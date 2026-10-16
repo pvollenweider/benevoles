@@ -5,7 +5,7 @@ import { createHash } from "node:crypto"
 import { readFile } from "node:fs/promises"
 import path from "node:path"
 
-export const memberLastNamesV2 = ["Favre", "Favre", "Morel", "Mercier", "Renaud", "Dumont", "Berger", "Perrin", "Perret", "Roux", "Leroy", "Dubois", "Girard", "Martin", "Blanc", "Fontaine", "Chevalier", "Meyer", "Garnier", "Rochat", "Chappuis", "Baud", "Henry", "Dutoit", "Richard", "Colin", "Besson", "Gaillard", "Picard", "Rey", "Gautier", "Schmid", "Laurent", "Bovet", "Bonnet", "Fischer"] as const
+export const memberLastNamesV2 = ["Favre", "Favre", "Morel", "Mercier", "Renaud", "Dumont", "Berger", "Perrin", "Perret", "Roux", "Leroy", "Dubois", "Girard", "Martin", "Blanc", "Fontaine", "Chevalier", "Meyer", "Garnier", "Rochat", "Chappuis", "Baud", "Henry", "Pasche", "Richard", "Colin", "Besson", "Gaillard", "Picard", "Rey", "Vonlanthen", "Schmid", "Laurent", "Bovet", "Bonnet", "Fischer"] as const
 export type SeedIdentity = { id: string; organizationId: string | null; firstName: string; lastName: string; email: string | null; phone: string | null; tags: string[]; active: boolean; notes: string | null; birthDate: Date | string | null; availabilityPeriods: string[]; availabilityNote: string | null; createdAt: Date | string }
 export type SeedProofV2 = { schemaVersion: 2; scenario: "natural-member-seeds"; provenance: "actual-seed-write" | "exact-v1-migration"; observedAt: string; members: SeedIdentity[]; sha256: string }
 const canonical = (value: unknown): string => JSON.stringify(value, (_key, item) => item && typeof item === "object" && !Array.isArray(item) ? Object.fromEntries(Object.entries(item).sort(([a], [b]) => a.localeCompare(b))) : item)
@@ -13,9 +13,18 @@ const digest = (value: unknown) => createHash("sha256").update(canonical(value))
 const equal = (a: unknown, b: unknown) => canonical(a) === canonical(b)
 const projection = (person: Partial<SeedIdentity>) => Object.fromEntries(["id", "organizationId", "firstName", "lastName", "email", "phone", "tags", "active", "notes", "birthDate", "availabilityPeriods", "availabilityNote", "createdAt"].map(key => [key, person[key as keyof SeedIdentity]]))
 
+/** Realistic fictional address, « prénom.nom@example.org » without accents. The second Stéphane
+ * Favre (index 1) is a homonym, not a duplicate: a distinct « nom.prénom » address keeps the pair a
+ * name-only suggestion. Numbered addresses (`video.membre.N`) made every pair « very close » (#1037). */
+export function memberEmailV2(index: number, firstName: string, lastName: string) {
+  const ascii = (value: string) => value.normalize("NFD").replace(/\p{Diacritic}/gu, "").toLowerCase()
+  return index === 1 ? `${ascii(lastName)}.${ascii(firstName)}@example.org` : `${ascii(firstName)}.${ascii(lastName)}@example.org`
+}
 export function expectedMemberV2(index: number, invitation = false) {
   assert(Number.isInteger(index) && index >= 0 && index < 36)
-  return { id: `video-member-management-${index}`, organizationId: "default", firstName: index < 2 ? "Stéphane" : invitation && index === 2 ? "René" : invitation && index === 3 ? "Aline" : ["Aline", "Émilie", "Sébastien", "Anaïs", "Nicolas", "Léon"][index % 6], lastName: invitation && index === 2 ? "Meyer" : memberLastNamesV2[index], email: index === 2 ? null : `video.membre.${index}@example.org`, phone: `079 000 ${String(index).padStart(2, "0")} 00`, active: index !== 35, tags: invitation && index === 2 ? ["accueil"] : invitation && index === 4 ? ["sécurité", "permis-b"] : index % 2 ? ["accueil"] : ["logistique", "permis-b"], notes: index === 2 ? "Contact à joindre par téléphone pour les horaires." : null, birthDate: null, availabilityPeriods: index % 2 ? ["morning"] : ["evening"], availabilityNote: index === 3 ? "Pas le dimanche" : null }
+  const firstName = index < 2 ? "Stéphane" : invitation && index === 2 ? "René" : invitation && index === 3 ? "Aline" : ["Aline", "Émilie", "Sébastien", "Anaïs", "Nicolas", "Léon"][index % 6]
+  const lastName = invitation && index === 2 ? "Meyer" : memberLastNamesV2[index]
+  return { id: `video-member-management-${index}`, organizationId: "default", firstName, lastName, email: index === 2 ? null : memberEmailV2(index, firstName, lastName), phone: `079 000 ${String(index).padStart(2, "0")} 00`, active: index !== 35, tags: invitation && index === 2 ? ["accueil"] : invitation && index === 4 ? ["sécurité", "permis-b"] : index % 2 ? ["accueil"] : ["logistique", "permis-b"], notes: index === 2 ? "Contact à joindre par téléphone pour les horaires." : null, birthDate: null, availabilityPeriods: index % 2 ? ["morning"] : ["evening"], availabilityNote: index === 3 ? "Pas le dimanche" : null }
 }
 export function exactMemberSeedV2(person: Partial<SeedIdentity>) {
   const match = /^video-member-management-(\d+)$/.exec(person.id ?? "")
