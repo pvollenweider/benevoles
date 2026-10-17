@@ -30,7 +30,7 @@ export function scrubUrl(value: string): string {
   return value.replace(TOKEN_PATH, "$1[token]").replace(TOKEN_QUERY, "$1[token]").replace(EMAIL_RE, "[email]")
 }
 
-function scrubDeep<T>(value: T, depth = 0): T {
+export function scrubDeep<T>(value: T, depth = 0): T {
   if (typeof value === "string") return scrubUrl(value) as T
   if (value === null || typeof value !== "object" || depth > 6) return value
   if (Array.isArray(value)) return value.map((v) => scrubDeep(v, depth + 1)) as T
@@ -73,6 +73,25 @@ export function scrubEvent<T extends Event>(event: T): T {
 // http.target, ...).
 export function scrubSpan(span: StreamedSpan): StreamedSpan {
   return { ...span, name: scrubUrl(span.name), attributes: scrubDeep(span.attributes) }
+}
+
+/**
+ * Session replay travels in its own envelope, past `beforeSend` (#1042). Two hooks cover what it
+ * sends besides the DOM recording: `scrubReplayFrame` (the replay integration's
+ * `beforeAddRecordingEvent`) for its custom frames (breadcrumbs, navigation and fetch spans with
+ * their URLs), and `scrubReplayEvent` (a `preprocessEvent` client hook) for the `urls` list of the
+ * replay event. The recorder's own page address is out of their reach: replay is never started on
+ * an address that carries a token (sentry-client-policy.ts).
+ */
+export function scrubReplayFrame<T>(frame: T): T {
+  return scrubDeep(frame, 0)
+}
+
+export function scrubReplayEvent(event: Event): void {
+  if (event.type !== "replay_event") return
+  const replay = event as Event & { urls?: unknown }
+  if (Array.isArray(replay.urls)) replay.urls = replay.urls.map((url) => (typeof url === "string" ? scrubUrl(url) : url))
+  if (event.request) event.request = scrubDeep(event.request)
 }
 
 /**

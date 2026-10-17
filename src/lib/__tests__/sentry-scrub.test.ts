@@ -1,6 +1,6 @@
 import { describe, it, expect } from "vitest"
 import type { ErrorEvent } from "@sentry/nextjs"
-import { scrubUrl, scrubBreadcrumb, scrubEvent, scrubSpan, NO_PII_DATA_COLLECTION, BROWSER_NOISE_ERRORS } from "../sentry-scrub"
+import { scrubUrl, scrubBreadcrumb, scrubEvent, scrubReplayEvent, scrubReplayFrame, scrubSpan, NO_PII_DATA_COLLECTION, BROWSER_NOISE_ERRORS } from "../sentry-scrub"
 
 const TOKEN = "a1b2c3d4e5f6a7b8c9d0e1f2a3b4c5d6e7f8a9b0c1d2e3f4"
 
@@ -130,5 +130,28 @@ describe("BROWSER_NOISE_ERRORS", () => {
     for (const m of ["Object not found", "TypeError: Cannot read properties of undefined (reading 'update')", "Error: Not Found", "Lien invalide"]) {
       expect(ignored(m)).toBe(false)
     }
+  })
+})
+
+describe("replay envelope scrubbing (#1042)", () => {
+  it("scrubs the URL list of a replay event, and leaves other events alone", () => {
+    const replay = { type: "replay_event", urls: [`https://www.benevol.app/admin/reset-password?token=${TOKEN}`, "https://www.benevol.app/admin"] }
+    scrubReplayEvent(replay as never)
+    expect(replay.urls).toEqual(["https://www.benevol.app/admin/reset-password?token=[token]", "https://www.benevol.app/admin"])
+
+    const error = { type: undefined, urls: [`/my/${TOKEN}`] }
+    scrubReplayEvent(error as never)
+    expect(error.urls[0]).toContain(TOKEN)
+  })
+
+  it("scrubs the URLs of a replay custom frame (navigation span, breadcrumb)", () => {
+    const frame = {
+      type: 5,
+      timestamp: 1,
+      data: { tag: "performanceSpan", payload: { op: "navigation.push", description: `/admin/keep?token=${TOKEN}`, data: { previous: `/leader/${TOKEN}` } } },
+    }
+    const out = scrubReplayFrame(frame)
+    expect(JSON.stringify(out)).not.toContain(TOKEN)
+    expect(out.data.payload.description).toBe("/admin/keep?token=[token]")
   })
 })

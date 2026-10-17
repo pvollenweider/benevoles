@@ -1,8 +1,6 @@
 // SPDX-FileCopyrightText: 2026 Philippe Vollenweider
 // SPDX-License-Identifier: AGPL-3.0-only
 
-import { pathnameOf } from "@/lib/sentry-client-policy"
-
 /**
  * Deferred browser Sentry (#773). The SDK used to be initialised before hydration on every page,
  * in the chunk every page shares; it is now imported once the page is idle, or straight away at the
@@ -14,7 +12,7 @@ import { pathnameOf } from "@/lib/sentry-client-policy"
 /** What the deferred chunk (src/lib/sentry-client-init.ts) provides. */
 export type SentryClientModule = {
   initSentryClient: () => void
-  maybeStartReplay: (pathname: string) => void
+  maybeStartReplay: (href: string) => void
   captureException: (error: unknown, hint?: { mechanism?: { type: string; handled: boolean } }) => unknown
   captureRouterTransitionStart: (href: string, navigationType: string) => void
 }
@@ -102,8 +100,9 @@ export function createSentryLoader({ load, win, idleTimeoutMs = 4000 }: SentryLo
     /** instrumentation-client.ts's `onRouterTransitionStart`; before the SDK loads, nothing to trace. */
     onRouterTransitionStart(href: string, navigationType: string) {
       if (!sentry) return
+      // Replay first: a navigation to a token address stops the recorder before anything else.
+      sentry.maybeStartReplay(href)
       sentry.captureRouterTransitionStart(href, navigationType)
-      sentry.maybeStartReplay(pathnameOf(href))
     },
     /** Test hook. */
     ensureLoaded,
