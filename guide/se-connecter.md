@@ -15,7 +15,7 @@ Cliquer sur **Espace organisateur**, en bas des pages publiques, et saisir les i
 
 Si vous avez reçu un **lien d'invitation** (email « Invitation à rejoindre… »), cliquez sur le bouton « Créer mon compte » dans l'email pour définir votre mot de passe avant votre première connexion.
 
-**Mot de passe oublié ?** Depuis la page de connexion, utilisez le lien du même nom : un email contenant un lien de réinitialisation vous est envoyé.
+**Mot de passe oublié ?** Depuis la page de connexion, utilisez le lien du même nom : un email contenant un lien de réinitialisation vous est envoyé. Une fois la page ouverte, le lien disparaît de la barre d'adresse : si vous rechargez la page avant d'avoir terminé, rouvrez le lien depuis l'email (c'est aussi vrai pour un lien d'invitation).
 
 Sur un téléphone ou un petit écran, les liens de la barre du haut (Tableau de bord, Événements, Membres, Paramètres, Aide) sont regroupés sous le bouton **Menu**.
 

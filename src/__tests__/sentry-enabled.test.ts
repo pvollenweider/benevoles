@@ -10,6 +10,7 @@ vi.mock("@sentry/nextjs", () => ({
   captureRouterTransitionStart: vi.fn(),
   captureException: vi.fn(),
   addIntegration: vi.fn(),
+  getClient: vi.fn(() => ({ on: vi.fn() })),
 }))
 
 // The browser SDK is initialised from a deferred chunk (#773), by calling initSentryClient().
@@ -22,7 +23,7 @@ const configs = [
 async function loadConfig(path: string) {
   const mod = await import(/* @vite-ignore */ path)
   if (typeof mod.initSentryClient === "function") {
-    vi.stubGlobal("window", { location: { pathname: "/" } })
+    vi.stubGlobal("window", { location: { pathname: "/", href: "https://www.benevol.app/" } })
     mod.initSentryClient()
     vi.unstubAllGlobals()
   }

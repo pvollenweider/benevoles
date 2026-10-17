@@ -2,7 +2,7 @@ import { describe, it, expect, vi } from "vitest"
 import fs from "node:fs"
 import path from "node:path"
 import type { ErrorEvent } from "@sentry/nextjs"
-import { isStaffPath, pathnameOf, tracesSampleRateFor, wantsReplay, STAFF_TRACES_SAMPLE_RATE } from "../sentry-client-policy"
+import { isStaffPath, pathnameOf, replayAllowedFor, tracesSampleRateFor, urlCarriesSecret, STAFF_TRACES_SAMPLE_RATE } from "../sentry-client-policy"
 import { createSentryLoader, type SentryClientModule } from "../sentry-client-loader"
 import { beforeSendClient, isStacklessDomEventRejection } from "../sentry-scrub"
 
@@ -21,9 +21,33 @@ describe("sentry client policy", () => {
     expect(tracesSampleRateFor(undefined, "/")).toBe(0)
   })
 
-  it("loads replay on back-office pages only", () => {
-    expect(wantsReplay("/admin/events")).toBe(true)
-    expect(wantsReplay("/videos")).toBe(false)
+  it("loads replay on signed-in back-office pages only", () => {
+    expect(replayAllowedFor("/admin/events")).toBe(true)
+    expect(replayAllowedFor("https://www.benevol.app/super-admin/organizations?page=2")).toBe(true)
+    expect(replayAllowedFor("/videos")).toBe(false)
+  })
+
+  // #1042: the recorder keeps the page address as is, past beforeSend.
+  it("never replays the public admin pages, token or not, with or without a trailing slash", () => {
+    for (const p of [
+      "/admin/login", "/admin/forgot-password", "/admin/reset-password", "/admin/accept-invite",
+      "/admin/reactivate", "/admin/reactivate/confirm", "/admin/keep", "/admin/keep/",
+      "https://www.benevol.app/admin/reset-password", "/admin/accept-invite#x",
+    ]) expect(replayAllowedFor(p)).toBe(false)
+  })
+
+  it("never replays an address carrying a token or an email address, raw or encoded", () => {
+    const secret = "a1b2c3d4e5f6a7b8c9d0e1f2a3b4c5d6"
+    const tokenQuery = new URLSearchParams({ token: secret }).toString()
+    for (const href of [
+      `/admin/events?${tokenQuery}`,
+      `/admin/events?x=1&${new URLSearchParams({ t: secret })}`,
+      `/admin/login?${new URLSearchParams({ callbackUrl: `/admin/keep?${tokenQuery}` })}`,
+      "/admin/members?q=jane%40example.org",
+      "/admin/members?q=%E0%A4%A",
+    ]) expect(replayAllowedFor(href)).toBe(false)
+    expect(urlCarriesSecret("/admin/events?tab=shifts")).toBe(false)
+    expect(urlCarriesSecret(`/my/${secret}`)).toBe(true)
   })
 
   it("extracts the path of an href", () => {
@@ -175,7 +199,9 @@ describe("sentry client loader", () => {
     await loader.ensureLoaded()
     loader.onRouterTransitionStart("/admin/events?tab=1", "push")
     expect(sentry.captureRouterTransitionStart).toHaveBeenCalledWith("/admin/events?tab=1", "push")
-    expect(sentry.maybeStartReplay).toHaveBeenCalledWith("/admin/events")
+    expect(sentry.maybeStartReplay).toHaveBeenCalledWith("/admin/events?tab=1")
+    // Replay is stopped before the transition is traced (#1042).
+    expect(sentry.maybeStartReplay.mock.invocationCallOrder[0]).toBeLessThan(sentry.captureRouterTransitionStart.mock.invocationCallOrder[0])
   })
 })
 

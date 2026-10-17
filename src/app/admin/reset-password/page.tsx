@@ -4,19 +4,19 @@
 // SPDX-License-Identifier: AGPL-3.0-only
 
 import { useEffect, useId, useRef, useState, Suspense } from "react"
-import { useSearchParams } from "next/navigation"
 import Link from "next/link"
 import PasswordRules from "@/components/PasswordRules"
 import FormStatus from "@/components/FormStatus"
 import { useSubmit } from "@/lib/use-submit"
+import { useUrlToken } from "@/lib/use-url-token"
 
 const inputClass = "w-full border border-gray-300 rounded-xl px-3 py-2.5 text-sm focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-blue-600"
 const buttonLink = "inline-block bg-blue-600 text-white px-4 py-2 rounded-xl text-sm font-medium hover:bg-blue-700 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-blue-600"
 
 function ResetForm() {
   const id = useId()
-  const searchParams = useSearchParams()
-  const token = searchParams.get("token") ?? ""
+  // Kept in state, then removed from the address bar (#1042).
+  const token = useUrlToken()
   const passwordRef = useRef<HTMLInputElement>(null)
   const confirmRef = useRef<HTMLInputElement>(null)
   const doneRef = useRef<HTMLHeadingElement>(null)
