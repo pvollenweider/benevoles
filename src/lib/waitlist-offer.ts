@@ -21,3 +21,41 @@ export function waitlistOfferExpiry(now: Date, shiftStart: Date): Date | null {
   if (lead < WAITLIST_OFFER_MIN_LEAD_MS) return null
   return new Date(Math.min(now.getTime() + WAITLIST_OFFER_HOURS * 60 * 60 * 1000, shiftStart.getTime()))
 }
+
+/**
+ * What the offer page (/waitlist/[token]/confirm) shows when the email's link is opened (#1044).
+ * Reading it changes nothing: mail scanners open links, some run the page's scripts. Only its
+ * « Prendre la place » button accepts (POST /api/public/waitlist/[token]/confirm, which checks the
+ * same conditions again, conditionally, at the moment of the click).
+ *
+ * - `offered`: the offer stands, the button is shown;
+ * - `expired`: the offer is still recorded but its time is up (the hourly cron hasn't passed yet);
+ * - `active` / `requested`: already accepted (or a firm registration under this link);
+ * - `invalid`: unknown link, or nothing to accept any more (expired offer withdrawn, cancelled).
+ */
+export type WaitlistOfferPageState = "offered" | "expired" | "active" | "requested" | "invalid"
+
+export function waitlistOfferPageState(
+  reg: { status: string; waitingExpiresAt: Date | null } | null,
+  now: Date,
+): WaitlistOfferPageState {
+  if (!reg) return "invalid"
+  if (reg.status === "offered") return reg.waitingExpiresAt && reg.waitingExpiresAt < now ? "expired" : "offered"
+  if (reg.status === "active" || reg.status === "requested") return reg.status
+  return "invalid"
+}
+
+/** What the offer page shows: the server's state, then the outcome of its button. */
+export type WaitlistOfferView = WaitlistOfferPageState | "confirmed" | "requestSent" | "gone"
+
+/** The browser tab title per view (WCAG 2.4.2): set by generateMetadata, then by the page itself. */
+export const WAITLIST_OFFER_PAGE_TITLES: Record<WaitlistOfferView, string> = {
+  offered: "Place proposée",
+  expired: "Lien expiré",
+  active: "Place déjà confirmée",
+  requested: "Demande déjà envoyée",
+  invalid: "Lien expiré ou invalide",
+  confirmed: "Place confirmée",
+  requestSent: "Demande envoyée",
+  gone: "Place plus disponible",
+}

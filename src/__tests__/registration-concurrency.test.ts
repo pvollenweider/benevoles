@@ -208,6 +208,11 @@ describe("conditional transitions", () => {
     expect(enqueueAndDeliver).not.toHaveBeenCalled()
   })
 
+  it("waitlist confirm: no GET handler, a link scanner following the URL accepts nothing (#1044)", async () => {
+    const route = await import("@/app/api/public/waitlist/[token]/confirm/route")
+    expect(Object.keys(route)).toEqual(["POST"])
+  })
+
   it("waitlist confirm on a « Sur validation » shift: the offered spot becomes a request (#484)", async () => {
     m.regFindFirst.mockResolvedValue({
       id: "r1", eventId: "evt-1", volunteerId: "v1", editTokenLegacy: "tok", editTokenEnc: null, waitingExpiresAt: new Date(Date.now() + 3600_000),

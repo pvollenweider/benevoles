@@ -10,6 +10,11 @@ import { registrationToken } from "@/lib/token-vault"
 import { deliverAfterResponse, enqueueNotifications } from "@/lib/notifications/outbox"
 import { pickShiftInfo } from "@/lib/shift-info"
 
+/**
+ * Accepts a spot offered from the waitlist. POST only (#1044): the offer email's link opens a
+ * read-only page (/waitlist/[token]/confirm) whose « Prendre la place » button sends this request,
+ * so a mail scanner or a link preview that follows the link, or runs its scripts, accepts nothing.
+ */
 export async function POST(_req: Request, { params }: { params: Promise<{ token: string }> }) {
   const rl = await rateLimit(getClientIp(_req), "waitlist-confirm", 10, 60 * 60 * 1000)
   if (!rl.ok) return NextResponse.json({ error: "Trop de requêtes." }, { status: 429 })
@@ -111,8 +116,4 @@ export async function POST(_req: Request, { params }: { params: Promise<{ token:
   deliverAfterResponse(outboxIds)
 
   return NextResponse.json({ success: true, editToken: token, requested: next === "requested" })
-}
-
-export async function GET(req: Request, ctx: { params: Promise<{ token: string }> }) {
-  return POST(req, ctx)
 }
