@@ -58,6 +58,7 @@ const prismaMock = {
   },
   organization: {
     findUnique: vi.fn().mockResolvedValue({ name: "Org A", timeZone: null }), // header data of exports (#384)
+    update: vi.fn().mockResolvedValue({ replyToEmail: null, notificationSettings: null }), // notification settings (#1049)
   },
   adminUser: {
     findUnique: vi.fn().mockResolvedValue(null),
@@ -80,9 +81,12 @@ const prismaMock = {
   },
   orgLog: {
     create: vi.fn().mockResolvedValue({ id: "log-1" }), // org activity log entries (#300 logo)
+    findMany: vi.fn().mockResolvedValue([]), // activity export (#1049)
   },
   async $transaction(fn: (tx: unknown) => unknown) { return fn(this) },
 }
+// Delivery after the response needs a Next request scope; the routes only queue through the outbox here (#1049).
+vi.mock("next/server", async (importOriginal) => ({ ...(await importOriginal<typeof import("next/server")>()), after: vi.fn() }))
 vi.mock("@/lib/push", () => ({ pushDeviceCount: vi.fn().mockResolvedValue(0), sendTargetedPush: vi.fn() }))
 vi.mock("@/lib/prisma", () => ({ prisma: prismaMock }))
 // The targeted-message route hashes addresses for the "adresses à vérifier" warning (#599), which
@@ -1594,5 +1598,232 @@ describe("Organization logo — cross-tenant isolation", () => {
     const res = await DELETE()
     expect(res.status).toBe(200)
     expect(db.organizationLogo.deleteMany).toHaveBeenCalledWith({ where: { organizationId: ORG_A } })
+  })
+})
+
+// ── Routes without an isolation case until #1049 ─────────────────────────────
+
+describe("Event actions — cross-tenant isolation (#1049)", () => {
+  beforeEach(() => vi.clearAllMocks())
+
+  it("POST /api/admin/events/[id]/duplicate returns 404 for an org-B event, creating nothing", async () => {
+    const { POST } = await import("@/app/api/admin/events/[id]/duplicate/route")
+    const db = setupGuard() // event.findFirst → null
+    const res = await POST(makeRequest("/api/admin/events/evt-b/duplicate", "POST", { title: "Copie" }), params("evt-b"))
+    expect(res.status).toBe(404)
+    expect(db.event.findFirst).toHaveBeenCalledWith(expect.objectContaining({ where: { id: "evt-b" } }))
+    expect(db.event.create).not.toHaveBeenCalled()
+    expect(prismaMock.event.findFirst).not.toHaveBeenCalled()
+  })
+
+  it("GET /api/admin/events/[id]/export/pdf returns 404 for an org-B event", async () => {
+    const { GET } = await import("@/app/api/admin/events/[id]/export/pdf/route")
+    const db = setupGuard()
+    const res = await GET(makeRequest("/api/admin/events/evt-b/export/pdf"), params("evt-b"))
+    expect(res.status).toBe(404)
+    expect(db.event.findFirst).toHaveBeenCalledWith(expect.objectContaining({ where: { id: "evt-b" } }))
+    expect(prismaMock.event.findFirst).not.toHaveBeenCalled()
+  })
+
+  it("POST /api/admin/events/[id]/invitations/test-email returns 404 for an org-B event, sending nothing", async () => {
+    const { POST } = await import("@/app/api/admin/events/[id]/invitations/test-email/route")
+    const { sendMemberInvite } = await import("@/lib/notification-helpers")
+    setupGuard()
+    const res = await POST(makeRequest("/api/admin/events/evt-b/invitations/test-email", "POST", { email: "test@a.com" }), params("evt-b"))
+    expect(res.status).toBe(404)
+    expect(sendMemberInvite).not.toHaveBeenCalled()
+    expect(prismaMock.event.findFirst).not.toHaveBeenCalled()
+  })
+
+  it("GET /api/admin/events/[id]/log/candidates returns 404 for an org-B event, for both kinds", async () => {
+    const { GET } = await import("@/app/api/admin/events/[id]/log/candidates/route")
+    setupGuard()
+    for (const kind of ["replay", "story"]) {
+      const res = await GET(makeRequest(`/api/admin/events/evt-b/log/candidates?kind=${kind}`), params("evt-b"))
+      expect(res.status).toBe(404)
+    }
+    expect(prismaMock.event.findFirst).not.toHaveBeenCalled()
+  })
+
+  it("POST /api/admin/events/[id]/reorder-roles returns 404 for an org-B event, reordering nothing", async () => {
+    const { POST } = await import("@/app/api/admin/events/[id]/reorder-roles/route")
+    const updateMany = vi.fn().mockResolvedValue({ count: 0 })
+    setupGuard({ shift: { updateMany } })
+    const res = await POST(makeRequest("/api/admin/events/evt-b/reorder-roles", "POST", { roleOrder: ["Bar", "Accueil"] }), params("evt-b"))
+    expect(res.status).toBe(404)
+    expect(updateMany).not.toHaveBeenCalled()
+    expect(prismaMock.shift.update).not.toHaveBeenCalled()
+  })
+
+  it("POST /api/admin/events/[id]/reorder-roles scopes every shift update to the org-A event", async () => {
+    const { POST } = await import("@/app/api/admin/events/[id]/reorder-roles/route")
+    const updateMany = vi.fn().mockResolvedValue({ count: 1 })
+    setupGuard({ event: { findFirst: vi.fn().mockResolvedValue({ id: "evt-a" }) }, shift: { updateMany } })
+    const res = await POST(makeRequest("/api/admin/events/evt-a/reorder-roles", "POST", { roleOrder: ["Bar", "Accueil"] }), params("evt-a"))
+    expect(res.status).toBe(200)
+    expect(updateMany).toHaveBeenCalledTimes(2)
+    for (const [arg] of updateMany.mock.calls) {
+      expect(arg.where).toEqual(expect.objectContaining({ eventId: "evt-a", event: { organizationId: ORG_A } }))
+    }
+  })
+
+  it("POST /api/admin/events/[id]/send-reminder returns 404 for an org-B event, sending and stamping nothing", async () => {
+    const { POST } = await import("@/app/api/admin/events/[id]/send-reminder/route")
+    const { sendNotification } = await import("@/lib/notifications")
+    const update = vi.fn()
+    const db = setupGuard({ event: { update } })
+    const res = await POST(makeRequest("/api/admin/events/evt-b/send-reminder", "POST"), params("evt-b"))
+    expect(res.status).toBe(404)
+    expect(db.registration.findMany).not.toHaveBeenCalled()
+    expect(sendNotification).not.toHaveBeenCalled()
+    expect(update).not.toHaveBeenCalled()
+    expect(prismaMock.event.update).not.toHaveBeenCalled()
+  })
+
+  it("POST /api/admin/events/[id]/send-reminder reads only the registrations of the org-A event", async () => {
+    const { POST } = await import("@/app/api/admin/events/[id]/send-reminder/route")
+    const db = setupGuard({
+      event: { findFirst: vi.fn().mockResolvedValue({ id: "evt-a", organizationId: ORG_A, title: "A", organization: { name: "Org A", slug: "org-a" } }) },
+    })
+    const res = await POST(makeRequest("/api/admin/events/evt-a/send-reminder", "POST"), params("evt-a"))
+    expect(res.status).toBe(400) // no registration in the scoped db
+    expect(db.registration.findMany).toHaveBeenCalledWith(expect.objectContaining({ where: expect.objectContaining({ eventId: "evt-a", event: { organizationId: ORG_A } }) }))
+  })
+
+  it("POST /api/admin/events/from-template creates the draft in the session org, through the scoped db only", async () => {
+    const { POST } = await import("@/app/api/admin/events/from-template/route")
+    const create = vi.fn().mockResolvedValue({ id: "evt-new", organization: { timeZone: null } })
+    const db = setupGuard({ event: { create } })
+    // An org-B id in the body has nowhere to go: the event's organization comes from the session.
+    const res = await POST(makeRequest("/api/admin/events/from-template", "POST", { templateId: "buvette", title: "Buvette", startDate: "2026-11-28", organizationId: "org-b" }))
+    expect(res.status).toBe(201)
+    expect(db.event.findFirst).toHaveBeenCalled() // slug collision checked within the org
+    expect(create).toHaveBeenCalledWith(expect.objectContaining({ data: expect.objectContaining({ organizationId: ORG_A }) }))
+    expect(prismaMock.event.findFirst).not.toHaveBeenCalled()
+  })
+})
+
+describe("Member import — cross-tenant isolation (#1049)", () => {
+  beforeEach(() => vi.clearAllMocks())
+
+  const file = () => new File(["prenom,nom,email\nAlice,Martin,alice@x.com"], "m.csv", { type: "text/csv" })
+
+  async function previewThenImport(db: ReturnType<typeof mockScopedDb>) {
+    const preview = await import("@/app/api/admin/members/import/preview/route")
+    const pfd = new FormData()
+    pfd.append("file", file())
+    pfd.append("onDuplicate", "update")
+    const analysis = await (await preview.POST(new Request("http://localhost:3000/api/admin/members/import/preview", { method: "POST", body: pfd }))).json()
+
+    const { POST } = await import("@/app/api/admin/members/import/route")
+    const fd = new FormData()
+    fd.append("file", file())
+    fd.append("onDuplicate", "update")
+    fd.append("fileHash", analysis.fileHash)
+    fd.append("planHash", analysis.planHash)
+    const res = await POST(new Request("http://localhost:3000/api/admin/members/import", { method: "POST", body: fd }))
+    expect(db.volunteer.findMany).toHaveBeenCalledWith(expect.objectContaining({ where: expect.objectContaining({ organizationId: ORG_A }) }))
+    return res
+  }
+
+  it("POST /api/admin/members/import never matches an org-B member: the address is created in org A", async () => {
+    // An org-B member with this address exists in the raw (unscoped) data; the scoped db sees none.
+    prismaMock.volunteer.findFirst.mockResolvedValueOnce({ id: "mem-b", organizationId: "org-b", email: "alice@x.com" })
+    const create = vi.fn().mockResolvedValue({ id: "mem-new" })
+    const update = vi.fn()
+    const db = setupGuard({ volunteer: { findMany: vi.fn().mockResolvedValue([]), create, update } })
+    const res = await previewThenImport(db)
+    expect(res.status).toBe(200)
+    expect((await res.json()).created).toBe(1)
+    expect(create).toHaveBeenCalledWith({ data: expect.objectContaining({ organizationId: ORG_A, email: "alice@x.com" }) })
+    expect(update).not.toHaveBeenCalled()
+    expect(prismaMock.volunteer.update).not.toHaveBeenCalled()
+    expect(prismaMock.volunteer.create).not.toHaveBeenCalled()
+  })
+
+  it("POST /api/admin/members/import updates only the org-A member it found through the scoped db", async () => {
+    const create = vi.fn()
+    const update = vi.fn().mockResolvedValue({ id: "mem-a" })
+    const db = setupGuard({ volunteer: { findMany: vi.fn().mockResolvedValue([{ id: "mem-a", email: "alice@x.com", tags: [] }]), create, update } })
+    const res = await previewThenImport(db)
+    expect(res.status).toBe(200)
+    expect((await res.json()).updated).toBe(1)
+    expect(update).toHaveBeenCalledWith(expect.objectContaining({ where: { id: "mem-a" } }))
+    expect(create).not.toHaveBeenCalled()
+    expect(prismaMock.volunteer.update).not.toHaveBeenCalled()
+  })
+})
+
+describe("Organization settings — cross-tenant isolation (#1049)", () => {
+  beforeEach(() => vi.clearAllMocks())
+
+  const slugDb = () => ({
+    ...mockScopedDb(),
+    orgSlugHistory: {
+      findMany: vi.fn().mockResolvedValue([{ slug: "ancien-a", createdAt: new Date("2026-01-01") }]),
+      deleteMany: vi.fn().mockResolvedValue({ count: 0 }),
+    },
+  })
+
+  it("GET /api/admin/settings/activity/export reads every page of the session org's log only", async () => {
+    const { GET } = await import("@/app/api/admin/settings/activity/export/route")
+    setupGuard()
+    const row = (i: number) => ({ id: `log-${i}`, actorType: "system", actorId: null, action: "event.updated", entityType: "Event", entityId: "evt-a", changes: null, createdAt: new Date("2026-10-01") })
+    prismaMock.orgLog.findMany.mockResolvedValueOnce(Array.from({ length: 201 }, (_, i) => row(i))).mockResolvedValueOnce([row(300)])
+    const res = await GET()
+    expect(res.status).toBe(200)
+    expect(prismaMock.organization.findUnique).toHaveBeenCalledWith(expect.objectContaining({ where: { id: ORG_A } }))
+    expect(prismaMock.orgLog.findMany).toHaveBeenCalledTimes(2)
+    for (const [arg] of prismaMock.orgLog.findMany.mock.calls) {
+      expect(arg.where).toEqual(expect.objectContaining({ organizationId: ORG_A }))
+    }
+  })
+
+  it("GET /api/admin/settings/organization/slugs lists only the session org's former addresses", async () => {
+    const { GET } = await import("@/app/api/admin/settings/organization/slugs/route")
+    const db = slugDb()
+    requireOrgSessionMock.mockResolvedValue({ db, organizationId: ORG_A, session: SESSION_A })
+    const res = await GET()
+    expect(res.status).toBe(200)
+    expect(db.orgSlugHistory.findMany).toHaveBeenCalledWith(expect.objectContaining({ where: { organizationId: ORG_A } }))
+    expect(db.event.count).toHaveBeenCalledWith({ where: { organizationId: ORG_A, publicStatus: "published" } })
+  })
+
+  it("DELETE /api/admin/settings/organization/slugs only frees a slug of the session org, never an org-B one", async () => {
+    const { DELETE } = await import("@/app/api/admin/settings/organization/slugs/route")
+    const db = slugDb()
+    requireOrgSessionMock.mockResolvedValue({ db, organizationId: ORG_A, session: SESSION_A })
+    // An org-B slug and id in the body: the delete stays filtered on the session org, so it matches nothing.
+    const res = await DELETE(makeRequest("/api/admin/settings/organization/slugs", "DELETE", { slug: "ancien-b", organizationId: "org-b" }))
+    expect(res.status).toBe(200)
+    expect(db.orgSlugHistory.deleteMany).toHaveBeenCalledWith({ where: { slug: "ancien-b", organizationId: ORG_A } })
+  })
+
+  it("GET /api/admin/settings/notifications reads the session org's settings only", async () => {
+    const { GET } = await import("@/app/api/admin/settings/notifications/route")
+    setupGuard()
+    const res = await GET()
+    expect(res.status).toBe(200)
+    expect(prismaMock.organization.findUnique).toHaveBeenCalledWith(expect.objectContaining({ where: { id: ORG_A } }))
+  })
+
+  it("PATCH /api/admin/settings/notifications writes the session org only, whatever id the body carries", async () => {
+    const { PATCH } = await import("@/app/api/admin/settings/notifications/route")
+    setupGuard()
+    const res = await PATCH(makeRequest("/api/admin/settings/notifications?organizationId=org-b", "PATCH", { organizationId: "org-b", settings: { signupAdminEmail: false } }))
+    expect(res.status).toBe(200)
+    expect(prismaMock.organization.findUnique).toHaveBeenCalledWith(expect.objectContaining({ where: { id: ORG_A } }))
+    expect(prismaMock.organization.update).toHaveBeenCalledTimes(1)
+    expect(prismaMock.organization.update).toHaveBeenCalledWith(expect.objectContaining({ where: { id: ORG_A } }))
+    expect(prismaMock.orgLog.create).toHaveBeenCalledWith(expect.objectContaining({ data: expect.objectContaining({ organizationId: ORG_A }) }))
+  })
+
+  it("POST /api/admin/settings/notifications/test queues the email under the session org only", async () => {
+    const { POST } = await import("@/app/api/admin/settings/notifications/test/route")
+    setupGuard()
+    const res = await POST()
+    expect(res.status).toBe(200)
+    expect(prismaMock.organization.findUnique).toHaveBeenCalledWith(expect.objectContaining({ where: { id: ORG_A } }))
+    expect(prismaMock.notificationOutbox.create).toHaveBeenCalledWith(expect.objectContaining({ data: expect.objectContaining({ organizationId: ORG_A }) }))
   })
 })
