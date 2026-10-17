@@ -1,5 +1,7 @@
 import { describe, it, expect, vi, beforeEach } from "vitest"
 import { hashToken } from "@/lib/token-hash"
+import { DUPLICATE_SIGNUP_MESSAGE } from "@/lib/signup-eligibility"
+import { SIGNUP_COMMENT_MAX, SIGNUP_PHONE_MAX } from "@/lib/signup-limits"
 
 // Public sign-up with someone else's email (#285): nothing proves the submitter owns the
 // address, so for an existing volunteer the response must not reveal a management token and
@@ -146,43 +148,6 @@ describe("POST /api/public/registrations — ownership of the email (#285)", () 
     expect(m.volUpdate).not.toHaveBeenCalled()
   })
 
-  it("throttled after failed sends: doesn't claim the link was emailed", async () => {
-    m.volFindFirst.mockResolvedValue({ ...victim, id: "vol-throttle-fail" })
-    m.regFindFirst.mockResolvedValue({
-      editTokenLegacy: "victims-tok", editTokenEnc: null,
-      volunteer: { firstName: "Real", lastName: "Owner", email: "owner@x.com" },
-      event: { title: "Festival", organization: { slug: "a" } },
-    })
-    m.sendNotification.mockResolvedValue({ ok: false, reason: "smtp down" })
-    const { POST } = await import("@/app/api/public/registrations/route")
-    for (let i = 0; i < 3; i++) {
-      m.regFindMany.mockResolvedValueOnce([{ id: "reg-existing" }])
-      await POST(post())
-    }
-    m.regFindMany.mockResolvedValueOnce([{ id: "reg-existing" }])
-    const { error } = await (await POST(post())).json()
-    expect(m.sendNotification).toHaveBeenCalledTimes(3) // 4th attempt throttled
-    expect(error).not.toContain("a été envoyé")
-  })
-
-  it("throttled after a successful send: says the link was emailed", async () => {
-    m.volFindFirst.mockResolvedValue({ ...victim, id: "vol-throttle-ok" })
-    m.regFindFirst.mockResolvedValue({
-      editTokenLegacy: "victims-tok", editTokenEnc: null,
-      volunteer: { firstName: "Real", lastName: "Owner", email: "owner@x.com" },
-      event: { title: "Festival", organization: { slug: "a" } },
-    })
-    const { POST } = await import("@/app/api/public/registrations/route")
-    for (let i = 0; i < 3; i++) {
-      m.regFindMany.mockResolvedValueOnce([{ id: "reg-existing" }])
-      await POST(post())
-    }
-    m.regFindMany.mockResolvedValueOnce([{ id: "reg-existing" }])
-    const { error } = await (await POST(post())).json()
-    expect(m.sendNotification).toHaveBeenCalledTimes(3)
-    expect(error).toContain("envoyé à ton adresse email")
-  })
-
   it("sign-up notifications go through the outbox, not sent inline (#293)", async () => {
     m.volFindFirst.mockResolvedValue(null)
     m.txVolCreateMany.mockResolvedValue({ count: 1 }); m.txVolFindFirstOrThrow.mockResolvedValue({ id: "vol-new" })
@@ -240,54 +205,94 @@ describe("POST /api/public/registrations — ownership of the email (#285)", () 
     expect(data.linkSentByEmail).toBe(true)
   })
 
-  it("already registered: 409 without the existing token, which is emailed to the owner instead", async () => {
-    m.volFindFirst.mockResolvedValue(victim)
-    m.regFindMany.mockResolvedValueOnce([{ id: "reg-existing" }])
-    m.regFindFirst.mockResolvedValue({
-      editTokenLegacy: "victims-tok", editTokenEnc: null,
-      volunteer: { firstName: "Real", lastName: "Owner", email: "owner@x.com" },
-      event: { title: "Festival", organization: { slug: "a" } },
-    })
+  // A live registration as the duplicate check loads it (linkTargetInclude), in a given status.
+  const existingReg = (volunteerId: string, status: string) => ({
+    id: `reg-${volunteerId}`, eventId: "evt-1", volunteerId, status,
+    editTokenHash: "h", editTokenLegacy: "victims-tok", editTokenEnc: null,
+    volunteer: { firstName: "Real", lastName: "Owner", email: "owner@x.com" },
+    event: { id: "evt-1", title: "Festival", organizationId: "org-a", organization: { slug: "a" } },
+  })
+
+  async function duplicateAnswer(volunteerId: string, status: string) {
+    m.volFindFirst.mockResolvedValue({ ...victim, id: volunteerId })
+    m.regFindMany.mockResolvedValueOnce([{ id: `reg-${volunteerId}` }])
+    m.regFindFirst.mockResolvedValue(existingReg(volunteerId, status))
     const { POST } = await import("@/app/api/public/registrations/route")
     const res = await POST(post())
-    expect(res.status).toBe(409)
-    const body = await res.json()
+    return { status: res.status, body: await res.json() }
+  }
+
+  it("already registered: 409 without the existing token, which is emailed to the owner instead", async () => {
+    const { status, body } = await duplicateAnswer("vol-dup-active", "active")
+    expect(status).toBe(409)
     expect(JSON.stringify(body)).not.toContain("victims-tok")
-    expect(body.error).toContain("envoyé à ton adresse email")
+    expect(body).toEqual({ error: DUPLICATE_SIGNUP_MESSAGE, duplicate: true })
     expect(m.sendNotification).toHaveBeenCalledWith(expect.objectContaining({
       kind: "registration_link_resend",
+      volunteerId: "vol-dup-active",
       recipient: expect.objectContaining({ email: "owner@x.com" }),
       data: expect.objectContaining({ editToken: "victims-tok" }),
     }))
     expect(m.volUpdate).not.toHaveBeenCalled()
   })
 
-  it("duplicate of a waitlisted/offered registration only: no email, and the message doesn't claim one", async () => {
-    m.volFindFirst.mockResolvedValue({ ...victim, id: "vol-waiting" })
-    m.regFindMany.mockResolvedValueOnce([{ id: "reg-waiting" }])
-    m.regFindFirst.mockResolvedValue(null) // no *active* registration: /my link doesn't exist
-    const { POST } = await import("@/app/api/public/registrations/route")
-    const res = await POST(post())
-    expect(res.status).toBe(409)
-    const { error } = await res.json()
-    expect(error).toContain("liste d'attente")
-    expect(error).not.toContain("a été envoyé")
-    expect(m.sendNotification).not.toHaveBeenCalled()
+  // #1047: the answer doesn't tell a stranger which state a known address is in.
+  it("one and the same answer for an active, requested, waitlisted or offered registration, each emailed its link", async () => {
+    const answers = []
+    for (const st of ["active", "requested", "waiting", "offered"]) {
+      m.sendNotification.mockClear()
+      answers.push(await duplicateAnswer(`vol-dup-${st}`, st))
+      expect(m.sendNotification).toHaveBeenCalledTimes(1)
+    }
+    for (const a of answers) expect(a).toEqual({ status: 409, body: { error: DUPLICATE_SIGNUP_MESSAGE, duplicate: true } })
   })
 
-  it("duplicate when the link email fails: the message doesn't claim it was sent", async () => {
-    m.volFindFirst.mockResolvedValue({ ...victim, id: "vol-mailfail" })
-    m.regFindMany.mockResolvedValueOnce([{ id: "reg-existing" }])
-    m.regFindFirst.mockResolvedValue({
-      editTokenLegacy: "victims-tok", editTokenEnc: null,
-      volunteer: { firstName: "Real", lastName: "Owner", email: "owner@x.com" },
-      event: { title: "Festival", organization: { slug: "a" } },
-    })
-    m.sendNotification.mockResolvedValue({ ok: false, reason: "smtp down" })
+  it("the same answer when the link email is throttled, fails or throws", async () => {
+    // Fourth try within the hour for the same volunteer: throttled, nothing sent.
+    const first = await duplicateAnswer("vol-dup-throttle", "active")
+    await duplicateAnswer("vol-dup-throttle", "active")
+    await duplicateAnswer("vol-dup-throttle", "active")
+    m.sendNotification.mockClear()
+    const throttled = await duplicateAnswer("vol-dup-throttle", "active")
+    expect(m.sendNotification).not.toHaveBeenCalled()
+    expect(throttled).toEqual(first)
+
+    m.sendNotification.mockResolvedValueOnce({ ok: false, reason: "smtp down" })
+    expect(await duplicateAnswer("vol-dup-mailfail", "active")).toEqual(first)
+    m.sendNotification.mockRejectedValueOnce(new Error("smtp crash"))
+    expect(await duplicateAnswer("vol-dup-mailthrow", "waiting")).toEqual(first)
+  })
+
+  // The personal page shows when the link was last emailed: never for a send that failed.
+  it("records the link email only once it actually went out", async () => {
+    const { prisma } = await import("@/lib/prisma")
+    const updateMany = vi.mocked(prisma.registration.updateMany)
+    updateMany.mockClear()
+    m.sendNotification.mockResolvedValueOnce({ ok: false, reason: "smtp down" })
+    await duplicateAnswer("vol-dup-stamp-fail", "active")
+    expect(updateMany).not.toHaveBeenCalled()
+    await duplicateAnswer("vol-dup-stamp-ok", "active")
+    expect(updateMany).toHaveBeenCalledWith(expect.objectContaining({ data: { linkEmailedAt: expect.any(Date) } }))
+  })
+
+  // #1047: free text is bounded, shown to organisers and exported to CSV.
+  it("refuses an over-long phone or comment before any lookup, accepts the limits themselves", async () => {
     const { POST } = await import("@/app/api/public/registrations/route")
-    const { error } = await (await POST(post())).json()
-    expect(error).not.toContain("a été envoyé")
-    expect(error).toContain("email de confirmation")
+    const phone = await POST(post({ phone: "1".repeat(SIGNUP_PHONE_MAX + 1) }))
+    expect(phone.status).toBe(400)
+    expect(await phone.json()).toEqual({ error: expect.stringContaining("Le téléphone ne peut pas dépasser 50 caractères"), field: "phone" })
+    const comment = await POST(post({ comment: "x".repeat(SIGNUP_COMMENT_MAX + 1) }))
+    expect(await comment.json()).toEqual({ error: expect.stringContaining("Le commentaire ne peut pas dépasser 2000 caractères"), field: "comment" })
+    for (const extra of [{ inviteToken: "t".repeat(201) }, { eventId: "e".repeat(101) }]) {
+      const res = await POST(post(extra))
+      expect(res.status).toBe(400)
+      expect((await res.json()).error).toContain(Object.keys(extra)[0])
+    }
+    expect(m.volFindFirst).not.toHaveBeenCalled()
+    m.volFindFirst.mockResolvedValue(null)
+    m.txVolCreateMany.mockResolvedValue({ count: 1 }); m.txVolFindFirstOrThrow.mockResolvedValue({ id: "vol-long" })
+    const ok = await POST(post({ email: "long@x.com", phone: "1".repeat(SIGNUP_PHONE_MAX), comment: "x".repeat(SIGNUP_COMMENT_MAX) }))
+    expect(ok.status).toBe(201)
   })
 
   it("overlap with an existing registration: 409 without any token", async () => {

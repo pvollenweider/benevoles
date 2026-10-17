@@ -9,7 +9,7 @@ import { describeSignupFailure } from "../form-errors"
 import { EMPTY_SIGNUP_FORM, validateSignup } from "../public-signup"
 import { checkAnswers } from "../event-questions"
 import { REQUEST_SHORT, WAITLIST_SHORT, WAITLIST_STEPS } from "../waitlist-copy"
-import { fullShift } from "../signup-eligibility"
+import { DUPLICATE_SIGNUP_MESSAGE, fullShift } from "../signup-eligibility"
 
 // The public sign-up addresses volunteers with « tu » (PRODUCT.md) and writes without the
 // inclusive middle dot or « (e) » (#534). Separators such as « Bar · Bar nuit » are not checked.
@@ -82,9 +82,9 @@ describe("public sign-up copy uses « tu », without inclusive writing", () => {
     const src = readFileSync(join(process.cwd(), "src/app/api/public/registrations/route.ts"), "utf8")
     // Every sentence literal: capitalised, with a space, ending with a full stop.
     const errors = [...src.matchAll(/"([A-ZÀ-Ý][^"\n]* [^"\n]*\.)"/g)].map((m) => m[1])
-    expect(errors).toContain("Tu as déjà une inscription pour l'un de ces créneaux.")
-    expect(errors.length).toBeGreaterThanOrEqual(5)
-    expectTu(errors)
+    expect(errors).toContain("Un ou plusieurs créneaux sont invalides ou fermés. Recharge la page.")
+    expect(errors.length).toBeGreaterThanOrEqual(3)
+    expectTu([...errors, DUPLICATE_SIGNUP_MESSAGE])
   })
 
   it("the recap and the event page headings", () => {

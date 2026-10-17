@@ -53,7 +53,7 @@ Ce lien t'est envoyé uniquement par email, jamais affiché à l'écran, pour qu
 
 ### Je n'ai pas reçu l'email de confirmation
 
-Vérifie tes courriers indésirables. Si tu tentes de te réinscrire à un créneau où tu as déjà une inscription, ton lien personnel t'est renvoyé par email.
+Vérifie tes courriers indésirables. Si tu tentes de te réinscrire à un créneau où tu as déjà une inscription ou une place en liste d'attente, le formulaire te le signale et ton lien personnel t'est renvoyé par email (trois fois par heure au plus).
 
 ### J'ai eu une erreur en confirmant mon inscription
 

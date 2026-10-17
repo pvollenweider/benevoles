@@ -3,6 +3,7 @@
 
 import { shiftsTooYoungFor } from "./utils"
 import { shiftsClash } from "./shift-overlap"
+import { tooLongSignupField } from "./signup-limits"
 import { INSTANCE_OPERATOR_PATH, isHostedService } from "@/lib/site"
 
 /**
@@ -109,6 +110,9 @@ export function validateSignup(input: {
   if (!form.firstName || !form.lastName || !form.email) return "Prénom, nom et email sont obligatoires."
   // `required` already blocks an empty field; this catches a whitespace-only one.
   if (input.requirePhone && !form.phone.trim()) return "Le téléphone est obligatoire pour cet événement."
+  // #1047: a phone saved before the limit may come back pre-filled, longer than the field allows.
+  const tooLong = tooLongSignupField(form)
+  if (tooLong) return tooLong.message
   if (input.ageGatedShifts.length > 0) {
     if (!form.birthDate) return "Date de naissance requise pour au moins un des créneaux sélectionnés."
     const tooYoungFor = shiftsTooYoungFor(form.birthDate, input.ageGatedShifts)
