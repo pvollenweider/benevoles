@@ -3,7 +3,7 @@
 
 import { ORG_INACTIVE_REASON } from "@/lib/outbox-org-cancel-reason"
 import { ORG_PENDING_REASON } from "@/lib/outbox-org-pending-reason"
-import { canEmailThirdParties, pendingRecipientAllowed } from "@/lib/org-approval"
+import { canEmailThirdParties, pendingRecipientAllowed, signupOwnerEmails } from "@/lib/org-approval"
 import { prisma } from "@/lib/prisma"
 
 export { ORG_INACTIVE_REASON, ORG_PENDING_REASON }
@@ -19,12 +19,20 @@ export { ORG_INACTIVE_REASON, ORG_PENDING_REASON }
  * organisation (platform emails: product updates, release check, super admin) is not concerned.
  *
  * An organisation awaiting validation (#810, src/lib/org-approval.ts) may only email its own
- * **active** administrator accounts (address confirmed): anything else is refused the same way,
- * and it sends no push at all. Inactive accounts (an invitation not yet accepted) do not count:
- * otherwise inviting any address as an organiser would let a pending organisation email it.
+ * **active** owner account created with it by the sign-up confirmation (address proved by the
+ * emailed confirmation link, `signupOwnerEmails`): anything else is refused the same way, and it
+ * sends no push at all. Inactive accounts (an invitation not yet accepted) do not count: otherwise
+ * inviting any address as an organiser would let a pending organisation email it. An account
+ * activated from an invitation does not count either (#1045): that link used to be shown to the
+ * owner who issued it, so activating it never proved access to the address.
  */
 
-type OrgSendState = { active: boolean; outboundEmailApprovedAt: Date | string | null; admins?: { email: string }[] }
+type OrgSendState = {
+  active: boolean
+  outboundEmailApprovedAt: Date | string | null
+  createdAt?: Date | string
+  admins?: { email: string; createdAt: Date | string }[]
+}
 
 /** The decision, from what the database says about the organisation (`null`: not found). */
 export function sendingBlocked(organizationId: string | null | undefined, org: { active: boolean } | null): boolean {
@@ -40,12 +48,13 @@ export function sendingVerdict(organizationId: string | null | undefined, org: O
   if (!organizationId) return null
   if (sendingBlocked(organizationId, org)) return ORG_INACTIVE_REASON
   if (canEmailThirdParties(org!)) return null
-  return pendingRecipientAllowed(recipientEmail, (org!.admins ?? []).map((a) => a.email)) ? null : ORG_PENDING_REASON
+  const confirmed = org!.createdAt ? signupOwnerEmails(org!.createdAt, org!.admins ?? []) : []
+  return pendingRecipientAllowed(recipientEmail, confirmed) ? null : ORG_PENDING_REASON
 }
 
 type OrgReader = {
   organization: {
-    findUnique(args: { where: { id: string }; select: { active: true; outboundEmailApprovedAt: true; admins: { where: { isActive: true }; select: { email: true } } } }): Promise<OrgSendState | null>
+    findUnique(args: { where: { id: string }; select: { active: true; outboundEmailApprovedAt: true; createdAt: true; admins: { where: { isActive: true }; select: { email: true; createdAt: true } } } }): Promise<OrgSendState | null>
   }
 }
 
@@ -54,7 +63,7 @@ export async function organizationSendingVerdict(organizationId: string | null |
   if (!organizationId) return null
   const org = await db.organization.findUnique({
     where: { id: organizationId },
-    select: { active: true, outboundEmailApprovedAt: true, admins: { where: { isActive: true }, select: { email: true } } },
+    select: { active: true, outboundEmailApprovedAt: true, createdAt: true, admins: { where: { isActive: true }, select: { email: true, createdAt: true } } },
   })
   return sendingVerdict(organizationId, org, recipientEmail)
 }

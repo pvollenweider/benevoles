@@ -33,7 +33,7 @@ describe("POST /api/admin/settings/admins — activity log", () => {
 
   it("logs adminuser.invited", async () => {
     requireOrgSessionMock.mockResolvedValue({
-      db: { organization: { findUnique: vi.fn().mockResolvedValue({ name: "Org A" }) } },
+      db: { organization: { findUnique: vi.fn().mockResolvedValue({ name: "Org A", outboundEmailApprovedAt: new Date() }) } },
       organizationId: "org-a",
       session: { user: { id: "admin-1" } },
     })

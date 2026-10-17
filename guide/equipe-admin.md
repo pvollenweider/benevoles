@@ -24,7 +24,7 @@ Dans la documentation, les réglages marqués **(réservé aux propriétaires)**
 Sur cette page, un propriétaire peut :
 
 - voir la **liste** des administrateurs de votre organisation (actifs et invitations en attente) ;
-- **inviter** un nouvel admin : saisir son nom et son email, et choisir son rôle (Organisateur par défaut). Un email d'invitation avec un lien d'activation est envoyé (lien valable 7 jours) ;
+- **inviter** un nouvel admin : saisir son nom et son email, et choisir son rôle (Organisateur par défaut). Le lien d'activation, valable 7 jours, part uniquement par email à cette adresse : la page ne l'affiche pas, et seule la personne qui reçoit l'email peut activer le compte. Tant que votre espace est en attente de validation, l'invitation d'autres administrateurs attend cette validation (voir [Créer son espace](creer-son-espace.md)) ;
 - **changer le rôle** d'un admin dans sa ligne ; le changement s'applique aussitôt, y compris à ses sessions ouvertes ;
 - **retirer** un admin. Il est impossible de se retirer soi-même ou de retirer le dernier admin actif, et l'organisation garde toujours au moins un propriétaire actif.
 

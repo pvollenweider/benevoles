@@ -37,6 +37,22 @@ test("a confirmed sign-up creates a space with no public page until it is valida
   // The same activation link also arrives by email, for someone who closes the page.
   await waitForMessage(`to:${email} subject:"Bienvenue sur"`)
 
+  // The owner chooses a password and signs in: inviting more administrators waits for the
+  // validation (#1045), the team page says so instead of offering « Inviter ».
+  const ownerPassword = `E2e-${stamp}-Owner-pass!`
+  await page.getByLabel("Nouveau mot de passe").fill(ownerPassword)
+  await page.getByLabel("Confirmer le mot de passe").fill(ownerPassword)
+  await page.getByRole("button", { name: "Créer mon mot de passe" }).click()
+  await expect(page.getByRole("heading", { name: "Mot de passe créé" })).toBeVisible({ timeout: 30_000 }) // password hashing
+  await page.goto("/admin/login")
+  await page.getByLabel("Email").fill(email)
+  await page.getByLabel("Mot de passe").fill(ownerPassword)
+  await page.getByRole("button", { name: "Se connecter" }).click()
+  await expect(page).toHaveURL(/\/admin\/events/)
+  await page.goto("/admin/settings/admins")
+  await expect(page.getByText("Vous pourrez inviter d'autres administrateurs une fois qu'il sera validé")).toBeVisible()
+  await expect(page.getByRole("button", { name: "Inviter" })).toHaveCount(0)
+
   // No public page, not even with the address: the space awaits validation.
   const visitor = await browser.newContext()
   const anonymous = await visitor.newPage()
