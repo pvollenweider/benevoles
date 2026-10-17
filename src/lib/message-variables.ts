@@ -52,7 +52,9 @@ export function splitVariables(text: string, vars: Record<string, string>): Vari
  */
 export function normalizeVariables(text: string, vars: Record<string, string>): string {
   const keys = new Set(Object.keys(vars).map(key))
-  return text.replace(TOKEN, (match, double: string | undefined, single: string | undefined) => {
+  return text.replace(TOKEN, (match, double: string | undefined, single: string | undefined, offset: number) => {
+    // `\{prénom}`: the organizer escaped the brace to show the placeholder itself.
+    if (text[offset - 1] === "\\") return match
     const k = key(double ?? single ?? "")
     return keys.has(k) ? `{${k}}` : match
   })

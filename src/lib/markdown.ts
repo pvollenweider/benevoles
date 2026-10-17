@@ -46,10 +46,10 @@ const HEADING_SIZES: Record<number, string> = {
  * a link, an image or any other syntax. In a link or image address, a placeholder is filled,
  * percent-encoded, only where the organizer already fixed the destination: after a scheme and
  * host (`https://example.org/plan?n={prénom}`), in a query or fragment (`mailto:a@b.org?subject=
- * {prénom}`), or in a path on the same site (`/plan/{prénom}`). A value can then never choose
+ * {prénom}`), or in a path on the same site (`/plan/{prénom}`, `../plan/{prénom}`). A value can then never choose
  * where a link leads; a placeholder anywhere else in an address stays as written.
  */
-const FIXED_DESTINATION = /^(?:[a-z][a-z0-9+.-]*:\/\/[^/?#\s{}]+[/?#]|[^?#]*[?#]|\/(?!\/))/i
+const FIXED_DESTINATION = /^(?:[a-z][a-z0-9+.-]*:\/\/[^/?#\s{}]+[/?#]|[^?#]*[?#]|(?![a-z][a-z0-9+.-]*:)(?!\/\/)[^?#]*\/)/i
 
 function makeRenderer(vars?: Record<string, string>): Renderer {
   const r = new Renderer()
