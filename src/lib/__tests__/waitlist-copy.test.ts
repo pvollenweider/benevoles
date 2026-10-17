@@ -9,6 +9,8 @@ describe("waitlist copy", () => {
     expect(WAITLIST_STEPS[1]).toContain("ordre")
     expect(WAITLIST_STEPS[2]).toContain(`${WAITLIST_OFFER_HOURS} heures`)
     expect(WAITLIST_STEPS[3]).toContain("clique sur le lien")
+    // Opening the link alone accepts nothing (#1044): the page's button does.
+    expect(WAITLIST_STEPS[3]).toContain("puis sur le bouton « Prendre la place »")
     expect(WAITLIST_STEPS[4]).toContain("personne suivante")
     expect(WAITLIST_STEPS[4]).toContain(`${WAITLIST_OFFER_HOURS} heures`)
     expect(WAITLIST_SHORT).toContain("24 heures")

@@ -1,77 +1,64 @@
-"use client"
+// SPDX-FileCopyrightText: 2026 Philippe Vollenweider
+// SPDX-License-Identifier: AGPL-3.0-only
 
-import { useEffect, useState } from "react"
-import { useParams } from "next/navigation"
-import Link from "next/link"
+import type { Metadata } from "next"
+import { cache } from "react"
+import { prisma } from "@/lib/prisma"
+import { registrationToken } from "@/lib/token-vault"
+import { orgTimeZone } from "@/lib/time-zone"
+import { offerDeadline } from "@/lib/waitlist-copy"
+import { dayLabel, spokenTimeRange } from "@/lib/spoken-time"
+import { WAITLIST_OFFER_PAGE_TITLES, waitlistOfferPageState } from "@/lib/waitlist-offer"
+import WaitlistOfferConfirm, { type WaitlistOfferDetails } from "@/components/public/WaitlistOfferConfirm"
 
-export default function WaitlistConfirmPage() {
-  const { token } = useParams() as { token: string }
-  const [state, setState] = useState<"loading" | "success" | "error">("loading")
-  const [message, setMessage] = useState("")
-  const [editToken, setEditToken] = useState<string | null>(null)
-  const [requested, setRequested] = useState(false)
+export const dynamic = "force-dynamic"
 
-  useEffect(() => {
-    fetch(`/api/public/waitlist/${token}/confirm`, { method: "POST" })
-      .then((r) => r.json())
-      .then((d) => {
-        if (d.success) {
-          setEditToken(d.editToken)
-          setRequested(d.requested === true)
-          setState("success")
-        } else {
-          setMessage(d.error ?? "Une erreur est survenue.")
-          setState("error")
-        }
+/** One read per request, shared by generateMetadata and the page. Read-only (#1044). */
+const loadOffer = cache(async (token: string) => {
+  const reg = token
+    ? await prisma.registration.findFirst({
+        where: registrationToken.where(token),
+        select: {
+          status: true,
+          waitingExpiresAt: true,
+          shift: { select: { label: true, date: true, startTime: true, endTime: true, requiresApproval: true } },
+          event: { select: { title: true, organization: { select: { timeZone: true } } } },
+        },
       })
-      .catch(() => {
-        setMessage("Impossible de confirmer. Réessayez.")
-        setState("error")
-      })
-  }, [token])
+    : null
+  const state = waitlistOfferPageState(reg, new Date())
+  const details: WaitlistOfferDetails | null = reg && state === "offered"
+    ? {
+        eventTitle: reg.event.title,
+        shiftLabel: reg.shift.label,
+        // Shift dates are calendar days at midnight UTC.
+        day: dayLabel(reg.shift.date.toISOString().slice(0, 10)),
+        time: spokenTimeRange(reg.shift.startTime, reg.shift.endTime),
+        deadline: offerDeadline(reg.waitingExpiresAt, orgTimeZone(reg.event.organization)),
+        requiresApproval: reg.shift.requiresApproval,
+      }
+    : null
+  return { state, details }
+})
 
+export async function generateMetadata({ params }: { params: Promise<{ token: string }> }): Promise<Metadata> {
+  const { token } = await params
+  const { state } = await loadOffer(token)
+  return { title: WAITLIST_OFFER_PAGE_TITLES[state], robots: { index: false, follow: false } }
+}
+
+/**
+ * Where the waitlist offer email's link lands. Opening it changes nothing (#1044): mail scanners
+ * open links, some run the page's scripts. The « Prendre la place » button accepts the offer
+ * (POST /api/public/waitlist/[token]/confirm).
+ */
+export default async function WaitlistConfirmPage({ params }: { params: Promise<{ token: string }> }) {
+  const { token } = await params
+  const { state, details } = await loadOffer(token)
   return (
-    <main className="min-h-screen bg-gray-50 flex items-center justify-center px-4">
-      <div
-        role={state === "error" ? "alert" : "status"}
-        aria-live={state === "error" ? "assertive" : "polite"}
-        className="max-w-md w-full bg-white rounded-2xl border border-gray-200 p-8 text-center"
-      >
-        {state === "loading" && (
-          <p className="text-gray-500 text-sm">Confirmation en cours…</p>
-        )}
-        {state === "success" && (
-          <>
-            {requested ? (
-              <>
-                <h1 className="text-xl font-bold text-gray-900 mb-2">Demande envoyée</h1>
-                <p className="text-sm text-gray-700 mb-6">Ce créneau est sur validation : la place t&apos;est réservée le temps que l&apos;organisation réponde. Tu recevras un email avec sa réponse.</p>
-              </>
-            ) : (
-              <>
-                <span aria-hidden="true" className="text-5xl block mb-4">🎉</span>
-                <h1 className="text-xl font-bold text-gray-900 mb-2">Place confirmée !</h1>
-                <p className="text-sm text-gray-500 mb-6">Ton inscription est maintenant active. À très vite !</p>
-              </>
-            )}
-            {editToken && (
-              <Link
-                href={`/my/${editToken}`}
-                className="block w-full bg-blue-600 text-white rounded-xl py-3 text-sm font-medium hover:bg-blue-700 transition-colors focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-blue-800"
-              >
-                Accéder à mon inscription
-              </Link>
-            )}
-          </>
-        )}
-        {state === "error" && (
-          <>
-            <span aria-hidden="true" className="text-5xl block mb-4">⏱</span>
-            <h1 className="text-xl font-bold text-gray-900 mb-2">Lien expiré ou invalide</h1>
-            <p className="text-sm text-gray-500 mb-6">{message}</p>
-            <Link href="/" className="text-blue-600 text-sm">Retour à l&apos;accueil</Link>
-          </>
-        )}
+    <main className="min-h-screen bg-gray-50 flex items-center justify-center px-4 py-8">
+      <div className="max-w-md w-full bg-white rounded-2xl border border-gray-200 p-6 sm:p-8">
+        <WaitlistOfferConfirm token={token} state={state} details={details} />
       </div>
     </main>
   )

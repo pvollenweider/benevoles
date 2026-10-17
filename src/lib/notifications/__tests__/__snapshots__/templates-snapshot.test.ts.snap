@@ -3711,7 +3711,7 @@ exports[`render — snapshot of every notification kind > waitlist_confirmation 
     "      <div>Position : <strong>#2</strong></div>",
     "    </div>",
     "    <h3 style="margin:1.25em 0 0.25em;font-size:1em">Comment ça marche</h3>",
-    "    <ol style="color:#555;margin:0;padding-left:1.25em;line-height:1.6"><li>Ton inscription n'est pas encore confirmée : le créneau est complet.</li><li>L'ordre est celui des inscriptions : la première personne inscrite en liste d'attente est la première prévenue.</li><li>Dès qu'une place se libère, tu reçois un email avec un lien pour la prendre. Tu as 24 heures à partir de cet email, jamais au-delà du début du créneau.</li><li>Pour accepter, clique sur le lien de cet email (ou sur « Prendre la place » sur ta page personnelle) : la place est à toi, tu reçois la confirmation.</li><li>Si tu ne réponds pas dans les 24 heures, la place passe à la personne suivante ; tu restes en liste d'attente.</li></ol>",
+    "    <ol style="color:#555;margin:0;padding-left:1.25em;line-height:1.6"><li>Ton inscription n'est pas encore confirmée : le créneau est complet.</li><li>L'ordre est celui des inscriptions : la première personne inscrite en liste d'attente est la première prévenue.</li><li>Dès qu'une place se libère, tu reçois un email avec un lien pour la prendre. Tu as 24 heures à partir de cet email, jamais au-delà du début du créneau.</li><li>Pour accepter, clique sur le lien de cet email (ou sur « Prendre la place » sur ta page personnelle), puis sur le bouton « Prendre la place » de la page qui s'ouvre : la place est à toi, tu reçois la confirmation.</li><li>Si tu ne réponds pas dans les 24 heures, la place passe à la personne suivante ; tu restes en liste d'attente.</li></ol>",
     "  ",
     "<div style="margin-top:32px;padding-top:16px;border-top:1px solid #f0f0f0;font-size:12px;color:#666;text-align:center;">",
     "  <a href="https://benevol.app" style="color:#666;text-decoration:none;">benevol.app</a>",
@@ -3733,7 +3733,7 @@ exports[`render — snapshot of every notification kind > waitlist_confirmation 
     "1. Ton inscription n'est pas encore confirmée : le créneau est complet.",
     "2. L'ordre est celui des inscriptions : la première personne inscrite en liste d'attente est la première prévenue.",
     "3. Dès qu'une place se libère, tu reçois un email avec un lien pour la prendre. Tu as 24 heures à partir de cet email, jamais au-delà du début du créneau.",
-    "4. Pour accepter, clique sur le lien de cet email (ou sur « Prendre la place » sur ta page personnelle) : la place est à toi, tu reçois la confirmation.",
+    "4. Pour accepter, clique sur le lien de cet email (ou sur « Prendre la place » sur ta page personnelle), puis sur le bouton « Prendre la place » de la page qui s'ouvre : la place est à toi, tu reçois la confirmation.",
     "5. Si tu ne réponds pas dans les 24 heures, la place passe à la personne suivante ; tu restes en liste d'attente.",
   ],
 }

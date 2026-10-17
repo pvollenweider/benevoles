@@ -60,6 +60,8 @@ export async function recordLastMinute(options: { page: Page; base: string; dire
       await go(`${base}/my/${registrationToken.reveal(nicolas)}`)
       const take = page.getByRole("link", { name: "Prendre la place : Accueil du matin", exact: true })
       await take.waitFor(); await at("Ouvrons son lien et acceptons"); await tap(page, take)
+      // The offer page only shows the offer (#1044): its button accepts it.
+      await tap(page, page.getByRole("button", { name: "Prendre la place", exact: true }))
       await page.getByRole("heading", { name: "Place confirmée !", exact: true }).waitFor()
       await at("Maintenant seulement, sa participation est"); await registrations()
       if ((await reg(1)).status !== "active") throw new Error("Offer acceptance not active")

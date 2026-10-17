@@ -28,7 +28,7 @@ Concrètement :
 1. ton inscription **n'est pas encore confirmée** : le créneau est complet ;
 2. l'ordre est celui des inscriptions : la première personne inscrite en liste d'attente est la première prévenue (ta position figure dans l'email et sur ta page personnelle) ;
 3. dès qu'une place se libère, tu reçois un **email avec un lien** pour la prendre, valable **24 heures**, jamais au-delà du début du créneau ;
-4. pour accepter, clique sur ce lien (ou sur **Prendre la place** depuis ta page personnelle) : la place est à toi et tu reçois la confirmation ;
+4. pour accepter, clique sur ce lien (ou sur **Prendre la place** depuis ta page personnelle) : la page qui s'ouvre rappelle le créneau et le délai ; le bouton **Prendre la place** la confirme, la place est à toi et tu reçois la confirmation. Ouvrir le lien seul ne prend pas la place ;
 5. sans réponse dans le délai, la place passe à la personne suivante ; tu restes en liste d'attente.
 
 Une fois les inscriptions de l'événement fermées, la liste d'attente ne propose plus de place ; une place qui t'est déjà proposée reste à prendre pendant son délai.
