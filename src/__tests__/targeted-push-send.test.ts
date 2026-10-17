@@ -49,7 +49,7 @@ describe("sendTargetedPush", () => {
     m.findMany.mockResolvedValue([
       sub("ok"),
       { id: "bad-host", endpoint: "https://169.254.169.254/x", auth: "a", p256dh: "p" },
-      { id: "bad-port", endpoint: "https://fcm.googleapis.com:8443/x", auth: "a", p256dh: "p" },
+      { id: "bad-local", endpoint: "https://localhost:8443/x", auth: "a", p256dh: "p" },
     ])
     m.send.mockResolvedValue({})
     const { sendPushToVolunteer } = await import("@/lib/push")
@@ -65,8 +65,8 @@ describe("sendTargetedPush", () => {
     const { sendPushToVolunteer, PUSH_SEND_TIMEOUT_MS, pushAgent } = await import("@/lib/push")
     const { safePushLookup } = await import("@/lib/push-endpoint")
     await sendPushToVolunteer("alice", { title: "T", body: "B" })
-    expect(PUSH_SEND_TIMEOUT_MS).toBe(10_000)
-    expect(m.send.mock.calls[0][2]).toEqual({ TTL: 3 * 24 * 3600, timeout: 10_000, agent: pushAgent })
+    expect(PUSH_SEND_TIMEOUT_MS).toBe(30_000)
+    expect(m.send.mock.calls[0][2]).toEqual({ TTL: 3 * 24 * 3600, timeout: 30_000, agent: pushAgent })
     // web-push 3.6.7 only uses an agent that is an https.Agent; its lookup is the DNS guard.
     const https = await import("node:https")
     expect(pushAgent).toBeInstanceOf(https.Agent)
@@ -80,6 +80,7 @@ describe("sendTargetedPush", () => {
       m.send.mockImplementation((s: { endpoint: string }) => s.endpoint.endsWith("slow") ? new Promise(() => {}) : Promise.resolve({}))
       const { sendPushToVolunteer, PUSH_SEND_DEADLINE_MS } = await import("@/lib/push")
       const pending = sendPushToVolunteer("alice", { title: "T", body: "B" })
+      expect(PUSH_SEND_DEADLINE_MS).toBe(60_000)
       await vi.advanceTimersByTimeAsync(PUSH_SEND_DEADLINE_MS + 1)
       expect(await pending).toEqual({ sent: 1, failed: 1, removed: 0 })
     } finally {

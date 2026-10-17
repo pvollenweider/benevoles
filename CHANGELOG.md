@@ -13,7 +13,7 @@ Format basé sur [Keep a Changelog](https://keepachangelog.com/fr/1.0.0/).
 
 ### Sécurité
 
-- **Notifications push mieux encadrées** (#1041) : un abonnement push doit pointer vers une adresse HTTPS publique ; le serveur refuse de contacter une adresse interne ou réservée, y compris quand un nom de domaine y renvoie au moment de l'envoi. Tous les services de notification des navigateurs continuent de fonctionner. Un abonnement enregistré auparavant qui ne respecte pas cette règle n'est plus contacté et compte comme un échec dans l'historique du message. Chaque envoi a un délai maximal, et les notifications d'un message programmé partent après les emails, qu'elles ne peuvent plus retarder.
+- **Notifications push mieux encadrées** (#1041) : un abonnement push doit pointer vers une adresse HTTPS publique ; le serveur refuse de contacter une adresse interne ou réservée, y compris quand un nom de domaine y renvoie au moment de l'envoi. Tous les services de notification des navigateurs continuent de fonctionner. Un abonnement enregistré auparavant qui ne respecte pas cette règle n'est plus contacté et compte comme un échec dans l'historique du message. Un envoi resté sans réponse est abandonné au bout d'une minute (compté en échec), et les notifications d'un message programmé partent après les emails, qu'elles ne peuvent plus retarder.
 
 ### Corrigé
 

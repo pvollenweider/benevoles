@@ -10,10 +10,17 @@ import { reportError } from "./report-error"
 import { siteDomain } from "@/lib/site"
 import { isAllowedPushEndpoint, safePushLookup } from "./push-endpoint"
 
-/** Socket inactivity timeout handed to web-push (#1041). */
-export const PUSH_SEND_TIMEOUT_MS = 10_000
-/** Overall cap on one send: the socket timeout alone does not bound a slow, trickling answer. */
-export const PUSH_SEND_DEADLINE_MS = 15_000
+/**
+ * Socket inactivity timeout handed to web-push (#1041). Push services answer in well under a
+ * second; this only ends a connection that has gone silent.
+ */
+export const PUSH_SEND_TIMEOUT_MS = 30_000
+/**
+ * Overall cap on one send: the socket timeout alone does not bound a slow, trickling answer. A
+ * send still running then counts as failed (the history has no "unknown" outcome), although the
+ * service may still deliver it.
+ */
+export const PUSH_SEND_DEADLINE_MS = 60_000
 /**
  * Connections of every push go through this agent (#1041): its lookup refuses a name that
  * resolves to a non-public address, so a stored endpoint cannot reach an internal host, even by

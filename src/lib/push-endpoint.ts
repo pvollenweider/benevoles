@@ -7,13 +7,14 @@ import net from "node:net"
 /**
  * Where the server may POST a Web Push message (#1041). Browsers pick their push service (FCM,
  * Mozilla, WNS, Apple, or any UnifiedPush distributor on its own domain), so the host itself is
- * not restricted: every legitimate provider keeps working. What is refused is anything that
- * would make the server talk to a non-public address: plain http, credentials, a non-default
- * port, IP literals outside the public internet, local-only names, and (at connection time,
+ * not restricted, nor is the port: every legitimate provider keeps working. What is refused is
+ * plain http, credentials, and anything that would make the server talk to a non-public
+ * address: IP literals outside the public internet, local-only names, and (at connection time,
  * see `safePushLookup`) names that resolve to such an address, which also covers DNS rebinding.
  */
 
-const MAX_ENDPOINT_LENGTH = 2048
+/** A sanity bound only: real endpoints are a few hundred characters. */
+const MAX_ENDPOINT_LENGTH = 8192
 
 /** Addresses never reachable for a push: loopback, private, link-local, CGNAT, documentation, multicast… */
 const blocked = new net.BlockList()
@@ -61,8 +62,8 @@ function isLocalName(host: string): boolean {
 }
 
 /**
- * Whether a push subscription endpoint may be stored and sent to: https on the default port, no
- * credentials, a bounded length, and a public host (a public IP literal or a DNS name that is not
+ * Whether a push subscription endpoint may be stored and sent to: https, no credentials, a
+ * bounded length, and a public host (a public IP literal or a DNS name that is not
  * local-only). Anything unparsable is refused. The DNS answer is checked when connecting.
  */
 export function isAllowedPushEndpoint(endpoint: unknown): boolean {
@@ -75,8 +76,6 @@ export function isAllowedPushEndpoint(endpoint: unknown): boolean {
   }
   if (url.protocol !== "https:") return false
   if (url.username || url.password) return false
-  // URL normalises ":443" to "" for https, so any port left is a non-default one.
-  if (url.port !== "") return false
   // URL also normalises numeric hosts ("2130706433", "0x7f.1") to dotted IPv4.
   // A fully qualified name may end with a dot ("fcm.googleapis.com."): same host.
   const host = url.hostname.toLowerCase().replace(/^\[(.*)\]$/, "$1").replace(/\.$/, "")

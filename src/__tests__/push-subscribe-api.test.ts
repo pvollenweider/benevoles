@@ -39,7 +39,7 @@ describe("POST /api/public/push", () => {
   // #1041: the server later POSTs to the endpoint, so it must be a public https address.
   it.each([
     "http://fcm.googleapis.com/fcm/send/abc",
-    "https://fcm.googleapis.com:8443/fcm/send/abc",
+    "https://10.0.0.1:8443/abc",
     "https://u:p@fcm.googleapis.com/fcm/send/abc",
     "https://10.0.0.1/abc",
     "https://169.254.169.254/latest/meta-data",

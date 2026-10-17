@@ -16,6 +16,9 @@ describe("isAllowedPushEndpoint", () => {
     "https://8.8.8.8/push",
     "https://[2001:4860:4860::8888]/push",
     "https://fcm.googleapis.com./fcm/send/abc",
+    // Any port on a public host: a self-hosted provider may not use 443.
+    "https://push.example-distributor.org:8443/UP/abc",
+    `https://fcm.googleapis.com/${"a".repeat(4000)}`,
   ])("accepts %s", (endpoint) => {
     expect(isAllowedPushEndpoint(endpoint)).toBe(true)
   })
@@ -24,7 +27,8 @@ describe("isAllowedPushEndpoint", () => {
     ["plain http", "http://fcm.googleapis.com/fcm/send/abc"],
     ["credentials", "https://user:pass@fcm.googleapis.com/fcm/send/abc"],
     ["a username only", "https://user@web.push.apple.com/abc"],
-    ["a non-default port", "https://fcm.googleapis.com:8443/fcm/send/abc"],
+    ["loopback on another port", "https://127.0.0.1:8443/abc"],
+    ["localhost on another port", "https://localhost:6379/abc"],
     ["loopback IPv4", "https://127.0.0.1/abc"],
     ["loopback in decimal", "https://2130706433/abc"],
     ["loopback in hex", "https://0x7f.1/abc"],
@@ -48,7 +52,7 @@ describe("isAllowedPushEndpoint", () => {
     ["a trailing-dot private literal", "https://10.0.0.1./abc"],
     ["another scheme", "wss://fcm.googleapis.com/abc"],
     ["garbage", "not a url"],
-    ["an overlong value", `https://fcm.googleapis.com/${"a".repeat(2100)}`],
+    ["an overlong value", `https://fcm.googleapis.com/${"a".repeat(8200)}`],
   ])("refuses %s", (_label, endpoint) => {
     expect(isAllowedPushEndpoint(endpoint)).toBe(false)
   })
