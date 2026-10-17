@@ -45,7 +45,6 @@ describe.skipIf(!url)("sign-up confirmation on Postgres (#810)", () => {
     await prisma.signupRequest.deleteMany({ where: { email: { startsWith: tag } } })
     await prisma.adminUser.deleteMany({ where: { email: { startsWith: tag } } })
     await prisma.organization.deleteMany({ where: { id: { in: orgIds } } })
-    await prisma.$disconnect()
   })
 
   it("creates the space awaiting validation and an inactive owner, once, and tells the operator", async () => {
@@ -94,3 +93,75 @@ describe.skipIf(!url)("sign-up confirmation on Postgres (#810)", () => {
     expect(await confirmSignupRequest(`${tag}-c`)).toEqual({ ok: false, reason: "taken" })
   })
 })
+
+describe.skipIf(!url)("an expired admin invitation frees the address on Postgres (#1053)", () => {
+  const DAY = 24 * 60 * 60 * 1000
+  const orgIds: string[] = []
+
+  afterAll(async () => {
+    await prisma.signupRequest.deleteMany({ where: { email: { startsWith: `${tag}-inv` } } })
+    await prisma.adminUser.deleteMany({ where: { email: { startsWith: `${tag}-inv` } } })
+    await prisma.organization.deleteMany({ where: { id: { in: orgIds } } })
+  })
+
+  async function otherOrg() {
+    const org = await prisma.organization.create({ data: { name: `Autre ${tag}`, slug: `${tag}-autre-${orgIds.length}` } })
+    orgIds.push(org.id)
+    return org
+  }
+
+  it("replaces only an expired, never-activated invitation, and never an active account or a valid invitation", async () => {
+    const { findAdminEmailHolder, releaseExpiredInvitation } = await import("@/lib/admin-invitation-server")
+    const org = await otherOrg()
+    const now = new Date()
+    const make = (code: string, data: object) => prisma.adminUser.create({ data: { email: `${tag}-inv-${code}@example.org`, name: code, passwordHash: "x", organizationId: org.id, ...data } })
+    await make("active", { isActive: true })
+    await make("valid", { isActive: false, setupTokenHash: `${tag}-h-valid`, setupTokenExpiresAt: new Date(now.getTime() + DAY) })
+    await make("expired", { isActive: false, setupTokenHash: `${tag}-h-expired`, setupTokenExpiresAt: new Date(now.getTime() - DAY) })
+
+    for (const code of ["active", "valid"]) {
+      const holder = await findAdminEmailHolder(prisma, `${tag}-INV-${code}@Example.org`)
+      expect(holder).not.toBeNull()
+      expect(await releaseExpiredInvitation(prisma, holder!, now)).toBe(false)
+      expect(await prisma.adminUser.count({ where: { email: `${tag}-inv-${code}@example.org` } })).toBe(1)
+    }
+    const expired = await findAdminEmailHolder(prisma, `${tag}-inv-expired@example.org`)
+    // Renewed meanwhile (a new link from the operator): the row read earlier is no longer replaced.
+    await prisma.adminUser.update({ where: { id: expired!.id }, data: { setupTokenHash: `${tag}-h-renewed` } })
+    expect(await releaseExpiredInvitation(prisma, expired!, now)).toBe(false)
+    const renewed = await findAdminEmailHolder(prisma, `${tag}-inv-expired@example.org`)
+    expect(await releaseExpiredInvitation(prisma, renewed!, now)).toBe(true)
+    expect(await prisma.adminUser.count({ where: { email: `${tag}-inv-expired@example.org` } })).toBe(0)
+  })
+
+  it("lets the person sign up and confirm over another organisation's expired invitation", async () => {
+    const org = await otherOrg()
+    await prisma.adminUser.create({ data: { email: `${tag}-inv-owner@example.org`, name: "Owner", passwordHash: "x", organizationId: org.id, isActive: true } })
+    const email = `${tag}-inv-signup@example.org`
+    await prisma.adminUser.create({ data: { email, name: "Invité", passwordHash: "x", organizationId: org.id, isActive: false, setupTokenHash: `${tag}-h-signup`, setupTokenExpiresAt: new Date(Date.now() - DAY) } })
+    await request("inv-signup", { email })
+
+    const result = await confirmSignupRequest(`${tag}-inv-signup`)
+    expect(result.ok).toBe(true)
+    if (!result.ok) return
+    const created = await prisma.organization.findUniqueOrThrow({ where: { slug: result.organizationSlug }, include: { admins: true } })
+    orgIds.push(created.id)
+    expect(created.admins.map((a) => a.email)).toEqual([email])
+    expect(await prisma.adminUser.count({ where: { organizationId: org.id } })).toBe(1)
+  })
+
+  it("keeps the expired first account of a space with no active admin", async () => {
+    const { findAdminEmailHolder, releaseExpiredInvitation } = await import("@/lib/admin-invitation-server")
+    const org = await otherOrg()
+    const email = `${tag}-inv-first@example.org`
+    await prisma.adminUser.create({ data: { email, name: "Premier", passwordHash: "x", organizationId: org.id, isActive: false, setupTokenHash: `${tag}-h-first`, setupTokenExpiresAt: new Date(Date.now() - DAY) } })
+    const holder = await findAdminEmailHolder(prisma, email)
+    expect(holder?.organizationHasActiveAdmin).toBe(false)
+    expect(await releaseExpiredInvitation(prisma, holder!, new Date())).toBe(false)
+    await request("inv-first", { email })
+    expect(await confirmSignupRequest(`${tag}-inv-first`)).toEqual({ ok: false, reason: "taken" })
+    expect(await prisma.adminUser.count({ where: { email } })).toBe(1)
+  })
+})
+
+afterAll(async () => { await prisma.$disconnect() })

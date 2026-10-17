@@ -43,6 +43,20 @@ describe("AdminsManager — roles", () => {
     expect(screen.getByRole("status")).toHaveTextContent("Votre rôle : organisateur.")
   })
 
+  // #1053: re-inviting an expired invitation replaces its row (new id) instead of listing it twice.
+  it("replaces the expired invitation row when the same address is invited again", async () => {
+    const expired = { id: "old", name: "Camille", email: "camille@x.ch", role: "organizer", isActive: false, createdAt: "2026-01-03T00:00:00.000Z", pending: true }
+    fetchMock.mockResolvedValue({ ok: true, status: 201, json: async () => ({ ...expired, id: "new", createdAt: "2026-10-17T00:00:00.000Z" }) })
+    render(<AdminsManager initialAdmins={[...admins, expired]} currentEmail="alice@x.ch" canManage />)
+    expect(screen.getAllByText("camille@x.ch")).toHaveLength(1)
+    fireEvent.click(screen.getByRole("button", { name: "Inviter" }))
+    fireEvent.change(screen.getByLabelText("Nom"), { target: { value: "Camille" } })
+    fireEvent.change(screen.getByLabelText("Email"), { target: { value: "camille@x.ch" } })
+    fireEvent.click(screen.getByRole("button", { name: "Envoyer l'invitation" }))
+    await waitFor(() => expect(screen.getByRole("status")).toHaveTextContent("Invitation envoyée à camille@x.ch."))
+    expect(screen.getAllByText("camille@x.ch")).toHaveLength(1)
+  })
+
   it("shows organisers the team without any control", () => {
     render(<AdminsManager initialAdmins={admins} currentEmail="bob@x.ch" canManage={false} />)
     expect(screen.queryByRole("button", { name: /Inviter/ })).toBeNull()

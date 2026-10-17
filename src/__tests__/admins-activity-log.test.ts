@@ -9,7 +9,7 @@ const adminUserDelete = vi.hoisted(() => vi.fn())
 const orgLogCreate = vi.hoisted(() => vi.fn())
 vi.mock("@/lib/prisma", () => ({
   prisma: {
-    adminUser: { findUnique: adminUserFindUnique, create: adminUserCreate, delete: adminUserDelete },
+    adminUser: { findUnique: adminUserFindUnique, findFirst: adminUserFindUnique, create: adminUserCreate, delete: adminUserDelete },
     orgLog: { create: orgLogCreate },
     async $transaction(fn: (tx: unknown) => unknown) { return fn(this) },
   },
