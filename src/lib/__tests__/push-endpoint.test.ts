@@ -15,6 +15,7 @@ describe("isAllowedPushEndpoint", () => {
     "https://push.example-distributor.org/UP/abc",
     "https://8.8.8.8/push",
     "https://[2001:4860:4860::8888]/push",
+    "https://fcm.googleapis.com./fcm/send/abc",
   ])("accepts %s", (endpoint) => {
     expect(isAllowedPushEndpoint(endpoint)).toBe(true)
   })
@@ -43,7 +44,8 @@ describe("isAllowedPushEndpoint", () => {
     ["a single-label name", "https://postgres/abc"],
     ["a cluster service name", "https://db.benevoles.svc.cluster.local/abc"],
     ["an .internal name", "https://metadata.google.internal/abc"],
-    ["a trailing dot", "https://fcm.googleapis.com./fcm/send/abc"],
+    ["a trailing-dot local name", "https://localhost./abc"],
+    ["a trailing-dot private literal", "https://10.0.0.1./abc"],
     ["another scheme", "wss://fcm.googleapis.com/abc"],
     ["garbage", "not a url"],
     ["an overlong value", `https://fcm.googleapis.com/${"a".repeat(2100)}`],
@@ -94,10 +96,16 @@ describe("createSafeLookup", () => {
     ["CGNAT", "100.64.1.1", 4],
     ["ULA", "fd00::5", 6],
     ["IPv6 loopback", "::1", 6],
-  ])("refuses a name resolving to %s", async (_label, address, family) => {
-    const lookup = createSafeLookup(resolverFor([{ address: "93.184.216.34", family: 4 }, { address, family }]))
-    const { err } = await run(lookup, { all: true })
-    expect(err?.code).toBe("EPUSHNONPUBLIC")
+  ])("refuses a name resolving only to %s", async (_label, address, family) => {
+    const lookup = createSafeLookup(resolverFor([{ address, family }]))
+    expect((await run(lookup, { all: true })).err?.code).toBe("EPUSHNONPUBLIC")
+    expect((await run(lookup, {})).err?.code).toBe("EPUSHNONPUBLIC")
+  })
+
+  it("never hands out the internal answers of a mixed reply", async () => {
+    const lookup = createSafeLookup(resolverFor([{ address: "10.0.0.5", family: 4 }, { address: "93.184.216.34", family: 4 }, { address: "::1", family: 6 }]))
+    expect((await run(lookup, { all: true })).address).toEqual([{ address: "93.184.216.34", family: 4 }])
+    expect(await run(lookup, {})).toEqual({ err: null, address: "93.184.216.34", family: 4 })
   })
 
   it("refuses an empty answer and forwards resolver errors", async () => {

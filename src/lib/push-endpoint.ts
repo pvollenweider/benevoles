@@ -78,8 +78,9 @@ export function isAllowedPushEndpoint(endpoint: unknown): boolean {
   // URL normalises ":443" to "" for https, so any port left is a non-default one.
   if (url.port !== "") return false
   // URL also normalises numeric hosts ("2130706433", "0x7f.1") to dotted IPv4.
-  const host = url.hostname.toLowerCase().replace(/^\[(.*)\]$/, "$1")
-  if (!host || host.endsWith(".")) return false
+  // A fully qualified name may end with a dot ("fcm.googleapis.com."): same host.
+  const host = url.hostname.toLowerCase().replace(/^\[(.*)\]$/, "$1").replace(/\.$/, "")
+  if (!host) return false
   if (net.isIP(host)) return isPublicAddress(host)
   return !isLocalName(host)
 }
@@ -89,22 +90,23 @@ type LookupCallback = (err: NodeJS.ErrnoException | null, address: string | Look
 type Resolver = (hostname: string, options: dns.LookupAllOptions, callback: (err: NodeJS.ErrnoException | null, addresses: LookupAddress[]) => void) => void
 
 /**
- * A `lookup` for the push connections: resolves the name, and refuses the connection when any
- * answer is not a public address, so a public name pointing (or re-pointed) to an internal host
- * is never reached. Same contract as `dns.lookup` (single address or `all`).
+ * A `lookup` for the push connections: resolves the name and keeps only the public answers, so
+ * a name pointing (or re-pointed) to an internal host is never reached; with no public answer
+ * left, the connection is refused. Same contract as `dns.lookup` (single address or `all`).
  */
 export function createSafeLookup(resolve: Resolver = dns.lookup as unknown as Resolver) {
   return (hostname: string, options: dns.LookupOptions | number | undefined, callback: LookupCallback) => {
     const opts: dns.LookupOptions = typeof options === "number" ? { family: options } : (options ?? {})
     resolve(hostname, { ...opts, all: true }, (err, addresses) => {
       if (err) return callback(err, [])
-      if (!addresses?.length || addresses.some((a) => !isPublicAddress(a.address))) {
+      const usable = (addresses ?? []).filter((a) => isPublicAddress(a.address))
+      if (usable.length === 0) {
         const e: NodeJS.ErrnoException = new Error(`Push endpoint host ${hostname} does not resolve to a public address`)
         e.code = "EPUSHNONPUBLIC"
         return callback(e, [])
       }
-      if (opts.all) return callback(null, addresses)
-      callback(null, addresses[0].address, addresses[0].family)
+      if (opts.all) return callback(null, usable)
+      callback(null, usable[0].address, usable[0].family)
     })
   }
 }
