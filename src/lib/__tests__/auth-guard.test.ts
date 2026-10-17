@@ -193,7 +193,7 @@ describe("getOrgContext (SSR helper)", () => {
   // An admin email link (e.g. /admin/events/<id>/questions) opened by the super admin.
   describe("super admin on an event page", () => {
     const page = "/admin/events/ev1/questions?x=1"
-    const switchTo = `/api/super-admin/use-org/org-event?next=${encodeURIComponent(page)}`
+    const switchTo = `/super-admin/use-org/org-event?next=${encodeURIComponent(page)}`
 
     beforeEach(() => {
       authMock.mockResolvedValue({ user: { role: "super_admin", organizationId: null } })

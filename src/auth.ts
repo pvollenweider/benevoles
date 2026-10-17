@@ -7,10 +7,10 @@ import bcrypt from "bcryptjs"
 import { authConfig } from "./auth.config"
 import { prisma } from "@/lib/prisma"
 import { getClientIp } from "@/lib/rate-limit"
-import { loginAllowed, recordLoginFailure, refreshAdminToken } from "@/lib/admin-session"
+import { beginLoginAttempt, refreshAdminToken } from "@/lib/admin-session"
+import { verifyAdminLogin } from "@/lib/admin-login"
 import { normalizeEmail } from "@/lib/email-address"
 import { MAX_LOGIN_PASSWORD_LENGTH } from "@/lib/password"
-import { organizationAllowsSignIn } from "@/lib/admin-sign-in"
 
 export const { handlers, auth, signIn, signOut } = NextAuth({
   ...authConfig,
@@ -34,28 +34,16 @@ export const { handlers, auth, signIn, signOut } = NextAuth({
         // Oversized input refused before bcrypt (#359); not the 72-byte policy, which only applies
         // when a password is set, so longer passwords set before it still work.
         if (String(credentials.password).length > MAX_LOGIN_PASSWORD_LENGTH) return null
-        const ip = getClientIp(request)
-        const email = normalizeEmail(credentials.email as string)
-        if (!(await loginAllowed(ip, email))) return null
-
-        const user = await prisma.adminUser.findUnique({
-          where: { email },
-          include: { organization: { select: { active: true } } },
-        })
-
-        if (!user || !user.isActive) {
-          await recordLoginFailure(ip, email)
-          return null
-        }
-        // super_admin has no organization (cross-tenant); org admins are locked out once their
-        // organization is disabled or gone.
-        if (!organizationAllowsSignIn(user)) return null
-
-        const valid = await bcrypt.compare(credentials.password as string, user.passwordHash)
-        if (!valid) {
-          await recordLoginFailure(ip, email)
-          return null
-        }
+        const user = await verifyAdminLogin(
+          { email: normalizeEmail(credentials.email as string), password: credentials.password as string, ip: getClientIp(request) },
+          {
+            beginAttempt: beginLoginAttempt,
+            findUser: (email) => prisma.adminUser.findUnique({ where: { email }, include: { organization: { select: { active: true } } } }),
+            compare: (password, hash) => bcrypt.compare(password, hash),
+            sleep: (ms) => new Promise((resolve) => setTimeout(resolve, ms)),
+          },
+        )
+        if (!user) return null
 
         return {
           id: user.id,

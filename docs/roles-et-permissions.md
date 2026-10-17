@@ -38,7 +38,7 @@ Une session est un JWT NextAuth v5 (`src/auth.config.ts`, `src/auth.ts`), mais e
 
 - à chaque appel de `auth()` côté serveur (pages admin, `requireOrgSession()`, `requireSuperAdmin()`), le compte est relu en base (`refreshAdminToken`, `src/lib/admin-session.ts`) : un compte supprimé ou désactivé, dont l'organisation est désactivée ou n'existe plus, perd l'accès immédiatement ; le rôle, l'organisation, l'email et le nom sont réévalués sans reconnexion ;
 - `AdminUser.sessionVersion` est copiée dans le JWT à la connexion et incrémentée à chaque changement ou réinitialisation du mot de passe : toute session ouverte auparavant est alors refusée. La session depuis laquelle le mot de passe est changé se reconnecte aussitôt avec le nouveau mot de passe ;
-- la connexion est limitée à 10 échecs par adresse email saisie et 30 par adresse IP sur 15 minutes ; la vérification du mot de passe actuel (changement de mot de passe, profil du super admin), à 5 échecs par compte et 20 par adresse IP.
+- la connexion est limitée, sur 15 minutes, à 30 échecs par adresse IP et à 10 échecs par adresse IP pour une même adresse email ; au-delà de 5 échecs sur un compte, toutes adresses IP confondues, chaque tentative attend 1 s, puis 2 s, 4 s et au plus 8 s, sans jamais bloquer le compte. Une adresse inconnue ou un compte inactif coûte le même calcul bcrypt qu'un mauvais mot de passe. La vérification du mot de passe actuel (changement de mot de passe, profil du super admin) est limitée à 5 échecs par compte et 20 par adresse IP.
 
 Le proxy (`src/proxy.ts`, la convention Next.js 16 qui remplace le middleware) ne fait qu'un premier filtrage sur les pages, à partir du JWT seul. Les contrôles faisant autorité sont côté serveur : les guards et `auth()` relisent le compte à chaque requête.
 
@@ -126,7 +126,8 @@ Règles sur l'équipe :
 | Pages | `src/proxy.ts` | `/admin/*` exige une session, sauf `login`, `accept-invite`, `forgot-password`, `reset-password`. `/super-admin/*` exige le rôle `super_admin`, sinon redirection vers `/admin` |
 | API admin | `requireOrgSession(level)` | 401 sans session ; 403 si le niveau est insuffisant (routes réservées aux propriétaires, voir `PERMISSIONS`), sans organisation ou organisation désactivée ; 409 pour un super admin qui n'a pas choisi d'organisation |
 | API super admin | `requireSuperAdmin()` | 401 sans session, 403 si le rôle n'est pas `super_admin` |
-| API cron | `isAuthorized()` | `Authorization: Bearer $CRON_SECRET` ; sans `CRON_SECRET`, refusé en production, `localhost` accepté en développement |
+| API admin et super admin, origine | `src/proxy.ts`, `src/lib/request-origin.ts` | `POST`, `PUT`, `PATCH`, `DELETE` : `403` si l'en-tête `Origin` n'est ni l'origine de la requête ni `NEXT_PUBLIC_APP_URL` ; sans `Origin`, `403` si `Sec-Fetch-Site` n'est pas `same-origin` ou si le `Referer` vient d'ailleurs ; `415` pour un corps qui n'est pas du JSON (sauf import des membres, logo, changement d'organisation du super admin) |
+| API cron | `isCronAuthorized()` (`src/lib/cron-auth.ts`) | `Authorization: Bearer $CRON_SECRET` comparé en temps constant ; sans `CRON_SECRET`, refusé en production, `localhost` accepté en développement |
 | API publique | jeton dans l'URL ou le corps | pas de session |
 
 ## Journaux d'activité

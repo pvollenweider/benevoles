@@ -14,7 +14,7 @@ export const DEFAULT_ADMIN_NEXT = "/admin/events"
 const MAX_NEXT_LENGTH = 2048
 
 /**
- * `next` of /api/super-admin/use-org/[id] when it is a same-origin admin page, the events list
+ * `next` of the super admin's organization switch when it is a same-origin admin page, the events list
  * otherwise: never an absolute or protocol-relative URL (open redirect), never outside /admin/.
  * Anything ambiguous (backslashes, control characters or spaces, encoded slashes, backslashes or
  * dots, dot segments) is refused rather than normalised. The fragment is dropped.
@@ -49,7 +49,30 @@ export function adminEventIdFromPath(path: string | null | undefined): string | 
   return id
 }
 
-/** The organization switch that opens `path` in the organization `orgId`. */
+/**
+ * The confirmation page of the organization switch that opens `path` in the organization `orgId`
+ * (#1048): opening it changes nothing, its button posts the switch (orgSwitchAction).
+ */
 export function orgSwitchUrl(orgId: string, path: string): string {
-  return `/api/super-admin/use-org/${encodeURIComponent(orgId)}?next=${encodeURIComponent(safeAdminNext(path))}`
+  return `/super-admin/use-org/${encodeURIComponent(orgId)}?next=${encodeURIComponent(safeAdminNext(path))}`
+}
+
+/** Where the confirmation page and the organization's « Gérer » button post the switch. */
+export function orgSwitchAction(orgId: string): string {
+  return `/api/super-admin/use-org/${encodeURIComponent(orgId)}`
+}
+
+/**
+ * The absolute address the switch redirects to (#1048): the site's configured address
+ * (NEXT_PUBLIC_APP_URL), never the forwarded host headers a client can choose; the request's own
+ * origin only when nothing is configured (development).
+ */
+export function canonicalRedirect(path: string, configuredAppUrl: string | undefined, requestUrl: string): string {
+  let base: string
+  try {
+    base = configuredAppUrl ? new URL(configuredAppUrl).origin : new URL(requestUrl).origin
+  } catch {
+    base = new URL(requestUrl).origin
+  }
+  return new URL(path, base).toString()
 }

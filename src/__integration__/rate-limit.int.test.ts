@@ -45,4 +45,17 @@ describe.skipIf(!url)("rate limit on Postgres (#322)", () => {
     expect(win.count).toBe(1)
     expect(win.msLeft).toBeGreaterThan(55_000)
   })
+
+  it("release gives back one hit, never below zero, and ignores a missing key (#1048)", async () => {
+    const key = `${tag}-release`
+    await postgresStore.hit(key, 60_000)
+    await postgresStore.hit(key, 60_000)
+    await postgresStore.release!(key)
+    expect((await postgresStore.peek(key))?.count).toBe(1)
+    await postgresStore.release!(key)
+    await postgresStore.release!(key)
+    expect((await postgresStore.peek(key))?.count).toBe(0)
+    await postgresStore.release!(`${tag}-release-missing`)
+    expect(await postgresStore.peek(`${tag}-release-missing`)).toBeNull()
+  })
 })

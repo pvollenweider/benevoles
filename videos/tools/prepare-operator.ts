@@ -34,8 +34,9 @@ async function main() {
     assert.equal((await owner.request.get("http://localhost:43104/api/super-admin/organizations")).status(), 403, "Owner cannot administer the platform")
     assert.equal((await anonymous.request.get("http://localhost:43104/api/super-admin/organizations")).status(), 401, "Anonymous platform request refused")
     assert.equal((await owner.request.get("http://localhost:43104/api/admin/events/video-operator-org-b-event-0")).status(), 404, "Owner cannot read the other organization")
-    await platform.goto("http://localhost:43104/api/super-admin/use-org/video-operator-org-a")
-    await platform.waitForURL(/\/admin\/events/)
+    // The switch is a POST (#1048); opening its address only shows the confirmation page.
+    assert.equal((await platform.request.post("http://localhost:43104/api/super-admin/use-org/video-operator-org-a")).ok(), true)
+    await platform.goto("http://localhost:43104/admin/events")
     await platform.getByRole("link", { name: "Parc — Fête de formation", exact: true }).waitFor()
     const selected = await platform.request.get("http://localhost:43104/api/admin/events")
     assert.equal(selected.status(), 200)

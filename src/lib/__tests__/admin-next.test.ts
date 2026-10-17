@@ -1,5 +1,5 @@
 import { describe, it, expect } from "vitest"
-import { adminEventIdFromPath, DEFAULT_ADMIN_NEXT, orgSwitchUrl, safeAdminNext } from "../admin-next"
+import { adminEventIdFromPath, DEFAULT_ADMIN_NEXT, orgSwitchUrl, orgSwitchAction, canonicalRedirect, safeAdminNext } from "../admin-next"
 
 describe("safeAdminNext", () => {
   it.each([
@@ -84,11 +84,37 @@ describe("adminEventIdFromPath", () => {
 describe("orgSwitchUrl", () => {
   it("switches organization and comes back to the page", () => {
     expect(orgSwitchUrl("org-1", "/admin/events/ev1/questions?x=1&y=2")).toBe(
-      "/api/super-admin/use-org/org-1?next=%2Fadmin%2Fevents%2Fev1%2Fquestions%3Fx%3D1%26y%3D2",
+      "/super-admin/use-org/org-1?next=%2Fadmin%2Fevents%2Fev1%2Fquestions%3Fx%3D1%26y%3D2",
     )
   })
 
   it("never carries an unsafe next", () => {
-    expect(orgSwitchUrl("org-1", "//evil.example")).toBe("/api/super-admin/use-org/org-1?next=%2Fadmin%2Fevents")
+    expect(orgSwitchUrl("org-1", "//evil.example")).toBe("/super-admin/use-org/org-1?next=%2Fadmin%2Fevents")
+  })
+
+  it("opens a confirmation page, never the switch itself (#1048)", () => {
+    expect(orgSwitchUrl("org-1", "/admin/events/ev1")).not.toContain("/api/")
+  })
+})
+
+describe("orgSwitchAction", () => {
+  it("is the switch's API, the id encoded", () => {
+    expect(orgSwitchAction("org-1")).toBe("/api/super-admin/use-org/org-1")
+    expect(orgSwitchAction("a/b")).toBe("/api/super-admin/use-org/a%2Fb")
+  })
+})
+
+describe("canonicalRedirect (#1048)", () => {
+  it("uses the configured site address, whatever the request's host", () => {
+    expect(canonicalRedirect("/admin/events", "https://www.benevol.app/", "http://evil.example/api/x")).toBe("https://www.benevol.app/admin/events")
+  })
+
+  it("keeps the query of the page", () => {
+    expect(canonicalRedirect("/admin/events/ev1?x=1&y=2", "https://www.benevol.app", "http://localhost:3000/")).toBe("https://www.benevol.app/admin/events/ev1?x=1&y=2")
+  })
+
+  it("falls back to the request's origin when nothing is configured (development)", () => {
+    expect(canonicalRedirect("/admin/events", undefined, "http://localhost:3100/api/x")).toBe("http://localhost:3100/admin/events")
+    expect(canonicalRedirect("/admin/events", "not a url", "http://localhost:3100/api/x")).toBe("http://localhost:3100/admin/events")
   })
 })

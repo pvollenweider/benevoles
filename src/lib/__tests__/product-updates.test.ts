@@ -28,4 +28,11 @@ describe("unsubscribeToken / verifyUnsubscribeToken", () => {
   it("rejects a tampered token", () => {
     expect(verifyUnsubscribeToken("admin-1", "not-the-right-token")).toBe(false)
   })
+
+  it("rejects a truncated, extended or empty token without throwing (#1048)", () => {
+    const token = unsubscribeToken("admin-1")
+    expect(verifyUnsubscribeToken("admin-1", token.slice(0, -1))).toBe(false)
+    expect(verifyUnsubscribeToken("admin-1", `${token}0`)).toBe(false)
+    expect(verifyUnsubscribeToken("admin-1", "")).toBe(false)
+  })
 })

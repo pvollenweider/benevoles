@@ -3,7 +3,8 @@ import { describe, it, expect, vi, beforeEach } from "vitest"
 const findUnique = vi.hoisted(() => vi.fn())
 vi.mock("../prisma", () => ({ prisma: { adminUser: { findUnique } } }))
 
-import { refreshAdminToken, loginAllowed, recordLoginFailure } from "../admin-session"
+import { refreshAdminToken, beginLoginAttempt, loginDelayMs, LOGIN_DELAY_MAX_MS } from "../admin-session"
+import { memoryStore, type RateLimitStore } from "../rate-limit"
 
 const token = () => ({ sub: "admin-1", role: "admin", organizationId: "org-A" })
 
@@ -73,25 +74,65 @@ describe("session follows the account's email and name", () => {
   })
 })
 
-describe("login failure budget (#266)", () => {
-  it("blocks an account after 10 failures, whatever the IP and email case", async () => {
-    const email = `Target-${Math.random()}@x.com`
-    for (let i = 0; i < 10; i++) {
-      expect(await loginAllowed(`10.0.0.${i}`, email)).toBe(true)
-      await recordLoginFailure(`10.0.0.${i}`, email)
+describe("login failure budget (#266, #1048)", () => {
+  /** One failed attempt: reserved, never given back. */
+  const fail = async (ip: string, email: string, store: RateLimitStore) => (await beginLoginAttempt(ip, email, store)).allowed
+
+  it("blocks an address after 10 failures on one account, whatever the email case", async () => {
+    const store = memoryStore()
+    for (let i = 0; i < 10; i++) expect(await fail("10.0.0.1", "Target@x.com", store)).toBe(true)
+    expect(await fail("10.0.0.1", "target@x.com", store)).toBe(false)
+  })
+
+  it("never locks the account's owner out from another address (regression #1048)", async () => {
+    const store = memoryStore()
+    // A stranger fails 10 times from each of several addresses...
+    for (let n = 0; n < 4; n++) for (let i = 0; i < 10; i++) await fail(`198.51.100.${n}`, "admin@x.com", store)
+    // ...the owner, from their own address, is still let in (only made to wait).
+    const owner = await beginLoginAttempt("203.0.113.7", "admin@x.com", store)
+    expect(owner.allowed).toBe(true)
+    expect(owner.delayMs).toBe(LOGIN_DELAY_MAX_MS)
+  })
+
+  it("blocks an address after 30 failures across accounts", async () => {
+    const store = memoryStore()
+    for (let i = 0; i < 30; i++) expect(await fail("10.0.0.2", `user${i}@x.com`, store)).toBe(true)
+    expect(await fail("10.0.0.2", "fresh@x.com", store)).toBe(false)
+    expect(await fail("10.0.0.3", "fresh@x.com", store)).toBe(true)
+  })
+
+  it("makes the account wait more after each failure from any address", async () => {
+    const store = memoryStore()
+    const delays: number[] = []
+    for (let i = 0; i < 9; i++) delays.push((await beginLoginAttempt(`10.1.0.${i}`, "slow@x.com", store)).delayMs)
+    expect(delays).toEqual([0, 0, 0, 0, 0, 1000, 2000, 4000, 8000])
+  })
+
+  it("doesn't count successful logins", async () => {
+    const store = memoryStore()
+    for (let i = 0; i < 50; i++) {
+      const attempt = await beginLoginAttempt("10.9.9.9", "ok@x.com", store)
+      expect(attempt).toMatchObject({ allowed: true, delayMs: 0 })
+      await attempt.succeeded()
     }
-    expect(await loginAllowed("10.0.1.1", email.toLowerCase())).toBe(false)
   })
 
-  it("blocks an IP after 30 failures across accounts", async () => {
-    const ip = `ip-${Math.random()}`
-    for (let i = 0; i < 30; i++) await recordLoginFailure(ip, `user${i}-${Math.random()}@x.com`)
-    expect(await loginAllowed(ip, "fresh@x.com")).toBe(false)
-    expect(await loginAllowed(`other-${ip}`, "fresh@x.com")).toBe(true)
+  it("counts parallel attempts before any password is checked", async () => {
+    const store = memoryStore()
+    const attempts = await Promise.all(Array.from({ length: 15 }, () => beginLoginAttempt("10.2.2.2", "race@x.com", store)))
+    expect(attempts.filter((a) => a.allowed)).toHaveLength(10)
   })
 
-  it("doesn't count successful logins (only failures are recorded)", async () => {
-    const email = `ok-${Math.random()}@x.com`
-    for (let i = 0; i < 50; i++) expect(await loginAllowed("10.9.9.9", email)).toBe(true)
+  it("lets the login through when the store fails", async () => {
+    const broken: RateLimitStore = { hit: () => Promise.reject(new Error("db down")), peek: () => Promise.reject(new Error("db down")) }
+    const attempt = await beginLoginAttempt("10.3.3.3", "x@x.com", broken)
+    expect(attempt).toMatchObject({ allowed: true, delayMs: 0 })
+    await attempt.succeeded()
+  })
+})
+
+describe("loginDelayMs", () => {
+  it("waits from the sixth failure, doubling up to 8 s", () => {
+    expect([0, 4, 5, 6, 7, 8, 20].map(loginDelayMs)).toEqual([0, 0, 1000, 2000, 4000, 8000, 8000])
   })
 })

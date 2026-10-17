@@ -3,7 +3,7 @@
 
 import type { JWT } from "next-auth/jwt"
 import { prisma } from "./prisma"
-import { isRateLimited, rateLimit } from "./rate-limit"
+import { isRateLimited, rateLimit, releaseHit, reserveHit, type RateLimitStore } from "./rate-limit"
 import { organizationAllowsSignIn } from "./admin-sign-in"
 
 /**
@@ -36,29 +36,63 @@ export async function refreshAdminToken(token: JWT): Promise<JWT | null> {
 }
 
 const LOGIN_WINDOW_MS = 15 * 60 * 1000
-const LOGIN_MAX_PER_EMAIL = 10
-const LOGIN_MAX_PER_IP = 30
+export const LOGIN_MAX_PER_IP = 30
+export const LOGIN_MAX_PER_EMAIL_IP = 10
+/** Failures on an account (from any address) before each attempt starts waiting. */
+export const LOGIN_DELAY_AFTER = 5
+export const LOGIN_DELAY_MAX_MS = 8_000
 
 const normalizeEmail = (email: string) => email.trim().toLowerCase()
 
 /**
- * Failed-login budget, per target account and per client IP — bcrypt cost alone doesn't bound
- * password guessing. Only failures count, so normal repeated logins never lock anyone out.
- * Checked before the password, so a blocked attempt says nothing about whether it was right.
+ * The wait before checking a password, from the account's recent failures from every address:
+ * none for the first five, then 1 s, 2 s, 4 s, then 8 s at most. It slows guessing spread across
+ * many addresses without ever refusing the account's owner, which a hard block on the account did
+ * (anyone could keep a known admin locked out by failing ten times, #1048).
  */
-export async function loginAllowed(ip: string, email: string): Promise<boolean> {
-  const [byEmail, byIp] = await Promise.all([
-    isRateLimited(normalizeEmail(email), "login-email", LOGIN_MAX_PER_EMAIL),
-    isRateLimited(ip, "login-ip", LOGIN_MAX_PER_IP),
-  ])
-  return !byEmail && !byIp
+export function loginDelayMs(accountFailures: number): number {
+  if (accountFailures < LOGIN_DELAY_AFTER) return 0
+  return Math.min(LOGIN_DELAY_MAX_MS, 1000 * 2 ** (accountFailures - LOGIN_DELAY_AFTER))
 }
 
-export async function recordLoginFailure(ip: string, email: string): Promise<void> {
-  await Promise.all([
-    rateLimit(normalizeEmail(email), "login-email", LOGIN_MAX_PER_EMAIL, LOGIN_WINDOW_MS),
-    rateLimit(ip, "login-ip", LOGIN_MAX_PER_IP, LOGIN_WINDOW_MS),
+export type LoginAttempt = {
+  /** False once this address, or this address for this account, used up its failure budget. */
+  allowed: boolean
+  /** How long to wait before checking the password (account-wide, see loginDelayMs). */
+  delayMs: number
+  /** A successful login does not count: gives back what this attempt reserved. */
+  succeeded(): Promise<void>
+}
+
+/**
+ * Failed-login budget (#266, #1048). bcrypt cost alone doesn't bound password guessing, so per
+ * 15 minutes:
+ * - an address gets 30 failures, whatever the accounts;
+ * - an address gets 10 failures on one account: the hard block no longer covers the account from
+ *   every address, so a stranger can't lock its owner out;
+ * - the account, from every address, gets a growing wait (loginDelayMs) instead of a block.
+ *
+ * Every attempt is counted before the password is checked, and given back once it succeeds: only
+ * failures stay counted, but parallel attempts can't all pass a check made before any of them is
+ * recorded. A blocked attempt is refused before bcrypt runs, so it says nothing about the password.
+ */
+export async function beginLoginAttempt(ip: string, email: string, using?: RateLimitStore): Promise<LoginAttempt> {
+  const account = normalizeEmail(email)
+  const keys = { ip: `login-ip:${ip}`, emailIp: `login-email-ip:${account}|${ip}`, account: `login-account:${account}` }
+  const [byIp, byEmailIp] = await Promise.all([
+    reserveHit(keys.ip, LOGIN_WINDOW_MS, using),
+    reserveHit(keys.emailIp, LOGIN_WINDOW_MS, using),
   ])
+  const allowed = (!byIp || byIp.count <= LOGIN_MAX_PER_IP) && (!byEmailIp || byEmailIp.count <= LOGIN_MAX_PER_EMAIL_IP)
+  if (!allowed) return { allowed: false, delayMs: 0, succeeded: async () => {} }
+  const byAccount = await reserveHit(keys.account, LOGIN_WINDOW_MS, using)
+  return {
+    allowed: true,
+    delayMs: byAccount ? loginDelayMs(byAccount.count - 1) : 0,
+    succeeded: async () => {
+      await Promise.all([releaseHit(keys.ip, using), releaseHit(keys.emailIp, using), releaseHit(keys.account, using)])
+    },
+  }
 }
 
 const PASSWORD_CHECK_WINDOW_MS = 15 * 60 * 1000

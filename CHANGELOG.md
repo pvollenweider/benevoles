@@ -11,6 +11,13 @@ Format basé sur [Keep a Changelog](https://keepachangelog.com/fr/1.0.0/).
 
 ## [Unreleased]
 
+### Sécurité
+
+- **Connexion des administrateurs** (#1048) : une série d'échecs ne bloque plus un compte depuis toutes les adresses IP, ce qui permettait à un tiers d'empêcher un administrateur de se connecter ; les échecs restent limités par adresse IP et par adresse IP pour un même compte, et un compte visé depuis plusieurs adresses fait attendre chaque tentative quelques secondes. Le temps de réponse ne révèle plus si une adresse email a un compte.
+- **Requêtes des pages d'administration** (#1048) : une modification envoyée à l'administration doit venir d'une page du site lui-même et être en JSON, de sorte qu'une page hébergée à l'adresse d'une autre organisation ne peut plus agir avec la session d'un administrateur.
+- **Changement d'organisation du super admin** (#1048) : ouvrir un lien ne change plus l'organisation de travail ; un lien d'email vers un événement d'une autre organisation ouvre une page de confirmation avec un bouton **Travailler dans…**.
+- **Comparaisons de secrets** (#1048) : le lien de désinscription des nouveautés produit et le secret des tâches planifiées sont comparés en temps constant.
+
 ### Corrigé
 
 - **Doublons possibles et adresses numérotées** (#1037) : deux adresses email qui ne diffèrent que par leurs chiffres (`benevole1@…` et `benevole2@…`) ne sont plus proposées comme doublons, et une adresse courte (moins de 8 caractères avant l'arobase) n'est rapprochée que pour une seule lettre d'écart. Une organisation avec des adresses numérotées voyait des centaines de paires sans fondement.

@@ -27,6 +27,11 @@ export type RateLimitStore = {
   hit(key: string, windowMs: number): Promise<WindowState>
   /** The current window, without counting; null if none or expired. */
   peek(key: string): Promise<WindowState | null>
+  /**
+   * Gives back one hit of the current window (never below zero), for a budget that reserves a hit
+   * before the work and returns it when the outcome must not count (a successful login, #1048).
+   */
+  release?(key: string): Promise<void>
 }
 
 export const postgresStore: RateLimitStore = {
@@ -45,6 +50,10 @@ export const postgresStore: RateLimitStore = {
       SELECT "count", (EXTRACT(EPOCH FROM ("resetAt" - now())) * 1000)::float8 AS "msLeft"
       FROM "RateLimit" WHERE "key" = ${key} AND "resetAt" > now()`
     return row ? { count: row.count, msLeft: row.msLeft } : null
+  },
+  async release(key) {
+    await prisma.$executeRaw`
+      UPDATE "RateLimit" SET "count" = GREATEST("count" - 1, 0) WHERE "key" = ${key} AND "resetAt" > now()`
   },
 }
 
@@ -75,6 +84,10 @@ export function memoryStore(sweepAbove = 10_000): RateLimitStore {
       const win = windows.get(key)
       return win && win.resetAt > now ? { count: win.count, msLeft: win.resetAt - now } : null
     },
+    async release(key) {
+      const win = windows.get(key)
+      if (win && win.resetAt > Date.now()) win.count = Math.max(0, win.count - 1)
+    },
   }
 }
 
@@ -98,6 +111,29 @@ export async function rateLimit(
   } catch (e) {
     reportError("rate_limit.hit")(e)
     return { ok: true, remaining: limit, retryAfter: 0 }
+  }
+}
+
+/**
+ * Counts one hit of `key` and returns its window, null if the store failed (reported): the caller
+ * then lets the request through, like `rateLimit`. With `releaseHit`, a budget that reserves the
+ * hit before the work, so parallel requests can't all pass a check made before any is counted.
+ */
+export async function reserveHit(key: string, windowMs: number, using: RateLimitStore = store): Promise<WindowState | null> {
+  try {
+    return await using.hit(key, windowMs)
+  } catch (e) {
+    reportError("rate_limit.reserve")(e)
+    return null
+  }
+}
+
+/** Gives back a hit counted by `reserveHit` (a store without `release` keeps it). */
+export async function releaseHit(key: string, using: RateLimitStore = store): Promise<void> {
+  try {
+    await using.release?.(key)
+  } catch (e) {
+    reportError("rate_limit.release")(e)
   }
 }
 
