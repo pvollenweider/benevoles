@@ -74,17 +74,30 @@ export type LoginAttempt = {
  *
  * Every attempt is counted before the password is checked, and given back once it succeeds: only
  * failures stay counted, but parallel attempts can't all pass a check made before any of them is
- * recorded. A blocked attempt is refused before bcrypt runs, so it says nothing about the password.
+ * recorded. A blocked attempt is refused before bcrypt runs, so it says nothing about the password,
+ * and is not counted.
  */
+const BLOCKED: LoginAttempt = { allowed: false, delayMs: 0, succeeded: async () => {} }
+
 export async function beginLoginAttempt(ip: string, email: string, using?: RateLimitStore): Promise<LoginAttempt> {
   const account = normalizeEmail(email)
   const keys = { ip: `login-ip:${ip}`, emailIp: `login-email-ip:${account}|${ip}`, account: `login-account:${account}` }
+  // Already used up: refused without counting, so refused retries never eat the budget other
+  // accounts behind the same address (an office, a mobile network) need.
+  const [ipFull, emailIpFull] = await Promise.all([
+    isRateLimited(ip, "login-ip", LOGIN_MAX_PER_IP, using),
+    isRateLimited(`${account}|${ip}`, "login-email-ip", LOGIN_MAX_PER_EMAIL_IP, using),
+  ])
+  if (ipFull || emailIpFull) return BLOCKED
   const [byIp, byEmailIp] = await Promise.all([
     reserveHit(keys.ip, LOGIN_WINDOW_MS, using),
     reserveHit(keys.emailIp, LOGIN_WINDOW_MS, using),
   ])
-  const allowed = (!byIp || byIp.count <= LOGIN_MAX_PER_IP) && (!byEmailIp || byEmailIp.count <= LOGIN_MAX_PER_EMAIL_IP)
-  if (!allowed) return { allowed: false, delayMs: 0, succeeded: async () => {} }
+  if ((byIp && byIp.count > LOGIN_MAX_PER_IP) || (byEmailIp && byEmailIp.count > LOGIN_MAX_PER_EMAIL_IP)) {
+    // Lost a race with parallel attempts: refused, and the reservation given back.
+    await Promise.all([releaseHit(keys.ip, using), releaseHit(keys.emailIp, using)])
+    return BLOCKED
+  }
   const byAccount = await reserveHit(keys.account, LOGIN_WINDOW_MS, using)
   return {
     allowed: true,

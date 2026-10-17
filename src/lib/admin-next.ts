@@ -63,16 +63,26 @@ export function orgSwitchAction(orgId: string): string {
 }
 
 /**
- * The absolute address the switch redirects to (#1048): the site's configured address
- * (NEXT_PUBLIC_APP_URL), never the forwarded host headers a client can choose; the request's own
- * origin only when nothing is configured (development).
+ * The absolute address the switch redirects to (#1048), never built from the forwarded host
+ * headers a client can choose. It stays on the host the browser used (the `Host` header) when that
+ * host is the configured site address (NEXT_PUBLIC_APP_URL) or one of its organizations'
+ * subdomains, with the configured scheme: the session and `sa-org-id` cookies belong to that host.
+ * Any other host goes to the configured address; the request's own origin only when nothing is
+ * configured (development).
  */
-export function canonicalRedirect(path: string, configuredAppUrl: string | undefined, requestUrl: string): string {
-  let base: string
+export function canonicalRedirect(path: string, configuredAppUrl: string | undefined, requestUrl: string, requestHost: string | null): string {
+  let configured: URL | null = null
   try {
-    base = configuredAppUrl ? new URL(configuredAppUrl).origin : new URL(requestUrl).origin
+    configured = configuredAppUrl ? new URL(configuredAppUrl) : null
   } catch {
-    base = new URL(requestUrl).origin
+    configured = null
   }
+  if (!configured) return new URL(path, new URL(requestUrl).origin).toString()
+  const host = (requestHost ?? "").trim().toLowerCase()
+  const hostname = host.replace(/:\d+$/, "")
+  const baseDomain = configured.hostname.replace(/^www\./, "")
+  const ownHost = /^[a-z0-9.-]+(:\d+)?$/.test(host)
+    && (hostname === configured.hostname || hostname === baseDomain || hostname.endsWith(`.${baseDomain}`))
+  const base = ownHost ? `${configured.protocol}//${host}` : configured.origin
   return new URL(path, base).toString()
 }

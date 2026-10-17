@@ -101,6 +101,15 @@ describe("login failure budget (#266, #1048)", () => {
     expect(await fail("10.0.0.3", "fresh@x.com", store)).toBe(true)
   })
 
+  it("doesn't count refused retries against the address's budget for other accounts", async () => {
+    const store = memoryStore()
+    for (let i = 0; i < 10; i++) await fail("10.4.4.4", "a@x.com", store)
+    // Refused retries on the blocked account...
+    for (let i = 0; i < 40; i++) expect(await fail("10.4.4.4", "a@x.com", store)).toBe(false)
+    // ...leave the colleague behind the same address able to sign in.
+    expect((await beginLoginAttempt("10.4.4.4", "b@x.com", store)).allowed).toBe(true)
+  })
+
   it("makes the account wait more after each failure from any address", async () => {
     const store = memoryStore()
     const delays: number[] = []

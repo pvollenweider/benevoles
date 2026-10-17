@@ -14,8 +14,8 @@ import { configuredAppUrl } from "@/lib/urls"
  *
  * A POST only (#1048), sent by the « Gérer » button of an organization or by the confirmation page
  * /super-admin/use-org/[id], and checked by the proxy like every admin API (src/lib/request-origin.ts):
- * the page of another organization's address can no longer switch it. The redirect is built from
- * the configured site address, not from forwarded headers.
+ * the page of another organization's address can no longer switch it. The redirect stays on the
+ * site's own host the browser used, never on a forwarded host (canonicalRedirect).
  */
 export async function POST(req: Request, { params }: { params: Promise<{ id: string }> }) {
   const guard = await requireSuperAdmin()
@@ -37,7 +37,7 @@ export async function POST(req: Request, { params }: { params: Promise<{ id: str
 
   const next = safeAdminNext(await readNext(req))
   // 303: the browser follows the form's POST with a GET of the page.
-  return NextResponse.redirect(canonicalRedirect(next, configuredAppUrl(), req.url), 303)
+  return NextResponse.redirect(canonicalRedirect(next, configuredAppUrl(), req.url, req.headers.get("host")), 303)
 }
 
 /**
@@ -49,7 +49,7 @@ export async function GET(req: Request, { params }: { params: Promise<{ id: stri
   if (guard instanceof NextResponse) return guard
   const { id } = await params
   const next = new URL(req.url).searchParams.get("next")
-  return NextResponse.redirect(canonicalRedirect(orgSwitchUrl(id, next ?? ""), configuredAppUrl(), req.url), 303)
+  return NextResponse.redirect(canonicalRedirect(orgSwitchUrl(id, next ?? ""), configuredAppUrl(), req.url, req.headers.get("host")), 303)
 }
 
 /** `next` from the confirmation page's form, or from the address. */

@@ -105,16 +105,30 @@ describe("orgSwitchAction", () => {
 })
 
 describe("canonicalRedirect (#1048)", () => {
-  it("uses the configured site address, whatever the request's host", () => {
-    expect(canonicalRedirect("/admin/events", "https://www.benevol.app/", "http://evil.example/api/x")).toBe("https://www.benevol.app/admin/events")
+  const APP = "https://www.benevol.app/"
+
+  it("stays on the site's own host the browser used, with the configured scheme", () => {
+    expect(canonicalRedirect("/admin/events", APP, "http://internal:3000/api/x", "www.benevol.app")).toBe("https://www.benevol.app/admin/events")
+    // An organization's subdomain: its cookies belong to that host (regression of the first draft).
+    expect(canonicalRedirect("/admin/events", APP, "http://internal:3000/api/x", "lausanne.benevol.app")).toBe("https://lausanne.benevol.app/admin/events")
+  })
+
+  it("goes to the configured address for any other host", () => {
+    for (const host of ["evil.example", "benevol.app.evil.example", "evil.example/x", "", null]) {
+      expect(canonicalRedirect("/admin/events", APP, "http://evil.example/api/x", host)).toBe("https://www.benevol.app/admin/events")
+    }
   })
 
   it("keeps the query of the page", () => {
-    expect(canonicalRedirect("/admin/events/ev1?x=1&y=2", "https://www.benevol.app", "http://localhost:3000/")).toBe("https://www.benevol.app/admin/events/ev1?x=1&y=2")
+    expect(canonicalRedirect("/admin/events/ev1?x=1&y=2", APP, "http://localhost:3000/", "www.benevol.app")).toBe("https://www.benevol.app/admin/events/ev1?x=1&y=2")
+  })
+
+  it("keeps the port on localhost", () => {
+    expect(canonicalRedirect("/admin/events", "http://localhost:3100", "http://localhost:3100/api/x", "localhost:3100")).toBe("http://localhost:3100/admin/events")
   })
 
   it("falls back to the request's origin when nothing is configured (development)", () => {
-    expect(canonicalRedirect("/admin/events", undefined, "http://localhost:3100/api/x")).toBe("http://localhost:3100/admin/events")
-    expect(canonicalRedirect("/admin/events", "not a url", "http://localhost:3100/api/x")).toBe("http://localhost:3100/admin/events")
+    expect(canonicalRedirect("/admin/events", undefined, "http://localhost:3100/api/x", "localhost:3100")).toBe("http://localhost:3100/admin/events")
+    expect(canonicalRedirect("/admin/events", "not a url", "http://localhost:3100/api/x", null)).toBe("http://localhost:3100/admin/events")
   })
 })

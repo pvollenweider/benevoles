@@ -43,6 +43,13 @@ describe("POST /api/super-admin/use-org/[id]", () => {
     }))
   })
 
+  it("stays on the organization's subdomain the switch was posted from", async () => {
+    const res = await POST(new Request("http://localhost/api/super-admin/use-org/org-1", {
+      method: "POST", headers: { host: "lausanne.benevol.app", "x-forwarded-host": "evil.example" },
+    }), { params: Promise.resolve({ id: "org-1" }) })
+    expect(res.headers.get("location")).toBe("https://lausanne.benevol.app/admin/events")
+  })
+
   it("goes to the events list without next, with a 303 on the configured address", async () => {
     const res = await post()
     expect(res.status).toBe(303)
