@@ -38,7 +38,7 @@ export async function analyseImport(file: unknown, db: OrgScopedPrisma, organiza
   if (isXlsx) {
     const preflight = preflightXlsx(buffer)
     if (!preflight.ok && preflight.reason === "too-large") {
-      return { ok: false, status: 413, error: "Fichier trop volumineux une fois décompressé : gardez uniquement la feuille des membres (5 000 lignes et 20 colonnes au plus) ou importez un CSV." }
+      return { ok: false, status: 413, error: "Fichier trop volumineux une fois décompressé : gardez uniquement la feuille des membres, ou importez un CSV." }
     }
     if (!preflight.ok) return { ok: false, status: 400, error: "Impossible de lire le fichier : vérifiez qu'il s'agit d'un CSV ou d'un .xlsx." }
   }

@@ -9,22 +9,24 @@
  * inflate to exactly its declared size, which is what ExcelJS will then inflate from the same
  * central directory. ExcelJS also builds one object per cell and row, which costs far more than
  * the XML (a 10 MB sheet of tiny cells took about 350 MB of memory), so cells and rows are counted
- * too. Server only (node:zlib).
+ * too. At these caps, the worst cases measured add about 130 MB each (all cells and rows, or all
+ * text). Server only (node:zlib).
  */
 import { inflateRawSync } from "node:zlib"
 
 export type XlsxLimits = { maxEntries: number; maxEntryBytes: number; maxTotalBytes: number; maxCells: number; maxRows: number }
 
 /**
- * A 5,000-line import (MAX_IMPORT_LINES) of up to 20 columns fits, with room for formatted empty
- * rows below the data. Cells and rows are summed over every worksheet, since ExcelJS loads them all.
+ * A 5,000-line import (MAX_IMPORT_LINES) of 24 columns fits, with long notes and room for formatted
+ * empty rows below the data. Cells and rows are summed over every worksheet, since ExcelJS loads
+ * them all; they bound ExcelJS's memory, while the byte caps bound the inflated text.
  */
 export const XLSX_LIMITS: XlsxLimits = {
   maxEntries: 1000,
-  maxEntryBytes: 4 * 1024 * 1024,
-  maxTotalBytes: 8 * 1024 * 1024,
-  maxCells: 5001 * 20,
-  maxRows: 20_000,
+  maxEntryBytes: 12 * 1024 * 1024,
+  maxTotalBytes: 24 * 1024 * 1024,
+  maxCells: 120_000,
+  maxRows: 50_000,
 }
 
 export type XlsxPreflightResult = { ok: true; entries: number; totalBytes: number } | { ok: false; reason: "malformed" | "too-large" }
@@ -32,10 +34,10 @@ export type XlsxPreflightResult = { ok: true; entries: number; totalBytes: numbe
 const EOCD_SIG = 0x06054b50
 const CENTRAL_SIG = 0x02014b50
 const LOCAL_SIG = 0x04034b50
-const EOCD_MIN = 22
+const ZIP64_LOCATOR_SIG = 0x07064b50
+const ZIP64_EOCD_SIG = 0x06064b50
 const CENTRAL_MIN = 46
 const LOCAL_MIN = 30
-const MAX_COMMENT = 0xffff
 
 const isTagEnd = (b: number | undefined) => b === 0x20 || b === 0x09 || b === 0x0a || b === 0x0d || b === 0x2f || b === 0x3e
 
@@ -53,63 +55,127 @@ export function countCellsAndRows(xml: Buffer): { cells: number; rows: number } 
 const malformed: XlsxPreflightResult = { ok: false, reason: "malformed" }
 const tooLarge: XlsxPreflightResult = { ok: false, reason: "too-large" }
 
-function findEocd(buf: Buffer): number {
-  const stop = Math.max(0, buf.length - EOCD_MIN - MAX_COMMENT)
-  for (let i = buf.length - EOCD_MIN; i >= stop; i--) {
-    if (buf.readUInt32LE(i) === EOCD_SIG && i + EOCD_MIN + buf.readUInt16LE(i + 20) === buf.length) return i
-  }
+class Malformed extends Error {}
+
+/** Bounds-checked little-endian reads: any read past the end means the archive is malformed. */
+function u16(buf: Buffer, at: number): number {
+  if (at < 0 || at + 2 > buf.length) throw new Malformed()
+  return buf.readUInt16LE(at)
+}
+function u32(buf: Buffer, at: number): number {
+  if (at < 0 || at + 4 > buf.length) throw new Malformed()
+  return buf.readUInt32LE(at)
+}
+function u64(buf: Buffer, at: number): number {
+  if (at < 0 || at + 8 > buf.length) throw new Malformed()
+  const value = buf.readBigUInt64LE(at)
+  if (value > BigInt(Number.MAX_SAFE_INTEGER)) throw new Malformed()
+  return Number(value)
+}
+
+function lastIndexOfSignature(buf: Buffer, sig: number): number {
+  for (let i = buf.length - 4; i >= 0; i--) if (buf.readUInt32LE(i) === sig) return i
   return -1
 }
 
-export function preflightXlsx(buf: Buffer, limits: XlsxLimits = XLSX_LIMITS): XlsxPreflightResult {
-  if (buf.length < EOCD_MIN) return malformed
-  const eocd = findEocd(buf)
-  if (eocd < 0) return malformed
+type CentralDirectory = { start: number; records: number; zero: number }
 
-  const disk = buf.readUInt16LE(eocd + 4)
-  const cdDisk = buf.readUInt16LE(eocd + 6)
-  const diskEntries = buf.readUInt16LE(eocd + 8)
-  const entries = buf.readUInt16LE(eocd + 10)
-  const cdSize = buf.readUInt32LE(eocd + 12)
-  const cdOffset = buf.readUInt32LE(eocd + 16)
-  // Multi-disk and ZIP64 archives are never produced by spreadsheet software: refuse them.
-  if (disk !== 0 || cdDisk !== 0 || diskEntries !== entries) return malformed
-  if (entries === 0xffff || cdSize === 0xffffffff || cdOffset === 0xffffffff) return malformed
-  if (entries === 0) return malformed
-  if (entries > limits.maxEntries) return tooLarge
-  if (cdOffset + cdSize !== eocd) return malformed
+/**
+ * Locates the central directory the way JSZip (ExcelJS's unzipper) does, so the entries checked
+ * here are the ones ExcelJS will inflate: last end-of-central-directory signature, ZIP64 records
+ * when a field is saturated, and an offset correction for bytes prepended to the archive.
+ */
+function locateCentralDirectory(buf: Buffer): CentralDirectory {
+  const eocd = lastIndexOfSignature(buf, EOCD_SIG)
+  if (eocd < 0) throw new Malformed()
+  const disk = u16(buf, eocd + 4)
+  const cdDisk = u16(buf, eocd + 6)
+  const diskRecords = u16(buf, eocd + 8)
+  let records = u16(buf, eocd + 10)
+  let cdSize = u32(buf, eocd + 12)
+  let cdOffset = u32(buf, eocd + 16)
+  let expectedEnd: number
+
+  const zip64 = disk === 0xffff || cdDisk === 0xffff || diskRecords === 0xffff || records === 0xffff || cdSize === 0xffffffff || cdOffset === 0xffffffff
+  if (zip64) {
+    const locator = lastIndexOfSignature(buf, ZIP64_LOCATOR_SIG)
+    if (locator < 0) throw new Malformed()
+    let record = u64(buf, locator + 8)
+    if (record + 4 > buf.length || buf.readUInt32LE(record) !== ZIP64_EOCD_SIG) {
+      record = lastIndexOfSignature(buf, ZIP64_EOCD_SIG)
+      if (record < 0) throw new Malformed()
+    }
+    const recordSize = u64(buf, record + 4)
+    records = u64(buf, record + 32)
+    cdSize = u64(buf, record + 40)
+    cdOffset = u64(buf, record + 48)
+    expectedEnd = cdOffset + cdSize + 20 + 12 + recordSize
+  } else {
+    expectedEnd = cdOffset + cdSize
+  }
+  const extraBytes = eocd - expectedEnd
+  if (extraBytes < 0) throw new Malformed()
+  // JSZip keeps the declared offsets when a central header sits at the end record's position,
+  // which cannot happen since that position holds the end record's own signature.
+  return { start: cdOffset + extraBytes, records, zero: extraBytes }
+}
+
+/** Reads a ZIP64 extended information field (0x0001) the way JSZip does: last one wins. */
+function zip64Extra(buf: Buffer, from: number, length: number): number | null {
+  const end = from + length
+  let found: number | null = null
+  let at = from
+  while (at + 4 < end) {
+    const id = u16(buf, at)
+    const size = u16(buf, at + 2)
+    if (id === 0x0001) found = at + 4
+    at += 4 + size
+  }
+  if (end > buf.length) throw new Malformed()
+  return found
+}
+
+function inspect(buf: Buffer, limits: XlsxLimits): XlsxPreflightResult {
+  const cd = locateCentralDirectory(buf)
 
   let declaredTotal = 0
   let actualTotal = 0
   let cells = 0
   let rows = 0
-  let pos = cdOffset
-  let count = 0
-  while (pos < eocd) {
-    if (pos + CENTRAL_MIN > eocd || buf.readUInt32LE(pos) !== CENTRAL_SIG) return malformed
-    if (++count > entries) return malformed
-    const flags = buf.readUInt16LE(pos + 8)
-    const method = buf.readUInt16LE(pos + 10)
-    const compressedSize = buf.readUInt32LE(pos + 20)
-    const size = buf.readUInt32LE(pos + 24)
-    const nameLen = buf.readUInt16LE(pos + 28)
-    const extraLen = buf.readUInt16LE(pos + 30)
-    const commentLen = buf.readUInt16LE(pos + 32)
-    const localOffset = buf.readUInt32LE(pos + 42)
+  let entries = 0
+  // Like JSZip, read central headers for as long as their signature follows: their declared
+  // count is only a hint, and the entries actually read are the ones that get inflated.
+  for (let pos = cd.start; pos + 4 <= buf.length && buf.readUInt32LE(pos) === CENTRAL_SIG; ) {
+    if (++entries > limits.maxEntries) return tooLarge
+    const flags = u16(buf, pos + 8)
+    const method = u16(buf, pos + 10)
+    let compressedSize = u32(buf, pos + 20)
+    let size = u32(buf, pos + 24)
+    const nameLen = u16(buf, pos + 28)
+    const extraLen = u16(buf, pos + 30)
+    const commentLen = u16(buf, pos + 32)
+    let localOffset = u32(buf, pos + 42)
     const next = pos + CENTRAL_MIN + nameLen + extraLen + commentLen
-    if (next > eocd) return malformed
-    if (flags & 0x0001) return malformed // encrypted
-    if (method !== 0 && method !== 8) return malformed // only stored and deflate
-    if (compressedSize === 0xffffffff || size === 0xffffffff || localOffset === 0xffffffff) return malformed
+    if (next > buf.length) return malformed
 
+    let extra = zip64Extra(buf, pos + CENTRAL_MIN + nameLen, extraLen)
+    if (extra !== null) {
+      if (size === 0xffffffff) { size = u64(buf, extra); extra += 8 }
+      if (compressedSize === 0xffffffff) { compressedSize = u64(buf, extra); extra += 8 }
+      if (localOffset === 0xffffffff) localOffset = u64(buf, extra)
+    }
+
+    if (flags & 0x0001) return malformed // encrypted: JSZip refuses it too
+    if (method !== 0 && method !== 8) return malformed // only stored and deflate
     if (size > limits.maxEntryBytes) return tooLarge
     declaredTotal += size
     if (declaredTotal > limits.maxTotalBytes) return tooLarge
 
-    if (localOffset + LOCAL_MIN > cdOffset || buf.readUInt32LE(localOffset) !== LOCAL_SIG) return malformed
-    const dataStart = localOffset + LOCAL_MIN + buf.readUInt16LE(localOffset + 26) + buf.readUInt16LE(localOffset + 28)
+    const local = localOffset + cd.zero
+    if (u32(buf, local) !== LOCAL_SIG) return malformed
+    const dataStart = local + LOCAL_MIN + u16(buf, local + 26) + u16(buf, local + 28)
     const dataEnd = dataStart + compressedSize
-    if (dataEnd > cdOffset) return malformed
+    if (dataEnd > buf.length) return malformed
     const data = buf.subarray(dataStart, dataEnd)
 
     let content: Buffer
@@ -134,6 +200,15 @@ export function preflightXlsx(buf: Buffer, limits: XlsxLimits = XLSX_LIMITS): Xl
     if (cells > limits.maxCells || rows > limits.maxRows) return tooLarge
     pos = next
   }
-  if (pos !== eocd || count !== entries) return malformed
+  if (entries === 0) return malformed
   return { ok: true, entries, totalBytes: actualTotal }
+}
+
+export function preflightXlsx(buf: Buffer, limits: XlsxLimits = XLSX_LIMITS): XlsxPreflightResult {
+  try {
+    return inspect(buf, limits)
+  } catch (err) {
+    if (err instanceof Malformed) return malformed
+    throw err
+  }
 }
