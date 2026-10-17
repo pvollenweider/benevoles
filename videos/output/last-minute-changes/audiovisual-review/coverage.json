@@ -1,42 +1,42 @@
 {
   "model": "gemini-3.8-flash",
-  "reviewedAt": "2026-10-16T08:58:48.216Z",
-  "videoSha256": "4c557865d2b8113c4e767c65e0ff9255874e84a7f6615119284a4b2b3084ee9e",
+  "reviewedAt": "2026-10-17T10:32:56.268Z",
+  "videoSha256": "4ebc69481a8c530ef1bf6def7b80407d73851b1a237279006058010402292214",
   "promptSha256": "89dc6c86291ffd8cdcb0702a76030c16dac146dc0f864111bb9017553e41b290",
-  "clipSha256": "8c5eb10c2df1324cbae756576b8cd2caed93b367b93cc991df30b4b8b1b31ff9",
+  "clipSha256": "d3e804c46de2307ba98e6c84d1c7d546afee7d0ab0d4e203e86daaba966d679e",
   "scene": "coverage",
   "review": {
     "heardOpening": "Où manque-t-il encore du monde ? Ouvrons la vue de couverture",
     "checkpoints": [
       {
-        "spokenSeconds": 2.5,
+        "spokenSeconds": 2.6,
         "spoken": "Ouvrons la vue de couverture de l'événement.",
-        "visibleSeconds": 0.5,
-        "visible": "La vue « Où manque-t-il du monde ? » est déjà affichée avec un léger défilement vers les créneaux.",
+        "visibleSeconds": 0,
+        "visible": "L'écran affiche déjà la section « Où manque-t-il du monde ? » de l'événement.",
         "sync": "aligned",
         "severity": "none"
       },
       {
         "spokenSeconds": 5.2,
         "spoken": "Le poste d'accueil est à nouveau rempli, mais un autre créneau reste sous-effectif.",
-        "visibleSeconds": 5.5,
-        "visible": "Affichage des sections « Créneaux à compléter » (logistique, préparation) et « Créneaux complets » (accueil).",
+        "visibleSeconds": 1.2,
+        "visible": "La section « Créneaux complets » liste les postes d'accueil, tandis que « Créneaux à compléter » liste les postes sous-effectifs.",
         "sync": "aligned",
         "severity": "none"
       },
       {
-        "spokenSeconds": 10.4,
+        "spokenSeconds": 10.5,
         "spoken": "Lisons le poste, la date, l'horaire et le nombre de places manquantes.",
-        "visibleSeconds": 10.5,
-        "visible": "Les informations détaillées (intitulé, date, créneau horaire, mention « manque 1 ») sont lisibles à l'écran.",
+        "visibleSeconds": 1.2,
+        "visible": "Affichage des détails : Logistique - Installation du matériel, sam. 31 oct., 12:00-14:00, manque 1.",
         "sync": "aligned",
         "severity": "none"
       },
       {
         "spokenSeconds": 15.6,
         "spoken": "Une demande à valider réserve déjà une place, sans être une présence confirmée.",
-        "visibleSeconds": 16,
-        "visible": "La mention « 1 demande à traiter » apparaît sur la jauge du créneau de préparation.",
+        "visibleSeconds": 1.2,
+        "visible": "Le créneau Préparation mentionne « 1 demande à traiter » dans le décompte.",
         "sync": "aligned",
         "severity": "none"
       }
@@ -45,7 +45,7 @@
     "voice": {
       "consistent": true,
       "warm": true,
-      "observation": "Voix féminine claire, posée et bien articulée, avec un débit régulier."
+      "observation": "Voix off posée, claire et bien articulée, avec un fond sonore musical discret."
     }
   },
   "note": "Automated observation of actual final video audio and images; not a claim of complete human validation"

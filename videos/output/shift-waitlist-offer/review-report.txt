@@ -1,19 +1,9 @@
 STATUS: READY
-{
-  "id": "SHIFT_WAITLIST_OFFER",
-  "status": "READY",
-  "duration": 100.2,
-  "buildId": "RnrUED_grQJ_YgINLz6Tf",
-  "music": {
-    "voicedWindows": 86,
-    "musicOnlyWindows": 1,
-    "smallestGapLu": 14.6,
-    "largestGapLu": 18.2,
-    "quietestMusicOnlyLufs": -33.5,
-    "loudestMusicOnlyLufs": -33.5,
-    "medianVoiceLufs": -16.4
-  },
-  "problems": "Une reprise videos-only acceptée. Première prise : option montrée tard ; AV décochée est faux, assertion et images coché. Reprise : option cochée sur phrase16.523, preuve16.8 ; capacité sur phrase19.340 ; retour option23.558. Prendre la place sur phrase62.985, preuve63.5 ; Refuser la place65.762,preuve66.3 ; admin77.185,preuve78.5 avec offreCamille et positions. 42 images finales revues, offre réelle après annulation Zoé ; expiration mardi13octobre française. AV ne signale plus retard option ; absence d’inscription bénévole jouée dans setup est explication générale, parcours ne promet pas ce clic et positions suivent dans admin. Validation,ASR final7/7 (0% chaque chapitre),VTT,effets4clics/0touches,musique passent ; Frise/aucune adresse interdite/overlay,aucun nouveau bug de disposition.",
-  "sourceChanges": "record.ts : préparation réelle éditeur entre chapitres puis option/capacité sur trois ancres de phrases. Transcript main changévolunteer/expiry : cache global refusé, prise continue entière régénérée (tooling exige une seule prise), coupes réelles setup13.042521/admin26.656937/release38.738000/volunteer50.154291 ; audit indépendant7/7 avant capture, nouvelle narration réutilisée pour reprise. Types et798tests ancres passent.",
-  "report": "videos/output/shift-waitlist-offer/review-report.txt"
-}
+ID: SHIFT_WAITLIST_OFFER
+Batch 25; product ecaf19593e6d6e4401beb918a03972f19e02499d; BUILD_ID qp5tejgaC6gjAk1ZLyYoe.
+Two complete narrated takes after reseeding; final take 2, 109.80 seconds. Previous artifacts and first take preserved under previous-*.
+Complete continuous Kore generation, continuousPauseTags false. Seven chapters independently audited before capture and again from final MP4; final word difference 0% throughout. Whole all-language final soundtrack ASR: no stray words or pause instructions. Voice consistency/warmth checked in all chapters. Real-time subjective listening unavailable, not used as a failure reason.
+Seven chapters reviewed: 42 MP4 frames plus nine anchor frames; 22 automated audiovisual checkpoints aligned. Setup minor remarks adjudicated in review/av-findings-resolution.json: intended focus scrolling and general capacity explanation. Raw reports preserved. Opening the new offer page leaves the actual registration offered; confirmation button shown. Offer deliberately kept active for expiry explanation.
+VTT matches narration with standard readable number/hour formatting; tu count 0. No viewer-address informal pronouns in final ASR. Effects match five actual clicks; zero actual keys and no invented key sounds. Music 15.4–18.8 LU under voice; no rule violation, prescribed continuous track. No qualifying 3-second music-only window outside fades. OCR: 51 frames, zero localhost/Timeline/dev-overlay flags.
+Posters from final MP4; metadata only in review/renders-generated.json. video:validate and 1025 video tests passed. No product bug seen in this video.
+Sources: offer-page narration and checklist/script; recorder sentence anchors/read-only state assertion; catalogue revision 4 dated 2026-10-17. No src/ changes.

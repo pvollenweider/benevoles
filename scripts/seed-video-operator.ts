@@ -5,6 +5,7 @@ import { PrismaClient } from "../src/generated/prisma/client"
 import { PrismaPg } from "@prisma/adapter-pg"
 import { Client } from "pg"
 import bcrypt from "bcryptjs"
+import assert from "node:assert/strict"
 
 async function main() {
   const url = new URL(process.env.DATABASE_URL ?? "")
@@ -18,6 +19,33 @@ async function main() {
   } finally { await marker.end() }
   const db = new PrismaClient({ adapter: new PrismaPg({ connectionString: url.href }) })
   try {
+    if (process.argv[2] === "--reset-owned") {
+      // Opt-in replay, only after a complete take deleted its fourth disposable space.
+      // Refuse every unfamiliar row; never empty an arbitrary existing database.
+      const orgs = await db.organization.findMany({ select: { id: true, slug: true, name: true } })
+      const admins = await db.adminUser.findMany({ select: { id: true, email: true } })
+      const events = await db.event.findMany({ select: { id: true } })
+      const people = await db.volunteer.findMany({ select: { id: true, email: true } })
+      assert.equal(orgs.length, 3)
+      assert(orgs.every(o => /^video-operator-org-[abc]$/.test(o.id) && o.slug === `formation-operateur-${o.id.slice(-1)}` && o.name === `Formation Opérateur ${{a: "Parc", b: "Quartier", c: "Réserve"}[o.id.slice(-1)]}`))
+      assert.equal(admins.length, 4)
+      assert(admins.every(a => a.id === "video-operator-platform" ? a.email === "video.operator.platform@example.org" : /^video-operator-org-[abc]-owner$/.test(a.id) && a.email === `video.operator.${a.id.split("-")[3]}.owner@example.org`))
+      assert.equal(events.length, 3)
+      assert(events.every(e => /^video-operator-org-[ab]-event-[01]$/.test(e.id)))
+      assert.equal(people.length, 9)
+      assert(people.every(p => { const m = /^video-operator-org-([ab])-member-([0-5])$/.exec(p.id); return m && p.email === `video.operator.${m[1]}.member.${m[2]}@example.org` }))
+      assert.equal(await db.registration.count(), 0)
+      assert.equal(await db.jobRun.count(), 0)
+      const sends = await db.productUpdateSend.findMany({ select: { id: true, subject: true, sentByAdminId: true } })
+      assert(sends.every(s => s.sentByAdminId === "video-operator-platform" && s.subject === "Formation — préparer votre prochain événement"))
+      await db.$transaction(async tx => {
+        await tx.productUpdateSend.deleteMany({ where: { id: { in: sends.map(s => s.id) } } })
+        await tx.volunteer.deleteMany({ where: { id: { in: people.map(p => p.id) } } })
+        await tx.adminUser.deleteMany({ where: { id: { in: admins.map(a => a.id) } } })
+        await tx.organization.deleteMany({ where: { id: { in: orgs.map(o => o.id) } } })
+      })
+      console.log("✓ Exact marked operator fixture reset; no unfamiliar organization/account/event/member accepted")
+    } else if (process.argv.length > 2) throw new Error("Only --reset-owned is accepted")
     const counts = await Promise.all([db.organization.count(), db.adminUser.count(), db.event.count(), db.volunteer.count()])
     if (counts.some(count => count !== 0)) throw new Error("Operator seed requires its new empty database; no existing data deleted")
     const passwordHash = await bcrypt.hash(process.env.ORG_ADMIN_PASSWORD ?? "e2e-org-admin-password", 10)

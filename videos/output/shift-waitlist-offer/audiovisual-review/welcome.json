@@ -1,34 +1,34 @@
 {
   "model": "gemini-3.8-flash",
-  "reviewedAt": "2026-10-12T01:59:24.449Z",
-  "videoSha256": "e032126c4203813bb0b7d5c7144dec98cad516250fa0296270310d86e3db1237",
+  "reviewedAt": "2026-10-17T09:57:47.698Z",
+  "videoSha256": "a02191469e2aecb0aee9499ae6d7692d2df4b6af27efca5d133eef906dcf26f7",
   "promptSha256": "a7fd2893fe9db59bee3854aa725437bf573b74e71ad6b1d04f8d17addb5d0a08",
-  "clipSha256": "83427797fca30bcccb4c2a5b3ed50687354f669d92fd6226fc250af90930974d",
+  "clipSha256": "9bf37752f79ce7d1df7bcc40402ae8ee7dcf0d6e0b0e86a318aba25c9f503d5b",
   "scene": "welcome",
   "review": {
     "heardOpening": "Une capacité protège l'organisation",
     "checkpoints": [
       {
-        "spokenSeconds": 0,
+        "spokenSeconds": 0.5,
         "spoken": "Une capacité protège l'organisation contre le sureffectif",
         "visibleSeconds": 0,
-        "visible": "Encart de titre « Capacités, listes d'attente et offre de place » affiché au premier plan",
+        "visible": "Bandeau titre « Capacités, listes d'attente et offre de place » affiché au centre de l'écran",
         "sync": "aligned",
         "severity": "none"
       },
       {
-        "spokenSeconds": 3.5,
+        "spokenSeconds": 3.3,
         "spoken": "mais un créneau complet ne doit pas faire perdre les personnes encore disponibles",
-        "visibleSeconds": 3.2,
-        "visible": "Disparition du titre d'introduction, laissant voir la vue planning des créneaux",
+        "visibleSeconds": 2.8,
+        "visible": "Le bandeau disparaît pour dévoiler la vue Frise du planning des créneaux avec les jauges d'inscrits",
         "sync": "aligned",
         "severity": "none"
       },
       {
         "spokenSeconds": 7,
         "spoken": "La liste d'attente conserve leur intérêt dans un ordre clair",
-        "visibleSeconds": 3.5,
-        "visible": "Vue d'ensemble des créneaux servant de support à l'introduction conceptuelle",
+        "visibleSeconds": 7,
+        "visible": "Écran stable sur l'onglet Créneaux montrant les plages horaires et postes configurés",
         "sync": "aligned",
         "severity": "none"
       }
@@ -37,7 +37,7 @@
     "voice": {
       "consistent": true,
       "warm": true,
-      "observation": "Voix féminine claire, posée et parfaitement intelligible, sans bruit parasite."
+      "observation": "Voix féminine claire, posée et naturelle, accompagnée d'une musique de fond discrète."
     }
   },
   "note": "Automated observation of actual final video audio and images; not a claim of complete human validation"

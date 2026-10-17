@@ -1,95 +1,109 @@
 WEBVTT
 
-00:00:01.127 --> 00:00:05.246
+00:00:01.174 --> 00:00:05.404
 Une capacité protège l’organisation contre
 le sureffectif, mais un créneau complet ne
 
-00:00:05.246 --> 00:00:09.365
+00:00:05.404 --> 00:00:09.634
 doit pas faire perdre les personnes encore
 disponibles. La liste d’attente conserve
 
-00:00:09.365 --> 00:00:13.484
+00:00:09.634 --> 00:00:13.864
 leur intérêt dans un ordre clair et
 automatise la proposition lorsqu’une place
 
-00:00:13.484 --> 00:00:14.170
+00:00:13.864 --> 00:00:14.569
 se libère.
 
-00:00:16.289 --> 00:00:20.714
+00:00:16.874 --> 00:00:21.257
 La liste d’attente s’active sur le
 créneau. Tant que la capacité n’est pas
 
-00:00:20.714 --> 00:00:24.457
+00:00:21.257 --> 00:00:24.966
 atteinte, les inscriptions sont confirmées
 normalement. Une fois le créneau complet,
 
-00:00:24.457 --> 00:00:29.222
+00:00:24.966 --> 00:00:29.686
 le prochain bénévole rejoint l’attente et
 voit sa position au lieu de recevoir une
 
-00:00:29.222 --> 00:00:29.903
+00:00:29.686 --> 00:00:30.360
 fausse confirmation.
 
-00:00:30.359 --> 00:00:34.134
+00:00:30.816 --> 00:00:34.666
 Dans l’administration, les inscriptions
 confirmées et les personnes en attente
 
-00:00:34.134 --> 00:00:37.910
+00:00:34.666 --> 00:00:38.515
 restent distinctes. L’ordre dépend du
 moment d’inscription. On peut ainsi
 
-00:00:37.910 --> 00:00:42.062
+00:00:38.515 --> 00:00:42.750
 répondre à une question sans déplacer
 manuellement les lignes ni perdre
 
-00:00:42.062 --> 00:00:42.440
+00:00:42.750 --> 00:00:43.135
 l’historique.
 
-00:00:44.605 --> 00:00:48.410
+00:00:45.301 --> 00:00:48.704
 Quand une personne confirmée se
 désinscrit, la place n’est pas attribuée
 
-00:00:48.410 --> 00:00:52.562
+00:00:48.704 --> 00:00:52.417
 silencieusement. Une offre est envoyée à
 la première personne en attente. Elle
 
-00:00:52.562 --> 00:00:56.021
-dispose de 24 h pour accepter depuis son
-lien personnel.
+00:00:52.417 --> 00:00:56.439
+dispose de 24 h au maximum, sans dépasser
+le début du créneau, pour
 
-00:00:56.476 --> 00:01:01.870
+00:00:56.439 --> 00:01:00.461
+accepter depuis son lien personnel. Une
+place libérée moins d’1 h avant le
+
+00:01:00.461 --> 00:01:01.699
+début n’est plus proposée.
+
+00:01:02.153 --> 00:01:07.311
 Sur sa page, la personne voit l’offre, son
 expiration et les actions Prendre la place
 
-00:01:01.870 --> 00:01:06.185
-ou Refuser la place. Prendre la place
-confirme immédiatement le créneau. Refuser
+00:01:07.311 --> 00:01:12.469
+ou Refuser la place. Le lien Prendre la
+place ouvre une page qui présente l’offre,
 
-00:01:06.185 --> 00:01:10.859
-la place conserve une réponse explicite et
-permet de contacter la personne suivante.
+00:01:12.469 --> 00:01:17.283
+sans l’accepter. Seul le bouton Prendre la
+place de cette page confirme le créneau.
 
-00:01:11.312 --> 00:01:15.920
+00:01:17.283 --> 00:01:21.409
+Refuser la place conserve une réponse
+explicite et permet de contacter la
+
+00:01:21.409 --> 00:01:22.097
+personne suivante.
+
+00:01:22.550 --> 00:01:27.092
 Si l’offre expire sans réponse, elle ne
 bloque pas la place indéfiniment : la
 
-00:01:15.920 --> 00:01:19.541
+00:01:27.092 --> 00:01:30.660
 promotion passe à la personne suivante.
 Dans l’administration, on peut suivre
 
-00:01:19.541 --> 00:01:22.832
+00:01:30.660 --> 00:01:33.904
 l’offre active et la position des
 personnes encore en attente.
 
-00:01:23.287 --> 00:01:27.173
+00:01:34.359 --> 00:01:38.528
 La liste d’attente est utile pour les
 missions demandées, mais elle doit rester
 
-00:01:27.173 --> 00:01:30.462
-compréhensible. Vérifie la capacité,
+00:01:38.528 --> 00:01:42.055
+compréhensible. Vérifiez la capacité,
 l’ordre, l’offre en cours et les délais
 
-00:01:30.462 --> 00:01:33.750
+00:01:42.055 --> 00:01:45.583
 avant de promettre une place à quelqu’un
 par un autre canal.
 

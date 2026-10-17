@@ -6,7 +6,6 @@ import { spawn } from "node:child_process"
 import { createHash } from "node:crypto"
 import { access, readFile, writeFile, mkdir } from "node:fs/promises"
 import path from "node:path"
-import { PUBLIC_APP_URL } from "../lib/public-hosts"
 import type { ProductBuild } from "../lib/product-build"
 
 async function main() {
@@ -21,19 +20,20 @@ async function main() {
     if (marker.rowCount !== 1 || marker.rows[0].purpose !== "benevol-masterclass-53-synthetic-only") throw new Error("Operator database is not marked for our fixture")
   } finally { await db.end() }
   const [mode, ...args] = process.argv.slice(2)
-  const env: NodeJS.ProcessEnv = { ...process.env, DATABASE_URL: source.href, NODE_ENV: "production", NEXT_TELEMETRY_DISABLED: "1", NEXTAUTH_URL: "http://localhost:43104", VIDEO_BASE_URL: "http://localhost:43104", NEXT_PUBLIC_APP_URL: PUBLIC_APP_URL, SENTRY_DSN: "", NEXT_PUBLIC_SENTRY_DSN: "",
+  const env: NodeJS.ProcessEnv = { ...process.env, DATABASE_URL: source.href, NODE_ENV: "production", NEXT_TELEMETRY_DISABLED: "1", NEXTAUTH_URL: "http://localhost:43104", VIDEO_BASE_URL: "http://localhost:43104", NEXT_PUBLIC_APP_URL: "http://localhost:43104", SENTRY_DSN: "", NEXT_PUBLIC_SENTRY_DSN: "",
     SMTP_HOST: "127.0.0.1", SMTP_PORT: "41026", SMTP_SECURE: "false", SMTP_USER: "", SMTP_PASSWORD: "",
     EMAIL_FROM: "Bénévoles formation <video.operator.platform@example.org>", EMAIL_REPLY_TO: "video.operator.platform@example.org",
     TOKEN_ENCRYPTION_KEY: createHash("sha256").update("benevol-local-video-fixture-only-never-production").digest("base64"), TOKEN_ENCRYPTION_KEY_ID: "local-video-fixture", TOKEN_ENCRYPTION_PREVIOUS_KEYS: "" }
   let commandArgs: string[]
   let childWorkingDirectory: string | undefined
   let serving: ProductBuild | undefined
-  if (mode === "serve") {
+  if (mode === "serve" || mode === "serve-public") {
     const copy = path.resolve(args[0] ?? "")
     if (args.length !== 1 || !/^\/(?:private\/)?tmp\/benevoles-video-production\.[A-Za-z0-9]+$/.test(copy)) throw new Error("Only existing disposable compiled video copy accepted")
     const server = path.join(copy, ".next/standalone/server.js")
     const proof = JSON.parse(await readFile(path.join(copy, ".video-build.json"), "utf8")) as ProductBuild
     if (proof.snapshot !== copy || !/^[a-f0-9]{40}$/.test(proof.commit) || !proof.buildId || !proof.productSourceSha256) throw new Error("Verified product build proof required before serving operator video UI")
+    if (mode === "serve-public") Object.assign(env, { NEXT_PUBLIC_APP_URL: "https://www.benevol.app", NEXTAUTH_URL: "https://www.benevol.app" })
     serving = proof
     childWorkingDirectory = path.dirname(server)
     await access(server)
@@ -41,7 +41,7 @@ async function main() {
     commandArgs = [server]
   } else if (mode === "run" && args[0] === "videos/tools/record.ts" && args[1] === "PLATFORM_INTERNAL_ADMINISTRATION" && (args.length === 2 || args.length === 4 && args[2] === "--rehearse" && args[3] === "--quick-rehearse")) {
     commandArgs = ["--import", "tsx", ...args]
-  } else if (mode === "run" && args.length === 2 && args[0] === "videos/tools/audit-audiovisual.ts" && args[1] === "PLATFORM_INTERNAL_ADMINISTRATION") {
+  } else if (mode === "run" && (args.length === 2 || args.length === 3 && ["welcome", "create", "renew", "activate", "identity", "availability", "context", "health", "preview", "broadcast", "delete", "result"].includes(args[2])) && args[0] === "videos/tools/audit-audiovisual.ts" && args[1] === "PLATFORM_INTERNAL_ADMINISTRATION") {
     commandArgs = ["--import", "tsx", ...args]
   } else if (mode === "run" && args.length === 1 && ["videos/tools/prepare-operator.ts", "videos/tools/verify-operator-lifecycle.ts", "videos/tools/inspect-operator-sessions.ts"].includes(args[0])) {
     commandArgs = ["--import", "tsx", args[0]]
