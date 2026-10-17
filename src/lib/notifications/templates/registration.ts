@@ -8,7 +8,7 @@
  */
 
 import { confirmationVariables, fillVariables } from "../../message-variables"
-import { renderMarkdown } from "../../markdown"
+import { renderMarkdownWithVariables } from "../../markdown"
 import { dayLabel, spokenShift } from "../../spoken-time"
 import type { NotificationPayload } from "../types"
 import { eventPublicUrl } from "@/lib/urls"
@@ -40,10 +40,12 @@ export function renderConfirmation(p: NotificationPayload): RenderedEmail {
   const editUrl = myPageUrl(orgSlug, editToken)
   const firstName = volunteerName.split(" ")[0]
   // The organizer's message may use {prénom}, {créneau}, {date}, {heure}: filled here as on the
-  // confirmation page and the personal page, never sent raw.
-  const message = confirmationMessage
-    ? fillVariables(confirmationMessage, confirmationVariables(firstName, shifts[0] && { label: shifts[0].label, day: spokenDay(shifts[0].date), startTime: shifts[0].startTime }))
-    : undefined
+  // confirmation page and the personal page, never sent raw. The text part substitutes plainly;
+  // the HTML part parses the organizer's Markdown first and inserts the values as literal text,
+  // so a first name can never become a link (#1046).
+  const vars = confirmationVariables(firstName, shifts[0] && { label: shifts[0].label, day: spokenDay(shifts[0].date), startTime: shifts[0].startTime })
+  const message = confirmationMessage ? fillVariables(confirmationMessage, vars) : undefined
+  const messageHtml = confirmationMessage ? renderMarkdownWithVariables(confirmationMessage, vars) : undefined
   const subject = `Inscription confirmée — ${eventTitle} 🎉`
 
   const text = [
@@ -74,7 +76,7 @@ export function renderConfirmation(p: NotificationPayload): RenderedEmail {
           ${shiftInfoHtml(s)}
         </div>`).join("")}
     </div>
-    ${message ? `<div style="background:#eff6ff;border-radius:8px;padding:14px 16px;margin-top:1em;font-size:0.9em;color:#1e40af;">${renderMarkdown(message)}</div>` : ""}
+    ${messageHtml ? `<div style="background:#eff6ff;border-radius:8px;padding:14px 16px;margin-top:1em;font-size:0.9em;color:#1e40af;">${messageHtml}</div>` : ""}
     <p style="margin-top:1.5em">${btn(editUrl, "Gérer mes inscriptions")}</p>${cancelNotice ? `
     <p style="color:#555;font-size:0.9em">${escapeHtml(cancelNotice)}</p>` : ""}
     <p style="color:#666;font-size:0.85em;margin-top:2em">Un grand M E R C I et à très vite ! 🙌</p>

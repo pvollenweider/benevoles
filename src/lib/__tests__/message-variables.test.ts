@@ -2,7 +2,7 @@
 // SPDX-License-Identifier: AGPL-3.0-only
 
 import { describe, it, expect } from "vitest"
-import { confirmationVariables, fillVariables } from "../message-variables"
+import { confirmationVariables, fillVariables, normalizeVariables, splitVariables } from "../message-variables"
 
 const vars = confirmationVariables("Lucas", { label: "Chauffeur navette", day: "samedi 10 octobre", startTime: "08:00" })
 
@@ -42,5 +42,20 @@ describe("confirmationVariables", () => {
 
   it("writes a legacy time past midnight as a clock time", () => {
     expect(confirmationVariables("A", { label: "Bar", startTime: "25:30" }).heure).toBe("01:30")
+  })
+})
+
+describe("splitVariables", () => {
+  it("cuts a template into literal pieces and values, unknown names staying in the text", () => {
+    expect(splitVariables("Merci {prénom} ({nom}) à {{heure}}", vars)).toEqual([
+      { text: "Merci " }, { value: "Lucas" }, { text: " ({nom}) à " }, { value: "08:00" },
+    ])
+    expect(splitVariables("", vars)).toEqual([])
+  })
+})
+
+describe("normalizeVariables", () => {
+  it("writes known variables without spaces, accent or case, and leaves the rest as written", () => {
+    expect(normalizeVariables("{{ Prénom }} { HEURE } {nom} {{inconnu}}", vars)).toBe("{prenom} {heure} {nom} {{inconnu}}")
   })
 })

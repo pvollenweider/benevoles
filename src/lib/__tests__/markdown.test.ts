@@ -1,5 +1,6 @@
 import { describe, it, expect } from "vitest"
-import { renderMarkdown, interpolate } from "../markdown"
+import { renderMarkdown, renderMarkdownWithVariables } from "../markdown"
+import { fillVariables } from "../message-variables"
 
 describe("renderMarkdown — basic syntax (CommonMark)", () => {
   it("renders headings h1-h6", () => {
@@ -129,16 +130,112 @@ describe("renderMarkdown — security", () => {
   })
 })
 
-describe("interpolate", () => {
-  it("replaces known {{variables}}", () => {
-    expect(interpolate("Bonjour {{prenom}} !", { prenom: "Alex" })).toBe("Bonjour Alex !")
+describe("renderMarkdownWithVariables", () => {
+  const vars = (prénom: string) => ({ prénom, créneau: "Accueil", date: "samedi 10 octobre", heure: "08:00" })
+  const render = (template: string, prénom: string) => renderMarkdownWithVariables(template, vars(prénom))
+
+  it("fills both spellings and leaves unknown keys as written", () => {
+    expect(render("Bonjour {{prenom}} !", "Alex")).toContain("Bonjour Alex !")
+    expect(render("Merci {prenom} !", "Alex")).toContain("Merci Alex !")
+    expect(render("{{inconnu}}", "Alex")).toContain("{{inconnu}}")
   })
 
-  it("leaves unknown keys untouched", () => {
-    expect(interpolate("{{inconnu}}", {})).toBe("{{inconnu}}")
+  // Regression #1046: values were substituted before parsing, so a first name was read as Markdown.
+  it("shows a Markdown link in a first name as text, not as a link", () => {
+    const html = render("Merci {prénom} !", "[Cliquez ici](https://evil.example/login)")
+    expect(html).not.toContain("<a")
+    expect(html).not.toContain("href")
+    expect(html).toContain("[Cliquez ici](https://evil.example/login)")
   })
 
-  it("also fills the single-brace spelling of the message templates (regression: {prenom} shown raw on the personal page)", () => {
-    expect(interpolate("Merci {prenom} !", { prenom: "Alex" })).toBe("Merci Alex !")
+  it("does not turn a bare URL, a www address or an email address in a first name into a link (GFM autolinks)", () => {
+    for (const name of ["https://evil.example/login", "www.evil.example", "pirate@evil.example", "<https://evil.example>"]) {
+      const html = render("Merci {prénom} !", name)
+      expect(html, name).not.toContain("<a")
+      expect(html, name).not.toContain("href")
+    }
+  })
+
+  it("does not turn a Markdown image in a first name into an image", () => {
+    const html = render("Merci {prénom} !", "![x](https://evil.example/pixel.png)")
+    expect(html).not.toContain("<img")
+    expect(html).toContain("![x](https://evil.example/pixel.png)")
+  })
+
+  it("escapes HTML in a first name", () => {
+    const html = render("Merci {prénom} !", '<a href="https://evil.example">x</a><img src=x onerror=alert(1)>')
+    expect(html).not.toContain("<a")
+    expect(html).not.toContain("<img")
+    expect(html).toContain("&lt;a href=")
+  })
+
+  it("does not let other Markdown syntax in a value change the formatting", () => {
+    const html = render("Merci {prénom} !", "**gras** _ital_ `code` # titre")
+    expect(html).not.toMatch(/<(strong|em|code|h1)/)
+    expect(html).toContain("**gras** _ital_ `code` # titre")
+  })
+
+  it("keeps a value literal inside the organizer's own formatting and link labels", () => {
+    expect(render("**Bravo {prénom}**", "[x](https://evil.example)")).toMatch(/<strong>Bravo \[x\]\(https:\/\/evil\.example\)<\/strong>/)
+    const html = render("[Votre page, {prénom}](https://www.benevol.app/)", "https://evil.example")
+    expect(html.match(/<a /g)).toHaveLength(1)
+    expect(html).toContain('href="https://www.benevol.app/"')
+    expect(html).toContain("Votre page, https://evil.example</a>")
+  })
+
+  it("fills a placeholder in a link or image address only after the organizer's fixed scheme and host, percent-encoded", () => {
+    expect(render("[Plan](https://example.org/plan?n={prénom})", "Alex")).toContain('href="https://example.org/plan?n=Alex"')
+    expect(render("[Plan](https://example.org/{prénom} \"Pour {prénom}\")", "Jean Paul")).toMatch(/href="https:\/\/example\.org\/Jean%20Paul" title="Pour Jean Paul"/)
+    expect(render("![Carte](https://example.org/{prénom}.png)", "Alex")).toContain('src="https://example.org/Alex.png"')
+    expect(render("Voir https://example.org/?n={prénom} ici", "Alex")).toContain('href="https://example.org/?n=Alex"')
+    // A value can never change where a link leads: separators are encoded…
+    expect(render("[Plan](https://example.org/{prénom})", "x/../../evil?a=b#c")).toContain('href="https://example.org/x%2F..%2F..%2Fevil%3Fa%3Db%23c"')
+    // …and a placeholder that would choose the scheme or the host is left as written.
+    expect(render("[x]({prénom})", "https://evil.example")).not.toContain("evil")
+    expect(render("[x](https://{prénom}.example/)", "evil")).not.toContain("evil")
+  })
+
+  it("fills a placeholder in a query, a fragment or a same-site path, and with spaces inside the braces", () => {
+    expect(render("[Plan](/plan?nom={prénom})", "Alex")).toContain('href="/plan?nom=Alex"')
+    expect(render("[Plan](//example.org/plan?nom={prénom})", "Alex")).toContain('href="//example.org/plan?nom=Alex"')
+    expect(render("[Écrire](mailto:equipe@example.org?subject={prénom})", "Alex")).toContain('href="mailto:equipe@example.org?subject=Alex"')
+    expect(render("[Plan](/plan/{prénom})", "/evil.example")).toContain('href="/plan/%2Fevil.example"')
+    expect(render("[Plan](https://example.org/?n={{ PRÉNOM }})", "Alex")).toContain('href="https://example.org/?n=Alex"')
+    expect(render("Voir https://example.org/?n={ prénom } ici", "Alex")).toContain('href="https://example.org/?n=Alex"')
+    expect(render("[x](//{prénom}/)", "evil.example")).not.toContain("evil")
+    expect(render("[Plan](../plan/{prénom}) [Carte](plan/{prénom})", "Alex")).toMatch(/href="\.\.\/plan\/Alex"[\s\S]*href="plan\/Alex"/)
+    expect(render("[x](javascript:{prénom})", "alert(1)")).not.toContain("alert")
+    expect(render("Écrivez \\{prénom} pour le prénom", "Alex")).toContain("Écrivez {prénom} pour le prénom")
+  })
+
+  it("renders an empty link or image address without throwing (regression)", () => {
+    expect(render("[ici]() [là](<>) ![carte]()", "Alex")).toBe(renderMarkdown("[ici]() [là](<>) ![carte]()"))
+  })
+
+  it("renders legitimate templates exactly as before (fill then render)", () => {
+    const templates = [
+      "Merci {prénom} !",
+      "# Bienvenue {prénom}\n\nRendez-vous **{date}** à _{heure}_ pour {{créneau}}.",
+      "- {prénom}, pense à ta gourde\n- Parking : [plan](https://example.org/plan)\n- Contact : https://example.org",
+      "> Merci {prénom}\n\n| Poste | Heure |\n| --- | --- |\n| {créneau} | {heure} |",
+      "Bonjour {prenom},\nligne deux\n\n1. un\n2. deux\n\n`{heure}`\n\n~~barré~~ <b>{prénom}</b>",
+      "{inconnu} {{ PRÉNOM }} {date}",
+    ]
+    for (const name of ["Lucas", "Marie-Hélène", "Jean Paul", "Zoé & Léa", "O'Neil"]) {
+      for (const t of templates) {
+        expect(render(t, name), `${t} / ${name}`).toBe(renderMarkdown(fillVariables(t, vars(name))))
+      }
+    }
+    // Personalized addresses: same link for names that need no percent-encoding (a browser
+    // encodes « é » the same way when it follows the old link).
+    const urlTemplates = [
+      "[Plan](https://example.org/plan?n={prénom} \"Pour {prénom}\") ![Carte](https://example.org/{créneau}.png)",
+      "Voir https://example.org/?n={prénom} ou <https://example.org/{prenom}>",
+    ]
+    for (const name of ["Lucas", "Jean-Paul", "O'Neil"]) {
+      for (const t of urlTemplates) {
+        expect(render(t, name), `${t} / ${name}`).toBe(renderMarkdown(fillVariables(t, vars(name))))
+      }
+    }
   })
 })

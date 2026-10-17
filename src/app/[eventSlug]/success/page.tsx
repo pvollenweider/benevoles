@@ -7,7 +7,7 @@ import Link from "next/link"
 import { Suspense, useEffect, useRef, useState } from "react"
 import PublicFooter from "@/components/PublicFooter"
 import { orgPageFooterSite } from "@/lib/urls"
-import { renderMarkdown, interpolate } from "@/lib/markdown"
+import { renderMarkdownWithVariables } from "@/lib/markdown"
 import { confirmationVariables } from "@/lib/message-variables"
 import { dayLabel } from "@/lib/spoken-time"
 import PushSubscribeButton from "@/components/PushSubscribeButton"
@@ -64,7 +64,7 @@ function SuccessContent() {
       day: first.date ? dayLabel(first.date.slice(0, 10)).toLocaleLowerCase("fr") : undefined,
       startTime: first.startTime,
     })
-    return renderMarkdown(interpolate(regData.confirmationMessage, vars))
+    return renderMarkdownWithVariables(regData.confirmationMessage, vars)
   })()
 
   const content = (
