@@ -7,7 +7,6 @@ import { prisma } from "@/lib/prisma"
 import { hashToken } from "@/lib/token-hash"
 import { reactivationLinkValid } from "@/lib/org-reactivation"
 import InvalidReactivationLink from "@/components/admin/InvalidReactivationLink"
-import StripUrlToken from "@/components/StripUrlToken"
 import ReactivateConfirm from "@/components/admin/ReactivateConfirm"
 
 export const dynamic = "force-dynamic"
@@ -33,8 +32,6 @@ export default async function ReactivateConfirmPage({ searchParams }: { searchPa
 
   return (
     <main className="min-h-screen bg-gray-50 flex items-center justify-center px-4">
-      {/* The form has the token as a prop: it leaves the address bar (#1042). */}
-      <StripUrlToken />
       <div className="w-full max-w-sm">
         <div className="text-center mb-8">
           <h1 className="text-2xl font-bold text-gray-900">Réactiver mon espace</h1>

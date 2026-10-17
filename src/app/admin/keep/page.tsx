@@ -6,7 +6,6 @@ import type { Metadata } from "next"
 import { prisma } from "@/lib/prisma"
 import { hashToken } from "@/lib/token-hash"
 import { keepLinkValid } from "@/lib/org-keep"
-import StripUrlToken from "@/components/StripUrlToken"
 import KeepConfirm from "@/components/admin/KeepConfirm"
 import InvalidKeepLink from "@/components/admin/InvalidKeepLink"
 
@@ -30,8 +29,6 @@ export default async function KeepPage({ searchParams }: { searchParams: Promise
 
   return (
     <main className="min-h-screen bg-gray-50 flex items-center justify-center px-4">
-      {/* The form has the token as a prop: it leaves the address bar (#1042). */}
-      <StripUrlToken />
       <div className="w-full max-w-sm">
         <div className="text-center mb-8">
           <h1 className="text-2xl font-bold text-gray-900">Conserver mon organisation</h1>

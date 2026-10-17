@@ -49,8 +49,6 @@ test("an administrator keeps the space with the emailed link, once", async ({ pa
   const path = `/admin/keep?${new URLSearchParams({ token: secret })}`
   await visitor.goto(path)
   await expect(visitor.getByRole("heading", { level: 1, name: "Conserver mon organisation" })).toBeVisible()
-  // The secret leaves the address bar once the page has read it; the button keeps it (#1042).
-  await expect(visitor).toHaveURL(/\/admin\/keep$/)
   // Opening the link changed nothing.
   expect((await sql(`SELECT "inactivityEmailsSent" FROM "Organization" WHERE id = $1`, [org.id]))[0].inactivityEmailsSent).toBe(1)
 
