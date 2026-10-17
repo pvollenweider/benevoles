@@ -13,7 +13,69 @@ import { EMBED_PARAM, isEmbedMode } from "./embed"
  * strict-origin sends the origin only (https://org.benevol.app), never the path or the query,
  * and nothing over plain HTTP. The app itself never reads the Referer.
  */
-export const SECURITY_HEADERS = [{ key: "Referrer-Policy", value: "strict-origin" }] as const
+export const REFERRER_POLICY_HEADER = { key: "Referrer-Policy", value: "strict-origin" } as const
+
+/**
+ * X-Content-Type-Options: nosniff (#1052). The browser takes every response for the type it
+ * declares instead of guessing from its bytes, so an uploaded or generated file can never be run as
+ * a script or a style sheet. Every route of the app declares its type (pages, JSON, CSV, ICS, PNG,
+ * SVG, the print pages, sw.js, the manifest, robots, sitemaps, llms.txt, feed.xml).
+ */
+export const NOSNIFF_HEADER = { key: "X-Content-Type-Options", value: "nosniff" } as const
+
+/**
+ * Permissions-Policy (#1052): turns off, for the app's pages and anything they frame, the device
+ * features the app never asks for. Kept to features no page uses: copying a link (clipboard),
+ * the share sheet, the video player's full screen and picture-in-picture, autoplay and push
+ * notifications are left as the browser's default. The embeddable sign-up uses none of these
+ * either, and the policy only constrains the app's own document inside the association's frame.
+ */
+export const PERMISSIONS_POLICY_HEADER = {
+  key: "Permissions-Policy",
+  value: "camera=(), microphone=(), geolocation=(), payment=(), usb=()",
+} as const
+
+/**
+ * Script policy, in report-only mode (#1052). A second line of defence behind the sanitised
+ * Markdown, and a first step towards an enforced policy. The browser only reports, in the
+ * developer console of the page (« [Report Only] … »), what the policy would have refused;
+ * nothing is blocked, and no report is sent anywhere (no report-uri / report-to: no endpoint, no
+ * third party). How to read the violations: SECURITY.md, « Politique de scripts ».
+ *
+ * What it reports: a script loaded from another site, a plugin (<object>, <embed>), a <base> tag
+ * pointing elsewhere, and in production any eval. What it does not: an injected inline script.
+ * `'unsafe-inline'` stays because the policy carries no nonce: Next.js puts the nonce on its own
+ * inline scripts only when it finds one in a `script-src` of the request's CSP, and it reads the
+ * enforced `Content-Security-Policy` first. The proxy's framing header (frame-ancestors, below)
+ * is that header for every page, and Next.js copies the proxy's response headers onto the request
+ * before rendering, so a report-only nonce never reaches its scripts (verified on a production
+ * build of Next.js 16.4). Without a nonce, every Next.js inline script would be reported on every
+ * page. Nonces come with enforcement: the proxy will emit frame-ancestors and a nonce-bearing
+ * script-src in one enforced policy, which Next.js then reads.
+ *
+ * - `worker-src 'self' blob:`: the error-tracking SDK's session-replay worker.
+ * - In development only, `'unsafe-eval'`, which React needs there for its error overlay.
+ *
+ * Kept apart from the enforced `Content-Security-Policy` (frame-ancestors, below): a report-only
+ * header never blocks, and the framing decision is unchanged.
+ */
+export function scriptPolicyReportOnly(options: { dev: boolean }): string {
+  const scriptSrc = ["'self'", "'unsafe-inline'", ...(options.dev ? ["'unsafe-eval'"] : [])]
+  return [`script-src ${scriptSrc.join(" ")}`, "worker-src 'self' blob:", "object-src 'none'", "base-uri 'self'"].join("; ")
+}
+
+/** The headers of every response (next.config.ts), in production or in development. */
+export function securityHeaders(options: { dev: boolean }): readonly { key: string; value: string }[] {
+  return [
+    REFERRER_POLICY_HEADER,
+    NOSNIFF_HEADER,
+    PERMISSIONS_POLICY_HEADER,
+    { key: "Content-Security-Policy-Report-Only", value: scriptPolicyReportOnly(options) },
+  ]
+}
+
+/** The production headers of every response. */
+export const SECURITY_HEADERS = securityHeaders({ dev: false })
 
 /**
  * Framing (#948). No page may be shown inside another site's frame (clickjacking: a hidden
@@ -27,7 +89,8 @@ export const SECURITY_HEADERS = [{ key: "Referrer-Policy", value: "strict-origin
  *   waitlist confirmation, API, the site's own pages.
  * - The embeddable sign-up: `frame-ancestors *` (any http/https site) and no X-Frame-Options,
  *   which would forbid it again in the browsers that read it. The policy carries no other
- *   directive: the app sets no other CSP anywhere, so nothing else changes for the embed.
+ *   directive: the app enforces no other CSP anywhere (the script policy above is report-only),
+ *   so nothing else changes for the embed.
  */
 export const FRAME_DENY_HEADERS = [
   { key: "Content-Security-Policy", value: "frame-ancestors 'none'" },

@@ -5,8 +5,11 @@ import {
   APP_TOP_LEVEL_SEGMENTS,
   FRAME_DENY_HEADERS,
   FRAME_EMBED_HEADERS,
+  SECURITY_HEADERS,
   frameHeaders,
   isEventSignupPath,
+  scriptPolicyReportOnly,
+  securityHeaders,
 } from "../security-headers"
 
 // Framing (#948): only the embeddable sign-up may be shown in another site's frame.
@@ -89,5 +92,78 @@ describe("the proxy sets them", () => {
   it("applies frameHeaders to the response it lets through", () => {
     const proxy = readFileSync(join(process.cwd(), "src/proxy.ts"), "utf8")
     expect(proxy).toMatch(/frameHeaders\(pathname, req\.nextUrl\.searchParams\)\) response\.headers\.set\(key, value\)/)
+  })
+})
+
+// #1052: nosniff, Permissions-Policy and a report-only script policy.
+
+function directives(policy: string): Record<string, string[]> {
+  return Object.fromEntries(policy.split(";").map((d) => d.trim().split(/\s+/)).map(([name, ...values]) => [name, values]))
+}
+
+describe("SECURITY_HEADERS (next.config.ts, every response)", () => {
+  const byKey = Object.fromEntries(SECURITY_HEADERS.map((h) => [h.key, h.value]))
+
+  it("keeps Referrer-Policy strict-origin and adds nosniff", () => {
+    expect(byKey["Referrer-Policy"]).toBe("strict-origin")
+    expect(byKey["X-Content-Type-Options"]).toBe("nosniff")
+  })
+
+  it("turns off only device features the app never uses", () => {
+    expect(byKey["Permissions-Policy"]).toBe("camera=(), microphone=(), geolocation=(), payment=(), usb=()")
+  })
+
+  it("never restricts what the app uses: clipboard, share sheet, full screen, picture-in-picture, autoplay", () => {
+    for (const feature of ["clipboard-write", "clipboard-read", "web-share", "fullscreen", "picture-in-picture", "autoplay"]) {
+      expect(byKey["Permissions-Policy"], feature).not.toContain(feature)
+    }
+  })
+
+  it("adds the script policy in report-only mode, never as an enforced CSP", () => {
+    expect(byKey["Content-Security-Policy-Report-Only"]).toBe(scriptPolicyReportOnly({ dev: false }))
+    expect(byKey["Content-Security-Policy"]).toBeUndefined()
+  })
+
+  it("leaves framing to the proxy's per-request decision", () => {
+    expect(byKey["X-Frame-Options"]).toBeUndefined()
+    for (const { value } of SECURITY_HEADERS) expect(value).not.toContain("frame-ancestors")
+  })
+
+  it("is the same set in development but for the policy's 'unsafe-eval'", () => {
+    const dev = Object.fromEntries(securityHeaders({ dev: true }).map((h) => [h.key, h.value]))
+    expect(Object.keys(dev)).toEqual(Object.keys(byKey))
+    expect(dev["Content-Security-Policy-Report-Only"]).toBe(scriptPolicyReportOnly({ dev: true }))
+  })
+})
+
+describe("scriptPolicyReportOnly", () => {
+  it("allows the app's own scripts and inline scripts, and refuses plugins and a foreign <base>", () => {
+    const d = directives(scriptPolicyReportOnly({ dev: false }))
+    expect(d["script-src"]).toEqual(["'self'", "'unsafe-inline'"])
+    expect(d["worker-src"]).toEqual(["'self'", "blob:"])
+    expect(d["object-src"]).toEqual(["'none'"])
+    expect(d["base-uri"]).toEqual(["'self'"])
+  })
+
+  it("carries no nonce or hash, which would make browsers ignore 'unsafe-inline'", () => {
+    expect(scriptPolicyReportOnly({ dev: false })).not.toMatch(/'(nonce|sha256|sha384|sha512)-/)
+  })
+
+  it("adds 'unsafe-eval' in development only", () => {
+    expect(directives(scriptPolicyReportOnly({ dev: true }))["script-src"]).toContain("'unsafe-eval'")
+    expect(directives(scriptPolicyReportOnly({ dev: false }))["script-src"]).not.toContain("'unsafe-eval'")
+  })
+
+  it("sends reports nowhere and never touches framing", () => {
+    const policy = scriptPolicyReportOnly({ dev: true })
+    expect(policy).not.toMatch(/report-(uri|to)/)
+    expect(policy).not.toContain("frame-ancestors")
+  })
+})
+
+describe("next.config.ts", () => {
+  it("sets securityHeaders on every path, in development with the development policy", () => {
+    const config = readFileSync(join(process.cwd(), "next.config.ts"), "utf8")
+    expect(config).toContain('source: "/:path*", headers: [...securityHeaders({ dev: process.env.NODE_ENV === "development" })]')
   })
 })

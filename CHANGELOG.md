@@ -17,6 +17,7 @@ Format basé sur [Keep a Changelog](https://keepachangelog.com/fr/1.0.0/).
 
 ### Sécurité
 
+- **En-têtes de sécurité renforcés** (#1052) : chaque réponse indique au navigateur de ne jamais deviner le type d'un fichier, et coupe les fonctions de l'appareil dont le service ne se sert pas (caméra, micro, géolocalisation, paiement, USB). Une politique de scripts est ajoutée en mode observation : elle ne bloque rien et prépare une protection supplémentaire des pages.
 - **Connexion des administrateurs** (#1048) : une série d'échecs ne bloque plus un compte depuis toutes les adresses IP, ce qui permettait à un tiers d'empêcher un administrateur de se connecter ; les échecs restent limités par adresse IP et par adresse IP pour un même compte, et un compte visé depuis plusieurs adresses fait attendre chaque tentative quelques secondes. Le temps de réponse ne révèle plus si une adresse email a un compte.
 - **Requêtes des pages d'administration** (#1048) : une modification envoyée à l'administration doit venir d'une page du site lui-même et être en JSON, de sorte qu'une page hébergée à l'adresse d'une autre organisation ne peut plus agir avec la session d'un administrateur.
 - **Changement d'organisation du super admin** (#1048) : ouvrir un lien ne change plus l'organisation de travail ; un lien d'email vers un événement d'une autre organisation ouvre une page de confirmation avec un bouton **Travailler dans…**.
