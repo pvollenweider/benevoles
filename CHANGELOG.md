@@ -11,10 +11,6 @@ Format basé sur [Keep a Changelog](https://keepachangelog.com/fr/1.0.0/).
 
 ## [Unreleased]
 
-### Sécurité
-
-- **Variables du message de confirmation** (#1046) : le prénom et les autres valeurs insérées dans le message de confirmation (page de succès, page personnelle, email) s'affichent désormais comme du texte simple ; elles ne peuvent plus ajouter de lien, d'image ou de mise en forme au message de l'organisation. Dans l'adresse d'un lien ou d'une image, une variable n'est remplie que là où l'organisation a déjà fixé la destination (après le nom du site ou dans les paramètres).
-
 ### Corrigé
 
 - **Doublons possibles et adresses numérotées** (#1037) : deux adresses email qui ne diffèrent que par leurs chiffres (`benevole1@…` et `benevole2@…`) ne sont plus proposées comme doublons, et une adresse courte (moins de 8 caractères avant l'arobase) n'est rapprochée que pour une seule lettre d'écart. Une organisation avec des adresses numérotées voyait des centaines de paires sans fondement.
@@ -22,6 +18,7 @@ Format basé sur [Keep a Changelog](https://keepachangelog.com/fr/1.0.0/).
 ### Sécurité
 
 - **Import de membres depuis Excel** (#1043) : un classeur `.xlsx` est vérifié avant d'être ouvert (structure de l'archive, taille réelle une fois décompressé, nombre de cellules et de lignes). Un fichier trop volumineux une fois décompressé est refusé avec un message clair, au lieu de pouvoir saturer la mémoire du serveur.
+- **Variables du message de confirmation** (#1046) : le prénom et les autres valeurs insérées dans le message de confirmation (page de succès, page personnelle, email) s'affichent désormais comme du texte simple ; elles ne peuvent plus ajouter de lien, d'image ou de mise en forme au message de l'organisation. Dans l'adresse d'un lien ou d'une image, une variable n'est remplie que là où l'organisation a déjà fixé la destination (après le nom du site ou dans les paramètres).
 - **Place proposée depuis la liste d'attente** (#1044) : le lien de l'email ouvre une page qui rappelle le créneau et le délai, et la place n'est prise qu'avec le bouton « Prendre la place ». Ouvrir le lien seul, y compris par l'analyse automatique de certaines messageries, ne prend plus la place à la place du bénévole. Les liens déjà envoyés restent valables.
 - **Liens à usage unique hors du suivi des erreurs** (#1042) : l'enregistrement d'une partie des sessions, qui aide à corriger les erreurs de l'administration, ne démarre plus sur les pages publiques de l'administration (connexion, mot de passe oublié ou à réinitialiser, invitation, conservation ou réactivation d'un espace), ni sur une adresse qui contient un jeton d'accès, et s'arrête si la navigation y mène. Les journaux du serveur ne gardent plus des erreurs signalées que leur catégorie, un code et un message nettoyé des jetons et adresses email.
 
