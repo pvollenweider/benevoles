@@ -32,9 +32,24 @@ export function isExpiredInvitation(row: AdminEmailHolder, now: Date): boolean {
   return !row.isActive && row.setupTokenHash != null && row.setupTokenExpiresAt != null && row.setupTokenExpiresAt.getTime() < now.getTime()
 }
 
-/** An expired invitation into a team that already has an active administrator: replaceable. */
+/**
+ * How long after its expiry an invitation stays untouchable: an activation whose link was checked
+ * just before the expiry (then the password hashed, then the account updated) always finishes
+ * first, so a replacement never deletes an account being activated.
+ */
+export const INVITATION_RELEASE_GRACE_MS = 60 * 60 * 1000
+
+/** The instant before which an expired invitation may be replaced. */
+export function invitationReleaseCutoff(now: Date): Date {
+  return new Date(now.getTime() - INVITATION_RELEASE_GRACE_MS)
+}
+
+/**
+ * An invitation into a team that already has an active administrator, expired for more than the
+ * grace period: replaceable.
+ */
 export function isReleasableInvitation(row: AdminEmailHolder, now: Date): boolean {
-  return row.organizationHasActiveAdmin && isExpiredInvitation(row, now)
+  return row.organizationHasActiveAdmin && isExpiredInvitation(row, invitationReleaseCutoff(now))
 }
 
 /** Same organisation: the person already appears in its own team list. */

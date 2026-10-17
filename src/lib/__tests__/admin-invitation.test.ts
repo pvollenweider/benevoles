@@ -44,6 +44,11 @@ describe("isReleasableInvitation", () => {
     expect(isReleasableInvitation(row({ organizationHasActiveAdmin: false }), now)).toBe(false)
   })
 
+  it("waits an hour after the expiry, so an activation checked just before it always finishes", () => {
+    expect(isReleasableInvitation(row({ setupTokenExpiresAt: new Date(now.getTime() - 59 * 60 * 1000) }), now)).toBe(false)
+    expect(isReleasableInvitation(row({ setupTokenExpiresAt: new Date(now.getTime() - 61 * 60 * 1000) }), now)).toBe(true)
+  })
+
   it("keeps a valid invitation and an active account", () => {
     expect(isReleasableInvitation(row({ setupTokenExpiresAt: future }), now)).toBe(false)
     expect(isReleasableInvitation(row({ isActive: true }), now)).toBe(false)

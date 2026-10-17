@@ -2,7 +2,7 @@
 // SPDX-License-Identifier: AGPL-3.0-only
 
 import type { Prisma } from "@/generated/prisma/client"
-import { isExpiredInvitation, isReleasableInvitation, type AdminEmailHolder } from "@/lib/admin-invitation"
+import { invitationReleaseCutoff, isExpiredInvitation, isReleasableInvitation, type AdminEmailHolder } from "@/lib/admin-invitation"
 
 /**
  * Database side of the expired-invitation rule (#1053, src/lib/admin-invitation.ts): finding the
@@ -45,7 +45,7 @@ export async function releaseExpiredInvitation(db: AdminUserDb, row: AdminEmailH
       id: row.id,
       isActive: false,
       setupTokenHash: row.setupTokenHash,
-      setupTokenExpiresAt: { lt: now },
+      setupTokenExpiresAt: { lt: invitationReleaseCutoff(now) },
     },
   })
   return count === 1

@@ -65,7 +65,7 @@ describe("sign-up and an address held by an invitation (#1053)", () => {
     m.findFirst.mockResolvedValue(expired)
     const result = await confirmSignupRequest("tok", now)
     expect(result.ok).toBe(true)
-    expect(m.deleteMany.mock.calls[0][0].where).toEqual({ id: "old-1", isActive: false, setupTokenHash: "old-hash", setupTokenExpiresAt: { lt: now } })
+    expect(m.deleteMany.mock.calls[0][0].where).toEqual({ id: "old-1", isActive: false, setupTokenHash: "old-hash", setupTokenExpiresAt: { lt: new Date(now.getTime() - 60 * 60 * 1000) } })
     expect(m.deleteMany.mock.invocationCallOrder[0]).toBeLessThan(m.orgCreate.mock.invocationCallOrder[0])
   })
 

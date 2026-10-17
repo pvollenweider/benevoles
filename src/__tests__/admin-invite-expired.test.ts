@@ -79,6 +79,14 @@ describe("POST /api/admin/settings/admins with an address already held (#1053)",
     expect(m.enqueue).toHaveBeenCalledTimes(1)
   })
 
+  it("leaves an invitation that expired less than an hour ago alone (an activation may be finishing)", async () => {
+    m.findFirst.mockResolvedValue(holder({ setupTokenExpiresAt: new Date(Date.now() - 5 * 60 * 1000) }))
+    const res = await post()
+    expect(res.status).toBe(409)
+    expect(m.deleteMany).not.toHaveBeenCalled()
+    expect(m.create).not.toHaveBeenCalled()
+  })
+
   it("lets the same organisation invite again once its invitation has expired", async () => {
     m.findFirst.mockResolvedValue(holder({ organizationId: "org-a" }))
     expect((await post()).status).toBe(201)
