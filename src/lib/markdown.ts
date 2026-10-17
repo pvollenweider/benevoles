@@ -43,17 +43,26 @@ const HEADING_SIZES: Record<number, string> = {
  * `vars` (confirmation message variables, #1046): the template is the organizer's trusted
  * Markdown, parsed as is; each variable value (a volunteer's first name, a shift label…) is then
  * inserted as escaped text where the template's text has a placeholder, so a value can never add
- * a link, an image or any other syntax. URL attributes (href, src, title) and the label of a bare
- * URL are left as written: placeholders are not filled there.
+ * a link, an image or any other syntax. In a link or image address, a placeholder is filled only
+ * after a fixed scheme and host written by the organizer (`https://example.org/plan?n={prénom}`),
+ * percent-encoded, so a value can never choose where a link leads; elsewhere in an address it
+ * stays as written.
  */
+const FIXED_ORIGIN = /^[a-z][a-z0-9+.-]*:\/\/[^/?#\s{}]+[/?#]/i
+
 function makeRenderer(vars?: Record<string, string>): Renderer {
   const r = new Renderer()
-  // > 0 while rendering the label of an autolink, which shows its URL: no variables there.
-  let urlLabel = 0
   const fill = (text: string, escapeLiteral: (s: string) => string): string =>
-    !vars || urlLabel > 0
+    !vars
       ? escapeLiteral(text)
       : splitVariables(text, vars).map((p) => ("value" in p ? escapeHtml(p.value) : escapeLiteral(p.text))).join("")
+  const fillUrl = (url: string): string => {
+    if (!vars) return escapeHtml(url)
+    const parts = splitVariables(url, vars)
+    if (parts.length === 1 && "text" in parts[0]) return escapeHtml(url)
+    if (!("text" in parts[0]) || !FIXED_ORIGIN.test(parts[0].text)) return escapeHtml(url)
+    return escapeHtml(parts.map((p) => ("value" in p ? encodeURIComponent(p.value) : p.text)).join(""))
+  }
 
   r.text = function (token: Tokens.Text | Tokens.Escape) {
     if ("tokens" in token && token.tokens) return this.parser.parseInline(token.tokens)
@@ -127,17 +136,12 @@ function makeRenderer(vars?: Record<string, string>): Renderer {
     return `<input type="checkbox" disabled ${checked ? "checked" : ""} style="margin-right:0.4em"> `
   }
 
-  r.link = function ({ href, title, tokens, raw }: Tokens.Link) {
-    // `[label](url)` and `[label][ref]` start with « [ »; `<url>` and a bare URL show the URL itself.
-    const autolink = !raw.startsWith("[")
-    if (autolink) urlLabel++
-    const label = this.parser.parseInline(tokens)
-    if (autolink) urlLabel--
-    return `<a href="${escapeHtml(href)}"${title ? ` title="${escapeHtml(title)}"` : ""} style="color:#2563eb;text-decoration:underline">${label}</a>`
+  r.link = function ({ href, title, tokens }: Tokens.Link) {
+    return `<a href="${fillUrl(href)}"${title ? ` title="${fill(title, escapeHtml)}"` : ""} style="color:#2563eb;text-decoration:underline">${this.parser.parseInline(tokens)}</a>`
   }
 
   r.image = function ({ href, title, text }: Tokens.Image) {
-    return `<img src="${escapeHtml(href)}" alt="${fill(text, escapeHtml)}"${title ? ` title="${escapeHtml(title)}"` : ""} style="max-width:100%;border-radius:8px">`
+    return `<img src="${fillUrl(href)}" alt="${fill(text, escapeHtml)}"${title ? ` title="${fill(title, escapeHtml)}"` : ""} style="max-width:100%;border-radius:8px">`
   }
 
   r.table = function (token: Tokens.Table) {
@@ -177,7 +181,8 @@ export function renderMarkdown(text: string): string {
 /**
  * Renders the organizer's Markdown `template` with {prénom}, {{prenom}}, {créneau}, {date},
  * {heure}… filled from `vars` as literal text (see makeRenderer): a value is never parsed as
- * Markdown, so a first name written as a link, a bare URL, an image or HTML shows as typed.
+ * Markdown, so a first name written as a link, a bare URL, an image or HTML shows as typed, and
+ * it never chooses the destination of a link.
  * Unknown keys are left as written. The plain-text email part uses fillVariables instead.
  */
 export function renderMarkdownWithVariables(template: string, vars: Record<string, string>): string {

@@ -13,7 +13,7 @@ Format basé sur [Keep a Changelog](https://keepachangelog.com/fr/1.0.0/).
 
 ### Sécurité
 
-- **Variables du message de confirmation** (#1046) : le prénom et les autres valeurs insérées dans le message de confirmation (page de succès, page personnelle, email) s'affichent désormais comme du texte simple ; elles ne peuvent plus ajouter de lien, d'image ou de mise en forme au message de l'organisation. Les variables ne sont pas remplies dans l'adresse d'un lien ou d'une image.
+- **Variables du message de confirmation** (#1046) : le prénom et les autres valeurs insérées dans le message de confirmation (page de succès, page personnelle, email) s'affichent désormais comme du texte simple ; elles ne peuvent plus ajouter de lien, d'image ou de mise en forme au message de l'organisation. Dans l'adresse d'un lien ou d'une image, une variable n'est remplie qu'après le nom du site écrit par l'organisation.
 
 ### Corrigé
 

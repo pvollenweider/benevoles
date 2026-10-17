@@ -183,11 +183,16 @@ describe("renderMarkdownWithVariables", () => {
     expect(html).toContain("Votre page, https://evil.example</a>")
   })
 
-  it("does not fill placeholders in URL attributes or in the label of a bare URL", () => {
-    const link = render("[Plan](https://example.org/{prénom}) ![Carte](https://example.org/{prénom}.png)", "evil")
-    expect(link).not.toContain("evil")
-    const auto = render("Voir https://example.org/?n={prénom} ici", "evil")
-    expect(auto).not.toContain("evil")
+  it("fills a placeholder in a link or image address only after the organizer's fixed scheme and host, percent-encoded", () => {
+    expect(render("[Plan](https://example.org/plan?n={prénom})", "Alex")).toContain('href="https://example.org/plan?n=Alex"')
+    expect(render("[Plan](https://example.org/{prénom} \"Pour {prénom}\")", "Jean Paul")).toMatch(/href="https:\/\/example\.org\/Jean%20Paul" title="Pour Jean Paul"/)
+    expect(render("![Carte](https://example.org/{prénom}.png)", "Alex")).toContain('src="https://example.org/Alex.png"')
+    expect(render("Voir https://example.org/?n={prénom} ici", "Alex")).toContain('href="https://example.org/?n=Alex"')
+    // A value can never change where a link leads: separators are encoded…
+    expect(render("[Plan](https://example.org/{prénom})", "x/../../evil?a=b#c")).toContain('href="https://example.org/x%2F..%2F..%2Fevil%3Fa%3Db%23c"')
+    // …and a placeholder that would choose the scheme or the host is left as written.
+    expect(render("[x]({prénom})", "https://evil.example")).not.toContain("evil")
+    expect(render("[x](https://{prénom}.example/)", "evil")).not.toContain("evil")
   })
 
   it("renders legitimate templates exactly as before (fill then render)", () => {
@@ -201,6 +206,17 @@ describe("renderMarkdownWithVariables", () => {
     ]
     for (const name of ["Lucas", "Marie-Hélène", "Jean Paul", "Zoé & Léa", "O'Neil"]) {
       for (const t of templates) {
+        expect(render(t, name), `${t} / ${name}`).toBe(renderMarkdown(fillVariables(t, vars(name))))
+      }
+    }
+    // Personalized addresses: same link for names that need no percent-encoding (a browser
+    // encodes « é » the same way when it follows the old link).
+    const urlTemplates = [
+      "[Plan](https://example.org/plan?n={prénom} \"Pour {prénom}\") ![Carte](https://example.org/{créneau}.png)",
+      "Voir https://example.org/?n={prénom} ou <https://example.org/{prenom}>",
+    ]
+    for (const name of ["Lucas", "Jean-Paul", "O'Neil"]) {
+      for (const t of urlTemplates) {
         expect(render(t, name), `${t} / ${name}`).toBe(renderMarkdown(fillVariables(t, vars(name))))
       }
     }
