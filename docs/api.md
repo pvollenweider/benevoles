@@ -84,7 +84,7 @@ Toutes ces routes sont ouvertes aux organisateurs, sauf les méthodes marquées 
 | `/api/admin/events/[id]/send-reminder` | POST | Rappel manuel à tous les inscrits |
 | `/api/admin/events/[id]/invitations` | GET, POST | État des invitations, envoi d'invitations |
 | `/api/admin/events/[id]/invitations/remind` | POST | Relance des membres non inscrits |
-| `/api/admin/events/[id]/invitations/test-email` | POST | Email de test |
+| `/api/admin/events/[id]/invitations/test-email` | POST | Email de test de l'invitation, envoyé pour l'organisation de la session (mêmes règles d'envoi, 5 par heure et par organisation) |
 | `/api/admin/events/[id]/questions` | GET, POST | Questions d'inscription de l'événement (#483), actives et dans l'ordre ; types `text`, `yesno`, `single`, `multiple` ; 5 au plus (409 au-delà) |
 | `/api/admin/events/[id]/questions/[questionId]` | PATCH, DELETE | Modifier une question (409 si la modification touche son type ou une option déjà choisie) ; supprimer : effacée sans réponse, archivée sinon |
 | `/api/admin/events/[id]/questions/reorder` | POST | Nouvel ordre des questions actives (liste complète des ids ; 409 si la liste a changé) |
@@ -105,7 +105,7 @@ Toutes ces routes sont ouvertes aux organisateurs, sauf les méthodes marquées 
 | `/api/admin/settings/organization` | PATCH (propriétaire) | Nom, slug, charte du bénévole, assurance RC, titre de la page publique (`publicTitle`, 2 à 100 caractères, vide = « Bénévoles »), fuseau horaire (`timeZone`, nom IANA, vide = défaut de la plateforme), masquage de la liste « Premiers pas » (`onboardingDismissed`) |
 | `/api/admin/settings/organization/slugs` | GET, DELETE (propriétaire) | Historique des slugs |
 | `/api/admin/settings/organization/logo` | PUT, DELETE (propriétaire) | Logo de l'organisation (#300). `PUT` : le fichier lui-même comme corps de la requête (pas un formulaire), PNG ou JPEG de 2 Mo au plus, type lu dans ses premiers octets (SVG refusé) ; ré-encodé et réduit à 512 px ; `400` si refusé, `413` si trop lourd ; renvoie `{ logo: { src, width, height } }`. `DELETE` : le retire, `{ logo: null }`. Consigné dans le journal de l'organisation |
-| `/api/admin/settings/admins` | GET, POST (propriétaire) | Équipe admin, invitation d'un admin |
+| `/api/admin/settings/admins` | GET, POST (propriétaire) | Équipe admin, invitation d'un admin (lien d'activation par email seulement ; 403 `org_pending` tant que l'organisation est en attente de validation) |
 | `/api/admin/settings/admins/[id]` | PATCH (propriétaire), DELETE (propriétaire) | Changer le niveau d'un admin (`role` : `admin` ou `organizer`, #469), retirer un admin. L'organisation garde au moins un propriétaire actif ; on ne peut pas se retirer soi-même (400) |
 | `/api/admin/settings/message-templates` | GET, POST | Modèles de message de l'organisation (#482) ; 20 au plus (409 au-delà) |
 | `/api/admin/settings/message-templates/[id]` | PATCH, DELETE | Modifier, supprimer un modèle |

@@ -15,6 +15,7 @@ import { deliverAfterResponse, enqueueNotifications } from "@/lib/notifications/
 import { validationError } from "@/lib/api-error"
 import { ORG_ROLES, ORGANIZER_ROLE } from "@/lib/permissions"
 import { apexBaseUrl } from "@/lib/urls"
+import { ADMIN_INVITE_PENDING_ERROR, canInviteAdmins } from "@/lib/org-approval"
 
 const postSchema = z.object({
   email: z.string().trim().toLowerCase().email(),
@@ -64,16 +65,20 @@ export async function POST(req: Request) {
   if (!parsed.success) return validationError(parsed.error)
   const { email, name, role } = parsed.data
 
+  const org = await db.organization.findUnique({ where: { id: organizationId }, select: { name: true, outboundEmailApprovedAt: true } })
+  if (!org) return NextResponse.json({ error: "Organisation introuvable." }, { status: 404 })
+  // A space awaiting validation invites nobody yet (#1045): before any account or email exists.
+  if (!canInviteAdmins(org)) return NextResponse.json({ error: ADMIN_INVITE_PENDING_ERROR, code: "org_pending" }, { status: 403 })
+
   const existing = await prisma.adminUser.findUnique({ where: { email } })
   if (existing) return NextResponse.json({ error: "Cet email est déjà utilisé." }, { status: 409 })
-
-  const org = await db.organization.findUnique({ where: { id: organizationId }, select: { name: true } })
-  if (!org) return NextResponse.json({ error: "Organisation introuvable." }, { status: 404 })
 
   const setupToken = generateToken()
   const setupTokenExpiresAt = new Date(Date.now() + 7 * 24 * 60 * 60 * 1000)
   const dummyHash = await bcrypt.hash(randomBytes(16).toString("hex"), 10)
 
+  // The setup link goes by email only, never back to the owner (#1045): activating the account
+  // must take access to that mailbox.
   const appUrl = apexBaseUrl()
   const inviteUrl = `${appUrl}/admin/accept-invite?token=${setupToken}`
 
@@ -112,5 +117,5 @@ export async function POST(req: Request) {
 
   deliverAfterResponse(outboxIds)
 
-  return NextResponse.json({ ...admin, pending: true, inviteUrl }, { status: 201 })
+  return NextResponse.json({ ...admin, pending: true }, { status: 201 })
 }

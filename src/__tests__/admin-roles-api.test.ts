@@ -27,7 +27,7 @@ const withDb = (target: object | null, owners: number, active = 3) => {
       findFirst: vi.fn().mockResolvedValue(target),
       count: vi.fn(async ({ where }: { where: { role?: string } }) => (where.role ? owners : active)),
     },
-    organization: { findUnique: vi.fn().mockResolvedValue({ name: "Org" }) },
+    organization: { findUnique: vi.fn().mockResolvedValue({ name: "Org", outboundEmailApprovedAt: new Date() }) },
   }
   m.guard.mockResolvedValue({ db, organizationId: "org-a", session })
   return db

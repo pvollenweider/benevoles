@@ -39,7 +39,7 @@ Les compteurs en haut récapitulent : **Invités**, **Inscrits**, **Pas disponib
 
 ![Page « Invitations » : les compteurs 9 Invités, 8 Inscrits, 0 Pas disponible et 1 Sans réponse, le bouton « + Inviter des membres », le bouton « Relancer la personne sans créneau » et le lien « Écrire un message à la personne sans créneau », puis le tableau des membres invités avec leurs tags, la date d'invitation et le statut « Participation confirmée » ou « Sans réponse »](/doc-img/admin-invitations.png)
 
-**Tester l'envoi d'email** envoie un exemple de l'email d'invitation à l'adresse de votre choix, pour vérifier le rendu avant d'inviter.
+**Tester l'envoi d'email** envoie un exemple de l'email d'invitation à l'adresse de votre choix, pour vérifier le rendu avant d'inviter. Cinq emails de test par heure au plus pour votre organisation.
 
 ## Pas disponible
 

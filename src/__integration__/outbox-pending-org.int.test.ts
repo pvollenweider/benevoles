@@ -47,6 +47,14 @@ describe.skipIf(!url)("pending organisation on Postgres (#810)", () => {
     rowIds.push(invite)
     expect(await deliverOutbox({ ids: [invite] })).toEqual({ sent: 0, retried: 0, failed: 0, cancelled: 1, held: 0 })
     expect(smtp).toHaveBeenCalledTimes(1)
+
+    // #1045: an active account added after the space (activated from an invitation link that the
+    // owner could see) does not open it either.
+    await prisma.adminUser.create({ data: { organizationId: orgId, email: `${tag}-activated@example.org`, name: "Activated", passwordHash: "x", role: "organizer", isActive: true, createdAt: new Date(org.createdAt.getTime() + 5 * 60_000) } })
+    const [toActivated] = await enqueueNotifications([payload(`${tag}-activated@example.org`)])
+    rowIds.push(toActivated)
+    expect(await deliverOutbox({ ids: [toActivated] })).toEqual({ sent: 0, retried: 0, failed: 0, cancelled: 1, held: 0 })
+    expect(smtp).toHaveBeenCalledTimes(1)
     const cancelled = await prisma.notificationOutbox.findFirstOrThrow({ where: { id: { in: ids }, status: "cancelled" } })
     expect(cancelled.lastError).toBe("org_pending")
 

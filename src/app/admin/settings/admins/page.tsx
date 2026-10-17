@@ -17,6 +17,7 @@ import HelpLink from "@/components/admin/HelpLink"
 import { siteDomain } from "@/lib/site"
 import { spaceBaseDomain } from "@/lib/space-address"
 import { configuredAppUrl } from "@/lib/urls"
+import { canInviteAdmins } from "@/lib/org-approval"
 
 export const dynamic = "force-dynamic"
 
@@ -44,7 +45,7 @@ export default async function AdminsSettingsPage() {
       },
       orderBy: { createdAt: "asc" },
     }),
-    db.organization.findUnique({ where: { id: organizationId }, select: { name: true, slug: true, volunteerCharter: true, hasOrgInsurance: true, publicTitle: true, timeZone: true, logo: ORG_LOGO_SELECT } }),
+    db.organization.findUnique({ where: { id: organizationId }, select: { name: true, slug: true, outboundEmailApprovedAt: true, volunteerCharter: true, hasOrgInsurance: true, publicTitle: true, timeZone: true, logo: ORG_LOGO_SELECT } }),
     db.orgSlugHistory.findMany({
       where: { organizationId },
       orderBy: { createdAt: "desc" },
@@ -137,6 +138,7 @@ export default async function AdminsSettingsPage() {
         }))}
         currentEmail={currentEmail}
         canManage={isOwner}
+        canInvite={!!org && canInviteAdmins(org)}
       />
     </div>
   )

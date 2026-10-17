@@ -29,11 +29,14 @@ export default function AdminsManager({
   initialAdmins,
   currentEmail,
   canManage,
+  canInvite = true,
 }: {
   initialAdmins: Admin[]
   currentEmail: string
   /** Owners manage the team (#469); organisers see it only. */
   canManage: boolean
+  /** False while the space awaits validation (#1045): inviting more administrators waits for it. */
+  canInvite?: boolean
 }) {
   const [admins, setAdmins] = useState<Admin[]>(initialAdmins)
   const [showForm, setShowForm] = useState(false)
@@ -51,15 +54,13 @@ export default function AdminsManager({
   // Where the focus lands when a control disappears (form closed, admin removed).
   const inviteButtonRef = useRef<HTMLButtonElement>(null)
   const headingRef = useRef<HTMLHeadingElement>(null)
-  const [inviteUrl, setInviteUrl] = useState<string | null>(null)
-  const [copied, setCopied] = useState(false)
   const [removing, setRemoving] = useState<string | null>(null)
 
   async function handleInvite(e: React.FormEvent) {
     e.preventDefault()
     if (form.name.trim().length < 2) { fail("Indiquez le nom de la personne (2 caractères au moins).", "name", nameRef.current); return }
     if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(form.email.trim())) { fail("Indiquez une adresse email complète.", "email", emailRef.current); return }
-    const outcome = await submit<Admin & { inviteUrl: string }>(() => fetch("/api/admin/settings/admins", {
+    const outcome = await submit<Admin>(() => fetch("/api/admin/settings/admins", {
       method: "POST",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify({ name: form.name.trim(), email: form.email.trim(), role: form.role }),
@@ -70,10 +71,10 @@ export default function AdminsManager({
       return
     }
     setAdmins((prev) => [...prev, outcome.data])
-    setInviteUrl(outcome.data.inviteUrl)
     setForm({ name: "", email: "", role: ORGANIZER_ROLE })
     setShowForm(false)
-    setStatus(`Invitation envoyée à ${outcome.data.email}.`)
+    // The activation link goes by email only (#1045), never on this page.
+    setStatus(`Invitation envoyée à ${outcome.data.email}. Le lien d'activation, valable 7 jours, lui a été envoyé par email.`)
     inviteButtonRef.current?.focus()
   }
 
@@ -119,40 +120,18 @@ export default function AdminsManager({
     selectOf(admin.id)?.focus()
   }
 
-  function copyUrl(url: string) {
-    navigator.clipboard.writeText(url).then(() => {
-      setStatus("Lien d'invitation copié.")
-      setCopied(true)
-      setTimeout(() => setCopied(false), 2000)
-    })
-  }
-
   return (
     <div className="space-y-4">
       <FormStatus status={status} error={error} errorId={`${id}-error`} />
-
-      {inviteUrl && (
-        <div className="bg-blue-50 border border-blue-200 rounded-xl p-4 space-y-2">
-          <h2 className="text-sm font-medium text-blue-900">Lien d&apos;invitation créé</h2>
-          <p className="text-xs text-blue-700 break-all font-mono">{inviteUrl}</p>
-          <button
-            onClick={() => copyUrl(inviteUrl)}
-            className="text-xs bg-blue-600 text-white px-3 py-1.5 rounded-lg hover:bg-blue-700 transition-colors"
-          >
-            {copied ? "Copié !" : "Copier le lien"}
-          </button>
-          <p className="text-xs text-blue-800">Un email a été envoyé. Ce lien expire dans 7 jours.</p>
-        </div>
-      )}
 
       <div className="bg-white rounded-2xl border border-gray-200 overflow-hidden">
         <div className="px-4 py-3 border-b border-gray-100 flex items-center justify-between">
           <h2 ref={headingRef} tabIndex={-1} className="text-sm font-semibold text-gray-700 focus:outline-none">
             Administrateurs ({admins.length})
           </h2>
-          {canManage && <button
+          {canManage && canInvite && <button
             ref={inviteButtonRef}
-            onClick={() => { setShowForm(true); setInviteUrl(null); reset() }}
+            onClick={() => { setShowForm(true); reset() }}
             className="text-xs bg-blue-600 text-white px-3 py-1.5 rounded-xl hover:bg-blue-700 transition-colors focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-blue-700"
           >
             <span aria-hidden="true">+ </span>Inviter
@@ -161,6 +140,11 @@ export default function AdminsManager({
         {!canManage && (
           <p className="px-4 py-2 border-b border-gray-100 text-xs text-gray-700">
             Votre rôle : organisateur. Seuls les propriétaires invitent, retirent ou changent le rôle des administrateurs.
+          </p>
+        )}
+        {canManage && !canInvite && (
+          <p className="px-4 py-2 border-b border-gray-100 text-xs text-gray-700">
+            Votre espace est en attente de validation. Vous pourrez inviter d&apos;autres administrateurs une fois qu&apos;il sera validé ; vous recevrez un email.
           </p>
         )}
 
