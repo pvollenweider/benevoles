@@ -50,3 +50,15 @@ export function adminInviteCheck(holder: AdminEmailHolder | null, organizationId
   if (isReleasableInvitation(holder, now)) return "replace"
   return holder.organizationId === organizationId ? "same_org" : "unavailable"
 }
+
+/**
+ * The team list after a successful invitation: the new row takes the place of a pending row with
+ * the same address (the expired invitation the server just replaced, under a new id), or goes last.
+ * An active member's row is never dropped.
+ */
+export function withInvitedAdmin<T extends { email: string; isActive: boolean }>(admins: readonly T[], invited: T): T[] {
+  const email = invited.email.trim().toLowerCase()
+  const i = admins.findIndex((a) => !a.isActive && a.email.trim().toLowerCase() === email)
+  if (i < 0) return [...admins, invited]
+  return admins.map((a, k) => (k === i ? invited : a))
+}

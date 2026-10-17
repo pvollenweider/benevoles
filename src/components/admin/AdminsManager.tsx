@@ -8,6 +8,7 @@ import { useRouter } from "next/navigation"
 import { useSubmit } from "@/lib/use-submit"
 import FormStatus from "@/components/FormStatus"
 import { ORGANIZER_ROLE, OWNER_ROLE, ROLE_LABEL, type OrgRole } from "@/lib/permissions"
+import { withInvitedAdmin } from "@/lib/admin-invitation"
 
 const ROLE_HELP: Record<OrgRole, string> = {
   admin: "Tous les droits, dont l'équipe d'administration et les réglages de l'organisation.",
@@ -70,7 +71,8 @@ export default function AdminsManager({
       fail(outcome.error, outcome.status === 400 || outcome.status === 409 ? "email" : undefined, outcome.status === 400 || outcome.status === 409 ? emailRef.current : null)
       return
     }
-    setAdmins((prev) => [...prev, outcome.data])
+    // A re-invited expired invitation comes back under a new id (#1053): it takes the old row's place.
+    setAdmins((prev) => withInvitedAdmin(prev, outcome.data))
     setForm({ name: "", email: "", role: ORGANIZER_ROLE })
     setShowForm(false)
     // The activation link goes by email only (#1045), never on this page.
