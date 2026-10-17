@@ -31,22 +31,24 @@ function replayStillAllowed(): boolean {
 /**
  * Session replay, in a further chunk, only once a signed-in back-office page is shown (see the
  * policy), and called again at every navigation with the target address. Heading for an address
- * replay must not record (a public page, a token in the URL: #1042), the recorder is stopped
- * before the address changes, its pending segment dropped, and not restarted until the next full
- * page load: `start()` would open a new session regardless of the sample rate.
+ * replay must not record (a public page, a token in the URL: #1042) while the recorder is on, it
+ * is stopped before the address changes, its pending segment dropped, and not restarted until the
+ * next full page load: `start()` would open a new session regardless of the sample rate. Before
+ * the recorder is on, such an address only defers it (sign-in, then the back office).
  */
 export function maybeStartReplay(href: string): void {
   if (replayBarred) return
   if (!replayAllowedFor(href)) {
-    barReplay()
+    if (replayRequested) barReplay()
     return
   }
   if (replayRequested) return
   replayRequested = true
   void import("@/lib/sentry-replay").then(({ createReplayIntegration }) => {
-    // The address may have changed while this chunk was loading.
-    if (replayBarred || !replayAllowedFor(window.location.href)) {
-      replayBarred = true
+    if (replayBarred) return
+    // The address may have changed while this chunk was loading: not now, maybe at a later page.
+    if (!replayAllowedFor(window.location.href)) {
+      replayRequested = false
       return
     }
     Sentry.addIntegration(createReplayIntegration(replayStillAllowed))

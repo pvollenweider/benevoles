@@ -60,6 +60,18 @@ describe("session replay guard (#1042)", () => {
     expect(addIntegration).not.toHaveBeenCalled()
   })
 
+  it("defers replay on a public page until the signed-in back office is reached", async () => {
+    const mod = await freshInit("https://www.benevol.app/admin/login")
+    mod.initSentryClient()
+    await flush()
+    expect(addIntegration).not.toHaveBeenCalled()
+    moveTo("https://www.benevol.app/admin/events")
+    mod.maybeStartReplay("/admin/events")
+    await flush()
+    expect(addIntegration).toHaveBeenCalledTimes(1)
+    expect(stop).not.toHaveBeenCalled()
+  })
+
   it("stops the running recorder, without flushing, before a navigation to a token address, and never restarts it", async () => {
     const mod = await freshInit("https://www.benevol.app/admin/events")
     mod.initSentryClient()
