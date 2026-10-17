@@ -11,6 +11,10 @@ Format basé sur [Keep a Changelog](https://keepachangelog.com/fr/1.0.0/).
 
 ## [Unreleased]
 
+### Sécurité
+
+- **Import de membres depuis Excel** (#1043) : un classeur `.xlsx` est vérifié avant d'être ouvert (structure de l'archive, taille réelle une fois décompressé, nombre de cellules et de lignes). Un fichier trop volumineux une fois décompressé est refusé avec un message clair, au lieu de pouvoir saturer la mémoire du serveur.
+
 ### Corrigé
 
 - **Doublons possibles et adresses numérotées** (#1037) : deux adresses email qui ne diffèrent que par leurs chiffres (`benevole1@…` et `benevole2@…`) ne sont plus proposées comme doublons, et une adresse courte (moins de 8 caractères avant l'arobase) n'est rapprochée que pour une seule lettre d'écart. Une organisation avec des adresses numérotées voyait des centaines de paires sans fondement.

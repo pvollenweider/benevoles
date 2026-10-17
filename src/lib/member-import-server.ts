@@ -10,6 +10,7 @@
 import { createHash } from "node:crypto"
 import type { OrgScopedPrisma } from "./prisma-org"
 import { parseCsv, parseXlsx } from "./csv-import"
+import { preflightXlsx } from "./xlsx-preflight"
 import { MAX_IMPORT_BYTES, MAX_IMPORT_LINES, planDigest, planImport, type ImportPlan, type OnDuplicate } from "./member-import-plan"
 
 export type ImportAnalysis = {
@@ -32,6 +33,15 @@ export async function analyseImport(file: unknown, db: OrgScopedPrisma, organiza
   const isXlsx =
     file.name.toLowerCase().endsWith(".xlsx") ||
     file.type === "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet"
+
+  // ExcelJS inflates the whole archive before any row limit applies (#1043): bound it first.
+  if (isXlsx) {
+    const preflight = preflightXlsx(buffer)
+    if (!preflight.ok && preflight.reason === "too-large") {
+      return { ok: false, status: 413, error: "Fichier trop volumineux une fois décompressé : gardez uniquement la feuille des membres (5 000 lignes et 20 colonnes au plus) ou importez un CSV." }
+    }
+    if (!preflight.ok) return { ok: false, status: 400, error: "Impossible de lire le fichier : vérifiez qu'il s'agit d'un CSV ou d'un .xlsx." }
+  }
 
   let parsed
   try {
