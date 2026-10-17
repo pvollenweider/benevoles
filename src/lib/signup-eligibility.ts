@@ -163,3 +163,19 @@ export function pastShiftRefusal(
   const label = pastShiftLabel(event, shifts, today)
   return label ? { status: 409, body: { error: `Le créneau "${label}" est passé. Recharge la page.` } } : null
 }
+
+/**
+ * A duplicate sign-up (#1047): one answer whatever the existing registration's status (active,
+ * request, waitlist, offered place) and whether the link email went out, so the response doesn't
+ * tell a stranger which state a known address is in. It never claims the email went out: the send
+ * may be throttled or fail, and saying so would tell those cases apart again. `duplicate` lets the form explain it apart
+ * from a full or overlapping shift.
+ */
+export const DUPLICATE_SIGNUP_MESSAGE =
+  "Cette adresse a déjà une inscription ou une place en liste d'attente pour l'un de ces créneaux. " +
+  "Si c'est la tienne, le lien pour gérer tes inscriptions est dans ton email de confirmation, et on essaie de te le renvoyer (trois fois par heure au plus). " +
+  "Vérifie ta boîte de réception et les courriers indésirables."
+
+export function duplicateSignupRefusal(): SignupRefusal {
+  return { status: 409, body: { error: DUPLICATE_SIGNUP_MESSAGE, duplicate: true } }
+}

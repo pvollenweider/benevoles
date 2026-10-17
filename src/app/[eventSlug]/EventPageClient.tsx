@@ -10,6 +10,7 @@ import type { OrgLogo } from "@/lib/org-logo"
 import OrgLogoImage from "@/components/OrgLogoImage"
 import { coordinatesOf, MAP_LINK_LABEL, MAP_LINK_SR_SUFFIX, osmLink } from "@/lib/map-link"
 import { describeSignupFailure, type Failure } from "@/lib/form-errors"
+import { SIGNUP_COMMENT_MAX, SIGNUP_PHONE_MAX } from "@/lib/signup-limits"
 import SignupRecap from "@/components/public/SignupRecap"
 import ShiftRow from "@/components/public/ShiftRow"
 import { useRouter, useSearchParams } from "next/navigation"
@@ -1165,6 +1166,7 @@ export default function EventPageClient({ orgSlug, eventSlug, preview, initialEv
                     type="tel"
                     required={event?.requirePhone ?? false}
                     autoComplete="tel"
+                    maxLength={SIGNUP_PHONE_MAX}
                     value={form.phone}
                     onChange={(e) => setForm((f) => ({ ...f, phone: e.target.value }))}
                     className="w-full border border-gray-300 rounded-xl px-3 py-3 text-sm focus:outline-hidden focus:ring-2 focus:ring-blue-500"
@@ -1204,6 +1206,7 @@ export default function EventPageClient({ orgSlug, eventSlug, preview, initialEv
                   <textarea
                     id="reg-comment"
                     rows={2}
+                    maxLength={SIGNUP_COMMENT_MAX}
                     value={form.comment}
                     onChange={(e) => setForm((f) => ({ ...f, comment: e.target.value }))}
                     className="w-full border border-gray-300 rounded-xl px-3 py-3 text-sm focus:outline-hidden focus:ring-2 focus:ring-blue-500 resize-none"
@@ -1266,7 +1269,7 @@ export default function EventPageClient({ orgSlug, eventSlug, preview, initialEv
                     <p className="font-semibold">{failure.title}</p>
                     <p>{failure.message}</p>
                     <p className="text-red-700">{failure.hint}</p>
-                    {failure.kind === "conflict" && (
+                    {(failure.kind === "conflict" || failure.kind === "duplicate") && (
                       <button type="button" onClick={() => { setFailure(null); stepFocus.current = "select"; setStep("select") }} className="mt-1 text-sm font-medium text-red-800 underline underline-offset-2 rounded focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-red-700">
                         Revenir au planning
                       </button>

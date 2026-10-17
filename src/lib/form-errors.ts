@@ -7,7 +7,7 @@
  * may have been recorded anyway. Built on the API error shape `{ error, details? }`.
  */
 
-export type FailureKind = "validation" | "conflict" | "rate_limit" | "network" | "server"
+export type FailureKind = "validation" | "conflict" | "duplicate" | "rate_limit" | "network" | "server"
 
 export type Failure = {
   kind: FailureKind
@@ -24,7 +24,7 @@ export type Failure = {
 export type FailureInput = {
   /** HTTP status; absent when the request never got an answer. */
   status?: number
-  body?: { error?: unknown } | null
+  body?: { error?: unknown; duplicate?: unknown } | null
   /** fetch threw, or the answer wasn't JSON. */
   network?: boolean
 }
@@ -44,6 +44,10 @@ export function describeSignupFailure(i: FailureInput): Failure {
   }
   if (i.status === 400) {
     return { kind: "validation", title: "Un champ est à corriger", message: msg ?? "Certaines informations sont invalides.", hint: "Corrige l'information signalée ci-dessus ; tes autres réponses sont conservées.", retryable: false, maybeRecorded: false }
+  }
+  if (i.status === 409 && i.body?.duplicate === true) {
+    // Already registered (#1047): the server's sentence says how to get the link back by email.
+    return { kind: "duplicate", title: "Inscription déjà enregistrée", message: msg ?? "Cette adresse a déjà une inscription pour l'un de ces créneaux. Le lien pour gérer tes inscriptions se trouve dans tes emails.", hint: "Pour choisir d'autres créneaux, reviens au planning ; tes informations restent remplies.", retryable: false, maybeRecorded: false }
   }
   if (i.status === 409) {
     return { kind: "conflict", title: "Ta sélection n'est plus disponible", message: msg ?? "Un créneau choisi n'est plus disponible.", hint: "Reviens au planning pour ajuster ton choix ; tes informations restent remplies.", retryable: false, maybeRecorded: false }

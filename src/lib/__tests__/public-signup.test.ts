@@ -79,6 +79,13 @@ describe("validateSignup", () => {
     expect(validateSignup(base)).toBeNull()
   })
 
+  // #1047: an older, longer phone pre-filled from a remembered contact is named before sending.
+  it("names an over-long phone or comment instead of sending it", () => {
+    expect(validateSignup({ ...base, form: { ...ok, phone: "1".repeat(51) } })).toContain("Le téléphone ne peut pas dépasser 50 caractères")
+    expect(validateSignup({ ...base, form: { ...ok, comment: "x".repeat(2001) } })).toContain("Le commentaire ne peut pas dépasser 2000 caractères")
+    expect(validateSignup({ ...base, form: { ...ok, phone: "1".repeat(50), comment: "x".repeat(2000) } })).toBeNull()
+  })
+
   it("checks charter, consent and required fields, in that order", () => {
     expect(validateSignup({ ...base, charterAccepted: false })).toContain("convention")
     expect(validateSignup({ ...base, form: { ...ok, consent: false } })).toBe("Coche la case d'accord sur tes données pour t'inscrire.")

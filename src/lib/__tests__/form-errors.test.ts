@@ -11,6 +11,15 @@ describe("describeSignupFailure", () => {
     expect(describeSignupFailure({ status: 502, body: null })).toMatchObject({ kind: "server", retryable: true, maybeRecorded: true })
   })
 
+  // #1047: a duplicate is told apart from a full shift by the server's flag, not by its wording.
+  it("explains a duplicate with the server's sentence and still offers the planning", () => {
+    const dup = describeSignupFailure({ status: 409, body: { error: "Cette adresse a déjà une inscription.", duplicate: true } })
+    expect(dup).toMatchObject({ kind: "duplicate", title: "Inscription déjà enregistrée", message: "Cette adresse a déjà une inscription.", retryable: false, maybeRecorded: false })
+    expect(dup.hint).toContain("planning")
+    expect(describeSignupFailure({ status: 409, body: { duplicate: true } }).message).toContain("tes emails")
+    expect(describeSignupFailure({ status: 409, body: { error: "Complet.", duplicate: "yes" } }).kind).toBe("conflict")
+  })
+
   it("says that retrying is safe when the request may have gone through", () => {
     expect(describeSignupFailure({ network: true }).hint).toContain("sans risque")
     expect(describeSignupFailure({ status: 500 }).hint).toContain("lien par email")

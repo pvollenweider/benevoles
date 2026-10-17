@@ -4,6 +4,8 @@
 import { describe, expect, it, vi } from "vitest"
 import {
   answersRefusal,
+  DUPLICATE_SIGNUP_MESSAGE,
+  duplicateSignupRefusal,
   existingOverlapRefusal,
   findOverlap,
   fullShift,
@@ -167,5 +169,15 @@ describe("minimumAgeRefusal", () => {
 
   it("lets an old enough volunteer through", () => {
     expect(minimumAgeRefusal(shifts, "2000-01-01")).toBeNull()
+  })
+})
+
+// #1047: one answer for every duplicate, which says how to get the link back by email.
+describe("duplicateSignupRefusal", () => {
+  it("is a flagged 409 that names neither the status nor whether an email went out", () => {
+    expect(duplicateSignupRefusal()).toEqual({ status: 409, body: { error: DUPLICATE_SIGNUP_MESSAGE, duplicate: true } })
+    expect(DUPLICATE_SIGNUP_MESSAGE).toContain("inscription ou une place en liste d'attente")
+    expect(DUPLICATE_SIGNUP_MESSAGE).toContain("boîte de réception")
+    expect(DUPLICATE_SIGNUP_MESSAGE).not.toMatch(/a été envoyé|vient de partir|on vient de/)
   })
 })

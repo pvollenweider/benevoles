@@ -6,10 +6,9 @@ import { NextResponse } from "next/server"
 import { birthDateSchema } from "@/lib/civil-date"
 import { prisma } from "@/lib/prisma"
 import { generateToken } from "@/lib/utils"
-import { sendNotification } from "@/lib/notifications"
 import { deliverAfterResponse, enqueueNotifications } from "@/lib/notifications/outbox"
 import { buildSignupNotifications, type CreatedRegistration } from "@/lib/signup-notifications"
-import { rateLimit, getClientIp, isRateLimited } from "@/lib/rate-limit"
+import { rateLimit, getClientIp } from "@/lib/rate-limit"
 import { logEvent } from "@/lib/event-log"
 import { reportError } from "@/lib/report-error"
 import {
@@ -22,6 +21,9 @@ import {
   planPlacement,
 } from "@/lib/registration-capacity"
 import { z } from "zod"
+import { SIGNUP_COMMENT_MAX, SIGNUP_ID_MAX, SIGNUP_PHONE_MAX, SIGNUP_SHIFTS_MAX, tooLongSignupField } from "@/lib/signup-limits"
+import { linkTargetInclude } from "@/lib/personal-link-send"
+import { sendNotification } from "@/lib/notifications"
 import { linkToken, registrationToken } from "@/lib/token-vault"
 import { validationError } from "@/lib/api-error"
 import { checkAnswers, consistentAdditions, planAnswerWrites } from "@/lib/event-questions"
@@ -39,6 +41,7 @@ import {
   reservedRoleRefusal,
   selectionOverlapRefusal,
   pastShiftRefusal,
+  duplicateSignupRefusal,
   type SignupRefusal,
 } from "@/lib/signup-eligibility"
 import { RoleLimitError, roleLimitBreaches, roleLimitMessage, roleLimits } from "@/lib/role-limit"
@@ -57,22 +60,23 @@ import { recordAnswerChanges, writeAnswerChanges } from "@/lib/answer-change-sav
 import { contactChanges, type ContactChange, type SignupUpdates } from "@/lib/signup-updates"
 
 const schema = z.object({
-  eventId: z.string(),
-  shiftIds: z.array(z.string()).min(1),
+  eventId: z.string().max(SIGNUP_ID_MAX),
+  shiftIds: z.array(z.string().max(SIGNUP_ID_MAX)).min(1).max(SIGNUP_SHIFTS_MAX),
   firstName: z.string().min(1).max(100),
   lastName: z.string().min(1).max(100),
   email: z.string().trim().toLowerCase().email(),
-  phone: z.string().optional(),
+  // Bounded (#1047): the text is shown to organisers and exported to CSV.
+  phone: z.string().max(SIGNUP_PHONE_MAX).optional(),
   // A real, past day (audit): an invalid string became an Invalid Date that passed every age check.
   // The form sends "" when no shift needs it: that is no birth date, not an invalid one.
   birthDate: z.preprocess((v) => (v === "" ? undefined : v), birthDateSchema.optional()),
-  comment: z.string().optional(),
+  comment: z.string().max(SIGNUP_COMMENT_MAX).optional(),
   consent: z.literal(true),
   // The volunteer ticked "J'ai lu et j'accepte la convention des bénévoles" (#569): the page
   // already refuses to submit without it (validateSignup). Required (#696): a false or missing
   // value is refused below with a readable message, before any lookup.
   charterAccepted: z.literal(true),
-  inviteToken: z.string().optional(),
+  inviteToken: z.string().max(200).optional(),
   /** Answers to the event's custom questions (#483), by question id. */
   answers: z.record(z.string(), z.unknown()).optional(),
   /** Code of the share link per group (#947) the page was opened with; resolved below, never an id. */
@@ -103,6 +107,10 @@ export async function POST(req: Request) {
       { status: 400 },
     )
   }
+  // Over-long phone or comment (#1047): named, so a volunteer whose older phone came back
+  // pre-filled knows what to shorten.
+  const tooLong = tooLongSignupField(body ?? {})
+  if (tooLong) return NextResponse.json({ error: tooLong.message, field: tooLong.field }, { status: 400 })
   const parsed = schema.safeParse(body)
   if (!parsed.success) {
     return validationError(parsed.error)
@@ -409,7 +417,7 @@ export async function POST(req: Request) {
       // independently of it (created before, or by a concurrent sign-up).
       const owner = await prisma.volunteer.findFirst({ where: { email: { equals: email, mode: "insensitive" }, organizationId }, select: { id: true } })
       if (owner) return alreadyRegistered(owner.id, eventId)
-      return NextResponse.json({ error: "Tu as déjà une inscription pour l'un de ces créneaux." }, { status: 409 })
+      return refuse(duplicateSignupRefusal())
     }
     throw e
   }
@@ -584,54 +592,39 @@ class OverlapError extends Error {
 /**
  * "Already registered" (#285): never answers with the existing registration's editToken — the
  * submitter may not be that volunteer. The owner gets their management link by email instead
- * (throttled per volunteer, so the form can't be used to flood their inbox).
+ * (throttled per volunteer, so the form can't be used to flood their inbox), whatever the status
+ * of their registration: the personal page shows waitlisted and offered places too.
  *
- * The duplicate can be a live registration of any status. Only an active one or a request (#484)
- * gets its management link re-sent here, so the message only claims an email when one actually
- * went out: waitlisted / offered-only duplicates get the waitlist message instead.
+ * The answer is the same in every case (#1047): status of the existing registration, email sent
+ * or throttled. Only the duplicate itself is still told apart from a new sign-up.
  */
 async function alreadyRegistered(volunteerId: string, eventId: string) {
+  // An active registration or a request first, as before; else the waitlisted / offered place.
   const reg = await prisma.registration.findFirst({
     where: { volunteerId, eventId, status: { in: [...COMMITTED_STATUSES] } },
-    include: {
-      volunteer: { select: { firstName: true, lastName: true, email: true } },
-      event: { select: { title: true, organizationId: true, organization: { select: { slug: true } } } },
-    },
+    include: linkTargetInclude,
+  }) ?? await prisma.registration.findFirst({
+    where: { volunteerId, eventId, status: { in: [...LIVE_STATUSES] } },
+    include: linkTargetInclude,
+    orderBy: { createdAt: "desc" },
   })
-  if (!reg) {
-    return NextResponse.json({
-      error: "Tu es déjà sur la liste d'attente de ce créneau. Tu recevras un email si une place se libère.",
-    }, { status: 409 })
-  }
-
-  let linkSent = false
-  if (reg.volunteer.email) {
-    if ((await rateLimit(volunteerId, "reg-link-resend", 3, 60 * 60 * 1000)).ok) {
-      const name = `${reg.volunteer.firstName} ${reg.volunteer.lastName}`
-      const result = await sendNotification({
-        kind: "registration_link_resend",
-        recipient: { email: reg.volunteer.email, name },
-        volunteerId,
-        organizationId: reg.event.organizationId,
-        data: { volunteerName: name, eventTitle: reg.event.title, orgSlug: reg.event.organization.slug, editToken: registrationToken.reveal(reg) },
-      }).catch((e) => {
-        reportError("notification.registration_link_resend")(e)
-        return { ok: false }
-      })
-      linkSent = result.ok
-      // Remember a *successful* send: the throttle counts attempts, failed ones included.
-      if (result.ok) {
-        await rateLimit(volunteerId, "reg-link-sent", 1, 60 * 60 * 1000)
-        await prisma.registration.updateMany({ where: { volunteerId, eventId, status: { in: [...LIVE_STATUSES] } }, data: { linkEmailedAt: new Date() } })
-      }
-    } else {
-      // Throttled: only claim the link was sent if a send actually succeeded within the hour.
-      linkSent = await isRateLimited(volunteerId, "reg-link-sent", 1)
+  if (reg?.volunteer.email && (await rateLimit(volunteerId, "reg-link-resend", 3, 60 * 60 * 1000)).ok) {
+    const name = `${reg.volunteer.firstName} ${reg.volunteer.lastName}`
+    const result = await sendNotification({
+      kind: "registration_link_resend",
+      recipient: { email: reg.volunteer.email, name },
+      volunteerId,
+      organizationId: reg.event.organizationId,
+      data: { volunteerName: name, eventTitle: reg.event.title, orgSlug: reg.event.organization.slug, editToken: registrationToken.reveal(reg) },
+    }).catch((e) => {
+      reportError("notification.registration_link_resend")(e)
+      return { ok: false }
+    })
+    // The personal page shows when the link was last emailed: only once it actually went out.
+    if (result.ok) {
+      await prisma.registration.updateMany({ where: { volunteerId, eventId, status: { in: [...LIVE_STATUSES] } }, data: { linkEmailedAt: new Date() } })
     }
   }
-  return NextResponse.json({
-    error: linkSent
-      ? "Tu as déjà une inscription pour l'un de ces créneaux. Le lien pour gérer tes inscriptions a été envoyé à ton adresse email."
-      : "Tu as déjà une inscription pour l'un de ces créneaux. Utilise le lien de ton email de confirmation pour gérer tes inscriptions.",
-  }, { status: 409 })
+  const { body, status } = duplicateSignupRefusal()
+  return NextResponse.json(body, { status })
 }
