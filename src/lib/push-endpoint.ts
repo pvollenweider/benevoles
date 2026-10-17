@@ -14,9 +14,6 @@
 const EXACT_HOSTS = new Set(["fcm.googleapis.com"])
 const SUFFIX_HOSTS = [".push.services.mozilla.com", ".notify.windows.com", ".push.apple.com"]
 
-/** Most subscriptions a volunteer keeps; the oldest are dropped beyond this. */
-export const MAX_PUSH_SUBSCRIPTIONS_PER_VOLUNTEER = 5
-
 /**
  * Whether a push subscription endpoint may be stored and sent to: https on the default port, no
  * credentials, and a host of a known Web Push service. Anything unparsable is refused.

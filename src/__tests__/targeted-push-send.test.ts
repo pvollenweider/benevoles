@@ -43,8 +43,9 @@ describe("sendTargetedPush", () => {
     expect(m.update).toHaveBeenCalledWith({ where: { id: "msg-1" }, data: { pushSent: { increment: 2 }, pushFailed: { increment: 1 } } })
   })
 
-  // #1041: rows stored before the endpoint check are never contacted, and are removed.
-  it("skips and removes stored endpoints outside the Web Push services", async () => {
+  // #1041: rows stored before the endpoint check are never contacted; they count as failed (so the
+  // message history adds up) and stay stored.
+  it("never contacts stored endpoints outside the Web Push services", async () => {
     m.findMany.mockResolvedValue([
       sub("ok"),
       { id: "bad-host", endpoint: "https://push.example.com/x", auth: "a", p256dh: "p" },
@@ -52,10 +53,10 @@ describe("sendTargetedPush", () => {
     ])
     m.send.mockResolvedValue({})
     const { sendPushToVolunteer } = await import("@/lib/push")
-    expect(await sendPushToVolunteer("alice", { title: "T", body: "B" })).toEqual({ sent: 1, failed: 0, removed: 2 })
+    expect(await sendPushToVolunteer("alice", { title: "T", body: "B" })).toEqual({ sent: 1, failed: 2, removed: 0 })
     expect(m.send).toHaveBeenCalledTimes(1)
     expect(m.send.mock.calls[0][0].endpoint).toBe("https://fcm.googleapis.com/fcm/send/ok")
-    expect(m.deleteMany).toHaveBeenCalledWith({ where: { id: { in: ["bad-host", "bad-port"] } } })
+    expect(m.deleteMany).not.toHaveBeenCalled()
   })
 
   it("hands web-push a finite timeout", async () => {

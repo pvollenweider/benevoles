@@ -47,8 +47,9 @@ function ensureConfigured() {
 export type PushOutcome = { sent: number; failed: number; removed: number }
 
 /**
- * Sends to every device of the volunteer; gone subscriptions (404/410) are removed, and so are
- * stored endpoints outside the Web Push services (#1041), which are never contacted.
+ * Sends to every device of the volunteer; gone subscriptions (404/410) are removed. A stored
+ * endpoint outside the Web Push services (#1041) is never contacted and counts as failed; the row
+ * is kept, so widening the allowlist would bring a wrongly refused device back.
  */
 export async function sendPushToVolunteer(
   volunteerId: string,
@@ -61,14 +62,10 @@ export async function sendPushToVolunteer(
   if (await organizationBlocksSending(volunteer?.organizationId)) return { sent: 0, failed: 0, removed: 0 }
 
   const stored = await prisma.pushSubscription.findMany({ where: { volunteerId } })
+  const subs = stored.filter((sub) => isAllowedPushEndpoint(sub.endpoint))
   const dead: string[] = []
-  const subs = stored.filter((sub) => {
-    if (isAllowedPushEndpoint(sub.endpoint)) return true
-    dead.push(sub.id)
-    return false
-  })
   let sent = 0
-  let failed = 0
+  let failed = stored.length - subs.length
 
   await Promise.allSettled(
     subs.map(async (sub) => {

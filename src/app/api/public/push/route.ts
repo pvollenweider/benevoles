@@ -8,7 +8,7 @@ import { z } from "zod"
 import { rateLimit, getClientIp } from "@/lib/rate-limit"
 import { reportError } from "@/lib/report-error"
 import { registrationToken } from "@/lib/token-vault"
-import { isAllowedPushEndpoint, MAX_PUSH_SUBSCRIPTIONS_PER_VOLUNTEER } from "@/lib/push-endpoint"
+import { isAllowedPushEndpoint } from "@/lib/push-endpoint"
 
 const schema = z.object({
   editToken: z.string().min(1),
@@ -54,15 +54,6 @@ export async function POST(req: Request) {
       update: { auth, p256dh },
       create: { endpoint, auth, p256dh, volunteerId },
     })
-    // A few devices per member (#1041): beyond that, the oldest other subscriptions give way to
-    // the one just registered.
-    const extra = await tx.pushSubscription.findMany({
-      where: { volunteerId, NOT: { endpoint } },
-      orderBy: [{ createdAt: "desc" }, { id: "desc" }],
-      skip: MAX_PUSH_SUBSCRIPTIONS_PER_VOLUNTEER - 1,
-      select: { id: true },
-    })
-    if (extra.length > 0) await tx.pushSubscription.deleteMany({ where: { id: { in: extra.map((s) => s.id) } } })
     return true
   })
   if (!attached) return NextResponse.json({ error: "Inscription introuvable" }, { status: 404 })

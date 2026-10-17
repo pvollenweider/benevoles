@@ -1,5 +1,5 @@
 import { describe, it, expect } from "vitest"
-import { isAllowedPushEndpoint, MAX_PUSH_SUBSCRIPTIONS_PER_VOLUNTEER } from "../push-endpoint"
+import { isAllowedPushEndpoint } from "../push-endpoint"
 
 // Web Push endpoints (#1041): only the browsers' push services, over https on the default port.
 describe("isAllowedPushEndpoint", () => {
@@ -42,9 +42,5 @@ describe("isAllowedPushEndpoint", () => {
   it("refuses non-strings", () => {
     expect(isAllowedPushEndpoint(undefined)).toBe(false)
     expect(isAllowedPushEndpoint(42)).toBe(false)
-  })
-
-  it("keeps the per-volunteer cap small", () => {
-    expect(MAX_PUSH_SUBSCRIPTIONS_PER_VOLUNTEER).toBe(5)
   })
 })

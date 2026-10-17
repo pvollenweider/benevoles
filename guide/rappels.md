@@ -22,7 +22,7 @@ Les rappels arrivent dans ta boîte email, avec tes créneaux du jour, leurs inf
 
 Sur ta page personnelle, le bouton **Recevoir des rappels push** active les **notifications du navigateur** (il figure aussi sur la page de confirmation si ton inscription vient d'un lien d'invitation). Tu reçois alors, en plus de l'email, un rappel 2 jours avant, la veille et le jour de ton créneau, et les messages urgents de l'organisation quand elle choisit de te prévenir aussi par notification (le message complet arrive toujours par email). Avec plusieurs créneaux le même jour pour le même événement, un seul rappel (email et notification) les regroupe ; un créneau sur un autre événement le même jour garde son propre rappel.
 
-Ton navigateur te demande d'abord ton autorisation ; tu peux la retirer à tout moment dans ses réglages. Le bouton n'apparaît pas si ton navigateur ne gère pas les notifications ou si le site ne les propose pas. Si l'activation échoue, un message sous le bouton le dit : tu peux réessayer un peu plus tard. Les notifications peuvent être actives sur 5 appareils au plus : en activer un sixième les coupe sur le plus ancien.
+Ton navigateur te demande d'abord ton autorisation ; tu peux la retirer à tout moment dans ses réglages. Le bouton n'apparaît pas si ton navigateur ne gère pas les notifications ou si le site ne les propose pas. Si l'activation échoue, un message sous le bouton le dit : tu peux réessayer un peu plus tard.
 
 ### Je ne veux pas oublier mon créneau le jour J
 

@@ -4,12 +4,11 @@ import { hashToken } from "@/lib/token-hash"
 const findFirst = vi.hoisted(() => vi.fn())
 const upsert = vi.hoisted(() => vi.fn())
 const deleteMany = vi.hoisted(() => vi.fn())
-const findMany = vi.hoisted(() => vi.fn())
 const lockRows = vi.hoisted(() => vi.fn())
 vi.mock("@/lib/prisma", () => {
   const prisma = {
     registration: { findFirst },
-    pushSubscription: { upsert, deleteMany, findMany },
+    pushSubscription: { upsert, deleteMany },
     $queryRaw: (...args: unknown[]) => lockRows(...args),
     $transaction: async (fn: (tx: unknown) => unknown): Promise<unknown> => fn(prisma),
   }
@@ -35,7 +34,6 @@ describe("POST /api/public/push", () => {
   beforeEach(() => {
     vi.clearAllMocks()
     lockRows.mockResolvedValue([{ erasedAt: null }])
-    findMany.mockResolvedValue([])
   })
 
   // #1041: the server later POSTs to the endpoint, so only the browsers' push services are kept.
@@ -54,27 +52,6 @@ describe("POST /api/public/push", () => {
     expect(await res.json()).toEqual({ error: "Données invalides" })
     expect(findFirst).not.toHaveBeenCalled()
     expect(upsert).not.toHaveBeenCalled()
-  })
-
-  it("keeps at most five devices per member, dropping the oldest other ones", async () => {
-    findFirst.mockResolvedValue({ volunteerId: "vol-1" })
-    findMany.mockResolvedValue([{ id: "old-1" }, { id: "old-2" }])
-    const { POST } = await import("@/app/api/public/push/route")
-    expect((await POST(post({ editToken: "tok", ...sub }))).status).toBe(200)
-    expect(findMany).toHaveBeenCalledWith({
-      where: { volunteerId: "vol-1", NOT: { endpoint: sub.endpoint } },
-      orderBy: [{ createdAt: "desc" }, { id: "desc" }],
-      skip: 4,
-      select: { id: true },
-    })
-    expect(deleteMany).toHaveBeenCalledWith({ where: { id: { in: ["old-1", "old-2"] } } })
-  })
-
-  it("deletes nothing while the member is under the cap", async () => {
-    findFirst.mockResolvedValue({ volunteerId: "vol-1" })
-    const { POST } = await import("@/app/api/public/push/route")
-    expect((await POST(post({ editToken: "tok", ...sub }))).status).toBe(200)
-    expect(deleteMany).not.toHaveBeenCalled()
   })
 
   it("never attaches a device to a record erased since the link was resolved (#516)", async () => {

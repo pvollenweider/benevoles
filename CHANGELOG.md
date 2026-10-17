@@ -13,7 +13,7 @@ Format basé sur [Keep a Changelog](https://keepachangelog.com/fr/1.0.0/).
 
 ### Sécurité
 
-- **Notifications push mieux encadrées** (#1041) : un abonnement push n'est accepté que vers les services de notification des navigateurs (Chrome, Firefox, Edge, Safari), en HTTPS ; les abonnements enregistrés auparavant qui ne respectent pas cette règle sont supprimés au premier envoi au lieu d'être contactés. Chaque envoi a un délai maximal, un bénévole garde au plus 5 appareils abonnés (le plus ancien laisse sa place), et les notifications d'un message programmé partent après les emails, qu'elles ne peuvent plus retarder.
+- **Notifications push mieux encadrées** (#1041) : un abonnement push n'est accepté que vers les services de notification des navigateurs (Chrome, Firefox, Edge, Safari), en HTTPS ; un abonnement enregistré auparavant qui ne respecte pas cette règle n'est plus contacté et compte comme un échec dans l'historique du message. Chaque envoi a un délai maximal, et les notifications d'un message programmé partent après les emails, qu'elles ne peuvent plus retarder.
 
 ### Corrigé
 
