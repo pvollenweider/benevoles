@@ -6,6 +6,7 @@ import { describe, it, expect, vi, beforeEach } from "vitest"
 const m = vi.hoisted(() => ({
   guard: vi.fn(),
   findFirst: vi.fn(),
+  count: vi.fn(),
   deleteMany: vi.fn(),
   create: vi.fn(),
   enqueue: vi.fn(),
@@ -14,7 +15,7 @@ const m = vi.hoisted(() => ({
 vi.mock("@/lib/auth-guard", () => ({ requireOrgSession: m.guard }))
 vi.mock("@/lib/prisma", () => ({
   prisma: {
-    adminUser: { findFirst: m.findFirst, deleteMany: m.deleteMany, create: m.create },
+    adminUser: { findFirst: m.findFirst, count: m.count, deleteMany: m.deleteMany, create: m.create },
     orgLog: { create: m.orgLog },
     async $transaction(fn: (tx: unknown) => unknown) { return fn(this) },
   },
@@ -53,6 +54,7 @@ describe("POST /api/admin/settings/admins with an address already held (#1053)",
       session: { user: { id: "owner-1", email: "owner@x.ch", role: "admin" } },
     })
     m.deleteMany.mockResolvedValue({ count: 1 })
+    m.count.mockResolvedValue(1) // the holder's organisation has an active admin
     m.create.mockImplementation(async ({ data }: { data: { email: string; name: string; role: string } }) => ({ id: "new-1", ...data, isActive: false }))
     m.enqueue.mockResolvedValue(["row-1"])
   })
@@ -71,6 +73,7 @@ describe("POST /api/admin/settings/admins with an address already held (#1053)",
     const where = m.deleteMany.mock.calls[0][0].where
     expect(where).toMatchObject({ id: "old-1", isActive: false, setupTokenHash: "old-hash" })
     expect(where.setupTokenExpiresAt.lt).toBeInstanceOf(Date)
+    expect(m.count).toHaveBeenCalledWith({ where: { organizationId: "org-b", isActive: true } })
     expect(m.create.mock.calls[0][0].data).toMatchObject({ organizationId: "org-a", email: "camille@example.org", isActive: false })
     expect(m.deleteMany.mock.invocationCallOrder[0]).toBeLessThan(m.create.mock.invocationCallOrder[0])
     expect(m.enqueue).toHaveBeenCalledTimes(1)
@@ -81,6 +84,16 @@ describe("POST /api/admin/settings/admins with an address already held (#1053)",
     expect((await post()).status).toBe(201)
     expect(m.deleteMany).toHaveBeenCalledTimes(1)
     expect(m.create).toHaveBeenCalledTimes(1)
+  })
+
+  it("keeps the expired first account of another space with no active admin (sign-up owner, operator-created)", async () => {
+    m.findFirst.mockResolvedValue(holder())
+    m.count.mockResolvedValue(0)
+    const res = await post()
+    expect(res.status).toBe(409)
+    expect(await res.json()).toEqual({ error: ADMIN_INVITE_UNAVAILABLE_ERROR })
+    expect(m.deleteMany).not.toHaveBeenCalled()
+    expect(m.create).not.toHaveBeenCalled()
   })
 
   it("refuses a valid invitation of another organisation without saying where the address is used", async () => {

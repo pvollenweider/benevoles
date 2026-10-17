@@ -1,5 +1,5 @@
 import { describe, it, expect } from "vitest"
-import { adminInviteCheck, isExpiredInvitation, type AdminEmailHolder } from "@/lib/admin-invitation"
+import { adminInviteCheck, isExpiredInvitation, isReleasableInvitation, type AdminEmailHolder } from "@/lib/admin-invitation"
 
 // #1053: an expired, never-activated invitation no longer holds an admin address.
 const now = new Date("2026-10-17T12:00:00Z")
@@ -10,6 +10,7 @@ const row = (over: Partial<AdminEmailHolder> = {}): AdminEmailHolder => ({
   isActive: false,
   setupTokenHash: "hash",
   setupTokenExpiresAt: past,
+  organizationHasActiveAdmin: true,
   ...over,
 })
 
@@ -34,6 +35,21 @@ describe("isExpiredInvitation", () => {
   })
 })
 
+describe("isReleasableInvitation", () => {
+  it("frees an expired invitation into a team that has an active administrator", () => {
+    expect(isReleasableInvitation(row(), now)).toBe(true)
+  })
+
+  it("keeps the first account of a space with no active administrator (sign-up owner, operator-created)", () => {
+    expect(isReleasableInvitation(row({ organizationHasActiveAdmin: false }), now)).toBe(false)
+  })
+
+  it("keeps a valid invitation and an active account", () => {
+    expect(isReleasableInvitation(row({ setupTokenExpiresAt: future }), now)).toBe(false)
+    expect(isReleasableInvitation(row({ isActive: true }), now)).toBe(false)
+  })
+})
+
 describe("adminInviteCheck", () => {
   it("is free when nobody holds the address", () => {
     expect(adminInviteCheck(null, "org-a", now)).toBe("free")
@@ -53,5 +69,7 @@ describe("adminInviteCheck", () => {
     expect(adminInviteCheck(row({ isActive: true, setupTokenHash: null, setupTokenExpiresAt: null }), "org-a", now)).toBe("unavailable")
     expect(adminInviteCheck(row({ setupTokenExpiresAt: future }), "org-a", now)).toBe("unavailable")
     expect(adminInviteCheck(row({ organizationId: null, isActive: true, setupTokenHash: null, setupTokenExpiresAt: null }), "org-a", now)).toBe("unavailable")
+    // The expired first account of another space stays: the operator can still send it a new link.
+    expect(adminInviteCheck(row({ organizationHasActiveAdmin: false }), "org-a", now)).toBe("unavailable")
   })
 })

@@ -4,6 +4,7 @@ import { describe, it, expect, vi, beforeEach } from "vitest"
 // and its confirmation replaces it; an active account or a valid invitation still holds the address.
 const m = vi.hoisted(() => ({
   findFirst: vi.fn(),
+  count: vi.fn(),
   deleteMany: vi.fn(),
   requestCreate: vi.fn(),
   requestFind: vi.fn(),
@@ -14,7 +15,7 @@ const m = vi.hoisted(() => ({
 }))
 vi.mock("@/lib/prisma", () => ({
   prisma: {
-    adminUser: { findFirst: m.findFirst, deleteMany: m.deleteMany },
+    adminUser: { findFirst: m.findFirst, count: m.count, deleteMany: m.deleteMany },
     signupRequest: { create: m.requestCreate, findUnique: m.requestFind, updateMany: m.requestClaim, update: m.requestUpdate },
     signupBlock: { findMany: vi.fn().mockResolvedValue([]) },
     organization: { findUnique: vi.fn().mockResolvedValue(null), create: m.orgCreate },
@@ -39,6 +40,7 @@ describe("sign-up and an address held by an invitation (#1053)", () => {
     vi.clearAllMocks()
     m.enqueue.mockResolvedValue(["row-1"])
     m.deleteMany.mockResolvedValue({ count: 1 })
+    m.count.mockResolvedValue(1) // the invitation's organisation has an active admin
     m.requestFind.mockResolvedValue({ id: "req-1", email: "camille@example.org", organizationName: "Fête", contactName: "Camille", description: "x", expiresAt: new Date(now.getTime() + DAY), confirmedAt: null })
     m.requestClaim.mockResolvedValue({ count: 1 })
     m.orgCreate.mockResolvedValue({ id: "org-new", slug: "fete", name: "Fête" })
@@ -72,6 +74,15 @@ describe("sign-up and an address held by an invitation (#1053)", () => {
       m.findFirst.mockResolvedValueOnce(holder)
       expect(await confirmSignupRequest("tok", now)).toEqual({ ok: false, reason: "taken" })
     }
+    expect(m.deleteMany).not.toHaveBeenCalled()
+    expect(m.orgCreate).not.toHaveBeenCalled()
+  })
+
+  it("keeps the expired first account of a space with no active admin: no confirmation, still taken", async () => {
+    m.findFirst.mockResolvedValue(expired)
+    m.count.mockResolvedValue(0)
+    expect(await createSignupRequest(input, now)).toEqual({ queued: false })
+    expect(await confirmSignupRequest("tok", now)).toEqual({ ok: false, reason: "taken" })
     expect(m.deleteMany).not.toHaveBeenCalled()
     expect(m.orgCreate).not.toHaveBeenCalled()
   })

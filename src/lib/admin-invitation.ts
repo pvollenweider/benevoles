@@ -7,9 +7,12 @@
  * invitation nobody accepted kept the address until the nightly cleanup, blocking the person's
  * own sign-up or their organisation's invitation.
  *
- * An invitation whose 7-day link has expired, never activated, no longer holds the address: an
- * invitation or a sign-up for it replaces that row (src/lib/admin-invitation-server.ts). Active
- * accounts and invitations still valid are never touched. Pure and Prisma-free.
+ * An invitation to join a team, never activated, whose 7-day link has expired no longer holds the
+ * address: an invitation or a sign-up for it replaces that row (src/lib/admin-invitation-server.ts).
+ * Only when the organisation already has an active administrator: the first account of a space
+ * (sign-up owner, account created by the operator) is kept, since the operator can still send it a
+ * new link and the space would otherwise lose its only account. Active accounts and invitations
+ * still valid are never touched. Pure and Prisma-free.
  */
 
 export type AdminEmailHolder = {
@@ -17,6 +20,8 @@ export type AdminEmailHolder = {
   isActive: boolean
   setupTokenHash: string | null
   setupTokenExpiresAt: Date | null
+  /** Whether the row's organisation has at least one active administrator. */
+  organizationHasActiveAdmin: boolean
 }
 
 /**
@@ -25,6 +30,11 @@ export type AdminEmailHolder = {
  */
 export function isExpiredInvitation(row: AdminEmailHolder, now: Date): boolean {
   return !row.isActive && row.setupTokenHash != null && row.setupTokenExpiresAt != null && row.setupTokenExpiresAt.getTime() < now.getTime()
+}
+
+/** An expired invitation into a team that already has an active administrator: replaceable. */
+export function isReleasableInvitation(row: AdminEmailHolder, now: Date): boolean {
+  return row.organizationHasActiveAdmin && isExpiredInvitation(row, now)
 }
 
 /** Same organisation: the person already appears in its own team list. */
@@ -37,6 +47,6 @@ export type AdminInviteCheck = "free" | "replace" | "same_org" | "unavailable"
 /** What an owner's invitation does with the account already holding the address, if any. */
 export function adminInviteCheck(holder: AdminEmailHolder | null, organizationId: string, now: Date): AdminInviteCheck {
   if (!holder) return "free"
-  if (isExpiredInvitation(holder, now)) return "replace"
+  if (isReleasableInvitation(holder, now)) return "replace"
   return holder.organizationId === organizationId ? "same_org" : "unavailable"
 }

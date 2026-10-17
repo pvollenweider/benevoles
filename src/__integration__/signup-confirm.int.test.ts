@@ -136,6 +136,7 @@ describe.skipIf(!url)("an expired admin invitation frees the address on Postgres
 
   it("lets the person sign up and confirm over another organisation's expired invitation", async () => {
     const org = await otherOrg()
+    await prisma.adminUser.create({ data: { email: `${tag}-inv-owner@example.org`, name: "Owner", passwordHash: "x", organizationId: org.id, isActive: true } })
     const email = `${tag}-inv-signup@example.org`
     await prisma.adminUser.create({ data: { email, name: "Invité", passwordHash: "x", organizationId: org.id, isActive: false, setupTokenHash: `${tag}-h-signup`, setupTokenExpiresAt: new Date(Date.now() - DAY) } })
     await request("inv-signup", { email })
@@ -146,7 +147,20 @@ describe.skipIf(!url)("an expired admin invitation frees the address on Postgres
     const created = await prisma.organization.findUniqueOrThrow({ where: { slug: result.organizationSlug }, include: { admins: true } })
     orgIds.push(created.id)
     expect(created.admins.map((a) => a.email)).toEqual([email])
-    expect(await prisma.adminUser.count({ where: { organizationId: org.id } })).toBe(0)
+    expect(await prisma.adminUser.count({ where: { organizationId: org.id } })).toBe(1)
+  })
+
+  it("keeps the expired first account of a space with no active admin", async () => {
+    const { findAdminEmailHolder, releaseExpiredInvitation } = await import("@/lib/admin-invitation-server")
+    const org = await otherOrg()
+    const email = `${tag}-inv-first@example.org`
+    await prisma.adminUser.create({ data: { email, name: "Premier", passwordHash: "x", organizationId: org.id, isActive: false, setupTokenHash: `${tag}-h-first`, setupTokenExpiresAt: new Date(Date.now() - DAY) } })
+    const holder = await findAdminEmailHolder(prisma, email)
+    expect(holder?.organizationHasActiveAdmin).toBe(false)
+    expect(await releaseExpiredInvitation(prisma, holder!, new Date())).toBe(false)
+    await request("inv-first", { email })
+    expect(await confirmSignupRequest(`${tag}-inv-first`)).toEqual({ ok: false, reason: "taken" })
+    expect(await prisma.adminUser.count({ where: { email } })).toBe(1)
   })
 })
 

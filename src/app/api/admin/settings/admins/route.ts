@@ -76,10 +76,11 @@ export async function POST(req: Request) {
   // A space awaiting validation invites nobody yet (#1045): before any account or email exists.
   if (!canInviteAdmins(org)) return NextResponse.json({ error: ADMIN_INVITE_PENDING_ERROR, code: "org_pending" }, { status: 403 })
 
-  // An expired, never-activated invitation no longer holds the address (#1053); an active account
-  // or a valid invitation does. Another organisation's holder gets an answer that names nothing.
+  // An expired, never-activated invitation into a team with an active admin no longer holds the
+  // address (#1053); an active account, a valid invitation or a space's first account does.
+  // Another organisation's holder gets an answer that names nothing.
   const now = new Date()
-  const holder = await findAdminEmailHolder(prisma, email)
+  const holder = await findAdminEmailHolder(prisma, email, now)
   const check = adminInviteCheck(holder, organizationId, now)
   if (check === "same_org") return NextResponse.json({ error: ADMIN_INVITE_SAME_ORG_ERROR }, { status: 409 })
   if (check === "unavailable") return NextResponse.json({ error: ADMIN_INVITE_UNAVAILABLE_ERROR }, { status: 409 })

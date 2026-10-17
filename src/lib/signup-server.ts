@@ -11,7 +11,7 @@ import { reportError } from "@/lib/report-error"
 import { deliverAfterResponse, enqueueNotifications } from "@/lib/notifications/outbox"
 import { confirmable, signupAlertMessage, slugify, SIGNUP_LINK_HOURS, type SignupInput } from "@/lib/signup"
 import { blockApplies, signupKeys } from "@/lib/signup-blocklist"
-import { isExpiredInvitation } from "@/lib/admin-invitation"
+import { isReleasableInvitation } from "@/lib/admin-invitation"
 import { findAdminEmailHolder, releaseExpiredInvitation } from "@/lib/admin-invitation-server"
 
 /**
@@ -50,12 +50,12 @@ export async function signupBlocked(email: string, ip: string | null, now: Date 
 
 /**
  * Stores the request and queues the confirmation email. Nothing is sent when the address already
- * has an account: the caller answers the same way, the form never tells. An invitation whose link
- * has expired, never activated, is no account (#1053): the confirmation replaces it.
+ * has an account: the caller answers the same way, the form never tells. An expired, never-activated
+ * invitation into another team is no account (#1053): the confirmation replaces it.
  */
 export async function createSignupRequest(input: Pick<SignupInput, "organizationName" | "contactName" | "email" | "description">, now: Date = new Date()): Promise<{ queued: boolean }> {
-  const known = await findAdminEmailHolder(prisma, input.email)
-  if (known && !isExpiredInvitation(known, now)) return { queued: false }
+  const known = await findAdminEmailHolder(prisma, input.email, now)
+  if (known && !isReleasableInvitation(known, now)) return { queued: false }
 
   const token = randomBytes(32).toString("base64url")
   await prisma.signupRequest.create({
@@ -110,8 +110,8 @@ export async function confirmSignupRequest(token: string, now: Date = new Date()
     const claimed = await tx.signupRequest.updateMany({ where: { id: req.id, confirmedAt: null }, data: { confirmedAt: now } })
     if (claimed.count === 0) return { ok: false as const, reason: "used" as const }
     // The address may have got an account meanwhile (another request, an invitation). An expired,
-    // never-activated invitation is replaced instead (#1053), in this transaction.
-    const holder = await findAdminEmailHolder(tx, req.email)
+    // never-activated invitation into another team is replaced instead (#1053), in this transaction.
+    const holder = await findAdminEmailHolder(tx, req.email, now)
     if (holder && !(await releaseExpiredInvitation(tx, holder, now))) return { ok: false as const, reason: "taken" as const }
     const slug = await uniqueOrgSlug(req.organizationName, tx)
     const org = await tx.organization.create({
