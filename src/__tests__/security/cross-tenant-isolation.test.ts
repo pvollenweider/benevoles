@@ -62,6 +62,8 @@ const prismaMock = {
   },
   adminUser: {
     findUnique: vi.fn().mockResolvedValue(null),
+    findFirst: vi.fn().mockResolvedValue(null), // holder of an invited address (#1053)
+    deleteMany: vi.fn().mockResolvedValue({ count: 0 }),
     create: vi.fn().mockResolvedValue({ id: "adm-new" }),
     count: vi.fn().mockResolvedValue(2),
     delete: vi.fn().mockResolvedValue({}),
@@ -1304,6 +1306,26 @@ describe("Admin settings — cross-tenant isolation", () => {
     const res = await DELETE(makeRequest("/api/admin/settings/admins/adm-b", "DELETE"), params("adm-b"))
     expect(res.status).toBe(404)
     expect(prismaMock.adminUser.delete).not.toHaveBeenCalled()
+  })
+
+  // #1053: an invitation never touches another organisation's active account or valid invitation,
+  // and the answer does not say the address is used there.
+  it("POST /api/admin/settings/admins leaves an org-B active account or valid invitation alone", async () => {
+    const { POST } = await import("@/app/api/admin/settings/admins/route")
+    const db = setupGuard()
+    db.organization.findUnique.mockResolvedValue({ id: ORG_A, name: "Org A", outboundEmailApprovedAt: new Date() })
+    const holders = [
+      { id: "adm-b", organizationId: "org-b", isActive: true, setupTokenHash: null, setupTokenExpiresAt: null },
+      { id: "inv-b", organizationId: "org-b", isActive: false, setupTokenHash: "h", setupTokenExpiresAt: new Date(Date.now() + 86_400_000) },
+    ]
+    for (const holder of holders) {
+      prismaMock.adminUser.findFirst.mockResolvedValueOnce(holder)
+      const res = await POST(makeRequest("/api/admin/settings/admins", "POST", { email: "b@b.com", name: "B" }))
+      expect(res.status).toBe(409)
+      expect((await res.json()).error).not.toMatch(/utilisé|autre organisation/)
+    }
+    expect(prismaMock.adminUser.deleteMany).not.toHaveBeenCalled()
+    expect(prismaMock.adminUser.create).not.toHaveBeenCalled()
   })
 
   it("DELETE /api/admin/settings/admins/[id] blocks removing self", async () => {

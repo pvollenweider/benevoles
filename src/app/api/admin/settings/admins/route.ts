@@ -16,6 +16,9 @@ import { validationError } from "@/lib/api-error"
 import { ORG_ROLES, ORGANIZER_ROLE } from "@/lib/permissions"
 import { apexBaseUrl } from "@/lib/urls"
 import { ADMIN_INVITE_PENDING_ERROR, canInviteAdmins } from "@/lib/org-approval"
+import { ADMIN_INVITE_SAME_ORG_ERROR, ADMIN_INVITE_UNAVAILABLE_ERROR, adminInviteCheck } from "@/lib/admin-invitation"
+import { findAdminEmailHolder, releaseExpiredInvitation } from "@/lib/admin-invitation-server"
+import { isUniqueViolation } from "@/lib/registration-capacity"
 
 const postSchema = z.object({
   email: z.string().trim().toLowerCase().email(),
@@ -23,6 +26,9 @@ const postSchema = z.object({
   /** Level of the new admin (#469); organiser unless an owner is chosen explicitly. */
   role: z.enum(ORG_ROLES).default(ORGANIZER_ROLE),
 })
+
+/** The address was taken, or its expired invitation renewed, between the check and the write. */
+class AddressTakenMeanwhile extends Error {}
 
 function generateToken(): string {
   return randomBytes(32).toString("hex")
@@ -70,8 +76,13 @@ export async function POST(req: Request) {
   // A space awaiting validation invites nobody yet (#1045): before any account or email exists.
   if (!canInviteAdmins(org)) return NextResponse.json({ error: ADMIN_INVITE_PENDING_ERROR, code: "org_pending" }, { status: 403 })
 
-  const existing = await prisma.adminUser.findUnique({ where: { email } })
-  if (existing) return NextResponse.json({ error: "Cet email est déjà utilisé." }, { status: 409 })
+  // An expired, never-activated invitation no longer holds the address (#1053); an active account
+  // or a valid invitation does. Another organisation's holder gets an answer that names nothing.
+  const now = new Date()
+  const holder = await findAdminEmailHolder(prisma, email)
+  const check = adminInviteCheck(holder, organizationId, now)
+  if (check === "same_org") return NextResponse.json({ error: ADMIN_INVITE_SAME_ORG_ERROR }, { status: 409 })
+  if (check === "unavailable") return NextResponse.json({ error: ADMIN_INVITE_UNAVAILABLE_ERROR }, { status: 409 })
 
   const setupToken = generateToken()
   const setupTokenExpiresAt = new Date(Date.now() + 7 * 24 * 60 * 60 * 1000)
@@ -82,29 +93,40 @@ export async function POST(req: Request) {
   const appUrl = apexBaseUrl()
   const inviteUrl = `${appUrl}/admin/accept-invite?token=${setupToken}`
 
-  // The admin account and its invitation email commit together (#352).
-  const { admin, outboxIds } = await prisma.$transaction(async (tx) => {
-    const admin = await tx.adminUser.create({
-      data: {
+  // The admin account and its invitation email commit together (#352), with the removal of the
+  // expired invitation it replaces, if any (#1053).
+  let created
+  try {
+    created = await prisma.$transaction(async (tx) => {
+      if (check === "replace" && holder && !(await releaseExpiredInvitation(tx, holder, now))) throw new AddressTakenMeanwhile()
+      const admin = await tx.adminUser.create({
+        data: {
+          organizationId,
+          email,
+          name,
+          passwordHash: dummyHash,
+          role,
+          isActive: false,
+          setupTokenHash: hashToken(setupToken),
+          setupTokenExpiresAt,
+        },
+        select: { id: true, name: true, email: true, role: true, isActive: true, createdAt: true, setupTokenExpiresAt: true },
+      })
+      const outboxIds = await enqueueNotifications([{
         organizationId,
-        email,
-        name,
-        passwordHash: dummyHash,
-        role,
-        isActive: false,
-        setupTokenHash: hashToken(setupToken),
-        setupTokenExpiresAt,
-      },
-      select: { id: true, name: true, email: true, role: true, isActive: true, createdAt: true, setupTokenExpiresAt: true },
+        kind: "admin_invite",
+        recipient: { email, name },
+        data: { adminName: name, organizationName: org.name, inviteUrl },
+      }], tx)
+      return { admin, outboxIds }
     })
-    const outboxIds = await enqueueNotifications([{
-      organizationId,
-      kind: "admin_invite",
-      recipient: { email, name },
-      data: { adminName: name, organizationName: org.name, inviteUrl },
-    }], tx)
-    return { admin, outboxIds }
-  })
+  } catch (e) {
+    if (e instanceof AddressTakenMeanwhile || isUniqueViolation(e)) {
+      return NextResponse.json({ error: ADMIN_INVITE_UNAVAILABLE_ERROR }, { status: 409 })
+    }
+    throw e
+  }
+  const { admin, outboxIds } = created
 
   await logOrgEvent({
     organizationId,

@@ -45,9 +45,9 @@ Si la demande ne correspond pas à une association ou à un événement bénévo
 
 ## En cas de souci
 
-**Je n'ai pas reçu l'email de confirmation.** Regardez dans les indésirables. Si l'adresse a déjà un compte sur benevol.app, aucun email ne part : connectez-vous avec ce compte, ou utilisez « Mot de passe oublié » sur la page de connexion.
+**Je n'ai pas reçu l'email de confirmation.** Regardez dans les indésirables. Si l'adresse a déjà un compte sur benevol.app, aucun email ne part : connectez-vous avec ce compte, ou utilisez « Mot de passe oublié » sur la page de connexion. Une invitation d'administrateur reçue d'une autre organisation, dont le lien a expiré sans être utilisé, ne compte pas comme un compte.
 
-**Je n'ai jamais choisi de mot de passe.** L'espace est créé dès la confirmation, mais sans mot de passe choisi, il est effacé avec son compte 30 jours après : refaites alors une demande.
+**Je n'ai jamais choisi de mot de passe.** L'espace est créé dès la confirmation, mais sans mot de passe choisi, il est effacé avec son compte 30 jours après. Une fois le lien de 7 jours expiré, vous pouvez refaire une demande avec la même adresse.
 
 **Le lien dit « Lien expiré ».** Il était valable 24 heures : refaites une demande depuis la page d'inscription.
 

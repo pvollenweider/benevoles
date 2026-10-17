@@ -12,7 +12,7 @@ const m = vi.hoisted(() => ({
 vi.mock("@/lib/auth-guard", () => ({ requireOrgSession: m.guard }))
 vi.mock("@/lib/prisma", () => ({
   prisma: {
-    adminUser: { findUnique: m.findUnique, create: m.create, update: m.update, delete: m.del },
+    adminUser: { findUnique: m.findUnique, findFirst: m.findUnique, create: m.create, update: m.update, delete: m.del },
     orgLog: { create: m.orgLog },
     async $transaction(fn: (tx: unknown) => unknown) { return fn(this) },
   },

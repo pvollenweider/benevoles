@@ -19,7 +19,7 @@ vi.mock("@/lib/notifications", () => ({ sendNotification: m.send }))
 vi.mock("@/lib/notifications/outbox", () => ({ enqueueNotifications: m.enqueue, deliverAfterResponse: () => {} }))
 vi.mock("@/lib/prisma", () => ({
   prisma: {
-    adminUser: { findUnique: m.adminFindUnique, create: m.adminCreate },
+    adminUser: { findUnique: m.adminFindUnique, findFirst: m.adminFindUnique, create: m.adminCreate },
     orgLog: { create: m.orgLog },
     async $transaction(fn: (tx: unknown) => unknown) { return fn(this) },
   },

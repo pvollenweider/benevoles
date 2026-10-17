@@ -31,6 +31,15 @@ test("an admin invitation sends the link by email and never shows it", async ({ 
   await expect(page.getByText(/accept-invite/)).toHaveCount(0)
   await expect(page.getByRole("button", { name: /Copier le lien/ })).toHaveCount(0)
 
+  // Inviting the same address again while its invitation is valid (#1053): refused, with a message
+  // about this team only.
+  await page.getByRole("button", { name: "Inviter" }).click()
+  await form.getByLabel("Nom").fill("Invitée E2E")
+  await form.getByLabel("Email").fill(email)
+  await form.getByRole("button", { name: "Envoyer l'invitation" }).click()
+  await expect(page.getByRole("alert").filter({ hasText: "Cette adresse fait déjà partie de votre équipe, ou son invitation est encore valable." })).toBeVisible()
+  await form.getByRole("button", { name: "Annuler" }).click()
+
   await page.getByRole("button", { name: "Retirer Invitée E2E" }).click()
   await expect(page.getByText(email)).toHaveCount(0)
 })
