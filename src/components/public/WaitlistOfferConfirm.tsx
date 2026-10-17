@@ -123,7 +123,7 @@ export default function WaitlistOfferConfirm({ token, state, details }: { token:
           type="submit"
           aria-disabled={busy || undefined}
           aria-describedby={error ? `${id}-error` : undefined}
-          className="w-full min-h-11 bg-blue-600 text-white rounded-xl py-3 text-sm font-medium hover:bg-blue-700 aria-disabled:opacity-80 aria-disabled:cursor-wait transition-colors focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-blue-800"
+          className="w-full min-h-11 bg-blue-600 text-white rounded-xl py-3 text-sm font-medium hover:bg-blue-700 aria-disabled:opacity-90 aria-disabled:cursor-wait transition-colors focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-blue-800"
         >
           {busy ? "Confirmation…" : "Prendre la place"}
         </button>
