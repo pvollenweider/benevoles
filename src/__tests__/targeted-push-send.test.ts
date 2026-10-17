@@ -45,10 +45,10 @@ describe("sendTargetedPush", () => {
 
   // #1041: rows stored before the endpoint check are never contacted; they count as failed (so the
   // message history adds up) and stay stored.
-  it("never contacts stored endpoints outside the Web Push services", async () => {
+  it("never contacts stored endpoints the policy refuses", async () => {
     m.findMany.mockResolvedValue([
       sub("ok"),
-      { id: "bad-host", endpoint: "https://push.example.com/x", auth: "a", p256dh: "p" },
+      { id: "bad-host", endpoint: "https://169.254.169.254/x", auth: "a", p256dh: "p" },
       { id: "bad-port", endpoint: "https://fcm.googleapis.com:8443/x", auth: "a", p256dh: "p" },
     ])
     m.send.mockResolvedValue({})
@@ -59,13 +59,18 @@ describe("sendTargetedPush", () => {
     expect(m.deleteMany).not.toHaveBeenCalled()
   })
 
-  it("hands web-push a finite timeout", async () => {
+  it("hands web-push a finite timeout and the guarded agent", async () => {
     m.findMany.mockResolvedValue([sub("a1")])
     m.send.mockResolvedValue({})
-    const { sendPushToVolunteer, PUSH_SEND_TIMEOUT_MS } = await import("@/lib/push")
+    const { sendPushToVolunteer, PUSH_SEND_TIMEOUT_MS, pushAgent } = await import("@/lib/push")
+    const { safePushLookup } = await import("@/lib/push-endpoint")
     await sendPushToVolunteer("alice", { title: "T", body: "B" })
     expect(PUSH_SEND_TIMEOUT_MS).toBe(10_000)
-    expect(m.send.mock.calls[0][2]).toEqual({ TTL: 3 * 24 * 3600, timeout: 10_000 })
+    expect(m.send.mock.calls[0][2]).toEqual({ TTL: 3 * 24 * 3600, timeout: 10_000, agent: pushAgent })
+    // web-push 3.6.7 only uses an agent that is an https.Agent; its lookup is the DNS guard.
+    const https = await import("node:https")
+    expect(pushAgent).toBeInstanceOf(https.Agent)
+    expect((pushAgent as unknown as { options: { lookup: unknown } }).options.lookup).toBe(safePushLookup)
   })
 
   it("gives up on a send that never settles and counts it failed", async () => {

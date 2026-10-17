@@ -2,17 +2,24 @@
 // SPDX-License-Identifier: AGPL-3.0-only
 
 import { organizationBlocksSending } from "@/lib/notifications/org-send-guard"
+import https from "node:https"
 import webpush from "web-push"
 import { env } from "./env"
 import { prisma } from "./prisma"
 import { reportError } from "./report-error"
 import { siteDomain } from "@/lib/site"
-import { isAllowedPushEndpoint } from "./push-endpoint"
+import { isAllowedPushEndpoint, safePushLookup } from "./push-endpoint"
 
 /** Socket inactivity timeout handed to web-push (#1041). */
 export const PUSH_SEND_TIMEOUT_MS = 10_000
 /** Overall cap on one send: the socket timeout alone does not bound a slow, trickling answer. */
 export const PUSH_SEND_DEADLINE_MS = 15_000
+/**
+ * Connections of every push go through this agent (#1041): its lookup refuses a name that
+ * resolves to a non-public address, so a stored endpoint cannot reach an internal host, even by
+ * changing its DNS answer after it was accepted. web-push 3.6.7 takes it as the `agent` option.
+ */
+export const pushAgent = new https.Agent({ lookup: safePushLookup as unknown as https.AgentOptions["lookup"] })
 /** Recipients of a targeted message sent to in parallel. */
 const TARGETED_PUSH_CONCURRENCY = 5
 
@@ -48,8 +55,7 @@ export type PushOutcome = { sent: number; failed: number; removed: number }
 
 /**
  * Sends to every device of the volunteer; gone subscriptions (404/410) are removed. A stored
- * endpoint outside the Web Push services (#1041) is never contacted and counts as failed; the row
- * is kept, so widening the allowlist would bring a wrongly refused device back.
+ * endpoint the policy refuses (#1041) is never contacted and counts as failed; the row is kept.
  */
 export async function sendPushToVolunteer(
   volunteerId: string,
@@ -74,7 +80,7 @@ export async function sendPushToVolunteer(
           webpush.sendNotification(
             { endpoint: sub.endpoint, keys: { auth: sub.auth, p256dh: sub.p256dh } },
             JSON.stringify(payload),
-            { TTL: 3 * 24 * 3600, timeout: PUSH_SEND_TIMEOUT_MS }
+            { TTL: 3 * 24 * 3600, timeout: PUSH_SEND_TIMEOUT_MS, agent: pushAgent }
           ),
           PUSH_SEND_DEADLINE_MS,
         )

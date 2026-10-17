@@ -12,7 +12,7 @@ import { isAllowedPushEndpoint } from "@/lib/push-endpoint"
 
 const schema = z.object({
   editToken: z.string().min(1),
-  // Only the browsers' Web Push services (#1041): the server later POSTs to this address.
+  // The server later POSTs to this address (#1041): https, default port, public host only.
   endpoint: z.string().refine(isAllowedPushEndpoint),
   auth: z.string().min(1),
   p256dh: z.string().min(1),
