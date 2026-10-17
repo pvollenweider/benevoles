@@ -17,6 +17,7 @@ Format basé sur [Keep a Changelog](https://keepachangelog.com/fr/1.0.0/).
 
 ### Sécurité
 
+- **Import de membres depuis Excel** (#1043) : un classeur `.xlsx` est vérifié avant d'être ouvert (structure de l'archive, taille réelle une fois décompressé, nombre de cellules et de lignes). Un fichier trop volumineux une fois décompressé est refusé avec un message clair, au lieu de pouvoir saturer la mémoire du serveur.
 - **Place proposée depuis la liste d'attente** (#1044) : le lien de l'email ouvre une page qui rappelle le créneau et le délai, et la place n'est prise qu'avec le bouton « Prendre la place ». Ouvrir le lien seul, y compris par l'analyse automatique de certaines messageries, ne prend plus la place à la place du bénévole. Les liens déjà envoyés restent valables.
 - **Liens à usage unique hors du suivi des erreurs** (#1042) : l'enregistrement d'une partie des sessions, qui aide à corriger les erreurs de l'administration, ne démarre plus sur les pages publiques de l'administration (connexion, mot de passe oublié ou à réinitialiser, invitation, conservation ou réactivation d'un espace), ni sur une adresse qui contient un jeton d'accès, et s'arrête si la navigation y mène. Les journaux du serveur ne gardent plus des erreurs signalées que leur catégorie, un code et un message nettoyé des jetons et adresses email.
 
