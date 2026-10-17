@@ -23,7 +23,7 @@
  * constructs (expression(), javascript: urls, etc.) from any style attribute an admin typed
  * directly, the same way it already does for href.
  */
-import { splitVariables } from "./message-variables"
+import { normalizeVariables, splitVariables } from "./message-variables"
 import { marked, Renderer, type Tokens } from "marked"
 import DOMPurify from "isomorphic-dompurify"
 
@@ -43,12 +43,13 @@ const HEADING_SIZES: Record<number, string> = {
  * `vars` (confirmation message variables, #1046): the template is the organizer's trusted
  * Markdown, parsed as is; each variable value (a volunteer's first name, a shift label…) is then
  * inserted as escaped text where the template's text has a placeholder, so a value can never add
- * a link, an image or any other syntax. In a link or image address, a placeholder is filled only
- * after a fixed scheme and host written by the organizer (`https://example.org/plan?n={prénom}`),
- * percent-encoded, so a value can never choose where a link leads; elsewhere in an address it
- * stays as written.
+ * a link, an image or any other syntax. In a link or image address, a placeholder is filled,
+ * percent-encoded, only where the organizer already fixed the destination: after a scheme and
+ * host (`https://example.org/plan?n={prénom}`), in a query or fragment (`mailto:a@b.org?subject=
+ * {prénom}`), or in a path on the same site (`/plan/{prénom}`). A value can then never choose
+ * where a link leads; a placeholder anywhere else in an address stays as written.
  */
-const FIXED_ORIGIN = /^[a-z][a-z0-9+.-]*:\/\/[^/?#\s{}]+[/?#]/i
+const FIXED_DESTINATION = /^(?:[a-z][a-z0-9+.-]*:\/\/[^/?#\s{}]+[/?#]|[^?#]*[?#]|\/(?!\/))/i
 
 function makeRenderer(vars?: Record<string, string>): Renderer {
   const r = new Renderer()
@@ -59,8 +60,8 @@ function makeRenderer(vars?: Record<string, string>): Renderer {
   const fillUrl = (url: string): string => {
     if (!vars) return escapeHtml(url)
     const parts = splitVariables(url, vars)
-    if (parts.length === 1 && "text" in parts[0]) return escapeHtml(url)
-    if (!("text" in parts[0]) || !FIXED_ORIGIN.test(parts[0].text)) return escapeHtml(url)
+    const first = parts[0]
+    if (!parts.some((p) => "value" in p) || !first || !("text" in first) || !FIXED_DESTINATION.test(first.text)) return escapeHtml(url)
     return escapeHtml(parts.map((p) => ("value" in p ? encodeURIComponent(p.value) : p.text)).join(""))
   }
 
@@ -186,7 +187,7 @@ export function renderMarkdown(text: string): string {
  * Unknown keys are left as written. The plain-text email part uses fillVariables instead.
  */
 export function renderMarkdownWithVariables(template: string, vars: Record<string, string>): string {
-  return renderWith(template, makeRenderer(vars))
+  return renderWith(normalizeVariables(template, vars), makeRenderer(vars))
 }
 
 function renderWith(text: string, renderer: Renderer): string {

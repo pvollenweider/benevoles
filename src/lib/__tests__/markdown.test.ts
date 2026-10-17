@@ -195,6 +195,20 @@ describe("renderMarkdownWithVariables", () => {
     expect(render("[x](https://{prénom}.example/)", "evil")).not.toContain("evil")
   })
 
+  it("fills a placeholder in a query, a fragment or a same-site path, and with spaces inside the braces", () => {
+    expect(render("[Plan](/plan?nom={prénom})", "Alex")).toContain('href="/plan?nom=Alex"')
+    expect(render("[Plan](//example.org/plan?nom={prénom})", "Alex")).toContain('href="//example.org/plan?nom=Alex"')
+    expect(render("[Écrire](mailto:equipe@example.org?subject={prénom})", "Alex")).toContain('href="mailto:equipe@example.org?subject=Alex"')
+    expect(render("[Plan](/plan/{prénom})", "/evil.example")).toContain('href="/plan/%2Fevil.example"')
+    expect(render("[Plan](https://example.org/?n={{ PRÉNOM }})", "Alex")).toContain('href="https://example.org/?n=Alex"')
+    expect(render("Voir https://example.org/?n={ prénom } ici", "Alex")).toContain('href="https://example.org/?n=Alex"')
+    expect(render("[x](//{prénom}/)", "evil.example")).not.toContain("evil")
+  })
+
+  it("renders an empty link or image address without throwing (regression)", () => {
+    expect(render("[ici]() [là](<>) ![carte]()", "Alex")).toBe(renderMarkdown("[ici]() [là](<>) ![carte]()"))
+  })
+
   it("renders legitimate templates exactly as before (fill then render)", () => {
     const templates = [
       "Merci {prénom} !",

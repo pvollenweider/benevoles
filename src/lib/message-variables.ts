@@ -46,6 +46,19 @@ export function splitVariables(text: string, vars: Record<string, string>): Vari
 }
 
 /**
+ * Rewrites each known variable as `{key}` (no space, accent or case: `{{ Prénom }}` → `{prenom}`),
+ * leaving everything else as written, so a placeholder survives Markdown parsing as one piece
+ * (a space would end a link address). Same values once filled.
+ */
+export function normalizeVariables(text: string, vars: Record<string, string>): string {
+  const keys = new Set(Object.keys(vars).map(key))
+  return text.replace(TOKEN, (match, double: string | undefined, single: string | undefined) => {
+    const k = key(double ?? single ?? "")
+    return keys.has(k) ? `{${k}}` : match
+  })
+}
+
+/**
  * Replaces `{prénom}`, `{{prenom}}`… in `text` by the values of `vars` (keys compared without
  * accent or case). Plain text only (the text part of an email): Markdown goes through
  * renderMarkdownWithVariables, which keeps the values out of the Markdown syntax.
