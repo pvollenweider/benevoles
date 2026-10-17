@@ -1,34 +1,34 @@
 {
   "model": "gemini-3.8-flash",
-  "reviewedAt": "2026-10-16T08:58:04.964Z",
-  "videoSha256": "4c557865d2b8113c4e767c65e0ff9255874e84a7f6615119284a4b2b3084ee9e",
+  "reviewedAt": "2026-10-17T10:32:14.170Z",
+  "videoSha256": "4ebc69481a8c530ef1bf6def7b80407d73851b1a237279006058010402292214",
   "promptSha256": "dd36b1968ee7773945035db23e6585c0c7c9a8e7ad400b649c7fef0e981bd4a2",
-  "clipSha256": "dbc2d520bd74bcb6a9237d1ae0be73679ae84b92eef53f3ae0dd55beff002a88",
+  "clipSha256": "5d342c025a13417f1e4512f27c46673a674c7ff1194b311bb5cb9b8e8e2a785e",
   "scene": "welcome",
   "review": {
     "heardOpening": "Un désistement, un horaire qui bouge",
     "checkpoints": [
       {
-        "spokenSeconds": 0.5,
-        "spoken": "Un désistement, un horaire qui bouge, une mission devenue inutile",
-        "visibleSeconds": 0,
-        "visible": "Encart central affichant le titre 'Gérer un imprévu sans perdre le fil' et le sous-titre 'Vérifier, prévenir, contrôler le résultat'",
-        "sync": "aligned",
-        "severity": "none"
-      },
-      {
         "spokenSeconds": 9.2,
         "spoken": "vérifier les faits, prévenir les bonnes personnes et regarder le résultat",
-        "visibleSeconds": 11.2,
-        "visible": "L'encart se ferme, découvrant la vue d'ensemble de l'événement 'Fête des imprévus — démonstration'",
+        "visibleSeconds": 1,
+        "visible": "Encart de titre au centre : « Gérer un imprévu sans perdre le fil - Vérifier, prévenir, contrôler le résultat »",
         "sync": "aligned",
         "severity": "none"
       },
       {
-        "spokenSeconds": 15.5,
-        "spoken": "nous allons suivre une place libérée, chercher une autre aide, déplacer un créneau et en annuler un",
-        "visibleSeconds": 15.5,
-        "visible": "Page d'aperçu de l'événement stable présentant les sections 'Où manque-t-il du monde ?' et 'À traiter'",
+        "spokenSeconds": 15.4,
+        "spoken": "Dans notre fête fictive, nous allons suivre une place libérée",
+        "visibleSeconds": 11.5,
+        "visible": "Disparition de l'encart d'introduction, révélant la page « Fête des imprévus — démonstration »",
+        "sync": "aligned",
+        "severity": "none"
+      },
+      {
+        "spokenSeconds": 25.1,
+        "spoken": "Chaque changement sera réellement enregistré dans notre environnement de formation",
+        "visibleSeconds": 25.1,
+        "visible": "Tableau de bord de l'événement affiché de manière stable",
         "sync": "aligned",
         "severity": "none"
       }
@@ -37,7 +37,7 @@
     "voice": {
       "consistent": true,
       "warm": true,
-      "observation": "Voix off posée, claire et dynamique, parfaitement intelligible avec fond musical discret."
+      "observation": "Voix féminine claire, dynamique et bien articulée, accompagnée d'une musique de fond discrète."
     }
   },
   "note": "Automated observation of actual final video audio and images; not a claim of complete human validation"

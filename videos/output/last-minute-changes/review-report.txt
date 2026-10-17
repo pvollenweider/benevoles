@@ -1,9 +1,27 @@
-STATUS: READY
-LAST_MINUTE_CHANGES — batch 23-1 — 2026-10-16
-BUILD_ID gHYEjPtpdQYUNytuIhMkh; commit 89a884c8d58c22dda6800481e1238bdc4e219dff
-Duration 345.36 s. Music 14.2–19.5 LU under voice.
-Existing whole narration reused after text/hash checks.
-Validation incl. music-only stretches, subtitles, sentence anchors and real input sounds passed. Full final multilingual ASR, all chapter frames and sentence/action frames reviewed.
-Final VTT viewer « tu » count 0.
-Retrait, offre acceptée, aide ciblée, accord supposé explicite, ajout réel de Zoé, décalage 14h–16h vers 14h30–16h30, annulation et journal causal vérifiés. Neuf réceptions SMTP finales, présence antérieure conservée. Alertes automatiques levées par les frames 71,850 s (lien Prendre la place) et 322,000 s (Nicolas actif, Aline annulée, nouvel horaire déjà visible) ; détails review/automated-counterchecks.json. Dix chapitres revus et deux ASR complets sans ajout ni tutoiement.
-Real-time subjective listening unavailable as permitted. Product source unchanged. Only the authorized local WIP transport commit; no further commit, push or publication.
+STATUS: NOT READY
+
+Batch25-2 — last-minute-changes
+
+Final MP4: last-minute-changes.mp4 ; actual duration 345.4 s.
+
+Final film product: 62129272a8b79e676ce221482d2b82e988ca43c9 ; BUILD_ID YO71lLiyNXV68dtInlVcb.
+
+Latest verified product: 490a44c306da8b93b4920ece009a452baf27fdbf ; BUILD_ID BJmN3rGF86wkhQequa0in.
+
+Two completed narrated takes: first ecaf1959 (previous-*-batch252-take1), second62129272 (retained final). Previous artifacts archived. No third narrated take: standing rule permits one re-film per video per batch.
+
+DELIVERY BLOCKER: latest main490a44c3 arrived after those two takes. It was rebuilt and every requested journey rehearsed in full, separately in review/latest-head-490a44c3. Final BUILD_ID is preserved, never relabelled as the latest build.
+
+Origin blocker FIXED under videos/ only: exact local HTTP runtime origins43102/43104; shared build HTTP43102. Compiled proxy reads process.env[name] at runtime. Real Chromium same-origin admin dry-run200/one recipient; super-admin empty payload400 reaches validation without creation; real foreign browser Origin refused403 for both. Latest proofs: review/origin-check.json.
+
+Narration unchanged: complete existing continuous Kore recording retained, source hashes/text re-audited, whole actual final soundtrack ASR plus every final MP4 chapter audited. No TTS call or sentence splice. Final VTT tu count0; no viewer tutoiement or stray English instructions in whole-film ASR.
+
+Technical validate PASSED: 10 chapters, 33 sentence anchors; music13.6–19.2 LU under voice; music-only minimum-33.3 LUFS. Real click/key sounds linked by SHA256 in audio-mix.json.
+
+Posters from actual final MP4; review/renders-generated.json used, videos/renders.json untouched. Full chapter review, six frames per chapter, every sentence anchor frame, OCR, complete final ASR retained.
+
+Latest main PR bodies1064 and1063 read in full; other batch25 films reviewed read-only on490a44c3 in videos/output/batch252-review/current-screens. No MP4/audio/VTT overwritten for those two films.
+
+No own src/ changes relative to origin/main. No commit, push, PR or publication. All owned capture servers stopped by exact PID; latest shutdown proof in review/server-stop-latest-head.json. Video types/lint and1025 video tests passed.
+
+Content review on filmed62129272: all10 final audiovisual chapter reviews clear. Actual9 notifications verified, requested schedule recipients excluded, attendance retained, duplicate API409/current message and no extra registration verified. No visible localhost or Timeline found in final frames. Only current-main provenance prevents READY.

@@ -1,42 +1,42 @@
 {
   "model": "gemini-3.8-flash",
-  "reviewedAt": "2026-10-16T08:59:30.051Z",
-  "videoSha256": "4c557865d2b8113c4e767c65e0ff9255874e84a7f6615119284a4b2b3084ee9e",
+  "reviewedAt": "2026-10-17T10:33:42.244Z",
+  "videoSha256": "4ebc69481a8c530ef1bf6def7b80407d73851b1a237279006058010402292214",
   "promptSha256": "14d92b6bdddaead8c3c5f97a6d073ad93c927c80a644505b7d7579396c56f90d",
-  "clipSha256": "84e2278eadacdeeaecf2c45d6b4262815dbac97cca0c7e502a7b2c973f428c3c",
+  "clipSha256": "714f0bb89e10fe8fed1e0f5416e4de8d2d0705172b881612eb091cbb5ae24148",
   "scene": "schedule",
   "review": {
     "heardOpening": "Le matériel arrive plus tard",
     "checkpoints": [
       {
         "spokenSeconds": 3.6,
-        "spoken": "Ouvrons le créneau concerné et lisons la date, le début et la fin",
-        "visibleSeconds": 3.2,
-        "visible": "Ouverture du formulaire Modifier le créneau avec date, début 14:00 et fin 16:00",
+        "spoken": "Ouvrons le créneau concerné et lisons la date, le début et la fin avant de modifier",
+        "visibleSeconds": 2,
+        "visible": "La page Modifier le créneau s'affiche avec la date, début 14:00 et fin 16:00",
         "sync": "aligned",
         "severity": "none"
       },
       {
-        "spokenSeconds": 9,
-        "spoken": "Décalons les deux heures, puis enregistrons.",
-        "visibleSeconds": 9.5,
-        "visible": "Saisie de 16:30 après 14:30 puis clic sur Enregistrer",
+        "spokenSeconds": 9.2,
+        "spoken": "Décalons les deux heures, puis enregistrons",
+        "visibleSeconds": 10.8,
+        "visible": "L'heure de fin est passée à 16:30 après celle de début, puis le bouton Enregistrer est cliqué",
         "sync": "aligned",
         "severity": "none"
       },
       {
-        "spokenSeconds": 16,
+        "spokenSeconds": 16.2,
         "spoken": "Lisons l'ancien et le nouvel horaire dans le message reçu",
-        "visibleSeconds": 16,
-        "visible": "Affichage de l'email Mailpit montrant l'ancien horaire barré et le nouveau créneau 14:30–16:30",
+        "visibleSeconds": 18,
+        "visible": "L'email s'affiche dans Mailpit avec l'ancien horaire barré et le nouvel horaire 14:30 - 16:30",
         "sync": "aligned",
         "severity": "none"
       },
       {
-        "spokenSeconds": 19.3,
-        "spoken": "puis revenons au planning.",
-        "visibleSeconds": 20.3,
-        "visible": "Retour à la vue des créneaux dans l'application",
+        "spokenSeconds": 19.5,
+        "spoken": "puis revenons au planning",
+        "visibleSeconds": 21,
+        "visible": "Retour à l'affichage des créneaux de l'événement",
         "sync": "aligned",
         "severity": "none"
       }
@@ -45,7 +45,7 @@
     "voice": {
       "consistent": true,
       "warm": true,
-      "observation": "Voix claire, posée et parfaitement synchronisée avec les actions à l'écran."
+      "observation": "Voix fluide, claire et bien articulée, parfaitement synchronisée avec la démonstration."
     }
   },
   "note": "Automated observation of actual final video audio and images; not a claim of complete human validation"

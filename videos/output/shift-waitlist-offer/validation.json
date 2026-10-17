@@ -1,64 +1,65 @@
 {
   "id": "SHIFT_WAITLIST_OFFER",
   "slug": "shift-waitlist-offer",
-  "validatedAt": "2026-10-12T01:58:45.034Z",
+  "validatedAt": "2026-10-17T10:00:41.516Z",
   "continuousNarration": true,
+  "sentenceRevision": false,
   "narrationContentChecked": true,
   "voice": "Kore",
-  "captureMs": 100200,
+  "captureMs": 109760,
   "scenes": [
     {
       "id": "welcome",
-      "visualMs": 13043,
-      "audioMs": 13043,
-      "driftMs": 0
+      "visualMs": 13397,
+      "audioMs": 13395,
+      "driftMs": 2
     },
     {
       "id": "setup",
-      "visualMs": 13616,
-      "audioMs": 13614,
+      "visualMs": 13488,
+      "audioMs": 13486,
       "driftMs": 2
     },
     {
       "id": "admin",
-      "visualMs": 12083,
-      "audioMs": 12081,
-      "driftMs": 2
+      "visualMs": 12320,
+      "audioMs": 12319,
+      "driftMs": 1
     },
     {
       "id": "release",
-      "visualMs": 11419,
-      "audioMs": 11416,
-      "driftMs": 3
+      "visualMs": 16400,
+      "audioMs": 16398,
+      "driftMs": 2
     },
     {
       "id": "volunteer",
-      "visualMs": 14385,
-      "audioMs": 14383,
+      "visualMs": 19946,
+      "audioMs": 19944,
       "driftMs": 2
     },
     {
       "id": "expiry",
-      "visualMs": 11522,
-      "audioMs": 11520,
-      "driftMs": 2
+      "visualMs": 11357,
+      "audioMs": 11354,
+      "driftMs": 3
     },
     {
       "id": "result",
-      "visualMs": 10463,
-      "audioMs": 10463,
-      "driftMs": 0
+      "visualMs": 11226,
+      "audioMs": 11224,
+      "driftMs": 2
     }
   ],
-  "anchorsChecked": 8,
+  "anchorsChecked": 9,
   "music": {
-    "voicedWindows": 86,
-    "musicOnlyWindows": 1,
-    "smallestGapLu": 14.6,
-    "largestGapLu": 18.2,
-    "quietestMusicOnlyLufs": -33.5,
-    "loudestMusicOnlyLufs": -33.5,
-    "medianVoiceLufs": -16.4
+    "voicedWindows": 98,
+    "musicOnlyWindows": 0,
+    "smallestGapLu": 15.4,
+    "largestGapLu": 18.8,
+    "quietestMusicOnlyLufs": null,
+    "loudestMusicOnlyLufs": null,
+    "medianVoiceLufs": -16.3
   },
   "issues": []
 }

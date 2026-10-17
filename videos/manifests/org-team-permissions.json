@@ -21,6 +21,7 @@
   "language": "fr-CH",
   "voice": "Puck",
   "continuousNarration": true,
+  "continuousPauseTags": false,
   "voiceStyle": "Speak with an audible smile throughout. Use a warm, friendly adult male voice, as if helping another association organizer beside you. Natural conversational French, calm medium pace and clear articulation. Keep exactly the same voice identity, pitch, smile and energy from beginning to end. Never sound corporate, theatrical, childish or rushed.",
   "viewport": {
     "width": 1280,
@@ -45,7 +46,7 @@
     },
     {
       "id": "invite-result",
-      "transcript": "Après l’envoi, Léa apparaît avec le statut En attente. Un email contient son lien personnel, valable sept jours ; on peut aussi copier ce lien pour le lui transmettre autrement. Son accès ne devient actif qu’après la création de son mot de passe.",
+      "transcript": "Après l’envoi, Léa apparaît avec le statut En attente. La confirmation indique que son lien d’activation, valable sept jours, lui a été envoyé par email. Son accès ne devient actif qu’après la création de son mot de passe.",
       "fallbackDurationMs": 22000
     },
     {

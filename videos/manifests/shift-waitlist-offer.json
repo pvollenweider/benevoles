@@ -13,7 +13,7 @@
       "Si l'offre expire, vérifiez que la place est proposée à la personne suivante."
     ],
     "remember": [
-      "Accepter une offre confirme immédiatement le créneau.",
+      "Ouvrir le lien ne réserve pas la place : confirmez avec le bouton Prendre la place sur la page de l’offre.",
       "Une offre expirée passe automatiquement à la personne suivante, sans bloquer la place.",
       "Vérifiez toujours la capacité, l'ordre et les délais avant de promettre une place par un autre moyen."
     ]
@@ -50,7 +50,7 @@
     },
     {
       "id": "volunteer",
-      "transcript": "Sur sa page, la personne voit l’offre, son expiration et les actions Prendre la place ou Refuser la place. Prendre la place confirme immédiatement le créneau. Refuser la place conserve une réponse explicite et permet de contacter la personne suivante.",
+      "transcript": "Sur sa page, la personne voit l’offre, son expiration et les actions Prendre la place ou Refuser la place. Le lien Prendre la place ouvre une page qui présente l’offre, sans l’accepter. Seul le bouton Prendre la place de cette page confirme le créneau. Refuser la place conserve une réponse explicite et permet de contacter la personne suivante.",
       "fallbackDurationMs": 23000
     },
     {

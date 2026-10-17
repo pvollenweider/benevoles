@@ -19,6 +19,7 @@
 import { execFile } from "node:child_process"
 import { mkdir, readFile, access } from "node:fs/promises"
 import http from "node:http"
+import net from "node:net"
 import https from "node:https"
 import type { AddressInfo } from "node:net"
 import os from "node:os"
@@ -101,10 +102,32 @@ export async function startPublicHostProxy(appBase: string): Promise<{ port: num
  * Launches a video browser whose benevol.app hosts resolve to this machine, and proves it before
  * returning: a page of the real site would fail the check and stop the tool.
  */
+const browserProxies = new WeakMap<Browser, string>()
+export function videoRequestProxy(browser: Browser) { return browserProxies.get(browser) }
+
 export async function launchVideoBrowser(chromium: BrowserType, options: LaunchOptions = {}, appBase = process.env.VIDEO_BASE_URL ?? "http://localhost:43100"): Promise<Browser> {
   const proxy = await startPublicHostProxy(appBase)
+  // APIRequestContext does not use Chromium's DNS rules. A local CONNECT gateway
+  // gives both browser and request checks the same verified public-host routing.
+  const gateway = http.createServer((req, res) => {
+    const url = new URL(req.url!)
+    if (!["localhost", "127.0.0.1"].includes(url.hostname)) { res.writeHead(403).end(); return }
+    const upstream = http.request(url, { method: req.method, headers: req.headers }, reply => { res.writeHead(reply.statusCode ?? 502, reply.headers); reply.pipe(res) })
+    upstream.on("error", () => res.writeHead(502).end()); req.pipe(upstream)
+  })
+  gateway.on("connect", (req, socket, head) => {
+    const host = req.url?.split(":")[0] ?? ""
+    const localPort = Number(req.url?.split(":")[1])
+    const local = ["localhost", "127.0.0.1"].includes(host) && [Number(new URL(appBase).port), 48026].includes(localPort)
+    if (!local && host !== PUBLIC_DOMAIN && !host.endsWith(`.${PUBLIC_DOMAIN}`)) { socket.end("HTTP/1.1 403 Forbidden\r\n\r\n"); return }
+    const upstream = net.connect(local ? localPort : proxy.port, "127.0.0.1", () => { socket.write("HTTP/1.1 200 Connection Established\r\n\r\n"); if (head.length) upstream.write(head); socket.pipe(upstream); upstream.pipe(socket) })
+    upstream.on("error", () => socket.destroy()); socket.on("error", () => upstream.destroy())
+  })
+  await new Promise<void>(resolve => gateway.listen(0, "127.0.0.1", resolve))
+  const gatewayUrl = `http://127.0.0.1:${(gateway.address() as AddressInfo).port}`
   const browser = await chromium.launch({ ...options, args: [...(options.args ?? []), hostResolverRules(proxy.port), "--ignore-certificate-errors"] })
-  browser.on("disconnected", () => { void proxy.close() })
+  browserProxies.set(browser, gatewayUrl)
+  browser.on("disconnected", () => { gateway.close(); gateway.closeAllConnections(); void proxy.close() })
   const probe = await browser.newPage()
   try {
     await probe.goto(`https://check.${PUBLIC_DOMAIN}${HOST_CHECK_PATH}`)

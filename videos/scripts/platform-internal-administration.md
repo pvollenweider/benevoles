@@ -185,3 +185,13 @@ Texte de narration conservé ; réutilisation soumise au contrôle des empreinte
 Montage du 2026-10-16 : musique relevée de 1,2 dB dans le manifeste, après mesure de deux fenêtres à 20,9 et 20,6 LU sous la voix. Même prise, même narration ; nouvelle mesure et revue sur le MP4 remonté.
 
 Bilan final du lot 22-6 (2026-10-16) : READY ; BUILD_ID `mmgd3Xkj4ODeijoElwvVr`. Durée 474.64 s, musique 12.8–19.7 LU sous la voix, zéro tutoiement du spectateur dans le VTT final. Voir le rapport et les preuves du rendu local.
+
+## Révision du 2026-10-17 — lot 26
+
+Produit filmé : `490a44c306da8b93b4920ece009a452baf27fdbf` (#1062).
+Même compilation vérifiée pour le contrôle d’origine HTTP et la capture sur les
+hôtes publics routés localement. Les vrais liens d’activation et la redirection
+d’ancien identifiant sont vérifiés ; aucun texte produit n’est remplacé.
+Le chapitre de contexte montre la confirmation « Travailler dans Formation
+Opérateur Parc », son absence d’effet à l’ouverture, puis le bouton de formulaire
+« Gérer » du détail. Narration continue Kore conservée et réauditée.

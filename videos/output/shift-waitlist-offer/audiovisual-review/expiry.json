@@ -1,34 +1,34 @@
 {
   "model": "gemini-3.8-flash",
-  "reviewedAt": "2026-10-12T01:59:36.538Z",
-  "videoSha256": "e032126c4203813bb0b7d5c7144dec98cad516250fa0296270310d86e3db1237",
+  "reviewedAt": "2026-10-17T09:58:47.106Z",
+  "videoSha256": "a02191469e2aecb0aee9499ae6d7692d2df4b6af27efca5d133eef906dcf26f7",
   "promptSha256": "d87ae0e82defead865e04ee9b4bea88f935c183458fd7a079f8657f78a5a02e9",
-  "clipSha256": "f3720c07e596c8b984bb9ee30ec1a4c117382341a153aa77d31676e7e22987f5",
+  "clipSha256": "4a9d67b269972fd22d086504e7914a7d4fb649c7b3b73798381634250da4f169",
   "scene": "expiry",
   "review": {
     "heardOpening": "Si l'offre expire sans réponse",
     "checkpoints": [
       {
-        "spokenSeconds": 0,
+        "spokenSeconds": 0.5,
         "spoken": "Si l'offre expire sans réponse, elle ne bloque pas la place indéfiniment",
-        "visibleSeconds": 0,
-        "visible": "Affichage de la page participant avec les règles de la liste d'attente et le délai de réponse",
+        "visibleSeconds": 0.5,
+        "visible": "Page expliquant le fonctionnement de la liste d'attente et l'expiration de l'offre",
         "sync": "aligned",
         "severity": "none"
       },
       {
-        "spokenSeconds": 5.9,
-        "spoken": "Dans l'administration, on peut suivre l'offre active",
-        "visibleSeconds": 5.7,
-        "visible": "Transition vers le tableau d'administration avec la mention 'Place proposée' pour Camille Rochat",
+        "spokenSeconds": 6.1,
+        "spoken": "Dans l'administration",
+        "visibleSeconds": 6.3,
+        "visible": "Basculement vers la vue d'administration des inscriptions de l'événement",
         "sync": "aligned",
         "severity": "none"
       },
       {
-        "spokenSeconds": 8,
-        "spoken": "et la position des personnes encore en attente",
+        "spokenSeconds": 7.3,
+        "spoken": "on peut suivre l'offre active et la position des personnes encore en attente",
         "visibleSeconds": 7.5,
-        "visible": "Statut 'Liste d'attente (position 3)' visible pour Eva Clerc",
+        "visible": "Tableau des inscriptions avec statut « Place proposée » pour Camille Rochat",
         "sync": "aligned",
         "severity": "none"
       }
@@ -37,7 +37,7 @@
     "voice": {
       "consistent": true,
       "warm": true,
-      "observation": "Voix off posée, claire et parfaitement intelligible."
+      "observation": "Voix féminine claire, posée et bien articulée, parfaitement synchronisée avec la transition d'écran."
     }
   },
   "note": "Automated observation of actual final video audio and images; not a claim of complete human validation"

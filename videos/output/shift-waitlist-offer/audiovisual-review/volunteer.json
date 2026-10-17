@@ -1,42 +1,42 @@
 {
   "model": "gemini-3.8-flash",
-  "reviewedAt": "2026-10-12T01:59:36.310Z",
-  "videoSha256": "e032126c4203813bb0b7d5c7144dec98cad516250fa0296270310d86e3db1237",
-  "promptSha256": "75003b6967f8e9717af2fdd86aa8a2ca63cb2be0a2ad11dbda3bc044859cb20d",
-  "clipSha256": "63844a2f565032ddf2eaa5cc3e5382146a16e368ecf1111e100077f0358cf6b5",
+  "reviewedAt": "2026-10-17T09:58:36.085Z",
+  "videoSha256": "a02191469e2aecb0aee9499ae6d7692d2df4b6af27efca5d133eef906dcf26f7",
+  "promptSha256": "e7e67434446e1cc7d1aa20120b206b6b38e0ef20ef066824ebc6f88967a9ac38",
+  "clipSha256": "63e881c33fdd4ed74e1a607b8e18489f74e498e8b27091ed370565253a20ba54",
   "scene": "volunteer",
   "review": {
     "heardOpening": "Sur sa page, la personne voit l'offre",
     "checkpoints": [
       {
-        "spokenSeconds": 0.5,
-        "spoken": "la personne voit l'offre, son expiration",
+        "spokenSeconds": 1.2,
+        "spoken": "la personne voit l'offre, son expiration et les actions Prendre la place ou Refuser la place",
         "visibleSeconds": 1,
-        "visible": "Affichage du bloc de créneau Buvette avec la mention 'Une place t'est proposée' et la date d'expiration",
+        "visible": "Affichage de la section avec l'offre pour la Buvette, la date limite d'expiration, le lien Prendre la place et le bouton Refuser la place",
         "sync": "aligned",
         "severity": "none"
       },
       {
-        "spokenSeconds": 3.7,
-        "spoken": "les actions Prendre la place ou Refuser la place",
-        "visibleSeconds": 4,
-        "visible": "Mise en évidence du lien 'Prendre la place' puis du bouton 'Refuser la place'",
+        "spokenSeconds": 6.8,
+        "spoken": "Le lien Prendre la place ouvre une page qui présente l'offre, sans l'accepter",
+        "visibleSeconds": 6,
+        "visible": "Clic sur le lien et ouverture de la page dédiée intitulée Une place s'est libérée",
         "sync": "aligned",
         "severity": "none"
       },
       {
-        "spokenSeconds": 6.3,
-        "spoken": "Prendre la place confirme immédiatement le créneau",
-        "visibleSeconds": 6.3,
-        "visible": "Mise en avant graphique sur le bouton 'Prendre la place'",
+        "spokenSeconds": 11.5,
+        "spoken": "Seul le bouton Prendre la place de cette page confirme le créneau",
+        "visibleSeconds": 11,
+        "visible": "Présentation du bouton bleu Prendre la place sur la page de détail",
         "sync": "aligned",
         "severity": "none"
       },
       {
-        "spokenSeconds": 8.9,
-        "spoken": "Refuser la place conserve une réponse explicite",
-        "visibleSeconds": 9,
-        "visible": "Mise en avant graphique sur le bouton 'Refuser la place'",
+        "spokenSeconds": 15,
+        "spoken": "Refuser la place conserve une réponse explicite et permet de contacter la personne suivante",
+        "visibleSeconds": 15,
+        "visible": "Retour à la page précédente montrant l'option et le bouton Refuser la place",
         "sync": "aligned",
         "severity": "none"
       }
@@ -45,7 +45,7 @@
     "voice": {
       "consistent": true,
       "warm": true,
-      "observation": "Voix posée, claire et bien articulée, synchronisée avec les animations de mise en valeur visuelle."
+      "observation": "Voix claire, posée et bien articulée, parfaitement synchronisée avec la démonstration à l'écran."
     }
   },
   "note": "Automated observation of actual final video audio and images; not a claim of complete human validation"

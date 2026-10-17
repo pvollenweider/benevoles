@@ -1,34 +1,34 @@
 {
   "model": "gemini-3.8-flash",
-  "reviewedAt": "2026-10-16T08:58:59.091Z",
-  "videoSha256": "4c557865d2b8113c4e767c65e0ff9255874e84a7f6615119284a4b2b3084ee9e",
+  "reviewedAt": "2026-10-17T10:33:08.369Z",
+  "videoSha256": "4ebc69481a8c530ef1bf6def7b80407d73851b1a237279006058010402292214",
   "promptSha256": "f8ab8dc7ce542ab654b6e86b69f488379645a7bd5675ba8f6482e6ee728e97db",
-  "clipSha256": "90ca5e848412cff3af4d2a758c3745f0c32d48dc6f923bb5f13f15a3506b719a",
+  "clipSha256": "7a313893dc773fd92abdd1a3d6b069bd9fcf79c8b501d066d5d573146b7fced6",
   "scene": "availability",
   "review": {
-    "heardOpening": "Pour chercher de l'aide",
+    "heardOpening": "Pour chercher de l'aide, regardons les disponibilités",
     "checkpoints": [
       {
-        "spokenSeconds": 1.5,
-        "spoken": "regardons les disponibilités générales dans les membres. Zoé a indiqué le matin avec une remarque.",
+        "spokenSeconds": 0.8,
+        "spoken": "regardons les disponibilités générales dans les membres.",
+        "visibleSeconds": 1.7,
+        "visible": "Saisie de « Zoé » dans le filtre de recherche affichant la fiche de Zoé Exemple",
+        "sync": "aligned",
+        "severity": "none"
+      },
+      {
+        "spokenSeconds": 5.2,
+        "spoken": "Zoé a indiqué le matin avec une remarque.",
         "visibleSeconds": 2.2,
-        "visible": "Filtrage sur « Zoé » affichant la fiche avec la mention « Matin » et la remarque associée",
+        "visible": "Affichage de la mention « Matin - Peut aussi aider en début d'après-midi après confirmation. » sous le contact",
         "sync": "aligned",
         "severity": "none"
       },
       {
-        "spokenSeconds": 8,
-        "spoken": "Ce renseignement aide à lui proposer un créneau",
-        "visibleSeconds": 8.8,
-        "visible": "Ouverture de la fenêtre « Modifier le membre » détaillant les disponibilités générales et notes de Zoé",
-        "sync": "aligned",
-        "severity": "none"
-      },
-      {
-        "spokenSeconds": 15.3,
+        "spokenSeconds": 15.6,
         "spoken": "Regardons aussi ses inscriptions pour éviter un chevauchement.",
-        "visibleSeconds": 19.5,
-        "visible": "Affichage de la page « Activité de Zoé Exemple » listant ses inscriptions à des événements",
+        "visibleSeconds": 18,
+        "visible": "Clic sur « Activité » puis affichage de la page « Activité de Zoé Exemple » listant son inscription",
         "sync": "aligned",
         "severity": "none"
       }
@@ -37,7 +37,7 @@
     "voice": {
       "consistent": true,
       "warm": true,
-      "observation": "Voix claire, posée et bien articulée, parfaitement synchronisée avec les actions à l'écran."
+      "observation": "Voix féminine claire, posée et bien synchronisée avec les actions affichées."
     }
   },
   "note": "Automated observation of actual final video audio and images; not a claim of complete human validation"
