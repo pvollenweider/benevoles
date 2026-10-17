@@ -2,11 +2,41 @@
 // SPDX-License-Identifier: AGPL-3.0-only
 
 import { organizationBlocksSending } from "@/lib/notifications/org-send-guard"
+import https from "node:https"
 import webpush from "web-push"
 import { env } from "./env"
 import { prisma } from "./prisma"
 import { reportError } from "./report-error"
 import { siteDomain } from "@/lib/site"
+import { isAllowedPushEndpoint, safePushLookup } from "./push-endpoint"
+
+/**
+ * Socket inactivity timeout handed to web-push (#1041). Push services answer in well under a
+ * second; this only ends a connection that has gone silent.
+ */
+export const PUSH_SEND_TIMEOUT_MS = 30_000
+/**
+ * Overall cap on one send: the socket timeout alone does not bound a slow, trickling answer. A
+ * send still running then counts as failed (the history has no "unknown" outcome), although the
+ * service may still deliver it.
+ */
+export const PUSH_SEND_DEADLINE_MS = 60_000
+/**
+ * Connections of every push go through this agent (#1041): its lookup refuses a name that
+ * resolves to a non-public address, so a stored endpoint cannot reach an internal host, even by
+ * changing its DNS answer after it was accepted. web-push 3.6.7 takes it as the `agent` option.
+ */
+export const pushAgent = new https.Agent({ lookup: safePushLookup as unknown as https.AgentOptions["lookup"] })
+/** Recipients of a targeted message sent to in parallel. */
+const TARGETED_PUSH_CONCURRENCY = 5
+
+function withDeadline<T>(promise: Promise<T>, ms: number): Promise<T> {
+  let timer: ReturnType<typeof setTimeout> | undefined
+  const deadline = new Promise<never>((_, reject) => {
+    timer = setTimeout(() => reject(new Error("Push send deadline exceeded")), ms)
+  })
+  return Promise.race([promise, deadline]).finally(() => clearTimeout(timer))
+}
 
 let configured = false
 
@@ -30,7 +60,10 @@ function ensureConfigured() {
 
 export type PushOutcome = { sent: number; failed: number; removed: number }
 
-/** Sends to every device of the volunteer; gone subscriptions (404/410) are removed. */
+/**
+ * Sends to every device of the volunteer; gone subscriptions (404/410) are removed. A stored
+ * endpoint the policy refuses (#1041) is never contacted and counts as failed; the row is kept.
+ */
 export async function sendPushToVolunteer(
   volunteerId: string,
   payload: { title: string; body: string; url?: string; tag?: string }
@@ -41,18 +74,22 @@ export async function sendPushToVolunteer(
   const volunteer = await prisma.volunteer.findUnique({ where: { id: volunteerId }, select: { organizationId: true } })
   if (await organizationBlocksSending(volunteer?.organizationId)) return { sent: 0, failed: 0, removed: 0 }
 
-  const subs = await prisma.pushSubscription.findMany({ where: { volunteerId } })
+  const stored = await prisma.pushSubscription.findMany({ where: { volunteerId } })
+  const subs = stored.filter((sub) => isAllowedPushEndpoint(sub.endpoint))
   const dead: string[] = []
   let sent = 0
-  let failed = 0
+  let failed = stored.length - subs.length
 
   await Promise.allSettled(
     subs.map(async (sub) => {
       try {
-        await webpush.sendNotification(
-          { endpoint: sub.endpoint, keys: { auth: sub.auth, p256dh: sub.p256dh } },
-          JSON.stringify(payload),
-          { TTL: 3 * 24 * 3600 }
+        await withDeadline(
+          webpush.sendNotification(
+            { endpoint: sub.endpoint, keys: { auth: sub.auth, p256dh: sub.p256dh } },
+            JSON.stringify(payload),
+            { TTL: 3 * 24 * 3600, timeout: PUSH_SEND_TIMEOUT_MS, agent: pushAgent }
+          ),
+          PUSH_SEND_DEADLINE_MS,
         )
         sent++
       } catch (err: unknown) {
@@ -92,12 +129,18 @@ export async function sendTargetedPush(
   payload: { title: string; body: string; tag: string },
 ): Promise<PushOutcome> {
   const total: PushOutcome = { sent: 0, failed: 0, removed: 0 }
-  for (const t of targets) {
-    const o = await sendPushToVolunteer(t.volunteerId, { ...payload, ...(t.title ? { title: t.title } : {}), ...(t.body ? { body: t.body } : {}), url: t.url }).catch((e) => { reportError("push.targeted")(e); return { sent: 0, failed: 0, removed: 0 } })
-    total.sent += o.sent
-    total.failed += o.failed
-    total.removed += o.removed
+  // A few recipients at a time: each send is bounded, so a slow service cannot stall the rest.
+  let next = 0
+  const worker = async () => {
+    while (next < targets.length) {
+      const t = targets[next++]
+      const o = await sendPushToVolunteer(t.volunteerId, { ...payload, ...(t.title ? { title: t.title } : {}), ...(t.body ? { body: t.body } : {}), url: t.url }).catch((e) => { reportError("push.targeted")(e); return { sent: 0, failed: 0, removed: 0 } })
+      total.sent += o.sent
+      total.failed += o.failed
+      total.removed += o.removed
+    }
   }
+  await Promise.all(Array.from({ length: Math.min(TARGETED_PUSH_CONCURRENCY, targets.length) }, worker))
   await prisma.targetedMessage.update({
     where: { id: targetedMessageId },
     data: { pushSent: { increment: total.sent }, pushFailed: { increment: total.failed } },

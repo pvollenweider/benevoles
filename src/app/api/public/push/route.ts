@@ -8,10 +8,12 @@ import { z } from "zod"
 import { rateLimit, getClientIp } from "@/lib/rate-limit"
 import { reportError } from "@/lib/report-error"
 import { registrationToken } from "@/lib/token-vault"
+import { isAllowedPushEndpoint } from "@/lib/push-endpoint"
 
 const schema = z.object({
   editToken: z.string().min(1),
-  endpoint: z.string().url(),
+  // The server later POSTs to this address (#1041): https and a public host only.
+  endpoint: z.string().refine(isAllowedPushEndpoint),
   auth: z.string().min(1),
   p256dh: z.string().min(1),
 })

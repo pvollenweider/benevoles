@@ -20,7 +20,7 @@ vi.mock("@/lib/rate-limit", () => ({
   getClientIp: () => "127.0.0.1",
 }))
 
-const sub = { endpoint: "https://push.example.com/abc", auth: "a", p256dh: "p" }
+const sub = { endpoint: "https://fcm.googleapis.com/fcm/send/abc", auth: "a", p256dh: "p" }
 
 function post(body: unknown) {
   return new Request("http://localhost/api/public/push", {
@@ -34,6 +34,24 @@ describe("POST /api/public/push", () => {
   beforeEach(() => {
     vi.clearAllMocks()
     lockRows.mockResolvedValue([{ erasedAt: null }])
+  })
+
+  // #1041: the server later POSTs to the endpoint, so it must be a public https address.
+  it.each([
+    "http://fcm.googleapis.com/fcm/send/abc",
+    "https://10.0.0.1:8443/abc",
+    "https://u:p@fcm.googleapis.com/fcm/send/abc",
+    "https://10.0.0.1/abc",
+    "https://169.254.169.254/latest/meta-data",
+    "https://localhost/abc",
+  ])("refuses the endpoint %s and stores nothing", async (endpoint) => {
+    findFirst.mockResolvedValue({ volunteerId: "vol-1" })
+    const { POST } = await import("@/app/api/public/push/route")
+    const res = await POST(post({ editToken: "tok", ...sub, endpoint }))
+    expect(res.status).toBe(400)
+    expect(await res.json()).toEqual({ error: "Données invalides" })
+    expect(findFirst).not.toHaveBeenCalled()
+    expect(upsert).not.toHaveBeenCalled()
   })
 
   it("never attaches a device to a record erased since the link was resolved (#516)", async () => {
@@ -63,6 +81,14 @@ describe("POST /api/public/push", () => {
       expect.objectContaining({ where: { editTokenHash: hashToken("nope"), status: "active" } }),
     )
     expect(upsert).not.toHaveBeenCalled()
+  })
+
+  // Any public push provider keeps working, e.g. a UnifiedPush distributor on its own domain.
+  it("accepts a push provider on any public domain", async () => {
+    findFirst.mockResolvedValue({ volunteerId: "vol-1" })
+    const { POST } = await import("@/app/api/public/push/route")
+    expect((await POST(post({ editToken: "tok", ...sub, endpoint: "https://ntfy.sh/upAbCd?up=1" }))).status).toBe(200)
+    expect(upsert.mock.calls[0][0].create.endpoint).toBe("https://ntfy.sh/upAbCd?up=1")
   })
 
   it("binds the subscription to the token's volunteer", async () => {
