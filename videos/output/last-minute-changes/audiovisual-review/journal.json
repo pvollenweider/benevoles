@@ -1,42 +1,34 @@
 {
   "model": "gemini-3.8-flash",
-  "reviewedAt": "2026-10-16T08:59:58.362Z",
-  "videoSha256": "4c557865d2b8113c4e767c65e0ff9255874e84a7f6615119284a4b2b3084ee9e",
+  "reviewedAt": "2026-10-17T10:34:00.411Z",
+  "videoSha256": "4ebc69481a8c530ef1bf6def7b80407d73851b1a237279006058010402292214",
   "promptSha256": "6ca4b8ee82d4ed0d99d918cc73fa611efa3046640b204323436e43f15b5265bd",
-  "clipSha256": "827b813a83e1bdf5de2f664f9dc0e7f32e274db3da03a4a97fc3d3ea80b30528",
+  "clipSha256": "484ad64dc219dfa97051b0685092cf5d3c6d7de4be6ca7b5ed54f20037c743eb",
   "scene": "journal",
   "review": {
     "heardOpening": "Pour comprendre l'imprévu après coup",
     "checkpoints": [
       {
-        "spokenSeconds": 3,
+        "spokenSeconds": 3.2,
         "spoken": "ouvrons le journal de l'événement",
         "visibleSeconds": 0,
-        "visible": "L'onglet Journal de l'événement est déjà affiché",
+        "visible": "Page du Journal de l'événement déjà affichée",
         "sync": "aligned",
         "severity": "none"
       },
       {
-        "spokenSeconds": 6,
+        "spokenSeconds": 5.3,
         "spoken": "Retrouvons le retrait, l'offre et son acceptation",
-        "visibleSeconds": 7.5,
-        "visible": "Défilement montrant les lignes d'offre de place libérée et de confirmation d'inscription",
+        "visibleSeconds": 6,
+        "visible": "Défilement de la liste du journal vers le bas montrant les lignes d'actions antérieures",
         "sync": "aligned",
         "severity": "none"
       },
       {
-        "spokenSeconds": 11.5,
+        "spokenSeconds": 11.7,
         "spoken": "Le mode Récit peut montrer les conséquences reliées à une action",
         "visibleSeconds": 15,
-        "visible": "Clic sur l'onglet Récit dans le journal",
-        "sync": "aligned",
-        "severity": "none"
-      },
-      {
-        "spokenSeconds": 16.5,
-        "spoken": "Deux lignes proches dans le temps ne suffisent pas à prouver un lien de cause",
-        "visibleSeconds": 19.5,
-        "visible": "Sélection du récit montrant l'enchaînement des étapes suite à l'annulation",
+        "visible": "Clic sur l'onglet 'Récit' et sélection d'une entrée",
         "sync": "aligned",
         "severity": "none"
       }
@@ -45,7 +37,7 @@
     "voice": {
       "consistent": true,
       "warm": true,
-      "observation": "Voix féminine claire, posée et bien articulée, parfaitement synchronisée avec les actions affichées."
+      "observation": "Voix claire, posée et bien articulée, synchronisée avec les actions à l'écran."
     }
   },
   "note": "Automated observation of actual final video audio and images; not a claim of complete human validation"

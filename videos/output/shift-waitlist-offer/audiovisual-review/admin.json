@@ -1,34 +1,34 @@
 {
   "model": "gemini-3.8-flash",
-  "reviewedAt": "2026-10-12T01:59:25.972Z",
-  "videoSha256": "e032126c4203813bb0b7d5c7144dec98cad516250fa0296270310d86e3db1237",
+  "reviewedAt": "2026-10-17T09:58:11.909Z",
+  "videoSha256": "a02191469e2aecb0aee9499ae6d7692d2df4b6af27efca5d133eef906dcf26f7",
   "promptSha256": "26b22f4c163d1cd7845fe6ccd5dfeb12e9f11897f9fecf55a687a197ab2e68ac",
-  "clipSha256": "754a9736f62a8b0547132a8d8a591ae0bbe0daf2f699966becd78ab71d499be2",
+  "clipSha256": "1d25aecfeae8f8205d335816507307ca1beffe947ac031d08644200cd1a24ab4",
   "scene": "admin",
   "review": {
-    "heardOpening": "Dans l'administration",
+    "heardOpening": "Dans l'administration, les inscriptions confirmées",
     "checkpoints": [
       {
-        "spokenSeconds": 0.9,
-        "spoken": "les inscriptions confirmées et les personnes en attente restent distinctes",
-        "visibleSeconds": 1,
-        "visible": "Tableau des inscriptions affichant les bénévoles confirmés et la mention Liste d'attente position 1 pour Camille Rochat",
+        "spokenSeconds": 1,
+        "spoken": "Dans l'administration, les inscriptions confirmées et les personnes en attente restent distinctes.",
+        "visibleSeconds": 3.5,
+        "visible": "Défilement vers le bas révélant les personnes avec le statut 'Liste d'attente' sous les inscriptions confirmées.",
         "sync": "aligned",
         "severity": "none"
       },
       {
-        "spokenSeconds": 5,
-        "spoken": "L'ordre dépend du moment d'inscription",
+        "spokenSeconds": 5.4,
+        "spoken": "L'ordre dépend du moment d'inscription.",
         "visibleSeconds": 5,
-        "visible": "Affichage de la liste ordonnée avec le numéro de position en attente",
+        "visible": "Affichage ordonné des inscrits avec les mentions 'position 1', 'position 2' et 'position 3' sur la liste d'attente.",
         "sync": "aligned",
         "severity": "none"
       },
       {
-        "spokenSeconds": 8.5,
-        "spoken": "sans déplacer manuellement les lignes ni perdre l'historique",
-        "visibleSeconds": 8.7,
-        "visible": "Défilement vers le bas révélant les positions d'attente suivantes (2 et 3) ainsi que la section des annulations récentes",
+        "spokenSeconds": 8,
+        "spoken": "On peut ainsi répondre à une question sans déplacer manuellement les lignes ni perdre l'historique.",
+        "visibleSeconds": 8,
+        "visible": "Écran stable présentant la liste organisée et la section 'Annulations récentes' conservant l'historique.",
         "sync": "aligned",
         "severity": "none"
       }
@@ -37,7 +37,7 @@
     "voice": {
       "consistent": true,
       "warm": true,
-      "observation": "Voix off féminine claire, fluide et naturelle, bien synchronisée avec le défilement de l'écran."
+      "observation": "Voix claire, posée et bien articulée, parfaitement synchronisée avec la présentation visuelle."
     }
   },
   "note": "Automated observation of actual final video audio and images; not a claim of complete human validation"

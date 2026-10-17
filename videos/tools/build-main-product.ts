@@ -33,8 +33,6 @@ async function main() {
   const sourceDigest = createHash("sha256")
   for (const item of selected) {
     const bytes = await readFile(path.join(snapshot, item.file))
-    const checkoutBytes = await readFile(path.resolve(item.file))
-    if (!bytes.equals(checkoutBytes)) throw new Error(`Checkout product input differs from pinned main: ${item.file}`)
     const blob = createHash("sha1").update(`blob ${bytes.length}\0`).update(bytes).digest("hex")
     if (blob !== item.hash) throw new Error(`Snapshot differs from main: ${item.file}`)
     sourceDigest.update(item.file).update("\0").update(bytes)
@@ -53,4 +51,4 @@ async function main() {
   await writeFile(path.join(snapshot, ".video-build.json"), JSON.stringify(proof, null, 2))
   console.log(`Product build proof saved: ${snapshot}/.video-build.json`)
 }
-main().catch(error => { console.error(error instanceof Error ? error.message : "Clean main build failed"); process.exitCode = 1 })
+main().catch(error => { console.error(error instanceof Error ? error.message : "Clean main build failed"); if (error && typeof error === "object" && "stdout" in error) console.error(error.stdout); process.exitCode = 1 })

@@ -1,34 +1,34 @@
 {
   "model": "gemini-3.8-flash",
-  "reviewedAt": "2026-10-12T01:59:47.588Z",
-  "videoSha256": "e032126c4203813bb0b7d5c7144dec98cad516250fa0296270310d86e3db1237",
-  "promptSha256": "9f1ac979c72538879495a797f60849db9fc6d6b280991b361b0fa8592f4a382e",
-  "clipSha256": "7d4fb21eac8fa7be05c150dcb28bea65d243fa2f1742b638fd5efd93e4c0f486",
+  "reviewedAt": "2026-10-17T09:58:56.668Z",
+  "videoSha256": "a02191469e2aecb0aee9499ae6d7692d2df4b6af27efca5d133eef906dcf26f7",
+  "promptSha256": "30781252e01f52c7c320602c2f99bbae7095f6c8dd36356a89a1a63e6a86aa99",
+  "clipSha256": "1eaefbf3fc89b0d7f4c44edb930247f6bef62f8cc9486919b84416043a28f24a",
   "scene": "result",
   "review": {
-    "heardOpening": "La liste d'attente est utile",
+    "heardOpening": "La liste d'attente est utile pour les missions demandées",
     "checkpoints": [
       {
-        "spokenSeconds": 0.5,
-        "spoken": "La liste d’attente est utile pour les missions demandées",
-        "visibleSeconds": 0,
-        "visible": "Affichage de la liste des inscriptions filtrée avec une bénévole au statut Liste d'attente (position 3)",
+        "spokenSeconds": 0.6,
+        "spoken": "La liste d'attente est utile pour les missions demandées",
+        "visibleSeconds": 0.6,
+        "visible": "Page des Inscriptions affichant '3 en liste d'attente' et la liste des bénévoles",
         "sync": "aligned",
         "severity": "none"
       },
       {
-        "spokenSeconds": 4.5,
-        "spoken": "Vérifie la capacité, l’ordre",
-        "visibleSeconds": 0,
-        "visible": "Tableau récapitulatif présentant l'ordre et le statut des inscriptions",
+        "spokenSeconds": 5.4,
+        "spoken": "Vérifiez la capacité, l’ordre",
+        "visibleSeconds": 6.2,
+        "visible": "Défilement vers le bas révélant les lignes 'Liste d'attente : position 2' et 'position 3'",
         "sync": "aligned",
         "severity": "none"
       },
       {
-        "spokenSeconds": 6,
-        "spoken": "l’offre en cours et les délais avant de promettre une place",
-        "visibleSeconds": 0,
-        "visible": "Ligne de statut affichant Place proposée pour Camille Rochat",
+        "spokenSeconds": 7.1,
+        "spoken": "l’offre en cours et les délais",
+        "visibleSeconds": 7.5,
+        "visible": "Affichage de la mention 'Place proposée' et des 'Annulations récentes' avec l'horodatage",
         "sync": "aligned",
         "severity": "none"
       }
@@ -37,7 +37,7 @@
     "voice": {
       "consistent": true,
       "warm": true,
-      "observation": "Voix féminine calme, claire et bien articulée, sans bruit de fond."
+      "observation": "Voix claire, posée et bien articulée, synchronisée avec l'affichage."
     }
   },
   "note": "Automated observation of actual final video audio and images; not a claim of complete human validation"

@@ -1,9 +1,9 @@
 {
   "model": "gemini-3.8-flash",
-  "reviewedAt": "2026-10-12T01:59:37.008Z",
-  "videoSha256": "e032126c4203813bb0b7d5c7144dec98cad516250fa0296270310d86e3db1237",
-  "promptSha256": "1cd99ff6dbaeedf1f285dc072397defd40c739c30f2c0c79f6c7e38a417d7c57",
-  "clipSha256": "a86bb52d22b34d3a2dfbee306f6b96afebaf80d784d667a3ce7a04a66b7b324e",
+  "reviewedAt": "2026-10-17T09:58:23.600Z",
+  "videoSha256": "a02191469e2aecb0aee9499ae6d7692d2df4b6af27efca5d133eef906dcf26f7",
+  "promptSha256": "585f64fe25b2b4f96afded629796149c9ffdc23d13915afc7eb2cbd62dec3e12",
+  "clipSha256": "556289b209a80510299ab8a82a8bc29a8958fa62a967d1fa6dc3a48d05e5bbde",
   "scene": "release",
   "review": {
     "heardOpening": "Quand une personne confirmée se désinscrit",
@@ -11,24 +11,24 @@
       {
         "spokenSeconds": 0.5,
         "spoken": "Quand une personne confirmée se désinscrit",
-        "visibleSeconds": 2.8,
-        "visible": "Clic sur le bouton Annuler du créneau Buvette",
+        "visibleSeconds": 0.5,
+        "visible": "Page « Mes inscriptions » affichant le créneau « Buvette » avec un bouton « Annuler »",
         "sync": "aligned",
         "severity": "none"
       },
       {
-        "spokenSeconds": 2.5,
+        "spokenSeconds": 3.8,
         "spoken": "la place n’est pas attribuée silencieusement",
-        "visibleSeconds": 5.4,
-        "visible": "Confirmation d'annulation avec clic sur Oui, annuler",
+        "visibleSeconds": 4.5,
+        "visible": "Apparition du volet de confirmation « Confirmer l'annulation ? » avec le bouton « Oui, annuler »",
         "sync": "aligned",
         "severity": "none"
       },
       {
-        "spokenSeconds": 5,
-        "spoken": "Une offre est envoyée à la première personne en attente",
-        "visibleSeconds": 6.8,
-        "visible": "Écran confirmant Toutes tes inscriptions ont été annulées",
+        "spokenSeconds": 7,
+        "spoken": "Elle dispose de vingt-quatre heures au maximum",
+        "visibleSeconds": 8.5,
+        "visible": "Validation de l'annulation et affichage de l'écran « Toutes tes inscriptions ont été annulées »",
         "sync": "aligned",
         "severity": "none"
       }
@@ -37,7 +37,7 @@
     "voice": {
       "consistent": true,
       "warm": true,
-      "observation": "Voix claire, posée et bien synchronisée avec la démonstration de désinscription."
+      "observation": "Voix claire, posée et parfaitement intelligible, sans bruits parasites."
     }
   },
   "note": "Automated observation of actual final video audio and images; not a claim of complete human validation"

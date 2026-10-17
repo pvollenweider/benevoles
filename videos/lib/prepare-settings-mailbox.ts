@@ -5,6 +5,7 @@ import { writeFile } from "node:fs/promises"
 import path from "node:path"
 export async function prepareSettingsMailbox(slug: string, directory: string) {
   const patterns: Record<string, RegExp> = {
+    "last-minute-changes": /^video\.last-minute\.(?:person\.[0-5]|owner)@example\.org$/,
     "org-email-settings": /^video\.email\.[a-z-]+@example\.org$/,
     "org-team-permissions": /^video\.team\.[a-z-]+@example\.org$/,
     "email-delivery-failures": /^video\.delivery\.[a-z-]+@example\.org$/,

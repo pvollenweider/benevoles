@@ -4,7 +4,7 @@
 import { mkdir, readFile, rm, writeFile } from "node:fs/promises"
 import path from "node:path"
 import { chromium, type Locator, type Page } from "playwright"
-import { launchVideoBrowser, PUBLIC_URL_PROBE_PATH, servedWithPublicUrl, videoAdminEmail } from "../lib/public-hosts"
+import { launchVideoBrowser, PUBLIC_URL_PROBE_PATH, servedWithPublicUrl, videoAdminEmail, videoRequestProxy } from "../lib/public-hosts"
 import { catalogEntry, loadManifest, videoDir, type AudioMetadata, type Timeline } from "../lib/manifest"
 import { pinProductBuildForCapture } from "../lib/product-build"
 import { estimateSentences, sentenceFor, type Cue, type SentenceAnchor, type TimedSentence } from "../lib/sentence-timing"
@@ -13,8 +13,10 @@ import { sentenceTimingsFromAudio } from "../lib/sentence-audio"
 const reference = process.argv.find((arg) => !arg.startsWith("-") && arg !== process.argv[0] && arg !== process.argv[1])
 if (!reference) throw new Error("Usage: npm run video:record -- <VIDEO_ID>")
 
-const baseUrl = (process.env.VIDEO_BASE_URL ?? "http://localhost:43100").replace(/\/$/, "")
-const host = new URL(baseUrl).hostname
+const localBaseUrl = (process.env.VIDEO_BASE_URL ?? "http://localhost:43100").replace(/\/$/, "")
+const publicOperator = (reference === "PLATFORM_INTERNAL_ADMINISTRATION" && process.env.VIDEO_OPERATOR_PUBLIC === "1") || (reference === "ORG_TEAM_PERMISSIONS" && process.env.VIDEO_PUBLIC_CAPTURE === "1")
+const baseUrl = publicOperator ? "https://www.benevol.app" : localBaseUrl
+const host = new URL(localBaseUrl).hostname
 if (host !== "localhost" && host !== "127.0.0.1" && host !== "::1") {
   throw new Error(`Refusing to record against non-local host ${host}`)
 }
@@ -37,7 +39,7 @@ async function metadata(file: string): Promise<AudioMetadata | null> {
 async function settle(page: Page) {
   // Public maps may keep tile requests open; the seven batch 22-7 journeys
   // assert their actual headings and controls after DOM and font readiness.
-  const publicRefresh = ["VOLUNTEER_PERSONAL_REGISTRATIONS", "VOLUNTEER_CALENDAR", "PRIVACY_PERSONAL_LINKS", "VOLUNTEER_DISCOVER_EVENT", "VOLUNTEER_REGISTER", "VOLUNTEER_CHOOSE_SHIFTS", "VOLUNTEER_FORM_RECAP", "VOLUNTEER_CONFIRMATION_ERRORS", "VOLUNTEER_SESSION_AVAILABILITY", "ACCESSIBILITY_KEYBOARD_DISPLAY"].some(id => process.argv.includes(id))
+  const publicRefresh = ["LAST_MINUTE_CHANGES", "VOLUNTEER_PERSONAL_REGISTRATIONS", "VOLUNTEER_CALENDAR", "PRIVACY_PERSONAL_LINKS", "VOLUNTEER_DISCOVER_EVENT", "VOLUNTEER_REGISTER", "VOLUNTEER_CHOOSE_SHIFTS", "VOLUNTEER_FORM_RECAP", "VOLUNTEER_CONFIRMATION_ERRORS", "VOLUNTEER_SESSION_AVAILABILITY", "ACCESSIBILITY_KEYBOARD_DISPLAY"].some(id => process.argv.includes(id))
   await page.waitForLoadState(publicRefresh ? "domcontentloaded" : "networkidle")
   await page.addStyleTag({ content: "nextjs-portal { display: none !important; }" })
   await page.evaluate(() => document.fonts?.ready)
@@ -173,11 +175,13 @@ async function fillVisibly(page: Page, field: Locator, value: string, pauseMs = 
 }
 
 async function main() {
-  // Links, QR codes and emails on screen must read benevol.app, not this machine (public-hosts.ts):
-  // the probe page's canonical link is built from the server's NEXT_PUBLIC_APP_URL.
-  if (!servedWithPublicUrl(await (await fetch(`${baseUrl}${PUBLIC_URL_PROBE_PATH}`)).text())) throw new Error("Serve the capture build with NEXT_PUBLIC_APP_URL=https://www.benevol.app (local-production.ts serve does it)")
+  // The canonical proves the deployment URL: explicit HTTP capture origins for batch 25-2,
+  // public video domain for the other journeys. Visible local links still fail final review.
   const manifest = await loadManifest(reference!)
-  const product = await pinProductBuildForCapture(baseUrl)
+  const probeHtml = await (await fetch(`${localBaseUrl}${PUBLIC_URL_PROBE_PATH}`)).text()
+  const localOriginCapture = ["LAST_MINUTE_CHANGES", "PLATFORM_INTERNAL_ADMINISTRATION"].includes(manifest.id) && !publicOperator
+  if (localOriginCapture ? !probeHtml.includes(`<link rel="canonical" href="${baseUrl}${PUBLIC_URL_PROBE_PATH}"`) : !servedWithPublicUrl(probeHtml)) throw new Error("Capture deployment origin does not match the expected canonical URL")
+  const product = await pinProductBuildForCapture(localBaseUrl)
   if ((await catalogEntry(reference!)).captureReady === false) throw new Error(`${manifest.id}: real UI recorder and fixture are not ready; refusing a substitute capture`)
   const slug = manifest.slug
   const dir = videoDir(manifest.slug)
@@ -215,8 +219,9 @@ async function main() {
     ...(questionsFrenchLauncher ? { executablePath: path.resolve(batch22French || slug === "members-import" ? "videos/tools/chromium-fr-members-import.sh" : "videos/tools/chromium-fr-questions.sh") } : {}),
     args: ["--lang=fr-FR"],
     env: { ...process.env, LANG: (batch22French || ["members-import", "privacy-personal-links"].includes(slug)) ? "fr_CH.UTF-8" : "fr_FR.UTF-8", LC_ALL: (batch22French || ["members-import", "privacy-personal-links"].includes(slug)) ? "fr_CH.UTF-8" : "fr_FR.UTF-8" },
-  }, baseUrl)
+  }, localBaseUrl)
   const context = await browser.newContext({
+    ...(publicOperator ? { proxy: { server: videoRequestProxy(browser)! }, ignoreHTTPSErrors: true } : {}),
     viewport: { width: manifest.viewport.width, height: manifest.viewport.height },
     deviceScaleFactor: manifest.viewport.deviceScaleFactor,
     isMobile: manifest.viewport.width < 600,
@@ -1697,9 +1702,15 @@ async function main() {
         await offeredCard.scrollIntoViewIfNeeded()
         await at(0.26) /* mid-sentence */
         await offeredCard.getByText(/Confirme avant/).scrollIntoViewIfNeeded()
-        await at("Prendre la place confirme immédiatement")
-        await offeredCard.getByRole("link", { name: `Prendre la place : ${waitlistShift.label}`, exact: true }).focus()
+        await at("Le lien Prendre la place ouvre")
+        await tap(page, offeredCard.getByRole("link", { name: `Prendre la place : ${waitlistShift.label}`, exact: true }))
+        await page.getByRole("button", { name: "Prendre la place", exact: true }).waitFor()
+        const unchangedOffer = await (await page.request.get(`${baseUrl}/api/public/registrations/demo-waitlist-camille-0001`)).json()
+        if (!unchangedOffer.registrations.some((registration: { status: string; shift: { id: string } }) => registration.status === "offered" && registration.shift.id === waitlistShift.id)) throw new Error("Opening an offer must leave it offered")
+        await at("Seul le bouton Prendre la place")
+        await page.getByRole("button", { name: "Prendre la place", exact: true }).focus()
         await at("Refuser la place conserve une réponse explicite")
+        await page.goto(`${baseUrl}/my/demo-waitlist-camille-0001`); await settle(page)
         await offeredCard.getByRole("button", { name: `Refuser la place proposée sur le créneau ${waitlistShift.label}`, exact: true }).focus()
       })
 
@@ -4707,14 +4718,13 @@ async function main() {
         await tap(page, form.getByRole("radio", { name: /Organisateur/ }))
         await at("Cliquez sur Envoyer l’invitation ")
         await tap(page, form.getByRole("button", { name: "Envoyer l'invitation" }))
-        await page.getByText("Invitation envoyée à video.team.lea@example.org.").waitFor()
+        await page.getByRole("status").filter({ hasText: "Invitation envoyée à video.team.lea@example.org. Le lien d'activation, valable 7 jours, lui a été envoyé par email." }).waitFor()
       })
 
       await scene("invite-result", async (at) => {
-        await page.getByRole("heading", { name: "Lien d'invitation créé" }).scrollIntoViewIfNeeded()
-        await at("on peut aussi copier ce")
-        await tap(page, page.getByRole("button", { name: "Copier le lien" }))
-        await page.getByText("Un email a été envoyé. Ce lien expire dans 7 jours.").scrollIntoViewIfNeeded()
+        await at("La confirmation indique")
+        await page.getByRole("status").filter({ hasText: "Invitation envoyée à video.team.lea@example.org." }).scrollIntoViewIfNeeded()
+        if (await page.getByRole("button", { name: "Copier le lien", exact: true }).count()) throw new Error("Owner must never receive the activation link")
         await at("Son accès ne devient actif")
         await page.getByText("Léa Martin", { exact: true }).scrollIntoViewIfNeeded()
       })

@@ -1,529 +1,476 @@
 {
-  "videoSha256": "4c557865d2b8113c4e767c65e0ff9255874e84a7f6615119284a4b2b3084ee9e",
+  "videoSha256": "4ebc69481a8c530ef1bf6def7b80407d73851b1a237279006058010402292214",
   "product": {
-    "commit": "89a884c8d58c22dda6800481e1238bdc4e219dff",
-    "sourceTree": "60284d6b5fdf08719063fe06492832a52a45d996",
-    "productSourceSha256": "bb3c83ca2cff86f744551f64b0f97ab94601895d1893bcce4312c18b0e47413d",
-    "buildId": "gHYEjPtpdQYUNytuIhMkh",
-    "snapshot": "/tmp/benevoles-video-production.Batch231",
-    "builtAt": "2026-10-16T08:22:06.973Z"
+    "commit": "62129272a8b79e676ce221482d2b82e988ca43c9",
+    "sourceTree": "a9e282c6b7788595ba5567488b3979fa9e31d307",
+    "productSourceSha256": "1e27636cc9fdaea8961b64c1f82d77ca88a180d2f4e0b243a355cd3aa5ccb4b3",
+    "buildId": "YO71lLiyNXV68dtInlVcb",
+    "snapshot": "/tmp/benevoles-video-production.Batch252B",
+    "builtAt": "2026-10-17T10:22:29.885Z"
   },
-  "chapters": [
+  "scope": "Actual final MP4 frames at the first real input after every sentence cue (or cue itself when no input follows); interpreted together with full chapter audiovisual review",
+  "rows": [
     {
-      "id": "welcome",
-      "startMs": 1380,
-      "endMs": 30979
+      "anchor": {
+        "segmentId": "withdrawal",
+        "phrase": "Depuis son lien personnel",
+        "startMs": 2824,
+        "endMs": 5578,
+        "cueMs": 35420
+      },
+      "firstActualInputAfterAnchor": {
+        "kind": "click",
+        "atMs": 35897
+      },
+      "frameMs": 36297,
+      "file": "/tmp/codex-video/videos/output/last-minute-changes/review/anchors/00-withdrawal.png"
     },
     {
-      "id": "withdrawal",
-      "startMs": 33242,
-      "endMs": 62692
+      "anchor": {
+        "segmentId": "withdrawal",
+        "phrase": "C'est un retrait individuel",
+        "startMs": 5956,
+        "endMs": 7973,
+        "cueMs": 38552
+      },
+      "firstActualInputAfterAnchor": {
+        "kind": "click",
+        "atMs": 39030
+      },
+      "frameMs": 39430,
+      "file": "/tmp/codex-video/videos/output/last-minute-changes/review/anchors/01-withdrawal.png"
     },
     {
-      "id": "offer",
-      "startMs": 64953,
-      "endMs": 90780
+      "anchor": {
+        "segmentId": "withdrawal",
+        "phrase": "Revenons dans les inscriptions côté",
+        "startMs": 9481,
+        "endMs": 11190,
+        "cueMs": 42077
+      },
+      "firstActualInputAfterAnchor": null,
+      "frameMs": 42477,
+      "file": "/tmp/codex-video/videos/output/last-minute-changes/review/anchors/02-withdrawal.png"
     },
     {
-      "id": "coverage",
-      "startMs": 93044,
-      "endMs": 121915
+      "anchor": {
+        "segmentId": "withdrawal",
+        "phrase": "Ouvrons le vrai email reçu",
+        "startMs": 20374,
+        "endMs": 22363,
+        "cueMs": 52970
+      },
+      "firstActualInputAfterAnchor": null,
+      "frameMs": 53370,
+      "file": "/tmp/codex-video/videos/output/last-minute-changes/review/anchors/03-withdrawal.png"
     },
     {
-      "id": "availability",
-      "startMs": 124181,
-      "endMs": 154181
+      "anchor": {
+        "segmentId": "offer",
+        "phrase": "Ouvrons son lien et acceptons",
+        "startMs": 6485,
+        "endMs": 9260,
+        "cueMs": 70796
+      },
+      "firstActualInputAfterAnchor": {
+        "kind": "click",
+        "atMs": 71269
+      },
+      "frameMs": 71669,
+      "file": "/tmp/codex-video/videos/output/last-minute-changes/review/anchors/04-offer.png"
     },
     {
-      "id": "message",
-      "startMs": 156442,
-      "endMs": 214604
+      "anchor": {
+        "segmentId": "offer",
+        "phrase": "Maintenant seulement, sa participation est",
+        "startMs": 12826,
+        "endMs": 15356,
+        "cueMs": 77138
+      },
+      "firstActualInputAfterAnchor": null,
+      "frameMs": 77538,
+      "file": "/tmp/codex-video/videos/output/last-minute-changes/review/anchors/05-offer.png"
     },
     {
-      "id": "schedule",
-      "startMs": 216865,
-      "endMs": 245155
+      "anchor": {
+        "segmentId": "coverage",
+        "phrase": "Lisons le poste, la date",
+        "startMs": 10246,
+        "endMs": 13432,
+        "cueMs": 102645
+      },
+      "firstActualInputAfterAnchor": null,
+      "frameMs": 103045,
+      "file": "/tmp/codex-video/videos/output/last-minute-changes/review/anchors/06-coverage.png"
     },
     {
-      "id": "cancel",
-      "startMs": 247418,
-      "endMs": 279486
+      "anchor": {
+        "segmentId": "coverage",
+        "phrase": "Un total de personnes inscrites",
+        "startMs": 19890,
+        "endMs": 23201,
+        "cueMs": 112290
+      },
+      "firstActualInputAfterAnchor": null,
+      "frameMs": 112690,
+      "file": "/tmp/codex-video/videos/output/last-minute-changes/review/anchors/07-coverage.png"
     },
     {
-      "id": "journal",
-      "startMs": 281764,
-      "endMs": 310756
+      "anchor": {
+        "segmentId": "availability",
+        "phrase": "Ce renseignement aide à lui",
+        "startMs": 5513,
+        "endMs": 7848,
+        "cueMs": 129044
+      },
+      "firstActualInputAfterAnchor": {
+        "kind": "click",
+        "atMs": 132324
+      },
+      "frameMs": 132724,
+      "file": "/tmp/codex-video/videos/output/last-minute-changes/review/anchors/08-availability.png"
     },
     {
-      "id": "result",
-      "startMs": 313018,
-      "endMs": 342812
-    }
-  ],
-  "anchors": [
-    {
-      "segmentId": "withdrawal",
-      "phrase": "Depuis son lien personnel",
-      "startMs": 2824,
-      "endMs": 5578,
-      "cueMs": 36068,
-      "frame": "review/sentence-frames/00-withdrawal.png",
-      "frameSeconds": 37.568,
-      "nextActualInputs": [
-        {
-          "kind": "click",
-          "atMs": 36571
-        },
-        {
-          "kind": "click",
-          "atMs": 39670
-        }
-      ]
+      "anchor": {
+        "segmentId": "availability",
+        "phrase": "il ne l'inscrit pas automatiquement",
+        "startMs": 8332,
+        "endMs": 15312,
+        "cueMs": 131862
+      },
+      "firstActualInputAfterAnchor": {
+        "kind": "click",
+        "atMs": 132324
+      },
+      "frameMs": 132724,
+      "file": "/tmp/codex-video/videos/output/last-minute-changes/review/anchors/09-availability.png"
     },
     {
-      "segmentId": "withdrawal",
-      "phrase": "C'est un retrait individuel",
-      "startMs": 5956,
-      "endMs": 7973,
-      "cueMs": 39199,
-      "frame": "review/sentence-frames/01-withdrawal.png",
-      "frameSeconds": 40.699,
-      "nextActualInputs": [
-        {
-          "kind": "click",
-          "atMs": 39670
-        }
-      ]
+      "anchor": {
+        "segmentId": "availability",
+        "phrase": "Regardons aussi ses inscriptions pour",
+        "startMs": 15628,
+        "endMs": 18922,
+        "cueMs": 139158
+      },
+      "firstActualInputAfterAnchor": {
+        "kind": "click",
+        "atMs": 139626
+      },
+      "frameMs": 140026,
+      "file": "/tmp/codex-video/videos/output/last-minute-changes/review/anchors/10-availability.png"
     },
     {
-      "segmentId": "withdrawal",
-      "phrase": "Revenons dans les inscriptions côté",
-      "startMs": 9481,
-      "endMs": 11190,
-      "cueMs": 42723,
-      "frame": "review/sentence-frames/02-withdrawal.png",
-      "frameSeconds": 44.223,
-      "nextActualInputs": []
+      "anchor": {
+        "segmentId": "availability",
+        "phrase": "Si la mission demande un",
+        "startMs": 19476,
+        "endMs": 26107,
+        "cueMs": 143005
+      },
+      "firstActualInputAfterAnchor": null,
+      "frameMs": 143405,
+      "file": "/tmp/codex-video/videos/output/last-minute-changes/review/anchors/11-availability.png"
     },
     {
-      "segmentId": "withdrawal",
-      "phrase": "Ouvrons le vrai email reçu",
-      "startMs": 20374,
-      "endMs": 22363,
-      "cueMs": 53616,
-      "frame": "review/sentence-frames/03-withdrawal.png",
-      "frameSeconds": 55.116,
-      "nextActualInputs": []
+      "anchor": {
+        "segmentId": "message",
+        "phrase": "Vérifions l'aperçu et le destinataire",
+        "startMs": 23927,
+        "endMs": 27636,
+        "cueMs": 179717
+      },
+      "firstActualInputAfterAnchor": {
+        "kind": "click",
+        "atMs": 180191
+      },
+      "frameMs": 180591,
+      "file": "/tmp/codex-video/videos/output/last-minute-changes/review/anchors/12-message.png"
     },
     {
-      "segmentId": "offer",
-      "phrase": "Ouvrons son lien et acceptons",
-      "startMs": 6485,
-      "endMs": 9260,
-      "cueMs": 71441,
-      "frame": "review/sentence-frames/04-offer.png",
-      "frameSeconds": 72.941,
-      "nextActualInputs": [
-        {
-          "kind": "click",
-          "atMs": 71931
-        }
-      ]
+      "anchor": {
+        "segmentId": "message",
+        "phrase": "Ouvrons le vrai email reçu.",
+        "startMs": 28362,
+        "endMs": 30324,
+        "cueMs": 184151
+      },
+      "firstActualInputAfterAnchor": {
+        "kind": "click",
+        "atMs": 184624
+      },
+      "frameMs": 185024,
+      "file": "/tmp/codex-video/videos/output/last-minute-changes/review/anchors/13-message.png"
     },
     {
-      "segmentId": "offer",
-      "phrase": "Maintenant seulement, sa participation est",
-      "startMs": 12826,
-      "endMs": 15356,
-      "cueMs": 77784,
-      "frame": "review/sentence-frames/05-offer.png",
-      "frameSeconds": 79.284,
-      "nextActualInputs": []
+      "anchor": {
+        "segmentId": "message",
+        "phrase": "Ce message ne crée aucune",
+        "startMs": 30887,
+        "endMs": 32647,
+        "cueMs": 186675
+      },
+      "firstActualInputAfterAnchor": {
+        "kind": "click",
+        "atMs": 194007
+      },
+      "frameMs": 194407,
+      "file": "/tmp/codex-video/videos/output/last-minute-changes/review/anchors/14-message.png"
     },
     {
-      "segmentId": "coverage",
-      "phrase": "Lisons le poste, la date",
-      "startMs": 10246,
-      "endMs": 13432,
-      "cueMs": 103290,
-      "frame": "review/sentence-frames/06-coverage.png",
-      "frameSeconds": 104.79,
-      "nextActualInputs": []
+      "anchor": {
+        "segmentId": "message",
+        "phrase": "Revenons aux inscriptions et ouvrons",
+        "startMs": 37102,
+        "endMs": 40339,
+        "cueMs": 192893
+      },
+      "firstActualInputAfterAnchor": {
+        "kind": "click",
+        "atMs": 194007
+      },
+      "frameMs": 194407,
+      "file": "/tmp/codex-video/videos/output/last-minute-changes/review/anchors/15-message.png"
     },
     {
-      "segmentId": "coverage",
-      "phrase": "Un total de personnes inscrites",
-      "startMs": 19890,
-      "endMs": 23201,
-      "cueMs": 112940,
-      "frame": "review/sentence-frames/07-coverage.png",
-      "frameSeconds": 114.44,
-      "nextActualInputs": []
+      "anchor": {
+        "segmentId": "message",
+        "phrase": "Choisissons le créneau de logistique",
+        "startMs": 45420,
+        "endMs": 48794,
+        "cueMs": 202169
+      },
+      "firstActualInputAfterAnchor": {
+        "kind": "click",
+        "atMs": 202640
+      },
+      "frameMs": 203040,
+      "file": "/tmp/codex-video/videos/output/last-minute-changes/review/anchors/16-message.png"
     },
     {
-      "segmentId": "availability",
-      "phrase": "Ce renseignement aide à lui",
-      "startMs": 5513,
-      "endMs": 7848,
-      "cueMs": 129695,
-      "frame": "review/sentence-frames/08-availability.png",
-      "frameSeconds": 131.195,
-      "nextActualInputs": [
-        {
-          "kind": "click",
-          "atMs": 133000
-        }
-      ]
+      "anchor": {
+        "segmentId": "message",
+        "phrase": "Enfin, revenons à la couverture",
+        "startMs": 49141,
+        "endMs": 51177,
+        "cueMs": 204932
+      },
+      "firstActualInputAfterAnchor": null,
+      "frameMs": 205332,
+      "file": "/tmp/codex-video/videos/output/last-minute-changes/review/anchors/17-message.png"
     },
     {
-      "segmentId": "availability",
-      "phrase": "il ne l'inscrit pas automatiquement",
-      "startMs": 8332,
-      "endMs": 15312,
-      "cueMs": 132514,
-      "frame": "review/sentence-frames/09-availability.png",
-      "frameSeconds": 134.014,
-      "nextActualInputs": [
-        {
-          "kind": "click",
-          "atMs": 133000
-        }
-      ]
+      "anchor": {
+        "segmentId": "schedule",
+        "phrase": "Ouvrons le créneau concerné et",
+        "startMs": 3789,
+        "endMs": 8717,
+        "cueMs": 220007
+      },
+      "firstActualInputAfterAnchor": {
+        "kind": "click",
+        "atMs": 220471
+      },
+      "frameMs": 220871,
+      "file": "/tmp/codex-video/videos/output/last-minute-changes/review/anchors/18-schedule.png"
     },
     {
-      "segmentId": "availability",
-      "phrase": "Regardons aussi ses inscriptions pour",
-      "startMs": 15628,
-      "endMs": 18922,
-      "cueMs": 139810,
-      "frame": "review/sentence-frames/10-availability.png",
-      "frameSeconds": 141.31,
-      "nextActualInputs": [
-        {
-          "kind": "click",
-          "atMs": 140299
-        }
-      ]
+      "anchor": {
+        "segmentId": "schedule",
+        "phrase": "Décalons les deux heures, puis",
+        "startMs": 9295,
+        "endMs": 10673,
+        "cueMs": 225514
+      },
+      "firstActualInputAfterAnchor": {
+        "kind": "click",
+        "atMs": 225988
+      },
+      "frameMs": 226388,
+      "file": "/tmp/codex-video/videos/output/last-minute-changes/review/anchors/19-schedule.png"
     },
     {
-      "segmentId": "availability",
-      "phrase": "Si la mission demande un",
-      "startMs": 19476,
-      "endMs": 26107,
-      "cueMs": 143658,
-      "frame": "review/sentence-frames/11-availability.png",
-      "frameSeconds": 145.158,
-      "nextActualInputs": []
+      "anchor": {
+        "segmentId": "schedule",
+        "phrase": "L'application prévient les personnes déjà",
+        "startMs": 10969,
+        "endMs": 15710,
+        "cueMs": 227188
+      },
+      "firstActualInputAfterAnchor": {
+        "kind": "click",
+        "atMs": 227654
+      },
+      "frameMs": 228054,
+      "file": "/tmp/codex-video/videos/output/last-minute-changes/review/anchors/20-schedule.png"
     },
     {
-      "segmentId": "message",
-      "phrase": "Vérifions l'aperçu et le destinataire",
-      "startMs": 23927,
-      "endMs": 27636,
-      "cueMs": 180369,
-      "frame": "review/sentence-frames/12-message.png",
-      "frameSeconds": 181.869,
-      "nextActualInputs": [
-        {
-          "kind": "click",
-          "atMs": 180870
-        }
-      ]
+      "anchor": {
+        "segmentId": "schedule",
+        "phrase": "Lisons l'ancien et le nouvel",
+        "startMs": 16090,
+        "endMs": 20591,
+        "cueMs": 232309
+      },
+      "firstActualInputAfterAnchor": {
+        "kind": "click",
+        "atMs": 238471
+      },
+      "frameMs": 238871,
+      "file": "/tmp/codex-video/videos/output/last-minute-changes/review/anchors/21-schedule.png"
     },
     {
-      "segmentId": "message",
-      "phrase": "Ouvrons le vrai email reçu.",
-      "startMs": 28362,
-      "endMs": 30324,
-      "cueMs": 184811,
-      "frame": "review/sentence-frames/13-message.png",
-      "frameSeconds": 186.311,
-      "nextActualInputs": [
-        {
-          "kind": "click",
-          "atMs": 185281
-        },
-        {
-          "kind": "click",
-          "atMs": 186081
-        }
-      ]
+      "anchor": {
+        "segmentId": "schedule",
+        "phrase": "Un email envoyé ne prouve",
+        "startMs": 21169,
+        "endMs": 23867,
+        "cueMs": 237388
+      },
+      "firstActualInputAfterAnchor": {
+        "kind": "click",
+        "atMs": 238471
+      },
+      "frameMs": 238871,
+      "file": "/tmp/codex-video/videos/output/last-minute-changes/review/anchors/22-schedule.png"
     },
     {
-      "segmentId": "message",
-      "phrase": "Ce message ne crée aucune",
-      "startMs": 30887,
-      "endMs": 32647,
-      "cueMs": 187333,
-      "frame": "review/sentence-frames/14-message.png",
-      "frameSeconds": 188.833,
-      "nextActualInputs": []
+      "anchor": {
+        "segmentId": "cancel",
+        "phrase": "Ouvrons la confirmation et prenons",
+        "startMs": 5198,
+        "endMs": 10211,
+        "cueMs": 251970
+      },
+      "firstActualInputAfterAnchor": {
+        "kind": "click",
+        "atMs": 252438
+      },
+      "frameMs": 252838,
+      "file": "/tmp/codex-video/videos/output/last-minute-changes/review/anchors/23-cancel.png"
     },
     {
-      "segmentId": "message",
-      "phrase": "Revenons aux inscriptions et ouvrons",
-      "startMs": 37102,
-      "endMs": 40339,
-      "cueMs": 193547,
-      "frame": "review/sentence-frames/15-message.png",
-      "frameSeconds": 195.047,
-      "nextActualInputs": [
-        {
-          "kind": "click",
-          "atMs": 195248
-        },
-        {
-          "kind": "click",
-          "atMs": 196049
-        },
-        {
-          "kind": "key",
-          "atMs": 196356
-        }
-      ]
+      "anchor": {
+        "segmentId": "cancel",
+        "phrase": "Une demande en attente de",
+        "startMs": 15923,
+        "endMs": 19167,
+        "cueMs": 262695
+      },
+      "firstActualInputAfterAnchor": null,
+      "frameMs": 263095,
+      "file": "/tmp/codex-video/videos/output/last-minute-changes/review/anchors/24-cancel.png"
     },
     {
-      "segmentId": "message",
-      "phrase": "Choisissons le créneau de logistique",
-      "startMs": 45420,
-      "endMs": 48794,
-      "cueMs": 203395,
-      "frame": "review/sentence-frames/16-message.png",
-      "frameSeconds": 204.895,
-      "nextActualInputs": [
-        {
-          "kind": "click",
-          "atMs": 203880
-        },
-        {
-          "kind": "click",
-          "atMs": 204663
-        },
-        {
-          "kind": "click",
-          "atMs": 205447
-        }
-      ]
+      "anchor": {
+        "segmentId": "cancel",
+        "phrase": "Si des présences ont déjà",
+        "startMs": 21007,
+        "endMs": 28054,
+        "cueMs": 267782
+      },
+      "firstActualInputAfterAnchor": null,
+      "frameMs": 268182,
+      "file": "/tmp/codex-video/videos/output/last-minute-changes/review/anchors/25-cancel.png"
     },
     {
-      "segmentId": "message",
-      "phrase": "Enfin, revenons à la couverture",
-      "startMs": 49141,
-      "endMs": 51177,
-      "cueMs": 205791,
-      "frame": "review/sentence-frames/17-message.png",
-      "frameSeconds": 207.291,
-      "nextActualInputs": []
+      "anchor": {
+        "segmentId": "cancel",
+        "phrase": "Annuler n'est pas simplement fermer",
+        "startMs": 28365,
+        "endMs": 31763,
+        "cueMs": 275139
+      },
+      "firstActualInputAfterAnchor": null,
+      "frameMs": 275539,
+      "file": "/tmp/codex-video/videos/output/last-minute-changes/review/anchors/26-cancel.png"
     },
     {
-      "segmentId": "schedule",
-      "phrase": "Ouvrons le créneau concerné et",
-      "startMs": 3789,
-      "endMs": 8717,
-      "cueMs": 220656,
-      "frame": "review/sentence-frames/18-schedule.png",
-      "frameSeconds": 222.156,
-      "nextActualInputs": [
-        {
-          "kind": "click",
-          "atMs": 221129
-        },
-        {
-          "kind": "key",
-          "atMs": 221437
-        },
-        {
-          "kind": "key",
-          "atMs": 221437
-        }
-      ]
+      "anchor": {
+        "segmentId": "journal",
+        "phrase": "Le mode Récit peut montrer",
+        "startMs": 9182,
+        "endMs": 14813,
+        "cueMs": 290303
+      },
+      "firstActualInputAfterAnchor": {
+        "kind": "click",
+        "atMs": 296803
+      },
+      "frameMs": 297203,
+      "file": "/tmp/codex-video/videos/output/last-minute-changes/review/anchors/27-journal.png"
     },
     {
-      "segmentId": "schedule",
-      "phrase": "Décalons les deux heures, puis",
-      "startMs": 9295,
-      "endMs": 10673,
-      "cueMs": 226160,
-      "frame": "review/sentence-frames/19-schedule.png",
-      "frameSeconds": 227.66,
-      "nextActualInputs": [
-        {
-          "kind": "click",
-          "atMs": 226629
-        },
-        {
-          "kind": "key",
-          "atMs": 226937
-        },
-        {
-          "kind": "key",
-          "atMs": 226937
-        }
-      ]
+      "anchor": {
+        "segmentId": "journal",
+        "phrase": "Deux lignes proches dans le",
+        "startMs": 15216,
+        "endMs": 18918,
+        "cueMs": 296337
+      },
+      "firstActualInputAfterAnchor": {
+        "kind": "click",
+        "atMs": 296803
+      },
+      "frameMs": 297203,
+      "file": "/tmp/codex-video/videos/output/last-minute-changes/review/anchors/28-journal.png"
     },
     {
-      "segmentId": "schedule",
-      "phrase": "L'application prévient les personnes déjà",
-      "startMs": 10969,
-      "endMs": 15710,
-      "cueMs": 227835,
-      "frame": "review/sentence-frames/20-schedule.png",
-      "frameSeconds": 229.335,
-      "nextActualInputs": [
-        {
-          "kind": "click",
-          "atMs": 228313
-        }
-      ]
+      "anchor": {
+        "segmentId": "journal",
+        "phrase": "Le journal aide l'équipe à",
+        "startMs": 19062,
+        "endMs": 21365,
+        "cueMs": 300183
+      },
+      "firstActualInputAfterAnchor": {
+        "kind": "click",
+        "atMs": 300653
+      },
+      "frameMs": 301053,
+      "file": "/tmp/codex-video/videos/output/last-minute-changes/review/anchors/29-journal.png"
     },
     {
-      "segmentId": "schedule",
-      "phrase": "Lisons l'ancien et le nouvel",
-      "startMs": 16090,
-      "endMs": 20591,
-      "cueMs": 232956,
-      "frame": "review/sentence-frames/21-schedule.png",
-      "frameSeconds": 234.456,
-      "nextActualInputs": []
+      "anchor": {
+        "segmentId": "result",
+        "phrase": "Nicolas a accepté sa place",
+        "startMs": 4129,
+        "endMs": 12919,
+        "cueMs": 316505
+      },
+      "firstActualInputAfterAnchor": {
+        "kind": "click",
+        "atMs": 326686
+      },
+      "frameMs": 327086,
+      "file": "/tmp/codex-video/videos/output/last-minute-changes/review/anchors/30-result.png"
     },
     {
-      "segmentId": "schedule",
-      "phrase": "Un email envoyé ne prouve",
-      "startMs": 21169,
-      "endMs": 23867,
-      "cueMs": 238035,
-      "frame": "review/sentence-frames/22-schedule.png",
-      "frameSeconds": 239.535,
-      "nextActualInputs": [
-        {
-          "kind": "click",
-          "atMs": 239763
-        }
-      ]
+      "anchor": {
+        "segmentId": "result",
+        "phrase": "Nous avons vérifié les résultats",
+        "startMs": 13228,
+        "endMs": 17084,
+        "cueMs": 325604
+      },
+      "firstActualInputAfterAnchor": {
+        "kind": "click",
+        "atMs": 326686
+      },
+      "frameMs": 327086,
+      "file": "/tmp/codex-video/videos/output/last-minute-changes/review/anchors/31-result.png"
     },
     {
-      "segmentId": "cancel",
-      "phrase": "Ouvrons la confirmation et prenons",
-      "startMs": 5198,
-      "endMs": 10211,
-      "cueMs": 252619,
-      "frame": "review/sentence-frames/23-cancel.png",
-      "frameSeconds": 254.119,
-      "nextActualInputs": [
-        {
-          "kind": "click",
-          "atMs": 253112
-        }
-      ]
-    },
-    {
-      "segmentId": "cancel",
-      "phrase": "Une demande en attente de",
-      "startMs": 15923,
-      "endMs": 19167,
-      "cueMs": 263342,
-      "frame": "review/sentence-frames/24-cancel.png",
-      "frameSeconds": 264.842,
-      "nextActualInputs": []
-    },
-    {
-      "segmentId": "cancel",
-      "phrase": "Si des présences ont déjà",
-      "startMs": 21007,
-      "endMs": 28054,
-      "cueMs": 268425,
-      "frame": "review/sentence-frames/25-cancel.png",
-      "frameSeconds": 269.925,
-      "nextActualInputs": []
-    },
-    {
-      "segmentId": "cancel",
-      "phrase": "Annuler n'est pas simplement fermer",
-      "startMs": 28365,
-      "endMs": 31763,
-      "cueMs": 275784,
-      "frame": "review/sentence-frames/26-cancel.png",
-      "frameSeconds": 277.284,
-      "nextActualInputs": []
-    },
-    {
-      "segmentId": "journal",
-      "phrase": "Le mode Récit peut montrer",
-      "startMs": 9182,
-      "endMs": 14813,
-      "cueMs": 290946,
-      "frame": "review/sentence-frames/27-journal.png",
-      "frameSeconds": 292.446,
-      "nextActualInputs": []
-    },
-    {
-      "segmentId": "journal",
-      "phrase": "Deux lignes proches dans le",
-      "startMs": 15216,
-      "endMs": 18918,
-      "cueMs": 296981,
-      "frame": "review/sentence-frames/28-journal.png",
-      "frameSeconds": 298.481,
-      "nextActualInputs": [
-        {
-          "kind": "click",
-          "atMs": 297461
-        },
-        {
-          "kind": "click",
-          "atMs": 301293
-        }
-      ]
-    },
-    {
-      "segmentId": "journal",
-      "phrase": "Le journal aide l'équipe à",
-      "startMs": 19062,
-      "endMs": 21365,
-      "cueMs": 300826,
-      "frame": "review/sentence-frames/29-journal.png",
-      "frameSeconds": 302.326,
-      "nextActualInputs": [
-        {
-          "kind": "click",
-          "atMs": 301293
-        }
-      ]
-    },
-    {
-      "segmentId": "result",
-      "phrase": "Nicolas a accepté sa place",
-      "startMs": 4129,
-      "endMs": 12919,
-      "cueMs": 317149,
-      "frame": "review/sentence-frames/30-result.png",
-      "frameSeconds": 318.649,
-      "nextActualInputs": []
-    },
-    {
-      "segmentId": "result",
-      "phrase": "Nous avons vérifié les résultats",
-      "startMs": 13228,
-      "endMs": 17084,
-      "cueMs": 326247,
-      "frame": "review/sentence-frames/31-result.png",
-      "frameSeconds": 327.747,
-      "nextActualInputs": [
-        {
-          "kind": "click",
-          "atMs": 327976
-        }
-      ]
-    },
-    {
-      "segmentId": "result",
-      "phrase": "En cas d'imprévu ",
-      "startMs": 17534,
-      "endMs": 17720,
-      "cueMs": 330554,
-      "frame": "review/sentence-frames/32-result.png",
-      "frameSeconds": 332.054,
-      "nextActualInputs": []
+      "anchor": {
+        "segmentId": "result",
+        "phrase": "En cas d'imprévu ",
+        "startMs": 17534,
+        "endMs": 17720,
+        "cueMs": 329909
+      },
+      "firstActualInputAfterAnchor": null,
+      "frameMs": 330309,
+      "file": "/tmp/codex-video/videos/output/last-minute-changes/review/anchors/32-result.png"
     }
   ]
 }

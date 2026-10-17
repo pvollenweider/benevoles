@@ -39,7 +39,7 @@ export async function validateOperatorNarration(directory: string) {
 }
 
 export async function prepareOperatorRecording(page: Page, base: string, directory: string, rehearsal = false) {
-  assert.equal(base, "http://localhost:43104")
+  assert(["http://localhost:43104", "https://www.benevol.app"].includes(base))
   if (!rehearsal) await validateOperatorNarration(directory)
   const proof = JSON.parse(await readFile(path.join(directory, "lifecycle-preparation.json"), "utf8"))
   assert(proof.oldLinkRefused && proof.disposableOrganizationDeleted && proof.existingSessionWhileInactiveStatus === 401)
@@ -179,10 +179,14 @@ export async function recordOperator(options: { page: Page; base: string; direct
       assert.equal(await db.orgSlugHistory.count({ where: { organizationId: orgId, slug: initialSlug } }), 1)
       await page.reload(); await settle(page)
       await at(.67)
-      const redirected = await page.request.get(`${base}/?org=${initialSlug}`, { maxRedirects: 0 })
-      const location = redirected.headers().location
-      assert(location && new URL(location, base).hostname === `${finalSlug}.benevol.app`, "Actual old public slug redirects to new canonical host")
-      checks.publicAliasRedirect = { status: redirected.status(), targetHost: `${finalSlug}.benevol.app` }
+      const redirected = await page.request.get(`https://${initialSlug}.benevol.app/`, { maxRedirects: 0 })
+      assert.equal(redirected.status(), 307)
+      const target = new URL(redirected.headers().location)
+      assert.equal(target.hostname, `${finalSlug}.benevol.app`)
+      await page.goto(`https://${initialSlug}.benevol.app/`)
+      await page.waitForURL(`https://${finalSlug}.benevol.app/`)
+      checks.publicAliasRedirect = { status: redirected.status(), target: target.href, productionEquivalent: true }
+      await go(`/super-admin/organizations/${finalSlug}`)
     })
     await scene("availability", async at => {
       await at("Ouvrons la confirmation"); await tap(page, page.getByRole("button", { name: "Désactiver", exact: true }))
@@ -202,8 +206,13 @@ export async function recordOperator(options: { page: Page; base: string; direct
       await session(setup.platformCookies)
       await at(.04); await go("/admin/events")
       await page.waitForURL(/\/super-admin\/organizations/)
-      await at(.28); await go("/super-admin/organizations/formation-operateur-a")
-      await at("Depuis son détail"); await tap(page, page.getByRole("button", { name: "Gérer l'organisation Formation Opérateur Parc", exact: true }))
+      // Opening the confirmation is read-only. Hold its named target before
+      // returning to the detail on the sentence announcing the actual switch.
+      await at(.12); await go("/super-admin/use-org/video-operator-org-a")
+      await page.getByRole("button", { name: "Travailler dans Formation Opérateur Parc", exact: true }).waitFor()
+      assert.equal((await page.request.get(`${base}/api/admin/events`)).status(), 409)
+      await at("Depuis son détail"); await go("/super-admin/organizations/formation-operateur-a")
+      await tap(page, page.getByRole("button", { name: "Gérer l'organisation Formation Opérateur Parc", exact: true }))
       await page.waitForURL(/\/admin\/events/)
       await page.getByRole("link", { name: "Parc — Fête de formation", exact: true }).waitFor()
       assert(!(await page.locator("body").innerText()).includes("Quartier — Fête de formation"))

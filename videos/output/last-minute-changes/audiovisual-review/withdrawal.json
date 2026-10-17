@@ -1,9 +1,9 @@
 {
   "model": "gemini-3.8-flash",
-  "reviewedAt": "2026-10-16T08:58:17.554Z",
-  "videoSha256": "4c557865d2b8113c4e767c65e0ff9255874e84a7f6615119284a4b2b3084ee9e",
+  "reviewedAt": "2026-10-17T10:32:28.334Z",
+  "videoSha256": "4ebc69481a8c530ef1bf6def7b80407d73851b1a237279006058010402292214",
   "promptSha256": "6779fc3003c59ddd2e70d33d82f152c835f5ba07a2ed86d43dc7d58620036f3f",
-  "clipSha256": "98386d4f1a3c5f7530524d756841d4c0f358051155ee47ee9c678afe9eb4a917",
+  "clipSha256": "c9eba0db19c6eb4230c9b119ea82632bb7b611cea6d7e389a03127898fda01ff",
   "scene": "withdrawal",
   "review": {
     "heardOpening": "Aline ne peut plus venir à l'accueil",
@@ -11,32 +11,32 @@
       {
         "spokenSeconds": 3.2,
         "spoken": "Depuis son lien personnel, elle annule son inscription.",
-        "visibleSeconds": 3.4,
-        "visible": "Clic sur Annuler pour le créneau Accueil du matin puis confirmation sur Oui, annuler",
+        "visibleSeconds": 3.6,
+        "visible": "Clic sur le bouton Annuler du créneau Accueil du matin puis confirmation par Oui, annuler",
         "sync": "aligned",
         "severity": "none"
       },
       {
-        "spokenSeconds": 9.2,
+        "spokenSeconds": 9.3,
         "spoken": "Revenons dans les inscriptions côté organisation.",
-        "visibleSeconds": 9.4,
-        "visible": "Affichage de l'onglet Inscriptions de l'événement côté organisateur",
+        "visibleSeconds": 9.5,
+        "visible": "Affichage de l'onglet Inscriptions dans la console d'administration de l'événement",
         "sync": "aligned",
         "severity": "none"
       },
       {
-        "spokenSeconds": 20.1,
+        "spokenSeconds": 20,
         "spoken": "Ouvrons le vrai email reçu par Nicolas.",
-        "visibleSeconds": 20.4,
-        "visible": "Affichage de la boîte Mailpit avec l'e-mail adressé à Nicolas",
+        "visibleSeconds": 21.2,
+        "visible": "Transition vers l'interface Mailpit affichant le courriel reçu par Nicolas",
         "sync": "aligned",
         "severity": "none"
       },
       {
-        "spokenSeconds": 23.2,
+        "spokenSeconds": 23,
         "spoken": "On y retrouve le créneau et un délai de réponse.",
-        "visibleSeconds": 22,
-        "visible": "Détails du créneau Accueil du matin et mention d'expiration du lien affichés dans le corps du message",
+        "visibleSeconds": 23,
+        "visible": "Le contenu de l'e-mail détaille le créneau Accueil du matin et la date limite de réponse",
         "sync": "aligned",
         "severity": "none"
       }
@@ -45,7 +45,7 @@
     "voice": {
       "consistent": true,
       "warm": true,
-      "observation": "Voix claire, posée et bien articulée, synchronisée avec les actions à l'écran."
+      "observation": "Voix claire, posée et bien articulée, parfaitement synchronisée avec les actions à l'écran."
     }
   },
   "note": "Automated observation of actual final video audio and images; not a claim of complete human validation"
