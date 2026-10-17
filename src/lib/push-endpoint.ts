@@ -36,23 +36,56 @@ for (const [prefix, bits] of [
   ["240.0.0.0", 4], // reserved, incl. broadcast
 ] as const) blocked.addSubnet(prefix, bits, "ipv4")
 for (const [prefix, bits] of [
-  ["64:ff9b::", 96], // NAT64: would reach an IPv4 address through a translator
-  ["64:ff9b:1::", 48], // local-use NAT64
+  ["64:ff9b:1::", 48], // local-use NAT64 (site-specific mapping)
   ["2001::", 23], // IETF protocol assignments, incl. Teredo
   ["2001:db8::", 32], // documentation
-  ["2002::", 16], // 6to4: embeds an arbitrary IPv4 address
   ["3fff::", 20], // documentation
 ] as const) blocked.addSubnet(prefix, bits, "ipv6")
 /** Global unicast IPv6: everything else (::1, ::, fc00::/7, fe80::/10, ff00::/8, ::ffff:0:0/96…) is outside it. */
 const globalIpv6 = new net.BlockList()
 globalIpv6.addSubnet("2000::", 3, "ipv6")
 
+/** The eight 16-bit groups of an IPv6 address (with an optional dotted IPv4 tail), or null. */
+function ipv6Groups(address: string): number[] | null {
+  let text = address.toLowerCase()
+  const dotted = text.match(/^(.*:)(\d+\.\d+\.\d+\.\d+)$/)
+  if (dotted) {
+    const o = dotted[2].split(".").map(Number)
+    text = `${dotted[1]}${((o[0] << 8) | o[1]).toString(16)}:${((o[2] << 8) | o[3]).toString(16)}`
+  }
+  const [head, tail, extra] = text.split("::")
+  if (extra !== undefined) return null
+  const left = head ? head.split(":") : []
+  const right = tail ? tail.split(":") : []
+  const missing = 8 - left.length - right.length
+  if (tail === undefined ? missing !== 0 : missing < 1) return null
+  const groups = [...left, ...Array(tail === undefined ? 0 : missing).fill("0"), ...right].map((g) => parseInt(g, 16))
+  return groups.length === 8 && groups.every((g) => g >= 0 && g <= 0xffff) ? groups : null
+}
+
+const ipv4FromGroups = (hi: number, lo: number) => `${hi >> 8}.${hi & 0xff}.${lo >> 8}.${lo & 0xff}`
+
+/**
+ * The IPv4 address an IPv6 address stands for when it only translates to one: NAT64 well-known
+ * prefix 64:ff9b::/96 (RFC 6052) and 6to4 2002::/16 (RFC 3056). Those reach the IPv4 internet, so
+ * they are as public as the IPv4 address they embed.
+ */
+function embeddedIpv4(address: string): string | null {
+  const g = ipv6Groups(address)
+  if (!g) return null
+  if (g[0] === 0x64 && g[1] === 0xff9b && g.slice(2, 6).every((x) => x === 0)) return ipv4FromGroups(g[6], g[7])
+  if (g[0] === 0x2002) return ipv4FromGroups(g[1], g[2])
+  return null
+}
+
 /** Whether an IP address is on the public internet (false for anything else, including non-IPs). */
 export function isPublicAddress(address: string): boolean {
   const family = net.isIP(address)
   if (family === 4) return !blocked.check(address, "ipv4")
-  if (family === 6) return globalIpv6.check(address, "ipv6") && !blocked.check(address, "ipv6")
-  return false
+  if (family !== 6) return false
+  const v4 = embeddedIpv4(address)
+  if (v4) return !blocked.check(v4, "ipv4")
+  return globalIpv6.check(address, "ipv6") && !blocked.check(address, "ipv6")
 }
 
 /** Names that only make sense inside a machine or a private network. */
