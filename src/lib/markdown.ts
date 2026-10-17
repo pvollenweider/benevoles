@@ -23,7 +23,7 @@
  * constructs (expression(), javascript: urls, etc.) from any style attribute an admin typed
  * directly, the same way it already does for href.
  */
-import { fillVariables } from "./message-variables"
+import { splitVariables } from "./message-variables"
 import { marked, Renderer, type Tokens } from "marked"
 import DOMPurify from "isomorphic-dompurify"
 
@@ -39,8 +39,26 @@ const HEADING_SIZES: Record<number, string> = {
   1: "1.5em", 2: "1.3em", 3: "1.15em", 4: "1em", 5: "0.9em", 6: "0.85em",
 }
 
-function makeRenderer(): Renderer {
+/**
+ * `vars` (confirmation message variables, #1046): the template is the organizer's trusted
+ * Markdown, parsed as is; each variable value (a volunteer's first name, a shift label…) is then
+ * inserted as escaped text where the template's text has a placeholder, so a value can never add
+ * a link, an image or any other syntax. URL attributes (href, src, title) and the label of a bare
+ * URL are left as written: placeholders are not filled there.
+ */
+function makeRenderer(vars?: Record<string, string>): Renderer {
   const r = new Renderer()
+  // > 0 while rendering the label of an autolink, which shows its URL: no variables there.
+  let urlLabel = 0
+  const fill = (text: string, escapeLiteral: (s: string) => string): string =>
+    !vars || urlLabel > 0
+      ? escapeLiteral(text)
+      : splitVariables(text, vars).map((p) => ("value" in p ? escapeHtml(p.value) : escapeLiteral(p.text))).join("")
+
+  r.text = function (token: Tokens.Text | Tokens.Escape) {
+    if ("tokens" in token && token.tokens) return this.parser.parseInline(token.tokens)
+    return fill(token.text, (s) => Renderer.prototype.text.call(this, { ...token, text: s } as Tokens.Text))
+  }
 
   // Raw HTML written directly in the Markdown source (e.g. an admin typing <p style="..."> by
   // hand) is rendered as literal escaped text, never live markup. Without this, DOMPurify seeing
@@ -51,7 +69,7 @@ function makeRenderer(): Renderer {
   // literal here, never from admin-supplied text, so this doesn't remove any real capability —
   // only raw HTML embedding, which was never advertised as supported syntax anyway.
   r.html = function ({ text }: Tokens.HTML | Tokens.Tag) {
-    return escapeHtml(text)
+    return fill(text, escapeHtml)
   }
 
   r.heading = function ({ tokens, depth }: Tokens.Heading) {
@@ -76,11 +94,11 @@ function makeRenderer(): Renderer {
   }
 
   r.codespan = function ({ text }: Tokens.Codespan) {
-    return `<code style="background:#f3f4f6;padding:0.15em 0.35em;border-radius:4px;font-family:ui-monospace,monospace;font-size:0.9em">${escapeHtml(text)}</code>`
+    return `<code style="background:#f3f4f6;padding:0.15em 0.35em;border-radius:4px;font-family:ui-monospace,monospace;font-size:0.9em">${fill(text, escapeHtml)}</code>`
   }
 
   r.code = function ({ text, lang }: Tokens.Code) {
-    return `<pre style="background:#f3f4f6;border-radius:8px;padding:0.75em 1em;overflow-x:auto;white-space:pre-wrap;word-break:break-word;font-family:ui-monospace,monospace;font-size:0.85em"><code${lang ? ` data-lang="${escapeHtml(lang)}"` : ""}>${escapeHtml(text)}</code></pre>\n`
+    return `<pre style="background:#f3f4f6;border-radius:8px;padding:0.75em 1em;overflow-x:auto;white-space:pre-wrap;word-break:break-word;font-family:ui-monospace,monospace;font-size:0.85em"><code${lang ? ` data-lang="${escapeHtml(lang)}"` : ""}>${fill(text, escapeHtml)}</code></pre>\n`
   }
 
   r.blockquote = function ({ tokens }: Tokens.Blockquote) {
@@ -109,12 +127,17 @@ function makeRenderer(): Renderer {
     return `<input type="checkbox" disabled ${checked ? "checked" : ""} style="margin-right:0.4em"> `
   }
 
-  r.link = function ({ href, title, tokens }: Tokens.Link) {
-    return `<a href="${escapeHtml(href)}"${title ? ` title="${escapeHtml(title)}"` : ""} style="color:#2563eb;text-decoration:underline">${this.parser.parseInline(tokens)}</a>`
+  r.link = function ({ href, title, tokens, raw }: Tokens.Link) {
+    // `[label](url)` and `[label][ref]` start with « [ »; `<url>` and a bare URL show the URL itself.
+    const autolink = !raw.startsWith("[")
+    if (autolink) urlLabel++
+    const label = this.parser.parseInline(tokens)
+    if (autolink) urlLabel--
+    return `<a href="${escapeHtml(href)}"${title ? ` title="${escapeHtml(title)}"` : ""} style="color:#2563eb;text-decoration:underline">${label}</a>`
   }
 
   r.image = function ({ href, title, text }: Tokens.Image) {
-    return `<img src="${escapeHtml(href)}" alt="${escapeHtml(text)}"${title ? ` title="${escapeHtml(title)}"` : ""} style="max-width:100%;border-radius:8px">`
+    return `<img src="${escapeHtml(href)}" alt="${fill(text, escapeHtml)}"${title ? ` title="${escapeHtml(title)}"` : ""} style="max-width:100%;border-radius:8px">`
   }
 
   r.table = function (token: Tokens.Table) {
@@ -148,14 +171,20 @@ const ALLOWED_ATTR = ["href", "title", "src", "alt", "style", "type", "checked",
  * inline styles, for use in emails and other raw-HTML contexts. Sanitized with DOMPurify.
  */
 export function renderMarkdown(text: string): string {
-  const html = marked.parse(text, { async: false, gfm: true, breaks: true, renderer: makeRenderer() })
-  return DOMPurify.sanitize(html, { ALLOWED_TAGS, ALLOWED_ATTR })
+  return renderWith(text, makeRenderer())
 }
 
 /**
- * Replaces {prénom}, {{prenom}}, {créneau}, {date}, {heure}… in text with provided values (see
- * fillVariables in message-variables.ts). Unknown keys are left as-is.
+ * Renders the organizer's Markdown `template` with {prénom}, {{prenom}}, {créneau}, {date},
+ * {heure}… filled from `vars` as literal text (see makeRenderer): a value is never parsed as
+ * Markdown, so a first name written as a link, a bare URL, an image or HTML shows as typed.
+ * Unknown keys are left as written. The plain-text email part uses fillVariables instead.
  */
-export function interpolate(text: string, vars: Record<string, string>): string {
-  return fillVariables(text, vars)
+export function renderMarkdownWithVariables(template: string, vars: Record<string, string>): string {
+  return renderWith(template, makeRenderer(vars))
+}
+
+function renderWith(text: string, renderer: Renderer): string {
+  const html = marked.parse(text, { async: false, gfm: true, breaks: true, renderer })
+  return DOMPurify.sanitize(html, { ALLOWED_TAGS, ALLOWED_ATTR })
 }

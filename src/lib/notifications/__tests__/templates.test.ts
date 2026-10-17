@@ -81,3 +81,33 @@ describe("render — registration_confirmation message formatting", () => {
     expect(html).not.toContain("**Gilet**")
   })
 })
+
+describe("render — registration_confirmation message variables are literal text (#1046)", () => {
+  const confirm = (volunteerName: string, confirmationMessage: string) => render({
+    kind: "registration_confirmation",
+    recipient: { email: "v@example.org", name: volunteerName },
+    data: {
+      volunteerName,
+      eventTitle: "Festival",
+      shifts: [{ label: "Accueil", date: "10/10/2026", startTime: "08:00", endTime: "12:00" }],
+      editToken: "edit-tok",
+      confirmationMessage,
+    },
+  })
+
+  it("does not turn a first name written as a link, a bare URL or an image into a link or an image", () => {
+    for (const name of ["[Payer](https://evil.example)", "https://evil.example/login", "www.evil.example", "![x](https://evil.example/p.png)"]) {
+      const { html, text } = confirm(name, "Merci {prénom} !")
+      expect(html, name).not.toContain("evil.example\"")
+      expect(html, name).not.toMatch(/<a [^>]*href="[^"]*evil/)
+      expect(html, name).not.toMatch(/<img [^>]*evil/)
+      // The plain-text part keeps the plain substitution.
+      expect(text, name).toContain(`Merci ${name} !`)
+    }
+  })
+
+  it("keeps the organizer's own link working", () => {
+    const { html } = confirm("Julie Martin", "[Plan d'accès](https://example.org/plan) pour {prénom}")
+    expect(html).toMatch(/<a href="https:\/\/example\.org\/plan"[^>]*>Plan d.accès<\/a> pour Julie/)
+  })
+})

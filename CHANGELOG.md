@@ -11,6 +11,10 @@ Format basé sur [Keep a Changelog](https://keepachangelog.com/fr/1.0.0/).
 
 ## [Unreleased]
 
+### Sécurité
+
+- **Variables du message de confirmation** (#1046) : le prénom et les autres valeurs insérées dans le message de confirmation (page de succès, page personnelle, email) s'affichent désormais comme du texte simple ; elles ne peuvent plus ajouter de lien, d'image ou de mise en forme au message de l'organisation. Les variables ne sont pas remplies dans l'adresse d'un lien ou d'une image.
+
 ### Corrigé
 
 - **Doublons possibles et adresses numérotées** (#1037) : deux adresses email qui ne diffèrent que par leurs chiffres (`benevole1@…` et `benevole2@…`) ne sont plus proposées comme doublons, et une adresse courte (moins de 8 caractères avant l'arobase) n'est rapprochée que pour une seule lettre d'écart. Une organisation avec des adresses numérotées voyait des centaines de paires sans fondement.

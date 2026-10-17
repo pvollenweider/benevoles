@@ -1,5 +1,6 @@
 import { describe, it, expect } from "vitest"
-import { renderMarkdown, interpolate } from "../markdown"
+import { renderMarkdown, renderMarkdownWithVariables } from "../markdown"
+import { fillVariables } from "../message-variables"
 
 describe("renderMarkdown — basic syntax (CommonMark)", () => {
   it("renders headings h1-h6", () => {
@@ -129,16 +130,79 @@ describe("renderMarkdown — security", () => {
   })
 })
 
-describe("interpolate", () => {
-  it("replaces known {{variables}}", () => {
-    expect(interpolate("Bonjour {{prenom}} !", { prenom: "Alex" })).toBe("Bonjour Alex !")
+describe("renderMarkdownWithVariables", () => {
+  const vars = (prénom: string) => ({ prénom, créneau: "Accueil", date: "samedi 10 octobre", heure: "08:00" })
+  const render = (template: string, prénom: string) => renderMarkdownWithVariables(template, vars(prénom))
+
+  it("fills both spellings and leaves unknown keys as written", () => {
+    expect(render("Bonjour {{prenom}} !", "Alex")).toContain("Bonjour Alex !")
+    expect(render("Merci {prenom} !", "Alex")).toContain("Merci Alex !")
+    expect(render("{{inconnu}}", "Alex")).toContain("{{inconnu}}")
   })
 
-  it("leaves unknown keys untouched", () => {
-    expect(interpolate("{{inconnu}}", {})).toBe("{{inconnu}}")
+  // Regression #1046: values were substituted before parsing, so a first name was read as Markdown.
+  it("shows a Markdown link in a first name as text, not as a link", () => {
+    const html = render("Merci {prénom} !", "[Cliquez ici](https://evil.example/login)")
+    expect(html).not.toContain("<a")
+    expect(html).not.toContain("href")
+    expect(html).toContain("[Cliquez ici](https://evil.example/login)")
   })
 
-  it("also fills the single-brace spelling of the message templates (regression: {prenom} shown raw on the personal page)", () => {
-    expect(interpolate("Merci {prenom} !", { prenom: "Alex" })).toBe("Merci Alex !")
+  it("does not turn a bare URL, a www address or an email address in a first name into a link (GFM autolinks)", () => {
+    for (const name of ["https://evil.example/login", "www.evil.example", "pirate@evil.example", "<https://evil.example>"]) {
+      const html = render("Merci {prénom} !", name)
+      expect(html, name).not.toContain("<a")
+      expect(html, name).not.toContain("href")
+    }
+  })
+
+  it("does not turn a Markdown image in a first name into an image", () => {
+    const html = render("Merci {prénom} !", "![x](https://evil.example/pixel.png)")
+    expect(html).not.toContain("<img")
+    expect(html).toContain("![x](https://evil.example/pixel.png)")
+  })
+
+  it("escapes HTML in a first name", () => {
+    const html = render("Merci {prénom} !", '<a href="https://evil.example">x</a><img src=x onerror=alert(1)>')
+    expect(html).not.toContain("<a")
+    expect(html).not.toContain("<img")
+    expect(html).toContain("&lt;a href=")
+  })
+
+  it("does not let other Markdown syntax in a value change the formatting", () => {
+    const html = render("Merci {prénom} !", "**gras** _ital_ `code` # titre")
+    expect(html).not.toMatch(/<(strong|em|code|h1)/)
+    expect(html).toContain("**gras** _ital_ `code` # titre")
+  })
+
+  it("keeps a value literal inside the organizer's own formatting and link labels", () => {
+    expect(render("**Bravo {prénom}**", "[x](https://evil.example)")).toMatch(/<strong>Bravo \[x\]\(https:\/\/evil\.example\)<\/strong>/)
+    const html = render("[Votre page, {prénom}](https://www.benevol.app/)", "https://evil.example")
+    expect(html.match(/<a /g)).toHaveLength(1)
+    expect(html).toContain('href="https://www.benevol.app/"')
+    expect(html).toContain("Votre page, https://evil.example</a>")
+  })
+
+  it("does not fill placeholders in URL attributes or in the label of a bare URL", () => {
+    const link = render("[Plan](https://example.org/{prénom}) ![Carte](https://example.org/{prénom}.png)", "evil")
+    expect(link).not.toContain("evil")
+    const auto = render("Voir https://example.org/?n={prénom} ici", "evil")
+    expect(auto).not.toContain("evil")
+  })
+
+  it("renders legitimate templates exactly as before (fill then render)", () => {
+    const templates = [
+      "Merci {prénom} !",
+      "# Bienvenue {prénom}\n\nRendez-vous **{date}** à _{heure}_ pour {{créneau}}.",
+      "- {prénom}, pense à ta gourde\n- Parking : [plan](https://example.org/plan)\n- Contact : https://example.org",
+      "> Merci {prénom}\n\n| Poste | Heure |\n| --- | --- |\n| {créneau} | {heure} |",
+      "Bonjour {prenom},\nligne deux\n\n1. un\n2. deux\n\n`{heure}`\n\n~~barré~~ <b>{prénom}</b>",
+      "{inconnu} {{ PRÉNOM }} {date}",
+    ]
+    for (const name of ["Lucas", "Marie-Hélène", "Jean Paul", "Zoé & Léa", "O'Neil"]) {
+      for (const t of templates) {
+        expect(render(t, name), `${t} / ${name}`).toBe(renderMarkdown(fillVariables(t, vars(name))))
+      }
+    }
   })
 })

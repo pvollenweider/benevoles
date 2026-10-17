@@ -18,13 +18,40 @@ function key(name: string): string {
   return name.trim().normalize("NFD").replace(/[̀-ͯ]/g, "").toLowerCase()
 }
 
-/** Replaces `{prénom}`, `{{prenom}}`… in `text` by the values of `vars` (keys compared without accent or case). */
-export function fillVariables(text: string, vars: Record<string, string>): string {
+/** A piece of a template: literal template text, or the value of a known variable. */
+export type VariablePart = { text: string } | { value: string }
+
+/**
+ * Cuts `text` into literal template pieces and variable values (keys compared without accent or
+ * case; unknown names stay in the literal text as written). The Markdown renderer uses it to
+ * insert values as text after parsing the trusted template, so a value is never read as syntax.
+ */
+export function splitVariables(text: string, vars: Record<string, string>): VariablePart[] {
   const values = new Map(Object.entries(vars).map(([k, v]) => [key(k), v]))
-  return text.replace(TOKEN, (match, double: string | undefined, single: string | undefined) => {
-    const k = key(double ?? single ?? "")
-    return values.has(k) ? (values.get(k) as string) : match
-  })
+  const parts: VariablePart[] = []
+  let literal = ""
+  let last = 0
+  for (const m of text.matchAll(TOKEN)) {
+    const k = key(m[1] ?? m[2] ?? "")
+    if (!values.has(k)) continue
+    literal += text.slice(last, m.index)
+    if (literal) parts.push({ text: literal })
+    literal = ""
+    parts.push({ value: values.get(k) as string })
+    last = m.index + m[0].length
+  }
+  literal += text.slice(last)
+  if (literal) parts.push({ text: literal })
+  return parts
+}
+
+/**
+ * Replaces `{prénom}`, `{{prenom}}`… in `text` by the values of `vars` (keys compared without
+ * accent or case). Plain text only (the text part of an email): Markdown goes through
+ * renderMarkdownWithVariables, which keeps the values out of the Markdown syntax.
+ */
+export function fillVariables(text: string, vars: Record<string, string>): string {
+  return splitVariables(text, vars).map((p) => ("value" in p ? p.value : p.text)).join("")
 }
 
 /**
