@@ -4,6 +4,7 @@
 import { NextResponse } from "next/server"
 import { z } from "zod"
 import { env } from "@/lib/env"
+import { isCronAuthorized } from "@/lib/cron-auth"
 import { heartbeat, isJobName, JOB_NAMES } from "@/lib/job-runs"
 import { validationError } from "@/lib/api-error"
 
@@ -16,11 +17,7 @@ const schema = z.object({
 
 // Same rule as the other cron routes: Bearer CRON_SECRET, localhost in dev only.
 function isAuthorized(req: Request): boolean {
-  const expected = env.CRON_SECRET
-  if (expected) return req.headers.get("authorization") === `Bearer ${expected}`
-  if (process.env.NODE_ENV === "production") return false
-  const host = req.headers.get("host") ?? ""
-  return host.startsWith("localhost") || host.startsWith("127.0.0.1")
+  return isCronAuthorized(req, env.CRON_SECRET)
 }
 
 /** Heartbeat of a job that runs outside the app (#383): the backup CronJobs, the manual restore test. */

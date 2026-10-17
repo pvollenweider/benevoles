@@ -3,6 +3,7 @@
 
 import { NextResponse } from "next/server"
 import { env, releaseCheckEnabled } from "@/lib/env"
+import { isCronAuthorized } from "@/lib/cron-auth"
 import { prisma } from "@/lib/prisma"
 import { fetchLatestRelease } from "@/lib/release-check-fetch"
 import { shouldNotify } from "@/lib/release-check"
@@ -14,11 +15,7 @@ export const dynamic = "force-dynamic"
 
 // Same rule as the other cron routes: Bearer CRON_SECRET, localhost in dev only.
 function isAuthorized(req: Request): boolean {
-  const expected = env.CRON_SECRET
-  if (expected) return req.headers.get("authorization") === `Bearer ${expected}`
-  if (process.env.NODE_ENV === "production") return false
-  const host = req.headers.get("host") ?? ""
-  return host.startsWith("localhost") || host.startsWith("127.0.0.1")
+  return isCronAuthorized(req, env.CRON_SECRET)
 }
 
 export async function GET(req: Request) { return run(req) }

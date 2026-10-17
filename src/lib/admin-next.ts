@@ -14,7 +14,7 @@ export const DEFAULT_ADMIN_NEXT = "/admin/events"
 const MAX_NEXT_LENGTH = 2048
 
 /**
- * `next` of /api/super-admin/use-org/[id] when it is a same-origin admin page, the events list
+ * `next` of the super admin's organization switch when it is a same-origin admin page, the events list
  * otherwise: never an absolute or protocol-relative URL (open redirect), never outside /admin/.
  * Anything ambiguous (backslashes, control characters or spaces, encoded slashes, backslashes or
  * dots, dot segments) is refused rather than normalised. The fragment is dropped.
@@ -49,7 +49,40 @@ export function adminEventIdFromPath(path: string | null | undefined): string | 
   return id
 }
 
-/** The organization switch that opens `path` in the organization `orgId`. */
+/**
+ * The confirmation page of the organization switch that opens `path` in the organization `orgId`
+ * (#1048): opening it changes nothing, its button posts the switch (orgSwitchAction).
+ */
 export function orgSwitchUrl(orgId: string, path: string): string {
-  return `/api/super-admin/use-org/${encodeURIComponent(orgId)}?next=${encodeURIComponent(safeAdminNext(path))}`
+  return `/super-admin/use-org/${encodeURIComponent(orgId)}?next=${encodeURIComponent(safeAdminNext(path))}`
+}
+
+/** Where the confirmation page and the organization's « Gérer » button post the switch. */
+export function orgSwitchAction(orgId: string): string {
+  return `/api/super-admin/use-org/${encodeURIComponent(orgId)}`
+}
+
+/**
+ * The absolute address the switch redirects to (#1048), never built from the forwarded host
+ * headers a client can choose. It stays on the host the browser used (the `Host` header) when that
+ * host is the configured site address (NEXT_PUBLIC_APP_URL) or one of its organizations'
+ * subdomains, with the configured scheme: the session and `sa-org-id` cookies belong to that host.
+ * Any other host goes to the configured address; the request's own origin only when nothing is
+ * configured (development).
+ */
+export function canonicalRedirect(path: string, configuredAppUrl: string | undefined, requestUrl: string, requestHost: string | null): string {
+  let configured: URL | null = null
+  try {
+    configured = configuredAppUrl ? new URL(configuredAppUrl) : null
+  } catch {
+    configured = null
+  }
+  if (!configured) return new URL(path, new URL(requestUrl).origin).toString()
+  const host = (requestHost ?? "").trim().toLowerCase()
+  const hostname = host.replace(/:\d+$/, "")
+  const baseDomain = configured.hostname.replace(/^www\./, "")
+  const ownHost = /^[a-z0-9.-]+(:\d+)?$/.test(host)
+    && (hostname === configured.hostname || hostname === baseDomain || hostname.endsWith(`.${baseDomain}`))
+  const base = ownHost ? `${configured.protocol}//${host}` : configured.origin
+  return new URL(path, base).toString()
 }

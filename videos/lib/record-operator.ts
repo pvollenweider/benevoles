@@ -203,7 +203,7 @@ export async function recordOperator(options: { page: Page; base: string; direct
       await at(.04); await go("/admin/events")
       await page.waitForURL(/\/super-admin\/organizations/)
       await at(.28); await go("/super-admin/organizations/formation-operateur-a")
-      await at("Depuis son détail"); await tap(page, page.getByRole("link", { name: "Gérer l'organisation Formation Opérateur Parc", exact: true }))
+      await at("Depuis son détail"); await tap(page, page.getByRole("button", { name: "Gérer l'organisation Formation Opérateur Parc", exact: true }))
       await page.waitForURL(/\/admin\/events/)
       await page.getByRole("link", { name: "Parc — Fête de formation", exact: true }).waitFor()
       assert(!(await page.locator("body").innerText()).includes("Quartier — Fête de formation"))

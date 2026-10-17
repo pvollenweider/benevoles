@@ -4,6 +4,7 @@
 import { NextResponse } from "next/server"
 import { recordJobRun } from "@/lib/job-runs"
 import { env } from "@/lib/env"
+import { isCronAuthorized } from "@/lib/cron-auth"
 import { deliverOutbox } from "@/lib/notifications/outbox"
 import { dispatchScheduledMessages } from "@/lib/scheduled-message-dispatch"
 import { reportError } from "@/lib/report-error"
@@ -12,11 +13,7 @@ export const dynamic = "force-dynamic"
 
 // Same auth as the other cron routes: `Authorization: Bearer <CRON_SECRET>`, localhost in dev.
 function isAuthorized(req: Request): boolean {
-  const expected = env.CRON_SECRET
-  if (expected) return req.headers.get("authorization") === `Bearer ${expected}`
-  if (process.env.NODE_ENV === "production") return false
-  const host = req.headers.get("host") ?? ""
-  return host.startsWith("localhost") || host.startsWith("127.0.0.1")
+  return isCronAuthorized(req, env.CRON_SECRET)
 }
 
 /**

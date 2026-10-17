@@ -2,7 +2,7 @@ import { describe, it, expect, vi, afterEach } from "vitest"
 
 vi.mock("../report-error", () => ({ reportError: () => () => {} }))
 
-import { decide, isRateLimited, memoryStore, rateLimit, type RateLimitStore } from "../rate-limit"
+import { decide, isRateLimited, memoryStore, rateLimit, releaseHit, reserveHit, type RateLimitStore } from "../rate-limit"
 
 const HOUR = 60 * 60 * 1000
 
@@ -74,5 +74,32 @@ describe("rateLimit (#322)", () => {
   it("never tells a refused client to retry after 0 seconds", () => {
     expect(decide({ count: 5, msLeft: 200 }, 3).retryAfter).toBe(1)
     expect(decide({ count: 5, msLeft: 1500 }, 3).retryAfter).toBe(2)
+  })
+})
+
+describe("reserveHit / releaseHit (#1048)", () => {
+  it("counts a hit and gives it back, never below zero", async () => {
+    const store = memoryStore()
+    expect((await reserveHit("k", HOUR, store))?.count).toBe(1)
+    expect((await reserveHit("k", HOUR, store))?.count).toBe(2)
+    await releaseHit("k", store)
+    expect((await store.peek("k"))?.count).toBe(1)
+    await releaseHit("k", store)
+    await releaseHit("k", store)
+    expect((await store.peek("k"))?.count).toBe(0)
+  })
+
+  it("returns null and keeps going when the store fails", async () => {
+    const broken: RateLimitStore = { hit: () => Promise.reject(new Error("db down")), peek: () => Promise.reject(new Error("db down")), release: () => Promise.reject(new Error("db down")) }
+    expect(await reserveHit("k", HOUR, broken)).toBeNull()
+    await expect(releaseHit("k", broken)).resolves.toBeUndefined()
+  })
+
+  it("does nothing on a store without release", async () => {
+    const base = memoryStore()
+    const store: RateLimitStore = { hit: base.hit, peek: base.peek }
+    await reserveHit("k", HOUR, store)
+    await releaseHit("k", store)
+    expect((await store.peek("k"))?.count).toBe(1)
   })
 })

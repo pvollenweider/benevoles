@@ -6,7 +6,8 @@ import { authConfig } from "./auth.config"
 import { NextResponse } from "next/server"
 import { ORG_HEADER, withOrgHeader } from "@/lib/org-subdomain"
 import { apexRedirectUrl, orgHostApexRedirectUrl } from "@/lib/apex-redirect"
-import { apexBaseUrl } from "@/lib/urls"
+import { apexBaseUrl, configuredAppUrl } from "@/lib/urls"
+import { checkAdminMutation } from "@/lib/request-origin"
 import { frameHeaders } from "@/lib/security-headers"
 import { isServerNotFound, NOT_FOUND_ROUTE } from "@/lib/server-not-found"
 import { loadDocUnits, resolveDocSlug } from "@/lib/doc-units"
@@ -61,6 +62,11 @@ export default auth((req) => {
   // videos, legal and features pages answered on every organization's host too. ---
   const orgHostTarget = orgHostApexRedirectUrl(host, `${pathname}${req.nextUrl.search}`, apexBaseUrl())
   if (orgHostTarget) return NextResponse.redirect(orgHostTarget, 308)
+
+  // --- Cross-site request forgery (#1048): a state-changing call to the admin APIs must come from
+  // one of this site's own pages and carry JSON (policy in src/lib/request-origin.ts). ---
+  const refused = checkAdminMutation({ method: req.method, pathname, headers: req.headers, configuredAppUrl: configuredAppUrl(), nodeEnv: process.env.NODE_ENV })
+  if (refused) return NextResponse.json({ error: refused.error }, { status: refused.status })
 
   // --- Auth guards ---
   const isSuperAdminPath = pathname.startsWith("/super-admin")

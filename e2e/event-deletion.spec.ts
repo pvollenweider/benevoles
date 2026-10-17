@@ -55,7 +55,7 @@ test("deleting an event never affects another event or organization", async ({ b
   })
   expect(orgRes.ok()).toBeTruthy()
   const orgB: { id: string; slug: string } = (await orgRes.json()).org
-  await superAdmin.page.request.get(`/api/super-admin/use-org/${orgB.id}`) // super admin now acts inside org B
+  await superAdmin.page.request.post(`/api/super-admin/use-org/${orgB.id}`) // super admin now acts inside org B
   const twinB = await createArchivedEventWithShift(superAdmin.page.request, sharedTitle)
   const otherB = await createArchivedEventWithShift(superAdmin.page.request, `E2E Other B ${stamp}`)
 

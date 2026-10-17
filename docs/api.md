@@ -16,7 +16,7 @@ L'authentification et l'isolation entre organisations sont décrites dans [roles
 
 ## Limites de requêtes
 
-Les limites utilisent `rateLimit()` de `src/lib/rate-limit.ts` : fenêtre fixe, compteurs dans la table `RateLimit` partagés entre les instances, lignes expirées purgées par le nettoyage nocturne. Si la table est injoignable, la requête passe et l'erreur est signalée. Les routes publiques comptent par IP (`X-Forwarded-For` posé par Traefik), les envois et imports admin par organisation ; au-delà, `429`. La connexion et la vérification du mot de passe actuel ont leur propre budget sur 15 minutes (`src/lib/admin-session.ts`) : 10 échecs par adresse email saisie et 30 par IP pour la connexion, 5 par compte et 20 par IP pour le mot de passe actuel. Les valeurs de chaque route figurent dans les tableaux ci-dessous.
+Les limites utilisent `rateLimit()` de `src/lib/rate-limit.ts` : fenêtre fixe, compteurs dans la table `RateLimit` partagés entre les instances, lignes expirées purgées par le nettoyage nocturne. Si la table est injoignable, la requête passe et l'erreur est signalée. Les routes publiques comptent par IP (`X-Forwarded-For` posé par Traefik), les envois et imports admin par organisation ; au-delà, `429`. La connexion et la vérification du mot de passe actuel ont leur propre budget sur 15 minutes (`src/lib/admin-session.ts`) : 30 échecs par IP et 10 par IP pour une même adresse email pour la connexion, avec une attente croissante (jusqu'à 8 s) au-delà de 5 échecs sur un compte, 5 par compte et 20 par IP pour le mot de passe actuel. Les valeurs de chaque route figurent dans les tableaux ci-dessous.
 
 ## Public
 
@@ -50,6 +50,8 @@ Les limites utilisent `rateLimit()` de `src/lib/rate-limit.ts` : fenêtre fixe, 
 ## Admin (organisation)
 
 Toutes ces routes sont ouvertes aux organisateurs, sauf les méthodes marquées « (propriétaire) ». La matrice complète est `PERMISSIONS` dans `src/lib/permissions.ts` ; un test vérifie qu'elle couvre chaque route et chaque méthode.
+
+Pour les routes admin et super admin, `src/proxy.ts` refuse un `POST`, `PUT`, `PATCH` ou `DELETE` venu d'une autre origine (`403`, règle complète dans `src/lib/request-origin.ts`) et un corps qui n'est pas déclaré `application/json` (`415`), sauf l'import des membres (`multipart/form-data`), le logo (image) et le changement d'organisation du super admin (formulaire). Un client hors navigateur (script, tests) peut omettre `Origin`.
 
 | Route | Méthodes | Rôle |
 |-------|----------|------|
@@ -123,7 +125,7 @@ Toutes ces routes sont ouvertes aux organisateurs, sauf les méthodes marquées 
 | `/api/super-admin/organizations` | GET, POST | Lister, créer des organisations (renvoie le lien d'invitation du premier admin) |
 | `/api/super-admin/organizations/[id]` | GET, PATCH, DELETE | Lire, modifier (nom, slug, activation), supprimer |
 | `/api/super-admin/organizations/[id]/send-invite` | POST | Envoyer l'email d'invitation aux admins de l'organisation qui n'ont pas encore activé leur compte ; `{ "adminId" }` facultatif pour un seul admin |
-| `/api/super-admin/use-org/[id]` | GET | Enregistre l'organisation dans le cookie `sa-org-id` puis redirige vers `/admin/events` |
+| `/api/super-admin/use-org/[id]` | POST | Enregistre l'organisation dans le cookie `sa-org-id` puis redirige (`303`, sur `NEXT_PUBLIC_APP_URL`) vers `next` (champ de formulaire ou paramètre, page `/admin/` seulement) ou `/admin/events`. `GET` ne change rien et ouvre la page de confirmation `/super-admin/use-org/[id]` |
 | `/api/super-admin/profile` | PATCH | Changer l'email ou le mot de passe du super admin : `currentPassword` obligatoire, mêmes règles et même limite d'échecs (`429`) que `/api/admin/settings/password` ; un nouveau mot de passe ferme toutes les autres sessions |
 | `/api/super-admin/product-updates` | GET | Historique des envois, nombre d'administrateurs abonnés (#200) |
 | `/api/super-admin/product-updates/send` | POST | Diffuser une communication à tous les administrateurs actifs et abonnés |

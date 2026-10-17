@@ -7,6 +7,7 @@ import { pickShiftInfo, withDayContact, withSectorLeaders } from "@/lib/shift-in
 import { parseNotificationSettings, reminderEnabled } from "@/lib/notification-settings"
 import { recordJobRun } from "@/lib/job-runs"
 import { env } from "@/lib/env"
+import { isCronAuthorized } from "@/lib/cron-auth"
 import { prisma } from "@/lib/prisma"
 import { sendNotification } from "@/lib/notifications"
 import { promoteNextInWaitlist, reconcileWaitlists } from "@/lib/waitlist"
@@ -26,12 +27,7 @@ export const dynamic = "force-dynamic"
 // In dev, if CRON_SECRET is unset we allow localhost requests so a manual
 // `curl http://localhost:3000/api/cron/reminders` works for testing.
 function isAuthorized(req: Request): boolean {
-  const expected = env.CRON_SECRET
-  if (expected) return req.headers.get("authorization") === `Bearer ${expected}`
-  // No secret configured: fail-closed in production, allow localhost in dev.
-  if (process.env.NODE_ENV === "production") return false
-  const host = req.headers.get("host") ?? ""
-  return host.startsWith("localhost") || host.startsWith("127.0.0.1")
+  return isCronAuthorized(req, env.CRON_SECRET)
 }
 
 type Window = { kind: "reminder_j2" | "reminder_j1" | "reminder_dd"; field: "reminderJ2Sent" | "reminderJ1Sent" | "reminderDdSent"; minHours: number; maxHours: number }

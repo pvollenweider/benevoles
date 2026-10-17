@@ -9,11 +9,12 @@
  */
 import { createHmac } from "crypto"
 import { env } from "./env"
+import { safeEqual } from "./safe-equal"
 
 export function unsubscribeToken(adminId: string): string {
   return createHmac("sha256", env.AUTH_SECRET).update(adminId).digest("hex").slice(0, 32)
 }
 
 export function verifyUnsubscribeToken(adminId: string, token: string): boolean {
-  return token === unsubscribeToken(adminId)
+  return safeEqual(token, unsubscribeToken(adminId))
 }

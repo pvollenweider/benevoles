@@ -15,6 +15,7 @@ import ConfirmActionModal from "@/components/admin/ConfirmActionModal"
 import InactivityPanel from "@/components/super-admin/InactivityPanel"
 import { useRouter } from "next/navigation"
 import Link from "next/link"
+import { orgSwitchAction } from "@/lib/admin-next"
 
 type Admin = {
   id: string
@@ -264,13 +265,16 @@ export default function OrgDetail({ org, cumulative, inactivity }: { org: Org; c
         </div>
 
         <div className="flex items-center gap-2">
-          <a
-            href={`/api/super-admin/use-org/${org.id}`}
-            aria-label={`Gérer l'organisation ${org.name}`}
-            className="text-sm bg-blue-600 text-white px-4 py-2 rounded-xl font-medium hover:bg-blue-700"
-          >
-            Gérer →
-          </a>
+          {/* A POST (#1048): opening a link must not switch the organization. */}
+          <form method="post" action={orgSwitchAction(org.id)}>
+            <button
+              type="submit"
+              aria-label={`Gérer l'organisation ${org.name}`}
+              className="text-sm bg-blue-600 text-white px-4 py-2 rounded-xl font-medium border border-transparent hover:bg-blue-700 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-blue-600"
+            >
+              Gérer →
+            </button>
+          </form>
           {status === "pending" && (
             <>
               <button

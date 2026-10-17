@@ -8,6 +8,7 @@ import { daysAgo, RETENTION_DAYS } from "@/lib/retention"
 import { NextResponse } from "next/server"
 import { recordJobRun } from "@/lib/job-runs"
 import { env } from "@/lib/env"
+import { isCronAuthorized } from "@/lib/cron-auth"
 import { prisma } from "@/lib/prisma"
 import { encryptLegacyTokens } from "@/lib/token-encryption-job"
 import { reportError } from "@/lib/report-error"
@@ -27,12 +28,7 @@ import { runInactivityProcedure, type ProcedureCounts } from "@/lib/org-inactivi
 export const dynamic = "force-dynamic"
 
 function isAuthorized(req: Request): boolean {
-  const expected = env.CRON_SECRET
-  if (expected) return req.headers.get("authorization") === `Bearer ${expected}`
-  // No secret configured: fail-closed in production, allow localhost in dev.
-  if (process.env.NODE_ENV === "production") return false
-  const host = req.headers.get("host") ?? ""
-  return host.startsWith("localhost") || host.startsWith("127.0.0.1")
+  return isCronAuthorized(req, env.CRON_SECRET)
 }
 
 export async function GET(req: Request) { return run(req) }
