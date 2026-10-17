@@ -18,7 +18,7 @@ import { sendPushToVolunteer } from "../push"
 describe("push to a member of a deactivated organisation (#814)", () => {
   beforeEach(() => {
     webpushSend.mockReset().mockResolvedValue({})
-    db.pushSubscription.findMany.mockReset().mockResolvedValue([{ id: "s1", endpoint: "https://push.example/1", auth: "a", p256dh: "p" }])
+    db.pushSubscription.findMany.mockReset().mockResolvedValue([{ id: "s1", endpoint: "https://fcm.googleapis.com/fcm/send/1", auth: "a", p256dh: "p" }])
     db.volunteer.findUnique.mockReset().mockResolvedValue({ organizationId: "org-1" })
     db.organization.findUnique.mockReset()
   })

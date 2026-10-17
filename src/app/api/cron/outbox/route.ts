@@ -1,7 +1,7 @@
 // SPDX-FileCopyrightText: 2026 Philippe Vollenweider
 // SPDX-License-Identifier: AGPL-3.0-only
 
-import { NextResponse } from "next/server"
+import { after, NextResponse } from "next/server"
 import { recordJobRun } from "@/lib/job-runs"
 import { env } from "@/lib/env"
 import { isCronAuthorized } from "@/lib/cron-auth"
@@ -20,11 +20,12 @@ function isAuthorized(req: Request): boolean {
  * Every 5 minutes (k8s/cronjob-outbox.yaml): sends the emails that became due, chiefly the grouped
  * « added by an organizer » email (#916), which waits a few minutes after the last add. The hourly
  * reminders run still retries failed sends too. First, the scheduled messages that became due
- * (#1019) are turned into queued emails, delivered in the same run.
+ * (#1019) are turned into queued emails, delivered in the same run; their push notifications go
+ * after the response, so a slow push service never holds up the emails (#1041).
  */
 export async function POST(req: Request) {
   if (!isAuthorized(req)) return NextResponse.json({ error: "Unauthorized" }, { status: 401 })
-  const scheduled = await dispatchScheduledMessages().catch((e) => {
+  const scheduled = await dispatchScheduledMessages(new Date(), { deferPush: (job) => after(job) }).catch((e) => {
     reportError("scheduled_message.cron")(e)
     return null
   })

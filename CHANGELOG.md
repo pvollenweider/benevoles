@@ -11,6 +11,10 @@ Format basé sur [Keep a Changelog](https://keepachangelog.com/fr/1.0.0/).
 
 ## [Unreleased]
 
+### Sécurité
+
+- **Notifications push mieux encadrées** (#1041) : un abonnement push n'est accepté que vers les services de notification des navigateurs (Chrome, Firefox, Edge, Safari), en HTTPS ; les abonnements enregistrés auparavant qui ne respectent pas cette règle sont supprimés au premier envoi au lieu d'être contactés. Chaque envoi a un délai maximal, un bénévole garde au plus 5 appareils abonnés (le plus ancien laisse sa place), et les notifications d'un message programmé partent après les emails, qu'elles ne peuvent plus retarder.
+
 ### Corrigé
 
 - **Doublons possibles et adresses numérotées** (#1037) : deux adresses email qui ne diffèrent que par leurs chiffres (`benevole1@…` et `benevole2@…`) ne sont plus proposées comme doublons, et une adresse courte (moins de 8 caractères avant l'arobase) n'est rapprochée que pour une seule lettre d'écart. Une organisation avec des adresses numérotées voyait des centaines de paires sans fondement.

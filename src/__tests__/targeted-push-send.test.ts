@@ -21,7 +21,7 @@ vi.mock("@/lib/prisma", () => ({
   },
 }))
 
-const sub = (id: string) => ({ id, endpoint: `https://push/${id}`, auth: "a", p256dh: "p" })
+const sub = (id: string) => ({ id, endpoint: `https://fcm.googleapis.com/fcm/send/${id}`, auth: "a", p256dh: "p" })
 
 describe("sendTargetedPush", () => {
   beforeEach(() => vi.clearAllMocks())
@@ -41,6 +41,61 @@ describe("sendTargetedPush", () => {
     expect(payloads.filter((p) => p.url === "/my/tok-b")).toHaveLength(1)
     expect(m.deleteMany).toHaveBeenCalledWith({ where: { id: { in: ["a2"] } } })
     expect(m.update).toHaveBeenCalledWith({ where: { id: "msg-1" }, data: { pushSent: { increment: 2 }, pushFailed: { increment: 1 } } })
+  })
+
+  // #1041: rows stored before the endpoint check are never contacted, and are removed.
+  it("skips and removes stored endpoints outside the Web Push services", async () => {
+    m.findMany.mockResolvedValue([
+      sub("ok"),
+      { id: "bad-host", endpoint: "https://push.example.com/x", auth: "a", p256dh: "p" },
+      { id: "bad-port", endpoint: "https://fcm.googleapis.com:8443/x", auth: "a", p256dh: "p" },
+    ])
+    m.send.mockResolvedValue({})
+    const { sendPushToVolunteer } = await import("@/lib/push")
+    expect(await sendPushToVolunteer("alice", { title: "T", body: "B" })).toEqual({ sent: 1, failed: 0, removed: 2 })
+    expect(m.send).toHaveBeenCalledTimes(1)
+    expect(m.send.mock.calls[0][0].endpoint).toBe("https://fcm.googleapis.com/fcm/send/ok")
+    expect(m.deleteMany).toHaveBeenCalledWith({ where: { id: { in: ["bad-host", "bad-port"] } } })
+  })
+
+  it("hands web-push a finite timeout", async () => {
+    m.findMany.mockResolvedValue([sub("a1")])
+    m.send.mockResolvedValue({})
+    const { sendPushToVolunteer, PUSH_SEND_TIMEOUT_MS } = await import("@/lib/push")
+    await sendPushToVolunteer("alice", { title: "T", body: "B" })
+    expect(PUSH_SEND_TIMEOUT_MS).toBe(10_000)
+    expect(m.send.mock.calls[0][2]).toEqual({ TTL: 3 * 24 * 3600, timeout: 10_000 })
+  })
+
+  it("gives up on a send that never settles and counts it failed", async () => {
+    vi.useFakeTimers()
+    try {
+      m.findMany.mockResolvedValue([sub("slow"), sub("fast")])
+      m.send.mockImplementation((s: { endpoint: string }) => s.endpoint.endsWith("slow") ? new Promise(() => {}) : Promise.resolve({}))
+      const { sendPushToVolunteer, PUSH_SEND_DEADLINE_MS } = await import("@/lib/push")
+      const pending = sendPushToVolunteer("alice", { title: "T", body: "B" })
+      await vi.advanceTimersByTimeAsync(PUSH_SEND_DEADLINE_MS + 1)
+      expect(await pending).toEqual({ sent: 1, failed: 1, removed: 0 })
+    } finally {
+      vi.useRealTimers()
+    }
+  })
+
+  it("sends to every recipient of a large message, a few at a time", async () => {
+    m.findMany.mockImplementation(async ({ where }: { where: { volunteerId: string } }) => [sub(where.volunteerId)])
+    let inFlight = 0
+    let peak = 0
+    m.send.mockImplementation(async () => {
+      inFlight++
+      peak = Math.max(peak, inFlight)
+      await new Promise((r) => setTimeout(r, 1))
+      inFlight--
+    })
+    const { sendTargetedPush } = await import("@/lib/push")
+    const targets = Array.from({ length: 12 }, (_, i) => ({ volunteerId: `v${i}`, url: `/my/t${i}` }))
+    expect(await sendTargetedPush("msg-2", targets, { title: "T", body: "B", tag: "x" })).toEqual({ sent: 12, failed: 0, removed: 0 })
+    expect(peak).toBeGreaterThan(1)
+    expect(peak).toBeLessThanOrEqual(5)
   })
 
   it("counts the devices of the recipients", async () => {

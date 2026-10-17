@@ -1,7 +1,8 @@
 import { describe, it, expect, vi, beforeEach } from "vitest"
 
 // The 5-minute delivery run (#916): same secret as the other cron routes, records its run.
-const m = vi.hoisted(() => ({ deliver: vi.fn(), record: vi.fn(), dispatch: vi.fn() }))
+const m = vi.hoisted(() => ({ deliver: vi.fn(), record: vi.fn(), dispatch: vi.fn(), after: vi.fn() }))
+vi.mock("next/server", async (orig) => ({ ...(await orig<typeof import("next/server")>()), after: m.after }))
 vi.mock("@/lib/env", () => ({ env: { CRON_SECRET: "s3cret" } }))
 vi.mock("@/lib/notifications/outbox", () => ({ deliverOutbox: m.deliver }))
 // Scheduled messages (#1019) are turned into queued emails first, in the same run.
@@ -34,6 +35,20 @@ describe("POST /api/cron/outbox", () => {
     expect(m.record).toHaveBeenCalledWith("outbox")
     // Dispatched before the delivery, so a due scheduled message leaves in the same run.
     expect(m.dispatch.mock.invocationCallOrder[0]).toBeLessThan(m.deliver.mock.invocationCallOrder[0])
+  })
+
+  // #1041: the push of a scheduled message runs after the response, never before the emails.
+  it("hands the scheduled messages' push to after()", async () => {
+    let deferred: (() => Promise<unknown>) | undefined
+    m.dispatch.mockImplementation(async (_now: Date, opts: { deferPush: (job: () => Promise<unknown>) => void }) => {
+      opts.deferPush(async () => "pushed")
+      return { sent: 1, skipped: 0, failed: 0 }
+    })
+    m.after.mockImplementation((job: () => Promise<unknown>) => { deferred = job })
+    expect((await POST(post("Bearer s3cret"))).status).toBe(200)
+    expect(m.after).toHaveBeenCalledOnce()
+    expect(m.deliver).toHaveBeenCalledOnce()
+    expect(await deferred!()).toBe("pushed")
   })
 
   it("still delivers the outbox when the scheduled dispatch throws", async () => {

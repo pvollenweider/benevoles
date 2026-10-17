@@ -15,6 +15,16 @@ import { reportError } from "./report-error"
 
 export type DispatchResult = { sent: number; skipped: number; failed: number }
 
+export type DispatchOptions = {
+  limit?: number
+  /**
+   * Runs a message's push delivery. By default it is awaited in place; the outbox cron hands it to
+   * `after()` so push services never delay the email delivery that follows (#1041). The outcomes
+   * are recorded on the history row either way.
+   */
+  deferPush?: (job: () => Promise<unknown>) => void
+}
+
 /**
  * Sends the scheduled messages that became due (#1019), from the outbox cron (every 5 minutes).
  *
@@ -30,7 +40,7 @@ export type DispatchResult = { sent: number; skipped: number; failed: number }
  * or nobody left in the audience mark it "skipped" with the reason, logged; a cancelled row is
  * never picked.
  */
-export async function dispatchScheduledMessages(now: Date = new Date(), opts: { limit?: number } = {}): Promise<DispatchResult> {
+export async function dispatchScheduledMessages(now: Date = new Date(), opts: DispatchOptions = {}): Promise<DispatchResult> {
   const due = await prisma.scheduledMessage.findMany({
     where: {
       OR: [
@@ -51,7 +61,7 @@ export async function dispatchScheduledMessages(now: Date = new Date(), opts: { 
     })
     if (count === 0) continue // cancelled or claimed by another run meanwhile
     try {
-      const outcome = await dispatchOne(row.id, now)
+      const outcome = await dispatchOne(row.id, now, opts.deferPush)
       result[outcome]++
     } catch (e) {
       // Back to "scheduled": tried again at the next run. Nothing was queued (the transaction
@@ -64,7 +74,7 @@ export async function dispatchScheduledMessages(now: Date = new Date(), opts: { 
   return result
 }
 
-async function dispatchOne(id: string, now: Date): Promise<"sent" | "skipped"> {
+async function dispatchOne(id: string, now: Date, deferPush?: DispatchOptions["deferPush"]): Promise<"sent" | "skipped"> {
   const sm = await prisma.scheduledMessage.findUniqueOrThrow({
     where: { id },
     include: { event: { select: { id: true, title: true, slug: true, organizationId: true, publicStatus: true, organization: { select: { name: true, slug: true, timeZone: true } } } } },
@@ -136,7 +146,9 @@ async function dispatchOne(id: string, now: Date): Promise<"sent" | "skipped"> {
       ...messagePushPayload(renderVariables(sm.subject, build.vars(r)), renderVariables(sm.message, build.vars(r))),
       url: r.editToken ? `/my/${r.editToken}` : r.signupUrl ? (() => { const u = new URL(r.signupUrl!); return u.pathname + u.search })() : `/${event.slug}`,
     }))
-    await sendTargetedPush(historyId, targets, { ...messagePushPayload(sm.subject, sm.message), tag: `message-${historyId}` }).catch(reportError("push.scheduled_message"))
+    const job = () => sendTargetedPush(historyId, targets, { ...messagePushPayload(sm.subject, sm.message), tag: `message-${historyId}` }).catch(reportError("push.scheduled_message"))
+    if (deferPush) deferPush(job)
+    else await job()
   }
 
   await logEvent({
