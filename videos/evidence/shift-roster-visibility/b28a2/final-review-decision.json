@@ -1,0 +1,78 @@
+{
+  "status": "READY",
+  "batch": "28A-2",
+  "videoSha256": "9d3d6f55cd5679ccfa7849fb7bb3bbc22ecd4eb19fe6a5e3745ab0cd7a3cd9e7",
+  "product": {
+    "commit": "84495b6313c09edc775306790a0823a639071561",
+    "sourceTree": "4f2fe9baf362976daf405b2317c9b4a9396b0d31",
+    "productSourceSha256": "fb1962bf80ac2e00748131368bb43238a80df2d4d47fe3f19c3875d52f0f6f2e",
+    "buildId": "jQiPFOLoEJz7j-X2GjLbK",
+    "snapshot": "/tmp/benevoles-video-production.bjbnl7ax",
+    "builtAt": "2026-10-21T17:57:02.001Z"
+  },
+  "fullTakes": 2,
+  "finalTake": 2,
+  "abortedPartialAttempts": 2,
+  "rehearsal": "full audio-timed, transition verified before both full takes",
+  "transition": "Bruno retained at relative 14.4s; Aline visible at 14.8s, inside independently identified clause 14.314–17.494s; final absolute bracket 98.435–98.835s.",
+  "chapters": [
+    {
+      "scene": "roster-confirm",
+      "checkpoints": 5,
+      "issues": []
+    },
+    {
+      "scene": "roster-existing",
+      "checkpoints": 4,
+      "issues": []
+    },
+    {
+      "scene": "roster-privacy",
+      "checkpoints": 3,
+      "issues": []
+    },
+    {
+      "scene": "roster-setting",
+      "checkpoints": 4,
+      "issues": []
+    },
+    {
+      "scene": "roster-signup",
+      "checkpoints": 4,
+      "issues": []
+    },
+    {
+      "scene": "roster-withdraw",
+      "checkpoints": 5,
+      "issues": []
+    }
+  ],
+  "tests": "1046 video tests; video types; targeted ESLint passed",
+  "fullSoundtrack": "entire final MP4 independently transcribed in all languages, no extras/problems; six final chapter narration audits pass",
+  "viewerTu": {
+    "asr": 0,
+    "vtt": 0
+  },
+  "ocrFrames": 303,
+  "contactSheetsInspected": 13,
+  "productBugs": [],
+  "subjectiveListening": "Real-time subjective listening unavailable; automated full chapter image/audio review and full-soundtrack recognition used, plus direct frame inspection.",
+  "music": {
+    "voicedWindows": 142,
+    "musicOnlyWindows": 1,
+    "smallestGapLu": 15.4,
+    "largestGapLu": 19.5,
+    "quietestMusicOnlyLufs": -33.4,
+    "loudestMusicOnlyLufs": -33.4,
+    "medianVoiceLufs": -16.2
+  },
+  "inputEffects": {
+    "effectsPreset": "soft-input-v2",
+    "music": "mixkit-tech-house-vibes-130.mp3",
+    "clicks": 15,
+    "keys": 0,
+    "effectsSha256": "ed9cc68b779ad63131b8b593181a96801246f25a1344881dd9b1f739e1a7177c",
+    "timelineSha256": "8998295b1c3fe2fdf1152495ee66bc73435ee39119e56649e7d4990eead1aef5",
+    "videoSha256": "9d3d6f55cd5679ccfa7849fb7bb3bbc22ecd4eb19fe6a5e3745ab0cd7a3cd9e7"
+  }
+}

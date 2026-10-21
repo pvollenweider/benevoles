@@ -2,6 +2,7 @@
 // SPDX-License-Identifier: AGPL-3.0-only
 /** Dedicated synthetic roster classroom; never alters another organisation. */
 import assert from "node:assert/strict"
+import { createHash } from "node:crypto"
 import { mkdir, writeFile } from "node:fs/promises"
 import { loadCurrentVideoPrisma } from "../videos/lib/current-product-prisma"
 const id = "video-shift-roster", slug = "formation-roster"
@@ -25,6 +26,10 @@ async function main() {
       await db.organization.create({ data: { id, slug, name: "Les amis de Montvert", timeZone: "Europe/Zurich", active: true, hasOrgInsurance: true, outboundEmailApprovedAt: new Date(), publicationApprovedAt: new Date(), volunteerCharter: "Merci de respecter les consignes de sécurité et les autres bénévoles." } })
       await db.adminUser.create({ data: { id: `${id}-owner`, organizationId: id, email: "video.roster.owner@example.org", name: "Élodie Rochat", passwordHash: source.passwordHash, role: "admin", isActive: true } })
     }
+    // Repeated local takes must not inherit Aline's public-email hourly quota.
+    // Only this exact fictitious recipient/kind is reset; other limits stay intact.
+    const recipientHash = createHash("sha256").update("video.roster.aline@example.org").digest("hex").slice(0, 32)
+    await db.rateLimit.deleteMany({ where: { key: { in: [`email:recipient:${recipientHash}:registration_confirmation:hour`, `email:recipient:${recipientHash}:registration_confirmation:hour:held`] } } })
     const date = new Date("2031-05-10T00:00:00Z"), eventId = `${id}-event`
     await db.event.create({ data: { id: eventId, organizationId: id, slug: "fete-du-parc", title: "Fête du parc", startDate: date, endDate: date, location: "Parc de Montvert", publicStatus: "draft", remindersEnabled: false, shiftRosterEnabled: false } })
     for (const [i, roleName] of ["Accueil", "Buvette", "Rangement"].entries()) await db.shift.create({ data: { id: `${id}-shift-${i}`, eventId, date, roleName, label: roleName, startTime: ["09:00", "12:00", "16:00"][i], endTime: ["12:00", "14:00", "18:00"][i], capacity: 8, displayOrder: i } })

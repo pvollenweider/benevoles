@@ -1,0 +1,60 @@
+{
+  "model": "gemini-3.8-flash",
+  "reviewedAt": "2026-10-21T18:28:39.994Z",
+  "videoSha256": "9d3d6f55cd5679ccfa7849fb7bb3bbc22ecd4eb19fe6a5e3745ab0cd7a3cd9e7",
+  "promptSha256": "3774c1f4bb87cb904d313a0edd24fe4e1cc74570d06a7c423a05696d78060101",
+  "clipSha256": "e88f6e460dc046d5bd4763c51bd84caafdc8b5fce3ddba28907206523d8fda34",
+  "scene": "roster-confirm",
+  "review": {
+    "heardOpening": "Ouvrez maintenant le véritable email de confirmation",
+    "checkpoints": [
+      {
+        "spokenSeconds": 0.5,
+        "spoken": "Ouvrez maintenant le véritable email de confirmation.",
+        "visibleSeconds": 1,
+        "visible": "Affichage de l'email de confirmation adressé à Aline avec le bouton Gérer mes inscriptions.",
+        "sync": "aligned",
+        "severity": "none"
+      },
+      {
+        "spokenSeconds": 3.2,
+        "spoken": "Suivez son lien personnel.",
+        "visibleSeconds": 4.5,
+        "visible": "Clic sur le bouton Gérer mes inscriptions et chargement de la page Mes inscriptions.",
+        "sync": "aligned",
+        "severity": "none"
+      },
+      {
+        "spokenSeconds": 5.4,
+        "spoken": "Dans Qui est inscrit, vous voyez les autres bénévoles confirmés qui ont accepté",
+        "visibleSeconds": 5.5,
+        "visible": "Section Qui est inscrit visible avec les créneaux et bénévoles confirmés.",
+        "sync": "aligned",
+        "severity": "none"
+      },
+      {
+        "spokenSeconds": 18.2,
+        "spoken": "Cliquez sur Afficher mon nom.",
+        "visibleSeconds": 19,
+        "visible": "Clic sur le bouton Afficher mon nom qui bascule sur Masquer mon nom.",
+        "sync": "aligned",
+        "severity": "none"
+      },
+      {
+        "spokenSeconds": 20.6,
+        "spoken": "Votre prénom et l’initiale de votre nom sont maintenant visibles.",
+        "visibleSeconds": 19.5,
+        "visible": "Le texte indique que le nom est affiché sous la forme Aline M.",
+        "sync": "aligned",
+        "severity": "none"
+      }
+    ],
+    "issues": [],
+    "voice": {
+      "consistent": true,
+      "warm": true,
+      "observation": "Voix féminine claire, fluide et parfaitement intelligible, débit naturel bien calé sur les actions."
+    }
+  },
+  "note": "Automated observation of actual final video audio and images; not a claim of complete human validation"
+}

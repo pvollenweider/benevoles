@@ -1,0 +1,36 @@
+{
+  "audioSha256": "c3f444a0d685844ec913ececba1ef2d5c3e87365336e63c45e0fcf48f8704541",
+  "segment": "roster-withdraw",
+  "anchor": "Pourtant, sur sa propre page",
+  "heuristicStartMs": 12357,
+  "precedingClauseMs": [
+    10891,
+    13523
+  ],
+  "targetClauseMs": [
+    14314,
+    17494
+  ],
+  "cueMs": 14500,
+  "silenceMs": [
+    13523,
+    14314
+  ],
+  "verification": [
+    {
+      "start": 10.891292,
+      "end": 13.523292,
+      "result": {
+        "transcription": "Sur la page de Bruno, Alina a disparu de la liste."
+      }
+    },
+    {
+      "start": 14.31375,
+      "end": 17.494125,
+      "result": {
+        "transcription": "Pourtant sur sa propre page, Aline voit toujours les autres bénévoles"
+      }
+    }
+  ],
+  "method": "Independent transcription of two exact real-silence bounded WAV excerpts; original audio unchanged. Short-window approximate ASR timestamps alone rejected; transition follows measured silence end and stays within independently identified clause."
+}

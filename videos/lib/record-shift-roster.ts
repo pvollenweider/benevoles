@@ -98,6 +98,10 @@ export async function recordShiftRoster({ page, base, dir, scene, tap, settle, f
     await at("Sur la page de Bruno, Aline a disparu")
     await personal("bruno"); assert(!(await roster().innerText()).includes("Aline"))
     await at("Pourtant, sur sa propre page")
+    // Retained WAV: the heuristic selects an intra-sentence pause at 12.357 s.
+    // Short-window ASR identifies the next clause; its real preceding silence
+    // ends at 14.314 s. Land inside that clause, after the measured onset.
+    await at(14.5 / 22.001) /* mid-sentence: measured « Pourtant, sur sa propre page » */
     await go(aline); await roster().scrollIntoViewIfNeeded(); assert((await roster().innerText()).includes("David P."))
   })
   await scene("roster-existing", async at => {

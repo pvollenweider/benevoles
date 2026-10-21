@@ -1,0 +1,44 @@
+{
+  "model": "gemini-3.8-flash",
+  "reviewedAt": "2026-10-21T18:29:21.122Z",
+  "videoSha256": "9d3d6f55cd5679ccfa7849fb7bb3bbc22ecd4eb19fe6a5e3745ab0cd7a3cd9e7",
+  "promptSha256": "71ebe60878ee7e05e7e84e4ff53bff1ca224e1a34e83a52f5ba54d00761e44e9",
+  "clipSha256": "31167d6482d87040bce838e03259ab53878644fbfdce07e062581d2fbd7a7de7",
+  "scene": "roster-privacy",
+  "review": {
+    "heardOpening": "La liste ne montre ni email, ni téléphone",
+    "checkpoints": [
+      {
+        "spokenSeconds": 1.2,
+        "spoken": "La liste ne montre ni email, ni téléphone, ni réponse aux questions.",
+        "visibleSeconds": 1.2,
+        "visible": "Section « Qui est inscrit » affichant uniquement les prénoms et initiales des inscrits sans coordonnées.",
+        "sync": "aligned",
+        "severity": "none"
+      },
+      {
+        "spokenSeconds": 9.8,
+        "spoken": "Ces noms ne figurent ni sur la page publique",
+        "visibleSeconds": 9.9,
+        "visible": "Affichage de la page publique de l'événement « Fête du parc » sans mention des noms des bénévoles.",
+        "sync": "aligned",
+        "severity": "none"
+      },
+      {
+        "spokenSeconds": 18.2,
+        "spoken": "peut consulter la liste depuis son lien personnel.",
+        "visibleSeconds": 13,
+        "visible": "Retour sur la page récapitulative personnelle « Mes inscriptions » affichant la section des inscrits.",
+        "sync": "aligned",
+        "severity": "none"
+      }
+    ],
+    "issues": [],
+    "voice": {
+      "consistent": true,
+      "warm": true,
+      "observation": "Voix off féminine claire, posée et bien articulée, synchronisée avec les illustrations à l'écran."
+    }
+  },
+  "note": "Automated observation of actual final video audio and images; not a claim of complete human validation"
+}
