@@ -34,7 +34,7 @@ Désignez un ou plusieurs bénévoles responsables d'un poste (ex. « Bar »). C
 
 ### Les bénévoles aimeraient savoir qui est déjà inscrit sur un créneau.
 
-La page publique d'un événement n'affiche aucun nom : elle montre les places libres, jamais les personnes inscrites. Pour qu'une personne suive l'équipe d'un poste, désignez-la responsable de secteur : son lien personnel affiche qui est inscrit sur son poste.
+La page publique d'un événement n'affiche aucun nom : elle montre les places libres, jamais les personnes inscrites. Pour que les bénévoles confirmés voient entre eux qui est inscrit sur chaque créneau, activez le réglage **Montrer aux bénévoles confirmés qui est inscrit sur chaque créneau** : seuls ceux qui l'acceptent apparaissent, sur la page personnelle des autres (voir [Créer un événement](creer-un-evenement.md)). Pour qu'une personne suive l'équipe d'un poste, avec les coordonnées, désignez-la responsable de secteur : son lien personnel affiche qui est inscrit sur son poste.
 
 ### Je veux qu'une personne suive « son » poste sans lui donner accès à tout l'admin.
 

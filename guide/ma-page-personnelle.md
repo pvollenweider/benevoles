@@ -46,11 +46,13 @@ Le lien n'apparaît que tant que l'événement accepte des inscriptions. Quand e
 
 Si l'organisation l'a prévu pour l'événement, et dès que tu as une place confirmée, l'encadré **Qui est inscrit** montre, créneau par créneau, les autres bénévoles confirmés de l'événement qui ont choisi d'afficher leur nom : leur prénom et l'initiale de leur nom, par exemple « Aline M. ». Tu sais ainsi avec qui tu seras, et tu peux choisir d'autres créneaux avec des personnes que tu connais. Rien d'autre n'est montré : ni email, ni téléphone, ni réponses aux questions. Ces noms ne sont jamais sur la page publique de l'événement. L'encadré disparaît après le dernier jour de l'événement, ou si tu n'as plus de place confirmée (en liste d'attente ou en attente de validation, tu ne le vois pas).
 
+![Encadré « Qui est inscrit » de la page personnelle de Léa : créneau par créneau (« Accueil des exposants », deux « Vin chaud », « Rangement », chacun avec sa date et ses heures), les bénévoles qui ont choisi d'afficher leur nom, comme « Aline M. » et « Bastien R. », puis la phrase « Ton nom n'est pas affiché aux autres bénévoles », qui montre comment il apparaîtrait (« Léa F. »), et le bouton « Afficher mon nom »](/doc-img/public-roster-card.png)
+
 Ton nom n'y figure que si tu l'as choisi. Sous la liste, une phrase dit ce que voient les autres, avec un bouton :
 - **Afficher mon nom** : les autres bénévoles confirmés de l'événement voient ton prénom et l'initiale de ton nom sur tes créneaux confirmés ;
 - **Masquer mon nom** : ton nom disparaît aussitôt de leur page. Tu peux changer d'avis à tout moment, même après la date limite d'annulation, sans effet sur ton inscription. Masquer ton nom ne t'empêche pas de voir celui des autres.
 
-Si tu as coché la case à l'inscription, la page te demande de confirmer avec **Afficher mon nom** : ton nom n'apparaît qu'après cette confirmation, parce que n'importe qui peut taper une adresse email dans le formulaire alors que ta page personnelle s'ouvre avec le lien envoyé à cette adresse. C'est aussi le cas si tu t'inscris à d'autres créneaux sans passer par ta page personnelle. Si tu t'es inscrit avant que l'organisation active ce réglage, ton nom reste masqué tant que tu ne choisis pas de l'afficher. Le nom d'un bénévole de moins de 18 ans n'est jamais montré.
+Si tu as coché la case à l'inscription, la page te demande de confirmer avec **Afficher mon nom** : ton nom n'apparaît qu'après cette confirmation, parce que n'importe qui peut taper une adresse email dans le formulaire alors que ta page personnelle s'ouvre avec le lien envoyé à cette adresse. C'est aussi le cas si tu t'inscris à d'autres créneaux sans passer par ta page personnelle. Si tu t'es inscrit avant que l'organisation active ce réglage, ton nom reste masqué tant que tu ne choisis pas de l'afficher : aucun email ne te le signale, l'encadré apparaît simplement sur ta page la prochaine fois que tu l'ouvres (voir [Je me suis inscrit avant que l'organisation montre qui est inscrit : pourquoi mon nom n'apparaît pas ?](#je-me-suis-inscrit-avant-que-l-organisation-montre-qui-est-inscrit-pourquoi-mon-nom-n-apparait-pas)). Le nom d'un bénévole de moins de 18 ans n'est jamais montré.
 
 Ton lien personnel donne accès à cette liste : ne le partage pas.
 
@@ -96,3 +98,9 @@ Tes créneaux s'ajoutent à ton calendrier (téléphone, Google, Outlook, Apple�
 ## Mes disponibilités
 
 Tu peux indiquer, si tu le souhaites, **tes disponibilités** en général (matin, après-midi, soir, et une remarque comme « pas le dimanche »). C'est facultatif : cela aide l'organisation si elle doit te proposer un autre créneau, mais tu choisis toujours tes créneaux toi-même.
+
+## Questions fréquentes
+
+### Je me suis inscrit avant que l'organisation montre qui est inscrit : pourquoi mon nom n'apparaît pas ?
+
+L'organisation a choisi de montrer qui est inscrit après ton inscription. Tu n'as donc rien accepté, et ton nom reste masqué : personne ne peut l'afficher à ta place, pas même l'organisation. Si tu veux apparaître, ouvre ta page personnelle avec le lien reçu par email, puis choisis **Afficher mon nom** dans l'encadré **Qui est inscrit** (voir [Qui est inscrit](#qui-est-inscrit)). Tu peux le masquer à nouveau à tout moment, sans effet sur ton inscription. Si tu ne vois pas l'encadré, c'est par exemple que tu n'as pas encore de place confirmée (liste d'attente, attente de validation), que l'événement est terminé ou que l'organisation a désactivé le réglage ; recharge aussi la page, au cas où elle n'aurait pas pu le charger.

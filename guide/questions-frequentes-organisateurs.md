@@ -20,6 +20,7 @@ Chaque question renvoie à sa réponse, dans la page de la documentation qui en 
 - [Je veux donner des infos pratiques (accès, parking, ce qu'il faut apporter) sans surcharger le message principal.](pages-personnalisees.md#je-veux-donner-des-infos-pratiques-acces-parking-ce-qu-il-faut-apporter-sans-surcharger-le-message-principal)
 - [Je veux qu'une personne suive « son » poste sans lui donner accès à tout l'admin.](responsables-de-secteur.md#je-veux-qu-une-personne-suive-son-poste-sans-lui-donner-acces-a-tout-l-admin)
 - [Les bénévoles aimeraient savoir qui est déjà inscrit sur un créneau.](responsables-de-secteur.md#les-benevoles-aimeraient-savoir-qui-est-deja-inscrit-sur-un-creneau)
+- [J'active « Qui est inscrit » alors que des bénévoles sont déjà inscrits : que se passe-t-il pour eux ?](creer-un-evenement.md#activer-qui-est-inscrit-sur-un-evenement-qui-a-deja-des-inscrits)
 
 ## Suivre l'événement
 
