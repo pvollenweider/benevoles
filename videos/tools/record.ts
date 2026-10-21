@@ -658,7 +658,7 @@ async function main() {
         const guide = await popupPromise
         await guide.waitForLoadState("domcontentloaded")
         const guideUrl = guide.url()
-        if (!guideUrl.startsWith(baseUrl)) throw new Error("Help must remain on the isolated local application")
+        if (new URL(guideUrl).origin !== new URL(baseUrl).origin) throw new Error("Help must remain on the isolated local application")
         await page.goto(guideUrl); await settle(page)
         await guide.close()
         await at(0.77) /* mid-sentence */
