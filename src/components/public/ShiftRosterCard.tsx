@@ -51,6 +51,7 @@ export default function ShiftRosterCard({ token, data, onChange }: {
     const visible = data.state !== "visible"
     setBusy(true)
     setFailure("")
+    setStatus("")
     let next: RosterData | null = null
     let error: string | null = null
     try {
@@ -75,7 +76,7 @@ export default function ShiftRosterCard({ token, data, onChange }: {
   }
 
   return (
-    <section aria-labelledby="roster-title" className="bg-white rounded-xl border border-gray-200 p-4 space-y-3">
+    <section id="roster-title-region" aria-labelledby="roster-title" className="bg-white rounded-xl border border-gray-200 p-4 space-y-3">
       <div>
         <h2 id="roster-title" className="text-sm font-semibold text-gray-900">Qui est inscrit</h2>
         <p className="text-sm text-gray-700 mt-0.5">Les bénévoles confirmés de l&apos;événement qui ont choisi d&apos;afficher leur nom, créneau par créneau.</p>
@@ -91,7 +92,7 @@ export default function ShiftRosterCard({ token, data, onChange }: {
               {shift.label} <span className="font-normal text-gray-600">· {date} · {fmtRange(shift.startTime, shift.endTime)}</span>
             </h3>
             <ul role="list" className="mt-1 space-y-0.5 text-sm text-gray-700">
-              {shift.names.map((name) => <li key={name} className="break-words"><RosterName name={name} /></li>)}
+              {shift.names.map((name, i) => <li key={i} className="break-words"><RosterName name={name} /></li>)}
             </ul>
           </div>
         )

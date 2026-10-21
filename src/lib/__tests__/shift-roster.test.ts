@@ -135,6 +135,17 @@ describe("buildShiftRoster", () => {
     expect(roster[0]).toMatchObject({ label: "bar", startTime: "10:00", endTime: "12:00", date: "2030-10-01T00:00:00.000Z" })
   })
 
+  it("two people with the same display name are both listed", () => {
+    const aline2 = person("aline2", "Aline", "Meier")
+    const roster = buildShiftRoster({
+      viewerId: "me", shifts: [shift("bar")],
+      registrations: [reg("bar", aline), reg("bar", aline2)],
+      choices: new Map<string, RosterChoice>([["aline", "visible"], ["aline2", "visible"]]),
+      eventStart: "2030-10-01",
+    })
+    expect(roster[0].names).toEqual(["Aline M.", "Aline M."])
+  })
+
   it("never the viewer themself", () => {
     const roster = buildShiftRoster({
       viewerId: "me", shifts: [shift("bar")],

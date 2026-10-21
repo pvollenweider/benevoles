@@ -148,18 +148,20 @@ export function buildShiftRoster(input: {
   const collator = new Intl.Collator("fr", { sensitivity: "base" })
   const entries: ShiftRosterEntry[] = []
   for (const shift of shifts) {
-    const names = new Set<string>()
+    // Two people can share a display name: both are listed (one entry per confirmed volunteer).
+    const names: string[] = []
+    const seen = new Set<string>()
     for (const r of registrations) {
       if (r.shiftId !== shift.id || r.status !== "active" || r.volunteerId === viewerId) continue
       if (choices.get(r.volunteerId) !== "visible") continue
       const v = r.volunteer
       if (v.erasedAt || v.mergedIntoId || isKnownMinor(v.birthDate, eventStart)) continue
       const name = rosterDisplayName(v.firstName, v.lastName)
-      if (name) names.add(name)
+      if (name && !seen.has(r.volunteerId)) { seen.add(r.volunteerId); names.push(name) }
     }
-    if (names.size === 0) continue
+    if (names.length === 0) continue
     const date = (shift.date instanceof Date ? shift.date : new Date(shift.date)).toISOString()
-    entries.push({ shiftId: shift.id, label: shift.label, date, startTime: shift.startTime, endTime: shift.endTime, names: [...names].sort(collator.compare) })
+    entries.push({ shiftId: shift.id, label: shift.label, date, startTime: shift.startTime, endTime: shift.endTime, names: names.sort(collator.compare) })
   }
   return entries
 }

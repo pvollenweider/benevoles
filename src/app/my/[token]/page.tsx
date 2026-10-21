@@ -120,7 +120,7 @@ export default function MyRegistrationPage() {
   const [withdrawMessage, setWithdrawMessage] = useState("")
   // Page status: the result of a withdrawal, voiced once.
   const [statusText, setStatusText] = useState("")
-  // « Bénévoles de l'événement » (#1068), loaded with the page; null = nothing to show.
+  // « Qui est inscrit » (#1068), loaded once the page is; null = nothing to show.
   const [roster, setRoster] = useState<RosterData | null>(null)
 
   // Focus to move, applied once React has committed the render it goes with (the confirmation
@@ -137,19 +137,16 @@ export default function MyRegistrationPage() {
   }, [focusRequest])
 
   useEffect(() => {
-    // Fetched together, so the roster card does not appear late and push the page down.
-    const rosterLoad = fetchRoster(token)
     fetch(`/api/public/registrations/${token}`)
-      .then(async (r) => {
-        const d = await r.json()
-        setRoster(await rosterLoad)
-        return d
-      })
+      .then((r) => r.json())
       .then((d) => {
         if (d.error) {
           setError(d.error)
         } else {
           setData(d)
+          // The optional roster (#1068) only for a link that opened the page, and never holding
+          // the page up: an unknown or cancelled link is looked up once, as before.
+          void fetchRoster(token).then(setRoster)
           if (d.event?.slug) {
             localStorage.setItem(`benevoles_token_${d.event.slug}`, token)
           }
@@ -240,8 +237,13 @@ export default function MyRegistrationPage() {
     }
 
     setData((d) => d ? { ...d, registrations: d.registrations.filter((r) => r.editToken !== reg.editToken) } : d)
-    // The roster needs a confirmed place (#1068): reloaded once one is withdrawn.
-    if (reg.status === "active") void fetchRoster(token).then(setRoster)
+    // The roster needs a confirmed place (#1068): reloaded once one is withdrawn, through a link
+    // still live (the page's own may be the one just cancelled), or gone with the last one.
+    if (reg.status === "active") {
+      const live = list.find((r) => r.editToken !== reg.editToken)?.editToken
+      if (live) void fetchRoster(live).then(setRoster)
+      else setRoster(null)
+    }
     setFocusRequest({
       candidates: [
         next && byId(triggerId(next)),
@@ -486,7 +488,14 @@ export default function MyRegistrationPage() {
         </section>
 
         {/* Who else is signed up (#1068): only when the event has the roster on. */}
-        {roster?.available && <ShiftRosterCard token={token} data={roster} onChange={setRoster} />}
+        {roster?.available && <ShiftRosterCard token={token} data={roster} onChange={(next) => {
+          // Turned off or over since the page loaded: the card goes, say so and keep the focus on the page.
+          if (!next.available) {
+            setFocusRequest({ candidates: [byId(LIST_TITLE_ID)], regionId: "roster-title-region" })
+            announce(setStatusText, "La liste des inscrits n'est plus disponible pour cet événement.")
+          }
+          setRoster(next)
+        }} />}
 
         {/* The answers to the event's questions (#984), under the registrations: editable while
             the volunteer can still withdraw online. */}
