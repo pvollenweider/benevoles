@@ -1,0 +1,24 @@
+{
+  "purpose": "rehearsal, actual WAV timing; not assemblable",
+  "sentence": {
+    "startSeconds": 1.716,
+    "endSeconds": 5.509
+  },
+  "clauseWindowSeconds": [
+    3.75,
+    5.23
+  ],
+  "cueSeconds": 4.07,
+  "pointerLeadSeconds": 0.42,
+  "actualClickSeconds": 4.542,
+  "withinNamedClause": true,
+  "chapter": {
+    "id": "change-role",
+    "startMs": 74116,
+    "endMs": 91265
+  },
+  "actualClick": {
+    "kind": "click",
+    "atMs": 78658
+  }
+}

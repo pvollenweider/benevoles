@@ -117,8 +117,8 @@
         "organisateur"
       ],
       "feature": "Équipe et permissions",
-      "updatedAt": "2026-10-16",
-      "revision": 4,
+      "updatedAt": "2026-10-21",
+      "revision": 5,
       "level": "essentiel"
     },
     {
@@ -539,8 +539,8 @@
         "organisateur"
       ],
       "feature": "Liste d'attente et offres de place",
-      "updatedAt": "2026-10-16",
-      "revision": 3,
+      "updatedAt": "2026-10-17",
+      "revision": 4,
       "level": "essentiel"
     },
     {
@@ -1419,8 +1419,8 @@
         "super-admin"
       ],
       "feature": "Administration de la plateforme",
-      "updatedAt": "2026-10-16",
-      "revision": 3,
+      "updatedAt": "2026-10-21",
+      "revision": 4,
       "level": "avance"
     },
     {
@@ -1471,8 +1471,8 @@
         "organisateur"
       ],
       "feature": "Gérer un imprévu",
-      "updatedAt": "2026-10-16",
-      "revision": 4,
+      "updatedAt": "2026-10-17",
+      "revision": 5,
       "level": "essentiel"
     }
   ]

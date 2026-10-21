@@ -1,6 +1,8 @@
 // SPDX-FileCopyrightText: 2026 Philippe Vollenweider
 // SPDX-License-Identifier: AGPL-3.0-only
 import type { Page, Locator } from "playwright"
+import { execFile } from "node:child_process"
+import { promisify } from "node:util"
 import { PrismaClient } from "../../src/generated/prisma/client"
 import { PrismaPg } from "@prisma/adapter-pg"
 import { registrationToken } from "../../src/lib/token-vault"
@@ -23,6 +25,8 @@ export async function recordLastMinute(options: { page: Page; base: string; dire
   const reg = (n: number) => db.registration.findUniqueOrThrow({ where: { id: `video-last-minute-registration-${n}` } })
   const inbox = async (): Promise<Mail[]> => (await (await page.request.get("http://localhost:48026/api/v1/messages?limit=1000")).json()).messages
   const openNewMail = async (prior: Set<string>, recipient: string, expected: string[]) => {
+    // Off-screen delivery ellipse: make only this fixture’s pending rows due, then use the real cron.
+    await promisify(execFile)(process.execPath, ["--import", "tsx", "videos/tools/flush-last-minute-outbox.ts"], { env: process.env })
     let found: Mail | undefined
     for (let attempt = 0; attempt < 40 && !found; attempt++) {
       for (const mail of (await inbox()).filter(mail => !prior.has(mail.ID) && mail.To.some(to => to.Address === recipient))) {

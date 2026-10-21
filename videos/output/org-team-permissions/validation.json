@@ -1,70 +1,71 @@
 {
   "id": "ORG_TEAM_PERMISSIONS",
   "slug": "org-team-permissions",
-  "validatedAt": "2026-10-12T01:05:25.207Z",
+  "validatedAt": "2026-10-21T16:37:39.136Z",
   "continuousNarration": true,
+  "sentenceRevision": false,
   "narrationContentChecked": true,
   "voice": "Puck",
-  "captureMs": 132120,
+  "captureMs": 139680,
   "scenes": [
     {
       "id": "welcome",
-      "visualMs": 12781,
-      "audioMs": 12779,
-      "driftMs": 2
-    },
-    {
-      "id": "roles",
-      "visualMs": 20884,
-      "audioMs": 20884,
+      "visualMs": 15201,
+      "audioMs": 15201,
       "driftMs": 0
     },
     {
+      "id": "roles",
+      "visualMs": 22005,
+      "audioMs": 22004,
+      "driftMs": 1
+    },
+    {
       "id": "invite",
-      "visualMs": 15403,
-      "audioMs": 15400,
-      "driftMs": 3
+      "visualMs": 17354,
+      "audioMs": 17353,
+      "driftMs": 1
     },
     {
       "id": "invite-result",
-      "visualMs": 11415,
-      "audioMs": 11413,
+      "visualMs": 11939,
+      "audioMs": 11937,
       "driftMs": 2
     },
     {
       "id": "change-role",
-      "visualMs": 15500,
-      "audioMs": 15498,
-      "driftMs": 2
+      "visualMs": 17148,
+      "audioMs": 17147,
+      "driftMs": 1
     },
     {
       "id": "organizer-view",
-      "visualMs": 13541,
-      "audioMs": 13539,
-      "driftMs": 2
+      "visualMs": 15668,
+      "audioMs": 15667,
+      "driftMs": 1
     },
     {
       "id": "limits",
-      "visualMs": 21755,
-      "audioMs": 21754,
+      "visualMs": 19673,
+      "audioMs": 19672,
       "driftMs": 1
     },
     {
       "id": "result",
-      "visualMs": 11494,
-      "audioMs": 11493,
+      "visualMs": 11300,
+      "audioMs": 11299,
       "driftMs": 1
     }
   ],
   "anchorsChecked": 10,
   "music": {
-    "voicedWindows": 118,
+    "voicedWindows": 127,
     "musicOnlyWindows": 0,
-    "smallestGapLu": 14.2,
-    "largestGapLu": 18.4,
+    "smallestGapLu": 14.3,
+    "largestGapLu": 18.8,
     "quietestMusicOnlyLufs": null,
     "loudestMusicOnlyLufs": null,
-    "medianVoiceLufs": -16.4
+    "medianVoiceLufs": -16.5
   },
   "issues": []
 }

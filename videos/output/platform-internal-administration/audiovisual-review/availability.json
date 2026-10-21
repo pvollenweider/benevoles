@@ -1,41 +1,41 @@
 {
   "model": "gemini-3.8-flash",
-  "reviewedAt": "2026-10-11T13:45:41.500Z",
-  "videoSha256": "5d340176fae0f8d93c606d4bd1ebba2776625dabed2f618b19701264ec57e85c",
+  "reviewedAt": "2026-10-21T16:33:09.873Z",
+  "videoSha256": "d46eeba2c72284c4b4bf53e4db0e24f6d8f43c377f9798b47f5f329bd94b2c9c",
   "promptSha256": "3632344d91cd5a8862e33d5071060d7d4392f68f3932f1c51e91be11189d0e17",
-  "clipSha256": "d2bb246124fe7c94f29e87e767ed3863f5536b76f0be4f371cac3d2f580e8d40",
+  "clipSha256": "87434e62b28c62dee2449ab425c4b71e59e530c77f9fdf2e2c4de882836df991",
   "scene": "availability",
   "review": {
-    "heardOpening": "Désactiver une organisation n'est pas la supprimer",
+    "heardOpening": "Désactiver une organisation n'est pas la supprimer.",
     "checkpoints": [
       {
         "spokenSeconds": 3.4,
         "spoken": "Ouvrons la confirmation et lisons les conséquences avant de valider.",
-        "visibleSeconds": 3.7,
-        "visible": "Ouverture de la modale de confirmation de désactivation avec les conséquences listées, puis clic sur Désactiver.",
+        "visibleSeconds": 3.8,
+        "visible": "Ouverture de la fenêtre modale de confirmation de désactivation puis clic sur Désactiver.",
         "sync": "aligned",
         "severity": "none"
       },
       {
-        "spokenSeconds": 8.1,
+        "spokenSeconds": 9.2,
         "spoken": "Dans la session organisateur déjà ouverte, une nouvelle requête est maintenant refusée.",
-        "visibleSeconds": 8,
-        "visible": "Basculement vers la session organisateur qui redirige vers la page d'administration/connexion.",
+        "visibleSeconds": 8.9,
+        "visible": "Basculement vers la session organisateur redirigée vers la page de connexion.",
         "sync": "aligned",
         "severity": "none"
       },
       {
-        "spokenSeconds": 14.8,
+        "spokenSeconds": 17.5,
         "spoken": "Revenons côté opérateur et réactivons-le.",
-        "visibleSeconds": 14.4,
-        "visible": "Retour sur l'interface opérateur, ouverture de la modale et clic sur Réactiver.",
+        "visibleSeconds": 18,
+        "visible": "Retour sur l'interface d'administration opérateur et clic sur le bouton vert Réactiver.",
         "sync": "aligned",
         "severity": "none"
       },
       {
-        "spokenSeconds": 18.7,
+        "spokenSeconds": 21.3,
         "spoken": "La session organisateur peut à nouveau accéder à ses événements.",
-        "visibleSeconds": 17.5,
+        "visibleSeconds": 20.6,
         "visible": "Affichage de la page Événements dans la session organisateur.",
         "sync": "aligned",
         "severity": "none"
@@ -45,7 +45,7 @@
     "voice": {
       "consistent": true,
       "warm": true,
-      "observation": "Voix off posée, claire et parfaitement synchronisée avec les manipulations à l'écran."
+      "observation": "Voix de synthèse claire, posée et bien synchronisée avec les actions à l'écran."
     }
   },
   "note": "Automated observation of actual final video audio and images; not a claim of complete human validation"

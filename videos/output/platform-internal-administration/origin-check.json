@@ -1,0 +1,13 @@
+{
+  "proof": {
+    "commit": "490a44c306da8b93b4920ece009a452baf27fdbf",
+    "sourceTree": "be1a1d9342fc3b6d37f922a5557bedbe7d2b997b",
+    "productSourceSha256": "5cadc01f8a0c46ff4a0d9d6d4de90702a18b4a0108564e6a460657a57ec1aeb7",
+    "buildId": "rFYo35VG0QypepwE2pYU_",
+    "snapshot": "/tmp/benevoles-video-production.Batch27",
+    "builtAt": "2026-10-21T15:59:30.726Z"
+  },
+  "sameOriginEmptyBody": 400,
+  "foreignOrigin": 403,
+  "realBrowserOrigin": true
+}

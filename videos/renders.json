@@ -102,7 +102,7 @@
     "poster": true
   },
   "last-minute-changes": {
-    "durationMs": 345360,
+    "durationMs": 345400,
     "width": 1280,
     "height": 800,
     "poster": true
@@ -156,7 +156,7 @@
     "poster": true
   },
   "org-team-permissions": {
-    "durationMs": 144800,
+    "durationMs": 139680,
     "width": 1280,
     "height": 800,
     "poster": true
@@ -186,7 +186,7 @@
     "poster": true
   },
   "platform-internal-administration": {
-    "durationMs": 474640,
+    "durationMs": 480640,
     "width": 1280,
     "height": 800,
     "poster": true
@@ -264,7 +264,7 @@
     "poster": true
   },
   "shift-waitlist-offer": {
-    "durationMs": 108840,
+    "durationMs": 109760,
     "width": 1280,
     "height": 800,
     "poster": true

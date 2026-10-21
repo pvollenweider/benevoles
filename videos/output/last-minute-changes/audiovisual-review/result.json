@@ -1,62 +1,59 @@
 {
   "model": "gemini-3.8-flash",
-  "reviewedAt": "2026-10-16T09:00:20.180Z",
-  "videoSha256": "4c557865d2b8113c4e767c65e0ff9255874e84a7f6615119284a4b2b3084ee9e",
+  "reviewedAt": "2026-10-17T10:34:07.643Z",
+  "videoSha256": "4ebc69481a8c530ef1bf6def7b80407d73851b1a237279006058010402292214",
   "promptSha256": "8c6a526acf2977743d9f2858505ccde324866dfd9e2f84f8db941ead53260ab9",
-  "clipSha256": "24235dbaed752b2435f1ea935c3122609aa0815c8d8693f6ac140404463f2b43",
+  "clipSha256": "21fdc8a41f04a6107df2278686af82977c5b26ab07a69b872318bc85c1906c61",
   "scene": "result",
   "review": {
     "heardOpening": "Terminons dans la vue de couverture et les inscriptions à jour.",
     "checkpoints": [
       {
-        "spokenSeconds": 1,
+        "spokenSeconds": 0.8,
         "spoken": "Terminons dans la vue de couverture et les inscriptions à jour.",
-        "visibleSeconds": 1.2,
-        "visible": "Affichage de l'onglet Inscriptions avec la liste des bénévoles et demandes.",
+        "visibleSeconds": 1,
+        "visible": "Page Inscriptions affichée avec la liste des bénévoles inscrits",
         "sync": "aligned",
         "severity": "none"
       },
       {
-        "spokenSeconds": 4.5,
+        "spokenSeconds": 4.1,
         "spoken": "Nicolas a accepté sa place",
-        "visibleSeconds": 4.8,
-        "visible": "Nicolas Exemple apparaît uniquement dans la section 'Annulations récentes' avec la mention 'la place a été reprise', et non parmi les inscriptions confirmées.",
-        "sync": "uncertain",
-        "severity": "minor"
-      },
-      {
-        "spokenSeconds": 6.4,
-        "spoken": "Zoé est sur le créneau convenu",
-        "visibleSeconds": 6.5,
-        "visible": "Zoé Exemple est visible sur les créneaux Logistique et Accueil du soir.",
+        "visibleSeconds": 4,
+        "visible": "Défilement vers le bas du tableau des inscriptions où figurent Lucas, Emma, etc.",
         "sync": "aligned",
         "severity": "none"
       },
       {
-        "spokenSeconds": 8.9,
-        "spoken": "le nouvel horaire est visible et la mission annulée n'est plus à pourvoir.",
-        "visibleSeconds": 14.5,
-        "visible": "Affichage du planning des créneaux en vue liste avec les horaires et statuts mis à jour.",
-        "sync": "late",
-        "severity": "minor"
+        "spokenSeconds": 6.7,
+        "spoken": "Zoé est sur le créneau convenu",
+        "visibleSeconds": 5,
+        "visible": "Lignes de Zoé Exemple affichées dans le tableau avec les créneaux Logistique et Accueil",
+        "sync": "aligned",
+        "severity": "none"
       },
       {
-        "spokenSeconds": 24.2,
-        "spoken": "et un dernier contrôle du planning.",
-        "visibleSeconds": 18,
-        "visible": "Retour sur la vue de couverture 'Où manque-t-il du monde ?'.",
+        "spokenSeconds": 13.5,
+        "spoken": "Nous avons vérifié les résultats, pas seulement cliqué sur des boutons.",
+        "visibleSeconds": 13,
+        "visible": "Basculement vers l'onglet Créneaux (vue frise puis vue liste)",
+        "sync": "aligned",
+        "severity": "none"
+      },
+      {
+        "spokenSeconds": 18,
+        "spoken": "En cas d'imprévu : un besoin précis, une proposition claire",
+        "visibleSeconds": 17.5,
+        "visible": "Retour sur l'onglet 'Où manque-t-il du monde ?'",
         "sync": "aligned",
         "severity": "none"
       }
     ],
-    "issues": [
-      "À 00:04, la mention 'Nicolas a accepté sa place' ne correspond pas à l'écran où Nicolas Exemple figure sous 'Annulations récentes' pour une place reprise par un tiers.",
-      "À 00:08, l'annonce du nouvel horaire et de la mission devance de quelques secondes la navigation vers l'onglet Créneaux (affiché à partir de 00:13)."
-    ],
+    "issues": [],
     "voice": {
       "consistent": true,
       "warm": true,
-      "observation": "Voix off féminine naturelle, claire et posée, sans bruit parasite."
+      "observation": "Voix féminine claire, posée et bien articulée, synchronisée avec les transitions d'écrans."
     }
   },
   "note": "Automated observation of actual final video audio and images; not a claim of complete human validation"

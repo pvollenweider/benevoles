@@ -26,7 +26,7 @@ async function main() {
     const aline = await reg(0), nicolas = await reg(1), attendance = (await reg(5)).checkedInAt
     if (aline.status !== "active" || nicolas.status !== "waiting" || !attendance) throw new Error("Reset the dedicated fixture before verification")
     const withdrawal = await page.request.delete(`${base}/api/public/registrations/${encodeURIComponent(registrationToken.reveal(aline))}`)
-    if (!withdrawal.ok() || (await reg(0)).status !== "cancelled" || (await reg(1)).status !== "offered") throw new Error("Actual withdrawal did not produce the expected offer")
+    if (!withdrawal.ok() || (await reg(0)).status !== "cancelled" || (await reg(1)).status !== "offered") throw new Error(`Actual withdrawal did not produce the expected offer: HTTP ${withdrawal.status()}, ${await withdrawal.text()}; states ${(await reg(0)).status}/${(await reg(1)).status}`)
     const confirmation = await page.request.post(`${base}/api/public/waitlist/${encodeURIComponent(registrationToken.reveal(nicolas))}/confirm`)
     if (!confirmation.ok() || (await reg(1)).status !== "active") throw new Error("Actual offered registration was not confirmed")
     const audience = { kind: "shift", shiftId: "video-last-minute-shift-1" }
@@ -38,6 +38,9 @@ async function main() {
     const zoe = await db.volunteer.findUniqueOrThrow({ where: { id: "video-last-minute-person-2" } })
     const added = await page.request.post(`${base}/api/admin/registrations`, { data: { eventId, shiftId: "video-last-minute-shift-1", firstName: zoe.firstName, lastName: zoe.lastName, email: zoe.email } })
     if (!added.ok() || await db.registration.count({ where: { shiftId: "video-last-minute-shift-1", status: "active" } }) !== 2) throw new Error("Actual manual replacement did not fill the shift")
+    const duplicate = await page.request.post(`${base}/api/admin/registrations`, { data: { eventId, shiftId: "video-last-minute-shift-1", firstName: zoe.firstName, lastName: zoe.lastName, email: zoe.email } })
+    const duplicateBody = await duplicate.json()
+    if (duplicate.status() !== 409 || duplicateBody.error !== "Cette personne est déjà inscrite sur ce créneau." || await db.registration.count({ where: { shiftId: "video-last-minute-shift-1", status: "active" } }) !== 2) throw new Error("Current duplicate sign-up feedback differs (#1057)")
     const changed = await page.request.patch(`${base}/api/admin/shifts/video-last-minute-shift-2`, { data: { startTime: "14:30", endTime: "16:30" } })
     if (!changed.ok() || (await changed.json()).notified !== 1) throw new Error("Changed schedule must notify only its active registration")
     const cancelled = await page.request.delete(`${base}/api/admin/shifts/video-last-minute-shift-3`)
@@ -46,7 +49,7 @@ async function main() {
     if (!logs.some(log => log.action === "registration.waitlist_confirmed" && log.causedByLogId) || !logs.some(log => log.action === "shift.cancelled")) throw new Error("Actual causal journal entries missing")
     const directory = "videos/output/last-minute-changes"
     await mkdir(directory, { recursive: true })
-    await writeFile(`${directory}/functional-checks.json`, JSON.stringify({ checkedAt: new Date().toISOString(), scope: "actual local routes and database only; inbox and audiovisual review still required", withdrawalPromotesOffer: true, offerConfirmed: true, targetedRecipients: 1, manualReplacementFillsShift: true, changedScheduleNotified: 1, cancelledActiveAndRequested: true, priorAttendancePreserved: true, actualCausalJournal: true, journalEntries: logs.length, fixtureMustBeResetBeforeCapture: true }, null, 2))
+    await writeFile(`${directory}/functional-checks.json`, JSON.stringify({ checkedAt: new Date().toISOString(), scope: "actual local routes and database only; inbox and audiovisual review still required", withdrawalPromotesOffer: true, offerConfirmed: true, targetedRecipients: 1, manualReplacementFillsShift: true, duplicateStatus: duplicate.status(), duplicateMessage: duplicateBody.error, changedScheduleNotified: 1, cancelledActiveAndRequested: true, priorAttendancePreserved: true, actualCausalJournal: true, journalEntries: logs.length, fixtureMustBeResetBeforeCapture: true }, null, 2))
     console.log("✓ Actual last-minute actions verified; inbox and audiovisual checks remain; reset fixture before capture")
   } finally { await browser.close(); await db.$disconnect() }
 }

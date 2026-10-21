@@ -1,50 +1,50 @@
 {
   "model": "gemini-3.8-flash",
-  "reviewedAt": "2026-10-11T13:46:38.039Z",
-  "videoSha256": "5d340176fae0f8d93c606d4bd1ebba2776625dabed2f618b19701264ec57e85c",
+  "reviewedAt": "2026-10-21T16:34:07.409Z",
+  "videoSha256": "d46eeba2c72284c4b4bf53e4db0e24f6d8f43c377f9798b47f5f329bd94b2c9c",
   "promptSha256": "16ee6760e7b06b93bcd008128cd03d6ced61c25e6686952f068f44bfab8bd863",
-  "clipSha256": "fdedcdf7cc2bd71c84e251e3dca4196e864a677a95c548dacbf28f7531cc9feb",
+  "clipSha256": "90dd75a39692e4f75edf7ae51bdc1439a97aea8c5d7bb07da1d30f8bdf854fa3",
   "scene": "broadcast",
   "review": {
     "heardOpening": "Le test est bon ? Revenons au formulaire",
     "checkpoints": [
       {
-        "spokenSeconds": 1.2,
+        "spokenSeconds": 2,
         "spoken": "Revenons au formulaire pour préparer la diffusion.",
         "visibleSeconds": 2,
-        "visible": "Retour sur la page du formulaire Communications admin.",
+        "visible": "Retour à la page du formulaire Nouveau message",
         "sync": "aligned",
         "severity": "none"
       },
       {
-        "spokenSeconds": 4.1,
+        "spokenSeconds": 5,
         "spoken": "Reprenons notre objet, puis le contenu que nous venons de vérifier.",
-        "visibleSeconds": 4.5,
-        "visible": "Saisie de l'objet et du contenu markdown avec aperçu instantané.",
+        "visibleSeconds": 5.2,
+        "visible": "Saisie de l'objet et du contenu en Markdown avec aperçu direct",
         "sync": "aligned",
         "severity": "none"
       },
       {
-        "spokenSeconds": 23.3,
+        "spokenSeconds": 22.8,
         "spoken": "vérifions le nombre de destinataires et lisons la confirmation.",
-        "visibleSeconds": 23.2,
-        "visible": "Affichage de la boîte modale de confirmation indiquant 2 administrateurs.",
+        "visibleSeconds": 22.5,
+        "visible": "Boîte de dialogue de confirmation Envoyer cette communication à 2 administrateurs",
         "sync": "aligned",
         "severity": "none"
       },
       {
-        "spokenSeconds": 35.6,
+        "spokenSeconds": 34.5,
         "spoken": "Validons, puis regardons le nombre d'envois réussis et l'historique.",
-        "visibleSeconds": 36.6,
-        "visible": "Clic sur Envoyer, notification de confirmation et mise à jour de l'historique des envois (2/2 envoyés).",
+        "visibleSeconds": 36.2,
+        "visible": "Validation de l'envoi et affichage de l'historique avec 2/2 envoyés",
         "sync": "aligned",
         "severity": "none"
       },
       {
-        "spokenSeconds": 43.1,
-        "spoken": "Ouvrons un message livré et utilisons son lien de désabonnement.",
-        "visibleSeconds": 44.5,
-        "visible": "Ouverture du message dans Mailpit et clic sur le lien de désabonnement affichant la page de confirmation.",
+        "spokenSeconds": 44,
+        "spoken": "utilisons son lien de désabonnement.",
+        "visibleSeconds": 44.8,
+        "visible": "Affichage de la page Désabonnement confirmé",
         "sync": "aligned",
         "severity": "none"
       }
@@ -53,7 +53,7 @@
     "voice": {
       "consistent": true,
       "warm": true,
-      "observation": "Voix claire, posée, dynamique et parfaitement synchronisée avec les actions à l'écran."
+      "observation": "Voix fluide, claire et bien calée avec les démonstrations à l'écran."
     }
   },
   "note": "Automated observation of actual final video audio and images; not a claim of complete human validation"

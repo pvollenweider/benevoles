@@ -6,7 +6,7 @@ Le propriétaire gère tout, y compris l’équipe et les réglages de l’organ
 
 Pour inviter Léa, ouvrez le formulaire, saisissez son nom et son adresse, puis choisissez son rôle avant l’envoi. Prenons Organisateur : c’est le bon niveau pour aider sur les plannings et les bénévoles sans accéder aux paramètres sensibles. Cliquez sur Envoyer l’invitation ; le message confirme son adresse.
 
-Après l’envoi, Léa apparaît avec le statut En attente. Un email contient son lien personnel, valable sept jours ; on peut aussi copier ce lien pour le lui transmettre autrement. Son accès ne devient actif qu’après la création de son mot de passe.
+Après l’envoi, Léa apparaît avec le statut En attente. La confirmation indique que son lien d’activation, valable sept jours, lui a été envoyé par email. Son accès ne devient actif qu’après la création de son mot de passe.
 
 Le rôle peut évoluer. On choisit d’abord Propriétaire dans la liste, puis on confirme avec Appliquer : parcourir simplement la liste au clavier ne change donc jamais les droits par accident. La confirmation indique le nouveau rôle. Retirer une personne coupe son accès, mais ne supprime pas l’historique des actions déjà réalisées.
 

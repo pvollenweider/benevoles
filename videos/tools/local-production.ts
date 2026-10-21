@@ -34,11 +34,11 @@ async function main() {
     const next = path.join(copy, "node_modules/next/dist/bin/next")
     childWorkingDirectory = copy
     await access(next)
-    // Reserved, non-routable training domain: mail paths are replayed only on localhost.
-    // Build-time public URL avoids localhost's ?org= suffix before email templates append ?token=.
-    env.NEXT_PUBLIC_APP_URL = "http://video.invalid"
+    // The proxy can inline NEXT_PUBLIC_APP_URL: build and capture use the same HTTP origin.
+    // Runtime wrappers keep each local port explicit; no product security check is changed.
+    env.NEXT_PUBLIC_APP_URL = "http://localhost:43102"
     commandArgs = [next, "build", copy, "--webpack"]
-  } else if (mode === "serve" || mode === "serve-delivery" || mode === "serve-dayof" || mode === "serve-merge" || mode === "serve-questions" || mode === "serve-hours") {
+  } else if (mode === "serve" || mode === "serve-public" || mode === "serve-capture" || mode === "serve-delivery" || mode === "serve-dayof" || mode === "serve-merge" || mode === "serve-questions" || mode === "serve-hours") {
     const copy = path.resolve(args[0] ?? "")
     if (!/^\/(?:private\/)?tmp\/benevoles-video-production\.[A-Za-z0-9]+$/.test(copy)) throw new Error("Only mktemp video copy accepted")
     const server = path.join(copy, ".next/standalone/server.js")
@@ -46,13 +46,14 @@ async function main() {
     if (proof.snapshot !== copy || !/^[a-f0-9]{40}$/.test(proof.commit) || !proof.buildId || !proof.productSourceSha256) throw new Error("Verified main build proof required before serving video UI")
     childWorkingDirectory = path.dirname(server)
     await access(server)
-    // Share links, QR codes and emails read https://<org>.benevol.app on screen (videos/lib/public-hosts.ts).
-    Object.assign(env, { PORT: "43102", HOSTNAME: "127.0.0.1", NEXT_PUBLIC_APP_URL: PUBLIC_APP_URL })
+    // HTTP capture pages must have an HTTP deployment origin (#1062).
+    Object.assign(env, { PORT: "43102", HOSTNAME: "127.0.0.1", NEXT_PUBLIC_APP_URL: mode === "serve-capture" ? "http://localhost:43102" : PUBLIC_APP_URL })
     if (mode === "serve-delivery") Object.assign(env, { PORT: "43106", NEXTAUTH_URL: "http://localhost:43106", VIDEO_BASE_URL: "http://localhost:43106", SMTP_HOST: "127.0.0.1", SMTP_PORT: "41028", SMTP_USER: "", SMTP_PASSWORD: "", SMTP_SECURE: "false", SENTRY_DSN: "", NEXT_PUBLIC_SENTRY_DSN: "" })
     if (mode === "serve-dayof") Object.assign(env, { PORT: "43108", NEXTAUTH_URL: "http://localhost:43108", VIDEO_BASE_URL: "http://localhost:43108", SMTP_HOST: "127.0.0.1", SMTP_PORT: "41026", SMTP_USER: "", SMTP_PASSWORD: "", SMTP_SECURE: "false", SENTRY_DSN: "", NEXT_PUBLIC_SENTRY_DSN: "" })
     if (mode === "serve-merge") Object.assign(env, { PORT: "43110", NEXTAUTH_URL: "http://localhost:43110", VIDEO_BASE_URL: "http://localhost:43110", SMTP_HOST: "127.0.0.1", SMTP_PORT: "41026", SMTP_USER: "", SMTP_PASSWORD: "", SMTP_SECURE: "false", SENTRY_DSN: "", NEXT_PUBLIC_SENTRY_DSN: "" })
     if (mode === "serve-questions") Object.assign(env, { PORT: "43112", NEXTAUTH_URL: "http://localhost:43112", VIDEO_BASE_URL: "http://localhost:43112", SMTP_HOST: "127.0.0.1", SMTP_PORT: "41026", SMTP_USER: "", SMTP_PASSWORD: "", SMTP_SECURE: "false", SENTRY_DSN: "", NEXT_PUBLIC_SENTRY_DSN: "" })
     if (mode === "serve-hours") Object.assign(env, { PORT: "43114", NEXTAUTH_URL: "http://localhost:43114", VIDEO_BASE_URL: "http://localhost:43114", SMTP_HOST: "127.0.0.1", SMTP_PORT: "41026", SMTP_USER: "", SMTP_PASSWORD: "", SMTP_SECURE: "false", SENTRY_DSN: "", NEXT_PUBLIC_SENTRY_DSN: "" })
+    if (mode === "serve-public") env.NEXTAUTH_URL = PUBLIC_APP_URL
     serving = { proof, port: Number(env.PORT) }
     commandArgs = [server]
   } else if (mode === "run" || mode === "run-delivery") {
@@ -124,7 +125,7 @@ async function main() {
       }
       const foundation = ({ ORG_TIMEZONE_CHARTER: "charter", ORG_PUBLIC_IDENTITY: "identity", ORG_EMAIL_SETTINGS: "email", ORG_TEAM_PERMISSIONS: "team", EVENT_CREATE_BLANK: "blank", EVENT_CREATE_TEMPLATE: "template", EVENT_MILESTONES: "milestones", EVENT_PROGRAM_PAGES_QR: "pages", SHIFTS_ROLES_VIEWS: "planning" } as Record<string, string>)[rest[0]]
       if (foundation) Object.assign(env, { ORG_ADMIN_EMAIL: `video.${foundation}.owner@example.org`, VIDEO_ORG: foundation === "identity" ? "fetes-de-montvert" : `formation-${foundation}`, VIDEO_EVENT_SLUG: "rencontre-0" })
-      const validFlags = rest.length === 1 || (script === "videos/tools/record.ts" && rest.length === 3 && rest[1] === "--rehearse" && rest[2] === "--quick-rehearse")
+      const validFlags = rest.length === 1 || (script === "videos/tools/record.ts" && rest.length === 3 && rest[1] === "--rehearse" && ["--quick-rehearse", "--audio-timing"].includes(rest[2]))
       if (!(validTake || commonTake || rest[0] === "SHIFTS_ROLES_VIEWS" || rest[0] === "EVENT_REPORTS" || rest[0] === "EVENT_ACTIVITY_LOG" || rest[0] === "ATTENDANCE_CHECK_IN" || rest[0] === "MEMBERS_DUPLICATES_MERGE" || rest[0] === "EVENT_QUESTIONS" || rest[0] === "VOLUNTEER_HOURS_CERTIFICATE" || rest[0] === "DATA_EXPORTS_ARCHIVES" || rest[0] === "ORGANIZATION_ACTIVITY_LOG") || !validFlags) throw new Error("Only explicit local video takes and rehearsal flags accepted")
       if (memberTakes.includes(rest[0])) Object.assign(env, { VIDEO_ORG: "default", VIDEO_EVENT_SLUG: rest[0] === "REMINDERS_CHANGES" ? "atelier-rappels" : "fete-du-village" })
     } else if (script === "videos/tools/migrate-private-identities.ts") {

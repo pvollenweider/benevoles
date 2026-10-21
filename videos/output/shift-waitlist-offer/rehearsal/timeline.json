@@ -1,18 +1,18 @@
 {
   "slug": "shift-waitlist-offer",
   "capturePurpose": "rehearsal",
-  "recordedAt": "2026-10-12T01:56:36.509Z",
+  "recordedAt": "2026-10-17T09:51:49.099Z",
   "video": "capture.webm",
   "product": {
-    "commit": "8c549d5b118899a156ada40a04284518ee18d913",
-    "sourceTree": "0c38af8f6775cdda55e03aeb8780f851137c0e2a",
-    "productSourceSha256": "1cfce1dbb86ff84904eaa07746c363bd97502c03b65a6b84b0af7882199e62ca",
-    "buildId": "RnrUED_grQJ_YgINLz6Tf",
-    "snapshot": "/tmp/benevoles-video-production.batch9",
-    "builtAt": "2026-10-12T00:53:50.007Z"
+    "commit": "ecaf19593e6d6e4401beb918a03972f19e02499d",
+    "sourceTree": "d15c4aa0afc9b6c54c870661b95414752dc8a3fa",
+    "productSourceSha256": "d52014c85fb55c433541dfe00cb5855998cd589cc9beb1b09e024d2968926a34",
+    "buildId": "qp5tejgaC6gjAk1ZLyYoe",
+    "snapshot": "/tmp/benevoles-video-production.Batch25",
+    "builtAt": "2026-10-17T09:49:37.968Z"
   },
   "captureEnvironment": {
-    "locale": "fr-FR",
+    "locale": "fr-CH",
     "timeZone": "Europe/Zurich",
     "organization": "default",
     "scenario": "SHIFT_WAITLIST_OFFER",
@@ -26,56 +26,60 @@
   "inputEvents": [
     {
       "kind": "click",
-      "atMs": 4701
+      "atMs": 4812
     },
     {
       "kind": "click",
-      "atMs": 5533
+      "atMs": 5661
     },
     {
       "kind": "click",
-      "atMs": 11443
+      "atMs": 11729
     },
     {
       "kind": "click",
-      "atMs": 12227
+      "atMs": 12512
+    },
+    {
+      "kind": "click",
+      "atMs": 14934
     }
   ],
   "cues": [
     {
       "id": "welcome",
-      "startMs": 1137,
-      "endMs": 3765
+      "startMs": 1244,
+      "endMs": 3864
     },
     {
       "id": "setup",
-      "startMs": 5882,
-      "endMs": 5952
+      "startMs": 6009,
+      "endMs": 6079
     },
     {
       "id": "admin",
-      "startMs": 6405,
-      "endMs": 7674
+      "startMs": 6532,
+      "endMs": 7925
     },
     {
       "id": "release",
-      "startMs": 9841,
-      "endMs": 12533
+      "startMs": 10088,
+      "endMs": 12821
     },
     {
       "id": "volunteer",
-      "startMs": 12986,
-      "endMs": 14144
+      "startMs": 13274,
+      "endMs": 16387
     },
     {
       "id": "expiry",
-      "startMs": 14598,
-      "endMs": 15800
+      "startMs": 16838,
+      "endMs": 18159
     },
     {
       "id": "result",
-      "startMs": 16253,
-      "endMs": 17465
+      "startMs": 18611,
+      "endMs": 19859
     }
   ],
   "anchors": [
@@ -84,56 +88,63 @@
       "phrase": "La liste d’attente s’active sur le créneau",
       "startMs": 0,
       "endMs": 3953,
-      "cueMs": 5882
+      "cueMs": 6010
     },
     {
       "segmentId": "setup",
       "phrase": "Tant que la capacité n’est pas atteinte",
       "startMs": 3953,
       "endMs": 12326,
-      "cueMs": 5886
+      "cueMs": 6014
     },
     {
       "segmentId": "setup",
       "phrase": "Une fois le créneau complet",
       "startMs": 12326,
       "endMs": 25000,
-      "cueMs": 5919
+      "cueMs": 6048
     },
     {
       "segmentId": "admin",
       "phrase": "On peut ainsi répondre à",
       "startMs": 12824,
       "endMs": 22000,
-      "cueMs": 7604
+      "cueMs": 7858
     },
     {
       "segmentId": "volunteer",
-      "phrase": "Prendre la place confirme immédiatement",
-      "startMs": 9379,
-      "endMs": 14291,
-      "cueMs": 14136
+      "phrase": "Le lien Prendre la place ouvre",
+      "startMs": 6950,
+      "endMs": 12079,
+      "cueMs": 14442
+    },
+    {
+      "segmentId": "volunteer",
+      "phrase": "Seul le bouton Prendre la place",
+      "startMs": 12079,
+      "endMs": 16547,
+      "cueMs": 15278
     },
     {
       "segmentId": "volunteer",
       "phrase": "Refuser la place conserve une réponse explicite",
-      "startMs": 14291,
+      "startMs": 16547,
       "endMs": 23000,
-      "cueMs": 14141
+      "cueMs": 15281
     },
     {
       "segmentId": "expiry",
       "phrase": "la promotion passe à la",
       "startMs": 7710,
       "endMs": 12284,
-      "cueMs": 14622
+      "cueMs": 16860
     },
     {
       "segmentId": "expiry",
       "phrase": "Dans l’administration, on peut suivre l’offre active",
       "startMs": 12284,
       "endMs": 23000,
-      "cueMs": 14653
+      "cueMs": 16892
     }
   ]
 }

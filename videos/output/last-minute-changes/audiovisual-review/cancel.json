@@ -1,51 +1,43 @@
 {
   "model": "gemini-3.8-flash",
-  "reviewedAt": "2026-10-16T08:59:43.799Z",
-  "videoSha256": "4c557865d2b8113c4e767c65e0ff9255874e84a7f6615119284a4b2b3084ee9e",
+  "reviewedAt": "2026-10-17T10:33:51.869Z",
+  "videoSha256": "4ebc69481a8c530ef1bf6def7b80407d73851b1a237279006058010402292214",
   "promptSha256": "347d4e20b89ba659474eb53dd634f29b00b13255c881e1126ea3a61d169b5bc1",
-  "clipSha256": "3b4455eccf138fca295293080b94211b0f0e573d777510e881cc9a54ee2a13c2",
+  "clipSha256": "b8c7adc5717e3558cef10b6030724a243142fe1e4e1d3d32dca8c10dfd01470d",
   "scene": "cancel",
   "review": {
     "heardOpening": "Une mission n'a plus lieu ?",
     "checkpoints": [
       {
-        "spokenSeconds": 6.6,
+        "spokenSeconds": 6.3,
         "spoken": "Ouvrons la confirmation et prenons le temps de lire les conséquences.",
-        "visibleSeconds": 6,
+        "visibleSeconds": 6.2,
+        "visible": "Ouverture de la fenêtre modale « Supprimer le créneau » détaillant les conséquences de l'annulation",
         "sync": "aligned",
-        "severity": "none",
-        "visible": "Ouverture de la fenêtre modale « Supprimer le créneau » détaillant les conséquences de l'annulation"
+        "severity": "none"
       },
       {
-        "spokenSeconds": 10.7,
+        "spokenSeconds": 10.9,
         "spoken": "Après confirmation, les inscriptions concernées sont annulées",
         "visibleSeconds": 11.5,
+        "visible": "Clic sur le bouton « Supprimer », validation en cours puis retour à la liste avec créneau supprimé",
         "sync": "aligned",
-        "severity": "none",
-        "visible": "Clic sur le bouton Supprimer et disparition du créneau dans la liste"
+        "severity": "none"
       },
       {
-        "spokenSeconds": 16.5,
-        "spoken": "Une demande en attente de validation est aussi concernée.",
-        "visibleSeconds": 16.2,
+        "spokenSeconds": 19.3,
+        "spoken": "Vérifions le statut, puis le vrai email reçu.",
+        "visibleSeconds": 21.3,
+        "visible": "Affichage de la boîte de réception Mailpit avec l'e-mail de notification d'annulation",
         "sync": "aligned",
-        "severity": "none",
-        "visible": "Affichage de l'onglet Journal montrant l'annulation d'une inscription confirmée et d'une demande à valider"
-      },
-      {
-        "spokenSeconds": 20.8,
-        "spoken": "puis le vrai email reçu.",
-        "visibleSeconds": 21,
-        "sync": "aligned",
-        "severity": "none",
-        "visible": "Affichage de la boîte de réception Mailpit avec l'e-mail informant de l'annulation du créneau"
+        "severity": "none"
       }
     ],
     "issues": [],
     "voice": {
       "consistent": true,
       "warm": true,
-      "observation": "Voix claire, posée et bien articulée, parfaitement synchronisée avec les actions à l'écran."
+      "observation": "Voix off féminine claire, posée et bien synchronisée avec les actions à l'écran."
     }
   },
   "note": "Automated observation of actual final video audio and images; not a claim of complete human validation"

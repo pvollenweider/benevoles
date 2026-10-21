@@ -23,6 +23,7 @@ async function main() {
       }
       if (scenario === "charter") await db.organization.update({ where: { id }, data: { timeZone: "Europe/Paris" } })
       if (scenario === "team") {
+        await db.organization.update({ where: { id }, data: { outboundEmailApprovedAt: new Date("2026-10-01T08:00:00Z"), publicationApprovedAt: new Date("2026-10-01T08:00:00Z") } })
         assert.equal(await db.adminUser.count({ where: { organizationId: id, email: "video.team.owner@example.org" } }), 1)
         await db.adminUser.deleteMany({ where: { organizationId: id, email: "video.team.lea@example.org", isActive: false } })
       }

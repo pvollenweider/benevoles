@@ -2,18 +2,104 @@ STATUS: READY
 {
   "id": "ORG_TEAM_PERMISSIONS",
   "status": "READY",
-  "duration": 132.12,
-  "buildId": "RnrUED_grQJ_YgINLz6Tf",
+  "reviewedAt": "2026-10-21",
+  "product": {
+    "commit": "490a44c306da8b93b4920ece009a452baf27fdbf",
+    "sourceTree": "be1a1d9342fc3b6d37f922a5557bedbe7d2b997b",
+    "productSourceSha256": "5cadc01f8a0c46ff4a0d9d6d4de90702a18b4a0108564e6a460657a57ec1aeb7",
+    "buildId": "PrM7VPUzFDhdfFFljgeHC",
+    "snapshot": "/tmp/benevoles-video-production.Batch27",
+    "builtAt": "2026-10-21T16:19:23.791Z"
+  },
+  "durationSeconds": 139.68,
+  "takes": 2,
+  "reviewedChapters": [
+    "welcome",
+    "roles",
+    "invite",
+    "invite-result",
+    "change-role",
+    "organizer-view",
+    "limits",
+    "result"
+  ],
+  "ocrFrames": 279,
+  "ocrErrors": 0,
+  "forbiddenHostOcrHits": 0,
+  "tuCountVtt": 0,
+  "tuCountFinalAsr": 0,
   "music": {
-    "voicedWindows": 118,
+    "voicedWindows": 127,
     "musicOnlyWindows": 0,
-    "smallestGapLu": 14.2,
-    "largestGapLu": 18.4,
+    "smallestGapLu": 14.3,
+    "largestGapLu": 18.8,
     "quietestMusicOnlyLufs": null,
     "loudestMusicOnlyLufs": null,
-    "medianVoiceLufs": -16.4
+    "medianVoiceLufs": -16.5
   },
-  "problems": "48 images et preuves41.4/55.2/69.9/70.4/92.2 revues. Invitation https://www.benevol.app, espace formation-team.benevol.app. Organisateur44.912 vs phrase44.444 ; Appliquer70.043 vs phrase69.549. AV prétend Appliquer absent et nom Léo : écarté sur images69.9/41.4 et clic enregistré, confirmation persistante normale. Samira sans commandes propriétaire. Tous chapitres conformes ; validation, ASR final8/8, VTT, effets9clics/0touches et musique passent ; aucune adresse interdite/overlay, dates françaises, aucun bug de disposition.",
-  "sourceChanges": "Aucune ; narration batch8 réutilisée, cache accepté.",
-  "report": "videos/output/org-team-permissions/review-report.txt"
+  "musicContinuityGaps": 0,
+  "issues": [],
+  "sourceChanges": "Measured Apply cue 4.07/17.147 after sentence anchor; actual-WAV rehearsal mode added. No src changes; retained complete Puck audio.",
+  "applySync": {
+    "measuredClauseSeconds": [
+      3.75,
+      5.23
+    ],
+    "takes": [
+      {
+        "take": "take1",
+        "chapter": {
+          "id": "change-role",
+          "startMs": 74171,
+          "endMs": 91320
+        },
+        "click": {
+          "kind": "click",
+          "atMs": 78702
+        },
+        "relativeSeconds": 4.531,
+        "withinClause": true,
+        "product": {
+          "commit": "490a44c306da8b93b4920ece009a452baf27fdbf",
+          "sourceTree": "be1a1d9342fc3b6d37f922a5557bedbe7d2b997b",
+          "productSourceSha256": "5cadc01f8a0c46ff4a0d9d6d4de90702a18b4a0108564e6a460657a57ec1aeb7",
+          "buildId": "PrM7VPUzFDhdfFFljgeHC",
+          "snapshot": "/tmp/benevoles-video-production.Batch27",
+          "builtAt": "2026-10-21T16:19:23.791Z"
+        }
+      },
+      {
+        "take": "take2",
+        "chapter": {
+          "id": "change-role",
+          "startMs": 74076,
+          "endMs": 91224
+        },
+        "click": {
+          "kind": "click",
+          "atMs": 78614
+        },
+        "relativeSeconds": 4.538,
+        "withinClause": true,
+        "product": {
+          "commit": "490a44c306da8b93b4920ece009a452baf27fdbf",
+          "sourceTree": "be1a1d9342fc3b6d37f922a5557bedbe7d2b997b",
+          "productSourceSha256": "5cadc01f8a0c46ff4a0d9d6d4de90702a18b4a0108564e6a460657a57ec1aeb7",
+          "buildId": "PrM7VPUzFDhdfFFljgeHC",
+          "snapshot": "/tmp/benevoles-video-production.Batch27",
+          "builtAt": "2026-10-21T16:19:23.791Z"
+        }
+      }
+    ]
+  },
+  "rehearsalClickSeconds": 4.542,
+  "validation": "8 scenes, 10 sentence anchors; source/final chapter ASR pass; full all-language ASR no extra languages; 8 full audiovisual clip reviews unflagged. All eight chapter sheets and precise Apply/confirmation frames inspected.",
+  "inputEvents": {
+    "clicks": 8,
+    "keys": 0
+  },
+  "mp4Sha256": "ca966d13be9da779a572f5709bd186a4bcc0dc849cccbe5176de511e9e5b76cb",
+  "catalogBumped": true,
+  "realTimeSubjectiveListening": "Unavailable; not a blocking criterion."
 }
+Full final review complete. No publication, push or merge.

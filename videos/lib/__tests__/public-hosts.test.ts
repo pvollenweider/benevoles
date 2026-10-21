@@ -2,7 +2,7 @@
 // SPDX-License-Identifier: AGPL-3.0-only
 
 import { describe, expect, it } from "vitest"
-import { hostResolverRules, localTarget, servedWithPublicUrl, videoAdminEmail, VIDEO_ADMIN_EMAIL } from "../public-hosts"
+import { hostResolverRules, localGatewayTarget, localTarget, servedWithPublicUrl, videoAdminEmail, VIDEO_ADMIN_EMAIL } from "../public-hosts"
 
 describe("public hosts of the videos", () => {
   it("maps benevol.app and its subdomains, patterns without a port", () => {
@@ -20,6 +20,18 @@ describe("public hosts of the videos", () => {
     expect(localTarget("http://127.0.0.1:43100").hostname).toBe("127.0.0.1")
     expect(() => localTarget("https://www.benevol.app")).toThrow()
     expect(() => localTarget("http://benevol.app")).toThrow()
+  })
+
+  it("restricts HTTP forwarding to the app and Mailpit origins", () => {
+    for (const host of ["localhost", "127.0.0.1"]) {
+      for (const port of [43104, 48026]) {
+        expect(localGatewayTarget(`http://${host}:${port}//example.org/path?q=1`, "http://localhost:43104")?.href)
+          .toBe(`http://127.0.0.1:${port}//example.org/path?q=1`)
+      }
+    }
+    for (const url of ["http://localhost:22/", "http://127.0.0.1:43102/", "http://localhost/", "https://localhost:43104/", "http://example.org:43104/", "http://localhost.example.org:43104/", "http://user@localhost:43104/", "/relative", "invalid"]) {
+      expect(localGatewayTarget(url, "http://localhost:43104")).toBeNull()
+    }
   })
 
   it("replaces the legacy localhost admin email, keeps a dedicated one", () => {

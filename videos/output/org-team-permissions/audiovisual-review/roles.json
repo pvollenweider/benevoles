@@ -1,42 +1,42 @@
 {
   "model": "gemini-3.8-flash",
-  "reviewedAt": "2026-10-12T01:06:09.945Z",
-  "videoSha256": "9d8121c4c409a4f0ae8e4ed84166e17de8a9a97388bc9e3ff88f3cf40bc11c55",
+  "reviewedAt": "2026-10-21T16:29:29.201Z",
+  "videoSha256": "ca966d13be9da779a572f5709bd186a4bcc0dc849cccbe5176de511e9e5b76cb",
   "promptSha256": "60bc633ca1ac1f6b45a5b2b7dc5d8384720994d4b3820b97098b687ccf01412d",
-  "clipSha256": "17f7f90ab9964a2f8905f90fe330bb37ee22846034caa8bd07a8a64fc502e294",
+  "clipSha256": "8dac321ae44ade2aac0271155465f7747d615057840f2e97e7971292c35da191",
   "scene": "roles",
   "review": {
-    "heardOpening": "Le propriétaire gère tout, y compris l'équipe",
+    "heardOpening": "Le propriétaire gère tout",
     "checkpoints": [
       {
-        "spokenSeconds": 0,
-        "spoken": "Le propriétaire gère tout, y compris l’équipe et les réglages de l’organisation.",
+        "spokenSeconds": 0.5,
+        "spoken": "Le propriétaire gère tout, y compris l’équipe",
         "visibleSeconds": 0,
-        "visible": "Liste des administrateurs affichant Camille Martin et Colette Favre avec le rôle Propriétaire.",
+        "visible": "Liste des administrateurs affichant des comptes avec le rôle Propriétaire",
         "sync": "aligned",
         "severity": "none"
       },
       {
-        "spokenSeconds": 4,
-        "spoken": "L’organisateur prépare les événements, les créneaux, les inscriptions, les membres et les messages, mais ne change pas l’équipe ni ces réglages.",
-        "visibleSeconds": 4.8,
-        "visible": "Clic sur « + Inviter », ouverture du formulaire détaillant le rôle Organisateur.",
+        "spokenSeconds": 4.7,
+        "spoken": "L’organisateur prépare les événements, les créneaux",
+        "visibleSeconds": 5,
+        "visible": "Ouverture du volet d'invitation affichant les détails et permissions du rôle Organisateur",
         "sync": "aligned",
         "severity": "none"
       },
       {
-        "spokenSeconds": 11,
-        "spoken": "Gardez si possible deux propriétaires actifs.",
-        "visibleSeconds": 11,
-        "visible": "Vue sur les administrateurs existants comportant deux comptes avec le rôle Propriétaire.",
+        "spokenSeconds": 12.2,
+        "spoken": "Gardez si possible deux propriétaires actifs",
+        "visibleSeconds": 12,
+        "visible": "Liste des administrateurs montrant deux personnes avec le statut Propriétaire",
         "sync": "aligned",
         "severity": "none"
       },
       {
-        "spokenSeconds": 14,
-        "spoken": "Un responsable de secteur est différent : désigné pour un événement, il reçoit un lien personnel, pas un rôle dans cette équipe d’administration.",
-        "visibleSeconds": 14,
-        "visible": "Écran explicatif stable sur la gestion d'équipe et le formulaire d'invitation d'administrateur.",
+        "spokenSeconds": 14.8,
+        "spoken": "Un responsable de secteur est différent",
+        "visibleSeconds": 15,
+        "visible": "Écran stable sur le formulaire d'invitation d'administrateur pendant l'explication conceptuelle",
         "sync": "aligned",
         "severity": "none"
       }
@@ -45,7 +45,7 @@
     "voice": {
       "consistent": true,
       "warm": true,
-      "observation": "Voix masculine claire, fluide et posée, en parfaite synchronisation avec les éléments affichés."
+      "observation": "Voix masculine claire, fluide et pédagogique, avec un fond musical discret."
     }
   },
   "note": "Automated observation of actual final video audio and images; not a claim of complete human validation"

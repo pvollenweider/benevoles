@@ -1,0 +1,20 @@
+[
+  {
+    "scene": "identity",
+    "automatedClaim": "New identifier detail allegedly appears only on reload at +28s, after speech at +21s.",
+    "decision": "Rejected on current final MP4: +20.4s (absolute 150.795s) already shows renamed organization, final slug and disabled OK. The later reload is a separate persistence check, not the save. Recorder asserts the actual new URL before reload.",
+    "frames": [
+      "identity-relative-20.4.jpg",
+      "identity-relative-21.jpg"
+    ]
+  },
+  {
+    "scene": "context",
+    "automatedClaim": "Events allegedly replace context page before the named Gérer action.",
+    "decision": "Rejected on current final MP4: 221.5s shows Travailler dans Formation Opérateur Parc and the unselected context. At 225.3s the actual Parc detail and Gérer are visible, after the measured sentence anchor at 225.008s. The real POST follows; recorder asserts Parc event only.",
+    "frames": [
+      "context-221.5.jpg",
+      "context-225.3.jpg"
+    ]
+  }
+]

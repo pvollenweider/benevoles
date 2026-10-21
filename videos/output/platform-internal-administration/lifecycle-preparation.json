@@ -1,5 +1,5 @@
 {
-  "checkedAt": "2026-10-11T13:35:29.244Z",
+  "checkedAt": "2026-10-21T16:20:14.984Z",
   "evidence": "Real API actions in isolated local database; not filmed UI validation",
   "createdPendingAccount": true,
   "twoInvitationsAcceptedByLocalSmtp": true,

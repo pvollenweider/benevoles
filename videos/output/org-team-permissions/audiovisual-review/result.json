@@ -1,34 +1,34 @@
 {
   "model": "gemini-3.8-flash",
-  "reviewedAt": "2026-10-12T01:06:32.117Z",
-  "videoSha256": "9d8121c4c409a4f0ae8e4ed84166e17de8a9a97388bc9e3ff88f3cf40bc11c55",
+  "reviewedAt": "2026-10-21T16:30:48.670Z",
+  "videoSha256": "ca966d13be9da779a572f5709bd186a4bcc0dc849cccbe5176de511e9e5b76cb",
   "promptSha256": "ac72762df383568923d36d8fe86130238fd10cf2c96df95b26a6dc270d986a76",
-  "clipSha256": "55639f218cbffec9bbaf5804930d3984ac6ac4faf4e990df453753d17713e23e",
+  "clipSha256": "1f942923f9eec55609e567a80d4e20ea85b1f3e1a3fafe7028d8327c3ac4a503",
   "scene": "result",
   "review": {
     "heardOpening": "Le résultat est une équipe autonome",
     "checkpoints": [
       {
         "spokenSeconds": 0.5,
-        "spoken": "Le résultat est une équipe autonome sans donner les pleins pouvoirs à tout le monde",
-        "visibleSeconds": 0.5,
-        "visible": "Encart central affichant « Une équipe autonome et maîtrisée - Des comptes nominatifs, des droits adaptés » sur la page Paramètres",
+        "spoken": "Le résultat est une équipe autonome sans donner les pleins pouvoirs",
+        "visibleSeconds": 0,
+        "visible": "Encart central récapitulatif : « Une équipe autonome et maîtrisée - Des comptes nominatifs, des droits adaptés »",
         "sync": "aligned",
         "severity": "none"
       },
       {
         "spokenSeconds": 4.5,
         "spoken": "les propriétaires protègent le cadre",
-        "visibleSeconds": 4.5,
-        "visible": "Section Administrateurs visible avec Camille Martin associée au « Rôle : Propriétaire »",
+        "visibleSeconds": 0,
+        "visible": "En arrière-plan, liste des administrateurs affichant Camille Martin avec le rôle Propriétaire",
         "sync": "aligned",
         "severity": "none"
       },
       {
-        "spokenSeconds": 6.2,
+        "spokenSeconds": 6.5,
         "spoken": "les organisateurs font vivre les événements",
-        "visibleSeconds": 6.2,
-        "visible": "Membres de l'équipe listés avec la mention « Rôle : Organisateur » (Colette Favre, Samira Diallo)",
+        "visibleSeconds": 0,
+        "visible": "En arrière-plan, liste affichant les membres avec le rôle Organisateur",
         "sync": "aligned",
         "severity": "none"
       }
@@ -37,7 +37,7 @@
     "voice": {
       "consistent": true,
       "warm": true,
-      "observation": "Voix claire, fluide et naturelle, bien synchronisée avec les éléments affichés."
+      "observation": "Voix claire, posée et bien articulée, parfaitement synchronisée avec l'écran récapitulatif."
     }
   },
   "note": "Automated observation of actual final video audio and images; not a claim of complete human validation"

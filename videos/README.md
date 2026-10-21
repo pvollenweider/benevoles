@@ -68,10 +68,10 @@ Les effets doublés du mode développement peuvent confirmer une offre puis affi
 le refus du second appel. Ne pas monter une telle prise comme un succès. Pour
 `LAST_MINUTE_CHANGES`, une copie compilée jetable sous
 `/tmp/benevoles-video-production.<suffixe>/` peut tourner sur **43102**, sans toucher
-au serveur de développement ni déployer. `local-production.ts serve <copie>`
+au serveur de développement ni déployer. `local-production.ts serve-capture <copie>`
 sert le build standalone avec ses assets copiés. La copie doit être construite
 depuis le même code que le tournage. `local-production.ts build <copie>` compile
-cette copie avec le domaine réservé `http://video.invalid` ; les assets doivent
+cette copie avec l’origine de capture `http://localhost:43102` ; les assets doivent
 ensuite être copiés dans le standalone. Le wrapper ne copie pas le dépôt.
 
 ```bash
@@ -88,10 +88,11 @@ file d'envoi de cette prise. Montage, extraction d'images et contrôle des parol
 ne lisent pas ces données et restent inchangés. Ne pas arrêter un serveur de
 l'utilisateur pour libérer un port ; identifier uniquement le processus vidéo créé.
 
-`PRIVACY_PERSONAL_LINKS` utilise aussi cette copie. Le domaine réservé évite le
+`PRIVACY_PERSONAL_LINKS` utilise aussi cette copie, avec `serve` (domaine public) plutôt
+que `serve-capture`. Le domaine public évite le
 double `?` de l'email d'invitation sous localhost (`?org=…?token=…`). Ne pas réparer
 le lien reçu dans le recorder : générer le vrai message avec la configuration de
-formation. Aucun accès réseau à `video.invalid` n'est nécessaire : seuls les
+formation. Aucun accès réseau au site public n'est nécessaire : seuls les
 chemins des liens de ces messages fictifs sont ouverts sur localhost:43102.
 Avant la capture, exécuter le seed `privacy-personal-links`, `prepare-privacy.ts`,
 puis `verify-privacy-details.ts` via ce wrapper ; refaire le seed avant chaque
@@ -327,7 +328,8 @@ de la production : `https://<espace>.benevol.app/…`. Ils viennent de `NEXT_PUB
 produit lit à l'exécution :
 
 - `videos/tools/local-production.ts serve` (et `operator-local.ts`) sert la compilation avec
-  `NEXT_PUBLIC_APP_URL=https://www.benevol.app` ; un serveur lancé à la main doit recevoir la même
+  `NEXT_PUBLIC_APP_URL=https://www.benevol.app` (sauf les deux captures HTTP décrites
+  ci-dessous) ; un serveur lancé à la main doit recevoir la même
   valeur. `video:record` le vérifie avant de filmer (lien canonique de `/doc`) et refuse sinon.
 - Chaque navigateur des outils vidéo passe par `launchVideoBrowser` (`videos/lib/public-hosts.ts`) :
   benevol.app et tous ses sous-domaines y sont redirigés vers un proxy TLS local, devant le serveur
@@ -683,3 +685,53 @@ devient obsolète quand l'écran qu'elle montre change, ce qu'aucun fichier de `
 Une commande qui ne regarderait que les sources donnerait donc une fausse assurance. En attendant,
 on régénère par identifiant (`make video ID=…`) quand un changement d'interface touche un écran
 filmé, puis on publie (`make video-publish`), qui ne renvoie que les fichiers réellement modifiés.
+
+### Capture HTTP et contrôle d’origine (#1062, lot 25-2)
+
+Les captures `LAST_MINUTE_CHANGES` et `PLATFORM_INTERNAL_ADMINISTRATION` utilisent
+respectivement `http://localhost:43102` (`local-production.ts serve-capture`) et
+`http://localhost:43104` (`operator-local.ts serve`) comme
+`NEXT_PUBLIC_APP_URL` à l’exécution. Le build commun utilise la première origine.
+`src/lib/urls.ts` lit la variable par nom dynamique, y compris depuis le proxy ;
+le port opérateur est donc lu à l’exécution. La configuration de build conserve
+aussi le schéma HTTP pour toute expression publique susceptible d’être intégrée.
+Le recorder contrôle le canonique local pour ces deux captures. Les autres prises
+restent soumises au contrôle du domaine public. Aucun contrôle produit n’est modifié.
+
+Après compilation vérifiée et seed, lancer `check-batch25-origin.ts` (et son
+argument `operator` pour 43104), avec `.env.video.e2e`. Le navigateur fait un
+POST JSON réel : aperçu sans envoi côté organisation, corps vide refusé par la
+validation côté opérateur. Une page fictive étrangère servie localement soumet
+ensuite un formulaire : son véritable Origin doit être refusé avec 403.
+Les liens locaux éventuellement visibles restent à signaler à la revue finale.
+
+Pour rejouer la vidéo opérateur après suppression visuelle du quatrième espace,
+`scripts/seed-video-operator.ts --reset-owned` remet les trois espaces initiaux
+à zéro puis les recrée. Il exige le marqueur de la base opérateur locale, les
+identités exactes (3 espaces, 4 comptes, 3 événements, 9 membres), aucune
+inscription ni tâche et uniquement les communications de cette formation.
+Toute donnée inconnue arrête le reset. Les essais interrompus avec un quatrième
+espace passent d’abord par la remise à zéro ciblée du recorder existant.
+
+### Reprise opérateur : adresses publiques via la passerelle locale (lot 26)
+
+La compilation conserve l’origine HTTP du lot 25-2 et `operator-local.ts serve`
+permet toujours les contrôles d’origine sur 43104. Après ces contrôles, arrêter
+ce PID et lancer `operator-local.ts serve-public <copie>` pour filmer les liens :
+ce mode utilise `https://www.benevol.app` à l’exécution. Avec
+`VIDEO_OPERATOR_PUBLIC=1`, le recorder vérifie toujours le PID et le BUILD_ID
+sur 43104, mais navigue sur les hôtes publics via le proxy TLS local vérifié.
+La passerelle CONNECT réservée à benevol.app permet aussi aux requêtes de
+contrôle Playwright de rester locales. Aucun Origin, écran ou résultat produit
+n’est réécrit. Les liens d’activation et la redirection d’ancien slug viennent
+ainsi du produit et sont vérifiés sur leurs véritables adresses publiques.
+
+### Reprise opérateur : cadrage du vrai message (lot 27-2)
+
+Mailpit 1.30.3 impose une date anglaise dans ses en-têtes, même avec le navigateur
+et son processus en français. Le montage opérateur utilise les intervalles du
+vrai écran Mailpit, détectés image par image dans la capture brute, pour cadrer
+le corps reçu (x=320, y=224, 960×576), sans cet en-tête ni la liste latérale.
+Aucun contenu d’email ni état produit n’est réécrit, aucune image fixe n’est
+ajoutée. La capture brute et `review/mailpit-focus-proof.json` restent conservées ;
+la revue vérifie aussi les transitions et la lisibilité du message complet.
