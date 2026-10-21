@@ -1,34 +1,34 @@
 {
   "model": "gemini-3.8-flash",
-  "reviewedAt": "2026-10-11T13:47:04.653Z",
-  "videoSha256": "5d340176fae0f8d93c606d4bd1ebba2776625dabed2f618b19701264ec57e85c",
+  "reviewedAt": "2026-10-21T16:13:54.360Z",
+  "videoSha256": "7350f773ffc928faed39ba31f4a706fca1122b7e734861ac922266f75fbee1af",
   "promptSha256": "0090acdc90d6ffa3eba4affb0fe87f97421501a10bc3e2ea52de3a527ace3bc7",
-  "clipSha256": "0cb0bbc85258daa944c7666badf0520d1747bc15137372b175ac03b0de0aa708",
+  "clipSha256": "0a967c464bc2dc964123bd898c3be4f8664e8f38fd015908d828c60f87c306f5",
   "scene": "result",
   "review": {
     "heardOpening": "Terminons en revenant au périmètre",
     "checkpoints": [
       {
-        "spokenSeconds": 3.5,
-        "spoken": "Un organisateur ordinaire ne peut pas ouvrir les routes de gestion",
-        "visibleSeconds": 4,
-        "visible": "Affichage de la mire de connexion puis de l'espace organisateur sur les événements",
+        "spokenSeconds": 3,
+        "spoken": "Un organisateur ordinaire ne peut pas ouvrir les routes de gestion de la plateforme.",
+        "visibleSeconds": 3,
+        "visible": "Page de connexion organisateur puis redirection vers l'espace événementiel restreint.",
         "sync": "aligned",
         "severity": "none"
       },
       {
-        "spokenSeconds": 9,
-        "spoken": "L'opérateur, lui, choisit son organisation avant d'y travailler",
-        "visibleSeconds": 8.8,
-        "visible": "Retour à la vue d'administration listant les différentes organisations",
+        "spokenSeconds": 7,
+        "spoken": "L'opérateur, lui, choisit son organisation avant d'y travailler.",
+        "visibleSeconds": 7,
+        "visible": "Retour à la console d'administration globale listant l'ensemble des organisations.",
         "sync": "aligned",
         "severity": "none"
       },
       {
-        "spokenSeconds": 14,
-        "spoken": "Créer un espace, activer un compte, désactiver et supprimer",
-        "visibleSeconds": 14,
-        "visible": "Écran stable récapitulatif de gestion des organisations accompagnant la conclusion",
+        "spokenSeconds": 12,
+        "spoken": "Créer un espace, activer un compte, désactiver et supprimer sont des actions différentes.",
+        "visibleSeconds": 12,
+        "visible": "Tableau des organisations affichant les boutons de création et de gestion de statut.",
         "sync": "aligned",
         "severity": "none"
       }
@@ -37,7 +37,7 @@
     "voice": {
       "consistent": true,
       "warm": true,
-      "observation": "Voix claire, posée et bien articulée, synchronisée avec les transitions illustratives."
+      "observation": "Voix posée, claire et dynamique, parfaitement synchronisée avec les transitions à l'écran."
     }
   },
   "note": "Automated observation of actual final video audio and images; not a claim of complete human validation"

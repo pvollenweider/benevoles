@@ -1,0 +1,17 @@
+[
+  {
+    "scene": "identity",
+    "automatedClaim": "Save is late until reload at chapter second 28",
+    "decision": "Rejected: actual final MP4 frame 150.8 s (chapter 20.406) already shows the saved new slug in the breadcrumb and disabled OK button, before the claimed spoken result at chapter second 21. The later reload is a distinct check. The real recorder asserts the new URL before it waits for that reload.",
+    "frame": "identity-saved-150.8.jpg"
+  },
+  {
+    "scene": "context",
+    "automatedClaim": "Gérer and context name are skipped before events",
+    "decision": "Rejected: confirmation page with exact named button visible at 221.5 s; actual Parc detail with Gérer and name visible at 225.3 s, after sentence anchor at 225.008 s, before the real click and events page. Capture assertions verify a POST context switch and only Parc event.",
+    "frames": [
+      "context-confirmation-221.5.jpg",
+      "context-manage-225.3.jpg"
+    ]
+  }
+]

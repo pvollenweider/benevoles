@@ -1,54 +1,53 @@
 {
   "model": "gemini-3.8-flash",
-  "reviewedAt": "2026-10-11T13:45:29.646Z",
-  "videoSha256": "5d340176fae0f8d93c606d4bd1ebba2776625dabed2f618b19701264ec57e85c",
+  "reviewedAt": "2026-10-21T16:13:11.031Z",
+  "videoSha256": "7350f773ffc928faed39ba31f4a706fca1122b7e734861ac922266f75fbee1af",
   "promptSha256": "b1ff09285b14fe2c7c4f73686105eb55c7e84015bdbbf30fe6ccec9954339d20",
-  "clipSha256": "a1d24a131d162af74a1edc9af2dd6f95b6b79692790e35fbd76d2ddccc1fa7b2",
+  "clipSha256": "3fe654d3730b165d6bb326738460e62d7c5ca2f1c11000506fa32884ff3092ed",
   "scene": "identity",
   "review": {
-    "heardOpening": "Le nom affiché et l'identifiant public",
+    "heardOpening": "Le nom affiché et l'identifiant public sont deux informations différentes.",
     "checkpoints": [
       {
-        "spokenSeconds": 5.4,
+        "spokenSeconds": 6.3,
         "spoken": "Modifions d'abord le nom et enregistrons-le.",
-        "visibleSeconds": 6.2,
-        "visible": "Le champ Nom est modifié en « Formation Operateur Jetable renommée » puis validé avec succès.",
+        "visibleSeconds": 8.8,
+        "visible": "Le nouveau nom est saisi et validé avec le bouton OK, le message 'Enregistré.' s'affiche.",
         "sync": "aligned",
         "severity": "none"
       },
       {
-        "spokenSeconds": 10.3,
-        "spoken": "essayons une valeur déjà utilisée : l'application la refuse.",
-        "visibleSeconds": 12.3,
-        "visible": "Saisie d'un slug existant et affichage de l'erreur en rouge « Ce slug est déjà utilisé. ».",
+        "spokenSeconds": 10.4,
+        "spoken": "Pour l'identifiant, essayons une valeur déjà utilisée : l'application la refuse.",
+        "visibleSeconds": 13,
+        "visible": "Tentative de modification du slug et apparition du message d'erreur en rouge 'Ce slug est déjà utilisé.'.",
         "sync": "aligned",
         "severity": "none"
       },
       {
-        "spokenSeconds": 15.2,
+        "spokenSeconds": 16.2,
         "spoken": "Choisissons alors un identifiant libre et enregistrons.",
-        "visibleSeconds": 16.5,
-        "visible": "Le texte « formation-operateur-jetable-renommee » est saisi dans le slug, mais le bouton OK n'est pas cliqué.",
-        "sync": "late",
-        "severity": "major"
+        "visibleSeconds": 19.9,
+        "visible": "Saisie de 'formation-operateur-jetable-renommee' dans le champ slug puis clic sur OK.",
+        "sync": "aligned",
+        "severity": "none"
       },
       {
-        "spokenSeconds": 19.1,
+        "spokenSeconds": 21,
         "spoken": "Le détail s'ouvre sous ce nouvel identifiant.",
-        "visibleSeconds": 20,
-        "visible": "L'enregistrement n'est pas effectué et la page ne se recharge pas sous le nouvel identifiant.",
-        "sync": "missing",
+        "visibleSeconds": 28.5,
+        "visible": "La page se recharge et affiche le nouvel identifiant sous le titre.",
+        "sync": "late",
         "severity": "major"
       }
     ],
     "issues": [
-      "À partir de 00:17, le nouvel identifiant est saisi mais l'enregistrement n'est jamais validé (bouton OK non cliqué).",
-      "À 00:19, l'annonce « Le détail s'ouvre sous ce nouvel identifiant » n'a pas lieu à l'écran : la page reste figée sur le formulaire non validé jusqu'à la fin de la vidéo."
+      "Désynchronisation à 00:21 : la voix annonce que le détail s'ouvre sous le nouvel identifiant, mais le rechargement de la page n'intervient qu'à 00:28 pendant que la voix continue son explication."
     ],
     "voice": {
       "consistent": true,
       "warm": true,
-      "observation": "Voix off féminine claire, posée et bien articulée."
+      "observation": "Voix off féminine claire, posée et bien articulée, avec une musique de fond discrète."
     }
   },
   "note": "Automated observation of actual final video audio and images; not a claim of complete human validation"

@@ -1,43 +1,53 @@
 {
   "model": "gemini-3.8-flash",
-  "reviewedAt": "2026-10-11T13:45:53.736Z",
-  "videoSha256": "5d340176fae0f8d93c606d4bd1ebba2776625dabed2f618b19701264ec57e85c",
+  "reviewedAt": "2026-10-21T16:13:44.360Z",
+  "videoSha256": "7350f773ffc928faed39ba31f4a706fca1122b7e734861ac922266f75fbee1af",
   "promptSha256": "0eafd04b7589de4dcd88f686a90a71e3583664283eaef7597229a952f6f27413",
-  "clipSha256": "ca17d0da5f46abb1ae48f33d17b46c9d657b925c9f8db861726869fcb850f45f",
+  "clipSha256": "b44176bfc54c9ddde5d3850b4b131b4d6be678399afade2aa792a2427bc40c4f",
   "scene": "context",
   "review": {
     "heardOpening": "Pour travailler dans une organisation",
     "checkpoints": [
       {
-        "spokenSeconds": 8,
-        "spoken": "Depuis son détail, utilisons Gérer",
-        "visibleSeconds": 8.8,
-        "visible": "Clic sur le bouton Gérer depuis la page de détail de l'organisation Formation Opérateur Parc",
+        "spokenSeconds": 7,
+        "spoken": "l'application demande de sélectionner un espace.",
+        "visibleSeconds": 4.5,
+        "visible": "Écran 'Changer d'organisation' demandant de choisir et bouton 'Travailler dans Formation Opérateur Parc'.",
         "sync": "aligned",
         "severity": "none"
       },
       {
-        "spokenSeconds": 10.8,
-        "spoken": "vérifions le nom du contexte avant d'ouvrir les événements",
-        "visibleSeconds": 10,
-        "visible": "Affichage de l'espace 'Formation Opérateur Parc' dans la barre de navigation avec l'onglet Événements",
+        "spokenSeconds": 12.5,
+        "spoken": "utilisons Gérer et vérifions le nom du contexte avant d'ouvrir les événements.",
+        "visibleSeconds": 12,
+        "visible": "L'écran bascule directement sur l'onglet Événements sans montrer l'action sur Gérer ni l'étape de vérification intermédiaire.",
+        "sync": "early",
+        "severity": "minor"
+      },
+      {
+        "spokenSeconds": 18.5,
+        "spoken": "Nous retrouvons ici ceux du Parc, pas ceux du Quartier.",
+        "visibleSeconds": 18.5,
+        "visible": "Liste des événements affichant 'Parc – Fête de formation'.",
         "sync": "aligned",
         "severity": "none"
       },
       {
-        "spokenSeconds": 14.2,
-        "spoken": "Nous retrouvons ici ceux du Parc, pas ceux du Quartier",
-        "visibleSeconds": 14,
-        "visible": "L'événement affiché dans la liste est 'Parc – Fête de formation'",
+        "spokenSeconds": 33,
+        "spoken": "regarder dans quel espace nous sommes.",
+        "visibleSeconds": 33,
+        "visible": "Le nom du contexte 'Formation Opérateur Parc' reste visible dans la barre supérieure.",
         "sync": "aligned",
         "severity": "none"
       }
     ],
-    "issues": [],
+    "issues": [
+      "Entre 00:12 et 00:17, la voix invite à utiliser 'Gérer' et à vérifier le contexte avant d'ouvrir les événements, mais la vidéo coupe directement vers la page Événements dès 00:12."
+    ],
     "voice": {
       "consistent": true,
       "warm": true,
-      "observation": "Voix féminine claire, posée et bien articulée, parfaitement synchronisée avec la démonstration à l'écran."
+      "observation": "Voix féminine claire, posée, bien articulée et sans artefact sonore."
     }
   },
   "note": "Automated observation of actual final video audio and images; not a claim of complete human validation"

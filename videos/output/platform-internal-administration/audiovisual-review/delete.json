@@ -1,50 +1,50 @@
 {
   "model": "gemini-3.8-flash",
-  "reviewedAt": "2026-10-11T13:46:49.561Z",
-  "videoSha256": "5d340176fae0f8d93c606d4bd1ebba2776625dabed2f618b19701264ec57e85c",
+  "reviewedAt": "2026-10-21T16:13:39.551Z",
+  "videoSha256": "7350f773ffc928faed39ba31f4a706fca1122b7e734861ac922266f75fbee1af",
   "promptSha256": "18835a9f4215dc11900016007fbed2420e8dd45e3970b73ff5f2dc1a0408bf78",
-  "clipSha256": "f72d415fce94f18c104fe8134acb55079601a5209bcc064ae4797ba134531179",
+  "clipSha256": "ddeedda404534303158c15df7ce178bd1df3d6036bdbc7e22adae1c11513329d",
   "scene": "delete",
   "review": {
     "heardOpening": "La suppression définitive demande une autre précaution",
     "checkpoints": [
       {
-        "spokenSeconds": 10,
+        "spokenSeconds": 9.2,
         "spoken": "Désactivons-le d'abord.",
-        "visibleSeconds": 11.2,
-        "visible": "Clic sur le bouton Désactiver puis confirmation dans la modale.",
+        "visibleSeconds": 10.3,
+        "visible": "Clic sur le bouton Désactiver puis confirmation dans la modale",
         "sync": "aligned",
         "severity": "none"
       },
       {
-        "spokenSeconds": 12.4,
+        "spokenSeconds": 11.2,
         "spoken": "Le bouton de suppression apparaît alors.",
-        "visibleSeconds": 13.2,
-        "visible": "Le bouton rouge Supprimer définitivement s'affiche en haut à droite et est cliqué.",
+        "visibleSeconds": 12.8,
+        "visible": "Le bouton Supprimer définitivement s'affiche et est cliqué, ouvrant la modale de récapitulatif",
         "sync": "aligned",
         "severity": "none"
       },
       {
-        "spokenSeconds": 22,
+        "spokenSeconds": 21.3,
         "spoken": "La confirmation demande de saisir exactement son identifiant.",
-        "visibleSeconds": 23,
-        "visible": "Saisie de l'identifiant formation-operateur-jetable-renommee dans le champ de confirmation.",
+        "visibleSeconds": 22.4,
+        "visible": "Saisie de l'identifiant formation-operateur-jetable-renommee dans le champ de confirmation",
         "sync": "aligned",
         "severity": "none"
       },
       {
-        "spokenSeconds": 26.6,
+        "spokenSeconds": 25.4,
         "spoken": "puis validons la suppression de cet espace jetable.",
-        "visibleSeconds": 26.5,
-        "visible": "Clic sur le bouton rouge Supprimer définitivement.",
+        "visibleSeconds": 25.5,
+        "visible": "Clic sur le bouton Supprimer définitivement et retour à la liste des organisations",
         "sync": "aligned",
         "severity": "none"
       },
       {
-        "spokenSeconds": 30.5,
+        "spokenSeconds": 29.8,
         "spoken": "Il disparaît de la liste.",
-        "visibleSeconds": 27.5,
-        "visible": "Retour à la liste des organisations où l'espace supprimé n'apparaît plus.",
+        "visibleSeconds": 26.5,
+        "visible": "Tableau des organisations affiché sans l'espace supprimé",
         "sync": "aligned",
         "severity": "none"
       }
@@ -53,7 +53,7 @@
     "voice": {
       "consistent": true,
       "warm": true,
-      "observation": "Voix claire, posée et bien synchronisée avec les actions à l'écran."
+      "observation": "Voix claire, posée et parfaitement synchronisée avec la démonstration à l'écran."
     }
   },
   "note": "Automated observation of actual final video audio and images; not a claim of complete human validation"

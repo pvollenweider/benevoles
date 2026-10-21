@@ -4736,7 +4736,10 @@ async function main() {
         await role.scrollIntoViewIfNeeded()
         await at("On choisit d’abord Propriétaire dans")
         await role.selectOption("admin")
+        // The confirmation sentence follows a keyboard-safety explanation. Saving
+        // there is too late: confirm inside the preceding sentence instead.
         await at("On choisit d’abord Propriétaire dans")
+        await at(0.23) /* mid-sentence: « puis on confirme avec Appliquer » */
         await tap(page, row.getByRole("button", { name: /Appliquer/ }))
         await page.getByRole("status").filter({ hasText: /Léa Martin : propriétaire/ }).waitFor()
         await at(0.74) /* mid-sentence */

@@ -1,42 +1,42 @@
 {
   "model": "gemini-3.8-flash",
-  "reviewedAt": "2026-10-11T13:44:29.896Z",
-  "videoSha256": "5d340176fae0f8d93c606d4bd1ebba2776625dabed2f618b19701264ec57e85c",
+  "reviewedAt": "2026-10-21T16:13:08.012Z",
+  "videoSha256": "7350f773ffc928faed39ba31f4a706fca1122b7e734861ac922266f75fbee1af",
   "promptSha256": "06169dd04dd315eda8ea84050055f57a883b43ace0203b1f8b60d3116a74cbc1",
-  "clipSha256": "6ada46f62d95564c466ce771b3beba8706d9809d7f1ee193c33cf69bfb1d7030",
+  "clipSha256": "86e80ef7621512942ed0dd929887f86cd7c6ac08c0d0918ffc5f110090b0109d",
   "scene": "welcome",
   "review": {
     "heardOpening": "Bienvenue dans l'administration de la plateforme.",
     "checkpoints": [
       {
-        "spokenSeconds": 8.9,
+        "spokenSeconds": 7.9,
         "spoken": "Notre liste contient trois organisations de formation.",
-        "visibleSeconds": 9,
-        "visible": "Tableau listant les 3 organisations : Formation Opérateur Réserve, Quartier et Parc.",
+        "visibleSeconds": 8,
+        "visible": "Tableau listant 3 organisations de formation sous le titre Organisations.",
         "sync": "aligned",
         "severity": "none"
       },
       {
-        "spokenSeconds": 11.5,
+        "spokenSeconds": 11.2,
         "spoken": "Elle montre leur nom, leur identifiant, leur état et les nombres d'événements, d'administrateurs et de membres.",
-        "visibleSeconds": 11.5,
-        "visible": "Colonnes affichées : Nom, Slug, État, Création, Événements, Admins, Membres.",
+        "visibleSeconds": 11.2,
+        "visible": "Colonnes du tableau affichant Nom, Slug, État, Création, Événements, Admins et Membres.",
         "sync": "aligned",
         "severity": "none"
       },
       {
         "spokenSeconds": 17.6,
-        "spoken": "Ouvrons un détail pour retrouver ces informations",
-        "visibleSeconds": 18.7,
-        "visible": "Clic sur le lien Détail de la ligne Formation Opérateur Parc et affichage de la fiche détaillée.",
+        "spoken": "Ouvrons un détail pour retrouver ces informations et les comptes associés.",
+        "visibleSeconds": 17.8,
+        "visible": "Clic sur l'organisation et affichage de la page de détail de « Formation Opérateur Parc ».",
         "sync": "aligned",
         "severity": "none"
       },
       {
-        "spokenSeconds": 21,
+        "spokenSeconds": 20.3,
         "spoken": "et les comptes associés.",
-        "visibleSeconds": 22.5,
-        "visible": "Défilement vers le bas révélant la section Administrateurs avec le compte Élodie Exemple.",
+        "visibleSeconds": 21.5,
+        "visible": "Défilement vers le bas révélant la section Administrateurs avec le compte associé.",
         "sync": "aligned",
         "severity": "none"
       }
@@ -45,7 +45,7 @@
     "voice": {
       "consistent": true,
       "warm": true,
-      "observation": "Voix claire, posée et bien articulée, synchronisée avec les actions à l'écran."
+      "observation": "Voix féminine naturelle, claire et posée, bien synchronisée avec les actions affichées à l'écran."
     }
   },
   "note": "Automated observation of actual final video audio and images; not a claim of complete human validation"

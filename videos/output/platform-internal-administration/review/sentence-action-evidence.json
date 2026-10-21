@@ -1,0 +1,459 @@
+{
+  "videoSha256": "7350f773ffc928faed39ba31f4a706fca1122b7e734861ac922266f75fbee1af",
+  "product": {
+    "commit": "490a44c306da8b93b4920ece009a452baf27fdbf",
+    "sourceTree": "be1a1d9342fc3b6d37f922a5557bedbe7d2b997b",
+    "productSourceSha256": "5cadc01f8a0c46ff4a0d9d6d4de90702a18b4a0108564e6a460657a57ec1aeb7",
+    "buildId": "rFYo35VG0QypepwE2pYU_",
+    "snapshot": "/tmp/benevoles-video-production.Batch27",
+    "builtAt": "2026-10-21T15:59:30.726Z"
+  },
+  "anchors": [
+    {
+      "segmentId": "create",
+      "phrase": "Renseignons son nom",
+      "startMs": 5309,
+      "endMs": 9880,
+      "cueMs": 36067,
+      "absoluteSentenceMs": 36067,
+      "firstFollowingInput": {
+        "kind": "click",
+        "atMs": 36542
+      },
+      "sentenceFrame": "videos/output/platform-internal-administration/review/anchor-00-sentence.jpg",
+      "actionFrame": "videos/output/platform-internal-administration/review/anchor-00-action.jpg"
+    },
+    {
+      "segmentId": "create",
+      "phrase": "Créons l’espace",
+      "startMs": 15885,
+      "endMs": 15933,
+      "cueMs": 46644,
+      "absoluteSentenceMs": 46643,
+      "firstFollowingInput": {
+        "kind": "click",
+        "atMs": 47108
+      },
+      "sentenceFrame": "videos/output/platform-internal-administration/review/anchor-01-sentence.jpg",
+      "actionFrame": "videos/output/platform-internal-administration/review/anchor-01-action.jpg"
+    },
+    {
+      "segmentId": "renew",
+      "phrase": "Avant de l’utiliser",
+      "startMs": 7247,
+      "endMs": 13001,
+      "cueMs": 71095,
+      "absoluteSentenceMs": 71093,
+      "firstFollowingInput": {
+        "kind": "click",
+        "atMs": 72825
+      },
+      "sentenceFrame": "videos/output/platform-internal-administration/review/anchor-02-sentence.jpg",
+      "actionFrame": "videos/output/platform-internal-administration/review/anchor-02-action.jpg"
+    },
+    {
+      "segmentId": "renew",
+      "phrase": "Ouvrons le second message reçu",
+      "startMs": 27719,
+      "endMs": 30084,
+      "cueMs": 91566,
+      "absoluteSentenceMs": 91565,
+      "firstFollowingInput": null,
+      "sentenceFrame": "videos/output/platform-internal-administration/review/anchor-03-sentence.jpg",
+      "actionFrame": "videos/output/platform-internal-administration/review/anchor-03-action.jpg"
+    },
+    {
+      "segmentId": "activate",
+      "phrase": "Elle choisit son mot de passe",
+      "startMs": 4792,
+      "endMs": 6576,
+      "cueMs": 101352,
+      "absoluteSentenceMs": 101351,
+      "firstFollowingInput": {
+        "kind": "click",
+        "atMs": 101823
+      },
+      "sentenceFrame": "videos/output/platform-internal-administration/review/anchor-04-sentence.jpg",
+      "actionFrame": "videos/output/platform-internal-administration/review/anchor-04-action.jpg"
+    },
+    {
+      "segmentId": "activate",
+      "phrase": "Elle choisit son mot de passe",
+      "startMs": 4792,
+      "endMs": 6576,
+      "cueMs": 105435,
+      "absoluteSentenceMs": 101351,
+      "firstFollowingInput": {
+        "kind": "click",
+        "atMs": 101823
+      },
+      "sentenceFrame": "videos/output/platform-internal-administration/review/anchor-05-sentence.jpg",
+      "actionFrame": "videos/output/platform-internal-administration/review/anchor-05-action.jpg"
+    },
+    {
+      "segmentId": "activate",
+      "phrase": "Connectons-nous ensuite",
+      "startMs": 10579,
+      "endMs": 14453,
+      "cueMs": 107139,
+      "absoluteSentenceMs": 107138,
+      "firstFollowingInput": {
+        "kind": "click",
+        "atMs": 107610
+      },
+      "sentenceFrame": "videos/output/platform-internal-administration/review/anchor-06-sentence.jpg",
+      "actionFrame": "videos/output/platform-internal-administration/review/anchor-06-action.jpg"
+    },
+    {
+      "segmentId": "activate",
+      "phrase": "Revenons au détail côté opérateur",
+      "startMs": 16008,
+      "endMs": 21465,
+      "cueMs": 112568,
+      "absoluteSentenceMs": 112567,
+      "firstFollowingInput": null,
+      "sentenceFrame": "videos/output/platform-internal-administration/review/anchor-07-sentence.jpg",
+      "actionFrame": "videos/output/platform-internal-administration/review/anchor-07-action.jpg"
+    },
+    {
+      "segmentId": "identity",
+      "phrase": "Modifions d’abord le nom",
+      "startMs": 6060,
+      "endMs": 9126,
+      "cueMs": 136457,
+      "absoluteSentenceMs": 136454,
+      "firstFollowingInput": {
+        "kind": "click",
+        "atMs": 136922
+      },
+      "sentenceFrame": "videos/output/platform-internal-administration/review/anchor-08-sentence.jpg",
+      "actionFrame": "videos/output/platform-internal-administration/review/anchor-08-action.jpg"
+    },
+    {
+      "segmentId": "identity",
+      "phrase": "Pour l’identifiant, essayons",
+      "startMs": 9997,
+      "endMs": 13504,
+      "cueMs": 140393,
+      "absoluteSentenceMs": 140391,
+      "firstFollowingInput": {
+        "kind": "click",
+        "atMs": 140887
+      },
+      "sentenceFrame": "videos/output/platform-internal-administration/review/anchor-09-sentence.jpg",
+      "actionFrame": "videos/output/platform-internal-administration/review/anchor-09-action.jpg"
+    },
+    {
+      "segmentId": "identity",
+      "phrase": "Choisissons alors un identifiant libre",
+      "startMs": 16324,
+      "endMs": 18562,
+      "cueMs": 146720,
+      "absoluteSentenceMs": 146718,
+      "firstFollowingInput": {
+        "kind": "click",
+        "atMs": 147186
+      },
+      "sentenceFrame": "videos/output/platform-internal-administration/review/anchor-10-sentence.jpg",
+      "actionFrame": "videos/output/platform-internal-administration/review/anchor-10-action.jpg"
+    },
+    {
+      "segmentId": "availability",
+      "phrase": "Ouvrons la confirmation",
+      "startMs": 3650,
+      "endMs": 7956,
+      "cueMs": 179173,
+      "absoluteSentenceMs": 179172,
+      "firstFollowingInput": {
+        "kind": "click",
+        "atMs": 179653
+      },
+      "sentenceFrame": "videos/output/platform-internal-administration/review/anchor-11-sentence.jpg",
+      "actionFrame": "videos/output/platform-internal-administration/review/anchor-11-action.jpg"
+    },
+    {
+      "segmentId": "availability",
+      "phrase": "Dans la session organisateur déjà ouverte",
+      "startMs": 8833,
+      "endMs": 13969,
+      "cueMs": 184357,
+      "absoluteSentenceMs": 184355,
+      "firstFollowingInput": {
+        "kind": "click",
+        "atMs": 194787
+      },
+      "sentenceFrame": "videos/output/platform-internal-administration/review/anchor-12-sentence.jpg",
+      "actionFrame": "videos/output/platform-internal-administration/review/anchor-12-action.jpg"
+    },
+    {
+      "segmentId": "availability",
+      "phrase": "Revenons côté opérateur",
+      "startMs": 17627,
+      "endMs": 19289,
+      "cueMs": 193152,
+      "absoluteSentenceMs": 193149,
+      "firstFollowingInput": {
+        "kind": "click",
+        "atMs": 194787
+      },
+      "sentenceFrame": "videos/output/platform-internal-administration/review/anchor-13-sentence.jpg",
+      "actionFrame": "videos/output/platform-internal-administration/review/anchor-13-action.jpg"
+    },
+    {
+      "segmentId": "availability",
+      "phrase": "La session organisateur peut à nouveau",
+      "startMs": 19449,
+      "endMs": 24324,
+      "cueMs": 195877,
+      "absoluteSentenceMs": 194971,
+      "firstFollowingInput": {
+        "kind": "click",
+        "atMs": 195569
+      },
+      "sentenceFrame": "videos/output/platform-internal-administration/review/anchor-14-sentence.jpg",
+      "actionFrame": "videos/output/platform-internal-administration/review/anchor-14-action.jpg"
+    },
+    {
+      "segmentId": "context",
+      "phrase": "Depuis son détail",
+      "startMs": 10664,
+      "endMs": 17126,
+      "cueMs": 225009,
+      "absoluteSentenceMs": 225008,
+      "firstFollowingInput": {
+        "kind": "click",
+        "atMs": 226651
+      },
+      "sentenceFrame": "videos/output/platform-internal-administration/review/anchor-15-sentence.jpg",
+      "actionFrame": "videos/output/platform-internal-administration/review/anchor-15-action.jpg"
+    },
+    {
+      "segmentId": "preview",
+      "phrase": "Donnons-lui un objet clair",
+      "startMs": 6011,
+      "endMs": 6552,
+      "cueMs": 296812,
+      "absoluteSentenceMs": 296810,
+      "firstFollowingInput": {
+        "kind": "click",
+        "atMs": 297281
+      },
+      "sentenceFrame": "videos/output/platform-internal-administration/review/anchor-16-sentence.jpg",
+      "actionFrame": "videos/output/platform-internal-administration/review/anchor-16-action.jpg"
+    },
+    {
+      "segmentId": "preview",
+      "phrase": "Le contenu commence",
+      "startMs": 9384,
+      "endMs": 11831,
+      "cueMs": 300183,
+      "absoluteSentenceMs": 300183,
+      "firstFollowingInput": {
+        "kind": "click",
+        "atMs": 300648
+      },
+      "sentenceFrame": "videos/output/platform-internal-administration/review/anchor-17-sentence.jpg",
+      "actionFrame": "videos/output/platform-internal-administration/review/anchor-17-action.jpg"
+    },
+    {
+      "segmentId": "preview",
+      "phrase": "Ajoutons deux conseils simples",
+      "startMs": 12650,
+      "endMs": 14074,
+      "cueMs": 303451,
+      "absoluteSentenceMs": 303449,
+      "firstFollowingInput": {
+        "kind": "key",
+        "atMs": 303454
+      },
+      "sentenceFrame": "videos/output/platform-internal-administration/review/anchor-18-sentence.jpg",
+      "actionFrame": "videos/output/platform-internal-administration/review/anchor-18-action.jpg"
+    },
+    {
+      "segmentId": "preview",
+      "phrase": "Un lien vers le guide",
+      "startMs": 18476,
+      "endMs": 20297,
+      "cueMs": 309276,
+      "absoluteSentenceMs": 309275,
+      "firstFollowingInput": {
+        "kind": "key",
+        "atMs": 309278
+      },
+      "sentenceFrame": "videos/output/platform-internal-administration/review/anchor-19-sentence.jpg",
+      "actionFrame": "videos/output/platform-internal-administration/review/anchor-19-action.jpg"
+    },
+    {
+      "segmentId": "preview",
+      "phrase": "Utilisons Envoyer un test",
+      "startMs": 32858,
+      "endMs": 36787,
+      "cueMs": 323659,
+      "absoluteSentenceMs": 323657,
+      "firstFollowingInput": {
+        "kind": "click",
+        "atMs": 324130
+      },
+      "sentenceFrame": "videos/output/platform-internal-administration/review/anchor-20-sentence.jpg",
+      "actionFrame": "videos/output/platform-internal-administration/review/anchor-20-action.jpg"
+    },
+    {
+      "segmentId": "preview",
+      "phrase": "Ouvrons le vrai email",
+      "startMs": 37992,
+      "endMs": 40852,
+      "cueMs": 328791,
+      "absoluteSentenceMs": 328791,
+      "firstFollowingInput": null,
+      "sentenceFrame": "videos/output/platform-internal-administration/review/anchor-21-sentence.jpg",
+      "actionFrame": "videos/output/platform-internal-administration/review/anchor-21-action.jpg"
+    },
+    {
+      "segmentId": "broadcast",
+      "phrase": "Reprenons notre objet",
+      "startMs": 5005,
+      "endMs": 8347,
+      "cueMs": 348138,
+      "absoluteSentenceMs": 348137,
+      "firstFollowingInput": {
+        "kind": "click",
+        "atMs": 348615
+      },
+      "sentenceFrame": "videos/output/platform-internal-administration/review/anchor-22-sentence.jpg",
+      "actionFrame": "videos/output/platform-internal-administration/review/anchor-22-action.jpg"
+    },
+    {
+      "segmentId": "broadcast",
+      "phrase": "Avant la diffusion",
+      "startMs": 22099,
+      "endMs": 26365,
+      "cueMs": 365233,
+      "absoluteSentenceMs": 365231,
+      "firstFollowingInput": {
+        "kind": "click",
+        "atMs": 365695
+      },
+      "sentenceFrame": "videos/output/platform-internal-administration/review/anchor-23-sentence.jpg",
+      "actionFrame": "videos/output/platform-internal-administration/review/anchor-23-action.jpg"
+    },
+    {
+      "segmentId": "broadcast",
+      "phrase": "Validons, puis regardons",
+      "startMs": 35669,
+      "endMs": 40998,
+      "cueMs": 378805,
+      "absoluteSentenceMs": 378801,
+      "firstFollowingInput": {
+        "kind": "click",
+        "atMs": 379278
+      },
+      "sentenceFrame": "videos/output/platform-internal-administration/review/anchor-24-sentence.jpg",
+      "actionFrame": "videos/output/platform-internal-administration/review/anchor-24-action.jpg"
+    },
+    {
+      "segmentId": "broadcast",
+      "phrase": "Validons, puis regardons",
+      "startMs": 35669,
+      "endMs": 40998,
+      "cueMs": 379612,
+      "absoluteSentenceMs": 378801,
+      "firstFollowingInput": {
+        "kind": "click",
+        "atMs": 379278
+      },
+      "sentenceFrame": "videos/output/platform-internal-administration/review/anchor-25-sentence.jpg",
+      "actionFrame": "videos/output/platform-internal-administration/review/anchor-25-action.jpg"
+    },
+    {
+      "segmentId": "broadcast",
+      "phrase": "Ouvrons un message livré",
+      "startMs": 43234,
+      "endMs": 46692,
+      "cueMs": 386366,
+      "absoluteSentenceMs": 386366,
+      "firstFollowingInput": null,
+      "sentenceFrame": "videos/output/platform-internal-administration/review/anchor-26-sentence.jpg",
+      "actionFrame": "videos/output/platform-internal-administration/review/anchor-26-action.jpg"
+    },
+    {
+      "segmentId": "broadcast",
+      "phrase": "Ouvrons un message livré",
+      "startMs": 43234,
+      "endMs": 46692,
+      "cueMs": 387627,
+      "absoluteSentenceMs": 386366,
+      "firstFollowingInput": null,
+      "sentenceFrame": "videos/output/platform-internal-administration/review/anchor-27-sentence.jpg",
+      "actionFrame": "videos/output/platform-internal-administration/review/anchor-27-action.jpg"
+    },
+    {
+      "segmentId": "delete",
+      "phrase": "Désactivons-le d’abord",
+      "startMs": 11131,
+      "endMs": 12226,
+      "cueMs": 415999,
+      "absoluteSentenceMs": 415997,
+      "firstFollowingInput": {
+        "kind": "click",
+        "atMs": 416477
+      },
+      "sentenceFrame": "videos/output/platform-internal-administration/review/anchor-28-sentence.jpg",
+      "actionFrame": "videos/output/platform-internal-administration/review/anchor-28-action.jpg"
+    },
+    {
+      "segmentId": "delete",
+      "phrase": "Le bouton de suppression apparaît alors",
+      "startMs": 12481,
+      "endMs": 13261,
+      "cueMs": 417565,
+      "absoluteSentenceMs": 417347,
+      "firstFollowingInput": {
+        "kind": "click",
+        "atMs": 417259
+      },
+      "sentenceFrame": "videos/output/platform-internal-administration/review/anchor-29-sentence.jpg",
+      "actionFrame": "videos/output/platform-internal-administration/review/anchor-29-action.jpg"
+    },
+    {
+      "segmentId": "delete",
+      "phrase": "La confirmation demande",
+      "startMs": 21323,
+      "endMs": 24509,
+      "cueMs": 426190,
+      "absoluteSentenceMs": 426189,
+      "firstFollowingInput": {
+        "kind": "click",
+        "atMs": 426658
+      },
+      "sentenceFrame": "videos/output/platform-internal-administration/review/anchor-30-sentence.jpg",
+      "actionFrame": "videos/output/platform-internal-administration/review/anchor-30-action.jpg"
+    },
+    {
+      "segmentId": "delete",
+      "phrase": "Vérifions-le, puis validons",
+      "startMs": 25125,
+      "endMs": 29018,
+      "cueMs": 429992,
+      "absoluteSentenceMs": 429991,
+      "firstFollowingInput": {
+        "kind": "click",
+        "atMs": 430459
+      },
+      "sentenceFrame": "videos/output/platform-internal-administration/review/anchor-31-sentence.jpg",
+      "actionFrame": "videos/output/platform-internal-administration/review/anchor-31-action.jpg"
+    },
+    {
+      "segmentId": "result",
+      "phrase": "L’opérateur, lui",
+      "startMs": 7815,
+      "endMs": 11429,
+      "cueMs": 450866,
+      "absoluteSentenceMs": 450865,
+      "firstFollowingInput": null,
+      "sentenceFrame": "videos/output/platform-internal-administration/review/anchor-32-sentence.jpg",
+      "actionFrame": "videos/output/platform-internal-administration/review/anchor-32-action.jpg"
+    }
+  ],
+  "clicks": 38,
+  "keys": 674
+}

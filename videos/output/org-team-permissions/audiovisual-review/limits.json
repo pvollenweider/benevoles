@@ -1,34 +1,34 @@
 {
   "model": "gemini-3.8-flash",
-  "reviewedAt": "2026-10-12T01:06:28.775Z",
-  "videoSha256": "9d8121c4c409a4f0ae8e4ed84166e17de8a9a97388bc9e3ff88f3cf40bc11c55",
+  "reviewedAt": "2026-10-21T16:08:44.735Z",
+  "videoSha256": "4729215066c6f4b2a5cfd43447431080691642c59ee7e32a9a99e562220ccb79",
   "promptSha256": "3f3f3a578750b9e2bf2af5a6124f46e4350a7c303020ece254d55cd2dcdf6219",
-  "clipSha256": "2a6dcc47df45960c113f0676f18260367f22c4505828a9125cbb11eb794cdf7c",
+  "clipSha256": "96cb4da0b36677ad51ac6f8811b19dbf17f30e572d0529e6517a583d32121105",
   "scene": "limits",
   "review": {
     "heardOpening": "La suppression définitive d'un événement",
     "checkpoints": [
       {
-        "spokenSeconds": 0,
-        "spoken": "La suppression définitive d’un événement et les réglages de l’organisation restent réservés aux propriétaires.",
-        "visibleSeconds": 0,
-        "visible": "Page Paramètres affichant la mention réservée aux propriétaires pour l'organisation et la gestion des administrateurs",
+        "spokenSeconds": 2.5,
+        "spoken": "les réglages de l'organisation restent réservés aux propriétaires",
+        "visibleSeconds": 2.5,
+        "visible": "Mention « Ces réglages sont réservés aux propriétaires de l'organisation. » visible sous la section Organisation",
         "sync": "aligned",
         "severity": "none"
       },
       {
-        "spokenSeconds": 6.5,
-        "spoken": "Attribuez les droits selon la responsabilité réelle, retirez les accès devenus inutiles",
-        "visibleSeconds": 0,
-        "visible": "Liste des administrateurs nominatifs affichée avec leurs rôles respectifs",
+        "spokenSeconds": 8,
+        "spoken": "Attribuez les droits selon la responsabilité réelle",
+        "visibleSeconds": 8,
+        "visible": "Section Administrateurs affichant différents rôles attribués (Propriétaire, Organisateur)",
         "sync": "aligned",
         "severity": "none"
       },
       {
-        "spokenSeconds": 14.8,
-        "spoken": "Changer un rôle s’applique aussitôt, y compris aux sessions déjà ouvertes",
-        "visibleSeconds": 0,
-        "visible": "Écran fixe des administrateurs servant de support à la recommandation générale",
+        "spokenSeconds": 14.5,
+        "spoken": "Changer un rôle s'applique aussitôt",
+        "visibleSeconds": 14.5,
+        "visible": "Écran stable récapitulatif sur les paramètres des administrateurs, sans interaction",
         "sync": "aligned",
         "severity": "none"
       }
@@ -37,7 +37,7 @@
     "voice": {
       "consistent": true,
       "warm": true,
-      "observation": "Voix claire, posée et bien articulée, avec un fond musical discret."
+      "observation": "Voix claire, posée et parfaitement intelligible, sans bruits parasites."
     }
   },
   "note": "Automated observation of actual final video audio and images; not a claim of complete human validation"

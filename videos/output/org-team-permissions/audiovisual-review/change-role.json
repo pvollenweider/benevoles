@@ -1,54 +1,53 @@
 {
   "model": "gemini-3.8-flash",
-  "reviewedAt": "2026-10-12T01:06:22.469Z",
-  "videoSha256": "9d8121c4c409a4f0ae8e4ed84166e17de8a9a97388bc9e3ff88f3cf40bc11c55",
+  "reviewedAt": "2026-10-21T16:08:19.628Z",
+  "videoSha256": "4729215066c6f4b2a5cfd43447431080691642c59ee7e32a9a99e562220ccb79",
   "promptSha256": "20b3bb31cd34b28e48e4cb12124d429ede2e2d2ed4dc2927c10c83dc1291fa62",
-  "clipSha256": "aa3a2cbce24943fbcae1bd081745c94af20b49a29e6a3638ee939bfdb282af08",
+  "clipSha256": "8661932b02f3d2ce9c9f26c8a222cb830ef72c8dae3188b426389d8864902938",
   "scene": "change-role",
   "review": {
     "heardOpening": "Le rôle peut évoluer",
     "checkpoints": [
       {
-        "spokenSeconds": 1.2,
-        "spoken": "On choisit d’abord Propriétaire dans la liste",
-        "visibleSeconds": 2.1,
-        "visible": "Le menu déroulant du rôle de Léa Martin passe d'Organisateur à Propriétaire",
+        "spokenSeconds": 1.4,
+        "spoken": "On choisit d'abord Propriétaire dans la liste",
+        "visibleSeconds": 1.5,
+        "visible": "Léa Martin a le rôle Propriétaire sélectionné dans le menu déroulant",
         "sync": "aligned",
         "severity": "none"
       },
       {
-        "spokenSeconds": 3.7,
+        "spokenSeconds": 3.8,
         "spoken": "puis on confirme avec Appliquer",
-        "visibleSeconds": 4.5,
-        "visible": "Aucun bouton Appliquer n'apparaît ni n'est cliqué dans l'interface, la mise à jour s'effectuant directement à la sélection",
-        "sync": "missing",
+        "visibleSeconds": 9.8,
+        "visible": "Le clic sur le lien Appliquer n'intervient qu'à 00:10",
+        "sync": "late",
         "severity": "major"
       },
       {
-        "spokenSeconds": 9.2,
+        "spokenSeconds": 9.9,
         "spoken": "La confirmation indique le nouveau rôle",
-        "visibleSeconds": 1.8,
-        "visible": "La notification textuelle 'Léa Martin : propriétaire.' est apparue dès le début du changement de rôle",
-        "sync": "early",
-        "severity": "minor"
+        "visibleSeconds": 10.5,
+        "visible": "Notification bleue affichant Léa Martin : propriétaire",
+        "sync": "aligned",
+        "severity": "none"
       },
       {
-        "spokenSeconds": 11.2,
+        "spokenSeconds": 12.4,
         "spoken": "Retirer une personne coupe son accès",
-        "visibleSeconds": 11.5,
-        "visible": "Les boutons 'Retirer' sont visibles en bout de ligne mais aucun clic n'est réalisé (illustration statique)",
+        "visibleSeconds": 12.4,
+        "visible": "Les boutons Retirer sont visibles en bout de chaque ligne d'administrateur",
         "sync": "aligned",
         "severity": "none"
       }
     ],
     "issues": [
-      "00:03 - L'action 'confirme avec Appliquer' est annoncée, mais aucun bouton 'Appliquer' n'existe dans l'interface pour valider la liste déroulante.",
-      "00:09 - La notification 'Léa Martin : propriétaire.' est commentée vers 00:09 alors qu'elle s'est affichée à l'écran dès 00:01."
+      "À 00:04, l'action de confirmation 'Appliquer' est annoncée, mais le clic sur le lien n'est réalisé qu'à 00:10 (environ 6 secondes d'attente)."
     ],
     "voice": {
       "consistent": true,
       "warm": true,
-      "observation": "Voix off masculine claire, posée et intelligible."
+      "observation": "Voix masculine claire, posée et bien articulée, sans bruit parasite."
     }
   },
   "note": "Automated observation of actual final video audio and images; not a claim of complete human validation"

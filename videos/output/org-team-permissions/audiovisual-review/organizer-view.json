@@ -1,42 +1,42 @@
 {
   "model": "gemini-3.8-flash",
-  "reviewedAt": "2026-10-12T01:06:25.903Z",
-  "videoSha256": "9d8121c4c409a4f0ae8e4ed84166e17de8a9a97388bc9e3ff88f3cf40bc11c55",
+  "reviewedAt": "2026-10-21T16:08:31.395Z",
+  "videoSha256": "4729215066c6f4b2a5cfd43447431080691642c59ee7e32a9a99e562220ccb79",
   "promptSha256": "3bdd624544b5a7ff2a96b70a1617100568698a387759e3a09821c1963d312bea",
-  "clipSha256": "6acd4a0d4a4225974fdad9c87707a90e6aa5971e4ba46c2ce45eda898233c0bd",
+  "clipSha256": "1df5e5ac9f2b0f9676a7492141b3adbbe8873f1181804f582df680f436b7f490",
   "scene": "organizer-view",
   "review": {
     "heardOpening": "Vérifions maintenant avec le compte de Samira",
     "checkpoints": [
       {
-        "spokenSeconds": 0,
+        "spokenSeconds": 0.5,
         "spoken": "Vérifions maintenant avec le compte de Samira, qui est organisatrice",
-        "visibleSeconds": 1,
-        "visible": "Connexion avec le compte de Samira et redirection vers son espace",
+        "visibleSeconds": 1.5,
+        "visible": "Connexion avec l'adresse de Samira puis affichage de l'espace avec le profil Samira Diallo en haut à droite",
         "sync": "aligned",
         "severity": "none"
       },
       {
-        "spokenSeconds": 3.4,
+        "spokenSeconds": 3.8,
         "spoken": "Elle retrouve les événements et les outils opérationnels",
-        "visibleSeconds": 2.2,
-        "visible": "Affichage de l'onglet Événements avec les actions et listes associées",
+        "visibleSeconds": 3,
+        "visible": "Affichage de la page Événements avec la liste des actions et événements opérationnels",
         "sync": "aligned",
         "severity": "none"
       },
       {
-        "spokenSeconds": 5.8,
-        "spoken": "Sur la page de l’équipe, la liste reste visible",
-        "visibleSeconds": 6.8,
-        "visible": "Ouverture des Paramètres affichant la section Administrateurs avec les membres de l'équipe",
+        "spokenSeconds": 7.3,
+        "spoken": "Sur la page de l’équipe, la liste reste visible pour comprendre qui administre l’espace",
+        "visibleSeconds": 7.8,
+        "visible": "Ouverture de l'onglet Paramètres affichant la section Administrateurs avec les membres de l'équipe",
         "sync": "aligned",
         "severity": "none"
       },
       {
-        "spokenSeconds": 9.6,
+        "spokenSeconds": 11.6,
         "spoken": "les commandes d’invitation, de retrait et de changement de rôle ont disparu",
-        "visibleSeconds": 7,
-        "visible": "Affichage de la liste des administrateurs sans aucun bouton d'action d'administration",
+        "visibleSeconds": 11.6,
+        "visible": "Vue de la liste des administrateurs sans boutons d'action ni commandes d'invitation ou d'édition",
         "sync": "aligned",
         "severity": "none"
       }
@@ -45,7 +45,7 @@
     "voice": {
       "consistent": true,
       "warm": true,
-      "observation": "Voix masculine naturelle, claire et fluide, en parfaite adéquation avec le déroulement visuel."
+      "observation": "Voix claire, posée et bien articulée, synchronisée avec les actions à l'écran."
     }
   },
   "note": "Automated observation of actual final video audio and images; not a claim of complete human validation"

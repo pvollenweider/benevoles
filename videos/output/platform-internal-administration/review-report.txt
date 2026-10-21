@@ -1,16 +1,74 @@
 STATUS: NOT READY
-ID: PLATFORM_INTERNAL_ADMINISTRATION
-Commit: 77b3556736243e72449cc7f778cb9959fd10d9df
-BUILD_ID: awdEYi1bluVzpj2kEgGcs
-Duration: 474.600 s
-Music smallest/largest gap: 12.5 / 19.6 LU; 436 voiced windows; one music-only window -31.8 LUFS; no rule issues.
-Narration: existing WAV retained; generation fingerprint accepted, source independent audit reused with identical audio/text; no new TTS. Final MP4 independent audio audit passes all twelve chapters. Exact 99 readableCaptions VTT cues match the current manifest.
-Objective validation passes twelve scenes and 33 sentence anchors. Effects metadata and hashes match 38 clicks / 674 key events. MP4, timeline, music-levels and effects hashes checked. Posters generated with review/renders-generated.json; videos/renders.json untouched.
-Reviewed all twelve final-MP4 chapter sheets, measured sentence-action-timing.txt/json, full-resolution anchor frames and supplemental frames. Current labels and outcomes are visible; no Timeline, localhost/org-admin@localhost, development overlay or mm/dd date found. Public activation URL is https://www.benevol.app. Product dates are French.
-FAIL French-date requirement: Mailpit's real external email viewer displays English date headers (e.g. Sun, 11 Oct 2026, 3:40 pm in preview-sheet.jpg). The training viewer's English chrome/date was retained, not fabricated or concealed. This is external viewer locale, not a product layout defect. No source fix made for that external application.
-Sentence/action checks: welcome detail click 18.66 vs sentence18.11; create submit13.89 vs13.43; renew rotation9.63 vs7.99 and second email at chapter end; activate login starts10.70 vs10.23 and organization visible before return (activate-anchor-6.png @113.010); identity collision visible identity-anchor-4.png @140.838, saved identity-saved.png @146.6; availability rejection and reactivation visible in anchor frames; context choose click9.81 vs8.44 and events in context-arrival.png @212.8; health reload and sections match their explanatory sentences; preview test36.59 vs36.11 and email on its opening sentence; broadcast confirmation23.11 vs22.65, submit37.11 vs36.64, actual history broadcast-anchor-5.png @371.610; delete confirm26.79 vs26.29 and list returns; result actual 401/403 account boundaries checked with real sessions. No confirmed additional early/late cue needing correction.
-Automated audiovisual claims are checked against actual evidence, not accepted as proof: second-mail.png @93.5 proves renew's second email was opened; identity-saved.png and successful PATCH/database assertion prove slug saved. Reports retained separately.
-Product layout observation: inline slug collision feedback only becomes visible after recorder scrolls the actual alert; first-pass recorder correction now shows it (not hidden). No new product layout bug found. Real-time subjective listening unavailable and is not a reason for this status.
-Local source changes: none. No repeated final take. No publish, push, commit or PR.
-
-Batch source validation: video tooling TypeScript passes 185 explicit sources; all sentence anchors resolve in their chapters. Generated poster metadata is separate; videos/renders.json unchanged.
+{
+  "id": "PLATFORM_INTERNAL_ADMINISTRATION",
+  "status": "NOT READY",
+  "reviewedAt": "2026-10-21",
+  "product": {
+    "commit": "490a44c306da8b93b4920ece009a452baf27fdbf",
+    "sourceTree": "be1a1d9342fc3b6d37f922a5557bedbe7d2b997b",
+    "productSourceSha256": "5cadc01f8a0c46ff4a0d9d6d4de90702a18b4a0108564e6a460657a57ec1aeb7",
+    "buildId": "rFYo35VG0QypepwE2pYU_",
+    "snapshot": "/tmp/benevoles-video-production.Batch27",
+    "builtAt": "2026-10-21T15:59:30.726Z"
+  },
+  "durationSeconds": 481.0,
+  "reviewedChapters": [
+    "welcome",
+    "create",
+    "renew",
+    "activate",
+    "identity",
+    "availability",
+    "context",
+    "health",
+    "preview",
+    "broadcast",
+    "delete",
+    "result"
+  ],
+  "tuCountVtt": 0,
+  "music": {
+    "voicedWindows": 440,
+    "musicOnlyWindows": 1,
+    "smallestGapLu": 12.2,
+    "largestGapLu": 18.6,
+    "quietestMusicOnlyLufs": -32.5,
+    "loudestMusicOnlyLufs": -32.5,
+    "medianVoiceLufs": -16.5
+  },
+  "issues": [
+    "External Mailpit viewer uses English header dates despite French browser/process locale: frame 69.94 s shows « Wed, 21 Oct 2026, 6:05 pm ». Also visible in later real-email shots. Its settings offer theme/timezone and UI toggles, no language/date-format setting. Not a Benevol product defect; not concealed or rewritten. French-date rule therefore fails."
+  ],
+  "sourceChanges": "No operator recorder or product change in batch 27; local gateway/build proof fixed in Part A. One complete Kore narration regenerated because recovered audio/ was empty; continuousPauseTags false. All 12 chapter cuts independently checked after aligning actual silences.",
+  "validation": "12 scenes, 33 sentence anchors, source and final MP4 chapter ASR pass; full all-language ASR includes only the expected technical word Markdown, no stray English or informal viewer address. All 12 audiovisual voice observations consistent and warm.",
+  "inputs": {
+    "clicks": 38,
+    "keys": 674
+  },
+  "mp4Sha256": "7350f773ffc928faed39ba31f4a706fca1122b7e734861ac922266f75fbee1af",
+  "catalogBumped": false,
+  "automatedFindingsResolvedByActualFrames": [
+    {
+      "scene": "identity",
+      "automatedClaim": "Save is late until reload at chapter second 28",
+      "decision": "Rejected: actual final MP4 frame 150.8 s (chapter 20.406) already shows the saved new slug in the breadcrumb and disabled OK button, before the claimed spoken result at chapter second 21. The later reload is a distinct check. The real recorder asserts the new URL before it waits for that reload.",
+      "frame": "identity-saved-150.8.jpg"
+    },
+    {
+      "scene": "context",
+      "automatedClaim": "Gérer and context name are skipped before events",
+      "decision": "Rejected: confirmation page with exact named button visible at 221.5 s; actual Parc detail with Gérer and name visible at 225.3 s, after sentence anchor at 225.008 s, before the real click and events page. Capture assertions verify a POST context switch and only Parc event.",
+      "frames": [
+        "context-confirmation-221.5.jpg",
+        "context-manage-225.3.jpg"
+      ]
+    }
+  ],
+  "realTimeSubjectiveListening": "Unavailable; not the reason for NOT READY.",
+  "ocrFrames": 962,
+  "ocrErrors": 0,
+  "forbiddenHostOcrHits": 0,
+  "musicContinuityGaps": 0,
+  "englishDateOcrFrames": 44
+}
+All chapter sheets and exact finding frames reviewed. Full final MP4 all-language ASR, per-chapter ASR, VTT register check, actual input effects, posters and video:validate completed. No local host, port or developer overlay found in the full 2 fps OCR inventory. No catalog bump. Real-time subjective listening unavailable; not a blocking criterion. No publication.

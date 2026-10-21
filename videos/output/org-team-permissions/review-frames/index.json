@@ -1,298 +1,298 @@
 {
   "video": "org-team-permissions",
-  "source": "/private/tmp/codex-video/videos/output/org-team-permissions/org-team-permissions.mp4",
-  "sourceSha256": "9d8121c4c409a4f0ae8e4ed84166e17de8a9a97388bc9e3ff88f3cf40bc11c55",
+  "source": "/Users/pol/Desktop/benevoles/.claude/worktrees/video-batch25-26-sources/videos/output/org-team-permissions/org-team-permissions.mp4",
+  "sourceSha256": "4729215066c6f4b2a5cfd43447431080691642c59ee7e32a9a99e562220ccb79",
   "capturePurpose": "narration-timed",
-  "extractedAt": "2026-10-12T01:05:29.528Z",
+  "extractedAt": "2026-10-21T16:07:30.669Z",
   "note": "Six actual MP4 frames per scene, including chapter start, midpoint and end; not a full audiovisual verification",
   "frames": [
     {
       "scene": "welcome",
-      "fraction": 0.046944683514591974,
-      "seconds": 1.727,
-      "file": "/private/tmp/codex-video/videos/output/org-team-permissions/review-frames/welcome-5.png"
+      "fraction": 0.03947108742845865,
+      "seconds": 1.733,
+      "file": "/Users/pol/Desktop/benevoles/.claude/worktrees/video-batch25-26-sources/videos/output/org-team-permissions/review-frames/welcome-4.png"
     },
     {
       "scene": "welcome",
       "fraction": 0.25,
-      "seconds": 4.32225,
-      "file": "/private/tmp/codex-video/videos/output/org-team-permissions/review-frames/welcome-25.png"
+      "seconds": 4.93325,
+      "file": "/Users/pol/Desktop/benevoles/.claude/worktrees/video-batch25-26-sources/videos/output/org-team-permissions/review-frames/welcome-25.png"
     },
     {
       "scene": "welcome",
       "fraction": 0.45,
-      "seconds": 6.87845,
-      "file": "/private/tmp/codex-video/videos/output/org-team-permissions/review-frames/welcome-45.png"
+      "seconds": 7.97345,
+      "file": "/Users/pol/Desktop/benevoles/.claude/worktrees/video-batch25-26-sources/videos/output/org-team-permissions/review-frames/welcome-45.png"
     },
     {
       "scene": "welcome",
       "fraction": 0.6,
-      "seconds": 8.795599999999999,
-      "file": "/private/tmp/codex-video/videos/output/org-team-permissions/review-frames/welcome-60.png"
+      "seconds": 10.2536,
+      "file": "/Users/pol/Desktop/benevoles/.claude/worktrees/video-batch25-26-sources/videos/output/org-team-permissions/review-frames/welcome-60.png"
     },
     {
       "scene": "welcome",
       "fraction": 0.85,
-      "seconds": 11.99085,
-      "file": "/private/tmp/codex-video/videos/output/org-team-permissions/review-frames/welcome-85.png"
+      "seconds": 14.05385,
+      "file": "/Users/pol/Desktop/benevoles/.claude/worktrees/video-batch25-26-sources/videos/output/org-team-permissions/review-frames/welcome-85.png"
     },
     {
       "scene": "welcome",
-      "fraction": 0.976527658242704,
-      "seconds": 13.608,
-      "file": "/private/tmp/codex-video/videos/output/org-team-permissions/review-frames/welcome-end.png"
+      "fraction": 0.9802644562857706,
+      "seconds": 16.034,
+      "file": "/Users/pol/Desktop/benevoles/.claude/worktrees/video-batch25-26-sources/videos/output/org-team-permissions/review-frames/welcome-end.png"
     },
     {
       "scene": "roles",
-      "fraction": 0.028730128327906532,
-      "seconds": 16.67,
-      "file": "/private/tmp/codex-video/videos/output/org-team-permissions/review-frames/roles-3.png"
+      "fraction": 0.027266530334014997,
+      "seconds": 19.09,
+      "file": "/Users/pol/Desktop/benevoles/.claude/worktrees/video-batch25-26-sources/videos/output/org-team-permissions/review-frames/roles-3.png"
     },
     {
       "scene": "roles",
       "fraction": 0.25,
-      "seconds": 21.291,
-      "file": "/private/tmp/codex-video/videos/output/org-team-permissions/review-frames/roles-25.png"
+      "seconds": 23.99125,
+      "file": "/Users/pol/Desktop/benevoles/.claude/worktrees/video-batch25-26-sources/videos/output/org-team-permissions/review-frames/roles-25.png"
     },
     {
       "scene": "roles",
       "fraction": 0.45,
-      "seconds": 25.467800000000004,
-      "file": "/private/tmp/codex-video/videos/output/org-team-permissions/review-frames/roles-45.png"
+      "seconds": 28.39225,
+      "file": "/Users/pol/Desktop/benevoles/.claude/worktrees/video-batch25-26-sources/videos/output/org-team-permissions/review-frames/roles-45.png"
     },
     {
       "scene": "roles",
       "fraction": 0.6,
-      "seconds": 28.6004,
-      "file": "/private/tmp/codex-video/videos/output/org-team-permissions/review-frames/roles-60.png"
+      "seconds": 31.693,
+      "file": "/Users/pol/Desktop/benevoles/.claude/worktrees/video-batch25-26-sources/videos/output/org-team-permissions/review-frames/roles-60.png"
     },
     {
       "scene": "roles",
       "fraction": 0.85,
-      "seconds": 33.8214,
-      "file": "/private/tmp/codex-video/videos/output/org-team-permissions/review-frames/roles-85.png"
+      "seconds": 37.19425,
+      "file": "/Users/pol/Desktop/benevoles/.claude/worktrees/video-batch25-26-sources/videos/output/org-team-permissions/review-frames/roles-85.png"
     },
     {
       "scene": "roles",
-      "fraction": 0.9856349358360468,
-      "seconds": 36.654,
-      "file": "/private/tmp/codex-video/videos/output/org-team-permissions/review-frames/roles-end.png"
+      "fraction": 0.9863667348329925,
+      "seconds": 40.195,
+      "file": "/Users/pol/Desktop/benevoles/.claude/worktrees/video-batch25-26-sources/videos/output/org-team-permissions/review-frames/roles-end.png"
     },
     {
       "scene": "invite",
-      "fraction": 0.03895345062650133,
-      "seconds": 39.177,
-      "file": "/private/tmp/codex-video/videos/output/org-team-permissions/review-frames/invite-4.png"
+      "fraction": 0.03457216940363008,
+      "seconds": 42.738,
+      "file": "/Users/pol/Desktop/benevoles/.claude/worktrees/video-batch25-26-sources/videos/output/org-team-permissions/review-frames/invite-3.png"
     },
     {
       "scene": "invite",
       "fraction": 0.25,
-      "seconds": 42.42775,
-      "file": "/private/tmp/codex-video/videos/output/org-team-permissions/review-frames/invite-25.png"
+      "seconds": 46.47675,
+      "file": "/Users/pol/Desktop/benevoles/.claude/worktrees/video-batch25-26-sources/videos/output/org-team-permissions/review-frames/invite-25.png"
     },
     {
       "scene": "invite",
       "fraction": 0.45,
-      "seconds": 45.50835,
-      "file": "/private/tmp/codex-video/videos/output/org-team-permissions/review-frames/invite-45.png"
+      "seconds": 49.94775,
+      "file": "/Users/pol/Desktop/benevoles/.claude/worktrees/video-batch25-26-sources/videos/output/org-team-permissions/review-frames/invite-45.png"
     },
     {
       "scene": "invite",
       "fraction": 0.6,
-      "seconds": 47.8188,
-      "file": "/private/tmp/codex-video/videos/output/org-team-permissions/review-frames/invite-60.png"
+      "seconds": 52.551,
+      "file": "/Users/pol/Desktop/benevoles/.claude/worktrees/video-batch25-26-sources/videos/output/org-team-permissions/review-frames/invite-60.png"
     },
     {
       "scene": "invite",
       "fraction": 0.85,
-      "seconds": 51.66955,
-      "file": "/private/tmp/codex-video/videos/output/org-team-permissions/review-frames/invite-85.png"
+      "seconds": 56.88975,
+      "file": "/Users/pol/Desktop/benevoles/.claude/worktrees/video-batch25-26-sources/videos/output/org-team-permissions/review-frames/invite-85.png"
     },
     {
       "scene": "invite",
-      "fraction": 0.9805232746867494,
-      "seconds": 53.68,
-      "file": "/private/tmp/codex-video/videos/output/org-team-permissions/review-frames/invite-end.png"
+      "fraction": 0.982713915298185,
+      "seconds": 59.193,
+      "file": "/Users/pol/Desktop/benevoles/.claude/worktrees/video-batch25-26-sources/videos/output/org-team-permissions/review-frames/invite-end.png"
     },
     {
       "scene": "invite-result",
-      "fraction": 0.052562417871222074,
-      "seconds": 55.034,
-      "file": "/private/tmp/codex-video/videos/output/org-team-permissions/review-frames/invite-result-5.png"
+      "fraction": 0.05025967498743508,
+      "seconds": 60.546,
+      "file": "/Users/pol/Desktop/benevoles/.claude/worktrees/video-batch25-26-sources/videos/output/org-team-permissions/review-frames/invite-result-5.png"
     },
     {
       "scene": "invite-result",
       "fraction": 0.25,
-      "seconds": 57.28775,
-      "file": "/private/tmp/codex-video/videos/output/org-team-permissions/review-frames/invite-result-25.png"
+      "seconds": 62.9305,
+      "file": "/Users/pol/Desktop/benevoles/.claude/worktrees/video-batch25-26-sources/videos/output/org-team-permissions/review-frames/invite-result-25.png"
     },
     {
       "scene": "invite-result",
       "fraction": 0.45,
-      "seconds": 59.57075,
-      "file": "/private/tmp/codex-video/videos/output/org-team-permissions/review-frames/invite-result-45.png"
+      "seconds": 65.3181,
+      "file": "/Users/pol/Desktop/benevoles/.claude/worktrees/video-batch25-26-sources/videos/output/org-team-permissions/review-frames/invite-result-45.png"
     },
     {
       "scene": "invite-result",
       "fraction": 0.6,
-      "seconds": 61.283,
-      "file": "/private/tmp/codex-video/videos/output/org-team-permissions/review-frames/invite-result-60.png"
+      "seconds": 67.1088,
+      "file": "/Users/pol/Desktop/benevoles/.claude/worktrees/video-batch25-26-sources/videos/output/org-team-permissions/review-frames/invite-result-60.png"
     },
     {
       "scene": "invite-result",
       "fraction": 0.85,
-      "seconds": 64.13675,
-      "file": "/private/tmp/codex-video/videos/output/org-team-permissions/review-frames/invite-result-85.png"
+      "seconds": 70.0933,
+      "file": "/Users/pol/Desktop/benevoles/.claude/worktrees/video-batch25-26-sources/videos/output/org-team-permissions/review-frames/invite-result-85.png"
     },
     {
       "scene": "invite-result",
-      "fraction": 0.973718791064389,
-      "seconds": 65.549,
-      "file": "/private/tmp/codex-video/videos/output/org-team-permissions/review-frames/invite-result-end.png"
+      "fraction": 0.9748701625062824,
+      "seconds": 71.584,
+      "file": "/Users/pol/Desktop/benevoles/.claude/worktrees/video-batch25-26-sources/videos/output/org-team-permissions/review-frames/invite-result-end.png"
     },
     {
       "scene": "change-role",
-      "fraction": 0.03870967741935484,
-      "seconds": 68.613,
-      "file": "/private/tmp/codex-video/videos/output/org-team-permissions/review-frames/change-role-4.png"
+      "fraction": 0.03498746282582075,
+      "seconds": 74.644,
+      "file": "/Users/pol/Desktop/benevoles/.claude/worktrees/video-batch25-26-sources/videos/output/org-team-permissions/review-frames/change-role-3.png"
     },
     {
       "scene": "change-role",
       "fraction": 0.25,
-      "seconds": 71.888,
-      "file": "/private/tmp/codex-video/videos/output/org-team-permissions/review-frames/change-role-25.png"
+      "seconds": 78.33125,
+      "file": "/Users/pol/Desktop/benevoles/.claude/worktrees/video-batch25-26-sources/videos/output/org-team-permissions/review-frames/change-role-25.png"
     },
     {
       "scene": "change-role",
       "fraction": 0.45,
-      "seconds": 74.988,
-      "file": "/private/tmp/codex-video/videos/output/org-team-permissions/review-frames/change-role-45.png"
+      "seconds": 81.76105,
+      "file": "/Users/pol/Desktop/benevoles/.claude/worktrees/video-batch25-26-sources/videos/output/org-team-permissions/review-frames/change-role-45.png"
     },
     {
       "scene": "change-role",
       "fraction": 0.6,
-      "seconds": 77.313,
-      "file": "/private/tmp/codex-video/videos/output/org-team-permissions/review-frames/change-role-60.png"
+      "seconds": 84.3334,
+      "file": "/Users/pol/Desktop/benevoles/.claude/worktrees/video-batch25-26-sources/videos/output/org-team-permissions/review-frames/change-role-60.png"
     },
     {
       "scene": "change-role",
       "fraction": 0.85,
-      "seconds": 81.188,
-      "file": "/private/tmp/codex-video/videos/output/org-team-permissions/review-frames/change-role-85.png"
+      "seconds": 88.62065,
+      "file": "/Users/pol/Desktop/benevoles/.claude/worktrees/video-batch25-26-sources/videos/output/org-team-permissions/review-frames/change-role-85.png"
     },
     {
       "scene": "change-role",
-      "fraction": 0.9806451612903225,
-      "seconds": 83.213,
-      "file": "/private/tmp/codex-video/videos/output/org-team-permissions/review-frames/change-role-end.png"
+      "fraction": 0.9825062685870897,
+      "seconds": 90.893,
+      "file": "/Users/pol/Desktop/benevoles/.claude/worktrees/video-batch25-26-sources/videos/output/org-team-permissions/review-frames/change-role-end.png"
     },
     {
       "scene": "organizer-view",
-      "fraction": 0.044309873716859904,
-      "seconds": 84.565,
-      "file": "/private/tmp/codex-video/videos/output/org-team-permissions/review-frames/organizer-view-4.png"
+      "fraction": 0.038294613224406436,
+      "seconds": 92.245,
+      "file": "/Users/pol/Desktop/benevoles/.claude/worktrees/video-batch25-26-sources/videos/output/org-team-permissions/review-frames/organizer-view-4.png"
     },
     {
       "scene": "organizer-view",
       "fraction": 0.25,
-      "seconds": 87.35025,
-      "file": "/private/tmp/codex-video/videos/output/org-team-permissions/review-frames/organizer-view-25.png"
+      "seconds": 95.562,
+      "file": "/Users/pol/Desktop/benevoles/.claude/worktrees/video-batch25-26-sources/videos/output/org-team-permissions/review-frames/organizer-view-25.png"
     },
     {
       "scene": "organizer-view",
       "fraction": 0.45,
-      "seconds": 90.05845,
-      "file": "/private/tmp/codex-video/videos/output/org-team-permissions/review-frames/organizer-view-45.png"
+      "seconds": 98.6956,
+      "file": "/Users/pol/Desktop/benevoles/.claude/worktrees/video-batch25-26-sources/videos/output/org-team-permissions/review-frames/organizer-view-45.png"
     },
     {
       "scene": "organizer-view",
       "fraction": 0.6,
-      "seconds": 92.0896,
-      "file": "/private/tmp/codex-video/videos/output/org-team-permissions/review-frames/organizer-view-60.png"
+      "seconds": 101.0458,
+      "file": "/Users/pol/Desktop/benevoles/.claude/worktrees/video-batch25-26-sources/videos/output/org-team-permissions/review-frames/organizer-view-60.png"
     },
     {
       "scene": "organizer-view",
       "fraction": 0.85,
-      "seconds": 95.47485,
-      "file": "/private/tmp/codex-video/videos/output/org-team-permissions/review-frames/organizer-view-85.png"
+      "seconds": 104.9628,
+      "file": "/Users/pol/Desktop/benevoles/.claude/worktrees/video-batch25-26-sources/videos/output/org-team-permissions/review-frames/organizer-view-85.png"
     },
     {
       "scene": "organizer-view",
-      "fraction": 0.97784506314157,
-      "seconds": 97.206,
-      "file": "/private/tmp/codex-video/videos/output/org-team-permissions/review-frames/organizer-view-end.png"
+      "fraction": 0.9808526933877968,
+      "seconds": 107.013,
+      "file": "/Users/pol/Desktop/benevoles/.claude/worktrees/video-batch25-26-sources/videos/output/org-team-permissions/review-frames/organizer-view-end.png"
     },
     {
       "scene": "limits",
-      "fraction": 0.027579866697310964,
-      "seconds": 98.559,
-      "file": "/private/tmp/codex-video/videos/output/org-team-permissions/review-frames/limits-3.png"
+      "fraction": 0.030497102775236352,
+      "seconds": 108.365,
+      "file": "/Users/pol/Desktop/benevoles/.claude/worktrees/video-batch25-26-sources/videos/output/org-team-permissions/review-frames/limits-3.png"
     },
     {
       "scene": "limits",
       "fraction": 0.25,
-      "seconds": 103.39775,
-      "file": "/private/tmp/codex-video/videos/output/org-team-permissions/review-frames/limits-25.png"
+      "seconds": 112.6835,
+      "file": "/Users/pol/Desktop/benevoles/.claude/worktrees/video-batch25-26-sources/videos/output/org-team-permissions/review-frames/limits-25.png"
     },
     {
       "scene": "limits",
       "fraction": 0.45,
-      "seconds": 107.74875,
-      "file": "/private/tmp/codex-video/videos/output/org-team-permissions/review-frames/limits-45.png"
+      "seconds": 116.6183,
+      "file": "/Users/pol/Desktop/benevoles/.claude/worktrees/video-batch25-26-sources/videos/output/org-team-permissions/review-frames/limits-45.png"
     },
     {
       "scene": "limits",
       "fraction": 0.6,
-      "seconds": 111.012,
-      "file": "/private/tmp/codex-video/videos/output/org-team-permissions/review-frames/limits-60.png"
+      "seconds": 119.56939999999999,
+      "file": "/Users/pol/Desktop/benevoles/.claude/worktrees/video-batch25-26-sources/videos/output/org-team-permissions/review-frames/limits-60.png"
     },
     {
       "scene": "limits",
       "fraction": 0.85,
-      "seconds": 116.45075,
-      "file": "/private/tmp/codex-video/videos/output/org-team-permissions/review-frames/limits-85.png"
+      "seconds": 124.4879,
+      "file": "/Users/pol/Desktop/benevoles/.claude/worktrees/video-batch25-26-sources/videos/output/org-team-permissions/review-frames/limits-85.png"
     },
     {
       "scene": "limits",
-      "fraction": 0.9862100666513445,
-      "seconds": 119.414,
-      "file": "/private/tmp/codex-video/videos/output/org-team-permissions/review-frames/limits-end.png"
+      "fraction": 0.9847514486123818,
+      "seconds": 127.139,
+      "file": "/Users/pol/Desktop/benevoles/.claude/worktrees/video-batch25-26-sources/videos/output/org-team-permissions/review-frames/limits-end.png"
     },
     {
       "scene": "result",
-      "fraction": 0.052201148425265353,
-      "seconds": 120.767,
-      "file": "/private/tmp/codex-video/videos/output/org-team-permissions/review-frames/result-5.png"
+      "fraction": 0.053092646668436425,
+      "seconds": 128.492,
+      "file": "/Users/pol/Desktop/benevoles/.claude/worktrees/video-batch25-26-sources/videos/output/org-team-permissions/review-frames/result-5.png"
     },
     {
       "scene": "result",
       "fraction": 0.25,
-      "seconds": 123.0405,
-      "file": "/private/tmp/codex-video/videos/output/org-team-permissions/review-frames/result-25.png"
+      "seconds": 130.71725,
+      "file": "/Users/pol/Desktop/benevoles/.claude/worktrees/video-batch25-26-sources/videos/output/org-team-permissions/review-frames/result-25.png"
     },
     {
       "scene": "result",
       "fraction": 0.45,
-      "seconds": 125.33930000000001,
-      "file": "/private/tmp/codex-video/videos/output/org-team-permissions/review-frames/result-45.png"
+      "seconds": 132.97745,
+      "file": "/Users/pol/Desktop/benevoles/.claude/worktrees/video-batch25-26-sources/videos/output/org-team-permissions/review-frames/result-45.png"
     },
     {
       "scene": "result",
       "fraction": 0.6,
-      "seconds": 127.06339999999999,
-      "file": "/private/tmp/codex-video/videos/output/org-team-permissions/review-frames/result-60.png"
+      "seconds": 134.67260000000002,
+      "file": "/Users/pol/Desktop/benevoles/.claude/worktrees/video-batch25-26-sources/videos/output/org-team-permissions/review-frames/result-60.png"
     },
     {
       "scene": "result",
       "fraction": 0.85,
-      "seconds": 129.93689999999998,
-      "file": "/private/tmp/codex-video/videos/output/org-team-permissions/review-frames/result-85.png"
+      "seconds": 137.49785,
+      "file": "/Users/pol/Desktop/benevoles/.claude/worktrees/video-batch25-26-sources/videos/output/org-team-permissions/review-frames/result-85.png"
     },
     {
       "scene": "result",
-      "fraction": 0.9738994257873673,
-      "seconds": 131.361,
-      "file": "/private/tmp/codex-video/videos/output/org-team-permissions/review-frames/result-end.png"
+      "fraction": 0.9734536766657818,
+      "seconds": 138.893,
+      "file": "/Users/pol/Desktop/benevoles/.claude/worktrees/video-batch25-26-sources/videos/output/org-team-permissions/review-frames/result-end.png"
     }
   ]
 }

@@ -1,61 +1,59 @@
 {
   "model": "gemini-3.8-flash",
-  "reviewedAt": "2026-10-12T01:06:14.752Z",
-  "videoSha256": "9d8121c4c409a4f0ae8e4ed84166e17de8a9a97388bc9e3ff88f3cf40bc11c55",
+  "reviewedAt": "2026-10-21T16:07:56.813Z",
+  "videoSha256": "4729215066c6f4b2a5cfd43447431080691642c59ee7e32a9a99e562220ccb79",
   "promptSha256": "6dd11cfbdd8886e1c6da0453f010705513dd53643fcfbf13e064fb55efd2d7c7",
-  "clipSha256": "27d76f33c40b8218b11609aedc9ea19c82a01a25d8d0f40f43739ae479a80d47",
+  "clipSha256": "55c947349392348150d4b07dd5f971dce153d45bc3bac43bebfc32c4720a2535",
   "scene": "invite",
   "review": {
     "heardOpening": "Pour inviter Léa, ouvrez le formulaire",
     "checkpoints": [
       {
-        "spokenSeconds": 0.5,
+        "spokenSeconds": 1.2,
         "spoken": "ouvrez le formulaire",
-        "visibleSeconds": 0.8,
-        "visible": "Ouverture du formulaire 'Inviter un administrateur' après clic sur '+ Inviter'",
+        "visibleSeconds": 1.1,
+        "visible": "Défilement vers la section Administrateurs où le formulaire d'invitation est ouvert",
         "sync": "aligned",
         "severity": "none"
       },
       {
-        "spokenSeconds": 1.8,
+        "spokenSeconds": 2.8,
         "spoken": "saisissez son nom et son adresse",
-        "visibleSeconds": 2.2,
-        "visible": "Saisie du nom dans le champ 'Nom' et de l'adresse dans le champ 'Email'",
+        "visibleSeconds": 3.7,
+        "visible": "Saisie de 'Léa Martin' dans le champ Nom puis de l'adresse email",
         "sync": "aligned",
         "severity": "none"
       },
       {
-        "spokenSeconds": 5.5,
+        "spokenSeconds": 6.8,
         "spoken": "Prenons Organisateur",
-        "visibleSeconds": 5.8,
-        "visible": "Le rôle 'Organisateur' est coché dans le formulaire",
+        "visibleSeconds": 6,
+        "visible": "Le bouton radio Organisateur est sélectionné sous la section Rôle",
         "sync": "aligned",
         "severity": "none"
       },
       {
-        "spokenSeconds": 11.2,
+        "spokenSeconds": 12.6,
         "spoken": "Cliquez sur Envoyer l’invitation",
-        "visibleSeconds": 12,
-        "visible": "Clic sur le bouton bleu 'Envoyer l'invitation'",
+        "visibleSeconds": 13,
+        "visible": "Clic sur le bouton bleu Envoyer l'invitation",
         "sync": "aligned",
         "severity": "none"
       },
       {
-        "spokenSeconds": 13,
+        "spokenSeconds": 14.5,
         "spoken": "le message confirme son adresse",
-        "visibleSeconds": 13.2,
-        "visible": "Affichage de la bannière verte de confirmation 'Invitation envoyée à video.team.lea@example.org'",
+        "visibleSeconds": 14.2,
+        "visible": "Bannière verte de confirmation affichant l'adresse email de Léa",
         "sync": "aligned",
         "severity": "none"
       }
     ],
-    "issues": [
-      "À 00:02, le champ Nom est temporairement rempli avec 'Léo Martin' au lieu de 'Léa Martin' (qui apparaît ensuite correctement dans la liste à 00:13)."
-    ],
+    "issues": [],
     "voice": {
       "consistent": true,
       "warm": true,
-      "observation": "Voix masculine claire, posée et bien articulée, en bonne synchronisation avec les actions affichées."
+      "observation": "Voix de synthèse masculine claire, posée, au débit régulier et parfaitement synchronisée avec les actions à l'écran."
     }
   },
   "note": "Automated observation of actual final video audio and images; not a claim of complete human validation"

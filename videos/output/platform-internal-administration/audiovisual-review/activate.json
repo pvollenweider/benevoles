@@ -1,9 +1,9 @@
 {
   "model": "gemini-3.8-flash",
-  "reviewedAt": "2026-10-11T13:45:14.416Z",
-  "videoSha256": "5d340176fae0f8d93c606d4bd1ebba2776625dabed2f618b19701264ec57e85c",
+  "reviewedAt": "2026-10-21T16:13:47.343Z",
+  "videoSha256": "7350f773ffc928faed39ba31f4a706fca1122b7e734861ac922266f75fbee1af",
   "promptSha256": "c5d658e0f9c71d26ad6231cd6e838281638b6ef4f288aed5b48d3c7a9b794d95",
-  "clipSha256": "5f6d60db100fb40a85e7cc1516c41cbabca00d4fba2087c4b2d91f1e26718d52",
+  "clipSha256": "733e1f663b124d159958ed1151d570e14df57c4afa40a11a75468e5a1a6adcd4",
   "scene": "activate",
   "review": {
     "heardOpening": "La personne invitée ouvre son nouveau lien",
@@ -11,40 +11,40 @@
       {
         "spokenSeconds": 0,
         "spoken": "La personne invitée ouvre son nouveau lien dans sa propre session.",
-        "visibleSeconds": 0.8,
-        "visible": "Affichage de la page « Bienvenue : Créez votre mot de passe pour activer votre compte ».",
+        "visibleSeconds": 1,
+        "visible": "Affichage du formulaire d'activation « Bienvenue - Créez votre mot de passe pour activer votre compte ».",
         "sync": "aligned",
         "severity": "none"
       },
       {
-        "spokenSeconds": 3.3,
+        "spokenSeconds": 3.7,
         "spoken": "Elle choisit son mot de passe et termine l'activation.",
-        "visibleSeconds": 3.8,
-        "visible": "Saisie des mots de passe puis clic sur « Créer mon mot de passe ».",
+        "visibleSeconds": 4.5,
+        "visible": "Saisie des mots de passe et clic sur « Créer mon mot de passe ».",
         "sync": "aligned",
         "severity": "none"
       },
       {
         "spokenSeconds": 10,
         "spoken": "Connectons-nous ensuite avec ce nouveau compte",
-        "visibleSeconds": 10.5,
-        "visible": "Clic sur « Se connecter », saisie des identifiants et validation du formulaire d'administration.",
+        "visibleSeconds": 11.2,
+        "visible": "Renseignement des identifiants sur la page d'administration et clic sur « Se connecter ».",
         "sync": "aligned",
         "severity": "none"
       },
       {
         "spokenSeconds": 13,
         "spoken": "nous arrivons dans son organisation, encore sans événement.",
-        "visibleSeconds": 13.5,
-        "visible": "Page « Événements » de l'organisation affichée avec la liste vide et les étapes initiales.",
+        "visibleSeconds": 14.3,
+        "visible": "Arrivée sur la page « Événements » vide avec le guide de démarrage.",
         "sync": "aligned",
         "severity": "none"
       },
       {
-        "spokenSeconds": 15.5,
+        "spokenSeconds": 16,
         "spoken": "Revenons au détail côté opérateur pour vérifier que le compte apparaît actif.",
-        "visibleSeconds": 16.2,
-        "visible": "Retour sur la vue opérateur affichant l'organisation avec le badge vert « Active ».",
+        "visibleSeconds": 16,
+        "visible": "Retour sur la vue Admin côté opérateur affichant le statut « Actif » et « 1 administrateurs ».",
         "sync": "aligned",
         "severity": "none"
       }
@@ -53,7 +53,7 @@
     "voice": {
       "consistent": true,
       "warm": true,
-      "observation": "Voix féminine posée, fluide, claire et parfaitement synchronisée avec les actions affichées."
+      "observation": "Voix claire, posée et bien articulée, synchronisée avec les actions à l'écran."
     }
   },
   "note": "Automated observation of actual final video audio and images; not a claim of complete human validation"

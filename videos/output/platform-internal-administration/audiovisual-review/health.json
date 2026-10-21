@@ -1,9 +1,9 @@
 {
   "model": "gemini-3.8-flash",
-  "reviewedAt": "2026-10-11T13:46:05.647Z",
-  "videoSha256": "5d340176fae0f8d93c606d4bd1ebba2776625dabed2f618b19701264ec57e85c",
+  "reviewedAt": "2026-10-21T16:14:02.268Z",
+  "videoSha256": "7350f773ffc928faed39ba31f4a706fca1122b7e734861ac922266f75fbee1af",
   "promptSha256": "8ad43c0c5b6bb559ae1dd73a5219a096df8fd0d9af307cf8d6b16159e7318146",
-  "clipSha256": "b14adc2baf7083fb299a8157ea22be31ff50b6b6046158af450af80598842422",
+  "clipSha256": "c75f865fca89bc15777bdd66800382b751d3a8f65911b9388927374d7fbfe137",
   "scene": "health",
   "review": {
     "heardOpening": "La page Santé du service regroupe",
@@ -12,31 +12,31 @@
         "spokenSeconds": 0.8,
         "spoken": "La page Santé du service regroupe trois ensembles d'informations",
         "visibleSeconds": 1,
-        "visible": "Affichage de la page Santé du service avec les rubriques Service et Tâches planifiées",
+        "visible": "Affichage de la page Santé du service avec les blocs Service et Tâches planifiées et sauvegardes",
         "sync": "aligned",
         "severity": "none"
       },
       {
-        "spokenSeconds": 11.2,
+        "spokenSeconds": 10,
         "spoken": "Regardons les états visibles, la date de contrôle et la version",
-        "visibleSeconds": 11.2,
-        "visible": "Version 2.2.0 et date de vérification (11 oct., 15:39) visibles sous le titre",
+        "visibleSeconds": 10,
+        "visible": "Mention de la version 2.4.0, de la date de vérification (21 oct., 18:08) et des badges d'état OK et Inconnu",
         "sync": "aligned",
         "severity": "none"
       },
       {
-        "spokenSeconds": 20.3,
-        "spoken": "certaines tâches n'ont jamais tourné : leur état reste inconnu ou en avertissement",
+        "spokenSeconds": 20.5,
+        "spoken": "leur état reste inconnu ou en avertissement",
         "visibleSeconds": 20.5,
-        "visible": "Lignes de tâches planifiées affichant « Jamais exécuté » et le statut « Inconnu »",
+        "visible": "Statuts Inconnu visibles en regard des différentes tâches planifiées jamais exécutées",
         "sync": "aligned",
         "severity": "none"
       },
       {
-        "spokenSeconds": 30.5,
+        "spokenSeconds": 27,
         "spoken": "Et une sauvegarde signalée ne prouve pas à elle seule qu'une restauration a été testée",
-        "visibleSeconds": 33.5,
-        "visible": "Défilement vers le bas affichant le statut « Test de restauration » à surveiller et la section Configuration",
+        "visibleSeconds": 29.5,
+        "visible": "Défilement vers le bas révélant la section Configuration et les lignes relatives aux sauvegardes",
         "sync": "aligned",
         "severity": "none"
       }
@@ -45,7 +45,7 @@
     "voice": {
       "consistent": true,
       "warm": true,
-      "observation": "Voix off posée, claire et fluide, parfaitement synchronisée avec les éléments affichés à l'écran."
+      "observation": "Voix féminine calme, claire et bien articulée, avec une musique de fond discrète et équilibrée."
     }
   },
   "note": "Automated observation of actual final video audio and images; not a claim of complete human validation"

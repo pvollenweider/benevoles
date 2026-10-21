@@ -1,34 +1,34 @@
 {
   "model": "gemini-3.8-flash",
-  "reviewedAt": "2026-10-12T01:06:19.043Z",
-  "videoSha256": "9d8121c4c409a4f0ae8e4ed84166e17de8a9a97388bc9e3ff88f3cf40bc11c55",
-  "promptSha256": "975cc064432826518cd9f3212d6d8e14c1f3d2cd5a3e85f9209e81b04f674ad5",
-  "clipSha256": "346c54664cd054bedea8f29bbdeba6bbf789ccfab2c15b88e0b5850e27152286",
+  "reviewedAt": "2026-10-21T16:08:07.032Z",
+  "videoSha256": "4729215066c6f4b2a5cfd43447431080691642c59ee7e32a9a99e562220ccb79",
+  "promptSha256": "669b45448cd506c53866aba1f5898c9d9eef620ae9c81d8789ac21870701dee5",
+  "clipSha256": "5a27450c6b1e37471bcb7b7fdeb83745fde5787d552c6f19136ef7fc65a27b95",
   "scene": "invite-result",
   "review": {
-    "heardOpening": "Après l'envoi, Léa apparaît",
+    "heardOpening": "Après l'envoi Léa apparaît",
     "checkpoints": [
       {
-        "spokenSeconds": 0.8,
+        "spokenSeconds": 1,
         "spoken": "Léa apparaît avec le statut En attente",
         "visibleSeconds": 0.5,
-        "visible": "Léa Martin est listée avec le badge 'En attente' surligné dans la section Administrateurs",
+        "visible": "Léa Martin est affichée dans la liste des administrateurs avec le badge jaune 'En attente'",
         "sync": "aligned",
         "severity": "none"
       },
       {
-        "spokenSeconds": 3.2,
-        "spoken": "Un email contient son lien personnel, valable sept jours",
+        "spokenSeconds": 3.5,
+        "spoken": "La confirmation indique que son lien d'activation, valable sept jours, lui a été envoyé par email",
         "visibleSeconds": 3,
-        "visible": "Encadré du lien d'invitation indiquant 'Un email a été envoyé. Ce lien expire dans 7 jours.'",
+        "visible": "Message de confirmation bleu au-dessus de la liste : 'Le lien d'activation, valable 7 jours, lui a été envoyé par email'",
         "sync": "aligned",
         "severity": "none"
       },
       {
-        "spokenSeconds": 5.8,
-        "spoken": "on peut aussi copier ce lien pour le lui transmettre autrement",
-        "visibleSeconds": 6.2,
-        "visible": "Clic sur le bouton 'Copier le lien', qui passe à l'état 'Copié !' avec confirmation 'Lien d'invitation copié.'",
+        "spokenSeconds": 8.5,
+        "spoken": "Son accès ne devient actif qu’après la création de son mot de passe",
+        "visibleSeconds": 8.5,
+        "visible": "Écran stable montrant le compte de Léa en attente sur la liste des administrateurs",
         "sync": "aligned",
         "severity": "none"
       }
@@ -37,7 +37,7 @@
     "voice": {
       "consistent": true,
       "warm": true,
-      "observation": "Voix de synthèse masculine claire, fluide et bien articulée."
+      "observation": "Voix claire, posée et parfaitement synchronisée avec les éléments affichés à l'écran."
     }
   },
   "note": "Automated observation of actual final video audio and images; not a claim of complete human validation"
