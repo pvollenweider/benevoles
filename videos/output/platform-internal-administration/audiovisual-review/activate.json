@@ -1,50 +1,42 @@
 {
   "model": "gemini-3.8-flash",
-  "reviewedAt": "2026-10-21T16:13:47.343Z",
-  "videoSha256": "7350f773ffc928faed39ba31f4a706fca1122b7e734861ac922266f75fbee1af",
+  "reviewedAt": "2026-10-21T16:32:33.713Z",
+  "videoSha256": "d46eeba2c72284c4b4bf53e4db0e24f6d8f43c377f9798b47f5f329bd94b2c9c",
   "promptSha256": "c5d658e0f9c71d26ad6231cd6e838281638b6ef4f288aed5b48d3c7a9b794d95",
-  "clipSha256": "733e1f663b124d159958ed1151d570e14df57c4afa40a11a75468e5a1a6adcd4",
+  "clipSha256": "b40ede95e0688c6293c6aab791b08bef1b0622868d260b0104f73f60b398973a",
   "scene": "activate",
   "review": {
     "heardOpening": "La personne invitée ouvre son nouveau lien",
     "checkpoints": [
       {
-        "spokenSeconds": 0,
-        "spoken": "La personne invitée ouvre son nouveau lien dans sa propre session.",
-        "visibleSeconds": 1,
-        "visible": "Affichage du formulaire d'activation « Bienvenue - Créez votre mot de passe pour activer votre compte ».",
-        "sync": "aligned",
-        "severity": "none"
-      },
-      {
         "spokenSeconds": 3.7,
         "spoken": "Elle choisit son mot de passe et termine l'activation.",
         "visibleSeconds": 4.5,
-        "visible": "Saisie des mots de passe et clic sur « Créer mon mot de passe ».",
+        "visible": "Saisie du mot de passe et validation via le bouton Créer mon mot de passe",
         "sync": "aligned",
         "severity": "none"
       },
       {
-        "spokenSeconds": 10,
+        "spokenSeconds": 10.3,
         "spoken": "Connectons-nous ensuite avec ce nouveau compte",
         "visibleSeconds": 11.2,
-        "visible": "Renseignement des identifiants sur la page d'administration et clic sur « Se connecter ».",
+        "visible": "Formulaire de connexion avec saisie de l'identifiant et du mot de passe",
         "sync": "aligned",
         "severity": "none"
       },
       {
-        "spokenSeconds": 13,
+        "spokenSeconds": 12.8,
         "spoken": "nous arrivons dans son organisation, encore sans événement.",
-        "visibleSeconds": 14.3,
-        "visible": "Arrivée sur la page « Événements » vide avec le guide de démarrage.",
+        "visibleSeconds": 14.8,
+        "visible": "Affichage de l'espace organisation avec l'onglet Événements vide",
         "sync": "aligned",
         "severity": "none"
       },
       {
-        "spokenSeconds": 16,
+        "spokenSeconds": 16.3,
         "spoken": "Revenons au détail côté opérateur pour vérifier que le compte apparaît actif.",
-        "visibleSeconds": 16,
-        "visible": "Retour sur la vue Admin côté opérateur affichant le statut « Actif » et « 1 administrateurs ».",
+        "visibleSeconds": 16.5,
+        "visible": "Retour à la vue d'administration montrant le statut vert Actif de l'organisation",
         "sync": "aligned",
         "severity": "none"
       }
@@ -53,7 +45,7 @@
     "voice": {
       "consistent": true,
       "warm": true,
-      "observation": "Voix claire, posée et bien articulée, synchronisée avec les actions à l'écran."
+      "observation": "Voix claire, posée et dynamique, parfaitement synchronisée avec la démonstration visuelle."
     }
   },
   "note": "Automated observation of actual final video audio and images; not a claim of complete human validation"

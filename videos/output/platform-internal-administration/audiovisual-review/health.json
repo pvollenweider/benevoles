@@ -1,42 +1,34 @@
 {
   "model": "gemini-3.8-flash",
-  "reviewedAt": "2026-10-21T16:14:02.268Z",
-  "videoSha256": "7350f773ffc928faed39ba31f4a706fca1122b7e734861ac922266f75fbee1af",
+  "reviewedAt": "2026-10-21T16:33:37.398Z",
+  "videoSha256": "d46eeba2c72284c4b4bf53e4db0e24f6d8f43c377f9798b47f5f329bd94b2c9c",
   "promptSha256": "8ad43c0c5b6bb559ae1dd73a5219a096df8fd0d9af307cf8d6b16159e7318146",
-  "clipSha256": "c75f865fca89bc15777bdd66800382b751d3a8f65911b9388927374d7fbfe137",
+  "clipSha256": "9c8717020788d66a9ee43872b3573898045ba274bb8d24eb3fc1e2727ad57be4",
   "scene": "health",
   "review": {
-    "heardOpening": "La page Santé du service regroupe",
+    "heardOpening": "La page Santé du service regroupe trois ensembles d'informations",
     "checkpoints": [
       {
-        "spokenSeconds": 0.8,
+        "spokenSeconds": 1,
         "spoken": "La page Santé du service regroupe trois ensembles d'informations",
         "visibleSeconds": 1,
-        "visible": "Affichage de la page Santé du service avec les blocs Service et Tâches planifiées et sauvegardes",
+        "visible": "Affichage de la page Santé du service avec les blocs Service et Tâches planifiées",
         "sync": "aligned",
         "severity": "none"
       },
       {
-        "spokenSeconds": 10,
+        "spokenSeconds": 10.3,
         "spoken": "Regardons les états visibles, la date de contrôle et la version",
-        "visibleSeconds": 10,
-        "visible": "Mention de la version 2.4.0, de la date de vérification (21 oct., 18:08) et des badges d'état OK et Inconnu",
+        "visibleSeconds": 10.3,
+        "visible": "Mention 'Version 2.4.0, vérifiée le 21 oct., 18:27' affichée en haut de page",
         "sync": "aligned",
         "severity": "none"
       },
       {
-        "spokenSeconds": 20.5,
-        "spoken": "leur état reste inconnu ou en avertissement",
-        "visibleSeconds": 20.5,
-        "visible": "Statuts Inconnu visibles en regard des différentes tâches planifiées jamais exécutées",
-        "sync": "aligned",
-        "severity": "none"
-      },
-      {
-        "spokenSeconds": 27,
-        "spoken": "Et une sauvegarde signalée ne prouve pas à elle seule qu'une restauration a été testée",
+        "spokenSeconds": 29.3,
+        "spoken": "qu'une restauration a été testée",
         "visibleSeconds": 29.5,
-        "visible": "Défilement vers le bas révélant la section Configuration et les lignes relatives aux sauvegardes",
+        "visible": "Défilement vers le bas affichant le bloc Configuration et les détails des sauvegardes",
         "sync": "aligned",
         "severity": "none"
       }
@@ -45,7 +37,7 @@
     "voice": {
       "consistent": true,
       "warm": true,
-      "observation": "Voix féminine calme, claire et bien articulée, avec une musique de fond discrète et équilibrée."
+      "observation": "Voix off fluide, claire et posée, bien synchronisée avec le défilement et la présentation de la page."
     }
   },
   "note": "Automated observation of actual final video audio and images; not a claim of complete human validation"

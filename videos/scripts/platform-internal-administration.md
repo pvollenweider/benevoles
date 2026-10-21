@@ -195,3 +195,12 @@ d’ancien identifiant sont vérifiés ; aucun texte produit n’est remplacé.
 Le chapitre de contexte montre la confirmation « Travailler dans Formation
 Opérateur Parc », son absence d’effet à l’ouverture, puis le bouton de formulaire
 « Gérer » du détail. Narration continue Kore conservée et réauditée.
+
+## Reprise du 2026-10-21 — lot 27-2
+
+Produit `490a44c306da8b93b4920ece009a452baf27fdbf`, compilation vérifiée
+`PrM7VPUzFDhdfFFljgeHC`. La narration Kore complète régénérée au lot 27
+est conservée sans changement. Après répétition, nouvelle capture du parcours
+réel. Les plans Mailpit cadrent le corps du vrai message, sans sa date anglaise
+imposée par le visualiseur externe. Les pixels sources, les intervalles à 25 i/s
+et le cadrage sont conservés dans la preuve de montage ; aucun email n’est réécrit.

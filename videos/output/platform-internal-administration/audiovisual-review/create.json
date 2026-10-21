@@ -1,41 +1,41 @@
 {
   "model": "gemini-3.8-flash",
-  "reviewedAt": "2026-10-21T16:13:22.023Z",
-  "videoSha256": "7350f773ffc928faed39ba31f4a706fca1122b7e734861ac922266f75fbee1af",
+  "reviewedAt": "2026-10-21T16:32:03.428Z",
+  "videoSha256": "d46eeba2c72284c4b4bf53e4db0e24f6d8f43c377f9798b47f5f329bd94b2c9c",
   "promptSha256": "a406161e9777f25fa57984276d0986d8e1bfbe349027f557876cf7d4aa9a6a90",
-  "clipSha256": "53c70cf46a0a40b86f57f15a8bb082c7bb6ccc9b03f116f23a54bb45d15f8cfd",
+  "clipSha256": "eef4b99cf88135009ae4cc5bfc3f9d38075a84210358678cf331e042ecda30ac",
   "scene": "create",
   "review": {
     "heardOpening": "Pour accueillir une nouvelle organisation",
     "checkpoints": [
       {
-        "spokenSeconds": 3.2,
+        "spokenSeconds": 2.8,
         "spoken": "ouvrons le formulaire de création",
-        "visibleSeconds": 1.2,
+        "visibleSeconds": 1,
         "visible": "Affichage de la page Nouvelle organisation",
         "sync": "aligned",
         "severity": "none"
       },
       {
-        "spokenSeconds": 5.2,
+        "spokenSeconds": 5,
         "spoken": "Renseignons son nom",
-        "visibleSeconds": 5.4,
-        "visible": "Saisie du nom de l'organisation Formation Opérateur Jetable",
+        "visibleSeconds": 5,
+        "visible": "Saisie du nom Formation Opérateur Jetable",
         "sync": "aligned",
         "severity": "none"
       },
       {
-        "spokenSeconds": 7.4,
-        "spoken": "le nom et l'adresse email de son premier administrateur",
-        "visibleSeconds": 8.1,
-        "visible": "Saisie du nom complet Lou Exemple puis de l'adresse email",
+        "spokenSeconds": 7,
+        "spoken": "puis le nom et l'adresse email de son premier administrateur",
+        "visibleSeconds": 7.5,
+        "visible": "Saisie du nom Lou Exemple et de l'adresse email",
         "sync": "aligned",
         "severity": "none"
       },
       {
         "spokenSeconds": 14.1,
         "spoken": "Créons l'espace",
-        "visibleSeconds": 14.8,
+        "visibleSeconds": 14.9,
         "visible": "Clic sur le bouton Créer l'organisation",
         "sync": "aligned",
         "severity": "none"
@@ -43,8 +43,8 @@
       {
         "spokenSeconds": 16.5,
         "spoken": "Le résultat affiche un lien d'activation valable sept jours",
-        "visibleSeconds": 16.3,
-        "visible": "Écran Organisation créée avec le lien d'invitation et mention valable 7 jours",
+        "visibleSeconds": 16,
+        "visible": "Écran de confirmation Organisation créée avec le lien d'invitation valable 7 jours",
         "sync": "aligned",
         "severity": "none"
       }
@@ -53,7 +53,7 @@
     "voice": {
       "consistent": true,
       "warm": true,
-      "observation": "Voix féminine posée, claire et bien articulée, synchronisation naturelle avec les manipulations."
+      "observation": "Voix claire, posée, bien articulée et parfaitement synchronisée avec les actions à l'écran."
     }
   },
   "note": "Automated observation of actual final video audio and images; not a claim of complete human validation"

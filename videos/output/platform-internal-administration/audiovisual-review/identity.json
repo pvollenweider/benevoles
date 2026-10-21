@@ -1,53 +1,53 @@
 {
   "model": "gemini-3.8-flash",
-  "reviewedAt": "2026-10-21T16:13:11.031Z",
-  "videoSha256": "7350f773ffc928faed39ba31f4a706fca1122b7e734861ac922266f75fbee1af",
+  "reviewedAt": "2026-10-21T16:32:56.320Z",
+  "videoSha256": "d46eeba2c72284c4b4bf53e4db0e24f6d8f43c377f9798b47f5f329bd94b2c9c",
   "promptSha256": "b1ff09285b14fe2c7c4f73686105eb55c7e84015bdbbf30fe6ccec9954339d20",
-  "clipSha256": "3fe654d3730b165d6bb326738460e62d7c5ca2f1c11000506fa32884ff3092ed",
+  "clipSha256": "86a2cc87cd9c011970a9402547a62d019b2df6705bfac623537daadb21e23cc7",
   "scene": "identity",
   "review": {
     "heardOpening": "Le nom affiché et l'identifiant public sont deux informations différentes.",
     "checkpoints": [
       {
-        "spokenSeconds": 6.3,
+        "spokenSeconds": 6.1,
         "spoken": "Modifions d'abord le nom et enregistrons-le.",
-        "visibleSeconds": 8.8,
-        "visible": "Le nouveau nom est saisi et validé avec le bouton OK, le message 'Enregistré.' s'affiche.",
+        "visibleSeconds": 8,
+        "visible": "Le nom est modifié puis validé avec la mention « Enregistré. » et le titre mis à jour.",
         "sync": "aligned",
         "severity": "none"
       },
       {
         "spokenSeconds": 10.4,
         "spoken": "Pour l'identifiant, essayons une valeur déjà utilisée : l'application la refuse.",
-        "visibleSeconds": 13,
-        "visible": "Tentative de modification du slug et apparition du message d'erreur en rouge 'Ce slug est déjà utilisé.'.",
+        "visibleSeconds": 12.5,
+        "visible": "Saisie d'un slug existant et apparition du message d'erreur rouge « Ce slug est déjà utilisé. ».",
         "sync": "aligned",
         "severity": "none"
       },
       {
-        "spokenSeconds": 16.2,
+        "spokenSeconds": 16.5,
         "spoken": "Choisissons alors un identifiant libre et enregistrons.",
-        "visibleSeconds": 19.9,
-        "visible": "Saisie de 'formation-operateur-jetable-renommee' dans le champ slug puis clic sur OK.",
+        "visibleSeconds": 19.8,
+        "visible": "Saisie de l'identifiant libre puis clic sur le bouton OK.",
         "sync": "aligned",
         "severity": "none"
       },
       {
         "spokenSeconds": 21,
         "spoken": "Le détail s'ouvre sous ce nouvel identifiant.",
-        "visibleSeconds": 28.5,
-        "visible": "La page se recharge et affiche le nouvel identifiant sous le titre.",
+        "visibleSeconds": 28.6,
+        "visible": "La page se recharge et affiche le nouvel identifiant public sous le titre seulement à 28,6s.",
         "sync": "late",
         "severity": "major"
       }
     ],
     "issues": [
-      "Désynchronisation à 00:21 : la voix annonce que le détail s'ouvre sous le nouvel identifiant, mais le rechargement de la page n'intervient qu'à 00:28 pendant que la voix continue son explication."
+      "À 00:21, la voix annonce que le détail s'ouvre sous le nouvel identifiant, mais le rechargement de la page n'intervient qu'à 00:28 (plus de 7 secondes de décalage)."
     ],
     "voice": {
       "consistent": true,
       "warm": true,
-      "observation": "Voix off féminine claire, posée et bien articulée, avec une musique de fond discrète."
+      "observation": "Voix de synthèse claire, posée et parfaitement intelligible."
     }
   },
   "note": "Automated observation of actual final video audio and images; not a claim of complete human validation"

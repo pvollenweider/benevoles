@@ -1,12 +1,12 @@
 {
   "id": "PLATFORM_INTERNAL_ADMINISTRATION",
   "slug": "platform-internal-administration",
-  "validatedAt": "2026-10-21T16:12:35.482Z",
+  "validatedAt": "2026-10-21T16:37:40.969Z",
   "continuousNarration": true,
   "sentenceRevision": false,
   "narrationContentChecked": true,
   "voice": "Kore",
-  "captureMs": 481000,
+  "captureMs": 480640,
   "scenes": [
     {
       "id": "welcome",
@@ -28,21 +28,21 @@
     },
     {
       "id": "activate",
-      "visualMs": 31570,
+      "visualMs": 31568,
       "audioMs": 31567,
-      "driftMs": 3
+      "driftMs": 1
     },
     {
       "id": "identity",
-      "visualMs": 42861,
+      "visualMs": 42859,
       "audioMs": 42858,
-      "driftMs": 3
+      "driftMs": 1
     },
     {
       "id": "availability",
-      "visualMs": 36553,
+      "visualMs": 36552,
       "audioMs": 36551,
-      "driftMs": 2
+      "driftMs": 1
     },
     {
       "id": "context",
@@ -52,21 +52,21 @@
     },
     {
       "id": "health",
-      "visualMs": 36269,
+      "visualMs": 36268,
       "audioMs": 36267,
-      "driftMs": 2
+      "driftMs": 1
     },
     {
       "id": "preview",
-      "visualMs": 50072,
+      "visualMs": 50073,
       "audioMs": 50071,
-      "driftMs": 1
+      "driftMs": 2
     },
     {
       "id": "broadcast",
-      "visualMs": 59466,
+      "visualMs": 59468,
       "audioMs": 59465,
-      "driftMs": 1
+      "driftMs": 3
     },
     {
       "id": "delete",
@@ -76,16 +76,16 @@
     },
     {
       "id": "result",
-      "visualMs": 35825,
+      "visualMs": 35824,
       "audioMs": 35824,
-      "driftMs": 1
+      "driftMs": 0
     }
   ],
   "anchorsChecked": 33,
   "music": {
     "voicedWindows": 440,
     "musicOnlyWindows": 1,
-    "smallestGapLu": 12.2,
+    "smallestGapLu": 12.3,
     "largestGapLu": 18.6,
     "quietestMusicOnlyLufs": -32.5,
     "loudestMusicOnlyLufs": -32.5,

@@ -1,26 +1,26 @@
 {
   "model": "gemini-3.8-flash",
-  "reviewedAt": "2026-10-21T16:13:54.360Z",
-  "videoSha256": "7350f773ffc928faed39ba31f4a706fca1122b7e734861ac922266f75fbee1af",
+  "reviewedAt": "2026-10-21T16:34:35.871Z",
+  "videoSha256": "d46eeba2c72284c4b4bf53e4db0e24f6d8f43c377f9798b47f5f329bd94b2c9c",
   "promptSha256": "0090acdc90d6ffa3eba4affb0fe87f97421501a10bc3e2ea52de3a527ace3bc7",
-  "clipSha256": "0a967c464bc2dc964123bd898c3be4f8664e8f38fd015908d828c60f87c306f5",
+  "clipSha256": "9f063f8b92b407359b04ead2b5a57c5eca6f28a9951df9a6fe9e3792b79569b9",
   "scene": "result",
   "review": {
     "heardOpening": "Terminons en revenant au périmètre",
     "checkpoints": [
       {
-        "spokenSeconds": 3,
+        "spokenSeconds": 3.4,
         "spoken": "Un organisateur ordinaire ne peut pas ouvrir les routes de gestion de la plateforme.",
-        "visibleSeconds": 3,
-        "visible": "Page de connexion organisateur puis redirection vers l'espace événementiel restreint.",
+        "visibleSeconds": 3.2,
+        "visible": "Affichage de la page de connexion espace organisateur puis redirection vers l'espace événements ordinaire.",
         "sync": "aligned",
         "severity": "none"
       },
       {
-        "spokenSeconds": 7,
+        "spokenSeconds": 7.3,
         "spoken": "L'opérateur, lui, choisit son organisation avant d'y travailler.",
-        "visibleSeconds": 7,
-        "visible": "Retour à la console d'administration globale listant l'ensemble des organisations.",
+        "visibleSeconds": 7.5,
+        "visible": "Retour sur l'interface d'administration listant les différentes organisations sélectionnables.",
         "sync": "aligned",
         "severity": "none"
       },
@@ -28,7 +28,7 @@
         "spokenSeconds": 12,
         "spoken": "Créer un espace, activer un compte, désactiver et supprimer sont des actions différentes.",
         "visibleSeconds": 12,
-        "visible": "Tableau des organisations affichant les boutons de création et de gestion de statut.",
+        "visible": "Tableau des organisations affichant le bouton '+ nouvelle organisation', les statuts actif/désactivé et les actions associées.",
         "sync": "aligned",
         "severity": "none"
       }
@@ -37,7 +37,7 @@
     "voice": {
       "consistent": true,
       "warm": true,
-      "observation": "Voix posée, claire et dynamique, parfaitement synchronisée avec les transitions à l'écran."
+      "observation": "Voix claire, posée et parfaitement intelligible, bien calée sur les transitions visuelles."
     }
   },
   "note": "Automated observation of actual final video audio and images; not a claim of complete human validation"

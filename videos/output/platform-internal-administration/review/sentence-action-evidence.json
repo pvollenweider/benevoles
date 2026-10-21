@@ -1,12 +1,12 @@
 {
-  "videoSha256": "7350f773ffc928faed39ba31f4a706fca1122b7e734861ac922266f75fbee1af",
+  "videoSha256": "d46eeba2c72284c4b4bf53e4db0e24f6d8f43c377f9798b47f5f329bd94b2c9c",
   "product": {
     "commit": "490a44c306da8b93b4920ece009a452baf27fdbf",
     "sourceTree": "be1a1d9342fc3b6d37f922a5557bedbe7d2b997b",
     "productSourceSha256": "5cadc01f8a0c46ff4a0d9d6d4de90702a18b4a0108564e6a460657a57ec1aeb7",
-    "buildId": "rFYo35VG0QypepwE2pYU_",
+    "buildId": "PrM7VPUzFDhdfFFljgeHC",
     "snapshot": "/tmp/benevoles-video-production.Batch27",
-    "builtAt": "2026-10-21T15:59:30.726Z"
+    "builtAt": "2026-10-21T16:19:23.791Z"
   },
   "anchors": [
     {
@@ -14,11 +14,11 @@
       "phrase": "Renseignons son nom",
       "startMs": 5309,
       "endMs": 9880,
-      "cueMs": 36067,
-      "absoluteSentenceMs": 36067,
+      "cueMs": 36065,
+      "absoluteSentenceMs": 36064,
       "firstFollowingInput": {
         "kind": "click",
-        "atMs": 36542
+        "atMs": 36544
       },
       "sentenceFrame": "videos/output/platform-internal-administration/review/anchor-00-sentence.jpg",
       "actionFrame": "videos/output/platform-internal-administration/review/anchor-00-action.jpg"
@@ -28,11 +28,11 @@
       "phrase": "Créons l’espace",
       "startMs": 15885,
       "endMs": 15933,
-      "cueMs": 46644,
-      "absoluteSentenceMs": 46643,
+      "cueMs": 46641,
+      "absoluteSentenceMs": 46640,
       "firstFollowingInput": {
         "kind": "click",
-        "atMs": 47108
+        "atMs": 47110
       },
       "sentenceFrame": "videos/output/platform-internal-administration/review/anchor-01-sentence.jpg",
       "actionFrame": "videos/output/platform-internal-administration/review/anchor-01-action.jpg"
@@ -42,11 +42,11 @@
       "phrase": "Avant de l’utiliser",
       "startMs": 7247,
       "endMs": 13001,
-      "cueMs": 71095,
-      "absoluteSentenceMs": 71093,
+      "cueMs": 71091,
+      "absoluteSentenceMs": 71089,
       "firstFollowingInput": {
         "kind": "click",
-        "atMs": 72825
+        "atMs": 72844
       },
       "sentenceFrame": "videos/output/platform-internal-administration/review/anchor-02-sentence.jpg",
       "actionFrame": "videos/output/platform-internal-administration/review/anchor-02-action.jpg"
@@ -56,8 +56,8 @@
       "phrase": "Ouvrons le second message reçu",
       "startMs": 27719,
       "endMs": 30084,
-      "cueMs": 91566,
-      "absoluteSentenceMs": 91565,
+      "cueMs": 91563,
+      "absoluteSentenceMs": 91561,
       "firstFollowingInput": null,
       "sentenceFrame": "videos/output/platform-internal-administration/review/anchor-03-sentence.jpg",
       "actionFrame": "videos/output/platform-internal-administration/review/anchor-03-action.jpg"
@@ -67,11 +67,11 @@
       "phrase": "Elle choisit son mot de passe",
       "startMs": 4792,
       "endMs": 6576,
-      "cueMs": 101352,
-      "absoluteSentenceMs": 101351,
+      "cueMs": 101357,
+      "absoluteSentenceMs": 101356,
       "firstFollowingInput": {
         "kind": "click",
-        "atMs": 101823
+        "atMs": 101825
       },
       "sentenceFrame": "videos/output/platform-internal-administration/review/anchor-04-sentence.jpg",
       "actionFrame": "videos/output/platform-internal-administration/review/anchor-04-action.jpg"
@@ -81,11 +81,11 @@
       "phrase": "Elle choisit son mot de passe",
       "startMs": 4792,
       "endMs": 6576,
-      "cueMs": 105435,
-      "absoluteSentenceMs": 101351,
+      "cueMs": 105452,
+      "absoluteSentenceMs": 101356,
       "firstFollowingInput": {
         "kind": "click",
-        "atMs": 101823
+        "atMs": 101825
       },
       "sentenceFrame": "videos/output/platform-internal-administration/review/anchor-05-sentence.jpg",
       "actionFrame": "videos/output/platform-internal-administration/review/anchor-05-action.jpg"
@@ -95,11 +95,11 @@
       "phrase": "Connectons-nous ensuite",
       "startMs": 10579,
       "endMs": 14453,
-      "cueMs": 107139,
-      "absoluteSentenceMs": 107138,
+      "cueMs": 107143,
+      "absoluteSentenceMs": 107143,
       "firstFollowingInput": {
         "kind": "click",
-        "atMs": 107610
+        "atMs": 107619
       },
       "sentenceFrame": "videos/output/platform-internal-administration/review/anchor-06-sentence.jpg",
       "actionFrame": "videos/output/platform-internal-administration/review/anchor-06-action.jpg"
@@ -109,8 +109,8 @@
       "phrase": "Revenons au détail côté opérateur",
       "startMs": 16008,
       "endMs": 21465,
-      "cueMs": 112568,
-      "absoluteSentenceMs": 112567,
+      "cueMs": 112573,
+      "absoluteSentenceMs": 112572,
       "firstFollowingInput": null,
       "sentenceFrame": "videos/output/platform-internal-administration/review/anchor-07-sentence.jpg",
       "actionFrame": "videos/output/platform-internal-administration/review/anchor-07-action.jpg"
@@ -120,11 +120,11 @@
       "phrase": "Modifions d’abord le nom",
       "startMs": 6060,
       "endMs": 9126,
-      "cueMs": 136457,
-      "absoluteSentenceMs": 136454,
+      "cueMs": 136456,
+      "absoluteSentenceMs": 136455,
       "firstFollowingInput": {
         "kind": "click",
-        "atMs": 136922
+        "atMs": 136924
       },
       "sentenceFrame": "videos/output/platform-internal-administration/review/anchor-08-sentence.jpg",
       "actionFrame": "videos/output/platform-internal-administration/review/anchor-08-action.jpg"
@@ -135,10 +135,10 @@
       "startMs": 9997,
       "endMs": 13504,
       "cueMs": 140393,
-      "absoluteSentenceMs": 140391,
+      "absoluteSentenceMs": 140392,
       "firstFollowingInput": {
         "kind": "click",
-        "atMs": 140887
+        "atMs": 140893
       },
       "sentenceFrame": "videos/output/platform-internal-administration/review/anchor-09-sentence.jpg",
       "actionFrame": "videos/output/platform-internal-administration/review/anchor-09-action.jpg"
@@ -149,10 +149,10 @@
       "startMs": 16324,
       "endMs": 18562,
       "cueMs": 146720,
-      "absoluteSentenceMs": 146718,
+      "absoluteSentenceMs": 146719,
       "firstFollowingInput": {
         "kind": "click",
-        "atMs": 147186
+        "atMs": 147189
       },
       "sentenceFrame": "videos/output/platform-internal-administration/review/anchor-10-sentence.jpg",
       "actionFrame": "videos/output/platform-internal-administration/review/anchor-10-action.jpg"
@@ -162,11 +162,11 @@
       "phrase": "Ouvrons la confirmation",
       "startMs": 3650,
       "endMs": 7956,
-      "cueMs": 179173,
-      "absoluteSentenceMs": 179172,
+      "cueMs": 179174,
+      "absoluteSentenceMs": 179174,
       "firstFollowingInput": {
         "kind": "click",
-        "atMs": 179653
+        "atMs": 179655
       },
       "sentenceFrame": "videos/output/platform-internal-administration/review/anchor-11-sentence.jpg",
       "actionFrame": "videos/output/platform-internal-administration/review/anchor-11-action.jpg"
@@ -177,10 +177,10 @@
       "startMs": 8833,
       "endMs": 13969,
       "cueMs": 184357,
-      "absoluteSentenceMs": 184355,
+      "absoluteSentenceMs": 184357,
       "firstFollowingInput": {
         "kind": "click",
-        "atMs": 194787
+        "atMs": 194822
       },
       "sentenceFrame": "videos/output/platform-internal-administration/review/anchor-12-sentence.jpg",
       "actionFrame": "videos/output/platform-internal-administration/review/anchor-12-action.jpg"
@@ -191,10 +191,10 @@
       "startMs": 17627,
       "endMs": 19289,
       "cueMs": 193152,
-      "absoluteSentenceMs": 193149,
+      "absoluteSentenceMs": 193151,
       "firstFollowingInput": {
         "kind": "click",
-        "atMs": 194787
+        "atMs": 194822
       },
       "sentenceFrame": "videos/output/platform-internal-administration/review/anchor-13-sentence.jpg",
       "actionFrame": "videos/output/platform-internal-administration/review/anchor-13-action.jpg"
@@ -204,11 +204,11 @@
       "phrase": "La session organisateur peut à nouveau",
       "startMs": 19449,
       "endMs": 24324,
-      "cueMs": 195877,
-      "absoluteSentenceMs": 194971,
+      "cueMs": 195915,
+      "absoluteSentenceMs": 194973,
       "firstFollowingInput": {
         "kind": "click",
-        "atMs": 195569
+        "atMs": 195608
       },
       "sentenceFrame": "videos/output/platform-internal-administration/review/anchor-14-sentence.jpg",
       "actionFrame": "videos/output/platform-internal-administration/review/anchor-14-action.jpg"
@@ -218,11 +218,11 @@
       "phrase": "Depuis son détail",
       "startMs": 10664,
       "endMs": 17126,
-      "cueMs": 225009,
+      "cueMs": 225008,
       "absoluteSentenceMs": 225008,
       "firstFollowingInput": {
         "kind": "click",
-        "atMs": 226651
+        "atMs": 226637
       },
       "sentenceFrame": "videos/output/platform-internal-administration/review/anchor-15-sentence.jpg",
       "actionFrame": "videos/output/platform-internal-administration/review/anchor-15-action.jpg"
@@ -232,11 +232,11 @@
       "phrase": "Donnons-lui un objet clair",
       "startMs": 6011,
       "endMs": 6552,
-      "cueMs": 296812,
-      "absoluteSentenceMs": 296810,
+      "cueMs": 296815,
+      "absoluteSentenceMs": 296813,
       "firstFollowingInput": {
         "kind": "click",
-        "atMs": 297281
+        "atMs": 297284
       },
       "sentenceFrame": "videos/output/platform-internal-administration/review/anchor-16-sentence.jpg",
       "actionFrame": "videos/output/platform-internal-administration/review/anchor-16-action.jpg"
@@ -246,11 +246,11 @@
       "phrase": "Le contenu commence",
       "startMs": 9384,
       "endMs": 11831,
-      "cueMs": 300183,
-      "absoluteSentenceMs": 300183,
+      "cueMs": 300187,
+      "absoluteSentenceMs": 300186,
       "firstFollowingInput": {
         "kind": "click",
-        "atMs": 300648
+        "atMs": 300650
       },
       "sentenceFrame": "videos/output/platform-internal-administration/review/anchor-17-sentence.jpg",
       "actionFrame": "videos/output/platform-internal-administration/review/anchor-17-action.jpg"
@@ -260,11 +260,11 @@
       "phrase": "Ajoutons deux conseils simples",
       "startMs": 12650,
       "endMs": 14074,
-      "cueMs": 303451,
-      "absoluteSentenceMs": 303449,
+      "cueMs": 303453,
+      "absoluteSentenceMs": 303452,
       "firstFollowingInput": {
         "kind": "key",
-        "atMs": 303454
+        "atMs": 303456
       },
       "sentenceFrame": "videos/output/platform-internal-administration/review/anchor-18-sentence.jpg",
       "actionFrame": "videos/output/platform-internal-administration/review/anchor-18-action.jpg"
@@ -274,11 +274,11 @@
       "phrase": "Un lien vers le guide",
       "startMs": 18476,
       "endMs": 20297,
-      "cueMs": 309276,
-      "absoluteSentenceMs": 309275,
+      "cueMs": 309279,
+      "absoluteSentenceMs": 309278,
       "firstFollowingInput": {
         "kind": "key",
-        "atMs": 309278
+        "atMs": 309283
       },
       "sentenceFrame": "videos/output/platform-internal-administration/review/anchor-19-sentence.jpg",
       "actionFrame": "videos/output/platform-internal-administration/review/anchor-19-action.jpg"
@@ -288,11 +288,11 @@
       "phrase": "Utilisons Envoyer un test",
       "startMs": 32858,
       "endMs": 36787,
-      "cueMs": 323659,
-      "absoluteSentenceMs": 323657,
+      "cueMs": 323661,
+      "absoluteSentenceMs": 323660,
       "firstFollowingInput": {
         "kind": "click",
-        "atMs": 324130
+        "atMs": 324155
       },
       "sentenceFrame": "videos/output/platform-internal-administration/review/anchor-20-sentence.jpg",
       "actionFrame": "videos/output/platform-internal-administration/review/anchor-20-action.jpg"
@@ -302,8 +302,8 @@
       "phrase": "Ouvrons le vrai email",
       "startMs": 37992,
       "endMs": 40852,
-      "cueMs": 328791,
-      "absoluteSentenceMs": 328791,
+      "cueMs": 328799,
+      "absoluteSentenceMs": 328794,
       "firstFollowingInput": null,
       "sentenceFrame": "videos/output/platform-internal-administration/review/anchor-21-sentence.jpg",
       "actionFrame": "videos/output/platform-internal-administration/review/anchor-21-action.jpg"
@@ -313,11 +313,11 @@
       "phrase": "Reprenons notre objet",
       "startMs": 5005,
       "endMs": 8347,
-      "cueMs": 348138,
-      "absoluteSentenceMs": 348137,
+      "cueMs": 348139,
+      "absoluteSentenceMs": 348138,
       "firstFollowingInput": {
         "kind": "click",
-        "atMs": 348615
+        "atMs": 348617
       },
       "sentenceFrame": "videos/output/platform-internal-administration/review/anchor-22-sentence.jpg",
       "actionFrame": "videos/output/platform-internal-administration/review/anchor-22-action.jpg"
@@ -328,10 +328,10 @@
       "startMs": 22099,
       "endMs": 26365,
       "cueMs": 365233,
-      "absoluteSentenceMs": 365231,
+      "absoluteSentenceMs": 365232,
       "firstFollowingInput": {
         "kind": "click",
-        "atMs": 365695
+        "atMs": 365697
       },
       "sentenceFrame": "videos/output/platform-internal-administration/review/anchor-23-sentence.jpg",
       "actionFrame": "videos/output/platform-internal-administration/review/anchor-23-action.jpg"
@@ -341,11 +341,11 @@
       "phrase": "Validons, puis regardons",
       "startMs": 35669,
       "endMs": 40998,
-      "cueMs": 378805,
-      "absoluteSentenceMs": 378801,
+      "cueMs": 378802,
+      "absoluteSentenceMs": 378802,
       "firstFollowingInput": {
         "kind": "click",
-        "atMs": 379278
+        "atMs": 379263
       },
       "sentenceFrame": "videos/output/platform-internal-administration/review/anchor-24-sentence.jpg",
       "actionFrame": "videos/output/platform-internal-administration/review/anchor-24-action.jpg"
@@ -355,11 +355,11 @@
       "phrase": "Validons, puis regardons",
       "startMs": 35669,
       "endMs": 40998,
-      "cueMs": 379612,
-      "absoluteSentenceMs": 378801,
+      "cueMs": 379602,
+      "absoluteSentenceMs": 378802,
       "firstFollowingInput": {
         "kind": "click",
-        "atMs": 379278
+        "atMs": 379263
       },
       "sentenceFrame": "videos/output/platform-internal-administration/review/anchor-25-sentence.jpg",
       "actionFrame": "videos/output/platform-internal-administration/review/anchor-25-action.jpg"
@@ -369,8 +369,8 @@
       "phrase": "Ouvrons un message livré",
       "startMs": 43234,
       "endMs": 46692,
-      "cueMs": 386366,
-      "absoluteSentenceMs": 386366,
+      "cueMs": 386368,
+      "absoluteSentenceMs": 386367,
       "firstFollowingInput": null,
       "sentenceFrame": "videos/output/platform-internal-administration/review/anchor-26-sentence.jpg",
       "actionFrame": "videos/output/platform-internal-administration/review/anchor-26-action.jpg"
@@ -380,8 +380,8 @@
       "phrase": "Ouvrons un message livré",
       "startMs": 43234,
       "endMs": 46692,
-      "cueMs": 387627,
-      "absoluteSentenceMs": 386366,
+      "cueMs": 387628,
+      "absoluteSentenceMs": 386367,
       "firstFollowingInput": null,
       "sentenceFrame": "videos/output/platform-internal-administration/review/anchor-27-sentence.jpg",
       "actionFrame": "videos/output/platform-internal-administration/review/anchor-27-action.jpg"
@@ -391,11 +391,11 @@
       "phrase": "Désactivons-le d’abord",
       "startMs": 11131,
       "endMs": 12226,
-      "cueMs": 415999,
-      "absoluteSentenceMs": 415997,
+      "cueMs": 416015,
+      "absoluteSentenceMs": 416012,
       "firstFollowingInput": {
         "kind": "click",
-        "atMs": 416477
+        "atMs": 416577
       },
       "sentenceFrame": "videos/output/platform-internal-administration/review/anchor-28-sentence.jpg",
       "actionFrame": "videos/output/platform-internal-administration/review/anchor-28-action.jpg"
@@ -405,11 +405,11 @@
       "phrase": "Le bouton de suppression apparaît alors",
       "startMs": 12481,
       "endMs": 13261,
-      "cueMs": 417565,
-      "absoluteSentenceMs": 417347,
+      "cueMs": 417725,
+      "absoluteSentenceMs": 417362,
       "firstFollowingInput": {
         "kind": "click",
-        "atMs": 417259
+        "atMs": 417414
       },
       "sentenceFrame": "videos/output/platform-internal-administration/review/anchor-29-sentence.jpg",
       "actionFrame": "videos/output/platform-internal-administration/review/anchor-29-action.jpg"
@@ -419,11 +419,11 @@
       "phrase": "La confirmation demande",
       "startMs": 21323,
       "endMs": 24509,
-      "cueMs": 426190,
-      "absoluteSentenceMs": 426189,
+      "cueMs": 426205,
+      "absoluteSentenceMs": 426204,
       "firstFollowingInput": {
         "kind": "click",
-        "atMs": 426658
+        "atMs": 426678
       },
       "sentenceFrame": "videos/output/platform-internal-administration/review/anchor-30-sentence.jpg",
       "actionFrame": "videos/output/platform-internal-administration/review/anchor-30-action.jpg"
@@ -433,11 +433,11 @@
       "phrase": "Vérifions-le, puis validons",
       "startMs": 25125,
       "endMs": 29018,
-      "cueMs": 429992,
-      "absoluteSentenceMs": 429991,
+      "cueMs": 430005,
+      "absoluteSentenceMs": 430006,
       "firstFollowingInput": {
         "kind": "click",
-        "atMs": 430459
+        "atMs": 430478
       },
       "sentenceFrame": "videos/output/platform-internal-administration/review/anchor-31-sentence.jpg",
       "actionFrame": "videos/output/platform-internal-administration/review/anchor-31-action.jpg"
@@ -447,8 +447,8 @@
       "phrase": "L’opérateur, lui",
       "startMs": 7815,
       "endMs": 11429,
-      "cueMs": 450866,
-      "absoluteSentenceMs": 450865,
+      "cueMs": 450886,
+      "absoluteSentenceMs": 450881,
       "firstFollowingInput": null,
       "sentenceFrame": "videos/output/platform-internal-administration/review/anchor-32-sentence.jpg",
       "actionFrame": "videos/output/platform-internal-administration/review/anchor-32-action.jpg"

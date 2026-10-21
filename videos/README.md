@@ -725,3 +725,13 @@ La passerelle CONNECT réservée à benevol.app permet aussi aux requêtes de
 contrôle Playwright de rester locales. Aucun Origin, écran ou résultat produit
 n’est réécrit. Les liens d’activation et la redirection d’ancien slug viennent
 ainsi du produit et sont vérifiés sur leurs véritables adresses publiques.
+
+### Reprise opérateur : cadrage du vrai message (lot 27-2)
+
+Mailpit 1.30.3 impose une date anglaise dans ses en-têtes, même avec le navigateur
+et son processus en français. Le montage opérateur utilise les intervalles du
+vrai écran Mailpit, détectés image par image dans la capture brute, pour cadrer
+le corps reçu (x=320, y=224, 960×576), sans cet en-tête ni la liste latérale.
+Aucun contenu d’email ni état produit n’est réécrit, aucune image fixe n’est
+ajoutée. La capture brute et `review/mailpit-focus-proof.json` restent conservées ;
+la revue vérifie aussi les transitions et la lisibilité du message complet.

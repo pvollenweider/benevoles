@@ -40,11 +40,11 @@
       "result": -0.2
     }
   },
-  "videoSha256": "7350f773ffc928faed39ba31f4a706fca1122b7e734861ac922266f75fbee1af",
+  "videoSha256": "d46eeba2c72284c4b4bf53e4db0e24f6d8f43c377f9798b47f5f329bd94b2c9c",
   "summary": {
     "voicedWindows": 440,
     "musicOnlyWindows": 1,
-    "smallestGapLu": 12.2,
+    "smallestGapLu": 12.3,
     "largestGapLu": 18.6,
     "quietestMusicOnlyLufs": -32.5,
     "loudestMusicOnlyLufs": -32.5,
@@ -265,22 +265,22 @@
     {
       "startS": 34.5,
       "kind": "voiced",
-      "voiceLufs": -16.2,
-      "musicLufs": -32.7,
+      "voiceLufs": -16.1,
+      "musicLufs": -32.6,
       "gapLu": 16.5
     },
     {
       "startS": 35.5,
       "kind": "voiced",
-      "voiceLufs": -16,
-      "musicLufs": -32.4,
+      "voiceLufs": -15.8,
+      "musicLufs": -32.3,
       "gapLu": 16.5
     },
     {
       "startS": 36.5,
       "kind": "voiced",
-      "voiceLufs": -15.2,
-      "musicLufs": -32.4,
+      "voiceLufs": -15.1,
+      "musicLufs": -32.3,
       "gapLu": 17.2
     },
     {
@@ -344,7 +344,7 @@
       "kind": "voiced",
       "voiceLufs": -15.8,
       "musicLufs": -31.6,
-      "gapLu": 15.7
+      "gapLu": 15.8
     },
     {
       "startS": 46.5,
@@ -370,7 +370,7 @@
     {
       "startS": 49.5,
       "kind": "voiced",
-      "voiceLufs": -16.6,
+      "voiceLufs": -16.7,
       "musicLufs": -32.4,
       "gapLu": 15.8
     },
@@ -447,7 +447,7 @@
     {
       "startS": 63.5,
       "kind": "voiced",
-      "voiceLufs": -16.3,
+      "voiceLufs": -16.2,
       "musicLufs": -32.2,
       "gapLu": 16
     },
@@ -468,28 +468,28 @@
     {
       "startS": 66.5,
       "kind": "voiced",
-      "voiceLufs": -16.2,
-      "musicLufs": -32.6,
-      "gapLu": 16.5
+      "voiceLufs": -16.3,
+      "musicLufs": -32.7,
+      "gapLu": 16.4
     },
     {
       "startS": 67.5,
       "kind": "voiced",
-      "voiceLufs": -16.9,
+      "voiceLufs": -17,
       "musicLufs": -32.2,
-      "gapLu": 15.3
+      "gapLu": 15.2
     },
     {
       "startS": 68.5,
       "kind": "voiced",
-      "voiceLufs": -17.2,
-      "musicLufs": -32.2,
-      "gapLu": 15
+      "voiceLufs": -17.4,
+      "musicLufs": -32.3,
+      "gapLu": 14.9
     },
     {
       "startS": 69.5,
       "kind": "voiced",
-      "voiceLufs": -17.4,
+      "voiceLufs": -17.5,
       "musicLufs": -31.8,
       "gapLu": 14.3
     },
@@ -552,30 +552,30 @@
     {
       "startS": 78.5,
       "kind": "voiced",
-      "voiceLufs": -16.8,
+      "voiceLufs": -16.9,
       "musicLufs": -32.1,
-      "gapLu": 15.3
+      "gapLu": 15.2
     },
     {
       "startS": 79.5,
       "kind": "voiced",
-      "voiceLufs": -17.1,
+      "voiceLufs": -17,
       "musicLufs": -32.6,
-      "gapLu": 15.5
+      "gapLu": 15.6
     },
     {
       "startS": 80.5,
       "kind": "voiced",
-      "voiceLufs": -17.9,
-      "musicLufs": -32.9,
-      "gapLu": 15
+      "voiceLufs": -17.7,
+      "musicLufs": -32.8,
+      "gapLu": 15.2
     },
     {
       "startS": 81.5,
       "kind": "voiced",
-      "voiceLufs": -16.7,
+      "voiceLufs": -16.5,
       "musicLufs": -32.5,
-      "gapLu": 15.8
+      "gapLu": 16
     },
     {
       "startS": 82.5,
@@ -589,7 +589,7 @@
       "kind": "voiced",
       "voiceLufs": -16.3,
       "musicLufs": -31.9,
-      "gapLu": 15.5
+      "gapLu": 15.6
     },
     {
       "startS": 84.5,
@@ -645,7 +645,7 @@
       "kind": "voiced",
       "voiceLufs": -15.3,
       "musicLufs": -32.3,
-      "gapLu": 17
+      "gapLu": 16.9
     },
     {
       "startS": 92.5,
@@ -671,23 +671,23 @@
     {
       "startS": 97.5,
       "kind": "voiced",
-      "voiceLufs": -16.3,
+      "voiceLufs": -16.1,
       "musicLufs": -32.4,
-      "gapLu": 16.1
+      "gapLu": 16.3
     },
     {
       "startS": 98.5,
       "kind": "voiced",
-      "voiceLufs": -16.4,
+      "voiceLufs": -16.2,
       "musicLufs": -31.8,
-      "gapLu": 15.5
+      "gapLu": 15.6
     },
     {
       "startS": 99.5,
       "kind": "voiced",
-      "voiceLufs": -17,
+      "voiceLufs": -16.8,
       "musicLufs": -32.3,
-      "gapLu": 15.3
+      "gapLu": 15.4
     },
     {
       "startS": 100.5,
@@ -699,7 +699,7 @@
     {
       "startS": 101.5,
       "kind": "voiced",
-      "voiceLufs": -16.6,
+      "voiceLufs": -16.7,
       "musicLufs": -33,
       "gapLu": 16.4
     },
@@ -708,7 +708,7 @@
       "kind": "voiced",
       "voiceLufs": -16.9,
       "musicLufs": -32.5,
-      "gapLu": 15.6
+      "gapLu": 15.7
     },
     {
       "startS": 103.5,
@@ -804,7 +804,7 @@
     {
       "startS": 116.5,
       "kind": "voiced",
-      "voiceLufs": -17.4,
+      "voiceLufs": -17.3,
       "musicLufs": -32.2,
       "gapLu": 14.9
     },
@@ -923,14 +923,14 @@
     {
       "startS": 137.5,
       "kind": "voiced",
-      "voiceLufs": -15.3,
+      "voiceLufs": -15.2,
       "musicLufs": -32.3,
       "gapLu": 17
     },
     {
       "startS": 138.5,
       "kind": "voiced",
-      "voiceLufs": -16.6,
+      "voiceLufs": -16.7,
       "musicLufs": -31.8,
       "gapLu": 15.2
     },
@@ -979,7 +979,7 @@
     {
       "startS": 145.5,
       "kind": "voiced",
-      "voiceLufs": -16.6,
+      "voiceLufs": -16.5,
       "musicLufs": -32.3,
       "gapLu": 15.8
     },
@@ -995,7 +995,7 @@
       "kind": "voiced",
       "voiceLufs": -16.8,
       "musicLufs": -32.5,
-      "gapLu": 15.7
+      "gapLu": 15.8
     },
     {
       "startS": 148.5,
@@ -1135,7 +1135,7 @@
       "kind": "voiced",
       "voiceLufs": -17.9,
       "musicLufs": -32.1,
-      "gapLu": 14.3
+      "gapLu": 14.2
     },
     {
       "startS": 168.5,
@@ -1156,7 +1156,7 @@
       "kind": "voiced",
       "voiceLufs": -19.7,
       "musicLufs": -31.9,
-      "gapLu": 12.2
+      "gapLu": 12.3
     },
     {
       "startS": 174.5,
@@ -1205,21 +1205,21 @@
       "kind": "voiced",
       "voiceLufs": -15.7,
       "musicLufs": -32.6,
-      "gapLu": 16.8
+      "gapLu": 16.9
     },
     {
       "startS": 181.5,
       "kind": "voiced",
       "voiceLufs": -15.5,
       "musicLufs": -32.5,
-      "gapLu": 16.9
+      "gapLu": 17
     },
     {
       "startS": 182.5,
       "kind": "voiced",
       "voiceLufs": -16.5,
       "musicLufs": -32.6,
-      "gapLu": 16.1
+      "gapLu": 16
     },
     {
       "startS": 183.5,
@@ -1247,7 +1247,7 @@
       "kind": "voiced",
       "voiceLufs": -16.7,
       "musicLufs": -33,
-      "gapLu": 16.2
+      "gapLu": 16.3
     },
     {
       "startS": 187.5,
@@ -1301,7 +1301,7 @@
     {
       "startS": 194.5,
       "kind": "voiced",
-      "voiceLufs": -18,
+      "voiceLufs": -17.9,
       "musicLufs": -32.4,
       "gapLu": 14.4
     },
@@ -1359,7 +1359,7 @@
       "kind": "voiced",
       "voiceLufs": -16.2,
       "musicLufs": -33,
-      "gapLu": 16.8
+      "gapLu": 16.7
     },
     {
       "startS": 203.5,
@@ -1399,7 +1399,7 @@
     {
       "startS": 208.5,
       "kind": "voiced",
-      "voiceLufs": -16.4,
+      "voiceLufs": -16.3,
       "musicLufs": -32.5,
       "gapLu": 16.1
     },
@@ -1408,7 +1408,7 @@
       "kind": "voiced",
       "voiceLufs": -17.5,
       "musicLufs": -32.4,
-      "gapLu": 14.9
+      "gapLu": 15
     },
     {
       "startS": 212.5,
@@ -1490,7 +1490,7 @@
       "kind": "voiced",
       "voiceLufs": -16.8,
       "musicLufs": -32.3,
-      "gapLu": 15.4
+      "gapLu": 15.5
     },
     {
       "startS": 225.5,
@@ -1607,7 +1607,7 @@
     {
       "startS": 241.5,
       "kind": "voiced",
-      "voiceLufs": -17.1,
+      "voiceLufs": -17,
       "musicLufs": -33.2,
       "gapLu": 16.1
     },
@@ -1712,7 +1712,7 @@
     {
       "startS": 259.5,
       "kind": "voiced",
-      "voiceLufs": -17.3,
+      "voiceLufs": -17.2,
       "musicLufs": -32.5,
       "gapLu": 15.2
     },
@@ -1721,7 +1721,7 @@
       "kind": "voiced",
       "voiceLufs": -17.1,
       "musicLufs": -31.8,
-      "gapLu": 14.8
+      "gapLu": 14.7
     },
     {
       "startS": 261.5,
@@ -1761,7 +1761,7 @@
     {
       "startS": 266.5,
       "kind": "voiced",
-      "voiceLufs": -16.2,
+      "voiceLufs": -16.3,
       "musicLufs": -32.8,
       "gapLu": 16.6
     },
@@ -1789,30 +1789,30 @@
     {
       "startS": 270.5,
       "kind": "voiced",
-      "voiceLufs": -16.8,
+      "voiceLufs": -16.6,
       "musicLufs": -32.3,
-      "gapLu": 15.5
+      "gapLu": 15.7
     },
     {
       "startS": 271.5,
       "kind": "voiced",
-      "voiceLufs": -16.7,
+      "voiceLufs": -16.6,
       "musicLufs": -31.9,
-      "gapLu": 15.2
+      "gapLu": 15.3
     },
     {
       "startS": 272.5,
       "kind": "voiced",
-      "voiceLufs": -17.2,
-      "musicLufs": -32.3,
-      "gapLu": 15.2
+      "voiceLufs": -17,
+      "musicLufs": -32.4,
+      "gapLu": 15.4
     },
     {
       "startS": 273.5,
       "kind": "voiced",
       "voiceLufs": -16.4,
       "musicLufs": -31.9,
-      "gapLu": 15.5
+      "gapLu": 15.4
     },
     {
       "startS": 274.5,
@@ -1833,12 +1833,12 @@
       "kind": "voiced",
       "voiceLufs": -16.6,
       "musicLufs": -32.4,
-      "gapLu": 15.7
+      "gapLu": 15.8
     },
     {
       "startS": 277.5,
       "kind": "voiced",
-      "voiceLufs": -15.7,
+      "voiceLufs": -15.6,
       "musicLufs": -32.4,
       "gapLu": 16.7
     },
@@ -1866,9 +1866,9 @@
     {
       "startS": 281.5,
       "kind": "voiced",
-      "voiceLufs": -16.4,
+      "voiceLufs": -16.3,
       "musicLufs": -32.5,
-      "gapLu": 16.1
+      "gapLu": 16.2
     },
     {
       "startS": 282.5,
@@ -1882,7 +1882,7 @@
       "kind": "voiced",
       "voiceLufs": -17,
       "musicLufs": -31.8,
-      "gapLu": 14.9
+      "gapLu": 14.8
     },
     {
       "startS": 284.5,
@@ -1985,7 +1985,7 @@
     {
       "startS": 301.5,
       "kind": "voiced",
-      "voiceLufs": -17.5,
+      "voiceLufs": -17.6,
       "musicLufs": -32.2,
       "gapLu": 14.7
     },
@@ -2099,7 +2099,7 @@
       "kind": "voiced",
       "voiceLufs": -16.8,
       "musicLufs": -32.3,
-      "gapLu": 15.5
+      "gapLu": 15.6
     },
     {
       "startS": 318.5,
@@ -2153,30 +2153,30 @@
     {
       "startS": 325.5,
       "kind": "voiced",
-      "voiceLufs": -16.9,
+      "voiceLufs": -16.8,
       "musicLufs": -32.2,
       "gapLu": 15.4
     },
     {
       "startS": 326.5,
       "kind": "voiced",
-      "voiceLufs": -16.5,
+      "voiceLufs": -16.3,
       "musicLufs": -32.4,
-      "gapLu": 15.8
+      "gapLu": 16
     },
     {
       "startS": 327.5,
       "kind": "voiced",
-      "voiceLufs": -16,
+      "voiceLufs": -15.8,
       "musicLufs": -32,
-      "gapLu": 16
+      "gapLu": 16.2
     },
     {
       "startS": 328.5,
       "kind": "voiced",
-      "voiceLufs": -15.7,
+      "voiceLufs": -15.5,
       "musicLufs": -32.2,
-      "gapLu": 16.5
+      "gapLu": 16.6
     },
     {
       "startS": 329.5,
@@ -2232,7 +2232,7 @@
       "kind": "voiced",
       "voiceLufs": -17,
       "musicLufs": -32.6,
-      "gapLu": 15.6
+      "gapLu": 15.5
     },
     {
       "startS": 337.5,
@@ -2314,7 +2314,7 @@
     {
       "startS": 352.5,
       "kind": "voiced",
-      "voiceLufs": -16.8,
+      "voiceLufs": -16.7,
       "musicLufs": -31.9,
       "gapLu": 15.1
     },
@@ -2442,7 +2442,7 @@
       "kind": "voiced",
       "voiceLufs": -16.8,
       "musicLufs": -32.4,
-      "gapLu": 15.6
+      "gapLu": 15.7
     },
     {
       "startS": 371.5,
@@ -2496,7 +2496,7 @@
     {
       "startS": 378.5,
       "kind": "voiced",
-      "voiceLufs": -15.5,
+      "voiceLufs": -15.4,
       "musicLufs": -32.5,
       "gapLu": 17
     },
@@ -2505,7 +2505,7 @@
       "kind": "voiced",
       "voiceLufs": -15.3,
       "musicLufs": -33,
-      "gapLu": 17.6
+      "gapLu": 17.7
     },
     {
       "startS": 380.5,
@@ -2596,7 +2596,7 @@
       "kind": "voiced",
       "voiceLufs": -15.8,
       "musicLufs": -32.2,
-      "gapLu": 16.4
+      "gapLu": 16.3
     },
     {
       "startS": 393.5,
@@ -2657,30 +2657,30 @@
     {
       "startS": 404.5,
       "kind": "voiced",
-      "voiceLufs": -14.3,
+      "voiceLufs": -14.4,
       "musicLufs": -32.9,
       "gapLu": 18.6
     },
     {
       "startS": 405.5,
       "kind": "voiced",
-      "voiceLufs": -15.2,
-      "musicLufs": -32.5,
-      "gapLu": 17.3
+      "voiceLufs": -15,
+      "musicLufs": -32.6,
+      "gapLu": 17.5
     },
     {
       "startS": 406.5,
       "kind": "voiced",
-      "voiceLufs": -15.9,
-      "musicLufs": -32.4,
-      "gapLu": 16.5
+      "voiceLufs": -15.8,
+      "musicLufs": -32.5,
+      "gapLu": 16.7
     },
     {
       "startS": 407.5,
       "kind": "voiced",
-      "voiceLufs": -16.2,
+      "voiceLufs": -16.1,
       "musicLufs": -31.8,
-      "gapLu": 15.5
+      "gapLu": 15.7
     },
     {
       "startS": 408.5,
@@ -2692,9 +2692,9 @@
     {
       "startS": 409.5,
       "kind": "voiced",
-      "voiceLufs": -15.6,
+      "voiceLufs": -15.5,
       "musicLufs": -32.1,
-      "gapLu": 16.5
+      "gapLu": 16.6
     },
     {
       "startS": 410.5,
@@ -2722,7 +2722,7 @@
       "kind": "voiced",
       "voiceLufs": -16.8,
       "musicLufs": -32.5,
-      "gapLu": 15.8
+      "gapLu": 15.7
     },
     {
       "startS": 414.5,
@@ -2743,12 +2743,12 @@
       "kind": "voiced",
       "voiceLufs": -16.7,
       "musicLufs": -32,
-      "gapLu": 15.3
+      "gapLu": 15.4
     },
     {
       "startS": 417.5,
       "kind": "voiced",
-      "voiceLufs": -18,
+      "voiceLufs": -17.9,
       "musicLufs": -32.1,
       "gapLu": 14.1
     },
@@ -2762,7 +2762,7 @@
     {
       "startS": 419.5,
       "kind": "voiced",
-      "voiceLufs": -16.3,
+      "voiceLufs": -16.4,
       "musicLufs": -32.5,
       "gapLu": 16.1
     },
@@ -2818,7 +2818,7 @@
     {
       "startS": 427.5,
       "kind": "voiced",
-      "voiceLufs": -16.8,
+      "voiceLufs": -16.7,
       "musicLufs": -32.6,
       "gapLu": 15.8
     },
@@ -2827,7 +2827,7 @@
       "kind": "voiced",
       "voiceLufs": -18,
       "musicLufs": -33.1,
-      "gapLu": 15
+      "gapLu": 15.1
     },
     {
       "startS": 429.5,
@@ -2860,23 +2860,23 @@
     {
       "startS": 433.5,
       "kind": "voiced",
-      "voiceLufs": -19,
+      "voiceLufs": -19.1,
       "musicLufs": -31.9,
-      "gapLu": 13
+      "gapLu": 12.8
     },
     {
       "startS": 434.5,
       "kind": "voiced",
-      "voiceLufs": -16.6,
+      "voiceLufs": -16.9,
       "musicLufs": -32.5,
-      "gapLu": 15.8
+      "gapLu": 15.6
     },
     {
       "startS": 435.5,
       "kind": "voiced",
-      "voiceLufs": -16.5,
-      "musicLufs": -32.2,
-      "gapLu": 15.8
+      "voiceLufs": -16.6,
+      "musicLufs": -32.3,
+      "gapLu": 15.6
     },
     {
       "startS": 436.5,
@@ -2897,7 +2897,7 @@
       "kind": "voiced",
       "voiceLufs": -17.5,
       "musicLufs": -32.6,
-      "gapLu": 15
+      "gapLu": 15.1
     },
     {
       "startS": 442.5,
@@ -2911,14 +2911,14 @@
       "kind": "voiced",
       "voiceLufs": -16.9,
       "musicLufs": -32.2,
-      "gapLu": 15.4
+      "gapLu": 15.3
     },
     {
       "startS": 444.5,
       "kind": "voiced",
       "voiceLufs": -17.9,
       "musicLufs": -32.6,
-      "gapLu": 14.6
+      "gapLu": 14.7
     },
     {
       "startS": 445.5,
@@ -2932,84 +2932,84 @@
       "kind": "voiced",
       "voiceLufs": -16.1,
       "musicLufs": -32,
-      "gapLu": 15.8
+      "gapLu": 15.9
     },
     {
       "startS": 447.5,
       "kind": "voiced",
-      "voiceLufs": -16.8,
+      "voiceLufs": -16.7,
       "musicLufs": -31.7,
       "gapLu": 15
     },
     {
       "startS": 448.5,
       "kind": "voiced",
-      "voiceLufs": -16.9,
-      "musicLufs": -32.1,
-      "gapLu": 15.2
+      "voiceLufs": -16.7,
+      "musicLufs": -32,
+      "gapLu": 15.3
     },
     {
       "startS": 449.5,
       "kind": "voiced",
-      "voiceLufs": -17,
+      "voiceLufs": -16.8,
       "musicLufs": -32.6,
-      "gapLu": 15.6
+      "gapLu": 15.7
     },
     {
       "startS": 450.5,
       "kind": "voiced",
-      "voiceLufs": -15.5,
+      "voiceLufs": -15.4,
       "musicLufs": -32.8,
-      "gapLu": 17.3
+      "gapLu": 17.5
     },
     {
       "startS": 451.5,
       "kind": "voiced",
-      "voiceLufs": -16,
+      "voiceLufs": -15.9,
       "musicLufs": -32.5,
       "gapLu": 16.6
     },
     {
       "startS": 452.5,
       "kind": "voiced",
-      "voiceLufs": -16.5,
+      "voiceLufs": -16.7,
       "musicLufs": -32.1,
-      "gapLu": 15.6
+      "gapLu": 15.5
     },
     {
       "startS": 453.5,
       "kind": "voiced",
-      "voiceLufs": -16.5,
+      "voiceLufs": -16.6,
       "musicLufs": -31.8,
-      "gapLu": 15.4
+      "gapLu": 15.2
     },
     {
       "startS": 454.5,
       "kind": "voiced",
-      "voiceLufs": -16.1,
+      "voiceLufs": -16.3,
       "musicLufs": -31.7,
-      "gapLu": 15.6
+      "gapLu": 15.5
     },
     {
       "startS": 455.5,
       "kind": "voiced",
-      "voiceLufs": -16.1,
+      "voiceLufs": -16.2,
       "musicLufs": -32.2,
-      "gapLu": 16.1
+      "gapLu": 15.9
     },
     {
       "startS": 456.5,
       "kind": "voiced",
-      "voiceLufs": -17.3,
+      "voiceLufs": -17.5,
       "musicLufs": -31.8,
-      "gapLu": 14.5
+      "gapLu": 14.3
     },
     {
       "startS": 457.5,
       "kind": "voiced",
-      "voiceLufs": -16.5,
-      "musicLufs": -32.5,
-      "gapLu": 15.9
+      "voiceLufs": -16.7,
+      "musicLufs": -32.4,
+      "gapLu": 15.7
     },
     {
       "startS": 458.5,
@@ -3086,7 +3086,7 @@
       "kind": "voiced",
       "voiceLufs": -15.8,
       "musicLufs": -31.9,
-      "gapLu": 16.1
+      "gapLu": 16
     },
     {
       "startS": 469.5,
@@ -3107,7 +3107,7 @@
       "kind": "voiced",
       "voiceLufs": -16.7,
       "musicLufs": -33.2,
-      "gapLu": 16.5
+      "gapLu": 16.6
     },
     {
       "startS": 472.5,
@@ -3126,7 +3126,7 @@
     {
       "startS": 474.5,
       "kind": "voiced",
-      "voiceLufs": -16.6,
+      "voiceLufs": -16.5,
       "musicLufs": -32.5,
       "gapLu": 16
     },

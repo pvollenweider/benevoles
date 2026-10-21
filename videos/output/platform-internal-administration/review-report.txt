@@ -1,17 +1,17 @@
-STATUS: NOT READY
+STATUS: READY
 {
   "id": "PLATFORM_INTERNAL_ADMINISTRATION",
-  "status": "NOT READY",
+  "status": "READY",
   "reviewedAt": "2026-10-21",
   "product": {
     "commit": "490a44c306da8b93b4920ece009a452baf27fdbf",
     "sourceTree": "be1a1d9342fc3b6d37f922a5557bedbe7d2b997b",
     "productSourceSha256": "5cadc01f8a0c46ff4a0d9d6d4de90702a18b4a0108564e6a460657a57ec1aeb7",
-    "buildId": "rFYo35VG0QypepwE2pYU_",
+    "buildId": "PrM7VPUzFDhdfFFljgeHC",
     "snapshot": "/tmp/benevoles-video-production.Batch27",
-    "builtAt": "2026-10-21T15:59:30.726Z"
+    "builtAt": "2026-10-21T16:19:23.791Z"
   },
-  "durationSeconds": 481.0,
+  "durationSeconds": 480.64,
   "reviewedChapters": [
     "welcome",
     "create",
@@ -27,48 +27,65 @@ STATUS: NOT READY
     "result"
   ],
   "tuCountVtt": 0,
+  "tuCountFinalAsr": 0,
   "music": {
     "voicedWindows": 440,
     "musicOnlyWindows": 1,
-    "smallestGapLu": 12.2,
+    "smallestGapLu": 12.3,
     "largestGapLu": 18.6,
     "quietestMusicOnlyLufs": -32.5,
     "loudestMusicOnlyLufs": -32.5,
     "medianVoiceLufs": -16.5
   },
-  "issues": [
-    "External Mailpit viewer uses English header dates despite French browser/process locale: frame 69.94 s shows « Wed, 21 Oct 2026, 6:05 pm ». Also visible in later real-email shots. Its settings offer theme/timezone and UI toggles, no language/date-format setting. Not a Benevol product defect; not concealed or rewritten. French-date rule therefore fails."
-  ],
-  "sourceChanges": "No operator recorder or product change in batch 27; local gateway/build proof fixed in Part A. One complete Kore narration regenerated because recovered audio/ was empty; continuousPauseTags false. All 12 chapter cuts independently checked after aligning actual silences.",
-  "validation": "12 scenes, 33 sentence anchors, source and final MP4 chapter ASR pass; full all-language ASR includes only the expected technical word Markdown, no stray English or informal viewer address. All 12 audiovisual voice observations consistent and warm.",
+  "issues": [],
+  "sourceChanges": "Operator-only actual Mailpit body framing in focus-mailpit/assemble and timeline type; documentation. No recorder or src changes for operator. Complete batch 27 Kore narration retained unchanged by WAV hashes.",
+  "validation": "12 scenes, 33 sentence anchors; source/final chapter ASR pass; full all-language MP4 ASR has no stray speech/extra languages. All 12 full audiovisual clip reviews inspected, all chapter sheets and sentence/action evidence inspected; two automated sync claims resolved on exact current frames.",
   "inputs": {
     "clicks": 38,
     "keys": 674
   },
-  "mp4Sha256": "7350f773ffc928faed39ba31f4a706fca1122b7e734861ac922266f75fbee1af",
-  "catalogBumped": false,
+  "mp4Sha256": "d46eeba2c72284c4b4bf53e4db0e24f6d8f43c377f9798b47f5f329bd94b2c9c",
+  "catalogBumped": true,
   "automatedFindingsResolvedByActualFrames": [
     {
       "scene": "identity",
-      "automatedClaim": "Save is late until reload at chapter second 28",
-      "decision": "Rejected: actual final MP4 frame 150.8 s (chapter 20.406) already shows the saved new slug in the breadcrumb and disabled OK button, before the claimed spoken result at chapter second 21. The later reload is a distinct check. The real recorder asserts the new URL before it waits for that reload.",
-      "frame": "identity-saved-150.8.jpg"
+      "automatedClaim": "New identifier detail allegedly appears only on reload at +28s, after speech at +21s.",
+      "decision": "Rejected on current final MP4: +20.4s (absolute 150.795s) already shows renamed organization, final slug and disabled OK. The later reload is a separate persistence check, not the save. Recorder asserts the actual new URL before reload.",
+      "frames": [
+        "identity-relative-20.4.jpg",
+        "identity-relative-21.jpg"
+      ]
     },
     {
       "scene": "context",
-      "automatedClaim": "Gérer and context name are skipped before events",
-      "decision": "Rejected: confirmation page with exact named button visible at 221.5 s; actual Parc detail with Gérer and name visible at 225.3 s, after sentence anchor at 225.008 s, before the real click and events page. Capture assertions verify a POST context switch and only Parc event.",
+      "automatedClaim": "Events allegedly replace context page before the named Gérer action.",
+      "decision": "Rejected on current final MP4: 221.5s shows Travailler dans Formation Opérateur Parc and the unselected context. At 225.3s the actual Parc detail and Gérer are visible, after the measured sentence anchor at 225.008s. The real POST follows; recorder asserts Parc event only.",
       "frames": [
-        "context-confirmation-221.5.jpg",
-        "context-manage-225.3.jpg"
+        "context-221.5.jpg",
+        "context-225.3.jpg"
       ]
     }
   ],
-  "realTimeSubjectiveListening": "Unavailable; not the reason for NOT READY.",
-  "ocrFrames": 962,
+  "realTimeSubjectiveListening": "Unavailable; not a blocking criterion.",
+  "ocrFrames": 961,
   "ocrErrors": 0,
   "forbiddenHostOcrHits": 0,
   "musicContinuityGaps": 0,
-  "englishDateOcrFrames": 44
+  "englishDateOcrFrames": 0,
+  "mailpit": {
+    "intervals": 4,
+    "rawCaptureRetained": true,
+    "bodyCrop": {
+      "x": 320,
+      "y": 224,
+      "width": 960,
+      "height": 576
+    },
+    "noEmailRewrite": true,
+    "noStillHolds": true,
+    "transitionsInspected": true,
+    "originalBlockingTimestampSeconds": 69.94,
+    "fixedFrame": "mailpit-fixed-69.94.jpg"
+  }
 }
-All chapter sheets and exact finding frames reviewed. Full final MP4 all-language ASR, per-chapter ASR, VTT register check, actual input effects, posters and video:validate completed. No local host, port or developer overlay found in the full 2 fps OCR inventory. No catalog bump. Real-time subjective listening unavailable; not a blocking criterion. No publication.
+Full final review complete. No publication, push or merge.

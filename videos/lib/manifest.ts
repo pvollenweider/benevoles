@@ -83,6 +83,8 @@ export type Timeline = {
   portraitFrames?: { startMs: number; endMs: number; width: number; height: number }[]
   /** Editorial focus on the actual Mailpit message pane; unrelated inbox messages remain stored. */
   mailpitFocusFrames?: { startMs: number; endMs: number }[]
+  /** Operator mail shots show only the real body, below the external viewer’s English date. */
+  mailpitBodyOnly?: boolean
   mailpitHolds?: { sourceMs: number; startMs: number; endMs: number }[]
   detailFrames?: { startMs: number; endMs: number; x: number; y: number; width: number; height: number }[]
 }

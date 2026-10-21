@@ -1,58 +1,58 @@
 {
   "model": "gemini-3.8-flash",
-  "reviewedAt": "2026-10-21T16:13:08.800Z",
-  "videoSha256": "7350f773ffc928faed39ba31f4a706fca1122b7e734861ac922266f75fbee1af",
+  "reviewedAt": "2026-10-21T16:33:50.581Z",
+  "videoSha256": "d46eeba2c72284c4b4bf53e4db0e24f6d8f43c377f9798b47f5f329bd94b2c9c",
   "promptSha256": "8a9c4e5066cfe52e7be665a870f0b8e8e62a0c0edebdcfd9703e67531e4bbb5a",
-  "clipSha256": "18beafb591ca3df351a53782646445c4f0b426ed903325a1a39c8a9bf66a6c89",
+  "clipSha256": "ca291dcd1596b45f0e3aad1ab7fe8253acdd9ce713b0fe0c719c716a1dc4218f",
   "scene": "preview",
   "review": {
     "heardOpening": "Préparons une communication destinée aux administrateurs abonnés.",
     "checkpoints": [
       {
-        "spokenSeconds": 4.1,
+        "spokenSeconds": 4.3,
         "spoken": "Donnons-lui un objet clair : Formation, préparer votre prochain événement.",
-        "visibleSeconds": 6.1,
-        "visible": "Saisie dans le champ Objet de « Formation — préparer votre prochain événement »",
+        "visibleSeconds": 6.3,
+        "visible": "Saisie de « Formation — préparer votre prochain événement » dans le champ Objet",
         "sync": "aligned",
         "severity": "none"
       },
       {
-        "spokenSeconds": 9.4,
+        "spokenSeconds": 9.1,
         "spoken": "Le contenu commence par un titre, Bienvenue.",
         "visibleSeconds": 10.3,
-        "visible": "Saisie du titre Markdown « # Bienvenue ! » avec rendu immédiat dans l'aperçu",
+        "visible": "Saisie du titre Markdown « # Bienvenue ! » et affichage dans l'aperçu",
         "sync": "aligned",
         "severity": "none"
       },
       {
-        "spokenSeconds": 12.3,
+        "spokenSeconds": 12.7,
         "spoken": "Ajoutons deux conseils simples : vérifier son planning et partager son lien public.",
-        "visibleSeconds": 13,
-        "visible": "Saisie de la liste à puces avec les deux conseils et actualisation de l'aperçu",
+        "visibleSeconds": 13.2,
+        "visible": "Ajout de la liste à puces avec les deux conseils dans l'éditeur et l'aperçu",
         "sync": "aligned",
         "severity": "none"
       },
       {
-        "spokenSeconds": 18,
+        "spokenSeconds": 18.2,
         "spoken": "Un lien vers le guide termine le message.",
-        "visibleSeconds": 19.5,
-        "visible": "Ajout du lien Markdown vers le guide benevol.app",
+        "visibleSeconds": 18.5,
+        "visible": "Saisie de la syntaxe du lien Markdown vers le guide",
         "sync": "aligned",
         "severity": "none"
       },
       {
         "spokenSeconds": 33.1,
         "spoken": "Utilisons Envoyer un test, uniquement vers notre adresse de formation.",
-        "visibleSeconds": 33.7,
-        "visible": "Clic sur le bouton « Envoyer un test » et notification de confirmation d'envoi",
+        "visibleSeconds": 33.6,
+        "visible": "Clic sur le bouton « Envoyer un test » et message de confirmation",
         "sync": "aligned",
         "severity": "none"
       },
       {
-        "spokenSeconds": 37.9,
+        "spokenSeconds": 37.5,
         "spoken": "Ouvrons le vrai email pour contrôler l'objet et le contenu reçu.",
-        "visibleSeconds": 37.5,
-        "visible": "Affichage de la boîte de réception Mailpit avec l'email de test sélectionné",
+        "visibleSeconds": 38,
+        "visible": "Affichage du client de messagerie affichant le courriel reçu",
         "sync": "aligned",
         "severity": "none"
       }
@@ -61,7 +61,7 @@
     "voice": {
       "consistent": true,
       "warm": true,
-      "observation": "Voix off posée, claire et bien articulée, parfaitement synchronisée avec la démonstration à l'écran."
+      "observation": "Voix claire, posée, bien articulée et synchronisée avec les actions affichées à l'écran."
     }
   },
   "note": "Automated observation of actual final video audio and images; not a claim of complete human validation"

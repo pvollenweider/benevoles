@@ -1,50 +1,58 @@
 {
   "model": "gemini-3.8-flash",
-  "reviewedAt": "2026-10-21T16:13:31.174Z",
-  "videoSha256": "7350f773ffc928faed39ba31f4a706fca1122b7e734861ac922266f75fbee1af",
+  "reviewedAt": "2026-10-21T16:32:18.308Z",
+  "videoSha256": "d46eeba2c72284c4b4bf53e4db0e24f6d8f43c377f9798b47f5f329bd94b2c9c",
   "promptSha256": "c797aa8dcbf15e944bb96bc6e1db7a50188bfad746f6946f3e4b442afc5bd1fb",
-  "clipSha256": "ffc6f9b1db4f2a301d84f0e4f8a627ffece872dc31e196393b00529bd70d00a7",
+  "clipSha256": "1b9a3d472e102af0887a1a30660d317a22e6e1737060e00236705093b0794f2a",
   "scene": "renew",
   "review": {
-    "heardOpening": "Envoyons maintenant l'invitation et ouvrons",
+    "heardOpening": "Envoyons maintenant l'invitation et ouvrons le vrai message",
     "checkpoints": [
       {
         "spokenSeconds": 0,
         "spoken": "Envoyons maintenant l'invitation",
-        "visibleSeconds": 0.8,
-        "visible": "Clic sur 'Envoyer l'invitation par email', message de confirmation affiché",
+        "visibleSeconds": 0,
+        "visible": "Page 'Organisation créée' avec le bouton 'Envoyer l'invitation par email', qui confirme l'envoi à 00:02",
         "sync": "aligned",
         "severity": "none"
       },
       {
-        "spokenSeconds": 2,
-        "spoken": "et ouvrons le vrai message reçu dans la boîte de formation",
-        "visibleSeconds": 4.5,
-        "visible": "Affichage de la boîte Mailpit avec le message d'invitation",
+        "spokenSeconds": 2.5,
+        "spoken": "ouvrons le vrai message reçu dans la boîte de formation",
+        "visibleSeconds": 4.1,
+        "visible": "Affichage du message de bienvenue et d'invitation dans la boîte de messagerie",
         "sync": "aligned",
         "severity": "none"
       },
       {
         "spokenSeconds": 7,
-        "spoken": "revenons au détail de l'organisation et renvoyons l'invitation",
-        "visibleSeconds": 8.5,
-        "visible": "Page détail de l'organisation affichée avec bandeau de renvoi de l'invitation",
+        "spoken": "revenons au détail de l'organisation",
+        "visibleSeconds": 6.8,
+        "visible": "Affichage de la page de gestion détaillée de l'organisation Formation Opérateur Jetable",
         "sync": "aligned",
         "severity": "none"
       },
       {
-        "spokenSeconds": 16.5,
-        "spoken": "Vérifions l'ancien : il est refusé.",
+        "spokenSeconds": 9.5,
+        "spoken": "renvoyons l'invitation au compte encore en attente",
+        "visibleSeconds": 9,
+        "visible": "Bannière verte confirmant le renvoi de l'invitation et l'invalidation de l'ancien lien",
+        "sync": "aligned",
+        "severity": "none"
+      },
+      {
+        "spokenSeconds": 17,
+        "spoken": "Vérifions l'ancien : il est refusé",
         "visibleSeconds": 16,
-        "visible": "Écran 'Bienvenue - Lien invalide ou déjà utilisé'",
+        "visible": "Page d'accueil affichant l'erreur 'Lien invalide ou déjà utilisé'",
         "sync": "aligned",
         "severity": "none"
       },
       {
-        "spokenSeconds": 27.5,
-        "spoken": "Ouvrons le second message reçu pour poursuivre.",
-        "visibleSeconds": 27.5,
-        "visible": "Retour sur la boîte Mailpit avec le second courriel ouvert",
+        "spokenSeconds": 27.2,
+        "spoken": "Ouvrons le second message reçu pour poursuivre",
+        "visibleSeconds": 27.8,
+        "visible": "Retour à la boîte de réception avec le nouveau message d'invitation",
         "sync": "aligned",
         "severity": "none"
       }
@@ -53,7 +61,7 @@
     "voice": {
       "consistent": true,
       "warm": true,
-      "observation": "Voix claire, posée, bien synchronisée avec les transitions d'écran."
+      "observation": "Voix claire, posée et parfaitement synchronisée avec les actions à l'écran."
     }
   },
   "note": "Automated observation of actual final video audio and images; not a claim of complete human validation"
