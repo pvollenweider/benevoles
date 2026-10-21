@@ -122,6 +122,9 @@ export default function MyRegistrationPage() {
   const [statusText, setStatusText] = useState("")
   // « Qui est inscrit » (#1068), loaded once the page is; null = nothing to show.
   const [roster, setRoster] = useState<RosterData | null>(null)
+  // The link the roster card reads and writes through: the page's own, or a live one of the same
+  // volunteer once the page's registration was withdrawn.
+  const [rosterToken, setRosterToken] = useState(token)
 
   // Focus to move, applied once React has committed the render it goes with (the confirmation
   // mounted, the card removed). Only while focus is still in the card the action came from, or was
@@ -241,8 +244,10 @@ export default function MyRegistrationPage() {
     // still live (the page's own may be the one just cancelled), or gone with the last one.
     if (reg.status === "active") {
       const live = list.find((r) => r.editToken !== reg.editToken)?.editToken
-      if (live) void fetchRoster(live).then(setRoster)
-      else setRoster(null)
+      if (live) {
+        setRosterToken(live)
+        void fetchRoster(live).then(setRoster)
+      } else setRoster(null)
     }
     setFocusRequest({
       candidates: [
@@ -488,7 +493,7 @@ export default function MyRegistrationPage() {
         </section>
 
         {/* Who else is signed up (#1068): only when the event has the roster on. */}
-        {roster?.available && <ShiftRosterCard token={token} data={roster} onChange={(next) => {
+        {roster?.available && <ShiftRosterCard token={rosterToken} data={roster} onChange={(next) => {
           // Turned off or over since the page loaded: the card goes, say so and keep the focus on the page.
           if (!next.available) {
             setFocusRequest({ candidates: [byId(LIST_TITLE_ID)], regionId: "roster-title-region" })
