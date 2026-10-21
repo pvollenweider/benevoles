@@ -1,0 +1,44 @@
+{
+  "model": "gemini-3.8-flash",
+  "reviewedAt": "2026-10-21T20:36:40.347Z",
+  "videoSha256": "f9f75baef1081d43acde918a1031d8412aefd1370c7beab0b849810d26a1fc68",
+  "promptSha256": "cc684394360a8963cf689ce22aa1edb2e66068b1494b5944b058fe2734832da7",
+  "clipSha256": "2cafd524de530caaf0d498f84dc754caafaca4aeff7bba75084a1f4dcf0edd4a",
+  "scene": "roster-withdraw",
+  "review": {
+    "heardOpening": "Revenons sur la page personnelle d'Aline.",
+    "checkpoints": [
+      {
+        "spokenSeconds": 2.1,
+        "spoken": "Cliquez sur Masquer mon nom.",
+        "visibleSeconds": 2.6,
+        "visible": "Clic sur le bouton Masquer mon nom qui bascule sur Afficher mon nom",
+        "sync": "aligned",
+        "severity": "none"
+      },
+      {
+        "spokenSeconds": 4.5,
+        "spoken": "Sur la page ouverte par l’invitation, Aline a disparu",
+        "visibleSeconds": 5.5,
+        "visible": "Affichage de la liste avec 'Voir qui est inscrit' activé, indiquant '3 autres bénévoles, sans nom affiché'",
+        "sync": "aligned",
+        "severity": "none"
+      },
+      {
+        "spokenSeconds": 12.3,
+        "spoken": "voici la même page sans identification.",
+        "visibleSeconds": 11.8,
+        "visible": "Passage à la vue publique sans session utilisateur connectée en haut à droite",
+        "sync": "aligned",
+        "severity": "none"
+      }
+    ],
+    "issues": [],
+    "voice": {
+      "consistent": true,
+      "warm": true,
+      "observation": "Voix off féminine claire, posée et bien articulée, parfaitement synchronisée avec les actions à l'écran."
+    }
+  },
+  "note": "Automated observation of actual final video audio and images; not a claim of complete human validation"
+}

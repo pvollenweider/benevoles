@@ -1,0 +1,52 @@
+STATUS: READY
+SHIFT_ROSTER_VISIBILITY — batch 29 — 2026-10-21
+
+Final: shift-roster-visibility.mp4, 229.520 s, 1280×800.
+SHA256: 1638077bc2a258324a29e2fcd6038d49c236d79b9777cbf5eadda812c3d665cb
+BUILD_ID: 9aTEFviiAtCSmiFgccOhV
+Commit filmed: c0242133d97f0ae688c673f7b6d8c36e62f1adc9
+One verified successful product build; two complete narrated takes; final take retained.
+Entire revised narration generated in one pass with Kore, French, continuousPauseTags false.
+First draft narration rejected and archived before filming; no mixed sentence voices.
+French browser and process locale; public domains via local gateway; raw takes retained.
+
+Coverage verified on the real product:
+- Paramètres: default on, existing events unchanged; new form on; event can turn off/on.
+- Organiser reminder and publication note, actual publication.
+- Anonymous page without switch/names; optional unticked V2 consent, actual signup.
+- Actual received email and personal link; explicit confirmation of name visibility.
+- Personal card: only the viewer's own shift; link to all event shifts with switch on.
+- List: Avec toi, Sur ce créneau; invited view Aline M. et 2 autres bénévoles.
+- Frise: unchanged bars; actual hover changes the line below the day chart.
+- Open invitation Gina, no registration: switch present before signup; V1 names absent.
+- Bruno V1 explicitly widens to invited members, then becomes visible to Gina.
+- Aline hides her name and disappears for others; place remains counted.
+- Final anonymous page has no switch/names. Known minor Emma never named.
+- Narration mentions no names in embeds/group links and closure at event end (PR1074 verified).
+
+Checks:
+video:validate PASS; 26 measured sentence anchors, frame evidence for each.
+1052 video tests PASS (33 files); video tools typecheck PASS (199 sources incl. seed).
+Changed TypeScript ESLint PASS, no warnings.
+Main product compiled with TypeScript on its clean verified snapshot.
+Additional product typecheck against snapshot Prisma PASS, without writing src/.
+Global checkout tsc cannot pass with its obsolete ignored Prisma client and an archived
+ignored helper whose relative import moved; not a product/video regression. No src/ fix made.
+Full chapter ASR from final MP4 PASS; complete multilingual soundtrack ASR has no stray words.
+Viewer tu count: 0; single toi is the exact quoted UI label Avec toi, also in VTT.
+8/8 actual final video chapters reviewed with sound; zero flagged issues.
+Agent inspected actual frames: settings, signup V2, own card, list, Frise, invitation,
+V1 widened state, hidden state and final anonymous page; generated posters inspected.
+Real-time subjective listening unavailable; automated audiovisual review + full ASR retained.
+OCR: 256 actual final frames (every second + sentence anchors), no localhost, 127.0.0.1,
+org-admin@ or Timeline. No visible local port, English native dates or dev overlay.
+26 recorded clicks with soft synced effects; 0 real key presses, 0 invented key sounds.
+Music: 15.2–19.6 LU under narration;
+quietest music-only -33.4 LUFS; music gaps: 0.
+Subtitles/transcript generated from the revised manifesto and checked against final ASR.
+No unresolved video/product problems observed. No third take needed.
+
+Delivery: local only, not pushed/published/merged. Catalogue revision 1, updatedAt 2026-10-21,
+published false. Posters and local render index in review/renders-generated.json.
+videos/renders.json, src/ and guide/ unchanged. Guide-link decision: videos/BATCH29.md.
+Historical batch28 evidence is not evidence for this redesigned UI.

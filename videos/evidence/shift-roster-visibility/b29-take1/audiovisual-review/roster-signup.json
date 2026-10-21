@@ -1,0 +1,52 @@
+{
+  "model": "gemini-3.8-flash",
+  "reviewedAt": "2026-10-21T20:35:33.951Z",
+  "videoSha256": "f9f75baef1081d43acde918a1031d8412aefd1370c7beab0b849810d26a1fc68",
+  "promptSha256": "14afd33d8c28b753e0be90d8b1cce66d7d33a7d1b23fb339d051989d75520a63",
+  "clipSha256": "602e588d330f620c5baec84f12a5372fd7670eec11175f414521fc92655f96eb",
+  "scene": "roster-signup",
+  "review": {
+    "heardOpening": "Voici la page vue par un visiteur anonyme.",
+    "checkpoints": [
+      {
+        "spokenSeconds": 6.3,
+        "spoken": "Choisissez un créneau, puis continuez.",
+        "visibleSeconds": 6.8,
+        "visible": "Sélection du créneau Accueil 09h-12h puis clic sur Continuer",
+        "sync": "aligned",
+        "severity": "none"
+      },
+      {
+        "spokenSeconds": 9.4,
+        "spoken": "Renseignez votre prénom, votre nom et votre adresse email.",
+        "visibleSeconds": 10.1,
+        "visible": "Saisie de Aline, Martin et de l'adresse email dans les champs correspondants",
+        "sync": "aligned",
+        "severity": "none"
+      },
+      {
+        "spokenSeconds": 14.1,
+        "spoken": "Acceptez la convention et l’utilisation des données pour l’inscription.",
+        "visibleSeconds": 14.5,
+        "visible": "Cochage des deux cases obligatoires pour la convention et les données",
+        "sync": "aligned",
+        "severity": "none"
+      },
+      {
+        "spokenSeconds": 33.7,
+        "spoken": "Cochez cette case si vous le souhaitez, puis confirmez l’inscription.",
+        "visibleSeconds": 34.3,
+        "visible": "Coche de la case de visibilité puis clic sur Confirmer 1 inscription et affichage de l'écran Inscription confirmée",
+        "sync": "aligned",
+        "severity": "none"
+      }
+    ],
+    "issues": [],
+    "voice": {
+      "consistent": true,
+      "warm": true,
+      "observation": "Voix off posée, claire et fluide, parfaitement synchronisée avec les manipulations à l'écran."
+    }
+  },
+  "note": "Automated observation of actual final video audio and images; not a claim of complete human validation"
+}

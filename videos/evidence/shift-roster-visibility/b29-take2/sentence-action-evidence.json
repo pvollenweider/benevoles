@@ -1,0 +1,214 @@
+{
+  "videoSha256": "1638077bc2a258324a29e2fcd6038d49c236d79b9777cbf5eadda812c3d665cb",
+  "method": "sentence timings measured from the retained WAV; actual MP4 frames 700 ms after cue/onset; chapter audiovisual review checks the visible result",
+  "rows": [
+    {
+      "chapter": "roster-setting",
+      "phrase": "Ouvrons un nouvel événement",
+      "measuredStartMs": 13524,
+      "cueMs": 13526,
+      "frameMs": 14226,
+      "file": "anchors/01-roster-setting.png"
+    },
+    {
+      "chapter": "roster-setting",
+      "phrase": "Vous pouvez la décocher pour cet événement",
+      "measuredStartMs": 17007,
+      "cueMs": 17010,
+      "frameMs": 17710,
+      "file": "anchors/02-roster-setting.png"
+    },
+    {
+      "chapter": "roster-setting",
+      "phrase": "Le rappel demande d’informer les bénévoles",
+      "measuredStartMs": 19405,
+      "cueMs": 19408,
+      "frameMs": 20108,
+      "file": "anchors/03-roster-setting.png"
+    },
+    {
+      "chapter": "roster-publication",
+      "phrase": "Vous pouvez la désactiver puis la réactiver",
+      "measuredStartMs": 37503,
+      "cueMs": 37505,
+      "frameMs": 38205,
+      "file": "anchors/04-roster-publication.png"
+    },
+    {
+      "chapter": "roster-publication",
+      "phrase": "Sur Vérifier avant publication",
+      "measuredStartMs": 40835,
+      "cueMs": 41365,
+      "frameMs": 42065,
+      "file": "anchors/05-roster-publication.png"
+    },
+    {
+      "chapter": "roster-publication",
+      "phrase": "Publions l’événement",
+      "measuredStartMs": 47724,
+      "cueMs": 47725,
+      "frameMs": 48425,
+      "file": "anchors/06-roster-publication.png"
+    },
+    {
+      "chapter": "roster-signup",
+      "phrase": "Choisissez un créneau",
+      "measuredStartMs": 58366,
+      "cueMs": 58370,
+      "frameMs": 59070,
+      "file": "anchors/07-roster-signup.png"
+    },
+    {
+      "chapter": "roster-signup",
+      "phrase": "Renseignez votre prénom",
+      "measuredStartMs": 60972,
+      "cueMs": 60975,
+      "frameMs": 61675,
+      "file": "anchors/08-roster-signup.png"
+    },
+    {
+      "chapter": "roster-signup",
+      "phrase": "Acceptez la convention",
+      "measuredStartMs": 64133,
+      "cueMs": 64136,
+      "frameMs": 64836,
+      "file": "anchors/09-roster-signup.png"
+    },
+    {
+      "chapter": "roster-signup",
+      "phrase": "La case de visibilité est facultative",
+      "measuredStartMs": 69912,
+      "cueMs": 69915,
+      "frameMs": 70615,
+      "file": "anchors/10-roster-signup.png"
+    },
+    {
+      "chapter": "roster-signup",
+      "phrase": "Cochez cette case",
+      "measuredStartMs": 85792,
+      "cueMs": 85792,
+      "frameMs": 86492,
+      "file": "anchors/11-roster-signup.png"
+    },
+    {
+      "chapter": "roster-confirm",
+      "phrase": "Ouvrez le véritable email de confirmation",
+      "measuredStartMs": 92425,
+      "cueMs": 92426,
+      "frameMs": 93126,
+      "file": "anchors/12-roster-confirm.png"
+    },
+    {
+      "chapter": "roster-confirm",
+      "phrase": "Suivez son lien personnel",
+      "measuredStartMs": 95031,
+      "cueMs": 95033,
+      "frameMs": 95733,
+      "file": "anchors/13-roster-confirm.png"
+    },
+    {
+      "chapter": "roster-confirm",
+      "phrase": "La carte Qui est inscrit montre uniquement",
+      "measuredStartMs": 96839,
+      "cueMs": 97103,
+      "frameMs": 97803,
+      "file": "anchors/14-roster-confirm.png"
+    },
+    {
+      "chapter": "roster-confirm",
+      "phrase": "Cliquez sur Afficher mon nom",
+      "measuredStartMs": 109354,
+      "cueMs": 109356,
+      "frameMs": 110056,
+      "file": "anchors/15-roster-confirm.png"
+    },
+    {
+      "chapter": "roster-confirm",
+      "phrase": "Pour consulter les autres créneaux",
+      "measuredStartMs": 112115,
+      "cueMs": 112116,
+      "frameMs": 112816,
+      "file": "anchors/16-roster-confirm.png"
+    },
+    {
+      "chapter": "roster-event",
+      "phrase": "Passons en Liste",
+      "measuredStartMs": 128408,
+      "cueMs": 128410,
+      "frameMs": 129110,
+      "file": "anchors/17-roster-event.png"
+    },
+    {
+      "chapter": "roster-event",
+      "phrase": "Passons en Frise",
+      "measuredStartMs": 139730,
+      "cueMs": 139731,
+      "frameMs": 140431,
+      "file": "anchors/18-roster-event.png"
+    },
+    {
+      "chapter": "roster-event",
+      "phrase": "Survolez un créneau",
+      "measuredStartMs": 143403,
+      "cueMs": 143405,
+      "frameMs": 144105,
+      "file": "anchors/19-roster-event.png"
+    },
+    {
+      "chapter": "roster-invite",
+      "phrase": "Activez Voir qui est inscrit",
+      "measuredStartMs": 163231,
+      "cueMs": 163232,
+      "frameMs": 163932,
+      "file": "anchors/20-roster-invite.png"
+    },
+    {
+      "chapter": "roster-invite",
+      "phrase": "En Liste, Aline apparaît",
+      "measuredStartMs": 165071,
+      "cueMs": 165073,
+      "frameMs": 165773,
+      "file": "anchors/21-roster-invite.png"
+    },
+    {
+      "chapter": "roster-existing",
+      "phrase": "Cliquez sur ce bouton pour élargir cet accord",
+      "measuredStartMs": 187716,
+      "cueMs": 187719,
+      "frameMs": 188419,
+      "file": "anchors/22-roster-existing.png"
+    },
+    {
+      "chapter": "roster-existing",
+      "phrase": "Sur le lien d’invitation, Bruno devient visible",
+      "measuredStartMs": 190286,
+      "cueMs": 190288,
+      "frameMs": 190988,
+      "file": "anchors/23-roster-existing.png"
+    },
+    {
+      "chapter": "roster-withdraw",
+      "phrase": "Cliquez sur Masquer mon nom",
+      "measuredStartMs": 200971,
+      "cueMs": 200974,
+      "frameMs": 201674,
+      "file": "anchors/24-roster-withdraw.png"
+    },
+    {
+      "chapter": "roster-withdraw",
+      "phrase": "Sur la page ouverte par l’invitation",
+      "measuredStartMs": 202816,
+      "cueMs": 202819,
+      "frameMs": 203519,
+      "file": "anchors/25-roster-withdraw.png"
+    },
+    {
+      "chapter": "roster-withdraw",
+      "phrase": "Pour terminer, voici la même page sans identification",
+      "measuredStartMs": 210194,
+      "cueMs": 210196,
+      "frameMs": 210896,
+      "file": "anchors/26-roster-withdraw.png"
+    }
+  ]
+}

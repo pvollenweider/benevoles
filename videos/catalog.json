@@ -1483,7 +1483,8 @@
         "créneaux",
         "bénévoles",
         "consentement",
-        "confidentialité"
+        "confidentialité",
+        "invitations"
       ],
       "published": false,
       "seedScenario": "shift-roster-visibility",

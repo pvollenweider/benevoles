@@ -1,0 +1,60 @@
+{
+  "model": "gemini-3.8-flash",
+  "reviewedAt": "2026-10-21T20:35:48.673Z",
+  "videoSha256": "f9f75baef1081d43acde918a1031d8412aefd1370c7beab0b849810d26a1fc68",
+  "promptSha256": "9130e6c73d699bf555284c0af985efca3bc7459f0754601a10890bb37697ec57",
+  "clipSha256": "50654d74494a483807b6b751df136ddc23ad7ef89e991e552fdb093bd065fb8b",
+  "scene": "roster-confirm",
+  "review": {
+    "heardOpening": "Ouvrez le véritable email de confirmation",
+    "checkpoints": [
+      {
+        "spokenSeconds": 0.8,
+        "spoken": "Ouvrez le véritable email de confirmation",
+        "visibleSeconds": 1,
+        "visible": "Affichage de l'e-mail de confirmation d'inscription pour Aline",
+        "sync": "aligned",
+        "severity": "none"
+      },
+      {
+        "spokenSeconds": 2.8,
+        "spoken": "Suivez son lien personnel",
+        "visibleSeconds": 3.2,
+        "visible": "Clic sur le bouton Gérer mes inscriptions dans l'e-mail",
+        "sync": "aligned",
+        "severity": "none"
+      },
+      {
+        "spokenSeconds": 5.2,
+        "spoken": "La carte Qui est inscrit montre uniquement vos propres créneaux confirmés",
+        "visibleSeconds": 5,
+        "visible": "La section Qui est inscrit est visible sur la page Mes inscriptions",
+        "sync": "aligned",
+        "severity": "none"
+      },
+      {
+        "spokenSeconds": 17,
+        "spoken": "Cliquez sur Afficher mon nom",
+        "visibleSeconds": 18,
+        "visible": "Clic sur le bouton Afficher mon nom qui devient Masquer mon nom",
+        "sync": "aligned",
+        "severity": "none"
+      },
+      {
+        "spokenSeconds": 22,
+        "spoken": "suivez Voir qui est inscrit sur les autres créneaux",
+        "visibleSeconds": 20.8,
+        "visible": "Clic sur le lien et affichage de la vue planning avec les créneaux",
+        "sync": "aligned",
+        "severity": "none"
+      }
+    ],
+    "issues": [],
+    "voice": {
+      "consistent": true,
+      "warm": true,
+      "observation": "Voix féminine claire, posée et parfaitement synchronisée avec la démonstration visuelle."
+    }
+  },
+  "note": "Automated observation of actual final video audio and images; not a claim of complete human validation"
+}

@@ -1,0 +1,52 @@
+{
+  "model": "gemini-3.8-flash",
+  "reviewedAt": "2026-10-21T20:43:28.830Z",
+  "videoSha256": "1638077bc2a258324a29e2fcd6038d49c236d79b9777cbf5eadda812c3d665cb",
+  "promptSha256": "cc684394360a8963cf689ce22aa1edb2e66068b1494b5944b058fe2734832da7",
+  "clipSha256": "af0fb4483864875f391edffe1e71633486fe0b6ad974a743c9804ebe2e11987e",
+  "scene": "roster-withdraw",
+  "review": {
+    "heardOpening": "Revenons sur la page personnelle",
+    "checkpoints": [
+      {
+        "spokenSeconds": 0.5,
+        "spoken": "Revenons sur la page personnelle d’Aline.",
+        "visibleSeconds": 0.5,
+        "visible": "Page 'Mes inscriptions' pour Aline Martin affichée à l'écran.",
+        "sync": "aligned",
+        "severity": "none"
+      },
+      {
+        "spokenSeconds": 2.2,
+        "spoken": "Cliquez sur Masquer mon nom.",
+        "visibleSeconds": 2.7,
+        "visible": "Clic sur le bouton 'Masquer mon nom', qui devient 'Afficher mon nom'.",
+        "sync": "aligned",
+        "severity": "none"
+      },
+      {
+        "spokenSeconds": 4.5,
+        "spoken": "Sur la page ouverte par l’invitation, Aline a disparu ; sa place reste comptée.",
+        "visibleSeconds": 5.8,
+        "visible": "Affichage de la page de l'événement avec 'Sur ce créneau : 3 autres bénévoles, sans nom affiché'.",
+        "sync": "aligned",
+        "severity": "none"
+      },
+      {
+        "spokenSeconds": 12,
+        "spoken": "voici la même page sans identification. Le bouton et les noms ont disparu.",
+        "visibleSeconds": 12.5,
+        "visible": "Vue sans session utilisateur connectée : absence de nom en haut à droite et bouton 'Voir qui est inscrit' retiré.",
+        "sync": "aligned",
+        "severity": "none"
+      }
+    ],
+    "issues": [],
+    "voice": {
+      "consistent": true,
+      "warm": true,
+      "observation": "Voix claire, posée et parfaitement synchronisée avec la démonstration visuelle."
+    }
+  },
+  "note": "Automated observation of actual final video audio and images; not a claim of complete human validation"
+}

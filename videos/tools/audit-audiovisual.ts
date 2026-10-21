@@ -77,8 +77,8 @@ async function main() {
       const fixture = await db.organization.findUniqueOrThrow({ where: { id: "video-shift-roster" }, include: { admins: true, volunteers: true, events: { include: { registrations: true, sectorLeaders: true } } } })
       assert(fixture.slug === "formation-roster" && fixture.name === "Les amis de Montvert")
       assert(fixture.admins.length === 1 && fixture.admins[0].email === "video.roster.owner@example.org")
-      const people = new Map([["aline", "Aline Martin"], ["bruno", "Bruno Favre"], ["claire", "Claire Rochat"], ["david", "David Perrin"], ["emma", "Emma Martin"]])
-      assert(fixture.volunteers.length === 5 && fixture.volunteers.every(v => [...people].some(([key, name]) => v.email === `video.roster.${key}@example.org` && `${v.firstName} ${v.lastName}` === name) && !v.phone))
+      const people = new Map([["aline", "Aline Martin"], ["bruno", "Bruno Favre"], ["claire", "Claire Rochat"], ["david", "David Perrin"], ["emma", "Emma Martin"], ["gina", "Gina Dubois"]])
+      assert(fixture.volunteers.length === 6 && fixture.volunteers.every(v => [...people].some(([key, name]) => v.email === `video.roster.${key}@example.org` && `${v.firstName} ${v.lastName}` === name) && !v.phone))
       assert(fixture.events.length === 1 && fixture.events[0].id === "video-shift-roster-event" && fixture.events[0].title === "Fête du parc" && fixture.events[0].sectorLeaders.length === 0)
       assert(fixture.events[0].registrations.length === 5 && fixture.events[0].registrations.every(r => fixture.volunteers.some(v => v.id === r.volunteerId)))
     } else if (manifest.id === "ORGANIZATION_ACTIVITY_LOG") {

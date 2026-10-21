@@ -1,0 +1,90 @@
+{
+  "model": "gemini-3.8-flash",
+  "promptVersion": 2,
+  "auditedAt": "2026-10-21T20:30:26.927Z",
+  "revalidatedAt": "2026-10-21T20:30:26.927Z",
+  "source": "generated narration WAV",
+  "note": "Independent multilingual ASR evidence, reused only for identical audio/text and audit instructions; not a full audiovisual or voice-quality validation",
+  "segments": [
+    {
+      "id": "roster-setting",
+      "audioSha256": "54efb9d60f11a232f3c009e8b9fb7722d06814bf0a07be2b55ffe4cb8907c905",
+      "recognized": "Dans Paramètres, la section Qui est inscrit ? définit le choix proposé pour les futurs événements. Par défaut, ce réglage est activé. Les événements existants gardent leurs propres valeurs. Ouvrons un nouvel événement. La case est déjà cochée. Vous pouvez la décocher pour cet événement. Le rappel demande d'informer les bénévoles, y compris du comptage des places dont le nom reste masqué. Activer le réglage ne donne jamais leur accord à leur place.",
+      "expected": "Dans Paramètres, la section Qui est inscrit définit le choix proposé pour les futurs événements. Par défaut, ce réglage est activé. Les événements existants gardent leur propre valeur. Ouvrons un nouvel événement. La case est déjà cochée. Vous pouvez la décocher pour cet événement. Le rappel demande d’informer les bénévoles, y compris du comptage des places dont le nom reste masqué. Activer le réglage ne donne jamais leur accord à leur place.",
+      "wordErrorRate": 0.0410958904109589,
+      "needsReview": false,
+      "unexpectedInstructions": [],
+      "edgeIssues": []
+    },
+    {
+      "id": "roster-publication",
+      "audioSha256": "582d7b8d6d16d6ac1a55c5527ed465875f8f4fa8f834ddbecbf1c7bb579358e8",
+      "recognized": "Retrouvons notre événement de démonstration. Dans ses réglages, la même option est activée. Vous pouvez la désactiver, puis la réactiver. Sur Vérifier avant publication, une note rappelle ce qui sera visible et permet de modifier le réglage. Publions l'événement.",
+      "expected": "Retrouvons notre événement de démonstration. Dans ses réglages, la même option est activée. Vous pouvez la désactiver puis la réactiver. Sur Vérifier avant publication, une note rappelle ce qui sera visible et permet de modifier le réglage. Publions l’événement.",
+      "wordErrorRate": 0,
+      "needsReview": false,
+      "unexpectedInstructions": [],
+      "edgeIssues": []
+    },
+    {
+      "id": "roster-signup",
+      "audioSha256": "eb3b710b38d4902d6f6eed86058c2ca92fec8fcbc750eff419586f36c4c60edb",
+      "recognized": "Voici la page vue par un visiteur anonyme. Aucun bouton pour voir les inscrits, aucun nom. Choisissez un créneau, puis continuez. Renseignez votre prénom, votre nom, et votre adresse e-mail. Acceptez la convention et l'utilisation des données pour l'inscription. La case de visibilité est facultative et non cochée. Elle autorise les bénévoles confirmés et les membres invités par l'organisation à voir votre prénom et l'initiale de votre nom sur vos créneaux confirmés. Même sans nom affiché, votre place est comptée. Cochez cette case si vous le souhaitez, puis confirmez l'inscription.",
+      "expected": "Voici la page vue par un visiteur anonyme. Aucun bouton pour voir les inscrits, aucun nom. Choisissez un créneau, puis continuez. Renseignez votre prénom, votre nom et votre adresse email. Acceptez la convention et l’utilisation des données pour l’inscription. La case de visibilité est facultative et non cochée. Elle autorise les bénévoles confirmés et les membres invités par l’organisation à voir votre prénom et l’initiale de votre nom sur vos créneaux confirmés. Même sans nom affiché, votre place est comptée. Cochez cette case si vous le souhaitez, puis confirmez l’inscription.",
+      "wordErrorRate": 0,
+      "needsReview": false,
+      "unexpectedInstructions": [],
+      "edgeIssues": []
+    },
+    {
+      "id": "roster-confirm",
+      "audioSha256": "999aa8d953084d3253cdd15730c33c4089a2fd2199ff875c89fd0b7b5a6d6a05",
+      "recognized": "Ouvrez le véritable email de confirmation. Suivez son lien personnel. La carte Qui est inscrit montre uniquement vos propres créneaux confirmés, avec les noms acceptés et le nombre des autres bénévoles. Votre demande du formulaire attend votre confirmation depuis ce lien. Cliquez sur Afficher mon nom. Pour consulter les autres créneaux, suivez Voir qui est inscrit sur les autres créneaux.",
+      "expected": "Ouvrez le véritable email de confirmation. Suivez son lien personnel. La carte Qui est inscrit montre uniquement vos propres créneaux confirmés, avec les noms acceptés et le nombre des autres bénévoles. Votre demande du formulaire attend votre confirmation depuis ce lien. Cliquez sur Afficher mon nom. Pour consulter les autres créneaux, suivez Voir qui est inscrit sur les autres créneaux.",
+      "wordErrorRate": 0,
+      "needsReview": false,
+      "unexpectedInstructions": [],
+      "edgeIssues": []
+    },
+    {
+      "id": "roster-event",
+      "audioSha256": "008337403f689f0b0a0223778eed9fd4cdaf916f961de3e60df3996c9218a4ab",
+      "recognized": "Sur la page de l'événement, le bouton « Voir qui est inscrit » se trouve à côté de « Frise » et « Liste ». Le lien personnel l'a ouvert activé. Passons en liste. Sur votre créneau, la ligne commence par « Avec toi ». Sur les autres, elle commence par « Sur ce créneau », les personnes sans nom affiché sont comptées ensemble, sans préciser la raison. Passons en frise. Les barres restent inchangées. Survolez un créneau, la ligne sous le graphique du jour montre les personnes de cette barre. La vue liste permet de parcourir tous les détails au clavier.",
+      "expected": "Sur la page de l’événement, le bouton Voir qui est inscrit se trouve à côté de Frise et Liste. Le lien personnel l’a ouvert activé. Passons en Liste. Sur votre créneau, la ligne commence par Avec toi. Sur les autres, elle commence par Sur ce créneau. Les personnes sans nom affiché sont comptées ensemble, sans préciser la raison. Passons en Frise. Les barres restent inchangées. Survolez un créneau : la ligne sous le graphique du jour montre les personnes de cette barre. La vue Liste permet de parcourir tous les détails au clavier.",
+      "wordErrorRate": 0,
+      "needsReview": false,
+      "unexpectedInstructions": [],
+      "edgeIssues": []
+    },
+    {
+      "id": "roster-invite",
+      "audioSha256": "75d1e0efc0c3e21061f5f546fe1b052239162557df148cb46ce81c2e756b441f",
+      "recognized": "Un membre qui arrive par son lien d'invitation voit aussi le bouton, avant même de s'inscrire, activer voir qui est inscrit. En liste, Aline apparaît avec son prénom et l'initiale de son nom à côté du nombre des autres bénévoles. Ce lien est personnel, gardez-le pour vous.",
+      "expected": "Un membre qui arrive par son lien d’invitation voit aussi le bouton, avant même de s’inscrire. Activez Voir qui est inscrit. En Liste, Aline apparaît avec son prénom et l’initiale de son nom, à côté du nombre des autres bénévoles. Ce lien est personnel : gardez-le pour vous.",
+      "wordErrorRate": 0.0196078431372549,
+      "needsReview": false,
+      "unexpectedInstructions": [],
+      "edgeIssues": []
+    },
+    {
+      "id": "roster-existing",
+      "audioSha256": "4e5a4eccb0852a10f018445925e7927aaaae20c7bf19d335a0a4fb0d6ff656a1",
+      "recognized": "Bruno avait accepté l'ancien texte limité aux bénévoles confirmés. Sur sa page personnelle, le bouton Montrer aussi mon nom aux membres invités propose un nouveau choix explicite. Cliquez sur ce bouton pour élargir cet accord. Sur le lien d'invitation, Bruno devient visible. Aucun ancien accord n'est élargi automatiquement.",
+      "expected": "Bruno avait accepté l’ancien texte, limité aux bénévoles confirmés. Sur sa page personnelle, le bouton Montrer aussi mon nom aux membres invités propose un nouveau choix explicite. Cliquez sur ce bouton pour élargir cet accord. Sur le lien d’invitation, Bruno devient visible. Aucun ancien accord n’est élargi automatiquement.",
+      "wordErrorRate": 0,
+      "needsReview": false,
+      "unexpectedInstructions": [],
+      "edgeIssues": []
+    },
+    {
+      "id": "roster-withdraw",
+      "audioSha256": "1cd2c8942754681cdacd1b652b77c2a4d1bf6d5ff8ad144cc233705788bcc9b4",
+      "recognized": "Revenons sur la page personnelle d'Aline. Cliquez sur Masquer mon nom. Sur la page ouverte par l'invitation, Aline a disparu, sa place reste comptée. Ce retrait ne change pas son inscription. Pour terminer, voici la même page sans identification. Le bouton et les noms ont disparu. Rien non plus dans l'intégration à votre site ni sur les liens de groupe. Les mineurs connus ne sont jamais nommés. Les noms ne sont consultables que jusqu'à la fin de l'événement.",
+      "expected": "Revenons sur la page personnelle d’Aline. Cliquez sur Masquer mon nom. Sur la page ouverte par l’invitation, Aline a disparu ; sa place reste comptée. Ce retrait ne change pas son inscription. Pour terminer, voici la même page sans identification. Le bouton et les noms ont disparu. Rien non plus dans l’intégration à votre site ni sur les liens de groupe. Les mineurs connus ne sont jamais nommés. Les noms ne sont consultables que jusqu’à la fin de l’événement.",
+      "wordErrorRate": 0,
+      "needsReview": false,
+      "unexpectedInstructions": [],
+      "edgeIssues": []
+    }
+  ]
+}

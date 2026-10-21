@@ -1,0 +1,52 @@
+{
+  "model": "gemini-3.8-flash",
+  "reviewedAt": "2026-10-21T20:42:24.324Z",
+  "videoSha256": "1638077bc2a258324a29e2fcd6038d49c236d79b9777cbf5eadda812c3d665cb",
+  "promptSha256": "14afd33d8c28b753e0be90d8b1cce66d7d33a7d1b23fb339d051989d75520a63",
+  "clipSha256": "d555363569a661550f410afdfec56e431a2137ac1a4f285f6d779caf47b75994",
+  "scene": "roster-signup",
+  "review": {
+    "heardOpening": "Voici la page vue par un visiteur anonyme",
+    "checkpoints": [
+      {
+        "spokenSeconds": 6.3,
+        "spoken": "Choisissez un créneau, puis continuez.",
+        "visibleSeconds": 6.7,
+        "visible": "Sélection du créneau Accueil puis clic sur le bouton bleu Continuer",
+        "sync": "aligned",
+        "severity": "none"
+      },
+      {
+        "spokenSeconds": 9.5,
+        "spoken": "Renseignez votre prénom, votre nom et votre adresse email.",
+        "visibleSeconds": 9.8,
+        "visible": "Saisie de Aline, Martin et de l'adresse email dans les champs correspondants",
+        "sync": "aligned",
+        "severity": "none"
+      },
+      {
+        "spokenSeconds": 14.1,
+        "spoken": "Acceptez la convention et l’utilisation des données pour l’inscription.",
+        "visibleSeconds": 13.8,
+        "visible": "Cochage des deux premières cases obligatoires",
+        "sync": "aligned",
+        "severity": "none"
+      },
+      {
+        "spokenSeconds": 33.9,
+        "spoken": "Cochez cette case si vous le souhaitez, puis confirmez l’inscription.",
+        "visibleSeconds": 34.4,
+        "visible": "Cochage de la case de visibilité puis clic sur Confirmer l'inscription",
+        "sync": "aligned",
+        "severity": "none"
+      }
+    ],
+    "issues": [],
+    "voice": {
+      "consistent": true,
+      "warm": true,
+      "observation": "Voix de synthèse claire, fluide et bien articulée, parfaitement synchronisée avec la démonstration à l'écran."
+    }
+  },
+  "note": "Automated observation of actual final video audio and images; not a claim of complete human validation"
+}
