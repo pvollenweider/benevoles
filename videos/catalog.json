@@ -1486,7 +1486,7 @@
         "confidentialité",
         "invitations"
       ],
-      "published": false,
+      "published": true,
       "seedScenario": "shift-roster-visibility",
       "themes": [
         "evenement-cycle-de-vie"

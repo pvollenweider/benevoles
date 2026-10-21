@@ -51,6 +51,8 @@ Un nouvel événement démarre avec le réglage par défaut de l'organisation, e
 
 ![Case « Qui est inscrit » cochée dans les réglages de l'événement, avec son explication puis le rappel « Informez les bénévoles… »](/doc-img/admin-roster-setting.png)
 
+En vidéo : [montrer aux bénévoles qui est inscrit](/videos/SHIFT_ROSTER_VISIBILITY#doc).
+
 Pour les personnes déjà inscrites :
 
 - **Personne n'apparaît automatiquement.** Elles n'ont rien accepté : leur nom reste masqué tant qu'elles ne choisissent pas elles-mêmes de l'afficher. Vous ne pouvez pas le faire à leur place.

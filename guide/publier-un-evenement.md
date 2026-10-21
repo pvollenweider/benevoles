@@ -44,6 +44,8 @@ Sous la vérification, la section **Publication** dit aussi où en est le régla
 
 ![Section « Publication » d'un brouillon : « Publier rend la page d'inscription accessible à qui a le lien. Rien n'est envoyé aux membres tant que vous ne les invitez pas. », puis la note sur le réglage « Qui est inscrit » avec le lien pour le modifier, le bouton « Publier » et le lien « Rester en brouillon pour l'instant »](/doc-img/admin-roster-publish-note.png)
 
+En vidéo : [montrer aux bénévoles qui est inscrit](/videos/SHIFT_ROSTER_VISIBILITY#doc).
+
 Tant que l'événement est un brouillon, son aperçu reprend cette liste sous **Prochaines étapes**, avec le lien **Vérifier avant publication**. Pour publier, cliquer sur **Publier**, le bouton principal en haut des pages de l'événement dès qu'il a un créneau (avant, ce bouton est **Ajouter des créneaux**).
 
 L'événement devient alors visible à l'URL :

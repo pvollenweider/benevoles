@@ -50,6 +50,8 @@ Pour choisir d'autres créneaux avec des personnes que tu connais, le lien **Voi
 
 ![Encadré « Qui est inscrit » de la page personnelle de Léa : ses créneaux confirmés, chacun avec sa date et ses heures, les bénévoles qui ont choisi d'afficher leur nom, comme « Aline M. », le nombre des autres, le lien vers les autres créneaux, puis la phrase qui dit si son nom est affiché et comment il apparaît (« Léa F. »), et le bouton pour l'afficher ou le masquer](/doc-img/public-roster-card.png)
 
+En vidéo : [montrer aux bénévoles qui est inscrit](/videos/SHIFT_ROSTER_VISIBILITY#doc).
+
 Ton nom n'y figure que si tu l'as choisi. Si ta place est confirmée, tu comptes dans les effectifs de tes créneaux, même si ton nom reste masqué : un nombre seul, qui ne dit ni qui tu es ni pourquoi ton nom n'est pas affiché. Sous la liste, une phrase dit ce que voient les autres, avec un bouton :
 - **Afficher mon nom** : sur tes créneaux confirmés, les bénévoles confirmés de l'événement et les membres invités par l'organisation voient ton prénom et l'initiale de ton nom ;
 - **Masquer mon nom** : ton nom disparaît aussitôt pour eux. Tu peux changer d'avis à tout moment, même après la date limite d'annulation, sans effet sur ton inscription. Masquer ton nom ne t'empêche pas de voir celui des autres.

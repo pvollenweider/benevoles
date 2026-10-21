@@ -1,0 +1,12 @@
+{
+  "anchor": "Un membre qui arrive par son lien d’invitation voit aussi le",
+  "windowStart": 124.648,
+  "result": {
+    "found": true,
+    "startSeconds": 19.3,
+    "wordsHeard": "Un membre qui arrive par son lien d’invitation voit aussi le"
+  },
+  "onset": 143.948,
+  "proposedCut": 143.46112499999998,
+  "note": "Proposal only; recut then independently audit before capture"
+}
