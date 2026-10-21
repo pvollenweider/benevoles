@@ -29,6 +29,8 @@ Puis cliquez sur **Créer mon espace**. Le message « Vérifiez votre boîte ema
 
 Vous recevez l'email « Confirmez votre adresse pour créer votre espace benevol.app ». Ouvrez son lien, **valable 24 heures** : il mène à une page avec le bouton **Confirmer et créer mon espace**. Ouvrir le lien ne crée rien ; seul le bouton crée l'espace.
 
+Votre adresse devient aussi l'adresse de réponse de l'espace : quand un bénévole répond à un de ses emails, sa réponse vous arrive. Vous pouvez la changer dans les [réglages des emails](reglages-et-suivi-des-emails.md).
+
 Vous arrivez ensuite directement sur la page où choisir votre mot de passe. Le même lien vous parvient aussi par email, « Bienvenue sur benevol.app : choisissez votre mot de passe », valable 7 jours, si vous fermez la page avant. Cet email liste aussi les pages du guide pour bien démarrer. Les règles du mot de passe sont celles de [Se connecter](se-connecter.md).
 
 ## Pendant la vérification
