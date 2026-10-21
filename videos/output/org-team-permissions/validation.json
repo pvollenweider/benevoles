@@ -1,12 +1,12 @@
 {
   "id": "ORG_TEAM_PERMISSIONS",
   "slug": "org-team-permissions",
-  "validatedAt": "2026-10-21T16:06:43.846Z",
+  "validatedAt": "2026-10-21T16:37:39.136Z",
   "continuousNarration": true,
   "sentenceRevision": false,
   "narrationContentChecked": true,
   "voice": "Puck",
-  "captureMs": 139640,
+  "captureMs": 139680,
   "scenes": [
     {
       "id": "welcome",
@@ -22,21 +22,21 @@
     },
     {
       "id": "invite",
-      "visualMs": 17355,
+      "visualMs": 17354,
       "audioMs": 17353,
-      "driftMs": 2
-    },
-    {
-      "id": "invite-result",
-      "visualMs": 11938,
-      "audioMs": 11937,
       "driftMs": 1
     },
     {
-      "id": "change-role",
-      "visualMs": 17149,
-      "audioMs": 17147,
+      "id": "invite-result",
+      "visualMs": 11939,
+      "audioMs": 11937,
       "driftMs": 2
+    },
+    {
+      "id": "change-role",
+      "visualMs": 17148,
+      "audioMs": 17147,
+      "driftMs": 1
     },
     {
       "id": "organizer-view",
@@ -46,26 +46,26 @@
     },
     {
       "id": "limits",
-      "visualMs": 19674,
+      "visualMs": 19673,
       "audioMs": 19672,
-      "driftMs": 2
+      "driftMs": 1
     },
     {
       "id": "result",
-      "visualMs": 11301,
+      "visualMs": 11300,
       "audioMs": 11299,
-      "driftMs": 2
+      "driftMs": 1
     }
   ],
   "anchorsChecked": 10,
   "music": {
-    "voicedWindows": 124,
+    "voicedWindows": 127,
     "musicOnlyWindows": 0,
     "smallestGapLu": 14.3,
     "largestGapLu": 18.8,
     "quietestMusicOnlyLufs": null,
     "loudestMusicOnlyLufs": null,
-    "medianVoiceLufs": -16.4
+    "medianVoiceLufs": -16.5
   },
   "issues": []
 }

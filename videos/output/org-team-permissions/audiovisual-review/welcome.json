@@ -1,18 +1,18 @@
 {
   "model": "gemini-3.8-flash",
-  "reviewedAt": "2026-10-21T16:07:29.459Z",
-  "videoSha256": "4729215066c6f4b2a5cfd43447431080691642c59ee7e32a9a99e562220ccb79",
+  "reviewedAt": "2026-10-21T16:29:16.912Z",
+  "videoSha256": "ca966d13be9da779a572f5709bd186a4bcc0dc849cccbe5176de511e9e5b76cb",
   "promptSha256": "fb72c09c2d3bbad99ea02705317bb629791c4256e3868a5cdc83f61f8034321c",
-  "clipSha256": "6d8a6c4459a706bfc8c0c40da15d5316d5f6a7626fa1619b3816d135f49f0aeb",
+  "clipSha256": "158f022781f64d780999c68ce5087b97ce851deb5315b815299c484768bb3056",
   "scene": "welcome",
   "review": {
-    "heardOpening": "Une équipe bien réglée évite de partager un seul mot de passe",
+    "heardOpening": "Une équipe bien réglée évite de partager",
     "checkpoints": [
       {
-        "spokenSeconds": 6.6,
+        "spokenSeconds": 6.8,
         "spoken": "Ici, trois personnes sont déjà actives",
-        "visibleSeconds": 7,
-        "visible": "Défilement vers la section « Administrateurs (3) » affichant trois membres de l'équipe",
+        "visibleSeconds": 6.5,
+        "visible": "Défilement vers la section Administrateurs (3) affichant la liste des trois membres",
         "sync": "aligned",
         "severity": "none"
       },
@@ -20,15 +20,15 @@
         "spokenSeconds": 9.2,
         "spoken": "deux propriétaires et une organisatrice",
         "visibleSeconds": 9,
-        "visible": "Affichage des rôles : Propriétaire pour Camille Martin et Coline Fabre, Organisateur pour Samira Diallo",
+        "visible": "Affichage des rôles Propriétaire pour Camille Martin et Colette Favre, et Organisateur pour Samira Diallo",
         "sync": "aligned",
         "severity": "none"
       },
       {
-        "spokenSeconds": 12,
+        "spokenSeconds": 11.9,
         "spoken": "Le badge Vous repère le compte actuellement connecté",
-        "visibleSeconds": 12,
-        "visible": "Badge grisé « Vous » affiché à côté du nom Camille Martin",
+        "visibleSeconds": 11.8,
+        "visible": "Le badge « Vous » est visible à côté du nom de Camille Martin",
         "sync": "aligned",
         "severity": "none"
       }
@@ -37,7 +37,7 @@
     "voice": {
       "consistent": true,
       "warm": true,
-      "observation": "Voix claire, posée et bien synchronisée avec les éléments affichés à l'écran."
+      "observation": "Voix off masculine claire, fluide, bien posée et parfaitement synchronisée avec l'écran."
     }
   },
   "note": "Automated observation of actual final video audio and images; not a claim of complete human validation"

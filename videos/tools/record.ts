@@ -26,6 +26,9 @@ const eventSlug = process.env.VIDEO_EVENT_SLUG ?? "fete-du-village"
 const gapMs = 450
 const rehearsal = process.argv.includes("--rehearse")
 const quickRehearsal = process.argv.includes("--quick-rehearse")
+const audioTimedRehearsal = process.argv.includes("--audio-timing")
+if (audioTimedRehearsal && (!rehearsal || quickRehearsal)) throw new Error("--audio-timing requires --rehearse without --quick-rehearse")
+const fallbackTiming = rehearsal && !audioTimedRehearsal
 if (quickRehearsal && !rehearsal) throw new Error("--quick-rehearse requires --rehearse; never use accelerated timing for narrated captures")
 
 async function metadata(file: string): Promise<AudioMetadata | null> {
@@ -188,7 +191,7 @@ async function main() {
   const rawVideo = path.join(dir, "capture.webm")
   const timelineFile = path.join(dir, "timeline.json")
   const audio = await metadata(path.join(dir, "audio-metadata.json"))
-  if (!rehearsal) {
+  if (!rehearsal || audioTimedRehearsal) {
     if (!audio) throw new Error(`${manifest.id}: narrated capture requires actual generated audio; fallback timing is rehearsal-only`)
     const { assertNarrationGeneration } = await import("../lib/narration-generation")
     assertNarrationGeneration(manifest, audio)
@@ -203,7 +206,7 @@ async function main() {
   if (slug === "platform-internal-administration" && !rehearsal) {
     await (await import("../lib/record-operator")).validateOperatorNarration(dir)
   }
-  const durations = new Map(manifest.segments.map((segment) => [segment.id, rehearsal ? segment.fallbackDurationMs : audio?.segments[segment.id]?.durationMs ?? segment.fallbackDurationMs]))
+  const durations = new Map(manifest.segments.map((segment) => [segment.id, fallbackTiming ? segment.fallbackDurationMs : audio?.segments[segment.id]?.durationMs ?? segment.fallbackDurationMs]))
   await mkdir(dir, { recursive: true })
   await (await import("../lib/prepare-settings-mailbox")).prepareSettingsMailbox(slug, dir)
   await rm(rawVideo, { force: true })
@@ -262,7 +265,7 @@ async function main() {
     if (cached) return cached
     const segment = manifest.segments.find(candidate => candidate.id === id)
     if (!segment) throw new Error(`Unknown narration segment ${id}`)
-    const generated = rehearsal ? undefined : audio?.segments[id]
+    const generated = fallbackTiming ? undefined : audio?.segments[id]
     const sentences = generated
       ? await sentenceTimingsFromAudio(path.join(dir, generated.file), segment.transcript, generated.durationMs)
       : estimateSentences(segment.transcript, durations.get(id) ?? segment.fallbackDurationMs)
@@ -4736,10 +4739,12 @@ async function main() {
         await role.scrollIntoViewIfNeeded()
         await at("On choisit d’abord Propriétaire dans")
         await role.selectOption("admin")
-        // The confirmation sentence follows a keyboard-safety explanation. Saving
-        // there is too late: confirm inside the preceding sentence instead.
+        // Measured Puck WAV: sentence 1.716–5.509 s; short-clip ASR verifies
+        // « puis on confirme avec Appliquer » in 3.75–5.23 s. Target its centre
+        // (4.49 s), minus tap’s 420 ms pointer lead: cue 4.07 / 17.147.
+        // Retain the sentence anchor; check the actual input time in rehearsal.
         await at("On choisit d’abord Propriétaire dans")
-        await at(0.23) /* mid-sentence: « puis on confirme avec Appliquer » */
+        await at(4.07 / 17.147) /* mid-sentence: measured clause, including tap pointer lead */
         await tap(page, row.getByRole("button", { name: /Appliquer/ }))
         await page.getByRole("status").filter({ hasText: /Léa Martin : propriétaire/ }).waitFor()
         await at(0.74) /* mid-sentence */

@@ -1,15 +1,15 @@
 {
   "slug": "org-team-permissions",
   "capturePurpose": "narration-timed",
-  "recordedAt": "2026-10-21T16:06:34.063Z",
+  "recordedAt": "2026-10-21T16:28:56.809Z",
   "video": "capture.webm",
   "product": {
     "commit": "490a44c306da8b93b4920ece009a452baf27fdbf",
     "sourceTree": "be1a1d9342fc3b6d37f922a5557bedbe7d2b997b",
     "productSourceSha256": "5cadc01f8a0c46ff4a0d9d6d4de90702a18b4a0108564e6a460657a57ec1aeb7",
-    "buildId": "rFYo35VG0QypepwE2pYU_",
+    "buildId": "PrM7VPUzFDhdfFFljgeHC",
     "snapshot": "/tmp/benevoles-video-production.Batch27",
-    "builtAt": "2026-10-21T15:59:30.726Z"
+    "builtAt": "2026-10-21T16:19:23.791Z"
   },
   "captureEnvironment": {
     "locale": "fr-CH",
@@ -26,77 +26,77 @@
   "inputEvents": [
     {
       "kind": "click",
-      "atMs": 23791
+      "atMs": 23842
     },
     {
       "kind": "click",
-      "atMs": 43209
+      "atMs": 43199
     },
     {
       "kind": "click",
-      "atMs": 44026
+      "atMs": 44032
     },
     {
       "kind": "click",
-      "atMs": 45690
+      "atMs": 45699
     },
     {
       "kind": "click",
-      "atMs": 49606
+      "atMs": 49631
     },
     {
       "kind": "click",
-      "atMs": 55706
+      "atMs": 55748
     },
     {
       "kind": "click",
-      "atMs": 84608
+      "atMs": 78614
     },
     {
       "kind": "click",
-      "atMs": 93222
+      "atMs": 93264
     }
   ],
   "cues": [
     {
       "id": "welcome",
-      "startMs": 1133,
-      "endMs": 16334
+      "startMs": 1149,
+      "endMs": 16350
     },
     {
       "id": "roles",
-      "startMs": 18490,
-      "endMs": 40495
+      "startMs": 18510,
+      "endMs": 40515
     },
     {
       "id": "invite",
-      "startMs": 42138,
-      "endMs": 59493
+      "startMs": 42169,
+      "endMs": 59523
     },
     {
       "id": "invite-result",
-      "startMs": 59946,
-      "endMs": 71884
+      "startMs": 59975,
+      "endMs": 71914
     },
     {
       "id": "change-role",
-      "startMs": 74044,
-      "endMs": 91193
+      "startMs": 74076,
+      "endMs": 91224
     },
     {
       "id": "organizer-view",
-      "startMs": 91645,
-      "endMs": 107313
+      "startMs": 91675,
+      "endMs": 107343
     },
     {
       "id": "limits",
-      "startMs": 107765,
-      "endMs": 127439
+      "startMs": 107798,
+      "endMs": 127471
     },
     {
       "id": "result",
-      "startMs": 127892,
-      "endMs": 139193
+      "startMs": 127923,
+      "endMs": 139223
     }
   ],
   "anchors": [
@@ -105,70 +105,70 @@
       "phrase": "Ici, trois personnes sont déjà",
       "startMs": 6776,
       "endMs": 8957,
-      "cueMs": 7910
+      "cueMs": 7926
     },
     {
       "segmentId": "roles",
       "phrase": "L’organisateur prépare les événements, les",
       "startMs": 4834,
       "endMs": 11276,
-      "cueMs": 23325
+      "cueMs": 23345
     },
     {
       "segmentId": "roles",
       "phrase": "désigné pour un événement, il",
       "startMs": 16483,
       "endMs": 21459,
-      "cueMs": 34974
+      "cueMs": 34995
     },
     {
       "segmentId": "invite",
       "phrase": "Pour inviter Léa, ouvrez le",
       "startMs": 549,
       "endMs": 6340,
-      "cueMs": 42688
+      "cueMs": 42719
     },
     {
       "segmentId": "invite",
       "phrase": "Prenons Organisateur",
       "startMs": 6997,
       "endMs": 6997,
-      "cueMs": 49136
+      "cueMs": 49168
     },
     {
       "segmentId": "invite",
       "phrase": "Cliquez sur Envoyer l’invitation ",
       "startMs": 13107,
       "endMs": 14797,
-      "cueMs": 55245
+      "cueMs": 55276
     },
     {
       "segmentId": "invite-result",
       "phrase": "La confirmation indique",
       "startMs": 3718,
       "endMs": 8308,
-      "cueMs": 63664
+      "cueMs": 63694
     },
     {
       "segmentId": "invite-result",
       "phrase": "Son accès ne devient actif",
       "startMs": 8822,
       "endMs": 11439,
-      "cueMs": 68768
+      "cueMs": 68797
     },
     {
       "segmentId": "change-role",
       "phrase": "On choisit d’abord Propriétaire dans",
       "startMs": 1716,
       "endMs": 5509,
-      "cueMs": 75761
+      "cueMs": 75794
     },
     {
       "segmentId": "change-role",
-      "phrase": "La confirmation indique le nouveau rôle",
-      "startMs": 10090,
-      "endMs": 11698,
-      "cueMs": 84136
+      "phrase": "On choisit d’abord Propriétaire dans",
+      "startMs": 1716,
+      "endMs": 5509,
+      "cueMs": 75799
     }
   ]
 }

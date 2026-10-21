@@ -1,9 +1,9 @@
 {
   "model": "gemini-3.8-flash",
-  "reviewedAt": "2026-10-21T16:07:56.813Z",
-  "videoSha256": "4729215066c6f4b2a5cfd43447431080691642c59ee7e32a9a99e562220ccb79",
+  "reviewedAt": "2026-10-21T16:29:44.454Z",
+  "videoSha256": "ca966d13be9da779a572f5709bd186a4bcc0dc849cccbe5176de511e9e5b76cb",
   "promptSha256": "6dd11cfbdd8886e1c6da0453f010705513dd53643fcfbf13e064fb55efd2d7c7",
-  "clipSha256": "55c947349392348150d4b07dd5f971dce153d45bc3bac43bebfc32c4720a2535",
+  "clipSha256": "5ca85f8fcb66382b5b9f36b2758689e9ccc5c6fc53c142826c30d83e173ab95c",
   "scene": "invite",
   "review": {
     "heardOpening": "Pour inviter Léa, ouvrez le formulaire",
@@ -11,15 +11,15 @@
       {
         "spokenSeconds": 1.2,
         "spoken": "ouvrez le formulaire",
-        "visibleSeconds": 1.1,
-        "visible": "Défilement vers la section Administrateurs où le formulaire d'invitation est ouvert",
+        "visibleSeconds": 0.9,
+        "visible": "Défilement vers la section 'Inviter un administrateur' avec les champs du formulaire affichés",
         "sync": "aligned",
         "severity": "none"
       },
       {
-        "spokenSeconds": 2.8,
+        "spokenSeconds": 2.3,
         "spoken": "saisissez son nom et son adresse",
-        "visibleSeconds": 3.7,
+        "visibleSeconds": 2.2,
         "visible": "Saisie de 'Léa Martin' dans le champ Nom puis de l'adresse email",
         "sync": "aligned",
         "severity": "none"
@@ -27,24 +27,24 @@
       {
         "spokenSeconds": 6.8,
         "spoken": "Prenons Organisateur",
-        "visibleSeconds": 6,
-        "visible": "Le bouton radio Organisateur est sélectionné sous la section Rôle",
+        "visibleSeconds": 6.8,
+        "visible": "Le rôle 'Organisateur' est coché par défaut pour l'invitation",
         "sync": "aligned",
         "severity": "none"
       },
       {
-        "spokenSeconds": 12.6,
+        "spokenSeconds": 12.5,
         "spoken": "Cliquez sur Envoyer l’invitation",
         "visibleSeconds": 13,
-        "visible": "Clic sur le bouton bleu Envoyer l'invitation",
+        "visible": "Clic sur le bouton bleu 'Envoyer l'invitation'",
         "sync": "aligned",
         "severity": "none"
       },
       {
         "spokenSeconds": 14.5,
         "spoken": "le message confirme son adresse",
-        "visibleSeconds": 14.2,
-        "visible": "Bannière verte de confirmation affichant l'adresse email de Léa",
+        "visibleSeconds": 13.8,
+        "visible": "Bandeau vert de confirmation 'Invitation envoyée à video.team.lea@example.org'",
         "sync": "aligned",
         "severity": "none"
       }
@@ -53,7 +53,7 @@
     "voice": {
       "consistent": true,
       "warm": true,
-      "observation": "Voix de synthèse masculine claire, posée, au débit régulier et parfaitement synchronisée avec les actions à l'écran."
+      "observation": "Voix masculine claire, posée et bien articulée, parfaitement synchronisée avec les manipulations à l'écran."
     }
   },
   "note": "Automated observation of actual final video audio and images; not a claim of complete human validation"

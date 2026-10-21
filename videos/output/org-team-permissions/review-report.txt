@@ -1,17 +1,17 @@
-STATUS: NOT READY
+STATUS: READY
 {
   "id": "ORG_TEAM_PERMISSIONS",
-  "status": "NOT READY",
+  "status": "READY",
   "reviewedAt": "2026-10-21",
   "product": {
     "commit": "490a44c306da8b93b4920ece009a452baf27fdbf",
     "sourceTree": "be1a1d9342fc3b6d37f922a5557bedbe7d2b997b",
     "productSourceSha256": "5cadc01f8a0c46ff4a0d9d6d4de90702a18b4a0108564e6a460657a57ec1aeb7",
-    "buildId": "rFYo35VG0QypepwE2pYU_",
+    "buildId": "PrM7VPUzFDhdfFFljgeHC",
     "snapshot": "/tmp/benevoles-video-production.Batch27",
-    "builtAt": "2026-10-21T15:59:30.726Z"
+    "builtAt": "2026-10-21T16:19:23.791Z"
   },
-  "durationSeconds": 139.6,
+  "durationSeconds": 139.68,
   "takes": 2,
   "reviewedChapters": [
     "welcome",
@@ -24,31 +24,82 @@ STATUS: NOT READY
     "result"
   ],
   "ocrFrames": 279,
+  "ocrErrors": 0,
   "forbiddenHostOcrHits": 0,
   "tuCountVtt": 0,
+  "tuCountFinalAsr": 0,
   "music": {
-    "voicedWindows": 124,
+    "voicedWindows": 127,
     "musicOnlyWindows": 0,
     "smallestGapLu": 14.3,
     "largestGapLu": 18.8,
     "quietestMusicOnlyLufs": null,
     "loudestMusicOnlyLufs": null,
-    "medianVoiceLufs": -16.4
+    "medianVoiceLufs": -16.5
   },
-  "issues": [
-    "Appliquer click 84.608 s is about six seconds after its spoken action (chapter change-role, spokenSeconds 3.8). Confirmation is correctly visible at 84.8 s after its sentence starts at 84.134 s, but action timing fails. Both takes used this cue."
-  ],
-  "sourceChange": "record.ts now retains the sentence anchor and proposes intra-sentence 0.23 for the Apply action. This candidate is unfilmed and unvalidated, and the separation between the spoken action and later confirmation sentence still needs review before any READY claim.",
-  "filmedCue": "await at(\"La confirmation indique le nouveau rôle\")",
-  "narration": "One complete newly generated Puck take; continuousPauseTags false; eight source and final-video chapter audits pass; full all-language MP4 ASR has no extra languages or informal viewer address.",
-  "voiceReview": "All eight audiovisual reports observe consistent warm voice.",
+  "musicContinuityGaps": 0,
+  "issues": [],
+  "sourceChanges": "Measured Apply cue 4.07/17.147 after sentence anchor; actual-WAV rehearsal mode added. No src changes; retained complete Puck audio.",
+  "applySync": {
+    "measuredClauseSeconds": [
+      3.75,
+      5.23
+    ],
+    "takes": [
+      {
+        "take": "take1",
+        "chapter": {
+          "id": "change-role",
+          "startMs": 74171,
+          "endMs": 91320
+        },
+        "click": {
+          "kind": "click",
+          "atMs": 78702
+        },
+        "relativeSeconds": 4.531,
+        "withinClause": true,
+        "product": {
+          "commit": "490a44c306da8b93b4920ece009a452baf27fdbf",
+          "sourceTree": "be1a1d9342fc3b6d37f922a5557bedbe7d2b997b",
+          "productSourceSha256": "5cadc01f8a0c46ff4a0d9d6d4de90702a18b4a0108564e6a460657a57ec1aeb7",
+          "buildId": "PrM7VPUzFDhdfFFljgeHC",
+          "snapshot": "/tmp/benevoles-video-production.Batch27",
+          "builtAt": "2026-10-21T16:19:23.791Z"
+        }
+      },
+      {
+        "take": "take2",
+        "chapter": {
+          "id": "change-role",
+          "startMs": 74076,
+          "endMs": 91224
+        },
+        "click": {
+          "kind": "click",
+          "atMs": 78614
+        },
+        "relativeSeconds": 4.538,
+        "withinClause": true,
+        "product": {
+          "commit": "490a44c306da8b93b4920ece009a452baf27fdbf",
+          "sourceTree": "be1a1d9342fc3b6d37f922a5557bedbe7d2b997b",
+          "productSourceSha256": "5cadc01f8a0c46ff4a0d9d6d4de90702a18b4a0108564e6a460657a57ec1aeb7",
+          "buildId": "PrM7VPUzFDhdfFFljgeHC",
+          "snapshot": "/tmp/benevoles-video-production.Batch27",
+          "builtAt": "2026-10-21T16:19:23.791Z"
+        }
+      }
+    ]
+  },
+  "rehearsalClickSeconds": 4.542,
+  "validation": "8 scenes, 10 sentence anchors; source/final chapter ASR pass; full all-language ASR no extra languages; 8 full audiovisual clip reviews unflagged. All eight chapter sheets and precise Apply/confirmation frames inspected.",
   "inputEvents": {
     "clicks": 8,
     "keys": 0
   },
-  "mp4Sha256": "4729215066c6f4b2a5cfd43447431080691642c59ee7e32a9a99e562220ccb79",
-  "catalogBumped": false,
-  "ocrErrors": 0,
-  "musicContinuityGaps": 0
+  "mp4Sha256": "ca966d13be9da779a572f5709bd186a4bcc0dc849cccbe5176de511e9e5b76cb",
+  "catalogBumped": true,
+  "realTimeSubjectiveListening": "Unavailable; not a blocking criterion."
 }
-All chapter sheets and exact finding frames reviewed. Full final MP4 all-language ASR, per-chapter ASR, VTT register check, actual input effects, posters and video:validate completed. No local host, port or developer overlay found in the full 2 fps OCR inventory. No catalog bump. Real-time subjective listening unavailable; not a blocking criterion. No publication.
+Full final review complete. No publication, push or merge.

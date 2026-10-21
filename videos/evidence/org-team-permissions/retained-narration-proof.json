@@ -1,0 +1,62 @@
+{
+  "sourceBatch": 27,
+  "regeneratedInThisRetry": false,
+  "metadata": {
+    "model": "gemini-3.8-flash-tts",
+    "voice": "Puck",
+    "generatedAt": "2026-10-21T15:59:22.617Z",
+    "segments": {
+      "welcome": {
+        "file": "audio/welcome.wav",
+        "durationMs": 15201,
+        "generationSha256": "23b010266a4229b801eabc18a499503dc218080d8b77d0eff7294d5d8fc13b3e"
+      },
+      "roles": {
+        "file": "audio/roles.wav",
+        "durationMs": 22004,
+        "generationSha256": "23b010266a4229b801eabc18a499503dc218080d8b77d0eff7294d5d8fc13b3e"
+      },
+      "invite": {
+        "file": "audio/invite.wav",
+        "durationMs": 17353,
+        "generationSha256": "23b010266a4229b801eabc18a499503dc218080d8b77d0eff7294d5d8fc13b3e"
+      },
+      "invite-result": {
+        "file": "audio/invite-result.wav",
+        "durationMs": 11937,
+        "generationSha256": "23b010266a4229b801eabc18a499503dc218080d8b77d0eff7294d5d8fc13b3e"
+      },
+      "change-role": {
+        "file": "audio/change-role.wav",
+        "durationMs": 17147,
+        "generationSha256": "23b010266a4229b801eabc18a499503dc218080d8b77d0eff7294d5d8fc13b3e"
+      },
+      "organizer-view": {
+        "file": "audio/organizer-view.wav",
+        "durationMs": 15667,
+        "generationSha256": "23b010266a4229b801eabc18a499503dc218080d8b77d0eff7294d5d8fc13b3e"
+      },
+      "limits": {
+        "file": "audio/limits.wav",
+        "durationMs": 19672,
+        "generationSha256": "23b010266a4229b801eabc18a499503dc218080d8b77d0eff7294d5d8fc13b3e"
+      },
+      "result": {
+        "file": "audio/result.wav",
+        "durationMs": 11299,
+        "generationSha256": "23b010266a4229b801eabc18a499503dc218080d8b77d0eff7294d5d8fc13b3e"
+      }
+    }
+  },
+  "wavSha256": {
+    "continuous-narration.wav": "a9729329815d2425c723d5594146368ba9ccc2436bcd3e02e74f36aec45b6636",
+    "invite.wav": "8b3f002731163a7f2424fefce25e31733eba67ea329e3d063eb3bc71fc34e940",
+    "result.wav": "d91819a1a6ca73d2671503078ef8309621a90918fdcd024a68e61d6fa14b9488",
+    "invite-result.wav": "ef8b377719f14925af9dc93531ea185b3d5949e2dfb591d6c2459efc83c94933",
+    "roles.wav": "b4a0e22369724810e44fdf43ab131e47961a700c10a4970684904f62e88e2622",
+    "welcome.wav": "dac5d342325c752bf092e2c4cf899f8d8c310a41a6bc13d857441cbd6ca42673",
+    "limits.wav": "c4c6459fbb1594c863b69cc143b2606199af18719eee39d5aaade2e3f81f56b5",
+    "change-role.wav": "ccca7a57024693e7d8bde939d28e6f9b16fcb573be818ba17fe92aaaa3d8cc04",
+    "organizer-view.wav": "e9f31b757203a167ca75432ae1a6612492671e7cf7d967cc3683ff4fe55a7eb4"
+  }
+}

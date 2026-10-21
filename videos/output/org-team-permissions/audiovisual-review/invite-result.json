@@ -1,34 +1,34 @@
 {
   "model": "gemini-3.8-flash",
-  "reviewedAt": "2026-10-21T16:08:07.032Z",
-  "videoSha256": "4729215066c6f4b2a5cfd43447431080691642c59ee7e32a9a99e562220ccb79",
+  "reviewedAt": "2026-10-21T16:29:56.423Z",
+  "videoSha256": "ca966d13be9da779a572f5709bd186a4bcc0dc849cccbe5176de511e9e5b76cb",
   "promptSha256": "669b45448cd506c53866aba1f5898c9d9eef620ae9c81d8789ac21870701dee5",
-  "clipSha256": "5a27450c6b1e37471bcb7b7fdeb83745fde5787d552c6f19136ef7fc65a27b95",
+  "clipSha256": "7531477d466396e3118fec72a102378728a963352b8d556db8ea2a9387683e45",
   "scene": "invite-result",
   "review": {
-    "heardOpening": "Après l'envoi Léa apparaît",
+    "heardOpening": "Après l'envoi, Léa apparaît avec le statut En attente.",
     "checkpoints": [
       {
-        "spokenSeconds": 1,
+        "spokenSeconds": 0.8,
         "spoken": "Léa apparaît avec le statut En attente",
-        "visibleSeconds": 0.5,
-        "visible": "Léa Martin est affichée dans la liste des administrateurs avec le badge jaune 'En attente'",
+        "visibleSeconds": 0,
+        "visible": "Léa Martin est affichée dans la liste des administrateurs avec le badge « En attente »",
         "sync": "aligned",
         "severity": "none"
       },
       {
-        "spokenSeconds": 3.5,
-        "spoken": "La confirmation indique que son lien d'activation, valable sept jours, lui a été envoyé par email",
-        "visibleSeconds": 3,
-        "visible": "Message de confirmation bleu au-dessus de la liste : 'Le lien d'activation, valable 7 jours, lui a été envoyé par email'",
+        "spokenSeconds": 3.4,
+        "spoken": "La confirmation indique que son lien d’activation, valable sept jours, lui a été envoyé par email",
+        "visibleSeconds": 0,
+        "visible": "Le message de confirmation au-dessus du tableau indique que le lien valable 7 jours a été envoyé par email",
         "sync": "aligned",
         "severity": "none"
       },
       {
-        "spokenSeconds": 8.5,
+        "spokenSeconds": 8.4,
         "spoken": "Son accès ne devient actif qu’après la création de son mot de passe",
-        "visibleSeconds": 8.5,
-        "visible": "Écran stable montrant le compte de Léa en attente sur la liste des administrateurs",
+        "visibleSeconds": 8.4,
+        "visible": "Écran stable montrant le compte Léa Martin toujours en attente d'activation",
         "sync": "aligned",
         "severity": "none"
       }
@@ -37,7 +37,7 @@
     "voice": {
       "consistent": true,
       "warm": true,
-      "observation": "Voix claire, posée et parfaitement synchronisée avec les éléments affichés à l'écran."
+      "observation": "Voix claire, posée et bien articulée, parfaitement synchronisée avec les informations présentées à l'écran."
     }
   },
   "note": "Automated observation of actual final video audio and images; not a claim of complete human validation"

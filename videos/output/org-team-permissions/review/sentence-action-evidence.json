@@ -1,12 +1,12 @@
 {
-  "videoSha256": "4729215066c6f4b2a5cfd43447431080691642c59ee7e32a9a99e562220ccb79",
+  "videoSha256": "ca966d13be9da779a572f5709bd186a4bcc0dc849cccbe5176de511e9e5b76cb",
   "product": {
     "commit": "490a44c306da8b93b4920ece009a452baf27fdbf",
     "sourceTree": "be1a1d9342fc3b6d37f922a5557bedbe7d2b997b",
     "productSourceSha256": "5cadc01f8a0c46ff4a0d9d6d4de90702a18b4a0108564e6a460657a57ec1aeb7",
-    "buildId": "rFYo35VG0QypepwE2pYU_",
+    "buildId": "PrM7VPUzFDhdfFFljgeHC",
     "snapshot": "/tmp/benevoles-video-production.Batch27",
-    "builtAt": "2026-10-21T15:59:30.726Z"
+    "builtAt": "2026-10-21T16:19:23.791Z"
   },
   "anchors": [
     {
@@ -14,8 +14,8 @@
       "phrase": "Ici, trois personnes sont déjà",
       "startMs": 6776,
       "endMs": 8957,
-      "cueMs": 7910,
-      "absoluteSentenceMs": 7909,
+      "cueMs": 7926,
+      "absoluteSentenceMs": 7925,
       "firstFollowingInput": null,
       "sentenceFrame": "videos/output/org-team-permissions/review/anchor-00-sentence.jpg",
       "actionFrame": "videos/output/org-team-permissions/review/anchor-00-action.jpg"
@@ -25,11 +25,11 @@
       "phrase": "L’organisateur prépare les événements, les",
       "startMs": 4834,
       "endMs": 11276,
-      "cueMs": 23325,
-      "absoluteSentenceMs": 23324,
+      "cueMs": 23345,
+      "absoluteSentenceMs": 23344,
       "firstFollowingInput": {
         "kind": "click",
-        "atMs": 23791
+        "atMs": 23842
       },
       "sentenceFrame": "videos/output/org-team-permissions/review/anchor-01-sentence.jpg",
       "actionFrame": "videos/output/org-team-permissions/review/anchor-01-action.jpg"
@@ -39,8 +39,8 @@
       "phrase": "désigné pour un événement, il",
       "startMs": 16483,
       "endMs": 21459,
-      "cueMs": 34974,
-      "absoluteSentenceMs": 34973,
+      "cueMs": 34995,
+      "absoluteSentenceMs": 34993,
       "firstFollowingInput": null,
       "sentenceFrame": "videos/output/org-team-permissions/review/anchor-02-sentence.jpg",
       "actionFrame": "videos/output/org-team-permissions/review/anchor-02-action.jpg"
@@ -50,11 +50,11 @@
       "phrase": "Pour inviter Léa, ouvrez le",
       "startMs": 549,
       "endMs": 6340,
-      "cueMs": 42688,
-      "absoluteSentenceMs": 42687,
+      "cueMs": 42719,
+      "absoluteSentenceMs": 42718,
       "firstFollowingInput": {
         "kind": "click",
-        "atMs": 43209
+        "atMs": 43199
       },
       "sentenceFrame": "videos/output/org-team-permissions/review/anchor-03-sentence.jpg",
       "actionFrame": "videos/output/org-team-permissions/review/anchor-03-action.jpg"
@@ -64,11 +64,11 @@
       "phrase": "Prenons Organisateur",
       "startMs": 6997,
       "endMs": 6997,
-      "cueMs": 49136,
-      "absoluteSentenceMs": 49135,
+      "cueMs": 49168,
+      "absoluteSentenceMs": 49166,
       "firstFollowingInput": {
         "kind": "click",
-        "atMs": 49606
+        "atMs": 49631
       },
       "sentenceFrame": "videos/output/org-team-permissions/review/anchor-04-sentence.jpg",
       "actionFrame": "videos/output/org-team-permissions/review/anchor-04-action.jpg"
@@ -78,11 +78,11 @@
       "phrase": "Cliquez sur Envoyer l’invitation ",
       "startMs": 13107,
       "endMs": 14797,
-      "cueMs": 55245,
-      "absoluteSentenceMs": 55245,
+      "cueMs": 55276,
+      "absoluteSentenceMs": 55276,
       "firstFollowingInput": {
         "kind": "click",
-        "atMs": 55706
+        "atMs": 55748
       },
       "sentenceFrame": "videos/output/org-team-permissions/review/anchor-05-sentence.jpg",
       "actionFrame": "videos/output/org-team-permissions/review/anchor-05-action.jpg"
@@ -92,8 +92,8 @@
       "phrase": "La confirmation indique",
       "startMs": 3718,
       "endMs": 8308,
-      "cueMs": 63664,
-      "absoluteSentenceMs": 63664,
+      "cueMs": 63694,
+      "absoluteSentenceMs": 63693,
       "firstFollowingInput": null,
       "sentenceFrame": "videos/output/org-team-permissions/review/anchor-06-sentence.jpg",
       "actionFrame": "videos/output/org-team-permissions/review/anchor-06-action.jpg"
@@ -103,8 +103,8 @@
       "phrase": "Son accès ne devient actif",
       "startMs": 8822,
       "endMs": 11439,
-      "cueMs": 68768,
-      "absoluteSentenceMs": 68768,
+      "cueMs": 68797,
+      "absoluteSentenceMs": 68797,
       "firstFollowingInput": null,
       "sentenceFrame": "videos/output/org-team-permissions/review/anchor-07-sentence.jpg",
       "actionFrame": "videos/output/org-team-permissions/review/anchor-07-action.jpg"
@@ -114,25 +114,25 @@
       "phrase": "On choisit d’abord Propriétaire dans",
       "startMs": 1716,
       "endMs": 5509,
-      "cueMs": 75761,
-      "absoluteSentenceMs": 75760,
+      "cueMs": 75794,
+      "absoluteSentenceMs": 75792,
       "firstFollowingInput": {
         "kind": "click",
-        "atMs": 84608
+        "atMs": 78614
       },
       "sentenceFrame": "videos/output/org-team-permissions/review/anchor-08-sentence.jpg",
       "actionFrame": "videos/output/org-team-permissions/review/anchor-08-action.jpg"
     },
     {
       "segmentId": "change-role",
-      "phrase": "La confirmation indique le nouveau rôle",
-      "startMs": 10090,
-      "endMs": 11698,
-      "cueMs": 84136,
-      "absoluteSentenceMs": 84134,
+      "phrase": "On choisit d’abord Propriétaire dans",
+      "startMs": 1716,
+      "endMs": 5509,
+      "cueMs": 75799,
+      "absoluteSentenceMs": 75792,
       "firstFollowingInput": {
         "kind": "click",
-        "atMs": 84608
+        "atMs": 78614
       },
       "sentenceFrame": "videos/output/org-team-permissions/review/anchor-09-sentence.jpg",
       "actionFrame": "videos/output/org-team-permissions/review/anchor-09-action.jpg"

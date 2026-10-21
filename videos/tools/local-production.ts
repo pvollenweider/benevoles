@@ -125,7 +125,7 @@ async function main() {
       }
       const foundation = ({ ORG_TIMEZONE_CHARTER: "charter", ORG_PUBLIC_IDENTITY: "identity", ORG_EMAIL_SETTINGS: "email", ORG_TEAM_PERMISSIONS: "team", EVENT_CREATE_BLANK: "blank", EVENT_CREATE_TEMPLATE: "template", EVENT_MILESTONES: "milestones", EVENT_PROGRAM_PAGES_QR: "pages", SHIFTS_ROLES_VIEWS: "planning" } as Record<string, string>)[rest[0]]
       if (foundation) Object.assign(env, { ORG_ADMIN_EMAIL: `video.${foundation}.owner@example.org`, VIDEO_ORG: foundation === "identity" ? "fetes-de-montvert" : `formation-${foundation}`, VIDEO_EVENT_SLUG: "rencontre-0" })
-      const validFlags = rest.length === 1 || (script === "videos/tools/record.ts" && rest.length === 3 && rest[1] === "--rehearse" && rest[2] === "--quick-rehearse")
+      const validFlags = rest.length === 1 || (script === "videos/tools/record.ts" && rest.length === 3 && rest[1] === "--rehearse" && ["--quick-rehearse", "--audio-timing"].includes(rest[2]))
       if (!(validTake || commonTake || rest[0] === "SHIFTS_ROLES_VIEWS" || rest[0] === "EVENT_REPORTS" || rest[0] === "EVENT_ACTIVITY_LOG" || rest[0] === "ATTENDANCE_CHECK_IN" || rest[0] === "MEMBERS_DUPLICATES_MERGE" || rest[0] === "EVENT_QUESTIONS" || rest[0] === "VOLUNTEER_HOURS_CERTIFICATE" || rest[0] === "DATA_EXPORTS_ARCHIVES" || rest[0] === "ORGANIZATION_ACTIVITY_LOG") || !validFlags) throw new Error("Only explicit local video takes and rehearsal flags accepted")
       if (memberTakes.includes(rest[0])) Object.assign(env, { VIDEO_ORG: "default", VIDEO_EVENT_SLUG: rest[0] === "REMINDERS_CHANGES" ? "atelier-rappels" : "fete-du-village" })
     } else if (script === "videos/tools/migrate-private-identities.ts") {
