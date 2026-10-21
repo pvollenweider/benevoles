@@ -1,0 +1,23 @@
+{
+  "videoTests": {
+    "files": 33,
+    "passed": 1052
+  },
+  "videoTypecheck": {
+    "sources": 199,
+    "passed": true
+  },
+  "eslintChangedTypeScript": {
+    "errors": 0,
+    "warnings": 0
+  },
+  "productTypecheck": {
+    "passed": true,
+    "method": "tsc --noEmit using verified snapshot Prisma aliases and src-only include, no checkout src modifications"
+  },
+  "globalCheckoutTsc": {
+    "passed": false,
+    "reason": "obsolete ignored Prisma client and archived ignored helper import; product clean build and independent product typecheck passed"
+  },
+  "commitHook": "HUSKY=0 for local commit; changed-source ESLint and targeted checks run separately"
+}

@@ -1,0 +1,46 @@
+STATUS: READY
+SHIFT_ROSTER_VISIBILITY — Batch 28A-2 retry only — 2026-10-21
+Duration: 151.6 s. BUILD_ID: jQiPFOLoEJz7j-X2GjLbK.
+Product commit filmed: 84495b6313c09edc775306790a0823a639071561 (origin/main unchanged after git fetch).
+Reused the verified main product build from batch 28A; live PID/BUILD_ID proof checked per capture.
+Final take: 2 of 2 complete narrated takes; one full audio-timed rehearsal.
+Two earlier partial attempts stopped before withdrawal because the real email hit the
+recipient hourly quota. Preserved separately; no incomplete take assembled.
+Final MP4 SHA256: 9d3d6f55cd5679ccfa7849fb7bb3bbc22ecd4eb19fe6a5e3745ab0cd7a3cd9e7
+
+FIX VERIFIED: original sentence anchor selected an intra-sentence pause at 12.357 s.
+Independent ASR of real-silence bounded excerpts identifies preceding Bruno clause
+10.891–13.523 s and target « Pourtant, sur sa propre page… » 14.314–17.494 s.
+Retain the named sentence anchor, then wait to 14.500 s inside its clause.
+Rehearsal, full take 1 and final take 2 independently show Bruno at relative
+14.4 s and Aline at 14.8 s. Final transition bracket: 98.435–98.835 s.
+Final audiovisual withdrawal review: heard target at 14.5 s, Aline visible at 15 s,
+aligned, no issue. Evidence and exact WAV SHA256 in videos/evidence/.../b28a2/.
+
+Narration unchanged: same verified single-pass continuous Kore WAVs; all SHA256s
+retained and rechecked. No TTS generation, recut, text or voice change.
+All six full-duration final chapters reviewed with image and sound, 25 checkpoints,
+zero flagged. Entire final MP4 soundtrack independently transcribed in all languages:
+no extra languages or stray words; six narration-from-video audits pass.
+Final ASR and VTT viewer tu/ton/ta/tes/toi/te/t': 0 / 0.
+303 full-size OCR frames at 2 fps, all 13 full-duration contact sheets inspected,
+plus individual transition frames: no localhost, port, dev overlay, org-admin or Timeline.
+French dates and browser/process locale. Actual confirmation email and popup URL;
+optional consent visible unticked, then selected; cross-shift Bruno/Aline and David;
+withdrawal hides Aline while she still sees others; Claire opts in herself; minor
+Emma excluded; public page has no roster. No product bug found.
+
+Validation passed: six durations, 20 sentence anchors, original narration audit,
+input effects, prescribed music mixkit-tech-house-vibes-130.mp3.
+Music 15.4–19.5 LU under voice; no music gap below allowed floor.
+15 actual clicks with soft synced effects, zero real key events/invented key effects.
+Posters generated with --metadata-output; videos/renders.json unchanged.
+1046 video tests, explicit video type check and targeted ESLint passed.
+
+Sources changed: measured recorder cue; exact Aline registration_confirmation hourly
+quota reset in isolated seed (normal and held keys only); review evidence.
+Quota issue is repeated local fixture preparation, not a product defect. First quota
+reset targeted signup_confirmation incorrectly; second partial attempt preserved,
+then corrected to actual registration_confirmation before the two full takes.
+No src/, guide/, narration manifest/script or product changes. No stash/push/publish/merge.
+Real-time subjective listening unavailable; not a reason for NOT READY.

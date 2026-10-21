@@ -20,6 +20,10 @@ async function run(command: string, args: string[]) {
 
 async function seed(scenario?: string) {
   if (!scenario) return
+  if (scenario === "shift-roster-visibility") {
+    await run("node", ["--env-file=.env.video.e2e", "--import", "tsx", "videos/tools/local-production.ts", "run", "scripts/seed-video-shift-roster.ts"])
+    return
+  }
   if (scenario === "attendance-check-in" || scenario === "volunteer-badges" || scenario === "event-reports" || scenario === "reminders-changes" || scenario === "targeted-messages" || scenario === "personal-withdrawals" || scenario === "personal-calendar" || scenario === "personal-session" || scenario === "members-management" || scenario === "members-invitations" || scenario === "members-reminders" || scenario === "registrations-management" || scenario === "staffing-gaps" || scenario === "shift-recurrence") {
     await seed("demo")
     await run("node", ["--env-file=.env.video.e2e", "node_modules/.bin/tsx", "scripts/seed-video-scenario.ts", scenario])
@@ -46,7 +50,9 @@ async function main() {
       await run("node", ["--env-file=.env.video.e2e", "--import", "tsx", "videos/tools/verify-reports.ts"])
       await run("node", ["--import", "tsx", "videos/tools/review-pdfs.ts", "videos/output/event-reports/documents"])
     }
-    await run("npm", ["run", "video:record", "--", entry.id])
+    if (entry.id === "SHIFT_ROSTER_VISIBILITY") {
+      await run("node", ["--env-file=.env.video.e2e", "--import", "tsx", "videos/tools/local-production.ts", "run", "videos/tools/record.ts", entry.id])
+    } else await run("npm", ["run", "video:record", "--", entry.id])
     await run("npm", ["run", "video:assemble", "--", entry.id])
     await run("npm", ["run", "video:validate", "--", entry.id])
   }

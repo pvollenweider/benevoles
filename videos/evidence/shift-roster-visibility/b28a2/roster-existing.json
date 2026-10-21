@@ -1,0 +1,52 @@
+{
+  "model": "gemini-3.8-flash",
+  "reviewedAt": "2026-10-21T18:29:07.829Z",
+  "videoSha256": "9d3d6f55cd5679ccfa7849fb7bb3bbc22ecd4eb19fe6a5e3745ab0cd7a3cd9e7",
+  "promptSha256": "0483a46dd86ed9e59a44671249d1acafd1ca1991c486585f184f16b1e7866841",
+  "clipSha256": "aa4a03fda231d126e079a98605a8e2c5201874904a021e804f4a34e5510eaa71",
+  "scene": "roster-existing",
+  "review": {
+    "heardOpening": "Claire était déjà inscrite",
+    "checkpoints": [
+      {
+        "spokenSeconds": 0.8,
+        "spoken": "Claire était déjà inscrite avant l'activation.",
+        "visibleSeconds": 0,
+        "visible": "Page personnelle de Claire Rochat affichée.",
+        "sync": "aligned",
+        "severity": "none"
+      },
+      {
+        "spokenSeconds": 3.4,
+        "spoken": "Sur sa page personnelle, son nom reste masqué.",
+        "visibleSeconds": 3.4,
+        "visible": "Encart indiquant que le nom n'est pas affiché avec le bouton 'Afficher mon nom'.",
+        "sync": "aligned",
+        "severity": "none"
+      },
+      {
+        "spokenSeconds": 8,
+        "spoken": "Cliquez sur Afficher mon nom pour choisir vous-même.",
+        "visibleSeconds": 8.8,
+        "visible": "Clic sur le bouton 'Afficher mon nom' qui bascule sur 'Masquer mon nom'.",
+        "sync": "aligned",
+        "severity": "none"
+      },
+      {
+        "spokenSeconds": 11.4,
+        "spoken": "Sur la page de Bruno, Claire apparaît désormais avec seulement son prénom et l'initiale de son nom.",
+        "visibleSeconds": 11.6,
+        "visible": "Affichage de la page de Bruno Favre montrant 'Claire R.' dans la liste des inscrits.",
+        "sync": "aligned",
+        "severity": "none"
+      }
+    ],
+    "issues": [],
+    "voice": {
+      "consistent": true,
+      "warm": true,
+      "observation": "Voix claire, posée et bien synchronisée avec les actions à l'écran."
+    }
+  },
+  "note": "Automated observation of actual final video audio and images; not a claim of complete human validation"
+}

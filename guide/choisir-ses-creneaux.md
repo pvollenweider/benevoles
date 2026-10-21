@@ -67,6 +67,8 @@ Dans la vue **Liste**, une ligne sous chaque créneau dit qui y est inscrit, par
 
 ![Page de l'événement avec le bouton « Voir qui est inscrit » activé, à côté de « Frise » et « Liste », sa phrase d'explication, la frise du jour, puis sous la frise la ligne du créneau survolé : son poste et ses heures, puis « Sur ce créneau : » suivi des prénoms et initiales des bénévoles qui l'acceptent et du nombre des autres](/doc-img/public-roster-switch.png)
 
+En vidéo : [montrer aux bénévoles qui est inscrit](/videos/SHIFT_ROSTER_VISIBILITY#doc).
+
 ## Un événement sur toute une saison
 
 Certaines associations publient toute une saison de permanences (l'accueil du mercredi, la distribution du samedi, de septembre à juin). Sur un événement de quatre semaines ou plus, les jours passés ne s'affichent plus et on ne peut plus s'y inscrire. À partir de huit dates, le planning se lit mois par mois : au-dessus du planning, un bouton par mois indique son nombre de dates, et le premier mois avec des dates à venir s'affiche d'abord.

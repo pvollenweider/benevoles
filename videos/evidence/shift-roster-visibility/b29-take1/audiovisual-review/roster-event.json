@@ -1,0 +1,60 @@
+{
+  "model": "gemini-3.8-flash",
+  "reviewedAt": "2026-10-21T20:36:06.447Z",
+  "videoSha256": "f9f75baef1081d43acde918a1031d8412aefd1370c7beab0b849810d26a1fc68",
+  "promptSha256": "3477e4deef99226bf41920bfc4365f639aa0df6fd3070d8fbbe784a8b7d23108",
+  "clipSha256": "717b7e7dc34efe89467f1f6def15ceb179eb612497ba6e7a283399886ad254b7",
+  "scene": "roster-event",
+  "review": {
+    "heardOpening": "Sur la page de l'événement",
+    "checkpoints": [
+      {
+        "spokenSeconds": 2.2,
+        "spoken": "le bouton Voir qui est inscrit se trouve à côté de Frise et Liste",
+        "visibleSeconds": 2,
+        "visible": "Affichage des boutons Frise, Liste et Voir qui est inscrit en haut de la page",
+        "sync": "aligned",
+        "severity": "none"
+      },
+      {
+        "spokenSeconds": 9.2,
+        "spoken": "Passons en Liste",
+        "visibleSeconds": 9.8,
+        "visible": "Clic sur l'onglet Liste et bascule vers la vue sous forme de liste",
+        "sync": "aligned",
+        "severity": "none"
+      },
+      {
+        "spokenSeconds": 11.8,
+        "spoken": "la ligne commence par Avec toi",
+        "visibleSeconds": 11.5,
+        "visible": "Mention « Avec toi : David P. et 1 autre bénévole » affichée sur le créneau sélectionné",
+        "sync": "aligned",
+        "severity": "none"
+      },
+      {
+        "spokenSeconds": 22.8,
+        "spoken": "Passons en Frise",
+        "visibleSeconds": 21.6,
+        "visible": "Clic sur le bouton Frise et réaffichage du graphique chronologique",
+        "sync": "aligned",
+        "severity": "none"
+      },
+      {
+        "spokenSeconds": 26.5,
+        "spoken": "Survolez un créneau : la ligne sous le graphique du jour montre les personnes de cette barre",
+        "visibleSeconds": 25.5,
+        "visible": "Survol du créneau Buvette et affichage de la ligne « Buvette · 12h-14h / Sur ce créneau : Bruno F. »",
+        "sync": "aligned",
+        "severity": "none"
+      }
+    ],
+    "issues": [],
+    "voice": {
+      "consistent": true,
+      "warm": true,
+      "observation": "Voix féminine claire, posée et bien synchronisée avec les interactions à l'écran."
+    }
+  },
+  "note": "Automated observation of actual final video audio and images; not a claim of complete human validation"
+}

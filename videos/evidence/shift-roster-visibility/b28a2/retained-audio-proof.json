@@ -1,0 +1,13 @@
+{
+  "unchanged": true,
+  "hashes": {
+    "continuous-narration.wav": "80fc45ee0dee6bc7b7bc32cb87295d1a5c40ccc4267e6e408074211711755cd5",
+    "roster-withdraw.wav": "c3f444a0d685844ec913ececba1ef2d5c3e87365336e63c45e0fcf48f8704541",
+    "roster-signup.wav": "d256124ba19c75342ff6e85cac953d9c416d7eea10804b7c9cdcaae0e2bb0071",
+    "roster-privacy.wav": "088d81e0290c50dad565930fb9d4cd4aae6ddbfa25236e7acdd9ccdbbe66cc6a",
+    "roster-existing.wav": "bdeee532fcdc6705226a26565968305e92cbfae0edb7847dbd5b5f2310275b9e",
+    "roster-confirm.wav": "c9c29f7b87cafc8c159f1a18df50ceb5120db0246258d44f96fa68a7951f6c98",
+    "roster-setting.wav": "9c5c629ba86a65ce83efc1b204d5d81eaf4fa0a555d54d21314c2626ddbd2d00"
+  },
+  "narrationManifestAndScriptUnchanged": true
+}

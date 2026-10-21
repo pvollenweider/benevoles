@@ -1,0 +1,14 @@
+{
+  "verified": "2026-10-21T20:40:51.270Z",
+  "orgDefault": true,
+  "newEventDefault": true,
+  "eventToggle": true,
+  "actualEmailLink": true,
+  "personalOwnOnly": true,
+  "listAndFrise": true,
+  "invitedBeforeSignup": true,
+  "v1WidenExplicit": true,
+  "hideRemovedForOthers": true,
+  "anonymousNoSwitch": true,
+  "minorExcluded": true
+}

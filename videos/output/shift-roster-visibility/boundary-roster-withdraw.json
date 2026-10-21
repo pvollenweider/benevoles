@@ -1,0 +1,12 @@
+{
+  "anchor": "Revenons sur la page personnelle d’Aline. Cliquez sur Masquer mon nom.",
+  "windowStart": 162.648,
+  "result": {
+    "found": true,
+    "startSeconds": 18.24,
+    "wordsHeard": "Revenons sur la page personnelle d’Aline. Cliquez sur Masquer mon nom."
+  },
+  "onset": 180.888,
+  "proposedCut": 180.9425625,
+  "note": "Proposal only; recut then independently audit before capture"
+}

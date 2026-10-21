@@ -12,6 +12,7 @@ const files = [
   ...ts.sys.readDirectory("videos/tools", [".ts", ".tsx"]),
   "scripts/seed-video-scenario.ts",
   "scripts/seed-video-operator.ts",
+  "scripts/seed-video-shift-roster.ts",
 ]
 const program = ts.createProgram(files, { ...parsed.options, noEmit: true, incremental: false })
 const diagnostics = [...parsed.errors, ...ts.getPreEmitDiagnostics(program)]

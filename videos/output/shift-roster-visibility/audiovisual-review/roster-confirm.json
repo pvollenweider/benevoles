@@ -1,0 +1,60 @@
+{
+  "model": "gemini-3.8-flash",
+  "reviewedAt": "2026-10-21T20:42:40.069Z",
+  "videoSha256": "1638077bc2a258324a29e2fcd6038d49c236d79b9777cbf5eadda812c3d665cb",
+  "promptSha256": "9130e6c73d699bf555284c0af985efca3bc7459f0754601a10890bb37697ec57",
+  "clipSha256": "3b4ac5cb444f564c13a9eca7e07c4d7359ea92a7394174bea3e2541e7345052d",
+  "scene": "roster-confirm",
+  "review": {
+    "heardOpening": "Ouvrez le véritable email de confirmation",
+    "checkpoints": [
+      {
+        "spokenSeconds": 0.8,
+        "spoken": "Ouvrez le véritable email de confirmation.",
+        "visibleSeconds": 1,
+        "visible": "L'email de confirmation 'Hello Aline !' s'affiche à l'écran.",
+        "sync": "aligned",
+        "severity": "none"
+      },
+      {
+        "spokenSeconds": 3.2,
+        "spoken": "Suivez son lien personnel.",
+        "visibleSeconds": 3.5,
+        "visible": "Clic sur le bouton 'Gérer mes inscriptions' menant à la page personnelle.",
+        "sync": "aligned",
+        "severity": "none"
+      },
+      {
+        "spokenSeconds": 5.5,
+        "spoken": "La carte Qui est inscrit montre uniquement vos propres créneaux confirmés",
+        "visibleSeconds": 5,
+        "visible": "La section 'Qui est inscrit' est visible sur la page 'Mes inscriptions'.",
+        "sync": "aligned",
+        "severity": "none"
+      },
+      {
+        "spokenSeconds": 17,
+        "spoken": "Cliquez sur Afficher mon nom.",
+        "visibleSeconds": 18,
+        "visible": "Clic sur le bouton 'Afficher mon nom', qui bascule en 'Masquer mon nom'.",
+        "sync": "aligned",
+        "severity": "none"
+      },
+      {
+        "spokenSeconds": 21.5,
+        "spoken": "suivez Voir qui est inscrit sur les autres créneaux.",
+        "visibleSeconds": 21,
+        "visible": "La page 'Vue qui est inscrit' avec la frise chronologique s'affiche.",
+        "sync": "aligned",
+        "severity": "none"
+      }
+    ],
+    "issues": [],
+    "voice": {
+      "consistent": true,
+      "warm": true,
+      "observation": "Voix naturelle, claire et bien synchronisée avec les actions à l'écran."
+    }
+  },
+  "note": "Automated observation of actual final video audio and images; not a claim of complete human validation"
+}

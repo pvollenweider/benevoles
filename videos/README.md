@@ -735,3 +735,26 @@ le corps reçu (x=320, y=224, 960×576), sans cet en-tête ni la liste latérale
 Aucun contenu d’email ni état produit n’est réécrit, aucune image fixe n’est
 ajoutée. La capture brute et `review/mailpit-focus-proof.json` restent conservées ;
 la revue vérifie aussi les transitions et la lisibilité du message complet.
+
+### Qui est inscrit (lot 29, interface refondue)
+
+`SHIFT_ROSTER_VISIBILITY` utilise le build main vérifié sur 43102, servi avec
+`local-production.ts serve`, et sa propre organisation fictive `formation-roster`.
+Le recorder navigue sur les domaines publics via la passerelle TLS locale, y compris
+pour les écritures et le véritable lien reçu dans Mailpit. Avant chaque répétition
+et chaque prise, réinitialiser uniquement cette formation et ses messages :
+
+```bash
+node --env-file=.env.video.e2e --import tsx videos/tools/local-production.ts run scripts/seed-video-shift-roster.ts
+node --env-file=.env.video.e2e --import tsx videos/tools/local-production.ts run videos/tools/record.ts SHIFT_ROSTER_VISIBILITY --rehearse --quick-rehearse
+# Refaire le seed, puis retirer les deux options pour la prise narrée.
+```
+
+Le seed conserve uniquement cette organisation fictive. Le défaut de l’organisation et
+le réglage de l’événement sont activés. Claire n’a pas accepté ; Bruno et David ont
+un accord V1 ; Emma est mineure connue et reste masquée malgré son choix fictif.
+Gina a une invitation ouverte et aucune inscription. Aline s’inscrit et confirme
+réellement depuis le message reçu. Le recorder vérifie le défaut du formulaire neuf,
+la note de publication, la carte limitée aux propres créneaux, Liste et Frise,
+l’accès avant inscription, l’élargissement V1 explicite et le retrait.
+Le montage cadre le véritable corps Mailpit sans modifier le message.

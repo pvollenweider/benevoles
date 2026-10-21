@@ -257,6 +257,12 @@
     "height": 800,
     "poster": true
   },
+  "shift-roster-visibility": {
+    "durationMs": 229520,
+    "width": 1280,
+    "height": 800,
+    "poster": true
+  },
   "shift-timeline-quick-actions": {
     "durationMs": 128120,
     "width": 1280,

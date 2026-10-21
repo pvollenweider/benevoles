@@ -1,0 +1,12 @@
+{
+  "anchor": "Sur la page de l’événement, le bouton Voir qui est inscrit",
+  "windowStart": 87.941,
+  "result": {
+    "found": true,
+    "startSeconds": 20.6,
+    "wordsHeard": "Sur la page de l’événement, le bouton Voir qui est inscrit"
+  },
+  "onset": 108.541,
+  "proposedCut": 108.10749999999999,
+  "note": "Proposal only; recut then independently audit before capture"
+}

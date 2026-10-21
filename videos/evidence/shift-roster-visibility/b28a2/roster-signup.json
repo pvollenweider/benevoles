@@ -1,0 +1,52 @@
+{
+  "model": "gemini-3.8-flash",
+  "reviewedAt": "2026-10-21T18:28:26.455Z",
+  "videoSha256": "9d3d6f55cd5679ccfa7849fb7bb3bbc22ecd4eb19fe6a5e3745ab0cd7a3cd9e7",
+  "promptSha256": "44d739facb2d67f46d9aec95ea63374bc3e8867bb769844491813da247fe55c0",
+  "clipSha256": "4b99e7b08740ddc3c57d98f44b61bc798a8522eb7796d688bdf0d962e9c6e8ae",
+  "scene": "roster-signup",
+  "review": {
+    "heardOpening": "Passons du côté bénévole. Choisissez un créneau",
+    "checkpoints": [
+      {
+        "spokenSeconds": 2.2,
+        "spoken": "Choisissez un créneau, puis continuez vers le formulaire.",
+        "visibleSeconds": 2.9,
+        "visible": "Sélection du créneau 12h-14h sur le planning puis clic sur Continuer vers le formulaire",
+        "sync": "aligned",
+        "severity": "none"
+      },
+      {
+        "spokenSeconds": 5.4,
+        "spoken": "Renseignez votre prénom, votre nom et votre adresse email.",
+        "visibleSeconds": 6.2,
+        "visible": "Saisie des champs Prénom, Nom et Adresse email dans le formulaire",
+        "sync": "aligned",
+        "severity": "none"
+      },
+      {
+        "spokenSeconds": 10.3,
+        "spoken": "Acceptez la convention et l’utilisation de vos données pour l’inscription.",
+        "visibleSeconds": 10,
+        "visible": "Cochage des deux cases obligatoires relatives à la convention et aux données personnelles",
+        "sync": "aligned",
+        "severity": "none"
+      },
+      {
+        "spokenSeconds": 26.8,
+        "spoken": "Cochez cette case si vous le souhaitez, puis confirmez votre inscription.",
+        "visibleSeconds": 28.1,
+        "visible": "Cochage de la case de visibilité et clic sur Confirmer mon inscription",
+        "sync": "aligned",
+        "severity": "none"
+      }
+    ],
+    "issues": [],
+    "voice": {
+      "consistent": true,
+      "warm": true,
+      "observation": "Voix claire, posée et bien synchronisée avec les actions à l'écran."
+    }
+  },
+  "note": "Automated observation of actual final video audio and images; not a claim of complete human validation"
+}

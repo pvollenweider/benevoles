@@ -1,0 +1,44 @@
+{
+  "model": "gemini-3.8-flash",
+  "reviewedAt": "2026-10-21T20:35:07.615Z",
+  "videoSha256": "f9f75baef1081d43acde918a1031d8412aefd1370c7beab0b849810d26a1fc68",
+  "promptSha256": "7796ef1c5a790fbb7e68d9f81f7274aaa9e2ee7cf195bc2e04ee5894ab7d079e",
+  "clipSha256": "462a596aebc1ba7f7b4c2cdf077e6c5acbdbd6a0b630dcd2ed99689fbda1aa4b",
+  "scene": "roster-setting",
+  "review": {
+    "heardOpening": "Dans Paramètres, la section Qui est inscrit",
+    "checkpoints": [
+      {
+        "spokenSeconds": 1.2,
+        "spoken": "la section Qui est inscrit définit le choix proposé",
+        "visibleSeconds": 1,
+        "visible": "Défilement vers la section « Qui est inscrit » cochée par défaut dans les Paramètres",
+        "sync": "aligned",
+        "severity": "none"
+      },
+      {
+        "spokenSeconds": 11,
+        "spoken": "Ouvrons un nouvel événement.",
+        "visibleSeconds": 11.8,
+        "visible": "Transition vers la création d'un nouvel événement puis affichage du formulaire",
+        "sync": "aligned",
+        "severity": "none"
+      },
+      {
+        "spokenSeconds": 13.5,
+        "spoken": "La case est déjà cochée.",
+        "visibleSeconds": 13,
+        "visible": "Option « Permettre aux bénévoles confirmés et aux membres invités de voir qui est inscrit » visible et cochée",
+        "sync": "aligned",
+        "severity": "none"
+      }
+    ],
+    "issues": [],
+    "voice": {
+      "consistent": true,
+      "warm": true,
+      "observation": "Voix féminine claire, fluide et naturelle, avec un débit régulier."
+    }
+  },
+  "note": "Automated observation of actual final video audio and images; not a claim of complete human validation"
+}

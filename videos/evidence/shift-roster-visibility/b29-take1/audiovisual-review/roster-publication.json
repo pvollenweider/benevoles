@@ -1,0 +1,52 @@
+{
+  "model": "gemini-3.8-flash",
+  "reviewedAt": "2026-10-21T20:35:20.837Z",
+  "videoSha256": "f9f75baef1081d43acde918a1031d8412aefd1370c7beab0b849810d26a1fc68",
+  "promptSha256": "42b4ace2c20c7575148f077aaf8b9d9f73269b2d998d627424f5434feb0423e2",
+  "clipSha256": "d93f66cbc13374bfb6efb56900075e69bf333c61041648f68f1e3a7e6c12ef19",
+  "scene": "roster-publication",
+  "review": {
+    "heardOpening": "Retrouvons notre événement de démonstration",
+    "checkpoints": [
+      {
+        "spokenSeconds": 1.2,
+        "spoken": "Retrouvons notre événement de démonstration. Dans ses réglages",
+        "visibleSeconds": 0.8,
+        "visible": "Page des réglages de l'événement Fête du parc avec défilement vers le bas",
+        "sync": "aligned",
+        "severity": "none"
+      },
+      {
+        "spokenSeconds": 3.7,
+        "spoken": "la même option est activée",
+        "visibleSeconds": 4,
+        "visible": "Option visible et cochée pour afficher les personnes confirmées et les membres invités",
+        "sync": "aligned",
+        "severity": "none"
+      },
+      {
+        "spokenSeconds": 9.2,
+        "spoken": "Sur Vérifier avant publication, une note rappelle ce qui sera visible",
+        "visibleSeconds": 9.8,
+        "visible": "Étape Vérifier avant publication avec le bloc rappelant l'état de l'option et le lien Modifier le réglage",
+        "sync": "aligned",
+        "severity": "none"
+      },
+      {
+        "spokenSeconds": 16,
+        "spoken": "Publions l’événement",
+        "visibleSeconds": 16.5,
+        "visible": "Clic sur le bouton Publier, l'événement passe au statut Publié",
+        "sync": "aligned",
+        "severity": "none"
+      }
+    ],
+    "issues": [],
+    "voice": {
+      "consistent": true,
+      "warm": true,
+      "observation": "Voix claire, posée et bien synchronisée avec les actions affichées."
+    }
+  },
+  "note": "Automated observation of actual final video audio and images; not a claim of complete human validation"
+}

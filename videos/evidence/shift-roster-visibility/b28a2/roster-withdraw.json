@@ -1,0 +1,60 @@
+{
+  "model": "gemini-3.8-flash",
+  "reviewedAt": "2026-10-21T18:28:54.453Z",
+  "videoSha256": "9d3d6f55cd5679ccfa7849fb7bb3bbc22ecd4eb19fe6a5e3745ab0cd7a3cd9e7",
+  "promptSha256": "2fb215dd3dac3b7ebbba4ff060def77ce0140bdd33749bc14e0a08d1eee57286",
+  "clipSha256": "ce979e0e998877f303d674b2c6c739637c46414eebd564c56eead1008a7028f5",
+  "scene": "roster-withdraw",
+  "review": {
+    "heardOpening": "Ouvrons la page personnelle de Bruno",
+    "checkpoints": [
+      {
+        "spokenSeconds": 0,
+        "spoken": "Ouvrons la page personnelle de Bruno, inscrit sur un autre créneau. Il voit Aline M.",
+        "visibleSeconds": 0,
+        "visible": "Page personnelle de Bruno Favre affichée avec la mention d'Aline M. sous le créneau Accueil.",
+        "sync": "aligned",
+        "severity": "none"
+      },
+      {
+        "spokenSeconds": 6,
+        "spoken": "Revenons sur la page d’Aline.",
+        "visibleSeconds": 6.8,
+        "visible": "Affichage de la page personnelle d'Aline Martin.",
+        "sync": "aligned",
+        "severity": "none"
+      },
+      {
+        "spokenSeconds": 8,
+        "spoken": "Cliquez sur Masquer mon nom.",
+        "visibleSeconds": 8.3,
+        "visible": "Clic sur le bouton « Masquer mon nom » qui se transforme en « Afficher mon nom ».",
+        "sync": "aligned",
+        "severity": "none"
+      },
+      {
+        "spokenSeconds": 10.5,
+        "spoken": "Sur la page de Bruno, Aline a disparu de la liste.",
+        "visibleSeconds": 11,
+        "visible": "Retour sur la page de Bruno Favre où le créneau Accueil et le nom d'Aline ne figurent plus dans la liste.",
+        "sync": "aligned",
+        "severity": "none"
+      },
+      {
+        "spokenSeconds": 14.5,
+        "spoken": "Pourtant, sur sa propre page, Aline voit toujours les autres bénévoles.",
+        "visibleSeconds": 15,
+        "visible": "Retour sur la page d'Aline Martin montrant les autres bénévoles inscrits (Bruno F. et David P.).",
+        "sync": "aligned",
+        "severity": "none"
+      }
+    ],
+    "issues": [],
+    "voice": {
+      "consistent": true,
+      "warm": true,
+      "observation": "Voix de synthèse féminine fluide, claire et parfaitement intelligible."
+    }
+  },
+  "note": "Automated observation of actual final video audio and images; not a claim of complete human validation"
+}

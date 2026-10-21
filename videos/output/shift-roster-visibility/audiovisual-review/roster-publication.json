@@ -1,0 +1,52 @@
+{
+  "model": "gemini-3.8-flash",
+  "reviewedAt": "2026-10-21T20:42:10.103Z",
+  "videoSha256": "1638077bc2a258324a29e2fcd6038d49c236d79b9777cbf5eadda812c3d665cb",
+  "promptSha256": "42b4ace2c20c7575148f077aaf8b9d9f73269b2d998d627424f5434feb0423e2",
+  "clipSha256": "be59e56ac65de6028900d1f87804639edf2c2a337ea4bdebc10cd060d4f344fc",
+  "scene": "roster-publication",
+  "review": {
+    "heardOpening": "Retrouvons notre événement de démonstration",
+    "checkpoints": [
+      {
+        "spokenSeconds": 1.2,
+        "spoken": "Retrouvons notre événement de démonstration. Dans ses réglages, la même option est activée.",
+        "visibleSeconds": 1.5,
+        "visible": "Défilement dans l'onglet Réglages de l'événement « Fête du parc », où l'option « Personnes visibles » apparaît cochée.",
+        "sync": "aligned",
+        "severity": "none"
+      },
+      {
+        "spokenSeconds": 5.9,
+        "spoken": "Vous pouvez la désactiver puis la réactiver.",
+        "visibleSeconds": 6.3,
+        "visible": "La case « Personnes visibles » est décochée puis recochée.",
+        "sync": "aligned",
+        "severity": "none"
+      },
+      {
+        "spokenSeconds": 9.4,
+        "spoken": "Sur Vérifier avant publication, une note rappelle ce qui sera visible et permet de modifier le réglage.",
+        "visibleSeconds": 10.2,
+        "visible": "Affichage de la page « Vérifier avant publication » avec le texte explicatif dans l'encadré « Publication » et le lien « Modifier le réglage ».",
+        "sync": "aligned",
+        "severity": "none"
+      },
+      {
+        "spokenSeconds": 16,
+        "spoken": "Publions l’événement.",
+        "visibleSeconds": 16.2,
+        "visible": "Clic sur le bouton bleu « Publier », le statut passe à « Public ».",
+        "sync": "aligned",
+        "severity": "none"
+      }
+    ],
+    "issues": [],
+    "voice": {
+      "consistent": true,
+      "warm": true,
+      "observation": "Voix claire, posée et bien synchronisée avec les manipulations à l'écran."
+    }
+  },
+  "note": "Automated observation of actual final video audio and images; not a claim of complete human validation"
+}

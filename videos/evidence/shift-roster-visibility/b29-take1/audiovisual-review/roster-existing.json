@@ -1,0 +1,44 @@
+{
+  "model": "gemini-3.8-flash",
+  "reviewedAt": "2026-10-21T20:36:27.382Z",
+  "videoSha256": "f9f75baef1081d43acde918a1031d8412aefd1370c7beab0b849810d26a1fc68",
+  "promptSha256": "163be1ae205d0cebee8002c36772a7dd5420b2cc44e5b532e2bc6fb7f0744027",
+  "clipSha256": "e23ed58e69e066b0263d9a3958eccf3796a686cab63950cbc7f9b85db41c9d52",
+  "scene": "roster-existing",
+  "review": {
+    "heardOpening": "Bruno avait accepté l'ancien texte",
+    "checkpoints": [
+      {
+        "spokenSeconds": 5.2,
+        "spoken": "le bouton Montrer aussi mon nom aux membres invités propose un nouveau choix explicite",
+        "visibleSeconds": 5,
+        "visible": "Le bouton « Montrer aussi mon nom aux membres invités » est bien visible sur la page personnelle",
+        "sync": "aligned",
+        "severity": "none"
+      },
+      {
+        "spokenSeconds": 10.4,
+        "spoken": "Cliquez sur ce bouton pour élargir cet accord",
+        "visibleSeconds": 11.2,
+        "visible": "Clic sur le bouton qui se transforme en « Masquer mon nom »",
+        "sync": "aligned",
+        "severity": "none"
+      },
+      {
+        "spokenSeconds": 13.6,
+        "spoken": "Sur le lien d’invitation, Bruno devient visible",
+        "visibleSeconds": 15.6,
+        "visible": "Affichage de la page de l'événement et activation de « Voir qui est inscrit », montrant « Sur ce créneau : Bruno F. »",
+        "sync": "aligned",
+        "severity": "none"
+      }
+    ],
+    "issues": [],
+    "voice": {
+      "consistent": true,
+      "warm": true,
+      "observation": "Voix off claire, fluide et posée, bien synchronisée avec les actions affichées."
+    }
+  },
+  "note": "Automated observation of actual final video audio and images; not a claim of complete human validation"
+}

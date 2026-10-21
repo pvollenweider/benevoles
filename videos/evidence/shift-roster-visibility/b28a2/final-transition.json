@@ -1,0 +1,11 @@
+{
+  "sceneStartMs": 84035,
+  "clauseMs": [
+    14314,
+    17494
+  ],
+  "brunoAtMs": 14400,
+  "alineAtMs": 14800,
+  "transitionInsideClause": true,
+  "source": "videos/output/shift-roster-visibility/shift-roster-visibility.mp4"
+}

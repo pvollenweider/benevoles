@@ -1,0 +1,11 @@
+{
+  "frames": 256,
+  "cadence": "every second of the complete final MP4 plus every sentence anchor frame",
+  "forbiddenPatterns": [
+    "localhost",
+    "127.0.0.1",
+    "org-admin@",
+    "Timeline"
+  ],
+  "issues": []
+}

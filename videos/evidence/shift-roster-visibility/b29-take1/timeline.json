@@ -1,0 +1,366 @@
+{
+  "slug": "shift-roster-visibility",
+  "capturePurpose": "narration-timed",
+  "recordedAt": "2026-10-21T20:34:23.054Z",
+  "video": "capture.webm",
+  "product": {
+    "commit": "c0242133d97f0ae688c673f7b6d8c36e62f1adc9",
+    "sourceTree": "2a24975d2e8b1c3bc7afcadaeefc6f31ae5e31f6",
+    "productSourceSha256": "4e01b69257c165b0480cfed064260e8e4d89ce4eea33618a159a71a9743961f9",
+    "buildId": "9aTEFviiAtCSmiFgccOhV",
+    "snapshot": "/tmp/benevoles-video-production.b29",
+    "builtAt": "2026-10-21T20:24:45.490Z"
+  },
+  "captureEnvironment": {
+    "locale": "fr-CH",
+    "timeZone": "Europe/Zurich",
+    "organization": "formation-roster",
+    "scenario": "SHIFT_ROSTER_VISIBILITY",
+    "viewport": {
+      "width": 1280,
+      "height": 800
+    },
+    "mobile": false
+  },
+  "inputAudioVersion": 1,
+  "inputEvents": [
+    {
+      "kind": "click",
+      "atMs": 17525
+    },
+    {
+      "kind": "click",
+      "atMs": 18325
+    },
+    {
+      "kind": "click",
+      "atMs": 38024
+    },
+    {
+      "kind": "click",
+      "atMs": 39607
+    },
+    {
+      "kind": "click",
+      "atMs": 48241
+    },
+    {
+      "kind": "click",
+      "atMs": 58874
+    },
+    {
+      "kind": "click",
+      "atMs": 59656
+    },
+    {
+      "kind": "click",
+      "atMs": 61523
+    },
+    {
+      "kind": "click",
+      "atMs": 62407
+    },
+    {
+      "kind": "click",
+      "atMs": 63273
+    },
+    {
+      "kind": "click",
+      "atMs": 64623
+    },
+    {
+      "kind": "click",
+      "atMs": 65406
+    },
+    {
+      "kind": "click",
+      "atMs": 86303
+    },
+    {
+      "kind": "click",
+      "atMs": 87089
+    },
+    {
+      "kind": "click",
+      "atMs": 109839
+    },
+    {
+      "kind": "click",
+      "atMs": 112608
+    },
+    {
+      "kind": "click",
+      "atMs": 128921
+    },
+    {
+      "kind": "click",
+      "atMs": 140236
+    },
+    {
+      "kind": "click",
+      "atMs": 163720
+    },
+    {
+      "kind": "click",
+      "atMs": 165584
+    },
+    {
+      "kind": "click",
+      "atMs": 188201
+    },
+    {
+      "kind": "click",
+      "atMs": 191917
+    },
+    {
+      "kind": "click",
+      "atMs": 192701
+    },
+    {
+      "kind": "click",
+      "atMs": 201468
+    },
+    {
+      "kind": "click",
+      "atMs": 204451
+    },
+    {
+      "kind": "click",
+      "atMs": 205234
+    }
+  ],
+  "cues": [
+    {
+      "id": "roster-setting",
+      "startMs": 1851,
+      "endMs": 29005
+    },
+    {
+      "id": "roster-publication",
+      "startMs": 31269,
+      "endMs": 49280
+    },
+    {
+      "id": "roster-signup",
+      "startMs": 51545,
+      "endMs": 89536
+    },
+    {
+      "id": "roster-confirm",
+      "startMs": 91794,
+      "endMs": 116754
+    },
+    {
+      "id": "roster-event",
+      "startMs": 119019,
+      "endMs": 154374
+    },
+    {
+      "id": "roster-invite",
+      "startMs": 156638,
+      "endMs": 174224
+    },
+    {
+      "id": "roster-existing",
+      "startMs": 176487,
+      "endMs": 196384
+    },
+    {
+      "id": "roster-withdraw",
+      "startMs": 198649,
+      "endMs": 224588
+    }
+  ],
+  "anchors": [
+    {
+      "segmentId": "roster-setting",
+      "phrase": "Ouvrons un nouvel événement",
+      "startMs": 11700,
+      "endMs": 12746,
+      "cueMs": 13553
+    },
+    {
+      "segmentId": "roster-setting",
+      "phrase": "Vous pouvez la décocher pour cet événement",
+      "startMs": 15183,
+      "endMs": 16990,
+      "cueMs": 17035
+    },
+    {
+      "segmentId": "roster-setting",
+      "phrase": "Le rappel demande d’informer les bénévoles",
+      "startMs": 17581,
+      "endMs": 23166,
+      "cueMs": 19434
+    },
+    {
+      "segmentId": "roster-publication",
+      "phrase": "Vous pouvez la désactiver puis la réactiver",
+      "startMs": 6259,
+      "endMs": 8530,
+      "cueMs": 37530
+    },
+    {
+      "segmentId": "roster-publication",
+      "phrase": "Sur Vérifier avant publication",
+      "startMs": 9591,
+      "endMs": 15688,
+      "cueMs": 41419
+    },
+    {
+      "segmentId": "roster-publication",
+      "phrase": "Publions l’événement",
+      "startMs": 16480,
+      "endMs": 17308,
+      "cueMs": 47749
+    },
+    {
+      "segmentId": "roster-signup",
+      "phrase": "Choisissez un créneau",
+      "startMs": 6845,
+      "endMs": 9029,
+      "cueMs": 58392
+    },
+    {
+      "segmentId": "roster-signup",
+      "phrase": "Renseignez votre prénom",
+      "startMs": 9451,
+      "endMs": 12119,
+      "cueMs": 60998
+    },
+    {
+      "segmentId": "roster-signup",
+      "phrase": "Acceptez la convention",
+      "startMs": 12612,
+      "endMs": 17814,
+      "cueMs": 64160
+    },
+    {
+      "segmentId": "roster-signup",
+      "phrase": "La case de visibilité est facultative",
+      "startMs": 18391,
+      "endMs": 21715,
+      "cueMs": 69937
+    },
+    {
+      "segmentId": "roster-signup",
+      "phrase": "Cochez cette case",
+      "startMs": 34271,
+      "endMs": 37346,
+      "cueMs": 85819
+    },
+    {
+      "segmentId": "roster-confirm",
+      "phrase": "Ouvrez le véritable email de confirmation",
+      "startMs": 646,
+      "endMs": 2617,
+      "cueMs": 92443
+    },
+    {
+      "segmentId": "roster-confirm",
+      "phrase": "Suivez son lien personnel",
+      "startMs": 3252,
+      "endMs": 4489,
+      "cueMs": 95049
+    },
+    {
+      "segmentId": "roster-confirm",
+      "phrase": "La carte Qui est inscrit montre uniquement",
+      "startMs": 5060,
+      "endMs": 12539,
+      "cueMs": 97120
+    },
+    {
+      "segmentId": "roster-confirm",
+      "phrase": "Cliquez sur Afficher mon nom",
+      "startMs": 17575,
+      "endMs": 19248,
+      "cueMs": 109373
+    },
+    {
+      "segmentId": "roster-confirm",
+      "phrase": "Pour consulter les autres créneaux",
+      "startMs": 20336,
+      "endMs": 24570,
+      "cueMs": 112133
+    },
+    {
+      "segmentId": "roster-event",
+      "phrase": "Passons en Liste",
+      "startMs": 9406,
+      "endMs": 10250,
+      "cueMs": 128426
+    },
+    {
+      "segmentId": "roster-event",
+      "phrase": "Passons en Frise",
+      "startMs": 20728,
+      "endMs": 21674,
+      "cueMs": 139748
+    },
+    {
+      "segmentId": "roster-event",
+      "phrase": "Survolez un créneau",
+      "startMs": 24401,
+      "endMs": 25921,
+      "cueMs": 143423
+    },
+    {
+      "segmentId": "roster-invite",
+      "phrase": "Activez Voir qui est inscrit",
+      "startMs": 6613,
+      "endMs": 7626,
+      "cueMs": 163251
+    },
+    {
+      "segmentId": "roster-invite",
+      "phrase": "En Liste, Aline apparaît",
+      "startMs": 8453,
+      "endMs": 14131,
+      "cueMs": 165093
+    },
+    {
+      "segmentId": "roster-existing",
+      "phrase": "Cliquez sur ce bouton pour élargir cet accord",
+      "startMs": 11249,
+      "endMs": 13431,
+      "cueMs": 187738
+    },
+    {
+      "segmentId": "roster-existing",
+      "phrase": "Sur le lien d’invitation, Bruno devient visible",
+      "startMs": 13819,
+      "endMs": 16344,
+      "cueMs": 190307
+    },
+    {
+      "segmentId": "roster-withdraw",
+      "phrase": "Cliquez sur Masquer mon nom",
+      "startMs": 2339,
+      "endMs": 3816,
+      "cueMs": 200991
+    },
+    {
+      "segmentId": "roster-withdraw",
+      "phrase": "Sur la page ouverte par l’invitation",
+      "startMs": 4184,
+      "endMs": 6898,
+      "cueMs": 202834
+    },
+    {
+      "segmentId": "roster-withdraw",
+      "phrase": "Pour terminer, voici la même page sans identification",
+      "startMs": 11562,
+      "endMs": 12508,
+      "cueMs": 210211
+    }
+  ],
+  "mailpitFocusFrames": [
+    {
+      "startMs": 92560,
+      "endMs": 96080
+    }
+  ],
+  "mailpitHolds": [],
+  "mailpitBodyOnly": true
+}

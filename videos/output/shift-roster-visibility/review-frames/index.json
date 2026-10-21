@@ -1,0 +1,298 @@
+{
+  "video": "shift-roster-visibility",
+  "source": "/Users/pol/Desktop/benevoles/.claude/worktrees/video-batch25-26-sources/videos/output/shift-roster-visibility/shift-roster-visibility.mp4",
+  "sourceSha256": "1638077bc2a258324a29e2fcd6038d49c236d79b9777cbf5eadda812c3d665cb",
+  "capturePurpose": "narration-timed",
+  "extractedAt": "2026-10-21T20:41:51.142Z",
+  "note": "Six actual MP4 frames per scene, including chapter start, midpoint and end; not a full audiovisual verification",
+  "frames": [
+    {
+      "scene": "roster-setting",
+      "fraction": 0.022095378383354815,
+      "seconds": 2.424,
+      "file": "/Users/pol/Desktop/benevoles/.claude/worktrees/video-batch25-26-sources/videos/output/shift-roster-visibility/review-frames/roster-setting-2.png"
+    },
+    {
+      "scene": "roster-setting",
+      "fraction": 0.25,
+      "seconds": 8.61275,
+      "file": "/Users/pol/Desktop/benevoles/.claude/worktrees/video-batch25-26-sources/videos/output/shift-roster-visibility/review-frames/roster-setting-25.png"
+    },
+    {
+      "scene": "roster-setting",
+      "fraction": 0.45,
+      "seconds": 14.04375,
+      "file": "/Users/pol/Desktop/benevoles/.claude/worktrees/video-batch25-26-sources/videos/output/shift-roster-visibility/review-frames/roster-setting-45.png"
+    },
+    {
+      "scene": "roster-setting",
+      "fraction": 0.6,
+      "seconds": 18.117,
+      "file": "/Users/pol/Desktop/benevoles/.claude/worktrees/video-batch25-26-sources/videos/output/shift-roster-visibility/review-frames/roster-setting-60.png"
+    },
+    {
+      "scene": "roster-setting",
+      "fraction": 0.85,
+      "seconds": 24.90575,
+      "file": "/Users/pol/Desktop/benevoles/.claude/worktrees/video-batch25-26-sources/videos/output/shift-roster-visibility/review-frames/roster-setting-85.png"
+    },
+    {
+      "scene": "roster-setting",
+      "fraction": 0.9889523108083226,
+      "seconds": 28.679,
+      "file": "/Users/pol/Desktop/benevoles/.claude/worktrees/video-batch25-26-sources/videos/output/shift-roster-visibility/review-frames/roster-setting-end.png"
+    },
+    {
+      "scene": "roster-publication",
+      "fraction": 0.03331482509716824,
+      "seconds": 31.844,
+      "file": "/Users/pol/Desktop/benevoles/.claude/worktrees/video-batch25-26-sources/videos/output/shift-roster-visibility/review-frames/roster-publication-3.png"
+    },
+    {
+      "scene": "roster-publication",
+      "fraction": 0.25,
+      "seconds": 35.7465,
+      "file": "/Users/pol/Desktop/benevoles/.claude/worktrees/video-batch25-26-sources/videos/output/shift-roster-visibility/review-frames/roster-publication-25.png"
+    },
+    {
+      "scene": "roster-publication",
+      "fraction": 0.45,
+      "seconds": 39.3485,
+      "file": "/Users/pol/Desktop/benevoles/.claude/worktrees/video-batch25-26-sources/videos/output/shift-roster-visibility/review-frames/roster-publication-45.png"
+    },
+    {
+      "scene": "roster-publication",
+      "fraction": 0.6,
+      "seconds": 42.05,
+      "file": "/Users/pol/Desktop/benevoles/.claude/worktrees/video-batch25-26-sources/videos/output/shift-roster-visibility/review-frames/roster-publication-60.png"
+    },
+    {
+      "scene": "roster-publication",
+      "fraction": 0.85,
+      "seconds": 46.5525,
+      "file": "/Users/pol/Desktop/benevoles/.claude/worktrees/video-batch25-26-sources/videos/output/shift-roster-visibility/review-frames/roster-publication-85.png"
+    },
+    {
+      "scene": "roster-publication",
+      "fraction": 0.9833425874514159,
+      "seconds": 48.954,
+      "file": "/Users/pol/Desktop/benevoles/.claude/worktrees/video-batch25-26-sources/videos/output/shift-roster-visibility/review-frames/roster-publication-end.png"
+    },
+    {
+      "scene": "roster-signup",
+      "fraction": 0.015792798483891344,
+      "seconds": 52.121,
+      "file": "/Users/pol/Desktop/benevoles/.claude/worktrees/video-batch25-26-sources/videos/output/shift-roster-visibility/review-frames/roster-signup-2.png"
+    },
+    {
+      "scene": "roster-signup",
+      "fraction": 0.25,
+      "seconds": 61.019,
+      "file": "/Users/pol/Desktop/benevoles/.claude/worktrees/video-batch25-26-sources/videos/output/shift-roster-visibility/review-frames/roster-signup-25.png"
+    },
+    {
+      "scene": "roster-signup",
+      "fraction": 0.45,
+      "seconds": 68.61739999999999,
+      "file": "/Users/pol/Desktop/benevoles/.claude/worktrees/video-batch25-26-sources/videos/output/shift-roster-visibility/review-frames/roster-signup-45.png"
+    },
+    {
+      "scene": "roster-signup",
+      "fraction": 0.6,
+      "seconds": 74.3162,
+      "file": "/Users/pol/Desktop/benevoles/.claude/worktrees/video-batch25-26-sources/videos/output/shift-roster-visibility/review-frames/roster-signup-60.png"
+    },
+    {
+      "scene": "roster-signup",
+      "fraction": 0.85,
+      "seconds": 83.8142,
+      "file": "/Users/pol/Desktop/benevoles/.claude/worktrees/video-batch25-26-sources/videos/output/shift-roster-visibility/review-frames/roster-signup-85.png"
+    },
+    {
+      "scene": "roster-signup",
+      "fraction": 0.9921036007580544,
+      "seconds": 89.213,
+      "file": "/Users/pol/Desktop/benevoles/.claude/worktrees/video-batch25-26-sources/videos/output/shift-roster-visibility/review-frames/roster-signup-end.png"
+    },
+    {
+      "scene": "roster-confirm",
+      "fraction": 0.024036535534011697,
+      "seconds": 92.379,
+      "file": "/Users/pol/Desktop/benevoles/.claude/worktrees/video-batch25-26-sources/videos/output/shift-roster-visibility/review-frames/roster-confirm-2.png"
+    },
+    {
+      "scene": "roster-confirm",
+      "fraction": 0.25,
+      "seconds": 98.0195,
+      "file": "/Users/pol/Desktop/benevoles/.claude/worktrees/video-batch25-26-sources/videos/output/shift-roster-visibility/review-frames/roster-confirm-25.png"
+    },
+    {
+      "scene": "roster-confirm",
+      "fraction": 0.45,
+      "seconds": 103.0119,
+      "file": "/Users/pol/Desktop/benevoles/.claude/worktrees/video-batch25-26-sources/videos/output/shift-roster-visibility/review-frames/roster-confirm-45.png"
+    },
+    {
+      "scene": "roster-confirm",
+      "fraction": 0.6,
+      "seconds": 106.75619999999999,
+      "file": "/Users/pol/Desktop/benevoles/.claude/worktrees/video-batch25-26-sources/videos/output/shift-roster-visibility/review-frames/roster-confirm-60.png"
+    },
+    {
+      "scene": "roster-confirm",
+      "fraction": 0.85,
+      "seconds": 112.9967,
+      "file": "/Users/pol/Desktop/benevoles/.claude/worktrees/video-batch25-26-sources/videos/output/shift-roster-visibility/review-frames/roster-confirm-85.png"
+    },
+    {
+      "scene": "roster-confirm",
+      "fraction": 0.9879817322329941,
+      "seconds": 116.441,
+      "file": "/Users/pol/Desktop/benevoles/.claude/worktrees/video-batch25-26-sources/videos/output/shift-roster-visibility/review-frames/roster-confirm-end.png"
+    },
+    {
+      "scene": "roster-event",
+      "fraction": 0.01697024550288494,
+      "seconds": 119.602,
+      "file": "/Users/pol/Desktop/benevoles/.claude/worktrees/video-batch25-26-sources/videos/output/shift-roster-visibility/review-frames/roster-event-2.png"
+    },
+    {
+      "scene": "roster-event",
+      "fraction": 0.25,
+      "seconds": 127.841,
+      "file": "/Users/pol/Desktop/benevoles/.claude/worktrees/video-batch25-26-sources/videos/output/shift-roster-visibility/review-frames/roster-event-25.png"
+    },
+    {
+      "scene": "roster-event",
+      "fraction": 0.45,
+      "seconds": 134.9122,
+      "file": "/Users/pol/Desktop/benevoles/.claude/worktrees/video-batch25-26-sources/videos/output/shift-roster-visibility/review-frames/roster-event-45.png"
+    },
+    {
+      "scene": "roster-event",
+      "fraction": 0.6,
+      "seconds": 140.2156,
+      "file": "/Users/pol/Desktop/benevoles/.claude/worktrees/video-batch25-26-sources/videos/output/shift-roster-visibility/review-frames/roster-event-60.png"
+    },
+    {
+      "scene": "roster-event",
+      "fraction": 0.85,
+      "seconds": 149.0546,
+      "file": "/Users/pol/Desktop/benevoles/.claude/worktrees/video-batch25-26-sources/videos/output/shift-roster-visibility/review-frames/roster-event-85.png"
+    },
+    {
+      "scene": "roster-event",
+      "fraction": 0.9915148772485576,
+      "seconds": 154.058,
+      "file": "/Users/pol/Desktop/benevoles/.claude/worktrees/video-batch25-26-sources/videos/output/shift-roster-visibility/review-frames/roster-event-end.png"
+    },
+    {
+      "scene": "roster-invite",
+      "fraction": 0.03411804844762879,
+      "seconds": 157.218,
+      "file": "/Users/pol/Desktop/benevoles/.claude/worktrees/video-batch25-26-sources/videos/output/shift-roster-visibility/review-frames/roster-invite-3.png"
+    },
+    {
+      "scene": "roster-invite",
+      "fraction": 0.25,
+      "seconds": 161.0145,
+      "file": "/Users/pol/Desktop/benevoles/.claude/worktrees/video-batch25-26-sources/videos/output/shift-roster-visibility/review-frames/roster-invite-25.png"
+    },
+    {
+      "scene": "roster-invite",
+      "fraction": 0.45,
+      "seconds": 164.5317,
+      "file": "/Users/pol/Desktop/benevoles/.claude/worktrees/video-batch25-26-sources/videos/output/shift-roster-visibility/review-frames/roster-invite-45.png"
+    },
+    {
+      "scene": "roster-invite",
+      "fraction": 0.6,
+      "seconds": 167.1696,
+      "file": "/Users/pol/Desktop/benevoles/.claude/worktrees/video-batch25-26-sources/videos/output/shift-roster-visibility/review-frames/roster-invite-60.png"
+    },
+    {
+      "scene": "roster-invite",
+      "fraction": 0.85,
+      "seconds": 171.5661,
+      "file": "/Users/pol/Desktop/benevoles/.claude/worktrees/video-batch25-26-sources/videos/output/shift-roster-visibility/review-frames/roster-invite-85.png"
+    },
+    {
+      "scene": "roster-invite",
+      "fraction": 0.9829409757761856,
+      "seconds": 173.904,
+      "file": "/Users/pol/Desktop/benevoles/.claude/worktrees/video-batch25-26-sources/videos/output/shift-roster-visibility/review-frames/roster-invite-end.png"
+    },
+    {
+      "scene": "roster-existing",
+      "fraction": 0.03015378429992964,
+      "seconds": 177.067,
+      "file": "/Users/pol/Desktop/benevoles/.claude/worktrees/video-batch25-26-sources/videos/output/shift-roster-visibility/review-frames/roster-existing-3.png"
+    },
+    {
+      "scene": "roster-existing",
+      "fraction": 0.25,
+      "seconds": 181.4415,
+      "file": "/Users/pol/Desktop/benevoles/.claude/worktrees/video-batch25-26-sources/videos/output/shift-roster-visibility/review-frames/roster-existing-25.png"
+    },
+    {
+      "scene": "roster-existing",
+      "fraction": 0.45,
+      "seconds": 185.4211,
+      "file": "/Users/pol/Desktop/benevoles/.claude/worktrees/video-batch25-26-sources/videos/output/shift-roster-visibility/review-frames/roster-existing-45.png"
+    },
+    {
+      "scene": "roster-existing",
+      "fraction": 0.6,
+      "seconds": 188.4058,
+      "file": "/Users/pol/Desktop/benevoles/.claude/worktrees/video-batch25-26-sources/videos/output/shift-roster-visibility/review-frames/roster-existing-60.png"
+    },
+    {
+      "scene": "roster-existing",
+      "fraction": 0.85,
+      "seconds": 193.38029999999998,
+      "file": "/Users/pol/Desktop/benevoles/.claude/worktrees/video-batch25-26-sources/videos/output/shift-roster-visibility/review-frames/roster-existing-85.png"
+    },
+    {
+      "scene": "roster-existing",
+      "fraction": 0.9849231078500352,
+      "seconds": 196.065,
+      "file": "/Users/pol/Desktop/benevoles/.claude/worktrees/video-batch25-26-sources/videos/output/shift-roster-visibility/review-frames/roster-existing-end.png"
+    },
+    {
+      "scene": "roster-withdraw",
+      "fraction": 0.02313119241296889,
+      "seconds": 199.232,
+      "file": "/Users/pol/Desktop/benevoles/.claude/worktrees/video-batch25-26-sources/videos/output/shift-roster-visibility/review-frames/roster-withdraw-2.png"
+    },
+    {
+      "scene": "roster-withdraw",
+      "fraction": 0.25,
+      "seconds": 205.11675,
+      "file": "/Users/pol/Desktop/benevoles/.claude/worktrees/video-batch25-26-sources/videos/output/shift-roster-visibility/review-frames/roster-withdraw-25.png"
+    },
+    {
+      "scene": "roster-withdraw",
+      "fraction": 0.45,
+      "seconds": 210.30454999999998,
+      "file": "/Users/pol/Desktop/benevoles/.claude/worktrees/video-batch25-26-sources/videos/output/shift-roster-visibility/review-frames/roster-withdraw-45.png"
+    },
+    {
+      "scene": "roster-withdraw",
+      "fraction": 0.6,
+      "seconds": 214.1954,
+      "file": "/Users/pol/Desktop/benevoles/.claude/worktrees/video-batch25-26-sources/videos/output/shift-roster-visibility/review-frames/roster-withdraw-60.png"
+    },
+    {
+      "scene": "roster-withdraw",
+      "fraction": 0.85,
+      "seconds": 220.68015,
+      "file": "/Users/pol/Desktop/benevoles/.claude/worktrees/video-batch25-26-sources/videos/output/shift-roster-visibility/review-frames/roster-withdraw-85.png"
+    },
+    {
+      "scene": "roster-withdraw",
+      "fraction": 0.9884344037935155,
+      "seconds": 224.271,
+      "file": "/Users/pol/Desktop/benevoles/.claude/worktrees/video-batch25-26-sources/videos/output/shift-roster-visibility/review-frames/roster-withdraw-end.png"
+    }
+  ]
+}

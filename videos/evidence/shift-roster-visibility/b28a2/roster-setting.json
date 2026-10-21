@@ -1,0 +1,52 @@
+{
+  "model": "gemini-3.8-flash",
+  "reviewedAt": "2026-10-21T18:28:14.187Z",
+  "videoSha256": "9d3d6f55cd5679ccfa7849fb7bb3bbc22ecd4eb19fe6a5e3745ab0cd7a3cd9e7",
+  "promptSha256": "eea1e1d23e843f9e290af5eb45a7a6d544eb3584b09e9bfe0fc239735ae8b5cf",
+  "clipSha256": "7734f352cc324c5433c4770327a3c095c6d1379466033cecd22b6b5c6f45a7ea",
+  "scene": "roster-setting",
+  "review": {
+    "heardOpening": "Vous pouvez permettre aux bénévoles confirmés de voir qui est inscrit",
+    "checkpoints": [
+      {
+        "spokenSeconds": 5.8,
+        "spoken": "Sur Vérifier avant publication, le réglage désactivé est signalé par une simple information.",
+        "visibleSeconds": 8,
+        "visible": "Défilement vers le bas révélant le texte informatif sur l'option et le lien Voir le réglage",
+        "sync": "aligned",
+        "severity": "none"
+      },
+      {
+        "spokenSeconds": 11.2,
+        "spoken": "Ouvrez Voir le réglage.",
+        "visibleSeconds": 11.5,
+        "visible": "Affichage de la section Réglages",
+        "sync": "aligned",
+        "severity": "none"
+      },
+      {
+        "spokenSeconds": 13.9,
+        "spoken": "Dans Réglages, cochez Montrer aux bénévoles confirmés qui est inscrit sur chaque créneau.",
+        "visibleSeconds": 14.1,
+        "visible": "La case « Montrer aux bénévoles confirmés qui est inscrit sur chaque créneau » est cochée",
+        "sync": "aligned",
+        "severity": "none"
+      },
+      {
+        "spokenSeconds": 20,
+        "spoken": "Le rappel vous demande d’informer les bénévoles.",
+        "visibleSeconds": 14.2,
+        "visible": "L'encadré d'explication « Informez les bénévoles... » apparaît sous la case cochée",
+        "sync": "aligned",
+        "severity": "none"
+      }
+    ],
+    "issues": [],
+    "voice": {
+      "consistent": true,
+      "warm": true,
+      "observation": "Voix claire, posée et bien synchronisée avec les actions à l'écran."
+    }
+  },
+  "note": "Automated observation of actual final video audio and images; not a claim of complete human validation"
+}

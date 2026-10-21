@@ -1474,6 +1474,32 @@
       "updatedAt": "2026-10-17",
       "revision": 5,
       "level": "essentiel"
+    },
+    {
+      "id": "SHIFT_ROSTER_VISIBILITY",
+      "manifest": "shift-roster-visibility",
+      "category": "event-lifecycle",
+      "tags": [
+        "créneaux",
+        "bénévoles",
+        "consentement",
+        "confidentialité",
+        "invitations"
+      ],
+      "published": true,
+      "seedScenario": "shift-roster-visibility",
+      "themes": [
+        "evenement-cycle-de-vie"
+      ],
+      "audience": [
+        "organisateur",
+        "benevole"
+      ],
+      "feature": "Qui est inscrit",
+      "updatedAt": "2026-10-21",
+      "revision": 1,
+      "level": "essentiel",
+      "added": "2026-10-21"
     }
   ]
 }
