@@ -69,6 +69,15 @@ describe("sign-up and an address held by an invitation (#1053)", () => {
     expect(m.deleteMany.mock.invocationCallOrder[0]).toBeLessThan(m.orgCreate.mock.invocationCallOrder[0])
   })
 
+  it("confirmation sets the owner's address as reply-to and keeps the space awaiting validation (#1067)", async () => {
+    m.findFirst.mockResolvedValue(null)
+    expect((await confirmSignupRequest("tok", now)).ok).toBe(true)
+    const data = m.orgCreate.mock.calls[0][0].data
+    expect(data.replyToEmail).toBe("camille@example.org")
+    expect(data.publicationApprovedAt).toBeNull()
+    expect(data.outboundEmailApprovedAt).toBeNull()
+  })
+
   it("confirmation keeps refusing an active account or a valid invitation, deleting nothing", async () => {
     for (const holder of [active, valid]) {
       m.findFirst.mockResolvedValueOnce(holder)

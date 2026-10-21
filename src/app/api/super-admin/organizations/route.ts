@@ -11,6 +11,7 @@ import { hashToken } from "@/lib/token-hash"
 import { validationError } from "@/lib/api-error"
 import { isReservedOrgSlug } from "@/lib/org-subdomain"
 import { configuredAppUrl } from "@/lib/urls"
+import { initialReplyToEmail } from "@/lib/org-reply-to"
 
 const createOrgSchema = z.object({
   name: z.string().min(1).max(100),
@@ -98,6 +99,8 @@ export async function POST(req: Request) {
       active: true,
       publicationApprovedAt: approvedAt,
       outboundEmailApprovedAt: approvedAt,
+      // Replies to the organization's emails reach its first administrator (#1067).
+      replyToEmail: initialReplyToEmail(adminEmail),
       admins: {
         create: {
           email: adminEmail,

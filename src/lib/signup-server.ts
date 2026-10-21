@@ -13,6 +13,7 @@ import { confirmable, signupAlertMessage, slugify, SIGNUP_LINK_HOURS, type Signu
 import { blockApplies, signupKeys } from "@/lib/signup-blocklist"
 import { isReleasableInvitation } from "@/lib/admin-invitation"
 import { findAdminEmailHolder, releaseExpiredInvitation } from "@/lib/admin-invitation-server"
+import { initialReplyToEmail } from "@/lib/org-reply-to"
 
 /**
  * Database side of the self-service sign-up (#810, part 4b); the rules are in src/lib/signup.ts.
@@ -124,6 +125,8 @@ export async function confirmSignupRequest(token: string, now: Date = new Date()
         outboundEmailApprovedAt: null,
         signupDescription: req.description,
         signupAt: now,
+        // Replies to the space's emails reach its owner until changed in the settings (#1067).
+        replyToEmail: initialReplyToEmail(req.email),
         admins: {
           create: {
             email: req.email,

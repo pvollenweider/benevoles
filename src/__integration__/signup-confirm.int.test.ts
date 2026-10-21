@@ -68,6 +68,8 @@ describe.skipIf(!url)("sign-up confirmation on Postgres (#810)", () => {
     expect(counters.map((c) => c.metric).sort()).toEqual(["signup_requests", "signup_spaces"])
     expect(org.admins).toHaveLength(1)
     expect(org.admins[0]).toMatchObject({ email: `${tag}-a@example.org`, role: "admin", isActive: false })
+    // Replies to the space's emails reach its owner by default (#1067).
+    expect(org.replyToEmail).toBe(`${tag}-a@example.org`)
     expect(org.admins[0].setupTokenHash).toBeTruthy()
     expect(notify).toHaveBeenCalledWith(expect.objectContaining({ key: `signup:${org.id}`, priority: 4, message: expect.stringContaining("« Fête de village, une centaine de bénévoles. »") }))
 

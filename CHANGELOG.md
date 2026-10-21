@@ -11,6 +11,10 @@ Format basé sur [Keep a Changelog](https://keepachangelog.com/fr/1.0.0/).
 
 ## [Unreleased]
 
+### Ajouté
+
+- **Adresse de réponse par défaut** (#1067) : une nouvelle organisation reçoit comme adresse de réponse l'adresse email de son premier administrateur ; les réponses des bénévoles lui arrivent sans réglage. Elle reste modifiable dans **Paramètres**, puis **Emails**. Les organisations existantes gardent leur réglage.
+
 ### Corrigé
 
 - **Doublons possibles et adresses numérotées** (#1037) : deux adresses email qui ne diffèrent que par leurs chiffres (`benevole1@…` et `benevole2@…`) ne sont plus proposées comme doublons, et une adresse courte (moins de 8 caractères avant l'arobase) n'est rapprochée que pour une seule lettre d'écart. Une organisation avec des adresses numérotées voyait des centaines de paires sans fondement.
