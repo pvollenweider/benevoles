@@ -62,6 +62,10 @@ describe.skipIf(!url)("past events anonymisation on Postgres (#813)", () => {
     const answerLog = (eventId: string) => prisma.eventLog.create({ data: { eventId, actorType: "volunteer", actorId: alice.id, action: "question.answer_changed", entityType: "EventQuestion", entityId: question.id, changes: { question: { from: "Taille de t-shirt", to: "Taille de t-shirt" }, answer: { from: "S", to: "M" } } } })
     const oldChange = await answerLog(old.id)
     const recentChange = await answerLog(recent.id)
+    // Shift roster choices (#1068): gone with the old event's anonymisation, kept on the recent one.
+    const choice = { status: "visible", noticeVersion: "v", source: "personal_page", decidedAt: new Date() }
+    await prisma.rosterConsent.create({ data: { eventId: old.id, volunteerId: alice.id, ...choice } })
+    await prisma.rosterConsent.create({ data: { eventId: recent.id, volunteerId: bruno.id, ...choice } })
     const membersBefore = await prisma.platformCounter.findUnique({ where: { metric: "members" } })
 
     expect((await loadPastEventOrganizations(NOW)).find((o) => o.id === orgId)).toMatchObject({ concernedEvents: 1, pastEventNoticeAt: null })
@@ -94,6 +98,8 @@ describe.skipIf(!url)("past events anonymisation on Postgres (#813)", () => {
     expect(await prisma.questionAnswer.count({ where: { eventId: old.id } })).toBe(0)
     expect(await prisma.memberInvite.count({ where: { eventId: old.id } })).toBe(0)
     expect(await prisma.sectorLeader.count({ where: { eventId: old.id } })).toBe(0)
+    expect(await prisma.rosterConsent.count({ where: { eventId: old.id } })).toBe(0)
+    expect(await prisma.rosterConsent.count({ where: { eventId: recent.id } })).toBe(1)
     expect(await prisma.eventLog.count({ where: { eventId: old.id, actorId: alice.id } })).toBe(0)
     expect(await prisma.eventLog.count({ where: { eventId: old.id, actorId: a.volunteerId } })).toBe(2)
     expect((await prisma.eventLog.findUniqueOrThrow({ where: { id: oldChange.id } })).changes).toEqual({ question: { from: "Taille de t-shirt", to: "Taille de t-shirt" } })

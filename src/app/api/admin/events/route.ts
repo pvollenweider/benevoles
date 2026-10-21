@@ -29,6 +29,7 @@ const schema = z.object({
   confirmationMessage: z.string().optional(),
   showSchedule: z.array(showSchema).optional(),
   requirePhone: z.boolean().optional(),
+  shiftRosterEnabled: z.boolean().optional(),
   /** Accent colour of the public page (#300): a palette key, or null for the neutral header. */
   accentColorKey: z.enum(ACCENT_KEYS).optional().nullable(),
   latitude: z.number().min(-90).max(90).nullable().optional(),

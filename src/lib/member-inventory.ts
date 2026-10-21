@@ -47,6 +47,12 @@ export const VOLUNTEER_RELATIONS: Record<string, VolunteerRelation> = {
     erasure: "delete",
     why: "free answers given by the person",
   },
+  RosterConsent: {
+    merge: "drop",
+    deletion: "cascade",
+    erasure: "delete",
+    why: "the person's own choice about the shift roster (#1068): a merge is not their consent, so the absorbed record's choices go, and so do the kept record's on the events where registrations move to it",
+  },
   PushSubscription: {
     merge: "drop",
     deletion: "cascade",

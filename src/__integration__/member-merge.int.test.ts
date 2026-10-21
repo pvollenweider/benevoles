@@ -124,6 +124,29 @@ describe.skipIf(!url)("member merge transaction (#600)", () => {
     expect(tombstone).toMatchObject({ email: null, mergedIntoId: keep.id })
   })
 
+  it("drops shift roster choices (#1068): the absorbed record's, and the kept record's on the events its registrations moved to", async () => {
+    const keep = await makeVolunteer("keep-roster", `${tag}-keep-roster@x.ch`)
+    const absorb = await makeVolunteer("absorb-roster", `${tag}-absorb-roster@x.ch`)
+    const other = await prisma.event.create({
+      data: { organizationId: orgId, slug: "autre-roster", title: "Autre", startDate: new Date("2030-07-01"), endDate: new Date("2030-07-01") },
+    })
+    await prisma.registration.create({ data: { eventId, shiftId: shift2, volunteerId: absorb.id, ...registrationToken.data(`${tag}-tok-roster`) } })
+    const choice = { status: "visible", noticeVersion: "v", source: "personal_page", decidedAt: new Date() }
+    await prisma.rosterConsent.createMany({
+      data: [
+        { eventId, volunteerId: absorb.id, ...choice },
+        { eventId, volunteerId: keep.id, ...choice },
+        { eventId: other.id, volunteerId: keep.id, ...choice },
+      ],
+    })
+
+    await runMemberMerge(getOrgClient(orgId), orgId, ADMIN_ACTOR, keep.id, absorb.id, {})
+
+    const left = await prisma.rosterConsent.findMany({ where: { volunteerId: { in: [keep.id, absorb.id] } }, select: { eventId: true, volunteerId: true } })
+    // A merge is not consent: only the kept record's choice on an event untouched by the merge stays.
+    expect(left).toEqual([{ eventId: other.id, volunteerId: keep.id }])
+  })
+
   it("reassigns a DeliveryOutcome only when its addressHash matches the kept member's final address, leaving the rest on the tombstone", async () => {
     const keep = await makeVolunteer("keep2", `${tag}-keep2@x.ch`)
     const absorb = await makeVolunteer("absorb2", `${tag}-wrong2@x.ch`)

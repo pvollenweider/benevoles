@@ -49,6 +49,8 @@ import { resolveCharterText } from "@/lib/volunteer-charter"
 import { hashCharterText } from "@/lib/charter-hash"
 import { lockSignupVolunteer } from "@/lib/signup-volunteer"
 import { touchOrgActivity } from "@/lib/org-activity"
+import { isKnownMinor } from "@/lib/shift-roster"
+import { applySignupRosterChoice, logRosterChange, type RosterChange } from "@/lib/roster-consent-write"
 import { parseGroupCode } from "@/lib/group-links"
 import { localDay } from "@/lib/day-of"
 import { orgTimeZone } from "@/lib/time-zone"
@@ -87,6 +89,11 @@ const schema = z.object({
    * (name, phone, answers) is saved. Resolved below, for this event and this address only.
    */
   personalToken: z.string().max(200).optional(),
+  /**
+   * The optional « show my name » box of the shift roster (#1068), offered only when the event has
+   * it on. Never authority on its own: see choiceAfterSignup (src/lib/shift-roster.ts).
+   */
+  rosterNameVisible: z.boolean().optional(),
 })
 
 export async function POST(req: Request) {
@@ -282,6 +289,8 @@ export async function POST(req: Request) {
     registrations: Awaited<ReturnType<typeof prisma.registration.create>>[]; volunteerId: string; createdNow: boolean; matchErased: boolean; outboxIds: string[]
     /** Saved from the personal link's form (#1013); null without one. */
     updates: { contact: ContactChange[]; answers: AnswerChange[] } | null
+    /** The shift roster choice this sign-up changed (#1068), to log; null if none. */
+    rosterChange?: RosterChange | null
   }
   try {
     outcome = await prisma.$transaction(async (tx) => {
@@ -371,13 +380,25 @@ export async function POST(req: Request) {
         )
       }
       const outboxIds = await enqueueNotifications(await buildNotifications(created, volunteerId), tx, { organizationId: event.organizationId })
+      // Shift roster (#1068): the box counts only when the event offers it, and makes the name
+      // visible only with proof of the address (the personal link, a member invite); otherwise
+      // it waits for a confirmation from the personal page. Any sign-up without proof suspends an
+      // earlier acceptance: the shifts just added may not be the person's.
+      const rosterChange = await applySignupRosterChoice(tx, {
+        eventId,
+        volunteerId,
+        requested: event.shiftRosterEnabled && parsed.data.rosterNameVisible === true,
+        verified: ownsEmail && !createdNow && !matchErased,
+        minor: isKnownMinor(birthDateValue ?? null, event.startDate),
+        now: new Date(),
+      })
       // From the personal link (#1013): the member is the link's, locked and not erased. Only what
       // changed is written, as on the personal page (#997).
       if (personal && !createdNow && !matchErased) {
         const updates = await savePersonalChanges(tx, {
           eventId, volunteerId, event, stored: personal.stored, submitted: { firstName, lastName, phone }, raw: parsed.data.answers ?? {}, values: answerCheck.values, hidden: answerCheck.hidden,
         })
-        return { registrations: created, volunteerId, createdNow, matchErased, outboxIds, updates }
+        return { registrations: created, volunteerId, createdNow, matchErased, outboxIds, updates, rosterChange }
       }
       // Answers (#483): replaced only with proof the submitter owns the address, as for the
       // profile below; otherwise only missing answers are added (see planAnswerWrites).
@@ -404,7 +425,7 @@ export async function POST(req: Request) {
       if (writes.clear.length > 0) {
         await tx.questionAnswer.deleteMany({ where: { volunteerId, questionId: { in: writes.clear } } })
       }
-      return { registrations: created, volunteerId, createdNow, matchErased, outboxIds, updates: null }
+      return { registrations: created, volunteerId, createdNow, matchErased, outboxIds, updates: null, rosterChange }
     })
   } catch (e) {
     if (e instanceof ShiftFullError) return refuse(fullShift(e.shiftId, e.label))
@@ -422,7 +443,7 @@ export async function POST(req: Request) {
     throw e
   }
 
-  const { registrations, volunteerId, createdNow, matchErased, outboxIds, updates } = outcome
+  const { registrations, volunteerId, createdNow, matchErased, outboxIds, updates, rosterChange } = outcome
   if (matchErased) ownsEmail = false
 
   // Only once the registration went through, and only with proof of ownership (see above):
@@ -467,6 +488,8 @@ export async function POST(req: Request) {
       },
     })
   }
+
+  if (rosterChange) await logRosterChange(eventId, volunteerId, rosterChange)
 
   // Mark the member invite as used (kept valid for re-visits per product
   // decision — only the first usage is timestamped).

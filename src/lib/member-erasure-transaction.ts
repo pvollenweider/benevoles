@@ -177,6 +177,8 @@ export async function runMemberErasure(
     await tx.$executeRaw`UPDATE "EventLog" SET changes = changes - ${ANSWER_LOG_FIELD}::text WHERE action = ${ANSWER_CHANGED_ACTION} AND "actorType" = 'volunteer' AND "actorId" = ANY(${authors}::text[])`
     if (del.inviteIds.length) await tx.memberInvite.deleteMany({ where: { id: { in: del.inviteIds } } })
     if (del.pushSubscriptionIds.length) await tx.pushSubscription.deleteMany({ where: { id: { in: del.pushSubscriptionIds }, volunteerId: id } })
+    // Shift roster choices (#1068): the person's own, never shown again.
+    await tx.rosterConsent.deleteMany({ where: { volunteerId: { in: authors } } })
     if (del.sectorLeaderIds.length) await tx.sectorLeader.deleteMany({ where: { id: { in: del.sectorLeaderIds } } })
     if (del.duplicateDismissalIds.length) await tx.duplicateDismissal.deleteMany({ where: { id: { in: del.duplicateDismissalIds } } })
     // SMTP outcomes (#598): the member's own, and any other row of the organisation with their

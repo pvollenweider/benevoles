@@ -121,6 +121,15 @@ export const RETENTION: readonly RetentionEntry[] = [
     public: true,
   },
   {
+    data: "Choix d'un bénévole d'afficher ou non son prénom et l'initiale de son nom aux autres bénévoles confirmés d'un événement : affiché, à confirmer ou masqué, version du texte accepté, manière (formulaire d'inscription ou page personnelle) et date ; les changements sont aussi notés dans le journal de l'événement",
+    purpose: "N'afficher le nom qu'avec l'accord de la personne, et pouvoir le montrer",
+    duration: `tant que l'événement existe ; les noms ne sont plus montrés après le dernier jour de l'événement ; effacé avec l'événement ou le membre, à l'effacement des données du membre, à une fusion de fiches (le choix ne passe jamais d'une fiche à l'autre) et à l'anonymisation de l'événement 3 ans après sa fin`,
+    trigger: "choix du bénévole",
+    mechanism: "suppression en cascade ; effacement, fusion et anonymisation le suppriment",
+    backups: inBackups,
+    public: true,
+  },
+  {
     data: "Événement supprimé par un administrateur",
     purpose: "—",
     duration: "effacé immédiatement, avec ses créneaux, inscriptions, invitations, réponses aux questions, responsables, pages, jalons, messages ciblés et programmés et son journal",
@@ -166,7 +175,7 @@ export const RETENTION: readonly RetentionEntry[] = [
     public: true,
   },
   {
-    data: "Données personnelles d'un membre dont l'effacement est demandé : nom, email, téléphone, date de naissance, notes, étiquettes, disponibilités, commentaires et téléphones de ses inscriptions, invitations (dont « pas disponible »), réponses aux questions, abonnements aux notifications, désignations comme responsable de secteur à son adresse, emails en file d'envoi qui la concernent, résultats d'envoi",
+    data: "Données personnelles d'un membre dont l'effacement est demandé : nom, email, téléphone, date de naissance, notes, étiquettes, disponibilités, commentaires et téléphones de ses inscriptions, invitations (dont « pas disponible »), réponses aux questions, abonnements aux notifications, choix d'afficher son nom aux autres bénévoles, désignations comme responsable de secteur à son adresse, emails en file d'envoi qui la concernent, résultats d'envoi",
     purpose: "Droit à l'effacement",
     duration: "effacées immédiatement ; la fiche devient « Bénévole effacé » et ses inscriptions restent, sans identité, pour les effectifs, les heures et l'historique",
     trigger: "effacement par un propriétaire ou un organisateur depuis la page du membre",

@@ -88,6 +88,8 @@ export function toPublicEvent(event: PublicEventRow) {
     publicInstructions: event.publicInstructions,
     confirmationMessage: event.confirmationMessage,
     requirePhone: event.requirePhone,
+    // Shift roster (#1068): whether the form offers the optional « show my name » box.
+    shiftRosterEnabled: event.shiftRosterEnabled,
     // Registration window (#463): the page shows the schedule either way, the form only when open.
     registrationsOpen: event.registrationsOpen,
     registrationOpensAt: event.registrationOpensAt,

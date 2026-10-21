@@ -13,6 +13,7 @@ import { LISTED_FIELD_HELP, LISTED_FIELD_LABEL, UNLISTED_HINT, visibilityLabel }
 import { announce } from "@/lib/announce"
 import { type SaveState, formatSavedAt, saveErrorText, shouldAnnounceSaved, visibleSaveText } from "@/lib/event-autosave"
 import { DAY_CONTACT_NAME_MAX, DAY_CONTACT_PHONE_MAX } from "@/lib/day-contact"
+import { ROSTER_ENABLE_REMINDER, ROSTER_SETTING_HINT, ROSTER_SETTING_LABEL } from "@/lib/shift-roster"
 import { CANCEL_DEADLINE_CREATE_ERROR, cancelDeadlineFormErrors, cancelDeadlinePayload, type CancelDeadlineForm } from "@/lib/cancel-deadline"
 import RequiredMark from "@/components/RequiredMark"
 
@@ -29,6 +30,8 @@ type EventFormData = {
   reminderMessage: string
   publicStatus: "draft" | "published" | "archived"
   requirePhone: boolean
+  /** Shift roster between volunteers (#1068): opt-in names on the personal page, off by default. */
+  shiftRosterEnabled: boolean
   /** Automatic reminders of this event (J-2, J-1, day-of); the organization's settings still apply. */
   remindersEnabled: boolean
   /** Unlisted events (#414): false = reachable by link only. */
@@ -69,6 +72,7 @@ const defaultData: EventFormData = {
   reminderMessage: "",
   publicStatus: "draft",
   requirePhone: false,
+  shiftRosterEnabled: false,
   remindersEnabled: true,
   isListed: true,
   accentColorKey: null,
@@ -178,6 +182,8 @@ export default function EventForm({ initialData, createdHref, timeZone = "Europe
   // scrolls: move focus to the box so keyboard and screen-reader users land on it too.
   useEffect(() => {
     if (isEdit && window.location.hash === "#event-reminders") document.getElementById("event-reminders-enabled")?.focus()
+    // Same from the review's note on the shift roster (#1068).
+    if (window.location.hash === "#event-shift-roster-setting") document.getElementById("event-shift-roster")?.focus()
   }, [isEdit])
 
   // Auto-save in edit mode with 800ms debounce
@@ -493,6 +499,24 @@ export default function EventForm({ initialData, createdHref, timeZone = "Europe
             <p id="event-require-phone-hint" className="text-xs text-gray-500">
               Les bénévoles devront indiquer un numéro pour s&apos;inscrire via le formulaire public.
             </p>
+          </div>
+        </div>
+
+        {/* Shift roster between volunteers (#1068): enables the volunteers' own opt-in, never shows anyone by itself. */}
+        <div id="event-shift-roster-setting" className="flex items-start gap-3">
+          <input
+            id="event-shift-roster"
+            type="checkbox"
+            aria-describedby="event-shift-roster-hint"
+            checked={form.shiftRosterEnabled}
+            onChange={(e) => setForm((f) => ({ ...f, shiftRosterEnabled: e.target.checked }))}
+            className="mt-0.5 h-4 w-4"
+          />
+          <div>
+            <label htmlFor="event-shift-roster" className="text-sm font-medium text-gray-700">{ROSTER_SETTING_LABEL}</label>
+            <p id="event-shift-roster-hint" className="text-xs text-gray-600">{ROSTER_SETTING_HINT}</p>
+            {/* The organiser's duty to inform, once on: a polite status, so that ticking the box says it. */}
+            <p role="status" className={form.shiftRosterEnabled ? "mt-1 text-xs text-gray-800" : "sr-only"}>{form.shiftRosterEnabled ? ROSTER_ENABLE_REMINDER : ""}</p>
           </div>
         </div>
 

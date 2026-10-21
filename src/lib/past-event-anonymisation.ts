@@ -89,6 +89,8 @@ export async function anonymisePastEvent(
     await tx.$executeRaw`UPDATE "EventLog" SET changes = changes - ${ANSWER_LOG_FIELD}::text WHERE "eventId" = ${eventId} AND action = ${ANSWER_CHANGED_ACTION}`
     const invites = await tx.memberInvite.deleteMany({ where: { eventId } })
     const sectorLeaders = await tx.sectorLeader.deleteMany({ where: { eventId } })
+    // Shift roster choices (#1068): personal, and the roster is closed for good.
+    await tx.rosterConsent.deleteMany({ where: { eventId } })
     await tx.event.update({ where: { id: eventId }, data: { personalDataAnonymizedAt: now } })
     const counts = { registrations: registrations.length, anonymousRecords, answers: answers.count, invites: invites.count, sectorLeaders: sectorLeaders.count }
     await tx.eventLog.create({

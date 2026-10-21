@@ -171,6 +171,13 @@ export async function runMemberMerge(
     // Push subscriptions are dropped, never moved (owner decision, #600): a device subscribed
     // through the absorbed record's wrong-address link may belong to someone else.
     if (plan.pushSubscriptionIdsToDelete.length) await tx.pushSubscription.deleteMany({ where: { id: { in: plan.pushSubscriptionIdsToDelete } } })
+    // Shift roster choices (#1068) are dropped too: a merge is not the person's consent. The
+    // absorbed record's choices go, and so do the kept record's on the events where registrations
+    // just moved to it, so nobody is shown on those events until they choose again.
+    const movedEventIds = [...new Set(loaded.absorbRegistrations.map((r) => r.eventId))]
+    await tx.rosterConsent.deleteMany({
+      where: { OR: [{ volunteerId: absorbId }, ...(movedEventIds.length ? [{ volunteerId: keepId, eventId: { in: movedEventIds } }] : [])] },
+    })
 
     // 4. Turn the absorbed record into an inactive tombstone: no personal data left, mapped to
     // the kept record so old ids keep resolving (event-log-read.ts, member-activity-data.ts).

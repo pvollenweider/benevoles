@@ -154,6 +154,10 @@ model Event {
   // organisation's zone, hours a duration on top. Admin removal is never limited by it.
   cancelDeadlineDays  Int?
   cancelDeadlineHours Int?
+  // Shift roster between volunteers (#1068): when on, a confirmed volunteer's personal page names
+  // (« Aline M. ») the other confirmed volunteers of their own shifts who opted in (RosterConsent).
+  // Off by default; turning it on shows nobody by itself, and nobody is opted in on their behalf.
+  shiftRosterEnabled  Boolean   @default(false)
   // Retention of past events (#813): when its registrations were anonymised, 3 years after its end.
   personalDataAnonymizedAt DateTime?
   createdAt           DateTime  @default(now())
@@ -173,6 +177,7 @@ model Event {
   questions        EventQuestion[]
   questionAnswers  QuestionAnswer[]
   groupLinks       EventGroupLink[]
+  rosterConsents   RosterConsent[]
 
   @@unique([organizationId, slug])
   @@index([organizationId])
@@ -555,6 +560,7 @@ model Volunteer {
   pushSubscriptions PushSubscription[]
   questionAnswers   QuestionAnswer[]
   deliveryOutcomes  DeliveryOutcome[]
+  rosterConsents    RosterConsent[]
   mergedInto        Volunteer?     @relation("VolunteerMerge", fields: [mergedIntoId], references: [id], onDelete: SetNull)
   mergedFrom        Volunteer[]    @relation("VolunteerMerge")
   // Possible-duplicate dismissals (#601) naming this record as either side of the pair.
@@ -809,6 +815,29 @@ model QuestionAnswer {
 
   @@unique([questionId, volunteerId])
   @@index([eventId])
+}
+
+// A volunteer's choice about the shift roster of one event (#1068): whether the other confirmed
+// volunteers of their shifts may see their first name and last-name initial. Opt-in, one row per
+// (event, volunteer), none until a choice is made (= hidden). "pending": asked on a sign-up form
+// that proves nothing about who submitted it (src/lib/shift-roster.ts), shown only once confirmed
+// from the personal page. `noticeVersion` names the text shown (ROSTER_NOTICE_VERSION); `source`
+// how the choice was made. The grants and withdrawals are also in the event log. Deleted with the
+// event, the member, on erasure, on merge and with the past event's anonymisation.
+model RosterConsent {
+  id            String   @id @default(cuid())
+  eventId       String
+  volunteerId   String
+  status        String
+  noticeVersion String
+  source        String
+  decidedAt     DateTime
+
+  event     Event     @relation(fields: [eventId], references: [id], onDelete: Cascade)
+  volunteer Volunteer @relation(fields: [volunteerId], references: [id], onDelete: Cascade)
+
+  @@unique([eventId, volunteerId])
+  @@index([volunteerId])
 }
 
 // One row per targeted message sent to volunteers (#467): who wrote what, when, to whom, and how

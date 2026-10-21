@@ -51,6 +51,7 @@ import { heldKinds } from "@/lib/public-timeline"
 import PublicFooter, { type FooterSite } from "@/components/PublicFooter"
 import SkipLink, { MAIN_CONTENT_ID } from "@/components/admin/SkipLink"
 import { resolveCharterText } from "@/lib/volunteer-charter"
+import { ROSTER_MINOR_TEXT, ROSTER_SIGNUP_HINT, ROSTER_SIGNUP_LABEL, signupRosterBox } from "@/lib/shift-roster"
 import { readStored, removeStored, writeStored } from "@/lib/device-storage"
 import { NEW_TAB_HINT, takeReturnToSchedule } from "@/lib/embed"
 import { successPath } from "@/lib/registration-success"
@@ -110,6 +111,8 @@ export type EventData = {
   publicInstructions: string | null
   confirmationMessage: string | null
   requirePhone: boolean
+  /** Shift roster (#1068): the form offers the optional « show my name » box. */
+  shiftRosterEnabled?: boolean
   registrationsOpen: boolean
   registrationOpensAt: string | null
   registrationClosesAt: string | null
@@ -224,6 +227,8 @@ export default function EventPageClient({ orgSlug, eventSlug, preview, initialEv
   // « Quitter la session » removes itself: the focus lands on the title instead of the body.
   const titleRef = useRef<HTMLHeadingElement>(null)
   const [charterAccepted, setCharterAccepted] = useState(false)
+  // The shift roster's optional box (#1068): unticked by default, never required.
+  const [rosterNameVisible, setRosterNameVisible] = useState(false)
   // Which consent checkbox the last refusal was about (#569): marked invalid and focused.
   const [invalidCheckbox, setInvalidCheckbox] = useState<"charter" | "consent" | null>(null)
   const [showCharter, setShowCharter] = useState(false)
@@ -310,6 +315,10 @@ export default function EventPageClient({ orgSlug, eventSlug, preview, initialEv
     () => (event?.shifts ?? []).filter((s) => selectedShifts.has(s.id) && !myShiftIds.has(s.id) && s.minAge != null),
     [event, selectedShifts, myShiftIds]
   )
+
+  // The shift roster's box (#1068): shown when the event has the roster, replaced by a sentence
+  // when the birth date asked for an age-gated shift says under 18.
+  const rosterBox = signupRosterBox(!!event?.shiftRosterEnabled, ageGatedSelectedShifts.length > 0 ? form.birthDate : "", event?.startDate ?? "")
 
   const conflictingShiftIds = useMemo(
     () => (event ? computeConflictingShiftIds(event.shifts, selectedShifts, myShiftIds) : new Set<string>()),
@@ -495,6 +504,8 @@ export default function EventPageClient({ orgSlug, eventSlug, preview, initialEv
           ...form,
           // Proof of acceptance (#569): validateSignup already refused to get here without it.
           charterAccepted,
+          // Only while the box is shown: never for a minor, nor once hidden by a birth date.
+          rosterNameVisible: rosterBox === "box" && rosterNameVisible,
           answers,
           inviteToken: inviteToken ?? undefined,
           // The sign-up counts for the group link the page was opened with (#947).
@@ -1257,6 +1268,32 @@ export default function EventPageClient({ orgSlug, eventSlug, preview, initialEv
                     Mes droits et combien de temps mes données sont gardées<span className="sr-only"> (ouvre dans un nouvel onglet)</span>
                   </Link>
                 </p>
+
+                {/* Shift roster (#1068): a separate, optional choice, unticked; never part of the
+                    required boxes above. A minor's birth date replaces it with a sentence (not a
+                    live region: it changes while typing in the date field). */}
+                {rosterBox && (
+                  <div>
+                    {rosterBox === "box" ? (
+                      <>
+                        <label className="flex items-start gap-3 cursor-pointer">
+                          <input
+                            id="reg-roster"
+                            type="checkbox"
+                            checked={rosterNameVisible}
+                            aria-describedby="reg-roster-hint"
+                            onChange={(e) => setRosterNameVisible(e.target.checked)}
+                            className="mt-0.5 h-4 w-4 rounded border-gray-300 text-blue-600"
+                          />
+                          <span className="text-sm text-gray-600">{ROSTER_SIGNUP_LABEL}</span>
+                        </label>
+                        <p id="reg-roster-hint" className="pl-7 mt-1 text-xs text-gray-600">{ROSTER_SIGNUP_HINT}</p>
+                      </>
+                    ) : (
+                      <p className="text-sm text-gray-600">{ROSTER_MINOR_TEXT}</p>
+                    )}
+                  </div>
+                )}
 
                 {error && (
                   <div id="signup-error" role="alert" className="bg-red-50 border border-red-200 rounded-xl p-3 text-sm text-red-700">

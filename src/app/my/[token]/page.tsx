@@ -21,6 +21,7 @@ import { announce } from "@/lib/announce"
 import { focusFirstAvailable, isFocusDropped, type FocusCandidate } from "@/lib/focus-return"
 import MissionBriefCard from "@/components/public/MissionBriefCard"
 import MyAnswersCard from "@/components/public/MyAnswersCard"
+import ShiftRosterCard, { type RosterData } from "@/components/public/ShiftRosterCard"
 import type { MyAnswerRow } from "@/lib/my-answers"
 import type { AnswersEditState } from "@/lib/answer-changes"
 import { MISSION_BRIEF_ID, MISSION_BRIEF_TITLE, nextConfirmedRegistration, type BriefEvent } from "@/lib/mission-brief"
@@ -87,6 +88,16 @@ const triggerId = (editToken: string) => `withdraw-${editToken}`
 const cardId = (regId: string) => `registration-${regId}`
 const closedId = (regId: string) => `cancel-closed-${regId}`
 
+/** The roster card's data (#1068). Optional: a failure leaves the card out, never the page. */
+async function fetchRoster(token: string): Promise<RosterData | null> {
+  try {
+    const res = await fetch(`/api/public/registrations/${token}/roster`)
+    return res.ok ? ((await res.json()) as RosterData) : null
+  } catch {
+    return null
+  }
+}
+
 /**
  * Personal page of a volunteer (/my/[token]): their registrations on one event, each withdrawable
  * after an inline confirmation (#534). The confirmation takes focus when it opens and gives it back
@@ -109,6 +120,8 @@ export default function MyRegistrationPage() {
   const [withdrawMessage, setWithdrawMessage] = useState("")
   // Page status: the result of a withdrawal, voiced once.
   const [statusText, setStatusText] = useState("")
+  // « Bénévoles de l'événement » (#1068), loaded with the page; null = nothing to show.
+  const [roster, setRoster] = useState<RosterData | null>(null)
 
   // Focus to move, applied once React has committed the render it goes with (the confirmation
   // mounted, the card removed). Only while focus is still in the card the action came from, or was
@@ -124,8 +137,14 @@ export default function MyRegistrationPage() {
   }, [focusRequest])
 
   useEffect(() => {
+    // Fetched together, so the roster card does not appear late and push the page down.
+    const rosterLoad = fetchRoster(token)
     fetch(`/api/public/registrations/${token}`)
-      .then((r) => r.json())
+      .then(async (r) => {
+        const d = await r.json()
+        setRoster(await rosterLoad)
+        return d
+      })
       .then((d) => {
         if (d.error) {
           setError(d.error)
@@ -221,6 +240,8 @@ export default function MyRegistrationPage() {
     }
 
     setData((d) => d ? { ...d, registrations: d.registrations.filter((r) => r.editToken !== reg.editToken) } : d)
+    // The roster needs a confirmed place (#1068): reloaded once one is withdrawn.
+    if (reg.status === "active") void fetchRoster(token).then(setRoster)
     setFocusRequest({
       candidates: [
         next && byId(triggerId(next)),
@@ -463,6 +484,9 @@ export default function MyRegistrationPage() {
             </div>
           )}
         </section>
+
+        {/* Who else is signed up (#1068): only when the event has the roster on. */}
+        {roster?.available && <ShiftRosterCard token={token} data={roster} onChange={setRoster} />}
 
         {/* The answers to the event's questions (#984), under the registrations: editable while
             the volunteer can still withdraw online. */}

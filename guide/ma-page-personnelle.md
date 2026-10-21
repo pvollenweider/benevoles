@@ -42,6 +42,18 @@ Encore un peu de temps ? Sous tes créneaux, le lien **S'inscrire à d'autres cr
 
 Le lien n'apparaît que tant que l'événement accepte des inscriptions. Quand elles sont fermées ou que l'événement est passé, il disparaît, et le lien en bas de la page s'appelle **Voir la page de l'événement** (ou **Retour à l'accueil**, vers la page de l'organisation, si l'événement n'est plus en ligne).
 
+## Qui est inscrit
+
+Si l'organisation l'a prévu pour l'événement, et dès que tu as une place confirmée, l'encadré **Qui est inscrit** montre, créneau par créneau, les autres bénévoles confirmés de l'événement qui ont choisi d'afficher leur nom : leur prénom et l'initiale de leur nom, par exemple « Aline M. ». Tu sais ainsi avec qui tu seras, et tu peux choisir d'autres créneaux avec des personnes que tu connais. Rien d'autre n'est montré : ni email, ni téléphone, ni réponses aux questions. Ces noms ne sont jamais sur la page publique de l'événement. L'encadré disparaît après le dernier jour de l'événement, ou si tu n'as plus de place confirmée (en liste d'attente ou en attente de validation, tu ne le vois pas).
+
+Ton nom n'y figure que si tu l'as choisi. Sous la liste, une phrase dit ce que voient les autres, avec un bouton :
+- **Afficher mon nom** : les autres bénévoles confirmés de l'événement voient ton prénom et l'initiale de ton nom sur tes créneaux confirmés ;
+- **Masquer mon nom** : ton nom disparaît aussitôt de leur page. Tu peux changer d'avis à tout moment, même après la date limite d'annulation, sans effet sur ton inscription. Masquer ton nom ne t'empêche pas de voir celui des autres.
+
+Si tu as coché la case à l'inscription, la page te demande de confirmer avec **Afficher mon nom** : ton nom n'apparaît qu'après cette confirmation, parce que n'importe qui peut taper une adresse email dans le formulaire alors que ta page personnelle s'ouvre avec le lien envoyé à cette adresse. C'est aussi le cas si tu t'inscris à d'autres créneaux sans passer par ta page personnelle. Si tu t'es inscrit avant que l'organisation active ce réglage, ton nom reste masqué tant que tu ne choisis pas de l'afficher. Le nom d'un bénévole de moins de 18 ans n'est jamais montré.
+
+Ton lien personnel donne accès à cette liste : ne le partage pas.
+
 ## Mes réponses
 
 ![Encadré « Mes réponses » : « Taille de t-shirt » avec la réponse M, puis « Régime alimentaire (repas des bénévoles) » et « Permis de conduire », chacune avec « Pas de réponse », et le bouton « Modifier mes réponses »](/doc-img/public-my-answers.png)

@@ -14,6 +14,7 @@ Format basé sur [Keep a Changelog](https://keepachangelog.com/fr/1.0.0/).
 ### Ajouté
 
 - **Adresse de réponse par défaut** (#1067) : une nouvelle organisation reçoit comme adresse de réponse l'adresse email de son premier administrateur ; les réponses des bénévoles lui arrivent sans réglage. Elle reste modifiable dans **Paramètres**, puis **Emails**. Les organisations existantes gardent leur réglage.
+- **Qui est inscrit sur chaque créneau** (#1068) : un nouveau réglage de l'événement, désactivé par défaut, montre aux bénévoles qui ont une place confirmée, sur leur page personnelle, le prénom et l'initiale du nom (« Aline M. ») des autres bénévoles confirmés de chaque créneau, jusqu'à la fin de l'événement. Seuls apparaissent ceux qui l'acceptent, par une case facultative du formulaire d'inscription confirmée depuis leur page personnelle ; les personnes déjà inscrites restent masquées tant qu'elles ne l'ont pas choisi, et chacun peut masquer son nom à tout moment. Rien n'apparaît sur la page publique. La page de vérification avant publication présente le réglage, sans bloquer.
 
 ### Corrigé
 

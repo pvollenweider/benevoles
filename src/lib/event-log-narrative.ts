@@ -53,6 +53,9 @@ const FIELD_LABELS: Record<string, string> = {
   publicInstructions: "instructions publiques",
   remindersEnabled: "rappels automatiques",
   requirePhone: "téléphone obligatoire",
+  // Shift roster between volunteers (#1068): the event's setting, and a volunteer's own choice.
+  shiftRosterEnabled: "noms visibles entre bénévoles d'un créneau",
+  rosterName: "nom affiché aux autres bénévoles",
   isListed: "visibilité",
   audience: "destinataires",
   recipients: "nombre de destinataires",
@@ -157,6 +160,7 @@ export const ACTION_VERB: Record<string, (actor: string) => string> = {
   "question.updated": (a) => `${a} a modifié une question`,
   "question.removed": (a) => `${a} a retiré une question`,
   "question.answer_changed": (a) => `${a} a modifié sa réponse à une question`,
+  "roster.choice_changed": (a) => `${a} a changé l'affichage de son nom aux autres bénévoles`,
   "memberinvite.sent": (a) => `${a} a envoyé une invitation`,
   "memberinvite.declined": (a) => `${a} a indiqué ne pas être disponible pour cet événement`,
   "eventpage.created": (a) => `${a} a créé une page`,

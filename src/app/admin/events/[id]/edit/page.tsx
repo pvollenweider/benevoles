@@ -50,6 +50,7 @@ export default async function EditEventPage({ params, searchParams }: { params: 
     confirmationMessage: event.confirmationMessage ?? "",
     reminderMessage: event.reminderMessage ?? "",
     requirePhone: event.requirePhone,
+    shiftRosterEnabled: event.shiftRosterEnabled,
     remindersEnabled: event.remindersEnabled,
     publicStatus: event.publicStatus as "draft" | "published" | "archived",
     isListed: event.isListed,
