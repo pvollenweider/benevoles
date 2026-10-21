@@ -2,7 +2,7 @@
 
 benevol.app vise le niveau **AA des WCAG 2.2**. Cette page dit ce qui a été vérifié, comment, et ce qui ne l'est pas encore.
 
-Déclaration établie le 5 octobre 2026, mise à jour le 14 octobre 2026, sur la base d'une auto-évaluation à la même date.
+Déclaration établie le 5 octobre 2026, mise à jour le 21 octobre 2026, sur la base d'une auto-évaluation à la même date.
 
 ## Périmètre
 
@@ -35,6 +35,7 @@ Parcours concernés : découvrir un événement ; choisir ses créneaux ; rempli
 
 - Le **planning** d'une journée s'affiche par défaut en frise horizontale, qu'il faut faire défiler latéralement sur un petit écran. Le bouton « Liste », au-dessus du planning, présente les mêmes créneaux heure par heure, sans défilement horizontal ; ce choix est mémorisé sur l'appareil.
 - Le **planning**, les **feuilles** et les **badges** à imprimer sont des pages HTML, analysées par les tests automatiques comme le reste du site : ce sont elles, ouvertes dans le navigateur, la version accessible de ces documents. Un PDF enregistré depuis le navigateur n'est balisé pour les lecteurs d'écran que si le navigateur le fait. Les présences s'exportent aussi en CSV.
+- Avec **Voir qui est inscrit**, dans la frise, les noms d'un créneau qui ne peut pas être choisi (complet, déjà pris, réservé) ne s'atteignent pas au clavier : seuls le toucher et le survol les affichent. La vue « Liste » donne les noms de tous les créneaux, au clavier comme au lecteur d'écran.
 - Le lien **Voir sur la carte** ouvre OpenStreetMap, un service externe dont nous ne maîtrisons pas l'accessibilité.
 - Le contenu écrit par les organisateurs (messages, pages d'information, consignes) dépend de leur rédaction.
 - L'**inscription affichée sur le site d'une association** dépend aussi de ce site : le code fourni donne au cadre un titre (« Inscription bénévoles – » suivi du nom de l'événement), que l'association peut modifier ou retirer. Sans l'ajustement automatique de la hauteur, la page défile à l'intérieur d'un cadre lui-même placé dans une page qui défile. Les rappels par notification ne sont pas proposés dans ce cadre : ils restent disponibles depuis la page personnelle.

@@ -229,6 +229,28 @@ async function run() {
     await settle(p)
     await save(p, "public-roster-card", { target: p.getByRole("region", { name: "Qui est inscrit" }) })
   })
+  // The event page as Léa, back from her personal page (its link, « Voir qui est inscrit sur les
+  // autres créneaux », turns the switch on): the frise of the first day, the line under it saying
+  // who is on the bar she touched.
+  await shot("public-roster-switch", async () => {
+    const lea = await browser.newContext(DESKTOP)
+    const l = await lea.newPage()
+    await l.goto(`${BASE}/my/${ROSTER.token}?org=${ROSTER.org}`)
+    await settle(l)
+    await l.goto(`${BASE}/${ROSTER.event}?org=${ROSTER.org}&inscrits=1`)
+    await settle(l)
+    await l.getByRole("button", { name: "Frise", exact: true }).click()
+    await l.getByText(/Touche, survole ou sélectionne/).first().waitFor()
+    await l.locator("[data-shift-id]").nth(1).hover()
+    await l.waitForTimeout(300)
+    const top = await l.getByRole("button", { name: "Voir qui est inscrit" }).boundingBox()
+    const day = await l.getByRole("region", { name: /^Planning du/ }).first().boundingBox()
+    const line = await l.locator("[data-roster-detail]").first().boundingBox()
+    if (!top || !day || !line) throw new Error("roster switch not found")
+    const x = day.x - 16
+    await save(l, "public-roster-switch", { clip: { x, y: top.y - 16, width: day.width + 32, height: line.y + line.height - top.y + 32 } })
+    await lea.close()
+  })
   await desk.close()
 
   if (process.env.PUBLIC_ONLY) return finish(browser)
@@ -360,7 +382,8 @@ async function run() {
   }
 
   // « Qui est inscrit » (#1068), the organizer's side: the setting of « Marché de Noël » (on, with
-  // its reminder), and the publication page of the « Marché de printemps » draft (setting off).
+  // its reminder), and the publication page of the « Marché de printemps » draft (setting on, the
+  // default of a new event).
   const roster = ONLY && !ONLY.has("admin-roster-setting") ? null : await signIn(browser, { email: ROSTER.email, title: "Marché de Noël", seed: ROSTER.seed })
   if (roster) {
     await shot("admin-roster-setting", async () => {

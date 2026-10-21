@@ -504,7 +504,7 @@ export default function MyRegistrationPage() {
         </section>
 
         {/* Who else is signed up (#1068): only when the event has the roster on. */}
-        {roster?.available && <ShiftRosterCard token={rosterToken} data={roster} beginChange={() => {
+        {roster?.available && <ShiftRosterCard token={rosterToken} data={roster} eventPageUrl={data.eventPageUrl} beginChange={() => {
           // Taken when the change is sent: an answer arriving after a withdrawal or a reload
           // replaced the roster is dropped, like an older GET.
           const n = rosterSeq.current

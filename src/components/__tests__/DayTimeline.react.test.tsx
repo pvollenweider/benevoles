@@ -169,3 +169,43 @@ describe("DayTimeline", () => {
     expect(screen.getByRole("region", { name: "Planning du samedi 4 juillet" })).toBeInTheDocument()
   })
 })
+
+// « Voir qui est inscrit » (#1068): bars unchanged; one line under the day says who is on the bar
+// hovered, tapped or focused last; a bar's description says the same.
+describe("DayTimeline with the roster", () => {
+  afterEach(cleanup)
+  const entry = (shiftId: string, names: string[], othersCount: number) =>
+    ({ shiftId, label: "Bar", date: "2031-06-06T00:00:00.000Z", startTime: "18:00", endTime: "20:00", names, othersCount, own: false })
+
+  it("a prompt first, then the last bar's roster, kept until another; the bar's description", () => {
+    const roster = new Map([["a", entry("a", ["Aline M."], 1)]])
+    render(<DayTimeline shifts={[shift("a"), shift("b", { startTime: "20:00", endTime: "22:00" })]} shows={[]} selected={new Set()} onToggle={() => {}} roster={roster} />)
+    expect(screen.getByText(/Touche, survole ou sélectionne/)).toBeInTheDocument()
+    const a = screen.getByRole("button", { name: /^18h–20h/ })
+    expect(a).toHaveAccessibleDescription("Sur ce créneau : Aline, initiale M et 1 autre bénévole.")
+    fireEvent.focus(a)
+    expect(screen.getByText("Bar · 18h–20h")).toBeInTheDocument()
+    fireEvent.pointerLeave(a)
+    expect(screen.getByText("Bar · 18h–20h")).toBeInTheDocument()
+    const b = screen.getByRole("button", { name: /^20h–22h/ })
+    expect(b).toHaveAccessibleDescription("Sur ce créneau : personne d'autre pour l'instant.")
+    fireEvent.click(b)
+    expect(screen.getByText("Bar · 20h–22h")).toBeInTheDocument()
+  })
+
+  it("a full (disabled) bar lets the tap through to update the line", () => {
+    const roster = new Map([["f", entry("f", ["Zoé R."], 0)]])
+    render(<DayTimeline shifts={[shift("f", { status: "full", registered: 5, spotsLeft: 0 })]} shows={[]} selected={new Set()} onToggle={() => {}} roster={roster} />)
+    const bar = screen.getByRole("button")
+    expect(bar).toBeDisabled()
+    expect(bar.className).toContain("pointer-events-none")
+    fireEvent.click(bar.parentElement!)
+    expect(screen.getByText("Bar · 18h–20h")).toBeInTheDocument()
+  })
+
+  it("nothing of the roster without the switch", () => {
+    render(<DayTimeline shifts={[shift("a")]} shows={[]} selected={new Set()} onToggle={() => {}} />)
+    expect(screen.queryByText(/Touche, survole ou sélectionne/)).toBeNull()
+    expect(screen.getByRole("button")).not.toHaveAttribute("aria-describedby")
+  })
+})

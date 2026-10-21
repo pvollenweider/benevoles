@@ -11,6 +11,7 @@ import OrgSlugForm from "@/components/admin/OrgSlugForm"
 import OrgTimeZoneForm from "@/components/admin/OrgTimeZoneForm"
 import { APP_TIME_ZONE, timeZoneChoices } from "@/lib/time-zone"
 import OrgCharterForm from "@/components/admin/OrgCharterForm"
+import OrgRosterDefaultForm from "@/components/admin/OrgRosterDefaultForm"
 import { charterStatusLabel } from "@/lib/volunteer-charter"
 import { hasLevel } from "@/lib/permissions"
 import HelpLink from "@/components/admin/HelpLink"
@@ -45,7 +46,7 @@ export default async function AdminsSettingsPage() {
       },
       orderBy: { createdAt: "asc" },
     }),
-    db.organization.findUnique({ where: { id: organizationId }, select: { name: true, slug: true, outboundEmailApprovedAt: true, volunteerCharter: true, hasOrgInsurance: true, publicTitle: true, timeZone: true, logo: ORG_LOGO_SELECT } }),
+    db.organization.findUnique({ where: { id: organizationId }, select: { name: true, slug: true, outboundEmailApprovedAt: true, volunteerCharter: true, hasOrgInsurance: true, shiftRosterDefault: true, publicTitle: true, timeZone: true, logo: ORG_LOGO_SELECT } }),
     db.orgSlugHistory.findMany({
       where: { organizationId },
       orderBy: { createdAt: "desc" },
@@ -92,6 +93,7 @@ export default async function AdminsSettingsPage() {
             <dt className="text-gray-600">Adresse</dt><dd className="text-gray-900 break-all">{org.slug}.{baseDomain}</dd>
             <dt className="text-gray-600">Fuseau horaire</dt><dd className="text-gray-900">{org.timeZone || APP_TIME_ZONE}</dd>
             <dt className="text-gray-600">Charte des bénévoles</dt><dd className="text-gray-900">{charterStatusLabel(org.volunteerCharter)}</dd>
+            <dt className="text-gray-600">Qui est inscrit, nouveaux événements</dt><dd className="text-gray-900">{org.shiftRosterDefault ? "activé" : "désactivé"}</dd>
           </dl>
         </section>
       )}
@@ -125,6 +127,8 @@ export default async function AdminsSettingsPage() {
           initialHasOrgInsurance={org.hasOrgInsurance}
         />
       )}
+
+      {org && isOwner && <OrgRosterDefaultForm initialValue={org.shiftRosterDefault} />}
 
       <AdminsManager
         initialAdmins={admins.map((a) => ({

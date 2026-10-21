@@ -93,6 +93,8 @@ export type DuplicableEvent = {
   requirePhone: boolean
   /** Shift roster between volunteers (#1068): the setting is copied with the settings, never anyone's choice. */
   shiftRosterEnabled?: boolean
+  /** The organisation's default for new events (#1068): the copy's value when the settings are not copied. */
+  organizationRosterDefault?: boolean
   accentColorKey: string | null
   /** Day-of contact (#560): copied with the settings, like the other messages. */
   dayContactName?: string | null
@@ -199,7 +201,7 @@ export function duplicatePlan(source: DuplicableEvent, options: DuplicateOptions
       reminderMessage: copy.settings ? source.reminderMessage : null,
       remindersEnabled: copy.settings ? source.remindersEnabled : true,
       requirePhone: copy.settings ? source.requirePhone : false,
-      shiftRosterEnabled: copy.settings ? source.shiftRosterEnabled ?? false : false,
+      shiftRosterEnabled: copy.settings ? source.shiftRosterEnabled ?? false : source.organizationRosterDefault ?? false,
       accentColorKey: copy.settings ? source.accentColorKey : null,
       dayContactName: copy.settings ? source.dayContactName ?? null : null,
       dayContactPhone: copy.settings ? source.dayContactPhone ?? null : null,

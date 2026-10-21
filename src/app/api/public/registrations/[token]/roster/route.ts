@@ -8,15 +8,20 @@ import { orgTimeZone } from "@/lib/time-zone"
 import { recordTokenMiss, tokenLookupsBlocked, tokenUseAllowed } from "@/lib/token-rate-limit"
 import { registrationToken } from "@/lib/token-vault"
 import { LIVE_STATUSES } from "@/lib/registration-capacity"
-import { buildShiftRoster, isKnownMinor, isRosterChoice, rosterDisplayName, rosterOpen, viewerState, type RosterChoice } from "@/lib/shift-roster"
-import { logRosterChange, setPersonalRosterChoice } from "@/lib/roster-consent-write"
+import { isKnownMinor, rosterDisplayName, rosterOpen, signupNoticeVersion, viewerState } from "@/lib/shift-roster"
+import { logRosterChange, setPersonalRosterChoice, storedRosterChoice } from "@/lib/roster-consent-write"
+import { loadShiftRoster } from "@/lib/roster-read"
 
 /**
- * The shift roster of a personal page (#1068): GET names, shift by shift over the event, the other
- * confirmed volunteers who chose to show their name, as « Aline M. », and says what the link
- * holder chose; PATCH sets that choice. Nothing at all unless the event has the setting on, is not
- * over nor anonymised, and the holder has a confirmed place on it: never another event's, never a
- * hidden or pending name, never an identifier or any other field of another volunteer. Private, never cached; same token lookup and rate limits as the personal page.
+ * The shift roster of a personal link (#1068), read by the personal page (the holder's own shifts)
+ * and by the event page behind « Voir qui est inscrit » (every shift): GET names, shift by shift
+ * over the event, the confirmed volunteers who chose to show their name, as « Aline M. », with the
+ * number of the others there (a bare count, never who or why: buildShiftRoster), and says what the
+ * link holder chose; PATCH sets that choice. The holder is a confirmed volunteer: every choice
+ * given under a known text is shown to them (noticeReaches). Nothing at all unless the event has
+ * the setting on, is not over nor anonymised, and the holder has a confirmed place on it: never
+ * another event's, never a hidden or pending name, never an identifier or any other field of
+ * another volunteer. Private, never cached; same token lookup and rate limits as the personal page.
  */
 
 const NO_STORE = { "Cache-Control": "private, no-store" }
@@ -50,31 +55,17 @@ function eligible(h: Holder, now: Date): boolean {
 }
 
 async function rosterBody(h: Holder) {
-  const [shifts, registrations, consents] = await Promise.all([
-    // Every shift of the event (owner decision: choose shifts by affinity), its public fields only.
-    prisma.shift.findMany({
-      where: { eventId: h.eventId, status: { not: "cancelled" } },
-      select: { id: true, label: true, date: true, startTime: true, endTime: true },
-      orderBy: [{ date: "asc" }, { startTime: "asc" }, { displayOrder: "asc" }],
-    }),
-    prisma.registration.findMany({
-      where: { eventId: h.eventId, status: "active" },
-      select: {
-        shiftId: true, volunteerId: true, status: true,
-        volunteer: { select: { firstName: true, lastName: true, birthDate: true, erasedAt: true, mergedIntoId: true } },
-      },
-    }),
-    prisma.rosterConsent.findMany({ where: { eventId: h.eventId, status: "visible" }, select: { volunteerId: true, status: true } }),
+  const [shifts, own] = await Promise.all([
+    loadShiftRoster({ eventId: h.eventId, viewerId: h.volunteerId, audience: "confirmed", eventStart: h.event.startDate }),
+    storedRosterChoice(prisma, h.eventId, h.volunteerId),
   ])
-  const choices = new Map<string, RosterChoice>(consents.filter((c) => isRosterChoice(c.status)).map((c) => [c.volunteerId, c.status as RosterChoice]))
-  const own = await prisma.rosterConsent.findUnique({ where: { eventId_volunteerId: { eventId: h.eventId, volunteerId: h.volunteerId } }, select: { status: true } })
-  const minor = isKnownMinor(h.volunteer.birthDate, h.event.startDate)
   return {
     available: true,
     // The holder's own display name, to say what the others see: never anyone else's identity.
     displayName: rosterDisplayName(h.volunteer.firstName, h.volunteer.lastName),
-    state: viewerState(own && isRosterChoice(own.status) ? own.status : null, minor),
-    shifts: buildShiftRoster({ viewerId: h.volunteerId, shifts, registrations, choices, eventStart: h.event.startDate }),
+    state: viewerState(own, isKnownMinor(h.volunteer.birthDate, h.event.startDate)),
+    // Every shift of the event (the event page's frise and list); the personal page keeps `own`.
+    shifts,
   }
 }
 
@@ -92,7 +83,8 @@ export async function GET(req: Request, { params }: { params: Promise<{ token: s
   return json(await rosterBody(h))
 }
 
-const patchSchema = z.object({ visible: z.boolean() })
+// `noticeVersion`: the text the page showed (#1068); a page loaded before the current text sends none.
+const patchSchema = z.object({ visible: z.boolean(), noticeVersion: z.string().max(40).optional() })
 
 export async function PATCH(req: Request, { params }: { params: Promise<{ token: string }> }) {
   if (await tokenLookupsBlocked(req)) return tooManyAttempts()
@@ -117,7 +109,7 @@ export async function PATCH(req: Request, { params }: { params: Promise<{ token:
   const change = await prisma.$transaction(async (tx) => {
     const locked = await tx.$queryRaw<{ id: string }[]>`SELECT id FROM "Volunteer" WHERE id = ${h.volunteerId} AND "erasedAt" IS NULL FOR UPDATE`
     if (locked.length === 0) return "erased" as const
-    return setPersonalRosterChoice(tx, { eventId: h.eventId, volunteerId: h.volunteerId, visible, now })
+    return setPersonalRosterChoice(tx, { eventId: h.eventId, volunteerId: h.volunteerId, visible, noticeVersion: signupNoticeVersion(parsed.data.noticeVersion), now })
   })
   if (change === "erased") return notFound()
   if (change) await logRosterChange(h.eventId, h.volunteerId, change)

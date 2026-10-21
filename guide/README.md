@@ -116,7 +116,7 @@ Après avoir ajouté, renommé ou retiré une page, mettre à jour la liste ci-d
 - [Gérer l'équipe admin](equipe-admin.md) : Les deux rôles d'administrateur, propriétaire et organisateur, et comment inviter, changer de rôle ou retirer un admin. Pour : organisateurs.
 - [Exporter et conserver ses données](exporter-et-conserver-ses-donnees.md) : Exporter un événement, les membres ou le journal à tout moment, et savoir combien de temps chaque donnée est conservée. Pour : organisateurs.
 - [Journal d'activité de l'organisation](journal-d-activite-de-l-organisation.md) : La liste chronologique de ce qui concerne l'organisation plutôt qu'un événement : membres, comptes admin, emails, réglages. Pour : organisateurs.
-- [Personnaliser l'organisation](personnaliser-l-organisation.md) : Le nom, l'adresse publique, le logo, le titre de la page publique et le fuseau horaire de l'organisation. Pour : organisateurs.
+- [Personnaliser l'organisation](personnaliser-l-organisation.md) : Nom, adresse publique, logo, titre de la page publique, fuseau horaire et réglage « Qui est inscrit » par défaut de l'organisation. Pour : organisateurs.
 - [Charte du bénévole](charte-du-benevole.md) : Personnaliser la convention que les bénévoles acceptent avant de s'inscrire, et retrouver la preuve de leur acceptation. Pour : organisateurs.
 
 ### Aide

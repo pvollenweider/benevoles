@@ -46,6 +46,12 @@ export const ROSTER_CHOICE_LOG_LABELS: Record<string, string> = {
   hidden: "masqué",
 }
 
+/** Who sees a volunteer's name (#1068), « nom visible par : bénévoles confirmés → bénévoles confirmés et membres invités ». */
+export const ROSTER_AUDIENCE_LOG_LABELS: Record<string, string> = {
+  confirmed: "bénévoles confirmés",
+  confirmed_and_invited: "bénévoles confirmés et membres invités",
+}
+
 function lookup(map: Record<string, string>, value: string): string | undefined {
   return Object.hasOwn(map, value) ? map[value] : undefined
 }
@@ -69,6 +75,8 @@ export function logValueLabel(field: string, value: unknown, entityType?: string
       return lookup(EVENT_PUBLIC_STATUS_LOG_LABELS, value)
     case "rosterName":
       return lookup(ROSTER_CHOICE_LOG_LABELS, value)
+    case "rosterAudience":
+      return lookup(ROSTER_AUDIENCE_LOG_LABELS, value)
     default:
       return undefined
   }

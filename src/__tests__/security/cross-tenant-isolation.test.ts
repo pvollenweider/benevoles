@@ -303,6 +303,23 @@ describe("Events — cross-tenant isolation", () => {
     expect(prismaMock.event.update).not.toHaveBeenCalled()
   })
 
+  it("POST /api/admin/events reads the « Qui est inscrit » default (#1068) of the caller's organisation only", async () => {
+    const { POST } = await import("@/app/api/admin/events/route")
+    const db = setupGuard()
+    const res = await POST(makeRequest("/api/admin/events", "POST", { title: "Fête", startDate: "2031-06-06", endDate: "2031-06-06" }))
+    expect(res.status).toBe(201)
+    expect(db.organization.findUnique).toHaveBeenCalledWith({ where: { id: ORG_A }, select: { shiftRosterDefault: true } })
+  })
+
+  it("POST /api/admin/events/[id]/duplicate returns 404 for an org-B event (its roster setting never copied)", async () => {
+    const { POST } = await import("@/app/api/admin/events/[id]/duplicate/route")
+    const db = setupGuard()
+    prismaMock.event.findFirst.mockResolvedValue({ id: "evt-b", organizationId: "org-b", shiftRosterEnabled: true })
+    const res = await POST(makeRequest("/api/admin/events/evt-b/duplicate", "POST", {}), params("evt-b"))
+    expect(res.status).toBe(404)
+    expect(db.event.create).not.toHaveBeenCalled()
+  })
+
   it("DELETE /api/admin/events/[id] returns 404 for org-B event", async () => {
     const { DELETE } = await import("@/app/api/admin/events/[id]/route")
     setupGuard()

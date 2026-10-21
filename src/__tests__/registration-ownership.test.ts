@@ -359,13 +359,13 @@ describe("POST /api/public/registrations — shift roster choice (#1068)", () =>
 
   it("no proof suspends an earlier acceptance, and never overrides a refusal", async () => {
     m.volFindFirst.mockResolvedValue(victim)
-    m.rosterFindUnique.mockResolvedValue({ status: "visible" })
+    m.rosterFindUnique.mockResolvedValue({ status: "visible", noticeVersion: "2026-10-21" })
     await withRosterEvent(true)
     const { POST } = await import("@/app/api/public/registrations/route")
     await POST(post())
     expect(stored()).toEqual(["pending"])
     m.rosterUpsert.mockReset()
-    m.rosterFindUnique.mockResolvedValue({ status: "hidden" })
+    m.rosterFindUnique.mockResolvedValue({ status: "hidden", noticeVersion: "2026-10-21" })
     await withRosterEvent(true)
     await POST(post({ rosterNameVisible: true }))
     expect(m.rosterUpsert).not.toHaveBeenCalled()
@@ -379,6 +379,32 @@ describe("POST /api/public/registrations — shift roster choice (#1068)", () =>
     await POST(post({ inviteToken: "inv-tok", rosterNameVisible: true }))
     expect(stored()).toEqual(["visible"])
     expect(m.rosterUpsert.mock.calls[0][0].update.source).toBe("signup_verified")
+  })
+
+  it("stores the version of the text the form showed: the current one only when the form says so", async () => {
+    m.volFindFirst.mockResolvedValue(victim)
+    m.inviteFindFirst.mockResolvedValue({ id: "inv-1" })
+    const { POST } = await import("@/app/api/public/registrations/route")
+    await withRosterEvent(true)
+    await POST(post({ inviteToken: "inv-tok", rosterNameVisible: true, rosterNoticeVersion: "2026-10-21.2" }))
+    expect(m.rosterUpsert.mock.calls[0][0].update).toMatchObject({ status: "visible", noticeVersion: "2026-10-21.2" })
+    // A page loaded before the current text (no version, or another one): the first text's narrower audience.
+    for (const version of [undefined, "2099-01-01"]) {
+      m.rosterUpsert.mockReset()
+      await withRosterEvent(true)
+      await POST(post({ inviteToken: "inv-tok", rosterNameVisible: true, rosterNoticeVersion: version }))
+      expect(m.rosterUpsert.mock.calls[0][0].update).toMatchObject({ status: "visible", noticeVersion: "2026-10-21" })
+    }
+  })
+
+  it("a sign-up without a new choice never widens a first-text acceptance", async () => {
+    m.volFindFirst.mockResolvedValue(victim)
+    m.inviteFindFirst.mockResolvedValue({ id: "inv-1" })
+    m.rosterFindUnique.mockResolvedValue({ status: "visible", noticeVersion: "2026-10-21" })
+    await withRosterEvent(true)
+    const { POST } = await import("@/app/api/public/registrations/route")
+    await POST(post({ inviteToken: "inv-tok", rosterNoticeVersion: "2026-10-21.2" }))
+    expect(m.rosterUpsert).not.toHaveBeenCalled()
   })
 
   it("the box counts for nothing on an event without the roster, and nothing is stored unticked", async () => {

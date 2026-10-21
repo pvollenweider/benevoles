@@ -7,7 +7,8 @@
  * - « Marché de Noël », published, the setting on: confirmed volunteers, some of whom chose to
  *   show their name, and Léa, registered before the setting was turned on, whose name stays
  *   hidden (her personal page shows the card with « Afficher mon nom »);
- * - « Marché de printemps », a draft with the setting off, for the publication page's note.
+ * - « Marché de printemps », a draft with the setting on (the default of a new event), for the
+ *   publication page's note.
  *
  * Its own organization: the village fête of scripts/seed-demo.ts and every other capture are left
  * untouched. Run on a throwaway database, after `prisma migrate deploy`, `prisma db seed` and
@@ -44,6 +45,8 @@ const PEOPLE: [string, string, boolean][] = [
   ["Chloé", "Délèze", true],
   ["Damien", "Crettenand", false],
   ["Élodie", "Bornet", true],
+  ["Florian", "Gaillard", false],
+  ["Gaëlle", "Rouiller", false],
 ]
 
 const email = (first: string, last: string) =>
@@ -74,6 +77,7 @@ async function main() {
     },
   })
   const shiftData = [
+    { roleName: "Montage des stands", date: start, startTime: "06:00", endTime: "08:00", capacity: 4 },
     { roleName: "Accueil des exposants", date: start, startTime: "08:00", endTime: "11:00", capacity: 4 },
     { roleName: "Vin chaud", date: start, startTime: "16:00", endTime: "20:00", capacity: 4 },
     { roleName: "Vin chaud", date: end, startTime: "16:00", endTime: "20:00", capacity: 4 },
@@ -83,12 +87,12 @@ async function main() {
   for (const [order, s] of shiftData.entries()) {
     shifts.push(await prisma.shift.create({ data: { eventId: event.id, label: s.roleName, displayOrder: order, ...s } }))
   }
-  const [accueil, vinSam, vinDim, rangement] = shifts
+  const [montage, accueil, vinSam, vinDim, rangement] = shifts
 
   const people = await Promise.all(
     PEOPLE.map(([firstName, lastName]) => prisma.volunteer.create({ data: { organizationId: org.id, firstName, lastName, email: email(firstName, lastName) } })),
   )
-  const [lea, aline, bastien, chloe, damien, elodie] = people
+  const [lea, aline, bastien, chloe, damien, elodie, florian, gaelle] = people
   const places: [typeof lea, typeof accueil][] = [
     [lea, vinSam], [lea, rangement],
     [aline, vinSam], [aline, accueil],
@@ -96,6 +100,10 @@ async function main() {
     [chloe, accueil], [chloe, vinDim],
     [damien, vinSam],
     [elodie, rangement], [elodie, vinDim],
+    // Hidden only: the card gives their number, never their names (« et 1 autre bénévole »,
+    // « 2 autres bénévoles, sans nom affiché »).
+    [florian, montage], [florian, accueil],
+    [gaelle, montage],
   ]
   let first = true
   for (const [v, shift] of places) {
@@ -105,7 +113,7 @@ async function main() {
       data: { eventId: event.id, shiftId: shift.id, volunteerId: v.id, status: "active", source: "public_form", ...registrationToken.data(token) },
     })
   }
-  // Those who chose to show their name; Léa and Damien made no choice: hidden.
+  // Those who chose to show their name; Léa, Damien, Florian and Gaëlle made no choice: hidden.
   for (const [i, [, , visible]] of PEOPLE.entries()) {
     if (!visible) continue
     await prisma.rosterConsent.create({
@@ -113,16 +121,16 @@ async function main() {
     })
   }
 
-  // A draft with the setting off: the publication page shows its note.
+  // A draft with the setting on, as a new event starts: the publication page says so.
   const spring = await prisma.event.create({
     data: {
       organizationId: org.id, slug: "marche-de-printemps", title: "Marché de printemps", location: "Place du Midi",
-      publicStatus: "draft", startDate: day(120), endDate: day(120),
+      publicStatus: "draft", startDate: day(120), endDate: day(120), shiftRosterEnabled: true,
     },
   })
   await prisma.shift.create({ data: { eventId: spring.id, roleName: "Accueil des exposants", label: "Accueil des exposants", date: day(120), startTime: "08:00", endTime: "11:00", capacity: 4 } })
 
-  console.log(`✓ « ${event.title} » (roster on) and « ${spring.title} » (draft) in ${org.name}`)
+  console.log(`✓ « ${event.title} » (roster on) and « ${spring.title} » (draft, roster on) in ${org.name}`)
 }
 
 main()

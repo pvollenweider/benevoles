@@ -146,18 +146,28 @@ export default function PrivacyPage() {
       {/* Shift roster between volunteers (#1068). */}
       <p id="noms-entre-benevoles">
         <strong>Noms visibles entre bénévoles d&apos;un événement.</strong> Sur instruction de
-        l&apos;Organisation, qui l&apos;active événement par événement (désactivé par défaut), les
-        bénévoles qui ont une place confirmée peuvent voir sur leur page personnelle, créneau par
-        créneau, le prénom et l&apos;initiale du nom (par exemple « Aline M. ») des autres bénévoles
-        confirmés du même événement, jusqu&apos;à la fin de l&apos;événement. Seules y figurent les
-        personnes qui l&apos;ont accepté : une case facultative du formulaire d&apos;inscription, à
-        confirmer depuis la page personnelle quand rien ne prouve que l&apos;adresse est la leur.
-        Personne n&apos;y figure sans ce choix, ni une personne de moins de 18 ans dont la date de
-        naissance est connue. Chacun peut masquer son nom à tout moment depuis sa page personnelle,
-        sans effet sur son inscription. Ces noms n&apos;apparaissent jamais sur la page publique de
-        l&apos;événement ni dans son intégration à un autre site. Le choix de chaque bénévole est
-        conservé avec l&apos;événement (voir la <a href="#conservation">conservation des données</a>).
-        L&apos;Organisation informe ses bénévoles de ce traitement et en reste responsable.
+        l&apos;Organisation, qui le règle événement par événement (activé par défaut pour ses
+        nouveaux événements, désactivable à tout moment, avec une valeur par défaut qu&apos;elle choisit
+        dans ses paramètres), deux catégories de personnes peuvent voir sur la page de
+        l&apos;événement, créneau par créneau, le prénom et l&apos;initiale du nom (par exemple
+        « Aline M. ») des bénévoles confirmés de l&apos;événement, jusqu&apos;à la fin de
+        l&apos;événement : les bénévoles qui y ont une place confirmée, par leur lien personnel, et
+        les membres que l&apos;Organisation a invités par email à s&apos;y inscrire, par le lien de leur
+        invitation, avant de s&apos;inscrire. Personne d&apos;autre : ni un visiteur sans lien, ni un
+        lien par groupe, ni l&apos;intégration de la page à un autre site, ni les moteurs de recherche.
+        Seuls les noms des personnes qui l&apos;ont accepté sont affichés : une case facultative du
+        formulaire d&apos;inscription, à confirmer depuis la page personnelle quand rien ne prouve que
+        l&apos;adresse est la leur. Aucun nom n&apos;est affiché sans ce choix, ni celui d&apos;une
+        personne de moins de 18 ans dont la date de naissance est connue. Une personne qui l&apos;a
+        accepté avant que les membres invités puissent le voir n&apos;est montrée qu&apos;aux bénévoles
+        confirmés, tant qu&apos;elle n&apos;a pas accepté le nouveau texte depuis sa page personnelle.
+        Pour chaque créneau, ces personnes voient également le nombre des autres bénévoles dont la
+        place est confirmée et dont le nom reste masqué, y compris les personnes mineures ou dont le
+        dossier a été effacé : un nombre seul, qui ne dit ni qui ni pourquoi. Chacun peut masquer son
+        nom à tout moment depuis sa page personnelle, sans effet sur son inscription. Le choix de
+        chaque bénévole est conservé avec l&apos;événement, avec la version du texte accepté (voir la{" "}
+        <a href="#conservation">conservation des données</a>). L&apos;Organisation informe ses
+        bénévoles de ce traitement, peut le désactiver pour un événement, et en reste responsable.
       </p>
       <p>
         En tant que sous-traitant, nous nous engageons à :

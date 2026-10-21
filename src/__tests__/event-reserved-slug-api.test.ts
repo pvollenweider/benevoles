@@ -17,7 +17,7 @@ describe("event creation with a reserved slug", () => {
     vi.clearAllMocks()
     create.mockResolvedValue({ id: "evt-new" })
     findFirst.mockResolvedValue(null)
-    requireOrgSessionMock.mockResolvedValue({ db: { event: { create, findFirst } }, organizationId: "org-a", session: {} })
+    requireOrgSessionMock.mockResolvedValue({ db: { organization: { findUnique: vi.fn().mockResolvedValue({ shiftRosterDefault: true }) }, event: { create, findFirst } }, organizationId: "org-a", session: {} })
   })
 
   it("POST /api/admin/events refuses « Tarifs » with a French message, and creates nothing", async () => {

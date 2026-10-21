@@ -32,11 +32,11 @@ vi.mock("@/lib/prisma", () => {
   const volunteerSelect = (v: Vol) => ({ firstName: v.firstName, lastName: v.lastName, birthDate: v.birthDate, erasedAt: v.erasedAt, mergedIntoId: v.mergedIntoId })
   const rosterConsent = {
     findMany: async ({ where }: { where: { eventId: string; status?: string } }) =>
-      db.consents.filter((c) => c.eventId === where.eventId && (!where.status || c.status === where.status)).map((c) => ({ volunteerId: c.volunteerId, status: c.status })),
+      db.consents.filter((c) => c.eventId === where.eventId && (!where.status || c.status === where.status)).map((c) => ({ volunteerId: c.volunteerId, status: c.status, noticeVersion: c.noticeVersion ?? "2026-10-21.2" })),
     findUnique: async ({ where }: { where: { eventId_volunteerId: { eventId: string; volunteerId: string } } }) => {
       const k = where.eventId_volunteerId
       const c = db.consents.find((x) => x.eventId === k.eventId && x.volunteerId === k.volunteerId)
-      return c ? { status: c.status } : null
+      return c ? { status: c.status, noticeVersion: c.noticeVersion ?? "2026-10-21.2" } : null
     },
     upsert: async ({ where, create, update }: { where: { eventId_volunteerId: { eventId: string; volunteerId: string } }; create: Consent; update: Partial<Consent> }) => {
       const k = where.eventId_volunteerId
@@ -129,11 +129,18 @@ describe("GET /api/public/registrations/[token]/roster (#1068)", () => {
       available: true,
       displayName: "Moi M.",
       state: "hidden",
-      shifts: [{ shiftId: "accueil", label: "Accueil", date: "2099-10-01T00:00:00.000Z", startTime: "14:00", endTime: "16:00", names: ["Aline M."] }],
+      shifts: [
+        // Bruno (pending) and Chloé (hidden) are on the viewer's shift: counted, never named; the
+        // waitlisted Wanda and the viewer are not counted.
+        { shiftId: "bar", label: "Bar", date: "2099-10-01T00:00:00.000Z", startTime: "10:00", endTime: "12:00", names: [], othersCount: 2, own: true },
+        { shiftId: "accueil", label: "Accueil", date: "2099-10-01T00:00:00.000Z", startTime: "14:00", endTime: "16:00", names: ["Aline M."], othersCount: 0, own: false },
+      ],
     })
+    // Only display strings and bare counts per shift: no field about the hidden people.
+    for (const s of body.shifts) expect(Object.keys(s).sort()).toEqual(["date", "endTime", "label", "names", "othersCount", "own", "shiftId", "startTime"])
     const text = JSON.stringify(body)
     // Pending, hidden, waitlisted: never in the payload. No ids, emails, phones or full names.
-    for (const leak of ["Bruno", "Chloé", "Wanda", "aline", "bruno", "Martin", "@example.com", "079"]) expect(text).not.toContain(leak)
+    for (const leak of ["Bruno", "Chloé", "Wanda", "aline", "bruno", "chloe", "waiter", "Martin", "Keller", "Roux", "pending", "@example.com", "079"]) expect(text).not.toContain(leak)
   })
 
   it("a link of event A never sees event B", async () => {
@@ -141,8 +148,8 @@ describe("GET /api/public/registrations/[token]/roster (#1068)", () => {
     expect(a).not.toContain("Bob")
     expect(a).not.toContain("Autre")
     const b = await (await get("tok-r-bob")).json()
-    // Bob is alone on B: nobody else to show, and nothing of A.
-    expect(b).toMatchObject({ available: true, shifts: [] })
+    // Bob is alone on B: his own shift with nobody else, and nothing of A.
+    expect(b).toMatchObject({ available: true, shifts: [{ shiftId: "b-shift", names: [], othersCount: 0, own: true }] })
     expect(JSON.stringify(b)).not.toContain("Aline")
   })
 
@@ -161,12 +168,14 @@ describe("GET /api/public/registrations/[token]/roster (#1068)", () => {
     expect(await (await get("tok-r-me")).json()).toEqual({ available: false })
   })
 
-  it("an erased volunteer or a known minor is never named", async () => {
+  it("an erased volunteer or a known minor is never named, only counted like anyone else", async () => {
+    const accueil = async () => (await (await get("tok-r-me")).json()).shifts.find((s: { shiftId: string }) => s.shiftId === "accueil")
     db.volunteers.get("aline")!.erasedAt = new Date()
-    expect((await (await get("tok-r-me")).json()).shifts).toEqual([])
+    expect(await accueil()).toMatchObject({ names: [], othersCount: 1 })
     seed()
     db.volunteers.get("aline")!.birthDate = new Date("2090-01-01T00:00:00Z")
-    expect((await (await get("tok-r-me")).json()).shifts).toEqual([])
+    expect(await accueil()).toMatchObject({ names: [], othersCount: 1 })
+    expect(JSON.stringify(await (await get("tok-r-me")).json())).not.toContain("Aline")
   })
 
   it("an unknown or cancelled link is a 404, counted as a miss", async () => {
@@ -180,23 +189,26 @@ describe("PATCH /api/public/registrations/[token]/roster (#1068)", () => {
   beforeEach(() => { vi.clearAllMocks(); seed() })
 
   it("shows, then hides the holder's name, each change logged as theirs", async () => {
-    let res = await patch("tok-r-me", { visible: true })
+    let res = await patch("tok-r-me", { visible: true, noticeVersion: "2026-10-21.2" })
     expect(res.status).toBe(200)
     expect((await res.json()).state).toBe("visible")
     expect(db.consents.find((c) => c.volunteerId === "me")).toMatchObject({ eventId: "ev-a", status: "visible", source: "personal_page", noticeVersion: expect.any(String) })
     expect(logEvent).toHaveBeenCalledWith(expect.objectContaining({ eventId: "ev-a", actor: { type: "volunteer", id: "me" }, action: "roster.choice_changed", changes: { rosterName: { from: null, to: "visible" } } }))
     // Another volunteer now sees « Moi M. ».
-    expect((await (await get("tok-r-bruno")).json()).shifts.find((s: { shiftId: string }) => s.shiftId === "bar").names).toEqual(["Moi M."])
+    expect((await (await get("tok-r-bruno")).json()).shifts.find((s: { shiftId: string }) => s.shiftId === "bar")).toMatchObject({ names: ["Moi M."], othersCount: 1 })
 
     res = await patch("tok-r-me", { visible: false })
     expect((await res.json()).state).toBe("hidden")
-    expect(JSON.stringify(await (await get("tok-r-bruno")).json())).not.toContain("Moi")
+    const bruno = await (await get("tok-r-bruno")).json()
+    expect(JSON.stringify(bruno)).not.toContain("Moi")
+    // Hidden again: counted like Chloé, the same number as a pending or absent choice.
+    expect(bruno.shifts.find((s: { shiftId: string }) => s.shiftId === "bar")).toMatchObject({ names: [], othersCount: 2 })
   })
 
   it("confirms a pending request from the sign-up form", async () => {
-    const res = await patch("tok-r-bruno", { visible: true })
+    const res = await patch("tok-r-bruno", { visible: true, noticeVersion: "2026-10-21.2" })
     expect((await res.json()).state).toBe("visible")
-    expect((await (await get("tok-r-me")).json()).shifts.find((s: { shiftId: string }) => s.shiftId === "bar").names).toEqual(["Bruno K."])
+    expect((await (await get("tok-r-me")).json()).shifts.find((s: { shiftId: string }) => s.shiftId === "bar")).toMatchObject({ names: ["Bruno K."], othersCount: 1 })
   })
 
   it("hiding is always possible, showing is refused when the roster is closed or for a known minor", async () => {
@@ -222,5 +234,52 @@ describe("PATCH /api/public/registrations/[token]/roster (#1068)", () => {
     expect(db.consents.find((c) => c.volunteerId === "me")).toBeUndefined()
     expect((await patch("tok-r-me", { visible: "yes" })).status).toBe(400)
     expect((await patch("nope", { visible: false })).status).toBe(404)
+  })
+})
+
+describe("the roster's text versions on a personal link (#1068 follow-up)", () => {
+  beforeEach(() => { vi.clearAllMocks(); seed() })
+
+  it("a confirmed volunteer sees names given under the first text too; an unknown text is never shown", async () => {
+    db.consents.find((c) => c.volunteerId === "aline")!.noticeVersion = "2026-10-21"
+    expect((await (await get("tok-r-me")).json()).shifts[1].names).toEqual(["Aline M."])
+    db.consents.find((c) => c.volunteerId === "aline")!.noticeVersion = "2099-01-01"
+    const body = await (await get("tok-r-me")).json()
+    expect(body.shifts[1]).toMatchObject({ names: [], othersCount: 1 })
+  })
+
+  it("a name shown under the first text: the page offers the current one, and showing again records it, logged as a wider audience", async () => {
+    db.consents.push({ eventId: "ev-a", volunteerId: "me", status: "visible", noticeVersion: "2026-10-21" })
+    expect((await (await get("tok-r-me")).json()).state).toBe("visible_confirmed")
+    // A page loaded before the current text sends no version: the first text's audience is kept.
+    expect((await (await patch("tok-r-me", { visible: true })).json()).state).toBe("visible_confirmed")
+    expect(logEvent).not.toHaveBeenCalled()
+    const res = await patch("tok-r-me", { visible: true, noticeVersion: "2026-10-21.2" })
+    expect((await res.json()).state).toBe("visible")
+    expect(db.consents.find((c) => c.volunteerId === "me")).toMatchObject({ status: "visible", noticeVersion: "2026-10-21.2", source: "personal_page" })
+    expect(logEvent).toHaveBeenCalledWith(expect.objectContaining({
+      action: "roster.choice_changed",
+      changes: { rosterAudience: { from: "confirmed", to: "confirmed_and_invited" } },
+    }))
+    // Again: nothing to record.
+    logEvent.mockClear()
+    await patch("tok-r-me", { visible: true, noticeVersion: "2026-10-21.2" })
+    expect(logEvent).not.toHaveBeenCalled()
+  })
+
+  it("hiding a name shown under the first text hides it for everyone", async () => {
+    db.consents.push({ eventId: "ev-a", volunteerId: "me", status: "visible", noticeVersion: "2026-10-21" })
+    expect((await (await patch("tok-r-me", { visible: false })).json()).state).toBe("hidden")
+    expect(db.consents.find((c) => c.volunteerId === "me")).toMatchObject({ status: "hidden" })
+  })
+})
+
+describe("PATCH and the text the page showed (#1068 follow-up)", () => {
+  beforeEach(() => { vi.clearAllMocks(); seed() })
+  it("a new acceptance from a page without the current text reaches confirmed volunteers only", async () => {
+    await patch("tok-r-me", { visible: true })
+    expect(db.consents.find((c) => c.volunteerId === "me")).toMatchObject({ status: "visible", noticeVersion: "2026-10-21" })
+    await patch("tok-r-me", { visible: true, noticeVersion: "2099-01-01" })
+    expect(db.consents.find((c) => c.volunteerId === "me")).toMatchObject({ noticeVersion: "2026-10-21" })
   })
 })

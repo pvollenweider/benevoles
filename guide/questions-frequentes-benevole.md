@@ -16,6 +16,7 @@ aliases: []
 - [Le créneau que je veux est complet](liste-d-attente.md#le-creneau-que-je-veux-est-complet)
 - [Le créneau indique « Sur validation »](inscriptions-sur-validation.md#le-creneau-indique-sur-validation)
 - [Le poste demande un âge minimum, mais je n'ai pas mon acte de naissance sur moi](age-minimum.md#le-poste-demande-un-age-minimum-mais-je-n-ai-pas-mon-acte-de-naissance-sur-moi)
+- [Je veux savoir qui est inscrit avant de choisir mes créneaux](choisir-ses-creneaux.md#voir-qui-est-inscrit)
 
 ## Pendant l'inscription
 
@@ -30,3 +31,5 @@ aliases: []
 - [Je n'ai plus le lien vers ma page personnelle](lien-personnel.md#je-n-ai-plus-le-lien-vers-ma-page-personnelle)
 - [Je ne veux pas oublier mon créneau le jour J](rappels.md#je-ne-veux-pas-oublier-mon-creneau-le-jour-j)
 - [Je me suis inscrit avant que l'organisation montre qui est inscrit : pourquoi mon nom n'apparaît pas ?](ma-page-personnelle.md#je-me-suis-inscrit-avant-que-l-organisation-montre-qui-est-inscrit-pourquoi-mon-nom-n-apparait-pas)
+- [Qui peut voir mon nom ?](ma-page-personnelle.md#qui-peut-voir-mon-nom)
+- [Mon nom est affiché aux bénévoles confirmés, mais pas aux membres invités : pourquoi ?](ma-page-personnelle.md#mon-nom-est-affiche-aux-benevoles-confirmes-mais-pas-aux-membres-invites-pourquoi)

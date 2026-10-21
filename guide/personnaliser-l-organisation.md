@@ -2,7 +2,7 @@
 roles: [admin]
 group: organisation
 order: 40
-summary: Le nom, l'adresse publique, le logo, le titre de la page publique et le fuseau horaire de l'organisation.
+summary: Nom, adresse publique, logo, titre de la page publique, fuseau horaire et réglage « Qui est inscrit » par défaut de l'organisation.
 related: [charte-du-benevole, equipe-admin, premiers-pas]
 legacy: [admin#nom-et-adresse-de-l-organisation, admin#logo-de-l-organisation, admin#titre-de-la-page-publique, admin#fuseau-horaire]
 aliases: []
@@ -41,3 +41,7 @@ Section **Titre de la page publique**. Le titre affiché en haut de la page publ
 ## Fuseau horaire
 
 Section **Fuseau horaire**. Les heures des créneaux sont des heures locales : ce réglage indique dans quel fuseau les lire. Il sert à envoyer les rappels au bon moment, à indiquer l'heure limite d'une place proposée en liste d'attente, et à afficher les heures du journal de l'événement et des **Documents à imprimer**. Par défaut, c'est le fuseau de la plateforme (Europe/Zurich) ; choisissez-en un autre si vos événements ont lieu ailleurs, puis **Enregistrer**. Changer de fuseau ne modifie pas les heures affichées des créneaux, mais décale le moment où leurs rappels partent.
+
+## Qui est inscrit, réglage par défaut
+
+Section **Qui est inscrit**. La case **Par défaut, permettre aux bénévoles confirmés et aux membres invités de voir qui est inscrit**, cochée par défaut, donne la valeur de départ du réglage de même nom des événements créés ensuite, sur une page blanche comme depuis un modèle (voir le réglage dans [Créer un événement](creer-un-evenement.md#page-blanche)). Cochez-la ou décochez-la, puis **Enregistrer**. Les événements existants ne changent pas : chacun garde son propre réglage, modifiable dans ses réglages. Une copie faite avec **Dupliquer** reprend le réglage de l'événement d'origine quand ses réglages sont copiés, et ce réglage par défaut sinon (voir [Dupliquer un événement](dupliquer-un-evenement.md)). Dans tous les cas, un nom n'apparaît que si le bénévole l'accepte.

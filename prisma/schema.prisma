@@ -18,6 +18,9 @@ model Organization {
   active           Boolean  @default(true)
   volunteerCharter String?
   hasOrgInsurance  Boolean  @default(true)
+  // « Qui est inscrit » (#1068): the value a NEW event of this organisation starts with
+  // (Event.shiftRosterEnabled). On by default; existing events keep their own value.
+  shiftRosterDefault Boolean @default(true)
   publicTitle      String? // headline of the public events page; null = "Bénévoles"
   // IANA time zone of the organization's events (#344): shift times are local wall-clock times in
   // this zone (reminders, emails, event log, PDF export). null = deployment default (APP_TIME_ZONE).
@@ -154,9 +157,11 @@ model Event {
   // organisation's zone, hours a duration on top. Admin removal is never limited by it.
   cancelDeadlineDays  Int?
   cancelDeadlineHours Int?
-  // Shift roster between volunteers (#1068): when on, a confirmed volunteer's personal page names
-  // (« Aline M. ») the other confirmed volunteers of their own shifts who opted in (RosterConsent).
-  // Off by default; turning it on shows nobody by itself, and nobody is opted in on their behalf.
+  // Shift roster between volunteers (#1068): when on, the event's identified viewers (confirmed
+  // volunteers, invited members) see « Aline M. » for the volunteers who opted in (RosterConsent).
+  // New events start with Organization.shiftRosterDefault, set by the creation routes; the column
+  // default stays false (existing events and seeds keep their value). Turning it on shows nobody
+  // by itself, and nobody is opted in on their behalf.
   shiftRosterEnabled  Boolean   @default(false)
   // Retention of past events (#813): when its registrations were anonymised, 3 years after its end.
   personalDataAnonymizedAt DateTime?

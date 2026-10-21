@@ -49,7 +49,7 @@ import { resolveCharterText } from "@/lib/volunteer-charter"
 import { hashCharterText } from "@/lib/charter-hash"
 import { lockSignupVolunteer } from "@/lib/signup-volunteer"
 import { touchOrgActivity } from "@/lib/org-activity"
-import { isKnownMinor } from "@/lib/shift-roster"
+import { isKnownMinor, signupNoticeVersion } from "@/lib/shift-roster"
 import { applySignupRosterChoice, logRosterChange, type RosterChange } from "@/lib/roster-consent-write"
 import { parseGroupCode } from "@/lib/group-links"
 import { localDay } from "@/lib/day-of"
@@ -94,6 +94,8 @@ const schema = z.object({
    * it on. Never authority on its own: see choiceAfterSignup (src/lib/shift-roster.ts).
    */
   rosterNameVisible: z.boolean().optional(),
+  /** The version of the roster box's text the form showed (#1068); absent from older pages = V1. */
+  rosterNoticeVersion: z.string().max(40).optional(),
 })
 
 export async function POST(req: Request) {
@@ -390,6 +392,7 @@ export async function POST(req: Request) {
         requested: event.shiftRosterEnabled && parsed.data.rosterNameVisible === true,
         verified: ownsEmail && !createdNow && !matchErased,
         minor: isKnownMinor(birthDateValue ?? null, event.startDate),
+        noticeVersion: signupNoticeVersion(parsed.data.rosterNoticeVersion),
         now: new Date(),
       })
       // From the personal link (#1013): the member is the link's, locked and not erased. Only what

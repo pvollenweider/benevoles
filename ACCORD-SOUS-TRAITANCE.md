@@ -1,6 +1,6 @@
 # Accord de sous-traitance (art. 28 RGPD et art. 9 nLPD)
 
-Version du 6 octobre 2026.
+Version du 21 octobre 2026.
 
 Cet accord encadre les données personnelles que benevol.app traite pour le compte de votre organisation. Il répond à l'article 28 du règlement général sur la protection des données (RGPD) et à l'article 9 de la loi fédérale suisse sur la protection des données (nLPD). Il complète les [conditions générales d'utilisation](/legal/terms) et s'applique dès que votre organisation utilise le service.
 
@@ -94,6 +94,7 @@ Nous pouvons faire évoluer cet accord, notamment pour suivre la loi ou le servi
   - identité et coordonnées : prénom, nom, adresse email, téléphone ;
   - date de naissance, seulement pour un créneau avec un âge minimum ;
   - inscriptions, liste d'attente et présences ; acceptation de votre charte du bénévole ;
+  - choix de chaque bénévole d'afficher son nom aux autres bénévoles d'un événement (« Qui est inscrit »), avec la date et la version du texte accepté ;
   - réponses aux questions de vos événements ;
   - disponibilités, étiquettes et notes internes ;
   - commentaires et autres champs libres ;
@@ -102,8 +103,8 @@ Nous pouvons faire évoluer cet accord, notamment pour suivre la loi ou le servi
   - contacts des créneaux et contact le jour J d'un événement ;
   - journaux d'activité (qui a fait quoi, et quand).
 - **Catégories particulières** : le service n'en demande aucune ; les champs libres peuvent en recevoir (voir l'article 14).
-- **Nature des opérations** : hébergement, enregistrement, consultation, modification, envoi d'emails et de notifications, export, sauvegarde, effacement.
-- **Finalités** : planifier les bénévoles de vos événements ; gérer les inscriptions ; envoyer les communications que vous décidez ; produire les exports et documents que vous demandez.
+- **Nature des opérations** : hébergement, enregistrement, consultation, modification, envoi d'emails et de notifications, export, sauvegarde, effacement ; communication du prénom et de l'initiale du nom des bénévoles qui l'acceptent, et du nombre des autres bénévoles confirmés de chaque créneau, aux bénévoles confirmés de l'événement et aux membres que vous y invitez (« Qui est inscrit » : réglage par événement, activé par défaut pour vos nouveaux événements selon la valeur choisie dans vos paramètres, désactivable à tout moment).
+- **Finalités** : planifier les bénévoles de vos événements ; gérer les inscriptions ; permettre à vos bénévoles de savoir avec qui ils seront et de choisir leurs créneaux (« Qui est inscrit ») ; envoyer les communications que vous décidez ; produire les exports et documents que vous demandez.
 - **Durées de conservation** : celles indiquées dans la [politique de confidentialité](/legal/privacy#conservation).
 
 ## Annexe II : mesures techniques et organisationnelles

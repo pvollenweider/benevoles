@@ -39,7 +39,7 @@ describe("PATCH /api/admin/events/[id] — day-of contact", () => {
   beforeEach(() => {
     vi.clearAllMocks()
     update.mockImplementation(async ({ data }: { data: object }) => ({ ...owned, ...data }))
-    requireOrgSessionMock.mockResolvedValue({ db: { event: { findFirst: vi.fn().mockResolvedValue(owned), update } }, organizationId: "org-a", session: {} })
+    requireOrgSessionMock.mockResolvedValue({ db: { organization: { findUnique: vi.fn().mockResolvedValue({ shiftRosterDefault: true }) }, event: { findFirst: vi.fn().mockResolvedValue(owned), update } }, organizationId: "org-a", session: {} })
   })
 
   it("saves the name and phone trimmed, a blank value as null, and keeps them out of the event log", async () => {
@@ -65,7 +65,7 @@ describe("PATCH /api/admin/events/[id] — day-of contact", () => {
 describe("POST /api/admin/events — day-of contact", () => {
   it("stores it at creation", async () => {
     const create = vi.fn(async ({ data }: { data: object }) => ({ id: "evt-new", ...data }))
-    requireOrgSessionMock.mockResolvedValue({ db: { event: { findFirst: vi.fn().mockResolvedValue(null), create } }, organizationId: "org-a", session: {} })
+    requireOrgSessionMock.mockResolvedValue({ db: { organization: { findUnique: vi.fn().mockResolvedValue({ shiftRosterDefault: true }) }, event: { findFirst: vi.fn().mockResolvedValue(null), create } }, organizationId: "org-a", session: {} })
     const { POST } = await import("@/app/api/admin/events/route")
     const res = await POST(new Request("http://localhost/api/admin/events", {
       method: "POST", headers: { "Content-Type": "application/json" },
