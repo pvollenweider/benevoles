@@ -29,3 +29,4 @@ aliases: []
 - [Je veux changer de créneau](ma-page-personnelle.md#changer-de-creneau)
 - [Je n'ai plus le lien vers ma page personnelle](lien-personnel.md#je-n-ai-plus-le-lien-vers-ma-page-personnelle)
 - [Je ne veux pas oublier mon créneau le jour J](rappels.md#je-ne-veux-pas-oublier-mon-creneau-le-jour-j)
+- [Je me suis inscrit avant que l'organisation montre qui est inscrit : pourquoi mon nom n'apparaît pas ?](ma-page-personnelle.md#je-me-suis-inscrit-avant-que-l-organisation-montre-qui-est-inscrit-pourquoi-mon-nom-n-apparait-pas)

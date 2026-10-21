@@ -11,6 +11,7 @@
  *      NEXT_PUBLIC_APP_URL=http://localhost:3200 in the environment.
  *   3. npx prisma migrate deploy && npx tsx prisma/seed.ts && npx tsx scripts/seed-demo.ts
  *      && npx tsx scripts/seed-demo-permanences.ts && npx tsx scripts/seed-demo-day-of.ts
+ *      && npx tsx scripts/seed-demo-roster.ts
  *      (the last one dates its shifts around the current hour: run it again right before
  *      the shots if an hour or more has passed, and capture during the day)
  *   4. npx next dev -p 3200    (from a checkout with its own node_modules: Turbopack refuses a
@@ -33,6 +34,8 @@ const ORG = process.env.DEMO_ORG ?? "default"
 const EVENT_SLUG = "fete-du-village"
 // Fixed in scripts/seed-demo.ts (demo database only).
 const TOKENS = { volunteer: "demo-volunteer-camille-0001", leader: "demo-leader-buvette-0001" }
+// « Qui est inscrit » (#1068): its own organization, fixed in scripts/seed-demo-roster.ts.
+const ROSTER = { org: "amicale-du-marche", event: "marche-de-noel", token: "demo-roster-lea-0001", email: "marche.admin@example.org", seed: "scripts/seed-demo-roster.ts" }
 const ORG_ADMIN_EMAIL = process.env.ORG_ADMIN_EMAIL ?? "org-admin@localhost"
 const ORG_ADMIN_PASSWORD = process.env.ORG_ADMIN_PASSWORD
 const ONLY = process.env.ONLY ? new Set(process.env.ONLY.split(",")) : null
@@ -52,9 +55,10 @@ async function settle(page) {
 }
 
 /** Screenshot of the viewport, of the full page, or of one element. */
-async function save(page, name, { target, fullPage = false } = {}) {
+async function save(page, name, { target, fullPage = false, clip } = {}) {
   const file = path.join(OUT, `${name}.png`)
   if (target) await target.screenshot({ path: file })
+  else if (clip) await page.screenshot({ path: file, clip })
   else await page.screenshot({ path: file, fullPage })
   console.log(`  ✓ ${name}.png`)
 }
@@ -178,7 +182,6 @@ async function run() {
     await settle(p)
     await save(p, "public-signup", { target: p.locator("main") })
   })
-  await desk.close()
 
   await shot("public-timeline-mobile", async () => {
     const mob = await browser.newContext(MOBILE)
@@ -199,6 +202,34 @@ async function run() {
     await save(m, "public-permanences-mobile")
     await mob.close()
   })
+
+  // « Qui est inscrit » (#1068), on « Marché de Noël » (scripts/seed-demo-roster.ts): the sign-up
+  // form's optional box under the required ones, and the card of Léa's personal page (registered
+  // before the setting was turned on: her name is hidden, the others who chose it are listed).
+  await shot("public-roster-signup-box", async () => {
+    const fresh = await browser.newContext(DESKTOP)
+    const r = await fresh.newPage()
+    await r.goto(`${BASE}/${ROSTER.event}?org=${ROSTER.org}`)
+    await settle(r)
+    await r.getByRole("button", { name: /^16h–20h .*Vin chaud : sélectionner/ }).first().click()
+    await r.getByRole("button", { name: /^Continuer/ }).first().click()
+    await settle(r)
+    const top = r.locator("#reg-charter").locator("xpath=ancestor::label[1]")
+    // The required boxes and the optional one with its hint, all in the viewport.
+    await top.evaluate((el) => window.scrollTo(0, el.getBoundingClientRect().top + window.scrollY - 120))
+    const a = await top.boundingBox()
+    const b = await r.locator("#reg-roster-hint").boundingBox()
+    if (!a || !b) throw new Error("roster box not found")
+    const x = Math.min(a.x, b.x) - 16
+    await save(r, "public-roster-signup-box", { clip: { x, y: a.y - 16, width: Math.max(a.x + a.width, b.x + b.width) - x + 16, height: b.y + b.height - a.y + 32 } })
+    await fresh.close()
+  })
+  await shot("public-roster-card", async () => {
+    await p.goto(`${BASE}/my/${ROSTER.token}?org=${ROSTER.org}`)
+    await settle(p)
+    await save(p, "public-roster-card", { target: p.getByRole("region", { name: "Qui est inscrit" }) })
+  })
+  await desk.close()
 
   if (process.env.PUBLIC_ONLY) return finish(browser)
 
@@ -326,6 +357,27 @@ async function run() {
       await save(season.page, "admin-recurrences", { target: season.page.getByRole("region", { name: "Permanences récurrentes" }) })
     })
     await season.context.close()
+  }
+
+  // « Qui est inscrit » (#1068), the organizer's side: the setting of « Marché de Noël » (on, with
+  // its reminder), and the publication page of the « Marché de printemps » draft (setting off).
+  const roster = ONLY && !ONLY.has("admin-roster-setting") ? null : await signIn(browser, { email: ROSTER.email, title: "Marché de Noël", seed: ROSTER.seed })
+  if (roster) {
+    await shot("admin-roster-setting", async () => {
+      await roster.page.goto(`${BASE}/admin/events/${roster.eventId}/edit`)
+      await settle(roster.page)
+      await save(roster.page, "admin-roster-setting", { target: roster.page.locator("#event-shift-roster-setting") })
+    })
+    await roster.context.close()
+  }
+  const spring = ONLY && !ONLY.has("admin-roster-publish-note") ? null : await signIn(browser, { email: ROSTER.email, title: "Marché de printemps", seed: ROSTER.seed })
+  if (spring) {
+    await shot("admin-roster-publish-note", async () => {
+      await spring.page.goto(`${BASE}/admin/events/${spring.eventId}/review`)
+      await settle(spring.page)
+      await save(spring.page, "admin-roster-publish-note", { target: spring.page.getByRole("region", { name: "Publication" }) })
+    })
+    await spring.context.close()
   }
 
   // « Jour J » on a phone, as on site: the first screen, the running shift with one person marked.
