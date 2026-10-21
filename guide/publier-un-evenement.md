@@ -40,6 +40,8 @@ La page **Vérifier avant publication** (dernière étape de la [création](cree
 
 ![Section « Vérification » d'un événement publié : huit points cochés (dates, créneaux, lieu, message de confirmation, instructions, responsables, inscriptions ouvertes, rappels J-2, J-1 et du jour), chacun avec un lien « Modifier » ou « Réglages des emails », et deux points « À vérifier » marqués d'un point d'interrogation, « 11 créneaux sans contact » avec le lien « Ajouter », et « 30 places occupées sur 44, 8 créneaux incomplets » avec le lien « Voir les créneaux incomplets »](/doc-img/admin-event-review.png)
 
+Sous la vérification, la section **Publication** présente aussi, tant que le réglage n'est pas activé, l'option qui montre aux bénévoles confirmés qui est inscrit sur chaque créneau (prénom et initiale du nom, seulement pour celles et ceux qui l'acceptent), avec le lien **Voir le réglage** vers la case du formulaire de l'événement (voir [Créer un événement](creer-un-evenement.md)). Ce n'est qu'une information : elle ne bloque jamais la publication.
+
 Tant que l'événement est un brouillon, son aperçu reprend cette liste sous **Prochaines étapes**, avec le lien **Vérifier avant publication**. Pour publier, cliquer sur **Publier**, le bouton principal en haut des pages de l'événement dès qu'il a un créneau (avant, ce bouton est **Ajouter des créneaux**).
 
 L'événement devient alors visible à l'URL :

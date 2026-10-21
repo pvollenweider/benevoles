@@ -43,11 +43,12 @@ En savoir plus : [créer un événement](guide/creer-un-evenement.md), [configur
 - **Une liste d'attente** : quand une place se libère, la personne suivante la reçoit par email et a 24 heures pour la prendre.
 - **Vos règles** : un âge minimum, un téléphone obligatoire, une validation pour les postes sensibles, quelques questions (taille de t-shirt, permis, ou un nombre comme les invités au repas, additionné pour vous), dont certaines posées seulement après une réponse donnée (« Combien de personnes ? » si le bénévole mange avec vous), des postes réservés aux membres qui portent une étiquette.
 - **Un lien par club ou par équipe** : quand plusieurs sociétés recrutent chacune pour leurs postes, chacune reçoit son propre lien, à envoyer par email ou à imprimer sur son affiche, qui n'affiche que ses postes. Vous voyez combien d'inscriptions chaque lien a apportées, et quelle société doit encore mobiliser.
+- **Savoir qui est inscrit, si vous le souhaitez** : un réglage par événement, désactivé par défaut, montre aux bénévoles confirmés le prénom et l'initiale du nom (« Aline M. ») des autres bénévoles de chaque créneau, sur leur page personnelle, pour choisir leurs créneaux avec des personnes qu'ils connaissent. Seuls ceux qui l'acceptent apparaissent, et chacun peut masquer son nom à tout moment.
 - **Sur le site de votre association** : un code à copier-coller affiche l'inscription dans une page de votre site, avec le nom et le logo de votre organisation. Les bénévoles choisissent leurs créneaux et s'inscrivent sans quitter votre site.
 
 <!-- video: VOLUNTEER_REGISTER -->
 
-En savoir plus : [s'inscrire](guide/s-inscrire.md), [la liste d'attente](guide/liste-d-attente.md), [les inscriptions sur validation](guide/inscriptions-sur-validation.md), [un lien par groupe](guide/partager-le-lien.md#un-lien-par-groupe), [l'inscription sur votre site](guide/partager-le-lien.md#integrer-l-inscription-a-votre-site).
+En savoir plus : [s'inscrire](guide/s-inscrire.md), [la liste d'attente](guide/liste-d-attente.md), [les inscriptions sur validation](guide/inscriptions-sur-validation.md), [un lien par groupe](guide/partager-le-lien.md#un-lien-par-groupe), [l'inscription sur votre site](guide/partager-le-lien.md#integrer-l-inscription-a-votre-site), [qui est inscrit](guide/ma-page-personnelle.md#qui-est-inscrit).
 
 ## Garder chacun informé
 

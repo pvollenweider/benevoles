@@ -39,6 +39,13 @@ export const EVENT_PUBLIC_STATUS_LOG_LABELS: Record<EventPublicStatus, string> =
   archived: "archivé",
 }
 
+/** A volunteer's shift roster choice (#1068), « nom affiché aux autres bénévoles : masqué → affiché ». */
+export const ROSTER_CHOICE_LOG_LABELS: Record<string, string> = {
+  visible: "affiché",
+  pending: "à confirmer",
+  hidden: "masqué",
+}
+
 function lookup(map: Record<string, string>, value: string): string | undefined {
   return Object.hasOwn(map, value) ? map[value] : undefined
 }
@@ -60,6 +67,8 @@ export function logValueLabel(field: string, value: unknown, entityType?: string
       return lookup(REGISTRATION_SOURCE_LOG_LABELS, value)
     case "publicStatus":
       return lookup(EVENT_PUBLIC_STATUS_LOG_LABELS, value)
+    case "rosterName":
+      return lookup(ROSTER_CHOICE_LOG_LABELS, value)
     default:
       return undefined
   }

@@ -23,7 +23,7 @@ export default function PrivacyPage() {
     <>
       <JsonLd data={publicPageJsonLd("/legal/privacy", apexBaseUrl())} />
       <h1>Politique de confidentialité</h1>
-      <p className="text-gray-500 text-sm">Dernière mise à jour : 10 octobre 2026</p>
+      <p className="text-gray-500 text-sm">Dernière mise à jour : 21 octobre 2026</p>
 
       <p>
         La présente politique décrit comment <strong>benevol.app</strong>, éditée par{" "}
@@ -142,6 +142,22 @@ export default function PrivacyPage() {
         Les données que les Organisations collectent sur leurs bénévoles (nom, e-mail,
         disponibilités, présences, notes éventuelles) sont traitées exclusivement pour le compte de
         l&apos;Organisation concernée.
+      </p>
+      {/* Shift roster between volunteers (#1068). */}
+      <p id="noms-entre-benevoles">
+        <strong>Noms visibles entre bénévoles d&apos;un événement.</strong> Sur instruction de
+        l&apos;Organisation, qui l&apos;active événement par événement (désactivé par défaut), les
+        bénévoles qui ont une place confirmée peuvent voir sur leur page personnelle, créneau par
+        créneau, le prénom et l&apos;initiale du nom (par exemple « Aline M. ») des autres bénévoles
+        confirmés du même événement, jusqu&apos;à la fin de l&apos;événement. Seules y figurent les
+        personnes qui l&apos;ont accepté : une case facultative du formulaire d&apos;inscription, à
+        confirmer depuis la page personnelle quand rien ne prouve que l&apos;adresse est la leur.
+        Personne n&apos;y figure sans ce choix, ni une personne de moins de 18 ans dont la date de
+        naissance est connue. Chacun peut masquer son nom à tout moment depuis sa page personnelle,
+        sans effet sur son inscription. Ces noms n&apos;apparaissent jamais sur la page publique de
+        l&apos;événement ni dans son intégration à un autre site. Le choix de chaque bénévole est
+        conservé avec l&apos;événement (voir la <a href="#conservation">conservation des données</a>).
+        L&apos;Organisation informe ses bénévoles de ce traitement et en reste responsable.
       </p>
       <p>
         En tant que sous-traitant, nous nous engageons à :

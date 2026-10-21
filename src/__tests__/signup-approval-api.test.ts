@@ -24,6 +24,7 @@ vi.mock("@/lib/prisma", () => ({
       shift: { findMany: vi.fn().mockResolvedValue([]) },
       volunteer: { createMany: vi.fn(), findFirstOrThrow: vi.fn() },
       charterVersion: { upsert: vi.fn() },
+      rosterConsent: { findUnique: vi.fn().mockResolvedValue(null), upsert: vi.fn() },
       registration: {
         findMany: m.txRegFindMany,
         count: vi.fn().mockResolvedValue(0),

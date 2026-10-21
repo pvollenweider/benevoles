@@ -23,6 +23,8 @@ const m = vi.hoisted(() => ({
   enqueueNotifications: vi.fn(),
   deliverAfterResponse: vi.fn(),
   sendConfirmationEmail: vi.fn(),
+  rosterFindUnique: vi.fn(),
+  rosterUpsert: vi.fn(),
 }))
 
 vi.mock("@/lib/prisma", () => {
@@ -32,6 +34,7 @@ vi.mock("@/lib/prisma", () => {
     // A new volunteer is created inside the registration transaction (#309).
     volunteer: { createMany: m.txVolCreateMany, findFirstOrThrow: m.txVolFindFirstOrThrow },
     charterVersion: { upsert: vi.fn() },
+    rosterConsent: { findUnique: m.rosterFindUnique, upsert: m.rosterUpsert },
     registration: {
       findMany: m.txRegFindMany,
       count: vi.fn().mockResolvedValue(0),
@@ -102,6 +105,7 @@ beforeEach(() => {
   m.txCreate.mockResolvedValue({ id: "reg-new", shiftId: "shift-2", status: "active", waitingPosition: null })
   m.sendNotification.mockResolvedValue({ ok: true })
   m.txQueryRaw.mockResolvedValue([{ id: "locked", erasedAt: null }]) // #516: a locked match, not erased
+  m.rosterFindUnique.mockResolvedValue(null)
 })
 
 describe("POST /api/public/registrations — ownership of the email (#285)", () => {
@@ -332,5 +336,59 @@ describe("POST /api/public/registrations — ownership of the email (#285)", () 
     expect(m.txCreate).toHaveBeenCalledWith(expect.objectContaining({ data: expect.objectContaining({ volunteerId: "vol-new", comment: "mon mot" }) }))
     expect(m.txCreate).not.toHaveBeenCalledWith(expect.objectContaining({ data: expect.objectContaining({ volunteerId: "vol-victim" }) }))
     expect(m.volUpdate).not.toHaveBeenCalled()
+  })
+})
+
+// The shift roster's box (#1068): typing someone's address never makes their name visible.
+describe("POST /api/public/registrations — shift roster choice (#1068)", () => {
+  const rosterEvent = { id: "evt-1", organizationId: "org-a", title: "Festival", organization: { slug: "a" }, confirmationMessage: null, shiftRosterEnabled: true, startDate: new Date("2030-06-01T00:00:00Z") }
+  async function withRosterEvent(on: boolean) {
+    const { prisma } = await import("@/lib/prisma")
+    vi.mocked(prisma.event.findFirst).mockResolvedValueOnce({ ...rosterEvent, shiftRosterEnabled: on } as never)
+  }
+  const stored = () => m.rosterUpsert.mock.calls.map(([a]) => a.update.status)
+
+  it("existing volunteer, no proof, box ticked: kept pending, never visible", async () => {
+    m.volFindFirst.mockResolvedValue(victim)
+    await withRosterEvent(true)
+    const { POST } = await import("@/app/api/public/registrations/route")
+    expect((await POST(post({ rosterNameVisible: true }))).status).toBe(201)
+    expect(stored()).toEqual(["pending"])
+    expect(m.rosterUpsert.mock.calls[0][0].update.source).toBe("signup")
+  })
+
+  it("no proof suspends an earlier acceptance, and never overrides a refusal", async () => {
+    m.volFindFirst.mockResolvedValue(victim)
+    m.rosterFindUnique.mockResolvedValue({ status: "visible" })
+    await withRosterEvent(true)
+    const { POST } = await import("@/app/api/public/registrations/route")
+    await POST(post())
+    expect(stored()).toEqual(["pending"])
+    m.rosterUpsert.mockReset()
+    m.rosterFindUnique.mockResolvedValue({ status: "hidden" })
+    await withRosterEvent(true)
+    await POST(post({ rosterNameVisible: true }))
+    expect(m.rosterUpsert).not.toHaveBeenCalled()
+  })
+
+  it("with a valid member invite, the box makes the name visible at once", async () => {
+    m.volFindFirst.mockResolvedValue(victim)
+    m.inviteFindFirst.mockResolvedValue({ id: "inv-1" })
+    await withRosterEvent(true)
+    const { POST } = await import("@/app/api/public/registrations/route")
+    await POST(post({ inviteToken: "inv-tok", rosterNameVisible: true }))
+    expect(stored()).toEqual(["visible"])
+    expect(m.rosterUpsert.mock.calls[0][0].update.source).toBe("signup_verified")
+  })
+
+  it("the box counts for nothing on an event without the roster, and nothing is stored unticked", async () => {
+    m.volFindFirst.mockResolvedValue(victim)
+    m.inviteFindFirst.mockResolvedValue({ id: "inv-1" })
+    await withRosterEvent(false)
+    const { POST } = await import("@/app/api/public/registrations/route")
+    await POST(post({ inviteToken: "inv-tok", rosterNameVisible: true }))
+    await withRosterEvent(true)
+    await POST(post({ inviteToken: "inv-tok" }))
+    expect(m.rosterUpsert).not.toHaveBeenCalled()
   })
 })

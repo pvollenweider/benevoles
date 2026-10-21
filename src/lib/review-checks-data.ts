@@ -18,6 +18,7 @@ export async function loadReviewChecks(db: OrgScopedPrisma, id: string, now: Dat
     select: {
       id: true, title: true, slug: true, startDate: true, endDate: true, location: true, confirmationMessage: true, publicInstructions: true, publicStatus: true,
       latitude: true, longitude: true, dayContactName: true, dayContactPhone: true, remindersEnabled: true, registrationsOpen: true, registrationOpensAt: true, registrationClosesAt: true,
+      shiftRosterEnabled: true,
       organization: { select: { slug: true, timeZone: true, publicationApprovedAt: true, notificationSettings: true } },
       shifts: {
         where: { status: { not: "cancelled" } },

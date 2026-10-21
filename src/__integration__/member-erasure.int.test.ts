@@ -112,6 +112,10 @@ describe.skipIf(!url)("member erasure transaction (#516)", () => {
     await prisma.questionAnswer.create({ data: { questionId, eventId, volunteerId: x.id, values: [v.answer] } })
     const otherAnswer = await prisma.questionAnswer.create({ data: { questionId, eventId, volunteerId: other.id, values: ["M"] } })
     await prisma.pushSubscription.create({ data: { volunteerId: x.id, endpoint: v.endpoint, auth: "a", p256dh: "p" } })
+    // Shift roster choices (#1068): the person's goes, the other member's stays.
+    const choice = { status: "visible", noticeVersion: "v", source: "personal_page", decidedAt: new Date() }
+    await prisma.rosterConsent.create({ data: { eventId, volunteerId: x.id, ...choice } })
+    await prisma.rosterConsent.create({ data: { eventId, volunteerId: other.id, ...choice } })
     await prisma.sectorLeader.create({ data: { eventId, roleName: "Bar", name: v.leaderName, email: v.email.toUpperCase(), tokenHash: `${tag}-lead-hash` } })
     const otherLeader = await prisma.sectorLeader.create({ data: { eventId, roleName: "Bar", name: "Paul", email: `${tag}-paul@example.org`, tokenHash: `${tag}-lead-hash-2` } })
     await prisma.deliveryOutcome.create({ data: { organizationId: orgId, volunteerId: x.id, kind: "signup", outcome: "accepted_by_relay" } })
@@ -153,6 +157,8 @@ describe.skipIf(!url)("member erasure transaction (#516)", () => {
     expect(erased).toMatchObject({ firstName: "Bénévole", lastName: "effacé", email: null, phone: null, notes: null, birthDate: null, tags: [], availabilityPeriods: [], availabilityNote: null, active: false })
     expect(erased.erasedAt).not.toBeNull()
     expect(await prisma.volunteer.findUnique({ where: { id: tombstone.id } })).toBeNull()
+    expect(await prisma.rosterConsent.count({ where: { volunteerId: x.id } })).toBe(0)
+    expect(await prisma.rosterConsent.count({ where: { volunteerId: other.id } })).toBe(1)
 
     // 3. History kept without identity: same rows, statuses, presence; personal link regenerated.
     const regs = await prisma.registration.findMany({ where: { volunteerId: x.id }, orderBy: { createdAt: "asc" } })

@@ -37,6 +37,7 @@ vi.mock("@/lib/prisma", () => {
     shift: { findUnique: m.shiftFindUnique, findMany: vi.fn().mockResolvedValue([]) },
     volunteer: { createMany: vi.fn().mockResolvedValue({ count: 1 }), findFirstOrThrow: vi.fn().mockResolvedValue({ id: "vol-1" }) },
     charterVersion: { upsert: vi.fn() },
+    rosterConsent: { findUnique: vi.fn().mockResolvedValue(null), upsert: vi.fn() },
   }
   m.transaction.mockImplementation(async (fn: (t: typeof tx) => unknown) => fn(tx))
   return {

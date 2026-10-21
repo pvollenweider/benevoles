@@ -24,6 +24,7 @@ vi.mock("@/lib/prisma", () => ({
       shift: { findMany: vi.fn(async (args: unknown) => { m.order.push("limits"); return m.txShiftFindMany(args) }) },
       volunteer: { createMany: vi.fn(), findFirstOrThrow: vi.fn() },
       charterVersion: { upsert: vi.fn() },
+      rosterConsent: { findUnique: vi.fn().mockResolvedValue(null), upsert: vi.fn() },
       registration: {
         findMany: vi.fn(async (args: { where: { shift?: unknown } }) => (args.where.shift ? m.txRegFindMany(args) : [])),
         count: vi.fn().mockResolvedValue(0),
