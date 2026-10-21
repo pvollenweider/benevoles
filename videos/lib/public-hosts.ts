@@ -56,6 +56,23 @@ export function localTarget(appBase: string): URL {
   return target
 }
 
+/** Resolve only an allowed loopback origin; request input supplies path/query only. */
+export function localGatewayTarget(requestUrl: string, appBase: string): URL | null {
+  let requested: URL
+  try { requested = new URL(requestUrl) } catch { return null }
+  const appPort = localTarget(appBase).port || "80"
+  if (requested.protocol !== "http:" || requested.username || requested.password ||
+      !["localhost", "127.0.0.1"].includes(requested.hostname)) return null
+  const port = requested.port || "80"
+  const origin = port === appPort ? `http://127.0.0.1:${appPort}` : port === "48026" ? "http://127.0.0.1:48026" : null
+  if (!origin) return null
+  // Assign the path instead of resolving it: even //host/path cannot replace the origin.
+  const target = new URL(origin)
+  target.pathname = requested.pathname
+  target.search = requested.search
+  return target
+}
+
 export const HOST_CHECK_PATH = "/__video_public_host_check"
 const HOST_CHECK_BODY = "benevol-video-local-proxy"
 
@@ -110,15 +127,15 @@ export async function launchVideoBrowser(chromium: BrowserType, options: LaunchO
   // APIRequestContext does not use Chromium's DNS rules. A local CONNECT gateway
   // gives both browser and request checks the same verified public-host routing.
   const gateway = http.createServer((req, res) => {
-    const url = new URL(req.url!)
-    if (!["localhost", "127.0.0.1"].includes(url.hostname)) { res.writeHead(403).end(); return }
-    const upstream = http.request(url, { method: req.method, headers: req.headers }, reply => { res.writeHead(reply.statusCode ?? 502, reply.headers); reply.pipe(res) })
+    const url = localGatewayTarget(req.url ?? "", appBase)
+    if (!url) { res.writeHead(403).end(); return }
+    const upstream = http.request({ hostname: "127.0.0.1", port: url.port || 80, path: url.pathname + url.search, method: req.method, headers: req.headers }, reply => { res.writeHead(reply.statusCode ?? 502, reply.headers); reply.pipe(res) })
     upstream.on("error", () => res.writeHead(502).end()); req.pipe(upstream)
   })
   gateway.on("connect", (req, socket, head) => {
     const host = req.url?.split(":")[0] ?? ""
     const localPort = Number(req.url?.split(":")[1])
-    const local = ["localhost", "127.0.0.1"].includes(host) && [Number(new URL(appBase).port), 48026].includes(localPort)
+    const local = ["localhost", "127.0.0.1"].includes(host) && [Number(localTarget(appBase).port || 80), 48026].includes(localPort)
     if (!local && host !== PUBLIC_DOMAIN && !host.endsWith(`.${PUBLIC_DOMAIN}`)) { socket.end("HTTP/1.1 403 Forbidden\r\n\r\n"); return }
     const upstream = net.connect(local ? localPort : proxy.port, "127.0.0.1", () => { socket.write("HTTP/1.1 200 Connection Established\r\n\r\n"); if (head.length) upstream.write(head); socket.pipe(upstream); upstream.pipe(socket) })
     upstream.on("error", () => socket.destroy()); socket.on("error", () => upstream.destroy())

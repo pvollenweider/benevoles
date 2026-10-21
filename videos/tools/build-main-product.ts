@@ -35,6 +35,13 @@ async function main() {
     const bytes = await readFile(path.join(snapshot, item.file))
     const blob = createHash("sha1").update(`blob ${bytes.length}\0`).update(bytes).digest("hex")
     if (blob !== item.hash) throw new Error(`Snapshot differs from main: ${item.file}`)
+    // The recorder runs from this checkout: prove its product code matches what
+    // the snapshot builds. Video editorial inputs may be newer on this branch;
+    // the app's copies above still must match the pinned main snapshot exactly.
+    if (!item.file.startsWith("videos/")) {
+      const checkout = await readFile(path.resolve(item.file))
+      if (!checkout.equals(bytes)) throw new Error(`Checkout differs from pinned product snapshot: ${item.file}`)
+    }
     sourceDigest.update(item.file).update("\0").update(bytes)
   }
   console.log(`Verified ${selected.length} product inputs against main ${commit}; building locally`)
