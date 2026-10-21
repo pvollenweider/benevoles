@@ -14,7 +14,7 @@ export default async function NewEventPage() {
   const ctx = await getOrgContext()
   if (!ctx) redirect("/admin/login")
   // The registration window is typed in the organisation's time zone, as on the edit page.
-  const org = await ctx.db.organization.findUnique({ where: { id: ctx.organizationId }, select: { timeZone: true } })
+  const org = await ctx.db.organization.findUnique({ where: { id: ctx.organizationId }, select: { timeZone: true, shiftRosterDefault: true } })
   return (
     <div className="max-w-2xl space-y-6">
       <WizardSteps current={1} eventId={null} />
@@ -23,7 +23,7 @@ export default async function NewEventPage() {
         <HelpLink route="/admin/events/new" />
       </div>
       <EventTemplatePicker>
-        <EventForm createdHref={wizardHrefs("{id}")[2]} timeZone={orgTimeZone(org)} />
+        <EventForm createdHref={wizardHrefs("{id}")[2]} timeZone={orgTimeZone(org)} initialData={{ shiftRosterEnabled: org?.shiftRosterDefault ?? true }} />
       </EventTemplatePicker>
     </div>
   )

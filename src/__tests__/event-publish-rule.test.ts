@@ -93,7 +93,7 @@ describe("PATCH /api/admin/events/[id] — publication rule", () => {
 describe("POST /api/admin/events — always a listed draft", () => {
   it("ignores any requested status and creates a listed draft", async () => {
     const create = vi.fn().mockImplementation(async ({ data }: { data: object }) => ({ id: "e", ...data }))
-    requireOrgSessionMock.mockResolvedValue({ db: { event: { findFirst: vi.fn().mockResolvedValue(null), create } }, organizationId: "org-a", session: {} })
+    requireOrgSessionMock.mockResolvedValue({ db: { organization: { findUnique: vi.fn().mockResolvedValue({ shiftRosterDefault: true }) }, event: { findFirst: vi.fn().mockResolvedValue(null), create } }, organizationId: "org-a", session: {} })
     const { POST } = await import("@/app/api/admin/events/route")
     for (const publicStatus of ["published", "archived"]) {
       const res = await POST(new Request("http://localhost/api/admin/events", { method: "POST", headers: { "Content-Type": "application/json" }, body: JSON.stringify({ title: "F", startDate: "2026-07-04", endDate: "2026-07-04", publicStatus }) }))

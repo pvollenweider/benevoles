@@ -30,10 +30,17 @@ describe("public GDPR documents", () => {
     expect(md).not.toMatch(/[·—]/)
   })
 
-  it.each([AGREEMENT, LIST])("%s carries its version date and the contact address", (file) => {
+  it.each([[AGREEMENT, "21 octobre 2026"], [LIST, "6 octobre 2026"]])("%s carries its version date and the contact address", (file, date) => {
     const md = read(file)
-    expect(md).toContain("Version du 6 octobre 2026.")
+    expect(md).toContain(`Version du ${date}.`)
     expect(md).toContain("contact@benevol.app")
+  })
+
+  // « Qui est inscrit » (#1068): the agreement describes the disclosure between volunteers.
+  it("the agreement's Annex I covers the names shown to confirmed volunteers and invited members", () => {
+    const md = read(AGREEMENT)
+    expect(md).toContain("aux bénévoles confirmés de l'événement et aux membres que vous y invitez")
+    expect(md).toContain("activé par défaut pour vos nouveaux événements")
   })
 
   it("the list links to an existing section of the agreement", () => {

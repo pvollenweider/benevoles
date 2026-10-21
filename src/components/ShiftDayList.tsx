@@ -5,6 +5,8 @@
 
 import { fmt, toMin } from "@/lib/gantt-utils"
 import { shiftListText, shiftViewState, type HeldKind, type TimelineShift } from "@/lib/public-timeline"
+import type { ShiftRosterEntry } from "@/lib/shift-roster"
+import { RosterSummary } from "@/components/public/RosterName"
 
 type Show = { name: string; startTime: string; endTime: string }
 
@@ -14,6 +16,10 @@ type Show = { name: string; startTime: string; endTime: string }
  * button whose visible text is its whole accessible name (WCAG 2.5.3). The rules of what can be
  * selected are the timeline's (`shiftViewState`, src/lib/public-timeline.ts). A shift that can't
  * be chosen stays in the tab order (aria-disabled), so it can be found and read.
+ *
+ * `roster` (#1068): « Voir qui est inscrit » is on, by shift id. A line under each shift with other
+ * confirmed volunteers says who (« Sur ce créneau : Aline M. et 2 autres bénévoles. »), read with
+ * the button as its description; nothing under a shift with nobody else.
  */
 export default function ShiftDayList({
   shifts,
@@ -28,6 +34,7 @@ export default function ShiftDayList({
   limitReachedRoles,
   reservedShiftIds,
   dayLabel,
+  roster,
 }: {
   shifts: TimelineShift[]
   shows: Show[]
@@ -43,6 +50,7 @@ export default function ShiftDayList({
   limitReachedRoles?: Map<string, number>
   reservedShiftIds?: Set<string>
   dayLabel: string
+  roster?: Map<string, ShiftRosterEntry> | null
 }) {
   const visible = shifts
     .filter((s) => s.status !== "cancelled")
@@ -73,6 +81,9 @@ export default function ShiftDayList({
             : view.clickable
               ? "border-gray-300 bg-white hover:bg-gray-50"
               : "border-gray-200 bg-gray-50"
+        const rosterEntry = roster?.get(shift.id)
+        const rosterId = rosterEntry && (rosterEntry.names.length > 0 || rosterEntry.othersCount > 0) ? `roster-list-${shift.id}` : undefined
+        const reasonId = view.clickable ? undefined : view.reserved ? reservedMessageId : locked ? lockedMessageId : undefined
         return (
           <li key={shift.id}>
             <button
@@ -80,7 +91,7 @@ export default function ShiftDayList({
               data-shift-id={shift.id}
               aria-pressed={view.clickable ? view.selected : undefined}
               aria-disabled={view.clickable ? undefined : true}
-              aria-describedby={view.clickable ? undefined : view.reserved ? reservedMessageId : locked ? lockedMessageId : undefined}
+              aria-describedby={[rosterId, reasonId].filter(Boolean).join(" ") || undefined}
               onClick={() => { if (view.clickable) onToggle(shift.id, shift.status) }}
               className={`w-full min-h-11 rounded-xl border-2 px-4 py-2 text-left break-words forced-colors:aria-pressed:border-[Highlight] focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-blue-600 ${tone} ${view.clickable ? "cursor-pointer" : "cursor-default"}`}
             >
@@ -102,6 +113,11 @@ export default function ShiftDayList({
               </span>
               {text.details && <>{" "}<span className="mt-0.5 block text-sm text-gray-700">{text.details}</span></>}
             </button>
+            {rosterId && (
+              <p id={rosterId} className="mt-1 px-1 text-sm text-gray-700 break-words">
+                <RosterSummary entry={rosterEntry} own={rosterEntry?.own ?? false} />
+              </p>
+            )}
           </li>
         )
       })}

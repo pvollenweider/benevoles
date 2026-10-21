@@ -54,6 +54,19 @@ Un créneau marqué « Sur validation » se choisit comme les autres, mais ton i
 
 L'application empêche automatiquement de sélectionner deux créneaux qui se chevauchent. Certains postes peuvent pourtant se cumuler avec un autre créneau, par exemple les premiers secours pendant que tu tiens la buvette : l'organisation l'a prévu, et ces créneaux restent sélectionnables même s'ils se passent en même temps qu'un autre de tes choix.
 
+## Voir qui est inscrit
+
+Si l'organisation l'a prévu pour l'événement, le bouton **Voir qui est inscrit**, à côté de **Frise** et **Liste**, montre qui est inscrit sur chaque créneau : le prénom et l'initiale du nom (par exemple « Aline M. ») des bénévoles confirmés qui l'ont accepté, et le nombre des autres, sans leur nom. Il est désactivé à l'ouverture de la page. Tu ne le vois que dans deux cas :
+
+- tu as une place confirmée sur l'événement : ouvre la page avec ton lien personnel, par exemple avec le lien **Voir qui est inscrit sur les autres créneaux** de [ta page personnelle](ma-page-personnelle.md#qui-est-inscrit), ou depuis le navigateur où tu l'as déjà ouverte ;
+- l'organisation t'a invité à l'événement : ouvre la page avec le lien de ton invitation, avant de t'inscrire.
+
+Sinon, la page n'affiche aucun nom, seulement les places libres : c'est le cas pour une personne en liste d'attente ou en attente de validation, sur le lien d'un groupe et sur le site de l'association.
+
+Dans la vue **Liste**, une ligne sous chaque créneau dit qui y est inscrit, par exemple « Sur ce créneau : Aline M., Luc D. et 2 autres bénévoles. », ou « Avec toi : … » sur un de tes créneaux, ou « 3 autres bénévoles, sans nom affiché ». Dans la vue **Frise**, les barres ne changent pas : sous le planning de chaque jour, une ligne montre qui est inscrit sur le dernier créneau que tu as touché, survolé ou atteint au clavier (« Touche ou survole un créneau pour voir qui est inscrit. La vue Liste affiche tous les noms. »). Au clavier, la frise ne permet d'atteindre que les créneaux que tu peux choisir ; la vue **Liste** donne tous les noms.
+
+![Page de l'événement avec le bouton « Voir qui est inscrit » activé, à côté de « Frise » et « Liste », sa phrase d'explication, la frise du jour, puis sous la frise la ligne du créneau survolé : son poste et ses heures, puis « Sur ce créneau : » suivi des prénoms et initiales des bénévoles qui l'acceptent et du nombre des autres](/doc-img/public-roster-switch.png)
+
 ## Un événement sur toute une saison
 
 Certaines associations publient toute une saison de permanences (l'accueil du mercredi, la distribution du samedi, de septembre à juin). Sur un événement de quatre semaines ou plus, les jours passés ne s'affichent plus et on ne peut plus s'y inscrire. À partir de huit dates, le planning se lit mois par mois : au-dessus du planning, un bouton par mois indique son nombre de dates, et le premier mois avec des dates à venir s'affiche d'abord.

@@ -16,7 +16,7 @@ describe("POST /api/admin/events/from-template", () => {
     vi.clearAllMocks()
     create.mockResolvedValue({ id: "evt-new" })
     findFirst.mockResolvedValue(null)
-    requireOrgSessionMock.mockResolvedValue({ db: { event: { create, findFirst } }, organizationId: "org-a", session: {} })
+    requireOrgSessionMock.mockResolvedValue({ db: { organization: { findUnique: vi.fn().mockResolvedValue({ shiftRosterDefault: true }) }, event: { create, findFirst } }, organizationId: "org-a", session: {} })
   })
 
   it("creates the draft and its shifts in one nested create", async () => {

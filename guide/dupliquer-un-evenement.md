@@ -20,6 +20,8 @@ aliases: []
 
 Les permanences récurrentes ne sont pas décalées comme les autres créneaux : chacune est recréée sur les mêmes jours de la semaine, avec les jours fériés de la nouvelle période (voir [Dupliquer une saison](permanences-recurrentes.md#dupliquer-une-saison)).
 
+Le réglage « Qui est inscrit » suit le choix des réglages : copié avec les **messages et réglages d'inscription**, sinon la copie reprend le réglage par défaut de l'organisation (voir [Qui est inscrit, réglage par défaut](personnaliser-l-organisation.md#qui-est-inscrit-reglage-par-defaut)). Les choix des bénévoles d'afficher leur nom ne sont jamais copiés.
+
 Un récapitulatif dit ce qui va être créé avant de confirmer. La copie est un brouillon ; les inscriptions et les jalons ne sont jamais copiés.
 
 Une copie démarre avec les inscriptions fermées : ouvrez-les quand le planning est prêt (voir [Ouvrir et fermer les inscriptions](ouvrir-et-fermer-les-inscriptions.md)). Elle est toujours répertoriée sur la page publique de l'organisation : le choix se refait pour chaque événement.

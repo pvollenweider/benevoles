@@ -30,7 +30,7 @@ type EventFormData = {
   reminderMessage: string
   publicStatus: "draft" | "published" | "archived"
   requirePhone: boolean
-  /** Shift roster between volunteers (#1068): opt-in names on the personal page, off by default. */
+  /** « Qui est inscrit » (#1068): opt-in names for confirmed volunteers and invited members; a new event starts with the organisation's default. */
   shiftRosterEnabled: boolean
   /** Automatic reminders of this event (J-2, J-1, day-of); the organization's settings still apply. */
   remindersEnabled: boolean
@@ -507,7 +507,7 @@ export default function EventForm({ initialData, createdHref, timeZone = "Europe
           <input
             id="event-shift-roster"
             type="checkbox"
-            aria-describedby="event-shift-roster-hint"
+            aria-describedby={form.shiftRosterEnabled ? "event-shift-roster-hint event-shift-roster-reminder" : "event-shift-roster-hint"}
             checked={form.shiftRosterEnabled}
             onChange={(e) => setForm((f) => ({ ...f, shiftRosterEnabled: e.target.checked }))}
             className="mt-0.5 h-4 w-4"
@@ -516,7 +516,7 @@ export default function EventForm({ initialData, createdHref, timeZone = "Europe
             <label htmlFor="event-shift-roster" className="text-sm font-medium text-gray-700">{ROSTER_SETTING_LABEL}</label>
             <p id="event-shift-roster-hint" className="text-xs text-gray-600">{ROSTER_SETTING_HINT}</p>
             {/* The organiser's duty to inform, once on: a polite status, so that ticking the box says it. */}
-            <p role="status" className={form.shiftRosterEnabled ? "mt-1 text-xs text-gray-800" : "sr-only"}>{form.shiftRosterEnabled ? ROSTER_ENABLE_REMINDER : ""}</p>
+            <p id="event-shift-roster-reminder" role="status" className={form.shiftRosterEnabled ? "mt-1 text-xs text-gray-800" : "sr-only"}>{form.shiftRosterEnabled ? ROSTER_ENABLE_REMINDER : ""}</p>
           </div>
         </div>
 

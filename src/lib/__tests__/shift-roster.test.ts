@@ -8,11 +8,32 @@ import {
   rosterDisplayName,
   rosterOpen,
   rosterSpokenName,
+  rosterOthersText,
+  rosterVisibleName,
+  ROSTER_COUNT_NOTICE,
+  ROSTER_EMPTY_TEXT,
+  ROSTER_ENABLE_REMINDER,
+  ROSTER_MINOR_TEXT,
+  ROSTER_SETTING_HINT,
+  ROSTER_SIGNUP_HINT,
   signupRosterBox,
   viewerState,
   viewerStateText,
+  type RosterAudience,
   type RosterChoice,
   type RosterRegistration,
+  type StoredRosterChoice,
+  ROSTER_NOTICE_V1,
+  ROSTER_NOTICE_VERSION,
+  eventPageRosterViewer,
+  inviteRosterAudience,
+  noticeReaches,
+  rosterAfterSignup,
+  rosterEventHref,
+  rosterSummary,
+  signupNoticeVersion,
+  ROSTER_PUBLISH_NOTE_ON,
+  rosterDoneText,
 } from "../shift-roster"
 
 // Shift roster between volunteers (#1068): pure visibility and format rules.
@@ -112,7 +133,11 @@ describe("buildShiftRoster", () => {
   const reg = (shiftId: string, p: ReturnType<typeof person>, status = "active"): RosterRegistration =>
     ({ shiftId, volunteerId: p.id, status, volunteer: p.volunteer })
   const shift = (id: string, startTime = "10:00") => ({ id, label: id, date: new Date("2030-10-01T00:00:00Z"), startTime, endTime: "12:00" })
-  const names = (entries: { shiftId: string; names: string[] }[]) => entries.map((e) => ({ shiftId: e.shiftId, names: e.names }))
+  const names = (entries: { shiftId: string; names: string[]; othersCount: number }[]) => entries.map((e) => ({ shiftId: e.shiftId, names: e.names, othersCount: e.othersCount }))
+
+  // The choices of these cases, all given under the current text, for a confirmed viewer.
+  const roster_ = (input: Omit<Parameters<typeof buildShiftRoster>[0], "choices" | "audience"> & { choices: Map<string, RosterChoice>; audience?: RosterAudience }) =>
+    buildShiftRoster({ audience: "confirmed", ...input, choices: new Map([...input.choices].map(([id, status]) => [id, { status, noticeVersion: ROSTER_NOTICE_VERSION }])) })
 
   const me = person("me", "Moi", "Même")
   const aline = person("aline", "Aline", "Martin")
@@ -120,66 +145,111 @@ describe("buildShiftRoster", () => {
   const chloe = person("chloe", "Chloé", "Roux")
 
   it("names, shift by shift over the whole event, the other confirmed volunteers who chose visible", () => {
-    const roster = buildShiftRoster({
+    const roster = roster_({
       viewerId: "me",
       shifts: [shift("bar"), shift("accueil", "14:00"), shift("vestiaire", "17:00")],
       registrations: [reg("bar", me), reg("bar", bruno), reg("bar", aline), reg("accueil", me), reg("accueil", chloe), reg("vestiaire", aline)],
       choices: new Map<string, RosterChoice>([["me", "visible"], ["aline", "visible"], ["bruno", "visible"], ["chloe", "hidden"]]),
       eventStart: "2030-10-01",
     })
-    // A shift the viewer is not on is listed too (choosing by affinity); one without names is left out.
+    // A shift the viewer is not on is listed too (choosing by affinity); one with only hidden
+    // people says how many, without their names; one with nobody else is left out.
     expect(names(roster)).toEqual([
-      { shiftId: "bar", names: ["Aline M.", "Bruno K."] },
-      { shiftId: "vestiaire", names: ["Aline M."] },
+      { shiftId: "bar", names: ["Aline M.", "Bruno K."], othersCount: 0 },
+      { shiftId: "accueil", names: [], othersCount: 1 },
+      { shiftId: "vestiaire", names: ["Aline M."], othersCount: 0 },
     ])
+    expect(JSON.stringify(roster)).not.toContain("Chlo")
     expect(roster[0]).toMatchObject({ label: "bar", startTime: "10:00", endTime: "12:00", date: "2030-10-01T00:00:00.000Z" })
   })
 
   it("two people with the same display name are both listed", () => {
     const aline2 = person("aline2", "Aline", "Meier")
-    const roster = buildShiftRoster({
+    const roster = roster_({
       viewerId: "me", shifts: [shift("bar")],
       registrations: [reg("bar", aline), reg("bar", aline2)],
       choices: new Map<string, RosterChoice>([["aline", "visible"], ["aline2", "visible"]]),
       eventStart: "2030-10-01",
     })
     expect(roster[0].names).toEqual(["Aline M.", "Aline M."])
+    expect(roster[0].othersCount).toBe(0)
   })
 
-  it("never the viewer themself", () => {
-    const roster = buildShiftRoster({
+  it("never the viewer themself, neither named nor counted, whatever their choice", () => {
+    for (const choice of ["visible", "hidden", "pending"] as RosterChoice[]) {
+      const roster = roster_({
+        viewerId: "me", shifts: [shift("bar")],
+        registrations: [reg("bar", me)],
+        choices: new Map([["me", choice]]),
+        eventStart: "2030-10-01",
+      })
+      // Their own shift is listed (the personal page shows those), with nobody else on it.
+      expect(roster).toMatchObject([{ shiftId: "bar", names: [], othersCount: 0, own: true }])
+    }
+    const roster = roster_({
       viewerId: "me", shifts: [shift("bar")],
-      registrations: [reg("bar", me)],
-      choices: new Map([["me", "visible" as RosterChoice]]),
+      registrations: [reg("bar", me), reg("bar", bruno)],
+      choices: new Map<string, RosterChoice>(),
       eventStart: "2030-10-01",
     })
-    expect(roster).toEqual([])
+    expect(names(roster)).toEqual([{ shiftId: "bar", names: [], othersCount: 1 }])
   })
 
-  it("leaves out pending, hidden, no choice, unconfirmed, erased, merged and minors", () => {
+  it("names nobody pending, hidden, no choice, unconfirmed, erased, merged or minor; counts the confirmed ones alike", () => {
     const pending = person("p", "Paul", "Pending")
     const none = person("n", "Nina", "None")
     const waiting = person("w", "Wanda", "Waiting")
     const erased = person("e", "Bénévole", "effacé", { erasedAt: new Date() })
     const merged = person("m", "Max", "Merged", { mergedIntoId: "x" })
     const minor = person("k", "Kim", "Kid", { birthDate: "2015-01-01" })
-    const roster = buildShiftRoster({
+    const roster = roster_({
       viewerId: "me", shifts: [shift("bar")],
       registrations: [reg("bar", pending), reg("bar", none), reg("bar", waiting, "waiting"), reg("bar", waiting, "requested"), reg("bar", erased), reg("bar", merged), reg("bar", minor), reg("bar", aline, "cancelled")],
       choices: new Map<string, RosterChoice>([["p", "pending"], ["w", "visible"], ["e", "visible"], ["m", "visible"], ["k", "visible"], ["aline", "visible"]]),
       eventStart: "2030-10-01",
     })
-    expect(roster).toEqual([])
+    // Counted: pending, no choice, erased, minor (4), the same whatever the reason. Not counted:
+    // waitlisted or requested places, a merged record, a cancelled registration.
+    expect(names(roster)).toEqual([{ shiftId: "bar", names: [], othersCount: 4 }])
+  })
+
+  it("counts every other confirmed volunteer not named, once, beside the names", () => {
+    const hidden = person("h", "Hugo", "Hidden")
+    const roster = roster_({
+      viewerId: "me", shifts: [shift("bar"), shift("accueil", "14:00")],
+      // Two registrations of the same person on one shift count once; the viewer never.
+      registrations: [reg("bar", me), reg("bar", aline), reg("bar", bruno), reg("bar", hidden), reg("bar", hidden), reg("bar", chloe), reg("accueil", hidden)],
+      choices: new Map<string, RosterChoice>([["aline", "visible"], ["bruno", "hidden"], ["chloe", "pending"]]),
+      eventStart: "2030-10-01",
+    })
+    expect(names(roster)).toEqual([
+      { shiftId: "bar", names: ["Aline M."], othersCount: 3 },
+      { shiftId: "accueil", names: [], othersCount: 1 },
+    ])
+  })
+
+  it("all hidden: only the count; none hidden: zero", () => {
+    const everyone = [aline, bruno, chloe]
+    const hiddenAll = roster_({
+      viewerId: "me", shifts: [shift("bar")], registrations: everyone.map((p) => reg("bar", p)),
+      choices: new Map<string, RosterChoice>(), eventStart: "2030-10-01",
+    })
+    expect(names(hiddenAll)).toEqual([{ shiftId: "bar", names: [], othersCount: 3 }])
+    const shownAll = roster_({
+      viewerId: "me", shifts: [shift("bar")], registrations: everyone.map((p) => reg("bar", p)),
+      choices: new Map<string, RosterChoice>(everyone.map((p) => [p.id, "visible"])), eventStart: "2030-10-01",
+    })
+    expect(names(shownAll)).toEqual([{ shiftId: "bar", names: ["Aline M.", "Bruno K.", "Chloé R."], othersCount: 0 }])
   })
 
   it("only the shift's public fields and display strings come out", () => {
-    const roster = buildShiftRoster({
+    const roster = roster_({
       viewerId: "me", shifts: [shift("bar")],
       registrations: [reg("bar", aline)],
       choices: new Map([["aline", "visible" as RosterChoice]]),
       eventStart: "2030-10-01",
     })
-    expect(Object.keys(roster[0]).sort()).toEqual(["date", "endTime", "label", "names", "shiftId", "startTime"])
+    expect(Object.keys(roster[0]).sort()).toEqual(["date", "endTime", "label", "names", "othersCount", "own", "shiftId", "startTime"])
     expect(JSON.stringify(roster)).not.toContain("aline")
     expect(JSON.stringify(roster)).not.toContain("Martin")
   })
@@ -193,6 +263,14 @@ describe("signupRosterBox and spoken names", () => {
     expect(signupRosterBox(true, "1990-01-01", "2030-10-01")).toBe("box")
     expect(signupRosterBox(true, "2015-01", "2030-10-01")).toBe("box") // still being typed
   })
+  it("prints the initial glued to the first name, speaks it plainly", () => {
+    expect(rosterVisibleName("Léa F.")).toBe("Léa\u00a0F.")
+    expect(rosterVisibleName("Jean Paul D.")).toBe("Jean Paul\u00a0D.")
+    expect(rosterVisibleName("Aline")).toBe("Aline")
+    expect(rosterSpokenName("Léa F.")).toBe("Léa, initiale F")
+    // Nor between the quotes and the name.
+    expect(viewerStateText("hidden", rosterVisibleName("Léa F."))).toContain("«\u00a0Léa\u00a0F.\u00a0»")
+  })
   it("says the initial so that « M. » is not read « Monsieur »", () => {
     expect(rosterSpokenName("Aline M.")).toBe("Aline, initiale M")
     expect(rosterSpokenName("Aline")).toBe("Aline")
@@ -201,17 +279,169 @@ describe("signupRosterBox and spoken names", () => {
 
 describe("viewer state", () => {
   it("no choice reads as hidden; a minor is always minor", () => {
+    const at = (status: RosterChoice, noticeVersion = ROSTER_NOTICE_VERSION): StoredRosterChoice => ({ status, noticeVersion })
     expect(viewerState(null, false)).toBe("hidden")
-    expect(viewerState("visible", true)).toBe("minor")
-    expect(viewerState("pending", false)).toBe("pending")
+    expect(viewerState(at("visible"), true)).toBe("minor")
+    expect(viewerState(at("pending"), false)).toBe("pending")
+    expect(viewerState(at("visible"), false)).toBe("visible")
+    // Shown under the first text: to confirmed volunteers only, with the offer of the current one.
+    expect(viewerState(at("visible", ROSTER_NOTICE_V1), false)).toBe("visible_confirmed")
+    expect(viewerState(at("hidden", ROSTER_NOTICE_V1), false)).toBe("hidden")
+    // An unknown text is shown to nobody: the page says hidden.
+    expect(viewerState(at("visible", "2099-01-01"), false)).toBe("hidden")
   })
   it("the button names the action", () => {
     expect(rosterButtonLabel("visible")).toBe("Masquer mon nom")
+    expect(rosterButtonLabel("visible_confirmed")).toBe("Masquer mon nom")
     expect(rosterButtonLabel("hidden")).toBe("Afficher mon nom")
     expect(rosterButtonLabel("pending")).toBe("Afficher mon nom")
   })
   it("the sentence quotes the viewer's own display name", () => {
-    expect(viewerStateText("visible", "Aline M.")).toContain("« Aline M. »")
+    expect(viewerStateText("visible", "Aline M.")).toContain("«\u00a0Aline M.\u00a0»")
     expect(viewerStateText("pending", "Aline M.")).toContain("confirmé ici")
+  })
+})
+
+describe("count of the others", () => {
+  it("singular and plural, after names or alone, nothing for zero", () => {
+    expect(rosterOthersText(1, true)).toBe("et 1 autre bénévole")
+    expect(rosterOthersText(3, true)).toBe("et 3 autres bénévoles")
+    expect(rosterOthersText(1, false)).toBe("1 autre bénévole, sans nom affiché")
+    expect(rosterOthersText(2, false)).toBe("2 autres bénévoles, sans nom affiché")
+    expect(rosterOthersText(0, true)).toBeNull()
+    expect(rosterOthersText(0, false)).toBeNull()
+  })
+  it("volunteers and organisers are told the count needs no choice", () => {
+    expect(ROSTER_SIGNUP_HINT).toContain(ROSTER_COUNT_NOTICE)
+    expect(ROSTER_MINOR_TEXT).toContain(ROSTER_COUNT_NOTICE)
+    expect(ROSTER_SETTING_HINT).toContain("et le nombre des autres")
+    expect(ROSTER_SETTING_HINT).toContain("Jamais les visiteurs anonymes, les liens par groupe ni l'intégration à votre site")
+    expect(ROSTER_ENABLE_REMINDER).toContain("Informez aussi les personnes déjà inscrites")
+    expect(ROSTER_EMPTY_TEXT).toBe("Aucun créneau confirmé pour l'instant.")
+  })
+})
+
+describe("audience by consent text (#1068 follow-up)", () => {
+  it("the current text reaches confirmed volunteers and invited members; the first one, confirmed volunteers only; any other, nobody", () => {
+    expect(noticeReaches(ROSTER_NOTICE_VERSION, "confirmed")).toBe(true)
+    expect(noticeReaches(ROSTER_NOTICE_VERSION, "invited")).toBe(true)
+    expect(noticeReaches(ROSTER_NOTICE_V1, "confirmed")).toBe(true)
+    expect(noticeReaches(ROSTER_NOTICE_V1, "invited")).toBe(false)
+    for (const v of ["", "2099-01-01", null, undefined]) {
+      expect(noticeReaches(v, "confirmed")).toBe(false)
+      expect(noticeReaches(v, "invited")).toBe(false)
+    }
+  })
+
+  it("a sign-up form's version: the current one only when the form says so", () => {
+    expect(signupNoticeVersion(ROSTER_NOTICE_VERSION)).toBe(ROSTER_NOTICE_VERSION)
+    for (const v of [undefined, null, "", ROSTER_NOTICE_V1, "2099-01-01", 3]) expect(signupNoticeVersion(v)).toBe(ROSTER_NOTICE_V1)
+  })
+
+  it("the current label names both audiences and the format; its hint the scope, purpose and count", () => {
+    expect(ROSTER_SIGNUP_LABEL).toContain("bénévoles confirmés et les membres invités par l'organisation")
+    expect(ROSTER_SIGNUP_HINT).toContain("même sans créneau commun avec toi")
+    expect(ROSTER_SIGNUP_HINT).toContain("jusqu'à la fin de l'événement")
+    expect(ROSTER_SIGNUP_HINT).toContain("Facultatif, sans effet sur ton inscription")
+  })
+
+  const shift = (id: string) => ({ id, label: id, date: new Date("2030-10-01T00:00:00Z"), startTime: "10:00", endTime: "12:00" })
+  const person = (id: string, first: string, last: string) => ({ id, volunteer: { firstName: first, lastName: last, birthDate: null, erasedAt: null, mergedIntoId: null } })
+  const reg = (shiftId: string, p: ReturnType<typeof person>): RosterRegistration => ({ shiftId, volunteerId: p.id, status: "active", volunteer: p.volunteer })
+  const old = person("old", "Odile", "Ancien")
+  const recent = person("new", "Nora", "Nouveau")
+  const strange = person("x", "Xavier", "Inconnu")
+  const choices = new Map<string, StoredRosterChoice>([
+    ["old", { status: "visible", noticeVersion: ROSTER_NOTICE_V1 }],
+    ["new", { status: "visible", noticeVersion: ROSTER_NOTICE_VERSION }],
+    ["x", { status: "visible", noticeVersion: "2099-01-01" }],
+  ])
+  const build = (audience: RosterAudience) => buildShiftRoster({ viewerId: "viewer", shifts: [shift("bar")], registrations: [reg("bar", old), reg("bar", recent), reg("bar", strange)], choices, audience, eventStart: "2030-10-01" })
+
+  it("a confirmed volunteer sees the names given under either known text; the others are counted", () => {
+    expect(build("confirmed")).toMatchObject([{ shiftId: "bar", names: ["Nora N.", "Odile A."], othersCount: 1, own: false }])
+  })
+
+  it("an invited member never sees a name given under the first text: counted instead", () => {
+    const roster = build("invited")
+    expect(roster).toMatchObject([{ shiftId: "bar", names: ["Nora N."], othersCount: 2 }])
+    expect(JSON.stringify(roster)).not.toContain("Odile")
+    expect(JSON.stringify(roster)).not.toContain("Xavier")
+  })
+})
+
+describe("rosterAfterSignup: the text's version", () => {
+  const V2 = ROSTER_NOTICE_VERSION
+  it("a verified new acceptance stores the version the form showed", () => {
+    expect(rosterAfterSignup({ stored: null, requested: true, verified: true, minor: false, noticeVersion: V2 })).toEqual({ status: "visible", noticeVersion: V2 })
+    expect(rosterAfterSignup({ stored: null, requested: true, verified: true, minor: false, noticeVersion: ROSTER_NOTICE_V1 })).toEqual({ status: "visible", noticeVersion: ROSTER_NOTICE_V1 })
+  })
+  it("a verified acceptance of the current text widens a first-text acceptance (same state, new version)", () => {
+    expect(rosterAfterSignup({ stored: { status: "visible", noticeVersion: ROSTER_NOTICE_V1 }, requested: true, verified: true, minor: false, noticeVersion: V2 })).toEqual({ status: "visible", noticeVersion: V2 })
+  })
+  it("a sign-up without a new choice never widens an earlier audience", () => {
+    const first = { status: "visible" as const, noticeVersion: ROSTER_NOTICE_V1 }
+    expect(rosterAfterSignup({ stored: first, requested: false, verified: true, minor: false, noticeVersion: V2 })).toBeNull()
+    // Unverified: suspended, still under its own text.
+    expect(rosterAfterSignup({ stored: first, requested: false, verified: false, minor: false, noticeVersion: V2 })).toEqual({ status: "pending", noticeVersion: ROSTER_NOTICE_V1 })
+  })
+  it("nothing to store when nothing changes", () => {
+    expect(rosterAfterSignup({ stored: { status: "visible", noticeVersion: V2 }, requested: true, verified: true, minor: false, noticeVersion: V2 })).toBeNull()
+    expect(rosterAfterSignup({ stored: null, requested: false, verified: false, minor: false, noticeVersion: V2 })).toBeNull()
+    expect(rosterAfterSignup({ stored: null, requested: true, verified: true, minor: true, noticeVersion: V2 })).toBeNull()
+    // A refusal stays as it was, under its own text and date.
+    expect(rosterAfterSignup({ stored: { status: "hidden", noticeVersion: ROSTER_NOTICE_V1 }, requested: true, verified: false, minor: false, noticeVersion: V2 })).toBeNull()
+  })
+})
+
+describe("who the event page reads the roster as", () => {
+  const base = { enabled: true, embed: false, preview: false, groupLink: false, inviteToken: null, sessionToken: null }
+  it("nobody anonymous, on a group link, in the embed, the preview, or without the roster", () => {
+    expect(eventPageRosterViewer(base)).toBeNull()
+    for (const over of [{ groupLink: true }, { embed: true }, { preview: true }, { enabled: false }]) {
+      expect(eventPageRosterViewer({ ...base, sessionToken: "s", inviteToken: "i", ...over })).toBeNull()
+    }
+  })
+  it("an invitation in the address first, else the browser's session", () => {
+    expect(eventPageRosterViewer({ ...base, inviteToken: "i", sessionToken: "s" })).toEqual({ kind: "invite", token: "i" })
+    expect(eventPageRosterViewer({ ...base, sessionToken: "s" })).toEqual({ kind: "personal", token: "s" })
+  })
+})
+
+describe("what an invitation may see", () => {
+  const open = { active: true, erased: false, merged: false, declined: false, used: false, confirmedOnEvent: false }
+  it("an open invitation: as an invited member", () => {
+    expect(inviteRosterAudience(open)).toBe("invited")
+  })
+  it("a member with a confirmed place: as a confirmed volunteer, even after declining or using it", () => {
+    expect(inviteRosterAudience({ ...open, confirmedOnEvent: true, used: true, declined: true })).toBe("confirmed")
+  })
+  it("declined, or used to sign up without a confirmed place now: nothing", () => {
+    expect(inviteRosterAudience({ ...open, declined: true })).toBeNull()
+    expect(inviteRosterAudience({ ...open, used: true })).toBeNull()
+  })
+  it("never an inactive, erased or merged member", () => {
+    for (const over of [{ active: false }, { erased: true }, { merged: true }]) expect(inviteRosterAudience({ ...open, confirmedOnEvent: true, ...over })).toBeNull()
+  })
+})
+
+describe("a shift's roster in one sentence", () => {
+  it("names, then the others; the others alone; nobody", () => {
+    expect(rosterSummary({ names: ["Aline M.", "Luc D."], othersCount: 2 })).toBe("Aline M., Luc D. et 2 autres bénévoles")
+    expect(rosterSummary({ names: ["Aline M.", "Luc D.", "Zoé R."], othersCount: 0 })).toBe("Aline M., Luc D. et Zoé R.")
+    expect(rosterSummary({ names: ["Aline M."], othersCount: 1 })).toBe("Aline M. et 1 autre bénévole")
+    expect(rosterSummary({ names: [], othersCount: 3 })).toBe("3 autres bénévoles, sans nom affiché")
+    expect(rosterSummary(undefined)).toBe("personne d'autre pour l'instant")
+    expect(rosterSummary({ names: ["Aline M."], othersCount: 0 }, rosterSpokenName)).toBe("Aline, initiale M")
+  })
+  it("the personal page's link turns the switch on, keeping the URL's query", () => {
+    expect(rosterEventHref("https://club.benevol.app/fete")).toBe("https://club.benevol.app/fete?inscrits=1")
+    expect(rosterEventHref("http://localhost:3000/fete?org=club")).toBe("http://localhost:3000/fete?org=club&inscrits=1")
+  })
+  it("the publication note says it is on and where to turn it off; the done texts", () => {
+    expect(ROSTER_PUBLISH_NOTE_ON).toContain("est activé")
+    expect(ROSTER_PUBLISH_NOTE_ON).toContain("désactiver")
+    expect(rosterDoneText("widen")).toContain("membres invités")
+    expect(rosterDoneText("hide")).toBe("Ton nom est maintenant masqué.")
   })
 })

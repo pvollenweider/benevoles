@@ -5,7 +5,10 @@
 
 import { getBarClasses } from "@/lib/roles"
 import { toMin, toMinEnd, fmt, assignLanes, crossesMidnight, hourLabel, showSpan, type GanttShow } from "@/lib/gantt-utils"
+import { useState } from "react"
 import { barText, shiftViewState, type HeldKind, type TimelineShift } from "@/lib/public-timeline"
+import { ROSTER_FRISE_PROMPT, type ShiftRosterEntry } from "@/lib/shift-roster"
+import { RosterSummary, rosterSpokenSummary } from "@/components/public/RosterName"
 
 export { fmt }
 export type { TimelineShift }
@@ -40,6 +43,7 @@ export default function DayTimeline({
   limitReachedRoles,
   reservedShiftIds,
   dayLabel,
+  roster,
 }: {
   shifts: TimelineShift[]
   shows: Show[]
@@ -58,7 +62,16 @@ export default function DayTimeline({
   reservedShiftIds?: Set<string>
   /** The day in words (« samedi 4 juillet »): each day's schedule gets its own name. */
   dayLabel?: string
+  /**
+   * « Voir qui est inscrit » (#1068), by shift id. The bars stay as they are; one line under the
+   * day's chart (outside its scrolling area) says who is on the bar hovered, tapped or focused
+   * last, and keeps it until another one; each bar that can take the focus has the same sentence
+   * as its description. A bar that can't be chosen is disabled: it lets taps through to its
+   * wrapper, which updates the line (the list view gives every name by keyboard).
+   */
+  roster?: Map<string, ShiftRosterEntry> | null
 }) {
+  const [detailId, setDetailId] = useState<string | null>(null)
   const visible = shifts.filter((s) => s.status !== "cancelled")
   if (visible.length === 0) return null
 
@@ -107,7 +120,11 @@ export default function DayTimeline({
   // A long day would print overlapping hour labels: print every other hour.
   const hourStep = hours.length > 14 ? 2 : 1
 
+  const detailShift = roster && detailId ? visible.find((s) => s.id === detailId) : undefined
+  const detailEntry = detailShift ? roster?.get(detailShift.id) : undefined
+
   return (
+    <>
     <div
       role="region"
       aria-label={dayLabel ? `Planning du ${dayLabel}` : "Planning de la journée"}
@@ -214,6 +231,9 @@ export default function DayTimeline({
                     // (the button keeps its full accessible name).
                     <div
                       key={shift.id}
+                      onPointerEnter={roster ? () => setDetailId(shift.id) : undefined}
+                      onClick={roster ? () => setDetailId(shift.id) : undefined}
+                      onFocus={roster ? () => setDetailId(shift.id) : undefined}
                       className="absolute @container focus-within:z-20"
                       style={{
                         left: `${pct(startMin)}%`,
@@ -228,8 +248,9 @@ export default function DayTimeline({
                         disabled={!clickable}
                         aria-pressed={clickable ? isSelected : undefined}
                         aria-label={ariaLabel}
+                        aria-describedby={roster ? `roster-bar-${shift.id}` : undefined}
                         onClick={() => onToggle(shift.id, shift.status)}
-                        className={`absolute inset-x-0 rounded border border-transparent forced-colors:aria-pressed:bg-[Highlight] ${isRegistered ? "forced-colors:border-2 forced-colors:border-[CanvasText]" : ""} flex items-center justify-center overflow-hidden transition-colors ${clickable ? "cursor-pointer" : "cursor-default"} ${barCls}`}
+                        className={`absolute inset-x-0 rounded border border-transparent ${roster && !clickable ? "pointer-events-none" : ""} forced-colors:aria-pressed:bg-[Highlight] ${isRegistered ? "forced-colors:border-2 forced-colors:border-[CanvasText]" : ""} flex items-center justify-center overflow-hidden transition-colors ${clickable ? "cursor-pointer" : "cursor-default"} ${barCls}`}
                         style={{
                           top: 0,
                           bottom: showSubLabel ? LABEL_H : 0,
@@ -313,6 +334,7 @@ export default function DayTimeline({
                           </div>
                         )}
                       </button>
+                      {roster && <span id={`roster-bar-${shift.id}`} className="sr-only">{rosterSpokenSummary(roster.get(shift.id), roster.get(shift.id)?.own ?? false)}</span>}
                       {showSubLabel && (
                         <span
                           className="absolute inset-x-0 bottom-0 text-[10px] text-gray-600 truncate text-center pointer-events-none"
@@ -377,5 +399,17 @@ export default function DayTimeline({
         </div>
       </div>
     </div>
+    {roster && (
+      // Plain text, not live: the focused bar's description says the same. Kept until another bar.
+      <p data-roster-detail className="-mt-3 mb-5 min-h-10 text-sm text-gray-700 break-words">
+        {detailShift ? (
+          <>
+            <span className="block font-medium text-gray-900">{detailShift.label} · {fmt(detailShift.startTime)}–{fmt(detailShift.endTime)}</span>
+            {" "}<RosterSummary entry={detailEntry} own={detailEntry?.own ?? false} />
+          </>
+        ) : ROSTER_FRISE_PROMPT}
+      </p>
+    )}
+    </>
   )
 }

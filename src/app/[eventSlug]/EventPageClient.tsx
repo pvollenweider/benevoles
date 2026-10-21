@@ -51,7 +51,12 @@ import { heldKinds } from "@/lib/public-timeline"
 import PublicFooter, { type FooterSite } from "@/components/PublicFooter"
 import SkipLink, { MAIN_CONTENT_ID } from "@/components/admin/SkipLink"
 import { resolveCharterText } from "@/lib/volunteer-charter"
-import { ROSTER_MINOR_TEXT, ROSTER_SIGNUP_HINT, ROSTER_SIGNUP_LABEL, signupRosterBox } from "@/lib/shift-roster"
+import {
+  ROSTER_MINOR_TEXT, ROSTER_NOTICE_VERSION, ROSTER_QUERY_PARAM, ROSTER_SIGNUP_HINT, ROSTER_SIGNUP_LABEL, ROSTER_SWITCH_EXPLAIN,
+  ROSTER_SWITCH_FAILURE, ROSTER_SWITCH_LABEL, ROSTER_SWITCH_LOADED, ROSTER_SWITCH_UNAVAILABLE, eventPageRosterViewer, signupRosterBox,
+  type ShiftRosterEntry,
+} from "@/lib/shift-roster"
+import { RosterName } from "@/components/public/RosterName"
 import { readStored, removeStored, writeStored } from "@/lib/device-storage"
 import { NEW_TAB_HINT, takeReturnToSchedule } from "@/lib/embed"
 import { successPath } from "@/lib/registration-success"
@@ -229,6 +234,13 @@ export default function EventPageClient({ orgSlug, eventSlug, preview, initialEv
   const [charterAccepted, setCharterAccepted] = useState(false)
   // The shift roster's optional box (#1068): unticked by default, never required.
   const [rosterNameVisible, setRosterNameVisible] = useState(false)
+  // « Voir qui est inscrit » (#1068): off on load (on with `?inscrits=1`, a display preference
+  // only), its data by shift once loaded, its messages (status and alert, mounted from the start).
+  const [rosterOn, setRosterOn] = useState(searchParams.get(ROSTER_QUERY_PARAM) === "1")
+  // The last answer, for the link and the visitor's shifts it was read with (see rosterKey).
+  const [rosterResult, setRosterResult] = useState<{ key: string; shifts: Map<string, ShiftRosterEntry> | null } | null>(null)
+  const [rosterStatus, setRosterStatus] = useState("")
+  const [rosterFailure, setRosterFailure] = useState("")
   // Which consent checkbox the last refusal was about (#569): marked invalid and focused.
   const [invalidCheckbox, setInvalidCheckbox] = useState<"charter" | "consent" | null>(null)
   const [showCharter, setShowCharter] = useState(false)
@@ -378,6 +390,51 @@ export default function EventPageClient({ orgSlug, eventSlug, preview, initialEv
       .catch(() => {})
   }, [storageKey, previewEventId])
 
+  // Who the roster is read as (#1068): an invitation in the address, else this browser's session
+  // with a confirmed place; nobody on a group link, in the embed or the preview. The server decides.
+  const hasConfirmedSession = myRegistrations.some((r) => r.status === "active")
+  const rosterViewer = eventPageRosterViewer({
+    enabled: !!event?.shiftRosterEnabled,
+    embed,
+    preview: !!previewEventId,
+    groupLink: groupFilter.kind !== "none",
+    inviteToken,
+    sessionToken: hasConfirmedSession ? sessionToken : null,
+  })
+  const rosterUrl = rosterViewer
+    ? rosterViewer.kind === "invite"
+      ? `/api/public/member-invite/${encodeURIComponent(rosterViewer.token)}/roster?slug=${encodeURIComponent(eventSlug)}&org=${encodeURIComponent(orgSlug)}`
+      : `/api/public/registrations/${encodeURIComponent(rosterViewer.token)}/roster`
+    : null
+  // Read whenever the switch is on and again after the visitor's own shifts change (a withdrawal);
+  // forgotten as soon as it is off, the link changes or the server says no.
+  const rosterKey = `${rosterUrl}|${myRegistrations.map((r) => `${r.shiftId}:${r.status}`).join(",")}`
+  useEffect(() => {
+    if (!rosterOn || !rosterUrl) return
+    let current = true
+    fetch(rosterUrl)
+      .then(async (r) => ({ ok: r.ok, body: await r.json().catch(() => null) }))
+      .then(({ ok, body }) => {
+        if (!current) return
+        if (ok && body?.available === true && Array.isArray(body.shifts)) {
+          setRosterResult({ key: rosterKey, shifts: new Map((body.shifts as ShiftRosterEntry[]).map((e) => [e.shiftId, e])) })
+          announce(setRosterStatus, ROSTER_SWITCH_LOADED)
+        } else {
+          setRosterResult({ key: rosterKey, shifts: null })
+          announce(setRosterFailure, ok && body?.available === false ? ROSTER_SWITCH_UNAVAILABLE : ROSTER_SWITCH_FAILURE)
+        }
+      })
+      .catch(() => {
+        if (!current) return
+        setRosterResult({ key: rosterKey, shifts: null })
+        announce(setRosterFailure, ROSTER_SWITCH_FAILURE)
+      })
+    return () => { current = false }
+  }, [rosterOn, rosterUrl, rosterKey])
+  const rosterLoading = rosterOn && !!rosterUrl && rosterResult?.key !== rosterKey
+  // Only the answer for this very link and these shifts, only while the switch is on.
+  const shownRoster = rosterOn && rosterUrl && rosterResult?.key === rosterKey ? rosterResult.shifts : null
+
   if (loading) return <div role="status" className="flex items-center justify-center min-h-screen text-gray-500">Chargement…</div>
   if (!event) return <div role="alert" className="flex items-center justify-center min-h-screen text-gray-500">Événement introuvable.</div>
 
@@ -506,6 +563,8 @@ export default function EventPageClient({ orgSlug, eventSlug, preview, initialEv
           charterAccepted,
           // Only while the box is shown: never for a minor, nor once hidden by a birth date.
           rosterNameVisible: rosterBox === "box" && rosterNameVisible,
+          // The text the box showed (#1068): its audience is the one stored with the choice.
+          rosterNoticeVersion: ROSTER_NOTICE_VERSION,
           answers,
           inviteToken: inviteToken ?? undefined,
           // The sign-up counts for the group link the page was opened with (#947).
@@ -886,7 +945,10 @@ export default function EventPageClient({ orgSlug, eventSlug, preview, initialEv
               <p className="rounded-xl border border-amber-300 bg-amber-50 px-4 py-3 text-sm text-amber-950">{groupNotice}</p>
             )}
 
-            {/* Frise or Liste (#808), once above every day; the pressed state says which is shown. */}
+            {/* Frise or Liste (#808), once above every day; the pressed state says which is shown.
+                « Voir qui est inscrit » (#1068) beside it, a separate toggle, only for an identified
+                visitor; its label never changes. */}
+            <div className="flex flex-wrap items-center gap-2">
             <div role="group" aria-label="Affichage des créneaux" className="inline-flex rounded-xl border border-gray-300 text-sm">
               {(["frise", "liste"] as const).map((view) => (
                 <button
@@ -900,6 +962,31 @@ export default function EventPageClient({ orgSlug, eventSlug, preview, initialEv
                 </button>
               ))}
             </div>
+            {rosterUrl && (
+              <button
+                type="button"
+                aria-pressed={rosterOn}
+                aria-describedby={rosterOn ? "roster-switch-explain" : undefined}
+                onClick={() => { setRosterOn((on) => !on); setRosterResult(null); setRosterStatus(""); setRosterFailure("") }}
+                className={`min-h-11 rounded-xl border border-gray-300 px-4 text-sm font-medium transition-colors focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-blue-600 forced-colors:aria-pressed:bg-[Highlight] ${rosterOn ? "bg-gray-900 text-white border-gray-900" : "text-gray-700 hover:bg-gray-50"}`}
+              >
+                {ROSTER_SWITCH_LABEL}
+              </button>
+            )}
+            </div>
+            {rosterUrl && rosterOn && (
+              <p id="roster-switch-explain" className="text-sm text-gray-700">
+                {ROSTER_SWITCH_EXPLAIN}
+                {/* Visible only: the result is said once by the status line below (DESIGN.md). */}
+                {rosterLoading && <span className="ml-1 text-gray-600">Chargement…</span>}
+              </p>
+            )}
+            {rosterUrl && (
+              <>
+                <p role="status" className="sr-only">{rosterStatus}</p>
+                <p role="alert" className={rosterFailure && rosterOn ? "rounded-xl border border-amber-300 bg-amber-50 px-4 py-2 text-sm text-amber-950" : "sr-only"}>{rosterOn ? rosterFailure : ""}</p>
+              </>
+            )}
 
             {/* minmax(0,1fr): the timelines column may shrink below the chart width and scroll */}
             <div className="lg:grid lg:grid-cols-[minmax(0,1fr)_300px] lg:gap-8 lg:items-start">
@@ -953,6 +1040,7 @@ export default function EventPageClient({ orgSlug, eventSlug, preview, initialEv
                           limitReachedRoles={limitReachedRoles}
                           reservedShiftIds={reservedShiftIds}
                           dayLabel={formatCalendarDay(day)}
+                          roster={shownRoster}
                         />
                       ) : (
                       <DayTimeline
@@ -967,6 +1055,7 @@ export default function EventPageClient({ orgSlug, eventSlug, preview, initialEv
                         limitReachedRoles={limitReachedRoles}
                         reservedShiftIds={reservedShiftIds}
                         dayLabel={formatCalendarDay(day)}
+                        roster={shownRoster}
                       />
                       )}
                       {limitNotice && limitNoticeDay === day && (
@@ -1285,7 +1374,11 @@ export default function EventPageClient({ orgSlug, eventSlug, preview, initialEv
                             onChange={(e) => setRosterNameVisible(e.target.checked)}
                             className="mt-0.5 h-4 w-4 rounded border-gray-300 text-blue-600"
                           />
-                          <span className="text-sm text-gray-600">{ROSTER_SIGNUP_LABEL}</span>
+                          <span className="text-sm text-gray-600">{(() => {
+                            // « Aline M. » spoken « Aline, initiale M » (not « Monsieur »).
+                            const [before, after] = ROSTER_SIGNUP_LABEL.split("Aline M.")
+                            return after === undefined ? ROSTER_SIGNUP_LABEL : <>{before}<RosterName name="Aline M." />{after}</>
+                          })()}</span>
                         </label>
                         <p id="reg-roster-hint" className="pl-7 mt-1 text-xs text-gray-600">{ROSTER_SIGNUP_HINT}</p>
                       </>

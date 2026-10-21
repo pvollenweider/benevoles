@@ -54,8 +54,9 @@ const FIELD_LABELS: Record<string, string> = {
   remindersEnabled: "rappels automatiques",
   requirePhone: "téléphone obligatoire",
   // Shift roster between volunteers (#1068): the event's setting, and a volunteer's own choice.
-  shiftRosterEnabled: "noms visibles entre bénévoles d'un créneau",
+  shiftRosterEnabled: "qui est inscrit, visible des bénévoles confirmés et des membres invités",
   rosterName: "nom affiché aux autres bénévoles",
+  rosterAudience: "nom visible par",
   isListed: "visibilité",
   audience: "destinataires",
   recipients: "nombre de destinataires",

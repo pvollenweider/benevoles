@@ -18,7 +18,7 @@ export async function PATCH(req: Request) {
   const { organizationId } = guard
 
   const body = await req.json().catch(() => ({}))
-  const updates: { name?: string; slug?: string; volunteerCharter?: string | null; hasOrgInsurance?: boolean; publicTitle?: string | null; timeZone?: string | null; onboardingDismissedAt?: Date | null } = {}
+  const updates: { name?: string; slug?: string; volunteerCharter?: string | null; hasOrgInsurance?: boolean; shiftRosterDefault?: boolean; publicTitle?: string | null; timeZone?: string | null; onboardingDismissedAt?: Date | null } = {}
   let oldSlug: string | null = null
 
   if (typeof body.name === "string") {
@@ -70,6 +70,11 @@ export async function PATCH(req: Request) {
     updates.hasOrgInsurance = body.hasOrgInsurance
   }
 
+  // « Qui est inscrit » (#1068): the value of the organisation's next new events; none changes now.
+  if (typeof body.shiftRosterDefault === "boolean") {
+    updates.shiftRosterDefault = body.shiftRosterDefault
+  }
+
   // Headline of the public events page. Empty means "use the default" (Bénévoles).
   if ("publicTitle" in body) {
     const title = typeof body.publicTitle === "string" ? body.publicTitle.trim() : ""
@@ -113,10 +118,10 @@ export async function PATCH(req: Request) {
     return tx.organization.update({
       where: { id: organizationId },
       data: updates,
-      select: { name: true, slug: true, volunteerCharter: true, hasOrgInsurance: true, publicTitle: true, timeZone: true },
+      select: { name: true, slug: true, volunteerCharter: true, hasOrgInsurance: true, shiftRosterDefault: true, publicTitle: true, timeZone: true },
     })
   })
 
   const adminUrl = oldSlug ? `${orgBaseUrl(org.slug)}/admin/settings/admins` : null
-  return NextResponse.json({ name: org.name, slug: org.slug, publicTitle: org.publicTitle, timeZone: org.timeZone, adminUrl })
+  return NextResponse.json({ name: org.name, slug: org.slug, publicTitle: org.publicTitle, timeZone: org.timeZone, shiftRosterDefault: org.shiftRosterDefault, adminUrl })
 }

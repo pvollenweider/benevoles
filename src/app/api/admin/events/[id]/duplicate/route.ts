@@ -37,13 +37,13 @@ export async function POST(req: Request, { params }: { params: Promise<{ id: str
       questions: { where: { archivedAt: null }, orderBy: { position: "asc" } },
       sectorLeaders: { select: { roleName: true, name: true, email: true } },
       shiftRecurrences: true,
-      organization: { select: { slug: true } },
+      organization: { select: { slug: true, shiftRosterDefault: true } },
     },
   })
 
   if (!source) return NextResponse.json({ error: "Non trouvé" }, { status: 404 })
 
-  const plan = duplicatePlan({ ...source, leaders: source.sectorLeaders, recurrences: source.shiftRecurrences }, parsed.data)
+  const plan = duplicatePlan({ ...source, leaders: source.sectorLeaders, recurrences: source.shiftRecurrences, organizationRosterDefault: source.organization.shiftRosterDefault }, parsed.data)
 
   // A title whose slug is one of the site's own addresses (/tarifs, /admin…) is refused (src/lib/event-slug.ts).
   const slugged = eventSlugFromTitle(plan.event.title)

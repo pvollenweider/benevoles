@@ -15,7 +15,7 @@ import { canPublish as orgCanPublish } from "@/lib/org-approval"
 import EventShareLink from "@/components/admin/EventShareLink"
 import HelpLink from "@/components/admin/HelpLink"
 import ReviewChecklist from "@/components/admin/ReviewChecklist"
-import { ROSTER_PUBLISH_NOTE } from "@/lib/shift-roster"
+import { ROSTER_PUBLISH_NOTE, ROSTER_PUBLISH_NOTE_ON, ROSTER_SETTING_LINK } from "@/lib/shift-roster"
 
 export const dynamic = "force-dynamic"
 export const metadata: Metadata = { title: "Vérifier avant publication" }
@@ -84,13 +84,12 @@ export default async function ReviewPage({ params }: { params: Promise<{ id: str
                 ? "Publier rend la page d'inscription accessible à qui a le lien. Rien n'est envoyé aux membres tant que vous ne les invitez pas."
                 : "Complétez les points marqués d'un ! (« À faire ») avant de publier."}
             </p>
-            {/* Shift roster (#1068): an informative note, never a condition of publication. */}
-            {!event.shiftRosterEnabled && (
-              <p className="text-sm text-gray-700">
-                {ROSTER_PUBLISH_NOTE}{" "}
-                <Link href={`/admin/events/${event.id}/edit#event-shift-roster-setting`} className={linkClass}>Voir le réglage</Link>
-              </p>
-            )}
+            {/* Shift roster (#1068): an informative note, never a condition of publication; on by
+                default for a new event, so it says so and where to turn it off. */}
+            <p className="text-sm text-gray-700">
+              {event.shiftRosterEnabled ? ROSTER_PUBLISH_NOTE_ON : ROSTER_PUBLISH_NOTE}{" "}
+              <Link href={`/admin/events/${event.id}/edit#event-shift-roster-setting`} className={linkClass}>{ROSTER_SETTING_LINK}</Link>
+            </p>
             <div className="flex flex-wrap items-center gap-3">
               {ready ? <PublishToggle eventId={event.id} currentStatus={event.publicStatus} awaitingValidation={!orgCanPublish(event.organization)} /> : null}
               <Link href={`/admin/events/${event.id}`} className={linkClass}>Rester en brouillon pour l&apos;instant</Link>

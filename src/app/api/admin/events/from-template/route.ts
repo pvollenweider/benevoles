@@ -37,9 +37,12 @@ export async function POST(req: Request) {
   const existing = await db.event.findFirst({ where: { slug }, select: { id: true } })
   if (existing) slug = `${slug}-${Date.now()}`
 
+  // « Qui est inscrit » (#1068): a new event starts with the organisation's default.
+  const org = await db.organization.findUnique({ where: { id: organizationId }, select: { shiftRosterDefault: true } })
   const event = await db.event.create({
     data: {
       title: draft.title,
+      shiftRosterEnabled: org?.shiftRosterDefault ?? true,
       slug,
       organizationId,
       startDate: new Date(draft.startDate),
