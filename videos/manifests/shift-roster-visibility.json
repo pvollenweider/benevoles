@@ -1,0 +1,61 @@
+{
+  "id": "SHIFT_ROSTER_VISIBILITY",
+  "slug": "shift-roster-visibility",
+  "title": "Montrer aux bénévoles qui est inscrit",
+  "description": "Activer la liste par créneau, choisir d’afficher son nom et le masquer depuis sa page personnelle.",
+  "viewer": {
+    "summary": "Activer la liste par créneau, choisir d’afficher son nom et le masquer depuis sa page personnelle.",
+    "steps": [
+      "Activez le réglage et informez les bénévoles.",
+      "Choisissez librement la visibilité à l’inscription et confirmez depuis le lien reçu par email.",
+      "Affichez ou masquez votre nom depuis votre page personnelle."
+    ],
+    "remember": [
+      "Les inscriptions existantes restent masquées jusqu’au choix du bénévole.",
+      "Seuls le prénom et l’initiale du nom sont visibles entre bénévoles confirmés.",
+      "Rien sur la page publique ni dans l’intégration. Les mineurs connus restent masqués."
+    ]
+  },
+  "language": "fr-CH",
+  "voice": "Kore",
+  "continuousNarration": true,
+  "voiceStyle": "Speak with an audible smile throughout. Use a warm, friendly adult female voice, as if helping another association organizer beside you. Natural conversational French, patient pace around 130 words per minute and clear articulation. Read every provided sentence verbatim: never omit, paraphrase or summarize any words. Keep exactly the same voice identity, pitch, smile and energy from beginning to end. Never sound corporate, theatrical, childish or rushed.",
+  "viewport": {
+    "width": 1280,
+    "height": 800,
+    "deviceScaleFactor": 1
+  },
+  "segments": [
+    {
+      "id": "roster-setting",
+      "transcript": "Vous pouvez permettre aux bénévoles confirmés de voir qui est inscrit, sur tous les créneaux de votre événement. Sur Vérifier avant publication, le réglage désactivé est signalé par une simple information. Ouvrez Voir le réglage. Dans Réglages, cochez Montrer aux bénévoles confirmés qui est inscrit sur chaque créneau. Le rappel vous demande d’informer les bénévoles. Activer cette option ne donne aucun accord à leur place.",
+      "fallbackDurationMs": 30952
+    },
+    {
+      "id": "roster-signup",
+      "transcript": "Passons du côté bénévole. Choisissez un créneau, puis continuez vers le formulaire. Renseignez votre prénom, votre nom et votre adresse email. Acceptez la convention et l’utilisation de vos données pour l’inscription. La case de visibilité reste séparée, facultative et non cochée. Son texte précise que les autres bénévoles confirmés, même sans créneau commun, verront votre prénom et l’initiale de votre nom, jusqu’à la fin de l’événement. Cochez cette case si vous le souhaitez, puis confirmez votre inscription.",
+      "fallbackDurationMs": 36667
+    },
+    {
+      "id": "roster-confirm",
+      "transcript": "Ouvrez maintenant le véritable email de confirmation. Suivez son lien personnel. Dans Qui est inscrit, vous voyez les autres bénévoles confirmés qui ont accepté, sur tous les créneaux de l’événement. Votre choix du formulaire attend encore votre confirmation, car saisir une adresse email ne prouve pas qu’elle vous appartient. Cliquez sur Afficher mon nom. Votre prénom et l’initiale de votre nom sont maintenant visibles.",
+      "fallbackDurationMs": 30476
+    },
+    {
+      "id": "roster-withdraw",
+      "transcript": "Ouvrons la page personnelle de Bruno, inscrit sur un autre créneau. Il voit Aline M. Revenons sur la page d’Aline. Cliquez sur Masquer mon nom. Sur la page de Bruno, Aline a disparu de la liste. Pourtant, sur sa propre page, Aline voit toujours les autres bénévoles. Ce choix ne change aucune inscription et peut être retiré à tout moment.",
+      "fallbackDurationMs": 28571
+    },
+    {
+      "id": "roster-existing",
+      "transcript": "Claire était déjà inscrite avant l’activation. Sur sa page personnelle, son nom reste masqué. L’organisateur ne peut pas accepter à sa place. Cliquez sur Afficher mon nom pour choisir vous-même. Sur la page de Bruno, Claire apparaît désormais avec seulement son prénom et l’initiale de son nom.",
+      "fallbackDurationMs": 22381
+    },
+    {
+      "id": "roster-privacy",
+      "transcript": "La liste ne montre ni email, ni téléphone, ni réponses aux questions. Les bénévoles mineurs dont l’âge est connu ne sont jamais affichés. Ces noms ne figurent ni sur la page publique, ni dans l’intégration à un autre site. Seule une personne avec une place confirmée peut consulter la liste depuis son lien personnel. Gardez ce lien pour vous. La liste se ferme après le dernier jour de l’événement.",
+      "fallbackDurationMs": 32857
+    }
+  ],
+  "continuousPauseTags": false
+}

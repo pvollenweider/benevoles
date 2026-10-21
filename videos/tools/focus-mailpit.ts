@@ -12,7 +12,7 @@ import { loadManifest, videoDir, type Timeline } from "../lib/manifest"
 const exec = promisify(execFile)
 export async function focusMailpit(reference: string) {
   const manifest = await loadManifest(reference)
-  assert(["MEMBERS_INVITATIONS", "MEMBERS_REMINDERS", "PLATFORM_INTERNAL_ADMINISTRATION"].includes(manifest.id))
+  assert(["SHIFT_ROSTER_VISIBILITY", "MEMBERS_INVITATIONS", "MEMBERS_REMINDERS", "PLATFORM_INTERNAL_ADMINISTRATION"].includes(manifest.id))
   const dir = videoDir(manifest.slug), file = path.join(dir, "timeline.json")
   const original = await readFile(file)
   const timeline = JSON.parse(original.toString()) as Timeline
@@ -31,7 +31,7 @@ export async function focusMailpit(reference: string) {
     if (isMailpit && start === null) start = index * 40
     if (!isMailpit && start !== null) { frames.push({ startMs: start, endMs: index * 40 }); start = null }
   }
-  assert(frames.length >= 2 && frames.every(frame => frame.endMs - frame.startMs > 200), "Expected stable actual message-pane intervals")
+  assert(frames.length >= (manifest.id === "SHIFT_ROSTER_VISIBILITY" ? 1 : 2) && frames.every(frame => frame.endMs - frame.startMs > 200), "Expected stable actual message-pane intervals")
   const holds: NonNullable<Timeline["mailpitHolds"]> = []
   if (manifest.id === "MEMBERS_REMINDERS") {
     const send = timeline.cues.find(cue => cue.id === "send")!
@@ -46,8 +46,8 @@ export async function focusMailpit(reference: string) {
   }
   await mkdir(path.join(dir, "review"), { recursive: true })
   if (!timeline.mailpitFocusFrames?.length) await writeFile(path.join(dir, "review/timeline-before-mailpit-focus.json"), original)
-  await writeFile(file, JSON.stringify({ ...timeline, mailpitFocusFrames: frames, mailpitHolds: holds, ...(manifest.id === "PLATFORM_INTERNAL_ADMINISTRATION" ? { mailpitBodyOnly: true } : {}) }, null, 2) + "\n")
-  await writeFile(path.join(dir, "review/mailpit-focus-proof.json"), JSON.stringify({ sourceSha256, frames, holds, sampling: "Actual toolbar RGB every frame at 25 fps", crop: manifest.id === "PLATFORM_INTERNAL_ADMINISTRATION" ? { x: 320, y: 224, width: 960, height: 576 } : { x: 320, y: 0, width: 960, height: 800 }, note: manifest.id === "PLATFORM_INTERNAL_ADMINISTRATION" ? "Actual message body cropped below Mailpit headers: its fixed English date and unrelated inbox excluded. No email text or product state changed; raw capture retained. No still holds." : "Only unrelated inbox sidebar excluded. Real email headers/body and raw capture retained. No mailbox message deleted. A short delivered-email shot may hold its last actual frame until the history point in the same spoken sentence, only when no click/key is covered." }, null, 2))
+  await writeFile(file, JSON.stringify({ ...timeline, mailpitFocusFrames: frames, mailpitHolds: holds, ...(["PLATFORM_INTERNAL_ADMINISTRATION", "SHIFT_ROSTER_VISIBILITY"].includes(manifest.id) ? { mailpitBodyOnly: true } : {}) }, null, 2) + "\n")
+  await writeFile(path.join(dir, "review/mailpit-focus-proof.json"), JSON.stringify({ sourceSha256, frames, holds, sampling: "Actual toolbar RGB every frame at 25 fps", crop: ["PLATFORM_INTERNAL_ADMINISTRATION", "SHIFT_ROSTER_VISIBILITY"].includes(manifest.id) ? (manifest.id === "SHIFT_ROSTER_VISIBILITY" ? { x: 320, y: 264, width: 960, height: 536 } : { x: 320, y: 224, width: 960, height: 576 }) : { x: 320, y: 0, width: 960, height: 800 }, note: ["PLATFORM_INTERNAL_ADMINISTRATION", "SHIFT_ROSTER_VISIBILITY"].includes(manifest.id) ? "Actual message body cropped below Mailpit headers: its fixed English date and unrelated inbox excluded. No email text or product state changed; raw capture retained. No still holds." : "Only unrelated inbox sidebar excluded. Real email headers/body and raw capture retained. No mailbox message deleted. A short delivered-email shot may hold its last actual frame until the history point in the same spoken sentence, only when no click/key is covered." }, null, 2))
   console.log(`${manifest.id}: ${frames.length} real Mailpit intervals focused`)
 }
 if (process.argv[1] && import.meta.url === pathToFileURL(path.resolve(process.argv[1])).href) focusMailpit(process.argv[2]).catch(error => { console.error(error); process.exitCode = 1 })

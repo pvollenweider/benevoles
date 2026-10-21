@@ -79,6 +79,7 @@ async function main() {
     allowed.add("videos/tools/inspect-navigation.ts")
     allowed.add("videos/tools/prepare-search.ts")
     allowed.add("videos/tools/prepare-event-log.ts")
+    allowed.add("scripts/seed-video-shift-roster.ts")
     allowed.add("videos/tools/prepare-foundation.ts")
     allowed.add("videos/tools/prepare-first-steps.ts")
     allowed.add("videos/tools/prepare-demo.ts")
@@ -104,7 +105,8 @@ async function main() {
     }
     if (script === "videos/tools/record.ts" || script === "videos/tools/audit-audiovisual.ts") {
       const commonTake = ["VOLUNTEER_BADGES", "EVENT_ARCHIVE_DELETE", "SHIFT_CREATE_EDIT_DETAIL", "SHIFT_CREATE_SERIES", "SHIFT_TIMELINE_QUICK_ACTIONS", "SHIFT_NIGHT_DST", "SHIFT_WAITLIST_OFFER", "SHIFT_APPROVAL", "SHIFT_ELIGIBILITY_RULES", "SHIFT_RECURRENCE", "VOLUNTEER_DISCOVER_EVENT", "VOLUNTEER_CHOOSE_SHIFTS", "VOLUNTEER_PERSONAL_REGISTRATIONS", "VOLUNTEER_CALENDAR", "VOLUNTEER_FORM_RECAP", "VOLUNTEER_REGISTER", "VOLUNTEER_SESSION_AVAILABILITY", ...memberTakes].includes(rest[0])
-      const validTake = mode === "run-delivery" ? rest[0] === "EMAIL_DELIVERY_FAILURES" : ["ADMIN_FEATURES_OVERVIEW", "EVENT_CREATE_PUBLISH_OVERVIEW", "ORG_FIRST_STEPS", "LAST_MINUTE_CHANGES", "PRIVACY_PERSONAL_LINKS", "VOLUNTEER_CONFIRMATION_ERRORS", "ADMIN_NAVIGATION", "ORG_TIMEZONE_CHARTER", "GLOBAL_SEARCH", "EVENT_MILESTONES", "ORG_PUBLIC_IDENTITY", "ORG_EMAIL_SETTINGS", "ORG_TEAM_PERMISSIONS", "EVENT_CREATE_BLANK", "EVENT_CREATE_TEMPLATE", "EVENT_VISIBILITY_REGISTRATION_WINDOW", "EVENT_PROGRAM_PAGES_QR", "SECTOR_LEADERS", "REGISTRATION_MONITOR_FOLLOWUP", "EVENT_DUPLICATE", "EVENT_REVIEW_PUBLISH"].includes(rest[0])
+      const validTake = mode === "run-delivery" ? rest[0] === "EMAIL_DELIVERY_FAILURES" : ["SHIFT_ROSTER_VISIBILITY", "ADMIN_FEATURES_OVERVIEW", "EVENT_CREATE_PUBLISH_OVERVIEW", "ORG_FIRST_STEPS", "LAST_MINUTE_CHANGES", "PRIVACY_PERSONAL_LINKS", "VOLUNTEER_CONFIRMATION_ERRORS", "ADMIN_NAVIGATION", "ORG_TIMEZONE_CHARTER", "GLOBAL_SEARCH", "EVENT_MILESTONES", "ORG_PUBLIC_IDENTITY", "ORG_EMAIL_SETTINGS", "ORG_TEAM_PERMISSIONS", "EVENT_CREATE_BLANK", "EVENT_CREATE_TEMPLATE", "EVENT_VISIBILITY_REGISTRATION_WINDOW", "EVENT_PROGRAM_PAGES_QR", "SECTOR_LEADERS", "REGISTRATION_MONITOR_FOLLOWUP", "EVENT_DUPLICATE", "EVENT_REVIEW_PUBLISH"].includes(rest[0])
+      if (rest[0] === "SHIFT_ROSTER_VISIBILITY") Object.assign(env, { ORG_ADMIN_EMAIL: "video.roster.owner@example.org", VIDEO_ORG: "formation-roster", VIDEO_EVENT_SLUG: "fete-du-parc" })
       if (rest[0] === "ORG_FIRST_STEPS") Object.assign(env, { ORG_ADMIN_EMAIL: "video.firststeps.owner@example.org", VIDEO_ORG: "formation-premiers-pas" })
       if (rest[0] === "ADMIN_NAVIGATION") Object.assign(env, { ORG_ADMIN_EMAIL: "video.navigation.owner@example.org", VIDEO_ORG: "formation-navigation", VIDEO_EVENT_SLUG: "rencontre-0" })
       if (rest[0] === "GLOBAL_SEARCH") Object.assign(env, { ORG_ADMIN_EMAIL: "video.search.owner@example.org", VIDEO_ORG: "formation-recherche", VIDEO_EVENT_SLUG: "rencontre-0" })

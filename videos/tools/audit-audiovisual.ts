@@ -60,12 +60,12 @@ async function main() {
   const manifest = await loadManifest(reference)
   // External visual review is opt-in here only for the fixture we can prove synthetic.
   // Do not export arbitrary videos, production captures or real volunteer information.
-  if (!["ORG_FIRST_STEPS", "ORGANIZATION_ACTIVITY_LOG", "ADMIN_NAVIGATION", "GLOBAL_SEARCH", "ORG_PUBLIC_IDENTITY", "ORG_TEAM_PERMISSIONS", "EVENT_CREATE_BLANK", "EVENT_CREATE_TEMPLATE", "SHIFTS_ROLES_VIEWS", "ORG_EMAIL_SETTINGS", "EVENT_PROGRAM_PAGES_QR", "ORG_TIMEZONE_CHARTER", "EVENT_MILESTONES", "EVENT_REPORTS", "VOLUNTEER_BADGES", "ATTENDANCE_CHECK_IN", "REMINDERS_CHANGES", "DATA_EXPORTS_ARCHIVES", "LAST_MINUTE_CHANGES", "PRIVACY_PERSONAL_LINKS", "PLATFORM_INTERNAL_ADMINISTRATION", "EMAIL_DELIVERY_FAILURES", "MEMBERS_DUPLICATES_MERGE", "EVENT_QUESTIONS", "VOLUNTEER_HOURS_CERTIFICATE", ...commonDemoVideos, ...memberDemoVideos].includes(manifest.id) || !process.env.DATABASE_URL?.includes("benevoles_video")) throw new Error("External audiovisual review currently restricted to verified synthetic local fixtures")
+  if (!["SHIFT_ROSTER_VISIBILITY", "ORG_FIRST_STEPS", "ORGANIZATION_ACTIVITY_LOG", "ADMIN_NAVIGATION", "GLOBAL_SEARCH", "ORG_PUBLIC_IDENTITY", "ORG_TEAM_PERMISSIONS", "EVENT_CREATE_BLANK", "EVENT_CREATE_TEMPLATE", "SHIFTS_ROLES_VIEWS", "ORG_EMAIL_SETTINGS", "EVENT_PROGRAM_PAGES_QR", "ORG_TIMEZONE_CHARTER", "EVENT_MILESTONES", "EVENT_REPORTS", "VOLUNTEER_BADGES", "ATTENDANCE_CHECK_IN", "REMINDERS_CHANGES", "DATA_EXPORTS_ARCHIVES", "LAST_MINUTE_CHANGES", "PRIVACY_PERSONAL_LINKS", "PLATFORM_INTERNAL_ADMINISTRATION", "EMAIL_DELIVERY_FAILURES", "MEMBERS_DUPLICATES_MERGE", "EVENT_QUESTIONS", "VOLUNTEER_HOURS_CERTIFICATE", ...commonDemoVideos, ...memberDemoVideos].includes(manifest.id) || !process.env.DATABASE_URL?.includes("benevoles_video")) throw new Error("External audiovisual review currently restricted to verified synthetic local fixtures")
   if (memberDemoVideos.includes(manifest.id) || manifest.id === "ATTENDANCE_CHECK_IN" || manifest.id === "MEMBERS_DUPLICATES_MERGE") {
     const url = new URL(process.env.DATABASE_URL!)
     assert(["localhost", "127.0.0.1", "[::1]"].includes(url.hostname) && url.port === "45433" && url.pathname === "/benevoles_video", "Member review requires isolated video database before connection")
   }
-  const currentMerge = manifest.id === "MEMBERS_DUPLICATES_MERGE" ? await (await import("../lib/current-product-prisma")).loadCurrentVideoPrisma("http://localhost:43110") : manifest.id === "EVENT_QUESTIONS" ? await (await import("../lib/current-product-prisma")).loadCurrentVideoPrisma("http://localhost:43112") : manifest.id === "VOLUNTEER_HOURS_CERTIFICATE" ? await (await import("../lib/current-product-prisma")).loadCurrentVideoPrisma("http://localhost:43114") : manifest.id === "DATA_EXPORTS_ARCHIVES" ? await (await import("../lib/current-product-prisma")).loadCurrentVideoPrisma("http://localhost:43102") : null
+  const currentMerge = manifest.id === "SHIFT_ROSTER_VISIBILITY" ? await (await import("../lib/current-product-prisma")).loadCurrentVideoPrisma("http://localhost:43102") : manifest.id === "MEMBERS_DUPLICATES_MERGE" ? await (await import("../lib/current-product-prisma")).loadCurrentVideoPrisma("http://localhost:43110") : manifest.id === "EVENT_QUESTIONS" ? await (await import("../lib/current-product-prisma")).loadCurrentVideoPrisma("http://localhost:43112") : manifest.id === "VOLUNTEER_HOURS_CERTIFICATE" ? await (await import("../lib/current-product-prisma")).loadCurrentVideoPrisma("http://localhost:43114") : manifest.id === "DATA_EXPORTS_ARCHIVES" ? await (await import("../lib/current-product-prisma")).loadCurrentVideoPrisma("http://localhost:43102") : null
   const db = currentMerge?.db ?? new PrismaClient({ adapter: new PrismaPg({ connectionString: process.env.DATABASE_URL }) })
   try {
     if (memberDemoVideos.includes(manifest.id)) {
@@ -73,7 +73,15 @@ async function main() {
       validateMemberReviewFixture(process.env.DATABASE_URL!, fixture, await memberOwnership(), Date.now(), await readImportOwnership("owned-import-members-v2.json"), await readSeedProofV2())
     }
     // Keep the existing reminder-specific nine-registration / three-event guard below as well.
-    if (manifest.id === "ORGANIZATION_ACTIVITY_LOG") {
+    if (manifest.id === "SHIFT_ROSTER_VISIBILITY") {
+      const fixture = await db.organization.findUniqueOrThrow({ where: { id: "video-shift-roster" }, include: { admins: true, volunteers: true, events: { include: { registrations: true, sectorLeaders: true } } } })
+      assert(fixture.slug === "formation-roster" && fixture.name === "Les amis de Montvert")
+      assert(fixture.admins.length === 1 && fixture.admins[0].email === "video.roster.owner@example.org")
+      const people = new Map([["aline", "Aline Martin"], ["bruno", "Bruno Favre"], ["claire", "Claire Rochat"], ["david", "David Perrin"], ["emma", "Emma Martin"]])
+      assert(fixture.volunteers.length === 5 && fixture.volunteers.every(v => [...people].some(([key, name]) => v.email === `video.roster.${key}@example.org` && `${v.firstName} ${v.lastName}` === name) && !v.phone))
+      assert(fixture.events.length === 1 && fixture.events[0].id === "video-shift-roster-event" && fixture.events[0].title === "Fête du parc" && fixture.events[0].sectorLeaders.length === 0)
+      assert(fixture.events[0].registrations.length === 5 && fixture.events[0].registrations.every(r => fixture.volunteers.some(v => v.id === r.volunteerId)))
+    } else if (manifest.id === "ORGANIZATION_ACTIVITY_LOG") {
       const url = new URL(process.env.DATABASE_URL!)
       assert(["localhost", "127.0.0.1", "[::1]"].includes(url.hostname) && url.port === "45433" && url.pathname === "/benevoles_video", "Organization journal review requires isolated video database")
       const fixture = await db.organization.findUniqueOrThrow({ where: { id: "video-org-activity" }, include: { volunteers: true, admins: true, events: { include: { registrations: true } } } })

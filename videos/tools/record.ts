@@ -14,7 +14,7 @@ const reference = process.argv.find((arg) => !arg.startsWith("-") && arg !== pro
 if (!reference) throw new Error("Usage: npm run video:record -- <VIDEO_ID>")
 
 const localBaseUrl = (process.env.VIDEO_BASE_URL ?? "http://localhost:43100").replace(/\/$/, "")
-const publicOperator = (reference === "PLATFORM_INTERNAL_ADMINISTRATION" && process.env.VIDEO_OPERATOR_PUBLIC === "1") || (reference === "ORG_TEAM_PERMISSIONS" && process.env.VIDEO_PUBLIC_CAPTURE === "1")
+const publicOperator = reference === "SHIFT_ROSTER_VISIBILITY" || (reference === "PLATFORM_INTERNAL_ADMINISTRATION" && process.env.VIDEO_OPERATOR_PUBLIC === "1") || (reference === "ORG_TEAM_PERMISSIONS" && process.env.VIDEO_PUBLIC_CAPTURE === "1")
 const baseUrl = publicOperator ? "https://www.benevol.app" : localBaseUrl
 const host = new URL(localBaseUrl).hostname
 if (host !== "localhost" && host !== "127.0.0.1" && host !== "::1") {
@@ -213,7 +213,7 @@ async function main() {
 
   // Native date controls also depend on Chromium's UI/process locale, not just
   // the context's Accept-Language. Keep French narration separate from this.
-  const batch22French = ["volunteer-personal-registrations", "volunteer-calendar", "privacy-personal-links", "volunteer-discover-event", "volunteer-register-mobile", "volunteer-choose-shifts", "volunteer-form-recap", "volunteer-confirmation-errors", "volunteer-session-availability", "accessibility-keyboard-display", "org-email-settings", "org-public-identity", "org-team-permissions", "org-timezone-charter", "organization-activity-log", "email-delivery-failures", "data-exports-archives", "global-search", "platform-internal-administration", "members-management", "members-import", "members-invitations", "members-duplicates-merge", "members-reminders", "volunteer-hours-certificate", "volunteer-badges", "registrations-management", "registrations-place-member", "organizer-monitor-followup", "staffing-gaps", "sector-leaders", "attendance-check-in", "last-minute-changes", "targeted-messages", "reminders-changes", "shift-create-edit-detail", "shift-create-series", "shift-eligibility-rules", "shift-night-dst", "shift-timeline-quick-actions", "shift-waitlist-offer", "shifts-roles-views", "shift-recurrence", "shift-approval", "event-duplicate", "event-archive-delete", "event-milestones", "event-program-pages-qr", "event-questions", "event-reports", "event-visibility-registration-window", "event-activity-log", "admin-navigation", "admin-features-tour", "masterclass-03-first-steps", "event-create-blank", "event-create-template", "organizer-create-publish", "event-review-publish"].includes(slug)
+  const batch22French = ["shift-roster-visibility", "volunteer-personal-registrations", "volunteer-calendar", "privacy-personal-links", "volunteer-discover-event", "volunteer-register-mobile", "volunteer-choose-shifts", "volunteer-form-recap", "volunteer-confirmation-errors", "volunteer-session-availability", "accessibility-keyboard-display", "org-email-settings", "org-public-identity", "org-team-permissions", "org-timezone-charter", "organization-activity-log", "email-delivery-failures", "data-exports-archives", "global-search", "platform-internal-administration", "members-management", "members-import", "members-invitations", "members-duplicates-merge", "members-reminders", "volunteer-hours-certificate", "volunteer-badges", "registrations-management", "registrations-place-member", "organizer-monitor-followup", "staffing-gaps", "sector-leaders", "attendance-check-in", "last-minute-changes", "targeted-messages", "reminders-changes", "shift-create-edit-detail", "shift-create-series", "shift-eligibility-rules", "shift-night-dst", "shift-timeline-quick-actions", "shift-waitlist-offer", "shifts-roles-views", "shift-recurrence", "shift-approval", "event-duplicate", "event-archive-delete", "event-milestones", "event-program-pages-qr", "event-questions", "event-reports", "event-visibility-registration-window", "event-activity-log", "admin-navigation", "admin-features-tour", "masterclass-03-first-steps", "event-create-blank", "event-create-template", "organizer-create-publish", "event-review-publish"].includes(slug)
   const questionsFrenchLauncher = (batch22French || ["event-questions", "volunteer-hours-certificate", "admin-navigation", "volunteer-confirmation-errors", "members-import", "data-exports-archives"].includes(slug)) && process.platform === "darwin"
   const frenchChromiumRevision = batch22French || slug === "members-import" ? "1248" : "1243"
   if (questionsFrenchLauncher && chromium.executablePath() !== `/Users/pol/Library/Caches/ms-playwright/chromium-${frenchChromiumRevision}/chrome-mac-arm64/Google Chrome for Testing.app/Contents/MacOS/Google Chrome for Testing`) throw new Error("Questions French launcher must be reverified against the current Playwright Chromium binary")
@@ -507,7 +507,9 @@ async function main() {
     recording = true
     startedAt = performance.now()
 
-    if (slug === "platform-internal-administration" && operatorRecording) {
+    if (slug === "shift-roster-visibility") {
+      await (await import("../lib/record-shift-roster")).recordShiftRoster({ page, base: baseUrl, dir, scene, tap, settle, fill: fillVisibly })
+    } else if (slug === "platform-internal-administration" && operatorRecording) {
       const { recordOperator } = await import("../lib/record-operator")
       await recordOperator({ page, base: baseUrl, directory: dir, title: manifest.title, setup: operatorRecording, scene, tap, settle })
     } else if (slug === "volunteer-register-mobile") {
