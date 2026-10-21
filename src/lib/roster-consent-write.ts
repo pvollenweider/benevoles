@@ -4,7 +4,7 @@
 import type { prisma } from "./prisma"
 import { logEvent } from "./event-log"
 import {
-  ROSTER_NOTICE_VERSION, isRosterChoice, noticeReaches, rosterAfterSignup,
+  isRosterChoice, noticeReaches, rosterAfterSignup,
   type RosterSource, type StoredRosterChoice,
 } from "./shift-roster"
 
@@ -44,16 +44,17 @@ export async function applySignupRosterChoice(tx: Tx, input: { eventId: string; 
 }
 
 /**
- * From the personal page (its link proves the address): shown under the current text, which the
- * page displays, or hidden. Showing again a name shown under the first text records the current
- * one (its wider audience). Null when unchanged.
+ * From the personal page (its link proves the address): shown under the text the page displayed
+ * (`noticeVersion`, see signupNoticeVersion: a page loaded before the current text sends none and
+ * counts as the first one), or hidden. Showing again a name shown under the first text, from a
+ * page with the current one, records it (its wider audience). Null when unchanged.
  */
-export async function setPersonalRosterChoice(tx: Tx, input: { eventId: string; volunteerId: string; visible: boolean; now: Date }): Promise<RosterChange | null> {
+export async function setPersonalRosterChoice(tx: Tx, input: { eventId: string; volunteerId: string; visible: boolean; noticeVersion: string; now: Date }): Promise<RosterChange | null> {
   const { eventId, volunteerId, now } = input
   const stored = await storedRosterChoice(tx, eventId, volunteerId)
   const next: StoredRosterChoice = input.visible
-    ? { status: "visible", noticeVersion: ROSTER_NOTICE_VERSION }
-    : { status: "hidden", noticeVersion: stored?.noticeVersion ?? ROSTER_NOTICE_VERSION }
+    ? { status: "visible", noticeVersion: input.noticeVersion }
+    : { status: "hidden", noticeVersion: stored?.noticeVersion ?? input.noticeVersion }
   if (stored && stored.status === next.status && (next.status === "hidden" || stored.noticeVersion === next.noticeVersion)) return null
   await store(tx, eventId, volunteerId, next, "personal_page", now)
   return { from: stored, to: next }

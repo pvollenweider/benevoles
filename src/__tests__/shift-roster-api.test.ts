@@ -189,7 +189,7 @@ describe("PATCH /api/public/registrations/[token]/roster (#1068)", () => {
   beforeEach(() => { vi.clearAllMocks(); seed() })
 
   it("shows, then hides the holder's name, each change logged as theirs", async () => {
-    let res = await patch("tok-r-me", { visible: true })
+    let res = await patch("tok-r-me", { visible: true, noticeVersion: "2026-10-21.2" })
     expect(res.status).toBe(200)
     expect((await res.json()).state).toBe("visible")
     expect(db.consents.find((c) => c.volunteerId === "me")).toMatchObject({ eventId: "ev-a", status: "visible", source: "personal_page", noticeVersion: expect.any(String) })
@@ -206,7 +206,7 @@ describe("PATCH /api/public/registrations/[token]/roster (#1068)", () => {
   })
 
   it("confirms a pending request from the sign-up form", async () => {
-    const res = await patch("tok-r-bruno", { visible: true })
+    const res = await patch("tok-r-bruno", { visible: true, noticeVersion: "2026-10-21.2" })
     expect((await res.json()).state).toBe("visible")
     expect((await (await get("tok-r-me")).json()).shifts.find((s: { shiftId: string }) => s.shiftId === "bar")).toMatchObject({ names: ["Bruno K."], othersCount: 1 })
   })
@@ -251,7 +251,10 @@ describe("the roster's text versions on a personal link (#1068 follow-up)", () =
   it("a name shown under the first text: the page offers the current one, and showing again records it, logged as a wider audience", async () => {
     db.consents.push({ eventId: "ev-a", volunteerId: "me", status: "visible", noticeVersion: "2026-10-21" })
     expect((await (await get("tok-r-me")).json()).state).toBe("visible_confirmed")
-    const res = await patch("tok-r-me", { visible: true })
+    // A page loaded before the current text sends no version: the first text's audience is kept.
+    expect((await (await patch("tok-r-me", { visible: true })).json()).state).toBe("visible_confirmed")
+    expect(logEvent).not.toHaveBeenCalled()
+    const res = await patch("tok-r-me", { visible: true, noticeVersion: "2026-10-21.2" })
     expect((await res.json()).state).toBe("visible")
     expect(db.consents.find((c) => c.volunteerId === "me")).toMatchObject({ status: "visible", noticeVersion: "2026-10-21.2", source: "personal_page" })
     expect(logEvent).toHaveBeenCalledWith(expect.objectContaining({
@@ -260,7 +263,7 @@ describe("the roster's text versions on a personal link (#1068 follow-up)", () =
     }))
     // Again: nothing to record.
     logEvent.mockClear()
-    await patch("tok-r-me", { visible: true })
+    await patch("tok-r-me", { visible: true, noticeVersion: "2026-10-21.2" })
     expect(logEvent).not.toHaveBeenCalled()
   })
 
@@ -268,5 +271,15 @@ describe("the roster's text versions on a personal link (#1068 follow-up)", () =
     db.consents.push({ eventId: "ev-a", volunteerId: "me", status: "visible", noticeVersion: "2026-10-21" })
     expect((await (await patch("tok-r-me", { visible: false })).json()).state).toBe("hidden")
     expect(db.consents.find((c) => c.volunteerId === "me")).toMatchObject({ status: "hidden" })
+  })
+})
+
+describe("PATCH and the text the page showed (#1068 follow-up)", () => {
+  beforeEach(() => { vi.clearAllMocks(); seed() })
+  it("a new acceptance from a page without the current text reaches confirmed volunteers only", async () => {
+    await patch("tok-r-me", { visible: true })
+    expect(db.consents.find((c) => c.volunteerId === "me")).toMatchObject({ status: "visible", noticeVersion: "2026-10-21" })
+    await patch("tok-r-me", { visible: true, noticeVersion: "2099-01-01" })
+    expect(db.consents.find((c) => c.volunteerId === "me")).toMatchObject({ noticeVersion: "2026-10-21" })
   })
 })

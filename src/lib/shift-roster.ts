@@ -341,7 +341,7 @@ export const ROSTER_SWITCH_EXPLAIN = "Prénom et initiale des bénévoles confir
 export const ROSTER_SWITCH_LOADED = "Les inscrits sont affichés sur les créneaux."
 export const ROSTER_SWITCH_FAILURE = "Impossible d'afficher qui est inscrit pour l'instant. Désactive puis réactive « Voir qui est inscrit » pour réessayer."
 export const ROSTER_SWITCH_UNAVAILABLE = "Qui est inscrit n'est pas disponible pour cet événement."
-export const ROSTER_FRISE_PROMPT = "Touche ou survole un créneau pour voir qui est inscrit. La vue Liste affiche tous les noms."
+export const ROSTER_FRISE_PROMPT = "Touche, survole ou sélectionne au clavier un créneau pour voir qui est inscrit. La vue Liste affiche tous les noms."
 /** The personal page's link to the event page, the switch on. */
 export const ROSTER_SEE_OTHERS_LABEL = "Voir qui est inscrit sur les autres créneaux"
 /** `?inscrits=1` on the event page: a display preference (the switch on at load), never an access right. */

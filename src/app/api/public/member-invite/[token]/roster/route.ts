@@ -19,7 +19,8 @@ import { loadShiftRoster } from "@/lib/roster-read"
  * the current text reach an invited member (noticeReaches); a member who already holds a confirmed
  * place sees the roster as a confirmed volunteer. Nothing unless the invitation is of this event,
  * on this organisation's site, still open (inviteRosterAudience), the event published with its
- * roster open. Every refusal answers the same 404; private, never cached.
+ * roster open. Every refusal answers the same 404 and counts against the client's address;
+ * private, never cached.
  */
 
 const NO_STORE = { "Cache-Control": "private, no-store" }
@@ -27,7 +28,7 @@ const json = (body: unknown, status = 200) => NextResponse.json(body, { status, 
 const invalid = () => json({ error: "Lien invalide" }, 404)
 const HOUR = 60 * 60 * 1000
 
-/** Failed lookups per IP per hour (unknown, other event's or closed invitation), then refused. */
+/** Refusals per IP per hour (unknown, other event's or closed invitation, roster closed), then refused. */
 const INVITE_ROSTER_MISSES = 20
 /** Reads per valid invitation per hour: the page reads it once per switch. */
 const INVITE_ROSTER_READS = 60
@@ -70,7 +71,7 @@ export async function GET(req: Request, { params }: { params: Promise<{ token: s
         declined: !!invite.declinedAt, used: !!invite.usedAt, confirmedOnEvent,
       })
     : null
-  if (!audience) return json({ available: false })
+  if (!audience) return miss()
 
   const shifts = await loadShiftRoster({ eventId: event.id, viewerId: invite.volunteerId, audience, eventStart: event.startDate })
   return json({ available: true, shifts })

@@ -128,7 +128,7 @@ test("on by default, sign up with the notice, confirm, seen on the event page by
   expect(await seriousViolations(bruno)).toEqual([])
   // Frise: the bars are unchanged, the line under the day says who is on the bar focused.
   await bruno.getByRole("button", { name: "Frise", exact: true }).click()
-  await expect(bruno.getByText(/Touche ou survole un créneau/)).toBeVisible()
+  await expect(bruno.getByText(/Touche, survole ou sélectionne/)).toBeVisible()
   await bruno.getByRole("button", { name: /, Buvette[^:]* : sélectionner/ }).first().focus()
   await expect(bruno.getByText("Buvette · 10h–12h")).toBeVisible()
   await bruno.setViewportSize({ width: 320, height: 800 })
@@ -136,7 +136,7 @@ test("on by default, sign up with the notice, confirm, seen on the event page by
   // Off: the names go.
   await brunoSwitch.click()
   await expect(brunoSwitch).toHaveAttribute("aria-pressed", "false")
-  await expect(bruno.getByText(/Touche ou survole un créneau/)).toHaveCount(0)
+  await expect(bruno.getByText(/Touche, survole ou sélectionne/)).toHaveCount(0)
   // The embed never offers it, even to a recognised volunteer.
   await bruno.goto(`/${event.slug}?org=default&embed=1`)
   await waitForHydration(bruno.getByRole("button", { name: /, Buvette[^:]* : sélectionner/ }).first())

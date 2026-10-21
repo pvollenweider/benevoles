@@ -8,7 +8,7 @@ import { orgTimeZone } from "@/lib/time-zone"
 import { recordTokenMiss, tokenLookupsBlocked, tokenUseAllowed } from "@/lib/token-rate-limit"
 import { registrationToken } from "@/lib/token-vault"
 import { LIVE_STATUSES } from "@/lib/registration-capacity"
-import { isKnownMinor, rosterDisplayName, rosterOpen, viewerState } from "@/lib/shift-roster"
+import { isKnownMinor, rosterDisplayName, rosterOpen, signupNoticeVersion, viewerState } from "@/lib/shift-roster"
 import { logRosterChange, setPersonalRosterChoice, storedRosterChoice } from "@/lib/roster-consent-write"
 import { loadShiftRoster } from "@/lib/roster-read"
 
@@ -83,7 +83,8 @@ export async function GET(req: Request, { params }: { params: Promise<{ token: s
   return json(await rosterBody(h))
 }
 
-const patchSchema = z.object({ visible: z.boolean() })
+// `noticeVersion`: the text the page showed (#1068); a page loaded before the current text sends none.
+const patchSchema = z.object({ visible: z.boolean(), noticeVersion: z.string().max(40).optional() })
 
 export async function PATCH(req: Request, { params }: { params: Promise<{ token: string }> }) {
   if (await tokenLookupsBlocked(req)) return tooManyAttempts()
@@ -108,7 +109,7 @@ export async function PATCH(req: Request, { params }: { params: Promise<{ token:
   const change = await prisma.$transaction(async (tx) => {
     const locked = await tx.$queryRaw<{ id: string }[]>`SELECT id FROM "Volunteer" WHERE id = ${h.volunteerId} AND "erasedAt" IS NULL FOR UPDATE`
     if (locked.length === 0) return "erased" as const
-    return setPersonalRosterChoice(tx, { eventId: h.eventId, volunteerId: h.volunteerId, visible, now })
+    return setPersonalRosterChoice(tx, { eventId: h.eventId, volunteerId: h.volunteerId, visible, noticeVersion: signupNoticeVersion(parsed.data.noticeVersion), now })
   })
   if (change === "erased") return notFound()
   if (change) await logRosterChange(h.eventId, h.volunteerId, change)

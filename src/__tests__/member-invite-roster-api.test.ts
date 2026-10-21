@@ -107,20 +107,20 @@ describe("GET /api/public/member-invite/[token]/roster", () => {
     expect(body.shifts[0]).toMatchObject({ names: ["Nora N.", "Odile A."], othersCount: 1, own: true })
   })
 
-  it("a declined invitation, or one used to sign up without a confirmed place now: nothing", async () => {
+  it("a declined invitation, or one used to sign up without a confirmed place now: the same 404 as an unknown link", async () => {
     db.invites[0].declinedAt = new Date()
-    expect(await (await get("inv-guest")).json()).toEqual({ available: false })
+    expect((await get("inv-guest")).status).toBe(404)
     seed()
     db.invites[0].usedAt = new Date()
     db.registrations.push({ eventId: "ev-a", shiftId: "bar", volunteerId: "guest", status: "waiting" })
-    expect(await (await get("inv-guest")).json()).toEqual({ available: false })
+    expect((await get("inv-guest")).status).toBe(404)
   })
 
   it("nothing for an inactive, erased or merged member", async () => {
     for (const more of [{ active: false }, { erasedAt: new Date() }, { mergedIntoId: "x" }]) {
       seed()
       Object.assign(db.volunteers.get("guest")!, more)
-      expect(await (await get("inv-guest")).json()).toEqual({ available: false })
+      expect((await get("inv-guest")).status).toBe(404)
     }
   })
 
@@ -128,8 +128,9 @@ describe("GET /api/public/member-invite/[token]/roster", () => {
     for (const more of [{ publicStatus: "draft" }, { shiftRosterEnabled: false }, { endDate: new Date("2020-01-01T00:00:00Z") }, { personalDataAnonymizedAt: new Date() }]) {
       seed()
       Object.assign(db.events.get("ev-a")!, more)
-      const body = await (await get("inv-guest")).json()
-      expect(body).toEqual({ available: false })
+      const res = await get("inv-guest")
+      expect(res.status).toBe(404)
+      expect(await res.json()).toEqual({ error: "Lien invalide" })
     }
   })
 

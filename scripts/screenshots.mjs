@@ -240,7 +240,7 @@ async function run() {
     await l.goto(`${BASE}/${ROSTER.event}?org=${ROSTER.org}&inscrits=1`)
     await settle(l)
     await l.getByRole("button", { name: "Frise", exact: true }).click()
-    await l.getByText(/Touche ou survole un créneau/).first().waitFor()
+    await l.getByText(/Touche, survole ou sélectionne/).first().waitFor()
     await l.locator("[data-shift-id]").nth(1).hover()
     await l.waitForTimeout(300)
     const top = await l.getByRole("button", { name: "Voir qui est inscrit" }).boundingBox()

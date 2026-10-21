@@ -241,6 +241,8 @@ export default function EventPageClient({ orgSlug, eventSlug, preview, initialEv
   const [rosterResult, setRosterResult] = useState<{ key: string; shifts: Map<string, ShiftRosterEntry> | null } | null>(null)
   const [rosterStatus, setRosterStatus] = useState("")
   const [rosterFailure, setRosterFailure] = useState("")
+  // Only a press of the switch is announced: on at load (`?inscrits=1`), the page's title is read first.
+  const rosterPressed = useRef(false)
   // Which consent checkbox the last refusal was about (#569): marked invalid and focused.
   const [invalidCheckbox, setInvalidCheckbox] = useState<"charter" | "consent" | null>(null)
   const [showCharter, setShowCharter] = useState(false)
@@ -413,15 +415,16 @@ export default function EventPageClient({ orgSlug, eventSlug, preview, initialEv
     if (!rosterOn || !rosterUrl) return
     let current = true
     fetch(rosterUrl)
-      .then(async (r) => ({ ok: r.ok, body: await r.json().catch(() => null) }))
-      .then(({ ok, body }) => {
+      .then(async (r) => ({ ok: r.ok, status: r.status, body: await r.json().catch(() => null) }))
+      .then(({ ok, status, body }) => {
         if (!current) return
         if (ok && body?.available === true && Array.isArray(body.shifts)) {
           setRosterResult({ key: rosterKey, shifts: new Map((body.shifts as ShiftRosterEntry[]).map((e) => [e.shiftId, e])) })
-          announce(setRosterStatus, ROSTER_SWITCH_LOADED)
+          if (rosterPressed.current) announce(setRosterStatus, ROSTER_SWITCH_LOADED)
         } else {
           setRosterResult({ key: rosterKey, shifts: null })
-          announce(setRosterFailure, ok && body?.available === false ? ROSTER_SWITCH_UNAVAILABLE : ROSTER_SWITCH_FAILURE)
+          // Refused (nothing to show for this link now): said as such, not as a failure to retry.
+          announce(setRosterFailure, (ok && body?.available === false) || status === 404 ? ROSTER_SWITCH_UNAVAILABLE : ROSTER_SWITCH_FAILURE)
         }
       })
       .catch(() => {
@@ -967,7 +970,7 @@ export default function EventPageClient({ orgSlug, eventSlug, preview, initialEv
                 type="button"
                 aria-pressed={rosterOn}
                 aria-describedby={rosterOn ? "roster-switch-explain" : undefined}
-                onClick={() => { setRosterOn((on) => !on); setRosterResult(null); setRosterStatus(""); setRosterFailure("") }}
+                onClick={() => { rosterPressed.current = true; setRosterOn((on) => !on); setRosterResult(null); setRosterStatus(""); setRosterFailure("") }}
                 className={`min-h-11 rounded-xl border border-gray-300 px-4 text-sm font-medium transition-colors focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-blue-600 forced-colors:aria-pressed:bg-[Highlight] ${rosterOn ? "bg-gray-900 text-white border-gray-900" : "text-gray-700 hover:bg-gray-50"}`}
               >
                 {ROSTER_SWITCH_LABEL}

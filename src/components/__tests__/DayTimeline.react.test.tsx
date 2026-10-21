@@ -180,7 +180,7 @@ describe("DayTimeline with the roster", () => {
   it("a prompt first, then the last bar's roster, kept until another; the bar's description", () => {
     const roster = new Map([["a", entry("a", ["Aline M."], 1)]])
     render(<DayTimeline shifts={[shift("a"), shift("b", { startTime: "20:00", endTime: "22:00" })]} shows={[]} selected={new Set()} onToggle={() => {}} roster={roster} />)
-    expect(screen.getByText(/Touche ou survole un créneau/)).toBeInTheDocument()
+    expect(screen.getByText(/Touche, survole ou sélectionne/)).toBeInTheDocument()
     const a = screen.getByRole("button", { name: /^18h–20h/ })
     expect(a).toHaveAccessibleDescription("Sur ce créneau : Aline, initiale M et 1 autre bénévole.")
     fireEvent.focus(a)
@@ -205,7 +205,7 @@ describe("DayTimeline with the roster", () => {
 
   it("nothing of the roster without the switch", () => {
     render(<DayTimeline shifts={[shift("a")]} shows={[]} selected={new Set()} onToggle={() => {}} />)
-    expect(screen.queryByText(/Touche ou survole/)).toBeNull()
+    expect(screen.queryByText(/Touche, survole ou sélectionne/)).toBeNull()
     expect(screen.getByRole("button")).not.toHaveAttribute("aria-describedby")
   })
 })

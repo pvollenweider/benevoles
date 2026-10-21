@@ -77,7 +77,7 @@ describe("ShiftRosterCard", () => {
     widen.focus()
     fireEvent.click(widen)
     await waitFor(() => expect(fetchMock).toHaveBeenCalled())
-    expect(JSON.parse(fetchMock.mock.calls[0][1].body)).toEqual({ visible: true })
+    expect(JSON.parse(fetchMock.mock.calls[0][1].body)).toEqual({ visible: true, noticeVersion: "2026-10-21.2" })
     // The page applies the answer: the second button goes, the focus lands on the one left.
     data = { ...data, state: "visible" }
     rerender(<ShiftRosterCard token="tok" data={data} beginChange={() => () => {}} />)

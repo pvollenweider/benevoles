@@ -7,7 +7,7 @@ import { useRef, useState } from "react"
 import { fmtRange } from "@/lib/gantt-utils"
 import { announce } from "@/lib/announce"
 import {
-  ROSTER_EMPTY_TEXT, ROSTER_FAILURE_TEXT, ROSTER_INTRO_TEXT, ROSTER_SEE_OTHERS_LABEL, ROSTER_WIDEN_LABEL, rosterButtonLabel,
+  ROSTER_EMPTY_TEXT, ROSTER_FAILURE_TEXT, ROSTER_NOTICE_VERSION, ROSTER_INTRO_TEXT, ROSTER_SEE_OTHERS_LABEL, ROSTER_WIDEN_LABEL, rosterButtonLabel,
   rosterDoneText, rosterEventHref, rosterOthersText, rosterSpokenName, rosterVisibleName, viewerStateText,
   type RosterAction, type RosterViewerState, type ShiftRosterEntry,
 } from "@/lib/shift-roster"
@@ -57,7 +57,8 @@ export default function ShiftRosterCard({ token, data, beginChange, eventPageUrl
       const res = await fetch(`/api/public/registrations/${token}/roster`, {
         method: "PATCH",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ visible }),
+        // The text this card shows (#1068): its audience is the one stored with the choice.
+        body: JSON.stringify({ visible, noticeVersion: ROSTER_NOTICE_VERSION }),
       })
       const body = await res.json().catch(() => null)
       if (res.ok && body && typeof body.available === "boolean") next = body as RosterData
