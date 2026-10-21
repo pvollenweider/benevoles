@@ -1,6 +1,6 @@
 "use client"
 
-import { useEffect, useLayoutEffect, useState } from "react"
+import { useEffect, useLayoutEffect, useRef, useState } from "react"
 import PersonalLinkPanel from "@/components/PersonalLinkPanel"
 import LinkRequestForm from "@/components/LinkRequestForm"
 import { offerDeadline, WAITLIST_STEPS, waitlistLabel } from "@/lib/waitlist-copy"
@@ -125,6 +125,17 @@ export default function MyRegistrationPage() {
   // The link the roster card reads and writes through: the page's own, or a live one of the same
   // volunteer once the page's registration was withdrawn.
   const [rosterToken, setRosterToken] = useState(token)
+  // Only the latest roster request may land: an older answer never brings back what a withdrawal
+  // or a choice made since replaced.
+  const rosterSeq = useRef(0)
+  function reloadRoster(link: string) {
+    const n = ++rosterSeq.current
+    void fetchRoster(link).then((r) => { if (n === rosterSeq.current) setRoster(r) })
+  }
+  function replaceRoster(next: RosterData | null) {
+    rosterSeq.current++
+    setRoster(next)
+  }
 
   // Focus to move, applied once React has committed the render it goes with (the confirmation
   // mounted, the card removed). Only while focus is still in the card the action came from, or was
@@ -149,7 +160,7 @@ export default function MyRegistrationPage() {
           setData(d)
           // The optional roster (#1068) only for a link that opened the page, and never holding
           // the page up: an unknown or cancelled link is looked up once, as before.
-          void fetchRoster(token).then(setRoster)
+          reloadRoster(token)
           if (d.event?.slug) {
             localStorage.setItem(`benevoles_token_${d.event.slug}`, token)
           }
@@ -242,12 +253,12 @@ export default function MyRegistrationPage() {
     setData((d) => d ? { ...d, registrations: d.registrations.filter((r) => r.editToken !== reg.editToken) } : d)
     // The roster needs a confirmed place (#1068): reloaded once one is withdrawn, through a link
     // still live (the page's own may be the one just cancelled), or gone with the last one.
-    if (reg.status === "active") {
-      const live = list.find((r) => r.editToken !== reg.editToken)?.editToken
-      if (live) {
-        setRosterToken(live)
-        void fetchRoster(live).then(setRoster)
-      } else setRoster(null)
+    const remaining = list.filter((r) => r.editToken !== reg.editToken)
+    if (remaining.length === 0) replaceRoster(null)
+    else {
+      const link = reg.editToken === rosterToken ? remaining[0].editToken : rosterToken
+      if (link !== rosterToken) setRosterToken(link)
+      if (reg.status === "active" || link !== rosterToken) reloadRoster(link)
     }
     setFocusRequest({
       candidates: [
@@ -499,7 +510,7 @@ export default function MyRegistrationPage() {
             setFocusRequest({ candidates: [byId(LIST_TITLE_ID)], regionId: "roster-title-region" })
             announce(setStatusText, "La liste des inscrits n'est plus disponible pour cet événement.")
           }
-          setRoster(next)
+          replaceRoster(next)
         }} />}
 
         {/* The answers to the event's questions (#984), under the registrations: editable while
