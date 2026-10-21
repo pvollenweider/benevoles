@@ -37,10 +37,11 @@ function RosterName({ name }: { name: string }) {
  * renders nothing while the event has no roster. Focus stays on the button; the result is said
  * by the card's status line, a failure by its alert, both mounted from the first render.
  */
-export default function ShiftRosterCard({ token, data, onChange }: {
+export default function ShiftRosterCard({ token, data, beginChange }: {
   token: string
   data: Extract<RosterData, { available: true }>
-  onChange: (next: RosterData) => void
+  /** Called when a change is sent; returns what applies its answer (a no-op if the page moved on since). */
+  beginChange: () => (next: RosterData) => void
 }) {
   const [busy, setBusy] = useState(false)
   const [status, setStatus] = useState("")
@@ -52,6 +53,7 @@ export default function ShiftRosterCard({ token, data, onChange }: {
     setBusy(true)
     setFailure("")
     setStatus("")
+    const apply = beginChange()
     let next: RosterData | null = null
     let error: string | null = null
     try {
@@ -69,7 +71,7 @@ export default function ShiftRosterCard({ token, data, onChange }: {
     setBusy(false)
     if (next) {
       announce(setStatus, rosterDoneText(visible))
-      onChange(next)
+      apply(next)
     } else {
       announce(setFailure, error ?? ROSTER_FAILURE_TEXT)
     }

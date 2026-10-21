@@ -504,13 +504,19 @@ export default function MyRegistrationPage() {
         </section>
 
         {/* Who else is signed up (#1068): only when the event has the roster on. */}
-        {roster?.available && <ShiftRosterCard token={rosterToken} data={roster} onChange={(next) => {
-          // Turned off or over since the page loaded: the card goes, say so and keep the focus on the page.
-          if (!next.available) {
-            setFocusRequest({ candidates: [byId(LIST_TITLE_ID)], regionId: "roster-title-region" })
-            announce(setStatusText, "La liste des inscrits n'est plus disponible pour cet événement.")
+        {roster?.available && <ShiftRosterCard token={rosterToken} data={roster} beginChange={() => {
+          // Taken when the change is sent: an answer arriving after a withdrawal or a reload
+          // replaced the roster is dropped, like an older GET.
+          const n = rosterSeq.current
+          return (next: RosterData) => {
+            if (n !== rosterSeq.current) return
+            // Turned off or over since the page loaded: the card goes, say so and keep the focus on the page.
+            if (!next.available) {
+              setFocusRequest({ candidates: [byId(LIST_TITLE_ID)], regionId: "roster-title-region" })
+              announce(setStatusText, "La liste des inscrits n'est plus disponible pour cet événement.")
+            }
+            replaceRoster(next)
           }
-          replaceRoster(next)
         }} />}
 
         {/* The answers to the event's questions (#984), under the registrations: editable while
