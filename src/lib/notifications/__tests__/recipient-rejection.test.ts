@@ -11,7 +11,7 @@ const nodemailerError = (responseCode: number | undefined, response: string | un
 
 describe("isRecipientAddressReply: 5.1.x destination address statuses", () => {
   it.each([
-    ["5.1.0", "550 5.1.0 Address rejected"],
+    ["5.1.0 with an unambiguous phrasing", "550 5.1.0 <a@example.org>: User unknown"],
     ["5.1.1", "550 5.1.1 <a@example.org>: Recipient address rejected: User unknown in virtual mailbox table"],
     ["5.1.1 (Gmail, multi-line)", "550-5.1.1 The email account that you tried to reach does not exist. Please try double-checking"],
     ["5.1.2", "550 5.1.2 <a@nowhere.invalid>: Recipient address rejected: domain_not_found"],
@@ -60,6 +60,11 @@ describe("isRecipientAddressReply: everything else stays reported", () => {
     ["recipient address rejected alone", 554, "554 Recipient address rejected: Access denied"],
     ["4xx with a 5.1.1 status in the text", 450, "450 5.1.1 greylisted"],
     ["unknown user or relay denied (no enhanced status)", 550, "550 User unknown or relay denied"],
+    ["unknown user or access refused", 550, "550 User unknown or access refused"],
+    ["generic 5.1.0 alone", 550, "550 5.1.0 Address rejected"],
+    ["5.1.0 address verification unavailable", 550, "550 5.1.0 Address verification service unavailable"],
+    ["5.1.1 recipient verification unavailable", 550, "550 5.1.1 Recipient verification unavailable"],
+    ["user unknown, try again later", 550, "550 User unknown, please try again later"],
     ["5.1.1 mentioning relaying", 550, "550 5.1.1 Relaying denied"],
     ["5.1.0 about the sender", 550, "550 5.1.0 Sender address rejected"],
     ["sender domain not found", 550, "550 Sender address rejected: Domain not found"],
