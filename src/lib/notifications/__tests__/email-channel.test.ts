@@ -140,11 +140,12 @@ describe("emailChannel with SMTP_HOST: records the outcome, never a raw reply or
     ["550 5.1.2 domain_not_found", 550, "550 5.1.2 <alice@example.org>: Recipient address rejected: domain_not_found", true],
     ["550 5.1.1 mailbox unknown", 550, RAW_REPLY, true],
     ["550 5.7.1 policy", 550, "550 5.7.1 Message rejected as spam", false],
+    ["553 5.1.8 sender domain (reply text only)", 553, "553 5.1.8 Domain of sender address does not exist", false],
   ])("%s: permanent, recipientRejected %s", async (_label, responseCode, response, flagged) => {
     vi.doMock("nodemailer", () => ({
       default: {
         createTransport: () => ({
-          sendMail: vi.fn().mockRejectedValue(Object.assign(new Error("rejected"), { code: "EENVELOPE", responseCode, response, recipient: "alice@example.org" })),
+          sendMail: vi.fn().mockRejectedValue(Object.assign(new Error("rejected"), { code: "EENVELOPE", command: "RCPT TO", responseCode, response, recipient: "alice@example.org" })),
         }),
       },
     }))

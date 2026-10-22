@@ -20,10 +20,17 @@
  * A 5xx reply without an enhanced status counts only with an unambiguous phrasing
  * (« user unknown », « no such user », « domain not found »…); a generic « mailbox unavailable »
  * or « recipient address rejected » alone does not, providers use it for policy blocks too.
+ *
+ * Only a reply to RCPT TO is about the recipient: Nodemailer sets `command: "RCPT TO"` on each
+ * refused recipient and on the « all recipients were rejected » error. A reply to MAIL FROM (our
+ * sender address), AUTH, DATA, or with no command at all is never accepted, and neither is a
+ * reply that mentions the sender, relaying, a policy, spam, a block or authentication, whatever
+ * its code.
  */
 
 /** Only what this module reads from a Nodemailer error (or one of its `rejectedErrors`). */
 export type SmtpReplyLike = {
+  command?: string
   responseCode?: number | null
   response?: string | null
   recipient?: string
@@ -49,6 +56,9 @@ const RECIPIENT_PHRASES = [
   /\binvalid recipient\b/i,
 ]
 
+/** Words of a refusal that may be about us (sender, relay, policy, auth), not the address. */
+const NOT_ABOUT_THE_ADDRESS = /\b(sender|relay(ing)?|denied|policy|spam|block(ed|list)?|blacklist(ed)?|auth\w*|rate|reputation)\b/i
+
 function replyCode(reply: SmtpReplyLike): number | null {
   if (typeof reply.responseCode === "number") return reply.responseCode
   const m = reply.response ? LEADING_CODE_RE.exec(reply.response) : null
@@ -58,9 +68,11 @@ function replyCode(reply: SmtpReplyLike): number | null {
 /** One server reply: a permanent refusal of a nonexistent recipient address? */
 export function isRecipientAddressReply(reply: SmtpReplyLike | null | undefined): boolean {
   if (!reply) return false
+  if (!/^RCPT\b/i.test(reply.command?.trim() ?? "")) return false
   const code = replyCode(reply)
   if (code === null || code < 500 || code > 599) return false
   const response = reply.response ?? ""
+  if (NOT_ABOUT_THE_ADDRESS.test(response)) return false
   const enhanced = ENHANCED_STATUS_RE.exec(response)
   if (enhanced) {
     const [, klass, subject, detail] = enhanced

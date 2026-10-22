@@ -133,6 +133,7 @@ function toSmtpErrorLike(err: unknown): SmtpErrorLike {
     const e = err as Record<string, unknown>
     return {
       code: typeof e.code === "string" ? e.code : undefined,
+      command: typeof e.command === "string" ? e.command : undefined,
       response: typeof e.response === "string" ? e.response : undefined,
       responseCode: typeof e.responseCode === "number" ? e.responseCode : undefined,
       recipient: typeof e.recipient === "string" ? e.recipient : undefined,
