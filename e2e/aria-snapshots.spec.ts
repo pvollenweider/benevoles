@@ -116,7 +116,7 @@ test.describe("public sign-up page, shift picker", () => {
     // Not toggle buttons while closed: no pressed state at all.
     for (const b of await region.getByRole("button").all()) await expect(b).not.toHaveAttribute("aria-pressed")
     // The keys first, then the reason.
-    await expect(region).toHaveAccessibleDescription(new RegExp(`^Flèches gauche et droite.*${message.replace(/[.]/g, "\\.")}$`))
+    await expect(region).toHaveAccessibleDescription(new RegExp(`^Flèches gauche et droite.*${message.replace(/[.*+?^${}()|[\]\\]/g, "\\$&")}$`))
     await expect(page.getByRole("button", { name: /^Continuer/ })).toHaveCount(0)
   })
 })
