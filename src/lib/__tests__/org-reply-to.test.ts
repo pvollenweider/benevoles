@@ -1,5 +1,6 @@
 import { describe, it, expect } from "vitest"
-import { initialReplyToEmail } from "@/lib/org-reply-to"
+import { initialReplyToEmail, replyToOnActivation } from "@/lib/org-reply-to"
+import { OWNER_ROLE, ORGANIZER_ROLE } from "@/lib/permissions"
 import { notificationSettingsPatchSchema } from "@/lib/notification-settings"
 
 describe("initialReplyToEmail (#1067)", () => {
@@ -21,5 +22,22 @@ describe("initialReplyToEmail (#1067)", () => {
     const parsed = notificationSettingsPatchSchema.safeParse({ replyToEmail: value })
     expect(parsed.success).toBe(true)
     if (parsed.success) expect(parsed.data.replyToEmail).toBe(value)
+  })
+})
+
+describe("replyToOnActivation (#1077)", () => {
+  it("offers an owner's address, normalized, when the owner activates their account", () => {
+    expect(replyToOnActivation(OWNER_ROLE, " Julie@Asso.CH ")).toBe("julie@asso.ch")
+  })
+
+  it("never offers an organiser's address", () => {
+    expect(replyToOnActivation(ORGANIZER_ROLE, "marc@asso.ch")).toBeNull()
+  })
+
+  it("offers nothing for an unknown role or an unusable address", () => {
+    expect(replyToOnActivation(null, "julie@asso.ch")).toBeNull()
+    expect(replyToOnActivation("super_admin", "julie@asso.ch")).toBeNull()
+    expect(replyToOnActivation(OWNER_ROLE, "not-an-email")).toBeNull()
+    expect(replyToOnActivation(OWNER_ROLE, null)).toBeNull()
   })
 })

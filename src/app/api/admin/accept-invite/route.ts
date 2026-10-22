@@ -13,6 +13,7 @@ import { rateLimit, getClientIp } from "@/lib/rate-limit"
 import { hashToken } from "@/lib/token-hash"
 import { deliverAfterResponse, enqueueNotifications } from "@/lib/notifications/outbox"
 import { validationError } from "@/lib/api-error"
+import { replyToOnActivation } from "@/lib/org-reply-to"
 
 const schema = z.object({
   token: z.string().min(1),
@@ -30,6 +31,7 @@ async function checkToken(token: string) {
       id: true,
       name: true,
       email: true,
+      role: true,
       setupTokenExpiresAt: true,
       isActive: true,
       organizationId: true,
@@ -88,7 +90,28 @@ export async function POST(req: Request) {
         setupTokenExpiresAt: null,
       },
     })
-    if (!organization) return []
+    if (!organization || !admin.organizationId) return []
+    // An owner's now-confirmed address becomes the reply-to of an organization that has none
+    // (#1077), only while it is still null: never over a value an owner set. No address in the log.
+    const replyTo = replyToOnActivation(admin.role, admin.email)
+    if (replyTo) {
+      const { count } = await tx.organization.updateMany({
+        where: { id: admin.organizationId, replyToEmail: null },
+        data: { replyToEmail: replyTo },
+      })
+      if (count > 0) {
+        await tx.orgLog.create({
+          data: {
+            organizationId: admin.organizationId,
+            actorType: "admin",
+            actorId: admin.id,
+            action: "organization.reply_to_defaulted",
+            entityType: "Organization",
+            entityId: admin.organizationId,
+          },
+        })
+      }
+    }
     return enqueueNotifications([{
       kind: "admin_welcome",
       organizationId: admin.organizationId,
