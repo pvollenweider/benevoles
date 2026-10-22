@@ -18,6 +18,7 @@ docker-compose*.yml
 !BENEVOLES-MANIFESTATION-SPORTIVE.md
 !PLANNING-PERMANENCES-BENEVOLES.md
 !TARIFS.md
+!TABLEUR-OU-OUTIL-DEDIE.md
 # The home's FAQ (#951, LANDING_FAQ_SOURCE in src/lib/landing-seo.ts), read at runtime too.
 !FAQ-ACCUEIL.md
 !ACCESSIBILITE.md

@@ -58,6 +58,9 @@ export function portableMarkdown(markdown: string, base: string): string {
 
 const link = (title: string, url: string, note?: string) => `- [${title}](${url})${note ? `: ${note}` : ""}`
 
+/** Practical pages of the hosted service, listed after the price (#871). */
+const RESOURCE_PATHS = ["/tableur-ou-outil-dedie"]
+
 const LEGAL_PATHS = ["/legal/privacy", "/legal/terms", "/legal/sous-traitance", "/legal/sous-traitants", "/accessibilite", "/legal/exploitant"]
 
 /** /llms.txt: what benevol.app is, then every public page by theme, each with its one-line summary. */
@@ -84,6 +87,11 @@ export function llmsTxt(s: LlmsSources): string {
   }
   const pricing = PUBLIC_PAGES.find((p) => p.path === "/tarifs")!
   if (pageAvailable(pricing)) out.push(link(pricing.title, url(pricing.path), pricing.summary))
+  // The practical pages of the hosted service (#871): spreadsheet and chat group, or a tool?
+  for (const path of RESOURCE_PATHS) {
+    const page = PUBLIC_PAGES.find((p) => p.path === path)
+    if (page && pageAvailable(page)) out.push(link(page.title, url(page.path), page.summary))
+  }
   out.push(link(news.title, url(news.path), news.summary))
   out.push(link(blog.title, url(blog.path), blog.summary))
   out.push("")

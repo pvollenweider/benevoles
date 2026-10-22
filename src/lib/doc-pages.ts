@@ -173,6 +173,20 @@ export const PUBLIC_PAGES: readonly PublicPage[] = [
     presentation: true,
   },
   {
+    // Spreadsheet and chat group, or a dedicated tool? (#871): what the usual combination does
+    // well, where it gets heavy, and a decision list. Facts about the app only (FEATURES.md rules).
+    path: "/tableur-ou-outil-dedie",
+    title: "Tableur et groupe de discussion, ou outil dédié ?",
+    summary: "Ce qu'un tableur et un groupe de discussion font bien, ce qui devient plus lourd quand l'événement grandit, et quand un outil dédié aide.",
+    metaTitle: "Tableur et groupe de discussion, ou outil dédié ?",
+    metaDescription: "Tableur et groupe de discussion, ou outil de planning pour vos bénévoles ? Ce que chacun fait bien, et une liste simple pour décider.",
+    source: "TABLEUR-OU-OUTIL-DEDIE.md",
+    priority: 0.6,
+    guide: false,
+    availability: "hosted",
+    presentation: true,
+  },
+  {
     // The target of every « Demander un espace » (#810), written in its page.tsx. In the sitemap
     // like the other apex pages (#934): it is where an association searching for the service
     // starts, and it exists on every instance (a closed sign-up shows why, with a contact).
