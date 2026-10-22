@@ -452,8 +452,9 @@ function LandingPage() {
             <div>
               <dt className="text-lg font-semibold">Pensé pour tout le monde</dt>
               <dd className="mt-2 text-base text-gray-600 leading-relaxed">
-                L&apos;inscription comme l&apos;administration s&apos;utilisent au clavier et avec un
-                lecteur d&apos;écran, et c&apos;est vérifié à chaque modification.{" "}
+                L&apos;inscription comme l&apos;administration s&apos;utilisent entièrement au clavier,
+                et sont conçues pour les lecteurs d&apos;écran ; chaque modification des écrans passe
+                une revue d&apos;accessibilité.{" "}
                 <Link href="/accessibilite" className={`text-blue-700 underline underline-offset-2 hover:text-blue-900 rounded ${focusRing} focus-visible:outline-blue-700`}>
                   Déclaration d&apos;accessibilité
                 </Link>
