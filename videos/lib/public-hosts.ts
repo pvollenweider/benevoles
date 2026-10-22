@@ -28,6 +28,11 @@ import { promisify } from "node:util"
 import type { Browser, BrowserType, LaunchOptions } from "playwright"
 
 export const PUBLIC_APP_URL = "https://www.benevol.app"
+const mailpitPort = () => {
+  const url = new URL(process.env.VIDEO_MAILPIT_URL ?? "http://localhost:48026")
+  if (url.protocol !== "http:" || !["localhost", "127.0.0.1"].includes(url.hostname) || !url.port || url.username || url.password) throw new Error("Local Mailpit URL required")
+  return url.port
+}
 const PUBLIC_DOMAIN = "benevol.app"
 
 /** The organizer the default organization's videos show (« Élodie Rochat » in the demo seed). */
@@ -64,7 +69,7 @@ export function localGatewayTarget(requestUrl: string, appBase: string): URL | n
   if (requested.protocol !== "http:" || requested.username || requested.password ||
       !["localhost", "127.0.0.1"].includes(requested.hostname)) return null
   const port = requested.port || "80"
-  const origin = port === appPort ? `http://127.0.0.1:${appPort}` : port === "48026" ? "http://127.0.0.1:48026" : null
+  const origin = port === appPort ? `http://127.0.0.1:${appPort}` : port === mailpitPort() ? `http://127.0.0.1:${mailpitPort()}` : null
   if (!origin) return null
   // Assign the path instead of resolving it: even //host/path cannot replace the origin.
   const target = new URL(origin)
@@ -135,7 +140,7 @@ export async function launchVideoBrowser(chromium: BrowserType, options: LaunchO
   gateway.on("connect", (req, socket, head) => {
     const host = req.url?.split(":")[0] ?? ""
     const localPort = Number(req.url?.split(":")[1])
-    const local = ["localhost", "127.0.0.1"].includes(host) && [Number(localTarget(appBase).port || 80), 48026].includes(localPort)
+    const local = ["localhost", "127.0.0.1"].includes(host) && [Number(localTarget(appBase).port || 80), Number(mailpitPort())].includes(localPort)
     if (!local && host !== PUBLIC_DOMAIN && !host.endsWith(`.${PUBLIC_DOMAIN}`)) { socket.end("HTTP/1.1 403 Forbidden\r\n\r\n"); return }
     const upstream = net.connect(local ? localPort : proxy.port, "127.0.0.1", () => { socket.write("HTTP/1.1 200 Connection Established\r\n\r\n"); if (head.length) upstream.write(head); socket.pipe(upstream); upstream.pipe(socket) })
     upstream.on("error", () => socket.destroy()); socket.on("error", () => upstream.destroy())

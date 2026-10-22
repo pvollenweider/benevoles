@@ -11,7 +11,7 @@ import { videoAdminEmail } from "../lib/public-hosts"
 
 async function main() {
   const url = new URL(process.env.DATABASE_URL ?? "")
-  assert(["localhost", "127.0.0.1"].includes(url.hostname) && url.port === "45433" && url.pathname === "/benevoles_video", "Dedicated local video database required")
+  assert(["localhost", "127.0.0.1"].includes(url.hostname) && ["45433", "45434"].includes(url.port) && url.pathname === "/benevoles_video", "Dedicated local video database required")
   const db = new PrismaClient({ adapter: new PrismaPg({ connectionString: url.toString() }) })
   const orgId = "video-accessibility", eventId = `${orgId}-event`
   try {

@@ -1,0 +1,5 @@
+{
+  "pid": 12340,
+  "buildId": "REmZmWYDIzWOi44KXOwl-",
+  "action": "SIGTERM sent only to the server started by this batch; existing Docker containers untouched"
+}

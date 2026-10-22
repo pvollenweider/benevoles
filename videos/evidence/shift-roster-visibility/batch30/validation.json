@@ -1,0 +1,71 @@
+{
+  "id": "SHIFT_ROSTER_VISIBILITY",
+  "slug": "shift-roster-visibility",
+  "validatedAt": "2026-10-22T09:40:45.018Z",
+  "continuousNarration": true,
+  "sentenceRevision": false,
+  "narrationContentChecked": true,
+  "voice": "Kore",
+  "captureMs": 244920,
+  "scenes": [
+    {
+      "id": "roster-setting",
+      "visualMs": 32883,
+      "audioMs": 32882,
+      "driftMs": 1
+    },
+    {
+      "id": "roster-publication",
+      "visualMs": 23138,
+      "audioMs": 23138,
+      "driftMs": 0
+    },
+    {
+      "id": "roster-signup",
+      "visualMs": 36566,
+      "audioMs": 36564,
+      "driftMs": 2
+    },
+    {
+      "id": "roster-confirm",
+      "visualMs": 29498,
+      "audioMs": 29496,
+      "driftMs": 2
+    },
+    {
+      "id": "roster-event",
+      "visualMs": 34457,
+      "audioMs": 34456,
+      "driftMs": 1
+    },
+    {
+      "id": "roster-invite",
+      "visualMs": 15347,
+      "audioMs": 15347,
+      "driftMs": 0
+    },
+    {
+      "id": "roster-existing",
+      "visualMs": 21447,
+      "audioMs": 21445,
+      "driftMs": 2
+    },
+    {
+      "id": "roster-withdraw",
+      "visualMs": 28273,
+      "audioMs": 28272,
+      "driftMs": 1
+    }
+  ],
+  "anchorsChecked": 28,
+  "music": {
+    "voicedWindows": 218,
+    "musicOnlyWindows": 1,
+    "smallestGapLu": 15,
+    "largestGapLu": 19.3,
+    "quietestMusicOnlyLufs": -33.8,
+    "loudestMusicOnlyLufs": -33.8,
+    "medianVoiceLufs": -16.2
+  },
+  "issues": []
+}

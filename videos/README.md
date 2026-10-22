@@ -757,3 +757,21 @@ réellement depuis le message reçu. Le recorder vérifie le défaut du formulai
 la note de publication, la carte limitée aux propres créneaux, Liste et Frise,
 l’accès avant inscription, l’élargissement V1 explicite et le retrait.
 Le montage cadre le véritable corps Mailpit sans modifier le message.
+
+### Pile isolée sur des ports alternatifs (lot 30)
+
+Ne jamais reprendre ni arrêter un conteneur existant pour libérer un port. Le lot 30
+utilise ses propres conteneurs PostgreSQL sur **45434**, SMTP sur **41030**, Mailpit
+sur **48030**, et le serveur produit vérifié sur **43102**. `DATABASE_URL` désigne
+uniquement `benevoles_video` sur ce PostgreSQL local ; `VIDEO_SMTP_PORT=41030` et
+`VIDEO_MAILPIT_URL=http://localhost:48030` doivent être présents dans le serveur,
+le seed et le recorder. Le proxy n'accepte que l'origine Mailpit locale configurée.
+Les valeurs historiques restent les valeurs par défaut pour les autres lots.
+
+Après le seed principal sur cette base neuve, utiliser le même build vérifié et
+les mêmes commandes de seed/répétition/prise que ci-dessus. Le contrôle du PID,
+du répertoire standalone et des deux BUILD_ID prouve le serveur réellement filmé.
+La narration et les sources du lot 30 décrivent les interrupteurs de #1083 et
+le clavier de la Frise de #1088 : un arrêt Tab par jour, flèches entre les barres.
+La vidéo d'accessibilité exige toujours ses inserts natifs ; un refus TCC laisse
+son statut NOT READY et l'écart #1075 ouvert.

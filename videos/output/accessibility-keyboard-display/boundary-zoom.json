@@ -1,12 +1,12 @@
 {
   "anchor": "Si le texte est trop petit, utilisons le zoom du navigateur.",
-  "windowStart": 114.87199999999999,
+  "windowStart": 143.825,
   "result": {
     "found": true,
-    "startSeconds": 30,
+    "startSeconds": 21.76,
     "wordsHeard": "Si le texte est trop petit"
   },
-  "onset": 144.87199999999999,
-  "proposedCut": 144.8723335,
+  "onset": 165.58499999999998,
+  "proposedCut": 165.347958,
   "note": "Proposal only; recut then independently audit before capture"
 }

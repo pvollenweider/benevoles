@@ -4,18 +4,18 @@ import assert from 'node:assert/strict'
 import { chromium } from 'playwright'
 import { mkdir, writeFile } from 'node:fs/promises'
 import path from 'node:path'
-import { launchVideoBrowser } from '../lib/public-hosts'
+import { launchVideoBrowser, videoRequestProxy } from '../lib/public-hosts'
 import { verifyProductBuild } from '../lib/product-build'
 async function main() {
- const base='http://localhost:43102'
- assert.equal(process.env.VIDEO_BASE_URL,base)
- const product=await verifyProductBuild(base)
+ const local='http://localhost:43102', base='https://www.benevol.app'
+ assert.equal(process.env.VIDEO_BASE_URL,local)
+ const product=await verifyProductBuild(local)
  const directory=path.resolve('videos/output/accessibility-keyboard-display/review/current-pages')
  await mkdir(directory,{recursive:true})
  const browser=await launchVideoBrowser(chromium,{env:{...process.env,LANG:'fr_CH.UTF-8',LC_ALL:'fr_CH.UTF-8'}})
  const checks:Record<string,unknown>={product,nativeZoom:false,nativeScreenReader:false,synchronizedVideo:false}
  try {
-  const page=await browser.newPage({viewport:{width:1280,height:800},locale:'fr-CH',timezoneId:'Europe/Zurich'})
+  const page=await browser.newPage({proxy:{server:videoRequestProxy(browser)!},ignoreHTTPSErrors:true,viewport:{width:1280,height:800},locale:'fr-CH',timezoneId:'Europe/Zurich'})
   await page.goto(base+'/admin/login')
   await page.getByLabel('Email',{exact:true}).fill('video.accessibility.owner@example.org')
   await page.getByLabel('Mot de passe',{exact:true}).fill(process.env.ORG_ADMIN_PASSWORD??'e2e-org-admin-password')
@@ -74,6 +74,24 @@ async function main() {
   const slot=page.getByRole('button',{name:/, Accueil[^:]* : sélectionner/}).first()
   for(let i=0;i<100&&!await slot.evaluate(el=>el===document.activeElement);i++)await page.keyboard.press('Tab')
   assert(await slot.evaluate(el=>el===document.activeElement))
+  assert.equal(await page.locator('[data-shift-id][tabindex="0"]').count(),1)
+  await page.getByText('← → : même poste',{exact:false}).waitFor()
+  const firstBar=await slot.getAttribute('data-shift-id')
+  await page.keyboard.press('ArrowRight')
+  assert.notEqual(await page.evaluate(()=>document.activeElement?.getAttribute('data-shift-id')),firstBar)
+  await page.keyboard.press('ArrowLeft')
+  assert(await slot.evaluate(el=>el===document.activeElement))
+  await page.keyboard.press('ArrowDown')
+  assert.notEqual(await page.evaluate(()=>document.activeElement?.getAttribute('data-shift-id')),firstBar)
+  await page.keyboard.press('ArrowUp')
+  await page.keyboard.press('Home')
+  assert(await slot.evaluate(el=>el===document.activeElement))
+  await page.screenshot({path:path.join(directory,'public-frise-keyboard-hint.png')})
+  await page.keyboard.press('Tab')
+  assert(!await page.evaluate(()=>document.activeElement?.hasAttribute('data-shift-id')))
+  await page.keyboard.press('Shift+Tab')
+  assert(await slot.evaluate(el=>el===document.activeElement))
+  checks.friseKeyboard={oneTabStopPerDay:true,leftRightSamePoste:true,upDownNeighbour:true,tabLeaves:true,returnsToLastBar:true,realHint:true}
   await page.keyboard.press('Space')
   const next=page.getByRole('button',{name:/^Continuer/})
   for(let i=0;i<100&&!await next.evaluate(el=>el===document.activeElement);i++)await page.keyboard.press('Tab')

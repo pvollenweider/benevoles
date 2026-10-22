@@ -1,50 +1,58 @@
 {
   "model": "gemini-3.8-flash",
-  "reviewedAt": "2026-10-21T20:42:40.069Z",
-  "videoSha256": "1638077bc2a258324a29e2fcd6038d49c236d79b9777cbf5eadda812c3d665cb",
-  "promptSha256": "9130e6c73d699bf555284c0af985efca3bc7459f0754601a10890bb37697ec57",
-  "clipSha256": "3b4ac5cb444f564c13a9eca7e07c4d7359ea92a7394174bea3e2541e7345052d",
+  "reviewedAt": "2026-10-22T09:37:55.607Z",
+  "videoSha256": "1c2554e5f75a482353c1ccf305dee280c62b5a36e1d58797af1d0171b3cc7518",
+  "promptSha256": "d81594e82f4fa8d77af0e6febc4ac6bb32ea326a2ff5563710aed76fa94b9bea",
+  "clipSha256": "ab177b4706f13783bde32201a9421cbe9559539fa5308fa569c20efa2bada46c",
   "scene": "roster-confirm",
   "review": {
     "heardOpening": "Ouvrez le véritable email de confirmation",
     "checkpoints": [
       {
-        "spokenSeconds": 0.8,
+        "spokenSeconds": 0,
         "spoken": "Ouvrez le véritable email de confirmation.",
-        "visibleSeconds": 1,
-        "visible": "L'email de confirmation 'Hello Aline !' s'affiche à l'écran.",
+        "visibleSeconds": 0.9,
+        "visible": "L'email de confirmation d'inscription avec le bouton 'Gérer mes inscriptions' est affiché.",
         "sync": "aligned",
         "severity": "none"
       },
       {
-        "spokenSeconds": 3.2,
+        "spokenSeconds": 2.6,
         "spoken": "Suivez son lien personnel.",
-        "visibleSeconds": 3.5,
-        "visible": "Clic sur le bouton 'Gérer mes inscriptions' menant à la page personnelle.",
+        "visibleSeconds": 3.7,
+        "visible": "Clic sur 'Gérer mes inscriptions' et affichage de la page 'Mes inscriptions'.",
         "sync": "aligned",
         "severity": "none"
       },
       {
-        "spokenSeconds": 5.5,
+        "spokenSeconds": 5.2,
         "spoken": "La carte Qui est inscrit montre uniquement vos propres créneaux confirmés",
-        "visibleSeconds": 5,
-        "visible": "La section 'Qui est inscrit' est visible sur la page 'Mes inscriptions'.",
+        "visibleSeconds": 5.2,
+        "visible": "La section 'Qui est inscrit' est visible avec le créneau Accueil et la mention 'À confirmer'.",
         "sync": "aligned",
         "severity": "none"
       },
       {
-        "spokenSeconds": 17,
-        "spoken": "Cliquez sur Afficher mon nom.",
-        "visibleSeconds": 18,
-        "visible": "Clic sur le bouton 'Afficher mon nom', qui bascule en 'Masquer mon nom'.",
+        "spokenSeconds": 19.5,
+        "spoken": "Activez Afficher mon nom aux autres bénévoles.",
+        "visibleSeconds": 20.3,
+        "visible": "L'interrupteur 'Afficher mon nom aux autres bénévoles' est activé.",
         "sync": "aligned",
         "severity": "none"
       },
       {
-        "spokenSeconds": 21.5,
-        "spoken": "suivez Voir qui est inscrit sur les autres créneaux.",
+        "spokenSeconds": 22.8,
+        "spoken": "L’état Visible confirme votre choix.",
         "visibleSeconds": 21,
-        "visible": "La page 'Vue qui est inscrit' avec la frise chronologique s'affiche.",
+        "visible": "Le statut 'Visible • Aline M.' apparaît sous l'interrupteur.",
+        "sync": "aligned",
+        "severity": "none"
+      },
+      {
+        "spokenSeconds": 24.9,
+        "spoken": "suivez Voir qui est inscrit sur les autres créneaux.",
+        "visibleSeconds": 25.7,
+        "visible": "Clic sur le lien et affichage de la vue globale avec la frise horaire.",
         "sync": "aligned",
         "severity": "none"
       }
@@ -53,7 +61,7 @@
     "voice": {
       "consistent": true,
       "warm": true,
-      "observation": "Voix naturelle, claire et bien synchronisée avec les actions à l'écran."
+      "observation": "Voix claire, posée et parfaitement synchronisée avec les interactions à l'écran."
     }
   },
   "note": "Automated observation of actual final video audio and images; not a claim of complete human validation"

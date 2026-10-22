@@ -1,0 +1,10 @@
+
+> benevoles@2.4.0 video:validate
+> node --import tsx videos/tools/validate.ts ACCESSIBILITY_KEYBOARD_DISPLAY
+
+[Error: ENOENT: no such file or directory, open '/Users/pol/Desktop/benevoles/.claude/worktrees/video-batch25-26-sources/videos/output/accessibility-keyboard-display/timeline.json'] {
+  errno: -2,
+  code: 'ENOENT',
+  syscall: 'open',
+  path: '/Users/pol/Desktop/benevoles/.claude/worktrees/video-batch25-26-sources/videos/output/accessibility-keyboard-display/timeline.json'
+}

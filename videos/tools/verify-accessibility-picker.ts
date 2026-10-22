@@ -10,12 +10,12 @@ import path from "node:path"
 async function main() {
   assert.equal(process.env.VIDEO_BASE_URL, "http://localhost:43102")
   const url = new URL(process.env.DATABASE_URL ?? "")
-  assert(url.hostname === "localhost" && url.port === "45433" && url.pathname === "/benevoles_video")
-  const browser = await launchVideoBrowser(chromium)
+  assert(url.hostname === "localhost" && ["45433", "45434"].includes(url.port) && url.pathname === "/benevoles_video")
+  const browser = await launchVideoBrowser(chromium, { env: { ...process.env, LANG: "fr_CH.UTF-8", LC_ALL: "fr_CH.UTF-8" } })
   const directory = path.resolve("videos/output/accessibility-keyboard-display")
   await mkdir(directory, { recursive: true })
   try {
-    const page = await browser.newPage({ viewport: { width: 1280, height: 800 } })
+    const page = await browser.newPage({ viewport: { width: 1280, height: 800 }, locale: "fr-CH", timezoneId: "Europe/Zurich" })
     await page.goto("http://localhost:43102/admin/login")
     await page.getByLabel("Email", { exact: true }).fill("video.accessibility.owner@example.org")
     await page.getByLabel("Mot de passe", { exact: true }).fill(process.env.ORG_ADMIN_PASSWORD ?? "e2e-org-admin-password")

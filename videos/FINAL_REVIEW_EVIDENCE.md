@@ -118,9 +118,6 @@ le planning » s'affiche sous la frise pendant l'usage au clavier.
   créneau « Accueil » au clavier ; `tabTo` (`videos/lib/record-accessibility.ts`)
   passe maintenant aux flèches dans la frise. Une nouvelle capture montrerait la
   ligne des touches et d'autres touches pressées : à régénérer.
-- `shift-roster-visibility` : « La vue Liste permet de parcourir tous les détails
-  au clavier » reste vrai, mais la frise le permet aussi désormais : narration à
-  revoir à la prochaine régénération.
 - `volunteer-choose-shifts` : rien de visible à la souris ; à revoir seulement si
   la vidéo montre le clavier.
 

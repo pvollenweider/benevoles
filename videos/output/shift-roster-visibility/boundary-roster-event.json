@@ -1,12 +1,12 @@
 {
-  "anchor": "Sur la page de l’événement, le bouton Voir qui est inscrit",
-  "windowStart": 87.941,
+  "anchor": "Sur la page de l’événement, l’interrupteur Voir qui est inscrit se",
+  "windowStart": 107.07999999999998,
   "result": {
     "found": true,
-    "startSeconds": 20.6,
-    "wordsHeard": "Sur la page de l’événement, le bouton Voir qui est inscrit"
+    "startSeconds": 15.14,
+    "wordsHeard": "Sur la page de l'événement l'interrupteur Voir qui est inscrit se"
   },
-  "onset": 108.541,
-  "proposedCut": 108.10749999999999,
+  "onset": 122.21999999999998,
+  "proposedCut": 122.080104,
   "note": "Proposal only; recut then independently audit before capture"
 }

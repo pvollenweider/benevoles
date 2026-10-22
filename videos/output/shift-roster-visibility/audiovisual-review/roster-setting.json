@@ -1,34 +1,42 @@
 {
   "model": "gemini-3.8-flash",
-  "reviewedAt": "2026-10-21T20:41:57.166Z",
-  "videoSha256": "1638077bc2a258324a29e2fcd6038d49c236d79b9777cbf5eadda812c3d665cb",
-  "promptSha256": "7796ef1c5a790fbb7e68d9f81f7274aaa9e2ee7cf195bc2e04ee5894ab7d079e",
-  "clipSha256": "1e4c627f3ed9c99937d52ef64a7e0d79368fd90a32e8fa85480edc5c8476555c",
+  "reviewedAt": "2026-10-22T09:37:54.798Z",
+  "videoSha256": "1c2554e5f75a482353c1ccf305dee280c62b5a36e1d58797af1d0171b3cc7518",
+  "promptSha256": "86486a403cdbcc9936079f9ea8f63c4ed30b34f68d7a3c38920a2429690d669f",
+  "clipSha256": "6620cf060004e6fb3d68c3b80d5f474ddee7c0f4a044190de04adb5bf40134fa",
   "scene": "roster-setting",
   "review": {
-    "heardOpening": "Dans Paramètres, la section Qui est inscrit",
+    "heardOpening": "Dans Paramètres, la case Par défaut",
     "checkpoints": [
       {
-        "spokenSeconds": 0.5,
-        "spoken": "Dans Paramètres, la section Qui est inscrit",
-        "visibleSeconds": 1,
-        "visible": "Défilement vers la section « Qui est inscrit » avec sa case cochée par défaut",
+        "spokenSeconds": 0.8,
+        "spoken": "la case Par défaut, montrer aux bénévoles qui est inscrit",
+        "visibleSeconds": 1.2,
+        "visible": "Section « Qui est inscrit » affichée avec la case cochée par défaut",
         "sync": "aligned",
         "severity": "none"
       },
       {
-        "spokenSeconds": 11.2,
-        "spoken": "Ouvrons un nouvel événement.",
-        "visibleSeconds": 11.8,
-        "visible": "Affichage de la page de création d'un Nouvel événement",
-        "sync": "aligned",
-        "severity": "none"
-      },
-      {
-        "spokenSeconds": 13.5,
-        "spoken": "La case est déjà cochée.",
+        "spokenSeconds": 12.2,
+        "spoken": "Ouvrons un nouvel événement",
         "visibleSeconds": 13.5,
-        "visible": "Dans le formulaire de l'événement, la case « Permettre aux bénévoles confirmés et aux membres invités de voir qui est inscrit » apparaît cochée",
+        "visible": "Affichage du formulaire de création d'un nouvel événement",
+        "sync": "aligned",
+        "severity": "none"
+      },
+      {
+        "spokenSeconds": 14.8,
+        "spoken": "La case Montrer aux bénévoles qui est inscrit est déjà cochée",
+        "visibleSeconds": 14.5,
+        "visible": "La case « Montrer aux bénévoles qui est inscrit » apparaît cochée dans le formulaire",
+        "sync": "aligned",
+        "severity": "none"
+      },
+      {
+        "spokenSeconds": 17.8,
+        "spoken": "Vous pouvez la décocher pour cet événement",
+        "visibleSeconds": 18,
+        "visible": "Le curseur décoche la case « Montrer aux bénévoles qui est inscrit »",
         "sync": "aligned",
         "severity": "none"
       }
@@ -37,7 +45,7 @@
     "voice": {
       "consistent": true,
       "warm": true,
-      "observation": "Voix claire, posée et bien articulée, synchronisation fluide avec la démonstration à l'écran."
+      "observation": "Voix naturelle, débit régulier et parfaitement audible."
     }
   },
   "note": "Automated observation of actual final video audio and images; not a claim of complete human validation"
