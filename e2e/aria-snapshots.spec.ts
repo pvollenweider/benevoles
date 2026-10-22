@@ -225,8 +225,8 @@ test.describe("admin", () => {
       - combobox "Créneau" [expanded] [invalid]
       - listbox "Créneau":
         - /children: equal
-        - option /^mar\\. 1 oct\\., de 10h à 12h, Bar, (aucun inscrit|\\d+ inscrits?) sur 3$/
-        - option /^mar\\. 1 oct\\., de 14h à 16h, Accueil, (aucun inscrit|\\d+ inscrits?) sur 2$/
+        - option /^mar\\. 1 oct\\., 10h.12h, Bar, \\d+\\W3, (aucun inscrit|\\d+ inscrits?) sur 3$/
+        - option /^mar\\. 1 oct\\., 14h.16h, Accueil, \\d+\\W2, (aucun inscrit|\\d+ inscrits?) sur 2$/
       - paragraph: Sélectionnez un créneau.
     `)
 

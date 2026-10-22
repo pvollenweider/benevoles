@@ -351,6 +351,9 @@ export default function DayTimeline({
                                 </>
                               )}
                             </div>
+                            {/* A space between the time and the count: their words stay apart in
+                                the visible text that the bar's name must contain (WCAG 2.5.3). */}
+                            {spotsText && " "}
                             {spotsText && (
                               // Much lower breakpoint than the time text above: "3/5" is short
                               // enough to fit right alongside the narrow-bar start-time fallback,

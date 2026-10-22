@@ -8,6 +8,7 @@
  */
 
 import { deleteShiftRecap, shiftWhen, type ActionRecap } from "./action-recap"
+import { fmt } from "./gantt-utils"
 import { spokenShiftName, spokenTimeRange } from "./spoken-time"
 import { shiftStaffingState, spokenStaffingState, staffingStateText } from "./staffing"
 
@@ -124,17 +125,36 @@ export function spokenPlaces(registered: number, capacity: number): string {
   return `${registered} inscrit${registered > 1 ? "s" : ""} sur ${capacity}`
 }
 
+type BarShift = ShiftWords & { registrationCount: number; capacity: number; minAge?: number | null; minVolunteers?: number | null }
+
+/** The hours a bar on the admin timeline shows: « 07h–09h ». */
+export function timelineBarTime(s: { startTime: string; endTime: string }): string {
+  return `${fmt(s.startTime)}–${fmt(s.endTime)}`
+}
+
 /**
- * The accessible name of a shift's bar on the admin timeline (#587): « Bar, Soir, de 10h30 à 12h,
- * 3 inscrits sur 5, complet, modifier ». It starts with the role, as the bar shows it.
+ * The accessible name of a shift's bar on the admin timeline: the role (shown by the row, not the
+ * bar), then the bar's visible text in its order, then the action: « Bar, 10h30–12h15, Soir,
+ * 3/5 inscrits, 2 libres, modifier ». It holds the visible words in a row so that a voice command
+ * using them reaches the bar (WCAG 2.5.3, axe `label-content-name-mismatch`); the « · » of the bar
+ * becomes a comma. The hours and places in words (#587) are its description, `timelineBarDescription`.
  */
-export function timelineBarName(s: ShiftWords & { registrationCount: number; capacity: number; minAge?: number | null; minVolunteers?: number | null }, full: boolean): string {
+export function timelineBarName(s: BarShift): string {
+  const label = s.label && s.label !== s.roleName ? `, ${s.label}` : ""
+  return `${s.roleName}, ${timelineBarTime(s)}${label}, ${timelineBarPlaces(s).split(" · ").join(", ")}, modifier`
+}
+
+/**
+ * The description of a bar on the admin timeline (#587), read after its name: the hours and places
+ * in words, for « 07h–09h » and « 3/5 » read with « tiret » and « barre »: « de 10h30 à 12h, 3
+ * inscrits sur 5, complet, 18 ans minimum ».
+ */
+export function timelineBarDescription(s: BarShift, full: boolean): string {
   const free = s.capacity - s.registrationCount
   // Against the minimum (#949): « sous le minimum de 2 », « minimum atteint », as on the bar.
   const minState = full ? null : spokenStaffingState(s, shiftStaffingState({ ...s, active: s.registrationCount }))
-  // « 2 libres » as on the bar (#925, 2.5.3): a voice command can use the words it shows.
   const state = full ? ", complet" : minState ? `, ${minState}` : free > 0 ? `, ${free} libre${free > 1 ? "s" : ""}` : ""
-  return `${spokenShiftName(s)}, ${spokenTimeRange(s.startTime, s.endTime)}, ${spokenPlaces(s.registrationCount, s.capacity)}${state}${s.minAge != null ? `, ${s.minAge} ans minimum` : ""}, modifier`
+  return `${spokenTimeRange(s.startTime, s.endTime)}, ${spokenPlaces(s.registrationCount, s.capacity)}${state}${s.minAge != null ? `, ${s.minAge} ans minimum` : ""}`
 }
 
 /**

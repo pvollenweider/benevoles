@@ -33,7 +33,7 @@ test("places and label applied to the whole event, across two days", async ({ pa
 
   const firstDay = page.getByRole("region", { name: /Planning du mardi 1 octobre/i })
   const secondDay = page.getByRole("region", { name: /Planning du mercredi 2 octobre/i })
-  await firstDay.getByRole("button", { name: /^Bar, de 10h à 12h/ }).click()
+  await firstDay.getByRole("button", { name: /^Bar, 10h–12h/ }).click()
   const popover = page.getByRole("dialog").filter({ has: page.getByRole("heading", { name: /^Bar ?, de 10h à 12h/ }) })
   await popover.getByLabel("Libellé").fill("Bar soir")
   await popover.getByLabel("Places").fill("5")
@@ -50,12 +50,12 @@ test("places and label applied to the whole event, across two days", async ({ pa
   await popover.getByRole("button", { name: "Fermer et enregistrer" }).click()
 
   // The other day and the other shift of the first day show it without a reload; Accueil is untouched.
-  await expect(secondDay.getByRole("button", { name: /^Bar, Bar soir, de 10h à 12h, 0 inscrit sur 5/ })).toBeVisible()
-  await expect(firstDay.getByRole("button", { name: /^Bar, Bar soir, de 14h à 16h, 0 inscrit sur 5/ })).toBeVisible()
-  await expect(secondDay.getByRole("button", { name: /^Accueil, de 10h à 12h/ })).toBeVisible()
+  await expect(secondDay.getByRole("button", { name: /^Bar, 10h–12h, Bar soir, 0\/5 inscrit/ })).toBeVisible()
+  await expect(firstDay.getByRole("button", { name: /^Bar, 14h–16h, Bar soir, 0\/5 inscrit/ })).toBeVisible()
+  await expect(secondDay.getByRole("button", { name: /^Accueil, 10h–12h/ })).toBeVisible()
 
   // And it is saved.
   await page.reload()
-  await expect(page.getByRole("region", { name: /Planning du mercredi 2 octobre/i }).getByRole("button", { name: /^Bar, Bar soir, de 10h à 12h, 0 inscrit sur 5/ })).toBeVisible()
-  await expect(page.getByRole("region", { name: /Planning du mardi 1 octobre/i }).getByRole("button", { name: /^Bar, Bar soir, de 14h à 16h, 0 inscrit sur 5/ })).toBeVisible()
+  await expect(page.getByRole("region", { name: /Planning du mercredi 2 octobre/i }).getByRole("button", { name: /^Bar, 10h–12h, Bar soir, 0\/5 inscrit/ })).toBeVisible()
+  await expect(page.getByRole("region", { name: /Planning du mardi 1 octobre/i }).getByRole("button", { name: /^Bar, 14h–16h, Bar soir, 0\/5 inscrit/ })).toBeVisible()
 })

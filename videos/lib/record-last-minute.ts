@@ -110,7 +110,7 @@ export async function recordLastMinute(options: { page: Page; base: string; dire
       await write(page.getByLabel(/^Nom(?: \*)?$/), "Exemple")
       await write(page.getByLabel("Email", { exact: true }), "video.last-minute.person.2@example.org")
       await at("Choisissons le créneau de logistique"); await tap(page, page.getByRole("combobox", { name: "Créneau", exact: true }))
-      await tap(page, page.getByRole("option", { name: /de 12h à 14h, Logistique/ }))
+      await tap(page, page.getByRole("option", { name: /12h–14h, Logistique/ }))
       const addition = page.waitForResponse(response => response.url().endsWith("/api/admin/registrations") && response.request().method() === "POST")
       await tap(page, page.getByRole("button", { name: "Ajouter", exact: true }))
       if (!(await addition).ok()) throw new Error("Actual manual add request failed")

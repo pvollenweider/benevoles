@@ -45,17 +45,17 @@ describe("InvitationsManager — filter by state (#558)", () => {
     expect(screen.getByRole("group", { name: "Filtrer les invités par statut" })).toBeInTheDocument()
   })
 
-  it("each card's accessible name reads the state then the count", () => {
+  it("each card is named by its visible text, the count then the state (WCAG 2.5.3)", () => {
     render(<InvitationsManager eventId="evt-1" members={[]} allTags={[]} invites={invites} />)
-    expect(screen.getByRole("button", { name: "Invités : 3" })).toBeInTheDocument()
-    expect(screen.getByRole("button", { name: "Inscrits : 1" })).toBeInTheDocument()
-    expect(screen.getByRole("button", { name: "Pas disponible : 1" })).toBeInTheDocument()
-    expect(screen.getByRole("button", { name: "Sans réponse : 1" })).toBeInTheDocument()
+    expect(screen.getByRole("button", { name: "3 Invités" })).toBeInTheDocument()
+    expect(screen.getByRole("button", { name: "1 Inscrits" })).toBeInTheDocument()
+    expect(screen.getByRole("button", { name: "1 Pas disponible" })).toBeInTheDocument()
+    expect(screen.getByRole("button", { name: "1 Sans réponse" })).toBeInTheDocument()
   })
 
   it("the chosen filter stays distinct in forced colours, where the ring vanishes", () => {
     render(<InvitationsManager eventId="evt-1" members={[]} allTags={[]} invites={invites} />)
-    expect(screen.getByRole("button", { name: "Invités : 3" })).toHaveClass(
+    expect(screen.getByRole("button", { name: "3 Invités" })).toHaveClass(
       "forced-colors:aria-pressed:bg-[Highlight]",
       "forced-colors:aria-pressed:text-[HighlightText]",
     )
@@ -66,19 +66,19 @@ describe("InvitationsManager — filter by state (#558)", () => {
     const status = document.getElementById("invitations-filter-status")!
     expect(status).toHaveTextContent("")
 
-    fireEvent.click(screen.getByRole("button", { name: "Sans réponse : 1" }))
+    fireEvent.click(screen.getByRole("button", { name: "1 Sans réponse" }))
     expect(screen.getByText("Fc L")).toBeInTheDocument()
     expect(screen.queryByText("Fa L")).not.toBeInTheDocument()
     expect(status).toHaveTextContent("Sans réponse : 1 invité affiché.")
 
-    fireEvent.click(screen.getByRole("button", { name: "Invités : 3" }))
+    fireEvent.click(screen.getByRole("button", { name: "3 Invités" }))
     expect(screen.getByText("Fa L")).toBeInTheDocument()
     expect(status).toHaveTextContent("Invités : 3 invités affichés.")
   })
 
   it("announces an empty filter in French", () => {
     render(<InvitationsManager eventId="evt-1" members={[]} allTags={[]} invites={[invite("a", { registered: true })]} />)
-    fireEvent.click(screen.getByRole("button", { name: "Pas disponible : 0" }))
+    fireEvent.click(screen.getByRole("button", { name: "0 Pas disponible" }))
     expect(screen.getByText("Aucun invité dans ce filtre.")).toBeInTheDocument()
   })
 

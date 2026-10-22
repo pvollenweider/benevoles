@@ -268,21 +268,23 @@ export default function ShiftSelect({
                   ${activeIndex === index ? "outline outline-2 -outline-offset-2 outline-blue-600" : ""}`}
               >
                 {isSelected && <Check className="left-0" />}
-                <span className="shrink-0 sm:w-28 text-xs text-gray-600">{fmtShortDate(s.date)}</span>
+                {/* The spaces between the cells keep their words apart in the visible text that
+                    the option's name must contain (WCAG 2.5.3); a flex row does not render them. */}
+                <span className="shrink-0 sm:w-28 text-xs text-gray-600">{fmtShortDate(s.date)}</span>{" "}
                 <span className="shrink-0 sm:w-20 text-xs text-gray-600 tabular-nums">
                   {fmtHour(s.startTime)}–{fmtHour(s.endTime)}
-                </span>
+                </span>{" "}
                 <span className={`flex-1 min-w-[8rem] sm:min-w-0 wrap-break-word text-sm font-medium ${alreadyReg ? "text-orange-800" : isConflict ? "text-amber-800" : "text-gray-800"}`}>
                   {s.roleName}
                   {s.label !== s.roleName && (
                     <span className="font-normal text-gray-600"> · {s.label}</span>
                   )}
-                </span>
+                </span>{" "}
                 {alreadyReg && (
-                  <span className="shrink-0 whitespace-nowrap text-[10px] text-orange-800 font-medium">Déjà inscrit</span>
+                  <><span className="shrink-0 whitespace-nowrap text-[10px] text-orange-800 font-medium">Déjà inscrit</span>{" "}</>
                 )}
                 {isConflict && (
-                  <span className="shrink-0 whitespace-nowrap text-[10px] text-amber-800 font-medium">⚠ conflit</span>
+                  <><span className="shrink-0 whitespace-nowrap text-[10px] text-amber-800 font-medium">⚠ conflit</span>{" "}</>
                 )}
                 <StatusPill s={s} />
               </div>

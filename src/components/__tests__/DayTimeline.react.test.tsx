@@ -37,6 +37,14 @@ describe("DayTimeline", () => {
     expect(onToggle).toHaveBeenCalledWith("a", "open")
   })
 
+  // axe-core 4.14 (label-content-name-mismatch) read « 18h–20h2/5 »: a space keeps the time and the
+  // count two words, as the bar's name says them (WCAG 2.5.3).
+  it("separates the time and the count of a bar by a space", () => {
+    render(<DayTimeline shifts={[shift("a")]} shows={[]} selected={new Set()} onToggle={() => {}} />)
+    const bar = screen.getByRole("button", { name: /^18h–20h 2\/5, Bar : sélectionner/ })
+    expect(bar.textContent).toMatch(/18h–20h 2\/5$/)
+  })
+
   // The public page moves focus to a withdrawn shift's bar when its list row is gone (#584).
   it("marks each bar with its shift id", () => {
     render(<DayTimeline shifts={[shift("a"), shift("b", { startTime: "20:00", endTime: "22:00" })]} shows={[]} selected={new Set()} onToggle={() => {}} />)

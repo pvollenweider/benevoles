@@ -2762,7 +2762,7 @@ async function main() {
           await tap(page, page.getByRole("button", { name: "Choisir Julien Favre", exact: true }))
           await at("nous choisissons le bon horaire et enregistrons")
           await tap(page, page.getByRole("combobox", { name: "Créneau", exact: true }))
-          await tap(page, page.getByRole("option", { name: /^sam\..*de 10h à 12h, Photos/ }))
+          await tap(page, page.getByRole("option", { name: /^sam\..*10h–12h, Photos/ }))
           await at("nous choisissons le bon horaire et enregistrons")
           const response = page.waitForResponse(r => r.url().endsWith("/api/admin/registrations") && r.request().method() === "POST")
           await tap(page, page.getByRole("button", { name: "Ajouter", exact: true }))
@@ -2815,12 +2815,12 @@ async function main() {
         })
         await scene("shifts", async at => {
           await at("Choisissons un premier créneau")
-          await choose("Créneau", /de 15h à 18h, Accueil/)
+          await choose("Créneau", /15h–18h, Accueil/)
           await at("Cliquez ensuite sur Ajouter un autre créneau")
           await tap(page, page.getByRole("button", { name: "+ Ajouter un autre créneau", exact: true }))
           await page.getByRole("combobox", { name: "Créneau 2 (facultatif)", exact: true }).waitFor()
           await at("Choisissons le démontage du lendemain")
-          await choose("Créneau 2 (facultatif)", /de 15h à 18h, Démontage/)
+          await choose("Créneau 2 (facultatif)", /15h–18h, Démontage/)
         })
         await scene("add", async at => {
           await at("Avant de valider, lisez la phrase sous la note")
@@ -2914,7 +2914,7 @@ async function main() {
           await fillVisibly(page, search(), "Léon")
           await at("Nous choisissons Accueil, et seulement")
           await page.getByRole("combobox", { name: "Filtrer par poste", exact: true }).selectOption({ label: "Accueil" })
-          await at("la liste se réduit aux"); await chooseShift("Filtrer par créneau", /de 15h à 18h, Accueil/)
+          await at("la liste se réduit aux"); await chooseShift("Filtrer par créneau", /15h–18h, Accueil/)
           await page.getByRole("link", { name: "Écrire à ce créneau", exact: true }).waitFor()
           checks.filteredAfternoonRows = await page.locator("tbody tr").count()
           await at("Pour retrouver toute la liste"); await page.getByRole("combobox", { name: "Filtrer par poste", exact: true }).selectOption("")
@@ -2950,7 +2950,7 @@ async function main() {
           await typeNaturally(page, page.getByLabel("Note", { exact: true }), "Horaire convenu par téléphone")
         })
         await scene("manual-check", async at => {
-          await chooseShift("Créneau *", /de 9h à 12h, Accueil.*déjà inscrit/)
+          await chooseShift("Créneau *", /9h–12h, Accueil.*Déjà inscrit/)
           await at("Si nous essayons de l'ajouter")
           const response = page.waitForResponse(r => r.url().endsWith("/api/admin/registrations") && r.request().method() === "POST")
           await tap(page, page.getByRole("button", { name: "Ajouter", exact: true }))
@@ -2958,11 +2958,11 @@ async function main() {
           if (result.status() !== 409) throw new Error("Duplicate registration was not refused")
           await page.getByText("Cette personne est déjà inscrite sur ce créneau.", { exact: true }).waitFor()
           checks.duplicateRejected = true
-          await at("Sur la buvette du matin"); await chooseShift("Créneau *", /de 10h à 14h, Buvette.*conflit d'horaire/)
+          await at("Sur la buvette du matin"); await chooseShift("Créneau *", /10h–14h, Buvette.*conflit/)
           await page.locator("#add-shift-conflict").waitFor()
           checks.overlapWarningObservedWithoutSubmitting = true
           await at("Choisissons plutôt un horaire compatible")
-          await chooseShift("Créneau *", /de 15h à 18h, Accueil/)
+          await chooseShift("Créneau *", /15h–18h, Accueil/)
           if (await page.locator("#add-shift-conflict").isVisible()) throw new Error("Narrated compatible shift still has an overlap warning; correct the management fixture before filming")
           checks.compatibleShiftWithoutWarning = true
         })

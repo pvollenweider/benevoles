@@ -3,6 +3,7 @@
  */
 import { describe, it, expect, vi, afterEach } from "vitest"
 import "@testing-library/jest-dom/vitest"
+import { visibleTextInName } from "@/__tests__/helpers/label-in-name"
 import { useState, type KeyboardEventHandler } from "react"
 import { render, screen, fireEvent, cleanup } from "@testing-library/react"
 import ShiftSelect from "../admin/registrations/ShiftSelect"
@@ -54,7 +55,7 @@ describe("ShiftSelect", () => {
     const list = screen.getByRole("listbox", { name: "Créneau *" })
     expect(combo()).toHaveAttribute("aria-expanded", "true")
     expect(combo()).toHaveAttribute("aria-controls", list.id)
-    const option = screen.getByRole("option", { name: /^sam\. 4 juil\., de 10h à 12h, Bar,/ })
+    const option = screen.getByRole("option", { name: /^sam\. 4 juil\., 10h–12h, Bar,/ })
     // The press on an option does not take the focus away from the trigger.
     expect(fireEvent.mouseDown(option)).toBe(false)
     fireEvent.click(option)
@@ -160,18 +161,20 @@ describe("ShiftSelect", () => {
     expect(o3).toHaveAttribute("aria-selected", "false")
   })
 
-  it("names each option in words: date, hours, role, label, filling and conflicts", () => {
+  it("names each option by its visible row, then the filling in words, and the conflicts", () => {
     const { unmount } = render(<Harness />)
     fireEvent.click(combo())
-    expect(screen.getByRole("option", { name: `${date}, de 10h à 12h, Bar, 1 inscrit sur 3` })).toBeInTheDocument()
-    expect(screen.getByRole("option", { name: `${date}, de 14h à 16h, Équipe, complet` })).toBeInTheDocument()
-    expect(screen.getByRole("option", { name: `${date}, de 18h à 20h, Bar, Soir, aucun inscrit sur 2` })).toBeInTheDocument()
+    expect(screen.getByRole("option", { name: `${date}, 10h–12h, Bar, 1/3, 1 inscrit sur 3` })).toBeInTheDocument()
+    expect(screen.getByRole("option", { name: `${date}, 14h–16h, Équipe, Complet` })).toBeInTheDocument()
+    expect(screen.getByRole("option", { name: `${date}, 18h–20h, Bar, Soir, 0/2, aucun inscrit sur 2` })).toBeInTheDocument()
     unmount()
 
     render(<Harness existingShifts={[{ ...bar, startTime: "10:00", endTime: "15:00" }]} />)
     fireEvent.click(combo())
-    expect(screen.getByRole("option", { name: /^sam\. 4 juil\., de 10h à 12h, Bar, 1 inscrit sur 3, déjà inscrit$/ })).toBeInTheDocument()
-    expect(screen.getByRole("option", { name: /Équipe, complet, conflit d'horaire$/ })).toBeInTheDocument()
+    expect(screen.getByRole("option", { name: /^sam\. 4 juil\., 10h–12h, Bar, Déjà inscrit, 1\/3, 1 inscrit sur 3$/ })).toBeInTheDocument()
+    expect(screen.getByRole("option", { name: /Équipe, conflit, Complet$/ })).toBeInTheDocument()
+    // The cells' words stay apart (a space between each), so the name holds the visible row (2.5.3).
+    for (const o of screen.getAllByRole("option")) expect(visibleTextInName(o.textContent ?? "", o.getAttribute("aria-label") ?? ""), o.textContent ?? "").toBe(true)
   })
 
   it("offers « Tous les créneaux » first when the choice can be empty", () => {

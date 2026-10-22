@@ -3,6 +3,7 @@
  */
 import { describe, it, expect, vi, afterEach } from "vitest"
 import "@testing-library/jest-dom/vitest"
+import { visibleTextInName } from "@/__tests__/helpers/label-in-name"
 import { render, screen, fireEvent, cleanup } from "@testing-library/react"
 
 vi.mock("next/navigation", () => ({ useRouter: () => ({ push: vi.fn(), refresh: vi.fn() }) }))
@@ -43,13 +44,20 @@ describe("AdminDayTimeline", () => {
     expect(label).toHaveTextContent("de 21h à 1h, jusqu'au lendemain")
   })
 
-  it("names each bar with the role first, then the time and places in words", () => {
+  // axe-core 4.14 (label-content-name-mismatch): the name holds the bar's visible text in its
+  // order (WCAG 2.5.3); the hours and places in words (#587) are its description.
+  it("names each bar with the role, then its visible text, and describes it in words", () => {
     setup([shift(), shift({ id: "s2", label: "Bar", startTime: "14:00", endTime: "16:00", registrationCount: 2, capacity: 2 })])
     const region = screen.getByRole("region", { name: "Planning du Samedi 4 juillet" })
     expect(region).toBeInTheDocument()
-    expect(screen.getByRole("button", { name: "Bar, Soir, de 10h30 à 12h15, 3 inscrits sur 5, 2 libres, modifier" })).toBeInTheDocument()
-    expect(screen.getByRole("button", { name: "Bar, de 14h à 16h, 2 inscrits sur 2, complet, modifier" })).toBeInTheDocument()
-    for (const b of screen.getAllByRole("button", { name: /^Bar/ })) expect(b.getAttribute("aria-label")).not.toMatch(/[–·]/)
+    const soir = screen.getByRole("button", { name: "Bar, 10h30–12h15, Soir, 3/5 inscrits, 2 libres, modifier" })
+    expect(soir).toHaveAccessibleDescription("de 10h30 à 12h15, 3 inscrits sur 5, 2 libres")
+    const full = screen.getByRole("button", { name: "Bar, 14h–16h, 2/2 inscrits, Complet, modifier" })
+    expect(full).toHaveAccessibleDescription("de 14h à 16h, 2 inscrits sur 2, complet")
+    for (const b of [soir, full]) {
+      // The words of the visible lines stay apart: a space between each line.
+      expect(visibleTextInName(b.querySelector("[title]")?.textContent ?? "", b.getAttribute("aria-label") ?? "")).toBe(true)
+    }
   })
 
   // #924: the role names scrolled away with the hours; the column is now sticky inside the region.
@@ -62,20 +70,21 @@ describe("AdminDayTimeline", () => {
     expect(column).toHaveTextContent("Accueil")
     // The layer holding it stacks above the rows; a focused bar above both.
     expect(column.parentElement).toHaveClass("absolute", "z-10", "pointer-events-none")
-    expect(screen.getByRole("button", { name: /^Bar, Soir/ })).toHaveClass("focus:z-20")
+    expect(screen.getByRole("button", { name: /^Bar, 10h30–12h15, Soir/ })).toHaveClass("focus:z-20")
     expect(region.style.scrollPaddingLeft).not.toBe("")
   })
 
   // #925: the bar said « 3/5 · 2 libre » without saying what it counted.
   it("shows what the figures on a bar count, and the minimum age", () => {
     setup([shift({ minAge: 18 })])
-    const bar = screen.getByRole("button", { name: "Bar, Soir, de 10h30 à 12h15, 3 inscrits sur 5, 2 libres, 18 ans minimum, modifier" })
+    const bar = screen.getByRole("button", { name: "Bar, 10h30–12h15, Soir, 18 ans min., 3/5 inscrits, 2 libres, modifier" })
+    expect(bar).toHaveAccessibleDescription("de 10h30 à 12h15, 3 inscrits sur 5, 2 libres, 18 ans minimum")
     expect(bar).toHaveTextContent("18 ans min. · 3/5 inscrits · 2 libres")
   })
 
   it("the deletion recap opened from a bar says the minutes and the shift in words (regression)", () => {
     setup([shift()])
-    fireEvent.click(screen.getByRole("button", { name: /^Bar, Soir, de 10h30/ }))
+    fireEvent.click(screen.getByRole("button", { name: /^Bar, 10h30–12h15, Soir/ }))
     fireEvent.click(screen.getByRole("button", { name: "Supprimer le créneau" }))
     const dialog = screen.getByRole("alertdialog", { name: "Supprimer le créneau « Bar, Soir » ?" })
     expect(dialog).toHaveTextContent("Samedi 4 juillet, de 10h30 à 12h15.")

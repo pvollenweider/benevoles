@@ -7,7 +7,7 @@ import { useState, useRef, useCallback, useEffect } from "react"
 import { announce } from "@/lib/announce"
 import { flushSync } from "react-dom"
 import { dayLabel, spokenTimeRange } from "@/lib/spoken-time"
-import { deleteShiftRecapFor, timelineBarName, timelineBarPlaces } from "@/lib/shifts-admin"
+import { deleteShiftRecapFor, timelineBarDescription, timelineBarName, timelineBarPlaces, timelineBarTime } from "@/lib/shifts-admin"
 import ConfirmActionModal from "@/components/admin/ConfirmActionModal"
 import { requestJson } from "@/lib/use-submit"
 import { getBarClasses } from "@/lib/roles"
@@ -411,7 +411,8 @@ export default function AdminDayTimeline({ eventId, date, shifts, eventShifts = 
                         tabIndex={0}
                         aria-haspopup="dialog"
                         aria-expanded={isSelected}
-                        aria-label={timelineBarName(shift, isFull)}
+                        aria-label={timelineBarName(shift)}
+                        aria-describedby={`shift-bar-desc-${shift.id}`}
                         onMouseDown={e => e.stopPropagation()}
                         onClick={e => { e.stopPropagation(); openPopover(shift.id) }}
                         onKeyDown={e => { if (e.key === "Enter" || e.key === " ") { e.preventDefault(); openPopover(shift.id) } }}
@@ -421,20 +422,27 @@ export default function AdminDayTimeline({ eventId, date, shifts, eventShifts = 
                             (the bar's children are presentational, so this one is not exposed). */}
                         <div
                           className="flex flex-col justify-center px-2 overflow-hidden w-full"
-                          title={[`${fmt(shift.startTime)}–${fmt(shift.endTime)}`, hasLabel ? shift.label : null, timelineBarPlaces(shift)].filter(Boolean).join(" · ")}
+                          title={[timelineBarTime(shift), hasLabel ? shift.label : null, timelineBarPlaces(shift)].filter(Boolean).join(" · ")}
                         >
+                          {/* The spaces between the lines keep their words apart in the visible
+                              text that the bar's name must contain (WCAG 2.5.3); a flex column
+                              does not render them. */}
                           <span className="text-white text-xs font-bold leading-none truncate text-shadow-[0_1px_2px_rgb(0_0_0/0.3)]">
-                            {fmt(shift.startTime)}–{fmt(shift.endTime)}
-                          </span>
+                            {timelineBarTime(shift)}
+                          </span>{" "}
                           {hasLabel && (
-                            <span className="text-white text-[11px] leading-none truncate mt-0.5">
-                              {shift.label}
-                            </span>
+                            <>
+                              <span className="text-white text-[11px] leading-none truncate mt-0.5">
+                                {shift.label}
+                              </span>{" "}
+                            </>
                           )}
                           <span className="text-white text-[11px] leading-none truncate mt-0.5">
                             {timelineBarPlaces(shift)}
                           </span>
                         </div>
+                        {/* The hours and places in words (#587), read after the name. */}
+                        <span id={`shift-bar-desc-${shift.id}`} hidden>{timelineBarDescription(shift, isFull)}</span>
 
                         {/* Left resize handle */}
                         <div

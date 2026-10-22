@@ -13,7 +13,7 @@ RUN npm ci --legacy-peer-deps
 # ── Stage 2 : prisma CLI avec toutes ses dépendances (engines inclus) ─────────
 FROM node:26-alpine AS prisma-cli
 WORKDIR /prisma
-RUN npm install prisma@7.10.0 \
+RUN npm install prisma@7.10.1 \
     --save-exact \
     --legacy-peer-deps \
     --no-fund \

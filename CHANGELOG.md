@@ -11,6 +11,14 @@ Format basé sur [Keep a Changelog](https://keepachangelog.com/fr/1.0.0/).
 
 ## [Unreleased]
 
+### Modifié
+
+- **Dépendances à jour** (#1066) : Next.js 16.4.2, React 19.3.1, Prisma 7.10.1, Sentry 11.8, nodemailer 10.1.2, resend 6.33, zod 4.6.7, isomorphic-dompurify 4.6, marked 18.1.1 ; outils de test Playwright 1.64.1, axe-core 4.14, Vitest 5.0.5 et jsdom 30.1.3.
+
+### Corrigé
+
+- **Nom des barres, des créneaux et des filtres pour la commande vocale** : axe-core 4.14 vérifie que le nom d'un contrôle contient son texte visible (WCAG 2.5.3). Les barres de la frise de la page Créneaux disent leur poste puis leur texte visible (« Bar, 10h–12h, Soir, 3/5 inscrits, 2 libres, modifier »), les heures et les places en mots venant après ; les créneaux de la liste « Créneau » des inscriptions sont nommés par leur ligne visible, puis les inscrits en mots ; les cartes de filtre des invitations par leur texte (« 3 Sans réponse ») ; l'heure et le nombre d'inscrits d'une barre de la page publique restent deux mots distincts.
+
 ## [2.5.0] — 2026-10-22
 
 ### En bref
