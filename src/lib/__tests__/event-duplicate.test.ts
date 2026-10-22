@@ -1,6 +1,6 @@
 import { describe, it, expect } from "vitest"
 import {
-  copiedShift, dayOffset, DEFAULT_COPY, duplicateOptionsSchema, duplicatePlan, duplicateSummary, resolveChoices, shiftIsoDate,
+  copiedShift, dayOffset, DEFAULT_COPY, duplicateOptionsSchema, duplicatePlan, duplicateSummary, leadersChoiceHint, resolveChoices, shiftIsoDate, summaryAnnouncement,
   type DuplicableEvent, type DuplicableShift,
 } from "../event-duplicate"
 
@@ -63,7 +63,14 @@ describe("duplicatePlan", () => {
     expect(plan.event.description).toBe("d") // description and location always follow
     expect(plan.shifts).toEqual([])
     expect(plan.pages).toEqual([])
-    expect(plan.leaders).toEqual(source.leaders)
+    // Without its shifts the copy has no poste: no leader follows (#1010).
+    expect(plan.leaders).toEqual([])
+  })
+
+  // Regression for #1010: a leader of a deleted poste got a link to a poste the copy doesn't have.
+  it("copies only the leaders of a poste the copy has", () => {
+    const withOrphan = { ...source, leaders: [...source.leaders, { roleName: "Vestiaire", name: "Noé", email: "noe@x.ch" }] }
+    expect(duplicatePlan(withOrphan, { copy: { leaders: true } }).leaders).toEqual(source.leaders)
   })
 
   it("offsets are whole days, backwards too", () => {
@@ -97,8 +104,13 @@ describe("duplicateSummary", () => {
     const lines = duplicateSummary(counts, { shifts: false, pages: false, leaders: true, settings: false }, -1)
     expect(lines[0]).toBe("Aucun créneau : la copie démarre vide.")
     expect(lines[1]).toBe("Toutes les dates décalées de -1 jour.")
-    expect(lines).toContain("1 responsable de secteur repris : chacun reçoit un email avec son lien pour la copie.")
+    expect(lines).toContain("Sans les créneaux, aucun responsable de secteur n'est repris.")
     expect(lines).toContain("Messages et réglages d'inscription remis à zéro.")
+  })
+
+  it("announces the leaders taken with the shifts", () => {
+    const lines = duplicateSummary(counts, { ...DEFAULT_COPY, leaders: true }, 0)
+    expect(lines).toContain("1 responsable de secteur repris : chacun reçoit un email avec son lien pour la copie.")
   })
 
   it("copies the active custom questions with the settings, never their answers (#483)", () => {
@@ -165,5 +177,29 @@ describe("duplicatePlan with recurring permanences", () => {
 
   it("copies no permanence when the shifts are not copied", () => {
     expect(duplicatePlan(season, { copy: { shifts: false } }).recurrences).toEqual([])
+  })
+})
+
+// #1010: leaders of a poste without live shift don't follow; the form says so.
+describe("leaders of a poste without live shift", () => {
+  const base = { shifts: 3, pages: 0, hasSettings: false }
+  it("hints who follows and who doesn't", () => {
+    expect(leadersChoiceHint({ ...base, leaders: 0 })).toBe("Aucun responsable sur l'événement d'origine.")
+    expect(leadersChoiceHint({ ...base, leaders: 2 })).toBe("2 responsables : chacun reçoit tout de suite un email avec son lien pour la copie.")
+    expect(leadersChoiceHint({ ...base, leaders: 2, leadersLeftOut: 1 })).toBe("2 responsables : chacun reçoit tout de suite un email avec son lien pour la copie. 1 autre, d'un poste sans créneau actif, n'est pas repris.")
+    expect(leadersChoiceHint({ ...base, leaders: 1, leadersLeftOut: 2 })).toBe("1 responsable : chacun reçoit tout de suite un email avec son lien pour la copie. 2 autres, de postes sans créneau actif, ne sont pas repris.")
+    expect(leadersChoiceHint({ ...base, leaders: 0, leadersLeftOut: 1 })).toBe("Aucun responsable repris : 1 responsable, d'un poste sans créneau actif, n'est pas repris.")
+  })
+
+  it("says in the summary that none follows when all are left out", () => {
+    const lines = duplicateSummary({ ...base, leaders: 0, leadersLeftOut: 1 }, { ...DEFAULT_COPY, leaders: true }, 0)
+    expect(lines).toContain("Aucun responsable de secteur repris : leur poste n'a aucun créneau actif.")
+    expect(duplicateSummary({ ...base, leaders: 0, leadersLeftOut: 1 }, DEFAULT_COPY, 0).some((l) => l.includes("responsable"))).toBe(false)
+  })
+
+  it("announces the leaders' line with the shifts and dates lines", () => {
+    const lines = duplicateSummary({ ...base, leaders: 1 }, { shifts: false, pages: false, leaders: true, settings: false }, 0)
+    expect(summaryAnnouncement(lines)).toBe("Résumé mis à jour : Aucun créneau : la copie démarre vide. Mêmes dates que l'original. Sans les créneaux, aucun responsable de secteur n'est repris.")
+    expect(summaryAnnouncement(duplicateSummary({ ...base, leaders: 1 }, DEFAULT_COPY, 0))).toBe("Résumé mis à jour : 3 créneaux copiés, rouverts et sans inscriptions. Mêmes dates que l'original.")
   })
 })

@@ -6,6 +6,7 @@ import { generateRecurrence, recurrenceProblem, type HolidayCalendar, type Recur
 import { civilDateSchema } from "./civil-date"
 import { duplicatedQuestionRole } from "./question-role"
 import { duplicatedParent } from "./question-follow-up"
+import { leadersOfPostes } from "./leader-postes"
 
 /**
  * Event duplication with explicit choices (#378, on top of #356). The organizer picks a title,
@@ -213,7 +214,9 @@ export function duplicatePlan(source: DuplicableEvent, options: DuplicateOptions
     recurrences,
     pages: copy.pages ? source.pages.map((p) => ({ slug: p.slug, title: p.title, content: p.content, displayOrder: p.displayOrder })) : [],
     questions: copy.settings ? duplicatedQuestions(source.questions ?? [], copiedRoles, newId) : [],
-    leaders: copy.leaders ? source.leaders : [],
+    // Only the leaders of a poste the copy has (#1010): one of a deleted poste would get a link to
+    // nothing, and so would every leader of a copy without its shifts.
+    leaders: copy.leaders ? leadersOfPostes(source.leaders, copiedRoles) : [],
   }
 }
 
@@ -236,7 +239,11 @@ function duplicatedQuestions(questions: NonNullable<DuplicableEvent["questions"]
     }))
 }
 
-export type DuplicateCounts = { shifts: number; pages: number; leaders: number; hasSettings: boolean }
+/**
+ * `leaders` counts the leaders of a poste with a live shift, the ones a copy with its shifts takes;
+ * `leadersLeftOut` the others, of a poste without live shift (#1010).
+ */
+export type DuplicateCounts = { shifts: number; pages: number; leaders: number; leadersLeftOut?: number; hasSettings: boolean }
 
 const n = (count: number, one: string, many: string) => `${count} ${count > 1 ? many : one}`
 
@@ -248,10 +255,33 @@ export function duplicateSummary(counts: DuplicateCounts, copy: CopyChoices, off
   if (offsetDays !== 0) lines.push(`Toutes les dates décalées de ${offsetDays > 0 ? "+" : ""}${n(offsetDays, "jour", "jours")}.`)
   else lines.push("Mêmes dates que l'original.")
   if (copy.pages && counts.pages > 0) lines.push(n(counts.pages, "page personnalisée copiée.", "pages personnalisées copiées."))
-  if (copy.leaders && counts.leaders > 0) lines.push(`${n(counts.leaders, "responsable de secteur repris", "responsables de secteur repris")} : chacun reçoit un email avec son lien pour la copie.`)
+  if (copy.leaders && counts.leaders > 0) {
+    lines.push(copy.shifts
+      ? `${n(counts.leaders, "responsable de secteur repris", "responsables de secteur repris")} : chacun reçoit un email avec son lien pour la copie.`
+      : "Sans les créneaux, aucun responsable de secteur n'est repris.")
+  } else if (copy.leaders && (counts.leadersLeftOut ?? 0) > 0) {
+    lines.push("Aucun responsable de secteur repris : leur poste n'a aucun créneau actif.")
+  }
   lines.push(copy.settings ? "Messages et réglages d'inscription copiés." : "Messages et réglages d'inscription remis à zéro.")
   lines.push("Les inscriptions et les jalons ne sont jamais copiés. La copie est un brouillon.")
   return lines
+}
+
+/** The hint of the « Les responsables de secteur » choice: who follows, and who doesn't (#1010). */
+export function leadersChoiceHint(c: DuplicateCounts): string {
+  const out = c.leadersLeftOut ?? 0
+  const leftOut = out === 0 ? "" : out > 1 ? `${out} autres, de postes sans créneau actif, ne sont pas repris.` : "1 autre, d'un poste sans créneau actif, n'est pas repris."
+  if (c.leaders > 0) return `${n(c.leaders, "responsable", "responsables")} : chacun reçoit tout de suite un email avec son lien pour la copie.${leftOut ? ` ${leftOut}` : ""}`
+  if (out > 0) return `Aucun responsable repris : ${out > 1 ? `${out} responsables, de postes sans créneau actif, ne sont pas repris.` : "1 responsable, d'un poste sans créneau actif, n'est pas repris."}`
+  return "Aucun responsable sur l'événement d'origine."
+}
+
+/**
+ * What a screen reader hears when a choice or the date changes: the shifts and dates lines, and
+ * the leaders' line when there is one, since unchecking the shifts changes it (#1010).
+ */
+export function summaryAnnouncement(lines: string[]): string {
+  return `Résumé mis à jour : ${[...lines.slice(0, 2), ...lines.slice(2).filter((l) => l.includes("responsable"))].join(" ")}`
 }
 
 const isRecurring = (s: DuplicableShift, source: DuplicableEvent) =>

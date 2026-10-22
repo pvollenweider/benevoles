@@ -22,6 +22,7 @@ Format basé sur [Keep a Changelog](https://keepachangelog.com/fr/1.0.0/).
 ### Corrigé
 
 - **Frise et bouton Retour** (#1004) : après une modification du libellé, des places ou du minimum enregistrée à la fermeture de la fenêtre d'un créneau, revenir sur la page des créneaux avec le bouton Retour du navigateur montre les valeurs enregistrées, et non plus les anciennes jusqu'au rechargement.
+- **Responsables de secteur d'un poste supprimé** (#1010) : dupliquer un événement ne reprend plus que les responsables d'un poste qui a encore un créneau actif, et seulement avec les créneaux ; les autres ne reçoivent plus d'email avec un lien vers un poste absent de la copie. Dans **Responsables de secteur**, un poste supprimé, ou dont tous les créneaux sont annulés, est signalé « Aucun créneau actif » ; ses responsables restent jusqu'à ce que vous les retiriez, et le retrouvent si vous recréez un poste du même nom.
 - **Doublons possibles et adresses numérotées** (#1037) : deux adresses email qui ne diffèrent que par leurs chiffres (`benevole1@…` et `benevole2@…`) ne sont plus proposées comme doublons, et une adresse courte (moins de 8 caractères avant l'arobase) n'est rapprochée que pour une seule lettre d'écart. Une organisation avec des adresses numérotées voyait des centaines de paires sans fondement.
 
 ### Sécurité

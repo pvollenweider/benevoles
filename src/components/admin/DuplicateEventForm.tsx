@@ -5,7 +5,7 @@
 
 import { useId, useRef, useState } from "react"
 import { useRouter } from "next/navigation"
-import { dayOffset, DEFAULT_COPY, duplicateSummary, type CopyChoices, type DuplicateCounts } from "@/lib/event-duplicate"
+import { dayOffset, DEFAULT_COPY, duplicateSummary, leadersChoiceHint, summaryAnnouncement, type CopyChoices, type DuplicateCounts } from "@/lib/event-duplicate"
 
 type Props = {
   eventId: string
@@ -19,7 +19,7 @@ const CHOICES: { key: keyof CopyChoices; label: string; hint: (c: DuplicateCount
   { key: "shifts", label: "Les créneaux", hint: (c) => `${c.shifts} créneau${c.shifts > 1 ? "x" : ""}, avec leurs postes, horaires, places, listes d'attente et infos pratiques. Rouverts, sans inscriptions.` },
   { key: "settings", label: "Les messages et réglages d'inscription", hint: () => "Instructions publiques, message de confirmation, rappels, téléphone obligatoire, contact le jour J, programme des spectacles." },
   { key: "pages", label: "Les pages personnalisées", hint: (c) => (c.pages ? `${c.pages} page${c.pages > 1 ? "s" : ""}.` : "Aucune page sur l'événement d'origine.") },
-  { key: "leaders", label: "Les responsables de secteur", hint: (c) => (c.leaders ? `${c.leaders} responsable${c.leaders > 1 ? "s" : ""} : chacun reçoit tout de suite un email avec son lien pour la copie.` : "Aucun responsable sur l'événement d'origine.") },
+  { key: "leaders", label: "Les responsables de secteur", hint: leadersChoiceHint },
 ]
 
 /** Duplication with explicit choices (#378): title, new start date, what follows, a summary, then the copy. */
@@ -41,7 +41,7 @@ export default function DuplicateEventForm({ eventId, sourceTitle, sourceStart, 
   const offsetDays = validDate ? dayOffset(new Date(`${sourceStart}T00:00:00Z`), startDate) : 0
   const summary = duplicateSummary(counts, copy, offsetDays).filter((l) => validDate || !l.startsWith("Mêmes dates"))
   const titleBad = title.trim().length === 0
-  const announceSummary = (c: CopyChoices, days: number) => setAnnounce(`Résumé mis à jour : ${duplicateSummary(counts, c, days).slice(0, 2).join(" ")}`)
+  const announceSummary = (c: CopyChoices, days: number) => setAnnounce(summaryAnnouncement(duplicateSummary(counts, c, days)))
 
   async function submit(e: React.FormEvent) {
     e.preventDefault()

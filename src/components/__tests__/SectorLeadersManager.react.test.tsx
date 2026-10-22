@@ -50,3 +50,28 @@ describe("SectorLeadersManager — names read in words", () => {
     expect(document.body.textContent).not.toMatch(/[·–—]/)
   })
 })
+
+// #1010: a poste without live shift (deleted, every shift cancelled) keeps its leaders, marked.
+describe("SectorLeadersManager — leaders of a poste without live shift", () => {
+  afterEach(cleanup)
+
+  it("marks the group in its heading and describes its Retirer buttons", () => {
+    render(
+      <SectorLeadersManager
+        eventId="evt-1"
+        roleNames={["Bar"]}
+        initialLeaders={[
+          { id: "l1", roleName: "Bar", name: "Léa", email: "lea@x.ch" },
+          { id: "l2", roleName: "Vestiaire", name: "Noé", email: "noe@x.ch" },
+        ]}
+      />,
+    )
+    expect(screen.getByRole("heading", { name: /^Vestiaire\W+Aucun créneau actif$/ })).toBeInTheDocument()
+    expect(screen.getByRole("heading", { name: "Bar" })).toBeInTheDocument()
+    expect(screen.getByRole("region", { name: /^Vestiaire\W+Aucun créneau actif$/ })).toBeInTheDocument()
+    const hint = "Ce poste n'a aucun créneau actif : supprimé, annulé ou pas encore créé. Ses responsables ne sont pas repris si vous dupliquez l'événement."
+    expect(screen.getByRole("button", { name: "Retirer Noé des responsables de Vestiaire" })).toHaveAccessibleDescription(hint)
+    expect(screen.getByRole("button", { name: "Retirer Léa des responsables de Bar" })).not.toHaveAccessibleDescription()
+    expect(screen.getByText("2 responsables, dont 1 sur un poste sans créneau actif")).toBeInTheDocument()
+  })
+})

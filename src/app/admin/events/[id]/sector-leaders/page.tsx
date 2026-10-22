@@ -5,6 +5,7 @@ import SectorLeadersManager from "@/components/admin/SectorLeadersManager"
 import HelpLink from "@/components/admin/HelpLink"
 import { LIVE_STATUSES } from "@/lib/registration-capacity"
 import { SECTOR_LEADER_ADMIN_SELECT } from "@/lib/admin-row-selects"
+import { livePosteNames } from "@/lib/leader-postes"
 
 export const dynamic = "force-dynamic"
 export const metadata: Metadata = { title: "Responsables de secteur" }
@@ -26,14 +27,16 @@ export default async function SectorLeadersPage({ params }: { params: Promise<{ 
       select: SECTOR_LEADER_ADMIN_SELECT,
       orderBy: [{ roleName: "asc" }, { createdAt: "asc" }],
     }),
-    db.shift.findMany({ where: { eventId: id }, select: { roleName: true }, distinct: ["roleName"] }),
+    db.shift.findMany({ where: { eventId: id }, select: { roleName: true, status: true }, distinct: ["roleName", "status"] }),
     db.registration.findMany({
       where: { eventId: id, status: { in: [...LIVE_STATUSES] } },
       select: { volunteer: { select: { id: true, firstName: true, lastName: true, email: true } }, shift: { select: { roleName: true } } },
     }),
   ])
 
-  const roleNames = [...new Set(shifts.map((s) => s.roleName))].sort((a, b) => a.localeCompare(b))
+  // The postes with a live shift (#1010): the add form suggests them, and a group of leaders whose
+  // poste isn't one of them (deleted, every shift cancelled) is shown as such.
+  const roleNames = livePosteNames(shifts)
 
   // One entry per registered volunteer, with the distinct roles they're signed up for — feeds
   // the "pick from an already-registered volunteer" shortcut instead of typing name/email by hand.
