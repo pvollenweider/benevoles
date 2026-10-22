@@ -31,6 +31,13 @@ type Org = {
   createdAt: string
   /** « 9 oct. 2026 », formatted by the page. */
   createdLabel: string
+  /** « Événement à venir le 12 nov. » (#1078), and its sort key; both computed by the page. */
+  activityLabel: string
+  activityRank: number
+  /** « Propriétaire jamais activé (lien expiré le 3 nov.) »; null when an owner account is active. */
+  ownerLabel: string | null
+  /** Whether that line calls for action (link expired, no owner account), not a link still valid. */
+  ownerAlert: boolean
   _count: OrgCount
 }
 
@@ -127,8 +134,9 @@ export default function OrgsManager({ initialOrgs, initialSort = { col: null, di
             <thead className="bg-gray-50 text-xs text-gray-500">
               <tr>
                 <SortTh col="nom" label="Nom" sortCol={sort.col} sortDir={sort.dir} onSort={toggleSort} />
-                <SortTh col="slug" label="Slug" sortCol={sort.col} sortDir={sort.dir} onSort={toggleSort} />
                 <SortTh col="etat" label="État" sortCol={sort.col} sortDir={sort.dir} onSort={toggleSort} />
+                <SortTh col="activite" label="Activité" sortCol={sort.col} sortDir={sort.dir} onSort={toggleSort} />
+                <SortTh col="slug" label="Slug" sortCol={sort.col} sortDir={sort.dir} onSort={toggleSort} />
                 <SortTh col="creation" label="Création" sortCol={sort.col} sortDir={sort.dir} onSort={toggleSort} />
                 <SortTh col="evenements" label="Événements" align="right" sortCol={sort.col} sortDir={sort.dir} onSort={toggleSort} />
                 <SortTh col="admins" label="Admins" align="right" sortCol={sort.col} sortDir={sort.dir} onSort={toggleSort} />
@@ -147,8 +155,18 @@ export default function OrgsManager({ initialOrgs, initialSort = { col: null, di
                       {org.name}
                     </Link>
                   </td>
+                  <td className="px-4 py-3 text-xs min-w-[8rem]">
+                    <span className={STATE_TONE[orgState(org)]}>{ORG_STATE_LABELS[orgState(org)]}</span>
+                    {org.ownerLabel && (
+                      <>
+                        {/* The line break alone runs both texts together in a screen reader. */}
+                        <span className="sr-only">. </span>
+                        <span className={`block mt-0.5 ${org.ownerAlert ? "text-amber-800" : "text-gray-600"}`}>{org.ownerLabel}</span>
+                      </>
+                    )}
+                  </td>
+                  <td className="px-4 py-3 text-xs min-w-[7.5rem] text-gray-700">{org.activityLabel}</td>
                   <td className="px-4 py-3 text-gray-500 font-mono text-xs">{org.slug}</td>
-                  <td className={`px-4 py-3 text-xs ${STATE_TONE[orgState(org)]}`}>{ORG_STATE_LABELS[orgState(org)]}</td>
                   <td className="px-4 py-3 text-gray-600 whitespace-nowrap">{org.createdLabel}</td>
                   <td className="px-4 py-3 text-right text-gray-600">{org._count.events}</td>
                   <td className="px-4 py-3 text-right text-gray-600">{org._count.admins}</td>

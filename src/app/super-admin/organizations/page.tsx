@@ -5,6 +5,9 @@ import OrgsManager from "@/components/super-admin/OrgsManager"
 import { orgTimeZone } from "@/lib/time-zone"
 import { ORG_SORT_COLS } from "@/lib/super-admin-tables"
 import { parseSortParam } from "@/lib/table-sort"
+import { OWNER_ROLE } from "@/lib/permissions"
+import { localToday } from "@/lib/volunteer-hours"
+import { eventActivity, eventActivityLabel, eventActivityRank, ownerActivation, ownerActivationLabel } from "@/lib/org-list-activity"
 
 export const dynamic = "force-dynamic"
 
@@ -26,6 +29,10 @@ export default async function SuperAdminOrgsPage({ searchParams }: { searchParam
       outboundEmailApprovedAt: true,
       createdAt: true,
       timeZone: true,
+      // Activity at a glance (#1078): every event's days, whatever its status, and the owner
+      // accounts' activation (only the setup link's expiry, never the link).
+      events: { select: { startDate: true, endDate: true } },
+      admins: { where: { role: OWNER_ROLE }, select: { isActive: true, setupTokenExpiresAt: true } },
       _count: {
         select: {
           events: true,
@@ -37,19 +44,31 @@ export default async function SuperAdminOrgsPage({ searchParams }: { searchParam
   })
 
   const { tri } = await searchParams
+  const now = new Date()
 
   return (
     <OrgsManager
       initialSort={parseSortParam(tri, ORG_SORT_COLS)}
-      initialOrgs={orgs.map(({ timeZone, ...o }) => ({
-        ...o,
-        createdAt: o.createdAt.toISOString(),
-        // Formatted here, in the organisation's zone: the same text on the server and in the browser.
-        createdLabel: o.createdAt.toLocaleDateString("fr-FR", { day: "numeric", month: "short", year: "numeric", timeZone: orgTimeZone({ timeZone }) }),
-        suspendedAt: o.suspendedAt?.toISOString() ?? null,
-        publicationApprovedAt: o.publicationApprovedAt?.toISOString() ?? null,
-        outboundEmailApprovedAt: o.outboundEmailApprovedAt?.toISOString() ?? null,
-      }))}
+      initialOrgs={orgs.map(({ timeZone, events, admins, ...o }) => {
+        const zone = orgTimeZone({ timeZone })
+        const today = localToday(now, zone)
+        const owner = ownerActivation(admins, now)
+        const activity = eventActivity(events.map((e) => ({ startDate: e.startDate.toISOString().slice(0, 10), endDate: e.endDate.toISOString().slice(0, 10) })), today)
+        return {
+          ...o,
+          // Computed here, with one « now »: the label and the sort key always agree.
+          activityLabel: eventActivityLabel(activity, today),
+          activityRank: eventActivityRank(activity, today),
+          ownerLabel: ownerActivationLabel(owner, now, zone),
+          ownerAlert: owner.kind === "expired" || owner.kind === "none",
+          createdAt: o.createdAt.toISOString(),
+          // Formatted here, in the organisation's zone: the same text on the server and in the browser.
+          createdLabel: o.createdAt.toLocaleDateString("fr-FR", { day: "numeric", month: "short", year: "numeric", timeZone: zone }),
+          suspendedAt: o.suspendedAt?.toISOString() ?? null,
+          publicationApprovedAt: o.publicationApprovedAt?.toISOString() ?? null,
+          outboundEmailApprovedAt: o.outboundEmailApprovedAt?.toISOString() ?? null,
+        }
+      })}
     />
   )
 }
