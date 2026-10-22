@@ -1,3 +1,4 @@
+import { visibleTextInName } from "@/__tests__/helpers/label-in-name"
 import { describe, it, expect } from "vitest"
 import { isRepeatedLetter, moveActive, panelShift, shiftOptionLabel, shiftTypeaheadText, shiftValueText, typeaheadIndex } from "../shift-select"
 import { fmtShortDate, type ShiftRef } from "../registrations-list"
@@ -9,31 +10,42 @@ const shift = (over: Partial<ShiftRef> = {}): ShiftRef => ({
 const date = fmtShortDate("2026-07-04")
 const none = { alreadyRegistered: false, conflict: false }
 
+// axe-core 4.14 (label-content-name-mismatch): the option's visible row, in its order, then the
+// filling in words.
 describe("shiftOptionLabel", () => {
   it("names an empty shift", () => {
-    expect(shiftOptionLabel(shift(), none)).toBe(`${date}, de 10h à 12h, Bar, aucun inscrit sur 3`)
+    expect(shiftOptionLabel(shift(), none)).toBe(`${date}, 10h–12h, Bar, 0/3, aucun inscrit sur 3`)
   })
 
   it("counts one, then several registrations", () => {
-    expect(shiftOptionLabel(shift({ registrationCount: 1 }), none)).toBe(`${date}, de 10h à 12h, Bar, 1 inscrit sur 3`)
-    expect(shiftOptionLabel(shift({ registrationCount: 2 }), none)).toBe(`${date}, de 10h à 12h, Bar, 2 inscrits sur 3`)
+    expect(shiftOptionLabel(shift({ registrationCount: 1 }), none)).toBe(`${date}, 10h–12h, Bar, 1/3, 1 inscrit sur 3`)
+    expect(shiftOptionLabel(shift({ registrationCount: 2 }), none)).toBe(`${date}, 10h–12h, Bar, 2/3, 2 inscrits sur 3`)
   })
 
-  it("says complet when full", () => {
-    expect(shiftOptionLabel(shift({ registrationCount: 3 }), none)).toBe(`${date}, de 10h à 12h, Bar, complet`)
-    expect(shiftOptionLabel(shift({ registrationCount: 0, capacity: 0 }), none)).toBe(`${date}, de 10h à 12h, Bar, complet`)
+  it("says Complet when full, as the pill does", () => {
+    expect(shiftOptionLabel(shift({ registrationCount: 3 }), none)).toBe(`${date}, 10h–12h, Bar, Complet`)
+    expect(shiftOptionLabel(shift({ registrationCount: 0, capacity: 0 }), none)).toBe(`${date}, 10h–12h, Bar, Complet`)
   })
 
   it("adds the label only when it differs from the role, and half hours", () => {
     expect(shiftOptionLabel(shift({ label: "Soir", startTime: "18:30", endTime: "20:00" }), none))
-      .toBe(`${date}, de 18h30 à 20h, Bar, Soir, aucun inscrit sur 3`)
+      .toBe(`${date}, 18h30–20h, Bar, Soir, 0/3, aucun inscrit sur 3`)
   })
 
-  it("says already registered and the time conflict", () => {
+  it("says already registered and the time conflict where the row shows them", () => {
     expect(shiftOptionLabel(shift({ registrationCount: 1 }), { alreadyRegistered: true, conflict: false }))
-      .toBe(`${date}, de 10h à 12h, Bar, 1 inscrit sur 3, déjà inscrit`)
+      .toBe(`${date}, 10h–12h, Bar, Déjà inscrit, 1/3, 1 inscrit sur 3`)
     expect(shiftOptionLabel(shift(), { alreadyRegistered: true, conflict: true }))
-      .toBe(`${date}, de 10h à 12h, Bar, aucun inscrit sur 3, déjà inscrit, conflit d'horaire`)
+      .toBe(`${date}, 10h–12h, Bar, Déjà inscrit, conflit, 0/3, aucun inscrit sur 3`)
+  })
+
+  it("holds the visible row in a row (WCAG 2.5.3)", () => {
+    const rows: [ShiftRef, { alreadyRegistered: boolean; conflict: boolean }, string][] = [
+      [shift(), none, `${date} 10h–12h Bar 0/3`],
+      [shift({ label: "Soir", registrationCount: 2 }), none, `${date} 10h–12h Bar · Soir 2/3`],
+      [shift({ registrationCount: 3 }), { alreadyRegistered: true, conflict: true }, `${date} 10h–12h Bar Déjà inscrit ⚠ conflit Complet`],
+    ]
+    for (const [s, f, visible] of rows) expect(visibleTextInName(visible, shiftOptionLabel(s, f)), visible).toBe(true)
   })
 
   it("starts with the visible date text", () => {

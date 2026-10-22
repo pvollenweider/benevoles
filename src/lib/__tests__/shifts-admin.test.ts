@@ -1,3 +1,4 @@
+import { visibleTextInName } from "@/__tests__/helpers/label-in-name"
 import { describe, it, expect } from "vitest"
 import {
   activeShiftsByDay,
@@ -12,7 +13,9 @@ import {
   shiftListStatus,
   sortShifts,
   spokenPlaces,
+  timelineBarDescription,
   timelineBarName,
+  timelineBarTime,
   timelineBarPlaces,
 } from "../shifts-admin"
 
@@ -118,19 +121,29 @@ describe("spoken shift wording", () => {
     expect(spokenPlaces(0, 2)).toBe("0 inscrit sur 2")
   })
 
-  it("timelineBarName starts with the role, then the time and places in words, and says when it is full", () => {
-    expect(timelineBarName(shift, false)).toBe("Bar, Soir, de 10h30 à 12h15, 3 inscrits sur 5, 2 libres, modifier")
-    expect(timelineBarName({ ...shift, label: "Bar", registrationCount: 5 }, true)).toBe("Bar, de 10h30 à 12h15, 5 inscrits sur 5, complet, modifier")
-    expect(timelineBarName({ ...shift, startTime: "22:00", endTime: "02:00" }, false)).toBe("Bar, Soir, de 22h à 2h, jusqu'au lendemain, 3 inscrits sur 5, 2 libres, modifier")
+  // axe-core 4.14 (label-content-name-mismatch): the bar's visible words, in a row, in its name.
+  it("timelineBarName says the role, then the bar's visible text in its order, then the action", () => {
+    expect(timelineBarName(shift)).toBe("Bar, 10h30–12h15, Soir, 3/5 inscrits, 2 libres, modifier")
+    expect(timelineBarName({ ...shift, label: "Bar", registrationCount: 5 })).toBe("Bar, 10h30–12h15, 5/5 inscrits, Complet, modifier")
+    expect(timelineBarName({ ...shift, registrationCount: 4 })).toBe("Bar, 10h30–12h15, Soir, 4/5 inscrits, 1 libre, modifier")
+    expect(timelineBarName({ ...shift, minAge: 18 })).toBe("Bar, 10h30–12h15, Soir, 18 ans min., 3/5 inscrits, 2 libres, modifier")
   })
 
-  it("timelineBarName says the free places in the bar's words, singular or plural (#925, 2.5.3)", () => {
-    expect(timelineBarName({ ...shift, registrationCount: 4 }, false)).toBe("Bar, Soir, de 10h30 à 12h15, 4 inscrits sur 5, 1 libre, modifier")
+  it("timelineBarName holds the bar's visible text, the minimum age and the minimum included (WCAG 2.5.3)", () => {
+    const cases = [shift, { ...shift, label: "Bar" }, { ...shift, minAge: 16 }, { ...shift, registrationCount: 1, minVolunteers: 2 }, { ...shift, registrationCount: 5 }, { ...shift, startTime: "22:00", endTime: "02:00" }]
+    for (const s of cases) {
+      const visible = [timelineBarTime(s), s.label !== s.roleName ? s.label : null, timelineBarPlaces(s)].filter(Boolean).join(" ")
+      expect(visibleTextInName(visible, timelineBarName(s)), timelineBarName(s)).toBe(true)
+    }
   })
 
-  it("timelineBarName says the minimum age, like the list view (#925)", () => {
-    expect(timelineBarName({ ...shift, minAge: 18 }, false)).toBe("Bar, Soir, de 10h30 à 12h15, 3 inscrits sur 5, 2 libres, 18 ans minimum, modifier")
-    expect(timelineBarName({ ...shift, minAge: null }, false)).toBe("Bar, Soir, de 10h30 à 12h15, 3 inscrits sur 5, 2 libres, modifier")
+  it("timelineBarDescription says the time and places in words, and when it is full (#587)", () => {
+    expect(timelineBarDescription(shift, false)).toBe("de 10h30 à 12h15, 3 inscrits sur 5, 2 libres")
+    expect(timelineBarDescription({ ...shift, registrationCount: 5 }, true)).toBe("de 10h30 à 12h15, 5 inscrits sur 5, complet")
+    expect(timelineBarDescription({ ...shift, startTime: "22:00", endTime: "02:00" }, false)).toBe("de 22h à 2h, jusqu'au lendemain, 3 inscrits sur 5, 2 libres")
+    expect(timelineBarDescription({ ...shift, registrationCount: 4 }, false)).toBe("de 10h30 à 12h15, 4 inscrits sur 5, 1 libre")
+    expect(timelineBarDescription({ ...shift, minAge: 18 }, false)).toBe("de 10h30 à 12h15, 3 inscrits sur 5, 2 libres, 18 ans minimum")
+    for (const s of [shift, { ...shift, startTime: "22:00", endTime: "02:00" }]) expect(timelineBarDescription(s, false)).not.toMatch(/[–·/]/)
   })
 })
 

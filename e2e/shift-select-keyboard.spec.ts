@@ -159,8 +159,8 @@ test("both shift pickers fit a 320 px wide screen", async ({ page }) => {
   await page.keyboard.press("ArrowDown")
   const list = page.getByRole("listbox", { name: "Créneau", exact: true })
   await expectListFits(page, list)
-  await expectBadgeWhole(list, /conflit d'horaire/, "⚠ conflit")
-  await expectBadgeWhole(list, /déjà inscrit/, "Déjà inscrit")
+  await expectBadgeWhole(list, /, conflit, /, "⚠ conflit")
+  await expectBadgeWhole(list, /, Déjà inscrit, /, "Déjà inscrit")
   await expect(list.getByText("Vestiaire des artistes, entrée nord", { exact: false })).toBeInViewport({ ratio: 1 })
 
   // The conflicting shift: its warning fits, describes the field and does not make it invalid.

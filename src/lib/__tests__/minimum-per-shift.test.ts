@@ -1,6 +1,6 @@
 import { describe, it, expect } from "vitest"
 import { roleMinimumPlan } from "../shift-quick-edit"
-import { timelineBarName, timelineBarPlaces } from "../shifts-admin"
+import { timelineBarDescription, timelineBarName, timelineBarPlaces } from "../shifts-admin"
 import { attentionItems, type AttentionEvent } from "../attention"
 import { eventSummary } from "../event-summary"
 import { effectifCell, minimumLegend, type SheetShift } from "../print-sheets"
@@ -54,10 +54,13 @@ describe("Frise bars", () => {
     expect(timelineBarPlaces({ ...bar, registrationCount: 1, minVolunteers: null })).toBe("1/4 inscrit · 3 libres")
   })
 
-  it("say it in words in their name", () => {
-    expect(timelineBarName({ ...bar, registrationCount: 1, minVolunteers: 2 }, false)).toBe("Bar, de 10h à 12h, 1 inscrit sur 4, sous le minimum de 2, modifier")
-    expect(timelineBarName({ ...bar, registrationCount: 3, minVolunteers: 2 }, false)).toBe("Bar, de 10h à 12h, 3 inscrits sur 4, minimum atteint, modifier")
-    expect(timelineBarName({ ...bar, registrationCount: 4, minVolunteers: 2 }, true)).toBe("Bar, de 10h à 12h, 4 inscrits sur 4, complet, modifier")
+  it("show their visible text in their name, in words in their description", () => {
+    expect(timelineBarName({ ...bar, registrationCount: 1, minVolunteers: 2 })).toBe("Bar, 10h–12h, 1/4 inscrit, sous le minimum (2), modifier")
+    expect(timelineBarName({ ...bar, registrationCount: 3, minVolunteers: 2 })).toBe("Bar, 10h–12h, 3/4 inscrits, minimum atteint, modifier")
+    expect(timelineBarName({ ...bar, registrationCount: 4, minVolunteers: 2 })).toBe("Bar, 10h–12h, 4/4 inscrits, Complet, modifier")
+    expect(timelineBarDescription({ ...bar, registrationCount: 1, minVolunteers: 2 }, false)).toBe("de 10h à 12h, 1 inscrit sur 4, sous le minimum de 2")
+    expect(timelineBarDescription({ ...bar, registrationCount: 3, minVolunteers: 2 }, false)).toBe("de 10h à 12h, 3 inscrits sur 4, minimum atteint")
+    expect(timelineBarDescription({ ...bar, registrationCount: 4, minVolunteers: 2 }, true)).toBe("de 10h à 12h, 4 inscrits sur 4, complet")
   })
 })
 

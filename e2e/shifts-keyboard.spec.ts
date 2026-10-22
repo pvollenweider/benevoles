@@ -322,7 +322,7 @@ test("list view: « Modifier » and « Supprimer » are named with their shift, 
 test("Frise popover, « Voir les inscriptions » with the keyboard: saves the places first, stays put when the save fails", async ({ page }) => {
   await openShiftsPage(page)
   const shiftsUrl = page.url()
-  const bar = page.getByRole("button", { name: /^Bar, de 10h à 12h/ })
+  const bar = page.getByRole("button", { name: /^Bar, 10h–12h/ })
   await bar.focus()
   await page.keyboard.press("Enter")
   const popover = page.getByRole("dialog").filter({ has: page.getByRole("heading", { name: /^Bar ?, de 10h à 12h/ }) })
@@ -364,7 +364,7 @@ test("Frise popover, « Voir les inscriptions » with the keyboard: saves the pl
 test("Frise popover: places saved on close are still shown after an admin link and Back", async ({ page }) => {
   await openShiftsPage(page)
   const shiftsUrl = page.url()
-  const bar = page.getByRole("button", { name: /^Bar, de 10h à 12h/ })
+  const bar = page.getByRole("button", { name: /^Bar, 10h–12h/ })
   await bar.focus()
   await page.keyboard.press("Enter")
   const popover = page.getByRole("dialog").filter({ has: page.getByRole("heading", { name: /^Bar ?, de 10h à 12h/ }) })
@@ -392,7 +392,7 @@ test("Frise popover: places saved on close are still shown after an admin link a
 test("Frise popover: places saved by clicking an admin link are still shown after Back", async ({ page }) => {
   await openShiftsPage(page)
   const shiftsUrl = page.url()
-  const bar = page.getByRole("button", { name: /^Bar, de 10h à 12h/ })
+  const bar = page.getByRole("button", { name: /^Bar, 10h–12h/ })
   await bar.click()
   const popover = page.getByRole("dialog").filter({ has: page.getByRole("heading", { name: /^Bar ?, de 10h à 12h/ }) })
   await popover.getByLabel("Places").fill("9")
