@@ -7,7 +7,8 @@ import { getBarClasses } from "@/lib/roles"
 import { toMin, toMinEnd, fmt, assignLanes, crossesMidnight, hourLabel, showSpan, type GanttShow } from "@/lib/gantt-utils"
 import { useState } from "react"
 import { barText, shiftViewState, type HeldKind, type TimelineShift } from "@/lib/public-timeline"
-import { ROSTER_FRISE_PROMPT, type ShiftRosterEntry } from "@/lib/shift-roster"
+import type { ShiftRosterEntry } from "@/lib/shift-roster"
+import { ROSTER_FRISE_PROMPT } from "@/lib/shift-roster-text"
 import { RosterSummary, rosterSpokenSummary } from "@/components/public/RosterName"
 
 export { fmt }

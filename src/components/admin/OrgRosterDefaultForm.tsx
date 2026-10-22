@@ -5,7 +5,7 @@
 
 import { useState } from "react"
 import { announce } from "@/lib/announce"
-import { ROSTER_ORG_DEFAULT_HINT, ROSTER_ORG_DEFAULT_LABEL } from "@/lib/shift-roster"
+import { ROSTER_ORG_DEFAULT_HINT, ROSTER_ORG_DEFAULT_LABEL } from "@/lib/shift-roster-text"
 
 /**
  * « Qui est inscrit » (#1068), Paramètres (owners): the value the organisation's next new events

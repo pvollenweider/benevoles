@@ -1,0 +1,1268 @@
+// Vitest Snapshot v1, https://vitest.dev/guide/snapshot.html
+
+exports[`shift roster routes characterization (#1068) > GET of every personal link of the event 1`] = `
+{
+  "nope": {
+    "body": {
+      "error": "Inscription introuvable ou déjà annulée.",
+    },
+    "cache": "private, no-store",
+    "status": 404,
+  },
+  "tok-aline": {
+    "body": {
+      "available": true,
+      "displayName": "Aline M.",
+      "shifts": [
+        {
+          "date": "2099-10-01T00:00:00.000Z",
+          "endTime": "12:00",
+          "label": "Bar",
+          "names": [
+            "Odile A.",
+          ],
+          "othersCount": 4,
+          "own": true,
+          "shiftId": "bar",
+          "startTime": "10:00",
+        },
+        {
+          "date": "2099-10-01T00:00:00.000Z",
+          "endTime": "16:00",
+          "label": "Accueil",
+          "names": [],
+          "othersCount": 3,
+          "own": true,
+          "shiftId": "accueil",
+          "startTime": "14:00",
+        },
+        {
+          "date": "2099-10-02T00:00:00.000Z",
+          "endTime": "10:00",
+          "label": "Rangement",
+          "names": [
+            "Léa F.",
+            "Léa F.",
+          ],
+          "othersCount": 2,
+          "own": false,
+          "shiftId": "rangement",
+          "startTime": "08:00",
+        },
+      ],
+      "state": "visible",
+    },
+    "cache": "private, no-store",
+    "status": 200,
+  },
+  "tok-annule": {
+    "body": {
+      "available": true,
+      "displayName": "Aline M.",
+      "shifts": [
+        {
+          "date": "2099-10-01T00:00:00.000Z",
+          "endTime": "12:00",
+          "label": "Bar",
+          "names": [
+            "Odile A.",
+          ],
+          "othersCount": 4,
+          "own": true,
+          "shiftId": "bar",
+          "startTime": "10:00",
+        },
+        {
+          "date": "2099-10-01T00:00:00.000Z",
+          "endTime": "16:00",
+          "label": "Accueil",
+          "names": [],
+          "othersCount": 3,
+          "own": true,
+          "shiftId": "accueil",
+          "startTime": "14:00",
+        },
+        {
+          "date": "2099-10-02T00:00:00.000Z",
+          "endTime": "10:00",
+          "label": "Rangement",
+          "names": [
+            "Léa F.",
+            "Léa F.",
+          ],
+          "othersCount": 2,
+          "own": false,
+          "shiftId": "rangement",
+          "startTime": "08:00",
+        },
+      ],
+      "state": "visible",
+    },
+    "cache": "private, no-store",
+    "status": 200,
+  },
+  "tok-bob": {
+    "body": {
+      "available": true,
+      "displayName": "Bob B.",
+      "shifts": [
+        {
+          "date": "2099-10-01T00:00:00.000Z",
+          "endTime": "12:00",
+          "label": "Autre",
+          "names": [],
+          "othersCount": 0,
+          "own": true,
+          "shiftId": "b-shift",
+          "startTime": "10:00",
+        },
+      ],
+      "state": "visible",
+    },
+    "cache": "private, no-store",
+    "status": 200,
+  },
+  "tok-bruno": {
+    "body": {
+      "available": true,
+      "displayName": "Bruno K.",
+      "shifts": [
+        {
+          "date": "2099-10-01T00:00:00.000Z",
+          "endTime": "12:00",
+          "label": "Bar",
+          "names": [
+            "Aline M.",
+            "Odile A.",
+          ],
+          "othersCount": 3,
+          "own": true,
+          "shiftId": "bar",
+          "startTime": "10:00",
+        },
+        {
+          "date": "2099-10-01T00:00:00.000Z",
+          "endTime": "16:00",
+          "label": "Accueil",
+          "names": [
+            "Aline M.",
+          ],
+          "othersCount": 3,
+          "own": false,
+          "shiftId": "accueil",
+          "startTime": "14:00",
+        },
+        {
+          "date": "2099-10-02T00:00:00.000Z",
+          "endTime": "10:00",
+          "label": "Rangement",
+          "names": [
+            "Léa F.",
+            "Léa F.",
+          ],
+          "othersCount": 2,
+          "own": false,
+          "shiftId": "rangement",
+          "startTime": "08:00",
+        },
+      ],
+      "state": "pending",
+    },
+    "cache": "private, no-store",
+    "status": 200,
+  },
+  "tok-chloe": {
+    "body": {
+      "available": true,
+      "displayName": "Chloé R.",
+      "shifts": [
+        {
+          "date": "2099-10-01T00:00:00.000Z",
+          "endTime": "12:00",
+          "label": "Bar",
+          "names": [
+            "Aline M.",
+            "Odile A.",
+          ],
+          "othersCount": 4,
+          "own": false,
+          "shiftId": "bar",
+          "startTime": "10:00",
+        },
+        {
+          "date": "2099-10-01T00:00:00.000Z",
+          "endTime": "16:00",
+          "label": "Accueil",
+          "names": [
+            "Aline M.",
+          ],
+          "othersCount": 2,
+          "own": true,
+          "shiftId": "accueil",
+          "startTime": "14:00",
+        },
+        {
+          "date": "2099-10-02T00:00:00.000Z",
+          "endTime": "10:00",
+          "label": "Rangement",
+          "names": [
+            "Léa F.",
+            "Léa F.",
+          ],
+          "othersCount": 2,
+          "own": false,
+          "shiftId": "rangement",
+          "startTime": "08:00",
+        },
+      ],
+      "state": "hidden",
+    },
+    "cache": "private, no-store",
+    "status": 200,
+  },
+  "tok-emile": {
+    "body": {
+      "available": true,
+      "displayName": "Émile Z.",
+      "shifts": [
+        {
+          "date": "2099-10-01T00:00:00.000Z",
+          "endTime": "12:00",
+          "label": "Bar",
+          "names": [
+            "Aline M.",
+            "Odile A.",
+          ],
+          "othersCount": 4,
+          "own": false,
+          "shiftId": "bar",
+          "startTime": "10:00",
+        },
+        {
+          "date": "2099-10-01T00:00:00.000Z",
+          "endTime": "16:00",
+          "label": "Accueil",
+          "names": [
+            "Aline M.",
+          ],
+          "othersCount": 3,
+          "own": false,
+          "shiftId": "accueil",
+          "startTime": "14:00",
+        },
+        {
+          "date": "2099-10-02T00:00:00.000Z",
+          "endTime": "10:00",
+          "label": "Rangement",
+          "names": [
+            "Léa F.",
+            "Léa F.",
+          ],
+          "othersCount": 1,
+          "own": true,
+          "shiftId": "rangement",
+          "startTime": "08:00",
+        },
+      ],
+      "state": "hidden",
+    },
+    "cache": "private, no-store",
+    "status": 200,
+  },
+  "tok-eric": {
+    "body": {
+      "available": false,
+    },
+    "cache": "private, no-store",
+    "status": 200,
+  },
+  "tok-max": {
+    "body": {
+      "available": true,
+      "displayName": "Max M.",
+      "shifts": [
+        {
+          "date": "2099-10-01T00:00:00.000Z",
+          "endTime": "12:00",
+          "label": "Bar",
+          "names": [
+            "Aline M.",
+            "Odile A.",
+          ],
+          "othersCount": 3,
+          "own": true,
+          "shiftId": "bar",
+          "startTime": "10:00",
+        },
+        {
+          "date": "2099-10-01T00:00:00.000Z",
+          "endTime": "16:00",
+          "label": "Accueil",
+          "names": [
+            "Aline M.",
+          ],
+          "othersCount": 3,
+          "own": false,
+          "shiftId": "accueil",
+          "startTime": "14:00",
+        },
+        {
+          "date": "2099-10-02T00:00:00.000Z",
+          "endTime": "10:00",
+          "label": "Rangement",
+          "names": [
+            "Léa F.",
+            "Léa F.",
+          ],
+          "othersCount": 2,
+          "own": false,
+          "shiftId": "rangement",
+          "startTime": "08:00",
+        },
+      ],
+      "state": "minor",
+    },
+    "cache": "private, no-store",
+    "status": 200,
+  },
+  "tok-me": {
+    "body": {
+      "available": true,
+      "displayName": "Moi M.",
+      "shifts": [
+        {
+          "date": "2099-10-01T00:00:00.000Z",
+          "endTime": "12:00",
+          "label": "Bar",
+          "names": [
+            "Aline M.",
+            "Odile A.",
+          ],
+          "othersCount": 3,
+          "own": true,
+          "shiftId": "bar",
+          "startTime": "10:00",
+        },
+        {
+          "date": "2099-10-01T00:00:00.000Z",
+          "endTime": "16:00",
+          "label": "Accueil",
+          "names": [
+            "Aline M.",
+          ],
+          "othersCount": 3,
+          "own": false,
+          "shiftId": "accueil",
+          "startTime": "14:00",
+        },
+        {
+          "date": "2099-10-02T00:00:00.000Z",
+          "endTime": "10:00",
+          "label": "Rangement",
+          "names": [
+            "Léa F.",
+            "Léa F.",
+          ],
+          "othersCount": 1,
+          "own": true,
+          "shiftId": "rangement",
+          "startTime": "08:00",
+        },
+      ],
+      "state": "hidden",
+    },
+    "cache": "private, no-store",
+    "status": 200,
+  },
+  "tok-me-2": {
+    "body": {
+      "available": true,
+      "displayName": "Moi M.",
+      "shifts": [
+        {
+          "date": "2099-10-01T00:00:00.000Z",
+          "endTime": "12:00",
+          "label": "Bar",
+          "names": [
+            "Aline M.",
+            "Odile A.",
+          ],
+          "othersCount": 3,
+          "own": true,
+          "shiftId": "bar",
+          "startTime": "10:00",
+        },
+        {
+          "date": "2099-10-01T00:00:00.000Z",
+          "endTime": "16:00",
+          "label": "Accueil",
+          "names": [
+            "Aline M.",
+          ],
+          "othersCount": 3,
+          "own": false,
+          "shiftId": "accueil",
+          "startTime": "14:00",
+        },
+        {
+          "date": "2099-10-02T00:00:00.000Z",
+          "endTime": "10:00",
+          "label": "Rangement",
+          "names": [
+            "Léa F.",
+            "Léa F.",
+          ],
+          "othersCount": 1,
+          "own": true,
+          "shiftId": "rangement",
+          "startTime": "08:00",
+        },
+      ],
+      "state": "hidden",
+    },
+    "cache": "private, no-store",
+    "status": 200,
+  },
+  "tok-mona": {
+    "body": {
+      "available": false,
+    },
+    "cache": "private, no-store",
+    "status": 200,
+  },
+  "tok-odile": {
+    "body": {
+      "available": true,
+      "displayName": "Odile A.",
+      "shifts": [
+        {
+          "date": "2099-10-01T00:00:00.000Z",
+          "endTime": "12:00",
+          "label": "Bar",
+          "names": [
+            "Aline M.",
+          ],
+          "othersCount": 4,
+          "own": true,
+          "shiftId": "bar",
+          "startTime": "10:00",
+        },
+        {
+          "date": "2099-10-01T00:00:00.000Z",
+          "endTime": "16:00",
+          "label": "Accueil",
+          "names": [
+            "Aline M.",
+          ],
+          "othersCount": 3,
+          "own": false,
+          "shiftId": "accueil",
+          "startTime": "14:00",
+        },
+        {
+          "date": "2099-10-02T00:00:00.000Z",
+          "endTime": "10:00",
+          "label": "Rangement",
+          "names": [
+            "Léa F.",
+            "Léa F.",
+          ],
+          "othersCount": 2,
+          "own": false,
+          "shiftId": "rangement",
+          "startTime": "08:00",
+        },
+      ],
+      "state": "visible_confirmed",
+    },
+    "cache": "private, no-store",
+    "status": 200,
+  },
+  "tok-wanda": {
+    "body": {
+      "available": false,
+    },
+    "cache": "private, no-store",
+    "status": 200,
+  },
+}
+`;
+
+exports[`shift roster routes characterization (#1068) > GET of member invitations: invited, confirmed, declined, another event 1`] = `
+{
+  "inv-declined": {
+    "body": {
+      "available": true,
+      "shifts": [
+        {
+          "date": "2099-10-01T00:00:00.000Z",
+          "endTime": "12:00",
+          "label": "Bar",
+          "names": [
+            "Aline M.",
+            "Odile A.",
+          ],
+          "othersCount": 4,
+          "own": false,
+          "shiftId": "bar",
+          "startTime": "10:00",
+        },
+        {
+          "date": "2099-10-01T00:00:00.000Z",
+          "endTime": "16:00",
+          "label": "Accueil",
+          "names": [
+            "Aline M.",
+          ],
+          "othersCount": 2,
+          "own": true,
+          "shiftId": "accueil",
+          "startTime": "14:00",
+        },
+        {
+          "date": "2099-10-02T00:00:00.000Z",
+          "endTime": "10:00",
+          "label": "Rangement",
+          "names": [
+            "Léa F.",
+            "Léa F.",
+          ],
+          "othersCount": 2,
+          "own": false,
+          "shiftId": "rangement",
+          "startTime": "08:00",
+        },
+      ],
+    },
+    "cache": "private, no-store",
+    "status": 200,
+  },
+  "inv-guest": {
+    "body": {
+      "available": true,
+      "shifts": [
+        {
+          "date": "2099-10-01T00:00:00.000Z",
+          "endTime": "12:00",
+          "label": "Bar",
+          "names": [
+            "Aline M.",
+          ],
+          "othersCount": 5,
+          "own": false,
+          "shiftId": "bar",
+          "startTime": "10:00",
+        },
+        {
+          "date": "2099-10-01T00:00:00.000Z",
+          "endTime": "16:00",
+          "label": "Accueil",
+          "names": [
+            "Aline M.",
+          ],
+          "othersCount": 3,
+          "own": false,
+          "shiftId": "accueil",
+          "startTime": "14:00",
+        },
+        {
+          "date": "2099-10-02T00:00:00.000Z",
+          "endTime": "10:00",
+          "label": "Rangement",
+          "names": [
+            "Léa F.",
+          ],
+          "othersCount": 3,
+          "own": false,
+          "shiftId": "rangement",
+          "startTime": "08:00",
+        },
+      ],
+    },
+    "cache": "private, no-store",
+    "status": 200,
+  },
+  "inv-guest/autre": {
+    "body": {
+      "error": "Lien invalide",
+    },
+    "cache": "private, no-store",
+    "status": 404,
+  },
+  "inv-guest/now confirmed": {
+    "body": {
+      "available": true,
+      "shifts": [
+        {
+          "date": "2099-10-01T00:00:00.000Z",
+          "endTime": "12:00",
+          "label": "Bar",
+          "names": [
+            "Aline M.",
+            "Odile A.",
+          ],
+          "othersCount": 4,
+          "own": false,
+          "shiftId": "bar",
+          "startTime": "10:00",
+        },
+        {
+          "date": "2099-10-01T00:00:00.000Z",
+          "endTime": "16:00",
+          "label": "Accueil",
+          "names": [
+            "Aline M.",
+          ],
+          "othersCount": 3,
+          "own": false,
+          "shiftId": "accueil",
+          "startTime": "14:00",
+        },
+        {
+          "date": "2099-10-01T00:00:00.000Z",
+          "endTime": "18:00",
+          "label": "Vide",
+          "names": [],
+          "othersCount": 0,
+          "own": true,
+          "shiftId": "vide",
+          "startTime": "16:00",
+        },
+        {
+          "date": "2099-10-02T00:00:00.000Z",
+          "endTime": "10:00",
+          "label": "Rangement",
+          "names": [
+            "Léa F.",
+            "Léa F.",
+          ],
+          "othersCount": 2,
+          "own": false,
+          "shiftId": "rangement",
+          "startTime": "08:00",
+        },
+      ],
+    },
+    "cache": "private, no-store",
+    "status": 200,
+  },
+  "inv-member": {
+    "body": {
+      "available": true,
+      "shifts": [
+        {
+          "date": "2099-10-01T00:00:00.000Z",
+          "endTime": "12:00",
+          "label": "Bar",
+          "names": [
+            "Aline M.",
+            "Odile A.",
+          ],
+          "othersCount": 4,
+          "own": false,
+          "shiftId": "bar",
+          "startTime": "10:00",
+        },
+        {
+          "date": "2099-10-01T00:00:00.000Z",
+          "endTime": "16:00",
+          "label": "Accueil",
+          "names": [
+            "Aline M.",
+          ],
+          "othersCount": 2,
+          "own": true,
+          "shiftId": "accueil",
+          "startTime": "14:00",
+        },
+        {
+          "date": "2099-10-02T00:00:00.000Z",
+          "endTime": "10:00",
+          "label": "Rangement",
+          "names": [
+            "Léa F.",
+            "Léa F.",
+          ],
+          "othersCount": 2,
+          "own": false,
+          "shiftId": "rangement",
+          "startTime": "08:00",
+        },
+      ],
+    },
+    "cache": "private, no-store",
+    "status": 200,
+  },
+  "unknown": {
+    "body": {
+      "error": "Lien invalide",
+    },
+    "cache": "private, no-store",
+    "status": 404,
+  },
+}
+`;
+
+exports[`shift roster routes characterization (#1068) > GET when the roster is closed 1`] = `
+[
+  {
+    "body": {
+      "available": false,
+    },
+    "cache": "private, no-store",
+    "status": 200,
+  },
+  {
+    "body": {
+      "error": "Lien invalide",
+    },
+    "cache": "private, no-store",
+    "status": 404,
+  },
+  {
+    "body": {
+      "available": false,
+    },
+    "cache": "private, no-store",
+    "status": 200,
+  },
+  {
+    "body": {
+      "error": "Lien invalide",
+    },
+    "cache": "private, no-store",
+    "status": 404,
+  },
+  {
+    "body": {
+      "available": false,
+    },
+    "cache": "private, no-store",
+    "status": 200,
+  },
+  {
+    "body": {
+      "error": "Lien invalide",
+    },
+    "cache": "private, no-store",
+    "status": 404,
+  },
+]
+`;
+
+exports[`shift roster routes characterization (#1068) > PATCH: show, widen, hide, a minor, a bad request 1`] = `
+{
+  "consents": [
+    {
+      "noticeVersion": "2026-10-21.2",
+      "source": "personal_page",
+      "status": "hidden",
+      "volunteerId": "me",
+    },
+    {
+      "noticeVersion": "2026-10-21.2",
+      "source": undefined,
+      "status": "visible",
+      "volunteerId": "aline",
+    },
+    {
+      "noticeVersion": "2026-10-21.2",
+      "source": "personal_page",
+      "status": "visible",
+      "volunteerId": "odile",
+    },
+    {
+      "noticeVersion": "2026-10-21",
+      "source": "personal_page",
+      "status": "visible",
+      "volunteerId": "bruno",
+    },
+    {
+      "noticeVersion": "2026-10-21.2",
+      "source": undefined,
+      "status": "hidden",
+      "volunteerId": "chloe",
+    },
+    {
+      "noticeVersion": "2026-10-21.2",
+      "source": "personal_page",
+      "status": "hidden",
+      "volunteerId": "max",
+    },
+    {
+      "noticeVersion": "2026-10-21.2",
+      "source": undefined,
+      "status": "visible",
+      "volunteerId": "eric",
+    },
+    {
+      "noticeVersion": "2026-10-21.2",
+      "source": undefined,
+      "status": "visible",
+      "volunteerId": "mona",
+    },
+    {
+      "noticeVersion": "2026-10-21.2",
+      "source": undefined,
+      "status": "visible",
+      "volunteerId": "lea1",
+    },
+    {
+      "noticeVersion": "2026-10-21",
+      "source": undefined,
+      "status": "visible",
+      "volunteerId": "lea2",
+    },
+    {
+      "noticeVersion": "1999-01-01",
+      "source": undefined,
+      "status": "visible",
+      "volunteerId": "emile",
+    },
+    {
+      "noticeVersion": "2026-10-21.2",
+      "source": undefined,
+      "status": "visible",
+      "volunteerId": "wanda",
+    },
+    {
+      "noticeVersion": "2026-10-21.2",
+      "source": undefined,
+      "status": "visible",
+      "volunteerId": "bob",
+    },
+  ],
+  "log": [
+    {
+      "action": "roster.choice_changed",
+      "actor": {
+        "id": "me",
+        "type": "volunteer",
+      },
+      "changes": {
+        "rosterName": {
+          "from": "hidden",
+          "to": "visible",
+        },
+      },
+    },
+    {
+      "action": "roster.choice_changed",
+      "actor": {
+        "id": "me",
+        "type": "volunteer",
+      },
+      "changes": {
+        "rosterName": {
+          "from": "visible",
+          "to": "hidden",
+        },
+      },
+    },
+    {
+      "action": "roster.choice_changed",
+      "actor": {
+        "id": "odile",
+        "type": "volunteer",
+      },
+      "changes": {
+        "rosterAudience": {
+          "from": "confirmed",
+          "to": "confirmed_and_invited",
+        },
+      },
+    },
+    {
+      "action": "roster.choice_changed",
+      "actor": {
+        "id": "bruno",
+        "type": "volunteer",
+      },
+      "changes": {
+        "rosterName": {
+          "from": "pending",
+          "to": "visible",
+        },
+      },
+    },
+    {
+      "action": "roster.choice_changed",
+      "actor": {
+        "id": "max",
+        "type": "volunteer",
+      },
+      "changes": {
+        "rosterName": {
+          "from": "visible",
+          "to": "hidden",
+        },
+      },
+    },
+  ],
+  "out": [
+    {
+      "body": {
+        "available": true,
+        "displayName": "Moi M.",
+        "shifts": [
+          {
+            "date": "2099-10-01T00:00:00.000Z",
+            "endTime": "12:00",
+            "label": "Bar",
+            "names": [
+              "Aline M.",
+              "Odile A.",
+            ],
+            "othersCount": 3,
+            "own": true,
+            "shiftId": "bar",
+            "startTime": "10:00",
+          },
+          {
+            "date": "2099-10-01T00:00:00.000Z",
+            "endTime": "16:00",
+            "label": "Accueil",
+            "names": [
+              "Aline M.",
+            ],
+            "othersCount": 3,
+            "own": false,
+            "shiftId": "accueil",
+            "startTime": "14:00",
+          },
+          {
+            "date": "2099-10-02T00:00:00.000Z",
+            "endTime": "10:00",
+            "label": "Rangement",
+            "names": [
+              "Léa F.",
+              "Léa F.",
+            ],
+            "othersCount": 1,
+            "own": true,
+            "shiftId": "rangement",
+            "startTime": "08:00",
+          },
+        ],
+        "state": "visible",
+      },
+      "cache": "private, no-store",
+      "status": 200,
+    },
+    {
+      "body": {
+        "available": true,
+        "displayName": "Moi M.",
+        "shifts": [
+          {
+            "date": "2099-10-01T00:00:00.000Z",
+            "endTime": "12:00",
+            "label": "Bar",
+            "names": [
+              "Aline M.",
+              "Odile A.",
+            ],
+            "othersCount": 3,
+            "own": true,
+            "shiftId": "bar",
+            "startTime": "10:00",
+          },
+          {
+            "date": "2099-10-01T00:00:00.000Z",
+            "endTime": "16:00",
+            "label": "Accueil",
+            "names": [
+              "Aline M.",
+            ],
+            "othersCount": 3,
+            "own": false,
+            "shiftId": "accueil",
+            "startTime": "14:00",
+          },
+          {
+            "date": "2099-10-02T00:00:00.000Z",
+            "endTime": "10:00",
+            "label": "Rangement",
+            "names": [
+              "Léa F.",
+              "Léa F.",
+            ],
+            "othersCount": 1,
+            "own": true,
+            "shiftId": "rangement",
+            "startTime": "08:00",
+          },
+        ],
+        "state": "visible",
+      },
+      "cache": "private, no-store",
+      "status": 200,
+    },
+    {
+      "body": {
+        "available": true,
+        "displayName": "Moi M.",
+        "shifts": [
+          {
+            "date": "2099-10-01T00:00:00.000Z",
+            "endTime": "12:00",
+            "label": "Bar",
+            "names": [
+              "Aline M.",
+              "Odile A.",
+            ],
+            "othersCount": 3,
+            "own": true,
+            "shiftId": "bar",
+            "startTime": "10:00",
+          },
+          {
+            "date": "2099-10-01T00:00:00.000Z",
+            "endTime": "16:00",
+            "label": "Accueil",
+            "names": [
+              "Aline M.",
+            ],
+            "othersCount": 3,
+            "own": false,
+            "shiftId": "accueil",
+            "startTime": "14:00",
+          },
+          {
+            "date": "2099-10-02T00:00:00.000Z",
+            "endTime": "10:00",
+            "label": "Rangement",
+            "names": [
+              "Léa F.",
+              "Léa F.",
+            ],
+            "othersCount": 1,
+            "own": true,
+            "shiftId": "rangement",
+            "startTime": "08:00",
+          },
+        ],
+        "state": "hidden",
+      },
+      "cache": "private, no-store",
+      "status": 200,
+    },
+    {
+      "body": {
+        "available": true,
+        "displayName": "Odile A.",
+        "shifts": [
+          {
+            "date": "2099-10-01T00:00:00.000Z",
+            "endTime": "12:00",
+            "label": "Bar",
+            "names": [
+              "Aline M.",
+            ],
+            "othersCount": 4,
+            "own": true,
+            "shiftId": "bar",
+            "startTime": "10:00",
+          },
+          {
+            "date": "2099-10-01T00:00:00.000Z",
+            "endTime": "16:00",
+            "label": "Accueil",
+            "names": [
+              "Aline M.",
+            ],
+            "othersCount": 3,
+            "own": false,
+            "shiftId": "accueil",
+            "startTime": "14:00",
+          },
+          {
+            "date": "2099-10-02T00:00:00.000Z",
+            "endTime": "10:00",
+            "label": "Rangement",
+            "names": [
+              "Léa F.",
+              "Léa F.",
+            ],
+            "othersCount": 2,
+            "own": false,
+            "shiftId": "rangement",
+            "startTime": "08:00",
+          },
+        ],
+        "state": "visible_confirmed",
+      },
+      "cache": "private, no-store",
+      "status": 200,
+    },
+    {
+      "body": {
+        "available": true,
+        "displayName": "Odile A.",
+        "shifts": [
+          {
+            "date": "2099-10-01T00:00:00.000Z",
+            "endTime": "12:00",
+            "label": "Bar",
+            "names": [
+              "Aline M.",
+            ],
+            "othersCount": 4,
+            "own": true,
+            "shiftId": "bar",
+            "startTime": "10:00",
+          },
+          {
+            "date": "2099-10-01T00:00:00.000Z",
+            "endTime": "16:00",
+            "label": "Accueil",
+            "names": [
+              "Aline M.",
+            ],
+            "othersCount": 3,
+            "own": false,
+            "shiftId": "accueil",
+            "startTime": "14:00",
+          },
+          {
+            "date": "2099-10-02T00:00:00.000Z",
+            "endTime": "10:00",
+            "label": "Rangement",
+            "names": [
+              "Léa F.",
+              "Léa F.",
+            ],
+            "othersCount": 2,
+            "own": false,
+            "shiftId": "rangement",
+            "startTime": "08:00",
+          },
+        ],
+        "state": "visible",
+      },
+      "cache": "private, no-store",
+      "status": 200,
+    },
+    {
+      "body": {
+        "available": true,
+        "displayName": "Bruno K.",
+        "shifts": [
+          {
+            "date": "2099-10-01T00:00:00.000Z",
+            "endTime": "12:00",
+            "label": "Bar",
+            "names": [
+              "Aline M.",
+              "Odile A.",
+            ],
+            "othersCount": 3,
+            "own": true,
+            "shiftId": "bar",
+            "startTime": "10:00",
+          },
+          {
+            "date": "2099-10-01T00:00:00.000Z",
+            "endTime": "16:00",
+            "label": "Accueil",
+            "names": [
+              "Aline M.",
+            ],
+            "othersCount": 3,
+            "own": false,
+            "shiftId": "accueil",
+            "startTime": "14:00",
+          },
+          {
+            "date": "2099-10-02T00:00:00.000Z",
+            "endTime": "10:00",
+            "label": "Rangement",
+            "names": [
+              "Léa F.",
+              "Léa F.",
+            ],
+            "othersCount": 2,
+            "own": false,
+            "shiftId": "rangement",
+            "startTime": "08:00",
+          },
+        ],
+        "state": "visible_confirmed",
+      },
+      "cache": "private, no-store",
+      "status": 200,
+    },
+    {
+      "body": {
+        "error": "Les noms des bénévoles de moins de 18 ans ne sont jamais montrés.",
+      },
+      "cache": "private, no-store",
+      "status": 409,
+    },
+    {
+      "body": {
+        "available": true,
+        "displayName": "Max M.",
+        "shifts": [
+          {
+            "date": "2099-10-01T00:00:00.000Z",
+            "endTime": "12:00",
+            "label": "Bar",
+            "names": [
+              "Aline M.",
+              "Bruno K.",
+              "Odile A.",
+            ],
+            "othersCount": 2,
+            "own": true,
+            "shiftId": "bar",
+            "startTime": "10:00",
+          },
+          {
+            "date": "2099-10-01T00:00:00.000Z",
+            "endTime": "16:00",
+            "label": "Accueil",
+            "names": [
+              "Aline M.",
+            ],
+            "othersCount": 3,
+            "own": false,
+            "shiftId": "accueil",
+            "startTime": "14:00",
+          },
+          {
+            "date": "2099-10-02T00:00:00.000Z",
+            "endTime": "10:00",
+            "label": "Rangement",
+            "names": [
+              "Léa F.",
+              "Léa F.",
+            ],
+            "othersCount": 2,
+            "own": false,
+            "shiftId": "rangement",
+            "startTime": "08:00",
+          },
+        ],
+        "state": "minor",
+      },
+      "cache": "private, no-store",
+      "status": 200,
+    },
+    {
+      "body": {
+        "error": "Requête invalide.",
+      },
+      "cache": "private, no-store",
+      "status": 400,
+    },
+    {
+      "body": {
+        "error": "Inscription introuvable ou déjà annulée.",
+      },
+      "cache": "private, no-store",
+      "status": 404,
+    },
+  ],
+}
+`;

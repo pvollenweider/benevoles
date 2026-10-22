@@ -13,7 +13,7 @@ import { LISTED_FIELD_HELP, LISTED_FIELD_LABEL, UNLISTED_HINT, visibilityLabel }
 import { announce } from "@/lib/announce"
 import { type SaveState, formatSavedAt, saveErrorText, shouldAnnounceSaved, visibleSaveText } from "@/lib/event-autosave"
 import { DAY_CONTACT_NAME_MAX, DAY_CONTACT_PHONE_MAX } from "@/lib/day-contact"
-import { ROSTER_ENABLE_REMINDER, ROSTER_SETTING_HINT, ROSTER_SETTING_LABEL } from "@/lib/shift-roster"
+import { ROSTER_ENABLE_REMINDER, ROSTER_SETTING_HINT, ROSTER_SETTING_LABEL } from "@/lib/shift-roster-text"
 import { CANCEL_DEADLINE_CREATE_ERROR, cancelDeadlineFormErrors, cancelDeadlinePayload, type CancelDeadlineForm } from "@/lib/cancel-deadline"
 import RequiredMark from "@/components/RequiredMark"
 

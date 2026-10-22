@@ -52,10 +52,12 @@ import PublicFooter, { type FooterSite } from "@/components/PublicFooter"
 import SkipLink, { MAIN_CONTENT_ID } from "@/components/admin/SkipLink"
 import { resolveCharterText } from "@/lib/volunteer-charter"
 import {
-  ROSTER_MINOR_TEXT, ROSTER_NOTICE_VERSION, ROSTER_QUERY_PARAM, ROSTER_SIGNUP_HINT, ROSTER_SIGNUP_LABEL, ROSTER_SWITCH_EXPLAIN,
-  ROSTER_SWITCH_FAILURE, ROSTER_SWITCH_LABEL, ROSTER_SWITCH_LOADED, ROSTER_SWITCH_UNAVAILABLE, eventPageRosterViewer, signupRosterBox,
-  type ShiftRosterEntry,
+  ROSTER_NOTICE_VERSION, ROSTER_QUERY_PARAM, eventPageRosterViewer, signupRosterBox, type ShiftRosterEntry,
 } from "@/lib/shift-roster"
+import {
+  ROSTER_MINOR_TEXT, ROSTER_SIGNUP_HINT, ROSTER_SIGNUP_LABEL, ROSTER_SWITCH_EXPLAIN, ROSTER_SWITCH_FAILURE, ROSTER_SWITCH_LABEL,
+  ROSTER_SWITCH_LOADED, ROSTER_SWITCH_UNAVAILABLE,
+} from "@/lib/shift-roster-text"
 import { RosterName } from "@/components/public/RosterName"
 import { readStored, removeStored, writeStored } from "@/lib/device-storage"
 import { NEW_TAB_HINT, takeReturnToSchedule } from "@/lib/embed"

@@ -1,40 +1,14 @@
 import { describe, it, expect } from "vitest"
 import {
-  ROSTER_SIGNUP_LABEL,
-  buildShiftRoster,
-  choiceAfterSignup,
-  isKnownMinor,
-  rosterButtonLabel,
-  rosterDisplayName,
-  rosterOpen,
-  rosterSpokenName,
-  rosterOthersText,
-  rosterVisibleName,
-  ROSTER_COUNT_NOTICE,
-  ROSTER_EMPTY_TEXT,
-  ROSTER_ENABLE_REMINDER,
-  ROSTER_MINOR_TEXT,
-  ROSTER_SETTING_HINT,
-  ROSTER_SIGNUP_HINT,
-  signupRosterBox,
-  viewerState,
-  viewerStateText,
-  type RosterAudience,
-  type RosterChoice,
-  type RosterRegistration,
-  type StoredRosterChoice,
-  ROSTER_NOTICE_V1,
-  ROSTER_NOTICE_VERSION,
-  eventPageRosterViewer,
-  inviteRosterAudience,
-  noticeReaches,
-  rosterAfterSignup,
-  rosterEventHref,
-  rosterSummary,
-  signupNoticeVersion,
-  ROSTER_PUBLISH_NOTE_ON,
-  rosterDoneText,
+  buildShiftRoster, choiceAfterSignup, isKnownMinor, rosterOpen, signupRosterBox, viewerState, type RosterAudience,
+  type RosterChoice, type RosterRegistration, type StoredRosterChoice, ROSTER_NOTICE_V1, ROSTER_NOTICE_VERSION,
+  eventPageRosterViewer, inviteRosterAudience, noticeReaches, rosterAfterSignup, rosterEventHref, signupNoticeVersion,
 } from "../shift-roster"
+import {
+  ROSTER_SIGNUP_LABEL, rosterButtonLabel, rosterDisplayName, rosterSpokenName, rosterOthersText, rosterVisibleName,
+  ROSTER_COUNT_NOTICE, ROSTER_EMPTY_TEXT, ROSTER_ENABLE_REMINDER, ROSTER_MINOR_TEXT, ROSTER_SETTING_HINT, ROSTER_SIGNUP_HINT,
+  viewerStateText, rosterSummary, ROSTER_PUBLISH_NOTE_ON, rosterDoneText,
+} from "../shift-roster-text"
 
 // Shift roster between volunteers (#1068): pure visibility and format rules.
 
@@ -443,5 +417,32 @@ describe("a shift's roster in one sentence", () => {
     expect(ROSTER_PUBLISH_NOTE_ON).toContain("désactiver")
     expect(rosterDoneText("widen")).toContain("membres invités")
     expect(rosterDoneText("hide")).toBe("Ton nom est maintenant masqué.")
+  })
+})
+
+describe("buildShiftRoster reads each registration a bounded number of times", () => {
+  // Counts every property read on the registrations (and their volunteer): grouping them by shift
+  // once keeps it proportional to the registrations, whatever the number of shifts. Re-scanning
+  // every registration for each shift would multiply it by the number of shifts.
+  function run(shiftCount: number, registrationCount: number) {
+    let reads = 0
+    const counted = <T extends object>(o: T): T => new Proxy(o, { get: (t, k, r) => { reads++; return Reflect.get(t, k, r) } })
+    const shifts = Array.from({ length: shiftCount }, (_, i) => ({ id: `s${i}`, label: `S${i}`, date: "2099-10-01", startTime: "10:00", endTime: "12:00" }))
+    const registrations: RosterRegistration[] = Array.from({ length: registrationCount }, (_, i) => counted({
+      shiftId: `s${i % 50}`, volunteerId: `v${i}`, status: i % 7 === 0 ? "waiting" : "active",
+      volunteer: counted({ firstName: `P${i}`, lastName: "Nom", birthDate: null, erasedAt: null, mergedIntoId: null }),
+    }))
+    const choices = new Map<string, StoredRosterChoice>(registrations.map((r, i) => [`v${i}`, { status: i % 2 ? "visible" : "hidden", noticeVersion: ROSTER_NOTICE_VERSION }]))
+    reads = 0
+    const out = buildShiftRoster({ viewerId: "v3", shifts, registrations, choices, audience: "confirmed", eventStart: "2099-10-01" })
+    return { reads, out }
+  }
+
+  it("the same reads for 50 shifts or 2,000 (the extra ones empty), at most a few per registration", () => {
+    const few = run(50, 1000)
+    const many = run(2000, 1000)
+    expect(many.out).toEqual(few.out)
+    expect(many.reads).toBe(few.reads)
+    expect(few.reads).toBeLessThanOrEqual(12 * 1000)
   })
 })

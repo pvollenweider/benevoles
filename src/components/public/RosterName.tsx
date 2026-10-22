@@ -1,7 +1,8 @@
 // SPDX-FileCopyrightText: 2026 Philippe Vollenweider
 // SPDX-License-Identifier: AGPL-3.0-only
 
-import { rosterLead, rosterSpokenName, rosterSummary, rosterVisibleName, type ShiftRosterEntry } from "@/lib/shift-roster"
+import type { ShiftRosterEntry } from "@/lib/shift-roster"
+import { rosterLead, rosterSpokenName, rosterSummary, rosterVisibleName } from "@/lib/shift-roster-text"
 
 /**
  * « Aline M. » shown (never wrapped before « M. »), « Aline, initiale M » spoken: French voices
