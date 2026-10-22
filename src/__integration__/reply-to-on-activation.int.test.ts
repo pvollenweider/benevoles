@@ -118,11 +118,11 @@ describe.skipIf(!url)("default reply-to on an owner's activation on Postgres (#1
     expect(await replyTo(remindersOnly.id)).toBe(`${tag}-e-owner@example.org`)
   })
 
-  it("a clear saved in the settings while an owner activates always wins (row lock)", async () => {
+  it("an owner's activation waits for a settings save in progress, and its clear wins", async () => {
     const o = await org("f", "old@asso.example")
     const owner = await invited(o.id, "f-owner", "admin")
     let activation: Promise<Response> | undefined
-    // Stands for the settings PATCH: it holds the organization's row lock while it clears and logs.
+    // Stands for a settings save in progress that clears the address and logs it, holding the row.
     await prisma.$transaction(async (tx) => {
       await tx.$queryRaw`SELECT 1 FROM "Organization" WHERE "id" = ${o.id} FOR UPDATE`
       activation = acceptInvite(post(owner))

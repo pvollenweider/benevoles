@@ -95,8 +95,8 @@ export async function POST(req: Request) {
     // An owner's now-confirmed address becomes the reply-to of an organization that has none
     // (#1077), only while it is still null: never over a value an owner set, nor after an owner
     // changed it in the email settings (a cleared value stays cleared). No address in the log.
-    // Same row lock as the settings PATCH, which reads, writes and logs under it: a clear saved
-    // concurrently is either already logged here or applied after this fill.
+    // Row lock on the organization: a settings save that starts meanwhile waits for this fill and
+    // then writes the value the owner chose, so a clear saved at the same moment still wins.
     if (isOwnerRole(admin.role)) await tx.$queryRaw`SELECT 1 FROM "Organization" WHERE "id" = ${admin.organizationId} FOR UPDATE`
     const editedInSettings = isOwnerRole(admin.role) && (await tx.$queryRaw<unknown[]>`
       SELECT 1 FROM "OrgLog"
