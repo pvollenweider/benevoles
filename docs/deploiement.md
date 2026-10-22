@@ -1,6 +1,6 @@
 # Déploiement
 
-Trois modes : développement local, Docker Compose, Kubernetes. Les variables d'environnement sont décrites dans [configuration.md](configuration.md).
+Trois modes : développement local, Docker Compose, Kubernetes. Les variables d'environnement sont décrites dans [configuration.md](configuration.md). Pour installer sa propre instance avec Docker Compose, voir [auto-hebergement.md](auto-hebergement.md) (squelette, non testé sur machine vierge).
 
 ## Développement local
 
@@ -30,11 +30,11 @@ export TOKEN_ENCRYPTION_KEY="$(openssl rand -base64 32)"   # à conserver : voir
 docker compose up -d
 ```
 
-`docker-compose.yml` lance PostgreSQL 16 et l'application (`build: .`) sur le port 3000. Ce qu'il ne fait pas :
+`docker-compose.yml` lance PostgreSQL 16, l'application (`build: .`) sur le port 3000, et le service `cron`, qui appelle `/api/cron/*` aux heures des CronJobs Kubernetes (`scripts/compose-cron.sh`). L'application a un healthcheck sur `/api/health` (`docker compose ps` la montre `healthy`), et `cron` attend qu'elle le soit. Le fichier transmet `AUTH_URL` (par défaut `NEXT_PUBLIC_APP_URL`), `AUTH_TRUST_HOST` (par défaut `true`), `CRON_SECRET`, et les variables optionnelles de [configuration.md](configuration.md) quand elles sont définies dans `.env` ou dans le shell. Procédure complète : [auto-hebergement.md](auto-hebergement.md). Ce qu'il ne fait pas :
 
-- Il ne transmet pas `AUTH_URL`, `AUTH_TRUST_HOST`, `CRON_SECRET`, `EMAIL_REPLY_TO`, `APP_TIME_ZONE`, `TRUSTED_PROXY_HOPS`, `TOKEN_ENCRYPTION_KEY_ID`, `TOKEN_ENCRYPTION_PREVIOUS_KEYS` ni les variables VAPID et Sentry : à ajouter dans la section `environment` si nécessaire.
 - Sans `AUTH_SECRET` exporté, il démarre sans erreur avec la valeur connue `change-me-in-production-32chars` : toujours l'exporter.
-- Il n'inclut aucun planificateur. Sans `CRON_SECRET`, les endpoints `/api/cron/*` refusent toute requête en production : ajouter ce secret et appeler les endpoints depuis un cron de l'hôte (voir [Tâches planifiées](../README.md#tâches-planifiées-cron) dans le README), dont `/api/cron/outbox` toutes les 5 minutes.
+- Sans `CRON_SECRET`, les endpoints `/api/cron/*` refusent toute requête en production et le service `cron` s'arrête avec un message (Docker le relance) : aucun rappel ni email en file ne part. Pour utiliser le cron de l'hôte à la place, retirer le service et suivre [Tâches planifiées](../README.md#tâches-planifiées-cron) dans le README.
+- Il ne sauvegarde pas la base (voir [auto-hebergement.md](auto-hebergement.md#sauvegarde-et-restauration)).
 - Il n'exécute pas le seed, et l'image ne contient pas `tsx` : lancer le seed depuis un checkout, sur l'hôte, avec les variables `ADMIN_*` et `ORG_ADMIN_*` pour créer les premiers comptes :
 
   ```bash
@@ -42,7 +42,7 @@ docker compose up -d
   ADMIN_EMAIL=… ADMIN_PASSWORD=… ORG_ADMIN_EMAIL=… ORG_ADMIN_PASSWORD=… npm run db:seed
   ```
 
-- Les identifiants PostgreSQL du fichier sont ceux du développement : les changer. PostgreSQL est publié sur le port 5432 de l'hôte, comme la stack de développement : les deux ne tournent pas ensemble, et le port est exposé.
+- Sans `POSTGRES_PASSWORD`, le mot de passe PostgreSQL est celui du développement (`benevoles`) : le définir avant le premier démarrage, car il n'est lu qu'à la création du volume. PostgreSQL est publié sur `127.0.0.1:5432`, comme la stack de développement : les deux ne tournent pas ensemble.
 
 ## Kubernetes
 

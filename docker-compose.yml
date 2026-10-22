@@ -12,11 +12,14 @@ services:
     environment:
       POSTGRES_DB: benevoles
       POSTGRES_USER: benevoles
-      POSTGRES_PASSWORD: benevoles
+      # Read only when the volume is first created: changing it later does not change the
+      # password of an existing database (see docs/auto-hebergement.md).
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD:-benevoles}
     volumes:
       - postgres_data:/var/lib/postgresql/data
+    # Reachable from this machine only (psql, pg_dump); remove the line if nothing needs it.
     ports:
-      - "5432:5432"
+      - "127.0.0.1:5432:5432"
     healthcheck:
       test: ["CMD-SHELL", "pg_isready -U benevoles"]
       interval: 5s
@@ -28,8 +31,9 @@ services:
     restart: unless-stopped
     ports:
       - "3000:3000"
+    # Values from .env (template: .env.example, reference: docs/configuration.md) or the shell.
     environment:
-      DATABASE_URL: postgresql://benevoles:benevoles@postgres:5432/benevoles?schema=public
+      DATABASE_URL: postgresql://benevoles:${POSTGRES_PASSWORD:-benevoles}@postgres:5432/benevoles?schema=public
       POSTGRES_HOST: postgres
       POSTGRES_USER: benevoles
       AUTH_SECRET: ${AUTH_SECRET:-change-me-in-production-32chars}
@@ -44,9 +48,69 @@ services:
       EMAIL_FROM: ${EMAIL_FROM:-no-reply@example.com}
       ADMIN_NOTIFICATION_EMAIL: ${ADMIN_NOTIFICATION_EMAIL:-}
       NEXT_PUBLIC_APP_URL: ${NEXT_PUBLIC_APP_URL:-http://localhost:3000}
+      # NextAuth behind the reverse proxy (docs/auto-hebergement.md)
+      AUTH_URL: ${AUTH_URL:-${NEXT_PUBLIC_APP_URL:-http://localhost:3000}}
+      AUTH_TRUST_HOST: ${AUTH_TRUST_HOST:-true}
+      # Shared with the cron service below; without it, /api/cron/* refuses every call.
+      CRON_SECRET: ${CRON_SECRET:-}
       NODE_ENV: production
+      # Optional settings, passed only when set in .env or the shell (left unset otherwise: an
+      # empty value is not the same as no value for some of them, VIDEO_MEDIA_BASE_URL for one).
+      EMAIL_REPLY_TO:
+      TOKEN_ENCRYPTION_KEY_ID:
+      TOKEN_ENCRYPTION_PREVIOUS_KEYS:
+      SITE_NAME:
+      CONTACT_EMAIL:
+      SUPPORT_URL:
+      HOSTED_SERVICE:
+      SIGNUP:
+      APP_TIME_ZONE:
+      TRUSTED_PROXY_HOPS:
+      RELEASE_CHECK:
+      ORG_INACTIVITY:
+      PAST_EVENT_RETENTION:
+      OPERATOR_ALERT_EMAIL:
+      NTFY_URL:
+      NTFY_TOKEN:
+      VAPID_PUBLIC_KEY:
+      VAPID_PRIVATE_KEY:
+      VAPID_EMAIL:
+      VIDEO_MEDIA_BASE_URL:
+      SENTRY_DSN:
+      EMAIL_LIMIT_SIGNUP_PER_HOUR:
+      EMAIL_LIMIT_ORG_PER_MINUTE:
+      EMAIL_LIMIT_ORG_PER_DAY:
+      EMAIL_LIMIT_ORG_BULK_PER_DAY:
+      EMAIL_LIMIT_ORG_ACCOUNT_PER_DAY:
+      EMAIL_LIMIT_RECIPIENT_PER_HOUR:
+      EMAIL_LIMIT_GLOBAL_PER_MINUTE:
+      WARMUP:
     depends_on:
       postgres:
+        condition: service_healthy
+    # The same check as the Kubernetes liveness probe: the server answers and reaches the
+    # database. `docker compose ps` shows the app « healthy » once it passes.
+    healthcheck:
+      test: ["CMD", "wget", "-q", "-O", "/dev/null", "http://127.0.0.1:3000/api/health"]
+      interval: 30s
+      timeout: 5s
+      retries: 3
+      start_period: 90s
+
+  # The scheduled tasks (reminders, outbox, cleanup, release check), as the Kubernetes CronJobs
+  # do: scripts/compose-cron.sh. Without CRON_SECRET it exits with a message (Docker restarts
+  # it, so the message repeats in its log), and no reminder or queued email leaves.
+  cron:
+    image: curlimages/curl:8.7.1
+    restart: unless-stopped
+    entrypoint: ["sh", "/compose-cron.sh"]
+    environment:
+      APP_URL: http://app:3000
+      CRON_SECRET: ${CRON_SECRET:-}
+    volumes:
+      - ./scripts/compose-cron.sh:/compose-cron.sh:ro
+    depends_on:
+      app:
         condition: service_healthy
 
 volumes:
