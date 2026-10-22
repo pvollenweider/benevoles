@@ -374,6 +374,8 @@ test("Frise popover: places saved on close are still shown after an admin link a
   expect((await saved).ok()).toBeTruthy()
   await expect(popover).toBeHidden()
   await expect(bar).toContainText("0/8")
+  // The refresh after the save keeps focus on the bar.
+  await expect(bar).toBeFocused()
 
   const tabs = page.getByRole("navigation", { name: "Sections de l'événement" })
   await tabs.getByRole("link", { name: "Inscriptions" }).click()
