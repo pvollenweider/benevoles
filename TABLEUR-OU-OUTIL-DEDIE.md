@@ -1,4 +1,3 @@
-<!-- BROUILLON : texte proposé pour #871, à relire et réécrire par le propriétaire avant publication. Le contrôle « Draft content » reste rouge tant que cette ligne est là. -->
 # Tableur et groupe de discussion, ou outil dédié ?
 
 Un tableau partagé avec une ligne par créneau, et un groupe de discussion pour tout le reste : beaucoup d'associations organisent leurs bénévoles comme ça, et ça marche. Le tableur dit qui tient la buvette samedi, le groupe rappelle à quelle heure on monte les tentes. Cette page vous aide à voir si ça suffit pour votre prochain événement, ou si un outil fait pour le planning vous ferait gagner du temps.
@@ -68,7 +67,7 @@ Non. La page d'inscription s'ouvre dans le navigateur, sur téléphone comme sur
 
 ## Démarrer
 
-benevol.app est gratuit, open source et hébergé en France. Demandez votre espace, puis suivez la page [Créer son premier événement](guide/creer-son-premier-evenement.md) jusqu'au lien à partager.
+benevol.app est gratuit, libre (open source) et hébergé en France. Demandez votre espace, puis suivez la page [Créer son premier événement](guide/creer-son-premier-evenement.md) jusqu'au lien à partager.
 
 <!-- actions -->
 - [Demander un espace](/inscription)
