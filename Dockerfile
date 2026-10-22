@@ -80,6 +80,8 @@ COPY --from=builder --chown=nextjs:nodejs /app/BENEVOLES-FESTIVAL.md ./BENEVOLES
 COPY --from=builder --chown=nextjs:nodejs /app/BENEVOLES-MANIFESTATION-SPORTIVE.md ./BENEVOLES-MANIFESTATION-SPORTIVE.md
 COPY --from=builder --chown=nextjs:nodejs /app/PLANNING-PERMANENCES-BENEVOLES.md ./PLANNING-PERMANENCES-BENEVOLES.md
 COPY --from=builder --chown=nextjs:nodejs /app/TARIFS.md ./TARIFS.md
+# Tableur et groupe de discussion, ou outil dédié ? (#871).
+COPY --from=builder --chown=nextjs:nodejs /app/TABLEUR-OU-OUTIL-DEDIE.md ./TABLEUR-OU-OUTIL-DEDIE.md
 COPY --from=builder --chown=nextjs:nodejs /app/FAQ-ACCUEIL.md ./FAQ-ACCUEIL.md
 COPY --from=builder --chown=nextjs:nodejs /app/ACCESSIBILITE.md ./ACCESSIBILITE.md
 COPY --from=builder --chown=nextjs:nodejs /app/ACCORD-SOUS-TRAITANCE.md ./ACCORD-SOUS-TRAITANCE.md

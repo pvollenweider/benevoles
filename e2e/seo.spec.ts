@@ -42,6 +42,8 @@ const PAGES: { path: string; types: string[]; ogType: string }[] = [
   { path: "/benevoles-festival", types: ["WebPage", "BreadcrumbList", "FAQPage"], ogType: "website" },
   { path: "/planning-permanences-benevoles", types: ["WebPage", "BreadcrumbList", "FAQPage"], ogType: "website" },
   { path: "/tarifs", types: ["WebPage", "BreadcrumbList", "SoftwareApplication", "FAQPage"], ogType: "website" },
+  // #871: spreadsheet and chat group, or a dedicated tool?
+  { path: "/tableur-ou-outil-dedie", types: ["WebPage", "BreadcrumbList", "FAQPage"], ogType: "website" },
   { path: "/doc", types: ["CollectionPage", "BreadcrumbList", "Organization"], ogType: "website" },
   { path: "/doc/revenir-sur-la-page-d-inscription", types: ["TechArticle", "BreadcrumbList", "Organization"], ogType: "article" },
   { path: "/legal/privacy", types: ["WebPage", "BreadcrumbList"], ogType: "website" },

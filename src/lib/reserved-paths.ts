@@ -25,6 +25,7 @@ export const APEX_ONLY_PATHS: readonly string[] = [
   "/benevoles-manifestation-sportive",
   "/planning-permanences-benevoles",
   "/tarifs",
+  "/tableur-ou-outil-dedie",
   "/nouveautes",
   "/blog",
   "/accessibilite",

@@ -126,6 +126,7 @@ export const APP_TOP_LEVEL_SEGMENTS: readonly string[] = [
   "product-updates",
   "pour-qui",
   "super-admin",
+  "tableur-ou-outil-dedie",
   "tarifs",
   "videos",
   "waitlist",
