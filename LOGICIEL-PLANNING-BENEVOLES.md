@@ -89,7 +89,7 @@ Vous ne payez rien, et le nombre de bénévoles ou d'événements n'est pas plaf
 
 Les données sont hébergées en France. Une copie de sauvegarde chiffrée, illisible sans sa clé, est gardée en Suisse. Le site ne dépose aucun cookie de pistage, d'analyse ou de publicité, et un [accord de sous-traitance](ACCORD-SOUS-TRAITANCE.md) fixe par écrit comment benevol.app traite les données de votre association.
 
-L'inscription et l'administration s'utilisent au clavier et avec un lecteur d'écran. La [déclaration d'accessibilité](ACCESSIBILITE.md) dit ce qui est testé et les limites connues.
+L'inscription et l'administration s'utilisent entièrement au clavier, et sont conçues pour les lecteurs d'écran. La [déclaration d'accessibilité](ACCESSIBILITE.md) dit ce qui est testé et les limites connues.
 
 ## Questions fréquentes
 
