@@ -85,6 +85,7 @@ const prismaMock = {
     create: vi.fn().mockResolvedValue({ id: "log-1" }), // org activity log entries (#300 logo)
     findMany: vi.fn().mockResolvedValue([]), // activity export (#1049)
   },
+  $queryRaw: vi.fn().mockResolvedValue([]), // row lock of the notification settings PATCH (#1077)
   async $transaction(fn: (tx: unknown) => unknown) { return fn(this) },
 }
 // Delivery after the response needs a Next request scope; the routes only queue through the outbox here (#1049).

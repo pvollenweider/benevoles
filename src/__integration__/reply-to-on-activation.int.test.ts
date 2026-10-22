@@ -117,4 +117,30 @@ describe.skipIf(!url)("default reply-to on an owner's activation on Postgres (#1
     expect((await acceptInvite(post(b))).status).toBe(200)
     expect(await replyTo(remindersOnly.id)).toBe(`${tag}-e-owner@example.org`)
   })
+
+  it("a clear saved in the settings while an owner activates always wins (row lock)", async () => {
+    const o = await org("f", "old@asso.example")
+    const owner = await invited(o.id, "f-owner", "admin")
+    let activation: Promise<Response> | undefined
+    // Stands for the settings PATCH: it holds the organization's row lock while it clears and logs.
+    await prisma.$transaction(async (tx) => {
+      await tx.$queryRaw`SELECT 1 FROM "Organization" WHERE "id" = ${o.id} FOR UPDATE`
+      activation = acceptInvite(post(owner))
+      let finished = false
+      void activation.then(() => { finished = true })
+      await new Promise((resolve) => setTimeout(resolve, 3000))
+      // The owner's activation waits for the settings change instead of deciding beside it.
+      expect(finished).toBe(false)
+      await tx.organization.update({ where: { id: o.id }, data: { replyToEmail: null } })
+      await tx.orgLog.create({
+        data: {
+          organizationId: o.id, actorType: "admin", actorId: "someone", action: "organization.notifications_updated",
+          entityType: "Organization", entityId: o.id, changes: { replyToEmail: { from: "old@asso.example", to: null } },
+        },
+      })
+    }, { timeout: 15_000 })
+    expect((await activation!).status).toBe(200)
+    expect(await replyTo(o.id)).toBeNull()
+    expect(await defaulted(o.id)).toHaveLength(0)
+  })
 })

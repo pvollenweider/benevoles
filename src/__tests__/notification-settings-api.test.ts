@@ -3,20 +3,27 @@ import { describe, it, expect, vi, beforeEach } from "vitest"
 // Notification settings per organization (#381): read, patch, test email.
 
 const m = vi.hoisted(() => ({
-  findUnique: vi.fn(), update: vi.fn(), logOrgEvent: vi.fn(), enqueue: vi.fn().mockResolvedValue(["n1"]), deliver: vi.fn(), rateLimit: vi.fn().mockResolvedValue({ ok: true }),
+  findUnique: vi.fn(), update: vi.fn(), logOrgEvent: vi.fn(), queryRaw: vi.fn().mockResolvedValue([]), order: [] as string[], enqueue: vi.fn().mockResolvedValue(["n1"]), deliver: vi.fn(), rateLimit: vi.fn().mockResolvedValue({ ok: true }),
 }))
 vi.mock("@/lib/auth-guard", () => ({
   requireOrgSession: vi.fn().mockResolvedValue({ db: {}, organizationId: "org-a", session: { user: { id: "adm-1", email: "lea@org.ch", name: "Léa" } } }),
 }))
-vi.mock("@/lib/prisma", () => ({ prisma: { organization: { findUnique: m.findUnique, update: m.update } } }))
-vi.mock("@/lib/org-log", () => ({ logOrgEvent: m.logOrgEvent, adminActor: () => ({ type: "admin", id: "adm-1" }) }))
+vi.mock("@/lib/prisma", () => ({
+  prisma: {
+    organization: { findUnique: m.findUnique, update: m.update },
+    orgLog: { create: (args: unknown) => m.logOrgEvent(args) },
+    $queryRaw: (...args: unknown[]) => { m.order.push("lock"); return m.queryRaw(...args) },
+    async $transaction(fn: (tx: unknown) => unknown) { m.order.push("begin"); const out = await fn(this); m.order.push("commit"); return out },
+  },
+}))
+vi.mock("@/lib/org-log", () => ({ adminActor: () => ({ type: "admin", id: "adm-1" }) }))
 vi.mock("@/lib/notifications/outbox", () => ({ enqueueNotifications: m.enqueue, deliverAfterResponse: m.deliver }))
 vi.mock("@/lib/rate-limit", () => ({ rateLimit: m.rateLimit }))
 
 const patch = (body: unknown) => new Request("http://localhost/api/admin/settings/notifications", { method: "PATCH", headers: { "Content-Type": "application/json" }, body: JSON.stringify(body) })
 
 describe("notification settings API", () => {
-  beforeEach(() => { vi.clearAllMocks(); m.rateLimit.mockResolvedValue({ ok: true }) })
+  beforeEach(() => { vi.clearAllMocks(); m.order.length = 0; m.queryRaw.mockResolvedValue([]); m.rateLimit.mockResolvedValue({ ok: true }) })
 
   it("GET returns defaults for an organization that never set anything", async () => {
     m.findUnique.mockResolvedValue({ replyToEmail: null, notificationSettings: null })
@@ -34,7 +41,7 @@ describe("notification settings API", () => {
     const call = m.update.mock.calls[0][0]
     expect(call.where).toEqual({ id: "org-a" })
     expect(call.data).toEqual({ replyToEmail: "contact@org.ch", notificationSettings: { reminders: { j2: false, j1: true, dd: false }, signupAdminEmail: true, withdrawalAdminEmail: true, addressesToVerifyAdminEmail: true } })
-    expect(m.logOrgEvent).toHaveBeenCalledWith(expect.objectContaining({ organizationId: "org-a", action: "organization.notifications_updated", entityType: "Organization" }))
+    expect(m.logOrgEvent).toHaveBeenCalledWith({ data: expect.objectContaining({ organizationId: "org-a", actorType: "admin", actorId: "adm-1", action: "organization.notifications_updated", entityType: "Organization" }) })
     expect((await res.json()).settings.reminders).toEqual({ j2: false, j1: true, dd: false })
   })
 
@@ -57,5 +64,17 @@ describe("notification settings API", () => {
     expect(m.deliver).toHaveBeenCalledWith(["n1"])
     m.rateLimit.mockResolvedValue({ ok: false })
     expect((await POST()).status).toBe(429)
+  })
+
+  it("PATCH reads, writes and logs under the organization's row lock, in one transaction (#1077)", async () => {
+    m.findUnique.mockImplementation(async () => { m.order.push("read"); return { replyToEmail: "old@org.ch", notificationSettings: null } })
+    m.update.mockImplementation(async ({ data }: { data: unknown }) => { m.order.push("write"); return data })
+    m.logOrgEvent.mockImplementation(async () => { m.order.push("log") })
+    const { PATCH } = await import("@/app/api/admin/settings/notifications/route")
+    const res = await PATCH(patch({ replyToEmail: "" }))
+    expect(res.status).toBe(200)
+    expect(m.order).toEqual(["begin", "lock", "read", "write", "log", "commit"])
+    expect(m.queryRaw.mock.calls[0][0].join("?")).toContain("FOR UPDATE")
+    expect(m.logOrgEvent.mock.calls[0][0].data.changes).toEqual({ replyToEmail: { from: "old@org.ch", to: null } })
   })
 })
