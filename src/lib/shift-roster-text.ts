@@ -34,17 +34,36 @@ export const ROSTER_MINOR_TEXT = `Les noms des bénévoles de moins de 18 ans ne
 
 // --- The organisers' side ---
 
-/** The organisers' side (#1068): the setting's hint, the reminder once it is on, the publication's note. */
-export const ROSTER_SETTING_LABEL = "Permettre aux bénévoles confirmés et aux membres invités de voir qui est inscrit"
-export const ROSTER_SETTING_HINT = "Les bénévoles confirmés et les membres invités par l'organisation voient sur la page de l'événement le prénom et l'initiale du nom (« Aline M. ») des bénévoles qui l'acceptent, et le nombre des autres, jusqu'à la fin de l'événement. Jamais les visiteurs anonymes, les liens par groupe ni l'intégration à votre site. Les personnes déjà inscrites restent masquées tant qu'elles ne l'ont pas accepté ; les mineurs connus n'apparaissent jamais."
-export const ROSTER_ENABLE_REMINDER = "Informez les bénévoles : le formulaire d'inscription leur propose d'afficher leur nom, et vous ne pouvez pas l'accepter à leur place. Activer ce réglage ne vaut pas leur accord. Refuser ou retirer son accord est sans effet sur leur inscription. Informez aussi les personnes déjà inscrites : leur place confirmée sera comptée même si leur nom reste masqué. Mentionnez-le aussi dans les informations que votre association donne à ses bénévoles."
+/**
+ * The organisers' side (#1068): one short sentence and a link to the guide, which holds the
+ * details (who never sees, minors, duration, people already registered, the duty to inform and a
+ * message to send). The duty to inform is recalled on the publication page.
+ */
+export const ROSTER_SETTING_LABEL = "Montrer aux bénévoles qui est inscrit"
+export const ROSTER_SETTING_HINT = "Les bénévoles confirmés et les membres invités voient le prénom et l'initiale de ceux qui l'acceptent."
+/** Under the setting while it is on (also once the event is published), said when ticked. */
+export const ROSTER_ENABLE_REMINDER = "Informez vos bénévoles, y compris les personnes déjà inscrites : leur place confirmée est comptée même si leur nom reste masqué."
 /** The publication page's note, the setting on (the default for a new event) or off. */
-export const ROSTER_PUBLISH_NOTE_ON = "« Qui est inscrit » est activé : les bénévoles confirmés et les membres invités par l'organisation verront le prénom et l'initiale du nom de celles et ceux qui l'acceptent, et le nombre des autres. Vous pouvez le désactiver dans les réglages de l'événement, maintenant ou plus tard ; cela ne change rien à la publication."
-export const ROSTER_PUBLISH_NOTE = "Option : vous pouvez permettre aux bénévoles confirmés et aux membres invités par l'organisation de voir qui est inscrit sur chaque créneau (prénom et initiale du nom, seulement pour celles et ceux qui l'acceptent). Ce réglage est désactivé pour cet événement ; l'activer, maintenant ou plus tard, ne change rien à la publication."
+export const ROSTER_PUBLISH_NOTE_ON = "« Qui est inscrit » est activé : prévenez vos bénévoles."
+export const ROSTER_PUBLISH_NOTE = "« Qui est inscrit » est désactivé. L'activer, maintenant ou plus tard, ne change rien à la publication."
 export const ROSTER_SETTING_LINK = "Modifier le réglage « Qui est inscrit »"
 /** The organisation's default for its new events (Paramètres, owners only). */
-export const ROSTER_ORG_DEFAULT_LABEL = "Par défaut, permettre aux bénévoles confirmés et aux membres invités de voir qui est inscrit"
-export const ROSTER_ORG_DEFAULT_HINT = "S'applique aux événements créés ensuite, y compris depuis un modèle ; chaque événement garde son propre réglage, modifiable dans ses réglages. Les événements existants ne changent pas. Un nom n'apparaît que si le bénévole l'accepte."
+export const ROSTER_ORG_DEFAULT_LABEL = "Par défaut, montrer aux bénévoles qui est inscrit"
+export const ROSTER_ORG_DEFAULT_HINT = "S'applique aux événements créés ensuite ; les événements existants gardent leur réglage."
+
+/** The topic of the « En savoir plus » links (said to screen readers: « En savoir plus sur … »). */
+export const ROSTER_DOC_TOPIC = "« Qui est inscrit »"
+/**
+ * Where « En savoir plus » leads, per screen: a heading of a unit of guide/
+ * (src/lib/__tests__/shift-roster-doc-links.test.ts fails when one no longer exists).
+ */
+export const ROSTER_DOC_LINKS = {
+  setting: "/doc/creer-un-evenement#activer-qui-est-inscrit-sur-un-evenement-qui-a-deja-des-inscrits",
+  orgDefault: "/doc/personnaliser-l-organisation#qui-est-inscrit-reglage-par-defaut",
+  publish: "/doc/creer-un-evenement#prevenir-les-benevoles-deja-inscrits",
+  signup: "/doc/choisir-ses-creneaux#voir-qui-est-inscrit",
+  personal: "/doc/ma-page-personnelle#qui-est-inscrit",
+} as const
 
 // --- The display name ---
 
@@ -77,34 +96,51 @@ export function rosterSpokenName(displayName: string): string {
 /** Who sees a name shown under the current text, in the personal page's sentences. */
 const AUDIENCE_TEXT = "les bénévoles confirmés et les membres invités par l'organisation"
 
+/** The personal page's switch: turning it on gives the consent (current text), off withdraws it. */
+export const ROSTER_NAME_SWITCH_LABEL = "Afficher mon nom aux autres bénévoles"
+
 /**
- * The sentence of the personal page about the viewer's choice, with their own display name, inside
- * French quotes with non-breaking spaces (a « never alone at a line's end).
+ * The state written next to the switch, always in words (never colour alone). `name` is the
+ * display name in the form wanted (printed or spoken), already quoted by the caller or not.
  */
-export function viewerStateText(state: RosterViewerState, displayName: string | null): string {
-  const shown = displayName ? `«\u00a0${displayName}\u00a0»` : "ton prénom et l'initiale de ton nom"
+export function rosterStateText(state: Exclude<RosterViewerState, "minor">, name: string | null): string {
+  const shown = name ? ` : «\u00a0${name}\u00a0»` : ""
   switch (state) {
-    case "visible": return `Ton nom est affiché : sur tes créneaux confirmés, ${AUDIENCE_TEXT} voient ${shown}.`
-    case "visible_confirmed": return `Ton nom est affiché aux bénévoles confirmés, qui voient ${shown} sur tes créneaux confirmés. Les membres invités par l'organisation peuvent maintenant voir eux aussi qui est inscrit : ton nom ne leur est montré que si tu l'acceptes.`
-    case "pending": return `Tu as demandé à l'inscription d'afficher ton nom : il n'apparaît qu'une fois confirmé ici. Sur tes créneaux confirmés, ${AUDIENCE_TEXT} verraient ${shown}.`
-    case "minor": return "Ton nom n'est pas montré aux autres bénévoles (moins de 18 ans)."
-    case "hidden": return `Ton nom n'est pas affiché. Si tu l'affiches, ${AUDIENCE_TEXT} verront ${shown} sur tes créneaux confirmés, jusqu'à la fin de l'événement. Tu pourras le masquer à tout moment.`
+    case "visible": return `Visible${shown}`
+    case "visible_confirmed": return `Visible aux bénévoles confirmés${shown}`
+    case "pending": return "À confirmer : tu l'as demandé à l'inscription. Active l'interrupteur pour l'afficher."
+    case "hidden": return "Masqué"
   }
 }
 
-/** The card's main button: hide a name shown, otherwise show it (under the current text). */
-export const rosterButtonLabel = (state: RosterViewerState) => (state === "visible" || state === "visible_confirmed" ? "Masquer mon nom" : "Afficher mon nom")
-/** The second button of a name shown under the first text: accept the current one. */
-export const ROSTER_WIDEN_LABEL = "Montrer aussi mon nom aux membres invités"
+/**
+ * What the switch's description says beyond its state: who sees the name and on what terms. Off
+ * or to confirm, this page may collect a first consent, so the sentence is complete (audience,
+ * data, scope, duration, purpose, free choice, withdrawal); the sign-up form's box says the same.
+ */
+export function rosterChoiceText(state: RosterViewerState, displayName: string | null): string {
+  const shown = displayName ? `«\u00a0${displayName}\u00a0»` : "ton prénom et l'initiale de ton nom"
+  switch (state) {
+    case "visible": return `Sur tes créneaux confirmés, ${AUDIENCE_TEXT} voient ${shown}. Tu peux le masquer à tout moment avec cet interrupteur.`
+    case "visible_confirmed": return `Sur tes créneaux confirmés, les bénévoles confirmés voient ${shown}. Tu peux le masquer à tout moment avec cet interrupteur.`
+    case "pending":
+    case "hidden": return `Si tu l'affiches, ${AUDIENCE_TEXT} verront ${shown} sur tes créneaux confirmés, même sans créneau commun avec toi, jusqu'à la fin de l'événement, pour choisir leurs créneaux et savoir avec qui ils seront. C'est facultatif, sans effet sur ton inscription. Tu peux le masquer à tout moment avec cet interrupteur.`
+    case "minor": return "Ton nom n'est pas montré aux autres bénévoles (moins de 18 ans)."
+  }
+}
+
+/** A name shown under the first text (confirmed volunteers only): the offer to accept the current one. */
+export const ROSTER_WIDEN_TEXT = "Les membres invités ne le voient pas encore."
+export const ROSTER_WIDEN_LABEL = "Le leur montrer aussi"
 /** What the card says once a choice is saved. */
 export function rosterDoneText(action: RosterAction): string {
   if (action === "hide") return "Ton nom est maintenant masqué."
   if (action === "widen") return "Ton nom est maintenant montré aussi aux membres invités."
   return "Ton nom est maintenant affiché."
 }
-/** The card's introduction, its empty state, its failure. */
-export const ROSTER_INTRO_TEXT = "Sur chacun de tes créneaux confirmés, les autres bénévoles dont la place est confirmée : les noms affichés avec leur accord et le nombre des autres, sans leur nom."
+/** The card's empty state, its failure. */
 export const ROSTER_EMPTY_TEXT = "Aucun créneau confirmé pour l'instant."
+export const ROSTER_NOBODY_TEXT = "Personne d'autre pour l'instant."
 export const ROSTER_FAILURE_TEXT = "Ton choix n'a pas pu être enregistré. Vérifie ta connexion, puis réessaie."
 
 // --- A shift's line (personal page and event page) ---

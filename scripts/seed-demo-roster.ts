@@ -6,7 +6,7 @@
  * own, « Amicale du Marché », with
  * - « Marché de Noël », published, the setting on: confirmed volunteers, some of whom chose to
  *   show their name, and Léa, registered before the setting was turned on, whose name stays
- *   hidden (her personal page shows the card with « Afficher mon nom »);
+ *   hidden (her personal page shows the card with its switch off, « Masqué »);
  * - « Marché de printemps », a draft with the setting on (the default of a new event), for the
  *   publication page's note.
  *

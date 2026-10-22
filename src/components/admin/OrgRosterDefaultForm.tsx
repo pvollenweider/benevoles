@@ -5,7 +5,8 @@
 
 import { useState } from "react"
 import { announce } from "@/lib/announce"
-import { ROSTER_ORG_DEFAULT_HINT, ROSTER_ORG_DEFAULT_LABEL } from "@/lib/shift-roster-text"
+import { ROSTER_DOC_LINKS, ROSTER_DOC_TOPIC, ROSTER_ORG_DEFAULT_HINT, ROSTER_ORG_DEFAULT_LABEL } from "@/lib/shift-roster-text"
+import DocMoreLink from "@/components/DocMoreLink"
 
 /**
  * « Qui est inscrit » (#1068), Paramètres (owners): the value the organisation's next new events
@@ -55,6 +56,8 @@ export default function OrgRosterDefaultForm({ initialValue }: { initialValue: b
         <div>
           <label htmlFor="org-roster-default" className="text-sm font-medium text-gray-700">{ROSTER_ORG_DEFAULT_LABEL}</label>
           <p id="org-roster-default-hint" className="text-xs text-gray-600">{ROSTER_ORG_DEFAULT_HINT}</p>
+          {/* Outside the hint: the box's description must not read the link. */}
+          <p className="text-xs"><DocMoreLink href={ROSTER_DOC_LINKS.orgDefault} about={ROSTER_DOC_TOPIC} /></p>
         </div>
       </div>
       <div className="flex flex-wrap items-center gap-3">
