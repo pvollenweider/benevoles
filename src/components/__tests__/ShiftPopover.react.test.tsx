@@ -340,4 +340,39 @@ describe("ShiftPopover", () => {
       expect(screen.getByLabelText("Places")).toHaveValue(6)
     })
   })
+
+  // #1004: Back from another admin page showed the values from before a save on close.
+  describe("saving on close refreshes the router cache", () => {
+    afterEach(() => { router.refresh.mockReset() })
+
+    const withBar = (run: (bar: HTMLButtonElement) => Promise<void>) => async () => {
+      const bar = document.createElement("button")
+      bar.id = `shift-bar-${shift.id}`
+      document.body.appendChild(bar)
+      bar.focus()
+      try { await run(bar) } finally { bar.remove() }
+    }
+
+    it("once the save has gone through, focus staying on the bar", withBar(async bar => {
+      let resolve: (saved: boolean) => void = () => {}
+      const p = setup()
+      p.onPatch.mockReturnValue(new Promise<boolean>(r => { resolve = r }))
+      fireEvent.change(screen.getByLabelText("Places"), { target: { value: "5" } })
+      fireEvent.keyDown(document, { key: "Escape" })
+      expect(p.onPatch).toHaveBeenCalledWith("s1", expect.objectContaining({ capacity: 5 }))
+      expect(router.refresh).not.toHaveBeenCalled()
+      await act(async () => { resolve(true) })
+      expect(router.refresh).toHaveBeenCalledTimes(1)
+      expect(bar).toHaveFocus()
+    }))
+
+    it("not when the save failed", withBar(async () => {
+      const p = setup()
+      p.onPatch.mockResolvedValue(false)
+      fireEvent.keyDown(document, { key: "Escape" })
+      await act(async () => {})
+      expect(p.onPatch).toHaveBeenCalledTimes(1)
+      expect(router.refresh).not.toHaveBeenCalled()
+    }))
+  })
 })

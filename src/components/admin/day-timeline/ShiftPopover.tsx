@@ -140,7 +140,9 @@ export default function ShiftPopover({
     // A capacity under the confirmed people isn't saved, and a minimum that doesn't fit the places
     // (#949) saves neither: the shift keeps its own.
     const { patch, pairProblem } = closingPatch(shift, { label: labelRef.current, capacity: capacityRef.current, minimum: minimumRef.current })
-    onPatch(shift.id, patch)
+    // Once saved, the page's copy in the router cache is refreshed: Back from another page would
+    // show the old values (#1004). Client state, focus and scroll are kept.
+    void Promise.resolve(onPatch(shift.id, patch)).then(saved => { if (saved !== false) router.refresh() })
     onClose()
     // The bar itself when what was focused at opening is gone (the bar is drawn again when a
     // duplicate adds a lane), was no control (WebKit, #987), or is the popover's own heading (the
@@ -151,7 +153,7 @@ export default function ShiftPopover({
     if (restoreFocus && opener?.isConnected) opener.focus()
     // The field's message is gone with the popover: the discarded pair is announced (3.3.1, 4.1.3).
     if (pairProblem) onNotSaved?.(`Places et minimum non enregistrés : ${pairProblem}`)
-  }, [shift, onPatch, onClose, onNotSaved])
+  }, [shift, onPatch, onClose, onNotSaved, router])
 
   useEffect(() => {
     function onMD(e: MouseEvent) {
