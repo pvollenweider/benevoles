@@ -23,7 +23,7 @@ export default function PrivacyPage() {
     <>
       <JsonLd data={publicPageJsonLd("/legal/privacy", apexBaseUrl())} />
       <h1>Politique de confidentialité</h1>
-      <p className="text-gray-500 text-sm">Dernière mise à jour : 21 octobre 2026</p>
+      <p className="text-gray-500 text-sm">Dernière mise à jour : 22 octobre 2026</p>
 
       <p>
         La présente politique décrit comment <strong>benevol.app</strong>, éditée par{" "}
@@ -42,6 +42,10 @@ export default function PrivacyPage() {
           <strong>Données des bénévoles</strong> (nom, e-mail, disponibilités, présences) :
           l&apos;Organisation est <strong>responsable du traitement</strong> ; benevol.app est{" "}
           <strong>sous-traitant</strong> agissant sur instruction de l&apos;Organisation.
+        </li>
+        <li>
+          <strong>Journaux du serveur et statistiques de visite</strong> (toute personne qui visite le
+          site) : benevol.app est <strong>responsable du traitement</strong>.
         </li>
       </ul>
 
@@ -74,15 +78,13 @@ export default function PrivacyPage() {
               <td>Exécution du contrat</td>
               <td>Durée du compte</td>
             </tr>
-            <tr>
-              <td>Logs de connexion</td>
-              <td>Sécurité et débogage</td>
-              <td>Intérêt légitime</td>
-              <td>{RETENTION_DAYS.technicalLogs} jours</td>
-            </tr>
           </tbody>
         </table>
       </div>
+      <p>
+        Les connexions à votre compte figurent aussi dans les{" "}
+        <a href="#journaux-serveur">journaux du serveur</a> (section 2.3).
+      </p>
 
       <h3 id="donnees-demandes-espace">2.2 Demandes d&apos;espace et prévention des abus</h3>
       <p className="sm:hidden">Faites défiler le tableau horizontalement.</p>
@@ -123,7 +125,38 @@ export default function PrivacyPage() {
         enregistré. L&apos;e-mail de confirmation ne reprend aucun texte saisi dans le formulaire.
       </p>
 
-      <h3>2.3 Cookies et stockage local</h3>
+      <h3 id="journaux-serveur">2.3 Visiteurs du site : journaux du serveur et statistiques</h3>
+      <p>
+        Pour toute visite du site, que vous ayez un compte ou non, benevol.app est responsable du
+        traitement des journaux de son serveur.
+      </p>
+      <ul>
+        <li>
+          <strong>Données</strong> : date et heure, adresse IP, page demandée, navigateur et système
+          d&apos;exploitation indiqués par votre appareil. Les liens personnels d&apos;inscription et d&apos;invitation n&apos;y sont jamais écrits.
+        </li>
+        <li>
+          <strong>Finalité</strong> : sécurité, détection des abus et correction des erreurs.
+        </li>
+        <li>
+          <strong>Base légale</strong> : intérêt légitime.
+        </li>
+        <li>
+          <strong>Durée</strong> : {RETENTION_DAYS.accessLogs} jours. L&apos;adresse IP complète et le
+          navigateur sont gardés {RETENTION_DAYS.accessLogFullIp} jours ; ensuite l&apos;adresse est
+          raccourcie (sans son dernier nombre pour une adresse IPv4, réduite à ses trois premiers
+          groupes pour une adresse IPv6) et le navigateur est retiré.
+        </li>
+        <li>
+          <strong>Statistiques</strong> : ces journaux servent aussi à calculer chaque nuit des totaux
+          de visites par page, pour savoir quelles pages sont utilisées et repérer les erreurs
+          (intérêt légitime). Les totaux ne contiennent ni adresse IP, ni navigateur, ni heure, et ne
+          suivent personne d&apos;une page à l&apos;autre ; aucun cookie n&apos;est utilisé. Ils sont
+          gardés {RETENTION_DAYS.accessLogStats / 365} ans.
+        </li>
+      </ul>
+
+      <h3 id="cookies">2.4 Cookies et stockage local</h3>
       <p>
         Nous utilisons un cookie de session (NextAuth) strictement nécessaire à
         l&apos;authentification. Aucun cookie de pistage, analytique ou publicitaire n&apos;est

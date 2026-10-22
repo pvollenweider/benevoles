@@ -195,3 +195,4 @@ Seules les inscriptions `active` d'un événement publié, aux rappels activés,
 - `/api/health` répond `200` si la base est joignable, `503` sinon ; la sonde de vie Kubernetes l'interroge, la sonde de disponibilité interroge `/api/health/ready` (503 tant que le préchauffage n'est pas fini).
 - `/super-admin/health` : base, migrations, file d'envoi, dernière exécution de chaque tâche planifiée (`JobRun`, alimenté par `recordJobRun` dans les crons et par `/api/cron/heartbeat` pour les sauvegardes et le test de restauration), version et commit déployés (`GIT_SHA`).
 - Les requêtes qui portent un jeton personnel ne sont pas écrites dans le journal d'accès de Traefik (`k8s/ingressroute-tokens.yaml`, #485).
+- Les journaux d'accès de Traefik sont un fichier JSON du nœud (`/var/log/traefik/access.log`), gardé 1 an, l'adresse du client réduite à son réseau après 90 jours ([`k8s/log-rotation.md`](../k8s/log-rotation.md)).

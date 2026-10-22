@@ -13,5 +13,5 @@
 | 7 | Journaux d'activité cités seulement comme export, pas parmi les données traitées | ils conservent les identifiants d'acteur et d'entité (données pseudonymisées) | les ajouter aux catégories, avec leur durée |
 | 9 | Rôles pour les données des administrateurs | répartition non tranchée ([inventaire.md](inventaire.md)) | clarifier après validation juridique |
 | 10 | Durées chez les fournisseurs absentes | Sentry, SMTP, corbeille Swiss Backup, services push : non documentées | les ajouter une fois vérifiées |
-| 11 | Journaux de connexion, 90 jours | rotation décrite mais pas installée par le dépôt (`k8s/log-rotation.md`) | vérifier sur le serveur avant de l'annoncer |
+| 11 | Journaux de connexion : 90 jours annoncés jusqu'ici ; journaux d'accès du proxy gardés 1 an, adresse IP complète 90 jours, depuis la décision du 2026-10-22 | rotation, réduction des adresses et fichier de Traefik décrits mais pas installés par le dépôt (`k8s/log-rotation.md`, `k8s/node/`) | appliquer et vérifier sur le serveur avant de publier la nouvelle durée dans la politique |
 | 12 | Procédure de violation | projet interne seulement ([procedure-violation.md](procedure-violation.md)) | valider, puis mentionner l'engagement d'information |

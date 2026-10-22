@@ -60,7 +60,7 @@ Manifestes dans `k8s/`, namespace `benevoles` :
 | `middleware-hsts.yaml` | Middleware `benevoles-hsts` | oui, avant `ingress.yaml` et `ingressroute-tokens.yaml` | En-tête `Strict-Transport-Security` (1 an, sans `includeSubDomains` ni `preload`) ; un routeur qui nomme un middleware absent est désactivé par Traefik |
 | `ingressroute-tokens.yaml` | IngressRoute `benevoles-app-tokens` et `benevoles-app-tokens-http`, Middleware `benevoles-https-redirect` | oui | Routeur prioritaire, **sans journal d'accès**, pour les requêtes qui portent un jeton personnel (chemins `/my/`, `/leader/`… et requêtes `token`, `t`) et la recherche admin, en HTTPS et en HTTP (redirigé). Un jeton ne doit jamais être journalisé ; limité à benevol.app, le Traefik partagé n'est pas modifié. Toute nouvelle route à jeton s'y ajoute (vérifié par `no-tokens-in-access-logs.test.ts`) |
 | `ingressroute-http.yaml` | IngressRoute `benevoles-app-http` | oui | Route de dernière priorité sur l'entrée `web` : toute adresse `http://` de benevol.app (apex et sous-domaines) est redirigée de façon permanente vers `https://`, avec le Middleware de `ingressroute-tokens.yaml` (à appliquer avant). Sans elle, Traefik répondait « 404 page not found » |
-| `traefik-config.yaml` | HelmChartConfig `traefik` (`kube-system`) | non | Réglage du Traefik fourni par k3s : `externalTrafficPolicy: Local` pour conserver l'adresse réelle des visiteurs (voir ci-dessous), journaux d'accès activés, délais de lecture et d'écriture de 30 min sur `web` et `websecure` |
+| `traefik-config.yaml` | HelmChartConfig `traefik` (`kube-system`) | non | Réglage du Traefik fourni par k3s : `externalTrafficPolicy: Local` pour conserver l'adresse réelle des visiteurs (voir ci-dessous), journaux d'accès en JSON dans `/var/log/traefik/access.log` sur le nœud (répertoire à créer avant, voir `log-rotation.md`), délais de lecture et d'écriture de 30 min sur `web` et `websecure` |
 | `certificate-wildcard.yaml` | Certificate `benevol-app-wildcard` | non | Certificat wildcard (cert-manager, `ClusterIssuer` `letsencrypt-prod`, hors dépôt) |
 | `gandi-webhook.yaml` | Deployment `cert-manager-webhook-gandi`, APIService `v1alpha1.acme.bwolf.me`… (`cert-manager`) | non | Webhook DNS Gandi pour la validation DNS-01 du certificat wildcard ; lit le secret `gandi-api-key` |
 | `cronjob-reminders.yaml` | CronJob `app-reminders` | oui | Rappels, toutes les heures |
@@ -69,7 +69,7 @@ Manifestes dans `k8s/`, namespace `benevoles` :
 | `cronjob-release-check.yaml` | CronJob `app-release-check` | oui | Vérification de nouvelle version GitHub (#612), 03:00 UTC ; sans effet ici, `benevol.app` est déployé depuis `main` |
 | `cronjob-backup.yaml` | PVC `backup-pvc` (5 Gi), CronJob `postgres-backup` | oui | `pg_dump` chiffré (AES-256), 01:00 UTC, rétention 30 jours |
 | `cronjob-backup-offsite.yaml` | CronJob `backup-offsite` | oui | Copie des fichiers déjà chiffrés hors site (`rclone`), 01:30 UTC, rétention 90 jours chez le fournisseur ; vers Infomaniak Swiss Backup (#524) ; demande le secret `rclone-config` et la clé `OFFSITE_BUCKET` de `benevoles-secret` |
-| `log-rotation.md` | | | Rotation des journaux du nœud : procédure manuelle, la durée de 90 jours n'est pas encore garantie |
+| `log-rotation.md`, `node/` | | | Journaux du nœud, procédure manuelle : journaux d'accès de Traefik gardés 1 an, adresses réduites après 90 jours (`node/` : logrotate, scripts et tâches cron à installer sur le nœud), totaux de visites gardés 2 ans ; journaux des conteneurs, 90 jours pas encore garantis |
 
 ### Adresse des visiteurs et limites de débit
 
@@ -276,7 +276,7 @@ La ranger **d'abord** dans un gestionnaire de mots de passe, hors du serveur et 
 
 Avec `deploy.yml`, un push sur `main` applique tout dans le bon ordre. À la main, suivre [Mise en place manuelle](#mise-en-place-manuelle) : migrations d'abord, et ne pas continuer si le Job échoue (`backoffLimit: 0`).
 
-`k8s/traefik-config.yaml` n'est **pas** appliqué par `deploy.yml` : il règle le Traefik de k3s partagé par tous les sites du cluster (`kube-system`) : adresse réelle des visiteurs, journaux d'accès, délais de lecture et d'écriture de 30 min. Un `HelmChartConfig` `traefik` existant serait remplacé : fusionner d'abord ses réglages. À appliquer une fois :
+`k8s/traefik-config.yaml` n'est **pas** appliqué par `deploy.yml` : il règle le Traefik de k3s partagé par tous les sites du cluster (`kube-system`) : adresse réelle des visiteurs, journaux d'accès dans un fichier du nœud, délais de lecture et d'écriture de 30 min. Un `HelmChartConfig` `traefik` existant serait remplacé : fusionner d'abord ses réglages. Créer d'abord sur le nœud les répertoires `/var/log/traefik` (propriétaire 65532) et `/var/log/traefik-archive` (root), puis installer la rotation et les scripts ([`k8s/log-rotation.md`](../k8s/log-rotation.md), « Mise en place ») : sans ce répertoire, le nouveau pod Traefik ne démarre pas. À appliquer ensuite :
 
 ```bash
 kubectl apply -f k8s/traefik-config.yaml
@@ -594,4 +594,4 @@ Il n'y a pas de suppression immédiate : le super admin **désactive** l'organis
 
 ## Journaux
 
-[`k8s/log-rotation.md`](../k8s/log-rotation.md) décrit comment limiter la rétention des journaux à 90 jours sur le nœud k3s (kubelet, logrotate ; Loki s'il est installé).
+[`k8s/log-rotation.md`](../k8s/log-rotation.md) décrit les journaux du nœud k3s : les journaux d'accès de Traefik, écrits dans `/var/log/traefik/access.log`, tournés chaque jour vers `/var/log/traefik-archive/` et gardés 1 an, avec l'adresse IP réduite à son réseau et le User-Agent retiré après 90 jours, et les totaux de visites gardés 2 ans (fichiers de `k8s/node/` à installer sur le nœud) ; et la limite de 90 jours des journaux des conteneurs (kubelet, logrotate ; Loki s'il est installé). Le même fichier reçoit les requêtes des autres sites servis par ce Traefik.

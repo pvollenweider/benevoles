@@ -1,0 +1,25 @@
+# SPDX-FileCopyrightText: 2026 Philippe Vollenweider
+# SPDX-License-Identifier: AGPL-3.0-only
+#
+# Traefik access log on the node (k8s/traefik-config.yaml writes it, k8s/log-rotation.md).
+# Installed as /etc/logrotate.d/traefik-access. One file per day, one year kept:
+# rotate 365 counts files and maxage 365 caps their age; logrotate only checks maxage when it
+# rotates, so traefik-log-anonymise also deletes archived files past 365 days. Rotated files go
+# to /var/log/traefik-archive (root only, 0700), beside and not inside the directory the Traefik
+# user can write: it can write the live file, never touch the history.
+# copytruncate: no Traefik restart or signal; Traefik opens the file with O_APPEND, so it keeps
+# writing at the new end. The few lines written between the copy and the truncation can be lost.
+# /usr/local/sbin/traefik-log-anonymise relies on the dateext names (access.log-YYYYMMDD).
+/var/log/traefik/access.log {
+    daily
+    rotate 365
+    maxage 365
+    olddir /var/log/traefik-archive
+    dateext
+    dateformat -%Y%m%d
+    compress
+    delaycompress
+    missingok
+    notifempty
+    copytruncate
+}

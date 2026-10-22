@@ -21,7 +21,7 @@
 
 1. **Enregistrer** : date et heure de la prise de connaissance, source, première description. Le registre sert de chronologie des décisions pour toute la suite.
 2. **Qualifier** : s'agit-il d'une violation (perte de confidentialité, d'intégrité ou de disponibilité de données personnelles) ? Garder la trace même si la réponse est non.
-3. **Préserver les preuves**, sans les altérer, en copies datées : journaux du proxy et des conteneurs, événements Sentry, journaux d'activité (`EventLog`, `OrgLog`, export CSV du journal de l'organisation, archive de l'événement), file d'envoi (`NotificationOutbox`), compteurs de limitation (`RateLimit`), dernières exécutions (`JobRun`), état des secrets.
+3. **Préserver les preuves**, sans les altérer, en copies datées : journaux du proxy (`/var/log/traefik/` et `/var/log/traefik-archive/` sur le nœud, 1 an ; ils contiennent aussi les autres sites du même Traefik) et des conteneurs, événements Sentry, journaux d'activité (`EventLog`, `OrgLog`, export CSV du journal de l'organisation, archive de l'événement), file d'envoi (`NotificationOutbox`), compteurs de limitation (`RateLimit`), dernières exécutions (`JobRun`), état des secrets.
    - Le nettoyage nocturne (02:00 UTC) efface les emails envoyés et les compteurs expirés : au besoin, le suspendre (`kubectl -n benevoles patch cronjob app-cleanup -p '{"spec":{"suspend":true}}'`).
    - Mettre de côté un dump antérieur à l'incident avant sa rotation (30 jours sur le serveur, 90 jours hors site).
    - Les requêtes à jeton personnel (`/my/`, `/leader/`, `/waitlist/`, API publiques à jeton) ne figurent **pas** dans le journal d'accès du proxy (`k8s/ingressroute-tokens.yaml`).

@@ -1,0 +1,325 @@
+#!/usr/bin/env python3
+# SPDX-FileCopyrightText: 2026 Philippe Vollenweider
+# SPDX-License-Identifier: AGPL-3.0-only
+"""Reduce old Traefik access-log files, delete expired ones (node script, k8s/log-rotation.md).
+
+Installed on the node as /usr/local/sbin/traefik-log-anonymise and run once a day by
+/etc/cron.d/traefik-log-anonymise. Python 3 standard library only.
+
+Traefik writes JSON lines to /var/log/traefik/access.log (k8s/traefik-config.yaml); logrotate
+moves it every day to /var/log/traefik-archive/access.log-YYYYMMDD (a directory only root can
+open, outside the one Traefik writes), compressed one day later (k8s/node/traefik-access.logrotate). For each archived file:
+
+  - once its oldest line is 89 days old (so before any line passes 90 days), the file is
+    rewritten with every client address reduced to its network, IPv4 to /24 (203.0.113.57 ->
+    203.0.113.0) and IPv6 to /48 (2001:db8:1234:5678::1 -> 2001:db8:1234::); the client port and
+    the User-Agent are dropped. The age comes from the timestamp of the first line (the oldest),
+    or from the file name when it has none.
+  - once its oldest line is more than --max-days (365) old, the file is deleted: logrotate only
+    applies maxage when it rotates, which a quiet log may never trigger.
+
+The live file is never rewritten (Traefik holds it open); the run fails if its first line is
+already due, which means the rotation has stopped.
+
+Idempotent: a reduced address reduces to itself, and the names of the files already done are
+kept in --state so they are not read again every day. A lost state file only costs one extra
+pass. A rewritten file keeps its owner, mode and modification time.
+
+    traefik-log-anonymise                 # the daily run
+    traefik-log-anonymise --dry-run       # list what would be rewritten or deleted
+    zcat access.log-20260101.gz | traefik-log-anonymise --filter   # one file, to stdout
+"""
+
+import argparse
+import datetime
+import fcntl
+import gzip
+import io
+import ipaddress
+import json
+import os
+import re
+import stat
+import sys
+import tempfile
+
+LIVE_FILE = "/var/log/traefik/access.log"
+ARCHIVE_DIR = "/var/log/traefik-archive"
+STATE_FILE = "/var/lib/traefik-log-anonymise/done"
+FULL_IP_DAYS = 90
+MAX_DAYS = 365
+IPV4_PREFIX = 24
+IPV6_PREFIX = 48
+
+# access.log-YYYYMMDD (yesterday's, not compressed yet: delaycompress) or access.log-YYYYMMDD.gz
+ROTATED = re.compile(r"^access\.log-(\d{8})(\.gz)?$")
+# Fields that hold one client address (Traefik's JSON access log, pkg/middlewares/accesslog).
+ADDRESS_FIELDS = ("ClientAddr", "ClientHost")
+# Dropped with the full address: the port narrows a /24 down again, and the User-Agent, kept for
+# the daily totals, has no use in an old file (minimisation).
+DROPPED_FIELDS = ("ClientPort", "request_User-Agent")
+# Other headers are dropped by the Traefik configuration; if they were ever kept, these carry addresses.
+ADDRESS_HEADERS = ("request_X-Forwarded-For", "request_X-Real-Ip", "request_Forwarded")
+
+
+def truncate_ip(value):
+    """The network address of an IP (IPv4 /24, IPv6 /48), or None when value is not an IP."""
+    if not isinstance(value, str):
+        return None
+    text = value.strip()
+    if text.startswith("[") and text.endswith("]"):
+        text = text[1:-1]
+    try:
+        ip = ipaddress.ip_address(text.split("%", 1)[0])
+    except ValueError:
+        return None
+    if ip.version == 6 and ip.ipv4_mapped is not None:
+        ip = ip.ipv4_mapped
+    prefix = IPV4_PREFIX if ip.version == 4 else IPV6_PREFIX
+    return str(ipaddress.ip_network(f"{ip}/{prefix}", strict=False).network_address)
+
+
+def split_host_port(value):
+    """'203.0.113.5:443' -> '203.0.113.5', '[2001:db8::1]:443' -> '2001:db8::1', bare IPs as is."""
+    if value.startswith("["):
+        end = value.find("]")
+        return value[1:end] if end != -1 else value
+    if value.count(":") == 1:
+        return value.split(":", 1)[0]
+    return value
+
+
+def truncate_address(value):
+    """A client address with or without port, truncated; None when it holds no IP."""
+    if not isinstance(value, str):
+        return None
+    return truncate_ip(split_host_port(value))
+
+
+def anonymise_record(record):
+    for field in ADDRESS_FIELDS:
+        truncated = truncate_address(record.get(field))
+        if truncated is not None:
+            record[field] = truncated
+    for field in DROPPED_FIELDS:
+        record.pop(field, None)
+    for field in ADDRESS_HEADERS:
+        value = record.get(field)
+        if isinstance(value, str):
+            parts = [p.strip() for p in value.split(",")]
+            record[field] = ", ".join(truncate_address(p) or p for p in parts)
+    return record
+
+
+IPV6_LIKE = re.compile(r"(?<![\w:.])(?:[0-9A-Fa-f]{0,4}:){2,7}[0-9A-Fa-f.]*(?![\w:.])")
+IPV4_LIKE = re.compile(r"(?<![\w.])(?:\d{1,3}\.){3}\d{1,3}(?![\w.])")
+
+
+def anonymise_text(text):
+    """Any address-looking word of a free-text line, truncated (a line that is not JSON)."""
+    swap = lambda m: truncate_ip(m.group(0)) or m.group(0)
+    return IPV4_LIKE.sub(swap, IPV6_LIKE.sub(swap, text))
+
+
+def anonymise_line(line):
+    """(new line, True) for a JSON record; (addresses truncated as text, False) otherwise."""
+    body = line.rstrip("\n")
+    if not body.strip():
+        return line, True
+    try:
+        record = json.loads(body)
+    except ValueError:
+        return anonymise_text(line), False
+    if not isinstance(record, dict):
+        return anonymise_text(line), False
+    out = json.dumps(anonymise_record(record), ensure_ascii=False, separators=(",", ":"))
+    return out + "\n", True
+
+
+def file_date(name):
+    match = ROTATED.match(name)
+    if not match:
+        return None
+    try:
+        return datetime.datetime.strptime(match.group(1), "%Y%m%d").date()
+    except ValueError:
+        return None
+
+
+def open_nofollow(path):
+    """Binary reader of a regular file, never through a symbolic link."""
+    fd = os.open(path, os.O_RDONLY | os.O_NOFOLLOW)
+    if not stat.S_ISREG(os.fstat(fd).st_mode):
+        os.close(fd)
+        raise ValueError("not a regular file")
+    return os.fdopen(fd, "rb")
+
+
+def first_line_date(path):
+    """UTC day of the first (oldest) line, from its StartUTC; None when there is none."""
+    with open_nofollow(path) as raw:
+        reader = gzip.GzipFile(fileobj=raw, mode="rb") if path.endswith(".gz") else raw
+        line = reader.readline(1 << 16).decode("utf-8", "replace")
+    try:
+        start = json.loads(line).get("StartUTC", "")
+        return datetime.date.fromisoformat(start[:10])
+    except (ValueError, AttributeError, TypeError):
+        return None
+
+
+def oldest_line_age(path, name, today):
+    """Age in days of the oldest line: its timestamp, else the day before the file's date."""
+    day = first_line_date(path)
+    if day is None:
+        named = file_date(name)
+        day = named and named - datetime.timedelta(days=1)
+    return None if day is None else (today - day).days
+
+
+def anonymise_file(path):
+    """Rewrite one regular file in place, atomically. Returns (lines, non-JSON lines)."""
+    info = os.lstat(path)
+    if not stat.S_ISREG(info.st_mode):
+        raise ValueError("not a regular file (symbolic link?), left untouched")
+    compressed = path.endswith(".gz")
+    directory, name = os.path.split(path)
+    fd, tmp = tempfile.mkstemp(prefix=".anonymise-", dir=directory or ".")
+    lines = skipped = 0
+    try:
+        with open_nofollow(path) as raw_in, os.fdopen(fd, "wb") as raw_out:
+            if os.fstat(raw_in.fileno()).st_ino != info.st_ino:
+                raise ValueError("file replaced while reading, left untouched")
+            reader = gzip.GzipFile(fileobj=raw_in, mode="rb") if compressed else raw_in
+            # The gzip header keeps the original name, not the temporary one.
+            writer = gzip.GzipFile(filename=name[:-3], fileobj=raw_out, mode="wb") if compressed else raw_out
+            source = io.TextIOWrapper(reader, encoding="utf-8", errors="surrogateescape", newline="")
+            target = io.TextIOWrapper(writer, encoding="utf-8", errors="surrogateescape", newline="")
+            for line in source:
+                new, ok = anonymise_line(line)
+                lines += 1
+                skipped += 0 if ok else 1
+                target.write(new)
+            target.flush()
+            source.detach()
+            target.detach()
+            if compressed:
+                writer.close()
+            raw_out.flush()
+            os.fsync(raw_out.fileno())
+        os.chown(tmp, info.st_uid, info.st_gid)
+        os.chmod(tmp, stat.S_IMODE(info.st_mode))
+        os.utime(tmp, ns=(info.st_atime_ns, info.st_mtime_ns))
+        os.replace(tmp, path)
+    except BaseException:
+        if os.path.exists(tmp):
+            os.unlink(tmp)
+        raise
+    return lines, skipped
+
+
+def read_state(path):
+    try:
+        with open(path, encoding="utf-8") as f:
+            return {line.strip() for line in f if line.strip()}
+    except FileNotFoundError:
+        return set()
+
+
+def write_state(path, names):
+    os.makedirs(os.path.dirname(path) or ".", exist_ok=True)
+    tmp = path + ".tmp"
+    with open(tmp, "w", encoding="utf-8") as f:
+        f.writelines(f"{n}\n" for n in sorted(names))
+    os.replace(tmp, path)
+
+
+def run(archive_dir, live_file, state_path, days, max_days, today, dry_run, log):
+    done = read_state(state_path)
+    present = set()
+    failures = 0
+    for name in sorted(os.listdir(archive_dir)):
+        named = file_date(name)
+        if named is None:
+            continue
+        path = os.path.join(archive_dir, name)
+        try:
+            age = oldest_line_age(path, name, today)
+        except (OSError, ValueError, EOFError) as error:
+            failures += 1
+            log(f"error: {path}: {error}")
+            continue
+        # Deleted as soon as its oldest line is past max_days, so no line outlives the year.
+        if age is not None and age > max_days:
+            if dry_run:
+                log(f"would delete {path} (oldest line {age} days old)")
+                continue
+            try:
+                if os.path.islink(path) or not os.path.isfile(path):
+                    raise ValueError("not a regular file, left untouched")
+                os.unlink(path)
+                log(f"deleted {path} (oldest line {age} days old)")
+            except (OSError, ValueError) as error:
+                failures += 1
+                log(f"error: {path}: {error}")
+            continue
+        present.add(name)
+        if name in done:
+            continue
+        if age is None or age < days - 1:
+            continue
+        if dry_run:
+            log(f"would anonymise {path} (oldest line {age} days old)")
+            continue
+        try:
+            lines, skipped = anonymise_file(path)
+        except (OSError, ValueError, EOFError) as error:
+            failures += 1
+            log(f"error: {path}: {error}")
+            continue
+        done.add(name)
+        log(f"anonymised {path}: {lines} lines" + (f", {skipped} not JSON (addresses truncated as text)" if skipped else ""))
+    try:
+        live_age = oldest_line_age(live_file, "", today) if os.path.exists(live_file) else None
+    except (OSError, ValueError, EOFError) as error:
+        live_age = None
+        failures += 1
+        log(f"error: {live_file}: {error}")
+    if live_age is not None and live_age >= days - 1:
+        failures += 1
+        log(f"error: {live_file} starts {live_age} days ago: is logrotate still running? (k8s/log-rotation.md)")
+    if not dry_run:
+        # Forget the files deleted since, so the state stays one year long at most.
+        write_state(state_path, done & present)
+    return 1 if failures else 0
+
+
+def main(argv=None):
+    parser = argparse.ArgumentParser(description=__doc__.split("\n\n")[0])
+    parser.add_argument("--dir", default=ARCHIVE_DIR, help=f"directory of the rotated files (default {ARCHIVE_DIR})")
+    parser.add_argument("--live", default=LIVE_FILE, help=f"file Traefik writes, checked only (default {LIVE_FILE})")
+    parser.add_argument("--state", default=STATE_FILE, help=f"names of the files already done (default {STATE_FILE})")
+    parser.add_argument("--days", type=int, default=FULL_IP_DAYS, help=f"keep full addresses this many days (default {FULL_IP_DAYS})")
+    parser.add_argument("--max-days", type=int, default=MAX_DAYS, help=f"delete files older than this (default {MAX_DAYS})")
+    parser.add_argument("--today", help="reference date YYYY-MM-DD (tests)")
+    parser.add_argument("--dry-run", action="store_true", help="list the files, change nothing")
+    parser.add_argument("--filter", action="store_true", help="anonymise stdin to stdout and exit")
+    args = parser.parse_args(argv)
+
+    if args.filter:
+        for line in sys.stdin:
+            sys.stdout.write(anonymise_line(line)[0])
+        return 0
+
+    today = datetime.date.fromisoformat(args.today) if args.today else datetime.datetime.now(datetime.timezone.utc).date()
+    os.makedirs(os.path.dirname(args.state) or ".", exist_ok=True)
+    with open(args.state + ".lock", "w") as lock:
+        try:
+            fcntl.flock(lock, fcntl.LOCK_EX | fcntl.LOCK_NB)
+        except BlockingIOError:
+            print("another run is in progress", file=sys.stderr)
+            return 0
+        return run(args.dir, args.live, args.state, args.days, args.max_days, today, args.dry_run, lambda m: print(m, file=sys.stderr))
+
+
+if __name__ == "__main__":
+    sys.exit(main())
