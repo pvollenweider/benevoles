@@ -25,7 +25,7 @@ import type { NotificationKind, NotificationPayload } from "./types"
  */
 export async function sendNotification(
   payload: NotificationPayload,
-): Promise<{ ok: true } | { ok: false; reason: string; permanent?: boolean; blocked?: true; held?: true; retryAfterMs?: number }> {
+): Promise<{ ok: true } | { ok: false; reason: string; permanent?: boolean; recipientRejected?: true; blocked?: true; held?: true; retryAfterMs?: number }> {
   // Deactivated or missing organisation (#814), or one awaiting validation writing to someone other
   // than its administrators (#810): refused, and the outbox cancels the row.
   const refused = await organizationSendingVerdict(payload.organizationId, payload.recipient?.email)

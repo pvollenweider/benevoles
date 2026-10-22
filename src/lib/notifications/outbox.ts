@@ -5,6 +5,7 @@ import { after } from "next/server"
 import { prisma } from "../prisma"
 import type { Prisma } from "@/generated/prisma/client"
 import { reportError } from "../report-error"
+import { errorLogLine } from "../report-error-log"
 import { sendNotification } from "./index"
 import type { NotificationPayload, Send } from "./types"
 import { MAX_ATTEMPTS } from "./types"
@@ -26,6 +27,15 @@ import { isAddedByOrganizer, resolveAddedByOrganizer } from "./added-by-organize
  */
 
 export { MAX_ATTEMPTS }
+
+/**
+ * A row that gave up only because the recipient's address doesn't exist (5.1.x, flagged by the
+ * email channel): not reported to Sentry. Both flags are required, so any other failure, including
+ * an unflagged permanent one, is still reported.
+ */
+export function isRecipientDataFailure(outcome: { permanent?: boolean; recipientRejected?: true }): boolean {
+  return outcome.permanent === true && outcome.recipientRejected === true
+}
 /** 5 min, 10, 20, 40, 80 between attempts. */
 export function backoffMs(attempts: number): number {
   return 5 * 60 * 1000 * 2 ** Math.max(0, attempts - 1)
@@ -177,7 +187,7 @@ export async function deliverOutbox(opts: { ids?: string[]; limit?: number; now?
         return sendNotification({ ...payload, organizationId: claimed.organizationId ?? payload.organizationId ?? null, messageId: outboxMessageId(row.id), outboxId: row.id })
       })
       .catch(
-      (e: unknown) => ({ ok: false as const, reason: e instanceof Error ? e.message : String(e), permanent: undefined as true | undefined, blocked: undefined as true | undefined, held: undefined as true | undefined, retryAfterMs: undefined as number | undefined }),
+      (e: unknown) => ({ ok: false as const, reason: e instanceof Error ? e.message : String(e), permanent: undefined as true | undefined, recipientRejected: undefined as true | undefined, blocked: undefined as true | undefined, held: undefined as true | undefined, retryAfterMs: undefined as number | undefined }),
     )
 
     if (nothingLeft) {
@@ -229,7 +239,14 @@ export async function deliverOutbox(opts: { ids?: string[]; limit?: number; now?
       result.failed++
       let kind = "unknown"
       try { kind = openPayload(claimed.payload).kind } catch { /* reported below anyway */ }
-      reportError(`outbox.gave_up.${kind}`)(new Error(`Notification ${row.id} failed ${attempts} times: ${outcome.reason}`))
+      const gaveUp = new Error(`Notification ${row.id} failed ${attempts} times: ${outcome.reason}`)
+      if (isRecipientDataFailure(outcome)) {
+        // A mailbox or domain that doesn't exist: the member's address, not an application error.
+        // Failed and shown to the organiser as before, logged as a warning, not sent to Sentry.
+        console.warn(errorLogLine(`outbox.gave_up.${kind}`, gaveUp))
+      } else {
+        reportError(`outbox.gave_up.${kind}`)(gaveUp)
+      }
     } else {
       result.retried++
     }

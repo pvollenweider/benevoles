@@ -53,6 +53,7 @@ export type RecipientOutcome = {
  * purpose: tests build plain fixtures instead of real Error instances. */
 export type SmtpErrorLike = {
   code?: string
+  command?: string
   response?: string
   responseCode?: number
   recipient?: string
