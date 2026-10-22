@@ -18,7 +18,7 @@ version: 2.5
 
 **Seulement pour ceux qui en font partie.** Cet interrupteur n'apparaît qu'aux bénévoles qui ont une place confirmée, avec leur lien personnel, et aux membres que vous avez invités, avec le lien de leur invitation. Un visiteur anonyme ne le voit pas, ni par un lien par groupe, ni dans l'inscription intégrée à votre site. Rien d'autre n'est montré : ni email, ni téléphone, ni réponses aux questions.
 
-**Chacun décide pour son nom.** À l'inscription, une case facultative, non cochée, demande l'accord du bénévole. Sur sa page personnelle, l'encadré « Qui est inscrit » montre ses créneaux et l'interrupteur « Afficher mon nom aux autres bénévoles », pour afficher ou masquer son nom à tout moment. Ceux qui ne l'ont pas choisi sont comptés, sans leur nom. Les bénévoles de moins de 18 ans n'apparaissent jamais.
+**Chacun décide pour son nom.** À l'inscription, une case facultative, non cochée, demande l'accord du bénévole. Sur sa page personnelle, l'encadré « Qui est inscrit » montre ses créneaux et l'interrupteur « Afficher mon nom aux autres bénévoles », pour afficher ou masquer son nom à tout moment. Ceux qui ne l'ont pas choisi sont comptés, sans leur nom. Les bénévoles de moins de 18 ans dont la date de naissance est connue n'apparaissent jamais.
 
 → [Qui est inscrit, côté bénévole](/doc/ma-page-personnelle#qui-est-inscrit)
 
