@@ -1,6 +1,7 @@
 import { test, expect, type Page } from "@playwright/test"
 import { waitForHydration } from "./helpers/hydration"
 import { seriousViolations } from "./helpers/axe"
+import { FRISE_KEYS_SHOWN } from "../src/lib/frise-keyboard"
 import { createPublicEvent, publicSignUp, randomIp, type PublicEvent } from "./helpers/public-signup"
 
 /**
@@ -135,7 +136,7 @@ test("a held shift is named and tagged as the visitor's own, and not offered (#5
   // The keys are shown under the chart while a bar has the keyboard focus, and only then.
   const keys = page.locator("[data-frise-keys]")
   await expect(keys).toBeVisible()
-  await expect(keys).toHaveText("← → : même poste · ↑ ↓ : poste voisin · Tab : quitter le planning")
+  await expect(keys).toHaveText(FRISE_KEYS_SHOWN)
   // Up to the held bar: reachable, says why it is not offered, and Enter does nothing.
   await page.keyboard.press("ArrowUp")
   await expect(held).toBeFocused()

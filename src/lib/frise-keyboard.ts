@@ -84,5 +84,5 @@ export function friseTabStop(order: string[], clickable: ReadonlySet<string>, re
 /** The keys, read on entering a day's schedule (first in its region, and its description). */
 export const FRISE_KEYS_SPOKEN = "Flèches gauche et droite : créneaux du même poste. Flèches haut et bas : poste voisin. Début et Fin : bouts de la ligne. Entrée ou Espace choisit un créneau disponible."
 
-/** The same, shown under the chart while a bar has the keyboard focus (aria-hidden: read above). */
-export const FRISE_KEYS_SHOWN = "← → : même poste · ↑ ↓ : poste voisin · Tab : quitter le planning"
+/** The same, shown under the chart while a bar has the keyboard focus (aria-hidden: read above); no-break spaces before « : ». */
+export const FRISE_KEYS_SHOWN = "← → : même poste · ↑ ↓ : poste voisin · Tab : quitter le planning"
