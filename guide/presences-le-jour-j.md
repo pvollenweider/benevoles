@@ -30,6 +30,6 @@ La page reste accessible en dehors des dates, par exemple depuis un favori enreg
 
 Sans terminal ni badge : dans les [inscriptions](suivre-les-inscriptions.md), sélectionnez les lignes des personnes arrivées et cliquez **Marquer présents**. Un badge **Présent** apparaît sur la ligne, le compteur « N présents sur M inscrits » se met à jour, et l'action est notée dans le journal. **Annuler la présence** retire la marque (sélection de lignes déjà marquées). Seules les inscriptions confirmées peuvent être marquées.
 
-**Exporter les présences (CSV)**, en haut de la page des inscriptions, télécharge la feuille de présence : une ligne par inscription confirmée avec prénom, nom, email, téléphone, poste, créneau, date, horaires, présent oui/non et l'heure du pointage (fuseau de l'organisation). Elle s'ouvre directement dans Excel ou LibreOffice.
+**Exporter les présences (CSV)**, en haut de la page des inscriptions, télécharge la feuille de présence : une ligne par inscription confirmée avec prénom, nom, email, téléphone, poste, créneau, date, horaires, présent oui/non, la date et l'heure du pointage (fuseau de l'organisation), puis une colonne par question de l'événement. Elle s'ouvre directement dans Excel ou LibreOffice.
 
 Les présences enregistrées font les heures attestées des membres (voir [Gérer les membres](gerer-les-membres.md)).

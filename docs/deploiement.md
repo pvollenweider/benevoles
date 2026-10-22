@@ -18,7 +18,7 @@ Le `Dockerfile` est multi-étapes (`node:26-alpine`) :
 1. `deps` : `npm ci`
 2. `prisma-cli` : installe la CLI Prisma pour les migrations à l'exécution
 3. `builder` : `prisma generate` puis `npm run build`. `DATABASE_URL` et `AUTH_SECRET` reçoivent des valeurs factices pendant le build. `NEXT_PUBLIC_SENTRY_DSN` et `GIT_SHA` (affiché sur la page Santé du service) sont des arguments de build, `SENTRY_AUTH_TOKEN` un secret de build (`sentry_auth_token`)
-4. `runner` : sortie `standalone` de Next.js, utilisateur non root, port 3000. Copie aussi `prisma/`, `prisma.config.ts` et les sources des pages de contenu (`GUIDE_ADMIN.md`, `FEATURES.md`, `ACCESSIBILITE.md`) et les pages de documentation (`guide/`), lues à la requête, ainsi que `doc-lastmod.json` (`{}` si le build ne l'a pas reçu) : toute nouvelle page de contenu s'ajoute au `Dockerfile`
+4. `runner` : sortie `standalone` de Next.js, utilisateur non root, port 3000. Copie aussi `prisma/`, `prisma.config.ts` et les sources des pages de contenu (`GUIDE_ADMIN.md`, `GUIDE_BENEVOLE.md`, `FEATURES.md`, `ACCESSIBILITE.md`, `CHANGELOG.md`, les pages publiques à la racine comme `TARIFS.md` ou `FAQ-ACCUEIL.md` : liste exacte dans le `Dockerfile`), les pages de documentation (`guide/`) et les articles (`blog/`), lues à la requête, ainsi que `doc-lastmod.json` (`{}` si le build ne l'a pas reçu) : toute nouvelle page de contenu s'ajoute au `Dockerfile`
 
 Au démarrage, `docker-entrypoint.sh` attend PostgreSQL, exécute `prisma migrate deploy` sauf si `MIGRATE_ON_START=false`, puis lance `node server.js` et, en arrière-plan, le préchauffage de ses pages publiques (voir [Préchauffage avant la mise en service](#préchauffage-avant-la-mise-en-service)). Avec Docker Compose, les migrations s'appliquent donc au démarrage de l'application. Sur Kubernetes, les pods de l'application ont `MIGRATE_ON_START=false` : c'est le Job de migration qui les applique, une seule fois par déploiement (voir ci-dessous).
 
@@ -33,7 +33,7 @@ docker compose up -d
 `docker-compose.yml` lance PostgreSQL 16 et l'application (`build: .`) sur le port 3000. Ce qu'il ne fait pas :
 
 - Il ne transmet pas `AUTH_URL`, `AUTH_TRUST_HOST`, `CRON_SECRET`, `EMAIL_REPLY_TO`, `APP_TIME_ZONE`, `TRUSTED_PROXY_HOPS`, `TOKEN_ENCRYPTION_KEY_ID`, `TOKEN_ENCRYPTION_PREVIOUS_KEYS` ni les variables VAPID et Sentry : à ajouter dans la section `environment` si nécessaire.
-- Sans `AUTH_SECRET` exporté, il démarre sans erreur avec la valeur connue `change-me-in-production-32chars` : toujours l'exporter.
+- Sans `AUTH_SECRET` exporté, la valeur par défaut du fichier (`change-me-in-production-32chars`, 31 caractères) est refusée par `src/lib/env.ts` et l'application ne démarre pas : toujours l'exporter.
 - Il n'inclut aucun planificateur. Sans `CRON_SECRET`, les endpoints `/api/cron/*` refusent toute requête en production : ajouter ce secret et appeler les endpoints depuis un cron de l'hôte (voir [Tâches planifiées](../README.md#tâches-planifiées-cron) dans le README), dont `/api/cron/outbox` toutes les 5 minutes.
 - Il n'exécute pas le seed, et l'image ne contient pas `tsx` : lancer le seed depuis un checkout, sur l'hôte, avec les variables `ADMIN_*` et `ORG_ADMIN_*` pour créer les premiers comptes :
 
@@ -57,6 +57,7 @@ Manifestes dans `k8s/`, namespace `benevoles` :
 | `deployment.yaml` | Deployment `benevoles-app` | oui, en dernier | 1 réplica, mise à jour progressive sans indisponibilité, secret injecté avec `envFrom`, limites 500m CPU et 512 Mi, sonde de disponibilité sur `/api/health/ready` (après le préchauffage), sonde de vie sur `/api/health` |
 | `service.yaml`, `ingress.yaml` | Service et Ingress `benevoles-app` | oui | Exposition via Traefik pour `*.benevol.app`, `benevol.app` et `www.benevol.app`, TLS `benevol-app-wildcard-tls`, avec les middlewares de compression de `middleware-compress.yaml` |
 | `middleware-compress.yaml` | Middlewares `benevoles-compress` et `benevoles-identity-upstream` | oui, avant `ingress.yaml` | Compression des réponses texte par Traefik (zstd, Brotli ou gzip selon le navigateur) ; l'application reçoit la requête sans `Accept-Encoding` et répond donc sans compression, ce que Traefik exige pour compresser. Voir « Compression » ci-dessous |
+| `middleware-hsts.yaml` | Middleware `benevoles-hsts` | oui, avant `ingress.yaml` et `ingressroute-tokens.yaml` | En-tête `Strict-Transport-Security` (1 an, sans `includeSubDomains` ni `preload`) ; un routeur qui nomme un middleware absent est désactivé par Traefik |
 | `ingressroute-tokens.yaml` | IngressRoute `benevoles-app-tokens` et `benevoles-app-tokens-http`, Middleware `benevoles-https-redirect` | oui | Routeur prioritaire, **sans journal d'accès**, pour les requêtes qui portent un jeton personnel (chemins `/my/`, `/leader/`… et requêtes `token`, `t`) et la recherche admin, en HTTPS et en HTTP (redirigé). Un jeton ne doit jamais être journalisé ; limité à benevol.app, le Traefik partagé n'est pas modifié. Toute nouvelle route à jeton s'y ajoute (vérifié par `no-tokens-in-access-logs.test.ts`) |
 | `ingressroute-http.yaml` | IngressRoute `benevoles-app-http` | oui | Route de dernière priorité sur l'entrée `web` : toute adresse `http://` de benevol.app (apex et sous-domaines) est redirigée de façon permanente vers `https://`, avec le Middleware de `ingressroute-tokens.yaml` (à appliquer avant). Sans elle, Traefik répondait « 404 page not found » |
 | `traefik-config.yaml` | HelmChartConfig `traefik` (`kube-system`) | non | Réglage du Traefik fourni par k3s : `externalTrafficPolicy: Local` pour conserver l'adresse réelle des visiteurs (voir ci-dessous), journaux d'accès activés, délais de lecture et d'écriture de 30 min sur `web` et `websecure` |
@@ -99,7 +100,7 @@ Dans la table `RateLimit`, les clés doivent ensuite contenir des adresses publi
    3. régénère `benevoles-secret` (« Sync k8s secret ») ;
    4. applique `k8s/postgres.yaml` et attend PostgreSQL (120 s au plus) ;
    5. supprime le Job de migration précédent, applique `k8s/job-migrate.yaml` avec la nouvelle image et attend sa réussite (300 s au plus). En cas d'échec, le déploiement s'arrête, la version en cours continue de servir, et les journaux du Job s'affichent dans le workflow ;
-   6. applique `service.yaml`, `middleware-compress.yaml`, `ingress.yaml`, `ingressroute-tokens.yaml`, `ingressroute-http.yaml` et les six CronJobs ;
+   6. applique `service.yaml`, `middleware-compress.yaml`, `middleware-hsts.yaml`, `ingress.yaml`, `ingressroute-tokens.yaml`, `ingressroute-http.yaml` et les six CronJobs ;
    7. seulement ensuite, applique `k8s/deployment.yaml` et attend la fin du remplacement (300 s au plus). Le nouveau pod démarre avant l'arrêt de l'ancien (`maxSurge: 1`, `maxUnavailable: 0`), et ne reçoit le trafic qu'une fois préchauffé.
 
 Le workflow n'applique pas `secret.yaml` (modèle), `traefik-config.yaml`, `certificate-wildcard.yaml` ni `gandi-webhook.yaml`.
@@ -147,7 +148,7 @@ Même ordre que `deploy.yml`, sans quoi une nouvelle version pourrait démarrer 
 ```bash
 IMAGE=ghcr.io/pvollenweider/benevoles:sha-<7 premiers caractères du commit>
 
-# 0. Prérequis hors dépôt : k3s avec Traefik 3.1 ou plus récent, cert-manager, ClusterIssuer
+# 0. Prérequis hors dépôt : k3s avec Traefik 3.2 ou plus récent, cert-manager, ClusterIssuer
 #    letsencrypt-prod qui utilise le webhook Gandi (k8s/gandi-webhook.yaml, secret gandi-api-key
 #    dans cert-manager). Une fois par cluster, voir « Mise à jour depuis 1.x », étape 5 :
 kubectl apply -f k8s/traefik-config.yaml
@@ -172,7 +173,7 @@ kubectl -n benevoles wait --for=condition=complete job/benevoles-migrate --timeo
 kubectl -n benevoles logs job/benevoles-migrate
 
 # 4. Exposition et tâches planifiées
-kubectl apply -f k8s/service.yaml -f k8s/middleware-compress.yaml -f k8s/ingress.yaml -f k8s/ingressroute-tokens.yaml -f k8s/ingressroute-http.yaml -f k8s/certificate-wildcard.yaml
+kubectl apply -f k8s/service.yaml -f k8s/middleware-compress.yaml -f k8s/middleware-hsts.yaml -f k8s/ingress.yaml -f k8s/ingressroute-tokens.yaml -f k8s/ingressroute-http.yaml -f k8s/certificate-wildcard.yaml
 kubectl apply -f k8s/cronjob-reminders.yaml -f k8s/cronjob-outbox.yaml -f k8s/cronjob-cleanup.yaml -f k8s/cronjob-release-check.yaml -f k8s/cronjob-backup.yaml -f k8s/cronjob-backup-offsite.yaml
 
 # 5. Seulement ensuite, l'application
@@ -431,9 +432,10 @@ kubectl -n benevoles exec deploy/benevoles-app -- node -e 'fetch(process.env.NTF
 
 | Workflow | Déclencheur | Étapes |
 |----------|-------------|--------|
-| `ci.yml` | pull request vers `main` | type-check, lint, tests Vitest avec couverture, `check-security-md.mjs`, `check-migrations.mjs` (migrations compatibles avec la version précédente) ; job E2E : base migrée et seedée, tests d'intégration (`npm run test:integration`), tests Playwright |
+| `ci.yml` | pull request vers `main` | aucune source publique en brouillon (`check-no-draft-content.mjs`) ; type-check, lint, tests Vitest avec couverture, `check-security-md.mjs`, `check-migrations.mjs` (migrations compatibles avec la version précédente), `check-doc-screenshots.mjs` (captures de la documentation à jour) ; job Lighthouse ; job E2E : base migrée et seedée, tests d'intégration (`npm run test:integration`), tests Playwright |
 | `deploy.yml` | push sur `main` | type-check, lint, tests ; construction et publication de l'image sur GHCR ; Job de migration, puis déploiement Kubernetes (voir « Ordre de déploiement ») |
 | `gandi-webhook.yml` | pull request ou push sur `main` touchant `gandi-webhook/` | construction de l'image du webhook ; publication sur GHCR seulement sur push |
+| `mirror-ci-images.yml` | manuel, chaque lundi à 04:17 UTC, ou pull request et push sur `main` touchant ce fichier | copie vers GHCR des images Postgres et Mailpit utilisées par la CI |
 
 L'analyse CodeQL (JavaScript/TypeScript, Go, Actions) ne figure pas dans `.github/workflows/` : elle est configurée côté GitHub (paramètres de sécurité du dépôt).
 
@@ -552,7 +554,7 @@ Restauration depuis le remote actuel : `rclone lsf <remote>:<chemin>` pour liste
 
 Le volume de sauvegarde local est sur le même cluster que la base : une panne de cluster emporte les deux, d'où la copie hors site ci-dessus.
 
-**Surveillance.** Chaque CronJob de sauvegarde envoie un signal de vie (`/api/cron/heartbeat`) quand il réussit. La page `/super-admin/health` affiche le dernier succès de chaque tâche : rappels (signalés au-delà de 2 h sans passage), nettoyage, sauvegarde chiffrée et copie hors site (au-delà de 26 h), test de restauration (avertissement après 45 jours, erreur après 90). Une sauvegarde qui échoue sans bruit y apparaît donc le lendemain, sans consulter `kubectl`.
+**Surveillance.** Chaque CronJob de sauvegarde envoie un signal de vie (`/api/cron/heartbeat`) quand il réussit. La page `/super-admin/health` affiche le dernier succès de chaque tâche : rappels (signalés au-delà de 2 h sans passage), envoi des emails en attente (au-delà d'1 h), nettoyage, sauvegarde chiffrée et copie hors site (au-delà de 26 h), test de restauration (avertissement après 45 jours, erreur après 90). Une sauvegarde qui échoue sans bruit y apparaît donc le lendemain, sans consulter `kubectl`.
 
 **Encore manuel.** Aucune alerte n'est envoyée d'elle-même (ni email ni notification) : il faut ouvrir la page de santé. Le test de restauration complète se fait à la main (voir la checklist ci-dessous) ; il envoie son propre signal de vie, que la page de santé réclame après 45 jours et passe en erreur après 90.
 

@@ -17,7 +17,7 @@ L'onglet **Partage** de l'événement (le bouton **Partager le lien**, en haut d
 
 Le lien partagé est toujours l'adresse publique de l'événement, jamais un lien personnel de bénévole ou de responsable.
 
-**Aperçu du lien.** Collé dans une messagerie, un réseau social ou une newsletter, le lien d'un événement publié s'affiche avec son titre, un court texte et l'image de benevol.app. Le texte est le début de la **description** de l'événement (environ 200 caractères, sans mise en forme) ; sans description, c'est « [Organisation] cherche des bénévoles pour [événement], du … au … ». Le nombre de places restantes n'y figure pas : les messageries gardent l'aperçu en mémoire, il serait vite faux. Un événement non répertorié a le même aperçu, mais reste hors des moteurs de recherche. Un brouillon ou un événement archivé ne donne ni titre ni texte.
+**Aperçu du lien.** Collé dans une messagerie, un réseau social ou une newsletter, le lien d'un événement publié s'affiche avec son titre, un court texte et l'image de benevol.app. Le texte reprend le début de la **description** de l'événement (160 caractères au plus, sans mise en forme), suivi des dates quand la place le permet ; sans description, c'est « [Organisation] cherche des bénévoles pour [événement], du … au … ». Le nombre de places restantes n'y figure pas : les messageries gardent l'aperçu en mémoire, il serait vite faux. Un événement non répertorié a le même aperçu, mais reste hors des moteurs de recherche. Un brouillon ou un événement archivé ne donne ni titre ni texte.
 
 Une messagerie peut garder l'ancien aperçu quelque temps après une modification du titre ou de la description.
 

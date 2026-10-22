@@ -14,7 +14,7 @@ aliases: []
 
 L'horloge va de `00:00` à `23:59` : on ne saisit jamais `24:00`, `25:00` ou `26:00`, l'horloge repart à zéro après minuit.
 
-- **Créneau qui passe minuit** : saisissez une heure de fin plus petite que le début, par exemple `22:00` à `02:00`. Il est affiché « 22h–02h +1 » sur le planning.
+- **Créneau qui passe minuit** : saisissez une heure de fin plus petite que le début, par exemple `22:00` à `02:00`. Il est affiché « 22h–02h +1 » sur le planning public, et « 22:00–02:00 (jusqu'au lendemain) » dans la vue Liste des créneaux.
 - **Créneau qui commence après minuit** : il appartient au jour suivant. Créez-le à la date du lendemain, à `00:00`, `01:00`, etc.
 - Un créneau qui se termine exactement à minuit s'écrit avec `00:00` comme fin (`22:00` à `00:00`).
 - Changer l'heure de début d'un créneau de nuit garde sa fin du lendemain : `22:00` à `02:00` passé à `23:00` finit toujours à `02:00`. La fin ne change que si elle tomberait à l'heure du nouveau début, ou si un créneau de jour passerait minuit seulement parce que son début a dépassé sa fin : elle devient alors une heure après le début.

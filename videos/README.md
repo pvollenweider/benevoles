@@ -133,7 +133,7 @@ node --env-file=.env.video.e2e --import tsx videos/tools/operator-local.ts run v
 ```
 
 La répétition accélérée vérifie les actions mais n'est jamais montée avec une
-narration. L'entrée opérateur du catalogue est interne et reste non publiée.
+narration. L'entrée opérateur du catalogue est publiée comme les autres.
 
 Préparation :
 
@@ -377,9 +377,8 @@ est une aide automatisée, pas une validation humaine, et ses observations doive
 confrontées aux images et au parcours réel. Un résultat signalé ne doit pas être ignoré au
 motif que `video:validate` passe.
 
-L'envoi visuel est pour l'instant limité à `EVENT_REPORTS`, `VOLUNTEER_BADGES`,
-`ATTENDANCE_CHECK_IN`, `REMINDERS_CHANGES`, `DATA_EXPORTS_ARCHIVES` et
-`LAST_MINUTE_CHANGES`, dans la base locale `benevoles_video`.
+L'envoi visuel est limité aux vidéos dont le jeu fictif est vérifié (liste dans
+`videos/tools/audit-audiovisual.ts`), dans la base locale `benevoles_video`.
 Un garde-fou vérifie le jeu explicitement fictif (dont les trois événements des rappels) et les identifiants,
 adresses `example.org` et téléphones de démonstration (ou leur absence pour le pointage) de chaque inscription. Aucune autre
 vidéo, capture de production ou donnée réelle n'est acceptée. Les exports et les
@@ -569,8 +568,8 @@ et `seedScenario` (#637, #638) :
   sur la page de la vidéo pendant 30 jours. Jamais déduits de `updatedAt` ou de `revision`, qui
   bougent à chaque rendu : à renseigner quand le changement mérite d'être signalé.
 
-`published` vaut `true` pour une vidéo dont le film est en ligne sur `medias.benevol.app` : 56 des
-59 vidéos aujourd'hui. La galerie affiche aussi les trois autres, avec leur état (« À venir »). Les
+`published` vaut `true` pour une vidéo dont le film est en ligne sur `medias.benevol.app`. La galerie affiche aussi
+les vidéos non publiées, avec leur état (« À venir »). Les
 guides publics renvoient aux vidéos publiées par leur
 identifiant (`<!-- video: ID -->`, #645, `src/lib/doc-video-references.ts`). `filterPublishedVideos(videos, VIDEO_LIBRARY_PUBLIC_ONLY)` filtre déjà sur
 `published` : passer la constante `VIDEO_LIBRARY_PUBLIC_ONLY` (dans `video-catalog.ts`) à `true`
@@ -652,7 +651,7 @@ les vidéos** (`/super-admin/video-feedback`) ; aucun score n'est montré au pub
 2. Déclarer cet identifiant, son manifeste, sa catégorie et ses tags dans `videos/catalog.json`.
 3. Écrire le script humain dans `videos/scripts/`.
 4. Ajouter son manifeste dans `videos/manifests/`, avec le même `id` que le catalogue.
-5. Ajouter un scénario de capture et le déclarer dans `videos/tools/record.ts`. Extraire les scénarios dans `videos/scenarios/` si leur nombre ou leur complexité continue d’augmenter.
+5. Ajouter un scénario de capture dans `videos/lib/record-*.ts` et le déclarer dans `videos/tools/record.ts`.
 6. Relire le transcript avec `--dry-run`.
 7. Générer la voix, enregistrer, assembler et visionner le résultat complet.
 8. Lancer `npm run video:validate -- VIDEO_ID` : le contrôle refuse plusieurs prises vocales,

@@ -16,7 +16,7 @@ aliases: []
 
 L'historique complet de ce qui s'est passé sur un événement : créneaux créés/modifiés, inscriptions, annulations, pages ajoutées, responsables désignés, jalons… Trois modes :
 
-- **Explorer** : liste filtrable par type, action, personne ou période
+- **Explorer** : liste filtrable par type d'élément, auteur (admin, bénévole ou système), action ou période
 - **Rejouer** : reconstitue l'état d'un créneau ou d'une inscription à un instant donné
 - **Récit** : raconte en une phrase la suite des événements liés (ex. une annulation qui déclenche une offre de liste d'attente)
 

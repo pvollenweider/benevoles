@@ -18,4 +18,4 @@ Chaque entrée définit une plage horaire qui apparaît en fond coloré sur la t
 
 **+ Ajouter** propose les champs : **Nom du spectacle**, **Date**, **Début**, **Fin**.
 
-Les spectacles sont copiés avec l'événement lors d'une duplication, leurs dates décalées comme celles des créneaux (voir [Dupliquer un événement](dupliquer-un-evenement.md)).
+Lors d'une duplication, les spectacles sont copiés avec les **messages et réglages d'inscription**, leurs dates décalées comme celles des créneaux (voir [Dupliquer un événement](dupliquer-un-evenement.md)).

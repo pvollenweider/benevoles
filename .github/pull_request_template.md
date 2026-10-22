@@ -9,7 +9,7 @@
 - [ ] CI / ops
 
 ## Tests
-- [ ] Les types TypeScript sont valides (`npm run tsc`)
+- [ ] Les types TypeScript sont valides (`npm run typecheck`)
 - [ ] Le lint passe (`npm run lint`)
 - [ ] Testé manuellement en local
 

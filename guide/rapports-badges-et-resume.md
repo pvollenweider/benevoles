@@ -24,12 +24,12 @@ aliases: []
 | Planning par poste | une page par poste : sa frise, ses créneaux, ses bénévoles, son responsable de secteur | chaque responsable |
 | Planning individuel | une page par bénévole : sa journée en frise, puis chaque créneau avec lieu de rendez-vous, contact (celui du créneau, sinon le contact le jour J de l'événement, avec la phrase sur les numéros d'urgence) et consignes | à remettre à l'arrivée |
 | Export complet | le planning en frise par jour, le récapitulatif par poste et la liste des bénévoles avec leurs coordonnées (en couleur) | organisateurs seulement (téléphones et emails) |
-| Feuille de présence | par créneau, une case à cocher par bénévole (déjà cochée si la présence a été marquée dans l'application), heure d'arrivée, remarque, et des lignes vides pour les arrivées imprévues | organisateurs |
+| Feuille de présence | par créneau, une case à cocher par bénévole (déjà cochée si la présence a été marquée dans l'application), son téléphone, heure d'arrivée, remarque, et des lignes vides pour les arrivées imprévues | organisateurs |
 | Liste avec téléphones | tous les bénévoles par ordre alphabétique, téléphone, email et créneaux | organisateurs seulement |
 | Synthèse des réponses | par question posée aux bénévoles, le nombre de réponses des confirmés et des personnes en attente, sans nom ni coordonnées (voir [Synthèse des réponses](questions-aux-benevoles.md#synthese-des-reponses)) | organisateurs, ou pour passer commande |
 | Archive de l'événement (JSON) | un fichier téléchargé avec toutes les données de l'événement : réglages, créneaux, inscriptions, pages, responsables, jalons et journal | vos archives, ou pour changer d'outil |
 
-Dans les plannings par jour et par poste, la colonne **Effectif** ajoute « sous le minimum (2) » ou « minimum atteint » aux créneaux qui ont un minimum de personnes, avec une phrase qui l'explique sous le tableau. Sauf l'export complet, ces documents sont conçus pour le noir et blanc ; le logo de l'organisation, s'il y en a un, figure en gris à côté du titre. La feuille de présence en CSV se télécharge depuis les inscriptions (voir [Présences le jour J](presences-le-jour-j.md)). Les heures planifiées des membres n'y figurent jamais ; les documents avec téléphones portent la mention « ne pas afficher ni distribuer ».
+Dans les plannings par jour et par poste, la colonne **Effectif** ajoute « sous le minimum (2) » ou « minimum atteint » aux créneaux qui ont un minimum de personnes, avec une phrase qui l'explique sous le tableau. Sauf l'export complet, ces documents sont conçus pour le noir et blanc ; le logo de l'organisation, s'il y en a un, figure en gris à côté du titre. La feuille de présence en CSV se télécharge depuis les inscriptions (voir [Présences le jour J](presences-le-jour-j.md)). Les heures planifiées des membres n'y figurent jamais ; la liste avec téléphones porte la mention « Ne pas afficher ni distribuer ».
 
 ## Badges
 
@@ -37,7 +37,7 @@ Dans l'onglet **Documents**, la section **Badges** imprime un badge d'identifica
 
 ## Résumé de l'événement
 
-Toujours dans l'onglet **Documents**, la section **Résumé de l'événement** (juste avant l'archive, et le bouton **Voir le résumé** en haut des pages de l'événement une fois celui-ci passé) donne de quoi faire le bilan et préparer la prochaine édition :
+Toujours dans l'onglet **Documents**, la section **Résumé de l'événement** (juste avant l'archive, et le bouton **Voir le résumé** en haut des pages de l'événement une fois celui-ci passé, tant qu'il n'est pas archivé) donne de quoi faire le bilan et préparer la prochaine édition :
 
 - nombre de bénévoles distincts avec un créneau confirmé, dont ceux de retour et ceux pour la première fois (pas d'inscription active sur un événement antérieur de l'organisation) ;
 - nombre de créneaux confirmés avec une présence enregistrée sur le total, avec une phrase explicite si le pointage n'a pas été utilisé ou seulement en partie ;
