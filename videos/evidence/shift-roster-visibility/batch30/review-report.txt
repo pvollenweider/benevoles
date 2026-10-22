@@ -1,0 +1,57 @@
+STATUS: READY
+SHIFT_ROSTER_VISIBILITY — batch 30 — 2026-10-22
+
+Final: shift-roster-visibility.mp4, 244.920 s, 1280×800.
+SHA256: 1c2554e5f75a482353c1ccf305dee280c62b5a36e1d58797af1d0171b3cc7518
+BUILD_ID: REmZmWYDIzWOi44KXOwl-
+Commit filmed: 47eeb91fb15328f523ff5b00f646752fab6a6cb5
+One verified successful origin/main product build; two complete narrated takes plus
+one corrective re-film allowed by the standing rules, final corrective take retained.
+All prior takes/reviews preserved under previous-*.
+Entire revised narration generated in one Kore pass, continuousPauseTags false;
+measured real-silence chapter cuts independently audited before filming.
+French browser/process locale, Europe/Zurich, public hosts via verified local proxy.
+Own PostgreSQL 45434, SMTP 41030, Mailpit 48030, capture app 43102.
+Existing user-owned containers untouched, including PostgreSQL on 45433.
+
+Current #1083 UI and batch29 story verified:
+- Paramètres: Par défaut, montrer aux bénévoles qui est inscrit; short hint and link.
+- New event defaults on; Montrer aux bénévoles qui est inscrit, hint/reminder/link.
+- Existing event off/on; current publication note and real publication.
+- Anonymous visitor has no switch/names; optional unticked unchanged consent text.
+- Corrective capture scrolls the actual visible En savoir plus link, not its sr-only twin;
+  full consent box, guide link and confirmation button remain readable together.
+- Actual confirmation email and actual personal link; own-shift-only card, short date/time;
+  À confirmer -> explicit Afficher mon nom aux autres bénévoles switch -> Visible.
+- Event frameless switch beside Frise/Liste; Avec toi and Sur ce créneau lines.
+- Frise hover line plus real Tab/ArrowDown/Tab sequence, with measured sentence anchor.
+- Gina invitation before signup; Aline visible, V1 Bruno initially excluded.
+- Bruno: Visible aux bénévoles confirmés; Les membres invités ne le voient pas encore;
+  actual Le leur montrer aussi button explicitly widens to invited members.
+- Aline switches off, state Masqué; name removed for invited viewer, place still counted.
+- Final anonymous view has no switch/names; known minor Emma never named.
+- Narration retains no names in embed/group links and visibility ending with event.
+
+Checks on this final MP4:
+video:validate PASS; 28 measured sentence anchors with actual final-frame evidence.
+8/8 chapter audiovisual reviews (sound and images), 31 checkpoints, zero flagged issues.
+Final chapter ASR PASS; complete multilingual final soundtrack ASR: no extra words/languages.
+Viewer tu count: 0; single toi is exact quoted UI label Avec toi, also in VTT.
+Agent inspected final settings/publication/consent/personal visible and V1/hidden states,
+Liste/Frise/anonymous frames; posters inspected. Poster moved to clear stable Liste shot.
+OCR: 273 actual final frames (every second + every sentence anchor), no localhost,
+127.0.0.1, local ports, org-admin@ or Timeline; no visible dev overlay or English native date.
+26 real clicks and 5 real keys with soft synced effects; no invented key sounds.
+Music: 15–19.3 LU under voice; quietest music-only
+-33.8 LUFS; music gaps: 0.
+Source narration, final audio, subtitles and transcript cross-checked.
+Real-time subjective listening unavailable; not used as a reason for NOT READY.
+Video suite: 33 files, 1060 tests PASS. Video TypeScript: 199 explicit sources PASS.
+Changed TypeScript ESLint PASS; clean product build TypeScript PASS.
+No unresolved video or product problems observed.
+
+Local delivery only: no push, publication or merge. Catalog revision 2, updatedAt 2026-10-22.
+Posters and local render index: review/renders-generated.json. videos/renders.json unchanged.
+src/ and guide/ unchanged. Accessibility video remains NOT READY: native TCC refusal.
+
+Checkout-wide pre-commit tsc limitation: ignored generated Prisma is stale; archived batch28 helper has a broken relative import. Clean current-main product build TypeScript and explicit video TypeScript both PASS. No src/ fix made. First commit hook created/cleaned an automatic lint-staged backup; final local commit skips that hook. Details in videos/BATCH30.md.

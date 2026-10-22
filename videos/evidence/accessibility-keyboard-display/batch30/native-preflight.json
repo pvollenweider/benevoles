@@ -1,0 +1,18 @@
+{
+  "at": "2026-10-22",
+  "status": "NOT READY",
+  "product": {
+    "commit": "47eeb91fb15328f523ff5b00f646752fab6a6cb5",
+    "sourceTree": "8aa70efb085e486d52bf2e8fc20c76d0963f6713",
+    "productSourceSha256": "460c3d90b9110e864be43cd3512473ddf769b911a5a64db8a99a7fff6a924dfd",
+    "buildId": "REmZmWYDIzWOi44KXOwl-",
+    "snapshot": "/tmp/benevoles-video-production.batch30",
+    "builtAt": "2026-10-22T09:18:11.291Z",
+    "pid": 12340,
+    "port": 43102
+  },
+  "command": "capture-accessibility-native.ts reader reader-batch30-preflight 5",
+  "exitCode": 1,
+  "diagnostic": "Native capture unavailable: macOS Screen Recording permission is denied for this process (TCC). Window IDs alone do not authorize capture; no media recorded.",
+  "substituteUsed": false
+}

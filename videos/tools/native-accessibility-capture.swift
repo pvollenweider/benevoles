@@ -105,7 +105,8 @@ let prefix = CommandLine.arguments[1]
 let title = CommandLine.arguments[2]
 let browserBundle = CommandLine.arguments.count == 5 ? CommandLine.arguments[4] : "com.apple.Safari"
 guard ["com.apple.Safari", "com.brave.Browser"].contains(browserBundle) else { fatalError("Only explicitly supported training browsers accepted") }
-guard prefix.hasPrefix("/tmp/") || prefix.hasPrefix("/Users/pol/Desktop/benevoles/videos/output/") else { fatalError("Local video output required") }
+let workspaceNativeRoot = FileManager.default.currentDirectoryPath + "/videos/output/accessibility-keyboard-display/native/"
+guard prefix.hasPrefix("/tmp/") || prefix.hasPrefix(workspaceNativeRoot) else { fatalError("Local video output required") }
 guard let duration = Double(CommandLine.arguments[3]), duration >= 5, duration <= 180 else { fatalError("Duration must be 5–180 seconds") }
 let files = [prefix + ".mp4", prefix + ".m4a", prefix + ".json"]
 guard !files.contains(where: FileManager.default.fileExists(atPath:)) else { fatalError("Refusing overwrite") }

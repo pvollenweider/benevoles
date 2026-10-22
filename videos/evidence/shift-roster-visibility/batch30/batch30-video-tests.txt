@@ -1,0 +1,11 @@
+
+ RUN  v5.0.3 /Users/pol/Desktop/benevoles/.claude/worktrees/video-batch25-26-sources
+
+
+ Test Files  33 passed (33)
+      Tests  1060 passed (1060)
+   Start at  11:32:47
+   Duration  1.14s (import 43%, transform 41%, tests 13%, worker 3%)
+
+    Isolate  33 workers spawned · ~107ms startup each (spawn + environment, per file)
+             at least ~284ms faster with isolate: false — reuses workers across files instead of one per file

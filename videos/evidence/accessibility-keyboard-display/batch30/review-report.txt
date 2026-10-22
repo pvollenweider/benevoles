@@ -1,0 +1,15 @@
+STATUS: NOT READY
+ACCESSIBILITY_KEYBOARD_DISPLAY — batch 30 — 2026-10-22
+
+Fresh native capture preflight failed: macOS Screen Recording permission denied for this process (TCC). No media recorded. Real Safari zoom 200/400% and VoiceOver inserts on the verified build are required by videos/README.md. No substitute or incomplete final MP4 produced. Existing captureReady false retained; #1075 evidence entry retained until READY.
+
+Editorial sources updated: one Tab stop per day, horizontal arrows within a poste, vertical arrows between postes, Tab leaves the day, unavailable bars readable. Recorder uses actual key presses and a visible hint assertion. Whole Puck narration regenerated in one pass, continuousPauseTags false; measured boundaries recut and all ten chapter narrations independently audited.
+BUILD_ID: REmZmWYDIzWOi44KXOwl-
+Product commit prepared (not filmed): 47eeb91fb15328f523ff5b00f646752fab6a6cb5
+No new duration/music/ASR-final evidence can be claimed without a final film.
+
+Narration audit: PASS, ten chapters, single Puck take. Zoom percentage notation normalized without changing values (tested 100/200/400; different levels remain different). Viewer familiar address in revised transcript: 0. Video suite 1059 PASS; video tools typecheck PASS.
+
+Current-build UI preflights PASS: real required error/focus return; existing registration/conflict warnings; native select keyboard; 320 px list and forced-colour emulation. Current pages: actual public Tab + ArrowRight/Left/Down/Up, hint, one tab stop per day, Tab exit and return, real selection/form, admin editor/reorder persistence and footer Accessibility link. These screenshots are not narrated takes.
+
+Validation attempt: fails as expected because no final timeline exists (no incomplete MP4 assembled). Catalogue draft revision 2, updatedAt 2026-10-22, published false and captureReady false. Native failure confirmed after the capture helper compatibility fixes.

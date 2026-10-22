@@ -7,6 +7,7 @@ import { test } from "vitest"
 test("current-product-prisma guards", async () => {
 
   const db = "postgresql://video:example@localhost:45433/benevoles_video"
+  guard("http://localhost:43102", "postgresql://video:example@localhost:45434/benevoles_video", "production")
   for (const port of [43102, 43106, 43108, 43110, 43112, 43114]) guard(`http://localhost:${port}`, db, "production")
   for (const base of ["https://benevol.app", "http://localhost:3100", "http://localhost:3101", "http://localhost:43103", "http://localhost:43111", "http://localhost:43113", "http://localhost:43115", "http://localhost:43102/", "http://localhost:43102?org=default", "http://localhost:43102/admin", "http://127.0.0.1:43102"]) assert.throws(() => guard(base, db, "production"))
   for (const value of [undefined, "postgresql://video:example@external:45433/benevoles_video", "postgresql://video:example@localhost:5432/benevoles_video", "postgresql://video:example@localhost:45433/production", "https://localhost:45433/benevoles_video"]) assert.throws(() => guard("http://localhost:43102", value, "production"))

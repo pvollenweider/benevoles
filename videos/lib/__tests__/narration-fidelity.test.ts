@@ -10,3 +10,9 @@ test("demo domain homophones and spelled hyphen retain their spoken meaning", ()
   assert.notDeepEqual(narrationWords("Vous choisissez."), narrationWords("Tu choisis."))
   assert.deepEqual(unexpectedPauseInstructions("Vous choisissez.", "Vous choisissez. Short pause."), ["short pause"])
 })
+
+test("zoom percentages preserve the actual value", () => {
+  assert.deepEqual(narrationWords("200 %, 400 %, 100 %"), narrationWords("deux cents pour cent, quatre cents pour cent, cent pour cent"))
+  assert.notDeepEqual(narrationWords("200 %"), narrationWords("quatre cents pour cent"))
+  assert.notDeepEqual(narrationWords("300 %"), narrationWords("quatre cents pour cent"))
+})

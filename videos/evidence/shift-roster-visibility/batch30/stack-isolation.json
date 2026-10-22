@@ -1,0 +1,68 @@
+[
+  {
+    "name": "benevoles_postgres_video",
+    "id": "33f5527e941bd8f2514f79fb79a8bfd7c9124064429f7e20c9474aa3c97b7a8b",
+    "running": true,
+    "ports": {
+      "5432/tcp": [
+        {
+          "HostIp": "0.0.0.0",
+          "HostPort": "45433"
+        }
+      ]
+    }
+  },
+  {
+    "name": "benevoles_mailpit_video",
+    "id": "5151c256d5a0f918b5877743e55b4d7eb96b588caf006dc16acd6893b683663b",
+    "running": true,
+    "ports": {
+      "1025/tcp": [
+        {
+          "HostIp": "0.0.0.0",
+          "HostPort": "41026"
+        }
+      ],
+      "1110/tcp": null,
+      "8025/tcp": [
+        {
+          "HostIp": "0.0.0.0",
+          "HostPort": "48026"
+        }
+      ]
+    }
+  },
+  {
+    "name": "benevoles_batch30_postgres",
+    "id": "f9983604ca836eca90ebe151eeb3a8e241df7b61b118e574d7dbf7da1e2a96ab",
+    "running": true,
+    "ports": {
+      "5432/tcp": [
+        {
+          "HostIp": "127.0.0.1",
+          "HostPort": "45434"
+        }
+      ]
+    }
+  },
+  {
+    "name": "benevoles_batch30_mailpit",
+    "id": "dc71f6acb9140977e18372d7cbb0dd9f3fa0610402a82bbf606f2e87f2542ac1",
+    "running": true,
+    "ports": {
+      "1025/tcp": [
+        {
+          "HostIp": "127.0.0.1",
+          "HostPort": "41030"
+        }
+      ],
+      "1110/tcp": null,
+      "8025/tcp": [
+        {
+          "HostIp": "127.0.0.1",
+          "HostPort": "48030"
+        }
+      ]
+    }
+  }
+]

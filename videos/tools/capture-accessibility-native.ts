@@ -8,6 +8,7 @@ import { createHash } from "node:crypto"
 import { verifyProductBuild } from "../lib/product-build"
 import { loadAccessibilityNativeEvidence } from "../lib/accessibility-native-evidence"
 const exec = promisify(execFile)
+async function main() {
 const [kind, name, seconds] = process.argv.slice(2)
 if (!["reader", "zoom"].includes(kind) || !/^[a-z0-9-]{8,80}$/.test(name ?? "") || !Number.isFinite(Number(seconds)) || Number(seconds) < 5 || Number(seconds) > 180) throw new Error("Usage: capture-accessibility-native.ts reader|zoom unique-name seconds")
 const root = path.resolve("videos/output/accessibility-keyboard-display/native")
@@ -46,3 +47,6 @@ if (kind === "reader") {
 await writeFile(file, JSON.stringify(evidence, null, 2))
 await loadAccessibilityNativeEvidence(file, { nativeRoot: root, currentProduct: current })
 console.log(`Native evidence validated: ${file}`)
+
+}
+main().catch(error => { console.error(error instanceof Error ? error.message : error); process.exitCode = 1 })

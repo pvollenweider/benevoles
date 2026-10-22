@@ -1,0 +1,68 @@
+{
+  "model": "gemini-3.8-flash",
+  "reviewedAt": "2026-10-22T09:37:55.607Z",
+  "videoSha256": "1c2554e5f75a482353c1ccf305dee280c62b5a36e1d58797af1d0171b3cc7518",
+  "promptSha256": "d81594e82f4fa8d77af0e6febc4ac6bb32ea326a2ff5563710aed76fa94b9bea",
+  "clipSha256": "ab177b4706f13783bde32201a9421cbe9559539fa5308fa569c20efa2bada46c",
+  "scene": "roster-confirm",
+  "review": {
+    "heardOpening": "Ouvrez le véritable email de confirmation",
+    "checkpoints": [
+      {
+        "spokenSeconds": 0,
+        "spoken": "Ouvrez le véritable email de confirmation.",
+        "visibleSeconds": 0.9,
+        "visible": "L'email de confirmation d'inscription avec le bouton 'Gérer mes inscriptions' est affiché.",
+        "sync": "aligned",
+        "severity": "none"
+      },
+      {
+        "spokenSeconds": 2.6,
+        "spoken": "Suivez son lien personnel.",
+        "visibleSeconds": 3.7,
+        "visible": "Clic sur 'Gérer mes inscriptions' et affichage de la page 'Mes inscriptions'.",
+        "sync": "aligned",
+        "severity": "none"
+      },
+      {
+        "spokenSeconds": 5.2,
+        "spoken": "La carte Qui est inscrit montre uniquement vos propres créneaux confirmés",
+        "visibleSeconds": 5.2,
+        "visible": "La section 'Qui est inscrit' est visible avec le créneau Accueil et la mention 'À confirmer'.",
+        "sync": "aligned",
+        "severity": "none"
+      },
+      {
+        "spokenSeconds": 19.5,
+        "spoken": "Activez Afficher mon nom aux autres bénévoles.",
+        "visibleSeconds": 20.3,
+        "visible": "L'interrupteur 'Afficher mon nom aux autres bénévoles' est activé.",
+        "sync": "aligned",
+        "severity": "none"
+      },
+      {
+        "spokenSeconds": 22.8,
+        "spoken": "L’état Visible confirme votre choix.",
+        "visibleSeconds": 21,
+        "visible": "Le statut 'Visible • Aline M.' apparaît sous l'interrupteur.",
+        "sync": "aligned",
+        "severity": "none"
+      },
+      {
+        "spokenSeconds": 24.9,
+        "spoken": "suivez Voir qui est inscrit sur les autres créneaux.",
+        "visibleSeconds": 25.7,
+        "visible": "Clic sur le lien et affichage de la vue globale avec la frise horaire.",
+        "sync": "aligned",
+        "severity": "none"
+      }
+    ],
+    "issues": [],
+    "voice": {
+      "consistent": true,
+      "warm": true,
+      "observation": "Voix claire, posée et parfaitement synchronisée avec les interactions à l'écran."
+    }
+  },
+  "note": "Automated observation of actual final video audio and images; not a claim of complete human validation"
+}
