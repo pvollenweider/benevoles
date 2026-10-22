@@ -131,10 +131,11 @@ Liste exhaustive des fonctionnalités de l'application.
 - Flux Atom `/blog/feed.xml`, annoncé par chaque page du blog ; liens du site rendus absolus dans le flux
 - Lien « Blog » dans l'en-tête et le pied de page des pages publiques ; chaque lien d'un article vers une fiche, une ancre ou une vidéo est vérifié par les tests (`src/lib/__tests__/blog.test.ts`)
 
-### Pour qui ? et Tarifs (`/pour-qui`, `/tarifs`, #872, #950)
+### Pour qui ?, Tarifs et pages de comparaison (`/pour-qui`, `/tarifs`, `/tableur-ou-outil-dedie`, #872, #950, #871)
 
 - `/pour-qui` réunit une page par situation (`/benevoles-fete-de-village`, `/benevoles-festival`, `/benevoles-manifestation-sportive`, `/planning-permanences-benevoles`), chacune avec une édition ou une saison type, les guides et tutoriels qui la concernent et ses questions fréquentes (données structurées FAQPage) ; l'en-tête des pages publiques les liste sous « Pour qui ? »
 - `/tarifs` (`TARIFS.md`) distingue le logiciel libre du service hébergé, gratuit, et dit comment le projet est financé
+- `/tableur-ou-outil-dedie` (`TABLEUR-OU-OUTIL-DEDIE.md`, #871) : ce que font bien un tableur et un groupe de discussion, ce qui devient plus lourd quand l'événement grandit, et une liste simple pour décider
 - Déclarées dans `src/lib/doc-pages.ts` ; sur une autre instance, les liens vers ces pages de présentation du service hébergé mènent à benevol.app
 
 ### Fonctionnalités et accessibilité (`/fonctionnalites`, `/accessibilite`)
@@ -175,7 +176,7 @@ Liste exhaustive des fonctionnalités de l'application.
 
 ### Authentification
 
-- Connexion par email + mot de passe (hashé bcrypt, NextAuth v5) ; tentatives échouées limitées (10 par compte, 30 par adresse IP, sur 15 minutes) ; même limite pour la vérification du mot de passe actuel lors d'un changement (5 échecs par compte, 20 par adresse IP)
+- Connexion par email + mot de passe (hashé bcrypt, NextAuth v5) ; tentatives échouées limitées sur 15 minutes (30 par adresse IP, 10 par adresse IP pour un même compte, #1048, `src/lib/admin-session.ts`) ; au-delà de 5 échecs sur un compte, toutes adresses confondues, chaque tentative attend 1 s, 2 s, 4 s puis 8 s au plus, sans jamais bloquer le compte ; temps de réponse identique pour une adresse sans compte ; même limite pour la vérification du mot de passe actuel lors d'un changement (5 échecs par compte, 20 par adresse IP)
 - Session revérifiée en base à chaque requête : un admin désactivé ou supprimé, ou dont l'organisation est désactivée, perd l'accès immédiatement ; un changement ou une réinitialisation de mot de passe ferme toutes les sessions ouvertes auparavant (sauf celle où le changement est fait) ; un changement de rôle s'applique sans reconnexion
 - Menu du compte sous le nom de l'utilisateur, en haut à droite : **Mon compte** (`/admin/account`, changement du mot de passe ; profil du super admin pour un super admin) et **Se déconnecter**
 - Mot de passe oublié : email de réinitialisation (`/admin/forgot-password`, `/admin/reset-password`)
