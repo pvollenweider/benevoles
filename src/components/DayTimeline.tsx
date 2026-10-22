@@ -5,11 +5,12 @@
 
 import { getBarClasses } from "@/lib/roles"
 import { toMin, toMinEnd, fmt, assignLanes, crossesMidnight, hourLabel, showSpan, type GanttShow } from "@/lib/gantt-utils"
-import { useState } from "react"
+import { useId, useRef, useState, type KeyboardEvent } from "react"
 import { barText, shiftViewState, type HeldKind, type TimelineShift } from "@/lib/public-timeline"
 import type { ShiftRosterEntry } from "@/lib/shift-roster"
 import { ROSTER_FRISE_PROMPT } from "@/lib/shift-roster-text"
 import { RosterSummary, rosterSpokenSummary } from "@/components/public/RosterName"
+import { FRISE_KEYS_SHOWN, FRISE_KEYS_SPOKEN, friseKey, friseTabStop, friseTarget, type FriseRows } from "@/lib/frise-keyboard"
 
 export { fmt }
 export type { TimelineShift }
@@ -31,6 +32,9 @@ const AXIS_H  = 18
 const MIN_PX_PER_MIN = 0.6
 const MAX_PX_PER_MIN = 2
 const MIN_BAR_W = 24
+// The faint frame of a full bar, in classes and not inline: an inline outline would hide the focus
+// outline, now that a full bar takes the focus (#1075); with the focus, the buttons' one (globals.css).
+const FULL_OUTLINE = "not-focus-visible:outline not-focus-visible:outline-[rgba(0,0,0,0.07)]"
 
 export default function DayTimeline({
   shifts,
@@ -66,13 +70,16 @@ export default function DayTimeline({
   /**
    * « Voir qui est inscrit » (#1068), by shift id. The bars stay as they are; one line under the
    * day's chart (outside its scrolling area) says who is on the bar hovered, tapped or focused
-   * last, and keeps it until another one; each bar that can take the focus has the same sentence
-   * as its description. A bar that can't be chosen is disabled: it lets taps through to its
-   * wrapper, which updates the line (the list view gives every name by keyboard).
+   * last, and keeps it until another one; each bar has the same sentence as its description. A
+   * bar that can't be chosen lets taps through to its wrapper, which updates the line.
    */
   roster?: Map<string, ShiftRosterEntry> | null
 }) {
   const [detailId, setDetailId] = useState<string | null>(null)
+  // Keyboard (#1075): one tab stop per day, the bar focused or touched last; arrows between bars.
+  const [stopId, setStopId] = useState<string | null>(null)
+  const bars = useRef(new Map<string, HTMLButtonElement>())
+  const hintId = useId()
   const visible = shifts.filter((s) => s.status !== "cancelled")
   if (visible.length === 0) return null
 
@@ -109,6 +116,23 @@ export default function DayTimeline({
     byRole[role] = [...byRole[role]].sort((a, b) =>
       toMin(a.startTime) - toMin(b.startTime) || lane[a.id] - lane[b.id])
   }
+  // Each bar's state, and the rows the arrows move through, in reading order (#1075). Every bar can
+  // take the focus, whether it can be chosen or not; the day's tab stop starts on the first one
+  // that can, and follows the focus.
+  const viewOf = (shift: TimelineShift) => shiftViewState({ shift, held: held?.get(shift.id), selected: selected.has(shift.id), conflict: conflicts?.has(shift.id) ?? false, reserved: !!reservedShiftIds?.has(shift.id), locked })
+  const rows: FriseRows = roleOrder.map((role) => byRole[role].map((s) => ({ id: s.id, start: toMin(s.startTime), end: toMinEnd(s.endTime, s.startTime) })))
+  const order = rows.flat().map((b) => b.id)
+  const clickableIds = new Set(visible.filter((s) => viewOf(s).clickable).map((s) => s.id))
+  const tabStop = friseTabStop(order, clickableIds, stopId)
+  const onBarKey = (id: string) => (e: KeyboardEvent<HTMLButtonElement>) => {
+    const k = friseKey({ key: e.key, altKey: e.altKey, ctrlKey: e.ctrlKey, metaKey: e.metaKey, shiftKey: e.shiftKey, isComposing: e.nativeEvent.isComposing })
+    if (!k) return
+    // Handled even at an end: the arrows never scroll the chart or the page under the focus.
+    e.preventDefault()
+    const target = friseTarget(rows, id, k.key, k.ctrl)
+    if (target) bars.current.get(target)?.focus()
+  }
+
   const roleTop: Record<string, number> = {}
   {
     let acc = 0
@@ -129,9 +153,11 @@ export default function DayTimeline({
     <div
       role="region"
       aria-label={dayLabel ? `Planning du ${dayLabel}` : "Planning de la journée"}
-      aria-describedby={describedBy}
-      className="mb-5 rounded-xl border border-gray-100 bg-white overflow-x-auto select-none"
+      aria-describedby={[hintId, describedBy].filter(Boolean).join(" ")}
+      className="peer mb-5 rounded-xl border border-gray-100 bg-white overflow-x-auto select-none"
     >
+      {/* First in the region: read on entering it; the visible form is under the chart. */}
+      <p id={hintId} className="sr-only">{FRISE_KEYS_SPOKEN}</p>
       {/* Fluid width; the min-width only sets the point where the card starts to scroll. */}
       <div className="p-3" style={{ minWidth: LABEL_W + span * MIN_PX_PER_MIN + 24 }}>
         <div className="relative">
@@ -181,7 +207,7 @@ export default function DayTimeline({
                   const heldKind        = held?.get(shift.id)
                   // Held wins over everything else: selected, full, waitlist, conflict, reserved.
                   // The same rules as the list view (#808): src/lib/public-timeline.ts.
-                  const view            = shiftViewState({ shift, held: heldKind, selected: selected.has(shift.id), conflict: conflicts?.has(shift.id) ?? false, reserved: !!reservedShiftIds?.has(shift.id), locked })
+                  const view            = viewOf(shift)
                   const isRegistered    = !!heldKind
                   const isConflict      = view.conflict
                   const isFull          = view.full
@@ -233,8 +259,9 @@ export default function DayTimeline({
                     <div
                       key={shift.id}
                       onPointerEnter={roster ? () => setDetailId(shift.id) : undefined}
-                      onClick={roster ? () => setDetailId(shift.id) : undefined}
-                      onFocus={roster ? () => setDetailId(shift.id) : undefined}
+                      // A touch moves the tab stop too: Safari does not focus a clicked button.
+                      onClick={() => { setStopId(shift.id); if (roster) setDetailId(shift.id) }}
+                      onFocus={() => { setStopId(shift.id); if (roster) setDetailId(shift.id) }}
                       className="absolute @container focus-within:z-20"
                       style={{
                         left: `${pct(startMin)}%`,
@@ -245,13 +272,20 @@ export default function DayTimeline({
                       }}
                     >
                       <button
+                        ref={(el) => { if (el) bars.current.set(shift.id, el); else bars.current.delete(shift.id) }}
+                        type="button"
                         data-shift-id={shift.id}
-                        disabled={!clickable}
+                        tabIndex={shift.id === tabStop ? 0 : -1}
+                        // Not `disabled`: a bar that can't be chosen stays reachable with the arrows,
+                        // says why in its name, and its click does nothing (Enter and Space included).
+                        aria-disabled={clickable ? undefined : true}
                         aria-pressed={clickable ? isSelected : undefined}
                         aria-label={ariaLabel}
                         aria-describedby={roster ? `roster-bar-${shift.id}` : undefined}
-                        onClick={() => onToggle(shift.id, shift.status)}
-                        className={`absolute inset-x-0 rounded border border-transparent ${roster && !clickable ? "pointer-events-none" : ""} forced-colors:aria-pressed:bg-[Highlight] ${isRegistered ? "forced-colors:border-2 forced-colors:border-[CanvasText]" : ""} flex items-center justify-center overflow-hidden transition-colors ${clickable ? "cursor-pointer" : "cursor-default"} ${barCls}`}
+                        onClick={() => { if (clickable) onToggle(shift.id, shift.status) }}
+                        onKeyDown={onBarKey(shift.id)}
+                        // In forced colours, the GrayText the system gave a disabled bar; a held bar keeps its CanvasText frame.
+                        className={`absolute inset-x-0 rounded border border-transparent ${roster && !clickable ? "pointer-events-none" : ""} forced-colors:aria-pressed:bg-[Highlight] ${isRegistered ? "forced-colors:border-2 forced-colors:border-[CanvasText]" : "forced-colors:aria-disabled:border-[GrayText]"} forced-colors:aria-disabled:text-[GrayText] flex items-center justify-center overflow-hidden transition-colors ${clickable ? "cursor-pointer" : "cursor-default"} ${fullNoWaitlist ? FULL_OUTLINE : ""} ${barCls}`}
                         style={{
                           top: 0,
                           bottom: showSubLabel ? LABEL_H : 0,
@@ -259,7 +293,6 @@ export default function DayTimeline({
                           ...(fullNoWaitlist ? {
                             backgroundColor: "white",
                             backgroundImage: "repeating-linear-gradient(45deg, transparent, transparent 6px, rgba(0,0,0,0.06) 6px, rgba(0,0,0,0.06) 8px)",
-                            outline: "1px solid rgba(0,0,0,0.07)",
                           } : {}),
                           ...(isWaitlistable && !isSelected && !isRegistered ? {
                             backgroundImage: "repeating-linear-gradient(45deg, transparent, transparent 5px, rgba(255,255,255,0.35) 5px, rgba(255,255,255,0.35) 7px)",
@@ -411,6 +444,8 @@ export default function DayTimeline({
         ) : ROSTER_FRISE_PROMPT}
       </p>
     )}
+    {/* Only while a bar has the keyboard focus (never for a mouse or a touch): the keys, in short. */}
+    <p aria-hidden="true" data-frise-keys className="hidden peer-has-[:focus-visible]:block -mt-3 mb-5 text-sm text-balance text-gray-600">{FRISE_KEYS_SHOWN}</p>
     </>
   )
 }

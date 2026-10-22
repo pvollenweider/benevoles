@@ -33,10 +33,38 @@ async function tabTo(page: Page, target: Locator) {
   await target.waitFor({ state: "visible" })
   for (let step = 0; step < 100; step++) {
     if (await target.evaluate(element => element === document.activeElement)) return
+    // A day's frise is one tab stop (#1075): inside it, the arrows reach the other bars.
+    if (await arrowsTo(page, target)) return
     await page.keyboard.press("Tab")
     await page.waitForTimeout(110)
   }
   throw new Error(`Keyboard cannot reach ${await target.getAttribute("aria-label") ?? await target.innerText()}`)
+}
+/** When the focus is on a frise bar of the target's day, walk its rows with real arrow presses. */
+async function arrowsTo(page: Page, target: Locator): Promise<boolean> {
+  const sameDay = await target.evaluate(element => {
+    const bar = document.activeElement
+    const day = element.closest("[role=region]")
+    return !!bar?.hasAttribute("data-shift-id") && !!day && day.contains(bar) && element !== bar
+  })
+  if (!sameDay) return false
+  const at = () => page.evaluate(() => document.activeElement?.getAttribute("data-shift-id") ?? "")
+  const press = async (key: string) => { await page.keyboard.press(key); await page.waitForTimeout(110) }
+  const reached = () => target.evaluate(element => element === document.activeElement)
+  await press("Control+Home")
+  for (let row = 0; row < 50; row++) {
+    await press("Home")
+    for (let bar = 0; bar < 50; bar++) {
+      if (await reached()) return true
+      const before = await at()
+      await press("ArrowRight")
+      if (await at() === before) break
+    }
+    const before = await at()
+    await press("ArrowDown")
+    if (await at() === before) return false
+  }
+  return false
 }
 async function activate(page: Page, target: Locator) {
   await tabTo(page, target)

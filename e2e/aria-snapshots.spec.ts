@@ -106,12 +106,17 @@ test.describe("public sign-up page, shift picker", () => {
       - main:
         - paragraph: ${message}
         - region "Planning du mardi 1 octobre":
-          - button /^10h–12h \\d+.\\d+, Bar/ [disabled]
-          - button /^14h–16h \\d+.\\d+, Accueil/ [disabled]
+          - paragraph: /^Flèches gauche et droite\\W+créneaux du même poste/
+          - button /^10h–12h \\d+.\\d+, Bar.*inscriptions fermées$/ [disabled]
+          - button /^14h–16h \\d+.\\d+, Accueil.*inscriptions fermées$/ [disabled]
     `)
+    // aria-disabled, not disabled (#1075): one bar in the Tab order, the arrows reach the other.
+    await expect(region.locator("[data-shift-id][tabindex='0']")).toHaveCount(1)
+    for (const b of await region.getByRole("button").all()) await expect(b).not.toHaveAttribute("disabled")
     // Not toggle buttons while closed: no pressed state at all.
     for (const b of await region.getByRole("button").all()) await expect(b).not.toHaveAttribute("aria-pressed")
-    await expect(region).toHaveAccessibleDescription(message)
+    // The keys first, then the reason.
+    await expect(region).toHaveAccessibleDescription(new RegExp(`^Flèches gauche et droite.*${message.replace(/[.*+?^${}()|[\]\\]/g, "\\$&")}$`))
     await expect(page.getByRole("button", { name: /^Continuer/ })).toHaveCount(0)
   })
 })

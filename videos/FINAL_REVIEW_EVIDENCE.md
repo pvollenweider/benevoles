@@ -106,3 +106,22 @@ l'ancienne disposition de ces formulaires et restent à reprendre.
   « Pour qui ? » dans l'en-tête des pages publiques, l'en-tête filmé n'a pas
   cette entrée. Ni la narration ni les sélecteurs de capture ne sont touchés :
   à reprendre à la prochaine régénération de cette vidéo.
+
+## Écart connu : frise au clavier (#1075)
+
+Chaque jour de la frise de la page publique est maintenant un seul arrêt de Tab ;
+les flèches passent d'un créneau à l'autre, y compris les créneaux qu'on ne peut
+pas choisir, et une ligne « ← → : même poste · ↑ ↓ : poste voisin · Tab : quitter
+le planning » s'affiche sous la frise pendant l'usage au clavier.
+
+- `accessibility-keyboard-display` (scène « public ») : la capture atteint le
+  créneau « Accueil » au clavier ; `tabTo` (`videos/lib/record-accessibility.ts`)
+  passe maintenant aux flèches dans la frise. Une nouvelle capture montrerait la
+  ligne des touches et d'autres touches pressées : à régénérer.
+- `shift-roster-visibility` : « La vue Liste permet de parcourir tous les détails
+  au clavier » reste vrai, mais la frise le permet aussi désormais : narration à
+  revoir à la prochaine régénération.
+- `volunteer-choose-shifts` : rien de visible à la souris ; à revoir seulement si
+  la vidéo montre le clavier.
+
+Ces vidéos n'ont pas été régénérées dans la même PR.

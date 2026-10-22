@@ -126,7 +126,9 @@ export function barText({ shift, held, selected, reserved, locked, conflict = fa
   else if (unavail && !selected) ariaLabel = `${isClosed ? "Fermé" : "Complet"}, ${roleLabel} ${timeSpoken}${minAgeSuffix}`
   // A disabled bar must not offer an action: it says why it can't be chosen.
   else if (conflict && !selected) ariaLabel = `${timeShown} ${count}, ${roleLabel}${minAgeSuffix} : chevauche un créneau déjà choisi`
-  else if (locked && !selected) ariaLabel = `${timeShown} ${count}, ${roleLabel}${minAgeSuffix}${spotsSuffix}`
+  // Registrations closed (#1075): the reason in the name, in the list view's words; a bar's name is
+  // what a screen reader says on focus, the schedule's description is not.
+  else if (locked && !selected) ariaLabel = `${timeShown} ${count}, ${roleLabel}${minAgeSuffix}${spotsSuffix} : inscriptions fermées`
   else if (isWaitlistable) {
     ariaLabel = selected
       ? `En attente ${count}, ${roleLabel} ${timeSpoken} : retirer de la file d'attente${minAgeSuffix}`

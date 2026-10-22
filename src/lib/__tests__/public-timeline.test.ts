@@ -87,7 +87,7 @@ describe("barText for a shift not held", () => {
   })
 
   it("drops the action verb when locked, and the limit only on bars not selected", () => {
-    expect(text({ locked: true, shift: shift({ minAge: 16 }) }).ariaLabel).toBe("10h–12h 2/5, Bar (16 ans minimum) (3 places libres sur 5)")
+    expect(text({ locked: true, shift: shift({ minAge: 16 }) }).ariaLabel).toBe("10h–12h 2/5, Bar (16 ans minimum) (3 places libres sur 5) : inscriptions fermées")
     expect(text({ limitReached: 2 }).ariaLabel).toMatch(/\(limite de 2 créneaux par personne atteinte\)$/)
     expect(text({ limitReached: 2, selected: true }).ariaLabel).not.toMatch(/limite/)
   })
