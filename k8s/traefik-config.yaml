@@ -13,7 +13,7 @@
 # Access logs stay on for supervision, but never for a request carrying a personal token: those
 # are routed by k8s/ingressroute-tokens.yaml with access logs off (benevol.app only; the global
 # settings here are unchanged for the other sites). Every request header is dropped except
-# User-Agent (owner decision 2026-10-22: tells bots from people in the daily totals); Referer,
+# User-Agent (owner decision 2026-10-22: tells robots from people when the log is analysed); Referer,
 # cookies and authorisation headers never reach the log.
 #
 # Access logs go to a JSON file on the node, /var/log/traefik/access.log (hostPath), not to
@@ -21,8 +21,8 @@
 # node rotates the file daily into /var/log/traefik-archive (root only) and keeps one year
 # (k8s/node/traefik-access.logrotate); before a line is 90 days old its client address is cut to
 # its /24 (IPv4) or /48 (IPv6) network and the User-Agent dropped (k8s/node/traefik-log-anonymise).
-# A daily job keeps per-page totals of the benevol.app requests, without addresses
-# (k8s/node/traefik-log-stats). Procedure, checks and rollback:
+# The raw file is analysed on demand with standard tools (GoAccess, lnav). Procedure, analysis,
+# checks and rollback:
 # k8s/log-rotation.md.
 #
 # The directory (root:65532, 0750) and the file (65532, 0640) must exist on the node BEFORE this

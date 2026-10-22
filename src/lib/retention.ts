@@ -52,9 +52,6 @@ export const RETENTION_DAYS = {
   /** Full client address and User-Agent in the access log; older files have the address
    * truncated to /24 or /48 and the User-Agent dropped (k8s/node/traefik-log-anonymise, FULL_IP_DAYS). */
   accessLogFullIp: 90,
-  /** Daily visit totals, no address or User-Agent, computed from the access log (k8s/node/traefik-log-stats,
-   * KEEP_DAYS), owner decision of 2026-10-22: two years, to compare a season with the last. */
-  accessLogStats: 730,
 } as const
 
 export const DAY_MS = 24 * 60 * 60 * 1000
@@ -340,19 +337,10 @@ export const RETENTION: readonly RetentionEntry[] = [
   },
   {
     data: "Journaux d'accès du proxy : date et heure, adresse IP du visiteur, site et page demandés (sans les liens personnels), méthode, statut, durée, taille de la réponse, navigateur et système déclarés (en-tête User-Agent) ; aucun autre en-tête. Le même fichier reçoit les requêtes des autres sites hébergés sur le serveur",
-    purpose: "Sécurité, détection des abus et débogage",
+    purpose: "Sécurité, détection des abus et débogage ; analyse de la fréquentation, des erreurs et des performances, sans cookie ni profil individuel",
     duration: `${d.accessLogs} jours ; l'adresse IP complète et le navigateur pendant ${d.accessLogFullIp} jours, puis l'adresse réduite à son réseau (adresse IPv4 sans son dernier nombre, adresse IPv6 limitée à ses trois premiers groupes) et le navigateur retiré`,
     trigger: "requête reçue par le serveur",
     mechanism: "procédure manuelle : fichier du nœud tourné chaque jour, adresses réduites et fichiers échus supprimés chaque nuit (k8s/log-rotation.md), à vérifier sur le serveur",
-    backups: "non",
-    public: false,
-  },
-  {
-    data: "Totaux de visites par page, calculés chaque nuit depuis les journaux d'accès du proxy : nombre de requêtes par modèle de page (adresses des événements, identifiants et noms inconnus remplacés), part des robots, statuts, durées, pages introuvables ; ni adresse IP, ni navigateur, ni heure, ni suivi d'une personne ; administration, API et liens personnels exclus, une page vue moins de 5 fois regroupée avec les autres ; conçus pour ne désigner personne",
-    purpose: "Savoir quelles pages servent et lesquelles échouent",
-    duration: `${d.accessLogStats} jours`,
-    trigger: "calcul quotidien",
-    mechanism: "procédure manuelle : script du nœud qui efface aussi les totaux échus (k8s/log-rotation.md), à vérifier sur le serveur",
     backups: "non",
     public: false,
   },

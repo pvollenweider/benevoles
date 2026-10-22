@@ -19,7 +19,8 @@ open, outside the one Traefik writes), compressed one day later (k8s/node/traefi
     applies maxage when it rotates, which a quiet log may never trigger.
 
 The live file is never rewritten (Traefik holds it open); the run fails if its first line is
-already due, which means the rotation has stopped.
+already due (the rotation has stopped), or if it is missing or no line came for 26 hours
+(Traefik no longer writes its access log, which it does silently when it cannot open the file).
 
 Idempotent: a reduced address reduces to itself, and the names of the files already done are
 kept in --state so they are not read again every day. A lost state file only costs one extra
@@ -48,6 +49,8 @@ ARCHIVE_DIR = "/var/log/traefik-archive"
 STATE_FILE = "/var/lib/traefik-log-anonymise/done"
 FULL_IP_DAYS = 90
 MAX_DAYS = 365
+# A new access-log line must have come within this many hours (Traefik logs thousands a day).
+STALE_HOURS = 26
 IPV4_PREFIX = 24
 IPV6_PREFIX = 48
 
@@ -56,7 +59,7 @@ ROTATED = re.compile(r"^access\.log-(\d{8})(\.gz)?$")
 # Fields that hold one client address (Traefik's JSON access log, pkg/middlewares/accesslog).
 ADDRESS_FIELDS = ("ClientAddr", "ClientHost")
 # Dropped with the full address: the port narrows a /24 down again, and the User-Agent, kept for
-# the daily totals, has no use in an old file (minimisation).
+# recent analyses (robots versus people), is not needed in an old file (minimisation).
 DROPPED_FIELDS = ("ClientPort", "request_User-Agent")
 # Other headers are dropped by the Traefik configuration; if they were ever kept, these carry addresses.
 ADDRESS_HEADERS = ("request_X-Forwarded-For", "request_X-Real-Ip", "request_Forwarded")
@@ -167,6 +170,21 @@ def first_line_date(path):
         return None
 
 
+def last_line_time(path):
+    """StartUTC of the last complete line of a plain file, as an aware datetime; None if none."""
+    with open_nofollow(path) as raw:
+        size = os.fstat(raw.fileno()).st_size
+        raw.seek(max(0, size - (1 << 16)))
+        lines = raw.read().decode("utf-8", "replace").splitlines()
+    for line in reversed(lines):
+        try:
+            start = json.loads(line).get("StartUTC", "")
+            return datetime.datetime.fromisoformat(start[:19]).replace(tzinfo=datetime.timezone.utc)
+        except (ValueError, AttributeError, TypeError):
+            continue
+    return None
+
+
 def oldest_line_age(path, name, today):
     """Age in days of the oldest line: its timestamp, else the day before the file's date."""
     day = first_line_date(path)
@@ -233,7 +251,7 @@ def write_state(path, names):
     os.replace(tmp, path)
 
 
-def run(archive_dir, live_file, state_path, days, max_days, today, dry_run, log):
+def run(archive_dir, live_file, state_path, days, max_days, today, now, dry_run, log):
     done = read_state(state_path)
     present = set()
     failures = 0
@@ -287,6 +305,28 @@ def run(archive_dir, live_file, state_path, days, max_days, today, dry_run, log)
     if live_age is not None and live_age >= days - 1:
         failures += 1
         log(f"error: {live_file} starts {live_age} days ago: is logrotate still running? (k8s/log-rotation.md)")
+    # Traefik serves thousands of requests a day: no new line for a day means it no longer writes
+    # (file missing or not writable: it then runs without access log, silently). The newest line
+    # is the live file's last one, or yesterday's archive's last one right after a rotation (the
+    # file's mtime would not do: copytruncate touches it even when Traefik writes nothing).
+    if not os.path.exists(live_file):
+        failures += 1
+        log(f"error: {live_file} is missing: Traefik cannot recreate it (k8s/log-rotation.md)")
+    else:
+        candidates = [live_file] + [os.path.join(archive_dir, n) for n in sorted(os.listdir(archive_dir), reverse=True) if ROTATED.match(n) and not n.endswith(".gz")][:1]
+        newest = None
+        for path in candidates:
+            try:
+                newest = last_line_time(path)
+            except (OSError, ValueError) as error:
+                log(f"error: {path}: {error}")
+            if newest is not None:
+                break
+        idle_hours = None if newest is None else (now - newest).total_seconds() / 3600
+        if idle_hours is None or idle_hours > STALE_HOURS:
+            failures += 1
+            since = "ever" if idle_hours is None else f"for {int(idle_hours)} hours"
+            log(f"error: no new access-log line {since}: is Traefik still writing {live_file}? (k8s/log-rotation.md)")
     if not dry_run:
         # Forget the files deleted since, so the state stays one year long at most.
         write_state(state_path, done & present)
@@ -300,7 +340,7 @@ def main(argv=None):
     parser.add_argument("--state", default=STATE_FILE, help=f"names of the files already done (default {STATE_FILE})")
     parser.add_argument("--days", type=int, default=FULL_IP_DAYS, help=f"keep full addresses this many days (default {FULL_IP_DAYS})")
     parser.add_argument("--max-days", type=int, default=MAX_DAYS, help=f"delete files older than this (default {MAX_DAYS})")
-    parser.add_argument("--today", help="reference date YYYY-MM-DD (tests)")
+    parser.add_argument("--today", help="reference date YYYY-MM-DD, noon UTC (tests)")
     parser.add_argument("--dry-run", action="store_true", help="list the files, change nothing")
     parser.add_argument("--filter", action="store_true", help="anonymise stdin to stdout and exit")
     args = parser.parse_args(argv)
@@ -318,7 +358,8 @@ def main(argv=None):
         except BlockingIOError:
             print("another run is in progress", file=sys.stderr)
             return 0
-        return run(args.dir, args.live, args.state, args.days, args.max_days, today, args.dry_run, lambda m: print(m, file=sys.stderr))
+        now = datetime.datetime.combine(today, datetime.time(12), datetime.timezone.utc) if args.today else datetime.datetime.now(datetime.timezone.utc)
+        return run(args.dir, args.live, args.state, args.days, args.max_days, today, now, args.dry_run, lambda m: print(m, file=sys.stderr))
 
 
 if __name__ == "__main__":

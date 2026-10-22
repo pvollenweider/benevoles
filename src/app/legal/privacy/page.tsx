@@ -44,7 +44,7 @@ export default function PrivacyPage() {
           <strong>sous-traitant</strong> agissant sur instruction de l&apos;Organisation.
         </li>
         <li>
-          <strong>Journaux du serveur et statistiques de visite</strong> (toute personne qui visite le
+          <strong>Journaux du serveur</strong> (toute personne qui visite le
           site) : benevol.app est <strong>responsable du traitement</strong>.
         </li>
       </ul>
@@ -125,7 +125,7 @@ export default function PrivacyPage() {
         enregistré. L&apos;e-mail de confirmation ne reprend aucun texte saisi dans le formulaire.
       </p>
 
-      <h3 id="journaux-serveur">2.3 Visiteurs du site : journaux du serveur et statistiques</h3>
+      <h3 id="journaux-serveur">2.3 Visiteurs du site : journaux du serveur</h3>
       <p>
         Pour toute visite du site, que vous ayez un compte ou non, benevol.app est responsable du
         traitement des journaux de son serveur.
@@ -148,11 +148,9 @@ export default function PrivacyPage() {
           groupes pour une adresse IPv6) et le navigateur est retiré.
         </li>
         <li>
-          <strong>Statistiques</strong> : ces journaux servent aussi à calculer chaque nuit des totaux
-          de visites par page, pour savoir quelles pages sont utilisées et repérer les erreurs
-          (intérêt légitime). Les totaux ne contiennent ni adresse IP, ni navigateur, ni heure, et ne
-          suivent personne d&apos;une page à l&apos;autre ; aucun cookie n&apos;est utilisé. Ils sont
-          gardés {RETENTION_DAYS.accessLogStats / 365} ans.
+          <strong>Analyse</strong> : nous pouvons analyser ces journaux pour connaître la fréquentation
+          du site, ses erreurs et ses performances, dans les mêmes durées, sur la même base légale,
+          sans cookie et sans profil individuel.
         </li>
       </ul>
 

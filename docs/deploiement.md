@@ -69,7 +69,7 @@ Manifestes dans `k8s/`, namespace `benevoles` :
 | `cronjob-release-check.yaml` | CronJob `app-release-check` | oui | Vérification de nouvelle version GitHub (#612), 03:00 UTC ; sans effet ici, `benevol.app` est déployé depuis `main` |
 | `cronjob-backup.yaml` | PVC `backup-pvc` (5 Gi), CronJob `postgres-backup` | oui | `pg_dump` chiffré (AES-256), 01:00 UTC, rétention 30 jours |
 | `cronjob-backup-offsite.yaml` | CronJob `backup-offsite` | oui | Copie des fichiers déjà chiffrés hors site (`rclone`), 01:30 UTC, rétention 90 jours chez le fournisseur ; vers Infomaniak Swiss Backup (#524) ; demande le secret `rclone-config` et la clé `OFFSITE_BUCKET` de `benevoles-secret` |
-| `log-rotation.md`, `node/` | | | Journaux du nœud, procédure manuelle : journaux d'accès de Traefik gardés 1 an, adresses réduites après 90 jours (`node/` : logrotate, scripts et tâches cron à installer sur le nœud), totaux de visites gardés 2 ans ; journaux des conteneurs, 90 jours pas encore garantis |
+| `log-rotation.md`, `node/` | | | Journaux du nœud, procédure manuelle : journaux d'accès de Traefik gardés 1 an, adresses réduites après 90 jours (`node/` : logrotate, script et tâche cron à installer sur le nœud), analyse à la demande avec GoAccess ; journaux des conteneurs, 90 jours pas encore garantis |
 
 ### Adresse des visiteurs et limites de débit
 
@@ -276,7 +276,7 @@ La ranger **d'abord** dans un gestionnaire de mots de passe, hors du serveur et 
 
 Avec `deploy.yml`, un push sur `main` applique tout dans le bon ordre. À la main, suivre [Mise en place manuelle](#mise-en-place-manuelle) : migrations d'abord, et ne pas continuer si le Job échoue (`backoffLimit: 0`).
 
-`k8s/traefik-config.yaml` n'est **pas** appliqué par `deploy.yml` : il règle le Traefik de k3s partagé par tous les sites du cluster (`kube-system`) : adresse réelle des visiteurs, journaux d'accès dans un fichier du nœud, délais de lecture et d'écriture de 30 min. Un `HelmChartConfig` `traefik` existant serait remplacé : fusionner d'abord ses réglages. Créer d'abord sur le nœud le répertoire `/var/log/traefik` (root, groupe 65532), le fichier `access.log` (65532, 0640) et `/var/log/traefik-archive` (root), puis installer la rotation et les scripts ([`k8s/log-rotation.md`](../k8s/log-rotation.md), « Mise en place ») : sans ce répertoire, le nouveau pod Traefik ne démarre pas. À appliquer ensuite :
+`k8s/traefik-config.yaml` n'est **pas** appliqué par `deploy.yml` : il règle le Traefik de k3s partagé par tous les sites du cluster (`kube-system`) : adresse réelle des visiteurs, journaux d'accès dans un fichier du nœud, délais de lecture et d'écriture de 30 min. Un `HelmChartConfig` `traefik` existant serait remplacé : fusionner d'abord ses réglages. Créer d'abord sur le nœud le répertoire `/var/log/traefik` (root, groupe 65532), le fichier `access.log` (65532, 0640) et `/var/log/traefik-archive` (root), puis installer la rotation et le script ([`k8s/log-rotation.md`](../k8s/log-rotation.md), « Mise en place ») : sans ce répertoire, le nouveau pod Traefik ne démarre pas. À appliquer ensuite :
 
 ```bash
 kubectl apply -f k8s/traefik-config.yaml
@@ -594,4 +594,4 @@ Il n'y a pas de suppression immédiate : le super admin **désactive** l'organis
 
 ## Journaux
 
-[`k8s/log-rotation.md`](../k8s/log-rotation.md) décrit les journaux du nœud k3s : les journaux d'accès de Traefik, écrits dans `/var/log/traefik/access.log`, tournés chaque jour vers `/var/log/traefik-archive/` et gardés 1 an, avec l'adresse IP réduite à son réseau et le User-Agent retiré après 90 jours, et les totaux de visites gardés 2 ans (fichiers de `k8s/node/` à installer sur le nœud) ; et la limite de 90 jours des journaux des conteneurs (kubelet, logrotate ; Loki s'il est installé). Le même fichier reçoit les requêtes des autres sites servis par ce Traefik.
+[`k8s/log-rotation.md`](../k8s/log-rotation.md) décrit les journaux du nœud k3s : les journaux d'accès de Traefik, écrits dans `/var/log/traefik/access.log`, tournés chaque jour vers `/var/log/traefik-archive/` et gardés 1 an, avec l'adresse IP réduite à son réseau et le User-Agent retiré après 90 jours, et analysés à la demande (GoAccess) (fichiers de `k8s/node/` à installer sur le nœud) ; et la limite de 90 jours des journaux des conteneurs (kubelet, logrotate ; Loki s'il est installé). Le même fichier reçoit les requêtes des autres sites servis par ce Traefik.

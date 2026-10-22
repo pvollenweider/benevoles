@@ -13,7 +13,6 @@ import { RETENTION, RETENTION_DAYS } from "../retention"
 const root = path.join(__dirname, "..", "..", "..")
 const read = (f: string) => fs.readFileSync(path.join(root, f), "utf-8")
 const SCRIPT = path.join(root, "k8s/node/traefik-log-anonymise")
-const STATS = path.join(root, "k8s/node/traefik-log-stats")
 
 function filter(input: string): string {
   return execFileSync("python3", ["-I", SCRIPT, "--filter"], { input, encoding: "utf-8" })
@@ -124,6 +123,20 @@ describe("traefik-log-anonymise on a log directory", () => {
     expect(fs.readFileSync(live, "utf-8")).toContain("203.0.113.57")
   })
 
+  it("fails when Traefik no longer writes the live file (missing, or no new line for a day)", () => {
+    fs.writeFileSync(live, line({ StartUTC: "2026-10-21T08:00:00Z", ClientHost: "203.0.113.57" })) // 28 hours before noon
+    const stale = run()
+    expect(stale.status).toBe(1)
+    expect(stale.stderr).toMatch(/no new access-log line for 28 hours/)
+    fs.writeFileSync(live, "") // just rotated: the newest line is yesterday's archive's last one
+    fs.writeFileSync(path.join(dir, "access.log-20261022"), line({ StartUTC: "2026-10-21T23:59:00Z", ClientHost: "203.0.113.57" }))
+    expect(run().status, "fresh archive after a rotation").toBe(0)
+    fs.rmSync(live)
+    const missing = run()
+    expect(missing.status).toBe(1)
+    expect(missing.stderr).toMatch(/is missing/)
+  })
+
   it("remembers the files done and does not read them again", () => {
     run()
     expect(fs.readFileSync(state(), "utf-8")).toBe(`access.log-20260721\n${DUE}\n`)
@@ -172,10 +185,9 @@ describe("access-log retention matches the node configuration", () => {
     expect(config).not.toMatch(/Referer: keep/)
     expect(logrotate).toMatch(/^\/var\/log\/traefik\/access\.log \{/m)
     expect(logrotate).toMatch(/^\s+olddir \/var\/log\/traefik-archive$/m)
-    for (const s of [script, read("k8s/node/traefik-log-stats")]) {
-      expect(s).toContain('LIVE_FILE = "/var/log/traefik/access.log"')
-      expect(s).toContain('ARCHIVE_DIR = "/var/log/traefik-archive"')
-    }
+    expect(script).toContain('LIVE_FILE = "/var/log/traefik/access.log"')
+    expect(script).toContain('ARCHIVE_DIR = "/var/log/traefik-archive"')
+    expect(fs.existsSync(path.join(root, "k8s/node/traefik-log-stats"))).toBe(false) // analysis is on demand (GoAccess), no aggregation
   })
 
   it("keeps one year of files and the full address 90 days", () => {
@@ -197,182 +209,5 @@ describe("access-log retention matches the node configuration", () => {
     expect(entry?.mechanism).toMatch(/procédure manuelle/)
     expect(entry?.data).toMatch(/autres sites/)
     expect(RETENTION.find((e) => e.data.startsWith("Journaux techniques des conteneurs"))?.data).toMatch(/sans les journaux d'accès/)
-  })
-})
-
-describe("traefik-log-stats: anonymous daily totals", () => {
-  const DAY = "2026-10-21"
-  const UA = "Mozilla/5.0 (X11; Linux x86_64) Firefox/131.0"
-  const req = (host: string, p: string, extra: Record<string, unknown> = {}) => ({ StartUTC: `${DAY}T10:00:00.1Z`, RequestHost: host, RequestPath: p, DownstreamStatus: 200, Duration: 10_000_000, ClientHost: "203.0.113.57", "request_User-Agent": UA, ...extra })
-  const times = (n: number, r: Record<string, unknown>) => Array.from({ length: n }, () => r)
-  type Row = { host: string; path: string; requests: number; bots: number; others: number; status: Record<string, number>; p50Ms: number; p95Ms: number }
-  type Stats = { date: string; totals: Row; paths: Row[]; notFound: { host: string; path: string; requests: number }[] }
-  const stats = (records: Record<string, unknown>[], day = DAY): Stats =>
-    JSON.parse(execFileSync("python3", ["-I", STATS, "--stdin", "--date", day], { input: records.map((r) => JSON.stringify(r)).join("\n"), encoding: "utf-8" }))
-  const row = (s: Stats, host: string, p: string) => s.paths.find((r) => r.host === host && r.path === p)
-  const FAKE = "fake-value-for-tests-0000"
-
-  it("counts benevol.app only, and never the administration, the API, personal links or token queries", () => {
-    const s = stats([
-      ...times(5, req("www.benevol.app", "/doc/admin")),
-      req("gallerypack.app", "/"),
-      req("www.benevol.app", "/admin/events"),
-      req("www.benevol.app", "/super-admin/organizations"),
-      req("fete.benevol.app", "/api/public/events"),
-      req("fete.benevol.app", `/my/${FAKE}`),
-      req("fete.benevol.app", `/leader/${FAKE}`),
-      req("fete.benevol.app", `/waitlist/${FAKE}/confirm`),
-      req("fete.benevol.app", `/fete-du-village?token=${FAKE}`),
-      req("fete.benevol.app", `/fete-du-village?t=${FAKE}`),
-      req("www.benevol.app", "/product-updates/unsubscribe"),
-      req("www.benevol.app", "/monitoring"),
-    ])
-    expect(s.totals.requests).toBe(5)
-    expect(s.paths.map((r) => `${r.host} ${r.path}`)).toEqual(["site /doc/admin"])
-  })
-
-  it("normalises event slugs, page slugs, identifiers and long values", () => {
-    const s = stats([
-      ...times(3, req("fete.benevol.app", "/fete-du-village?embed=1")),
-      ...times(2, req("club.benevol.app", "/tournoi")),
-      ...times(5, req("fete.benevol.app", "/fete-du-village/infos-pratiques")),
-      ...times(5, req("fete.benevol.app", "/fete-du-village/success")),
-      ...times(5, req("www.benevol.app", "/videos/ckv9z0a1b2c3d4e5f6g7h8i9")),
-      ...times(5, req("www.benevol.app", "/x/jean.dupont@example.org/123/a/b/c")),
-      ...times(5, req("fete.benevol.app", "/doc/admin")),
-    ])
-    expect(row(s, "org", "/:event")?.requests).toBe(5)
-    expect(row(s, "org", "/:event/:page")?.requests).toBe(5)
-    expect(row(s, "org", "/:event/success")?.requests).toBe(5)
-    expect(row(s, "org", "/doc/admin")?.requests).toBe(5)
-    expect(row(s, "site", "/videos/:id")?.requests).toBe(5)
-    expect(row(s, "site", "/:page/:x/:n/:page/*")?.requests).toBe(5)
-    expect(JSON.stringify(s)).not.toMatch(/fete|tournoi|club|dupont|infos-pratiques/)
-  })
-
-  it("keeps a content page name only when the page exists, and probe names in the 404 list", () => {
-    const s = stats([
-      ...times(5, req("www.benevol.app", "/blog/rentree-2026")),
-      ...times(5, req("www.benevol.app", "/blog/alice-martin", { DownstreamStatus: 404 })),
-      ...times(5, req("www.benevol.app", "/alice-martin", { DownstreamStatus: 404 })),
-      ...times(5, req("www.benevol.app", "/wp-login.php", { DownstreamStatus: 404 })),
-      ...times(5, req("www.benevol.app", "/doc/admin/en-trop", { DownstreamStatus: 404 })),
-    ])
-    expect(row(s, "site", "/blog/rentree-2026")?.requests).toBe(5)
-    expect(row(s, "site", "/blog/:page")?.requests).toBe(5)
-    expect(row(s, "site", "/:page")?.requests).toBe(5)
-    expect(row(s, "site", "/wp-login.php")?.requests).toBe(5)
-    expect(row(s, "site", "/doc/:page/:page")?.requests).toBe(5)
-    expect(JSON.stringify(s)).not.toMatch(/alice|martin|en-trop/)
-  })
-
-  it("decodes the path and the query before leaving requests out", () => {
-    const s = stats([
-      req("www.benevol.app", "/%61dmin/events"),
-      req("fete.benevol.app", `/fete-du-village?%74oken=${FAKE}`),
-      req("fete.benevol.app", `/fete-du-village?TOKEN=${FAKE}`),
-      req("fete.benevol.app", "/%6Dy/abc"),
-    ])
-    expect(s.totals.requests).toBe(0)
-  })
-
-  it("merges every path under 5 requests into « autres », in the paths and the 404 list", () => {
-    const s = stats([
-      ...times(5, req("www.benevol.app", "/tarifs")),
-      ...times(4, req("www.benevol.app", "/blog/rare", { DownstreamStatus: 404 })),
-      req("www.benevol.app", "/wp-login.php", { DownstreamStatus: 404 }),
-      ...times(6, req("www.benevol.app", "/.env", { DownstreamStatus: 404 })),
-    ])
-    expect(s.paths.map((r) => r.path)).toEqual(["/.env", "/tarifs", "autres"])
-    expect(row(s, "autres", "autres")).toMatchObject({ requests: 5, status: { "4xx": 5 } })
-    expect(s.notFound).toEqual([{ host: "site", path: "/.env", requests: 6 }, { host: "autres", path: "autres", requests: 5 }])
-  })
-
-  it("splits bots from people, counts status classes and gives p50 and p95 in milliseconds", () => {
-    const s = stats([
-      ...Array.from({ length: 18 }, (_, i) => req("www.benevol.app", "/", { Duration: (i + 1) * 1_000_000 })),
-      req("www.benevol.app", "/", { "request_User-Agent": "Mozilla/5.0 (compatible; Googlebot/2.1)", Duration: 19_000_000, DownstreamStatus: 301 }),
-      req("www.benevol.app", "/", { "request_User-Agent": undefined, Duration: 20_000_000, DownstreamStatus: 500 }),
-    ])
-    expect(row(s, "site", "/")).toEqual({ host: "site", path: "/", requests: 20, bots: 2, others: 18, status: { "2xx": 18, "3xx": 1, "5xx": 1 }, p50Ms: 10, p95Ms: 19 })
-  })
-
-  it("keeps one UTC day, and writes no address, User-Agent or time of day", () => {
-    const s = stats([...times(5, req("www.benevol.app", "/tarifs")), ...times(5, req("www.benevol.app", "/tarifs", { StartUTC: "2026-10-22T00:00:01Z" }))])
-    expect(s.date).toBe(DAY)
-    expect(s.totals.requests).toBe(5)
-    const text = JSON.stringify(s)
-    for (const leak of ["203.0.113", "Mozilla", "Firefox", "T10:00"]) expect(text).not.toContain(leak)
-  })
-
-  describe("on the node files", () => {
-    let dir: string, logs: string, out: string, live: string
-    const lines = (n: number, day = DAY) => times(n, req("www.benevol.app", "/tarifs", { StartUTC: `${day}T10:00:00Z` })).map((r) => JSON.stringify(r)).join("\n") + "\n"
-    const runStats = (...args: string[]) => spawnSync("python3", ["-I", STATS, "--dir", logs, "--live", live, "--out", out, "--today", "2026-10-22", ...args], { encoding: "utf-8" })
-    beforeEach(() => {
-      dir = fs.mkdtempSync(path.join(os.tmpdir(), "traefik-stats-"))
-      logs = path.join(dir, "archive")
-      out = path.join(dir, "out")
-      live = path.join(dir, "access.log")
-      fs.mkdirSync(logs)
-      fs.mkdirSync(out)
-    })
-    afterEach(() => fs.rmSync(dir, { recursive: true, force: true }))
-
-    it("reads the live and archived files of the day, writes YYYY-MM-DD.json and deletes totals older than two years", () => {
-      fs.writeFileSync(path.join(logs, "access.log-20261022"), lines(3))
-      fs.writeFileSync(live, lines(2))
-      fs.writeFileSync(path.join(logs, "access.log-20261020.gz"), zlib.gzipSync(lines(5))) // dated before the day: not read
-      fs.writeFileSync(path.join(out, "2024-10-21.json"), "{}")
-      fs.writeFileSync(path.join(out, "2024-10-23.json"), "{}")
-      const r = runStats("--date", DAY)
-      expect(r.status, r.stderr).toBe(0)
-      const written: Stats = JSON.parse(fs.readFileSync(path.join(out, `${DAY}.json`), "utf-8"))
-      expect(written.totals.requests).toBe(5)
-      expect(fs.readdirSync(out).sort()).toEqual(["2024-10-23.json", `${DAY}.json`])
-    })
-
-    it("fills a missing day of the last week, and skips the days before any log", () => {
-      fs.writeFileSync(path.join(logs, "access.log-20261019"), lines(5, "2026-10-18"))
-      fs.writeFileSync(path.join(logs, "access.log-20261022"), lines(5))
-      const r = runStats()
-      expect(r.status, r.stderr).toBe(0)
-      expect(fs.readdirSync(out).sort()).toEqual(["2026-10-18.json", `${DAY}.json`])
-    })
-
-    it("fails without writing on a read error, and fails on a day with no benevol.app request at all", () => {
-      fs.writeFileSync(path.join(logs, "access.log-20261022.gz"), "not gzip")
-      const broken = runStats("--date", DAY)
-      expect(broken.status).toBe(1)
-      expect(fs.existsSync(path.join(out, `${DAY}.json`))).toBe(false)
-      fs.rmSync(path.join(logs, "access.log-20261022.gz"))
-      const empty = runStats("--date", DAY)
-      expect(empty.status).toBe(1)
-      expect(empty.stderr).toMatch(/no benevol\.app request/)
-    })
-
-    it("never reads through a symbolic link", () => {
-      fs.writeFileSync(path.join(dir, "elsewhere"), lines(5))
-      fs.symlinkSync(path.join(dir, "elsewhere"), path.join(logs, "access.log-20261022"))
-      const r = runStats("--date", DAY)
-      expect(r.status).toBe(1)
-      expect(fs.existsSync(path.join(out, `${DAY}.json`))).toBe(false)
-    })
-  })
-
-  it("knows every fixed first segment of the app, so an event slug is never taken for a page", () => {
-    const script = read("k8s/node/traefik-log-stats")
-    const set = (name: string) => {
-      const start = script.indexOf(`${name} = {`)
-      return new Set([...script.slice(start, script.indexOf("}", start)).matchAll(/"([^"]+)"/g)].map((m) => m[1]))
-    }
-    const known = set("KNOWN_ROOTS")
-    const excluded = set("EXCLUDED_ROOTS")
-    const roots = [...fs.readdirSync(path.join(root, "src/app"), { withFileTypes: true }).filter((e) => e.isDirectory() && !e.name.startsWith("[")).map((e) => e.name), ...fs.readdirSync(path.join(root, "public"))]
-    for (const r of roots) expect(known.has(r) || excluded.has(r), r).toBe(true)
-    for (const family of ["my", "waitlist", "leader", "api", "admin", "super-admin"]) expect(excluded.has(family), family).toBe(true)
-    expect(script).toContain(`KEEP_DAYS = ${RETENTION_DAYS.accessLogStats}`)
-    expect(script).toContain("MIN_BUCKET = 5")
-    expect(read("k8s/node/traefik-log-stats.cron")).toMatch(/^\d+ \d+ \* \* \* root out=\$\(traefik-log-stats 2>&1\); rc=\$\?;.*logger -p user\.err/m)
   })
 })
