@@ -15,6 +15,16 @@
  * Plain TypeScript without path aliases: the CI script imports it directly (Node type stripping).
  */
 
+/**
+ * Images of public/doc-img that are not captures of the app, so scripts/screenshots.mjs does not
+ * make them and no route file can make them stale: name → how it is made.
+ */
+export const DOC_IMAGES_NOT_CAPTURED: Record<string, string> = {
+  // #870: the free schedule template (src/lib/schedule-template.ts), filled with first names
+  // for the picture, exported to PDF by LibreOffice, then cropped to the Accueil block.
+  "modele-planning-tableur": "public/modeles/modele-planning-benevoles.xlsx rendered by LibreOffice",
+}
+
 /** Capture name (file public/doc-img/<name>.png) → route files it shows. */
 export const DOC_SCREENSHOTS: Record<string, string[]> = {
   "public-timeline": ["src/app/[eventSlug]/page.tsx"],

@@ -3,7 +3,7 @@
 
 import { describe, expect, it } from "vitest"
 import { existsSync, readFileSync, readdirSync } from "node:fs"
-import { DOC_SCREENSHOTS, hasOptOut, importSpecifiers, resolveLocalImport, screenshotSources, staleScreenshots } from "../doc-screenshots"
+import { DOC_IMAGES_NOT_CAPTURED, DOC_SCREENSHOTS, hasOptOut, importSpecifiers, resolveLocalImport, screenshotSources, staleScreenshots } from "../doc-screenshots"
 
 describe("importSpecifiers", () => {
   it("finds static, multi-line, type, re-export and dynamic imports", () => {
@@ -79,10 +79,17 @@ describe("DOC_SCREENSHOTS", () => {
   const script = readFileSync("scripts/screenshots.mjs", "utf-8")
 
   it("covers every capture of public/doc-img and every shot of scripts/screenshots.mjs", () => {
-    const pngs = readdirSync("public/doc-img").filter((f) => f.endsWith(".png")).map((f) => f.slice(0, -4)).sort()
+    const pngs = readdirSync("public/doc-img").filter((f) => f.endsWith(".png")).map((f) => f.slice(0, -4)).filter((n) => !(n in DOC_IMAGES_NOT_CAPTURED)).sort()
     const shots = [...script.matchAll(/await shot\("([^"]+)"/g)].map((m) => m[1]).sort()
     expect(Object.keys(DOC_SCREENSHOTS).sort()).toEqual(pngs)
     expect(Object.keys(DOC_SCREENSHOTS).sort()).toEqual(shots)
+  })
+
+  it("keeps the images that are not captures apart, each with its file (#870)", () => {
+    for (const name of Object.keys(DOC_IMAGES_NOT_CAPTURED)) {
+      expect(existsSync(`public/doc-img/${name}.png`), name).toBe(true)
+      expect(DOC_SCREENSHOTS, name).not.toHaveProperty(name)
+    }
   })
 
   it("points to route files that exist", () => {

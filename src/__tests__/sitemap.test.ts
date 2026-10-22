@@ -33,7 +33,7 @@ describe("sitemap on the apex host", () => {
     withHeaders({ host: "www.benevol.app" })
     const sitemap = (await import("../app/sitemap")).default
     const entries = await sitemap()
-    expect(entries.map((e) => e.url).slice(0, 20)).toEqual([
+    expect(entries.map((e) => e.url).slice(0, 21)).toEqual([
       "https://www.benevol.app/",
       "https://www.benevol.app/fonctionnalites",
       // The editorial page on volunteer scheduling (#767).
@@ -45,6 +45,8 @@ describe("sitemap on the apex host", () => {
       "https://www.benevol.app/benevoles-manifestation-sportive",
       "https://www.benevol.app/planning-permanences-benevoles",
       "https://www.benevol.app/tarifs",
+      // The free schedule template (#870).
+      "https://www.benevol.app/modele-planning-benevoles",
       // The sign-up page (#934).
       "https://www.benevol.app/inscription",
       // What changed, rendered from CHANGELOG.md (#757).
@@ -65,11 +67,11 @@ describe("sitemap on the apex host", () => {
     // without VIDEO_MEDIA_BASE_URL none can be played, so none is indexed.
     const { readDocUnits } = await import("../lib/doc-units")
     const units = readDocUnits()
-    expect(entries.map((e) => e.url).slice(20, 20 + units.length)).toEqual(units.map((u) => `https://www.benevol.app/doc/${u.slug}`))
+    expect(entries.map((e) => e.url).slice(21, 21 + units.length)).toEqual(units.map((u) => `https://www.benevol.app/doc/${u.slug}`))
     // Then the blog posts of blog/ (#944), newest first, each dated the day it was sent.
     const { readBlogPosts } = await import("../lib/blog")
     const posts = readBlogPosts()
-    expect(entries.map((e) => e.url).slice(20 + units.length)).toEqual(posts.map((p) => `https://www.benevol.app/blog/${p.slug}`))
+    expect(entries.map((e) => e.url).slice(21 + units.length)).toEqual(posts.map((p) => `https://www.benevol.app/blog/${p.slug}`))
     expect(entries.at(-1)?.lastModified).toEqual(new Date(`${posts.at(-1)!.date}T00:00:00Z`))
     expect(entries.map((e) => e.url)).toContain("https://www.benevol.app/doc/revenir-sur-la-page-d-inscription")
     expect(entries.map((e) => e.url)).toContain("https://www.benevol.app/doc/configurer-les-creneaux")

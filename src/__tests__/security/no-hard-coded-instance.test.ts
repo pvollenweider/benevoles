@@ -18,6 +18,7 @@ const ALLOWED: Record<string, string> = {
   "src/app/legal/terms/page.tsx": "hosted service only (HOSTED_SERVICE)",
   "src/lib/landing-seo.ts": "the hosted service's marketing home (HOSTED_SERVICE)",
   "src/app/legal/exploitant/page.tsx": "names the software the instance runs (attribution)",
+  "src/lib/schedule-template.ts": "the hosted service's downloadable schedule template (#870), a static file of /modele-planning-benevoles",
   "src/components/PublicFooter.tsx": "« benevol.app vX.Y.Z » links to the upstream source code (AGPL attribution)",
 }
 

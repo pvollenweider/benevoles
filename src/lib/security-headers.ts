@@ -119,6 +119,7 @@ export const APP_TOP_LEVEL_SEGMENTS: readonly string[] = [
   "leader",
   "legal",
   "logiciel-planning-benevoles",
+  "modele-planning-benevoles",
   "monitoring",
   "my",
   "nouveautes",

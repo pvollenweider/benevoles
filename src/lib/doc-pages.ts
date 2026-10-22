@@ -173,6 +173,21 @@ export const PUBLIC_PAGES: readonly PublicPage[] = [
     presentation: true,
   },
   {
+    // The free volunteer schedule template (#870): the spreadsheet to download
+    // (public/modeles, src/lib/schedule-template.ts), how to use it, and the same structure in
+    // the app. For people who search « modèle planning bénévoles ».
+    path: "/modele-planning-benevoles",
+    title: "Modèle gratuit de planning des bénévoles",
+    summary: "Un tableur prêt à remplir pour une semaine : un bloc par poste, une colonne par jour, le besoin de chaque créneau et ce qui manque.",
+    metaTitle: "Modèle gratuit de planning des bénévoles",
+    metaDescription: "Un modèle de planning des bénévoles à télécharger (Excel et LibreOffice, sans macro) : un bloc par poste, une colonne par jour, le manque calculé.",
+    source: "MODELE-PLANNING-BENEVOLES.md",
+    priority: 0.6,
+    guide: false,
+    availability: "hosted",
+    presentation: true,
+  },
+  {
     // The target of every « Demander un espace » (#810), written in its page.tsx. In the sitemap
     // like the other apex pages (#934): it is where an association searching for the service
     // starts, and it exists on every instance (a closed sign-up shows why, with a contact).
