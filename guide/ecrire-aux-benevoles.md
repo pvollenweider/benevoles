@@ -52,6 +52,6 @@ En bas de l'onglet **Communication**, chaque message déjà envoyé pour l'évé
 
 Dans l'onglet **Communication**, section **Rappels**, sous l'encadré des rappels automatiques, le bouton **Envoyer le rappel** permet d'envoyer un email de rappel à **tous les bénévoles inscrits** de l'événement.
 
-Avant d'envoyer, rédiger un message dans la section « Message de rappel » (onglet **Réglages** de l'événement). Ce message apparaîtra dans l'email, avec le récapitulatif des créneaux de chaque bénévole.
+Avant d'envoyer, rédigez si vous le souhaitez un message dans la section « Message de rappel » (onglet **Réglages** de l'événement). Ce message apparaîtra dans l'email, avec le récapitulatif des créneaux de chaque bénévole.
 
 Les rappels automatiques (J-2, J-1, jour J) partent sans intervention : voir [Rappels et changements de créneau](rappels.md). Pour un rappel à une date et une heure précises, écrivez-le dans **Écrire aux bénévoles** et [programmez l'envoi](#programmer-l-envoi).

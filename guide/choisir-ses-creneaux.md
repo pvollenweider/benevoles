@@ -42,7 +42,7 @@ Certains postes affichent un petit repère (par exemple « 18+ ») : ils demande
 
 ## Sélectionner un créneau
 
-Clique (ou tape) sur une barre disponible. Le créneau s'ajoute à ta sélection, visible dans la liste en bas de page. Pour le retirer, clique sur le **✕** à droite de son nom dans cette liste.
+Clique (ou tape) sur une barre disponible. Le créneau s'ajoute à ta sélection : dans la colonne de droite (« Créneaux sélectionnés ») sur ordinateur, sous le planning sur téléphone. Pour le retirer, clique sur le **✕** à droite de son nom dans cette liste.
 
 ![Planning public avec deux créneaux sélectionnés (Accueil de 9 h à 12 h et Chauffeur navette de 14 h à 18 h) ; la colonne de droite les liste, le second marqué « 21 ans minimum » et « Sur validation · demande à accepter par l'organisation »](/doc-img/public-selection.png)
 
@@ -56,7 +56,7 @@ L'application empêche automatiquement de sélectionner deux créneaux qui se ch
 
 ## Voir qui est inscrit
 
-Si l'organisation l'a prévu pour l'événement, l'interrupteur **Voir qui est inscrit**, à côté de **Frise** et **Liste**, montre qui est inscrit sur chaque créneau : le prénom et l'initiale du nom (par exemple « Aline M. ») des bénévoles confirmés qui l'ont accepté, et le nombre des autres, sans leur nom. Il est éteint à l'ouverture de la page ; touche-le pour l'allumer, une deuxième fois pour l'éteindre. Tu ne le vois que dans deux cas :
+Si l'organisation l'a prévu pour l'événement, l'interrupteur **Voir qui est inscrit**, à côté de **Frise** et **Liste**, montre qui est inscrit sur chaque créneau : le prénom et l'initiale du nom (par exemple « Aline M. ») des bénévoles confirmés qui l'ont accepté, et le nombre des autres, sans leur nom. Il est éteint à l'ouverture de la page, sauf depuis le lien **Voir qui est inscrit sur les autres créneaux** de ta page personnelle, qui l'ouvre allumé ; touche-le pour l'allumer, une deuxième fois pour l'éteindre. Tu ne le vois que dans deux cas :
 
 - tu as une place confirmée sur l'événement : ouvre la page avec ton lien personnel, par exemple avec le lien **Voir qui est inscrit sur les autres créneaux** de [ta page personnelle](ma-page-personnelle.md#qui-est-inscrit), ou depuis le navigateur où tu l'as déjà ouverte ;
 - l'organisation t'a invité à l'événement : ouvre la page avec le lien de ton invitation, avant de t'inscrire.

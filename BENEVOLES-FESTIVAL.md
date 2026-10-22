@@ -74,7 +74,7 @@ Non. Un responsable de secteur reçoit un lien personnel, sans compte à créer,
 
 ### Un bénévole peut-il prendre deux créneaux qui se chevauchent ?
 
-Non. La page d'inscription le signale, et le serveur refuse deux créneaux qui se chevauchent, même de quelques minutes, y compris quand l'un des deux a été pris plus tôt sur le même événement.
+Non, sauf sur un poste que vous rendez cumulable avec un autre créneau, comme les premiers secours tenus depuis la buvette. Sinon, la page d'inscription le signale, et le serveur refuse deux créneaux qui se chevauchent, même de quelques minutes, y compris quand l'un des deux a été pris plus tôt sur le même événement.
 
 ### Peut-on accepter soi-même les bénévoles de la billetterie ?
 

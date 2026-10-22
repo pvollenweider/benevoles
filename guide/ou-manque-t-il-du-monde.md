@@ -14,7 +14,7 @@ aliases: []
 
 **Événements**, puis l'événement, puis, dans la section **Où manque-t-il du monde ?**, **Voir les créneaux à compléter** (ou **Voir le détail des créneaux** quand tout est complet)
 
-En haut de la page principale de l'événement (**Événements**, puis l'événement), 4 chiffres donnent l'état en un coup d'œil : créneaux, places totales, inscrits, places restantes. Juste en dessous, **Où manque-t-il du monde ?** résume en une phrase (« Il manque encore 12 personnes sur 20 places », suivie de « 2 créneaux sont sous leur minimum. » s'il y en a) et mène à la vue détaillée.
+En haut de la page principale de l'événement (**Événements**, puis l'événement), la section **Où manque-t-il du monde ?** résume l'état en quelques phrases (« Il manque encore 12 personnes sur 20 places (7 créneaux). », suivie de « 2 créneaux sont sous leur minimum. » et du nombre de personnes en liste d'attente s'il y en a) et mène à la vue détaillée.
 
 La question que se pose l'organisateur avant l'événement, en une page, du plus urgent au moins urgent :
 
@@ -37,7 +37,7 @@ Après un désistement qui laisse une place vide sans personne sur la liste d'at
 Sous chaque créneau à compléter, **Chercher des bénévoles** ouvre une page pour proposer ce créneau à des membres choisis ; **Chercher des bénévoles pour plusieurs créneaux**, sous la liste, permet d'en proposer plusieurs à la fois. Sur cette page :
 
 1. Cochez les créneaux à proposer, parmi ceux qui manquent de monde (places libres indiquées, et « sous le minimum » ou « minimum atteint » pour un créneau qui a un minimum ; l'email aux membres n'en parle pas).
-2. La liste des membres apparaît, par ordre alphabétique, sans classement ni score. Pour chaque membre, les raisons de sa présence sont écrites : ses étiquettes, sa disponibilité générale (indicative : elle ne confirme rien pour ces créneaux) et si elle correspond aux horaires choisis, s'il est déjà inscrit à l'événement, s'il est déjà invité ou s'il recevra une invitation. Filtrez par tag ou cherchez un nom si besoin.
+2. La liste des membres apparaît, par ordre alphabétique, sans classement ni score. Pour chaque membre, les raisons de sa présence sont écrites : ses étiquettes, sa disponibilité générale (indicative : elle ne confirme rien pour ces créneaux) et si elle correspond aux horaires choisis, s'il est déjà inscrit à l'événement, s'il est déjà invité ou s'il recevra une invitation. Filtrez par **Étiquette** ou cherchez un nom si besoin.
 3. Un membre dont une inscription chevauche un créneau choisi, même de quelques minutes, est affiché avec la mention **Chevauchement** et la durée en commun : ce créneau ne lui est pas proposé. Ce n'est pas le cas si l'un des deux postes est cumulable avec un autre créneau : le créneau lui est alors proposé. S'il n'a plus rien à recevoir, sa case n'est pas cochable.
 4. Personne n'est coché d'avance : cochez vous-même chaque personne. Les membres inactifs, sans email, déjà inscrits sur tous les créneaux choisis, sans l'étiquette d'un poste réservé, ou dont la date de naissance connue est sous l'âge minimum du créneau ne sont pas listés ; une phrase dit combien ont été laissés de côté et pourquoi. Les membres qui ont répondu « pas disponible » à leur invitation sont aussi laissés de côté, sauf si vous cochez **Afficher aussi les membres qui ont répondu « pas disponible »**.
 5. Ajoutez si vous le souhaitez un mot pour accompagner l'email, puis **Voir l'aperçu et envoyer** : l'aperçu montre l'email reçu par la première personne et rappelle le nombre de destinataires avant l'envoi.

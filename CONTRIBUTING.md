@@ -40,11 +40,13 @@ Les PRs doivent passer la CI avant d'être fusionnées. Contrôles de `ci.yml` e
 
 | Job CI | Contrôle | En local |
 |--------|----------|----------|
+| Draft content | Aucune source publique encore en brouillon | `node scripts/check-no-draft-content.mjs` |
 | Type-check, lint & tests | `tsc --noEmit` | `make typecheck` |
 | | ESLint | `make lint` |
 | | Vitest et seuils de couverture | `npm run test:coverage` |
 | | `SECURITY.md` suit la version de `package.json` | `node scripts/check-security-md.mjs` |
 | | Migrations compatibles avec la version précédente | `node scripts/check-migrations.mjs origin/main` |
+| | Captures de la documentation à jour des écrans qu'elles montrent | `node scripts/check-doc-screenshots.mjs origin/main` |
 | E2E (Playwright) | Tests d'intégration sur un vrai PostgreSQL | `npm run test:integration` (avec `DATABASE_URL`) |
 | | Tests Playwright, dont l'accessibilité (axe-core) | `make e2e` |
 | Lighthouse | Scores Lighthouse mobile et bureau des pages publiques, sur la base E2E : échoue sous 100 en accessibilité, bonnes pratiques et SEO, et sous 95 en performance sur bureau | `LHCI_FORM_FACTOR=mobile npx lhci collect --config=lighthouserc.cjs` (après `npm run build`, avec `DATABASE_URL` vers la base E2E) |
@@ -101,7 +103,7 @@ src/
     super-admin/            # organizations, product-updates, health, profile (rôle super_admin)
     api/
       public/ admin/ super-admin/
-      cron/                 # reminders, cleanup (purge RGPD), heartbeat (sauvegardes)
+      cron/                 # reminders, outbox (emails en attente), cleanup (purge RGPD), release-check, heartbeat (sauvegardes)
       health/               # Sonde Kubernetes
   components/               # admin/, super-admin/, public/, __tests__/ (*.react.test.tsx, jsdom)
   lib/                      # Logique métier pure et testée (__tests__/), notifications/

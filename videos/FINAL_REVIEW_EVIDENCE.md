@@ -125,3 +125,18 @@ le planning » s'affiche sous la frise pendant l'usage au clavier.
   la vidéo montre le clavier.
 
 Ces vidéos n'ont pas été régénérées dans la même PR.
+
+## Écart connu : liste des organisations du super admin (#1081)
+
+La liste `/super-admin/organizations` a maintenant une colonne « Activité »
+(événement en cours, à venir, dernier événement ou aucun), placée après « État »,
+et sous « État » une ligne quand aucun propriétaire n'est actif (« Propriétaire
+jamais activé (lien expiré le …) », « Lien d'activation valable jusqu'au … »,
+« Aucun compte propriétaire »).
+
+- `platform-internal-administration` : la scène d'accueil filme l'ancienne liste
+  et sa narration ne cite ni l'activité ni la ligne du propriétaire ; les
+  chapitres de création et d'activation montreraient cette ligne changer. À
+  revoir à la prochaine régénération.
+
+Cette vidéo n'a pas été régénérée dans la même PR.

@@ -18,7 +18,7 @@ Désignez un ou plusieurs bénévoles responsables d'un poste (ex. « Bar »). C
 
 ![Liste des responsables de secteur d'un événement, avec le poste, le nom et l'action retirer](/doc-img/admin-sector-leaders.png)
 
-- **+ Ajouter un responsable** : poste (autocomplété depuis les postes qui ont un créneau actif), nom, email, ou **Depuis les inscrits** pour choisir directement un bénévole déjà inscrit à l'événement, qui pré-remplit ces champs
+- **+ Ajouter un responsable** : poste (autocomplété depuis les postes qui ont au moins un créneau non annulé), nom, email, ou **Depuis les inscrits** pour choisir directement un bénévole déjà inscrit à l'événement, qui pré-remplit ces champs
 - Depuis la page des inscriptions, sélectionner une seule ligne puis **Rendre responsable** propose directement le poste de ce créneau
 
   ![Fenêtre « Rendre Camille Rochat responsable » : choix du poste parmi ceux où la personne est inscrite, et email pré-rempli](/doc-img/admin-make-leader-modal.png)

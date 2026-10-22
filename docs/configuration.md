@@ -1,10 +1,10 @@
 # Configuration
 
-Toutes les variables d'environnement lues par l'application. Au démarrage, `src/lib/env.ts` (Zod) arrête le processus avec un message explicite si `DATABASE_URL` manque, si `AUTH_SECRET` fait moins de 32 caractères, si `NEXT_PUBLIC_APP_URL` n'est pas une URL ou si `TOKEN_ENCRYPTION_KEY` n'est pas une clé de 32 octets. `src/lib/production-guards.ts` (appelé par `src/instrumentation.ts`) refuse ensuite de démarrer sur une clé de rotation mal formée, un `TOKEN_ENCRYPTION_KEY_ID` qui contient `:` ou un fuseau invalide, et, en production, sans `TOKEN_ENCRYPTION_KEY`.
+Toutes les variables d'environnement lues par l'application. Au démarrage, `src/lib/env.ts` (Zod) arrête le processus avec un message explicite si `DATABASE_URL` manque, si `AUTH_SECRET` fait moins de 32 caractères, si `NEXT_PUBLIC_APP_URL` n'est pas une URL si `TOKEN_ENCRYPTION_KEY` n'est pas une clé de 32 octets ou si `VIDEO_MEDIA_BASE_URL` n'est pas une URL. `src/lib/production-guards.ts` (appelé par `src/instrumentation.ts`) refuse ensuite de démarrer sur une clé de rotation mal formée, un `TOKEN_ENCRYPTION_KEY_ID` qui contient `:` ou un fuseau invalide, et, en production, sans `TOKEN_ENCRYPTION_KEY`.
 
 Modèles de fichiers fournis :
 
-- `.env.example` : production. Il ne contient pas `TOKEN_ENCRYPTION_KEY`, pourtant obligatoire en production : l'ajouter.
+- `.env.example` : production. `TOKEN_ENCRYPTION_KEY` y est vide : la remplir, elle est obligatoire en production.
 - `.env.development.example` : développement local, prérempli pour la stack Docker (`docker-compose.dev.yml`)
 
 ## Application
@@ -65,7 +65,7 @@ Sans `SMTP_HOST`, aucun email n'est envoyé. En production, chaque envoi échoue
 | `SMTP_PORT` | non | Défaut `587` |
 | `SMTP_SECURE` | non | `true` pour TLS implicite (port 465), sinon `false` |
 | `SMTP_USER`, `SMTP_PASSWORD` | non | Authentification SMTP, utilisée si les deux sont renseignées |
-| `EMAIL_FROM` | recommandé | Expéditeur, avec nom possible : `Bénévoles <notifications@votre-domaine.com>`. Défaut : `Bénévoles <notifications@benevol.app>` |
+| `EMAIL_FROM` | recommandé | Expéditeur, avec nom possible : `Bénévoles <notifications@votre-domaine.com>`. Défaut : `Bénévoles <notifications@…>`, avec le domaine de `NEXT_PUBLIC_APP_URL` (`benevol.app` sans adresse) |
 | `EMAIL_REPLY_TO` | non | Adresse de réponse par défaut, utilisée quand l'organisation n'a pas défini la sienne dans ses réglages. Doit pointer vers une boîte lue par un humain |
 | `ADMIN_NOTIFICATION_EMAIL` | non | Reçoit une copie de chaque nouvelle inscription |
 
@@ -79,7 +79,7 @@ Sans clés VAPID, aucun push n'est envoyé. Le bouton d'abonnement de la page pe
 |----------|-------------|
 | `VAPID_PUBLIC_KEY` | Clé publique VAPID |
 | `VAPID_PRIVATE_KEY` | Clé privée VAPID |
-| `VAPID_EMAIL` | Contact déclaré au service push. Défaut : `EMAIL_FROM`, puis `mailto:admin@benevol.app` |
+| `VAPID_EMAIL` | Contact déclaré au service push. Défaut : `EMAIL_FROM`, puis `mailto:admin@…`, avec le domaine de `NEXT_PUBLIC_APP_URL` (`benevol.app` sans adresse) |
 
 Générer une paire de clés :
 
@@ -95,7 +95,7 @@ node -e "const wp=require('web-push'); console.log(JSON.stringify(wp.generateVAP
 |----------|--------|-------------|
 | `VIDEO_MEDIA_BASE_URL` | non | Base des fichiers rendus : `<base>/<slug>/<slug>.mp4`, `.vtt`, `.txt`. Production (`benevol.app`) : `https://medias.benevol.app` (`k8s/media.yaml`, rendus publiés par `make video-publish`), un domaine séparé réservé par `src/lib/org-subdomain.ts` (`NON_ORG_SUBDOMAINS`, `isReservedOrgSlug`) pour qu'aucune organisation ne puisse jamais prendre ce slug ; écrite en dur par l'étape « Sync k8s secret » de `.github/workflows/deploy.yml` (comme `NEXT_PUBLIC_APP_URL`), qui régénère `benevoles-secret` à chaque déploiement — un `kubectl` manuel sur le secret serait donc écrasé. Sans la variable, ou si le rendu d'une vidéo précise n'existe pas, la page affiche « Vidéo bientôt disponible » sans jamais sonder le réseau côté serveur — voir `videos/README.md` |
 
-Le lecteur (`<video crossOrigin="anonymous">`) charge la vidéo et ses sous-titres (`<track>`) depuis `medias.benevol.app`, une autre origine que `www.benevol.app` : ce domaine doit répondre avec `Access-Control-Allow-Origin: https://www.benevol.app` (et les sous-domaines d'organisation si la page y est un jour servie), et les bons `Content-Type` (`video/mp4`, `text/vtt`). `make video-media-serve` envoie les mêmes en-têtes en local. L'application n'a pas de Content-Security-Policy aujourd'hui : rien à y ajouter pour ce domaine.
+Le lecteur (`<video crossOrigin="anonymous">`) charge la vidéo et ses sous-titres (`<track>`) depuis `medias.benevol.app`, une autre origine que `www.benevol.app` : ce domaine doit répondre avec `Access-Control-Allow-Origin: https://www.benevol.app` (et les sous-domaines d'organisation si la page y est un jour servie), et les bons `Content-Type` (`video/mp4`, `text/vtt`). `make video-media-serve` envoie les mêmes en-têtes en local. La politique de contenu actuelle (`frame-ancestors`, et `script-src` en observation seulement) ne restreint pas les médias : rien à y ajouter pour ce domaine.
 
 ## Sentry (optionnel)
 
@@ -139,7 +139,7 @@ Avec `.env.development.example`, le super admin est `admin@local` / `admin`.
 
 ## Secrets Kubernetes
 
-`k8s/secret.yaml` est un modèle incomplet : il n'a pas `AUTH_URL`, `AUTH_TRUST_HOST`, `VAPID_*`, `SENTRY_DSN`, `NTFY_*`, `OPERATOR_ALERT_EMAIL`, `SIGNUP`, `HOSTED_SERVICE`, `ORG_INACTIVITY` ni `PAST_EVENT_RETENTION`. Le secret réel `benevoles-secret` est régénéré à chaque déploiement par l'étape « Sync k8s secret » de `.github/workflows/deploy.yml` :
+`k8s/secret.yaml` est un modèle incomplet : il n'a pas `AUTH_URL`, `AUTH_TRUST_HOST`, `VAPID_*`, `SENTRY_DSN`, `NTFY_*`, `OPERATOR_ALERT_EMAIL`, `SIGNUP`, `HOSTED_SERVICE`, `ORG_INACTIVITY`, `PAST_EVENT_RETENTION` ni `VIDEO_MEDIA_BASE_URL`. Le secret réel `benevoles-secret` est régénéré à chaque déploiement par l'étape « Sync k8s secret » de `.github/workflows/deploy.yml` :
 
 | Clé | Origine |
 |-----|---------|

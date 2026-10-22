@@ -24,7 +24,7 @@ Vue tabulaire des inscriptions, en quatre colonnes :
 
 ![Page des inscriptions d'un événement : compteurs (actives, liste d'attente, demandes à traiter), recherche et filtres, puis le tableau avec bénévole et coordonnées, créneau et source](/doc-img/admin-registrations.png)
 
-Au-dessus du tableau, la recherche (nom, email) et les filtres par poste et par créneau. Quand l'événement a des [liens par groupe](partager-le-lien.md#un-lien-par-groupe), le filtre **Par lien de groupe** montre les inscriptions venues d'un lien, ou celles arrivées **Sans lien de groupe**.
+Au-dessus du tableau, la recherche (nom, email) et les filtres par poste et par créneau. Quand l'événement a des [liens par groupe](partager-le-lien.md#un-lien-par-groupe), un filtre (**Tous les liens de groupe**) montre les inscriptions venues d'un lien (« Lien : … »), ou celles arrivées **Sans lien de groupe**.
 
 Seules les demandes sur un créneau sur validation ont leurs propres boutons, **Accepter** et **Refuser**, sur la ligne (voir [Inscriptions sur validation](inscriptions-sur-validation.md)). Tout le reste passe par la sélection : cocher une ou plusieurs inscriptions (case d'en-tête pour tout sélectionner d'un coup) fait apparaître une barre d'outils, appliquée à toute la sélection, même une inscription masquée entre-temps par un filtre ou une recherche :
 

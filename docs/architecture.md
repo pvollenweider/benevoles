@@ -9,7 +9,7 @@ Navigateur ──► Traefik (ingress) ──► Next.js (server.js, port 3000) 
                                           ├──► Service push (Web Push, VAPID)
                                           └──► Sentry (navigateur via le tunnel /monitoring)
 
-CronJobs Kubernetes ──► /api/cron/reminders (toutes les heures), /api/cron/outbox (toutes les 5 min), /api/cron/cleanup (02:00 UTC)
+CronJobs Kubernetes ──► /api/cron/reminders (toutes les heures), /api/cron/outbox (toutes les 5 min), /api/cron/cleanup (02:00 UTC), /api/cron/release-check (03:00 UTC)
 CronJobs de sauvegarde ──► pg_dump chiffré (01:00 UTC), copie hors site (01:30 UTC) ──► /api/cron/heartbeat
 Job de migration (k8s/job-migrate.yaml) ──► prisma migrate deploy, à chaque déploiement, avant la mise à jour de l'application
 ```
@@ -88,14 +88,14 @@ Dépendances principales, en nombre d'imports d'un fichier vers un autre (graphe
 ## Multi-tenant
 
 - Chaque organisation (`Organization`) possède ses événements, créneaux, membres et admins.
-- L'organisation courante d'une page publique vient du sous-domaine : `src/proxy.ts` extrait `[orgSlug]` de `[orgSlug].benevol.app` (`orgSlugFromHost`, `src/lib/org-subdomain.ts`) et le passe dans l'en-tête `x-org-slug`, sauf pour `www`, `app`, `admin`, `api` et `staging`. Sans sous-domaine d'organisation (domaine principal, `localhost`), `?org=<slug>` joue le même rôle. Un en-tête `x-org-slug` envoyé par le client est toujours supprimé avant (`withOrgHeader`) : les routes publiques qui s'en servent ne voient que la valeur du proxy. Un slug historique redirige vers le slug actuel (`resolveOrgSlug`, `src/lib/resolve-org.ts`).
+- L'organisation courante d'une page publique vient du sous-domaine : `src/proxy.ts` extrait `[orgSlug]` de `[orgSlug].benevol.app` (`orgSlugFromHost`, `src/lib/org-subdomain.ts`) et le passe dans l'en-tête `x-org-slug`, sauf pour `www`, `app`, `admin`, `api`, `staging` et `medias`. Sans sous-domaine d'organisation (domaine principal, `localhost`), `?org=<slug>` joue le même rôle. Un en-tête `x-org-slug` envoyé par le client est toujours supprimé avant (`withOrgHeader`) : les routes publiques qui s'en servent ne voient que la valeur du proxy. Un slug historique redirige vers le slug actuel (`resolveOrgSlug`, `src/lib/resolve-org.ts`).
 - Côté admin, l'organisation vient de la session (pour le super admin, du cookie `sa-org-id`). `requireOrgSession()` renvoie un client `db` (`getOrgClient`) qui limite chaque opération à l'organisation ; une ligne d'une autre organisation se comporte comme une ligne inexistante. La liste des modèles couverts et les autres garde-fous sont dans [roles-et-permissions.md](roles-et-permissions.md).
 - Un changement de slug archive l'ancien dans `OrgSlugHistory` pour rediriger les anciens liens.
 - Le slug d'un événement est unique au sein d'une organisation, pas globalement.
 
 ## Modèle de données
 
-Modèles Prisma (`prisma/schema.prisma`) :
+Principaux modèles Prisma (`prisma/schema.prisma`) :
 
 | Modèle | Rôle |
 |--------|------|
@@ -117,7 +117,7 @@ Modèles Prisma (`prisma/schema.prisma`) :
 | `QuestionAnswer` | Réponse d'un bénévole à une question, unique par question et bénévole |
 | `TargetedMessage` | Message ciblé envoyé : objet, texte, audience, compteurs email et push (#467) |
 | `MessageTemplate` | Modèle de message réutilisable de l'organisation (#482) |
-| `JobRun` | Dernier état de chaque tâche planifiée : rappels, nettoyage, sauvegardes, test de restauration (#383) |
+| `JobRun` | Dernier état de chaque tâche planifiée : rappels, envoi des emails en attente, nettoyage, sauvegardes, test de restauration (#383) |
 | `ProductUpdateSend` | Historique des communications de nouveautés produit diffusées aux administrateurs (#200) |
 | `NotificationOutbox` | File d'envoi des notifications (voir Notifications) |
 | `RateLimit` | Compteurs des limites de tentatives, partagés entre instances (#322) |
@@ -180,9 +180,9 @@ Seules les inscriptions `active` d'un événement publié, aux rappels activés,
   - Passent par l'outbox : inscription publique, offre et confirmation de liste d'attente, décision sur une demande, créneau modifié ou annulé, invitation d'un responsable, bienvenue et invitation d'un admin, réinitialisation de mot de passe, renvoi du lien par le bénévole, messages ciblés et renvoi de leurs échecs, email de test des réglages.
   - Restent synchrones, parce que la réponse indique si l'email est parti : invitations de membres et relances, rappel manuel, « renvoyer le lien » depuis l'admin, communications produit, invitation envoyée par le super admin, lien renvoyé après une inscription en double.
   - Transactionnelle : chaque action écrit ses notifications avec le client de la transaction qui fait la modification (`enqueueNotifications(payloads, tx)`, y compris avec `db.$transaction` du client limité à l'organisation), puis les livre après validation (`deliverAfterResponse`, `after()` de Next). La modification et ses emails sont validés ou annulés ensemble. Pour l'inscription publique, les helpers (`sendConfirmationEmail`, `sendAdminNotification`, `notifySectorLeadersOfSignup`) reçoivent un collecteur au lieu de `sendNotification`.
-  - Nouvelles tentatives : `/api/cron/reminders` retente les échecs avec un délai croissant (5, 10, 20, 40, 80 min) ; après 6 tentatives, ou dès le premier refus définitif (5xx), la ligne passe en `failed` et Sentry est prévenu, sauf si le refus porte sur l'adresse du destinataire elle-même (boîte ou domaine inexistant, 5.1.x, `recipient-rejection.ts`) : une donnée à corriger, pas une erreur de l'application, journalisée en avertissement. Un propriétaire ou un organisateur peut la relancer depuis les réglages.
+  - Nouvelles tentatives : `/api/cron/outbox` (toutes les 5 minutes) et `/api/cron/reminders` (toutes les heures) retentent les échecs dont le délai est écoulé, avec un délai croissant (5, 10, 20, 40, 80 min) ; après 6 tentatives, ou dès le premier refus définitif (5xx), la ligne passe en `failed` et Sentry est prévenu, sauf si le refus porte sur l'adresse du destinataire elle-même (boîte ou domaine inexistant, 5.1.x, `recipient-rejection.ts`) : une donnée à corriger, pas une erreur de l'application, journalisée en avertissement. Un propriétaire ou un organisateur peut la relancer depuis les réglages.
   - Concurrence : chaque ligne est réservée par une mise à jour conditionnelle ; une réservation abandonnée depuis 15 minutes est reprise. Livraison « au moins une fois » : un plantage entre l'acceptation SMTP et le passage à `sent` peut produire un doublon, préféré à un email perdu, qui porte le même `Message-ID` ; une clé métier (`dedupeKey`) évite de mettre deux fois en file la même notification.
-  - Santé : le cron horaire alerte Sentry en cas d'échec dans les dernières 24 h, d'email en attente depuis plus de 2 h ou de réservation abandonnée ; la page `/super-admin/health` affiche le même état.
+  - Santé : le cron horaire alerte Sentry seulement quand l'envoi est bloqué (email en attente depuis plus de 2 h ou réservation abandonnée) ; une ligne passée en `failed` est signalée à son échec (voir ci-dessus), pas à nouveau. La page `/super-admin/health` affiche aussi les échecs des dernières 24 h.
   - Purge : `/api/cron/cleanup` supprime chaque nuit les lignes envoyées, et les échecs et annulations de plus de 30 jours, car elles contiennent des données personnelles.
   - Plafonds d'envoi (#810, `src/lib/notifications/send-limits.ts`) : chaque email, quel que soit son destinataire, est compté dans `sendNotification`, après la vérification de l'organisation et avant SMTP, sur des fenêtres fixes de la table `RateLimit` partagées entre réplicas : plateforme par minute, organisation par minute et par jour, envois en masse et emails de compte par jour. Au-delà, l'email est retenu (`held`) : l'outbox le laisse en attente jusqu'à la fin de la fenêtre sans compter de tentative, un envoi direct le signale à l'appelant ; une seule alerte par fenêtre. Valeurs par défaut et variables : [configuration.md](configuration.md).
   - Organisation en attente de validation (#810, `src/lib/org-approval.ts`) : deux autorisations séparées, `publicationApprovedAt` (publier un événement, pages publiques de l'organisation : `PUBLIC_ORG_WHERE` dans `resolveOrgSlug`, les routes publiques, le logo et l'index des sitemaps) et `outboundEmailApprovedAt` (écrire à des tiers). Accordées par défaut à la création (valeur par défaut de la base) ; seule l'inscription en libre-service créera une organisation avec les deux à null. Sans la seconde, `sendNotification` n'envoie qu'aux comptes administrateurs de l'organisation (raison `org_pending`, ligne annulée) et aucun push ne part ; sans la première, le PATCH d'un événement refuse la publication (409, `publication_pending`).
@@ -192,6 +192,6 @@ Seules les inscriptions `active` d'un événement publié, aux rappels activés,
 ## Observabilité
 
 - Sentry : `sentry.server.config.ts` et `sentry.edge.config.ts` sont chargés par `src/instrumentation.ts`, qui exporte aussi `onRequestError` et lance au démarrage les vérifications de `production-guards.ts`. Côté navigateur, `instrumentation-client.ts` ne fait qu'écouter les erreurs : le SDK (`src/lib/sentry-client-init.ts`) est importé quand la page est inactive ou à la première erreur (`src/lib/sentry-client-loader.ts`), et passe par le tunnel `/monitoring`. Session Replay est chargé à part, sur l'espace d'administration seulement (`src/lib/sentry-client-policy.ts`). Les trois configurations filtrent jetons et données personnelles (`src/lib/sentry-scrub.ts`).
-- `/api/health` répond `200` si la base est joignable, `503` sinon ; les sondes Kubernetes l'interrogent.
+- `/api/health` répond `200` si la base est joignable, `503` sinon ; la sonde de vie Kubernetes l'interroge, la sonde de disponibilité interroge `/api/health/ready` (503 tant que le préchauffage n'est pas fini).
 - `/super-admin/health` : base, migrations, file d'envoi, dernière exécution de chaque tâche planifiée (`JobRun`, alimenté par `recordJobRun` dans les crons et par `/api/cron/heartbeat` pour les sauvegardes et le test de restauration), version et commit déployés (`GIT_SHA`).
 - Les requêtes qui portent un jeton personnel ne sont pas écrites dans le journal d'accès de Traefik (`k8s/ingressroute-tokens.yaml`, #485).

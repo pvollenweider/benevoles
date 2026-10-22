@@ -33,7 +33,7 @@ Les limites utilisent `rateLimit()` de `src/lib/rate-limit.ts` : fenêtre fixe, 
 | `/api/public/registrations/[token]/roster` | GET, PATCH | public (jeton) | « Qui est inscrit » (#1068) : `GET` les noms (« Aline M. ») et le nombre des autres bénévoles confirmés, créneau par créneau, pour un bénévole qui a une place confirmée sur l'événement, et son propre choix ; `PATCH { visible }` affiche ou masque son nom (texte actuel). Rien si le réglage est désactivé, l'événement terminé ou anonymisé ; `private, no-store`, limite par lien |
 | `/api/public/member-invite/[token]` | GET | public (jeton) | Données de pré-remplissage d'une invitation (prénom, nom, email, téléphone, postes réservés ouverts) ; l'invitation doit appartenir à l'événement (`?slug=`) et à l'organisation de l'hôte ; même 404 « Lien invalide » pour tout refus ; 30 requêtes par heure et par IP |
 | `/api/public/member-invite/[token]/roster` | GET | public (jeton) | « Qui est inscrit » (#1068) pour un membre invité, avant son inscription : seulement les noms acceptés sous le texte actuel ; rien après « pas disponible » ni après une inscription faite avec l'invitation (`inviteRosterAudience`) ; tout refus répond 404 ; 20 échecs par IP et 60 lectures par invitation par heure ; `private, no-store` |
-| `/api/public/waitlist/[token]/confirm` | GET, POST | public (jeton) | Consulter puis confirmer une place de liste d'attente ; 10 requêtes par heure et par IP |
+| `/api/public/waitlist/[token]/confirm` | POST | public (jeton) | Confirmer une place de liste d'attente (la page du lien affiche un bouton ; l'ouvrir ne prend pas la place) ; 10 requêtes par heure et par IP |
 | `/api/public/leader/[token]` | GET | public (jeton) | Roster lecture seule d'un responsable de secteur : bénévoles inscrits ou en liste d'attente sur son poste (#186) ; 30 requêtes par heure et par IP |
 | `/api/public/push` | GET, POST, DELETE | public | Clé VAPID publique, abonnement et désabonnement push ; abonnement et désabonnement : 10 requêtes par heure et par IP |
 | `/api/public/organizations/[id]/logo` | GET | public | Logo d'une organisation active (#300), depuis la même origine : `?v=` (début de l'empreinte) rend l'URL immuable (`Cache-Control: public, max-age=31536000, immutable`), une autre version ou aucune est revalidée après une heure ; `ETag` et `304` ; `X-Content-Type-Options: nosniff`. `404` sans logo, ou si l'organisation est désactivée ou supprimée |
@@ -140,7 +140,9 @@ Pour les routes admin et super admin, `src/proxy.ts` refuse un `POST`, `PUT`, `P
 | `/api/cron/reminders` | GET, POST | cron | Rappels J-2, J-1, Jour J ; expiration des offres de liste d'attente |
 | `/api/cron/outbox` | POST | cron | Envoi des emails de la file arrivés à échéance, dont les emails groupés (#869, #916) ; toutes les 5 minutes |
 | `/api/cron/cleanup` | GET, POST | cron | Purge RGPD |
-| `/api/cron/heartbeat` | POST | cron | Battement des tâches hors application (#383) : `{ job, ok, error?, summary? }`, `job` parmi `reminders`, `cleanup`, `backup`, `backup-offsite`, `restore-test` ; alimente la page `/super-admin/health` |
+| `/api/cron/release-check` | GET, POST | cron | Vérification d'une nouvelle version publiée sur GitHub (#612) |
+| `/api/cron/heartbeat` | POST | cron | Battement des tâches hors application (#383) : `{ job, ok, error?, summary? }`, `job` parmi `reminders`, `outbox`, `cleanup`, `backup`, `backup-offsite`, `restore-test` ; alimente la page `/super-admin/health` |
 | `/api/health` | GET | public | `200 { "ok": true }` si la base répond, sinon `503` |
+| `/api/health/ready` | GET | public | `200` une fois le préchauffage fini et la base joignable, sinon `503` |
 
-Les sondes Kubernetes (`k8s/deployment.yaml`) interrogent `/api/health`.
+La sonde de vie Kubernetes (`k8s/deployment.yaml`) interroge `/api/health`, la sonde de disponibilité `/api/health/ready`.
