@@ -7,10 +7,12 @@ import { useRef, useState } from "react"
 import { fmtRange } from "@/lib/gantt-utils"
 import { announce } from "@/lib/announce"
 import {
-  ROSTER_EMPTY_TEXT, ROSTER_FAILURE_TEXT, ROSTER_NOTICE_VERSION, ROSTER_INTRO_TEXT, ROSTER_SEE_OTHERS_LABEL, ROSTER_WIDEN_LABEL, rosterButtonLabel,
-  rosterDoneText, rosterEventHref, rosterOthersText, rosterSpokenName, rosterVisibleName, viewerStateText,
-  type RosterAction, type RosterViewerState, type ShiftRosterEntry,
+  ROSTER_NOTICE_VERSION, rosterEventHref, type RosterAction, type RosterViewerState, type ShiftRosterEntry,
 } from "@/lib/shift-roster"
+import {
+  ROSTER_EMPTY_TEXT, ROSTER_FAILURE_TEXT, ROSTER_INTRO_TEXT, ROSTER_SEE_OTHERS_LABEL, ROSTER_WIDEN_LABEL, rosterButtonLabel,
+  rosterDoneText, rosterOthersText, rosterSpokenName, rosterVisibleName, viewerStateText,
+} from "@/lib/shift-roster-text"
 import { RosterName } from "./RosterName"
 
 /** What GET /api/public/registrations/[token]/roster answers (#1068). */

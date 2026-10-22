@@ -15,7 +15,7 @@ import { canPublish as orgCanPublish } from "@/lib/org-approval"
 import EventShareLink from "@/components/admin/EventShareLink"
 import HelpLink from "@/components/admin/HelpLink"
 import ReviewChecklist from "@/components/admin/ReviewChecklist"
-import { ROSTER_PUBLISH_NOTE, ROSTER_PUBLISH_NOTE_ON, ROSTER_SETTING_LINK } from "@/lib/shift-roster"
+import { ROSTER_PUBLISH_NOTE, ROSTER_PUBLISH_NOTE_ON, ROSTER_SETTING_LINK } from "@/lib/shift-roster-text"
 
 export const dynamic = "force-dynamic"
 export const metadata: Metadata = { title: "Vérifier avant publication" }

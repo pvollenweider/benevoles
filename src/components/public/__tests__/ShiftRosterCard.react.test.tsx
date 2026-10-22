@@ -6,7 +6,8 @@ import "@testing-library/jest-dom/vitest"
 import { render, screen, cleanup, within, fireEvent, waitFor } from "@testing-library/react"
 
 import ShiftRosterCard from "../ShiftRosterCard"
-import { ROSTER_EMPTY_TEXT, ROSTER_INTRO_TEXT, type RosterViewerState, type ShiftRosterEntry } from "@/lib/shift-roster"
+import type { RosterViewerState, ShiftRosterEntry } from "@/lib/shift-roster"
+import { ROSTER_EMPTY_TEXT, ROSTER_INTRO_TEXT } from "@/lib/shift-roster-text"
 
 // « Qui est inscrit » (#1068): names, then the number of the others without their names.
 describe("ShiftRosterCard", () => {
