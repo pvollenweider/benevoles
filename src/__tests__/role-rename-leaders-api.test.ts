@@ -97,6 +97,8 @@ describe("PATCH /api/admin/events/[id]/roles/[roleName] — sector leaders follo
     expect($transaction).not.toHaveBeenCalled()
   })
 
+  // #1010: they stay, shown in « Responsables de secteur » as a poste without live shift, and a
+  // duplication leaves them out; no row is deleted.
   it("leaves the leaders in place when the poste is deleted", async () => {
     setup([{ id: "l1", email: "marc@x.org", roleName: "Bar" }])
     Object.assign(db.shift, { findMany: vi.fn().mockResolvedValue([{ id: "s1", registrations: [], event: { id: "evt-1" } }]) })

@@ -8,6 +8,7 @@ import { duplicateOptionsSchema, duplicatePlan } from "@/lib/event-duplicate"
 import { addSectorLeader } from "@/lib/admin-registration-actions"
 import { adminActor } from "@/lib/event-log"
 import { validationError } from "@/lib/api-error"
+import { deletedPosteNames } from "@/lib/leader-postes"
 
 /**
  * Duplicates an event as a draft (#378): title, new start date (every date moves by the same
@@ -43,7 +44,14 @@ export async function POST(req: Request, { params }: { params: Promise<{ id: str
 
   if (!source) return NextResponse.json({ error: "Non trouvé" }, { status: 404 })
 
-  const plan = duplicatePlan({ ...source, leaders: source.sectorLeaders, recurrences: source.shiftRecurrences, organizationRosterDefault: source.organization.shiftRosterDefault }, parsed.data)
+  // A deleted poste (every shift cancelled) keeps its leaders; they don't follow the copy (#1010).
+  // Read only when leaders are to be copied.
+  const cancelled = parsed.data.copy?.leaders && source.sectorLeaders.length > 0
+    ? await db.shift.findMany({ where: { eventId: id, status: "cancelled" }, select: { roleName: true, status: true }, distinct: ["roleName"] })
+    : []
+  const deletedPostes = deletedPosteNames([...source.shifts, ...cancelled])
+
+  const plan = duplicatePlan({ ...source, leaders: source.sectorLeaders, deletedPostes, recurrences: source.shiftRecurrences, organizationRosterDefault: source.organization.shiftRosterDefault }, parsed.data)
 
   // A title whose slug is one of the site's own addresses (/tarifs, /admin…) is refused (src/lib/event-slug.ts).
   const slugged = eventSlugFromTitle(plan.event.title)

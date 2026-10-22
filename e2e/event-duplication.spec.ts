@@ -91,3 +91,43 @@ test("duplication with choices moves the dates and honours the checkboxes (#378)
   const bareDetail: { shifts: unknown[] } = await (await page.request.get(`/api/admin/events/${bareEvent.id}`)).json()
   expect(bareDetail.shifts).toHaveLength(0)
 })
+
+// #1010: deleting a poste keeps its sector leaders, marked « Créneaux tous annulés »; duplicating
+// leaves them out.
+test("leaders of a deleted poste are marked and left out of a duplication (#1010)", async ({ page }) => {
+  const stamp = Date.now()
+  await page.goto("/admin/login")
+  await page.getByLabel("Email").fill(ORG_ADMIN_EMAIL)
+  await page.getByLabel("Mot de passe").fill(ORG_ADMIN_PASSWORD)
+  await page.getByRole("button", { name: "Se connecter" }).click()
+  await expect(page).toHaveURL(/\/admin\/events/)
+
+  const created = await page.request.post("/api/admin/events", { data: { title: `E2E Leaders ${stamp}`, startDate: "2030-08-01", endDate: "2030-08-01" } })
+  expect(created.ok()).toBeTruthy()
+  const source: { id: string } = await created.json()
+  for (const roleName of ["Accueil", "Bar"]) {
+    const res = await page.request.post("/api/admin/shifts", {
+      data: { eventId: source.id, roleName, label: roleName, date: "2030-08-01", startTime: "10:00", endTime: "12:00", capacity: 2 },
+    })
+    expect(res.ok()).toBeTruthy()
+    const leader = await page.request.post(`/api/admin/events/${source.id}/sector-leaders`, {
+      data: { roleName, name: `Resp ${roleName}`, email: `resp-${roleName.toLowerCase()}-${stamp}@example.org` },
+    })
+    expect(leader.ok()).toBeTruthy()
+  }
+  expect((await page.request.delete(`/api/admin/events/${source.id}/roles/Bar`)).ok()).toBeTruthy()
+
+  await page.goto(`/admin/events/${source.id}/sector-leaders`)
+  await expect(page.getByRole("heading", { name: /^Bar\W+Créneaux tous annulés$/ })).toBeVisible()
+  await expect(page.getByRole("heading", { name: "Accueil", exact: true })).toBeVisible()
+  await expect(page.getByText("2 responsables, dont 1 sur un poste aux créneaux tous annulés")).toBeVisible()
+
+  await page.goto(`/admin/events/${source.id}/duplicate`)
+  await expect(page.getByText("1 responsable : chacun reçoit tout de suite un email avec son lien pour la copie. 1 autre, d'un poste aux créneaux tous annulés, n'est pas repris.")).toBeVisible()
+
+  const dup = await page.request.post(`/api/admin/events/${source.id}/duplicate`, { data: { copy: { leaders: true } } })
+  expect(dup.ok()).toBeTruthy()
+  const copy: { id: string } = await dup.json()
+  const leaders: { roleName: string }[] = await (await page.request.get(`/api/admin/events/${copy.id}/sector-leaders`)).json()
+  expect(leaders.map((l) => l.roleName)).toEqual(["Accueil"])
+})

@@ -16,7 +16,7 @@ aliases: []
 
 - le **titre** de la copie (« (copie) » par défaut) ;
 - le **premier jour** de la copie : toutes les dates (fin, créneaux, spectacles) sont décalées du même nombre de jours ;
-- ce qui suit : les **créneaux** (postes, horaires, places, listes d'attente, âge minimum, infos pratiques, rouverts et sans inscriptions), les **messages et réglages d'inscription** (dont le délai d'annulation par le bénévole), les **pages personnalisées**, et, décochés par défaut, les **responsables de secteur** (chacun reçoit alors un email avec son lien pour la copie).
+- ce qui suit : les **créneaux** (postes, horaires, places, listes d'attente, âge minimum, infos pratiques, rouverts et sans inscriptions), les **messages et réglages d'inscription** (dont le délai d'annulation par le bénévole), les **pages personnalisées**, et, décochés par défaut, les **responsables de secteur** (chacun reçoit alors un email avec son lien pour la copie). Les responsables d'un poste supprimé, dont tous les créneaux sont annulés, ne sont pas repris et ne reçoivent pas d'email.
 
 Les permanences récurrentes ne sont pas décalées comme les autres créneaux : chacune est recréée sur les mêmes jours de la semaine, avec les jours fériés de la nouvelle période (voir [Dupliquer une saison](permanences-recurrentes.md#dupliquer-une-saison)).
 

@@ -8,7 +8,6 @@ import { removeLeaderRecap } from "@/lib/action-recap"
 import ConfirmActionModal from "@/components/admin/ConfirmActionModal"
 import FormStatus from "@/components/FormStatus"
 import { useSubmit } from "@/lib/use-submit"
-import { slugify } from "@/lib/utils"
 import { leaderDesignatedAnnouncement, leaderRemovedAnnouncement } from "@/lib/registrations-list"
 import { outcomeClass } from "@/lib/status-message"
 
@@ -27,11 +26,14 @@ export type RegisteredVolunteer = {
 }
 
 export default function SectorLeadersManager({
-  eventId, initialLeaders, roleNames, registeredVolunteers = [],
+  eventId, initialLeaders, roleNames, deletedPostes = [], registeredVolunteers = [],
 }: {
   eventId: string
   initialLeaders: SectorLeaderRow[]
+  /** Postes with a live shift, suggested by the add form. */
   roleNames: string[]
+  /** Postes whose every shift is cancelled (#1010): their leaders are marked. */
+  deletedPostes?: string[]
   registeredVolunteers?: RegisteredVolunteer[]
 }) {
   const [leaders, setLeaders] = useState(initialLeaders)
@@ -53,6 +55,7 @@ export default function SectorLeadersManager({
   const [outcome, setOutcome] = useState<{ kind: "ok" | "error"; text: string } | null>(null)
   const outcomeRef = useRef<HTMLParagraphElement>(null)
   const errorId = useId()
+  const groupId = useId()
 
   const roleInputRef = useRef<HTMLInputElement>(null)
   const addButtonRef = useRef<HTMLButtonElement>(null)
@@ -145,6 +148,8 @@ export default function SectorLeadersManager({
     (acc[l.roleName] ??= []).push(l)
     return acc
   }, {})
+  // A leader of a deleted poste stays until removed, and is shown as such (#1010).
+  const ofDeletedPoste = leaders.filter((l) => deletedPostes.includes(l.roleName)).length
 
   return (
     <div className="space-y-4">
@@ -163,7 +168,7 @@ export default function SectorLeadersManager({
 
       <div className="flex items-center justify-between">
         <p className="text-sm text-gray-500">
-          {leaders.length === 0 ? "Aucun responsable pour l'instant." : `${leaders.length} responsable${leaders.length > 1 ? "s" : ""}`}
+          {leaders.length === 0 ? "Aucun responsable pour l'instant." : `${leaders.length} responsable${leaders.length > 1 ? "s" : ""}${ofDeletedPoste > 0 ? `, dont ${ofDeletedPoste} sur un poste aux créneaux tous annulés` : ""}`}
         </p>
         {!showForm && (
           <button
@@ -264,13 +269,27 @@ export default function SectorLeadersManager({
 
       {Object.keys(grouped).length > 0 && (
         <div className="space-y-3">
-          {Object.entries(grouped).map(([role, roleLeaders]) => {
-            // Role names are free text (spaces, accents) — HTML ids can't contain whitespace,
-            // so slugify() rather than the raw role name.
-            const headingId = `role-${slugify(role) || "poste"}`
+          {Object.entries(grouped).map(([role, roleLeaders], index) => {
+            // Role names are free text: « Bar » and « bar » are two groups, so the ids come from
+            // useId and the group's position, never from the name.
+            const headingId = `${groupId}-poste-${index}`
+            const hintId = `${groupId}-hint-${index}`
+            const inactive = deletedPostes.includes(role)
             return (
             <section key={role} className="bg-white border border-gray-200 rounded-xl p-4" aria-labelledby={headingId}>
-              <h2 id={headingId} className="text-sm font-medium text-gray-900 mb-2">{role}</h2>
+              <h2 id={headingId} className="text-sm font-medium text-gray-900 mb-2 flex flex-wrap items-center gap-2">
+                {role}
+                {inactive && (
+                  <span className="text-xs font-medium rounded-full px-2 py-0.5 bg-gray-100 text-gray-600">
+                    <span className="sr-only">, </span>Créneaux tous annulés
+                  </span>
+                )}
+              </h2>
+              {inactive && (
+                <p id={hintId} className="text-xs text-gray-600 -mt-1 mb-2">
+                  Ce poste a été supprimé, ou tous ses créneaux annulés. Ses responsables ne sont pas repris si vous dupliquez l&apos;événement ; un nouveau créneau de ce poste leur rend leur poste.
+                </p>
+              )}
               <ul className="space-y-2" role="list">
                 {roleLeaders.map((leader) => (
                   <li key={leader.id} className="flex items-center justify-between gap-3">
@@ -281,6 +300,7 @@ export default function SectorLeadersManager({
                     <button
                       onClick={() => handleRemove(leader)}
                       aria-label={`Retirer ${leader.name} des responsables de ${role}`}
+                      aria-describedby={inactive ? hintId : undefined}
                       className="text-xs text-red-600 px-3 py-1.5 rounded-full hover:bg-red-50 transition-colors flex-shrink-0"
                     >
                       Retirer

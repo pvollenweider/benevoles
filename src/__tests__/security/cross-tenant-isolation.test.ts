@@ -318,6 +318,8 @@ describe("Events — cross-tenant isolation", () => {
     const res = await POST(makeRequest("/api/admin/events/evt-b/duplicate", "POST", {}), params("evt-b"))
     expect(res.status).toBe(404)
     expect(db.event.create).not.toHaveBeenCalled()
+    // Nor are its cancelled shifts read, for the leaders of a deleted poste (#1010).
+    expect(db.shift.findMany).not.toHaveBeenCalled()
   })
 
   it("DELETE /api/admin/events/[id] returns 404 for org-B event", async () => {
