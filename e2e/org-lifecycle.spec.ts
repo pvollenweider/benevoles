@@ -28,6 +28,12 @@ test("disabling an org blocks public access; deletion requires disabled + typed 
   const orgId: string = org.id
   const orgSlug: string = org.slug
 
+  // The list says at a glance that it has no event and its owner has not activated yet (#1078).
+  await page.goto("/super-admin/organizations")
+  const row = page.getByRole("row").filter({ has: page.getByRole("link", { name: slug, exact: true }) })
+  await expect(row).toContainText("Aucun événement")
+  await expect(row).toContainText(/Lien d'activation valable jusqu'au \d{1,2} \S+/)
+
   // Public page reachable while active.
   const beforeRes = await page.request.get(`/api/public/${slug}?org=${orgSlug}`)
   // No event exists for this org, so this 404s on the event lookup, not the

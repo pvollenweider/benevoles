@@ -1,6 +1,7 @@
 import { describe, it, expect } from "vitest"
 import { ORG_SORT_COLS, ORG_SORT_LABELS, VIDEO_SORT_COLS, VIDEO_SORT_LABELS, orgSortKey, orgState, usefulPercent, videoSortKey, type OrgRow } from "../super-admin-tables"
 import { sortAnnouncement, sortRows } from "../table-sort"
+import { eventActivityRank } from "../org-list-activity"
 import type { FeedbackSummaryRow } from "../video-feedback"
 
 // Sortable super admin tables (#820): columns and sort keys.
@@ -12,6 +13,7 @@ const org = (over: Partial<OrgRow> & { name: string }): OrgRow => ({
   publicationApprovedAt: "2026-01-01T00:00:00.000Z",
   outboundEmailApprovedAt: "2026-01-01T00:00:00.000Z",
   createdAt: "2026-01-01T00:00:00.000Z",
+  activityRank: 2_000_000,
   _count: { events: 0, admins: 1, volunteers: 0 },
   ...over,
 })
@@ -46,6 +48,19 @@ describe("organisations sort", () => {
 
   it("sorts by state: active, waiting, deactivated, suspended", () => {
     expect(names(sortRows(orgs, { col: "etat", dir: "asc" }, orgSortKey))).toEqual(["Zèbre", "école", "Abeille", "Mouette"])
+  })
+
+  it("sorts by activity (#1078): most active first, organisations without any event last, and the reverse", () => {
+    const today = "2026-10-22"
+    const byActivity = [
+      org({ name: "Sans", activityRank: eventActivityRank({ kind: "none" }, today) }),
+      org({ name: "Passé", activityRank: eventActivityRank({ kind: "past", endDate: "2026-03-01" }, today) }),
+      org({ name: "En cours", activityRank: eventActivityRank({ kind: "ongoing" }, today) }),
+      org({ name: "À venir", activityRank: eventActivityRank({ kind: "upcoming", startDate: "2026-11-12" }, today) }),
+    ]
+    expect(names(sortRows(byActivity, { col: "activite", dir: "asc" }, orgSortKey))).toEqual(["En cours", "À venir", "Passé", "Sans"])
+    expect(names(sortRows(byActivity, { col: "activite", dir: "desc" }, orgSortKey))).toEqual(["Sans", "Passé", "À venir", "En cours"])
+    expect(sortAnnouncement({ col: "activite", dir: "asc" }, ORG_SORT_LABELS)).toBe("Trié par activité, des plus actives aux sans événement")
   })
 
   it("sorts by creation date", () => {

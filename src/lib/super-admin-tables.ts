@@ -11,13 +11,14 @@ import type { SortLabel, SortValue } from "./table-sort"
 
 // --- Organisations ---------------------------------------------------------------------------
 
-export const ORG_SORT_COLS = ["nom", "slug", "etat", "creation", "evenements", "admins", "membres"] as const
+export const ORG_SORT_COLS = ["nom", "slug", "etat", "activite", "creation", "evenements", "admins", "membres"] as const
 export type OrgSortCol = (typeof ORG_SORT_COLS)[number]
 
 export const ORG_SORT_LABELS: Record<OrgSortCol, SortLabel> = {
   nom: "nom",
   slug: "slug",
   etat: { name: "état", asc: "des actives aux suspendues", desc: "des suspendues aux actives" },
+  activite: { name: "activité", asc: "des plus actives aux sans événement", desc: "des sans événement aux plus actives" },
   creation: { name: "date de création", asc: "de la plus ancienne à la plus récente", desc: "de la plus récente à la plus ancienne" },
   evenements: "événements",
   admins: "admins",
@@ -32,6 +33,8 @@ export type OrgRow = {
   publicationApprovedAt?: string | null
   outboundEmailApprovedAt?: string | null
   createdAt: string
+  /** Sort key of the « Activité » column (#1078, `eventActivityRank` in src/lib/org-list-activity.ts). */
+  activityRank: number
   _count: { events: number; admins: number; volunteers: number }
 }
 
@@ -58,6 +61,7 @@ export function orgSortKey(org: OrgRow, col: OrgSortCol): SortValue {
     case "nom": return org.name
     case "slug": return org.slug
     case "etat": return ORG_STATE_RANK[orgState(org)]
+    case "activite": return org.activityRank
     case "creation": return org.createdAt
     case "evenements": return org._count.events
     case "admins": return org._count.admins
