@@ -5,7 +5,7 @@ import SectorLeadersManager from "@/components/admin/SectorLeadersManager"
 import HelpLink from "@/components/admin/HelpLink"
 import { LIVE_STATUSES } from "@/lib/registration-capacity"
 import { SECTOR_LEADER_ADMIN_SELECT } from "@/lib/admin-row-selects"
-import { livePosteNames } from "@/lib/leader-postes"
+import { deletedPosteNames, livePosteNames } from "@/lib/leader-postes"
 
 export const dynamic = "force-dynamic"
 export const metadata: Metadata = { title: "Responsables de secteur" }
@@ -34,9 +34,10 @@ export default async function SectorLeadersPage({ params }: { params: Promise<{ 
     }),
   ])
 
-  // The postes with a live shift (#1010): the add form suggests them, and a group of leaders whose
-  // poste isn't one of them (deleted, every shift cancelled) is shown as such.
+  // The add form suggests the postes with a live shift; a group of leaders of a deleted poste,
+  // every shift cancelled, is shown as such (#1010).
   const roleNames = livePosteNames(shifts)
+  const deletedPostes = deletedPosteNames(shifts)
 
   // One entry per registered volunteer, with the distinct roles they're signed up for — feeds
   // the "pick from an already-registered volunteer" shortcut instead of typing name/email by hand.
@@ -62,7 +63,7 @@ export default async function SectorLeadersPage({ params }: { params: Promise<{ 
         </p>
       </div>
 
-      <SectorLeadersManager eventId={id} initialLeaders={leaders} roleNames={roleNames} registeredVolunteers={registeredVolunteers} />
+      <SectorLeadersManager eventId={id} initialLeaders={leaders} roleNames={roleNames} deletedPostes={deletedPostes} registeredVolunteers={registeredVolunteers} />
     </div>
   )
 }

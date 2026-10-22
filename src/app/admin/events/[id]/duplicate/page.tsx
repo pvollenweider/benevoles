@@ -5,7 +5,7 @@ import type { Metadata } from "next"
 import { notFound, redirect } from "next/navigation"
 import { getOrgContext } from "@/lib/auth-guard"
 import DuplicateEventForm from "@/components/admin/DuplicateEventForm"
-import { leadersOfPostes } from "@/lib/leader-postes"
+import { deletedPosteNames, leadersOutsideDeletedPostes } from "@/lib/leader-postes"
 
 export const dynamic = "force-dynamic"
 export const metadata: Metadata = { title: "Dupliquer l'événement" }
@@ -21,13 +21,13 @@ export default async function DuplicateEventPage({ params }: { params: Promise<{
     select: {
       id: true, title: true, startDate: true, publicInstructions: true, confirmationMessage: true, reminderMessage: true,
       _count: { select: { shifts: { where: { status: { not: "cancelled" } } }, pages: true } },
-      // A copy takes only the leaders of a poste with a live shift (#1010): the count says so.
-      shifts: { where: { status: { not: "cancelled" } }, select: { roleName: true }, distinct: ["roleName"] },
+      // A copy leaves out the leaders of a deleted poste, every shift cancelled (#1010): the count says so.
+      shifts: { select: { roleName: true, status: true }, distinct: ["roleName", "status"] },
       sectorLeaders: { select: { roleName: true } },
     },
   })
   if (!event) notFound()
-  const leadersTaken = leadersOfPostes(event.sectorLeaders, event.shifts.map((s) => s.roleName)).length
+  const leadersTaken = leadersOutsideDeletedPostes(event.sectorLeaders, deletedPosteNames(event.shifts)).length
 
   return (
     <div className="space-y-6 max-w-2xl">

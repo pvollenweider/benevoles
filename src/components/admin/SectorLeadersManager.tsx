@@ -26,11 +26,14 @@ export type RegisteredVolunteer = {
 }
 
 export default function SectorLeadersManager({
-  eventId, initialLeaders, roleNames, registeredVolunteers = [],
+  eventId, initialLeaders, roleNames, deletedPostes = [], registeredVolunteers = [],
 }: {
   eventId: string
   initialLeaders: SectorLeaderRow[]
+  /** Postes with a live shift, suggested by the add form. */
   roleNames: string[]
+  /** Postes whose every shift is cancelled (#1010): their leaders are marked. */
+  deletedPostes?: string[]
   registeredVolunteers?: RegisteredVolunteer[]
 }) {
   const [leaders, setLeaders] = useState(initialLeaders)
@@ -145,9 +148,8 @@ export default function SectorLeadersManager({
     (acc[l.roleName] ??= []).push(l)
     return acc
   }, {})
-  // `roleNames` lists the postes with a live shift (#1010): a leader of any other poste (deleted,
-  // every shift cancelled, or not created yet) stays until removed, and is shown as such.
-  const withoutLiveShift = leaders.filter((l) => !roleNames.includes(l.roleName)).length
+  // A leader of a deleted poste stays until removed, and is shown as such (#1010).
+  const ofDeletedPoste = leaders.filter((l) => deletedPostes.includes(l.roleName)).length
 
   return (
     <div className="space-y-4">
@@ -166,7 +168,7 @@ export default function SectorLeadersManager({
 
       <div className="flex items-center justify-between">
         <p className="text-sm text-gray-500">
-          {leaders.length === 0 ? "Aucun responsable pour l'instant." : `${leaders.length} responsable${leaders.length > 1 ? "s" : ""}${withoutLiveShift > 0 ? `, dont ${withoutLiveShift} sur un poste sans créneau actif` : ""}`}
+          {leaders.length === 0 ? "Aucun responsable pour l'instant." : `${leaders.length} responsable${leaders.length > 1 ? "s" : ""}${ofDeletedPoste > 0 ? `, dont ${ofDeletedPoste} sur un poste aux créneaux tous annulés` : ""}`}
         </p>
         {!showForm && (
           <button
@@ -272,20 +274,20 @@ export default function SectorLeadersManager({
             // useId and the group's position, never from the name.
             const headingId = `${groupId}-poste-${index}`
             const hintId = `${groupId}-hint-${index}`
-            const inactive = !roleNames.includes(role)
+            const inactive = deletedPostes.includes(role)
             return (
             <section key={role} className="bg-white border border-gray-200 rounded-xl p-4" aria-labelledby={headingId}>
               <h2 id={headingId} className="text-sm font-medium text-gray-900 mb-2 flex flex-wrap items-center gap-2">
                 {role}
                 {inactive && (
                   <span className="text-xs font-medium rounded-full px-2 py-0.5 bg-gray-100 text-gray-600">
-                    <span className="sr-only">, </span>Aucun créneau actif
+                    <span className="sr-only">, </span>Créneaux tous annulés
                   </span>
                 )}
               </h2>
               {inactive && (
                 <p id={hintId} className="text-xs text-gray-600 -mt-1 mb-2">
-                  Ce poste n&apos;a aucun créneau actif : supprimé, annulé ou pas encore créé. Ses responsables ne sont pas repris si vous dupliquez l&apos;événement.
+                  Ce poste a été supprimé, ou tous ses créneaux annulés. Ses responsables ne sont pas repris si vous dupliquez l&apos;événement ; un nouveau créneau de ce poste leur rend leur poste.
                 </p>
               )}
               <ul className="space-y-2" role="list">

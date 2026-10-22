@@ -92,8 +92,8 @@ test("duplication with choices moves the dates and honours the checkboxes (#378)
   expect(bareDetail.shifts).toHaveLength(0)
 })
 
-// #1010: deleting a poste keeps its sector leaders, marked « Aucun créneau actif »; duplicating
-// takes only the leaders of a poste the copy has.
+// #1010: deleting a poste keeps its sector leaders, marked « Créneaux tous annulés »; duplicating
+// leaves them out.
 test("leaders of a deleted poste are marked and left out of a duplication (#1010)", async ({ page }) => {
   const stamp = Date.now()
   await page.goto("/admin/login")
@@ -118,12 +118,12 @@ test("leaders of a deleted poste are marked and left out of a duplication (#1010
   expect((await page.request.delete(`/api/admin/events/${source.id}/roles/Bar`)).ok()).toBeTruthy()
 
   await page.goto(`/admin/events/${source.id}/sector-leaders`)
-  await expect(page.getByRole("heading", { name: /^Bar\W+Aucun créneau actif$/ })).toBeVisible()
+  await expect(page.getByRole("heading", { name: /^Bar\W+Créneaux tous annulés$/ })).toBeVisible()
   await expect(page.getByRole("heading", { name: "Accueil", exact: true })).toBeVisible()
-  await expect(page.getByText("2 responsables, dont 1 sur un poste sans créneau actif")).toBeVisible()
+  await expect(page.getByText("2 responsables, dont 1 sur un poste aux créneaux tous annulés")).toBeVisible()
 
   await page.goto(`/admin/events/${source.id}/duplicate`)
-  await expect(page.getByText("1 responsable : chacun reçoit tout de suite un email avec son lien pour la copie. 1 autre, d'un poste sans créneau actif, n'est pas repris.")).toBeVisible()
+  await expect(page.getByText("1 responsable : chacun reçoit tout de suite un email avec son lien pour la copie. 1 autre, d'un poste aux créneaux tous annulés, n'est pas repris.")).toBeVisible()
 
   const dup = await page.request.post(`/api/admin/events/${source.id}/duplicate`, { data: { copy: { leaders: true } } })
   expect(dup.ok()).toBeTruthy()

@@ -51,8 +51,9 @@ describe("SectorLeadersManager — names read in words", () => {
   })
 })
 
-// #1010: a poste without live shift (deleted, every shift cancelled) keeps its leaders, marked.
-describe("SectorLeadersManager — leaders of a poste without live shift", () => {
+// #1010: a deleted poste (every shift cancelled) keeps its leaders, marked; a poste typed
+// before its shifts exist is not marked.
+describe("SectorLeadersManager — leaders of a deleted poste", () => {
   afterEach(cleanup)
 
   it("marks the group in its heading and describes its Retirer buttons", () => {
@@ -60,18 +61,21 @@ describe("SectorLeadersManager — leaders of a poste without live shift", () =>
       <SectorLeadersManager
         eventId="evt-1"
         roleNames={["Bar"]}
+        deletedPostes={["Vestiaire"]}
         initialLeaders={[
           { id: "l1", roleName: "Bar", name: "Léa", email: "lea@x.ch" },
           { id: "l2", roleName: "Vestiaire", name: "Noé", email: "noe@x.ch" },
+          { id: "l3", roleName: "Sécurité", name: "Marc", email: "marc@x.ch" },
         ]}
       />,
     )
-    expect(screen.getByRole("heading", { name: /^Vestiaire\W+Aucun créneau actif$/ })).toBeInTheDocument()
+    expect(screen.getByRole("heading", { name: /^Vestiaire\W+Créneaux tous annulés$/ })).toBeInTheDocument()
     expect(screen.getByRole("heading", { name: "Bar" })).toBeInTheDocument()
-    expect(screen.getByRole("region", { name: /^Vestiaire\W+Aucun créneau actif$/ })).toBeInTheDocument()
-    const hint = "Ce poste n'a aucun créneau actif : supprimé, annulé ou pas encore créé. Ses responsables ne sont pas repris si vous dupliquez l'événement."
+    expect(screen.getByRole("heading", { name: "Sécurité" })).toBeInTheDocument()
+    expect(screen.getByRole("region", { name: /^Vestiaire\W+Créneaux tous annulés$/ })).toBeInTheDocument()
+    const hint = "Ce poste a été supprimé, ou tous ses créneaux annulés. Ses responsables ne sont pas repris si vous dupliquez l'événement ; un nouveau créneau de ce poste leur rend leur poste."
     expect(screen.getByRole("button", { name: "Retirer Noé des responsables de Vestiaire" })).toHaveAccessibleDescription(hint)
     expect(screen.getByRole("button", { name: "Retirer Léa des responsables de Bar" })).not.toHaveAccessibleDescription()
-    expect(screen.getByText("2 responsables, dont 1 sur un poste sans créneau actif")).toBeInTheDocument()
+    expect(screen.getByText("3 responsables, dont 1 sur un poste aux créneaux tous annulés")).toBeInTheDocument()
   })
 })
