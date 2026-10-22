@@ -10,6 +10,7 @@ import { ORG_LOGO_SELECT, orgLogoOf } from "@/lib/org-logo"
 import { orgBaseUrl } from "@/lib/urls"
 import { classifySmtpOutcome, type SmtpErrorLike, type SmtpInfoLike } from "../smtp-outcome"
 import { recordDeliveryOutcomes } from "../delivery-outcomes"
+import { isRecipientAddressRejection } from "../recipient-rejection"
 import { encodeOutcomeReason } from "@/lib/outbox-view"
 import { siteDomain } from "@/lib/site"
 
@@ -106,7 +107,9 @@ export const emailChannel: { send: Send } = {
         // Nodemailer only resolves like this when *some* recipient was accepted; with a single
         // `to` that can't happen, but stay honest about what was actually proven.
         console.error(`[notif:email] ${payload.kind} partial: code=${classified.responseCode ?? "-"} category=${classified.outcome}`)
-        return { ok: false as const, reason: encodeOutcomeReason(classified), permanent: classified.outcome === "rejected_permanent" }
+        const permanent = classified.outcome === "rejected_permanent"
+        const recipientRejected = permanent && isRecipientAddressRejection({ rejectedErrors: info.rejectedErrors as SmtpErrorLike[] | undefined }, to)
+        return { ok: false as const, reason: encodeOutcomeReason(classified), permanent, ...(recipientRejected ? { recipientRejected: true as const } : {}) }
       }
       return { ok: true as const }
     } catch (err) {
@@ -115,7 +118,11 @@ export const emailChannel: { send: Send } = {
       await recordDeliveryOutcomes(recordCtx, [classified])
       // Code, category and kind only — never the recipient or the raw server reply (#598).
       console.error(`[notif:email] ${payload.kind} failed: code=${errLike.code ?? classified.responseCode ?? "-"} category=${classified.outcome}`)
-      return { ok: false as const, reason: encodeOutcomeReason(classified), permanent: classified.outcome === "rejected_permanent" }
+      const permanent = classified.outcome === "rejected_permanent"
+      // A mailbox or domain that doesn't exist (5.1.x): the outbox still fails the row, but doesn't
+      // report it to Sentry (a member's wrong address, not an application error).
+      const recipientRejected = permanent && isRecipientAddressRejection(errLike, to)
+      return { ok: false as const, reason: encodeOutcomeReason(classified), permanent, ...(recipientRejected ? { recipientRejected: true as const } : {}) }
     }
   },
 }

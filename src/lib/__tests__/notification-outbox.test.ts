@@ -30,7 +30,7 @@ vi.mock("../notifications/index", () => ({ sendNotification: m.sendNotification 
 vi.mock("next/server", () => ({ after: m.after }))
 vi.mock("../report-error", () => ({ reportError: (ctx: string) => (e: unknown) => m.reported(ctx, e) }))
 
-import { backoffMs, collectNotifications, deliverAfterResponse, deliverOutbox, enqueueNotifications, MAX_ATTEMPTS, openPayload, outboxHealth, outboxMessageId, sealPayload } from "../notifications/outbox"
+import { backoffMs, collectNotifications, isRecipientDataFailure, deliverAfterResponse, deliverOutbox, enqueueNotifications, MAX_ATTEMPTS, openPayload, outboxHealth, outboxMessageId, sealPayload } from "../notifications/outbox"
 
 const payload = { kind: "registration_confirmation" as const, recipient: { email: "a@x.com" }, data: {} }
 const now = new Date("2030-01-01T12:00:00Z")
@@ -138,6 +138,43 @@ describe("deliverOutbox", () => {
       where: { id: "n1" },
       data: expect.objectContaining({ status: "failed", attempts: 1, lastError: "smtp:rejected_permanent:mailbox_unknown:550:5.1.1" }),
     })
+  })
+
+  // Sentry 154728595: a member's address on a domain that doesn't exist is their data, not an
+  // application error. The row fails exactly as before, a warning is logged, nothing goes to Sentry.
+  it("a nonexistent recipient address (550 5.1.2) fails the row without reporting it", async () => {
+    const warn = vi.spyOn(console, "warn").mockImplementation(() => {})
+    m.sendNotification.mockResolvedValue({ ok: false, reason: "smtp:rejected_permanent:domain_not_found:550:5.1.2", permanent: true, recipientRejected: true })
+    expect(await deliverOutbox({ now })).toEqual({ sent: 0, retried: 0, failed: 1, cancelled: 0, held: 0 })
+    expect(m.update).toHaveBeenCalledWith({
+      where: { id: "n1" },
+      data: expect.objectContaining({ status: "failed", attempts: 1, lastError: "smtp:rejected_permanent:domain_not_found:550:5.1.2" }),
+    })
+    expect(m.reported).not.toHaveBeenCalled()
+    expect(warn).toHaveBeenCalledOnce()
+    const line = String(warn.mock.calls[0][0])
+    expect(line).toContain("outbox.gave_up.registration_confirmation")
+    expect(line).toContain("5.1.2")
+    expect(line).not.toContain("a@x.com")
+    warn.mockRestore()
+  })
+
+  it("any other permanent rejection is still reported (5.7.1, or permanent without the recipient flag)", async () => {
+    m.sendNotification.mockResolvedValueOnce({ ok: false, reason: "smtp:rejected_permanent:policy_rejected:550:5.7.1", permanent: true })
+    await deliverOutbox({ now })
+    expect(m.reported).toHaveBeenCalledWith("outbox.gave_up.registration_confirmation", expect.any(Error))
+    m.reported.mockReset()
+    // The flag alone, without permanent, isn't enough either: that row is retried, not given up.
+    m.sendNotification.mockResolvedValueOnce({ ok: false, reason: "smtp:failed_temporary:other:-:-", recipientRejected: true })
+    expect(await deliverOutbox({ now })).toEqual({ sent: 0, retried: 1, failed: 0, cancelled: 0, held: 0 })
+    expect(m.reported).not.toHaveBeenCalled()
+  })
+
+  it("isRecipientDataFailure needs both permanent and the recipient flag", () => {
+    expect(isRecipientDataFailure({ permanent: true, recipientRejected: true })).toBe(true)
+    expect(isRecipientDataFailure({ permanent: true })).toBe(false)
+    expect(isRecipientDataFailure({ recipientRejected: true })).toBe(false)
+    expect(isRecipientDataFailure({ permanent: false, recipientRejected: true })).toBe(false)
   })
 
   it("treats a thrown error as a failed attempt", async () => {
