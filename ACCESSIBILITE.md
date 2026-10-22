@@ -2,7 +2,7 @@
 
 benevol.app vise le niveau **AA des WCAG 2.2**. Cette page dit ce qui a été vérifié, comment, et ce qui ne l'est pas encore.
 
-Déclaration établie le 5 octobre 2026, mise à jour le 21 octobre 2026, sur la base d'une auto-évaluation à la même date.
+Déclaration établie le 5 octobre 2026, mise à jour le 22 octobre 2026, sur la base d'une auto-évaluation à la même date.
 
 ## Périmètre
 
@@ -20,7 +20,7 @@ Technologies utilisées : HTML, CSS, JavaScript, WAI-ARIA.
 - **Rôles, noms et états** : pour le choix des créneaux sur la page d'un événement, le menu du compte de l'administration, le choix entre frise et liste des créneaux, et l'ajout manuel d'une inscription avec son message d'erreur, les tests automatiques vérifient aussi ce qui est transmis aux technologies d'assistance : le rôle et le nom de chaque élément, et ses états (sélectionné, ouvert, en erreur, désactivé). C'est une vérification du code, pas un essai avec un lecteur d'écran.
 - **Toucher sur téléphone** : le menu du compte de l'administration (ouvrir le menu, « Mon compte », « Se déconnecter », refermer en touchant ailleurs), le choix d'un créneau sur la page d'un événement l'annulation d'un créneau sur la page personnelle et la suppression d'un créneau dans l'administration, depuis la frise et depuis la liste, sont aussi testés automatiquement au toucher, avec le moteur de Safari et l'affichage d'un iPhone simulé ; ce n'est pas un essai sur un vrai téléphone ni avec VoiceOver.
 - **Revue de chaque changement d'interface** : chaque modification des écrans passe par une revue d'accessibilité dédiée (structure, noms accessibles, clavier, focus, annonces, contraste, libellés) ; ses remarques bloquantes sont corrigées avant publication.
-- **Clavier** : les parcours ci-dessous sont conçus pour être utilisés au clavier seul, avec un lien d'évitement (« Aller au contenu ») sur la page d'un événement, les documents légaux, les pages de la documentation et celles de l'administration, et un focus visible. Une vérification manuelle complète et datée de ces parcours reste à faire.
+- **Clavier** : les parcours ci-dessous sont conçus pour être utilisés au clavier seul, avec un lien d'évitement (« Aller au contenu ») sur la page d'un événement, les documents légaux, les pages de la documentation et celles de l'administration, et un focus visible. Dans le planning d'un événement, chaque jour est un seul arrêt de Tab : les flèches passent d'un créneau à l'autre, y compris ceux qui ne peuvent pas être choisis, et chacun dit pourquoi. Une vérification manuelle complète et datée de ces parcours reste à faire.
 
 Parcours concernés : découvrir un événement ; choisir ses créneaux ; remplir et envoyer l'inscription ; ouvrir sa page personnelle, annuler un créneau, quitter une liste d'attente ou retirer une demande ; accepter une place de liste d'attente ; se connecter à l'administration ; créer un événement, ajouter des créneaux, suivre les inscriptions, pointer les arrivées le jour J et écrire aux bénévoles.
 
@@ -35,7 +35,6 @@ Parcours concernés : découvrir un événement ; choisir ses créneaux ; rempli
 
 - Le **planning** d'une journée s'affiche par défaut en frise horizontale, qu'il faut faire défiler latéralement sur un petit écran. Le bouton « Liste », au-dessus du planning, présente les mêmes créneaux heure par heure, sans défilement horizontal ; ce choix est mémorisé sur l'appareil.
 - Le **planning**, les **feuilles** et les **badges** à imprimer sont des pages HTML, analysées par les tests automatiques comme le reste du site : ce sont elles, ouvertes dans le navigateur, la version accessible de ces documents. Un PDF enregistré depuis le navigateur n'est balisé pour les lecteurs d'écran que si le navigateur le fait. Les présences s'exportent aussi en CSV.
-- Avec **Voir qui est inscrit**, dans la frise, les noms d'un créneau qui ne peut pas être choisi (complet, déjà pris, réservé) ne s'atteignent pas au clavier : seuls le toucher et le survol les affichent. La vue « Liste » donne les noms de tous les créneaux, au clavier comme au lecteur d'écran.
 - Le lien **Voir sur la carte** ouvre OpenStreetMap, un service externe dont nous ne maîtrisons pas l'accessibilité.
 - Le contenu écrit par les organisateurs (messages, pages d'information, consignes) dépend de leur rédaction.
 - L'**inscription affichée sur le site d'une association** dépend aussi de ce site : le code fourni donne au cadre un titre (« Inscription bénévoles – » suivi du nom de l'événement), que l'association peut modifier ou retirer. Sans l'ajustement automatique de la hauteur, la page défile à l'intérieur d'un cadre lui-même placé dans une page qui défile. Les rappels par notification ne sont pas proposés dans ce cadre : ils restent disponibles depuis la page personnelle.
