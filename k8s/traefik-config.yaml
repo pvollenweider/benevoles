@@ -25,10 +25,10 @@
 # (k8s/node/traefik-log-stats). Procedure, checks and rollback:
 # k8s/log-rotation.md.
 #
-# The directory must exist on the node and be writable by the Traefik user (65532) BEFORE this is
-# applied. type: Directory makes a missing directory fail loudly: the new pod stays in
-# ContainerCreating and the old one keeps serving (rolling update, maxUnavailable 0). A directory
-# that exists but is not writable is worse: Traefik starts, logs « Unable to create access
+# The directory (root:65532, 0750) and the file (65532, 0640) must exist on the node BEFORE this
+# is applied: Traefik can append to the file, never create, rename or delete anything there. type: Directory makes a missing directory fail loudly: the new pod stays in
+# ContainerCreating and the old one keeps serving (rolling update, maxUnavailable 0). A file that
+# is missing or not writable is worse: Traefik starts, logs « Unable to create access
 # logger » and writes no access log at all; check that the file grows after applying.
 #
 # This Traefik also serves other sites of the cluster (gallerypack.app, deck.altsessions.ch): they

@@ -67,7 +67,7 @@ CONTENT_ROOTS = {"blog", "doc", "videos", "legal", "doc-img"}
 # Left out entirely: administration, API, operator, personal links and token routes, the Sentry
 # tunnel. Same families as k8s/ingressroute-tokens.yaml, plus everything behind a login.
 EXCLUDED_ROOTS = {"admin", "api", "super-admin", "my", "leader", "waitlist", "product-updates", "monitoring"}
-EXCLUDED_QUERY_KEYS = {"token", "t", "q"}
+EXCLUDED_QUERY_KEYS = {"token", "t", "q", "deleted", "tag", "next", "callbackurl"}
 # Event routes below the slug (src/app/[eventSlug]): a fixed one is kept, the rest is a page slug.
 EVENT_FIXED = {"success"}
 # Robot probe names worth seeing in the 404 list (/wp-login.php, /.env): hidden files and server
@@ -304,7 +304,7 @@ def write_json(path, data):
     with os.fdopen(fd, "w", encoding="utf-8") as f:
         json.dump(data, f, ensure_ascii=False, indent=1)
         f.write("\n")
-    os.chmod(tmp, 0o644)
+    os.chmod(tmp, 0o640)
     os.replace(tmp, path)
 
 

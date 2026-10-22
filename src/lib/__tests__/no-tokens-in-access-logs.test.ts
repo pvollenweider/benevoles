@@ -1,5 +1,6 @@
 import { describe, it, expect } from "vitest"
 import { readFileSync } from "fs"
+import { execFileSync } from "child_process"
 import { join } from "path"
 import { SECURITY_HEADERS } from "../security-headers"
 import { scrubUrl } from "../sentry-scrub"
@@ -52,7 +53,41 @@ describe("no personal token in the proxy access log", () => {
     for (const family of ["my", "waitlist", "member-invite", "registrations", "leader"]) {
       expect(prefixes.some((p) => p.endsWith(`/${family}/`)), family).toBe(true)
     }
-    expect(queryKeys.sort()).toEqual(["t", "token"])
+    expect(queryKeys.filter((k) => !["q", "deleted", "tag", "next", "callbackUrl"].includes(k)).sort()).toEqual(["t", "token"])
+  })
+
+  it("never logs a search typed in the administration (?q= is often a name or an email)", () => {
+    expect(queryKeys).toContain("q")
+    for (const url of [
+      "/admin/members?q=dupont", "/api/admin/members?q=jean%40example.org", "/admin/events/e1/registrations?q=marie", "/admin/search?q=x",
+      "/admin/members?deleted=Marie%20Dupont", "/api/admin/members?tag=malade",
+      "/admin/login?callbackUrl=%2Fadmin%2Fmembers%3Fq%3Dalice", "/super-admin/use-org/o1?next=%2Fadmin%2Fevents%3Fq%3Dx",
+    ]) {
+      expect(exempt(url), url).toBe(true)
+    }
+  })
+
+  it("applies the same rule over HTTPS and HTTP", () => {
+    const rules = [...manifest.matchAll(/match: >-\n([\s\S]*?)\n\s+observability:/g)].map((m) => m[1].replace(/\s+/g, " ").trim())
+    expect(rules).toHaveLength(2)
+    expect(rules[0]).toBe(rules[1])
+  })
+
+  it("routes every query-string secret the app builds through the unlogged router", () => {
+    // Every `?<key>=${…}` written in src (links in emails, redirects): its key must be exempt, or be
+    // listed here as carrying no secret and no personal data.
+    const NOT_SECRET = new Set(["org", "groupe", "embed", "wizard", "shift", "role", "audience", "since", "verify", "edit", "tri", "ok", "creneau", "decline", "registration", "admin", "slug", "v", "with", "member", "demandes", "lien", "volunteer", "link", "format", "download", "from", "to", "cursor", "limit", "tag", "kind", "includeAll", "entityType", "entityId", "actorType", "actorId", "action", "chainOf", "until", "waitlist", "requested", "active", "lastName", "shifts", "color", "shiftId", "eventId", "id", "page", "view", "type", "status", "sort",
+      // external links, never to this server: OpenStreetMap (map-link.ts), mailto subject
+      "mlat", "mlon", "subject"])
+    const files = execFileSync("git", ["ls-files", "src"], { encoding: "utf8" }).split("\n").filter((f) => /\.(ts|tsx)$/.test(f) && !f.includes("__tests__") && !f.includes("__integration__"))
+    const keys = new Set<string>()
+    for (const f of files) {
+      const text = readFileSync(join(process.cwd(), f), "utf8")
+      // `?key=${…}` in a template, and searchParams.set("key", …) / params.set("key", …)
+      for (const m of text.matchAll(/[?&]([A-Za-z_]+)=\$\{/g)) keys.add(m[1])
+      for (const m of text.matchAll(/\.set\(\s*"([A-Za-z_]+)",/g)) keys.add(m[1])
+    }
+    for (const key of keys) expect(queryKeys.includes(key) || NOT_SECRET.has(key), key).toBe(true)
   })
 
   it("ordinary pages stay logged", () => {

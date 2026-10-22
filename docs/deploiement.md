@@ -276,7 +276,7 @@ La ranger **d'abord** dans un gestionnaire de mots de passe, hors du serveur et 
 
 Avec `deploy.yml`, un push sur `main` applique tout dans le bon ordre. À la main, suivre [Mise en place manuelle](#mise-en-place-manuelle) : migrations d'abord, et ne pas continuer si le Job échoue (`backoffLimit: 0`).
 
-`k8s/traefik-config.yaml` n'est **pas** appliqué par `deploy.yml` : il règle le Traefik de k3s partagé par tous les sites du cluster (`kube-system`) : adresse réelle des visiteurs, journaux d'accès dans un fichier du nœud, délais de lecture et d'écriture de 30 min. Un `HelmChartConfig` `traefik` existant serait remplacé : fusionner d'abord ses réglages. Créer d'abord sur le nœud les répertoires `/var/log/traefik` (propriétaire 65532) et `/var/log/traefik-archive` (root), puis installer la rotation et les scripts ([`k8s/log-rotation.md`](../k8s/log-rotation.md), « Mise en place ») : sans ce répertoire, le nouveau pod Traefik ne démarre pas. À appliquer ensuite :
+`k8s/traefik-config.yaml` n'est **pas** appliqué par `deploy.yml` : il règle le Traefik de k3s partagé par tous les sites du cluster (`kube-system`) : adresse réelle des visiteurs, journaux d'accès dans un fichier du nœud, délais de lecture et d'écriture de 30 min. Un `HelmChartConfig` `traefik` existant serait remplacé : fusionner d'abord ses réglages. Créer d'abord sur le nœud le répertoire `/var/log/traefik` (root, groupe 65532), le fichier `access.log` (65532, 0640) et `/var/log/traefik-archive` (root), puis installer la rotation et les scripts ([`k8s/log-rotation.md`](../k8s/log-rotation.md), « Mise en place ») : sans ce répertoire, le nouveau pod Traefik ne démarre pas. À appliquer ensuite :
 
 ```bash
 kubectl apply -f k8s/traefik-config.yaml
