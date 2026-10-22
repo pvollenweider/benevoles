@@ -13,6 +13,8 @@ import { rateLimit, getClientIp } from "@/lib/rate-limit"
 import { hashToken } from "@/lib/token-hash"
 import { deliverAfterResponse, enqueueNotifications } from "@/lib/notifications/outbox"
 import { validationError } from "@/lib/api-error"
+import { replyToOnActivation } from "@/lib/org-reply-to"
+import { isOwnerRole } from "@/lib/permissions"
 
 const schema = z.object({
   token: z.string().min(1),
@@ -30,6 +32,7 @@ async function checkToken(token: string) {
       id: true,
       name: true,
       email: true,
+      role: true,
       setupTokenExpiresAt: true,
       isActive: true,
       organizationId: true,
@@ -88,7 +91,38 @@ export async function POST(req: Request) {
         setupTokenExpiresAt: null,
       },
     })
-    if (!organization) return []
+    if (!organization || !admin.organizationId) return []
+    // An owner's now-confirmed address becomes the reply-to of an organization that has none
+    // (#1077), only while it is still null: never over a value an owner set, nor after an owner
+    // changed it in the email settings (a cleared value stays cleared). No address in the log.
+    // Row lock on the organization: a settings save that starts meanwhile waits for this fill and
+    // then writes the value the owner chose, so a clear saved at the same moment still wins.
+    if (isOwnerRole(admin.role)) await tx.$queryRaw`SELECT 1 FROM "Organization" WHERE "id" = ${admin.organizationId} FOR UPDATE`
+    const editedInSettings = isOwnerRole(admin.role) && (await tx.$queryRaw<unknown[]>`
+      SELECT 1 FROM "OrgLog"
+      WHERE "organizationId" = ${admin.organizationId}
+        AND "action" = 'organization.notifications_updated'
+        AND ("changes" -> 'replyToEmail') IS NOT NULL
+      LIMIT 1`).length > 0
+    const replyTo = replyToOnActivation(admin.role, admin.email, editedInSettings)
+    if (replyTo) {
+      const { count } = await tx.organization.updateMany({
+        where: { id: admin.organizationId, replyToEmail: null },
+        data: { replyToEmail: replyTo },
+      })
+      if (count > 0) {
+        await tx.orgLog.create({
+          data: {
+            organizationId: admin.organizationId,
+            actorType: "admin",
+            actorId: admin.id,
+            action: "organization.reply_to_defaulted",
+            entityType: "Organization",
+            entityId: admin.organizationId,
+          },
+        })
+      }
+    }
     return enqueueNotifications([{
       kind: "admin_welcome",
       organizationId: admin.organizationId,

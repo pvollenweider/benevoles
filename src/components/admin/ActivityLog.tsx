@@ -43,6 +43,8 @@ export const ACTION_LABEL: Record<string, string> = {
   "adminuser.invited": "a invité un admin",
   "notification.retried": "a renvoyé un email",
   "organization.notifications_updated": "a modifié les réglages de notification",
+  // #1077: says whose address became the reply-to without writing it in the log.
+  "organization.reply_to_defaulted": "a activé son compte : son adresse email est devenue l'adresse de réponse de l'organisation",
   "organization.logo_updated": "a changé le logo de l'organisation",
   "organization.logo_removed": "a retiré le logo de l'organisation",
   "adminuser.removed": "a retiré un admin",
