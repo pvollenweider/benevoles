@@ -4,7 +4,8 @@ import { describe, it, expect, afterAll, vi } from "vitest"
  * #1077 against a real Postgres: an organization without a reply-to gets its first owner's address
  * when that owner activates their account through the invitation link, in the activation
  * transaction and only while it is still null. Organisers never set it, a later owner never
- * overwrites it, and the log entry carries no address.
+ * overwrites it, a value an owner cleared in the settings stays cleared, and the log entry
+ * carries no address.
  */
 
 // The welcome email delivers after the response (`after`), which needs a request: nothing to deliver here.
@@ -87,5 +88,33 @@ describe.skipIf(!url)("default reply-to on an owner's activation on Postgres (#1
     expect(await replyTo(kept.id)).toBe("contact@asso.example")
     expect(await defaulted(kept.id)).toHaveLength(0)
     expect(await replyTo(other.id)).toBeNull()
+  })
+
+  it("keeps a reply-to an owner cleared in the email settings empty", async () => {
+    const cleared = await org("d")
+    // What PATCH /api/admin/settings/notifications logs when an owner empties the field.
+    await prisma.orgLog.create({
+      data: {
+        organizationId: cleared.id, actorType: "admin", actorId: "someone", action: "organization.notifications_updated",
+        entityType: "Organization", entityId: cleared.id, changes: { replyToEmail: { from: "old@asso.example", to: null } },
+      },
+    })
+    // A change of the reminders only does not count as an edit of the reply-to.
+    const remindersOnly = await org("e")
+    await prisma.orgLog.create({
+      data: {
+        organizationId: remindersOnly.id, actorType: "admin", actorId: "someone", action: "organization.notifications_updated",
+        entityType: "Organization", entityId: remindersOnly.id, changes: { settings: { from: {}, to: {} } },
+      },
+    })
+    const a = await invited(cleared.id, "d-owner", "admin")
+    const b = await invited(remindersOnly.id, "e-owner", "admin")
+
+    expect((await acceptInvite(post(a))).status).toBe(200)
+    expect(await replyTo(cleared.id)).toBeNull()
+    expect(await defaulted(cleared.id)).toHaveLength(0)
+
+    expect((await acceptInvite(post(b))).status).toBe(200)
+    expect(await replyTo(remindersOnly.id)).toBe(`${tag}-e-owner@example.org`)
   })
 })

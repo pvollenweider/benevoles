@@ -4,12 +4,14 @@ const findUnique = vi.hoisted(() => vi.fn())
 const update = vi.hoisted(() => vi.fn())
 const orgUpdateMany = vi.hoisted(() => vi.fn())
 const orgLogCreate = vi.hoisted(() => vi.fn())
+const queryRaw = vi.hoisted(() => vi.fn())
 const txOrder = vi.hoisted(() => [] as string[])
 vi.mock("@/lib/prisma", () => ({
   prisma: {
     adminUser: { findUnique, update },
     organization: { updateMany: orgUpdateMany },
     orgLog: { create: orgLogCreate },
+    $queryRaw: queryRaw,
     async $transaction(fn: (tx: unknown) => unknown) { txOrder.push("begin"); const out = await fn(this); txOrder.push("commit"); return out },
   },
 }))
@@ -131,6 +133,7 @@ describe("accept-invite: an owner's activation fills a missing reply-to (#1077)"
     update.mockImplementation(async () => { txOrder.push("activate"); return {} })
     orgUpdateMany.mockImplementation(async () => { txOrder.push("reply-to"); return { count: 1 } })
     orgLogCreate.mockImplementation(async () => { txOrder.push("log"); return {} })
+    queryRaw.mockImplementation(async () => { txOrder.push("edited?"); return [] })
   })
 
   it("sets the owner's address only while the organization has none, in the activation transaction", async () => {
@@ -142,7 +145,7 @@ describe("accept-invite: an owner's activation fills a missing reply-to (#1077)"
       where: { id: "org-1", replyToEmail: null },
       data: { replyToEmail: "julie@asso.ch" },
     })
-    expect(txOrder).toEqual(["begin", "activate", "reply-to", "log", "commit"])
+    expect(txOrder).toEqual(["begin", "activate", "edited?", "reply-to", "log", "commit"])
   })
 
   it("logs it in the organization's activity without the address", async () => {
@@ -168,6 +171,7 @@ describe("accept-invite: an owner's activation fills a missing reply-to (#1077)"
     const res = await POST(post({ token: "organizer-token", password }))
     expect(res.status).toBe(200)
     expect(update).toHaveBeenCalled()
+    expect(queryRaw).not.toHaveBeenCalled()
     expect(orgUpdateMany).not.toHaveBeenCalled()
     expect(orgLogCreate).not.toHaveBeenCalled()
   })
@@ -180,6 +184,17 @@ describe("accept-invite: an owner's activation fills a missing reply-to (#1077)"
     const res = await POST(post({ token: "second-owner-token", password }))
     expect(res.status).toBe(200)
     expect(orgUpdateMany).toHaveBeenCalledWith(expect.objectContaining({ where: { id: "org-1", replyToEmail: null } }))
+    expect(orgLogCreate).not.toHaveBeenCalled()
+  })
+
+  it("keeps a reply-to an owner cleared in the settings empty", async () => {
+    queryRaw.mockResolvedValue([{ "?column?": 1 }])
+    findUnique.mockResolvedValue(owner)
+    const { POST } = await import("@/app/api/admin/accept-invite/route")
+    const res = await POST(post({ token: "owner-token", password }))
+    expect(res.status).toBe(200)
+    expect(update).toHaveBeenCalled()
+    expect(orgUpdateMany).not.toHaveBeenCalled()
     expect(orgLogCreate).not.toHaveBeenCalled()
   })
 

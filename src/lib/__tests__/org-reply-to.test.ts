@@ -27,17 +27,21 @@ describe("initialReplyToEmail (#1067)", () => {
 
 describe("replyToOnActivation (#1077)", () => {
   it("offers an owner's address, normalized, when the owner activates their account", () => {
-    expect(replyToOnActivation(OWNER_ROLE, " Julie@Asso.CH ")).toBe("julie@asso.ch")
+    expect(replyToOnActivation(OWNER_ROLE, " Julie@Asso.CH ", false)).toBe("julie@asso.ch")
   })
 
   it("never offers an organiser's address", () => {
-    expect(replyToOnActivation(ORGANIZER_ROLE, "marc@asso.ch")).toBeNull()
+    expect(replyToOnActivation(ORGANIZER_ROLE, "marc@asso.ch", false)).toBeNull()
   })
 
   it("offers nothing for an unknown role or an unusable address", () => {
-    expect(replyToOnActivation(null, "julie@asso.ch")).toBeNull()
-    expect(replyToOnActivation("super_admin", "julie@asso.ch")).toBeNull()
-    expect(replyToOnActivation(OWNER_ROLE, "not-an-email")).toBeNull()
-    expect(replyToOnActivation(OWNER_ROLE, null)).toBeNull()
+    expect(replyToOnActivation(null, "julie@asso.ch", false)).toBeNull()
+    expect(replyToOnActivation("super_admin", "julie@asso.ch", false)).toBeNull()
+    expect(replyToOnActivation(OWNER_ROLE, "not-an-email", false)).toBeNull()
+    expect(replyToOnActivation(OWNER_ROLE, null, false)).toBeNull()
+  })
+
+  it("keeps a reply-to an owner cleared on purpose in the settings empty", () => {
+    expect(replyToOnActivation(OWNER_ROLE, "julie@asso.ch", true)).toBeNull()
   })
 })

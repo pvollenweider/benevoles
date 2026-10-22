@@ -17,11 +17,17 @@ export function initialReplyToEmail(adminEmail: string | null | undefined): stri
 
 /**
  * Reply-to address offered when an administrator activates their account (#1077): an owner's
- * address, now confirmed by the activation, for an organization that still has none. Organisers
- * never set it. The caller writes it only while the organization's reply-to is still null, so a
- * value an owner set is never overwritten. A value an owner cleared is null too and can be filled
- * by a later owner's activation; activation happens once per account, so that stays rare.
+ * address, now confirmed by the activation, for an organization that has never had one. Organisers
+ * never set it. `editedInSettings` says whether an owner has ever changed the reply-to in the email
+ * settings (every such change is logged since the setting exists, #381): a null value after an edit
+ * was cleared on purpose and stays null. The caller also writes only while the value is still
+ * null, so an address an owner set is never overwritten.
  */
-export function replyToOnActivation(role: string | null | undefined, email: string | null | undefined): string | null {
-  return isOwnerRole(role) ? initialReplyToEmail(email) : null
+export function replyToOnActivation(
+  role: string | null | undefined,
+  email: string | null | undefined,
+  editedInSettings: boolean,
+): string | null {
+  if (!isOwnerRole(role) || editedInSettings) return null
+  return initialReplyToEmail(email)
 }

@@ -14,6 +14,7 @@ import { hashToken } from "@/lib/token-hash"
 import { deliverAfterResponse, enqueueNotifications } from "@/lib/notifications/outbox"
 import { validationError } from "@/lib/api-error"
 import { replyToOnActivation } from "@/lib/org-reply-to"
+import { isOwnerRole } from "@/lib/permissions"
 
 const schema = z.object({
   token: z.string().min(1),
@@ -92,8 +93,15 @@ export async function POST(req: Request) {
     })
     if (!organization || !admin.organizationId) return []
     // An owner's now-confirmed address becomes the reply-to of an organization that has none
-    // (#1077), only while it is still null: never over a value an owner set. No address in the log.
-    const replyTo = replyToOnActivation(admin.role, admin.email)
+    // (#1077), only while it is still null: never over a value an owner set, nor after an owner
+    // changed it in the email settings (a cleared value stays cleared). No address in the log.
+    const editedInSettings = isOwnerRole(admin.role) && (await tx.$queryRaw<unknown[]>`
+      SELECT 1 FROM "OrgLog"
+      WHERE "organizationId" = ${admin.organizationId}
+        AND "action" = 'organization.notifications_updated'
+        AND ("changes" -> 'replyToEmail') IS NOT NULL
+      LIMIT 1`).length > 0
+    const replyTo = replyToOnActivation(admin.role, admin.email, editedInSettings)
     if (replyTo) {
       const { count } = await tx.organization.updateMany({
         where: { id: admin.organizationId, replyToEmail: null },
