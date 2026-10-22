@@ -118,11 +118,12 @@ describe.skipIf(!url)("default reply-to on an owner's activation on Postgres (#1
     expect(await replyTo(remindersOnly.id)).toBe(`${tag}-e-owner@example.org`)
   })
 
-  it("an owner's activation waits for a settings save in progress, and its clear wins", async () => {
+  it("an owner's activation waits for a concurrent write to the organization, and a logged clear wins", async () => {
     const o = await org("f", "old@asso.example")
     const owner = await invited(o.id, "f-owner", "admin")
     let activation: Promise<Response> | undefined
-    // Stands for a settings save in progress that clears the address and logs it, holding the row.
+    // A write holding the organization's row (here a clear and its log entry, committed together):
+    // the activation waits for it and then decides on what it committed.
     await prisma.$transaction(async (tx) => {
       await tx.$queryRaw`SELECT 1 FROM "Organization" WHERE "id" = ${o.id} FOR UPDATE`
       activation = acceptInvite(post(owner))
