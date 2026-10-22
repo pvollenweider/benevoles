@@ -358,3 +358,48 @@ test("Frise popover, « Voir les inscriptions » with the keyboard: saves the pl
   await expect(page).toHaveURL(shiftsUrl)
   await expect(bar).toContainText("0/6")
 })
+
+// #1004: a save on close left the page's old copy in the router cache: Back from another admin
+// page showed the old places until a reload.
+test("Frise popover: places saved on close are still shown after an admin link and Back", async ({ page }) => {
+  await openShiftsPage(page)
+  const shiftsUrl = page.url()
+  const bar = page.getByRole("button", { name: /^Bar, de 10h à 12h/ })
+  await bar.focus()
+  await page.keyboard.press("Enter")
+  const popover = page.getByRole("dialog").filter({ has: page.getByRole("heading", { name: /^Bar ?, de 10h à 12h/ }) })
+  await popover.getByLabel("Places").fill("8")
+  const saved = page.waitForResponse(r => r.request().method() === "PATCH" && r.url().includes("/api/admin/shifts/"))
+  await page.keyboard.press("Escape")
+  expect((await saved).ok()).toBeTruthy()
+  await expect(popover).toBeHidden()
+  await expect(bar).toContainText("0/8")
+
+  const tabs = page.getByRole("navigation", { name: "Sections de l'événement" })
+  await tabs.getByRole("link", { name: "Inscriptions" }).click()
+  await expect(page).toHaveURL(/\/registrations$/)
+  await page.goBack()
+  await expect(page).toHaveURL(shiftsUrl)
+  await expect(bar).toContainText("0/8")
+  await bar.focus()
+  await page.keyboard.press("Enter")
+  await expect(popover.getByLabel("Places")).toHaveValue("8")
+})
+
+// #1004, the same with the admin link clicked while the popover is open: that click closes it and saves.
+test("Frise popover: places saved by clicking an admin link are still shown after Back", async ({ page }) => {
+  await openShiftsPage(page)
+  const shiftsUrl = page.url()
+  const bar = page.getByRole("button", { name: /^Bar, de 10h à 12h/ })
+  await bar.click()
+  const popover = page.getByRole("dialog").filter({ has: page.getByRole("heading", { name: /^Bar ?, de 10h à 12h/ }) })
+  await popover.getByLabel("Places").fill("9")
+  const saved = page.waitForResponse(r => r.request().method() === "PATCH" && r.url().includes("/api/admin/shifts/"))
+  const tabs = page.getByRole("navigation", { name: "Sections de l'événement" })
+  await tabs.getByRole("link", { name: "Inscriptions" }).click()
+  expect((await saved).ok()).toBeTruthy()
+  await expect(page).toHaveURL(/\/registrations$/)
+  await page.goBack()
+  await expect(page).toHaveURL(shiftsUrl)
+  await expect(bar).toContainText("0/9")
+})
