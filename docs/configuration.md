@@ -4,7 +4,7 @@ Toutes les variables d'environnement lues par l'application. Au démarrage, `src
 
 Modèles de fichiers fournis :
 
-- `.env.example` : production. Il ne contient pas `TOKEN_ENCRYPTION_KEY`, pourtant obligatoire en production : l'ajouter.
+- `.env.example` : production. Il ne liste pas encore toutes les variables de cette page (#761) : une variable optionnelle absente garde sa valeur par défaut.
 - `.env.development.example` : développement local, prérempli pour la stack Docker (`docker-compose.dev.yml`)
 
 ## Application
@@ -45,7 +45,7 @@ Modèles de fichiers fournis :
 | `DIGEST_DELAY_SECONDS` | non, tests | Remplace le délai de regroupement des emails groupés (#869, #916) : 5 minutes pour les désistements d'un même événement, 10 minutes pour « inscrit par un organisateur ». Nombre de secondes, `0` compris ; une valeur négative ou non numérique est ignorée. `0` dans le job E2E de la CI : l'email part tout de suite, sans attendre `/api/cron/outbox`. À laisser vide en production, qui garde les délais par défaut ; pas transmise par `deploy.yml` |
 | `GIT_SHA` | non | Commit déployé, fixé au build de l'image (argument de build `GIT_SHA`, rempli par `deploy.yml`). Affiché sur la page Santé du service |
 
-L'image et les manifestes fixent eux-mêmes `NODE_ENV=production`, `PORT=3000`, `HOSTNAME=0.0.0.0` et `NEXT_TELEMETRY_DISABLED=1`. `docker-compose.yml` transmet aussi `POSTGRES_HOST` et `POSTGRES_USER` à l'application, qui ne les lit pas.
+L'image et les manifestes fixent eux-mêmes `NODE_ENV=production`, `PORT=3000`, `HOSTNAME=0.0.0.0` et `NEXT_TELEMETRY_DISABLED=1`. `docker-compose.yml` transmet aussi `POSTGRES_HOST` et `POSTGRES_USER` à l'application, qui ne les lit pas. `POSTGRES_PASSWORD` n'est lu que par `docker-compose.yml` (mot de passe de la base à la création du volume, et `DATABASE_URL` de l'application). Un test (`src/__tests__/env-documented.test.ts`) vérifie que chaque variable lue par le code de l'application figure sur cette page.
 
 ### Rotation de la clé de chiffrement
 
