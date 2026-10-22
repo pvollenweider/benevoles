@@ -56,7 +56,7 @@ L'application empêche automatiquement de sélectionner deux créneaux qui se ch
 
 ## Voir qui est inscrit
 
-Si l'organisation l'a prévu pour l'événement, le bouton **Voir qui est inscrit**, à côté de **Frise** et **Liste**, montre qui est inscrit sur chaque créneau : le prénom et l'initiale du nom (par exemple « Aline M. ») des bénévoles confirmés qui l'ont accepté, et le nombre des autres, sans leur nom. Il est désactivé à l'ouverture de la page. Tu ne le vois que dans deux cas :
+Si l'organisation l'a prévu pour l'événement, l'interrupteur **Voir qui est inscrit**, à côté de **Frise** et **Liste**, montre qui est inscrit sur chaque créneau : le prénom et l'initiale du nom (par exemple « Aline M. ») des bénévoles confirmés qui l'ont accepté, et le nombre des autres, sans leur nom. Il est éteint à l'ouverture de la page ; touche-le pour l'allumer, une deuxième fois pour l'éteindre. Tu ne le vois que dans deux cas :
 
 - tu as une place confirmée sur l'événement : ouvre la page avec ton lien personnel, par exemple avec le lien **Voir qui est inscrit sur les autres créneaux** de [ta page personnelle](ma-page-personnelle.md#qui-est-inscrit), ou depuis le navigateur où tu l'as déjà ouverte ;
 - l'organisation t'a invité à l'événement : ouvre la page avec le lien de ton invitation, avant de t'inscrire.
@@ -65,7 +65,7 @@ Sinon, la page n'affiche aucun nom, seulement les places libres : c'est le cas p
 
 Dans la vue **Liste**, une ligne sous chaque créneau dit qui y est inscrit, par exemple « Sur ce créneau : Aline M., Luc D. et 2 autres bénévoles. », ou « Avec toi : … » sur un de tes créneaux, ou « 3 autres bénévoles, sans nom affiché ». Dans la vue **Frise**, les barres ne changent pas : sous le planning de chaque jour, une ligne montre qui est inscrit sur le dernier créneau que tu as touché, survolé ou atteint au clavier (« Touche, survole ou sélectionne au clavier un créneau pour voir qui est inscrit. La vue Liste affiche tous les noms. »). Au clavier, la frise ne permet d'atteindre que les créneaux que tu peux choisir ; la vue **Liste** donne tous les noms.
 
-![Page de l'événement avec le bouton « Voir qui est inscrit » activé, à côté de « Frise » et « Liste », sa phrase d'explication, la frise du jour, puis sous la frise la ligne du créneau survolé : son poste et ses heures, puis « Sur ce créneau : » suivi des prénoms et initiales des bénévoles qui l'acceptent et du nombre des autres](/doc-img/public-roster-switch.png)
+![Page de l'événement avec l'interrupteur « Voir qui est inscrit » allumé, à côté de « Frise » et « Liste », sa phrase d'explication, la frise du jour, puis sous la frise la ligne du créneau survolé : son poste et ses heures, puis « Sur ce créneau : » suivi des prénoms et initiales des bénévoles qui l'acceptent et du nombre des autres](/doc-img/public-roster-switch.png)
 
 En vidéo : [montrer aux bénévoles qui est inscrit](/videos/SHIFT_ROSTER_VISIBILITY#doc).
 

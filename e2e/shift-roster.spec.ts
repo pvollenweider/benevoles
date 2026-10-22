@@ -9,11 +9,11 @@ const ORG_ADMIN_PASSWORD = process.env.ORG_ADMIN_PASSWORD ?? "e2e-org-admin-pass
 
 /**
  * « Qui est inscrit » (#1068): on by default on a new event (the organisation's default), the
- * organiser's reminder shown; the sign-up form offers an optional, unticked box; a public
+ * organiser's short hint and reminder shown, the details behind « En savoir plus »; the sign-up form offers an optional, unticked box; a public
  * sign-up's acceptance waits for a confirmation from the personal page. Nobody anonymous sees the
  * switch, nor the embed; a confirmed volunteer sees their own shifts on their personal page and,
- * through its link, every shift on the event page behind « Voir qui est inscrit » (list and
- * frise); a member invited by email sees it too before signing up.
+ * through its link, every shift on the event page behind the « Voir qui est inscrit » switch (list
+ * and frise); a member invited by email sees it too before signing up.
  */
 
 let event: PublicEvent
@@ -57,16 +57,20 @@ test("on by default, sign up with the notice, confirm, seen on the event page by
   const admin = await browser.newPage()
   await login(admin)
   await admin.goto(`/admin/events/${event.eventId}/edit`)
-  const setting = admin.getByLabel("Permettre aux bénévoles confirmés et aux membres invités de voir qui est inscrit")
+  const setting = admin.getByLabel("Montrer aux bénévoles qui est inscrit")
   await waitForHydration(setting)
   await expect(setting).toBeChecked()
-  await expect(setting).toHaveAccessibleDescription(/Informez les bénévoles/)
+  await expect(setting).toHaveAccessibleDescription(/membres invités voient le prénom.*Informez vos bénévoles, y compris les personnes déjà inscrites/)
+  // The details are in the guide, at an existing heading (a new tab).
+  const more = admin.locator("#event-shift-roster-setting").getByRole("link", { name: /^En savoir plus/ })
+  await expect(more).toHaveAttribute("href", "/doc/creer-un-evenement#activer-qui-est-inscrit-sur-un-evenement-qui-a-deja-des-inscrits")
+  await expect(more).toHaveAttribute("target", "_blank")
 
   // 2. Anonymous visitor: no switch, no names.
   await page.goto(`/${event.slug}?org=default`)
   const select = page.getByRole("button", { name: /, Buvette[^:]* : sélectionner/ }).first()
   await waitForHydration(select)
-  await expect(page.getByRole("button", SWITCH)).toHaveCount(0)
+  await expect(page.getByRole("switch", SWITCH)).toHaveCount(0)
 
   // 3. A public sign-up: the optional box, unticked, separate from the required ones.
   await select.click()
@@ -104,22 +108,26 @@ test("on by default, sign up with the notice, confirm, seen on the event page by
   const aline = await alineContext.newPage()
   await aline.setExtraHTTPHeaders({ "x-forwarded-for": randomIp() })
   await openMyPage(aline, alineLink)
-  await expect(card(aline)).toContainText("Tu as demandé à l'inscription d'afficher ton nom")
-  const show = card(aline).getByRole("button", { name: "Afficher mon nom" })
-  await waitForHydration(show)
+  // Ticked at sign-up, not confirmed: the switch off, « À confirmer »; one tap confirms.
+  await expect(card(aline)).toContainText("À confirmer : tu l'as demandé à l'inscription")
+  const nameSwitch = card(aline).getByRole("switch", { name: "Afficher mon nom aux autres bénévoles" })
+  await waitForHydration(nameSwitch)
+  await expect(nameSwitch).toHaveAttribute("aria-checked", "false")
   expect(await seriousViolations(aline)).toEqual([])
-  await show.click()
-  const hide = card(aline).getByRole("button", { name: "Masquer mon nom" })
-  await expect(hide).toBeVisible()
-  await expect(hide).toBeFocused()
-  await expect(card(aline)).toContainText("Ton nom est affiché")
+  await nameSwitch.click()
+  await expect(nameSwitch).toHaveAttribute("aria-checked", "true")
+  await expect(nameSwitch).toBeFocused()
+  await expect(card(aline)).toContainText(/Visible : «\s*Aline\s+M\.\s*»/)
+  await expect(card(aline).getByRole("status")).toHaveText("Ton nom est maintenant affiché.")
+  await aline.setViewportSize({ width: 320, height: 800 })
+  expect(await aline.evaluate(() => document.documentElement.scrollWidth <= window.innerWidth)).toBe(true)
 
   // 6. Bruno follows « Voir qui est inscrit sur les autres créneaux »: the event page, switch on.
   await bruno.reload()
   await card(bruno).getByRole("link", { name: "Voir qui est inscrit sur les autres créneaux" }).click()
   await expect(bruno).toHaveURL(/inscrits=1/)
-  const brunoSwitch = bruno.getByRole("button", SWITCH)
-  await expect(brunoSwitch).toHaveAttribute("aria-pressed", "true")
+  const brunoSwitch = bruno.getByRole("switch", SWITCH)
+  await expect(brunoSwitch).toHaveAttribute("aria-checked", "true")
   await bruno.getByRole("button", { name: "Liste", exact: true }).click()
   const buvette = bruno.getByRole("button", { name: /^10h–12h · Buvette/ })
   await expect(buvette).toHaveAccessibleDescription("Sur ce créneau : Aline, initiale M.")
@@ -135,12 +143,12 @@ test("on by default, sign up with the notice, confirm, seen on the event page by
   expect(await bruno.evaluate(() => document.documentElement.scrollWidth <= window.innerWidth)).toBe(true)
   // Off: the names go.
   await brunoSwitch.click()
-  await expect(brunoSwitch).toHaveAttribute("aria-pressed", "false")
+  await expect(brunoSwitch).toHaveAttribute("aria-checked", "false")
   await expect(bruno.getByText(/Touche, survole ou sélectionne/)).toHaveCount(0)
   // The embed never offers it, even to a recognised volunteer.
   await bruno.goto(`/${event.slug}?org=default&embed=1`)
   await waitForHydration(bruno.getByRole("button", { name: /, Buvette[^:]* : sélectionner/ }).first())
-  await expect(bruno.getByRole("button", SWITCH)).toHaveCount(0)
+  await expect(bruno.getByRole("switch", SWITCH)).toHaveCount(0)
 
   // 7. A member invited by email sees it before signing up.
   const post = async (url: string, body: unknown) => {
@@ -159,7 +167,7 @@ test("on by default, sign up with the notice, confirm, seen on the event page by
   await guest.setExtraHTTPHeaders({ "x-forwarded-for": randomIp() })
   const url = new URL(inviteUrl!)
   await guest.goto(url.pathname + url.search)
-  const guestSwitch = guest.getByRole("button", SWITCH)
+  const guestSwitch = guest.getByRole("switch", SWITCH)
   await waitForHydration(guestSwitch)
   await guestSwitch.click()
   await guest.getByRole("button", { name: "Liste", exact: true }).click()
@@ -167,10 +175,11 @@ test("on by default, sign up with the notice, confirm, seen on the event page by
   await expect(guest.getByRole("button", { name: /^14h–16h · Caisse/ })).toHaveAccessibleDescription("Sur ce créneau : 1 autre bénévole, sans nom affiché.")
 
   // 8. Aline hides her name: gone for everyone.
-  await hide.click()
-  await expect(card(aline).getByRole("button", { name: "Afficher mon nom" })).toBeVisible()
+  await nameSwitch.click()
+  await expect(nameSwitch).toHaveAttribute("aria-checked", "false")
+  await expect(card(aline)).toContainText("Masqué")
   await guest.reload()
-  await guest.getByRole("button", SWITCH).click()
+  await guest.getByRole("switch", SWITCH).click()
   await expect(guest.getByRole("button", { name: /^10h–12h · Buvette/ })).toHaveAccessibleDescription("Sur ce créneau : 1 autre bénévole, sans nom affiché.")
   await guestContext.close()
   await alineContext.close()

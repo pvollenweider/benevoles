@@ -56,9 +56,11 @@ import {
 } from "@/lib/shift-roster"
 import {
   ROSTER_MINOR_TEXT, ROSTER_SIGNUP_HINT, ROSTER_SIGNUP_LABEL, ROSTER_SWITCH_EXPLAIN, ROSTER_SWITCH_FAILURE, ROSTER_SWITCH_LABEL,
-  ROSTER_SWITCH_LOADED, ROSTER_SWITCH_UNAVAILABLE,
+  ROSTER_SWITCH_LOADED, ROSTER_SWITCH_UNAVAILABLE, ROSTER_DOC_LINKS, ROSTER_DOC_TOPIC,
 } from "@/lib/shift-roster-text"
 import { RosterName } from "@/components/public/RosterName"
+import Switch from "@/components/public/Switch"
+import DocMoreLink from "@/components/DocMoreLink"
 import { readStored, removeStored, writeStored } from "@/lib/device-storage"
 import { NEW_TAB_HINT, takeReturnToSchedule } from "@/lib/embed"
 import { successPath } from "@/lib/registration-success"
@@ -951,9 +953,9 @@ export default function EventPageClient({ orgSlug, eventSlug, preview, initialEv
             )}
 
             {/* Frise or Liste (#808), once above every day; the pressed state says which is shown.
-                « Voir qui est inscrit » (#1068) beside it, a separate toggle, only for an identified
+                « Voir qui est inscrit » (#1068) beside it, a separate switch, only for an identified
                 visitor; its label never changes. */}
-            <div className="flex flex-wrap items-center gap-2">
+            <div className="flex flex-wrap items-center gap-x-4 gap-y-2">
             <div role="group" aria-label="Affichage des créneaux" className="inline-flex rounded-xl border border-gray-300 text-sm">
               {(["frise", "liste"] as const).map((view) => (
                 <button
@@ -968,15 +970,16 @@ export default function EventPageClient({ orgSlug, eventSlug, preview, initialEv
               ))}
             </div>
             {rosterUrl && (
-              <button
-                type="button"
-                aria-pressed={rosterOn}
-                aria-describedby={rosterOn ? "roster-switch-explain" : undefined}
-                onClick={() => { rosterPressed.current = true; setRosterOn((on) => !on); setRosterResult(null); setRosterStatus(""); setRosterFailure("") }}
-                className={`min-h-11 rounded-xl border border-gray-300 px-4 text-sm font-medium transition-colors focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-blue-600 forced-colors:aria-pressed:bg-[Highlight] ${rosterOn ? "bg-gray-900 text-white border-gray-900" : "text-gray-700 hover:bg-gray-50"}`}
+              // A switch (DESIGN.md §5), not a third view: an on/off display setting beside the
+              // group, its label constant, the whole line its 44 px target.
+              <Switch
+                checked={rosterOn}
+                describedBy={rosterOn ? "roster-switch-explain" : undefined}
+                onToggle={() => { rosterPressed.current = true; setRosterOn((on) => !on); setRosterResult(null); setRosterStatus(""); setRosterFailure("") }}
+                data-roster-switch
               >
                 {ROSTER_SWITCH_LABEL}
-              </button>
+              </Switch>
             )}
             </div>
             {rosterUrl && rosterOn && (
@@ -1386,6 +1389,8 @@ export default function EventPageClient({ orgSlug, eventSlug, preview, initialEv
                           })()}</span>
                         </label>
                         <p id="reg-roster-hint" className="pl-7 mt-1 text-xs text-gray-600">{ROSTER_SIGNUP_HINT}</p>
+                        {/* Outside the hint: the box's description must not read the link. */}
+                        <p className="pl-7 text-xs"><DocMoreLink href={ROSTER_DOC_LINKS.signup} about={ROSTER_DOC_TOPIC} /></p>
                       </>
                     ) : (
                       <p className="text-sm text-gray-600">{ROSTER_MINOR_TEXT}</p>

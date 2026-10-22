@@ -13,7 +13,8 @@ import { LISTED_FIELD_HELP, LISTED_FIELD_LABEL, UNLISTED_HINT, visibilityLabel }
 import { announce } from "@/lib/announce"
 import { type SaveState, formatSavedAt, saveErrorText, shouldAnnounceSaved, visibleSaveText } from "@/lib/event-autosave"
 import { DAY_CONTACT_NAME_MAX, DAY_CONTACT_PHONE_MAX } from "@/lib/day-contact"
-import { ROSTER_ENABLE_REMINDER, ROSTER_SETTING_HINT, ROSTER_SETTING_LABEL } from "@/lib/shift-roster-text"
+import { ROSTER_DOC_LINKS, ROSTER_DOC_TOPIC, ROSTER_ENABLE_REMINDER, ROSTER_SETTING_HINT, ROSTER_SETTING_LABEL } from "@/lib/shift-roster-text"
+import DocMoreLink from "@/components/DocMoreLink"
 import { CANCEL_DEADLINE_CREATE_ERROR, cancelDeadlineFormErrors, cancelDeadlinePayload, type CancelDeadlineForm } from "@/lib/cancel-deadline"
 import RequiredMark from "@/components/RequiredMark"
 
@@ -517,6 +518,8 @@ export default function EventForm({ initialData, createdHref, timeZone = "Europe
             <p id="event-shift-roster-hint" className="text-xs text-gray-600">{ROSTER_SETTING_HINT}</p>
             {/* The organiser's duty to inform, once on: a polite status, so that ticking the box says it. */}
             <p id="event-shift-roster-reminder" role="status" className={form.shiftRosterEnabled ? "mt-1 text-xs text-gray-800" : "sr-only"}>{form.shiftRosterEnabled ? ROSTER_ENABLE_REMINDER : ""}</p>
+            {/* The details are in the guide; outside the texts the box's description reads. */}
+            <p className="text-xs"><DocMoreLink href={ROSTER_DOC_LINKS.setting} about={ROSTER_DOC_TOPIC} /></p>
           </div>
         </div>
 

@@ -218,7 +218,8 @@ async function run() {
     // The required boxes and the optional one with its hint, all in the viewport.
     await top.evaluate((el) => window.scrollTo(0, el.getBoundingClientRect().top + window.scrollY - 120))
     const a = await top.boundingBox()
-    const b = await r.locator("#reg-roster-hint").boundingBox()
+    // The hint and its « En savoir plus » link under it.
+    const b = await r.locator("#reg-roster-hint + p").boundingBox()
     if (!a || !b) throw new Error("roster box not found")
     const x = Math.min(a.x, b.x) - 16
     await save(r, "public-roster-signup-box", { clip: { x, y: a.y - 16, width: Math.max(a.x + a.width, b.x + b.width) - x + 16, height: b.y + b.height - a.y + 32 } })
@@ -243,7 +244,7 @@ async function run() {
     await l.getByText(/Touche, survole ou sélectionne/).first().waitFor()
     await l.locator("[data-shift-id]").nth(1).hover()
     await l.waitForTimeout(300)
-    const top = await l.getByRole("button", { name: "Voir qui est inscrit" }).boundingBox()
+    const top = await l.getByRole("switch", { name: "Voir qui est inscrit" }).boundingBox()
     const day = await l.getByRole("region", { name: /^Planning du/ }).first().boundingBox()
     const line = await l.locator("[data-roster-detail]").first().boundingBox()
     if (!top || !day || !line) throw new Error("roster switch not found")

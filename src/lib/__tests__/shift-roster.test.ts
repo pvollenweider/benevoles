@@ -5,9 +5,9 @@ import {
   eventPageRosterViewer, inviteRosterAudience, noticeReaches, rosterAfterSignup, rosterEventHref, signupNoticeVersion,
 } from "../shift-roster"
 import {
-  ROSTER_SIGNUP_LABEL, rosterButtonLabel, rosterDisplayName, rosterSpokenName, rosterOthersText, rosterVisibleName,
+  ROSTER_SIGNUP_LABEL, rosterStateText, rosterChoiceText, ROSTER_DOC_LINKS, ROSTER_ORG_DEFAULT_HINT, rosterDisplayName, rosterSpokenName, rosterOthersText, rosterVisibleName,
   ROSTER_COUNT_NOTICE, ROSTER_EMPTY_TEXT, ROSTER_ENABLE_REMINDER, ROSTER_MINOR_TEXT, ROSTER_SETTING_HINT, ROSTER_SIGNUP_HINT,
-  viewerStateText, rosterSummary, ROSTER_PUBLISH_NOTE_ON, rosterDoneText,
+  rosterSummary, ROSTER_PUBLISH_NOTE_ON, ROSTER_PUBLISH_NOTE, rosterDoneText,
 } from "../shift-roster-text"
 
 // Shift roster between volunteers (#1068): pure visibility and format rules.
@@ -243,7 +243,7 @@ describe("signupRosterBox and spoken names", () => {
     expect(rosterVisibleName("Aline")).toBe("Aline")
     expect(rosterSpokenName("Léa F.")).toBe("Léa, initiale F")
     // Nor between the quotes and the name.
-    expect(viewerStateText("hidden", rosterVisibleName("Léa F."))).toContain("«\u00a0Léa\u00a0F.\u00a0»")
+    expect(rosterChoiceText("hidden", rosterVisibleName("Léa F."))).toContain("«\u00a0Léa\u00a0F.\u00a0»")
   })
   it("says the initial so that « M. » is not read « Monsieur »", () => {
     expect(rosterSpokenName("Aline M.")).toBe("Aline, initiale M")
@@ -264,15 +264,25 @@ describe("viewer state", () => {
     // An unknown text is shown to nobody: the page says hidden.
     expect(viewerState(at("visible", "2099-01-01"), false)).toBe("hidden")
   })
-  it("the button names the action", () => {
-    expect(rosterButtonLabel("visible")).toBe("Masquer mon nom")
-    expect(rosterButtonLabel("visible_confirmed")).toBe("Masquer mon nom")
-    expect(rosterButtonLabel("hidden")).toBe("Afficher mon nom")
-    expect(rosterButtonLabel("pending")).toBe("Afficher mon nom")
+  it("the switch's state is always written in words, with the viewer's display name when shown", () => {
+    expect(rosterStateText("visible", "Aline M.")).toBe("Visible : «\u00a0Aline M.\u00a0»")
+    expect(rosterStateText("visible_confirmed", "Aline M.")).toBe("Visible aux bénévoles confirmés : «\u00a0Aline M.\u00a0»")
+    expect(rosterStateText("visible", null)).toBe("Visible")
+    expect(rosterStateText("hidden", "Aline M.")).toBe("Masqué")
+    expect(rosterStateText("pending", "Aline M.")).toMatch(/^À confirmer : tu l'as demandé à l'inscription\./)
   })
-  it("the sentence quotes the viewer's own display name", () => {
-    expect(viewerStateText("visible", "Aline M.")).toContain("«\u00a0Aline M.\u00a0»")
-    expect(viewerStateText("pending", "Aline M.")).toContain("confirmé ici")
+  it("off or to confirm, the description says everything a first consent needs", () => {
+    for (const state of ["hidden", "pending"] as const) {
+      const text = rosterChoiceText(state, "Aline M.")
+      for (const part of ["les bénévoles confirmés et les membres invités par l'organisation", "«\u00a0Aline M.\u00a0»", "sur tes créneaux confirmés",
+        "même sans créneau commun avec toi", "jusqu'à la fin de l'événement", "pour choisir leurs créneaux", "facultatif, sans effet sur ton inscription", "masquer à tout moment"]) {
+        expect(text, `${state}: ${part}`).toContain(part)
+      }
+    }
+    // Shown under the first text: the narrower audience, until the current one is accepted.
+    expect(rosterChoiceText("visible_confirmed", "Aline M.")).not.toContain("membres invités")
+    expect(rosterChoiceText("visible", "Aline M.")).toContain("membres invités")
+    expect(rosterChoiceText("minor", null)).toContain("moins de 18 ans")
   })
 })
 
@@ -288,9 +298,8 @@ describe("count of the others", () => {
   it("volunteers and organisers are told the count needs no choice", () => {
     expect(ROSTER_SIGNUP_HINT).toContain(ROSTER_COUNT_NOTICE)
     expect(ROSTER_MINOR_TEXT).toContain(ROSTER_COUNT_NOTICE)
-    expect(ROSTER_SETTING_HINT).toContain("et le nombre des autres")
-    expect(ROSTER_SETTING_HINT).toContain("Jamais les visiteurs anonymes, les liens par groupe ni l'intégration à votre site")
-    expect(ROSTER_ENABLE_REMINDER).toContain("Informez aussi les personnes déjà inscrites")
+    expect(ROSTER_ENABLE_REMINDER).toContain("y compris les personnes déjà inscrites")
+    expect(ROSTER_ENABLE_REMINDER).toContain("comptée même si leur nom reste masqué")
     expect(ROSTER_EMPTY_TEXT).toBe("Aucun créneau confirmé pour l'instant.")
   })
 })
@@ -412,9 +421,9 @@ describe("a shift's roster in one sentence", () => {
     expect(rosterEventHref("https://club.benevol.app/fete")).toBe("https://club.benevol.app/fete?inscrits=1")
     expect(rosterEventHref("http://localhost:3000/fete?org=club")).toBe("http://localhost:3000/fete?org=club&inscrits=1")
   })
-  it("the publication note says it is on and where to turn it off; the done texts", () => {
+  it("the publication note says it is on and recalls the duty to inform; the done texts", () => {
     expect(ROSTER_PUBLISH_NOTE_ON).toContain("est activé")
-    expect(ROSTER_PUBLISH_NOTE_ON).toContain("désactiver")
+    expect(ROSTER_PUBLISH_NOTE_ON).toContain("prévenez vos bénévoles")
     expect(rosterDoneText("widen")).toContain("membres invités")
     expect(rosterDoneText("hide")).toBe("Ton nom est maintenant masqué.")
   })
@@ -444,5 +453,15 @@ describe("buildShiftRoster reads each registration a bounded number of times", (
     expect(many.out).toEqual(few.out)
     expect(many.reads).toBe(few.reads)
     expect(few.reads).toBeLessThanOrEqual(12 * 1000)
+  })
+})
+
+describe("the organisers' short texts (#1068)", () => {
+  it("one sentence each; the details are behind « En savoir plus »", () => {
+    expect(ROSTER_SETTING_HINT).toBe("Les bénévoles confirmés et les membres invités voient le prénom et l'initiale de ceux qui l'acceptent.")
+    expect(ROSTER_PUBLISH_NOTE_ON).toBe("« Qui est inscrit » est activé : prévenez vos bénévoles.")
+    expect(ROSTER_PUBLISH_NOTE).toContain("ne change rien à la publication")
+    expect(ROSTER_ORG_DEFAULT_HINT).toContain("créés ensuite")
+    for (const href of Object.values(ROSTER_DOC_LINKS)) expect(href).toMatch(/^\/doc\/[a-z-]+#[a-z-]+$/)
   })
 })
