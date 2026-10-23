@@ -8,6 +8,7 @@ import { getOrgContext } from "@/lib/auth-guard"
 import { loadOpenShiftsContext } from "@/lib/open-shifts-data"
 import { acceptsRegistrations } from "@/lib/registration-window"
 import OpenShiftsFinder from "@/components/admin/OpenShiftsFinder"
+import HelpLink from "@/components/admin/HelpLink"
 
 export const dynamic = "force-dynamic"
 export const metadata: Metadata = { title: "Chercher des bénévoles" }
@@ -36,6 +37,7 @@ export default async function OpenShiftsSearchPage({ params, searchParams }: { p
     <div className="space-y-6 max-w-3xl">
       <div>
         <h1 id="page-heading" tabIndex={-1} className="text-2xl font-bold text-gray-900 focus:outline-none">Chercher des bénévoles</h1>
+        <HelpLink route="/admin/events/[id]/staffing/search" />
         <p className="text-sm text-gray-700 mt-1">
           Choisissez les créneaux à compléter, puis cochez les membres à qui les proposer. Personne n&apos;est coché d&apos;avance et rien ne part sans votre confirmation. Chaque personne reçoit un seul email avec les créneaux qui la concernent et son lien pour s&apos;inscrire.
         </p>

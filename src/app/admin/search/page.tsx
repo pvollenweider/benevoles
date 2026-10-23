@@ -10,6 +10,7 @@ import { loadSearch } from "@/lib/admin-search-data"
 import { formatShortDate } from "@/lib/utils"
 import StatusBadge from "@/components/admin/StatusBadge"
 import { clockTime } from "@/lib/gantt-utils"
+import HelpLink from "@/components/admin/HelpLink"
 
 export const dynamic = "force-dynamic"
 type Search = { searchParams: Promise<{ q?: string | string[] }> }
@@ -60,9 +61,12 @@ export default async function SearchPage({ searchParams }: Search) {
 
   return (
     <div className="space-y-6">
-      <h1 id="page-heading" tabIndex={-1} className="text-2xl font-bold text-gray-900 focus:outline-none">
-        Recherche
-      </h1>
+      <div>
+        <h1 id="page-heading" tabIndex={-1} className="text-2xl font-bold text-gray-900 focus:outline-none">
+          Recherche
+        </h1>
+        <HelpLink route="/admin/search" />
+      </div>
 
       <form role="search" aria-label="Recherche dans l'organisation" action="/admin/search" className="flex flex-wrap items-end gap-2">
         <div className="flex-1 min-w-48">

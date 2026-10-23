@@ -61,6 +61,7 @@ import {
 import { RosterName } from "@/components/public/RosterName"
 import Switch from "@/components/public/Switch"
 import DocMoreLink from "@/components/DocMoreLink"
+import { SECTION_DOC_LINKS, docHref } from "@/lib/help-links"
 import { readStored, removeStored, writeStored } from "@/lib/device-storage"
 import { NEW_TAB_HINT, takeReturnToSchedule } from "@/lib/embed"
 import { successPath } from "@/lib/registration-success"
@@ -161,7 +162,8 @@ export default function EventPageClient({ orgSlug, eventSlug, preview, initialEv
   privacyHref?: string
   orgSlug: string
   eventSlug: string
-  preview?: { eventId: string; adminEventUrl: string }
+  /** `helpLink` (#1096): the preview page's « Aide : … », shown in the preview banner. */
+  preview?: { eventId: string; adminEventUrl: string; helpLink?: React.ReactNode }
   initialEvent?: EventData
   groupFilter?: GroupFilter
   embed?: boolean
@@ -770,7 +772,10 @@ export default function EventPageClient({ orgSlug, eventSlug, preview, initialEv
               <strong>Aperçu</strong> : la page telle que la verront les bénévoles
               {event.publicStatus === "published" ? "" : ", alors que l'événement n'est pas encore publié"}. Rien n'est enregistré ni envoyé.
             </p>
-            <Link href={preview.adminEventUrl} className="font-medium underline underline-offset-2">Retour à l&apos;événement</Link>
+            <div className="flex items-center gap-x-4 gap-y-1 flex-wrap">
+              <Link href={preview.adminEventUrl} className="font-medium underline underline-offset-2">Retour à l&apos;événement</Link>
+              {preview.helpLink}
+            </div>
           </div>
         </div>
       )}
@@ -982,6 +987,8 @@ export default function EventPageClient({ orgSlug, eventSlug, preview, initialEv
               </Switch>
             )}
             </div>
+            {/* The guide's page on reading the schedule (#1096); in a sentence, not beside the switches. */}
+            <p className="text-sm text-gray-700">Comment lire le planning et choisir tes créneaux : <DocMoreLink href={docHref(SECTION_DOC_LINKS.benevole.chooseShifts)} about="la lecture du planning" /></p>
             {rosterUrl && rosterOn && (
               <p id="roster-switch-explain" className="text-sm text-gray-700">
                 {ROSTER_SWITCH_EXPLAIN}
@@ -1206,6 +1213,8 @@ export default function EventPageClient({ orgSlug, eventSlug, preview, initialEv
                 />
               </div>
 
+              {/* Above the form (#1096): not a Tab stop between its fields. */}
+              <p className="mb-4 text-sm"><DocMoreLink href={docHref(SECTION_DOC_LINKS.benevole.signUp)} about="l'inscription" /></p>
               <form onSubmit={handleSubmit} className="space-y-4">
                 <p aria-hidden="true" className="text-xs text-gray-600">Les champs marqués d&apos;un astérisque (*) sont obligatoires.</p>
                 {inSession && (

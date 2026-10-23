@@ -5,6 +5,8 @@
 
 import { useId, useState } from "react"
 import { buildVolunteerCharter } from "@/lib/volunteer-charter"
+import DocMoreLink from "@/components/DocMoreLink"
+import { SECTION_DOC_LINKS, docHref } from "@/lib/help-links"
 
 export default function OrgCharterForm({
   initialCharter,
@@ -52,6 +54,7 @@ export default function OrgCharterForm({
         <p className="text-xs text-gray-500 mt-0.5">
           Ce texte est présenté aux bénévoles lors de l'inscription.
         </p>
+        <p className="text-sm"><DocMoreLink href={docHref(SECTION_DOC_LINKS.admin.charter)} about="la charte des bénévoles" /></p>
       </div>
 
       <div className="flex items-center justify-between bg-gray-50 rounded-xl px-4 py-3">

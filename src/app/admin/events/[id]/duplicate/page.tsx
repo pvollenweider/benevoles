@@ -6,6 +6,7 @@ import { notFound, redirect } from "next/navigation"
 import { getOrgContext } from "@/lib/auth-guard"
 import DuplicateEventForm from "@/components/admin/DuplicateEventForm"
 import { deletedPosteNames, leadersOutsideDeletedPostes } from "@/lib/leader-postes"
+import HelpLink from "@/components/admin/HelpLink"
 
 export const dynamic = "force-dynamic"
 export const metadata: Metadata = { title: "Dupliquer l'événement" }
@@ -33,6 +34,7 @@ export default async function DuplicateEventPage({ params }: { params: Promise<{
     <div className="space-y-6 max-w-2xl">
       <div>
         <h1 id="page-heading" tabIndex={-1} className="text-2xl font-bold text-gray-900 focus:outline-none">Dupliquer l&apos;événement</h1>
+        <HelpLink route="/admin/events/[id]/duplicate" />
         <p className="text-sm text-gray-700 mt-1">Repartez de « {event.title} » pour une nouvelle édition : choisissez les dates et ce qui suit. Les inscriptions ne sont jamais copiées.</p>
       </div>
       <DuplicateEventForm

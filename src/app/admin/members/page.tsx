@@ -12,6 +12,7 @@ import { countDuplicatePairs } from "@/lib/member-duplicates-data"
 import { loadMemberDeletionEligibilities } from "@/lib/member-deletion-data"
 import { MEMBER_DELETION_REASON } from "@/lib/member-deletion"
 import { memberRecordState } from "@/lib/member-record-state"
+import HelpLink from "@/components/admin/HelpLink"
 
 export const dynamic = "force-dynamic"
 
@@ -110,6 +111,7 @@ export default async function MembersPage({ searchParams }: { searchParams: Prom
       initialDeletedName={initialDeletedName}
       defaultHoursPeriod={defaultPeriod(new Date(), timeZone)}
       duplicatesCount={duplicatesCount}
+      helpLink={<HelpLink route="/admin/members" />}
     />
   )
 }

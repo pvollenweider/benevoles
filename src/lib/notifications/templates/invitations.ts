@@ -7,7 +7,8 @@
 
 import type { NotificationPayload } from "../types"
 import { eventPublicUrl } from "@/lib/urls"
-import { escapeHtml, btn, wrap, type RenderedEmail } from "./shared"
+import { docUrl, escapeHtml, btn, wrap, type RenderedEmail } from "./shared"
+import { SECTION_DOC_LINKS } from "@/lib/help-links"
 
 // ── Invitation d'un membre ───────────────────────────────────────────────────
 
@@ -46,6 +47,9 @@ export function renderMemberInvite(p: NotificationPayload): RenderedEmail {
   declineUrlObj.searchParams.set("decline", "1")
   const declineUrl = declineUrlObj.toString()
   const firstName = memberName.split(" ")[0]
+  // How signing up works (#1096): the guide's page, a text link under the button.
+  const guideUrl = docUrl(SECTION_DOC_LINKS.benevole.signUp)
+  const guideLabel = "Comment s'inscrire, pas à pas"
   const subject = `[${organizationName}] On a besoin de toi — ${eventTitle} 🙌`
 
   const text = [
@@ -58,6 +62,9 @@ export function renderMemberInvite(p: NotificationPayload): RenderedEmail {
     ``,
     `Consulte les missions disponibles et inscris-toi ici :`,
     inviteUrl,
+    ``,
+    `${guideLabel} :`,
+    guideUrl,
     ``,
     `Tu ne peux pas participer cette fois ? Indiquer que je ne suis pas disponible :`,
     declineUrl,
@@ -73,6 +80,7 @@ export function renderMemberInvite(p: NotificationPayload): RenderedEmail {
     ${message ? `<div style="background:#f3f4f6;padding:14px;border-radius:10px;white-space:pre-wrap;margin-bottom:1em">${escapeHtml(message)}</div>` : ""}
     <p style="color:#555">📅 ${escapeHtml(eventDate)}${eventLocation ? `<br>📍 ${escapeHtml(eventLocation)}` : ""}</p>
     <p style="margin-top:1.5em">${btn(inviteUrl, "Voir les missions et m'inscrire")}</p>
+    <p style="color:#555;font-size:0.9em"><a href="${guideUrl}" style="color:#1d4ed8;text-decoration:underline">${guideLabel}</a></p>
     <p style="color:#666;font-size:0.85em;margin-top:2em">Un grand merci d'avance, une grosse bise et à très vite !<br><strong>${escapeHtml(organizationName)}</strong></p>
     <p style="color:#666;font-size:0.8em">Tu ne peux pas participer cette fois ? <a href="${declineUrl}" style="color:#2563eb">Indiquer que je ne suis pas disponible</a>.</p>
   `, preheader)

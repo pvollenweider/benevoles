@@ -9,6 +9,8 @@ import { useSubmit } from "@/lib/use-submit"
 import FormStatus from "@/components/FormStatus"
 import { ORGANIZER_ROLE, OWNER_ROLE, ROLE_LABEL, type OrgRole } from "@/lib/permissions"
 import { withInvitedAdmin } from "@/lib/admin-invitation"
+import DocMoreLink from "@/components/DocMoreLink"
+import { SECTION_DOC_LINKS, docHref } from "@/lib/help-links"
 
 const ROLE_HELP: Record<OrgRole, string> = {
   admin: "Tous les droits, dont l'équipe d'administration et les réglages de l'organisation.",
@@ -139,6 +141,7 @@ export default function AdminsManager({
             <span aria-hidden="true">+ </span>Inviter
           </button>}
         </div>
+        <p className="px-4 pt-2 text-sm"><DocMoreLink href={docHref(SECTION_DOC_LINKS.admin.adminTeam)} about="l'équipe admin" /></p>
         {!canManage && (
           <p className="px-4 py-2 border-b border-gray-100 text-xs text-gray-700">
             Votre rôle : organisateur. Seuls les propriétaires invitent, retirent ou changent le rôle des administrateurs.

@@ -5,6 +5,9 @@ import { belowMinimumSentence, staffingHeadline, staffingSummary } from "@/lib/s
 import MilestonesSection from "@/components/admin/MilestonesSection"
 import EventLifecycleBar from "@/components/admin/EventLifecycleBar"
 import ReviewChecklist from "@/components/admin/ReviewChecklist"
+import HelpLink from "@/components/admin/HelpLink"
+import DocMoreLink from "@/components/DocMoreLink"
+import { SECTION_DOC_LINKS, docHref } from "@/lib/help-links"
 import { orgTimeZone } from "@/lib/time-zone"
 import { eligibleOwnerWhere } from "@/lib/milestones"
 import { LIVE_STATUSES, OCCUPYING_STATUSES } from "@/lib/registration-capacity"
@@ -108,6 +111,8 @@ export default async function AdminEventPage({ params }: { params: Promise<{ id:
 
   return (
     <div className="space-y-8">
+      {/* The event's title (h1) is in the layout's header; the help of this tab comes first here. */}
+      <HelpLink route="/admin/events/[id]" />
       <section aria-labelledby="overview-staffing" className={sectionClass}>
         <h2 id="overview-staffing" className={h2Class}>Où manque-t-il du monde ?</h2>
         <p className="text-sm text-gray-800">
@@ -178,6 +183,7 @@ export default async function AdminEventPage({ params }: { params: Promise<{ id:
 
       <section aria-labelledby="jalons" className={sectionClass}>
         <h2 id="jalons" tabIndex={-1} className={`${h2Class} focus:outline-none scroll-mt-4`}>Jalons</h2>
+        <p className="text-sm"><DocMoreLink href={docHref(SECTION_DOC_LINKS.admin.milestones)} about="les jalons" /></p>
         <MilestonesSection
           eventId={event.id}
           initialMilestones={event.milestones.map((m) => ({

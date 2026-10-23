@@ -10,12 +10,21 @@ import { orgBaseUrl } from "@/lib/urls"
 import { onSiteContact, shiftInfoLines, telHref, type ShiftInfo, type ShiftInfoLine } from "../../shift-info"
 import { MAP_LINK_EMAIL_LABEL } from "../../map-link"
 import { siteDomain, siteName } from "@/lib/site"
+import { docHref, type AdminHelpTarget } from "@/lib/help-links"
 
 export const BASE_URL = (process.env.NEXT_PUBLIC_APP_URL ?? "http://localhost:3000").replace(/\/$/, "")
 
 export function myPageUrl(orgSlug: string | undefined, editToken: string): string {
   const base = orgSlug ? orgBaseUrl(orgSlug) : BASE_URL
   return `${base}/my/${editToken}`
+}
+
+/**
+ * A page of the documentation, absolute (#1096): /doc is served by the app's own domain, the one
+ * the emails' admin links use too.
+ */
+export function docUrl(target: AdminHelpTarget): string {
+  return `${BASE_URL}${docHref(target)}`
 }
 
 export function leaderPageUrl(orgSlug: string | undefined, token: string): string {

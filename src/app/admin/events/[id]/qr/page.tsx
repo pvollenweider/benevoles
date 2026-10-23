@@ -3,6 +3,7 @@ import { notFound, redirect } from "next/navigation"
 import { getOrgContext } from "@/lib/auth-guard"
 import { eventPublicUrl } from "@/lib/urls"
 import QrPrintView from "@/components/admin/QrPrintView"
+import HelpLink from "@/components/admin/HelpLink"
 
 export const dynamic = "force-dynamic"
 export const metadata: Metadata = { title: "QR code" }
@@ -34,6 +35,7 @@ export default async function EventQrPage({
       startDate={event.startDate.toISOString()}
       endDate={event.endDate.toISOString()}
       publicUrl={publicUrl}
+      helpLink={<HelpLink route="/admin/events/[id]/qr" />}
     />
   )
 }

@@ -5,6 +5,7 @@ import OnboardingChecklist from "@/components/admin/OnboardingChecklist"
 import { loadOnboarding } from "@/lib/onboarding-data"
 import AttentionList from "@/components/admin/AttentionList"
 import { loadAttention } from "@/lib/attention-data"
+import HelpLink from "@/components/admin/HelpLink"
 
 export const dynamic = "force-dynamic"
 
@@ -62,7 +63,10 @@ export default async function DashboardPage() {
 
   return (
     <div className="space-y-8">
-      <h1 id="page-heading" tabIndex={-1} className="text-2xl font-bold text-gray-900 focus:outline-none">Tableau de bord</h1>
+      <div>
+        <h1 id="page-heading" tabIndex={-1} className="text-2xl font-bold text-gray-900 focus:outline-none">Tableau de bord</h1>
+        <HelpLink route="/admin/dashboard" />
+      </div>
       {onboarding && <OnboardingChecklist steps={onboarding} viewerRole={ctx.session.user?.role} />}
 
       <AttentionList items={attention} />
