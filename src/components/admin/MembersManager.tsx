@@ -4,7 +4,7 @@
 // SPDX-License-Identifier: AGPL-3.0-only
 
 import Link from "next/link"
-import { useEffect, useLayoutEffect, useMemo, useRef, useState, useTransition } from "react"
+import { useEffect, useId, useLayoutEffect, useMemo, useRef, useState, useTransition } from "react"
 import { deactivateMemberRecap, deleteMemberRecap } from "@/lib/action-recap"
 import ConfirmActionModal from "@/components/admin/ConfirmActionModal"
 import { useRouter } from "next/navigation"
@@ -20,6 +20,8 @@ import { availabilityLabel, hasAvailability } from "@/lib/availability"
 import { outcomeClass } from "@/lib/status-message"
 import { ERASED_ROW, formatRecordDay, mergedRowSentence, recordDisplayName, recordSubject } from "@/lib/member-record-state"
 import MergedSentenceView from "./members/MergedSentenceView"
+import { useHidesColumns } from "./members/useHidesColumns"
+import { TABLE_SCROLL_HINT } from "@/lib/table-overflow"
 
 type Props = {
   initialMembers: Member[]
@@ -85,6 +87,11 @@ export default function MembersManager({ initialMembers, allTags, initialSearch,
     ),
     [members, search, tagFilter, showInactive, addressToVerify, showArchived, sortCol, sortDir],
   )
+
+  // #1102: a visible cue, linked to the scroll region, only while the table is wider than it.
+  const tableRegionRef = useRef<HTMLDivElement>(null)
+  const scrollHintId = useId()
+  const tableHidesColumns = useHidesColumns(tableRegionRef, [filtered])
 
   const [resultAnnouncement, setResultAnnouncement] = useState("")
   // Skips the very first run (mount): nothing changed yet, nothing to announce.
@@ -308,7 +315,9 @@ export default function MembersManager({ initialMembers, allTags, initialSearch,
   }
 
   return (
-    <div className="space-y-5">
+    // data-admin-wide (#1102): the admin <main> widens to max-w-7xl for this data-heavy list
+    // (src/app/admin/layout.tsx); the top bar keeps its width.
+    <div data-admin-wide="" className="space-y-5">
       {pendingDeactivate && (
         <ConfirmActionModal
           recap={deactivateMemberRecap(pendingDeactivate.name)}
@@ -513,9 +522,15 @@ export default function MembersManager({ initialMembers, allTags, initialSearch,
         {/* overflow-x-auto, not overflow-hidden (#557): on a narrow screen the table scrolls in its
             own region, never the page. tabIndex/role/aria-label: the scroll region itself is
             reachable and named for keyboard and screen-reader users (same pattern as the outbox
-            table, settings/notifications). min-w-[56rem], not 64rem (#927): the table fits the
-            admin column at 1280 px, its row actions wrapping instead of running past the edge. */}
-        <div role="region" aria-label="Liste des membres" tabIndex={0} className="bg-white border border-gray-200 rounded-xl overflow-x-auto focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-blue-600">
+            table, settings/notifications). The page is wider for this list (data-admin-wide,
+            #1102), so the row actions stay on one line (compact rows) instead of wrapping (#927);
+            when the table is still wider than the region, the cue above says it scrolls and is
+            the region's description. `relative`: the absolutely positioned sr-only spans of the
+            action names stay inside the scroll container instead of widening the page. */}
+        {tableHidesColumns && (
+          <p id={scrollHintId} className="max-w-[65ch] text-sm text-gray-600">{TABLE_SCROLL_HINT}</p>
+        )}
+        <div ref={tableRegionRef} role="region" aria-label="Liste des membres" aria-describedby={tableHidesColumns ? scrollHintId : undefined} tabIndex={0} className="relative bg-white border border-gray-200 rounded-xl overflow-x-auto focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-blue-600">
           <table aria-label="Liste des membres" className="w-full text-sm min-w-[56rem]">
             <thead className="bg-gray-50 text-xs text-gray-500">
               <tr>
@@ -556,9 +571,10 @@ export default function MembersManager({ initialMembers, allTags, initialSearch,
                     )}
                   </td>
                   {!archived && <td className="px-4 py-3 font-medium text-gray-900">{m.lastName}</td>}
-                  <td className="px-4 py-3 text-gray-600">
-                    {m.email && <div className="text-xs">{m.email}</div>}
-                    {m.phone && <div className="text-xs text-gray-500">{m.phone}</div>}
+                  <td className="px-4 py-3 text-gray-600 min-w-[12rem]">
+                    {/* A long address wraps anywhere rather than widening the table (#1102), in a column never narrower than 12rem (most addresses on one line); a phone number never breaks between its digit groups. */}
+                    {m.email && <div className="text-xs [overflow-wrap:anywhere]">{m.email}</div>}
+                    {m.phone && <div className="text-xs text-gray-500 whitespace-nowrap">{m.phone}</div>}
                     {!m.email && !m.phone && <span className="text-xs text-gray-500">—</span>}
                     {hasAvailability(m) && <div className="text-xs text-gray-700 mt-0.5"><span className="sr-only">Disponible : </span><span aria-hidden="true">🕒 </span>{availabilityLabel(m)}</div>}
                     {m.addressStatus.kind !== "ok" && (
@@ -577,7 +593,7 @@ export default function MembersManager({ initialMembers, allTags, initialSearch,
                   <td className="px-4 py-3">
                     <div className="flex flex-wrap gap-1">
                       {m.tags.map((t) => (
-                        <span key={t} className="text-xs bg-gray-100 text-gray-700 px-2 py-0.5 rounded-full">
+                        <span key={t} className="text-xs bg-gray-100 text-gray-700 px-2 py-0.5 rounded-full whitespace-nowrap">
                           {t}
                         </span>
                       ))}
@@ -602,8 +618,8 @@ export default function MembersManager({ initialMembers, allTags, initialSearch,
                     )}
                   </td>
                   <td className="px-4 py-3">
-                    {/* min-h-11 sm:min-h-6 (44 px on a phone, 24 px from sm, #557 axe target-size): the hit area meets the minimum regardless of the small label text. A wrapping flex row with a gap (#927), not nowrap inline text: the actions may take two lines when the table is narrow, each keeping its own box, never overlapping. */}
-                    <div className="flex flex-wrap justify-end gap-1">
+                    {/* min-h-11 sm:min-h-6 (44 px on a phone, 24 px from sm, #557 axe target-size): the hit area meets the minimum regardless of the small label text. One line (#1102): the wider page leaves room for them, and stacked actions made every row three lines tall; each keeps its own box and the gap, and a table still too wide scrolls in its region. */}
+                    <div className="flex flex-nowrap justify-end gap-1 whitespace-nowrap">
                       <Link
                         href={`/admin/members/${m.id}`}
                         className="inline-flex items-center justify-center min-h-11 sm:min-h-6 px-1.5 text-xs text-gray-700 hover:text-blue-700 underline underline-offset-2 rounded focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-blue-600"
