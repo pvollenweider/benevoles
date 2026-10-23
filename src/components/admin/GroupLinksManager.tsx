@@ -338,7 +338,7 @@ function GroupLinkForm({ eventId, roles, link, onSaved, onCancel }: {
                 aria-invalid={rolesInvalid}
                 // The focused box carries the message too: VoiceOver does not read the fieldset's.
                 aria-describedby={i === 0 && rolesInvalid ? errorId : undefined}
-                className="h-4 w-4 rounded border-gray-400"
+                className="h-4 w-4 rounded border-gray-500"
               />
               {role}
             </label>
@@ -352,7 +352,7 @@ function GroupLinkForm({ eventId, roles, link, onSaved, onCancel }: {
             checked={values.hideFull}
             onChange={(e) => setValues((v) => ({ ...v, hideFull: e.target.checked }))}
             aria-describedby={`${id}-full-hint`}
-            className="h-4 w-4 rounded border-gray-400"
+            className="h-4 w-4 rounded border-gray-500"
           />
           Masquer les créneaux complets
         </label>

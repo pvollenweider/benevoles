@@ -8,7 +8,7 @@ import Link from "next/link"
 import { useSubmit } from "@/lib/use-submit"
 import FormStatus from "@/components/FormStatus"
 
-const inputClass = "w-full border border-gray-300 rounded-xl px-3 py-3 text-sm focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-blue-600"
+const inputClass = "w-full border border-gray-500 rounded-xl px-3 py-3 text-sm focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-blue-600"
 
 export default function ForgotPasswordPage() {
   const id = useId()

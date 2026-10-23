@@ -367,7 +367,7 @@ export default function OrgDetail({ org, cumulative, inactivity, limitHits, rece
             rows={3}
             value={suspensionReason}
             onChange={(e) => setSuspensionReason(e.target.value)}
-            className="mt-1 w-full rounded-xl border border-gray-300 px-3 py-2 text-sm text-gray-900 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-blue-600"
+            className="mt-1 w-full rounded-xl border border-gray-500 px-3 py-2 text-sm text-gray-900 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-blue-600"
           />
           <p id="suspension-reason-error" role="alert" className="text-sm text-red-800 mt-1">{reasonError}</p>
         </ConfirmActionModal>
@@ -459,7 +459,7 @@ export default function OrgDetail({ org, cumulative, inactivity, limitHits, rece
               minLength={2}
               maxLength={100}
               required
-              className="flex-1 border border-gray-200 rounded-lg px-3 py-1.5 text-sm focus:outline-hidden focus:ring-2 focus:ring-blue-500"
+              className="flex-1 border border-gray-500 rounded-lg px-3 py-1.5 text-sm focus:outline-hidden focus:ring-2 focus:ring-blue-500"
             />
             <button
               type="submit"
@@ -484,7 +484,7 @@ export default function OrgDetail({ org, cumulative, inactivity, limitHits, rece
               maxLength={40}
               pattern="^[a-z0-9]([a-z0-9-]*[a-z0-9])?$"
               required
-              className="flex-1 border border-gray-200 rounded-lg px-3 py-1.5 text-sm font-mono focus:outline-hidden focus:ring-2 focus:ring-blue-500"
+              className="flex-1 border border-gray-500 rounded-lg px-3 py-1.5 text-sm font-mono focus:outline-hidden focus:ring-2 focus:ring-blue-500"
             />
             <button
               type="submit"
@@ -552,7 +552,7 @@ export default function OrgDetail({ org, cumulative, inactivity, limitHits, rece
                   readOnly
                   aria-labelledby="resend-link-title"
                   value={resend.link}
-                  className="w-full font-mono text-xs bg-white border border-blue-200 rounded-lg px-3 py-2 text-blue-900 select-all"
+                  className="w-full font-mono text-xs bg-white border border-gray-500 rounded-lg px-3 py-2 text-blue-900 select-all"
                   onClick={(e) => (e.target as HTMLInputElement).select()}
                 />
               </div>

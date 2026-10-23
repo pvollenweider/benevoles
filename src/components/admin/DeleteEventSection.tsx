@@ -154,7 +154,7 @@ export default function DeleteEventSection({ eventId, title, counts, exportUrl }
               spellCheck={false}
               aria-describedby={hintId}
               disabled={pending}
-              className="mt-1 w-full border border-gray-400 rounded-lg px-3 py-2 text-sm"
+              className="mt-1 w-full border border-gray-500 rounded-lg px-3 py-2 text-sm"
             />
             <p id={hintId} role="status" className={`mt-1 text-sm ${matches ? "text-green-800 font-medium" : "text-gray-700"}`}>
               {matches

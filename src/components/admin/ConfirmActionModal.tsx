@@ -103,7 +103,7 @@ export default function ConfirmActionModal({ recap, busy, onConfirm, onCancel, e
             spellCheck={false}
             aria-invalid={challengeError ? true : undefined}
             aria-describedby={`${id}-error`}
-            className="w-full border border-gray-300 rounded-lg px-3 py-1.5 text-sm font-mono focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-blue-600"
+            className="w-full border border-gray-500 rounded-lg px-3 py-1.5 text-sm font-mono focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-blue-600"
           />
         </div>
       )}

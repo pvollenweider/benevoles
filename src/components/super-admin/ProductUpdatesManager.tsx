@@ -122,7 +122,7 @@ export default function ProductUpdatesManager({
               onChange={(e) => setSubject(e.target.value)}
               maxLength={150}
               placeholder="Nouveautés de septembre, ou toute autre communication"
-              className="w-full border border-gray-200 rounded-lg px-3 py-1.5 text-sm"
+              className="w-full border border-gray-500 rounded-lg px-3 py-1.5 text-sm"
             />
           </div>
           <div>
@@ -136,7 +136,7 @@ export default function ProductUpdatesManager({
               onChange={(e) => setContent(e.target.value)}
               rows={12}
               maxLength={10000}
-              className="w-full border border-gray-200 rounded-lg px-3 py-1.5 text-sm font-mono"
+              className="w-full border border-gray-500 rounded-lg px-3 py-1.5 text-sm font-mono"
             />
           </div>
           <p role="alert" className={error ? "text-sm text-red-800 bg-red-50 border border-red-200 rounded-lg px-3 py-2" : "sr-only"}>{error ?? ""}</p>
@@ -151,7 +151,7 @@ export default function ProductUpdatesManager({
               onChange={(e) => setTestEmail(e.target.value)}
               placeholder="prenom@example.com"
               maxLength={255}
-              className="w-full border border-gray-200 rounded-lg px-3 py-1.5 text-sm"
+              className="w-full border border-gray-500 rounded-lg px-3 py-1.5 text-sm"
             />
           </div>
           <div className="flex justify-end gap-2 pt-1">

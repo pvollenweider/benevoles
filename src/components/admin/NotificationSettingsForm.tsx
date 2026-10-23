@@ -80,7 +80,7 @@ export default function NotificationSettingsForm({ initialSettings, initialReply
   const toggle = (key: ReminderKey) => setSettings((s) => ({ ...s, reminders: { ...s.reminders, [key]: !s.reminders[key] } }))
   // shrink-0 (#928): beside a long help text, a flex item shrank the checkbox below 16 px, out of
   // line with its siblings (« Prévenir en cas de désistement »).
-  const checkboxClass = "mt-0.5 h-4 w-4 shrink-0 rounded border-gray-300 text-blue-600"
+  const checkboxClass = "mt-0.5 h-4 w-4 shrink-0 rounded border-gray-500 text-blue-600"
   const testDisabled = testing || !adminEmail
 
   return (
@@ -140,7 +140,7 @@ export default function NotificationSettingsForm({ initialSettings, initialReply
           onChange={(e) => { setReplyTo(e.target.value); setFieldError(null) }}
           aria-describedby={fieldError ? `${id}-replyto-help ${id}-replyto-error` : `${id}-replyto-help`}
           aria-invalid={fieldError ? true : undefined}
-          className="w-full border border-gray-300 rounded-xl px-3 py-2 text-sm focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-blue-600"
+          className="w-full border border-gray-500 rounded-xl px-3 py-2 text-sm focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-blue-600"
         />
         <p id={`${id}-replyto-help`} className="mt-1 text-xs text-gray-600">
           Quand un bénévole répond à un email de l&apos;application, sa réponse arrive ici, par exemple contact@votre-association.ch. Laissez vide pour utiliser l&apos;adresse par défaut de la plateforme. Cette adresse figure aussi sur la page personnelle des bénévoles.

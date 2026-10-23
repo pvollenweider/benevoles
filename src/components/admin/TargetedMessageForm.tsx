@@ -349,7 +349,7 @@ export default function TargetedMessageForm({ eventId, roles, shifts, initialAud
       </div>
 
       <div className="flex items-start gap-2">
-        <input id={`${id}-push`} type="checkbox" checked={push} onChange={(e) => setPush(e.target.checked)} aria-describedby={`${id}-push-hint`} className="mt-0.5 h-4 w-4 rounded border-gray-300 text-blue-600 focus:ring-2 focus:ring-blue-500" />
+        <input id={`${id}-push`} type="checkbox" checked={push} onChange={(e) => setPush(e.target.checked)} aria-describedby={`${id}-push-hint`} className="mt-0.5 h-4 w-4 rounded border-gray-500 text-blue-600 focus:ring-2 focus:ring-blue-500" />
         <div>
           <label htmlFor={`${id}-push`} className="text-sm font-medium text-gray-800">Envoyer aussi une notification (téléphone ou ordinateur)</label>
           <p id={`${id}-push-hint`} className="text-xs text-gray-600 mt-0.5">

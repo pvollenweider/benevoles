@@ -280,7 +280,7 @@ export default function QuestionsEditor({ eventId, initialQuestions, roles = [] 
             </fieldset>
           )}
           <div className="flex items-center gap-2">
-            <input id={`${id}-required`} type="checkbox" checked={draft.required} onChange={(e) => setDraft((d) => ({ ...d, required: e.target.checked }))} className="h-4 w-4 rounded border-gray-300" />
+            <input id={`${id}-required`} type="checkbox" checked={draft.required} onChange={(e) => setDraft((d) => ({ ...d, required: e.target.checked }))} className="h-4 w-4 rounded border-gray-500" />
             <label htmlFor={`${id}-required`} className="text-sm text-gray-800">Réponse obligatoire</label>
           </div>
           {hasFollowUps ? (
@@ -324,7 +324,7 @@ export default function QuestionsEditor({ eventId, initialQuestions, roles = [] 
                           onChange={(e) => setDraft((d) => ({ ...d, showIf: e.target.checked ? [...d.showIf, c] : d.showIf.filter((v) => v !== c) }))}
                           aria-invalid={editor.isInvalid("showif")}
                           aria-describedby={editor.invalidField === "showif" ? `${id}-editor-error` : undefined}
-                          className="h-4 w-4 rounded border-gray-300"
+                          className="h-4 w-4 rounded border-gray-500"
                         />
                         {c}
                       </label>

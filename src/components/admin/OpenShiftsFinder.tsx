@@ -179,7 +179,7 @@ export default function OpenShiftsFinder({ eventId, shifts, eventShifts, members
                 checked={shiftIds.has(s.id)}
                 onChange={() => setShiftIds((prev) => toggle(prev, s.id))}
                 aria-describedby={`${id}-shift-${s.id}-detail`}
-                className="mt-0.5 h-6 w-6 shrink-0 rounded border-gray-300 text-blue-600 focus:ring-2 focus:ring-blue-500"
+                className="mt-0.5 h-6 w-6 shrink-0 rounded border-gray-500 text-blue-600 focus:ring-2 focus:ring-blue-500"
               />
               <div className="min-w-0 text-sm">
                 <label htmlFor={`${id}-shift-${s.id}`} className="font-medium text-gray-900">{shiftName(s)}, {shiftDay(s.date, "short")}, {shiftHours(s)}</label>
@@ -218,7 +218,7 @@ export default function OpenShiftsFinder({ eventId, shifts, eventShifts, members
             </div>
             {anyDeclined && (
               <div className="flex items-start gap-2">
-                <input id={`${id}-declined`} type="checkbox" checked={includeDeclined} onChange={(e) => setIncludeDeclined(e.target.checked)} className="mt-0.5 h-6 w-6 shrink-0 rounded border-gray-300 text-blue-600 focus:ring-2 focus:ring-blue-500" />
+                <input id={`${id}-declined`} type="checkbox" checked={includeDeclined} onChange={(e) => setIncludeDeclined(e.target.checked)} className="mt-0.5 h-6 w-6 shrink-0 rounded border-gray-500 text-blue-600 focus:ring-2 focus:ring-blue-500" />
                 <label htmlFor={`${id}-declined`} className="text-sm text-gray-800">Afficher aussi les membres qui ont répondu « pas disponible »</label>
               </div>
             )}
@@ -249,7 +249,7 @@ export default function OpenShiftsFinder({ eventId, shifts, eventShifts, members
                         aria-disabled={!c.selectable || undefined}
                         onChange={() => { if (c.selectable) setSelected((prev) => toggle(prev, c.member.id)) }}
                         aria-describedby={`${cb}-reasons`}
-                        className="mt-0.5 h-6 w-6 shrink-0 rounded border-gray-300 text-blue-600 focus:ring-2 focus:ring-blue-500 aria-disabled:opacity-50 aria-disabled:cursor-not-allowed"
+                        className="mt-0.5 h-6 w-6 shrink-0 rounded border-gray-500 text-blue-600 focus:ring-2 focus:ring-blue-500 aria-disabled:opacity-50 aria-disabled:cursor-not-allowed"
                       />
                       <div className="min-w-0 text-sm">
                         <div className="flex flex-wrap items-center gap-x-2 gap-y-1">

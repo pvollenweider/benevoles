@@ -167,7 +167,7 @@ export default function AdminsManager({
                   onChange={(e) => setForm((f) => ({ ...f, name: e.target.value }))}
                   aria-invalid={isInvalid("name")}
                   aria-describedby={error ? `${id}-error` : undefined}
-                  className="w-full border border-gray-300 rounded-lg px-3 py-2 text-sm focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-blue-600"
+                  className="w-full border border-gray-500 rounded-lg px-3 py-2 text-sm focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-blue-600"
                   autoComplete="off"
                 />
               </div>
@@ -181,7 +181,7 @@ export default function AdminsManager({
                   onChange={(e) => setForm((f) => ({ ...f, email: e.target.value }))}
                   aria-invalid={isInvalid("email")}
                   aria-describedby={error ? `${id}-error` : undefined}
-                  className="w-full border border-gray-300 rounded-lg px-3 py-2 text-sm focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-blue-600"
+                  className="w-full border border-gray-500 rounded-lg px-3 py-2 text-sm focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-blue-600"
                   autoComplete="off"
                 />
               </div>
@@ -255,7 +255,7 @@ export default function AdminsManager({
                           onChange={(e) => { setRoleErrorFor(null); setDraft((d) => ({ ...d, [admin.id]: e.target.value as OrgRole })) }}
                           aria-invalid={roleErrorFor === admin.id && error ? true : undefined}
                           aria-describedby={roleErrorFor === admin.id && error ? `${id}-error` : undefined}
-                          className="text-xs border border-gray-300 rounded-lg px-2 py-1 bg-white focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-blue-600"
+                          className="text-xs border border-gray-500 rounded-lg px-2 py-1 bg-white focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-blue-600"
                         >
                           <option value={OWNER_ROLE}>{ROLE_LABEL.admin}</option>
                           <option value={ORGANIZER_ROLE}>{ROLE_LABEL.organizer}</option>

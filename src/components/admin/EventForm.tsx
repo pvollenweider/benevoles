@@ -97,7 +97,7 @@ function eventBody(form: EventFormData) {
 }
 
 const emptyShow: Show = { name: "", date: "", startTime: "", endTime: "" }
-const inputCls = "w-full border border-gray-300 rounded-xl px-3 py-2.5 text-sm focus:outline-hidden focus:ring-2 focus:ring-blue-500"
+const inputCls = "w-full border border-gray-500 rounded-xl px-3 py-2.5 text-sm focus:outline-hidden focus:ring-2 focus:ring-blue-500"
 
 export default function EventForm({ initialData, createdHref, timeZone = "Europe/Zurich" }: Props) {
   const router = useRouter()
@@ -623,7 +623,7 @@ export default function EventForm({ initialData, createdHref, timeZone = "Europe
               aria-describedby="event-reminders-hint"
               checked={form.remindersEnabled}
               onChange={(e) => setForm((f) => ({ ...f, remindersEnabled: e.target.checked }))}
-              className="mt-1 h-4 w-4 rounded border-gray-300 text-blue-600 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-blue-600"
+              className="mt-1 h-4 w-4 rounded border-gray-500 text-blue-600 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-blue-600"
             />
             <div>
               <label htmlFor="event-reminders-enabled" className="text-sm font-medium text-gray-700">Rappels automatiques</label>
@@ -651,7 +651,7 @@ export default function EventForm({ initialData, createdHref, timeZone = "Europe
                 checked={form.isListed}
                 aria-describedby={form.publicStatus === "published" && !form.isListed ? "event-listed-help event-listed-warning" : "event-listed-help"}
                 onChange={(e) => setForm((f) => ({ ...f, isListed: e.target.checked }))}
-                className="mt-1 h-4 w-4 rounded border-gray-300 text-blue-600 focus:ring-2 focus:ring-blue-500"
+                className="mt-1 h-4 w-4 rounded border-gray-500 text-blue-600 focus:ring-2 focus:ring-blue-500"
               />
               <div>
                 <label htmlFor="event-listed" className="text-sm font-medium text-gray-700">{LISTED_FIELD_LABEL}</label>
@@ -677,7 +677,7 @@ export default function EventForm({ initialData, createdHref, timeZone = "Europe
                 aria-describedby="event-registrations-hint event-registrations-zone"
                 checked={form.registrationsOpen}
                 onChange={(e) => setForm((f) => ({ ...f, registrationsOpen: e.target.checked }))}
-                className="mt-1 h-4 w-4 rounded border-gray-300 text-blue-600 focus:ring-2 focus:ring-blue-500"
+                className="mt-1 h-4 w-4 rounded border-gray-500 text-blue-600 focus:ring-2 focus:ring-blue-500"
               />
               <label htmlFor="event-registrations-open" className="text-sm font-medium text-gray-700">Inscriptions ouvertes</label>
             </div>
@@ -755,7 +755,7 @@ function AccentPill({ value, selected, onSelect, children }: { value: string; se
   return (
     <label
       className={`relative inline-flex items-center gap-2 text-sm border rounded-full px-3 py-1.5 cursor-pointer has-focus-visible:outline-2 has-focus-visible:outline-offset-2 has-focus-visible:outline-blue-600 focus-within:outline-2 focus-within:outline-offset-2 focus-within:outline-blue-600 ${
-        selected ? "border-gray-900 bg-gray-100 font-medium shadow-[inset_0_0_0_1px_#101828]" : "border-gray-300 hover:border-gray-500"
+        selected ? "border-gray-900 bg-gray-100 font-medium shadow-[inset_0_0_0_1px_#101828]" : "border-gray-500 hover:border-gray-700"
       }`}
     >
       <input type="radio" name="event-accent" value={value} checked={selected} onChange={onSelect} className="absolute inset-0 h-full w-full appearance-none opacity-0 cursor-pointer rounded-full" />

@@ -31,6 +31,8 @@ Format basé sur [Keep a Changelog](https://keepachangelog.com/fr/1.0.0/).
 
 - **Garder ou réactiver un espace inactif, en deux temps** (#1121) : la politique de confidentialité, le guide « Exporter et conserver ses données » et l'email « Souhaitez-vous conserver votre espace ? » ne parlent plus d'un seul clic. Le lien du message ouvre une page où appuyer sur « Conserver mon organisation ». Pour réactiver un espace désactivé, on demande un lien depuis la page de connexion ; ce lien, utilisable une seule fois dans les 24 heures, ouvre une page où appuyer sur « Réactiver l'espace ».
 
+- **Bord des champs de formulaire plus visible** (#1123) : les champs, listes déroulantes, zones de texte, le sélecteur de créneau et l'interrupteur de la charte ont un bord gris plus foncé, qui se distingue du fond à au moins 3:1 (WCAG 1.4.11) sur la page publique, les pages des bénévoles, l'administration et l'espace super admin, au lieu d'un gris très clair à peine visible (1,5:1).
+
 - **Renvoi d'invitations dans le journal de l'événement** (#1101) : inviter à nouveau des membres déjà invités est maintenant noté dans le journal de l'événement, une fois par envoi avec le nombre de personnes, comme une relance.
 
 - **Aide de la page Paramètres** (#1096) : son lien « Aide » ouvre « Personnaliser l'organisation », que la page montre surtout, au lieu de « Gérer l'équipe admin ».

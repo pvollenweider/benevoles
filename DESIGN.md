@@ -14,7 +14,7 @@ colors:
   surface-card: "#ffffff"
   surface-hover: "#f3f4f6"
   border-default: "#e5e7eb"
-  border-input: "#d1d5db"
+  border-input: "#6b7280"
   status-active-bg: "#dcfce7"
   status-active-text: "#15803d"
   status-full-bg: "#dbeafe"
@@ -135,7 +135,7 @@ Un bleu d'action unique sur fond blanc/gris très clair. Les couleurs sémantiqu
 - **Carte** (`#ffffff`): Surface des cartes, formulaires, tableaux. Blanc pur pour différencier du fond page.
 - **Hover** (`#f3f4f6`): Fond de ligne au survol, état hover des items de liste.
 - **Bordure** (`#e5e7eb`): Séparateurs de cartes, divisions de tableaux, cadres de section.
-- **Bordure Input** (`#d1d5db`): Bord des champs de saisie à l'état de repos.
+- **Bordure Input** (`#6b7280`, `border-gray-500`): Bord des champs de saisie, listes déroulantes, zones de texte et du sélecteur de créneau à l'état de repos : 4,83:1 sur blanc, 4,63:1 sur `#f9fafb` (au moins 3:1, WCAG 1.4.11, #1123). En thème sombre, `dark:border-gray-400`. Jamais `border-gray-200`, `-300` ou `-400` sur un champ (1,24 à 2,60:1) ; la Bordure (`#e5e7eb`) reste aux cartes et séparateurs. Garde-fou : `src/__tests__/a11y/form-control-border.test.ts`.
 
 ### Semantic Status Colors
 Les badges de statut (`StatusBadge`) utilisent des combinaisons fond clair / texte foncé dans la même teinte. Chaque statut a une paire dédiée ; mélanger les paires est interdit.
@@ -224,9 +224,9 @@ Pills compactes avec radius full. Fond teinté + texte sombre dans la même tein
 Pas de cartes imbriquées. Si un contenu doit être distingué à l'intérieur d'une carte, utiliser un fond `#f9fafb` et une bordure, pas une carte dans une carte.
 
 ### Inputs / Fields
-- **Classe globale `.input`:** `border: 1px solid #d1d5db`, `border-radius: 12px`, `padding: 8px 12px`, `font-size: 0.875rem`, `background: white`
+- **Classe globale `.input`:** `border: 1px solid #6b7280`, `border-radius: 12px`, `padding: 8px 12px`, `font-size: 0.875rem`, `background: white`
 - **Focus:** voir §4 (`border-color: #3b82f6`, `box-shadow: 0 0 0 2px #3b82f6`)
-- **Erreur:** bordure rouge (`!border-red-600`) et message d'erreur en `text-red-700` sous le champ
+- **Erreur:** bordure rouge (`!border-red-600`) et message d'erreur en `text-red-700` sous le champ ; au repos, un champ `aria-invalid="true"` reçoit en plus une ombre rouge de 1 px (`globals.css`), car le rouge seul est aussi foncé que la Bordure Input (1,01:1) et ne s'en distingue que par la teinte
 - **Désactivé:** pas de style dédié dans `globals.css` ; ne pas compter sur la seule couleur
 - **Label au-dessus:** `block text-sm font-medium text-gray-700 mb-1`
 - **Champ obligatoire:** astérisque visible masqué aux lecteurs d'écran, `<span aria-hidden="true">*</span>` dans le label, et `required` sur le champ (`aria-required` sur un contrôle personnalisé, comme le choix du créneau) : c'est l'état du champ qui fait dire « obligatoire », sans « étoile » (`RequiredMark`, `src/components/RequiredMark.tsx`). Un groupe de boutons radio met `required` sur chaque bouton ; un groupe de cases à cocher, qui n'a pas d'état obligatoire (`required` sur chaque case les exigerait toutes), le dit en mots dans sa légende (« (un choix ou plus) », ou « (au moins un choix) » en `sr-only`). Pas de « (obligatoire) » en `sr-only` en plus de `required` : il serait lu deux fois. La note « * champ obligatoire » d'un formulaire est `aria-hidden` : elle n'explique qu'un signe que les lecteurs d'écran n'entendent plus.
