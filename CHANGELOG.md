@@ -13,6 +13,7 @@ Format basé sur [Keep a Changelog](https://keepachangelog.com/fr/1.0.0/).
 
 ### Modifié
 
+- **Guides : les envois à beaucoup de personnes** : les guides « Écrire aux bénévoles » et « Réglages et suivi des emails » expliquent que les emails d'un message à une longue liste partent par vagues, sans rien à faire et sans que cette attente les fasse échouer ; « Inviter des membres » et le rappel manuel disent qu'au-delà d'une centaine de personnes d'un coup une partie peut échouer, et comment l'éviter.
 - **Dépendances à jour** (#1066) : Next.js 16.4.2, React 19.3.1, Prisma 7.10.1, Sentry 11.8, nodemailer 10.1.2, resend 6.33, zod 4.6.7, isomorphic-dompurify 4.6, marked 18.1.1 ; outils de test Playwright 1.64.1, axe-core 4.14, Vitest 5.0.5 et jsdom 30.1.3.
 
 ### Corrigé
