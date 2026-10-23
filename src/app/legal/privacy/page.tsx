@@ -70,7 +70,7 @@ export default function PrivacyPage() {
               <td>Nom, adresse e-mail</td>
               <td>Création et gestion du compte</td>
               <td>Exécution du contrat</td>
-              <td>Durée du compte ; effacé avec l&apos;Organisation {RETENTION_DAYS.deactivatedOrganization} jours après sa désactivation par l&apos;opérateur du service, délai compté depuis sa dernière modification (pas en cas de suspension ni de désactivation faute d&apos;activité)</td>
+              <td>Durée du compte ; effacé avec l&apos;Organisation désactivée par l&apos;opérateur du service, au nettoyage quotidien qui suit {RETENTION_DAYS.deactivatedOrganization} jours sans modification de l&apos;Organisation (pas en cas de suspension ni de désactivation faute d&apos;activité)</td>
             </tr>
             <tr>
               <td>Mot de passe (hashé bcrypt)</td>
@@ -318,9 +318,9 @@ export default function PrivacyPage() {
       <h2 id="conservation">7. Conservation des données</h2>
       <p>
         Les données des bénévoles sont conservées tant que l&apos;Organisation maintient son compte
-        sur la plateforme. Elles sont supprimées {RETENTION_DAYS.deactivatedOrganization} jours après la désactivation du
-        compte de l&apos;Organisation par l&apos;opérateur du service, délai compté depuis la dernière
-        modification de l&apos;Organisation désactivée. Une Organisation suspendue pour abus,
+        sur la plateforme. Quand l&apos;opérateur du service désactive le compte de l&apos;Organisation,
+        elles sont supprimées par le nettoyage quotidien, une fois écoulés {RETENTION_DAYS.deactivatedOrganization} jours
+        depuis la dernière modification de l&apos;Organisation désactivée. Une Organisation suspendue pour abus,
         ou désactivée faute d&apos;activité, n&apos;est pas supprimée automatiquement (voir ci-dessous).
       </p>
       <p>
@@ -342,8 +342,7 @@ export default function PrivacyPage() {
       </p>
       <p>
         Le compte d&apos;un administrateur retiré de l&apos;équipe est supprimé immédiatement. Les comptes des
-        administrateurs d&apos;une Organisation sont supprimés avec elle, {RETENTION_DAYS.deactivatedOrganization} jours
-        après sa désactivation par l&apos;opérateur du service. Une invitation d&apos;administrateur non acceptée est supprimée{" "}
+        administrateurs d&apos;une Organisation sont supprimés avec elle. Une invitation d&apos;administrateur non acceptée est supprimée{" "}
         {RETENTION_DAYS.deactivatedAdmin} jours après son dernier envoi.
       </p>
       <p>Plus précisément :</p>
