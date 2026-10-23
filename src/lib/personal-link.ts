@@ -39,3 +39,40 @@ export const INVALID_LINK_STEPS: readonly string[] = [
 /** Requests per address and per hour; the same throttle as the re-send from the sign-up form. */
 export const LINK_REQUEST_LIMIT = 3
 export const LINK_REQUEST_WINDOW_MS = 60 * 60 * 1000
+
+/**
+ * « J'ai perdu mon lien » on the event page (#1097): the same request as on the « Ce lien ne
+ * fonctionne pas » page (same route, same limits, same answer whether the address is known or
+ * not), for a volunteer who has no link at all. Never returns a link on screen (#285).
+ */
+export const LOST_LINK_SUMMARY = "J'ai perdu mon lien personnel"
+
+export const LOST_LINK_INTRO =
+  "Si une inscription existe à cette adresse, ton lien personnel t'est envoyé par email."
+
+/** The request form's button: a fresh copy on the « Ce lien ne fonctionne pas » page, the link itself when lost. */
+export const LINK_REQUEST_SUBMIT = {
+  invalid: "Recevoir un nouveau lien",
+  lost: "Recevoir mon lien par email",
+} as const
+
+export type LinkRequestVariant = keyof typeof LINK_REQUEST_SUBMIT
+
+/** Said on the confirmation when the link went out by email only (#1097, #285), and in the embedded one (#948). */
+export const PERSONAL_LINK_EMAIL_NOTE =
+  "L'email de confirmation contient ton lien personnel : garde-le pour modifier ou annuler ton inscription."
+
+/** The guide pages behind these texts (content/guide/lien-personnel.md, checked by its test). */
+export const PERSONAL_LINK_DOC_LINKS = {
+  personalLink: "/doc/lien-personnel",
+  lostLink: "/doc/lien-personnel#je-n-ai-plus-le-lien-vers-ma-page-personnelle",
+} as const
+
+/**
+ * Whether the event page offers « J'ai perdu mon lien personnel »: not in the organiser's
+ * preview (nothing is sent from it), and not once this browser already holds a registration of
+ * the event (its links are on the page).
+ */
+export function showsLostLinkEntry(o: { preview: boolean; sessionRegistrations: number }): boolean {
+  return !o.preview && o.sessionRegistrations === 0
+}

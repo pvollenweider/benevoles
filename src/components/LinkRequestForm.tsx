@@ -4,13 +4,16 @@
 // SPDX-License-Identifier: AGPL-3.0-only
 
 import { useId, useRef, useState } from "react"
-import { INVALID_LINK_STEPS } from "@/lib/personal-link"
+import { INVALID_LINK_STEPS, LINK_REQUEST_SUBMIT, LOST_LINK_INTRO, type LinkRequestVariant } from "@/lib/personal-link"
 
 /**
  * When a personal link doesn't work (#376): why it can happen, and a form to get a new one by
  * email. The answer is always the same, whether the address is known or not.
+ * `lost` (#1097): the same form on the event page, for a volunteer who has no link at all; no
+ * « why it fails » list, its own short line instead. `scrollClass` keeps its controls clear of a
+ * fixed bar at the bottom of the screen when they take the focus (WCAG 2.4.11).
  */
-export default function LinkRequestForm() {
+export default function LinkRequestForm({ variant = "invalid", scrollClass = "" }: { variant?: LinkRequestVariant; scrollClass?: string } = {}) {
   const id = useId()
   const [email, setEmail] = useState("")
   const [busy, setBusy] = useState(false)
@@ -52,9 +55,13 @@ export default function LinkRequestForm() {
 
   return (
     <div className="text-left space-y-4">
-      <ol className="list-decimal pl-5 space-y-1 text-sm text-gray-700">
-        {INVALID_LINK_STEPS.map((s) => <li key={s}>{s}</li>)}
-      </ol>
+      {variant === "lost" ? (
+        <p className="text-sm text-gray-700">{LOST_LINK_INTRO}</p>
+      ) : (
+        <ol className="list-decimal pl-5 space-y-1 text-sm text-gray-700">
+          {INVALID_LINK_STEPS.map((s) => <li key={s}>{s}</li>)}
+        </ol>
+      )}
       <form onSubmit={submit} noValidate className="space-y-2">
         <label htmlFor={`${id}-email`} className="block text-sm font-medium text-gray-700">Adresse email utilisée pour t&apos;inscrire <span aria-hidden="true">*</span></label>
         <input
@@ -69,15 +76,15 @@ export default function LinkRequestForm() {
           onBlur={() => setTouched(true)}
           aria-invalid={showError ? true : undefined}
           aria-describedby={showError ? `${id}-error` : undefined}
-          className="w-full border border-gray-300 rounded-xl px-3 py-3 text-sm focus:outline-hidden focus:ring-2 focus:ring-blue-500"
+          className={`w-full border border-gray-300 rounded-xl px-3 py-3 text-sm focus:outline-hidden focus:ring-2 focus:ring-blue-500 ${scrollClass}`}
         />
         {showError && <p id={`${id}-error`} className="text-sm text-red-700">{errorText}</p>}
         <button
           type="submit"
           aria-disabled={busy || undefined}
-          className={`w-full bg-blue-600 text-white rounded-xl py-3 text-sm font-semibold hover:bg-blue-700 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-blue-600 ${busy ? "opacity-70 cursor-not-allowed" : ""}`}
+          className={`w-full bg-blue-600 text-white rounded-xl py-3 text-sm font-semibold hover:bg-blue-700 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-blue-600 ${busy ? "opacity-70 cursor-not-allowed" : ""} ${scrollClass}`}
         >
-          {busy ? "Envoi…" : "Recevoir un nouveau lien"}
+          {busy ? "Envoi…" : LINK_REQUEST_SUBMIT[variant]}
         </button>
       </form>
       <p role="status" aria-live="polite" className={`text-sm ${failed ? "text-red-700" : "text-gray-700"}`}>{message}</p>

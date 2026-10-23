@@ -50,7 +50,7 @@ Clique sur **Confirmer mon inscription**.
 
 Après l'inscription, un **email de confirmation** est envoyé à ton adresse. Il récapitule tes créneaux et contient ton **lien personnel** pour gérer ton inscription (voir [Ton lien personnel](lien-personnel.md)).
 
-Ce lien t'est envoyé uniquement par email, jamais affiché à l'écran, pour que personne ne puisse y accéder en saisissant ton adresse à ta place. Seule exception : si tu t'inscris depuis un lien d'invitation reçu par email, la page de succès l'affiche aussi.
+Ce lien t'est envoyé uniquement par email, jamais affiché à l'écran, pour que personne ne puisse y accéder en saisissant ton adresse à ta place. Seule exception : si tu t'inscris depuis un lien d'invitation reçu par email, la page de succès l'affiche aussi. Sinon, la page de succès te rappelle que le lien est dans l'email de confirmation. **Revenir à l'événement** te ramène au planning.
 
 ## Questions fréquentes
 

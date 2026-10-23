@@ -62,6 +62,8 @@ import { RosterName } from "@/components/public/RosterName"
 import Switch from "@/components/public/Switch"
 import DocMoreLink from "@/components/DocMoreLink"
 import { SECTION_DOC_LINKS, docHref } from "@/lib/help-links"
+import LinkRequestForm from "@/components/LinkRequestForm"
+import { LOST_LINK_SUMMARY, PERSONAL_LINK_DOC_LINKS, showsLostLinkEntry } from "@/lib/personal-link"
 import { readStored, removeStored, writeStored } from "@/lib/device-storage"
 import { NEW_TAB_HINT, takeReturnToSchedule } from "@/lib/embed"
 import { successPath } from "@/lib/registration-success"
@@ -1139,6 +1141,24 @@ export default function EventPageClient({ orgSlug, eventSlug, preview, initialEv
                 </div>
               </div>
             </div>
+
+            {/* « J'ai perdu mon lien personnel » (#1097): the request of the « Ce lien ne fonctionne
+                pas » page (same route, limits and neutral answer, no link on screen, #285) for a
+                visitor without a session. A native disclosure; under lg its controls keep clear of
+                the fixed « Continuer » bar when focused (scroll-margin, WCAG 2.4.11). */}
+            {showsLostLinkEntry({ preview: !!preview, sessionRegistrations: myRegistrations.length }) && (
+              <details className="group scroll-mb-32 lg:scroll-mb-0">
+                <summary className="inline-flex min-h-11 lg:min-h-6 cursor-pointer list-none items-center gap-1 rounded py-0.5 text-sm font-medium text-blue-700 hover:text-blue-900 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-blue-600 scroll-mb-32 lg:scroll-mb-0 [&::-webkit-details-marker]:hidden">
+                  {/* Underline on the words only: on the summary it would turn with the ▸ once open. */}
+                  <span aria-hidden="true" className="inline-block motion-safe:transition-transform group-open:rotate-90">▸</span>
+                  <span className="underline underline-offset-2">{LOST_LINK_SUMMARY}</span>
+                </summary>
+                <div className="mt-3 max-w-md rounded-2xl border border-gray-200 bg-white p-4 space-y-3">
+                  <LinkRequestForm variant="lost" scrollClass="scroll-mb-32 lg:scroll-mb-0" />
+                  <p className="text-xs"><DocMoreLink href={PERSONAL_LINK_DOC_LINKS.lostLink} about="le lien personnel perdu" className="scroll-mb-32 lg:scroll-mb-0" /></p>
+                </div>
+              </details>
+            )}
 
             {/* Embedded, mobile: the same button after the selection, in the flow of the page. */}
             {showMobileCta && embed && (

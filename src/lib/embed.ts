@@ -140,9 +140,6 @@ export function embedFlowParams(current: URLSearchParams): URLSearchParams {
   return kept
 }
 
-/** Said on the embedded confirmation: the personal link is in the email, outside the frame too. */
-export const EMBED_PERSONAL_LINK_NOTE =
-  "L'email de confirmation contient ton lien personnel : garde-le pour modifier ou annuler ton inscription."
 
 /** The iframe's accessible name, as the snippet sets it: what the frame holds, for a screen reader. */
 export function embedFrameTitle(eventTitle: string): string {
