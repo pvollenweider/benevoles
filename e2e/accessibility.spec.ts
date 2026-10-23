@@ -45,10 +45,34 @@ test.describe("content pages on a phone, in dark mode", () => {
   test.use({ viewport: { width: 320, height: 640 }, colorScheme: "dark" })
   // Documentation units (#649): the breadcrumb wraps at 320 px; an organisers' unit has wide tables.
   // /doc/rappels: a unit for both audiences, with its jump links, previous and next, « Dans ce thème ».
-  for (const path of ["/accessibilite", "/logiciel-planning-benevoles", "/planning-permanences-benevoles", "/tarifs", "/tableur-ou-outil-dedie", "/doc", "/doc/revenir-sur-la-page-d-inscription", "/doc/creer-un-evenement", "/doc/rappels"]) {
+  // The video library and the legal documents (#1116): in the content pages' frame, dark theme included.
+  for (const path of ["/accessibilite", "/logiciel-planning-benevoles", "/planning-permanences-benevoles", "/tarifs", "/tableur-ou-outil-dedie", "/doc", "/doc/revenir-sur-la-page-d-inscription", "/doc/creer-un-evenement", "/doc/rappels", "/videos", "/legal/privacy", "/legal/terms", "/legal/sous-traitance", "/legal/sous-traitants"]) {
     test(`${path} has no serious violation at 320 px, dark`, async ({ page }) => {
       await page.goto(path)
       await expect(page.getByRole("heading", { level: 1 })).toBeVisible()
+      expect.soft(await seriousViolations(page)).toEqual([])
+    })
+  }
+})
+
+// #1116: a video page with its disclosures open (axe skips closed <details>), then the library's
+// filters in use and its empty state, in the dark theme on a phone and on a desktop.
+test.describe("video library in dark mode", () => {
+  test.use({ colorScheme: "dark" })
+  for (const viewport of [{ width: 320, height: 640 }, { width: 1280, height: 800 }]) {
+    test(`a video page, details open, and the filters have no serious violation at ${viewport.width} px`, async ({ page }) => {
+      await page.setViewportSize(viewport)
+      await page.goto("/videos/EVENT_CREATE_BLANK")
+      await expect(page.getByRole("heading", { level: 1 })).toBeVisible()
+      await page.locator("main details").evaluateAll((els) => els.forEach((d) => d.setAttribute("open", "")))
+      expect.soft(await seriousViolations(page)).toEqual([])
+
+      await page.goto("/videos")
+      const search = page.getByLabel("Recherche")
+      await waitForHydration(search)
+      await search.fill("zzzz-aucune-video")
+      await expect(page.getByText("Aucune vidéo ne correspond à ces critères.")).toBeVisible()
+      await expect(page.getByRole("button", { name: "Réinitialiser les filtres" })).toBeVisible()
       expect.soft(await seriousViolations(page)).toEqual([])
     })
   }

@@ -57,16 +57,21 @@ export const CONTENT_PROSE_CLASS = `prose prose-gray dark:prose-invert max-w-[65
           prose-img:rounded-lg prose-img:border prose-img:border-gray-200 dark:prose-img:border-gray-700 prose-img:shadow-sm`
 
 /**
- * Frame of the public content pages rendered from Markdown sources (features, documentation):
+ * Frame of every public content page (features, documentation, blog, changelog, accessibility,
+ * video library, legal documents; one test checks their layouts, site-shell.react.test.tsx):
  * site header with the content navigation and the theme toggle, and the real PublicFooter.
  * Header, content and footer share one container (SITE_CONTAINER_CLASS), so their edges line up.
  * `layout="article"` (default) puts the page in a <main> with the shared prose recipe;
- * `layout="doc"` lets the page draw its own <main> (DocFrame, FeaturesPage), so a unit's side
- * menu can sit beside it, outside the main landmark that « Aller au contenu » jumps to.
+ * `layout="doc"` lets the page draw its own <main> (DocFrame, FeaturesPage, the video library), so
+ * a unit's side menu can sit beside it, outside the main landmark that « Aller au contenu » jumps to.
+ * Text that sets no colour of its own inherits gray-900 (gray-100 in dark), and native controls
+ * (scrollbars, select lists, the search field's clear button) follow the theme (color-scheme).
  */
 export default function ContentShell({ children, layout = "article" }: { children: React.ReactNode; layout?: "article" | "doc" }) {
   return (
-    <div data-theme-scope className="min-h-screen bg-white dark:bg-gray-900 transition-colors">
+    // suppressHydrationWarning: THEME_INIT_SCRIPT adds `dark` to this element's class before
+    // hydration, on purpose; React would otherwise report the class as a mismatch (in dark only).
+    <div data-theme-scope suppressHydrationWarning className="min-h-screen bg-white text-gray-900 dark:bg-gray-900 dark:text-gray-100 dark:[color-scheme:dark] transition-colors">
       <script dangerouslySetInnerHTML={{ __html: THEME_INIT_SCRIPT }} />
       <SkipLink />
 

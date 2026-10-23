@@ -1,9 +1,11 @@
 /**
  * @vitest-environment jsdom
  */
-import { describe, it, expect, afterEach } from "vitest"
+import { describe, it, expect, afterEach, beforeAll, vi } from "vitest"
 import "@testing-library/jest-dom/vitest"
 import { render, screen, cleanup, within } from "@testing-library/react"
+
+vi.mock("next/navigation", () => ({ usePathname: () => "/legal/privacy" }))
 import LegalLayout from "../layout"
 import { CONTENT_PROSE_CLASS } from "@/components/public/ContentShell"
 import { SITE_READING_COLUMN_CLASS } from "@/components/public/site-container"
@@ -31,6 +33,10 @@ function contentHrefs(): string[] {
 
 describe("legal pages layout", () => {
   afterEach(cleanup)
+  // The theme toggle reads the system preference; jsdom has no matchMedia.
+  beforeAll(() => {
+    window.matchMedia = ((query: string) => ({ matches: false, media: query, addEventListener() {}, removeEventListener() {} })) as never
+  })
 
   // The legal pages share the public footer of benevol.app's own pages, after </main>.
   it.each(Object.keys(PAGES) as (keyof typeof PAGES)[])("ends with the site footer, outside main (%s)", (path) => {
@@ -49,16 +55,15 @@ describe("legal pages layout", () => {
     expect(within(nav).getByRole("link", { name: "Accessibilité" })).toHaveAttribute("href", "/accessibilite")
   })
 
-  it("keeps its own light header with the link home and the skip link", () => {
+  // #1116: the content pages' header (site-shell.react.test.tsx checks it is the same markup).
+  it("has the content pages' header, with the link home, the navigation, the theme toggle and the skip link", () => {
     renderLegal("/legal/privacy")
     expect(screen.getByRole("link", { name: "Aller au contenu" })).toHaveAttribute("href", "#main")
     const banner = screen.getByRole("banner")
     expect(within(banner).getByRole("link", { name: "benevol.app" })).toHaveAttribute("href", "/")
-    expect(banner).toHaveTextContent("Documents légaux")
-    // Same 24 px target and focus outline as the content pages' header link.
-    const home = within(banner).getByRole("link", { name: "benevol.app" })
-    expect(home.className).toContain("py-3 -my-3")
-    expect(home.className).toContain("focus-visible:outline-blue-600")
+    expect(within(banner).getByRole("navigation", { name: "Présentation, guides et blog" })).toBeInTheDocument()
+    expect(within(banner).getByRole("button", { name: "Thème sombre" })).toBeInTheDocument()
+    expect(banner).not.toHaveTextContent("Documents légaux")
   })
 
   // The content pages' prose recipe: focus outline on the links, scroll margin on the headings.
