@@ -73,13 +73,13 @@ Un membre qui n'a participé à aucun événement depuis 3 ans garde sa fiche : 
 Pour ne pas garder sans fin des espaces dont personne n'a plus besoin, l'opérateur du service peut activer une vérification périodique. Elle ne concerne qu'un espace sans activité depuis 18 mois et sans événement prévu : un événement à venir ou en cours l'arrête toujours.
 
 - **Trois messages d'abord** : les administrateurs reçoivent « Souhaitez-vous conserver votre espace ? », puis deux rappels. Un rappel ne part qu'une fois le message précédent accepté par le serveur d'envoi pour au moins un administrateur, et au plus tôt 30 jours de calendrier après lui. Chaque message indique jusqu'à quel jour répondre ; si un rappel part plus tard que prévu, ce jour est repoussé et le rappel le signale.
-- **Un clic pour le garder** : le bouton « Conserver mon organisation » du message suffit. Créer ou modifier un événement, un créneau, un membre ou un réglage compte aussi comme une réponse. La vérification recommence alors à zéro.
+- **Le garder** : ouvrez le lien du message, puis appuyez sur « Conserver mon organisation » sur la page qui s'affiche. Créer ou modifier un événement, un créneau, un membre ou un réglage compte aussi comme une réponse. La vérification recommence alors à zéro.
 - **Sans réponse** : l'espace est désactivé au plus tôt 15 jours après l'envoi du dernier rappel, et jamais moins de 75 jours après l'envoi du premier message. Plus personne ne peut s'y connecter ni s'inscrire à ses événements, mais ses données sont gardées. Tant qu'un message n'a été accepté pour aucun administrateur, l'espace ne peut pas être désactivé, et l'opérateur du service est prévenu.
-- **Le réactiver** : sur la page de connexion, choisissez « Espace désactivé faute d'activité ? Le réactiver » et entrez l'adresse de votre compte. Le lien reçu réactive l'espace, tel que vous l'avez laissé.
+- **Le réactiver** : sur la page de connexion, choisissez « Espace désactivé faute d'activité ? Le réactiver » et entrez l'adresse de votre compte (le message qui annonce la désactivation mène au même endroit). Un lien vous est envoyé par email. Il sert une seule fois, dans les 24 heures, et seul le dernier lien demandé fonctionne : ouvrez-le, puis appuyez sur « Réactiver l'espace ». L'espace revient tel que vous l'avez laissé.
 
 ### Mon espace va-t-il être désactivé si je ne l'utilise qu'une fois par an ?
 
-Non. Tant qu'un événement est prévu, ou que vous avez modifié quelque chose dans les 18 derniers mois, rien ne se passe. Et même après ce délai, vous recevez trois messages avant toute désactivation, et un clic suffit pour garder l'espace.
+Non. Tant qu'un événement est prévu, ou que vous avez modifié quelque chose dans les 18 derniers mois, rien ne se passe. Et même après ce délai, vous recevez trois messages avant toute désactivation : pour garder l'espace, il suffit d'ouvrir le lien de l'un d'eux et de confirmer.
 
 ## Supprimer une organisation
 

@@ -520,7 +520,7 @@ export function renderOrgInactivityNotice(p: NotificationPayload): RenderedEmail
   const changed = d.previousDeactivationOn
     ? `Cette date remplace celle du ${d.previousDeactivationOn}, indiquée dans notre message précédent : ce rappel part plus tard que prévu, vous avez donc plus de temps pour répondre.`
     : null
-  const keep = "Pour le conserver, appuyez sur le bouton ci-dessous : il n'y a rien d'autre à faire. Créer ou modifier un événement compte aussi comme une réponse."
+  const keep = "Pour le conserver, ouvrez le lien ci-dessous, puis appuyez sur « Conserver mon organisation » sur la page qui s'affiche : il n'y a rien d'autre à faire. Créer ou modifier un événement compte aussi comme une réponse."
   const consequence = "Une fois l'espace désactivé, plus personne ne peut s'y connecter ni s'inscrire à ses événements. Ses données sont gardées, et vous pouvez le réactiver vous-même depuis la page de connexion, avec « Espace désactivé faute d'activité ? Le réactiver »."
   const why = `Nous posons régulièrement cette question pour ne pas garder sans fin des données dont personne n'a plus besoin.`
   const wrote = d.previousSentOn ? `Nous avons écrit aux administrateurs de l'espace le ${d.previousSentOn}, sans réponse.` : "Nous avons déjà écrit aux administrateurs de l'espace, sans réponse."
@@ -560,7 +560,7 @@ export function renderOrgInactivityNotice(p: NotificationPayload): RenderedEmail
     <p>${escapeHtml(consequence)}</p>
     <p>${escapeHtml(why)}</p>
     <p><a href="${escapeHtml(loginUrl)}" style="color:#1d4ed8;text-decoration:underline">Se connecter à l'espace</a></p>
-  `, `Sans réponse d'ici le ${d.deactivationOn} inclus, l'espace pourra être désactivé. Il suffit d'appuyer sur un bouton pour le conserver.`)
+  `, `Sans réponse d'ici le ${d.deactivationOn} inclus, l'espace pourra être désactivé. Pour le conserver, ouvrez le lien de ce message et confirmez.`)
 
   return { subject, html, text }
 }
