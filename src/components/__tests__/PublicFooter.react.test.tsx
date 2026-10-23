@@ -158,8 +158,8 @@ describe("PublicFooter", () => {
       expect(screen.getByRole("link", { name: "CGU (ouvre dans un nouvel onglet)" })).toHaveAttribute("href", "https://www.benevol.app/legal/terms")
     })
 
-    // #1117: the last link goes to the instance's home, not to the code on GitHub.
-    it("ends with « Propulsé par <instance> » to the site's home, in a new tab, no GitHub link", () => {
+    // #1117: the tool's name links the instance's home, the code has its own link.
+    it("links « Propulsé par <instance> » to the site's home, in a new tab, without the GitHub mark", () => {
       render(<PublicFooter variant="embed" site={{ apexBase: "https://www.benevol.app", name: "benevol.app" }} />)
       const home = screen.getByRole("link", { name: "Propulsé par benevol.app (ouvre dans un nouvel onglet)" })
       expect(home).toHaveAttribute("href", "https://www.benevol.app/")
@@ -167,8 +167,17 @@ describe("PublicFooter", () => {
       expect(home).toHaveAttribute("rel", "noopener")
       expect(home.querySelector("svg")).toBeNull()
       expect(screen.getByRole("navigation", { name: "Liens utiles" }).contains(home)).toBe(true)
-      expect(screen.queryByRole("link", { name: /GitHub/ })).toBeNull()
-      expect(document.querySelector(`a[href="${GITHUB}"]`)).toBeNull()
+    })
+
+    // AGPL-3.0 §13: the source offer stays on the embedded page, separately named.
+    it("ends with a link to the code on GitHub, in a new tab", () => {
+      render(<PublicFooter variant="embed" site={{ apexBase: "https://www.benevol.app", name: "benevol.app" }} />)
+      const code = screen.getByRole("link", { name: "Code source sur GitHub (ouvre dans un nouvel onglet)" })
+      expect(code).toHaveAttribute("href", GITHUB)
+      expect(code).toHaveAttribute("target", "_blank")
+      expect(code.querySelector("svg")).toHaveAttribute("aria-hidden", "true")
+      const nav = screen.getByRole("navigation", { name: "Liens utiles" })
+      expect(within(nav).getAllByRole("link").at(-1)).toBe(code)
     })
 
     it("names a self-hosted instance and links its own address", () => {

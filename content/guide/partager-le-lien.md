@@ -61,7 +61,7 @@ Puis **Créer le lien**. Recommencez pour la fanfare, avec le poste Buvette.
 
 ## Intégrer l'inscription à votre site
 
-Votre association a son propre site ? Affichez-y l'inscription : les bénévoles choisissent leurs créneaux et s'inscrivent sans quitter votre site. La page garde le nom, le logo et la couleur de votre organisation ; seuls le lien « Retour » et les colonnes du pied de page de benevol.app disparaissent. En bas de la page restent les mentions légales et le lien « Propulsé par benevol.app » vers la page d'accueil de benevol.app.
+Votre association a son propre site ? Affichez-y l'inscription : les bénévoles choisissent leurs créneaux et s'inscrivent sans quitter votre site. La page garde le nom, le logo et la couleur de votre organisation ; seuls le lien « Retour » et les colonnes du pied de page de benevol.app disparaissent. En bas de la page restent les mentions légales, le lien « Propulsé par benevol.app » vers la page d'accueil de benevol.app et le lien vers le code source.
 
 L'événement doit être publié. Dans l'onglet **Partage**, section **Liens par groupe et intégration**, sous **Intégrer à votre site**, cliquez sur **Code d'intégration**.
 
@@ -74,7 +74,7 @@ L'événement doit être publié. Dans l'onglet **Partage**, section **Liens par
 
 **Ajouter le code à votre site.** Dans l'éditeur de votre site, ouvrez la page voulue et ajoutez un bloc de type « HTML », « Code personnalisé » ou « Intégrer » (le nom change d'un éditeur à l'autre). Collez-y le code, puis enregistrez et publiez la page. Le code ne charge aucun script d'un autre site : seulement la page d'inscription de benevol.app dans un cadre.
 
-**Ce que voient les bénévoles.** Le même parcours que sur la page de l'événement : choix des créneaux, formulaire, récapitulatif, confirmation. Ce qui quitte l'inscription s'ouvre dans un nouvel onglet, pour que votre page reste en place : la page personnelle, les pages de l'événement, les mentions légales, la page d'accueil de benevol.app. La confirmation rappelle que l'email contient le lien personnel, pour modifier ou annuler. Les rappels par notification se proposent depuis la page personnelle, pas dans le cadre. L'inscription affichée sur votre site ne montre jamais qui est inscrit : l'interrupteur **Voir qui est inscrit** n'existe que sur la page de l'événement, pour les bénévoles confirmés et les membres invités.
+**Ce que voient les bénévoles.** Le même parcours que sur la page de l'événement : choix des créneaux, formulaire, récapitulatif, confirmation. Ce qui quitte l'inscription s'ouvre dans un nouvel onglet, pour que votre page reste en place : la page personnelle, les pages de l'événement, les mentions légales, la page d'accueil de benevol.app, le code source. La confirmation rappelle que l'email contient le lien personnel, pour modifier ou annuler. Les rappels par notification se proposent depuis la page personnelle, pas dans le cadre. L'inscription affichée sur votre site ne montre jamais qui est inscrit : l'interrupteur **Voir qui est inscrit** n'existe que sur la page de l'événement, pour les bénévoles confirmés et les membres invités.
 
 Certains navigateurs ne laissent pas une page affichée dans le site d'un autre retenir quoi que ce soit sur l'appareil. Le bénévole doit alors retaper ses coordonnées pour un autre événement, et la page ne le reconnaît pas en revenant : son lien personnel reste dans l'email.
 
