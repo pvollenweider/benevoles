@@ -656,6 +656,8 @@ const cases: [string, NotificationPayload][] = [
       lastActivity: "12 mars 2025",
       deactivationOn: "mardi 23 décembre 2026",
       keepUrl: "https://www.benevol.app/admin/keep?lien=abc",
+      previousSentOn: "3 octobre 2026",
+      previousDeactivationOn: "vendredi 18 décembre 2026",
     },
   }],
   ["org_inactivity_deactivated", {

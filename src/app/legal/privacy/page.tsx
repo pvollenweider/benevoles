@@ -6,7 +6,8 @@ import JsonLd from "@/components/public/JsonLd"
 import Link from "next/link"
 import { IP_MAX_DAYS } from "@/lib/signup-blocklist"
 import { RETENTION, RETENTION_DAYS } from "@/lib/retention"
-import { DEACTIVATION_DAYS, INACTIVITY_MONTHS, LAST_REMINDER_DAYS } from "@/lib/org-inactivity"
+import { INACTIVITY_MONTHS } from "@/lib/org-inactivity"
+import { FINAL_NOTICE_DAYS, MIN_DEACTIVATION_DAYS, REMINDER_GAP_DAYS } from "@/lib/org-inactivity-steps"
 import { PAST_EVENT_NOTICE_DAYS, PAST_EVENT_RETENTION_YEARS } from "@/lib/past-event-retention"
 import { notFound } from "next/navigation"
 
@@ -334,11 +335,15 @@ export default function PrivacyPage() {
       <p>
         Un espace qui n&apos;est plus utilisé depuis {INACTIVITY_MONTHS} mois et qui n&apos;a aucun événement
         prévu peut être désactivé. Cette règle s&apos;applique lorsque l&apos;opérateur du service
-        l&apos;active. Avant toute désactivation, les administrateurs de l&apos;Organisation reçoivent
-        trois messages en {LAST_REMINDER_DAYS} jours ; un clic sur « Conserver mon organisation »
-        suffit pour garder l&apos;espace. Sans réponse, l&apos;espace est désactivé {DEACTIVATION_DAYS} jours après le
-        premier message. Ses données sont gardées, et ses administrateurs peuvent le réactiver
-        eux-mêmes depuis la page de connexion.
+        l&apos;active. Avant toute désactivation, trois messages sont envoyés aux administrateurs de
+        l&apos;Organisation ; un clic sur « Conserver mon organisation » suffit pour garder l&apos;espace. Chaque
+        message doit avoir été accepté par notre serveur d&apos;envoi pour au moins un administrateur (ce qui
+        ne garantit pas qu&apos;il ait été lu), et le suivant part au plus tôt {REMINDER_GAP_DAYS} jours de calendrier
+        plus tard. Sans réponse, l&apos;espace est désactivé au plus tôt {FINAL_NOTICE_DAYS} jours après l&apos;envoi du
+        dernier rappel, et jamais moins de {MIN_DEACTIVATION_DAYS} jours après l&apos;envoi du premier message ; chaque
+        message indique jusqu&apos;à quel jour répondre. Tant qu&apos;un message n&apos;a été accepté pour aucun
+        administrateur, l&apos;espace ne peut pas être désactivé. Une fois l&apos;espace désactivé, ses données sont
+        gardées, et ses administrateurs peuvent le réactiver eux-mêmes depuis la page de connexion.
       </p>
       <p>
         Le compte d&apos;un administrateur retiré de l&apos;équipe est supprimé immédiatement. Les comptes des

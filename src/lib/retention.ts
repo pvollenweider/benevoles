@@ -11,7 +11,8 @@
  */
 
 import { PAST_EVENT_NOTICE_DAYS } from "./past-event-retention"
-import { DEACTIVATION_DAYS, INACTIVITY_MONTHS } from "./org-inactivity"
+import { INACTIVITY_MONTHS } from "./org-inactivity"
+import { FINAL_NOTICE_DAYS, MIN_DEACTIVATION_DAYS, REMINDER_GAP_DAYS } from "./org-inactivity-steps"
 
 export const RETENTION_DAYS = {
   /** Deactivated organisation, with its events, members, registrations, logs (cascade). */
@@ -99,7 +100,7 @@ export const RETENTION: readonly RetentionEntry[] = [
     public: true,
   },
   {
-    data: `Les mêmes données, pour une organisation désactivée faute d'activité : ${INACTIVITY_MONTHS} mois sans activité et sans événement prévu, puis trois messages à ses administrateurs (« Souhaitez-vous conserver votre espace ? » et deux rappels) restés sans réponse ${DEACTIVATION_DAYS} jours`,
+    data: `Les mêmes données, pour une organisation désactivée faute d'activité : ${INACTIVITY_MONTHS} mois sans activité et sans événement prévu, puis trois messages à ses administrateurs (« Souhaitez-vous conserver votre espace ? » et deux rappels, chacun accepté par le serveur d'envoi pour au moins un administrateur, le suivant au plus tôt ${REMINDER_GAP_DAYS} jours de calendrier plus tard) restés sans réponse au moins ${FINAL_NOTICE_DAYS} jours après l'envoi du dernier rappel, et au moins ${MIN_DEACTIVATION_DAYS} jours après l'envoi du premier`,
     purpose: "Permettre à ses administrateurs de la réactiver eux-mêmes",
     duration: "conservées tant qu'elle est désactivée ; une réponse, une activité ou un événement prévu arrête la procédure avant la désactivation",
     trigger: "désactivation après trois messages sans réponse",

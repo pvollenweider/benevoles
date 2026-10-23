@@ -66,6 +66,13 @@ model Organization {
   // upcoming event, postponement, exclusion).
   inactivityNoticeAt       DateTime?
   inactivityEmailsSent     Int       @default(0)
+  // Since #1114 each of the three messages is a row of OrgInactivityStep, confirmed once a copy
+  // is accepted by the relay. The planned date: start of the day (organisation's time zone) from
+  // which the space may be deactivated; it only moves later. `inactivityBlockedAt`: the procedure
+  // is blocked (a step not confirmed in time, or an older procedure without proof) and the
+  // operator was alerted, once; cleared when it is no longer blocked. All cleared when it stops.
+  inactivityPlannedAt      DateTime?
+  inactivityBlockedAt      DateTime?
   // Retention of past events (#813): the notice sent 30 days before the first batch, the last batch.
   pastEventNoticeAt DateTime?
   pastEventBatchAt  DateTime?
@@ -76,6 +83,7 @@ model Organization {
   volunteers  Volunteer[]
   admins      AdminUser[]
   keepLinks   OrgKeepLink[]
+  inactivitySteps OrgInactivityStep[]
   slugHistory OrgSlugHistory[]
   logs        OrgLog[]
   targetedMessages TargetedMessage[]
@@ -346,6 +354,28 @@ model OrgKeepLink {
   createdAt      DateTime     @default(now())
 
   @@index([organizationId])
+}
+
+// One message of the inactivity procedure (#1114): queued once per organisation and step, confirmed
+// when the first administrator's copy is accepted by the relay (set with the outbox row's « sent »
+// status, in the same transaction: sent outbox rows are purged nightly). `recipientHashes`: HMAC of
+// the addresses already queued (no address in clear), so an administrator added later gets the
+// step once. `plannedAt`: the planned date its email announced. Deleted when the procedure stops.
+model OrgInactivityStep {
+  id              String       @id @default(cuid())
+  organizationId  String
+  organization    Organization @relation(fields: [organizationId], references: [id], onDelete: Cascade)
+  step            String // "first" | "second" | "last"
+  queuedAt        DateTime
+  confirmedAt     DateTime?
+  recipients      Int          @default(0)
+  recipientHashes String[]     @default([])
+  plannedAt       DateTime
+  createdAt       DateTime     @default(now())
+
+  outbox NotificationOutbox[]
+
+  @@unique([organizationId, step])
 }
 
 model OrgLog {
@@ -724,11 +754,15 @@ model NotificationOutbox {
   // The batch it was sent with (#1101): invitations, a reminder, a message to volunteers.
   sendBatchId       String?
   sendBatch         SendBatch? @relation(fields: [sendBatchId], references: [id], onDelete: SetNull)
+  // The inactivity step this copy belongs to (#1114): its « sent » confirms the step.
+  inactivityStepId  String?
+  inactivityStep    OrgInactivityStep? @relation(fields: [inactivityStepId], references: [id], onDelete: SetNull)
 
   @@index([status, nextAttemptAt])
   @@index([targetedMessageId])
   @@index([organizationId, createdAt])
   @@index([sendBatchId])
+  @@index([inactivityStepId])
 }
 
 // Per-recipient SMTP outcome of a send (#598): "accepted by our relay" is the only thing a
