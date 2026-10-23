@@ -165,6 +165,23 @@ describe.skipIf(!url)("invitations and reminders through the outbox (#1105)", ()
     expect(both.filter(Boolean)).toHaveLength(1)
   })
 
+  it("« Renvoyer » of a failed copy and a new invitation at the same instant: one copy, never two", async () => {
+    const { retryOutboxRow } = await import("@/lib/outbox-data")
+    const ev = (await prisma.event.create({ data: { organizationId: orgId, slug: "course", title: "Fête", startDate: new Date("2030-11-01"), endDate: new Date("2030-11-01") } })).id
+    const member = await prisma.volunteer.create({ data: { organizationId: orgId, firstName: "Race", lastName: "L", email: `${tag}-race@example.org`, active: true } })
+    await invite(post(`/api/admin/events/${ev}/invitations`, { volunteerIds: [member.id] }), params(ev))
+    const [a] = await prisma.notificationOutbox.findMany({ where: { organizationId: orgId } })
+    await prisma.notificationOutbox.update({ where: { id: a.id }, data: { status: "failed", lastError: "smtp:temporary" } })
+    await prisma.memberInvite.updateMany({ where: { eventId: ev }, data: { sentAt: new Date(Date.now() - 10 * 60 * 1000) } })
+    for (let round = 0; round < 5; round++) {
+      await prisma.notificationOutbox.deleteMany({ where: { organizationId: orgId, id: { not: a.id } } })
+      await prisma.notificationOutbox.update({ where: { id: a.id }, data: { status: "failed" } })
+      await prisma.memberInvite.updateMany({ where: { eventId: ev }, data: { lastRemindedAt: null } })
+      await Promise.all([retryOutboxRow(a.id, orgId), invite(post(`/api/admin/events/${ev}/invitations`, { volunteerIds: [member.id] }), params(ev))])
+      expect(await prisma.notificationOutbox.count({ where: { organizationId: orgId, status: { in: ["pending", "sending"] } } })).toBe(1)
+    }
+  })
+
   it("« Renvoyer » still works for a later copy when an older one went out before it was queued", async () => {
     const { retryOutboxRow } = await import("@/lib/outbox-data")
     const ev = (await prisma.event.create({ data: { organizationId: orgId, slug: "ancien", title: "Fête", startDate: new Date("2030-10-01"), endDate: new Date("2030-10-01") } })).id

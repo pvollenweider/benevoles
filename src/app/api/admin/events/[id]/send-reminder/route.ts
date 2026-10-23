@@ -5,6 +5,7 @@ import { NextResponse } from "next/server"
 import { requireOrgSession } from "@/lib/auth-guard"
 import { deliverAfterResponse, enqueueNotifications } from "@/lib/notifications/outbox"
 import type { NotificationPayload } from "@/lib/notifications/types"
+import { lockSameEmails } from "@/lib/invitation-outbox"
 import { OUTSTANDING_OUTBOX_STATUSES, RESEND_GUARD_MS, SEND_TRANSACTION_OPTIONS, manualReminderDedupeKey, manualReminderKeyPrefix, sendCutoff } from "@/lib/invitation-sending"
 import { registrationToken } from "@/lib/token-vault"
 
@@ -69,6 +70,8 @@ export async function POST(_req: Request, { params }: { params: Promise<{ id: st
   const now = new Date()
   const cutoff = sendCutoff(now, RESEND_GUARD_MS)
   const outcome = await db.$transaction(async (tx) => {
+    // Serialised with « Renvoyer » of an earlier copy of these same reminders.
+    await lockSameEmails(tx, [...byVolunteer.keys()].map((volunteerId) => `manual_reminder:${id}:${volunteerId}:`))
     // The previous reminder still waiting in the outbox (held by a sending limit): a second one
     // would queue a second copy behind it.
     const pending = await tx.notificationOutbox.count({

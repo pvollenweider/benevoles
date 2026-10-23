@@ -98,6 +98,8 @@ function fakeDb(volunteers: Volunteer[], invites: Invite[], opts: { registeredEm
         return (opts.registeredEmails ?? []).map((email) => ({ volunteer: { email } }))
       }),
     },
+    locks: [] as string[][],
+    async $executeRaw(_q: TemplateStringsArray, keys: string[]) { db.locks.push(keys); return 1 },
     transactionOptions: [] as unknown[],
     async $transaction<T>(fn: (tx: unknown) => Promise<T>, options?: unknown): Promise<T> { db.transactionOptions.push(options); return fn(db) },
   }
@@ -325,6 +327,14 @@ describe("POST /api/admin/events/[id]/send-reminder (#1105)", () => {
     expect((await res.json()).error).toMatch(/^Le rappel précédent n'est pas encore parti en entier/)
     expect(enqueued).toHaveLength(1)
     expect(db.event.updateMany).not.toHaveBeenCalled()
+  })
+
+  it("takes the « Renvoyer » locks of each person's reminder before checking for a copy", async () => {
+    const db = fakeDb(members(2), [])
+    setup(db)
+    const { POST } = await import("@/app/api/admin/events/[id]/send-reminder/route")
+    await POST(post("/api/admin/events/evt-1/send-reminder"), params)
+    expect(db.locks).toEqual([["manual_reminder:evt-1:vol-0:", "manual_reminder:evt-1:vol-1:"]])
   })
 
   it("gives the transaction room for a long list (Prisma's 5 s default is too short)", async () => {

@@ -26,3 +26,17 @@ export async function outstandingInviteEmails(tx: OutboxReader, organizationId: 
     return { dedupeKey: r.dedupeKey, email }
   }), currentEmail)
 }
+
+type Locker = { $executeRaw(query: TemplateStringsArray, ...values: unknown[]): Promise<number> }
+
+/**
+ * Takes the transaction-scoped advisory locks of these emails (#1105), the same ones « Renvoyer »
+ * takes (retryOutboxRow): queuing a new copy and putting back a failed one are serialised, so
+ * they cannot both find no twin and both send. Sorted, so two transactions never wait on each
+ * other in opposite orders. Prefixes come from sameEmailKeyPrefix's formats.
+ */
+export async function lockSameEmails(tx: Locker, prefixes: string[]): Promise<void> {
+  const keys = [...new Set(prefixes)].sort()
+  if (keys.length === 0) return
+  await tx.$executeRaw`SELECT pg_advisory_xact_lock(hashtext(k)) FROM unnest(${keys}::text[]) AS k ORDER BY k`
+}

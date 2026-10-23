@@ -10,7 +10,7 @@ import { z } from "zod"
 import { linkToken } from "@/lib/token-vault"
 import { validationError } from "@/lib/api-error"
 import { REMIND_COOLDOWN_MS, SEND_TRANSACTION_OPTIONS, emailedWithin, inviteEmailDedupeKey, sendCutoff } from "@/lib/invitation-sending"
-import { outstandingInviteEmails } from "@/lib/invitation-outbox"
+import { lockSameEmails, outstandingInviteEmails } from "@/lib/invitation-outbox"
 
 const schema = z.object({
   message: z.string().max(500).optional(),
@@ -84,6 +84,8 @@ export async function POST(req: Request, { params }: { params: Promise<{ id: str
   const { outboxIds, claimed } = candidates.length === 0
     ? { outboxIds: [] as string[], claimed: 0 }
     : await db.$transaction(async (tx) => {
+        // Serialised with « Renvoyer » of an earlier copy of these same emails.
+        await lockSameEmails(tx, candidates.map((i) => `member_invite:${i.id}:`))
         // An earlier invitation email still waiting in the outbox: no second copy behind it.
         const outstanding = await outstandingInviteEmails(tx, event.organizationId, new Map(candidates.map((i) => [i.id, i.volunteer.email])))
         // The claim: only rows still last emailed before the cutoff. A concurrent reminder that got

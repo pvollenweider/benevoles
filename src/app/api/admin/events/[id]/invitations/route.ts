@@ -6,7 +6,7 @@ import { requireOrgSession } from "@/lib/auth-guard"
 import { memberInvitePayload } from "@/lib/notification-helpers"
 import { deliverAfterResponse, enqueueNotifications } from "@/lib/notifications/outbox"
 import { RESEND_GUARD_MS, SEND_TRANSACTION_OPTIONS, inviteEmailDedupeKey, sendCutoff } from "@/lib/invitation-sending"
-import { outstandingInviteEmails } from "@/lib/invitation-outbox"
+import { lockSameEmails, outstandingInviteEmails } from "@/lib/invitation-outbox"
 import { adminActor, logEvent } from "@/lib/event-log"
 import { z } from "zod"
 import { randomBytes } from "crypto"
@@ -145,6 +145,8 @@ export async function POST(req: Request, { params }: { params: Promise<{ id: str
     // RESEND_GUARD_MS ago or is still waiting in the outbox: a double click or a retried request
     // never emails them twice.
     const existingInvites = existingIds.length === 0 ? [] : await tx.memberInvite.findMany({ where: { eventId, volunteerId: { in: existingIds } }, select: { id: true, volunteerId: true } })
+    // Serialised with « Renvoyer » of an earlier copy of these same emails.
+    await lockSameEmails(tx, existingInvites.map((i) => `member_invite:${i.id}:`))
     const outstanding = await outstandingInviteEmails(tx, event.organizationId, new Map(existingInvites.map((i) => [i.id, byId.get(i.volunteerId)!.email])))
     const resent = existingIds.length === 0 ? [] : await tx.memberInvite.updateManyAndReturn({
       where: {
