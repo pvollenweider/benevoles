@@ -42,7 +42,7 @@ describe("public content renders are memoised in production", () => {
     vi.stubEnv("NODE_ENV", "production")
     const unit = loadDocUnits()[0]
     expect(renderChangelog()).toBe(renderChangelog())
-    expect(renderPublicSource("GUIDE_ADMIN.md", "Guide administrateur", "https://media.test")).toBe(renderPublicSource("GUIDE_ADMIN.md", "Guide administrateur", "https://media.test"))
+    expect(renderPublicSource("content/guide/GUIDE_ADMIN.md", "Guide administrateur", "https://media.test")).toBe(renderPublicSource("content/guide/GUIDE_ADMIN.md", "Guide administrateur", "https://media.test"))
     expect(renderFeaturesPage("https://media.test")).toBe(renderFeaturesPage("https://media.test"))
     expect(renderDocUnitParts(unit, "https://media.test")).toBe(renderDocUnitParts(unit, "https://media.test"))
     expect(docUnitHeadingIds(unit)).toBe(docUnitHeadingIds(unit))
@@ -51,7 +51,7 @@ describe("public content renders are memoised in production", () => {
   it("keys on the media address, so the video links follow VIDEO_MEDIA_BASE_URL", () => {
     vi.stubEnv("NODE_ENV", "production")
     expect(renderFeaturesPage("https://media.test")).not.toBe(renderFeaturesPage(null))
-    expect(renderPublicSource("GUIDE_ADMIN.md", "Guide administrateur", "https://media.test")).not.toBe(renderPublicSource("GUIDE_ADMIN.md", "Guide administrateur", null))
+    expect(renderPublicSource("content/guide/GUIDE_ADMIN.md", "Guide administrateur", "https://media.test")).not.toBe(renderPublicSource("content/guide/GUIDE_ADMIN.md", "Guide administrateur", null))
   })
 
   it("gives the same result as an uncached render", () => {

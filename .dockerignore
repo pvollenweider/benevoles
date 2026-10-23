@@ -10,23 +10,23 @@ docker-compose*.yml
 # build time (next build prerenders /fonctionnalites, /doc/admin) and at runtime:
 # each must be listed here, or the *.md rule above breaks the production build (ENOENT).
 # Checked by src/lib/__tests__/docker-public-sources.test.ts.
-!FEATURES.md
-!LOGICIEL-PLANNING-BENEVOLES.md
-!POUR-QUI.md
-!BENEVOLES-FETE-DE-VILLAGE.md
-!BENEVOLES-FESTIVAL.md
-!BENEVOLES-MANIFESTATION-SPORTIVE.md
-!PLANNING-PERMANENCES-BENEVOLES.md
-!TARIFS.md
-!TABLEUR-OU-OUTIL-DEDIE.md
+!content/pages/FEATURES.md
+!content/pages/LOGICIEL-PLANNING-BENEVOLES.md
+!content/pages/POUR-QUI.md
+!content/pages/BENEVOLES-FETE-DE-VILLAGE.md
+!content/pages/BENEVOLES-FESTIVAL.md
+!content/pages/BENEVOLES-MANIFESTATION-SPORTIVE.md
+!content/pages/PLANNING-PERMANENCES-BENEVOLES.md
+!content/pages/TARIFS.md
+!content/pages/TABLEUR-OU-OUTIL-DEDIE.md
 # The home's FAQ (#951, LANDING_FAQ_SOURCE in src/lib/landing-seo.ts), read at runtime too.
-!FAQ-ACCUEIL.md
-!ACCESSIBILITE.md
-!ACCORD-SOUS-TRAITANCE.md
-!SOUS-TRAITANTS.md
+!content/pages/FAQ-ACCUEIL.md
+!content/pages/ACCESSIBILITE.md
+!content/legal/ACCORD-SOUS-TRAITANCE.md
+!content/legal/SOUS-TRAITANTS.md
 !CHANGELOG.md
-!GUIDE_ADMIN.md
-!GUIDE_BENEVOLE.md
+!content/guide/GUIDE_ADMIN.md
+!content/guide/GUIDE_BENEVOLE.md
 # The documentation units (#649, src/lib/doc-units.ts), rendered by /doc/<slug>.
 !guide/*.md
 # The blog posts (#944, src/lib/blog.ts), rendered by /blog, /blog/<slug> and /blog/feed.xml.
@@ -40,7 +40,7 @@ coverage
 # output never belong in the app image — only the catalogue, manifests and scripts do, read by
 # src/lib/video-catalog.ts at build and at runtime, the same way the guides above are. `*.md`
 # above already excludes every .md file including the scripts and the plan: re-included below,
-# like FEATURES.md. Checked by src/lib/__tests__/video-docker-sources.test.ts.
+# like content/pages/FEATURES.md. Checked by src/lib/__tests__/video-docker-sources.test.ts.
 videos/assets
 videos/lib
 videos/tools

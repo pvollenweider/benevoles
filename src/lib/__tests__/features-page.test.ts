@@ -86,7 +86,9 @@ describe("actionHref (#759)", () => {
   it("turns a link to a source file into the page that serves it", () => {
     expect(actionHref("guide/premiers-pas.md")).toBe("/doc/premiers-pas")
     expect(actionHref("guide/premiers-pas.md#la-liste")).toBe("/doc/premiers-pas#la-liste")
-    expect(actionHref("GUIDE_ADMIN.md")).toBe("/doc/admin")
+    expect(actionHref("../guide/GUIDE_ADMIN.md")).toBe("/doc/admin")
+    // As written in content/pages/, relative to the file (#759 kept after the move to content/).
+    expect(actionHref("../../guide/premiers-pas.md#la-liste")).toBe("/doc/premiers-pas#la-liste")
   })
 
   it("leaves every other address as it is", () => {
@@ -99,7 +101,7 @@ describe("actionHref (#759)", () => {
   })
 
   it("no action of FEATURES.md points at a Markdown file", () => {
-    const page = parseFeaturesPage(read("FEATURES.md"))
+    const page = parseFeaturesPage(read("content/pages/FEATURES.md"))
     const hrefs = [page.intro, ...page.sections].flatMap((b) => b.actions.map((a) => a.href))
     expect(hrefs.length).toBeGreaterThan(0)
     for (const href of hrefs) expect(href, href).not.toMatch(/\.md(#|$)/)
@@ -187,7 +189,7 @@ describe("mailtoAddress", () => {
 })
 
 describe("FEATURES.md, as /fonctionnalites lays it out", () => {
-  const page = parseFeaturesPage(read("FEATURES.md"))
+  const page = parseFeaturesPage(read("content/pages/FEATURES.md"))
   const catalog = loadVideoCatalog()
 
   it("opens with the promise, two actions (the sign-up first, #810) and the presentation video", () => {
@@ -199,7 +201,7 @@ describe("FEATURES.md, as /fonctionnalites lays it out", () => {
   })
 
   it("says what decides: free, open source, no account for the volunteers", () => {
-    const text = read("FEATURES.md")
+    const text = read("content/pages/FEATURES.md")
     for (const words of [/gratuit/i, /open source/i, /sans compte/i, /hébergé en France/i, /développé en Suisse/i]) expect(text).toMatch(words)
   })
 
@@ -242,7 +244,7 @@ describe("FEATURES.md, as /fonctionnalites lays it out", () => {
   })
 
   it("says « étiquette », never « tag », like the rest of the page", () => {
-    expect(read("FEATURES.md")).not.toMatch(/\btags?\b/i)
+    expect(read("content/pages/FEATURES.md")).not.toMatch(/\btags?\b/i)
   })
 
   // #951: a short FAQ of its own, also its FAQPage structured data (the draft marker is no question).
@@ -260,10 +262,10 @@ describe("FEATURES.md, as /fonctionnalites lays it out", () => {
 })
 
 describe("LOGICIEL-PLANNING-BENEVOLES.md, the editorial page on volunteer scheduling (#767)", () => {
-  const source = read("LOGICIEL-PLANNING-BENEVOLES.md")
+  const source = read("content/pages/LOGICIEL-PLANNING-BENEVOLES.md")
   const page = parseFeaturesPage(source)
   const catalog = loadVideoCatalog()
-  const features = parseFeaturesPage(read("FEATURES.md"))
+  const features = parseFeaturesPage(read("content/pages/FEATURES.md"))
 
   it("answers the search with its title, then asks for a space by email, like /fonctionnalites", () => {
     expect(page.title).toBe("Logiciel de planning pour bénévoles")

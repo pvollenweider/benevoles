@@ -6,7 +6,7 @@ C'est gratuit, open source et hébergé en France.
 
 <!-- actions -->
 - [Demander un espace](/inscription)
-- [Créer son premier événement](guide/creer-son-premier-evenement.md)
+- [Créer son premier événement](../../guide/creer-son-premier-evenement.md)
 
 ![La page d'inscription sur un téléphone : la Fête du village de Montvert, ses postes (Montage, Accueil, Buvette, Navette, Sécurité) sur une frise horaire, avec les places prises et les créneaux complets.](/doc-img/public-timeline-mobile.png)
 
@@ -22,7 +22,7 @@ Le dernier créneau de buvette, de 23 h à 2 h, se termine le lendemain. Le plan
 
 Le modèle prévoit quatre personnes par créneau de buvette. Si elle peut tourner à deux, indiquez un minimum de 2 : le planning distingue alors un créneau sous le minimum d'un créneau qui a son minimum sans être complet.
 
-En savoir plus : [créer un événement](guide/creer-un-evenement.md), [horaires et créneaux de nuit](guide/horaires-et-nuit.md).
+En savoir plus : [créer un événement](../../guide/creer-un-evenement.md), [horaires et créneaux de nuit](../../guide/horaires-et-nuit.md).
 
 ## Reprendre l'édition de l'an dernier
 
@@ -32,7 +32,7 @@ La copie est un brouillon, avec les inscriptions fermées. Vous les ouvrez quand
 
 <!-- video: EVENT_DUPLICATE -->
 
-En savoir plus : [dupliquer un événement](guide/dupliquer-un-evenement.md), [le tutoriel vidéo sur la duplication](/videos/EVENT_DUPLICATE).
+En savoir plus : [dupliquer un événement](../../guide/dupliquer-un-evenement.md), [le tutoriel vidéo sur la duplication](/videos/EVENT_DUPLICATE).
 
 ## Toucher tout le village, pas seulement le comité
 
@@ -42,7 +42,7 @@ Vos habitués peuvent recevoir une invitation par email : vous importez leur lis
 
 <!-- video: MEMBERS_INVITATIONS -->
 
-En savoir plus : [partager le lien](guide/partager-le-lien.md), [inviter des membres](guide/inviter-des-membres.md), [le tutoriel vidéo sur les invitations](/videos/MEMBERS_INVITATIONS).
+En savoir plus : [partager le lien](../../guide/partager-le-lien.md), [inviter des membres](../../guide/inviter-des-membres.md), [le tutoriel vidéo sur les invitations](/videos/MEMBERS_INVITATIONS).
 
 ## Une responsable pour la buvette
 
@@ -52,7 +52,7 @@ La personne qui tient la buvette depuis des années n'a pas besoin d'un accès �
 
 <!-- video: SECTOR_LEADERS -->
 
-En savoir plus : [les responsables de secteur](guide/responsables-de-secteur.md), [le tutoriel vidéo sur les responsables de secteur](/videos/SECTOR_LEADERS).
+En savoir plus : [les responsables de secteur](../../guide/responsables-de-secteur.md), [le tutoriel vidéo sur les responsables de secteur](/videos/SECTOR_LEADERS).
 
 ## Le week-end de la fête
 
@@ -62,7 +62,7 @@ Sur votre téléphone, la page du jour J montre les créneaux en cours et ceux d
 
 <!-- video: ATTENDANCE_CHECK_IN -->
 
-En savoir plus : [rapports, badges et résumé](guide/rapports-badges-et-resume.md), [les présences le jour J](guide/presences-le-jour-j.md), [le tutoriel vidéo sur les présences](/videos/ATTENDANCE_CHECK_IN).
+En savoir plus : [rapports, badges et résumé](../../guide/rapports-badges-et-resume.md), [les présences le jour J](../../guide/presences-le-jour-j.md), [le tutoriel vidéo sur les présences](/videos/ATTENDANCE_CHECK_IN).
 
 ## Questions fréquentes
 
@@ -88,4 +88,4 @@ Créez l'espace de votre comité, puis partez du modèle « Fête de village » 
 
 <!-- actions -->
 - [Demander un espace](/inscription)
-- [Créer son premier événement](guide/creer-son-premier-evenement.md)
+- [Créer son premier événement](../../guide/creer-son-premier-evenement.md)

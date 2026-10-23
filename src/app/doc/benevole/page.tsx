@@ -19,7 +19,7 @@ export function generateMetadata(): Metadata {
 // GUIDE_BENEVOLE.md (source of truth, also readable on GitHub), then the frequent questions and the
 // index of its units; old /doc/benevole#<anchor> links are followed to their unit.
 export default function DocBenevolePage() {
-  const { title, html } = renderPublicSource("GUIDE_BENEVOLE.md", "Guide bénévole", env.VIDEO_MEDIA_BASE_URL)
+  const { title, html } = renderPublicSource("content/guide/GUIDE_BENEVOLE.md", "Guide bénévole", env.VIDEO_MEDIA_BASE_URL)
   return (
     <>
       <JsonLd data={publicPageJsonLd("/doc/benevole", apexBaseUrl())} />

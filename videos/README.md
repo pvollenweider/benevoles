@@ -544,7 +544,7 @@ Depuis le 2026-10-07, la bibliothèque est publique et référencée (`src/lib/v
 - sitemap vidéo `/video-sitemap.xml` (extension vidéo de Google), cité dans `robots.txt`, servi
   sur le domaine principal seulement ;
 - liens « Tutoriels vidéo » dans le pied de page public, sur `/doc` et sur `/fonctionnalites`
-  (`FEATURES.md`).
+  (`content/pages/FEATURES.md`).
 - le téléphone de l'accueil de benevol.app joue `VOLUNTEER_REGISTER` sur place (#765,
   `src/lib/home-signup-video.ts`) : la dépublier ou la renommer rend au téléphone son image fixe.
 
@@ -559,7 +559,7 @@ et `seedScenario` (#637, #638) :
 - `level` (optionnel parmi `decouverte`, `intermediaire`, `avance`) : aucune vidéo n'en a
   aujourd'hui, le plan ne donnant pas encore de niveau par module.
 - `feature` : le nom de la fonctionnalité Benevol illustrée (texte simple aujourd'hui, pas encore
-  un lien vérifié vers une ancre de `FEATURES.md` ou `GUIDE_ADMIN.md`).
+  un lien vérifié vers une ancre de `content/pages/FEATURES.md` ou `content/guide/GUIDE_ADMIN.md`).
 - `updatedAt` (`AAAA-MM-JJ`) et `revision` (entier ≥ 1) : `revision` identifie le rendu sur
   lequel portent les réponses « utile ? » (#646, voir plus bas). L'augmenter quand une vidéo est
   entièrement régénérée : ses réponses repartent de zéro.

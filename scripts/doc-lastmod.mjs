@@ -47,7 +47,17 @@ export function docLastmodSources(root = ROOT) {
 }
 
 /**
- * Committer date (ISO 8601) of the last commit touching each file; files without history are skipped.
+ * The trailer of a commit that changes no rendered page, only where its sources live (a move of
+ * the Markdown files, the relative links between them): the sitemap keeps the date of the change
+ * before it, so a page whose text didn't change doesn't look updated to search engines.
+ */
+export const LASTMOD_SKIP_TRAILER = "Doc-Lastmod: skip"
+const [TRAILER_KEY, TRAILER_VALUE] = LASTMOD_SKIP_TRAILER.split(": ")
+
+/**
+ * Committer date (ISO 8601) of the last commit touching each file, following it across renames
+ * and passing over the commits that carry LASTMOD_SKIP_TRAILER (unless every commit carries it, as
+ * in a shallow clone); files without history are skipped.
  * @param {string[]} sources
  * @param {string} [root]
  * @returns {Record<string, string>}
@@ -56,7 +66,14 @@ export function docLastmod(sources, root = ROOT) {
   /** @type {Record<string, string>} */
   const map = {}
   for (const source of sources) {
-    const date = execFileSync("git", ["log", "-1", "--format=%cI", "--", source], { cwd: root, encoding: "utf-8" }).trim()
+    // Not `--grep`: a rename commit left out by it would also stop `--follow` at the new path.
+    const log = execFileSync("git", ["log", "--follow", `--format=%cI%x09%(trailers:key=${TRAILER_KEY},valueonly,separator=%x2c)`, "--", source], { cwd: root, encoding: "utf-8" })
+    const commits = log
+      .split("\n")
+      .map((line) => line.split("\t"))
+      .filter(([d]) => d)
+    // Every commit skipped (a shallow clone that only has the move): the last commit, as before.
+    const date = (commits.find(([, trailer]) => trailer?.trim() !== TRAILER_VALUE) ?? commits[0])?.[0]
     if (date) map[source] = date
   }
   return map

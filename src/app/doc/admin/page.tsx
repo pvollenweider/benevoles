@@ -20,7 +20,7 @@ export function generateMetadata(): Metadata {
 // GUIDE_ADMIN.md (source of truth, also readable on GitHub), then the frequent questions and the
 // index of its units.
 export default function DocAdminPage() {
-  const { title, html } = renderPublicSource("GUIDE_ADMIN.md", "Guide administrateur", env.VIDEO_MEDIA_BASE_URL)
+  const { title, html } = renderPublicSource("content/guide/GUIDE_ADMIN.md", "Guide administrateur", env.VIDEO_MEDIA_BASE_URL)
   return (
     <>
       <JsonLd data={publicPageJsonLd("/doc/admin", apexBaseUrl())} />

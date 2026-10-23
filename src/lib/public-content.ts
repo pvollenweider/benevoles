@@ -57,7 +57,7 @@ function docImageHtml(image: MarkdownImage, index: number): string {
 }
 
 /**
- * A public content page's HTML from its Markdown source at the repo root (server only). The file's
+ * A public content page's HTML from its Markdown source, a path from the repo root (server only). The file's
  * own "# " title becomes the page's single <h1>; the remaining headings (##, ###...) keep their
  * depth, each with a stable id, the slug of its text (#568), so links can open a given section.
  * Links to other source files become site links. The Dockerfile copies every source into
@@ -172,7 +172,7 @@ export type RenderedFeaturesPage = {
  * generated (videos/renders.json) and VIDEO_MEDIA_BASE_URL; a player, a render to play. Otherwise
  * nothing, never a broken image.
  */
-export function renderFeaturesPage(mediaBaseUrl?: string | null, source = "FEATURES.md", fallbackTitle = "Fonctionnalités"): RenderedFeaturesPage {
+export function renderFeaturesPage(mediaBaseUrl?: string | null, source = "content/pages/FEATURES.md", fallbackTitle = "Fonctionnalités"): RenderedFeaturesPage {
   return featuresPageCache(`${source}\0${mediaBaseUrl ?? ""}`, () => renderFeaturesPageNow(mediaBaseUrl, source, fallbackTitle))
 }
 

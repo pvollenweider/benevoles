@@ -23,7 +23,7 @@ export async function llmsSources(): Promise<(LlmsSources & { guides: { path: st
   return {
     base: apexBaseUrl(),
     summary: LANDING_DESCRIPTION,
-    features: read("FEATURES.md"),
+    features: read("content/pages/FEATURES.md"),
     units: loadDocUnits(),
     repositoryUrl: REPOSITORY_URL,
     guides: DOC_GUIDES.flatMap((g) => (g.source ? [{ path: g.path, markdown: read(g.source) }] : [])),
