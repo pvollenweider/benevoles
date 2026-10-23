@@ -23,7 +23,7 @@ export default function PrivacyPage() {
     <>
       <JsonLd data={publicPageJsonLd("/legal/privacy", apexBaseUrl())} />
       <h1>Politique de confidentialité</h1>
-      <p className="text-gray-500 text-sm">Dernière mise à jour : 22 octobre 2026</p>
+      <p className="text-gray-500 text-sm">Dernière mise à jour : 23 octobre 2026</p>
 
       <p>
         La présente politique décrit comment <strong>benevol.app</strong>, éditée par{" "}

@@ -5,7 +5,7 @@ Deux politiques, fixées dans `src/lib/retention.ts` ([docs/retention.md](../doc
 - **Journaux d'accès de Traefik** (`accessLogs`, `accessLogFullIp`) : **1 an**, lignes JSON brutes telles que Traefik les écrit, pour tous les sites de ce Traefik. Adresse IP complète et User-Agent pendant **90 jours** ; ensuite l'adresse est réduite à son réseau (IPv4 en /24, IPv6 en /48) et le User-Agent retiré. Décision du propriétaire du 2026-10-22 pour la durée, le User-Agent et l'analyse à la demande ; la réduction après 90 jours est une proposition de minimisation (voir plus bas). Fichier JSON sur le nœud, procédure ci-dessous.
 - **Journaux techniques des conteneurs** (`technicalLogs`) : **90 jours**. Sortie standard des pods, lue par `kubectl logs` ; voir « Journaux des conteneurs » plus bas.
 
-Ces réglages vivent sur le nœud k3s (`vol8`, Ubuntu 24.04), hors du workflow de déploiement : rien ici n'est appliqué par `deploy.yml`. Une durée n'est garantie qu'une fois la procédure appliquée et vérifiée sur le serveur (`docs/rgpd/verifications-production.md`).
+Ces réglages vivent sur le nœud k3s (`vol8`, Ubuntu 24.04), hors du workflow de déploiement : rien ici n'est appliqué par `deploy.yml`. Une durée n'est garantie qu'une fois la procédure appliquée et vérifiée sur le serveur (`docs/rgpd/verifications-production.md`). Journaux d'accès de Traefik : procédure appliquée sur `vol8` le 2026-10-23.
 
 ## Journaux d'accès de Traefik
 
@@ -107,6 +107,8 @@ kubectl -n kube-system rollout status deploy/traefik
 
 **Fichier de manifeste de k3s** : le `HelmChartConfig` `traefik` appartient aussi à l'Addon `traefik-config` de k3s, dont la source est `/var/lib/rancher/k3s/server/manifests/traefik-config.yaml` sur le nœud. Si ce fichier existe encore, k3s peut le réappliquer (au redémarrage de k3s, ou dès qu'il change) et revenir à l'ancienne configuration. Le comparer à `k8s/traefik-config.yaml` et l'aligner (copie du fichier du dépôt) dans la même intervention, ou le retirer si `kubectl apply` reste la seule source.
 
+> **En production** : appliqué le 2026-10-23 en installant `k8s/traefik-config.yaml` comme `/var/lib/rancher/k3s/server/manifests/traefik-config.yaml` (k3s l'applique lui-même ; l'ancienne version est gardée dans `/root/traefik-config.yaml.avant-1095`). C'est désormais **ce fichier du nœud** qui fait foi : toute modification de `k8s/traefik-config.yaml` s'y recopie, un `kubectl apply` seul serait écrasé au prochain redémarrage de k3s. Le retour arrière remet l'ancienne version à cet endroit.
+
 ### Vérification
 
 ```bash
@@ -145,7 +147,8 @@ Après un an, `sudo ls /var/log/traefik-archive/ | wc -l` se stabilise autour de
 # Traefik revient à la sortie standard (journaux visibles par kubectl logs, quelques heures seulement)
 git show <commit-précédent>:k8s/traefik-config.yaml > /tmp/traefik-config.yaml
 kubectl apply -f /tmp/traefik-config.yaml       # ou retirer logs.access.format/filePath/fields, deployment.additionalVolumes et additionalVolumeMounts
-# aligner aussi /var/lib/rancher/k3s/server/manifests/traefik-config.yaml s'il existe
+# en production, la source est le fichier du nœud : y remettre l'ancienne version (sauvegardée le 2026-10-23)
+# sudo cp /root/traefik-config.yaml.avant-1095 /var/lib/rancher/k3s/server/manifests/traefik-config.yaml
 ```
 
 Garder ou supprimer les fichiers déjà écrits est une décision à part : tant qu'ils existent, la politique annoncée (1 an, adresses réduites après 90 jours) doit continuer de s'appliquer, donc garder logrotate et `traefik-log-anonymise` jusqu'à la suppression du dernier fichier ; Traefik n'écrivant plus le fichier, l'alerte « not written » du script devient alors attendue chaque nuit, jusqu'au retrait de la tâche. Pour tout retirer d'un coup, sur le nœud : supprimer `/etc/cron.d/traefik-log-anonymise`, `/etc/logrotate.d/traefik-access`, le script de `/usr/local/sbin`, puis les répertoires `/var/log/traefik`, `/var/log/traefik-archive` et `/var/lib/traefik-log-anonymise`. Revenir aussi sur `src/lib/retention.ts` et la politique de confidentialité si ce qui est annoncé change.
