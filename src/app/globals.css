@@ -81,6 +81,24 @@ body {
   box-shadow: 0 0 0 2px rgba(59, 130, 246, 1);
 }
 
+/* In a dark content frame (ContentShell, #1116: the video library's filters): a gray-800 field
+   whose gray-400 border is its visible edge (1.4.11: 5.8:1 on its fill, 7:1 on gray-900), light
+   text, and the dark theme's focus blue. `.dark` only exists on that frame's root. */
+.dark .input {
+  background: var(--color-gray-800);
+  border-color: var(--color-gray-400);
+  color: var(--color-gray-100);
+}
+
+.dark .input::placeholder {
+  color: var(--color-gray-400);
+}
+
+.dark .input:focus {
+  border-color: var(--color-blue-400);
+  box-shadow: 0 0 0 2px var(--color-blue-400);
+}
+
 /* Forced colours (Windows Contrast themes) drop box-shadow and force border colours, so the
    focus above disappears. A transparent outline is repainted in the system colour, like
    Tailwind's `outline-hidden`; outside forced colours nothing changes. */
@@ -109,6 +127,13 @@ body {
   input[type="range"]:focus-visible {
     outline: 2px solid #1d4ed8;
     outline-offset: 2px;
+  }
+
+  /* blue-700 is 1.7:1 on the dark theme's gray-900: a button without its own outline colour
+     takes the dark theme's blue-400 there (#1116). */
+  .dark button:focus-visible,
+  .dark input[type="range"]:focus-visible {
+    outline-color: var(--color-blue-400);
   }
 }
 

@@ -1,38 +1,26 @@
 // SPDX-FileCopyrightText: 2026 Philippe Vollenweider
 // SPDX-License-Identifier: AGPL-3.0-only
 
-import PublicFooter from "@/components/PublicFooter"
-import ContentNav from "@/components/public/ContentNav"
-import SiteBrandLink from "@/components/public/SiteBrandLink"
-import SkipLink, { MAIN_CONTENT_ID } from "@/components/admin/SkipLink"
+import ContentShell from "@/components/public/ContentShell"
+import { MAIN_CONTENT_ID } from "@/components/admin/SkipLink"
 import { SITE_CONTAINER_CLASS } from "@/components/public/site-container"
-import { audienceNav } from "@/lib/doc-pages"
+import { CONTENT_VIEWPORT } from "@/lib/seo-metadata"
+
+export const viewport = CONTENT_VIEWPORT
 
 /**
  * The video library (#644): public and indexed since 2026-10-07 (src/lib/video-seo.ts), linked
  * from the site footer and the documentation, listed in its own /video-sitemap.xml rather than in
- * CONTENT_NAV (src/lib/doc-pages.ts). Its own frame instead of ContentShell (no dark theme, a gray
- * page under the cards), with the same header navigation (features, « Pour qui ? », guides) and the same site
- * footer, all in the site container (SITE_CONTAINER_CLASS) as on the other public pages.
+ * CONTENT_NAV (src/lib/doc-pages.ts). In the frame of every public content page (#1116): the same
+ * header (navigation, « Pour qui ? », theme toggle), the same footer and the dark theme;
+ * `layout="doc"` because the library draws its own, wider <main> (no prose column).
  */
 export default function VideosLayout({ children }: { children: React.ReactNode }) {
   return (
-    <div className="min-h-screen bg-gray-50">
-      <SkipLink />
-      <header className="border-b border-gray-200 bg-white">
-        {/* relative: the « Pour qui ? » list of ContentNav opens under the header on a phone. */}
-        <div className={`${SITE_CONTAINER_CLASS} relative py-4 flex items-center justify-between flex-wrap gap-x-2 gap-y-4`}>
-          <SiteBrandLink className="text-gray-900 hover:text-gray-600 focus-visible:outline-blue-600" />
-          <ContentNav audiences={audienceNav()} />
-        </div>
-      </header>
+    <ContentShell layout="doc">
       <main id={MAIN_CONTENT_ID} tabIndex={-1} className={`${SITE_CONTAINER_CLASS} py-10 focus:outline-none`}>
         {children}
       </main>
-      {/* After </main>: a footer inside main loses its contentinfo role. */}
-      <div className={SITE_CONTAINER_CLASS}>
-        <PublicFooter variant="site" />
-      </div>
-    </div>
+    </ContentShell>
   )
 }

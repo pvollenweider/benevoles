@@ -1,37 +1,15 @@
-import PublicFooter from "@/components/PublicFooter"
-import SiteBrandLink from "@/components/public/SiteBrandLink"
-// The shared prose recipe of the content pages (focus outline on links, scroll-mt on headings);
-// its dark: variants are inert here, the legal pages have no dark scope.
-import { CONTENT_PROSE_CLASS } from "@/components/public/ContentShell"
-import SkipLink, { MAIN_CONTENT_ID } from "@/components/admin/SkipLink"
-import { SITE_CONTAINER_CLASS, SITE_READING_COLUMN_CLASS } from "@/components/public/site-container"
+import ContentShell from "@/components/public/ContentShell"
+import { CONTENT_VIEWPORT } from "@/lib/seo-metadata"
 
-// The browser bar takes the colour of the legal pages' white header.
-export const viewport = { themeColor: "#ffffff" }
+// The browser bar takes the header's colour, white or the dark theme's gray-900.
+export const viewport = CONTENT_VIEWPORT
 
+/**
+ * The legal documents in the frame of every public content page (#1116): the same header
+ * (navigation, « Pour qui ? », theme toggle), the shared prose recipe in a <main>, the site footer
+ * after it, and the dark theme. The processing agreement and the sub-processors list are linked
+ * from the privacy policy, the terms and each other, not from the footer.
+ */
 export default function LegalLayout({ children }: { children: React.ReactNode }) {
-  return (
-    <div className="min-h-screen bg-white">
-      <SkipLink />
-      <header className="border-b border-gray-100">
-        <div className={`${SITE_CONTAINER_CLASS} py-4 flex items-center justify-between`}>
-          <SiteBrandLink className="text-gray-900 hover:text-gray-600 focus-visible:outline-blue-600" />
-          <span className="text-xs text-gray-500">Documents légaux</span>
-        </div>
-      </header>
-
-      <main id={MAIN_CONTENT_ID} tabIndex={-1} className={`${SITE_CONTAINER_CLASS} py-12 focus:outline-none`}>
-        <article className={`${CONTENT_PROSE_CLASS} ${SITE_READING_COLUMN_CLASS}`}>
-          {children}
-        </article>
-      </main>
-
-      {/* After </main>: a footer inside main loses its contentinfo role. The processing agreement
-          and the sub-processors list are linked from the privacy policy, the terms and each other.
-          Header, content and footer share the site container: their edges line up. */}
-      <div className={SITE_CONTAINER_CLASS}>
-        <PublicFooter variant="site" />
-      </div>
-    </div>
-  )
+  return <ContentShell>{children}</ContentShell>
 }

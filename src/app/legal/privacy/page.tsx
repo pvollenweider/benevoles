@@ -25,7 +25,7 @@ export default function PrivacyPage() {
     <>
       <JsonLd data={publicPageJsonLd("/legal/privacy", apexBaseUrl())} />
       <h1>Politique de confidentialité</h1>
-      <p className="text-gray-500 text-sm">Dernière mise à jour : 23 octobre 2026</p>
+      <p className="text-gray-500 dark:text-gray-400 text-sm">Dernière mise à jour : 23 octobre 2026</p>
 
       <p>
         La présente politique décrit comment <strong>benevol.app</strong>, éditée par{" "}
@@ -57,7 +57,7 @@ export default function PrivacyPage() {
       {/* A wide table scrolls in its own focusable region, named by its heading, so the page
           reflows at 320 px (1.4.10); the hint says so where the table is wider than the screen. */}
       <p className="sm:hidden">Faites défiler le tableau horizontalement.</p>
-      <div role="region" aria-labelledby="donnees-administrateurs" tabIndex={0} className="overflow-x-auto rounded focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-blue-600">
+      <div role="region" aria-labelledby="donnees-administrateurs" tabIndex={0} className="overflow-x-auto rounded focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-blue-600 dark:focus-visible:outline-blue-400">
         <table>
           <thead>
             <tr>
@@ -90,7 +90,7 @@ export default function PrivacyPage() {
 
       <h3 id="donnees-demandes-espace">2.2 Demandes d&apos;espace et prévention des abus</h3>
       <p className="sm:hidden">Faites défiler le tableau horizontalement.</p>
-      <div role="region" aria-labelledby="donnees-demandes-espace" tabIndex={0} className="overflow-x-auto rounded focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-blue-600">
+      <div role="region" aria-labelledby="donnees-demandes-espace" tabIndex={0} className="overflow-x-auto rounded focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-blue-600 dark:focus-visible:outline-blue-400">
         <table>
           <thead>
             <tr>

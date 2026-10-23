@@ -15,7 +15,7 @@ test("gallery loads, filters by theme, and opens a detail page", async ({ page }
 
   // VideoGallery is a client component (filters run in the browser, #592): wait for hydration
   // before interacting with its first control, or the selectOption below can be a no-op.
-  const themeSelect = page.getByLabel("Thème")
+  const themeSelect = page.getByLabel("Thème", { exact: true })
   await waitForHydration(themeSelect)
   await themeSelect.selectOption({ label: "Le parcours complet du bénévole" })
   await expect(page.getByRole("status").filter({ hasText: /vidéo/ })).toBeVisible()

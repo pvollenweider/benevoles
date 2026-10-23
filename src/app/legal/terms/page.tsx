@@ -19,7 +19,7 @@ export default function TermsPage() {
     <>
       <JsonLd data={publicPageJsonLd("/legal/terms", apexBaseUrl())} />
       <h1>Conditions générales d&apos;utilisation</h1>
-      <p className="text-gray-500 text-sm">Dernière mise à jour : 6 octobre 2026</p>
+      <p className="text-gray-500 dark:text-gray-400 text-sm">Dernière mise à jour : 6 octobre 2026</p>
 
       <h2>1. Objet</h2>
       <p>

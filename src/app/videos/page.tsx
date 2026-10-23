@@ -28,8 +28,8 @@ export default function VideosPage() {
     <div className="space-y-8">
       <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: serializeJsonLd(jsonLd) }} />
       <div>
-        <h1 className="text-xl font-bold text-gray-900">Bibliothèque vidéo</h1>
-        <p className="mt-1 text-sm text-gray-600">
+        <h1 className="text-xl font-bold text-gray-900 dark:text-gray-100">Bibliothèque vidéo</h1>
+        <p className="mt-1 text-sm text-gray-600 dark:text-gray-400">
           {videos.length} tutoriel{videos.length > 1 ? "s" : ""} vidéo pour prendre en main {SITE_NAME}, par thème et par public.
         </p>
       </div>
