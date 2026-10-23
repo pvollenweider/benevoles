@@ -1,5 +1,5 @@
 import { describe, it, expect } from "vitest"
-import { REMIND_COOLDOWN_MS, RESEND_GUARD_MS, emailedWithin, inviteEmailDedupeKey, lastInvitationEmailAt, manualReminderDedupeKey, sendCutoff } from "../invitation-sending"
+import { invitesWithEmailOutstanding, manualReminderKeyPrefix, REMIND_COOLDOWN_MS, RESEND_GUARD_MS, emailedWithin, inviteEmailDedupeKey, lastInvitationEmailAt, manualReminderDedupeKey, sendCutoff } from "../invitation-sending"
 
 const now = new Date("2026-10-23T12:00:00.000Z")
 const ago = (ms: number) => new Date(now.getTime() - ms)
@@ -38,5 +38,11 @@ describe("invitation sending rules (#1105)", () => {
     expect(inviteEmailDedupeKey("inv-1", now)).not.toBe(inviteEmailDedupeKey("inv-1", ago(-1)))
     expect(inviteEmailDedupeKey("inv-1", now)).not.toBe(inviteEmailDedupeKey("inv-2", now))
     expect(manualReminderDedupeKey("evt-1", "vol-1", now)).toBe(`manual_reminder:evt-1:vol-1:${now.getTime()}`)
+  })
+
+  it("reads the invites with an email still in the outbox from the rows' keys", () => {
+    expect(invitesWithEmailOutstanding(["member_invite:inv-1:123", "member_invite:inv-2:456", "open-shifts:b:vol", null, "manual_reminder:e:v:1"])).toEqual(new Set(["inv-1", "inv-2"]))
+    expect(manualReminderDedupeKey("evt-1", "vol-1", now).startsWith(manualReminderKeyPrefix("evt-1"))).toBe(true)
+    expect(inviteEmailDedupeKey("inv-9", now).startsWith("member_invite:inv-9:")).toBe(true)
   })
 })

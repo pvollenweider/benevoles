@@ -101,6 +101,18 @@ describe.skipIf(!url)("invitations and reminders through the outbox (#1105)", ()
     expect(await prisma.notificationOutbox.count({ where: { organizationId: orgId } })).toBe(COUNT)
   })
 
+  it("queues the largest allowed invitation (500 members) in one transaction, within its timeout", async () => {
+    const bigEvent = (await prisma.event.create({ data: { organizationId: orgId, slug: "grande", title: "Grande fête", startDate: new Date("2030-07-01"), endDate: new Date("2030-07-01") } })).id
+    await prisma.volunteer.createMany({ data: Array.from({ length: 500 }, (_, i) => ({ organizationId: orgId, firstName: `B${i}`, lastName: "L", email: `${tag}-big-${i}@example.org`, active: true })) })
+    const ids = (await prisma.volunteer.findMany({ where: { organizationId: orgId, email: { startsWith: `${tag}-big-` } }, select: { id: true } })).map((v) => v.id)
+    const started = Date.now()
+    const res = await invite(post(`/api/admin/events/${bigEvent}/invitations`, { volunteerIds: ids }), params(bigEvent))
+    expect(res.status).toBe(201)
+    expect(await res.json()).toMatchObject({ invitedNew: 500, emailsQueued: 500 })
+    expect(await prisma.notificationOutbox.count({ where: { organizationId: orgId } })).toBe(500)
+    console.log(`500 invitations queued in ${Date.now() - started} ms`)
+  })
+
   it("invites members through the outbox and does not re-send to someone invited a minute ago", async () => {
     smtp.mockResolvedValue({ ok: true })
     const ids = volunteerIds.slice(0, 3)

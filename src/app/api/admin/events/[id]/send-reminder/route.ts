@@ -5,7 +5,7 @@ import { NextResponse } from "next/server"
 import { requireOrgSession } from "@/lib/auth-guard"
 import { deliverAfterResponse, enqueueNotifications } from "@/lib/notifications/outbox"
 import type { NotificationPayload } from "@/lib/notifications/types"
-import { RESEND_GUARD_MS, manualReminderDedupeKey, sendCutoff } from "@/lib/invitation-sending"
+import { OUTSTANDING_OUTBOX_STATUSES, RESEND_GUARD_MS, SEND_TRANSACTION_OPTIONS, manualReminderDedupeKey, manualReminderKeyPrefix, sendCutoff } from "@/lib/invitation-sending"
 import { registrationToken } from "@/lib/token-vault"
 
 /**
@@ -68,12 +68,18 @@ export async function POST(_req: Request, { params }: { params: Promise<{ id: st
   // one gets it twice. The stamp and the emails commit together.
   const now = new Date()
   const cutoff = sendCutoff(now, RESEND_GUARD_MS)
-  const outboxIds = await db.$transaction(async (tx) => {
+  const outcome = await db.$transaction(async (tx) => {
+    // The previous reminder still waiting in the outbox (held by a sending limit): a second one
+    // would queue a second copy behind it.
+    const pending = await tx.notificationOutbox.count({
+      where: { organizationId: event.organizationId, status: { in: [...OUTSTANDING_OUTBOX_STATUSES] }, dedupeKey: { startsWith: manualReminderKeyPrefix(id) } },
+    })
+    if (pending > 0) return "pending" as const
     const { count } = await tx.event.updateMany({
       where: { id, OR: [{ reminderSentAt: null }, { reminderSentAt: { lt: cutoff } }] },
       data: { reminderSentAt: now },
     })
-    if (count === 0) return null
+    if (count === 0) return "recent" as const
     const payloads: NotificationPayload[] = []
     for (const bundle of byVolunteer.values()) {
       if (!bundle.volunteer.email) continue
@@ -101,10 +107,14 @@ export async function POST(_req: Request, { params }: { params: Promise<{ id: st
       })
     }
     return enqueueNotifications(payloads, tx, { organizationId: event.organizationId })
-  })
-  if (outboxIds === null) {
+  }, SEND_TRANSACTION_OPTIONS)
+  if (outcome === "recent") {
     return NextResponse.json({ error: "Ce rappel a déjà été lancé il y a moins de 5 minutes. Il n'est pas renvoyé, pour que personne ne le reçoive deux fois." }, { status: 409 })
   }
+  if (outcome === "pending") {
+    return NextResponse.json({ error: "Le rappel précédent n'est pas encore parti en entier : une partie de ses emails attend son tour. Il n'est pas renvoyé, pour que personne ne le reçoive deux fois. Vous pourrez en lancer un autre une fois ces emails partis." }, { status: 409 })
+  }
+  const outboxIds = outcome
   deliverAfterResponse(outboxIds)
 
   // `sent` kept for a page loaded before this version: it now means « queued ».

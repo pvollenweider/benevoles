@@ -17,8 +17,8 @@ export function inviteResultText(r: { invitedNew?: number; skippedExisting?: num
   const sentences = parts.length ? [`${parts.join(", ")}.`] : []
   if (r.recentlySkipped) {
     sentences.push(r.recentlySkipped > 1
-      ? `${r.recentlySkipped} invitations pas renvoyées : déjà envoyées il y a moins de 5 minutes.`
-      : "1 invitation pas renvoyée : déjà envoyée il y a moins de 5 minutes.")
+      ? `${r.recentlySkipped} invitations pas renvoyées : la précédente est partie il y a moins de 5 minutes, ou attend encore son tour.`
+      : "1 invitation pas renvoyée : la précédente est partie il y a moins de 5 minutes, ou attend encore son tour.")
   }
   return sentences.join(" ")
 }

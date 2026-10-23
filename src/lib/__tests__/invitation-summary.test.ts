@@ -9,8 +9,8 @@ describe("inviteResultText", () => {
   })
 
   it("puts an invitation not sent again in its own sentence", () => {
-    expect(inviteResultText({ skippedExisting: 1, recentlySkipped: 1 })).toBe("1 déjà invité. 1 invitation pas renvoyée : déjà envoyée il y a moins de 5 minutes.")
-    expect(inviteResultText({ skippedExisting: 2, recentlySkipped: 2 })).toBe("2 déjà invités. 2 invitations pas renvoyées : déjà envoyées il y a moins de 5 minutes.")
+    expect(inviteResultText({ skippedExisting: 1, recentlySkipped: 1 })).toBe("1 déjà invité. 1 invitation pas renvoyée : la précédente est partie il y a moins de 5 minutes, ou attend encore son tour.")
+    expect(inviteResultText({ skippedExisting: 2, recentlySkipped: 2 })).toBe("2 déjà invités. 2 invitations pas renvoyées : la précédente est partie il y a moins de 5 minutes, ou attend encore son tour.")
   })
 
   it("never uses a middle dot", () => {

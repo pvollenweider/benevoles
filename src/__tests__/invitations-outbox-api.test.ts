@@ -15,7 +15,9 @@ const logEvent = vi.hoisted(() => vi.fn().mockResolvedValue("log-1"))
 vi.mock("@/lib/event-log", () => ({ logEvent, adminActor: () => ({ type: "admin", id: "adm-1" }) }))
 
 type Payload = { kind: string; dedupeKey?: string; organizationId?: string | null; volunteerId?: string | null; recipient: { email?: string | null }; data: Record<string, unknown> }
-const enqueued: Payload[] = []
+const enqueued: (Payload & { status?: string })[] = []
+/** The outbox delivered every queued row (otherwise they are still pending). */
+const deliverAll = () => { for (const p of enqueued) p.status = "sent" }
 const enqueueNotifications = vi.hoisted(() => vi.fn())
 const deliverAfterResponse = vi.hoisted(() => vi.fn())
 vi.mock("@/lib/notifications/outbox", () => ({ enqueueNotifications, deliverAfterResponse }))
@@ -49,7 +51,7 @@ function fakeDb(volunteers: Volunteer[], invites: Invite[], opts: { registeredEm
   const ev = { ...event, reminderSentAt: opts.reminderSentAt ?? null }
   const vById = new Map(volunteers.map((v) => [v.id, v]))
   const lastBefore = (i: Invite, cutoff: Date) => i.sentAt < cutoff && (i.lastRemindedAt === null || i.lastRemindedAt < cutoff)
-  type ClaimWhere = { id?: { in: string[] }; volunteerId?: { in: string[] }; sentAt: { lt: Date } }
+  type ClaimWhere = { id?: { in?: string[]; notIn?: string[] }; volunteerId?: { in: string[] }; sentAt: { lt: Date } }
   const db = {
     event: {
       findFirst: vi.fn(async () => ev),
@@ -75,10 +77,18 @@ function fakeDb(volunteers: Volunteer[], invites: Invite[], opts: { registeredEm
       }),
       updateManyAndReturn: vi.fn(async ({ where, data }: { where: ClaimWhere; data: { lastRemindedAt: Date } }) => {
         const cutoff = where.sentAt.lt
-        const rows = invites.filter((i) => (where.id ? where.id.in.includes(i.id) : where.volunteerId!.in.includes(i.volunteerId)) && lastBefore(i, cutoff))
+        const rows = invites.filter((i) =>
+          (!where.id?.in || where.id.in.includes(i.id)) && !(where.id?.notIn ?? []).includes(i.id) &&
+          (!where.volunteerId || where.volunteerId.in.includes(i.volunteerId)) && lastBefore(i, cutoff))
         for (const r of rows) r.lastRemindedAt = data.lastRemindedAt
         return rows.map((r) => ({ id: r.id, volunteerId: r.volunteerId, tokenEnc: r.tokenEnc, tokenLegacy: null }))
       }),
+    },
+    notificationOutbox: {
+      findMany: vi.fn(async ({ where }: { where: { status: { in: string[] }; dedupeKey: { startsWith: string } } }) =>
+        enqueued.filter((p) => where.status.in.includes(p.status ?? "pending") && p.dedupeKey?.startsWith(where.dedupeKey.startsWith)).map((p) => ({ dedupeKey: p.dedupeKey! }))),
+      count: vi.fn(async ({ where }: { where: { status: { in: string[] }; dedupeKey: { startsWith: string } } }) =>
+        enqueued.filter((p) => where.status.in.includes(p.status ?? "pending") && p.dedupeKey?.startsWith(where.dedupeKey.startsWith)).length),
     },
     registration: {
       findMany: vi.fn(async ({ select, include }: { select?: unknown; include?: unknown }) => {
@@ -87,7 +97,8 @@ function fakeDb(volunteers: Volunteer[], invites: Invite[], opts: { registeredEm
         return (opts.registeredEmails ?? []).map((email) => ({ volunteer: { email } }))
       }),
     },
-    async $transaction<T>(fn: (tx: unknown) => Promise<T>): Promise<T> { return fn(db) },
+    transactionOptions: [] as unknown[],
+    async $transaction<T>(fn: (tx: unknown) => Promise<T>, options?: unknown): Promise<T> { db.transactionOptions.push(options); return fn(db) },
   }
   return db
 }
@@ -178,6 +189,16 @@ describe("POST /api/admin/events/[id]/invitations/remind (#1105)", () => {
     expect(inv[2].lastRemindedAt!.getTime()).toBeGreaterThan(Date.now() - 1000)
   })
 
+  it("skips someone whose earlier invitation email still waits in the outbox, even past 48 hours", async () => {
+    const vs = members(2)
+    setup(fakeDb(vs, invitesFor(vs)))
+    enqueued.push({ kind: "member_invite", dedupeKey: "member_invite:inv-vol-0:1", recipient: { email: "m0@example.org" }, data: {}, status: "pending" })
+    const { POST } = await import("@/app/api/admin/events/[id]/invitations/remind/route")
+    const body = await (await POST(post("/api/admin/events/evt-1/invitations/remind"), params)).json()
+    expect(body).toMatchObject({ queued: 1, recentlySkipped: 1 })
+    expect(enqueued.filter((p) => p.volunteerId === "vol-0")).toHaveLength(0)
+  })
+
   it("keeps leaving out registered and declined members (#558)", async () => {
     const vs = members(3)
     const inv = invitesFor(vs)
@@ -229,6 +250,15 @@ describe("POST /api/admin/events/[id]/invitations (#1105)", () => {
     expect(inv[0].lastRemindedAt).not.toBeNull()
   })
 
+  it("does not re-send an invitation whose previous email still waits in the outbox", async () => {
+    const vs = members(1)
+    setup(fakeDb(vs, invitesFor(vs)))
+    enqueued.push({ kind: "member_invite", dedupeKey: "member_invite:inv-vol-0:1", recipient: { email: "m0@example.org" }, data: {}, status: "sending" })
+    const { POST } = await import("@/app/api/admin/events/[id]/invitations/route")
+    const body = await (await POST(post("/api/admin/events/evt-1/invitations", { volunteerIds: ["vol-0"] }), params)).json()
+    expect(body).toMatchObject({ emailsQueued: 0, recentlySkipped: 1 })
+  })
+
   it("a double click invites and emails each person once", async () => {
     const vs = members(2)
     setup(fakeDb(vs, []))
@@ -267,10 +297,31 @@ describe("POST /api/admin/events/[id]/send-reminder (#1105)", () => {
     setup(db)
     const { POST } = await import("@/app/api/admin/events/[id]/send-reminder/route")
     await POST(post("/api/admin/events/evt-1/send-reminder"), params)
+    deliverAll()
     const res = await POST(post("/api/admin/events/evt-1/send-reminder"), params)
     expect(res.status).toBe(409)
     expect((await res.json()).error).toBe("Ce rappel a déjà été lancé il y a moins de 5 minutes. Il n'est pas renvoyé, pour que personne ne le reçoive deux fois.")
     expect(enqueued).toHaveLength(2)
+  })
+
+  it("refuses a new reminder while the previous one still waits in the outbox, whatever its age", async () => {
+    const db = fakeDb(members(2), [], { reminderSentAt: new Date(Date.now() - 6 * 60 * 1000) })
+    setup(db)
+    enqueued.push({ kind: "manual_reminder", dedupeKey: "manual_reminder:evt-1:vol-0:1", recipient: { email: "m0@example.org" }, data: {}, status: "pending" })
+    const { POST } = await import("@/app/api/admin/events/[id]/send-reminder/route")
+    const res = await POST(post("/api/admin/events/evt-1/send-reminder"), params)
+    expect(res.status).toBe(409)
+    expect((await res.json()).error).toMatch(/^Le rappel précédent n'est pas encore parti en entier/)
+    expect(enqueued).toHaveLength(1)
+    expect(db.event.updateMany).not.toHaveBeenCalled()
+  })
+
+  it("gives the transaction room for a long list (Prisma's 5 s default is too short)", async () => {
+    const db = fakeDb(members(2), [])
+    setup(db)
+    const { POST } = await import("@/app/api/admin/events/[id]/send-reminder/route")
+    await POST(post("/api/admin/events/evt-1/send-reminder"), params)
+    expect(db.transactionOptions[0]).toMatchObject({ timeout: 60_000 })
   })
 
   it("sends again once the 5 minutes are over", async () => {

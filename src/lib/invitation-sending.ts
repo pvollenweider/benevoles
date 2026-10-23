@@ -48,3 +48,29 @@ export function inviteEmailDedupeKey(inviteId: string, claimedAt: Date): string 
 export function manualReminderDedupeKey(eventId: string, volunteerId: string, claimedAt: Date): string {
   return `manual_reminder:${eventId}:${volunteerId}:${claimedAt.getTime()}`
 }
+
+/**
+ * An email claimed earlier can still be waiting in the outbox (held by a sending limit, up to a
+ * day for the bulk daily cap): the windows above count from the claim, not from delivery. So a new
+ * claim also skips anyone whose previous invitation email, or the event's previous manual
+ * reminder, is still pending or being sent: no second copy is queued behind the first.
+ */
+export const OUTSTANDING_OUTBOX_STATUSES = ["pending", "sending"] as const
+export const INVITE_EMAIL_KEY_PREFIX = "member_invite:"
+export function manualReminderKeyPrefix(eventId: string): string {
+  return `manual_reminder:${eventId}:`
+}
+
+/** The invites whose invitation email is still in the outbox, from the outstanding rows' keys. */
+export function invitesWithEmailOutstanding(dedupeKeys: (string | null)[]): Set<string> {
+  const ids = new Set<string>()
+  for (const key of dedupeKeys) {
+    if (!key?.startsWith(INVITE_EMAIL_KEY_PREFIX)) continue
+    const inviteId = key.slice(INVITE_EMAIL_KEY_PREFIX.length).split(":")[0]
+    if (inviteId) ids.add(inviteId)
+  }
+  return ids
+}
+
+/** Prisma's 5 s default is too short for a long list queued in one transaction (500 invitations). */
+export const SEND_TRANSACTION_OPTIONS = { maxWait: 10_000, timeout: 60_000 } as const

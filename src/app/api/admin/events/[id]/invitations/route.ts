@@ -5,7 +5,7 @@ import { NextResponse } from "next/server"
 import { requireOrgSession } from "@/lib/auth-guard"
 import { memberInvitePayload } from "@/lib/notification-helpers"
 import { deliverAfterResponse, enqueueNotifications } from "@/lib/notifications/outbox"
-import { RESEND_GUARD_MS, inviteEmailDedupeKey, sendCutoff } from "@/lib/invitation-sending"
+import { INVITE_EMAIL_KEY_PREFIX, OUTSTANDING_OUTBOX_STATUSES, RESEND_GUARD_MS, SEND_TRANSACTION_OPTIONS, inviteEmailDedupeKey, invitesWithEmailOutstanding, sendCutoff } from "@/lib/invitation-sending"
 import { adminActor, logEvent } from "@/lib/event-log"
 import { z } from "zod"
 import { randomBytes } from "crypto"
@@ -141,11 +141,17 @@ export async function POST(req: Request, { params }: { params: Promise<{ id: str
     // Already invited and reachable: a member without an address gets nothing, and isn't claimed.
     const existingIds = ids.filter((id) => !createdIds.has(id) && byId.get(id)!.email)
     // Someone already invited gets the invitation again, as before, unless it went less than
-    // RESEND_GUARD_MS ago: a double click or a retried request never emails them twice.
+    // RESEND_GUARD_MS ago or is still waiting in the outbox: a double click or a retried request
+    // never emails them twice.
+    const outstanding = existingIds.length === 0 ? new Set<string>() : invitesWithEmailOutstanding((await tx.notificationOutbox.findMany({
+      where: { organizationId: event.organizationId, status: { in: [...OUTSTANDING_OUTBOX_STATUSES] }, dedupeKey: { startsWith: INVITE_EMAIL_KEY_PREFIX } },
+      select: { dedupeKey: true },
+    })).map((r) => r.dedupeKey))
     const resent = existingIds.length === 0 ? [] : await tx.memberInvite.updateManyAndReturn({
       where: {
         eventId,
         volunteerId: { in: existingIds },
+        id: { notIn: [...outstanding] },
         sentAt: { lt: guardCutoff },
         OR: [{ lastRemindedAt: null }, { lastRemindedAt: { lt: guardCutoff } }],
       },
@@ -177,7 +183,7 @@ export async function POST(req: Request, { params }: { params: Promise<{ id: str
     const outboxIds = await enqueueNotifications(payloads, tx, { organizationId: event.organizationId })
     const recentlySkipped = existingIds.length - resent.length
     return { created, recentlySkipped, outboxIds }
-  })
+  }, SEND_TRANSACTION_OPTIONS)
   deliverAfterResponse(outboxIds)
 
   for (const invite of created) {
