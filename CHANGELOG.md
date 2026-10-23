@@ -13,6 +13,8 @@ Format basé sur [Keep a Changelog](https://keepachangelog.com/fr/1.0.0/).
 
 ### Ajouté
 
+- **Envois groupés** (#1101) : dans l'onglet Communication de chaque événement, une section liste chaque envoi à plusieurs personnes (invitations, relance des invités sans réponse, rappel aux inscrits, message aux bénévoles, message programmé, créneaux à compléter) : quand, par qui, à combien de personnes, et ce que sont devenus ses emails, mis à jour à chaque visite. Une phrase dit quand le plafond d'envoi en a fait attendre une partie. Un lien ouvre « Emails envoyés » limité aux emails de cet envoi, pour retrouver un échec et le renvoyer. Chaque envoi apparaît aussi dans le journal d'activité de l'organisation, avec un filtre « Envois groupés ». Ni les adresses ni le texte des emails ne sont gardés avec l'envoi, conservé trois ans.
+
 - **Plafonds d'envoi atteints, pour l'opérateur** (#1100) : en haut de la liste des organisations du super admin, les plafonds d'envoi d'emails atteints ces 7 derniers jours, par organisation : le plafond en clair, quand, combien d'emails ont été retenus (ils partent à la fin de la période du plafond) et combien ont été refusés, et s'il reste des emails retenus en attente. Une mention « Plafond d'envoi atteint » sur la ligne de l'organisation mène au même détail sur sa fiche. Rien sur les destinataires ni le contenu des emails n'est gardé, et ces relevés sont effacés après 90 jours. <!-- interne -->
 
 ### Modifié
@@ -25,6 +27,8 @@ Format basé sur [Keep a Changelog](https://keepachangelog.com/fr/1.0.0/).
 - **Liens vers l'aide sur plus d'écrans** (#1096) : le tableau de bord, la liste des événements, l'aperçu d'un événement, le journal, la duplication, le QR code, les pages d'information, l'aperçu bénévole, la recherche de bénévoles, les membres, leur fiche, l'attestation, la fusion et les doublons, les modèles de messages, le journal d'activité, la recherche et « Mon compte » ont leur lien « Aide » vers la page du guide qui les explique. Les jalons, l'équipe admin et la charte ont un lien « En savoir plus ». Côté bénévoles, le planning, le formulaire d'inscription, la page personnelle (et l'annulation d'un créneau) et la page « Ce lien ne fonctionne pas » renvoient à la page précise du guide, et les emails d'invitation et de confirmation ont un lien vers le guide.
 
 ### Corrigé
+
+- **Renvoi d'invitations dans le journal de l'événement** (#1101) : inviter à nouveau des membres déjà invités est maintenant noté dans le journal de l'événement, une fois par envoi avec le nombre de personnes, comme une relance.
 
 - **Aide de la page Paramètres** (#1096) : son lien « Aide » ouvre « Personnaliser l'organisation », que la page montre surtout, au lieu de « Gérer l'équipe admin ».
 - **Guide « Revenir sur la page d'inscription »** (#1096) : il ne dit plus que la page reconnaît toujours le bénévole qui la rouvre dans le même navigateur. Elle le reconnaît après une inscription depuis une invitation, ou une fois le lien personnel de l'email ouvert dans ce navigateur ; après une inscription par le lien public, il faut d'abord ouvrir ce lien.

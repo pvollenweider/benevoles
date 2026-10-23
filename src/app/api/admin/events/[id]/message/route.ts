@@ -6,7 +6,7 @@ import { requireOrgSession } from "@/lib/auth-guard"
 import { validationError } from "@/lib/api-error"
 import { rateLimit } from "@/lib/rate-limit"
 import { render } from "@/lib/notifications/templates"
-import { deliverAfterResponse, enqueueNotifications } from "@/lib/notifications/outbox"
+import { deliverAfterResponse, enqueueBatch } from "@/lib/notifications/outbox"
 import { adminActor, logEvent } from "@/lib/event-log"
 import { messagePushPayload, messageSchema, MESSAGE_RATE_LIMIT } from "@/lib/targeted-message"
 import { buildTargetedMessage } from "@/lib/targeted-message-build"
@@ -105,7 +105,8 @@ export async function POST(req: Request, { params }: { params: Promise<{ id: str
       select: { id: true },
     })
     historyId = history.id
-    return enqueueNotifications(recipients.map((r) => payloadFor(r, batchId)), tx, { organizationId, targetedMessageId: history.id })
+    // Its « envoi groupé » (#1101) too: the history row keeps the text, the batch the delivery.
+    return enqueueBatch(recipients.map((r) => payloadFor(r, batchId)), tx, { organizationId, targetedMessageId: history.id, batch: { kind: "targeted_message", eventId: id, actorId: guard.session.user?.id ?? null } })
   })
   deliverAfterResponse(outboxIds)
 

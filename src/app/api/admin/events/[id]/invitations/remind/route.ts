@@ -4,7 +4,7 @@
 import { NextResponse } from "next/server"
 import { requireOrgSession } from "@/lib/auth-guard"
 import { memberInvitePayload } from "@/lib/notification-helpers"
-import { deliverAfterResponse, enqueueNotifications } from "@/lib/notifications/outbox"
+import { deliverAfterResponse, enqueueBatch } from "@/lib/notifications/outbox"
 import { adminActor, logEvent } from "@/lib/event-log"
 import { z } from "zod"
 import { linkToken } from "@/lib/token-vault"
@@ -115,7 +115,8 @@ export async function POST(req: Request, { params }: { params: Promise<{ id: str
           volunteerId: invite.volunteer.id,
           organizationId: event.organizationId,
         }, inviteEmailDedupeKey(invite.id, now)))
-        const ids = await enqueueNotifications(payloads, tx, { organizationId: event.organizationId })
+        // One « envoi groupé » (#1101), with its emails and its organisation log entry.
+        const ids = await enqueueBatch(payloads, tx, { organizationId: event.organizationId, batch: { kind: "invite_reminder", eventId, actorId: guard.session.user?.id ?? null } })
         return { outboxIds: ids, claimed: mine.size }
       }, SEND_TRANSACTION_OPTIONS)
   recentlySkipped += candidates.length - claimed

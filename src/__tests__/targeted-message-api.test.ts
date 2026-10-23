@@ -9,7 +9,7 @@ vi.mock("@/lib/event-log", () => ({ logEvent, adminActor: () => ({ type: "admin"
 
 const enqueueNotifications = vi.hoisted(() => vi.fn().mockResolvedValue(["row-1", "row-2"]))
 const deliverAfterResponse = vi.hoisted(() => vi.fn())
-vi.mock("@/lib/notifications/outbox", () => ({ enqueueNotifications, deliverAfterResponse }))
+vi.mock("@/lib/notifications/outbox", () => ({ enqueueNotifications, enqueueBatch: enqueueNotifications, deliverAfterResponse }))
 
 const rateLimit = vi.hoisted(() => vi.fn().mockResolvedValue({ ok: true, remaining: 1, retryAfter: 0 }))
 vi.mock("@/lib/rate-limit", () => ({ rateLimit }))
@@ -102,7 +102,7 @@ describe("POST /api/admin/events/[id]/message", () => {
       subject: base.subject, message: base.message, audienceLabel: "les bénévoles du poste « Bar »", recipientCount: 1,
       pushRequested: false, pushDevices: 0,
     })
-    expect(enqueueNotifications.mock.calls[0][2]).toEqual({ organizationId: "org-a", targetedMessageId: "msg-1" })
+    expect(enqueueNotifications.mock.calls[0][2]).toEqual({ organizationId: "org-a", targetedMessageId: "msg-1", batch: expect.objectContaining({ kind: "targeted_message" }) })
   })
 
   it("waitlist audience: waiting people, no shift list in the email", async () => {

@@ -8,6 +8,9 @@ const m = vi.hoisted(() => ({
   outboxDeleteMany: vi.fn(),
   messageUpdate: vi.fn(),
   messageDeleteMany: vi.fn(),
+  batchUpdate: vi.fn(),
+  batchUpdateMany: vi.fn(),
+  executeRaw: vi.fn(),
   deliver: vi.fn(),
   logEvent: vi.fn(),
   guard: vi.fn(),
@@ -19,6 +22,9 @@ vi.mock("@/lib/prisma", () => {
     targetedMessage: { update: m.messageUpdate, deleteMany: m.messageDeleteMany },
     scheduledMessage: { deleteMany: vi.fn().mockResolvedValue({ count: 0 }) },
     organization: { findMany: vi.fn().mockResolvedValue([]), findUnique: vi.fn().mockResolvedValue(null) },
+    sendBatch: { update: m.batchUpdate, updateMany: m.batchUpdateMany, findMany: vi.fn().mockResolvedValue([]), deleteMany: vi.fn().mockResolvedValue({ count: 0 }) },
+    orgLog: { deleteMany: vi.fn().mockResolvedValue({ count: 0 }) },
+    $executeRaw: m.executeRaw,
   }
   const zero = { deleteMany: vi.fn().mockResolvedValue({ count: 0 }), updateMany: vi.fn().mockResolvedValue({ count: 0 }), findMany: vi.fn().mockResolvedValue([]) }
   return {
@@ -61,6 +67,29 @@ describe("nightly cleanup", () => {
     // Messages older than 12 months are deleted.
     const cutoff = m.messageDeleteMany.mock.calls[0][0].where.createdAt.lt as Date
     expect(Math.round((Date.now() - cutoff.getTime()) / 86_400_000)).toBe(365)
+  })
+})
+
+// #1101: a batch keeps the outcome of its purged rows, folded from the same rows as the messages,
+// under a lock so two cleanups at once never fold them twice.
+describe("nightly cleanup of batches of emails", () => {
+  it("folds sent, held then sent, failed and cancelled rows into their batch before deleting them", async () => {
+    const at = (s: string) => new Date(`2026-10-22T21:${s}Z`)
+    m.outboxFindMany.mockResolvedValue([
+      { id: "o1", targetedMessageId: null, sendBatchId: "b1", status: "sent", lastHeldAt: at("00:00"), firstHeldAt: at("00:00"), sentAt: at("01:30") },
+      { id: "o2", targetedMessageId: null, sendBatchId: "b1", status: "sent", lastHeldAt: null, firstHeldAt: null, sentAt: at("00:00") },
+      { id: "o3", targetedMessageId: "msg-1", sendBatchId: "b2", status: "cancelled", lastHeldAt: null, firstHeldAt: null, sentAt: null },
+    ])
+    m.outboxDeleteMany.mockResolvedValueOnce({ count: 3 }).mockResolvedValueOnce({ count: 0 })
+    const { GET } = await import("@/app/api/cron/cleanup/route")
+    const res = await GET(new Request("http://localhost/api/cron/cleanup", { headers: { authorization: "Bearer s" } }))
+    expect(res.status).toBe(200)
+    expect(m.executeRaw).toHaveBeenCalled()
+    expect(m.batchUpdate).toHaveBeenCalledWith({ where: { id: "b1" }, data: { sentCount: { increment: 2 }, heldSentCount: { increment: 1 }, failedCount: { increment: 0 }, cancelledCount: { increment: 0 } } })
+    expect(m.batchUpdate).toHaveBeenCalledWith({ where: { id: "b2" }, data: { sentCount: { increment: 0 }, heldSentCount: { increment: 0 }, failedCount: { increment: 0 }, cancelledCount: { increment: 1 } } })
+    expect(m.batchUpdateMany).toHaveBeenCalledWith({ where: { id: "b1", maxHeldWaitSec: { lt: 90 } }, data: { maxHeldWaitSec: 90 } })
+    expect(m.outboxDeleteMany.mock.calls[0][0]).toEqual({ where: { id: { in: ["o1", "o2", "o3"] } } })
+    expect(JSON.stringify(m.outboxDeleteMany.mock.calls[1][0])).toContain('"sendBatchId":null')
   })
 })
 

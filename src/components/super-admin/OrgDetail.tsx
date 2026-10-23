@@ -51,7 +51,7 @@ type Org = {
   admins: Admin[]
 }
 
-export default function OrgDetail({ org, cumulative, inactivity, limitHits }: { org: Org; cumulative: UsageRow[]; inactivity?: ComponentProps<typeof InactivityPanel>; limitHits?: { group: OrgLimitHits; zone: string; truncated: boolean } }) {
+export default function OrgDetail({ org, cumulative, inactivity, limitHits, recentBatches = [], zone = "" }: { org: Org; cumulative: UsageRow[]; inactivity?: ComponentProps<typeof InactivityPanel>; limitHits?: { group: OrgLimitHits; zone: string; truncated: boolean }; recentBatches?: { id: string; line: string; createdAt: string; heldSentence: string | null; failed: boolean }[]; zone?: string }) {
   const router = useRouter()
   const [, startTransition] = useTransition()
   const [toggling, setToggling] = useState(false)
@@ -425,6 +425,22 @@ export default function OrgDetail({ org, cumulative, inactivity, limitHits }: { 
           </p>
           {limitHits.group.queueStatus && <p className={`text-sm mt-2 ${limitHits.group.stillHeld > 0 ? "text-amber-800" : "text-gray-700"}`}>{limitHits.group.queueStatus}</p>}
           <LimitHitLines hits={limitHits.group.hits} />
+        </section>
+      )}
+
+      {/* Its batches of emails of the same days (#1101), as the organisers see them, without recipients. */}
+      {recentBatches.length > 0 && (
+        <section aria-labelledby="org-send-batches" className="bg-white border border-gray-200 rounded-xl p-4">
+          <h2 id="org-send-batches" className="text-sm font-semibold text-gray-900">Envois groupés</h2>
+          <p className="text-xs text-gray-600 mt-0.5">Les {LIMIT_HITS_DAYS} derniers jours, les plus récents d&apos;abord : invitations, relances, rappels et messages envoyés à plusieurs personnes. {zone}</p>
+          <ul role="list" className="mt-2 space-y-1">
+            {recentBatches.map((b) => (
+              <li key={b.id} className="text-sm text-gray-700">
+                <span className={b.failed ? "text-red-800" : undefined}>{b.line}</span>
+                {b.heldSentence && <span className="block text-gray-600">{b.heldSentence}</span>}
+              </li>
+            ))}
+          </ul>
         </section>
       )}
 

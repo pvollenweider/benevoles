@@ -78,6 +78,10 @@ const prismaMock = {
     create: vi.fn().mockResolvedValue({ id: "row-1" }),
     createMany: vi.fn().mockResolvedValue({ count: 1 }),
     findUniqueOrThrow: vi.fn().mockResolvedValue({ id: "row-1" }),
+    findMany: vi.fn().mockResolvedValue([]), // live rows of a batch of emails (#1101)
+  },
+  sendBatch: {
+    findMany: vi.fn().mockResolvedValue([]), // batches of emails (#1101): filtered by organisation
   },
   deliveryOutcome: {
     findMany: vi.fn().mockResolvedValue([]), // #598
@@ -1853,6 +1857,19 @@ describe("Organization settings — cross-tenant isolation (#1049)", () => {
     for (const [arg] of prismaMock.orgLog.findMany.mock.calls) {
       expect(arg.where).toEqual(expect.objectContaining({ organizationId: ORG_A }))
     }
+  })
+
+  // #1101: a batch of emails is hydrated in the activity log only within the session org; an id
+  // of an org-B batch written in an org-A entry would find nothing.
+  it("GET /api/admin/settings/activity reads batches of emails of the session org only", async () => {
+    const { GET } = await import("@/app/api/admin/settings/activity/route")
+    setupGuard()
+    prismaMock.orgLog.findMany.mockResolvedValueOnce([{ id: "log-1", actorType: "admin", actorId: null, action: "sendbatch.queued", entityType: "SendBatch", entityId: "batch-b", changes: null, createdAt: new Date("2026-10-22") }])
+    const res = await GET(new Request("http://localhost/api/admin/settings/activity"))
+    expect(res.status).toBe(200)
+    expect(prismaMock.sendBatch.findMany).toHaveBeenCalledWith(expect.objectContaining({ where: expect.objectContaining({ organizationId: ORG_A, id: { in: ["batch-b"] } }) }))
+    const body = await res.json()
+    expect(body.entries[0].batch).toBeNull()
   })
 
   it("GET /api/admin/settings/organization/slugs lists only the session org's former addresses", async () => {

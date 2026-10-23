@@ -20,7 +20,8 @@ const enqueued: (Payload & { status?: string })[] = []
 const deliverAll = () => { for (const p of enqueued) p.status = "sent" }
 const enqueueNotifications = vi.hoisted(() => vi.fn())
 const deliverAfterResponse = vi.hoisted(() => vi.fn())
-vi.mock("@/lib/notifications/outbox", () => ({ enqueueNotifications, deliverAfterResponse, openPayload: (p: unknown) => p }))
+// #1101: the batch routes queue through enqueueBatch, same contract plus the batch record.
+vi.mock("@/lib/notifications/outbox", () => ({ enqueueNotifications, enqueueBatch: enqueueNotifications, deliverAfterResponse, openPayload: (p: unknown) => p }))
 
 const sendNotification = vi.hoisted(() => vi.fn())
 vi.mock("@/lib/notifications", () => ({ sendNotification }))
@@ -164,7 +165,7 @@ describe("POST /api/admin/events/[id]/invitations/remind (#1105)", () => {
     expect(p.data).toMatchObject({ token: "tok-vol-0", eventSlug: "festival", orgSlug: "org", message: "Venez !" })
     expect(p.dedupeKey).toMatch(/^member_invite:inv-vol-0:\d+$/)
     expect(sendCategory("member_invite")).toBe("bulk")
-    expect(enqueueNotifications).toHaveBeenCalledWith(expect.any(Array), expect.anything(), { organizationId: "org-a" })
+    expect(enqueueNotifications).toHaveBeenCalledWith(expect.any(Array), expect.anything(), { organizationId: "org-a", batch: expect.objectContaining({ kind: "invite_reminder", eventId: expect.any(String) }) })
   })
 
   it("a second reminder right after (double click) emails no one twice and says why", async () => {
@@ -261,6 +262,10 @@ describe("POST /api/admin/events/[id]/invitations (#1105)", () => {
     expect(body).toMatchObject({ invitedNew: 0, skippedExisting: 1, emailsQueued: 1, recentlySkipped: 0 })
     expect(enqueued[0].data.token).toBe("tok-vol-0")
     expect(inv[0].lastRemindedAt).not.toBeNull()
+    // #1101 regression: a re-sent invitation left no event log entry; now one per batch, with its count.
+    const resent = logEvent.mock.calls.filter((c) => c[0].action === "memberinvite.resent")
+    expect(resent).toHaveLength(1)
+    expect(resent[0][0]).toMatchObject({ entityType: "Event", changes: { recipients: { from: null, to: 1 } } })
   })
 
   it("does not re-send an invitation whose previous email still waits in the outbox", async () => {

@@ -3,7 +3,7 @@
 
 import { prisma } from "./prisma"
 import { getOrgClient } from "./prisma-org"
-import { enqueueNotifications } from "./notifications/outbox"
+import { enqueueBatch } from "./notifications/outbox"
 import { buildTargetedMessage } from "./targeted-message-build"
 import { audienceSchema, messagePushPayload } from "./targeted-message"
 import { renderVariables, templateProblems } from "./message-template"
@@ -130,10 +130,11 @@ async function dispatchOne(id: string, now: Date, deferPush?: DispatchOptions["d
       },
       select: { id: true },
     })
-    await enqueueNotifications(
+    // Its « envoi groupé » (#1101), credited to whoever scheduled it.
+    await enqueueBatch(
       build.recipients.map((r) => build.payloadFor(r, `message:scheduled:${sm.id}:${r.volunteerId}`)),
       tx,
-      { organizationId: sm.organizationId, targetedMessageId: history.id },
+      { organizationId: sm.organizationId, targetedMessageId: history.id, batch: { kind: "scheduled_message", eventId: event.id, actorId: sm.authorId } },
     )
     await tx.scheduledMessage.update({ where: { id }, data: { targetedMessageId: history.id } })
     return history.id
