@@ -3,7 +3,7 @@ import { seriousViolations } from "./helpers/axe"
 import { waitForHydration } from "./helpers/hydration"
 
 /**
- * A documentation unit (#649): guide/<slug>.md rendered at /doc/<slug>, with its breadcrumb, its
+ * A documentation unit (#649): content/guide/<slug>.md rendered at /doc/<slug>, with its breadcrumb, its
  * single <h1> and who it is for; a unit shared by both roles; the indexes of the units on /doc and
  * on the guides' pages; the old anchors of the guides followed to their unit. The parsing and the
  * checks of the units are unit-tested in src/lib/__tests__/doc-units.test.ts, the frozen anchors in

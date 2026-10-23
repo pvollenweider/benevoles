@@ -10,7 +10,7 @@ import { localizeInstanceText } from "@/lib/site"
 /**
  * /llms.txt and /llms-full.txt (llmstxt.org): the apex site summed up for AI assistants, in plain
  * Markdown. Built from the same sources as the pages (FEATURES.md, the guides' introductions,
- * guide/<slug>.md and the registry of src/lib/doc-pages.ts), so it can never drift from them: a
+ * content/guide/<slug>.md and the registry of src/lib/doc-pages.ts), so it can never drift from them: a
  * new unit or page appears here as soon as it appears on the site. Pure: the routes read the files
  * and pass them in, with the base URL of the running deployment.
  */

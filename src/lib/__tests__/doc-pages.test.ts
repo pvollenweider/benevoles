@@ -169,22 +169,24 @@ describe("linkSourcesToRoutes", () => {
     expect(linkSourcesToRoutes("[a](../GUIDE_ADMIN.md#creer-un-evenement)")).toBe("[a](/doc/admin#creer-un-evenement)")
   })
 
-  // The sources live in content/ (pages/, legal/, guide/): a link between them, or from them to the
-  // root and to guide/, is relative to the file so that it works on GitHub, and leads to the same page.
-  it("rewrites the relative links between the folders of content/, to the root and to guide/", () => {
+  // The sources live in content/ (pages/, legal/, guide/, blog/): a link between them, or from them to the
+  // root, is relative to the file so that it works on GitHub, and leads to the same page.
+  it("rewrites the relative links between the folders of content/ and to the root", () => {
     expect(linkSourcesToRoutes("[a](../guide/GUIDE_ADMIN.md) [b](../legal/SOUS-TRAITANTS.md#x) [c](TARIFS.md)")).toBe("[a](/doc/admin) [b](/legal/sous-traitants#x) [c](/tarifs)")
-    expect(linkSourcesToRoutes("[a](../../CHANGELOG.md) [b](../../guide/rappels.md#y)")).toBe("[a](/nouveautes) [b](/doc/rappels#y)")
+    expect(linkSourcesToRoutes("[a](../../CHANGELOG.md) [b](../guide/rappels.md#y) [c](rappels.md)")).toBe("[a](/nouveautes) [b](/doc/rappels#y) [c](/doc/rappels)")
     expect(linkSourcesToRoutes("[a](../content/guide/GUIDE_ADMIN.md) [b](content/pages/FEATURES.md)")).toBe("[a](/doc/admin) [b](/fonctionnalites)")
   })
 
   it("rewrites links to the documentation units (#649), by path from the root or relative from another unit", () => {
-    expect(linkSourcesToRoutes("[a](guide/revenir-sur-la-page.md)")).toBe("[a](/doc/revenir-sur-la-page)")
-    expect(linkSourcesToRoutes("[a](guide/confirmation.md#le-lien)")).toBe("[a](/doc/confirmation#le-lien)")
+    expect(linkSourcesToRoutes("[a](content/guide/revenir-sur-la-page.md)")).toBe("[a](/doc/revenir-sur-la-page)")
+    expect(linkSourcesToRoutes("[a](content/guide/confirmation.md#le-lien)")).toBe("[a](/doc/confirmation#le-lien)")
+    // The path before the move to content/ (#1106 phase 2), as older texts still write it.
+    expect(linkSourcesToRoutes("[a](guide/confirmation.md#le-lien) [b](../../guide/s-inscrire.md)")).toBe("[a](/doc/confirmation#le-lien) [b](/doc/s-inscrire)")
     expect(linkSourcesToRoutes("[a](confirmation.md#le-lien) et [b](s-inscrire.md)")).toBe("[a](/doc/confirmation#le-lien) et [b](/doc/s-inscrire)")
   })
 
   it("leaves other links alone: site paths, URLs, the guide index, files elsewhere", () => {
-    const md = "[a](/doc/admin) [b](https://example.org/x.md) [c](README.md) [d](guide/README.md) [e](docs/retention.md) [f](SECURITY.md) [g](../../docs/retention.md) [h](../x.md) [i](https://github.com/pvollenweider/benevoles/blob/main/CHANGELOG.md)"
+    const md = "[a](/doc/admin) [b](https://example.org/x.md) [c](README.md) [d](content/guide/README.md) [e](docs/retention.md) [f](SECURITY.md) [g](../../docs/retention.md) [h](../x.md) [i](https://github.com/pvollenweider/benevoles/blob/main/CHANGELOG.md)"
     expect(linkSourcesToRoutes(md)).toBe(md)
   })
 
@@ -207,7 +209,7 @@ describe("apexSitemap", () => {
 
   it("lists the documentation units after the pages, with their own file's date (#649)", () => {
     const d = new Date("2026-10-01T10:00:00Z")
-    const entries = apexSitemap("https://www.benevol.app", (src) => (src === "guide/b.md" ? d : null), [{ slug: "a", source: "guide/a.md" }, { slug: "b", source: "guide/b.md" }])
+    const entries = apexSitemap("https://www.benevol.app", (src) => (src === "content/guide/b.md" ? d : null), [{ slug: "a", source: "content/guide/a.md" }, { slug: "b", source: "content/guide/b.md" }])
     expect(entries.slice(-2)).toEqual([
       { url: "https://www.benevol.app/doc/a", changeFrequency: "monthly", priority: DOC_UNIT_PRIORITY },
       { url: "https://www.benevol.app/doc/b", changeFrequency: "monthly", priority: DOC_UNIT_PRIORITY, lastModified: d },

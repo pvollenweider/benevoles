@@ -12,7 +12,7 @@ export function generateMetadata(): Metadata {
   return blogIndexMetadata(apexBaseUrl())
 }
 
-// The product newsletters, archived (#944): one Markdown file per post in blog/ (src/lib/blog.ts),
+// The product newsletters, archived (#944): one Markdown file per post in content/blog/ (src/lib/blog.ts),
 // the only copy of each post, listed newest first.
 export default function BlogPage() {
   return (

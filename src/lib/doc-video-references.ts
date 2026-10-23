@@ -7,7 +7,7 @@ import { FROM_DOC_FRAGMENT } from "@/lib/video-feedback"
 
 /**
  * Videos referenced from the documentation by their stable id (#645). A source (GUIDE_ADMIN.md,
- * guide/<page>.md, FEATURES.md...) writes, on its own line and at the start of the line:
+ * content/guide/<page>.md, FEATURES.md...) writes, on its own line and at the start of the line:
  *
  *     <!-- video: ORG_FIRST_STEPS -->
  *

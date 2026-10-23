@@ -19,7 +19,7 @@ function unit(overrides: Partial<DocUnit> & { slug: string }): DocUnit {
     legacy: [],
     aliases: [],
     body: "Texte.\n",
-    source: `guide/${overrides.slug}.md`,
+    source: `content/guide/${overrides.slug}.md`,
     ...overrides,
   }
 }
@@ -49,7 +49,7 @@ describe("firstOrganiserDocUnit", () => {
   })
 })
 
-describe("the quickstart of guide/", () => {
+describe("the quickstart of content/guide/", () => {
   const units = readDocUnits()
   const quickstart = docQuickstartUnit(units)!
   const steps = quickstart.body.split(/^## /m).slice(1)
@@ -88,6 +88,6 @@ describe("the quickstart of guide/", () => {
 
   it("is where the organisers' guide tells a newcomer to start", () => {
     const intro = fs.readFileSync(path.join(process.cwd(), "content/guide/GUIDE_ADMIN.md"), "utf-8")
-    expect(intro).toContain(`(../../guide/${DOC_QUICKSTART_SLUG}.md)`)
+    expect(intro).toContain(`(${DOC_QUICKSTART_SLUG}.md)`)
   })
 })

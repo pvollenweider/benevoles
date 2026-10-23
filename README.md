@@ -12,7 +12,7 @@ Ce projet est gratuit et open source. Si vous l'utilisez et voulez soutenir son 
 
 | Document | Destinataires |
 |----------|---------------|
-| [Guide bénévole](guide/README.md) | Personnes qui s'inscrivent comme bénévoles (une page par tâche, dans `guide/`) |
+| [Guide bénévole](content/guide/README.md) | Personnes qui s'inscrivent comme bénévoles (une page par tâche, dans `content/guide/`) |
 | [Guide administrateur](content/guide/GUIDE_ADMIN.md) | Organisateurs qui gèrent les événements |
 | [Fonctionnalités](docs/fonctionnalites.md) | Liste exhaustive de tout ce que fait l'application |
 | [Présentation des fonctionnalités](content/pages/FEATURES.md) | Page publique `/fonctionnalites`, par besoins |
@@ -174,8 +174,8 @@ Toutes les variables, leurs défauts et leurs effets, ainsi que la rotation de l
 | `npm run db:studio` | Interface graphique Prisma Studio |
 | `npm run db:generate` | Régénérer le client Prisma |
 | `npm run screenshots` | Génère les captures d'écran (`scripts/screenshots.mjs`) |
-| `npm run retention:docs` | Régénère les tableaux de conservation de `guide/exporter-et-conserver-ses-donnees.md` et `docs/retention.md` depuis `src/lib/retention.ts` |
-| `npm run doc:index` | Régénère la liste des pages de `guide/README.md` depuis les fichiers de `guide/` |
+| `npm run retention:docs` | Régénère les tableaux de conservation de `content/guide/exporter-et-conserver-ses-donnees.md` et `docs/retention.md` depuis `src/lib/retention.ts` |
+| `npm run doc:index` | Régénère la liste des pages de `content/guide/README.md` depuis les fichiers de `content/guide/` |
 
 `db:migrate`, `db:push`, `db:seed` et `db:studio` ne chargent pas `.env` : exporter `DATABASE_URL` avant, ou passer par `make` (voir « Setup manuel »). `npm run dev` et `npm run test:e2e` vérifient d'abord la version de Node (`scripts/check-node-version.mjs`).
 
@@ -270,8 +270,7 @@ e2e/                                      # Tests Playwright
 scripts/                                  # Captures, seed de démo, contrôles CI
 k8s/                                      # Manifestes Kubernetes
 k8s/gandi-webhook/                        # Webhook DNS Gandi pour cert-manager (Go)
-content/                                  # Sources Markdown des pages publiques : pages/, legal/, guide/
-guide/, blog/                             # Pages de documentation par tâche (/doc/<page>), articles du blog
+content/                                  # Sources Markdown des pages publiques : pages/, legal/, guide/ (documentation par tâche, /doc/<page>), blog/
 .github/workflows/                        # CI/CD
 ```
 

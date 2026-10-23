@@ -49,7 +49,7 @@ describe("the audience pages (#872)", () => {
 
 // #760: a self-hosted instance has no presentation page; a shared source must not link to a 404.
 describe("links to the presentation pages from a shared source", () => {
-  const md = "[a](TARIFS.md) [b](POUR-QUI.md#une-fete-de-village) [c](LOGICIEL-PLANNING-BENEVOLES.md) [d](guide/rappels.md) [e](GUIDE_ADMIN.md) [f](FEATURES.md) [g](/videos/SHIFT_RECURRENCE) [h](CHANGELOG.md)"
+  const md = "[a](TARIFS.md) [b](POUR-QUI.md#une-fete-de-village) [c](LOGICIEL-PLANNING-BENEVOLES.md) [d](content/guide/rappels.md) [e](GUIDE_ADMIN.md) [f](FEATURES.md) [g](/videos/SHIFT_RECURRENCE) [h](CHANGELOG.md)"
 
   it("stay relative on the hosted service", () => {
     expect(linkSourcesToRoutes(md, true)).toBe("[a](/tarifs) [b](/pour-qui#une-fete-de-village) [c](/logiciel-planning-benevoles) [d](/doc/rappels) [e](/doc/admin) [f](/fonctionnalites) [g](/videos/SHIFT_RECURRENCE) [h](/nouveautes)")

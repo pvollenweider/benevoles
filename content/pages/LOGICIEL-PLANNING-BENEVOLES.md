@@ -30,7 +30,7 @@ L'événement reste en brouillon tant que vous ne le publiez pas, et une page de
 
 <!-- video: EVENT_CREATE_PUBLISH_OVERVIEW -->
 
-En savoir plus : [créer un événement](../../guide/creer-un-evenement.md), [configurer les créneaux](../../guide/configurer-les-creneaux.md), [publier un événement](../../guide/publier-un-evenement.md), [partager le lien](../../guide/partager-le-lien.md).
+En savoir plus : [créer un événement](../guide/creer-un-evenement.md), [configurer les créneaux](../guide/configurer-les-creneaux.md), [publier un événement](../guide/publier-un-evenement.md), [partager le lien](../guide/partager-le-lien.md).
 
 ## Pour le bénévole : un lien, sans compte ni application
 
@@ -44,7 +44,7 @@ En savoir plus : [créer un événement](../../guide/creer-un-evenement.md), [co
 
 <!-- video: VOLUNTEER_REGISTER -->
 
-En savoir plus : [s'inscrire](../../guide/s-inscrire.md), [la page personnelle du bénévole](../../guide/ma-page-personnelle.md), [les rappels](../../guide/rappels.md), [la liste d'attente](../../guide/liste-d-attente.md).
+En savoir plus : [s'inscrire](../guide/s-inscrire.md), [la page personnelle du bénévole](../guide/ma-page-personnelle.md), [les rappels](../guide/rappels.md), [la liste d'attente](../guide/liste-d-attente.md).
 
 ## Avant l'événement : voir où il manque du monde
 
@@ -57,7 +57,7 @@ En savoir plus : [s'inscrire](../../guide/s-inscrire.md), [la page personnelle d
 
 <!-- video: STAFFING_GAPS -->
 
-En savoir plus : [où manque-t-il du monde ?](../../guide/ou-manque-t-il-du-monde.md), [écrire aux bénévoles](../../guide/ecrire-aux-benevoles.md).
+En savoir plus : [où manque-t-il du monde ?](../guide/ou-manque-t-il-du-monde.md), [écrire aux bénévoles](../guide/ecrire-aux-benevoles.md).
 
 ## Le jour J : feuilles imprimées et page sur le téléphone
 
@@ -70,7 +70,7 @@ En savoir plus : [où manque-t-il du monde ?](../../guide/ou-manque-t-il-du-mond
 
 <!-- video: ATTENDANCE_CHECK_IN -->
 
-En savoir plus : [les présences le jour J](../../guide/presences-le-jour-j.md), [rapports, badges et résumé](../../guide/rapports-badges-et-resume.md), [les responsables de secteur](../../guide/responsables-de-secteur.md).
+En savoir plus : [les présences le jour J](../guide/presences-le-jour-j.md), [rapports, badges et résumé](../guide/rapports-badges-et-resume.md), [les responsables de secteur](../guide/responsables-de-secteur.md).
 
 ## Après l'événement : heures, attestation et exports
 
@@ -81,7 +81,7 @@ En savoir plus : [les présences le jour J](../../guide/presences-le-jour-j.md),
 
 <!-- video: EVENT_REPORTS -->
 
-En savoir plus : [rapports, badges et résumé](../../guide/rapports-badges-et-resume.md), [les heures et l'attestation d'un membre](../../guide/gerer-les-membres.md#attestation-de-benevolat), [exporter et conserver ses données](../../guide/exporter-et-conserver-ses-donnees.md).
+En savoir plus : [rapports, badges et résumé](../guide/rapports-badges-et-resume.md), [les heures et l'attestation d'un membre](../guide/gerer-les-membres.md#attestation-de-benevolat), [exporter et conserver ses données](../guide/exporter-et-conserver-ses-donnees.md).
 
 ## Un outil sur lequel compter
 
@@ -99,7 +99,7 @@ Oui. benevol.app n'a ni abonnement, ni fonction payante, ni plafond de bénévol
 
 ### Est-ce adapté à une petite association ?
 
-Oui. Une buvette d'un après-midi peut tenir en deux postes et quelques créneaux, sans rien d'autre à régler. Un modèle d'événement vous donne une base, et la liste des [premiers pas](../../guide/premiers-pas.md) vous guide jusqu'au lien partagé, sans formation.
+Oui. Une buvette d'un après-midi peut tenir en deux postes et quelques créneaux, sans rien d'autre à régler. Un modèle d'événement vous donne une base, et la liste des [premiers pas](../guide/premiers-pas.md) vous guide jusqu'au lien partagé, sans formation.
 
 ### Les bénévoles doivent-ils créer un compte ?
 
@@ -119,7 +119,7 @@ Oui, c'est l'usage prévu : des modèles existent pour un festival, une buvette,
 
 ### Comment commencer ?
 
-Créez votre espace en ligne depuis la [page d'inscription](/inscription) : il est prêt dès que vous avez confirmé votre adresse, à l'adresse de votre association, du type votre-association.benevol.app. Vous préparez votre événement tout de suite ; la publication suit une courte vérification. La page [Créer son premier événement](../../guide/creer-son-premier-evenement.md) vous mène ensuite, étape par étape, jusqu'au lien partagé.
+Créez votre espace en ligne depuis la [page d'inscription](/inscription) : il est prêt dès que vous avez confirmé votre adresse, à l'adresse de votre association, du type votre-association.benevol.app. Vous préparez votre événement tout de suite ; la publication suit une courte vérification. La page [Créer son premier événement](../guide/creer-son-premier-evenement.md) vous mène ensuite, étape par étape, jusqu'au lien partagé.
 
 ## Démarrer
 
@@ -127,4 +127,4 @@ Une question avant de vous lancer ? Les [tutoriels vidéo](/videos) montrent cha
 
 <!-- actions -->
 - [Demander un espace](/inscription)
-- [Créer son premier événement](../../guide/creer-son-premier-evenement.md)
+- [Créer son premier événement](../guide/creer-son-premier-evenement.md)

@@ -63,12 +63,12 @@ describe("sitemap on the apex host", () => {
       "https://www.benevol.app/doc/admin",
       "https://www.benevol.app/doc/benevole",
     ])
-    // Then the documentation units of guide/ (#649), each at /doc/<slug>, in reading order. No video:
+    // Then the documentation units of content/guide/ (#649), each at /doc/<slug>, in reading order. No video:
     // without VIDEO_MEDIA_BASE_URL none can be played, so none is indexed.
     const { readDocUnits } = await import("../lib/doc-units")
     const units = readDocUnits()
     expect(entries.map((e) => e.url).slice(21, 21 + units.length)).toEqual(units.map((u) => `https://www.benevol.app/doc/${u.slug}`))
-    // Then the blog posts of blog/ (#944), newest first, each dated the day it was sent.
+    // Then the blog posts of content/blog/ (#944), newest first, each dated the day it was sent.
     const { readBlogPosts } = await import("../lib/blog")
     const posts = readBlogPosts()
     expect(entries.map((e) => e.url).slice(21 + units.length)).toEqual(posts.map((p) => `https://www.benevol.app/blog/${p.slug}`))

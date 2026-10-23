@@ -14,7 +14,7 @@ function unit(overrides: Partial<DocUnit> & { slug: string }): DocUnit {
     legacy: [],
     aliases: [],
     body: "Texte.\n",
-    source: `guide/${overrides.slug}.md`,
+    source: `content/guide/${overrides.slug}.md`,
     ...overrides,
   }
 }
@@ -98,7 +98,7 @@ describe("docMenuSections", () => {
     expect(docMenuGroupAudience([unit({ slug: "x", roles: ["admin", "benevole"] })])).toBe("commun")
   })
 
-  it("files every group of guide/ exactly once", () => {
+  it("files every group of content/guide/ exactly once", () => {
     const real = readDocUnits()
     const menu = docMenuSections(real, real[0].slug)
     const ids = menu.flatMap((s) => s.groups.map((g) => g.group.id))

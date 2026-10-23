@@ -62,7 +62,7 @@ const LINK_ITEM_RE = /^[-*]\s+\[([^\]]+)\]\(([^)\s]+)\)\s*$/
 const SCREENSHOT_RE = /^!\[([^\]]+)\]\((\/doc-img\/[a-z0-9-]+\.png)\)$/
 
 /**
- * An action's address as the site serves it: a link to a source file (`guide/premiers-pas.md`,
+ * An action's address as the site serves it: a link to a source file (`content/guide/premiers-pas.md`,
  * `content/guide/GUIDE_ADMIN.md#x`) becomes its page, like the links of the text (`linkSourcesToRoutes`); the
  * buttons are drawn from the raw list, so without this they pointed at a file path that 404s (#759).
  */

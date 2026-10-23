@@ -131,7 +131,7 @@ export function matchingDocQuestionLinks(
   return links.slice(0, limit)
 }
 
-/** The help unit for organisers (guide/aide-et-retours.md): the last step when nothing matches. */
+/** The help unit for organisers (content/guide/aide-et-retours.md): the last step when nothing matches. */
 export const DOC_HELP_UNIT_SLUG = "aide-et-retours"
 
 /** A link of the filter's empty state: its target, its name, and what it is for when the name says too little. */

@@ -47,7 +47,7 @@ describe("blogFileName", () => {
 describe("parseBlogPost", () => {
   it("parses the front matter and keeps the body after it", () => {
     const p = parseBlogPost("2026-10-12-neuf.md", post(valid, "## Section\n\nTexte."))
-    expect(p).toEqual({ slug: "neuf", title: "benevol.app passe en 9.0 🌱", date: "2026-10-12", summary: SUMMARY, version: "9.0", body: "## Section\n\nTexte.", source: "blog/2026-10-12-neuf.md" })
+    expect(p).toEqual({ slug: "neuf", title: "benevol.app passe en 9.0 🌱", date: "2026-10-12", summary: SUMMARY, version: "9.0", body: "## Section\n\nTexte.", source: "content/blog/2026-10-12-neuf.md" })
   })
 
   it("makes version and image optional", () => {
@@ -77,7 +77,7 @@ describe("parseBlogPost", () => {
   })
 })
 
-const fake = (slug: string, date: string, extra: Partial<BlogPost> = {}): BlogPost => ({ slug, title: `Titre ${slug}`, date, summary: `Résumé ${slug}`, body: "Texte", source: `blog/${date}-${slug}.md`, ...extra })
+const fake = (slug: string, date: string, extra: Partial<BlogPost> = {}): BlogPost => ({ slug, title: `Titre ${slug}`, date, summary: `Résumé ${slug}`, body: "Texte", source: `content/blog/${date}-${slug}.md`, ...extra })
 
 describe("sortBlogPosts and blogProblems", () => {
   it("lists the newest first, two posts of one day by slug", () => {
@@ -89,9 +89,9 @@ describe("sortBlogPosts and blogProblems", () => {
     expect(blogProblems([fake("a", "2026-09-26"), fake("b", "2026-09-27")])).toEqual([])
     const problems = blogProblems([fake("a", "2026-09-26"), fake("a", "2026-09-27", { title: "Titre a", summary: "Résumé a" })])
     expect(problems).toEqual([
-      "blog/2026-09-27-a.md: same slug as blog/2026-09-26-a.md",
-      "blog/2026-09-27-a.md: same title as blog/2026-09-26-a.md",
-      "blog/2026-09-27-a.md: same summary as blog/2026-09-26-a.md",
+      "content/blog/2026-09-27-a.md: same slug as content/blog/2026-09-26-a.md",
+      "content/blog/2026-09-27-a.md: same title as content/blog/2026-09-26-a.md",
+      "content/blog/2026-09-27-a.md: same summary as content/blog/2026-09-26-a.md",
     ])
   })
 
@@ -194,7 +194,7 @@ describe("metadata, structured data and sitemap", () => {
 })
 
 // The posts of the repository: every file valid, and every link inside them leads somewhere.
-describe("the posts of blog/", () => {
+describe("the posts of content/blog/", () => {
   const posts = readBlogPosts()
 
   it("are all valid, newest first, one per .md file", () => {

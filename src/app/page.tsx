@@ -259,7 +259,7 @@ async function InstanceHome() {
 }
 
 function LandingPage() {
-  // The documentation's entry points (#764): titles and summaries read from guide/.
+  // The documentation's entry points (#764): titles and summaries read from content/guide/.
   const units = loadDocUnits()
   const quickstart = landingQuickstartLink(units)
   // The phone plays the volunteer sign-up video in place (#765) when it can play here.

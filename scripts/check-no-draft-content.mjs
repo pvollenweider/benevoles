@@ -10,7 +10,7 @@
 //
 // The sources are the Markdown files the Dockerfile copies into the runtime image (every public
 // page's source, src/lib/doc-pages.ts, checked by docker-public-sources.test.ts) and the folders it
-// copies whole (guide/, blog/).
+// copies whole (content/guide/, content/blog/).
 //   node scripts/check-no-draft-content.mjs
 import { existsSync, readFileSync, readdirSync, statSync } from "node:fs"
 import path from "node:path"
@@ -26,11 +26,11 @@ export function publicContentSources(root) {
   for (const entry of copied) {
     const full = path.join(root, entry)
     if (entry.endsWith(".md")) files.push(entry)
-    else if (["guide", "blog"].includes(entry) && existsSync(full) && statSync(full).isDirectory()) {
+    else if (["content/guide", "content/blog"].includes(entry) && existsSync(full) && statSync(full).isDirectory()) {
       for (const f of readdirSync(full).sort()) if (f.endsWith(".md")) files.push(`${entry}/${f}`)
     }
   }
-  return files
+  return [...new Set(files)]
 }
 
 /** The sources that still carry the draft marker. */

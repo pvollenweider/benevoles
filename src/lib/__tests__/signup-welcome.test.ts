@@ -4,7 +4,7 @@ import { describe, it, expect } from "vitest"
 import { WELCOME_DOC_LINKS, WELCOME_HELP_SLUG, welcomeDocLinks } from "../signup-welcome"
 import { render } from "../notifications/templates"
 
-const guide = (slug: string) => readFileSync(path.join(process.cwd(), "guide", `${slug}.md`), "utf8")
+const guide = (slug: string) => readFileSync(path.join(process.cwd(), "content/guide", `${slug}.md`), "utf8")
 
 describe("welcome email after a confirmed sign-up", () => {
   it.each(WELCOME_DOC_LINKS.map((l) => [l.slug, l.label]))("points to an organisers' guide page under its own title (%s)", (slug, label) => {

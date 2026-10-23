@@ -123,9 +123,8 @@ k8s/gandi-webhook/          # Webhook DNS Gandi pour cert-manager (Go)
 content/                    # Sources Markdown des pages publiques (src/lib/doc-pages.ts)
   pages/                    # Fonctionnalités, pages éditoriales et « Pour qui ? », tarifs, FAQ de l'accueil, accessibilité
   legal/                    # Accord de sous-traitance, liste des sous-traitants
-  guide/                    # Introductions des guides administrateur et bénévole (/doc/admin, /doc/benevole)
-guide/                      # Documentation par tâche (#649), une page par fichier : /doc/<page>
-blog/                       # Articles du blog (#944) : /blog/<slug>
+  guide/                    # Documentation par tâche (#649), une page par fichier : /doc/<page> ; GUIDE_ADMIN.md et GUIDE_BENEVOLE.md, introductions de /doc/admin et /doc/benevole
+  blog/                     # Articles du blog (#944) : /blog/<slug>
 ```
 
 ## Base de données
@@ -187,9 +186,9 @@ Elle doit aussi figurer dans `PERMISSIONS` (`src/lib/permissions.ts`) avec son n
 | Fichier | Rôle |
 |---------|------|
 | `content/pages/FEATURES.md`, `content/guide/GUIDE_ADMIN.md`, `content/pages/ACCESSIBILITE.md` | Sources des pages publiques (`/fonctionnalites`, `/doc/admin`, `/accessibilite`), déclarées dans `src/lib/doc-pages.ts` et copiées dans l'image par le `Dockerfile` |
-| `content/guide/GUIDE_BENEVOLE.md` | Mot d'accueil du guide bénévole, rendu en tête de `/doc/benevole` : le guide est entièrement découpé en pages de `guide/`, dont `/doc/benevole` est l'index |
-| `guide/*.md` | Documentation par tâche (#649), celle des bénévoles et des organisateurs, une page par fichier rendue à `/doc/<fichier>` ; le tableau des durées de conservation d'`exporter-et-conserver-ses-donnees.md` est généré par `npm run retention:docs` ; en-tête et règles d'écriture dans `guide/README.md`, dont la liste est générée par `npm run doc:index` depuis `src/lib/doc-units.ts` |
-| `blog/*.md` | Articles du blog (#944), un par fichier `AAAA-MM-JJ-slug.md`, rendus à `/blog/<slug>`, listés sur `/blog` et dans le flux `/blog/feed.xml` (voir « Ajouter un article au blog ») |
+| `content/guide/GUIDE_BENEVOLE.md` | Mot d'accueil du guide bénévole, rendu en tête de `/doc/benevole` : le guide est entièrement découpé en pages de `content/guide/`, dont `/doc/benevole` est l'index |
+| `content/guide/*.md` | Documentation par tâche (#649), celle des bénévoles et des organisateurs, une page par fichier rendue à `/doc/<fichier>` ; le tableau des durées de conservation d'`exporter-et-conserver-ses-donnees.md` est généré par `npm run retention:docs` ; en-tête et règles d'écriture dans `content/guide/README.md`, dont la liste est générée par `npm run doc:index` depuis `src/lib/doc-units.ts` |
+| `content/blog/*.md` | Articles du blog (#944), un par fichier `AAAA-MM-JJ-slug.md`, rendus à `/blog/<slug>`, listés sur `/blog` et dans le flux `/blog/feed.xml` (voir « Ajouter un article au blog ») |
 | `docs/fonctionnalites.md` | Inventaire détaillé pour l'équipe |
 | `DESIGN.md`, `PRODUCT.md` | Système visuel et contexte produit, à relire avant tout changement d'interface |
 | `docs/accessibilite.md` | Vérifications d'accessibilité, à dater |
@@ -200,11 +199,11 @@ Elle doit aussi figurer dans `PERMISSIONS` (`src/lib/permissions.ts`) avec son n
 
 Les guides et les pages publiques décrivent l'état actuel du produit, jamais « depuis la version X » : l'historique va dans `CHANGELOG.md`.
 
-Les titres des pages publiques ont une ancre stable, le slug de leur texte (`/doc/creer-un-evenement#page-blanche`, `src/lib/heading-anchors.ts`). Les liens « Aide : … » des pages d'administration ouvrent une page de `guide/` (et, s'il est indiqué, un de ses titres) listée dans `src/lib/help-links.ts` : renommer ou supprimer une de ces pages ou un de ces titres demande de mettre ce fichier à jour dans le même changement (`src/lib/__tests__/help-links.test.ts` échoue sinon, comme pour un lien `](autre-page.md#ancre)` vers un titre qui n'existe plus).
+Les titres des pages publiques ont une ancre stable, le slug de leur texte (`/doc/creer-un-evenement#page-blanche`, `src/lib/heading-anchors.ts`). Les liens « Aide : … » des pages d'administration ouvrent une page de `content/guide/` (et, s'il est indiqué, un de ses titres) listée dans `src/lib/help-links.ts` : renommer ou supprimer une de ces pages ou un de ces titres demande de mettre ce fichier à jour dans le même changement (`src/lib/__tests__/help-links.test.ts` échoue sinon, comme pour un lien `](autre-page.md#ancre)` vers un titre qui n'existe plus).
 
 ### Principes de rédaction de la documentation
 
-Pour toute section nouvelle ou réécrite des guides (`content/guide/GUIDE_ADMIN.md`, pages de `guide/`) :
+Pour toute section nouvelle ou réécrite des guides (`content/guide/GUIDE_ADMIN.md`, pages de `content/guide/`) :
 
 - **La tâche d'abord** : le titre dit ce que la personne veut faire (« Créer une série de créneaux », « Gérer son inscription »), pas le nom d'un écran ou d'un composant. La première phrase dit où cela se passe et à quoi cela sert.
 - **Des sections courtes** : une tâche par section, une procédure en étapes quand il y en a plusieurs, les cas rares dans les questions fréquentes. Une explication qui vaut pour plusieurs rôles est écrite une seule fois, au bon endroit, et les autres sections y renvoient par un lien.
@@ -214,7 +213,7 @@ Pour toute section nouvelle ou réécrite des guides (`content/guide/GUIDE_ADMIN
 
 ### Ajouter un article au blog
 
-Un article est un fichier Markdown de `blog/`, nommé `AAAA-MM-JJ-slug.md` (la date d'envoi, puis l'adresse de l'article : `/blog/slug`). Il commence par un en-tête `---` : `title` (l'objet de la newsletter tel qu'envoyé, emoji compris), `date` (`AAAA-MM-JJ`, la même que dans le nom du fichier), `summary` (une ou deux phrases de 70 à 160 caractères, tirées de l'ouverture de l'article, aussi la description de la page), et au besoin `version` (`2.3`, qui affiche le badge et renvoie vers ses notes sur `/nouveautes`) et `image` (une image PNG de 1200 x 630 servie par le site, sinon la carte du site). Le texte suit, sans titre `#` (la page affiche `title` en titre) ; les liens vers le site sont relatifs (`/doc/s-inscrire`, `/videos/ID`). L'index, la page, le plan du site et le flux Atom suivent sans autre changement ; `src/lib/__tests__/blog.test.ts` vérifie chaque fichier et chaque lien interne.
+Un article est un fichier Markdown de `content/blog/`, nommé `AAAA-MM-JJ-slug.md` (la date d'envoi, puis l'adresse de l'article : `/blog/slug`). Il commence par un en-tête `---` : `title` (l'objet de la newsletter tel qu'envoyé, emoji compris), `date` (`AAAA-MM-JJ`, la même que dans le nom du fichier), `summary` (une ou deux phrases de 70 à 160 caractères, tirées de l'ouverture de l'article, aussi la description de la page), et au besoin `version` (`2.3`, qui affiche le badge et renvoie vers ses notes sur `/nouveautes`) et `image` (une image PNG de 1200 x 630 servie par le site, sinon la carte du site). Le texte suit, sans titre `#` (la page affiche `title` en titre) ; les liens vers le site sont relatifs (`/doc/s-inscrire`, `/videos/ID`). L'index, la page, le plan du site et le flux Atom suivent sans autre changement ; `src/lib/__tests__/blog.test.ts` vérifie chaque fichier et chaque lien interne.
 
 ### Le CHANGELOG et la page Nouveautés
 
@@ -235,7 +234,7 @@ Checklist à suivre à chaque changement de version :
 3. **`SECURITY.md`** : dans le même commit que le bump de `package.json`, mettre à jour la première ligne `X.Y.x` de la table « Versions supportées » à chaque changement de version mineure ou majeure (un correctif ne la change pas). **Vérifié en CI** (`scripts/check-security-md.mjs`, job « Type-check, lint & tests ») : la CI échoue si cette ligne ne correspond pas à la version majeure et mineure de `package.json`.
 4. **`docs/fonctionnalites.md`** : vérifier que les fonctionnalités ajoutées ou retirées depuis la dernière relecture y figurent. Pas de vérification automatique : audit manuel périodique.
 5. **`content/pages/FEATURES.md`** (page publique `/fonctionnalites`) : chaque fonctionnalité livrée y figure, aucune fonctionnalité non livrée n'y est annoncée (règle d'`AGENTS.md`).
-6. **`content/guide/GUIDE_ADMIN.md` / `guide/*.md`** : décrivent uniquement l'état actuel du produit, jamais de langage « depuis la version x, … ». Ce sont aussi les pages publiques `/doc/admin` et `/doc/<page>` (même source) ; `/doc/benevole` et `/doc/admin` listent les pages de leur rôle.
+6. **`content/guide/GUIDE_ADMIN.md` / `content/guide/*.md`** : décrivent uniquement l'état actuel du produit, jamais de langage « depuis la version x, … ». Ce sont aussi les pages publiques `/doc/admin` et `/doc/<page>` (même source) ; `/doc/benevole` et `/doc/admin` listent les pages de leur rôle.
 7. **Changement incompatible** (variable obligatoire, manifeste, migration par Job) : section « Mise à jour depuis x » dans `docs/deploiement.md`, lien dans le README et en tête de la section du CHANGELOG.
 8. **Nouvelle variable d'environnement** : `src/lib/env.ts` si elle doit être validée au démarrage, `docs/configuration.md`, `.env.example`, l'étape « Sync k8s secret » de `.github/workflows/deploy.yml` et le secret GitHub correspondant.
 9. **Captures de la documentation** (`public/doc-img/`, utilisées par les guides et le README) : si des écrans ont changé, les régénérer sur une base jetable avec l'événement de démonstration (`scripts/seed-demo.ts` puis `npm run screenshots`, procédure en tête de `scripts/screenshots.mjs`), et relire les textes alternatifs. Hors release, la même règle s'applique à chaque PR qui modifie un écran montré (« Captures de la documentation » dans `AGENTS.md`, vérifiée en CI).

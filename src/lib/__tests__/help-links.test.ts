@@ -8,7 +8,7 @@ import { CONTACT_EMAIL, REPOSITORY_URL } from "../landing-seo"
 import { MAIN_CONTENT_ID } from "@/components/admin/SkipLink"
 
 // #568, #649: every contextual help link opens an existing page of the documentation (a unit of
-// guide/ for organisers), at an existing heading when it names one. Renaming or removing a unit or
+// content/guide/ for organisers), at an existing heading when it names one. Renaming or removing a unit or
 // a heading a page links to fails here: update src/lib/help-links.ts in the same change.
 const root = path.join(__dirname, "..", "..", "..")
 const units = readDocUnits()
@@ -29,7 +29,7 @@ const decode = (s: string) => {
 const headingsOf = (html: string) => [...html.matchAll(/<h([2-6])(?: id="([^"]*)")?>([\s\S]*?)<\/h\1>/g)].map((m) => ({ id: m[2], text: decode(m[3]) }))
 const unitBySlug = (slug: string): DocUnit => {
   const unit = units.find((u) => u.slug === slug)
-  expect(unit, `guide/${slug}.md`).toBeDefined()
+  expect(unit, `content/guide/${slug}.md`).toBeDefined()
   return unit!
 }
 
@@ -41,7 +41,7 @@ describe("docHref", () => {
 })
 
 describe("ADMIN_HELP_LINKS", () => {
-  it.each(routes)("%s opens an organisers' unit of guide/, and the heading it names, with the same wording", (route) => {
+  it.each(routes)("%s opens an organisers' unit of content/guide/, and the heading it names, with the same wording", (route) => {
     const target: AdminHelpTarget = ADMIN_HELP_LINKS[route]
     const unit = unitBySlug(target.unit)
     expect(unit.roles, unit.slug).toContain("admin")

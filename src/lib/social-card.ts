@@ -8,7 +8,7 @@ import { DOC_ROLE_INFO, docGroup, type DocUnit } from "@/lib/doc-units"
  * What the social card of a public page shows (src/app/og-image.png/[...page]/route.tsx): where the
  * page sits (« Documentation, Le jour J »), its title in large type, the sentence that sums it up,
  * and who it is for. Every word comes from the page's own registry entry (src/lib/doc-pages.ts) or
- * its unit's front matter (guide/<slug>.md), so a card never says anything its page doesn't.
+ * its unit's front matter (content/guide/<slug>.md), so a card never says anything its page doesn't.
  */
 export type SocialCard = {
   /** Small line above the title: the section of the site. */

@@ -9,7 +9,7 @@ import type { DocUnit } from "@/lib/doc-units"
 /**
  * The home page's entry points to the documentation (#764): the quickstart in the hero, then a
  * « Bien démarrer » block with the essential units, in the order a new organiser needs them, then
- * the volunteers' guide apart. Titles and summaries come from the units themselves (guide/*.md) and from
+ * the volunteers' guide apart. Titles and summaries come from the units themselves (content/guide/*.md) and from
  * the guides' registry (src/lib/doc-pages.ts), never copied here.
  */
 export const LANDING_START_UNITS: readonly string[] = [

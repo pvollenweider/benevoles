@@ -6,7 +6,7 @@ import { docUnitHref } from "./doc-href"
 /**
  * The guide pages the welcome email points a new organiser to, once their address is confirmed
  * (self-service sign-up, #810): in reading order, the quickstart first. Labels are the pages'
- * own titles; a test checks each one exists in `guide/` for organisers, under that title.
+ * own titles; a test checks each one exists in `content/guide/` for organisers, under that title.
  */
 export const WELCOME_DOC_LINKS = [
   { slug: "creer-son-premier-evenement", label: "Créer son premier événement" },

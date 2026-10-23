@@ -6,7 +6,7 @@ Le service est gratuit aujourd'hui, le code est open source et les données sont
 
 <!-- actions -->
 - [Demander un espace](/inscription)
-- [Créer son premier événement](../../guide/creer-son-premier-evenement.md)
+- [Créer son premier événement](../guide/creer-son-premier-evenement.md)
 
 ![Page personnelle « Mes inscriptions » : la carte « Avant ta mission » (poste, horaire, lieu, responsable, consignes et pages de l'événement), l'ajout de tout le planning au calendrier, puis « Tous mes créneaux », chacun avec sa date et son bouton Annuler](/doc-img/public-my-page.png)
 
@@ -22,7 +22,7 @@ Le modèle « Manifestation sportive » prépare une matinée :
 
 Vous adaptez ensuite les horaires, les places et les postes à votre parcours. Un tournoi sur deux jours ou un week-end de compétition se prépare de la même façon, avec un événement sur plusieurs jours.
 
-En savoir plus : [créer un événement](../../guide/creer-un-evenement.md), [configurer les créneaux](../../guide/configurer-les-creneaux.md).
+En savoir plus : [créer un événement](../guide/creer-un-evenement.md), [configurer les créneaux](../guide/configurer-les-creneaux.md).
 
 ## Chaque signaleur à son carrefour
 
@@ -34,7 +34,7 @@ Si un club partenaire fournit une partie des bénévoles, **Créer un lien pour 
 
 <!-- video: SHIFT_CREATE_EDIT_DETAIL -->
 
-En savoir plus : [configurer les créneaux](../../guide/configurer-les-creneaux.md), [créer un événement (le contact le jour J)](../../guide/creer-un-evenement.md), [le tutoriel vidéo sur le détail d'un créneau](/videos/SHIFT_CREATE_EDIT_DETAIL).
+En savoir plus : [configurer les créneaux](../guide/configurer-les-creneaux.md), [créer un événement (le contact le jour J)](../guide/creer-un-evenement.md), [le tutoriel vidéo sur le détail d'un créneau](/videos/SHIFT_CREATE_EDIT_DETAIL).
 
 ## Joindre tout le monde le matin même
 
@@ -46,7 +46,7 @@ Depuis « Écrire aux bénévoles », un message part en une fois à tous les si
 
 <!-- video: ATTENDANCE_CHECK_IN -->
 
-En savoir plus : [les présences le jour J](../../guide/presences-le-jour-j.md), [écrire aux bénévoles](../../guide/ecrire-aux-benevoles.md), [le tutoriel vidéo sur les présences](/videos/ATTENDANCE_CHECK_IN).
+En savoir plus : [les présences le jour J](../guide/presences-le-jour-j.md), [écrire aux bénévoles](../guide/ecrire-aux-benevoles.md), [le tutoriel vidéo sur les présences](/videos/ATTENDANCE_CHECK_IN).
 
 ## Le départ est décalé d'une heure
 
@@ -54,13 +54,13 @@ Depuis le planning, vous changez les horaires d'un créneau avec **Décaler**, e
 
 <!-- video: LAST_MINUTE_CHANGES -->
 
-En savoir plus : [modifier vite depuis le planning](../../guide/modifier-vite-depuis-le-planning.md), [les rappels et les messages de changement](../../guide/rappels.md), [le tutoriel vidéo sur les imprévus](/videos/LAST_MINUTE_CHANGES).
+En savoir plus : [modifier vite depuis le planning](../guide/modifier-vite-depuis-le-planning.md), [les rappels et les messages de changement](../guide/rappels.md), [le tutoriel vidéo sur les imprévus](/videos/LAST_MINUTE_CHANGES).
 
 ## Après la course
 
 La feuille de présence s'exporte en CSV, avec l'heure du pointage. Le bilan de l'événement compte les bénévoles, en distinguant les nouveaux de ceux qui reviennent, et les heures effectuées. Pour l'édition suivante, vous dupliquez celle-ci et toutes ses dates sont décalées.
 
-En savoir plus : [rapports, badges et résumé](../../guide/rapports-badges-et-resume.md), [dupliquer un événement](../../guide/dupliquer-un-evenement.md).
+En savoir plus : [rapports, badges et résumé](../guide/rapports-badges-et-resume.md), [dupliquer un événement](../guide/dupliquer-un-evenement.md).
 
 ## Questions fréquentes
 
@@ -86,4 +86,4 @@ Créez l'espace de votre club ou de votre comité d'organisation, puis partez du
 
 <!-- actions -->
 - [Demander un espace](/inscription)
-- [Créer son premier événement](../../guide/creer-son-premier-evenement.md)
+- [Créer son premier événement](../guide/creer-son-premier-evenement.md)

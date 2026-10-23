@@ -28,9 +28,9 @@ docker-compose*.yml
 !content/guide/GUIDE_ADMIN.md
 !content/guide/GUIDE_BENEVOLE.md
 # The documentation units (#649, src/lib/doc-units.ts), rendered by /doc/<slug>.
-!guide/*.md
+!content/guide/*.md
 # The blog posts (#944, src/lib/blog.ts), rendered by /blog, /blog/<slug> and /blog/feed.xml.
-!blog/*.md
+!content/blog/*.md
 # Their last commit dates (scripts/doc-lastmod.mjs, run by deploy.yml before the build): the
 # sitemap's lastmod. Not matched by the rules above, re-included in case one ever does.
 !doc-lastmod.json

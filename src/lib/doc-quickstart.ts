@@ -6,7 +6,7 @@ import { DOC_ROLE_GROUP_ORDER, docUnitsByGroup, type DocUnit } from "@/lib/doc-u
 /**
  * The quickstart unit (#758), « Créer son premier événement »: one page that takes a new organiser,
  * in order, from an empty organisation to a shared sign-up link, each step linking to the unit
- * that details it. Its source is `guide/creer-son-premier-evenement.md`; the documentation's index
+ * that details it. Its source is `content/guide/creer-son-premier-evenement.md`; the documentation's index
  * (/doc), the organisers' guide and the home page point to it by this slug.
  */
 export const DOC_QUICKSTART_SLUG = "creer-son-premier-evenement"

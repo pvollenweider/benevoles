@@ -54,7 +54,7 @@ export const ROSTER_ORG_DEFAULT_HINT = "S'applique aux événements créés ensu
 /** The topic of the « En savoir plus » links (said to screen readers: « En savoir plus sur … »). */
 export const ROSTER_DOC_TOPIC = "« Qui est inscrit »"
 /**
- * Where « En savoir plus » leads, per screen: a heading of a unit of guide/
+ * Where « En savoir plus » leads, per screen: a heading of a unit of content/guide/
  * (src/lib/__tests__/shift-roster-doc-links.test.ts fails when one no longer exists).
  */
 export const ROSTER_DOC_LINKS = {
