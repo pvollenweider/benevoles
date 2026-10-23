@@ -3153,9 +3153,9 @@ async function main() {
         await tap(page, page.getByRole("dialog", { name: /^Relancer .*sans créneau confirmé/ }).getByRole("button", { name: "Relancer", exact: true }))
         const result = await response
         const sent = await result.json()
-        if (!result.ok() || sent.failed || sent.sent < 1) throw new Error("Reminder delivery failed")
+        if (!result.ok() || !(sent.queued >= 1)) throw new Error("Reminder delivery failed")
         checks.simpleReminder = sent
-        await page.getByText(`${sent.sent} relances envoyées`, { exact: true }).waitFor()
+        await page.getByText(`${sent.queued} relances en cours d'envoi.`, { exact: true }).waitFor()
       })
       await scene("link", async at => {
         await at("Ouvrons l'email reçu dans")

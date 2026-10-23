@@ -658,6 +658,10 @@ model MemberInvite {
   // from the admin side. Cleared when they register from the same link (change of mind), but a
   // later withdrawal of all their shifts does not set it back (product decision, #558).
   declinedAt  DateTime?
+  // When the invitation email was last sent again (#1105): a reminder (« Relancer les invités sans
+  // réponse ») or a new invitation of someone already invited. With `sentAt`, it keeps a reminder
+  // from emailing the same person twice within 48 h (src/lib/invitation-sending.ts).
+  lastRemindedAt DateTime?
 
   event     Event     @relation(fields: [eventId], references: [id], onDelete: Cascade)
   volunteer Volunteer @relation(fields: [volunteerId], references: [id], onDelete: Cascade)

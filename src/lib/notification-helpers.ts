@@ -7,13 +7,14 @@
  * notification of a new sign-up, which also applies the organization's email settings and falls
  * back to ADMIN_NOTIFICATION_EMAIL when the organization has no active admin.
  * The sign-up ones take a `send` (sendNotification or an outbox collector, #293) so the public sign-up
- * can queue them in its transaction; the invitation is sent directly, its route reports the outcome.
+ * can queue them in its transaction; the invitation has a payload builder for the outbox (#1105).
  */
 
 import { env } from "./env"
 import { parseNotificationSettings } from "./notification-settings"
 import { prisma } from "./prisma"
 import { sendNotification, type Send } from "./notifications"
+import type { NotificationPayload } from "./notifications/types"
 import type { ShiftInfo } from "./shift-info"
 
 type RegistrationEmailData = {
@@ -49,7 +50,7 @@ export async function sendConfirmationEmail(data: RegistrationEmailData, send: S
   })
 }
 
-type MemberInviteEmailData = {
+export type MemberInviteEmailData = {
   to: string
   memberName: string
   organizationName: string
@@ -65,10 +66,16 @@ type MemberInviteEmailData = {
   organizationId?: string | null
 }
 
-export async function sendMemberInvite(data: MemberInviteEmailData) {
-  return sendNotification({
+/**
+ * The member invitation email (#1105): sent through the outbox by the invitation and reminder
+ * routes (`dedupeKey` set), directly by the test email and the link re-sends. Its `token` is the
+ * clear invite token the link needs; in the outbox it is sealed with the rest of the payload.
+ */
+export function memberInvitePayload(data: MemberInviteEmailData, dedupeKey?: string): NotificationPayload {
+  return {
     kind: "member_invite",
     recipient: { email: data.to, name: data.memberName },
+    ...(dedupeKey ? { dedupeKey } : {}),
     volunteerId: data.volunteerId,
     organizationId: data.organizationId,
     data: {
@@ -82,7 +89,11 @@ export async function sendMemberInvite(data: MemberInviteEmailData) {
       message: data.message,
       token: data.token,
     },
-  })
+  }
+}
+
+export async function sendMemberInvite(data: MemberInviteEmailData) {
+  return sendNotification(memberInvitePayload(data))
 }
 
 export async function sendAdminNotification(data: {

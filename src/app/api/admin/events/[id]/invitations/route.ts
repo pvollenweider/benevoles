@@ -3,7 +3,9 @@
 
 import { NextResponse } from "next/server"
 import { requireOrgSession } from "@/lib/auth-guard"
-import { sendMemberInvite } from "@/lib/notification-helpers"
+import { memberInvitePayload } from "@/lib/notification-helpers"
+import { deliverAfterResponse, enqueueNotifications } from "@/lib/notifications/outbox"
+import { RESEND_GUARD_MS, inviteEmailDedupeKey, sendCutoff } from "@/lib/invitation-sending"
 import { adminActor, logEvent } from "@/lib/event-log"
 import { z } from "zod"
 import { randomBytes } from "crypto"
@@ -117,24 +119,68 @@ export async function POST(req: Request, { params }: { params: Promise<{ id: str
     return NextResponse.json({ error: "Aucun membre valide à inviter" }, { status: 400 })
   }
 
-  // Existing invites for this event so we don't recreate them.
-  const existing = await db.memberInvite.findMany({
-    where: { eventId, volunteerId: { in: volunteers.map((v) => v.id) } },
-    select: { volunteerId: true, id: true, ...linkToken.select },
-  })
-  const existingByVolunteer = new Map(existing.map((e) => [e.volunteerId, { id: e.id, volunteerId: e.volunteerId, token: linkToken.reveal(e) }]))
+  const now = new Date()
+  const eventDate = event.startDate.toLocaleDateString("fr-FR", { weekday: "long", day: "numeric", month: "long" })
+  const guardCutoff = sendCutoff(now, RESEND_GUARD_MS)
+  const ids = volunteers.map((v) => v.id)
+  const byId = new Map(volunteers.map((v) => [v.id, v]))
 
-  const created: { id: string; volunteerId: string; token: string }[] = []
-  for (const volunteer of volunteers) {
-    if (existingByVolunteer.has(volunteer.id)) continue
-    // Clear token only in memory (the email needs it); the DB keeps hash + encrypted copy (#290).
-    const token = randomBytes(24).toString("hex")
-    const row = await db.memberInvite.create({
-      data: { eventId, volunteerId: volunteer.id, ...linkToken.data(token) },
+  // Through the outbox (#1105): over a sending limit the emails wait and leave in waves instead of
+  // failing, and each one shows in « Emails envoyés ». New invitations, the claim of the re-sent
+  // ones and their emails commit together.
+  const { created, recentlySkipped, outboxIds } = await db.$transaction(async (tx) => {
+    // Clear tokens only in memory (the email needs them); the DB keeps hash + encrypted copy (#290).
+    // skipDuplicates: an invitation created meanwhile (a double click) is kept, and treated as existing.
+    const tokens = new Map(ids.map((id) => [id, randomBytes(24).toString("hex")]))
+    const created = await tx.memberInvite.createManyAndReturn({
+      data: ids.map((volunteerId) => ({ eventId, volunteerId, ...linkToken.data(tokens.get(volunteerId)!) })),
+      skipDuplicates: true,
       select: { id: true, volunteerId: true },
     })
-    const invite = { ...row, token }
-    created.push(invite)
+    const createdIds = new Set(created.map((c) => c.volunteerId))
+    // Already invited and reachable: a member without an address gets nothing, and isn't claimed.
+    const existingIds = ids.filter((id) => !createdIds.has(id) && byId.get(id)!.email)
+    // Someone already invited gets the invitation again, as before, unless it went less than
+    // RESEND_GUARD_MS ago: a double click or a retried request never emails them twice.
+    const resent = existingIds.length === 0 ? [] : await tx.memberInvite.updateManyAndReturn({
+      where: {
+        eventId,
+        volunteerId: { in: existingIds },
+        sentAt: { lt: guardCutoff },
+        OR: [{ lastRemindedAt: null }, { lastRemindedAt: { lt: guardCutoff } }],
+      },
+      data: { lastRemindedAt: now },
+      select: { id: true, volunteerId: true, ...linkToken.select },
+    })
+    const toEmail = [
+      ...created.map((c) => ({ id: c.id, volunteerId: c.volunteerId, token: tokens.get(c.volunteerId)! })),
+      ...resent.map((r) => ({ id: r.id, volunteerId: r.volunteerId, token: linkToken.reveal(r) })),
+    ]
+    const payloads = toEmail.flatMap((invite) => {
+      const volunteer = byId.get(invite.volunteerId)!
+      if (!volunteer.email) return []
+      return [memberInvitePayload({
+        to: volunteer.email,
+        memberName: volunteer.firstName,
+        organizationName: event.organization.name,
+        eventTitle: event.title,
+        eventDate,
+        eventLocation: event.location,
+        orgSlug: event.organization.slug,
+        eventSlug: event.slug,
+        message: parsed.data.message ?? null,
+        token: invite.token,
+        volunteerId: volunteer.id,
+        organizationId: event.organizationId,
+      }, inviteEmailDedupeKey(invite.id, now))]
+    })
+    const outboxIds = await enqueueNotifications(payloads, tx, { organizationId: event.organizationId })
+    const recentlySkipped = existingIds.length - resent.length
+    return { created, recentlySkipped, outboxIds }
+  })
+  deliverAfterResponse(outboxIds)
+
+  for (const invite of created) {
     await logEvent({
       eventId,
       actor: adminActor(guard.session),
@@ -144,45 +190,13 @@ export async function POST(req: Request, { params }: { params: Promise<{ id: str
     })
   }
 
-  // Send emails in parallel so a slow SMTP doesn't make the route
-  // hang for `volunteers.length × timeout`. Promise.allSettled keeps a
-  // partial failure from cancelling the others.
-  const sends = volunteers
-    .filter((v) => v.email)
-    .map(async (volunteer) => {
-      const invite = existingByVolunteer.get(volunteer.id) ?? created.find((c) => c.volunteerId === volunteer.id)
-      if (!invite) return { ok: false }
-      try {
-        const result = await sendMemberInvite({
-          to: volunteer.email!,
-          memberName: volunteer.firstName,
-          organizationName: event.organization.name,
-          eventTitle: event.title,
-          eventDate: event.startDate.toLocaleDateString("fr-FR", { weekday: "long", day: "numeric", month: "long" }),
-          eventLocation: event.location,
-          orgSlug: event.organization.slug,
-          eventSlug: event.slug,
-          message: parsed.data.message ?? null,
-          token: invite.token,
-          volunteerId: volunteer.id,
-          organizationId: event.organizationId,
-        })
-        return { ok: result.ok }
-      } catch (err) {
-        console.error("Member invite email error:", err)
-        return { ok: false }
-      }
-    })
-
-  const results = await Promise.allSettled(sends)
-  const sent = results.filter((r) => r.status === "fulfilled" && r.value.ok).length
-  const failed = results.length - sent
-
   return NextResponse.json({
     invitedNew: created.length,
     skippedExisting: volunteers.length - created.length,
-    emailsSent: sent,
-    emailsFailed: failed,
+    emailsQueued: outboxIds.length,
+    // Kept for a page loaded before this version: it now means « queued ».
+    emailsSent: outboxIds.length,
+    recentlySkipped,
     membersWithoutEmail: volunteers.filter((v) => !v.email).length,
   }, { status: 201 })
 }

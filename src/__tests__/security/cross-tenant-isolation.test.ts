@@ -1394,6 +1394,9 @@ describe("Invitations — cross-tenant isolation", () => {
       params("evt-b"),
     )
     expect(res.status).toBe(404)
+    // Nothing queued in the outbox for an org-B event (#1105).
+    expect(prismaMock.notificationOutbox.createMany).not.toHaveBeenCalled()
+    expect(prismaMock.notificationOutbox.create).not.toHaveBeenCalled()
   })
 
   it("GET /api/admin/events/[id]/invitations returns 404 for org-B event", async () => {
@@ -1410,6 +1413,8 @@ describe("Invitations — cross-tenant isolation", () => {
 
     const res = await POST(makeRequest("/api/admin/events/evt-b/invitations/remind", "POST", {}), params("evt-b"))
     expect(res.status).toBe(404)
+    expect(prismaMock.notificationOutbox.createMany).not.toHaveBeenCalled()
+    expect(prismaMock.notificationOutbox.create).not.toHaveBeenCalled()
   })
 
   it("POST /api/admin/events/[id]/invitations/test-email returns 404 for org-B event and sends nothing (#1045)", async () => {
@@ -1744,6 +1749,10 @@ describe("Event actions — cross-tenant isolation (#1049)", () => {
     expect(sendNotification).not.toHaveBeenCalled()
     expect(update).not.toHaveBeenCalled()
     expect(prismaMock.event.update).not.toHaveBeenCalled()
+    // Through the outbox since #1105: no stamp claimed, nothing queued.
+    expect(prismaMock.event.updateMany).not.toHaveBeenCalled()
+    expect(prismaMock.notificationOutbox.createMany).not.toHaveBeenCalled()
+    expect(prismaMock.notificationOutbox.create).not.toHaveBeenCalled()
   })
 
   it("POST /api/admin/events/[id]/send-reminder reads only the registrations of the org-A event", async () => {

@@ -38,6 +38,10 @@ async function createEventWithMember(browser: Browser, title: string, memberEmai
   const member = await post("/api/admin/members", { firstName: "E2E", lastName: `Decline${Date.now()}`, email: memberEmail })
   const invite = await page.request.post(`/api/admin/events/${event.id}/invitations`, { data: { volunteerIds: [member.id] } })
   expect(invite.ok(), await invite.text()).toBeTruthy()
+  // Through the outbox (#1105): queued, not « sent »; a second click right after emails no one twice.
+  expect(await invite.json()).toMatchObject({ invitedNew: 1, emailsQueued: 1 })
+  const again = await page.request.post(`/api/admin/events/${event.id}/invitations`, { data: { volunteerIds: [member.id] } })
+  expect(await again.json()).toMatchObject({ invitedNew: 0, emailsQueued: 0, recentlySkipped: 1 })
 
   await page.close()
   return { id: event.id, slug: event.slug }
