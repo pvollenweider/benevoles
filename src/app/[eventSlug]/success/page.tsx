@@ -157,9 +157,12 @@ function SuccessContent() {
             </div>
           )}
 
-          {/* Back to the event (#1097); embedded, to its schedule in the frame. */}
+          {/* Back to the event (#1097); embedded, to its schedule in the frame. Not prefetched in
+              view: the prefetch request drops the query, so without an organisation subdomain
+              (`?org=`, local runs and Lighthouse) it answered 404 in the console. */}
           <Link
             href={back.href}
+            prefetch={false}
             onClick={embed ? markReturnToSchedule : undefined}
             className="block w-full bg-gray-900 text-white rounded-xl py-3 text-sm font-medium hover:bg-gray-800 transition-colors focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-blue-600"
           >
