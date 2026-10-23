@@ -65,7 +65,7 @@ body {
 
 .input {
   width: 100%;
-  border: 1px solid #d1d5db;
+  border: 1px solid #6b7280;
   border-radius: 0.75rem;
   padding: 0.5rem 0.75rem;
   font-size: 0.875rem;
@@ -88,6 +88,17 @@ body {
   .input:focus {
     outline: 2px solid transparent;
     outline-offset: 2px;
+  }
+}
+
+/* An invalid field at rest (#1123): the red border alone is about as dark as the gray-500 resting
+   border (1.01:1), so a second pixel of red, drawn as a shadow, keeps it apart by its weight, not
+   by its hue alone. Not on focus, where the field's own focus indicator takes the box-shadow. In
+   @layer base so an explicit shadow utility still wins; the error text and aria-invalid carry
+   the information either way (forced colours drop the shadow and keep the border). */
+@layer base {
+  :is(input:not([type="checkbox"], [type="radio"]), select, textarea, [role="combobox"])[aria-invalid="true"]:not(:focus) {
+    box-shadow: 0 0 0 1px #dc2626;
   }
 }
 

@@ -407,7 +407,7 @@ export default function MembersManager({ initialMembers, allTags, initialSearch,
               onChange={(e) => setHoursFrom(e.target.value)}
               aria-invalid={!hoursRangeValid}
               aria-describedby={!hoursRangeValid ? "hours-period-error" : undefined}
-              className="border border-gray-300 rounded-lg px-2 py-1.5 text-sm focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-blue-600"
+              className="border border-gray-500 rounded-lg px-2 py-1.5 text-sm focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-blue-600"
             />
           </div>
           <div>
@@ -421,11 +421,11 @@ export default function MembersManager({ initialMembers, allTags, initialSearch,
               onChange={(e) => setHoursTo(e.target.value)}
               aria-invalid={!hoursRangeValid}
               aria-describedby={!hoursRangeValid ? "hours-period-error" : undefined}
-              className="border border-gray-300 rounded-lg px-2 py-1.5 text-sm focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-blue-600"
+              className="border border-gray-500 rounded-lg px-2 py-1.5 text-sm focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-blue-600"
             />
           </div>
           <label className="text-sm text-gray-700 flex items-center gap-1.5 pb-1.5">
-            <input type="checkbox" name="includeAll" value="1" className="h-4 w-4 rounded border-gray-300" />
+            <input type="checkbox" name="includeAll" value="1" className="h-4 w-4 rounded border-gray-500" />
             Inclure les membres sans créneau confirmé sur la période
           </label>
           <button type="submit" className="text-sm border border-gray-200 px-3 py-1.5 rounded-lg hover:bg-gray-50 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-blue-600">
@@ -445,7 +445,7 @@ export default function MembersManager({ initialMembers, allTags, initialSearch,
           value={search}
           onChange={(e) => setSearch(e.target.value)}
           placeholder="Rechercher (nom, email, téléphone)…"
-          className="flex-1 min-w-[200px] border border-gray-200 rounded-lg px-3 py-1.5 text-sm"
+          className="flex-1 min-w-[200px] border border-gray-500 rounded-lg px-3 py-1.5 text-sm"
         />
         <label htmlFor="members-tag-filter" className="text-sm text-gray-600">
           Étiquette
@@ -453,7 +453,7 @@ export default function MembersManager({ initialMembers, allTags, initialSearch,
             id="members-tag-filter"
             value={tagFilter}
             onChange={(e) => setTagFilter(e.target.value)}
-            className="ml-1.5 border border-gray-200 rounded-lg px-3 py-1.5 text-sm"
+            className="ml-1.5 border border-gray-500 rounded-lg px-3 py-1.5 text-sm"
           >
             <option value="">Toutes les étiquettes</option>
             {allTags.map((t) => (

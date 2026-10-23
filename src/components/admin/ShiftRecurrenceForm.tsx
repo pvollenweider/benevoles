@@ -242,7 +242,7 @@ export default function ShiftRecurrenceForm({ panelId, eventId, eventStart, even
         <div className="flex flex-wrap gap-2">
           {WEEKDAYS.map((w) => (
             <label key={w.value} htmlFor={`${id}-wd-${w.value}`} className="inline-flex items-center gap-2 min-h-11 px-3 rounded-xl border border-gray-300 text-sm text-gray-800 has-[:checked]:border-blue-600 has-[:checked]:bg-blue-50 cursor-pointer">
-              <input id={`${id}-wd-${w.value}`} type="checkbox" checked={weekdays.includes(w.value)} aria-invalid={invalid("weekdays") || undefined} aria-describedby={invalid("weekdays") ? errorIdOf("weekdays") : undefined} onChange={() => toggleWeekday(w.value)} className="h-4 w-4 rounded border-gray-300 text-blue-600 focus:ring-2 focus:ring-blue-500" />
+              <input id={`${id}-wd-${w.value}`} type="checkbox" checked={weekdays.includes(w.value)} aria-invalid={invalid("weekdays") || undefined} aria-describedby={invalid("weekdays") ? errorIdOf("weekdays") : undefined} onChange={() => toggleWeekday(w.value)} className="h-4 w-4 rounded border-gray-500 text-blue-600 focus:ring-2 focus:ring-blue-500" />
               {w.label}
             </label>
           ))}
@@ -255,7 +255,7 @@ export default function ShiftRecurrenceForm({ panelId, eventId, eventStart, even
         <div className="flex flex-wrap gap-4">
           {([1, 2] as const).map((n) => (
             <label key={n} htmlFor={`${id}-every-${n}`} className="inline-flex items-center gap-2 min-h-11 text-sm text-gray-800">
-              <input id={`${id}-every-${n}`} type="radio" name={`${id}-every`} checked={everyWeeks === n} onChange={() => setEveryWeeks(n)} className="h-4 w-4 border-gray-300 text-blue-600 focus:ring-2 focus:ring-blue-500" />
+              <input id={`${id}-every-${n}`} type="radio" name={`${id}-every`} checked={everyWeeks === n} onChange={() => setEveryWeeks(n)} className="h-4 w-4 border-gray-500 text-blue-600 focus:ring-2 focus:ring-blue-500" />
               {n === 1 ? "Chaque semaine" : "Une semaine sur deux"}
             </label>
           ))}
@@ -322,11 +322,11 @@ export default function ShiftRecurrenceForm({ panelId, eventId, eventStart, even
 
       <div className="flex flex-col gap-1">
         <div className="flex items-center gap-2 min-h-11">
-          <input id={`${id}-waitlist`} type="checkbox" checked={waitlistEnabled} onChange={(e) => setWaitlistEnabled(e.target.checked)} className="h-4 w-4 rounded border-gray-300 text-blue-600 focus:ring-2 focus:ring-blue-500" />
+          <input id={`${id}-waitlist`} type="checkbox" checked={waitlistEnabled} onChange={(e) => setWaitlistEnabled(e.target.checked)} className="h-4 w-4 rounded border-gray-500 text-blue-600 focus:ring-2 focus:ring-blue-500" />
           <label htmlFor={`${id}-waitlist`} className="text-xs font-medium text-gray-600 select-none">Activer la liste d&apos;attente</label>
         </div>
         <div className="flex items-center gap-2 min-h-11">
-          <input id={`${id}-approval`} type="checkbox" checked={requiresApproval} onChange={(e) => setRequiresApproval(e.target.checked)} className="h-4 w-4 rounded border-gray-300 text-blue-600 focus:ring-2 focus:ring-blue-500" />
+          <input id={`${id}-approval`} type="checkbox" checked={requiresApproval} onChange={(e) => setRequiresApproval(e.target.checked)} className="h-4 w-4 rounded border-gray-500 text-blue-600 focus:ring-2 focus:ring-blue-500" />
           <label htmlFor={`${id}-approval`} className="text-xs font-medium text-gray-600 select-none">Sur validation (chaque inscription est une demande à accepter ou refuser)</label>
         </div>
       </div>

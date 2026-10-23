@@ -187,7 +187,7 @@ function Field({
   autoComplete?: string
 }) {
   const id = useId()
-  const cls = "w-full border border-gray-300 rounded-lg px-3 py-1.5 text-sm focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-blue-600"
+  const cls = "w-full border border-gray-500 rounded-lg px-3 py-1.5 text-sm focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-blue-600"
   return (
     <div>
       <label htmlFor={id} className="block text-sm text-gray-700 mb-1">

@@ -158,14 +158,14 @@ export default async function ReportsPage({ params }: { params: Promise<{ id: st
           <div className="grid gap-3 sm:grid-cols-2">
             <div>
               <label htmlFor="badges-role" className="block text-sm font-medium text-gray-800 mb-1">Poste</label>
-              <select id="badges-role" name="role" className="w-full border border-gray-300 rounded-xl px-3 py-2 text-sm focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-blue-600">
+              <select id="badges-role" name="role" className="w-full border border-gray-500 rounded-xl px-3 py-2 text-sm focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-blue-600">
                 <option value="">Tous les postes</option>
                 {roles.map((r) => <option key={r} value={r}>{r}</option>)}
               </select>
             </div>
             <div>
               <label htmlFor="badges-volunteer" className="block text-sm font-medium text-gray-800 mb-1">Bénévole (réimpression)</label>
-              <select id="badges-volunteer" name="volunteer" aria-describedby="badges-volunteer-help" className="w-full border border-gray-300 rounded-xl px-3 py-2 text-sm focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-blue-600">
+              <select id="badges-volunteer" name="volunteer" aria-describedby="badges-volunteer-help" className="w-full border border-gray-500 rounded-xl px-3 py-2 text-sm focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-blue-600">
                 <option value="">Tous les bénévoles du poste choisi</option>
                 {volunteers.map((v) => <option key={v.id} value={v.id}>{v.label}</option>)}
               </select>
@@ -174,7 +174,7 @@ export default async function ReportsPage({ params }: { params: Promise<{ id: st
           <p id="badges-volunteer-help" className="text-xs text-gray-600 -mt-1">Pour réimprimer le badge d&apos;une seule personne. Si un poste est choisi, seuls ses créneaux sur ce poste figurent sur le badge ; laissez « Tous les postes » pour son badge complet.</p>
           <div>
             <label htmlFor="badges-color" className="block text-sm font-medium text-gray-800 mb-1">Couleur du bandeau</label>
-            <select id="badges-color" name="color" className="w-full sm:w-auto border border-gray-300 rounded-xl px-3 py-2 text-sm focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-blue-600">
+            <select id="badges-color" name="color" className="w-full sm:w-auto border border-gray-500 rounded-xl px-3 py-2 text-sm focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-blue-600">
               <option value="role">Couleur du poste (à défaut celle de l&apos;événement)</option>
               <option value="event">Couleur de l&apos;événement</option>
               <option value="none">Noir et blanc</option>
@@ -182,8 +182,8 @@ export default async function ReportsPage({ params }: { params: Promise<{ id: st
           </div>
           <fieldset className="flex flex-wrap gap-x-6 gap-y-2">
             <legend className="sr-only">Contenu du badge</legend>
-            <label className="inline-flex items-center gap-2 text-sm text-gray-800"><input type="checkbox" name="lastName" value="1" defaultChecked className="h-4 w-4 rounded border-gray-300" /> Nom de famille</label>
-            <label className="inline-flex items-center gap-2 text-sm text-gray-800"><input type="checkbox" name="shifts" value="1" defaultChecked className="h-4 w-4 rounded border-gray-300" /> Créneaux</label>
+            <label className="inline-flex items-center gap-2 text-sm text-gray-800"><input type="checkbox" name="lastName" value="1" defaultChecked className="h-4 w-4 rounded border-gray-500" /> Nom de famille</label>
+            <label className="inline-flex items-center gap-2 text-sm text-gray-800"><input type="checkbox" name="shifts" value="1" defaultChecked className="h-4 w-4 rounded border-gray-500" /> Créneaux</label>
           </fieldset>
           <button type="submit" className={linkClass}>
             Ouvrir les badges

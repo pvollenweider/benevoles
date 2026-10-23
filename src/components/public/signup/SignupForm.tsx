@@ -9,7 +9,7 @@ import { useSubmit } from "@/lib/use-submit"
 import FormStatus from "@/components/FormStatus"
 import { DESCRIPTION_LONG_MESSAGE, DESCRIPTION_SHORT_MESSAGE, SIGNUP_ACCEPTED_MESSAGE, SIGNUP_DESCRIPTION_MAX, SIGNUP_DESCRIPTION_MIN } from "@/lib/signup"
 
-const inputClass = "w-full rounded-xl border border-gray-500 bg-white px-3 py-3 text-base text-gray-900 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-blue-600 dark:focus-visible:outline-blue-400 dark:border-gray-500 dark:bg-gray-800 dark:text-gray-100"
+const inputClass = "w-full rounded-xl border border-gray-500 bg-white px-3 py-3 text-base text-gray-900 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-blue-600 dark:focus-visible:outline-blue-400 dark:border-gray-400 dark:bg-gray-800 dark:text-gray-100"
 const labelClass = "block text-sm font-medium text-gray-900 dark:text-gray-100 mb-1"
 
 type Field = "organizationName" | "description" | "contactName" | "email"

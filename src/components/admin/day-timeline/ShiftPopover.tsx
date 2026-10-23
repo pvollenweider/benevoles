@@ -269,7 +269,7 @@ export default function ShiftPopover({
   const left = clamp(barLeft + barWidth / 2 - POPW / 2, 8, window.innerWidth - POPW - 8)
   // Below the bar, or above it when it is low on the screen; always inside the viewport.
   const { top, maxHeight } = popoverPlacement({ anchorTop: barTop, anchorBottom: barBottom, viewportHeight: window.innerHeight, contentHeight })
-  const field = "w-full text-sm border border-gray-300 rounded-lg px-2.5 py-1.5 focus:outline-hidden focus:ring-2 focus:ring-blue-500"
+  const field = "w-full text-sm border border-gray-500 rounded-lg px-2.5 py-1.5 focus:outline-hidden focus:ring-2 focus:ring-blue-500"
   const action = "text-sm font-medium rounded-lg px-2 py-1.5 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-blue-600"
 
   return (

@@ -333,7 +333,7 @@ export default function MilestonesSection({
                   checked={m.done}
                   onChange={() => toggleDone(m)}
                   aria-describedby={m.ownerName ? `${checkboxId}-owner` : undefined}
-                  className="h-4 w-4 rounded border-gray-300 text-blue-600 focus:ring-blue-500 flex-shrink-0"
+                  className="h-4 w-4 rounded border-gray-500 text-blue-600 focus:ring-blue-500 flex-shrink-0"
                 />
                 {/* The owner under the title (#985): it wraps with it on a narrow screen. */}
                 <div className="flex-1 min-w-[10rem]">

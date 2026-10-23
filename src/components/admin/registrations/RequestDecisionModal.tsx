@@ -73,7 +73,7 @@ export default function RequestDecisionModal({ reg, kind, waitlist, onCancel, on
             maxLength={1000}
             rows={3}
             aria-describedby="refusal-note-hint"
-            className="w-full border border-gray-300 rounded-lg px-3 py-1.5 text-sm focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-blue-600"
+            className="w-full border border-gray-500 rounded-lg px-3 py-1.5 text-sm focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-blue-600"
           />
           <p id="refusal-note-hint" className="text-xs text-gray-600 mt-1">Ajouté tel quel à l&apos;email. Sans message, l&apos;email ne donne aucune raison.</p>
         </div>

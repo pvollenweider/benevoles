@@ -460,7 +460,7 @@ export default function RegistrationsManager({ eventId, initialRegistrations, sh
           placeholder="Rechercher (nom, email…)"
           value={search}
           onChange={(e) => setSearch(e.target.value)}
-          className="flex-1 min-w-48 border border-gray-300 rounded-xl px-3 py-2 text-sm focus:outline-hidden focus:ring-2 focus:ring-blue-500"
+          className="flex-1 min-w-48 border border-gray-500 rounded-xl px-3 py-2 text-sm focus:outline-hidden focus:ring-2 focus:ring-blue-500"
         />
         <label htmlFor="role-filter" className="sr-only">Filtrer par poste</label>
         <select
@@ -473,7 +473,7 @@ export default function RegistrationsManager({ eventId, initialRegistrations, sh
               if (s && e.target.value && s.roleName !== e.target.value) setShiftFilter("")
             }
           }}
-          className="border border-gray-300 rounded-xl px-3 py-2 text-sm focus:outline-hidden focus:ring-2 focus:ring-blue-500"
+          className="border border-gray-500 rounded-xl px-3 py-2 text-sm focus:outline-hidden focus:ring-2 focus:ring-blue-500"
         >
           <option value="">Tous les postes</option>
           {uniqueRoles.map(r => <option key={r} value={r}>{r}</option>)}
@@ -485,7 +485,7 @@ export default function RegistrationsManager({ eventId, initialRegistrations, sh
               id="group-link-filter"
               value={groupFilter}
               onChange={(e) => setGroupFilter(e.target.value)}
-              className="border border-gray-300 rounded-xl px-3 py-2 text-sm focus:outline-hidden focus:ring-2 focus:ring-blue-500"
+              className="border border-gray-500 rounded-xl px-3 py-2 text-sm focus:outline-hidden focus:ring-2 focus:ring-blue-500"
             >
               <option value="">Tous les liens de groupe</option>
               {groupLinks.map((l) => <option key={l.id} value={l.id}>Lien : {l.name}</option>)}
@@ -495,7 +495,7 @@ export default function RegistrationsManager({ eventId, initialRegistrations, sh
         )}
         {(requestCount > 0 || requestsOnly) && (
           <label className="flex items-center gap-2 border border-amber-300 bg-amber-50 text-amber-950 rounded-xl px-3 py-2 text-sm font-medium cursor-pointer">
-            <input ref={requestsFilterRef} type="checkbox" checked={requestsOnly} onChange={(e) => setRequestsOnly(e.target.checked)} className="h-4 w-4 rounded border-gray-300" />
+            <input ref={requestsFilterRef} type="checkbox" checked={requestsOnly} onChange={(e) => setRequestsOnly(e.target.checked)} className="h-4 w-4 rounded border-gray-500" />
             Demandes à traiter ({requestCount})
           </label>
         )}
@@ -580,7 +580,7 @@ export default function RegistrationsManager({ eventId, initialRegistrations, sh
                       if (el) el.indeterminate = selectedIds.size > 0 && !filtered.every((r) => selectedIds.has(r.id))
                     }}
                     onChange={toggleSelectAllVisible}
-                    className="rounded border-gray-300"
+                    className="rounded border-gray-500"
                   />
                 </th>
                 <th scope="col" className="text-left px-4 py-2.5 text-xs font-medium text-gray-500">Bénévole</th>

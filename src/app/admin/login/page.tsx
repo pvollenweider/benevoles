@@ -11,7 +11,7 @@ import FormStatus from "@/components/FormStatus"
 import { useSubmit } from "@/lib/use-submit"
 import { useHydrated } from "@/lib/use-hydrated"
 
-const inputClass = "w-full border border-gray-300 rounded-xl px-3 py-3 text-sm focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-blue-600"
+const inputClass = "w-full border border-gray-500 rounded-xl px-3 py-3 text-sm focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-blue-600"
 
 export default function LoginPage() {
   const id = useId()

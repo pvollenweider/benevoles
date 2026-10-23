@@ -10,7 +10,7 @@ import PasswordRules from "@/components/PasswordRules"
 import FormStatus from "@/components/FormStatus"
 import { useSubmit } from "@/lib/use-submit"
 
-const inputClass = "w-full border border-gray-300 rounded-xl px-3 py-2.5 text-sm focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-blue-600"
+const inputClass = "w-full border border-gray-500 rounded-xl px-3 py-2.5 text-sm focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-blue-600"
 const buttonLink = "inline-block bg-blue-600 text-white px-4 py-2 rounded-xl text-sm font-medium hover:bg-blue-700 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-blue-600"
 
 function AcceptInviteForm() {

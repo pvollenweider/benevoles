@@ -119,7 +119,7 @@ export default function CertificateView({ memberId, memberName, organizationName
               onChange={(e) => setFrom(e.target.value)}
               aria-invalid={!validRange}
               aria-describedby={!validRange ? `${id}-period-error` : undefined}
-              className="w-full border border-gray-300 rounded-xl px-3 py-2 text-sm focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-blue-600"
+              className="w-full border border-gray-500 rounded-xl px-3 py-2 text-sm focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-blue-600"
             />
           </div>
           <div>
@@ -131,7 +131,7 @@ export default function CertificateView({ memberId, memberName, organizationName
               onChange={(e) => setTo(e.target.value)}
               aria-invalid={!validRange}
               aria-describedby={!validRange ? `${id}-period-error` : undefined}
-              className="w-full border border-gray-300 rounded-xl px-3 py-2 text-sm focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-blue-600"
+              className="w-full border border-gray-500 rounded-xl px-3 py-2 text-sm focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-blue-600"
             />
           </div>
         </div>
@@ -150,7 +150,7 @@ export default function CertificateView({ memberId, memberName, organizationName
             maxLength={CERTIFICATE_NOTE_MAX}
             aria-describedby={`${id}-note-hint`}
             onChange={(e) => setNote(e.target.value)}
-            className="w-full border border-gray-300 rounded-xl px-3 py-2 text-sm focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-blue-600"
+            className="w-full border border-gray-500 rounded-xl px-3 py-2 text-sm focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-blue-600"
           />
           <p id={`${id}-note-hint`} className="text-xs text-gray-600 mt-1">Par exemple le rôle tenu par la personne. {note.length}/{CERTIFICATE_NOTE_MAX} caractères.</p>
         </div>
@@ -162,7 +162,7 @@ export default function CertificateView({ memberId, memberName, organizationName
             checked={includePlanned}
             onChange={(e) => setIncludePlanned(e.target.checked)}
             aria-describedby={`${id}-planned-hint`}
-            className="mt-0.5 h-4 w-4 rounded border-gray-300 text-blue-600 focus:ring-2 focus:ring-blue-500"
+            className="mt-0.5 h-4 w-4 rounded border-gray-500 text-blue-600 focus:ring-2 focus:ring-blue-500"
           />
           <div>
             <label htmlFor={`${id}-planned`} className="text-sm font-medium text-gray-800">Inclure les heures prévues sans présence saisie</label>

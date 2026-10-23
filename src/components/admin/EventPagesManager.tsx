@@ -283,7 +283,7 @@ function PageFormModal({
             aria-invalid={isInvalid("title")}
             aria-describedby={isInvalid("title") ? errorId : undefined}
             maxLength={120}
-            className="w-full border border-gray-200 rounded-lg px-3 py-1.5 text-sm"
+            className="w-full border border-gray-500 rounded-lg px-3 py-1.5 text-sm"
           />
         </div>
         <div>
@@ -296,7 +296,7 @@ function PageFormModal({
             onChange={(e) => setContent(e.target.value)}
             rows={12}
             maxLength={20000}
-            className="w-full border border-gray-200 rounded-lg px-3 py-1.5 text-sm font-mono"
+            className="w-full border border-gray-500 rounded-lg px-3 py-1.5 text-sm font-mono"
           />
         </div>
         <FormStatus error={error} errorId={errorId} />

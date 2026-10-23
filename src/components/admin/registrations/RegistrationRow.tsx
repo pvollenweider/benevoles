@@ -41,7 +41,7 @@ export default function RegistrationRow({ reg, selected, onToggleSelected, onDec
           type="checkbox"
           checked={selected}
           onChange={onToggleSelected}
-          className="rounded border-gray-300"
+          className="rounded border-gray-500"
         />
       </td>
       <td className="px-4 py-3">

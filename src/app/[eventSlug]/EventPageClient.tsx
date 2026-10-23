@@ -1262,7 +1262,7 @@ export default function EventPageClient({ orgSlug, eventSlug, preview, initialEv
                       autoComplete="given-name"
                       value={form.firstName}
                       onChange={(e) => setForm((f) => ({ ...f, firstName: e.target.value }))}
-                      className="w-full border border-gray-300 rounded-xl px-3 py-3 text-sm focus:outline-hidden focus:ring-2 focus:ring-blue-500"
+                      className="w-full border border-gray-500 rounded-xl px-3 py-3 text-sm focus:outline-hidden focus:ring-2 focus:ring-blue-500"
                     />
                   </div>
                   <div>
@@ -1274,7 +1274,7 @@ export default function EventPageClient({ orgSlug, eventSlug, preview, initialEv
                       autoComplete="family-name"
                       value={form.lastName}
                       onChange={(e) => setForm((f) => ({ ...f, lastName: e.target.value }))}
-                      className="w-full border border-gray-300 rounded-xl px-3 py-3 text-sm focus:outline-hidden focus:ring-2 focus:ring-blue-500"
+                      className="w-full border border-gray-500 rounded-xl px-3 py-3 text-sm focus:outline-hidden focus:ring-2 focus:ring-blue-500"
                     />
                   </div>
                 </div>
@@ -1288,7 +1288,7 @@ export default function EventPageClient({ orgSlug, eventSlug, preview, initialEv
                     aria-describedby={inSession ? "reg-email-hint" : undefined}
                     value={form.email}
                     onChange={(e) => setForm((f) => ({ ...f, email: e.target.value }))}
-                    className="w-full border border-gray-300 rounded-xl px-3 py-3 text-sm focus:outline-hidden focus:ring-2 focus:ring-blue-500"
+                    className="w-full border border-gray-500 rounded-xl px-3 py-3 text-sm focus:outline-hidden focus:ring-2 focus:ring-blue-500"
                   />
                   {inSession && <p id="reg-email-hint" className="text-xs text-gray-600 mt-1">{SESSION_EMAIL_HINT}</p>}
                 </div>
@@ -1306,7 +1306,7 @@ export default function EventPageClient({ orgSlug, eventSlug, preview, initialEv
                     maxLength={SIGNUP_PHONE_MAX}
                     value={form.phone}
                     onChange={(e) => setForm((f) => ({ ...f, phone: e.target.value }))}
-                    className="w-full border border-gray-300 rounded-xl px-3 py-3 text-sm focus:outline-hidden focus:ring-2 focus:ring-blue-500"
+                    className="w-full border border-gray-500 rounded-xl px-3 py-3 text-sm focus:outline-hidden focus:ring-2 focus:ring-blue-500"
                   />
                 </div>
                 {ageGatedSelectedShifts.length > 0 && (
@@ -1320,7 +1320,7 @@ export default function EventPageClient({ orgSlug, eventSlug, preview, initialEv
                       aria-describedby="reg-birthdate-hint"
                       value={form.birthDate}
                       onChange={(e) => setForm((f) => ({ ...f, birthDate: e.target.value }))}
-                      className="w-full border border-gray-300 rounded-xl px-3 py-3 text-sm focus:outline-hidden focus:ring-2 focus:ring-blue-500"
+                      className="w-full border border-gray-500 rounded-xl px-3 py-3 text-sm focus:outline-hidden focus:ring-2 focus:ring-blue-500"
                     />
                     <p id="reg-birthdate-hint" className="text-xs text-gray-500 mt-1">
                       Requis : {ageGatedSelectedShifts.map((s) => `${s.label} (${s.minAge} ans min.)`).join(", ")}
@@ -1346,7 +1346,7 @@ export default function EventPageClient({ orgSlug, eventSlug, preview, initialEv
                     maxLength={SIGNUP_COMMENT_MAX}
                     value={form.comment}
                     onChange={(e) => setForm((f) => ({ ...f, comment: e.target.value }))}
-                    className="w-full border border-gray-300 rounded-xl px-3 py-3 text-sm focus:outline-hidden focus:ring-2 focus:ring-blue-500 resize-none"
+                    className="w-full border border-gray-500 rounded-xl px-3 py-3 text-sm focus:outline-hidden focus:ring-2 focus:ring-blue-500 resize-none"
                   />
                 </div>
                 <label className="flex items-start gap-3 cursor-pointer">
@@ -1357,7 +1357,7 @@ export default function EventPageClient({ orgSlug, eventSlug, preview, initialEv
                     aria-invalid={invalidCheckbox === "charter" || undefined}
                     aria-describedby={invalidCheckbox === "charter" ? (failure ? "signup-failure" : "signup-error") : undefined}
                     onChange={(e) => { setCharterAccepted(e.target.checked); if (e.target.checked && invalidCheckbox === "charter") setInvalidCheckbox(null) }}
-                    className="mt-0.5 h-4 w-4 rounded border-gray-300 text-blue-600"
+                    className="mt-0.5 h-4 w-4 rounded border-gray-500 text-blue-600"
                   />
                   <span className="text-sm text-gray-600">
                     J&apos;ai lu et j&apos;accepte la{" "}
@@ -1382,7 +1382,7 @@ export default function EventPageClient({ orgSlug, eventSlug, preview, initialEv
                     aria-invalid={invalidCheckbox === "consent" || undefined}
                     aria-describedby={invalidCheckbox === "consent" ? "signup-error" : undefined}
                     onChange={(e) => { const checked = e.target.checked; setForm((f) => ({ ...f, consent: checked })); if (checked && invalidCheckbox === "consent") setInvalidCheckbox(null) }}
-                    className="mt-0.5 h-4 w-4 rounded border-gray-300 text-blue-600"
+                    className="mt-0.5 h-4 w-4 rounded border-gray-500 text-blue-600"
                   />
                   <span className="text-sm text-gray-600">
                     J&apos;accepte que l&apos;association qui organise cet événement utilise mes données pour gérer ses bénévoles, pour cet événement et les suivants.
@@ -1409,7 +1409,7 @@ export default function EventPageClient({ orgSlug, eventSlug, preview, initialEv
                             checked={rosterNameVisible}
                             aria-describedby="reg-roster-hint"
                             onChange={(e) => setRosterNameVisible(e.target.checked)}
-                            className="mt-0.5 h-4 w-4 rounded border-gray-300 text-blue-600"
+                            className="mt-0.5 h-4 w-4 rounded border-gray-500 text-blue-600"
                           />
                           <span className="text-sm text-gray-600">{(() => {
                             // « Aline M. » spoken « Aline, initiale M » (not « Monsieur »).

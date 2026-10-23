@@ -252,7 +252,7 @@ export default function MemberMergeFlow({ member, initialOther }: { member: Memb
               value={query}
               onChange={(e) => setQuery(e.target.value)}
               placeholder="Nom ou email"
-              className="flex-1 rounded-lg border border-gray-400 px-3 py-2 text-sm"
+              className="flex-1 rounded-lg border border-gray-500 px-3 py-2 text-sm"
             />
             <button type="submit" className="rounded-lg bg-blue-700 px-4 py-2 text-sm font-medium text-white hover:bg-blue-800 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-blue-600">
               Chercher

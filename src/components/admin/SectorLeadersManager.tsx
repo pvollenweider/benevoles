@@ -194,7 +194,7 @@ export default function SectorLeadersManager({
                   if (e.target.value) pickRegisteredVolunteer(e.target.value)
                   e.target.value = ""
                 }}
-                className="w-full border border-gray-200 rounded-lg px-3 py-1.5 text-sm bg-white"
+                className="w-full border border-gray-500 rounded-lg px-3 py-1.5 text-sm bg-white"
               >
                 <option value="">Choisir parmi les bénévoles inscrits…</option>
                 {registeredVolunteers.map((v) => (
@@ -218,7 +218,7 @@ export default function SectorLeadersManager({
               required
               maxLength={100}
               placeholder="ex. Bar"
-              className="w-full border border-gray-200 rounded-lg px-3 py-1.5 text-sm"
+              className="w-full border border-gray-500 rounded-lg px-3 py-1.5 text-sm"
             />
             <datalist id={`${roleId}-options`}>
               {roleNames.map((r) => <option key={r} value={r} />)}
@@ -235,7 +235,7 @@ export default function SectorLeadersManager({
               onChange={(e) => setName(e.target.value)}
               required
               maxLength={100}
-              className="w-full border border-gray-200 rounded-lg px-3 py-1.5 text-sm"
+              className="w-full border border-gray-500 rounded-lg px-3 py-1.5 text-sm"
             />
           </div>
           <div>
@@ -248,7 +248,7 @@ export default function SectorLeadersManager({
               value={email}
               onChange={(e) => setEmail(e.target.value)}
               required
-              className="w-full border border-gray-200 rounded-lg px-3 py-1.5 text-sm"
+              className="w-full border border-gray-500 rounded-lg px-3 py-1.5 text-sm"
             />
           </div>
           <FormStatus error={error} errorId={errorId} />

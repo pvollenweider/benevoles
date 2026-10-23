@@ -90,7 +90,7 @@ export default function NewOrgForm() {
               readOnly
               aria-label="Lien d'invitation (lecture seule)"
               value={result.inviteUrl}
-              className="flex-1 font-mono text-xs bg-white border border-blue-200 rounded-lg px-3 py-2 text-blue-900 select-all"
+              className="flex-1 font-mono text-xs bg-white border border-gray-500 rounded-lg px-3 py-2 text-blue-900 select-all"
               onClick={(e) => (e.target as HTMLInputElement).select()}
             />
             <button
@@ -258,7 +258,7 @@ function Field({
         aria-invalid={invalid}
         aria-describedby={invalid ? errorId : undefined}
         aria-required={required || undefined}
-        className="w-full border border-gray-300 rounded-lg px-3 py-1.5 text-sm placeholder:text-gray-500"
+        className="w-full border border-gray-500 rounded-lg px-3 py-1.5 text-sm placeholder:text-gray-500"
       />
     </div>
   )

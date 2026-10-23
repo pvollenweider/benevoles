@@ -219,7 +219,7 @@ export default function InvitationsManager({ eventId, members, allTags, invites 
               aria-describedby={testFieldError ? `${testId}-error` : undefined}
               onChange={(e) => { setTestEmail(e.target.value); setTestState("idle"); setTestFieldError(null) }}
               placeholder="votre@email.com"
-              className="w-full border border-amber-300 rounded-lg px-3 py-1.5 text-sm bg-white"
+              className="w-full border border-gray-500 rounded-lg px-3 py-1.5 text-sm bg-white"
             />
           </div>
           <button
@@ -418,13 +418,13 @@ function InviteModal({
             value={search}
             onChange={(e) => setSearch(e.target.value)}
             placeholder="Rechercher…"
-            className="flex-1 min-w-[180px] border border-gray-200 rounded-lg px-3 py-1.5 text-sm placeholder:text-gray-500"
+            className="flex-1 min-w-[180px] border border-gray-500 rounded-lg px-3 py-1.5 text-sm placeholder:text-gray-500"
           />
           <select
             aria-label="Filtrer par étiquette"
             value={tagFilter}
             onChange={(e) => setTagFilter(e.target.value)}
-            className="border border-gray-200 rounded-lg px-3 py-1.5 text-sm"
+            className="border border-gray-500 rounded-lg px-3 py-1.5 text-sm"
           >
             <option value="">Toutes les étiquettes</option>
             {allTags.map((t) => <option key={t} value={t}>{t}</option>)}
@@ -479,7 +479,7 @@ function InviteModal({
               maxLength={500}
               rows={2}
               placeholder="Un mot d'accompagnement court qui sera inclus dans l'email"
-              className="w-full border border-gray-200 rounded-lg px-3 py-1.5 text-sm placeholder:text-gray-500"
+              className="w-full border border-gray-500 rounded-lg px-3 py-1.5 text-sm placeholder:text-gray-500"
             />
           </div>
 

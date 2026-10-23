@@ -160,7 +160,7 @@ export default function ActivityLog() {
           id={filterId}
           value={entityType}
           onChange={(e) => setEntityType(e.target.value)}
-          className="border border-gray-200 rounded-lg px-3 py-1.5 text-sm bg-white"
+          className="border border-gray-500 rounded-lg px-3 py-1.5 text-sm bg-white"
         >
           {ENTITY_FILTERS.map((f) => <option key={f.value} value={f.value}>{f.label}</option>)}
         </select>

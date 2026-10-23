@@ -32,7 +32,7 @@ export default function AvailabilityFields({ periods, note, onChange, voice = "a
                 type="checkbox"
                 checked={selected.includes(p.id)}
                 onChange={(e) => onChange({ periods: e.target.checked ? [...selected, p.id] : selected.filter((x) => x !== p.id), note })}
-                className="h-4 w-4 rounded border-gray-300 text-blue-600 focus:ring-2 focus:ring-blue-500"
+                className="h-4 w-4 rounded border-gray-500 text-blue-600 focus:ring-2 focus:ring-blue-500"
               />
               <label htmlFor={`${id}-${p.id}`} className="text-sm text-gray-800">{p.label}</label>
             </div>
@@ -50,7 +50,7 @@ export default function AvailabilityFields({ periods, note, onChange, voice = "a
           maxLength={AVAILABILITY_NOTE_MAX}
           aria-describedby={`${id}-note-hint`}
           onChange={(e) => onChange({ periods: selected, note: e.target.value })}
-          className="w-full border border-gray-300 rounded-lg px-3 py-1.5 text-sm"
+          className="w-full border border-gray-500 rounded-lg px-3 py-1.5 text-sm"
         />
         <p id={`${id}-note-hint`} className="text-xs text-gray-600 mt-1">Une phrase courte, par exemple « pas le dimanche ». {note.length}/{AVAILABILITY_NOTE_MAX} caractères.</p>
       </div>

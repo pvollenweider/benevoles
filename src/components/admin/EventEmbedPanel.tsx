@@ -99,7 +99,7 @@ export default function EventEmbedPanel({ publicUrl, eventTitle, eventSlug, grou
               checked={autoResize}
               onChange={(e) => setAutoResize(e.target.checked)}
               aria-describedby={`${id}-resize-hint`}
-              className="h-4 w-4 rounded border-gray-400"
+              className="h-4 w-4 rounded border-gray-500"
             />
             Ajuster la hauteur automatiquement
           </label>

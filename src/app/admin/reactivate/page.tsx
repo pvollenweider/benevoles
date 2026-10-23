@@ -9,7 +9,7 @@ import { useSubmit } from "@/lib/use-submit"
 import { REACTIVATION_LINK_HOURS } from "@/lib/org-reactivation"
 import FormStatus from "@/components/FormStatus"
 
-const inputClass = "w-full border border-gray-300 rounded-xl px-3 py-3 text-sm focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-blue-600"
+const inputClass = "w-full border border-gray-500 rounded-xl px-3 py-3 text-sm focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-blue-600"
 
 /**
  * « Réactiver mon espace » (#811): an administrator of a space deactivated for lack of activity

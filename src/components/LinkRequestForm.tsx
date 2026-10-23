@@ -76,7 +76,7 @@ export default function LinkRequestForm({ variant = "invalid", scrollClass = "" 
           onBlur={() => setTouched(true)}
           aria-invalid={showError ? true : undefined}
           aria-describedby={showError ? `${id}-error` : undefined}
-          className={`w-full border border-gray-300 rounded-xl px-3 py-3 text-sm focus:outline-hidden focus:ring-2 focus:ring-blue-500 ${scrollClass}`}
+          className={`w-full border border-gray-500 rounded-xl px-3 py-3 text-sm focus:outline-hidden focus:ring-2 focus:ring-blue-500 ${scrollClass}`}
         />
         {showError && <p id={`${id}-error`} className="text-sm text-red-700">{errorText}</p>}
         <button

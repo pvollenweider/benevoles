@@ -72,15 +72,16 @@ export default function OrgCharterForm({
           aria-checked={hasOrgInsurance}
           aria-labelledby={insuranceLabelId}
           onClick={() => handleToggle(!hasOrgInsurance)}
-          className={`group relative inline-flex h-6 w-11 flex-shrink-0 cursor-pointer rounded-full border-2 border-transparent transition-colors duration-200 focus:outline-hidden focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 forced-colors:border-[CanvasText] forced-colors:aria-checked:bg-[Highlight] ${
-            hasOrgInsurance ? "bg-blue-600" : "bg-gray-300"
+          className={`group relative inline-flex h-6 w-11 flex-shrink-0 cursor-pointer rounded-full border-2 transition-colors duration-200 focus:outline-hidden focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 forced-colors:border-[CanvasText] forced-colors:aria-checked:bg-[Highlight] ${
+            hasOrgInsurance ? "border-transparent bg-blue-600" : "border-gray-500 bg-white"
           }`}
         >
           {/* Forced colours paint both backgrounds in Canvas: system colours keep the knob and the
-              « on » track apart there (WCAG 1.4.11). Normal display is unchanged. */}
+              « on » track apart there (WCAG 1.4.11). Off, a gray-500 border and a gray-600 knob on a white
+              track (4.6:1 and 7.6:1 on the gray-50 row), like Switch.tsx (#1123). */}
           <span
-            className={`inline-block h-5 w-5 transform rounded-full bg-white shadow transition duration-200 forced-colors:bg-[CanvasText] forced-colors:group-aria-checked:bg-[HighlightText] ${
-              hasOrgInsurance ? "translate-x-5" : "translate-x-0"
+            className={`inline-block h-5 w-5 transform rounded-full shadow transition duration-200 forced-colors:bg-[CanvasText] forced-colors:group-aria-checked:bg-[HighlightText] ${
+              hasOrgInsurance ? "translate-x-5 bg-white" : "translate-x-0 bg-gray-600"
             }`}
           />
         </button>
@@ -91,7 +92,7 @@ export default function OrgCharterForm({
         value={text}
         onChange={(e) => { setText(e.target.value); setSuccess(false) }}
         rows={14}
-        className="w-full border border-gray-200 rounded-xl px-3 py-2.5 text-sm text-gray-700 font-mono leading-relaxed focus:outline-hidden focus:ring-2 focus:ring-blue-500 resize-y"
+        className="w-full border border-gray-500 rounded-xl px-3 py-2.5 text-sm text-gray-700 font-mono leading-relaxed focus:outline-hidden focus:ring-2 focus:ring-blue-500 resize-y"
       />
 
       <div className="flex items-center justify-between gap-3">

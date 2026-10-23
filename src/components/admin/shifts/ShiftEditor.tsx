@@ -300,7 +300,7 @@ export default function ShiftEditor({
           id={`waitlistEnabled-${sfx}`}
           checked={Boolean(form.waitlistEnabled)}
           onChange={e => setField("waitlistEnabled", e.target.checked)}
-          className="h-4 w-4 rounded border-gray-300 text-blue-600 focus:ring-2 focus:ring-blue-500"
+          className="h-4 w-4 rounded border-gray-500 text-blue-600 focus:ring-2 focus:ring-blue-500"
         />
         <label htmlFor={`waitlistEnabled-${sfx}`} className="text-xs font-medium text-gray-600 select-none cursor-pointer">
           Activer la liste d'attente (si complet, les bénévoles peuvent s'y inscrire)
@@ -314,7 +314,7 @@ export default function ShiftEditor({
             checked={Boolean(form.requiresApproval)}
             onChange={e => setField("requiresApproval", e.target.checked)}
             aria-describedby={`requiresApproval-hint-${sfx}`}
-            className="h-4 w-4 rounded border-gray-300 text-blue-600 focus:ring-2 focus:ring-blue-500"
+            className="h-4 w-4 rounded border-gray-500 text-blue-600 focus:ring-2 focus:ring-blue-500"
           />
           <label htmlFor={`requiresApproval-${sfx}`} className="text-xs font-medium text-gray-600 select-none cursor-pointer">
             Sur validation (chaque inscription est une demande à accepter ou refuser)
