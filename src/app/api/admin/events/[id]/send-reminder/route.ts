@@ -3,7 +3,7 @@
 
 import { NextResponse } from "next/server"
 import { requireOrgSession } from "@/lib/auth-guard"
-import { deliverAfterResponse, enqueueNotifications } from "@/lib/notifications/outbox"
+import { deliverAfterResponse, enqueueBatch } from "@/lib/notifications/outbox"
 import type { NotificationPayload } from "@/lib/notifications/types"
 import { lockSameEmails } from "@/lib/invitation-outbox"
 import { OUTSTANDING_OUTBOX_STATUSES, RESEND_GUARD_MS, SEND_TRANSACTION_OPTIONS, manualReminderDedupeKey, manualReminderKeyPrefix, sendCutoff } from "@/lib/invitation-sending"
@@ -109,7 +109,8 @@ export async function POST(_req: Request, { params }: { params: Promise<{ id: st
         },
       })
     }
-    return enqueueNotifications(payloads, tx, { organizationId: event.organizationId })
+    // One « envoi groupé » (#1101), with its emails and its organisation log entry.
+    return enqueueBatch(payloads, tx, { organizationId: event.organizationId, batch: { kind: "manual_reminder", eventId: id, actorId: guard.session.user?.id ?? null } })
   }, SEND_TRANSACTION_OPTIONS)
   if (outcome === "recent") {
     return NextResponse.json({ error: "Ce rappel a déjà été lancé il y a moins de 5 minutes. Il n'est pas renvoyé, pour que personne ne le reçoive deux fois." }, { status: 409 })

@@ -39,4 +39,6 @@ La même page liste les emails de l'organisation des plus récents aux plus anci
 
 Un rejet permanent sur l'adresse actuelle d'un membre se retrouve aussi, sans avoir à parcourir cette page, sur sa fiche et dans la liste des membres (« Adresse à vérifier », voir [Gérer les membres](gerer-les-membres.md)) : même donnée, lue depuis l'endroit où vous corrigez l'adresse.
 
+Depuis un [envoi groupé](ecrire-aux-benevoles.md#envois-groupes) de l'onglet **Communication** d'un événement, **Voir les emails de cet envoi** ouvre cette liste limitée aux emails de cet envoi ; une phrase en haut le rappelle, avec un lien pour revoir tous les emails de l'organisation. Le bilan de l'envoi, lui, reste dans l'onglet **Communication** après que ses emails ont quitté cette liste.
+
 Les emails envoyés sont effacés chaque nuit (ils contiennent des données personnelles) ; ceux en échec ou annulés restent 30 jours, comme le résultat détaillé de chaque envoi (destinataire concerné, type de message, résultat, raison), conservé pour la même durée. Les 200 plus récents sont affichés.

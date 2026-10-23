@@ -29,6 +29,10 @@ export const RETENTION_DAYS = {
    * and the accepted outcomes kept alongside them (needed so #599 can tell a later send to the
    * same address succeeded). */
   deliveryOutcome: 30,
+  /** Batch of emails sent at once (#1101): kind, author, counts, no recipient, no content. Three
+   * years, like the volunteers' data of a past event, so an organisation can still say what it
+   * sent for an event of the last seasons. */
+  sendBatch: 1095,
   /** Targeted message (subject, text, audience, counts), #467. */
   targetedMessage: 365,
   /** Anonymous « utile ? » answer to a tutorial video (#646): not personal data, but no reason to
@@ -228,6 +232,15 @@ export const RETENTION: readonly RetentionEntry[] = [
     mechanism: "nettoyage quotidien (cron cleanup) ; effacés avec l'organisation",
     backups: inBackups,
     public: false,
+  },
+  {
+    data: "Envois groupés d'emails (invitations, relances, rappels, messages) : type d'envoi, événement, administrateur qui l'a lancé, date, nombre de destinataires et nombres d'emails envoyés, retenus par un plafond d'envoi, en échec ou annulés ; ni destinataire, ni adresse, ni contenu ; et l'entrée correspondante du journal d'activité de l'organisation",
+    purpose: "Permettre à l'organisation de suivre un envoi dans son ensemble, et de savoir plus tard ce qui a été envoyé pour un événement",
+    duration: `${d.sendBatch} jours après l'envoi, ou avec l'événement`,
+    trigger: "envoi groupé depuis un événement",
+    mechanism: "nettoyage quotidien (cron cleanup) ; effacés avec l'événement ou l'organisation",
+    backups: inBackups,
+    public: true,
   },
   {
     data: "Messages ciblés (objet, texte, public, nombres)",

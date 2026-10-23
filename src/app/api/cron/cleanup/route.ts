@@ -4,6 +4,7 @@
 import { PENDING_ORG_WHERE, abandonedSignupSpaceWhere, expiredDeactivatedOrgWhere, pendingSummary } from "@/lib/org-review"
 import { notifyOperator } from "@/lib/operator-alerts"
 import { countsToFreeze } from "@/lib/message-history"
+import { batchCountsToFreeze } from "@/lib/send-batches"
 import { daysAgo, RETENTION_DAYS } from "@/lib/retention"
 import { NextResponse } from "next/server"
 import { recordJobRun } from "@/lib/job-runs"
@@ -127,17 +128,34 @@ async function run(req: Request) {
   // A targeted message keeps the count of its rows deleted here (#467), in the same transaction,
   // so its delivery summary stays right after the purge.
   const outboxToDelete = { OR: [{ status: "sent" }, { status: { in: ["failed", "cancelled"] }, createdAt: { lt: failedCutoff } }] }
+  // A batch of emails (#1101) likewise keeps the outcome of its rows (sent, held then sent, failed,
+  // cancelled), folded from the same selected rows; both counters come from one read of the rows.
   const deletedOutbox = await prisma.$transaction(async (tx) => {
+    // Two cleanups at once would fold the same rows twice: the second waits here, then finds them gone.
+    await tx.$executeRaw`SELECT pg_advisory_xact_lock(hashtext('cleanup.outbox-freeze'))`
     // Exactly the rows counted are deleted: one that turns « sent » meanwhile waits for tomorrow.
     const linked = await tx.notificationOutbox.findMany({
-      where: { AND: [outboxToDelete, { targetedMessageId: { not: null } }] },
-      select: { id: true, targetedMessageId: true, status: true },
+      where: { AND: [outboxToDelete, { OR: [{ targetedMessageId: { not: null } }, { sendBatchId: { not: null } }] }] },
+      select: { id: true, targetedMessageId: true, sendBatchId: true, status: true, lastHeldAt: true, firstHeldAt: true, sentAt: true },
     })
     for (const [id, c] of countsToFreeze(linked)) {
       await tx.targetedMessage.update({ where: { id }, data: { sentCount: { increment: c.sent }, failedCount: { increment: c.failed } } })
     }
+    for (const [id, c] of batchCountsToFreeze(linked)) {
+      const { maxHeldWaitSec, ...counts } = c
+      await tx.sendBatch.update({
+        where: { id },
+        data: {
+          sentCount: { increment: counts.sentCount },
+          heldSentCount: { increment: counts.heldSentCount },
+          failedCount: { increment: counts.failedCount },
+          cancelledCount: { increment: counts.cancelledCount },
+        },
+      })
+      if (maxHeldWaitSec > 0) await tx.sendBatch.updateMany({ where: { id, maxHeldWaitSec: { lt: maxHeldWaitSec } }, data: { maxHeldWaitSec } })
+    }
     const linkedDeleted = await tx.notificationOutbox.deleteMany({ where: { id: { in: linked.map((r) => r.id) } } })
-    const otherDeleted = await tx.notificationOutbox.deleteMany({ where: { AND: [outboxToDelete, { targetedMessageId: null }] } })
+    const otherDeleted = await tx.notificationOutbox.deleteMany({ where: { AND: [outboxToDelete, { targetedMessageId: null }, { sendBatchId: null }] } })
     return { count: linkedDeleted.count + otherDeleted.count }
   })
 
@@ -148,6 +166,15 @@ async function run(req: Request) {
   // Scheduled messages (#1019) that went, were cancelled or skipped: kept as long, then deleted.
   const deletedScheduled = await prisma.scheduledMessage.deleteMany({
     where: { status: { in: ["sent", "cancelled", "skipped"] }, scheduledFor: { lt: daysAgo(now, RETENTION_DAYS.targetedMessage) } },
+  })
+
+  // Batches of emails (#1101): no recipient and no content, kept 3 years, with their log entry.
+  const expiredBatches = await prisma.sendBatch.findMany({ where: { createdAt: { lt: daysAgo(now, RETENTION_DAYS.sendBatch) } }, select: { id: true } })
+  const deletedBatches = await prisma.$transaction(async (tx) => {
+    const ids = expiredBatches.map((b) => b.id)
+    if (ids.length === 0) return { count: 0 }
+    await tx.orgLog.deleteMany({ where: { entityType: "SendBatch", entityId: { in: ids } } })
+    return tx.sendBatch.deleteMany({ where: { id: { in: ids } } })
   })
 
   // --- 6. Expired rate limit windows (#322) ---
@@ -291,6 +318,7 @@ async function run(req: Request) {
       rateLimits: deletedRateLimits.count,
       deliveryOutcomes: deletedDeliveryOutcomes.count,
       limitHits: deletedLimitHits.count,
+      sendBatches: deletedBatches.count,
       videoFeedback: deletedVideoFeedback.count,
       signupRequests: deletedSignupRequests.count,
       signupBlocks: deletedSignupBlocks.count,

@@ -16,6 +16,8 @@ import { parseNotificationSettings } from "@/lib/notification-settings"
 // eslint-disable-next-line no-restricted-imports
 import { prisma } from "@/lib/prisma"
 import HelpLink from "@/components/admin/HelpLink"
+import FocusTargetHeading from "@/components/admin/event-nav/FocusTargetHeading"
+import { loadSendBatches } from "@/lib/send-batches-data"
 
 export const dynamic = "force-dynamic"
 export const metadata: Metadata = { title: "Emails" }
@@ -32,15 +34,22 @@ const STATE_STYLE: Record<OutboxState, string> = {
 }
 
 /** Emails of the organization (#382): pending, retrying, sent, failed, with the reason and a « Renvoyer ». */
-export default async function NotificationsPage() {
+export default async function NotificationsPage({ searchParams }: { searchParams: Promise<{ envoi?: string | string[] }> }) {
   const ctx = await getOrgContext()
   if (!ctx) redirect("/admin/login")
+  // `?envoi=<id>`: only the emails of one batch (#1101) of this organisation; any other id is ignored.
+  const { envoi } = await searchParams
+  const askedBatch = typeof envoi === "string" && envoi.length > 0 && envoi.length <= 64 ? envoi : null
+  const [batch] = askedBatch ? await loadSendBatches(ctx.organizationId, { ids: [askedBatch], limit: 1 }) : []
   const [{ rows, counts, truncated }, org] = await Promise.all([
-    loadOutbox(ctx.organizationId),
+    loadOutbox(ctx.organizationId, OUTBOX_PAGE_LIMIT, batch ? { sendBatchId: batch.id } : {}),
     prisma.organization.findUnique({ where: { id: ctx.organizationId }, select: { timeZone: true, replyToEmail: true, notificationSettings: true } }),
   ])
   const tz = orgTimeZone(org)
   const when = (d: Date) => d.toLocaleString("fr-FR", { timeZone: tz, day: "numeric", month: "short", hour: "2-digit", minute: "2-digit" })
+  const batchName = batch
+    ? `l'envoi «\u00a0${batch.kindLabel}\u00a0» du ${batch.createdAt.toLocaleDateString("fr-FR", { timeZone: tz, day: "numeric", month: "long" })} à ${batch.createdAt.toLocaleTimeString("fr-FR", { timeZone: tz, hour: "2-digit", minute: "2-digit" })} (${batch.eventTitle})`
+    : null
   const order: OutboxState[] = ["failed", "retrying", "pending", "sent"]
 
   return (
@@ -70,7 +79,17 @@ export default async function NotificationsPage() {
       )}
 
       <div>
-        <h2 className="text-base font-semibold text-gray-900">Emails envoyés</h2>
+        {/* Reached from an « envoi groupé » (#1101): the list, not the settings above, takes the focus. */}
+        <FocusTargetHeading id="emails-envoyes" className="text-base font-semibold text-gray-900">Emails envoyés</FocusTargetHeading>
+        {batchName && (
+          <p className="text-sm text-gray-900 mt-1">
+            Emails de {batchName}, encore dans la liste.{" "}
+            <Link href="/admin/settings/notifications" className={linkClass}>Voir tous les emails de l&apos;organisation</Link>
+          </p>
+        )}
+        {askedBatch && !batch && (
+          <p className="text-sm text-gray-900 mt-1">Cet envoi groupé est introuvable : tous les emails de l&apos;organisation sont affichés.</p>
+        )}
         <p className="text-sm text-gray-700 mt-1">{outboxHeadline(counts)}</p>
         <p className="text-sm text-gray-600 mt-1">
           Les emails envoyés sont effacés chaque nuit (ils contiennent des données personnelles) ; ceux en échec ou annulés restent 30 jours.
@@ -88,11 +107,11 @@ export default async function NotificationsPage() {
       </dl>
 
       {rows.length === 0 ? (
-        <p className="text-sm text-gray-600">Aucun email récent.</p>
+        <p className="text-sm text-gray-600">{batch ? "Aucun email de cet envoi n'est encore dans la liste : les emails partis sont effacés chaque nuit." : "Aucun email récent."}</p>
       ) : (
         <div tabIndex={0} role="region" aria-labelledby="outbox-caption" className="bg-white border border-gray-200 rounded-xl overflow-x-auto focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-blue-600">
           <table className="w-full text-sm">
-            <caption id="outbox-caption" className="sr-only">Emails récents de l&apos;organisation, du plus récent au plus ancien</caption>
+            <caption id="outbox-caption" className="sr-only">{batchName ? `Emails de ${batchName}, du plus récent au plus ancien` : "Emails récents de l'organisation, du plus récent au plus ancien"}</caption>
             <thead className="text-left text-xs text-gray-600 border-b border-gray-200">
               <tr>
                 <th scope="col" className="px-4 py-2 font-medium">Date</th>

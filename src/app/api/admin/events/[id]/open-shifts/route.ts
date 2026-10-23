@@ -9,7 +9,7 @@ import { validationError } from "@/lib/api-error"
 import { rateLimit } from "@/lib/rate-limit"
 import { linkToken, registrationToken } from "@/lib/token-vault"
 import { render } from "@/lib/notifications/templates"
-import { deliverAfterResponse, enqueueNotifications } from "@/lib/notifications/outbox"
+import { deliverAfterResponse, enqueueBatch } from "@/lib/notifications/outbox"
 import type { NotificationPayload } from "@/lib/notifications/types"
 import type { OpenShiftsEmailData } from "@/lib/notifications/templates/open-shifts"
 import { adminActor, logEvent } from "@/lib/event-log"
@@ -183,7 +183,7 @@ export async function POST(req: Request, { params }: { params: Promise<{ id: str
         : { signupUrl: linkWithToken(publicUrl, token), declineUrl: linkWithToken(publicUrl, token, { decline: "1" }) }
       return payloadFor(t, batchId, links)
     })
-    return enqueueNotifications(payloads, tx, { organizationId, targetedMessageId: row.id })
+    return enqueueBatch(payloads, tx, { organizationId, targetedMessageId: row.id, batch: { kind: "open_shifts", eventId: id, actorId: guard.session.user?.id ?? null } })
   })
   deliverAfterResponse(outboxIds)
 

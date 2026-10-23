@@ -14,10 +14,13 @@ import { sameEmailKeyPrefix } from "./invitation-sending"
 /** Rows shown on the delivery page; sent rows only live until the nightly cleanup anyway. */
 export const OUTBOX_PAGE_LIMIT = 200
 
-/** The organization's recent notifications, newest first, with only recipient and kind opened. */
-export async function loadOutbox(organizationId: string, limit: number = OUTBOX_PAGE_LIMIT) {
+/**
+ * The organization's recent notifications, newest first, with only recipient and kind opened;
+ * `sendBatchId`: only the emails of one batch (#1101), still in the outbox.
+ */
+export async function loadOutbox(organizationId: string, limit: number = OUTBOX_PAGE_LIMIT, opts: { sendBatchId?: string } = {}) {
   const rows = await prisma.notificationOutbox.findMany({
-    where: { organizationId },
+    where: { organizationId, ...(opts.sendBatchId ? { sendBatchId: opts.sendBatchId } : {}) },
     orderBy: { createdAt: "desc" },
     take: limit,
     select: { id: true, status: true, attempts: true, nextAttemptAt: true, lastError: true, sentAt: true, createdAt: true, payload: true },

@@ -4,6 +4,9 @@
 // SPDX-License-Identifier: AGPL-3.0-only
 
 import { useState, useEffect, useCallback, useId } from "react"
+import { SEND_BATCHES_ANCHOR, type ActivityBatch } from "@/lib/send-batches"
+
+const LINK = "font-medium text-blue-700 underline underline-offset-2 hover:text-blue-900 rounded focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-blue-600"
 
 export type OrgLogEntry = {
   id: string
@@ -15,6 +18,8 @@ export type OrgLogEntry = {
   entityId: string
   changes: Record<string, { from: unknown; to: unknown }> | null
   createdAt: string
+  /** A batch of emails (#1101), with its delivery as it is now; null when deleted since. */
+  batch?: ActivityBatch | null
 }
 
 /**
@@ -54,6 +59,8 @@ export const ACTION_LABEL: Record<string, string> = {
   "member.duplicate_dismissed": "a ignoré un doublon possible",
   "volunteer.certificate_generated": "a généré une attestation de bénévolat",
   "organization.links_regenerated": "a régénéré les liens personnels de tous les membres",
+  // #1101: one entry per batch of emails sent at once from an event.
+  "sendbatch.queued": "a lancé un envoi groupé d'emails",
 }
 
 const ENTITY_FILTERS = [
@@ -61,6 +68,7 @@ const ENTITY_FILTERS = [
   { value: "Member", label: "Membres" },
   { value: "AdminUser", label: "Comptes admin" },
   { value: "NotificationOutbox", label: "Emails" },
+  { value: "SendBatch", label: "Envois groupés" },
   { value: "Organization", label: "Organisation" },
 ]
 
@@ -169,11 +177,22 @@ export default function ActivityLog() {
       ) : (
         <ul className="space-y-1.5" role="list">
           {entries.map((entry) => (
-            <li key={entry.id} className="bg-white border border-gray-200 rounded-lg px-3 py-2 flex items-center justify-between gap-3">
-              <p className="text-sm text-gray-800 min-w-0">
-                <span className="font-medium">{entry.actorLabel}</span> {ACTION_LABEL[entry.action] ?? entry.action}
-              </p>
-              <span className="text-xs text-gray-500 flex-shrink-0 whitespace-nowrap">{fmtDateTime(entry.createdAt)}</span>
+            <li key={entry.id} className="bg-white border border-gray-200 rounded-lg px-3 py-2 flex items-start justify-between gap-3">
+              <div className="min-w-0 flex-1">
+                <p className="text-sm text-gray-800">
+                  <span className="font-medium">{entry.actorLabel}</span> {ACTION_LABEL[entry.action] ?? entry.action}
+                </p>
+                {entry.batch && (
+                  <p className="text-sm text-gray-700 mt-0.5">
+                    {entry.batch.kindLabel}, {entry.batch.eventTitle}{"\u00a0"}: {entry.batch.summary}.
+                    {entry.batch.heldSentence && <> {entry.batch.heldSentence}</>}{" "}
+                    <a href={`/admin/events/${entry.batch.eventId}/message#${SEND_BATCHES_ANCHOR}`} className={LINK}>
+                      Voir dans la communication de l&apos;événement<span className="sr-only">{"\u00a0"}: {entry.batch.kindLabel}, {entry.batch.eventTitle}, {fmtDateTime(entry.createdAt)}</span>
+                    </a>
+                  </p>
+                )}
+              </div>
+              <time dateTime={entry.createdAt} className="text-xs text-gray-500 flex-shrink-0 whitespace-nowrap">{fmtDateTime(entry.createdAt)}</time>
             </li>
           ))}
         </ul>

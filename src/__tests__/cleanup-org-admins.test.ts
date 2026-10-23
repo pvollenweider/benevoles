@@ -9,6 +9,9 @@ const m = vi.hoisted(() => ({
   orgDeleteMany: vi.fn(),
   adminFindMany: vi.fn(),
   adminDeleteMany: vi.fn(),
+  batchFindMany: vi.fn(),
+  batchDeleteMany: vi.fn(),
+  orgLogDeleteMany: vi.fn(),
 }))
 
 const videoFeedbackDeleteMany = vi.hoisted(() => vi.fn())
@@ -22,6 +25,9 @@ vi.mock("@/lib/prisma", () => {
     notificationOutbox: { findMany: vi.fn().mockResolvedValue([]), deleteMany: vi.fn().mockResolvedValue({ count: 0 }) },
     targetedMessage: { update: vi.fn(), deleteMany: vi.fn().mockResolvedValue({ count: 0 }) },
     scheduledMessage: { deleteMany: vi.fn().mockResolvedValue({ count: 0 }) },
+    sendBatch: { update: vi.fn(), updateMany: vi.fn(), findMany: m.batchFindMany, deleteMany: m.batchDeleteMany },
+    orgLog: { deleteMany: m.orgLogDeleteMany },
+    $executeRaw: vi.fn().mockResolvedValue(0),
   }
   return {
     prisma: {
@@ -47,6 +53,9 @@ beforeEach(() => {
   m.adminDeleteMany.mockResolvedValue({ count: 0 })
   videoFeedbackDeleteMany.mockResolvedValue({ count: 0 })
   limitHitDeleteMany.mockResolvedValue({ count: 0 })
+  m.batchFindMany.mockResolvedValue([])
+  m.batchDeleteMany.mockResolvedValue({ count: 0 })
+  m.orgLogDeleteMany.mockResolvedValue({ count: 0 })
 })
 
 describe("nightly cleanup of deactivated organizations", () => {
@@ -128,5 +137,23 @@ describe("nightly cleanup of sending limits reached", () => {
     expect(before - cutoff.getTime()).toBeGreaterThanOrEqual(RETENTION_DAYS.emailLimitHit * DAY_MS - 1000)
     expect(before - cutoff.getTime()).toBeLessThanOrEqual(RETENTION_DAYS.emailLimitHit * DAY_MS + 1000)
     expect(body.deleted.limitHits).toBe(3)
+  })
+})
+
+// #1101: batches of emails are kept 3 years, then deleted with their organisation log entry.
+describe("nightly cleanup of batches of emails", () => {
+  it("deletes the batches older than RETENTION_DAYS.sendBatch and their log entries, and counts them", async () => {
+    m.orgFindMany.mockResolvedValue([])
+    m.batchFindMany.mockResolvedValue([{ id: "b1" }, { id: "b2" }])
+    m.batchDeleteMany.mockResolvedValue({ count: 2 })
+    const before = Date.now()
+    const body = await (await run()).json()
+    const cutoff: Date = m.batchFindMany.mock.calls[0][0].where.createdAt.lt
+    const { RETENTION_DAYS, DAY_MS } = await import("@/lib/retention")
+    expect(before - cutoff.getTime()).toBeGreaterThanOrEqual(RETENTION_DAYS.sendBatch * DAY_MS - 1000)
+    expect(before - cutoff.getTime()).toBeLessThanOrEqual(RETENTION_DAYS.sendBatch * DAY_MS + 1000)
+    expect(m.orgLogDeleteMany).toHaveBeenCalledWith({ where: { entityType: "SendBatch", entityId: { in: ["b1", "b2"] } } })
+    expect(m.batchDeleteMany).toHaveBeenCalledWith({ where: { id: { in: ["b1", "b2"] } } })
+    expect(body.deleted.sendBatches).toBe(2)
   })
 })

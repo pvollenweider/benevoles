@@ -79,6 +79,7 @@ model Organization {
   slugHistory OrgSlugHistory[]
   logs        OrgLog[]
   targetedMessages TargetedMessage[]
+  sendBatches SendBatch[]
   scheduledMessages ScheduledMessage[]
   messageTemplates MessageTemplate[]
   duplicateDismissals DuplicateDismissal[]
@@ -179,6 +180,7 @@ model Event {
   sectorLeaders SectorLeader[]
   milestones    EventMilestone[]
   targetedMessages TargetedMessage[]
+  sendBatches      SendBatch[]
   scheduledMessages   ScheduledMessage[]
   questions        EventQuestion[]
   questionAnswers  QuestionAnswer[]
@@ -717,10 +719,16 @@ model NotificationOutbox {
   // Last time a sending limit held this email back (#1100); null = never held. Lets one email
   // held several times count once per hour in EmailLimitHit, and tells « still held » apart.
   lastHeldAt        DateTime?
+  // First time a sending limit held it (#1101): with sentAt, how long the limit delayed it.
+  firstHeldAt       DateTime?
+  // The batch it was sent with (#1101): invitations, a reminder, a message to volunteers.
+  sendBatchId       String?
+  sendBatch         SendBatch? @relation(fields: [sendBatchId], references: [id], onDelete: SetNull)
 
   @@index([status, nextAttemptAt])
   @@index([targetedMessageId])
   @@index([organizationId, createdAt])
+  @@index([sendBatchId])
 }
 
 // Per-recipient SMTP outcome of a send (#598): "accepted by our relay" is the only thing a
@@ -882,6 +890,7 @@ model TargetedMessage {
   event        Event                @relation(fields: [eventId], references: [id], onDelete: Cascade)
   outbox       NotificationOutbox[]
   scheduled    ScheduledMessage?
+  sendBatch    SendBatch?
 
   @@index([eventId, createdAt])
   @@index([createdAt])
@@ -1053,6 +1062,46 @@ model VideoFeedback {
 // ends) or refused (a direct send that failed, or a public-triggered email dropped). No address,
 // no content, no recipient: an organisation, a limit name, times and counts. Kept 90 days
 // (src/lib/retention.ts). `organizationId` null: platform emails, outside any organisation.
+// One batch of emails sent at once from an event (#1101, src/lib/send-batches.ts): invitations,
+// a reminder of the invitees, the manual reminder, a message to volunteers (now, scheduled, or
+// « créneaux à compléter »). Who and when, how many, and how it was delivered; no recipient, no
+// address, no content (a message's text stays in TargetedMessage, kept less long). The outbox rows
+// are purged every night, so the cleanup folds their outcome into the counters first, like
+// TargetedMessage (#467); the live summary is the counters plus the rows still queued.
+// Kept 3 years (src/lib/retention.ts), or until the event is deleted.
+model SendBatch {
+  id                String   @id @default(cuid())
+  organizationId    String
+  eventId           String
+  // "member_invite" | "invite_reminder" | "manual_reminder" | "targeted_message" | "scheduled_message" | "open_shifts"
+  kind              String
+  // AdminUser.id of who sent it (who scheduled it, for a scheduled message); the name is read at
+  // display, like OrgLog. Null: no administrator (removed meanwhile, or none).
+  actorId           String?
+  // Emails queued with the batch.
+  recipientCount    Int      @default(0)
+  // Outcomes of rows already purged from the outbox.
+  sentCount         Int      @default(0)
+  // Among them, sent after a sending limit held them back.
+  heldSentCount     Int      @default(0)
+  failedCount       Int      @default(0)
+  cancelledCount    Int      @default(0)
+  // Longest wait a limit caused among the purged rows, in seconds.
+  maxHeldWaitSec    Int      @default(0)
+  // The message history row (#467) for the message kinds; null once that one is deleted.
+  targetedMessageId String?  @unique
+  createdAt         DateTime @default(now())
+
+  organization    Organization         @relation(fields: [organizationId], references: [id], onDelete: Cascade)
+  event           Event                @relation(fields: [eventId], references: [id], onDelete: Cascade)
+  targetedMessage TargetedMessage?     @relation(fields: [targetedMessageId], references: [id], onDelete: SetNull)
+  outbox          NotificationOutbox[]
+
+  @@index([organizationId, eventId, createdAt])
+  @@index([organizationId, createdAt])
+  @@index([createdAt])
+}
+
 model EmailLimitHit {
   id             String   @id @default(cuid())
   // limit:organisation-or-"platform":UTC hour, the upsert key.

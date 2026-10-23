@@ -4,7 +4,7 @@
 import { NextResponse } from "next/server"
 import { requireOrgSession } from "@/lib/auth-guard"
 import { memberInvitePayload } from "@/lib/notification-helpers"
-import { deliverAfterResponse, enqueueNotifications } from "@/lib/notifications/outbox"
+import { deliverAfterResponse, enqueueBatch } from "@/lib/notifications/outbox"
 import { RESEND_GUARD_MS, SEND_TRANSACTION_OPTIONS, inviteEmailDedupeKey, sendCutoff } from "@/lib/invitation-sending"
 import { lockSameEmails, outstandingInviteEmails } from "@/lib/invitation-outbox"
 import { adminActor, logEvent } from "@/lib/event-log"
@@ -129,7 +129,7 @@ export async function POST(req: Request, { params }: { params: Promise<{ id: str
   // Through the outbox (#1105): over a sending limit the emails wait and leave in waves instead of
   // failing, and each one shows in « Emails envoyés ». New invitations, the claim of the re-sent
   // ones and their emails commit together.
-  const { created, recentlySkipped, outboxIds } = await db.$transaction(async (tx) => {
+  const { created, recentlySkipped, outboxIds, resentCount } = await db.$transaction(async (tx) => {
     // Clear tokens only in memory (the email needs them); the DB keeps hash + encrypted copy (#290).
     // skipDuplicates: an invitation created meanwhile (a double click) is kept, and treated as existing.
     const tokens = new Map(ids.map((id) => [id, randomBytes(24).toString("hex")]))
@@ -181,9 +181,10 @@ export async function POST(req: Request, { params }: { params: Promise<{ id: str
         organizationId: event.organizationId,
       }, inviteEmailDedupeKey(invite.id, now))]
     })
-    const outboxIds = await enqueueNotifications(payloads, tx, { organizationId: event.organizationId })
+    // One « envoi groupé » (#1101) for the batch, with its emails and its organisation log entry.
+    const outboxIds = await enqueueBatch(payloads, tx, { organizationId: event.organizationId, batch: { kind: "member_invite", eventId, actorId: guard.session.user?.id ?? null } })
     const recentlySkipped = existingIds.length - resent.length
-    return { created, recentlySkipped, outboxIds }
+    return { created, recentlySkipped, outboxIds, resentCount: resent.length }
   }, SEND_TRANSACTION_OPTIONS)
   deliverAfterResponse(outboxIds)
 
@@ -194,6 +195,19 @@ export async function POST(req: Request, { params }: { params: Promise<{ id: str
       action: "memberinvite.sent",
       entityType: "MemberInvite",
       entityId: invite.id,
+    })
+  }
+
+  // Invitations sent again to people already invited (#1101): one entry for the batch, with its
+  // count; the new ones keep their entry each, above.
+  if (resentCount > 0) {
+    await logEvent({
+      eventId,
+      actor: adminActor(guard.session),
+      action: "memberinvite.resent",
+      entityType: "Event",
+      entityId: eventId,
+      changes: { recipients: { from: null, to: resentCount } },
     })
   }
 

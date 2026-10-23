@@ -165,6 +165,8 @@ export const ACTION_VERB: Record<string, (actor: string) => string> = {
   "memberinvite.sent": (a) => `${a} a envoyé une invitation`,
   // One entry per reminder batch (#1105), its count in `changes.recipients`.
   "memberinvite.reminded": (a) => `${a} a relancé les invités sans réponse`,
+  // #1101: an invitation sent again to people already invited, once per batch.
+  "memberinvite.resent": (a) => `${a} a renvoyé l'invitation à des personnes déjà invitées`,
   "memberinvite.declined": (a) => `${a} a indiqué ne pas être disponible pour cet événement`,
   "eventpage.created": (a) => `${a} a créé une page`,
   "eventpage.updated": (a) => `${a} a modifié une page`,

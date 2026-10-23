@@ -77,6 +77,8 @@ describe("no personal token in the proxy access log", () => {
     // Every `?<key>=${…}` written in src (links in emails, redirects): its key must be exempt, or be
     // listed here as carrying no secret and no personal data.
     const NOT_SECRET = new Set(["org", "groupe", "embed", "wizard", "shift", "role", "audience", "since", "verify", "edit", "tri", "ok", "creneau", "decline", "registration", "admin", "slug", "v", "with", "member", "demandes", "lien", "volunteer", "link", "format", "download", "from", "to", "cursor", "limit", "tag", "kind", "includeAll", "entityType", "entityId", "actorType", "actorId", "action", "chainOf", "until", "waitlist", "requested", "active", "lastName", "shifts", "color", "shiftId", "eventId", "id", "page", "view", "type", "status", "sort",
+      // a batch of emails' id (#1101), behind the admin login: no secret, no personal data
+      "envoi",
       // external links, never to this server: OpenStreetMap (map-link.ts), mailto subject
       "mlat", "mlon", "subject"])
     const files = execFileSync("git", ["ls-files", "src"], { encoding: "utf8" }).split("\n").filter((f) => /\.(ts|tsx)$/.test(f) && !f.includes("__tests__") && !f.includes("__integration__"))

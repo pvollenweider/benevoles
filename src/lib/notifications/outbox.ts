@@ -14,6 +14,7 @@ import { siteDomain } from "@/lib/site"
 import { isAddedByOrganizer, resolveAddedByOrganizer } from "./added-by-organizer"
 import { MEMBER_ADDRESS_CHANGED_REASON, MEMBER_ADDRESS_CHECKED_KINDS, memberAddressChanged } from "../outbox-address-changed-reason"
 import { bestEffort, hourStart, recordLimitHit } from "./limit-hits"
+import type { SendBatchKind } from "../send-batches"
 
 /**
  * Notification outbox (#293).
@@ -51,10 +52,29 @@ const STALE_CLAIM_MS = 15 * 60 * 1000
  */
 export type OutboxDb = {
   notificationOutbox: {
-    createMany(args: { data: { payload: Prisma.InputJsonValue; dedupeKey: string; organizationId?: string | null; targetedMessageId?: string | null }[]; skipDuplicates: boolean }): Promise<{ count: number }>
+    createMany(args: { data: { payload: Prisma.InputJsonValue; dedupeKey: string; organizationId?: string | null; targetedMessageId?: string | null; sendBatchId?: string | null }[]; skipDuplicates: boolean }): Promise<{ count: number }>
     findUniqueOrThrow(args: { where: { dedupeKey: string }; select: { id: true } }): Promise<{ id: string }>
-    create(args: { data: { payload: Prisma.InputJsonValue; organizationId?: string | null; targetedMessageId?: string | null }; select: { id: true } }): Promise<{ id: string }>
+    create(args: { data: { payload: Prisma.InputJsonValue; organizationId?: string | null; targetedMessageId?: string | null; sendBatchId?: string | null }; select: { id: true } }): Promise<{ id: string }>
   }
+}
+
+/** A batch of emails sent at once from an event (#1101): recorded with the emails, see enqueueNotifications. */
+export type SendBatchSpec = { kind: SendBatchKind; eventId: string; actorId: string | null }
+
+/** What recording a batch needs on top of OutboxDb: the transaction of the routes has it all. */
+export type BatchDb = OutboxDb & {
+  sendBatch: {
+    create(args: { data: { organizationId: string; eventId: string; kind: string; actorId: string | null; targetedMessageId?: string | null }; select: { id: true } }): Promise<{ id: string }>
+    // updateMany / deleteMany, never update / delete: the org-scoped client checks a unique-key
+    // write against the committed row, which this transaction's new batch is not yet.
+    updateMany(args: { where: { id: string }; data: { recipientCount: number } }): Promise<unknown>
+    deleteMany(args: { where: { id: string } }): Promise<unknown>
+  }
+  orgLog: {
+    create(args: { data: { organizationId: string; actorType: string; actorId: string | null; action: string; entityType: string; entityId: string; changes?: Prisma.InputJsonValue } }): Promise<unknown>
+  }
+  /** Savepoints only (constant statements), so the batch record never aborts the send. */
+  $executeRawUnsafe(query: string): Promise<number>
 }
 
 /** A `send` that only records payloads, to pass to the notification helpers. */
@@ -101,7 +121,77 @@ export async function enqueueNotifications(
   /** `targetedMessageId`: the history row of a targeted message (#467) these emails belong to. */
   opts: { organizationId?: string | null; targetedMessageId?: string } = {},
 ): Promise<string[]> {
-  const link = opts.targetedMessageId ? { targetedMessageId: opts.targetedMessageId } : {}
+  return enqueueRows(payloads, db, opts, null)
+}
+
+/**
+ * Stores a batch of emails sent at once from an event (#1101) like `enqueueNotifications`, plus
+ * its SendBatch (who, when, how many; no recipient) and one organisation log entry, in the same
+ * transaction: the batch, its emails and its trace commit together. Nothing queued (no address,
+ * all already queued): no batch, no entry. Returns the ids of rows to deliver.
+ *
+ * The record never decides whether the emails go: each of its writes runs inside a savepoint, and
+ * a failure rolls back that savepoint only (reported), never the transaction of the send. The
+ * emails are then queued as before, outside any batch, or the batch keeps no log entry.
+ */
+export async function enqueueBatch(
+  payloads: NotificationPayload[],
+  db: BatchDb,
+  opts: { organizationId: string; targetedMessageId?: string; batch: SendBatchSpec },
+): Promise<string[]> {
+  if (!payloads.some((p) => p.recipient.email?.trim())) return []
+  const batchId = await inSavepoint(db, "send_batch_create", async () => (await db.sendBatch.create({
+    data: { organizationId: opts.organizationId, eventId: opts.batch.eventId, kind: opts.batch.kind, actorId: opts.batch.actorId, targetedMessageId: opts.targetedMessageId ?? null },
+    select: { id: true },
+  })).id)
+  const ids = await enqueueRows(payloads, db, opts, batchId)
+  if (!batchId) return ids
+  await inSavepoint(db, "send_batch_finish", async () => {
+    if (ids.length === 0) {
+      await db.sendBatch.deleteMany({ where: { id: batchId } })
+      return
+    }
+    await db.sendBatch.updateMany({ where: { id: batchId }, data: { recipientCount: ids.length } })
+    await db.orgLog.create({
+      data: {
+        organizationId: opts.organizationId,
+        actorType: opts.batch.actorId ? "admin" : "system",
+        actorId: opts.batch.actorId,
+        action: "sendbatch.queued",
+        entityType: "SendBatch",
+        entityId: batchId,
+        changes: { recipients: { from: null, to: ids.length } },
+      },
+    })
+  })
+  return ids
+}
+
+/**
+ * Runs `step` inside a savepoint of the current transaction: on failure, only the step is rolled
+ * back, the transaction goes on (Postgres aborts a whole transaction on a failed statement
+ * otherwise). Returns the step's value, or null when it failed.
+ */
+async function inSavepoint<T>(db: BatchDb, name: string, step: () => Promise<T>): Promise<T | null> {
+  await db.$executeRawUnsafe(`SAVEPOINT ${name}`)
+  try {
+    const value = await step()
+    await db.$executeRawUnsafe(`RELEASE SAVEPOINT ${name}`)
+    return value
+  } catch (e) {
+    await db.$executeRawUnsafe(`ROLLBACK TO SAVEPOINT ${name}`)
+    try { reportError(`outbox.send_batch.${name}`)(e) } catch { /* reporting never fails the send */ }
+    return null
+  }
+}
+
+async function enqueueRows(
+  payloads: NotificationPayload[],
+  db: OutboxDb,
+  opts: { organizationId?: string | null; targetedMessageId?: string },
+  sendBatchId: string | null,
+): Promise<string[]> {
+  const link = { ...(opts.targetedMessageId ? { targetedMessageId: opts.targetedMessageId } : {}), ...(sendBatchId ? { sendBatchId } : {}) }
   const ids: string[] = []
   for (const { dedupeKey, ...payload } of payloads) {
     if (!payload.recipient.email?.trim()) continue
@@ -277,6 +367,8 @@ export async function deliverOutbox(opts: { ids?: string[]; limit?: number; now?
  */
 async function markHeld(id: string, organizationId: string | null, limit: string, now: Date): Promise<void> {
   await bestEffort("email.limit.mark_held", async () => {
+    // The first hold (#1101): with sentAt, how long the limit delayed this email.
+    await prisma.notificationOutbox.updateMany({ where: { id, firstHeldAt: null }, data: { firstHeldAt: now } })
     const { count } = await prisma.notificationOutbox.updateMany({
       where: { id, OR: [{ lastHeldAt: null }, { lastHeldAt: { lt: hourStart(now) } }] },
       data: { lastHeldAt: now },
