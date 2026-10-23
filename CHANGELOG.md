@@ -11,6 +11,10 @@ Format basé sur [Keep a Changelog](https://keepachangelog.com/fr/1.0.0/).
 
 ## [Unreleased]
 
+### Ajouté
+
+- **Plafonds d'envoi atteints, pour l'opérateur** (#1100) : en haut de la liste des organisations du super admin, les plafonds d'envoi d'emails atteints ces 7 derniers jours, par organisation : le plafond en clair, quand, combien d'emails ont été retenus (ils partent à la fin de la période du plafond) et combien ont été refusés, et s'il reste des emails retenus en attente. Une mention « Plafond d'envoi atteint » sur la ligne de l'organisation mène au même détail sur sa fiche. Rien sur les destinataires ni le contenu des emails n'est gardé, et ces relevés sont effacés après 90 jours. <!-- interne -->
+
 ### Modifié
 
 - **Plus d'impasse après une inscription** (#1097) : la page de confirmation ramène à l'événement (« Revenir à l'événement » au lieu de « Retour à l'accueil ») et rappelle que le lien personnel est dans l'email de confirmation, avec un lien vers le guide. Un bénévole qui a perdu son lien le redemande depuis la page de l'événement (« J'ai perdu mon lien personnel ») : la réponse est la même que l'adresse soit inscrite ou non, et le lien n'arrive que par email.

@@ -12,6 +12,7 @@ const m = vi.hoisted(() => ({
 }))
 
 const videoFeedbackDeleteMany = vi.hoisted(() => vi.fn())
+const limitHitDeleteMany = vi.hoisted(() => vi.fn())
 
 vi.mock("@/lib/prisma", () => {
   const zero = { deleteMany: vi.fn().mockResolvedValue({ count: 0 }), updateMany: vi.fn().mockResolvedValue({ count: 0 }), findMany: vi.fn().mockResolvedValue([]) }
@@ -25,7 +26,7 @@ vi.mock("@/lib/prisma", () => {
   return {
     prisma: {
       ...tx,
-      volunteer: zero, rateLimit: zero, deliveryOutcome: zero, videoFeedback: { deleteMany: videoFeedbackDeleteMany }, signupRequest: zero, signupBlock: zero, operatorLog: zero,
+      volunteer: zero, rateLimit: zero, deliveryOutcome: zero, emailLimitHit: { deleteMany: limitHitDeleteMany }, videoFeedback: { deleteMany: videoFeedbackDeleteMany }, signupRequest: zero, signupBlock: zero, operatorLog: zero,
       $transaction: async (fn: (t: typeof tx) => unknown) => fn(tx),
     },
   }
@@ -45,6 +46,7 @@ beforeEach(() => {
   m.orgDeleteMany.mockResolvedValue({ count: 0 })
   m.adminDeleteMany.mockResolvedValue({ count: 0 })
   videoFeedbackDeleteMany.mockResolvedValue({ count: 0 })
+  limitHitDeleteMany.mockResolvedValue({ count: 0 })
 })
 
 describe("nightly cleanup of deactivated organizations", () => {
@@ -111,5 +113,20 @@ describe("nightly cleanup of video feedback", () => {
     expect(before - cutoff.getTime()).toBeGreaterThanOrEqual(RETENTION_DAYS.videoFeedback * DAY_MS - 1000)
     expect(before - cutoff.getTime()).toBeLessThanOrEqual(RETENTION_DAYS.videoFeedback * DAY_MS + 1000)
     expect(body.deleted.videoFeedback).toBe(4)
+  })
+})
+
+// #1100: sending limits reached, purged after their retention window (src/lib/retention.ts).
+describe("nightly cleanup of sending limits reached", () => {
+  it("deletes the hours last hit more than RETENTION_DAYS.emailLimitHit ago, and counts them", async () => {
+    m.orgFindMany.mockResolvedValue([])
+    limitHitDeleteMany.mockResolvedValue({ count: 3 })
+    const before = Date.now()
+    const body = await (await run()).json()
+    const cutoff: Date = limitHitDeleteMany.mock.calls[0][0].where.lastAt.lt
+    const { RETENTION_DAYS, DAY_MS } = await import("@/lib/retention")
+    expect(before - cutoff.getTime()).toBeGreaterThanOrEqual(RETENTION_DAYS.emailLimitHit * DAY_MS - 1000)
+    expect(before - cutoff.getTime()).toBeLessThanOrEqual(RETENTION_DAYS.emailLimitHit * DAY_MS + 1000)
+    expect(body.deleted.limitHits).toBe(3)
   })
 })

@@ -158,6 +158,9 @@ async function run(req: Request) {
     where: { createdAt: { lt: deliveryOutcomeCutoff } },
   })
 
+  // --- 6b bis. Sending limits reached (#1100), past their retention window ---
+  const deletedLimitHits = await prisma.emailLimitHit.deleteMany({ where: { lastAt: { lt: daysAgo(now, RETENTION_DAYS.emailLimitHit) } } })
+
   // --- 6c. Anonymous video feedback (#646): answers older than their retention window ---
   // `answeredOn` is a day; a row is kept until the whole retention window has passed.
   const deletedVideoFeedback = await prisma.videoFeedback.deleteMany({
@@ -287,6 +290,7 @@ async function run(req: Request) {
     scheduledMessages: deletedScheduled.count,
       rateLimits: deletedRateLimits.count,
       deliveryOutcomes: deletedDeliveryOutcomes.count,
+      limitHits: deletedLimitHits.count,
       videoFeedback: deletedVideoFeedback.count,
       signupRequests: deletedSignupRequests.count,
       signupBlocks: deletedSignupBlocks.count,

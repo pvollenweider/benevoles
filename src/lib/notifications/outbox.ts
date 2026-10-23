@@ -13,6 +13,7 @@ import { decryptValue, encryptValue } from "../token-vault"
 import { siteDomain } from "@/lib/site"
 import { isAddedByOrganizer, resolveAddedByOrganizer } from "./added-by-organizer"
 import { MEMBER_ADDRESS_CHANGED_REASON, MEMBER_ADDRESS_CHECKED_KINDS, memberAddressChanged } from "../outbox-address-changed-reason"
+import { bestEffort, hourStart, recordLimitHit } from "./limit-hits"
 
 /**
  * Notification outbox (#293).
@@ -195,7 +196,7 @@ export async function deliverOutbox(opts: { ids?: string[]; limit?: number; now?
         return sendNotification({ ...payload, organizationId: claimed.organizationId ?? payload.organizationId ?? null, messageId: outboxMessageId(row.id), outboxId: row.id })
       })
       .catch(
-      (e: unknown) => ({ ok: false as const, reason: e instanceof Error ? e.message : String(e), permanent: undefined as true | undefined, recipientRejected: undefined as true | undefined, blocked: undefined as true | undefined, held: undefined as true | undefined, retryAfterMs: undefined as number | undefined }),
+      (e: unknown) => ({ ok: false as const, reason: e instanceof Error ? e.message : String(e), permanent: undefined as true | undefined, recipientRejected: undefined as true | undefined, blocked: undefined as true | undefined, held: undefined as true | undefined, retryAfterMs: undefined as number | undefined, limit: undefined as string | undefined }),
     )
 
     if (addressChanged) {
@@ -218,6 +219,7 @@ export async function deliverOutbox(opts: { ids?: string[]; limit?: number; now?
         data: { status: "pending", claimedAt: null, nextAttemptAt: new Date(now.getTime() + (outcome.retryAfterMs ?? 60_000)) },
       })
       result.held++
+      if (outcome.limit) await markHeld(row.id, claimed.organizationId, outcome.limit, now)
       continue
     }
 
@@ -266,6 +268,21 @@ export async function deliverOutbox(opts: { ids?: string[]; limit?: number; now?
     }
   }
   return result
+}
+
+/**
+ * Marks a held row (#1100) and counts it in its limit's hour, once per row and hour: the
+ * conditional update lets exactly one delivery through, even when two run at once or a stale
+ * claim is picked up again. Best effort, after the row is already back to pending.
+ */
+async function markHeld(id: string, organizationId: string | null, limit: string, now: Date): Promise<void> {
+  await bestEffort("email.limit.mark_held", async () => {
+    const { count } = await prisma.notificationOutbox.updateMany({
+      where: { id, OR: [{ lastHeldAt: null }, { lastHeldAt: { lt: hourStart(now) } }] },
+      data: { lastHeldAt: now },
+    })
+    if (count === 1) await recordLimitHit({ organizationId, limit, outcome: "held", now })
+  })
 }
 
 export type OutboxHealth = {

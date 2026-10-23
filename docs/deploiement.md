@@ -397,7 +397,7 @@ L'opérateur de l'instance est prévenu par une notification ntfy sur son télé
 | Alerte | Quand | Priorité ntfy |
 |---|---|---|
 | « Nouvelle demande d'espace » | une association confirme son inscription en libre-service ; le message reprend le nom de l'espace et le début de sa description, sans lien | 4 |
-| « plafond d'envoi atteint » | un plafond d'envoi d'emails est atteint (au plus une fois par heure, par plafond et par organisation) | 4 |
+| « plafond d'envoi atteint » | un plafond d'envoi d'emails est atteint (au plus une fois par heure, par plafond et par organisation) ; le détail des 7 derniers jours (emails retenus, refusés, encore en attente) est en haut de la liste des organisations du super admin | 4 |
 | « espaces en attente » | récapitulatif quotidien, tant que des espaces attendent une validation (cron de nettoyage) | 3 |
 
 **Deux canaux, de rôles différents.** La notification ntfy prévient vite ; l'email est la garantie (iOS peut retenir une notification plusieurs minutes, et ntfy.sh peut ne pas répondre). Les deux partent en même temps : l'email n'attend jamais la notification. La notification est tentée trois fois (tout de suite, après 2 s, puis après 10 s) en cas de coupure réseau, de réponse 429 ou d'erreur 5xx de ntfy, une seule fois si ntfy refuse la demande ; un échec final est signalé une fois à Sentry (`operator_alert.ntfy`).
