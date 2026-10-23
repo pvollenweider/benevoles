@@ -15,6 +15,7 @@ import { isAddedByOrganizer, resolveAddedByOrganizer } from "./added-by-organize
 import { MEMBER_ADDRESS_CHANGED_REASON, MEMBER_ADDRESS_CHECKED_KINDS, memberAddressChanged } from "../outbox-address-changed-reason"
 import { bestEffort, hourStart, recordLimitHit } from "./limit-hits"
 import type { SendBatchKind } from "../send-batches"
+import { inactivityCopyVerdict } from "../org-inactivity-steps"
 
 /**
  * Notification outbox (#293).
@@ -52,9 +53,9 @@ const STALE_CLAIM_MS = 15 * 60 * 1000
  */
 export type OutboxDb = {
   notificationOutbox: {
-    createMany(args: { data: { payload: Prisma.InputJsonValue; dedupeKey: string; organizationId?: string | null; targetedMessageId?: string | null; sendBatchId?: string | null }[]; skipDuplicates: boolean }): Promise<{ count: number }>
+    createMany(args: { data: { payload: Prisma.InputJsonValue; dedupeKey: string; organizationId?: string | null; targetedMessageId?: string | null; sendBatchId?: string | null; inactivityStepId?: string | null }[]; skipDuplicates: boolean }): Promise<{ count: number }>
     findUniqueOrThrow(args: { where: { dedupeKey: string }; select: { id: true } }): Promise<{ id: string }>
-    create(args: { data: { payload: Prisma.InputJsonValue; organizationId?: string | null; targetedMessageId?: string | null; sendBatchId?: string | null }; select: { id: true } }): Promise<{ id: string }>
+    create(args: { data: { payload: Prisma.InputJsonValue; organizationId?: string | null; targetedMessageId?: string | null; sendBatchId?: string | null; inactivityStepId?: string | null }; select: { id: true } }): Promise<{ id: string }>
   }
 }
 
@@ -118,8 +119,11 @@ export function openPayload(stored: unknown): NotificationPayload {
 export async function enqueueNotifications(
   payloads: NotificationPayload[],
   db: OutboxDb = prisma,
-  /** `targetedMessageId`: the history row of a targeted message (#467) these emails belong to. */
-  opts: { organizationId?: string | null; targetedMessageId?: string } = {},
+  /**
+   * `targetedMessageId`: the history row of a targeted message (#467) these emails belong to.
+   * `inactivityStepId`: the inactivity step (#1114) these copies confirm once one is sent.
+   */
+  opts: { organizationId?: string | null; targetedMessageId?: string; inactivityStepId?: string } = {},
 ): Promise<string[]> {
   return enqueueRows(payloads, db, opts, null)
 }
@@ -188,10 +192,14 @@ async function inSavepoint<T>(db: BatchDb, name: string, step: () => Promise<T>)
 async function enqueueRows(
   payloads: NotificationPayload[],
   db: OutboxDb,
-  opts: { organizationId?: string | null; targetedMessageId?: string },
+  opts: { organizationId?: string | null; targetedMessageId?: string; inactivityStepId?: string },
   sendBatchId: string | null,
 ): Promise<string[]> {
-  const link = { ...(opts.targetedMessageId ? { targetedMessageId: opts.targetedMessageId } : {}), ...(sendBatchId ? { sendBatchId } : {}) }
+  const link = {
+    ...(opts.targetedMessageId ? { targetedMessageId: opts.targetedMessageId } : {}),
+    ...(sendBatchId ? { sendBatchId } : {}),
+    ...(opts.inactivityStepId ? { inactivityStepId: opts.inactivityStepId } : {}),
+  }
   const ids: string[] = []
   for (const { dedupeKey, ...payload } of payloads) {
     if (!payload.recipient.email?.trim()) continue
@@ -267,6 +275,7 @@ export async function deliverOutbox(opts: { ids?: string[]; limit?: number; now?
     // nothing left, nothing to tell. A failed read is an ordinary failed attempt, retried.
     let nothingLeft = false
     let addressChanged = false
+    let inactivityStopped: string | null = null
     const outcome = await Promise.resolve()
       .then(async () => {
         let payload = openPayload(claimed.payload)
@@ -281,6 +290,11 @@ export async function deliverOutbox(opts: { ids?: string[]; limit?: number; now?
           const member = await prisma.volunteer.findUnique({ where: { id: payload.volunteerId }, select: { email: true } })
           if (memberAddressChanged(payload.recipient.email, member)) { addressChanged = true; return { ok: true as const } }
         }
+        // An inactivity message (#1114) goes only to a current administrator, while the procedure runs.
+        if (claimed.inactivityStepId) {
+          inactivityStopped = await inactivityCopyBlocked(claimed.inactivityStepId, payload.recipient.email ?? "", now)
+          if (inactivityStopped) return { ok: true as const }
+        }
         // The row's organisation (#814) is checked by sendNotification right before this one send,
         // not when the batch was read: a deactivation during a batch stops the rest of it.
         return sendNotification({ ...payload, organizationId: claimed.organizationId ?? payload.organizationId ?? null, messageId: outboxMessageId(row.id), outboxId: row.id })
@@ -291,6 +305,12 @@ export async function deliverOutbox(opts: { ids?: string[]; limit?: number; now?
 
     if (addressChanged) {
       await prisma.notificationOutbox.update({ where: { id: row.id }, data: { status: "cancelled", lastError: MEMBER_ADDRESS_CHANGED_REASON, claimedAt: null } })
+      result.cancelled++
+      continue
+    }
+
+    if (inactivityStopped) {
+      await prisma.notificationOutbox.update({ where: { id: row.id }, data: { status: "cancelled", lastError: inactivityStopped, claimedAt: null } })
       result.cancelled++
       continue
     }
@@ -322,7 +342,18 @@ export async function deliverOutbox(opts: { ids?: string[]; limit?: number; now?
     }
 
     if (outcome.ok) {
-      await prisma.notificationOutbox.update({ where: { id: row.id }, data: { status: "sent", sentAt: new Date(), lastError: null } })
+      const sentAt = new Date()
+      if (claimed.inactivityStepId) {
+        // The first copy accepted confirms its inactivity step (#1114), in the same transaction:
+        // the sent row itself is purged the next night, the confirmation stays.
+        const stepId = claimed.inactivityStepId
+        await prisma.$transaction([
+          prisma.notificationOutbox.update({ where: { id: row.id }, data: { status: "sent", sentAt, lastError: null } }),
+          prisma.orgInactivityStep.updateMany({ where: { id: stepId, confirmedAt: null }, data: { confirmedAt: sentAt } }),
+        ])
+      } else {
+        await prisma.notificationOutbox.update({ where: { id: row.id }, data: { status: "sent", sentAt, lastError: null } })
+      }
       result.sent++
       continue
     }
@@ -358,6 +389,36 @@ export async function deliverOutbox(opts: { ids?: string[]; limit?: number; now?
     }
   }
   return result
+}
+
+/**
+ * Why a queued inactivity copy (#1114) must not leave any more, read right before the send: its
+ * step is gone (procedure stopped), the recipient is no longer an active administrator at that
+ * address, or the procedure was stopped since the step was queued. Null: it may go.
+ */
+async function inactivityCopyBlocked(stepId: string, recipientEmail: string, now: Date): Promise<string | null> {
+  const step = await prisma.orgInactivityStep.findUnique({
+    where: { id: stepId },
+    select: {
+      queuedAt: true,
+      organization: {
+        select: {
+          active: true, inactivityExempt: true, inactivityPostponedUntil: true, lastMeaningfulActivityAt: true, lastRetentionConfirmedAt: true,
+          admins: { where: { isActive: true }, select: { email: true } },
+        },
+      },
+    },
+  })
+  if (!step) return "Vérification d'inactivité arrêtée : message annulé."
+  const o = step.organization
+  return inactivityCopyVerdict({ recipientEmail, queuedAt: step.queuedAt }, {
+    active: o.active,
+    exempt: o.inactivityExempt,
+    postponedUntil: o.inactivityPostponedUntil,
+    lastActivityAt: o.lastMeaningfulActivityAt,
+    lastRetentionConfirmedAt: o.lastRetentionConfirmedAt,
+    adminEmails: o.admins.map((a) => a.email),
+  }, now)
 }
 
 /**

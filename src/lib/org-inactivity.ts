@@ -8,9 +8,12 @@
  * deactivated, and later erased. A suspended organisation (abuse, #810) never goes through here.
  *
  * Rollout: `ORG_INACTIVITY=report` (the default) computes and lists everything, and sends,
- * deactivates and deletes nothing. `on` sends the three emails and deactivates a space nobody
- * answered for; erasure is not enabled yet. Pure, Prisma-free.
+ * deactivates and deletes nothing. `on` sends the three emails, each confirmed before the next
+ * (src/lib/org-inactivity-steps.ts), and deactivates a space nobody answered for; erasure is not
+ * enabled yet. Pure, Prisma-free.
  */
+
+import { procedureView, type ProcedureInput } from "./org-inactivity-steps"
 
 export type InactivityMode = "off" | "report" | "on"
 
@@ -22,7 +25,11 @@ export function inactivityMode(env: Record<string, string | undefined> = process
 /** Months without meaningful activity before the first « Souhaitez-vous conserver votre espace ? ». */
 export const INACTIVITY_MONTHS = 18
 
-/** Days after the first email: second reminder, last reminder, deactivation, erasure. */
+/**
+ * The theoretical schedule the report shows (days after the first email): second reminder, last
+ * reminder, deactivation, erasure. The procedure itself (`on`) waits for each message to be
+ * confirmed, so these are the earliest dates, never a promise.
+ */
 export const INACTIVITY_STEPS = [
   { key: "first", label: "1er email « Souhaitez-vous conserver votre espace ? »", days: 0 },
   { key: "second", label: "2e rappel", days: 30 },
@@ -132,9 +139,8 @@ export function inactivityStatusText(
     lastActivityAt: Date | null
     postponedUntil: Date | null
     assessment: InactivityAssessment
-    /** The procedure under way (`on`), and a deactivation it made. */
-    noticeAt?: Date | null
-    emailsSent?: number
+    /** The procedure under way (`on`, #1114), and a deactivation it made. */
+    procedure?: ProcedureInput | null
     deactivatedAt?: Date | null
   },
   mode: InactivityMode,
@@ -145,9 +151,9 @@ export function inactivityStatusText(
   if (mode === "off") return `${last} La vérification est désactivée (ORG_INACTIVITY=off).`
   const a = info.assessment
   if (info.deactivatedAt) return `${last} Désactivée faute de réponse le ${day(info.deactivatedAt)} ; ses administrateurs peuvent la réactiver depuis la page de connexion.`
-  if (info.noticeAt && a.state === "due") {
-    const n = info.emailsSent ?? 1
-    return `${last} Premier email « Souhaitez-vous conserver votre espace ? » envoyé le ${day(info.noticeAt)} (${n} email${n > 1 ? "s" : ""} sur 3) ; sans réponse, désactivation le ${day(deactivationDate(info.noticeAt))}.`
+  if (info.procedure && a.state === "due") {
+    const paused = mode === "report" ? " Mode observation : la procédure est en pause, rien de plus n'est envoyé ni désactivé." : ""
+    return `${last} ${procedureText(info.procedure, now, day)}${paused}`
   }
   if (a.state === "excluded") {
     const why = {
@@ -165,14 +171,25 @@ export function inactivityStatusText(
   return `${last}${hold} Premier email dû le ${day(a.firstEmailAt)} ; étape atteinte : ${a.stepLabel.charAt(0).toLowerCase()}${a.stepLabel.slice(1)}.${observe}`
 }
 
-/** Days after the first email actually sent: second reminder, last reminder, deactivation. */
-export const SECOND_REMINDER_DAYS = 30
-export const LAST_REMINDER_DAYS = 60
-export const DEACTIVATION_DAYS = 75
-
-/** The day a procedure started on `noticeAt` deactivates the space without an answer. */
-export function deactivationDate(noticeAt: Date): Date {
-  return new Date(noticeAt.getTime() + DEACTIVATION_DAYS * DAY_MS)
+/**
+ * The procedure under way in words, for the operator (#1114): each message queued, sent or
+ * blocked, the real planned date, and what blocks it. `day` formats in the organisation's zone.
+ */
+export function procedureText(p: ProcedureInput, now: Date, day: (d: Date) => string): string {
+  const v = procedureView(p, now)
+  const steps = v.steps.map((s) => {
+    const label = s.label.charAt(0).toUpperCase() + s.label.slice(1)
+    return s.state === "sent" ? `${label} : envoyé le ${day(s.at)}` : s.state === "queued" ? `${label} : en file d'attente depuis le ${day(s.at)}` : `${label} : bloqué (en file d'attente depuis le ${day(s.at)})`
+  })
+  const done = steps.length > 0 ? `${steps.join(" ; ")}.` : ""
+  if (v.blocked) {
+    // The outcome first: what the operator scans for.
+    const floor = v.deadline && v.plannedAt ? ` Désactivation au plus tôt le ${day(v.plannedAt)}, une fois débloquée.` : ""
+    return `Procédure bloquée : ${v.blocked.text}. Aucune désactivation automatique : à traiter manuellement (vérifier les adresses des administrateurs, les contacter autrement, reporter la vérification ou l'exclure).${done ? ` ${done}` : ""}${floor}`
+  }
+  const next = v.next ? ` Prochain message (${v.next.label.toLowerCase()}) au plus tôt le ${day(v.next.at)}.` : ""
+  const planned = v.deadline && v.plannedAt ? ` Sans réponse d'ici le ${day(v.deadline)} inclus, désactivation au plus tôt le ${day(v.plannedAt)}.` : ""
+  return `${done}${next}${planned}`
 }
 
 /** Days between an automatic deactivation and the planned erasure (step « erase » minus « deactivate »). */
@@ -193,32 +210,3 @@ export function erasureDue(deactivatedAt: Date, now: Date): boolean {
 }
 
 export type InactivityEmailStep = "first" | "second" | "last"
-
-export type ProcedureAction =
-  | { action: "none" }
-  /** The procedure stops: activity, confirmation, upcoming event, postponement or exclusion. */
-  | { action: "reset" }
-  | { action: "email"; step: InactivityEmailStep }
-  | { action: "deactivate" }
-
-/**
- * What the nightly run does for one active organisation with `ORG_INACTIVITY=on`. The procedure
- * counts from the first email actually sent (`noticeAt`), never from the theoretical schedule:
- * switching `on` for a space idle for years still starts with the first email, and gives it the
- * full 75 days. Each email goes once (`emailsSent`); a missed night only delays a step.
- */
-export function procedureAction(
-  p: { assessment: InactivityAssessment; noticeAt: Date | null; emailsSent: number },
-  now: Date,
-): ProcedureAction {
-  const due = p.assessment.state === "due"
-  if (p.noticeAt === null) return due ? { action: "email", step: "first" } : { action: "none" }
-  // Anything that makes the space not due any more (a later activity or confirmation moves the
-  // schedule past today) stops the procedure.
-  if (!due) return { action: "reset" }
-  const days = Math.floor((now.getTime() - p.noticeAt.getTime()) / DAY_MS)
-  if (days >= DEACTIVATION_DAYS) return { action: "deactivate" }
-  if (days >= LAST_REMINDER_DAYS && p.emailsSent < 3) return { action: "email", step: "last" }
-  if (days >= SECOND_REMINDER_DAYS && p.emailsSent < 2) return { action: "email", step: "second" }
-  return { action: "none" }
-}

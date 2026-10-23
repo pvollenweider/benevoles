@@ -1,4 +1,4 @@
-import { describe, it, expect, afterAll } from "vitest"
+import { describe, it, expect, afterAll, vi } from "vitest"
 
 /**
  * #811 report mode against a real Postgres: the organisation's own writes record its activity (at
@@ -36,8 +36,12 @@ describe.skipIf(!url)("periodic check of inactive organisations on Postgres (#81
 
     // The organisation's own write records it.
     await getOrgClient(org.id).event.create({ data: { organizationId: org.id, slug: "fete", title: "Fête", startDate: new Date("2024-03-01"), endDate: new Date("2024-03-01") } })
-    await new Promise((r) => setTimeout(r, 200))
-    const touched = (await prisma.organization.findUniqueOrThrow({ where: { id: org.id } })).lastMeaningfulActivityAt!
+    // Recorded after the write, not inside it: wait until it lands rather than for a fixed delay.
+    const touched = await vi.waitFor(async () => {
+      const at = (await prisma.organization.findUniqueOrThrow({ where: { id: org.id } })).lastMeaningfulActivityAt!
+      expect(at.getTime()).toBeGreaterThan(new Date("2024-01-01T00:00:00Z").getTime())
+      return at
+    }, { timeout: 10_000, interval: 50 })
     expect(Date.now() - touched.getTime()).toBeLessThan(60_000)
 
     // Within the hour, no second write.

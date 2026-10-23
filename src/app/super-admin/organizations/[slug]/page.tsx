@@ -12,7 +12,6 @@ import { loadSendBatches } from "@/lib/send-batches-data"
 import { batchSummary } from "@/lib/send-batches"
 import { daysAgo } from "@/lib/retention"
 
-const day = (d: Date) => d.toLocaleDateString("fr-FR", { timeZone: APP_TIME_ZONE, day: "numeric", month: "long", year: "numeric" })
 
 export const dynamic = "force-dynamic"
 
@@ -82,7 +81,9 @@ export default async function OrgDetailPage({ params }: { params: Promise<{ slug
       limitHits={limitHits.groups[0] ? { group: limitHits.groups[0], zone: zoneSentence(APP_TIME_ZONE), truncated: limitHits.truncated } : undefined}
       inactivity={inactivity ? {
         orgId: org.id,
-        status: inactivityStatusText(inactivity, inactivityMode(), now, day),
+        // The procedure's dates in the organisation's own zone (#1114), said when it is not the default.
+        status: inactivityStatusText(inactivity, inactivityMode(), now, (d) => d.toLocaleDateString("fr-FR", { timeZone: inactivity.timeZone, day: "numeric", month: "long", year: "numeric" }))
+          + (inactivity.procedure && inactivity.timeZone !== APP_TIME_ZONE ? ` Dates en heure de ${inactivity.timeZone}.` : ""),
         postponed: inactivity.postponedUntil !== null && inactivity.postponedUntil.getTime() > now.getTime(),
         exempt: inactivity.exempt,
         applies: org.active && org.suspendedAt === null,

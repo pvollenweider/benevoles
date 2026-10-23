@@ -6,11 +6,13 @@ import { prisma } from "@/lib/prisma"
 import { rateLimit, getClientIp } from "@/lib/rate-limit"
 import { hashToken } from "@/lib/token-hash"
 import { INVALID_KEEP_LINK, keepLinkValid, keepUpdate } from "@/lib/org-keep"
+import { clearProcedure } from "@/lib/org-inactivity-clear"
 
 /**
  * « Conserver mon organisation » (#811): the link's token, sent by the button of the link page
  * (never on opening the link: mail scanners open links). Single use: every link of the
- * organisation is deleted, the procedure stops, and the organisation's log says who answered.
+ * organisation is deleted, the procedure stops (its queued reminders are cancelled), and the
+ * organisation's log says who answered.
  */
 export async function POST(req: Request) {
   const rl = await rateLimit(getClientIp(req), "org-keep", 20, 60 * 60 * 1000)
@@ -21,13 +23,20 @@ export async function POST(req: Request) {
 
   const now = new Date()
   const outcome = await prisma.$transaction(async (tx) => {
-    const link = await tx.orgKeepLink.findUnique({
+    const find = () => tx.orgKeepLink.findUnique({
       where: { tokenHash: hashToken(token) },
       select: { organizationId: true, adminUserId: true, expiresAt: true, organization: { select: { name: true, active: true, suspendedAt: true } } },
     })
+    const found = await find()
+    if (!found) return null
+    // The nightly deactivation (#1114) locks the same row: one waits for the other, and the link
+    // is read again once the lock is held, so an answer never succeeds on a space just deactivated.
+    await tx.$queryRaw`SELECT id FROM "Organization" WHERE id = ${found.organizationId} FOR UPDATE`
+    const link = await find()
     if (!link || !keepLinkValid(link, now)) return null
+    // The procedure stops: its steps, planned date and links go, its queued reminders are cancelled.
+    await clearProcedure(tx, link.organizationId)
     await tx.organization.update({ where: { id: link.organizationId }, data: keepUpdate(now) })
-    await tx.orgKeepLink.deleteMany({ where: { organizationId: link.organizationId } })
     await tx.orgLog.create({
       data: {
         organizationId: link.organizationId,
