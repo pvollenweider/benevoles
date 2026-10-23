@@ -67,4 +67,4 @@ Référence d'élégance : Notion / Linear — sobre, structuré, dense sans êt
 
 ## Accessibility & Inclusion
 
-Cible WCAG 2.2 AA sur toutes les surfaces ; état réel et limites connues dans `ACCESSIBILITE.md` (page `/accessibilite`), vérifications dans `docs/accessibilite.md`. Aucune régression acceptée. Pas d'animation de mouvement hors `motion-safe:`. Attention particulière sur la timeline Gantt publique (seniors, mobile, contraste des barres de postes).
+Cible WCAG 2.2 AA sur toutes les surfaces ; état réel et limites connues dans `content/pages/ACCESSIBILITE.md` (page `/accessibilite`), vérifications dans `docs/accessibilite.md`. Aucune régression acceptée. Pas d'animation de mouvement hors `motion-safe:`. Attention particulière sur la timeline Gantt publique (seniors, mobile, contraste des barres de postes).

@@ -8,11 +8,11 @@ on:
   push:
     branches: [main]
     paths:
-      - "gandi-webhook/**"
+      - "k8s/gandi-webhook/**"
   pull_request:
     branches: [main]
     paths:
-      - "gandi-webhook/**"
+      - "k8s/gandi-webhook/**"
       - ".github/workflows/gandi-webhook.yml"
 
 env:
@@ -39,7 +39,7 @@ jobs:
       - name: Build and push
         uses: docker/build-push-action@v6
         with:
-          context: ./gandi-webhook
+          context: ./k8s/gandi-webhook
           push: ${{ github.event_name == 'push' }}
           tags: |
             ${{ env.REGISTRY }}/${{ env.IMAGE_NAME }}:latest

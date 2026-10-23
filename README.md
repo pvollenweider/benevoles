@@ -13,16 +13,16 @@ Ce projet est gratuit et open source. Si vous l'utilisez et voulez soutenir son 
 | Document | Destinataires |
 |----------|---------------|
 | [Guide bénévole](guide/README.md) | Personnes qui s'inscrivent comme bénévoles (une page par tâche, dans `guide/`) |
-| [Guide administrateur](GUIDE_ADMIN.md) | Organisateurs qui gèrent les événements |
-| [Fonctionnalités](FONCTIONNALITES.md) | Liste exhaustive de tout ce que fait l'application |
-| [Présentation des fonctionnalités](FEATURES.md) | Page publique `/fonctionnalites`, par besoins |
+| [Guide administrateur](content/guide/GUIDE_ADMIN.md) | Organisateurs qui gèrent les événements |
+| [Fonctionnalités](docs/fonctionnalites.md) | Liste exhaustive de tout ce que fait l'application |
+| [Présentation des fonctionnalités](content/pages/FEATURES.md) | Page publique `/fonctionnalites`, par besoins |
 | [Architecture](docs/architecture.md) | Découpage du code, multi-tenant, flux principaux |
 | [Configuration](docs/configuration.md) | Toutes les variables d'environnement |
 | [Déploiement](docs/deploiement.md) | Docker, Kubernetes, CI/CD, sauvegardes |
 | [Rôles et permissions](docs/roles-et-permissions.md) | Bénévoles, admins, super admin, isolation entre organisations |
 | [API](docs/api.md) | Routes HTTP de l'application |
 | [Conservation des données](docs/retention.md) | Durées, déclencheurs et mécanismes de purge |
-| [Accessibilité](ACCESSIBILITE.md) | Déclaration publique (`/accessibilite`) ; vérifications : [docs/accessibilite.md](docs/accessibilite.md) |
+| [Accessibilité](content/pages/ACCESSIBILITE.md) | Déclaration publique (`/accessibilite`) ; vérifications : [docs/accessibilite.md](docs/accessibilite.md) |
 | [Dossier RGPD](docs/rgpd/README.md) | Travail interne (non publié) : inventaire, sous-traitants, vérifications en production |
 | [Contribuer](CONTRIBUTING.md) | Mise en place, conventions, tests |
 | [Sécurité](SECURITY.md) | Signaler une vulnérabilité |
@@ -224,7 +224,7 @@ Variables à ajouter et cron de l'hôte : [docs/deploiement.md](docs/deploiement
 
 ### Kubernetes
 
-Les manifestes sont dans `k8s/` (application, Job de migration, PostgreSQL, ingress, cron jobs, certificat wildcard via le webhook DNS Gandi de `gandi-webhook/`). Les migrations passent par un Job dédié, **avant** la mise à jour de l'application ; l'ordre complet des étapes, pour un déploiement manuel comme automatique, est dans [docs/deploiement.md](docs/deploiement.md#kubernetes).
+Les manifestes sont dans `k8s/` (application, Job de migration, PostgreSQL, ingress, cron jobs, certificat wildcard via le webhook DNS Gandi de `k8s/gandi-webhook/`). Les migrations passent par un Job dédié, **avant** la mise à jour de l'application ; l'ordre complet des étapes, pour un déploiement manuel comme automatique, est dans [docs/deploiement.md](docs/deploiement.md#kubernetes).
 
 Le CI/CD GitHub Actions (`.github/workflows/`) exécute le type-check, le lint et les tests, construit l'image (GHCR) puis déploie sur Kubernetes à chaque push vers `main`. La CI de pull request exécute en plus la couverture de tests, les contrôles `check-security-md.mjs` et `check-migrations.mjs`, les tests d'intégration sur PostgreSQL et les tests E2E Playwright (détail : [docs/deploiement.md](docs/deploiement.md#cicd)).
 
@@ -269,7 +269,9 @@ prisma/                                   # schema.prisma, migrations/, seed.ts
 e2e/                                      # Tests Playwright
 scripts/                                  # Captures, seed de démo, contrôles CI
 k8s/                                      # Manifestes Kubernetes
-gandi-webhook/                            # Webhook DNS Gandi pour cert-manager (Go)
+k8s/gandi-webhook/                        # Webhook DNS Gandi pour cert-manager (Go)
+content/                                  # Sources Markdown des pages publiques : pages/, legal/, guide/
+guide/, blog/                             # Pages de documentation par tâche (/doc/<page>), articles du blog
 .github/workflows/                        # CI/CD
 ```
 

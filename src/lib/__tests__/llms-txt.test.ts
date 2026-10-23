@@ -11,10 +11,10 @@ const read = (f: string) => fs.readFileSync(path.join(process.cwd(), f), "utf-8"
 const sources = () => ({
   base: BASE,
   summary: "Le planning des bénévoles.",
-  features: read("FEATURES.md"),
+  features: read("content/pages/FEATURES.md"),
   units: loadDocUnits(),
   repositoryUrl: "https://github.com/pvollenweider/benevoles",
-  guides: [{ path: "/doc/admin", markdown: read("GUIDE_ADMIN.md") }, { path: "/doc/benevole", markdown: read("GUIDE_BENEVOLE.md") }],
+  guides: [{ path: "/doc/admin", markdown: read("content/guide/GUIDE_ADMIN.md") }, { path: "/doc/benevole", markdown: read("content/guide/GUIDE_BENEVOLE.md") }],
 })
 
 describe("llmsTxt", () => {
@@ -41,8 +41,8 @@ describe("llmsTxt", () => {
   })
 
   it("links the features page's sections by the anchors the page really has", () => {
-    const ids = headingIdsOf(renderPublicSource("FEATURES.md", "Fonctionnalités").html)
-    const sections = markdownSections(read("FEATURES.md"))
+    const ids = headingIdsOf(renderPublicSource("content/pages/FEATURES.md", "Fonctionnalités").html)
+    const sections = markdownSections(read("content/pages/FEATURES.md"))
     expect(sections.length).toBeGreaterThan(5)
     for (const s of sections) {
       expect(ids, s.title).toContain(s.id)

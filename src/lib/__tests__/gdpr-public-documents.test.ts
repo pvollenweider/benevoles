@@ -9,8 +9,8 @@ import { slugifyHeading } from "../heading-anchors"
 // leak into them, and every provider they name must be backed by docs/rgpd/sous-traitants.md, the
 // dated source of the facts (and the reverse: none of its current providers is left out).
 const read = (f: string) => fs.readFileSync(path.join(process.cwd(), f), "utf-8")
-const AGREEMENT = "ACCORD-SOUS-TRAITANCE.md"
-const LIST = "SOUS-TRAITANTS.md"
+const AGREEMENT = "content/legal/ACCORD-SOUS-TRAITANCE.md"
+const LIST = "content/legal/SOUS-TRAITANTS.md"
 
 describe("public GDPR documents", () => {
   it("are declared as public pages under /legal", () => {

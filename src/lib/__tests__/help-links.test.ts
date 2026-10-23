@@ -98,7 +98,7 @@ describe("the units' heading ids", () => {
   })
 
   it("link to the admin guide only at a heading it still has", () => {
-    const guideIds = new Set(headingsOf(renderPublicSource("GUIDE_ADMIN.md", "x").html).map((h) => h.id))
+    const guideIds = new Set(headingsOf(renderPublicSource("content/guide/GUIDE_ADMIN.md", "x").html).map((h) => h.id))
     for (const unit of units) {
       for (const [, id] of renderDocUnit(unit).matchAll(/href="\/doc\/admin#([^"]+)"/g)) expect(guideIds.has(id), `${unit.slug} → /doc/admin#${id}`).toBe(true)
     }
@@ -113,7 +113,7 @@ describe("feedback section", () => {
 
   it("exists in its unit, and the admin guide's introduction links to it", () => {
     expect(headingsOf(html).find((h) => h.id === anchor)?.text).toBe(FEEDBACK_SECTION.heading)
-    const guide = renderPublicSource("GUIDE_ADMIN.md", "x").html
+    const guide = renderPublicSource("content/guide/GUIDE_ADMIN.md", "x").html
     expect(guide.indexOf(`href="${href}"`)).toBeGreaterThan(-1)
   })
 

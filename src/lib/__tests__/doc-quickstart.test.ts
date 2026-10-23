@@ -87,7 +87,7 @@ describe("the quickstart of guide/", () => {
   })
 
   it("is where the organisers' guide tells a newcomer to start", () => {
-    const intro = fs.readFileSync(path.join(process.cwd(), "GUIDE_ADMIN.md"), "utf-8")
-    expect(intro).toContain(`(guide/${DOC_QUICKSTART_SLUG}.md)`)
+    const intro = fs.readFileSync(path.join(process.cwd(), "content/guide/GUIDE_ADMIN.md"), "utf-8")
+    expect(intro).toContain(`(../../guide/${DOC_QUICKSTART_SLUG}.md)`)
   })
 })

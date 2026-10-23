@@ -69,23 +69,23 @@ COPY --from=builder --chown=nextjs:nodejs /app/prisma.config.ts ./prisma.config.
 
 # Guides utilisateur, rendus par /doc — fs.readFileSync() à la requête, hors du tracing
 # automatique de `output: "standalone"`, donc copiés explicitement comme prisma/ ci-dessus.
-COPY --from=builder --chown=nextjs:nodejs /app/GUIDE_ADMIN.md ./GUIDE_ADMIN.md
-COPY --from=builder --chown=nextjs:nodejs /app/GUIDE_BENEVOLE.md ./GUIDE_BENEVOLE.md
-COPY --from=builder --chown=nextjs:nodejs /app/FEATURES.md ./FEATURES.md
-COPY --from=builder --chown=nextjs:nodejs /app/LOGICIEL-PLANNING-BENEVOLES.md ./LOGICIEL-PLANNING-BENEVOLES.md
+COPY --from=builder --chown=nextjs:nodejs /app/content/guide/GUIDE_ADMIN.md ./content/guide/GUIDE_ADMIN.md
+COPY --from=builder --chown=nextjs:nodejs /app/content/guide/GUIDE_BENEVOLE.md ./content/guide/GUIDE_BENEVOLE.md
+COPY --from=builder --chown=nextjs:nodejs /app/content/pages/FEATURES.md ./content/pages/FEATURES.md
+COPY --from=builder --chown=nextjs:nodejs /app/content/pages/LOGICIEL-PLANNING-BENEVOLES.md ./content/pages/LOGICIEL-PLANNING-BENEVOLES.md
 # Pages « Pour qui ? » (#872), tarifs (#950) et questions de l'accueil (#951).
-COPY --from=builder --chown=nextjs:nodejs /app/POUR-QUI.md ./POUR-QUI.md
-COPY --from=builder --chown=nextjs:nodejs /app/BENEVOLES-FETE-DE-VILLAGE.md ./BENEVOLES-FETE-DE-VILLAGE.md
-COPY --from=builder --chown=nextjs:nodejs /app/BENEVOLES-FESTIVAL.md ./BENEVOLES-FESTIVAL.md
-COPY --from=builder --chown=nextjs:nodejs /app/BENEVOLES-MANIFESTATION-SPORTIVE.md ./BENEVOLES-MANIFESTATION-SPORTIVE.md
-COPY --from=builder --chown=nextjs:nodejs /app/PLANNING-PERMANENCES-BENEVOLES.md ./PLANNING-PERMANENCES-BENEVOLES.md
-COPY --from=builder --chown=nextjs:nodejs /app/TARIFS.md ./TARIFS.md
+COPY --from=builder --chown=nextjs:nodejs /app/content/pages/POUR-QUI.md ./content/pages/POUR-QUI.md
+COPY --from=builder --chown=nextjs:nodejs /app/content/pages/BENEVOLES-FETE-DE-VILLAGE.md ./content/pages/BENEVOLES-FETE-DE-VILLAGE.md
+COPY --from=builder --chown=nextjs:nodejs /app/content/pages/BENEVOLES-FESTIVAL.md ./content/pages/BENEVOLES-FESTIVAL.md
+COPY --from=builder --chown=nextjs:nodejs /app/content/pages/BENEVOLES-MANIFESTATION-SPORTIVE.md ./content/pages/BENEVOLES-MANIFESTATION-SPORTIVE.md
+COPY --from=builder --chown=nextjs:nodejs /app/content/pages/PLANNING-PERMANENCES-BENEVOLES.md ./content/pages/PLANNING-PERMANENCES-BENEVOLES.md
+COPY --from=builder --chown=nextjs:nodejs /app/content/pages/TARIFS.md ./content/pages/TARIFS.md
 # Tableur et groupe de discussion, ou outil dédié ? (#871).
-COPY --from=builder --chown=nextjs:nodejs /app/TABLEUR-OU-OUTIL-DEDIE.md ./TABLEUR-OU-OUTIL-DEDIE.md
-COPY --from=builder --chown=nextjs:nodejs /app/FAQ-ACCUEIL.md ./FAQ-ACCUEIL.md
-COPY --from=builder --chown=nextjs:nodejs /app/ACCESSIBILITE.md ./ACCESSIBILITE.md
-COPY --from=builder --chown=nextjs:nodejs /app/ACCORD-SOUS-TRAITANCE.md ./ACCORD-SOUS-TRAITANCE.md
-COPY --from=builder --chown=nextjs:nodejs /app/SOUS-TRAITANTS.md ./SOUS-TRAITANTS.md
+COPY --from=builder --chown=nextjs:nodejs /app/content/pages/TABLEUR-OU-OUTIL-DEDIE.md ./content/pages/TABLEUR-OU-OUTIL-DEDIE.md
+COPY --from=builder --chown=nextjs:nodejs /app/content/pages/FAQ-ACCUEIL.md ./content/pages/FAQ-ACCUEIL.md
+COPY --from=builder --chown=nextjs:nodejs /app/content/pages/ACCESSIBILITE.md ./content/pages/ACCESSIBILITE.md
+COPY --from=builder --chown=nextjs:nodejs /app/content/legal/ACCORD-SOUS-TRAITANCE.md ./content/legal/ACCORD-SOUS-TRAITANCE.md
+COPY --from=builder --chown=nextjs:nodejs /app/content/legal/SOUS-TRAITANTS.md ./content/legal/SOUS-TRAITANTS.md
 COPY --from=builder --chown=nextjs:nodejs /app/CHANGELOG.md ./CHANGELOG.md
 # Blog (#944) : blog/<date>-<slug>.md, lu de la même façon par /blog et son flux.
 COPY --from=builder --chown=nextjs:nodejs /app/blog ./blog

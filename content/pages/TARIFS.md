@@ -34,7 +34,7 @@ benevol.app est un outil communautaire, pas un produit commercial. Son code est 
 ## Ce que benevol.app ne fait pas
 
 - Pas de publicité, et aucun cookie de pistage, d'analyse ou de publicité.
-- Pas de revente des données : celles de vos bénévoles ne servent qu'au service, dans le cadre fixé par écrit dans l'[accord de sous-traitance](ACCORD-SOUS-TRAITANCE.md).
+- Pas de revente des données : celles de vos bénévoles ne servent qu'au service, dans le cadre fixé par écrit dans l'[accord de sous-traitance](../legal/ACCORD-SOUS-TRAITANCE.md).
 - Pas de période d'essai qui expire, ni de fonction qui se débloque en payant.
 - Pas de paiement, de billetterie ni de cotisation : benevol.app s'en tient au planning des bénévoles.
 
@@ -68,7 +68,7 @@ Par un don, sur la page [Soutenir le projet](https://buymeacoffee.com/benevol.ap
 
 ## Démarrer
 
-Dès que vous avez confirmé votre adresse email, vous pouvez préparer votre premier événement. La page [Créer son premier événement](guide/creer-son-premier-evenement.md) vous guide ensuite jusqu'au lien à partager.
+Dès que vous avez confirmé votre adresse email, vous pouvez préparer votre premier événement. La page [Créer son premier événement](../../guide/creer-son-premier-evenement.md) vous guide ensuite jusqu'au lien à partager.
 
 <!-- actions -->
 - [Demander un espace](/inscription)

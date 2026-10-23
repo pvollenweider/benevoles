@@ -40,10 +40,10 @@ describe("the audience pages (#872)", () => {
   })
 
   it("are each linked from the index page, the index from the home, the features page and the editorial page", () => {
-    const index = linkSourcesToRoutes(read("POUR-QUI.md"))
+    const index = linkSourcesToRoutes(read("content/pages/POUR-QUI.md"))
     for (const page of AUDIENCE_PAGES) expect(index, page.path).toContain(`](${page.path})`)
     expect(read("src/app/page.tsx")).toContain('href="/pour-qui"')
-    for (const source of ["FEATURES.md", "LOGICIEL-PLANNING-BENEVOLES.md"]) expect(linkSourcesToRoutes(read(source)), source).toContain("](/pour-qui)")
+    for (const source of ["content/pages/FEATURES.md", "content/pages/LOGICIEL-PLANNING-BENEVOLES.md"]) expect(linkSourcesToRoutes(read(source)), source).toContain("](/pour-qui)")
   })
 })
 
@@ -62,7 +62,7 @@ describe("links to the presentation pages from a shared source", () => {
   })
 
   it("are rewritten in FEATURES.md as another instance renders it", () => {
-    const site = linkSourcesToRoutes(read("FEATURES.md"), false)
+    const site = linkSourcesToRoutes(read("content/pages/FEATURES.md"), false)
     for (const page of AUDIENCE_PAGES) expect(site, page.path).toContain(`](https://www.benevol.app${page.path})`)
     expect(site).toContain("](https://www.benevol.app/tarifs)")
     expect(site).not.toMatch(/\]\(\/(tarifs|pour-qui|benevoles-|planning-permanences|logiciel-planning)/)
@@ -74,12 +74,12 @@ describe("links to the presentation pages from a shared source", () => {
 describe("the pricing page (#950)", () => {
   it("is linked from the home, the features page and the editorial page", () => {
     expect(read("src/app/page.tsx")).toContain('href="/tarifs"')
-    for (const source of ["FEATURES.md", "LOGICIEL-PLANNING-BENEVOLES.md"]) expect(linkSourcesToRoutes(read(source)), source).toContain("](/tarifs)")
+    for (const source of ["content/pages/FEATURES.md", "content/pages/LOGICIEL-PLANNING-BENEVOLES.md"]) expect(linkSourcesToRoutes(read(source)), source).toContain("](/tarifs)")
   })
 
   it("has a title and a heading about « gratuit », and its structured data states the free offer", () => {
     expect(publicPage("/tarifs").metaTitle.toLowerCase()).toContain("gratuit")
-    expect(splitTitle(read("TARIFS.md")).title?.toLowerCase()).toContain("gratuit")
+    expect(splitTitle(read("content/pages/TARIFS.md")).title?.toLowerCase()).toContain("gratuit")
     const graph = publicPageJsonLd("/tarifs", BASE)["@graph"] as Record<string, unknown>[]
     expect(graph.find((n) => n["@type"] === "SoftwareApplication")).toMatchObject({ isAccessibleForFree: true, offers: { price: "0" } })
   })
@@ -88,7 +88,7 @@ describe("the pricing page (#950)", () => {
   it("states the technical limits the code enforces", async () => {
     const { SERIES_MAX_SHIFTS } = await import("../shift-series")
     const { RECURRENCE_MAX_SHIFTS } = await import("../shift-recurrence")
-    const md = read("TARIFS.md")
+    const md = read("content/pages/TARIFS.md")
     expect(md).toContain(`au plus ${SERIES_MAX_SHIFTS} créneaux`)
     expect(md).toContain(`une permanence au plus ${RECURRENCE_MAX_SHIFTS}`)
   })
@@ -101,7 +101,7 @@ describe.each(EDITORIAL)("%s", (pagePath) => {
   const faq = featuresPageFaq(rendered)
 
   it("is declared with its own source, copied into the image, and a title and description that fit search results", () => {
-    expect(page.source).toMatch(/^[A-Z-]+\.md$/)
+    expect(page.source).toMatch(/^content\/pages\/[A-Z-]+\.md$/)
     expect(read("Dockerfile")).toContain(`/app/${page.source} ./${page.source}`)
     expect(metaLengthProblems(pageTitle(page.metaTitle), page.metaDescription)).toEqual([])
   })
@@ -174,7 +174,7 @@ describe.each(AUDIENCE_PAGES.map((p) => p.path))("audience page %s", (pagePath) 
 // the owner's review, never a failure.
 describe("the FAQs of the editorial pages, the features page and the home", () => {
   it("report the questions asked on several pages", () => {
-    const sources = ["FEATURES.md", ...PUBLIC_PAGES.filter((p) => p.path === "/logiciel-planning-benevoles" || EDITORIAL.includes(p.path)).map((p) => p.source!)]
+    const sources = ["content/pages/FEATURES.md", ...PUBLIC_PAGES.filter((p) => p.path === "/logiciel-planning-benevoles" || EDITORIAL.includes(p.path)).map((p) => p.source!)]
     const questions = [
       ...sources.flatMap((s) => renderFeaturesPage(null, s).sections.flatMap((sec) => sec.faq ?? []).map((q) => q.question)),
       ...renderFaqSource(LANDING_FAQ_SOURCE).map((q) => q.question),

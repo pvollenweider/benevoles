@@ -18,7 +18,7 @@ Le `Dockerfile` est multi-étapes (`node:26-alpine`) :
 1. `deps` : `npm ci`
 2. `prisma-cli` : installe la CLI Prisma pour les migrations à l'exécution
 3. `builder` : `prisma generate` puis `npm run build`. `DATABASE_URL` et `AUTH_SECRET` reçoivent des valeurs factices pendant le build. `NEXT_PUBLIC_SENTRY_DSN` et `GIT_SHA` (affiché sur la page Santé du service) sont des arguments de build, `SENTRY_AUTH_TOKEN` un secret de build (`sentry_auth_token`)
-4. `runner` : sortie `standalone` de Next.js, utilisateur non root, port 3000. Copie aussi `prisma/`, `prisma.config.ts` et les sources des pages de contenu (`GUIDE_ADMIN.md`, `GUIDE_BENEVOLE.md`, `FEATURES.md`, `ACCESSIBILITE.md`, `CHANGELOG.md`, les pages publiques à la racine comme `TARIFS.md` ou `FAQ-ACCUEIL.md` : liste exacte dans le `Dockerfile`), les pages de documentation (`guide/`) et les articles (`blog/`), lues à la requête, ainsi que `doc-lastmod.json` (`{}` si le build ne l'a pas reçu) : toute nouvelle page de contenu s'ajoute au `Dockerfile`
+4. `runner` : sortie `standalone` de Next.js, utilisateur non root, port 3000. Copie aussi `prisma/`, `prisma.config.ts` et les sources des pages de contenu (`content/guide/GUIDE_ADMIN.md`, `content/guide/GUIDE_BENEVOLE.md`, `content/pages/FEATURES.md`, `content/pages/ACCESSIBILITE.md`, `CHANGELOG.md`, les autres pages publiques de `content/` comme `content/pages/TARIFS.md`, `content/pages/FAQ-ACCUEIL.md` ou `content/legal/SOUS-TRAITANTS.md` : liste exacte dans le `Dockerfile`), les pages de documentation (`guide/`) et les articles (`blog/`), lues à la requête, ainsi que `doc-lastmod.json` (`{}` si le build ne l'a pas reçu) : toute nouvelle page de contenu s'ajoute au `Dockerfile`
 
 Au démarrage, `docker-entrypoint.sh` attend PostgreSQL, exécute `prisma migrate deploy` sauf si `MIGRATE_ON_START=false`, puis lance `node server.js` et, en arrière-plan, le préchauffage de ses pages publiques (voir [Préchauffage avant la mise en service](#préchauffage-avant-la-mise-en-service)). Avec Docker Compose, les migrations s'appliquent donc au démarrage de l'application. Sur Kubernetes, les pods de l'application ont `MIGRATE_ON_START=false` : c'est le Job de migration qui les applique, une seule fois par déploiement (voir ci-dessous).
 
@@ -93,7 +93,7 @@ Dans la table `RateLimit`, les clés doivent ensuite contenir des adresses publi
 À chaque push sur `main`, `deploy.yml` enchaîne trois jobs et applique les migrations **avant** de mettre à jour l'application :
 
 1. **check** : type-check, lint, tests unitaires ;
-2. **build-push** : `scripts/doc-lastmod.mjs` écrit `doc-lastmod.json` (date du dernier commit de chaque source de la documentation, sur un clone complet `fetch-depth: 0`), le `lastmod` du sitemap ; puis image `ghcr.io/<dépôt>:sha-<7 premiers caractères du commit>` (et `:latest`), avec `NEXT_PUBLIC_SENTRY_DSN` et `GIT_SHA` en arguments de build et `sentry_auth_token` en secret de build ;
+2. **build-push** : `scripts/doc-lastmod.mjs` écrit `doc-lastmod.json` (date du dernier commit de chaque source de la documentation, sur un clone complet `fetch-depth: 0`, en suivant les renommages et en sautant les commits dont le message porte la ligne `Doc-Lastmod: skip`, réservée à un déplacement de sources qui ne change aucune page), le `lastmod` du sitemap ; puis image `ghcr.io/<dépôt>:sha-<7 premiers caractères du commit>` (et `:latest`), avec `NEXT_PUBLIC_SENTRY_DSN` et `GIT_SHA` en arguments de build et `sentry_auth_token` en secret de build ;
 3. **deploy** (environnement GitHub `production`) :
    1. applique `k8s/namespace.yaml` et régénère le secret de tirage `ghcr-secret` ;
    2. s'arrête, avant de toucher au reste, si le secret GitHub `TOKEN_ENCRYPTION_KEY` est vide ;
@@ -372,11 +372,11 @@ aucune donnée personnelle et n'est pas sauvegardé : les vidéos se régénère
 
 ## Webhook DNS Gandi
 
-`gandi-webhook/` est un programme Go (`main.go`, `gandiclient.go`) construit par son propre `Dockerfile`. Il implémente le webhook cert-manager qui crée les enregistrements DNS-01 chez Gandi, nécessaire au certificat wildcard.
+`k8s/gandi-webhook/` est un programme Go (`main.go`, `gandiclient.go`) construit par son propre `Dockerfile`. Il implémente le webhook cert-manager qui crée les enregistrements DNS-01 chez Gandi, nécessaire au certificat wildcard.
 
-Le workflow `gandi-webhook.yml` construit l'image à chaque pull request touchant `gandi-webhook/` (sans la publier) et la publie sur GHCR (`:latest` et `:<sha du commit>`) à chaque push sur `main`. Le déploiement Kubernetes de ce webhook n'est pas appliqué par `deploy.yml` : il se met à jour à la main.
+Le workflow `gandi-webhook.yml` construit l'image à chaque pull request touchant `k8s/gandi-webhook/` (sans la publier) et la publie sur GHCR (`:latest` et `:<sha du commit>`) à chaque push sur `main`. Le déploiement Kubernetes de ce webhook n'est pas appliqué par `deploy.yml` : il se met à jour à la main.
 
-Le manifeste `k8s/gandi-webhook.yaml` référence le tag du commit et non `:latest`, avec `imagePullPolicy: IfNotPresent` : avec `:latest`, un redémarrage réutiliserait l'image en cache sur le nœud et ne chargerait jamais la nouvelle. Pour mettre à jour après un changement de `gandi-webhook/` :
+Le manifeste `k8s/gandi-webhook.yaml` référence le tag du commit et non `:latest`, avec `imagePullPolicy: IfNotPresent` : avec `:latest`, un redémarrage réutiliserait l'image en cache sur le nœud et ne chargerait jamais la nouvelle. Pour mettre à jour après un changement de `k8s/gandi-webhook/` :
 
 ```bash
 # 1. Attendre la fin du workflow « Build Gandi Webhook » sur main, puis :
@@ -434,7 +434,7 @@ kubectl -n benevoles exec deploy/benevoles-app -- node -e 'fetch(process.env.NTF
 |----------|-------------|--------|
 | `ci.yml` | pull request vers `main` | aucune source publique en brouillon (`check-no-draft-content.mjs`) ; type-check, lint, tests Vitest avec couverture, `check-security-md.mjs`, `check-migrations.mjs` (migrations compatibles avec la version précédente), `check-doc-screenshots.mjs` (captures de la documentation à jour) ; job Lighthouse ; job E2E : base migrée et seedée, tests d'intégration (`npm run test:integration`), tests Playwright |
 | `deploy.yml` | push sur `main` | type-check, lint, tests ; construction et publication de l'image sur GHCR ; Job de migration, puis déploiement Kubernetes (voir « Ordre de déploiement ») |
-| `gandi-webhook.yml` | pull request ou push sur `main` touchant `gandi-webhook/` | construction de l'image du webhook ; publication sur GHCR seulement sur push |
+| `gandi-webhook.yml` | pull request ou push sur `main` touchant `k8s/gandi-webhook/` | construction de l'image du webhook ; publication sur GHCR seulement sur push |
 | `mirror-ci-images.yml` | manuel, chaque lundi à 04:17 UTC, ou pull request et push sur `main` touchant ce fichier | copie vers GHCR des images Postgres et Mailpit utilisées par la CI |
 
 L'analyse CodeQL (JavaScript/TypeScript, Go, Actions) ne figure pas dans `.github/workflows/` : elle est configurée côté GitHub (paramètres de sécurité du dépôt).

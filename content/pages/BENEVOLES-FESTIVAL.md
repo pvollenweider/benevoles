@@ -6,7 +6,7 @@ Le service est gratuit aujourd'hui, le code est open source et les données sont
 
 <!-- actions -->
 - [Demander un espace](/inscription)
-- [Créer son premier événement](guide/creer-son-premier-evenement.md)
+- [Créer son premier événement](../../guide/creer-son-premier-evenement.md)
 
 ![Planning public d'un festival sur plusieurs jours : les postes en lignes, les créneaux en barres colorées, et au-dessus les liens vers les pages de l'événement (accès et parking, questions fréquentes)](/doc-img/public-timeline.png)
 
@@ -24,7 +24,7 @@ Le programme des concerts s'affiche en fond coloré sur le planning, et chaque b
 
 <!-- video: SHIFT_CREATE_SERIES -->
 
-En savoir plus : [créer une série de créneaux](guide/creer-une-serie-de-creneaux.md), [le programme des spectacles](guide/programme-des-spectacles.md), [le tutoriel vidéo sur les séries](/videos/SHIFT_CREATE_SERIES).
+En savoir plus : [créer une série de créneaux](../../guide/creer-une-serie-de-creneaux.md), [le programme des spectacles](../../guide/programme-des-spectacles.md), [le tutoriel vidéo sur les séries](/videos/SHIFT_CREATE_SERIES).
 
 ## Des nuits courtes, sans erreur d'horaire
 
@@ -34,7 +34,7 @@ Pour qu'un bénévole motivé ne passe pas tout le week-end au bar, vous pouvez 
 
 <!-- video: SHIFT_NIGHT_DST -->
 
-En savoir plus : [horaires et créneaux de nuit](guide/horaires-et-nuit.md), [gérer les postes](guide/gerer-les-postes.md), [le tutoriel vidéo sur les créneaux de nuit](/videos/SHIFT_NIGHT_DST).
+En savoir plus : [horaires et créneaux de nuit](../../guide/horaires-et-nuit.md), [gérer les postes](../../guide/gerer-les-postes.md), [le tutoriel vidéo sur les créneaux de nuit](/videos/SHIFT_NIGHT_DST).
 
 ## Les t-shirts, la charte et l'accès au site
 
@@ -44,7 +44,7 @@ Les bénévoles acceptent votre charte avant de s'inscrire. L'événement peut a
 
 <!-- video: EVENT_QUESTIONS -->
 
-En savoir plus : [questions aux bénévoles](guide/questions-aux-benevoles.md), [la charte du bénévole](guide/charte-du-benevole.md), [les pages personnalisées](guide/pages-personnalisees.md), [le tutoriel vidéo sur les questions](/videos/EVENT_QUESTIONS).
+En savoir plus : [questions aux bénévoles](../../guide/questions-aux-benevoles.md), [la charte du bénévole](../../guide/charte-du-benevole.md), [les pages personnalisées](../../guide/pages-personnalisees.md), [le tutoriel vidéo sur les questions](/videos/EVENT_QUESTIONS).
 
 ## Quand quelqu'un se désiste
 
@@ -56,7 +56,7 @@ Un désistement moins de 24 heures avant le créneau vous arrive tout de suite, 
 
 <!-- video: STAFFING_GAPS -->
 
-En savoir plus : [la liste d'attente](guide/liste-d-attente.md), [où manque-t-il du monde ?](guide/ou-manque-t-il-du-monde.md), [le tutoriel vidéo sur les créneaux à compléter](/videos/STAFFING_GAPS).
+En savoir plus : [la liste d'attente](../../guide/liste-d-attente.md), [où manque-t-il du monde ?](../../guide/ou-manque-t-il-du-monde.md), [le tutoriel vidéo sur les créneaux à compléter](/videos/STAFFING_GAPS).
 
 ## Pendant le festival
 
@@ -64,7 +64,7 @@ Chaque chef d'équipe suit son poste depuis un lien personnel de responsable de 
 
 <!-- video: SECTOR_LEADERS -->
 
-En savoir plus : [les responsables de secteur](guide/responsables-de-secteur.md), [le tableau de bord](guide/tableau-de-bord.md), [les présences le jour J](guide/presences-le-jour-j.md).
+En savoir plus : [les responsables de secteur](../../guide/responsables-de-secteur.md), [le tableau de bord](../../guide/tableau-de-bord.md), [les présences le jour J](../../guide/presences-le-jour-j.md).
 
 ## Questions fréquentes
 
@@ -90,4 +90,4 @@ Créez l'espace de votre festival, puis partez du modèle « Festival sur plusie
 
 <!-- actions -->
 - [Demander un espace](/inscription)
-- [Créer son premier événement](guide/creer-son-premier-evenement.md)
+- [Créer son premier événement](../../guide/creer-son-premier-evenement.md)

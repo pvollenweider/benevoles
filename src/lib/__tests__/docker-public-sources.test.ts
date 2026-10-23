@@ -15,7 +15,7 @@ describe("public page sources in the Docker image", () => {
   const sources = [...new Set([...PUBLIC_PAGES.map((p) => p.source).filter((s): s is string => !!s), LANDING_FAQ_SOURCE])]
 
   it("has sources to check", () => {
-    expect(sources).toContain("FEATURES.md")
+    expect(sources).toContain("content/pages/FEATURES.md")
   })
 
   it.each(sources)("%s is re-included by .dockerignore and copied into the runtime image", (source) => {

@@ -25,7 +25,7 @@ export type PublicPage = {
   metaTitle: string
   /** Meta and social description: 70 to 160 characters, as audited (src/lib/meta-length.ts). */
   metaDescription: string
-  /** Markdown file at the repo root the page is rendered from (null: written in its page.tsx); its last commit is the sitemap's lastModified (doc-lastmod.json). */
+  /** Markdown file (path from the repo root, content/…) the page is rendered from (null: written in its page.tsx); its last commit is the sitemap's lastModified (doc-lastmod.json). */
   source: string | null
   /** Sitemap priority. */
   priority: number
@@ -68,7 +68,7 @@ export const PUBLIC_PAGES: readonly PublicPage[] = [
     summary: `Ce que fait ${SITE_NAME}, besoin par besoin.`,
     metaTitle: "Fonctionnalités pour organiser vos bénévoles",
     metaDescription: `Planning de bénévoles par postes et créneaux, inscription sans compte, rappels et messages, feuilles et badges du jour J : tout ce que fait ${SITE_NAME}.`,
-    source: "FEATURES.md",
+    source: "content/pages/FEATURES.md",
     priority: 0.9,
     guide: false,
   },
@@ -82,7 +82,7 @@ export const PUBLIC_PAGES: readonly PublicPage[] = [
     summary: "Ce que fait un logiciel de planning pour bénévoles, côté organisateur et côté bénévole, et les questions qu'on se pose avant de choisir.",
     metaTitle: "Logiciel de planning pour bénévoles, gratuit",
     metaDescription: "Le planning de vos bénévoles : postes et créneaux, inscription par lien sans compte ni application, rappels, jour J et heures. Gratuit, hébergé en France.",
-    source: "LOGICIEL-PLANNING-BENEVOLES.md",
+    source: "content/pages/LOGICIEL-PLANNING-BENEVOLES.md",
     priority: 0.8,
     guide: false,
     availability: "hosted",
@@ -99,7 +99,7 @@ export const PUBLIC_PAGES: readonly PublicPage[] = [
     summary: `Les situations pour lesquelles ${SITE_NAME} est fait : fête de village, festival, manifestation sportive et permanences qui reviennent chaque semaine.`,
     metaTitle: "Pour qui : fêtes, festivals, courses, permanences",
     metaDescription: `Fête de village, festival, course ou permanences chaque semaine : comment ${SITE_NAME} organise les bénévoles de votre association, situation par situation.`,
-    source: "POUR-QUI.md",
+    source: "content/pages/POUR-QUI.md",
     priority: 0.7,
     guide: false,
     availability: "hosted",
@@ -111,7 +111,7 @@ export const PUBLIC_PAGES: readonly PublicPage[] = [
     summary: "La buvette, les grillades, le montage et le démontage d'une fête de village, et l'édition de l'an dernier reprise en quelques minutes.",
     metaTitle: "Planning des bénévoles d'une fête de village",
     metaDescription: "Le planning des bénévoles d’une fête de village : buvette, grillades, montage et démontage, l’édition précédente reprise, des rappels automatiques.",
-    source: "BENEVOLES-FETE-DE-VILLAGE.md",
+    source: "content/pages/BENEVOLES-FETE-DE-VILLAGE.md",
     priority: 0.7,
     guide: false,
     availability: "hosted",
@@ -124,7 +124,7 @@ export const PUBLIC_PAGES: readonly PublicPage[] = [
     summary: "Plusieurs jours, des soirées qui finissent après minuit, le montage et le démontage, des responsables par poste et des désistements à remplacer.",
     metaTitle: "Planning des bénévoles d'un festival",
     metaDescription: "Le planning des bénévoles d’un festival sur plusieurs jours : montage, soirées, démontage, créneaux de nuit, responsables de poste et remplaçants.",
-    source: "BENEVOLES-FESTIVAL.md",
+    source: "content/pages/BENEVOLES-FESTIVAL.md",
     priority: 0.7,
     guide: false,
     availability: "hosted",
@@ -137,7 +137,7 @@ export const PUBLIC_PAGES: readonly PublicPage[] = [
     summary: "Des signaleurs sur le parcours, les dossards et le ravitaillement le matin de la course, chacun avec son point de rendez-vous et un contact sur place.",
     metaTitle: "Bénévoles d'une manifestation sportive",
     metaDescription: "Signaleurs, dossards, ravitaillement : le planning des bénévoles d’une course ou d’une manifestation sportive, avec consignes et présences le jour J.",
-    source: "BENEVOLES-MANIFESTATION-SPORTIVE.md",
+    source: "content/pages/BENEVOLES-MANIFESTATION-SPORTIVE.md",
     priority: 0.7,
     guide: false,
     availability: "hosted",
@@ -150,7 +150,7 @@ export const PUBLIC_PAGES: readonly PublicPage[] = [
     summary: "Une épicerie participative, une distribution alimentaire, un repair café ou un accueil : des permanences chaque semaine, jours fériés exclus.",
     metaTitle: "Planning des permanences de bénévoles",
     metaDescription: "Épicerie participative, distribution alimentaire, repair café : des permanences chaque semaine, jours fériés exclus, réparties entre vos bénévoles.",
-    source: "PLANNING-PERMANENCES-BENEVOLES.md",
+    source: "content/pages/PLANNING-PERMANENCES-BENEVOLES.md",
     priority: 0.7,
     guide: false,
     availability: "hosted",
@@ -166,7 +166,7 @@ export const PUBLIC_PAGES: readonly PublicPage[] = [
     summary: `${SITE_NAME} est un logiciel libre, et son hébergement est gratuit aujourd'hui : ce qui est compris, pourquoi, et les seuls garde-fous.`,
     metaTitle: "Tarifs : logiciel libre, hébergement gratuit",
     metaDescription: `${SITE_NAME} est un logiciel libre sous licence AGPL, que vous pouvez installer vous-même. Son hébergement est gratuit aujourd’hui, sans fonction payante.`,
-    source: "TARIFS.md",
+    source: "content/pages/TARIFS.md",
     priority: 0.7,
     guide: false,
     availability: "hosted",
@@ -180,7 +180,7 @@ export const PUBLIC_PAGES: readonly PublicPage[] = [
     summary: "Ce qu'un tableur et un groupe de discussion font bien, ce qui devient plus lourd quand l'événement grandit, et quand un outil dédié aide.",
     metaTitle: "Tableur et groupe de discussion, ou outil dédié ?",
     metaDescription: "Tableur et groupe de discussion, ou outil de planning pour vos bénévoles ? Ce que chacun fait bien, et une liste simple pour décider.",
-    source: "TABLEUR-OU-OUTIL-DEDIE.md",
+    source: "content/pages/TABLEUR-OU-OUTIL-DEDIE.md",
     priority: 0.6,
     guide: false,
     availability: "hosted",
@@ -228,7 +228,7 @@ export const PUBLIC_PAGES: readonly PublicPage[] = [
     summary: "Ce qui a été vérifié pour l'accessibilité, comment, et les limites connues.",
     metaTitle: "Déclaration d'accessibilité",
     metaDescription: `Déclaration d'accessibilité de ${SITE_NAME} : niveau visé (WCAG 2.2 AA), méthode de vérification, limites connues et comment signaler un problème.`,
-    source: "ACCESSIBILITE.md",
+    source: "content/pages/ACCESSIBILITE.md",
     priority: 0.3,
     guide: false,
     availability: "hosted",
@@ -261,7 +261,7 @@ export const PUBLIC_PAGES: readonly PublicPage[] = [
     summary: `L'accord qui encadre les données que ${SITE_NAME} traite pour votre organisation (art. 28 RGPD, art. 9 nLPD).`,
     metaTitle: "Accord de sous-traitance (RGPD et nLPD)",
     metaDescription: `Accord de sous-traitance de ${SITE_NAME} (art. 28 RGPD, art. 9 nLPD) : instructions, sécurité, sous-traitants, violations de données et fin du traitement.`,
-    source: "ACCORD-SOUS-TRAITANCE.md",
+    source: "content/legal/ACCORD-SOUS-TRAITANCE.md",
     priority: 0.2,
     guide: false,
     availability: "hosted",
@@ -272,7 +272,7 @@ export const PUBLIC_PAGES: readonly PublicPage[] = [
     summary: "Les prestataires qui traitent les données de votre organisation, où et avec quelles garanties.",
     metaTitle: "Liste des sous-traitants",
     metaDescription: `Les prestataires qui traitent les données de votre organisation pour ${SITE_NAME} : hébergement, emails, sauvegardes, suivi des erreurs, lieu et garanties.`,
-    source: "SOUS-TRAITANTS.md",
+    source: "content/legal/SOUS-TRAITANTS.md",
     priority: 0.2,
     guide: false,
     availability: "hosted",
@@ -293,7 +293,7 @@ export const PUBLIC_PAGES: readonly PublicPage[] = [
     summary: "Créer un événement, configurer les créneaux, inviter des membres, suivre les inscriptions, et les fonctionnalités plus récentes (pages personnalisées, responsables de secteur, jalons, journaux d'activité).",
     metaTitle: "Guide administrateur",
     metaDescription: `Créer un événement, organiser postes et créneaux, inviter vos membres, suivre les inscriptions et préparer le jour J avec ${SITE_NAME}, étape par étape.`,
-    source: "GUIDE_ADMIN.md",
+    source: "content/guide/GUIDE_ADMIN.md",
     priority: 0.8,
     guide: true,
   },
@@ -304,7 +304,7 @@ export const PUBLIC_PAGES: readonly PublicPage[] = [
     metaTitle: "Guide bénévole : s'inscrire et gérer ses créneaux",
     metaDescription: `S'inscrire à un créneau sans créer de compte, recevoir sa confirmation, retrouver son planning et modifier ou annuler son inscription sur ${SITE_NAME}.`,
     // Split into units (#649): GUIDE_BENEVOLE.md is the welcome above their index.
-    source: "GUIDE_BENEVOLE.md",
+    source: "content/guide/GUIDE_BENEVOLE.md",
     priority: 0.8,
     guide: true,
   },
@@ -377,20 +377,25 @@ export function publicPageMetadata(path: string, base: string): Metadata {
 }
 
 /**
- * Links between source files become site links: FEATURES.md links to GUIDE_ADMIN.md so that it
- * reads well on GitHub; rendered on the site, the same link points to /doc/admin (an anchor is
- * kept). The same goes for the documentation units (#649, src/lib/doc-units.ts): `](guide/x.md#y)`
- * from a file at the root, or `](x.md#y)` from another unit of guide/, becomes `](/doc/x#y)`; a
- * unit links to a root source with `](../GUIDE_ADMIN.md)`. Only a lower-case file name is a unit
- * (guide/README.md, the index, isn't one). On an instance that is not the hosted service, a link
- * to a presentation page it doesn't have (the audience pages, /tarifs…) becomes an absolute link to
- * the hosted service; every other link stays relative.
+ * Links between source files become site links: content/pages/FEATURES.md links to
+ * ../guide/GUIDE_ADMIN.md so that it reads well on GitHub; rendered on the site, the same link
+ * points to /doc/admin (an anchor is kept). A source is recognised by its file name, whatever the
+ * relative path in front of it (`](FEATURES.md)` from a sibling, `](../legal/SOUS-TRAITANTS.md)`
+ * from another folder of content/, `](../../CHANGELOG.md)` from content/ to the root). The same
+ * goes for the documentation units (#649, src/lib/doc-units.ts): `](../../guide/x.md#y)` from a
+ * file of content/, `](guide/x.md#y)` from a file at the root, or `](x.md#y)` from another unit
+ * of guide/, becomes `](/doc/x#y)`; a unit links to a source of content/ with
+ * `](../content/guide/GUIDE_ADMIN.md)`. Only a lower-case file name is a unit (guide/README.md,
+ * the index, isn't one). On an instance that is not the hosted service, a link to a presentation
+ * page it doesn't have (the audience pages, /tarifs…) becomes an absolute link to the hosted
+ * service; every other link stays relative.
  */
 export function linkSourcesToRoutes(markdown: string, hosted: boolean = isHostedService()): string {
   const pages = PUBLIC_PAGES.reduce((md, p) => {
     const file = p.source
     if (!file) return md
-    const source = new RegExp(`\\]\\((?:\\.\\./)?${escapeRegExp(file)}(#[^)\\s]*)?\\)`, "g")
+    const name = file.slice(file.lastIndexOf("/") + 1)
+    const source = new RegExp(`\\]\\(${RELATIVE_DIRS}${escapeRegExp(name)}(#[^)\\s]*)?\\)`, "g")
     // A presentation page this instance doesn't have (#760) is linked on the hosted service.
     const target = p.presentation && !pageAvailable(p, hosted) ? `${HOSTED_SERVICE_URL}${p.path}` : p.path
     return md.replace(source, (_match, anchor: string | undefined) => `](${target}${anchor ?? ""})`)
@@ -403,8 +408,11 @@ function escapeRegExp(text: string): string {
   return text.replace(/[\\^$.*+?()[\]{}|]/g, "\\$&")
 }
 
-/** `](guide/x.md#y)` or `](x.md#y)`: a link to a documentation unit by its file. */
-const UNIT_LINK_RE = /\]\((?:guide\/)?([a-z0-9]+(?:-[a-z0-9]+)*)\.md(#[^)\s]*)?\)/g
+/** The relative folders in front of a source's file name: `../` steps, then folder names. */
+const RELATIVE_DIRS = String.raw`(?:\.\.\/)*(?:[A-Za-z0-9_-]+\/)*`
+
+/** `](../../guide/x.md#y)`, `](guide/x.md#y)` or `](x.md#y)`: a link to a documentation unit by its file. */
+const UNIT_LINK_RE = /\]\((?:(?:\.\.\/)*guide\/)?([a-z0-9]+(?:-[a-z0-9]+)*)\.md(#[^)\s]*)?\)/g
 
 /**
  * The source's own first-level title (the page's <h1>) and the rest of the document. HTML comments

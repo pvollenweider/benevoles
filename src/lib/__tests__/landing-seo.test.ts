@@ -92,7 +92,7 @@ describe("landing FAQ (FAQ-ACCUEIL.md, #951)", () => {
   // #951: the home may repeat a question of /logiciel-planning-benevoles or /fonctionnalites; the
   // repeats are reported (src/lib/__tests__/audience-pages.test.ts), never a failure.
   it("reads the questions of the editorial page and the features page to compare", () => {
-    const others = ["LOGICIEL-PLANNING-BENEVOLES.md", "FEATURES.md"].flatMap((source) =>
+    const others = ["content/pages/LOGICIEL-PLANNING-BENEVOLES.md", "content/pages/FEATURES.md"].flatMap((source) =>
       renderFeaturesPage(null, source).sections.flatMap((s) => s.faq ?? []).map((q) => q.question),
     )
     expect(others.length).toBeGreaterThan(0)

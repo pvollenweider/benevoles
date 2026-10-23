@@ -27,7 +27,7 @@ Job de migration (k8s/job-migrate.yaml) ──► prisma migrate deploy, à chaq
 | `src/app/admin/` | Administration d'une organisation |
 | `src/app/super-admin/` | Gestion des organisations, nouveautés produit, profil, page santé (`health/`) |
 | `src/app/legal/` | Politique de confidentialité, conditions d'utilisation |
-| `src/app/doc/`, `src/app/fonctionnalites/`, `src/app/accessibilite/` | Pages de contenu publiques rendues depuis `GUIDE_*.md`, `FEATURES.md`, `ACCESSIBILITE.md` (déclarées dans `src/lib/doc-pages.ts`) |
+| `src/app/doc/`, `src/app/fonctionnalites/`, `src/app/accessibilite/` | Pages de contenu publiques rendues depuis `content/guide/GUIDE_*.md`, `content/pages/FEATURES.md`, `content/pages/ACCESSIBILITE.md` (déclarées dans `src/lib/doc-pages.ts`) |
 | `src/app/product-updates/unsubscribed/` | Confirmation du désabonnement des nouveautés produit |
 | `src/app/api/` | Routes HTTP, voir [api.md](api.md) |
 | `src/components/` | Composants (`admin/`, `super-admin/`, timeline publique `DayTimeline.tsx`) |
@@ -35,7 +35,7 @@ Job de migration (k8s/job-migrate.yaml) ──► prisma migrate deploy, à chaq
 | `src/proxy.ts` | Proxy (ex-middleware) : authentification des pages et routage par sous-domaine |
 | `prisma/` | Schéma, migrations, seed |
 | `k8s/`, `Dockerfile`, `docker-compose*.yml` | Déploiement |
-| `gandi-webhook/` | Webhook DNS Gandi pour cert-manager (Go, hors application) |
+| `k8s/gandi-webhook/` | Webhook DNS Gandi pour cert-manager (Go, hors application) |
 
 Modules `src/lib/` à connaître :
 
@@ -173,7 +173,7 @@ Seules les inscriptions `active` d'un événement publié, aux rappels activés,
 
 ## Notifications
 
-- Tous les emails passent par `sendNotification()` : aucune route n'appelle Nodemailer directement. Les types de notification sont listés dans [FONCTIONNALITES.md](../FONCTIONNALITES.md).
+- Tous les emails passent par `sendNotification()` : aucune route n'appelle Nodemailer directement. Les types de notification sont listés dans [fonctionnalites.md](fonctionnalites.md).
 - Sans `SMTP_HOST` : en production, l'envoi échoue (« SMTP_HOST manquant ») sans rien écrire du destinataire ni du contenu, l'outbox le retente puis alerte Sentry ; en développement et en test, le contenu est affiché dans la console.
 - Le push est envoyé séparément (`src/lib/push.ts`) : `sendPushToVolunteer()` pour les rappels, `sendTargetedPush()` pour un message ciblé quand l'admin le demande. Il n'a d'effet que si les clés VAPID sont configurées.
 - **Outbox** (`src/lib/notifications/outbox.ts`, table `NotificationOutbox`) :
