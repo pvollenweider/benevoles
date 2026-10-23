@@ -87,10 +87,10 @@ COPY --from=builder --chown=nextjs:nodejs /app/content/pages/ACCESSIBILITE.md ./
 COPY --from=builder --chown=nextjs:nodejs /app/content/legal/ACCORD-SOUS-TRAITANCE.md ./content/legal/ACCORD-SOUS-TRAITANCE.md
 COPY --from=builder --chown=nextjs:nodejs /app/content/legal/SOUS-TRAITANTS.md ./content/legal/SOUS-TRAITANTS.md
 COPY --from=builder --chown=nextjs:nodejs /app/CHANGELOG.md ./CHANGELOG.md
-# Blog (#944) : blog/<date>-<slug>.md, lu de la même façon par /blog et son flux.
-COPY --from=builder --chown=nextjs:nodejs /app/blog ./blog
-# Documentation par tâche (#649) : guide/<slug>.md, lue de la même façon par /doc/<slug>.
-COPY --from=builder --chown=nextjs:nodejs /app/guide ./guide
+# Blog (#944) : content/blog/<date>-<slug>.md, lu de la même façon par /blog et son flux.
+COPY --from=builder --chown=nextjs:nodejs /app/content/blog ./content/blog
+# Documentation par tâche (#649) : content/guide/<slug>.md, lue de la même façon par /doc/<slug>.
+COPY --from=builder --chown=nextjs:nodejs /app/content/guide ./content/guide
 # Date du dernier commit de chacune de ces sources (lastmod du sitemap), écrite par
 # scripts/doc-lastmod.mjs dans deploy.yml avant le build ; `{}` pour un build local (étape builder).
 COPY --from=builder --chown=nextjs:nodejs /app/doc-lastmod.json ./doc-lastmod.json

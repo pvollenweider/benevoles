@@ -6,7 +6,7 @@ import type { DocUnit } from "@/lib/doc-units"
 
 /**
  * Contextual help (#568): the main admin pages link to the page of the documentation that explains
- * them (#649: one unit of guide/ per task), so an organizer stuck on a screen doesn't have to search
+ * them (#649: one unit of content/guide/ per task), so an organizer stuck on a screen doesn't have to search
  * the whole documentation. Few pages, on purpose: the ones where people prepare or run an event.
  * Each route names a unit by its slug and, optionally, the exact text of one of its headings: the
  * link reads « Aide : <heading, or the unit's title> » and opens /doc/<slug>, at the heading's

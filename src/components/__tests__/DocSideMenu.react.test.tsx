@@ -9,7 +9,7 @@ import { docMenuSections } from "@/lib/doc-navigation"
 import type { DocUnit } from "@/lib/doc-units"
 
 function unit(slug: string, overrides: Partial<DocUnit> = {}): DocUnit {
-  return { slug, title: `Titre ${slug}`, roles: ["benevole"], group: "inscription", order: 10, summary: `Résumé de ${slug}.`, related: [], legacy: [], aliases: [], body: "Texte.\n", source: `guide/${slug}.md`, ...overrides }
+  return { slug, title: `Titre ${slug}`, roles: ["benevole"], group: "inscription", order: 10, summary: `Résumé de ${slug}.`, related: [], legacy: [], aliases: [], body: "Texte.\n", source: `content/guide/${slug}.md`, ...overrides }
 }
 
 const units = [

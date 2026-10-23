@@ -358,8 +358,8 @@ export const RETENTION: readonly RetentionEntry[] = [
 // Markdown table cell: backslashes first, then pipes, so an escape can't be undone.
 const cell = (s: string) => s.replace(/\\/g, "\\\\").replace(/\|/g, "\\|")
 
-/** The organisers' documentation unit that holds their retention table (#649, guide/). */
-export const RETENTION_GUIDE_SOURCE = "guide/exporter-et-conserver-ses-donnees.md"
+/** The organisers' documentation unit that holds their retention table (#649, content/guide/). */
+export const RETENTION_GUIDE_SOURCE = "content/guide/exporter-et-conserver-ses-donnees.md"
 
 /** The organisers' table (RETENTION_GUIDE_SOURCE): data and retention. */
 export function retentionGuideTable(): string {

@@ -26,7 +26,7 @@ const unit: DocUnit = {
   legacy: [],
   aliases: [],
   body: "Texte.\n",
-  source: "guide/presences-le-jour-j.md",
+  source: "content/guide/presences-le-jour-j.md",
 }
 
 describe("shared nodes", () => {

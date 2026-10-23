@@ -10,7 +10,7 @@ const section = (md: string) => md.slice(md.indexOf(TABLE_START) + TABLE_START.l
 
 describe("retention policy", () => {
   it("is the table of the organisers' documentation and of docs/retention.md (npm run retention:docs)", () => {
-    expect(RETENTION_GUIDE_SOURCE).toMatch(/^guide\/[a-z0-9-]+\.md$/)
+    expect(RETENTION_GUIDE_SOURCE).toMatch(/^content\/guide\/[a-z0-9-]+\.md$/)
     expect(section(read(RETENTION_GUIDE_SOURCE))).toBe(retentionGuideTable())
     expect(section(read("docs/retention.md"))).toBe(retentionMatrixTable())
   })

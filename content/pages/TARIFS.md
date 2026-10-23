@@ -68,7 +68,7 @@ Par un don, sur la page [Soutenir le projet](https://buymeacoffee.com/benevol.ap
 
 ## Démarrer
 
-Dès que vous avez confirmé votre adresse email, vous pouvez préparer votre premier événement. La page [Créer son premier événement](../../guide/creer-son-premier-evenement.md) vous guide ensuite jusqu'au lien à partager.
+Dès que vous avez confirmé votre adresse email, vous pouvez préparer votre premier événement. La page [Créer son premier événement](../guide/creer-son-premier-evenement.md) vous guide ensuite jusqu'au lien à partager.
 
 <!-- actions -->
 - [Demander un espace](/inscription)

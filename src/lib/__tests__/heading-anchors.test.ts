@@ -79,7 +79,7 @@ describe("public content sources", () => {
 
   it.each(sources)("%s: heading ids are unique and never a reserved id", (source) => {
     const { html } = renderPublicSource(source, "")
-    // GUIDE_ADMIN.md is down to its introduction (#649: its sections are units of guide/, whose
+    // GUIDE_ADMIN.md is down to its introduction (#649: its sections are units of content/guide/, whose
     // ids are checked in help-links.test.ts), so a source may have no heading at all.
     const ids = [...html.matchAll(/<h[1-6] id="([^"]+)"/g)].map((m) => m[1])
     expect(new Set(ids).size).toBe(ids.length)

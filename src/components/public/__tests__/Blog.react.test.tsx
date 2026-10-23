@@ -8,8 +8,8 @@ import { BlogIndex, BlogPostView } from "../Blog"
 import type { BlogPost } from "@/lib/blog"
 
 const POSTS: BlogPost[] = [
-  { slug: "passe-en-2-3", title: "benevol.app passe en 2.3 : moins de ressaisie", date: "2026-10-12", summary: "Le résumé de la 2.3.", version: "2.3", body: "", source: "blog/2026-10-12-passe-en-2-3.md" },
-  { slug: "a-bien-grandi", title: "benevol.app a bien grandi 🌱", date: "2026-09-01", summary: "Le résumé de l'été.", body: "", source: "blog/2026-09-01-a-bien-grandi.md" },
+  { slug: "passe-en-2-3", title: "benevol.app passe en 2.3 : moins de ressaisie", date: "2026-10-12", summary: "Le résumé de la 2.3.", version: "2.3", body: "", source: "content/blog/2026-10-12-passe-en-2-3.md" },
+  { slug: "a-bien-grandi", title: "benevol.app a bien grandi 🌱", date: "2026-09-01", summary: "Le résumé de l'été.", body: "", source: "content/blog/2026-09-01-a-bien-grandi.md" },
 ]
 
 // /blog (#944): one <h1>, the posts as a list, each its linked <h2>, its date and its summary.

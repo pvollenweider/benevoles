@@ -2,7 +2,7 @@ import { test, expect, type Page } from "@playwright/test"
 import { seriousViolations } from "./helpers/axe"
 
 /**
- * Videos referenced from the documentation (#645): a `<!-- video: ID -->` line of a unit of guide/
+ * Videos referenced from the documentation (#645): a `<!-- video: ID -->` line of a unit of content/guide/
  * (#649) renders as the button « Voir la vidéo : <titre> (<durée>) », which opens the player in
  * place, without leaving the documentation (a disclosure: aria-expanded, aria-controls); before
  * hydration it is a plain link to /videos/<ID>#doc. A guide (/doc/admin) keeps the plain link.

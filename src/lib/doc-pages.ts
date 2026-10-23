@@ -211,7 +211,7 @@ export const PUBLIC_PAGES: readonly PublicPage[] = [
     guide: false,
   },
   {
-    // The product newsletters, archived (#944): an index of the posts of blog/ (src/lib/blog.ts),
+    // The product newsletters, archived (#944): an index of the posts of content/blog/ (src/lib/blog.ts),
     // newest first, one page per post at /blog/<slug> (in the sitemap after the documentation).
     path: "/blog",
     title: "Blog",
@@ -382,11 +382,11 @@ export function publicPageMetadata(path: string, base: string): Metadata {
  * points to /doc/admin (an anchor is kept). A source is recognised by its file name, whatever the
  * relative path in front of it (`](FEATURES.md)` from a sibling, `](../legal/SOUS-TRAITANTS.md)`
  * from another folder of content/, `](../../CHANGELOG.md)` from content/ to the root). The same
- * goes for the documentation units (#649, src/lib/doc-units.ts): `](../../guide/x.md#y)` from a
- * file of content/, `](guide/x.md#y)` from a file at the root, or `](x.md#y)` from another unit
- * of guide/, becomes `](/doc/x#y)`; a unit links to a source of content/ with
- * `](../content/guide/GUIDE_ADMIN.md)`. Only a lower-case file name is a unit (guide/README.md,
- * the index, isn't one). On an instance that is not the hosted service, a link to a presentation
+ * goes for the documentation units (#649, src/lib/doc-units.ts), in content/guide/:
+ * `](../guide/x.md#y)` from another folder of content/, `](content/guide/x.md#y)` (or `guide/x.md`,
+ * their path before the move) from a file at the root, or `](x.md#y)` from a file of content/guide/
+ * itself, becomes `](/doc/x#y)`; a unit links to another source with `](GUIDE_ADMIN.md)` or
+ * `](../pages/FEATURES.md)`. Only a lower-case file name is a unit (README.md, the index, isn't one). On an instance that is not the hosted service, a link to a presentation
  * page it doesn't have (the audience pages, /tarifs…) becomes an absolute link to the hosted
  * service; every other link stays relative.
  */
@@ -411,8 +411,8 @@ function escapeRegExp(text: string): string {
 /** The relative folders in front of a source's file name: `../` steps, then folder names. */
 const RELATIVE_DIRS = String.raw`(?:\.\.\/)*(?:[A-Za-z0-9_-]+\/)*`
 
-/** `](../../guide/x.md#y)`, `](guide/x.md#y)` or `](x.md#y)`: a link to a documentation unit by its file. */
-const UNIT_LINK_RE = /\]\((?:(?:\.\.\/)*guide\/)?([a-z0-9]+(?:-[a-z0-9]+)*)\.md(#[^)\s]*)?\)/g
+/** `](../guide/x.md#y)`, `](content/guide/x.md#y)` or `](x.md#y)`: a link to a documentation unit by its file. */
+const UNIT_LINK_RE = /\]\((?:(?:\.\.\/)*(?:content\/)?guide\/)?([a-z0-9]+(?:-[a-z0-9]+)*)\.md(#[^)\s]*)?\)/g
 
 /**
  * The source's own first-level title (the page's <h1>) and the rest of the document. HTML comments

@@ -20,7 +20,7 @@ function unit(slug: string, overrides: Partial<DocUnit> = {}): DocUnit {
     legacy: [],
     aliases: [],
     body: "Texte.\n",
-    source: `guide/${slug}.md`,
+    source: `content/guide/${slug}.md`,
     ...overrides,
   }
 }

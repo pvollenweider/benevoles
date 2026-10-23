@@ -54,4 +54,4 @@ Créez l'espace de votre association. Il est prêt dès que vous avez confirmé 
 
 <!-- actions -->
 - [Demander un espace](/inscription)
-- [Créer son premier événement](../../guide/creer-son-premier-evenement.md)
+- [Créer son premier événement](../guide/creer-son-premier-evenement.md)

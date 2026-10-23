@@ -31,7 +31,7 @@ C'est gratuit, open source et hébergé en France. Ça convient aussi bien à un
 
 <!-- video: EVENT_CREATE_PUBLISH_OVERVIEW -->
 
-En savoir plus : [créer un événement](../../guide/creer-un-evenement.md), [configurer les créneaux](../../guide/configurer-les-creneaux.md), [publier un événement](../../guide/publier-un-evenement.md).
+En savoir plus : [créer un événement](../guide/creer-un-evenement.md), [configurer les créneaux](../guide/configurer-les-creneaux.md), [publier un événement](../guide/publier-un-evenement.md).
 
 ## Inscrire les bénévoles
 
@@ -48,7 +48,7 @@ En savoir plus : [créer un événement](../../guide/creer-un-evenement.md), [co
 
 <!-- video: VOLUNTEER_REGISTER -->
 
-En savoir plus : [s'inscrire](../../guide/s-inscrire.md), [la liste d'attente](../../guide/liste-d-attente.md), [les inscriptions sur validation](../../guide/inscriptions-sur-validation.md), [un lien par groupe](../../guide/partager-le-lien.md#un-lien-par-groupe), [l'inscription sur votre site](../../guide/partager-le-lien.md#integrer-l-inscription-a-votre-site), [qui est inscrit](../../guide/choisir-ses-creneaux.md#voir-qui-est-inscrit).
+En savoir plus : [s'inscrire](../guide/s-inscrire.md), [la liste d'attente](../guide/liste-d-attente.md), [les inscriptions sur validation](../guide/inscriptions-sur-validation.md), [un lien par groupe](../guide/partager-le-lien.md#un-lien-par-groupe), [l'inscription sur votre site](../guide/partager-le-lien.md#integrer-l-inscription-a-votre-site), [qui est inscrit](../guide/choisir-ses-creneaux.md#voir-qui-est-inscrit).
 
 ## Garder chacun informé
 
@@ -62,7 +62,7 @@ En savoir plus : [s'inscrire](../../guide/s-inscrire.md), [la liste d'attente](.
 
 <!-- video: TARGETED_MESSAGES -->
 
-En savoir plus : [les rappels](../../guide/rappels.md), [écrire aux bénévoles](../../guide/ecrire-aux-benevoles.md).
+En savoir plus : [les rappels](../guide/rappels.md), [écrire aux bénévoles](../guide/ecrire-aux-benevoles.md).
 
 ## Voir où il manque du monde
 
@@ -76,7 +76,7 @@ En savoir plus : [les rappels](../../guide/rappels.md), [écrire aux bénévoles
 
 <!-- video: STAFFING_GAPS -->
 
-En savoir plus : [où manque-t-il du monde ?](../../guide/ou-manque-t-il-du-monde.md), [le tableau de bord](../../guide/tableau-de-bord.md).
+En savoir plus : [où manque-t-il du monde ?](../guide/ou-manque-t-il-du-monde.md), [le tableau de bord](../guide/tableau-de-bord.md).
 
 ## Tenir le jour J
 
@@ -89,7 +89,7 @@ En savoir plus : [où manque-t-il du monde ?](../../guide/ou-manque-t-il-du-mond
 
 <!-- video: ATTENDANCE_CHECK_IN -->
 
-En savoir plus : [les présences le jour J](../../guide/presences-le-jour-j.md), [documents à imprimer, badges et résumé](../../guide/rapports-badges-et-resume.md), [les responsables de secteur](../../guide/responsables-de-secteur.md).
+En savoir plus : [les présences le jour J](../guide/presences-le-jour-j.md), [documents à imprimer, badges et résumé](../guide/rapports-badges-et-resume.md), [les responsables de secteur](../guide/responsables-de-secteur.md).
 
 ## Après l'événement
 
@@ -100,7 +100,7 @@ En savoir plus : [les présences le jour J](../../guide/presences-le-jour-j.md),
 
 <!-- video: EVENT_REPORTS -->
 
-En savoir plus : [documents à imprimer, badges et résumé](../../guide/rapports-badges-et-resume.md), [le journal de l'événement](../../guide/journal-de-l-evenement.md).
+En savoir plus : [documents à imprimer, badges et résumé](../guide/rapports-badges-et-resume.md), [le journal de l'événement](../guide/journal-de-l-evenement.md).
 
 ## Vos membres et leurs données
 
@@ -114,7 +114,7 @@ En savoir plus : [documents à imprimer, badges et résumé](../../guide/rapport
 
 <!-- video: MEMBERS_MANAGEMENT -->
 
-En savoir plus : [gérer les membres](../../guide/gerer-les-membres.md), [doublons et fusion](../../guide/doublons-et-fusion.md), [exporter et conserver ses données](../../guide/exporter-et-conserver-ses-donnees.md).
+En savoir plus : [gérer les membres](../guide/gerer-les-membres.md), [doublons et fusion](../guide/doublons-et-fusion.md), [exporter et conserver ses données](../guide/exporter-et-conserver-ses-donnees.md).
 
 ## À l'image de votre association
 
@@ -122,7 +122,7 @@ En savoir plus : [gérer les membres](../../guide/gerer-les-membres.md), [doublo
 - **Votre charte du bénévole**, à accepter avant de s'inscrire, et des pages d'information pour chaque événement : accès, FAQ, règlement.
 - **Votre fuseau horaire**, pour que rappels et horaires tombent juste.
 
-En savoir plus : [personnaliser l'organisation](../../guide/personnaliser-l-organisation.md), [la charte du bénévole](../../guide/charte-du-benevole.md).
+En savoir plus : [personnaliser l'organisation](../guide/personnaliser-l-organisation.md), [la charte du bénévole](../guide/charte-du-benevole.md).
 
 ## Un outil sur lequel compter
 
@@ -137,7 +137,7 @@ En savoir plus : [personnaliser l'organisation](../../guide/personnaliser-l-orga
 
 Les [tutoriels vidéo](/videos) montrent chaque étape en quelques minutes, avec leur transcription complète. Le [guide administrateur](../guide/GUIDE_ADMIN.md) explique la mise en place pas à pas, et le [guide bénévole](../guide/GUIDE_BENEVOLE.md) montre ce que vivent vos bénévoles. Dans l'administration, les principaux écrans ont un lien « Aide » vers la page qui les explique. Vous cherchez encore le bon outil ? La page [Logiciel de planning pour bénévoles](LOGICIEL-PLANNING-BENEVOLES.md) répond aux questions qu'on se pose avant de choisir, et la page [Pour qui ?](POUR-QUI.md) montre comment s'organisent une fête, un festival, une course ou des permanences. Une question, un problème ou une idée d'amélioration ? Écrivez à [contact@benevol.app](mailto:contact@benevol.app), aucun compte n'est nécessaire.
 
-> **Bénévole ?** Rien à installer, aucun compte à créer : il suffit d'ouvrir le lien reçu par email ou partagé par l'association. Lien perdu ? [Le recevoir à nouveau](../../guide/lien-personnel.md).
+> **Bénévole ?** Rien à installer, aucun compte à créer : il suffit d'ouvrir le lien reçu par email ou partagé par l'association. Lien perdu ? [Le recevoir à nouveau](../guide/lien-personnel.md).
 
 ## Questions fréquentes
 
@@ -165,11 +165,11 @@ Oui. Une permanence se décrit une fois, avec ses jours et ses horaires, et tout
 
 ## Démarrer
 
-benevol.app est ouvert aux associations qui veulent l'essayer. Demandez votre espace en ligne : il est prêt dès que vous avez confirmé votre adresse, et la publication suit une courte vérification. Ensuite, la page [Créer son premier événement](../../guide/creer-son-premier-evenement.md) vous mène, en huit étapes, jusqu'au lien partagé ; dans l'application, la liste des [premiers pas](../../guide/premiers-pas.md) suit le même chemin.
+benevol.app est ouvert aux associations qui veulent l'essayer. Demandez votre espace en ligne : il est prêt dès que vous avez confirmé votre adresse, et la publication suit une courte vérification. Ensuite, la page [Créer son premier événement](../guide/creer-son-premier-evenement.md) vous mène, en huit étapes, jusqu'au lien partagé ; dans l'application, la liste des [premiers pas](../guide/premiers-pas.md) suit le même chemin.
 
 <!-- actions -->
 - [Demander un espace](/inscription)
-- [Créer son premier événement](../../guide/creer-son-premier-evenement.md)
+- [Créer son premier événement](../guide/creer-son-premier-evenement.md)
 
 ## Ce que benevol.app ne fait pas, volontairement
 

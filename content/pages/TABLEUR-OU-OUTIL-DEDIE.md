@@ -67,8 +67,8 @@ Non. La page d'inscription s'ouvre dans le navigateur, sur téléphone comme sur
 
 ## Démarrer
 
-benevol.app est gratuit, libre (open source) et hébergé en France. Demandez votre espace, puis suivez la page [Créer son premier événement](../../guide/creer-son-premier-evenement.md) jusqu'au lien à partager.
+benevol.app est gratuit, libre (open source) et hébergé en France. Demandez votre espace, puis suivez la page [Créer son premier événement](../guide/creer-son-premier-evenement.md) jusqu'au lien à partager.
 
 <!-- actions -->
 - [Demander un espace](/inscription)
-- [Créer son premier événement](../../guide/creer-son-premier-evenement.md)
+- [Créer son premier événement](../guide/creer-son-premier-evenement.md)

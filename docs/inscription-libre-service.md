@@ -1,6 +1,6 @@
 # Inscription en libre-service
 
-Une association crée son espace elle-même depuis `/inscription` (#810). Cette page décrit le parcours, ce que l'opérateur voit et fait, et les protections contre les abus. Le parcours côté association est expliqué aux organisateurs dans [guide/creer-son-espace.md](../guide/creer-son-espace.md) (`/doc/creer-son-espace`).
+Une association crée son espace elle-même depuis `/inscription` (#810). Cette page décrit le parcours, ce que l'opérateur voit et fait, et les protections contre les abus. Le parcours côté association est expliqué aux organisateurs dans [content/guide/creer-son-espace.md](../content/guide/creer-son-espace.md) (`/doc/creer-son-espace`).
 
 ## Parcours
 

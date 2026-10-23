@@ -2,7 +2,7 @@ import { test, expect, type Page } from "@playwright/test"
 
 /**
  * Contextual help (#568): « Aide : <section> » under a main admin page's title opens, in a new tab,
- * the page of the documentation that explains the screen (#649: a unit of guide/, at a heading when
+ * the page of the documentation that explains the screen (#649: a unit of content/guide/, at a heading when
  * the route names one). The units and headings are checked by src/lib/__tests__/help-links.test.ts;
  * this follows a link for real, with the mouse and with the keyboard.
  */

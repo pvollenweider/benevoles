@@ -4,7 +4,7 @@
 // SPDX-License-Identifier: AGPL-3.0-only
 
 // Writes doc-lastmod.json at the repo root: each source file of the apex sitemap (the `source` of
-// PUBLIC_PAGES in src/lib/doc-pages.ts, the documentation units guide/*.md and the video pages'
+// PUBLIC_PAGES in src/lib/doc-pages.ts, the documentation units content/guide/*.md and the video pages'
 // own code, VIDEO_PAGE_SOURCES) mapped to the ISO date of its last commit. The sitemap (src/app/sitemap.ts) reads it as each page's lastmod: the
 // files' mtime in the image is the build time, identical for every page on every deploy.
 //
@@ -31,7 +31,7 @@ export const VIDEO_PAGE_SOURCES = {
 
 /**
  * The sitemap's source files, read from the code itself so the list can't drift: every
- * `source: "…"` of src/lib/doc-pages.ts, then every guide/*.md except the index guide/README.md
+ * `source: "…"` of src/lib/doc-pages.ts, then every unit of content/guide/ (not the index README.md nor the role guides' introductions GUIDE_*.md)
  * (the same rule as readDocUnits in src/lib/doc-units.ts). A test checks it covers both.
  * @param {string} [root]
  * @returns {string[]}
@@ -39,9 +39,11 @@ export const VIDEO_PAGE_SOURCES = {
 export function docLastmodSources(root = ROOT) {
   const pages = readFileSync(path.join(root, "src/lib/doc-pages.ts"), "utf-8")
   const sources = [...pages.matchAll(/^\s*source:\s*"([^"]+)"/gm)].map((m) => m[1])
-  const guideDir = path.join(root, "guide")
+  const guideDir = path.join(root, "content/guide")
+  // Not units: the index and the role guides' introductions (DOC_NON_UNIT_FILES in src/lib/doc-units.ts).
+  const notUnits = ["README.md", "GUIDE_ADMIN.md", "GUIDE_BENEVOLE.md"]
   const units = existsSync(guideDir)
-    ? readdirSync(guideDir).filter((f) => f.endsWith(".md") && f !== "README.md").sort().map((f) => `guide/${f}`)
+    ? readdirSync(guideDir).filter((f) => f.endsWith(".md") && !notUnits.includes(f)).sort().map((f) => `content/guide/${f}`)
     : []
   return [...new Set([...sources, ...units, ...VIDEO_PAGE_SOURCES.library, ...VIDEO_PAGE_SOURCES.video])]
 }

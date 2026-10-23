@@ -67,7 +67,7 @@ describe("llmsFullTxt", () => {
 
 describe("portableMarkdown", () => {
   it("drops video references, turns links between sources into absolute site links", () => {
-    const md = "Intro [a](guide/rappels.md#b) et [c](/doc/admin).\n\n<!-- video: ORG_FIRST_STEPS -->\n\n\nFin [d](https://example.org)."
+    const md = "Intro [a](content/guide/rappels.md#b) et [c](/doc/admin).\n\n<!-- video: ORG_FIRST_STEPS -->\n\n\nFin [d](https://example.org)."
     expect(portableMarkdown(md, `${BASE}/`)).toBe(`Intro [a](${BASE}/doc/rappels#b) et [c](${BASE}/doc/admin).\n\nFin [d](https://example.org).`)
   })
 })

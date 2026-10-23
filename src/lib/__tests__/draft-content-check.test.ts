@@ -13,8 +13,8 @@ describe("the draft content check", () => {
     const sources: string[] = publicContentSources(process.cwd())
     for (const page of PUBLIC_PAGES) if (page.source) expect(sources, page.source).toContain(page.source)
     expect(sources).toContain(LANDING_FAQ_SOURCE)
-    expect(sources.some((s) => s.startsWith("guide/"))).toBe(true)
-    expect(sources.some((s) => s.startsWith("blog/"))).toBe(true)
+    expect(sources.some((s) => s.startsWith("content/guide/"))).toBe(true)
+    expect(sources.some((s) => s.startsWith("content/blog/"))).toBe(true)
   })
 
   it("names the files that still carry the marker", () => {

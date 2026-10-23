@@ -7,7 +7,7 @@ import { adminHelpLink, type AdminHelpRoute } from "@/lib/help-links"
 /**
  * « Aide : <section> » under a main admin page's title (#568): the page of the documentation that
  * explains this screen (#649, src/lib/help-links.ts), named after the unit's title or heading. A
- * server component: it reads the units of guide/. A new tab, so a form being filled in stays as
+ * server component: it reads the units of content/guide/. A new tab, so a form being filled in stays as
  * it is; said visibly (↗) and to screen readers. 24 px tall at least (WCAG 2.5.8).
  */
 export default function HelpLink({ route }: { route: AdminHelpRoute }) {

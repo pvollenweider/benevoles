@@ -4,6 +4,8 @@ import os from "node:os"
 import path from "node:path"
 import {
   DOC_GROUPS,
+  DOC_NON_UNIT_FILES,
+  DOC_UNITS_DIR,
   DOC_INDEX_END,
   DOC_INDEX_START,
   DOC_ROLE_INFO,
@@ -32,7 +34,7 @@ import { findVideoReferences } from "../doc-video-references"
 import { loadVideoCatalog } from "../video-catalog-load"
 import { docUnitHeadingIds, renderDocUnit } from "../public-content"
 
-// #649: the documentation split into one Markdown file per task in guide/, served at /doc/<slug>.
+// #649: the documentation split into one Markdown file per task in content/guide/, served at /doc/<slug>.
 
 const read = (f: string) => fs.readFileSync(path.join(process.cwd(), f), "utf-8")
 
@@ -55,7 +57,7 @@ function unit(overrides: Partial<DocUnit> & { slug: string }): DocUnit {
     legacy: [],
     aliases: [],
     body: "Texte.\n",
-    source: `guide/${overrides.slug}.md`,
+    source: `content/guide/${overrides.slug}.md`,
     ...overrides,
   }
 }
@@ -96,7 +98,7 @@ describe("parseDocUnit", () => {
       legacy: [],
       aliases: [],
       body: "\n## Section\n\nTexte.\n",
-      source: "guide/ma-page.md",
+      source: "content/guide/ma-page.md",
     })
   })
 
@@ -317,7 +319,7 @@ describe("docUnitMetadata", () => {
   })
 })
 
-describe("the guide index (guide/README.md)", () => {
+describe("the guide index (content/guide/README.md)", () => {
   it("lists the units by group, linked by file, with their roles", () => {
     const md = docIndexMarkdown([unit({ slug: "b", title: "B", roles: ["admin", "benevole"], summary: "Résumé B." }), unit({ slug: "a", title: "A", group: "inscription", summary: "Résumé A." })])
     expect(md).toBe("### S'inscrire à un créneau\n\n- [A](a.md) : Résumé A. Pour : bénévoles.\n\n### Après l'inscription\n\n- [B](b.md) : Résumé B. Pour : organisateurs, bénévoles.")
@@ -331,17 +333,26 @@ describe("the guide index (guide/README.md)", () => {
   })
 
   it("is up to date (npm run doc:index)", () => {
-    const readme = read("guide/README.md")
+    const readme = read("content/guide/README.md")
     expect(readme).toBe(withDocIndex(readme, docIndexMarkdown(readDocUnits())))
   })
 })
 
-// Guards over the real units of guide/.
-describe("the units of guide/", () => {
+// Guards over the real units of content/guide/.
+describe("the units of content/guide/", () => {
   const units = readDocUnits()
 
   it("exist and load without any problem", () => {
     expect(units.length).toBeGreaterThan(0)
+  })
+
+  // The role guides' introductions share the folder with the units (content/guide/GUIDE_ADMIN.md):
+  // each is left out of the units, which would otherwise fail on its missing front matter.
+  it("leaves out the index and every public page source of the folder, and only them", () => {
+    const pageSources = PUBLIC_PAGES.flatMap((p) => (p.source?.startsWith(`${DOC_UNITS_DIR}/`) ? [p.source.slice(DOC_UNITS_DIR.length + 1)] : []))
+    expect(pageSources.length).toBeGreaterThan(0)
+    expect([...DOC_NON_UNIT_FILES].sort()).toEqual(["README.md", ...pageSources].sort())
+    expect(units.map((u) => u.source).filter((s) => DOC_NON_UNIT_FILES.some((f) => s.endsWith(`/${f}`)))).toEqual([])
   })
 
   it("never take the slug of a static page of /doc: every static folder of src/app/doc is reserved", () => {
@@ -393,7 +404,7 @@ describe("the units of guide/", () => {
       for (const [, slug] of u.body.matchAll(/\]\(([a-z0-9-]+)\.md(?:#[^)]*)?\)/g)) expect(slugs.has(slug), `${u.slug} links to ${slug}.md`).toBe(true)
     }
     for (const file of PUBLIC_PAGES.map((p) => p.source).filter((f): f is string => !!f)) {
-      for (const [, slug] of read(file).matchAll(/\]\(guide\/([a-z0-9-]+)\.md(?:#[^)]*)?\)/g)) expect(slugs.has(slug), `${file} links to guide/${slug}.md`).toBe(true)
+      for (const [, slug] of read(file).matchAll(/\]\(guide\/([a-z0-9-]+)\.md(?:#[^)]*)?\)/g)) expect(slugs.has(slug), `${file} links to content/guide/${slug}.md`).toBe(true)
     }
   })
 
@@ -422,7 +433,7 @@ describe("the units of guide/", () => {
 // (« Événements, puis l'événement, puis Gérer les créneaux »), never by its internal route: a URL with
 // « [id] » in it is no use to a reader and goes stale when the routes move. Code fences may still
 // show one (an example of an address, say).
-describe("the pages of guide/", () => {
+describe("the pages of content/guide/", () => {
   const outsideCodeFences = (markdown: string) => markdown.replace(/^(```|~~~)[^\n]*\n[\s\S]*?^\1[^\n]*$/gm, "")
 
   it("drops fenced code only", () => {
@@ -430,7 +441,7 @@ describe("the pages of guide/", () => {
   })
 
   it("never name an internal /admin/ route outside a code fence", () => {
-    const dir = path.join(process.cwd(), "guide")
+    const dir = path.join(process.cwd(), "content/guide")
     const files = fs.readdirSync(dir).filter((f) => f.endsWith(".md"))
     expect(files.length).toBeGreaterThan(0)
     for (const file of files) {

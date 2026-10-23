@@ -84,8 +84,8 @@ describe("parseFaqSource and the draft marker (#951)", () => {
 
 describe("actionHref (#759)", () => {
   it("turns a link to a source file into the page that serves it", () => {
-    expect(actionHref("guide/premiers-pas.md")).toBe("/doc/premiers-pas")
-    expect(actionHref("guide/premiers-pas.md#la-liste")).toBe("/doc/premiers-pas#la-liste")
+    expect(actionHref("content/guide/premiers-pas.md")).toBe("/doc/premiers-pas")
+    expect(actionHref("content/guide/premiers-pas.md#la-liste")).toBe("/doc/premiers-pas#la-liste")
     expect(actionHref("../guide/GUIDE_ADMIN.md")).toBe("/doc/admin")
     // As written in content/pages/, relative to the file (#759 kept after the move to content/).
     expect(actionHref("../../guide/premiers-pas.md#la-liste")).toBe("/doc/premiers-pas#la-liste")
@@ -96,7 +96,7 @@ describe("actionHref (#759)", () => {
   })
 
   it("a source link in an actions list becomes a site link, not a file path that 404s", () => {
-    const block = parseFeatureBlock("<!-- actions -->\n- [Lire](guide/premiers-pas.md)\n")
+    const block = parseFeatureBlock("<!-- actions -->\n- [Lire](content/guide/premiers-pas.md)\n")
     expect(block.actions).toEqual([{ label: "Lire", href: "/doc/premiers-pas" }])
   })
 
@@ -171,7 +171,7 @@ describe("parseFaq (#767)", () => {
 
 describe("plainAnswer (#767)", () => {
   it("keeps the words the page shows: link text, no emphasis or code marks, one line", () => {
-    expect(plainAnswer("Oui. La page [Créer son premier événement](guide/creer.md) vous **mène** au `lien`.\n\nEnsuite *tout* va.")).toBe(
+    expect(plainAnswer("Oui. La page [Créer son premier événement](content/guide/creer.md) vous **mène** au `lien`.\n\nEnsuite *tout* va.")).toBe(
       "Oui. La page Créer son premier événement vous mène au lien. Ensuite tout va.",
     )
   })

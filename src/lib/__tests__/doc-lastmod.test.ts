@@ -12,9 +12,9 @@ import { docLastmod, docLastmodSources, LASTMOD_SKIP_TRAILER, VIDEO_PAGE_SOURCES
 // deploy), not from the files' mtime in the image, which is the build time for every page.
 describe("docLastmodLookup", () => {
   it("gives each source's date from a valid map", () => {
-    const lookup = docLastmodLookup({ "content/pages/FEATURES.md": "2026-09-30T10:00:00+02:00", "guide/a.md": "2026-10-01T08:00:00Z" })
+    const lookup = docLastmodLookup({ "content/pages/FEATURES.md": "2026-09-30T10:00:00+02:00", "content/guide/a.md": "2026-10-01T08:00:00Z" })
     expect(lookup("content/pages/FEATURES.md")).toEqual(new Date("2026-09-30T08:00:00Z"))
-    expect(lookup("guide/a.md")).toEqual(new Date("2026-10-01T08:00:00Z"))
+    expect(lookup("content/guide/a.md")).toEqual(new Date("2026-10-01T08:00:00Z"))
   })
 
   it("gives null for a source missing from the map, including inherited keys", () => {
@@ -35,7 +35,7 @@ describe("docLastmodLookup", () => {
   })
 
   it("leaves lastModified out of the sitemap when there is no map (local build, tests)", () => {
-    const entries = apexSitemap("https://www.benevol.app", docLastmodLookup(null), [{ slug: "a", source: "guide/a.md" }])
+    const entries = apexSitemap("https://www.benevol.app", docLastmodLookup(null), [{ slug: "a", source: "content/guide/a.md" }])
     expect(entries.every((e) => !("lastModified" in e))).toBe(true)
   })
 })
@@ -43,7 +43,7 @@ describe("docLastmodLookup", () => {
 describe("scripts/doc-lastmod.mjs", () => {
   const sources = docLastmodSources()
 
-  // The script reads the list from src/lib/doc-pages.ts and guide/ rather than importing the
+  // The script reads the list from src/lib/doc-pages.ts and content/guide/ rather than importing the
   // TypeScript: this guard fails if the two ever drift (a renamed field, a new kind of source).
   it("dates every source of PUBLIC_PAGES, every documentation unit and the video pages' code, and nothing else", () => {
     const pages = PUBLIC_PAGES.map((p) => p.source).filter((s): s is string => !!s)
@@ -51,7 +51,7 @@ describe("scripts/doc-lastmod.mjs", () => {
     const videoPages = [...VIDEO_PAGE_SOURCES.library, ...VIDEO_PAGE_SOURCES.video]
     expect(units.length).toBeGreaterThan(1)
     expect([...sources].sort()).toEqual([...new Set([...pages, ...units, ...videoPages])].sort())
-    expect(sources).not.toContain("guide/README.md")
+    expect(sources).not.toContain("content/guide/README.md")
   })
 
   it("dates a file by its last commit and skips a file without history", () => {
