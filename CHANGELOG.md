@@ -18,6 +18,7 @@ Format basé sur [Keep a Changelog](https://keepachangelog.com/fr/1.0.0/).
 
 ### Corrigé
 
+- **Liste des membres sur grand écran** (#1102) : la page s'élargit pour le tableau des membres, les actions d'une ligne (« Activité », « Modifier », « Désactiver ») restent côte à côte au lieu de s'empiler, et la dernière colonne n'est plus coupée au bord droit. Sur un petit écran, seul le tableau défile de côté, plus la page entière, et une phrase au-dessus le signale.
 - **Nom des barres, des créneaux et des filtres pour la commande vocale** : axe-core 4.14 vérifie que le nom d'un contrôle contient son texte visible (WCAG 2.5.3). Les barres de la frise de la page Créneaux disent leur poste puis leur texte visible (« Bar, 10h–12h, Soir, 3/5 inscrits, 2 libres, modifier »), les heures et les places en mots venant après ; les créneaux de la liste « Créneau » des inscriptions sont nommés par leur ligne visible, puis les inscrits en mots ; les cartes de filtre des invitations par leur texte (« 3 Sans réponse ») ; l'heure et le nombre d'inscrits d'une barre de la page publique restent deux mots distincts.
 
 ## [2.5.0] — 2026-10-22

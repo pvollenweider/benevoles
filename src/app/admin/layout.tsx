@@ -46,7 +46,10 @@ export default async function AdminLayout({ children }: { children: React.ReactN
           </p>
         </section>
       )}
-      <main id={MAIN_CONTENT_ID} tabIndex={-1} className="max-w-5xl mx-auto px-4 py-6 focus:outline-none print:max-w-none print:p-0">{children}</main>
+      {/* A data-heavy list (the members table, #1102) marks its root with data-admin-wide: <main>
+          widens to max-w-7xl for it. The top bar and the banner keep max-w-5xl, a stable
+          navigation on every page. Never capped on paper. */}
+      <main id={MAIN_CONTENT_ID} tabIndex={-1} className="max-w-5xl has-[[data-admin-wide]]:max-w-7xl mx-auto px-4 py-6 focus:outline-none print:max-w-none print:has-[[data-admin-wide]]:max-w-none print:p-0">{children}</main>
     </div>
   )
 }

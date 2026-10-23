@@ -248,10 +248,11 @@ describe("MembersManager — ?deleted= from the member page (#667)", () => {
   })
 })
 
-// #927: at 1280 px the row actions ran past the table's edge (min-w 64rem, nowrap cell). The
-// table now fits the admin column and the actions wrap in a flex row, each keeping its target size.
-describe("MembersManager — row actions wrap instead of overflowing", () => {
-  it("lays the actions out in a wrapping flex row, in a table of 56rem minimum", () => {
+// #927: at 1280 px the row actions ran past the table's edge (min-w 64rem). #1102: the page is
+// wider for this list, so the actions sit on one line (no more stacking), each keeping its own box
+// and target size; a table still too wide scrolls in its region.
+describe("MembersManager — row actions on one line, never past the table's edge", () => {
+  it("lays the actions out in one flex row, in a table of 56rem minimum", () => {
     render(
       <MembersManager
         initialMembers={[member({ id: "a", addressStatus: { kind: "to_verify", since: "2026-03-01T00:00:00.000Z" } })]}
@@ -264,8 +265,7 @@ describe("MembersManager — row actions wrap instead of overflowing", () => {
     expect(table).not.toHaveClass("min-w-[64rem]")
     const edit = screen.getByRole("button", { name: "Modifier Alice Martin" })
     const row = edit.parentElement!
-    expect(row).toHaveClass("flex", "flex-wrap", "gap-1")
-    expect(row.closest("td")).not.toHaveClass("whitespace-nowrap")
+    expect(row).toHaveClass("flex", "flex-nowrap", "gap-1")
     const actions = [
       screen.getByRole("link", { name: "Activité de Alice Martin" }),
       edit,
@@ -324,5 +324,69 @@ describe("MembersManager — absorbed and erased records", () => {
   it("a deep-linked edit never opens for an archived record", () => {
     render(<MembersManager initialMembers={members} allTags={[]} initialEditId="erased" defaultHoursPeriod={{ from: "2026-01-01", to: "2026-12-31" }} />)
     expect(screen.queryByRole("dialog")).toBeNull()
+  })
+})
+
+describe("MembersManager — table layout (#1102)", () => {
+  const HINT = /Le tableau est plus large que l'écran/
+  const renderList = () => render(
+    <MembersManager
+      initialMembers={[member({ id: "a", firstName: "Gwendoline", lastName: "Montmollin", email: "gwendoline.de.montmollin@long-address.example.org", phone: "079 123 45 67", tags: ["permis B"] })]}
+      allTags={["permis B"]}
+      defaultHoursPeriod={{ from: "2026-01-01", to: "2026-12-31" }}
+    />,
+  )
+  const stubWidths = (scrollWidth: number, clientWidth: number) => {
+    const sw = vi.spyOn(HTMLElement.prototype, "scrollWidth", "get").mockReturnValue(scrollWidth)
+    const cw = vi.spyOn(HTMLElement.prototype, "clientWidth", "get").mockReturnValue(clientWidth)
+    return () => { sw.mockRestore(); cw.mockRestore() }
+  }
+
+  it("marks its root so the admin page widens for it", () => {
+    const { container } = renderList()
+    expect(container.firstElementChild).toHaveAttribute("data-admin-wide")
+  })
+
+  it("keeps the row actions on one line, with their names unchanged", () => {
+    renderList()
+    const edit = screen.getByRole("button", { name: "Modifier Gwendoline Montmollin" })
+    const actions = edit.parentElement!
+    expect(actions).toHaveClass("flex-nowrap", "whitespace-nowrap")
+    expect(actions).not.toHaveClass("flex-wrap")
+    expect(within(actions).getByRole("link", { name: "Activité de Gwendoline Montmollin" })).toBeInTheDocument()
+    expect(within(actions).getByRole("button", { name: "Désactiver Gwendoline Montmollin" })).toBeInTheDocument()
+  })
+
+  it("contains the sr-only parts of the action names in the scroll region (no page-level sideways scroll)", () => {
+    renderList()
+    expect(screen.getByRole("region", { name: "Liste des membres" })).toHaveClass("relative", "overflow-x-auto")
+  })
+
+  it("wraps a long address and keeps tags and phone numbers whole", () => {
+    renderList()
+    expect(screen.getByText("gwendoline.de.montmollin@long-address.example.org")).toHaveClass("[overflow-wrap:anywhere]")
+    expect(screen.getByText("079 123 45 67")).toHaveClass("whitespace-nowrap")
+    expect(screen.getByText("permis B", { selector: "span" })).toHaveClass("whitespace-nowrap")
+  })
+
+  it("shows no scroll cue when the table fits", () => {
+    const restore = stubWidths(1246, 1246)
+    try {
+      renderList()
+      expect(screen.queryByText(HINT)).toBeNull()
+      expect(screen.getByRole("region", { name: "Liste des membres" })).not.toHaveAttribute("aria-describedby")
+    } finally { restore() }
+  })
+
+  it("shows the cue, as the region's description, when the table is wider than its region", () => {
+    const restore = stubWidths(1076, 341)
+    try {
+      renderList()
+      const hint = screen.getByText(HINT)
+      const region = screen.getByRole("region", { name: "Liste des membres" })
+      expect(region).toHaveAttribute("aria-describedby", hint.id)
+      // Before the region in reading order.
+      expect(hint.compareDocumentPosition(region) & Node.DOCUMENT_POSITION_FOLLOWING).toBeTruthy()
+    } finally { restore() }
   })
 })

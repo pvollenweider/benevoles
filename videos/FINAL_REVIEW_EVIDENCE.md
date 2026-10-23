@@ -137,3 +137,20 @@ jamais activé (lien expiré le …) », « Lien d'activation valable jusqu'au �
   revoir à la prochaine régénération.
 
 Cette vidéo n'a pas été régénérée dans la même PR.
+
+## Écart connu : largeur de la liste des membres (#1102)
+
+La page `/admin/members` est maintenant plus large (`max-w-7xl`, 1248 px de
+contenu à 1280 px au lieu de 992) ; la barre de navigation garde sa largeur.
+Les actions d'une ligne (« Activité », « Modifier », « Désactiver ») sont côte à
+côte au lieu d'être empilées, les lignes sont plus basses. Libellés, noms
+accessibles et sélecteurs inchangés : les captures continuent de fonctionner.
+
+Vidéos filmées à 1280 px qui montrent la liste des membres avec l'ancienne
+disposition, à revoir à la prochaine régénération : `members-management`,
+`members-duplicates-merge`, `data-exports-archives`, `email-delivery-failures`,
+`last-minute-changes`, `privacy-personal-links`, `volunteer-hours-certificate`,
+`attendance-check-in`, et les passages sur « Membres » de `admin-features-tour`
+et `admin-navigation`. Aucune narration ne décrit la disposition du tableau.
+
+Ces vidéos n'ont pas été régénérées dans la même PR.
