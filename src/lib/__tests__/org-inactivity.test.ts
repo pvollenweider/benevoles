@@ -96,6 +96,10 @@ describe("periodic check of inactive organisations (#811)", () => {
     const blocked = { ...procedure, waiting: 0 }
     expect(inactivityStatusText({ lastActivityAt: facts().lastActivityAt, postponedUntil: null, assessment: assessInactivity(facts(), at), procedure: blocked }, "report", at, zurich))
       .toBe("Dernière activité : le 2025-01-15. Procédure bloquée : aucune copie acceptée par le serveur d'envoi (envois échoués ou annulés). Pas de désactivation tant que c'est le cas (une acceptation tardive fait reprendre la procédure) : à traiter manuellement (vérifier les adresses des administrateurs, les contacter autrement, reporter la vérification ou l'exclure). 1er message « Souhaitez-vous conserver votre espace ? » : envoyé le 2027-06-01 ; 2e rappel : bloqué (en file d'attente depuis le 2027-07-01). Désactivation au plus tôt le 2027-08-15, une fois débloquée. Mode observation : la procédure est en pause, rien de plus n'est envoyé ni désactivé.")
+    // An older procedure (no steps): never resumes on its own, so no promise of a resumption.
+    const legacy = { ...procedure, steps: [], waiting: 0, plannedAt: null }
+    const legacyText = inactivityStatusText({ lastActivityAt: facts().lastActivityAt, postponedUntil: null, assessment: assessInactivity(facts(), at), procedure: legacy }, "on", at, zurich)
+    expect(legacyText).toBe("Dernière activité : le 2025-01-15. Procédure bloquée : commencée avant le suivi des envois, aucun de ses messages n'est prouvé. Jamais de désactivation automatique pour elle : à traiter manuellement (vérifier les adresses des administrateurs, les contacter autrement, reporter la vérification ou l'exclure). Elle ne pourrait de toute façon pas être désactivée avant le 2027-08-16.")
     expect(inactivityStatusText({ lastActivityAt: null, postponedUntil: null, assessment: { state: "excluded", reason: "deactivated" }, deactivatedAt: new Date("2027-08-15T03:00:00Z") }, "on", now, day))
       .toBe("Dernière activité : jamais mesurée. Désactivée faute de réponse le 2027-08-15 ; ses administrateurs peuvent la réactiver depuis la page de connexion.")
   })

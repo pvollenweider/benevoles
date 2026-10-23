@@ -50,7 +50,7 @@ export type StepRow = {
 export type BlockReason = "legacy" | "no-recipient" | "undelivered" | "held"
 
 export const BLOCK_REASONS: Record<BlockReason, string> = {
-  legacy: "procédure commencée avant le suivi des envois : aucun message n'est prouvé",
+  legacy: "commencée avant le suivi des envois, aucun de ses messages n'est prouvé",
   "no-recipient": "aucun administrateur avec une adresse email",
   undelivered: "aucune copie acceptée par le serveur d'envoi (envois échoués ou annulés)",
   held: `toujours en attente d'envoi après ${BLOCK_AFTER_DAYS} jours`,

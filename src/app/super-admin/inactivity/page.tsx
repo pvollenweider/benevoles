@@ -115,7 +115,7 @@ export default async function InactivityPage() {
                       </>
                     )}
                   </td>
-                  <td className="px-4 py-2 text-gray-800">
+                  <td className="px-4 py-2 text-gray-800 min-w-72">
                     {r.postponedUntil && r.postponedUntil.getTime() > now.getTime() && `Reporté jusqu'au ${day(r.postponedUntil)}. `}
                     {r.procedure && r.assessment.state === "due"
                       ? (
