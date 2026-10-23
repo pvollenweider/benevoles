@@ -37,3 +37,24 @@ export function successPath(eventSlug: string, result: SignupResult, current: UR
   const query = params.toString()
   return `/${eventSlug}/success${query ? `?${query}` : ""}`
 }
+
+/**
+ * The confirmation's way out (#1097): back to the event, never to the organisation's home only.
+ * Embedded (#948), back to the schedule in the frame with its flow; otherwise the event page with
+ * the organisation of the page (`?org=`, no subdomain), nothing else of the address (the token
+ * stays out).
+ */
+export function successBackLink(eventSlug: string, current: URLSearchParams, embed: boolean): { href: string; label: string } {
+  if (embed) return { href: `/${eventSlug}?${embedFlowParams(current)}`, label: "Revenir au planning" }
+  const org = current.get("org")
+  return { href: `/${eventSlug}${org ? `?${new URLSearchParams({ org })}` : ""}`, label: "Revenir à l'événement" }
+}
+
+/**
+ * Whether the confirmation says the personal link is in the email (#1097): when the page has no
+ * link of its own to show (a public sign-up without proof of the address, #285), and always in
+ * the frame (#948). Not for a waiting list only: that email carries no personal link.
+ */
+export function showsPersonalLinkEmailNote(o: { hasToken: boolean; embed: boolean; waitlistOnly: boolean }): boolean {
+  return !o.waitlistOnly && (o.embed || !o.hasToken)
+}

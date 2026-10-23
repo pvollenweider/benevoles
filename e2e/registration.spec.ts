@@ -104,3 +104,54 @@ test("signing up again with the same address explains how to get the link back",
   await expect(alert.getByRole("button", { name: "Revenir au planning" })).toBeVisible()
   await again.screenshot({ path: test.info().outputPath("duplicate.png"), fullPage: false })
 })
+
+// #1097: no dead end after a public sign-up. The confirmation says where the personal link is
+// (never on screen without proof of the address, #285) and goes back to the event, where a
+// visitor without a session can ask for the link again; the answer is the same for any address.
+test("after a public sign-up, back to the event and the lost link asked again by email", async ({ browser }) => {
+  const email = `e2e-lost-${Date.now()}@example.com`
+  const context = await browser.newContext()
+  const page = await context.newPage()
+  await page.goto("/spectacle-cirque-2026?org=default")
+  const select = page.getByRole("button", { name: /, Démontage[^:]* : sélectionner/ }).first()
+  await waitForHydration(select)
+  await select.click()
+  await page.getByRole("button", { name: /^Continuer/ }).click()
+  await page.getByLabel("Prénom *", { exact: true }).fill("E2E")
+  await page.getByLabel("Nom *", { exact: true }).fill("Perdu")
+  await page.getByLabel("Email *", { exact: true }).fill(email)
+  await page.getByRole("button", { name: "convention des bénévoles" }).click()
+  await page.getByRole("button", { name: "J'ai lu et j'accepte" }).click()
+  await page.getByLabel(/J.accepte que l.association/).check()
+  await page.getByRole("button", { name: "Confirmer mon inscription" }).click()
+  await expect(page).toHaveURL(/\/spectacle-cirque-2026\/success/)
+
+  await expect(page.getByText("L'email de confirmation contient ton lien personnel")).toBeVisible()
+  await expect(page.getByRole("link", { name: /^En savoir plus sur ton lien personnel/ })).toHaveAttribute("href", "/doc/lien-personnel")
+  await expect(page.getByRole("link", { name: /Accéder à mon inscription/ })).toHaveCount(0)
+  await expect(page.getByRole("link", { name: /Retour à l.accueil/ })).toHaveCount(0)
+  await page.getByRole("link", { name: "Revenir à l'événement" }).click()
+  await expect(page).toHaveURL(/\/spectacle-cirque-2026\?org=default$/)
+  await waitForMessage(`to:"${email}"`)
+
+  const lost = page.getByText("J'ai perdu mon lien personnel")
+  await waitForHydration(lost)
+  await lost.click()
+  const field = page.getByLabel(/Adresse email utilisée pour t.inscrire/)
+  await field.fill(email)
+  await page.getByRole("button", { name: "Recevoir mon lien par email" }).click()
+  const answer = page.getByRole("status").filter({ hasText: "Si une inscription existe à cette adresse" })
+  await expect(answer).toBeVisible()
+  await expect(page.locator("a[href^='/my/']")).toHaveCount(0)
+  // Which email leaves (one per upcoming event) is the route's, covered by
+  // src/__tests__/personal-link-routes.test.ts: the seeded event is dated June 2026.
+
+  // An address with no registration gets the very same answer, and no email.
+  const unknown = `e2e-nobody-${Date.now()}@example.com`
+  await field.fill(unknown)
+  await page.getByRole("button", { name: "Recevoir mon lien par email" }).click()
+  await expect(answer).toBeVisible()
+  const { searchMessages } = await import("./helpers/mailpit")
+  expect(await searchMessages(`to:"${unknown}"`)).toHaveLength(0)
+  await context.close()
+})

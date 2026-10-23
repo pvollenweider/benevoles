@@ -13,7 +13,10 @@ import { dayLabel } from "@/lib/spoken-time"
 import PushSubscribeButton from "@/components/PushSubscribeButton"
 import EmbedFrame from "@/components/public/EmbedFrame"
 import { readUpdatedParams, updatedNotice } from "@/lib/signup-updates"
-import { EMBED_PARAM, EMBED_PERSONAL_LINK_NOTE, NEW_TAB_HINT, embedFlowParams, isEmbedMode, markReturnToSchedule } from "@/lib/embed"
+import { EMBED_PARAM, NEW_TAB_HINT, isEmbedMode, markReturnToSchedule } from "@/lib/embed"
+import { PERSONAL_LINK_DOC_LINKS, PERSONAL_LINK_EMAIL_NOTE } from "@/lib/personal-link"
+import { showsPersonalLinkEmailNote, successBackLink } from "@/lib/registration-success"
+import DocMoreLink from "@/components/DocMoreLink"
 
 type RegistrationData = {
   volunteer: { firstName: string; email: string }
@@ -41,6 +44,10 @@ function SuccessContent() {
   const notice = requestNotice(outcome)
   // What a sign-up from the personal page updated (#1013), from the address: there at first render.
   const updatedLine = updatedNotice(readUpdatedParams(params))
+  // No dead end (#1097): back to the event, and where the personal link is when the page has
+  // none to show (a public sign-up: the link only goes out by email, #285).
+  const back = successBackLink(eventSlug, params, embed)
+  const emailNote = showsPersonalLinkEmailNote({ hasToken: !!token, embed, waitlistOnly: isWaitlist })
 
   const [regData, setRegData] = useState<RegistrationData | null>(null)
   const [fetching, setFetching] = useState(!!token)
@@ -115,7 +122,12 @@ function SuccessContent() {
             </p>
           )}
 
-          {embed && <p className="text-gray-700 text-sm mb-6">{EMBED_PERSONAL_LINK_NOTE}</p>}
+          {emailNote && (
+            <p className="text-gray-700 text-sm mb-6">
+              {PERSONAL_LINK_EMAIL_NOTE}{" "}
+              <DocMoreLink href={PERSONAL_LINK_DOC_LINKS.personalLink} about="ton lien personnel" />
+            </p>
+          )}
 
           {token && (
             <div className="bg-gray-50 rounded-xl p-4 mb-6 space-y-3">
@@ -145,13 +157,16 @@ function SuccessContent() {
             </div>
           )}
 
-          {/* Embedded: back to the event's schedule in the frame; the organisation's home can't be framed. */}
+          {/* Back to the event (#1097); embedded, to its schedule in the frame. Not prefetched in
+              view: the prefetch request drops the query, so without an organisation subdomain
+              (`?org=`, local runs and Lighthouse) it answered 404 in the console. */}
           <Link
-            href={embed ? `/${eventSlug}?${embedFlowParams(params)}` : "/"}
+            href={back.href}
+            prefetch={false}
             onClick={embed ? markReturnToSchedule : undefined}
-            className="block w-full bg-gray-900 text-white rounded-xl py-3 text-sm font-medium hover:bg-gray-800 transition-colors"
+            className="block w-full bg-gray-900 text-white rounded-xl py-3 text-sm font-medium hover:bg-gray-800 transition-colors focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-blue-600"
           >
-            {embed ? "Revenir au planning" : <>Retour à l&apos;accueil</>}
+            {back.label}
           </Link>
         </div>
       </div>

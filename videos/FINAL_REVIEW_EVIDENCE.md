@@ -154,3 +154,28 @@ disposition, à revoir à la prochaine régénération : `members-management`,
 et `admin-navigation`. Aucune narration ne décrit la disposition du tableau.
 
 Ces vidéos n'ont pas été régénérées dans la même PR.
+
+## Écart connu : confirmation et lien perdu (#1097)
+
+Après une inscription par le lien public, la page de confirmation dit maintenant
+« L'email de confirmation contient ton lien personnel : garde-le pour modifier
+ou annuler ton inscription. » avec « En savoir plus ↗ », et son bouton du bas
+s'appelle « Revenir à l'événement » (vers l'événement) au lieu de « Retour à
+l'accueil ». La page de l'événement a, en bas du planning et sans session, un
+repli « J'ai perdu mon lien personnel » avec le formulaire de demande du lien.
+Sélecteurs des captures inchangés (« Merci pour ton engagement… », absence de
+« Accéder à mon inscription ») : les captures continuent de fonctionner.
+
+- `volunteer-register-mobile` (scène « success ») : filme l'ancienne
+  confirmation (bouton « Retour à l'accueil », pas de phrase sur le lien) ; la
+  narration reste juste.
+- `volunteer-confirmation-errors` : les confirmations comparées montrent
+  l'ancienne page côté lien public.
+- `privacy-personal-links` : la confirmation anonyme filmée est l'ancienne ; la
+  récupération d'un lien perdu peut maintenant partir de la page de l'événement,
+  la narration (« Depuis la page de récupération ») reste juste.
+- `volunteer-session-availability` (citée par le guide « Ton lien personnel ») :
+  la page de l'événement sans session montre maintenant le repli en bas du
+  planning, si la vidéo y descend.
+
+Ces vidéos n'ont pas été régénérées dans la même PR.

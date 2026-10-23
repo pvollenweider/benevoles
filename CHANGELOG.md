@@ -13,6 +13,7 @@ Format basé sur [Keep a Changelog](https://keepachangelog.com/fr/1.0.0/).
 
 ### Modifié
 
+- **Plus d'impasse après une inscription** (#1097) : la page de confirmation ramène à l'événement (« Revenir à l'événement » au lieu de « Retour à l'accueil ») et rappelle que le lien personnel est dans l'email de confirmation, avec un lien vers le guide. Un bénévole qui a perdu son lien le redemande depuis la page de l'événement (« J'ai perdu mon lien personnel ») : la réponse est la même que l'adresse soit inscrite ou non, et le lien n'arrive que par email.
 - **Guides : les envois à beaucoup de personnes** : les guides « Écrire aux bénévoles » et « Réglages et suivi des emails » expliquent que les emails d'un message à une longue liste partent par vagues, sans rien à faire et sans que cette attente les fasse échouer.
 - **Dépendances à jour** (#1066) : Next.js 16.4.2, React 19.3.1, Prisma 7.10.1, Sentry 11.8, nodemailer 10.1.2, resend 6.33, zod 4.6.7, isomorphic-dompurify 4.6, marked 18.1.1 ; outils de test Playwright 1.64.1, axe-core 4.14, Vitest 5.0.5 et jsdom 30.1.3.
 - **Journaux d'accès du serveur** : gardés un an pour enquêter sur un abus après coup, au lieu de quelques heures en pratique ; l'adresse IP complète et le navigateur n'y restent que 90 jours, puis seul le réseau de l'adresse est gardé. Les liens personnels n'y sont toujours pas écrits, ni aucun en-tête autre que le navigateur. Ils peuvent servir à analyser la fréquentation, les erreurs et les performances du site, sans cookie ni profil individuel. La politique de confidentialité l'indique.

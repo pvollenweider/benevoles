@@ -1,5 +1,5 @@
 import { describe, it, expect } from "vitest"
-import { successPath } from "../registration-success"
+import { showsPersonalLinkEmailNote, successBackLink, successPath } from "../registration-success"
 
 const query = (path: string) => new URLSearchParams(path.split("?")[1] ?? "")
 
@@ -42,5 +42,40 @@ describe("successPath, from the personal page (#1013)", () => {
 
   it("nothing updated: nothing carried", () => {
     expect(successPath("fete", { updated: { contact: [], answers: 0 } }, new URLSearchParams(), false)).toBe("/fete/success")
+  })
+})
+
+// No dead end after a public sign-up (#1097).
+describe("successBackLink", () => {
+  it("goes back to the event, not to the organisation's home", () => {
+    expect(successBackLink("fete", new URLSearchParams(), false)).toEqual({ href: "/fete", label: "Revenir à l'événement" })
+  })
+
+  it("keeps the organisation of the page and drops the token", () => {
+    expect(successBackLink("fete", new URLSearchParams("org=asso-a&token=secret&waitlist=1"), false).href).toBe("/fete?org=asso-a")
+  })
+
+  it("goes back to the schedule in the frame, with its flow", () => {
+    expect(successBackLink("fete", new URLSearchParams("org=club&groupe=abcd2345&token=tok&embed=1"), true))
+      .toEqual({ href: "/fete?org=club&groupe=abcd2345&embed=1", label: "Revenir au planning" })
+  })
+})
+
+describe("showsPersonalLinkEmailNote", () => {
+  it("says the link is in the email when the page has none to show (#285)", () => {
+    expect(showsPersonalLinkEmailNote({ hasToken: false, embed: false, waitlistOnly: false })).toBe(true)
+  })
+
+  it("stays quiet when the page links the personal page itself", () => {
+    expect(showsPersonalLinkEmailNote({ hasToken: true, embed: false, waitlistOnly: false })).toBe(false)
+  })
+
+  it("is always said in the frame (#948)", () => {
+    expect(showsPersonalLinkEmailNote({ hasToken: true, embed: true, waitlistOnly: false })).toBe(true)
+  })
+
+  it("is never said for a waiting list only: that email has no personal link", () => {
+    expect(showsPersonalLinkEmailNote({ hasToken: false, embed: false, waitlistOnly: true })).toBe(false)
+    expect(showsPersonalLinkEmailNote({ hasToken: false, embed: true, waitlistOnly: true })).toBe(false)
   })
 })
