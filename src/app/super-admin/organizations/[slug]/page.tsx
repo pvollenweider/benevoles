@@ -6,6 +6,8 @@ import { loadOrganizationCumulative } from "@/lib/usage-stats"
 import { loadOrganizationInactivity } from "@/lib/org-inactivity-data"
 import { inactivityMode, inactivityStatusText } from "@/lib/org-inactivity"
 import { APP_TIME_ZONE } from "@/lib/time-zone"
+import { loadLimitHits } from "@/lib/limit-hits-data"
+import { zoneSentence } from "@/lib/limit-hits-view"
 
 const day = (d: Date) => d.toLocaleDateString("fr-FR", { timeZone: APP_TIME_ZONE, day: "numeric", month: "long", year: "numeric" })
 
@@ -55,7 +57,7 @@ export default async function OrgDetailPage({ params }: { params: Promise<{ slug
 
   if (!org) notFound()
   const now = new Date()
-  const [cumulative, inactivity] = await Promise.all([loadOrganizationCumulative(org.id), loadOrganizationInactivity(org.id, now)])
+  const [cumulative, inactivity, limitHits] = await Promise.all([loadOrganizationCumulative(org.id), loadOrganizationInactivity(org.id, now), loadLimitHits({ organizationId: org.id, now })])
 
   return (
     <OrgDetail
@@ -69,6 +71,7 @@ export default async function OrgDetailPage({ params }: { params: Promise<{ slug
         admins: org.admins.map((a) => ({ ...a, createdAt: a.createdAt.toISOString() })),
       }}
       cumulative={cumulative}
+      limitHits={limitHits.groups[0] ? { group: limitHits.groups[0], zone: zoneSentence(APP_TIME_ZONE), truncated: limitHits.truncated } : undefined}
       inactivity={inactivity ? {
         orgId: org.id,
         status: inactivityStatusText(inactivity, inactivityMode(), now, day),

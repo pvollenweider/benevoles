@@ -3,6 +3,8 @@ import { describe, it, expect, vi, beforeEach } from "vitest"
 const send = vi.hoisted(() => vi.fn())
 const bump = vi.hoisted(() => vi.fn())
 const allowance = vi.hoisted(() => vi.fn())
+const record = vi.hoisted(() => vi.fn())
+vi.mock("../limit-hits", () => ({ recordLimitHit: record }))
 vi.mock("../channels/email", () => ({ emailChannel: { send } }))
 vi.mock("@/lib/usage-stats", () => ({ bumpPlatformCounter: bump }))
 vi.mock("../send-limits", () => ({ takeSendAllowance: allowance }))
@@ -24,6 +26,21 @@ describe("sendNotification", () => {
     expect(await sendNotification(payload)).toMatchObject({ blocked: true })
     expect(bump.mock.calls).toEqual([["emails_held"], ["emails_dropped"]])
     expect(send).not.toHaveBeenCalled()
+  })
+
+  // #1100: a refused email (dropped, or a direct send over a limit) is recorded here; a held
+  // outbox email is recorded by the outbox, once per email and hour.
+  it("records a dropped or direct-held email as refused, not an outbox-held one", async () => {
+    allowance.mockResolvedValueOnce({ ok: false, limit: "recipient_per_hour", drop: true })
+    expect(await sendNotification({ ...payload, organizationId: "org1" })).toMatchObject({ blocked: true, limit: "recipient_per_hour" })
+    allowance.mockResolvedValueOnce({ ok: false, limit: "org_per_minute", retryAfterMs: 1000 })
+    expect(await sendNotification({ ...payload, organizationId: "org1" })).toMatchObject({ held: true, limit: "org_per_minute" })
+    allowance.mockResolvedValueOnce({ ok: false, limit: "org_per_minute", retryAfterMs: 1000 })
+    expect(await sendNotification({ ...payload, organizationId: "org1", outboxId: "row1" })).toMatchObject({ held: true })
+    expect(record.mock.calls).toEqual([
+      [{ organizationId: "org1", limit: "recipient_per_hour", outcome: "refused" }],
+      [{ organizationId: "org1", limit: "org_per_minute", outcome: "refused" }],
+    ])
   })
 
   it("delivers through the email channel and returns its outcome", async () => {

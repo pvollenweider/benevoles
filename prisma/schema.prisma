@@ -86,6 +86,7 @@ model Organization {
   logo        OrganizationLogo?
   erasureRecords  ErasureRecord[]
   counters    OrganizationCounter[]
+  emailLimitHits EmailLimitHit[]
 }
 
 // The organization's logo (#300), processed server-side (PNG or JPEG, at most 512 px on its longest
@@ -713,6 +714,9 @@ model NotificationOutbox {
   // The targeted message this email belongs to (#467), for its delivery summary.
   targetedMessageId String?
   targetedMessage   TargetedMessage? @relation(fields: [targetedMessageId], references: [id], onDelete: SetNull)
+  // Last time a sending limit held this email back (#1100); null = never held. Lets one email
+  // held several times count once per hour in EmailLimitHit, and tells « still held » apart.
+  lastHeldAt        DateTime?
 
   @@index([status, nextAttemptAt])
   @@index([targetedMessageId])
@@ -1044,6 +1048,29 @@ model VideoFeedback {
 // never lowered by a deletion. Incremented by AFTER INSERT triggers that Prisma does not model
 // (migration 20261008150000_usage_counters); the metrics are listed in src/lib/usage-counters.ts.
 // Read only by the app. Counts only, no personal data.
+// A sending limit reached (#1100, src/lib/notifications/limit-hits.ts): one row per limit,
+// organisation and UTC hour, with how many emails it held (queued, they leave when the window
+// ends) or refused (a direct send that failed, or a public-triggered email dropped). No address,
+// no content, no recipient: an organisation, a limit name, times and counts. Kept 90 days
+// (src/lib/retention.ts). `organizationId` null: platform emails, outside any organisation.
+model EmailLimitHit {
+  id             String   @id @default(cuid())
+  // limit:organisation-or-"platform":UTC hour, the upsert key.
+  bucket         String   @unique
+  organizationId String?
+  limit          String
+  hourStart      DateTime
+  heldCount      Int      @default(0)
+  refusedCount   Int      @default(0)
+  firstAt        DateTime @default(now())
+  lastAt         DateTime @default(now())
+
+  organization Organization? @relation(fields: [organizationId], references: [id], onDelete: Cascade)
+
+  @@index([lastAt])
+  @@index([organizationId, lastAt])
+}
+
 model PlatformCounter {
   metric String @id
   value  BigInt @default(0)

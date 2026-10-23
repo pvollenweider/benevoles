@@ -13,6 +13,9 @@ import { ORG_STATUS_LABELS, orgStatus, SUSPENSION_REASON_MAX, SUSPENSION_REASON_
 import { formatCount, type UsageRow } from "@/lib/usage-counters"
 import ConfirmActionModal from "@/components/admin/ConfirmActionModal"
 import InactivityPanel from "@/components/super-admin/InactivityPanel"
+import FocusTargetHeading from "@/components/admin/event-nav/FocusTargetHeading"
+import { LimitHitLines } from "@/components/super-admin/LimitHitsList"
+import { LIMIT_HITS_ANCHOR, LIMIT_HITS_DAYS, TRUNCATED_SENTENCE, type OrgLimitHits } from "@/lib/limit-hits-view"
 import { useRouter } from "next/navigation"
 import Link from "next/link"
 import { orgSwitchAction } from "@/lib/admin-next"
@@ -48,7 +51,7 @@ type Org = {
   admins: Admin[]
 }
 
-export default function OrgDetail({ org, cumulative, inactivity }: { org: Org; cumulative: UsageRow[]; inactivity?: ComponentProps<typeof InactivityPanel> }) {
+export default function OrgDetail({ org, cumulative, inactivity, limitHits }: { org: Org; cumulative: UsageRow[]; inactivity?: ComponentProps<typeof InactivityPanel>; limitHits?: { group: OrgLimitHits; zone: string; truncated: boolean } }) {
   const router = useRouter()
   const [, startTransition] = useTransition()
   const [toggling, setToggling] = useState(false)
@@ -412,6 +415,18 @@ export default function OrgDetail({ org, cumulative, inactivity }: { org: Org; c
           ))}
         </dl>
       </section>
+
+      {/* Sending limits reached in the last days (#1100), target of the list's marker. */}
+      {limitHits && (
+        <section aria-labelledby={LIMIT_HITS_ANCHOR} className="bg-white border border-gray-200 rounded-xl p-4">
+          <FocusTargetHeading id={LIMIT_HITS_ANCHOR} className="text-sm font-semibold text-gray-900">Plafonds d&apos;envoi atteints</FocusTargetHeading>
+          <p className="text-xs text-gray-600 mt-0.5">
+            Les {LIMIT_HITS_DAYS} derniers jours. Un email retenu part à la fin de la période du plafond (minute ou jour) ; un email refusé n&apos;est pas parti. {limitHits.zone}{limitHits.truncated && ` ${TRUNCATED_SENTENCE}`}
+          </p>
+          {limitHits.group.queueStatus && <p className={`text-sm mt-2 ${limitHits.group.stillHeld > 0 ? "text-amber-800" : "text-gray-700"}`}>{limitHits.group.queueStatus}</p>}
+          <LimitHitLines hits={limitHits.group.hits} />
+        </section>
+      )}
 
       {/* Periodic check of inactive organisations (#811): postpone or exclude. */}
       {inactivity && <InactivityPanel {...inactivity} />}

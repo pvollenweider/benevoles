@@ -13,6 +13,8 @@ import Link from "next/link"
 import SortTh from "@/components/admin/members/SortTh"
 import { ORG_SORT_LABELS, ORG_STATE_LABELS, orgSortKey, orgState, type OrgSortCol } from "@/lib/super-admin-tables"
 import { nextSort, sortAnnouncement, sortRows, urlWithSort, type SortState } from "@/lib/table-sort"
+import LimitHitsList from "@/components/super-admin/LimitHitsList"
+import { LIMIT_HITS_ANCHOR, LIMIT_HITS_DAYS, TRUNCATED_SENTENCE, type OrgLimitHits } from "@/lib/limit-hits-view"
 
 type OrgCount = {
   events: number
@@ -45,6 +47,12 @@ type Props = {
   initialOrgs: Org[]
   /** From `?tri=`: the sort chosen before a reload (#820). */
   initialSort?: SortState<OrgSortCol>
+  /** Sending limits reached in the last days (#1100), grouped by organisation; empty: no block. */
+  limitHits?: OrgLimitHits[]
+  /** « Heures de Zurich. », the zone of the block's times. */
+  limitHitsZone?: string
+  /** Only the latest hourly rows were read. */
+  limitHitsTruncated?: boolean
 }
 
 const STATE_TONE: Record<ReturnType<typeof orgState>, string> = {
@@ -54,7 +62,8 @@ const STATE_TONE: Record<ReturnType<typeof orgState>, string> = {
   suspended: "text-red-700",
 }
 
-export default function OrgsManager({ initialOrgs, initialSort = { col: null, dir: "asc" } }: Props) {
+export default function OrgsManager({ initialOrgs, initialSort = { col: null, dir: "asc" }, limitHits = [], limitHitsZone = "", limitHitsTruncated = false }: Props) {
+  const hitOrgIds = new Set(limitHits.map((g) => g.key))
   const router = useRouter()
   const [sort, setSort] = useState(initialSort)
   const [sortStatus, setSortStatus] = useState("")
@@ -122,6 +131,17 @@ export default function OrgsManager({ initialOrgs, initialSort = { col: null, di
         </Link>
       </div>
 
+      {limitHits.length > 0 && (
+        <section aria-labelledby="send-limit-hits-heading" className="bg-white border border-gray-200 rounded-xl p-4">
+          <h2 id="send-limit-hits-heading" className="text-base font-semibold text-gray-900">Plafonds d&apos;envoi atteints</h2>
+          <p className="text-sm text-gray-700 mt-0.5 mb-3">
+            Les {LIMIT_HITS_DAYS} derniers jours. Un email retenu part à la fin de la période du plafond (minute ou jour) ; un email refusé n&apos;est pas parti. {limitHitsZone}{limitHitsTruncated && ` ${TRUNCATED_SENTENCE}`}
+          </p>
+          <LimitHitsList groups={limitHits} />
+        </section>
+      )}
+
+      {limitHits.length > 0 && <h2 className="sr-only">Liste des organisations</h2>}
       {orgs.length === 0 ? (
         <div className="text-center py-16 text-gray-500">
           Aucune organisation. Créez-en une pour commencer.
@@ -154,6 +174,17 @@ export default function OrgsManager({ initialOrgs, initialSort = { col: null, di
                     >
                       {org.name}
                     </Link>
+                    {hitOrgIds.has(org.id) && (
+                      <>
+                        <span className="sr-only">. </span>
+                        <Link
+                          href={`/super-admin/organizations/${org.slug}#${LIMIT_HITS_ANCHOR}`}
+                          className="block w-fit mt-1 py-0.5 text-xs text-blue-700 underline underline-offset-2 hover:text-blue-800 rounded focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-blue-600"
+                        >
+                          Plafond d&apos;envoi atteint<span className="sr-only"> par {org.name}</span>
+                        </Link>
+                      </>
+                    )}
                   </td>
                   <td className="px-4 py-3 text-xs min-w-[8rem]">
                     <span className={STATE_TONE[orgState(org)]}>{ORG_STATE_LABELS[orgState(org)]}</span>

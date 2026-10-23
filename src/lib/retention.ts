@@ -35,6 +35,9 @@ export const RETENTION_DAYS = {
    * keep it longer than the videos it judges stay current; a year of answers is enough to find
    * the videos to improve, and a regenerated video starts fresh anyway (new revision). */
   videoFeedback: 365,
+  /** Sending limits reached (#1100): organisation, limit, hour, counts; no address, no content.
+   * The operator looks at the last 7 days; three months show whether a limit is hit again and again. */
+  emailLimitHit: 90,
   /** The operator's decisions (#810): space validated, refused, suspended, deleted, block list. */
   operatorLog: 365,
   /** Self-service sign-up request (#810): name, contact name and address typed on /inscription. */
@@ -216,6 +219,15 @@ export const RETENTION: readonly RetentionEntry[] = [
     mechanism: "nettoyage quotidien (cron cleanup) ; effacés aussi si le membre est effacé",
     backups: inBackups,
     public: true,
+  },
+  {
+    data: "Plafonds d'envoi atteints : organisation, plafond concerné, heure, nombres d'emails retenus et refusés ; ni adresse, ni destinataire, ni contenu",
+    purpose: "Permettre à l'opérateur de voir quelle organisation atteint quel plafond, et à quelle fréquence",
+    duration: `${d.emailLimitHit} jours après le dernier email retenu ou refusé de l'heure`,
+    trigger: "un email retenu ou refusé par un plafond d'envoi",
+    mechanism: "nettoyage quotidien (cron cleanup) ; effacés avec l'organisation",
+    backups: inBackups,
+    public: false,
   },
   {
     data: "Messages ciblés (objet, texte, public, nombres)",
