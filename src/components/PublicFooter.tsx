@@ -152,7 +152,7 @@ function FooterAnchor({ link }: { link: FooterLink }) {
  */
 export default function PublicFooter({ variant = "event", site }: { variant?: "site" | "event" | "embed"; site?: FooterSite }) {
   const apexBase = site?.apexBase ?? null
-  if (variant === "embed") return <EmbedFooter apexBase={apexBase} />
+  if (variant === "embed") return <EmbedFooter apexBase={apexBase} name={site?.name ?? siteName()} />
   const columns = variant === "site" ? footerSiteColumns() : footerEventColumns(apexBase)
   const width = variant === "site" ? "w-full" : "max-w-xl"
   return (
@@ -185,25 +185,25 @@ export default function PublicFooter({ variant = "event", site }: { variant?: "s
 }
 
 /**
- * The embedded sign-up's footer (#948): no site chrome, a single line with the legal links and the
- * tool's name, every link in a new tab (the site around the frame stays where it is). Still one
- * `<footer>` and one `<nav>` « Liens utiles », after the `</main>`.
+ * The embedded sign-up's footer (#948): no site chrome, a single line with the legal links,
+ * « Propulsé par <instance> » to the site's home (#1117) and the code, every link in a new tab (the
+ * site around the frame stays where it is). Still one `<footer>` and one `<nav>` « Liens utiles », after the
+ * `</main>`.
  */
-function EmbedFooter({ apexBase }: { apexBase: string | null }) {
+function EmbedFooter({ apexBase, name }: { apexBase: string | null; name: string }) {
+  const links: readonly FooterLink[] = [
+    ...footerEmbedLinks(apexBase),
+    { href: apexHomeHref(apexBase), label: `Propulsé par ${name}`, newTab: true },
+    // The source offer stays on the page itself (AGPL-3.0 §13): a volunteer may only ever see the frame.
+    { href: REPOSITORY_URL, label: "Code source", external: true, github: true },
+  ]
   return (
     <footer className="max-w-6xl mx-auto mt-6 pt-4 pb-4 border-t border-gray-200 text-xs text-gray-600">
       <nav aria-label="Liens utiles">
         <ul className="flex flex-wrap items-center gap-x-4 gap-y-1">
-          {footerEmbedLinks(apexBase).map((l) => (
+          {links.map((l) => (
             <li key={l.href}><FooterAnchor link={l} /></li>
           ))}
-          <li>
-            <a href={REPOSITORY_URL} target="_blank" rel="noopener noreferrer" className={`${linkClass} gap-1.5`}>
-              <GitHubMark className="w-3.5 h-3.5" />
-              benevol.app
-              <span className="sr-only">, code source sur GitHub {NEW_TAB}</span>
-            </a>
-          </li>
         </ul>
       </nav>
     </footer>

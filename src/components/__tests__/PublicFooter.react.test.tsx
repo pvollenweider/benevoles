@@ -150,13 +150,50 @@ describe("PublicFooter", () => {
   })
 
   describe("embed variant (#948)", () => {
-    it("links the legal pages on the site's address, in a new tab, and no home link", () => {
+    it("links the legal pages on the site's address, in a new tab", () => {
       render(<PublicFooter variant="embed" site={{ apexBase: "https://www.benevol.app", name: "benevol.app" }} />)
       const privacy = screen.getByRole("link", { name: "Confidentialité (ouvre dans un nouvel onglet)" })
       expect(privacy).toHaveAttribute("href", "https://www.benevol.app/legal/privacy")
       expect(privacy).toHaveAttribute("target", "_blank")
       expect(screen.getByRole("link", { name: "CGU (ouvre dans un nouvel onglet)" })).toHaveAttribute("href", "https://www.benevol.app/legal/terms")
-      expect(screen.queryByRole("link", { name: /Propulsé par/ })).toBeNull()
+    })
+
+    // #1117: the tool's name links the instance's home, the code has its own link.
+    it("links « Propulsé par <instance> » to the site's home, in a new tab, without the GitHub mark", () => {
+      render(<PublicFooter variant="embed" site={{ apexBase: "https://www.benevol.app", name: "benevol.app" }} />)
+      const home = screen.getByRole("link", { name: "Propulsé par benevol.app (ouvre dans un nouvel onglet)" })
+      expect(home).toHaveAttribute("href", "https://www.benevol.app/")
+      expect(home).toHaveAttribute("target", "_blank")
+      expect(home).toHaveAttribute("rel", "noopener")
+      expect(home.querySelector("svg")).toBeNull()
+      expect(screen.getByRole("navigation", { name: "Liens utiles" }).contains(home)).toBe(true)
+    })
+
+    // AGPL-3.0 §13: the source offer stays on the embedded page, separately named.
+    it("ends with a link to the code on GitHub, in a new tab", () => {
+      render(<PublicFooter variant="embed" site={{ apexBase: "https://www.benevol.app", name: "benevol.app" }} />)
+      const code = screen.getByRole("link", { name: "Code source sur GitHub (ouvre dans un nouvel onglet)" })
+      expect(code).toHaveAttribute("href", GITHUB)
+      expect(code).toHaveAttribute("target", "_blank")
+      expect(code.querySelector("svg")).toHaveAttribute("aria-hidden", "true")
+      const nav = screen.getByRole("navigation", { name: "Liens utiles" })
+      expect(within(nav).getAllByRole("link").at(-1)).toBe(code)
+    })
+
+    it("names a self-hosted instance and links its own address", () => {
+      vi.stubEnv("HOSTED_SERVICE", "false")
+      try {
+        render(<PublicFooter variant="embed" site={{ apexBase: "https://benevoles.asso.example", name: "Bénévoles Asso" }} />)
+        expect(screen.getByRole("link", { name: "Propulsé par Bénévoles Asso (ouvre dans un nouvel onglet)" })).toHaveAttribute("href", "https://benevoles.asso.example/")
+        expect(screen.getByRole("link", { name: "Exploitant de cette instance (ouvre dans un nouvel onglet)" })).toHaveAttribute("href", "https://benevoles.asso.example/legal/exploitant")
+      } finally {
+        vi.unstubAllEnvs()
+      }
+    })
+
+    it("links the home at / without an address (localhost, ?org=)", () => {
+      render(<PublicFooter variant="embed" />)
+      expect(screen.getByRole("link", { name: /^Propulsé par .+ \(ouvre dans un nouvel onglet\)$/ })).toHaveAttribute("href", "/")
     })
   })
 
