@@ -113,6 +113,45 @@ describe.skipIf(!url)("invitations and reminders through the outbox (#1105)", ()
     console.log(`500 invitations queued in ${Date.now() - started} ms`)
   })
 
+  it("cancels a held invitation whose member's address was corrected, and the re-invitation reaches the new address", async () => {
+    const ev = (await prisma.event.create({ data: { organizationId: orgId, slug: "adresse", title: "Fête", startDate: new Date("2030-08-01"), endDate: new Date("2030-08-01") } })).id
+    const member = await prisma.volunteer.create({ data: { organizationId: orgId, firstName: "Typo", lastName: "L", email: `${tag}-typo@example.org`, active: true } })
+    await invite(post(`/api/admin/events/${ev}/invitations`, { volunteerIds: [member.id] }), params(ev))
+    await prisma.volunteer.update({ where: { id: member.id }, data: { email: `${tag}-right@example.org` } })
+    // The old row is still pending (held); inviting again a few minutes later queues the new address.
+    await prisma.memberInvite.updateMany({ where: { eventId: ev }, data: { sentAt: new Date(Date.now() - 10 * 60 * 1000) } })
+    const again = await (await invite(post(`/api/admin/events/${ev}/invitations`, { volunteerIds: [member.id] }), params(ev))).json()
+    expect(again).toMatchObject({ emailsQueued: 1, recentlySkipped: 0 })
+
+    smtp.mockResolvedValue({ ok: true })
+    // The first test filled this minute's window (in-memory limiter): room for this delivery.
+    process.env.EMAIL_LIMIT_ORG_PER_MINUTE = "100000"
+    const rows = await prisma.notificationOutbox.findMany({ where: { organizationId: orgId }, orderBy: { createdAt: "asc" } })
+    expect(await deliverOutbox({ ids: rows.map((r) => r.id) })).toMatchObject({ sent: 1, cancelled: 1 })
+    expect(smtp).toHaveBeenCalledTimes(1)
+    expect(smtp.mock.calls[0][0].recipient.email).toBe(`${tag}-right@example.org`)
+    expect((await prisma.notificationOutbox.findUniqueOrThrow({ where: { id: rows[0].id } })).lastError).toBe("member_address_changed")
+    delete process.env.EMAIL_LIMIT_ORG_PER_MINUTE
+  })
+
+  it("« Renvoyer » refuses a failed invitation email once a newer copy was queued or sent", async () => {
+    const { retryOutboxRow } = await import("@/lib/outbox-data")
+    const ev = (await prisma.event.create({ data: { organizationId: orgId, slug: "renvoi", title: "Fête", startDate: new Date("2030-09-01"), endDate: new Date("2030-09-01") } })).id
+    const member = await prisma.volunteer.create({ data: { organizationId: orgId, firstName: "Retry", lastName: "L", email: `${tag}-retry@example.org`, active: true } })
+    await invite(post(`/api/admin/events/${ev}/invitations`, { volunteerIds: [member.id] }), params(ev))
+    const [first] = await prisma.notificationOutbox.findMany({ where: { organizationId: orgId } })
+    await prisma.notificationOutbox.update({ where: { id: first.id }, data: { status: "failed", lastError: "smtp:temporary" } })
+    // Alone, the failed copy can be put back.
+    expect(await retryOutboxRow(first.id, orgId)).toBe(true)
+    await prisma.notificationOutbox.update({ where: { id: first.id }, data: { status: "failed", lastError: "smtp:temporary" } })
+    // A newer copy queued later (a re-invitation past the 5 minutes): the failed one stays failed.
+    await prisma.memberInvite.updateMany({ where: { eventId: ev }, data: { sentAt: new Date(Date.now() - 10 * 60 * 1000) } })
+    await invite(post(`/api/admin/events/${ev}/invitations`, { volunteerIds: [member.id] }), params(ev))
+    expect(await prisma.notificationOutbox.count({ where: { organizationId: orgId } })).toBe(2)
+    expect(await retryOutboxRow(first.id, orgId)).toBe(false)
+    expect((await prisma.notificationOutbox.findUniqueOrThrow({ where: { id: first.id } })).status).toBe("failed")
+  })
+
   it("invites members through the outbox and does not re-send to someone invited a minute ago", async () => {
     smtp.mockResolvedValue({ ok: true })
     const ids = volunteerIds.slice(0, 3)

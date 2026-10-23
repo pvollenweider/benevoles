@@ -5,7 +5,8 @@ import { NextResponse } from "next/server"
 import { requireOrgSession } from "@/lib/auth-guard"
 import { memberInvitePayload } from "@/lib/notification-helpers"
 import { deliverAfterResponse, enqueueNotifications } from "@/lib/notifications/outbox"
-import { INVITE_EMAIL_KEY_PREFIX, OUTSTANDING_OUTBOX_STATUSES, RESEND_GUARD_MS, SEND_TRANSACTION_OPTIONS, inviteEmailDedupeKey, invitesWithEmailOutstanding, sendCutoff } from "@/lib/invitation-sending"
+import { RESEND_GUARD_MS, SEND_TRANSACTION_OPTIONS, inviteEmailDedupeKey, sendCutoff } from "@/lib/invitation-sending"
+import { outstandingInviteEmails } from "@/lib/invitation-outbox"
 import { adminActor, logEvent } from "@/lib/event-log"
 import { z } from "zod"
 import { randomBytes } from "crypto"
@@ -143,10 +144,8 @@ export async function POST(req: Request, { params }: { params: Promise<{ id: str
     // Someone already invited gets the invitation again, as before, unless it went less than
     // RESEND_GUARD_MS ago or is still waiting in the outbox: a double click or a retried request
     // never emails them twice.
-    const outstanding = existingIds.length === 0 ? new Set<string>() : invitesWithEmailOutstanding((await tx.notificationOutbox.findMany({
-      where: { organizationId: event.organizationId, status: { in: [...OUTSTANDING_OUTBOX_STATUSES] }, dedupeKey: { startsWith: INVITE_EMAIL_KEY_PREFIX } },
-      select: { dedupeKey: true },
-    })).map((r) => r.dedupeKey))
+    const existingInvites = existingIds.length === 0 ? [] : await tx.memberInvite.findMany({ where: { eventId, volunteerId: { in: existingIds } }, select: { id: true, volunteerId: true } })
+    const outstanding = await outstandingInviteEmails(tx, event.organizationId, new Map(existingInvites.map((i) => [i.id, byId.get(i.volunteerId)!.email])))
     const resent = existingIds.length === 0 ? [] : await tx.memberInvite.updateManyAndReturn({
       where: {
         eventId,

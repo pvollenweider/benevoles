@@ -14,9 +14,11 @@ const m = vi.hoisted(() => ({
   sendNotification: vi.fn(),
   after: vi.fn(),
   reported: vi.fn(),
+  volunteerFindUnique: vi.fn(),
 }))
 vi.mock("../prisma", () => ({
   prisma: {
+    volunteer: { findUnique: m.volunteerFindUnique },
     notificationOutbox: {
       findMany: m.findMany, updateMany: m.updateMany, update: m.update, create: m.create,
       createMany: m.createMany, count: m.count, findFirst: m.findFirst,
@@ -257,10 +259,32 @@ describe("member invitation through the outbox (#1105)", () => {
 
     m.findUniqueOrThrow.mockResolvedValue({ id: "n1", attempts: 0, organizationId: "org-a", payload: sealed })
     m.sendNotification.mockResolvedValue({ ok: true })
+    m.volunteerFindUnique.mockResolvedValue({ email: "M@x.ch" }) // same address, any case
     await deliverOutbox({ now })
     const sent = m.sendNotification.mock.calls.at(-1)![0]
     expect(sent).toMatchObject({ kind: "member_invite", organizationId: "org-a", volunteerId: "vol-1", outboxId: "n1" })
     expect(render(sent).html).toContain("token=clear-invite-token")
+  })
+
+  it("cancels a queued invitation or manual reminder whose member's address changed meanwhile, never sends it", async () => {
+    for (const kind of ["member_invite", "manual_reminder"] as const) {
+      m.sendNotification.mockReset()
+      m.update.mockReset()
+      m.findUniqueOrThrow.mockResolvedValue({ id: "n1", attempts: 0, organizationId: "org-a", payload: { kind, volunteerId: "vol-1", recipient: { email: "typo@x.ch" }, data: {} } })
+      m.volunteerFindUnique.mockResolvedValue({ email: "right@x.ch" })
+      const res = await deliverOutbox({ now })
+      expect(res).toMatchObject({ cancelled: 1, sent: 0 })
+      expect(m.sendNotification).not.toHaveBeenCalled()
+      expect(m.update).toHaveBeenCalledWith(expect.objectContaining({ data: expect.objectContaining({ status: "cancelled", lastError: "member_address_changed" }) }))
+    }
+  })
+
+  it("does not look up the member for other kinds", async () => {
+    m.findUniqueOrThrow.mockResolvedValue({ id: "n1", attempts: 0, payload: { kind: "targeted_message", volunteerId: "vol-1", recipient: { email: "a@x.ch" }, data: {} } })
+    m.sendNotification.mockResolvedValue({ ok: true })
+    await deliverOutbox({ now })
+    expect(m.volunteerFindUnique).not.toHaveBeenCalled()
+    expect(m.sendNotification).toHaveBeenCalled()
   })
 
   it("an invitation held over a sending limit stays pending, never failed", async () => {

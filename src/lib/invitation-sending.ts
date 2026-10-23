@@ -61,16 +61,41 @@ export function manualReminderKeyPrefix(eventId: string): string {
   return `manual_reminder:${eventId}:`
 }
 
-/** The invites whose invitation email is still in the outbox, from the outstanding rows' keys. */
-export function invitesWithEmailOutstanding(dedupeKeys: (string | null)[]): Set<string> {
+/**
+ * The invites whose invitation email is still in the outbox, from the outstanding rows' keys and
+ * queued addresses. A row queued for an address the member no longer has does not count: delivery
+ * cancels it (outbox-address-changed-reason.ts), so the new address must get its own copy.
+ * `currentEmail` gives each invite's current address; an unreadable row (null address) counts.
+ */
+export function invitesWithEmailOutstanding(rows: { dedupeKey: string | null; email: string | null }[], currentEmail: Map<string, string | null>): Set<string> {
+  const norm = (e: string | null | undefined) => (e ?? "").trim().toLowerCase()
   const ids = new Set<string>()
-  for (const key of dedupeKeys) {
+  for (const { dedupeKey: key, email } of rows) {
     if (!key?.startsWith(INVITE_EMAIL_KEY_PREFIX)) continue
     const inviteId = key.slice(INVITE_EMAIL_KEY_PREFIX.length).split(":")[0]
-    if (inviteId) ids.add(inviteId)
+    if (!inviteId || !currentEmail.has(inviteId)) continue
+    if (email !== null && norm(email) !== norm(currentEmail.get(inviteId))) continue
+    ids.add(inviteId)
   }
   return ids
 }
 
 /** Prisma's 5 s default is too short for a long list queued in one transaction (500 invitations). */
 export const SEND_TRANSACTION_OPTIONS = { maxWait: 10_000, timeout: 60_000 } as const
+
+/**
+ * The key prefix shared by every copy of « the same » email: one invitation's emails, or one
+ * person's manual reminders for one event. A failed copy put back in the queue (« Renvoyer ») is
+ * refused when a newer copy with the same prefix is queued or already sent: it would be a second
+ * one. Null for any other kind, which keeps its own retry rules.
+ */
+export function sameEmailKeyPrefix(dedupeKey: string | null | undefined): string | null {
+  if (!dedupeKey) return null
+  const parts = dedupeKey.split(":")
+  if (parts[0] === "member_invite" && parts.length === 3 && parts[1]) return `member_invite:${parts[1]}:`
+  if (parts[0] === "manual_reminder" && parts.length === 4 && parts[1] && parts[2]) return `manual_reminder:${parts[1]}:${parts[2]}:`
+  return null
+}
+
+/** Statuses of a copy that makes an older failed one redundant. */
+export const SUPERSEDING_OUTBOX_STATUSES = ["pending", "sending", "sent"] as const

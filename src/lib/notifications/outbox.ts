@@ -12,6 +12,7 @@ import { MAX_ATTEMPTS } from "./types"
 import { decryptValue, encryptValue } from "../token-vault"
 import { siteDomain } from "@/lib/site"
 import { isAddedByOrganizer, resolveAddedByOrganizer } from "./added-by-organizer"
+import { MEMBER_ADDRESS_CHANGED_REASON, MEMBER_ADDRESS_CHECKED_KINDS, memberAddressChanged } from "../outbox-address-changed-reason"
 
 /**
  * Notification outbox (#293).
@@ -174,6 +175,7 @@ export async function deliverOutbox(opts: { ids?: string[]; limit?: number; now?
     // A grouped « added by an organizer » email (#916) lists what is still held when it leaves:
     // nothing left, nothing to tell. A failed read is an ordinary failed attempt, retried.
     let nothingLeft = false
+    let addressChanged = false
     const outcome = await Promise.resolve()
       .then(async () => {
         let payload = openPayload(claimed.payload)
@@ -182,6 +184,12 @@ export async function deliverOutbox(opts: { ids?: string[]; limit?: number; now?
           if (!resolved) { nothingLeft = true; return { ok: true as const } }
           payload = resolved
         }
+        // An invitation or manual reminder held in the queue (#1105) carries a personal link: if
+        // the member's address changed meanwhile, it must not leave for the old one.
+        if (payload.volunteerId && MEMBER_ADDRESS_CHECKED_KINDS.includes(payload.kind)) {
+          const member = await prisma.volunteer.findUnique({ where: { id: payload.volunteerId }, select: { email: true } })
+          if (memberAddressChanged(payload.recipient.email, member)) { addressChanged = true; return { ok: true as const } }
+        }
         // The row's organisation (#814) is checked by sendNotification right before this one send,
         // not when the batch was read: a deactivation during a batch stops the rest of it.
         return sendNotification({ ...payload, organizationId: claimed.organizationId ?? payload.organizationId ?? null, messageId: outboxMessageId(row.id), outboxId: row.id })
@@ -189,6 +197,12 @@ export async function deliverOutbox(opts: { ids?: string[]; limit?: number; now?
       .catch(
       (e: unknown) => ({ ok: false as const, reason: e instanceof Error ? e.message : String(e), permanent: undefined as true | undefined, recipientRejected: undefined as true | undefined, blocked: undefined as true | undefined, held: undefined as true | undefined, retryAfterMs: undefined as number | undefined }),
     )
+
+    if (addressChanged) {
+      await prisma.notificationOutbox.update({ where: { id: row.id }, data: { status: "cancelled", lastError: MEMBER_ADDRESS_CHANGED_REASON, claimedAt: null } })
+      result.cancelled++
+      continue
+    }
 
     if (nothingLeft) {
       await prisma.notificationOutbox.update({ where: { id: row.id }, data: { status: "cancelled", lastError: "Plus aucune inscription à annoncer.", claimedAt: null } })

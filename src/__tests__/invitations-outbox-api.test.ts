@@ -20,7 +20,7 @@ const enqueued: (Payload & { status?: string })[] = []
 const deliverAll = () => { for (const p of enqueued) p.status = "sent" }
 const enqueueNotifications = vi.hoisted(() => vi.fn())
 const deliverAfterResponse = vi.hoisted(() => vi.fn())
-vi.mock("@/lib/notifications/outbox", () => ({ enqueueNotifications, deliverAfterResponse }))
+vi.mock("@/lib/notifications/outbox", () => ({ enqueueNotifications, deliverAfterResponse, openPayload: (p: unknown) => p }))
 
 const sendNotification = vi.hoisted(() => vi.fn())
 vi.mock("@/lib/notifications", () => ({ sendNotification }))
@@ -64,7 +64,8 @@ function fakeDb(volunteers: Volunteer[], invites: Invite[], opts: { registeredEm
     },
     volunteer: { findMany: vi.fn(async ({ where }: { where: { id: { in: string[] } } }) => volunteers.filter((v) => where.id.in.includes(v.id) && v.active)) },
     memberInvite: {
-      findMany: vi.fn(async () => invites.map((i) => ({ ...i, volunteer: vById.get(i.volunteerId)! }))),
+      findMany: vi.fn(async (args?: { where?: { volunteerId?: { in: string[] } } }) =>
+        invites.filter((i) => !args?.where?.volunteerId || args.where.volunteerId.in.includes(i.volunteerId)).map((i) => ({ ...i, volunteer: vById.get(i.volunteerId)! }))),
       createManyAndReturn: vi.fn(async ({ data }: { data: { eventId: string; volunteerId: string; tokenEnc: string }[] }) => {
         const out: { id: string; volunteerId: string }[] = []
         for (const d of data) {
@@ -86,7 +87,7 @@ function fakeDb(volunteers: Volunteer[], invites: Invite[], opts: { registeredEm
     },
     notificationOutbox: {
       findMany: vi.fn(async ({ where }: { where: { status: { in: string[] }; dedupeKey: { startsWith: string } } }) =>
-        enqueued.filter((p) => where.status.in.includes(p.status ?? "pending") && p.dedupeKey?.startsWith(where.dedupeKey.startsWith)).map((p) => ({ dedupeKey: p.dedupeKey! }))),
+        enqueued.filter((p) => where.status.in.includes(p.status ?? "pending") && p.dedupeKey?.startsWith(where.dedupeKey.startsWith)).map((p) => ({ dedupeKey: p.dedupeKey!, payload: p }))),
       count: vi.fn(async ({ where }: { where: { status: { in: string[] }; dedupeKey: { startsWith: string } } }) =>
         enqueued.filter((p) => where.status.in.includes(p.status ?? "pending") && p.dedupeKey?.startsWith(where.dedupeKey.startsWith)).length),
     },
@@ -197,6 +198,16 @@ describe("POST /api/admin/events/[id]/invitations/remind (#1105)", () => {
     const body = await (await POST(post("/api/admin/events/evt-1/invitations/remind"), params)).json()
     expect(body).toMatchObject({ queued: 1, recentlySkipped: 1 })
     expect(enqueued.filter((p) => p.volunteerId === "vol-0")).toHaveLength(0)
+  })
+
+  it("reminds someone whose pending email was queued for an address since corrected (that one is cancelled at delivery)", async () => {
+    const vs = members(1)
+    setup(fakeDb(vs, invitesFor(vs)))
+    enqueued.push({ kind: "member_invite", dedupeKey: "member_invite:inv-vol-0:1", recipient: { email: "typo@example.org" }, data: {}, status: "pending" })
+    const { POST } = await import("@/app/api/admin/events/[id]/invitations/remind/route")
+    const body = await (await POST(post("/api/admin/events/evt-1/invitations/remind"), params)).json()
+    expect(body).toMatchObject({ queued: 1, recentlySkipped: 0 })
+    expect(enqueued.at(-1)!.recipient.email).toBe("m0@example.org")
   })
 
   it("keeps leaving out registered and declined members (#558)", async () => {

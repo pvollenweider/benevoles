@@ -74,6 +74,7 @@ const prismaMock = {
   },
   notificationOutbox: {
     updateMany: vi.fn().mockResolvedValue({ count: 0 }), // nothing of org-A matches an org-B row (#382)
+    findFirst: vi.fn().mockResolvedValue(null), // « Renvoyer » looks for a newer copy first (#1105)
     create: vi.fn().mockResolvedValue({ id: "row-1" }),
     createMany: vi.fn().mockResolvedValue({ count: 1 }),
     findUniqueOrThrow: vi.fn().mockResolvedValue({ id: "row-1" }),

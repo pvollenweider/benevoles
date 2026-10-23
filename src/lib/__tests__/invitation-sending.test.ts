@@ -1,5 +1,5 @@
 import { describe, it, expect } from "vitest"
-import { invitesWithEmailOutstanding, manualReminderKeyPrefix, REMIND_COOLDOWN_MS, RESEND_GUARD_MS, emailedWithin, inviteEmailDedupeKey, lastInvitationEmailAt, manualReminderDedupeKey, sendCutoff } from "../invitation-sending"
+import { invitesWithEmailOutstanding, sameEmailKeyPrefix, manualReminderKeyPrefix, REMIND_COOLDOWN_MS, RESEND_GUARD_MS, emailedWithin, inviteEmailDedupeKey, lastInvitationEmailAt, manualReminderDedupeKey, sendCutoff } from "../invitation-sending"
 
 const now = new Date("2026-10-23T12:00:00.000Z")
 const ago = (ms: number) => new Date(now.getTime() - ms)
@@ -41,8 +41,27 @@ describe("invitation sending rules (#1105)", () => {
   })
 
   it("reads the invites with an email still in the outbox from the rows' keys", () => {
-    expect(invitesWithEmailOutstanding(["member_invite:inv-1:123", "member_invite:inv-2:456", "open-shifts:b:vol", null, "manual_reminder:e:v:1"])).toEqual(new Set(["inv-1", "inv-2"]))
+    const current = new Map<string, string | null>([["inv-1", "a@x.ch"], ["inv-2", "b@x.ch"], ["inv-3", "c@x.ch"]])
+    const rows = [
+      { dedupeKey: "member_invite:inv-1:123", email: "A@x.ch " },
+      { dedupeKey: "member_invite:inv-2:456", email: null }, // unreadable: counted, never a second copy
+      { dedupeKey: "member_invite:inv-3:789", email: "old@x.ch" }, // queued for an old address: cancelled at delivery
+      { dedupeKey: "member_invite:inv-other:1", email: "z@x.ch" }, // not one of these invites
+      { dedupeKey: "open-shifts:b:vol", email: "a@x.ch" },
+      { dedupeKey: null, email: null },
+      { dedupeKey: "manual_reminder:e:v:1", email: "a@x.ch" },
+    ]
+    expect(invitesWithEmailOutstanding(rows, current)).toEqual(new Set(["inv-1", "inv-2"]))
     expect(manualReminderDedupeKey("evt-1", "vol-1", now).startsWith(manualReminderKeyPrefix("evt-1"))).toBe(true)
     expect(inviteEmailDedupeKey("inv-9", now).startsWith("member_invite:inv-9:")).toBe(true)
+  })
+
+  it("groups the copies of the same email for « Renvoyer »: one invitation, one person's manual reminder", () => {
+    expect(sameEmailKeyPrefix("member_invite:inv-1:123")).toBe("member_invite:inv-1:")
+    expect(sameEmailKeyPrefix("manual_reminder:evt-1:vol-1:123")).toBe("manual_reminder:evt-1:vol-1:")
+    expect(sameEmailKeyPrefix("open-shifts:batch:vol")).toBeNull()
+    expect(sameEmailKeyPrefix("message:batch:vol")).toBeNull()
+    expect(sameEmailKeyPrefix(null)).toBeNull()
+    expect(sameEmailKeyPrefix("member_invite:")).toBeNull()
   })
 })

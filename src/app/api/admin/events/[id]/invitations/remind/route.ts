@@ -9,7 +9,8 @@ import { adminActor, logEvent } from "@/lib/event-log"
 import { z } from "zod"
 import { linkToken } from "@/lib/token-vault"
 import { validationError } from "@/lib/api-error"
-import { INVITE_EMAIL_KEY_PREFIX, OUTSTANDING_OUTBOX_STATUSES, REMIND_COOLDOWN_MS, SEND_TRANSACTION_OPTIONS, emailedWithin, inviteEmailDedupeKey, invitesWithEmailOutstanding, sendCutoff } from "@/lib/invitation-sending"
+import { REMIND_COOLDOWN_MS, SEND_TRANSACTION_OPTIONS, emailedWithin, inviteEmailDedupeKey, sendCutoff } from "@/lib/invitation-sending"
+import { outstandingInviteEmails } from "@/lib/invitation-outbox"
 
 const schema = z.object({
   message: z.string().max(500).optional(),
@@ -84,10 +85,7 @@ export async function POST(req: Request, { params }: { params: Promise<{ id: str
     ? { outboxIds: [] as string[], claimed: 0 }
     : await db.$transaction(async (tx) => {
         // An earlier invitation email still waiting in the outbox: no second copy behind it.
-        const outstanding = invitesWithEmailOutstanding((await tx.notificationOutbox.findMany({
-          where: { organizationId: event.organizationId, status: { in: [...OUTSTANDING_OUTBOX_STATUSES] }, dedupeKey: { startsWith: INVITE_EMAIL_KEY_PREFIX } },
-          select: { dedupeKey: true },
-        })).map((r) => r.dedupeKey))
+        const outstanding = await outstandingInviteEmails(tx, event.organizationId, new Map(candidates.map((i) => [i.id, i.volunteer.email])))
         // The claim: only rows still last emailed before the cutoff. A concurrent reminder that got
         // there first has moved them past it, and they are left out here.
         const mine = new Set(
