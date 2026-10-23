@@ -1,6 +1,6 @@
 # Accord de sous-traitance (art. 28 RGPD et art. 9 nLPD)
 
-Version du 21 octobre 2026.
+Version du 23 octobre 2026.
 
 Cet accord encadre les données personnelles que benevol.app traite pour le compte de votre organisation. Il répond à l'article 28 du règlement général sur la protection des données (RGPD) et à l'article 9 de la loi fédérale suisse sur la protection des données (nLPD). Il complète les [conditions générales d'utilisation](/legal/terms) et s'applique dès que votre organisation utilise le service.
 
@@ -61,7 +61,8 @@ Compte tenu des informations dont nous disposons, nous vous aidons à assurer la
 
 ## 12. Fin du traitement
 
-- À la fin de votre utilisation du service, vous pouvez exporter vos données depuis l'administration. Nous les effaçons ensuite, sauf obligation légale de les conserver : les données d'une organisation désactivée sont effacées automatiquement 30 jours après sa désactivation.
+- À la fin de votre utilisation du service, vous pouvez exporter vos données depuis l'administration. Nous les effaçons ensuite, sauf obligation légale de les conserver : quand nous désactivons votre organisation, à votre demande par exemple, ses données sont effacées par le nettoyage quotidien, une fois écoulés 30 jours depuis la dernière modification de l'organisation désactivée.
+- Deux cas font exception. Une organisation désactivée faute d'activité n'est pas effacée automatiquement : ses données sont gardées et vous pouvez la réactiver vous-même depuis la page de connexion. Une organisation suspendue pour abus est conservée pendant la suspension, jusqu'à notre décision de la lever ou de supprimer définitivement ses données.
 - Vos données restent dans les sauvegardes chiffrées jusqu'à la fin de leur rotation (30 jours sur le serveur, 90 jours pour la copie hors site), sans restauration partielle possible. Si une sauvegarde devait être restaurée, les effacements intervenus depuis seraient appliqués de nouveau.
 - Sur demande, nous vous confirmons l'effacement par écrit.
 

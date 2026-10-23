@@ -30,7 +30,7 @@ describe("public GDPR documents", () => {
     expect(md).not.toMatch(/[·—]/)
   })
 
-  it.each([[AGREEMENT, "21 octobre 2026"], [LIST, "6 octobre 2026"]])("%s carries its version date and the contact address", (file, date) => {
+  it.each([[AGREEMENT, "23 octobre 2026"], [LIST, "6 octobre 2026"]])("%s carries its version date and the contact address", (file, date) => {
     const md = read(file)
     expect(md).toContain(`Version du ${date}.`)
     expect(md).toContain("contact@benevol.app")
