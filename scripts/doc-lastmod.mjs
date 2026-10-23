@@ -56,7 +56,8 @@ const [TRAILER_KEY, TRAILER_VALUE] = LASTMOD_SKIP_TRAILER.split(": ")
 
 /**
  * Committer date (ISO 8601) of the last commit touching each file, following it across renames
- * and passing over the commits that carry LASTMOD_SKIP_TRAILER; files without history are skipped.
+ * and passing over the commits that carry LASTMOD_SKIP_TRAILER (unless every commit carries it, as
+ * in a shallow clone); files without history are skipped.
  * @param {string[]} sources
  * @param {string} [root]
  * @returns {Record<string, string>}
@@ -67,10 +68,12 @@ export function docLastmod(sources, root = ROOT) {
   for (const source of sources) {
     // Not `--grep`: a rename commit left out by it would also stop `--follow` at the new path.
     const log = execFileSync("git", ["log", "--follow", `--format=%cI%x09%(trailers:key=${TRAILER_KEY},valueonly,separator=%x2c)`, "--", source], { cwd: root, encoding: "utf-8" })
-    const date = log
+    const commits = log
       .split("\n")
       .map((line) => line.split("\t"))
-      .find(([d, trailer]) => d && trailer?.trim() !== TRAILER_VALUE)?.[0]
+      .filter(([d]) => d)
+    // Every commit skipped (a shallow clone that only has the move): the last commit, as before.
+    const date = (commits.find(([, trailer]) => trailer?.trim() !== TRAILER_VALUE) ?? commits[0])?.[0]
     if (date) map[source] = date
   }
   return map

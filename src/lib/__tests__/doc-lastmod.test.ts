@@ -75,6 +75,14 @@ describe("scripts/doc-lastmod.mjs", () => {
       git("2026-02-01T00:00:00Z", "mv", "PAGE.md", "content/PAGE.md")
       git("2026-02-01T00:00:00Z", "commit", "-q", "-m", "move it", "-m", LASTMOD_SKIP_TRAILER)
       expect(docLastmod(["content/PAGE.md"], repo)).toEqual({ "content/PAGE.md": "2026-01-01T00:00:00Z" })
+      // A shallow clone that only holds the move (CI checks out one commit): dated by it rather than left out.
+      const shallow = fs.mkdtempSync(path.join(os.tmpdir(), "doc-lastmod-shallow-"))
+      try {
+        execFileSync("git", ["clone", "-q", "--depth", "1", `file://${repo}`, shallow])
+        expect(docLastmod(["content/PAGE.md"], shallow)).toEqual({ "content/PAGE.md": "2026-02-01T00:00:00Z" })
+      } finally {
+        fs.rmSync(shallow, { recursive: true, force: true })
+      }
       fs.appendFileSync(path.join(repo, "content/PAGE.md"), "Four lines.\n")
       git("2026-03-01T00:00:00Z", "commit", "-q", "-am", "change it")
       expect(docLastmod(["content/PAGE.md"], repo)).toEqual({ "content/PAGE.md": "2026-03-01T00:00:00Z" })
