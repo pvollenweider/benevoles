@@ -306,7 +306,7 @@ async function markBlocked(facts: Facts, decision: Extract<ProcedureDecision, { 
   await notifyOperator({
     key: `inactivity-blocked:${facts.org.id}:${now.toISOString()}`,
     title: `${siteName()} : vérification d'inactivité bloquée`,
-    message: `${facts.org.name} : ${step}${BLOCK_REASONS[decision.reason]}. Aucune désactivation automatique : à traiter depuis la page de l'organisation.`,
+    message: `${facts.org.name} : ${step}${BLOCK_REASONS[decision.reason]}. Pas de désactivation tant que c'est le cas : à traiter depuis la page de l'organisation.`,
     priority: 3,
     url: `${APP_URL()}/super-admin/organizations/${facts.org.slug}`,
   }).catch(reportError("cleanup.inactivity_operator_alert"))

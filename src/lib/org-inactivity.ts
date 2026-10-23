@@ -185,7 +185,7 @@ export function procedureText(p: ProcedureInput, now: Date, day: (d: Date) => st
   if (v.blocked) {
     // The outcome first: what the operator scans for.
     const floor = v.deadline && v.plannedAt ? ` Désactivation au plus tôt le ${day(v.plannedAt)}, une fois débloquée.` : ""
-    return `Procédure bloquée : ${v.blocked.text}. Aucune désactivation automatique : à traiter manuellement (vérifier les adresses des administrateurs, les contacter autrement, reporter la vérification ou l'exclure).${done ? ` ${done}` : ""}${floor}`
+    return `Procédure bloquée : ${v.blocked.text}. Pas de désactivation tant que c'est le cas (une acceptation tardive fait reprendre la procédure) : à traiter manuellement (vérifier les adresses des administrateurs, les contacter autrement, reporter la vérification ou l'exclure).${done ? ` ${done}` : ""}${floor}`
   }
   const next = v.next ? ` Prochain message (${v.next.label.toLowerCase()}) au plus tôt le ${day(v.next.at)}.` : ""
   const planned = v.deadline && v.plannedAt ? ` Sans réponse d'ici le ${day(v.deadline)} inclus, désactivation au plus tôt le ${day(v.plannedAt)}.` : ""

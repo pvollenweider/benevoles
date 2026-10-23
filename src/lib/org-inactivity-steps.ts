@@ -25,11 +25,11 @@ export const STEP_LABELS: Record<StepKey, string> = {
   last: "Dernier rappel",
 }
 
-/** Calendar days (UTC) between a message's confirmation and the next one. */
+/** Calendar days (UTC) between a message's confirmation and the next one: from the 30th day after it. */
 export const REMINDER_GAP_DAYS = 30
 /** Full periods of 24 h between the last reminder's confirmation and the deactivation. */
 export const FINAL_NOTICE_DAYS = 15
-/** Never deactivated before the first email + this many periods of 24 h (also the floor of an old procedure). */
+/** Never deactivated before the first email's acceptance + this many periods of 24 h (also the floor of an old procedure). */
 export const MIN_DEACTIVATION_DAYS = 75
 /** A step still unconfirmed this many periods of 24 h after being queued blocks the procedure. */
 export const BLOCK_AFTER_DAYS = 3
@@ -158,6 +158,8 @@ export function decideProcedure(p: ProcedureInput, now: Date): ProcedureDecision
 
   const current = ordered.at(-1)!
   const stored = later(p.plannedAt, current.plannedAt)
+  // The 75 days count from the first message's acceptance by the relay, its queuing as a fallback.
+  const floorFrom = ordered[0].confirmedAt ?? noticeAt
   if (!current.confirmedAt) {
     const reason: BlockReason | null =
       current.recipients === 0 ? "no-recipient"
@@ -169,14 +171,14 @@ export function decideProcedure(p: ProcedureInput, now: Date): ProcedureDecision
   }
 
   if (current.step === "last") {
-    const planned = plannedAfterLast(current.confirmedAt, noticeAt, stored, p.timeZone)
+    const planned = plannedAfterLast(current.confirmedAt, floorFrom, stored, p.timeZone)
     if (now.getTime() >= planned.getTime()) return { action: "deactivate", plannedAt: planned }
     return { action: "wait", step: current.step, confirmed: true, plannedAt: planned, nextAt: planned }
   }
 
   const next = STEP_ORDER[STEP_ORDER.indexOf(current.step) + 1]
   const at = nextStepAt(current.confirmedAt)
-  if (now.getTime() >= at.getTime()) return { action: "queue", step: next, plannedAt: plannedAtQueue(next, now, noticeAt, stored, p.timeZone) }
+  if (now.getTime() >= at.getTime()) return { action: "queue", step: next, plannedAt: plannedAtQueue(next, now, floorFrom, stored, p.timeZone) }
   return { action: "wait", step: current.step, confirmed: true, plannedAt: stored, nextAt: at }
 }
 

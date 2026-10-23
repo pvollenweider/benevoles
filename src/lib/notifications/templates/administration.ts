@@ -508,7 +508,7 @@ export function renderOrgInactivityNotice(p: NotificationPayload): RenderedEmail
     previousDeactivationOn?: string | null
   }
   const subject = d.step === "last"
-    ? `Dernier rappel : sans réponse d'ici le ${d.deactivationOn}, l'espace ${d.organizationName} sera désactivé`
+    ? `Dernier rappel : sans réponse d'ici le ${d.deactivationOn} inclus, l'espace ${d.organizationName} pourra être désactivé`
     : d.step === "second"
       ? `Rappel : souhaitez-vous conserver l'espace ${d.organizationName} ?`
       : `Souhaitez-vous conserver l'espace ${d.organizationName} ?`
@@ -516,14 +516,14 @@ export function renderOrgInactivityNotice(p: NotificationPayload): RenderedEmail
   const loginUrl = `${BASE_URL}/admin/login`
   const since = d.lastActivity ? `depuis le ${d.lastActivity}` : "depuis longtemps"
   const intro = `L'espace de ${d.organizationName} sur ${siteName()} n'a pas été utilisé ${since}, et aucun événement n'y est prévu. Souhaitez-vous le conserver ?`
-  const deadline = `Sans réponse d'ici le ${d.deactivationOn} inclus, l'espace sera désactivé.`
+  const deadline = `Sans réponse d'ici le ${d.deactivationOn} inclus, l'espace pourra être désactivé à partir du lendemain.`
   const changed = d.previousDeactivationOn
-    ? `Cette date remplace celle du ${d.previousDeactivationOn}, annoncée dans notre message précédent : ce rappel part plus tard que prévu, le délai pour répondre est donc prolongé.`
+    ? `Cette date remplace celle du ${d.previousDeactivationOn}, indiquée dans notre message précédent : ce rappel part plus tard que prévu, vous avez donc plus de temps pour répondre.`
     : null
   const keep = "Pour le conserver, appuyez sur le bouton ci-dessous : il n'y a rien d'autre à faire. Créer ou modifier un événement compte aussi comme une réponse."
   const consequence = "Une fois l'espace désactivé, plus personne ne peut s'y connecter ni s'inscrire à ses événements. Ses données sont gardées, et vous pouvez le réactiver vous-même depuis la page de connexion, avec « Espace désactivé faute d'activité ? Le réactiver »."
   const why = `Nous posons régulièrement cette question pour ne pas garder sans fin des données dont personne n'a plus besoin.`
-  const wrote = d.previousSentOn ? `Nous vous avons écrit le ${d.previousSentOn}, sans réponse.` : "Nous vous avons déjà écrit, sans réponse."
+  const wrote = d.previousSentOn ? `Nous avons écrit aux administrateurs de l'espace le ${d.previousSentOn}, sans réponse.` : "Nous avons déjà écrit aux administrateurs de l'espace, sans réponse."
   const reminder = d.step === "first" ? null : d.step === "second" ? wrote : `${wrote} C'est notre dernier message avant la désactivation.`
 
   const text = [
@@ -560,7 +560,7 @@ export function renderOrgInactivityNotice(p: NotificationPayload): RenderedEmail
     <p>${escapeHtml(consequence)}</p>
     <p>${escapeHtml(why)}</p>
     <p><a href="${escapeHtml(loginUrl)}" style="color:#1d4ed8;text-decoration:underline">Se connecter à l'espace</a></p>
-  `, `Sans réponse d'ici le ${d.deactivationOn} inclus, l'espace sera désactivé. Il suffit d'appuyer sur un bouton pour le conserver.`)
+  `, `Sans réponse d'ici le ${d.deactivationOn} inclus, l'espace pourra être désactivé. Il suffit d'appuyer sur un bouton pour le conserver.`)
 
   return { subject, html, text }
 }

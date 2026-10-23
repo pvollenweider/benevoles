@@ -16,11 +16,11 @@ describe("periodic check emails (#811)", () => {
   it("asks, reminds, then warns for the last time, with the date and the consequence", () => {
     expect(render(notice("first")).subject).toBe("Souhaitez-vous conserver l'espace Fête <du> village ?")
     expect(render(notice("second")).subject).toBe("Rappel : souhaitez-vous conserver l'espace Fête <du> village ?")
-    expect(render(notice("last")).subject).toBe("Dernier rappel : sans réponse d'ici le mardi 23 décembre 2026, l'espace Fête <du> village sera désactivé")
+    expect(render(notice("last")).subject).toBe("Dernier rappel : sans réponse d'ici le mardi 23 décembre 2026 inclus, l'espace Fête <du> village pourra être désactivé")
     const { text, html } = render(notice("first"))
     expect(text).toContain("n'a pas été utilisé depuis le 12 mars 2025")
     expect(text).toContain("Conserver mon organisation : https://www.benevol.app/admin/keep?lien=abc")
-    expect(text).toContain("Sans réponse d'ici le mardi 23 décembre 2026 inclus, l'espace sera désactivé.")
+    expect(text).toContain("Sans réponse d'ici le mardi 23 décembre 2026 inclus, l'espace pourra être désactivé à partir du lendemain.")
     expect(text).toContain("Espace désactivé faute d'activité ? Le réactiver")
     expect(html).toContain("Fête &lt;du&gt; village")
     expect(html).not.toContain("Fête <du> village")
@@ -32,15 +32,15 @@ describe("periodic check emails (#811)", () => {
   it("dates the previous message instead of « a month ago », and says when the deadline moved", () => {
     const late = render(notice("second", { previousSentOn: "3 septembre 2026", previousDeactivationOn: "vendredi 18 décembre 2026" }))
     expect(late.text).not.toMatch(/il y a un mois/)
-    expect(late.text).toContain("Nous vous avons écrit le 3 septembre 2026, sans réponse.")
-    expect(late.text).toContain("Cette date remplace celle du vendredi 18 décembre 2026, annoncée dans notre message précédent")
+    expect(late.text).toContain("Nous avons écrit aux administrateurs de l'espace le 3 septembre 2026, sans réponse.")
+    expect(late.text).toContain("Cette date remplace celle du vendredi 18 décembre 2026, indiquée dans notre message précédent")
     expect(late.html).toContain("Cette date remplace celle du vendredi 18 décembre 2026")
     const onTime = render(notice("last", { previousSentOn: "3 octobre 2026", previousDeactivationOn: null }))
-    expect(onTime.text).toContain("Nous vous avons écrit le 3 octobre 2026, sans réponse. C'est notre dernier message avant la désactivation.")
+    expect(onTime.text).toContain("Nous avons écrit aux administrateurs de l'espace le 3 octobre 2026, sans réponse. C'est notre dernier message avant la désactivation.")
     expect(onTime.text).not.toContain("Cette date remplace")
     // An older payload without these fields still reads right.
-    expect(render(notice("second")).text).toContain("Nous vous avons déjà écrit, sans réponse.")
-    expect(render(notice("first")).text).not.toContain("Nous vous avons")
+    expect(render(notice("second")).text).toContain("Nous avons déjà écrit aux administrateurs de l'espace, sans réponse.")
+    expect(render(notice("first")).text).not.toContain("Nous avons")
   })
 
   it("says the space was deactivated, its data kept, and how to reactivate it", () => {

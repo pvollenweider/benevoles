@@ -41,7 +41,7 @@ export default async function InactivityPage() {
       <div>
         <h1 id="page-heading" tabIndex={-1} className="text-2xl font-bold text-gray-900 focus:outline-none">Organisations bientôt inactives</h1>
         <p className="text-sm text-gray-700 mt-1">
-          Après {INACTIVITY_MONTHS} mois sans activité et sans événement à venir, une organisation reçoit « Souhaitez-vous conserver votre espace ? », puis deux rappels, au moins {REMINDER_GAP_DAYS} jours entre deux messages ; chaque message ne part qu&apos;une fois le précédent accepté par le serveur d&apos;envoi pour au moins un administrateur. Sans réponse, elle est désactivée au plus tôt {FINAL_NOTICE_DAYS} jours après l&apos;envoi du dernier rappel, et jamais moins de {MIN_DEACTIVATION_DAYS} jours après le premier ; ses administrateurs peuvent la réactiver eux-mêmes. Un message qui ne part pas bloque la procédure : rien n&apos;est alors désactivé automatiquement.
+          Après {INACTIVITY_MONTHS} mois sans activité et sans événement à venir, une organisation reçoit « Souhaitez-vous conserver votre espace ? », puis deux rappels ; un rappel ne part qu&apos;une fois le message précédent accepté par le serveur d&apos;envoi pour au moins un administrateur, au plus tôt {REMINDER_GAP_DAYS} jours de calendrier après lui. Sans réponse, elle est désactivée au plus tôt {FINAL_NOTICE_DAYS} jours après l&apos;envoi du dernier rappel, et jamais moins de {MIN_DEACTIVATION_DAYS} jours après l&apos;envoi du premier ; ses administrateurs peuvent la réactiver eux-mêmes. Un message accepté pour aucun administrateur bloque la procédure : pas de désactivation tant qu&apos;il n&apos;est pas accepté.
           {" "}
           {mode === "off"
             ? "La vérification est désactivée (ORG_INACTIVITY=off)."
@@ -64,7 +64,7 @@ export default async function InactivityPage() {
               {")"}
             </>
           )}
-          {" : un message n'a pas pu partir, ou la procédure a commencé avant le suivi des envois. Aucune désactivation automatique ; traitez-les depuis leur page."}
+          {" : un message n'a été accepté pour aucun administrateur, ou la procédure a commencé avant le suivi des envois. Pas de désactivation tant que c'est le cas ; traitez-les depuis leur page."}
           {blocked.length > 5 && " Repérez-les par « Procédure bloquée » dans le tableau."}
         </p>
       )}
@@ -121,8 +121,8 @@ export default async function InactivityPage() {
                       ? (
                         <>
                           <ProcedureCell text={procedureText(r.procedure, now, dayIn(r.timeZone))} />
-                          {mode === "report" && " Mode observation : la procédure est en pause."}
                           {r.timeZone !== APP_TIME_ZONE && ` (dates en heure de ${r.timeZone})`}
+                          {mode === "report" && " Mode observation : la procédure est en pause."}
                         </>
                       )
                       : r.assessment.state === "active"
@@ -139,7 +139,7 @@ export default async function InactivityPage() {
       {mode !== "off" && deactivated.length > 0 && (
         <section aria-labelledby="inactivity-deactivated" className="space-y-2">
           <h2 id="inactivity-deactivated" className="text-base font-semibold text-gray-900">Désactivées faute d&apos;activité</h2>
-          <p className="text-sm text-gray-700">Elles n&apos;ont répondu à aucun des trois messages envoyés. Leurs administrateurs peuvent les réactiver depuis la page de connexion ; leurs données sont gardées. L&apos;effacement automatique, 90 jours après la désactivation, n&apos;est pas activé : la date indiquée est celle qu&apos;il suivrait.</p>
+          <p className="text-sm text-gray-700">Désactivées faute de réponse à la vérification d&apos;inactivité. Leurs administrateurs peuvent les réactiver depuis la page de connexion ; leurs données sont gardées. L&apos;effacement automatique, 90 jours après la désactivation, n&apos;est pas activé : la date indiquée est celle qu&apos;il suivrait.</p>
           <ul className="list-disc pl-5 text-sm">
             {deactivated.map((o) => (
               <li key={o.id}>

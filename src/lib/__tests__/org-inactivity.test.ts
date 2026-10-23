@@ -76,7 +76,6 @@ describe("periodic check of inactive organisations (#811)", () => {
   it("says how far the procedure went, and when a space was deactivated", () => {
     const now = new Date("2027-07-01T00:00:00Z")
     const day = (d: Date) => d.toISOString().slice(0, 10)
-    const assessment = assessInactivity(facts(), now)
     const procedure = {
       due: true,
       noticeAt: new Date("2027-06-01T02:00:00Z"),
@@ -96,7 +95,7 @@ describe("periodic check of inactive organisations (#811)", () => {
     // Blocked: said as such, with what to do; in report mode the procedure is paused.
     const blocked = { ...procedure, waiting: 0 }
     expect(inactivityStatusText({ lastActivityAt: facts().lastActivityAt, postponedUntil: null, assessment: assessInactivity(facts(), at), procedure: blocked }, "report", at, zurich))
-      .toBe("Dernière activité : le 2025-01-15. Procédure bloquée : aucune copie acceptée par le serveur d'envoi (envois échoués ou annulés). Aucune désactivation automatique : à traiter manuellement (vérifier les adresses des administrateurs, les contacter autrement, reporter la vérification ou l'exclure). 1er message « Souhaitez-vous conserver votre espace ? » : envoyé le 2027-06-01 ; 2e rappel : bloqué (en file d'attente depuis le 2027-07-01). Désactivation au plus tôt le 2027-08-15, une fois débloquée. Mode observation : la procédure est en pause, rien de plus n'est envoyé ni désactivé.")
+      .toBe("Dernière activité : le 2025-01-15. Procédure bloquée : aucune copie acceptée par le serveur d'envoi (envois échoués ou annulés). Pas de désactivation tant que c'est le cas (une acceptation tardive fait reprendre la procédure) : à traiter manuellement (vérifier les adresses des administrateurs, les contacter autrement, reporter la vérification ou l'exclure). 1er message « Souhaitez-vous conserver votre espace ? » : envoyé le 2027-06-01 ; 2e rappel : bloqué (en file d'attente depuis le 2027-07-01). Désactivation au plus tôt le 2027-08-15, une fois débloquée. Mode observation : la procédure est en pause, rien de plus n'est envoyé ni désactivé.")
     expect(inactivityStatusText({ lastActivityAt: null, postponedUntil: null, assessment: { state: "excluded", reason: "deactivated" }, deactivatedAt: new Date("2027-08-15T03:00:00Z") }, "on", now, day))
       .toBe("Dernière activité : jamais mesurée. Désactivée faute de réponse le 2027-08-15 ; ses administrateurs peuvent la réactiver depuis la page de connexion.")
   })

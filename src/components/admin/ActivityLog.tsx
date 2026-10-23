@@ -43,7 +43,7 @@ export const ACTION_LABEL: Record<string, string> = {
   "organization.kept": "a confirmé vouloir conserver l'espace",
   "organization.inactivity_email_sent": "a demandé si l'espace doit être conservé (vérification d'inactivité)",
   "organization.inactivity_email_queued": "a préparé l'envoi d'un message demandant si l'espace doit être conservé (vérification d'inactivité)",
-  "organization.inactivity_check_blocked": "a mis en attente la vérification d'inactivité : un message n'a pas pu partir, l'équipe du service s'en occupe",
+  "organization.inactivity_check_blocked": "a mis en attente la vérification d'inactivité : un message n'a pu être envoyé à aucun administrateur, l'opérateur du service est prévenu",
   "organization.inactivity_check_stopped": "a arrêté la vérification d'inactivité en cours (activité, réponse, événement prévu ou décision de l'équipe du service)",
   "organization.deactivated_for_inactivity": "a désactivé l'espace, sans réponse à la vérification d'inactivité",
   "organization.approved": "a validé l'espace",

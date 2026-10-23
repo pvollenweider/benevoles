@@ -100,7 +100,7 @@ export const RETENTION: readonly RetentionEntry[] = [
     public: true,
   },
   {
-    data: `Les mêmes données, pour une organisation désactivée faute d'activité : ${INACTIVITY_MONTHS} mois sans activité et sans événement prévu, puis trois messages à ses administrateurs (« Souhaitez-vous conserver votre espace ? » et deux rappels, au moins ${REMINDER_GAP_DAYS} jours entre deux messages, chacun envoyé seulement après que le précédent a été accepté par le serveur d'envoi pour au moins un administrateur) restés sans réponse au moins ${FINAL_NOTICE_DAYS} jours après le dernier rappel, et au moins ${MIN_DEACTIVATION_DAYS} jours après le premier message`,
+    data: `Les mêmes données, pour une organisation désactivée faute d'activité : ${INACTIVITY_MONTHS} mois sans activité et sans événement prévu, puis trois messages à ses administrateurs (« Souhaitez-vous conserver votre espace ? » et deux rappels, chacun accepté par le serveur d'envoi pour au moins un administrateur, le suivant au plus tôt ${REMINDER_GAP_DAYS} jours de calendrier plus tard) restés sans réponse au moins ${FINAL_NOTICE_DAYS} jours après l'envoi du dernier rappel, et au moins ${MIN_DEACTIVATION_DAYS} jours après l'envoi du premier`,
     purpose: "Permettre à ses administrateurs de la réactiver eux-mêmes",
     duration: "conservées tant qu'elle est désactivée ; une réponse, une activité ou un événement prévu arrête la procédure avant la désactivation",
     trigger: "désactivation après trois messages sans réponse",
