@@ -100,6 +100,9 @@ test("a volunteer signs up inside an iframe of another site, storage blocked, he
   await expect(frame.getByRole("heading", { level: 1 })).toContainText("E2E Intégration")
   await expect(frame.getByRole("link", { name: /Retour/ })).toHaveCount(0)
   await expect(frame.getByRole("link", { name: "Espace organisateur" })).toHaveCount(0)
+  // Its footer ends with « Propulsé par <instance> », to the site's home in a new tab, not the code (#1117).
+  await expect(frame.getByRole("contentinfo").getByRole("link", { name: /^Propulsé par .+ \(ouvre dans un nouvel onglet\)$/ })).toHaveAttribute("target", "_blank")
+  await expect(frame.getByRole("contentinfo").getByRole("link", { name: /GitHub/ })).toHaveCount(0)
 
   // The auto-resize: the listener of the snippet sets the frame to the page's height.
   await expect.poll(() => iframe.evaluate((el) => (el as HTMLIFrameElement).style.height)).toMatch(/^\d+px$/)
