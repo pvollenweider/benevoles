@@ -5,6 +5,7 @@ import { redirect } from "next/navigation"
 import Link from "next/link"
 import { auth } from "@/auth"
 import ChangePasswordForm from "@/components/admin/ChangePasswordForm"
+import HelpLink from "@/components/admin/HelpLink"
 
 export const dynamic = "force-dynamic"
 
@@ -21,6 +22,7 @@ export default async function AccountPage() {
       <div>
         <Link href="/admin/events" className="text-sm text-blue-600">← Événements</Link>
         <h1 className="text-xl font-bold text-gray-900 mt-1">Mon compte</h1>
+        <HelpLink route="/admin/account" />
         <p className="text-sm text-gray-500">
           {session.user?.name} · {session.user?.email}
         </p>

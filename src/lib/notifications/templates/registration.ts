@@ -14,7 +14,8 @@ import type { NotificationPayload } from "../types"
 import { eventPublicUrl } from "@/lib/urls"
 import { clockTime } from "../../gantt-utils"
 import { shiftInfoText, type ShiftInfo } from "../../shift-info"
-import { myPageUrl, escapeHtml, shiftInfoHtml, btn, wrap, type RenderedEmail } from "./shared"
+import { myPageUrl, docUrl, escapeHtml, shiftInfoHtml, btn, wrap, type RenderedEmail } from "./shared"
+import { SECTION_DOC_LINKS } from "@/lib/help-links"
 
 /** « samedi 10 octobre » from the « 10/10/2026 » the senders format, for {date} mid-sentence; as given otherwise. */
 function spokenDay(date: string): string {
@@ -47,6 +48,9 @@ export function renderConfirmation(p: NotificationPayload): RenderedEmail {
   const message = confirmationMessage ? fillVariables(confirmationMessage, vars) : undefined
   const messageHtml = confirmationMessage ? renderMarkdownWithVariables(confirmationMessage, vars) : undefined
   const subject = `Inscription confirmée — ${eventTitle} 🎉`
+  // What the personal page is for (#1096): the guide's page, a text link under the button.
+  const guideUrl = docUrl(SECTION_DOC_LINKS.benevole.personalPage)
+  const guideLabel = "Comment fonctionne ta page personnelle"
 
   const text = [
     `Hello ${firstName} !`,
@@ -60,6 +64,9 @@ export function renderConfirmation(p: NotificationPayload): RenderedEmail {
     `Un empêchement ? Tu peux gérer tes inscriptions ici :`,
     editUrl,
     ...(cancelNotice ? [cancelNotice] : []),
+    ``,
+    `${guideLabel} :`,
+    guideUrl,
     ``,
     `Un grand M E R C I et à très vite !`,
   ].join("\n")
@@ -79,6 +86,7 @@ export function renderConfirmation(p: NotificationPayload): RenderedEmail {
     ${messageHtml ? `<div style="background:#eff6ff;border-radius:8px;padding:14px 16px;margin-top:1em;font-size:0.9em;color:#1e40af;">${messageHtml}</div>` : ""}
     <p style="margin-top:1.5em">${btn(editUrl, "Gérer mes inscriptions")}</p>${cancelNotice ? `
     <p style="color:#555;font-size:0.9em">${escapeHtml(cancelNotice)}</p>` : ""}
+    <p style="color:#555;font-size:0.9em"><a href="${guideUrl}" style="color:#1d4ed8;text-decoration:underline">${guideLabel}</a></p>
     <p style="color:#666;font-size:0.85em;margin-top:2em">Un grand M E R C I et à très vite ! 🙌</p>
   `, preheader)
 

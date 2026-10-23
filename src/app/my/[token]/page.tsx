@@ -3,6 +3,8 @@
 import { useEffect, useLayoutEffect, useRef, useState } from "react"
 import PersonalLinkPanel from "@/components/PersonalLinkPanel"
 import LinkRequestForm from "@/components/LinkRequestForm"
+import DocMoreLink from "@/components/DocMoreLink"
+import { SECTION_DOC_LINKS, docHref } from "@/lib/help-links"
 import { offerDeadline, WAITLIST_STEPS, waitlistLabel } from "@/lib/waitlist-copy"
 import { fmtRange } from "@/lib/gantt-utils"
 import { useParams } from "next/navigation"
@@ -281,6 +283,7 @@ export default function MyRegistrationPage() {
           <h1 className="text-lg font-semibold text-gray-900 mb-2">Ce lien ne fonctionne pas</h1>
           <p className="text-sm text-gray-700 mb-4">{error ?? "Ce lien est invalide ou a déjà été annulé."}</p>
           <LinkRequestForm />
+          <p className="mt-4 text-sm"><DocMoreLink href={docHref(SECTION_DOC_LINKS.benevole.brokenLink)} about="ton lien personnel" /></p>
           <Link href={data?.eventUrl ?? data?.orgHomeUrl ?? "/"} className="inline-block mt-6 text-blue-700 text-sm underline underline-offset-2">Retour à l&apos;accueil</Link>
         </div>
       </main>
@@ -327,6 +330,7 @@ export default function MyRegistrationPage() {
           <p className="text-sm text-gray-500">
             {data.volunteer.firstName} {data.volunteer.lastName} · {data.volunteer.email}
           </p>
+          <p className="text-sm text-gray-700">Comment fonctionne cette page : <DocMoreLink href={docHref(SECTION_DOC_LINKS.benevole.personalPage)} about="ta page personnelle" /></p>
         </div>
 
         {next && (
@@ -355,6 +359,7 @@ export default function MyRegistrationPage() {
 
         <section aria-labelledby="shifts-title" className="space-y-3">
           <h2 id="shifts-title" className="text-sm font-semibold text-gray-900">Tous mes créneaux</h2>
+          <p className="text-sm text-gray-700">Annuler ou changer un créneau : <DocMoreLink href={docHref(SECTION_DOC_LINKS.benevole.cancelShift)} about="l'annulation d'un créneau" /></p>
           {data.registrations.map((reg) => {
             // Shift dates are calendar days at midnight UTC: read them in UTC, whatever the visitor's zone.
             const date = new Date(reg.shift.date).toLocaleDateString("fr-FR", {

@@ -2,6 +2,7 @@ import type { Metadata } from "next"
 import { notFound, redirect } from "next/navigation"
 import { getOrgContext } from "@/lib/auth-guard"
 import EventPagesManager from "@/components/admin/EventPagesManager"
+import HelpLink from "@/components/admin/HelpLink"
 
 export const dynamic = "force-dynamic"
 export const metadata: Metadata = { title: "Pages d'information" }
@@ -30,6 +31,7 @@ export default async function EventPagesPage({ params }: { params: Promise<{ id:
     <div className="space-y-6">
       <div>
         <h1 id="page-heading" tabIndex={-1} className="text-xl font-bold text-gray-900 focus:outline-none">Pages d&apos;information</h1>
+        <HelpLink route="/admin/events/[id]/pages" />
         <p className="text-sm text-gray-500">Règlement, FAQ, infos pratiques — du contenu libre en plus des instructions publiques, visible sur la page de l&apos;événement.</p>
       </div>
 

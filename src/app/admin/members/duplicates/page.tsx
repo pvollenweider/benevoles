@@ -7,6 +7,7 @@ import { getOrgContext } from "@/lib/auth-guard"
 import { hasLevel } from "@/lib/permissions"
 import { loadDuplicatePairs } from "@/lib/member-duplicates-data"
 import MemberDuplicatesManager from "@/components/admin/MemberDuplicatesManager"
+import HelpLink from "@/components/admin/HelpLink"
 
 export const dynamic = "force-dynamic"
 
@@ -41,6 +42,7 @@ export default async function MemberDuplicatesPage({ searchParams }: { searchPar
       isOwner={isOwner}
       prefilterMemberId={prefilterMember?.id}
       prefilterMemberName={prefilterMember ? `${prefilterMember.firstName} ${prefilterMember.lastName}` : undefined}
+      helpLink={<HelpLink route="/admin/members/duplicates" />}
     />
   )
 }

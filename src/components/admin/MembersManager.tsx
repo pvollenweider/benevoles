@@ -40,13 +40,15 @@ type Props = {
   defaultHoursPeriod: { from: string; to: string }
   /** Possible-duplicate pairs still suggested (#601), computed server-side (member-duplicates-data.ts). */
   duplicatesCount?: number
+  /** « Aide : … » (#1096): the page's HelpLink, a server component rendered by the page. */
+  helpLink?: React.ReactNode
 }
 
 /** "2026-05-02" → "2 mai 2026", for the last-participation column (#557) and the address status date (#599). */
 const fmtDay = (iso: string) => new Date(`${iso}T00:00:00Z`).toLocaleDateString("fr-FR", { timeZone: "UTC", day: "numeric", month: "long", year: "numeric" })
 const fmtDate = (d: Date) => d.toLocaleDateString("fr-FR", { day: "numeric", month: "long", year: "numeric" })
 
-export default function MembersManager({ initialMembers, allTags, initialSearch, initialAddressToVerify, initialEditId, initialDeletedName, defaultHoursPeriod, duplicatesCount = 0 }: Props) {
+export default function MembersManager({ initialMembers, allTags, initialSearch, initialAddressToVerify, initialEditId, initialDeletedName, defaultHoursPeriod, duplicatesCount = 0, helpLink }: Props) {
   const router = useRouter()
   const members = initialMembers
   const [search, setSearch] = useState(initialSearch ?? "")
@@ -348,6 +350,7 @@ export default function MembersManager({ initialMembers, allTags, initialSearch,
         <div>
           <h1 ref={headingRef} tabIndex={-1} className="text-xl font-bold text-gray-900 focus:outline-none">Membres</h1>
           <p className="text-sm text-gray-500">{memberCount} membre{memberCount > 1 ? "s" : ""}</p>
+          {helpLink}
         </div>
         <div className="flex gap-2 flex-wrap">
           {duplicatesCount > 0 && (

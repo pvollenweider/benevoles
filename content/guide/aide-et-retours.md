@@ -13,7 +13,7 @@ aliases: []
 
 ## Aide depuis chaque écran
 
-Le lien **Aide** de la barre du haut ouvre le guide administrateur, avec la liste de toutes les pages de la documentation. Les principaux écrans d'un événement (création, modification, vérification et publication, créneaux, questions, inscriptions, invitations, écrire aux bénévoles, « Où manque-t-il du monde ? », jour J) et les paramètres (équipe admin, emails) ont en plus, sous leur titre, un lien **Aide : …** qui ouvre directement la page de la documentation consacrée à cet écran. Cette page s'ouvre dans un nouvel onglet, si bien que l'écran sur lequel vous travailliez reste tel quel, même avec un formulaire à moitié rempli.
+Le lien **Aide** de la barre du haut ouvre le guide administrateur, avec la liste de toutes les pages de la documentation. Chaque écran qui a sa page dans la documentation (tableau de bord, événements et chacun de leurs onglets, membres, recherche, mon compte, paramètres) a en plus, sous son titre, un lien **Aide : …** qui ouvre directement la page de la documentation consacrée à cet écran. Les sections qui ont leur propre page, comme les jalons, l'équipe admin ou la charte, ont un lien **En savoir plus**. Cette page s'ouvre dans un nouvel onglet, si bien que l'écran sur lequel vous travailliez reste tel quel, même avec un formulaire à moitié rempli.
 
 ## Signaler un problème ou proposer une amélioration
 

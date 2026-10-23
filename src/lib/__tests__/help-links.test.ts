@@ -1,7 +1,7 @@
 import { describe, it, expect } from "vitest"
 import fs from "node:fs"
 import path from "node:path"
-import { ADMIN_HELP_LINKS, FEEDBACK_SECTION, adminHelpLink, docHref, type AdminHelpRoute, type AdminHelpTarget } from "../help-links"
+import { ADMIN_HELP_LINKS, FEEDBACK_SECTION, SECTION_DOC_LINKS, adminHelpLink, docHref, type AdminHelpRoute, type AdminHelpTarget } from "../help-links"
 import { readDocUnits, type DocUnit } from "../doc-units"
 import { renderDocUnit, renderPublicSource } from "../public-content"
 import { CONTACT_EMAIL, REPOSITORY_URL } from "../landing-seo"
@@ -71,6 +71,40 @@ describe("ADMIN_HELP_LINKS", () => {
   it("gives the edit page its own link, to editing an event", () => {
     expect(adminHelpLink("/admin/events/[id]/edit", units)).toEqual({ section: "Modifier un événement", href: "/doc/creer-un-evenement#modifier-un-evenement" })
     expect(adminHelpLink("/admin/events/new", units)).toEqual({ section: "Créer un événement", href: "/doc/creer-un-evenement" })
+  })
+
+  // #1096: the settings page shows the organisation's settings first, the team last.
+  it("sends the settings page to the organisation's settings, not to the admin team", () => {
+    expect(adminHelpLink("/admin/settings/admins", units)).toEqual({ section: "Personnaliser l'organisation", href: "/doc/personnaliser-l-organisation" })
+  })
+
+  // #1096: every admin screen of the navigation audit with a page of its own now links to it.
+  it.each([
+    "/admin/dashboard", "/admin/events", "/admin/events/[id]", "/admin/events/[id]/log", "/admin/events/[id]/duplicate",
+    "/admin/events/[id]/qr", "/admin/events/[id]/pages", "/admin/events/[id]/preview", "/admin/events/[id]/staffing/search",
+    "/admin/members", "/admin/members/[id]", "/admin/members/[id]/certificate", "/admin/members/[id]/merge",
+    "/admin/members/duplicates", "/admin/settings/message-templates", "/admin/settings/activity", "/admin/search", "/admin/account",
+  ])("%s has a help link", (route) => {
+    expect(routes).toContain(route)
+  })
+})
+
+describe("SECTION_DOC_LINKS", () => {
+  const entries = (Object.entries(SECTION_DOC_LINKS) as [keyof typeof SECTION_DOC_LINKS, Record<string, AdminHelpTarget>][])
+    .flatMap(([role, links]) => Object.entries(links).map(([name, target]) => [role, name, target] as const))
+
+  it.each(entries)("%s/%s opens a unit for that role, at the heading it names", (role, _name, target) => {
+    const unit = unitBySlug(target.unit)
+    expect(unit.roles, unit.slug).toContain(role)
+    const [pathname, anchor] = docHref(target).split("#")
+    expect(pathname).toBe(`/doc/${unit.slug}`)
+    if (target.heading) expect(headingsOf(renderDocUnit(unit)).find((h) => h.id === anchor)?.text, `#${anchor} in ${unit.source}`).toBe(target.heading)
+    else expect(anchor).toBeUndefined()
+  })
+
+  it("points the broken-link page and the cancel button to their own sections", () => {
+    expect(docHref(SECTION_DOC_LINKS.benevole.brokenLink)).toBe("/doc/lien-personnel#la-page-ce-lien-ne-fonctionne-pas-s-affiche")
+    expect(docHref(SECTION_DOC_LINKS.benevole.cancelShift)).toBe("/doc/ma-page-personnelle#annuler-un-creneau")
   })
 })
 

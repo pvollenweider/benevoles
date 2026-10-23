@@ -6,6 +6,7 @@ import { redirect } from "next/navigation"
 import Link from "next/link"
 import { getOrgContext } from "@/lib/auth-guard"
 import MessageTemplatesManager from "@/components/admin/messages/MessageTemplatesManager"
+import HelpLink from "@/components/admin/HelpLink"
 
 export const dynamic = "force-dynamic"
 export const metadata: Metadata = { title: "Modèles de messages" }
@@ -25,6 +26,7 @@ export default async function MessageTemplatesPage() {
           <span aria-hidden="true">← </span>Paramètres
         </Link>
         <h1 className="text-2xl font-bold text-gray-900 mt-1">Modèles de messages</h1>
+        <HelpLink route="/admin/settings/message-templates" />
         <p className="text-sm text-gray-700 mt-1">
           Les messages que vous envoyez souvent (infos pratiques, convocation, remerciements). Dans « Écrire aux bénévoles », « Partir d&apos;un modèle » remplit l&apos;objet et le message, que vous pouvez encore modifier avant l&apos;envoi.
         </p>
