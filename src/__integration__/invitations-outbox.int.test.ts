@@ -150,6 +150,33 @@ describe.skipIf(!url)("invitations and reminders through the outbox (#1105)", ()
     expect(await prisma.notificationOutbox.count({ where: { organizationId: orgId } })).toBe(2)
     expect(await retryOutboxRow(first.id, orgId)).toBe(false)
     expect((await prisma.notificationOutbox.findUniqueOrThrow({ where: { id: first.id } })).status).toBe("failed")
+
+    // Both copies failed: the first « Renvoyer » wins, the second is refused while the first waits,
+    // and still refused once the first has gone out.
+    const second = (await prisma.notificationOutbox.findMany({ where: { organizationId: orgId, id: { not: first.id } } }))[0]
+    await prisma.notificationOutbox.update({ where: { id: second.id }, data: { status: "failed", lastError: "smtp:temporary" } })
+    expect(await retryOutboxRow(first.id, orgId)).toBe(true)
+    expect(await retryOutboxRow(second.id, orgId)).toBe(false)
+    await prisma.notificationOutbox.update({ where: { id: first.id }, data: { status: "sent", sentAt: new Date() } })
+    expect(await retryOutboxRow(second.id, orgId)).toBe(false)
+    // Concurrent retries of two failed copies: exactly one is put back.
+    await prisma.notificationOutbox.updateMany({ where: { id: { in: [first.id, second.id] } }, data: { status: "failed", lastError: "smtp:temporary", sentAt: null } })
+    const both = await Promise.all([retryOutboxRow(first.id, orgId), retryOutboxRow(second.id, orgId)])
+    expect(both.filter(Boolean)).toHaveLength(1)
+  })
+
+  it("« Renvoyer » still works for a later copy when an older one went out before it was queued", async () => {
+    const { retryOutboxRow } = await import("@/lib/outbox-data")
+    const ev = (await prisma.event.create({ data: { organizationId: orgId, slug: "ancien", title: "Fête", startDate: new Date("2030-10-01"), endDate: new Date("2030-10-01") } })).id
+    const member = await prisma.volunteer.create({ data: { organizationId: orgId, firstName: "Old", lastName: "L", email: `${tag}-old@example.org`, active: true } })
+    await invite(post(`/api/admin/events/${ev}/invitations`, { volunteerIds: [member.id] }), params(ev))
+    const [old] = await prisma.notificationOutbox.findMany({ where: { organizationId: orgId } })
+    await prisma.notificationOutbox.update({ where: { id: old.id }, data: { status: "sent", sentAt: new Date(Date.now() - 1000) } })
+    await prisma.memberInvite.updateMany({ where: { eventId: ev }, data: { sentAt: new Date(Date.now() - 10 * 60 * 1000) } })
+    await invite(post(`/api/admin/events/${ev}/invitations`, { volunteerIds: [member.id] }), params(ev))
+    const later = (await prisma.notificationOutbox.findMany({ where: { organizationId: orgId, id: { not: old.id } } }))[0]
+    await prisma.notificationOutbox.update({ where: { id: later.id }, data: { status: "failed", lastError: "smtp:temporary" } })
+    expect(await retryOutboxRow(later.id, orgId)).toBe(true)
   })
 
   it("invites members through the outbox and does not re-send to someone invited a minute ago", async () => {
