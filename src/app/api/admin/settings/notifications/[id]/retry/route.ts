@@ -16,7 +16,7 @@ export async function POST(_req: Request, { params }: { params: Promise<{ id: st
   const { id } = await params
 
   const ok = await retryOutboxRow(id, organizationId)
-  if (!ok) return NextResponse.json({ error: "Notification introuvable ou pas en échec." }, { status: 404 })
+  if (!ok) return NextResponse.json({ error: "Cet email ne peut pas être renvoyé : introuvable, pas en échec, ou remplacé par un envoi plus récent du même email." }, { status: 404 })
 
   await logOrgEvent({ organizationId, actor: adminActor(session), action: "notification.retried", entityType: "NotificationOutbox", entityId: id })
   deliverAfterResponse([id])

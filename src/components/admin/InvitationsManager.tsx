@@ -3,7 +3,7 @@
 // SPDX-FileCopyrightText: 2026 Philippe Vollenweider
 // SPDX-License-Identifier: AGPL-3.0-only
 
-import { inviteResultText, remindResultText } from "@/lib/invitation-summary"
+import { inviteResultText, remindResultText, remindWaitHint } from "@/lib/invitation-summary"
 import { inviteState, inviteStateCounts, type InviteState } from "@/lib/invite-state"
 import { useEffect, useId, useMemo, useRef, useState, useTransition } from "react"
 import { flushSync } from "react-dom"
@@ -34,6 +34,8 @@ type Invite = {
   email: string | null
   tags: string[]
   registered: boolean
+  /** Invited or reminded less than 48 h ago (#1105): « Relancer » leaves them out. */
+  recentlyContacted: boolean
 }
 
 type Props = {
@@ -74,6 +76,11 @@ export default function InvitationsManager({ eventId, members, allTags, invites 
   const states = useMemo(() => invites.map((i) => inviteState({ declinedAt: i.declinedAt, hasActiveRegistration: i.registered })), [invites])
   const counts = useMemo(() => inviteStateCounts(invites.map((i) => ({ declinedAt: i.declinedAt, hasActiveRegistration: i.registered }))), [invites])
   const { total, registered, notAvailable, noAnswer } = counts
+  // Who « Relancer » reaches now (#1105): no answer, and not emailed in the last 48 h.
+  const remindable = useMemo(() => invites.filter((i, idx) => states[idx] === "no_answer" && !i.recentlyContacted).length, [invites, states])
+  const remindWait = noAnswer - remindable
+  const remindHint = remindWaitHint({ eligible: remindable, recent: remindWait })
+  const remindHintId = useId()
   const visibleInvites = useMemo(
     () => (filter === "all" ? invites : invites.filter((i, idx) => states[idx] === filter)),
     [invites, states, filter],
@@ -118,7 +125,7 @@ export default function InvitationsManager({ eventId, members, allTags, invites 
   }
 
   function remindNonRegistered() {
-    if (noAnswer === 0) return
+    if (remindable === 0) return
     setConfirmingRemind(true)
   }
 
@@ -126,7 +133,7 @@ export default function InvitationsManager({ eventId, members, allTags, invites 
     setReminding(true)
     setRemindResult(null)
     setRemindError(null)
-    const outcome = await requestJson<{ sent: number; failed?: number; declinedSkipped?: number }>(() => fetch(`/api/admin/events/${eventId}/invitations/remind`, { method: "POST" }), "Les relances n'ont pas pu être envoyées.")
+    const outcome = await requestJson<{ queued: number; recentlySkipped?: number; declinedSkipped?: number }>(() => fetch(`/api/admin/events/${eventId}/invitations/remind`, { method: "POST" }), "Les relances n'ont pas pu être lancées.")
     setReminding(false)
     // A failure stays in the dialog, where « Réessayer » is at hand.
     if (!outcome.ok) { setRemindError(outcome.error); return }
@@ -139,7 +146,7 @@ export default function InvitationsManager({ eventId, members, allTags, invites 
   return (
     <div className="space-y-5">
       {confirmingRemind && (
-        <ConfirmActionModal recap={remindInvitedRecap({ people: noAnswer, declined: notAvailable })} busy={reminding} error={remindError} onConfirm={() => void runRemind()} onCancel={() => setConfirmingRemind(false)} />
+        <ConfirmActionModal recap={remindInvitedRecap({ people: remindable, declined: notAvailable, recent: remindWait })} busy={reminding} error={remindError} onConfirm={() => void runRemind()} onCancel={() => setConfirmingRemind(false)} />
       )}
       <div role="group" aria-label="Filtrer les invités par statut" className="grid grid-cols-2 sm:grid-cols-4 gap-3">
         <StatCard label="Invités" value={total} active={filter === "all"} onClick={() => setFilter("all")} />
@@ -150,6 +157,7 @@ export default function InvitationsManager({ eventId, members, allTags, invites 
       {/* Always mounted, so the filter's result is voiced even when the same text repeats. */}
       <p id="invitations-filter-status" role="status" className="sr-only">{filterAnnouncement}</p>
 
+      <div className="space-y-2">
       <div className="flex gap-2 flex-wrap">
         <button
           onClick={() => setShowInvite(true)}
@@ -158,12 +166,16 @@ export default function InvitationsManager({ eventId, members, allTags, invites 
           + Inviter des membres
         </button>
         {noAnswer > 0 && (
+          // Stays mounted when nobody can be reminded yet (#1105): the focus returned here after a
+          // reminder is not lost, and the hint below says when it becomes possible.
           <button
             type="button"
             onClick={remindNonRegistered}
-            className="text-sm border border-gray-300 px-3 py-2 rounded-xl hover:bg-gray-50"
+            aria-disabled={remindable === 0 || undefined}
+            aria-describedby={remindHint ? remindHintId : undefined}
+            className="text-sm border border-gray-300 px-3 py-2 rounded-xl hover:bg-gray-50 aria-disabled:opacity-60 aria-disabled:cursor-not-allowed aria-disabled:hover:bg-transparent"
           >
-            {noAnswer === 1 ? "Relancer la personne sans créneau" : `Relancer les ${noAnswer} sans créneau`}
+            {remindable === 0 ? (noAnswer === 1 ? "Relancer la personne sans créneau" : "Relancer les sans créneau") : remindable === 1 ? "Relancer la personne sans créneau" : `Relancer les ${remindable} sans créneau`}
           </button>
         )}
         {noAnswer > 0 && (
@@ -175,13 +187,18 @@ export default function InvitationsManager({ eventId, members, allTags, invites 
             {noAnswer === 1 ? "Écrire un message à la personne sans créneau" : `Écrire un message aux ${noAnswer} sans créneau`}
           </Link>
         )}
-        <span role="status" className="text-sm self-center text-gray-600">{remindResult ?? ""}</span>
         <button
           onClick={() => setShowTest((v) => !v)}
           className="text-xs text-gray-500 hover:text-gray-700 ml-auto self-center"
         >
           Tester l&apos;envoi d&apos;email
         </button>
+      </div>
+      {/* Not live: it changes with each refresh, and would talk over the result below (#1105). */}
+      {noAnswer > 0 && remindHint && (
+        <p id={remindHintId} className="text-sm text-gray-600">{remindHint}</p>
+      )}
+      <p role="status" className={remindResult ? "text-sm text-gray-700" : "sr-only"}>{remindResult ?? ""}</p>
       </div>
 
       {showTest && (
@@ -365,7 +382,7 @@ function InviteModal({
     if (selected.size === 0 || submitting) return
     setSubmitting(true)
     setResult(null)
-    const outcome = await requestJson<{ invitedNew?: number; skippedExisting?: number; emailsSent?: number; emailsFailed?: number; membersWithoutEmail?: number }>(() => fetch(`/api/admin/events/${eventId}/invitations`, {
+    const outcome = await requestJson<{ invitedNew?: number; skippedExisting?: number; emailsQueued?: number; recentlySkipped?: number; membersWithoutEmail?: number }>(() => fetch(`/api/admin/events/${eventId}/invitations`, {
       method: "POST",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify({

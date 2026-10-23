@@ -3,13 +3,16 @@
 
 import { NextResponse } from "next/server"
 import { requireOrgSession } from "@/lib/auth-guard"
-import { sendNotification } from "@/lib/notifications"
+import { deliverAfterResponse, enqueueNotifications } from "@/lib/notifications/outbox"
+import type { NotificationPayload } from "@/lib/notifications/types"
+import { lockSameEmails } from "@/lib/invitation-outbox"
+import { OUTSTANDING_OUTBOX_STATUSES, RESEND_GUARD_MS, SEND_TRANSACTION_OPTIONS, manualReminderDedupeKey, manualReminderKeyPrefix, sendCutoff } from "@/lib/invitation-sending"
 import { registrationToken } from "@/lib/token-vault"
 
 /**
  * POST /api/admin/events/[id]/send-reminder
  *
- * Sends one email per volunteer who has at least one active registration
+ * Queues one email per volunteer who has at least one active registration
  * on the event. Each email contains the admin's custom reminder message
  * (Event.reminderMessage) followed by the volunteer's own shifts.
  */
@@ -60,39 +63,63 @@ export async function POST(_req: Request, { params }: { params: Promise<{ id: st
     bundle.shifts.push(r.shift)
   }
 
-  let sent = 0
-  let failed = 0
-  for (const bundle of byVolunteer.values()) {
-    if (!bundle.volunteer.email) continue
-    const result = await sendNotification({
-      kind: "manual_reminder",
-      recipient: { email: bundle.volunteer.email, name: bundle.volunteer.firstName },
-      volunteerId: bundle.volunteer.id,
-      organizationId: event.organizationId,
-      data: {
-        volunteerName: bundle.volunteer.firstName,
-        organizationName: event.organization.name,
-        orgSlug: event.organization.slug,
-        eventTitle: event.title,
-        customMessage: event.reminderMessage ?? "",
-        shifts: bundle.shifts.map((s) => ({
-          label: s.label,
-          date: s.date.toLocaleDateString("fr-FR", { weekday: "long", day: "numeric", month: "long" }),
-          startTime: s.startTime,
-          endTime: s.endTime,
-          roleName: s.roleName,
-        })),
-        editToken: bundle.editToken,
-      },
+  // Through the outbox (#1105): over a sending limit the emails wait and leave in waves instead of
+  // failing, and each one shows in « Emails envoyés ». The event's stamp is the claim: a second
+  // reminder less than RESEND_GUARD_MS later (a double click, a retried request) is refused, so no
+  // one gets it twice. The stamp and the emails commit together.
+  const now = new Date()
+  const cutoff = sendCutoff(now, RESEND_GUARD_MS)
+  const outcome = await db.$transaction(async (tx) => {
+    // Serialised with « Renvoyer » of an earlier copy of these same reminders.
+    await lockSameEmails(tx, [...byVolunteer.keys()].map((volunteerId) => `manual_reminder:${id}:${volunteerId}:`))
+    // The previous reminder still waiting in the outbox (held by a sending limit): a second one
+    // would queue a second copy behind it.
+    const pending = await tx.notificationOutbox.count({
+      where: { organizationId: event.organizationId, status: { in: [...OUTSTANDING_OUTBOX_STATUSES] }, dedupeKey: { startsWith: manualReminderKeyPrefix(id) } },
     })
-    if (result.ok) sent++
-    else failed++
+    if (pending > 0) return "pending" as const
+    const { count } = await tx.event.updateMany({
+      where: { id, OR: [{ reminderSentAt: null }, { reminderSentAt: { lt: cutoff } }] },
+      data: { reminderSentAt: now },
+    })
+    if (count === 0) return "recent" as const
+    const payloads: NotificationPayload[] = []
+    for (const bundle of byVolunteer.values()) {
+      if (!bundle.volunteer.email) continue
+      payloads.push({
+        kind: "manual_reminder",
+        dedupeKey: manualReminderDedupeKey(id, bundle.volunteer.id, now),
+        recipient: { email: bundle.volunteer.email, name: bundle.volunteer.firstName },
+        volunteerId: bundle.volunteer.id,
+        organizationId: event.organizationId,
+        data: {
+          volunteerName: bundle.volunteer.firstName,
+          organizationName: event.organization.name,
+          orgSlug: event.organization.slug,
+          eventTitle: event.title,
+          customMessage: event.reminderMessage ?? "",
+          shifts: bundle.shifts.map((s) => ({
+            label: s.label,
+            date: s.date.toLocaleDateString("fr-FR", { weekday: "long", day: "numeric", month: "long" }),
+            startTime: s.startTime,
+            endTime: s.endTime,
+            roleName: s.roleName,
+          })),
+          editToken: bundle.editToken,
+        },
+      })
+    }
+    return enqueueNotifications(payloads, tx, { organizationId: event.organizationId })
+  }, SEND_TRANSACTION_OPTIONS)
+  if (outcome === "recent") {
+    return NextResponse.json({ error: "Ce rappel a déjà été lancé il y a moins de 5 minutes. Il n'est pas renvoyé, pour que personne ne le reçoive deux fois." }, { status: 409 })
   }
+  if (outcome === "pending") {
+    return NextResponse.json({ error: "Le rappel précédent n'est pas encore parti en entier : une partie de ses emails attend son tour. Il n'est pas renvoyé, pour que personne ne le reçoive deux fois. Vous pourrez en lancer un autre une fois ces emails partis." }, { status: 409 })
+  }
+  const outboxIds = outcome
+  deliverAfterResponse(outboxIds)
 
-  await db.event.update({
-    where: { id },
-    data: { reminderSentAt: new Date() },
-  })
-
-  return NextResponse.json({ sent, failed, totalVolunteers: byVolunteer.size })
+  // `sent` kept for a page loaded before this version: it now means « queued ».
+  return NextResponse.json({ queued: outboxIds.length, sent: outboxIds.length, totalVolunteers: byVolunteer.size })
 }

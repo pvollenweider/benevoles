@@ -44,7 +44,11 @@ describe("action recaps", () => {
     expect(bulkLeaderRecap({ people: 2, withoutEmail: 1 }).lines).toContain("1 personne ignorée : pas d'adresse email.")
     expect(bulkLeaderRecap({ people: 1, withoutEmail: 0 }).lines).toHaveLength(3)
     expect(bulkResendRecap({ people: 4 }).title).toBe("Renvoyer leur lien personnel à 4 bénévoles ?")
-    expect(remindInvitedRecap({ people: 1 }).lines[0]).toBe("1 email de relance envoyé.")
+    expect(remindInvitedRecap({ people: 1 }).lines[0]).toBe("1 email de relance part dans les minutes qui suivent.")
+    expect(remindInvitedRecap({ people: 150 }).lines[0]).toBe("150 emails de relance partent dans les minutes qui suivent.")
+    // #1105: who was emailed less than 48 hours ago gets nothing, said before the log line.
+    expect(remindInvitedRecap({ people: 2, recent: 1 }).lines.at(-2)).toBe("1 membre invité ou relancé il y a moins de 48 heures ne reçoit rien cette fois.")
+    expect(remindInvitedRecap({ people: 2, recent: 3 }).lines).toContain("3 membres invités ou relancés il y a moins de 48 heures ne reçoivent rien cette fois.")
   })
 
   it("remind: mentions declined members left out when there are any (#558)", () => {

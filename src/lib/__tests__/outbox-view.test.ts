@@ -130,3 +130,14 @@ describe("outbox view", () => {
     expect(outboxHeadline({ pending: 0, retrying: 0, sent: 0, failed: 0, cancelled: 2 })).toBe("2 emails annulés (organisation désactivée), jamais envoyés.")
   })
 })
+
+describe("an invitation cancelled because the member's address changed (#1105)", () => {
+  it("says why in French and how to send it to the new address", async () => {
+    const { MEMBER_ADDRESS_CHANGED_REASON, memberAddressChanged } = await import("../outbox-address-changed-reason")
+    expect(outboxErrorSentence(MEMBER_ADDRESS_CHANGED_REASON)).toBe("Annulé : l'adresse du membre a changé depuis la mise en file. Renvoyez l'invitation ou le rappel pour qu'il le reçoive à sa nouvelle adresse.")
+    expect(memberAddressChanged("A@x.ch ", { email: "a@x.ch" })).toBe(false)
+    expect(memberAddressChanged("typo@x.ch", { email: "a@x.ch" })).toBe(true)
+    expect(memberAddressChanged("a@x.ch", { email: null })).toBe(true)
+    expect(memberAddressChanged("a@x.ch", null)).toBe(true)
+  })
+})

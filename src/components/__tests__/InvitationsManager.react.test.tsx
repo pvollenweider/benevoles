@@ -12,7 +12,7 @@ import InvitationsManager from "../admin/InvitationsManager"
 // Invitation states and the filter (#558): the four stat cards double as a filter group, announce
 // their result, and have an accessible name that reads the state before the count.
 
-const invite = (id: string, over: Partial<{ usedAt: string | null; declinedAt: string | null; registered: boolean }> = {}) => ({
+const invite = (id: string, over: Partial<{ usedAt: string | null; declinedAt: string | null; registered: boolean; recentlyContacted: boolean }> = {}) => ({
   id,
   sentAt: "2026-06-01T00:00:00.000Z",
   usedAt: null,
@@ -23,6 +23,7 @@ const invite = (id: string, over: Partial<{ usedAt: string | null; declinedAt: s
   email: `${id}@x.ch`,
   tags: [],
   registered: false,
+  recentlyContacted: false,
   ...over,
 })
 
@@ -92,5 +93,38 @@ describe("InvitationsManager — filter by state (#558)", () => {
   it("does not announce anything on first render", async () => {
     render(<InvitationsManager eventId="evt-1" members={[]} allTags={[]} invites={invites} />)
     await waitFor(() => expect(document.getElementById("invitations-filter-status")).toHaveTextContent(""))
+  })
+})
+
+describe("InvitationsManager — reminders skip anyone emailed less than 48 hours ago (#1105)", () => {
+  afterEach(() => { cleanup() })
+
+  it("counts only who will receive the reminder, and says why the others are left out", () => {
+    const list = [invite("c"), invite("d", { recentlyContacted: true }), invite("e", { recentlyContacted: true })]
+    render(<InvitationsManager eventId="evt-1" members={[]} allTags={[]} invites={list} />)
+    const button = screen.getByRole("button", { name: "Relancer la personne sans créneau" })
+    expect(button).not.toHaveAttribute("aria-disabled")
+    expect(button).toHaveAccessibleDescription("2 personnes invitées ou relancées il y a moins de 48 heures ne seront pas relancées cette fois.")
+    // The free message still reaches every invitee without an answer.
+    expect(screen.getByRole("link", { name: "Écrire un message aux 3 sans créneau" })).toBeInTheDocument()
+  })
+
+  it("keeps the button, unavailable, when everyone was emailed less than 48 hours ago", () => {
+    render(<InvitationsManager eventId="evt-1" members={[]} allTags={[]} invites={[invite("c", { recentlyContacted: true })]} />)
+    const button = screen.getByRole("button", { name: "Relancer la personne sans créneau" })
+    expect(button).toHaveAttribute("aria-disabled", "true")
+    expect(button).toHaveAccessibleDescription("La personne sans créneau a été invitée ou relancée il y a moins de 48 heures : vous pourrez la relancer après ce délai.")
+    fireEvent.click(button)
+    expect(screen.queryByRole("dialog")).not.toBeInTheDocument()
+  })
+
+  it("names the unavailable button without a count when several were emailed recently", () => {
+    render(<InvitationsManager eventId="evt-1" members={[]} allTags={[]} invites={[invite("c", { recentlyContacted: true }), invite("d", { recentlyContacted: true })]} />)
+    expect(screen.getByRole("button", { name: "Relancer les sans créneau" })).toHaveAccessibleDescription("Les 2 sans créneau ont été invités ou relancés il y a moins de 48 heures : vous pourrez les relancer après ce délai.")
+  })
+
+  it("has no hint when nobody is in the 48-hour window", () => {
+    render(<InvitationsManager eventId="evt-1" members={[]} allTags={[]} invites={[invite("c"), invite("d")]} />)
+    expect(screen.getByRole("button", { name: "Relancer les 2 sans créneau" })).not.toHaveAttribute("aria-describedby")
   })
 })

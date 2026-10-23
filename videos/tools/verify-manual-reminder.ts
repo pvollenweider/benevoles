@@ -51,11 +51,13 @@ async function main() {
     await modal.getByRole("button", { name: "Envoyer", exact: true }).click()
     const response = await sent
     const result = await response.json()
-    if (!response.ok() || result.sent !== 3 || result.failed !== 0) throw new Error("Expected three actual manual reminders")
-    await modal.getByText("3 rappels envoyés", { exact: true }).waitFor()
-    const newMail = (await inbox()).filter(m => !before.has(m.ID))
+    if (!response.ok() || result.queued !== 3) throw new Error("Expected three actual manual reminders")
+    await modal.getByText("3 rappels en cours d'envoi", { exact: true }).waitFor()
     const active = event.registrations.filter(r => r.status === "active")
     const recipients = [...new Set(active.map(r => r.volunteer.email).filter(Boolean))]
+    // Queued, then delivered right after the response (#1105): wait for them to reach the mailbox.
+    let newMail = (await inbox()).filter(m => !before.has(m.ID))
+    for (let i = 0; i < 30 && newMail.length < recipients.length; i++) { await page.waitForTimeout(500); newMail = (await inbox()).filter(m => !before.has(m.ID)) }
     if (newMail.length !== recipients.length || recipients.some(email => newMail.filter(m => m.To.some(t => t.Address === email)).length !== 1)) throw new Error("Wrong recipients or duplicate reminders")
     const lea = newMail.find(m => m.To.some(t => t.Address === "video.reminder.dd@example.org"))!
     const detailResponse = await page.request.get(`http://localhost:48026/api/v1/message/${lea.ID}`)

@@ -163,6 +163,8 @@ export const ACTION_VERB: Record<string, (actor: string) => string> = {
   "question.answer_changed": (a) => `${a} a modifié sa réponse à une question`,
   "roster.choice_changed": (a) => `${a} a changé l'affichage de son nom aux autres bénévoles`,
   "memberinvite.sent": (a) => `${a} a envoyé une invitation`,
+  // One entry per reminder batch (#1105), its count in `changes.recipients`.
+  "memberinvite.reminded": (a) => `${a} a relancé les invités sans réponse`,
   "memberinvite.declined": (a) => `${a} a indiqué ne pas être disponible pour cet événement`,
   "eventpage.created": (a) => `${a} a créé une page`,
   "eventpage.updated": (a) => `${a} a modifié une page`,

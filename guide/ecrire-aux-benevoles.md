@@ -56,6 +56,6 @@ Dans l'onglet **Communication**, section **Rappels**, sous l'encadré des rappel
 
 Avant d'envoyer, rédigez si vous le souhaitez un message dans la section « Message de rappel » (onglet **Réglages** de l'événement). Ce message apparaîtra dans l'email, avec le récapitulatif des créneaux de chaque bénévole.
 
-Le rappel manuel part tout de suite, sans file d'attente : pour un très grand nombre d'inscrits (plus d'une centaine), une partie peut ne pas partir, et le résultat affiché compte les échecs. Pour écrire à beaucoup de monde, **Écrire aux bénévoles** est plus sûr : ses emails attendent leur tour et partent par vagues au lieu d'échouer.
+Pour beaucoup d'inscrits, les emails du rappel partent par vagues, comme un message aux bénévoles : les premiers tout de suite, les suivants dans les minutes qui suivent, sans qu'aucun n'échoue pour autant. Le résultat affiché compte les rappels « en cours d'envoi », et chacun apparaît dans les [emails envoyés](reglages-et-suivi-des-emails.md#emails-envoyes). Un second envoi moins de 5 minutes après le premier, ou tant qu'une partie des emails du précédent attend encore son tour, est refusé, avec une phrase qui l'explique : un double clic n'envoie jamais deux fois le rappel.
 
 Les rappels automatiques (J-2, J-1, jour J) partent sans intervention : voir [Rappels et changements de créneau](rappels.md). Pour un rappel à une date et une heure précises, écrivez-le dans **Écrire aux bénévoles** et [programmez l'envoi](#programmer-l-envoi).

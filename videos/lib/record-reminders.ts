@@ -69,10 +69,12 @@ export async function recordReminders(options: { page: Page; base: string; event
       const response = page.waitForResponse(r => r.url().endsWith("/send-reminder") && r.request().method() === "POST")
       await tap(page, dialog.getByRole("button", { name: "Envoyer", exact: true }))
       const sent = await response; const result = await sent.json()
-      if (!sent.ok() || result.sent !== 3 || result.failed) throw new Error("Manual reminder delivery failed")
-      await dialog.getByText("3 rappels envoyés", { exact: true }).waitFor()
+      if (!sent.ok() || result.queued !== 3) throw new Error("Manual reminder delivery failed")
+      await dialog.getByText("3 rappels en cours d'envoi", { exact: true }).waitFor()
       await at("Ouvrons l'email de Léa")
-      const mails = (await inbox()).filter(m => !prior.has(m.ID))
+      // Queued, then delivered right after the response (#1105): wait for the three to arrive.
+      let mails = (await inbox()).filter(m => !prior.has(m.ID))
+      for (let i = 0; i < 30 && mails.length < 3; i++) { await page.waitForTimeout(500); mails = (await inbox()).filter(m => !prior.has(m.ID)) }
       if (mails.length !== 3 || mails.some(m => m.To.some(t => /request|waiting/.test(t.Address)))) throw new Error("Manual reminder audience incorrect")
       await openMail(mails, "video.reminder.dd@example.org", ["Prends une gourde", ...activeLea.flatMap(r => [r.shift.startTime, r.shift.endTime])])
       checks.manualReminder = { sent: 3, cancelledWithoutEmail: true, twoShiftsInOneEmail: true, mailIds: mails.map(m => m.ID) }

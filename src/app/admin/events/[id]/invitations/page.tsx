@@ -3,6 +3,7 @@ import { notFound, redirect } from "next/navigation"
 import { getOrgContext } from "@/lib/auth-guard"
 import InvitationsManager from "@/components/admin/InvitationsManager"
 import HelpLink from "@/components/admin/HelpLink"
+import { REMIND_COOLDOWN_MS, emailedWithin } from "@/lib/invitation-sending"
 
 export const dynamic = "force-dynamic"
 export const metadata: Metadata = { title: "Invitations" }
@@ -57,6 +58,10 @@ export default async function EventInvitationsPage({
     : []
   const registeredEmails = new Set(registrations.map((r) => r.volunteer.email).filter((e): e is string => !!e))
 
+  // Invited or reminded less than 48 h ago (#1105): « Relancer » leaves them out. Computed here, with
+  // the server's clock, so the page renders the same count it was given.
+  const now = new Date()
+
   const allTags = new Set<string>()
   for (const v of volunteers) for (const t of v.tags) allTags.add(t)
 
@@ -88,6 +93,7 @@ export default async function EventInvitationsPage({
           email: i.volunteer.email,
           tags: i.volunteer.tags,
           registered: i.volunteer.email ? registeredEmails.has(i.volunteer.email) : false,
+          recentlyContacted: emailedWithin(i, now, REMIND_COOLDOWN_MS),
         }))}
       />
     </div>
