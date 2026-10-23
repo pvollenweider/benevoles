@@ -70,7 +70,7 @@ export default function PrivacyPage() {
               <td>Nom, adresse e-mail</td>
               <td>Création et gestion du compte</td>
               <td>Exécution du contrat</td>
-              <td>Durée du compte ; effacé avec l&apos;Organisation {RETENTION_DAYS.deactivatedOrganization} jours après sa désactivation</td>
+              <td>Durée du compte ; effacé avec l&apos;Organisation {RETENTION_DAYS.deactivatedOrganization} jours après sa désactivation par l&apos;opérateur du service (pas en cas de suspension ni de désactivation faute d&apos;activité)</td>
             </tr>
             <tr>
               <td>Mot de passe (hashé bcrypt)</td>
@@ -318,8 +318,9 @@ export default function PrivacyPage() {
       <h2 id="conservation">7. Conservation des données</h2>
       <p>
         Les données des bénévoles sont conservées tant que l&apos;Organisation maintient son compte
-        sur la plateforme. Elles sont supprimées dans un délai de {RETENTION_DAYS.deactivatedOrganization} jours suivant la désactivation du
-        compte de l&apos;Organisation par l&apos;opérateur du service.
+        sur la plateforme. Elles sont supprimées {RETENTION_DAYS.deactivatedOrganization} jours après la désactivation du
+        compte de l&apos;Organisation par l&apos;opérateur du service. Une Organisation suspendue pour abus,
+        ou désactivée faute d&apos;activité, n&apos;est pas supprimée automatiquement (voir ci-dessous).
       </p>
       <p>
         Pour un événement terminé depuis plus de {PAST_EVENT_RETENTION_YEARS} ans, les données des bénévoles peuvent être
