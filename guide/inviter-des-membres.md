@@ -25,6 +25,8 @@ Les invitations permettent d'envoyer des emails personnalisés aux membres de vo
 
 Chaque membre reçoit un email avec un lien unique qui pré-remplit son prénom, nom, email et téléphone sur la page d'inscription. Ce lien ouvre aussi les postes à accès réservé aux membres qui portent la bonne étiquette (voir [Gérer les postes](gerer-les-postes.md)).
 
+Les invitations partent tout de suite, toutes en même temps, sans file d'attente. Pour inviter un très grand nombre de membres d'un coup (plus d'une centaine), une partie peut ne pas partir : le compte rendu affiché après l'envoi les compte en « échecs d'envoi », et ces membres figurent quand même parmi les invités. Mieux vaut alors inviter par groupes, par exemple une étiquette à la fois, en laissant une minute entre deux envois. Le compte rendu ne dit pas quels membres sont concernés : une minute plus tard, **Relancer les N sans créneau** (voir [plus bas](#relancer-les-invites-sans-reponse)) leur envoie leur invitation, comme aux autres invités sans réponse.
+
 Pour proposer des créneaux précis qui manquent de monde à des membres choisis, utilisez plutôt **Chercher des bénévoles** depuis [Où manque-t-il du monde ?](ou-manque-t-il-du-monde.md#chercher-des-benevoles) : les membres pas encore invités y reçoivent leur invitation avec la liste des créneaux concernés.
 
 ## Suivre l'état des invitations
