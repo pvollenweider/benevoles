@@ -346,7 +346,7 @@ export default function PrivacyPage() {
         message indique jusqu&apos;à quel jour répondre. Tant qu&apos;un message n&apos;a été accepté pour aucun
         administrateur, l&apos;espace ne peut pas être désactivé. Une fois l&apos;espace désactivé, ses données sont
         gardées, et ses administrateurs peuvent le réactiver eux-mêmes : depuis la page de connexion, ils
-        demandent un lien par email, valable {REACTIVATION_LINK_HOURS} heures et une seule fois, qui ouvre une page où
+        demandent un lien par email, utilisable une seule fois dans les {REACTIVATION_LINK_HOURS} heures, qui ouvre une page où
         confirmer la réactivation.
       </p>
       <p>
