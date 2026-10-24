@@ -32,7 +32,7 @@ const questionRead = async (args: { select: { answers?: unknown } }) =>
 
 vi.mock("@/lib/prisma", () => {
   const tx = {
-    $queryRaw: vi.fn().mockResolvedValue([{ id: "v1", erasedAt: null }]),
+    $queryRaw: vi.fn().mockResolvedValue([{ id: "v1", erasedAt: null, email: "julie@x.com" }]),
     shift: { findMany: vi.fn().mockResolvedValue([]) },
     volunteer: { createMany: vi.fn(), findFirstOrThrow: vi.fn(), update: m.txVolUpdate },
     charterVersion: { upsert: vi.fn() },
@@ -40,6 +40,8 @@ vi.mock("@/lib/prisma", () => {
     eventQuestion: { findMany: questionRead },
     questionAnswer: { upsert: m.upsert, deleteMany: m.deleteMany, createMany: m.createMany },
     registration: {
+      // The link is checked again under the member lock (#1138 follow-up).
+      findFirst: (...args: unknown[]) => m.regFindFirst(...args),
       findMany: m.txRegFindMany,
       count: vi.fn().mockResolvedValue(0),
       aggregate: vi.fn().mockResolvedValue({ _max: { waitingPosition: null } }),

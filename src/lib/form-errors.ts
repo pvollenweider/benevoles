@@ -7,7 +7,7 @@
  * may have been recorded anyway. Built on the API error shape `{ error, details? }`.
  */
 
-export type FailureKind = "validation" | "conflict" | "duplicate" | "rate_limit" | "network" | "server"
+export type FailureKind = "validation" | "conflict" | "duplicate" | "stale_link" | "rate_limit" | "network" | "server"
 
 export type Failure = {
   kind: FailureKind
@@ -24,7 +24,7 @@ export type Failure = {
 export type FailureInput = {
   /** HTTP status; absent when the request never got an answer. */
   status?: number
-  body?: { error?: unknown; duplicate?: unknown } | null
+  body?: { error?: unknown; duplicate?: unknown; staleLink?: unknown } | null
   /** fetch threw, or the answer wasn't JSON. */
   network?: boolean
 }
@@ -48,6 +48,11 @@ export function describeSignupFailure(i: FailureInput): Failure {
   if (i.status === 409 && i.body?.duplicate === true) {
     // Already registered (#1047): the server's sentence says how to get the link back by email.
     return { kind: "duplicate", title: "Inscription déjà enregistrée", message: msg ?? "Cette adresse a déjà une inscription pour l'un de ces créneaux. Le lien pour gérer tes inscriptions se trouve dans tes emails.", hint: "Pour choisir d'autres créneaux, reviens au planning ; tes informations restent remplies.", retryable: false, maybeRecorded: false }
+  }
+  if (i.status === 409 && i.body?.staleLink === true) {
+    // The link the page was opened with was replaced meanwhile (#1138 follow-up): going back to
+    // the planning would hit the same refusal, the newest link is the way on.
+    return { kind: "stale_link", title: "Ce lien n'est plus valable", message: msg ?? "Le lien avec lequel tu t'inscris a été remplacé.", hint: "Ouvre le dernier lien reçu par email, puis recommence ton inscription.", retryable: false, maybeRecorded: false }
   }
   if (i.status === 409) {
     return { kind: "conflict", title: "Ta sélection n'est plus disponible", message: msg ?? "Un créneau choisi n'est plus disponible.", hint: "Reviens au planning pour ajuster ton choix ; tes informations restent remplies.", retryable: false, maybeRecorded: false }

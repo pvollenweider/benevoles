@@ -1,5 +1,6 @@
 import { describe, it, expect } from "vitest"
 import { describeBulkFailure, describeSignupFailure, mergeFailureMessage, partialOutcome } from "../form-errors"
+import { STALE_LINK_MESSAGE, staleLinkRefusal } from "../signup-eligibility"
 
 // Error recovery on important forms (#375).
 describe("describeSignupFailure", () => {
@@ -18,6 +19,19 @@ describe("describeSignupFailure", () => {
     expect(dup.hint).toContain("planning")
     expect(describeSignupFailure({ status: 409, body: { duplicate: true } }).message).toContain("tes emails")
     expect(describeSignupFailure({ status: 409, body: { error: "Complet.", duplicate: "yes" } }).kind).toBe("conflict")
+  })
+
+  // #1138 follow-up: the link the page was opened with was replaced; the planning is no way on.
+  it("explains a replaced link by the server's flag and points to the newest link, not the planning", () => {
+    const refusal = staleLinkRefusal()
+    const stale = describeSignupFailure({ status: refusal.status, body: refusal.body })
+    expect(stale).toMatchObject({ kind: "stale_link", title: "Ce lien n'est plus valable", message: STALE_LINK_MESSAGE, retryable: false, maybeRecorded: false })
+    expect(stale.hint).toContain("dernier lien reçu par email")
+    expect(stale.hint).not.toContain("planning")
+    expect(describeSignupFailure({ status: 409, body: { staleLink: true } }).message).toContain("remplacé")
+    expect(describeSignupFailure({ status: 409, body: { error: "Complet.", staleLink: "yes" } }).kind).toBe("conflict")
+    // The refusal never carries a link.
+    expect(JSON.stringify(refusal.body)).not.toMatch(/token/i)
   })
 
   it("says that retrying is safe when the request may have gone through", () => {

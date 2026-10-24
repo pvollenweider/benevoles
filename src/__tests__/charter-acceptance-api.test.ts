@@ -22,7 +22,7 @@ vi.mock("@/lib/prisma", () => ({
     registration: { findMany: vi.fn().mockResolvedValue([]) },
     memberInvite: { findFirst: vi.fn() },
     $transaction: vi.fn(async (fn: (tx: unknown) => unknown) => fn({
-      $queryRaw: vi.fn(),
+      $queryRaw: vi.fn().mockResolvedValue([{ id: "locked" }]), // the member lock (#285): the row it locked
       shift: { findMany: vi.fn().mockResolvedValue([]) },
       volunteer: { createMany: vi.fn().mockResolvedValue({ count: 1 }), findFirstOrThrow: vi.fn().mockResolvedValue({ id: "vol-1" }) },
       charterVersion: { upsert: m.charterUpsert },
