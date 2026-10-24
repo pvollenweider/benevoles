@@ -50,7 +50,7 @@ test("a unit for both roles says so, then speaks to each under its own heading",
 
 test("an example quote is a figure named by its « Exemple de situation » caption, without added quotation marks", async ({ page }) => {
   await page.goto("/doc/s-inscrire")
-  const figure = page.getByRole("figure", { name: /^Exemple de situation\s:\sbénévole occasionnelle$/ })
+  const figure = page.getByRole("figure", { name: /^Exemple de situation\s:\sLéa, bénévole occasionnelle$/ })
   await expect(figure).toBeVisible()
   const quote = figure.locator("blockquote p")
   await expect(quote).toHaveText(/^«\sJe peux donner deux heures samedi\./)

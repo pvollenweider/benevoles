@@ -13,7 +13,7 @@ aliases: []
 
 > « Je peux donner deux heures samedi. J'aimerais voir où je peux être utile et m'inscrire simplement. »
 >
-> Exemple de situation : bénévole occasionnelle
+> Exemple de situation : Léa, bénévole occasionnelle
 
 <!-- video: VOLUNTEER_FORM_RECAP -->
 

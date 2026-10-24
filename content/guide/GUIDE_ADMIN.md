@@ -4,7 +4,7 @@ Bienvenue ! La documentation des organisateurs est rangée en pages courtes, une
 
 > « On veut passer moins de temps à remplir des tableaux et plus de temps à préparer un beau festival. »
 >
-> Exemple de situation : comité d'un festival
+> Exemple de situation : Camille, comité d'un festival
 
 <!-- video: ADMIN_FEATURES_OVERVIEW -->
 

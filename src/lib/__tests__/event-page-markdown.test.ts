@@ -87,13 +87,13 @@ describe("renderEventPageMarkdown", () => {
 
 describe("example quotes (exampleQuotes)", () => {
   const nbsp = "\u00a0"
-  const source = `> «${nbsp}Je peux donner deux heures samedi.${nbsp}»\n>\n> Exemple de situation${nbsp}: bénévole occasionnelle`
+  const source = `> «${nbsp}Je peux donner deux heures samedi.${nbsp}»\n>\n> Exemple de situation${nbsp}: Léa, bénévole occasionnelle`
 
   it("renders a blockquote ending with « Exemple de situation : » as a figure with its caption", () => {
     const html = renderEventPageMarkdown(source, { exampleQuotes: true })
     // DOMPurify writes the non-breaking spaces back as &nbsp;.
     expect(html).toBe(
-      "<figure>\n<blockquote>\n<p>«&nbsp;Je peux donner deux heures samedi.&nbsp;»</p>\n</blockquote>\n<figcaption>Exemple de situation&nbsp;: bénévole occasionnelle</figcaption>\n</figure>\n",
+      "<figure>\n<blockquote>\n<p>«&nbsp;Je peux donner deux heures samedi.&nbsp;»</p>\n</blockquote>\n<figcaption>Exemple de situation&nbsp;: Léa, bénévole occasionnelle</figcaption>\n</figure>\n",
     )
   })
 

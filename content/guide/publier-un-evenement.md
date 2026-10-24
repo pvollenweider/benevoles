@@ -12,7 +12,7 @@ aliases: []
 
 > « Le vrai soulagement, c'est de ne plus devoir envoyer une confirmation à chaque personne. On a pu consacrer ce temps au reste de la préparation. »
 >
-> Exemple de situation : association culturelle
+> Exemple de situation : Sarah, association culturelle
 
 <!-- video: EVENT_REVIEW_PUBLISH -->
 

@@ -12,7 +12,7 @@ aliases: []
 
 > « Le matin de l'événement, j'ai ouvert ma liste et je savais qui j'attendais. Je n'ai pas eu besoin de demander la dernière version du planning au comité. »
 >
-> Exemple de situation : responsable d'équipe
+> Exemple de situation : Noah, responsable d'équipe
 
 <!-- video: SECTOR_LEADERS -->
 

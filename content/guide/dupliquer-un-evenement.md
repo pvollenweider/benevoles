@@ -12,7 +12,7 @@ aliases: []
 
 > « À la deuxième édition, on a dupliqué l'événement précédent et adapté les dates et les postes. On n'est pas repartis d'un tableau vide. »
 >
-> Exemple de situation : membre d'un comité
+> Exemple de situation : René, membre d'un comité
 
 <!-- video: EVENT_DUPLICATE -->
 

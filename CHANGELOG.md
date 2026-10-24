@@ -21,7 +21,7 @@ Format basé sur [Keep a Changelog](https://keepachangelog.com/fr/1.0.0/).
 
 - **Plafonds d'envoi atteints, pour l'opérateur** (#1100) : en haut de la liste des organisations du super admin, les plafonds d'envoi d'emails atteints ces 7 derniers jours, par organisation : le plafond en clair, quand, combien d'emails ont été retenus (ils partent à la fin de la période du plafond) et combien ont été refusés, et s'il reste des emails retenus en attente. Une mention « Plafond d'envoi atteint » sur la ligne de l'organisation mène au même détail sur sa fiche. Rien sur les destinataires ni le contenu des emails n'est gardé, et ces relevés sont effacés après 90 jours. <!-- interne -->
 
-- **Situations types dans la documentation** : une courte citation d'exemple en tête de quinze pages des guides organisateur et bénévole (création, créneaux, partage, suivi, jour J, inscription, lien personnel…), présentée dans un encadré sobre et légendée « Exemple de situation », jamais comme un témoignage réel.
+- **Situations types dans la documentation** : une courte citation d'exemple en tête de quinze pages des guides organisateur et bénévole (création, créneaux, partage, suivi, jour J, inscription, lien personnel…), présentée dans un encadré sobre et légendée « Exemple de situation » avec un prénom et un rôle, ceux des personnes des captures et des vidéos, jamais comme un témoignage réel.
 
 ### Modifié
 

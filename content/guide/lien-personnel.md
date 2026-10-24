@@ -12,7 +12,7 @@ aliases: []
 
 > « J'ai choisi mes créneaux en quelques minutes. Et quand j'ai voulu revérifier mes horaires, j'ai retrouvé mon lien dans l'email, sans avoir à créer un compte. »
 >
-> Exemple de situation : bénévole
+> Exemple de situation : Anna, bénévole
 
 <!-- video: VOLUNTEER_SESSION_AVAILABILITY -->
 

@@ -12,7 +12,7 @@ aliases: []
 
 > « On a vu tout de suite qu'il nous manquait du monde au rangement. Ça nous a permis de relancer pour ces créneaux précis plutôt que de redemander à tout le monde. »
 >
-> Exemple de situation : club sportif
+> Exemple de situation : Lucas, club sportif
 
 <!-- video: STAFFING_GAPS -->
 

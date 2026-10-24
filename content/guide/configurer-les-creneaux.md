@@ -12,7 +12,7 @@ aliases: []
 
 > « Pour notre tournoi, on a besoin de parents à la buvette, à l'accueil et au montage. Le plus compliqué, c'est de savoir quels postes restent à compléter. »
 >
-> Exemple de situation : responsable d'un club sportif
+> Exemple de situation : Julien, responsable d'un club sportif
 
 <!-- video: SHIFTS_ROLES_VIEWS -->
 

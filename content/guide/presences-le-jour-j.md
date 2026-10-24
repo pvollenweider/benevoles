@@ -12,7 +12,7 @@ aliases: []
 
 > « Le jour de la manifestation, j'ai surtout besoin de savoir qui arrive, à quelle heure et pour quel poste. »
 >
-> Exemple de situation : responsable d'équipe
+> Exemple de situation : Étienne, responsable d'équipe
 
 <!-- video: ATTENDANCE_CHECK_IN -->
 

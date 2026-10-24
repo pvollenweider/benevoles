@@ -12,7 +12,7 @@ aliases: []
 
 > « Je veux bien aider chaque année, mais pas forcément au même poste. C'est agréable de pouvoir choisir. »
 >
-> Exemple de situation : bénévole fidèle
+> Exemple de situation : Zoé, bénévole fidèle
 
 <!-- video: VOLUNTEER_CHOOSE_SHIFTS -->
 

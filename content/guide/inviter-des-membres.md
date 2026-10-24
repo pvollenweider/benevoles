@@ -12,7 +12,7 @@ aliases: []
 
 > « Certains bénévoles reviennent chaque année, d'autres nous rejoignent pour la première fois. On cherche un outil simple pour accueillir tout le monde. »
 >
-> Exemple de situation : organisatrice d'une fête de village
+> Exemple de situation : Aline, organisatrice d'une fête de village
 
 <!-- video: MEMBERS_INVITATIONS -->
 

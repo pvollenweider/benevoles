@@ -12,7 +12,7 @@ aliases: []
 
 > « Nous aussi, on est bénévoles. Organiser les bénévoles ne devrait pas devenir un deuxième travail. »
 >
-> Exemple de situation : association culturelle
+> Exemple de situation : Élodie, association culturelle
 
 <!-- video: EVENT_CREATE_PUBLISH_OVERVIEW -->
 

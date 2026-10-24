@@ -12,7 +12,7 @@ aliases: []
 
 > « On avait peur de devoir expliquer l'outil à chacun. Finalement, la plupart des bénévoles se sont inscrits seuls, et on a accompagné les quelques personnes qui préféraient nous appeler. »
 >
-> Exemple de situation : fête de village
+> Exemple de situation : Manon, fête de village
 
 L'onglet **Partage** de l'événement (le bouton **Partager le lien**, en haut de ses pages une fois publié, y mène) ouvre la page **Partager l'événement**. Une fois l'événement publié, sa section **Lien de l'événement**, comme la page de vérification avant publication, affiche le lien à partager, avec deux boutons :
 
