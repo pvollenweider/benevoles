@@ -13,10 +13,9 @@ import { SITE_CONTAINER_CLASS, SITE_READING_COLUMN_CLASS } from "@/components/pu
  * heading scale in rem (h1 30 px, h2 24 px, h3 20 px, h4 18 px, all semibold, long words wrapped
  * rather than overflowing), underlined links with the same visible focus outline as the links a
  * page draws itself. No fixed height anywhere. Dark variants stay AA on gray-900. An example quote
- * (a <figure> holding a <blockquote> and a <figcaption> with the person and the « Personnage et
- * citation fictifs. » note, see `exampleQuotes` in src/lib/event-page-markdown.ts) is a neutral
- * tinted box with a full 1 px border (never a side stripe), without italics or added quotation
- * marks (the text carries its « »), the note in smaller muted text right under the caption.
+ * (a <figure> holding a <blockquote> and the <figcaption> naming who says it, see `exampleQuotes`
+ * in src/lib/event-page-markdown.ts) is a neutral tinted box with a full 1 px border (never a side
+ * stripe), without italics or added quotation marks (the text carries its « »).
  */
 export const DOC_PROSE_CLASS = `prose prose-gray dark:prose-invert max-w-[65ch]
   prose-headings:font-semibold prose-headings:tracking-tight prose-headings:text-gray-900 dark:prose-headings:text-gray-100 prose-headings:scroll-mt-4 prose-headings:break-words
@@ -38,8 +37,7 @@ export const DOC_PROSE_CLASS = `prose prose-gray dark:prose-invert max-w-[65ch]
   [&_figure:has(>blockquote)]:bg-gray-50 dark:[&_figure:has(>blockquote)]:bg-gray-800 [&_figure:has(>blockquote)]:px-5 [&_figure:has(>blockquote)]:py-4
   [&_figure>blockquote]:m-0 [&_figure>blockquote]:border-0 [&_figure>blockquote]:p-0 [&_figure>blockquote]:not-italic [&_figure>blockquote]:font-normal
   [&_figure>blockquote_p]:m-0 [&_figure>blockquote_p]:text-gray-800 dark:[&_figure>blockquote_p]:text-gray-200 [&_figure>blockquote_p]:before:content-none [&_figure>blockquote_p]:after:content-none
-  [&_figure>figcaption]:mt-2 [&_figure>figcaption_p]:m-0 [&_figure>figcaption_p]:max-w-none [&_figure>figcaption_p]:text-sm [&_figure>figcaption_p]:leading-normal
-  [&_figure>figcaption_p]:text-gray-600 dark:[&_figure>figcaption_p]:text-gray-400 [&_figure>figcaption_p+p]:mt-1 [&_figure>figcaption_p+p]:text-xs [&_figure>figcaption_p+p]:text-gray-500 dark:[&_figure>figcaption_p+p]:text-gray-400`
+  [&_figure>figcaption]:mt-2 [&_figure>figcaption]:text-sm [&_figure>figcaption]:leading-normal [&_figure>figcaption]:text-gray-600 dark:[&_figure>figcaption]:text-gray-400`
 
 /**
  * The frame of a documentation page, inside ContentShell's `layout="doc"`: an optional side menu

@@ -12,9 +12,7 @@ aliases: []
 
 > « Certains bénévoles reviennent chaque année, d'autres nous rejoignent pour la première fois. On cherche un outil simple pour accueillir tout le monde. »
 >
-> Aline, organisatrice d'une fête de village*
->
-> \* Personnage et citation fictifs.
+> Aline, organisatrice d'une fête de village
 
 <!-- video: MEMBERS_INVITATIONS -->
 

@@ -12,9 +12,7 @@ aliases: []
 
 > « Le jour de la manifestation, j'ai surtout besoin de savoir qui arrive, à quelle heure et pour quel poste. »
 >
-> Noah, responsable d'équipe*
->
-> \* Personnage et citation fictifs.
+> Noah, responsable d'équipe
 
 <!-- video: ATTENDANCE_CHECK_IN -->
 
