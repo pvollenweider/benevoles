@@ -8,6 +8,8 @@ import { passwordErrors } from "@/lib/password"
 import { rateLimit, getClientIp } from "@/lib/rate-limit"
 import { hashToken } from "@/lib/token-hash"
 
+const INVALID_ERROR = "Lien invalide ou expiré."
+
 export async function POST(req: Request) {
   const rl = await rateLimit(getClientIp(req), "reset-password", 10, 60 * 60 * 1000)
   if (!rl.ok) {
@@ -25,16 +27,20 @@ export async function POST(req: Request) {
     return NextResponse.json({ error: errors[0] }, { status: 400 })
   }
 
-  const admin = await prisma.adminUser.findUnique({ where: { passwordResetTokenHash: hashToken(token) } })
+  const tokenHash = hashToken(token)
+  const admin = await prisma.adminUser.findUnique({ where: { passwordResetTokenHash: tokenHash } })
 
   if (!admin || !admin.passwordResetExpiresAt || admin.passwordResetExpiresAt < new Date()) {
-    return NextResponse.json({ error: "Lien invalide ou expiré." }, { status: 400 })
+    return NextResponse.json({ error: INVALID_ERROR }, { status: 400 })
   }
 
   const passwordHash = await bcrypt.hash(password, 12)
 
-  await prisma.adminUser.update({
-    where: { id: admin.id },
+  // Consumes the link atomically: the update only matches while the account still carries this
+  // token, unexpired. A concurrent request that consumed it first, a link replaced by a newer
+  // request or one expired during bcrypt match no row, and the password stays as it was.
+  const { count } = await prisma.adminUser.updateMany({
+    where: { id: admin.id, passwordResetTokenHash: tokenHash, passwordResetExpiresAt: { gt: new Date() } },
     data: {
       passwordHash,
       // Signs out every session opened before the reset (#360), e.g. one opened by whoever
@@ -44,6 +50,9 @@ export async function POST(req: Request) {
       passwordResetExpiresAt: null,
     },
   })
+  if (count === 0) {
+    return NextResponse.json({ error: INVALID_ERROR }, { status: 400 })
+  }
 
   return NextResponse.json({ ok: true })
 }

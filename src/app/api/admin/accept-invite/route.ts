@@ -15,6 +15,7 @@ import { deliverAfterResponse, enqueueNotifications } from "@/lib/notifications/
 import { validationError } from "@/lib/api-error"
 import { replyToOnActivation } from "@/lib/org-reply-to"
 import { isOwnerRole } from "@/lib/permissions"
+import { activationAllowed } from "@/lib/activation-budget"
 
 const schema = z.object({
   token: z.string().min(1),
@@ -71,6 +72,11 @@ export async function POST(req: Request) {
 
   const { token, password } = parsed.data
 
+  // Counted before the token lookup and bcrypt, so parallel requests can't all get through.
+  if (!(await activationAllowed(getClientIp(req), token))) {
+    return NextResponse.json({ error: "Trop de tentatives. Réessayez plus tard." }, { status: 429 })
+  }
+
   const result = await checkToken(token)
   if (!result.ok) {
     return NextResponse.json({ error: result.error }, { status: result.status })
@@ -82,8 +88,15 @@ export async function POST(req: Request) {
   // Activation and welcome email commit together (#352).
   const organization = admin.organization
   const outboxIds = await prisma.$transaction(async (tx) => {
-    await tx.adminUser.update({
-      where: { id: admin.id },
+    // Consumes the link atomically: the update only matches while the account still carries this
+    // token, unexpired. A concurrent request that consumed it first, a link replaced by a new
+    // invitation or one expired during bcrypt match no row, and nothing else happens.
+    const { count } = await tx.adminUser.updateMany({
+      where: {
+        id: admin.id,
+        setupTokenHash: hashToken(token),
+        OR: [{ setupTokenExpiresAt: null }, { setupTokenExpiresAt: { gt: new Date() } }],
+      },
       data: {
         passwordHash,
         isActive: true,
@@ -91,6 +104,7 @@ export async function POST(req: Request) {
         setupTokenExpiresAt: null,
       },
     })
+    if (count === 0) return null
     if (!organization || !admin.organizationId) return []
     // An owner's now-confirmed address becomes the reply-to of an organization that has none
     // (#1077), only while it is still null: never over a value an owner set, nor after an owner
@@ -135,6 +149,13 @@ export async function POST(req: Request) {
       },
     }], tx)
   })
+  if (outboxIds === null) {
+    // Lost to another consumption, a replacement or the expiry: same answer as a fresh lookup.
+    const now = await checkToken(token)
+    return now.ok
+      ? NextResponse.json({ error: INVALID_ERROR }, { status: 404 })
+      : NextResponse.json({ error: now.error }, { status: now.status })
+  }
   deliverAfterResponse(outboxIds)
 
   return NextResponse.json({ ok: true })

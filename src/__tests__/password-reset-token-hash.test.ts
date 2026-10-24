@@ -5,8 +5,9 @@ import { hashToken } from "@/lib/token-hash"
 
 const findUnique = vi.hoisted(() => vi.fn())
 const update = vi.hoisted(() => vi.fn())
+const updateMany = vi.hoisted(() => vi.fn())
 const sendNotification = vi.hoisted(() => vi.fn())
-vi.mock("@/lib/prisma", () => ({ prisma: { adminUser: { findUnique, update }, async $transaction(fn: (tx: unknown) => unknown) { return fn(this) }, } }))
+vi.mock("@/lib/prisma", () => ({ prisma: { adminUser: { findUnique, update, updateMany }, async $transaction(fn: (tx: unknown) => unknown) { return fn(this) }, } }))
 vi.mock("@/lib/notifications", () => ({ sendNotification }))
 vi.mock("@/lib/notifications/outbox", () => ({
   // Stored with the transaction (#352); what matters is the payload queued.
@@ -48,12 +49,46 @@ describe("password reset tokens are stored hashed (#269)", () => {
 
   it("a reset signs out every session opened before it (#360)", async () => {
     findUnique.mockResolvedValue({ id: "a1", passwordResetExpiresAt: new Date(Date.now() + 60_000) })
+    updateMany.mockResolvedValue({ count: 1 })
     const { POST } = await import("@/app/api/public/reset-password/route")
     const res = await POST(json("http://localhost/api/public/reset-password", { token: "abc", password: "Correct-horse-battery-9" }))
     expect(res.status).toBe(200)
-    expect(update).toHaveBeenCalledWith(expect.objectContaining({
-      where: { id: "a1" },
-      data: expect.objectContaining({ sessionVersion: { increment: 1 }, passwordResetTokenHash: null }),
+    expect(updateMany).toHaveBeenCalledWith(expect.objectContaining({
+      data: expect.objectContaining({ sessionVersion: { increment: 1 }, passwordResetTokenHash: null, passwordResetExpiresAt: null }),
     }))
+  })
+})
+
+describe("reset-password consumes the link once, atomically", () => {
+  beforeEach(() => vi.clearAllMocks())
+  const reset = async () => {
+    const { POST } = await import("@/app/api/public/reset-password/route")
+    return POST(json("http://localhost/api/public/reset-password", { token: "abc", password: "Correct-horse-battery-9" }))
+  }
+
+  it("only matches while the account still carries this token, unexpired", async () => {
+    findUnique.mockResolvedValue({ id: "a1", passwordResetExpiresAt: new Date(Date.now() + 60_000) })
+    updateMany.mockResolvedValue({ count: 1 })
+    expect((await reset()).status).toBe(200)
+    expect(updateMany.mock.calls[0][0].where).toEqual({
+      id: "a1",
+      passwordResetTokenHash: hashToken("abc"),
+      passwordResetExpiresAt: { gt: expect.any(Date) },
+    })
+    expect(update).not.toHaveBeenCalled()
+  })
+
+  it("a request that lost the race, or whose link expired or was replaced meanwhile, is refused", async () => {
+    findUnique.mockResolvedValue({ id: "a1", passwordResetExpiresAt: new Date(Date.now() + 60_000) })
+    updateMany.mockResolvedValue({ count: 0 })
+    const res = await reset()
+    expect(res.status).toBe(400)
+    expect((await res.json()).error).toMatch(/invalide ou expiré/)
+  })
+
+  it("an expired link is refused before the password is hashed or anything is written", async () => {
+    findUnique.mockResolvedValue({ id: "a1", passwordResetExpiresAt: new Date(Date.now() - 1) })
+    expect((await reset()).status).toBe(400)
+    expect(updateMany).not.toHaveBeenCalled()
   })
 })
