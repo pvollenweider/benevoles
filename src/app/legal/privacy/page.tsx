@@ -25,7 +25,7 @@ export default function PrivacyPage() {
     <>
       <JsonLd data={publicPageJsonLd("/legal/privacy", apexBaseUrl())} />
       <h1>Politique de confidentialité</h1>
-      <p className="text-gray-500 dark:text-gray-400 text-sm">Dernière mise à jour : 23 octobre 2026</p>
+      <p className="text-gray-500 dark:text-gray-400 text-sm">Dernière mise à jour : 24 octobre 2026</p>
 
       <p>
         La présente politique décrit comment <strong>benevol.app</strong>, éditée par{" "}
@@ -102,10 +102,10 @@ export default function PrivacyPage() {
           </thead>
           <tbody>
             <tr>
-              <td>Demande d&apos;espace : nom de l&apos;association, sa description et son besoin, votre nom et votre adresse e-mail</td>
-              <td>Vérifier l&apos;adresse, créer l&apos;espace et son compte, examiner la demande avant d&apos;activer l&apos;espace</td>
+              <td>Demande d&apos;espace : nom de l&apos;association, sa description et son besoin, votre nom et votre adresse e-mail, et, si vous y répondez, comment vous avez connu le site</td>
+              <td>Vérifier l&apos;adresse, créer l&apos;espace et son compte, examiner la demande avant d&apos;activer l&apos;espace ; la réponse facultative sert à savoir comment les associations découvrent le service (des totaux par réponse, sans suivi)</td>
               <td>Mesures précontractuelles prises à votre demande</td>
-              <td>{RETENTION_DAYS.signupRequest} jours après la demande, confirmée ou non ; la description reste ensuite sur la fiche de l&apos;espace, visible de l&apos;opérateur seulement, et suit l&apos;Organisation</td>
+              <td>{RETENTION_DAYS.signupRequest} jours après la demande, confirmée ou non ; la description et la réponse facultative restent ensuite sur la fiche de l&apos;espace, visibles de l&apos;opérateur seulement, et suivent l&apos;Organisation</td>
             </tr>
             <tr>
               <td>Liste de blocage : adresse e-mail ou nom de domaine bloqué, ou empreinte d&apos;une adresse IP (jamais l&apos;adresse en clair), avec la raison et l&apos;échéance</td>

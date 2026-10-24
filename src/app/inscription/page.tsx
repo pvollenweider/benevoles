@@ -8,7 +8,7 @@ import { SITE_CONTAINER_CLASS, SITE_READING_COLUMN_CLASS } from "@/components/pu
 import SignupForm from "@/components/public/signup/SignupForm"
 import { isSignupOpen } from "@/lib/signup-switch"
 import { signupClosedMessage } from "@/lib/signup"
-import { contactEmail, privacyHref } from "@/lib/site"
+import { contactEmail, privacyHref, siteName } from "@/lib/site"
 import { publicPageMetadata } from "@/lib/doc-pages"
 import { apexBaseUrl } from "@/lib/urls"
 
@@ -31,7 +31,7 @@ export default async function SignupPage() {
               Votre espace est prêt dès que vous avez confirmé votre adresse : vous pouvez préparer votre événement tout de suite. Sa publication et l&apos;envoi d&apos;invitations seront possibles après une courte vérification de votre inscription ; vous recevrez un email dès que votre espace sera activé.
             </p>
           </div>
-          <SignupForm open={await isSignupOpen()} closedMessage={signupClosedMessage(contactEmail())} privacyHref={privacyHref()} />
+          <SignupForm open={await isSignupOpen()} closedMessage={signupClosedMessage(contactEmail())} privacyHref={privacyHref()} siteName={siteName()} />
         </div>
       </main>
     </ContentShell>

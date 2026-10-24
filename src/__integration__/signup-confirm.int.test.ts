@@ -24,7 +24,7 @@ async function ownEmails() {
   return rows.map((row) => ({ row, payload: openPayload(row.payload) })).filter(({ payload }) => payload.recipient.email?.startsWith(tag))
 }
 
-async function request(code: string, over: { email?: string; expiresAt?: Date } = {}) {
+async function request(code: string, over: { email?: string; expiresAt?: Date; source?: string; sourceDetail?: string } = {}) {
   return prisma.signupRequest.create({
     data: {
       organizationName: `Fête ${tag}`,
@@ -33,6 +33,8 @@ async function request(code: string, over: { email?: string; expiresAt?: Date } 
       email: over.email ?? `${tag}-${code}@example.org`,
       tokenHash: hashToken(`${tag}-${code}`),
       expiresAt: over.expiresAt ?? new Date(Date.now() + 60 * 60 * 1000),
+      source: over.source,
+      sourceDetail: over.sourceDetail,
     },
   })
 }
@@ -62,6 +64,9 @@ describe.skipIf(!url)("sign-up confirmation on Postgres (#810)", () => {
     expect(org.publicationApprovedAt).toBeNull()
     expect(org.outboundEmailApprovedAt).toBeNull()
     expect(org.signupDescription).toBe("Fête de village, une centaine de bénévoles.")
+    // No answer to « Comment avez-vous connu … ? » (#1094): nothing copied.
+    expect(org.signupSource).toBeNull()
+    expect(org.signupSourceDetail).toBeNull()
     // The statistics (#810): marked as a sign-up space, counted by the database triggers.
     expect(org.signupAt).toBeInstanceOf(Date)
     const counters = await prisma.platformCounter.findMany({ where: { metric: { in: ["signup_requests", "signup_spaces"] } } })
@@ -83,6 +88,16 @@ describe.skipIf(!url)("sign-up confirmation on Postgres (#810)", () => {
     // A second click: refused, nothing more created.
     expect(await confirmSignupRequest(`${tag}-a`)).toEqual({ ok: false, reason: "used" })
     expect((await signupRequestState(`${tag}-a`)).state).toBe("used")
+  })
+
+  it("copies the « Comment avez-vous connu … ? » answer to the space (#1094)", async () => {
+    await request("src", { source: "other", sourceDetail: "la newsletter de la commune" })
+    const result = await confirmSignupRequest(`${tag}-src`)
+    expect(result.ok).toBe(true)
+    if (!result.ok) return
+    const org = await prisma.organization.findUniqueOrThrow({ where: { slug: result.organizationSlug } })
+    orgIds.push(org.id)
+    expect(org).toMatchObject({ signupSource: "other", signupSourceDetail: "la newsletter de la commune" })
   })
 
   it("refuses an expired, an unknown, and an already-taken address", async () => {

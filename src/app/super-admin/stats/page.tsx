@@ -5,7 +5,8 @@ import type { Metadata } from "next"
 import { redirect } from "next/navigation"
 import { auth } from "@/auth"
 import { formatCount, type UsageRow } from "@/lib/usage-counters"
-import { loadPlatformUsage, loadSignupFacts } from "@/lib/usage-stats"
+import { loadPlatformUsage, loadSignupFacts, loadSignupSources } from "@/lib/usage-stats"
+import { signupSourceRows } from "@/lib/signup-source"
 import { signupIndicatorRows } from "@/lib/signup-indicators"
 import { observePastEvents } from "@/lib/past-event-retention-data"
 import { pastEventRetentionMode } from "@/lib/past-event-retention"
@@ -25,7 +26,7 @@ export default async function StatsPage() {
   if (!session?.user) redirect("/admin/login")
   if (session.user.role !== "super_admin") redirect("/admin/login")
 
-  const [{ cumulative, current }, signupFacts, pastEvents] = await Promise.all([loadPlatformUsage(), loadSignupFacts(), observePastEvents()])
+  const [{ cumulative, current }, signupFacts, signupSources, pastEvents] = await Promise.all([loadPlatformUsage(), loadSignupFacts(), loadSignupSources(), observePastEvents()])
   const signup = signupIndicatorRows(signupFacts)
 
   return (
@@ -43,6 +44,12 @@ export default async function StatsPage() {
         title="Inscription en libre-service"
         intro="Ce qui dit si la validation à la main reste nécessaire. Les décisions comptent sur 12 mois (le journal de l'opérateur les garde un an) ; un envoi reporté plusieurs fois compte à chaque fois."
         rows={signup}
+      />
+      <UsageTable
+        id="stats-signup-source"
+        title="Comment les espaces nous ont connus"
+        intro="La réponse facultative à « Comment avez-vous connu le site ? » du formulaire de demande d'espace, pour les espaces créés par l'inscription en libre-service et encore présents. « Sans réponse » compte aussi les espaces créés avant que la question existe."
+        rows={signupSourceRows(signupSources)}
       />
       <PastEventRetentionTable rows={pastEvents} mode={pastEventRetentionMode()} />
     </div>
