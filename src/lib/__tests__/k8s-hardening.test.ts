@@ -65,6 +65,25 @@ describe("k8s pod hardening (#1050)", () => {
     expect(m).not.toMatch(/privileged: true/)
   })
 
+  // Root entrypoints kept as such (postgres drops to uid 70 with su-exec, nginx runs its workers as
+  // nginx, video-publish writes with tar as root): only the capabilities they use, nothing else.
+  it.each([
+    ["k8s/postgres.yaml", "[CHOWN, DAC_OVERRIDE, FOWNER, SETGID, SETUID]"],
+    ["k8s/media.yaml", "[CHOWN, DAC_OVERRIDE, FOWNER, FSETID, SETGID, SETUID]"],
+  ])("%s: no service account token, RuntimeDefault seccomp, no escalation, only the capabilities it needs", (file, caps) => {
+    const m = read(file)
+    expect(count(m, /^\s+image: /gm)).toBe(1)
+    expect(m).toMatch(/^\s+automountServiceAccountToken: false$/m)
+    expect(m).toMatch(/seccompProfile:\n\s+type: RuntimeDefault\n/)
+    expect(m).toContain("allowPrivilegeEscalation: false")
+    expect(m).toContain(`capabilities:\n              drop: [ALL]\n              add: ${caps}\n`)
+    expect(m).not.toMatch(/^\s+(runAsUser|fsGroup):/m) // the data volumes keep their current owners
+  })
+
+  it("postgres is replaced, never run twice on the same data directory", () => {
+    expect(read("k8s/postgres.yaml")).toMatch(/strategy:\n\s+type: Recreate\n/)
+  })
+
   it.each(POD_MANIFESTS)("%s: runAsNonRoot comes with a numeric user (the images only name theirs)", (file) => {
     const m = read(file)
     if (!m.includes("runAsNonRoot: true")) return
