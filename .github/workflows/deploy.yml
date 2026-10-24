@@ -237,9 +237,33 @@ jobs:
       # Before the migration on purpose (#1050): the migration Job and the new app pod then open
       # fresh connections through these rules within this deploy (open connections are kept by
       # the policy controller, so a check right after applying would prove nothing).
+      # The backup CronJob first, for its app: postgres-backup label; then, since a Job keeps the
+      # pod template it was created with, wait for any running database job without an allowed
+      # label (a backup started by an older template) to finish. The policy file lists the allow
+      # rules before the default deny, so a partial apply never denies without allowing.
       - name: Apply NetworkPolicy
         id: netpol
-        run: kubectl apply -f k8s/networkpolicy.yaml
+        run: |
+          kubectl apply -f k8s/cronjob-backup.yaml
+          for i in $(seq 1 90); do
+            running=$(kubectl -n benevoles get jobs -o json | python3 -c '
+          import json, sys
+          allowed = {"benevoles-migrate", "postgres-backup"}
+          for j in json.load(sys.stdin)["items"]:
+              t = j["spec"]["template"]
+              names = {e["name"] for c in t["spec"]["containers"] for e in c.get("env", [])}
+              if j["status"].get("active") and t["metadata"].get("labels", {}).get("app") not in allowed and names & {"PGHOST", "DATABASE_URL"}:
+                  print(j["metadata"]["name"])
+          ')
+            [ -z "$running" ] && break
+            echo "Waiting for running job(s) to finish: $running"
+            sleep 10
+          done
+          if [ -n "$running" ]; then
+            echo "::error::Database job(s) still running without an allowed label: $running"
+            exit 1
+          fi
+          kubectl apply -f k8s/networkpolicy.yaml
 
       - name: Run database migrations
         env:
@@ -312,7 +336,8 @@ jobs:
       # Any failure once the policy is in place (migration, rollout, the check above) removes it:
       # the site must keep answering, isolation comes back with the next successful deploy.
       - name: Remove NetworkPolicy after a failure
-        if: failure() && steps.netpol.outcome == 'success'
+        # Also after a partial apply (outcome failure) or a cancelled run.
+        if: (failure() || cancelled()) && steps.netpol.outcome != 'skipped'
         run: |
           kubectl -n benevoles delete networkpolicy -l app.kubernetes.io/part-of=benevoles-netpol --ignore-not-found
           echo "::warning::NetworkPolicy removed after a failed deploy (k8s/networkpolicy.yaml)"

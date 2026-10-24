@@ -89,7 +89,7 @@ Les pods de l'application, du Job de migration et des CronJobs ne reçoivent pas
 
 Les sondes du kubelet partent du nœud et passent toujours ; `kubectl exec`, `logs` et `port-forward` ne passent pas par le réseau des pods. Les CronJobs appellent l'adresse publique et arrivent donc par Traefik. Un nouveau pod qui doit joindre PostgreSQL reçoit l'une de ces étiquettes, sinon sa connexion est refusée. Les sorties ne sont pas filtrées (SMTP, Sentry, ntfy, notifications push, GitHub, miroirs Alpine, Swiss Backup).
 
-`deploy.yml` applique ces règles avant la migration : le Job de migration et le nouveau pod ouvrent alors de nouvelles connexions à travers elles. Après le déploiement, l'étape « Check the site through the NetworkPolicy » interroge les adresses publiques ; si elle échoue, ou si une étape échoue après l'application des règles, elles sont retirées et le site reste joignable. À la main :
+`deploy.yml` applique ces règles avant la migration : le Job de migration et le nouveau pod ouvrent alors de nouvelles connexions à travers elles. Il applique d'abord `cronjob-backup.yaml` (étiquette de la sauvegarde) et attend la fin d'une sauvegarde lancée avec l'ancien modèle ; le fichier liste le refus par défaut en dernier. Après le déploiement, l'étape « Check the site through the NetworkPolicy » interroge les adresses publiques ; si elle échoue, ou si une étape échoue ou si l'exécution est annulée après le début de l'application des règles, elles sont retirées et le site reste joignable. À la main :
 
 ```bash
 kubectl -n benevoles get networkpolicy

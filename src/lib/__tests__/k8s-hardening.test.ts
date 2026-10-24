@@ -182,6 +182,10 @@ describe("NetworkPolicy of the namespace (#1050)", () => {
     expect(allowed.sort()).toEqual(["benevoles-app", "benevoles-migrate", "postgres-backup"])
   })
 
+  it("lists the default deny last, so a partial apply never denies without the allow rules", () => {
+    expect(docs[docs.length - 1]).toContain("name: default-deny-ingress\n")
+  })
+
   it("every policy carries the label the deploy workflow removes them by", () => {
     for (const d of docs) expect(d).toContain("app.kubernetes.io/part-of: benevoles-netpol")
   })
@@ -190,7 +194,10 @@ describe("NetworkPolicy of the namespace (#1050)", () => {
     const apply = workflow.indexOf("kubectl apply -f k8s/networkpolicy.yaml")
     expect(apply).toBeGreaterThan(-1)
     expect(apply).toBeLessThan(workflow.indexOf("envsubst < k8s/job-migrate.yaml"))
-    expect(workflow).toMatch(/if: failure\(\) && steps\.netpol\.outcome == 'success'\n\s+run: \|\n\s+kubectl -n benevoles delete networkpolicy -l app\.kubernetes\.io\/part-of=benevoles-netpol/)
+    // Also after a partial apply or a cancelled run, not only after a successful apply.
+    expect(workflow).toMatch(/if: \(failure\(\) \|\| cancelled\(\)\) && steps\.netpol\.outcome != 'skipped'\n\s+run: \|\n\s+kubectl -n benevoles delete networkpolicy -l app\.kubernetes\.io\/part-of=benevoles-netpol/)
+    // The backup CronJob gets its label before the policy is in place.
+    expect(workflow.indexOf("kubectl apply -f k8s/cronjob-backup.yaml")).toBeLessThan(apply)
     expect(workflow.indexOf("Check the site through the NetworkPolicy")).toBeGreaterThan(workflow.indexOf("rollout status deployment/benevoles-app"))
   })
 })
