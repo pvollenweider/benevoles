@@ -13,6 +13,7 @@ import { MEMBER_TAGS_HINT as TAGS_HINT } from "@/lib/role-reservation"
 import type { AvailabilityPeriod } from "@/lib/availability"
 import type { FocusCandidate } from "@/lib/focus-return"
 import RequiredMark from "@/components/RequiredMark"
+import { addressCorrected } from "@/lib/member-address-change"
 
 const EMAIL = /^[^\s@]+@[^\s@]+\.[^\s@]+$/
 
@@ -25,6 +26,9 @@ function memberProblem(v: { firstName: string; lastName: string; email: string }
   if (v.email.trim() && !EMAIL.test(v.email.trim())) return { field: "email", message: "Indiquez une adresse email complète, ou laissez le champ vide." }
   return null
 }
+
+/** Shown while an organiser corrects a saved address: saving renews the member's links (src/lib/member-address-revocation.ts). */
+const LINKS_RENEWED_HINT = "À l'enregistrement, les liens personnels de ce membre (y compris l'abonnement au calendrier) seront renouvelés\u00a0: ceux déjà envoyés à l'ancienne adresse ne fonctionneront plus, et les nouveaux seront envoyés à cette adresse pour ses événements à venir."
 
 /** The API's 400/409 talk about the address (duplicate, invalid); mark it. */
 const fieldForStatus = (status: number | null): FieldKey | undefined => (status === 400 || status === 409 ? "email" : undefined)
@@ -80,7 +84,11 @@ export function EditMemberModal({ member, onClose, onSaved, fallbackFocusOnClose
           <Field label="Prénom" required value={firstName} onChange={setFirstName} inputRef={firstNameRef} invalid={isInvalid("firstName")} errorId={errorId} autoComplete="off" />
           <Field label="Nom" required value={lastName} onChange={setLastName} inputRef={lastNameRef} invalid={isInvalid("lastName")} errorId={errorId} autoComplete="off" />
         </div>
-        <Field label="Email" type="email" value={email} onChange={setEmail} inputRef={emailRef} invalid={isInvalid("email")} errorId={errorId} autoComplete="off" />
+        <Field
+          label="Email" type="email" value={email} onChange={setEmail} inputRef={emailRef} invalid={isInvalid("email")} errorId={errorId} autoComplete="off"
+          liveHint
+          hint={EMAIL.test(email.trim()) && addressCorrected(member.email, email) ? LINKS_RENEWED_HINT : undefined}
+        />
         <Field label="Téléphone" type="tel" value={phone} onChange={setPhone} autoComplete="off" />
         <Field label="Étiquettes (séparées par des virgules)" value={tags} onChange={setTags} placeholder="bénévole, bar" hint={TAGS_HINT} />
         <Field label="Notes" value={notes} onChange={setNotes} multiline />
@@ -170,11 +178,16 @@ function Actions({ busy, onClose, label }: { busy: boolean; onClose: () => void;
 }
 
 function Field({
-  label, value, onChange, type = "text", required = false, placeholder, multiline = false, inputRef, invalid, errorId, autoComplete, hint,
+  label, value, onChange, type = "text", required = false, placeholder, multiline = false, inputRef, invalid, errorId, autoComplete, hint, liveHint = false,
 }: {
   label: string
   /** A short help line under the field, read with it (aria-describedby). */
   hint?: string
+  /**
+   * The hint appears while typing: its container stays mounted as a polite status, so a screen
+   * reader announces it once when it appears (not on each keystroke), not only on focus.
+   */
+  liveHint?: boolean
   value: string
   onChange: (v: string) => void
   type?: string
@@ -206,11 +219,13 @@ function Field({
           autoComplete={autoComplete}
           required={required}
           aria-invalid={invalid}
-          aria-describedby={[hint ? `${id}-hint` : null, invalid && errorId ? errorId : null].filter(Boolean).join(" ") || undefined}
+          aria-describedby={[hint || liveHint ? `${id}-hint` : null, invalid && errorId ? errorId : null].filter(Boolean).join(" ") || undefined}
           className={cls}
         />
       )}
-      {hint && <p id={`${id}-hint`} className="text-xs text-gray-600 mt-1">{hint}</p>}
+      {liveHint
+        ? <p id={`${id}-hint`} role="status" className={hint ? "text-xs text-gray-600 mt-1" : "text-xs text-gray-600"}>{hint ?? ""}</p>
+        : hint && <p id={`${id}-hint`} className="text-xs text-gray-600 mt-1">{hint}</p>}
     </div>
   )
 }

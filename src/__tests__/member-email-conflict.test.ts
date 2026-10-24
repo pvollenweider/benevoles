@@ -9,14 +9,23 @@ vi.mock("@/lib/auth-guard", () => ({ requireOrgSession: requireOrgSessionMock })
 const orgLogCreate = vi.hoisted(() => vi.fn())
 vi.mock("@/lib/prisma", () => ({ prisma: { orgLog: { create: orgLogCreate } } }))
 
+// An address change renews the member's links (src/lib/member-address-revocation.ts, covered by
+// src/__integration__/member-address-revocation.int.test.ts): stubbed here.
+const renewMemberLinks = vi.hoisted(() => vi.fn())
+vi.mock("@/lib/member-address-revocation", () => ({ renewMemberLinks }))
+vi.mock("@/lib/notifications/outbox", () => ({ deliverAfterResponse: vi.fn() }))
+
 const alice = { id: "mem-1", firstName: "Alice", lastName: "L", email: "a@x.com", phone: null, tags: [], notes: null, active: true }
 
 function setup(findFirst: ReturnType<typeof vi.fn>, update: ReturnType<typeof vi.fn>) {
+  // An address change runs in a transaction with the row locked and read again there.
+  const tx = { $queryRaw: vi.fn(), volunteer: { findFirst: vi.fn().mockResolvedValue({ email: alice.email, erasedAt: null }), update } }
   requireOrgSessionMock.mockResolvedValue({
-    db: { volunteer: { findFirst, update } },
+    db: { volunteer: { findFirst, update }, $transaction: (fn: (t: typeof tx) => unknown) => fn(tx) },
     organizationId: "org-a",
     session: { user: { id: "admin-1" } },
   })
+  renewMemberLinks.mockResolvedValue({ registrations: 0, invites: 0, pushSubscriptions: 0, cancelled: 0, outboxIds: [] })
 }
 
 async function patch(body: unknown) {
@@ -66,3 +75,30 @@ describe("PATCH /api/admin/members/[id] — email already used", () => {
     await expect(patch({ firstName: "Alicia" })).rejects.toThrow("connection lost")
   })
 })
+
+describe("PATCH /api/admin/members/[id] — a corrected address renews the member's links", () => {
+  beforeEach(() => vi.clearAllMocks())
+
+  it("renews the links in the transaction, with the address read under the lock, and says so", async () => {
+    const findFirst = vi.fn().mockResolvedValueOnce(alice).mockResolvedValueOnce(null)
+    const update = vi.fn().mockResolvedValue({ ...alice, email: "right@x.com" })
+    setup(findFirst, update)
+    renewMemberLinks.mockResolvedValue({ registrations: 2, invites: 1, pushSubscriptions: 0, cancelled: 1, outboxIds: ["o1", "o2"] })
+    orgLogCreate.mockResolvedValue({ id: "log-1" })
+    const res = await patch({ email: "right@x.com" })
+    expect(res.status).toBe(200)
+    expect((await res.json()).linksRenewed).toEqual({ links: 3, emailsQueued: 2 })
+    expect(renewMemberLinks).toHaveBeenCalledWith(expect.anything(), expect.objectContaining({ organizationId: "org-a", oldEmail: "a@x.com", newEmail: "right@x.com" }))
+  })
+
+  it("renews nothing when only the case of the address changes", async () => {
+    const findFirst = vi.fn().mockResolvedValueOnce(alice)
+    const update = vi.fn().mockResolvedValue(alice)
+    setup(findFirst, update)
+    const res = await patch({ email: "A@X.com" })
+    expect(res.status).toBe(200)
+    expect(renewMemberLinks).not.toHaveBeenCalled()
+    expect((await res.json()).linksRenewed).toBeUndefined()
+  })
+})
+

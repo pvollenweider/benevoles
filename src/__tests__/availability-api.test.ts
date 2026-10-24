@@ -11,6 +11,9 @@ vi.mock("@/lib/token-vault", () => ({ registrationToken: { where: (t: string) =>
 
 const requireOrgSessionMock = vi.hoisted(() => vi.fn())
 vi.mock("@/lib/auth-guard", () => ({ requireOrgSession: requireOrgSessionMock }))
+// Address changes renew the member's links: covered by src/__integration__/member-address-revocation.int.test.ts.
+vi.mock("@/lib/member-address-revocation", () => ({ renewMemberLinks: vi.fn() }))
+vi.mock("@/lib/notifications/outbox", () => ({ deliverAfterResponse: vi.fn() }))
 vi.mock("@/lib/org-log", () => ({ adminActor: () => ({ type: "admin" }), logOrgEvent: vi.fn(), diffFields: () => null }))
 
 const patch = (body: unknown) =>

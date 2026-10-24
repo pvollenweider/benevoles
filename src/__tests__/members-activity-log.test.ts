@@ -2,6 +2,9 @@ import { describe, it, expect, vi, beforeEach } from "vitest"
 
 const requireOrgSessionMock = vi.hoisted(() => vi.fn())
 vi.mock("@/lib/auth-guard", () => ({ requireOrgSession: requireOrgSessionMock }))
+// Address changes renew the member's links: covered by src/__integration__/member-address-revocation.int.test.ts.
+vi.mock("@/lib/member-address-revocation", () => ({ renewMemberLinks: vi.fn() }))
+vi.mock("@/lib/notifications/outbox", () => ({ deliverAfterResponse: vi.fn() }))
 
 const volunteerFindFirst = vi.hoisted(() => vi.fn())
 const volunteerCreate = vi.hoisted(() => vi.fn())

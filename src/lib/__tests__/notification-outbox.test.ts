@@ -15,10 +15,16 @@ const m = vi.hoisted(() => ({
   after: vi.fn(),
   reported: vi.fn(),
   volunteerFindUnique: vi.fn(),
+  registrationFindUnique: vi.fn(),
+  leaderFindUnique: vi.fn(),
+  adminFindUnique: vi.fn(),
 }))
 vi.mock("../prisma", () => ({
   prisma: {
     volunteer: { findUnique: m.volunteerFindUnique },
+    registration: { findUnique: m.registrationFindUnique },
+    sectorLeader: { findUnique: m.leaderFindUnique },
+    adminUser: { findUnique: m.adminFindUnique },
     notificationOutbox: {
       findMany: m.findMany, updateMany: m.updateMany, update: m.update, create: m.create,
       createMany: m.createMany, count: m.count, findFirst: m.findFirst,
@@ -279,12 +285,17 @@ describe("member invitation through the outbox (#1105)", () => {
     }
   })
 
-  it("does not look up the member for other kinds", async () => {
-    m.findUniqueOrThrow.mockResolvedValue({ id: "n1", attempts: 0, payload: { kind: "targeted_message", volunteerId: "vol-1", recipient: { email: "a@x.ch" }, data: {} } })
-    m.sendNotification.mockResolvedValue({ ok: true })
-    await deliverOutbox({ now })
-    expect(m.volunteerFindUnique).not.toHaveBeenCalled()
-    expect(m.sendNotification).toHaveBeenCalled()
+  it("checks every email to a member, not only invitations and reminders", async () => {
+    for (const kind of ["targeted_message", "registration_link_resend", "registration_confirmation", "waitlist_offered", "shift_modified"] as const) {
+      m.sendNotification.mockReset().mockResolvedValue({ ok: true })
+      m.update.mockReset()
+      m.findUniqueOrThrow.mockResolvedValue({ id: "n1", attempts: 0, payload: { kind, volunteerId: "vol-1", recipient: { email: "a@x.ch" }, data: { editToken: "t" } } })
+      m.volunteerFindUnique.mockResolvedValue({ email: "a@x.ch" })
+      expect(await deliverOutbox({ now })).toMatchObject({ sent: 1 })
+      m.volunteerFindUnique.mockResolvedValue({ email: "corrected@x.ch" })
+      expect(await deliverOutbox({ now })).toMatchObject({ cancelled: 1, sent: 0 })
+      expect(m.sendNotification).toHaveBeenCalledOnce()
+    }
   })
 
   it("an invitation held over a sending limit stays pending, never failed", async () => {
@@ -293,6 +304,64 @@ describe("member invitation through the outbox (#1105)", () => {
     const res = await deliverOutbox({ now })
     expect(res).toMatchObject({ held: 1, failed: 0 })
     expect(m.update).toHaveBeenCalledWith(expect.objectContaining({ data: expect.objectContaining({ status: "pending", claimedAt: null }) }))
+  })
+})
+
+describe("recipient checked right before the send: links revoked since the email was queued", () => {
+  const deliver = async (payload: Record<string, unknown>) => {
+    m.sendNotification.mockReset().mockResolvedValue({ ok: true })
+    m.update.mockReset()
+    m.findUniqueOrThrow.mockResolvedValue({ id: "n1", attempts: 0, organizationId: "org-a", payload })
+    const res = await deliverOutbox({ now })
+    const lastError = m.update.mock.calls.at(-1)?.[0]?.data?.lastError
+    return { ...res, lastError }
+  }
+
+  it("a personal link without a member id: cancelled when the link's member has another address or the link no longer exists", async () => {
+    const payload = { kind: "registration_link_resend", recipient: { email: "old@x.ch" }, data: { editToken: "tok" } }
+    m.registrationFindUnique.mockResolvedValue({ volunteer: { email: "new@x.ch" } })
+    expect(await deliver(payload)).toMatchObject({ cancelled: 1, lastError: "member_address_changed" })
+    m.registrationFindUnique.mockResolvedValue({ volunteer: { email: "OLD@x.ch" } })
+    expect(await deliver(payload)).toMatchObject({ sent: 1 })
+    m.registrationFindUnique.mockResolvedValue(null)
+    expect(await deliver(payload)).toMatchObject({ cancelled: 1, lastError: "personal_link_revoked" })
+  })
+
+  it("a sector leader email: cancelled once the leader is gone or has another address", async () => {
+    const payload = { kind: "sector_leader_new_signup", recipient: { email: "lead@x.ch" }, data: { token: "lt" } }
+    m.leaderFindUnique.mockResolvedValue({ email: "lead@x.ch" })
+    expect(await deliver(payload)).toMatchObject({ sent: 1 })
+    m.leaderFindUnique.mockResolvedValue(null)
+    expect(await deliver(payload)).toMatchObject({ cancelled: 1, lastError: "leader_link_revoked" })
+    m.leaderFindUnique.mockResolvedValue({ email: "someone-else@x.ch" })
+    expect(await deliver(payload)).toMatchObject({ cancelled: 1, lastError: "leader_link_revoked" })
+  })
+
+  it("an account link: sent only while it is still the account's link, for this address", async () => {
+    const payload = { kind: "password_reset", recipient: { email: "admin@x.ch" }, data: { resetUrl: "https://app.test/admin/reset-password?token=abc" } }
+    m.adminFindUnique.mockResolvedValue({ email: "admin@x.ch" })
+    expect(await deliver(payload)).toMatchObject({ sent: 1 })
+    const { hashToken } = await import("../token-hash")
+    expect(m.adminFindUnique).toHaveBeenLastCalledWith({ where: { passwordResetTokenHash: hashToken("abc") }, select: { email: true } })
+    // Replaced by a newer request, revoked by a password change: no account holds it any more.
+    m.adminFindUnique.mockResolvedValue(null)
+    expect(await deliver(payload)).toMatchObject({ cancelled: 1, lastError: "account_link_revoked" })
+    // The account's address changed since.
+    m.adminFindUnique.mockResolvedValue({ email: "new-admin@x.ch" })
+    expect(await deliver(payload)).toMatchObject({ cancelled: 1, lastError: "account_link_revoked" })
+  })
+
+  it("organiser and platform emails are not looked up", async () => {
+    m.volunteerFindUnique.mockReset(); m.registrationFindUnique.mockReset(); m.leaderFindUnique.mockReset(); m.adminFindUnique.mockReset()
+    expect(await deliver({ kind: "admin_notification", recipient: { email: "admin@x.ch" }, data: { volunteerName: "A" } })).toMatchObject({ sent: 1 })
+    expect(await deliver({ kind: "release_available", recipient: { email: "sa@x.ch" }, data: {} })).toMatchObject({ sent: 1 })
+    for (const fn of [m.volunteerFindUnique, m.registrationFindUnique, m.leaderFindUnique, m.adminFindUnique]) expect(fn).not.toHaveBeenCalled()
+  })
+
+  it("a failed lookup is an ordinary failed attempt, retried, never a send", async () => {
+    m.volunteerFindUnique.mockRejectedValue(new Error("db down"))
+    expect(await deliver({ kind: "targeted_message", volunteerId: "vol-1", recipient: { email: "a@x.ch" }, data: {} })).toMatchObject({ retried: 1, sent: 0 })
+    expect(m.sendNotification).not.toHaveBeenCalled()
   })
 })
 
