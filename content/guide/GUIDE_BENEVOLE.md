@@ -4,8 +4,6 @@ Bienvenue ! Tu donnes un coup de main à un événement : ces pages t'expliquent
 
 > « Je ne connais encore personne. M'inscrire sur un créneau, c'est une première façon de participer. »
 >
-> Emma, nouvelle membre d'une association*
->
-> \* Personnage et citation fictifs.
+> Emma, nouvelle membre d'une association
 
 Chaque page répond à une question en quelques lignes. Pour commencer, voir [Trouver la page d'inscription](trouver-la-page-d-inscription.md).

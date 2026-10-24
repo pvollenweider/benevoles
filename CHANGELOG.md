@@ -23,6 +23,8 @@ Format basé sur [Keep a Changelog](https://keepachangelog.com/fr/1.0.0/).
 
 - **Situations types dans la documentation** : une courte citation en tête de huit pages des guides organisateur et bénévole (accueil des guides, premier événement, invitations, postes à compléter, jour J, choix des créneaux, inscription), attribuée à un prénom et un rôle et suivie de la note « * Personnage et citation fictifs. », dans un encadré sobre.
 
+- **Situations types dans la documentation, légende simplifiée** : la citation reste attribuée à un prénom et un rôle (« Léa, bénévole occasionnelle »), sans astérisque ni note sous l'encadré.
+
 ### Modifié
 
 - **Inscription intégrée à un site** (#1117) : le pied de page montre « Propulsé par benevol.app » (le nom de l'instance ailleurs), qui mène à la page d'accueil du site dans un nouvel onglet ; le code source sur GitHub garde son propre lien « Code source ».

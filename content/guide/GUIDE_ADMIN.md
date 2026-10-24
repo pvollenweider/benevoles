@@ -4,9 +4,7 @@ Bienvenue ! La documentation des organisateurs est rangée en pages courtes, une
 
 > « On veut passer moins de temps à remplir des tableaux et plus de temps à préparer un beau festival. »
 >
-> Camille, comité d'un festival*
->
-> \* Personnage et citation fictifs.
+> Camille, comité d'un festival
 
 <!-- video: ADMIN_FEATURES_OVERVIEW -->
 

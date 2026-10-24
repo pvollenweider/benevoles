@@ -12,9 +12,7 @@ aliases: []
 
 > « Nous aussi, on est bénévoles. Organiser les bénévoles ne devrait pas devenir un deuxième travail. »
 >
-> Élodie, association culturelle*
->
-> \* Personnage et citation fictifs.
+> Élodie, association culturelle
 
 <!-- video: EVENT_CREATE_PUBLISH_OVERVIEW -->
 

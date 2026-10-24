@@ -48,14 +48,14 @@ test("a unit for both roles says so, then speaks to each under its own heading",
   await expect(page.locator("main h2").filter({ hasText: /^Côté / })).toHaveText(["Côté bénévole", "Côté organisation"])
 })
 
-test("an example quote is a figure named by its person and the fiction note, without added quotation marks", async ({ page }) => {
+test("an example quote is a figure named by its caption, without added quotation marks", async ({ page }) => {
   await page.goto("/doc/s-inscrire")
-  const figure = page.getByRole("figure", { name: /^Léa, bénévole occasionnelle\s+Personnage et citation fictifs\.$/ })
+  const figure = page.getByRole("figure", { name: "Léa, bénévole occasionnelle", exact: true })
   await expect(figure).toBeVisible()
-  await expect(figure.locator("figcaption p").last()).toHaveText("* Personnage et citation fictifs.")
   const quote = figure.locator("blockquote p")
   await expect(quote).toHaveText(/^«\sJe peux donner deux heures samedi\./)
   expect(await quote.evaluate((p) => [getComputedStyle(p, "::before").content, getComputedStyle(p, "::after").content])).toEqual(["none", "none"])
+  await expect(page.locator("main")).not.toContainText("fictifs")
   expect.soft(await seriousViolations(page)).toEqual([])
 })
 
