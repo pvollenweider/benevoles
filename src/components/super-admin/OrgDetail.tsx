@@ -11,6 +11,7 @@ import { requestJson } from "@/lib/use-submit"
 import { approveOrgRecap, deleteOrgRecap, liftSuspensionRecap, refuseOrgRecap, suspendOrgRecap, toggleOrgRecap } from "@/lib/action-recap"
 import { ORG_STATUS_LABELS, orgStatus, SUSPENSION_REASON_MAX, SUSPENSION_REASON_MIN } from "@/lib/org-suspension"
 import { formatCount, type UsageRow } from "@/lib/usage-counters"
+import { signupSourceLabel } from "@/lib/signup-source"
 import ConfirmActionModal from "@/components/admin/ConfirmActionModal"
 import InactivityPanel from "@/components/super-admin/InactivityPanel"
 import FocusTargetHeading from "@/components/admin/event-nav/FocusTargetHeading"
@@ -43,6 +44,8 @@ type Org = {
   suspendedAt: string | null
   suspensionReason: string | null
   signupDescription: string | null
+  signupSource: string | null
+  signupSourceDetail: string | null
   publicationApprovedAt: string | null
   outboundEmailApprovedAt: string | null
   createdAt: string
@@ -53,6 +56,7 @@ type Org = {
 
 export default function OrgDetail({ org, cumulative, inactivity, limitHits, recentBatches = [], zone = "" }: { org: Org; cumulative: UsageRow[]; inactivity?: ComponentProps<typeof InactivityPanel>; limitHits?: { group: OrgLimitHits; zone: string; truncated: boolean }; recentBatches?: { id: string; line: string; createdAt: string; heldSentence: string | null; failed: boolean }[]; zone?: string }) {
   const router = useRouter()
+  const sourceLabel = signupSourceLabel(org.signupSource, org.signupSourceDetail)
   const [, startTransition] = useTransition()
   const [toggling, setToggling] = useState(false)
   const [deleting, setDeleting] = useState(false)
@@ -386,12 +390,20 @@ export default function OrgDetail({ org, cumulative, inactivity, limitHits, rece
         />
       )}
 
-      {/* What the association wrote when signing up (#810): typed text, shown as plain text only. */}
-      {org.signupDescription && (
+      {/* What the association wrote when signing up (#810) and how it found the site (#1094):
+          typed text, shown as plain text only, to the operator only. */}
+      {(org.signupDescription || sourceLabel) && (
         <section aria-labelledby="org-signup-description" className="bg-white border border-gray-200 rounded-xl p-4">
           <h2 id="org-signup-description" className="text-sm font-semibold text-gray-900">Demande d&apos;inscription</h2>
-          <p className="text-xs text-gray-600 mt-0.5">Ce que l&apos;association a écrit sur elle et son besoin en créant son espace.</p>
-          <p className="text-sm text-gray-800 mt-2 whitespace-pre-line break-words">{org.signupDescription}</p>
+          {org.signupDescription && (
+            <>
+              <p className="text-xs text-gray-600 mt-0.5">Ce que l&apos;association a écrit sur elle et son besoin en créant son espace.</p>
+              <p className="text-sm text-gray-800 mt-2 whitespace-pre-line break-words">{org.signupDescription}</p>
+            </>
+          )}
+          {sourceLabel && (
+            <p className="text-sm text-gray-800 mt-2 break-words">Comment l&apos;association nous a connus : <strong className="font-medium">{sourceLabel}</strong></p>
+          )}
         </section>
       )}
 

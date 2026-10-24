@@ -44,6 +44,10 @@ model Organization {
   // What the association wrote about itself and its need when signing up (#810): helps the
   // operator validate the space. Shown only in the super admin space; null for other spaces.
   signupDescription String?
+  // « Comment avez-vous connu … ? » (#1094, src/lib/signup-source.ts), copied from the request:
+  // one of SIGNUP_SOURCES, and a short precision for « Autre ». Optional; super admin only.
+  signupSource       String?
+  signupSourceDetail String?
   // When the space was created by the self-service sign-up (#810): null for any other creation.
   // Feeds the sign-up indicators of the statistics (median validation delay, unused spaces).
   signupAt          DateTime?
@@ -1179,6 +1183,9 @@ model SignupRequest {
   contactName      String
   email            String
   description      String?
+  // Optional « Comment avez-vous connu … ? » answer (#1094), copied to the organisation.
+  source           String?
+  sourceDetail     String?
   tokenHash        String    @unique
   expiresAt        DateTime
   confirmedAt      DateTime?

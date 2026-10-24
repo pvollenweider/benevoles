@@ -8,26 +8,31 @@ import Link from "next/link"
 import { useSubmit } from "@/lib/use-submit"
 import FormStatus from "@/components/FormStatus"
 import { DESCRIPTION_LONG_MESSAGE, DESCRIPTION_SHORT_MESSAGE, SIGNUP_ACCEPTED_MESSAGE, SIGNUP_DESCRIPTION_MAX, SIGNUP_DESCRIPTION_MIN } from "@/lib/signup"
+import { cleanSourceDetail, SIGNUP_SOURCE_DETAIL_MAX, SIGNUP_SOURCES, SOURCE_DETAIL_LONG_MESSAGE } from "@/lib/signup-source"
 
 const inputClass = "w-full rounded-xl border border-gray-500 bg-white px-3 py-3 text-base text-gray-900 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-blue-600 dark:focus-visible:outline-blue-400 dark:border-gray-400 dark:bg-gray-800 dark:text-gray-100"
 const labelClass = "block text-sm font-medium text-gray-900 dark:text-gray-100 mb-1"
 
-type Field = "organizationName" | "description" | "contactName" | "email"
+type Field = "organizationName" | "description" | "contactName" | "email" | "sourceDetail"
 
 /**
  * The self-service sign-up form (#810, part 4b), on the forms pattern of the project (useSubmit,
  * FormStatus): each error under its field, the field marked and focused; the confirmation replaces
  * the form and takes the focus. A hidden field catches naive scripts; the time the form was shown
- * is sent so a submission faster than a person is ignored (src/lib/signup.ts).
+ * is sent so a submission faster than a person is ignored (src/lib/signup.ts). The last question,
+ * « Comment avez-vous connu … ? » (#1094), is optional: a select whose empty first choice undoes an
+ * answer; its precision field shows only with « Autre » and keeps its text while the choice moves
+ * (arrow keys on a closed select change it), but is sent only with « Autre ».
  */
-export default function SignupForm({ open, closedMessage = "Les inscriptions sont fermées pour le moment.", privacyHref = "/legal/privacy" }: { open: boolean; closedMessage?: string; privacyHref?: string }) {
+export default function SignupForm({ open, closedMessage = "Les inscriptions sont fermées pour le moment.", privacyHref = "/legal/privacy", siteName }: { open: boolean; closedMessage?: string; privacyHref?: string; siteName: string }) {
   const id = useId()
   const orgRef = useRef<HTMLInputElement>(null)
   const descriptionRef = useRef<HTMLTextAreaElement>(null)
   const nameRef = useRef<HTMLInputElement>(null)
   const emailRef = useRef<HTMLInputElement>(null)
+  const sourceDetailRef = useRef<HTMLInputElement>(null)
   const doneRef = useRef<HTMLHeadingElement>(null)
-  const [values, setValues] = useState({ organizationName: "", description: "", contactName: "", email: "", website: "" })
+  const [values, setValues] = useState({ organizationName: "", description: "", contactName: "", email: "", source: "", sourceDetail: "", website: "" })
   const [startedAt] = useState(() => Date.now())
   const [done, setDone] = useState(false)
   const { submit, busy, error, fail, isInvalid } = useSubmit()
@@ -54,6 +59,7 @@ export default function SignupForm({ open, closedMessage = "Les inscriptions son
     if (description > SIGNUP_DESCRIPTION_MAX) return { field: "description", message: DESCRIPTION_LONG_MESSAGE }
     if (values.contactName.trim().length < 2) return { field: "contactName", message: "Indiquez votre nom (2 caractères au moins)." }
     if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(values.email.trim())) return { field: "email", message: "Indiquez une adresse email valide, par exemple nom@exemple.org." }
+    if (values.source === "other" && cleanSourceDetail(values.sourceDetail).length > SIGNUP_SOURCE_DETAIL_MAX) return { field: "sourceDetail", message: SOURCE_DETAIL_LONG_MESSAGE }
     return null
   }
 
@@ -63,14 +69,15 @@ export default function SignupForm({ open, closedMessage = "Les inscriptions son
     if (busy) return
     const problem = check()
     if (problem) {
-      const el = { organizationName: orgRef, description: descriptionRef, contactName: nameRef, email: emailRef }[problem.field].current
+      const el = { organizationName: orgRef, description: descriptionRef, contactName: nameRef, email: emailRef, sourceDetail: sourceDetailRef }[problem.field].current
       fail(problem.message, problem.field, el)
       return
     }
     const outcome = await submit(() => fetch("/api/public/signup", {
       method: "POST",
       headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({ ...values, startedAt }),
+      // The precision goes only with « Autre » (the server drops it otherwise too).
+      body: JSON.stringify({ ...values, sourceDetail: values.source === "other" ? values.sourceDetail : "", startedAt }),
     }), { silent: true })
     if (outcome.ok) { setDone(true); return }
     // The fields were checked above: what the server refuses (closed sign-up, server error) is general.
@@ -81,7 +88,7 @@ export default function SignupForm({ open, closedMessage = "Les inscriptions son
 
   return (
     <form onSubmit={handleSubmit} noValidate className="space-y-5">
-      <p className="text-sm text-gray-700 dark:text-gray-300">Tous les champs sont obligatoires.</p>
+      <p className="text-sm text-gray-700 dark:text-gray-300">Tous les champs sont obligatoires, sauf ceux marqués « facultatif ».</p>
       <div>
         <label htmlFor={`${id}-org`} className={labelClass}>Nom de l&apos;association</label>
         <input id={`${id}-org`} ref={orgRef} value={values.organizationName} onChange={(e) => setValues({ ...values, organizationName: e.target.value })}
@@ -104,6 +111,22 @@ export default function SignupForm({ open, closedMessage = "Les inscriptions son
         <input id={`${id}-email`} ref={emailRef} type="email" value={values.email} onChange={(e) => setValues({ ...values, email: e.target.value })}
           required maxLength={200} autoComplete="email" aria-invalid={isInvalid("email")} aria-describedby={describedBy("email", `${id}-email-hint`)} className={inputClass} />
       </div>
+      <div>
+        <label htmlFor={`${id}-source`} className={labelClass}>Comment avez-vous connu {siteName} ? (facultatif)</label>
+        <p id={`${id}-source-hint`} className="text-sm text-gray-700 dark:text-gray-300 mb-1">Pour savoir comment les associations nous trouvent. Sans réponse, rien ne change.</p>
+        <select id={`${id}-source`} value={values.source} onChange={(e) => setValues({ ...values, source: e.target.value })}
+          aria-describedby={`${id}-source-hint`} className={`${inputClass} dark:[color-scheme:dark]`}>
+          <option value="">Choisir une réponse</option>
+          {SIGNUP_SOURCES.map((s) => <option key={s.value} value={s.value}>{s.label}</option>)}
+        </select>
+      </div>
+      {values.source === "other" && (
+        <div>
+          <label htmlFor={`${id}-source-detail`} className={labelClass}>Précisez comment vous nous avez connus (facultatif)</label>
+          <input id={`${id}-source-detail`} ref={sourceDetailRef} value={values.sourceDetail} onChange={(e) => setValues({ ...values, sourceDetail: e.target.value })}
+            maxLength={SIGNUP_SOURCE_DETAIL_MAX} autoComplete="off" aria-invalid={isInvalid("sourceDetail")} aria-describedby={describedBy("sourceDetail")} className={inputClass} />
+        </div>
+      )}
       {/* Honeypot: off screen and out of the tab order; people never see it, naive scripts fill it. */}
       <div aria-hidden="true" inert className="absolute -left-[9999px] h-px w-px overflow-hidden">
         <label htmlFor={`${id}-website`}>Site web (laisser vide)</label>

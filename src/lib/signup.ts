@@ -2,6 +2,7 @@
 // SPDX-License-Identifier: AGPL-3.0-only
 
 import { z } from "zod"
+import { signupSourceFields } from "@/lib/signup-source"
 
 /**
  * Self-service sign-up (#810, part 4b). Pure rules, shared by the form, the API routes and tests.
@@ -43,6 +44,8 @@ export const signupSchema = z.object({
   // an email, only shown as plain text in the super admin space, and shortened by plainLabel in
   // the operator alert.
   description: z.string({ error: DESCRIPTION_SHORT_MESSAGE }).trim().min(SIGNUP_DESCRIPTION_MIN, DESCRIPTION_SHORT_MESSAGE).max(SIGNUP_DESCRIPTION_MAX, DESCRIPTION_LONG_MESSAGE),
+  // « Comment avez-vous connu … ? » (#1094): optional, an empty choice changes nothing.
+  ...signupSourceFields,
   /** Honeypot: hidden from people, filled by naive scripts. */
   website: z.string().optional(),
   /** When the form was shown (ms since epoch), set by the page. */

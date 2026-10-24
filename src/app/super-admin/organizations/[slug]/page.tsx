@@ -32,6 +32,8 @@ export default async function OrgDetailPage({ params }: { params: Promise<{ slug
       suspendedAt: true,
       suspensionReason: true,
       signupDescription: true,
+      signupSource: true,
+      signupSourceDetail: true,
       publicationApprovedAt: true,
       outboundEmailApprovedAt: true,
       createdAt: true,

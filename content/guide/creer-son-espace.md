@@ -14,14 +14,16 @@ L'espace de votre association se crée en ligne, depuis la page [Demander un esp
 
 ## Faire la demande
 
-Sur la page [Demander un espace](/inscription), remplissez les quatre champs, tous obligatoires :
+Sur la page [Demander un espace](/inscription), remplissez les quatre champs obligatoires :
 
 - **Nom de l'association** : il devient le nom de votre espace et donne son adresse (par exemple `fete-du-village.benevol.app`), que vous pourrez changer dans les [paramètres de l'organisation](personnaliser-l-organisation.md). Un nom seul, sans lien ni adresse.
 - **Votre association et votre besoin** : en quelques phrases, ce que fait votre association et pour quel événement vous cherchez des bénévoles, entre 20 et 1000 caractères. Nous le lisons avant de valider votre espace. Vous pouvez y indiquer le site de l'association.
 - **Votre nom**, sans lien ni adresse.
 - **Votre adresse email** : elle reçoit le lien de confirmation et devient votre identifiant de connexion.
 
-![Formulaire « Demander un espace » : les quatre champs obligatoires « Nom de l'association », « Votre association et votre besoin » (entre 20 et 1000 caractères), « Votre nom » et « Votre adresse email », puis le bouton « Créer mon espace »](/doc-img/public-signup.png)
+Une dernière question est facultative : **Comment avez-vous connu benevol.app ?** Choisissez une réponse dans la liste (moteur de recherche, une autre association ou un bénévole, réseau social, article ou blog, salon ou événement, autre), ou laissez « Choisir une réponse ». Avec « Autre », un champ permet de préciser en quelques mots (100 caractères au plus). Sans réponse, rien ne change pour votre demande. La réponse n'est visible que de l'équipe de benevol.app, qui s'en sert pour savoir comment les associations découvrent le service.
+
+![Formulaire « Demander un espace » : les quatre champs obligatoires « Nom de l'association », « Votre association et votre besoin » (entre 20 et 1000 caractères), « Votre nom » et « Votre adresse email », la liste facultative « Comment avez-vous connu benevol.app ? », puis le bouton « Créer mon espace »](/doc-img/public-signup.png)
 
 Puis cliquez sur **Créer mon espace**. Le message « Vérifiez votre boîte email » s'affiche, quoi qu'il arrive : pour protéger les comptes existants, la page ne dit jamais si une adresse est déjà connue.
 
