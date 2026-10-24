@@ -23,9 +23,11 @@ vi.mock("@/lib/prisma", () => ({
     registration: { findMany: vi.fn().mockResolvedValue([]) },
     memberInvite: { findFirst: m.inviteFindFirst, findUnique: m.inviteFindUnique, updateMany: vi.fn().mockResolvedValue({ count: 1 }) },
     $transaction: vi.fn(async (fn: (tx: unknown) => unknown) => fn({
-      $queryRaw: vi.fn().mockResolvedValue([{ id: "locked", erasedAt: null }]), // #516: a locked match, not erased
+      $queryRaw: vi.fn().mockResolvedValue([{ id: "locked", erasedAt: null, email: "lea@x.ch" }]), // #516: a locked match, not erased, still at the address
       shift: { findMany: vi.fn().mockResolvedValue([]) },
-      volunteer: { createMany: vi.fn().mockResolvedValue({ count: 1 }), findFirstOrThrow: vi.fn().mockResolvedValue({ id: "vol-1" }) },
+      volunteer: { createMany: vi.fn().mockResolvedValue({ count: 1 }), findFirstOrThrow: vi.fn().mockResolvedValue({ id: "vol-1" }), update: vi.fn() },
+      // The invitation is checked again under the member lock (#1138 follow-up).
+      memberInvite: { findFirst: (...args: unknown[]) => m.inviteFindFirst(...args) },
       charterVersion: { upsert: vi.fn() },
       rosterConsent: { findUnique: vi.fn().mockResolvedValue(null), upsert: vi.fn() },
       registration: { findMany: vi.fn().mockResolvedValue([]), count: vi.fn().mockResolvedValue(0), aggregate: vi.fn().mockResolvedValue({ _max: { waitingPosition: null } }), create: m.txCreate },

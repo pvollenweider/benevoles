@@ -32,9 +32,11 @@ vi.mock("@/lib/prisma", () => {
     $queryRaw: (...args: unknown[]) => m.txQueryRaw(...args),
     shift: { findMany: vi.fn().mockResolvedValue([]) }, // no role limit (#466)
     // A new volunteer is created inside the registration transaction (#309).
-    volunteer: { createMany: m.txVolCreateMany, findFirstOrThrow: m.txVolFindFirstOrThrow },
+    volunteer: { createMany: m.txVolCreateMany, findFirstOrThrow: m.txVolFindFirstOrThrow, update: (...args: unknown[]) => m.volUpdate(...args) },
     charterVersion: { upsert: vi.fn() },
     rosterConsent: { findUnique: m.rosterFindUnique, upsert: m.rosterUpsert },
+    // The proof is checked again under the member lock (#1138 follow-up).
+    memberInvite: { findFirst: (...args: unknown[]) => m.inviteFindFirst(...args) },
     registration: {
       findMany: m.txRegFindMany,
       count: vi.fn().mockResolvedValue(0),
@@ -104,7 +106,7 @@ beforeEach(() => {
   m.txRegFindMany.mockResolvedValue([])
   m.txCreate.mockResolvedValue({ id: "reg-new", shiftId: "shift-2", status: "active", waitingPosition: null })
   m.sendNotification.mockResolvedValue({ ok: true })
-  m.txQueryRaw.mockResolvedValue([{ id: "locked", erasedAt: null }]) // #516: a locked match, not erased
+  m.txQueryRaw.mockResolvedValue([{ id: "locked", erasedAt: null, email: "owner@x.com" }]) // #516: a locked match, not erased, still at the address
   m.rosterFindUnique.mockResolvedValue(null)
 })
 
@@ -131,6 +133,52 @@ describe("POST /api/public/registrations — ownership of the email (#285)", () 
       where: { tokenHash: hashToken("inv-tok"), eventId: "evt-1", volunteerId: "vol-victim" },
     }))
     expect(m.volUpdate).toHaveBeenCalledWith(expect.objectContaining({ where: { id: "vol-victim" } }))
+  })
+
+  // #1138 follow-up: the proof read before the transaction is checked again under the member lock.
+  it("an invite valid before the lock but replaced under it: refused, no token, nothing written", async () => {
+    m.volFindFirst.mockResolvedValue(victim)
+    m.inviteFindFirst.mockResolvedValueOnce({ id: "inv-1" }).mockResolvedValueOnce(null)
+    const { POST } = await import("@/app/api/public/registrations/route")
+    const res = await POST(post({ inviteToken: "inv-tok" }))
+    expect(res.status).toBe(409)
+    const data = await res.json()
+    expect(data).toMatchObject({ staleLink: true })
+    expect(data.editToken).toBeUndefined()
+    expect(m.txCreate).not.toHaveBeenCalled()
+    expect(m.volUpdate).not.toHaveBeenCalled()
+    expect(m.enqueueNotifications).not.toHaveBeenCalled()
+  })
+
+  it("an invite of a member whose address was corrected before the lock: refused, never attached to the corrected member", async () => {
+    m.volFindFirst.mockResolvedValue(victim)
+    m.inviteFindFirst.mockResolvedValue({ id: "inv-1" })
+    m.txQueryRaw.mockImplementation(async (_sql: TemplateStringsArray, ...values: unknown[]) =>
+      values[0] === "vol-victim" ? [{ id: "vol-victim", erasedAt: null, email: "corrected@x.com" }] : [{ id: values[0] }])
+    m.txVolCreateMany.mockResolvedValue({ count: 1 })
+    m.txVolFindFirstOrThrow.mockResolvedValue({ id: "vol-new" })
+    const { POST } = await import("@/app/api/public/registrations/route")
+    const res = await POST(post({ inviteToken: "inv-tok" }))
+    expect(res.status).toBe(409)
+    expect(await res.json()).toMatchObject({ staleLink: true })
+    expect(m.txCreate).not.toHaveBeenCalled()
+    expect(m.volUpdate).not.toHaveBeenCalled()
+  })
+
+  it("no proof, address corrected before the lock: the sign-up goes to a record holding the submitted address, not the corrected member", async () => {
+    m.volFindFirst.mockResolvedValue(victim)
+    m.txQueryRaw.mockImplementation(async (_sql: TemplateStringsArray, ...values: unknown[]) =>
+      values[0] === "vol-victim" ? [{ id: "vol-victim", erasedAt: null, email: "corrected@x.com" }] : [{ id: values[0] }])
+    m.txVolCreateMany.mockResolvedValue({ count: 1 })
+    m.txVolFindFirstOrThrow.mockResolvedValue({ id: "vol-new" })
+    const { POST } = await import("@/app/api/public/registrations/route")
+    const res = await POST(post())
+    expect(res.status).toBe(201)
+    expect((await res.json()).editToken).toBeNull()
+    expect(m.txVolCreateMany).toHaveBeenCalledWith(expect.objectContaining({ data: [expect.objectContaining({ email: "owner@x.com" })] }))
+    expect(m.txCreate).toHaveBeenCalledWith(expect.objectContaining({ data: expect.objectContaining({ volunteerId: "vol-new" }) }))
+    expect(m.txCreate).not.toHaveBeenCalledWith(expect.objectContaining({ data: expect.objectContaining({ volunteerId: "vol-victim" }) }))
+    expect(m.volUpdate).not.toHaveBeenCalled()
   })
 
   it("an invite of another volunteer is not proof", async () => {
@@ -325,8 +373,8 @@ describe("POST /api/public/registrations — ownership of the email (#285)", () 
   it("a match erased between the lookup and the lock (#516) counts as no match: a new record, nothing written on the erased one", async () => {
     m.volFindFirst.mockResolvedValue(victim)
     m.inviteFindFirst.mockResolvedValue({ id: "inv-1" }) // even a valid invite of the erased record proves nothing now
-    m.txQueryRaw.mockImplementation(async (strings: TemplateStringsArray, ...values: unknown[]) =>
-      strings.join("?").includes("erasedAt") && values[0] === "vol-victim" ? [{ id: "vol-victim", erasedAt: new Date() }] : [])
+    m.txQueryRaw.mockImplementation(async (_sql: TemplateStringsArray, ...values: unknown[]) =>
+      values[0] === "vol-victim" ? [{ id: "vol-victim", erasedAt: new Date() }] : [{ id: values[0] }])
     m.txVolCreateMany.mockResolvedValue({ count: 1 })
     m.txVolFindFirstOrThrow.mockResolvedValue({ id: "vol-new" })
     const { POST } = await import("@/app/api/public/registrations/route")
