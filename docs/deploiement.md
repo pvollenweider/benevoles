@@ -116,18 +116,24 @@ Dans la table `RateLimit`, les clés doivent ensuite contenir des adresses publi
 
 ### Ordre de déploiement
 
-À chaque push sur `main`, `deploy.yml` enchaîne trois jobs et applique les migrations **avant** de mettre à jour l'application :
+À chaque push sur `main`, `deploy.yml` lance deux jobs en parallèle, puis le déploiement quand les deux ont réussi, et applique les migrations **avant** de mettre à jour l'application :
 
-1. **check** : type-check, lint, tests unitaires ;
-2. **build-push** : `scripts/doc-lastmod.mjs` écrit `doc-lastmod.json` (date du dernier commit de chaque source de la documentation, sur un clone complet `fetch-depth: 0`, en suivant les renommages et en sautant les commits dont le message porte la ligne `Doc-Lastmod: skip`, réservée à un déplacement de sources qui ne change aucune page), le `lastmod` du sitemap ; puis image `ghcr.io/<dépôt>:sha-<7 premiers caractères du commit>` (et `:latest`), avec `NEXT_PUBLIC_SENTRY_DSN` et `GIT_SHA` en arguments de build et `sentry_auth_token` en secret de build ;
-3. **deploy** (environnement GitHub `production`) :
-   1. applique `k8s/namespace.yaml` et régénère le secret de tirage `ghcr-secret` ;
-   2. s'arrête, avant de toucher au reste, si le secret GitHub `TOKEN_ENCRYPTION_KEY` est vide ;
-   3. régénère `benevoles-secret` (« Sync k8s secret ») ;
-   4. applique `k8s/postgres.yaml` et attend PostgreSQL (120 s au plus) ;
-   5. supprime le Job de migration précédent, applique `k8s/job-migrate.yaml` avec la nouvelle image et attend sa réussite (300 s au plus). En cas d'échec, le déploiement s'arrête, la version en cours continue de servir, et les journaux du Job s'affichent dans le workflow ;
-   6. applique `service.yaml`, `middleware-compress.yaml`, `middleware-hsts.yaml`, `ingress.yaml`, `ingressroute-tokens.yaml`, `ingressroute-http.yaml` et les six CronJobs ;
-   7. seulement ensuite, applique `k8s/deployment.yaml` et attend la fin du remplacement (300 s au plus). Le nouveau pod démarre avant l'arrêt de l'ancien (`maxSurge: 1`, `maxUnavailable: 0`), et ne reçoit le trafic qu'une fois préchauffé.
+1. **check** : type-check, lint, tests unitaires, sur le commit fusionné (la CI de la pull request a testé un commit de fusion temporaire, qui peut différer si `main` a avancé entre-temps) ;
+2. **build-push**, en même temps que **check** : `scripts/doc-lastmod.mjs` écrit `doc-lastmod.json` (date du dernier commit de chaque source de la documentation, sur un clone complet `fetch-depth: 0`, en suivant les renommages et en sautant les commits dont le message porte la ligne `Doc-Lastmod: skip`, réservée à un déplacement de sources qui ne change aucune page), le `lastmod` du sitemap ; puis image `ghcr.io/<dépôt>:sha-<7 premiers caractères du commit>`, avec `NEXT_PUBLIC_SENTRY_DSN` et `GIT_SHA` en arguments de build et `sentry_auth_token` en secret de build. Une image dont les contrôles échouent est publiée sous ce seul tag et n'est jamais déployée. Le job transmet la référence complète `…:sha-<commit>@sha256:<empreinte>` : le Job de migration et l'application tournent exactement sur l'image construite, même si le tag était republié ;
+3. **deploy** (environnement GitHub `production`), après **check** et **build-push** :
+   1. refuse de déployer une version plus ancienne que celle en production (« Refuse an older version ») : si le commit de l'image en production contient déjà le commit de ce run, le job échoue avant de toucher au cluster. C'est le cas de la relance d'un ancien run, ou d'un run dont l'image a fini après celle d'un commit plus récent. Redéployer le commit en production (relance pour recopier un secret) reste possible ; un retour volontaire à une version précédente suit la « Mise en place manuelle » ci-dessous ;
+   2. applique `k8s/namespace.yaml` et régénère le secret de tirage `ghcr-secret` ;
+   3. s'arrête, avant de toucher au reste, si le secret GitHub `TOKEN_ENCRYPTION_KEY` est vide ;
+   4. régénère `benevoles-secret` (« Sync k8s secret ») ;
+   5. applique `k8s/postgres.yaml` et attend PostgreSQL (120 s au plus) ;
+   6. supprime le Job de migration précédent, applique `k8s/job-migrate.yaml` avec la nouvelle image et attend sa réussite (300 s au plus). En cas d'échec, le déploiement s'arrête, la version en cours continue de servir, et les journaux du Job s'affichent dans le workflow ;
+   7. applique `service.yaml`, `middleware-compress.yaml`, `middleware-hsts.yaml`, `ingress.yaml`, `ingressroute-tokens.yaml`, `ingressroute-http.yaml` et les six CronJobs ;
+   8. seulement ensuite, applique `k8s/deployment.yaml` et attend la fin du remplacement (300 s au plus). Le nouveau pod démarre avant l'arrêt de l'ancien (`maxSurge: 1`, `maxUnavailable: 0`), et ne reçoit le trafic qu'une fois préchauffé ;
+   9. une fois le site vérifié, déplace `:latest` sur l'image déployée, par son empreinte, sans la reconstruire.
+
+Un seul déploiement à la fois (groupe de concurrence `production-deploy`), jamais annulé une fois commencé : une migration peut être en cours. Si deux fusions se suivent de près, le déploiement de la seconde attend la fin du premier ; un déploiement en attente est remplacé par un plus récent, et son run apparaît alors annulé (« cancelled ») sans avoir rien touché : le commit plus récent contient le sien. L'ordre d'attente n'est pas forcément l'ordre des commits, d'où la vérification de l'étape 1.
+
+L'image est toujours reconstruite après la fusion : celle que la CI de la pull request aurait pu construire vient d'un autre commit (le commit de fusion temporaire), avec d'autres arguments (`GIT_SHA`, DSN Sentry, `doc-lastmod.json`), et rien ne prouverait aujourd'hui qu'elle correspond au commit de `main`. Les limites et la piste d'une promotion sans reconstruction sont dans « Construction partagée en CI » plus bas.
 
 Le workflow n'applique pas `secret.yaml` (modèle), `traefik-config.yaml`, `certificate-wildcard.yaml` ni `gandi-webhook.yaml`.
 
@@ -144,7 +150,7 @@ Les secrets de production sont les secrets GitHub du dépôt (Settings → Secre
 Conséquence : pour qu'un secret modifié prenne effet,
 
 - un push sur `main` suffit (nouvelle image `sha-…`, donc nouveau pod) ;
-- relancer un déploiement du **même** commit (`gh run rerun <id>`) recopie le secret mais ne redémarre pas le pod (même image, spécification inchangée). Il faut alors redémarrer le pod après la relance :
+- relancer le seul job de déploiement du **même** commit (`gh run rerun <id> --job <id du job deploy>`) recopie le secret mais ne redémarre pas le pod (même image, même empreinte, spécification inchangée). Il faut alors redémarrer le pod après la relance (relancer tout le run reconstruit l'image, dont l'empreinte peut changer et redémarrer le pod, ou non) :
 
 ```bash
 kubectl -n benevoles rollout restart deployment/benevoles-app
@@ -458,10 +464,30 @@ kubectl -n benevoles exec deploy/benevoles-app -- node -e 'fetch(process.env.NTF
 
 | Workflow | Déclencheur | Étapes |
 |----------|-------------|--------|
-| `ci.yml` | pull request vers `main` | aucune source publique en brouillon (`check-no-draft-content.mjs`) ; type-check, lint, tests Vitest avec couverture, `check-security-md.mjs`, `check-migrations.mjs` (migrations compatibles avec la version précédente), `check-doc-screenshots.mjs` (captures de la documentation à jour) ; job Lighthouse ; job E2E : base migrée et seedée, tests d'intégration (`npm run test:integration`), tests Playwright |
-| `deploy.yml` | push sur `main` | type-check, lint, tests ; construction et publication de l'image sur GHCR ; Job de migration, puis déploiement Kubernetes (voir « Ordre de déploiement ») |
+| `ci.yml` | pull request vers `main` | aucune source publique en brouillon (`check-no-draft-content.mjs`) ; type-check, lint, tests Vitest avec couverture, `check-security-md.mjs`, `check-migrations.mjs` (migrations compatibles avec la version précédente), `check-doc-screenshots.mjs` (captures de la documentation à jour) ; un `next build` partagé (job Build), puis le job Lighthouse et deux jobs E2E : base migrée et seedée, tests d'intégration (`npm run test:integration`, premier job), tests Playwright répartis entre les deux |
+| `deploy.yml` | push sur `main` | type-check, lint, tests, en parallèle de la construction et de la publication de l'image sur GHCR ; Job de migration, puis déploiement Kubernetes (voir « Ordre de déploiement ») |
 | `gandi-webhook.yml` | pull request ou push sur `main` touchant `k8s/gandi-webhook/` | construction de l'image du webhook ; publication sur GHCR seulement sur push |
 | `mirror-ci-images.yml` | manuel, chaque lundi à 04:17 UTC, ou pull request et push sur `main` touchant ce fichier | copie vers GHCR des images Postgres et Mailpit utilisées par la CI |
+
+Un nouveau push sur une pull request annule le run `ci.yml` du push précédent, dont le résultat ne dit plus rien de la branche.
+
+### Construction partagée en CI
+
+Le job **Build (Next.js)** de `ci.yml` fait le seul `next build` du run, sur le commit de fusion de la pull request, avec les réglages de build qu'avaient les jobs E2E et Lighthouse (sans base de données : le build n'en lit aucune). Il publie `.next` en artefact `next-build` (une archive `tar` compressée, environ 30 Mo, gardée 3 jours), sans le cache de Turbopack, la copie `standalone` (propre à Docker) ni les traces, avec un manifeste `.next/ci-build.json` écrit par `scripts/ci-build-artifact.mjs`.
+
+Les deux jobs **E2E (Playwright, 1/2 et 2/2)** et le job **Lighthouse** installent les dépendances du même `package-lock.json`, téléchargent l'artefact et le vérifient avant de lancer `next start` dessus (`E2E_SERVER=prebuilt` pour Playwright) : même run, même commit et même arbre Git (`HEAD^{tree}`), même `package-lock.json`, même plateforme, même version majeure de Node, mêmes valeurs `NEXT_PUBLIC_*` (inscrites dans le build), et un `.next/BUILD_ID` conforme. À la moindre différence, le job échoue ; il ne reconstruit jamais l'application lui-même, et sans build `next start` s'arrête. Le build tourne sur le même runner Ubuntu que ses consommateurs : rien n'est copié vers l'image Alpine de production, construite à part par `deploy.yml`.
+
+Chaque job E2E a sa propre base PostgreSQL, sa propre boîte Mailpit et son propre seed. Playwright répartit les fichiers de tests entre eux (`--shard=1/2`, `--shard=2/2`), toujours un fichier à la fois dans chaque job ; les tests d'intégration ne tournent que dans le premier. Les deux projets (Chromium et WebKit iPhone) sont conservés.
+
+Relances :
+
+- « Re-run failed jobs » sur un job E2E ou Lighthouse réutilise l'artefact du run tant qu'il existe (3 jours) ;
+- au-delà, ou si l'artefact manque, le téléchargement échoue : relancer tout le run (« Re-run all jobs »), qui reconstruit et remplace l'artefact ;
+- un artefact d'un autre run n'est jamais accepté (le manifeste porte l'identifiant du run).
+
+Caches : `actions/setup-node` garde le cache npm (les téléchargements, pas `npm ci`, qui tourne dans chaque job). Le cache de build de Turbopack (`.next/cache`, environ 350 Mo) n'est sauvegardé ni en CI ni dans Docker : le cache GitHub Actions du dépôt dépasse déjà sa limite de 10 Go, et un cache par push de pull request évincerait celui de BuildKit dont dépend la vitesse du déploiement. Le `Dockerfile` le supprime dans la couche du build, que l'export `mode=max` de BuildKit téléversait à chaque déploiement.
+
+Pas de promotion de l'image de la pull request en production : la CI ne construit pas d'image, et une image de PR serait faite d'un autre commit (le commit de fusion temporaire), d'un autre `GIT_SHA`, de dates de documentation qui peuvent changer après un squash, et sans les secrets Sentry. Une promotion sans reconstruction demanderait une empreinte vérifiable du contenu compilé (arbre Git, `doc-lastmod.json`, arguments de build, image de base, dépendances), recalculée après la fusion à partir de sources de confiance, et la séparation de `GIT_SHA` du contenu compilé : piste non retenue pour l'instant.
 
 L'analyse CodeQL (JavaScript/TypeScript, Go, Actions) ne figure pas dans `.github/workflows/` : elle est configurée côté GitHub (paramètres de sécurité du dépôt).
 
