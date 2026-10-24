@@ -42,11 +42,12 @@ test.beforeEach(async ({ page }) => {
 })
 
 /** Signs up for every shift of the event and opens the personal page, hydrated. */
-async function openMyPage(page: Page, answers?: Record<string, unknown>) {
+async function openMyPage(page: Page, answers?: Record<string, unknown>): Promise<string> {
   const token = await publicSignUp(page, event, event.shifts.map((s) => s.id), answers)
   await page.goto(`/my/${token}`)
   await expect(page.getByRole("heading", { level: 1, name: "Mes inscriptions" })).toBeVisible()
   await waitForHydration(trigger(page, "Bar"))
+  return token
 }
 
 const trigger = (page: Page, label: string) => page.getByRole("button", { name: `Annuler le créneau ${label}` })
@@ -110,6 +111,41 @@ test("links to the event's sign-up page for more shifts, the bottom link gone (#
   await more.click()
   await expect(page).toHaveURL((url) => url.pathname === `/${event.slug}`)
   await expect(page.getByRole("heading", { level: 1, name: title })).toBeVisible()
+})
+
+test("« Mon calendrier »: a read-only subscription, never the personal link, that follows a withdrawal (#961)", async ({ page }) => {
+  const token = await openMyPage(page)
+  const card = page.getByRole("region", { name: "Mon calendrier" })
+  const subscribe = card.getByRole("link", { name: "S'abonner avec l'agenda de cet appareil" })
+  await expect(subscribe).toHaveAttribute("href", /^webcal:\/\/.+\/calendar\.ics$/)
+  expect(await subscribe.getAttribute("href")).not.toContain(token)
+  await expect(card.getByRole("link", { name: "Télécharger tout mon planning (fichier .ics)" })).toBeVisible()
+
+  await card.getByText("Google Agenda ou autre agenda en ligne").click()
+  const address = (await card.locator("span[translate=no]").textContent())!.trim()
+  expect(address).toMatch(/^https?:\/\/.+\/calendar\.ics$/)
+  const path = new URL(address).pathname
+  const fetchFeed = async () => {
+    const res = await page.request.get(path, { headers: { "x-forwarded-for": randomIp() } })
+    expect(res.status(), await res.text()).toBe(200)
+    expect(res.headers()["cache-control"]).toBe("private, no-store")
+    expect(res.headers()["referrer-policy"]).toBe("no-referrer")
+    return res.text()
+  }
+  const before = await fetchFeed()
+  expect(before.split("BEGIN:VEVENT")).toHaveLength(4)
+  expect(before).not.toContain(token)
+  expect(before).not.toContain("/my/")
+
+  // The personal token itself opens no calendar at that address.
+  expect((await page.request.get(`/api/public/registrations/${token}/calendar.ics`, { headers: { "x-forwarded-for": randomIp() } })).status()).toBe(404)
+
+  // A withdrawn shift drops out of the next fetch.
+  await trigger(page, "Bar").click()
+  await page.getByRole("button", { name: "Oui, annuler" }).click()
+  await expect(trigger(page, "Bar")).toHaveCount(0)
+  const after = await fetchFeed()
+  expect(after.split("BEGIN:VEVENT")).toHaveLength(3)
 })
 
 test("a message left on withdrawal reaches the organizer's email (#559)", async ({ page }) => {

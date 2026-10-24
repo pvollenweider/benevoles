@@ -7,14 +7,15 @@ import { rateLimit, getClientIp } from "@/lib/rate-limit"
 import { registrationToken } from "@/lib/token-vault"
 import { orgTimeZone } from "@/lib/time-zone"
 import { orgBaseUrl } from "@/lib/urls"
-import { pickShiftInfo, shiftInfoText } from "@/lib/shift-info"
 import { buildIcs } from "@/lib/ics"
+import { icsShiftsFor } from "@/lib/calendar-feed"
 import { LIVE_STATUSES } from "@/lib/registration-capacity"
 
 /**
  * GET /api/public/registrations/[token]/calendar (#480): the volunteer's confirmed shifts of the
  * event as an .ics file, or one of them with ?registration=<id>. Only with a valid personal link;
- * waitlist entries and offers are left out; nothing about other volunteers.
+ * waitlist entries and offers are left out; nothing about other volunteers. A one-off file: the
+ * address that updates itself is the subscription (#961, ../calendar.ics).
  */
 /** Errors as a small page, not JSON: the link has a download attribute, a JSON body would be saved as a file. */
 function errorPage(message: string, status: number) {
@@ -31,7 +32,7 @@ export async function GET(req: Request, { params }: { params: Promise<{ token: s
 
   const registration = await prisma.registration.findFirst({
     where: { ...registrationToken.where(token), status: { in: [...LIVE_STATUSES] } },
-    include: { event: { select: { id: true, title: true, location: true, latitude: true, longitude: true, organization: { select: { slug: true, timeZone: true } } } } },
+    include: { event: { select: { id: true, title: true, location: true, latitude: true, longitude: true, updatedAt: true, organization: { select: { slug: true, timeZone: true, updatedAt: true } } } } },
   })
   if (!registration) return errorPage("Inscription introuvable ou déjà annulée.", 404)
 
@@ -45,26 +46,10 @@ export async function GET(req: Request, { params }: { params: Promise<{ token: s
   const event = registration.event
   const base = orgBaseUrl(event.organization.slug)
   const url = `${base}/my/${token}`
-  const ics = buildIcs(
-    regs.map((r) => {
-      const info = pickShiftInfo(r.shift, event)
-      return {
-        registrationId: r.id,
-        eventTitle: event.title,
-        roleName: r.shift.roleName,
-        label: r.shift.label,
-        date: r.shift.date,
-        startTime: r.shift.startTime,
-        endTime: r.shift.endTime,
-        location: r.shift.locationDetails?.trim() || event.location,
-        latitude: info.latitude,
-        longitude: info.longitude,
-        details: shiftInfoText(info),
-        url,
-      }
-    }),
-    { timeZone: orgTimeZone(event.organization), host: new URL(base).hostname },
-  )
+  const ics = buildIcs(icsShiftsFor(regs, event, { url, orgUpdatedAt: event.organization.updatedAt }), {
+    timeZone: orgTimeZone(event.organization),
+    host: new URL(base).hostname,
+  })
   const name = only ? "creneau" : "mes-creneaux"
   return new NextResponse(ics, {
     headers: {

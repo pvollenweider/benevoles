@@ -18,7 +18,7 @@ Ta page personnelle s'ouvre avec ton **lien personnel**, reçu par email (voir [
 https://[organisation].benevol.app/my/[token]
 ```
 
-![Page personnelle « Mes inscriptions » : la carte « Avant ta mission » (poste, horaire, lieu, responsable, consignes et pages de l'événement), l'ajout de tout le planning au calendrier, puis « Tous mes créneaux », chacun avec sa date et son bouton Annuler](/doc-img/public-my-page.png)
+![Page personnelle « Mes inscriptions » : la carte « Avant ta mission » (poste, horaire, lieu, responsable, consignes et pages de l'événement), puis la carte « Mon calendrier » : s'abonner avec l'agenda de cet appareil, Google Agenda ou autre agenda en ligne, et le téléchargement de tout le planning](/doc-img/public-my-page.png)
 
 ## Avant ta mission
 
@@ -99,7 +99,15 @@ Il n'y a pas de bouton pour échanger un créneau contre un autre : le changemen
 
 ## Ajouter mes créneaux à mon calendrier
 
-Tes créneaux s'ajoutent à ton calendrier (téléphone, Google, Outlook, Apple…) : avec plusieurs créneaux, « Ajouter tout mon planning à mon calendrier » télécharge un fichier `.ics` de tes créneaux confirmés, et « Ajouter à mon calendrier » sous un créneau le fait pour lui seul. Ouvre le fichier pour l'importer. Il ne se met pas à jour tout seul : si un horaire change, tu reçois un email ; télécharge-le à nouveau (le créneau est alors remplacé, pas dupliqué, dans la plupart des calendriers).
+Dès que tu as un créneau confirmé, la carte **Mon calendrier** te propose deux façons de retrouver tes créneaux dans ton agenda (téléphone, Google, Outlook, Apple…). Seuls les créneaux confirmés y figurent : pas la liste d'attente ni les demandes en attente de validation.
+
+**S'abonner (l'agenda se met à jour tout seul).** Ton agenda reçoit une adresse d'abonnement et va y relire tes créneaux régulièrement : un horaire modifié, un créneau annulé (par toi ou par l'organisation) ou un nouveau créneau y apparaît sans rien refaire. Selon l'agenda, la mise à jour arrive après quelques heures, parfois un jour : en cas de doute, ta page personnelle et les emails de l'organisation font foi.
+- Sur iPhone, iPad, Mac, ou avec Outlook ou Thunderbird : **S'abonner avec l'agenda de cet appareil** ouvre ton agenda, qui te demande de confirmer l'abonnement.
+- Avec Google Agenda (et donc sur un téléphone Android) ou un autre agenda en ligne : ouvre **Google Agenda ou autre agenda en ligne**, puis **Copier l'adresse de l'abonnement**. Sur un ordinateur, dans Google Agenda, choisis « Autres agendas », puis « À partir de l'URL », et colle l'adresse : l'agenda apparaît ensuite aussi sur ton téléphone.
+
+L'abonnement couvre tes créneaux de cet événement. Il continue de fonctionner si tu annules le créneau dont tu as utilisé le lien : tes autres créneaux restent dans l'agenda. L'adresse d'abonnement n'est pas ton lien personnel : elle permet seulement de voir tes créneaux confirmés de cet événement (avec leurs horaires, lieux, contacts et consignes), pas de les annuler ni de modifier tes réponses. Garde-la quand même pour toi. Elle cesse de fonctionner quand ton lien personnel est remplacé (par exemple si l'organisation renouvelle les liens) ou quand les données de l'événement sont effacées ; ton agenda garde alors en général les derniers créneaux reçus. Pour arrêter l'abonnement, supprime-le dans ton agenda.
+
+**Télécharger un fichier (une seule fois).** Avec plusieurs créneaux, **Télécharger tout mon planning (fichier .ics)** télécharge tes créneaux confirmés, et **Ajouter à mon calendrier** sous un créneau le fait pour lui seul. Ouvre le fichier pour l'importer. Ce fichier ne se met pas à jour tout seul : si un horaire change, tu reçois un email ; télécharge-le à nouveau (le créneau est alors remplacé, pas dupliqué, dans la plupart des calendriers).
 
 ## Mes disponibilités
 

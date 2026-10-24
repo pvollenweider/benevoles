@@ -1,6 +1,6 @@
 import type { NextConfig } from "next"
 import { withSentryConfig } from "@sentry/nextjs/config"
-import { securityHeaders } from "./src/lib/security-headers"
+import { CALENDAR_FEED_HEADER_RULES, securityHeaders } from "./src/lib/security-headers"
 import { STATIC_CACHE_HEADERS } from "./src/lib/static-cache-headers"
 import pkg from "./package.json"
 
@@ -13,7 +13,11 @@ const nextConfig: NextConfig = {
   // package.json there shipped the whole file in the public pages' JavaScript (#773).
   env: { APP_VERSION: pkg.version },
   async headers() {
-    return [{ source: "/:path*", headers: [...securityHeaders({ dev: process.env.NODE_ENV === "development" })] }, ...STATIC_CACHE_HEADERS]
+    return [
+      { source: "/:path*", headers: [...securityHeaders({ dev: process.env.NODE_ENV === "development" })] },
+      ...STATIC_CACHE_HEADERS,
+      ...CALENDAR_FEED_HEADER_RULES.map((r) => ({ source: r.source, headers: [...r.headers] })),
+    ]
   },
   images: {
     // 512 between the default 384 and 640 (#773): the home page's phone capture is 280 CSS px

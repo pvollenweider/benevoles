@@ -25,7 +25,7 @@
     },
     {
       "id": "all",
-      "transcript": "Avec plusieurs créneaux confirmés, le bouton Ajouter tout mon planning à mon calendrier permet de récupérer un seul fichier pour l'ensemble. Le planning de Camille contient l'Accueil, le Rangement de nuit et la Buvette du dimanche. L'inscription en liste d'attente n'y figure pas : elle n'est pas encore confirmée. Les offres et les demandes en cours de validation sont également exclues.",
+      "transcript": "Avec plusieurs créneaux confirmés, le lien Télécharger tout mon planning, dans la carte Mon calendrier, permet de récupérer un seul fichier pour l'ensemble. Le planning de Camille contient l'Accueil, le Rangement de nuit et la Buvette du dimanche. L'inscription en liste d'attente n'y figure pas : elle n'est pas encore confirmée. Les offres et les demandes en cours de validation sont également exclues.",
       "fallbackDurationMs": 35000
     },
     {
@@ -62,7 +62,7 @@
   "viewer": {
     "summary": "Dans cette vidéo, tu ajoutes tes créneaux confirmés à ton agenda et tu vois comment reprendre un horaire après une modification.",
     "steps": [
-      "Depuis ton lien personnel, clique sur « Ajouter à mon calendrier » sous un créneau, ou sur « Ajouter tout mon planning à mon calendrier ».",
+      "Depuis ton lien personnel, clique sur « Ajouter à mon calendrier » sous un créneau, ou sur « Télécharger tout mon planning » dans la carte « Mon calendrier ».",
       "Ouvre le fichier .ics téléchargé dans ton application de calendrier et choisis le calendrier de destination.",
       "Vérifie les horaires présentés, notamment la fin le lendemain pour un créneau de nuit.",
       "Si un créneau change, reviens sur ton lien personnel et télécharge la nouvelle version.",

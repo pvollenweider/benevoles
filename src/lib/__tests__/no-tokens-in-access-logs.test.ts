@@ -19,6 +19,7 @@ const TOKEN_URLS = [
   `/leader/${FAKE}`,
   `/api/public/registrations/${FAKE}`,
   `/api/public/registrations/${FAKE}/calendar`,
+  `/api/public/registrations/${FAKE}/calendar.ics`,
   `/api/public/member-invite/${FAKE}`,
   `/api/public/leader/${FAKE}`,
   `/api/public/waitlist/${FAKE}/confirm`,

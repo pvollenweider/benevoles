@@ -1071,7 +1071,7 @@ async function main() {
       await scene("calendar", async (at) => {
         // Demonstrate the real volunteer command, not an unrelated admin list.
         await page.goto(`${baseUrl}/my/demo-volunteer-camille-0001`); await settle(page)
-        const calendar = page.getByRole("link", { name: "Ajouter tout mon planning à mon calendrier (fichier .ics)", exact: true })
+        const calendar = page.getByRole("link", { name: "Télécharger tout mon planning (fichier .ics)", exact: true })
         await calendar.scrollIntoViewIfNeeded()
         await at(0.22)
         const downloading = page.waitForEvent("download")
@@ -2347,7 +2347,7 @@ async function main() {
         await file.saveAs(target)
         return (await readFile(target, "utf8")).replace(/\r\n[ \t]/g, "")
       }
-      const allLink = () => page.getByRole("link", { name: /^Ajouter tout mon planning/ })
+      const allLink = () => page.getByRole("link", { name: /^Télécharger tout mon planning/ })
       const events = (ics: string) => ics.split("BEGIN:VEVENT").slice(1).map(block => block.split("END:VEVENT")[0])
       let oldPlanning = ""
       let newPlanning = ""
@@ -2359,7 +2359,7 @@ async function main() {
         const one = await download(page.getByRole("link", { name: /Ajouter à mon calendrier.*Accueil/ }), "accueil.ics")
         if (events(one).length !== 1 || !one.includes("Accueil")) throw new Error("Single calendar download is not exactly Accueil")
         await at("Ce téléchargement ne crée pas")
-        await page.getByText(/Le fichier s'ouvre avec l'agenda/).scrollIntoViewIfNeeded()
+        await page.getByText(/Un fichier à importer une fois/).scrollIntoViewIfNeeded()
       })
       await scene("all", async at => {
         oldPlanning = await download(allLink(), "planning-original.ics")
@@ -2373,7 +2373,7 @@ async function main() {
         // control and its hint; do not fabricate or claim a calendar-client result.
         await allLink().scrollIntoViewIfNeeded()
         await at(0.48) /* mid-sentence */
-        await page.getByText(/Le fichier s'ouvre avec l'agenda/).scrollIntoViewIfNeeded()
+        await page.getByText(/Un fichier à importer une fois/).scrollIntoViewIfNeeded()
       })
       await scene("details", async at => {
         for (const expected of ["Arrive 15 minutes avant", "Manon Aebi", "/my/", "GEO:"]) {
@@ -2412,7 +2412,7 @@ async function main() {
         if (!night?.includes(`DTSTART:${icsInstant(nightDate, "23:00")}`)) throw new Error("Updated calendar does not contain 23:00 Zurich start")
         if (!night.includes(`DTEND:${icsInstant(nextDate, "02:00")}`)) throw new Error("PRODUCT BUG: shifting overnight start also changed its 02:00 end; refuse a misleading calendar take")
         await at(0.52) /* mid-sentence */
-        await page.getByText(/Le fichier s'ouvre avec l'agenda/).scrollIntoViewIfNeeded()
+        await page.getByText(/Un fichier à importer une fois/).scrollIntoViewIfNeeded()
       })
       await scene("result", async at => {
         await page.getByRole("heading", { name: "Mes inscriptions", exact: true }).scrollIntoViewIfNeeded()

@@ -8,7 +8,7 @@ Le service est gratuit aujourd'hui, le code est open source et les données sont
 - [Demander un espace](/inscription)
 - [Créer son premier événement](../guide/creer-son-premier-evenement.md)
 
-![Page personnelle « Mes inscriptions » : la carte « Avant ta mission » (poste, horaire, lieu, responsable, consignes et pages de l'événement), l'ajout de tout le planning au calendrier, puis « Tous mes créneaux », chacun avec sa date et son bouton Annuler](/doc-img/public-my-page.png)
+![Page personnelle « Mes inscriptions » : la carte « Avant ta mission » (poste, horaire, lieu, responsable, consignes et pages de l'événement), puis la carte « Mon calendrier » : s'abonner avec l'agenda de cet appareil, Google Agenda ou autre agenda en ligne, et le téléchargement de tout le planning](/doc-img/public-my-page.png)
 
 ## Une matinée de course type
 
