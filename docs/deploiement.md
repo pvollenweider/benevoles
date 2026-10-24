@@ -112,7 +112,7 @@ Entre la migration et la fin du remplacement, l'ancienne version du code tourne 
 Les secrets de production sont les secrets GitHub du dépôt (Settings → Secrets and variables → Actions, ou `gh secret set`). Ils arrivent dans l'application en trois temps, et chacun peut être vérifié :
 
 1. **Secret GitHub** : `gh secret set NOM --repo <dépôt> --body "valeur"` (une valeur seule, sans guillemets dans la valeur, sans espace ni retour à la ligne autour). `gh secret list` montre la date de mise à jour, jamais la valeur.
-2. **Secret Kubernetes `benevoles-secret`** : recopié depuis GitHub à chaque déploiement (« Sync k8s secret »). Un secret GitHub nouveau ou modifié n'agit qu'au déploiement suivant. Un nouveau secret doit aussi figurer dans la commande `kubectl create secret` de `deploy.yml`, sinon il n'est jamais recopié.
+2. **Secret Kubernetes `benevoles-secret`** : recopié depuis GitHub à chaque déploiement (« Sync k8s secret »). Un secret GitHub nouveau ou modifié n'agit qu'au déploiement suivant. Un nouveau secret doit aussi figurer dans cette étape de `deploy.yml`, dans son bloc `env:` et dans la liste des clés, sinon il n'est jamais recopié.
 3. **Pod** : le pod lit `benevoles-secret` (`envFrom`) **à son démarrage seulement**. Un pod qui tourne garde l'ancienne valeur.
 
 Conséquence : pour qu'un secret modifié prenne effet,
