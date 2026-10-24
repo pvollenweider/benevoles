@@ -48,6 +48,7 @@ Format basé sur [Keep a Changelog](https://keepachangelog.com/fr/1.0.0/).
 
 ### Infrastructure
 
+- **Workflows GitHub durcis** (#1051) : chaque action est épinglée sur l'empreinte complète de son commit, avec sa version en commentaire, que Dependabot tient à jour. Le déploiement ne recopie plus les secrets GitHub dans le texte de ses commandes : ils passent par l'environnement de l'étape, et `kubectl` lit les valeurs de `benevoles-secret` dans son environnement (`--from-env-file`). Le secret obtenu est le même. <!-- interne -->
 - **Racine du dépôt allégée** : les sources Markdown des pages publiques passent dans `content/` (`pages/`, `legal/`, `guide/`), l'inventaire `FONCTIONNALITES.md` devient `docs/fonctionnalites.md`, `dep-graph.svg` passe dans `docs/` et le webhook Gandi dans `k8s/gandi-webhook/`. Aucune adresse ni aucun contenu de page ne change ; le `lastmod` du plan du site garde la date de la dernière vraie modification (`scripts/doc-lastmod.mjs` suit les renommages et ignore les commits marqués `Doc-Lastmod: skip`).
 - **Documentation et blog sous `content/`** : les pages de documentation par tâche passent de `guide/` à `content/guide/` (à côté des introductions `GUIDE_ADMIN.md` et `GUIDE_BENEVOLE.md`, qui ne sont pas des pages de `/doc/<page>`) et les articles de `blog/` à `content/blog/`. Aucune adresse ni aucun contenu de page ne change, le `lastmod` du plan du site non plus.
 
