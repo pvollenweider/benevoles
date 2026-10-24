@@ -24,14 +24,29 @@ spec:
       restartPolicy: Never
       imagePullSecrets:
         - name: ghcr-secret
+      # Same image and same restrictions as the app (k8s/deployment.yaml, #1050).
+      automountServiceAccountToken: false
+      securityContext:
+        runAsNonRoot: true
+        runAsUser: 1001
+        runAsGroup: 1001
+        seccompProfile:
+          type: RuntimeDefault
       containers:
         - name: migrate
           image: ${APP_IMAGE}
           args: ["true"]
-          envFrom:
-            - secretRef:
-                name: benevoles-secret
+          securityContext:
+            allowPrivilegeEscalation: false
+            capabilities:
+              drop: [ALL]
           env:
+            # The entrypoint and `prisma migrate deploy` (prisma.config.ts) read only DATABASE_URL.
+            - name: DATABASE_URL
+              valueFrom:
+                secretKeyRef:
+                  name: benevoles-secret
+                  key: DATABASE_URL
             - name: NODE_ENV
               value: production
             - name: MIGRATE_ON_START

@@ -68,7 +68,7 @@ kubectl -n benevoles set env deployment/benevoles-app SIGNUP=off
 kubectl -n benevoles set env deployment/benevoles-app SIGNUP-
 ```
 
-`set env` redémarre le pod et l'emporte sur le secret. La variable ajoutée ainsi ne figure pas dans `k8s/deployment.yaml` : un déploiement suivant (`kubectl apply`) la laisse en place, l'inscription reste fermée jusqu'à `SIGNUP-`.
+`set env` redémarre le pod et remplace, dans le Deployment, la valeur que `k8s/deployment.yaml` prend dans le secret. Tant qu'elle est en place, un déploiement s'arrête à l'étape « Deploy app » (Kubernetes refuse une variable qui a à la fois une valeur et une référence au secret) : l'ancienne version continue de servir, inscription fermée. Pour revenir à la configuration sans rouvrir, poser le secret GitHub `SIGNUP=off`, puis rendre à la variable sa référence au secret : `kubectl -n benevoles set env deployment/benevoles-app --from=secret/benevoles-secret --keys=SIGNUP` (elle prend la valeur recopiée au dernier déploiement : relancer le déploiement s'il s'est arrêté avant). Après `SIGNUP-`, le déploiement suivant remet aussi la référence. Le bouton de l'espace super admin n'a pas cette limite.
 
 ## Conservation
 

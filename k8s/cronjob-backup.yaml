@@ -35,6 +35,12 @@ spec:
       template:
         spec:
           restartPolicy: OnFailure
+          # Hardened but still root (#1050): `apk add` below installs into the image, and the files
+          # already on backup-pvc belong to root. No capability is needed for that as root.
+          automountServiceAccountToken: false
+          securityContext:
+            seccompProfile:
+              type: RuntimeDefault
           volumes:
             - name: backup-storage
               persistentVolumeClaim:
@@ -42,6 +48,10 @@ spec:
           containers:
             - name: backup
               image: postgres:16-alpine
+              securityContext:
+                allowPrivilegeEscalation: false
+                capabilities:
+                  drop: [ALL]
               volumeMounts:
                 - name: backup-storage
                   mountPath: /backups
