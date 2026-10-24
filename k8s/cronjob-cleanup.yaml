@@ -20,9 +20,30 @@ spec:
       template:
         spec:
           restartPolicy: OnFailure
+          # Restricted pod (#1050): curl_user (uid 100, gid 101) of the image, given as numbers for
+          # runAsNonRoot; read-only root filesystem, the response body goes to an emptyDir /tmp.
+          automountServiceAccountToken: false
+          securityContext:
+            runAsNonRoot: true
+            runAsUser: 100
+            runAsGroup: 101
+            seccompProfile:
+              type: RuntimeDefault
+          volumes:
+            - name: tmp
+              emptyDir:
+                sizeLimit: 16Mi
           containers:
             - name: cleanup
               image: curlimages/curl:8.7.1
+              securityContext:
+                allowPrivilegeEscalation: false
+                readOnlyRootFilesystem: true
+                capabilities:
+                  drop: [ALL]
+              volumeMounts:
+                - name: tmp
+                  mountPath: /tmp
               command:
                 - sh
                 - -c

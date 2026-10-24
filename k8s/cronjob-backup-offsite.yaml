@@ -46,6 +46,12 @@ spec:
       template:
         spec:
           restartPolicy: OnFailure
+          # Hardened but still root (#1050), like the dump job: it reads the root-owned files of
+          # backup-pvc (read-only) and needs no capability for that.
+          automountServiceAccountToken: false
+          securityContext:
+            seccompProfile:
+              type: RuntimeDefault
           volumes:
             - name: backup-storage
               persistentVolumeClaim:
@@ -57,6 +63,10 @@ spec:
           containers:
             - name: offsite-sync
               image: rclone/rclone:1.68
+              securityContext:
+                allowPrivilegeEscalation: false
+                capabilities:
+                  drop: [ALL]
               env:
                 # Nom du container Swiss Backup (OFFSITE_BUCKET), requis.
                 - name: OFFSITE_BUCKET

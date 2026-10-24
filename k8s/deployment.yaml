@@ -27,16 +27,200 @@ spec:
     spec:
       imagePullSecrets:
         - name: ghcr-secret
+      # The app never calls the Kubernetes API (#1050).
+      automountServiceAccountToken: false
+      # The image runs as nextjs (uid 1001, Dockerfile); runAsNonRoot needs the numeric id since
+      # the image only names the user. Group 1001 (nodejs) owns the app files.
+      securityContext:
+        runAsNonRoot: true
+        runAsUser: 1001
+        runAsGroup: 1001
+        seccompProfile:
+          type: RuntimeDefault
 
       containers:
         - name: app
           image: ${APP_IMAGE}
           ports:
             - containerPort: 3000
-          envFrom:
-            - secretRef:
-                name: benevoles-secret
+          # readOnlyRootFilesystem stays off: Next.js writes its cache at run time, optimised images
+          # in .next/cache and pages it renders again in .next/server/app (#1050).
+          securityContext:
+            allowPrivilegeEscalation: false
+            capabilities:
+              drop: [ALL]
           env:
+            # Only the keys of benevoles-secret the app reads (#1050), not the whole secret:
+            # POSTGRES_USER/POSTGRES_PASSWORD (postgres pod), BACKUP_PASSPHRASE (backup CronJob),
+            # OFFSITE_BUCKET (off-site copy) and ADMIN_EMAIL/ADMIN_PASSWORD (prisma/seed.ts, not in
+            # the image) stay out. A key added to the secret in deploy.yml is added here too, or to
+            # the list of keys the app never reads (src/lib/__tests__/k8s-hardening.test.ts).
+            # Optional keys stay optional, as they were with envFrom.
+            - name: DATABASE_URL
+              valueFrom:
+                secretKeyRef:
+                  name: benevoles-secret
+                  key: DATABASE_URL
+            - name: AUTH_SECRET
+              valueFrom:
+                secretKeyRef:
+                  name: benevoles-secret
+                  key: AUTH_SECRET
+            - name: TOKEN_ENCRYPTION_KEY
+              valueFrom:
+                secretKeyRef:
+                  name: benevoles-secret
+                  key: TOKEN_ENCRYPTION_KEY
+            - name: TOKEN_ENCRYPTION_KEY_ID
+              valueFrom:
+                secretKeyRef:
+                  name: benevoles-secret
+                  key: TOKEN_ENCRYPTION_KEY_ID
+                  optional: true
+            - name: TOKEN_ENCRYPTION_PREVIOUS_KEYS
+              valueFrom:
+                secretKeyRef:
+                  name: benevoles-secret
+                  key: TOKEN_ENCRYPTION_PREVIOUS_KEYS
+                  optional: true
+            - name: AUTH_URL
+              valueFrom:
+                secretKeyRef:
+                  name: benevoles-secret
+                  key: AUTH_URL
+                  optional: true
+            - name: AUTH_TRUST_HOST
+              valueFrom:
+                secretKeyRef:
+                  name: benevoles-secret
+                  key: AUTH_TRUST_HOST
+                  optional: true
+            - name: NEXT_PUBLIC_APP_URL
+              valueFrom:
+                secretKeyRef:
+                  name: benevoles-secret
+                  key: NEXT_PUBLIC_APP_URL
+                  optional: true
+            - name: HOSTED_SERVICE
+              valueFrom:
+                secretKeyRef:
+                  name: benevoles-secret
+                  key: HOSTED_SERVICE
+                  optional: true
+            - name: CRON_SECRET
+              valueFrom:
+                secretKeyRef:
+                  name: benevoles-secret
+                  key: CRON_SECRET
+                  optional: true
+            - name: SMTP_HOST
+              valueFrom:
+                secretKeyRef:
+                  name: benevoles-secret
+                  key: SMTP_HOST
+                  optional: true
+            - name: SMTP_PORT
+              valueFrom:
+                secretKeyRef:
+                  name: benevoles-secret
+                  key: SMTP_PORT
+                  optional: true
+            - name: SMTP_SECURE
+              valueFrom:
+                secretKeyRef:
+                  name: benevoles-secret
+                  key: SMTP_SECURE
+                  optional: true
+            - name: SMTP_USER
+              valueFrom:
+                secretKeyRef:
+                  name: benevoles-secret
+                  key: SMTP_USER
+                  optional: true
+            - name: SMTP_PASSWORD
+              valueFrom:
+                secretKeyRef:
+                  name: benevoles-secret
+                  key: SMTP_PASSWORD
+                  optional: true
+            - name: EMAIL_FROM
+              valueFrom:
+                secretKeyRef:
+                  name: benevoles-secret
+                  key: EMAIL_FROM
+                  optional: true
+            - name: EMAIL_REPLY_TO
+              valueFrom:
+                secretKeyRef:
+                  name: benevoles-secret
+                  key: EMAIL_REPLY_TO
+                  optional: true
+            - name: ADMIN_NOTIFICATION_EMAIL
+              valueFrom:
+                secretKeyRef:
+                  name: benevoles-secret
+                  key: ADMIN_NOTIFICATION_EMAIL
+                  optional: true
+            - name: OPERATOR_ALERT_EMAIL
+              valueFrom:
+                secretKeyRef:
+                  name: benevoles-secret
+                  key: OPERATOR_ALERT_EMAIL
+                  optional: true
+            - name: NTFY_URL
+              valueFrom:
+                secretKeyRef:
+                  name: benevoles-secret
+                  key: NTFY_URL
+                  optional: true
+            - name: NTFY_TOKEN
+              valueFrom:
+                secretKeyRef:
+                  name: benevoles-secret
+                  key: NTFY_TOKEN
+                  optional: true
+            - name: VAPID_PUBLIC_KEY
+              valueFrom:
+                secretKeyRef:
+                  name: benevoles-secret
+                  key: VAPID_PUBLIC_KEY
+                  optional: true
+            - name: VAPID_PRIVATE_KEY
+              valueFrom:
+                secretKeyRef:
+                  name: benevoles-secret
+                  key: VAPID_PRIVATE_KEY
+                  optional: true
+            - name: SENTRY_DSN
+              valueFrom:
+                secretKeyRef:
+                  name: benevoles-secret
+                  key: SENTRY_DSN
+                  optional: true
+            - name: VIDEO_MEDIA_BASE_URL
+              valueFrom:
+                secretKeyRef:
+                  name: benevoles-secret
+                  key: VIDEO_MEDIA_BASE_URL
+                  optional: true
+            - name: SIGNUP
+              valueFrom:
+                secretKeyRef:
+                  name: benevoles-secret
+                  key: SIGNUP
+                  optional: true
+            - name: ORG_INACTIVITY
+              valueFrom:
+                secretKeyRef:
+                  name: benevoles-secret
+                  key: ORG_INACTIVITY
+                  optional: true
+            - name: PAST_EVENT_RETENTION
+              valueFrom:
+                secretKeyRef:
+                  name: benevoles-secret
+                  key: PAST_EVENT_RETENTION
+                  optional: true
             - name: NODE_ENV
               value: production
             # Migrations run once per deploy in k8s/job-migrate.yaml (#314), not in every pod.
