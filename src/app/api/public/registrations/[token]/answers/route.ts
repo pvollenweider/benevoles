@@ -4,6 +4,8 @@
 import { NextResponse } from "next/server"
 import { z } from "zod"
 import { prisma } from "@/lib/prisma"
+import { ORG_LIFECYCLE_SELECT, orgLinksOpen } from "@/lib/org-lifecycle"
+import { orgUnavailableResponse } from "@/lib/org-lifecycle-response"
 import { recordTokenMiss, tokenLookupsBlocked, tokenUseAllowed } from "@/lib/token-rate-limit"
 import { registrationToken } from "@/lib/token-vault"
 import { LIVE_STATUSES } from "@/lib/registration-capacity"
@@ -41,13 +43,14 @@ export async function PATCH(req: Request, { params }: { params: Promise<{ token:
       volunteerId: true,
       eventId: true,
       volunteer: { select: { firstName: true, lastName: true } },
-      event: { select: { id: true, title: true, organizationId: true, cancelDeadlineDays: true, cancelDeadlineHours: true, organization: { select: { timeZone: true } } } },
+      event: { select: { id: true, title: true, organizationId: true, cancelDeadlineDays: true, cancelDeadlineHours: true, organization: { select: { timeZone: true, ...ORG_LIFECYCLE_SELECT } } } },
     },
   })
   if (!registration) {
     await recordTokenMiss(req)
     return notFound()
   }
+  if (!orgLinksOpen(registration.event.organization)) return orgUnavailableResponse()
   if (!(await tokenUseAllowed(token, "answers"))) return tooManyAttempts()
 
   const { volunteerId, eventId, event } = registration

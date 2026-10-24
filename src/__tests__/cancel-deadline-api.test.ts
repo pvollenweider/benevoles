@@ -1,5 +1,8 @@
 import { describe, it, expect, vi, beforeEach, afterEach } from "vitest"
 
+// The link's organisation, open: its links give data (src/lib/org-lifecycle.ts).
+const OPEN_ORG = { active: true, suspendedAt: null }
+
 // Volunteer self-cancellation deadline (#946): saved from the event settings (days and hours, 0 or
 // empty = until the start), given to the personal page per registration, and never limiting an
 // admin's removal. The refusal itself is tested in volunteer-withdraw-api.test.ts.
@@ -88,7 +91,7 @@ describe("GET /api/public/registrations/[token] — selfCancel", () => {
     location: null, latitude: null, longitude: null, publicInstructions: null, dayContactName: null, dayContactPhone: null,
     cancelDeadlineDays: 2, cancelDeadlineHours: null,
     pages: [], sectorLeaders: [],
-    organization: { slug: "org", timeZone: "Europe/Zurich", replyToEmail: "orga@example.org" },
+    organization: { ...OPEN_ORG, slug: "org", timeZone: "Europe/Zurich", replyToEmail: "orga@example.org" },
     ...over,
   })
   // Saturday 6 June 2026, 10:00 to 12:00 in Zurich (08:00 UTC).

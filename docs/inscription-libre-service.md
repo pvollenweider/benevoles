@@ -54,7 +54,7 @@ Pas de CAPTCHA (accessibilité, vie privée). À la place :
 - les plafonds d'envoi d'emails (`src/lib/notifications/send-limits.ts`) : par destinataire pour les emails déclenchés depuis une page publique, et 60 emails de confirmation par heure pour toute la plateforme (`EMAIL_LIMIT_SIGNUP_PER_HOUR`) ;
 - les noms saisis refusent liens, adresses et retours à la ligne, et l'email de confirmation ne reprend aucun texte saisi : il ne peut pas servir à faire passer un message ;
 - la **liste de blocage** (`/super-admin/blocklist`) : une adresse email, un domaine (confirmation demandée pour un fournisseur courant) ou une adresse IP (toujours pour une durée limitée, conservée sous forme d'empreinte), avec une raison. Une demande bloquée reçoit la réponse habituelle et rien n'est enregistré ; un blocage posé entre la demande et la confirmation vaut aussi ;
-- la **suspension** d'une organisation pour abus, depuis sa fiche (`src/lib/org-suspension.ts`) : ses administrateurs ne se connectent plus, ses pages publiques ne répondent plus et ses emails en attente sont annulés ; ses données sont conservées.
+- la **suspension** d'une organisation pour abus, depuis sa fiche (`src/lib/org-suspension.ts`) : ses administrateurs ne se connectent plus (même si une écriture incohérente l'avait laissée active), ses pages publiques et les liens de ses bénévoles et responsables de secteur ne répondent plus, et ses emails en attente sont annulés ; ses données sont conservées. Une réactivation, par ses administrateurs ou par l'opérateur, est décidée sous le verrou de la ligne de l'organisation : une suspension posée au même moment l'emporte toujours.
 
 ## Fermer l'inscription
 

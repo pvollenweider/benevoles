@@ -4,6 +4,8 @@
 import { NextResponse } from "next/server"
 import { z } from "zod"
 import { prisma } from "@/lib/prisma"
+import { ORG_LIFECYCLE_SELECT, orgLinksOpen } from "@/lib/org-lifecycle"
+import { orgUnavailableResponse } from "@/lib/org-lifecycle-response"
 import { orgTimeZone } from "@/lib/time-zone"
 import { recordTokenMiss, tokenLookupsBlocked, tokenUseAllowed } from "@/lib/token-rate-limit"
 import { registrationToken } from "@/lib/token-vault"
@@ -39,7 +41,7 @@ async function holder(token: string) {
       volunteerId: true,
       eventId: true,
       volunteer: { select: { firstName: true, lastName: true, birthDate: true, erasedAt: true, mergedIntoId: true } },
-      event: { select: { shiftRosterEnabled: true, personalDataAnonymizedAt: true, startDate: true, endDate: true, organization: { select: { timeZone: true } } } },
+      event: { select: { shiftRosterEnabled: true, personalDataAnonymizedAt: true, startDate: true, endDate: true, organization: { select: { timeZone: true, ...ORG_LIFECYCLE_SELECT } } } },
     },
   })
 }
@@ -78,6 +80,7 @@ export async function GET(req: Request, { params }: { params: Promise<{ token: s
     await recordTokenMiss(req)
     return notFound()
   }
+  if (!orgLinksOpen(h.event.organization)) return orgUnavailableResponse()
   if (!(await tokenUseAllowed(token, "roster"))) return tooManyAttempts()
   if (!eligible(h, new Date())) return json(UNAVAILABLE)
   if (!(await confirmedOnEvent(h))) return json(UNAVAILABLE)
@@ -97,6 +100,8 @@ export async function PATCH(req: Request, { params }: { params: Promise<{ token:
     await recordTokenMiss(req)
     return notFound()
   }
+  // Hiding too: the roster is unreachable anyway, and the stored choices stay as they are.
+  if (!orgLinksOpen(h.event.organization)) return orgUnavailableResponse()
   if (!(await tokenUseAllowed(token, "roster"))) return tooManyAttempts()
   const now = new Date()
   const visible = parsed.data.visible

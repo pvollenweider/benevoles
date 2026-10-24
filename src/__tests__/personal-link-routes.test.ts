@@ -1,5 +1,8 @@
 import { describe, it, expect, vi, beforeEach } from "vitest"
 
+// The link's organisation, open: its links give data (src/lib/org-lifecycle.ts).
+const OPEN_ORG = { active: true, suspendedAt: null }
+
 // Personal links (#376): re-send from the personal page, request by email when the link is lost.
 
 const m = vi.hoisted(() => ({
@@ -20,7 +23,7 @@ vi.mock("next/headers", () => ({ headers: m.headers }))
 const reg = {
   id: "r1", eventId: "e1", volunteerId: "v1", editTokenHash: "h", editTokenEnc: null, editTokenLegacy: null,
   volunteer: { firstName: "A", lastName: "B", email: "a@x.ch" },
-  event: { id: "e1", title: "Fête", organizationId: "org-a", organization: { slug: "org" } },
+  event: { id: "e1", title: "Fête", organizationId: "org-a", organization: { ...OPEN_ORG, slug: "org" } },
 }
 
 describe("POST /api/public/registrations/[token]/resend-link", () => {
@@ -48,6 +51,15 @@ describe("POST /api/public/registrations/[token]/resend-link", () => {
     expect(res.status).toBe(429)
     expect(m.enqueue).not.toHaveBeenCalled()
   })
+  it("sends nothing while the organisation is deactivated", async () => {
+    m.findFirst.mockResolvedValue({ ...reg, event: { ...reg.event, organization: { ...reg.event.organization, active: false } } })
+    const { POST } = await import("@/app/api/public/registrations/[token]/resend-link/route")
+    const res = await POST(new Request("http://localhost/x", { method: "POST" }), { params: Promise.resolve({ token: "t" }) })
+    expect(res.status).toBe(403)
+    expect(await res.json()).toMatchObject({ code: "org_unavailable" })
+    expect(m.enqueue).not.toHaveBeenCalled()
+    expect(m.updateMany).not.toHaveBeenCalled()
+  })
 })
 
 describe("POST /api/public/registrations/link", () => {
@@ -62,7 +74,8 @@ describe("POST /api/public/registrations/link", () => {
     expect(res.status).toBe(200)
     expect((await res.json()).message).toMatch(/^Si une inscription existe/)
     const where = m.findMany.mock.calls[0][0].where
-    expect(where.volunteer).toEqual({ email: { equals: "a@x.ch", mode: "insensitive" }, organization: { slug: "org" } })
+    // Never for a deactivated or suspended organisation (src/lib/org-lifecycle.ts).
+    expect(where.volunteer).toEqual({ email: { equals: "a@x.ch", mode: "insensitive" }, organization: { slug: "org", active: true, suspendedAt: null } })
     expect(m.enqueue).toHaveBeenCalledTimes(2)
 
     m.findMany.mockResolvedValue([])

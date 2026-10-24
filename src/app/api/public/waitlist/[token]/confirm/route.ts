@@ -4,6 +4,8 @@
 import { cancelPolicySentence } from "@/lib/cancel-deadline"
 import { NextResponse } from "next/server"
 import { prisma } from "@/lib/prisma"
+import { ORG_LIFECYCLE_SELECT, orgLinksOpen } from "@/lib/org-lifecycle"
+import { orgUnavailableResponse } from "@/lib/org-lifecycle-response"
 import { rateLimit, getClientIp } from "@/lib/rate-limit"
 import { logEvent } from "@/lib/event-log"
 import { registrationToken } from "@/lib/token-vault"
@@ -26,13 +28,14 @@ export async function POST(_req: Request, { params }: { params: Promise<{ token:
     include: {
       volunteer: true,
       shift: true,
-      event: { include: { organization: { select: { slug: true } } } },
+      event: { include: { organization: { select: { slug: true, ...ORG_LIFECYCLE_SELECT } } } },
     },
   })
 
   if (!reg) {
     return NextResponse.json({ error: "Lien invalide, déjà confirmé ou expiré." }, { status: 404 })
   }
+  if (!orgLinksOpen(reg.event.organization)) return orgUnavailableResponse()
 
   if (reg.waitingExpiresAt && reg.waitingExpiresAt < new Date()) {
     return NextResponse.json({ error: "Ce lien a expiré. La place a été proposée à quelqu'un d'autre." }, { status: 410 })

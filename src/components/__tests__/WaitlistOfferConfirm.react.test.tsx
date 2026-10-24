@@ -83,4 +83,23 @@ describe("WaitlistOfferConfirm", () => {
     render(<WaitlistOfferConfirm token="tok" state="invalid" details={null} />)
     expect(screen.getByRole("link", { name: "Retour à l'accueil" })).toHaveAttribute("href", "/")
   })
+
+  it("shows nothing of the offer when the organisation is closed, only where to ask", () => {
+    render(<WaitlistOfferConfirm token="tok" state="unavailable" details={null} contact="aide@example.org" />)
+    expect(screen.getByRole("heading", { level: 1, name: "Espace indisponible" })).not.toHaveFocus()
+    expect(screen.getByRole("link", { name: "aide@example.org" })).toHaveAttribute("href", "mailto:aide@example.org")
+    // No link out: the organisation's pages are closed too.
+    expect(screen.getAllByRole("link")).toHaveLength(1)
+    expect(screen.queryByRole("button")).not.toBeInTheDocument()
+  })
+
+  it("switches to the closed-space view when the organisation was closed since the page loaded", async () => {
+    fetchMock.mockResolvedValue({ ok: false, status: 403, json: async () => ({ error: "Cet espace n'est pas disponible.", code: "org_unavailable", contact: "aide@example.org" }) })
+    render(<WaitlistOfferConfirm token="tok" state="offered" details={details} />)
+    fireEvent.click(screen.getByRole("button", { name: "Prendre la place" }))
+    expect(await screen.findByRole("heading", { level: 1, name: "Espace indisponible" })).toHaveFocus()
+    expect(document.title).toBe("Espace indisponible")
+    expect(screen.queryByText("Buvette")).not.toBeInTheDocument()
+    expect(screen.getByRole("link", { name: "aide@example.org" })).toBeInTheDocument()
+  })
 })

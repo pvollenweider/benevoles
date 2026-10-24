@@ -4,6 +4,8 @@
 import { NextResponse } from "next/server"
 import { orgTimeZone } from "@/lib/time-zone"
 import { prisma } from "@/lib/prisma"
+import { ORG_LIFECYCLE_SELECT, orgLinksOpen } from "@/lib/org-lifecycle"
+import { orgUnavailableResponse } from "@/lib/org-lifecycle-response"
 import { eventPublicUrl, orgBaseUrl } from "@/lib/urls"
 import { signUpUrl, volunteerGroupCode } from "@/lib/personal-page-links"
 import { myAnswerRows, myAnswersQuery } from "@/lib/my-answers"
@@ -48,7 +50,7 @@ export async function GET(req: Request, { params }: { params: Promise<{ token: s
           pages: { select: { slug: true, title: true }, orderBy: { displayOrder: "asc" } },
           // The sector leaders' names only (#560): never their email nor their link.
           sectorLeaders: { select: { roleName: true, name: true } },
-          organization: { select: { slug: true, timeZone: true, replyToEmail: true } },
+          organization: { select: { slug: true, timeZone: true, replyToEmail: true, ...ORG_LIFECYCLE_SELECT } },
         },
       },
     },
@@ -58,6 +60,8 @@ export async function GET(req: Request, { params }: { params: Promise<{ token: s
     await recordTokenMiss(req)
     return NextResponse.json({ error: "Inscription introuvable ou déjà annulée." }, { status: 404 })
   }
+  // Nothing of the page while the organisation is deactivated or suspended (src/lib/org-lifecycle.ts).
+  if (!orgLinksOpen(registration.event.organization)) return orgUnavailableResponse()
   if (!(await tokenUseAllowed(token, "read"))) return tooManyAttempts()
 
   // Toutes les inscriptions actives du même bénévole pour le même événement
@@ -175,7 +179,7 @@ export async function DELETE(req: Request, { params }: { params: Promise<{ token
     include: {
       volunteer: { select: { firstName: true, lastName: true, email: true } },
       shift: { select: { id: true, roleName: true, label: true, date: true, startTime: true, endTime: true, capacity: true } },
-      event: { select: { id: true, title: true, organizationId: true, cancelDeadlineDays: true, cancelDeadlineHours: true, organization: { select: { slug: true, timeZone: true } } } },
+      event: { select: { id: true, title: true, organizationId: true, cancelDeadlineDays: true, cancelDeadlineHours: true, organization: { select: { slug: true, timeZone: true, ...ORG_LIFECYCLE_SELECT } } } },
     },
   })
   const plan = registration && planVolunteerWithdraw(registration.status)
@@ -184,6 +188,8 @@ export async function DELETE(req: Request, { params }: { params: Promise<{ token
     await recordTokenMiss(req)
     return NextResponse.json({ error: "Inscription introuvable ou déjà annulée." }, { status: 404 })
   }
+  // No withdrawal either: the registrations stay as they are while the organisation is closed.
+  if (!orgLinksOpen(registration.event.organization)) return orgUnavailableResponse()
   if (!(await tokenUseAllowed(token, "withdraw"))) return tooManyAttempts()
 
   // Never once the shift has started, nor past the event's earlier deadline for a confirmed place

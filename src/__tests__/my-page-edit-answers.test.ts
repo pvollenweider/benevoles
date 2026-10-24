@@ -1,5 +1,8 @@
 import { describe, it, expect, vi, beforeEach, afterEach } from "vitest"
 
+// The link's organisation, open: its links give data (src/lib/org-lifecycle.ts).
+const OPEN_ORG = { active: true, suspendedAt: null }
+
 // Changing one's answers from the personal page (#984, part 2): PATCH
 // /api/public/registrations/[token]/answers. Who and which event come from the link only; only the
 // event's active questions are written; a required question can't be cleared; the withdrawals'
@@ -43,7 +46,7 @@ const database = (args: Args) => stored
   .filter((q) => q.eventId === args.where.eventId && q.archivedAt === null)
   .map((q) => ({ ...q, answers: q.answers.filter((a) => a.volunteerId === args.select.answers.where.volunteerId).map(({ values }) => ({ values })) }))
 
-const event = { id: "e1", title: "Fête", organizationId: "org-1", cancelDeadlineDays: null, cancelDeadlineHours: null, organization: { timeZone: "Europe/Zurich" } }
+const event = { id: "e1", title: "Fête", organizationId: "org-1", cancelDeadlineDays: null, cancelDeadlineHours: null, organization: { ...OPEN_ORG, timeZone: "Europe/Zurich" } }
 const linkRegistration = { volunteerId: "v1", eventId: "e1", volunteer: { firstName: "Julie", lastName: "Martin" }, event }
 // Sat 4 July 2026, 10:00 in Zurich.
 const liveShift = { status: "active", shift: { date: new Date("2026-07-04T00:00:00Z"), startTime: "10:00", endTime: "12:00" } }

@@ -1,18 +1,19 @@
 import { describe, it, expect, vi, beforeEach } from "vitest"
 import { hashToken } from "@/lib/token-hash"
-import { canSelfReactivate, reactivationLinkValid, reactivationUpdate } from "@/lib/org-reactivation"
+import { SELF_REACTIVATION_WHERE, canSelfReactivate, reactivationLinkValid, reactivationUpdate } from "@/lib/org-reactivation"
 
 // « Réactiver mon espace » (#811): only for a space deactivated for inactivity, a single-use link
 // stored hashed, sent without an organisation (a deactivated one sends nothing), spent once shown.
 
 const m = vi.hoisted(() => ({
-  findUnique: vi.fn(), adminUpdate: vi.fn(), adminUpdateMany: vi.fn(), orgUpdate: vi.fn(), orgLog: vi.fn(), queued: [] as unknown[],
+  findUnique: vi.fn(), adminUpdate: vi.fn(), adminUpdateMany: vi.fn(), orgUpdate: vi.fn(), orgUpdateMany: vi.fn(), orgLog: vi.fn(), queryRaw: vi.fn(), queued: [] as unknown[],
 }))
 vi.mock("@/lib/prisma", () => {
   const db = {
     adminUser: { findUnique: m.findUnique, update: m.adminUpdate, updateMany: m.adminUpdateMany },
-    organization: { update: m.orgUpdate },
+    organization: { update: m.orgUpdate, updateMany: m.orgUpdateMany },
     orgLog: { create: m.orgLog },
+    $queryRaw: m.queryRaw,
     async $transaction(fn: (tx: unknown) => unknown) { return fn(db) },
   }
   return { prisma: db }
@@ -34,7 +35,15 @@ const deactivated = { name: "Fête du village", active: false, suspendedAt: null
 beforeEach(() => {
   vi.clearAllMocks()
   m.queued = []
+  m.adminUpdateMany.mockResolvedValue({ count: 1 })
+  m.orgUpdateMany.mockResolvedValue({ count: 1 })
+  m.queryRaw.mockResolvedValue([])
 })
+
+// The confirmation reads the link twice: its organisation first (to lock that row), then in full under the lock.
+function presentLink<T extends { organizationId: string | null }>(row: T | null) {
+  m.findUnique.mockResolvedValueOnce(row && { organizationId: row.organizationId }).mockResolvedValueOnce(row)
+}
 
 describe("who may reactivate a space alone (#811)", () => {
   it("only a space deactivated for inactivity, never one the operator deactivated or suspended", () => {
@@ -92,32 +101,53 @@ describe("POST /api/public/org-reactivation/confirm (#811)", () => {
   const secret = "a".repeat(64)
 
   it("reactivates, clears every link of the organisation and logs who did it", async () => {
-    m.findUnique.mockResolvedValueOnce({ id: "a1", isActive: true, organizationId: "org-1", orgReactivationExpiresAt: new Date(Date.now() + 3_600_000), organization: deactivated })
+    presentLink({ id: "a1", isActive: true, organizationId: "org-1", orgReactivationExpiresAt: new Date(Date.now() + 3_600_000), organization: deactivated })
     const { POST } = await import("@/app/api/public/org-reactivation/confirm/route")
     const res = await POST(json("http://localhost/x", { token: secret }))
     expect(await res.json()).toEqual({ ok: true, organizationName: "Fête du village" })
     expect(m.findUnique.mock.calls[0][0].where).toEqual({ orgReactivationTokenHash: hashToken(secret) })
-    expect(m.orgUpdate).toHaveBeenCalledWith({ where: { id: "org-1" }, data: expect.objectContaining({ active: true, inactivityDeactivatedAt: null }) })
+    expect(m.findUnique.mock.calls[1][0].where).toEqual({ orgReactivationTokenHash: hashToken(secret) })
+    expect(m.queryRaw).toHaveBeenCalledTimes(1)
+    // The link spent conditionally on its own hash, the organisation reactivated conditionally on its state.
+    expect(m.adminUpdateMany).toHaveBeenCalledWith({ where: { id: "a1", orgReactivationTokenHash: hashToken(secret) }, data: { orgReactivationTokenHash: null, orgReactivationExpiresAt: null } })
+    expect(m.orgUpdateMany).toHaveBeenCalledWith({ where: { id: "org-1", ...SELF_REACTIVATION_WHERE }, data: expect.objectContaining({ active: true, inactivityDeactivatedAt: null }) })
     expect(m.adminUpdateMany).toHaveBeenCalledWith(expect.objectContaining({ where: expect.objectContaining({ organizationId: "org-1" }) }))
     expect(m.orgLog).toHaveBeenCalledWith({ data: expect.objectContaining({ action: "organization.reactivated_after_inactivity", actorId: "a1", organizationId: "org-1" }) })
   })
 
   it("spends an expired link without reactivating, and refuses an unknown one", async () => {
-    m.findUnique.mockResolvedValueOnce({ id: "a1", isActive: true, organizationId: "org-1", orgReactivationExpiresAt: new Date(Date.now() - 1000), organization: deactivated })
+    presentLink({ id: "a1", isActive: true, organizationId: "org-1", orgReactivationExpiresAt: new Date(Date.now() - 1000), organization: deactivated })
     const { POST } = await import("@/app/api/public/org-reactivation/confirm/route")
     expect((await POST(json("http://localhost/x", { token: secret }))).status).toBe(400)
-    expect(m.adminUpdate).toHaveBeenCalledWith({ where: { id: "a1" }, data: { orgReactivationTokenHash: null, orgReactivationExpiresAt: null } })
-    expect(m.orgUpdate).not.toHaveBeenCalled()
+    expect(m.adminUpdateMany).toHaveBeenCalledWith({ where: { id: "a1", orgReactivationTokenHash: hashToken(secret) }, data: { orgReactivationTokenHash: null, orgReactivationExpiresAt: null } })
+    expect(m.orgUpdateMany).not.toHaveBeenCalled()
 
-    m.findUnique.mockResolvedValueOnce(null)
+    presentLink(null)
     expect((await POST(json("http://localhost/x", { token: secret }))).status).toBe(400)
     expect((await POST(json("http://localhost/x", { token: "short" }))).status).toBe(400)
   })
 
   it("never reactivates a suspended space, even with a valid link", async () => {
-    m.findUnique.mockResolvedValueOnce({ id: "a1", isActive: true, organizationId: "org-1", orgReactivationExpiresAt: new Date(Date.now() + 3_600_000), organization: { ...deactivated, suspendedAt: new Date() } })
+    presentLink({ id: "a1", isActive: true, organizationId: "org-1", orgReactivationExpiresAt: new Date(Date.now() + 3_600_000), organization: { ...deactivated, suspendedAt: new Date() } })
     const { POST } = await import("@/app/api/public/org-reactivation/confirm/route")
     expect((await POST(json("http://localhost/x", { token: secret }))).status).toBe(400)
-    expect(m.orgUpdate).not.toHaveBeenCalled()
+    expect(m.orgUpdateMany).not.toHaveBeenCalled()
+  })
+
+  it("changes nothing when a concurrent confirmation spent the link first", async () => {
+    presentLink({ id: "a1", isActive: true, organizationId: "org-1", orgReactivationExpiresAt: new Date(Date.now() + 3_600_000), organization: deactivated })
+    m.adminUpdateMany.mockResolvedValueOnce({ count: 0 })
+    const { POST } = await import("@/app/api/public/org-reactivation/confirm/route")
+    expect((await POST(json("http://localhost/x", { token: secret }))).status).toBe(400)
+    expect(m.orgUpdateMany).not.toHaveBeenCalled()
+    expect(m.orgLog).not.toHaveBeenCalled()
+  })
+
+  it("logs nothing when the organisation's state no longer allows it under the lock", async () => {
+    presentLink({ id: "a1", isActive: true, organizationId: "org-1", orgReactivationExpiresAt: new Date(Date.now() + 3_600_000), organization: deactivated })
+    m.orgUpdateMany.mockResolvedValueOnce({ count: 0 })
+    const { POST } = await import("@/app/api/public/org-reactivation/confirm/route")
+    expect((await POST(json("http://localhost/x", { token: secret }))).status).toBe(400)
+    expect(m.orgLog).not.toHaveBeenCalled()
   })
 })

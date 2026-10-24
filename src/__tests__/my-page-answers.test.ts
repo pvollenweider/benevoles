@@ -1,5 +1,8 @@
 import { describe, it, expect, vi, beforeEach } from "vitest"
 
+// The link's organisation, open: its links give data (src/lib/org-lifecycle.ts).
+const OPEN_ORG = { active: true, suspendedAt: null }
+
 // « Mes réponses » on the personal page (#984): the API sends the event's active questions with the
 // answers of the link's volunteer only, never another member's, in the order of the form.
 
@@ -44,7 +47,7 @@ function stub() {
       id: "e1", title: "Fête", slug: "fete", confirmationMessage: null, pages: [], sectorLeaders: [],
       publicStatus: "published", registrationsOpen: true, registrationOpensAt: null, registrationClosesAt: null,
       endDate: new Date("2099-07-04T00:00:00Z"),
-      organization: { slug: "asso-a", timeZone: "Europe/Zurich", replyToEmail: null },
+      organization: { ...OPEN_ORG, slug: "asso-a", timeZone: "Europe/Zurich", replyToEmail: null },
     },
   })
   findMany.mockResolvedValue([{ id: "r1", editTokenLegacy: "tok", editTokenEnc: null, phone: null, status: "active", createdAt: new Date("2026-06-01"), groupLink: null, shift }])

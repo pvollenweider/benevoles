@@ -3,6 +3,7 @@
 
 import { NextResponse } from "next/server"
 import { prisma } from "@/lib/prisma"
+import { ORG_LIFECYCLE_SELECT, ORG_UNAVAILABLE_ERROR, ORG_UNAVAILABLE_STATUS, orgLinksOpen } from "@/lib/org-lifecycle"
 import { rateLimit, getClientIp } from "@/lib/rate-limit"
 import { registrationToken } from "@/lib/token-vault"
 import { orgTimeZone } from "@/lib/time-zone"
@@ -32,9 +33,10 @@ export async function GET(req: Request, { params }: { params: Promise<{ token: s
 
   const registration = await prisma.registration.findFirst({
     where: { ...registrationToken.where(token), status: { in: [...LIVE_STATUSES] } },
-    include: { event: { select: { id: true, title: true, location: true, latitude: true, longitude: true, updatedAt: true, organization: { select: { slug: true, timeZone: true, updatedAt: true } } } } },
+    include: { event: { select: { id: true, title: true, location: true, latitude: true, longitude: true, updatedAt: true, organization: { select: { slug: true, timeZone: true, updatedAt: true, ...ORG_LIFECYCLE_SELECT } } } } },
   })
   if (!registration) return errorPage("Inscription introuvable ou déjà annulée.", 404)
+  if (!orgLinksOpen(registration.event.organization)) return errorPage(ORG_UNAVAILABLE_ERROR, ORG_UNAVAILABLE_STATUS)
 
   const regs = await prisma.registration.findMany({
     where: { volunteerId: registration.volunteerId, eventId: registration.eventId, status: "active", ...(only ? { id: only } : {}) },

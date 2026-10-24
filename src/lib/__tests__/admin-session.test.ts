@@ -31,6 +31,11 @@ describe("refreshAdminToken (#266)", () => {
     expect(await refreshAdminToken(token())).toBeNull()
   })
 
+  it("ends the session of an org admin whose organization is suspended, even if left active", async () => {
+    findUnique.mockResolvedValue({ sessionVersion: 0, isActive: true, role: "admin", organizationId: "org-A", organization: { active: true, suspendedAt: new Date() } })
+    expect(await refreshAdminToken(token())).toBeNull()
+  })
+
   it("applies a role or organization change without re-login", async () => {
     findUnique.mockResolvedValue({ sessionVersion: 0, isActive: true, role: "super_admin", organizationId: null, organization: null })
     expect(await refreshAdminToken(token())).toMatchObject({ role: "super_admin", organizationId: null })

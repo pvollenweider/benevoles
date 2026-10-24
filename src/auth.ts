@@ -38,7 +38,7 @@ export const { handlers, auth, signIn, signOut } = NextAuth({
           { email: normalizeEmail(credentials.email as string), password: credentials.password as string, ip: getClientIp(request) },
           {
             beginAttempt: beginLoginAttempt,
-            findUser: (email) => prisma.adminUser.findUnique({ where: { email }, include: { organization: { select: { active: true } } } }),
+            findUser: (email) => prisma.adminUser.findUnique({ where: { email }, include: { organization: { select: { active: true, suspendedAt: true } } } }),
             compare: (password, hash) => bcrypt.compare(password, hash),
             sleep: (ms) => new Promise((resolve) => setTimeout(resolve, ms)),
           },

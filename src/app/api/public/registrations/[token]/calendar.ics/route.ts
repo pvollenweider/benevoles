@@ -3,6 +3,7 @@
 
 import { NextResponse } from "next/server"
 import { prisma } from "@/lib/prisma"
+import { ORG_LIFECYCLE_SELECT, ORG_UNAVAILABLE_ERROR, ORG_UNAVAILABLE_STATUS, orgLinksOpen } from "@/lib/org-lifecycle"
 import { orgTimeZone } from "@/lib/time-zone"
 import { eventPublicUrl, orgBaseUrl } from "@/lib/urls"
 import { buildIcs } from "@/lib/ics"
@@ -59,7 +60,7 @@ export async function GET(req: Request, { params }: { params: Promise<{ token: s
       event: {
         select: {
           id: true, title: true, slug: true, publicStatus: true, location: true, latitude: true, longitude: true, updatedAt: true,
-          organization: { select: { slug: true, timeZone: true, updatedAt: true } },
+          organization: { select: { slug: true, timeZone: true, updatedAt: true, ...ORG_LIFECYCLE_SELECT } },
         },
       },
     },
@@ -68,6 +69,10 @@ export async function GET(req: Request, { params }: { params: Promise<{ token: s
   if (!anchor || !calendarFeedLinkValid(parsed, anchor.editTokenHash, key) || anchor.volunteer.erasedAt || anchor.volunteer.mergedIntoId) {
     return text("Ce calendrier n'est plus disponible : le lien personnel qui le donnait a été remplacé ou supprimé.", 410)
   }
+
+  // The address stays valid but gives nothing while the organisation is closed; it works again
+  // once the organisation is reactivated.
+  if (!orgLinksOpen(anchor.event.organization)) return text(ORG_UNAVAILABLE_ERROR, ORG_UNAVAILABLE_STATUS)
 
   const { event } = anchor
   const regs = await prisma.registration.findMany({

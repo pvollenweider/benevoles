@@ -6,7 +6,7 @@ vi.mock("@/lib/prisma", () => ({ prisma: { registration: { findFirst: m.findFirs
 const rl = vi.hoisted(() => ({ rateLimit: vi.fn(), isRateLimited: vi.fn() }))
 vi.mock("@/lib/rate-limit", () => ({ rateLimit: rl.rateLimit, isRateLimited: rl.isRateLimited, getClientIp: () => "ip" }))
 
-const event = { id: "e1", title: "Fête", location: "Salle", latitude: null, longitude: null, organization: { slug: "org", timeZone: "Europe/Zurich" } }
+const event = { id: "e1", title: "Fête", location: "Salle", latitude: null, longitude: null, organization: { slug: "org", timeZone: "Europe/Zurich", active: true, suspendedAt: null } }
 const reg = (id: string) => ({ id, shift: { roleName: "Bar", label: "Bar", date: new Date("2026-07-04T00:00:00Z"), startTime: "18:00", endTime: "20:00", locationDetails: null, contactName: null, contactPhone: null, instructions: null, latitude: null, longitude: null } })
 const get = (qs = "") => new Request(`http://localhost/api/public/registrations/tok/calendar${qs}`)
 const params = { params: Promise.resolve({ token: "tok" }) }
@@ -62,5 +62,12 @@ describe("GET /api/public/registrations/[token]/calendar", () => {
     m.findMany.mockResolvedValue([])
     const { GET } = await import("@/app/api/public/registrations/[token]/calendar/route")
     expect((await GET(get(), params)).status).toBe(404)
+  })
+
+  it("gives no shift while the organisation is suspended", async () => {
+    m.findFirst.mockResolvedValue({ volunteerId: "v1", eventId: "e1", event: { ...event, organization: { ...event.organization, suspendedAt: new Date() } } })
+    const { GET } = await import("@/app/api/public/registrations/[token]/calendar/route")
+    expect((await GET(get(), params)).status).toBe(403)
+    expect(m.findMany).not.toHaveBeenCalled()
   })
 })

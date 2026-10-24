@@ -31,15 +31,19 @@ export function waitlistOfferExpiry(now: Date, shiftStart: Date): Date | null {
  * - `offered`: the offer stands, the button is shown;
  * - `expired`: the offer is still recorded but its time is up (the hourly cron hasn't passed yet);
  * - `active` / `requested`: already accepted (or a firm registration under this link);
- * - `invalid`: unknown link, or nothing to accept any more (expired offer withdrawn, cancelled).
+ * - `invalid`: unknown link, or nothing to accept any more (expired offer withdrawn, cancelled);
+ * - `unavailable`: the organisation is deactivated or suspended (src/lib/org-lifecycle.ts), whatever
+ *   the registration's state: nothing about it is shown.
  */
-export type WaitlistOfferPageState = "offered" | "expired" | "active" | "requested" | "invalid"
+export type WaitlistOfferPageState = "offered" | "expired" | "active" | "requested" | "invalid" | "unavailable"
 
 export function waitlistOfferPageState(
   reg: { status: string; waitingExpiresAt: Date | null } | null,
   now: Date,
+  orgOpen = true,
 ): WaitlistOfferPageState {
   if (!reg) return "invalid"
+  if (!orgOpen) return "unavailable"
   if (reg.status === "offered") return reg.waitingExpiresAt && reg.waitingExpiresAt < now ? "expired" : "offered"
   if (reg.status === "active" || reg.status === "requested") return reg.status
   return "invalid"
@@ -55,6 +59,7 @@ export const WAITLIST_OFFER_PAGE_TITLES: Record<WaitlistOfferView, string> = {
   active: "Place déjà confirmée",
   requested: "Demande déjà envoyée",
   invalid: "Lien expiré ou invalide",
+  unavailable: "Espace indisponible",
   confirmed: "Place confirmée",
   requestSent: "Demande envoyée",
   gone: "Place plus disponible",

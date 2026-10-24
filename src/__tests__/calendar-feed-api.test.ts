@@ -15,7 +15,7 @@ const key = calendarFeedKey(SECRET)
 const token = calendarFeedToken("cmreg0000001", HASH, key)
 const event = {
   id: "e1", title: "Fête", slug: "fete", publicStatus: "published", location: "Salle", latitude: null, longitude: null,
-  updatedAt: new Date("2026-05-01T00:00:00Z"), organization: { slug: "org", timeZone: "Europe/Zurich", updatedAt: new Date("2026-01-01T00:00:00Z") },
+  updatedAt: new Date("2026-05-01T00:00:00Z"), organization: { slug: "org", timeZone: "Europe/Zurich", updatedAt: new Date("2026-01-01T00:00:00Z"), active: true, suspendedAt: null },
 }
 const anchor = (over: object = {}) => ({ editTokenHash: HASH, volunteerId: "v1", volunteer: { erasedAt: null, mergedIntoId: null }, event, ...over })
 const reg = (id: string, over: object = {}) => ({
