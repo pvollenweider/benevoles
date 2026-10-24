@@ -33,11 +33,16 @@ export default defineConfig({
   // `make e2e-setup`. This only owns the Next.js server itself.
   // E2E_SERVER=production runs the suite against `next build` + `next start` (#592), as in
   // production: no on-demand compilation under load, and build-time behaviour (prerendering,
-  // static params) is exercised. CI sets it; locally `next dev` stays the default.
+  // static params) is exercised. Locally `next dev` stays the default.
+  // E2E_SERVER=prebuilt (CI) only runs `next start` on the build the CI build job made and
+  // checked (scripts/ci-build-artifact.mjs): without a build, `next start` fails instead of
+  // silently testing a fresh one.
   webServer: {
     command: process.env.E2E_SERVER === "production"
       ? `npm run build && npm run start -- -p ${PORT}`
-      : `npm run dev -- -p ${PORT}`,
+      : process.env.E2E_SERVER === "prebuilt"
+        ? `npm run start -- -p ${PORT}`
+        : `npm run dev -- -p ${PORT}`,
     url: baseURL,
     reuseExistingServer: !process.env.CI,
     timeout: process.env.E2E_SERVER === "production" ? 600_000 : 120_000,
