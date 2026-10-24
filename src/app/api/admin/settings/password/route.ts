@@ -9,6 +9,7 @@ import { getClientIp } from "@/lib/rate-limit"
 // eslint-disable-next-line no-restricted-imports
 import { prisma } from "@/lib/prisma"
 import { passwordErrors } from "@/lib/password"
+import { RESET_LINK_REVOKED } from "@/lib/password-reset-revocation"
 import bcrypt from "bcryptjs"
 import { z } from "zod"
 
@@ -58,7 +59,10 @@ export async function POST(req: Request) {
   await prisma.adminUser.update({
     where: { id: adminId },
     // Ends every session opened before (#360); the form signs this one in again right after.
-    data: { passwordHash, sessionVersion: { increment: 1 } },
+    // Revokes a reset link still pending (src/lib/password-recovery.ts): a link sent before the
+    // change must not be able to undo it. A recovery request in flight is serialised on this row
+    // and sees the new sessionVersion, so it can't bring a link back.
+    data: { passwordHash, sessionVersion: { increment: 1 }, ...RESET_LINK_REVOKED },
   })
 
   return NextResponse.json({ ok: true })

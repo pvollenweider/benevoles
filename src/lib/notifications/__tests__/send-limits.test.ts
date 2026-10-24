@@ -1,6 +1,6 @@
 import { describe, it, expect, vi } from "vitest"
 import { memoryStore } from "@/lib/rate-limit"
-import { DEFAULT_SEND_LIMITS, sendCategory, sendLimits, sendWindows, takeSendAllowance, type SendLimits } from "../send-limits"
+import { alertRefusedAtRequest, DEFAULT_SEND_LIMITS, recipientWindowKey, sendCategory, sendLimits, sendWindows, takeSendAllowance, type SendLimits } from "../send-limits"
 
 const tight: SendLimits = { orgPerMinute: 3, orgPerDay: 5, orgBulkPerDay: 2, orgAccountPerDay: 1, globalPerMinute: 10, recipientPerHour: 2, signupConfirmationsPerHour: 3 }
 
@@ -28,9 +28,14 @@ describe("email sending limits (#810)", () => {
     expect(sendWindows("org-1", "registration_confirmation", tight).map((w) => w.name)).toEqual(["global_per_minute", "org_per_minute", "org_per_day"])
     expect(sendWindows("org-1", "targeted_message", tight).map((w) => w.name)).toContain("org_bulk_per_day")
     expect(sendWindows("org-1", "admin_invite", tight).map((w) => w.name)).toContain("org_account_per_day")
-    expect(sendWindows("org-1", "password_reset", tight, "a@b.ch").map((w) => w.name)).toEqual(["recipient_per_hour", "global_per_minute", "org_per_minute", "org_per_day"])
+    expect(sendWindows("org-1", "registration_link_resend", tight, "a@b.ch").map((w) => w.name)).toEqual(["recipient_per_hour", "global_per_minute", "org_per_minute", "org_per_day"])
     // The recipient is never stored as such: only a hash in the key.
-    expect(sendWindows("org-1", "password_reset", tight, "a@b.ch")[0].key).not.toContain("a@b.ch")
+    expect(sendWindows("org-1", "registration_link_resend", tight, "a@b.ch")[0].key).not.toContain("a@b.ch")
+    // A password reset takes its per-recipient cap when it is requested (src/lib/password-recovery.ts):
+    // delivery does not count it a second time, the other windows still apply.
+    expect(sendWindows("org-1", "password_reset", tight, "a@b.ch").map((w) => w.name)).toEqual(["global_per_minute", "org_per_minute", "org_per_day"])
+    expect(recipientWindowKey(" A@B.ch", "password_reset")).toBe(recipientWindowKey("a@b.ch", "password_reset"))
+    expect(recipientWindowKey("a@b.ch", "password_reset")).not.toContain("a@b.ch")
     expect(sendWindows(null, "release_available", tight).map((w) => w.name)).toEqual(["global_per_minute"])
   })
 
@@ -79,7 +84,7 @@ describe("email sending limits (#810)", () => {
   it("caps public-triggered emails per recipient, before the organisation's windows", async () => {
     const store = memoryStore()
     const limits = { ...tight, orgPerMinute: 100, orgPerDay: 100 }
-    const reset = (email: string) => takeSendAllowance("org-1", "password_reset", { store, limits, recipientEmail: email, alert: vi.fn() })
+    const reset = (email: string) => takeSendAllowance("org-1", "registration_link_resend", { store, limits, recipientEmail: email, alert: vi.fn() })
     expect((await reset("victim@example.org")).ok).toBe(true)
     expect((await reset("Victim@Example.org ")).ok).toBe(true)
     // Dropped, not held: a flood must not queue up and trickle out in front of a real request.
@@ -87,7 +92,7 @@ describe("email sending limits (#810)", () => {
     for (let i = 0; i < 10; i++) await reset("victim@example.org")
     // The flood used two emails of the organisation's day, no more; another administrator still resets.
     expect((await store.peek("email:org:org-1:day"))?.count).toBe(2)
-    expect((await reset("other-admin@example.org")).ok).toBe(true)
+    expect((await reset("other-volunteer@example.org")).ok).toBe(true)
     // An admin invitation is not touched by any of it.
     expect((await takeSendAllowance("org-1", "admin_invite", { store, limits, alert: vi.fn() })).ok).toBe(true)
   })
@@ -119,5 +124,15 @@ describe("operator alert gate (#810)", () => {
     expect(await firstAlertOfKey(alertKey("recipient_per_hour", "org-1", new Date("2026-10-09T11:00:00Z")), store)).toBe(true)
     // A broken store gives no alert rather than a flood.
     expect(await firstAlertOfKey(key, { hit: vi.fn().mockRejectedValue(new Error("db down")), peek: vi.fn() })).toBe(false)
+  })
+
+  it("alerts the operator once per window for requests refused at request time", async () => {
+    const store = memoryStore()
+    const alert = vi.fn()
+    for (let i = 0; i < 3; i++) await alertRefusedAtRequest("org-1", "password_reset", "victim@example.org", { store, alert })
+    expect(alert).toHaveBeenCalledOnce()
+    expect(alert).toHaveBeenCalledWith("recipient_per_hour", "org-1")
+    // A store that fails never fails the request.
+    await expect(alertRefusedAtRequest("org-1", "password_reset", "x@example.org", { store: { peek: vi.fn(), hit: vi.fn().mockRejectedValue(new Error("db down")) }, alert })).resolves.toBeUndefined()
   })
 })

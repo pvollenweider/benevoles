@@ -43,6 +43,20 @@ const ACCOUNT: readonly NotificationKind[] = ["admin_invite", "admin_welcome"]
 /** Kinds anyone can trigger from a public page: capped per recipient address. */
 export const PUBLIC_TRIGGERED: readonly NotificationKind[] = ["password_reset", "registration_confirmation", "registration_link_resend", "signup_confirmation", "signup_account_link", "registration_withdrawn"]
 
+/**
+ * Public kinds whose per-recipient cap is taken when the request is made, not at delivery: a
+ * password reset (src/lib/password-recovery.ts). Each request replaces the account's reset link,
+ * so a request over the cap must be refused before it does, never by dropping its email
+ * afterwards: that would leave the account with a link nobody received. Delivery then skips this
+ * window for them (the email was already counted), the other windows still apply.
+ */
+export const RECIPIENT_CAP_AT_REQUEST: readonly NotificationKind[] = ["password_reset"]
+
+/** The per-recipient window of a public kind, shared by the delivery and the request-time cap. */
+export function recipientWindowKey(email: string, kind: NotificationKind): string {
+  return `email:recipient:${recipientKey(email)}:${kind}:hour`
+}
+
 export function sendCategory(kind: NotificationKind): SendCategory {
   if (BULK.includes(kind)) return "bulk"
   if (ACCOUNT.includes(kind)) return "account"
@@ -109,8 +123,8 @@ type Window = { key: string; windowMs: number; limit: number; name: string }
  */
 export function sendWindows(organizationId: string | null | undefined, kind: NotificationKind, limits: SendLimits = sendLimits(), recipientEmail?: string | null): Window[] {
   const windows: Window[] = []
-  if (recipientEmail && PUBLIC_TRIGGERED.includes(kind)) {
-    windows.push({ key: `email:recipient:${recipientKey(recipientEmail)}:${kind}:hour`, windowMs: HOUR, limit: limits.recipientPerHour, name: "recipient_per_hour" })
+  if (recipientEmail && PUBLIC_TRIGGERED.includes(kind) && !RECIPIENT_CAP_AT_REQUEST.includes(kind)) {
+    windows.push({ key: recipientWindowKey(recipientEmail, kind), windowMs: HOUR, limit: limits.recipientPerHour, name: "recipient_per_hour" })
   }
   if (kind === "signup_confirmation") {
     windows.push({ key: "email:signup:hour", windowMs: HOUR, limit: limits.signupConfirmationsPerHour, name: "signup_per_hour" })
@@ -191,6 +205,21 @@ async function alertOperator(limit: string, organizationId: string | null, store
 }
 
 const defaultStore: RateLimitStore = process.env.NODE_ENV === "test" ? memoryStore() : postgresStore
+
+/**
+ * A request refused by a request-time cap (RECIPIENT_CAP_AT_REQUEST): the same operator alert as
+ * an email dropped at delivery, once per window. Best effort: never fails the request.
+ */
+export async function alertRefusedAtRequest(organizationId: string | null, kind: NotificationKind, recipientEmail: string, opts: { store?: RateLimitStore; alert?: (limit: string, organizationId: string | null) => void } = {}): Promise<void> {
+  const store = opts.store ?? defaultStore
+  const alert = opts.alert ?? ((limit: string, org: string | null) => void alertOperator(limit, org, store))
+  try {
+    const marker = await store.hit(`${recipientWindowKey(recipientEmail, kind)}:held`, HOUR)
+    if (marker.count === 1) alert("recipient_per_hour", organizationId)
+  } catch (e) {
+    reportError("email.limit.alert_marker")(e)
+  }
+}
 
 /**
  * Says whether one email may go, and counts it only if it does: every window is read first; if one

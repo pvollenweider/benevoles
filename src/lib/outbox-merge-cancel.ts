@@ -49,9 +49,10 @@ export interface OutboxMergeCancelDb {
 /**
  * Cancels pending outbox rows addressed to the absorbed member, returns their ids. Safe to call
  * more than once for the same merge (a row already cancelled is no longer `"pending"`, so a
- * second call simply finds nothing left to touch).
+ * second call simply finds nothing left to touch). Also used when an organiser corrects a
+ * member's address (src/lib/member-address-revocation.ts), with that reason instead.
  */
-export async function cancelOutboxForMergedMember(db: OutboxMergeCancelDb, organizationId: string, absorbed: AbsorbedMemberIdentity): Promise<string[]> {
+export async function cancelOutboxForMergedMember(db: OutboxMergeCancelDb, organizationId: string, absorbed: AbsorbedMemberIdentity, reason: string = MERGED_MEMBER_CANCEL_REASON): Promise<string[]> {
   const candidates = await db.notificationOutbox.findMany({ where: { organizationId, status: "pending" }, select: { id: true, payload: true } })
   const toCancel: string[] = []
   for (const row of candidates) {
@@ -64,7 +65,7 @@ export async function cancelOutboxForMergedMember(db: OutboxMergeCancelDb, organ
     if (matchesAbsorbedRecipient(payload, absorbed)) toCancel.push(row.id)
   }
   if (toCancel.length > 0) {
-    await db.notificationOutbox.updateMany({ where: { id: { in: toCancel } }, data: { status: "cancelled", lastError: MERGED_MEMBER_CANCEL_REASON } })
+    await db.notificationOutbox.updateMany({ where: { id: { in: toCancel } }, data: { status: "cancelled", lastError: reason } })
   }
   return toCancel
 }

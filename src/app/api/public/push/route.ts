@@ -50,10 +50,13 @@ export async function POST(req: Request) {
   const { volunteerId } = registration
 
   // Under the member's row lock (#516, the lock the erasure takes first): a record erased since
-  // the lookup above never gets a device attached to it.
+  // the lookup above never gets a device attached to it, and a link renewed since (a corrected
+  // address, src/lib/member-address-revocation.ts, takes the same lock) no longer attaches one.
   const attached = await prisma.$transaction(async (tx) => {
     const rows = await tx.$queryRaw<{ erasedAt: Date | null }[]>`SELECT "erasedAt" FROM "Volunteer" WHERE id = ${volunteerId} FOR UPDATE`
     if (rows.length === 0 || rows[0].erasedAt) return false
+    const stillValid = await tx.registration.findFirst({ where: { ...registrationToken.where(editToken), status: "active", volunteerId }, select: { id: true } })
+    if (!stillValid) return false
     await tx.pushSubscription.upsert({
       where: { endpoint_volunteerId: { endpoint, volunteerId } },
       update: { auth, p256dh },

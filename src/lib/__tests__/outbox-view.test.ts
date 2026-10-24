@@ -131,13 +131,21 @@ describe("outbox view", () => {
   })
 })
 
-describe("an invitation cancelled because the member's address changed (#1105)", () => {
-  it("says why in French and how to send it to the new address", async () => {
+describe("an email cancelled because the member's address changed (#1105)", () => {
+  it("says why in French and that nothing went to the old address", async () => {
     const { MEMBER_ADDRESS_CHANGED_REASON, memberAddressChanged } = await import("../outbox-address-changed-reason")
-    expect(outboxErrorSentence(MEMBER_ADDRESS_CHANGED_REASON)).toBe("Annulé : l'adresse du membre a changé depuis la mise en file. Renvoyez l'invitation ou le rappel pour qu'il le reçoive à sa nouvelle adresse.")
+    expect(outboxErrorSentence(MEMBER_ADDRESS_CHANGED_REASON)).toBe("Annulé : l'adresse du membre a changé depuis la mise en file. Rien n'est parti vers l'ancienne adresse ; renvoyez ce message s'il doit le recevoir à la nouvelle.")
     expect(memberAddressChanged("A@x.ch ", { email: "a@x.ch" })).toBe(false)
     expect(memberAddressChanged("typo@x.ch", { email: "a@x.ch" })).toBe(true)
     expect(memberAddressChanged("a@x.ch", { email: null })).toBe(true)
     expect(memberAddressChanged("a@x.ch", null)).toBe(true)
+  })
+})
+
+describe("an email cancelled because its link was revoked", () => {
+  it("says so in French, without the token or the address", async () => {
+    const { ACCOUNT_LINK_REVOKED_REASON, LEADER_LINK_REVOKED_REASON } = await import("../outbox-address-changed-reason")
+    expect(outboxErrorSentence(ACCOUNT_LINK_REVOKED_REASON)).toBe("Annulé : le lien de cet email a été remplacé ou n'est plus valable.")
+    expect(outboxErrorSentence(LEADER_LINK_REVOKED_REASON)).toBe("Annulé : ce responsable de secteur a été retiré, ou son adresse a changé, depuis la mise en file.")
   })
 })

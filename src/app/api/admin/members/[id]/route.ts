@@ -9,6 +9,11 @@ import { validationError } from "@/lib/api-error"
 import { availabilitySchema } from "@/lib/availability"
 import { isUniqueViolation } from "@/lib/registration-capacity"
 import { MEMBER_ERASURE_REASON } from "@/lib/member-erasure"
+import { addressCorrected } from "@/lib/member-address-change"
+import { normalizeEmail } from "@/lib/email-address"
+import { renewMemberLinks } from "@/lib/member-address-revocation"
+import { deliverAfterResponse } from "@/lib/notifications/outbox"
+import type { Tx } from "@/lib/registration-capacity"
 
 const EMAIL_TAKEN = "Un autre membre de l'organisation utilise déjà cette adresse email."
 
@@ -60,13 +65,44 @@ export async function PATCH(req: Request, { params }: { params: Promise<{ id: st
     if (taken) return NextResponse.json({ error: EMAIL_TAKEN }, { status: 409 })
   }
 
+  // An address change goes through a transaction with the member's row locked, so that two edits,
+  // or an edit and a merge or an erasure, never interleave and the address compared is the one
+  // under the lock. A corrected address renews the member's links in that same transaction
+  // (src/lib/member-address-revocation.ts): the old address loses access, the new one receives
+  // what the member needs. Any other edit is a plain update, as before.
   let volunteer
+  let renewal: Awaited<ReturnType<typeof renewMemberLinks>> | null = null
   try {
-    volunteer = await db.volunteer.update({ where: { id }, data: updateData })
+    if (newEmail === undefined || normalizeEmail(newEmail ?? "") === normalizeEmail(before.email ?? "")) {
+      volunteer = await db.volunteer.update({ where: { id }, data: updateData })
+    } else {
+      const outcome = await db.$transaction(async (tx) => {
+        await tx.$queryRaw`SELECT id FROM "Volunteer" WHERE id = ${id} FOR UPDATE`
+        const locked = await tx.volunteer.findFirst({ where: { id }, select: { email: true, erasedAt: true } })
+        if (!locked) return { notFound: true as const }
+        if (locked.erasedAt) return { erased: true as const }
+        const updated = await tx.volunteer.update({ where: { id }, data: updateData })
+        const renewed = addressCorrected(locked.email, updated.email)
+          ? await renewMemberLinks(tx as unknown as Tx, {
+            organizationId,
+            volunteer: { id, firstName: updated.firstName, lastName: updated.lastName, active: updated.active },
+            oldEmail: locked.email!,
+            newEmail: updated.email,
+            now: new Date(),
+          })
+          : null
+        return { updated, renewed }
+      })
+      if ("notFound" in outcome) return NextResponse.json({ error: "Non trouvé" }, { status: 404 })
+      if ("erased" in outcome) return NextResponse.json({ error: MEMBER_ERASURE_REASON.erased }, { status: 409 })
+      volunteer = outcome.updated
+      renewal = outcome.renewed
+    }
   } catch (e) {
     if (isUniqueViolation(e)) return NextResponse.json({ error: EMAIL_TAKEN }, { status: 409 })
     throw e
   }
+  if (renewal) deliverAfterResponse(renewal.outboxIds)
 
   // Deactivation is its own action (matches DELETE's "soft delete"), distinct from a plain field
   // edit — logged separately so the activity list reads naturally either way. `tags` excluded:
@@ -96,7 +132,18 @@ export async function PATCH(req: Request, { params }: { params: Promise<{ id: st
     })
   }
 
-  return NextResponse.json(volunteer)
+  if (renewal) {
+    await logOrgEvent({
+      organizationId,
+      actor: adminActor(guard.session),
+      action: "member.links_renewed",
+      entityType: "Member",
+      entityId: id,
+    })
+  }
+
+  // `linksRenewed`: what the edit form tells the organiser after a corrected address.
+  return NextResponse.json({ ...volunteer, ...(renewal ? { linksRenewed: { links: renewal.registrations + renewal.invites, emailsQueued: renewal.outboxIds.length } } : {}) })
 }
 
 export async function DELETE(_req: Request, { params }: { params: Promise<{ id: string }> }) {

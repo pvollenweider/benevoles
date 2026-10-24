@@ -56,4 +56,15 @@ describe("PATCH /api/super-admin/profile", () => {
     await PATCH(patch({ currentPassword: "right", email: "other@x.ch" }))
     expect(update.mock.calls.at(-1)![0].data).not.toHaveProperty("sessionVersion")
   })
+
+  it("a new password or a new address revokes a pending reset link; an unchanged address doesn't", async () => {
+    compare.mockResolvedValue(true)
+    const { PATCH } = await import("@/app/api/super-admin/profile/route")
+    await PATCH(patch({ currentPassword: "right", newPassword: "Nouveau-mot2passe" }))
+    expect(update.mock.calls.at(-1)![0].data).toMatchObject({ passwordResetTokenHash: null, passwordResetExpiresAt: null })
+    await PATCH(patch({ currentPassword: "right", email: "other@x.ch" }))
+    expect(update.mock.calls.at(-1)![0].data).toMatchObject({ email: "other@x.ch", passwordResetTokenHash: null, passwordResetExpiresAt: null })
+    await PATCH(patch({ currentPassword: "right", email: "sa@x.ch" }))
+    expect(update.mock.calls.at(-1)![0].data).not.toHaveProperty("passwordResetTokenHash")
+  })
 })

@@ -7,7 +7,8 @@ const findUnique = vi.hoisted(() => vi.fn())
 const update = vi.hoisted(() => vi.fn())
 const updateMany = vi.hoisted(() => vi.fn())
 const sendNotification = vi.hoisted(() => vi.fn())
-vi.mock("@/lib/prisma", () => ({ prisma: { adminUser: { findUnique, update, updateMany }, async $transaction(fn: (tx: unknown) => unknown) { return fn(this) }, } }))
+const queryRaw = vi.hoisted(() => vi.fn())
+vi.mock("@/lib/prisma", () => ({ prisma: { adminUser: { findUnique, update, updateMany }, $queryRaw: queryRaw, async $transaction(fn: (tx: unknown) => unknown) { return fn(this) }, } }))
 vi.mock("@/lib/notifications", () => ({ sendNotification }))
 vi.mock("@/lib/notifications/outbox", () => ({
   // Stored with the transaction (#352); what matters is the payload queued.
@@ -26,7 +27,9 @@ describe("password reset tokens are stored hashed (#269)", () => {
   beforeEach(() => vi.clearAllMocks())
 
   it("forgot-password stores the hash and emails the plaintext", async () => {
-    findUnique.mockResolvedValue({ id: "a1", email: "a@x.com", name: "A", isActive: true })
+    findUnique.mockResolvedValue({ id: "a1", email: "a@x.com", name: "A", isActive: true, sessionVersion: 0, organizationId: null })
+    // The account row read again under its lock, then the per-recipient budget taken.
+    queryRaw.mockResolvedValueOnce([{ email: "a@x.com", sessionVersion: 0, isActive: true }]).mockResolvedValueOnce([{ count: 1 }])
     sendNotification.mockResolvedValue({ ok: true })
     const { POST } = await import("@/app/api/public/forgot-password/route")
     await POST(json("http://localhost/api/public/forgot-password", { email: "a@x.com" }))

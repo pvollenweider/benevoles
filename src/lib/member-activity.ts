@@ -37,6 +37,7 @@ const PROFILE_ACTIONS: Record<string, string> = {
   "member.created": "Fiche créée",
   "member.updated": "Fiche modifiée",
   "member.deactivated": "Fiche désactivée",
+  "member.links_renewed": "Adresse corrigée : liens personnels renouvelés",
   "member.imported": "Importé",
 }
 
