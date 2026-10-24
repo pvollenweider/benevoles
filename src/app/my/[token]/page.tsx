@@ -22,6 +22,8 @@ import WithdrawMessageField from "@/components/public/WithdrawMessageField"
 import { announce } from "@/lib/announce"
 import { focusFirstAvailable, isFocusDropped, type FocusCandidate } from "@/lib/focus-return"
 import MissionBriefCard from "@/components/public/MissionBriefCard"
+import CalendarSubscribeCard from "@/components/public/CalendarSubscribeCard"
+import { calendarCard, type CalendarFeedUrls } from "@/lib/calendar-card-copy"
 import MyAnswersCard from "@/components/public/MyAnswersCard"
 import ShiftRosterCard, { type RosterData } from "@/components/public/ShiftRosterCard"
 import type { MyAnswerRow } from "@/lib/my-answers"
@@ -74,6 +76,8 @@ type PageData = {
   /** Where to sign up for more shifts, with the volunteer's group link; null when no sign-up is possible (#988). */
   signUpUrl?: string | null
   timeZone?: string
+  /** The calendar subscription of this link (#961): read-only, never the personal link. */
+  calendarFeed?: CalendarFeedUrls | null
   linkEmailedAt?: string | null
   contactEmail?: string | null
   confirmationMessage: string | null
@@ -292,6 +296,7 @@ export default function MyRegistrationPage() {
 
   // « Avant ta mission » (#560): the next confirmed shift not over yet, read on the visitor's clock.
   const next = nextConfirmedRegistration(data.registrations, new Date(), data.timeZone ?? APP_TIME_ZONE)
+  const calendar = calendarCard(data.registrations, data.calendarFeed, `/api/public/registrations/${token}/calendar`)
 
   // The status region is the fragment's first child in both views below, so React keeps the same
   // node when the last withdrawal switches to the empty view, and the result is still voiced.
@@ -337,25 +342,11 @@ export default function MyRegistrationPage() {
           <MissionBriefCard shift={next.shift} event={data.event} eventTitle={data.event.title} contactEmail={data.contactEmail ?? null} />
         )}
 
-        {/* Calendar file of the confirmed shifts (#480): a one-off download, not a subscription. */}
-        {data.registrations.filter((r) => r.status === "active").length > 1 && (
-          <div className="bg-white rounded-xl border border-gray-200 p-4">
-            <a
-              href={`/api/public/registrations/${token}/calendar`}
-              download
-              aria-describedby="calendar-hint"
-              className="text-sm font-medium text-blue-700 underline underline-offset-2 hover:text-blue-900 rounded focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-blue-600"
-            >
-              Ajouter tout mon planning à mon calendrier (fichier .ics)
-            </a>
-            <p id="calendar-hint" className="text-xs text-gray-600 mt-1">
-              Le fichier s&apos;ouvre avec l&apos;agenda de ton téléphone ou de ton ordinateur (Google, Apple, Outlook). Seuls les créneaux confirmés sont ajoutés. Le fichier ne se met pas à jour : si un horaire change, tu recevras un email, et il faudra télécharger à nouveau le fichier.
-            </p>
-          </div>
-        )}
+        {/* « Mon calendrier » (#961): the subscription that updates itself, and the one-off file (#480). */}
+        {calendar && <CalendarSubscribeCard {...calendar} />}
 
         {/* The caveat of the one-shift calendar links (the card above only shows with several shifts). */}
-        <p id="calendar-hint-shift" className="sr-only">Fichier pour l&apos;agenda de ton téléphone ou ordinateur. Il ne se met pas à jour : si un horaire change, tu recevras un email.</p>
+        <p id="calendar-hint-shift" className="sr-only">Fichier pour l&apos;agenda de ton téléphone ou ordinateur. Il ne se met pas à jour : si un horaire change, tu recevras un email. Pour un agenda qui se met à jour tout seul, voir « Mon calendrier ».</p>
 
         <section aria-labelledby="shifts-title" className="space-y-3">
           <h2 id="shifts-title" className="text-sm font-semibold text-gray-900">Tous mes créneaux</h2>

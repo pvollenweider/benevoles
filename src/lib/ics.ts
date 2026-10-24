@@ -26,9 +26,23 @@ export type IcsShift = {
   longitude?: number | null
   /** Short practical lines (place, contact, instructions). */
   details?: string[]
-  /** The volunteer's personal page. */
+  /** What the entry links to: the personal page in the downloaded file, never in the feed (#961). */
   url: string
+  /** Grows with every change of the entry (#961); 0 when unknown. */
+  sequence?: number
+  /** Last change of the entry (#961). */
+  lastModified?: Date
 }
+
+/**
+ * A subscription feed (#961) rather than a file to import: named, with a refresh hint, no METHOD
+ * (a snapshot of the current shifts, not a message), DTSTAMP at the entry's last change so that a
+ * fetch without change gives the same entries, and no « download again » advice.
+ */
+export type IcsFeed = { calendarName: string; refreshHours: number }
+
+export const FEED_UPDATE_NOTE = "Ce calendrier se met à jour tout seul : un horaire modifié, un créneau annulé ou ajouté y apparaît après la prochaine actualisation de ton agenda."
+const DOWNLOAD_UPDATE_NOTE = "Si un horaire change, vous recevrez un email : téléchargez à nouveau le fichier."
 
 const DESCRIPTION_MAX = 800
 
@@ -73,30 +87,42 @@ export function shiftInstants(s: Pick<IcsShift, "date" | "startTime" | "endTime"
 
 const clip = (s: string, max: number) => (s.length > max ? `${s.slice(0, max - 1).trimEnd()}…` : s)
 
-export function buildIcs(shifts: IcsShift[], opts: { timeZone: string; now?: Date; host?: string }): string {
+export function buildIcs(shifts: IcsShift[], opts: { timeZone: string; now?: Date; host?: string; feed?: IcsFeed }): string {
   const now = opts.now ?? new Date()
   const host = opts.host ?? siteDomain()
+  const { feed } = opts
   const lines = [
     "BEGIN:VCALENDAR",
     "VERSION:2.0",
     `PRODID:-//${siteName()}//Planning bénévoles//FR`,
     "CALSCALE:GREGORIAN",
-    "METHOD:PUBLISH",
   ]
+  if (feed) {
+    lines.push(
+      `NAME:${icsEscape(feed.calendarName)}`,
+      `X-WR-CALNAME:${icsEscape(feed.calendarName)}`,
+      `REFRESH-INTERVAL;VALUE=DURATION:PT${feed.refreshHours}H`,
+      `X-PUBLISHED-TTL:PT${feed.refreshHours}H`,
+    )
+  } else {
+    lines.push("METHOD:PUBLISH")
+  }
   for (const s of shifts) {
     const { start, end } = shiftInstants(s, opts.timeZone)
     const name = s.label && s.label !== s.roleName ? `${s.roleName} · ${s.label}` : s.roleName
     const description = clip(
-      [name, ...(s.details ?? []), "Si un horaire change, vous recevrez un email : téléchargez à nouveau le fichier.", `Mes inscriptions : ${s.url}`].join("\n"),
+      (feed ? [name, ...(s.details ?? []), FEED_UPDATE_NOTE] : [name, ...(s.details ?? []), DOWNLOAD_UPDATE_NOTE, `Mes inscriptions : ${s.url}`]).join("\n"),
       DESCRIPTION_MAX,
     )
     lines.push(
       "BEGIN:VEVENT",
       `UID:${s.registrationId}@${host}`,
-      `DTSTAMP:${stamp(now)}`,
+      `DTSTAMP:${stamp(feed && s.lastModified ? s.lastModified : now)}`,
       `DTSTART:${stamp(start)}`,
       `DTEND:${stamp(end)}`,
-      "SEQUENCE:0",
+      `SEQUENCE:${s.sequence ?? 0}`,
+      ...(s.lastModified ? [`LAST-MODIFIED:${stamp(s.lastModified)}`] : []),
+      "STATUS:CONFIRMED",
       `SUMMARY:${icsEscape(`${s.eventTitle} — ${name}`)}`,
       `DESCRIPTION:${icsEscape(description)}`,
       `URL:${s.url}`,

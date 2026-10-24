@@ -14,6 +14,7 @@ import { logEvent } from "@/lib/event-log"
 import { reportError } from "@/lib/report-error"
 import { contactPhone } from "@/lib/contact-phone"
 import { registrationToken } from "@/lib/token-vault"
+import { calendarFeedKeyFromEnv, calendarFeedToken, calendarFeedUrls } from "@/lib/calendar-feed"
 import { pickShiftInfo, withDayContact, withSectorLeaders } from "@/lib/shift-info"
 import { LIVE_STATUSES, OCCUPYING_STATUSES } from "@/lib/registration-capacity"
 import { WITHDRAWABLE_STATUSES, planVolunteerWithdraw, withdrawalConfirmation, withdrawalMoment } from "@/lib/volunteer-withdraw"
@@ -84,6 +85,7 @@ export async function GET(req: Request, { params }: { params: Promise<{ token: s
   // volunteer's group link, only while a sign-up is possible; for the page itself, while published.
   const publicUrl = eventPublicUrl(orgSlug, event.slug)
   const groupCode = volunteerGroupCode(allRegistrations, registration.id)
+  const feedKey = calendarFeedKeyFromEnv()
   return NextResponse.json({
     // What the « Avant ta mission » block falls back on (#560). The information pages only
     // open once the event is published: no link to a page that would answer 404.
@@ -106,6 +108,8 @@ export async function GET(req: Request, { params }: { params: Promise<{ token: s
     eventPageUrl: event.publicStatus === "published" ? publicUrl : null,
     signUpUrl: signUpUrl({ event, eventUrl: publicUrl, groupCode, now, timeZone }),
     timeZone,
+    // The calendar subscription of this link (#961): a read-only address of its own, never the link.
+    calendarFeed: feedKey ? calendarFeedUrls(baseUrl, calendarFeedToken(registration.id, registration.editTokenHash, feedKey)) : null,
     // The newest email carrying the link, across the volunteer's registrations on this event (#376).
     linkEmailedAt: allRegistrations.reduce<Date | null>((m, r) => (r.linkEmailedAt && (!m || r.linkEmailedAt > m) ? r.linkEmailedAt : m), null),
     contactEmail: registration.event.organization.replyToEmail || process.env.EMAIL_REPLY_TO || null,

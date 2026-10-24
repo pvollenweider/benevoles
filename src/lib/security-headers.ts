@@ -16,6 +16,15 @@ import { EMBED_PARAM, isEmbedMode } from "./embed"
 export const REFERRER_POLICY_HEADER = { key: "Referrer-Policy", value: "strict-origin" } as const
 
 /**
+ * The calendar subscription (#961) is a secret address fetched by calendar apps: no Referer at
+ * all, not even the origin. A rule of next.config.ts placed after the global headers (the last
+ * rule for a key wins: a header set by the route itself would be overwritten by the global one).
+ */
+export const CALENDAR_FEED_HEADER_RULES = [
+  { source: "/api/public/registrations/:token/calendar.ics", headers: [{ key: "Referrer-Policy", value: "no-referrer" }] },
+] as const
+
+/**
  * X-Content-Type-Options: nosniff (#1052). The browser takes every response for the type it
  * declares instead of guessing from its bytes, so an uploaded or generated file can never be run as
  * a script or a style sheet. Every route of the app declares its type (pages, JSON, CSV, ICS, PNG,

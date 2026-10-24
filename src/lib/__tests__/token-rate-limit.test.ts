@@ -20,6 +20,16 @@ describe("personal-link rate limits (#609)", () => {
     expect(await tokenLookupsBlocked(req("2.2.2.2"), store)).toBe(false)
   })
 
+  it("counts calendar-subscription misses apart from personal-link misses (#961), with the same limit", async () => {
+    const store = memoryStore()
+    for (let i = 0; i < TOKEN_MISS_LIMIT; i++) await recordTokenMiss(req("3.3.3.3"), store, "calendar")
+    expect(await tokenLookupsBlocked(req("3.3.3.3"), store, "calendar")).toBe(true)
+    // Stale subscriptions polled from a shared address never lock anyone out of their personal page.
+    expect(await tokenLookupsBlocked(req("3.3.3.3"), store)).toBe(false)
+    for (let i = 0; i < TOKEN_MISS_LIMIT; i++) await recordTokenMiss(req("4.4.4.4"), store)
+    expect(await tokenLookupsBlocked(req("4.4.4.4"), store, "calendar")).toBe(false)
+  })
+
   it("limits each valid link on its own, per use", async () => {
     const store = memoryStore()
     for (let i = 0; i < TOKEN_USE_LIMITS.withdraw; i++) expect(await tokenUseAllowed("tok-a", "withdraw", store)).toBe(true)
@@ -41,6 +51,6 @@ describe("personal-link rate limits (#609)", () => {
 
   it("thresholds are the agreed ones", () => {
     expect(TOKEN_MISS_LIMIT).toBe(20)
-    expect(TOKEN_USE_LIMITS).toEqual({ read: 60, withdraw: 30, availability: 30, answers: 30, roster: 60 })
+    expect(TOKEN_USE_LIMITS).toEqual({ read: 60, withdraw: 30, availability: 30, answers: 30, roster: 60, calendar: 60 })
   })
 })

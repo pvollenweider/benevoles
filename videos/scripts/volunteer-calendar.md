@@ -10,7 +10,7 @@ Retrouver les créneaux confirmés dans l'agenda que le bénévole utilise déj�
 
 1. Depuis la page personnelle de Camille, montrer trois créneaux confirmés et une attente.
 2. Télécharger un seul créneau avec « Ajouter à mon calendrier » ; vérifier que le fichier contient exactement un événement.
-3. Télécharger « Ajouter tout mon planning à mon calendrier » ; vérifier les trois événements et l'absence de la liste d'attente.
+3. Télécharger « Télécharger tout mon planning » (carte « Mon calendrier ») ; vérifier les trois événements et l'absence de la liste d'attente.
 4. Expliquer l'import dans son agenda sans ouvrir une application native, selon la décision de Philippe de poursuivre sans accès à Calendrier. Montrer les informations correspondantes sur la page Benevol et vérifier leur présence dans le fichier réellement téléchargé. Ne pas annoncer un import effectué.
 5. Montrer le créneau de nuit : samedi 22 h à dimanche 2 h. Vérifier les dates, le fuseau et la durée réelle dans le fichier ; ne pas prétendre avoir vérifié un rendu dans un agenda externe.
 6. Expliquer l'ouverture dans Apple, Google ou Outlook ; ne pas faire passer un visualiseur maison pour l'un de ces logiciels. Toute importation annoncée comme vérifiée doit être réellement réalisée dans un environnement de démonstration approprié.
