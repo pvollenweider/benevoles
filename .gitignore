@@ -86,3 +86,6 @@ k8s/gandi-webhook/cert-manager-webhook-gandi
 # local tool scratch output (impeccable skill critiques, vitest run artifacts)
 .impeccable/
 .vitest/
+
+# Local access to the Compose database (docker-compose.override.example.yml)
+docker-compose.override.yml

@@ -3,6 +3,11 @@
 # services with the same names ("postgres", "mailpit"/none here) — see docker-compose.e2e.yml's
 # comment for what happens without it. Matches the directory-name default this already had, so no
 # volume rename/migration needed (still resolves to benevoles_postgres_data).
+#
+# PostgreSQL is reachable only by the app, on the Compose network: no port on the host. Its
+# password is required (POSTGRES_PASSWORD, in .env next to this file or exported), with no default.
+# On a volume that already exists, PostgreSQL keeps the password it was created with: see
+# docs/deploiement.md before changing it. Local access: docker-compose.override.example.yml.
 name: benevoles
 
 services:
@@ -12,11 +17,9 @@ services:
     environment:
       POSTGRES_DB: benevoles
       POSTGRES_USER: benevoles
-      POSTGRES_PASSWORD: benevoles
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD:?POSTGRES_PASSWORD est requis, voir docs/deploiement.md}
     volumes:
       - postgres_data:/var/lib/postgresql/data
-    ports:
-      - "5432:5432"
     healthcheck:
       test: ["CMD-SHELL", "pg_isready -U benevoles"]
       interval: 5s
@@ -29,9 +32,11 @@ services:
     ports:
       - "3000:3000"
     environment:
-      DATABASE_URL: postgresql://benevoles:benevoles@postgres:5432/benevoles?schema=public
+      # docker-entrypoint.sh builds DATABASE_URL from these, each part encoded (any password works).
       POSTGRES_HOST: postgres
+      POSTGRES_DB: benevoles
       POSTGRES_USER: benevoles
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD:?POSTGRES_PASSWORD est requis, voir docs/deploiement.md}
       AUTH_SECRET: ${AUTH_SECRET:-change-me-in-production-32chars}
       # Required by the production image (openssl rand -base64 32); the server won't start
       # without it. Never change or lose it once used — see README.

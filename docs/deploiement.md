@@ -24,25 +24,51 @@ Au démarrage, `docker-entrypoint.sh` attend PostgreSQL, exécute `prisma migrat
 
 ## Docker Compose
 
+Nouvelle installation : placer les secrets dans un fichier `.env` à côté de `docker-compose.yml` (lu par Compose, à ne jamais commiter), puis lancer la stack.
+
 ```bash
-export AUTH_SECRET="$(openssl rand -base64 48)"
-export TOKEN_ENCRYPTION_KEY="$(openssl rand -base64 32)"   # à conserver : voir « Mise à jour depuis 1.x »
+umask 077
+cat > .env <<EOF
+POSTGRES_PASSWORD=$(openssl rand -hex 32)
+AUTH_SECRET=$(openssl rand -base64 48)
+TOKEN_ENCRYPTION_KEY=$(openssl rand -base64 32)
+EOF
 docker compose up -d
 ```
 
-`docker-compose.yml` lance PostgreSQL 16 et l'application (`build: .`) sur le port 3000. Ce qu'il ne fait pas :
+`TOKEN_ENCRYPTION_KEY` est à conserver (voir « Mise à jour depuis 1.x »), `POSTGRES_PASSWORD` aussi : PostgreSQL l'enregistre à la création du volume.
+
+`docker-compose.yml` lance PostgreSQL 16 et l'application (`build: .`) sur le port 3000. PostgreSQL n'est joignable que par l'application, sur le réseau interne de Compose : aucun port n'est publié sur l'hôte. Sans `POSTGRES_PASSWORD`, Compose refuse de démarrer ; il n'y a pas de valeur par défaut. L'application reçoit `POSTGRES_USER`, `POSTGRES_PASSWORD`, `POSTGRES_DB` et `POSTGRES_HOST` plutôt qu'une URL : `docker-entrypoint.sh` construit `DATABASE_URL` (`scripts/database-url.mjs`, chaque partie encodée), donc tout caractère est accepté dans le mot de passe et les deux services reçoivent toujours le même. Dans `.env`, entourer de guillemets simples une valeur qui contient `$`, `#` ou une espace ; un mot de passe hexadécimal évite la question. Une `DATABASE_URL` fournie explicitement (Kubernetes, base externe) est utilisée telle quelle.
+
+Ce qu'il ne fait pas :
 
 - Il ne transmet pas `AUTH_URL`, `AUTH_TRUST_HOST`, `CRON_SECRET`, `EMAIL_REPLY_TO`, `APP_TIME_ZONE`, `TRUSTED_PROXY_HOPS`, `TOKEN_ENCRYPTION_KEY_ID`, `TOKEN_ENCRYPTION_PREVIOUS_KEYS` ni les variables VAPID et Sentry : à ajouter dans la section `environment` si nécessaire.
 - Sans `AUTH_SECRET` exporté, la valeur par défaut du fichier (`change-me-in-production-32chars`, 31 caractères) est refusée par `src/lib/env.ts` et l'application ne démarre pas : toujours l'exporter.
 - Il n'inclut aucun planificateur. Sans `CRON_SECRET`, les endpoints `/api/cron/*` refusent toute requête en production : ajouter ce secret et appeler les endpoints depuis un cron de l'hôte (voir [Tâches planifiées](../README.md#tâches-planifiées-cron) dans le README), dont `/api/cron/outbox` toutes les 5 minutes.
-- Il n'exécute pas le seed, et l'image ne contient pas `tsx` : lancer le seed depuis un checkout, sur l'hôte, avec les variables `ADMIN_*` et `ORG_ADMIN_*` pour créer les premiers comptes :
+- Il n'exécute pas le seed, et l'image ne contient pas `tsx` : lancer le seed depuis un checkout, sur l'hôte, avec les variables `ADMIN_*` et `ORG_ADMIN_*` pour créer les premiers comptes, le temps d'un accès local à la base (ci-dessous) :
 
   ```bash
-  DATABASE_URL=postgresql://benevoles:benevoles@localhost:5432/benevoles \
+  set -a; . ./.env; set +a
+  DATABASE_URL="$(POSTGRES_HOST=127.0.0.1 node scripts/database-url.mjs)" \
   ADMIN_EMAIL=… ADMIN_PASSWORD=… ORG_ADMIN_EMAIL=… ORG_ADMIN_PASSWORD=… npm run db:seed
   ```
 
-- Les identifiants PostgreSQL du fichier sont ceux du développement : les changer. PostgreSQL est publié sur le port 5432 de l'hôte, comme la stack de développement : les deux ne tournent pas ensemble, et le port est exposé.
+### Accès ponctuel à la base
+
+- Une requête SQL, sans rien ouvrir : `docker compose exec postgres psql -U benevoles benevoles` (connexion locale au conteneur).
+- Une commande Prisma dans le conteneur de l'application, qui n'a pas `DATABASE_URL` hors du démarrage : `docker compose exec app sh -c 'DATABASE_URL="$(node scripts/database-url.mjs)" ./node_modules/.bin/prisma migrate status'`.
+- Un outil sur l'hôte (seed, client graphique, `pg_dump` local) : copier `docker-compose.override.example.yml` en `docker-compose.override.yml`, puis `docker compose up -d`. PostgreSQL est alors publié sur `127.0.0.1:5432` uniquement, jamais sur le réseau ; la stack de développement utilise le même port, les deux ne tournent pas ensemble. Supprimer la copie et relancer `docker compose up -d` une fois terminé.
+
+### Mettre à jour une installation Compose existante
+
+Le fichier publiait PostgreSQL sur le port 5432 de toutes les interfaces de l'hôte, avec le mot de passe `benevoles`. Il ne le publie plus et exige `POSTGRES_PASSWORD`. Sur un volume existant, **changer `POSTGRES_PASSWORD` ne change pas le mot de passe enregistré par PostgreSQL** : il n'est lu qu'à la création du volume. Ne jamais supprimer le volume `benevoles_postgres_data` pour appliquer ce changement, il contient toutes les données.
+
+1. Sauvegarder : `docker compose exec -T postgres pg_dump -U benevoles benevoles | gzip > benevoles-avant-mot-de-passe.sql.gz`.
+2. Choisir le nouveau mot de passe et l'enregistrer dans PostgreSQL, sans qu'il apparaisse dans l'historique ni dans la liste des processus : `docker compose exec postgres psql -U benevoles benevoles -c '\password benevoles'` (saisi deux fois). L'application en place n'ouvre plus de nouvelle connexion jusqu'à l'étape 4 : enchaîner les étapes.
+3. Écrire le même mot de passe dans `.env` : `POSTGRES_PASSWORD=…`.
+4. `git pull && docker compose up -d --build` : l'application se reconnecte avec le nouveau mot de passe et le port 5432 n'est plus publié (`docker compose ps` ne l'affiche plus).
+
+Si le mot de passe de `.env` et celui de PostgreSQL diffèrent, l'application s'arrête au démarrage sur une erreur d'authentification : refaire l'étape 2 avec la valeur de `.env`. Si le port était ouvert vers l'extérieur, considérer l'ancien mot de passe comme connu et vérifier le contenu de la base (comptes `AdminUser` en particulier).
 
 ## Kubernetes
 
