@@ -33,6 +33,10 @@ spec:
     spec:
       backoffLimit: 2
       template:
+        metadata:
+          # Lets this job through to postgres (k8s/networkpolicy.yaml).
+          labels:
+            app: postgres-backup
         spec:
           restartPolicy: OnFailure
           # Hardened but still root (#1050): `apk add` below installs into the image, and the files

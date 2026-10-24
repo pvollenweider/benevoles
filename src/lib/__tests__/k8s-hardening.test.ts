@@ -139,3 +139,58 @@ describe("explicit secret keys for the app (#1050)", () => {
     expect(read("k8s/cronjob-backup.yaml")).toMatch(/- name: BACKUP_PASSPHRASE\n\s+valueFrom:\n\s+secretKeyRef:\n\s+name: benevoles-secret\n\s+key: BACKUP_PASSPHRASE\n/)
   })
 })
+
+describe("NetworkPolicy of the namespace (#1050)", () => {
+  const policy = read("k8s/networkpolicy.yaml")
+  const workflow = read(".github/workflows/deploy.yml")
+  const docs = policy.split(/^---$/m).filter((d) => d.includes("kind: NetworkPolicy"))
+  const byName = (name: string) => {
+    const doc = docs.find((d) => d.includes(`name: ${name}\n`))
+    expect(doc, name).toBeDefined()
+    return doc!
+  }
+
+  it("denies ingress by default and never restricts egress", () => {
+    expect(byName("default-deny-ingress")).toMatch(/podSelector: \{\}\n\s+policyTypes: \[Ingress\]\n/)
+    for (const d of docs) expect(d).not.toMatch(/policyTypes:.*Egress|^\s+egress:/m)
+  })
+
+  it("lets Traefik reach the app, the media server and the ACME solver on their container ports", () => {
+    const traefik = /namespaceSelector:\n\s+matchLabels:\n\s+kubernetes\.io\/metadata\.name: kube-system\n\s+podSelector:\n\s+matchLabels:\n\s+app\.kubernetes\.io\/name: traefik\n/
+    const cases: [string, string, string][] = [
+      ["app-from-traefik", "app: benevoles-app", read("k8s/deployment.yaml").match(/containerPort: (\d+)/)![1]],
+      ["media-from-traefik", "app: benevoles-media", read("k8s/media.yaml").match(/containerPort: (\d+)/)![1]],
+      // cert-manager's HTTP-01 solver pods (label and port of cert-manager's acmesolver).
+      ["acme-solver-from-traefik", 'acme.cert-manager.io/http01-solver: "true"', "8089"],
+    ]
+    for (const [name, selector, port] of cases) {
+      const d = byName(name)
+      expect(d, name).toContain(selector)
+      expect(d, name).toMatch(traefik)
+      expect(d, name).toContain(`port: ${port}\n`)
+    }
+  })
+
+  it("lets every pod that talks to postgres through, by the labels its manifest sets", () => {
+    const d = byName("postgres-from-clients")
+    expect(d).toContain("port: 5432\n")
+    const allowed = d.match(/values: \[([^\]]+)\]/)![1].split(",").map((v) => v.trim())
+    const labelOf = (file: string) => read(file).match(/template:\n\s+metadata:\n\s+labels:\n\s+app: ([\w-]+)\n/)![1]
+    expect(labelOf("k8s/deployment.yaml")).toBe("benevoles-app")
+    expect(labelOf("k8s/job-migrate.yaml")).toBe("benevoles-migrate")
+    expect(read("k8s/cronjob-backup.yaml")).toMatch(/template:\n\s+metadata:\n(?:\s+#.*\n)*\s+labels:\n\s+app: postgres-backup\n/)
+    expect(allowed.sort()).toEqual(["benevoles-app", "benevoles-migrate", "postgres-backup"])
+  })
+
+  it("every policy carries the label the deploy workflow removes them by", () => {
+    for (const d of docs) expect(d).toContain("app.kubernetes.io/part-of: benevoles-netpol")
+  })
+
+  it("is applied before the migration and removed again if the deploy fails afterwards", () => {
+    const apply = workflow.indexOf("kubectl apply -f k8s/networkpolicy.yaml")
+    expect(apply).toBeGreaterThan(-1)
+    expect(apply).toBeLessThan(workflow.indexOf("envsubst < k8s/job-migrate.yaml"))
+    expect(workflow).toMatch(/if: failure\(\) && steps\.netpol\.outcome == 'success'\n\s+run: \|\n\s+kubectl -n benevoles delete networkpolicy -l app\.kubernetes\.io\/part-of=benevoles-netpol/)
+    expect(workflow.indexOf("Check the site through the NetworkPolicy")).toBeGreaterThan(workflow.indexOf("rollout status deployment/benevoles-app"))
+  })
+})
