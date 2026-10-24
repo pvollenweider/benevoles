@@ -152,10 +152,10 @@ export async function PATCH(req: Request, { params }: { params: Promise<{ id: st
   }
 
   const result = await prisma.$transaction(async (tx) => {
-    // Decided again under the organisation's row lock, the one a self-service reactivation takes
+    // Decided again under the organisation's row lock (NO KEY UPDATE: the strength of the update itself), the one a self-service reactivation takes
     // too: a suspension committed since the read above is never undone by a reactivation decided
     // on the older state.
-    await tx.$queryRaw`SELECT id FROM "Organization" WHERE id = ${id} FOR UPDATE`
+    await tx.$queryRaw`SELECT id FROM "Organization" WHERE id = ${id} FOR NO KEY UPDATE`
     const current = await tx.organization.findUnique({ where: { id }, select: { active: true, suspendedAt: true } })
     if (!current) return { refused: { status: 404, error: "Organisation non trouvée" } } as const
     const again = decideSuspension(current, parsed.data)

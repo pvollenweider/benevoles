@@ -24,11 +24,11 @@ export async function POST(req: Request) {
   const outcome = await prisma.$transaction(async (tx) => {
     const found = await tx.adminUser.findUnique({ where: { orgReactivationTokenHash: tokenHash }, select: { organizationId: true } })
     if (!found) return null
-    // Decided under the organisation's row lock, the one an operator's suspension or deactivation
+    // Decided under the organisation's row lock (NO KEY UPDATE: the strength of the update itself), the one an operator's suspension or deactivation
     // and the nightly deactivation take too: whichever comes second sees the state the first left.
     // A suspension committed meanwhile is read here and refuses the link; one arriving later waits,
     // then applies on top of the reactivation. The suspension always wins.
-    if (found.organizationId) await tx.$queryRaw`SELECT id FROM "Organization" WHERE id = ${found.organizationId} FOR UPDATE`
+    if (found.organizationId) await tx.$queryRaw`SELECT id FROM "Organization" WHERE id = ${found.organizationId} FOR NO KEY UPDATE`
     const admin = await tx.adminUser.findUnique({
       where: { orgReactivationTokenHash: tokenHash },
       select: {
