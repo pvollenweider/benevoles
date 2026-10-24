@@ -10,6 +10,10 @@ aliases: []
 
 # Ton lien personnel
 
+> « J'ai choisi mes créneaux en quelques minutes. Et quand j'ai voulu revérifier mes horaires, j'ai retrouvé mon lien dans l'email, sans avoir à créer un compte. »
+>
+> Exemple de situation : bénévole
+
 <!-- video: VOLUNTEER_SESSION_AVAILABILITY -->
 
 L'email de confirmation contient ton **lien personnel**. Il ouvre [ta page personnelle](ma-page-personnelle.md), où tu retrouves tes inscriptions et peux les annuler jusqu'au début du créneau, ou jusqu'au délai fixé par l'organisation (voir [Jusqu'à quand annuler](ma-page-personnelle.md#jusqu-a-quand-annuler)) : **ne le partage pas**. Chaque annulation faite avec ce lien t'est confirmée par email : si tu en reçois une que tu n'as pas faite, réponds à cet email pour prévenir l'organisation.

@@ -10,6 +10,10 @@ aliases: []
 
 # Choisir ses créneaux
 
+> « Je veux bien aider chaque année, mais pas forcément au même poste. C'est agréable de pouvoir choisir. »
+>
+> Exemple de situation : bénévole fidèle
+
 <!-- video: VOLUNTEER_CHOOSE_SHIFTS -->
 
 La page affiche un **planning par jour**. Chaque ligne correspond à un poste (accueil, photos, buvette…) et chaque barre colorée représente un créneau disponible.

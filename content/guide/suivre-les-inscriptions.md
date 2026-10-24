@@ -11,6 +11,10 @@ updated: 2026-10-12
 
 # Suivre les inscriptions
 
+> « Avant, les inscriptions arrivaient par mail, par message et parfois au détour d'une conversation. Cette fois, on avait enfin une liste à jour au même endroit. »
+>
+> Exemple de situation : organisation d'un festival
+
 <!-- video: REGISTRATIONS_MANAGEMENT -->
 
 **Événements**, puis l'événement, puis l'onglet **Inscriptions**

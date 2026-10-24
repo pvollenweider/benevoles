@@ -10,6 +10,10 @@ aliases: []
 
 # Présences le jour J
 
+> « Le jour de la manifestation, j'ai surtout besoin de savoir qui arrive, à quelle heure et pour quel poste. »
+>
+> Exemple de situation : responsable d'équipe
+
 <!-- video: ATTENDANCE_CHECK_IN -->
 
 De la veille du premier jour au dernier jour de l'événement, ses pages affichent un onglet **Jour J** et, pour un événement publié, le bouton principal **Ouvrir le jour J** en haut. Cette page est faite pour le téléphone, sur place :

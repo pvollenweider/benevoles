@@ -10,6 +10,10 @@ aliases: []
 
 # Où manque-t-il du monde ?
 
+> « On a vu tout de suite qu'il nous manquait du monde au rangement. Ça nous a permis de relancer pour ces créneaux précis plutôt que de redemander à tout le monde. »
+>
+> Exemple de situation : club sportif
+
 <!-- video: STAFFING_GAPS -->
 
 **Événements**, puis l'événement, puis, dans la section **Où manque-t-il du monde ?**, **Voir les créneaux à compléter** (ou **Voir le détail des créneaux** quand tout est complet)

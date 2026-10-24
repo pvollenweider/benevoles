@@ -1,5 +1,5 @@
 import { describe, it, expect } from "vitest"
-import { renderEventPageMarkdown } from "../event-page-markdown"
+import { isExampleCaption, renderEventPageMarkdown } from "../event-page-markdown"
 
 describe("renderEventPageMarkdown", () => {
   it("renders basic Markdown formatting", () => {
@@ -82,5 +82,53 @@ describe("renderEventPageMarkdown", () => {
   it("still strips an id written by hand in inline HTML when headingIds is off", () => {
     const html = renderEventPageMarkdown('<p id="main">x</p>')
     expect(html).not.toContain('id="main"')
+  })
+})
+
+describe("example quotes (exampleQuotes)", () => {
+  const nbsp = "\u00a0"
+  const source = `> «${nbsp}Je peux donner deux heures samedi.${nbsp}»\n>\n> Exemple de situation${nbsp}: bénévole occasionnelle`
+
+  it("renders a blockquote ending with « Exemple de situation : » as a figure with its caption", () => {
+    const html = renderEventPageMarkdown(source, { exampleQuotes: true })
+    // DOMPurify writes the non-breaking spaces back as &nbsp;.
+    expect(html).toBe(
+      "<figure>\n<blockquote>\n<p>«&nbsp;Je peux donner deux heures samedi.&nbsp;»</p>\n</blockquote>\n<figcaption>Exemple de situation&nbsp;: bénévole occasionnelle</figcaption>\n</figure>\n",
+    )
+  })
+
+  it("leaves any other blockquote unchanged", () => {
+    const plain = "> Pour {événement}, vous pouvez maintenant voir qui est inscrit.\n>\n> C'est facultatif."
+    const html = renderEventPageMarkdown(plain, { exampleQuotes: true })
+    expect(html).not.toContain("<figure>")
+    expect(html).toContain("<p>C'est facultatif.</p>")
+    expect(html).toBe(renderEventPageMarkdown(plain))
+  })
+
+  it("needs a quote before the caption: a caption alone stays a plain blockquote", () => {
+    const html = renderEventPageMarkdown(`> Exemple de situation${nbsp}: comité d'un festival`, { exampleQuotes: true })
+    expect(html).not.toContain("<figure>")
+    expect(html).toContain("<blockquote>")
+  })
+
+  it("keeps the plain blockquote when the option is off, and strips a figure written by hand", () => {
+    expect(renderEventPageMarkdown(source)).not.toContain("<figure>")
+    expect(renderEventPageMarkdown(source)).toContain("<blockquote>")
+    expect(renderEventPageMarkdown("<figure><figcaption>x</figcaption></figure>")).not.toMatch(/<fig/)
+  })
+
+  it("sanitizes the caption and the quote like the rest of the page", () => {
+    const html = renderEventPageMarkdown(`> «${nbsp}x${nbsp}» <script>alert(1)</script>\n>\n> Exemple de situation : <img src=x onerror=alert(1)>`, { exampleQuotes: true })
+    expect(html).not.toContain("<script")
+    expect(html).not.toContain("onerror")
+  })
+
+  it("accepts a plain, non-breaking or narrow non-breaking space before the colon", () => {
+    expect(isExampleCaption("Exemple de situation : x")).toBe(true)
+    expect(isExampleCaption(`Exemple de situation${nbsp}: x`)).toBe(true)
+    expect(isExampleCaption("Exemple de situation\u202f: x")).toBe(true)
+    expect(isExampleCaption("Exemple de situation: x")).toBe(true)
+    expect(isExampleCaption("Un exemple de situation : x")).toBe(false)
+    expect(isExampleCaption("Situation type : x")).toBe(false)
   })
 })
