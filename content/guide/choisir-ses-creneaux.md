@@ -12,7 +12,9 @@ aliases: []
 
 > « Je veux bien aider chaque année, mais pas forcément au même poste. C'est agréable de pouvoir choisir. »
 >
-> Exemple de situation : Zoé, bénévole fidèle
+> Zoé, bénévole fidèle*
+>
+> \* Personnage et citation fictifs.
 
 <!-- video: VOLUNTEER_CHOOSE_SHIFTS -->
 

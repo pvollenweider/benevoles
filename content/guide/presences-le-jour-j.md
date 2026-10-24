@@ -12,7 +12,9 @@ aliases: []
 
 > « Le jour de la manifestation, j'ai surtout besoin de savoir qui arrive, à quelle heure et pour quel poste. »
 >
-> Exemple de situation : Étienne, responsable d'équipe
+> Noah, responsable d'équipe*
+>
+> \* Personnage et citation fictifs.
 
 <!-- video: ATTENDANCE_CHECK_IN -->
 

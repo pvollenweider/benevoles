@@ -10,10 +10,6 @@ aliases: []
 
 # Publier un événement
 
-> « Le vrai soulagement, c'est de ne plus devoir envoyer une confirmation à chaque personne. On a pu consacrer ce temps au reste de la préparation. »
->
-> Exemple de situation : Sarah, association culturelle
-
 <!-- video: EVENT_REVIEW_PUBLISH -->
 
 ## Brouillon, publié, répertorié, archivé

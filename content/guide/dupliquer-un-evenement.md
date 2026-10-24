@@ -10,10 +10,6 @@ aliases: []
 
 # Dupliquer un événement
 
-> « À la deuxième édition, on a dupliqué l'événement précédent et adapté les dates et les postes. On n'est pas repartis d'un tableau vide. »
->
-> Exemple de situation : René, membre d'un comité
-
 <!-- video: EVENT_DUPLICATE -->
 
 **Repartir d'un événement existant** (édition suivante d'un festival, même organisation d'une année sur l'autre) : **Dupliquer**, depuis la liste des événements ou le bouton **⋯** (**Autres actions**) en haut des pages de l'événement, ouvre une page de choix :

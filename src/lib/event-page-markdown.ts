@@ -44,10 +44,13 @@ import { DOC_VIDEO_ATTRIBUTE, videoReferenceId } from "@/lib/doc-video-reference
 // the repo's documentation gives its screenshots their size and lazy loading (src/lib/doc-images.ts).
 // Admin-authored event pages keep marked's own <img>.
 //
-// exampleQuotes turns a blockquote of the repo's own documentation whose last paragraph starts with
-// « Exemple de situation : » into a <figure>: the quote in its <blockquote>, that last paragraph as
-// its <figcaption>, so the caption saying it is an invented example names the quote for screen
-// readers (HTML's own pattern for a quote and its attribution). Any other blockquote is unchanged.
+// exampleQuotes turns a blockquote of the repo's own documentation that ends with a caption marked
+// by an asterisk (« Léa, bénévole occasionnelle* ») and the note « \\* Personnage et citation fictifs. »
+// into a <figure>: the quote in its <blockquote>, the caption and the note together in its
+// <figcaption>, so the figure's name says the person and the quote are invented (HTML's own pattern
+// for a quote and its attribution). The asterisks only point the eye from the caption to the note:
+// hidden from screen readers, which read the note as part of the caption. Any other blockquote is
+// unchanged.
 export type MarkdownImage = { src: string; alt: string; title?: string | null }
 
 function makeRenderer(
@@ -83,19 +86,24 @@ function makeRenderer(
   if (exampleQuotes) {
     const defaultBlockquote = renderer.blockquote
     renderer.blockquote = function (token) {
-      const last = token.tokens[token.tokens.length - 1]
-      if (token.tokens.length < 2 || last?.type !== "paragraph" || !isExampleCaption(last.text)) return defaultBlockquote.call(this, token)
-      const quote = this.parser.parse(token.tokens.slice(0, -1))
-      const caption = this.parser.parseInline((last as Tokens.Paragraph).tokens)
-      return `<figure>\n<blockquote>\n${quote}</blockquote>\n<figcaption>${caption}</figcaption>\n</figure>\n`
+      const blocks = token.tokens.filter((t) => t.type !== "space")
+      const n = blocks.length
+      const [caption, note] = [blocks[n - 2], blocks[n - 1]]
+      if (n < 3 || caption?.type !== "paragraph" || note?.type !== "paragraph" || !isFictionNote(note.text) || !caption.text.trimEnd().endsWith("*")) {
+        return defaultBlockquote.call(this, token)
+      }
+      const quote = this.parser.parse(blocks.slice(0, -2))
+      const who = this.parser.parseInline((caption as Tokens.Paragraph).tokens).trimEnd().replace(/\*$/, "").trimEnd()
+      const noteText = this.parser.parseInline((note as Tokens.Paragraph).tokens).replace(/^\*\s*/, "")
+      return `<figure>\n<blockquote>\n${quote}</blockquote>\n<figcaption>\n<p>${who}<span aria-hidden="true">*</span></p>\n<p><span aria-hidden="true">* </span>${noteText}</p>\n</figcaption>\n</figure>\n`
     }
   }
   return renderer
 }
 
-/** « Exemple de situation : », with a plain, non-breaking or narrow non-breaking space before the colon. */
-export function isExampleCaption(text: string): boolean {
-  return /^Exemple de situation[ \u00a0\u202f]*:/.test(text)
+/** The note under an example quote, « \\* Personnage et citation fictifs. » in the Markdown source. */
+export function isFictionNote(text: string): boolean {
+  return /^\\?\*\s*Personnage et citation fictifs\.?$/.test(text.trim())
 }
 
 /** The few entities marked can leave in plain text, back to their characters (&amp; last). */
@@ -122,7 +130,8 @@ const ALLOWED_ATTR = ["href", "title", "src", "alt", "width", "height"]
 // Only kept when the caller draws the images itself (`image`).
 const IMAGE_LOADING_ATTR = ["loading", "decoding"]
 // Only kept when the caller asks for example quotes (`exampleQuotes`).
-const EXAMPLE_QUOTE_TAGS = ["figure", "figcaption"]
+const EXAMPLE_QUOTE_TAGS = ["figure", "figcaption", "span"]
+const EXAMPLE_QUOTE_ATTR = ["aria-hidden"]
 
 export function renderEventPageMarkdown(
   content: string,
@@ -141,6 +150,7 @@ export function renderEventPageMarkdown(
     ...(headingIds ? ["id"] : []),
     ...(videoCard ? [DOC_VIDEO_ATTRIBUTE] : []),
     ...(image ? IMAGE_LOADING_ATTR : []),
+    ...(exampleQuotes ? EXAMPLE_QUOTE_ATTR : []),
   ]
   const allowedTags = exampleQuotes ? [...ALLOWED_TAGS, ...EXAMPLE_QUOTE_TAGS] : ALLOWED_TAGS
   return DOMPurify.sanitize(html, { ALLOWED_TAGS: allowedTags, ALLOWED_ATTR: allowedAttr })

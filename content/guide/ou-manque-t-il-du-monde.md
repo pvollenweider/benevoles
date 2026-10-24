@@ -10,9 +10,11 @@ aliases: []
 
 # Où manque-t-il du monde ?
 
-> « On a vu tout de suite qu'il nous manquait du monde au rangement. Ça nous a permis de relancer pour ces créneaux précis plutôt que de redemander à tout le monde. »
+> « Pour notre tournoi, on a besoin de parents à la buvette, à l'accueil et au montage. Le plus compliqué, c'est de savoir quels postes restent à compléter. »
 >
-> Exemple de situation : Lucas, club sportif
+> Julien, responsable d'un club sportif*
+>
+> \* Personnage et citation fictifs.
 
 <!-- video: STAFFING_GAPS -->
 

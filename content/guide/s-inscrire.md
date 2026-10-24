@@ -13,7 +13,9 @@ aliases: []
 
 > « Je peux donner deux heures samedi. J'aimerais voir où je peux être utile et m'inscrire simplement. »
 >
-> Exemple de situation : Léa, bénévole occasionnelle
+> Léa, bénévole occasionnelle*
+>
+> \* Personnage et citation fictifs.
 
 <!-- video: VOLUNTEER_FORM_RECAP -->
 
