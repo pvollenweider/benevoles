@@ -55,6 +55,7 @@ Manifestes dans `k8s/`, namespace `benevoles` :
 | `postgres.yaml` | PVC `postgres-pvc` (5 Gi), Deployment et Service `postgres` | oui | PostgreSQL 16 |
 | `job-migrate.yaml` | Job `benevoles-migrate` | oui, avant l'application | `prisma migrate deploy` avec l'image déployée ; `backoffLimit: 0`, 300 s au plus |
 | `deployment.yaml` | Deployment `benevoles-app` | oui, en dernier | 1 réplica, mise à jour progressive sans indisponibilité, clés de `benevoles-secret` données une à une (voir [configuration.md](configuration.md#secrets-kubernetes)), limites 500m CPU et 512 Mi, sonde de disponibilité sur `/api/health/ready` (après le préchauffage), sonde de vie sur `/api/health` |
+| `networkpolicy.yaml` | NetworkPolicies `default-deny-ingress`, `app-from-traefik`, `media-from-traefik`, `acme-solver-from-traefik`, `postgres-from-clients` | oui, avant la migration ; retirées si le déploiement échoue ensuite | Entrées refusées par défaut dans le namespace, voir « Isolation réseau » ci-dessous |
 | `service.yaml`, `ingress.yaml` | Service et Ingress `benevoles-app` | oui | Exposition via Traefik pour `*.benevol.app`, `benevol.app` et `www.benevol.app`, TLS `benevol-app-wildcard-tls`, avec les middlewares de compression de `middleware-compress.yaml` |
 | `middleware-compress.yaml` | Middlewares `benevoles-compress` et `benevoles-identity-upstream` | oui, avant `ingress.yaml` | Compression des réponses texte par Traefik (zstd, Brotli ou gzip selon le navigateur) ; l'application reçoit la requête sans `Accept-Encoding` et répond donc sans compression, ce que Traefik exige pour compresser. Voir « Compression » ci-dessous |
 | `middleware-hsts.yaml` | Middleware `benevoles-hsts` | oui, avant `ingress.yaml` et `ingressroute-tokens.yaml` | En-tête `Strict-Transport-Security` (1 an, sans `includeSubDomains` ni `preload`) ; un routeur qui nomme un middleware absent est désactivé par Traefik |
@@ -78,6 +79,22 @@ Les pods de l'application, du Job de migration et des CronJobs ne reçoivent pas
 - L'application et la migration tournent sous l'utilisateur `nextjs` de l'image (uid 1001, groupe 1001), donné en chiffres : `runAsNonRoot` ne peut pas vérifier un utilisateur désigné par son nom. Leur système de fichiers reste en écriture : Next.js écrit son cache à l'exécution (`.next/cache`, et les pages qu'il régénère dans `.next/server/app`).
 - Les quatre CronJobs `curl` tournent sous `curl_user` (uid 100, groupe 101), système de fichiers en lecture seule, avec un `emptyDir` pour `/tmp`.
 - La sauvegarde et la copie hors site restent root sans capacité : la sauvegarde installe `openssl` avec `apk add`, et les fichiers de `backup-pvc` appartiennent à root.
+
+### Isolation réseau
+
+`k8s/networkpolicy.yaml` refuse par défaut toute connexion entrante vers les pods du namespace `benevoles` ; le contrôleur de NetworkPolicy intégré à k3s (kube-router) l'applique. Seuls passent :
+
+- Traefik (pod `app.kubernetes.io/name=traefik` du namespace `kube-system`) vers l'application (port 3000), le serveur de médias (8080) et le pod de validation HTTP-01 de cert-manager (8089), qui renouvelle le certificat de `benevol.app` dans ce namespace ;
+- l'application, le Job de migration et la sauvegarde (étiquettes `app: benevoles-app`, `benevoles-migrate`, `postgres-backup`) vers PostgreSQL (5432).
+
+Les sondes du kubelet partent du nœud et passent toujours ; `kubectl exec`, `logs` et `port-forward` ne passent pas par le réseau des pods. Les CronJobs appellent l'adresse publique et arrivent donc par Traefik. Un nouveau pod qui doit joindre PostgreSQL reçoit l'une de ces étiquettes, sinon sa connexion est refusée. Les sorties ne sont pas filtrées (SMTP, Sentry, ntfy, notifications push, GitHub, miroirs Alpine, Swiss Backup).
+
+`deploy.yml` applique ces règles avant la migration : le Job de migration et le nouveau pod ouvrent alors de nouvelles connexions à travers elles. Il applique d'abord `cronjob-backup.yaml` (étiquette de la sauvegarde) et attend la fin d'une sauvegarde lancée avec l'ancien modèle ; le fichier liste le refus par défaut en dernier. Après le déploiement, l'étape « Check the site through the NetworkPolicy » interroge les adresses publiques ; si elle échoue, ou si une étape échoue ou si l'exécution est annulée après le début de l'application des règles, elles sont retirées et le site reste joignable. À la main :
+
+```bash
+kubectl -n benevoles get networkpolicy
+kubectl -n benevoles delete networkpolicy -l app.kubernetes.io/part-of=benevoles-netpol   # retrait d'urgence
+```
 
 ### Adresse des visiteurs et limites de débit
 

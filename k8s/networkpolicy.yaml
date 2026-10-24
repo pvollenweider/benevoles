@@ -1,0 +1,131 @@
+# SPDX-FileCopyrightText: 2026 Philippe Vollenweider
+# SPDX-License-Identifier: AGPL-3.0-only
+
+# Network isolation of the benevoles namespace (#1050). Enforced by the network policy controller
+# embedded in k3s (kube-router), on by default.
+#
+# Ingress is denied by default; only these flows are let in:
+#   Traefik (namespace kube-system)  -> app          :3000   every request of every visitor
+#   Traefik                          -> media server :8080   medias.benevol.app
+#   Traefik                          -> ACME solver  :8089   HTTP-01 challenge of benevol.app (cert-manager)
+#   app, migration Job, backup job   -> postgres     :5432
+# Kubelet probes come from the node itself and are always allowed by kube-router. kubectl exec,
+# logs and port-forward do not go through the pod network. The CronJobs call the public address
+# (https://www.benevol.app), so they reach the app through Traefik like any visitor.
+#
+# Egress is not restricted: the app talks to SMTP, Sentry, ntfy, web push services and GitHub, the
+# backup job installs openssl from the Alpine mirrors and the off-site copy goes to Swiss Backup.
+#
+# Applied by the deploy workflow before the migration, so the migration Job and the new app pod
+# open fresh connections through these rules in the same deploy; deploy.yml removes them again if
+# the site stops answering afterwards. To remove them by hand:
+#   kubectl -n benevoles delete networkpolicy -l app.kubernetes.io/part-of=benevoles-netpol
+apiVersion: networking.k8s.io/v1
+kind: NetworkPolicy
+metadata:
+  name: app-from-traefik
+  namespace: benevoles
+  labels:
+    app.kubernetes.io/part-of: benevoles-netpol
+spec:
+  podSelector:
+    matchLabels:
+      app: benevoles-app
+  policyTypes: [Ingress]
+  ingress:
+    - from:
+        - namespaceSelector:
+            matchLabels:
+              kubernetes.io/metadata.name: kube-system
+          podSelector:
+            matchLabels:
+              app.kubernetes.io/name: traefik
+      ports:
+        - protocol: TCP
+          port: 3000
+---
+apiVersion: networking.k8s.io/v1
+kind: NetworkPolicy
+metadata:
+  name: media-from-traefik
+  namespace: benevoles
+  labels:
+    app.kubernetes.io/part-of: benevoles-netpol
+spec:
+  podSelector:
+    matchLabels:
+      app: benevoles-media
+  policyTypes: [Ingress]
+  ingress:
+    - from:
+        - namespaceSelector:
+            matchLabels:
+              kubernetes.io/metadata.name: kube-system
+          podSelector:
+            matchLabels:
+              app.kubernetes.io/name: traefik
+      ports:
+        - protocol: TCP
+          port: 8080
+---
+# cert-manager renews the certificate of benevol.app with an HTTP-01 challenge (ClusterIssuer
+# letsencrypt-prod; the wildcard *.benevol.app uses DNS-01): it starts a solver pod in this
+# namespace, which Let's Encrypt and cert-manager's own self-check reach through Traefik.
+apiVersion: networking.k8s.io/v1
+kind: NetworkPolicy
+metadata:
+  name: acme-solver-from-traefik
+  namespace: benevoles
+  labels:
+    app.kubernetes.io/part-of: benevoles-netpol
+spec:
+  podSelector:
+    matchLabels:
+      acme.cert-manager.io/http01-solver: "true"
+  policyTypes: [Ingress]
+  ingress:
+    - from:
+        - namespaceSelector:
+            matchLabels:
+              kubernetes.io/metadata.name: kube-system
+          podSelector:
+            matchLabels:
+              app.kubernetes.io/name: traefik
+      ports:
+        - protocol: TCP
+          port: 8089
+---
+apiVersion: networking.k8s.io/v1
+kind: NetworkPolicy
+metadata:
+  name: postgres-from-clients
+  namespace: benevoles
+  labels:
+    app.kubernetes.io/part-of: benevoles-netpol
+spec:
+  podSelector:
+    matchLabels:
+      app: postgres
+  policyTypes: [Ingress]
+  ingress:
+    - from:
+        - podSelector:
+            matchExpressions:
+              - key: app
+                operator: In
+                values: [benevoles-app, benevoles-migrate, postgres-backup]
+      ports:
+        - protocol: TCP
+          port: 5432
+---
+# Last: kubectl applies in file order, so the allow rules are in place before anything is denied.
+apiVersion: networking.k8s.io/v1
+kind: NetworkPolicy
+metadata:
+  name: default-deny-ingress
+  namespace: benevoles
+  labels:
+    app.kubernetes.io/part-of: benevoles-netpol
+spec:
+  podSelector: {}
+  policyTypes: [Ingress]
