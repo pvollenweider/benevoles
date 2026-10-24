@@ -11,7 +11,7 @@ Modèles de fichiers fournis :
 
 | Variable | Requis | Description |
 |----------|--------|-------------|
-| `DATABASE_URL` | oui | URL PostgreSQL (`postgresql://utilisateur:motdepasse@hôte:5432/benevoles?schema=public`) |
+| `DATABASE_URL` | oui | URL PostgreSQL (`postgresql://utilisateur:motdepasse@hôte:5432/benevoles?schema=public`, caractères réservés du mot de passe encodés en `%XX`). Dans l'image, si elle est vide, `docker-entrypoint.sh` la construit à partir de `POSTGRES_USER`, `POSTGRES_PASSWORD` (alors obligatoire), `POSTGRES_DB`, `POSTGRES_HOST` et `POSTGRES_PORT` (`scripts/database-url.mjs`) : c'est le cas avec Docker Compose |
 | `AUTH_SECRET` | oui | Secret NextAuth, 32 caractères minimum (`openssl rand -base64 48`). Il sert aussi de clé aux empreintes d'adresse du registre des effacements (#516) : avant de le changer, exporter ce registre (`scripts/erasure-register.ts export`), car les empreintes antérieures ne permettront plus de retrouver une fiche par son adresse ; le rejeu par identifiant fonctionne toujours. Voir [rgpd/procedure-effacement.md](rgpd/procedure-effacement.md). |
 | `AUTH_URL` | en production | URL publique, requise par NextAuth v5 derrière un reverse proxy |
 | `AUTH_TRUST_HOST` | en production | `true` derrière un reverse proxy |
@@ -45,7 +45,7 @@ Modèles de fichiers fournis :
 | `DIGEST_DELAY_SECONDS` | non, tests | Remplace le délai de regroupement des emails groupés (#869, #916) : 5 minutes pour les désistements d'un même événement, 10 minutes pour « inscrit par un organisateur ». Nombre de secondes, `0` compris ; une valeur négative ou non numérique est ignorée. `0` dans le job E2E de la CI : l'email part tout de suite, sans attendre `/api/cron/outbox`. À laisser vide en production, qui garde les délais par défaut ; pas transmise par `deploy.yml` |
 | `GIT_SHA` | non | Commit déployé, fixé au build de l'image (argument de build `GIT_SHA`, rempli par `deploy.yml`). Affiché sur la page Santé du service |
 
-L'image et les manifestes fixent eux-mêmes `NODE_ENV=production`, `PORT=3000`, `HOSTNAME=0.0.0.0` et `NEXT_TELEMETRY_DISABLED=1`. `docker-compose.yml` transmet aussi `POSTGRES_HOST` et `POSTGRES_USER` à l'application, qui ne les lit pas.
+L'image et les manifestes fixent eux-mêmes `NODE_ENV=production`, `PORT=3000`, `HOSTNAME=0.0.0.0` et `NEXT_TELEMETRY_DISABLED=1`. `docker-compose.yml` transmet à l'application `POSTGRES_HOST`, `POSTGRES_DB`, `POSTGRES_USER` et `POSTGRES_PASSWORD` (obligatoire, sans valeur par défaut) au lieu de `DATABASE_URL`, que `docker-entrypoint.sh` construit au démarrage.
 
 ### Rotation de la clé de chiffrement
 

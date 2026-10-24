@@ -1,0 +1,9 @@
+# Optional access to the PostgreSQL of docker-compose.yml from this machine only, for a one-off
+# task (seed, psql, a dump with a local client). Copy it to docker-compose.override.yml, which
+# Compose reads automatically, then `docker compose up -d`; delete the copy and run
+# `docker compose up -d` again when done. Bound to 127.0.0.1: never reachable from the network.
+# The development stack (docker-compose.dev.yml) uses the same port: they don't run together.
+services:
+  postgres:
+    ports:
+      - "127.0.0.1:5432:5432"

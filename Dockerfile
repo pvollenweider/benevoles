@@ -108,6 +108,8 @@ COPY --from=builder --chown=nextjs:nodejs /app/videos/MASTERCLASS_PLAN.md ./vide
 # Warm-up of a new server before it takes traffic (docker-entrypoint.sh, src/lib/readiness.ts):
 # plain Node, no dependency.
 COPY --from=builder --chown=nextjs:nodejs /app/scripts/warmup.mjs ./scripts/warmup.mjs
+# Database URL built from POSTGRES_* when DATABASE_URL is not set (docker-entrypoint.sh, Compose).
+COPY --from=builder --chown=nextjs:nodejs /app/scripts/database-url.mjs ./scripts/database-url.mjs
 
 # Merge prisma CLI (+ toutes ses deps) dans node_modules
 # Appeler index.js directement préserve __dirname = node_modules/prisma/build/

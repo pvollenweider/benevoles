@@ -212,11 +212,11 @@ Sur Kubernetes, `k8s/` fournit les CronJobs `app-reminders` (toutes les heures),
 ### Docker Compose
 
 ```bash
-docker compose up -d                       # première installation
+docker compose up -d                       # première installation, après avoir écrit .env
 git pull && docker compose up -d --build   # mise à jour
 ```
 
-Variables à ajouter et cron de l'hôte : [docs/deploiement.md](docs/deploiement.md#docker-compose).
+`POSTGRES_PASSWORD` est obligatoire et PostgreSQL n'est pas publié sur l'hôte. Fichier `.env`, variables à ajouter et cron de l'hôte : [docs/deploiement.md](docs/deploiement.md#docker-compose). Installation existante : [Mettre à jour une installation Compose existante](docs/deploiement.md#mettre-à-jour-une-installation-compose-existante).
 
 **Depuis 2.2.x**, ajouter l'appel de `/api/cron/outbox` toutes les 5 minutes (CronJob `k8s/cronjob-outbox.yaml` sur Kubernetes) : voir [Mise à jour depuis 2.2.x](docs/deploiement.md#mise-à-jour-depuis-22x).
 
