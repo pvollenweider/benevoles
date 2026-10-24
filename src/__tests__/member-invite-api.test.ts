@@ -1,5 +1,8 @@
 import { describe, it, expect, vi, beforeEach, afterEach } from "vitest"
 
+// The link's organisation, open: its links give data (src/lib/org-lifecycle.ts).
+const OPEN_ORG = { active: true, suspendedAt: null }
+
 // #541: GET /api/public/member-invite/[token] returns the member's name, email and phone to
 // pre-fill the sign-up form. It had no rate limit, and checked the event slug but not the
 // organization of the host (event slugs are only unique per organization).
@@ -24,7 +27,7 @@ vi.mock("next/headers", () => ({
 
 const invite = (over: Record<string, unknown> = {}) => ({
   volunteer: { id: "v1", firstName: "Alice", lastName: "Martin", email: "alice@x.ch", phone: "079 000 00 00", active: true, tags: [] },
-  event: { slug: "festival", organizationId: "org-a", shifts: [] },
+  event: { slug: "festival", organizationId: "org-a", organization: OPEN_ORG, shifts: [] },
   ...over,
 })
 

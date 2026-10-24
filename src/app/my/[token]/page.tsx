@@ -10,6 +10,8 @@ import { fmtRange } from "@/lib/gantt-utils"
 import { useParams } from "next/navigation"
 import Link from "next/link"
 import PublicFooter from "@/components/PublicFooter"
+import OrgUnavailableNotice from "@/components/public/OrgUnavailableNotice"
+import { isOrgUnavailable, orgUnavailableContact } from "@/lib/org-lifecycle"
 import { orgPageFooterSite } from "@/lib/urls"
 import { renderMarkdownWithVariables } from "@/lib/markdown"
 import { confirmationVariables } from "@/lib/message-variables"
@@ -118,6 +120,8 @@ export default function MyRegistrationPage() {
   const [data, setData] = useState<PageData | null>(null)
   const [loading, setLoading] = useState(true)
   const [error, setError] = useState<string | null>(null)
+  // The organisation is deactivated or suspended: a page of its own, without any registration.
+  const [orgUnavailable, setOrgUnavailable] = useState<{ contact: string | null; afterLoad?: boolean } | null>(null)
   const [cancelling, setCancelling] = useState<string | null>(null)
   const [pendingCancel, setPendingCancel] = useState<{ editToken: string } | null>(null)
   // A failed withdrawal's message, per registration id: shown under its card, the page stays.
@@ -160,7 +164,9 @@ export default function MyRegistrationPage() {
     fetch(`/api/public/registrations/${token}`)
       .then((r) => r.json())
       .then((d) => {
-        if (d.error) {
+        if (isOrgUnavailable(d)) {
+          setOrgUnavailable({ contact: orgUnavailableContact(d) })
+        } else if (d.error) {
           setError(d.error)
         } else {
           setData(d)
@@ -225,7 +231,14 @@ export default function MyRegistrationPage() {
         body: JSON.stringify({ message: withdrawMessage }),
       })
       if (!res.ok) {
-        const body = res.status === 409 ? await res.json().catch(() => null) : null
+        const body = res.status === 409 || res.status === 403 ? await res.json().catch(() => null) : null
+        // The organisation was closed since the page loaded: the page gives way to the notice.
+        if (res.status === 403 && isOrgUnavailable(body)) {
+          setCancelling(null)
+          setPendingCancel(null)
+          setOrgUnavailable({ contact: orgUnavailableContact(body), afterLoad: true })
+          return
+        }
         failure = { status: res.status, error: typeof body?.error === "string" ? body.error : undefined, reason: body?.reason }
       }
     } catch {
@@ -279,6 +292,8 @@ export default function MyRegistrationPage() {
   }
 
   if (loading) return <div role="status" className="flex items-center justify-center min-h-screen text-gray-500">Chargement…</div>
+
+  if (orgUnavailable) return <OrgUnavailableNotice audience="volunteer" contact={orgUnavailable.contact} focusHeading={orgUnavailable.afterLoad} />
 
   if (error || !data) {
     return (

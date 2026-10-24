@@ -3,6 +3,8 @@
 
 import { NextResponse } from "next/server"
 import { prisma } from "@/lib/prisma"
+import { ORG_LIFECYCLE_SELECT, orgLinksOpen } from "@/lib/org-lifecycle"
+import { orgUnavailableResponse } from "@/lib/org-lifecycle-response"
 import { recordTokenMiss, tokenLookupsBlocked, tokenUseAllowed } from "@/lib/token-rate-limit"
 import { registrationToken } from "@/lib/token-vault"
 import { validationError } from "@/lib/api-error"
@@ -22,12 +24,13 @@ export async function PATCH(req: Request, { params }: { params: Promise<{ token:
   const { token } = await params
   const registration = await prisma.registration.findFirst({
     where: { ...registrationToken.where(token), status: "active" },
-    select: { volunteerId: true },
+    select: { volunteerId: true, event: { select: { organization: { select: ORG_LIFECYCLE_SELECT } } } },
   })
   if (!registration) {
     await recordTokenMiss(req)
     return NextResponse.json({ error: "Lien invalide ou inscription annulée." }, { status: 404 })
   }
+  if (!orgLinksOpen(registration.event.organization)) return orgUnavailableResponse()
   if (!(await tokenUseAllowed(token, "availability"))) return NextResponse.json({ error: "Trop de tentatives." }, { status: 429 })
 
   // Conditional write (#516): a record erased since the lookup above (its links are regenerated,

@@ -1,5 +1,8 @@
 import { describe, it, expect, vi, beforeEach } from "vitest"
 
+// The link's organisation, open: its links give data (src/lib/org-lifecycle.ts).
+const OPEN_ORG = { active: true, suspendedAt: null }
+
 // Day-of contact of an event (#560): saved from the event settings, shown to registered
 // volunteers on their personal page (only for a confirmed shift without a contact of its own),
 // never in a public payload.
@@ -131,7 +134,7 @@ describe("GET /api/public/registrations/[token] — « Avant ta mission »", () 
     pages: [{ slug: "acces", title: "Accès" }, { slug: "faq", title: "FAQ" }],
     // Only roleName and name are selected; the email here checks that nothing else is passed on.
     sectorLeaders: [{ roleName: "Bar", name: "Paul Martin", email: "paul@leader.example" }],
-    organization: { slug: "org", timeZone: "Europe/Zurich", replyToEmail: "orga@example.org" },
+    organization: { ...OPEN_ORG, slug: "org", timeZone: "Europe/Zurich", replyToEmail: "orga@example.org" },
     ...over,
   })
   const reg = (id: string, status: string, shift: Record<string, unknown>) => ({

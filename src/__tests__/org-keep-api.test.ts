@@ -55,7 +55,9 @@ describe("POST /api/public/org-keep (#811)", () => {
     expect(await (await POST(post({ token: secret }))).json()).toEqual({ ok: true, organizationName: "Fête du village" })
     expect(m.find.mock.calls[0][0].where).toEqual({ tokenHash: hashToken(secret) })
     // The organisation row is locked before the link is read again (#1114).
-    expect(m.lock).toHaveBeenCalledTimes(1)
+    // Once by the route, once more (already held, no effect) by clearProcedure, which always
+    // takes the organisation's row before any outbox row.
+    expect(m.lock).toHaveBeenCalledTimes(2)
     expect(m.find).toHaveBeenCalledTimes(2)
     expect(m.orgUpdate).toHaveBeenCalledWith({ where: { id: "org-1" }, data: expect.objectContaining({ inactivityNoticeAt: null, inactivityEmailsSent: 0 }) })
     expect(m.orgUpdate).toHaveBeenCalledWith({ where: { id: "org-1" }, data: expect.objectContaining({ inactivityPlannedAt: null, inactivityBlockedAt: null }) })

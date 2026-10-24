@@ -151,7 +151,15 @@ export async function PATCH(req: Request, { params }: { params: Promise<{ id: st
     }
   }
 
-  const org = await prisma.$transaction(async (tx) => {
+  const result = await prisma.$transaction(async (tx) => {
+    // Decided again under the organisation's row lock (NO KEY UPDATE: the strength of the update itself), the one a self-service reactivation takes
+    // too: a suspension committed since the read above is never undone by a reactivation decided
+    // on the older state.
+    await tx.$queryRaw`SELECT id FROM "Organization" WHERE id = ${id} FOR NO KEY UPDATE`
+    const current = await tx.organization.findUnique({ where: { id }, select: { active: true, suspendedAt: true } })
+    if (!current) return { refused: { status: 404, error: "Organisation non trouvée" } } as const
+    const again = decideSuspension(current, parsed.data)
+    if (!again.ok) return { refused: { status: again.status, error: again.error } } as const
     // Deactivation and suspension (#814, #810): queued emails cancelled with it, never sent later.
     if (decision.cancelQueuedEmails) await cancelPendingOutboxForOrganization(tx, id)
     if (decision.event) {
@@ -187,12 +195,14 @@ export async function PATCH(req: Request, { params }: { params: Promise<{ id: st
       await tx.orgSlugHistory.deleteMany({ where: { slug: updates.slug, organizationId: id } })
       await tx.orgSlugHistory.create({ data: { slug: oldSlug, organizationId: id } })
     }
-    return tx.organization.update({
+    const org = await tx.organization.update({
       where: { id },
       data: updates,
       select: { id: true, name: true, slug: true, active: true, suspendedAt: true, suspensionReason: true, updatedAt: true },
     })
+    return { org, refused: null } as const
   })
 
-  return NextResponse.json(org)
+  if (result.refused) return NextResponse.json({ error: result.refused.error }, { status: result.refused.status })
+  return NextResponse.json(result.org)
 }

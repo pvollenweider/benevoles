@@ -5,6 +5,8 @@ import { useParams } from "next/navigation"
 import { fmtRange } from "@/lib/gantt-utils"
 import { slugify } from "@/lib/utils"
 import PublicFooter from "@/components/PublicFooter"
+import OrgUnavailableNotice from "@/components/public/OrgUnavailableNotice"
+import { isOrgUnavailable, orgUnavailableContact } from "@/lib/org-lifecycle"
 import { orgPageFooterSite } from "@/lib/urls"
 import { spokenStaffingState, staffingStateText, type StaffingState } from "@/lib/staffing"
 
@@ -75,12 +77,15 @@ export default function SectorLeaderPage() {
   const [data, setData] = useState<PageData | null>(null)
   const [loading, setLoading] = useState(true)
   const [error, setError] = useState<string | null>(null)
+  // The organisation is deactivated or suspended: a page of its own, without any of the roster.
+  const [orgUnavailable, setOrgUnavailable] = useState<{ contact: string | null } | null>(null)
 
   useEffect(() => {
     fetch(`/api/public/leader/${token}`)
       .then((r) => r.json())
       .then((d) => {
-        if (d.error) setError(d.error)
+        if (isOrgUnavailable(d)) setOrgUnavailable({ contact: orgUnavailableContact(d) })
+        else if (d.error) setError(d.error)
         else setData(d)
         setLoading(false)
       })
@@ -95,6 +100,8 @@ export default function SectorLeaderPage() {
   }, [data])
 
   if (loading) return <div role="status" className="flex items-center justify-center min-h-screen text-gray-500">Chargement…</div>
+
+  if (orgUnavailable) return <OrgUnavailableNotice audience="leader" contact={orgUnavailable.contact} />
 
   if (error || !data) {
     return (

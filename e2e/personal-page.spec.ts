@@ -359,3 +359,27 @@ test.describe("at 320 px", () => {
     }
   })
 })
+
+// A link of a deactivated or suspended organisation: the API refuses it (403 « org_unavailable »,
+// covered against Postgres by src/__integration__/org-lifecycle-links.int.test.ts); the page shows
+// « Espace indisponible » and the contact address, nothing else, for a volunteer and a sector leader.
+test("a link of a closed organisation shows « Espace indisponible », nothing of the link", async ({ page }) => {
+  const refusal = { error: "Cet espace n'est pas disponible.", code: "org_unavailable", contact: "aide@example.org" }
+  await page.route("**/api/public/registrations/closed-org-link", (route) => route.fulfill({ status: 403, json: refusal }))
+  await page.route("**/api/public/leader/closed-org-link", (route) => route.fulfill({ status: 403, json: refusal }))
+
+  await page.goto("/my/closed-org-link")
+  await expect(page.getByRole("heading", { level: 1, name: "Espace indisponible" })).toBeVisible()
+  await expect(page).toHaveTitle("Espace indisponible — Bénévoles")
+  await expect(page.getByText("ce lien ne donne plus accès à tes inscriptions")).toBeVisible()
+  await expect(page.getByRole("link", { name: "aide@example.org" })).toHaveAttribute("href", "mailto:aide@example.org")
+  await expect(page.getByText("Ce lien ne fonctionne pas")).toHaveCount(0)
+  await expect(page.getByRole("button")).toHaveCount(0)
+  expect.soft(await seriousViolations(page)).toEqual([])
+
+  await page.goto("/leader/closed-org-link")
+  await expect(page.getByRole("heading", { level: 1, name: "Espace indisponible" })).toBeVisible()
+  await expect(page.getByText("ce lien ne donne plus accès à la liste des bénévoles")).toBeVisible()
+  await expect(page.getByText(/écrivez à/)).toBeVisible()
+  expect.soft(await seriousViolations(page)).toEqual([])
+})

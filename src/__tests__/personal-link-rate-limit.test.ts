@@ -1,5 +1,8 @@
 import { describe, it, expect, vi, beforeEach } from "vitest"
 
+// The link's organisation, open: its links give data (src/lib/org-lifecycle.ts).
+const OPEN_ORG = { active: true, suspendedAt: null }
+
 // Personal-link API rate limits (#609): normal use from one shared connection is never refused;
 // failed lookups are limited per IP, and a blocked IP is refused even with a valid link.
 
@@ -24,12 +27,12 @@ const withdrawable = {
   volunteer: { firstName: "A", lastName: "B", email: "a@b.c" },
   // A shift years ahead: a withdrawal is refused once the shift has started (#946).
   shift: { id: "s1", roleName: "Bar", label: "Bar", date: new Date("2031-07-04"), startTime: "10:00", endTime: "12:00", capacity: 2 },
-  event: { id: "e1", title: "T", organizationId: "o1", organization: { slug: "o", timeZone: "Europe/Zurich" } },
+  event: { id: "e1", title: "T", organizationId: "o1", organization: { ...OPEN_ORG, slug: "o", timeZone: "Europe/Zurich" } },
 }
 const page = {
   ...valid,
   volunteer: { firstName: "A", lastName: "B", email: "a@b.c", availabilityPeriods: [], availabilityNote: null, phone: null },
-  event: { id: "e1", title: "T", slug: "t", confirmationMessage: null, latitude: null, longitude: null, organization: { slug: "o", timeZone: "Europe/Zurich", replyToEmail: null } },
+  event: { id: "e1", title: "T", slug: "t", confirmationMessage: null, latitude: null, longitude: null, organization: { ...OPEN_ORG, slug: "o", timeZone: "Europe/Zurich", replyToEmail: null } },
 }
 
 let ipSeq = 0
@@ -106,7 +109,7 @@ describe("personal-link API rate limits", () => {
   it("availability: valid saves are not limited per IP, failed lookups are", async () => {
     const { PATCH } = await routes()
     const ip = freshIp()
-    findFirst.mockResolvedValue({ volunteerId: "v1" })
+    findFirst.mockResolvedValue({ volunteerId: "v1", event: { organization: OPEN_ORG } })
     for (let i = 0; i < 12; i++) expect((await PATCH(request("PATCH", ip, { availabilityPeriods: [], availabilityNote: null }), params(`tok-av-${i}`))).status).toBe(200)
     findFirst.mockResolvedValue(null)
     const other = freshIp()

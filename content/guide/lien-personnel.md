@@ -18,6 +18,10 @@ Sur ta page personnelle, l'encadré **Ton lien personnel** rappelle la date du d
 
 ![Encadré « Ton lien personnel » : « Ce lien est personnel : il donne accès à tes inscriptions et permet de les annuler. Ne le partage pas. », la date du dernier email qui le contenait, et le bouton « Recevoir ce lien par email »](/doc-img/public-personal-link.png)
 
+## La page « Espace indisponible » s'affiche
+
+L'espace de l'organisation sur la plateforme n'est pas disponible en ce moment. Tant que c'est le cas, ton lien personnel ne montre plus tes inscriptions et ne permet plus de rien modifier ; l'abonnement au calendrier ne donne plus de créneaux non plus. Pour une question sur tes données personnelles, écris à l'adresse indiquée sur la page : elle t'aidera à transmettre ta demande à l'organisation. Si l'espace rouvre, le même lien fonctionne de nouveau.
+
 ## La page « Ce lien ne fonctionne pas » s'affiche
 
 Le lien a pu être coupé par ta messagerie (ouvre-le depuis l'email plutôt que de le recopier), ou l'inscription qu'il ouvrait a été annulée (« Inscription introuvable ou déjà annulée »). La page propose de recevoir un nouveau lien : indique l'adresse email utilisée pour t'inscrire ; si une inscription existe à cette adresse dans cette organisation, un email part pour chaque événement à venir. La réponse affichée est la même dans tous les cas, pour que personne ne puisse vérifier qui est inscrit.

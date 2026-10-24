@@ -1,5 +1,8 @@
 import { describe, it, expect, vi, beforeEach } from "vitest"
 
+// The link's organisation, open: its links give data (src/lib/org-lifecycle.ts).
+const OPEN_ORG = { active: true, suspendedAt: null }
+
 const findUnique = vi.hoisted(() => vi.fn())
 const findMany = vi.hoisted(() => vi.fn())
 // The role's shifts with a minimum of people (#949); none unless a test says so.
@@ -25,7 +28,7 @@ describe("GET /api/public/leader/[token]", () => {
   it("returns the roster scoped to the leader's roleName, active and waiting only", async () => {
     findUnique.mockResolvedValue({
       id: "l1", eventId: "evt-1", roleName: "Bar", name: "Alice", token: "tok",
-      event: { id: "evt-1", title: "Festival", slug: "festival" },
+      event: { id: "evt-1", title: "Festival", slug: "festival", organization: OPEN_ORG },
     })
     findMany.mockResolvedValue([
       {
@@ -53,7 +56,7 @@ describe("GET /api/public/leader/[token]", () => {
   it("lists the role's shifts with a minimum and their state, none without one (#949)", async () => {
     findUnique.mockResolvedValue({
       id: "l1", eventId: "evt-1", roleName: "Bar", name: "Alice", token: "tok",
-      event: { id: "evt-1", title: "Festival", slug: "festival" },
+      event: { id: "evt-1", title: "Festival", slug: "festival", organization: OPEN_ORG },
     })
     findMany.mockResolvedValue([])
     shiftFindMany.mockResolvedValueOnce([

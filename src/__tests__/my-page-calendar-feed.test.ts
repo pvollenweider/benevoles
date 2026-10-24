@@ -1,6 +1,9 @@
 import { describe, it, expect, vi, beforeAll } from "vitest"
 import { calendarFeedKey, calendarFeedLinkValid, parseCalendarFeedToken } from "@/lib/calendar-feed"
 
+// The link's organisation, open: its links give data (src/lib/org-lifecycle.ts).
+const OPEN_ORG = { active: true, suspendedAt: null }
+
 // The personal page's API gives the link's calendar subscription (#961): a read-only address of its
 // own, never the personal token, tied to the link's current hash.
 const SECRET = "k".repeat(48)
@@ -24,7 +27,7 @@ describe("GET /api/public/registrations/[token] — calendar subscription", () =
     findFirst.mockResolvedValue({
       id: "cmreg0000001", volunteerId: "v1", eventId: "e1", phone: null, editTokenHash: HASH,
       volunteer: { firstName: "A", lastName: "B", email: "a@x.com", phone: null },
-      event: { id: "e1", title: "F", slug: "f", confirmationMessage: null, organization: { slug: "a" } },
+      event: { id: "e1", title: "F", slug: "f", confirmationMessage: null, organization: { ...OPEN_ORG, slug: "a" } },
     })
     findMany.mockResolvedValue([])
     const { GET } = await import("@/app/api/public/registrations/[token]/route")

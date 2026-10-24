@@ -314,7 +314,9 @@ export default function PrivacyPage() {
         <strong>Pour les bénévoles</strong> : vos données étant contrôlées par l&apos;Organisation
         qui vous a invité(e), adressez votre demande directement à cette Organisation. Nous
         transmettrons toute demande reçue par erreur à l&apos;Organisation concernée dans un délai
-        de 72 heures.
+        de 72 heures. Si l&apos;espace de l&apos;Organisation n&apos;est plus disponible, écrivez à{" "}
+        <a href="mailto:contact@benevol.app">contact@benevol.app</a> : nous vous aiderons à
+        transmettre votre demande à l&apos;Organisation concernée.
       </p>
 
       <h2 id="conservation">7. Conservation des données</h2>

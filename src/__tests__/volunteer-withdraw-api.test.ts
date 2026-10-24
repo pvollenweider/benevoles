@@ -1,5 +1,8 @@
 import { describe, it, expect, vi, beforeEach, afterEach } from "vitest"
 
+// The link's organisation, open: its links give data (src/lib/org-lifecycle.ts).
+const OPEN_ORG = { active: true, suspendedAt: null }
+
 // Withdrawing from the personal page (DELETE /api/public/registrations/[token]): every live
 // registration can be withdrawn, the waitlist included. Regression: a waiting or offered entry
 // answered « Inscription introuvable ou déjà annulée. » although /my showed it an « Annuler ».
@@ -23,7 +26,7 @@ vi.mock("@/lib/withdrawal-notifications", () => ({ queueWithdrawalNotifications:
 vi.mock("@/lib/notifications/outbox", () => ({ enqueueNotifications, deliverAfterResponse }))
 
 const shift = { id: "s1", roleName: "Bar", label: "Bar", date: new Date("2026-07-04"), startTime: "10:00", endTime: "12:00", capacity: 2 }
-const event = { id: "e1", title: "Fête", organizationId: "org-1", organization: { slug: "org", timeZone: "Europe/Zurich" } }
+const event = { id: "e1", title: "Fête", organizationId: "org-1", organization: { ...OPEN_ORG, slug: "org", timeZone: "Europe/Zurich" } }
 const volunteer = { firstName: "Chloé", lastName: "Roy", email: "chloe@example.com" }
 
 const del = (body?: unknown) =>

@@ -1,5 +1,8 @@
 import { describe, it, expect, vi, beforeEach } from "vitest"
 
+// The link's organisation, open: its links give data (src/lib/org-lifecycle.ts).
+const OPEN_ORG = { active: true, suspendedAt: null }
+
 // Route-level behavior of the concurrency fixes (#264), with Prisma mocked: what each route does
 // when the locked re-check or a conditional update tells it another request got there first.
 // The actual locking/serialization is exercised against Postgres in e2e/registration-concurrency.spec.ts.
@@ -186,7 +189,7 @@ describe("conditional transitions", () => {
   it("public cancel: a second concurrent cancel gets 404 and doesn't promote again", async () => {
     m.regFindFirst.mockResolvedValue({
       id: "r1", eventId: "evt-1", shiftId: "shift-1", volunteerId: "v1", status: "active",
-      shift: { date: weekAhead(), startTime: "10:00", endTime: "12:00" }, event: { organization: { timeZone: "Europe/Zurich" } },
+      shift: { date: weekAhead(), startTime: "10:00", endTime: "12:00" }, event: { organization: { ...OPEN_ORG, timeZone: "Europe/Zurich" } },
     })
     m.regUpdateMany.mockResolvedValue({ count: 0 })
     const { DELETE } = await import("@/app/api/public/registrations/[token]/route")
@@ -199,7 +202,7 @@ describe("conditional transitions", () => {
     m.regFindFirst.mockResolvedValue({
       id: "r1", eventId: "evt-1", volunteerId: "v1", editTokenLegacy: "tok", editTokenEnc: null, waitingExpiresAt: new Date(Date.now() + 3600_000),
       volunteer: { email: "a@x.com", firstName: "A" }, shift: { label: "Bar", date: new Date(), startTime: "10:00", endTime: "12:00" },
-      event: { title: "F", organization: { slug: "a" } },
+      event: { title: "F", organization: { ...OPEN_ORG, slug: "a" } },
     })
     m.regUpdateMany.mockResolvedValue({ count: 0 })
     enqueueAndDeliver.mockClear()
@@ -218,7 +221,7 @@ describe("conditional transitions", () => {
     m.regFindFirst.mockResolvedValue({
       id: "r1", eventId: "evt-1", volunteerId: "v1", editTokenLegacy: "tok", editTokenEnc: null, waitingExpiresAt: new Date(Date.now() + 3600_000),
       volunteer: { email: "a@x.com", firstName: "A" }, shift: { label: "Navette", date: new Date(), startTime: "10:00", endTime: "12:00", requiresApproval: true },
-      event: { title: "F", organizationId: "org-a", organization: { slug: "a" } },
+      event: { title: "F", organizationId: "org-a", organization: { ...OPEN_ORG, slug: "a" } },
     })
     m.regUpdateMany.mockResolvedValue({ count: 1 })
     m.eventLogFindFirst.mockResolvedValue(null)

@@ -1,5 +1,8 @@
 import { describe, it, expect, vi, beforeEach } from "vitest"
 
+// The link's organisation, open: its links give data (src/lib/org-lifecycle.ts).
+const OPEN_ORG = { active: true, suspendedAt: null }
+
 // Reserved roles (#470): enforced at sign-up from the member invitation only.
 const m = vi.hoisted(() => ({
   eventFindFirst: vi.fn(),
@@ -88,7 +91,7 @@ describe("GET /api/public/member-invite/[token]", () => {
   it("says which reserved roles the invitation opens, never the member's tags", async () => {
     m.inviteFindUnique.mockResolvedValue({
       volunteer: { id: "v", firstName: "Léa", lastName: "M", email: "lea@x.ch", phone: null, active: true, tags: ["sécurité", "privé"] },
-      event: { slug: "fete", organizationId: "org-a", shifts: [{ roleName: "Sécurité", reservedTags: ["sécurité"] }, { roleName: "Loge", reservedTags: ["artistes"] }, { roleName: "Bar", reservedTags: [] }] },
+      event: { slug: "fete", organizationId: "org-a", organization: OPEN_ORG, shifts: [{ roleName: "Sécurité", reservedTags: ["sécurité"] }, { roleName: "Loge", reservedTags: ["artistes"] }, { roleName: "Bar", reservedTags: [] }] },
     })
     const { GET } = await import("@/app/api/public/member-invite/[token]/route")
     const res = await GET(new Request("http://localhost/api/public/member-invite/tok?slug=fete"), { params: Promise.resolve({ token: "tok" }) })

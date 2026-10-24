@@ -51,4 +51,11 @@ describe("waitlistOfferPageState", () => {
     expect(waitlistOfferPageState({ status: "cancelled", waitingExpiresAt: null }, now)).toBe("invalid")
     expect(waitlistOfferPageState({ status: "waiting", waitingExpiresAt: null }, now)).toBe("invalid")
   })
+
+  it("shows nothing of the offer while the organisation is closed", () => {
+    expect(waitlistOfferPageState({ status: "offered", waitingExpiresAt: null }, now, false)).toBe("unavailable")
+    expect(waitlistOfferPageState({ status: "active", waitingExpiresAt: null }, now, false)).toBe("unavailable")
+    // An unknown link stays an unknown link.
+    expect(waitlistOfferPageState(null, now, false)).toBe("invalid")
+  })
 })

@@ -3,6 +3,8 @@
 
 import { NextResponse } from "next/server"
 import { prisma } from "@/lib/prisma"
+import { ORG_LIFECYCLE_SELECT, orgLinksOpen } from "@/lib/org-lifecycle"
+import { orgUnavailableResponse } from "@/lib/org-lifecycle-response"
 import { rateLimit, getClientIp } from "@/lib/rate-limit"
 import { contactPhone } from "@/lib/contact-phone"
 import { linkToken } from "@/lib/token-vault"
@@ -18,9 +20,11 @@ export async function GET(req: Request, { params }: { params: Promise<{ token: s
 
   const leader = await prisma.sectorLeader.findUnique({
     where: linkToken.where(token),
-    include: { event: { select: { id: true, title: true, slug: true } } },
+    include: { event: { select: { id: true, title: true, slug: true, organization: { select: ORG_LIFECYCLE_SELECT } } } },
   })
   if (!leader) return NextResponse.json({ error: "Lien introuvable." }, { status: 404 })
+  // No roster at all while the organisation is deactivated or suspended.
+  if (!orgLinksOpen(leader.event.organization)) return orgUnavailableResponse()
 
   const registrations = await prisma.registration.findMany({
     where: {

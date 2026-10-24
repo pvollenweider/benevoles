@@ -1,5 +1,8 @@
 import { describe, it, expect, vi, beforeEach } from "vitest"
 
+// The link's organisation, open: its links give data (src/lib/org-lifecycle.ts).
+const OPEN_ORG = { active: true, suspendedAt: null }
+
 // The personal page (/my/<token>) shows the same phone as admins and sector leaders
 // (contactPhone): the one given at sign-up, which for an already-known volunteer lives only on
 // the registration (the profile isn't updated from an unverified public submission).
@@ -20,7 +23,7 @@ const get = (token: string) =>
 const reg = (phone: string | null, profilePhone: string | null) => ({
   id: "r1", volunteerId: "v1", eventId: "e1", phone,
   volunteer: { firstName: "A", lastName: "B", email: "a@x.com", phone: profilePhone },
-  event: { id: "e1", title: "F", slug: "f", confirmationMessage: null, organization: { slug: "a" } },
+  event: { id: "e1", title: "F", slug: "f", confirmationMessage: null, organization: { ...OPEN_ORG, slug: "a" } },
 })
 
 const sibling = (phone: string | null) => ({

@@ -19,7 +19,7 @@ export async function refreshAdminToken(token: JWT): Promise<JWT | null> {
   if (!token.sub) return null
   const admin = await prisma.adminUser.findUnique({
     where: { id: token.sub },
-    select: { isActive: true, role: true, organizationId: true, sessionVersion: true, email: true, name: true, organization: { select: { active: true } } },
+    select: { isActive: true, role: true, organizationId: true, sessionVersion: true, email: true, name: true, organization: { select: { active: true, suspendedAt: true } } },
   })
   if (!admin || !admin.isActive) return null
   // Password changed or reset since this session was opened (#360). Tokens issued before the
