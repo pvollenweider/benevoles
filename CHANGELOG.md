@@ -21,6 +21,8 @@ Format basé sur [Keep a Changelog](https://keepachangelog.com/fr/1.0.0/).
 
 - **Plafonds d'envoi atteints, pour l'opérateur** (#1100) : en haut de la liste des organisations du super admin, les plafonds d'envoi d'emails atteints ces 7 derniers jours, par organisation : le plafond en clair, quand, combien d'emails ont été retenus (ils partent à la fin de la période du plafond) et combien ont été refusés, et s'il reste des emails retenus en attente. Une mention « Plafond d'envoi atteint » sur la ligne de l'organisation mène au même détail sur sa fiche. Rien sur les destinataires ni le contenu des emails n'est gardé, et ces relevés sont effacés après 90 jours. <!-- interne -->
 
+- **Situations types dans la documentation** : une courte citation en tête de huit pages des guides organisateur et bénévole (accueil des guides, premier événement, invitations, postes à compléter, jour J, choix des créneaux, inscription), attribuée à un prénom et un rôle et suivie de la note « * Personnage et citation fictifs. », dans un encadré sobre.
+
 ### Modifié
 
 - **Inscription intégrée à un site** (#1117) : le pied de page montre « Propulsé par benevol.app » (le nom de l'instance ailleurs), qui mène à la page d'accueil du site dans un nouvel onglet ; le code source sur GitHub garde son propre lien « Code source ».

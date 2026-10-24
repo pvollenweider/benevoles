@@ -10,6 +10,12 @@ aliases: []
 
 # Créer son premier événement
 
+> « Nous aussi, on est bénévoles. Organiser les bénévoles ne devrait pas devenir un deuxième travail. »
+>
+> Élodie, association culturelle*
+>
+> \* Personnage et citation fictifs.
+
 <!-- video: EVENT_CREATE_PUBLISH_OVERVIEW -->
 
 Les huit étapes ci-dessous mènent, dans l'ordre, d'une organisation toute neuve à un lien d'inscription partagé. Chacune tient en quelques lignes et renvoie à la page qui la détaille.

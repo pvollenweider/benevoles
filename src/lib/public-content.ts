@@ -109,7 +109,7 @@ function renderDocUnitPartsNow(unit: DocUnit, mediaBaseUrl?: string | null): Doc
     players.set(id, player)
     return renderDocVideoSlot(id)
   }
-  const html = renderEventPageMarkdown(linkSourcesToRoutes(localizeInstanceText(unit.body)), { shiftHeadings: false, headingIds: true, videoCard: videoSlot, image: docImageHtml })
+  const html = renderEventPageMarkdown(linkSourcesToRoutes(localizeInstanceText(unit.body)), { shiftHeadings: false, headingIds: true, videoCard: videoSlot, image: docImageHtml, exampleQuotes: true })
   return splitAtDocVideoSlots(html, players)
 }
 
@@ -131,7 +131,7 @@ function renderPublicMarkdown(body: string, mediaBaseUrl?: string | null): strin
     const link = docVideoLink(id, catalog, hasRender)
     return link ? renderDocVideoCard(link) : ""
   }
-  return renderEventPageMarkdown(linkSourcesToRoutes(localizeInstanceText(body)), { shiftHeadings: false, headingIds: true, videoCard, image: docImageHtml })
+  return renderEventPageMarkdown(linkSourcesToRoutes(localizeInstanceText(body)), { shiftHeadings: false, headingIds: true, videoCard, image: docImageHtml, exampleQuotes: true })
 }
 
 const blogPostCache = createRenderCache<string>()

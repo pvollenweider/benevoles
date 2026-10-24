@@ -10,6 +10,12 @@ aliases: []
 
 # Où manque-t-il du monde ?
 
+> « Pour notre tournoi, on a besoin de parents à la buvette, à l'accueil et au montage. Le plus compliqué, c'est de savoir quels postes restent à compléter. »
+>
+> Julien, responsable d'un club sportif*
+>
+> \* Personnage et citation fictifs.
+
 <!-- video: STAFFING_GAPS -->
 
 **Événements**, puis l'événement, puis, dans la section **Où manque-t-il du monde ?**, **Voir les créneaux à compléter** (ou **Voir le détail des créneaux** quand tout est complet)

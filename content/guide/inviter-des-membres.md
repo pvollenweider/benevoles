@@ -10,6 +10,12 @@ aliases: []
 
 # Inviter des membres à un événement
 
+> « Certains bénévoles reviennent chaque année, d'autres nous rejoignent pour la première fois. On cherche un outil simple pour accueillir tout le monde. »
+>
+> Aline, organisatrice d'une fête de village*
+>
+> \* Personnage et citation fictifs.
+
 <!-- video: MEMBERS_INVITATIONS -->
 
 **Événements**, puis l'événement, puis l'onglet **Inscriptions**, et **Invitations** dans ses pages

@@ -1,5 +1,5 @@
 import { describe, it, expect } from "vitest"
-import { renderEventPageMarkdown } from "../event-page-markdown"
+import { isFictionNote, renderEventPageMarkdown } from "../event-page-markdown"
 
 describe("renderEventPageMarkdown", () => {
   it("renders basic Markdown formatting", () => {
@@ -82,5 +82,57 @@ describe("renderEventPageMarkdown", () => {
   it("still strips an id written by hand in inline HTML when headingIds is off", () => {
     const html = renderEventPageMarkdown('<p id="main">x</p>')
     expect(html).not.toContain('id="main"')
+  })
+})
+
+describe("example quotes (exampleQuotes)", () => {
+  const source = "> « Je peux donner deux heures samedi. »\n>\n> Léa, bénévole occasionnelle*\n>\n> \\* Personnage et citation fictifs."
+
+  it("renders a quote, its starred caption and the fiction note as one figure, the note inside the caption", () => {
+    const html = renderEventPageMarkdown(source, { exampleQuotes: true })
+    expect(html).toBe(
+      '<figure>\n<blockquote>\n<p>« Je peux donner deux heures samedi. »</p>\n</blockquote>\n<figcaption>\n<p>Léa, bénévole occasionnelle<span aria-hidden="true">*</span></p>\n<p><span aria-hidden="true">* </span>Personnage et citation fictifs.</p>\n</figcaption>\n</figure>\n',
+    )
+  })
+
+  it("leaves any other blockquote unchanged", () => {
+    const plain = "> Pour {événement}, vous pouvez maintenant voir qui est inscrit.\n>\n> C'est facultatif."
+    const html = renderEventPageMarkdown(plain, { exampleQuotes: true })
+    expect(html).not.toContain("<figure>")
+    expect(html).toContain("<p>C'est facultatif.</p>")
+    expect(html).toBe(renderEventPageMarkdown(plain))
+  })
+
+  it("needs the quote, the starred caption and the note: anything less stays a plain blockquote", () => {
+    for (const partial of [
+      "> Léa, bénévole*\n>\n> \\* Personnage et citation fictifs.",
+      "> « x »\n>\n> Léa, bénévole\n>\n> \\* Personnage et citation fictifs.",
+      "> « x »\n>\n> Léa, bénévole*",
+    ]) {
+      const html = renderEventPageMarkdown(partial, { exampleQuotes: true })
+      expect(html).not.toContain("<figure>")
+      expect(html).toContain("<blockquote>")
+    }
+  })
+
+  it("keeps the plain blockquote when the option is off, and strips a figure or aria-hidden written by hand", () => {
+    expect(renderEventPageMarkdown(source)).not.toContain("<figure>")
+    expect(renderEventPageMarkdown(source)).toContain("<blockquote>")
+    const hand = renderEventPageMarkdown('<figure><figcaption><span aria-hidden="true">x</span></figcaption></figure>')
+    expect(hand).not.toMatch(/<fig|<span|aria-hidden/)
+  })
+
+  it("sanitizes the quote and the caption like the rest of the page", () => {
+    const html = renderEventPageMarkdown("> « x » <script>alert(1)</script>\n>\n> Léa <img src=x onerror=alert(1)>*\n>\n> \\* Personnage et citation fictifs.", { exampleQuotes: true })
+    expect(html).toContain("<figure>")
+    expect(html).not.toContain("<script")
+    expect(html).not.toContain("onerror")
+  })
+
+  it("recognises the note with or without the escaping backslash, and nothing else", () => {
+    expect(isFictionNote("\\* Personnage et citation fictifs.")).toBe(true)
+    expect(isFictionNote("* Personnage et citation fictifs.")).toBe(true)
+    expect(isFictionNote("Personnage et citation fictifs.")).toBe(false)
+    expect(isFictionNote("\\* Personnage et citation réels.")).toBe(false)
   })
 })
