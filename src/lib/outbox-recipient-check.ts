@@ -8,6 +8,7 @@ import {
   ACCOUNT_LINK_REVOKED_REASON,
   LEADER_LINK_REVOKED_REASON,
   MEMBER_ADDRESS_CHANGED_REASON,
+  PERSONAL_LINK_REVOKED_REASON,
   memberAddressChanged,
 } from "./outbox-address-changed-reason"
 
@@ -24,8 +25,8 @@ import {
  *   invitations, removals, restorations, targeted messages, open shifts, lost-link re-sends…): the
  *   member's current address must be the recipient. They carry a personal link, an invitation
  *   link or the member's shifts.
- * - A payload with a personal link (`data.editToken`) but no `volunteerId`: the link's member must
- *   have the recipient's address (an unknown token, like a preview's placeholder, is left alone).
+ * - A payload with a personal link (`data.editToken`) but no `volunteerId`: the link must still
+ *   exist and its member have the recipient's address (previews are rendered, never queued).
  * - Sector leader emails (`sector_leader_*`, `data.token`): the leader must still exist, with
  *   this link and this address. They carry the role's roster link and volunteers' names.
  * - Account emails with a single-use link (password_reset, admin_invite, signup_account_link,
@@ -51,8 +52,8 @@ export async function outboxRecipientVerdict(payload: NotificationPayload): Prom
       where: { editTokenHash: hashToken(data.editToken) },
       select: { volunteer: { select: { email: true } } },
     })
-    if (reg && memberAddressChanged(recipient, reg.volunteer)) return MEMBER_ADDRESS_CHANGED_REASON
-    return null
+    if (!reg) return PERSONAL_LINK_REVOKED_REASON
+    return memberAddressChanged(recipient, reg.volunteer) ? MEMBER_ADDRESS_CHANGED_REASON : null
   }
 
   if (payload.kind.startsWith("sector_leader_") && typeof data.token === "string" && data.token) {

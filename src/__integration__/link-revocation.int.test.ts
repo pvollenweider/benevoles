@@ -266,12 +266,21 @@ describe.skipIf(!url)("revocation of links and queued emails", () => {
       }])
       state.sent = []
       expect(await deliverOutbox({ ids: late })).toMatchObject({ sent: 0, cancelled: 1 })
-      // Same without a member id: the link names a member whose address is no longer this one.
+      // Same without a member id, with the old link: it no longer exists, the email can't leave.
       const noId = await enqueueNotifications([{
         kind: "registration_link_resend", organizationId: state.orgId,
-        recipient: { email: oldEmail, name: "Alix" }, data: { volunteerName: "Alix", eventTitle: "Fête", orgSlug, editToken: (await prisma.registration.findFirstOrThrow({ where: { volunteerId: v.id }, select: registrationToken.select }).then(registrationToken.reveal)) },
+        recipient: { email: oldEmail, name: "Alix" }, data: { volunteerName: "Alix", eventTitle: "Fête", orgSlug, editToken: personal },
       }])
       expect(await deliverOutbox({ ids: noId })).toMatchObject({ sent: 0, cancelled: 1 })
+      expect((await prisma.notificationOutbox.findUniqueOrThrow({ where: { id: noId[0] } })).lastError).toBe("personal_link_revoked")
+      // And with the new link but the old address: its member's address is no longer this one.
+      const newLink = await prisma.registration.findFirstOrThrow({ where: { volunteerId: v.id }, select: registrationToken.select }).then(registrationToken.reveal)
+      const wrongAddress = await enqueueNotifications([{
+        kind: "registration_link_resend", organizationId: state.orgId,
+        recipient: { email: oldEmail, name: "Alix" }, data: { volunteerName: "Alix", eventTitle: "Fête", orgSlug, editToken: newLink },
+      }])
+      expect(await deliverOutbox({ ids: wrongAddress })).toMatchObject({ sent: 0, cancelled: 1 })
+      expect((await prisma.notificationOutbox.findUniqueOrThrow({ where: { id: wrongAddress[0] } })).lastError).toBe("member_address_changed")
       expect(state.sent).toHaveLength(0)
     })
 
@@ -324,6 +333,33 @@ describe.skipIf(!url)("revocation of links and queued emails", () => {
       expect((await edit(v.id, { email: email.toUpperCase() })).status).toBe(200)
       expect((await prisma.registration.findUniqueOrThrow({ where: { id: reg.id } })).editTokenHash).toBe(reg.editTokenHash)
       expect((await openPersonal(personal)).status).toBe(200)
+    })
+
+    it("an administrator's own email is not cancelled when the member record with the same address is corrected", async () => {
+      const shared = `${tag}-shared-${seq++}@example.org`
+      const { v } = await member(shared)
+      const adminRow = await prisma.adminUser.create({ data: { name: "Alix", email: shared, role: "admin", organizationId: state.orgId, passwordHash: await bcrypt.hash(PASSWORD, 4) } })
+      const reset = await enqueueNotifications([{
+        kind: "password_reset", organizationId: state.orgId, recipient: { email: shared, name: "Alix" },
+        data: { adminName: "Alix", resetUrl: "http://localhost:3999/admin/reset-password?token=shared-reset" },
+      }])
+      await prisma.adminUser.update({ where: { id: adminRow.id }, data: { passwordResetTokenHash: hashToken("shared-reset"), passwordResetExpiresAt: new Date(Date.now() + 3_600_000) } })
+      expect((await edit(v.id, { email: `${tag}-member-only-${seq++}@example.org` })).status).toBe(200)
+      expect(await prisma.notificationOutbox.findUniqueOrThrow({ where: { id: reset[0] } })).toMatchObject({ status: "pending" })
+      expect(await deliverOutbox({ ids: reset })).toMatchObject({ sent: 1 })
+    })
+
+    it("a form still showing the old address can't put it back without renewing the links", async () => {
+      for (let round = 0; round < 3; round++) {
+        const original = `${tag}-orig-${seq++}@example.org`
+        const { v, personal } = await member(original)
+        const corrected = `${tag}-corr-${seq++}@example.org`
+        // Concurrently: a correction, and a stale form that sends the original address with another field.
+        const results = await Promise.all([edit(v.id, { email: corrected }), edit(v.id, { email: original, firstName: "Alexandra" })])
+        expect(results.map((r) => r.status)).toEqual([200, 200])
+        // Whatever the order, the address changed at least once: the first links are dead.
+        expect((await openPersonal(personal)).status).toBe(404)
+      }
     })
 
     it("two corrections at the same time leave one consistent result: every old link dead, the last address holds the links", async () => {

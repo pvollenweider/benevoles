@@ -214,7 +214,10 @@ export async function alertRefusedAtRequest(organizationId: string | null, kind:
   const store = opts.store ?? defaultStore
   const alert = opts.alert ?? ((limit: string, org: string | null) => void alertOperator(limit, org, store))
   try {
-    const marker = await store.hit(`${recipientWindowKey(recipientEmail, kind)}:held`, HOUR)
+    // As long as the window it belongs to, like a delivery's marker: the next full window alerts again.
+    const key = recipientWindowKey(recipientEmail, kind)
+    const window = await store.peek(key)
+    const marker = await store.hit(`${key}:held`, Math.max(1000, Math.ceil(window?.msLeft ?? HOUR)))
     if (marker.count === 1) alert("recipient_per_hour", organizationId)
   } catch (e) {
     reportError("email.limit.alert_marker")(e)

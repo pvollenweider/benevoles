@@ -317,14 +317,14 @@ describe("recipient checked right before the send: links revoked since the email
     return { ...res, lastError }
   }
 
-  it("a personal link without a member id: cancelled when the link's member has another address, left alone when the link is unknown", async () => {
+  it("a personal link without a member id: cancelled when the link's member has another address or the link no longer exists", async () => {
     const payload = { kind: "registration_link_resend", recipient: { email: "old@x.ch" }, data: { editToken: "tok" } }
     m.registrationFindUnique.mockResolvedValue({ volunteer: { email: "new@x.ch" } })
     expect(await deliver(payload)).toMatchObject({ cancelled: 1, lastError: "member_address_changed" })
     m.registrationFindUnique.mockResolvedValue({ volunteer: { email: "OLD@x.ch" } })
     expect(await deliver(payload)).toMatchObject({ sent: 1 })
     m.registrationFindUnique.mockResolvedValue(null)
-    expect(await deliver(payload)).toMatchObject({ sent: 1 })
+    expect(await deliver(payload)).toMatchObject({ cancelled: 1, lastError: "personal_link_revoked" })
   })
 
   it("a sector leader email: cancelled once the leader is gone or has another address", async () => {

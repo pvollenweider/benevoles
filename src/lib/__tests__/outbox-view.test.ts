@@ -144,7 +144,8 @@ describe("an email cancelled because the member's address changed (#1105)", () =
 
 describe("an email cancelled because its link was revoked", () => {
   it("says so in French, without the token or the address", async () => {
-    const { ACCOUNT_LINK_REVOKED_REASON, LEADER_LINK_REVOKED_REASON } = await import("../outbox-address-changed-reason")
+    const { ACCOUNT_LINK_REVOKED_REASON, LEADER_LINK_REVOKED_REASON, PERSONAL_LINK_REVOKED_REASON } = await import("../outbox-address-changed-reason")
+    expect(outboxErrorSentence(PERSONAL_LINK_REVOKED_REASON)).toBe("Annulé : le lien personnel de cet email a été remplacé depuis la mise en file.")
     expect(outboxErrorSentence(ACCOUNT_LINK_REVOKED_REASON)).toBe("Annulé : le lien de cet email a été remplacé ou n'est plus valable.")
     expect(outboxErrorSentence(LEADER_LINK_REVOKED_REASON)).toBe("Annulé : ce responsable de secteur a été retiré, ou son adresse a changé, depuis la mise en file.")
   })

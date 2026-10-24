@@ -56,3 +56,21 @@ export function linksToResend(
     .map((i) => i.id)
   return { registrationIds: [...newestByEvent.values()].map((r) => r.id), inviteIds }
 }
+
+/**
+ * Whether a queued email belongs to the member whose address is being corrected: tied to the
+ * member (`volunteerId`), or, without a member id, carrying one of the member's old links
+ * (`hash` is the token hash function, passed in to keep this module free of node:crypto).
+ */
+export function memberLinkPayload(
+  payload: { kind: string; volunteerId?: string | null; data?: Record<string, unknown> },
+  volunteerId: string,
+  oldLinks: { registrationHashes: Set<string>; inviteHashes: Set<string> },
+  hash: (token: string) => string,
+): boolean {
+  if (payload.volunteerId) return payload.volunteerId === volunteerId
+  const data = payload.data ?? {}
+  if (typeof data.editToken === "string" && data.editToken && oldLinks.registrationHashes.has(hash(data.editToken))) return true
+  if (payload.kind === "member_invite" && typeof data.token === "string" && data.token && oldLinks.inviteHashes.has(hash(data.token))) return true
+  return false
+}

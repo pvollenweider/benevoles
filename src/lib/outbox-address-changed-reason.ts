@@ -20,6 +20,13 @@ export const MEMBER_ADDRESS_CHANGED_REASON = "member_address_changed"
  */
 export const ACCOUNT_LINK_REVOKED_REASON = "account_link_revoked"
 
+/**
+ * An email with a personal link but no member id whose link no longer exists (renewed after an
+ * address correction, a merge, an erasure): it can't be tied to a member any more, and its link
+ * would not work.
+ */
+export const PERSONAL_LINK_REVOKED_REASON = "personal_link_revoked"
+
 /** A sector leader email whose leader was removed, or whose link or address changed, since it was queued. */
 export const LEADER_LINK_REVOKED_REASON = "leader_link_revoked"
 

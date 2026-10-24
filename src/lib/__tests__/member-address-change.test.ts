@@ -1,5 +1,5 @@
 import { describe, it, expect } from "vitest"
-import { addressCorrected, linksToResend, UPCOMING_GRACE_MS, type RenewedInvite, type RenewedRegistration } from "../member-address-change"
+import { addressCorrected, linksToResend, memberLinkPayload, UPCOMING_GRACE_MS, type RenewedInvite, type RenewedRegistration } from "../member-address-change"
 
 const now = new Date("2031-05-01T12:00:00Z")
 const later = new Date("2031-06-01T00:00:00Z")
@@ -59,5 +59,23 @@ describe("linksToResend: what the new address receives", () => {
     expect(linksToResend({ ...input, newEmail: null, active: true }, now)).toEqual({ registrationIds: [], inviteIds: [] })
     expect(linksToResend({ ...input, newEmail: "  ", active: true }, now)).toEqual({ registrationIds: [], inviteIds: [] })
     expect(linksToResend({ ...input, newEmail: "right@x.ch", active: false }, now)).toEqual({ registrationIds: ["r1"], inviteIds: [] })
+  })
+})
+
+describe("memberLinkPayload: which queued emails a correction cancels", () => {
+  const hash = (t: string) => `h:${t}`
+  const old = { registrationHashes: new Set(["h:reg-old"]), inviteHashes: new Set(["h:inv-old"]) }
+  it("the member's own emails, by member id", () => {
+    expect(memberLinkPayload({ kind: "targeted_message", volunteerId: "v1", data: {} }, "v1", old, hash)).toBe(true)
+    expect(memberLinkPayload({ kind: "targeted_message", volunteerId: "v2", data: { editToken: "reg-old" } }, "v1", old, hash)).toBe(false)
+  })
+  it("without a member id, only an email carrying one of the member's old links", () => {
+    expect(memberLinkPayload({ kind: "registration_link_resend", data: { editToken: "reg-old" } }, "v1", old, hash)).toBe(true)
+    expect(memberLinkPayload({ kind: "member_invite", data: { token: "inv-old" } }, "v1", old, hash)).toBe(true)
+    expect(memberLinkPayload({ kind: "registration_link_resend", data: { editToken: "someone-else" } }, "v1", old, hash)).toBe(false)
+  })
+  it("never an administrator's email that only shares the address", () => {
+    expect(memberLinkPayload({ kind: "password_reset", data: { resetUrl: "https://app.test/?token=x" } }, "v1", old, hash)).toBe(false)
+    expect(memberLinkPayload({ kind: "admin_notification", data: { volunteerName: "A" } }, "v1", old, hash)).toBe(false)
   })
 })

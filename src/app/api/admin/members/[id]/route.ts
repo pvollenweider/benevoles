@@ -10,7 +10,7 @@ import { availabilitySchema } from "@/lib/availability"
 import { isUniqueViolation } from "@/lib/registration-capacity"
 import { MEMBER_ERASURE_REASON } from "@/lib/member-erasure"
 import { addressCorrected } from "@/lib/member-address-change"
-import { normalizeEmail } from "@/lib/email-address"
+import { SEND_TRANSACTION_OPTIONS } from "@/lib/invitation-sending"
 import { renewMemberLinks } from "@/lib/member-address-revocation"
 import { deliverAfterResponse } from "@/lib/notifications/outbox"
 import type { Tx } from "@/lib/registration-capacity"
@@ -65,15 +65,17 @@ export async function PATCH(req: Request, { params }: { params: Promise<{ id: st
     if (taken) return NextResponse.json({ error: EMAIL_TAKEN }, { status: 409 })
   }
 
-  // An address change goes through a transaction with the member's row locked, so that two edits,
-  // or an edit and a merge or an erasure, never interleave and the address compared is the one
-  // under the lock. A corrected address renews the member's links in that same transaction
-  // (src/lib/member-address-revocation.ts): the old address loses access, the new one receives
-  // what the member needs. Any other edit is a plain update, as before.
+  // An edit that carries an address goes through a transaction with the member's row locked, so
+  // that two edits, or an edit and a merge or an erasure, never interleave and the address compared
+  // is the one under the lock (an unlocked comparison would let a form that still shows the old
+  // address put it back after a correction without renewing anything). A corrected address renews
+  // the member's links in that same transaction (src/lib/member-address-revocation.ts): the old
+  // address loses access, the new one receives what the member needs. Any other edit is a plain
+  // update, as before.
   let volunteer
   let renewal: Awaited<ReturnType<typeof renewMemberLinks>> | null = null
   try {
-    if (newEmail === undefined || normalizeEmail(newEmail ?? "") === normalizeEmail(before.email ?? "")) {
+    if (newEmail === undefined) {
       volunteer = await db.volunteer.update({ where: { id }, data: updateData })
     } else {
       const outcome = await db.$transaction(async (tx) => {
@@ -92,7 +94,7 @@ export async function PATCH(req: Request, { params }: { params: Promise<{ id: st
           })
           : null
         return { updated, renewed }
-      })
+      }, SEND_TRANSACTION_OPTIONS)
       if ("notFound" in outcome) return NextResponse.json({ error: "Non trouvé" }, { status: 404 })
       if ("erased" in outcome) return NextResponse.json({ error: MEMBER_ERASURE_REASON.erased }, { status: 409 })
       volunteer = outcome.updated

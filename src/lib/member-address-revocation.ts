@@ -3,14 +3,14 @@
 
 import { generateToken } from "./utils"
 import { linkToken, registrationToken } from "./token-vault"
-import { enqueueNotifications } from "./notifications/outbox"
+import { enqueueNotifications, openPayload } from "./notifications/outbox"
 import type { NotificationPayload } from "./notifications/types"
 import { memberInvitePayload } from "./notification-helpers"
 import { inviteEmailDedupeKey } from "./invitation-sending"
-import { cancelOutboxForMergedMember } from "./outbox-merge-cancel"
+import { hashToken } from "./token-hash"
 import { MEMBER_ADDRESS_CHANGED_REASON } from "./outbox-address-changed-reason"
 import { LIVE_STATUSES, type Tx } from "./registration-capacity"
-import { linksToResend } from "./member-address-change"
+import { linksToResend, memberLinkPayload } from "./member-address-change"
 
 /**
  * The renewal of a member's links when an organiser corrects their address (rules in
@@ -41,11 +41,11 @@ export async function renewMemberLinks(tx: Tx, input: {
   } as const
   const registrations = await tx.registration.findMany({
     where: { volunteerId: volunteer.id },
-    select: { id: true, eventId: true, status: true, createdAt: true, event: eventSelect },
+    select: { id: true, eventId: true, status: true, createdAt: true, editTokenHash: true, event: eventSelect },
   })
   const invites = await tx.memberInvite.findMany({
     where: { volunteerId: volunteer.id },
-    select: { id: true, eventId: true, usedAt: true, declinedAt: true, event: eventSelect },
+    select: { id: true, eventId: true, usedAt: true, declinedAt: true, tokenHash: true, event: eventSelect },
   })
 
   // 1. New tokens, kept in clear for the emails below (sealed in the outbox payload).
@@ -64,8 +64,22 @@ export async function renewMemberLinks(tx: Tx, input: {
   // 2. Devices subscribed with an old link.
   const { count: pushSubscriptions } = await tx.pushSubscription.deleteMany({ where: { volunteerId: volunteer.id } })
 
-  // 3. Before queuing anything new: the new emails are pending rows of this member too.
-  const cancelled = await cancelOutboxForMergedMember(tx, organizationId, { volunteerId: volunteer.id, email: input.oldEmail }, MEMBER_ADDRESS_CHANGED_REASON)
+  // 3. Before queuing anything new (the new emails are pending rows of this member too): the
+  // pending emails of the member, by member id, or by one of the old links for a row without one.
+  // Never by address alone: the same person may also be an administrator, whose own emails
+  // (password reset, digests) have nothing to do with the member's address.
+  const oldLinks = { registrationHashes: new Set(registrations.map((r) => r.editTokenHash)), inviteHashes: new Set(invites.map((i) => i.tokenHash)) }
+  const candidates = await tx.notificationOutbox.findMany({ where: { organizationId, status: "pending" }, select: { id: true, payload: true } })
+  const toCancel: string[] = []
+  for (const row of candidates) {
+    let payload: NotificationPayload
+    try { payload = openPayload(row.payload) } catch { continue } // unreadable (key rotated away): left to its own retry path
+    if (memberLinkPayload(payload, volunteer.id, oldLinks, hashToken)) toCancel.push(row.id)
+  }
+  if (toCancel.length) {
+    await tx.notificationOutbox.updateMany({ where: { id: { in: toCancel }, status: "pending" }, data: { status: "cancelled", lastError: MEMBER_ADDRESS_CHANGED_REASON } })
+  }
+  const cancelled = toCancel
 
   // 4. The new links, to the new address.
   const plan = linksToResend({
