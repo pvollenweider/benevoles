@@ -213,3 +213,41 @@ que la case n'est pas cochée) : les captures continuent de fonctionner.
   panneau filmée est l'ancienne ; la narration reste juste.
 
 Ces vidéos n'ont pas été régénérées dans la même PR.
+
+## Écart connu : un seul nom par écran (#1099)
+
+Renommés dans l'interface, les emails et les guides : la page personnelle des
+bénévoles s'appelle « Mes inscriptions » (son titre) ; l'onglet « Communication »
+d'un événement devient « Messages » ; le titre « Modifier l'événement » devient
+« Informations de l'événement » ; « Partager l'événement » devient « Liens à
+partager » ; la page de connexion « Administration » devient « Espace
+organisateur » ; les boutons des emails « Voir mes créneaux », « Gérer mon
+inscription » et « Voir mon inscription » deviennent « Gérer mes inscriptions »
+(« Voir mes inscriptions » le jour même). Sources mises à jour dans la même PR :
+narration et bloc `viewer` des manifestes, scripts, sélecteurs et repères de
+narration (`videos/tools/record.ts`, `videos/lib/record-privacy.ts`). Les
+captures suivantes trouvent les nouveaux libellés.
+
+Narration modifiée (le son et les sous-titres publiés disent encore l'ancien nom) :
+
+- `admin-navigation`, `org-email-settings`, `reminders-changes`,
+  `targeted-messages` : « Communication » devient « Messages ».
+- `privacy-personal-links`, `shift-approval`, `shift-night-dst`,
+  `shift-roster-visibility`, `volunteer-calendar`,
+  `volunteer-personal-registrations`, `volunteer-phone-notifications`,
+  `volunteer-session-availability` : « page personnelle » devient « page Mes
+  inscriptions ».
+
+Image seulement (la narration reste juste) :
+
+- toute vidéo filmée sur une page d'un événement montre l'onglet
+  « Communication » dans la barre d'onglets ;
+- `admin-features-tour`, `event-program-pages-qr`,
+  `event-visibility-registration-window` : titre « Modifier l'événement » ;
+- `admin-navigation`, `event-program-pages-qr`, `event-review-publish`,
+  `organizer-create-publish` : titre « Partager l'événement » ;
+- `org-team-permissions`, `volunteer-form-recap`, `volunteer-register-mobile` :
+  page de connexion « Administration » ;
+- `registrations-management` : bouton « Voir mes créneaux » de l'email.
+
+Ces vidéos n'ont pas été régénérées dans la même PR.
