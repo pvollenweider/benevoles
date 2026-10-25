@@ -1682,6 +1682,15 @@ describe("Organization logo — cross-tenant isolation", () => {
 describe("Event actions — cross-tenant isolation (#1049)", () => {
   beforeEach(() => vi.clearAllMocks())
 
+  it("GET /api/admin/events/[id]/day-of returns 404 for an org-B event, reading only through the scoped db (#1141)", async () => {
+    const { GET } = await import("@/app/api/admin/events/[id]/day-of/route")
+    const db = setupGuard() // event.findFirst → null
+    const res = await GET(makeRequest("/api/admin/events/evt-b/day-of"), params("evt-b"))
+    expect(res.status).toBe(404)
+    expect(db.event.findFirst).toHaveBeenCalledWith(expect.objectContaining({ where: { id: "evt-b" } }))
+    expect(prismaMock.event.findFirst).not.toHaveBeenCalled()
+  })
+
   it("POST /api/admin/events/[id]/duplicate returns 404 for an org-B event, creating nothing", async () => {
     const { POST } = await import("@/app/api/admin/events/[id]/duplicate/route")
     const db = setupGuard() // event.findFirst → null

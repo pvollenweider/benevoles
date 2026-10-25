@@ -5,11 +5,9 @@ import type { Metadata } from "next"
 import Link from "next/link"
 import { notFound, redirect } from "next/navigation"
 import { getOrgContext } from "@/lib/auth-guard"
-import { orgTimeZone } from "@/lib/time-zone"
-import { contactPhone } from "@/lib/contact-phone"
 import { formatShortDate } from "@/lib/utils"
-import { fmtHour } from "@/lib/registrations-list"
-import { dayOfBoard, dayOfDateRange, isEventDay, localDay, type DayOfShift } from "@/lib/day-of"
+import { isEventDay } from "@/lib/day-of"
+import { loadDayOf } from "@/lib/day-of-load"
 import DayOfBoard from "@/components/admin/DayOfBoard"
 import HelpLink from "@/components/admin/HelpLink"
 import { statusBoxClass } from "@/lib/status-message"
@@ -31,47 +29,10 @@ export default async function DayOfPage({ params }: { params: Promise<{ id: stri
   if (!ctx) redirect("/admin/login")
   const { id } = await params
   const now = new Date()
-  const range = dayOfDateRange(now)
-
-  const event = await ctx.db.event.findFirst({
-    where: { id },
-    select: {
-      id: true, title: true, startDate: true, endDate: true,
-      organization: { select: { timeZone: true } },
-      shifts: {
-        where: { status: { not: "cancelled" }, date: { gte: range.from, lte: range.to } },
-        select: {
-          id: true, roleName: true, label: true, date: true, startTime: true, endTime: true, capacity: true, displayOrder: true,
-          contactName: true, contactPhone: true,
-          // Confirmed people only: check-in applies to them (#399), as on the registrations list.
-          registrations: {
-            where: { status: "active" },
-            select: { id: true, phone: true, checkedInAt: true, volunteer: { select: { firstName: true, lastName: true, phone: true } } },
-          },
-        },
-      },
-    },
-  })
-  if (!event) notFound()
-
-  const timeZone = orgTimeZone(event.organization)
-  const shifts: DayOfShift[] = event.shifts.map((s) => ({
-    id: s.id, roleName: s.roleName, label: s.label, date: s.date.toISOString().slice(0, 10),
-    startTime: s.startTime, endTime: s.endTime, capacity: s.capacity, displayOrder: s.displayOrder,
-    contactName: s.contactName, contactPhone: s.contactPhone,
-    people: s.registrations
-      .map((r) => ({
-        registrationId: r.id,
-        firstName: r.volunteer.firstName,
-        lastName: r.volunteer.lastName,
-        phone: contactPhone(r),
-        checkedInAt: r.checkedInAt?.toISOString() ?? null,
-      }))
-      .sort((a, b) => a.lastName.localeCompare(b.lastName, "fr") || a.firstName.localeCompare(b.firstName, "fr")),
-  }))
-  const board = dayOfBoard(shifts, now, timeZone)
+  const loaded = await loadDayOf(ctx.db, id, now)
+  if (!loaded) notFound()
+  const { event, timeZone, board, today, refreshedAt } = loaded
   const base = `/admin/events/${event.id}`
-  const clock = now.toLocaleTimeString("fr-CH", { timeZone, hour: "2-digit", minute: "2-digit", hourCycle: "h23" })
   const eventDay = isEventDay({ startDate: event.startDate.toISOString(), endDate: event.endDate.toISOString() }, now, timeZone)
 
   return (
@@ -90,7 +51,7 @@ export default async function DayOfPage({ params }: { params: Promise<{ id: stri
         </p>
       )}
 
-      <DayOfBoard eventId={event.id} board={board} today={localDay(now, timeZone)} refreshedAt={fmtHour(clock)} />
+      <DayOfBoard eventId={event.id} board={board} today={today} refreshedAt={refreshedAt} />
 
       <nav aria-labelledby="dayof-more" className="border-t border-gray-200 pt-4 space-y-2">
         <h2 id="dayof-more" className="text-sm font-semibold text-gray-700">Autres pages de l&apos;événement</h2>

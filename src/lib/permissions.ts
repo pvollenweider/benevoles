@@ -39,6 +39,7 @@ type Method = "GET" | "POST" | "PATCH" | "PUT" | "DELETE"
 export const PERMISSIONS: Record<string, Partial<Record<Method, Level>>> = {
   "events": { GET: "organizer", POST: "organizer" },
   "events/[id]": { GET: "organizer", PATCH: "organizer", DELETE: "owner" },
+  "events/[id]/day-of": { GET: "organizer" },
   "events/[id]/duplicate": { POST: "organizer" },
   "events/[id]/export/answers": { GET: "organizer" },
   "events/[id]/export/archive": { GET: "organizer" },
