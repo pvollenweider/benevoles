@@ -81,8 +81,9 @@ test("a test email starts from a version of the changelog, edited before sending
   expect(version).toMatch(/^\d+\.\d+\.\d+/)
   await page.getByRole("button", { name: "Préremplir" }).click()
   const subject = page.getByLabel("Objet *")
-  await expect(subject).toHaveValue(new RegExp(`version ${version.replace(/\./g, "\\.")}$`))
-  await expect(page.locator("textarea")).toHaveValue(new RegExp(`/nouveautes#${version.replace(/\./g, "\\.")}\\)\\.$`))
+  const escaped = version.replace(/[\\^$.*+?()[\]{}|]/g, "\\$&")
+  await expect(subject).toHaveValue(new RegExp(`version ${escaped}$`))
+  await expect(page.locator("textarea")).toHaveValue(new RegExp(`/nouveautes#${escaped}\\)\\.$`))
   // Editable before sending: the subject gets a stamp so this test finds its own email.
   await subject.fill(`${await subject.inputValue()} ${stamp}`)
   const sent = page.waitForResponse((r) => r.url().endsWith("/api/super-admin/product-updates/test") && r.request().method() === "POST")
