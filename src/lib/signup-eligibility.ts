@@ -179,3 +179,16 @@ export const DUPLICATE_SIGNUP_MESSAGE =
 export function duplicateSignupRefusal(): SignupRefusal {
   return { status: 409, body: { error: DUPLICATE_SIGNUP_MESSAGE, duplicate: true } }
 }
+
+/**
+ * The personal link or the invitation the sign-up came with no longer proves the address (#1138
+ * follow-up): checked again under the member lock, it was replaced in the meantime (an organiser
+ * corrected the address, which renews every link of the member). Nothing is saved; the volunteer
+ * starts again from the newest link they received. Same answer for both kinds of link.
+ */
+export const STALE_LINK_MESSAGE =
+  "Le lien avec lequel tu t'inscris n'est plus valable : il a été remplacé. Rien n'a été enregistré."
+
+export function staleLinkRefusal(): SignupRefusal {
+  return { status: 409, body: { error: STALE_LINK_MESSAGE, staleLink: true } }
+}

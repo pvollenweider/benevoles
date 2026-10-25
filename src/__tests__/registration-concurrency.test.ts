@@ -35,7 +35,7 @@ vi.mock("@/lib/prisma", () => {
     create: m.regCreate,
   }
   const tx = {
-    $queryRaw: vi.fn(),
+    $queryRaw: vi.fn().mockResolvedValue([{ id: "locked" }]), // the member lock (#285): the row it locked
     registration,
     shift: { findUnique: m.shiftFindUnique, findMany: vi.fn().mockResolvedValue([]) },
     volunteer: { createMany: vi.fn().mockResolvedValue({ count: 1 }), findFirstOrThrow: vi.fn().mockResolvedValue({ id: "vol-1" }) },

@@ -6,7 +6,9 @@ import { describe, it, expect, vi, beforeAll, afterAll, beforeEach } from "vites
  *   request that started before the change never writes one after it;
  * - correcting a member's address renews their personal links, calendar address and invitations,
  *   cancels what was queued for the old address and queues the new links for the new one;
- * - a recovery request over the per-recipient cap leaves the link already received working.
+ * - a recovery request over the per-recipient cap leaves the link already received working;
+ * - a public sign-up in flight while the address is corrected gets no access from the old link or
+ *   invitation, whichever commits first (#1138 follow-up).
  * SMTP is replaced by an in-memory channel; nothing leaves the process.
  */
 
@@ -24,6 +26,8 @@ vi.mock("@/lib/notifications/channels/email", () => ({
   emailChannel: { send: async (payload: (typeof state.sent)[number]) => { state.sent.push(payload); return { ok: true } } },
 }))
 
+import * as signupVolunteer from "@/lib/signup-volunteer"
+import { POST as publicSignup } from "@/app/api/public/registrations/route"
 import bcrypt from "bcryptjs"
 import { prisma } from "@/lib/prisma"
 import { hashToken } from "@/lib/token-hash"
@@ -222,6 +226,212 @@ describe.skipIf(!url)("revocation of links and queued emails", () => {
 
     const edit = (id: string, body: unknown) => editMember(jsonRequest("PATCH", body), { params: Promise.resolve({ id }) })
     const openPersonal = (token: string) => personalPage(new Request("http://localhost/my", { headers: { "x-forwarded-for": nextIp() } }), { params: Promise.resolve({ token }) })
+
+    describe("a public sign-up in flight while the address is corrected (#1138 follow-up)", () => {
+      // An optional question: the old link must not replace a stored answer either.
+      let questionId = ""
+      beforeAll(async () => {
+        questionId = (await prisma.eventQuestion.create({ data: { eventId, label: "Régime ?", type: "text", required: false } })).id
+      })
+      afterAll(async () => { await prisma.eventQuestion.delete({ where: { id: questionId } }) })
+
+      const storedAnswer = async (volunteerId: string) =>
+        (await prisma.questionAnswer.findUnique({ where: { questionId_volunteerId: { questionId, volunteerId } } }))?.values ?? null
+      const answerAs = (volunteerId: string, value: string) =>
+        prisma.questionAnswer.create({ data: { questionId, eventId, volunteerId, values: [value] } })
+
+      /** Resolves once the correction waits on the member lock the paused sign-up holds (its session is blocked by another one, on the Volunteer row). */
+      async function someoneWaitsOnALock() {
+        for (let i = 0; i < 200; i++) {
+          const [{ n }] = await prisma.$queryRaw<{ n: number }[]>`SELECT count(*)::int AS n FROM pg_stat_activity WHERE datname = current_database() AND wait_event_type = 'Lock' AND cardinality(pg_blocking_pids(pid)) > 0 AND query LIKE '%"Volunteer"%FOR UPDATE%'`
+          if (n > 0) return
+          await new Promise((r) => setTimeout(r, 25))
+        }
+        throw new Error("the correction never waited on the member lock")
+      }
+      /** Runs `start` with the sign-up paused right before (or right after) it locks the member, runs `meanwhile`, then lets it go on. */
+      async function pausedSignup(when: "before-lock" | "after-lock", start: () => Promise<Response>, meanwhile: () => Promise<void>) {
+        let ready!: () => void
+        let resume!: () => void
+        const reached = new Promise<void>((r) => { ready = r })
+        const released = new Promise<void>((r) => { resume = r })
+        const original = signupVolunteer.lockSignupVolunteer
+        const spy = vi.spyOn(signupVolunteer, "lockSignupVolunteer").mockImplementationOnce(async (...args) => {
+          if (when === "before-lock") { ready(); await released; return original(...args) }
+          const locked = await original(...args)
+          ready()
+          await released
+          return locked
+        })
+        try {
+          const request = start()
+          await reached
+          await meanwhile()
+          resume()
+          return await request
+        } finally {
+          resume()
+          spy.mockRestore()
+        }
+      }
+
+      async function extraShift() {
+        return prisma.shift.create({ data: { eventId, roleName: "Après-midi", label: "Après-midi", date: new Date("2031-06-01"), startTime: "14:00", endTime: "16:00", capacity: 10 } })
+      }
+
+      const signup = (body: Record<string, unknown>) => publicSignup(jsonRequest("POST", { eventId, firstName: "Modifié", lastName: "Par ancien lien", consent: true, charterAccepted: true, answers: { [questionId]: "Réponse par ancien lien" }, ...body }))
+
+      async function invitedMember(email: string) {
+        const v = await prisma.volunteer.create({ data: { organizationId: state.orgId, firstName: "Alix", lastName: `Invitée${seq++}`, email } })
+        const invite = `${tag}-invite-${seq++}`
+        await prisma.memberInvite.create({ data: { eventId, volunteerId: v.id, ...linkToken.data(invite) } })
+        return { v, invite }
+      }
+
+      /** Nothing of the refused submission landed: no registration on the shift, profile and answer untouched, nothing queued for the old address. */
+      async function nothingSaved(volunteerId: string, shift: string, oldEmail: string) {
+        expect(await prisma.registration.count({ where: { shiftId: shift } })).toBe(0)
+        expect((await prisma.volunteer.findUniqueOrThrow({ where: { id: volunteerId } })).firstName).toBe("Alix")
+        expect(await storedAnswer(volunteerId)).toEqual(["Réponse d'origine"])
+        const pending = await prisma.notificationOutbox.findMany({ where: { organizationId: state.orgId, status: "pending" } })
+        expect(pending.map((r) => openPayload(r.payload)).filter((p) => p.recipient.email === oldEmail)).toHaveLength(0)
+      }
+
+      it("personal link, correction committed first: refused, no link returned, nothing saved", async () => {
+        const oldEmail = `${tag}-race-old-${seq++}@example.org`
+        const newEmail = `${tag}-race-new-${seq++}@example.org`
+        const { v, personal } = await member(oldEmail)
+        await answerAs(v.id, "Réponse d'origine")
+        const extra = await extraShift()
+        const response = await pausedSignup("before-lock",
+          () => signup({ shiftIds: [extra.id], email: oldEmail, personalToken: personal }),
+          async () => {
+            expect((await edit(v.id, { email: newEmail })).status).toBe(200)
+            expect((await openPersonal(personal)).status).toBe(404)
+          })
+        expect(response.status).toBe(409)
+        const body = await response.json()
+        expect(body).toMatchObject({ staleLink: true })
+        expect(body.editToken).toBeUndefined()
+        expect(JSON.stringify(body)).not.toContain(newEmail)
+        await nothingSaved(v.id, extra.id, oldEmail)
+        expect((await prisma.volunteer.findUniqueOrThrow({ where: { id: v.id } })).email).toBe(newEmail)
+      })
+
+      it("invitation, correction committed first: refused, no link returned, nothing saved", async () => {
+        const oldEmail = `${tag}-race-old-${seq++}@example.org`
+        const newEmail = `${tag}-race-new-${seq++}@example.org`
+        const { v, invite } = await invitedMember(oldEmail)
+        await answerAs(v.id, "Réponse d'origine")
+        const extra = await extraShift()
+        const response = await pausedSignup("before-lock",
+          () => signup({ shiftIds: [extra.id], email: oldEmail, inviteToken: invite }),
+          async () => {
+            expect((await edit(v.id, { email: newEmail })).status).toBe(200)
+            expect(await prisma.memberInvite.findUnique({ where: linkToken.where(invite) })).toBeNull()
+          })
+        expect(response.status).toBe(409)
+        const body = await response.json()
+        expect(body).toMatchObject({ staleLink: true })
+        expect(body.editToken).toBeUndefined()
+        await nothingSaved(v.id, extra.id, oldEmail)
+      })
+
+      it("personal link or invitation, sign-up committed first: the correction that follows renews the link it returned", async () => {
+        for (const proof of ["personal", "invite"] as const) {
+          const oldEmail = `${tag}-race-old-${seq++}@example.org`
+          const newEmail = `${tag}-race-new-${seq++}@example.org`
+          const { v, token } = proof === "personal"
+            ? await member(oldEmail).then((m) => ({ v: m.v, token: m.personal }))
+            : await invitedMember(oldEmail).then((m) => ({ v: m.v, token: m.invite }))
+          const extra = await extraShift()
+          let correction!: Promise<Response>
+          const response = await pausedSignup("after-lock",
+            () => signup({ shiftIds: [extra.id], email: oldEmail, ...(proof === "personal" ? { personalToken: token } : { inviteToken: token }) }),
+            async () => {
+              // Waits for the member lock the sign-up holds: it can only commit after the sign-up.
+              correction = edit(v.id, { email: newEmail })
+              await someoneWaitsOnALock()
+            })
+          expect(response.status).toBe(201)
+          const { editToken } = await response.json()
+          expect(editToken).toBeTypeOf("string")
+          expect((await correction).status).toBe(200)
+          // The link handed out before the correction no longer opens anything.
+          expect((await openPersonal(editToken)).status).toBe(404)
+          const reg = await prisma.registration.findFirstOrThrow({ where: { shiftId: extra.id } })
+          expect(reg.volunteerId).toBe(v.id)
+          expect(reg.editTokenHash).not.toBe(hashToken(editToken))
+          // What is still queued for the member goes to the new address only.
+          const pending = await prisma.notificationOutbox.findMany({ where: { organizationId: state.orgId, status: "pending" } })
+          const mine = pending.filter((r) => openPayload(r.payload).volunteerId === v.id).map((r) => r.id)
+          state.sent = []
+          await deliverOutbox({ ids: mine })
+          const links = state.sent.filter((s) => "editToken" in s.data || "token" in s.data)
+          expect(links.length).toBeGreaterThan(0)
+          expect(links.every((s) => s.recipient.email === newEmail)).toBe(true)
+          expect(links.some((s) => s.data.editToken === editToken)).toBe(false)
+        }
+      })
+
+      it("no proof, correction committed first: the corrected member is not reused for the old address", async () => {
+        const oldEmail = `${tag}-race-old-${seq++}@example.org`
+        const newEmail = `${tag}-race-new-${seq++}@example.org`
+        const { v } = await member(oldEmail)
+        await answerAs(v.id, "Réponse d'origine")
+        const extra = await extraShift()
+        const response = await pausedSignup("before-lock",
+          () => signup({ shiftIds: [extra.id], email: oldEmail }),
+          async () => { expect((await edit(v.id, { email: newEmail })).status).toBe(200) })
+        // As a sign-up arriving after the correction: a new record holds the address it was made with.
+        expect(response.status).toBe(201)
+        expect((await response.json()).editToken).toBeNull()
+        const reg = await prisma.registration.findFirstOrThrow({ where: { shiftId: extra.id }, include: { volunteer: true } })
+        expect(reg.volunteerId).not.toBe(v.id)
+        expect(reg.volunteer.email).toBe(oldEmail)
+        const corrected = await prisma.volunteer.findUniqueOrThrow({ where: { id: v.id } })
+        expect(corrected).toMatchObject({ email: newEmail, firstName: "Alix" })
+        expect(await storedAnswer(v.id)).toEqual(["Réponse d'origine"])
+        expect(await prisma.registration.count({ where: { volunteerId: v.id, shiftId: extra.id } })).toBe(0)
+      })
+
+      it("same address, link replaced meanwhile (links regenerated): the exact link is checked again, refused", async () => {
+        for (const proof of ["personal", "invite"] as const) {
+          const email = `${tag}-rotated-${seq++}@example.org`
+          const { v, token } = proof === "personal"
+            ? await member(email).then((m) => ({ v: m.v, token: m.personal }))
+            : await invitedMember(email).then((m) => ({ v: m.v, token: m.invite }))
+          await answerAs(v.id, "Réponse d'origine")
+          const extra = await extraShift()
+          const response = await pausedSignup("before-lock",
+            () => signup({ shiftIds: [extra.id], email, ...(proof === "personal" ? { personalToken: token } : { inviteToken: token }) }),
+            async () => {
+              if (proof === "personal") await prisma.registration.updateMany({ where: { volunteerId: v.id }, data: registrationToken.data(`${tag}-renewed-${seq++}`) })
+              else await prisma.memberInvite.updateMany({ where: { volunteerId: v.id }, data: linkToken.data(`${tag}-renewed-${seq++}`) })
+            })
+          expect(response.status).toBe(409)
+          expect(await response.json()).toMatchObject({ staleLink: true })
+          await nothingSaved(v.id, extra.id, email)
+        }
+      })
+
+      it("no correction: a sign-up from the personal link or an invitation still returns its link and saves the changes (no regression)", async () => {
+        for (const proof of ["personal", "invite"] as const) {
+          const email = `${tag}-legit-${seq++}@example.org`
+          const { v, token } = proof === "personal"
+            ? await member(email).then((m) => ({ v: m.v, token: m.personal }))
+            : await invitedMember(email).then((m) => ({ v: m.v, token: m.invite }))
+          const extra = await extraShift()
+          const response = await signup({ shiftIds: [extra.id], email, ...(proof === "personal" ? { personalToken: token } : { inviteToken: token }) })
+          expect(response.status).toBe(201)
+          const { editToken } = await response.json()
+          expect(editToken).toBeTypeOf("string")
+          expect((await openPersonal(editToken)).status).toBe(200)
+          expect((await prisma.volunteer.findUniqueOrThrow({ where: { id: v.id } })).firstName).toBe("Modifié")
+          expect(await storedAnswer(v.id)).toEqual(["Réponse par ancien lien"])
+        }
+      })
+    })
 
     it("an email queued for the old address is cancelled, the old link stops working, and the new link goes to the new address", async () => {
       const oldEmail = `${tag}-typo-${seq++}@example.org`

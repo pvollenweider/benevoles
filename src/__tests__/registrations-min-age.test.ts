@@ -11,7 +11,7 @@ vi.mock("@/lib/prisma", () => ({
     registration: { findMany: vi.fn().mockResolvedValue([]), aggregate: vi.fn(), create: vi.fn() },
     // Interactive transaction: runs the callback against a minimal tx client.
     $transaction: vi.fn(async (fn: (tx: unknown) => unknown) => fn({
-      $queryRaw: vi.fn(),
+      $queryRaw: vi.fn().mockResolvedValue([{ id: "locked" }]), // the member lock (#285): the row it locked
       shift: { findMany: vi.fn().mockResolvedValue([]) }, // no role limit (#466)
       volunteer: { createMany: vi.fn().mockResolvedValue({ count: 1 }), findFirstOrThrow: vi.fn().mockResolvedValue({ id: "vol-1" }) },
       charterVersion: { upsert: vi.fn() },
