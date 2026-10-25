@@ -53,6 +53,8 @@ import {
 const SEARCH_ANNOUNCE_MS = 500
 /** A board read that takes longer than this counts as failed. */
 const SYNC_TIMEOUT_MS = 15_000
+/** A check-in without an answer after this long is reported as possibly not received. */
+const ACTION_TIMEOUT_MS = 20_000
 /** Changes made elsewhere wait this long after the last keystroke in the search box. */
 const TYPING_QUIET_MS = 2_000
 
@@ -342,7 +344,8 @@ export default function DayOfBoard({ eventId, board: initialBoard, today: initia
       const again = deferred.current
       if (actionsInFlight.current === 0 && again) {
         deferred.current = null
-        void sync(again)
+        // A background read waits for the page to be visible and online again (the return reads).
+        if (again === "manual" || (document.visibilityState !== "hidden" && navigator.onLine !== false)) void sync(again)
       }
     }
     const { url, body } = presenceRequest(eventId, id, present)
@@ -356,7 +359,8 @@ export default function DayOfBoard({ eventId, board: initialBoard, today: initia
     }
     let res: Response
     try {
-      res = await fetch(url, { method: "POST", headers: { "Content-Type": "application/json" }, body: JSON.stringify(body) })
+      // Bounded: a hung check-in would hold the board's refresh (reads wait for actions to settle).
+      res = await fetch(url, { method: "POST", headers: { "Content-Type": "application/json" }, body: JSON.stringify(body), signal: AbortSignal.timeout(ACTION_TIMEOUT_MS) })
     } catch {
       const f = describeBulkFailure({ network: true }, what)
       fail(`${f.title}. ${f.message} Réessayez dans un instant.`)
