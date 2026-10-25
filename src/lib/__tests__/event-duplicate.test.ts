@@ -112,13 +112,21 @@ describe("duplicateSummary", () => {
   it("copies the active custom questions with the settings, never their answers (#483)", () => {
     const q = { label: "Taille", type: "single", options: ["S", "M"], required: true, position: 0 }
     const withQ = { ...source, questions: [q] }
-    expect(duplicatePlan(withQ, {}).questions).toEqual([{ ...q, id: expect.any(String), roleName: null, minValue: null, maxValue: null, parentId: null, showIfValues: [] }])
+    expect(duplicatePlan(withQ, {}).questions).toEqual([{ ...q, id: expect.any(String), roleName: null, minValue: null, maxValue: null, parentId: null, showIfValues: [], displayScope: "event", displayRoleNames: [] }])
     expect(duplicatePlan(withQ, { copy: { settings: false } }).questions).toEqual([])
+  })
+
+  it("copies who a question is asked to (#1140), postes by name even without their shifts; a follow-up follows its parent", () => {
+    const parent = { id: "p", label: "Bar ?", type: "yesno", options: [], required: true, position: 0, displayScope: "roles", displayRoleNames: ["Bar", "Absent"] }
+    const child = { id: "c", label: "Heures", type: "number", options: [], required: false, position: 1, parentId: "p", showIfValues: ["Oui"], displayScope: "event", displayRoleNames: [] }
+    const [p, c] = duplicatePlan({ ...source, questions: [parent, child] }, { copy: { shifts: false } }).questions
+    expect(p).toMatchObject({ displayScope: "roles", displayRoleNames: ["Bar", "Absent"] })
+    expect(c).toMatchObject({ parentId: p.id, displayScope: "event", displayRoleNames: [] })
   })
 
   it("copies a number question with its type and bounds (#1015)", () => {
     const q = { label: "Combien de personnes ?", type: "number", options: [], required: false, position: 0, minValue: 1, maxValue: 8 }
-    expect(duplicatePlan({ ...source, questions: [q] }, {}).questions).toEqual([{ ...q, id: expect.any(String), roleName: null, parentId: null, showIfValues: [] }])
+    expect(duplicatePlan({ ...source, questions: [q] }, {}).questions).toEqual([{ ...q, id: expect.any(String), roleName: null, parentId: null, showIfValues: [], displayScope: "event", displayRoleNames: [] }])
   })
 
   it("a question's poste follows when the copy has that poste, cleared otherwise (#984, part 3)", () => {

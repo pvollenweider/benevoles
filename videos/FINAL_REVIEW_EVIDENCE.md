@@ -180,6 +180,23 @@ Sélecteurs des captures inchangés (« Merci pour ton engagement… », absence
 
 Ces vidéos n'ont pas été régénérées dans la même PR.
 
+## Écart connu : questions posées à certains postes (#1140)
+
+Le formulaire « Nouvelle question » / « Modifier la question » a maintenant, après
+« Afficher seulement si… », le réglage « À qui poser cette question ? » (« Tous
+les bénévoles » coché par défaut, ou « Certains postes seulement » avec les
+postes à cocher), et le choix par défaut de « Afficher seulement si… » s'appelle
+« Toujours (sans condition) » au lieu de « Toujours (question posée à tous) ».
+Sélecteurs des captures inchangés (« Réponse obligatoire », « Afficher seulement
+si », « Enregistrer ») : les captures continuent de fonctionner, et les
+questions de la vidéo restent posées à tous les bénévoles.
+
+- `event-questions` (scènes `create-*`) : le formulaire filmé n'a pas le nouveau
+  réglage, et la scène Oui / non montre l'ancien libellé « Toujours (question
+  posée à tous) » ; la narration reste juste.
+
+Cette vidéo n'a pas été régénérée dans la même PR.
+
 ## Écart connu : accès « attribué par l'organisation uniquement » (#1145)
 
 Dans « Gérer les postes », le texte d'introduction du panneau dit maintenant

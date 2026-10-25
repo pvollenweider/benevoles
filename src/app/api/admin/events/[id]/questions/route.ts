@@ -12,8 +12,9 @@ import { liveRoleNames } from "@/lib/question-role-data"
 import { conditionText } from "@/lib/event-questions"
 import { followUpProblem, normalisedShowIf } from "@/lib/question-follow-up"
 import { activeQuestions, normalisePositions } from "@/lib/question-follow-up-data"
+import { SCOPE_EVENT, scopeLogText, scopeProblem } from "@/lib/question-scope"
 
-const select = { id: true, label: true, type: true, options: true, required: true, minValue: true, maxValue: true, roleName: true, parentId: true, showIfValues: true, position: true, _count: { select: { answers: true } } } as const
+const select = { id: true, label: true, type: true, options: true, required: true, minValue: true, maxValue: true, roleName: true, parentId: true, showIfValues: true, displayScope: true, displayRoleNames: true, position: true, _count: { select: { answers: true } } } as const
 
 
 /** The sign-up questions of an event (#483), active ones in order. */
@@ -39,8 +40,15 @@ export async function POST(req: Request, { params }: { params: Promise<{ id: str
   if (!parsed.success) return validationError(parsed.error, { useIssueMessage: true })
 
   // A poste of this very event only (#984, part 3): never another event's, nor another organisation's.
-  const roleProblem = parsed.data.roleName ? questionRoleProblem(parsed.data.roleName, await liveRoleNames(db, id)) : null
+  const live = parsed.data.roleName || parsed.data.displayRoleNames?.length ? await liveRoleNames(db, id) : []
+  const roleProblem = parsed.data.roleName ? questionRoleProblem(parsed.data.roleName, live) : null
   if (roleProblem) return NextResponse.json({ error: roleProblem, field: "roleName" }, { status: 400 })
+  // Who is asked (#1140): postes of this very event, at least one. A follow-up has no scope of its
+  // own (it follows its parent's), so none is checked nor stored for it.
+  if (!parsed.data.parentId && parsed.data.displayScope) {
+    const problem = scopeProblem({ displayScope: parsed.data.displayScope, displayRoleNames: parsed.data.displayRoleNames ?? [] }, live)
+    if (problem) return NextResponse.json({ error: problem, field: "displayScope" }, { status: 400 })
+  }
 
   const active = await db.eventQuestion.count({ where: { eventId: id, archivedAt: null } })
   if (active >= QUESTION_LIMIT) return NextResponse.json({ error: `${QUESTION_LIMIT} questions au plus par événement.` }, { status: 409 })
@@ -49,6 +57,8 @@ export async function POST(req: Request, { params }: { params: Promise<{ id: str
   const data = { ...parsed.data }
   let parentLabel: string | null = null
   if (data.parentId) {
+    data.displayScope = SCOPE_EVENT
+    data.displayRoleNames = []
     const questions = await activeQuestions(db, id)
     const problem = followUpProblem({ selfId: null, parentId: data.parentId, showIfValues: data.showIfValues ?? [] }, questions)
     if (problem) return NextResponse.json({ error: problem, field: "parentId" }, { status: 400 })
@@ -68,6 +78,7 @@ export async function POST(req: Request, { params }: { params: Promise<{ id: str
     changes: {
       label: { from: null, to: question.label },
       ...(question.roleName ? { roleName: { from: null, to: question.roleName } } : {}),
+      ...(question.displayScope !== SCOPE_EVENT ? { displayScope: { from: null, to: scopeLogText(question) } } : {}),
       ...(parentLabel ? { condition: { from: null, to: conditionText(question.showIfValues, parentLabel) } } : {}),
     },
   })

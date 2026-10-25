@@ -27,6 +27,7 @@ import { sendNotification } from "@/lib/notifications"
 import { linkToken, registrationToken } from "@/lib/token-vault"
 import { validationError } from "@/lib/api-error"
 import { checkAnswers, consistentAdditions, planAnswerWrites } from "@/lib/event-questions"
+import { askedQuestions } from "@/lib/question-scope"
 import { reservedRoles } from "@/lib/role-reservation"
 import { assignedOnlyRoles, asksAssignedOnly } from "@/lib/role-assignment"
 import {
@@ -195,12 +196,12 @@ export async function POST(req: Request) {
     : null
 
   // Custom questions (#483), checked here whatever the page did; stored with the registration.
-  const questions = await prisma.eventQuestion.findMany({
+  // Read now, kept only once the asked ones are known (#1140, below): the postes of the shifts
+  // chosen, plus those the volunteer already holds when they come from their personal link.
+  const eventQuestions = await prisma.eventQuestion.findMany({
     where: { eventId, archivedAt: null },
-    select: { id: true, label: true, type: true, options: true, required: true, minValue: true, maxValue: true, parentId: true, showIfValues: true },
+    select: { id: true, label: true, type: true, options: true, required: true, minValue: true, maxValue: true, parentId: true, showIfValues: true, displayScope: true, displayRoleNames: true },
   })
-  const answerCheck = checkAnswers(questions, parsed.data.answers)
-  if (!answerCheck.ok) return refuse(answersRefusal(answerCheck)!)
 
   // Minimum age (#192), authoritative: see minimumAgeRefusal.
   const ageRefusal = minimumAgeRefusal(shifts, birthDate)
@@ -229,6 +230,7 @@ export async function POST(req: Request) {
   // Which link gave the proof: read here, before the transaction, and checked again under the
   // member lock (#1138 follow-up), where it is the only authority.
   let inviteProof = false
+  let heldRoles: string[] = []
   let hiddenRoles = new Set<string>()
   if (existing) {
     if (inviteToken) {
@@ -248,8 +250,11 @@ export async function POST(req: Request) {
       else if (link.volunteerId === existing.id) {
         const others = await prisma.registration.findMany({
           where: { volunteerId: existing.id, eventId, status: { in: [...LIVE_STATUSES] } },
-          select: { phone: true },
+          select: { phone: true, shift: { select: { roleName: true } } },
         })
+        // The form from the personal link starts from the shifts already held (#1013): their
+        // postes' questions are on it too (#1140).
+        heldRoles = others.map((r) => r.shift.roleName)
         // Same phone as the personal page shows (GET /api/public/registrations/[token]).
         const shownPhone = contactPhone({ phone: link.phone?.trim() || others.find((r) => r.phone?.trim())?.phone, volunteer: link.volunteer })
         personal = { stored: { firstName: link.volunteer.firstName, lastName: link.volunteer.lastName, phone: shownPhone } }
@@ -276,6 +281,14 @@ export async function POST(req: Request) {
     const clashRefusal = existingOverlapRefusal(allEventRegs, shifts, hiddenRoles)
     if (clashRefusal) return refuse(clashRefusal)
   }
+
+  // Only the questions asked for these postes (#1140) are checked, required and written: an answer
+  // posted for another one is ignored, and its stored answer kept (never cleared below). Without
+  // the personal link, only the shifts chosen count: the form knows nothing of the others (an
+  // invitation proves the address, it doesn't widen what was asked).
+  const questions = askedQuestions(eventQuestions, [...shifts.map((s) => s.roleName), ...(personal ? heldRoles : [])])
+  const answerCheck = checkAnswers(questions, parsed.data.answers)
+  if (!answerCheck.ok) return refuse(answersRefusal(answerCheck)!)
 
   // Chaque inscription reçoit son propre token unique.
   // On retourne le token de la première comme lien de confirmation.
@@ -641,11 +654,13 @@ async function savePersonalChanges(tx: PersonalTx, input: {
     }
   }
 
-  const questions = await tx.eventQuestion.findMany(myAnswersQuery(eventId, volunteerId))
   const live = await tx.registration.findMany({
     where: { volunteerId, eventId, status: { in: [...LIVE_STATUSES] } },
-    select: { status: true, shift: { select: { date: true, startTime: true, endTime: true } } },
+    select: { status: true, shift: { select: { date: true, startTime: true, endTime: true, roleName: true } } },
   })
+  // The questions asked for the postes held now, the new shifts included (#1140); the others keep
+  // their stored answer untouched.
+  const questions = askedQuestions(await tx.eventQuestion.findMany(myAnswersQuery(eventId, volunteerId)), live.map((r) => r.shift.roleName))
   const edit = answersEditState({ registrations: live, setting: input.event, timeZone: orgTimeZone(input.event.organization), now: new Date() })
   if (!edit.allowed) {
     const stored = storedAnswers(questions)

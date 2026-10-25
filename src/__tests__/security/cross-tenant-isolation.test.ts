@@ -931,7 +931,7 @@ describe("Shifts — cross-tenant isolation", () => {
       eventGroupLink: { findMany: vi.fn().mockResolvedValue([]) },
     })
     Object.assign(db, {
-      eventQuestion: { updateMany: vi.fn().mockResolvedValue({ count: 0 }) },
+      eventQuestion: { updateMany: vi.fn().mockResolvedValue({ count: 0 }), findMany: vi.fn().mockResolvedValue([]), update: vi.fn() },
       sectorLeader: { findMany: leaderFindMany, updateMany: leaderUpdateMany, deleteMany: vi.fn() },
       $transaction: async (fn: (tx: unknown) => unknown) => fn(db),
     })

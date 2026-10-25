@@ -35,7 +35,7 @@ describe("PATCH /api/admin/events/[id]/roles/[roleName] — overlapAllowed", () 
         event: { findFirst: vi.fn().mockResolvedValue({ id: "evt-1" }) },
         shift: { findMany: vi.fn(async () => shifts), findFirst: shiftFindFirst, updateMany },
         eventGroupLink: { findMany: vi.fn().mockResolvedValue([]) },
-        eventQuestion: { updateMany: eventQuestionUpdateMany },
+        eventQuestion: { updateMany: eventQuestionUpdateMany, findMany: vi.fn().mockResolvedValue([]), update: vi.fn() },
         sectorLeader: { findMany: vi.fn().mockResolvedValue([]), deleteMany: vi.fn(), updateMany: vi.fn().mockResolvedValue({ count: 0 }) },
         async $transaction(fn: (tx: unknown) => unknown) { return fn(this) },
       },

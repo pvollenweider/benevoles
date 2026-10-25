@@ -4,14 +4,14 @@
 /**
  * A sign-up question attached to a poste (#984, part 3): a volunteer's later change of that answer
  * goes to the poste's sector leaders instead of the organisers (`answerChangeAudience`). The
- * question stays asked to every volunteer. Roles have no table: a poste is the roleName of the
+ * question's audience is its display scope (question-scope.ts, #1140). Roles have no table: a poste is the roleName of the
  * event's live shifts. Pure and client-safe (no Prisma, no zod): the editor shows the choices, the
  * admin API checks them, the duplication carries them.
  */
 
 export const QUESTION_ROLE_LABEL = "Poste concerné"
 export const NO_QUESTION_ROLE_LABEL = "Aucun"
-export const QUESTION_ROLE_HINT = "Quand un bénévole modifie sa réponse depuis sa page personnelle, l'email part aux responsables de ce poste au lieu de vous : ils voient son nom et sa réponse. Sans responsable pour ce poste, vous restez prévenu. Le poste ne change pas à qui la question est posée."
+export const QUESTION_ROLE_HINT = "Quand un bénévole modifie sa réponse depuis sa page personnelle, l'email part aux responsables de ce poste au lieu de vous : ils voient son nom et sa réponse. Sans responsable pour ce poste, vous restez prévenu. Ce réglage ne change pas à qui la question est posée : c'est le rôle de « À qui poser cette question ? »."
 export const NO_ROLES_HINT = "Ajoutez des créneaux à l'événement pour rattacher cette question à un poste."
 export const QUESTION_ROLE_PROBLEM = "Ce poste n'existe pas dans cet événement : choisissez-en un dans la liste."
 

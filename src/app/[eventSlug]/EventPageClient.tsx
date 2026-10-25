@@ -42,6 +42,7 @@ import WithdrawDialog from "@/components/public/WithdrawDialog"
 import DeclineInvite from "@/components/public/DeclineInvite"
 import SignupQuestions, { type Answers } from "@/components/public/SignupQuestions"
 import { checkAnswers, visibleQuestions, type Question } from "@/lib/event-questions"
+import { askedQuestions } from "@/lib/question-scope"
 import DayTimeline from "@/components/DayTimeline"
 import ShiftDayList from "@/components/ShiftDayList"
 import { useHydrated } from "@/lib/use-hydrated"
@@ -472,6 +473,12 @@ export default function EventPageClient({ orgSlug, eventSlug, preview, initialEv
   const hasAvailableShift = anyShiftAvailable(shownShifts)
   // Coming back with the session of a sign-up on this event (#1013): the form starts from it.
   const inSession = !previewEventId && !!sessionToken && myRegistrations.length > 0
+  // The questions asked for the postes of the shifts chosen (#1140), plus those already held from
+  // the personal link, as the server decides. Recomputed with the selection: back on the form, a
+  // question of a poste no longer chosen is gone, neither checked nor sent (what was typed in it
+  // stays in memory, should the shift be chosen again).
+  const askedRoles = (event?.shifts ?? []).filter((s) => selectedShifts.has(s.id) || (inSession && myShiftIds.has(s.id))).map((s) => s.roleName)
+  const formQuestions = askedQuestions(event?.questions ?? [], askedRoles)
 
   function toggleGroupFilter() {
     if (groupFilter.kind !== "filtered") return
@@ -526,7 +533,7 @@ export default function EventPageClient({ orgSlug, eventSlug, preview, initialEv
     }
     setInvalidCheckbox(null)
     // Custom questions (#483): the same check as the server, the first refused field focused.
-    const answerCheck = checkAnswers(event?.questions ?? [], answers)
+    const answerCheck = checkAnswers(formQuestions, answers)
     if (!answerCheck.ok) {
       setFailure(null)
       setQuestionErrors(new Map(answerCheck.errors.map((e) => [e.questionId, e.message])))
@@ -576,7 +583,8 @@ export default function EventPageClient({ orgSlug, eventSlug, preview, initialEv
           rosterNameVisible: rosterBox === "box" && rosterNameVisible,
           // The text the box showed (#1068): its audience is the one stored with the choice.
           rosterNoticeVersion: ROSTER_NOTICE_VERSION,
-          answers,
+          // Only the questions asked (#1140): the server would ignore the others anyway.
+          answers: Object.fromEntries(Object.entries(answers).filter(([id]) => formQuestions.some((q) => q.id === id))),
           inviteToken: inviteToken ?? undefined,
           // The sign-up counts for the group link the page was opened with (#947).
           groupCode: attributionCode(groupFilter) ?? undefined,
@@ -1200,7 +1208,7 @@ export default function EventPageClient({ orgSlug, eventSlug, preview, initialEv
                   requirePhone={event.requirePhone}
                   phoneGiven={form.phone.trim().length > 0}
                   commentGiven={form.comment.trim().length > 0}
-                  answeredQuestions={visibleQuestions(event.questions ?? [], answers).filter((q) => { const v = answers[q.id]; return Array.isArray(v) ? v.length > 0 : !!v && String(v).trim() !== "" }).map((q) => q.label)}
+                  answeredQuestions={visibleQuestions(formQuestions, answers).filter((q) => { const v = answers[q.id]; return Array.isArray(v) ? v.length > 0 : !!v && String(v).trim() !== "" }).map((q) => q.label)}
                   heldShifts={heldShifts}
                   timeZone={event.timeZone}
                   variant="sidebar"
@@ -1226,7 +1234,7 @@ export default function EventPageClient({ orgSlug, eventSlug, preview, initialEv
                   requirePhone={event.requirePhone}
                   phoneGiven={form.phone.trim().length > 0}
                   commentGiven={form.comment.trim().length > 0}
-                  answeredQuestions={visibleQuestions(event.questions ?? [], answers).filter((q) => { const v = answers[q.id]; return Array.isArray(v) ? v.length > 0 : !!v && String(v).trim() !== "" }).map((q) => q.label)}
+                  answeredQuestions={visibleQuestions(formQuestions, answers).filter((q) => { const v = answers[q.id]; return Array.isArray(v) ? v.length > 0 : !!v && String(v).trim() !== "" }).map((q) => q.label)}
                   heldShifts={heldShifts}
                   timeZone={event.timeZone}
                   variant="card"
@@ -1238,7 +1246,7 @@ export default function EventPageClient({ orgSlug, eventSlug, preview, initialEv
               <form onSubmit={handleSubmit} className="space-y-4">
                 <p aria-hidden="true" className="text-xs text-gray-600">Les champs marqués d&apos;un astérisque (*) sont obligatoires.</p>
                 {inSession && (
-                  <p className="rounded-xl bg-gray-50 border border-gray-200 px-3 py-2 text-sm text-gray-700">{sessionFormNote((event.questions ?? []).length > 0)}</p>
+                  <p className="rounded-xl bg-gray-50 border border-gray-200 px-3 py-2 text-sm text-gray-700">{sessionFormNote(formQuestions.length > 0)}</p>
                 )}
                 {usedRemembered && myRegistrations.length === 0 && (
                   <div className="flex flex-wrap items-center gap-x-3 gap-y-2 rounded-xl bg-gray-50 border border-gray-200 px-3 py-2">
@@ -1328,7 +1336,7 @@ export default function EventPageClient({ orgSlug, eventSlug, preview, initialEv
                   </div>
                 )}
                 <SignupQuestions
-                  questions={event.questions ?? []}
+                  questions={formQuestions}
                   answers={answers}
                   onChange={(qid, value) => {
                     setAnswers((a) => ({ ...a, [qid]: value }))

@@ -32,7 +32,8 @@ export default async function EventQuestionsPage({ params }: { params: Promise<{
           select: { ...answerSummarySelect.questions.select, required: true, minValue: true, maxValue: true, roleName: true, _count: { select: { answers: true } } },
         },
         registrations: answerSummarySelect.registrations,
-        // The postes a question can be attached to (#984, part 3), with their sector leaders.
+        // The postes a question can be attached to (#984, part 3), with their sector leaders, and
+        // the ones it can be asked to (#1140).
         shifts: { where: { status: { not: "cancelled" } }, select: { roleName: true }, distinct: ["roleName"] },
         sectorLeaders: { select: { roleName: true } },
       },
@@ -54,7 +55,7 @@ export default async function EventQuestionsPage({ params }: { params: Promise<{
       </div>
       <QuestionsEditor
         eventId={id}
-        initialQuestions={event.questions.map(({ _count, id, label, type, options, required, minValue, maxValue, roleName, parentId, showIfValues }) => ({ id, label, type, options, required, minValue, maxValue, roleName, parentId, showIfValues, answers: _count.answers }))}
+        initialQuestions={event.questions.map(({ _count, id, label, type, options, required, minValue, maxValue, roleName, parentId, showIfValues, displayScope, displayRoleNames }) => ({ id, label, type, options, required, minValue, maxValue, roleName, parentId, showIfValues, displayScope, displayRoleNames, answers: _count.answers }))}
         roles={event.shifts.map((s) => ({ roleName: s.roleName, leaders: event.sectorLeaders.filter((l) => l.roleName === s.roleName).length }))}
       />
       <AnswerSummary

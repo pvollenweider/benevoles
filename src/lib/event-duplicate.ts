@@ -6,6 +6,7 @@ import { generateRecurrence, recurrenceProblem, type HolidayCalendar, type Recur
 import { civilDateSchema } from "./civil-date"
 import { duplicatedQuestionRole } from "./question-role"
 import { duplicatedParent } from "./question-follow-up"
+import { duplicatedScope } from "./question-scope"
 import { leadersOutsideDeletedPostes } from "./leader-postes"
 
 /**
@@ -109,7 +110,7 @@ export type DuplicableEvent = {
   shifts: DuplicableShift[]
   pages: { slug: string; title: string; content: string; displayOrder: number }[]
   /** Active custom questions (#483); copied with the registration settings, never their answers. */
-  questions?: { id?: string; label: string; type: string; options: string[]; required: boolean; position: number; roleName?: string | null; minValue?: number | null; maxValue?: number | null; parentId?: string | null; showIfValues?: string[] }[]
+  questions?: { id?: string; label: string; type: string; options: string[]; required: boolean; position: number; roleName?: string | null; minValue?: number | null; maxValue?: number | null; parentId?: string | null; showIfValues?: string[]; displayScope?: string | null; displayRoleNames?: string[] | null }[]
   leaders: { roleName: string; name: string; email: string }[]
   /** Postes whose every shift is cancelled (#1010): their leaders don't follow. */
   deletedPostes?: string[]
@@ -226,7 +227,7 @@ export function duplicatePlan(source: DuplicableEvent, options: DuplicateOptions
 }
 
 /**
- * The copied questions (#483), with their poste when the copy has it (#984) and each follow-up
+ * The copied questions (#483), with their poste when the copy has it (#984), their scope (#1140) and each follow-up
  * (#1016) pointing to the copy of its parent; a follow-up whose parent is not copied is left out,
  * as it would be asked to everyone without the question it depends on.
  */
@@ -241,6 +242,8 @@ function duplicatedQuestions(questions: NonNullable<DuplicableEvent["questions"]
       roleName: duplicatedQuestionRole(q.roleName, copiedRoles),
       parentId: duplicatedParent(q.parentId, ids),
       showIfValues: q.parentId ? (q.showIfValues ?? []) : [],
+      // Who is asked (#1140), postes by name, even those the copy has no shifts for yet.
+      ...duplicatedScope(q),
     }))
 }
 

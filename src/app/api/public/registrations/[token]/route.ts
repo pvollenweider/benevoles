@@ -8,7 +8,8 @@ import { ORG_LIFECYCLE_SELECT, orgLinksOpen } from "@/lib/org-lifecycle"
 import { orgUnavailableResponse } from "@/lib/org-lifecycle-response"
 import { eventPublicUrl, orgBaseUrl } from "@/lib/urls"
 import { signUpUrl, volunteerGroupCode } from "@/lib/personal-page-links"
-import { myAnswerRows, myAnswersQuery } from "@/lib/my-answers"
+import { keptAnswerRows, myAnswerRows, myAnswersQuery } from "@/lib/my-answers"
+import { splitByScope } from "@/lib/question-scope"
 import { answersEditState } from "@/lib/answer-changes"
 import { promoteNextInWaitlist } from "@/lib/waitlist"
 import { recordTokenMiss, tokenLookupsBlocked, tokenUseAllowed } from "@/lib/token-rate-limit"
@@ -77,7 +78,12 @@ export async function GET(req: Request, { params }: { params: Promise<{ token: s
 
   // « Mes réponses » (#984): the event's questions with this volunteer's own answers only, the
   // volunteer being the one of the link's registration.
-  const questions = await prisma.eventQuestion.findMany(myAnswersQuery(registration.eventId, registration.volunteerId))
+  // Only the questions asked for the postes of their live registrations (#1140); the answers kept
+  // for the others are shown apart, read-only.
+  const { asked: questions, outOfScope } = splitByScope(
+    await prisma.eventQuestion.findMany(myAnswersQuery(registration.eventId, registration.volunteerId)),
+    allRegistrations.map((r) => r.shift.roleName),
+  )
 
   const orgSlug = registration.event.organization.slug
   const baseUrl = orgBaseUrl(orgSlug)
@@ -105,6 +111,7 @@ export async function GET(req: Request, { params }: { params: Promise<{ token: s
     },
     confirmationMessage: registration.event.confirmationMessage ?? null,
     answers: myAnswerRows(questions),
+    keptAnswers: keptAnswerRows(outOfScope),
     // Whether the answers can still change from this page (#984): the withdrawals' lock (#946).
     answersEdit: answersEditState({ registrations: allRegistrations, setting: event, timeZone, now }),
     orgHomeUrl: baseUrl,

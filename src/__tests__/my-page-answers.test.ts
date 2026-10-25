@@ -87,6 +87,18 @@ describe("GET /api/public/registrations/[token] — the volunteer's answers (#98
     expect(b.answersEdit).toEqual({ allowed: true })
   })
 
+  it("only the questions asked for the postes held (#1140); a kept answer of another poste is sent apart, read-only", async () => {
+    questionFindMany.mockImplementation(async (args: Args) => [
+      ...database(args),
+      { id: "qa", label: "Pour ton poste ?", position: 5, archivedAt: null, type: "text", options: [], required: true, displayScope: "roles", displayRoleNames: [shift.roleName], answers: [] },
+      { id: "qb", label: "Allergies ?", position: 6, archivedAt: null, type: "text", options: [], required: true, displayScope: "roles", displayRoleNames: ["Autre poste"], answers: [{ values: ["Noix"] }] },
+      { id: "qc", label: "Jamais posée ?", position: 7, archivedAt: null, type: "text", options: [], required: false, displayScope: "roles", displayRoleNames: ["Autre poste"], answers: [] },
+    ])
+    const b = await body()
+    expect(b.answers.map((r: { id: string }) => r.id)).toEqual(["q1", "q2", "qa"])
+    expect(b.keptAnswers).toEqual([{ id: "qb", label: "Allergies ?", answer: "Noix" }])
+  })
+
   it("an event without questions sends an empty list", async () => {
     questionFindMany.mockResolvedValue([])
     expect((await body()).answers.map(({ id, label, answer }: { id: string; label: string; answer: string | null }) => ({ id, label, answer }))).toEqual([])

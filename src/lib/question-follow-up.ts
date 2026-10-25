@@ -11,21 +11,21 @@
 import { canBeParent, conditionText, formOrder, parentChoices } from "./event-questions"
 
 export const FOLLOW_UP_LABEL = "Afficher seulement si…"
-export const ALWAYS_LABEL = "Toujours (question posée à tous)"
+export const ALWAYS_LABEL = "Toujours (sans condition)"
 export const FOLLOW_UP_VALUES_LEGEND = "Réponses qui affichent cette question"
 export const FOLLOW_UP_HINT = "Choisissez une question Oui / non ou à choix : celle-ci n'apparaîtra, juste après elle, qu'aux bénévoles qui y donnent l'une des réponses cochées ; sinon elle reste cachée et n'est pas obligatoire."
 export const NO_PARENT_HINT = "Pour poser cette question seulement après une réponse donnée, ajoutez d'abord une question Oui / non ou à choix."
-export const FOLLOW_UP_LOCKED_HINT = "Cette question a déjà des réponses : elle ne peut plus dépendre d'une autre question. Vous pouvez seulement ajouter des réponses qui l'affichent, ou la poser à tous."
+export const FOLLOW_UP_LOCKED_HINT = "Cette question a déjà des réponses : elle ne peut plus dépendre d'une autre question. Vous pouvez seulement ajouter des réponses qui l'affichent, ou la poser sans condition."
 export const HAS_FOLLOW_UPS_HINT = "Cette question a une question de suivi : elle ne peut pas dépendre elle-même d'une autre question."
 
 export const PARENT_UNKNOWN = "Cette question n'existe pas dans cet événement : choisissez-en une dans la liste."
 export const PARENT_SELF = "Une question ne peut pas dépendre d'elle-même."
-export const PARENT_NESTED = "Une question de suivi ne peut pas avoir elle-même de question de suivi : choisissez une question posée à tous."
+export const PARENT_NESTED = "Une question de suivi ne peut pas avoir elle-même de question de suivi : choisissez une question sans condition."
 export const PARENT_TYPE = "Seule une question Oui / non ou à choix peut afficher une question de suivi."
 export const HAS_FOLLOW_UPS = "Cette question a une question de suivi : elle ne peut pas dépendre elle-même d'une autre question."
 export const VALUES_EMPTY = "Cochez au moins une réponse qui affiche cette question."
 export const VALUES_UNKNOWN = "Une des réponses cochées n'est pas un choix de cette question."
-export const PARENT_LOCKED = "Cette question a déjà des réponses : elle ne peut plus dépendre d'une autre question. Vous pouvez la poser à tous."
+export const PARENT_LOCKED = "Cette question a déjà des réponses : elle ne peut plus dépendre d'une autre question. Vous pouvez la poser sans condition."
 export const VALUES_LOCKED = "Cette question a déjà des réponses : vous pouvez ajouter des réponses qui l'affichent, pas en retirer."
 
 type Candidate = { id: string; label: string; type: string; options: string[]; parentId?: string | null }

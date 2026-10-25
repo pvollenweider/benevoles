@@ -20,7 +20,7 @@ function makeModels(leaders: { id: string; email: string; roleName: string }[]) 
   return {
     shift: { updateMany: vi.fn().mockResolvedValue({ count: 1 }) },
     eventGroupLink: { findMany: vi.fn().mockResolvedValue([]), update: vi.fn() },
-    eventQuestion: { updateMany: vi.fn().mockResolvedValue({ count: 0 }) },
+    eventQuestion: { updateMany: vi.fn().mockResolvedValue({ count: 0 }), findMany: vi.fn().mockResolvedValue([]), update: vi.fn() },
     sectorLeader: {
       findMany: vi.fn(async ({ where }: { where: { roleName: string } }) => leaders.filter((l) => l.roleName === where.roleName)),
       deleteMany: vi.fn().mockResolvedValue({ count: 1 }),

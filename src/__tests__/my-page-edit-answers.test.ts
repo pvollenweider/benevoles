@@ -100,6 +100,31 @@ describe("PATCH /api/public/registrations/[token]/answers", () => {
     expect(deliverAfterResponse).toHaveBeenCalledWith(["n1"])
   })
 
+  it("a question asked to a poste the volunteer no longer holds (#1140): the answer sent is ignored, the stored one kept, and it is no longer required", async () => {
+    const bar = { id: "bar", eventId: "e1", label: "Caisse ?", type: "yesno", options: [], required: true, position: 3, archivedAt: null, displayScope: "roles", displayRoleNames: ["Bar"], answers: [{ values: ["Oui"] }] }
+    const kitchen = { id: "kitchen", eventId: "e1", label: "Allergies ?", type: "text", options: [], required: true, position: 4, archivedAt: null, displayScope: "roles", displayRoleNames: ["Cuisine"], answers: [] }
+    questionFindMany.mockImplementation(async (args: Args) => [...database(args), bar, kitchen])
+    findMany.mockResolvedValue([{ ...liveShift, shift: { ...liveShift.shift, roleName: "Accueil" } }])
+    const res = await patch({ answers: { meal: "Non", bar: "", kitchen: "" } })
+    expect(res.status).toBe(200)
+    const body = await res.json()
+    expect(body.changed).toBe(1)
+    expect(deleteMany).not.toHaveBeenCalled()
+    expect(upsert).toHaveBeenCalledTimes(1)
+    // Not among the rows the page edits.
+    expect(body.answers.map((r: { id: string }) => r.id)).toEqual(["meal", "size", "note"])
+  })
+
+  it("a question asked to a poste they hold (#1140) is required like any other", async () => {
+    const kitchen = { id: "kitchen", eventId: "e1", label: "Allergies ?", type: "text", options: [], required: true, position: 4, archivedAt: null, displayScope: "roles", displayRoleNames: ["Cuisine"], answers: [] }
+    questionFindMany.mockImplementation(async (args: Args) => [...database(args), kitchen])
+    findMany.mockResolvedValue([{ ...liveShift, shift: { ...liveShift.shift, roleName: "Cuisine" } }])
+    const res = await patch({ answers: { kitchen: "" } })
+    expect(res.status).toBe(400)
+    expect((await res.json()).questionErrors.map((e: { questionId: string }) => e.questionId)).toEqual(["kitchen"])
+    expect(upsert).not.toHaveBeenCalled()
+  })
+
   it("a parent changed to « Non » clears its follow-up, sent or not, logged like any change (#1016)", async () => {
     const guests = { id: "guests", eventId: "e1", label: "Combien de personnes ?", type: "number", options: [], required: true, position: 1, archivedAt: null, parentId: "meal", showIfValues: ["Oui"], answers: [{ volunteerId: "v1", values: ["3"] }] }
     questionFindMany.mockImplementation(async (args: Args) => [...database(args), { ...guests, answers: guests.answers.map(({ values }) => ({ values })) }])

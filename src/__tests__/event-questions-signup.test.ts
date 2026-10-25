@@ -100,3 +100,45 @@ describe("public sign-up with custom questions", () => {
     expect(m.upsert).not.toHaveBeenCalled()
   })
 })
+
+// Questions asked to some postes only (#1140): judged from the shifts this sign-up registers.
+describe("public sign-up with questions asked to some postes", () => {
+  beforeEach(() => {
+    vi.clearAllMocks()
+    m.eventFindFirst.mockResolvedValue({ id: "evt-1", organizationId: "org-a", title: "Fête", organization: { slug: "a", timeZone: null }, confirmationMessage: null })
+    m.shiftFindMany.mockResolvedValue([bar])
+    m.volunteerFindFirst.mockResolvedValue(null)
+    m.txCreate.mockResolvedValue({ id: "reg-1", shiftId: "s1", status: "active", waitingPosition: null })
+    m.questions.mockResolvedValue([
+      { id: "size", label: "Taille", type: "single", options: ["S", "M"], required: false },
+      { id: "cash", label: "Caisse ?", type: "yesno", options: [], required: true, displayScope: "roles", displayRoleNames: ["Bar"] },
+      { id: "kitchen", label: "Allergies ?", type: "text", options: [], required: true, displayScope: "roles", displayRoleNames: ["Cuisine"] },
+      { id: "kitchen-more", label: "Lesquelles ?", type: "text", options: [], required: true, parentId: "kitchen", showIfValues: [] },
+    ])
+  })
+
+  it("a required question of a poste not chosen never blocks; one of the chosen poste is required", async () => {
+    const { POST } = await import("@/app/api/public/registrations/route")
+    const missing = await POST(post({ answers: {} }))
+    expect(missing.status).toBe(400)
+    expect((await missing.json()).questionErrors.map((e: { questionId: string }) => e.questionId)).toEqual(["cash"])
+    expect((await POST(post({ answers: { cash: "Oui" } }))).status).toBeLessThan(300)
+  })
+
+  it("an answer posted for a question of another poste is ignored, never stored nor refused", async () => {
+    const { POST } = await import("@/app/api/public/registrations/route")
+    const res = await POST(post({ answers: { cash: "Non", kitchen: "x".repeat(500) } }))
+    expect(res.status).toBeLessThan(300)
+    expect(m.upsert.mock.calls.map((c) => c[0].create.questionId)).toEqual(["cash"])
+  })
+
+  it("with proof of the address, an empty asked question is cleared, an out-of-scope one (and its follow-up) keeps its stored answer", async () => {
+    m.volunteerFindFirst.mockResolvedValue({ id: "vol-9" })
+    m.inviteFindFirst.mockResolvedValue({ id: "inv-1" })
+    const { POST } = await import("@/app/api/public/registrations/route")
+    const res = await POST(post({ answers: { cash: "Oui" }, inviteToken: "tok-inv" }))
+    expect(res.status).toBeLessThan(300)
+    expect(m.deleteMany).toHaveBeenCalledWith({ where: { volunteerId: "vol-9", questionId: { in: ["size"] } } })
+  })
+})
+

@@ -28,7 +28,7 @@ import CalendarSubscribeCard from "@/components/public/CalendarSubscribeCard"
 import { calendarCard, type CalendarFeedUrls } from "@/lib/calendar-card-copy"
 import MyAnswersCard from "@/components/public/MyAnswersCard"
 import ShiftRosterCard, { type RosterData } from "@/components/public/ShiftRosterCard"
-import type { MyAnswerRow } from "@/lib/my-answers"
+import type { KeptAnswerRow, MyAnswerRow } from "@/lib/my-answers"
 import type { AnswersEditState } from "@/lib/answer-changes"
 import { MISSION_BRIEF_ID, MISSION_BRIEF_TITLE, nextConfirmedRegistration, type BriefEvent } from "@/lib/mission-brief"
 import { APP_TIME_ZONE } from "@/lib/time-zone"
@@ -85,6 +85,8 @@ type PageData = {
   confirmationMessage: string | null
   /** « Mes réponses » (#984): the event's questions with this volunteer's answers, in form order. */
   answers?: MyAnswerRow[]
+  /** Answers kept for questions of postes no longer held (#1140), read-only. */
+  keptAnswers?: KeptAnswerRow[]
   /** Whether they can still change from this page (#984): the withdrawals' lock. */
   answersEdit?: AnswersEditState
 }
@@ -532,7 +534,7 @@ export default function MyRegistrationPage() {
 
         {/* The answers to the event's questions (#984), under the registrations: editable while
             the volunteer can still withdraw online. */}
-        <MyAnswersCard rows={data.answers ?? []} edit={data.answersEdit} token={token} contactEmail={data.contactEmail ?? null} eventTitle={data.event.title} />
+        <MyAnswersCard rows={data.answers ?? []} kept={data.keptAnswers ?? []} edit={data.answersEdit} token={token} contactEmail={data.contactEmail ?? null} eventTitle={data.event.title} />
 
         <PersonalLinkPanel
           token={token}

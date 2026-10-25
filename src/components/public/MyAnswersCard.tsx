@@ -5,7 +5,7 @@
 
 import { useLayoutEffect, useState } from "react"
 import { orgContactHref } from "@/lib/mission-brief"
-import { MY_ANSWERS_TITLE, NO_ANSWER_TEXT, shownRows, startingAnswers, type MyAnswerRow } from "@/lib/my-answers"
+import { KEPT_ANSWERS_NOTE, KEPT_ANSWERS_TITLE, MY_ANSWERS_TITLE, NO_ANSWER_TEXT, shownRows, startingAnswers, type KeptAnswerRow, type MyAnswerRow } from "@/lib/my-answers"
 import { ORG_CONTACT_LABEL } from "@/lib/shift-info"
 import { checkAnswers, visibleQuestions, type Question } from "@/lib/event-questions"
 import {
@@ -38,11 +38,14 @@ function fieldOf(id: string): () => HTMLElement | null {
  * lock, #946), « Modifier mes réponses » opens the sign-up form's fields in place, with
  * « Enregistrer » and « Annuler »; afterwards, the organisation's email to ask for a change.
  * Focus: the first field on open, the button back on save or cancel, the first refused field on an
- * error; the result is said by a status line that stays mounted. Nothing when the event asks no
- * question.
+ * error; the result is said by a status line that stays mounted. Below, closed by default, the
+ * answers kept for questions no longer asked to the volunteer (#1140, postes they left), read-only.
+ * Nothing when the event asks them no question and nothing is kept.
  */
-export default function MyAnswersCard({ rows: initialRows, edit: initialEdit, token, contactEmail, eventTitle }: {
+export default function MyAnswersCard({ rows: initialRows, kept = [], edit: initialEdit, token, contactEmail, eventTitle }: {
   rows: MyAnswerRow[]
+  /** Answers kept for questions of postes the volunteer no longer holds (#1140), never editable here. */
+  kept?: KeptAnswerRow[]
   /** Whether the answers can still change online; absent means not (an older answer). */
   edit?: AnswersEditState
   token: string
@@ -67,7 +70,7 @@ export default function MyAnswersCard({ rows: initialRows, edit: initialEdit, to
     focusRequest.after?.()
   }, [focusRequest])
 
-  if (rows.length === 0) return null
+  if (rows.length === 0 && kept.length === 0) return null
 
   function open() {
     setAnswers(startingAnswers(rows))
@@ -164,7 +167,7 @@ export default function MyAnswersCard({ rows: initialRows, edit: initialEdit, to
       <div>
         <h2 id="my-answers-title" className="text-sm font-semibold text-gray-900">{MY_ANSWERS_TITLE}</h2>
         <p className="text-sm text-gray-700 mt-0.5">
-          {editing ? "Modifie tes réponses, puis enregistre." : "Ce que tu as répondu aux questions de l’inscription."}
+          {editing ? "Modifie tes réponses, puis enregistre." : rows.length > 0 ? "Ce que tu as répondu aux questions de l’inscription." : "Aucune question ne concerne tes créneaux actuels."}
         </p>
       </div>
       {editing ? (
@@ -192,7 +195,7 @@ export default function MyAnswersCard({ rows: initialRows, edit: initialEdit, to
             </button>
           </div>
         </form>
-      ) : (
+      ) : rows.length === 0 ? null : (
         <>
           <dl className="space-y-2 text-sm text-gray-800">
             {/* A follow-up (#1016) only when the answer to its parent shows it, set in under it. */}
@@ -214,6 +217,22 @@ export default function MyAnswersCard({ rows: initialRows, edit: initialEdit, to
             </button>
           )}
         </>
+      )}
+      {!editing && kept.length > 0 && (
+        <details className="text-sm text-gray-800">
+          <summary className="cursor-pointer font-medium text-blue-700 underline underline-offset-2 hover:text-blue-900 rounded min-h-6 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-blue-600">
+            {KEPT_ANSWERS_TITLE} ({kept.length})
+          </summary>
+          <p className="text-gray-700 mt-2">{KEPT_ANSWERS_NOTE}</p>
+          <dl className="space-y-2 mt-2">
+            {kept.map((row) => (
+              <div key={row.id}>
+                <dt className="font-medium text-gray-900 break-words">{row.label}</dt>
+                <dd className="break-words">{row.answer}</dd>
+              </div>
+            ))}
+          </dl>
+        </details>
       )}
       {/* The result of a save: visible, outside the form/list swap, so it stays mounted. */}
       <p role="status" className={status ? "text-sm text-green-800" : "sr-only"}>{status}</p>
