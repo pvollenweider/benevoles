@@ -105,7 +105,14 @@ export function productUpdateDraft(releases: readonly ChangelogRelease[], versio
 
   const summary = release.sections.find((s) => s.title === SUMMARY_SECTION)
   const body = releaseMarkdown(summary ? { ...release, sections: [summary] } : release)
+  // The page's link pipeline (linkSourcesToRoutes, repositoryLinks: inline links), then absolute.
   const linked = absoluteLinks(repositoryLinks(linkSourcesToRoutes(body), repositoryUrl), baseUrl)
+  // Reference definitions (`[g]: url`) render as nothing: set apart and always kept, at the end,
+  // so a shortened text never keeps a `[texte][g]` whose definition was cut.
+  const lines = linked.split("\n")
+  const isDefinition = (line: string) => /^ {0,3}\[[^\]\n]+\]:\s/.test(line)
+  const definitions = lines.filter(isDefinition).map((l) => l.trim()).join("\n")
+  const text = lines.filter((l) => !isDefinition(l)).join("\n").replace(/\n{3,}/g, "\n\n").trim()
 
   const date = formatReleaseDate(release.date)
   const opening = `Voici les nouveautés de la version ${release.version} de ${siteName}, publiée le ${date}.`
@@ -113,10 +120,11 @@ export function productUpdateDraft(releases: readonly ChangelogRelease[], versio
   const closing = (truncated: boolean) =>
     truncated ? `La suite de cette version n'est pas reprise ici, tout est sur la page ${link}.` : `Tout le détail sur la page ${link}.`
 
-  // Budget for the body: what the opening, the longer closing and the blank lines between leave.
-  const budget = maxLength - opening.length - closing(true).length - 4
-  const fitted = fitBlocks(linked, Math.max(0, budget))
-  const content = [opening, fitted.markdown, closing(fitted.truncated)].filter(Boolean).join("\n\n")
+  // Budget for the body: what the opening, the longer closing, the definitions and the blank
+  // lines between leave.
+  const budget = maxLength - opening.length - closing(true).length - (definitions ? definitions.length + 2 : 0) - 4
+  const fitted = fitBlocks(text, Math.max(0, budget))
+  const content = [opening, fitted.markdown, closing(fitted.truncated), definitions].filter(Boolean).join("\n\n")
 
   // A long instance name (SITE_NAME) would make the subject too long for the routes: then without it.
   const named = `Nouveautés de ${siteName}, version ${release.version}`

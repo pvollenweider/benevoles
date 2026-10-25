@@ -108,6 +108,15 @@ describe("productUpdateDraft", () => {
     expect(draft.content).toMatch(/La suite de cette version n'est pas reprise ici, tout est sur la page \[Nouveautés de la version 2\.0\.0\]\(https:\/\/www\.benevol\.app\/nouveautes#2\.0\.0\)\.$/)
   })
 
+  it("keeps reference definitions when the text is shortened", () => {
+    const md = `## [3.0.0] — 2026-10-01\n\n### Ajouté\n\n- **Un** : voir [le guide][g].\n- **Deux** : ${"y".repeat(400)}\n\n[g]: /doc/admin\n`
+    const draft = productUpdateDraft(parseChangelog(md), "3.0.0", { ...OPTIONS, maxLength: 400 })!
+    expect(draft.content.length).toBeLessThanOrEqual(400)
+    expect(draft.content).toContain("[le guide][g]")
+    expect(draft.content).not.toContain("**Deux**")
+    expect(draft.content.endsWith("[g]: https://www.benevol.app/doc/admin")).toBe(true)
+  })
+
   it("keeps the subject within the routes' limit with a long instance name", () => {
     const draft = productUpdateDraft(releases, "1.2.0", { ...OPTIONS, siteName: "x".repeat(140) })!
     expect(draft.subject).toBe("Nouveautés de la version 1.2.0")
