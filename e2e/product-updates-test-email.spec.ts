@@ -1,5 +1,5 @@
 import { test, expect } from "@playwright/test"
-import { clearMailbox, waitForMessage, searchMessages } from "./helpers/mailpit"
+import { clearMailbox, waitForMessage, searchMessages, getMessageText } from "./helpers/mailpit"
 import { waitForHydration } from "./helpers/hydration"
 
 /**
@@ -64,6 +64,34 @@ test("sending a test to a custom address delivers it there instead", async ({ pa
   // Only the custom address got it — not the super admin's own mailbox too.
   const matching = await searchMessages(`subject:"[Test] E2E custom email ${stamp}"`)
   expect(matching).toHaveLength(1)
+})
+
+test("a test email starts from a version of the changelog, edited before sending (#762)", async ({ page }) => {
+  await page.goto("/admin/login")
+  await page.getByLabel("Email").fill(SUPER_ADMIN_EMAIL)
+  await page.getByLabel("Mot de passe").fill(SUPER_ADMIN_PASSWORD)
+  await page.getByRole("button", { name: "Se connecter" }).click()
+  await expect(page).toHaveURL(/\/admin\/events|\/super-admin\/organizations/)
+
+  const stamp = Date.now()
+  await page.goto("/super-admin/product-updates")
+  const picker = page.getByLabel("Partir des nouveautés de la version")
+  await waitForHydration(picker)
+  const version = await picker.inputValue()
+  expect(version).toMatch(/^\d+\.\d+\.\d+/)
+  await page.getByRole("button", { name: "Préremplir" }).click()
+  const subject = page.getByLabel("Objet *")
+  await expect(subject).toHaveValue(new RegExp(`version ${version.replace(/\./g, "\\.")}$`))
+  await expect(page.locator("textarea")).toHaveValue(new RegExp(`/nouveautes#${version.replace(/\./g, "\\.")}\\)\\.$`))
+  // Editable before sending: the subject gets a stamp so this test finds its own email.
+  await subject.fill(`${await subject.inputValue()} ${stamp}`)
+  const sent = page.waitForResponse((r) => r.url().endsWith("/api/super-admin/product-updates/test") && r.request().method() === "POST")
+  await page.getByRole("button", { name: "Envoyer un test" }).click()
+  expect((await sent).ok()).toBe(true)
+
+  const msg = await waitForMessage(`subject:"${stamp}"`)
+  expect(msg.Subject).toContain(`version ${version} ${stamp}`)
+  expect(await getMessageText(msg.ID)).toContain(`/nouveautes#${version}`)
 })
 
 test("rejects a malformed test email address", async ({ page }) => {

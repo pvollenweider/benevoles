@@ -13,7 +13,7 @@ import { loadVideoCatalog } from "@/lib/video-catalog-load"
 import { homeSignupVideo, type HomeSignupVideo } from "@/lib/home-signup-video"
 import type { DocUnit } from "@/lib/doc-units"
 import { hideLineArrows, type BlogPost } from "@/lib/blog"
-import { formatReleaseDate, parseChangelog, repositoryLinks } from "@/lib/changelog"
+import { formatReleaseDate, parseChangelog, repositoryLinks, type ChangelogRelease } from "@/lib/changelog"
 import { REPOSITORY_URL, type FaqItem } from "@/lib/structured-data"
 import { createRenderCache } from "@/lib/render-cache"
 import { localizeInstanceText } from "@/lib/site"
@@ -280,4 +280,16 @@ function renderChangelogNow(): RenderedRelease[] {
     introHtml: html(r.intro),
     sections: r.sections.map((s) => ({ title: s.title, html: html(s.markdown) })),
   }))
+}
+
+const changelogReleasesCache = createRenderCache<ChangelogRelease[]>()
+
+/**
+ * CHANGELOG.md parsed as /nouveautes reads it (released versions, public sections, no internal
+ * bullet), not rendered: what a product update email starts from (#762, src/lib/product-update-draft.ts).
+ */
+export function changelogReleases(): ChangelogRelease[] {
+  return changelogReleasesCache("CHANGELOG.md", () =>
+    parseChangelog(fs.readFileSync(path.join(/*turbopackIgnore: true*/ process.cwd(), "CHANGELOG.md"), "utf-8")),
+  )
 }
