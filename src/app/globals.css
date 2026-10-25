@@ -91,16 +91,17 @@ html:has([data-theme-scope].dark) {
   color-scheme: dark;
 }
 
-/* The heading a client navigation to a #fragment focuses (ContentShellRoot, tabindex="-1" while
-   it has the focus): the content links' focus outline (blue-700, blue-400 in dark), not the
-   browser's own ring, and only for a keyboard user (focus-visible). */
-[data-theme-scope] :is(h1, h2, h3, h4, h5, h6)[tabindex="-1"]:focus-visible {
+/* The element (usually a heading) a client navigation to a #fragment focuses, made focusable only
+   while it has the focus (ContentShellRoot, data-nav-focus): the content links' focus outline
+   (blue-700, blue-400 in dark), not the browser's own ring, and only for a keyboard user
+   (focus-visible). Elements a page focuses itself keep their own style. */
+[data-theme-scope] [data-nav-focus]:focus-visible {
   outline: 2px solid #1d4ed8;
   outline-offset: 4px;
   border-radius: 0.25rem;
 }
 
-[data-theme-scope].dark :is(h1, h2, h3, h4, h5, h6)[tabindex="-1"]:focus-visible {
+[data-theme-scope].dark [data-nav-focus]:focus-visible {
   outline-color: var(--color-blue-400);
 }
 

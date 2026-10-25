@@ -81,6 +81,18 @@ describe("ContentShellRoot: focus after a client navigation", () => {
     expect(document.activeElement).toBe(screen.getByRole("main"))
   })
 
+  it("leaves it alone on Back or Forward", async () => {
+    const { rerender } = render(<Prose />)
+    await act(() => new Promise((resolve) => requestAnimationFrame(resolve)))
+    act(() => (document.activeElement as HTMLElement).blur())
+    pathname = "/doc/creer-son-premier-evenement"
+    window.history.replaceState(null, "", pathname)
+    window.dispatchEvent(new PopStateEvent("popstate"))
+    rerender(<Prose />)
+    await act(() => new Promise((resolve) => requestAnimationFrame(resolve)))
+    expect(document.activeElement).toBe(document.body)
+  })
+
   it("moves it to the fragment's target, made focusable only while focused", async () => {
     const { rerender } = render(<Prose />)
     pathname = "/doc/creer-son-premier-evenement"

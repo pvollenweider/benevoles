@@ -7,6 +7,18 @@ import { clientNavigationTarget, navigationFocusTarget } from "@/lib/content-lin
 
 /** The pathname the last content frame was shown at, across frames: null until the first one. */
 let lastPathname: string | null = null
+/** The focus move waiting for the next frame, across frames (cancelled by a newer navigation only). */
+let pendingFocus: number | undefined
+/**
+ * The pathname Back/Forward (popstate) landed on: that page keeps the browser's own position. The
+ * path, not a flag, since a same-page #anchor fires popstate too and must not mute the next move.
+ */
+let traversedTo: string | null = null
+if (typeof window !== "undefined") {
+  window.addEventListener("popstate", () => {
+    traversedTo = window.location.pathname
+  })
+}
 
 /**
  * The root of ContentShell, the element the dark theme is scoped to ([data-theme-scope]).
@@ -20,8 +32,9 @@ let lastPathname: string | null = null
  * After a client navigation to another content page, by such a link or a next/link (header, side
  * menu, pager), the focus goes to the #fragment's target, else to <main> (the skip link's target),
  * without scrolling (Next has already scrolled): the next Tab starts from the content, as after a
- * full load, instead of from wherever the removed link was. Not on a full load, nor when only the
- * query changes (the doc index filter).
+ * full load, instead of from wherever the removed link was. Not on a full load, nor on Back or
+ * Forward (the browser restores its own position), nor when only the query changes (the doc index
+ * filter).
  */
 export default function ContentShellRoot({ pages, className, children }: { pages: readonly string[]; className: string; children: React.ReactNode }) {
   const router = useRouter()
@@ -29,19 +42,31 @@ export default function ContentShellRoot({ pages, className, children }: { pages
 
   useEffect(() => {
     const previous = lastPathname
+    const traversal = traversedTo === pathname
     lastPathname = pathname
-    if (previous === null || previous === pathname) return
-    const frame = requestAnimationFrame(() => {
+    traversedTo = null
+    // A replayed effect (StrictMode) sees the same pathname and leaves the pending move alone.
+    if (previous === null || previous === pathname || traversal) return
+    if (pendingFocus !== undefined) cancelAnimationFrame(pendingFocus)
+    pendingFocus = requestAnimationFrame(() => {
+      pendingFocus = undefined
       const id = navigationFocusTarget(window.location.hash, (candidate) => document.getElementById(candidate) !== null, MAIN_CONTENT_ID)
       const target = document.getElementById(id)
       if (!target) return
       if (!target.hasAttribute("tabindex")) {
         target.setAttribute("tabindex", "-1")
-        target.addEventListener("blur", () => target.removeAttribute("tabindex"), { once: true })
+        target.setAttribute("data-nav-focus", "")
+        target.addEventListener(
+          "blur",
+          () => {
+            target.removeAttribute("tabindex")
+            target.removeAttribute("data-nav-focus")
+          },
+          { once: true },
+        )
       }
       target.focus({ preventScroll: true })
     })
-    return () => cancelAnimationFrame(frame)
   }, [pathname])
 
   function onClick(event: React.MouseEvent<HTMLDivElement>) {
@@ -59,6 +84,7 @@ export default function ContentShellRoot({ pages, className, children }: { pages
     )
     if (!to) return
     event.preventDefault()
+    traversedTo = null
     router.push(to)
   }
 
