@@ -68,26 +68,33 @@ export function selectionOverlapRefusal(shifts: (OverlapShift & { label: string 
   return null
 }
 
-/** The first of the volunteer's registrations that clashes with one of the asked shifts (#986: a cumulable role may overlap). */
+/** A registration's shift as the overlap checks read it. */
+type ExistingShift = OverlapShift & { label: string; assignedOnly?: boolean | null }
+
+/**
+ * The first of the volunteer's registrations that clashes with one of the asked shifts (#986: a
+ * cumulable role may overlap). The label is null for a shift of a role assigned by the
+ * organisation only (#1145): nothing proves the submitter is that volunteer, the answer never names it.
+ */
 export function findOverlap(
-  existing: { shift: OverlapShift & { label: string } }[],
+  existing: { shift: ExistingShift }[],
   shifts: OverlapShift[],
-): { label: string } | null {
+): { label: string | null } | null {
   for (const reg of existing) {
     for (const shift of shifts) {
-      if (shiftsClash(reg.shift, shift)) return { label: reg.shift.label }
+      if (shiftsClash(reg.shift, shift)) return { label: reg.shift.assignedOnly ? null : reg.shift.label }
     }
   }
   return null
 }
 
-export function overlapWithExisting(label: string): SignupRefusal {
-  return { status: 409, body: { error: `Ce créneau chevauche une inscription existante (${label}).` } }
+export function overlapWithExisting(label: string | null): SignupRefusal {
+  return { status: 409, body: { error: label === null ? "Ce créneau chevauche une inscription existante." : `Ce créneau chevauche une inscription existante (${label}).` } }
 }
 
 /** Overlap with one of the volunteer's live registrations of the event. */
 export function existingOverlapRefusal(
-  existing: { shift: OverlapShift & { label: string } }[],
+  existing: { shift: ExistingShift }[],
   shifts: OverlapShift[],
 ): SignupRefusal | null {
   const clash = findOverlap(existing, shifts)

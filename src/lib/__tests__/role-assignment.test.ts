@@ -1,5 +1,6 @@
 import { describe, it, expect } from "vitest"
-import { assignedOnlyRoles, asksAssignedOnly, publicShifts, roleAssignedOnly } from "../role-assignment"
+import { assignedOnlyRoles, asksAssignedOnly, publicShifts, roleAssignedOnly, rosterShifts } from "../role-assignment"
+import { findOverlap, overlapWithExisting } from "../signup-eligibility"
 
 // Roles assigned by the organisation only (#1145): never offered publicly.
 const s = (id: string, roleName: string, assignedOnly?: boolean | null) => ({ id, roleName, assignedOnly })
@@ -42,5 +43,24 @@ describe("asksAssignedOnly", () => {
     expect(asksAssignedOnly([{ roleName: "Bar" }, { roleName: "Caisse" }], hidden)).toBe(true)
     expect(asksAssignedOnly([{ roleName: "Bar" }], hidden)).toBe(false)
     expect(asksAssignedOnly([{ roleName: "Bar" }], new Set())).toBe(false)
+  })
+})
+
+describe("rosterShifts (#1068 roster)", () => {
+  it("shows public shifts, and a hidden role's shifts only to a volunteer on them", () => {
+    const shifts = [s("1", "Bar"), s("2", "Caisse", true), s("3", "Caisse")]
+    expect(rosterShifts(shifts, new Set()).map((x) => x.id)).toEqual(["1"])
+    expect(rosterShifts(shifts, new Set(["2"])).map((x) => x.id)).toEqual(["1", "2"])
+  })
+})
+
+describe("overlap with a hidden assignment", () => {
+  const at = (startTime: string, endTime: string) => ({ date: "2030-06-01", startTime, endTime })
+  it("is found, but not named", () => {
+    const existing = [{ shift: { ...at("10:00", "12:00"), label: "Caisse", assignedOnly: true } }]
+    const clash = findOverlap(existing, [at("11:00", "13:00")])
+    expect(clash).toEqual({ label: null })
+    expect(overlapWithExisting(clash!.label).body.error).toBe("Ce créneau chevauche une inscription existante.")
+    expect(findOverlap([{ shift: { ...at("10:00", "12:00"), label: "Bar" } }], [at("11:00", "13:00")])).toEqual({ label: "Bar" })
   })
 })

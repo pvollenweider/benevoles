@@ -124,11 +124,26 @@ describe("POST /api/public/registrations — role assigned by the organisation o
 
   it("refuses it when the role became assigned-only while the sign-up ran, seen under the shift lock", async () => {
     shiftsInDb([bar])
-    m.txShiftFindMany.mockImplementation(async ({ where }: { where: { assignedOnly?: boolean } }) => (where.assignedOnly ? [{ id: "s-bar", assignedOnly: true }] : []))
+    m.txShiftFindMany.mockImplementation(async ({ where }: { where: { assignedOnly?: boolean } }) => (where.assignedOnly ? [{ roleName: "Bar", assignedOnly: true }] : []))
     const { POST } = await import("@/app/api/public/registrations/route")
     const res = await POST(post(["s-bar"]))
     expect(res.status).toBe(409)
     expect(await res.text()).toContain("invalides ou fermés")
+    expect(m.txCreate).not.toHaveBeenCalled()
+  })
+
+  it("an overlap with a hidden assignment is refused without naming it: nothing proves who submits", async () => {
+    shiftsInDb([bar, caisse])
+    const { prisma } = await import("@/lib/prisma")
+    ;(prisma.volunteer.findFirst as ReturnType<typeof vi.fn>).mockResolvedValueOnce({ id: "vol-1" })
+    ;(prisma.registration.findMany as ReturnType<typeof vi.fn>)
+      .mockResolvedValueOnce([]) // not already on the asked shift
+      .mockResolvedValueOnce([{ shift: { ...caisse, startTime: "11:00", endTime: "13:00", date: bar.date } }])
+    const { POST } = await import("@/app/api/public/registrations/route")
+    const res = await POST(post(["s-bar"]))
+    expect(res.status).toBe(409)
+    const body = await res.json()
+    expect(body.error).toBe("Ce créneau chevauche une inscription existante.")
     expect(m.txCreate).not.toHaveBeenCalled()
   })
 

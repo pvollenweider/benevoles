@@ -372,10 +372,15 @@ export async function POST(req: Request) {
           const [breach] = roleLimitBreaches(shifts, held.map((h) => h.shift), limits)
           if (breach) throw new RoleLimitError(breach)
         }
-        // Again under the shift lock (#1145): the role route sets the option on every shift of the role,
-        // so a role made assigned-only while this sign-up ran shows on the locked shifts themselves.
-        const lockedFlags = await tx.shift.findMany({ where: { id: { in: shiftIds }, assignedOnly: true }, select: { id: true, assignedOnly: true } })
-        if (lockedFlags.some((s) => s.assignedOnly)) throw new AssignedOnlyError()
+        // Again under the shift lock (#1145), on the whole role as above: a role made assigned-only
+        // while this sign-up ran is refused here. The role route writes every shift of the role, the
+        // locked ones included, so its change either committed before this read or waits for this
+        // sign-up, which then came first, like the registrations kept when the option is set.
+        const lockedFlags = await tx.shift.findMany({
+          where: { eventId, roleName: { in: [...new Set(shifts.map((s) => s.roleName))] }, status: { not: "cancelled" }, assignedOnly: true },
+          select: { roleName: true, assignedOnly: true },
+        })
+        if (asksAssignedOnly(shifts, assignedOnlyRoles(lockedFlags))) throw new AssignedOnlyError()
         const created = []
         for (const shift of shifts) {
           const occupied = await tx.registration.count({
@@ -670,7 +675,7 @@ class AssignedOnlyError extends Error {
 const INVALID_SHIFTS = "Un ou plusieurs créneaux sont invalides ou fermés. Recharge la page."
 
 class OverlapError extends Error {
-  constructor(readonly label: string) {
+  constructor(readonly label: string | null) {
     super(`Overlaps ${label}`)
   }
 }

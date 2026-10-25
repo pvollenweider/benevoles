@@ -38,6 +38,15 @@ export function publicShifts<S extends AssignableShift>(shifts: S[]): S[] {
   return hidden.size === 0 ? shifts : shifts.filter((s) => !hidden.has(s.roleName))
 }
 
+/**
+ * The shifts a volunteer's roster (#1068) may show: the public ones, plus the shifts of an
+ * assigned-only role this volunteer is on (`ownShiftIds`), where they see who they work with.
+ */
+export function rosterShifts<S extends AssignableShift & { id: string }>(shifts: S[], ownShiftIds: Set<string>): S[] {
+  const hidden = assignedOnlyRoles(shifts)
+  return hidden.size === 0 ? shifts : shifts.filter((s) => !hidden.has(s.roleName) || ownShiftIds.has(s.id))
+}
+
 /** Whether a public sign-up asks for a shift of a role in `hidden` (from `assignedOnlyRoles`). */
 export function asksAssignedOnly(asked: { roleName: string }[], hidden: Set<string>): boolean {
   return asked.some((s) => hidden.has(s.roleName))
