@@ -182,9 +182,9 @@ export default function SectorLeaderPage() {
                           {mailtoHref(reg.volunteer.email) ? (
                             <a href={mailtoHref(reg.volunteer.email)!} className="hover:text-blue-600 underline-offset-2 hover:underline">{reg.volunteer.email}</a>
                           ) : reg.volunteer.email && <span>{reg.volunteer.email}</span>}
-                          {reg.volunteer.phone && (
+                          {reg.volunteer.phone && (telHref(reg.volunteer.phone) !== "tel:" ? (
                             <a href={telHref(reg.volunteer.phone)} className="hover:text-blue-600 underline-offset-2 hover:underline">{reg.volunteer.phone}</a>
-                          )}
+                          ) : <span>{reg.volunteer.phone}</span>)}
                         </div>
                         {reg.comment && <p className="text-xs text-gray-600 mt-1 italic">{reg.comment}</p>}
                       </li>

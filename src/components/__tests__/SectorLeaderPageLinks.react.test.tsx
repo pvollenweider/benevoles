@@ -61,4 +61,11 @@ describe("SectorLeaderPage links", () => {
     expect(screen.queryByRole("link", { name: odd })).not.toBeInTheDocument()
     expect(document.querySelector('a[href^="mailto:"]')).toBeNull()
   })
+
+  it("shows a phone without any digit as text, without a tel link", async () => {
+    stubFetch([reg("C", "lea@example.com", "pas de numéro")])
+    render(<SectorLeaderPage />)
+    expect(await screen.findByText("pas de numéro")).toBeInTheDocument()
+    expect(document.querySelector('a[href^="tel:"]')).toBeNull()
+  })
 })
