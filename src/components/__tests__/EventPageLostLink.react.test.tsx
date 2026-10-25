@@ -39,7 +39,7 @@ describe("EventPageClient — lost link (#1097)", () => {
     expect(details).toHaveTextContent(LOST_LINK_INTRO)
     expect(details).not.toHaveTextContent(INVALID_LINK_STEPS[0])
     expect(screen.getByRole("link", { name: /En savoir plus sur le lien personnel perdu/, hidden: true }))
-      .toHaveAttribute("href", "/doc/lien-personnel#je-n-ai-plus-le-lien-vers-ma-page-personnelle")
+      .toHaveAttribute("href", "/doc/lien-personnel#je-n-ai-plus-le-lien-vers-mes-inscriptions")
   })
 
   it("sends the address to the existing request and shows its neutral answer", async () => {

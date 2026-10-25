@@ -43,7 +43,7 @@ const HELD_NAME: Record<HeldKind, string> = {
   active: "inscription confirmée",
   requested: "demande envoyée, en attente de validation",
   waiting: "en liste d'attente",
-  offered: "place proposée, à accepter sur ta page personnelle",
+  offered: "place proposée, à accepter sur ta page « Mes inscriptions »",
 }
 
 /** Visible tag under a held bar, first in its sub-label. */

@@ -52,7 +52,7 @@ Clique (ou tape) sur une barre disponible. Le créneau s'ajoute à ta sélection
 
 Certains postes sont **réservés** à des membres de l'association : ils sont marqués « Réservé » et on s'y inscrit avec le lien personnel reçu par email dans l'invitation.
 
-Certains postes limitent le nombre de créneaux par personne. Si tu en as déjà pris le maximum (en comptant tes inscriptions et ta sélection), les autres créneaux du poste affichent « Limite atteinte » sous leur barre, et la phrase entière dans la vue Liste, avec le nombre fixé par l'organisation (par exemple « Limite de 2 créneaux par personne atteinte »). Si tu cliques quand même, un message sous le planning du jour le rappelle et le créneau n'est pas ajouté. Pour en choisir un autre, retire un créneau du poste de ta sélection, ou annule une de tes inscriptions depuis [ta page personnelle](ma-page-personnelle.md).
+Certains postes limitent le nombre de créneaux par personne. Si tu en as déjà pris le maximum (en comptant tes inscriptions et ta sélection), les autres créneaux du poste affichent « Limite atteinte » sous leur barre, et la phrase entière dans la vue Liste, avec le nombre fixé par l'organisation (par exemple « Limite de 2 créneaux par personne atteinte »). Si tu cliques quand même, un message sous le planning du jour le rappelle et le créneau n'est pas ajouté. Pour en choisir un autre, retire un créneau du poste de ta sélection, ou annule une de tes inscriptions depuis [ta page « Mes inscriptions »](ma-page-personnelle.md).
 
 Un créneau marqué « Sur validation » se choisit comme les autres, mais ton inscription y sera une demande : voir [Inscriptions sur validation](inscriptions-sur-validation.md).
 
@@ -60,9 +60,9 @@ L'application empêche automatiquement de sélectionner deux créneaux qui se ch
 
 ## Voir qui est inscrit
 
-Si l'organisation l'a prévu pour l'événement, l'interrupteur **Voir qui est inscrit**, à côté de **Frise** et **Liste**, montre qui est inscrit sur chaque créneau : le prénom et l'initiale du nom (par exemple « Aline M. ») des bénévoles confirmés qui l'ont accepté, et le nombre des autres, sans leur nom. Il est éteint à l'ouverture de la page, sauf depuis le lien **Voir qui est inscrit sur les autres créneaux** de ta page personnelle, qui l'ouvre allumé ; touche-le pour l'allumer, une deuxième fois pour l'éteindre. Tu ne le vois que dans deux cas :
+Si l'organisation l'a prévu pour l'événement, l'interrupteur **Voir qui est inscrit**, à côté de **Frise** et **Liste**, montre qui est inscrit sur chaque créneau : le prénom et l'initiale du nom (par exemple « Aline M. ») des bénévoles confirmés qui l'ont accepté, et le nombre des autres, sans leur nom. Il est éteint à l'ouverture de la page, sauf depuis le lien **Voir qui est inscrit sur les autres créneaux** de ta page **Mes inscriptions**, qui l'ouvre allumé ; touche-le pour l'allumer, une deuxième fois pour l'éteindre. Tu ne le vois que dans deux cas :
 
-- tu as une place confirmée sur l'événement : ouvre la page avec ton lien personnel, par exemple avec le lien **Voir qui est inscrit sur les autres créneaux** de [ta page personnelle](ma-page-personnelle.md#qui-est-inscrit), ou depuis le navigateur où tu l'as déjà ouverte ;
+- tu as une place confirmée sur l'événement : ouvre la page avec ton lien personnel, par exemple avec le lien **Voir qui est inscrit sur les autres créneaux** de [ta page « Mes inscriptions »](ma-page-personnelle.md#qui-est-inscrit), ou depuis le navigateur où tu l'as déjà ouverte ;
 - l'organisation t'a invité à l'événement : ouvre la page avec le lien de ton invitation, avant de t'inscrire.
 
 Sinon, la page n'affiche aucun nom, seulement les places libres : c'est le cas pour une personne en liste d'attente ou en attente de validation, sur le lien d'un groupe et sur le site de l'association.
@@ -81,4 +81,4 @@ Certaines associations publient toute une saison de permanences (l'accueil du me
 
 ### Je veux m'inscrire à plusieurs créneaux différents (par exemple accueil le vendredi, bar le samedi)
 
-Sélectionne-les tous avant de cliquer sur **Continuer** : un seul formulaire suffit pour valider plusieurs créneaux d'un coup. Tu pourras les annuler un par un plus tard depuis [ta page personnelle](ma-page-personnelle.md).
+Sélectionne-les tous avant de cliquer sur **Continuer** : un seul formulaire suffit pour valider plusieurs créneaux d'un coup. Tu pourras les annuler un par un plus tard depuis [ta page « Mes inscriptions »](ma-page-personnelle.md).

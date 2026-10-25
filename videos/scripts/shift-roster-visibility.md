@@ -26,8 +26,8 @@ Un membre qui arrive par son lien d’invitation voit aussi l’interrupteur, av
 
 ## roster-existing
 
-Bruno avait accepté l’ancien texte, limité aux bénévoles confirmés. Sur sa page personnelle, la mention Les membres invités ne le voient pas encore accompagne le bouton Le leur montrer aussi. Il propose un nouveau choix explicite. Cliquez sur ce bouton pour élargir cet accord. Sur le lien d’invitation, Bruno devient visible. Aucun ancien accord n’est élargi automatiquement.
+Bruno avait accepté l’ancien texte, limité aux bénévoles confirmés. Sur sa page Mes inscriptions, la mention Les membres invités ne le voient pas encore accompagne le bouton Le leur montrer aussi. Il propose un nouveau choix explicite. Cliquez sur ce bouton pour élargir cet accord. Sur le lien d’invitation, Bruno devient visible. Aucun ancien accord n’est élargi automatiquement.
 
 ## roster-withdraw
 
-Revenons sur la page personnelle d’Aline. Désactivez Afficher mon nom aux autres bénévoles. L’état Masqué confirme le retrait. Sur la page ouverte par l’invitation, Aline a disparu ; sa place reste comptée. Ce retrait ne change pas son inscription. Pour terminer, voici la même page sans identification. L’interrupteur et les noms ont disparu. Rien non plus dans l’intégration à votre site ni sur les liens de groupe. Les mineurs connus ne sont jamais nommés. Les noms ne sont consultables que jusqu’à la fin de l’événement.
+Revenons sur la page Mes inscriptions d’Aline. Désactivez Afficher mon nom aux autres bénévoles. L’état Masqué confirme le retrait. Sur la page ouverte par l’invitation, Aline a disparu ; sa place reste comptée. Ce retrait ne change pas son inscription. Pour terminer, voici la même page sans identification. L’interrupteur et les noms ont disparu. Rien non plus dans l’intégration à votre site ni sur les liens de groupe. Les mineurs connus ne sont jamais nommés. Les noms ne sont consultables que jusqu’à la fin de l’événement.

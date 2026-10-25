@@ -33,7 +33,7 @@ const dangerButton =
 type FormValues = { name: string; roleNames: string[]; hideFull: boolean }
 
 /**
- * Share links per group (#947), in the event's « Partager l'événement » area: one link per club or
+ * Share links per group (#947), in the event's « Liens à partager » page: one link per club or
  * team, showing only its roles, with its QR code and the sign-ups it brought. Inline forms (no
  * dialog), the focus handled by hand as in MilestonesSection; deletion asks first.
  *

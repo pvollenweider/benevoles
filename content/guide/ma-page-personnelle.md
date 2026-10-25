@@ -2,23 +2,23 @@
 roles: [benevole]
 group: apres-inscription
 order: 10
-summary: Ta page personnelle : prochain créneau, infos pratiques, tes réponses, d'autres créneaux, changer ou annuler, calendrier, disponibilités.
+summary: Ta page « Mes inscriptions » : prochain créneau, infos pratiques, tes réponses, d'autres créneaux, changer ou annuler, calendrier, disponibilités.
 related: [lien-personnel, rappels, revenir-sur-la-page-d-inscription]
 legacy: [benevole#gerer-son-inscription]
 aliases: []
 ---
 
-# Ma page personnelle
+# Mes inscriptions
 
 <!-- video: VOLUNTEER_PERSONAL_REGISTRATIONS -->
 
-Ta page personnelle s'ouvre avec ton **lien personnel**, reçu par email (voir [Ton lien personnel](lien-personnel.md)) :
+Ta page **Mes inscriptions** s'ouvre avec ton **lien personnel**, reçu par email (voir [Ton lien personnel](lien-personnel.md)) :
 
 ```
 https://[organisation].benevol.app/my/[token]
 ```
 
-![Page personnelle « Mes inscriptions » : la carte « Avant ta mission » (poste, horaire, lieu, responsable, consignes et pages de l'événement), puis la carte « Mon calendrier » : s'abonner avec l'agenda de cet appareil, Google Agenda ou autre agenda en ligne, et le téléchargement de tout le planning](/doc-img/public-my-page.png)
+![Page « Mes inscriptions » : la carte « Avant ta mission » (poste, horaire, lieu, responsable, consignes et pages de l'événement), puis la carte « Mon calendrier » : s'abonner avec l'agenda de cet appareil, Google Agenda ou autre agenda en ligne, et le téléchargement de tout le planning](/doc-img/public-my-page.png)
 
 ## Avant ta mission
 
@@ -48,7 +48,7 @@ Si l'organisation l'a prévu pour l'événement, et dès que tu as une place con
 
 Pour choisir d'autres créneaux avec des personnes que tu connais, le lien **Voir qui est inscrit sur les autres créneaux** ouvre la page de l'événement avec **Voir qui est inscrit** déjà activé : la vue **Liste** montre les noms sur tous les créneaux, la **Frise** ceux du créneau que tu touches (voir [Voir qui est inscrit](choisir-ses-creneaux.md#voir-qui-est-inscrit)).
 
-![Encadré « Qui est inscrit » de la page personnelle de Léa : ses créneaux confirmés, chacun avec sa date et ses heures, les bénévoles qui ont choisi d'afficher leur nom, comme « Aline M. », le nombre des autres, le lien vers les autres créneaux, puis l'interrupteur « Afficher mon nom aux autres bénévoles », son état écrit en toutes lettres (« Visible : « Léa F. » » ou « Masqué ») et ce qu'il implique](/doc-img/public-roster-card.png)
+![Encadré « Qui est inscrit » de la page « Mes inscriptions » de Léa : ses créneaux confirmés, chacun avec sa date et ses heures, les bénévoles qui ont choisi d'afficher leur nom, comme « Aline M. », le nombre des autres, le lien vers les autres créneaux, puis l'interrupteur « Afficher mon nom aux autres bénévoles », son état écrit en toutes lettres (« Visible : « Léa F. » » ou « Masqué ») et ce qu'il implique](/doc-img/public-roster-card.png)
 
 En vidéo : [montrer aux bénévoles qui est inscrit](/videos/SHIFT_ROSTER_VISIBILITY#doc).
 
@@ -58,7 +58,7 @@ Ton nom n'y figure que si tu l'as choisi. Si ta place est confirmée, tu comptes
 
 Si ton accord porte sur un texte précédent, qui ne parlait que des bénévoles confirmés, ton nom n'est montré qu'à eux. L'état le dit (« Visible aux bénévoles confirmés »), suivi de « Les membres invités ne le voient pas encore. » : ils voient eux aussi qui est inscrit, mais ton nom ne leur est montré que si tu l'acceptes. Le bouton **Le leur montrer aussi** l'accepte ; éteindre l'interrupteur masque ton nom pour tout le monde. Sans rien faire, rien ne change pour toi.
 
-Si tu as coché la case à l'inscription, l'interrupteur reste éteint avec l'état « À confirmer » : un seul toucher le confirme, et ton nom n'apparaît qu'après cette confirmation, parce que n'importe qui peut taper une adresse email dans le formulaire alors que ta page personnelle s'ouvre avec le lien envoyé à cette adresse. C'est aussi le cas si tu t'inscris à d'autres créneaux sans passer par ta page personnelle. Si tu t'es inscrit avant que l'organisation active ce réglage, ton nom reste masqué tant que tu ne choisis pas de l'afficher : aucun email ne te le signale, l'encadré apparaît simplement sur ta page la prochaine fois que tu l'ouvres (voir [Je me suis inscrit avant que l'organisation montre qui est inscrit : pourquoi mon nom n'apparaît pas ?](#je-me-suis-inscrit-avant-que-l-organisation-montre-qui-est-inscrit-pourquoi-mon-nom-n-apparait-pas)). Le nom d'un bénévole de moins de 18 ans n'est jamais montré.
+Si tu as coché la case à l'inscription, l'interrupteur reste éteint avec l'état « À confirmer » : un seul toucher le confirme, et ton nom n'apparaît qu'après cette confirmation, parce que n'importe qui peut taper une adresse email dans le formulaire alors que ta page **Mes inscriptions** s'ouvre avec le lien envoyé à cette adresse. C'est aussi le cas si tu t'inscris à d'autres créneaux sans passer par ta page **Mes inscriptions**. Si tu t'es inscrit avant que l'organisation active ce réglage, ton nom reste masqué tant que tu ne choisis pas de l'afficher : aucun email ne te le signale, l'encadré apparaît simplement sur ta page la prochaine fois que tu l'ouvres (voir [Je me suis inscrit avant que l'organisation montre qui est inscrit : pourquoi mon nom n'apparaît pas ?](#je-me-suis-inscrit-avant-que-l-organisation-montre-qui-est-inscrit-pourquoi-mon-nom-n-apparait-pas)). Le nom d'un bénévole de moins de 18 ans n'est jamais montré.
 
 Ton lien personnel donne accès à ces noms : ne le partage pas.
 
@@ -103,7 +103,7 @@ Il n'y a pas de bouton pour échanger un créneau contre un autre : le changemen
 
 Dès que tu as un créneau confirmé, la carte **Mon calendrier** te propose deux façons de retrouver tes créneaux dans ton agenda (téléphone, Google, Outlook, Apple…). Seuls les créneaux confirmés y figurent : pas la liste d'attente ni les demandes en attente de validation.
 
-**S'abonner (l'agenda se met à jour tout seul).** Ton agenda reçoit une adresse d'abonnement et va y relire tes créneaux régulièrement : un horaire modifié, un créneau annulé (par toi ou par l'organisation) ou un nouveau créneau y apparaît sans rien refaire. Selon l'agenda, la mise à jour arrive après quelques heures, parfois un jour : en cas de doute, ta page personnelle et les emails de l'organisation font foi.
+**S'abonner (l'agenda se met à jour tout seul).** Ton agenda reçoit une adresse d'abonnement et va y relire tes créneaux régulièrement : un horaire modifié, un créneau annulé (par toi ou par l'organisation) ou un nouveau créneau y apparaît sans rien refaire. Selon l'agenda, la mise à jour arrive après quelques heures, parfois un jour : en cas de doute, ta page **Mes inscriptions** et les emails de l'organisation font foi.
 - Sur iPhone, iPad, Mac, ou avec Outlook ou Thunderbird : **S'abonner avec l'agenda de cet appareil** ouvre ton agenda, qui te demande de confirmer l'abonnement.
 - Avec Google Agenda (et donc sur un téléphone Android) ou un autre agenda en ligne : ouvre **Google Agenda ou autre agenda en ligne**, puis **Copier l'adresse de l'abonnement**. Sur un ordinateur, dans Google Agenda, choisis « Autres agendas », puis « À partir de l'URL », et colle l'adresse : l'agenda apparaît ensuite aussi sur ton téléphone.
 
@@ -119,7 +119,7 @@ Tu peux indiquer, si tu le souhaites, **tes disponibilités** en général (mati
 
 ### Je me suis inscrit avant que l'organisation montre qui est inscrit : pourquoi mon nom n'apparaît pas ?
 
-L'organisation a choisi de montrer qui est inscrit après ton inscription. Tu n'as donc rien accepté, et ton nom reste masqué : personne ne peut l'afficher à ta place, pas même l'organisation. Si tu veux apparaître, ouvre ta page personnelle avec le lien reçu par email, puis allume **Afficher mon nom aux autres bénévoles** dans l'encadré **Qui est inscrit** (voir [Qui est inscrit](#qui-est-inscrit)). Tu peux le masquer à nouveau à tout moment, sans effet sur ton inscription. Si tu ne vois pas l'encadré, c'est par exemple que tu n'as pas encore de place confirmée (liste d'attente, attente de validation), que l'événement est terminé ou que l'organisation a désactivé le réglage ; recharge aussi la page, au cas où elle n'aurait pas pu le charger.
+L'organisation a choisi de montrer qui est inscrit après ton inscription. Tu n'as donc rien accepté, et ton nom reste masqué : personne ne peut l'afficher à ta place, pas même l'organisation. Si tu veux apparaître, ouvre ta page **Mes inscriptions** avec le lien reçu par email, puis allume **Afficher mon nom aux autres bénévoles** dans l'encadré **Qui est inscrit** (voir [Qui est inscrit](#qui-est-inscrit)). Tu peux le masquer à nouveau à tout moment, sans effet sur ton inscription. Si tu ne vois pas l'encadré, c'est par exemple que tu n'as pas encore de place confirmée (liste d'attente, attente de validation), que l'événement est terminé ou que l'organisation a désactivé le réglage ; recharge aussi la page, au cas où elle n'aurait pas pu le charger.
 
 ### Qui peut voir mon nom ?
 
@@ -127,4 +127,4 @@ Seulement si tu l'as choisi, et seulement ton prénom et l'initiale de ton nom, 
 
 ### Mon nom est affiché aux bénévoles confirmés, mais pas aux membres invités : pourquoi ?
 
-Tu as accepté un texte précédent, qui ne parlait que des bénévoles confirmés : ton nom n'est donc montré qu'à eux. Pour le montrer aussi aux membres invités par l'organisation, choisis **Le leur montrer aussi** dans l'encadré **Qui est inscrit** de ta page personnelle. Sans rien faire, rien ne change.
+Tu as accepté un texte précédent, qui ne parlait que des bénévoles confirmés : ton nom n'est donc montré qu'à eux. Pour le montrer aussi aux membres invités par l'organisation, choisis **Le leur montrer aussi** dans l'encadré **Qui est inscrit** de ta page **Mes inscriptions**. Sans rien faire, rien ne change.

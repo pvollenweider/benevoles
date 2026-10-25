@@ -13,7 +13,7 @@ Ce projet est gratuit et open source. Si vous l'utilisez et voulez soutenir son 
 | Document | Destinataires |
 |----------|---------------|
 | [Guide bénévole](content/guide/README.md) | Personnes qui s'inscrivent comme bénévoles (une page par tâche, dans `content/guide/`) |
-| [Guide administrateur](content/guide/GUIDE_ADMIN.md) | Organisateurs qui gèrent les événements |
+| [Guide organisateur](content/guide/GUIDE_ADMIN.md) | Organisateurs qui gèrent les événements |
 | [Fonctionnalités](docs/fonctionnalites.md) | Liste exhaustive de tout ce que fait l'application |
 | [Présentation des fonctionnalités](content/pages/FEATURES.md) | Page publique `/fonctionnalites`, par besoins |
 | [Architecture](docs/architecture.md) | Découpage du code, multi-tenant, flux principaux |

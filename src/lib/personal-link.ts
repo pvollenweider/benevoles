@@ -65,7 +65,7 @@ export const PERSONAL_LINK_EMAIL_NOTE =
 /** The guide pages behind these texts (content/guide/lien-personnel.md, checked by its test). */
 export const PERSONAL_LINK_DOC_LINKS = {
   personalLink: "/doc/lien-personnel",
-  lostLink: "/doc/lien-personnel#je-n-ai-plus-le-lien-vers-ma-page-personnelle",
+  lostLink: "/doc/lien-personnel#je-n-ai-plus-le-lien-vers-mes-inscriptions",
 } as const
 
 /**

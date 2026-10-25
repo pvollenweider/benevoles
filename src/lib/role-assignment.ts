@@ -54,4 +54,4 @@ export function asksAssignedOnly(asked: { roleName: string }[], hidden: Set<stri
 
 /** What the option does, under it in the role editor. */
 export const ASSIGNED_ONLY_HELP =
-  "Le poste n'apparaît pas sur la page publique, ni dans les liens de groupe ou la page intégrée, et personne ne peut s'y inscrire, même avec un lien d'invitation. Vous y ajoutez les personnes à la main ; elles le voient sur leur page personnelle. Les inscriptions déjà faites sont conservées."
+  "Le poste n'apparaît pas sur la page publique, ni dans les liens de groupe ou la page intégrée, et personne ne peut s'y inscrire, même avec un lien d'invitation. Vous y ajoutez les personnes à la main ; elles le voient sur leur page « Mes inscriptions ». Les inscriptions déjà faites sont conservées."

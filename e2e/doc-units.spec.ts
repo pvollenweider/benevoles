@@ -39,7 +39,7 @@ test("a unit page has a breadcrumb, one title, its audience and no serious viola
 test("a unit for both roles says so, then speaks to each under its own heading", async ({ page }) => {
   await page.goto("/doc/liste-d-attente")
   await expect(page.getByRole("heading", { level: 1 })).toHaveText("Liste d'attente")
-  await expect(page.locator("main p", { hasText: /^Pour\s:/ })).toHaveText(/^Pour\s:\sorganisateurs \(Guide administrateur\), bénévoles \(Guide bénévole\)$/)
+  await expect(page.locator("main p", { hasText: /^Pour\s:/ })).toHaveText(/^Pour\s:\sorganisateurs \(Guide organisateur\), bénévoles \(Guide bénévole\)$/)
   await expect(page.getByRole("heading", { level: 2, name: "Côté organisation" })).toBeVisible()
   await expect(page.getByRole("heading", { level: 2, name: "Côté bénévole" })).toBeVisible()
   expect.soft(await seriousViolations(page)).toEqual([])
@@ -265,7 +265,7 @@ test.describe("a unit's navigation on a phone", () => {
     await expect(page.getByRole("navigation", { name: "Documentation" })).toBeHidden()
     const theme = page.getByRole("region", { name: "Dans ce thème" })
     await expect(theme).toBeVisible()
-    await expect(theme.getByRole("listitem")).toHaveText(["Ma page personnelle", "Ton lien personnel", "Revenir sur la page d'inscription", "Questions fréquentes des bénévoles"])
+    await expect(theme.getByRole("listitem")).toHaveText(["Mes inscriptions", "Ton lien personnel", "Revenir sur la page d'inscription", "Questions fréquentes des bénévoles"])
     await expect(theme.getByRole("link", { name: "Après l'inscription" })).toHaveAttribute("href", "/doc#apres-inscription")
     await expect(page.getByRole("navigation", { name: "Pages du thème" }).getByRole("link")).toHaveCount(2)
     expect(await page.evaluate(() => document.documentElement.scrollWidth)).toBeLessThanOrEqual(390)
@@ -294,7 +294,7 @@ test("the filter over the index narrows the list as you type, hides empty groups
   await expect(field).toBeFocused()
 
   await field.fill("creneau changer")
-  await expect(page.locator("main li").getByRole("link", { name: "Ma page personnelle", exact: true })).toBeVisible()
+  await expect(page.locator("main li").getByRole("link", { name: "Mes inscriptions", exact: true })).toBeVisible()
 
   // A unit found by one of its questions links to it, under its result.
   await field.fill("oublier")

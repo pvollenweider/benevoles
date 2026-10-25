@@ -709,7 +709,7 @@
         "validation"
       ],
       "seedScenario": "personal-withdrawals",
-      "feature": "Page personnelle du bénévole",
+      "feature": "Page « Mes inscriptions » du bénévole",
       "level": "essentiel",
       "published": true,
       "audience": [

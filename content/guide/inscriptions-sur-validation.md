@@ -18,7 +18,7 @@ Pour un poste sensible (conduite, caisse, sécurité, une qualification), l'orga
 
 ### Le créneau indique « Sur validation »
 
-Tu t'inscris normalement, mais ton inscription est une **demande** : le récapitulatif et la page après l'envoi le disent. La place t'est réservée le temps que l'organisation réponde. Tu reçois un email « Demande reçue » avec ton lien personnel ; sur [ta page personnelle](ma-page-personnelle.md), tu suis la demande et peux la retirer (**Retirer ma demande**). Si elle est acceptée, tu reçois l'email de confirmation habituel ; sinon, un email te le dit. Les rappels ne concernent que les créneaux confirmés.
+Tu t'inscris normalement, mais ton inscription est une **demande** : le récapitulatif et la page après l'envoi le disent. La place t'est réservée le temps que l'organisation réponde. Tu reçois un email « Demande reçue » avec ton lien personnel ; sur [ta page « Mes inscriptions »](ma-page-personnelle.md), tu suis la demande et peux la retirer (**Retirer ma demande**). Si elle est acceptée, tu reçois l'email de confirmation habituel ; sinon, un email te le dit. Les rappels ne concernent que les créneaux confirmés.
 
 ## Côté organisation
 

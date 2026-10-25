@@ -189,15 +189,15 @@ export default function PrivacyPage() {
         invitation, avant de s&apos;inscrire. Personne d&apos;autre : ni un visiteur sans lien, ni un
         lien par groupe, ni l&apos;intégration de la page à un autre site, ni les moteurs de recherche.
         Seuls les noms des personnes qui l&apos;ont accepté sont affichés : une case facultative du
-        formulaire d&apos;inscription, à confirmer depuis la page personnelle quand rien ne prouve que
+        formulaire d&apos;inscription, à confirmer depuis la page « Mes inscriptions » quand rien ne prouve que
         l&apos;adresse est la leur. Aucun nom n&apos;est affiché sans ce choix, ni celui d&apos;une
         personne de moins de 18 ans dont la date de naissance est connue. Une personne qui l&apos;a
         accepté avant que les membres invités puissent le voir n&apos;est montrée qu&apos;aux bénévoles
-        confirmés, tant qu&apos;elle n&apos;a pas accepté le nouveau texte depuis sa page personnelle.
+        confirmés, tant qu&apos;elle n&apos;a pas accepté le nouveau texte depuis sa page « Mes inscriptions ».
         Pour chaque créneau, ces personnes voient également le nombre des autres bénévoles dont la
         place est confirmée et dont le nom reste masqué, y compris les personnes mineures ou dont le
         dossier a été effacé : un nombre seul, qui ne dit ni qui ni pourquoi. Chacun peut masquer son
-        nom à tout moment depuis sa page personnelle, sans effet sur son inscription. Le choix de
+        nom à tout moment depuis sa page « Mes inscriptions », sans effet sur son inscription. Le choix de
         chaque bénévole est conservé avec l&apos;événement, avec la version du texte accepté (voir la{" "}
         <a href="#conservation">conservation des données</a>). L&apos;Organisation informe ses
         bénévoles de ce traitement, peut le désactiver pour un événement, et en reste responsable.

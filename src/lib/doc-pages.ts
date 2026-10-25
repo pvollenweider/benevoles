@@ -289,9 +289,9 @@ export const PUBLIC_PAGES: readonly PublicPage[] = [
   },
   {
     path: "/doc/admin",
-    title: "Guide administrateur",
+    title: "Guide organisateur",
     summary: "Créer un événement, configurer les créneaux, inviter des membres, suivre les inscriptions, et les fonctionnalités plus récentes (pages personnalisées, responsables de secteur, jalons, journaux d'activité).",
-    metaTitle: "Guide administrateur",
+    metaTitle: "Guide organisateur",
     metaDescription: `Créer un événement, organiser postes et créneaux, inviter vos membres, suivre les inscriptions et préparer le jour J avec ${SITE_NAME}, étape par étape.`,
     source: "content/guide/GUIDE_ADMIN.md",
     priority: 0.8,

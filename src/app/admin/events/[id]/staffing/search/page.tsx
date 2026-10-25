@@ -68,7 +68,7 @@ export default async function OpenShiftsSearchPage({ params, searchParams }: { p
           {!acceptsRegistrations(event) && (
             <p role="note" className="text-sm text-amber-900 bg-amber-50 border border-amber-300 rounded-lg px-3 py-2 forced-colors:border-[CanvasText]">
               Les inscriptions ne sont pas ouvertes pour cet événement : vous pouvez préparer votre choix, mais l&apos;envoi sera refusé tant qu&apos;elles ne le sont pas.{" "}
-              <Link href={`${base}/edit`} className={linkClass}>Modifier l&apos;événement</Link>
+              <Link href={`${base}/edit`} className={linkClass}>Modifier les informations de l&apos;événement</Link>
             </p>
           )}
           <OpenShiftsFinder

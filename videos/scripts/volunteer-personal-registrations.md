@@ -14,7 +14,7 @@ Retrouver ses engagements sans compte, lire les informations du jour J et préve
 4. Ouvrir l'annulation du créneau confirmé puis choisir « Non, garder ». Vérifier que le créneau est toujours présent. Refaire l'action et confirmer : constater sa disparition, pas seulement la fermeture de la confirmation.
 5. Quitter la liste d'attente, lire les conséquences et confirmer : plus de proposition de place pour ce créneau.
 6. Refuser la place offerte, lire que la place passe à la personne suivante et constater la disparition de l'offre. Ne pas laisser penser qu'une offre vaut inscription confirmée.
-7. Retirer la demande en attente de validation : la place réservée est libérée. Montrer le résultat dans la page personnelle.
+7. Retirer la demande en attente de validation : la place réservée est libérée. Montrer le résultat dans la page Mes inscriptions.
 8. Après le dernier retrait, montrer « Toutes tes inscriptions ont été annulées ». Utiliser « S’inscrire à d’autres créneaux » et vérifier la destination réelle : la page de l'événement permet de choisir un autre créneau.
 
 ## Résultat visible

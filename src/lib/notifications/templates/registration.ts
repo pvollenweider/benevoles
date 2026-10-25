@@ -50,7 +50,7 @@ export function renderConfirmation(p: NotificationPayload): RenderedEmail {
   const subject = `Inscription confirmée — ${eventTitle} 🎉`
   // What the personal page is for (#1096): the guide's page, a text link under the button.
   const guideUrl = docUrl(SECTION_DOC_LINKS.benevole.personalPage)
-  const guideLabel = "Comment fonctionne ta page personnelle"
+  const guideLabel = "Comment fonctionne ta page « Mes inscriptions »"
 
   const text = [
     `Hello ${firstName} !`,
@@ -222,7 +222,7 @@ export function renderRegistrationRemoved(p: NotificationPayload): RenderedEmail
     <p style="color:#555">L'organisation de <strong>${escapeHtml(d.eventTitle)}</strong> a annulé ton inscription ${several ? "à ces créneaux" : "à ce créneau"} :</p>
     <ul style="color:#333;padding-left:1.25em;margin:0.5em 0 1em">${lines.map((l) => `<li>${escapeHtml(l)}</li>`).join("")}</ul>
     <p style="color:#555">${escapeHtml(next)}</p>
-    <p style="margin-top:1.5em">${btn(linkUrl, d.editToken ? "Voir mes créneaux" : "Voir les créneaux")}</p>
+    <p style="margin-top:1.5em">${btn(linkUrl, d.editToken ? "Gérer mes inscriptions" : "Voir les créneaux")}</p>
     <p style="color:#666;font-size:0.85em;margin-top:2em">Merci pour ton engagement !</p>
   `, several ? `${lines.length} créneaux annulés pour ${d.eventTitle}.` : `Créneau annulé : ${lines[0] ?? d.eventTitle}.`)
 
@@ -300,7 +300,7 @@ export function renderRegistrationRestored(p: NotificationPayload): RenderedEmai
     `- ${line}`,
     ``,
     ...(d.newLink ? [renewed, ``] : []),
-    `Ton lien personnel pour voir ou gérer tes créneaux :`,
+    `Ton lien personnel pour gérer tes inscriptions :`,
     linkUrl,
     ``,
     unwanted,
@@ -311,7 +311,7 @@ export function renderRegistrationRestored(p: NotificationPayload): RenderedEmai
     <p style="color:#555">${escapeHtml(what)}</p>
     <ul style="color:#333;padding-left:1.25em;margin:0.5em 0 1em"><li>${escapeHtml(line)}</li></ul>
     ${d.newLink ? `<p style="color:#555"><strong>${escapeHtml(renewed)}</strong></p>` : ""}
-    <p style="margin-top:1.5em">${btn(linkUrl, "Voir mes créneaux")}</p>
+    <p style="margin-top:1.5em">${btn(linkUrl, "Gérer mes inscriptions")}</p>
     <p style="color:#666;font-size:0.85em;margin-top:2em">${escapeHtml(unwanted)}</p>
   `, `${d.status === "requested" ? "Demande rétablie" : "Inscription rétablie"} : ${line}.`)
 
@@ -355,7 +355,7 @@ export function renderRegistrationAddedByOrganizer(p: NotificationPayload): Rend
     what,
     ...lines.map((l) => `- ${l}`),
     ``,
-    `Ton lien personnel pour voir ou gérer tes créneaux :`,
+    `Ton lien personnel pour gérer tes inscriptions :`,
     linkUrl,
     ``,
     unwanted,
@@ -365,7 +365,7 @@ export function renderRegistrationAddedByOrganizer(p: NotificationPayload): Rend
     <h2 style="margin:0 0 0.25em">Hello ${escapeHtml(firstName)},</h2>
     <p style="color:#555">${escapeHtml(what)}</p>
     <ul style="color:#333;padding-left:1.25em;margin:0.5em 0 1em">${lines.map((l) => `<li>${escapeHtml(l)}</li>`).join("")}</ul>
-    <p style="margin-top:1.5em">${btn(linkUrl, "Voir mes créneaux")}</p>
+    <p style="margin-top:1.5em">${btn(linkUrl, "Gérer mes inscriptions")}</p>
     <p style="color:#666;font-size:0.85em;margin-top:2em">${escapeHtml(unwanted)}</p>
   `, several ? `Inscrit·e sur ${lines.length} créneaux : ${d.eventTitle}.` : `Inscrit·e : ${lines[0] ?? d.eventTitle}.`)
 
@@ -412,7 +412,7 @@ export function renderShiftModified(p: NotificationPayload): RenderedEmail {
       <div style="font-weight:600;margin-top:4px">→ ${escapeHtml(d.newDate)} · ${escapeHtml(d.newStart)}–${escapeHtml(d.newEnd)}</div>
     </div>
     <p style="color:#555;font-size:0.9em">Si ces nouveaux horaires ne te conviennent pas, tu peux gérer ton inscription ci-dessous.</p>
-    <p style="margin-top:1.5em">${btn(editUrl, "Gérer mon inscription")}</p>
+    <p style="margin-top:1.5em">${btn(editUrl, "Gérer mes inscriptions")}</p>
   `, `Nouvel horaire : ${d.newDate} · ${d.newStart}–${d.newEnd} (était ${d.oldStart}–${d.oldEnd})`)
 
   return { subject, html, text }
@@ -466,12 +466,12 @@ export function renderRegistrationLinkResend(p: NotificationPayload): RenderedEm
   }
   const editUrl = myPageUrl(orgSlug, editToken)
   const firstName = volunteerName.split(" ")[0]
-  const subject = `Ton lien pour gérer ton inscription — ${eventTitle}`
+  const subject = `Ton lien pour gérer tes inscriptions — ${eventTitle}`
 
   const text = [
     `Hello ${firstName} !`,
     ``,
-    `Voici ton lien personnel pour voir ou modifier ton inscription à ${eventTitle} :`,
+    `Voici ton lien personnel pour gérer tes inscriptions à ${eventTitle} :`,
     editUrl,
     ``,
     `À très vite !`,
@@ -479,8 +479,8 @@ export function renderRegistrationLinkResend(p: NotificationPayload): RenderedEm
 
   const html = wrap(`
     <h2 style="margin:0 0 0.25em">Hello ${escapeHtml(firstName)} ! 👋</h2>
-    <p style="color:#555;margin:0 0 1.25em">Voici ton lien personnel pour voir ou modifier ton inscription à <strong>${escapeHtml(eventTitle)}</strong>.</p>
-    <p style="margin-top:1.5em">${btn(editUrl, "Gérer mon inscription")}</p>
+    <p style="color:#555;margin:0 0 1.25em">Voici ton lien personnel pour gérer tes inscriptions à <strong>${escapeHtml(eventTitle)}</strong>.</p>
+    <p style="margin-top:1.5em">${btn(editUrl, "Gérer mes inscriptions")}</p>
     <p style="color:#666;font-size:0.85em;margin-top:2em">À très vite !</p>
   `, `Ton lien pour ${escapeHtml(eventTitle)}`)
 

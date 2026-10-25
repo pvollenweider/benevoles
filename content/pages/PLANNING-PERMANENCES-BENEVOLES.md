@@ -49,7 +49,7 @@ Le bénévole choisit plusieurs créneaux en une fois et confirme avec son nom e
 
 <!-- video: VOLUNTEER_CHOOSE_SHIFTS -->
 
-En savoir plus : [choisir ses créneaux](../guide/choisir-ses-creneaux.md), [la page personnelle du bénévole](../guide/ma-page-personnelle.md).
+En savoir plus : [choisir ses créneaux](../guide/choisir-ses-creneaux.md), [la page « Mes inscriptions » du bénévole](../guide/ma-page-personnelle.md).
 
 ## Changer en cours de saison
 

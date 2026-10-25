@@ -44,7 +44,7 @@ export type DocRole = (typeof DOC_ROLES)[number]
  * (« Guide bénévole »), the audience stays plain text.
  */
 export const DOC_ROLE_INFO: Record<DocRole, { label: string; path: string; guideTitle: string }> = {
-  admin: { label: "organisateurs", path: "/doc/admin", guideTitle: "Guide administrateur" },
+  admin: { label: "organisateurs", path: "/doc/admin", guideTitle: "Guide organisateur" },
   benevole: { label: "bénévoles", path: "/doc/benevole", guideTitle: "Guide bénévole" },
 }
 

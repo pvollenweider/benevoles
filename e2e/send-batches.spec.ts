@@ -60,7 +60,7 @@ test("a batch of invitations is one « envoi groupé », in the Communication ta
   const entry = page.getByRole("listitem").filter({ hasText: `Invitations, ${title}` })
   await expect(entry).toContainText("a lancé un envoi groupé d'emails")
   await expect(entry).toContainText("2 destinataires")
-  await entry.getByRole("link", { name: /^Voir dans la communication de l'événement/ }).click()
+  await entry.getByRole("link", { name: /^Voir dans les messages de l'événement/ }).click()
   await expect(page).toHaveURL(new RegExp(`/admin/events/${event.id}/message#envois-groupes$`))
   await expect(page.getByRole("heading", { level: 2, name: "Envois groupés" })).toBeFocused()
 })

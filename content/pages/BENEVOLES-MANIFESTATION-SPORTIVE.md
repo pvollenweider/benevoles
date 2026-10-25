@@ -8,7 +8,7 @@ Le service est gratuit aujourd'hui, le code est open source et les données sont
 - [Demander un espace](/inscription)
 - [Créer son premier événement](../guide/creer-son-premier-evenement.md)
 
-![Page personnelle « Mes inscriptions » : la carte « Avant ta mission » (poste, horaire, lieu, responsable, consignes et pages de l'événement), puis la carte « Mon calendrier » : s'abonner avec l'agenda de cet appareil, Google Agenda ou autre agenda en ligne, et le téléchargement de tout le planning](/doc-img/public-my-page.png)
+![Page « Mes inscriptions » : la carte « Avant ta mission » (poste, horaire, lieu, responsable, consignes et pages de l'événement), puis la carte « Mon calendrier » : s'abonner avec l'agenda de cet appareil, Google Agenda ou autre agenda en ligne, et le téléchargement de tout le planning](/doc-img/public-my-page.png)
 
 ## Une matinée de course type
 
@@ -28,7 +28,7 @@ En savoir plus : [créer un événement](../guide/creer-un-evenement.md), [confi
 
 Le poste « Signaleurs » peut compter un créneau par point du parcours, chacun avec son libellé (« Carrefour de l'église », « Sortie du bois ») et une ou deux places. Le bénévole sait ainsi où il sera posté avant de choisir.
 
-Chaque créneau peut porter un lieu de rendez-vous et une consigne courte, par exemple « gilet à retirer au stand des dossards ». Le bénévole les retrouve sur la page d'inscription, dans son email de confirmation, dans ses rappels et sur sa page personnelle. Le nom et le téléphone d'un contact sur place ne sont envoyés qu'aux inscrits, jamais affichés publiquement.
+Chaque créneau peut porter un lieu de rendez-vous et une consigne courte, par exemple « gilet à retirer au stand des dossards ». Le bénévole les retrouve sur la page d'inscription, dans son email de confirmation, dans ses rappels et sur sa page **Mes inscriptions**. Le nom et le téléphone d'un contact sur place ne sont envoyés qu'aux inscrits, jamais affichés publiquement.
 
 Si un club partenaire fournit une partie des bénévoles, **Créer un lien pour un groupe** lui donne son propre lien et son QR code, qui n'affichent que les postes que vous lui confiez.
 

@@ -9,6 +9,6 @@ describe("btn", () => {
   })
 
   it("keeps an ordinary link working", () => {
-    expect(btn("https://www.benevol.app/my/abc", "Gérer mon inscription")).toContain('href="https://www.benevol.app/my/abc"')
+    expect(btn("https://www.benevol.app/my/abc", "Gérer mes inscriptions")).toContain('href="https://www.benevol.app/my/abc"')
   })
 })

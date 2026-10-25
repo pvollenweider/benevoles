@@ -30,7 +30,7 @@
     },
     {
       "id": "cancel",
-      "transcript": "Pour l'Accueil, Annuler ouvre une confirmation. Tu peux encore choisir Non, garder : rien n'est retiré. Reprenons et confirmons cette fois. La carte disparaît de la page personnelle. Si tu changes de disponibilité près du début de la mission, préviens aussi le contact sur place : cela aide l'équipe à réorganiser la relève.",
+      "transcript": "Pour l'Accueil, Annuler ouvre une confirmation. Tu peux encore choisir Non, garder : rien n'est retiré. Reprenons et confirmons cette fois. La carte disparaît de la page Mes inscriptions. Si tu changes de disponibilité près du début de la mission, préviens aussi le contact sur place : cela aide l'équipe à réorganiser la relève.",
       "fallbackDurationMs": 32000
     },
     {

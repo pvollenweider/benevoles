@@ -115,14 +115,14 @@ describe("render — registration_confirmation message variables are literal tex
 // #1096: the volunteer's first two emails point to the guide page that explains the next step,
 // as words on a text link (not a bare address), and as « label : address » in the text part.
 describe("render — guide link in the volunteer's emails", () => {
-  it("the confirmation links to « Ma page personnelle »", () => {
+  it("the confirmation links to « Mes inscriptions »", () => {
     const { html, text } = render({
       kind: "registration_confirmation",
       recipient: { email: "v@example.com", name: "Julie Martin" },
       data: { volunteerName: "Julie Martin", eventTitle: "Festival", orgSlug: "rhone", editToken: "tok-1", shifts: [{ label: "Bar", date: "10/10/2030", startTime: "10:00", endTime: "12:00" }] },
     })
-    expect(html).toMatch(/<a href="https?:\/\/[^"]+\/doc\/ma-page-personnelle"[^>]*>Comment fonctionne ta page personnelle<\/a>/)
-    expect(text).toMatch(/Comment fonctionne ta page personnelle :\nhttps?:\/\/\S+\/doc\/ma-page-personnelle\n/)
+    expect(html).toMatch(/<a href="https?:\/\/[^"]+\/doc\/ma-page-personnelle"[^>]*>Comment fonctionne ta page « Mes inscriptions »<\/a>/)
+    expect(text).toMatch(/Comment fonctionne ta page « Mes inscriptions » :\nhttps?:\/\/\S+\/doc\/ma-page-personnelle\n/)
     // The management link stays the email's main action, before the guide.
     expect(html.indexOf("/my/tok-1")).toBeLessThan(html.indexOf("/doc/ma-page-personnelle"))
   })

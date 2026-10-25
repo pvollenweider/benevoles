@@ -59,8 +59,8 @@ export default function LoginPage() {
     <main className="min-h-screen bg-gray-50 flex items-center justify-center px-4">
       <div className="w-full max-w-sm">
         <div className="text-center mb-8">
-          <h1 className="text-2xl font-bold text-gray-900">Administration</h1>
-          <p className="text-gray-600 text-sm mt-1">Espace réservé aux organisateurs</p>
+          <h1 className="text-2xl font-bold text-gray-900">Espace organisateur</h1>
+          <p className="text-gray-600 text-sm mt-1">Connectez-vous pour gérer vos événements.</p>
         </div>
 
         <form onSubmit={handleSubmit} noValidate className="bg-white rounded-2xl border border-gray-200 p-6 space-y-4">

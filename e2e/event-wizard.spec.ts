@@ -74,5 +74,5 @@ test("an admin creates and publishes an event through the three steps", async ({
   await page.goto(`${eventUrl}/message`)
   await expect(page.getByRole("region", { name: "Rappels automatiques coupés pour cet événement" })).toBeVisible()
   await page.goto(eventUrl)
-  await expect(page.getByRole("region", { name: "Communication" })).toContainText("Rappels automatiques coupés pour cet événement.")
+  await expect(page.getByRole("region", { name: "Messages" })).toContainText("Rappels automatiques coupés pour cet événement.")
 })

@@ -136,7 +136,7 @@ export const RETENTION: readonly RetentionEntry[] = [
     public: true,
   },
   {
-    data: "Choix d'un bénévole d'afficher ou non son prénom et l'initiale de son nom aux autres bénévoles confirmés d'un événement : affiché, à confirmer ou masqué, version du texte accepté, manière (formulaire d'inscription ou page personnelle) et date ; les changements sont aussi notés dans le journal de l'événement",
+    data: "Choix d'un bénévole d'afficher ou non son prénom et l'initiale de son nom aux autres bénévoles confirmés d'un événement : affiché, à confirmer ou masqué, version du texte accepté, manière (formulaire d'inscription ou page « Mes inscriptions ») et date ; les changements sont aussi notés dans le journal de l'événement",
     purpose: "N'afficher le nom qu'avec l'accord de la personne, et pouvoir le montrer",
     duration: `tant que l'événement existe ; les noms ne sont plus montrés après le dernier jour de l'événement ; effacé avec l'événement ou le membre, à l'effacement des données du membre, à une fusion de fiches (le choix ne passe jamais d'une fiche à l'autre) et à l'anonymisation de l'événement 3 ans après sa fin`,
     trigger: "choix du bénévole",

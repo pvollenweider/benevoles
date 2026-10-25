@@ -18,7 +18,7 @@ Expliquer les différences entre rappel manuel, rappels automatiques et notifica
 
 ## Démonstration
 
-1. **Le rappel manuel.** Depuis les réglages de l'événement, écrire un message de rappel simple : rendez-vous, matériel utile, merci. Attendre l'enregistrement automatique et sa confirmation visible. Dans Communication, ouvrir Envoyer le rappel, laisser lire la confirmation et annuler une première fois. Vérifier qu'aucun email n'a été créé. Reprendre et envoyer réellement. Ouvrir l'email d'une personne ayant deux inscriptions : un message avec ses deux créneaux, pas deux emails identiques. Une personne seulement en attente ou sur demande n'est pas destinataire de ce rappel.
+1. **Le rappel manuel.** Depuis les réglages de l'événement, écrire un message de rappel simple : rendez-vous, matériel utile, merci. Attendre l'enregistrement automatique et sa confirmation visible. Dans Messages, ouvrir Envoyer le rappel, laisser lire la confirmation et annuler une première fois. Vérifier qu'aucun email n'a été créé. Reprendre et envoyer réellement. Ouvrir l'email d'une personne ayant deux inscriptions : un message avec ses deux créneaux, pas deux emails identiques. Une personne seulement en attente ou sur demande n'est pas destinataire de ce rappel.
 2. **Les rappels de toute l'organisation.** Ouvrir Paramètres puis Emails. Montrer Rappel J-2, Rappel J-1 et Rappel du jour, leur aide et le bouton Enregistrer. Désactiver J-1, enregistrer, vérifier le résultat puis le réactiver réellement. Ne pas présenter un changement de case non enregistré comme appliqué.
 3. **Les rappels d’un événement.** Les trois cases concernent toute l’organisation. Dans le formulaire de l’événement, décocher « Rappels automatiques », attendre l’enregistrement automatique puis réactiver réellement. Le rappel manuel reste distinct. Montrer ensuite le brouillon et expliquer son exclusion des rappels automatiques.
 4. **Quand les rappels partent.** Montrer trois emails réellement produits pour trois échéances du jeu local. Dire « autour de deux jours avant », « autour de la veille » et « deux à quatre heures avant ». Ne pas promettre une minute fixe : le traitement actuel utilise les fenêtres 47–49 heures, 23–25 heures et 2–4 heures. Les créneaux sont interprétés dans le fuseau de l'organisation, Europe/Zurich dans la démonstration. Montrer l'horaire local dans l'email et le réglage du fuseau sans le modifier en cachette.
@@ -84,7 +84,7 @@ Relecture sur main `43c1aae776430702dd155711b25f4f0a1331fce5` et PR fusionnées 
 
 Narration à régénérer intégralement, même voix, une seule passe, `continuousPauseTags: false`. WAITING TTS : plafond mensuel du projet connu, aucun nouvel appel. Phrases révisées :
 
-- Dans Communication, Envoyer le rappel demande une confirmation.
+- Dans Messages, Envoyer le rappel demande une confirmation.
 
 Correction de citation du 2026-10-16 : la consigne bénévole est reproduite exactement comme elle est saisie et reçue (les « ton » s’adressent au bénévole cité, jamais au spectateur) :
 

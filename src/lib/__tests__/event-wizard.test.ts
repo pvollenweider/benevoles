@@ -98,7 +98,7 @@ describe("review: practical info item", () => {
   it("words what is missing, with the count and where to fix it", () => {
     const both = check({ practicalInfo: gaps({ noPlace: 3, noContact: 3, noPlaceNorContact: 3, incomplete: 3 }) }, "practical-info")!
     expect(both).toMatchObject({ ok: false, required: false, warn: true, label: "3 créneaux sans lieu ni contact", href: "/admin/events/evt-1/shifts" })
-    expect(both.hint).toMatch(/email de confirmation, les rappels et la page personnelle/)
+    expect(both.hint).toMatch(/email de confirmation, les rappels et la page « Mes inscriptions »/)
     expect(check({ practicalInfo: gaps({ noContact: 1, incomplete: 1 }) }, "practical-info")!.label).toBe("1 créneau sans contact")
     expect(check({ practicalInfo: gaps({ noPlace: 2, incomplete: 2 }) }, "practical-info")!.label).toBe("2 créneaux sans lieu de rendez-vous")
     expect(check({ practicalInfo: gaps({ noPlace: 1, noContact: 2, incomplete: 3 }) }, "practical-info")!.label).toBe("3 créneaux sans lieu ou sans contact")

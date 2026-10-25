@@ -26,14 +26,14 @@ Si la liste d'attente est activée sur ce créneau, sa barre reste cliquable (ra
 Concrètement :
 
 1. ton inscription **n'est pas encore confirmée** : le créneau est complet ;
-2. l'ordre est celui des inscriptions : la première personne inscrite en liste d'attente est la première prévenue (ta position figure dans l'email et sur ta page personnelle) ;
+2. l'ordre est celui des inscriptions : la première personne inscrite en liste d'attente est la première prévenue (ta position figure dans l'email et sur ta page **Mes inscriptions**) ;
 3. dès qu'une place se libère, tu reçois un **email avec un lien** pour la prendre, valable **24 heures**, jamais au-delà du début du créneau ;
-4. pour accepter, clique sur ce lien (ou sur **Prendre la place** depuis ta page personnelle) : la page qui s'ouvre rappelle le créneau et le délai ; le bouton **Prendre la place** la confirme, la place est à toi et tu reçois la confirmation. Ouvrir le lien seul ne prend pas la place ;
+4. pour accepter, clique sur ce lien (ou sur **Prendre la place** depuis ta page **Mes inscriptions**) : la page qui s'ouvre rappelle le créneau et le délai ; le bouton **Prendre la place** la confirme, la place est à toi et tu reçois la confirmation. Ouvrir le lien seul ne prend pas la place ;
 5. sans réponse dans le délai, la place passe à la personne suivante ; tu restes en liste d'attente.
 
 Une fois les inscriptions de l'événement fermées, la liste d'attente ne propose plus de place ; une place qui t'est déjà proposée reste à prendre pendant son délai.
 
-Tu ne veux plus de ce créneau ? Sur [ta page personnelle](ma-page-personnelle.md), **Quitter la liste d'attente** (ou **Refuser la place** si elle t'est proposée), jusqu'au début du créneau, même si l'organisation a fixé un délai d'annulation plus tôt pour les places confirmées.
+Tu ne veux plus de ce créneau ? Sur [ta page « Mes inscriptions »](ma-page-personnelle.md), **Quitter la liste d'attente** (ou **Refuser la place** si elle t'est proposée), jusqu'au début du créneau, même si l'organisation a fixé un délai d'annulation plus tôt pour les places confirmées.
 
 Si la liste d'attente n'est pas disponible, la barre est grisée et non cliquable : reviens plus tard ou contacte l'organisation.
 

@@ -39,9 +39,9 @@ Chaque chapitre du manifeste a un écran préparé avant la parole. Utiliser les
 
 | Chapitre | Manipulation complète | Résultat à montrer et preuve nécessaire |
 |---|---|---|
-| `welcome` | Ouvrir la page personnelle de la bénévole fictive | Créneaux et identité fictive cohérents ; contexte annoncé comme démonstration |
+| `welcome` | Ouvrir la page Mes inscriptions de la bénévole fictive | Créneaux et identité fictive cohérents ; contexte annoncé comme démonstration |
 | `conditions` | Montrer l'appareil et le navigateur réellement utilisés | Étiquette système/navigateur, contexte sécurisé et disponibilité constatée ; aucune promesse tous téléphones |
-| `personal-link` | Trouver « Recevoir des rappels push » sur la page personnelle | Bouton réel ; montrer aussi son emplacement sur une confirmation issue d'une invitation valide, sans remplacer ce parcours par une URL fabriquée |
+| `personal-link` | Trouver « Recevoir des rappels push » sur la page Mes inscriptions | Bouton réel ; montrer aussi son emplacement sur une confirmation issue d'une invitation valide, sans remplacer ce parcours par une URL fabriquée |
 | `permission` | Cliquer et répondre à la vraie demande du navigateur | Demande native et choix réellement effectués ; conserver les repères des clics sans données saisies |
 | `active` | Attendre l'issue, puis recharger et revenir | « Rappels push activés » ; abonnement réellement rattaché au bon bénévole, vérifié par comptage/identifiant fixture sans divulguer l'endpoint ; ne pas confondre cet état avec réception |
 | `reminders` | Déclencher séparément les échéances de démonstration autorisées J-2, J-1 et jour J | Notifications réellement visibles sur l'appareil et emails Mailpit ; un rappel regroupé pour deux créneaux de la même journée ; aucun rappel pour demande/attente ; conserver la preuve des réglages de rappel actifs |
@@ -60,7 +60,7 @@ La narration `delivery` décrit le fonctionnement sans prétendre que la récept
 - Les rappels automatiques dépendent du statut confirmé, de la publication de l'événement et des réglages de l'organisation/événement. L'activation push ne réactive pas des rappels désactivés.
 - Les emails de rappel ne sont pas un « secours » lancé uniquement en cas d'échec push : ce sont des envois séparés. Pour un message ciblé envoyé avec notification, le message complet est également envoyé par email ; ne pas généraliser cette phrase à tout type de notification.
 - L'autorisation peut être refusée ou retirée. Montrer les réglages du navigateur effectivement filmé, sans imposer ce chemin aux autres systèmes. Ne pas prétendre supprimer immédiatement tous les abonnements serveur ; le serveur nettoie les abonnements expirés selon les réponses 404/410 de son fournisseur.
-- Ne pas promettre un rappel reçu à chaque instant : réseau, appareil et permissions ont leurs propres contraintes. La page personnelle reste la référence.
+- Ne pas promettre un rappel reçu à chaque instant : réseau, appareil et permissions ont leurs propres contraintes. La page Mes inscriptions reste la référence.
 
 ## Critères de livraison bloquants
 

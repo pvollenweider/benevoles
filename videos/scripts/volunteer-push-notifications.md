@@ -8,7 +8,7 @@ Recevoir un rappel sur son appareil, en complément des emails activés par l'or
 
 ## Démonstrations requises
 
-1. Montrer le bouton « Recevoir des rappels push » sur la confirmation et sur une page personnelle réellement accessible.
+1. Montrer le bouton « Recevoir des rappels push » sur la confirmation et sur une page Mes inscriptions réellement accessible.
 2. Cliquer, puis montrer la vraie demande d'autorisation du navigateur et la réponse choisie. Une permission préaccordée par Playwright n'illustre pas cette étape : ne pas la présenter comme une validation manuelle.
 3. Après acceptation, montrer « Rappels push activés » et vérifier l'abonnement enregistré dans la base vidéo.
 4. Déclencher les rappels J-2, J-1 et jour J dans un scénario dédié. Montrer la notification réellement reçue et son lien vers les inscriptions. Ne pas remplacer une réception système par une carte HTML présentée comme une notification du téléphone.

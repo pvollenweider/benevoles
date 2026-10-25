@@ -174,9 +174,9 @@ export function renderAdminWelcome(p: NotificationPayload): RenderedEmail {
   const html = wrap(`
     <h2 style="margin:0 0 0.5em">Bienvenue, ${escapeHtml(d.adminName)} !</h2>
     <p>Votre compte administrateur pour <strong>${escapeHtml(d.organizationName)}</strong> est maintenant actif.</p>
-    <p style="margin-top:1.5em">${btn(d.adminUrl, "Accéder à mon espace admin")}</p>
+    <p style="margin-top:1.5em">${btn(d.adminUrl, "Ouvrir mon espace organisateur")}</p>
     <p style="color:#666;font-size:0.85em;margin-top:2em">Vous pouvez utiliser ce lien à tout moment pour gérer vos événements et vos bénévoles.</p>
-  `, `Votre espace admin est prêt — gérez vos événements et bénévoles dès maintenant.`)
+  `, `Votre espace organisateur est prêt — gérez vos événements et bénévoles dès maintenant.`)
 
   return { subject, html, text }
 }

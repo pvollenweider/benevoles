@@ -50,7 +50,7 @@ export function notFoundLinks(org: NotFoundOrg | null, host: string, apexUrl: st
         { href: "/fonctionnalites", label: "Fonctionnalités", description: `Ce que fait ${SITE_NAME}, besoin par besoin.` },
         DOCUMENTATION,
         GUIDE_BENEVOLE,
-        { href: "/doc/admin", label: "Guide des organisateurs", description: "Préparer un événement et ses créneaux." },
+        { href: "/doc/admin", label: "Guide organisateur", description: "Préparer un événement et ses créneaux." },
         VIDEOS,
         ORGANIZER_SPACE,
       ].map(onSite),

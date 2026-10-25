@@ -28,7 +28,7 @@ test("an unknown URL on the apex answers 404 with the page and its main links", 
     ["Fonctionnalités", "/fonctionnalites"],
     ["Documentation", "/doc"],
     ["Guide bénévole", "/doc/benevole"],
-    ["Guide des organisateurs", "/doc/admin"],
+    ["Guide organisateur", "/doc/admin"],
     ["Tutoriels vidéo", "/videos"],
     ["Espace organisateur", "/admin/login"],
   ]) {

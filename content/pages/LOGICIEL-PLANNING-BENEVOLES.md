@@ -44,7 +44,7 @@ En savoir plus : [créer un événement](../guide/creer-un-evenement.md), [confi
 
 <!-- video: VOLUNTEER_REGISTER -->
 
-En savoir plus : [s'inscrire](../guide/s-inscrire.md), [la page personnelle du bénévole](../guide/ma-page-personnelle.md), [les rappels](../guide/rappels.md), [la liste d'attente](../guide/liste-d-attente.md).
+En savoir plus : [s'inscrire](../guide/s-inscrire.md), [la page « Mes inscriptions » du bénévole](../guide/ma-page-personnelle.md), [les rappels](../guide/rappels.md), [la liste d'attente](../guide/liste-d-attente.md).
 
 ## Avant l'événement : voir où il manque du monde
 
