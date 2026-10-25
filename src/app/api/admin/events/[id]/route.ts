@@ -9,6 +9,7 @@ import { civilDateSchema, DATE_ORDER_ERROR, isOrderedPeriod } from "@/lib/civil-
 import { COORDINATE_PAIR_ERROR, isCoordinatePair } from "@/lib/map-link"
 import { ACCENT_KEYS } from "@/lib/event-accent"
 import { requireOrgSession } from "@/lib/auth-guard"
+import { reportError } from "@/lib/report-error"
 import { REGISTRATION_ADMIN_SELECT } from "@/lib/admin-row-selects"
 import { titlesMatch } from "@/lib/confirm-title"
 import { adminActor, diffFields, logEvent } from "@/lib/event-log"
@@ -158,8 +159,9 @@ export async function PATCH(req: Request, { params }: { params: Promise<{ id: st
 
     return NextResponse.json(event)
   } catch (err) {
-    // Details stay in the server log: they can name tables or constraints.
-    console.error("Event PATCH error:", err)
+    // Not in the response: details can name tables or constraints. The log line keeps a code and the
+    // scrubbed message only, never the raw error with the event's fields (src/lib/report-error.ts).
+    reportError("event.update")(err)
     return NextResponse.json({ error: "Erreur serveur" }, { status: 500 })
   }
 }
@@ -195,7 +197,7 @@ export async function DELETE(req: Request, { params }: { params: Promise<{ id: s
     await db.event.delete({ where: { id } })
     return NextResponse.json({ success: true })
   } catch (err) {
-    console.error("Event DELETE error:", err)
+    reportError("event.delete")(err)
     return NextResponse.json({ error: "Erreur serveur" }, { status: 500 })
   }
 }
