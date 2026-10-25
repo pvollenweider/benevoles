@@ -128,8 +128,15 @@ describe("TargetedMessageForm", () => {
   // the server, a preview and a confirmation that say when and that the count is recalculated.
   describe("scheduled send", () => {
     const zone = "Europe/Zurich"
-    const tomorrow = () => localNow(new Date(Date.now() + 24 * 3600 * 1000), zone).date
-    const yesterday = () => localNow(new Date(Date.now() - 24 * 3600 * 1000), zone).date
+    // Calendar days of the zone, not 24 hours: the day the clocks go back lasts 25 hours, and
+    // « now minus 24 h » was still today during its last hour.
+    const shiftDay = (days: number) => {
+      const d = new Date(`${localNow(new Date(), zone).date}T12:00:00Z`)
+      d.setUTCDate(d.getUTCDate() + days)
+      return d.toISOString().slice(0, 10)
+    }
+    const tomorrow = () => shiftDay(1)
+    const yesterday = () => shiftDay(-1)
     const fillText = () => {
       fireEvent.change(screen.getByLabelText("Objet *"), { target: { value: "Parking" } })
       fireEvent.change(screen.getByLabelText("Message *"), { target: { value: "Entrée par la rue Basse." } })
