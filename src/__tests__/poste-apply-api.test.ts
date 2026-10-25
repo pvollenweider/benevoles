@@ -83,4 +83,15 @@ describe("PATCH /api/admin/events/[id]/roles/[roleName]: label and scope", () =>
     expect((await none.json()).error).toBe("Aucun créneau du poste ce jour.")
     expect(transaction).not.toHaveBeenCalled()
   })
+
+  it("takes the role name as Next decodes it: a « % » in the name is no error (Sentry 156069049)", async () => {
+    const { PATCH } = await import("@/app/api/admin/events/[id]/roles/[roleName]/route")
+    const { db } = await requireOrgSessionMock.mock.results[0]?.value ?? await requireOrgSessionMock()
+    const res = await PATCH(
+      new Request("http://localhost/api/admin/events/evt-a/roles/Calcul%2010%25", { method: "PATCH", headers: { "Content-Type": "application/json" }, body: JSON.stringify({ capacity: 3 }) }),
+      { params: Promise.resolve({ id: "evt-a", roleName: "Calcul 10%" }) },
+    )
+    expect(res.status).toBe(200)
+    expect(JSON.stringify(db.shift.findMany.mock.calls)).toContain('"roleName":"Calcul 10%"')
+  })
 })
