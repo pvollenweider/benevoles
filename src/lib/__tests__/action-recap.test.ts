@@ -1,5 +1,5 @@
 import { describe, it, expect } from "vitest"
-import { acceptRequestRecap, bulkCancelCounts, bulkCancelRecap, dayLabel, bulkLeaderRecap, bulkResendRecap, deactivateMemberRecap, broadcastRecap, deleteMilestoneRecap, deleteOrgRecap, deletePageRecap, toggleOrgRecap, deleteRoleRecap, deleteShiftRecap, shiftWhen, logLinkFor, remindInvitedRecap, removeLeaderRecap } from "../action-recap"
+import { acceptRequestRecap, bulkCancelCounts, bulkCancelRecap, dayLabel, bulkLeaderRecap, bulkResendRecap, deactivateMemberRecap, broadcastRecap, prefillRecap, prefillNeedsConfirmation, deleteMilestoneRecap, deleteOrgRecap, deletePageRecap, toggleOrgRecap, deleteRoleRecap, deleteShiftRecap, shiftWhen, logLinkFor, remindInvitedRecap, removeLeaderRecap } from "../action-recap"
 
 // Confirmation before sensitive actions (#379).
 describe("action recaps", () => {
@@ -72,6 +72,20 @@ describe("action recaps", () => {
     expect(toggleOrgRecap("Asso", false)).toMatchObject({ confirmLabel: "Réactiver", danger: false })
     expect(deleteOrgRecap({ name: "Asso", events: 2, volunteers: 1, admins: 3 }).lines[0]).toBe("Toutes ses données sont effacées : 2 événements, 1 membre, 3 administrateurs, inscriptions et journaux.")
     expect(broadcastRecap(1).title).toBe("Envoyer cette communication à 1 administrateur ?")
+  })
+
+  // #762: prefilling a product update from a version only asks when it would overwrite something.
+  it("prefill: replaces the draft, asks only when a field has text", () => {
+    expect(prefillRecap("2.5.0")).toEqual({
+      title: "Remplacer le brouillon par les nouveautés de la version 2.5.0 ?",
+      lines: ["L'objet et le contenu actuels sont remplacés. Rien n'est envoyé."],
+      confirmLabel: "Remplacer le brouillon",
+      danger: false,
+    })
+    expect(prefillNeedsConfirmation("", "")).toBe(false)
+    expect(prefillNeedsConfirmation("  ", "\n ")).toBe(false)
+    expect(prefillNeedsConfirmation("Objet", "")).toBe(true)
+    expect(prefillNeedsConfirmation("", "Texte")).toBe(true)
   })
 
   // #587: in words, without the en dash read « tiret »; minutes and past midnight kept.

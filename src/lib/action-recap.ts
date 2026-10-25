@@ -307,6 +307,21 @@ export function broadcastRecap(recipients: number): ActionRecap {
   }
 }
 
+/** Replacing a product update draft by a version's changelog (#762): nothing is sent, the draft is overwritten. */
+export function prefillRecap(version: string): ActionRecap {
+  return {
+    title: `Remplacer le brouillon par les nouveautés de la version ${version} ?`,
+    lines: ["L'objet et le contenu actuels sont remplacés. Rien n'est envoyé."],
+    confirmLabel: "Remplacer le brouillon",
+    danger: false,
+  }
+}
+
+/** Whether prefilling would overwrite something typed: blank fields (spaces only) are replaced without asking. */
+export function prefillNeedsConfirmation(subject: string, content: string): boolean {
+  return subject.trim() !== "" || content.trim() !== ""
+}
+
 /** Link to the event log filtered from the day the action ran (the log's filter is a date), so its entries are on the first page. */
 export function logLinkFor(eventId: string, startedAt: Date, timeZone?: string): string {
   const since = startedAt.toLocaleDateString("sv-SE", timeZone ? { timeZone } : undefined)

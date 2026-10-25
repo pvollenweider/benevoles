@@ -6,7 +6,8 @@
 import { useState, useId } from "react"
 import { announce } from "@/lib/announce"
 import { requestJson } from "@/lib/use-submit"
-import { broadcastRecap } from "@/lib/action-recap"
+import { broadcastRecap, prefillNeedsConfirmation, prefillRecap } from "@/lib/action-recap"
+import type { ProductUpdateDraft } from "@/lib/product-update-draft"
 import ConfirmActionModal from "@/components/admin/ConfirmActionModal"
 import { renderMarkdown } from "@/lib/markdown"
 import RequiredMark from "@/components/RequiredMark"
@@ -25,10 +26,12 @@ function fmtDateTime(iso: string) {
 }
 
 export default function ProductUpdatesManager({
-  recipientCount, initialSends,
+  recipientCount, initialSends, drafts = [],
 }: {
   recipientCount: number
   initialSends: ProductUpdateSendRow[]
+  /** One per released version, newest first (#762): what « Préremplir » puts in the fields. */
+  drafts?: ProductUpdateDraft[]
 }) {
   const [sends, setSends] = useState(initialSends)
   const [subject, setSubject] = useState("")
@@ -40,16 +43,45 @@ export default function ProductUpdatesManager({
   const [announcement, setAnnouncement] = useState("")
   const [confirming, setConfirming] = useState(false)
   const [sendError, setSendError] = useState<string | null>(null)
+  const [draftVersion, setDraftVersion] = useState(drafts[0]?.version ?? "")
+  // The draft chosen when « Préremplir » was pressed, while its confirmation is open.
+  const [prefillTarget, setPrefillTarget] = useState<ProductUpdateDraft | null>(null)
 
   const subjectId = useId()
   const contentId = useId()
   const testEmailId = useId()
+  const draftId = useId()
+  const draftHintId = useId()
 
   const canSend = subject.trim().length > 0 && content.trim().length > 0
 
   function missingFields(message: string) {
     announce(setError, message)
     document.getElementById(subject.trim() ? contentId : subjectId)?.focus()
+  }
+
+  // Fills both fields from a version, then says so; focus stays on « Préremplir » (the dialog
+  // gives it back there), so the announcement isn't cut off by a field's label.
+  function applyDraft(draft: ProductUpdateDraft) {
+    setSubject(draft.subject)
+    setContent(draft.content)
+    setError(null)
+    announce(setAnnouncement, `Objet et contenu préremplis depuis la version ${draft.version}. Relisez-les avant l'envoi.`)
+  }
+
+  function prefill() {
+    const draft = drafts.find((d) => d.version === draftVersion)
+    if (!draft) return
+    if (prefillNeedsConfirmation(subject, content)) setPrefillTarget(draft)
+    else applyDraft(draft)
+  }
+
+  function confirmPrefill() {
+    if (!prefillTarget) return
+    const draft = prefillTarget
+    // Closed first: a screen reader ignores the status paragraph while the dialog is open.
+    setPrefillTarget(null)
+    applyDraft(draft)
   }
 
   async function sendTest() {
@@ -101,6 +133,9 @@ export default function ProductUpdatesManager({
       {confirming && (
         <ConfirmActionModal recap={broadcastRecap(recipientCount)} busy={sending} error={sendError} onConfirm={() => void runBroadcast()} onCancel={() => setConfirming(false)} />
       )}
+      {prefillTarget && (
+        <ConfirmActionModal recap={prefillRecap(prefillTarget.version)} busy={false} onConfirm={confirmPrefill} onCancel={() => setPrefillTarget(null)} />
+      )}
 
       <div>
         <h1 className="text-xl font-bold text-gray-900">Communications admin</h1>
@@ -112,6 +147,34 @@ export default function ProductUpdatesManager({
       <div className="grid gap-5 sm:grid-cols-2">
         <div className="bg-white rounded-2xl border border-gray-200 p-5 space-y-3">
           <h2 className="text-sm font-semibold text-gray-900">Nouveau message</h2>
+          {drafts.length > 0 && (
+            <div>
+              <label htmlFor={draftId} className="block text-xs font-medium text-gray-600 mb-1">Partir des nouveautés de la version</label>
+              <div className="flex flex-wrap items-stretch gap-2">
+                <select
+                  id={draftId}
+                  value={draftVersion}
+                  onChange={(e) => setDraftVersion(e.target.value)}
+                  aria-describedby={draftHintId}
+                  className="flex-1 min-w-0 border border-gray-500 rounded-lg px-3 py-2 text-sm bg-white focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-blue-600"
+                >
+                  {drafts.map((d) => (
+                    <option key={d.version} value={d.version}>{d.version}, {d.dateLabel}</option>
+                  ))}
+                </select>
+                <button
+                  type="button"
+                  onClick={prefill}
+                  className="text-sm text-gray-700 border border-gray-300 px-4 py-2 rounded-full hover:bg-gray-50 transition-colors focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-blue-600"
+                >
+                  Préremplir
+                </button>
+              </div>
+              <p id={draftHintId} className="mt-1 text-xs text-gray-600">
+                Reprend l&apos;essentiel de la version et un lien vers la page Nouveautés ; vous pouvez tout modifier avant l&apos;envoi.
+              </p>
+            </div>
+          )}
           <div>
             <label htmlFor={subjectId} className="block text-xs font-medium text-gray-600 mb-1">Objet<RequiredMark /></label>
             <input

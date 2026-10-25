@@ -251,3 +251,16 @@ Image seulement (la narration reste juste) :
 - `registrations-management` : bouton « Voir mes créneaux » de l'email.
 
 Ces vidéos n'ont pas été régénérées dans la même PR.
+
+## Écart connu : communications préremplies depuis une version (#762)
+
+L'écran `/super-admin/product-updates` a maintenant, en tête de la carte
+« Nouveau message », « Partir des nouveautés de la version » : une liste des
+versions publiées et un bouton « Préremplir », avec une phrase d'aide.
+
+- `platform-internal-administration` : les scènes « preview » et « broadcast »
+  filment la carte sans ce choix ; la narration (objet et contenu saisis à la
+  main) reste juste et les sélecteurs de capture ne changent pas. Image
+  seulement, à revoir à la prochaine régénération.
+
+Cette vidéo n'a pas été régénérée dans la même PR.
