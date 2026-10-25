@@ -97,6 +97,29 @@ test("the event page leads to « Jour J », where one tap marks a person present
   await expect(page.getByRole("status")).toHaveText("1 créneau, 1 personne affichée.")
 })
 
+test("a check-in made elsewhere shows up without a reload; the search stays (#1141)", async ({ page }) => {
+  test.setTimeout(120_000)
+  await login(page)
+  const stamp = Date.now()
+  const { eventId, registrationIds } = await eventRunningToday(page, stamp)
+  await page.goto(`/admin/events/${eventId}/day-of`)
+  const search = page.getByLabel("Rechercher un bénévole ou un poste")
+  await waitForHydration(search)
+  await search.fill("leon")
+  await expect(page.getByRole("button", { name: `Marquer présent, Léon Favre${stamp}` })).toBeVisible()
+  // Another phone marks Léon present.
+  const res = await page.request.post(`/api/admin/events/${eventId}/registrations/bulk`, { data: { action: "check_in", registrationIds: [registrationIds[1]] } })
+  expect(res.ok(), await res.text()).toBeTruthy()
+  // The network coming back reads the board at once (the 25 s timer would do the same).
+  const navigations: string[] = []
+  page.on("framenavigated", (f) => { if (f === page.mainFrame()) navigations.push(f.url()) })
+  await page.evaluate(() => window.dispatchEvent(new Event("online")))
+  await expect(page.getByRole("button", { name: `Annuler la présence, Léon Favre${stamp}` })).toBeVisible()
+  await expect(search).toHaveValue("leon")
+  await expect(page.getByText(/^Mis à jour à \d{1,2}h(\d{2})?\.$/)).toBeVisible()
+  expect(navigations).toEqual([])
+})
+
 test.describe("on a 320 px phone", () => {
   test.use({ viewport: { width: 320, height: 640 } })
 
