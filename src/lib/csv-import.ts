@@ -3,7 +3,7 @@
 
 import { parse } from "csv-parse/sync"
 import ExcelJS from "exceljs"
-import { normalizeEmail } from "./email-address"
+import { isValidEmailAddress, normalizeEmail } from "./email-address"
 
 export type ParsedMemberRow = {
   /** Line in the file (the header is line 1), for the preview and error messages. */
@@ -95,7 +95,8 @@ function rowToMember(
   const phone = get("phone") || undefined
   const tags = parseTagsValue(get("tags"))
 
-  if (email && !email.includes("@")) {
+  // The same rule as the other ways of adding a member: one address, nothing else in the cell.
+  if (email && !isValidEmailAddress(email)) {
     return { ok: false, error: { line: lineNumber, reason: `Email invalide : ${email}` } }
   }
 

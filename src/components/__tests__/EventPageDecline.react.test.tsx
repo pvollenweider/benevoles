@@ -129,4 +129,20 @@ describe("DeclineInvite on the public event page (#558)", () => {
     await waitFor(() => expect(screen.queryByRole("button", { name: "Je ne suis pas disponible pour cet événement" })).not.toBeInTheDocument())
     window.localStorage.clear()
   })
+
+  it.each([
+    ["dot segments", "../../admin/events/evt-1/send-reminder?"],
+    ["an encoded slash", "x%2F..%2F..%2Fadmin"],
+    ["a fragment", "tok-1#x"],
+  ])("a ?token= that is not a token (%s) is ignored: no request with it, no decline button", async (_label, token) => {
+    search = new URLSearchParams({ token, decline: "1" })
+    const fetchMock = stubFetch()
+    render(<EventPageClient orgSlug="org" eventSlug="fete" />)
+    await screen.findByRole("heading", { level: 1, name: "Fête d'été" })
+    await act(() => Promise.resolve())
+    expect(screen.queryByRole("alertdialog")).not.toBeInTheDocument()
+    expect(screen.queryByRole("button", { name: "Je ne suis pas disponible pour cet événement" })).not.toBeInTheDocument()
+    const urls = fetchMock.mock.calls.map(([url]) => String(url))
+    expect(urls.some((u) => u.includes("member-invite") || u.includes("admin") || u.includes(".."))).toBe(false)
+  })
 })

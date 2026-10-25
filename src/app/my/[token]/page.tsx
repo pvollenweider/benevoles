@@ -34,6 +34,7 @@ import { MISSION_BRIEF_ID, MISSION_BRIEF_TITLE, nextConfirmedRegistration, type 
 import { APP_TIME_ZONE } from "@/lib/time-zone"
 import { SIGN_UP_MORE_LABEL, bottomLink, emptyPageLink } from "@/lib/personal-page-links"
 import { CANCEL_CONTACTS_INTRO, cancelClosedText, cancelContacts, cancelUntilText, type SelfCancelReason } from "@/lib/cancel-deadline"
+import { isTokenShaped, requireTokenPath, tokenPath } from "@/lib/token-path"
 
 type ShiftRef = {
   label: string
@@ -101,7 +102,7 @@ const closedId = (regId: string) => `cancel-closed-${regId}`
 /** The roster card's data (#1068). Optional: a failure leaves the card out, never the page. */
 async function fetchRoster(token: string): Promise<RosterData | null> {
   try {
-    const res = await fetch(`/api/public/registrations/${token}/roster`)
+    const res = await fetch(requireTokenPath("/api/public/registrations", token, "/roster"))
     return res.ok ? ((await res.json()) as RosterData) : null
   } catch {
     return null
@@ -120,7 +121,8 @@ export default function MyRegistrationPage() {
   const token = params.token as string
 
   const [data, setData] = useState<PageData | null>(null)
-  const [loading, setLoading] = useState(true)
+  // Not shaped like a token: no request, the page says the link is invalid straight away.
+  const [loading, setLoading] = useState(() => isTokenShaped(token))
   const [error, setError] = useState<string | null>(null)
   // The organisation is deactivated or suspended: a page of its own, without any registration.
   const [orgUnavailable, setOrgUnavailable] = useState<{ contact: string | null; afterLoad?: boolean } | null>(null)
@@ -163,7 +165,9 @@ export default function MyRegistrationPage() {
   }, [focusRequest])
 
   useEffect(() => {
-    fetch(`/api/public/registrations/${token}`)
+    const url = tokenPath("/api/public/registrations", token)
+    if (!url) return
+    fetch(url)
       .then((r) => r.json())
       .then((d) => {
         if (isOrgUnavailable(d)) {
@@ -227,7 +231,7 @@ export default function MyRegistrationPage() {
     // The page-level error is for the initial load only: a failed withdrawal keeps the page.
     let failure: { status?: number; network?: boolean; error?: string; reason?: SelfCancelReason } | null = null
     try {
-      const res = await fetch(`/api/public/registrations/${reg.editToken}`, {
+      const res = await fetch(requireTokenPath("/api/public/registrations", reg.editToken), {
         method: "DELETE",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ message: withdrawMessage }),
@@ -313,7 +317,7 @@ export default function MyRegistrationPage() {
 
   // « Avant ta mission » (#560): the next confirmed shift not over yet, read on the visitor's clock.
   const next = nextConfirmedRegistration(data.registrations, new Date(), data.timeZone ?? APP_TIME_ZONE)
-  const calendar = calendarCard(data.registrations, data.calendarFeed, `/api/public/registrations/${token}/calendar`)
+  const calendar = calendarCard(data.registrations, data.calendarFeed, `/api/public/registrations/${encodeURIComponent(token)}/calendar`)
 
   // The status region is the fragment's first child in both views below, so React keeps the same
   // node when the last withdrawal switches to the empty view, and the result is still voiced.
@@ -392,7 +396,7 @@ export default function MyRegistrationPage() {
                     {reg.status === "offered" && (
                       <p className="text-xs text-amber-900 mt-1">
                         {offerDeadline(reg.waitingExpiresAt, data.timeZone ?? APP_TIME_ZONE)}{" "}
-                        <Link href={`/waitlist/${reg.editToken}/confirm`} aria-label={`Prendre la place : ${reg.shift.label}`} className="font-medium underline underline-offset-2 rounded focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-amber-900">Prendre la place</Link>
+                        <Link href={`/waitlist/${encodeURIComponent(reg.editToken)}/confirm`} aria-label={`Prendre la place : ${reg.shift.label}`} className="font-medium underline underline-offset-2 rounded focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-amber-900">Prendre la place</Link>
                       </p>
                     )}
                     {/* An earlier deadline still ahead (#946): said under a confirmed shift. */}
@@ -408,7 +412,7 @@ export default function MyRegistrationPage() {
                       : <ShiftInfoList info={reg.shift} className="mt-2 text-xs text-gray-700" />}
                     {reg.status === "active" && (
                       <a
-                        href={`/api/public/registrations/${token}/calendar?registration=${reg.id}`}
+                        href={`/api/public/registrations/${encodeURIComponent(token)}/calendar?registration=${encodeURIComponent(reg.id)}`}
                         download
                         aria-describedby="calendar-hint-shift"
                         className="mt-1 py-1 inline-block text-xs font-medium text-blue-700 underline underline-offset-2 hover:text-blue-900 rounded focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-blue-600"

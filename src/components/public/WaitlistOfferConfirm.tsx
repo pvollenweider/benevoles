@@ -105,7 +105,7 @@ export default function WaitlistOfferConfirm({ token, state, details, contact = 
   )
   const myLink = view === "invalid"
     ? <Link href="/" className={LINK_CLASS}>Retour à l&apos;accueil</Link>
-    : <Link href={`/my/${token}`} className={LINK_CLASS}>Accéder à mon inscription</Link>
+    : <Link href={`/my/${encodeURIComponent(token)}`} className={LINK_CLASS}>Accéder à mon inscription</Link>
 
   if (view === "offered" && details) {
     return (
