@@ -40,9 +40,14 @@ import { DOC_VIDEO_ATTRIBUTE, videoReferenceId } from "@/lib/doc-video-reference
 // caller returns for that id (src/lib/doc-video-references.ts), "" to render nothing. Only block
 // HTML on its own line counts; any other raw HTML is left to DOMPurify, as before.
 //
+// allowImages: only the repo's own Markdown (src/lib/public-content.ts) shows images. Admin-authored
+// event pages never get an <img>: an image loads by itself for every visitor, from whatever host its
+// address names, so each Markdown image becomes a link to it instead (its alt text, or the address),
+// and an <img> written as raw HTML is dropped by DOMPurify.
+//
 // image (#759 F2) draws each Markdown image itself, given its index in the page (0 for the first):
 // the repo's documentation gives its screenshots their size and lazy loading (src/lib/doc-images.ts).
-// Admin-authored event pages keep marked's own <img>.
+// Without it, an allowed image is marked's own <img>.
 //
 // exampleQuotes turns a blockquote of the repo's own documentation made of exactly two paragraphs, a
 // quote between « » and a short caption naming who says it (« Léa, bénévole occasionnelle »), into
@@ -54,6 +59,7 @@ export type MarkdownImage = { src: string; alt: string; title?: string | null }
 function makeRenderer(
   shiftHeadings: boolean,
   headingIds: boolean,
+  allowImages: boolean,
   videoCard?: (id: string) => string,
   image?: (img: MarkdownImage, index: number) => string,
   exampleQuotes = false,
@@ -72,7 +78,12 @@ function makeRenderer(
       return id ? videoCard(id) : text
     }
   }
-  if (image) {
+  if (!allowImages) {
+    renderer.image = function ({ href, title, text, tokens }) {
+      const alt = decodeBasicEntities(tokens ? this.parser.parseInline(tokens, this.parser.textRenderer) : text).trim()
+      return `<a href="${escapeAttr(href)}"${title ? ` title="${escapeAttr(title)}"` : ""}>${escapeAttr(alt || href)}</a>`
+    }
+  } else if (image) {
     let index = 0
     renderer.image = function ({ href, title, text, tokens }) {
       // Plain text for the caller to escape once: an entity written in the source (« &amp; ») is
@@ -103,6 +114,9 @@ export function isExampleQuote(quote: string, caption: string): boolean {
   return q.startsWith("«") && q.endsWith("»") && c.length > 0 && c.length <= 80 && !c.includes("\n") && !c.startsWith("«")
 }
 
+const escapeAttr = (s: string) =>
+  s.replace(/&/g, "&amp;").replace(/"/g, "&quot;").replace(/</g, "&lt;").replace(/>/g, "&gt;")
+
 /** The few entities marked can leave in plain text, back to their characters (&amp; last). */
 function decodeBasicEntities(text: string): string {
   return text
@@ -118,12 +132,15 @@ const ALLOWED_TAGS = [
   "h1", "h2", "h3", "h4", "h5", "h6",
   "strong", "em", "del", "code", "pre",
   "ul", "ol", "li",
-  "a", "blockquote", "img",
+  "a", "blockquote",
   "table", "thead", "tbody", "tr", "th", "td",
 ]
+// Only kept when the caller allows images (`allowImages`, the repo's own Markdown).
+const IMAGE_TAGS = ["img"]
+const ALLOWED_ATTR = ["href", "title"]
 // img needs its own alt text (WCAG 1.1.1) — Markdown's ![alt](src) already forces authors to
 // supply one syntactically, but DOMPurify still needs "alt" allowlisted for it to survive.
-const ALLOWED_ATTR = ["href", "title", "src", "alt", "width", "height"]
+const IMAGE_ATTR = ["src", "alt", "width", "height"]
 // Only kept when the caller draws the images itself (`image`).
 const IMAGE_LOADING_ATTR = ["loading", "decoding"]
 // Only kept when the caller asks for example quotes (`exampleQuotes`).
@@ -134,19 +151,21 @@ export function renderEventPageMarkdown(
   options: {
     shiftHeadings?: boolean
     headingIds?: boolean
+    allowImages?: boolean
     videoCard?: (id: string) => string
     image?: (img: MarkdownImage, index: number) => string
     exampleQuotes?: boolean
   } = {},
 ): string {
-  const { shiftHeadings = true, headingIds = false, videoCard, image, exampleQuotes = false } = options
-  const html = marked.parse(content, { async: false, gfm: true, breaks: true, renderer: makeRenderer(shiftHeadings, headingIds, videoCard, image, exampleQuotes) })
+  const { shiftHeadings = true, headingIds = false, allowImages = false, videoCard, image, exampleQuotes = false } = options
+  const html = marked.parse(content, { async: false, gfm: true, breaks: true, renderer: makeRenderer(shiftHeadings, headingIds, allowImages, videoCard, image, exampleQuotes) })
   const allowedAttr = [
     ...ALLOWED_ATTR,
+    ...(allowImages ? IMAGE_ATTR : []),
     ...(headingIds ? ["id"] : []),
     ...(videoCard ? [DOC_VIDEO_ATTRIBUTE] : []),
-    ...(image ? IMAGE_LOADING_ATTR : []),
+    ...(allowImages && image ? IMAGE_LOADING_ATTR : []),
   ]
-  const allowedTags = exampleQuotes ? [...ALLOWED_TAGS, ...EXAMPLE_QUOTE_TAGS] : ALLOWED_TAGS
+  const allowedTags = [...ALLOWED_TAGS, ...(allowImages ? IMAGE_TAGS : []), ...(exampleQuotes ? EXAMPLE_QUOTE_TAGS : [])]
   return DOMPurify.sanitize(html, { ALLOWED_TAGS: allowedTags, ALLOWED_ATTR: allowedAttr })
 }

@@ -16,6 +16,15 @@ describe("icsEscape and icsFold", () => {
     expect(icsEscape("Parking; entrée nord")).toBe("Parking\\; entrée nord")
   })
 
+  // A lone carriage return is a line break for some readers: it must never reach a content line raw,
+  // where it could start a new property.
+  it("escapes CRLF, a lone LF and a lone CR alike", () => {
+    expect(icsEscape("a\r\nb\nc\rd")).toBe("a\\nb\\nc\\nd")
+    expect(icsEscape("Titre\rBEGIN:VALARM")).toBe("Titre\\nBEGIN:VALARM")
+    expect(icsEscape("x\r\r\ny")).toBe("x\\n\\ny")
+    expect(icsEscape("Titre\rURL:https://example.org")).not.toMatch(/\r/)
+  })
+
   it("folds at 75 octets without cutting a multi-byte character", () => {
     const line = "DESCRIPTION:" + "é".repeat(80)
     const folded = icsFold(line)
@@ -39,6 +48,14 @@ describe("shiftInstants", () => {
 
 describe("buildIcs", () => {
   const now = new Date("2026-06-01T10:00:00Z")
+  it("never lets a carriage return in organiser text start a new line or property", () => {
+    const ics = buildIcs([shift({ eventTitle: "Fête\rBEGIN:VALARM", roleName: "Bar\r", label: "Soir\r\nURL:https://example.org", location: "Salle\rX-Y:1", details: ["a\rb"] })], { timeZone: TZ, now })
+    // Every CR is part of a CRLF line ending, and no organiser text opens a line of its own.
+    expect(ics).not.toMatch(/\r(?!\n)/)
+    const lines = unfold(ics).split("\r\n")
+    expect(lines.some((l) => l === "BEGIN:VALARM" || l.startsWith("URL:https://example.org") || l.startsWith("X-Y:"))).toBe(false)
+  })
+
   it("writes one VEVENT per shift, UTC times, stable UID, escaped text, CRLF", () => {
     const ics = buildIcs([shift({ location: "Salle, 1er étage", details: ["Contact : Léa; 079 1"], latitude: 46.2, longitude: 6.1 })], { timeZone: TZ, now, host: "org.benevol.app" })
     expect(ics.startsWith("BEGIN:VCALENDAR\r\nVERSION:2.0\r\n")).toBe(true)

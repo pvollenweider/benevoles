@@ -46,9 +46,9 @@ const DOWNLOAD_UPDATE_NOTE = "Si un horaire change, vous recevrez un email : té
 
 const DESCRIPTION_MAX = 800
 
-/** RFC 5545 TEXT escaping. */
+/** RFC 5545 TEXT escaping. A lone carriage return is a line break too, never left raw in a content line. */
 export function icsEscape(text: string): string {
-  return text.replace(/\\/g, "\\\\").replace(/;/g, "\\;").replace(/,/g, "\\,").replace(/\r?\n/g, "\\n")
+  return text.replace(/\\/g, "\\\\").replace(/;/g, "\\;").replace(/,/g, "\\,").replace(/\r\n|\r|\n/g, "\\n")
 }
 
 /** Folds a content line at 75 octets (UTF-8), continuation lines starting with a space. */
