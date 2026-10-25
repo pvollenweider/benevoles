@@ -81,7 +81,9 @@ export default function QuestionsEditor({ eventId, initialQuestions, roles = [] 
     if (draft.parentId && draft.showIf.length === 0) { editor.fail(VALUES_EMPTY, "showif", document.getElementById(`${id}-showif-0`)); return }
     // Asked to some postes (#1140): at least one, unless it already had none left and stays so.
     const stored = editing !== "new" ? questions.find((q) => q.id === editing) : undefined
-    const keptNobody = stored?.displayScope === SCOPE_ROLES && (stored.displayRoleNames ?? []).length === 0
+    // A follow-up detached keeps its former parent's audience, nobody included (#1140).
+    const effective = stored?.parentId ? questions.find((q) => q.id === stored.parentId) : stored
+    const keptNobody = effective?.displayScope === SCOPE_ROLES && (effective.displayRoleNames ?? []).length === 0
     if (!draft.parentId && draft.scope === SCOPE_ROLES && draft.scopeRoles.length === 0 && !keptNobody) { editor.fail(SCOPE_ROLES_EMPTY, "roles", document.getElementById(`${id}-scope-role-0`)); return }
     const isNew = editing === "new"
     const outcome = await editor.submit<Q & { _count: { answers: number } }>(() => fetch(isNew ? base : `${base}/${editing}`, {
@@ -157,7 +159,8 @@ export default function QuestionsEditor({ eventId, initialQuestions, roles = [] 
   const followUpsOf = (q: Q) => questions.filter((x) => x.parentId === q.id)
   // Who is asked (#1140): the event's postes, plus the ticked ones without shifts any more.
   const scopeChoices = scopeRoleChoices(roles.map((r) => r.roleName), draft.scopeRoles)
-  const storedNobody = current?.displayScope === SCOPE_ROLES && (current.displayRoleNames ?? []).length === 0
+  const effectiveCurrent = current?.parentId ? questions.find((q) => q.id === current.parentId) : current
+  const storedNobody = effectiveCurrent?.displayScope === SCOPE_ROLES && (effectiveCurrent.displayRoleNames ?? []).length === 0
   const showNobody = storedNobody && draft.scope === SCOPE_ROLES && draft.scopeRoles.length === 0
   const clearScopeError = () => { if (editor.invalidField === "roles") editor.reset() }
   const describedBy = (field: string, extra: string) => [extra, editor.invalidField === field ? `${id}-editor-error` : null].filter(Boolean).join(" ") || undefined
@@ -358,7 +361,7 @@ export default function QuestionsEditor({ eventId, initialQuestions, roles = [] 
           )}
           {chosenParent ? (
             <p id={`${id}-scope-inherited`} className="text-xs text-gray-600">{inheritedScopeText(chosenParent)}</p>
-          ) : scopeChoices.length === 0 ? (
+          ) : scopeChoices.length === 0 && draft.scope === SCOPE_EVENT ? (
             <p className="text-xs text-gray-600">{SCOPE_NO_ROLES_HINT}</p>
           ) : (
             <fieldset>
@@ -373,7 +376,7 @@ export default function QuestionsEditor({ eventId, initialQuestions, roles = [] 
                       value={value}
                       checked={draft.scope === value}
                       onChange={() => { clearScopeError(); setDraft((d) => ({ ...d, scope: value })) }}
-                      aria-describedby={[`${id}-scope-hint`, value === SCOPE_ROLES && showNobody ? `${id}-scope-nobody` : null].filter(Boolean).join(" ")}
+                      aria-describedby={value === SCOPE_ROLES ? [`${id}-scope-hint`, showNobody ? `${id}-scope-nobody` : null].filter(Boolean).join(" ") : undefined}
                       className="h-4 w-4 border-gray-500"
                     />
                     {label}

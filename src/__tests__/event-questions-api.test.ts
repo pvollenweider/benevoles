@@ -247,6 +247,16 @@ describe("questions admin API", () => {
     expect(d.eventQuestion.update.mock.calls[1][0].data).toMatchObject({ parentId: null, displayScope: "roles", displayRoleNames: ["Cuisine"] })
   })
 
+  it("a follow-up whose parent is asked to nobody can be detached keeping that audience (#1140)", async () => {
+    const followUp = { ...q, parentId: "meal", showIfValues: ["Oui"], displayScope: "event", displayRoleNames: [], parent: { displayScope: "roles", displayRoleNames: [] }, answers: [], followUps: [] }
+    const d = db({ findFirst: vi.fn().mockResolvedValue(followUp), update: vi.fn(async ({ data }: { data: Record<string, unknown> }) => ({ ...followUp, ...data })) })
+    guard.mockResolvedValue({ db: d, session: {} })
+    const { PATCH } = await import("@/app/api/admin/events/[id]/questions/[questionId]/route")
+    const res = await PATCH(json("PATCH", { label: "Taille", type: "single", options: ["S", "M"], parentId: null, displayScope: "roles", displayRoleNames: [] }), params)
+    expect(res.status).toBe(200)
+    expect(d.eventQuestion.update.mock.calls[0][0].data).toMatchObject({ parentId: null, displayScope: "roles", displayRoleNames: [] })
+  })
+
   it("an edit keeps a scope whose postes are all gone, asked to nobody, but can't empty a live one (#1140)", async () => {
     const nobody = { ...q, displayScope: "roles", displayRoleNames: [], parentId: null, answers: [], followUps: [] }
     guard.mockResolvedValue({ db: db({ findFirst: vi.fn().mockResolvedValue(nobody) }), session: {} })

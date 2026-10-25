@@ -89,7 +89,9 @@ export async function PATCH(req: Request, { params }: Params) {
   } else if (existing.parentId && data.displayScope === undefined) {
     Object.assign(data, detachedScope(existing.parent ?? undefined))
   } else if (data.displayScope !== undefined) {
-    const problem = scopeProblem({ displayScope: data.displayScope, displayRoleNames: data.displayRoleNames ?? [] }, live, existing)
+    // A follow-up detached is judged against the audience it had, its former parent's.
+    const before = existing.parentId ? (existing.parent ?? undefined) : existing
+    const problem = scopeProblem({ displayScope: data.displayScope, displayRoleNames: data.displayRoleNames ?? [] }, live, before)
     if (problem) return NextResponse.json({ error: problem, field: "displayScope" }, { status: 400 })
   }
 

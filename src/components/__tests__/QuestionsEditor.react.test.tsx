@@ -226,4 +226,15 @@ describe("QuestionsEditor: scope of a question", () => {
     expect(screen.getByRole("radio", { name: "Certains postes seulement" })).toBeChecked()
     expect(screen.getByRole("checkbox", { name: "Cuisine" })).toBeChecked()
   })
+
+  it("postes all gone and no shift left: the radios stay, so the question can go back to everyone", () => {
+    const gone = { ...size, displayScope: "roles", displayRoleNames: [] }
+    render(<QuestionsEditor eventId="evt-1" initialQuestions={[gone]} roles={[]} />)
+    fireEvent.click(screen.getByRole("button", { name: "Modifier la question « Taille ? »" }))
+    expect(screen.getByRole("radio", { name: "Certains postes seulement" })).toBeChecked()
+    expect(screen.getByRole("radio", { name: "Tous les bénévoles" })).not.toHaveAccessibleDescription()
+    fireEvent.click(screen.getByRole("radio", { name: "Tous les bénévoles" }))
+    expect(screen.getByText(/Ajoutez des créneaux à l'événement pour poser cette question/)).toBeInTheDocument()
+  })
 })
+

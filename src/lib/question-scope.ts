@@ -123,7 +123,7 @@ export function inheritedScopeText(parent: ScopeFields & { label: string }): str
 }
 
 /**
- * The checkboxes of « Postes concernés »: the event's live postes in name order, then the ticked
+ * The checkboxes of « Postes à qui la poser »: the event's live postes in name order, then the ticked
  * ones that no shift carries any more, saying so, so the current value shows and can be unticked.
  */
 export function scopeRoleChoices(liveRoles: string[], selected: string[]): { value: string; label: string }[] {
