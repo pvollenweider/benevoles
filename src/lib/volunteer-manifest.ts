@@ -4,9 +4,9 @@
 import type { MetadataRoute } from "next"
 
 /**
- * Web app manifest of the volunteer's personal page « Mes inscriptions » (#593): it makes
- * `/my/<token>` installable (Chrome, Edge, Android), and on iPhone lets the volunteer add it to the
- * Home Screen, the only way iOS offers Web Push to a site.
+ * Web app manifest of the volunteer's personal page « Mes inscriptions » (#593): on iPhone it lets
+ * the volunteer add the page to the Home Screen as a web app, the only way iOS offers Web Push to a
+ * site; Chrome and Edge install it from their menu (« Installer la page en tant qu'application »).
  *
  * Served at `VOLUNTEER_MANIFEST_PATH` (src/app/my/manifest.webmanifest/route.ts) and linked from
  * the personal page only (src/app/my/[token]/layout.tsx): not `app/manifest.ts`, which Next.js
@@ -18,6 +18,10 @@ import type { MetadataRoute } from "next"
  * volunteer's own page, and the token never appears in the manifest. One file for everyone, the
  * same bytes whoever asks, safe to cache. iOS behaves the same: with a `start_url` it opens that
  * address instead of the page added to the Home Screen; without one, it keeps the page.
+ * Trade-off: Chromium only promotes an install on its own (address bar icon, install prompt) for a
+ * manifest with an explicit `start_url` (installable_evaluator.cc, `has_valid_specified_start_url`),
+ * which would mean a token in the manifest or a page that isn't the volunteer's; installing from
+ * the browser's menu still works and opens the page it was installed from.
  * No `id` either: it defaults to the start address, so each personal link installs as its own app
  * (a volunteer may have several, one per organisation).
  *

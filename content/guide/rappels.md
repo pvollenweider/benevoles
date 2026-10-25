@@ -28,7 +28,7 @@ Ton navigateur te demande d'abord ton autorisation ; tu peux la retirer à tout 
 
 Sur iPhone et iPad, les notifications ne fonctionnent que pour une page ajoutée à l'écran d'accueil (iOS 16.4 ou plus récent). Ouverte dans le navigateur, ta page **Mes inscriptions** affiche donc, à la place du bouton, les étapes pour l'y ajouter :
 
-1. Touche le bouton Partager : un carré avec une flèche vers le haut. Si tu ne le vois pas, touche d'abord « … ».
+1. Touche le bouton Partager : un carré avec une flèche vers le haut. Si tu ne le vois pas, touche d'abord le bouton « … » (trois points).
 2. Choisis « Sur l'écran d'accueil » (ou « Ajouter à l'écran d'accueil »), puis « Ajouter ».
 3. Ouvre la page avec la nouvelle icône **Mes inscriptions**, puis touche **Recevoir des rappels push**.
 
@@ -36,7 +36,7 @@ L'icône ouvre ta propre page **Mes inscriptions** : comme un favori, elle garde
 
 ### Installer ta page sur Android ou sur un ordinateur
 
-Chrome et Edge peuvent aussi installer ta page **Mes inscriptions** comme une application, depuis le menu du navigateur (« Installer » ou « Ajouter à l'écran d'accueil ») : elle s'ouvre alors dans sa propre fenêtre, avec son icône. Ce n'est pas nécessaire pour les notifications, qui fonctionnent aussi dans le navigateur.
+Chrome et Edge peuvent aussi installer ta page **Mes inscriptions** comme une application : dans le menu du navigateur, cherche « Installer la page en tant qu'application » ou « Ajouter à l'écran d'accueil », selon le navigateur. Elle s'ouvre alors dans sa propre fenêtre, avec son icône, toujours sur ta page. Ce n'est pas nécessaire pour les notifications, qui fonctionnent aussi dans le navigateur.
 
 ### Je ne veux pas oublier mon créneau le jour J
 

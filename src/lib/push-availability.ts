@@ -39,7 +39,7 @@ const q = (text: string) => `«\u00a0${text}\u00a0»`
 export const PUSH_INSTALL_TITLE = "Recevoir les rappels sur iPhone ou iPad"
 export const PUSH_INSTALL_INTRO = "Ajoute d'abord cette page à ton écran d'accueil\u00a0:"
 export const PUSH_INSTALL_STEPS: readonly string[] = [
-  `Touche le bouton Partager\u00a0: un carré avec une flèche vers le haut. Si tu ne le vois pas, touche d'abord ${q("…")}.`,
+  `Touche le bouton Partager\u00a0: un carré avec une flèche vers le haut. Si tu ne le vois pas, touche d'abord le bouton ${q("…")} (trois points).`,
   `Choisis ${q("Sur l'écran d'accueil")} (ou ${q("Ajouter à l'écran d'accueil")}), puis ${q("Ajouter")}.`,
   `Ouvre la page avec la nouvelle icône, puis touche ${q(PUSH_BUTTON_LABEL)}.`,
 ]
