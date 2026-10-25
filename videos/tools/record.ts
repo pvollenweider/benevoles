@@ -3786,7 +3786,7 @@ async function main() {
         await page.getByText("Un nouvel email avec ton lien vient de partir.", { exact: true }).waitFor()
         await at("Attendons le résultat, puis ouvrons")
         await page.goto("http://localhost:48026"); await settle(page)
-        await tap(page, page.getByText(/Ton lien pour gérer ton inscription/).first())
+        await tap(page, page.getByText(/Ton lien pour gérer tes inscriptions/).first())
         await page.frameLocator("iframe").locator('a[href*="/my/"]').first().waitFor()
       })
       await scene("recover", async at => {

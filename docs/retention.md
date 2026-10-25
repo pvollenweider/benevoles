@@ -1,6 +1,6 @@
 # Conservation des données
 
-La politique de conservation, avec pour chaque donnée sa finalité, sa durée, ce qui la déclenche et ce qui l'efface. Source unique : `src/lib/retention.ts`. Le nettoyage quotidien (`/api/cron/cleanup`) lit ses durées dans ce fichier, et un test vérifie que ce tableau, celui du guide administrateur, la politique de confidentialité et la rotation des sauvegardes (`k8s/cronjob-backup*.yaml`) disent la même chose. Pour régénérer les tableaux : `npm run retention:docs`.
+La politique de conservation, avec pour chaque donnée sa finalité, sa durée, ce qui la déclenche et ce qui l'efface. Source unique : `src/lib/retention.ts`. Le nettoyage quotidien (`/api/cron/cleanup`) lit ses durées dans ce fichier, et un test vérifie que ce tableau, celui du guide organisateur, la politique de confidentialité et la rotation des sauvegardes (`k8s/cronjob-backup*.yaml`) disent la même chose. Pour régénérer les tableaux : `npm run retention:docs`.
 
 Une durée annoncée est reliée à un traitement automatique, ou à une procédure manuelle explicitement signalée comme telle. Une donnée effacée de la base reste dans les sauvegardes jusqu'à leur rotation : elle n'en disparaît pas immédiatement.
 
