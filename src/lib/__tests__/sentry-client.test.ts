@@ -4,7 +4,7 @@ import path from "node:path"
 import type { ErrorEvent } from "@sentry/nextjs"
 import { isStaffPath, pathnameOf, replayAllowedFor, tracesSampleRateFor, urlCarriesSecret, STAFF_TRACES_SAMPLE_RATE } from "../sentry-client-policy"
 import { createSentryLoader, type SentryClientModule } from "../sentry-client-loader"
-import { beforeSendClient, isStacklessDomEventRejection } from "../sentry-scrub"
+import { beforeSendClient, isStacklessDomEventRejection, isStacklessNetworkRejection } from "../sentry-scrub"
 
 // Deferred browser Sentry (#773).
 
@@ -228,7 +228,7 @@ describe("stackless DOM Event rejections (BENEVOLAPP-P)", () => {
   })
 
   it("keeps real errors", () => {
-    const real = rejection({ type: "TypeError", value: "Failed to fetch" })
+    const real = rejection({ type: "TypeError", value: "Cannot read properties of undefined (reading 'id')" })
     expect(isStacklessDomEventRejection(real)).toBe(false)
     expect(beforeSendClient(real)).toBe(real)
   })
@@ -237,6 +237,38 @@ describe("stackless DOM Event rejections (BENEVOLAPP-P)", () => {
     expect(isStacklessDomEventRejection(rejection({ stacktrace: { frames: [{ filename: "app.js" }] } }))).toBe(false)
     expect(isStacklessDomEventRejection(rejection({ mechanism: { type: "generic", handled: true } }))).toBe(false)
     expect(isStacklessDomEventRejection({ type: undefined } as ErrorEvent)).toBe(false)
+  })
+})
+
+describe("stackless network failures (Safari « Load failed » after a deploy)", () => {
+  const rejection = (overrides: Record<string, unknown> = {}): ErrorEvent =>
+    ({
+      type: undefined,
+      exception: {
+        values: [
+          {
+            type: "TypeError",
+            value: "Load failed",
+            mechanism: { type: "auto.browser.global_handlers.onunhandledrejection", handled: false },
+            ...overrides,
+          },
+        ],
+      },
+    }) as ErrorEvent
+
+  it("drops the browsers' network failure messages", () => {
+    for (const value of ["Load failed", "Failed to fetch", "NetworkError when attempting to fetch resource."]) {
+      expect(isStacklessNetworkRejection(rejection({ value }))).toBe(true)
+      expect(beforeSendClient(rejection({ value }))).toBeNull()
+    }
+  })
+
+  it("keeps it with a stack, from another mechanism, another type or another message", () => {
+    expect(isStacklessNetworkRejection(rejection({ stacktrace: { frames: [{ filename: "app.js" }] } }))).toBe(false)
+    expect(isStacklessNetworkRejection(rejection({ mechanism: { type: "generic", handled: true } }))).toBe(false)
+    expect(isStacklessNetworkRejection(rejection({ type: "Error" }))).toBe(false)
+    expect(isStacklessNetworkRejection(rejection({ value: "Load failed: /api/admin/events" }))).toBe(false)
+    expect(isStacklessNetworkRejection({ type: undefined } as ErrorEvent)).toBe(false)
   })
 })
 

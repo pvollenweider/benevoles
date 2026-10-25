@@ -81,6 +81,8 @@ Format basé sur [Keep a Changelog](https://keepachangelog.com/fr/1.0.0/).
 
 ### Infrastructure
 
+- **Suivi des erreurs** : une requête du navigateur restée sans réponse (« Load failed », « Failed to fetch »), sans pile d'appels, n'est plus remontée comme une erreur ; c'est ce que voit un onglet ouvert avant une mise à jour. <!-- interne -->
+
 - **Envoi des emails** : avant chaque email, les plafonds d'envoi sont lus en une seule requête au lieu d'une par plafond, ce qui allège l'envoi des lots. <!-- interne -->
 
 - **Docker Compose : PostgreSQL n'est plus publié sur l'hôte et son mot de passe est obligatoire** : la base n'est joignable que par l'application, `POSTGRES_PASSWORD` n'a plus de valeur par défaut et l'adresse de connexion de l'application est construite à partir des mêmes variables, quel que soit le mot de passe. Un fichier `docker-compose.override.example.yml` donne un accès local (127.0.0.1) ponctuel. Installation Compose existante : action requise avant la mise à jour, voir « Mettre à jour une installation Compose existante » dans `docs/deploiement.md`. Sans effet sur Kubernetes.
