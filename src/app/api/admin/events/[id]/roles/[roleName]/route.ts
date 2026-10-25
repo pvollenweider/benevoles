@@ -14,6 +14,7 @@ import { removeRoleFromLink, renameRoleInLink } from "@/lib/group-links"
 import { leaderRenamePlan } from "@/lib/sector-leader-rename"
 import { isCivilDate } from "@/lib/civil-date"
 import { labelUpdates, posteApplyCount, posteApplyTargets } from "@/lib/poste-apply"
+import { removeRoleFromScope, renameRoleInScope } from "@/lib/question-scope"
 
 /**
  * Share links per group (#947) name their roles: a rename or a deletion is carried into every link
@@ -31,6 +32,25 @@ async function updateGroupLinks(
     select: { id: true, roleNames: true },
   })
   for (const l of links) await db.eventGroupLink.update({ where: { id: l.id }, data: { roleNames: next(l.roleNames) } })
+}
+
+/**
+ * Questions asked to some postes only (#1140) name them too, archived ones included (so a question
+ * put back keeps a meaningful scope): carried the same way. Their answers are attached to the
+ * question, never to the poste, so they stay whatever happens to it.
+ */
+async function updateQuestionScopes(
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  db: any,
+  eventId: string,
+  role: string,
+  next: (roleNames: string[]) => string[],
+) {
+  const questions: { id: string; displayRoleNames: string[] }[] = await db.eventQuestion.findMany({
+    where: { eventId, displayRoleNames: { has: role } },
+    select: { id: true, displayRoleNames: true },
+  })
+  for (const q of questions) await db.eventQuestion.update({ where: { id: q.id }, data: { displayRoleNames: next(q.displayRoleNames) } })
 }
 
 // A "role" only exists implicitly, as the roleName shared by a group of shifts on one event —
@@ -114,7 +134,7 @@ export async function PATCH(req: Request, { params }: { params: Promise<{ id: st
     }
 
     // Everything matched to the poste by its name moves in one transaction: its shifts, the share
-    // links that show it (#947), the questions attached to it (#984, part 3) and its sector
+    // links that show it (#947), the questions attached to it (#984, part 3) or asked to it (#1140) and its sector
     // leaders (#1001), so its leaders keep their list, its withdrawals and its answer changes.
     const droppedLeaders = await db.$transaction(async (tx) => {
       await tx.shift.updateMany({
@@ -130,6 +150,7 @@ export async function PATCH(req: Request, { params }: { params: Promise<{ id: st
       })
       await updateGroupLinks(tx, id, decodedRole, (names) => renameRoleInLink(names, decodedRole, newName))
       await tx.eventQuestion.updateMany({ where: { eventId: id, roleName: decodedRole }, data: { roleName: newName } })
+      await updateQuestionScopes(tx, id, decodedRole, (names) => renameRoleInScope(names, decodedRole, newName))
       const [moving, atTarget] = await Promise.all([
         tx.sectorLeader.findMany({ where: { eventId: id, roleName: decodedRole }, select: { id: true, email: true } }),
         tx.sectorLeader.findMany({ where: { eventId: id, roleName: newName }, select: { id: true, email: true, roleName: true } }),
@@ -287,6 +308,9 @@ export async function DELETE(_req: Request, { params }: { params: Promise<{ id: 
   // Its sector leaders stay: deleting a poste cancels its shifts, which keep their name, and the
   // leaders stay attached to it until removed from « Responsables de secteur » (#1001).
   await db.eventQuestion.updateMany({ where: { eventId: id, roleName: decodedRole }, data: { roleName: null } })
+  // A question asked to that poste (#1140) is no longer asked for it; asked to that poste only, it
+  // is then asked to nobody (the editor says so) rather than to everyone. Its answers stay.
+  await updateQuestionScopes(db, id, decodedRole, (names) => removeRoleFromScope(names, decodedRole))
 
   return NextResponse.json({ success: true, cancelledShifts: shifts.length, cancelledRegistrations, notified, unpublished })
 }

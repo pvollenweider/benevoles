@@ -837,7 +837,7 @@ model EventQuestion {
   // that role's sector leaders instead of the organisers. Roles have no table (they are the
   // roleName shared by shifts), so this is the name, kept in step like EventGroupLink.roleNames:
   // renamed with the role, cleared when the role is deleted (src/app/api/admin/events/[id]/roles/
-  // [roleName]/route.ts). Null = the organisers, as before. The question stays asked to everyone.
+  // [roleName]/route.ts). Null = the organisers, as before. Who is asked is displayScope's job.
   roleName   String?
   // Follow-up question (#1016): shown only when the volunteer's answer to the parent question (a
   // yes/no or choice question of the same event, itself not a follow-up) is one of showIfValues;
@@ -846,6 +846,14 @@ model EventQuestion {
   // unanswered, archived otherwise), in the API: SetNull is only the database's safety net.
   parentId     String?
   showIfValues String[]  @default([])
+  // Display scope (#1140), apart from roleName (which only routes change emails): "event" = asked
+  // to every volunteer (default, every question created before); "roles" = asked only to volunteers
+  // whose live registrations include a shift of one of displayRoleNames (the role names of the
+  // event's shifts, kept in step on rename, dropped on deletion: "roles" with none left is asked to
+  // nobody rather than widened to everyone). A follow-up has no scope of its own: it follows its
+  // parent's (src/lib/question-scope.ts). Answers stay attached to the question, whatever the scope.
+  displayScope     String   @default("event")
+  displayRoleNames String[] @default([])
   archivedAt DateTime?
   createdAt  DateTime  @default(now())
 

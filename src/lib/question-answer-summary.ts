@@ -14,11 +14,15 @@
  * Archived questions are left out. A number question (#1015) is summed instead of counted by answer:
  * its total, then how many people answered. A follow-up question (#1016) comes right after its
  * parent and counts only the people it was asked to (their parent answer shows it), « Sans
- * réponse » included. Pure, no Prisma: also used by the print sheets.
+ * réponse » included. A question asked to some postes only (#1140, a follow-up through its parent)
+ * counts only the people with a counting registration on one of them, confirmed or waiting as of
+ * those registrations: a volunteer confirmed at the reception but waiting for the bar is waiting
+ * for a bar question. Pure, no Prisma: also used by the print sheets.
  */
 import { csvDocument } from "./data-export"
 import { NO, YES, conditionText, followUpApplies, formOrder, parseWholeNumber } from "./event-questions"
 import { fmtHour } from "./registrations-list"
+import { effectiveScope } from "./question-scope"
 
 export type SummaryQuestion = {
   id: string
@@ -29,9 +33,13 @@ export type SummaryQuestion = {
   /** Follow-up question (#1016): its parent and the parent's answers that show it. */
   parentId?: string | null
   showIfValues?: string[]
+  /** Who is asked (#1140): "roles" counts only the people on displayRoleNames. */
+  displayScope?: string | null
+  displayRoleNames?: string[] | null
   answers: { volunteerId: string; values: string[] }[]
 }
-export type SummaryRegistration = { volunteerId: string; status: string }
+/** A registration that can count; its shift's poste for a question asked to some postes (#1140). */
+export type SummaryRegistration = { volunteerId: string; status: string; shift?: { roleName: string } | null }
 
 /**
  * "option": a current choice; "removed": a choice no longer offered; "text": a group of short texts;
@@ -41,7 +49,9 @@ export type SummaryRowKind = "option" | "removed" | "text" | "total" | "count" |
 export type SummaryRow = { answer: string; kind: SummaryRowKind; confirmed: number; waiting: number }
 /** A follow-up's condition (#1016), « Si « Oui » à « … » », and how many people it was asked to. */
 export type SummaryCondition = { text: string; confirmed: number; waiting: number }
-export type QuestionSummary = { id: string; label: string; type: string; rows: SummaryRow[]; condition?: SummaryCondition }
+/** A question asked to some postes only (#1140): the postes, and how many people it was asked to. */
+export type SummaryScope = { roles: string[]; confirmed: number; waiting: number }
+export type QuestionSummary = { id: string; label: string; type: string; rows: SummaryRow[]; condition?: SummaryCondition; scope?: SummaryScope }
 export type AnswerSummary = { confirmedCount: number; waitingCount: number; questions: QuestionSummary[] }
 
 const CONFIRMED_STATUSES = new Set(["active"])
@@ -67,11 +77,11 @@ export const answerSummarySelect = {
   questions: {
     where: { archivedAt: null },
     orderBy: { position: "asc" as const },
-    select: { id: true, label: true, type: true, options: true, archivedAt: true, parentId: true, showIfValues: true, answers: { select: { volunteerId: true, values: true } } },
+    select: { id: true, label: true, type: true, options: true, archivedAt: true, parentId: true, showIfValues: true, displayScope: true, displayRoleNames: true, answers: { select: { volunteerId: true, values: true } } },
   },
   registrations: {
     where: { status: { in: [...CONFIRMED_STATUSES, ...WAITING_STATUSES] }, shift: { status: { not: "cancelled" } } },
-    select: { volunteerId: true, status: true },
+    select: { volunteerId: true, status: true, shift: { select: { roleName: true } } },
   },
 }
 
@@ -168,18 +178,35 @@ function concerned(q: SummaryQuestion, parent: SummaryQuestion | undefined, peop
   return new Map([...people].filter(([volunteerId]) => followUpApplies(q, answers.get(volunteerId))))
 }
 
+const tally = (people: Map<string, "confirmed" | "waiting">) => {
+  const whos = [...people.values()]
+  return { confirmed: whos.filter((w) => w === "confirmed").length, waiting: whos.filter((w) => w === "waiting").length }
+}
+
 export function answerSummary(questions: SummaryQuestion[], registrations: SummaryRegistration[]): AnswerSummary {
   const people = countedPeople(registrations)
   const counts = [...people.values()]
   const active = formOrder(questions.filter((q) => !q.archivedAt))
   const byId = new Map(active.map((q) => [q.id, q]))
+  // The people a question is asked to (#1140): everyone counted, or those on its postes, classified
+  // by their registrations on these postes only.
+  const askedTo = (roles: string[] | null) => {
+    if (roles === null) return people
+    const set = new Set(roles)
+    return countedPeople(registrations.filter((r) => r.shift && set.has(r.shift.roleName)))
+  }
   return {
     confirmedCount: counts.filter((w) => w === "confirmed").length,
     waitingCount: counts.filter((w) => w === "waiting").length,
     questions: active.map((q) => {
-      if (!q.parentId) return summarizeQuestion(q, people)
+      const roles = effectiveScope(q, byId)
+      const scoped = askedTo(roles)
+      if (!q.parentId) {
+        const summary = summarizeQuestion(q, scoped)
+        return roles === null ? summary : { ...summary, scope: { roles, ...tally(scoped) } }
+      }
       const parent = byId.get(q.parentId)
-      const asked = concerned(q, parent, people)
+      const asked = concerned(q, parent, scoped)
       const whos = [...asked.values()]
       return {
         ...summarizeQuestion(q, asked),
@@ -201,6 +228,16 @@ export function conditionLine(c: SummaryCondition, waiting: boolean): string {
   const text = c.text.replace(/^Si /, "Posée seulement si ")
   const confirmed = `${c.confirmed} bénévole${c.confirmed > 1 ? "s" : ""} confirmé${c.confirmed > 1 ? "s" : ""} concerné${c.confirmed > 1 ? "s" : ""}`
   return `${text} : ${confirmed}${waiting ? `, ${c.waiting} en attente` : ""}.`
+}
+
+/**
+ * Under a question asked to some postes only (#1140): whom it was asked to. « Posée seulement pour
+ * Bar, Cuisine. 3 bénévoles confirmés concernés. », with the waiting people when the summary has them.
+ */
+export function scopeLine(s: SummaryScope, waiting: boolean): string {
+  if (s.roles.length === 0) return "Posée à personne : plus aucun de ses postes n'a de créneau."
+  const confirmed = `${s.confirmed} bénévole${s.confirmed > 1 ? "s" : ""} confirmé${s.confirmed > 1 ? "s" : ""} concerné${s.confirmed > 1 ? "s" : ""}`
+  return `Posée seulement pour ${s.roles.join(", ")}. ${confirmed}${waiting ? `, ${s.waiting} en attente` : ""}.`
 }
 
 /** An answer as shown and exported: a removed choice says so. */
@@ -243,6 +280,7 @@ export function answerSummaryCsv(summary: AnswerSummary): string {
   return csvDocument(
     ["Question", "Réponse", "Confirmés", "En attente"],
     // A follow-up (#1016) says its condition next to its label: the file is read on its own.
-    summary.questions.flatMap((q) => q.rows.map((r) => [q.condition ? `${q.label} (${q.condition.text.replace(/^Si /, "si ")})` : q.label, rowLabel(r), r.confirmed, r.waiting])),
+    // A question asked to some postes (#1140) names them the same way.
+    summary.questions.flatMap((q) => q.rows.map((r) => [q.condition ? `${q.label} (${q.condition.text.replace(/^Si /, "si ")})` : q.scope ? `${q.label} (postes : ${q.scope.roles.join(", ") || "aucun"})` : q.label, rowLabel(r), r.confirmed, r.waiting])),
   )
 }

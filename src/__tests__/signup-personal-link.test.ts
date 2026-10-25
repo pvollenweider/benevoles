@@ -1,4 +1,4 @@
-import { describe, it, expect, vi, beforeEach } from "vitest"
+import { describe, it, expect, vi, beforeEach, afterEach } from "vitest"
 import { hashToken } from "@/lib/token-hash"
 
 // More shifts from the personal page (#1013): POST /api/public/registrations with the session's
@@ -113,10 +113,10 @@ beforeEach(() => {
   m.regFindFirst.mockResolvedValue(link)
   m.enqueueNotifications.mockResolvedValue([])
   // Outside the transaction: no duplicate, no overlap; the phones of v1's live registrations.
-  m.regFindMany.mockImplementation(async (args: { select?: { phone?: boolean } }) => (args.select?.phone ? [{ phone: "079 111 11 11" }] : []))
+  m.regFindMany.mockImplementation(async (args: { select?: { phone?: boolean } }) => (args.select?.phone ? [{ phone: "079 111 11 11", shift: { roleName: "Accueil" } }] : []))
   // Inside: no overlap; v1's live registrations, the new one far ahead (answers still editable).
   m.txRegFindMany.mockImplementation(async (args: { select?: { status?: boolean } }) => (args.select?.status
-    ? [{ status: "active", shift: { date: new Date("2030-06-01T00:00:00Z"), startTime: "14:00", endTime: "16:00" } }]
+    ? [{ status: "active", shift: { date: new Date("2030-06-01T00:00:00Z"), startTime: "14:00", endTime: "16:00", roleName: "Accueil" } }, { status: "active", shift: { date: new Date("2030-06-01T00:00:00Z"), startTime: "14:00", endTime: "16:00", roleName: "Bar" } }]
     : []))
   m.txCreate.mockResolvedValue({ id: "reg-new", shiftId: "shift-2", status: "active", waitingPosition: null })
 })
@@ -195,11 +195,36 @@ describe("POST /api/public/registrations with the personal link (#1013)", () => 
 
   it("answers locked (every registration on the event started): only missing answers are added", async () => {
     m.txRegFindMany.mockImplementation(async (args: { select?: { status?: boolean } }) => (args.select?.status
-      ? [{ status: "active", shift: { date: new Date("2020-06-01T00:00:00Z"), startTime: "14:00", endTime: "16:00" } }]
+      ? [{ status: "active", shift: { date: new Date("2020-06-01T00:00:00Z"), startTime: "14:00", endTime: "16:00", roleName: "Bar" } }]
       : []))
     const { body } = await signUp({ answers: { size: "L", note: "Végétarien" } })
     expect(body.updated.answers).toBe(0)
     expect(m.upsert).not.toHaveBeenCalled()
     expect(m.recordAnswerChanges).not.toHaveBeenCalled()
+  })
+
+  describe("questions asked to some postes (#1140)", () => {
+    const scoped = [
+      { id: "accueil", label: "Badge ?", type: "yesno", options: [], required: true, position: 2, archivedAt: null, roleName: null, displayScope: "roles", displayRoleNames: ["Accueil"], answers: [] as { values: string[] }[] },
+      { id: "kitchen", label: "Allergies ?", type: "text", options: [], required: true, position: 3, archivedAt: null, roleName: null, displayScope: "roles", displayRoleNames: ["Cuisine"], answers: [{ values: ["Noix"] }] },
+    ]
+    beforeEach(() => { questions.push(...(scoped as never[])) })
+    afterEach(() => { questions.splice(2) })
+
+    it("a required question of a poste already held counts from the personal link, though the new shift is elsewhere", async () => {
+      const { res, body } = await signUp({ answers: { size: "M", note: "Végétarien" } })
+      expect(res.status).toBe(400)
+      expect(body.questionErrors.map((e: { questionId: string }) => e.questionId)).toEqual(["accueil"])
+      expect(m.txCreate).not.toHaveBeenCalled()
+    })
+
+    it("a question of a poste not held: the answer sent is ignored and the stored one kept, never cleared", async () => {
+      const { res, body } = await signUp({ answers: { size: "M", note: "Végétarien", accueil: "Oui", kitchen: "" } })
+      expect(res.status).toBe(201)
+      expect(body.updated.answers).toBe(1)
+      expect(m.upsert).toHaveBeenCalledWith(expect.objectContaining({ where: { questionId_volunteerId: { questionId: "accueil", volunteerId: "v1" } } }))
+      expect(m.deleteMany).not.toHaveBeenCalled()
+      expect(m.recordAnswerChanges.mock.calls[0][0].changes.map((c: { questionId: string }) => c.questionId)).toEqual(["accueil"])
+    })
   })
 })

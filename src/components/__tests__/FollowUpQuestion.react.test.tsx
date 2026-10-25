@@ -91,7 +91,7 @@ describe("questions editor: « Afficher seulement si… »", () => {
     fireEvent.click(screen.getByRole("button", { name: "Ajouter une question" }))
     const select = screen.getByRole("combobox", { name: "Afficher seulement si…" })
     expect(select).toHaveAccessibleDescription(/n'est pas obligatoire/)
-    expect([...(select as HTMLSelectElement).options].map((o) => o.textContent)).toEqual(["Toujours (question posée à tous)", "Tu manges avec nous ?"])
+    expect([...(select as HTMLSelectElement).options].map((o) => o.textContent)).toEqual(["Toujours (sans condition)", "Tu manges avec nous ?"])
     fireEvent.change(screen.getByRole("textbox", { name: /Question posée aux bénévoles/ }), { target: { value: "Combien ?" } })
     fireEvent.change(select, { target: { value: "meal" } })
     const group = screen.getByRole("group", { name: /Réponses qui affichent cette question/ })

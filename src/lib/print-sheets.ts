@@ -4,7 +4,7 @@
 import { printLogoHtml, type OrgLogo } from "./org-logo"
 import { EMERGENCY_NOTE, emergencyNoteFor, shiftInfoText, type ShiftInfo } from "./shift-info"
 import { buildDayParts, type ShiftRow } from "./pdf-export-gantt"
-import { conditionLine, confirmedLine, MULTIPLE_NOTE, numberNote, rowLabel, waitingLine, type AnswerSummary } from "./question-answer-summary"
+import { conditionLine, scopeLine, confirmedLine, MULTIPLE_NOTE, numberNote, rowLabel, waitingLine, type AnswerSummary } from "./question-answer-summary"
 import { effectiveMinimum, shiftStaffingState, staffingStateText } from "./staffing"
 
 /**
@@ -287,7 +287,7 @@ function answersView(d: SheetData): string {
     ${a.questions.map((q) => `
     <section class="block${q.condition ? " follow-up" : ""}">
       <table class="detail answers">
-        <caption>${esc(q.label)}${q.condition ? `<span class="caption-note">${esc(conditionLine(q.condition, waiting))}</span>` : ""}${q.type === "multiple" ? `<span class="caption-note">${esc(MULTIPLE_NOTE)}</span>` : ""}${q.type === "number" ? `<span class="caption-note">${esc(numberNote(waiting))}</span>` : ""}</caption>
+        <caption>${esc(q.label)}${q.condition ? `<span class="caption-note">${esc(conditionLine(q.condition, waiting))}</span>` : ""}${q.scope ? `<span class="caption-note">${esc(scopeLine(q.scope, waiting))}</span>` : ""}${q.type === "multiple" ? `<span class="caption-note">${esc(MULTIPLE_NOTE)}</span>` : ""}${q.type === "number" ? `<span class="caption-note">${esc(numberNote(waiting))}</span>` : ""}</caption>
         <thead><tr><th scope="col">Réponse</th><th scope="col" class="num">Confirmés</th>${waiting ? `<th scope="col" class="num">En attente</th>` : ""}</tr></thead>
         <tbody>
           ${q.rows.map((r) => `<tr>

@@ -14,18 +14,23 @@ import {
   canMove, followUpErrorField, followUpText, moveInGroups, moveStatus, parentCandidates, removalLines,
 } from "@/lib/question-follow-up"
 import { NO_ROLES_HINT, QUESTION_ROLE_HINT, QUESTION_ROLE_LABEL, questionErrorField, questionRoleOptions, questionRoleText, type QuestionRoleChoice } from "@/lib/question-role"
+import {
+  SCOPE_EVENT, SCOPE_EVENT_LABEL, SCOPE_HINT, SCOPE_LEGEND, SCOPE_NOBODY, SCOPE_NO_ROLES_HINT, SCOPE_ROLES, SCOPE_ROLES_EMPTY, SCOPE_ROLES_LABEL, SCOPE_ROLES_LEGEND, SCOPE_ROLE_UNKNOWN,
+  detachedScope, inheritedScopeText, scopeRoleChoices, scopeText, type DisplayScope,
+} from "@/lib/question-scope"
 import RequiredMark from "@/components/RequiredMark"
 
-type Q = { id: string; label: string; type: string; options: string[]; required: boolean; minValue?: number | null; maxValue?: number | null; roleName: string | null; parentId?: string | null; showIfValues?: string[]; answers: number }
-type Draft = { label: string; type: QuestionType; options: string; required: boolean; min: string; max: string; roleName: string; parentId: string; showIf: string[] }
-const EMPTY: Draft = { label: "", type: "text", options: "", required: false, min: "", max: "", roleName: "", parentId: "", showIf: [] }
+type Q = { id: string; label: string; type: string; options: string[]; required: boolean; minValue?: number | null; maxValue?: number | null; roleName: string | null; parentId?: string | null; showIfValues?: string[]; displayScope?: string | null; displayRoleNames?: string[] | null; answers: number }
+type Draft = { label: string; type: QuestionType; options: string; required: boolean; min: string; max: string; roleName: string; parentId: string; showIf: string[]; scope: DisplayScope; scopeRoles: string[] }
+const EMPTY: Draft = { label: "", type: "text", options: "", required: false, min: "", max: "", roleName: "", parentId: "", showIf: [], scope: SCOPE_EVENT, scopeRoles: [] }
 const isChoice = (t: string) => t === "single" || t === "multiple"
 
 /**
  * Edit the custom questions of an event's sign-up form (#483), each optionally attached to one of
  * the event's postes (`roles`, #984 part 3) so a change of its answer reaches that poste's leaders,
- * and optionally shown only for some answers of another question (a follow-up, #1016): listed in
- * a nested list under its parent, moved with it, removed with it.
+ * optionally shown only for some answers of another question (a follow-up, #1016): listed in
+ * a nested list under its parent, moved with it, removed with it; and asked to every volunteer or
+ * only to those who pick shifts of some postes (#1140), a follow-up following its parent's.
  */
 export default function QuestionsEditor({ eventId, initialQuestions, roles = [] }: { eventId: string; initialQuestions: Q[]; roles?: QuestionRoleChoice[] }) {
   const [questions, setQuestions] = useState(() => formOrder(initialQuestions))
@@ -47,7 +52,7 @@ export default function QuestionsEditor({ eventId, initialQuestions, roles = [] 
     editor.reset()
     list.reset()
     setEditing(q ? q.id : "new")
-    setDraft(q ? { label: q.label, type: q.type as QuestionType, options: q.options.join("\n"), required: q.required, min: q.minValue ? String(q.minValue) : "", max: q.maxValue == null ? "" : String(q.maxValue), roleName: q.roleName ?? "", parentId: q.parentId ?? "", showIf: q.showIfValues ?? [] } : EMPTY)
+    setDraft(q ? { label: q.label, type: q.type as QuestionType, options: q.options.join("\n"), required: q.required, min: q.minValue ? String(q.minValue) : "", max: q.maxValue == null ? "" : String(q.maxValue), roleName: q.roleName ?? "", parentId: q.parentId ?? "", showIf: q.showIfValues ?? [], scope: q.displayScope === SCOPE_ROLES ? SCOPE_ROLES : SCOPE_EVENT, scopeRoles: q.displayRoleNames ?? [] } : EMPTY)
     requestAnimationFrame(() => document.getElementById(`${id}-label`)?.focus())
   }
 
@@ -74,21 +79,26 @@ export default function QuestionsEditor({ eventId, initialQuestions, roles = [] 
     }
     // A follow-up (#1016) needs at least one answer of its parent that shows it.
     if (draft.parentId && draft.showIf.length === 0) { editor.fail(VALUES_EMPTY, "showif", document.getElementById(`${id}-showif-0`)); return }
+    // Asked to some postes (#1140): at least one, unless it already had none left and stays so.
+    const stored = editing !== "new" ? questions.find((q) => q.id === editing) : undefined
+    const keptNobody = stored?.displayScope === SCOPE_ROLES && (stored.displayRoleNames ?? []).length === 0
+    if (!draft.parentId && draft.scope === SCOPE_ROLES && draft.scopeRoles.length === 0 && !keptNobody) { editor.fail(SCOPE_ROLES_EMPTY, "roles", document.getElementById(`${id}-scope-role-0`)); return }
     const isNew = editing === "new"
     const outcome = await editor.submit<Q & { _count: { answers: number } }>(() => fetch(isNew ? base : `${base}/${editing}`, {
       method: isNew ? "POST" : "PATCH",
       headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({ label: draft.label, type: draft.type, options, required: draft.required, minValue, maxValue, roleName: draft.roleName || null, parentId: draft.parentId || null, showIfValues: draft.parentId ? draft.showIf : [] }),
+      body: JSON.stringify({ label: draft.label, type: draft.type, options, required: draft.required, minValue, maxValue, roleName: draft.roleName || null, parentId: draft.parentId || null, showIfValues: draft.parentId ? draft.showIf : [], ...(draft.parentId ? {} : { displayScope: draft.scope, displayRoleNames: draft.scope === SCOPE_ROLES ? draft.scopeRoles : [] }) }),
     }), { fallback: "Impossible d'enregistrer la question.", silent: true })
     if (!outcome.ok) {
       // A refused poste marks and focuses its field; any other refusal is shown as before.
       if (outcome.error) {
-        const field = questionErrorField(outcome.error) ?? followUpErrorField(outcome.error)
-        editor.fail(outcome.error, field ?? undefined, field ? document.getElementById(field === "showif" ? `${id}-showif-0` : `${id}-${field}`) : undefined)
+        const field = questionErrorField(outcome.error) ?? followUpErrorField(outcome.error) ?? ([SCOPE_ROLES_EMPTY, SCOPE_ROLE_UNKNOWN].includes(outcome.error) ? "roles" : null)
+        const target = field === "showif" ? `${id}-showif-0` : field === "roles" ? `${id}-scope-role-0` : `${id}-${field}`
+        editor.fail(outcome.error, field ?? undefined, field ? document.getElementById(target) : undefined)
       }
       return
     }
-    const saved = { id: outcome.data.id, label: outcome.data.label, type: outcome.data.type, options: outcome.data.options, required: outcome.data.required, minValue: outcome.data.minValue ?? null, maxValue: outcome.data.maxValue ?? null, roleName: outcome.data.roleName ?? null, parentId: outcome.data.parentId ?? null, showIfValues: outcome.data.showIfValues ?? [], answers: outcome.data._count.answers }
+    const saved = { id: outcome.data.id, label: outcome.data.label, type: outcome.data.type, options: outcome.data.options, required: outcome.data.required, minValue: outcome.data.minValue ?? null, maxValue: outcome.data.maxValue ?? null, roleName: outcome.data.roleName ?? null, parentId: outcome.data.parentId ?? null, showIfValues: outcome.data.showIfValues ?? [], displayScope: outcome.data.displayScope ?? SCOPE_EVENT, displayRoleNames: outcome.data.displayRoleNames ?? [], answers: outcome.data._count.answers }
     // A follow-up takes its place right after its parent, as the server put it.
     const before = isNew ? null : questions.find((q) => q.id === saved.id)
     setQuestions((prev) => formOrder(isNew ? [...prev, saved] : prev.map((q) => (q.id === saved.id ? saved : q))))
@@ -145,6 +155,11 @@ export default function QuestionsEditor({ eventId, initialQuestions, roles = [] 
   const parentLocked = answered > 0 && !current?.parentId
   const chosenParent = questions.find((q) => q.id === draft.parentId)
   const followUpsOf = (q: Q) => questions.filter((x) => x.parentId === q.id)
+  // Who is asked (#1140): the event's postes, plus the ticked ones without shifts any more.
+  const scopeChoices = scopeRoleChoices(roles.map((r) => r.roleName), draft.scopeRoles)
+  const storedNobody = current?.displayScope === SCOPE_ROLES && (current.displayRoleNames ?? []).length === 0
+  const showNobody = storedNobody && draft.scope === SCOPE_ROLES && draft.scopeRoles.length === 0
+  const clearScopeError = () => { if (editor.invalidField === "roles") editor.reset() }
   const describedBy = (field: string, extra: string) => [extra, editor.invalidField === field ? `${id}-editor-error` : null].filter(Boolean).join(" ") || undefined
 
   /** One question of the list: its label, its details, and its actions. */
@@ -164,6 +179,7 @@ export default function QuestionsEditor({ eventId, initialQuestions, roles = [] 
             {q.roleName ? ` · ${questionRoleText(q.roleName)}` : ""}
           </p>
           {condition && <p className="text-xs text-gray-700 break-words">Question de suivi · {condition}</p>}
+          {!q.parentId && scopeText(q) && <p className="text-xs text-gray-700 break-words">{scopeText(q)}</p>}
         </div>
         <div className="flex flex-wrap gap-2 flex-shrink-0 justify-end">
           <button type="button" data-move="up" data-q={q.id} onClick={(e) => void move(q, -1, e.currentTarget)} aria-disabled={!up || undefined} className={`text-xs font-medium text-gray-700 hover:text-gray-900 rounded px-1 py-1 min-h-6 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-blue-600 ${!up ? "opacity-50 cursor-not-allowed" : ""}`}>
@@ -297,11 +313,17 @@ export default function QuestionsEditor({ eventId, initialQuestions, roles = [] 
                   disabled={parentLocked}
                   onChange={(e) => {
                     if (editor.invalidField === "parent" || editor.invalidField === "showif") editor.reset()
-                    // Another parent has other answers: none ticked until chosen again.
-                    setDraft((d) => ({ ...d, parentId: e.target.value, showIf: [] }))
+                    clearScopeError()
+                    // Another parent has other answers: none ticked until chosen again. Back to
+                    // « Toujours », it keeps the audience it had: its former parent's (#1140).
+                    const next = e.target.value
+                    setDraft((d) => {
+                      const from = !next && d.parentId ? detachedScope(questions.find((q) => q.id === d.parentId)) : null
+                      return { ...d, parentId: next, showIf: [], ...(from ? { scope: from.displayScope, scopeRoles: from.displayRoleNames } : {}) }
+                    })
                   }}
                   aria-invalid={editor.isInvalid("parent")}
-                  aria-describedby={describedBy("parent", parentLocked ? `${id}-parent-locked` : `${id}-parent-hint`)}
+                  aria-describedby={describedBy("parent", [parentLocked ? `${id}-parent-locked` : `${id}-parent-hint`, chosenParent ? `${id}-scope-inherited` : null].filter(Boolean).join(" "))}
                   className="input"
                 >
                   <option value="">{ALWAYS_LABEL}</option>
@@ -333,6 +355,55 @@ export default function QuestionsEditor({ eventId, initialQuestions, roles = [] 
                 </fieldset>
               )}
             </div>
+          )}
+          {chosenParent ? (
+            <p id={`${id}-scope-inherited`} className="text-xs text-gray-600">{inheritedScopeText(chosenParent)}</p>
+          ) : scopeChoices.length === 0 ? (
+            <p className="text-xs text-gray-600">{SCOPE_NO_ROLES_HINT}</p>
+          ) : (
+            <fieldset>
+              <legend className="block text-sm font-medium text-gray-800 mb-1">{SCOPE_LEGEND}</legend>
+              <div className="flex flex-wrap gap-x-4 gap-y-2">
+                {([[SCOPE_EVENT, SCOPE_EVENT_LABEL], [SCOPE_ROLES, SCOPE_ROLES_LABEL]] as const).map(([value, label]) => (
+                  <label key={value} htmlFor={`${id}-scope-${value}`} className="flex items-center gap-2 text-sm text-gray-800 min-h-8">
+                    <input
+                      id={`${id}-scope-${value}`}
+                      type="radio"
+                      name={`${id}-scope`}
+                      value={value}
+                      checked={draft.scope === value}
+                      onChange={() => { clearScopeError(); setDraft((d) => ({ ...d, scope: value })) }}
+                      aria-describedby={[`${id}-scope-hint`, value === SCOPE_ROLES && showNobody ? `${id}-scope-nobody` : null].filter(Boolean).join(" ")}
+                      className="h-4 w-4 border-gray-500"
+                    />
+                    {label}
+                  </label>
+                ))}
+              </div>
+              <p id={`${id}-scope-hint`} className="text-xs text-gray-600 mt-1">{SCOPE_HINT}</p>
+              {draft.scope === SCOPE_ROLES && (
+                <fieldset className="mt-3">
+                  <legend className="block text-sm font-medium text-gray-800 mb-1">{SCOPE_ROLES_LEGEND}<RequiredMark />{" "}<span className="text-gray-600 font-normal">(un ou plusieurs)</span></legend>
+                  {showNobody && <p id={`${id}-scope-nobody`} className="text-xs text-gray-800 mb-2">{SCOPE_NOBODY}</p>}
+                  <div className="grid gap-x-4 gap-y-1 sm:grid-cols-2 lg:grid-cols-3">
+                    {scopeChoices.map((c, i) => (
+                      <label key={c.value} htmlFor={`${id}-scope-role-${i}`} className="flex items-center gap-2 text-sm text-gray-800 min-h-8 break-words">
+                        <input
+                          id={`${id}-scope-role-${i}`}
+                          type="checkbox"
+                          checked={draft.scopeRoles.includes(c.value)}
+                          onChange={(e) => { clearScopeError(); setDraft((d) => ({ ...d, scopeRoles: e.target.checked ? [...d.scopeRoles, c.value] : d.scopeRoles.filter((r) => r !== c.value) })) }}
+                          aria-invalid={editor.isInvalid("roles")}
+                          aria-describedby={editor.invalidField === "roles" ? `${id}-editor-error` : undefined}
+                          className="h-4 w-4 rounded border-gray-500 flex-shrink-0"
+                        />
+                        {c.label}
+                      </label>
+                    ))}
+                  </div>
+                </fieldset>
+              )}
+            </fieldset>
           )}
           {roleOptions.length > 1 ? (
             <div>

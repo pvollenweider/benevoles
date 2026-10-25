@@ -79,6 +79,8 @@ const FIELD_LABELS: Record<string, string> = {
   answer: "réponse",
   // A follow-up question's condition (#1016): « Si « Oui » à « … » », or none.
   condition: "affichée seulement",
+  // Who a question is asked to (#1140): « tous les bénévoles », or the postes.
+  displayScope: "posée à",
 }
 
 /**

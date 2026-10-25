@@ -12,6 +12,7 @@ import { liveRoleNames } from "@/lib/question-role-data"
 import { conditionText } from "@/lib/event-questions"
 import { followUpProblem, normalisedShowIf, parentEditProblem } from "@/lib/question-follow-up"
 import { activeQuestions, normalisePositions } from "@/lib/question-follow-up-data"
+import { SCOPE_EVENT, detachedScope, scopeLogText, scopeProblem } from "@/lib/question-scope"
 
 type Params = { params: Promise<{ id: string; questionId: string }> }
 
@@ -21,7 +22,9 @@ async function load(guard: Guard, id: string, questionId: string) {
   return guard.db.eventQuestion.findFirst({
     where: { id: questionId, eventId: id, archivedAt: null },
     select: {
-      id: true, label: true, type: true, options: true, required: true, minValue: true, maxValue: true, roleName: true, parentId: true, showIfValues: true,
+      id: true, label: true, type: true, options: true, required: true, minValue: true, maxValue: true, roleName: true, parentId: true, showIfValues: true, displayScope: true, displayRoleNames: true,
+      // The parent's scope (#1140): what a follow-up detached from it starts from.
+      parent: { select: { displayScope: true, displayRoleNames: true } },
       answers: { select: { values: true } },
       // Its active follow-ups (#1016): what an edit must keep, what a removal carries along.
       followUps: { where: { archivedAt: null }, select: { id: true, label: true, showIfValues: true, _count: { select: { answers: true } } } },
@@ -53,7 +56,8 @@ export async function PATCH(req: Request, { params }: Params) {
 
   // A poste of this very event (#984, part 3); the one it already has stays allowed unchanged.
   const { roleName } = parsed.data
-  const roleProblem = roleName && roleName !== existing.roleName ? questionRoleProblem(roleName, await liveRoleNames(guard.db, id), existing.roleName) : null
+  const live = (roleName && roleName !== existing.roleName) || parsed.data.displayRoleNames?.length ? await liveRoleNames(guard.db, id) : []
+  const roleProblem = roleName && roleName !== existing.roleName ? questionRoleProblem(roleName, live, existing.roleName) : null
   if (roleProblem) return NextResponse.json({ error: roleProblem, field: "roleName" }, { status: 400 })
 
   // A parent keeps what its follow-ups' conditions use (#1016).
@@ -75,7 +79,21 @@ export async function PATCH(req: Request, { params }: Params) {
     if (parent) data.showIfValues = normalisedShowIf(parent, data.showIfValues ?? [])
   }
 
-  const select = { id: true, label: true, type: true, options: true, required: true, minValue: true, maxValue: true, roleName: true, parentId: true, showIfValues: true, position: true, _count: { select: { answers: true } } } as const
+  // Who is asked (#1140). A follow-up follows its parent's scope and stores none; one detached from
+  // its parent without a scope sent keeps the audience it had, its former parent's; otherwise the
+  // postes must be this event's (or ones it already had), at least one.
+  const parentAfter = data.parentId !== undefined ? data.parentId : (existing.parentId ?? null)
+  if (parentAfter) {
+    data.displayScope = SCOPE_EVENT
+    data.displayRoleNames = []
+  } else if (existing.parentId && data.displayScope === undefined) {
+    Object.assign(data, detachedScope(existing.parent ?? undefined))
+  } else if (data.displayScope !== undefined) {
+    const problem = scopeProblem({ displayScope: data.displayScope, displayRoleNames: data.displayRoleNames ?? [] }, live, existing)
+    if (problem) return NextResponse.json({ error: problem, field: "displayScope" }, { status: 400 })
+  }
+
+  const select = { id: true, label: true, type: true, options: true, required: true, minValue: true, maxValue: true, roleName: true, parentId: true, showIfValues: true, displayScope: true, displayRoleNames: true, position: true, _count: { select: { answers: true } } } as const
   let question = await guard.db.eventQuestion.update({ where: { id: questionId }, data, select })
   const parentChanged = data.parentId !== undefined && (existing.parentId ?? null) !== (question.parentId ?? null)
   if (parentChanged && question.parentId) {
@@ -84,6 +102,9 @@ export async function PATCH(req: Request, { params }: Params) {
     question = (await guard.db.eventQuestion.findFirst({ where: { id: questionId, eventId: id }, select })) ?? question
   }
   const roleChanged = (existing.roleName ?? null) !== (question.roleName ?? null)
+  // A follow-up's own scope is not its audience (its parent's is): only said for a question without one.
+  const scopeBefore = existing.parentId ? scopeLogText(existing.parent ?? {}) : scopeLogText(existing)
+  const scopeAfter = question.parentId ? scopeBefore : scopeLogText(question)
   const before = await conditionOf(guard, id, existing.parentId, existing.showIfValues)
   const after = await conditionOf(guard, id, question.parentId, question.showIfValues)
   await logEvent({
@@ -92,6 +113,7 @@ export async function PATCH(req: Request, { params }: Params) {
       label: { from: existing.label, to: question.label },
       ...(roleChanged ? { roleName: { from: existing.roleName ?? null, to: question.roleName ?? null } } : {}),
       ...(before !== after ? { condition: { from: before, to: after } } : {}),
+      ...(scopeBefore !== scopeAfter ? { displayScope: { from: scopeBefore, to: scopeAfter } } : {}),
     },
   })
   return NextResponse.json(question)

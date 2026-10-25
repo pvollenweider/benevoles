@@ -1,5 +1,5 @@
 import { describe, it, expect } from "vitest"
-import { answerSummary, answerSummaryCsv, countedPeople, numberNote, rowLabel, stateAt, textKey, type SummaryQuestion } from "../question-answer-summary"
+import { answerSummary, answerSummaryCsv, countedPeople, numberNote, rowLabel, scopeLine, stateAt, textKey, type SummaryQuestion } from "../question-answer-summary"
 
 const sizes: SummaryQuestion = {
   id: "q1", label: "Taille de t-shirt", type: "single", options: ["S", "M", "L"],
@@ -141,3 +141,41 @@ describe("answerSummary (#686)", () => {
     expect(stateAt(new Date("2026-01-05T08:05:00Z"), "UTC")).toBe("État au 5 janvier 2026 à 8h05")
   })
 })
+
+describe("questions asked to some postes (#1140)", () => {
+  const regs = [
+    { volunteerId: "alice", status: "active", shift: { roleName: "Bar" } },
+    { volunteerId: "bob", status: "active", shift: { roleName: "Accueil" } },
+    { volunteerId: "bob", status: "waiting", shift: { roleName: "Bar" } }, // confirmed elsewhere, waiting for the bar
+    { volunteerId: "carla", status: "active", shift: { roleName: "Parking" } }, // left the bar, answer kept
+  ]
+  const cash: SummaryQuestion = {
+    id: "cash", label: "Caisse ?", type: "yesno", options: [], displayScope: "roles", displayRoleNames: ["Bar"],
+    answers: [{ volunteerId: "alice", values: ["Oui"] }, { volunteerId: "carla", values: ["Non"] }],
+  }
+
+  it("counts only the people on the postes, classified by those registrations; a kept answer of someone who left is not counted", () => {
+    const s = answerSummary([cash], regs)
+    expect(s.confirmedCount).toBe(3)
+    expect(rows(s.questions[0])).toEqual(["Oui:1/0", "Non:0/0", "Sans réponse:0/1"])
+    expect(s.questions[0].scope).toEqual({ roles: ["Bar"], confirmed: 1, waiting: 1 })
+  })
+
+  it("a follow-up counts within its parent's scope and condition; a whole-event question is unchanged", () => {
+    const more: SummaryQuestion = { id: "more", label: "Combien d'heures ?", type: "number", options: [], parentId: "cash", showIfValues: ["Oui"], answers: [{ volunteerId: "alice", values: ["3"] }] }
+    const all: SummaryQuestion = { id: "all", label: "Taille", type: "single", options: ["S"], answers: [] }
+    const s = answerSummary([cash, more, all], regs)
+    expect(s.questions[1].condition).toMatchObject({ confirmed: 1, waiting: 0 })
+    expect(s.questions[1].scope).toBeUndefined()
+    expect(s.questions[2].scope).toBeUndefined()
+    expect(rows(s.questions[2])).toEqual(["S:0/0", "Sans réponse:3/0"])
+  })
+
+  it("says whom it was asked to, in the page and the CSV", () => {
+    expect(scopeLine({ roles: ["Bar", "Cuisine"], confirmed: 3, waiting: 1 }, true)).toBe("Posée seulement pour Bar, Cuisine. 3 bénévoles confirmés concernés, 1 en attente.")
+    expect(scopeLine({ roles: ["Bar"], confirmed: 1, waiting: 0 }, false)).toBe("Posée seulement pour Bar. 1 bénévole confirmé concerné.")
+    expect(scopeLine({ roles: [], confirmed: 0, waiting: 0 }, false)).toMatch(/^Posée à personne/)
+    expect(answerSummaryCsv(answerSummary([cash], regs))).toContain("Caisse ? (postes : Bar)")
+  })
+})
+

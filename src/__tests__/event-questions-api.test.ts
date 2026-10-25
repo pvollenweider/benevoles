@@ -220,6 +220,42 @@ describe("questions admin API", () => {
     expect(d.eventQuestion.update.mock.calls[0][0].data).toMatchObject({ minValue: 1, maxValue: 20 })
   })
 
+  it("asks a question to some postes of this event only, at least one, logged (#1140)", async () => {
+    const d = db({ create: vi.fn(async ({ data }: { data: Record<string, unknown> }) => ({ ...q, ...data })) })
+    guard.mockResolvedValue({ db: d, session: {} })
+    const { POST } = await import("@/app/api/admin/events/[id]/questions/route")
+    const ok = await POST(json("POST", { label: "Caisse ?", type: "yesno", displayScope: "roles", displayRoleNames: ["Bar", "Bar"] }), params)
+    expect(ok.status).toBe(201)
+    expect(d.eventQuestion.create.mock.calls[0][0].data).toMatchObject({ displayScope: "roles", displayRoleNames: ["Bar"] })
+    expect(logEvent.mock.calls[0][0].changes.displayScope).toEqual({ from: null, to: "Bar" })
+    const other = await POST(json("POST", { label: "X", type: "text", displayScope: "roles", displayRoleNames: ["Parking d'un autre événement"] }), params)
+    expect(other.status).toBe(400)
+    expect((await other.json()).field).toBe("displayScope")
+    expect((await POST(json("POST", { label: "X", type: "text", displayScope: "roles", displayRoleNames: [] }), params)).status).toBe(400)
+    expect(d.eventQuestion.create).toHaveBeenCalledTimes(1)
+  })
+
+  it("a follow-up stores no scope of its own (it follows its parent's); detached, it keeps its former parent's (#1140)", async () => {
+    const active = [{ id: "meal", label: "Repas ?", type: "yesno", options: [], parentId: null, showIfValues: [], position: 0, displayScope: "roles", displayRoleNames: ["Cuisine"] }]
+    const followUp = { ...q, id: "q1", type: "number", options: [], parentId: "meal", showIfValues: ["Oui"], displayScope: "event", displayRoleNames: [], parent: { displayScope: "roles", displayRoleNames: ["Cuisine"] }, answers: [], followUps: [] }
+    const d = db({ findMany: vi.fn().mockResolvedValue(active), findFirst: vi.fn().mockResolvedValue(followUp), update: vi.fn(async ({ data }: { data: Record<string, unknown> }) => ({ ...followUp, ...data })) })
+    guard.mockResolvedValue({ db: d, session: {} })
+    const { PATCH } = await import("@/app/api/admin/events/[id]/questions/[questionId]/route")
+    await PATCH(json("PATCH", { label: "Combien ?", type: "number", parentId: "meal", showIfValues: ["Oui"], displayScope: "roles", displayRoleNames: ["Bar"] }), params)
+    expect(d.eventQuestion.update.mock.calls[0][0].data).toMatchObject({ displayScope: "event", displayRoleNames: [] })
+    await PATCH(json("PATCH", { label: "Combien ?", type: "number", parentId: null }), params)
+    expect(d.eventQuestion.update.mock.calls[1][0].data).toMatchObject({ parentId: null, displayScope: "roles", displayRoleNames: ["Cuisine"] })
+  })
+
+  it("an edit keeps a scope whose postes are all gone, asked to nobody, but can't empty a live one (#1140)", async () => {
+    const nobody = { ...q, displayScope: "roles", displayRoleNames: [], parentId: null, answers: [], followUps: [] }
+    guard.mockResolvedValue({ db: db({ findFirst: vi.fn().mockResolvedValue(nobody) }), session: {} })
+    const { PATCH } = await import("@/app/api/admin/events/[id]/questions/[questionId]/route")
+    expect((await PATCH(json("PATCH", { label: "Taille", type: "single", options: ["S", "M"], displayScope: "roles", displayRoleNames: [] }), params)).status).toBe(200)
+    guard.mockResolvedValue({ db: db({ findFirst: vi.fn().mockResolvedValue({ ...nobody, displayRoleNames: ["Bar"] }) }), session: {} })
+    expect((await PATCH(json("PATCH", { label: "Taille", type: "single", options: ["S", "M"], displayScope: "roles", displayRoleNames: [] }), params)).status).toBe(400)
+  })
+
   it("reorders only with the full current list", async () => {
     const d = db()
     guard.mockResolvedValue({ db: d, session: {} })

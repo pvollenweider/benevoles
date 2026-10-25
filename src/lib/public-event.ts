@@ -30,7 +30,8 @@ export const publicEventInclude = {
     where: { archivedAt: null },
     orderBy: { position: "asc" },
     // A follow-up (#1016) carries its parent and the answers that show it: the page hides it otherwise.
-    select: { id: true, label: true, type: true, options: true, required: true, minValue: true, maxValue: true, parentId: true, showIfValues: true },
+    // Its scope (#1140): the page asks it only when a chosen shift is on one of its postes.
+    select: { id: true, label: true, type: true, options: true, required: true, minValue: true, maxValue: true, parentId: true, showIfValues: true, displayScope: true, displayRoleNames: true },
   },
 } satisfies Prisma.EventInclude
 
