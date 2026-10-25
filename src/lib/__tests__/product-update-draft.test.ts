@@ -108,6 +108,11 @@ describe("productUpdateDraft", () => {
     expect(draft.content).toMatch(/La suite de cette version n'est pas reprise ici, tout est sur la page \[Nouveautés de la version 2\.0\.0\]\(https:\/\/www\.benevol\.app\/nouveautes#2\.0\.0\)\.$/)
   })
 
+  it("keeps the subject within the routes' limit with a long instance name", () => {
+    const draft = productUpdateDraft(releases, "1.2.0", { ...OPTIONS, siteName: "x".repeat(140) })!
+    expect(draft.subject).toBe("Nouveautés de la version 1.2.0")
+  })
+
   it("keeps every version of the real CHANGELOG.md within the routes' limit", () => {
     const real = parseChangelog(fs.readFileSync(path.join(process.cwd(), "CHANGELOG.md"), "utf-8"))
     const drafts = productUpdateDrafts(real, OPTIONS)
@@ -130,6 +135,18 @@ describe("draft helpers", () => {
     expect(absoluteLinks("[a](/doc) [b](#2.0.0) [c](https://e.test/x) [d](mailto:a@b.c) [e](//cdn.test/x)", "https://s.test")).toBe(
       "[a](https://s.test/doc) [b](https://s.test/nouveautes#2.0.0) [c](https://e.test/x) [d](mailto:a@b.c) [e](//cdn.test/x)",
     )
+  })
+
+  it("resolves angle-bracket destinations and reference definitions too", () => {
+    expect(absoluteLinks("[a](</doc/admin>) [b][g] [c][h]\n\n[g]: /doc/admin\n  [h]: <#2.0.0>\n[i]: https://e.test", "https://s.test")).toBe(
+      "[a](<https://s.test/doc/admin>) [b][g] [c][h]\n\n[g]: https://s.test/doc/admin\n  [h]: <https://s.test/nouveautes#2.0.0>\n[i]: https://e.test",
+    )
+  })
+
+  it("never cuts a paragraph or a bullet whose next line continues at the margin", () => {
+    expect(fitBlocks("First line\ncontinuation longer than the budget", 12)).toEqual({ markdown: "", truncated: true })
+    expect(fitBlocks("- un\n- deux\nsuite de deux, longue", 12)).toEqual({ markdown: "- un", truncated: true })
+    expect(fitBlocks("#### Titre\nUn paragraphe trop long", 12)).toEqual({ markdown: "", truncated: true })
   })
 
   it("never leaves a heading alone at the end of a shortened text", () => {

@@ -20,6 +20,8 @@ import { linkSourcesToRoutes } from "@/lib/doc-pages"
 
 /** The longest content the product update routes accept (their zod schemas). */
 export const PRODUCT_UPDATE_CONTENT_MAX = 10000
+/** The longest subject they accept. */
+export const PRODUCT_UPDATE_SUBJECT_MAX = 150
 
 /** The section a version's email starts from when the version has one. */
 export const SUMMARY_SECTION = "En bref"
@@ -44,25 +46,34 @@ export function releasePageUrl(baseUrl: string, version: string): string {
 
 /**
  * A Markdown link resolved for an email: a site path gets the base URL, an anchor alone points
- * to /nouveautes (where the version anchors live). Full URLs and email addresses stay as they are.
+ * to /nouveautes (where the version anchors live). Inline links (`](/x)`, `](</x>)`) and
+ * reference definitions (`[x]: /x`) alike; full URLs and email addresses stay as they are.
  */
 export function absoluteLinks(markdown: string, baseUrl: string): string {
+  // The start of a destination: `](`, `](<`, or a reference definition's `[label]: ` (`<` optional).
   return markdown
-    .replace(/\]\(\/(?!\/)/g, `](${baseUrl}/`)
-    .replace(/\]\(#/g, `](${baseUrl}/nouveautes#`)
+    .replace(/(\]\(<?|^ {0,3}\[[^\]\n]+\]:[ \t]*<?)\/(?!\/)/gm, (_m, start: string) => `${start}${baseUrl}/`)
+    .replace(/(\]\(<?|^ {0,3}\[[^\]\n]+\]:[ \t]*<?)#/gm, (_m, start: string) => `${start}${baseUrl}/nouveautes#`)
 }
 
 /**
- * The top-level blocks of a Markdown text, in order: a block starts at a line at the margin
- * (a bullet, a paragraph, a heading) and keeps the indented and blank lines that follow it, so
- * joining them with "\n" gives the text back.
+ * The top-level blocks of a Markdown text, in order: a block starts at a bullet or a heading at
+ * the margin, or at a line at the margin after a blank line or a heading (a new paragraph). It keeps what
+ * follows until then: indented sub-items, blank lines, and the lines of the same paragraph or
+ * bullet that continue at the margin. Joining the blocks with "\n" gives the text back.
  */
 function topLevelBlocks(markdown: string): string[][] {
   const blocks: string[][] = []
+  // Whether the previous line ends a block: a blank line, or a heading (always a single line).
+  let previousEnds = true
   for (const line of markdown.split("\n")) {
-    const atMargin = line.length > 0 && !/^\s/.test(line)
-    if (atMargin || blocks.length === 0) blocks.push([line])
+    const blank = line.trim() === ""
+    const heading = /^#{1,6}\s/.test(line)
+    const atMargin = !blank && !/^\s/.test(line)
+    const starts = atMargin && (previousEnds || heading || /^([-*+] |\d+[.)] )/.test(line))
+    if (starts || blocks.length === 0) blocks.push([line])
     else blocks[blocks.length - 1].push(line)
+    previousEnds = blank || heading
   }
   return blocks
 }
@@ -107,7 +118,11 @@ export function productUpdateDraft(releases: readonly ChangelogRelease[], versio
   const fitted = fitBlocks(linked, Math.max(0, budget))
   const content = [opening, fitted.markdown, closing(fitted.truncated)].filter(Boolean).join("\n\n")
 
-  return { version: release.version, date: release.date, dateLabel: date, subject: `Nouveautés de ${siteName}, version ${release.version}`, content }
+  // A long instance name (SITE_NAME) would make the subject too long for the routes: then without it.
+  const named = `Nouveautés de ${siteName}, version ${release.version}`
+  const subject = named.length <= PRODUCT_UPDATE_SUBJECT_MAX ? named : `Nouveautés de la version ${release.version}`
+
+  return { version: release.version, date: release.date, dateLabel: date, subject, content }
 }
 
 /** One draft per released version, newest first, as the product updates screen offers them. */
