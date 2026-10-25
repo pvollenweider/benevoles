@@ -8,26 +8,41 @@ import { flushSync } from "react-dom"
 import { requestJson } from "@/lib/use-submit"
 import { COLOR_OPTIONS } from "@/lib/roles"
 import { parseTagList } from "@/lib/role-reservation"
+import { ASSIGNED_ONLY_HELP } from "@/lib/role-assignment"
 import type { RawShift } from "./types"
 
-// The inline editors of one role in the « Gérer les postes » panel: tags reserving it (#470),
+// The inline editors of one role in the « Gérer les postes » panel: its access, tags reserving it
+// (#470) or assigned by the organisation only (#1145),
 // shifts per volunteer (#466) and colour. Each sends its own PATCH; which editor is open, the typed
 // values, the busy role and the panel's error stay in RoleManagerPanel, which renders them.
 
 type SetShifts = React.Dispatch<React.SetStateAction<RawShift[]>>
 
+/** Announced once a role's « Accès » is saved (#470, #1145). */
+export function accessAnnouncement(role: string, assignedOnly: boolean, tags: string[], dropped = 0): string {
+  if (assignedOnly) return `Poste « ${role} » : attribué par l'organisation uniquement.`
+  if (tags.length === 0) return `Poste « ${role} » : ouvert à tous.`
+  return `Poste « ${role} » : réservé aux membres avec l'étiquette ${tags.join(" ou ")}.`
+    + (dropped > 0 ? ` ${dropped} étiquette${dropped > 1 ? "s" : ""} ignorée${dropped > 1 ? "s" : ""} (doublons, ou 10 au maximum).` : "")
+}
+
 export function RoleReserveForm({
-  eventId, autoFocus = true, role, index, reservedTags, value, onValueChange, busyRole, onBusyRoleChange, onActionError, onClose, setShifts, onAnnounce,
+  eventId, autoFocus = true, role, index, reservedTags, assignedOnly, value, onValueChange, assignedOnlyValue, onAssignedOnlyChange, busyRole, onBusyRoleChange, onActionError, onClose, setShifts, onAnnounce,
 }: {
   eventId:          string
-  /** Focus the input on mount; false when the panel is reopened with this editor still open. */
+  /** Focus the first control on mount; false when the panel is reopened with this editor still open. */
   autoFocus?:       boolean
   role:             string
   /** Position of the role in the panel, for the ids. */
   index:            number
   reservedTags:     string[]
+  /** The role's saved « Attribué par l'organisation uniquement » (#1145). */
+  assignedOnly:     boolean
   value:            string
   onValueChange:    (value: string) => void
+  /** The checkbox, kept by the panel while it is closed, like the typed tags. */
+  assignedOnlyValue: boolean
+  onAssignedOnlyChange: (value: boolean) => void
   /** The role an action is running on, if any: a save waits for it. */
   busyRole:         string | null
   onBusyRoleChange: (role: string | null) => void
@@ -40,61 +55,90 @@ export function RoleReserveForm({
   const i = index
   const isBusy = busyRole === role
 
-  async function saveReserve(role: string, tags: string[]) {
+  // Assigned by the organisation only (#1145) leaves the tags as they are: they apply again once
+  // the option is removed. Otherwise the tags typed, [] opening the role to everyone.
+  async function saveReserve(role: string, nextAssignedOnly: boolean, tags: string[]) {
     if (busyRole) return
+    const tagsChanged = !nextAssignedOnly && tags.join("|") !== reservedTags.join("|")
+    if (nextAssignedOnly === assignedOnly && (nextAssignedOnly || !tagsChanged)) {
+      onClose(role)
+      onAnnounce(`Poste « ${role} » : aucune modification.`)
+      return
+    }
     onActionError(null)
     onBusyRoleChange(role)
+    const body = nextAssignedOnly ? { assignedOnly: true } : { assignedOnly: false, reservedTags: tags }
     const outcome = await requestJson(() => fetch(`/api/admin/events/${eventId}/roles/${encodeURIComponent(role)}`, {
       method: "PATCH",
       headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({ reservedTags: tags }),
+      body: JSON.stringify(body),
     }), "Erreur lors de l'enregistrement.")
     onBusyRoleChange(null)
     if (!outcome.ok) {
       onActionError(outcome.error)
       return
     }
-    setShifts(prev => prev.map(s => s.roleName === role ? { ...s, reservedTags: tags } : s))
+    setShifts(prev => prev.map(s => s.roleName === role ? { ...s, assignedOnly: nextAssignedOnly, ...(nextAssignedOnly ? {} : { reservedTags: tags }) } : s))
     onClose(role)
     const typed = value.split(/[,;]/).map((t) => t.trim()).filter(Boolean).length
-    const dropped = Math.max(0, typed - tags.length)
-    onAnnounce((tags.length === 0 ? `Poste « ${role} » : ouvert à tous.` : `Poste « ${role} » : réservé aux membres avec l'étiquette ${tags.join(" ou ")}.`) + (dropped > 0 && tags.length > 0 ? ` ${dropped} étiquette${dropped > 1 ? "s" : ""} ignorée${dropped > 1 ? "s" : ""} (doublons, ou 10 au maximum).` : ""))
+    onAnnounce(accessAnnouncement(role, nextAssignedOnly, tags, nextAssignedOnly || tags.length === 0 ? 0 : Math.max(0, typed - tags.length)))
   }
 
   return (
     <form
       id={`reserve-form-${i}`}
       noValidate
-      onSubmit={(e) => { e.preventDefault(); saveReserve(role, parseTagList(value)) }}
-      onKeyDown={(e) => { if (e.key === "Escape") { e.stopPropagation(); onClose(role) } }}
+      onSubmit={(e) => { e.preventDefault(); saveReserve(role, assignedOnlyValue, parseTagList(value)) }}
+      // Escape waits for a running save, whose success closes the form and moves focus itself.
+      onKeyDown={(e) => { if (e.key === "Escape") { e.stopPropagation(); if (!isBusy) onClose(role) } }}
       className="flex flex-wrap items-end gap-2 px-3 py-2.5 mt-1 rounded-xl border border-blue-100 bg-blue-50/50"
     >
-      <div className="flex-1 min-w-48">
-        <label htmlFor={`reserve-${i}`} className="block text-xs font-medium text-gray-700 mb-1">Étiquettes donnant accès au poste « {role} »</label>
+      <div className="basis-full min-h-6 flex items-center gap-2">
         <input
-          id={`reserve-${i}`}
-          type="text"
-          value={value}
+          id={`assigned-only-${i}`}
+          type="checkbox"
+          checked={assignedOnlyValue}
           autoFocus={autoFocus}
-          onChange={(e) => onValueChange(e.target.value)}
-          aria-describedby={`reserve-help-${i}`}
-          placeholder="ex. sécurité, secouriste"
-          className="input w-full py-1"
+          onChange={(e) => onAssignedOnlyChange(e.target.checked)}
+          aria-describedby={`assigned-only-help-${i}`}
+          className="w-4 h-4 flex-shrink-0"
         />
+        <label htmlFor={`assigned-only-${i}`} className="text-xs font-medium text-gray-700">Poste « {role} » attribué par l&apos;organisation uniquement</label>
       </div>
+      <p id={`assigned-only-help-${i}`} className="basis-full text-xs text-gray-600">{ASSIGNED_ONLY_HELP} Les étiquettes ne s&apos;appliquent pas tant que cette case est cochée.</p>
+      {/* The tags apply only to a role open to sign-up: unmounted, not just hidden, while the box is ticked. */}
+      {!assignedOnlyValue && (
+        <div className="flex-1 min-w-48">
+          <label htmlFor={`reserve-${i}`} className="block text-xs font-medium text-gray-700 mb-1">Étiquettes donnant accès au poste « {role} »</label>
+          <input
+            id={`reserve-${i}`}
+            type="text"
+            value={value}
+            onChange={(e) => onValueChange(e.target.value)}
+            aria-describedby={`reserve-help-${i}`}
+            placeholder="ex. sécurité, secouriste"
+            className="input w-full py-1"
+          />
+        </div>
+      )}
       <button type="submit" aria-disabled={isBusy || undefined} className={`text-xs text-blue-700 font-medium hover:text-blue-900 py-1.5 ${isBusy ? "opacity-60 cursor-wait" : ""}`}>
         {isBusy ? "Enregistrement…" : "Enregistrer"}
       </button>
-      {reservedTags.length > 0 && (
-        <button type="button" onClick={() => saveReserve(role, [])} aria-disabled={isBusy || undefined} className={`text-xs text-gray-700 hover:text-gray-900 py-1.5 ${isBusy ? "opacity-60 cursor-wait" : ""}`}>
+      {/* From the saved setting, never the draft: the button does not come and go under the hand. */}
+      {(reservedTags.length > 0 || assignedOnly) && (
+        <button type="button" onClick={() => saveReserve(role, false, [])} aria-disabled={isBusy || undefined} className={`text-xs text-gray-700 hover:text-gray-900 py-1.5 ${isBusy ? "opacity-60 cursor-wait" : ""}`}>
           Ouvrir à tous
         </button>
       )}
       <button type="button" onClick={() => onClose(role)} className="text-xs text-gray-600 hover:text-gray-900 py-1.5">Annuler</button>
-      <p id={`reserve-help-${i}`} className="basis-full text-xs text-gray-600">Séparées par des virgules, 10 au plus. Laissez vide pour ouvrir le poste à tous.</p>
-      <p className="basis-full text-xs text-gray-600">
-        Seuls les membres portant l&apos;une de ces étiquettes peuvent le prendre, et seulement avec le lien d&apos;invitation reçu par email : sans ce lien, la page publique affiche le poste comme « Réservé ». Les étiquettes ne sont jamais montrées aux bénévoles. Vous pouvez toujours ajouter quelqu&apos;un à la main.
-      </p>
+      {!assignedOnlyValue && (
+        <>
+          <p id={`reserve-help-${i}`} className="basis-full text-xs text-gray-600">Séparées par des virgules, 10 au plus. Laissez vide pour ouvrir le poste à tous.</p>
+          <p className="basis-full text-xs text-gray-600">
+            Seuls les membres portant l&apos;une de ces étiquettes peuvent le prendre, et seulement avec le lien d&apos;invitation reçu par email : sans ce lien, la page publique affiche le poste comme « Réservé ». Les étiquettes ne sont jamais montrées aux bénévoles. Vous pouvez toujours ajouter quelqu&apos;un à la main.
+          </p>
+        </>
+      )}
     </form>
   )
 }

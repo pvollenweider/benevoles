@@ -2,6 +2,7 @@
 // SPDX-License-Identifier: AGPL-3.0-only
 
 import { prisma } from "./prisma"
+import { rosterShifts } from "./role-assignment"
 import { buildShiftRoster, isRosterChoice, type RosterAudience, type ShiftRosterEntry, type StoredRosterChoice } from "./shift-roster"
 
 /**
@@ -15,7 +16,7 @@ export async function loadShiftRoster(input: { eventId: string; viewerId: string
     // Every shift of the event (owner decision: choose shifts by affinity), its public fields only.
     prisma.shift.findMany({
       where: { eventId, status: { not: "cancelled" } },
-      select: { id: true, label: true, date: true, startTime: true, endTime: true },
+      select: { id: true, label: true, date: true, startTime: true, endTime: true, roleName: true, assignedOnly: true },
       orderBy: [{ date: "asc" }, { startTime: "asc" }, { displayOrder: "asc" }],
     }),
     prisma.registration.findMany({
@@ -30,5 +31,9 @@ export async function loadShiftRoster(input: { eventId: string; viewerId: string
   const choices = new Map<string, StoredRosterChoice>(
     consents.filter((c) => isRosterChoice(c.status)).map((c) => [c.volunteerId, { status: c.status as StoredRosterChoice["status"], noticeVersion: c.noticeVersion }]),
   )
-  return buildShiftRoster({ viewerId, shifts, registrations, choices, audience, eventStart })
+  // A role assigned by the organisation only (#1145) stays out, but for the shifts the viewer is on.
+  const own = new Set(registrations.filter((r) => r.volunteerId === viewerId).map((r) => r.shiftId))
+  const visible = rosterShifts(shifts, own).map((s) => ({ id: s.id, label: s.label, date: s.date, startTime: s.startTime, endTime: s.endTime }))
+  const ids = new Set(visible.map((s) => s.id))
+  return buildShiftRoster({ viewerId, shifts: visible, registrations: registrations.filter((r) => ids.has(r.shiftId)), choices, audience, eventStart })
 }

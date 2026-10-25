@@ -10,6 +10,7 @@ import { requestJson } from "@/lib/use-submit"
 import { getRoleAccent } from "@/lib/roles"
 import { roleLimits } from "@/lib/role-limit"
 import { reservedRoles } from "@/lib/role-reservation"
+import { roleAssignedOnly } from "@/lib/role-assignment"
 import { roleOverlapAllowed } from "@/lib/shift-overlap"
 import { applyRoleOrder, moveItem, renameRole } from "@/lib/shifts-admin"
 import { focusFirstAvailable, isFocusDropped, type FocusCandidate } from "@/lib/focus-return"
@@ -73,6 +74,8 @@ export default function RoleManagerPanel({
   // Reserved roles (#470): the inline editor, like the limit's.
   const [reserveRole, setReserveRole] = useState<string | null>(null)
   const [reserveValue, setReserveValue] = useState("")
+  // « Attribué par l'organisation uniquement » (#1145), in the same editor: kept like the typed tags.
+  const [assignedOnlyValue, setAssignedOnlyValue] = useState(false)
   const reserveBtnRefs = useRef(new Map<string, HTMLButtonElement>())
   // « Cumulable avec un autre créneau » (#986): the inline editor, like the limit's.
   const [overlapRole, setOverlapRole] = useState<string | null>(null)
@@ -259,6 +262,11 @@ export default function RoleManagerPanel({
     setOverlapRole(null)
     setReserveRole(reserveRole === role ? null : role)
     setReserveValue(reservedTagsOf(role).join(", "))
+    setAssignedOnlyValue(assignedOnlyOf(role))
+  }
+
+  function assignedOnlyOf(role: string): boolean {
+    return roleAssignedOnly(shifts, role)
   }
 
   function overlapAllowedOf(role: string): boolean {
@@ -307,7 +315,7 @@ export default function RoleManagerPanel({
       <div>
         {/* Focused by code only, when the row whose button should get focus back is gone. */}
         <h2 ref={headingRef} tabIndex={-1} className="font-semibold text-gray-800 focus:outline-none">Gérer les postes</h2>
-        <p className="text-xs text-gray-500 mt-0.5">Réordonnez avec les flèches Monter et Descendre ou par glisser-déposer, puis enregistrez l&apos;ordre. Vous pouvez aussi renommer un poste, limiter le nombre de créneaux par personne, réserver un poste à certains membres, le rendre cumulable avec un autre créneau ou le supprimer (avec tous ses créneaux).</p>
+        <p className="text-xs text-gray-500 mt-0.5">Réordonnez avec les flèches Monter et Descendre ou par glisser-déposer, puis enregistrez l&apos;ordre. Vous pouvez aussi renommer un poste, limiter le nombre de créneaux par personne, réserver un poste à certains membres ou à l&apos;organisation, le rendre cumulable avec un autre créneau ou le supprimer (avec tous ses créneaux).</p>
       </div>
       {roleActionError && (
         <p role="alert" className="text-sm text-red-600 bg-red-50 rounded-lg px-3 py-2">{roleActionError}</p>
@@ -320,6 +328,7 @@ export default function RoleManagerPanel({
           const isPickingColor = colorPickerRole === role
           const limit = roleLimitOf(role)
           const reservedTags = reservedTagsOf(role)
+          const assignedOnly = assignedOnlyOf(role)
           const cumulable = overlapAllowedOf(role)
           return (
           <li key={role}>
@@ -429,11 +438,12 @@ export default function RoleManagerPanel({
                     disabled={isBusy}
                     aria-expanded={reserveRole === role}
                     aria-controls={reserveRole === role ? `reserve-form-${i}` : undefined}
-                    aria-label={reservedTags.length === 0 ? `Accès : tous, poste « ${role} »` : `Accès : ${reservedTags.join(", ")}, poste « ${role} » réservé`}
+                    // Assigned by the organisation only (#1145) wins over tags still stored.
+                    aria-label={assignedOnly ? `Accès : par l'organisation uniquement, poste « ${role} »` : reservedTags.length === 0 ? `Accès : tous, poste « ${role} »` : `Accès : ${reservedTags.join(", ")}, poste « ${role} » réservé`}
                     className="text-xs text-gray-600 hover:text-blue-600 disabled:opacity-50 text-left min-w-0 [overflow-wrap:anywhere]"
                   >
                     {/* A long list of tags wraps, whole (#606). */}
-                    {reservedTags.length === 0 ? "Accès : tous" : `Accès : ${reservedTags.join(", ")}`}
+                    {assignedOnly ? "Accès : par l'organisation" : reservedTags.length === 0 ? "Accès : tous" : `Accès : ${reservedTags.join(", ")}`}
                   </button>
                   <button
                     ref={(el) => setRoleButton(overlapBtnRefs.current, role, el)}
@@ -479,8 +489,11 @@ export default function RoleManagerPanel({
                 role={role}
                 index={i}
                 reservedTags={reservedTags}
+                assignedOnly={assignedOnly}
                 value={reserveValue}
                 onValueChange={setReserveValue}
+                assignedOnlyValue={assignedOnlyValue}
+                onAssignedOnlyChange={setAssignedOnlyValue}
                 busyRole={roleActionBusy}
                 onBusyRoleChange={setRoleActionBusy}
                 onActionError={setRoleActionError}

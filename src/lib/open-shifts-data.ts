@@ -4,6 +4,7 @@
 import type { OrgScopedPrisma } from "./prisma-org"
 import { LIVE_STATUSES } from "./registration-capacity"
 import { reservedRoles } from "./role-reservation"
+import { assignedOnlyRoles } from "./role-assignment"
 import { spokenStaffingState, staffingStateText, staffingSummary } from "./staffing"
 import type { EventShiftRef, InviteRef, LiveRegistration, OpenShift, PoolMember } from "./open-shifts"
 
@@ -23,7 +24,7 @@ export async function loadOpenShiftsContext(db: OrgScopedPrisma, eventId: string
         where: { status: { not: "cancelled" } },
         orderBy: [{ date: "asc" }, { startTime: "asc" }],
         select: {
-          id: true, roleName: true, label: true, date: true, startTime: true, endTime: true, capacity: true, minVolunteers: true, status: true, reservedTags: true, minAge: true, overlapAllowed: true,
+          id: true, roleName: true, label: true, date: true, startTime: true, endTime: true, capacity: true, minVolunteers: true, status: true, reservedTags: true, minAge: true, overlapAllowed: true, assignedOnly: true,
           registrations: { where: { status: { in: [...LIVE_STATUSES] } }, select: { volunteerId: true, status: true } },
         },
       },
@@ -58,8 +59,13 @@ export async function loadOpenShiftsContext(db: OrgScopedPrisma, eventId: string
   const overlapAllowedOf = new Map(event.shifts.map((s) => [s.id, s.overlapAllowed]))
   // Reserved roles (#470): one set of tags per role, whichever shift carries it.
   const reserved = reservedRoles(event.shifts)
+  // Roles assigned by the organisation only (#1145): never proposed to members, who could not take
+  // them; counted, so the page says where they went.
+  const assignedOnly = assignedOnlyRoles(event.shifts)
+  const assignedOnlyLeftOut = summary.underfilled.filter((s) => assignedOnly.has(s.roleName)).length
   // Underfilled shifts in time order: the order the email and the picker read best in.
   const openShifts: OpenShift[] = summary.underfilled
+    .filter((s) => !assignedOnly.has(s.roleName))
     .map((s) => ({ id: s.id, roleName: s.roleName, label: s.label, date: s.date, startTime: s.startTime, endTime: s.endTime, placesLeft: s.missing, reservedTags: reserved.get(s.roleName) ?? [], minAge: minAgeOf.get(s.id) ?? null, overlapAllowed: overlapAllowedOf.get(s.id) ?? false,
       // The state against the minimum (#949), for the organizer's list only: never in the email.
       staffingState: staffingStateText(s, s.state ?? "open"), spokenStaffingState: spokenStaffingState(s, s.state ?? "open") }))
@@ -74,5 +80,5 @@ export async function loadOpenShiftsContext(db: OrgScopedPrisma, eventId: string
   const inviteRefs: InviteRef[] = invites.map((i) => ({ volunteerId: i.volunteerId, declined: !!i.declinedAt }))
   const tags = [...new Set(volunteers.flatMap((v) => v.tags))].sort((a, b) => a.localeCompare(b, "fr"))
 
-  return { event, eventShifts, openShifts, members, registrations, invites: inviteRefs, tags, emails: new Map(volunteers.map((v) => [v.id, v.email])) }
+  return { event, eventShifts, openShifts, assignedOnlyLeftOut, members, registrations, invites: inviteRefs, tags, emails: new Map(volunteers.map((v) => [v.id, v.email])) }
 }

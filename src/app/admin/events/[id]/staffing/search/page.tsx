@@ -32,6 +32,16 @@ export default async function OpenShiftsSearchPage({ params, searchParams }: { p
   const asked = new Set(Array.isArray(q.shift) ? q.shift : q.shift ? [q.shift] : [])
   const initialShiftIds = data.openShifts.filter((s) => asked.has(s.id)).map((s) => s.id)
   const base = `/admin/events/${event.id}`
+  // Shifts of roles assigned by the organisation only (#1145), left out: where they went, with a way to act.
+  const leftOut = data.assignedOnlyLeftOut
+  const assignedOnlyNote = leftOut > 0 && (
+    <p role="note" className="text-sm text-gray-700">
+      {leftOut > 1
+        ? `${leftOut} créneaux de postes attribués par l'organisation ne sont pas proposés ici : `
+        : "1 créneau d'un poste attribué par l'organisation n'est pas proposé ici : "}
+      ajoutez les personnes à la main depuis les <Link href={`${base}/registrations`} className={linkClass}>inscriptions</Link>.
+    </p>
+  )
 
   return (
     <div className="space-y-6 max-w-3xl">
@@ -44,9 +54,17 @@ export default async function OpenShiftsSearchPage({ params, searchParams }: { p
       </div>
 
       {data.openShifts.length === 0 ? (
-        <p className="text-sm text-gray-700">Aucun créneau à compléter pour l&apos;instant : tous les créneaux ouverts sont complets.</p>
+        leftOut > 0 ? (
+          <>
+            <p className="text-sm text-gray-700">Aucun créneau à proposer ici.</p>
+            {assignedOnlyNote}
+          </>
+        ) : (
+          <p className="text-sm text-gray-700">Aucun créneau à compléter pour l&apos;instant : tous les créneaux ouverts sont complets.</p>
+        )
       ) : (
         <>
+          {assignedOnlyNote}
           {!acceptsRegistrations(event) && (
             <p role="note" className="text-sm text-amber-900 bg-amber-50 border border-amber-300 rounded-lg px-3 py-2 forced-colors:border-[CanvasText]">
               Les inscriptions ne sont pas ouvertes pour cet événement : vous pouvez préparer votre choix, mais l&apos;envoi sera refusé tant qu&apos;elles ne le sont pas.{" "}

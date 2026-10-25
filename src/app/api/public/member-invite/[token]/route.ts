@@ -10,6 +10,7 @@ import { rateLimit, getClientIp } from "@/lib/rate-limit"
 import { resolveOrgSlug } from "@/lib/resolve-org"
 import { linkToken } from "@/lib/token-vault"
 import { allowedReservedRoles, reservedRoles } from "@/lib/role-reservation"
+import { publicShifts } from "@/lib/role-assignment"
 
 /** One answer for every refusal: an unknown, revoked or foreign invitation looks the same (#541). */
 const invalid = () => NextResponse.json({ error: "Lien invalide" }, { status: 404 })
@@ -49,7 +50,7 @@ export async function GET(
           tags: true,
         },
       },
-      event: { select: { slug: true, organizationId: true, organization: { select: ORG_LIFECYCLE_SELECT }, shifts: { where: { status: { not: "cancelled" } }, select: { roleName: true, reservedTags: true } } } },
+      event: { select: { slug: true, organizationId: true, organization: { select: ORG_LIFECYCLE_SELECT }, shifts: { where: { status: { not: "cancelled" } }, select: { roleName: true, reservedTags: true, assignedOnly: true } } } },
     },
   })
 
@@ -72,8 +73,9 @@ export async function GET(
 
   return NextResponse.json({
     eventSlug: invite.event.slug,
-    // The reserved roles (#470) this invitation opens; the member's tags themselves stay private.
-    reservedRolesAllowed: allowedReservedRoles(reservedRoles(invite.event.shifts), invite.volunteer.tags),
+    // The reserved roles (#470) this invitation opens; the member's tags themselves stay private. A
+    // role assigned by the organisation only (#1145) is never one: no invitation opens it.
+    reservedRolesAllowed: allowedReservedRoles(reservedRoles(publicShifts(invite.event.shifts)), invite.volunteer.tags),
     // Whether this link already answered « pas disponible » (#558): the page shows that instead
     // of the decline button, without a second request.
     declined: !!invite.declinedAt,

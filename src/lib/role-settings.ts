@@ -3,13 +3,14 @@
 
 import { roleLimits } from "./role-limit"
 import { reservedRoles } from "./role-reservation"
+import { roleAssignedOnly } from "./role-assignment"
 import { roleOverlapAllowed } from "./shift-overlap"
 
 /**
  * The settings of a poste (#1002). A poste has no table of its own: it is the roleName shared by
  * shifts of one event, and its settings are stored on every one of its shifts by « Gérer les
- * postes » (colour #219, limit per volunteer #466, reserved access #470, cumulable #986, order
- * #215). A shift created in an existing poste (single, series, recurring permanence, duplicate) or
+ * postes » (colour #219, limit per volunteer #466, reserved access #470, cumulable #986, assigned by
+ * the organisation only #1145, order #215). A shift created in an existing poste (single, series, recurring permanence, duplicate) or
  * moved to one takes these values, so the poste keeps one value per setting. A poste without live
  * shift (new, or deleted then recreated under the same name) has none: the caller keeps its defaults.
  *
@@ -18,6 +19,8 @@ import { roleOverlapAllowed } from "./shift-overlap"
  * - limit per volunteer: the smallest one set (what sign-up enforces, `roleLimits`);
  * - reserved access: every tag set on any of its shifts (what sign-up enforces, `reservedRoles`);
  * - cumulable: only when every shift is (`roleOverlapAllowed`, #986);
+ * - assigned by the organisation only: as soon as one shift is (`roleAssignedOnly`, #1145), what the
+ *   public page and the sign-up enforce;
  * - order: the smallest displayOrder (how the timelines and exports order postes);
  * - colour: the colour set on most shifts, shifts without a colour ignored; on a tie, the colour of
  *   the most recently updated of the tied shifts, then the first key in alphabetical order.
@@ -28,6 +31,7 @@ export type RoleSettings = {
   maxPerVolunteer: number | null
   reservedTags: string[]
   overlapAllowed: boolean
+  assignedOnly: boolean
   displayOrder: number
 }
 
@@ -37,6 +41,7 @@ export type RoleSettingsShift = {
   maxPerVolunteer?: number | null
   reservedTags?: string[] | null
   overlapAllowed?: boolean | null
+  assignedOnly?: boolean | null
   displayOrder?: number | null
   updatedAt?: Date | string | null
 }
@@ -48,7 +53,7 @@ export function liveRoleShifts(eventId: string, roleName: string) {
 
 /** What the routes read for `roleSettingsOf`. */
 export const ROLE_SETTINGS_SELECT = {
-  roleName: true, colorKey: true, maxPerVolunteer: true, reservedTags: true, overlapAllowed: true, displayOrder: true, updatedAt: true,
+  roleName: true, colorKey: true, maxPerVolunteer: true, reservedTags: true, overlapAllowed: true, assignedOnly: true, displayOrder: true, updatedAt: true,
 } as const
 
 const time = (d: Date | string | null | undefined) => (d == null ? 0 : new Date(d).getTime())
@@ -85,6 +90,7 @@ export function roleSettingsOf(shifts: RoleSettingsShift[], roleName: string): R
     maxPerVolunteer: roleLimits(own).get(roleName) ?? null,
     reservedTags: reservedRoles(own).get(roleName) ?? [],
     overlapAllowed: roleOverlapAllowed(own, roleName),
+    assignedOnly: roleAssignedOnly(own, roleName),
     displayOrder: Math.min(...own.map((s) => s.displayOrder ?? 0)),
   }
 }

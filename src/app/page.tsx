@@ -13,6 +13,7 @@ import { ORG_LOGO_SELECT, orgLogoOf, type OrgLogo } from "@/lib/org-logo"
 import { apexBaseUrl, orgBaseUrl, orgPageFooterSite } from "@/lib/urls"
 import { orgHomeMetadata } from "@/lib/event-share"
 import { PUBLIC_LIST_WHERE } from "@/lib/event-visibility"
+import { publicShifts } from "@/lib/role-assignment"
 import { CONTACT_EMAIL, LANDING_FAQ_SOURCE, REPOSITORY_URL, jsonLdScript, landingJsonLd, landingMetadata } from "@/lib/landing-seo"
 import { loadDocUnits } from "@/lib/doc-units"
 import { landingQuickstartLink, landingStartLinks, landingVolunteerGuideLink } from "@/lib/landing-start-guides"
@@ -99,8 +100,10 @@ export default async function HomePage() {
   })
 
   const enriched = events.map((event) => {
-    const totalCapacity = event.shifts.reduce((s, sh) => s + sh.capacity, 0)
-    const totalRegistered = event.shifts.reduce((s, sh) => s + sh.registrations.length, 0)
+    // Roles assigned by the organisation only (#1145) are not counted: no total reveals them.
+    const shifts = publicShifts(event.shifts)
+    const totalCapacity = shifts.reduce((s, sh) => s + sh.capacity, 0)
+    const totalRegistered = shifts.reduce((s, sh) => s + sh.registrations.length, 0)
     return { ...event, totalCapacity, totalRegistered, spotsLeft: totalCapacity - totalRegistered }
   })
 

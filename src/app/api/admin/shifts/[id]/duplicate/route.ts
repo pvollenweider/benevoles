@@ -51,6 +51,7 @@ export async function POST(_req: Request, { params }: { params: Promise<{ id: st
       maxPerVolunteer: source.maxPerVolunteer,
       reservedTags: source.reservedTags,
       overlapAllowed: source.overlapAllowed,
+      assignedOnly: source.assignedOnly,
       ...poste,
     },
   })

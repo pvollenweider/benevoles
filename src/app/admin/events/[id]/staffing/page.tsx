@@ -8,6 +8,7 @@ import { getOrgContext } from "@/lib/auth-guard"
 import { belowMinimumSentence, staffingHeadline, staffingSummary } from "@/lib/staffing"
 import { LIVE_STATUSES } from "@/lib/registration-capacity"
 import { shiftDay, shiftHours, shiftName } from "@/lib/open-shifts"
+import { assignedOnlyRoles } from "@/lib/role-assignment"
 import HelpLink from "@/components/admin/HelpLink"
 import { Meter, ShiftLine, StaffingStateSuffix, staffingLinkClass } from "@/components/admin/StaffingShiftLine"
 
@@ -53,7 +54,7 @@ export default async function StaffingPage({ params }: { params: Promise<{ id: s
       shifts: {
         where: { status: { not: "cancelled" } },
         select: {
-          id: true, roleName: true, label: true, date: true, startTime: true, endTime: true, capacity: true, minVolunteers: true, status: true,
+          id: true, roleName: true, label: true, date: true, startTime: true, endTime: true, capacity: true, minVolunteers: true, status: true, assignedOnly: true,
           registrations: { where: { status: { in: [...LIVE_STATUSES] } }, select: { status: true } },
         },
       },
@@ -73,6 +74,8 @@ export default async function StaffingPage({ params }: { params: Promise<{ id: s
     event.sectorLeaders.map((l) => l.roleName),
   )
   const base = `/admin/events/${event.id}`
+  // Roles assigned by the organisation only (#1145) are never proposed to members: added by hand.
+  const assignedOnly = assignedOnlyRoles(event.shifts)
   const t = summary.totals
   const nothingToDo = summary.emptyRoles.length === 0 && summary.underfilled.length === 0 && summary.waitlisted.length === 0
 
@@ -144,12 +147,17 @@ export default async function StaffingPage({ params }: { params: Promise<{ id: s
                   group="underfilled"
                   s={s}
                   detail={<><strong><Ratio active={s.active} capacity={s.capacity} /></strong><StaffingStateSuffix s={s} />{s.requested ? ` · ${plural(s.requested, "demande")} à traiter` : ""} · manque {s.missing}</>}
-                  action={
+                  action={assignedOnly.has(s.roleName) ? (
+                    <Link href={`${base}/registrations?shift=${encodeURIComponent(s.id)}`} className={`inline-block py-3 sm:py-0.5 text-sm ${linkClass}`}>
+                      Ajouter à la main depuis les inscriptions
+                      <span className="sr-only"> pour {shiftName(s)}, {shiftDay(s.date)}, {shiftHours(s)}</span>
+                    </Link>
+                  ) : (
                     <Link href={`${base}/staffing/search?shift=${encodeURIComponent(s.id)}`} className={`inline-block py-3 sm:py-0.5 text-sm ${linkClass}`}>
                       Chercher des bénévoles
                       <span className="sr-only"> pour {shiftName(s)}, {shiftDay(s.date)}, {shiftHours(s)}</span>
                     </Link>
-                  }
+                  )}
                 />
               ))}
             </Group>
