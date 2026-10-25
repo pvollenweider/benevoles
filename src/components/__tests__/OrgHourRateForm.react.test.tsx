@@ -51,4 +51,16 @@ describe("OrgHourRateForm", () => {
     expect(JSON.parse(fetchMock.mock.calls[0][1].body)).toEqual({ volunteerHourRate: "28,50", volunteerHourRateCurrency: "CHF" })
     expect(screen.getByText(/Taux enregistré le 20 octobre 2026/)).toBeInTheDocument()
   })
+
+  it("a network failure is said without marking a field", async () => {
+    vi.stubGlobal("fetch", vi.fn().mockRejectedValue(new TypeError("offline")))
+    render(<OrgHourRateForm initial={empty} timeZone="Europe/Zurich" />)
+    const rate = screen.getByLabelText("Taux horaire (facultatif)")
+    fireEvent.change(rate, { target: { value: "20" } })
+    fireEvent.change(screen.getByLabelText("Devise"), { target: { value: "EUR" } })
+    fireEvent.click(screen.getByRole("button", { name: "Enregistrer" }))
+    await waitFor(() => expect(screen.getByRole("alert")).toHaveTextContent("Impossible d'enregistrer."))
+    expect(rate).not.toHaveAttribute("aria-invalid")
+    expect(screen.getByLabelText("Devise")).not.toHaveAttribute("aria-invalid")
+  })
 })

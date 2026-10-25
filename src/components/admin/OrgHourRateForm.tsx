@@ -14,7 +14,8 @@ import {
 } from "@/lib/volunteer-hour-value"
 
 type Saved = { cents: number | null; currency: HourRateCurrency | ""; setAt: string | null }
-type Field = "rate" | "currency"
+/** "form": a failure that is no field's fault (network, unknown answer): said without marking a field. */
+type Field = "rate" | "currency" | "form"
 
 // In the organisation's time zone, so the server and the browser render the same date.
 const setAtLabel = (iso: string, timeZone: string) => new Date(iso).toLocaleDateString("fr-FR", { timeZone, day: "numeric", month: "long", year: "numeric" })
@@ -43,7 +44,7 @@ export default function OrgHourRateForm({ initial, timeZone }: { initial: Saved;
 
   function fail(field: Field, message: string) {
     setError({ field, message })
-    ;(field === "rate" ? rateRef : currencyRef).current?.focus()
+    if (field !== "form") (field === "rate" ? rateRef : currencyRef).current?.focus()
   }
 
   function say(text: string) {
@@ -79,7 +80,7 @@ export default function OrgHourRateForm({ initial, timeZone }: { initial: Saved;
       const data = await res.json().catch(() => ({}))
       if (!res.ok) {
         const message = typeof data?.error === "string" ? data.error : "Le taux n'a pas pu être enregistré. Réessayez."
-        fail(data?.field === "currency" ? "currency" : "rate", message)
+        fail(data?.field === "currency" || data?.field === "rate" ? data.field : "form", message)
         return
       }
       const cents: number | null = typeof data.volunteerHourRateCents === "number" ? data.volunteerHourRateCents : null
@@ -93,7 +94,7 @@ export default function OrgHourRateForm({ initial, timeZone }: { initial: Saved;
           : "Taux horaire retiré : les heures ne sont plus valorisées.",
       )
     } catch {
-      fail("rate", "Impossible d'enregistrer. Vérifiez votre connexion et réessayez.")
+      fail("form", "Impossible d'enregistrer. Vérifiez votre connexion et réessayez.")
     } finally {
       setLoading(false)
     }
@@ -150,6 +151,7 @@ export default function OrgHourRateForm({ initial, timeZone }: { initial: Saved;
       </div>
       {rateInvalid && <p id={rateErrorId} role="alert" className="text-sm font-medium text-red-700">{error.message}</p>}
       {currencyInvalid && <p id={currencyErrorId} role="alert" className="text-sm font-medium text-red-700">{error.message}</p>}
+      {error?.field === "form" && <p role="alert" className="text-sm font-medium text-red-700">{error.message}</p>}
       {saved.cents != null && saved.currency && saved.setAt && (
         <p className="text-sm text-gray-800">
           Taux enregistré le {setAtLabel(saved.setAt, timeZone)} : {hourRateLabel({ cents: saved.cents, currency: saved.currency })}.
