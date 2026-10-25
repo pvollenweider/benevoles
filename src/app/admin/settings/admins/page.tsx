@@ -9,9 +9,11 @@ import { ORG_LOGO_SELECT, orgLogoOf } from "@/lib/org-logo"
 import OrgPublicTitleForm from "@/components/admin/OrgPublicTitleForm"
 import OrgSlugForm from "@/components/admin/OrgSlugForm"
 import OrgTimeZoneForm from "@/components/admin/OrgTimeZoneForm"
-import { APP_TIME_ZONE, timeZoneChoices } from "@/lib/time-zone"
+import { APP_TIME_ZONE, orgTimeZone, timeZoneChoices } from "@/lib/time-zone"
 import OrgCharterForm from "@/components/admin/OrgCharterForm"
 import OrgRosterDefaultForm from "@/components/admin/OrgRosterDefaultForm"
+import OrgHourRateForm from "@/components/admin/OrgHourRateForm"
+import { hourRateLabel, hourRateOf } from "@/lib/volunteer-hour-value"
 import { charterStatusLabel } from "@/lib/volunteer-charter"
 import { hasLevel } from "@/lib/permissions"
 import HelpLink from "@/components/admin/HelpLink"
@@ -46,7 +48,7 @@ export default async function AdminsSettingsPage() {
       },
       orderBy: { createdAt: "asc" },
     }),
-    db.organization.findUnique({ where: { id: organizationId }, select: { name: true, slug: true, outboundEmailApprovedAt: true, volunteerCharter: true, hasOrgInsurance: true, shiftRosterDefault: true, publicTitle: true, timeZone: true, logo: ORG_LOGO_SELECT } }),
+    db.organization.findUnique({ where: { id: organizationId }, select: { name: true, slug: true, outboundEmailApprovedAt: true, volunteerCharter: true, hasOrgInsurance: true, shiftRosterDefault: true, publicTitle: true, timeZone: true, volunteerHourRateCents: true, volunteerHourRateCurrency: true, volunteerHourRateSetAt: true, logo: ORG_LOGO_SELECT } }),
     db.orgSlugHistory.findMany({
       where: { organizationId },
       orderBy: { createdAt: "desc" },
@@ -59,6 +61,7 @@ export default async function AdminsSettingsPage() {
   // Organisers see these settings but can't change them (#469); the routes refuse it too.
   const isOwner = hasLevel(session.user?.role, "owner")
   const logo = org ? orgLogoOf(organizationId, org.logo) : null
+  const hourRate = hourRateOf(org)
 
   return (
     <div className="space-y-5">
@@ -94,6 +97,7 @@ export default async function AdminsSettingsPage() {
             <dt className="text-gray-600">Fuseau horaire</dt><dd className="text-gray-900">{org.timeZone || APP_TIME_ZONE}</dd>
             <dt className="text-gray-600">Charte des bénévoles</dt><dd className="text-gray-900">{charterStatusLabel(org.volunteerCharter)}</dd>
             <dt className="text-gray-600">Qui est inscrit, nouveaux événements</dt><dd className="text-gray-900">{org.shiftRosterDefault ? "activé" : "désactivé"}</dd>
+            <dt className="text-gray-600">Taux horaire de valorisation</dt><dd className="text-gray-900">{hourRate ? hourRateLabel(hourRate) : "aucun"}</dd>
           </dl>
         </section>
       )}
@@ -129,6 +133,13 @@ export default async function AdminsSettingsPage() {
       )}
 
       {org && isOwner && <OrgRosterDefaultForm initialValue={org.shiftRosterDefault} />}
+
+      {org && isOwner && (
+        <OrgHourRateForm
+          initial={{ cents: hourRate?.cents ?? null, currency: hourRate?.currency ?? "", setAt: hourRate?.setAt?.toISOString() ?? null }}
+          timeZone={orgTimeZone(org)}
+        />
+      )}
 
       <AdminsManager
         initialAdmins={admins.map((a) => ({

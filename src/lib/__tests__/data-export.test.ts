@@ -63,6 +63,27 @@ describe("csv", () => {
     expect(lines[3]).toBe("Total;;;4;4.5;4")
   })
 
+  it("hours by volunteer with an hourly rate (#867): estimated amounts from the minutes, rate and currency on every line", () => {
+    const rate = { cents: 2550, currency: "CHF" as const, setAt: null }
+    const csv = memberHoursCsv([
+      // 2 h 50 planned, 1 h 20 attested: amounts from the minutes (72.25 and 34.00), not from the rounded hours.
+      { firstName: "Zoé", lastName: "Roy", eventsCount: 2, shiftsCount: 3, plannedHours: 2.83, attestedHours: 1.33, plannedMinutes: 170, attestedMinutes: 80 },
+      { firstName: "Léo", lastName: "Dupont", eventsCount: 1, shiftsCount: 1, plannedHours: 1, attestedHours: 0, plannedMinutes: 60, attestedMinutes: 0 },
+    ], rate)
+    const lines = csv.split("\r\n")
+    expect(lines[0]).toBe("\uFEFFPrénom;Nom;Événements;Créneaux;Heures prévues;Heures attestées;Valorisation estimée des heures prévues;Valorisation estimée des heures attestées;Taux horaire;Devise")
+    expect(lines[1]).toBe("Zoé;Roy;2;3;2.83;1.33;72.25;34;25.5;CHF")
+    expect(lines[2]).toBe("Léo;Dupont;1;1;1;0;25.5;0;25.5;CHF")
+    // The total adds up the members' amounts; the rate is repeated, never summed.
+    expect(lines[3]).toBe("Total;;;4;3.83;1.33;97.75;34;25.5;CHF")
+  })
+
+  it("hours by volunteer without a rate: the same file as before (#867)", () => {
+    const rows = [{ firstName: "Zoé", lastName: "Roy", eventsCount: 1, shiftsCount: 1, plannedHours: 1, attestedHours: 1, plannedMinutes: 60, attestedMinutes: 60 }]
+    expect(memberHoursCsv(rows, null)).toBe(memberHoursCsv(rows))
+    expect(memberHoursCsv(rows).split("\r\n")[0]).toBe("\uFEFFPrénom;Nom;Événements;Créneaux;Heures prévues;Heures attestées")
+  })
+
   it("activity: changes serialized as JSON", () => {
     const csv = activityCsv([{ createdAt: new Date("2026-07-04T08:00:00Z"), actorType: "admin", actorLabel: "Léa", action: "member.updated", entityType: "Member", entityId: "m1", changes: { tags: { from: [], to: ["bar"] } } }], "Europe/Zurich")
     expect(csv.split("\r\n")[1]).toBe('04/07/2026 10:00;Léa;admin;member.updated;Member;m1;"{""tags"":{""from"":[],""to"":[""bar""]}}"')

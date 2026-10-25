@@ -2,7 +2,7 @@
 roles: [admin]
 group: organisation
 order: 40
-summary: Nom, adresse publique, logo, titre de la page publique, fuseau horaire et réglage « Qui est inscrit » par défaut de l'organisation.
+summary: Nom, adresse, logo, titre public, fuseau horaire, « Qui est inscrit » par défaut et taux horaire pour valoriser le bénévolat.
 related: [charte-du-benevole, equipe-admin, premiers-pas]
 legacy: [admin#nom-et-adresse-de-l-organisation, admin#logo-de-l-organisation, admin#titre-de-la-page-publique, admin#fuseau-horaire]
 aliases: []
@@ -45,3 +45,9 @@ Section **Fuseau horaire**. Les heures des créneaux sont des heures locales : c
 ## Qui est inscrit, réglage par défaut
 
 Section **Qui est inscrit**. La case **Par défaut, montrer aux bénévoles qui est inscrit**, cochée par défaut, donne la valeur de départ du réglage de même nom des événements créés ensuite, sur une page blanche comme depuis un modèle (voir le réglage dans [Créer un événement](creer-un-evenement.md#page-blanche)). Sous la case, une phrase le résume et le lien **En savoir plus** ouvre cette page. Cochez-la ou décochez-la, puis **Enregistrer**. Les événements existants ne changent pas : chacun garde son propre réglage, modifiable dans ses réglages. Une copie faite avec **Dupliquer** reprend le réglage de l'événement d'origine quand ses réglages sont copiés, et ce réglage par défaut sinon (voir [Dupliquer un événement](dupliquer-un-evenement.md)). Dans tous les cas, un nom n'apparaît que si le bénévole l'accepte. En vidéo : [montrer aux bénévoles qui est inscrit](/videos/SHIFT_ROSTER_VISIBILITY#doc).
+
+## Valorisation du bénévolat
+
+Section **Valorisation du bénévolat**. Pour un dossier de subvention ou les comptes annuels, vous pouvez estimer la valeur du travail de vos bénévoles (contribution volontaire en nature) : les heures multipliées par un taux horaire que votre association choisit. Saisissez le **Taux horaire** (par exemple 28,50), choisissez la **Devise** (CHF ou EUR, obligatoire avec un taux), puis **Enregistrer**. La date d'enregistrement s'affiche sous les champs.
+
+Avec un taux, le [résumé de l'événement](rapports-badges-et-resume.md#resume-de-l-evenement) et l'export [Heures par bénévole](gerer-les-membres.md#heures-par-benevole-pour-une-periode-csv) donnent la valeur estimée des heures prévues et des heures attestées, avec le taux utilisé. C'est le taux enregistré au moment où vous les consultez qui compte. Ce n'est pas une valeur officielle : aucun taux n'est proposé, à vous de retenir celui qui convient à votre association et à vos financeurs. Videz le champ puis **Enregistrer** pour retirer le taux : les heures ne sont plus valorisées nulle part.

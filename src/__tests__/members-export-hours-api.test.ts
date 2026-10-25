@@ -52,4 +52,26 @@ describe("GET /api/admin/members/export-hours (#557)", () => {
     const res = await GET(get())
     expect(res.status).toBe(200)
   })
+
+  it("adds the estimated value of the hours when the organisation has an hourly rate (#867)", async () => {
+    orgFindUnique.mockResolvedValue({ name: "Org A", timeZone: "Europe/Zurich", volunteerHourRateCents: 3000, volunteerHourRateCurrency: "EUR", volunteerHourRateSetAt: new Date() })
+    volunteerFindMany.mockResolvedValue([{
+      id: "v1", firstName: "Zoé", lastName: "Roy",
+      registrations: [{
+        id: "r1", status: "active", checkedInAt: new Date("2026-03-01T09:00:00Z"),
+        shift: { id: "s1", roleName: "Bar", label: "Bar", date: new Date("2026-03-01T00:00:00Z"), startTime: "10:00", endTime: "11:30", status: "open" },
+        event: { id: "e1", title: "Fête" },
+      }],
+    }])
+    const { GET } = await import("@/app/api/admin/members/export-hours/route")
+    const lines = (await (await GET(get("?from=2026-01-01&to=2026-06-30"))).text()).split("\r\n")
+    expect(lines[0]).toContain(";Valorisation estimée des heures prévues;Valorisation estimée des heures attestées;Taux horaire;Devise")
+    expect(lines[1]).toBe("Zoé;Roy;1;1;1.5;1.5;45;45;30;EUR")
+  })
+
+  it("leaves the file unchanged without a rate (#867)", async () => {
+    const { GET } = await import("@/app/api/admin/members/export-hours/route")
+    const text = await (await GET(get("?from=2026-01-01&to=2026-06-30"))).text()
+    expect(text).not.toContain("Valorisation")
+  })
 })

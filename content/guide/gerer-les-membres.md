@@ -38,6 +38,8 @@ Ces colonnes n'apparaissent que dans cette page ; elles ne sont jamais incluses 
 
 Le bandeau **Heures par bénévole, pour une période (CSV)**, au-dessus de la liste, exporte un fichier avec une ligne par membre ayant au moins une inscription confirmée sur la période choisie (douze derniers mois par défaut) : nombre d'événements, de créneaux, heures prévues et heures attestées, puis une ligne de total pour l'organisation. La case **Inclure les membres sans créneau confirmé sur la période** ajoute aussi ceux qui n'ont rien donné sur cette période, à zéro : utile pour répondre à « qui n'a plus participé depuis… » sans écran supplémentaire. Mêmes règles de comptage que l'attestation de bénévolat : seules les inscriptions actives sur un créneau jamais annulé comptent, et le temps de deux créneaux tenus en même temps n'est compté qu'une fois.
 
+Si votre organisation a fixé un taux horaire (voir [Valorisation du bénévolat](personnaliser-l-organisation.md#valorisation-du-benevolat)), le fichier a quatre colonnes de plus : la valeur estimée des heures prévues, celle des heures attestées, le taux horaire et la devise. La ligne de total additionne les montants des membres. Sans taux, le fichier ne change pas.
+
 ![Page « Activité de Camille Rochat » : un résumé en une phrase, puis la chronologie datée, du plus récent au plus ancien, de ses inscriptions, de sa place en liste d'attente et de son invitation, chacune reliée à l'événement](/doc-img/admin-member-activity.png)
 
 ## Attestation de bénévolat
