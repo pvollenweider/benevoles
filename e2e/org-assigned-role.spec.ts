@@ -42,7 +42,7 @@ test("a role assigned by the organisation only: hidden publicly, refused by the 
   await box.check()
   // The tags no longer apply: their field goes.
   await expect(page.getByLabel(`Étiquettes donnant accès au poste « ${ROLE} »`)).toHaveCount(0)
-  await page.getByRole("button", { name: "Enregistrer" }).click()
+  await page.getByRole("button", { name: "Enregistrer", exact: true }).click()
   const access = page.getByRole("button", { name: `Accès : par l'organisation uniquement, poste « ${ROLE} »` })
   await expect(access).toBeFocused()
   await expect(page.getByRole("status").filter({ hasText: `Poste « ${ROLE} » : attribué par l'organisation uniquement.` })).toBeAttached()
