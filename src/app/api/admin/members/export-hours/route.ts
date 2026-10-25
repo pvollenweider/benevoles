@@ -5,8 +5,9 @@ import { NextResponse } from "next/server"
 import { requireOrgSession } from "@/lib/auth-guard"
 import { exportFileName, memberHoursCsv } from "@/lib/data-export"
 import { orgTimeZone } from "@/lib/time-zone"
+import { hourRateOf } from "@/lib/volunteer-hour-value"
 import { defaultPeriod, memberHourTotals, volunteerHourEntries, type Period } from "@/lib/volunteer-hours"
-// Reads the Organization row for its name and time zone, not a tenant-scoped model.
+// Reads the Organization row for its name, time zone and hourly rate (#867), not a tenant-scoped model.
 // eslint-disable-next-line no-restricted-imports
 import { prisma } from "@/lib/prisma"
 
@@ -17,14 +18,15 @@ const ISO_DATE = /^\d{4}-\d{2}-\d{2}$/
  * the period, events, shift count, planned and attested hours, and a total line. `includeAll=1`
  * also lists members without one, at zero — answers "who hasn't taken part since…" without a new
  * screen. Same counting rules as the certificate (#556): active registrations on a shift that was
- * never cancelled, a shift belongs to a period by its local start date.
+ * never cancelled, a shift belongs to a period by its local start date. With an hourly rate set in
+ * Paramètres (#867), the estimated value of the planned and attested hours, with the rate.
  */
 export async function GET(req: Request) {
   const guard = await requireOrgSession()
   if (guard instanceof NextResponse) return guard
   const { db, organizationId } = guard
 
-  const org = await prisma.organization.findUnique({ where: { id: organizationId }, select: { name: true, timeZone: true } })
+  const org = await prisma.organization.findUnique({ where: { id: organizationId }, select: { name: true, timeZone: true, volunteerHourRateCents: true, volunteerHourRateCurrency: true, volunteerHourRateSetAt: true } })
   const timeZone = orgTimeZone(org)
   const now = new Date()
 
@@ -74,11 +76,15 @@ export async function GET(req: Request) {
         shiftsCount: t?.shiftsCount ?? 0,
         plannedHours: Math.round(((t?.plannedMinutes ?? 0) / 60) * 100) / 100,
         attestedHours: Math.round(((t?.attestedMinutes ?? 0) / 60) * 100) / 100,
+        plannedMinutes: t?.plannedMinutes ?? 0,
+        attestedMinutes: t?.attestedMinutes ?? 0,
       }
     })
     .filter((r) => includeAll || r.shiftsCount > 0)
 
-  const csv = memberHoursCsv(rows)
+  // With the organisation's hourly rate (#867), the estimated value of those hours; without one,
+  // the file is unchanged.
+  const csv = memberHoursCsv(rows, hourRateOf(org))
   return new NextResponse(csv, {
     headers: {
       "Content-Type": "text/csv; charset=utf-8",

@@ -12,6 +12,7 @@ import { eventSummary, type EventSummaryRegistration } from "@/lib/event-summary
 import { returningVolunteerIds } from "@/lib/volunteer-hours"
 import { fmtDuration } from "@/lib/signup-recap"
 import { orgTimeZone } from "@/lib/time-zone"
+import { formatMoney, hourRateLabel, hourRateOf, hoursValuation } from "@/lib/volunteer-hour-value"
 import { StaffingStateSuffix } from "@/components/admin/StaffingShiftLine"
 
 export const dynamic = "force-dynamic"
@@ -50,7 +51,7 @@ export default async function ReportsPage({ params }: { params: Promise<{ id: st
         sectorLeaders: { select: { roleName: true } },
       },
     }),
-    ctx.db.organization.findUnique({ where: { id: ctx.organizationId }, select: { timeZone: true } }),
+    ctx.db.organization.findUnique({ where: { id: ctx.organizationId }, select: { timeZone: true, volunteerHourRateCents: true, volunteerHourRateCurrency: true, volunteerHourRateSetAt: true } }),
   ])
   if (!event) notFound()
   const roles = [...new Set(event.shifts.map((s) => s.roleName))]
@@ -99,6 +100,9 @@ export default async function ReportsPage({ params }: { params: Promise<{ id: st
   // Provisional until the event is over (#557): the organizer can still look, but shifts, check-ins
   // and registrations may still change until then.
   const provisional = event.endDate.getTime() > new Date().getTime()
+  // Valuing volunteer work (#867): only with the organisation's hourly rate, from the same minutes.
+  const hourRate = hourRateOf(org)
+  const valuation = hourRate ? hoursValuation(summary, hourRate) : null
 
   // A report opens in a new tab and is printed from there; a download saves a file (#384).
   const row = (href: string, name: string, description: string, describedBy?: string, kind: "tab" | "download" = "tab") => {
@@ -225,6 +229,14 @@ export default async function ReportsPage({ params }: { params: Promise<{ id: st
             <p className="text-sm text-gray-800 mt-1">
               <strong>{fmtDuration(summary.plannedMinutes)}</strong> prévues, dont <strong>{fmtDuration(summary.attestedMinutes)}</strong> attestées (présence enregistrée).
             </p>
+            {hourRate && valuation && (
+              <p className="text-sm text-gray-800 mt-1">
+                Valeur estimée (contribution volontaire en nature) : <strong>{formatMoney(valuation.plannedCents, hourRate.currency)}</strong> pour les heures prévues,
+                dont <strong>{formatMoney(valuation.attestedCents, hourRate.currency)}</strong> pour les heures attestées.
+                Au taux de {hourRateLabel(hourRate)}{hourRate.setAt ? `, fixé le ${hourRate.setAt.toLocaleDateString("fr-FR", { timeZone, day: "numeric", month: "long", year: "numeric" })}` : ""} dans les Paramètres.
+                C&apos;est une estimation de votre association, pas une valeur officielle.
+              </p>
+            )}
           </div>
 
           <div>

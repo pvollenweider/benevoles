@@ -1934,6 +1934,19 @@ describe("Organization settings — cross-tenant isolation (#1049)", () => {
     expect(db.orgSlugHistory.deleteMany).toHaveBeenCalledWith({ where: { slug: "ancien-b", organizationId: ORG_A } })
   })
 
+  // #867: the hourly rate is written on the session org; an org-B id in the URL or the body has nowhere to go.
+  it("PATCH /api/admin/settings/organization writes the hourly rate on the session org only", async () => {
+    const { PATCH } = await import("@/app/api/admin/settings/organization/route")
+    setupGuard()
+    const res = await PATCH(makeRequest("/api/admin/settings/organization?organizationId=org-b", "PATCH", { organizationId: "org-b", volunteerHourRate: "25", volunteerHourRateCurrency: "CHF" }))
+    expect(res.status).toBe(200)
+    expect(prismaMock.organization.update).toHaveBeenCalledTimes(1)
+    const arg = prismaMock.organization.update.mock.calls[0][0]
+    expect(arg.where).toEqual({ id: ORG_A })
+    expect(arg.data).not.toHaveProperty("organizationId")
+    expect(arg.data).toEqual(expect.objectContaining({ volunteerHourRateCents: 2500, volunteerHourRateCurrency: "CHF" }))
+  })
+
   it("GET /api/admin/settings/notifications reads the session org's settings only", async () => {
     const { GET } = await import("@/app/api/admin/settings/notifications/route")
     setupGuard()

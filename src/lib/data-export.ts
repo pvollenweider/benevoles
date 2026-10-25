@@ -6,6 +6,7 @@
  * (UTF-8 with BOM, semicolons, CRLF: opens as is in Excel), JSON for the full archive of an
  * event. Pure: the routes read through the org-scoped client and call these.
  */
+import { csvAmount, hoursValuation, type VolunteerHourRate } from "./volunteer-hour-value"
 
 /**
  * A text cell that a spreadsheet would read as a formula (#567): it starts with = + - @, possibly
@@ -78,26 +79,50 @@ export type MemberHoursExportRow = {
   lastName: string
   eventsCount: number
   shiftsCount: number
-  /** Decimal hours, already split by volunteer-hours.ts's splitMinutes (planned ≠ attested, never overlapping). */
+  /** Decimal hours from volunteer-hours.ts's splitMinutes: planned = every counted hour, attested =
+   * the recorded-presence subset of it (attested ≤ planned). */
   plannedHours: number
   attestedHours: number
+  /** The same totals in minutes, for the valuation (#867): amounts come from the minutes, never from
+   * the rounded hours. Falls back to the hours when absent. */
+  plannedMinutes?: number
+  attestedMinutes?: number
 }
 
 /**
  * Hours by volunteer for a period (#557): one line per member with at least one confirmed shift in
  * the period (or every member, when the caller asked to include those without one — `rows` already
  * reflects that choice), plus a total line for the organization.
+ *
+ * With the organisation's hourly rate (#867), four more columns: the estimated value of the planned
+ * and of the attested hours (each member's amount rounded to the cent, the total is the sum of those
+ * amounts, so the file adds up), then the rate and its currency, repeated on every line so a line
+ * read alone still says how it was valued. Without a rate, the file is exactly as before.
  */
-export function memberHoursCsv(rows: MemberHoursExportRow[]): string {
+export function memberHoursCsv(rows: MemberHoursExportRow[], rate?: VolunteerHourRate | null): string {
   const total = rows.reduce(
     (acc, r) => ({ shiftsCount: acc.shiftsCount + r.shiftsCount, plannedHours: acc.plannedHours + r.plannedHours, attestedHours: acc.attestedHours + r.attestedHours }),
     { shiftsCount: 0, plannedHours: 0, attestedHours: 0 },
   )
+  const header = ["Prénom", "Nom", "Événements", "Créneaux", "Heures prévues", "Heures attestées"]
+  const lines: unknown[][] = rows.map((r) => [r.firstName, r.lastName, r.eventsCount, r.shiftsCount, r.plannedHours, r.attestedHours])
+  const totalLine: unknown[] = ["Total", "", "", total.shiftsCount, total.plannedHours, total.attestedHours]
+  if (!rate) return csvDocument(header, [...lines, totalLine])
+
+  const values = rows.map((r) =>
+    hoursValuation({ plannedMinutes: r.plannedMinutes ?? Math.round(r.plannedHours * 60), attestedMinutes: r.attestedMinutes ?? Math.round(r.attestedHours * 60) }, rate),
+  )
+  const rateCells = [csvAmount(rate.cents), rate.currency]
   return csvDocument(
-    ["Prénom", "Nom", "Événements", "Créneaux", "Heures prévues", "Heures attestées"],
+    [...header, "Valorisation estimée des heures prévues", "Valorisation estimée des heures attestées", "Taux horaire", "Devise"],
     [
-      ...rows.map((r) => [r.firstName, r.lastName, r.eventsCount, r.shiftsCount, r.plannedHours, r.attestedHours]),
-      ["Total", "", "", total.shiftsCount, total.plannedHours, total.attestedHours],
+      ...lines.map((line, i) => [...line, csvAmount(values[i].plannedCents), csvAmount(values[i].attestedCents), ...rateCells]),
+      [
+        ...totalLine,
+        csvAmount(values.reduce((n, v) => n + v.plannedCents, 0)),
+        csvAmount(values.reduce((n, v) => n + v.attestedCents, 0)),
+        ...rateCells,
+      ],
     ],
   )
 }
