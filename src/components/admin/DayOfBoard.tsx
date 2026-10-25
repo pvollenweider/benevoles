@@ -36,6 +36,8 @@ import {
   marksAfterPoll,
   mayAnnounceChanges,
   nextPollDelay,
+  pinMark,
+  releasePin,
   shouldSyncOnResume,
   shownCheckIn,
   shownStatus,
@@ -49,6 +51,8 @@ import {
 
 /** Typing in the search box: the count is announced once typing has paused this long. */
 const SEARCH_ANNOUNCE_MS = 500
+/** A board read that takes longer than this counts as failed. */
+const SYNC_TIMEOUT_MS = 15_000
 /** Changes made elsewhere wait this long after the last keystroke in the search box. */
 const TYPING_QUIET_MS = 2_000
 
@@ -135,10 +139,12 @@ export default function DayOfBoard({ eventId, board: initialBoard, today: initia
   const unsaid = useRef<BoardChanges>(NO_CHANGES)
   const typingUntil = useRef(0)
   const say = (text: string) => sayAt(lastAnnouncedAt, setStatus, text)
-  const pendingRef = useRef(0)
-  useEffect(() => { pendingRef.current = pending.size }, [pending])
+  // Actions in flight, counted at once (state lags a render). A read answering meanwhile is not
+  // applied: it could drop the row the action needs for its outcome; it is read again after.
+  const actionsInFlight = useRef(0)
+  const deferred = useRef<SyncKind | null>(null)
   // The row that had the focus when a read replaced the board, to find it again after the render.
-  const focusAfterSync = useRef<{ registrationId: string; shiftId: string; leftText: string | null } | null>(null)
+  const focusAfterSync = useRef<{ registrationId: string | null; shiftId: string; leftText: string | null } | null>(null)
 
   const isPresent = (p: DayOfPerson) => shownCheckIn(p, marks) !== null
 
@@ -183,6 +189,7 @@ export default function DayOfBoard({ eventId, board: initialBoard, today: initia
       finish()
       // A newer read already went through: this older failure says nothing about now.
       if (!isFreshAnswer(sentAt, appliedAt.current)) return
+      appliedAt.current = sentAt
       // A failure of « Actualiser » shows at once: the person asked, the old time must not pass for an answer.
       const nextFailures = kind === "manual" ? Math.max(2, statusRef.current.failures + 1) : statusRef.current.failures + 1
       const voiced = setFreshness(next, nextFailures, snapRef.current.refreshedAt, false)
@@ -191,7 +198,8 @@ export default function DayOfBoard({ eventId, board: initialBoard, today: initia
     }
     let res: Response
     try {
-      res = await fetch(`/api/admin/events/${encodeURIComponent(eventId)}/day-of`, { cache: "no-store", headers: { Accept: "application/json" } })
+      // A read that hangs (weak site network) would hold the next ones: given up after a while.
+      res = await fetch(`/api/admin/events/${encodeURIComponent(eventId)}/day-of`, { cache: "no-store", headers: { Accept: "application/json" }, signal: AbortSignal.timeout(SYNC_TIMEOUT_MS) })
     } catch {
       fail(syncStatusOf({ network: true, online: typeof navigator === "undefined" || navigator.onLine !== false }))
       return
@@ -207,6 +215,11 @@ export default function DayOfBoard({ eventId, board: initialBoard, today: initia
     }
     finish()
     if (!isFreshAnswer(sentAt, appliedAt.current)) return
+    if (actionsInFlight.current > 0) {
+      const rank: Record<SyncKind, number> = { after_action: 0, poll: 1, manual: 2 }
+      if (!deferred.current || rank[kind] > rank[deferred.current]) deferred.current = kind
+      return
+    }
     appliedAt.current = sentAt
 
     const before = snapRef.current
@@ -215,12 +228,16 @@ export default function DayOfBoard({ eventId, board: initialBoard, today: initia
     const changes = boardChanges(before.board, marksBefore, next.board, marksAfter)
 
     // The focused row, found again after the render even if its card moved to another section.
-    const row = document.activeElement instanceof HTMLElement ? document.activeElement.closest<HTMLElement>("[data-registration-id]") : null
-    if (row?.dataset.registrationId && row.dataset.shiftId) {
-      focusAfterSync.current = { registrationId: row.dataset.registrationId, shiftId: row.dataset.shiftId, leftText: kind === "after_action" ? null : leftBoardAnnouncement(before.board, next.board, row.dataset.registrationId) }
+    // A person's row, or anywhere else in a shift card (its title, its contact's phone).
+    const active = document.activeElement instanceof HTMLElement ? document.activeElement : null
+    const card = active?.closest<HTMLElement>("[data-shift-id]")
+    if (card?.dataset.shiftId) {
+      const registrationId = active?.closest<HTMLElement>("[data-registration-id]")?.dataset.registrationId ?? null
+      const leftText = registrationId && kind !== "after_action" ? leftBoardAnnouncement(before.board, next.board, registrationId) : null
+      focusAfterSync.current = { registrationId, shiftId: card.dataset.shiftId, leftText }
     }
 
-    // Nothing new: no render at all, so a screen reader's reading position is left alone.
+    // Nothing new: the board is left as it is (no list re-rendered), so a screen reader's position stays.
     if (JSON.stringify(before) !== JSON.stringify(next)) {
       snapRef.current = next
       setSnap(next)
@@ -241,7 +258,7 @@ export default function DayOfBoard({ eventId, board: initialBoard, today: initia
     if (reconnected || leftText) { unsaid.current = NO_CHANGES; return }
     unsaid.current = addChanges(unsaid.current, changes)
     const now = nowMs()
-    const busy = pendingRef.current > 0 || now < typingUntil.current
+    const busy = actionsInFlight.current > 0 || now < typingUntil.current
     const text = changesAnnouncement(unsaid.current)
     if (text && mayAnnounceChanges({ now, lastAnnouncedAt: lastAnnouncedAt.current, lastChangesAt: lastChangesAt.current, busy })) {
       unsaid.current = NO_CHANGES
@@ -258,7 +275,7 @@ export default function DayOfBoard({ eventId, board: initialBoard, today: initia
     focusAfterSync.current = null
     if (!target || !isFocusDropped(document.activeElement)) return
     focusFirstAvailable([
-      () => buttons.current.get(target.registrationId),
+      () => (target.registrationId ? buttons.current.get(target.registrationId) : null),
       () => document.getElementById(`dayof-shift-${target.shiftId}`),
       () => document.getElementById("dayof-earlier-summary"),
       () => document.getElementById("page-heading"),
@@ -271,10 +288,12 @@ export default function DayOfBoard({ eventId, board: initialBoard, today: initia
     void sync("poll")
   })
   const onResume = useEffectEvent(() => {
-    if (pollInFlight.current) return
+    if (pollInFlight.current || document.visibilityState === "hidden" || navigator.onLine === false) return
     if (shouldSyncOnResume(lastAttemptAt.current, nowMs(), statusRef.current.status)) void sync("poll")
   })
   const onOffline = useEffectEvent(() => {
+    // Signed out stays the message: a network drop changes nothing to what the person must do.
+    if (statusRef.current.status === "expired") return
     setFreshness("offline", statusRef.current.failures + 1, snapRef.current.refreshedAt, false)
   })
 
@@ -312,20 +331,26 @@ export default function DayOfBoard({ eventId, board: initialBoard, today: initia
     const present = shownBefore === null
     const name = personName(person)
     setPending((prev) => new Set(prev).add(id))
+    actionsInFlight.current += 1
     // While the action is in flight, the row keeps what it showed when tapped, whatever a read says.
-    updateMarks((m) => ({ ...m, [id]: { checkedInAt: shownBefore, at: null } }))
-    const unpin = () => updateMarks((m) => {
-      if (m[id]?.at !== null || !(id in m)) return m
-      const next = { ...m }
-      delete next[id]
-      return next
-    })
-    const done = () => setPending((prev) => { const next = new Set(prev); next.delete(id); return next })
+    updateMarks((m) => pinMark(m, id, shownBefore))
+    const unpin = () => updateMarks((m) => releasePin(m, id))
+    const done = () => {
+      setPending((prev) => { const next = new Set(prev); next.delete(id); return next })
+      actionsInFlight.current -= 1
+      // A read that answered during the action is read again now.
+      const again = deferred.current
+      if (actionsInFlight.current === 0 && again) {
+        deferred.current = null
+        void sync(again)
+      }
+    }
     const { url, body } = presenceRequest(eventId, id, present)
     const what = `Présence de ${name}`
     const fail = (text: string) => {
       errorSeq.current += 1
       setError({ registrationId: id, text, seq: errorSeq.current })
+      lastAnnouncedAt.current = nowMs() // the alert is voiced: changes made elsewhere wait
       unpin()
       done()
     }
@@ -372,7 +397,7 @@ export default function DayOfBoard({ eventId, board: initialBoard, today: initia
     const contactPhone = shift.contactPhone?.trim()
     const contactName = shift.contactName?.trim()
     return (
-      <li key={shift.id} className="bg-white border border-gray-200 rounded-xl p-4 space-y-2">
+      <li key={shift.id} data-shift-id={shift.id} className="bg-white border border-gray-200 rounded-xl p-4 space-y-2">
         <div>
           <h4 id={headingId} tabIndex={-1} className="text-base font-semibold text-gray-900 break-words focus:outline-none">{shiftName(shift)}</h4>
           <p className="text-sm text-gray-700">{shiftHours(shift)}</p>
@@ -399,7 +424,7 @@ export default function DayOfBoard({ eventId, board: initialBoard, today: initia
               const busy = pending.has(p.registrationId)
               const name = personName(p)
               return (
-                <li key={p.registrationId} data-registration-id={p.registrationId} data-shift-id={shift.id} className="py-2 flex flex-wrap items-center gap-x-3 gap-y-2">
+                <li key={p.registrationId} data-registration-id={p.registrationId} className="py-2 flex flex-wrap items-center gap-x-3 gap-y-2">
                   <div className="min-w-0 flex-1 basis-40">
                     <p className="font-medium text-gray-900 break-words">{name}</p>
                     <p className="text-sm">

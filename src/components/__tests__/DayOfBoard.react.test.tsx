@@ -285,6 +285,71 @@ describe("DayOfBoard", () => {
       expect(screen.getByRole("status")).not.toHaveTextContent("présence annulée")
     })
 
+    it("a poll answering while an action is in flight is not applied (the row stays), then read again", async () => {
+      let answerBulk: (v: unknown) => void = () => {}
+      const without: Board = { ...board, inProgress: [{ ...board.inProgress[0], shifts: [{ ...bar, people: bar.people.slice(1) }] }] }
+      fetchMock.mockImplementation((url: string) => url.endsWith("/bulk")
+        ? new Promise((resolve) => { answerBulk = resolve })
+        : Promise.resolve(jsonOk({ board: without, today: "2026-07-04", refreshedAt: "14h06" })))
+      renderBoard()
+      fireEvent.click(screen.getByRole("button", { name: "Marquer présent, Zoé Müller" }))
+      await act(async () => { await vi.advanceTimersByTimeAsync(25_000) })
+      await flush()
+      expect(dayOfCalls()).toHaveLength(1)
+      // Zoé's row is still there for the action's outcome.
+      expect(screen.getByRole("button", { name: "Marquer présent, Zoé Müller" })).toBeInTheDocument()
+      await act(async () => { answerBulk(jsonOk({ done: 1, changedIds: ["r1"], skipped: 0 })); await vi.advanceTimersByTimeAsync(50) })
+      // Read again once the action settled: now the board applies.
+      await flush()
+      expect(dayOfCalls()).toHaveLength(2)
+      expect(screen.queryByRole("button", { name: /Zoé Müller/ })).toBeNull()
+    })
+
+    it("a failed undo keeps the check-in made just before, not yet seen by a poll", async () => {
+      fetchMock.mockImplementation(async (url: string, init: RequestInit) => {
+        if (!url.endsWith("/bulk")) return jsonOk({ board, today: "2026-07-04", refreshedAt: "14h06" })
+        return JSON.parse(String(init.body)).action === "check_in"
+          ? jsonOk({ done: 1, changedIds: ["r1"], skipped: 0 })
+          : { ok: false, status: 500, json: async () => ({ error: "Boom" }) }
+      })
+      renderBoard()
+      fireEvent.click(screen.getByRole("button", { name: "Marquer présent, Zoé Müller" }))
+      await flush()
+      fireEvent.click(screen.getByRole("button", { name: "Annuler la présence, Zoé Müller" }))
+      await flush()
+      expect(screen.getByRole("alert")).toBeInTheDocument()
+      expect(screen.getByRole("button", { name: "Annuler la présence, Zoé Müller" })).toBeInTheDocument()
+    })
+
+    it("a card that moves section keeps the focus: on the person's button, or on the shift title", async () => {
+      const moved: Board = { ...board, inProgress: [], upcoming: [{ ...board.inProgress[0] }, ...board.upcoming] }
+      fetchMock.mockResolvedValue(jsonOk({ board: moved, today: "2026-07-04", refreshedAt: "14h06" }))
+      renderBoard()
+      screen.getByRole("button", { name: "Annuler la présence, Léon Favre" }).focus()
+      await act(async () => { await vi.advanceTimersByTimeAsync(25_000) })
+      await flush()
+      expect(screen.getByRole("button", { name: "Annuler la présence, Léon Favre" })).toHaveFocus()
+
+      fetchMock.mockResolvedValue(jsonOk({ board, today: "2026-07-04", refreshedAt: "14h07" }))
+      screen.getByRole("heading", { level: 4, name: "Bar, Soir" }).focus()
+      await act(async () => { await vi.advanceTimersByTimeAsync(25_000) })
+      await flush()
+      expect(screen.getByText("Mis à jour à 14h07.")).toBeInTheDocument()
+      expect(screen.getByRole("heading", { level: 4, name: "Bar, Soir" })).toHaveFocus()
+    })
+
+    it("a network drop after the session expired keeps the expiry message, said once", async () => {
+      fetchMock.mockResolvedValue({ ok: false, status: 401, json: async () => ({}) })
+      renderBoard()
+      await act(async () => { await vi.advanceTimersByTimeAsync(25_000) })
+      await flush()
+      act(() => { window.dispatchEvent(new Event("offline")) })
+      act(() => { window.dispatchEvent(new Event("online")) })
+      await flush()
+      expect(screen.getAllByText("Votre session a expiré : rechargez la page pour vous reconnecter.")).toHaveLength(2)
+      expect(dayOfCalls()).toHaveLength(1)
+    })
+
     it("an expired session stops polling and says how to get back", async () => {
       fetchMock.mockResolvedValue({ ok: false, status: 401, json: async () => ({}) })
       renderBoard()

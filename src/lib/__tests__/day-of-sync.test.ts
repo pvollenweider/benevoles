@@ -12,6 +12,8 @@ import {
   marksAfterPoll,
   mayAnnounceChanges,
   nextPollDelay,
+  pinMark,
+  releasePin,
   shouldSyncOnResume,
   shownCheckIn,
   shownStatus,
@@ -190,5 +192,22 @@ describe("focused person leaving the board", () => {
     expect(leftBoardAnnouncement(before, boardOf([]), "a")).toBe("Zoé a ne figure plus parmi les personnes attendues, Bar, Soir.")
     expect(leftBoardAnnouncement(before, boardOf([person("a")], "earlier"), "a")).toBeNull()
     expect(leftBoardAnnouncement(boardOf([]), boardOf([]), "a")).toBeNull()
+  })
+})
+
+describe("pinMark and releasePin", () => {
+  it("a failed undo puts back the check-in answered earlier but not yet seen by a poll", () => {
+    const checkedIn: LocalMarks = { a: { checkedInAt: "y", at: 4 } }
+    const pinned = pinMark(checkedIn, "a", "y")
+    expect(pinned.a).toEqual({ checkedInAt: "y", at: null, prev: { checkedInAt: "y", at: 4 } })
+    expect(releasePin(pinned, "a")).toEqual(checkedIn)
+  })
+  it("without an earlier mark, releasing goes back to the board", () => {
+    expect(releasePin(pinMark({}, "a", null), "a")).toEqual({})
+  })
+  it("leaves an answered mark alone", () => {
+    const marks: LocalMarks = { a: { checkedInAt: "y", at: 4 } }
+    expect(releasePin(marks, "a")).toBe(marks)
+    expect(releasePin(marks, "zz")).toBe(marks)
   })
 })

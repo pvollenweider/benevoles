@@ -54,14 +54,36 @@ export function syncStatusOf(r: { network: true; online: boolean } | { status: n
   return "error"
 }
 
-/** A check-in made on this phone: `at` the tick of its answer, null while the action is in flight. */
-export type LocalMark = { checkedInAt: string | null; at: number | null }
+/**
+ * A check-in made on this phone: `at` the tick of its answer, null while the action is in flight.
+ * An in-flight mark keeps the mark it replaced (`prev`), put back if the action fails.
+ */
+export type LocalMark = { checkedInAt: string | null; at: number | null; prev?: LocalMark }
 export type LocalMarks = Record<string, LocalMark>
 
 /** The check-in shown for a person: this phone's mark if any, else the board's. */
 export function shownCheckIn(p: Pick<DayOfPerson, "registrationId" | "checkedInAt">, marks: LocalMarks): string | null {
   const m = marks[p.registrationId]
   return m ? m.checkedInAt : p.checkedInAt
+}
+
+/** Starts an action on a row: it shows `shown` (what was on screen when tapped) until the answer. */
+export function pinMark(marks: LocalMarks, id: string, shown: string | null): LocalMarks {
+  const prev = marks[id]
+  return { ...marks, [id]: prev ? { checkedInAt: shown, at: null, prev } : { checkedInAt: shown, at: null } }
+}
+
+/**
+ * The action failed or changed nothing: the row goes back to what it showed before, an earlier
+ * mark of this phone included (a check-in answered but not yet seen by a poll is not lost).
+ */
+export function releasePin(marks: LocalMarks, id: string): LocalMarks {
+  const m = marks[id]
+  if (!m || m.at !== null) return marks
+  const next = { ...marks }
+  if (m.prev) next[id] = m.prev
+  else delete next[id]
+  return next
 }
 
 /** Whether a poll answer sent at `sentAt` comes after the last applied one (`appliedAt`). */
