@@ -81,6 +81,29 @@ body {
   box-shadow: 0 0 0 2px rgba(59, 130, 246, 1);
 }
 
+/* The page canvas under a dark content frame: gray-900 like the frame, with dark native scrollbars
+   (color-scheme), so no white shows around it (overscroll, the instant before the frame paints).
+   Matches only while a frame whose root has `dark` is on the page: back on the home page (no
+   frame), the canvas is white again with no script to undo. Nothing is portalled to <body> outside
+   the frame on these pages; if something ever is, it would inherit the dark color-scheme. */
+html:has([data-theme-scope].dark) {
+  background-color: var(--color-gray-900);
+  color-scheme: dark;
+}
+
+/* The heading a client navigation to a #fragment focuses (ContentShellRoot, tabindex="-1" while
+   it has the focus): the content links' focus outline (blue-700, blue-400 in dark), not the
+   browser's own ring, and only for a keyboard user (focus-visible). */
+[data-theme-scope] :is(h1, h2, h3, h4, h5, h6)[tabindex="-1"]:focus-visible {
+  outline: 2px solid #1d4ed8;
+  outline-offset: 4px;
+  border-radius: 0.25rem;
+}
+
+[data-theme-scope].dark :is(h1, h2, h3, h4, h5, h6)[tabindex="-1"]:focus-visible {
+  outline-color: var(--color-blue-400);
+}
+
 /* In a dark content frame (ContentShell, #1116: the video library's filters): a gray-800 field
    whose gray-400 border is its visible edge (1.4.11: 5.8:1 on its fill, 7:1 on gray-900), light
    text, and the dark theme's focus blue. `.dark` only exists on that frame's root. */

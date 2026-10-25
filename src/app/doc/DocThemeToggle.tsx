@@ -1,21 +1,21 @@
 "use client"
 
-import { useEffect, useState, useSyncExternalStore } from "react"
+import { useCallback, useLayoutEffect, useRef, useState, useSyncExternalStore } from "react"
 
 // The `dark` class lives on the content shell's own root ([data-theme-scope], see
 // src/components/public/ContentShell.tsx), never on <html>: leaving the features page or the
 // documentation for the home page must not carry the dark theme along. Both icons always render;
 // which one shows is driven by that class. isDark only drives aria-pressed and the announcement.
+// The toggle acts on its own frame (closest), never on the first one in the document, so it stays
+// right even if two frames are ever on the page at once during a client navigation.
 
 const EVENT = "doc-theme-change"
-const scope = () => document.querySelector<HTMLElement>("[data-theme-scope]")
+/** How long the frame's colours fade when the reader switches the theme (transition-colors: 150 ms). */
+const SWITCH_MS = 200
 
 function subscribe(onChange: () => void) {
   window.addEventListener(EVENT, onChange)
   return () => window.removeEventListener(EVENT, onChange)
-}
-function getSnapshot() {
-  return scope()?.classList.contains("dark") ?? false
 }
 function getServerSnapshot() {
   return false
@@ -33,20 +33,33 @@ function preferredDark(): boolean {
 }
 
 export default function DocThemeToggle() {
+  const button = useRef<HTMLButtonElement>(null)
+  const switching = useRef<ReturnType<typeof setTimeout> | undefined>(undefined)
+  const scope = () => button.current?.closest<HTMLElement>("[data-theme-scope]") ?? null
+  const getSnapshot = useCallback(() => button.current?.closest("[data-theme-scope]")?.classList.contains("dark") ?? false, [])
   const isDark = useSyncExternalStore(subscribe, getSnapshot, getServerSnapshot)
   const [announcement, setAnnouncement] = useState("")
 
   // The inline script only runs on a full page load; arriving by client navigation (from the home
-  // page's « Voir toutes les fonctionnalités »), apply the preference here.
-  useEffect(() => {
-    scope()?.classList.toggle("dark", preferredDark())
+  // page's « Voir toutes les fonctionnalités », or from another content section, whose frame is another
+  // one), apply the preference here, in a layout effect: before the new frame is painted, so it
+  // never shows in the light theme for a frame, and before its style is first computed, so its
+  // colours don't fade from light to dark either.
+  useLayoutEffect(() => {
+    button.current?.closest("[data-theme-scope]")?.classList.toggle("dark", preferredDark())
     window.dispatchEvent(new Event(EVENT))
+    return () => clearTimeout(switching.current)
   }, [])
 
   function toggle() {
     const root = scope()
     if (!root) return
     const next = !root.classList.contains("dark")
+    // The colours fade only for this switch (motion-safe:data-[theme-switching]:transition-colors
+    // on the frame, ContentShell.tsx); a quick second switch keeps the attribute for its own fade.
+    clearTimeout(switching.current)
+    root.setAttribute("data-theme-switching", "")
+    switching.current = setTimeout(() => root.removeAttribute("data-theme-switching"), SWITCH_MS)
     root.classList.toggle("dark", next)
     try {
       localStorage.setItem("doc-theme", next ? "dark" : "light")
@@ -61,6 +74,7 @@ export default function DocThemeToggle() {
     <>
       <div role="status" aria-live="polite" className="sr-only">{announcement}</div>
       <button
+        ref={button}
         type="button"
         onClick={toggle}
         aria-label="Thème sombre"

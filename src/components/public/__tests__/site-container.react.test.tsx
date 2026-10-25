@@ -5,7 +5,7 @@ import { describe, it, expect, afterEach, vi } from "vitest"
 import "@testing-library/jest-dom/vitest"
 import { render, screen, cleanup, within } from "@testing-library/react"
 
-vi.mock("next/navigation", () => ({ usePathname: () => "/doc/admin" }))
+vi.mock("next/navigation", () => ({ usePathname: () => "/doc/admin", useRouter: () => ({ push: vi.fn() }) }))
 // The theme toggle reads matchMedia, absent from jsdom; it plays no part in the frame's width.
 vi.mock("@/app/doc/DocThemeToggle", () => ({ default: () => null }))
 
