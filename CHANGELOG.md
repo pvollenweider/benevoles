@@ -45,6 +45,8 @@ Format basé sur [Keep a Changelog](https://keepachangelog.com/fr/1.0.0/).
 
 ### Corrigé
 
+- **Un poste dont le nom contient « % » se modifie à nouveau** : renommer, régler ou supprimer un poste comme « Calcul 10% » dans « Gérer les postes » échouait sur une erreur serveur ; le nom n'est plus décodé deux fois.
+
 - **Plus d'éclair blanc en thème sombre entre deux pages de contenu** : passer de la documentation aux fonctionnalités ou au blog (et inversement) affichait la page en clair un instant avant de la passer en sombre. Le thème est maintenant appliqué avant le premier affichage de la page, le fond de la fenêtre est sombre lui aussi (y compris au-delà du haut et du bas de la page), et les couleurs ne s'animent plus que lorsqu'on change de thème. Les liens du texte des guides vers une autre page de contenu s'ouvrent sans recharger toute la page, comme ceux du menu ; après un tel changement de page, le focus clavier va au contenu (ou à la section visée par le lien), et non plus à l'endroit où se trouvait le lien.
 
 - **Liens de réinitialisation du mot de passe et d'invitation à usage unique, strictement** : le lien est consommé en une seule écriture qui vérifie qu'il est toujours valable. Deux envois simultanés du même lien ne changent le mot de passe qu'une fois, un lien remplacé ou expiré pendant le traitement ne change rien, et l'activation d'un compte n'envoie qu'un email de bienvenue. L'activation d'un compte depuis une invitation est aussi limitée en nombre de tentatives, par adresse et par lien.

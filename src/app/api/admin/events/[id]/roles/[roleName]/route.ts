@@ -88,7 +88,8 @@ export async function PATCH(req: Request, { params }: { params: Promise<{ id: st
   const { db, organizationId } = guard
 
   const { id, roleName } = await params
-  const decodedRole = decodeURIComponent(roleName)
+  // Next already decodes the segment: decoding it again throws on a name with « % » (« Calcul 10% »).
+  const decodedRole = roleName
 
   const body = await req.json()
   const parsed = updateSchema.safeParse(body)
@@ -294,7 +295,7 @@ export async function DELETE(_req: Request, { params }: { params: Promise<{ id: 
   const { db, organizationId } = guard
 
   const { id, roleName } = await params
-  const decodedRole = decodeURIComponent(roleName)
+  const decodedRole = roleName
 
   const owned = await db.event.findFirst({ where: { id }, select: { id: true } })
   if (!owned) return NextResponse.json({ error: "Non trouvé" }, { status: 404 })
