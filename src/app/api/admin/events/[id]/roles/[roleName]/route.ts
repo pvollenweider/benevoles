@@ -72,13 +72,15 @@ const updateSchema = z.object({
   reservedTags: z.array(z.string().trim().min(1).max(40)).max(10).optional(),
   /** « Cumulable avec un autre créneau » (#986): the role's shifts may overlap any other shift of a volunteer. */
   overlapAllowed: z.boolean().optional(),
+  /** « Attribué par l'organisation uniquement » (#1145): never offered publicly, people added by hand. */
+  assignedOnly: z.boolean().optional(),
   /** Label copied onto the live shifts, with the places and minimum (#1017). */
   label: z.string().trim().min(1).max(200).optional(),
   /** Day the places, minimum and label apply to (#1017, « ce jour »); absent: the whole event. */
   date: z.string().refine(isCivilDate).optional(),
-}).refine((d) => d.name !== undefined || d.colorKey !== undefined || d.capacity !== undefined || d.minVolunteers !== undefined || d.label !== undefined || d.maxPerVolunteer !== undefined || d.reservedTags !== undefined || d.overlapAllowed !== undefined, { message: "Rien à modifier." })
+}).refine((d) => d.name !== undefined || d.colorKey !== undefined || d.capacity !== undefined || d.minVolunteers !== undefined || d.label !== undefined || d.maxPerVolunteer !== undefined || d.reservedTags !== undefined || d.overlapAllowed !== undefined || d.assignedOnly !== undefined, { message: "Rien à modifier." })
   // A day only narrows the places, minimum and label: the poste's own settings are event-wide.
-  .refine((d) => d.date === undefined || (d.name === undefined && d.colorKey === undefined && d.maxPerVolunteer === undefined && d.reservedTags === undefined && d.overlapAllowed === undefined), { message: "Un jour ne vaut que pour les places, le minimum et le libellé." })
+  .refine((d) => d.date === undefined || (d.name === undefined && d.colorKey === undefined && d.maxPerVolunteer === undefined && d.reservedTags === undefined && d.overlapAllowed === undefined && d.assignedOnly === undefined), { message: "Un jour ne vaut que pour les places, le minimum et le libellé." })
 
 export async function PATCH(req: Request, { params }: { params: Promise<{ id: string; roleName: string }> }) {
   const guard = await requireOrgSession()
@@ -93,7 +95,7 @@ export async function PATCH(req: Request, { params }: { params: Promise<{ id: st
   if (!parsed.success) {
     return NextResponse.json({ error: "Données invalides." }, { status: 400 })
   }
-  const { name: newName, colorKey, capacity, minVolunteers, maxPerVolunteer, overlapAllowed, label, date } = parsed.data
+  const { name: newName, colorKey, capacity, minVolunteers, maxPerVolunteer, overlapAllowed, assignedOnly, label, date } = parsed.data
   const reservedTags = parsed.data.reservedTags === undefined ? undefined : parseTagList(parsed.data.reservedTags.join(","))
 
   const owned = await db.event.findFirst({ where: { id }, select: { id: true } })
@@ -103,7 +105,7 @@ export async function PATCH(req: Request, { params }: { params: Promise<{ id: st
   // on top of that, matching reorder-roles/route.ts's own pattern for the same raw-prisma calls.
   const shifts = await db.shift.findMany({
     where: { eventId: id, roleName: decodedRole, event: { organizationId } },
-    select: { id: true, label: true, date: true, colorKey: true, capacity: true, minVolunteers: true, status: true, maxPerVolunteer: true, reservedTags: true, overlapAllowed: true, _count: { select: { registrations: { where: { status: "active" } } } } },
+    select: { id: true, label: true, date: true, colorKey: true, capacity: true, minVolunteers: true, status: true, maxPerVolunteer: true, reservedTags: true, overlapAllowed: true, assignedOnly: true, _count: { select: { registrations: { where: { status: "active" } } } } },
   })
   if (shifts.length === 0) return NextResponse.json({ error: "Poste introuvable" }, { status: 404 })
 
@@ -228,6 +230,21 @@ export async function PATCH(req: Request, { params }: { params: Promise<{ id: st
       await logEvent({
         eventId: id, actor, action: "shift.updated", entityType: "Shift", entityId: s.id,
         changes: { overlapAllowed: { from: s.overlapAllowed, to: overlapAllowed } },
+      })
+    }
+  }
+
+  if (assignedOnly !== undefined) {
+    // Every shift of the role, cancelled ones too, so the role keeps one value (#1145). The public
+    // page and the sign-up read it from then on; registrations already made stay.
+    await db.shift.updateMany({
+      where: { eventId: id, roleName: newName ?? decodedRole, event: { organizationId } },
+      data: { assignedOnly },
+    })
+    for (const s of shifts.filter((sh) => sh.assignedOnly !== assignedOnly)) {
+      await logEvent({
+        eventId: id, actor, action: "shift.updated", entityType: "Shift", entityId: s.id,
+        changes: { assignedOnly: { from: s.assignedOnly, to: assignedOnly } },
       })
     }
   }

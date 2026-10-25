@@ -3,7 +3,7 @@ import { liveRoleShifts, roleColorOf, roleSettingsOf, type RoleSettingsShift } f
 
 // The settings of a poste (#1002), read from its live shifts for a shift created in it or moved to it.
 const shift = (patch: Partial<RoleSettingsShift> = {}): RoleSettingsShift => ({
-  roleName: "Bar", colorKey: null, maxPerVolunteer: null, reservedTags: [], overlapAllowed: false, displayOrder: 0, updatedAt: "2026-07-01T10:00:00Z", ...patch,
+  roleName: "Bar", colorKey: null, maxPerVolunteer: null, reservedTags: [], overlapAllowed: false, assignedOnly: false, displayOrder: 0, updatedAt: "2026-07-01T10:00:00Z", ...patch,
 })
 
 describe("roleSettingsOf", () => {
@@ -13,12 +13,12 @@ describe("roleSettingsOf", () => {
   })
 
   it("returns the poste's values when its shifts agree, ignoring other postes", () => {
-    const set = { colorKey: "teal", maxPerVolunteer: 2, reservedTags: ["sécurité"], overlapAllowed: true, displayOrder: 300 }
+    const set = { colorKey: "teal", maxPerVolunteer: 2, reservedTags: ["sécurité"], overlapAllowed: true, assignedOnly: true, displayOrder: 300 }
     expect(roleSettingsOf([shift(set), shift(set), shift({ roleName: "Accueil", colorKey: "rose", displayOrder: 0 })], "Bar")).toEqual(set)
   })
 
   it("returns the defaults for a poste whose shifts have none set", () => {
-    expect(roleSettingsOf([shift()], "Bar")).toEqual({ colorKey: null, maxPerVolunteer: null, reservedTags: [], overlapAllowed: false, displayOrder: 0 })
+    expect(roleSettingsOf([shift()], "Bar")).toEqual({ colorKey: null, maxPerVolunteer: null, reservedTags: [], overlapAllowed: false, assignedOnly: false, displayOrder: 0 })
   })
 
   describe("mixed values (shifts added before #1002)", () => {
@@ -34,6 +34,12 @@ describe("roleSettingsOf", () => {
     it("cumulable: only when every shift is", () => {
       expect(roleSettingsOf([shift({ overlapAllowed: true }), shift()], "Bar")?.overlapAllowed).toBe(false)
       expect(roleSettingsOf([shift({ overlapAllowed: true }), shift({ overlapAllowed: true })], "Bar")?.overlapAllowed).toBe(true)
+    })
+
+    it("assigned by the organisation only (#1145): as soon as one shift is, as sign-up enforces it", () => {
+      expect(roleSettingsOf([shift(), shift({ assignedOnly: true })], "Bar")?.assignedOnly).toBe(true)
+      expect(roleSettingsOf([shift(), shift({ assignedOnly: null })], "Bar")?.assignedOnly).toBe(false)
+      expect(roleSettingsOf([shift(), shift({ roleName: "Accueil", assignedOnly: true })], "Bar")?.assignedOnly).toBe(false)
     })
 
     it("order: the smallest displayOrder, as the timelines order postes", () => {

@@ -59,6 +59,8 @@ export type DuplicableShift = {
   reservedTags?: string[]
   /** Role cumulable with another shift (#986), copied with the role's other settings. */
   overlapAllowed?: boolean
+  /** Role assigned by the organisation only (#1145), copied with the role's other settings. */
+  assignedOnly?: boolean
   /** Recurring permanence (#866) the shift came from: such shifts are regenerated, not copied. */
   recurrenceId?: string | null
 }
@@ -142,6 +144,7 @@ export function copiedShift(s: DuplicableShift) {
     maxPerVolunteer: s.maxPerVolunteer ?? null,
     reservedTags: s.reservedTags ?? [],
     overlapAllowed: s.overlapAllowed ?? false,
+    assignedOnly: s.assignedOnly ?? false,
   }
 }
 

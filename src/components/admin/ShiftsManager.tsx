@@ -487,6 +487,8 @@ export default function ShiftsManager({
                     {s.minAge != null && <p className="text-[11px] text-gray-500">{s.minAge} ans minimum</p>}
                     {/* A cumulable role (#986): why someone may hold it and an overlapping shift. */}
                     {s.overlapAllowed && <p className="text-[11px] text-gray-600">Cumulable avec un autre créneau</p>}
+                    {/* A role assigned by the organisation only (#1145): why it is not on the public page. */}
+                    {s.assignedOnly && <p className="text-[11px] text-gray-600">Attribué par l&apos;organisation</p>}
                   </td>
                   <td className="px-4 py-3 hidden sm:table-cell tabular-nums">
                     <p className="text-gray-700 font-medium">

@@ -7,7 +7,7 @@ import { render, screen, cleanup, within } from "@testing-library/react"
 import { existsSync, readdirSync, statSync } from "node:fs"
 import { join } from "node:path"
 
-vi.mock("next/navigation", () => ({ usePathname: () => "/videos" }))
+vi.mock("next/navigation", () => ({ usePathname: () => "/videos", useRouter: () => ({ push: vi.fn() }) }))
 
 import ContentShell from "../ContentShell"
 import VideosLayout from "@/app/videos/layout"

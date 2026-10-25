@@ -71,6 +71,20 @@ describe("POST /api/admin/events/[id]/open-shifts (#566)", () => {
     requireOrgSessionMock.mockResolvedValue({ db, organizationId: "org-a", session: { user: { id: "adm-1", name: "Léa Admin" } } })
   })
 
+  it("never proposes a role assigned by the organisation only (#1145): its shifts are refused, as no longer open", async () => {
+    const assigned = { ...event, shifts: event.shifts.map((s) => (s.id === "bar" ? { ...s, assignedOnly: true } : s)) }
+    ;(db.event as { findFirst: ReturnType<typeof vi.fn> }).findFirst.mockResolvedValue(assigned)
+    const { POST } = await import("@/app/api/admin/events/[id]/open-shifts/route")
+    const res = await POST(post({ shiftIds: ["bar"], volunteerIds: ["ana"], dryRun: true }), params)
+    expect(res.status).toBe(409)
+    expect(createManyAndReturn).not.toHaveBeenCalled()
+    expect(enqueueNotifications).not.toHaveBeenCalled()
+    const { loadOpenShiftsContext } = await import("@/lib/open-shifts-data")
+    const ctx = await loadOpenShiftsContext(db as never, "evt-a")
+    expect(ctx!.openShifts.map((x) => x.id)).not.toContain("bar")
+    expect(ctx!.assignedOnlyLeftOut).toBe(1)
+  })
+
   it("dry run: previews the first person's email, creates and sends nothing", async () => {
     const { POST } = await import("@/app/api/admin/events/[id]/open-shifts/route")
     const res = await POST(post({ shiftIds: ["bar"], volunteerIds: ["ana", "bob"], dryRun: true }), params)

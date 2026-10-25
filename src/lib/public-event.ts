@@ -6,10 +6,12 @@ import { orgTimeZone } from "@/lib/time-zone"
 import { coordinatesOf } from "@/lib/map-link"
 import { OCCUPYING_STATUSES } from "@/lib/registration-capacity"
 import { ORG_LOGO_SELECT, orgLogoOf } from "@/lib/org-logo"
+import { publicShifts } from "@/lib/role-assignment"
 
 /**
  * What volunteers see of an event on its public page. Shared by the public API and the admin
- * preview (#370), so the preview shows exactly what will be published.
+ * preview (#370), so the preview shows exactly what will be published. The shifts of a role
+ * assigned by the organisation only (#1145) are never part of it: see `toPublicEvent`.
  */
 export const publicEventInclude = {
   // The logo's metadata only (#300): the page loads the image from its own URL.
@@ -39,7 +41,9 @@ export type PublicEventRow = Prisma.EventGetPayload<{ include: typeof publicEven
 
 export function toPublicEvent(event: PublicEventRow) {
   const eventPoint = coordinatesOf(event)
-  const shifts = event.shifts.map((shift) => {
+  // Roles assigned by the organisation only (#1145) are left out here, so of the page, its API, the
+  // group links, the embeddable page and the preview alike: nothing counts or names them.
+  const shifts = publicShifts(event.shifts).map((shift) => {
     // Meeting point (#191): the shift's whole pair, else the event's, never half of each.
     const point = coordinatesOf(shift) ?? eventPoint
     return {

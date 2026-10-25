@@ -179,6 +179,13 @@ describe("duplicatePlan with recurring permanences", () => {
     expect(plan.recurrences[0].shifts.every((s) => s.overlapAllowed)).toBe(true)
   })
 
+  it("keeps a role assigned by the organisation only (#1145), on copied and regenerated shifts", () => {
+    const assigned = { ...season, shifts: season.shifts.map((s) => ({ ...s, assignedOnly: s.roleName === "Accueil" })) }
+    const plan = duplicatePlan(assigned, { startDate: "2027-09-01" })
+    expect(plan.shifts.map((s) => s.assignedOnly)).toEqual([false])
+    expect(plan.recurrences[0].shifts.every((s) => s.assignedOnly)).toBe(true)
+  })
+
   it("copies no permanence when the shifts are not copied", () => {
     expect(duplicatePlan(season, { copy: { shifts: false } }).recurrences).toEqual([])
   })

@@ -868,6 +868,39 @@ describe("Shifts — cross-tenant isolation", () => {
     expect(updateMany).toHaveBeenCalledWith({ where: { eventId: "evt-a", roleName: "Bar", event: { organizationId: ORG_A } }, data: { overlapAllowed: true } })
   })
 
+  it("PATCH /api/admin/events/[id]/roles/[roleName] with assignedOnly (#1145) returns 404 for an org-B event, updating nothing", async () => {
+    const { PATCH } = await import("@/app/api/admin/events/[id]/roles/[roleName]/route")
+    const updateMany = vi.fn()
+    const db = setupGuard({ shift: { updateMany } }) // event.findFirst → null
+
+    const res = await PATCH(
+      makeRequest("/api/admin/events/evt-b/roles/Bar", "PATCH", { assignedOnly: true }),
+      { params: Promise.resolve({ id: "evt-b", roleName: "Bar" }) },
+    )
+    expect(res.status).toBe(404)
+    expect(db.shift.findMany).not.toHaveBeenCalled()
+    expect(updateMany).not.toHaveBeenCalled()
+  })
+
+  it("PATCH /api/admin/events/[id]/roles/[roleName] with assignedOnly (#1145) scopes the shifts it updates to the org", async () => {
+    const { PATCH } = await import("@/app/api/admin/events/[id]/roles/[roleName]/route")
+    const updateMany = vi.fn().mockResolvedValue({ count: 1 })
+    setupGuard({
+      event: { findFirst: vi.fn().mockResolvedValue({ id: "evt-a" }) },
+      shift: {
+        findMany: vi.fn().mockResolvedValue([{ id: "s1", colorKey: null, capacity: 2, minVolunteers: null, status: "open", maxPerVolunteer: null, reservedTags: [], overlapAllowed: false, assignedOnly: false, _count: { registrations: 0 } }]),
+        updateMany,
+      },
+    })
+
+    const res = await PATCH(
+      makeRequest("/api/admin/events/evt-a/roles/Bar", "PATCH", { assignedOnly: true }),
+      { params: Promise.resolve({ id: "evt-a", roleName: "Bar" }) },
+    )
+    expect(res.status).toBe(200)
+    expect(updateMany).toHaveBeenCalledWith({ where: { eventId: "evt-a", roleName: "Bar", event: { organizationId: ORG_A } }, data: { assignedOnly: true } })
+  })
+
   it("PATCH /api/admin/events/[id]/roles/[roleName] rename (#1001) returns 404 for an org-B event, touching no sector leader", async () => {
     const { PATCH } = await import("@/app/api/admin/events/[id]/roles/[roleName]/route")
     const $transaction = vi.fn()
@@ -1681,6 +1714,15 @@ describe("Organization logo — cross-tenant isolation", () => {
 
 describe("Event actions — cross-tenant isolation (#1049)", () => {
   beforeEach(() => vi.clearAllMocks())
+
+  it("GET /api/admin/events/[id]/day-of returns 404 for an org-B event, reading only through the scoped db (#1141)", async () => {
+    const { GET } = await import("@/app/api/admin/events/[id]/day-of/route")
+    const db = setupGuard() // event.findFirst → null
+    const res = await GET(makeRequest("/api/admin/events/evt-b/day-of"), params("evt-b"))
+    expect(res.status).toBe(404)
+    expect(db.event.findFirst).toHaveBeenCalledWith(expect.objectContaining({ where: { id: "evt-b" } }))
+    expect(prismaMock.event.findFirst).not.toHaveBeenCalled()
+  })
 
   it("POST /api/admin/events/[id]/duplicate returns 404 for an org-B event, creating nothing", async () => {
     const { POST } = await import("@/app/api/admin/events/[id]/duplicate/route")

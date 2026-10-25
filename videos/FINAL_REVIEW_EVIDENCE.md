@@ -196,3 +196,20 @@ questions de la vidéo restent posées à tous les bénévoles.
   posée à tous) » ; la narration reste juste.
 
 Cette vidéo n'a pas été régénérée dans la même PR.
+
+## Écart connu : accès « attribué par l'organisation uniquement » (#1145)
+
+Dans « Gérer les postes », le texte d'introduction du panneau dit maintenant
+« réserver un poste à certains membres ou à l'organisation », et l'éditeur
+« Accès » commence par la case « Poste « … » attribué par l'organisation
+uniquement » et son explication, au-dessus du champ des étiquettes.
+Sélecteurs des captures inchangés (bouton « Accès : sécurité, poste « Sécurité »
+réservé », champ « Étiquettes donnant accès au poste « Sécurité » », visible tant
+que la case n'est pas cochée) : les captures continuent de fonctionner.
+
+- `shift-eligibility-rules` (scène « La limite et les étiquettes ») : filme
+  l'ancien éditeur « Accès », sans la case ; la narration reste juste.
+- `shifts-roles-views` (passage « Dans Gérer les postes ») : l'introduction du
+  panneau filmée est l'ancienne ; la narration reste juste.
+
+Ces vidéos n'ont pas été régénérées dans la même PR.

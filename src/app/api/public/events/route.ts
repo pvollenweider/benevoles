@@ -6,6 +6,7 @@ import { NextResponse } from "next/server"
 import { headers } from "next/headers"
 import { prisma } from "@/lib/prisma"
 import { PUBLIC_LIST_WHERE } from "@/lib/event-visibility"
+import { publicShifts } from "@/lib/role-assignment"
 
 /**
  * Public list of an organization's events: published and listed ones only (#414), scoped to the
@@ -27,8 +28,10 @@ export async function GET(req: Request) {
   })
 
   const result = events.map((event) => {
-    const totalCapacity = event.shifts.reduce((s, sh) => s + sh.capacity, 0)
-    const totalRegistered = event.shifts.reduce((s, sh) => s + sh.registrations.length, 0)
+    // Roles assigned by the organisation only (#1145) are not counted: no total reveals them.
+    const shifts = publicShifts(event.shifts)
+    const totalCapacity = shifts.reduce((s, sh) => s + sh.capacity, 0)
+    const totalRegistered = shifts.reduce((s, sh) => s + sh.registrations.length, 0)
     return {
       id: event.id,
       slug: event.slug,
