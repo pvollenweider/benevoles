@@ -62,5 +62,7 @@ describe("overlap with a hidden assignment", () => {
     expect(clash).toEqual({ label: null })
     expect(overlapWithExisting(clash!.label).body.error).toBe("Ce créneau chevauche une inscription existante.")
     expect(findOverlap([{ shift: { ...at("10:00", "12:00"), label: "Bar" } }], [at("11:00", "13:00")])).toEqual({ label: "Bar" })
+    // Its role hidden, the shift's own flag missing: still not named.
+    expect(findOverlap([{ shift: { ...at("10:00", "12:00"), label: "Caisse", roleName: "Caisse" } }], [at("11:00", "13:00")], new Set(["Caisse"]))).toEqual({ label: null })
   })
 })

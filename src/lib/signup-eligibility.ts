@@ -69,20 +69,25 @@ export function selectionOverlapRefusal(shifts: (OverlapShift & { label: string 
 }
 
 /** A registration's shift as the overlap checks read it. */
-type ExistingShift = OverlapShift & { label: string; assignedOnly?: boolean | null }
+type ExistingShift = OverlapShift & { label: string; roleName?: string; assignedOnly?: boolean | null }
 
 /**
  * The first of the volunteer's registrations that clashes with one of the asked shifts (#986: a
  * cumulable role may overlap). The label is null for a shift of a role assigned by the
- * organisation only (#1145): nothing proves the submitter is that volunteer, the answer never names it.
+ * organisation only (#1145), its own flag or its role in `hiddenRoles` (`assignedOnlyRoles` of the
+ * event): nothing proves the submitter is that volunteer, the answer never names it.
  */
 export function findOverlap(
   existing: { shift: ExistingShift }[],
   shifts: OverlapShift[],
+  hiddenRoles: Set<string> = new Set(),
 ): { label: string | null } | null {
   for (const reg of existing) {
     for (const shift of shifts) {
-      if (shiftsClash(reg.shift, shift)) return { label: reg.shift.assignedOnly ? null : reg.shift.label }
+      if (shiftsClash(reg.shift, shift)) {
+        const hidden = !!reg.shift.assignedOnly || (reg.shift.roleName !== undefined && hiddenRoles.has(reg.shift.roleName))
+        return { label: hidden ? null : reg.shift.label }
+      }
     }
   }
   return null
@@ -96,8 +101,9 @@ export function overlapWithExisting(label: string | null): SignupRefusal {
 export function existingOverlapRefusal(
   existing: { shift: ExistingShift }[],
   shifts: OverlapShift[],
+  hiddenRoles: Set<string> = new Set(),
 ): SignupRefusal | null {
-  const clash = findOverlap(existing, shifts)
+  const clash = findOverlap(existing, shifts, hiddenRoles)
   return clash ? overlapWithExisting(clash.label) : null
 }
 

@@ -229,6 +229,7 @@ export async function POST(req: Request) {
   // Which link gave the proof: read here, before the transaction, and checked again under the
   // member lock (#1138 follow-up), where it is the only authority.
   let inviteProof = false
+  let hiddenRoles = new Set<string>()
   if (existing) {
     if (inviteToken) {
       const invite = await prisma.memberInvite.findFirst({
@@ -266,7 +267,13 @@ export async function POST(req: Request) {
       where: { volunteerId: existing.id, eventId, status: { in: [...COMMITTED_STATUSES] } },
       include: { shift: true },
     })
-    const clashRefusal = existingOverlapRefusal(allEventRegs, shifts)
+    // Roles of the event assigned by the organisation only (#1145): an overlap with one of their
+    // shifts is refused without naming it.
+    hiddenRoles = assignedOnlyRoles(await prisma.shift.findMany({
+      where: { eventId, status: { not: "cancelled" }, assignedOnly: true },
+      select: { roleName: true, assignedOnly: true },
+    }))
+    const clashRefusal = existingOverlapRefusal(allEventRegs, shifts, hiddenRoles)
     if (clashRefusal) return refuse(clashRefusal)
   }
 
@@ -355,7 +362,7 @@ export async function POST(req: Request) {
           where: { volunteerId, eventId, status: { in: [...COMMITTED_STATUSES] } },
           include: { shift: true },
         })
-        const clashNow = findOverlap(liveNow, shifts)
+        const clashNow = findOverlap(liveNow, shifts, hiddenRoles)
         if (clashNow) throw new OverlapError(clashNow.label)
 
         // Shifts per volunteer for a role (#466), under the same volunteer lock, so two concurrent

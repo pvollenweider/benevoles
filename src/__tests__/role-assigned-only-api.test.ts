@@ -56,6 +56,7 @@ const caisseUnflagged = shiftRow({ id: "s-caisse-2", roleName: "Caisse confident
 function shiftsInDb(rows: ReturnType<typeof shiftRow>[]) {
   m.shiftFindMany.mockImplementation(async ({ where }: { where: { id?: { in: string[] }; roleName?: { in: string[] } } }) => {
     if (where.id) return rows.filter((r) => where.id!.in.includes(r.id))
+    if (!where.roleName) return rows.filter((r) => r.assignedOnly) // the event's hidden roles
     return rows.filter((r) => where.roleName!.in.includes(r.roleName))
   })
 }
@@ -138,7 +139,8 @@ describe("POST /api/public/registrations — role assigned by the organisation o
     ;(prisma.volunteer.findFirst as ReturnType<typeof vi.fn>).mockResolvedValueOnce({ id: "vol-1" })
     ;(prisma.registration.findMany as ReturnType<typeof vi.fn>)
       .mockResolvedValueOnce([]) // not already on the asked shift
-      .mockResolvedValueOnce([{ shift: { ...caisse, startTime: "11:00", endTime: "13:00", date: bar.date } }])
+      // A shift of the hidden role left without the flag: its role, read from the event, still hides it.
+      .mockResolvedValueOnce([{ shift: { ...caisse, assignedOnly: false, startTime: "11:00", endTime: "13:00", date: bar.date } }])
     const { POST } = await import("@/app/api/public/registrations/route")
     const res = await POST(post(["s-bar"]))
     expect(res.status).toBe(409)
