@@ -10,6 +10,7 @@ import { siteName } from "@/lib/site"
 import { env } from "@/lib/env"
 import { reportError } from "@/lib/report-error"
 import { notifyOperator } from "@/lib/operator-alerts"
+import { plainLabel } from "@/lib/signup"
 import { unreachableNote } from "@/lib/admin-reachability"
 import { addressHash } from "@/lib/notifications/smtp-outcome"
 import { cancelPendingOutboxForOrganization } from "@/lib/notifications/org-send-guard"
@@ -144,7 +145,7 @@ export async function runInactivityProcedure(now: Date = new Date(), only?: stri
     await notifyOperator({
       key: `inactivity-deactivated:${now.toISOString().slice(0, 10)}`,
       title: `${siteName()} : espaces désactivés faute d'activité`,
-      message: `${deactivatedNames.length} espace${deactivatedNames.length > 1 ? "s" : ""} désactivé${deactivatedNames.length > 1 ? "s" : ""} sans réponse aux trois messages envoyés : ${deactivatedNames.join(", ")}.`,
+      message: `${deactivatedNames.length} espace${deactivatedNames.length > 1 ? "s" : ""} désactivé${deactivatedNames.length > 1 ? "s" : ""} sans réponse aux trois messages envoyés : ${deactivatedNames.map(plainLabel).join(", ")}.`,
       priority: 3,
       url: `${APP_URL()}/super-admin/inactivity`,
     }).catch(reportError("cleanup.inactivity_operator_alert"))
@@ -245,7 +246,7 @@ async function queueStep(facts: Facts, key: StepKey, plannedAt: Date, now: Date,
     await notifyOperator({
       key: `inactivity-last:${o.id}:${now.toISOString().slice(0, 10)}`,
       title: `${siteName()} : espace bientôt désactivé`,
-      message: `${o.name} : dernier rappel mis en file d'attente pour ${admins.length} administrateur${admins.length > 1 ? "s" : ""}. Sans réponse, désactivation au plus tôt après le ${day(deadlineDay(plannedAt), timeZone, true)}, et seulement 15 jours après l'envoi effectif de ce rappel.${unreachableNote(reachability)}`,
+      message: `${plainLabel(o.name)} : dernier rappel mis en file d'attente pour ${admins.length} administrateur${admins.length > 1 ? "s" : ""}. Sans réponse, désactivation au plus tôt après le ${day(deadlineDay(plannedAt), timeZone, true)}, et seulement 15 jours après l'envoi effectif de ce rappel.${unreachableNote(reachability)}`,
       priority: 3,
       url: `${APP_URL()}/super-admin/organizations/${o.slug}`,
     }).catch(reportError("cleanup.inactivity_operator_alert"))
@@ -306,7 +307,7 @@ async function markBlocked(facts: Facts, decision: Extract<ProcedureDecision, { 
   await notifyOperator({
     key: `inactivity-blocked:${facts.org.id}:${now.toISOString()}`,
     title: `${siteName()} : vérification d'inactivité bloquée`,
-    message: `${facts.org.name} : ${step}${BLOCK_REASONS[decision.reason]}. Pas de désactivation tant que c'est le cas : à traiter depuis la page de l'organisation.`,
+    message: `${plainLabel(facts.org.name)} : ${step}${BLOCK_REASONS[decision.reason]}. Pas de désactivation tant que c'est le cas : à traiter depuis la page de l'organisation.`,
     priority: 3,
     url: `${APP_URL()}/super-admin/organizations/${facts.org.slug}`,
   }).catch(reportError("cleanup.inactivity_operator_alert"))

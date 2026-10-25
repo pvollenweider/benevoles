@@ -87,7 +87,7 @@ export function shiftInfoHtml(info: ShiftInfo): string {
 }
 
 export function btn(href: string, label: string): string {
-  return `<a href="${href}" style="background:#2563eb;color:#fff;padding:11px 22px;border-radius:8px;text-decoration:none;display:inline-block;font-weight:600;font-size:14px">${label}</a>`
+  return `<a href="${escapeHtml(href)}" style="background:#2563eb;color:#fff;padding:11px 22px;border-radius:8px;text-decoration:none;display:inline-block;font-weight:600;font-size:14px">${label}</a>`
 }
 
 /** Opening tag of the white card of every email: the organization's logo goes right after it. */

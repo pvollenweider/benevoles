@@ -81,7 +81,7 @@ export function renderOpenShifts(p: NotificationPayload): RenderedEmail {
     <ul style="background:#f9fafb;border-radius:10px;padding:12px 16px 12px 32px;margin:0">
       ${d.shifts.map((s, i) => `<li style="padding:4px 0">${escapeHtml(lines[i])}<br><a href="${escapeHtml(takeShiftUrl(d.signupUrl, s.id))}" style="color:#1d4ed8;font-weight:600">Je prends ce créneau${several ? ` (${escapeHtml(takeLabel(s))})` : ""}</a></li>`).join("")}
     </ul>
-    <p style="margin-top:1.5em">${btn(escapeHtml(d.signupUrl), several ? "Voir tous les créneaux" : "Choisir mon créneau")}</p>
+    <p style="margin-top:1.5em">${btn(d.signupUrl, several ? "Voir tous les créneaux" : "Choisir mon créneau")}</p>
     ${editUrl ? `<p style="font-size:0.9em"><a href="${escapeHtml(editUrl)}" style="color:#2563eb">Voir mes inscriptions</a></p>` : ""}
     <p style="color:#666;font-size:0.85em;margin-top:2em">Merci d'avance !<br><strong>${escapeHtml(d.organizationName)}</strong></p>
     ${d.declineUrl ? `<p style="color:#666;font-size:0.8em">Pas disponible cette fois ? <a href="${escapeHtml(d.declineUrl)}" style="color:#2563eb">Indiquer que je ne suis pas disponible</a>.</p>` : ""}
