@@ -156,8 +156,27 @@ export function isStacklessDomEventRejection(event: Event): boolean {
   )
 }
 
+// What browsers say when a fetch never got an answer: Safari « Load failed », Chrome « Failed to
+// fetch », Firefox « NetworkError when attempting to fetch resource. ». Seen when a tab opened
+// before a deploy asks for a file of the previous build, or the network drops; Next reloads the
+// page itself. With no stack there is no code of ours to point at.
+const NETWORK_FAILURE = /^(?:Load failed|Failed to fetch|NetworkError when attempting to fetch resource\.?)$/
+
+/** An unhandled rejection that is only a browser network failure, without any stack (client only). */
+export function isStacklessNetworkRejection(event: Event): boolean {
+  const exceptions = event.exception?.values ?? []
+  if (exceptions.length === 0) return false
+  return exceptions.every(
+    (ex) =>
+      ex.type === "TypeError" &&
+      NETWORK_FAILURE.test(ex.value ?? "") &&
+      (ex.mechanism?.type ?? "").includes("onunhandledrejection") &&
+      !ex.stacktrace?.frames?.length,
+  )
+}
+
 /** Client `beforeSend`: drops browser noise that `ignoreErrors` cannot express, then scrubs. */
 export function beforeSendClient<T extends Event>(event: T): T | null {
-  if (isStacklessDomEventRejection(event)) return null
+  if (isStacklessDomEventRejection(event) || isStacklessNetworkRejection(event)) return null
   return scrubEvent(event)
 }
