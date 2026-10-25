@@ -576,10 +576,15 @@ export default function MyRegistrationPage() {
 
         <AvailabilityForm token={token} initialPeriods={data.volunteer.availabilityPeriods ?? []} initialNote={data.volunteer.availabilityNote ?? null} />
 
-        <div className="flex items-center justify-between gap-3 pt-2">
-          {back && <Link href={back.href} className="text-sm font-medium text-blue-700 underline underline-offset-2 hover:text-blue-900 rounded focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-blue-600">{back.label}</Link>}
-          <PushSubscribeButton editToken={token} />
-        </div>
+        {/* Before the way out (the back link ends the page): the push button, or on an iPhone or
+            iPad in a tab the steps to add the page to the Home Screen (#593), full width. */}
+        <PushSubscribeButton editToken={token} installHint />
+
+        {back && (
+          <div className="pt-2">
+            <Link href={back.href} className="text-sm font-medium text-blue-700 underline underline-offset-2 hover:text-blue-900 rounded focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-blue-600">{back.label}</Link>
+          </div>
+        )}
       </div>
     </main>
     {/* After </main>: a footer inside main loses its contentinfo role. */}
