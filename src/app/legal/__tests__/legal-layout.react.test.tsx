@@ -5,7 +5,7 @@ import { describe, it, expect, afterEach, beforeAll, vi } from "vitest"
 import "@testing-library/jest-dom/vitest"
 import { render, screen, cleanup, within } from "@testing-library/react"
 
-vi.mock("next/navigation", () => ({ usePathname: () => "/legal/privacy" }))
+vi.mock("next/navigation", () => ({ usePathname: () => "/legal/privacy", useRouter: () => ({ push: vi.fn() }) }))
 import LegalLayout from "../layout"
 import { CONTENT_PROSE_CLASS } from "@/components/public/ContentShell"
 import { SITE_READING_COLUMN_CLASS } from "@/components/public/site-container"
