@@ -43,6 +43,8 @@ const FIELD_LABELS: Record<string, string> = {
   requiresApproval: "sur validation",
   // « Cumulable avec un autre créneau » (#986).
   overlapAllowed: "cumulable avec un autre créneau",
+  // « Attribué par l'organisation uniquement » (#1145).
+  assignedOnly: "attribué par l'organisation uniquement",
   shiftId: "créneau",
   source: "origine",
   comment: "commentaire",

@@ -200,9 +200,9 @@ describe("RoleSettings", () => {
   })
 
   describe("RoleReserveForm", () => {
-    const setup = (value: string, reservedTags: string[] = []) => {
-      const cb = { ...callbacks(), onValueChange: vi.fn() }
-      render(<RoleReserveForm eventId="evt-1" role="Bar" index={0} reservedTags={reservedTags} value={value} busyRole={null} {...cb} />)
+    const setup = (value: string, reservedTags: string[] = [], assigned = { saved: false, draft: false }) => {
+      const cb = { ...callbacks(), onValueChange: vi.fn(), onAssignedOnlyChange: vi.fn() }
+      render(<RoleReserveForm eventId="evt-1" role="Bar" index={0} reservedTags={reservedTags} assignedOnly={assigned.saved} assignedOnlyValue={assigned.draft} value={value} busyRole={null} {...cb} />)
       return cb
     }
 
@@ -212,17 +212,57 @@ describe("RoleSettings", () => {
       fireEvent.click(screen.getByRole("button", { name: "Enregistrer" }))
 
       await waitFor(() => expect(cb.onAnnounce).toHaveBeenCalledOnce())
-      expect(JSON.parse(fetchMock.mock.calls[0][1].body)).toEqual({ reservedTags: ["sécurité", "secouriste"] })
+      expect(JSON.parse(fetchMock.mock.calls[0][1].body)).toEqual({ assignedOnly: false, reservedTags: ["sécurité", "secouriste"] })
       expect(applied(cb.setShifts, [shift({})])[0].reservedTags).toEqual(["sécurité", "secouriste"])
       expect(cb.onClose).toHaveBeenCalledWith("Bar")
       expect(cb.onAnnounce).toHaveBeenCalledWith("Poste « Bar » : réservé aux membres avec l'étiquette sécurité ou secouriste. 1 étiquette ignorée (doublons, ou 10 au maximum).")
     })
 
     it("does nothing while another role action runs", () => {
-      const cb = { ...callbacks(), onValueChange: vi.fn() }
-      render(<RoleReserveForm eventId="evt-1" role="Bar" index={0} reservedTags={["a"]} value="a" busyRole="Accueil" {...cb} />)
+      const cb = { ...callbacks(), onValueChange: vi.fn(), onAssignedOnlyChange: vi.fn() }
+      render(<RoleReserveForm eventId="evt-1" role="Bar" index={0} reservedTags={["a"]} assignedOnly={false} assignedOnlyValue={false} value="a" busyRole="Accueil" {...cb} />)
       fireEvent.click(screen.getByRole("button", { name: "Ouvrir à tous" }))
       expect(fetchMock).not.toHaveBeenCalled()
+    })
+
+    // Assigned by the organisation only (#1145), in the same editor.
+    it("offers « attribué par l'organisation uniquement » first, described, with the tags field while unticked", () => {
+      const cb = setup("sécurité")
+      const box = screen.getByRole("checkbox", { name: "Poste « Bar » attribué par l'organisation uniquement" })
+      expect(box).toHaveFocus()
+      expect(box).not.toBeChecked()
+      expect(box).toHaveAccessibleDescription(/personne ne peut s'y inscrire, même avec un lien d'invitation.*Les étiquettes ne s'appliquent pas tant que cette case est cochée/)
+      expect(screen.getByLabelText("Étiquettes donnant accès au poste « Bar »")).toHaveValue("sécurité")
+      fireEvent.click(box)
+      expect(cb.onAssignedOnlyChange).toHaveBeenCalledWith(true)
+    })
+
+    it("ticked: the tags field is gone, and saving sends the option alone, keeping the tags", async () => {
+      fetchMock.mockResolvedValue({ ok: true, json: async () => ({}) })
+      const cb = setup("sécurité", ["sécurité"], { saved: false, draft: true })
+      expect(screen.queryByLabelText("Étiquettes donnant accès au poste « Bar »")).toBeNull()
+      fireEvent.click(screen.getByRole("button", { name: "Enregistrer" }))
+      await waitFor(() => expect(cb.onAnnounce).toHaveBeenCalledOnce())
+      expect(JSON.parse(fetchMock.mock.calls[0][1].body)).toEqual({ assignedOnly: true })
+      const after = applied(cb.setShifts, [shift({ reservedTags: ["sécurité"] })])[0]
+      expect(after).toMatchObject({ assignedOnly: true, reservedTags: ["sécurité"] })
+      expect(cb.onAnnounce).toHaveBeenCalledWith("Poste « Bar » : attribué par l'organisation uniquement.")
+    })
+
+    it("« Ouvrir à tous » shows for a saved assigned-only role and clears both settings", async () => {
+      fetchMock.mockResolvedValue({ ok: true, json: async () => ({}) })
+      const cb = setup("", [], { saved: true, draft: true })
+      fireEvent.click(screen.getByRole("button", { name: "Ouvrir à tous" }))
+      await waitFor(() => expect(cb.onAnnounce).toHaveBeenCalledOnce())
+      expect(JSON.parse(fetchMock.mock.calls[0][1].body)).toEqual({ assignedOnly: false, reservedTags: [] })
+      expect(cb.onAnnounce).toHaveBeenCalledWith("Poste « Bar » : ouvert à tous.")
+    })
+
+    it("saving without a change sends nothing and says so", () => {
+      const cb = setup("sécurité", ["sécurité"], { saved: true, draft: true })
+      fireEvent.click(screen.getByRole("button", { name: "Enregistrer" }))
+      expect(fetchMock).not.toHaveBeenCalled()
+      expect(cb.onAnnounce).toHaveBeenCalledWith("Poste « Bar » : aucune modification.")
     })
 
     it("reports the server's error and stays open", async () => {

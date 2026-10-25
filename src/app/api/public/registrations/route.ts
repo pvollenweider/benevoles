@@ -28,6 +28,7 @@ import { linkToken, registrationToken } from "@/lib/token-vault"
 import { validationError } from "@/lib/api-error"
 import { checkAnswers, consistentAdditions, planAnswerWrites } from "@/lib/event-questions"
 import { reservedRoles } from "@/lib/role-reservation"
+import { assignedOnlyRoles, asksAssignedOnly } from "@/lib/role-assignment"
 import {
   answersRefusal,
   existingOverlapRefusal,
@@ -146,9 +147,19 @@ export async function POST(req: Request) {
     include: { registrations: { where: { status: { in: [...OCCUPYING_STATUSES] } } } },
   })
 
-  if (shifts.length !== shiftIds.length) {
-    return NextResponse.json({ error: "Un ou plusieurs créneaux sont invalides ou fermés. Recharge la page." }, { status: 409 })
-  }
+  const invalidShifts = () => NextResponse.json({ error: INVALID_SHIFTS }, { status: 409 })
+  if (shifts.length !== shiftIds.length) return invalidShifts()
+
+  // The settings of the roles asked for, from all their live shifts: a role is assigned by the
+  // organisation only (#1145) or reserved (#470) as soon as one of its shifts is.
+  const roleShifts = await prisma.shift.findMany({
+    where: { eventId, roleName: { in: [...new Set(shifts.map((s) => s.roleName))] }, status: { not: "cancelled" } },
+    select: { roleName: true, reservedTags: true, assignedOnly: true },
+  })
+  // A role assigned by the organisation only (#1145) is never bookable here, invitation or personal
+  // link included: its shifts answer as unknown ones, before any other check, so neither the
+  // message nor a « full » or « past » refusal reveals the role.
+  if (asksAssignedOnly(shifts, assignedOnlyRoles(roleShifts))) return invalidShifts()
 
   // Early, unlocked check for a friendly error — the authoritative one runs under lock below.
   // A full shift with a waitlist goes on: its registration is created with status "waiting".
@@ -162,10 +173,7 @@ export async function POST(req: Request) {
   if (selectionRefusal) return refuse(selectionRefusal)
 
   // Roles reserved to members with a tag (#470): all the role's shifts count, see reservedRoleRefusal.
-  const reserved = reservedRoles(await prisma.shift.findMany({
-    where: { eventId, roleName: { in: [...new Set(shifts.map((s) => s.roleName))] }, status: { not: "cancelled" } },
-    select: { roleName: true, reservedTags: true },
-  }))
+  const reserved = reservedRoles(roleShifts)
   const roleRefusal = await reservedRoleRefusal({
     shifts,
     reserved,
@@ -364,6 +372,10 @@ export async function POST(req: Request) {
           const [breach] = roleLimitBreaches(shifts, held.map((h) => h.shift), limits)
           if (breach) throw new RoleLimitError(breach)
         }
+        // Again under the shift lock (#1145): the role route sets the option on every shift of the role,
+        // so a role made assigned-only while this sign-up ran shows on the locked shifts themselves.
+        const lockedFlags = await tx.shift.findMany({ where: { id: { in: shiftIds }, assignedOnly: true }, select: { id: true, assignedOnly: true } })
+        if (lockedFlags.some((s) => s.assignedOnly)) throw new AssignedOnlyError()
         const created = []
         for (const shift of shifts) {
           const occupied = await tx.registration.count({
@@ -477,6 +489,7 @@ export async function POST(req: Request) {
       }
       if (e instanceof OverlapError) return refuse(overlapWithExisting(e.label))
       if (e instanceof StaleProofError) return refuse(staleLinkRefusal())
+      if (e instanceof AssignedOnlyError) return NextResponse.json({ error: INVALID_SHIFTS }, { status: 409 })
       if (isUniqueViolation(e)) {
         // Our transaction rolled back; the duplicate belongs to a volunteer that exists
         // independently of it (created before, or by a concurrent sign-up).
@@ -645,6 +658,16 @@ class StaleProofError extends Error {
     super("Proof of address changed before the member lock")
   }
 }
+
+/** A role made assigned-only by the organisation (#1145) while the sign-up ran, seen under the lock. */
+class AssignedOnlyError extends Error {
+  constructor() {
+    super("Shift of a role assigned by the organisation only")
+  }
+}
+
+/** Unknown, closed or not public (#1145): one answer for all, which reveals no role. */
+const INVALID_SHIFTS = "Un ou plusieurs créneaux sont invalides ou fermés. Recharge la page."
 
 class OverlapError extends Error {
   constructor(readonly label: string) {

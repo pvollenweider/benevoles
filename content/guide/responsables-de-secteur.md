@@ -14,7 +14,7 @@ aliases: []
 
 **Événements**, puis l'événement, puis l'onglet **Réglages**, et **Responsables de secteur** dans ses pages
 
-Désignez un ou plusieurs bénévoles responsables d'un poste (ex. « Bar »). Chacun reçoit un lien personnel, sans compte à créer, qui affiche en lecture seule la liste des bénévoles inscrits sur ce poste (nom, email, téléphone). Pour les créneaux qui ont un minimum de personnes, la page indique aussi « 2/4 · minimum atteint » ou « 1/4 · sous le minimum (2) », et liste en tête les créneaux sous leur minimum, même ceux où personne n'est encore inscrit.
+Désignez un ou plusieurs bénévoles responsables d'un poste (ex. « Bar »). Chacun reçoit un lien personnel, sans compte à créer, qui affiche en lecture seule la liste des bénévoles inscrits sur ce poste (nom, email, téléphone). Pour les créneaux qui ont un minimum de personnes, la page indique aussi « 2/4 · minimum atteint » ou « 1/4 · sous le minimum (2) », et liste en tête les créneaux sous leur minimum, même ceux où personne n'est encore inscrit. Un poste [attribué par l'organisation uniquement](gerer-les-postes.md) se suit de la même façon : son responsable voit les personnes que vous y avez ajoutées, et ne voit pas plus que pour un autre poste.
 
 ![Liste des responsables de secteur d'un événement, avec le poste, le nom et l'action retirer](/doc-img/admin-sector-leaders.png)
 
