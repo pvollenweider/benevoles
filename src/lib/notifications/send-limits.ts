@@ -247,8 +247,11 @@ export async function takeSendAllowance(
   // 1. Decide, from the windows as they are.
   let full: { window: Window; msLeft: number } | null = null
   try {
+    // One read for every window when the store can (the outbox sends emails one after another,
+    // so a read per window per email added up); windows are still checked in their order.
+    const states = store.peekMany ? await store.peekMany(windows.map((w) => w.key)) : null
     for (const w of windows) {
-      const state = await store.peek(w.key)
+      const state = states ? states.get(w.key) ?? null : await store.peek(w.key)
       if (state && state.count >= w.limit) { full = { window: w, msLeft: state.msLeft }; break }
     }
   } catch (e) {

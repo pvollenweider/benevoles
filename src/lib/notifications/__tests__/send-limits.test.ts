@@ -135,4 +135,22 @@ describe("operator alert gate (#810)", () => {
     // A store that fails never fails the request.
     await expect(alertRefusedAtRequest("org-1", "password_reset", "x@example.org", { store: { peek: vi.fn(), hit: vi.fn().mockRejectedValue(new Error("db down")) }, alert })).resolves.toBeUndefined()
   })
+
+  it("reads every window of an email in one call when the store can, with the same decisions as one read per window", async () => {
+    const batched = memoryStore()
+    const peekMany = vi.spyOn(batched, "peekMany")
+    const peek = vi.spyOn(batched, "peek")
+    const single = memoryStore()
+    delete single.peekMany
+    const run = async (store: typeof batched) => {
+      const out = []
+      for (let i = 0; i < 5; i++) out.push(await takeSendAllowance("org-1", "registration_confirmation", { store, limits: tight, alert: vi.fn(), recipientEmail: "a@example.org" }))
+      return out
+    }
+    const a = await run(batched)
+    const b = await run(single)
+    expect(a.map((r) => r.ok)).toEqual(b.map((r) => r.ok))
+    expect(peekMany).toHaveBeenCalledTimes(5)
+    expect(peek).not.toHaveBeenCalled()
+  })
 })

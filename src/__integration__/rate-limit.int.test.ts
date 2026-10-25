@@ -46,6 +46,19 @@ describe.skipIf(!url)("rate limit on Postgres (#322)", () => {
     expect(win.msLeft).toBeGreaterThan(55_000)
   })
 
+  it("peekMany reads several live windows at once and leaves out missing and expired keys", async () => {
+    const live = `${tag}-many-live`, expired = `${tag}-many-expired`
+    await postgresStore.hit(live, 60_000)
+    await postgresStore.hit(live, 60_000)
+    await postgresStore.hit(expired, 60_000)
+    await prisma.rateLimit.update({ where: { key: expired }, data: { resetAt: new Date(Date.now() - 1000) } })
+    const found = await postgresStore.peekMany!([live, expired, `${tag}-many-missing`])
+    expect([...found.keys()]).toEqual([live])
+    expect(found.get(live)?.count).toBe(2)
+    expect(found.get(live)?.msLeft).toBeGreaterThan(55_000)
+    expect((await postgresStore.peekMany!([])).size).toBe(0)
+  })
+
   it("release gives back one hit, never below zero, and ignores a missing key (#1048)", async () => {
     const key = `${tag}-release`
     await postgresStore.hit(key, 60_000)
