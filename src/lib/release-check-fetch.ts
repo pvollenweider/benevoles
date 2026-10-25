@@ -12,6 +12,19 @@ const TIMEOUT_MS = 5000
 
 export type LatestRelease = { version: string; url: string }
 
+const RELEASES_PAGE = "https://github.com/pvollenweider/benevoles/releases"
+
+/** The release link shown in the banner and the email: GitHub's page of this repository only. */
+export function releasePageUrl(htmlUrl: string): string {
+  try {
+    const u = new URL(htmlUrl)
+    if (u.protocol === "https:" && u.hostname === "github.com" && u.pathname.startsWith("/pvollenweider/benevoles/releases/")) return u.toString()
+  } catch {
+    // Not a URL: falls back to the releases page.
+  }
+  return RELEASES_PAGE
+}
+
 /**
  * Null on any failure (network, non-200, malformed body, timeout) or when the latest release
  * turns out to be a draft/prerelease. Never throws — the caller logs and moves on.
@@ -28,7 +41,7 @@ export async function fetchLatestRelease(): Promise<LatestRelease | null> {
     const { tag_name, html_url, draft, prerelease } = data as Record<string, unknown>
     if (draft || prerelease) return null
     if (typeof tag_name !== "string" || typeof html_url !== "string") return null
-    return { version: tag_name, url: html_url }
+    return { version: tag_name, url: releasePageUrl(html_url) }
   } catch (e) {
     console.warn("release-check: GitHub request failed:", e instanceof Error ? e.message : e)
     return null
