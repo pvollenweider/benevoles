@@ -264,3 +264,20 @@ versions publiées et un bouton « Préremplir », avec une phrase d'aide.
   seulement, à revoir à la prochaine régénération.
 
 Cette vidéo n'a pas été régénérée dans la même PR.
+
+## Écart connu : page « Mes inscriptions » installable et étapes iPhone (#593)
+
+Sur `/my/[token]`, le bouton « Recevoir des rappels push » n'est plus à droite
+du lien de retour : il a sa propre ligne, au-dessus de ce lien. Sur iPhone et
+iPad dans un onglet, la page affiche à sa place la carte « Recevoir les rappels
+sur iPhone ou iPad » avec les étapes d'ajout à l'écran d'accueil.
+
+- `volunteer-phone-notifications` : la scène « personal-link » filme le bouton
+  à son ancienne place (bureau, 1280 px) ; le libellé, les sélecteurs de
+  capture (`videos/lib/record-phone-notifications.ts`, par rôle et nom) et la
+  narration restent justes (« Sur certains téléphones, des étapes
+  supplémentaires peuvent être nécessaires »). Image seulement, à revoir à la
+  prochaine régénération ; la carte iPhone pourra alors être montrée dans la
+  scène « conditions », une fois vérifiée sur un vrai iPhone.
+
+Cette vidéo n'a pas été régénérée dans la même PR.

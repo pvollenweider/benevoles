@@ -118,6 +118,8 @@ describe("the units' heading ids", () => {
     }
   })
 
+  // Renders every unit, and the target unit again for each cross-unit link: over the 5 s default on
+  // a busy CI runner.
   it("resolve every in-page link of a unit, and every link to another unit's heading", () => {
     for (const unit of units) {
       const html = renderDocUnit(unit)
@@ -129,7 +131,7 @@ describe("the units' heading ids", () => {
         expect(headingsOf(renderDocUnit(other)).map((h) => h.id), `${unit.slug} → /doc/${slug}#${id}`).toContain(id)
       }
     }
-  })
+  }, 20_000)
 
   it("link to the admin guide only at a heading it still has", () => {
     const guideIds = new Set(headingsOf(renderPublicSource("content/guide/GUIDE_ADMIN.md", "x").html).map((h) => h.id))
