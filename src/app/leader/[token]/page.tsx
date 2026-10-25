@@ -9,12 +9,15 @@ import OrgUnavailableNotice from "@/components/public/OrgUnavailableNotice"
 import { isOrgUnavailable, orgUnavailableContact } from "@/lib/org-lifecycle"
 import { orgPageFooterSite } from "@/lib/urls"
 import { spokenStaffingState, staffingStateText, type StaffingState } from "@/lib/staffing"
+import { isTokenShaped, tokenPath } from "@/lib/token-path"
+import { mailtoHref } from "@/lib/email-address"
+import { telHref } from "@/lib/shift-info"
 
 type RegistrationItem = {
   id: string
   status: string
   comment: string | null
-  volunteer: { firstName: string; lastName: string; email: string; phone: string }
+  volunteer: { firstName: string; lastName: string; email: string | null; phone: string }
   shift: { label: string; date: string; startTime: string; endTime: string }
 }
 
@@ -75,13 +78,16 @@ export default function SectorLeaderPage() {
   const token = params.token as string
 
   const [data, setData] = useState<PageData | null>(null)
-  const [loading, setLoading] = useState(true)
+  // Not shaped like a token: no request, the page says the link is invalid straight away.
+  const [loading, setLoading] = useState(() => isTokenShaped(token))
   const [error, setError] = useState<string | null>(null)
   // The organisation is deactivated or suspended: a page of its own, without any of the roster.
   const [orgUnavailable, setOrgUnavailable] = useState<{ contact: string | null } | null>(null)
 
   useEffect(() => {
-    fetch(`/api/public/leader/${token}`)
+    const url = tokenPath("/api/public/leader", token)
+    if (!url) return
+    fetch(url)
       .then((r) => r.json())
       .then((d) => {
         if (isOrgUnavailable(d)) setOrgUnavailable({ contact: orgUnavailableContact(d) })
@@ -173,9 +179,11 @@ export default function SectorLeaderPage() {
                           )}
                         </div>
                         <div className="text-xs text-gray-500 mt-0.5 flex flex-wrap gap-x-3">
-                          <a href={`mailto:${reg.volunteer.email}`} className="hover:text-blue-600 underline-offset-2 hover:underline">{reg.volunteer.email}</a>
+                          {mailtoHref(reg.volunteer.email) ? (
+                            <a href={mailtoHref(reg.volunteer.email)!} className="hover:text-blue-600 underline-offset-2 hover:underline">{reg.volunteer.email}</a>
+                          ) : reg.volunteer.email && <span>{reg.volunteer.email}</span>}
                           {reg.volunteer.phone && (
-                            <a href={`tel:${reg.volunteer.phone}`} className="hover:text-blue-600 underline-offset-2 hover:underline">{reg.volunteer.phone}</a>
+                            <a href={telHref(reg.volunteer.phone)} className="hover:text-blue-600 underline-offset-2 hover:underline">{reg.volunteer.phone}</a>
                           )}
                         </div>
                         {reg.comment && <p className="text-xs text-gray-600 mt-1 italic">{reg.comment}</p>}

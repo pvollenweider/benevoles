@@ -7,6 +7,7 @@ import { useState } from "react"
 import { lastLinkEmailLabel, PERSONAL_LINK_NOTICE } from "@/lib/personal-link"
 import { orgContactHref } from "@/lib/mission-brief"
 import { ORG_CONTACT_LABEL } from "@/lib/shift-info"
+import { requireTokenPath } from "@/lib/token-path"
 
 type Props = {
   token: string
@@ -31,7 +32,7 @@ export default function PersonalLinkPanel({ token, linkEmailedAt, timeZone, cont
     setMessage(null)
     setFailed(false)
     try {
-      const res = await fetch(`/api/public/registrations/${token}/resend-link`, { method: "POST" })
+      const res = await fetch(requireTokenPath("/api/public/registrations", token, "/resend-link"), { method: "POST" })
       const data = await res.json().catch(() => ({}))
       setFailed(!res.ok)
       setMessage(data.message ?? data.error ?? (res.ok ? "Email envoyé." : "L'email n'a pas pu être envoyé. Réessaie plus tard."))

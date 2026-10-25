@@ -16,6 +16,7 @@ import { announce } from "@/lib/announce"
 import { focusFirstAvailable, type FocusCandidate } from "@/lib/focus-return"
 import type { SelfCancelReason } from "@/lib/cancel-deadline"
 import SignupQuestions, { type Answers } from "./SignupQuestions"
+import { requireTokenPath } from "@/lib/token-path"
 
 const linkCls = "font-medium text-blue-700 underline underline-offset-2 hover:text-blue-900 rounded focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-blue-600"
 const EDIT_BUTTON_ID = "my-answers-edit"
@@ -112,7 +113,7 @@ export default function MyAnswersCard({ rows: initialRows, kept = [], edit: init
     let body: { answers?: MyAnswerRow[]; changed?: number; error?: string; questionErrors?: unknown; reason?: SelfCancelReason } = {}
     let statusCode = 0
     try {
-      const res = await fetch(`/api/public/registrations/${token}/answers`, {
+      const res = await fetch(requireTokenPath("/api/public/registrations", token, "/answers"), {
         method: "PATCH",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ answers }),

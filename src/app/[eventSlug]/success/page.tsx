@@ -17,6 +17,7 @@ import { EMBED_PARAM, NEW_TAB_HINT, isEmbedMode, markReturnToSchedule } from "@/
 import { PERSONAL_LINK_DOC_LINKS, PERSONAL_LINK_EMAIL_NOTE } from "@/lib/personal-link"
 import { showsPersonalLinkEmailNote, successBackLink } from "@/lib/registration-success"
 import DocMoreLink from "@/components/DocMoreLink"
+import { tokenOrNull, tokenPath } from "@/lib/token-path"
 
 type RegistrationData = {
   volunteer: { firstName: string; email: string }
@@ -27,7 +28,8 @@ type RegistrationData = {
 function SuccessContent() {
   const params = useSearchParams()
   const { eventSlug } = useParams<{ eventSlug: string }>()
-  const token = params.get("token")
+  // Only a value shaped like a token is used: anything else is as if the address had none.
+  const token = tokenOrNull(params.get("token"))
   // The embedded sign-up (#948): same confirmation inside the association's site, without the site
   // footer; the personal page opens in a new tab, and push reminders are offered there instead
   // (a third-party frame may not ask for notifications).
@@ -53,8 +55,9 @@ function SuccessContent() {
   const [fetching, setFetching] = useState(!!token)
 
   useEffect(() => {
-    if (!token) return
-    fetch(`/api/public/registrations/${token}`)
+    const url = tokenPath("/api/public/registrations", token)
+    if (!url) return
+    fetch(url)
       .then((r) => (r.ok ? r.json() : null))
       .then((d) => {
         if (d && !d.error) setRegData(d)
@@ -135,7 +138,7 @@ function SuccessContent() {
                 <p className="text-xs text-gray-500 mb-2">Lien pour modifier ou annuler</p>
                 {embed ? (
                   <a
-                    href={`/my/${token}`}
+                    href={`/my/${encodeURIComponent(token)}`}
                     target="_blank"
                     rel="noopener"
                     className="text-blue-600 text-sm font-medium underline break-all"
@@ -144,7 +147,7 @@ function SuccessContent() {
                   </a>
                 ) : (
                   <Link
-                    href={`/my/${token}`}
+                    href={`/my/${encodeURIComponent(token)}`}
                     className="text-blue-600 text-sm font-medium underline break-all"
                   >
                     Accéder à mon inscription

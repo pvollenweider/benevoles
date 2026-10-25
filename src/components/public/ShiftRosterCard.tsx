@@ -17,6 +17,7 @@ import {
 import { RosterName } from "./RosterName"
 import Switch from "./Switch"
 import DocMoreLink from "@/components/DocMoreLink"
+import { requireTokenPath } from "@/lib/token-path"
 
 /** What GET /api/public/registrations/[token]/roster answers (#1068). */
 export type RosterData =
@@ -76,7 +77,7 @@ export default function ShiftRosterCard({ token, data, beginChange, eventPageUrl
     let next: RosterData | null = null
     let error: string | null = null
     try {
-      const res = await fetch(`/api/public/registrations/${token}/roster`, {
+      const res = await fetch(requireTokenPath("/api/public/registrations", token, "/roster"), {
         method: "PATCH",
         headers: { "Content-Type": "application/json" },
         // The text this card shows (#1068): its audience is the one stored with the choice.

@@ -66,6 +66,7 @@ import { SECTION_DOC_LINKS, docHref } from "@/lib/help-links"
 import LinkRequestForm from "@/components/LinkRequestForm"
 import { LOST_LINK_SUMMARY, PERSONAL_LINK_DOC_LINKS, showsLostLinkEntry } from "@/lib/personal-link"
 import { readStored, removeStored, writeStored } from "@/lib/device-storage"
+import { tokenOrNull, tokenPath } from "@/lib/token-path"
 import { NEW_TAB_HINT, takeReturnToSchedule } from "@/lib/embed"
 import { successPath } from "@/lib/registration-success"
 import EmbedFrame from "@/components/public/EmbedFrame"
@@ -177,7 +178,8 @@ export default function EventPageClient({ orgSlug, eventSlug, preview, initialEv
   const [previewResult, setPreviewResult] = useState<PreviewResult | null>(null)
   const router = useRouter()
   const searchParams = useSearchParams()
-  const inviteToken = searchParams.get("token")
+  // Only a value shaped like a token counts as an invitation: anything else is as if there were none.
+  const inviteToken = tokenOrNull(searchParams.get("token"))
   // « Je prends ce créneau » from an organizer's email (#869): the proposed shift, offered in one click.
   const proposedShiftId = searchParams.get("creneau")
   const proposalTextRef = useRef<HTMLParagraphElement>(null)
@@ -307,7 +309,7 @@ export default function EventPageClient({ orgSlug, eventSlug, preview, initialEv
   const myShiftIds = useMemo(() => new Set(myRegistrations.map((r) => r.shiftId)), [myRegistrations])
   const myStatus = useMemo(() => new Map(myRegistrations.map((r) => [r.shiftId, r.status])), [myRegistrations])
   // Held shifts the volunteer can't cancel online any more (#946): no ✕, a sentence instead.
-  const myTokenByShift = useMemo(() => new Map(myRegistrations.map((r) => [r.shiftId, `/my/${r.token}`])), [myRegistrations])
+  const myTokenByShift = useMemo(() => new Map(myRegistrations.map((r) => [r.shiftId, `/my/${encodeURIComponent(r.token)}`])), [myRegistrations])
   const closedShiftIds = useMemo(() => new Set(myRegistrations.filter((r) => r.cancellable === false).map((r) => r.shiftId)), [myRegistrations])
   // Held shifts by status, for the schedule: named and drawn as the visitor's own (#534).
   const heldByShift = useMemo(() => heldKinds(myRegistrations), [myRegistrations])
@@ -364,8 +366,9 @@ export default function EventPageClient({ orgSlug, eventSlug, preview, initialEv
   }, [eventSlug, orgSlug, previewEventId, serverRendered])
 
   useEffect(() => {
-    if (!inviteToken || previewEventId) return
-    fetch(`/api/public/member-invite/${inviteToken}?slug=${encodeURIComponent(eventSlug)}`)
+    const inviteUrl = tokenPath("/api/public/member-invite", inviteToken, `?slug=${encodeURIComponent(eventSlug)}`)
+    if (!inviteUrl || previewEventId) return
+    fetch(inviteUrl)
       .then((r) => (r.ok ? r.json() : null))
       .then((data) => {
         if (!data?.member) return
@@ -379,9 +382,10 @@ export default function EventPageClient({ orgSlug, eventSlug, preview, initialEv
   useEffect(() => {
     if (previewEventId) return // a preview never picks up a volunteer's session on this browser
     // Storage may be refused or partitioned (a third-party frame, #948): no session then.
-    const token = readStored(storageKey)
-    if (!token) return
-    fetch(`/api/public/registrations/${token}`)
+    const token = tokenOrNull(readStored(storageKey))
+    const sessionUrl = tokenPath("/api/public/registrations", token)
+    if (!token || !sessionUrl) return
+    fetch(sessionUrl)
       .then((r) => r.ok ? r.json() : null)
       .then((data) => {
         if (!data?.registrations) return
@@ -715,13 +719,16 @@ export default function EventPageClient({ orgSlug, eventSlug, preview, initialEv
     setWithdrawing(true)
     setWithdrawError(null)
     let failure: { status?: number; network?: boolean; error?: string } | null = null
+    const url = tokenPath("/api/public/registrations", pending.token)
     try {
-      const res = await fetch(`/api/public/registrations/${pending.token}`, {
+      // Not a token (never from the server): nothing to cancel, said like an unknown link.
+      const res = url ? await fetch(url, {
         method: "DELETE",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ message: withdrawMessage }),
-      })
-      if (!res.ok) {
+      }) : null
+      if (!res) failure = { status: 404 }
+      else if (!res.ok) {
         // Too late to cancel online (#946): the server says why, in words for the volunteer.
         const body = res.status === 409 ? await res.json().catch(() => null) : null
         failure = { status: res.status, error: typeof body?.error === "string" ? body.error : undefined }
