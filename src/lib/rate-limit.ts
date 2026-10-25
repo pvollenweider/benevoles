@@ -27,6 +27,8 @@ export type RateLimitStore = {
   hit(key: string, windowMs: number): Promise<WindowState>
   /** The current window, without counting; null if none or expired. */
   peek(key: string): Promise<WindowState | null>
+  /** Several current windows in one read: only the keys with a live window are in the map. */
+  peekMany?(keys: string[]): Promise<Map<string, WindowState>>
   /**
    * Gives back one hit of the current window (never below zero), for a budget that reserves a hit
    * before the work and returns it when the outcome must not count (a successful login, #1048).
@@ -50,6 +52,13 @@ export const postgresStore: RateLimitStore = {
       SELECT "count", (EXTRACT(EPOCH FROM ("resetAt" - now())) * 1000)::float8 AS "msLeft"
       FROM "RateLimit" WHERE "key" = ${key} AND "resetAt" > now()`
     return row ? { count: row.count, msLeft: row.msLeft } : null
+  },
+  async peekMany(keys) {
+    if (keys.length === 0) return new Map()
+    const rows = await prisma.$queryRaw<{ key: string; count: number; msLeft: number }[]>`
+      SELECT "key", "count", (EXTRACT(EPOCH FROM ("resetAt" - now())) * 1000)::float8 AS "msLeft"
+      FROM "RateLimit" WHERE "key" = ANY(${keys}::text[]) AND "resetAt" > now()`
+    return new Map(rows.map((r) => [r.key, { count: r.count, msLeft: r.msLeft }]))
   },
   async release(key) {
     await prisma.$executeRaw`
@@ -83,6 +92,15 @@ export function memoryStore(sweepAbove = 10_000): RateLimitStore {
       const now = Date.now()
       const win = windows.get(key)
       return win && win.resetAt > now ? { count: win.count, msLeft: win.resetAt - now } : null
+    },
+    async peekMany(keys) {
+      const now = Date.now()
+      const found = new Map<string, WindowState>()
+      for (const key of keys) {
+        const win = windows.get(key)
+        if (win && win.resetAt > now) found.set(key, { count: win.count, msLeft: win.resetAt - now })
+      }
+      return found
     },
     async release(key) {
       const win = windows.get(key)
