@@ -87,10 +87,28 @@ describe("renderMarkdown — extended syntax (GFM)", () => {
     expect(html).toContain("<td")
   })
 
-  it("renders an image", () => {
-    const html = renderMarkdown("![texte alternatif](https://example.com/img.png)")
-    expect(html).toContain('src="https://example.com/img.png"')
-    expect(html).toContain('alt="texte alternatif"')
+  // An image would load by itself in every mail client and on every visit to the volunteer's pages,
+  // from the host its address names: it becomes a link the reader can choose to open.
+  it("renders an image as a link to it, never as an <img>", () => {
+    const html = renderMarkdown('![texte alternatif](https://example.com/img.png "Titre")')
+    expect(html).not.toContain("<img")
+    expect(html).not.toContain("src=")
+    expect(html).toContain('<a href="https://example.com/img.png" title="Titre"')
+    expect(html).toContain(">texte alternatif</a>")
+  })
+
+  it("labels an image without alt text with its address", () => {
+    const html = renderMarkdown("![](https://tracker.example/p.gif?e=fete)")
+    expect(html).not.toContain("<img")
+    expect(html).toContain('href="https://tracker.example/p.gif?e=fete"')
+    expect(html).toContain(">https://tracker.example/p.gif?e=fete</a>")
+  })
+
+  it("loads no image whatever the address: same site, data: URL or raw HTML", () => {
+    for (const source of ["![logo](/doc-img/admin-shifts.png)", "![x](data:image/png;base64,iVBORw0KGgo=)", '<img src="https://tracker.example/p.gif">', '<input type="image" src="https://tracker.example/p.gif">']) {
+      const html = renderMarkdown(source)
+      expect(html, source).not.toMatch(/<img|<input[^>]*src=/)
+    }
   })
 
   it("autolinks a bare URL", () => {
@@ -186,7 +204,7 @@ describe("renderMarkdownWithVariables", () => {
   it("fills a placeholder in a link or image address only after the organizer's fixed scheme and host, percent-encoded", () => {
     expect(render("[Plan](https://example.org/plan?n={prénom})", "Alex")).toContain('href="https://example.org/plan?n=Alex"')
     expect(render("[Plan](https://example.org/{prénom} \"Pour {prénom}\")", "Jean Paul")).toMatch(/href="https:\/\/example\.org\/Jean%20Paul" title="Pour Jean Paul"/)
-    expect(render("![Carte](https://example.org/{prénom}.png)", "Alex")).toContain('src="https://example.org/Alex.png"')
+    expect(render("![Carte](https://example.org/{prénom}.png)", "Alex")).toContain('href="https://example.org/Alex.png"')
     expect(render("Voir https://example.org/?n={prénom} ici", "Alex")).toContain('href="https://example.org/?n=Alex"')
     // A value can never change where a link leads: separators are encoded…
     expect(render("[Plan](https://example.org/{prénom})", "x/../../evil?a=b#c")).toContain('href="https://example.org/x%2F..%2F..%2Fevil%3Fa%3Db%23c"')

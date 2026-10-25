@@ -14,7 +14,7 @@ aliases: []
 
 En complément du champ unique « instructions publiques », ajoutez autant de pages libres que nécessaire à un événement : règlement, FAQ, accès et lieu, ce qu'il faut apporter…
 
-- **Ajouter** une page : titre + contenu rédigé en Markdown (gras, listes, titres, liens, tableaux)
+- **Ajouter** une page : titre + contenu rédigé en Markdown (gras, listes, titres, liens, tableaux). Une image s'affiche comme un lien vers elle, que le visiteur ouvre s'il le souhaite
 - L'adresse de la page (slug) est générée automatiquement depuis le titre
 - **Réordonner** les pages avec leurs flèches Monter et Descendre (aussi au clavier) : l'ordre est enregistré à chaque déplacement ; si l'enregistrement échoue, un message le dit et l'ordre enregistré est rétabli
 - **Supprimer** une page (confirmation demandée)

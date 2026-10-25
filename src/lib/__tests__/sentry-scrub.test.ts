@@ -78,6 +78,37 @@ describe("scrubEvent", () => {
 
     expect(JSON.stringify(scrubEvent(event))).not.toContain(TOKEN)
   })
+
+  // The error itself can carry personal data: a failed query quotes its arguments in its message.
+  it("masks tokens and email addresses in exception values, the message, extra data and contexts", () => {
+    const event = {
+      message: `Lien envoyé à jane.doe@example.com : /my/${TOKEN}`,
+      logentry: { message: "Échec pour %s", params: ["jane.doe@example.com"] },
+      exception: {
+        values: [
+          { type: "PrismaClientValidationError", value: `Invalid args { email: "jane.doe@example.com", token: "/leader/${TOKEN}" }`, stacktrace: { frames: [{ filename: "app.js" }] } },
+          { type: "Error" },
+        ],
+      },
+      extra: { input: { email: "jane.doe@example.com", link: `https://benevol.app/waitlist/${TOKEN}/confirm` }, count: 3 },
+      contexts: {
+        trace: { trace_id: "abc123", data: { url: `/api/public/member-invite/${TOKEN}` } },
+        response: { body: "to jane.doe@example.com" },
+      },
+    } as unknown as ErrorEvent
+
+    const out = scrubEvent(event)
+    const json = JSON.stringify(out)
+    expect(json).not.toContain(TOKEN)
+    expect(json).not.toContain("jane.doe@example.com")
+    expect(out.message).toBe("Lien envoyé à [email] : /my/[token]")
+    expect(out.exception?.values?.[0].value).toBe('Invalid args { email: "[email]", token: "/leader/[token]" }')
+    expect(out.exception?.values?.[0].type).toBe("PrismaClientValidationError")
+    expect(out.exception?.values?.[0].stacktrace?.frames).toHaveLength(1)
+    expect(out.exception?.values?.[1]).toEqual({ type: "Error" })
+    expect(out.extra?.count).toBe(3)
+    expect(out.contexts?.trace?.trace_id).toBe("abc123")
+  })
 })
 
 describe("scrubSpan (@sentry/nextjs 11 streamed spans)", () => {

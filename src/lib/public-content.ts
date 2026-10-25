@@ -109,7 +109,7 @@ function renderDocUnitPartsNow(unit: DocUnit, mediaBaseUrl?: string | null): Doc
     players.set(id, player)
     return renderDocVideoSlot(id)
   }
-  const html = renderEventPageMarkdown(linkSourcesToRoutes(localizeInstanceText(unit.body)), { shiftHeadings: false, headingIds: true, videoCard: videoSlot, image: docImageHtml, exampleQuotes: true })
+  const html = renderEventPageMarkdown(linkSourcesToRoutes(localizeInstanceText(unit.body)), { shiftHeadings: false, allowImages: true, headingIds: true, videoCard: videoSlot, image: docImageHtml, exampleQuotes: true })
   return splitAtDocVideoSlots(html, players)
 }
 
@@ -131,7 +131,7 @@ function renderPublicMarkdown(body: string, mediaBaseUrl?: string | null): strin
     const link = docVideoLink(id, catalog, hasRender)
     return link ? renderDocVideoCard(link) : ""
   }
-  return renderEventPageMarkdown(linkSourcesToRoutes(localizeInstanceText(body)), { shiftHeadings: false, headingIds: true, videoCard, image: docImageHtml, exampleQuotes: true })
+  return renderEventPageMarkdown(linkSourcesToRoutes(localizeInstanceText(body)), { shiftHeadings: false, allowImages: true, headingIds: true, videoCard, image: docImageHtml, exampleQuotes: true })
 }
 
 const blogPostCache = createRenderCache<string>()
@@ -142,7 +142,7 @@ const blogPostCache = createRenderCache<string>()
  * links between sources made site links.
  */
 export function renderBlogPost(post: Pick<BlogPost, "source" | "body">): string {
-  return blogPostCache(post.source, () => hideLineArrows(renderEventPageMarkdown(linkSourcesToRoutes(localizeInstanceText(post.body)), { shiftHeadings: false, headingIds: true, image: docImageHtml })))
+  return blogPostCache(post.source, () => hideLineArrows(renderEventPageMarkdown(linkSourcesToRoutes(localizeInstanceText(post.body)), { shiftHeadings: false, allowImages: true, headingIds: true, image: docImageHtml })))
 }
 
 /** A still of a video (its poster), as /fonctionnalites shows it: never a broken image. */
@@ -200,14 +200,14 @@ function renderFeaturesPageNow(mediaBaseUrl: string | null | undefined, source: 
       players.set(id, player)
       return renderDocVideoSlot(id)
     }
-    const html = block.markdown ? renderEventPageMarkdown(linkSourcesToRoutes(block.markdown), { shiftHeadings: false, videoCard: videoSlot }) : ""
+    const html = block.markdown ? renderEventPageMarkdown(linkSourcesToRoutes(block.markdown), { shiftHeadings: false, allowImages: true, videoCard: videoSlot }) : ""
     return {
       parts: splitAtDocVideoSlots(html, players),
       actions: block.actions,
       stills: [...block.images.map(still), ...block.screenshots.map(screenshot)].filter((s): s is FeatureStill => s !== null),
     }
   }
-  const markdownHtml = (markdown: string) => renderEventPageMarkdown(linkSourcesToRoutes(markdown), { shiftHeadings: false })
+  const markdownHtml = (markdown: string) => renderEventPageMarkdown(linkSourcesToRoutes(markdown), { shiftHeadings: false, allowImages: true })
   return {
     title: page.title ?? fallbackTitle,
     intro: render(page.intro),
@@ -242,7 +242,7 @@ export function renderFaqSource(source: string): RenderedQuestion[] {
     return parsed.questions.map((q) => ({
       question: q.question,
       id: q.id,
-      html: renderEventPageMarkdown(linkSourcesToRoutes(q.answer), { shiftHeadings: false }),
+      html: renderEventPageMarkdown(linkSourcesToRoutes(q.answer), { shiftHeadings: false, allowImages: true }),
       text: plainAnswer(q.answer),
     }))
   })
@@ -272,7 +272,7 @@ export function renderChangelog(): RenderedRelease[] {
 
 function renderChangelogNow(): RenderedRelease[] {
   const raw = fs.readFileSync(path.join(/*turbopackIgnore: true*/ process.cwd(), "CHANGELOG.md"), "utf-8")
-  const html = (markdown: string) => (markdown ? renderEventPageMarkdown(repositoryLinks(linkSourcesToRoutes(markdown), REPOSITORY_URL), { shiftHeadings: false }) : "")
+  const html = (markdown: string) => (markdown ? renderEventPageMarkdown(repositoryLinks(linkSourcesToRoutes(markdown), REPOSITORY_URL), { shiftHeadings: false, allowImages: true }) : "")
   return parseChangelog(raw).map((r) => ({
     version: r.version,
     date: r.date,

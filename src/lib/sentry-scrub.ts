@@ -55,7 +55,15 @@ export function scrubEvent<T extends Event>(event: T): T {
   if (event.transaction) event.transaction = scrubUrl(event.transaction)
   if (event.tags) event.tags = scrubDeep(event.tags)
   if (event.breadcrumbs) event.breadcrumbs = event.breadcrumbs.map(scrubBreadcrumb)
-  if (event.contexts?.trace?.data) event.contexts.trace.data = scrubDeep(event.contexts.trace.data)
+  // The error itself: an exception's message (a failed query can quote its arguments), a captured
+  // message, and the extra data and contexts attached to the event, with the same rules.
+  if (event.message) event.message = scrubUrl(event.message)
+  if (event.logentry) event.logentry = scrubDeep(event.logentry)
+  if (event.exception?.values) {
+    event.exception.values = event.exception.values.map((ex) => (ex.value ? { ...ex, value: scrubUrl(ex.value) } : ex))
+  }
+  if (event.extra) event.extra = scrubDeep(event.extra)
+  if (event.contexts) event.contexts = scrubDeep(event.contexts)
   // Transaction events also carry spans (fetch and http calls with their URLs).
   const withSpans = event as { spans?: { description?: string; data?: Record<string, unknown> }[] }
   if (withSpans.spans) {

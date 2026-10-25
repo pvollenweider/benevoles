@@ -5,6 +5,7 @@ import { NextResponse } from "next/server"
 import { requireOrgSession } from "@/lib/auth-guard"
 import { adminActor, logEvent } from "@/lib/event-log"
 import { untagVolunteerIfNoLongerResponsable } from "@/lib/sector-leaders"
+import { reportError } from "@/lib/report-error"
 
 export async function DELETE(_req: Request, { params }: { params: Promise<{ id: string; leaderId: string }> }) {
   const guard = await requireOrgSession()
@@ -29,7 +30,7 @@ export async function DELETE(_req: Request, { params }: { params: Promise<{ id: 
     changes: { roleName: { from: leader.roleName, to: null } },
   })
 
-  await untagVolunteerIfNoLongerResponsable(guard.organizationId, leader.email).catch((e) => console.error("untagVolunteerIfNoLongerResponsable error:", e))
+  await untagVolunteerIfNoLongerResponsable(guard.organizationId, leader.email).catch(reportError("sector_leader.untag"))
 
   return NextResponse.json({ success: true })
 }
