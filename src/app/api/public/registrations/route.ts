@@ -362,7 +362,17 @@ export async function POST(req: Request) {
           where: { volunteerId, eventId, status: { in: [...COMMITTED_STATUSES] } },
           include: { shift: true },
         })
-        const clashNow = findOverlap(liveNow, shifts, hiddenRoles)
+        // The event's roles assigned by the organisation only (#1145), read again under the shift
+        // lock: a role made assigned-only while this sign-up ran is refused here, and an overlap with
+        // one of its shifts is not named. The role route writes every shift of the role, the locked
+        // ones included, so its change either committed before this read or waits for this sign-up,
+        // which then came first, like the registrations kept when the option is set.
+        const hiddenNow = assignedOnlyRoles(await tx.shift.findMany({
+          where: { eventId, status: { not: "cancelled" }, assignedOnly: true },
+          select: { roleName: true, assignedOnly: true },
+        }))
+        if (asksAssignedOnly(shifts, hiddenNow)) throw new AssignedOnlyError()
+        const clashNow = findOverlap(liveNow, shifts, new Set([...hiddenRoles, ...hiddenNow]))
         if (clashNow) throw new OverlapError(clashNow.label)
 
         // Shifts per volunteer for a role (#466), under the same volunteer lock, so two concurrent
@@ -379,15 +389,6 @@ export async function POST(req: Request) {
           const [breach] = roleLimitBreaches(shifts, held.map((h) => h.shift), limits)
           if (breach) throw new RoleLimitError(breach)
         }
-        // Again under the shift lock (#1145), on the whole role as above: a role made assigned-only
-        // while this sign-up ran is refused here. The role route writes every shift of the role, the
-        // locked ones included, so its change either committed before this read or waits for this
-        // sign-up, which then came first, like the registrations kept when the option is set.
-        const lockedFlags = await tx.shift.findMany({
-          where: { eventId, roleName: { in: [...new Set(shifts.map((s) => s.roleName))] }, status: { not: "cancelled" }, assignedOnly: true },
-          select: { roleName: true, assignedOnly: true },
-        })
-        if (asksAssignedOnly(shifts, assignedOnlyRoles(lockedFlags))) throw new AssignedOnlyError()
         const created = []
         for (const shift of shifts) {
           const occupied = await tx.registration.count({

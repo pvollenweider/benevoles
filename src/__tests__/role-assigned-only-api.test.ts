@@ -13,6 +13,7 @@ const m = vi.hoisted(() => ({
   inviteFindFirst: vi.fn(),
   inviteFindUnique: vi.fn(),
   txCreate: vi.fn(),
+  txRegFindMany: vi.fn(),
   getHeader: vi.fn(),
 }))
 vi.mock("@/lib/prisma", () => ({
@@ -24,12 +25,12 @@ vi.mock("@/lib/prisma", () => ({
     registration: { findMany: vi.fn().mockResolvedValue([]), findFirst: vi.fn().mockResolvedValue(null) },
     memberInvite: { findFirst: m.inviteFindFirst, findUnique: m.inviteFindUnique, updateMany: vi.fn().mockResolvedValue({ count: 1 }) },
     $transaction: vi.fn(async (fn: (tx: unknown) => unknown) => fn({
-      $queryRaw: vi.fn().mockResolvedValue([{ id: "locked" }]),
+      $queryRaw: vi.fn().mockResolvedValue([{ id: "vol-1", erasedAt: null, email: "lea@x.ch" }]),
       shift: { findMany: m.txShiftFindMany },
       volunteer: { createMany: vi.fn().mockResolvedValue({ count: 1 }), findFirstOrThrow: vi.fn().mockResolvedValue({ id: "vol-1" }) },
       charterVersion: { upsert: vi.fn() },
       rosterConsent: { findUnique: vi.fn().mockResolvedValue(null), upsert: vi.fn() },
-      registration: { findMany: vi.fn().mockResolvedValue([]), count: vi.fn().mockResolvedValue(0), aggregate: vi.fn().mockResolvedValue({ _max: { waitingPosition: null } }), create: m.txCreate },
+      registration: { findMany: m.txRegFindMany, count: vi.fn().mockResolvedValue(0), aggregate: vi.fn().mockResolvedValue({ _max: { waitingPosition: null } }), create: m.txCreate },
     })),
   },
 }))
@@ -72,6 +73,7 @@ describe("POST /api/public/registrations — role assigned by the organisation o
     vi.clearAllMocks()
     m.eventFindFirst.mockResolvedValue({ id: "evt-1", organizationId: "org-a", title: "Fête", organization: { slug: "a", timeZone: null }, confirmationMessage: null })
     m.txShiftFindMany.mockResolvedValue([])
+    m.txRegFindMany.mockResolvedValue([])
     m.txCreate.mockResolvedValue({ id: "reg-1", shiftId: "s-bar", status: "active", waitingPosition: null })
   })
 
@@ -146,6 +148,20 @@ describe("POST /api/public/registrations — role assigned by the organisation o
     expect(res.status).toBe(409)
     const body = await res.json()
     expect(body.error).toBe("Ce créneau chevauche une inscription existante.")
+    expect(m.txCreate).not.toHaveBeenCalled()
+  })
+
+  it("an overlap seen under the lock with a shift of a role hidden meanwhile is not named either", async () => {
+    shiftsInDb([bar])
+    const { prisma } = await import("@/lib/prisma")
+    ;(prisma.volunteer.findFirst as ReturnType<typeof vi.fn>).mockResolvedValueOnce({ id: "vol-1" })
+    // Hidden after the checks before the transaction: only the read under the lock knows.
+    m.txShiftFindMany.mockImplementation(async ({ where }: { where: { assignedOnly?: boolean } }) => (where.assignedOnly ? [{ roleName: "Caisse confidentielle", assignedOnly: true }] : []))
+    m.txRegFindMany.mockResolvedValue([{ shift: { ...caisse, assignedOnly: false, startTime: "11:00", endTime: "13:00", date: bar.date } }])
+    const { POST } = await import("@/app/api/public/registrations/route")
+    const res = await POST(post(["s-bar"]))
+    expect(res.status).toBe(409)
+    expect((await res.json()).error).toBe("Ce créneau chevauche une inscription existante.")
     expect(m.txCreate).not.toHaveBeenCalled()
   })
 
