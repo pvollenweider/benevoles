@@ -41,8 +41,11 @@ ENV GIT_SHA=$GIT_SHA
 
 # SENTRY_AUTH_TOKEN is only needed at build time for source-map upload;
 # use --mount=type=secret so it never appears in image layers or history.
+# .next/cache (Turbopack's build cache, ~350 MB) is removed in the same layer: no later build reads
+# it (each one starts from a fresh layer) and the runner stage does not copy it, but deploy.yml's
+# BuildKit cache export (mode=max) uploaded it to the GitHub Actions cache on every deploy.
 RUN --mount=type=secret,id=sentry_auth_token,env=SENTRY_AUTH_TOKEN \
-    npx prisma generate && npm run build
+    npx prisma generate && npm run build && rm -rf .next/cache
 
 # ── Stage 4 : runner ─────────────────────────────────────────────────────────
 FROM node:26-alpine AS runner
