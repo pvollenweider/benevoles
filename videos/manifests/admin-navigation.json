@@ -41,7 +41,7 @@
     },
     {
       "id": "event-navigation",
-      "transcript": "Ouvrez un événement. Les onglets donnent accès à Aperçu, Créneaux, Inscriptions, Communication, Partage, Documents et Réglages. Jour J apparaît à l’approche de l’événement. Partage rassemble le lien public, le QR code et les pages d’information. Réglages donne accès aux questions et aux responsables de secteur. Le menu Autres actions contient notamment le journal et la duplication. Dans l’aperçu, les besoins de personnel viennent en premier, suivis des éléments à traiter, des prochaines étapes, des jalons et du résumé de communication. Le lien Événements vous ramène à la liste de l’association.",
+      "transcript": "Ouvrez un événement. Les onglets donnent accès à Aperçu, Créneaux, Inscriptions, Messages, Partage, Documents et Réglages. Jour J apparaît à l’approche de l’événement. Partage rassemble le lien public, le QR code et les pages d’information. Réglages donne accès aux questions et aux responsables de secteur. Le menu Autres actions contient notamment le journal et la duplication. Dans l’aperçu, les besoins de personnel viennent en premier, suivis des éléments à traiter, des prochaines étapes, des jalons et du résumé de communication. Le lien Événements vous ramène à la liste de l’association.",
       "fallbackDurationMs": 28000
     },
     {

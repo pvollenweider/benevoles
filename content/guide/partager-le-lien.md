@@ -10,7 +10,7 @@ aliases: []
 
 # Partager le lien de l'événement
 
-L'onglet **Partage** de l'événement (le bouton **Partager le lien**, en haut de ses pages une fois publié, y mène) ouvre la page **Partager l'événement**. Une fois l'événement publié, sa section **Lien de l'événement**, comme la page de vérification avant publication, affiche le lien à partager, avec deux boutons :
+L'onglet **Partage** de l'événement (le bouton **Partager le lien**, en haut de ses pages une fois publié, y mène) ouvre la page **Liens à partager**. Une fois l'événement publié, sa section **Lien de l'événement**, comme la page de vérification avant publication, affiche le lien à partager, avec deux boutons :
 
 - **Copier le lien** copie l'adresse publique de l'événement. « Lien copié. » s'affiche sous les boutons. Si le navigateur refuse la copie, le lien affiché est sélectionné : copiez-le.
 - **Partager** ouvre le partage de votre téléphone ou de votre navigateur (WhatsApp, email, messages…). Ce bouton n'apparaît que si votre navigateur sait partager, le plus souvent sur téléphone.
@@ -43,7 +43,7 @@ La fête du village est montée par plusieurs sociétés : l'Amicale des pompier
 
 Puis **Créer le lien**. Recommencez pour la fanfare, avec le poste Buvette.
 
-![Section « Partager l'événement » : le lien de l'événement, puis « Liens par groupe » avec deux liens, « Amicale des pompiers » (postes Montage, Sécurité, Démontage) et « Fanfare L'Écho du Mont » (poste Buvette, créneaux complets masqués), chacun avec son nombre d'inscriptions, son adresse et les boutons Copier le lien, QR code PNG, QR code SVG, Modifier et Supprimer ; en dessous, « Créer un lien pour un groupe », puis « Intégrer à votre site » avec le bouton « Code d'intégration »](/doc-img/admin-group-links.png)
+![Page « Liens à partager » : le lien de l'événement, puis « Liens par groupe » avec deux liens, « Amicale des pompiers » (postes Montage, Sécurité, Démontage) et « Fanfare L'Écho du Mont » (poste Buvette, créneaux complets masqués), chacun avec son nombre d'inscriptions, son adresse et les boutons Copier le lien, QR code PNG, QR code SVG, Modifier et Supprimer ; en dessous, « Créer un lien pour un groupe », puis « Intégrer à votre site » avec le bouton « Code d'intégration »](/doc-img/admin-group-links.png)
 
 **2. Diffuser les liens.** Chaque lien a son adresse, de la forme `https://[organisation].benevol.app/[evenement]?groupe=[code]`. **Copier le lien** la copie pour un email ou une messagerie ; **QR code PNG** et **QR code SVG** téléchargent le QR code de ce lien, à imprimer sur l'affiche ou dans le bulletin de la société. Le code est tiré au hasard : on ne devine pas le lien d'une autre société à partir du sien.
 
@@ -74,8 +74,8 @@ L'événement doit être publié. Dans l'onglet **Partage**, section **Liens par
 
 **Ajouter le code à votre site.** Dans l'éditeur de votre site, ouvrez la page voulue et ajoutez un bloc de type « HTML », « Code personnalisé » ou « Intégrer » (le nom change d'un éditeur à l'autre). Collez-y le code, puis enregistrez et publiez la page. Le code ne charge aucun script d'un autre site : seulement la page d'inscription de benevol.app dans un cadre.
 
-**Ce que voient les bénévoles.** Le même parcours que sur la page de l'événement : choix des créneaux, formulaire, récapitulatif, confirmation. Ce qui quitte l'inscription s'ouvre dans un nouvel onglet, pour que votre page reste en place : la page personnelle, les pages de l'événement, les mentions légales, la page d'accueil de benevol.app, le code source. La confirmation rappelle que l'email contient le lien personnel, pour modifier ou annuler. Les rappels par notification se proposent depuis la page personnelle, pas dans le cadre. L'inscription affichée sur votre site ne montre jamais qui est inscrit : l'interrupteur **Voir qui est inscrit** n'existe que sur la page de l'événement, pour les bénévoles confirmés et les membres invités.
+**Ce que voient les bénévoles.** Le même parcours que sur la page de l'événement : choix des créneaux, formulaire, récapitulatif, confirmation. Ce qui quitte l'inscription s'ouvre dans un nouvel onglet, pour que votre page reste en place : la page **Mes inscriptions**, les pages de l'événement, les mentions légales, la page d'accueil de benevol.app, le code source. La confirmation rappelle que l'email contient le lien personnel, pour modifier ou annuler. Les rappels par notification se proposent depuis la page **Mes inscriptions**, pas dans le cadre. L'inscription affichée sur votre site ne montre jamais qui est inscrit : l'interrupteur **Voir qui est inscrit** n'existe que sur la page de l'événement, pour les bénévoles confirmés et les membres invités.
 
 Certains navigateurs ne laissent pas une page affichée dans le site d'un autre retenir quoi que ce soit sur l'appareil. Le bénévole doit alors retaper ses coordonnées pour un autre événement, et la page ne le reconnaît pas en revenant : son lien personnel reste dans l'email.
 
-Le cadre affiche uniquement la page d'inscription : la page personnelle, l'espace organisateur et les autres pages de benevol.app refusent de s'afficher dans un autre site.
+Le cadre affiche uniquement la page d'inscription : la page **Mes inscriptions**, l'espace organisateur et les autres pages de benevol.app refusent de s'afficher dans un autre site.

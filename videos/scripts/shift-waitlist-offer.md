@@ -8,8 +8,8 @@
 2. Distinguer confirmations, attente et positions côté admin.
 3. Libérer une place depuis une inscription confirmée.
 4. Montrer l’offre de vingt-quatre heures au maximum, limitée au début du créneau.
-5. Ouvrir la page personnelle de la personne promue.
-6. Ouvrir le lien « Prendre la place » : la page présente l’offre sans l’accepter. Montrer le bouton « Prendre la place », seul geste qui confirme, puis revenir à la page personnelle et montrer « Refuser la place ». Expliquer l’expiration et le passage au suivant.
+5. Ouvrir la page Mes inscriptions de la personne promue.
+6. Ouvrir le lien « Prendre la place » : la page présente l’offre sans l’accepter. Montrer le bouton « Prendre la place », seul geste qui confirme, puis revenir à la page Mes inscriptions et montrer « Refuser la place ». Expliquer l’expiration et le passage au suivant.
 7. Revenir réellement dans l’administration pour lire l’offre active et les positions restantes, sans simuler une expiration non exécutée.
 
 ## Résultat visible

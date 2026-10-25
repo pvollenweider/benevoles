@@ -190,7 +190,7 @@ export default function ActivityLog() {
                     {entry.batch.kindLabel}, {entry.batch.eventTitle}{"\u00a0"}: {entry.batch.summary}.
                     {entry.batch.heldSentence && <> {entry.batch.heldSentence}</>}{" "}
                     <a href={`/admin/events/${entry.batch.eventId}/message#${SEND_BATCHES_ANCHOR}`} className={LINK}>
-                      Voir dans la communication de l&apos;événement<span className="sr-only">{"\u00a0"}: {entry.batch.kindLabel}, {entry.batch.eventTitle}, {fmtDateTime(entry.createdAt)}</span>
+                      Voir dans les messages de l&apos;événement<span className="sr-only">{"\u00a0"}: {entry.batch.kindLabel}, {entry.batch.eventTitle}, {fmtDateTime(entry.createdAt)}</span>
                     </a>
                   </p>
                 )}

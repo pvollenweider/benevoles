@@ -28,7 +28,7 @@ import type { RosterAction, RosterViewerState, ShiftRosterEntry } from "./shift-
 export const ROSTER_SIGNUP_LABEL = "J'accepte que les bénévoles confirmés et les membres invités par l'organisation voient mon prénom et l'initiale de mon nom (par exemple « Aline M. ») sur mes créneaux confirmés."
 /** Said wherever a volunteer learns about the roster: the count needs no choice (#1068 follow-up). */
 export const ROSTER_COUNT_NOTICE = "Même si ton nom reste masqué, ta place confirmée est comptée dans le nombre de bénévoles affiché sur chaque créneau."
-export const ROSTER_SIGNUP_HINT = `Ces personnes le voient, même sans créneau commun avec toi, jusqu'à la fin de l'événement, pour choisir leurs créneaux et savoir avec qui elles seront. Facultatif, sans effet sur ton inscription. Tu pourras le confirmer, ou le masquer à tout moment, sur ta page personnelle. ${ROSTER_COUNT_NOTICE}`
+export const ROSTER_SIGNUP_HINT = `Ces personnes le voient, même sans créneau commun avec toi, jusqu'à la fin de l'événement, pour choisir leurs créneaux et savoir avec qui elles seront. Facultatif, sans effet sur ton inscription. Tu pourras le confirmer, ou le masquer à tout moment, sur ta page « Mes inscriptions ». ${ROSTER_COUNT_NOTICE}`
 /** The sign-up form's sentence for a known minor, instead of the box. */
 export const ROSTER_MINOR_TEXT = `Les noms des bénévoles de moins de 18 ans ne sont jamais montrés aux autres bénévoles. ${ROSTER_COUNT_NOTICE}`
 

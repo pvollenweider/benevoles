@@ -66,7 +66,7 @@ export function renderOpenShifts(p: NotificationPayload): RenderedEmail {
     ...d.shifts.flatMap((s, i) => [`- ${lines[i]}`, `  Je prends ce créneau : ${takeShiftUrl(d.signupUrl, s.id)}`]),
     ``,
     several ? `Tous les créneaux : ${d.signupUrl}` : `T'inscrire : ${d.signupUrl}`,
-    ...(editUrl ? [`Tes inscriptions : ${editUrl}`] : []),
+    ...(editUrl ? [`Voir tes inscriptions : ${editUrl}`] : []),
     ...(d.declineUrl ? [``, `Pas disponible cette fois ? Tu peux le dire ici : ${d.declineUrl}`] : []),
     ``,
     `Merci d'avance !`,

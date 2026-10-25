@@ -13,7 +13,7 @@ import GroupLinksManager from "@/components/admin/GroupLinksManager"
 import HelpLink from "@/components/admin/HelpLink"
 
 export const dynamic = "force-dynamic"
-export const metadata: Metadata = { title: "Partager l'événement" }
+export const metadata: Metadata = { title: "Liens à partager" }
 
 const linkClass =
   "font-medium text-blue-700 underline underline-offset-2 hover:text-blue-900 rounded focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-blue-600"
@@ -43,7 +43,7 @@ export default async function SharePage({ params }: { params: Promise<{ id: stri
   return (
     <div className="space-y-6 max-w-3xl">
       <div>
-        <h1 id="page-heading" tabIndex={-1} className="text-xl font-bold text-gray-900 focus:outline-none">Partager l&apos;événement</h1>
+        <h1 id="page-heading" tabIndex={-1} className="text-xl font-bold text-gray-900 focus:outline-none">Liens à partager</h1>
         <HelpLink route="/admin/events/[id]/share" />
       </div>
 

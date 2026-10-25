@@ -117,8 +117,8 @@ function practicalInfoCheck(g: PracticalInfoGaps, base: string): ReviewCheck {
   return {
     id: "practical-info", label: `${shiftsWord(g.incomplete)} ${missing}`, ok: false, required: false, warn: true, href,
     hint: g.noContact > 0
-      ? "Le lieu et la personne à contacter figurent dans l'email de confirmation, les rappels et la page personnelle des bénévoles. Un contact le jour J, dans les réglages de l'événement, vaut pour tous les créneaux sans contact."
-      : "Le lieu et la personne à contacter figurent dans l'email de confirmation, les rappels et la page personnelle des bénévoles.",
+      ? "Le lieu et la personne à contacter figurent dans l'email de confirmation, les rappels et la page « Mes inscriptions » des bénévoles. Un contact le jour J, dans les réglages de l'événement, vaut pour tous les créneaux sans contact."
+      : "Le lieu et la personne à contacter figurent dans l'email de confirmation, les rappels et la page « Mes inscriptions » des bénévoles.",
   }
 }
 

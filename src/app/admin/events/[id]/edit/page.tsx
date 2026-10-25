@@ -14,7 +14,7 @@ import { hasLevel } from "@/lib/permissions"
 import { DELETE_SECTION_ID } from "@/lib/event-nav"
 
 export const dynamic = "force-dynamic"
-export const metadata: Metadata = { title: "Réglages" }
+export const metadata: Metadata = { title: "Informations de l'événement" }
 
 export default async function EditEventPage({ params, searchParams }: { params: Promise<{ id: string }>; searchParams: Promise<{ wizard?: string }> }) {
   const ctx = await getOrgContext()
@@ -71,7 +71,7 @@ export default async function EditEventPage({ params, searchParams }: { params: 
       {wizard && <WizardSteps current={1} eventId={id} />}
       <div className="flex items-start justify-between gap-3 flex-wrap">
         <div>
-          <h1 id="page-heading" tabIndex={-1} className="text-xl font-bold text-gray-900 focus:outline-none">Modifier l&apos;événement</h1>
+          <h1 id="page-heading" tabIndex={-1} className="text-xl font-bold text-gray-900 focus:outline-none">Informations de l&apos;événement</h1>
           <HelpLink route="/admin/events/[id]/edit" />
         </div>
         {wizard && (

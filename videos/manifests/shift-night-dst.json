@@ -55,7 +55,7 @@
     },
     {
       "id": "calendar",
-      "transcript": "Depuis la page personnelle de notre bénévole fictif, téléchargeons son planning au format calendrier. Le fichier contient des instants précis avec le bon décalage d’été ou d’hiver. Après une modification, téléchargez-le à nouveau pour que les informations de votre agenda correspondent au planning actuel.",
+      "transcript": "Depuis la page Mes inscriptions de notre bénévole fictif, téléchargeons son planning au format calendrier. Le fichier contient des instants précis avec le bon décalage d’été ou d’hiver. Après une modification, téléchargez-le à nouveau pour que les informations de votre agenda correspondent au planning actuel.",
       "fallbackDurationMs": 25000
     },
     {

@@ -26,9 +26,9 @@ Désignez un ou plusieurs bénévoles responsables d'un poste (ex. « Bar »). C
 - **Retirer** un responsable à tout moment (confirmation demandée)
 - Renommer le poste dans **Gérer les postes** emporte ses responsables : leur lien reste le même et affiche le poste sous son nouveau nom. Si une personne était déjà responsable d'un poste portant ce nouveau nom, elle n'y garde qu'une désignation, celle du poste renommé. Supprimer le poste ne retire pas ses responsables : le poste reste affiché avec la mention « Créneaux tous annulés », comme un poste dont vous avez annulé chaque créneau. Leur lien reste valable mais n'affiche plus aucun créneau, et ils ne sont pas repris si vous dupliquez l'événement. Retirez-les si vous ne recréez pas ce poste ; un nouveau créneau de ce poste leur rend leur poste
 - La fiche du bénévole concerné (**Membres**) reçoit automatiquement l'étiquette « responsable »
-- Les bénévoles confirmés du poste voient le **nom** de son ou ses responsables (« Responsable du poste : … ») sur leur page personnelle, dans les rappels automatiques et sur le planning individuel imprimé. Jamais son email ni son téléphone : pour que les bénévoles puissent l'appeler, indiquez-le comme contact du créneau ou comme **Contact le jour J**. Rien n'apparaît sur la page publique
+- Les bénévoles confirmés du poste voient le **nom** de son ou ses responsables (« Responsable du poste : … ») sur leur page **Mes inscriptions**, dans les rappels automatiques et sur le planning individuel imprimé. Jamais son email ni son téléphone : pour que les bénévoles puissent l'appeler, indiquez-le comme contact du créneau ou comme **Contact le jour J**. Rien n'apparaît sur la page publique
 
-![Page personnelle de la responsable du poste Buvette : chaque créneau avec ses bénévoles inscrits, leur email et leur téléphone, et les personnes en liste d'attente](/doc-img/leader-page.png)
+![Page de la responsable du poste Buvette : chaque créneau avec ses bénévoles inscrits, leur email et leur téléphone, et les personnes en liste d'attente](/doc-img/leader-page.png)
 
 ## Questions fréquentes
 

@@ -210,7 +210,7 @@ export async function recordPrivacy(options: { page: Page; base: string; directo
       await at("Regardons la fiche de Léa"); await tap(page, page.getByRole("button", { name: "Modifier Léa Exemple", exact: true }))
       if (await page.getByLabel("Notes", { exact: true }).inputValue() !== "Note interne fictive — organisation A") throw new Error("Dedicated internal note missing")
       await page.getByLabel("Notes", { exact: true }).scrollIntoViewIfNeeded()
-      await at("Sa page personnelle ne montre"); await tap(page, page.getByRole("dialog").getByRole("button", { name: "Annuler", exact: true }))
+      await at("Sa page Mes inscriptions ne montre"); await tap(page, page.getByRole("dialog").getByRole("button", { name: "Annuler", exact: true }))
       const leaReg = await db.registration.findUniqueOrThrow({ where: { id: "video-privacy-a-registration-0" } })
       await go(`/my/${registrationToken.reveal(leaReg)}`)
       if ((await page.locator("body").innerText()).includes("Note interne fictive")) throw new Error("Internal note visible in personal page")

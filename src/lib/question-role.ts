@@ -11,7 +11,7 @@
 
 export const QUESTION_ROLE_LABEL = "Poste concerné"
 export const NO_QUESTION_ROLE_LABEL = "Aucun"
-export const QUESTION_ROLE_HINT = "Quand un bénévole modifie sa réponse depuis sa page personnelle, l'email part aux responsables de ce poste au lieu de vous : ils voient son nom et sa réponse. Sans responsable pour ce poste, vous restez prévenu. Ce réglage ne change pas à qui la question est posée : c'est le rôle de « À qui poser cette question ? »."
+export const QUESTION_ROLE_HINT = "Quand un bénévole modifie sa réponse depuis sa page « Mes inscriptions », l'email part aux responsables de ce poste au lieu de vous : ils voient son nom et sa réponse. Sans responsable pour ce poste, vous restez prévenu. Ce réglage ne change pas à qui la question est posée : c'est le rôle de « À qui poser cette question ? »."
 export const NO_ROLES_HINT = "Ajoutez des créneaux à l'événement pour rattacher cette question à un poste."
 export const QUESTION_ROLE_PROBLEM = "Ce poste n'existe pas dans cet événement : choisissez-en un dans la liste."
 

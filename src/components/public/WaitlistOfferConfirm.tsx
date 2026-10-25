@@ -136,7 +136,7 @@ export default function WaitlistOfferConfirm({ token, state, details, contact = 
           {busy ? "Confirmation…" : "Prendre la place"}
         </button>
         <p className="text-sm text-gray-700 mt-4">
-          Tu ne peux plus venir ? Tu peux refuser la place depuis ta page personnelle.
+          Tu ne peux plus venir ? Tu peux refuser la place depuis ta page « Mes inscriptions ».
         </p>
         <p>{myLink}</p>
       </form>

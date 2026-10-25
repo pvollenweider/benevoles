@@ -3696,7 +3696,7 @@ exports[`shift roster characterization (#1068) > exports the same names and the 
   "ROSTER_SETTING_HINT": "Les bénévoles confirmés et les membres invités voient le prénom et l'initiale de ceux qui l'acceptent.",
   "ROSTER_SETTING_LABEL": "Montrer aux bénévoles qui est inscrit",
   "ROSTER_SETTING_LINK": "Modifier le réglage « Qui est inscrit »",
-  "ROSTER_SIGNUP_HINT": "Ces personnes le voient, même sans créneau commun avec toi, jusqu'à la fin de l'événement, pour choisir leurs créneaux et savoir avec qui elles seront. Facultatif, sans effet sur ton inscription. Tu pourras le confirmer, ou le masquer à tout moment, sur ta page personnelle. Même si ton nom reste masqué, ta place confirmée est comptée dans le nombre de bénévoles affiché sur chaque créneau.",
+  "ROSTER_SIGNUP_HINT": "Ces personnes le voient, même sans créneau commun avec toi, jusqu'à la fin de l'événement, pour choisir leurs créneaux et savoir avec qui elles seront. Facultatif, sans effet sur ton inscription. Tu pourras le confirmer, ou le masquer à tout moment, sur ta page « Mes inscriptions ». Même si ton nom reste masqué, ta place confirmée est comptée dans le nombre de bénévoles affiché sur chaque créneau.",
   "ROSTER_SIGNUP_LABEL": "J'accepte que les bénévoles confirmés et les membres invités par l'organisation voient mon prénom et l'initiale de mon nom (par exemple « Aline M. ») sur mes créneaux confirmés.",
   "ROSTER_SWITCH_EXPLAIN": "Prénom et initiale des bénévoles confirmés qui l'ont accepté ; les autres sont comptés, sans leur nom.",
   "ROSTER_SWITCH_FAILURE": "Impossible d'afficher qui est inscrit pour l'instant. Désactive puis réactive « Voir qui est inscrit » pour réessayer.",
@@ -3708,7 +3708,7 @@ exports[`shift roster characterization (#1068) > exports the same names and the 
 }
 `;
 
-exports[`shift roster characterization (#1068) > exports the same names and the same texts and numbers 3`] = `"b43f7f7341e0405a80d8a528fa17054c964e20542a787d64184a631b197095b5"`;
+exports[`shift roster characterization (#1068) > exports the same names and the same texts and numbers 3`] = `"2803c240349b669565e1ee01a19c87241d18053d4ab79ec06596baa21b84d009"`;
 
 exports[`shift roster characterization (#1068) > minors, the sign-up box, the roster's opening and who may look 1`] = `
 {

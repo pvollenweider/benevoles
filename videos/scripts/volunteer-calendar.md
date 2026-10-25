@@ -8,7 +8,7 @@ Retrouver les créneaux confirmés dans l'agenda que le bénévole utilise déj�
 
 ## Démonstration
 
-1. Depuis la page personnelle de Camille, montrer trois créneaux confirmés et une attente.
+1. Depuis la page Mes inscriptions de Camille, montrer trois créneaux confirmés et une attente.
 2. Télécharger un seul créneau avec « Ajouter à mon calendrier » ; vérifier que le fichier contient exactement un événement.
 3. Télécharger « Télécharger tout mon planning » (carte « Mon calendrier ») ; vérifier les trois événements et l'absence de la liste d'attente.
 4. Expliquer l'import dans son agenda sans ouvrir une application native, selon la décision de Philippe de poursuivre sans accès à Calendrier. Montrer les informations correspondantes sur la page Benevol et vérifier leur présence dans le fichier réellement téléchargé. Ne pas annoncer un import effectué.

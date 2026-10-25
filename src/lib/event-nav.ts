@@ -24,7 +24,7 @@ export const EVENT_TABS: EventTabDef[] = [
   { id: "day-of", label: "Jour J", pages: [{ path: "day-of", label: "Jour J" }] },
   { id: "shifts", label: "Créneaux", pages: [{ path: "shifts", label: "Créneaux" }, { path: "staffing", label: "Où manque-t-il du monde ?", nested: ["staffing/search"] }] },
   { id: "registrations", label: "Inscriptions", pages: [{ path: "registrations", label: "Inscriptions" }, { path: "invitations", label: "Invitations" }] },
-  { id: "communication", label: "Communication", pages: [{ path: "message", label: "Communication" }] },
+  { id: "communication", label: "Messages", pages: [{ path: "message", label: "Messages" }] },
   {
     id: "share", label: "Partage",
     pages: [{ path: "share", label: "Liens" }, { path: "qr", label: "QR code" }, { path: "pages", label: "Pages d'information" }, { path: "preview", label: "Aperçu bénévole" }],

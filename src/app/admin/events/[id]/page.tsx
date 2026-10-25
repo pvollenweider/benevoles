@@ -199,8 +199,8 @@ export default async function AdminEventPage({ params }: { params: Promise<{ id:
         />
       </section>
 
-      <section aria-labelledby="overview-communication" className={sectionClass}>
-        <h2 id="overview-communication" className={h2Class}>Communication</h2>
+      <section aria-labelledby="overview-messages" className={sectionClass}>
+        <h2 id="overview-messages" className={h2Class}>Messages</h2>
         <ul role="list" className="text-sm text-gray-800 space-y-1">
           <li>
             <span className="font-medium text-gray-900">Dernier message : </span>
@@ -213,7 +213,7 @@ export default async function AdminEventPage({ params }: { params: Promise<{ id:
           </li>
         </ul>
         <p className="text-sm">
-          <Link href={`${base}/message`} className={linkClass}>Ouvrir la communication</Link>
+          <Link href={`${base}/message`} className={linkClass}>Ouvrir les messages</Link>
           <span className="text-gray-700"> : écrire aux bénévoles, rappels et messages envoyés.</span>
         </p>
       </section>

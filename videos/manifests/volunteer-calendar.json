@@ -55,7 +55,7 @@
     },
     {
       "id": "result",
-      "transcript": "Ton agenda aide à te rappeler les horaires, mais la page personnelle reste la référence pour tes inscriptions. Elle affiche aussi l'attente, les offres et les demandes, qui n'ont pas leur place dans le fichier des créneaux confirmés. Après une modification, consulte cette page, récupère le nouveau fichier et vérifie le résultat dans ton calendrier.",
+      "transcript": "Ton agenda aide à te rappeler les horaires, mais la page Mes inscriptions reste la référence. Elle affiche aussi l'attente, les offres et les demandes, qui n'ont pas leur place dans le fichier des créneaux confirmés. Après une modification, consulte cette page, récupère le nouveau fichier et vérifie le résultat dans ton calendrier.",
       "fallbackDurationMs": 30000
     }
   ],
@@ -72,7 +72,7 @@
       "Seuls les créneaux confirmés vont dans le fichier : pas l'attente, les offres ni les demandes.",
       "Le fichier ne se met pas à jour tout seul : l'organisation te prévient par email en cas de changement.",
       "Le fichier contient ton lien personnel : garde-le pour toi.",
-      "Ta page personnelle reste la référence pour tes inscriptions."
+      "Ta page Mes inscriptions reste la référence."
     ]
   },
   "continuousPauseTags": false

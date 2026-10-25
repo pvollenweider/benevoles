@@ -47,7 +47,7 @@ formulaire public ordinaire et Aline depuis une invitation effectivement
 envoyée. La première réponse n'expose aucun jeton ; la page n'a pas de lien
 personnel et l'email effectivement reçu contient ce lien. L'invitation
 préremplit Aline, et sa confirmation affiche « Accéder à mon inscription ».
-Les trois images de confirmation et de page personnelle ont été inspectées.
+Les trois images de confirmation et de page Mes inscriptions ont été inspectées.
 
 Le test initial s'est arrêté après les deux succès sur un sélecteur trop court
 du bouton d'annulation ; le nom contient aussi le libellé du créneau. Le
@@ -128,7 +128,7 @@ serveur local 43102 ; la préparation remet à zéro son seul compteur
 La répétition suivante est passée sur les onze chapitres. Les 55 images ont
 été réextraites et indexées avec le SHA-256 de cette nouvelle capture. Quatre
 images de fin ont été inspectées individuellement : refus de chevauchement,
-ligne unique de Nicolas après reprise, page personnelle d'Aline affichant
+ligne unique de Nicolas après reprise, page Mes inscriptions d'Aline affichant
 ses deux créneaux, puis liste organisateur des cinq inscriptions. La page
 personnelle est cette fois effectivement présente dans la capture. Cela ne
 signifie pas que les 55 images ou la synchronisation vocale sont validées.

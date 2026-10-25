@@ -9,7 +9,7 @@
 3. Montrer le passage à l’heure d’été : 1 h–5 h, trois heures réelles.
 4. Montrer le passage à l’heure d’hiver : 1 h–5 h, cinq heures réelles.
 5. Vérifier le fuseau Europe/Zurich.
-6. Télécharger tout le planning depuis la page personnelle du bénévole.
+6. Télécharger tout le planning depuis la page Mes inscriptions du bénévole.
 
 ## Résultat visible
 
@@ -39,5 +39,5 @@ Narration finale de référence (génération intégrale si modifiée, même voi
 - `spring` : Le dernier dimanche de mars, la Suisse passe directement de deux heures à trois heures. Un créneau affiché de une heure à cinq heures ne dure donc que trois heures réelles. Les emails et calendriers gardent les heures locales, tandis que les totaux utilisent la durée réellement écoulée.
 - `autumn` : Le dernier dimanche d’octobre, l’heure entre deux et trois se répète. Le même créneau de une heure à cinq heures dure alors cinq heures réelles. Cette différence compte pour les heures prévues et évite de sous-estimer l’engagement d’une personne présente toute la nuit.
 - `timezone` : Ces calculs dépendent du fuseau horaire de l’organisation, ici Europe Zurich. Le serveur peut fonctionner en UTC sans décaler les rappels : une heure saisie reste l’heure locale comprise par l’organisateur et le bénévole.
-- `calendar` : Depuis la page personnelle de notre bénévole fictif, téléchargeons son planning au format calendrier. Le fichier contient des instants précis avec le bon décalage d’été ou d’hiver. Après une modification, téléchargez-le à nouveau pour que les informations de votre agenda correspondent au planning actuel.
+- `calendar` : Depuis la page Mes inscriptions de notre bénévole fictif, téléchargeons son planning au format calendrier. Le fichier contient des instants précis avec le bon décalage d’été ou d’hiver. Après une modification, téléchargez-le à nouveau pour que les informations de votre agenda correspondent au planning actuel.
 - `result` : Pour une permanence de nuit, indiquez clairement le jour de départ, l’heure du lendemain et les consignes d’arrivée. L’affichage reste humain, tandis que les rappels, calendriers et totaux restent justes autour de minuit et des changements d’heure.

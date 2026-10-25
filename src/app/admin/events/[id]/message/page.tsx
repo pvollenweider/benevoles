@@ -22,12 +22,12 @@ import { parseNotificationSettings } from "@/lib/notification-settings"
 import { hasUpcomingShift } from "@/lib/event-wizard"
 
 export const dynamic = "force-dynamic"
-export const metadata: Metadata = { title: "Communication" }
+export const metadata: Metadata = { title: "Messages" }
 
 const day = (d: Date) => d.toLocaleDateString("fr-FR", { timeZone: "UTC", weekday: "short", day: "numeric", month: "short" })
 
 /**
- * « Communication »: « Écrire aux bénévoles » (#396), one message to the event, a role, a shift or
+ * « Messages »: « Écrire aux bénévoles » (#396), one message to the event, a role, a shift or
  * the waitlist, now or on a chosen date and time (#1019); the automatic reminders (#705) and the
  * manual reminder; the scheduled messages (#1019), every batch of emails (#1101) and the messages
  * sent (#467).
@@ -88,7 +88,7 @@ export default async function MessagePage({ params, searchParams }: { params: Pr
   return (
     <div className="space-y-6 max-w-2xl">
       <div>
-        <h1 id="page-heading" tabIndex={-1} className="text-2xl font-bold text-gray-900 focus:outline-none">Communication</h1>
+        <h1 id="page-heading" tabIndex={-1} className="text-2xl font-bold text-gray-900 focus:outline-none">Messages</h1>
         <HelpLink route="/admin/events/[id]/message" />
       </div>
       <section aria-labelledby="message-write" className="space-y-4">

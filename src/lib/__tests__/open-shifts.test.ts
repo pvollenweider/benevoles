@@ -209,7 +209,7 @@ describe("email and history", () => {
       data: { volunteerName: "Zoé", organizationName: "Asso", eventTitle: "Fête", shifts: [shifts[0]], signupUrl: "https://x/fete", editToken: "tok-z" },
     })
     expect(text).toContain("Le créneau à compléter :")
-    expect(text).toMatch(/Tes inscriptions : .*\/my\/tok-z/)
+    expect(text).toMatch(/Voir tes inscriptions : .*\/my\/tok-z/)
     expect(text).not.toContain("Pas disponible")
   })
 

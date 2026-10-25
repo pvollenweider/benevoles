@@ -183,7 +183,7 @@ export function renderReminderJ1(p: NotificationPayload): RenderedEmail {
     <p style="color:#555;margin:0 0 1.25em"><strong>${escapeHtml(d.eventTitle)}</strong> demain à ${escapeHtml(clockTime(first.startTime))}${first.locationDetails ? `, à ${escapeHtml(first.locationDetails)}` : ""}.</p>
     <p>Tu fais : <strong>${escapeHtml(roleLine(first))}</strong></p>
     ${shiftInfoHtml(first)}${noteHtml(d.shifts)}
-    ${cancelHtml(d)}<p style="margin-top:1.5em">${btn(editUrl, "Gérer mon inscription")}</p>
+    ${cancelHtml(d)}<p style="margin-top:1.5em">${btn(editUrl, "Gérer mes inscriptions")}</p>
     <p style="color:#666;font-size:0.85em;margin-top:2em">On se réjouit de te retrouver !<br><strong>${escapeHtml(d.organizationName)}</strong></p>
   `, `RDV demain à ${clockTime(first.startTime)}${first.locationDetails ? ` · ${first.locationDetails}` : ""} — mission : ${roleLine(first)}`)
     : wrap(`
@@ -246,7 +246,7 @@ export function renderReminderDd(p: NotificationPayload): RenderedEmail {
       <div>Mission : <strong>${escapeHtml(roleLine(first))}</strong></div>
       ${shiftInfoHtml(first)}
     </div>${noteHtml(d.shifts)}
-    ${cancelHtml(d)}<p style="margin-top:1.5em">${btn(editUrl, "Voir mon inscription")}</p>
+    ${cancelHtml(d)}<p style="margin-top:1.5em">${btn(editUrl, "Voir mes inscriptions")}</p>
     <p style="color:#666;font-size:0.85em;margin-top:2em">On se réjouit de te retrouver !<br><strong>${escapeHtml(d.organizationName)}</strong></p>
   `, `${roleLine(first)} · RDV ${hoursLabel}${first.locationDetails ? ` à ${first.locationDetails}` : ""}`)
     : wrap(`

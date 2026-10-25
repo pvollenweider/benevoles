@@ -12,9 +12,9 @@ aliases: []
 
 <!-- video: VOLUNTEER_SESSION_AVAILABILITY -->
 
-L'email de confirmation contient ton **lien personnel**. Il ouvre [ta page personnelle](ma-page-personnelle.md), où tu retrouves tes inscriptions et peux les annuler jusqu'au début du créneau, ou jusqu'au délai fixé par l'organisation (voir [Jusqu'à quand annuler](ma-page-personnelle.md#jusqu-a-quand-annuler)) : **ne le partage pas**. Chaque annulation faite avec ce lien t'est confirmée par email : si tu en reçois une que tu n'as pas faite, réponds à cet email pour prévenir l'organisation.
+L'email de confirmation contient ton **lien personnel**. Il ouvre [ta page « Mes inscriptions »](ma-page-personnelle.md), où tu retrouves tes inscriptions et peux les annuler jusqu'au début du créneau, ou jusqu'au délai fixé par l'organisation (voir [Jusqu'à quand annuler](ma-page-personnelle.md#jusqu-a-quand-annuler)) : **ne le partage pas**. Chaque annulation faite avec ce lien t'est confirmée par email : si tu en reçois une que tu n'as pas faite, réponds à cet email pour prévenir l'organisation.
 
-Sur ta page personnelle, l'encadré **Ton lien personnel** rappelle la date du dernier email qui le contenait et propose **Recevoir ce lien par email** pour l'avoir à nouveau dans ta boîte (au plus trois envois par heure). Si l'organisation a indiqué une adresse de contact, un lien **Écrire à l'organisation** ouvre ta messagerie avec l'objet déjà rempli.
+Sur ta page **Mes inscriptions**, l'encadré **Ton lien personnel** rappelle la date du dernier email qui le contenait et propose **Recevoir ce lien par email** pour l'avoir à nouveau dans ta boîte (au plus trois envois par heure). Si l'organisation a indiqué une adresse de contact, un lien **Écrire à l'organisation** ouvre ta messagerie avec l'objet déjà rempli.
 
 ![Encadré « Ton lien personnel » : « Ce lien est personnel : il donne accès à tes inscriptions et permet de les annuler. Ne le partage pas. », la date du dernier email qui le contenait, et le bouton « Recevoir ce lien par email »](/doc-img/public-personal-link.png)
 
@@ -34,6 +34,6 @@ En bas du planning de la page de l'événement, **J'ai perdu mon lien personnel*
 
 ## Questions fréquentes
 
-### Je n'ai plus le lien vers ma page personnelle
+### Je n'ai plus le lien vers mes inscriptions
 
 Rouvre la page de l'événement depuis le même navigateur : si ta session est encore reconnue, tes inscriptions existantes sont prises en compte sur cette page (voir [Revenir sur la page d'inscription](revenir-sur-la-page-d-inscription.md)). Pour retrouver le lien lui-même, l'email de confirmation le contient toujours. Si tu l'as supprimé, ouvre la page de l'événement et clique sur **J'ai perdu mon lien personnel**, en bas du planning ; si un ancien lien affiche « Ce lien ne fonctionne pas », la même demande est sur cette page. Indique l'adresse email utilisée pour t'inscrire : ton lien t'est envoyé par email pour chaque événement à venir. L'organisation peut aussi te le renvoyer par email depuis son espace.

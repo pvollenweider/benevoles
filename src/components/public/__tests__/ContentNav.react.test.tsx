@@ -45,7 +45,7 @@ describe("ContentNav, « Pour qui ? »", () => {
     // Never the menu pattern: plain links in a list.
     expect(nav.querySelector("[role=menu], [role=menuitem]")).toBeNull()
     const order = [...nav.querySelectorAll(":scope > a, :scope > div > button")].map((el) => el.textContent?.trim())
-    expect(order).toEqual(["Fonctionnalités", "Pour qui ?", "Guide administrateur", "Guide bénévole", "Blog"])
+    expect(order).toEqual(["Fonctionnalités", "Pour qui ?", "Guide organisateur", "Guide bénévole", "Blog"])
   })
 
   it("opens on a click, listing every audience page then « Toutes les situations »", () => {
@@ -126,7 +126,7 @@ describe("ContentNav, « Pour qui ? »", () => {
     render(<ContentNav audiences={[]} />)
     expect(screen.queryByRole("button", { name: "Pour qui ?" })).toBeNull()
     expect(screen.queryByRole("link", { name: "Pour qui ?" })).toBeNull()
-    expect(screen.getAllByRole("link").map((a) => a.textContent)).toEqual(["Fonctionnalités", "Guide administrateur", "Guide bénévole", "Blog"])
+    expect(screen.getAllByRole("link").map((a) => a.textContent)).toEqual(["Fonctionnalités", "Guide organisateur", "Guide bénévole", "Blog"])
   })
 })
 
@@ -150,7 +150,7 @@ describe("ContentNav, current page", () => {
     pathname = "/blog/benevol-app-passe-en-2-3"
     render(<ContentNav />)
     expect(screen.getByRole("link", { name: "Blog" })).toHaveAttribute("aria-current", "true")
-    for (const name of ["Fonctionnalités", "Guide administrateur", "Guide bénévole"]) {
+    for (const name of ["Fonctionnalités", "Guide organisateur", "Guide bénévole"]) {
       expect(screen.getByRole("link", { name })).not.toHaveAttribute("aria-current")
       expect(screen.getByRole("link", { name })).not.toHaveAttribute("data-current")
     }

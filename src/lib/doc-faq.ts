@@ -23,7 +23,7 @@ export const DOC_FAQ: Record<DocRole, readonly DocFaqItem[]> = {
   benevole: [
     { question: "Comment changer de créneau ?", unit: "ma-page-personnelle", heading: "changer-de-creneau" },
     { question: "Comment annuler mon inscription ?", unit: "ma-page-personnelle", heading: "annuler-un-creneau" },
-    { question: "J'ai perdu mon lien personnel, que faire ?", unit: "lien-personnel", heading: "je-n-ai-plus-le-lien-vers-ma-page-personnelle" },
+    { question: "J'ai perdu mon lien personnel, que faire ?", unit: "lien-personnel", heading: "je-n-ai-plus-le-lien-vers-mes-inscriptions" },
     { question: "Comment recevoir un rappel avant mon créneau ?", unit: "rappels", heading: "je-ne-veux-pas-oublier-mon-creneau-le-jour-j" },
   ],
   admin: [

@@ -356,7 +356,7 @@ export default function MyRegistrationPage() {
           <p className="text-sm text-gray-500">
             {data.volunteer.firstName} {data.volunteer.lastName} · {data.volunteer.email}
           </p>
-          <p className="text-sm text-gray-700">Comment fonctionne cette page : <DocMoreLink href={docHref(SECTION_DOC_LINKS.benevole.personalPage)} about="ta page personnelle" /></p>
+          <p className="text-sm text-gray-700">Comment fonctionne cette page : <DocMoreLink href={docHref(SECTION_DOC_LINKS.benevole.personalPage)} about="ta page « Mes inscriptions »" /></p>
         </div>
 
         {next && (

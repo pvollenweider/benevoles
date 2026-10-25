@@ -335,7 +335,7 @@ export default function EventForm({ initialData, createdHref, timeZone = "Europe
           id="event-coordinates"
           value={{ latitude: form.latitude, longitude: form.longitude }}
           onChange={(c) => setForm((f) => ({ ...f, latitude: c?.latitude ?? null, longitude: c?.longitude ?? null }))}
-          hint="Les bénévoles auront un lien « Voir sur la carte » (OpenStreetMap) sur la page d'inscription, dans les emails et sur leur page personnelle ; les créneaux sans lieu propre l'utilisent aussi."
+          hint="Les bénévoles auront un lien « Voir sur la carte » (OpenStreetMap) sur la page d'inscription, dans les emails et sur leur page « Mes inscriptions » ; les créneaux sans lieu propre l'utilisent aussi."
         />
 
         <div className="grid grid-cols-2 gap-4">
@@ -470,7 +470,7 @@ export default function EventForm({ initialData, createdHref, timeZone = "Europe
         <fieldset id="event-day-contact" aria-describedby="event-day-contact-hint">
           <legend className="text-sm font-medium text-gray-700 mb-1">Contact le jour J</legend>
           <p id="event-day-contact-hint" className="text-xs text-gray-600 mb-2">
-            Facultatif. La personne que les bénévoles appellent sur place quand leur créneau n&apos;a pas de contact. Visible uniquement par les bénévoles confirmés (page personnelle, rappels, planning individuel imprimé), jamais sur la page publique. Le contact d&apos;un créneau, s&apos;il est renseigné, passe avant.
+            Facultatif. La personne que les bénévoles appellent sur place quand leur créneau n&apos;a pas de contact. Visible uniquement par les bénévoles confirmés (page « Mes inscriptions », rappels, planning individuel imprimé), jamais sur la page publique. Le contact d&apos;un créneau, s&apos;il est renseigné, passe avant.
           </p>
           <div className="grid gap-3 sm:grid-cols-2">
             <div>

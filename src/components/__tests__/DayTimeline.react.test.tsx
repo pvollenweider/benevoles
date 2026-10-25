@@ -145,7 +145,7 @@ describe("DayTimeline", () => {
     )
     expect(screen.getByRole("button", { name: "18h–20h, Bar : demande envoyée, en attente de validation" })).toHaveAttribute("aria-disabled", "true")
     expect(screen.getByRole("button", { name: "20h–22h, Bar : en liste d'attente" })).toHaveAttribute("aria-disabled", "true")
-    expect(screen.getByRole("button", { name: "22h–23h, Bar : place proposée, à accepter sur ta page personnelle" })).toHaveAttribute("aria-disabled", "true")
+    expect(screen.getByRole("button", { name: "22h–23h, Bar : place proposée, à accepter sur ta page « Mes inscriptions »" })).toHaveAttribute("aria-disabled", "true")
     for (const tag of ["Demande envoyée", "En liste d'attente", "Place proposée", "Ton créneau"]) expect(screen.getByText(tag)).toBeInTheDocument()
     expect(screen.queryByText("Réservé")).toBeNull()
   })

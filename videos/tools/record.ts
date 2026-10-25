@@ -994,7 +994,7 @@ async function main() {
         await page.getByRole("heading", { name: "Charte des bénévoles", exact: true }).scrollIntoViewIfNeeded()
         await at("Pour une information urgente, utilisez")
         await page.goto(`${baseUrl}/admin/events/${featureEventId}/message`); await settle(page)
-        await page.getByRole("heading", { name: "Communication", exact: true }).scrollIntoViewIfNeeded()
+        await page.getByRole("heading", { name: "Messages", exact: true }).scrollIntoViewIfNeeded()
       })
 
       await scene("result", async () => {
@@ -2992,7 +2992,7 @@ async function main() {
           if (!cron.ok()) throw new Error(`Actual cron failed: ${cron.status()}`)
           await openNewMail("camille.rochat@example.org", before)
           const confirmationText = await page.frameLocator("iframe").locator("body").innerText()
-          if (!confirmationText.includes("Élodie Rochat") || !confirmationText.includes("Accueil") || !confirmationText.includes("15h") || !confirmationText.includes("Voir mes créneaux")) throw new Error("Actual organizer confirmation content differs from expected fixture")
+          if (!confirmationText.includes("Élodie Rochat") || !confirmationText.includes("Accueil") || !confirmationText.includes("15h") || !confirmationText.includes("Gérer mes inscriptions")) throw new Error("Actual organizer confirmation content differs from expected fixture")
           const sent = await db.notificationOutbox.findUniqueOrThrow({ where: { id: pending[0].id } })
           if (sent.status !== "sent") throw new Error("Organizer confirmation was not sent")
           checks.manualConfirmationRealCron = true
@@ -3839,7 +3839,7 @@ async function main() {
         await section().scrollIntoViewIfNeeded()
       })
       await scene("result", async at => {
-        await at("Reviens sur ta page personnelle")
+        await at("Reviens sur ta page Mes inscriptions")
         await tap(page, section().getByLabel("Matin", { exact: true }))
         await tap(page, section().getByLabel("Soir", { exact: true }))
         await fillVisibly(page, section().getByLabel(/Sauf/), "")
@@ -4142,7 +4142,7 @@ async function main() {
       await page.goto(`${baseUrl}/admin/events/${featureEventId}/edit`); await settle(page)
       await scene("welcome", async () => {
         await page.screencast.showChapter(manifest.title, { description: "Informer, orienter et partager", duration: 2_300 })
-        await page.getByRole("heading", { name: "Modifier l'événement" }).waitFor()
+        await page.getByRole("heading", { name: "Informations de l'événement" }).waitFor()
       })
 
       await scene("program", async (at) => {
@@ -4370,7 +4370,7 @@ async function main() {
       await page.goto(`${baseUrl}/admin/events/${featureEventId}/edit`); await settle(page)
       await scene("welcome", async () => {
         await page.screencast.showChapter(manifest.title, { description: "Qui voit la page, et quand peut-on s’inscrire ?", duration: 2_300 })
-        await page.getByRole("heading", { name: "Modifier l'événement" }).waitFor()
+        await page.getByRole("heading", { name: "Informations de l'événement" }).waitFor()
       })
 
       await scene("statuses", async (at) => {
@@ -4821,9 +4821,9 @@ async function main() {
         await tap(page, enabled)
         if (!(await saved).ok()) throw new Error("Event reminder disable was not saved")
         await page.getByText(/^Modifications enregistrées à/).waitFor()
-        await at("Son onglet Communication")
+        await at("Son onglet Messages")
         await page.goto(`${baseUrl}/admin/events/${emailEventId}/message`); await settle(page)
-        await page.getByRole("heading", { name: "Communication", exact: true }).scrollIntoViewIfNeeded()
+        await page.getByRole("heading", { name: "Messages", exact: true }).scrollIntoViewIfNeeded()
         await page.getByText("Rappels automatiques coupés pour cet événement", { exact: true }).waitFor()
       })
 
@@ -4865,7 +4865,7 @@ async function main() {
         await replyTo.pressSequentially("benevoles@example.org", { delay: 115 })
         if (await replyTo.inputValue() !== "benevoles@example.org") throw new Error("Reply address must be fully entered before showing its result")
         await at(0.72)
-        await page.getByText(/Cette adresse figure aussi sur la page personnelle/).scrollIntoViewIfNeeded()
+        await page.getByText(/Cette adresse figure aussi sur la page « Mes inscriptions »/).scrollIntoViewIfNeeded()
       })
 
       await scene("save", async (at) => {
@@ -5125,7 +5125,7 @@ async function main() {
 
       await scene("appearance", async (at) => {
         await at(0.08) /* mid-sentence */
-        const editHeading = page.getByRole("heading", { name: "Modifier l'événement" })
+        const editHeading = page.getByRole("heading", { name: "Informations de l'événement" })
         if (await editHeading.isVisible()) await editHeading.scrollIntoViewIfNeeded()
         await at(0.35) /* mid-sentence: color in the first sentence */
         await page.getByText("Couleur de la page publique").scrollIntoViewIfNeeded()
@@ -5253,7 +5253,7 @@ async function main() {
       await page.goto(`${baseUrl}/admin/events/${featureEventId}/message`); await settle(page)
       await page.screencast.showChapter("Communiquer", { description: "Messages, modèles et rappels", duration: 1_400 })
       await scene("messages", async (at) => {
-        await page.getByRole("heading", { name: "Communication", exact: true }).waitFor()
+        await page.getByRole("heading", { name: "Messages", exact: true }).waitFor()
         await page.getByText("Destinataires", { exact: true }).scrollIntoViewIfNeeded()
         await at("Les modèles réutilisables acceptent des")
         await page.goto(`${baseUrl}/admin/settings/message-templates`); await settle(page)
@@ -5301,7 +5301,7 @@ async function main() {
         await page.screencast.showChapter(manifest.title, { description: "Du premier inscrit au jour J", duration: 2_300 })
         await page.getByRole("heading", { name: "Fête du village de Montvert" }).waitFor()
         await at(0.58) /* mid-sentence */
-        await page.getByRole("heading", { name: "Communication", exact: true }).scrollIntoViewIfNeeded()
+        await page.getByRole("heading", { name: "Messages", exact: true }).scrollIntoViewIfNeeded()
       })
 
       await page.goto(`${baseUrl}/admin/events/${featureEventId}/staffing`); await settle(page)

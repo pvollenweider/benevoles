@@ -105,7 +105,7 @@ export default function NotificationSettingsForm({ initialSettings, initialReply
         <input id={`${id}-signup`} type="checkbox" checked={settings.signupAdminEmail} onChange={(e) => setSettings((s) => ({ ...s, signupAdminEmail: e.target.checked }))} aria-describedby={`${id}-signup-help`} className={checkboxClass} />
         <div>
           <label htmlFor={`${id}-signup`} className="text-sm font-medium text-gray-800">Prévenir les administrateurs à chaque inscription</label>
-          <p id={`${id}-signup-help`} className="text-xs text-gray-600">Un email à chaque administrateur actif quand un bénévole s&apos;inscrit depuis la page publique, et quand il modifie ses réponses aux questions depuis sa page personnelle (plusieurs modifications rapprochées en un seul email). Une question rattachée à un poste prévient ses responsables à la place ; ce réglage coupe aussi leur email.</p>
+          <p id={`${id}-signup-help`} className="text-xs text-gray-600">Un email à chaque administrateur actif quand un bénévole s&apos;inscrit depuis la page publique, et quand il modifie ses réponses aux questions depuis sa page « Mes inscriptions » (plusieurs modifications rapprochées en un seul email). Une question rattachée à un poste prévient ses responsables à la place ; ce réglage coupe aussi leur email.</p>
         </div>
       </div>
 
@@ -143,7 +143,7 @@ export default function NotificationSettingsForm({ initialSettings, initialReply
           className="w-full border border-gray-500 rounded-xl px-3 py-2 text-sm focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-blue-600"
         />
         <p id={`${id}-replyto-help`} className="mt-1 text-xs text-gray-600">
-          Quand un bénévole répond à un email de l&apos;application, sa réponse arrive ici, par exemple contact@votre-association.ch. Laissez vide pour utiliser l&apos;adresse par défaut de la plateforme. Cette adresse figure aussi sur la page personnelle des bénévoles.
+          Quand un bénévole répond à un email de l&apos;application, sa réponse arrive ici, par exemple contact@votre-association.ch. Laissez vide pour utiliser l&apos;adresse par défaut de la plateforme. Cette adresse figure aussi sur la page « Mes inscriptions » des bénévoles.
         </p>
         {fieldError && <p id={`${id}-replyto-error`} className="mt-1 text-sm font-medium text-red-700">{fieldError}</p>}
       </div>

@@ -46,9 +46,9 @@ En savoir plus : [partager le lien](../guide/partager-le-lien.md), [inviter des 
 
 ## Une responsable pour la buvette
 
-La personne qui tient la buvette depuis des années n'a pas besoin d'un accès à l'administration. Désignez-la responsable de secteur : elle reçoit un lien personnel, sans compte, qui lui montre qui est inscrit sur son poste, avec le téléphone de chacun. Elle est prévenue de chaque inscription et de chaque désistement sur son poste, et tout de suite si le désistement arrive moins de 24 heures avant le créneau. Les bénévoles du poste voient son nom sur leur page personnelle et dans leurs rappels.
+La personne qui tient la buvette depuis des années n'a pas besoin d'un accès à l'administration. Désignez-la responsable de secteur : elle reçoit un lien personnel, sans compte, qui lui montre qui est inscrit sur son poste, avec le téléphone de chacun. Elle est prévenue de chaque inscription et de chaque désistement sur son poste, et tout de suite si le désistement arrive moins de 24 heures avant le créneau. Les bénévoles du poste voient son nom sur leur page **Mes inscriptions** et dans leurs rappels.
 
-![Page personnelle de la responsable du poste Buvette : chaque créneau avec ses bénévoles inscrits, leur email et leur téléphone, et les personnes en liste d'attente](/doc-img/leader-page.png)
+![Page de la responsable du poste Buvette : chaque créneau avec ses bénévoles inscrits, leur email et leur téléphone, et les personnes en liste d'attente](/doc-img/leader-page.png)
 
 <!-- video: SECTOR_LEADERS -->
 

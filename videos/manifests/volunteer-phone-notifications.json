@@ -9,7 +9,7 @@
       "Ouvre ton lien personnel, reçu après ton inscription.",
       "Clique sur « Recevoir des rappels push », puis lis le nom du site avant d'autoriser les notifications.",
       "Vérifie que la page affiche « Rappels push activés ».",
-      "Quand tu ouvres une notification, vérifie les horaires et les consignes sur ta page personnelle.",
+      "Quand tu ouvres une notification, vérifie les horaires et les consignes sur ta page Mes inscriptions.",
       "Pour arrêter, retire l'autorisation de notifications du site dans les réglages de ton navigateur."
     ],
     "remember": [
@@ -74,7 +74,7 @@
     },
     {
       "id": "delivery",
-      "transcript": "Un message urgent de l'organisation peut aussi être accompagné d'une notification, si elle choisit cette option. Le message complet est envoyé par email aux destinataires du message ciblé. Pour comprendre le résultat, distingue le court aperçu affiché par ton appareil et les informations complètes. Quand tu ouvres une notification de Benevol, son lien te ramène vers la page concernée. Vérifie les horaires et les consignes sur ta page personnelle, plutôt que de te fier uniquement à l'aperçu.",
+      "transcript": "Un message urgent de l'organisation peut aussi être accompagné d'une notification, si elle choisit cette option. Le message complet est envoyé par email aux destinataires du message ciblé. Pour comprendre le résultat, distingue le court aperçu affiché par ton appareil et les informations complètes. Quand tu ouvres une notification de Benevol, son lien te ramène vers la page concernée. Vérifie les horaires et les consignes sur ta page Mes inscriptions, plutôt que de te fier uniquement à l'aperçu.",
       "fallbackDurationMs": 41000
     },
     {
@@ -84,7 +84,7 @@
     },
     {
       "id": "disable",
-      "transcript": "Tu veux arrêter ces notifications ? Ouvre les autorisations du site dans les réglages du navigateur et retire l'autorisation d'envoyer des notifications. Le chemin exact dépend de ton appareil ; ce qui est montré ici correspond au navigateur de la démonstration. Ce choix ne supprime pas tes inscriptions, et ne modifie pas les emails prévus par l'organisation. Ce n'est pas non plus un bouton pour se désinscrire d'un créneau. Si tu réactives plus tard, reviens sur ta page personnelle et vérifie le résultat de l'activation.",
+      "transcript": "Tu veux arrêter ces notifications ? Ouvre les autorisations du site dans les réglages du navigateur et retire l'autorisation d'envoyer des notifications. Le chemin exact dépend de ton appareil ; ce qui est montré ici correspond au navigateur de la démonstration. Ce choix ne supprime pas tes inscriptions, et ne modifie pas les emails prévus par l'organisation. Ce n'est pas non plus un bouton pour se désinscrire d'un créneau. Si tu réactives plus tard, reviens sur ta page Mes inscriptions et vérifie le résultat de l'activation.",
       "fallbackDurationMs": 44000
     },
     {

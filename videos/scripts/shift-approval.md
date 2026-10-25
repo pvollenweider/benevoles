@@ -17,7 +17,7 @@ Réserver les missions sensibles aux profils appropriés sans demander à l’é
 ## Résultat visible
 
 - La demande occupe une place sans être présentée comme confirmée.
-- La décision est visible dans l’administration et sur la page personnelle.
+- La décision est visible dans l’administration et sur la page Mes inscriptions.
 - L’email de décision est envoyé dans la pile vidéo isolée.
 
 ## Points d’attention

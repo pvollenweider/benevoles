@@ -64,7 +64,7 @@ describe("publicPageJsonLd", () => {
     expect(types(doc)).toEqual(["WebPage", "BreadcrumbList", "WebSite", "Organization"])
     const [page, crumbs] = graphOf(doc)
     expect(page).toMatchObject({ "@id": `${BASE}/doc/admin#webpage`, url: `${BASE}/doc/admin`, inLanguage: "fr", breadcrumb: { "@id": `${BASE}/doc/admin#breadcrumb` } })
-    expect((crumbs.itemListElement as { name: string }[]).map((c) => c.name)).toEqual(["Accueil", "Documentation", "Guide administrateur"])
+    expect((crumbs.itemListElement as { name: string }[]).map((c) => c.name)).toEqual(["Accueil", "Documentation", "Guide organisateur"])
   })
 
   it("makes /doc a collection, and the features page describe the application", () => {

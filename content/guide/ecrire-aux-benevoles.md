@@ -12,7 +12,7 @@ aliases: []
 
 <!-- video: TARGETED_MESSAGES -->
 
-Depuis l'onglet **Communication** de l'événement (**Événements**, puis l'événement, puis **Communication**), section **Écrire aux bénévoles**, ou depuis les inscriptions (le bouton reprend le poste ou le créneau filtré).
+Depuis l'onglet **Messages** de l'événement (**Événements**, puis l'événement, puis **Messages**), section **Écrire aux bénévoles**, ou depuis les inscriptions (le bouton reprend le poste ou le créneau filtré).
 
 ![Page « Écrire aux bénévoles » : choix des destinataires (tous les inscrits, un poste, un créneau, la liste d'attente, les invités sans créneau) avec le nombre de personnes, le choix d'un modèle, puis l'objet et le message](/doc-img/admin-message.png)
 
@@ -26,7 +26,7 @@ Un email simple, à qui c'est utile :
 
 Si des destinataires ont une adresse à vérifier (un précédent message leur a été définitivement refusé), l'aperçu et la confirmation le signalent avec leur nombre. C'est un avertissement, l'envoi reste possible : l'adresse a pu être corrigée côté destinataire depuis.
 
-Vous saisissez un objet et un message texte (les retours à la ligne sont conservés). Pour une information urgente, cochez **Envoyer aussi une notification (téléphone ou ordinateur)** : les destinataires qui ont activé les notifications la reçoivent en plus de l'email, qui part à tous dans tous les cas. Le formulaire indique combien d'appareils sont abonnés parmi les destinataires, et l'aperçu comme la confirmation le rappellent. La notification montre l'objet et la première ligne du message, et ouvre la page personnelle du bénévole (la page de l'événement pour la liste d'attente). Son résultat s'affiche à part de celui des emails dans les messages envoyés ; un appareil qui n'existe plus est retiré. Le nombre de destinataires s'affiche dès le choix ; **Voir l'aperçu et envoyer** montre l'email tel qu'il sera reçu, puis demande une confirmation avec le nombre de personnes. Chaque personne reçoit un seul email, avec ses créneaux concernés et le lien vers ses inscriptions ; l'envoi est noté dans le journal de l'événement. Pour l'envoyer plus tard, voir [Programmer l'envoi](#programmer-l-envoi). Pas d'éditeur HTML ni de segments enregistrés : pour relancer les membres invités sans réponse, voir [Relancer les invités sans réponse](inviter-des-membres.md#relancer-les-invites-sans-reponse).
+Vous saisissez un objet et un message texte (les retours à la ligne sont conservés). Pour une information urgente, cochez **Envoyer aussi une notification (téléphone ou ordinateur)** : les destinataires qui ont activé les notifications la reçoivent en plus de l'email, qui part à tous dans tous les cas. Le formulaire indique combien d'appareils sont abonnés parmi les destinataires, et l'aperçu comme la confirmation le rappellent. La notification montre l'objet et la première ligne du message, et ouvre la page **Mes inscriptions** du bénévole (la page de l'événement pour la liste d'attente). Son résultat s'affiche à part de celui des emails dans les messages envoyés ; un appareil qui n'existe plus est retiré. Le nombre de destinataires s'affiche dès le choix ; **Voir l'aperçu et envoyer** montre l'email tel qu'il sera reçu, puis demande une confirmation avec le nombre de personnes. Chaque personne reçoit un seul email, avec ses créneaux concernés et le lien vers ses inscriptions ; l'envoi est noté dans le journal de l'événement. Pour l'envoyer plus tard, voir [Programmer l'envoi](#programmer-l-envoi). Pas d'éditeur HTML ni de segments enregistrés : pour relancer les membres invités sans réponse, voir [Relancer les invités sans réponse](inviter-des-membres.md#relancer-les-invites-sans-reponse).
 
 Pour un message à beaucoup de personnes, les emails partent par vagues : les premiers tout de suite, les suivants dans les minutes qui suivent, un peu plus tard pour une très longue liste. C'est normal, et rien à faire de votre côté : cette attente ne fait échouer aucun email. En attendant, les [messages envoyés](#messages-envoyes) les comptent « en attente ».
 
@@ -40,11 +40,11 @@ Le message n'est pas envoyé si l'événement est archivé à l'heure prévue, s
 
 ## Messages programmés
 
-Dans l'onglet **Communication**, au-dessus des messages envoyés, **Messages programmés** liste les envois à venir, le plus proche en premier, avec la date et l'heure prévues, qui l'a programmé, le public choisi et le texte. **Annuler l'envoi** l'annule après confirmation, tant qu'il n'est pas parti ; le message reste listé comme annulé, avec la date et l'auteur de l'annulation. Une fois parti, il rejoint les messages envoyés, avec l'heure pour laquelle il était programmé.
+Dans l'onglet **Messages**, au-dessus des messages envoyés, **Messages programmés** liste les envois à venir, le plus proche en premier, avec la date et l'heure prévues, qui l'a programmé, le public choisi et le texte. **Annuler l'envoi** l'annule après confirmation, tant qu'il n'est pas parti ; le message reste listé comme annulé, avec la date et l'auteur de l'annulation. Une fois parti, il rejoint les messages envoyés, avec l'heure pour laquelle il était programmé.
 
 ## Envois groupés
 
-Dans l'onglet **Communication**, entre les messages programmés et les messages envoyés, **Envois groupés** liste chaque envoi à plusieurs personnes fait depuis l'événement, du plus récent au plus ancien : invitations, relance des invités sans réponse, rappel aux inscrits, message aux bénévoles, message programmé, créneaux à compléter. Pour chacun : la date et l'heure, qui l'a lancé (qui l'a programmé, pour un message programmé), le nombre de destinataires et la remise en toutes lettres, mise à jour à chaque visite (envoyés, en attente, en échec, annulés).
+Dans l'onglet **Messages**, entre les messages programmés et les messages envoyés, **Envois groupés** liste chaque envoi à plusieurs personnes fait depuis l'événement, du plus récent au plus ancien : invitations, relance des invités sans réponse, rappel aux inscrits, message aux bénévoles, message programmé, créneaux à compléter. Pour chacun : la date et l'heure, qui l'a lancé (qui l'a programmé, pour un message programmé), le nombre de destinataires et la remise en toutes lettres, mise à jour à chaque visite (envoyés, en attente, en échec, annulés).
 
 Quand le plafond d'envoi a fait attendre une partie des emails, une phrase le dit, par exemple « 1 email a attendu une minute avant de partir, à cause du plafond d'envoi. », ou, tant qu'ils attendent encore, combien partiront dès que le plafond le permet. Ce n'est pas une erreur : ces emails partent d'eux-mêmes.
 
@@ -56,11 +56,11 @@ Quand le plafond d'envoi a fait attendre une partie des emails, une phrase le di
 
 ## Messages envoyés
 
-En bas de l'onglet **Communication**, chaque message déjà envoyé pour l'événement (y compris les créneaux proposés depuis « Chercher des bénévoles »), du plus récent au plus ancien, avec la date et l'heure, qui l'a écrit, l'objet, le public choisi, le nombre de destinataires et la remise en toutes lettres (envoyés, en échec, en attente). **Voir le texte envoyé** affiche le message. Quand des emails ont échoué, **Renvoyer les emails en échec** les remet en file d'envoi, eux seuls ; un second clic n'en renvoie pas d'autres. Les destinataires ne sont pas listés, seulement leur nombre. Les emails automatiques (confirmations, rappels) n'y figurent pas : voir [Réglages et suivi des emails](reglages-et-suivi-des-emails.md#emails-envoyes). Les messages, et les messages programmés annulés ou non envoyés, sont conservés 12 mois, puis supprimés ; ils le sont aussi avec l'événement.
+En bas de l'onglet **Messages**, chaque message déjà envoyé pour l'événement (y compris les créneaux proposés depuis « Chercher des bénévoles »), du plus récent au plus ancien, avec la date et l'heure, qui l'a écrit, l'objet, le public choisi, le nombre de destinataires et la remise en toutes lettres (envoyés, en échec, en attente). **Voir le texte envoyé** affiche le message. Quand des emails ont échoué, **Renvoyer les emails en échec** les remet en file d'envoi, eux seuls ; un second clic n'en renvoie pas d'autres. Les destinataires ne sont pas listés, seulement leur nombre. Les emails automatiques (confirmations, rappels) n'y figurent pas : voir [Réglages et suivi des emails](reglages-et-suivi-des-emails.md#emails-envoyes). Les messages, et les messages programmés annulés ou non envoyés, sont conservés 12 mois, puis supprimés ; ils le sont aussi avec l'événement.
 
 ## Rappel manuel
 
-Dans l'onglet **Communication**, section **Rappels**, sous l'encadré des rappels automatiques, le bouton **Envoyer le rappel** permet d'envoyer un email de rappel à **tous les bénévoles inscrits** de l'événement.
+Dans l'onglet **Messages**, section **Rappels**, sous l'encadré des rappels automatiques, le bouton **Envoyer le rappel** permet d'envoyer un email de rappel à **tous les bénévoles inscrits** de l'événement.
 
 Avant d'envoyer, rédigez si vous le souhaitez un message dans la section « Message de rappel » (onglet **Réglages** de l'événement). Ce message apparaîtra dans l'email, avec le récapitulatif des créneaux de chaque bénévole.
 

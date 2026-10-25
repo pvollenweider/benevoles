@@ -13,7 +13,7 @@ describe("barText for a held shift", () => {
     ["active", "10h–12h, Bar : inscription confirmée", "Ton créneau"],
     ["requested", "10h–12h, Bar : demande envoyée, en attente de validation", "Demande envoyée"],
     ["waiting", "10h–12h, Bar : en liste d'attente", "En liste d'attente"],
-    ["offered", "10h–12h, Bar : place proposée, à accepter sur ta page personnelle", "Place proposée"],
+    ["offered", "10h–12h, Bar : place proposée, à accepter sur ta page « Mes inscriptions »", "Place proposée"],
   ]
   for (const [held, name, tag] of cases) {
     it(`names and tags a ${held} shift`, () => {
