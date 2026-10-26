@@ -240,8 +240,9 @@ model Sector {
   createdAt    DateTime  @default(now())
   updatedAt    DateTime  @updatedAt
 
-  event  Event   @relation(fields: [eventId], references: [id], onDelete: Cascade)
-  shifts Shift[]
+  event   Event          @relation(fields: [eventId], references: [id], onDelete: Cascade)
+  shifts  Shift[]
+  leaders SectorLeader[]
 
   // Also unique case-insensitively among the sectors not archived: "Sector_eventId_name_ci_key" on
   // (eventId, lower(trim(name))) WHERE archivedAt IS NULL, created by migration 20261026180000_sectors.
@@ -271,16 +272,21 @@ model EventPage {
   @@index([eventId])
 }
 
-// "Sector leader" (responsable de secteur) — see issue #186. Scoped to a roleName within an
-// event (matches how shifts already group on the planning, not per-shift: finer-grained scope
-// wasn't a proven need). No login: a stable magic-link token, same pattern as MemberInvite,
-// opens a read-only roster of who's signed up for that role — name, email, phone — without
-// giving admin access to the rest of the event. v1 is read-only on purpose: no mutation surface
-// to secure yet. Several leaders can share a roleName, and one person can lead several.
+// "Sector leader" (responsable de secteur) — see issue #186. Scoped to one poste (`roleName`) or,
+// since #1169, to one sector of the event (`sectorId`, beta): exactly one of the two is set
+// (check "SectorLeader_scope_check", migration 20261026200000_sector_scoped_leaders). A sector
+// leader covers the postes currently in their sector, resolved at each request
+// (src/lib/leader-scope.ts). No login: a stable magic-link token, same pattern as MemberInvite,
+// opens a read-only roster of who's signed up on the scope — name, email, phone — without
+// giving admin access to the rest of the event. Read-only on purpose: no mutation surface
+// to secure yet. Several leaders can share a scope, and one person can lead several (one row each).
 model SectorLeader {
   id        String   @id @default(cuid())
   eventId   String
-  roleName  String
+  roleName  String?
+  // NO ACTION: a sector is never deleted while it has leaders (the app archives sectors), and the
+  // event's cascade still removes both in one statement.
+  sectorId  String?
   name      String
   email     String
   // Access token of the personal link (#290). Looked up by `…Hash` (SHA-256); re-sent from
@@ -292,13 +298,17 @@ model SectorLeader {
   tokenEnc    String?
   createdAt DateTime @default(now())
 
-  event Event @relation(fields: [eventId], references: [id], onDelete: Cascade)
+  event  Event   @relation(fields: [eventId], references: [id], onDelete: Cascade)
+  sector Sector? @relation(fields: [sectorId], references: [id], onDelete: NoAction)
 
   // Also unique case-insensitively: "SectorLeader_eventId_roleName_email_ci_key" on lower(trim(email)), created by migration
-  // 20260930110000_email_case_insensitive_unique (#342). Expression indexes can't be declared here;
-  // if `prisma migrate dev` ever proposes dropping it, remove that statement from the generated SQL.
+  // 20260930110000_email_case_insensitive_unique (#342), and "SectorLeader_eventId_sectorId_email_ci_key"
+  // (#1169). Expression indexes and the check can't be declared here; if `prisma migrate dev` ever
+  // proposes dropping them, remove those statements from the generated SQL.
   @@unique([eventId, roleName, email])
+  @@unique([eventId, sectorId, email])
   @@index([eventId])
+  @@index([sectorId])
 }
 
 // Share link per group (#947): a club or a team of a festival gets its own link and QR code,

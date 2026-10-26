@@ -18,6 +18,7 @@ import type { NotificationPayload } from "./notifications"
 import { collectNotifications, enqueueNotifications } from "./notifications/outbox"
 import { digestDelayMs, queueDigestItem } from "./notifications/digest"
 import { linkToken } from "./token-vault"
+import { leadersCoveringRole } from "./leader-scope-data"
 import { deadlineMoment } from "./cancel-deadline"
 import { APP_TIME_ZONE, localDateTimeToUtc } from "./time-zone"
 
@@ -89,7 +90,8 @@ export async function buildWithdrawalNotifications(
     await outbox.send({ kind: "registration_cancelled", recipient: { email: r.email, name: r.name }, organizationId: event.organizationId, data: shiftData })
   }
 
-  const leaders = await prisma.sectorLeader.findMany({ where: { eventId: event.id, roleName: shift.roleName } })
+  // The poste's leaders and its sector's (#1169), once per address.
+  const leaders = await leadersCoveringRole(prisma, event.id, shift.roleName)
   for (const leader of leaders) {
     await outbox.send({
       kind: "sector_leader_withdrawal",
@@ -98,6 +100,7 @@ export async function buildWithdrawalNotifications(
       data: {
         ...shiftData,
         leaderName: leader.name,
+        ...(leader.sectorId ? { sectorName: leader.sector?.name ?? null } : {}),
         orgSlug: event.organization.slug,
         token: linkToken.reveal(leader),
       },

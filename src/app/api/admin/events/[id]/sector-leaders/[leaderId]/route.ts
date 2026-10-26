@@ -16,7 +16,7 @@ export async function DELETE(_req: Request, { params }: { params: Promise<{ id: 
   const event = await db.event.findFirst({ where: { id: eventId }, select: { id: true } })
   if (!event) return NextResponse.json({ error: "Non trouvé" }, { status: 404 })
 
-  const leader = await db.sectorLeader.findFirst({ where: { id: leaderId, eventId }, select: { roleName: true, email: true } })
+  const leader = await db.sectorLeader.findFirst({ where: { id: leaderId, eventId }, select: { roleName: true, sector: { select: { name: true } }, email: true } })
   if (!leader) return NextResponse.json({ error: "Non trouvé" }, { status: 404 })
 
   await db.sectorLeader.delete({ where: { id: leaderId } })
@@ -27,7 +27,7 @@ export async function DELETE(_req: Request, { params }: { params: Promise<{ id: 
     action: "sectorleader.removed",
     entityType: "SectorLeader",
     entityId: leaderId,
-    changes: { roleName: { from: leader.roleName, to: null } },
+    changes: leader.roleName ? { roleName: { from: leader.roleName, to: null } } : { sector: { from: leader.sector?.name ?? null, to: null } },
   })
 
   await untagVolunteerIfNoLongerResponsable(guard.organizationId, leader.email).catch(reportError("sector_leader.untag"))

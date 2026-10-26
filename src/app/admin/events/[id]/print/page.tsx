@@ -1,6 +1,7 @@
 // SPDX-FileCopyrightText: 2026 Philippe Vollenweider
 // SPDX-License-Identifier: AGPL-3.0-only
 
+import { leaderRoleNamesOf } from "@/lib/leader-scope"
 import type { Metadata } from "next"
 import { notFound, redirect } from "next/navigation"
 import HelpLink from "@/components/admin/HelpLink"
@@ -41,14 +42,15 @@ export default async function ReportsPage({ params }: { params: Promise<{ id: st
           where: { status: { not: "cancelled" } },
           orderBy: { displayOrder: "asc" },
           select: {
-            id: true, roleName: true, label: true, date: true, startTime: true, endTime: true, capacity: true, minVolunteers: true, status: true,
+            id: true, roleName: true, sectorId: true, updatedAt: true, label: true, date: true, startTime: true, endTime: true, capacity: true, minVolunteers: true, status: true,
             registrations: {
               where: { status: { in: [...LIVE_STATUSES] } },
               select: { status: true, checkedInAt: true, volunteerId: true, volunteer: { select: { id: true, firstName: true, lastName: true, email: true } } },
             },
           },
         },
-        sectorLeaders: { select: { roleName: true } },
+        sectorLeaders: { select: { roleName: true, sectorId: true } },
+        sectors: { select: { id: true, archivedAt: true } },
       },
     }),
     ctx.db.organization.findUnique({ where: { id: ctx.organizationId }, select: { timeZone: true, volunteerHourRateCents: true, volunteerHourRateCurrency: true, volunteerHourRateSetAt: true } }),
@@ -96,7 +98,7 @@ export default async function ReportsPage({ params }: { params: Promise<{ id: st
     event.id,
     event.startDate,
   )
-  const summary = eventSummary(summaryRegistrations, returning, staffingShifts, event.sectorLeaders.map((l) => l.roleName), timeZone)
+  const summary = eventSummary(summaryRegistrations, returning, staffingShifts, leaderRoleNamesOf(event.sectorLeaders, event.shifts, event.sectors), timeZone)
   // Provisional until the event is over (#557): the organizer can still look, but shifts, check-ins
   // and registrations may still change until then.
   const provisional = event.endDate.getTime() > new Date().getTime()

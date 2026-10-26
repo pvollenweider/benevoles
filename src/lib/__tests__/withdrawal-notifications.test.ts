@@ -7,11 +7,16 @@ import { describe, it, expect, vi, beforeEach } from "vitest"
 const findUniqueOrg = vi.hoisted(() => vi.fn())
 const findManyAdmin = vi.hoisted(() => vi.fn())
 const findManyLeader = vi.hoisted(() => vi.fn())
+// The event's live shifts and sectors, read only when a sector leader exists (#1169).
+const findManyShift = vi.hoisted(() => vi.fn(async () => [] as unknown[]))
+const findManySector = vi.hoisted(() => vi.fn(async () => [] as unknown[]))
 vi.mock("@/lib/prisma", () => ({
   prisma: {
     organization: { findUnique: findUniqueOrg },
     adminUser: { findMany: findManyAdmin },
     sectorLeader: { findMany: findManyLeader },
+    shift: { findMany: findManyShift },
+    sector: { findMany: findManySector },
   },
 }))
 vi.mock("@/lib/token-vault", () => ({ linkToken: { reveal: (l: { email: string }) => `tok-${l.email}` } }))
@@ -78,7 +83,8 @@ describe("buildWithdrawalNotifications", () => {
 
   it("queries sector leaders by this event and this shift's role only", async () => {
     await buildWithdrawalNotifications(baseInput)
-    expect(findManyLeader).toHaveBeenCalledWith({ where: { eventId: "e1", roleName: "Bar" } })
+    // The poste's leaders and the event's sector leaders (#1169), whose scope is then checked.
+    expect(findManyLeader).toHaveBeenCalledWith(expect.objectContaining({ where: { eventId: "e1", OR: [{ roleName: "Bar" }, { sectorId: { not: null } }] } }))
   })
 
   it("one dedupe key per registration, kind and recipient (#315)", async () => {
@@ -98,4 +104,21 @@ describe("buildWithdrawalNotifications", () => {
     const payloads = await buildWithdrawalNotifications(baseInput)
     expect(payloads.map((p) => p.kind)).toEqual(["registration_cancelled"])
   })
+
+  // #1169: the leaders of the shift's sector are told too, each address once.
+  it("reaches the poste's sector leader once, with the sector named, and never an out-of-scope one", async () => {
+    findManyAdmin.mockResolvedValue([])
+    findManyShift.mockResolvedValue([{ roleName: "Bar", sectorId: "sec-fete", updatedAt: new Date() }, { roleName: "Parking", sectorId: "sec-parking", updatedAt: new Date() }])
+    findManySector.mockResolvedValue([{ id: "sec-fete", archivedAt: null }, { id: "sec-parking", archivedAt: null }])
+    findManyLeader.mockResolvedValue([
+      { id: "a", email: "lea@org.ch", name: "Léa", roleName: "Bar", sectorId: null, sector: null },
+      { id: "b", email: "LEA@org.ch", name: "Léa", roleName: null, sectorId: "sec-fete", sector: { name: "Fête" } },
+      { id: "c", email: "paul@org.ch", name: "Paul", roleName: null, sectorId: "sec-parking", sector: { name: "Parking" } },
+    ])
+    const payloads = await buildWithdrawalNotifications(baseInput)
+    const leaders = payloads.filter((p) => p.kind === "sector_leader_withdrawal")
+    expect(leaders.map((p) => p.recipient.email)).toEqual(["LEA@org.ch"])
+    expect(leaders[0].data).toMatchObject({ roleName: "Bar", sectorName: "Fête", token: "tok-LEA@org.ch" })
+  })
 })
+

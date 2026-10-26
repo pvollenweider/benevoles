@@ -54,7 +54,8 @@ export type SheetData = {
   /** Already formatted, in the organization's time zone. */
   printedAt: string
   shifts: SheetShift[]
-  leaders: { roleName: string; name: string; email?: string | null }[]
+  /** Poste leaders (a sector leader, roleName null, is not listed on a poste's sheet in #1169). */
+  leaders: { roleName: string | null; name: string; email?: string | null }[]
   /** The answers to the custom questions (#686), only loaded for the « answers » view. */
   answers?: AnswerSummary
 }

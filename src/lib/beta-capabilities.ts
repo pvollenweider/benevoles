@@ -45,6 +45,14 @@ export const BETA_CAPABILITIES = {
     description: "Regrouper plusieurs postes sous une même coordination.",
     shipped: true,
   },
+  // #1169, lot B1: a leader responsible for a whole sector (src/lib/leader-scope.ts). Needs an event
+  // that adopted sectors. Its own capability so the operator opens it once the deploy is over: an
+  // older pod still serving during the rollout never meets a sector leader (rollout in #1169).
+  sectorLeaders: {
+    label: "Responsables de secteur",
+    description: "Confier tous les postes d'un secteur à un même responsable, en lecture seule.",
+    shipped: true,
+  },
 } as const satisfies BetaRegistry
 
 export type BetaCapabilityId = keyof typeof BETA_CAPABILITIES

@@ -1,6 +1,7 @@
 // SPDX-FileCopyrightText: 2026 Philippe Vollenweider
 // SPDX-License-Identifier: AGPL-3.0-only
 
+import { leaderRoleNamesOf } from "@/lib/leader-scope"
 import type { Metadata } from "next"
 import Link from "next/link"
 import { notFound, redirect } from "next/navigation"
@@ -54,11 +55,12 @@ export default async function StaffingPage({ params }: { params: Promise<{ id: s
       shifts: {
         where: { status: { not: "cancelled" } },
         select: {
-          id: true, roleName: true, label: true, date: true, startTime: true, endTime: true, capacity: true, minVolunteers: true, status: true, assignedOnly: true,
+          id: true, roleName: true, sectorId: true, updatedAt: true, label: true, date: true, startTime: true, endTime: true, capacity: true, minVolunteers: true, status: true, assignedOnly: true,
           registrations: { where: { status: { in: [...LIVE_STATUSES] } }, select: { status: true } },
         },
       },
-      sectorLeaders: { select: { roleName: true } },
+      sectorLeaders: { select: { roleName: true, sectorId: true } },
+      sectors: { select: { id: true, archivedAt: true } },
     },
   })
   if (!event) notFound()
@@ -71,7 +73,8 @@ export default async function StaffingPage({ params }: { params: Promise<{ id: s
       waiting: s.registrations.filter((r) => r.status === "waiting" || r.status === "offered").length,
       requested: s.registrations.filter((r) => r.status === "requested").length,
     })),
-    event.sectorLeaders.map((l) => l.roleName),
+    // A poste with its own leader or its sector's (#1169).
+    leaderRoleNamesOf(event.sectorLeaders, event.shifts, event.sectors),
   )
   const base = `/admin/events/${event.id}`
   // Roles assigned by the organisation only (#1145) are never proposed to members: added by hand.

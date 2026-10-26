@@ -48,7 +48,8 @@ export async function queueAnswerChangeNotifications(input: {
       where: { eventId: event.id, roleName: { in: roles } },
       select: { id: true, roleName: true, name: true, email: true, tokenEnc: true, tokenLegacy: true },
       orderBy: [{ roleName: "asc" }, { createdAt: "asc" }],
-    })
+    // Poste leaders only (#1169): a sector leader (roleName null) does not get answer changes in this lot.
+    }).then((rows) => rows.flatMap((l) => (l.roleName ? [{ ...l, roleName: l.roleName }] : [])))
     : []
   // Read off process.env, as the withdrawal emails do: importing this module must not force the
   // whole env schema check on a route test.

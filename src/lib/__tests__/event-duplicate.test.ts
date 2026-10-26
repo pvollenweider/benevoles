@@ -214,3 +214,38 @@ describe("leaders of a deleted poste", () => {
     expect(summaryAnnouncement(duplicateSummary({ ...base, leaders: 1 }, DEFAULT_COPY, 0))).toBe("Résumé mis à jour : 3 créneaux copiés, rouverts et sans inscriptions. Mêmes dates que l'original.")
   })
 })
+
+// #1169: sector leaders follow in the copy of their sector, never those of an archived sector.
+describe("duplicatePlan — sector leaders (#1169)", () => {
+  const withSectors: DuplicableEvent = {
+    ...source,
+    sectorsEnabled: true,
+    sectorsAdoptedAt: new Date("2026-06-01"),
+    sectors: [{ id: "sec-a", name: "Parking", displayOrder: 0, archivedAt: null }, { id: "sec-old", name: "Accueil", displayOrder: 1, archivedAt: new Date() }],
+    leaders: [
+      { roleName: "Bar", sectorId: null, name: "Léa", email: "lea@x.ch" },
+      { roleName: null, sectorId: "sec-a", name: "Paula", email: "paula@x.ch" },
+      { roleName: null, sectorId: "sec-old", name: "Oscar", email: "oscar@x.ch" },
+    ],
+  }
+  let n = 0
+  const newId = () => `new-${++n}`
+
+  it("maps a sector leader to the copy of the sector, keeps poste leaders, leaves out an archived sector's", () => {
+    n = 0
+    const plan = duplicatePlan(withSectors, { copy: { leaders: true } }, newId)
+    const parkingCopy = plan.sectors.find((s) => s.name === "Parking")!.id
+    expect(plan.leaders).toEqual([
+      { roleName: "Bar", name: "Léa", email: "lea@x.ch" },
+      { roleName: null, sectorId: parkingCopy, name: "Paula", email: "paula@x.ch" },
+    ])
+  })
+
+  it("says why leaders are left out when one leads an archived sector", () => {
+    expect(leadersChoiceHint({ shifts: 2, pages: 0, leaders: 2, leadersLeftOut: 1, leftOutSectors: 1, hasSettings: true }))
+      .toBe("2 responsables : chacun reçoit tout de suite un email avec son lien pour la copie. 1 autre, d'un poste ou d'un secteur qui n'est plus actif, n'est pas repris.")
+    // Without sector leaders, the wording of #1010 is unchanged.
+    expect(leadersChoiceHint({ shifts: 2, pages: 0, leaders: 0, leadersLeftOut: 1, hasSettings: true }))
+      .toBe("Aucun responsable repris : 1 responsable, d'un poste aux créneaux tous annulés, n'est pas repris.")
+  })
+})

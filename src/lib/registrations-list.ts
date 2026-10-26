@@ -181,13 +181,13 @@ export function chosenOverlapMessage(selected: ShiftRef | null, otherChosen: Shi
 }
 
 /** A volunteer just made sector leader of a role (« responsable » is the same for everyone). */
-export function leaderDesignatedAnnouncement(name: string, role: string): string {
-  return `${name} est maintenant responsable de « ${role} », invitation envoyée par email.`
+export function leaderDesignatedAnnouncement(name: string, role: string, kind?: "sector"): string {
+  return `${name} est maintenant responsable ${kind === "sector" ? "du secteur " : "de "}« ${role} », invitation envoyée par email.`
 }
 
 /** A sector leader just removed from a role, without « ·e ». */
-export function leaderRemovedAnnouncement(name: string, role: string): string {
-  return `${name} n'est plus responsable de « ${role} ».`
+export function leaderRemovedAnnouncement(name: string, role: string, kind?: "sector"): string {
+  return `${name} n'est plus responsable ${kind === "sector" ? "du secteur " : "de "}« ${role} ».`
 }
 
 /**

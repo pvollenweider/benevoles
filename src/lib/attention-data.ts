@@ -1,6 +1,7 @@
 // SPDX-FileCopyrightText: 2026 Philippe Vollenweider
 // SPDX-License-Identifier: AGPL-3.0-only
 
+import { leaderRoleNamesOf } from "./leader-scope"
 import type { OrgScopedPrisma } from "./prisma-org"
 import { attentionItems, INVITE_NUDGE_DAYS, type AttentionItem } from "./attention"
 import { orgTimeZone } from "./time-zone"
@@ -24,9 +25,10 @@ export async function loadAttention(db: OrgScopedPrisma, organizationId: string,
         id: true, title: true, startDate: true, endDate: true,
         shifts: {
           where: { status: { not: "cancelled" } },
-          select: { date: true, capacity: true, minVolunteers: true, roleName: true, _count: { select: { registrations: { where: { status: "active" } } } } },
+          select: { date: true, capacity: true, minVolunteers: true, roleName: true, sectorId: true, updatedAt: true, _count: { select: { registrations: { where: { status: "active" } } } } },
         },
-        sectorLeaders: { select: { roleName: true } },
+        sectorLeaders: { select: { roleName: true, sectorId: true } },
+        sectors: { select: { id: true, archivedAt: true } },
         // `dueDate < now` only narrows the read: a milestone is late once its due day is over in
         // the organisation's zone (isMilestoneOverdue, the event page's rule too, #985).
         milestones: {
@@ -61,7 +63,8 @@ export async function loadAttention(db: OrgScopedPrisma, organizationId: string,
     events: events.map((e) => ({
       id: e.id, title: e.title, startDate: e.startDate, endDate: e.endDate,
       shifts: e.shifts.map((s) => ({ date: s.date, capacity: s.capacity, minVolunteers: s.minVolunteers, roleName: s.roleName, active: s._count.registrations })),
-      leaderRoles: e.sectorLeaders.map((l) => l.roleName),
+      // A poste with its own leader or its sector's (#1169).
+      leaderRoles: leaderRoleNamesOf(e.sectorLeaders, e.shifts, e.sectors),
       overdueMilestones: e.milestones
         .filter((m) => isMilestoneOverdue(m, now, orgTimeZone(e.organization)))
         .map((m) => ({ title: m.title, ownerName: m.owner?.name ?? null })),

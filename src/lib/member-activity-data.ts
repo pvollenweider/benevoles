@@ -23,7 +23,7 @@ export async function loadMemberActivity(db: OrgScopedPrisma, volunteerId: strin
     db.memberInvite.findMany({ where: { volunteerId }, select: { sentAt: true, usedAt: true, declinedAt: true, event } }),
     db.registration.findMany({ where: { volunteerId }, select: { createdAt: true, updatedAt: true, status: true, checkedInAt: true, shift: { select: { roleName: true, label: true, date: true } }, event } }),
     member.email
-      ? db.sectorLeader.findMany({ where: { email: { equals: member.email, mode: "insensitive" } }, select: { createdAt: true, roleName: true, event } })
+      ? db.sectorLeader.findMany({ where: { email: { equals: member.email, mode: "insensitive" } }, select: { createdAt: true, roleName: true, sector: { select: { name: true } }, event } })
       : Promise.resolve([]),
     db.orgLog.findMany({ where: { entityType: "Member", entityId: { in: volunteerIds } }, select: { createdAt: true, action: true } }),
   ])

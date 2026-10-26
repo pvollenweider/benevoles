@@ -38,7 +38,7 @@ export async function POST(req: Request, { params }: { params: Promise<{ id: str
       shifts: { where: { status: { not: "cancelled" } } },
       pages: { orderBy: { displayOrder: "asc" } },
       questions: { where: { archivedAt: null }, orderBy: { position: "asc" } },
-      sectorLeaders: { select: { roleName: true, name: true, email: true } },
+      sectorLeaders: { select: { roleName: true, sectorId: true, name: true, email: true } },
       shiftRecurrences: true,
       sectors: { select: { id: true, name: true, displayOrder: true, archivedAt: true } },
       organization: { select: { slug: true, shiftRosterDefault: true, sectorsDefault: true } },

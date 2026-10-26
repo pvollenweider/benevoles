@@ -13,6 +13,9 @@ import { collectNotifications, deliverAfterResponse, enqueueNotifications } from
 import type { Send } from "./notifications/types"
 import { LIVE_STATUSES } from "./registration-capacity"
 import { SECTOR_LEADER_ADMIN_SELECT } from "./admin-row-selects"
+import { lockEventSectors, lockSector } from "./sector-adoption"
+import { SECTOR_NOT_FOUND_ERROR } from "./sectors"
+import { leaderInviteScope } from "./leader-scope"
 
 /**
  * Admin actions on registrations, shared by the single-row routes and the bulk route (#292), so
@@ -170,26 +173,52 @@ export async function setPresence(db: OrgScopedPrisma, actor: LogActor, targets:
   return changed
 }
 
-export type LeaderInput = { roleName: string; name: string; email: string }
+/** One poste (`roleName`) or, since #1169, one sector (`sectorId`) of the event: exactly one. */
+export type LeaderInput = { roleName?: string | null; sectorId?: string | null; name: string; email: string }
+
+export const SECTOR_LEADER_UNAVAILABLE_ERROR = "Cet événement n'utilise pas de secteurs : choisissez un poste."
+export const SECTOR_LEADER_ARCHIVED_ERROR = "Ce secteur est archivé : rétablissez-le avant d'y désigner un responsable."
+
+type AddLeaderResult =
+  | { status: "created"; leader: { id: string; eventId: string; roleName: string | null; sectorId: string | null; name: string; email: string; createdAt: Date } }
+  | { status: "exists"; leader: unknown }
+  | { status: "refused"; httpStatus: 404 | 409; error: string }
 
 /**
- * Makes someone sector leader of a role on an event (#186): creates the SectorLeader, logs it,
- * tags the member "Responsable", emails them their link. `exists` when they already lead it.
+ * Makes someone leader of a poste or a sector of an event (#186, #1169): creates the SectorLeader,
+ * logs it, tags the member "Responsable", emails them their link. `exists` when they already lead
+ * it. A sector leader needs an event that adopted sectors and an active sector of this event, read
+ * under the event's then the sector's row lock (src/lib/sector-adoption.ts), the order every
+ * sector write takes: an archive sent at the same time either comes first (refused) or after.
  */
 export async function addSectorLeader(
   db: OrgScopedPrisma,
   ctx: { organizationId: string; actor: LogActor; event: { id: string; title: string; organization: { slug: string } } },
   input: LeaderInput,
-) {
-  const existing = await db.sectorLeader.findFirst({ where: { eventId: ctx.event.id, roleName: input.roleName, email: input.email }, select: SECTOR_LEADER_ADMIN_SELECT })
+): Promise<AddLeaderResult> {
+  const sectorId = input.sectorId ?? null
+  const roleName = sectorId ? null : (input.roleName ?? null)
+  if (!sectorId && !roleName) return { status: "refused", httpStatus: 409, error: "Indiquez le poste ou le secteur." }
+  const scopeWhere = sectorId ? { sectorId } : { roleName }
+  const existing = await db.sectorLeader.findFirst({ where: { eventId: ctx.event.id, ...scopeWhere, email: input.email }, select: SECTOR_LEADER_ADMIN_SELECT })
   if (existing) return { status: "exists" as const, leader: existing }
 
   // Clear token only in memory (the invite email needs it); the DB keeps hash + encrypted copy.
   const token = generateToken()
   // The leader and their invite email commit together (#352).
-  const { leader, outboxIds } = await db.$transaction(async (tx) => {
+  const result = await db.$transaction(async (tx) => {
+    let sectorName: string | null = null
+    if (sectorId) {
+      const event = await lockEventSectors(tx, ctx.event.id, ctx.organizationId)
+      if (!event) return { refused: { httpStatus: 404 as const, error: "Non trouvé" } }
+      if (!event.sectorsAdoptedAt) return { refused: { httpStatus: 409 as const, error: SECTOR_LEADER_UNAVAILABLE_ERROR } }
+      const sector = await lockSector(tx, ctx.event.id, sectorId)
+      if (!sector) return { refused: { httpStatus: 404 as const, error: SECTOR_NOT_FOUND_ERROR } }
+      if (sector.archivedAt) return { refused: { httpStatus: 409 as const, error: SECTOR_LEADER_ARCHIVED_ERROR } }
+      sectorName = sector.name
+    }
     const leader = await tx.sectorLeader.create({
-      data: { eventId: ctx.event.id, roleName: input.roleName, name: input.name, email: input.email, ...linkToken.data(token) },
+      data: { eventId: ctx.event.id, roleName, sectorId, name: input.name, email: input.email, ...linkToken.data(token) },
       // Returned to the admin by POST …/sector-leaders (#1009): never the stored token.
       select: SECTOR_LEADER_ADMIN_SELECT,
     })
@@ -200,14 +229,16 @@ export async function addSectorLeader(
       recipient: { email: leader.email, name: leader.name },
       data: {
         leaderName: leader.name,
-        roleName: leader.roleName,
+        ...leaderInviteScope({ roleName: leader.roleName, sector: sectorName === null ? null : { name: sectorName } }),
         eventTitle: ctx.event.title,
         orgSlug: ctx.event.organization.slug,
         token,
       },
     }], tx)
-    return { leader, outboxIds }
+    return { leader, outboxIds, sectorName }
   })
+  if ("refused" in result) return { status: "refused", ...result.refused! }
+  const { leader, outboxIds, sectorName } = result
 
   await logEvent({
     eventId: ctx.event.id,
@@ -215,7 +246,7 @@ export async function addSectorLeader(
     action: "sectorleader.added",
     entityType: "SectorLeader",
     entityId: leader.id,
-    changes: { roleName: { from: null, to: leader.roleName } },
+    changes: sectorId ? { sector: { from: null, to: sectorName } } : { roleName: { from: null, to: leader.roleName } },
   })
 
   await tagVolunteerAsResponsable(ctx.organizationId, leader.email).catch(reportError("sector_leader.tag_member"))

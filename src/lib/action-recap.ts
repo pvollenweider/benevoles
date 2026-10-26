@@ -154,10 +154,10 @@ export function deleteShiftRecap(i: { name: string; when: string; registered: nu
   }
 }
 
-export function removeLeaderRecap(name: string, roleName: string): ActionRecap {
+export function removeLeaderRecap(name: string, roleName: string, kind?: "sector"): ActionRecap {
   return {
-    title: `Retirer ${name} des responsables de « ${roleName} » ?`,
-    lines: ["Son lien de responsable cesse de fonctionner tout de suite.", "Aucun email n'est envoyé. Si la personne n'est plus responsable d'aucun poste, son tag « responsable » lui est retiré.", LOGGED],
+    title: `Retirer ${name} des responsables ${kind === "sector" ? "du secteur " : "de "}« ${roleName} » ?`,
+    lines: ["Son lien de responsable cesse de fonctionner tout de suite.", `Aucun email n'est envoyé. Si la personne n'est plus responsable d'aucun ${kind === "sector" ? "poste ni secteur" : "poste"}, son tag « responsable » lui est retiré.`, LOGGED],
     confirmLabel: "Retirer",
 
     danger: true,

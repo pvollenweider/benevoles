@@ -156,7 +156,8 @@ export type ArchiveInput = {
   pages: Record<string, unknown>[]
   /** Custom sign-up questions (#483) with their answers, archived ones included. */
   questions?: Record<string, unknown>[]
-  sectorLeaders: { roleName: string; name: string; email: string; createdAt: Date | string }[]
+  /** A poste (`roleName`) or, since #1169, a sector (`sector`, its name). */
+  sectorLeaders: { roleName: string | null; sector?: { name: string } | null; name: string; email: string; createdAt: Date | string }[]
   milestones: Record<string, unknown>[]
   logs: Record<string, unknown>[]
   exportedAt: Date
