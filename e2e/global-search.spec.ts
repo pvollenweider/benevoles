@@ -16,6 +16,7 @@ test("an admin finds an event from the top-bar search", async ({ page }) => {
   await page.getByLabel("Mot de passe").fill(ORG_ADMIN_PASSWORD)
   await page.getByRole("button", { name: "Se connecter" }).click()
   await expect(page).toHaveURL(/\/admin\/dashboard/)
+  await page.goto("/admin/events")
 
   // An event of the list (its « Gérer » link), and its title as its own page shows it. Other links
   // to an event, such as the onboarding checklist's, carry other text.
