@@ -185,11 +185,28 @@ describe("ShiftEditor with sectors", () => {
     expect(screen.getByText(/^Secteur du poste : « Autres postes »\./)).toBeInTheDocument()
   })
 
-  it("a new name keeps the select's current value, said in the poste field's description", async () => {
+  it("a new name goes back to « Autres postes » while no sector was chosen (« Bar » then « Barrière »)", async () => {
     fetchMock.mockResolvedValue({ ok: true, json: async () => ({ id: "new", roleName: "Buvette 2", date: "2026-07-04" }) })
     setup()
     const poste = screen.getByLabelText("Poste *")
     fireEvent.change(poste, { target: { value: "Buvette" } })
+    expect(screen.getByLabelText("Secteur")).toHaveValue("sec-bar")
+    fireEvent.change(poste, { target: { value: "Buvette 2" } })
+    expect(screen.getByLabelText("Secteur")).toHaveValue("")
+    expect(poste).toHaveAccessibleDescription("Le poste sera créé dans « Autres postes » avec son premier créneau.")
+    fill()
+    fireEvent.click(screen.getByRole("button", { name: "Ajouter" }))
+    await waitFor(() => expect(fetchMock).toHaveBeenCalled())
+    const body = JSON.parse(fetchMock.mock.calls[0][1].body)
+    expect(body).toMatchObject({ roleName: "Buvette 2" })
+    expect(body.sectorId ?? null).toBeNull()
+  })
+
+  it("a new name keeps a sector chosen by hand", async () => {
+    fetchMock.mockResolvedValue({ ok: true, json: async () => ({ id: "new", roleName: "Buvette 2", date: "2026-07-04" }) })
+    setup()
+    fireEvent.change(screen.getByLabelText("Secteur"), { target: { value: "sec-bar" } })
+    const poste = screen.getByLabelText("Poste *")
     fireEvent.change(poste, { target: { value: "Buvette 2" } })
     expect(screen.getByLabelText("Secteur")).toHaveValue("sec-bar")
     expect(poste).toHaveAccessibleDescription("Le poste sera créé dans « Bar » avec son premier créneau.")

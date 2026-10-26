@@ -18,7 +18,7 @@ export type SectorOption = { id: string; name: string }
  * - `sectors` null (the event has not adopted sectors): no select, nothing sent;
  * - every sector archived (`sectors` empty): no select, the new poste goes to « Autres postes »;
  * - until the organiser chooses a sector (preset by « Ajouter un poste dans « S » », or changed by
- *   hand), the select follows the existing poste typed, with no message; a new name keeps its value;
+ *   hand), the select follows the existing poste typed, with no message; a new name goes back to « Autres postes »;
  * - once chosen, an existing poste of another sector is never moved: the form says where it is,
  *   offers to switch the select, and saving waits (`mismatch`).
  */

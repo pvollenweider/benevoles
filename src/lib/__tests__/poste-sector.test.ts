@@ -121,8 +121,9 @@ describe("the « Secteur » select following the poste typed (#1147 follow-up)",
     expect(effectiveSector(false, null, "sec-bar")).toBeNull()
   })
 
-  it("effectiveSector: a new name keeps the current value, chosen or not", () => {
-    expect(effectiveSector(false, undefined, "sec-bar")).toBe("sec-bar")
+  it("effectiveSector: a new name goes back to « Autres postes » unless a sector was chosen", () => {
+    // « Bar » followed the Buvette sector; « Barrière » is new: back to « Autres postes ».
+    expect(effectiveSector(false, undefined, "sec-bar")).toBeNull()
     expect(effectiveSector(false, undefined, null)).toBeNull()
     expect(effectiveSector(true, undefined, "sec-bar")).toBe("sec-bar")
   })
