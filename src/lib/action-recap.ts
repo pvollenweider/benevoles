@@ -387,3 +387,18 @@ export function restoreRecap(i: { name: string; shift: string; hasEmail: boolean
     danger: false,
   }
 }
+
+/** Archiving a sector that still groups postes (#1147): they move to « Sans secteur ». */
+export function archiveSectorRecap(name: string, postes: number): ActionRecap {
+  return {
+    title: `Archiver le secteur « ${name} » ?`,
+    lines: [
+      `${n(postes, "poste passe", "postes passent")} dans « Sans secteur » : ${postes > 1 ? "ils gardent" : "il garde"} ${postes > 1 ? "leurs" : "ses"} créneaux et ${postes > 1 ? "leurs" : "ses"} inscriptions.`,
+      "Vous pourrez rétablir le secteur, mais ses postes n'y reviennent pas tout seuls.",
+      "Les bénévoles ne voient aucun changement.",
+      LOGGED,
+    ],
+    confirmLabel: "Archiver le secteur",
+    danger: false,
+  }
+}

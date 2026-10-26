@@ -9,6 +9,8 @@ import { addSectorLeader } from "@/lib/admin-registration-actions"
 import { adminActor } from "@/lib/event-log"
 import { validationError } from "@/lib/api-error"
 import { deletedPosteNames } from "@/lib/leader-postes"
+import { canAdoptBeta } from "@/lib/beta-access"
+import { newEventSectorsEnabled } from "@/lib/sector-adoption"
 
 /**
  * Duplicates an event as a draft (#378): title, new start date (every date moves by the same
@@ -38,7 +40,8 @@ export async function POST(req: Request, { params }: { params: Promise<{ id: str
       questions: { where: { archivedAt: null }, orderBy: { position: "asc" } },
       sectorLeaders: { select: { roleName: true, name: true, email: true } },
       shiftRecurrences: true,
-      organization: { select: { slug: true, shiftRosterDefault: true } },
+      sectors: { select: { id: true, name: true, displayOrder: true, archivedAt: true } },
+      organization: { select: { slug: true, shiftRosterDefault: true, sectorsDefault: true } },
     },
   })
 
@@ -51,7 +54,14 @@ export async function POST(req: Request, { params }: { params: Promise<{ id: str
     : []
   const deletedPostes = deletedPosteNames([...source.shifts, ...cancelled])
 
-  const plan = duplicatePlan({ ...source, leaders: source.sectorLeaders, deletedPostes, recurrences: source.shiftRecurrences, organizationRosterDefault: source.organization.shiftRosterDefault }, parsed.data)
+  // Sectors (#1147): an adopted source gives an adopted copy; otherwise the option is a new
+  // adoption, read from the beta gate (src/lib/event-duplicate.ts, duplicatedSectors).
+  const adopted = !!source.sectorsAdoptedAt
+  const [sectorsGate, newEventSectors] = adopted ? [true, false] : await Promise.all([
+    source.sectorsEnabled ? canAdoptBeta(organizationId, "sectors") : false,
+    newEventSectorsEnabled(organizationId, source.organization.sectorsDefault),
+  ])
+  const plan = duplicatePlan({ ...source, leaders: source.sectorLeaders, deletedPostes, recurrences: source.shiftRecurrences, organizationRosterDefault: source.organization.shiftRosterDefault, sectorsGate, newEventSectors }, parsed.data)
 
   // A title whose slug is one of the site's own addresses (/tarifs, /admin…) is refused (src/lib/event-slug.ts).
   const slugged = eventSlugFromTitle(plan.event.title)
@@ -60,6 +70,7 @@ export async function POST(req: Request, { params }: { params: Promise<{ id: str
   const existing = await db.event.findFirst({ where: { slug } })
   if (existing) slug = `${slug}-${Date.now()}`
 
+  const withSectors = plan.sectors.length > 0
   const newEvent = await db.event.create({
     data: {
       slug,
@@ -68,12 +79,16 @@ export async function POST(req: Request, { params }: { params: Promise<{ id: str
       publicStatus: "draft",
       // The unlisted choice is a deliberate decision per event, never copied.
       isListed: true,
-      shifts: { create: plan.shifts },
+      // With sectors (#1147), the shifts are written once the sectors exist (below): they point
+      // to them by the ids of the plan, and a nested write does not promise that order.
+      ...(withSectors ? { sectors: { create: plan.sectors } } : { shifts: { create: plan.shifts } }),
       pages: { create: plan.pages },
       // One insert: a follow-up (#1016) points to its parent's copy, whose id the plan gave.
       questions: { createMany: { data: plan.questions } },
     },
   })
+
+  if (withSectors && plan.shifts.length > 0) await db.shift.createMany({ data: plan.shifts.map((s) => ({ ...s, eventId: newEvent.id })) })
 
   // Recurring permanences (#866): the rule, then its regenerated shifts linked to it.
   for (const { rule, shifts } of plan.recurrences) {

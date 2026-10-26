@@ -17,8 +17,8 @@ import {
   type BetaRegistry,
 } from "../beta-capabilities"
 
-// The real registry ships nothing yet (sectors land with #1147): the rules are checked against a
-// registry where sectors is shipped, plus one capability that is not.
+// The rules are checked against a registry with sectors shipped (as the real one since #1147),
+// plus one capability that is not.
 const SHIPPED: BetaRegistry = {
   sectors: { label: "Secteurs", description: "Regrouper plusieurs postes sous une même coordination.", shipped: true },
   swaps: { label: "Échanges", description: "Échanger un créneau.", shipped: false },
@@ -34,10 +34,13 @@ describe("registry", () => {
     expect(BETA_CAPABILITIES.sectors.description).toMatch(/^Regrouper plusieurs postes sous une même coordination\.$/)
   })
 
-  it("does not let sectors be opened before the sectors lot ships", () => {
-    expect(isOpenableCapability("sectors")).toBe(false)
-    expect(parseOpenCapabilities({ open: ["sectors"] })).toEqual([])
-    expect(betaAdoptionAllowed(OPTED_IN, ["sectors"], "sectors")).toBe(false)
+  it("ships sectors (#1147): the operator can open them, an organisation taking part can adopt them", () => {
+    expect(BETA_CAPABILITIES.sectors.shipped).toBe(true)
+    expect(isOpenableCapability("sectors")).toBe(true)
+    expect(parseOpenCapabilities({ open: ["sectors"] })).toEqual(["sectors"])
+    expect(betaAdoptionAllowed(OPTED_IN, ["sectors"], "sectors")).toBe(true)
+    expect(betaAdoptionAllowed(NOT_OPTED_IN, ["sectors"], "sectors")).toBe(false)
+    expect(betaAdoptionAllowed(OPTED_IN, [], "sectors")).toBe(false)
   })
 })
 
@@ -70,7 +73,7 @@ describe("parseCapabilityRequest", () => {
   it("refuses an unknown or unshipped id instead of pretending to open it", () => {
     expect(parseCapabilityRequest({ open: ["teleportation"] }, SHIPPED).ok).toBe(false)
     expect(parseCapabilityRequest({ open: ["swaps"] }, SHIPPED).ok).toBe(false)
-    expect(parseCapabilityRequest({ open: ["sectors"] }).ok).toBe(false) // the real registry: not shipped yet
+    expect(parseCapabilityRequest({ open: ["sectors"] }).ok).toBe(true) // the real registry: shipped with #1147
   })
 
   it("refuses a body without a list", () => {

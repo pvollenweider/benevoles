@@ -3,7 +3,7 @@
 // SPDX-FileCopyrightText: 2026 Philippe Vollenweider
 // SPDX-License-Identifier: AGPL-3.0-only
 
-import { useState, useRef, useCallback, useEffect } from "react"
+import { useState, useRef, useCallback, useEffect, useId } from "react"
 import { announce } from "@/lib/announce"
 import { flushSync } from "react-dom"
 import { dayLabel, spokenTimeRange } from "@/lib/spoken-time"
@@ -14,9 +14,10 @@ import { getBarClasses } from "@/lib/roles"
 import { shiftStaffingState } from "@/lib/staffing"
 import { toMin, toMinEnd, fromMin, fmt, hourLabel, showSpan, type GanttShow } from "@/lib/gantt-utils"
 import {
-  AXIS_H, GAP, HANDLE_W, LABEL_W, LANE_GAP, MIN_DUR, PX_PER_MIN, ROW_H, SHOW_H,
-  dayRange, draftEnd, draftStart, hourTicks, layoutRoles, offsetToMin, resizedTimes,
+  AXIS_H, GAP, HANDLE_W, LABEL_W, LANE_GAP, MIN_DUR, PX_PER_MIN, ROW_H, SECTOR_H, SHOW_H,
+  dayRange, draftEnd, draftStart, hourTicks, layoutRoles, layoutSectorGroups, offsetToMin, resizedTimes,
 } from "@/lib/day-timeline"
+import { groupRolesBySector, postesCount, sectorGroupKey, type SectorLike } from "@/lib/sectors"
 import { applyResultMessage, posteApplyCount, posteApplyTargets, posteSpansOtherDays, type ApplyResult, type ApplyScope, type ApplyValues } from "@/lib/poste-apply"
 import ShiftPopover from "./day-timeline/ShiftPopover"
 import Toast from "./day-timeline/Toast"
@@ -41,6 +42,20 @@ export type AdminShift = {
   requiresApproval?: boolean
   minAge?: number | null
   colorKey?: string | null
+  /** Sector of the poste (#1147), shared by its shifts; null = « Sans secteur ». */
+  sectorId?: string | null
+}
+
+/**
+ * Grouping by sector (#1147), for an event that adopted sectors. The parent holds one collapsed
+ * set for every day, so a sector collapsed once is collapsed on each day.
+ */
+export type TimelineSectors = {
+  sectors: SectorLike[]
+  /** Each poste's sector, read over the whole event (roleSectorOf). */
+  sectorOf: Record<string, string | null>
+  collapsed: ReadonlySet<string>
+  onToggle: (key: string) => void
 }
 
 type Show = GanttShow
@@ -55,14 +70,17 @@ interface Props {
   eventShifts?: AdminShift[]
   shows?:    Show[]
   roleOrder?: string[]   // global stable order from parent
+  /** Rows grouped by sector (#1147); absent: one row per poste, as before. */
+  sectorGrouping?: TimelineSectors
   onCreated: (s: AdminShift) => void
   onUpdated: (s: AdminShift) => void
   onDeleted: (id: string)    => void
 }
 
 // ── Main component ────────────────────────────────────────────────────────────
-export default function AdminDayTimeline({ eventId, date, shifts, eventShifts = shifts, shows = [], roleOrder, onCreated, onUpdated, onDeleted }: Props) {
+export default function AdminDayTimeline({ eventId, date, shifts, eventShifts = shifts, shows = [], roleOrder, sectorGrouping, onCreated, onUpdated, onDeleted }: Props) {
   const containerRef = useRef<HTMLDivElement>(null)
+  const groupIdBase = useId()
 
   const [resizeOverlay, setResizeOverlay] = useState<Record<string, { startTime: string; endTime: string }>>({})
   const [draft,    setDraft]    = useState<Draft | null>(null)
@@ -97,7 +115,14 @@ export default function AdminDayTimeline({ eventId, date, shifts, eventShifts = 
   const px = (min: number) => (min - dayStart) * PX_PER_MIN
 
   // ── Role rows ─────────────────────────────────────────────────────────────
-  const { roles, byRole, roleLane, roleHeight, roleTop, rowsH } = layoutRoles(visible, roleOrder)
+  const layout = layoutRoles(visible, roleOrder)
+  const { byRole, roleLane, roleHeight } = layout
+  // By sector (#1147): the groups of this day's postes, « Sans secteur » last, each with a header row.
+  const groups = sectorGrouping ? groupRolesBySector(layout.roles, (r) => sectorGrouping.sectorOf[r], sectorGrouping.sectors) : null
+  const sectorRows = groups ? layoutSectorGroups(groups.map((g) => ({ key: sectorGroupKey(g), roles: g.roles })), roleHeight, sectorGrouping!.collapsed) : null
+  const roles = sectorRows ? sectorRows.groups.flatMap((g) => g.roles) : layout.roles
+  const roleTop = sectorRows ? sectorRows.roleTop : layout.roleTop
+  const rowsH = sectorRows ? sectorRows.rowsH : layout.rowsH
 
   // ── Create drag ─────────────────────────────────────────────────────────────
   function startCreate(roleName: string, e: React.MouseEvent) {
@@ -285,6 +310,149 @@ export default function AdminDayTimeline({ eventId, date, shifts, eventShifts = 
     return result
   }
 
+  // One poste's name in the sticky label column.
+  function renderRoleLabel(role: string) {
+    return (
+      <div
+        key={role}
+        className="flex items-center justify-end pr-2 shrink-0"
+        style={{ height: roleHeight[role], marginBottom: GAP }}
+      >
+        <span
+          className="text-[11px] text-gray-600 line-clamp-2 text-right leading-tight max-w-full"
+          title={role}
+        >
+          {role.split(" &")[0].trim()}
+        </span>
+      </div>
+    )
+  }
+
+  // One poste's row: its bars, and the ghost bar while one is dragged in it.
+  function renderRoleRow(role: string) {
+    const rowTop = roleTop[role]
+    return (
+      <div
+        key={role}
+        className="absolute cursor-crosshair"
+        style={{ left: LABEL_W, top: rowTop, width: span * PX_PER_MIN, height: roleHeight[role] }}
+        onMouseDown={e => {
+          const target = e.target as HTMLElement
+          if (target.closest("[data-shift-bar]")) return
+          startCreate(role, e)
+        }}
+      >
+        {/* Shifts */}
+        {(byRole[role] ?? []).map(shift => {
+          const startMin   = toMin(shift.startTime)
+          const endMin     = toMinEnd(shift.endTime, shift.startTime)
+          const barLeft    = px(startMin)
+          const barWidth   = Math.max((endMin - startMin) * PX_PER_MIN, 4)
+          const laneTop    = roleLane[role][shift.id] * (ROW_H + LANE_GAP)
+          const isSelected = selected === shift.id
+          const isFull     = shift.status === "full" || shift.registrationCount >= shift.capacity
+          // Below its minimum (#949): a dashed white frame on top of the words on the bar,
+          // so the critical shifts stand out at a glance even when the text is cut.
+          const belowMin   = !isFull && shiftStaffingState({ ...shift, active: shift.registrationCount }) === "below_minimum"
+          const barCls     = getBarClasses(shift.roleName, isSelected ? "selected" : "default", shift.colorKey)
+          const hasLabel   = shift.label && shift.label !== shift.roleName
+
+          return (
+            <div
+              key={shift.id}
+              id={`shift-bar-${shift.id}`}
+              data-shift-bar="1"
+              data-below-minimum={belowMin ? "1" : undefined}
+              className={`absolute rounded-lg cursor-pointer overflow-hidden focus:z-20
+                flex items-center transition-shadow
+                ${isSelected ? "shadow-md" : "hover:shadow-sm"} ${belowMin ? "border-2 border-dashed border-white" : ""} ${barCls}`}
+              style={{
+                left: barLeft,
+                width: barWidth,
+                top: laneTop + 6,
+                height: ROW_H - 12,
+                ...(isFull ? {
+                  backgroundImage: "repeating-linear-gradient(45deg, transparent, transparent 5px, rgba(255,255,255,0.3) 5px, rgba(255,255,255,0.3) 7px)",
+                } : {}),
+              }}
+              role="button"
+              tabIndex={0}
+              aria-haspopup="dialog"
+              aria-expanded={isSelected}
+              aria-label={timelineBarName(shift)}
+              aria-describedby={`shift-bar-desc-${shift.id}`}
+              onMouseDown={e => e.stopPropagation()}
+              onClick={e => { e.stopPropagation(); openPopover(shift.id) }}
+              onKeyDown={e => { if (e.key === "Enter" || e.key === " ") { e.preventDefault(); openPopover(shift.id) } }}
+            >
+              {/* The full visible text as a tooltip, for a narrow bar that cuts it: on this
+                  inner box, not on the bar, whose title would be read after its name
+                  (the bar's children are presentational, so this one is not exposed). */}
+              <div
+                className="flex flex-col justify-center px-2 overflow-hidden w-full"
+                title={[timelineBarTime(shift), hasLabel ? shift.label : null, timelineBarPlaces(shift)].filter(Boolean).join(" · ")}
+              >
+                {/* The spaces between the lines keep their words apart in the visible
+                    text that the bar's name must contain (WCAG 2.5.3); a flex column
+                    does not render them. */}
+                <span className="text-white text-xs font-bold leading-none truncate text-shadow-[0_1px_2px_rgb(0_0_0/0.3)]">
+                  {timelineBarTime(shift)}
+                </span>{" "}
+                {hasLabel && (
+                  <>
+                    <span className="text-white text-[11px] leading-none truncate mt-0.5">
+                      {shift.label}
+                    </span>{" "}
+                  </>
+                )}
+                <span className="text-white text-[11px] leading-none truncate mt-0.5">
+                  {timelineBarPlaces(shift)}
+                </span>
+              </div>
+              {/* The hours and places in words (#587), read after the name. */}
+              <span id={`shift-bar-desc-${shift.id}`} hidden>{timelineBarDescription(shift, isFull)}</span>
+
+              {/* Left resize handle */}
+              <div
+                className="absolute left-0 inset-y-0 cursor-ew-resize z-10 flex items-center"
+                style={{ width: HANDLE_W }}
+                onMouseDown={e => startResize(shift, "left", e)}
+              >
+                <div className="w-px h-4 bg-white/40 rounded-full mx-auto" />
+              </div>
+
+              {/* Right resize handle */}
+              <div
+                className="absolute right-0 inset-y-0 cursor-ew-resize z-10 flex items-center"
+                style={{ width: HANDLE_W }}
+                onMouseDown={e => startResize(shift, "right", e)}
+              >
+                <div className="w-px h-4 bg-white/40 rounded-full mx-auto" />
+              </div>
+            </div>
+          )
+        })}
+
+        {/* Ghost bar during create */}
+        {draft?.roleName === role && (
+          <div
+            className="absolute rounded-lg border-2 border-blue-400 border-dashed bg-blue-400/25 pointer-events-none flex items-center justify-center"
+            style={{
+              left:  px(draft.startMin),
+              width: Math.max((draft.endMin - draft.startMin) * PX_PER_MIN, 2),
+              top:   6,
+              height: ROW_H - 12,
+            }}
+          >
+            <span className="text-[11px] text-blue-700 font-medium px-1 truncate">
+              {fmt(fromMin(draft.startMin))}–{fmt(fromMin(draft.endMin))}
+            </span>
+          </div>
+        )}
+      </div>
+    )
+  }
+
   // ── Hour ticks ──────────────────────────────────────────────────────────────
   const hours = hourTicks(dayStart, dayEnd)
 
@@ -331,159 +499,83 @@ export default function AdminDayTimeline({ eventId, date, shifts, eventShifts = 
                 so a full-width absolute layer (no pointer events) holds it; the column sticks to
                 the left edge of the scroll region while the hours scroll under it. A focused bar
                 rises above it (focus:z-20, also when focus comes back by code) and the region's scroll padding keeps it clear. */}
-            <div className="absolute inset-y-0 left-0 z-10 pointer-events-none" style={{ width: totalW }}>
-            <div
-              data-role-labels="1"
-              className="sticky left-0 flex flex-col bg-white pointer-events-auto"
-              style={{ width: LABEL_W }}
-            >
-              {roles.map(role => (
-                <div
-                  key={role}
-                  className="flex items-center justify-end pr-2 shrink-0"
-                  style={{ height: roleHeight[role], marginBottom: GAP }}
-                >
-                  <span
-                    className="text-[11px] text-gray-600 line-clamp-2 text-right leading-tight max-w-full"
-                    title={role}
-                  >
-                    {role.split(" &")[0].trim()}
-                  </span>
-                </div>
-              ))}
-              <div style={{ height: AXIS_H }} />
-              {hasShows && (
-                <div className="flex items-center justify-end pr-2" style={{ height: SHOW_H }}>
-                  <span className="text-[11px] text-indigo-800">Spectacles</span>
-                </div>
-              )}
-            </div>
-            </div>
-
-            {/* Role rows */}
-            {roles.map(role => {
-              const rowTop = roleTop[role]
-              return (
-                <div
-                  key={role}
-                  className="absolute cursor-crosshair"
-                  style={{ left: LABEL_W, top: rowTop, width: span * PX_PER_MIN, height: roleHeight[role] }}
-                  onMouseDown={e => {
-                    const target = e.target as HTMLElement
-                    if (target.closest("[data-shift-bar]")) return
-                    startCreate(role, e)
-                  }}
-                >
-                  {/* Shifts */}
-                  {(byRole[role] ?? []).map(shift => {
-                    const startMin   = toMin(shift.startTime)
-                    const endMin     = toMinEnd(shift.endTime, shift.startTime)
-                    const barLeft    = px(startMin)
-                    const barWidth   = Math.max((endMin - startMin) * PX_PER_MIN, 4)
-                    const laneTop    = roleLane[role][shift.id] * (ROW_H + LANE_GAP)
-                    const isSelected = selected === shift.id
-                    const isFull     = shift.status === "full" || shift.registrationCount >= shift.capacity
-                    // Below its minimum (#949): a dashed white frame on top of the words on the bar,
-                    // so the critical shifts stand out at a glance even when the text is cut.
-                    const belowMin   = !isFull && shiftStaffingState({ ...shift, active: shift.registrationCount }) === "below_minimum"
-                    const barCls     = getBarClasses(shift.roleName, isSelected ? "selected" : "default", shift.colorKey)
-                    const hasLabel   = shift.label && shift.label !== shift.roleName
-
-                    return (
-                      <div
-                        key={shift.id}
-                        id={`shift-bar-${shift.id}`}
-                        data-shift-bar="1"
-                        data-below-minimum={belowMin ? "1" : undefined}
-                        className={`absolute rounded-lg cursor-pointer overflow-hidden focus:z-20
-                          flex items-center transition-shadow
-                          ${isSelected ? "shadow-md" : "hover:shadow-sm"} ${belowMin ? "border-2 border-dashed border-white" : ""} ${barCls}`}
-                        style={{
-                          left: barLeft,
-                          width: barWidth,
-                          top: laneTop + 6,
-                          height: ROW_H - 12,
-                          ...(isFull ? {
-                            backgroundImage: "repeating-linear-gradient(45deg, transparent, transparent 5px, rgba(255,255,255,0.3) 5px, rgba(255,255,255,0.3) 7px)",
-                          } : {}),
-                        }}
-                        role="button"
-                        tabIndex={0}
-                        aria-haspopup="dialog"
-                        aria-expanded={isSelected}
-                        aria-label={timelineBarName(shift)}
-                        aria-describedby={`shift-bar-desc-${shift.id}`}
-                        onMouseDown={e => e.stopPropagation()}
-                        onClick={e => { e.stopPropagation(); openPopover(shift.id) }}
-                        onKeyDown={e => { if (e.key === "Enter" || e.key === " ") { e.preventDefault(); openPopover(shift.id) } }}
-                      >
-                        {/* The full visible text as a tooltip, for a narrow bar that cuts it: on this
-                            inner box, not on the bar, whose title would be read after its name
-                            (the bar's children are presentational, so this one is not exposed). */}
-                        <div
-                          className="flex flex-col justify-center px-2 overflow-hidden w-full"
-                          title={[timelineBarTime(shift), hasLabel ? shift.label : null, timelineBarPlaces(shift)].filter(Boolean).join(" · ")}
-                        >
-                          {/* The spaces between the lines keep their words apart in the visible
-                              text that the bar's name must contain (WCAG 2.5.3); a flex column
-                              does not render them. */}
-                          <span className="text-white text-xs font-bold leading-none truncate text-shadow-[0_1px_2px_rgb(0_0_0/0.3)]">
-                            {timelineBarTime(shift)}
-                          </span>{" "}
-                          {hasLabel && (
-                            <>
-                              <span className="text-white text-[11px] leading-none truncate mt-0.5">
-                                {shift.label}
-                              </span>{" "}
-                            </>
-                          )}
-                          <span className="text-white text-[11px] leading-none truncate mt-0.5">
-                            {timelineBarPlaces(shift)}
-                          </span>
-                        </div>
-                        {/* The hours and places in words (#587), read after the name. */}
-                        <span id={`shift-bar-desc-${shift.id}`} hidden>{timelineBarDescription(shift, isFull)}</span>
-
-                        {/* Left resize handle */}
-                        <div
-                          className="absolute left-0 inset-y-0 cursor-ew-resize z-10 flex items-center"
-                          style={{ width: HANDLE_W }}
-                          onMouseDown={e => startResize(shift, "left", e)}
-                        >
-                          <div className="w-px h-4 bg-white/40 rounded-full mx-auto" />
-                        </div>
-
-                        {/* Right resize handle */}
-                        <div
-                          className="absolute right-0 inset-y-0 cursor-ew-resize z-10 flex items-center"
-                          style={{ width: HANDLE_W }}
-                          onMouseDown={e => startResize(shift, "right", e)}
-                        >
-                          <div className="w-px h-4 bg-white/40 rounded-full mx-auto" />
+            {groups && sectorRows ? (
+              <>
+                {/* By sector (#1147): each group holds its header, its own sticky label column
+                    and its postes' rows, in screen order, so Tab goes from a sector's button to its
+                    bars. No group wrapper sets z-index, transform, opacity or filter: a focused bar
+                    must still rise above the label columns (DESIGN.md, timeline focus). */}
+                {groups.map((g, gi) => {
+                  const rows = sectorRows.groups[gi]
+                  const expanded = !sectorGrouping!.collapsed.has(rows.key)
+                  const nameId = `${groupIdBase}-sector-${gi}`
+                  const rowsId = `${groupIdBase}-sector-rows-${gi}`
+                  return (
+                    <div key={rows.key} role="group" aria-labelledby={nameId} data-sector-group={rows.key}>
+                      {/* The header's band across the hours; its border stays in forced colours. */}
+                      <div aria-hidden="true" className="absolute left-0 border-t border-gray-300 bg-gray-50 pointer-events-none" style={{ top: rows.top, height: SECTOR_H, width: totalW }} />
+                      <div className="absolute left-0 z-10 pointer-events-none" style={{ top: rows.top, height: rows.height, width: totalW }}>
+                        <div className="sticky left-0 flex flex-col bg-white pointer-events-auto" style={{ width: LABEL_W }}>
+                          {/* Wider than the label column, over the band: a long sector name stays on one line. */}
+                          <div className="flex items-center border-t border-transparent bg-gray-50 pr-1" style={{ height: SECTOR_H, marginBottom: LANE_GAP, width: Math.min(totalW, 420) }}>
+                            <button
+                              type="button"
+                              aria-expanded={expanded}
+                              aria-controls={expanded ? rowsId : undefined}
+                              onClick={() => sectorGrouping!.onToggle(rows.key)}
+                              data-sector-toggle={rows.key}
+                              className="flex min-h-6 max-w-full items-center gap-1 rounded-md px-1 text-left text-xs font-semibold text-gray-900 hover:bg-gray-200 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-blue-600"
+                            >
+                              <svg aria-hidden="true" className={`h-3.5 w-3.5 shrink-0 motion-safe:transition-transform ${expanded ? "rotate-90" : ""}`} fill="none" stroke="currentColor" strokeWidth={2} viewBox="0 0 24 24">
+                                <path strokeLinecap="round" strokeLinejoin="round" d="M9 5l7 7-7 7" />
+                              </svg>
+                              <span className="min-w-0 truncate">
+                                <span id={nameId}>{g.name}</span>{" "}
+                                <span className="font-normal text-gray-700">· {postesCount(g.roles.length)}</span>
+                              </span>
+                            </button>
+                          </div>
+                          {rows.roles.map(renderRoleLabel)}
                         </div>
                       </div>
-                    )
-                  })}
-
-                  {/* Ghost bar during create */}
-                  {draft?.roleName === role && (
-                    <div
-                      className="absolute rounded-lg border-2 border-blue-400 border-dashed bg-blue-400/25 pointer-events-none flex items-center justify-center"
-                      style={{
-                        left:  px(draft.startMin),
-                        width: Math.max((draft.endMin - draft.startMin) * PX_PER_MIN, 2),
-                        top:   6,
-                        height: ROW_H - 12,
-                      }}
-                    >
-                      <span className="text-[11px] text-blue-700 font-medium px-1 truncate">
-                        {fmt(fromMin(draft.startMin))}–{fmt(fromMin(draft.endMin))}
-                      </span>
+                      <div id={rowsId}>{rows.roles.map(renderRoleRow)}</div>
                     </div>
-                  )}
+                  )
+                })}
+                {/* The axis and the shows' row keep their label column below the groups. */}
+                <div className="absolute left-0 bottom-0 z-10 pointer-events-none" style={{ top: rowsH, width: totalW }}>
+                  <div className="sticky left-0 flex flex-col bg-white pointer-events-auto" style={{ width: LABEL_W }}>
+                    <div style={{ height: AXIS_H }} />
+                    {hasShows && (
+                      <div className="flex items-center justify-end pr-2" style={{ height: SHOW_H }}>
+                        <span className="text-[11px] text-indigo-800">Spectacles</span>
+                      </div>
+                    )}
+                  </div>
                 </div>
-              )
-            })}
+              </>
+            ) : (
+              <>
+              <div className="absolute inset-y-0 left-0 z-10 pointer-events-none" style={{ width: totalW }}>
+              <div
+                data-role-labels="1"
+                className="sticky left-0 flex flex-col bg-white pointer-events-auto"
+                style={{ width: LABEL_W }}
+              >
+                {roles.map(renderRoleLabel)}
+                <div style={{ height: AXIS_H }} />
+                {hasShows && (
+                  <div className="flex items-center justify-end pr-2" style={{ height: SHOW_H }}>
+                    <span className="text-[11px] text-indigo-800">Spectacles</span>
+                  </div>
+                )}
+              </div>
+              </div>
+
+              {/* Role rows */}
+              {roles.map(renderRoleRow)}
+              </>
+            )}
 
             {/* Spacer */}
             <div style={{ height: rowsH }} />

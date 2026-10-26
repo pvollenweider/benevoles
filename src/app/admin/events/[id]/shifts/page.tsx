@@ -8,6 +8,7 @@ import HelpLink from "@/components/admin/HelpLink"
 import { defaultHolidayCalendar } from "@/lib/shift-recurrence"
 import { orgTimeZone } from "@/lib/time-zone"
 import { localDay } from "@/lib/day-of"
+import { sectorsManaged } from "@/lib/sectors"
 
 export const dynamic = "force-dynamic"
 export const metadata: Metadata = { title: "Créneaux" }
@@ -25,6 +26,7 @@ export default async function ShiftsPage({ params, searchParams }: { params: Pro
     include: {
       organization: { select: { timeZone: true } },
       shiftRecurrences: { orderBy: { createdAt: "asc" } },
+      sectors: { select: { id: true, name: true, displayOrder: true, archivedAt: true }, orderBy: { displayOrder: "asc" } },
       shifts: {
         // Only counted: the rows (and their link token) never go to the browser (#1009).
         include: { registrations: { where: { status: "active" }, select: { id: true } } },
@@ -67,6 +69,12 @@ export default async function ShiftsPage({ params, searchParams }: { params: Pro
         showSchedule={showSchedule}
         defaultHolidays={defaultHolidayCalendar(orgTimeZone(event.organization))}
         today={localDay(new Date(), orgTimeZone(event.organization))}
+        // Sectors (#1147): only for an event with the option on or adopted; otherwise nothing changes.
+        initialSectors={sectorsManaged(event) ? {
+          enabled: event.sectorsEnabled,
+          adoptedAt: event.sectorsAdoptedAt?.toISOString() ?? null,
+          sectors: event.sectors.map((s) => ({ ...s, archivedAt: s.archivedAt?.toISOString() ?? null })),
+        } : null}
         initialRecurrences={event.shiftRecurrences.map((r) => ({ ...r, fromDate: r.fromDate.toISOString().slice(0, 10), untilDate: r.untilDate.toISOString().slice(0, 10) }))}
         initialShifts={event.shifts.map(({ registrations, ...s }) => ({
           ...s,

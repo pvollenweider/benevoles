@@ -63,6 +63,8 @@ export type DuplicableShift = {
   assignedOnly?: boolean
   /** Recurring permanence (#866) the shift came from: such shifts are regenerated, not copied. */
   recurrenceId?: string | null
+  /** Sector of the poste (#1147): remapped to the copy of the sector, or none. */
+  sectorId?: string | null
 }
 
 /** A recurring permanence (#866) of the source event. */
@@ -115,6 +117,35 @@ export type DuplicableEvent = {
   /** Postes whose every shift is cancelled (#1010): their leaders don't follow. */
   deletedPostes?: string[]
   recurrences?: DuplicableRecurrence[]
+  /** Sectors (#1147): the source's option, its adoption and its sectors (archived ones included, left out of the copy). */
+  sectorsEnabled?: boolean
+  sectorsAdoptedAt?: Date | null
+  sectors?: { id: string; name: string; displayOrder: number; archivedAt: Date | null }[]
+  /** Whether the organisation can adopt sectors now (canAdoptBeta): needed to copy the option of a source that has not adopted them. */
+  sectorsGate?: boolean
+  /** The option a new event of the organisation starts with (default and gate), when the settings are not copied. */
+  newEventSectors?: boolean
+}
+
+/**
+ * The sectors of a copy (#1147): an event that adopted sectors gives a copy that adopted them, with
+ * its active sectors (fresh ids, same names and order) and each poste in the copy of its sector,
+ * as the issue asks (« copies sectors, the poste → sector links and the adoption »). A source that
+ * has not adopted them gives no sector; its option follows the settings, and only while the
+ * capability can be adopted (a new adoption), else the organisation's rule for a new event.
+ */
+export function duplicatedSectors(source: DuplicableEvent, copySettings: boolean, newId: () => string) {
+  const adopted = !!source.sectorsAdoptedAt
+  const sectors = adopted
+    ? (source.sectors ?? []).filter((s) => !s.archivedAt).sort((a, b) => a.displayOrder - b.displayOrder).map((s, i) => ({ from: s.id, id: newId(), name: s.name, displayOrder: i }))
+    : []
+  const ids = new Map(sectors.map((s) => [s.from, s.id]))
+  return {
+    sectors: sectors.map(({ id, name, displayOrder }) => ({ id, name, displayOrder })),
+    sectorOf: (sectorId: string | null | undefined) => (sectorId ? ids.get(sectorId) ?? null : null),
+    sectorsEnabled: adopted ? true : copySettings ? !!source.sectorsEnabled && !!source.sectorsGate : !!source.newEventSectors,
+    sectorsAdoptedAt: adopted ? new Date() : null,
+  }
 }
 
 /** What a duplicated event copies from each shift (#356): every setting, never the identity, the status or the sign-ups. */
@@ -145,6 +176,7 @@ export function copiedShift(s: DuplicableShift) {
     reservedTags: s.reservedTags ?? [],
     overlapAllowed: s.overlapAllowed ?? false,
     assignedOnly: s.assignedOnly ?? false,
+    sectorId: s.sectorId ?? null,
   }
 }
 
@@ -184,8 +216,11 @@ export function duplicatePlan(source: DuplicableEvent, options: DuplicateOptions
   const shows = Array.isArray(source.showSchedule) ? source.showSchedule.filter(isShow) : []
   // A permanence's shifts are regenerated from its rule (below): moved by a number of days that
   // isn't a whole number of weeks, they would land on other weekdays and miss the new holidays.
-  const shifts = copy.shifts ? source.shifts.filter((s) => !isRecurring(s, source)).map((s) => ({ ...copiedShift(s), date: shiftDate(s.date, offsetDays) })) : []
-  const recurrences = copy.shifts ? duplicatedRecurrences(source, offsetDays) : []
+  const shiftsCopied = copy.shifts ? source.shifts.filter((s) => !isRecurring(s, source)).map((s) => ({ ...copiedShift(s), date: shiftDate(s.date, offsetDays) })) : []
+  const sectorPlan = duplicatedSectors(source, copy.settings, newId)
+  const inSector = <S extends { sectorId: string | null }>(s: S): S => ({ ...s, sectorId: sectorPlan.sectorOf(s.sectorId) })
+  const shifts = shiftsCopied.map(inSector)
+  const recurrences = (copy.shifts ? duplicatedRecurrences(source, offsetDays) : []).map((r) => ({ ...r, shifts: r.shifts.map(inSector) }))
   // A question's poste (#984, part 3) follows when the copy has that poste, by the same name.
   const copiedRoles = new Set([...shifts.map((s) => s.roleName), ...recurrences.flatMap((r) => r.shifts.map((s) => s.roleName))])
   return {
@@ -215,7 +250,10 @@ export function duplicatePlan(source: DuplicableEvent, options: DuplicateOptions
       cancelDeadlineDays: copy.settings ? source.cancelDeadlineDays ?? null : null,
       cancelDeadlineHours: copy.settings ? source.cancelDeadlineHours ?? null : null,
       showSchedule: copy.settings ? shows.map((s) => ({ ...s, date: shiftIsoDate(s.date, offsetDays) })) : [],
+      sectorsEnabled: sectorPlan.sectorsEnabled,
+      sectorsAdoptedAt: sectorPlan.sectorsAdoptedAt,
     },
+    sectors: sectorPlan.sectors,
     shifts,
     recurrences,
     pages: copy.pages ? source.pages.map((p) => ({ slug: p.slug, title: p.title, content: p.content, displayOrder: p.displayOrder })) : [],

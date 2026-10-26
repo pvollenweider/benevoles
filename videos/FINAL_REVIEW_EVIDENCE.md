@@ -404,3 +404,20 @@ Image seulement, à revoir à la prochaine régénération :
   « contrast », phrase sous le commutateur.
 
 Ces vidéos n'ont pas été régénérées dans la même PR.
+
+## Vérifié sans écart : secteurs en bêta (#1147)
+
+Les secteurs ne s'affichent que pour un événement dont l'option « Organiser les
+postes par secteurs » est activée, ce qui demande une organisation inscrite à
+la bêta et la fonction ouverte par l'opérateur. Les scénarios `seed-video-*`
+n'activent ni l'une ni l'autre : les écrans filmés restent identiques.
+
+Vidéos vérifiées (sources et sélecteurs, sans rendu) : `shifts-roles-views`,
+`accessibility-keyboard-display` (« Gérer les postes », frise au clavier),
+`shift-timeline-quick-actions`, `shift-create-edit-detail`,
+`shift-create-series`, `shift-recurrence`, `shift-eligibility-rules`,
+`shift-approval`, `shift-waitlist-offer`, `shift-night-dst` (frise admin).
+Les sélecteurs de `videos/tools/record.ts` et `videos/lib/record-accessibility.ts`
+(bouton et titre « Gérer les postes », barres de la frise) ne changent pas. Aucune
+narration ni bloc `viewer` à modifier. Une future vidéo des secteurs demandera
+un scénario qui ouvre la bêta.

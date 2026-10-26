@@ -9,6 +9,7 @@
  * environment.
  */
 import { clockTime, toMin, toMinEnd } from "@/lib/gantt-utils"
+import { groupedRoleOrder, groupRolesBySector, type SectorGroup, type SectorLike } from "@/lib/sectors"
 
 export type VolData       = { firstName: string; lastName: string; email: string | null; phone: string | null }
 export type RegData       = { volunteer: VolData; comment: string | null; source: string }
@@ -21,6 +22,12 @@ export type ShiftRow = {
   waitlistEntries: WaitlistEntry[]
 }
 export type ShowEntry = { name: string; date: string; startTime: string; endTime: string }
+
+/**
+ * Grouping by sector (#1147), for an event that adopted sectors: the sectors and each poste's
+ * sector (read over the whole event). Absent: the tables are exactly as before.
+ */
+export type PdfSectors = { sectors: SectorLike[]; sectorOf: Record<string, string | null> }
 
 // `mins` is minutes since the export's day-relative start and can exceed 1440 — both a raw slot
 // position on the axis when the day's shifts run past midnight, and a shift's own endTime read as
@@ -62,6 +69,7 @@ export function buildDayParts(
   shifts: ShiftRow[],
   shows: ShowEntry[],
   showWaitlist: boolean,
+  bySector?: PdfSectors,
 ): { gantt: string; recap: string } {
   // toMinEnd (not a raw toMin) for every end time: an overnight shift's end (e.g. "02:00") is a
   // small raw minute value with no +1440 rollover, which used to drag dayStart toward 0 and
@@ -91,10 +99,13 @@ export function buildDayParts(
     if (!roleFirstIndex.has(s.roleName)) roleFirstIndex.set(s.roleName, i)
     roleMinOrder.set(s.roleName, Math.min(roleMinOrder.get(s.roleName) ?? Infinity, s.displayOrder ?? 0))
   })
-  const roleOrder = [...roleFirstIndex.keys()].sort((a, b) => {
+  const posteOrder = [...roleFirstIndex.keys()].sort((a, b) => {
     const d = (roleMinOrder.get(a) ?? 0) - (roleMinOrder.get(b) ?? 0)
     return d !== 0 ? d : roleFirstIndex.get(a)! - roleFirstIndex.get(b)!
   })
+  // By sector (#1147): sector by sector in their order, « Sans secteur » last, postes in their order.
+  const sectorGroups: SectorGroup[] | null = bySector ? groupRolesBySector(posteOrder, (r) => bySector.sectorOf[r], bySector.sectors) : null
+  const roleOrder = sectorGroups ? groupedRoleOrder(sectorGroups) : posteOrder
   const sorted = [...shifts].sort((a, b) => {
     const ri = roleOrder.indexOf(a.roleName) - roleOrder.indexOf(b.roleName)
     return ri !== 0 ? ri : a.startTime.localeCompare(b.startTime)
@@ -147,7 +158,8 @@ export function buildDayParts(
     for (let s = Math.max(0, s0); s < s1; s++) showSlots.add(s)
   }
 
-  let ganttRows = ""
+  // Each poste's rows, assembled below in one body, or one body per sector.
+  const roleRows = new Map<string, string>()
   let gi = 0
   while (gi < groups.length) {
     const role = groups[gi].roleName
@@ -163,7 +175,9 @@ export function buildDayParts(
       let row = `<tr class="${isLastInRole ? "role-last" : ""}">`
 
       if (m === gi) {
-        row += `<th scope="${roleSpan > 1 ? "rowgroup" : "row"}" class="role-cell"${roleSpan > 1 ? ` rowspan="${roleSpan}"` : ""}>${esc(role)}</th>`
+        // In a sector's body, the sector heads the row group: a poste heads its own rows only.
+        const scope = roleSpan > 1 && !sectorGroups ? "rowgroup" : "row"
+        row += `<th scope="${scope}" class="role-cell"${roleSpan > 1 ? ` rowspan="${roleSpan}"` : ""}>${esc(role)}</th>`
       }
 
       if (hasAnyLabel) row += `<td class="label-cell">${esc(displayLbl)}</td>`
@@ -192,7 +206,7 @@ export function buildDayParts(
       }
 
       row += "</tr>"
-      ganttRows += row
+      roleRows.set(role, (roleRows.get(role) ?? "") + row)
     }
 
     gi = roleEnd
@@ -220,6 +234,12 @@ export function buildDayParts(
     showRow += `</tr>`
   }
 
+  const ganttColumns = 1 + (hasAnyLabel ? 1 : 0) + slots.length
+  const ganttBody = sectorGroups
+    ? sectorGroups.map((g) => `<tbody class="sector-group">${sectorHeaderRow(g, ganttColumns)}${g.roles.map((r) => roleRows.get(r) ?? "").join("")}</tbody>`).join("")
+      + (showRow ? `<tbody>${showRow}</tbody>` : "")
+    : `<tbody>${roleOrder.map((r) => roleRows.get(r) ?? "").join("")}${showRow}</tbody>`
+
   const slotHeaders = slots.map((s) => `<th scope="col" class="slot-th${s % 60 === 0 ? " hour-th" : ""}">${s % 60 === 0 ? fmtSlot(s) : `<span class="sr-only">${fmtSlot(s)}</span>`}</th>`).join("")
 
   const widths = ganttColumnWidths(slots.length, hasAnyLabel)
@@ -236,12 +256,12 @@ export function buildDayParts(
           ${slotHeaders}
         </tr>
       </thead>
-      <tbody>${ganttRows}${showRow}</tbody>
+      ${ganttBody}
     </table>`
 
   // ── Recap ──────────────────────────────────────────────────────────────────
 
-  let recapRows = ""
+  const recapByRole = new Map<string, string>()
   sorted.forEach((shift, i) => {
     const vols        = smartVolsList(shift.registrations)
     const lbl         = shift.label !== shift.roleName ? shift.label : ""
@@ -260,7 +280,7 @@ export function buildDayParts(
             ).join("<br>")
           : ""}</td>`
       : ""
-    recapRows += `<tr${cls ? ` class="${cls}"` : ""}>
+    recapByRole.set(shift.roleName, (recapByRole.get(shift.roleName) ?? "") + `<tr${cls ? ` class="${cls}"` : ""}>
       <td>${esc(shift.roleName)}</td>
       ${hasAnyLabel ? `<td>${esc(lbl)}</td>` : ""}
       <td class="center">${fmtSlot(toMin(shift.startTime))}</td>
@@ -269,8 +289,12 @@ export function buildDayParts(
       <td class="center">${shift.registrations.length}</td>
       <td>${vols}</td>
       ${waitlistCell}
-    </tr>`
+    </tr>`)
   })
+  const recapColumns = 6 + (hasAnyLabel ? 1 : 0) + (showWaitlist ? 1 : 0)
+  const recapBody = sectorGroups
+    ? sectorGroups.map((g) => `<tbody class="sector-group">${sectorHeaderRow(g, recapColumns)}${g.roles.map((r) => recapByRole.get(r) ?? "").join("")}</tbody>`).join("")
+    : `<tbody>${roleOrder.map((r) => recapByRole.get(r) ?? "").join("")}</tbody>`
 
   const waitlistHeader = showWaitlist ? `<th class="waitlist-th">File d'attente</th>` : ""
   const recapHtml = `
@@ -282,7 +306,7 @@ export function buildDayParts(
           ${waitlistHeader}
         </tr>
       </thead>
-      <tbody>${recapRows}</tbody>
+      ${recapBody}
     </table>`
 
   const dayLabel = `<h3 class="day-sub-title">${fmtDate(date)}</h3>`
@@ -291,6 +315,12 @@ export function buildDayParts(
     gantt: `<div class="day-block">${dayLabel}${ganttHtml}</div>`,
     recap: `<div class="day-block">${dayLabel}${recapHtml}</div>`,
   }
+}
+
+/** The first row of a sector's body (#1147): its name across every column, heading the group. */
+function sectorHeaderRow(g: SectorGroup, columns: number): string {
+  const name = g.id === null ? esc(g.name) : `Secteur ${esc(g.name)}`
+  return `<tr class="sector-row"><th scope="rowgroup" colspan="${columns}" class="sector-cell">${name}</th></tr>`
 }
 
 /**

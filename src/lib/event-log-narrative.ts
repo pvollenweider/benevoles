@@ -83,6 +83,10 @@ const FIELD_LABELS: Record<string, string> = {
   condition: "affichée seulement",
   // Who a question is asked to (#1140): « tous les bénévoles », or the postes.
   displayScope: "posée à",
+  // Sectors (#1147): a poste's sector (by name), the event's option and how many postes moved.
+  sector: "secteur",
+  sectorsEnabled: "organisation des postes par secteurs",
+  postes: "postes",
 }
 
 /**
@@ -183,6 +187,12 @@ export const ACTION_VERB: Record<string, (actor: string) => string> = {
   "grouplink.created": (a) => `${a} a créé un lien de groupe`,
   "grouplink.updated": (a) => `${a} a modifié un lien de groupe`,
   "grouplink.deleted": (a) => `${a} a supprimé un lien de groupe`,
+  "sector.created": (a) => `${a} a créé un secteur`,
+  "sector.updated": (a) => `${a} a renommé un secteur`,
+  "sector.archived": (a) => `${a} a archivé un secteur`,
+  "sector.restored": (a) => `${a} a rétabli un secteur`,
+  "sector.reordered": (a) => `${a} a changé l'ordre des secteurs`,
+  "event.sectors_adopted": (a) => `${a} a enregistré le premier secteur : l'événement garde désormais l'organisation par secteurs`,
   // Not a real event: a synthetic snapshot of current state for entities that predate logging
   // (see the baseline endpoint). Worded as an observation, never as something that "happened".
   "shift.baseline": () => "état initial observé (avant le suivi du journal)",

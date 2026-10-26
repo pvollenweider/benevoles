@@ -15,8 +15,12 @@ import { roleOverlapAllowed } from "@/lib/shift-overlap"
 import { applyRoleOrder, moveItem, renameRole } from "@/lib/shifts-admin"
 import { focusFirstAvailable, isFocusDropped, type FocusCandidate } from "@/lib/focus-return"
 import { moveRole, roleMoveBoundaryMessage, roleMoveMessage, type MoveDirection } from "@/lib/role-order"
-import { RoleColorPicker, RoleLimitForm, RoleOverlapForm, RoleReserveForm } from "./RoleSettings"
+import { RoleColorPicker, RoleLimitForm, RoleOverlapForm, RoleReserveForm, RoleSectorForm } from "./RoleSettings"
 import type { RawShift } from "./types"
+import SectorsSection from "./SectorsSection"
+import type { AdminSectorsState } from "../ShiftsManager"
+import { roleSectorOf } from "@/lib/role-settings"
+import { activeSectors, sectorsAdopted, sectorsManaged } from "@/lib/sectors"
 
 /** Ref callback body: keeps `buttons` keyed by role while the button is mounted. */
 function setRoleButton(buttons: Map<string, HTMLButtonElement>, role: string, el: HTMLButtonElement | null) {
@@ -38,6 +42,7 @@ function setRoleButton(buttons: Map<string, HTMLButtonElement>, role: string, el
 export default function RoleManagerPanel({
   open, panelId, eventId, shifts, setShifts, roles, setRoles, onClose, onAnnounce,
   onRequestDelete, onDeletingChange, onDeleteError, onRoleDeleted,
+  sectorsState = null, setSectorsState, onConfirmDone,
 }: {
   open:             boolean
   /** Id of the panel's root, which « Gérer les postes » controls (`aria-controls`). */
@@ -56,6 +61,11 @@ export default function RoleManagerPanel({
   onDeleteError:    (error: string) => void
   /** The role is deleted server-side: the parent closes the modal, drops its shifts and announces. */
   onRoleDeleted:    (role: string, unpublished: boolean | undefined) => void
+  /** Sectors (#1147, beta): null for an event without the option, which keeps the panel as it was. */
+  sectorsState?:    AdminSectorsState | null
+  setSectorsState?: React.Dispatch<React.SetStateAction<AdminSectorsState | null>>
+  /** Closes the parent's confirmation modal once a confirmed action is done (archiving a sector). */
+  onConfirmDone?:   () => void
 }) {
   const [dragRoleIdx, setDragRoleIdx]     = useState<number | null>(null)
   const [savingOrder, setSavingOrder]     = useState(false)
@@ -81,6 +91,10 @@ export default function RoleManagerPanel({
   const [overlapRole, setOverlapRole] = useState<string | null>(null)
   const [overlapValue, setOverlapValue] = useState(false)
   const overlapBtnRefs = useRef(new Map<string, HTMLButtonElement>())
+  // A poste's sector (#1147): the inline editor, like the limit's.
+  const [sectorRole, setSectorRole] = useState<string | null>(null)
+  const [sectorValue, setSectorValue] = useState("")
+  const sectorBtnRefs = useRef(new Map<string, HTMLButtonElement>())
   // « Limite » buttons per role: focus returns there when the inline form closes (#466).
   const limitBtnRefs = useRef(new Map<string, HTMLButtonElement>())
   // « Renommer » and colour buttons per role, and the heading, the fallback when the row is gone (#554).
@@ -160,6 +174,7 @@ export default function RoleManagerPanel({
 
   function startRenameRole(role: string) {
     setEditorAutoFocus(true)
+    setSectorRole(null)
     setRoleActionError(null)
     setLimitRole(null)
     setReserveRole(null)
@@ -239,6 +254,7 @@ export default function RoleManagerPanel({
 
   function startRoleLimit(role: string) {
     setEditorAutoFocus(true)
+    setSectorRole(null)
     setRoleActionError(null)
     setLimitError(null)
     setColorPickerRole(null)
@@ -255,6 +271,7 @@ export default function RoleManagerPanel({
 
   function startReserve(role: string) {
     setEditorAutoFocus(true)
+    setSectorRole(null)
     setRoleActionError(null)
     setColorPickerRole(null)
     setRenamingRole(null)
@@ -275,6 +292,7 @@ export default function RoleManagerPanel({
 
   function startOverlap(role: string) {
     setEditorAutoFocus(true)
+    setSectorRole(null)
     setRoleActionError(null)
     setColorPickerRole(null)
     setRenamingRole(null)
@@ -303,6 +321,33 @@ export default function RoleManagerPanel({
     focusRoleButton(limitBtnRefs, role)
   }
 
+  const sectorsShown = sectorsManaged(sectorsState ? { sectorsEnabled: sectorsState.enabled, sectorsAdoptedAt: sectorsState.adoptedAt } : null)
+  const sectorsInUse = !!sectorsState && sectorsAdopted({ sectorsEnabled: sectorsState.enabled, sectorsAdoptedAt: sectorsState.adoptedAt })
+  const liveSectors = sectorsState ? activeSectors(sectorsState.sectors) : []
+
+  function sectorOfRole(role: string): string | null {
+    const id = roleSectorOf(shifts.filter((s) => s.roleName === role && s.status !== "cancelled"))
+    return id && liveSectors.some((s) => s.id === id) ? id : null
+  }
+
+  function startSector(role: string) {
+    setEditorAutoFocus(true)
+    setRoleActionError(null)
+    setColorPickerRole(null)
+    setRenamingRole(null)
+    setLimitRole(null)
+    setReserveRole(null)
+    setOverlapRole(null)
+    setSectorRole(sectorRole === role ? null : role)
+    setSectorValue(sectorOfRole(role) ?? "")
+  }
+
+  function closeSector(role: string) {
+    setSectorRole(null)
+    setRoleActionError(null)
+    focusRoleButton(sectorBtnRefs, role)
+  }
+
   function closeColorPicker(role: string) {
     setColorPickerRole(null)
     focusRoleButton(colorBtnRefs, role)
@@ -320,6 +365,24 @@ export default function RoleManagerPanel({
       {roleActionError && (
         <p role="alert" className="text-sm text-red-600 bg-red-50 rounded-lg px-3 py-2">{roleActionError}</p>
       )}
+      {sectorsShown && sectorsState && setSectorsState && (
+        <SectorsSection
+          eventId={eventId}
+          state={sectorsState}
+          setState={setSectorsState}
+          shifts={shifts}
+          setShifts={setShifts}
+          onAnnounce={onAnnounce}
+          onRequestConfirm={onRequestDelete}
+          onConfirmBusy={onDeletingChange}
+          onConfirmError={onDeleteError}
+          onConfirmDone={() => onConfirmDone?.()}
+          // A poste editor offering an archived sector closes; its value would be refused.
+          onSectorGone={(id) => { if (sectorValue === id) setSectorRole(null) }}
+        />
+      )}
+      {/* With sectors, the postes get their own heading under « Secteurs » (outline). */}
+      {sectorsShown && <h3 className="sr-only">Postes</h3>}
       {/* role="list": Safari drops the list role of an <ol> without bullets. */}
       <ol role="list" aria-label="Ordre des postes" className="space-y-1.5">
         {roles.map((role, i) => {
@@ -330,6 +393,8 @@ export default function RoleManagerPanel({
           const reservedTags = reservedTagsOf(role)
           const assignedOnly = assignedOnlyOf(role)
           const cumulable = overlapAllowedOf(role)
+          const roleSectorId = sectorsInUse ? sectorOfRole(role) : null
+          const roleSectorName = liveSectors.find((s) => s.id === roleSectorId)?.name ?? null
           return (
           <li key={role}>
             <div
@@ -457,6 +522,20 @@ export default function RoleManagerPanel({
                   >
                     {cumulable ? "Cumul : oui" : "Cumul : non"}
                   </button>
+                  {sectorsInUse && (liveSectors.length > 0 || roleSectorId) && (
+                    <button
+                      ref={(el) => setRoleButton(sectorBtnRefs.current, role, el)}
+                      type="button"
+                      onClick={() => startSector(role)}
+                      disabled={isBusy}
+                      aria-expanded={sectorRole === role}
+                      aria-controls={sectorRole === role ? `sector-form-${i}` : undefined}
+                      aria-label={`Secteur : ${roleSectorName ?? "aucun"}, poste « ${role} »`}
+                      className="text-xs text-gray-600 hover:text-blue-600 disabled:opacity-50 min-h-6 text-left min-w-0 [overflow-wrap:anywhere]"
+                    >
+                      {`Secteur : ${roleSectorName ?? "aucun"}`}
+                    </button>
+                  )}
                   <button
                     ref={(el) => setRoleButton(renameBtnRefs.current, role, el)}
                     type="button"
@@ -515,6 +594,24 @@ export default function RoleManagerPanel({
                 onBusyRoleChange={setRoleActionBusy}
                 onActionError={setRoleActionError}
                 onClose={closeOverlap}
+                setShifts={setShifts}
+                onAnnounce={onAnnounce}
+              />
+            )}
+            {sectorRole === role && sectorsInUse && (
+              <RoleSectorForm
+                eventId={eventId}
+                autoFocus={editorAutoFocus}
+                role={role}
+                index={i}
+                sectorId={sectorOfRole(role)}
+                sectors={liveSectors}
+                value={sectorValue}
+                onValueChange={setSectorValue}
+                busyRole={roleActionBusy}
+                onBusyRoleChange={setRoleActionBusy}
+                onActionError={setRoleActionError}
+                onClose={closeSector}
                 setShifts={setShifts}
                 onAnnounce={onAnnounce}
               />
