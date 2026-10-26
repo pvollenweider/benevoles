@@ -42,7 +42,7 @@ describe("leader scope (#1169)", () => {
   })
 
   it("follows the poste's majority rule, like the organisers' grouping", () => {
-    // Two shifts of Sud in Parking, one left « Sans secteur » by a race: Sud stays in Parking.
+    // Two shifts of Sud in Parking, one left in « Autres postes » by a race: Sud stays in Parking.
     const split = posteSectorsOf([...shifts, { roleName: "Parking Sud", sectorId: "sec-parking" }, { roleName: "Parking Sud", sectorId: null }], sectors)
     expect(leaderCoversRole(parkingLeader, "Parking Sud", split)).toBe(true)
   })

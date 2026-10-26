@@ -75,7 +75,7 @@ const updateSchema = z.object({
   overlapAllowed: z.boolean().optional(),
   /** « Attribué par l'organisation uniquement » (#1145): never offered publicly, people added by hand. */
   assignedOnly: z.boolean().optional(),
-  /** Sector of the poste (#1147): an active sector of the event, or null for « Sans secteur ». */
+  /** Sector of the poste (#1147): an active sector of the event, or null for « Autres postes ». */
   sectorId: z.string().min(1).nullable().optional(),
   /** Label copied onto the live shifts, with the places and minimum (#1017). */
   label: z.string().trim().min(1).max(200).optional(),

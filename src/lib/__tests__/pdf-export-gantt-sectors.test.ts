@@ -1,7 +1,7 @@
 import { describe, it, expect } from "vitest"
 import { buildDayParts, type ShiftRow } from "../pdf-export-gantt"
 
-// The PDF print grouped by sector (#1147): one body per sector, « Sans secteur » last, the sector
+// The PDF print grouped by sector (#1147): one body per sector, « Autres postes » last, the sector
 // heading its row group, the poste only its own rows; an event without sectors is unchanged.
 const shift = (o: Partial<ShiftRow> & Pick<ShiftRow, "id" | "roleName" | "startTime" | "endTime">): ShiftRow => ({
   label: o.roleName, date: new Date("2026-07-10"), capacity: 5, status: "open", displayOrder: 0, registrations: [], waitlistEntries: [], ...o,
@@ -17,14 +17,14 @@ const bySector = {
 }
 
 describe("buildDayParts by sector (#1147)", () => {
-  it("draws each sector as its own body, its postes in order, « Sans secteur » last, empty sectors left out", () => {
+  it("draws each sector as its own body, its postes in order, « Autres postes » last, empty sectors left out", () => {
     const { gantt, recap } = buildDayParts(new Date("2026-07-10"), shifts, [], false, bySector)
     for (const html of [gantt, recap]) {
       expect(html.match(/<tbody class="sector-group">/g)).toHaveLength(2)
       expect(html.indexOf("Secteur Parking")).toBeLessThan(html.indexOf("Parking Nord"))
       expect(html.indexOf("Parking Nord")).toBeLessThan(html.indexOf("Parking Mairie"))
-      expect(html.indexOf("Parking Mairie")).toBeLessThan(html.indexOf(">Sans secteur<"))
-      expect(html.indexOf(">Sans secteur<")).toBeLessThan(html.lastIndexOf(">Bar<"))
+      expect(html.indexOf("Parking Mairie")).toBeLessThan(html.indexOf(">Autres postes<"))
+      expect(html.indexOf(">Autres postes<")).toBeLessThan(html.lastIndexOf(">Bar<"))
       expect(html).not.toContain("Secteur Vide")
     }
     expect(gantt).toMatch(/<th scope="rowgroup" colspan="\d+" class="sector-cell">Secteur Parking<\/th>/)
@@ -33,7 +33,7 @@ describe("buildDayParts by sector (#1147)", () => {
   it("A07: a poste moved to another sector prints in its new group", () => {
     const moved = { ...bySector, sectorOf: { ...bySector.sectorOf, "Bar": "p" } }
     const { gantt } = buildDayParts(new Date("2026-07-10"), shifts, [], false, moved)
-    expect(gantt).not.toContain("Sans secteur")
+    expect(gantt).not.toContain("Autres postes")
     expect(gantt.match(/<tbody class="sector-group">/g)).toHaveLength(1)
   })
 

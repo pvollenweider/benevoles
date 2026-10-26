@@ -26,11 +26,11 @@ import { roleOverlapAllowed } from "./shift-overlap"
  *   the most recently updated of the tied shifts, then the first key in alphabetical order;
  * - sector (#1147): the same rule as the colour, on `sectorId`. The role route sets it on every shift
  *   of the poste, so a disagreement only comes from a race (a shift created while the sector was
- *   being changed): the sector most shifts carry wins, shifts « Sans secteur » are ignored, and the
- *   poste falls back to « Sans secteur » only when none has one. Since #1169 a sector leader's
+ *   being changed): the sector most shifts carry wins, shifts « Autres postes » are ignored, and the
+ *   poste falls back to « Autres postes » only when none has one. Since #1169 a sector leader's
  *   read-only access follows it too (src/lib/leader-scope.ts): the value in force for most of the
  *   poste is the one every view reads, so the leader sees exactly what the organisers' grouping shows.
- *   An archived or unknown sector is shown as « Sans secteur » (src/lib/sectors.ts).
+ *   An archived or unknown sector is shown as « Autres postes » (src/lib/sectors.ts).
  * Pure, no Prisma import.
  */
 export type RoleSettings = {
@@ -40,7 +40,7 @@ export type RoleSettings = {
   overlapAllowed: boolean
   assignedOnly: boolean
   displayOrder: number
-  /** Sector of the poste (#1147), null = « Sans secteur ». */
+  /** Sector of the poste (#1147), null = « Autres postes ». */
   sectorId: string | null
 }
 
@@ -97,7 +97,7 @@ export function roleColorOf(shifts: RoleSettingsShift[]): string | null {
   return mostSetValue(shifts, (s) => s.colorKey)
 }
 
-/** The sector of a poste from its shifts (#1147): the same rule as the colour. Null = « Sans secteur ». */
+/** The sector of a poste from its shifts (#1147): the same rule as the colour. Null = « Autres postes ». */
 export function roleSectorOf(shifts: RoleSettingsShift[]): string | null {
   return mostSetValue(shifts, (s) => s.sectorId)
 }

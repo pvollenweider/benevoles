@@ -11,7 +11,7 @@ vi.mock("next/navigation", () => ({ useRouter: () => ({ push: vi.fn(), refresh: 
 import AdminDayTimeline, { type AdminShift } from "../admin/AdminDayTimeline"
 
 // The admin timeline grouped by sector (#1147): named groups, collapse buttons with aria-expanded,
-// « Sans secteur » last, a collapsed sector's bars out of the tab order; without sectors, no group.
+// « Autres postes » last, a collapsed sector's bars out of the tab order; without sectors, no group.
 const shift = (over: Partial<AdminShift>): AdminShift => ({
   id: "s", roleName: "Bar", label: "Bar", date: "2026-07-04", startTime: "10:00", endTime: "12:00",
   capacity: 2, status: "open", registrationCount: 0, displayOrder: 0, ...over,
@@ -36,10 +36,10 @@ function Grouped() {
 describe("AdminDayTimeline by sector (#1147)", () => {
   afterEach(cleanup)
 
-  it("groups the postes by sector, each group named, « Sans secteur » last", () => {
+  it("groups the postes by sector, each group named, « Autres postes » last", () => {
     render(<Grouped />)
     const groups = screen.getAllByRole("group")
-    expect(groups.map((g) => g.getAttribute("aria-labelledby") && document.getElementById(g.getAttribute("aria-labelledby")!)?.textContent)).toEqual(["Parking", "Sans secteur"])
+    expect(groups.map((g) => g.getAttribute("aria-labelledby") && document.getElementById(g.getAttribute("aria-labelledby")!)?.textContent)).toEqual(["Parking", "Autres postes"])
     expect(within(groups[0]).getAllByRole("button", { name: /^Parking (Nord|Mairie),/ })).toHaveLength(2)
     expect(within(groups[1]).getByRole("button", { name: /^Bar,/ })).toBeInTheDocument()
     // Tab order: the sector's button comes before its bars.

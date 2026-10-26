@@ -29,3 +29,21 @@ export function roleMoveMessage(role: string, index: number, total: number): str
 export function roleMoveBoundaryMessage(role: string, dir: MoveDirection): string {
   return `${role} est déjà en ${dir === "up" ? "première" : "dernière"} position.`
 }
+
+/**
+ * Keyboard reorder in « Gérer les postes » grouped by sector: `role` moves one step inside its own
+ * group, never into the next sector (its sector is changed with « Secteur », not by moving). The
+ * returned `roles` is the grouped order, the one the grouped views draw and « Enregistrer l'ordre »
+ * saves; `index` and `total` are the poste's place in its group, for the announcement.
+ */
+export function moveRoleInGroup(groups: readonly { roles: readonly string[] }[], role: string, dir: MoveDirection): { roles: string[]; index: number; total: number } | null {
+  const group = groups.find((g) => g.roles.includes(role))
+  if (!group) return null
+  const moved = moveRole(group.roles, role, dir)
+  if (!moved) return null
+  return {
+    roles: groups.flatMap((g) => (g === group ? moved.roles : [...g.roles])),
+    index: moved.index,
+    total: moved.roles.length,
+  }
+}

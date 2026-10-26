@@ -96,26 +96,34 @@ describe("groupRolesBySector", () => {
   ]
   const of: Record<string, string | null> = { "Parking Nord": "s-parking", "Bar": null, "Régie": "s-scene", "Parking Mairie": "s-parking", "Vestiaire": "s-old", "Accueil": "s-gone" }
 
-  it("groups by sector in the sectors' order, postes in the event's order, « Sans secteur » last", () => {
+  it("groups by sector in the sectors' order, postes in the event's order, « Autres postes » last", () => {
     const groups = groupRolesBySector(["Parking Nord", "Bar", "Régie", "Parking Mairie", "Vestiaire", "Accueil"], (r) => of[r], sectors)
     expect(groups).toEqual([
       { id: "s-scene", name: "Scène", roles: ["Régie"] },
       { id: "s-parking", name: "Parking", roles: ["Parking Nord", "Parking Mairie"] },
-      // An archived or unknown sector shows as « Sans secteur ».
+      // An archived or unknown sector shows as « Autres postes ».
       { id: null, name: NO_SECTOR_LABEL, roles: ["Bar", "Vestiaire", "Accueil"] },
     ])
     expect(groupedRoleOrder(groups)).toEqual(["Régie", "Parking Nord", "Parking Mairie", "Bar", "Vestiaire", "Accueil"])
   })
 
-  it("leaves empty groups out, « Sans secteur » included (A07: a moved poste lands in its new group)", () => {
+  it("leaves empty groups out, « Autres postes » included (A07: a moved poste lands in its new group)", () => {
     expect(groupRolesBySector(["Bar"], () => "s-scene", sectors)).toEqual([{ id: "s-scene", name: "Scène", roles: ["Bar"] }])
     expect(groupRolesBySector([], () => null, sectors)).toEqual([])
+  })
+
+  it("keeps every active sector, empty ones included, with keepEmptySectors (« Gérer les postes »); never an archived one or an empty « Autres postes »", () => {
+    expect(groupRolesBySector(["Bar"], () => "s-scene", sectors, { keepEmptySectors: true })).toEqual([
+      { id: "s-scene", name: "Scène", roles: ["Bar"] },
+      { id: "s-parking", name: "Parking", roles: [] },
+    ])
+    expect(groupRolesBySector([], () => null, sectors, { keepEmptySectors: true }).map((g) => g.id)).toEqual(["s-scene", "s-parking"])
   })
 
   it("keys the groups and words the archive confirmation", () => {
     expect(sectorGroupKey({ id: "s" })).toBe("s")
     expect(sectorGroupKey({ id: null })).toBe("none")
     expect(archiveSectorSentence("Parking", 0)).toBe("Le secteur « Parking » sera archivé. Vous pourrez le rétablir.")
-    expect(archiveSectorSentence("Parking", 3)).toContain("ses 3 postes passeront dans « Sans secteur »")
+    expect(archiveSectorSentence("Parking", 3)).toContain("ses 3 postes passeront dans « Autres postes »")
   })
 })

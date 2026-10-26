@@ -11,7 +11,7 @@ import { sectorName, SECTOR_NAME_MAX, SECTOR_NAME_TAKEN_ERROR } from "@/lib/sect
 /**
  * One sector (#1147): rename, archive, restore. Never deleted. Archiving a sector that still groups
  * postes is refused (409, with the number of postes) unless `detachPostes` says the organiser
- * confirmed: its postes then move to « Sans secteur » in the same transaction.
+ * confirmed: its postes then move to « Autres postes » in the same transaction.
  */
 
 const patchSchema = z.object({

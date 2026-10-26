@@ -10,7 +10,7 @@ import { COLOR_OPTIONS } from "@/lib/roles"
 import { parseTagList } from "@/lib/role-reservation"
 import { ASSIGNED_ONLY_HELP } from "@/lib/role-assignment"
 import type { RawShift } from "./types"
-import { NO_SECTOR_LABEL } from "@/lib/sectors"
+import { NO_SECTOR_LABEL, NO_SECTOR_OPTION } from "@/lib/sectors"
 
 // The inline editors of one role in the « Gérer les postes » panel: its access, tags reserving it
 // (#470) or assigned by the organisation only (#1145),
@@ -426,62 +426,73 @@ export function RoleColorPicker({
   )
 }
 
-/** Announced once a poste's sector is saved (#1147). */
-export function sectorAnnouncement(role: string, sectorName: string | null): string {
-  return sectorName ? `Poste « ${role} » : secteur ${sectorName}.` : `Poste « ${role} » : sans secteur.`
+/**
+ * Announced once a poste is moved to another sector (#1147): where it went and its place there,
+ * so the next Monter / Descendre is predictable. `place` is 0-based, in its new group.
+ */
+export function sectorAnnouncement(role: string, sectorName: string | null, place?: { index: number; total: number }): string {
+  const where = sectorName ? `dans le secteur « ${sectorName} »` : `dans « ${NO_SECTOR_LABEL} », sans secteur`
+  const at = !place || place.total <= 1 ? ""
+    : place.index === 0 ? `, en première position (1 sur ${place.total})`
+    : place.index === place.total - 1 ? `, en dernière position (${place.total} sur ${place.total})`
+    : `, en position ${place.index + 1} sur ${place.total}`
+  return `Poste « ${role} » déplacé ${where}${at}.`
 }
 
 /**
- * The sector of a poste (#1147), in « Gérer les postes »: a select of the active sectors and
- * « Sans secteur », saved with « Enregistrer » onto every shift of the poste. Like the other
- * editors, the panel keeps which one is open and returns the focus to its « Secteur » button.
+ * « Déplacer… » a poste to another sector (#1147), in « Gérer les postes »: a select of the active
+ * sectors then « Autres postes (aucun secteur) », saved with « Déplacer » onto every shift of the
+ * poste, on every day. Like the other editors, the panel keeps which one is open and returns the
+ * focus to the poste's « Déplacer… » button, in its new group.
  */
 export function RoleSectorForm({
-  eventId, autoFocus = true, role, index, sectorId, sectors, value, onValueChange, busyRole, onBusyRoleChange, onActionError, onClose, setShifts, onAnnounce,
+  eventId, autoFocus = true, role, index, sectorId, sectors, value, onValueChange, busyRole, onBusyRoleChange, onClose, setShifts, onAnnounce, placeAfter,
 }: {
   eventId:          string
   autoFocus?:       boolean
   role:             string
   index:            number
-  /** The poste's saved sector, null = « Sans secteur ». */
+  /** The poste's saved sector, null = « Autres postes ». */
   sectorId:         string | null
   /** The active sectors, in their order. */
   sectors:          { id: string; name: string }[]
-  /** The select's value ("" = « Sans secteur »), kept by the panel while it is closed. */
+  /** The select's value ("" = « Autres postes »), kept by the panel while it is closed. */
   value:            string
   onValueChange:    (value: string) => void
   busyRole:         string | null
   onBusyRoleChange: (role: string | null) => void
-  onActionError:    (error: string | null) => void
   onClose:          (role: string) => void
   setShifts:        SetShifts
   onAnnounce:       (text: string) => void
+  /** The poste's place in the group it moves to, for the announcement. */
+  placeAfter?:      (sectorId: string | null) => { index: number; total: number }
 }) {
   const i = index
   const isBusy = busyRole === role
+  const [error, setError] = useState<string | null>(null)
+  const errorId = `sector-error-${i}`
+  const hintId = `sector-hint-${i}`
 
   async function saveSector(role: string, next: string | null) {
     if (busyRole) return
-    if (next === sectorId) {
-      onClose(role)
-      onAnnounce(`Poste « ${role} » : aucune modification.`)
-      return
-    }
-    onActionError(null)
+    // The current sector again: like « Annuler », nothing to announce.
+    if (next === sectorId) { onClose(role); return }
+    setError(null)
     onBusyRoleChange(role)
     const outcome = await requestJson(() => fetch(`/api/admin/events/${eventId}/roles/${encodeURIComponent(role)}`, {
       method: "PATCH",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify({ sectorId: next }),
-    }), "Erreur lors de l'enregistrement.")
+    }), "Le poste n'a pas pu être déplacé.")
     onBusyRoleChange(null)
     if (!outcome.ok) {
-      onActionError(outcome.error)
+      setError(outcome.error)
       return
     }
+    const place = placeAfter?.(next)
     setShifts(prev => prev.map(s => s.roleName === role ? { ...s, sectorId: next } : s))
     onClose(role)
-    onAnnounce(sectorAnnouncement(role, sectors.find((s) => s.id === next)?.name ?? null))
+    onAnnounce(sectorAnnouncement(role, sectors.find((s) => s.id === next)?.name ?? null, place))
   }
 
   return (
@@ -492,21 +503,25 @@ export function RoleSectorForm({
       onKeyDown={(e) => { if (e.key === "Escape") { e.stopPropagation(); if (!isBusy) onClose(role) } }}
       className="flex flex-wrap items-center gap-2 px-3 py-2.5 mt-1 rounded-xl border border-blue-100 bg-blue-50/50"
     >
-      <label htmlFor={`sector-${i}`} className="text-xs font-medium text-gray-700">Secteur du poste « {role} »</label>
+      <label htmlFor={`sector-${i}`} className="text-xs font-medium text-gray-700">Déplacer le poste « {role} » vers</label>
       <select
         id={`sector-${i}`}
         value={value}
         autoFocus={autoFocus}
-        onChange={(e) => onValueChange(e.target.value)}
+        onChange={(e) => { onValueChange(e.target.value); setError(null) }}
+        aria-describedby={error ? `${errorId} ${hintId}` : hintId}
+        aria-invalid={error ? true : undefined}
         className="input py-1 text-sm min-w-40"
       >
-        <option value="">{NO_SECTOR_LABEL}</option>
         {sectors.map((s) => <option key={s.id} value={s.id}>{s.name}</option>)}
+        <option value="">{NO_SECTOR_OPTION}</option>
       </select>
       <button type="submit" aria-disabled={isBusy || undefined} className={`text-xs text-blue-700 font-medium hover:text-blue-900 py-1.5 ${isBusy ? "opacity-60 cursor-wait" : ""}`}>
-        {isBusy ? "Enregistrement…" : "Enregistrer"}
+        {isBusy ? "Déplacement…" : "Déplacer"}
       </button>
       <button type="button" onClick={() => onClose(role)} className="text-xs text-gray-600 hover:text-gray-900 py-1.5">Annuler</button>
+      <p id={hintId} className="basis-full text-xs text-gray-600">Tous les créneaux du poste suivent, sur tous les jours.</p>
+      {error && <p id={errorId} role="alert" className="basis-full text-xs text-red-700">{error}</p>}
     </form>
   )
 }
