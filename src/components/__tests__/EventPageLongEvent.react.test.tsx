@@ -21,7 +21,7 @@ const event = {
   id: "evt-1", slug: "saison", title: "Saison", organizationName: "Épicerie", description: null, location: null,
   startDate: "2030-09-01T00:00:00.000Z", endDate: "2031-06-30T00:00:00.000Z", publicInstructions: null,
   confirmationMessage: null, requirePhone: false, registrationsOpen: true, registrationOpensAt: null, registrationClosesAt: null,
-  timeZone: "Europe/Zurich", accentColorKey: null, showSchedule: [], volunteerCharter: null, pages: [], questions: [],
+  timeZone: "Europe/Zurich", accentColorKey: null, showSchedule: [], volunteerCharter: null, hasOrgInsurance: true, pages: [], questions: [],
   shifts: wednesdays.map((d, i) => shift(`s${i}`, d)),
 } satisfies EventData
 

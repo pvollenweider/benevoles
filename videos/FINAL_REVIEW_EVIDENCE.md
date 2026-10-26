@@ -375,3 +375,32 @@ Image seulement (la narration reste juste) :
 - `sector-leaders` : seul le bloc `viewer` change (« administrateurs »).
 
 Ces vidéos n'ont pas été régénérées dans la même PR.
+
+## Écart connu : commutateur d'assurance de la charte
+
+Dans Paramètres, section « Charte des bénévoles », la phrase sous le
+commutateur « Assurance RC fournie par l'organisation » devient « Votre
+assurance RC couvre les dommages causés à des tiers. » ou « Chaque bénévole
+répond lui-même des dommages causés à des tiers. ». Le texte par défaut de la
+charte change : la puce sur la couverture accidents (« À disposer d'une
+couverture accidents personnelle adéquate (LAA ou assurance équivalente). »)
+et le dernier paragraphe sur l'assurance. Un texte personnalisé n'est plus
+remplacé par le commutateur : un message et le bouton « Mettre à jour le
+paragraphe sur l'assurance » apparaissent sous le commutateur.
+
+Libellés du commutateur et de « Réinitialiser la charte par défaut »,
+sélecteurs de capture (`videos/tools/record.ts`,
+`videos/lib/record-accessibility.ts`) et narrations inchangés : les deux
+vidéos partent du texte par défaut (`scripts/seed-video-scenario.ts`,
+`volunteerCharter: null`), que le commutateur remplace toujours.
+
+Image seulement, à revoir à la prochaine régénération :
+
+- `ORG_TIMEZONE_CHARTER` (`org-timezone-charter`) : scène « charter », phrase
+  sous le commutateur et texte de la zone de saisie ; scène « public-result »,
+  texte de la convention défilé dans la fenêtre (puce LAA et clause
+  d'assurance).
+- `ACCESSIBILITY_KEYBOARD_DISPLAY` (`accessibility-keyboard-display`) : scène
+  « contrast », phrase sous le commutateur.
+
+Ces vidéos n'ont pas été régénérées dans la même PR.

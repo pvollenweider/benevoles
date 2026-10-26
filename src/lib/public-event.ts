@@ -15,7 +15,7 @@ import { publicShifts } from "@/lib/role-assignment"
  */
 export const publicEventInclude = {
   // The logo's metadata only (#300): the page loads the image from its own URL.
-  organization: { select: { name: true, slug: true, volunteerCharter: true, timeZone: true, logo: ORG_LOGO_SELECT } },
+  organization: { select: { name: true, slug: true, volunteerCharter: true, hasOrgInsurance: true, timeZone: true, logo: ORG_LOGO_SELECT } },
   shifts: {
     where: { status: { not: "cancelled" } },
     // Every spot taken counts, a pending request or a waitlist offer included (#484): the page
@@ -102,7 +102,9 @@ export function toPublicEvent(event: PublicEventRow) {
     timeZone: orgTimeZone(event.organization),
     accentColorKey: event.accentColorKey,
     showSchedule: event.showSchedule,
+    // Both needed to show the exact charter text the sign-up route hashes (#569): resolveCharterText.
     volunteerCharter: event.organization.volunteerCharter,
+    hasOrgInsurance: event.organization.hasOrgInsurance,
     shifts,
     pages: event.pages,
   }

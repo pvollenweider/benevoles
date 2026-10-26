@@ -134,6 +134,8 @@ export type EventData = {
   accentColorKey: string | null
   showSchedule: Show[]
   volunteerCharter: string | null
+  /** With volunteerCharter, picks the exact text the sign-up route hashes (#569). */
+  hasOrgInsurance: boolean
   shifts: Shift[]
   pages: { slug: string; title: string }[]
   /** Only in the admin preview (#370). */
@@ -1484,7 +1486,7 @@ export default function EventPageClient({ orgSlug, eventSlug, preview, initialEv
           panelClassName="max-w-lg"
         >
           <div className="text-sm text-gray-700 whitespace-pre-wrap leading-relaxed">
-            {resolveCharterText(event.volunteerCharter)}
+            {resolveCharterText(event.volunteerCharter, event.hasOrgInsurance)}
           </div>
           <div className="pt-4 mt-4 border-t border-gray-100">
             <button
