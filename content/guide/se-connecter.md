@@ -11,7 +11,7 @@ aliases: []
 
 # Se connecter
 
-Cliquer sur **Espace organisateur**, en bas des pages publiques, et saisir les identifiants administrateur.
+Cliquer sur **Espace organisateur**, en bas des pages publiques, et saisir les identifiants administrateur. La connexion ouvre le [Tableau de bord](tableau-de-bord.md), qui commence par ce qui demande votre attention ; si vous aviez ouvert un lien vers une page de l'administration sans être connecté(e), elle s'ouvre directement après la connexion.
 
 Si vous avez reçu un **lien d'invitation** (email « Invitation à rejoindre… »), cliquez sur le bouton « Créer mon compte » dans l'email pour définir votre mot de passe avant votre première connexion.
 

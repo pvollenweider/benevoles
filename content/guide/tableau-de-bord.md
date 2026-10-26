@@ -13,7 +13,7 @@ aliases: []
 
 <!-- video: ADMIN_NAVIGATION -->
 
-**Tableau de bord**, dans la barre du haut
+**Tableau de bord**, dans la barre du haut ; c'est aussi la page qui s'ouvre après la connexion, et celle du nom de l'organisation en haut à gauche.
 
 En haut, **Ce qui demande votre attention** liste, du plus urgent au moins urgent, les situations de vos événements publiés sur lesquelles agir, chacune avec un lien vers l'endroit où la régler :
 
@@ -27,9 +27,11 @@ En haut, **Ce qui demande votre attention** liste, du plus urgent au moins urgen
 - postes sans responsable de secteur, quand l'événement en a déjà d'autres ;
 - bénévoles avec une charge élevée (plus de 8 h dans la journée, ou plus de 6 h d'affilée sans vraie pause) ;
 - événement qui commence dans la semaine ;
-- événement terminé mais toujours publié, à archiver ;
+- événement terminé mais toujours publié : **L'archiver** demande une confirmation sur place, puis l'archive sans quitter la page ;
 - membres avec une adresse à vérifier, quand un message important (confirmation, proposition de liste d'attente ou rappel) a été refusé définitivement : lien vers la liste des membres déjà filtrée.
 
 Quand rien ne demande votre attention, la section le dit.
 
 Vue d'ensemble de votre organisation : nombre d'événements (publiés et à venir), bénévoles inscrits, taux de remplissage global (places occupées sur places disponibles) et répartition des membres (total, avec email, sans email : ces derniers ne peuvent pas recevoir d'invitations).
+
+**Remplissage par événement** montre jusqu'à dix événements qui ont des créneaux, les plus tardifs d'abord, avec leurs inscrits sur leurs places ; un clic sur une ligne ouvre l'aperçu de l'événement.

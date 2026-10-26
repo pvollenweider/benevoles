@@ -16,7 +16,7 @@ async function login(page: Page) {
   await page.getByLabel("Email").fill(ORG_ADMIN_EMAIL)
   await page.getByLabel("Mot de passe").fill(ORG_ADMIN_PASSWORD)
   await page.getByRole("button", { name: "Se connecter" }).tap()
-  await expect(page).toHaveURL(/\/admin\/events/)
+  await expect(page).toHaveURL(/\/admin\/dashboard/)
 }
 
 test("tapping « Présent » then « Annuler la présence » toggles the mark and keeps the focus on the button", async ({ page }) => {

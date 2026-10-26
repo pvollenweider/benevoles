@@ -84,7 +84,7 @@ async function main() {
     await page.getByLabel("Email", { exact: true }).fill("video.errors.owner@example.org")
     await page.getByLabel("Mot de passe", { exact: true }).fill(process.env.ORG_ADMIN_PASSWORD ?? "e2e-org-admin-password")
     await page.getByRole("button", { name: "Se connecter", exact: true }).click()
-    await page.waitForURL(/\/admin\/events/)
+    await page.waitForURL(/\/admin\/dashboard/)
     const invited = await page.request.post(`http://localhost:43102/api/admin/events/${eventId}/invitations`, { data: { volunteerIds: ["video-errors-aline"], message: "Invitation fictive à choisir une autre mission disponible." } })
     assert.equal(invited.status(), 201)
     assert.equal((await invited.json()).emailsSent, 1)

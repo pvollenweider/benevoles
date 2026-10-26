@@ -155,8 +155,9 @@ export async function recordOperator(options: { page: Page; base: string; direct
       await write(page.getByLabel("Email", { exact: true }), ownerEmail, 10)
       await write(page.getByLabel("Mot de passe", { exact: true }), password, 10)
       await tap(page, page.getByRole("button", { name: "Se connecter", exact: true }))
-      await page.waitForURL(/\/admin\/events/); ownerCookies = await page.context().cookies()
-      await page.getByRole("heading", { name: "Événements", exact: true }).waitFor()
+      // Login lands on the dashboard (#1098): the new organisation's « Premiers pas » and zeros.
+      await page.waitForURL(/\/admin\/dashboard/); ownerCookies = await page.context().cookies()
+      await page.getByRole("heading", { name: "Tableau de bord", exact: true }).waitFor()
       await settle(page)
       assert.equal((await page.request.get(`${base}/api/admin/events`)).status(), 200)
       await at("Revenons au détail côté opérateur"); await session(setup.platformCookies); await go(`/super-admin/organizations/${initialSlug}`)
@@ -290,7 +291,7 @@ export async function recordOperator(options: { page: Page; base: string; direct
       await page.getByLabel("Email", { exact: true }).fill("video.operator.a.owner@example.org")
       await page.getByLabel("Mot de passe", { exact: true }).fill(process.env.ORG_ADMIN_PASSWORD ?? "e2e-org-admin-password")
       await tap(page, page.getByRole("button", { name: "Se connecter", exact: true }))
-      await page.waitForURL(/\/admin\/events/)
+      await page.waitForURL(/\/admin\/dashboard/)
       assert.equal((await page.request.get(`${base}/api/super-admin/organizations`)).status(), 403)
       await at("L’opérateur, lui"); await session(setup.platformCookies); await go("/super-admin/organizations")
       checks.ordinaryOwnerPlatformAccessRefused = true

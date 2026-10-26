@@ -21,7 +21,7 @@ async function main() {
     await page.getByLabel("Email", { exact: true }).fill("video.last-minute.owner@example.org")
     await page.getByLabel("Mot de passe", { exact: true }).fill(process.env.ORG_ADMIN_PASSWORD ?? "e2e-org-admin-password")
     await page.getByRole("button", { name: "Se connecter", exact: true }).click()
-    await page.waitForURL(/\/admin\/events/)
+    await page.waitForURL(/\/admin\/dashboard/)
     const reg = (n: number) => db.registration.findUniqueOrThrow({ where: { id: `video-last-minute-registration-${n}` } })
     const aline = await reg(0), nicolas = await reg(1), attendance = (await reg(5)).checkedInAt
     if (aline.status !== "active" || nicolas.status !== "waiting" || !attendance) throw new Error("Reset the dedicated fixture before verification")

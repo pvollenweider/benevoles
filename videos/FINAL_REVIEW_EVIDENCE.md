@@ -281,3 +281,37 @@ sur iPhone ou iPad » avec les étapes d'ajout à l'écran d'accueil.
   scène « conditions », une fois vérifiée sur un vrai iPhone.
 
 Cette vidéo n'a pas été régénérée dans la même PR.
+
+## Écart connu : chemins plus courts des organisateurs (#1098)
+
+La connexion ouvre le tableau de bord (plus la liste des événements) ;
+« L'archiver » archive sur place ; « Prochaines étapes » d'un événement publié
+a une ligne « inviter des membres » ; la page Membres a « Inviter à un
+événement » ; l'onglet Messages a un lien « gérer les modèles de messages » ;
+à l'étape 2 de la création, l'en-tête n'affiche plus « Publier ».
+
+Sélecteurs mis à jour dans la même PR : toutes les attentes d'URL après la
+connexion (`waitForURL(/\/admin\/dashboard/)`) dans `videos/tools/*.ts` et
+`videos/lib/record-*.ts` ; `record.ts` (volunteer-form-recap) ouvre la liste des
+événements après la connexion ; `record-operator.ts` attend le titre « Tableau
+de bord » à la première connexion du nouveau compte.
+
+Image seulement, narration juste, à revoir à la prochaine régénération :
+
+- `platform-internal-administration` : la première connexion du nouveau compte
+  arrive sur le tableau de bord (« Premiers pas », zéros) au lieu de la liste
+  des événements ; « nous arrivons dans son organisation, encore sans
+  événement » reste juste.
+- `admin-navigation`, `admin-features-tour`, `staffing-gaps` : l'aperçu d'un
+  événement publié montre la ligne d'invitation dans « Prochaines étapes ».
+- `targeted-messages`, `email-delivery-failures`, `org-email-settings`,
+  `reminders-changes` : une phrase et un lien de plus sous « Écrire aux
+  bénévoles ».
+- `members-management`, `members-import`, `members-duplicates-merge`,
+  `data-exports-archives`, `event-questions`, `organization-activity-log`,
+  `volunteer-hours-certificate` : le bouton « Inviter à… » en tête de la page
+  Membres, s'il y a un événement publié à venir.
+- `shift-create-series` : si la scène filme l'étape 2 de l'assistant, l'en-tête
+  n'a plus « Publier ».
+
+Ces vidéos n'ont pas été régénérées dans la même PR.

@@ -29,7 +29,7 @@ async function main() {
       await page.getByLabel("Email", { exact: true }).fill(email)
       await page.getByLabel("Mot de passe", { exact: true }).fill(loginPassword)
       await page.getByRole("button", { name: "Se connecter", exact: true }).click()
-      await page.waitForURL(/\/(?:admin\/events|super-admin\/organizations)/)
+      await page.waitForURL(/\/(?:admin\/dashboard|super-admin\/organizations)/)
     }
     await login(platform, "video.operator.platform@example.org")
     if (cleanup) {

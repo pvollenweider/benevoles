@@ -1,5 +1,5 @@
 import { describe, it, expect } from "vitest"
-import { adminEventIdFromPath, DEFAULT_ADMIN_NEXT, orgSwitchUrl, orgSwitchAction, canonicalRedirect, safeAdminNext } from "../admin-next"
+import { adminEventIdFromPath, ADMIN_HOME, DEFAULT_ADMIN_NEXT, loginDestination, orgSwitchUrl, orgSwitchAction, canonicalRedirect, safeAdminNext } from "../admin-next"
 
 describe("safeAdminNext", () => {
   it.each([
@@ -130,5 +130,46 @@ describe("canonicalRedirect (#1048)", () => {
   it("falls back to the request's origin when nothing is configured (development)", () => {
     expect(canonicalRedirect("/admin/events", undefined, "http://localhost:3100/api/x", "localhost:3100")).toBe("http://localhost:3100/admin/events")
     expect(canonicalRedirect("/admin/events", "not a url", "http://localhost:3100/api/x", null)).toBe("http://localhost:3100/admin/events")
+  })
+})
+
+describe("loginDestination (#1098)", () => {
+  it("lands on the dashboard without a callback", () => {
+    expect(ADMIN_HOME).toBe("/admin/dashboard")
+    expect(loginDestination(null)).toBe(ADMIN_HOME)
+    expect(loginDestination(undefined)).toBe(ADMIN_HOME)
+    expect(loginDestination("")).toBe(ADMIN_HOME)
+  })
+
+  it.each([
+    ["https://festival.benevol.app/admin/events/ev1/registrations?filtre=attente", "/admin/events/ev1/registrations?filtre=attente"],
+    ["https://festival.benevol.app/admin/members?verify=1#top", "/admin/members?verify=1"],
+    ["https://festival.benevol.app/super-admin/organizations", "/super-admin/organizations"],
+    ["https://festival.benevol.app/super-admin", "/super-admin"],
+    ["/admin/events/ev1/shifts", "/admin/events/ev1/shifts"],
+    // Behind the reverse proxy the callback may carry the internal host: only its path is kept,
+    // opened on the login page's own origin, never on that host.
+    ["http://0.0.0.0:3000/admin/events/ev1", "/admin/events/ev1"],
+    ["https://evil.example/admin/events", "/admin/events"],
+  ])("goes back to the deep link %s", (raw, expected) => {
+    expect(loginDestination(raw)).toBe(expected)
+  })
+
+  it.each([
+    ["https://festival.benevol.app/admin"],
+    ["https://festival.benevol.app/admin?org=festival"],
+    ["https://festival.benevol.app/admin/login"],
+    ["https://festival.benevol.app/admin/login?callbackUrl=%2Fadmin%2Fevents"],
+    ["ftp://festival.benevol.app/admin/events"],
+    ["https://festival.benevol.app/fr/admin/events"],
+    ["https://festival.benevol.app/api/admin/events"],
+    ["//evil.example/admin/events"],
+    ["/admin/\\evil.example"],
+    ["/admin/%2F%2Fevil.example"],
+    ["/admin/../api/admin/events"],
+    ["javascript:alert(1)"],
+    ["not a url"],
+  ])("falls back to the dashboard for %s", (raw) => {
+    expect(loginDestination(raw)).toBe(ADMIN_HOME)
   })
 })

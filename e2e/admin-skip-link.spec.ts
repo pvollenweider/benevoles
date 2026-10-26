@@ -16,7 +16,7 @@ test("the first Tab reveals a skip link that focuses the main content", async ({
   await page.getByLabel("Email").fill(ORG_ADMIN_EMAIL)
   await page.getByLabel("Mot de passe").fill(ORG_ADMIN_PASSWORD)
   await page.getByRole("button", { name: "Se connecter" }).click()
-  await expect(page).toHaveURL(/\/admin\/events/)
+  await expect(page).toHaveURL(/\/admin\/dashboard/)
 
   // Fresh load so nothing on the page holds the focus.
   await page.goto("/admin/events")
@@ -37,7 +37,7 @@ test("super admin: the first Tab reveals a skip link that focuses the main conte
   await page.getByLabel("Email").fill(SUPER_ADMIN_EMAIL)
   await page.getByLabel("Mot de passe").fill(SUPER_ADMIN_PASSWORD)
   await page.getByRole("button", { name: "Se connecter" }).click()
-  await expect(page).toHaveURL(/\/admin\/events|\/super-admin/)
+  await expect(page).toHaveURL(/\/admin\/dashboard|\/super-admin/)
 
   await page.goto("/super-admin/organizations")
   const link = page.getByRole("link", { name: "Aller au contenu" })

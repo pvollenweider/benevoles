@@ -330,7 +330,8 @@ async function main() {
       await page.getByLabel("Email").fill(videoAdminEmail())
       await page.getByLabel("Mot de passe").fill(process.env.ORG_ADMIN_PASSWORD ?? "e2e-org-admin-password")
       await page.getByRole("button", { name: "Se connecter" }).click()
-      await page.waitForURL(/\/admin\/events/)
+      await page.waitForURL(/\/admin\/dashboard/)
+      await page.goto(`${baseUrl}/admin/events`)
       const href = await page.getByRole("link", { name: "Fête du village de Montvert" }).first().getAttribute("href")
       featureEventId = href!.split("/").at(-1)!
       await page.evaluate(async (eventId) => {

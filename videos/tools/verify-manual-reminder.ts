@@ -28,7 +28,7 @@ async function main() {
     await page.getByLabel("Email", { exact: true }).fill(videoAdminEmail())
     await page.getByLabel("Mot de passe", { exact: true }).fill(process.env.ORG_ADMIN_PASSWORD ?? "e2e-org-admin-password")
     await page.getByRole("button", { name: "Se connecter", exact: true }).click()
-    await page.waitForURL(/\/admin\/events/)
+    await page.waitForURL(/\/admin\/dashboard/)
     await page.goto(`${base}/admin/events/${event.id}/edit`)
     const message = "Retrouve-nous au stand quinze minutes avant ton horaire. Prends une gourde. Merci pour ton aide !"
     const saved = page.waitForResponse(r => r.url().endsWith(`/api/admin/events/${event.id}`) && r.request().method() === "PATCH" && r.ok())

@@ -21,7 +21,7 @@ async function main() {
     await page.getByLabel("Email", { exact: true }).fill("video.operator.disposable.owner@example.org")
     await page.getByLabel("Mot de passe", { exact: true }).fill("Formation-Operator-2026!")
     await page.getByRole("button", { name: "Se connecter", exact: true }).click()
-    await page.waitForURL(/\/admin\/events/)
+    await page.waitForURL(/\/admin\/dashboard/)
     await page.context().clearCookies(); await page.context().addCookies(cookies)
     const session = await (await page.request.get("http://localhost:43104/api/auth/session")).json()
     console.log("Restored role/id only:", session.user?.role, session.user?.id)

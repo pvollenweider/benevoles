@@ -21,7 +21,7 @@ test("cumulative counters count a new organisation and keep it after its deletio
   await page.getByLabel("Email").fill(SUPER_ADMIN_EMAIL)
   await page.getByLabel("Mot de passe").fill(SUPER_ADMIN_PASSWORD)
   await page.getByRole("button", { name: "Se connecter" }).click()
-  await expect(page).toHaveURL(/\/admin\/events|\/super-admin\/organizations/)
+  await expect(page).toHaveURL(/\/admin\/dashboard|\/super-admin\/organizations/)
 
   const orgsBefore = await cumulative(page, "Organisations créées")
   const adminsBefore = await cumulative(page, "Comptes administrateurs créés")

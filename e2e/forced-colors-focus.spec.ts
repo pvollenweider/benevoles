@@ -70,7 +70,7 @@ async function login(page: Page, email = ORG_ADMIN_EMAIL, password = ORG_ADMIN_P
   await page.getByLabel("Email").fill(email)
   await page.getByLabel("Mot de passe").fill(password)
   await page.getByRole("button", { name: "Se connecter" }).click()
-  await expect(page).toHaveURL(/\/admin\/events|\/super-admin/)
+  await expect(page).toHaveURL(/\/admin\/dashboard|\/super-admin/)
 }
 
 /** A published event with three shifts (one on approval), a required text question and a choice

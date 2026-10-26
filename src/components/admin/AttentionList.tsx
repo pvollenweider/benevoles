@@ -3,6 +3,7 @@
 
 import Link from "next/link"
 import type { AttentionItem } from "@/lib/attention"
+import ArchiveFromList from "@/components/admin/ArchiveFromList"
 
 const SEVERITY = {
   high: { label: "Urgent", badge: "bg-red-100 text-red-800" },
@@ -10,11 +11,18 @@ const SEVERITY = {
   low: { label: "Info", badge: "bg-gray-100 text-gray-700" },
 } as const
 
-/** « Ce qui demande votre attention » on the dashboard (#372), most urgent first. */
+/** Focused once an item's own action removed it (« L'archiver », #1098). */
+export const ATTENTION_HEADING_ID = "attention-heading"
+
+/**
+ * « Ce qui demande votre attention » on the dashboard (#372), most urgent first. « L'archiver »
+ * archives in place (#1098): render it inside an AnnounceProvider.
+ */
 export default function AttentionList({ items }: { items: AttentionItem[] }) {
   return (
-    <section aria-labelledby="attention-heading" className="space-y-3">
-      <h2 id="attention-heading" className="text-base font-semibold text-gray-900">
+    <section aria-labelledby={ATTENTION_HEADING_ID} className="space-y-3">
+      {/* Focused by code only (tabIndex -1, DESIGN.md exception). */}
+      <h2 id={ATTENTION_HEADING_ID} tabIndex={-1} className="text-base font-semibold text-gray-900 focus:outline-none">
         Ce qui demande votre attention
       </h2>
       {items.length === 0 ? (
@@ -37,6 +45,11 @@ export default function AttentionList({ items }: { items: AttentionItem[] }) {
                 </p>
                 <p className="text-sm text-gray-900 mt-1">{item.message}</p>
               </div>
+              {item.archiveEventId ? (
+                <div className="min-w-0 max-w-full sm:max-w-sm">
+                  <ArchiveFromList eventId={item.archiveEventId} eventTitle={item.eventTitle} focusId={ATTENTION_HEADING_ID} />
+                </div>
+              ) : (
               <Link
                 href={item.href}
                 className="inline-block py-1 text-sm font-medium text-blue-700 underline underline-offset-2 hover:text-blue-900 flex-shrink-0 rounded focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-blue-600"
@@ -44,6 +57,7 @@ export default function AttentionList({ items }: { items: AttentionItem[] }) {
                 {item.action}
                 <span className="sr-only"> : {item.eventTitle}</span>
               </Link>
+              )}
             </li>
           ))}
         </ul>

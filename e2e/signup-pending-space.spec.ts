@@ -52,7 +52,7 @@ test("a confirmed sign-up creates a space with no public page until it is valida
   await page.getByLabel("Email").fill(email)
   await page.getByLabel("Mot de passe").fill(ownerPassword)
   await page.getByRole("button", { name: "Se connecter" }).click()
-  await expect(page).toHaveURL(/\/admin\/events/)
+  await expect(page).toHaveURL(/\/admin\/dashboard/)
   await page.goto("/admin/settings/admins")
   await expect(page.getByText("Vous pourrez inviter d'autres administrateurs une fois qu'il sera validé")).toBeVisible()
   await expect(page.getByRole("button", { name: "Inviter" })).toHaveCount(0)
@@ -70,7 +70,7 @@ test("a confirmed sign-up creates a space with no public page until it is valida
   await page.getByLabel("Email").fill(SUPER_ADMIN_EMAIL)
   await page.getByLabel("Mot de passe").fill(SUPER_ADMIN_PASSWORD)
   await page.getByRole("button", { name: "Se connecter" }).click()
-  await expect(page).toHaveURL(/\/admin\/events|\/super-admin\/organizations/)
+  await expect(page).toHaveURL(/\/admin\/dashboard|\/super-admin\/organizations/)
   const orgs = (await (await page.request.get("/api/super-admin/organizations")).json()) as { id: string; slug: string }[]
   const space = orgs.find((o) => o.slug === slug)
   expect(space, "the space created by the sign-up").toBeTruthy()

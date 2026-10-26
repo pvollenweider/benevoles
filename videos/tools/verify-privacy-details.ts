@@ -23,7 +23,7 @@ async function main() {
     await page.getByLabel("Email", { exact: true }).fill("video.privacy.a.owner@example.org")
     await page.getByLabel("Mot de passe", { exact: true }).fill(process.env.ORG_ADMIN_PASSWORD ?? "e2e-org-admin-password")
     await page.getByRole("button", { name: "Se connecter", exact: true }).click()
-    await page.waitForURL(/\/admin\/events/)
+    await page.waitForURL(/\/admin\/dashboard/)
     const invite = await db.memberInvite.findFirstOrThrow({ where: { eventId: "video-privacy-a-event", volunteerId: "video-privacy-a-member-3" } })
     const invitePath = `/api/public/member-invite/${linkToken.reveal(invite)}?slug=fete-des-liens`
     const own = await page.request.get(`${base}${invitePath}&org=formation-confidentialite-a`)

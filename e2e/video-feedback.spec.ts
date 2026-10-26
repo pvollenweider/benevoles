@@ -66,7 +66,7 @@ test("the super admin sees Oui, Non and total per video and revision", async ({ 
   await page.getByLabel("Email").fill(SUPER_ADMIN_EMAIL)
   await page.getByLabel("Mot de passe").fill(SUPER_ADMIN_PASSWORD)
   await page.getByRole("button", { name: "Se connecter" }).click()
-  await expect(page).toHaveURL(/\/admin\/events|\/super-admin\/organizations/)
+  await expect(page).toHaveURL(/\/admin\/dashboard|\/super-admin\/organizations/)
 
   const cells = async () => {
     await page.goto("/super-admin/video-feedback")
@@ -89,7 +89,7 @@ test("the super admin sorts the organisations and video feedback tables, and the
   await page.getByLabel("Email").fill(SUPER_ADMIN_EMAIL)
   await page.getByLabel("Mot de passe").fill(SUPER_ADMIN_PASSWORD)
   await page.getByRole("button", { name: "Se connecter" }).click()
-  await expect(page).toHaveURL(/\/admin\/events|\/super-admin\/organizations/)
+  await expect(page).toHaveURL(/\/admin\/dashboard|\/super-admin\/organizations/)
 
   await page.goto("/super-admin/organizations")
   const members = page.getByRole("columnheader", { name: "Membres" })

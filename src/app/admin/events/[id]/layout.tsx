@@ -12,6 +12,7 @@ import { eventDatesLabel } from "@/lib/event-nav"
 import { localDay } from "@/lib/day-of"
 import { orgTimeZone } from "@/lib/time-zone"
 import EventHeader from "@/components/admin/event-nav/EventHeader"
+import AnnounceProvider from "@/components/admin/AnnounceProvider"
 
 export const dynamic = "force-dynamic"
 
@@ -59,6 +60,8 @@ export default async function EventLayout({ children, params }: { children: Reac
   const stage = currentStage({ ...facts, confirmationMessage: null, remindersEnabled: false })
 
   return (
+    // One live region for the header's actions and the overview's « L'archiver » (#1098).
+    <AnnounceProvider>
     <div className="space-y-6">
       <EventHeader
         facts={facts}
@@ -73,5 +76,6 @@ export default async function EventLayout({ children, params }: { children: Reac
       />
       {children}
     </div>
+    </AnnounceProvider>
   )
 }

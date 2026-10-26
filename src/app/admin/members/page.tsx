@@ -13,6 +13,9 @@ import { loadMemberDeletionEligibilities } from "@/lib/member-deletion-data"
 import { MEMBER_DELETION_REASON } from "@/lib/member-deletion"
 import { memberRecordState } from "@/lib/member-record-state"
 import HelpLink from "@/components/admin/HelpLink"
+import InviteToEventMenu from "@/components/admin/InviteToEventMenu"
+import { eventDatesLabel } from "@/lib/event-nav"
+import { inviteTargetsWhere } from "@/lib/invite-targets"
 
 export const dynamic = "force-dynamic"
 
@@ -60,6 +63,13 @@ export default async function MembersPage({ searchParams }: { searchParams: Prom
   ])
   const timeZone = orgTimeZone(org)
   const today = localToday(new Date(), timeZone)
+  // « Inviter à un événement » (#1098): the published events not over yet in the organisation's
+  // zone, soonest first (db is scoped to this organisation).
+  const inviteTargets = await db.event.findMany({
+    where: inviteTargetsWhere(today),
+    select: { id: true, title: true, startDate: true, endDate: true },
+    orderBy: [{ startDate: "asc" }, { title: "asc" }],
+  })
   const addressStatuses = await loadAddressStatuses(
     ctx.organizationId,
     volunteers.map((v) => ({ id: v.id, addressHash: v.email ? addressHash(v.email, env.AUTH_SECRET) : null })),
@@ -112,6 +122,9 @@ export default async function MembersPage({ searchParams }: { searchParams: Prom
       defaultHoursPeriod={defaultPeriod(new Date(), timeZone)}
       duplicatesCount={duplicatesCount}
       helpLink={<HelpLink route="/admin/members" />}
+      inviteMenu={<InviteToEventMenu events={inviteTargets.map((e) => ({
+        id: e.id, title: e.title, dateLabel: eventDatesLabel(e.startDate.toISOString(), e.endDate.toISOString()),
+      }))} />}
     />
   )
 }

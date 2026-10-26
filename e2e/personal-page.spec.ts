@@ -278,7 +278,7 @@ test("a question attached to a poste: its change goes to the poste's leader, the
   await admin.getByLabel("Email").fill(ORG_ADMIN_EMAIL)
   await admin.getByLabel("Mot de passe").fill(ORG_ADMIN_PASSWORD)
   await admin.getByRole("button", { name: "Se connecter" }).click()
-  await expect(admin).toHaveURL(/\/admin\/events/)
+  await expect(admin).toHaveURL(/\/admin\/dashboard/)
   const lead = await admin.request.post(`/api/admin/events/${event.eventId}/sector-leaders`, { data: { roleName: "Accueil", name: "Chef Accueil", email: leaderEmail } })
   expect(lead.ok(), await lead.text()).toBeTruthy()
   await admin.goto(`/admin/events/${event.eventId}/questions`)

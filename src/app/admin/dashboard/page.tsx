@@ -6,6 +6,8 @@ import { loadOnboarding } from "@/lib/onboarding-data"
 import AttentionList from "@/components/admin/AttentionList"
 import { loadAttention } from "@/lib/attention-data"
 import HelpLink from "@/components/admin/HelpLink"
+import AnnounceProvider from "@/components/admin/AnnounceProvider"
+import Link from "next/link"
 
 export const dynamic = "force-dynamic"
 
@@ -69,7 +71,10 @@ export default async function DashboardPage() {
       </div>
       {onboarding && <OnboardingChecklist steps={onboarding} viewerRole={ctx.session.user?.role} />}
 
-      <AttentionList items={attention} />
+      {/* « L'archiver » archives in place (#1098): its outcome is voiced from here. */}
+      <AnnounceProvider>
+        <AttentionList items={attention} />
+      </AnnounceProvider>
 
       {/* Stat cards */}
       <div className="grid grid-cols-2 lg:grid-cols-4 gap-4">
@@ -85,7 +90,8 @@ export default async function DashboardPage() {
           <h2 className="text-sm font-semibold text-gray-700 mb-3">
             Remplissage par événement
           </h2>
-          <div className="space-y-2">
+          {/* role="list": Safari/VoiceOver drops list semantics once Tailwind removes the bullets. */}
+          <ul role="list" className="space-y-2">
             {eventsWithShifts.map((event) => {
               const cap = event.shifts.reduce((s, sh) => s + sh.capacity, 0)
               const reg = event.shifts.reduce((s, sh) => s + sh.registrations.length, 0)
@@ -101,10 +107,16 @@ export default async function DashboardPage() {
                 pct >= 25 ? "text-orange-800" :
                 "text-red-600"
               return (
-                <div key={event.id} className="bg-white border border-gray-200 rounded-xl p-4">
+                // The whole card opens the event (#1098): the title is the link, stretched over the
+                // card; the date and the count stay outside its name.
+                <li key={event.id} className="relative bg-white border border-gray-200 rounded-xl p-4 hover:border-gray-300 hover:bg-gray-50 has-[a:focus-visible]:outline has-[a:focus-visible]:outline-2 has-[a:focus-visible]:outline-offset-2 has-[a:focus-visible]:outline-blue-600">
                   <div className="flex items-start justify-between gap-3 mb-2">
                     <div className="flex-1 min-w-0">
-                      <p className="text-sm font-medium text-gray-900 truncate">{event.title}</p>
+                      <p className="text-sm font-medium text-gray-900 truncate">
+                        <Link href={`/admin/events/${event.id}`} className="text-gray-900 underline-offset-2 hover:underline focus:outline-hidden after:absolute after:inset-0 after:rounded-xl">
+                          {event.title}
+                        </Link>
+                      </p>
                       <p className="text-xs text-gray-500 mt-0.5">{formatShortDate(event.startDate)}</p>
                     </div>
                     <span className={`text-xs font-semibold tabular-nums whitespace-nowrap ${countColor}`}>
@@ -117,10 +129,10 @@ export default async function DashboardPage() {
                       style={{ width: `${Math.max(pct, reg > 0 ? 3 : 0)}%` }}
                     />
                   </div>
-                </div>
+                </li>
               )
             })}
-          </div>
+          </ul>
         </section>
       )}
 

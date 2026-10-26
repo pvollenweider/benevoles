@@ -20,7 +20,7 @@ async function main() {
       await page.getByLabel("Email", { exact: true }).fill(email)
       await page.getByLabel("Mot de passe", { exact: true }).fill(process.env.ORG_ADMIN_PASSWORD ?? "e2e-org-admin-password")
       await page.getByRole("button", { name: "Se connecter", exact: true }).click()
-      await page.waitForURL(/\/(?:admin\/events|super-admin\/organizations)/)
+      await page.waitForURL(/\/(?:admin\/dashboard|super-admin\/organizations)/)
     }
     await platform.goto("http://localhost:43104/super-admin/organizations")
     await platform.getByRole("heading", { name: "Organisations", exact: true }).waitFor()

@@ -22,7 +22,7 @@ async function main() {
       await page.getByLabel("Email", { exact: true }).fill(`video.privacy.${side}.owner@example.org`)
       await page.getByLabel("Mot de passe", { exact: true }).fill(process.env.ORG_ADMIN_PASSWORD ?? "e2e-org-admin-password")
       await page.getByRole("button", { name: "Se connecter", exact: true }).click()
-      await page.waitForURL(/\/admin\/events/)
+      await page.waitForURL(/\/admin\/dashboard/)
       const response = await page.request.get(`${base}/api/admin/events/video-privacy-${side}-event`)
       assert.equal(response.status(), 200, "Own event must be accessible")
       const other = await page.request.get(`${base}/api/admin/events/video-privacy-${side === "a" ? "b" : "a"}-event`)

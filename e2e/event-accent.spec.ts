@@ -9,7 +9,7 @@ test("the public header takes the organiser's colour and stays readable", async 
   await page.getByLabel("Email").fill(ORG_ADMIN_EMAIL)
   await page.getByLabel("Mot de passe").fill(ORG_ADMIN_PASSWORD)
   await page.getByRole("button", { name: "Se connecter" }).click()
-  await expect(page).toHaveURL(/\/admin\/events/)
+  await expect(page).toHaveURL(/\/admin\/dashboard/)
   const stamp = Date.now()
   const eventRes = await page.request.post("/api/admin/events", {
     data: { title: `E2E Accent ${stamp}`, startDate: "2031-06-01", endDate: "2031-06-01", accentColorKey: "blue" },

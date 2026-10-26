@@ -7,8 +7,10 @@ import { render, screen, cleanup, fireEvent, within } from "@testing-library/rea
 import EventHeader, { type EventHeaderProps } from "../admin/event-nav/EventHeader"
 
 let segments: string[] = []
+let search = new URLSearchParams()
 vi.mock("next/navigation", () => ({
   useSelectedLayoutSegments: () => segments,
+  useSearchParams: () => search,
   useRouter: () => ({ refresh: vi.fn() }),
 }))
 
@@ -27,7 +29,7 @@ const props = (over: Partial<EventHeaderProps["facts"]> = {}, rest: Partial<Even
 const tabs = () => within(screen.getByRole("navigation", { name: "Sections de l'événement" })).getAllByRole("link")
 
 describe("EventHeader: the event's tabs", () => {
-  beforeEach(() => { segments = [] })
+  beforeEach(() => { segments = []; search = new URLSearchParams() })
   afterEach(cleanup)
 
   it("the title is the overview's <h1>, a plain line elsewhere", () => {
@@ -70,6 +72,17 @@ describe("EventHeader: the event's tabs", () => {
     expect(screen.getByRole("link", { name: "Ouvrir le jour J" })).toHaveAttribute("href", `${B}/day-of`)
   })
 
+  it("no « Publier » on step 2 of the creation assistant, which has its own « Continuer » (#1098)", () => {
+    segments = ["shifts"]
+    search = new URLSearchParams("wizard=1")
+    render(<EventHeader {...props({ publicStatus: "draft" })} />)
+    expect(screen.queryByRole("button", { name: /Publier/ })).toBeNull()
+    cleanup()
+    search = new URLSearchParams()
+    render(<EventHeader {...props({ publicStatus: "draft" })} />)
+    expect(screen.getByRole("button", { name: /Publier/ })).toBeInTheDocument()
+  })
+
   it("one primary action, gone on the page it leads to", () => {
     render(<EventHeader {...props()} />)
     expect(screen.getByRole("link", { name: "Partager le lien" })).toHaveAttribute("href", `${B}/share`)
@@ -85,7 +98,7 @@ describe("EventHeader: the event's tabs", () => {
 })
 
 describe("EventHeader: « Autres actions »", () => {
-  beforeEach(() => { segments = [] })
+  beforeEach(() => { segments = []; search = new URLSearchParams() })
   afterEach(cleanup)
 
   it("a disclosure: opens without moving the focus, Escape closes it and returns to the button", () => {

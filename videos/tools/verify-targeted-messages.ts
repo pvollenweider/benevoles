@@ -20,7 +20,7 @@ async function main() {
     await page.getByLabel("Email", { exact: true }).fill(videoAdminEmail())
     await page.getByLabel("Mot de passe", { exact: true }).fill(process.env.ORG_ADMIN_PASSWORD ?? "e2e-org-admin-password")
     await page.getByRole("button", { name: "Se connecter", exact: true }).click()
-    await page.waitForURL(/\/admin\/events/)
+    await page.waitForURL(/\/admin\/dashboard/)
     const event = await db.event.findFirstOrThrow({ where: { organizationId: "default", slug: "fete-du-village" } })
     const registrations = await db.registration.findMany({ where: { eventId: event.id }, include: { volunteer: true, shift: true } })
     const invites = await db.memberInvite.findMany({ where: { eventId: event.id }, include: { volunteer: true } })

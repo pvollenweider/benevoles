@@ -26,7 +26,7 @@ async function main() {
     await page.getByLabel("Email", { exact: true }).fill(videoAdminEmail())
     await page.getByLabel("Mot de passe", { exact: true }).fill(process.env.ORG_ADMIN_PASSWORD ?? "e2e-org-admin-password")
     await page.getByRole("button", { name: "Se connecter", exact: true }).click()
-    await page.waitForURL(/\/admin\/events/)
+    await page.waitForURL(/\/admin\/dashboard/)
     await page.goto(`${base}/admin/events/${event.id}/print`)
     const reports = [
       { id: "complete", label: "Export complet", suffix: "pdf", privateContacts: true },

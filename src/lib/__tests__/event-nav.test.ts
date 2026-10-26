@@ -1,6 +1,6 @@
 import { describe, it, expect } from "vitest"
 import {
-  activeTab, eventPrimaryAction, eventSubNav, eventSubPath, eventTabs, inDayOfWindow, primaryIsCurrent,
+  activeTab, eventPrimaryAction, eventSubNav, eventSubPath, eventTabs, inDayOfWindow, primaryIsCurrent, showPrimaryAction,
   type EventNavFacts, type PrimaryFacts,
 } from "../event-nav"
 
@@ -139,6 +139,15 @@ describe("eventPrimaryAction", () => {
     expect(primaryIsCurrent(share, `${B}/share`, "e1")).toBe(true)
     expect(primaryIsCurrent(share, `${B}/qr`, "e1")).toBe(false)
     expect(primaryIsCurrent({ kind: "publish", path: "review" }, `${B}/review`, "e1")).toBe(true)
+  })
+
+  it("leaves step 2 of the creation assistant its own « Continuer » as the one primary (#1098)", () => {
+    const publish = { kind: "publish", path: "review" } as const
+    expect(showPrimaryAction(publish, `${B}/shifts`, "e1", true)).toBe(false)
+    expect(showPrimaryAction(publish, `${B}/shifts`, "e1", false)).toBe(true)
+    // Another page with a stray ?wizard keeps its primary; the page it leads to never shows it.
+    expect(showPrimaryAction(publish, `${B}/registrations`, "e1", true)).toBe(true)
+    expect(showPrimaryAction(publish, `${B}/review`, "e1", false)).toBe(false)
   })
 })
 

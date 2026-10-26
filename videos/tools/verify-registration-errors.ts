@@ -86,7 +86,7 @@ async function main() {
     await page.getByLabel("Email", { exact: true }).fill("video.errors.owner@example.org")
     await page.getByLabel("Mot de passe", { exact: true }).fill(process.env.ORG_ADMIN_PASSWORD ?? "e2e-org-admin-password")
     await page.getByRole("button", { name: "Se connecter", exact: true }).click()
-    await page.waitForURL(/\/admin\/events/)
+    await page.waitForURL(/\/admin\/dashboard/)
     await page.goto(`http://localhost:43102/admin/events/${eventId}/registrations`)
     assert.equal(await page.getByRole("row").filter({ hasText: "video.errors.nicolas@example.org" }).count(), 1)
     await page.screenshot({ path: path.join(directory, "single-registration-result.png"), fullPage: true })

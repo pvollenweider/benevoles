@@ -15,7 +15,7 @@ test("the offer page is read-only until « Prendre la place » is pressed", asyn
   await page.getByLabel("Email").fill(ORG_ADMIN_EMAIL)
   await page.getByLabel("Mot de passe").fill(ORG_ADMIN_PASSWORD)
   await page.getByRole("button", { name: "Se connecter" }).click()
-  await expect(page).toHaveURL(/\/admin\/events/)
+  await expect(page).toHaveURL(/\/admin\/dashboard/)
 
   const stamp = Date.now()
   const event: { id: string } = await (await page.request.post("/api/admin/events", {

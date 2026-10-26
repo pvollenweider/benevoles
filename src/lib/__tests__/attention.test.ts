@@ -83,6 +83,15 @@ describe("attentionItems", () => {
     expect(ids(attentionItems({ now, events: [ended], offers: [] }))).toEqual(["ended:e1"])
   })
 
+  it("archives an ended event from the list itself, not through a link to its overview (#1098)", () => {
+    const [item] = attentionItems({ now, events: [ev({ startDate: day(-5), endDate: day(-3) })], offers: [] })
+    expect(item).toMatchObject({ action: "L'archiver", archiveEventId: "e1" })
+    // Every other item stays a link.
+    const others = attentionItems({ now, events: [ev({ startDate: day(3), endDate: day(4), overdueMilestones: [{ title: "Louer la tente", ownerName: null }] })], offers: [] })
+    expect(others.length).toBeGreaterThan(0)
+    expect(others.every((i) => i.archiveEventId === undefined)).toBe(true)
+  })
+
   it("sorts urgent first", () => {
     const items = attentionItems({
       now,

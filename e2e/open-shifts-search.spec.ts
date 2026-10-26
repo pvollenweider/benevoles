@@ -18,7 +18,7 @@ async function login(page: Page) {
   await page.getByLabel("Email").fill(ORG_ADMIN_EMAIL)
   await page.getByLabel("Mot de passe").fill(ORG_ADMIN_PASSWORD)
   await page.getByRole("button", { name: "Se connecter" }).click()
-  await expect(page).toHaveURL(/\/admin\/events/)
+  await expect(page).toHaveURL(/\/admin\/dashboard/)
 }
 
 test("proposes an underfilled shift to members picked by hand, one email each, recorded in the history", async ({ page }) => {

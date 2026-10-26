@@ -18,6 +18,7 @@ import { remindersState, remindersSummary } from "@/lib/automatic-reminders"
 import { loadAttention } from "@/lib/attention-data"
 import { eventAttentionItems } from "@/lib/attention"
 import { loadReviewChecks } from "@/lib/review-checks-data"
+import ArchiveFromList from "@/components/admin/ArchiveFromList"
 import { lastMessageSentence, nextAutomaticReminder, placesSentence } from "@/lib/event-overview"
 
 export const dynamic = "force-dynamic"
@@ -67,11 +68,13 @@ export default async function AdminEventPage({ params }: { params: Promise<{ id:
 
   // The possible owners of a milestone (#985): the organisation's active admin accounts.
   // « À traiter » (#372) for this event only; the checklist (#401) while it is a draft.
-  const [team, attention, review, lastMessage] = await Promise.all([
+  // Invited members (#1098): the published stage's « Inviter » step says how many.
+  const [team, attention, review, lastMessage, invitedCount] = await Promise.all([
     db.adminUser.findMany({ where: eligibleOwnerWhere(organizationId), select: { id: true, name: true }, orderBy: { name: "asc" } }),
     published ? loadAttention(db, organizationId, now, { eventId: id }).then((items) => eventAttentionItems(items, id)) : Promise.resolve([]),
     isDraft ? loadReviewChecks(db, id, now) : Promise.resolve(null),
     db.targetedMessage.findFirst({ where: { eventId: id }, orderBy: { createdAt: "desc" }, select: { subject: true, createdAt: true, recipientCount: true } }),
+    published ? db.memberInvite.count({ where: { eventId: id } }) : Promise.resolve(0),
   ])
 
   const count = (status: string) => event.shifts.reduce((n, sh) => n + sh.registrations.filter((r) => r.status === status).length, 0)
@@ -146,7 +149,10 @@ export default async function AdminEventPage({ params }: { params: Promise<{ id:
                     {item.severity === "high" && <span className="font-semibold text-red-800">Urgent : </span>}
                     {item.message}
                   </p>
-                  <Link href={item.href} className={linkClass}>{item.action}</Link>
+                  {/* « L'archiver » archives here (#1098); the event header's h1 takes the focus. */}
+                  {item.archiveEventId
+                    ? <ArchiveFromList eventId={item.archiveEventId} eventTitle={event.title} focusId="page-heading" />
+                    : <Link href={item.href} className={linkClass}>{item.action}</Link>}
                 </li>
               ))}
             </ul>
@@ -176,6 +182,7 @@ export default async function AdminEventPage({ params }: { params: Promise<{ id:
               shiftCount: event.shifts.length,
               confirmationMessage: event.confirmationMessage,
               remindersEnabled: event.remindersEnabled,
+              invitedCount,
             }}
           />
         )}

@@ -69,6 +69,9 @@ export type AttentionItem = {
   message: string
   action: string
   href: string
+  /** Set when the action is archiving this event (#1098): the list shows a button that opens the
+   * archive confirmation in place, not a link (`href` stays the event's overview). */
+  archiveEventId?: string
 }
 
 const startOfUtcDay = (d: Date) => Date.UTC(d.getUTCFullYear(), d.getUTCMonth(), d.getUTCDate())
@@ -94,7 +97,7 @@ export function attentionItems({ now, events, offers, addressesToVerifyCount = 0
       items.push({
         id: `ended:${e.id}`, severity: "low", eventTitle: e.title,
         message: "L'événement est terminé mais toujours publié.",
-        action: "L'archiver", href: base,
+        action: "L'archiver", href: base, archiveEventId: e.id,
       })
       continue
     }

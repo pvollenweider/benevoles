@@ -64,7 +64,7 @@ export async function recordDeliveryStates(options: {
     await page.getByLabel("Email", { exact: true }).pressSequentially("video.delivery.organizer@example.org", { delay: 55 })
     await page.getByLabel("Mot de passe", { exact: true }).fill(process.env.ORG_ADMIN_PASSWORD ?? "e2e-org-admin-password")
     await tap(page, page.getByRole("button", { name: "Se connecter", exact: true }))
-    await page.waitForURL(/\/admin\/events/)
+    await page.waitForURL(/\/admin\/dashboard/)
     await go()
     await page.getByText("Votre rôle : organisateur. Ces réglages sont réservés aux propriétaires de l'organisation.", { exact: true }).scrollIntoViewIfNeeded()
     checks.actualOrganizerReadOnlySettings = true
