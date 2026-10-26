@@ -10,7 +10,8 @@ import { adminActor, logEvent } from "@/lib/event-log"
 import { validationError } from "@/lib/api-error"
 import { generateRecurrence, recurrenceProblem, type RecurrenceInput } from "@/lib/shift-recurrence"
 import { SHIFT_CONTACT_NAME_MAX, SHIFT_CONTACT_PHONE_MAX, SHIFT_INSTRUCTIONS_MAX } from "@/lib/shift-info"
-import { liveRoleShifts, ROLE_SETTINGS_SELECT, roleSettingsOf } from "@/lib/role-settings"
+import { liveRoleShifts, ROLE_SETTINGS_SELECT, roleSettingsOf, type RoleSettings } from "@/lib/role-settings"
+import { newShiftsSector } from "@/lib/sector-adoption"
 
 const schema = z.object({
   eventId: z.string(),
@@ -34,6 +35,13 @@ const schema = z.object({
   displayOrder: z.number().int().optional(),
   waitlistEnabled: z.boolean().optional(),
   requiresApproval: z.boolean().optional(),
+  /**
+   * Sector chosen in the form (#1147), as for one shift (POST /api/admin/shifts): a new poste is
+   * created in it, an existing poste keeps its own and a different one is refused (409). Absent:
+   * as before, the poste's sector or none. Every date is created now, with the rule: no later
+   * generation needs it, so the rule itself stores no sector.
+   */
+  sectorId: z.string().min(1).nullable().optional(),
 })
 
 const day = (d: Date) => d.toISOString().slice(0, 10)
@@ -49,7 +57,7 @@ export async function POST(req: Request) {
 
   const parsed = schema.safeParse(await req.json())
   if (!parsed.success) return validationError(parsed.error, { useIssueMessage: true })
-  const { eventId, roleName, label, from, until, weekdays, everyWeeks, startTime, endTime, slotMinutes, breakMinutes = 0, capacity, holidays, closures, ...info } = parsed.data
+  const { eventId, roleName, label, from, until, weekdays, everyWeeks, startTime, endTime, slotMinutes, breakMinutes = 0, capacity, holidays, closures, sectorId, ...info } = parsed.data
 
   const owned = await db.event.findFirst({ where: { id: eventId }, select: { id: true, startDate: true, endDate: true } })
   if (!owned) return NextResponse.json({ error: "Événement introuvable" }, { status: 404 })
@@ -63,9 +71,20 @@ export async function POST(req: Request) {
 
   const { shifts: slots } = generateRecurrence(input)
   const shiftLabel = label?.trim() || roleName
-  // Shifts added to an existing poste take its settings (#986, #1002).
-  const poste = roleSettingsOf(await db.shift.findMany({ where: liveRoleShifts(eventId, roleName), select: ROLE_SETTINGS_SELECT }), roleName)
-  const { rule, count } = await db.$transaction(async (tx) => {
+  // Shifts added to an existing poste take its settings (#986, #1002). With a sector chosen in the
+  // form (#1147), it is checked and locked like one shift, in the transaction that writes them.
+  const poste = sectorId === undefined
+    ? roleSettingsOf(await db.shift.findMany({ where: liveRoleShifts(eventId, roleName), select: ROLE_SETTINGS_SELECT }), roleName)
+    : null
+  const outcome = await db.$transaction(async (tx) => {
+    let settings: Partial<RoleSettings> | null = poste
+    let sectorName: string | null = null
+    if (sectorId !== undefined) {
+      const target = await newShiftsSector(tx, guard.organizationId, eventId, roleName, sectorId)
+      if (!target.ok) return target
+      settings = { ...target.value.poste, sectorId: target.value.sectorId }
+      sectorName = target.value.sectorName
+    }
     const rule = await tx.shiftRecurrence.create({
       data: {
         eventId, roleName, label: shiftLabel, weekdays: input.weekdays, everyWeeks, startTime, endTime, slotMinutes, breakMinutes,
@@ -84,11 +103,13 @@ export async function POST(req: Request) {
         endTime: slot.endTime,
         status: "open",
         recurrenceId: rule.id,
-        ...poste,
+        ...settings,
       })),
     })
-    return { rule, count: created.count }
+    return { ok: true as const, value: { rule, count: created.count, sectorName } }
   })
+  if (!outcome.ok) return NextResponse.json({ error: outcome.error }, { status: outcome.status })
+  const { rule, count, sectorName } = outcome.value
 
   // One entry for the whole rule: hundreds of « shift.created » lines would drown the log.
   await logEvent({
@@ -104,6 +125,7 @@ export async function POST(req: Request) {
       startTime: { from: null, to: startTime },
       endTime: { from: null, to: endTime },
       shiftCount: { from: null, to: count },
+      ...(sectorName ? { sector: { from: null, to: sectorName } } : {}),
     },
   })
 

@@ -12,9 +12,7 @@ import { validationError } from "@/lib/api-error"
 import { SHIFT_CONTACT_NAME_MAX, SHIFT_CONTACT_PHONE_MAX, SHIFT_INSTRUCTIONS_MAX } from "@/lib/shift-info"
 import { minVolunteersProblem } from "@/lib/staffing"
 import { liveRoleShifts, ROLE_SETTINGS_SELECT, roleSettingsOf } from "@/lib/role-settings"
-import { newShiftSectorDecision, posteSectorConflictError, posteSectorOf } from "@/lib/poste-sector"
-import { eventPostes, posteKey } from "@/lib/poste-suggestions"
-import { lockPosteDestination } from "@/lib/sector-adoption"
+import { newShiftsSector } from "@/lib/sector-adoption"
 
 const schema = z.object({
   eventId: z.string(),
@@ -78,29 +76,19 @@ export async function POST(req: Request) {
     })
   } else {
     // Sector first (#1147): the sector is checked under the locks a sector write takes (never an
-    // archived one or another event's), and the shift is written in the same transaction. The
-    // poste is compared like the form does (case and spaces aside): an existing poste in another
-    // sector is refused, never moved by a shift.
-    const requested = data.sectorId
+    // archived one or another event's), and the shift is written in the same transaction; an
+    // existing poste in another sector is refused, never moved by a shift (newShiftsSector).
     const outcome = await db.$transaction(async (tx) => {
-      const target = await lockPosteDestination(tx, guard.organizationId, data.eventId, requested)
+      const target = await newShiftsSector(tx, guard.organizationId, data.eventId, data.roleName, data.sectorId ?? null)
       if (!target.ok) return target
-      const live = await tx.shift.findMany({ where: { eventId: data.eventId, status: { not: "cancelled" } }, select: ROLE_SETTINGS_SELECT })
-      const existing = eventPostes(live).find((p) => posteKey(p) === posteKey(data.roleName))
-      const decision = newShiftSectorDecision(existing === undefined ? undefined : posteSectorOf(live, existing), requested)
-      if (!decision.ok) {
-        const other = decision.posteSectorId ? await tx.sector.findFirst({ where: { id: decision.posteSectorId, eventId: data.eventId }, select: { name: true } }) : null
-        return { ok: false as const, status: 409 as const, error: posteSectorConflictError(existing!, other?.name ?? null) }
-      }
-      const poste = roleSettingsOf(live, data.roleName)
       const created = await tx.shift.create({
-        data: { ...data, date: new Date(data.date), status: "open", ...poste, sectorId: poste ? poste.sectorId : decision.sectorId },
+        data: { ...data, date: new Date(data.date), status: "open", ...target.value.poste, sectorId: target.value.sectorId },
       })
-      return { ok: true as const, value: { shift: created, name: target.value.name } }
+      return { ok: true as const, value: { shift: created, name: target.value.sectorName } }
     })
     if (!outcome.ok) return NextResponse.json({ error: outcome.error }, { status: outcome.status })
     shift = outcome.value.shift
-    sectorName = shift.sectorId ? outcome.value.name : null
+    sectorName = outcome.value.name
   }
 
   await logEvent({

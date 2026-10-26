@@ -1,5 +1,5 @@
 import { describe, it, expect } from "vitest"
-import { acceptRequestRecap, bulkCancelCounts, bulkCancelRecap, dayLabel, bulkLeaderRecap, bulkResendRecap, deactivateMemberRecap, broadcastRecap, prefillRecap, prefillNeedsConfirmation, deleteMilestoneRecap, deleteOrgRecap, deletePageRecap, toggleOrgRecap, deleteRoleRecap, deleteShiftRecap, shiftWhen, logLinkFor, remindInvitedRecap, removeLeaderRecap } from "../action-recap"
+import { acceptRequestRecap, bulkCancelCounts, bulkCancelRecap, dayLabel, bulkLeaderRecap, bulkResendRecap, deactivateMemberRecap, broadcastRecap, prefillRecap, prefillNeedsConfirmation, deleteMilestoneRecap, deleteOrgRecap, deletePageRecap, toggleOrgRecap, deleteRoleRecap, deleteShiftRecap, shiftWhen, logLinkFor, remindInvitedRecap, removeLeaderRecap, unsavedRoleOrderRecap } from "../action-recap"
 
 // Confirmation before sensitive actions (#379).
 describe("action recaps", () => {
@@ -123,5 +123,17 @@ describe("action recaps", () => {
     const r = acceptRequestRecap({ name: "Chloé Roy", shift: "Bar, Soir", hasEmail: true })
     expect(r.lines[0]).toBe("La demande de Chloé Roy sur « Bar, Soir » devient une inscription confirmée.")
     expect(r.lines.join(" ")).not.toMatch(/·/)
+  })
+})
+
+describe("unsavedRoleOrderRecap", () => {
+  it("asks before dropping an unsaved poste order: a safe way back, then closing without saving", () => {
+    const r = unsavedRoleOrderRecap()
+    expect(r.title).toBe("L'ordre des postes n'est pas enregistré")
+    expect(r.lead).toContain("« Enregistrer l'ordre »")
+    expect(r.cancelLabel).toBe("Revenir aux postes")
+    expect(r.confirmLabel).toBe("Fermer sans enregistrer")
+    expect(r.danger).toBe(false)
+    expect(r.lines).toEqual([])
   })
 })

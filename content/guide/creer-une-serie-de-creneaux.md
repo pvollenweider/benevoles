@@ -16,7 +16,7 @@ Pour couvrir une plage horaire avec des créneaux qui se suivent (une buvette de
 
 | Champ | Description |
 |-------|-------------|
-| Poste, libellé | Comme pour un créneau seul (voir [Configurer les créneaux](configurer-les-creneaux.md)) |
+| Poste, libellé | Comme pour un créneau seul (voir [Configurer les créneaux](configurer-les-creneaux.md)). Si l'événement range ses postes par secteurs, un champ **Secteur** vient avant (voir [Organiser les postes par secteurs](gerer-les-postes.md#organiser-les-postes-par-secteurs-beta)) |
 | Date, début, fin | La plage à couvrir ; une fin plus petite que le début passe minuit |
 | Durée d'un créneau | Choix courant (30 min à 4 h) ou saisie en minutes (15 au minimum) |
 | Pause entre deux créneaux | Facultative, en minutes |

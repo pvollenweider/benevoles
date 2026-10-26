@@ -1,5 +1,5 @@
 import { describe, it, expect } from "vitest"
-import { moveRole, moveRoleInGroup, roleMoveBoundaryMessage, roleMoveMessage } from "../role-order"
+import { moveRole, moveRoleInGroup, roleMoveBoundaryMessage, roleMoveMessage, roleOrderUnsaved } from "../role-order"
 
 describe("moveRole", () => {
   const roles = ["Bar", "Accueil", "Cuisine"]
@@ -66,5 +66,19 @@ describe("moveRoleInGroup", () => {
     expect(moveRoleInGroup(groups, "Accueil", "up")).toBeNull()
     moveRoleInGroup(groups, "Caisse", "up")
     expect(groups[1].roles).toEqual(["Bar", "Cuisine", "Caisse"])
+  })
+})
+
+describe("roleOrderUnsaved", () => {
+  it("is false for the saved order, true once a poste moved", () => {
+    expect(roleOrderUnsaved(["Bar", "Accueil"], ["Bar", "Accueil"])).toBe(false)
+    expect(roleOrderUnsaved(["Accueil", "Bar"], ["Bar", "Accueil"])).toBe(true)
+  })
+
+  it("ignores a poste created or deleted while the panel is open", () => {
+    expect(roleOrderUnsaved(["Bar", "Accueil", "Vestiaire"], ["Bar", "Vestiaire", "Accueil"].filter((r) => r !== "Vestiaire"))).toBe(false)
+    expect(roleOrderUnsaved(["Bar", "Accueil", "Vestiaire"], ["Vestiaire", "Bar", "Accueil"])).toBe(true)
+    expect(roleOrderUnsaved(["Bar", "Accueil"], ["Bar", "Cuisine", "Accueil"])).toBe(false)
+    expect(roleOrderUnsaved([], [])).toBe(false)
   })
 })

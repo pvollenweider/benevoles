@@ -2,6 +2,7 @@ import { describe, expect, it } from "vitest"
 import {
   newShiftSectorDecision, posteSectorConflictError, posteSectorMessage, posteSectorMismatch, posteSectorOf,
   posteSuggestionsInSector, switchSectorLabel,
+  effectiveSector, newPosteSectorHint, posteFollowHint, typedPosteSector,
 } from "../poste-sector"
 
 // Sector first, then poste (#1147): suggestions per sector, the « est dans le secteur » check of
@@ -96,5 +97,48 @@ describe("newShiftSectorDecision", () => {
     expect(newShiftSectorDecision("sec-entrees", "sec-bar")).toEqual({ ok: false, status: 409, posteSectorId: "sec-entrees" })
     expect(newShiftSectorDecision(null, "sec-bar")).toEqual({ ok: false, status: 409, posteSectorId: null })
     expect(newShiftSectorDecision("sec-bar", null)).toEqual({ ok: false, status: 409, posteSectorId: "sec-bar" })
+  })
+})
+
+describe("the « Secteur » select following the poste typed (#1147 follow-up)", () => {
+  const live = new Set(["sec-entrees", "sec-bar"])
+  const shifts = [
+    { roleName: "Accueil", sectorId: "sec-entrees" },
+    { roleName: "Montage", sectorId: null },
+  ]
+
+  it("typedPosteSector: the existing poste's sector (any spelling), null for « Autres postes », undefined for a new or empty name", () => {
+    expect(typedPosteSector(shifts, "  ACCUEIL ", live)).toBe("sec-entrees")
+    expect(typedPosteSector(shifts, "Montage", live)).toBeNull()
+    expect(typedPosteSector(shifts, "Vestiaire", live)).toBeUndefined()
+    expect(typedPosteSector(shifts, "  ", live)).toBeUndefined()
+    // An archived sector is « Autres postes », as the grouped views draw it.
+    expect(typedPosteSector(shifts, "Accueil", new Set(["sec-bar"]))).toBeNull()
+  })
+
+  it("effectiveSector: an unchosen select follows an existing poste, to a sector or to « Autres postes »", () => {
+    expect(effectiveSector(false, "sec-entrees", null)).toBe("sec-entrees")
+    expect(effectiveSector(false, null, "sec-bar")).toBeNull()
+  })
+
+  it("effectiveSector: a new name keeps the current value, chosen or not", () => {
+    expect(effectiveSector(false, undefined, "sec-bar")).toBe("sec-bar")
+    expect(effectiveSector(false, undefined, null)).toBeNull()
+    expect(effectiveSector(true, undefined, "sec-bar")).toBe("sec-bar")
+  })
+
+  it("effectiveSector: a chosen select never follows (the mismatch rule applies instead)", () => {
+    expect(effectiveSector(true, "sec-entrees", "sec-bar")).toBe("sec-bar")
+    expect(effectiveSector(true, null, "sec-bar")).toBe("sec-bar")
+  })
+
+  it("posteFollowHint names the sector, then the poste's settings", () => {
+    expect(posteFollowHint("Accueil", "Entrées")).toBe("Secteur du poste : « Entrées ». Les paramètres du poste « Accueil » s'appliquent (couleur, limite, accès, chevauchement).")
+    expect(posteFollowHint("Montage", null)).toMatch(/^Secteur du poste : « Autres postes »\./)
+  })
+
+  it("newPosteSectorHint: one shift or several", () => {
+    expect(newPosteSectorHint("Bar")).toBe("Le poste sera créé dans « Bar » avec son premier créneau.")
+    expect(newPosteSectorHint(null, true)).toBe("Le poste sera créé dans « Autres postes » avec ses créneaux.")
   })
 })

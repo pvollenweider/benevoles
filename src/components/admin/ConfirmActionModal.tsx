@@ -117,7 +117,7 @@ export default function ConfirmActionModal({ recap, busy, onConfirm, onCancel, e
           aria-disabled={busy || undefined}
           className="text-sm font-medium border border-gray-300 text-gray-800 rounded-xl px-4 py-2 hover:bg-gray-50 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-blue-600"
         >
-          Annuler
+          {recap.cancelLabel ?? "Annuler"}
         </button>
         <button
           type="submit"

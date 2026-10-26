@@ -6,8 +6,12 @@
 import { useEffect, useId, useRef, useState } from "react"
 import { flushSync } from "react-dom"
 import { requestJson } from "@/lib/use-submit"
-import { matchingPoste, posteSuggestions } from "@/lib/poste-suggestions"
+import { matchingPoste } from "@/lib/poste-suggestions"
 import PosteHint from "@/components/admin/shifts/PosteHint"
+import SectorSelect from "@/components/admin/shifts/SectorSelect"
+import { usePosteSector, type SectorOption } from "@/components/admin/shifts/usePosteSector"
+import type { PosteSectorShift } from "@/lib/poste-sector"
+import { NO_SECTOR_LABEL } from "@/lib/sectors"
 import { fmtRange, resolveNewShiftDisplayOrder } from "@/lib/gantt-utils"
 import { fmtLongDate as fmtDate, normalizeTime } from "@/lib/shifts-admin"
 import { isValidClock } from "@/lib/shift-time"
@@ -30,16 +34,18 @@ type Props = {
   eventId: string
   /** Days of the event, "YYYY-MM-DD". */
   dates: string[]
-  existingShifts: { roleName: string; displayOrder: number; status?: string | null }[]
+  existingShifts: (PosteSectorShift & { displayOrder: number })[]
   onCreated: (shifts: AdminShift[]) => void
   onClose: () => void
+  /** Sectors (#1147): the event's active sectors once it adopted sectors, null otherwise (no select). */
+  sectors?: SectorOption[] | null
 }
 
 /**
  * « Créer une série de créneaux » (#393): one role, one day, a time range and a shift length give
  * several shifts at once, previewed before they're created. Same generator as the API.
  */
-export default function ShiftSeriesForm({ panelId, eventId, dates, existingShifts, onCreated, onClose }: Props) {
+export default function ShiftSeriesForm({ panelId, eventId, dates, existingShifts, onCreated, onClose, sectors = null }: Props) {
   const id = useId()
   const headingRef = useRef<HTMLHeadingElement>(null)
   const [roleName, setRoleName] = useState("")
@@ -48,6 +54,12 @@ export default function ShiftSeriesForm({ panelId, eventId, dates, existingShift
   const poste = matchingPoste(existingShifts, roleName)
   const sentRole = poste ?? roleName.trim()
   const hintId = `${id}-role-hint`
+  // Sector first (#1147), the same rule as one shift (usePosteSector).
+  const sector = usePosteSector({ sectors, existingShifts, roleName })
+  const [hintQuiet, setHintQuiet] = useState(false)
+  const sectorSelectRef = useRef<HTMLSelectElement>(null)
+  const newPosteHint = sector.newPosteHint(true)
+  const newPosteHintId = `${id}-new-poste`
   const [label, setLabel] = useState("")
   const [date, setDate] = useState(dates.length === 1 ? dates[0] : "")
   const [startTime, setStartTime] = useState("")
@@ -78,9 +90,29 @@ export default function ShiftSeriesForm({ panelId, eventId, dates, existingShift
   const minimumValue = parseMinVolunteers(minimum)
   const minimumProblem = minVolunteersProblem(minimumValue, Number(capacity))
   const minimumInvalid = attempted && minimumProblem !== null
+  const mismatchInvalid = attempted && !!sector.mismatch
+  const mismatchText = sector.message ? `${sector.message}${mismatchInvalid ? " Choisissez ce secteur, ou un autre nom de poste." : ""}` : null
+  // Where the shifts go, under the summary, and part of the create button's description.
+  const sectorLine = sector.shown ? `Secteur : « ${sector.sectorName ?? NO_SECTOR_LABEL} ».` : null
+  const sectorLineId = `${id}-sector-line`
+
+  function switchToPosteSector() {
+    // Focus moves to the select in the same task, which reads its new value and the poste's settings.
+    flushSync(() => {
+      sector.switchToPoste()
+      setHintQuiet(true)
+    })
+    sectorSelectRef.current?.focus()
+  }
 
   async function handleCreate() {
     if (saving) return
+    if (sector.mismatch && complete && !minimumProblem) {
+      // The poste field says where the poste is and how to fix it, once focus reaches it.
+      flushSync(() => { setAttempted(true); setHintQuiet(true) })
+      document.getElementById(fieldId("roleName"))?.focus()
+      return
+    }
     if (!complete) {
       // Like the shift editor (#554, #587): each message is tied to its field, not an alert; focus
       // moves to the first missing field once it says it is invalid, so its message is read with it.
@@ -104,6 +136,7 @@ export default function ShiftSeriesForm({ panelId, eventId, dates, existingShift
         eventId, roleName: sentRole, label: label.trim() || undefined, date, startTime, endTime,
         slotMinutes, breakMinutes, capacity: Number(capacity), minVolunteers: minimumValue, waitlistEnabled, requiresApproval,
         displayOrder: resolveNewShiftDisplayOrder(existingShifts, sentRole, 0),
+        ...(sector.send ? { sectorId: sector.sectorId } : {}),
       }),
     }), "Erreur lors de la création.")
     setSaving(false)
@@ -137,18 +170,33 @@ export default function ShiftSeriesForm({ panelId, eventId, dates, existingShift
         </p>
       </div>
 
+      {sector.shown && (
+        <SectorSelect
+          ref={sectorSelectRef} id={`${id}-sector`} sectors={sectors!} value={sector.sectorId ?? ""}
+          describedBy={poste && !sector.mismatch && (hintQuiet || sector.following) ? hintId : undefined}
+          // Choosing the sector it already follows says nothing new: the hint stays quiet.
+          onChange={(v) => { setHintQuiet(sector.following && v === (sector.sectorId ?? "")); sector.choose(v) }}
+        />
+      )}
       <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
         <div>
           <label htmlFor={`${id}-role`} className={labelClass(missing.roleName)}>Poste <span aria-hidden="true">*</span></label>
           <input
             id={fieldId("roleName")} type="text" list={`${id}-roles`} value={roleName} required
-            aria-invalid={invalid("roleName") || undefined}
-            aria-describedby={describedBy("roleName", ...(poste ? [hintId] : []))}
-            onChange={(e) => setRoleName(e.target.value)} placeholder="ex. Buvette" className={fieldClass(missing.roleName)}
+            aria-invalid={invalid("roleName") || mismatchInvalid || undefined}
+            aria-describedby={describedBy("roleName", ...(poste ? [hintId] : []), ...(newPosteHint ? [newPosteHintId] : []))}
+            onChange={(e) => { setRoleName(e.target.value); sector.followPoste(e.target.value); setHintQuiet(false) }}
+            placeholder="ex. Buvette" className={fieldClass(missing.roleName || !!sector.mismatch)}
           />
           {fieldMessage("roleName")}
-          <PosteHint id={hintId} poste={poste} />
-          <datalist id={`${id}-roles`}>{posteSuggestions(existingShifts).map((r) => <option key={r} value={r} />)}</datalist>
+          <PosteHint id={hintId} poste={poste} message={mismatchText} invalid={mismatchInvalid} quiet={hintQuiet} />
+          {sector.mismatch && (
+            <button type="button" onClick={switchToPosteSector} className="mt-1 text-xs font-medium text-blue-700 hover:text-blue-900 rounded-md min-h-6 text-left focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-blue-600">
+              {sector.switchLabel}
+            </button>
+          )}
+          {newPosteHint && <p id={newPosteHintId} className="text-xs text-gray-600 mt-1">{newPosteHint}</p>}
+          <datalist id={`${id}-roles`}>{sector.suggestions.map((r) => <option key={r} value={r} />)}</datalist>
         </div>
         <div>
           <label htmlFor={`${id}-label`} className="block text-xs font-medium text-gray-600 mb-1">Libellé</label>
@@ -258,6 +306,8 @@ export default function ShiftSeriesForm({ panelId, eventId, dates, existingShift
             ? "Renseignez le poste, la date et les heures pour voir les créneaux."
             : problem ?? `Aperçu : ${describeSeries(slots)}, ${capacity} personne${capacity > 1 ? "s" : ""} par créneau${minimumValue != null && !minimumProblem ? `, ${minimumValue} au minimum` : ""}.`}
         </p>
+        {/* Not live: the summary above is read at each keystroke, the sector would only repeat. */}
+        {sectorLine && <p id={sectorLineId} className="mt-1 text-gray-700">{sectorLine}</p>}
         {slots.length > 0 && (
           <>
             <ol aria-label="Créneaux qui seront créés" className="mt-2 grid grid-cols-2 sm:grid-cols-3 gap-x-4 gap-y-1 text-gray-700 tabular-nums">
@@ -278,10 +328,11 @@ export default function ShiftSeriesForm({ panelId, eventId, dates, existingShift
       {attempted && !complete && (
         <p className="text-xs text-red-700">{missingFieldsSummary(missingFields)}</p>
       )}
+      {mismatchInvalid && <p className="text-xs text-red-700">À corriger : le secteur du poste.</p>}
 
       <div className="flex gap-3">
         <button
-          type="button" onClick={handleCreate} aria-disabled={saving || undefined} aria-describedby={summaryId}
+          type="button" onClick={handleCreate} aria-disabled={saving || undefined} aria-describedby={sectorLine ? `${summaryId} ${sectorLineId}` : summaryId}
           className="bg-blue-600 text-white px-4 py-2 rounded-xl text-sm font-medium hover:bg-blue-700 aria-disabled:cursor-wait focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-blue-600"
         >
           {saving ? "Création…" : slots.length > 0 ? `Créer ${slots.length} créneau${slots.length > 1 ? "x" : ""}` : "Créer les créneaux"}

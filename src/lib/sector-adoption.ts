@@ -7,6 +7,9 @@ import {
   firstSectorDecision, isSectorPermutation, sectorNameTaken, sectorsSwitchDecision,
   SECTOR_ARCHIVED_ERROR, SECTOR_NAME_TAKEN_ERROR, SECTOR_NOT_FOUND_ERROR, type SectorsEventState,
 } from "@/lib/sectors"
+import { newShiftSectorDecision, posteSectorConflictError, posteSectorOf } from "@/lib/poste-sector"
+import { eventPostes, posteKey } from "@/lib/poste-suggestions"
+import { ROLE_SETTINGS_SELECT, roleSettingsOf, type RoleSettings } from "@/lib/role-settings"
 
 /**
  * Writes of the sectors (#1147), server only. Every change of the event's sector mode goes through
@@ -202,4 +205,36 @@ export async function lockPosteDestination(tx: Tx, organizationId: string, event
   if (!sector) return { ok: false, status: 404, error: SECTOR_NOT_FOUND_ERROR }
   if (sector.archivedAt) return { ok: false, status: 409, error: SECTOR_ARCHIVED_ERROR }
   return { ok: true, value: { name: sector.name } }
+}
+
+export type NewShiftsSector = {
+  /** The existing poste's settings (src/lib/role-settings.ts), or null for a new poste. */
+  poste: RoleSettings | null
+  /** The sector the new shifts take: the existing poste's own, or the one asked for a new poste. */
+  sectorId: string | null
+  /** Its name for the log, null for « Autres postes ». */
+  sectorName: string | null
+}
+
+/**
+ * The sector of shifts created from a form that asked for one (#1147): one shift (POST
+ * /api/admin/shifts), a series or a weekly permanence. Runs in the caller's transaction, which
+ * then writes the shifts: the destination is locked and checked first (lockPosteDestination), so
+ * an archive sent at the same time either runs first and refuses this, or waits and detaches them.
+ * The poste is compared like the forms do (case and spaces aside): an existing poste keeps its
+ * sector, and a different one is refused (409), never moved by new shifts.
+ */
+export async function newShiftsSector(tx: Tx, organizationId: string, eventId: string, roleName: string, requested: string | null): Promise<SectorResult<NewShiftsSector>> {
+  const target = await lockPosteDestination(tx, organizationId, eventId, requested)
+  if (!target.ok) return target
+  const live = await tx.shift.findMany({ where: { eventId, status: { not: "cancelled" } }, select: ROLE_SETTINGS_SELECT })
+  const existing = eventPostes(live).find((p) => posteKey(p) === posteKey(roleName))
+  const decision = newShiftSectorDecision(existing === undefined ? undefined : posteSectorOf(live, existing), requested)
+  if (!decision.ok) {
+    const other = decision.posteSectorId ? await tx.sector.findFirst({ where: { id: decision.posteSectorId, eventId }, select: { name: true } }) : null
+    return { ok: false, status: 409, error: posteSectorConflictError(existing!, other?.name ?? null) }
+  }
+  const poste = roleSettingsOf(live, roleName)
+  const sectorId = poste ? poste.sectorId : decision.sectorId
+  return { ok: true, value: { poste, sectorId, sectorName: sectorId && sectorId === requested ? target.value.name : null } }
 }

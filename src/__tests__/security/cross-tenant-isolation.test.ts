@@ -2074,6 +2074,44 @@ describe("Sectors — cross-tenant isolation (#1147)", () => {
     expect(create).not.toHaveBeenCalled()
   })
 
+  const bulk = [
+    { path: "/api/admin/shifts/series", load: () => import("@/app/api/admin/shifts/series/route"), body: { roleName: "Accueil", date: "2026-07-04", startTime: "10:00", endTime: "14:00", slotMinutes: 120, capacity: 2 } },
+    {
+      path: "/api/admin/shifts/recurrence", load: () => import("@/app/api/admin/shifts/recurrence/route"),
+      body: { roleName: "Accueil", from: "2026-07-01", until: "2026-07-31", weekdays: [3], everyWeeks: 1, startTime: "14:00", endTime: "17:00", slotMinutes: 180, capacity: 2, holidays: "none", closures: [] },
+    },
+  ]
+
+  it.each(bulk)("POST $path with a sector returns 404 for an org-B event, locking and creating nothing", async ({ path, load, body }) => {
+    const { POST } = await load()
+    const { db, tx } = sectorDb()
+    const writes = { create: vi.fn(), createMany: vi.fn() }
+    Object.assign(tx.shift, writes)
+    const res = await POST(makeRequest(path, "POST", { ...body, eventId: "evt-b", sectorId: "sec-b" }))
+    expect(res.status).toBe(404)
+    expect(db.$transaction).not.toHaveBeenCalled()
+    expect(writes.create).not.toHaveBeenCalled()
+    expect(writes.createMany).not.toHaveBeenCalled()
+  })
+
+  it.each(bulk)("POST $path with an org-B sector on an org-A event creates nothing: the sector lock filters on the event", async ({ path, load, body }) => {
+    const { POST } = await load()
+    const { tx } = sectorDb({ id: "evt-a", startDate: new Date("2026-07-01"), endDate: new Date("2026-07-31") })
+    const writes = { create: vi.fn(), createMany: vi.fn() }
+    const ruleCreate = vi.fn()
+    Object.assign(tx.shift, writes)
+    Object.assign(tx, { shiftRecurrence: { create: ruleCreate } })
+    tx.$queryRaw.mockResolvedValueOnce([{ id: "evt-a", sectorsEnabled: true, sectorsAdoptedAt: new Date() }]).mockResolvedValueOnce([])
+    const res = await POST(makeRequest(path, "POST", { ...body, eventId: "evt-a", sectorId: "sec-b" }))
+    expect(res.status).toBe(404)
+    const [eventLock, sectorLock] = tx.$queryRaw.mock.calls
+    expect(eventLock.slice(1)).toEqual(["evt-a", ORG_A])
+    expect(sectorLock.slice(1)).toEqual(["sec-b", "evt-a"])
+    expect(writes.create).not.toHaveBeenCalled()
+    expect(writes.createMany).not.toHaveBeenCalled()
+    expect(ruleCreate).not.toHaveBeenCalled()
+  })
+
   it("PATCH roles/[roleName] with an org-B sector moves no shift", async () => {
     const { PATCH } = await import("@/app/api/admin/events/[id]/roles/[roleName]/route")
     const { db, tx } = sectorDb({ id: "evt-a" })

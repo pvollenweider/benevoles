@@ -32,7 +32,7 @@ Les jours fériés suivent le pays de l'organisation (France ou Suisse, selon so
 
 | Champ | Description |
 |-------|-------------|
-| Poste, libellé | Comme pour un créneau seul (voir [Configurer les créneaux](configurer-les-creneaux.md)) |
+| Poste, libellé | Comme pour un créneau seul (voir [Configurer les créneaux](configurer-les-creneaux.md)). Si l'événement range ses postes par secteurs, un champ **Secteur** vient avant (voir [Organiser les postes par secteurs](gerer-les-postes.md#organiser-les-postes-par-secteurs-beta)) |
 | Du, au | La période de la permanence, à l'intérieur de celle de l'événement |
 | Jours | Un ou plusieurs jours de la semaine |
 | Rythme | Chaque semaine, ou une semaine sur deux (à partir de la semaine de la date de début) |

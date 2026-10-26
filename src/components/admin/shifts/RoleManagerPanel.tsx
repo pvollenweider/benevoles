@@ -48,7 +48,7 @@ function PosteRows({ render, group }: { render: (group: SectorGroup) => React.Re
  */
 
 export default function RoleManagerPanel({
-  open, panelId, eventId, shifts, setShifts, roles, setRoles, onClose, onAnnounce,
+  open, panelId, eventId, shifts, setShifts, roles, setRoles, onClose, onRequestClose, onAnnounce,
   onRequestDelete, onDeletingChange, onDeleteError, onRoleDeleted,
   sectorsState = null, setSectorsState, onConfirmDone, onAddPoste,
 }: {
@@ -61,7 +61,10 @@ export default function RoleManagerPanel({
   /** The roles in the order being edited; the parent resets it when it opens the panel. */
   roles:            string[]
   setRoles:         React.Dispatch<React.SetStateAction<string[]>>
+  /** Closes the panel (after the order was saved). */
   onClose:          () => void
+  /** « Fermer »: the parent asks first when the order is changed and not saved; else as onClose. */
+  onRequestClose?:  () => void
   onAnnounce:       (text: string) => void
   /** Asks the parent's confirmation modal (#379) for a role deletion; `run` deletes once confirmed. */
   onRequestDelete:  (pending: { recap: ActionRecap; run: () => Promise<void> }) => void
@@ -707,7 +710,7 @@ export default function RoleManagerPanel({
             Enregistrer l'ordre
           </button>
         )}
-        <button type="button" onClick={onClose}
+        <button type="button" onClick={onRequestClose ?? onClose}
           className="text-gray-500 px-3 py-2 text-sm hover:text-gray-800">
           Fermer
         </button>
