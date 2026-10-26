@@ -6,7 +6,7 @@
   "viewer": {
     "summary": "Dans cette vidéo, vous apprenez à vous repérer dans l'administration et à retrouver rapidement une information.",
     "steps": [
-      "Utilisez le Tableau de bord pour les priorités, Événements pour vos événements, Membres pour les personnes et Paramètres pour les réglages communs.",
+      "Utilisez le Tableau de bord pour les priorités, Événements pour vos événements, Membres pour les personnes et Paramètres pour les paramètres communs.",
       "Ouvrez un événement pour accéder à ses créneaux, ses inscriptions, ses invitations, son QR code, ses rapports, son journal, ses pages et ses questions.",
       "Ouvrez la recherche avec la loupe ou Ctrl+K (Cmd+K sur Mac) et précisez avec un second mot si besoin.",
       "Retrouvez « Mon compte » et « Se déconnecter » dans le menu de votre compte ; l'aide est dans la barre de navigation.",
@@ -31,17 +31,17 @@
   "segments": [
     {
       "id": "welcome",
-      "transcript": "Bienvenue dans l’administration. Vous allez retrouver les principaux points d’entrée, distinguer les réglages de l’association du suivi d’un événement et chercher une information sans parcourir tous les écrans.",
+      "transcript": "Bienvenue dans l’administration. Vous allez retrouver les principaux points d’entrée, distinguer les paramètres de l’association du suivi d’un événement et chercher une information sans parcourir tous les écrans.",
       "fallbackDurationMs": 16000
     },
     {
       "id": "organization-navigation",
-      "transcript": "Le Tableau de bord rassemble les priorités de l’association. Événements ouvre la liste de vos événements. Membres réunit les personnes connues de l’association. Paramètres concerne les réglages communs. Certaines modifications sont réservées au propriétaire : votre rôle détermine les actions disponibles.",
+      "transcript": "Le Tableau de bord rassemble les priorités de l’association. Événements ouvre la liste de vos événements. Membres réunit les personnes connues de l’association. Paramètres concerne les paramètres communs. Certaines modifications sont réservées au propriétaire : votre rôle détermine les actions disponibles.",
       "fallbackDurationMs": 23000
     },
     {
       "id": "event-navigation",
-      "transcript": "Ouvrez un événement. Les onglets donnent accès à Aperçu, Créneaux, Inscriptions, Messages, Partage, Documents et Réglages. Jour J apparaît à l’approche de l’événement. Partage rassemble le lien public, le QR code et les pages d’information. Réglages donne accès aux questions et aux responsables de secteur. Le menu Autres actions contient notamment le journal et la duplication. Dans l’aperçu, les besoins de personnel viennent en premier, suivis des éléments à traiter, des prochaines étapes, des jalons et du résumé de communication. Le lien Événements vous ramène à la liste de l’association.",
+      "transcript": "Ouvrez un événement. Les onglets donnent accès à Aperçu, Créneaux, Inscriptions, Messages, Partage, Documents et Paramètres. Jour J apparaît à l’approche de l’événement. Partage rassemble le lien public, le QR code et les pages d’information. Paramètres donne accès aux questions et aux responsables de secteur. Le menu Autres actions contient notamment le journal et la duplication. Dans l’aperçu, les besoins de personnel viennent en premier, suivis des éléments à traiter, des prochaines étapes, des jalons et du résumé de communication. Le lien Événements vous ramène à la liste de l’association.",
       "fallbackDurationMs": 28000
     },
     {

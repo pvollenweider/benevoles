@@ -164,8 +164,8 @@ export default function GroupLinksManager({ eventId, roles, initialLinks, publis
                     {link.missingRoles.length > 0 && (
                       <p className="text-sm text-amber-900">
                         {link.missingRoles.length === link.roleNames.length
-                          ? "Aucun de ses postes n'est sur la page publique : le lien affiche tout l'événement."
-                          : `Plus sur la page publique : ${link.missingRoles.join(", ")}.`}
+                          ? "Aucun de ses postes n'est sur la page d'inscription : le lien affiche tout l'événement."
+                          : `Plus sur la page d'inscription : ${link.missingRoles.join(", ")}.`}
                       </p>
                     )}
                     {link.roleNames.length === 0 && (

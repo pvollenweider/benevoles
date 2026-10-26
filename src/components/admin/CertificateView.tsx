@@ -108,7 +108,7 @@ export default function CertificateView({ memberId, memberName, organizationName
   return (
     <div className="space-y-6">
       <section aria-labelledby={`${id}-settings`} className="print:hidden bg-white border border-gray-200 rounded-xl p-4 space-y-4">
-        <h2 id={`${id}-settings`} className="text-base font-semibold text-gray-900">Réglages de l&apos;attestation</h2>
+        <h2 id={`${id}-settings`} className="text-base font-semibold text-gray-900">Paramètres de l&apos;attestation</h2>
         <div className="grid gap-3 sm:grid-cols-2">
           <div>
             <label htmlFor={`${id}-from`} className="block text-sm font-medium text-gray-800 mb-1">Du</label>

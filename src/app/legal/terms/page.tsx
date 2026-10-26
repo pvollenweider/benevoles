@@ -48,7 +48,7 @@ export default function TermsPage() {
       <h2>3. Accès et comptes</h2>
       <p>
         L&apos;accès à l&apos;interface d&apos;administration est réservé aux personnes invitées
-        par un administrateur d&apos;Organisation. Tout compte est nominatif et non cessible.
+        par un organisateur d&apos;Organisation. Tout compte est nominatif et non cessible.
       </p>
       <p>
         L&apos;utilisateur est responsable de la confidentialité de ses identifiants et de toute
@@ -82,7 +82,7 @@ export default function TermsPage() {
       </p>
       <ul>
         <li>
-          <strong>Données des administrateurs</strong> (nom, adresse e-mail, mot de passe hashé) :
+          <strong>Données des organisateurs</strong> (nom, adresse e-mail, mot de passe hashé) :
           traitées par benevol.app en qualité de responsable du traitement, conformément à notre{" "}
           <Link href="/legal/privacy">Politique de confidentialité</Link>.
         </li>

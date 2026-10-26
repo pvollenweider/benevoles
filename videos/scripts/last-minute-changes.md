@@ -34,7 +34,7 @@ La répétition accélérée a terminé les dix chapitres, avec les clics réels
 
 Contrôle SMTP local terminé : six notifications nouvelles reçues et rapprochées de la file d'envoi (`mail-checks.json`). L'offre, la confirmation, le message ciblé, le changement avec les deux horaires avant/après et les deux annulations sont présents ; la demande en attente ne reçoit pas le changement d'horaire. Ces preuves ne constituent ni une lecture par un bénévole ni une validation audiovisuelle. Les 43 fichiers d'outillage vidéo passent la vérification TypeScript. Aucun MP4 de ce parcours n'est encore produit.
 
-Script et manifeste écrits. Une prise continue Kore est générée, ses neuf frontières recalées et les dix chapitres passent la transcription indépendante. Le seed dédié contient six membres fictifs, cinq créneaux, huit inscriptions dans différents états, disponibilité de Zoé et présence préalable à la caisse. Les précontrôles par les vraies routes passent : retrait et offre, acceptation, message ciblé à un destinataire, ajout manuel remplissant le poste, changement d'horaire notifiant une confirmation, annulation des deux inscriptions et pointage conservé, chaîne causale du journal. Preuve : `functional-checks.json`. La remise à zéro traite désormais les profils et l'administrateur fictifs conservés sans organisation, après vérification de leur périmètre. Le jeu a été modifié par le contrôle : le réinitialiser avant capture. Lecture des emails, recorder, MP4 et revue audiovisuelle restent à faire. Capture désactivée, rien de publié.
+Script et manifeste écrits. Une prise continue Kore est générée, ses neuf frontières recalées et les dix chapitres passent la transcription indépendante. Le seed dédié contient six membres fictifs, cinq créneaux, huit inscriptions dans différents états, disponibilité de Zoé et présence préalable à la caisse. Les précontrôles par les vraies routes passent : retrait et offre, acceptation, message ciblé à un destinataire, ajout manuel remplissant le poste, changement d'horaire notifiant une confirmation, annulation des deux inscriptions et pointage conservé, chaîne causale du journal. Preuve : `functional-checks.json`. La remise à zéro traite désormais les profils et l'organisateur fictifs conservés sans organisation, après vérification de leur périmètre. Le jeu a été modifié par le contrôle : le réinitialiser avant capture. Lecture des emails, recorder, MP4 et revue audiovisuelle restent à faire. Capture désactivée, rien de publié.
 
 
 ## Révision du 2026-10-16 — lot 22-4
@@ -51,7 +51,7 @@ Narration à régénérer intégralement, même voix, une seule passe, `continuo
 
 ## Révision du 2026-10-16 — lot 23-1
 
-Relecture sur main `89a884c8d58c22dda6800481e1238bdc4e219dff`, PR #1026–#1034. Suggestions de postes et rappel des réglages hérités ; Appliquer au poste : Ce jour / Tout l’événement ; fin de nuit conservée ; limite atteinte visible en Frise et Liste. Les parcours conservent les vrais formulaires et emails.
+Relecture sur main `89a884c8d58c22dda6800481e1238bdc4e219dff`, PR #1026–#1034. Suggestions de postes et rappel des paramètres hérités ; Appliquer au poste : Ce jour / Tout l’événement ; fin de nuit conservée ; limite atteinte visible en Frise et Liste. Les parcours conservent les vrais formulaires et emails.
 
 Narration finale de référence (génération intégrale si modifiée, même voix, sans balises de pause) :
 

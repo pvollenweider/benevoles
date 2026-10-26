@@ -23,7 +23,7 @@ const schema = z.object({
 })
 
 const INVALID_ERROR = "Lien invalide ou déjà utilisé."
-const EXPIRED_ERROR = "Ce lien a expiré. Contactez votre administrateur."
+const EXPIRED_ERROR = "Ce lien a expiré. Contactez le propriétaire de votre espace."
 
 /** Looks up an invite token and returns its status, without consuming it. */
 async function checkToken(token: string) {

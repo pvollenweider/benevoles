@@ -62,7 +62,7 @@
     },
     {
       "id": "create-yesno",
-      "transcript": "Pour le permis de conduire, une réponse simple suffit. Ajoutons une nouvelle question, puis écrivons Permis de conduire. Choisissons Oui ou non dans le type de réponse. Le réglage Afficher seulement si permet de préparer une question de suivi selon une réponse précédente. Ici, nous gardons une question affichée à tout le monde. Pas de liste à saisir : les deux réponses sont proposées automatiquement. Dans cet exemple, rendons aussi la réponse obligatoire, puis enregistrons. Attention, demander le permis ici recueille une information : ce n'est pas, à lui seul, une règle qui réserve un poste ou vérifie le document.",
+      "transcript": "Pour le permis de conduire, une réponse simple suffit. Ajoutons une nouvelle question, puis écrivons Permis de conduire. Choisissons Oui ou non dans le type de réponse. Le paramètre Afficher seulement si permet de préparer une question de suivi selon une réponse précédente. Ici, nous gardons une question affichée à tout le monde. Pas de liste à saisir : les deux réponses sont proposées automatiquement. Dans cet exemple, rendons aussi la réponse obligatoire, puis enregistrons. Attention, demander le permis ici recueille une information : ce n'est pas, à lui seul, une règle qui réserve un poste ou vérifie le document.",
       "fallbackDurationMs": 39000
     },
     {

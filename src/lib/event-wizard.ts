@@ -117,7 +117,7 @@ function practicalInfoCheck(g: PracticalInfoGaps, base: string): ReviewCheck {
   return {
     id: "practical-info", label: `${shiftsWord(g.incomplete)} ${missing}`, ok: false, required: false, warn: true, href,
     hint: g.noContact > 0
-      ? "Le lieu et la personne à contacter figurent dans l'email de confirmation, les rappels et la page « Mes inscriptions » des bénévoles. Un contact le jour J, dans les réglages de l'événement, vaut pour tous les créneaux sans contact."
+      ? "Le lieu et la personne à contacter figurent dans l'email de confirmation, les rappels et la page « Mes inscriptions » des bénévoles. Un contact le jour J, dans les paramètres de l'événement, vaut pour tous les créneaux sans contact."
       : "Le lieu et la personne à contacter figurent dans l'email de confirmation, les rappels et la page « Mes inscriptions » des bénévoles.",
   }
 }
@@ -151,7 +151,7 @@ function registrationCheck(r: NonNullable<ReviewFacts["registration"]>, publishe
 }
 
 function remindersCheck(r: NonNullable<ReviewFacts["reminders"]>, base: string): ReviewCheck {
-  const settings = { href: EMAIL_SETTINGS_HREF, action: "Réglages des emails" }
+  const settings = { href: EMAIL_SETTINGS_HREF, action: "Paramètres des emails" }
   const state = remindersState(r)
   switch (state.kind) {
     case "no-upcoming-shift": // never reached: the item is only listed while a shift is to come
@@ -159,7 +159,7 @@ function remindersCheck(r: NonNullable<ReviewFacts["reminders"]>, base: string):
       return {
         id: "reminders", label: "Rappels automatiques coupés pour cet événement", ok: false, required: false, warn: true,
         href: `${base}/edit#event-reminders`, action: "Modifier",
-        hint: "Aucun rappel J-2, J-1 ni du jour ne part pour cet événement, quels que soient les réglages de l'organisation.",
+        hint: "Aucun rappel J-2, J-1 ni du jour ne part pour cet événement, quels que soient les paramètres de l'organisation.",
       }
     case "on":
       return { id: "reminders", label: "Rappels automatiques J-2, J-1 et du jour activés", ok: true, required: false, ...settings }
@@ -205,7 +205,7 @@ export function reviewChecks(f: ReviewFacts): ReviewCheck[] {
     },
     {
       id: "location", label: f.location?.trim() ? `Lieu : ${f.location.trim()}` : "Pas de lieu indiqué",
-      ok: !!f.location?.trim(), required: false, href: `${base}/edit`, hint: "Affiché sur la page publique et dans les invitations.",
+      ok: !!f.location?.trim(), required: false, href: `${base}/edit`, hint: "Affiché sur la page d'inscription et dans les invitations.",
     },
     {
       id: "confirmation", label: f.confirmationMessage?.trim() ? "Message de confirmation renseigné" : "Pas de message de confirmation",

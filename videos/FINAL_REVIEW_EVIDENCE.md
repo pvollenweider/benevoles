@@ -315,3 +315,63 @@ Image seulement, narration juste, à revoir à la prochaine régénération :
   n'a plus « Publier ».
 
 Ces vidéos n'ont pas été régénérées dans la même PR.
+
+## Écart connu : paramètres, page d'inscription, organisateurs (#1099, suite)
+
+Renommés dans l'interface, les emails et les guides : « Réglages » devient
+« Paramètres » (onglet d'un événement, « Paramètres des emails », « Paramètres
+de l'attestation », « Paramètres enregistrés. ») ; la page où l'on s'inscrit à
+un événement devient partout la « page d'inscription » (« Ouvrir la page
+d'inscription », « Couleur de la page d'inscription », « Voir la page
+d'inscription ») ; l'équipe d'un espace devient « les organisateurs »
+(« Organisateurs (n) », « Inviter un organisateur », « Prévenir les
+organisateurs à chaque inscription », comptes de l'espace dans le super admin).
+Sources mises à jour dans la même PR : narration et bloc `viewer` des
+manifestes, scripts, sélecteurs et repères de narration (`videos/tools/record.ts`,
+`videos/lib/record-data-exports.ts`, `record-delivery.ts`,
+`record-event-questions.ts`, `record-operator.ts`, `record-org-activity.ts`,
+`record-reminders.ts`, `record-shift-roster.ts`). L'onglet d'un événement a pour
+nom accessible « Paramètres de l'événement » (suffixe masqué) : les captures le
+cherchent sous ce nom.
+
+Narration modifiée (le son et les sous-titres publiés disent encore l'ancien mot) :
+
+- « réglages » devient « paramètres » : `admin-features-tour`,
+  `admin-navigation`, `data-exports-archives`, `email-delivery-failures`,
+  `event-activity-log`, `event-create-blank`, `event-duplicate`,
+  `event-questions`, `event-visibility-registration-window`,
+  `masterclass-03-first-steps`, `org-email-settings`, `org-public-identity`,
+  `org-team-permissions`, `org-timezone-charter`, `organization-activity-log`,
+  `reminders-changes`, `shift-create-edit-detail`, `shift-recurrence`,
+  `shift-roster-visibility`, `shift-timeline-quick-actions`,
+  `volunteer-calendar`, `volunteer-hours-certificate`,
+  `volunteer-phone-notifications` ;
+- « administrateurs » devient « organisateurs » : `email-delivery-failures`,
+  `event-activity-log`, `org-email-settings`, `org-team-permissions`,
+  `organization-activity-log`, `platform-internal-administration` ;
+- « page publique » ou « page de l'événement » devient « page d'inscription » :
+  `event-archive-delete`, `event-create-blank`, `event-program-pages-qr`,
+  `org-email-settings`, `privacy-personal-links`,
+  `volunteer-personal-registrations`.
+
+Image seulement (la narration reste juste) :
+
+- toute vidéo filmée sur une page d'un événement montre l'onglet « Réglages »
+  dans la barre d'onglets ;
+- `org-team-permissions`, `admin-features-tour` : titre « Administrateurs (n) »
+  et formulaire « Inviter un administrateur » ;
+- `admin-features-tour`, `event-create-blank` : légende « Couleur de la page
+  publique » du formulaire de l'événement ;
+- `event-duplicate` : case « Les messages et réglages d'inscription » ;
+- `shift-recurrence`, `shift-create-edit-detail` : phrase « Les réglages du
+  poste … s'appliquent » sous le champ Poste ;
+- `org-email-settings`, `reminders-changes` : titre « Réglages des emails »,
+  case « Prévenir les administrateurs à chaque inscription », message
+  « Réglages enregistrés. » ;
+- `event-review-publish`, `organizer-create-publish`, `event-program-pages-qr` :
+  lien « Ouvrir la page publique » de l'onglet Partage ;
+- `platform-internal-administration` : « Premier administrateur » et compteurs
+  « Administrateurs » du super admin ;
+- `sector-leaders` : seul le bloc `viewer` change (« administrateurs »).
+
+Ces vidéos n'ont pas été régénérées dans la même PR.

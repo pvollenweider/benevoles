@@ -20,7 +20,7 @@ export default async function ActivityPage() {
           Exporter tout le journal (CSV)<span className="sr-only"> (télécharge un fichier)</span>
         </a>
         <p className="text-sm text-gray-500">
-          Membres et comptes admin créés, modifiés ou retirés — indépendant du journal par événement.
+          Membres et comptes organisateurs créés, modifiés ou retirés — indépendant du journal par événement.
         </p>
       </div>
 

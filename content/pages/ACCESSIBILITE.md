@@ -28,7 +28,7 @@ Parcours concernés : découvrir un événement ; choisir ses créneaux ; rempli
 
 - Aucun essai complet avec un lecteur d'écran (NVDA, JAWS, VoiceOver) n'a encore été mené sur ces parcours.
 - Aucun audit n'a été réalisé par un organisme indépendant.
-- Certains écrans ne sont pas encore analysés automatiquement : la page du responsable de secteur, la confirmation d'une inscription, l'acceptation d'une place de liste d'attente et les conditions d'utilisation ; dans l'administration, les journaux, les réglages des emails, les modèles de messages et une partie des fenêtres qui s'ouvrent par-dessus la page.
+- Certains écrans ne sont pas encore analysés automatiquement : la page du responsable de secteur, la confirmation d'une inscription, l'acceptation d'une place de liste d'attente et les conditions d'utilisation ; dans l'administration, les journaux, les paramètres des emails, les modèles de messages et une partie des fenêtres qui s'ouvrent par-dessus la page.
 - Le formulaire d'inscription, surtout utilisé sur téléphone, n'est analysé qu'en affichage ordinateur.
 
 ## Limites connues

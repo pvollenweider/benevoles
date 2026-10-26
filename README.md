@@ -45,7 +45,7 @@ Ce projet est gratuit et open source. Si vous l'utilisez et voulez soutenir son 
 - Rappels automatiques (J-2, J-1, Jour J) et rappel manuel avec message personnalisé
 - Suivi des inscriptions en temps réel, export Gantt PDF
 - Tableau de bord : événements, taux de remplissage, membres
-- Réglages de l'organisation : nom, titre de la page publique, slug, charte du bénévole, équipe admin
+- Paramètres de l'organisation : nom, titre de la page publique, slug, charte du bénévole, équipe d'organisation
 
 **Super admin**
 - CRUD des organisations
@@ -187,9 +187,9 @@ Cinq endpoints, protégés par `Authorization: Bearer $CRON_SECRET` :
 
 | Endpoint | Méthodes | Rôle | Fréquence |
 |----------|----------|------|-----------|
-| `/api/cron/reminders` | `GET`, `POST` | Rappels J-2, J-1 et Jour J (email et push) selon les réglages de l'organisation ; expiration des offres de liste d'attente et promotion du suivant ; nouvel essai des emails en échec (file d'envoi) | toutes les heures |
+| `/api/cron/reminders` | `GET`, `POST` | Rappels J-2, J-1 et Jour J (email et push) selon les paramètres de l'organisation ; expiration des offres de liste d'attente et promotion du suivant ; nouvel essai des emails en échec (file d'envoi) | toutes les heures |
 | `/api/cron/outbox` | `POST` | Envoi des messages programmés arrivés à leur heure, puis des emails de la file arrivés à échéance, dont les emails groupés (« inscrit par un organisateur », désistements d'un même événement) qui attendent quelques minutes pour regrouper les créneaux ; sans lui, les messages programmés ne partent pas et les emails groupés partent au passage horaire des rappels | toutes les 5 minutes |
-| `/api/cron/cleanup` | `GET`, `POST` | Purge RGPD : organisations désactivées depuis plus de 30 jours avec leurs comptes admin, comptes admin inactifs (désactivés ou invitation jamais acceptée) depuis plus de 30 jours, bénévoles orphelins, jetons de réinitialisation expirés, emails envoyés (en échec : après 30 jours), messages ciblés et messages programmés terminés de plus de 12 mois, compteurs de limites expirés, et les autres durées de [docs/retention.md](docs/retention.md) ; chiffrement des anciens liens personnels ; résumé quotidien des adresses à vérifier ; procédure d'inactivité des organisations et anonymisation des événements passés, si elles sont activées | une fois par jour |
+| `/api/cron/cleanup` | `GET`, `POST` | Purge RGPD : organisations désactivées depuis plus de 30 jours avec leurs comptes organisateurs, comptes organisateurs inactifs (désactivés ou invitation jamais acceptée) depuis plus de 30 jours, bénévoles orphelins, jetons de réinitialisation expirés, emails envoyés (en échec : après 30 jours), messages ciblés et messages programmés terminés de plus de 12 mois, compteurs de limites expirés, et les autres durées de [docs/retention.md](docs/retention.md) ; chiffrement des anciens liens personnels ; résumé quotidien des adresses à vérifier ; procédure d'inactivité des organisations et anonymisation des événements passés, si elles sont activées | une fois par jour |
 | `/api/cron/release-check` | `GET`, `POST` | Instances auto-hébergées (#612) : compare la version déployée à la dernière release publique GitHub (sans jeton), prévient les super admins par email une fois par nouvelle version, affiche la dernière version connue sur `/super-admin/health`. Sans effet si `RELEASE_CHECK=off` (aucune requête sortante) | une fois par jour |
 | `/api/cron/heartbeat` | `POST` | Signal de vie des tâches extérieures à l'application (`backup`, `backup-offsite`, `restore-test`), affiché sur `/super-admin/health` | à la fin de chaque sauvegarde réussie |
 

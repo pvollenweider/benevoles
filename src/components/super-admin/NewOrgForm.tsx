@@ -38,7 +38,7 @@ export default function NewOrgForm() {
   async function submit(e: React.FormEvent) {
     e.preventDefault()
     if (name.trim().length < 2) { fail("Indiquez le nom de l'organisation (2 caractères au moins).", "name", document.getElementById(`${id}-name`)); return }
-    if (!adminName.trim()) { fail("Indiquez le nom de l'administrateur.", "adminName", document.getElementById(`${id}-adminName`)); return }
+    if (!adminName.trim()) { fail("Indiquez le nom de l'organisateur.", "adminName", document.getElementById(`${id}-adminName`)); return }
     if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(adminEmail.trim())) { fail("Indiquez une adresse email complète.", "adminEmail", document.getElementById(`${id}-adminEmail`)); return }
     const outcome = await run<{ org: { id: string; name: string }; inviteUrl: string }>(() => fetch("/api/super-admin/organizations", {
       method: "POST",
@@ -74,13 +74,13 @@ export default function NewOrgForm() {
         <div>
           <h1 ref={doneHeadingRef} tabIndex={-1} className="text-xl font-bold text-gray-900 focus:outline-none">Organisation créée</h1>
           <p className="text-sm text-gray-500 mt-1">
-            L'organisation <strong>{result.orgName}</strong> et son premier administrateur ont été créés.
+            L'organisation <strong>{result.orgName}</strong> et son premier organisateur ont été créés.
           </p>
         </div>
 
         <div className="bg-blue-50 border border-blue-200 rounded-xl p-4 space-y-3">
           <p className="text-sm font-semibold text-blue-900">
-            Lien d'invitation — à envoyer à l'administrateur
+            Lien d'invitation — à envoyer à l'organisateur
           </p>
           <p className="text-xs text-blue-700">
             Ce lien est valable 7 jours. Il sera révoqué dès que le mot de passe sera créé.
@@ -152,7 +152,7 @@ export default function NewOrgForm() {
       <div>
         <h1 className="text-xl font-bold text-gray-900">Nouvelle organisation</h1>
         <p className="text-sm text-gray-500 mt-1">
-          Créez une organisation et son premier administrateur. Un lien d’invitation lui permettra de choisir son mot de passe.
+          Créez une organisation et son premier organisateur. Un lien d’invitation lui permettra de choisir son mot de passe.
         </p>
       </div>
 
@@ -173,7 +173,7 @@ export default function NewOrgForm() {
         </div>
 
         <div>
-          <p className="text-xs font-semibold text-gray-600 mb-3">Premier administrateur</p>
+          <p className="text-xs font-semibold text-gray-600 mb-3">Premier organisateur</p>
           <div className="space-y-3">
             <Field
               id={`${id}-adminName`}

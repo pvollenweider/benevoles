@@ -24,7 +24,7 @@ test("cumulative counters count a new organisation and keep it after its deletio
   await expect(page).toHaveURL(/\/admin\/dashboard|\/super-admin\/organizations/)
 
   const orgsBefore = await cumulative(page, "Organisations créées")
-  const adminsBefore = await cumulative(page, "Comptes administrateurs créés")
+  const adminsBefore = await cumulative(page, "Comptes organisateurs créés")
 
   const slug = `e2e-usage-counters-${Date.now()}`
   const createRes = await page.request.post("/api/super-admin/organizations", {
@@ -35,12 +35,12 @@ test("cumulative counters count a new organisation and keep it after its deletio
 
   const orgsAfterCreate = await cumulative(page, "Organisations créées")
   expect(orgsAfterCreate).toBeGreaterThanOrEqual(orgsBefore + 1)
-  expect(await cumulative(page, "Comptes administrateurs créés")).toBeGreaterThanOrEqual(adminsBefore + 1)
+  expect(await cumulative(page, "Comptes organisateurs créés")).toBeGreaterThanOrEqual(adminsBefore + 1)
 
   // The organisation's own counters: its first admin account is counted.
   await page.goto(`/super-admin/organizations/${org.slug}`)
   const own = page.getByRole("region", { name: "Depuis le début" })
-  await expect(own.getByText("Comptes administrateurs créés")).toBeVisible()
+  await expect(own.getByText("Comptes organisateurs créés")).toBeVisible()
   await expect(own.getByRole("definition").filter({ hasText: /^1$/ }).first()).toBeVisible()
 
   expect((await page.request.patch(`/api/super-admin/organizations/${org.id}`, { data: { active: false } })).ok()).toBeTruthy()

@@ -14,9 +14,9 @@ aliases: []
 
 Publier rend le planning visible. Les inscriptions, elles, se règlent à part, dans la section **Inscriptions** du formulaire d'édition :
 
-- **Inscriptions ouvertes** : décochez pour fermer les inscriptions tout en laissant le planning consultable. La page publique affiche « Les inscriptions sont fermées pour le moment » et ne permet plus de choisir de créneau.
+- **Inscriptions ouvertes** : décochez pour fermer les inscriptions tout en laissant le planning consultable. La page d'inscription affiche « Les inscriptions sont fermées pour le moment » et ne permet plus de choisir de créneau.
 - **Ouverture programmée** (facultatif) : avant cette date et heure, la page annonce « Les inscriptions ouvrent le… » et refuse les inscriptions.
-- **Fermeture programmée** (facultatif) : à partir de cette date et heure, les inscriptions sont terminées. Tant qu'elles sont ouvertes, la page publique indique jusqu'à quand.
+- **Fermeture programmée** (facultatif) : à partir de cette date et heure, les inscriptions sont terminées. Tant qu'elles sont ouvertes, la page d'inscription indique jusqu'à quand.
 
 Les heures sont celles du fuseau de l'organisation. Quand la case **Inscriptions ouvertes** est décochée, elle l'emporte sur les dates. Une fois les inscriptions fermées, la liste d'attente ne propose plus de place ; une place déjà proposée reste confirmable pendant son délai. Les bénévoles déjà inscrits gardent leur lien personnel pour consulter, modifier ou annuler.
 

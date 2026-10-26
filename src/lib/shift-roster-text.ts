@@ -46,10 +46,10 @@ export const ROSTER_ENABLE_REMINDER = "Informez vos bénévoles, y compris les p
 /** The publication page's note, the setting on (the default for a new event) or off. */
 export const ROSTER_PUBLISH_NOTE_ON = "« Qui est inscrit » est activé : prévenez vos bénévoles."
 export const ROSTER_PUBLISH_NOTE = "« Qui est inscrit » est désactivé. L'activer, maintenant ou plus tard, ne change rien à la publication."
-export const ROSTER_SETTING_LINK = "Modifier le réglage « Qui est inscrit »"
+export const ROSTER_SETTING_LINK = "Modifier le paramètre « Qui est inscrit »"
 /** The organisation's default for its new events (Paramètres, owners only). */
 export const ROSTER_ORG_DEFAULT_LABEL = "Par défaut, montrer aux bénévoles qui est inscrit"
-export const ROSTER_ORG_DEFAULT_HINT = "S'applique aux événements créés ensuite ; les événements existants gardent leur réglage."
+export const ROSTER_ORG_DEFAULT_HINT = "S'applique aux événements créés ensuite ; les événements existants conservent leur valeur actuelle."
 
 /** The topic of the « En savoir plus » links (said to screen readers: « En savoir plus sur … »). */
 export const ROSTER_DOC_TOPIC = "« Qui est inscrit »"
@@ -59,7 +59,7 @@ export const ROSTER_DOC_TOPIC = "« Qui est inscrit »"
  */
 export const ROSTER_DOC_LINKS = {
   setting: "/doc/creer-un-evenement#activer-qui-est-inscrit-sur-un-evenement-qui-a-deja-des-inscrits",
-  orgDefault: "/doc/personnaliser-l-organisation#qui-est-inscrit-reglage-par-defaut",
+  orgDefault: "/doc/personnaliser-l-organisation#qui-est-inscrit-parametre-par-defaut",
   publish: "/doc/creer-un-evenement#prevenir-les-benevoles-deja-inscrits",
   signup: "/doc/choisir-ses-creneaux#voir-qui-est-inscrit",
   personal: "/doc/ma-page-personnelle#qui-est-inscrit",

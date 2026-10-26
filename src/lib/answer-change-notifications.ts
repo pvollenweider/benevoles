@@ -10,7 +10,7 @@
  * with their personal link, like a withdrawal on their poste (#559); without any leader, to the
  * organisers (`answerChangeAudience`).
  *
- * Gated by the organisation's « Prévenir les administrateurs à chaque inscription » setting
+ * Gated by the organisation's « Prévenir les organisateurs à chaque inscription » setting
  * (`signupAdminEmail`, #381): the answers belong to the sign-up, and an organisation that does not
  * want an email per sign-up does not want one per answer either. One switch for the organisers'
  * and the leaders' email, as for withdrawals (`withdrawalAdminEmail`): leaders have no setting.

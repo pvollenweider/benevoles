@@ -68,6 +68,6 @@ describe("matchingPoste", () => {
 
 describe("posteSettingsHint", () => {
   it("names the poste and the settings it carries", () => {
-    expect(posteSettingsHint("Bar")).toBe("Les réglages du poste «\u00a0Bar\u00a0» s'appliquent (couleur, limite, accès, chevauchement).")
+    expect(posteSettingsHint("Bar")).toBe("Les paramètres du poste «\u00a0Bar\u00a0» s'appliquent (couleur, limite, accès, chevauchement).")
   })
 })

@@ -1,4 +1,4 @@
-# Organiser ses bénévoles, du premier réglage au jour J
+# Organiser ses bénévoles, du premier paramètre au jour J
 
 Révision du 14 octobre 2026 : narration entièrement régénérée en une seule prise continue avec la voix Kore, sans balises de pause ni réutilisation d’anciens extraits. Le vouvoiement est conservé partout pour les organisateurs, impératifs compris. Les citations destinées aux bénévoles conservent leur ton initial. La création d’une page est suivie de son enregistrement et de son déplacement avec « Monter la page ». Les badges sont décrits selon les champs réels « Poste » et « Bénévole (réimpression) ». Narration, sous-titres, synchronisation et MP4 final sont recontrôlés après régénération.
 
@@ -31,14 +31,14 @@ Souriant, sympathique et concret. La narration ressemble à une visite faite par
 Toutes les données montrées sont fictives et locales. Toute la narration utilise une seule nouvelle prise continue ; aucun ancien audio n’est repris.
 
 
-Révision du 15 octobre 2026 (batch 22-1) : revue du build 43c1aae7 ; onglets persistants et accès Partage, Réglages et Documents contrôlés. Vocabulaire actualisé. Narration complète régénérée en une seule prise continue avec la même voix, continuousPauseTags: false ; aucun mélange d’extraits.
+Révision du 15 octobre 2026 (batch 22-1) : revue du build 43c1aae7 ; onglets persistants et accès Partage, Paramètres et Documents contrôlés. Vocabulaire actualisé. Narration complète régénérée en une seule prise continue avec la même voix, continuousPauseTags: false ; aucun mélange d’extraits.
 
 La phrase d’adresse reste générale (« votre sous-domaine sur benevol point app ») pour éviter une lecture ambiguë des tirets. La dernière prise complète remplace intégralement la précédente.
 
 
 ## Révision du 2026-10-16 — lot 23-1
 
-Relecture sur main `89a884c8d58c22dda6800481e1238bdc4e219dff`, PR #1026–#1034. Suggestions de postes et rappel des réglages hérités ; Appliquer au poste : Ce jour / Tout l’événement ; fin de nuit conservée ; limite atteinte visible en Frise et Liste. Les parcours conservent les vrais formulaires et emails.
+Relecture sur main `89a884c8d58c22dda6800481e1238bdc4e219dff`, PR #1026–#1034. Suggestions de postes et rappel des paramètres hérités ; Appliquer au poste : Ce jour / Tout l’événement ; fin de nuit conservée ; limite atteinte visible en Frise et Liste. Les parcours conservent les vrais formulaires et emails.
 
 Narration finale de référence (génération intégrale si modifiée, même voix, sans balises de pause) :
 
@@ -47,7 +47,7 @@ Narration finale de référence (génération intégrale si modifiée, même voi
 - `team` : Côté équipe, le propriétaire administre l’organisation et ses accès. Les organisateurs préparent les événements, les membres et les communications. Les responsables de secteur reçoivent un lien personnel limité à leur poste, avec les noms et coordonnées des inscrits, sans accès au reste de l’administration.
 - `lifecycle` : Un événement suit un cycle clair : brouillon pendant la préparation, publié quand la page est prête, puis archivé une fois terminé. Même publié, il peut rester non répertorié et accessible seulement par son lien. Les inscriptions peuvent être immédiates, fermées, ou programmées à une date précise.
 - `appearance` : Dans ses paramètres, vous réglez le titre, les dates, les messages et une couleur d’en-tête accessible. Le lieu peut recevoir des coordonnées : les bénévoles obtiennent alors un lien OpenStreetMap dans la page, les emails et leur espace personnel.
-- `duplicate` : Pour repartir d’une édition précédente, dupliquez l’événement et décalez toutes les dates. Vous choisissez ce qui est repris : les créneaux, les réglages, les pages d’information et les responsables.
+- `duplicate` : Pour repartir d’une édition précédente, dupliquez l’événement et décalez toutes les dates. Vous choisissez ce qui est repris : les créneaux, les paramètres, les pages d’information et les responsables.
 - `shift-methods` : Pour construire le planning, trois méthodes se complètent : ajouter un créneau depuis la liste, copier un créneau existant, ou dessiner directement sa plage sur la frise puis l’élargir. Pour des horaires répétitifs, la création en série prépare plusieurs créneaux d’un coup.
 - `shift-fields` : Chaque créneau peut préciser le poste, le libellé, la date, les horaires et le nombre de places, mais aussi une description, un lieu de rendez-vous, une carte, un contact, une consigne, des notes internes et un âge minimum. La liste d’attente et l’inscription sur validation s’activent ici.
 - `registrations` : La vue des inscriptions montre qui est inscrit, sur quel créneau et par quel moyen. Vous pouvez filtrer, ajouter quelqu’un manuellement, accepter une demande, renvoyer son lien, désigner un responsable, retirer une inscription et noter les présences.

@@ -265,7 +265,7 @@ export function duplicateSummary(counts: DuplicateCounts, copy: CopyChoices, off
   if (copy.pages && counts.pages > 0) lines.push(n(counts.pages, "page personnalisée copiée.", "pages personnalisées copiées."))
   if (copy.leaders && counts.leaders > 0) lines.push(`${n(counts.leaders, "responsable de secteur repris", "responsables de secteur repris")} : chacun reçoit un email avec son lien pour la copie.`)
   else if (copy.leaders && (counts.leadersLeftOut ?? 0) > 0) lines.push("Aucun responsable de secteur repris : tous les créneaux de leur poste sont annulés.")
-  lines.push(copy.settings ? "Messages et réglages d'inscription copiés." : "Messages et réglages d'inscription remis à zéro.")
+  lines.push(copy.settings ? "Messages et paramètres d'inscription copiés." : "Messages et paramètres d'inscription remis à zéro.")
   lines.push("Les inscriptions et les jalons ne sont jamais copiés. La copie est un brouillon.")
   return lines
 }

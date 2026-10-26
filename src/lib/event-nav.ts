@@ -31,7 +31,7 @@ export const EVENT_TABS: EventTabDef[] = [
   },
   { id: "documents", label: "Documents", pages: [{ path: "print", label: "Documents à imprimer" }] },
   {
-    id: "settings", label: "Réglages",
+    id: "settings", label: "Paramètres",
     pages: [{ path: "edit", label: "Informations" }, { path: "questions", label: "Questions" }, { path: "sector-leaders", label: "Responsables de secteur" }],
   },
 ]
@@ -42,7 +42,7 @@ export const EVENT_MENU_PAGES = [
   { path: "duplicate", label: "Dupliquer" },
 ] as const
 
-/** Anchor of the permanent deletion section, at the bottom of the Réglages page. */
+/** Anchor of the permanent deletion section, at the bottom of the Paramètres page. */
 export const DELETE_SECTION_ID = "suppression-definitive"
 
 const eventBase = (eventId: string) => `/admin/events/${eventId}`
@@ -123,7 +123,7 @@ export type SubNavLink = { label: string; href: string; current: Current }
 
 /**
  * The second-level navigation of the current tab, when it groups several pages (Créneaux,
- * Inscriptions, Partage, Réglages). Null otherwise. The review page, reached from the overview's
+ * Inscriptions, Partage, Paramètres). Null otherwise. The review page, reached from the overview's
  * checklist, is not listed: it is a step, not a page of the tab.
  */
 export function eventSubNav(pathname: string, eventId: string): { tabLabel: string; links: SubNavLink[] } | null {

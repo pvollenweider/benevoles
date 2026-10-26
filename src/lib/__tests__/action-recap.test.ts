@@ -70,8 +70,8 @@ describe("action recaps", () => {
   it("organisation toggle, deletion and broadcast", () => {
     expect(toggleOrgRecap("Asso", true)).toMatchObject({ confirmLabel: "Désactiver", danger: true })
     expect(toggleOrgRecap("Asso", false)).toMatchObject({ confirmLabel: "Réactiver", danger: false })
-    expect(deleteOrgRecap({ name: "Asso", events: 2, volunteers: 1, admins: 3 }).lines[0]).toBe("Toutes ses données sont effacées : 2 événements, 1 membre, 3 administrateurs, inscriptions et journaux.")
-    expect(broadcastRecap(1).title).toBe("Envoyer cette communication à 1 administrateur ?")
+    expect(deleteOrgRecap({ name: "Asso", events: 2, volunteers: 1, admins: 3 }).lines[0]).toBe("Toutes ses données sont effacées : 2 événements, 1 membre, 3 organisateurs, inscriptions et journaux.")
+    expect(broadcastRecap(1).title).toBe("Envoyer cette communication à 1 organisateur ?")
   })
 
   // #762: prefilling a product update from a version only asks when it would overwrite something.

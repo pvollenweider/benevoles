@@ -32,7 +32,7 @@ export default async function EventPagesPage({ params }: { params: Promise<{ id:
       <div>
         <h1 id="page-heading" tabIndex={-1} className="text-xl font-bold text-gray-900 focus:outline-none">Pages d&apos;information</h1>
         <HelpLink route="/admin/events/[id]/pages" />
-        <p className="text-sm text-gray-500">Règlement, FAQ, infos pratiques — du contenu libre en plus des instructions publiques, visible sur la page de l&apos;événement.</p>
+        <p className="text-sm text-gray-500">Règlement, FAQ, infos pratiques — du contenu libre en plus des instructions publiques, visible sur la page d&apos;inscription.</p>
       </div>
 
       <EventPagesManager eventId={id} initialPages={event.pages} />

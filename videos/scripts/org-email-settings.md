@@ -11,7 +11,7 @@ faire revenir les réponses vers la bonne boîte.
 
 1. Ouvrir Paramètres → Emails.
 2. Examiner et modifier les rappels J-2, J-1 et jour J.
-3. Régler l’alerte envoyée aux administrateurs lors d’une inscription publique.
+3. Régler l’alerte envoyée aux organisateurs lors d’une inscription publique.
 4. Montrer l’interrupteur des rappels dans un événement et son résultat dans Messages.
 5. Décocher puis recocher l’alerte de désistement, séparée de celle d’inscription.
 6. Expliquer et montrer le résumé quotidien des adresses à vérifier.
@@ -22,9 +22,9 @@ faire revenir les réponses vers la bonne boîte.
 
 ## Résultat visible
 
-- Les réglages sont confirmés comme enregistrés.
-- L’email de test part uniquement vers le compte administrateur courant.
-- La boîte vidéo reçoit le message avec les réglages enregistrés.
+- Les paramètres sont confirmés comme enregistrés.
+- L’email de test part uniquement vers le compte organisateur courant.
+- La boîte vidéo reçoit le message avec les paramètres enregistrés.
 
 ## Points d’attention
 
@@ -32,7 +32,7 @@ faire revenir les réponses vers la bonne boîte.
 - L’alerte par inscription peut devenir bruyante sur un gros événement.
 - Le test n’envoie rien aux bénévoles.
 - Une modification non enregistrée n’est pas utilisée par l’email de test.
-- Réglages réservés aux propriétaires ; les organisateurs peuvent suivre les envois.
+- Paramètres réservés aux propriétaires ; les organisateurs peuvent suivre les envois.
 - Chaque rappel regroupe les créneaux d’une personne pour un événement et un jour ; les délais se calculent avant son premier créneau du jour.
 - Un échec définitif peut déclencher le résumé quotidien, pas un incident temporaire seul.
 - « Envoyé » prouve l’acceptation SMTP, pas la remise ni la lecture par le destinataire.

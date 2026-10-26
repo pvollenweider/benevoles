@@ -40,7 +40,7 @@
     },
     {
       "id": "night",
-      "transcript": "Le Rangement commence samedi à vingt-deux heures et se termine dimanche à deux heures. L'agenda doit donc montrer la fin le lendemain, pas une mission qui se termine avant de commencer. Les horaires sont calculés avec le fuseau de l'organisation. Si tu voyages, ton agenda peut les afficher dans le fuseau de ton appareil : vérifie ce réglage.",
+      "transcript": "Le Rangement commence samedi à vingt-deux heures et se termine dimanche à deux heures. L'agenda doit donc montrer la fin le lendemain, pas une mission qui se termine avant de commencer. Les horaires sont calculés avec le fuseau de l'organisation. Si tu voyages, ton agenda peut les afficher dans le fuseau de ton appareil : vérifie ce paramètre.",
       "fallbackDurationMs": 30000
     },
     {

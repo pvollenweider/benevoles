@@ -64,7 +64,7 @@ export async function DELETE(_req: Request, { params }: { params: Promise<{ id: 
 
   const activeCount = await db.adminUser.count({ where: { organizationId, isActive: true } })
   if (target.isActive && activeCount <= 1) {
-    return NextResponse.json({ error: "Impossible de retirer le dernier admin actif." }, { status: 400 })
+    return NextResponse.json({ error: "Impossible de retirer le dernier organisateur actif." }, { status: 400 })
   }
   // The organisation always keeps an active owner (#469).
   const owners = await db.adminUser.count({ where: { organizationId, isActive: true, role: OWNER_ROLE } })

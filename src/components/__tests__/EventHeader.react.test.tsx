@@ -45,7 +45,7 @@ describe("EventHeader: the event's tabs", () => {
   it("marks the current tab with aria-current, page on its first page, true on another", () => {
     segments = ["shifts"]
     const { rerender } = render(<EventHeader {...props()} />)
-    expect(tabs().map((l) => l.textContent)).toEqual(["Aperçu", "Créneaux", "Inscriptions", "Messages", "Partage", "Documents", "Réglages"])
+    expect(tabs().map((l) => l.textContent)).toEqual(["Aperçu", "Créneaux", "Inscriptions", "Messages", "Partage", "Documents", "Paramètres de l'événement"])
     expect(tabs().find((l) => l.textContent === "Créneaux")).toHaveAttribute("aria-current", "page")
     expect(tabs().filter((l) => l.hasAttribute("aria-current"))).toHaveLength(1)
     segments = ["staffing", "search"]

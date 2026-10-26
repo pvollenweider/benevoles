@@ -10,7 +10,7 @@ Déléguer le suivi d'une équipe sur le terrain sans donner accès à toute l'a
 
 ## Démonstration
 
-1. Depuis l'événement, ouvrir Réglages, puis Responsables de secteur ; montrer Accueil et Buvette déjà renseignés.
+1. Depuis l'événement, ouvrir Paramètres, puis Responsables de secteur ; montrer Accueil et Buvette déjà renseignés.
 2. Nommer manuellement une personne pour un autre poste. Saisir lentement nom et email fictifs, puis envoyer le lien.
 3. Reprendre les coordonnées d'une personne inscrite via la liste proposée ; vérifier le poste et confirmer.
 4. Ouvrir l'email réellement émis dans Mailpit et son lien. Ne pas simuler une boîte remplie par une capture statique.

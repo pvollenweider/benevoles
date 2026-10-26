@@ -153,7 +153,7 @@ describe("review: reminders item", () => {
 
   it("says on, with a link to the organization's settings", () => {
     expect(check({ reminders: rem({}) }, "reminders")!.warn).toBeFalsy()
-    expect(check({ reminders: rem({}) }, "reminders")).toMatchObject({ ok: true, label: "Rappels automatiques J-2, J-1 et du jour activés", href: "/admin/settings/notifications", action: "Réglages des emails" })
+    expect(check({ reminders: rem({}) }, "reminders")).toMatchObject({ ok: true, label: "Rappels automatiques J-2, J-1 et du jour activés", href: "/admin/settings/notifications", action: "Paramètres des emails" })
   })
 
   it("names the reminders left when the organization switched some off", () => {
@@ -171,7 +171,7 @@ describe("review: reminders item", () => {
     const off = check({ reminders: rem({ eventEnabled: false, organization: { j2: false, j1: true, dd: true } }) }, "reminders")!
     expect(off).toMatchObject({ ok: false, warn: true, label: "Rappels automatiques coupés pour cet événement" })
     expect(off).toMatchObject({ href: "/admin/events/evt-1/edit#event-reminders", action: "Modifier" })
-    expect(off.hint).toBe("Aucun rappel J-2, J-1 ni du jour ne part pour cet événement, quels que soient les réglages de l'organisation.")
+    expect(off.hint).toBe("Aucun rappel J-2, J-1 ni du jour ne part pour cet événement, quels que soient les paramètres de l'organisation.")
     expect(off.hint).not.toMatch(/interface/)
   })
 })

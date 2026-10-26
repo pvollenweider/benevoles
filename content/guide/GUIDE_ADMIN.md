@@ -1,6 +1,6 @@
 # Guide organisateur
 
-Bienvenue ! La documentation des organisateurs est rangée en pages courtes, une par tâche : créer l'événement, poser les créneaux, inviter les membres de votre pool, suivre les inscriptions en direct, le jour J et les réglages de l'organisation. Les règles d'inscription (liste d'attente, inscriptions sur validation, âge minimum) et les rappels ont chacune leur page, partagée avec les bénévoles. Pour un premier événement, suivez [Créer son premier événement](creer-son-premier-evenement.md) : huit étapes, de la demande d'espace au lien partagé.
+Bienvenue ! La documentation des organisateurs est rangée en pages courtes, une par tâche : créer l'événement, poser les créneaux, inviter les membres de votre pool, suivre les inscriptions en direct, le jour J et les paramètres de l'organisation. Les règles d'inscription (liste d'attente, inscriptions sur validation, âge minimum) et les rappels ont chacune leur page, partagée avec les bénévoles. Pour un premier événement, suivez [Créer son premier événement](creer-son-premier-evenement.md) : huit étapes, de la demande d'espace au lien partagé.
 
 > « On veut passer moins de temps à remplir des tableaux et plus de temps à préparer un beau festival. »
 >

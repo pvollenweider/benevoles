@@ -53,7 +53,7 @@ export default function NotificationSettingsForm({ initialSettings, initialReply
       }
       setSettings(data.settings)
       setReplyTo(data.replyToEmail ?? "")
-      setMessage({ kind: "ok", text: "Réglages enregistrés." })
+      setMessage({ kind: "ok", text: "Paramètres enregistrés." })
     } catch {
       setMessage({ kind: "error", text: "Impossible d'enregistrer. Vérifiez votre connexion et réessayez." })
     } finally {
@@ -85,11 +85,11 @@ export default function NotificationSettingsForm({ initialSettings, initialReply
 
   return (
     <form onSubmit={save} noValidate aria-labelledby={`${id}-title`} className="bg-white rounded-2xl border border-gray-200 p-5 space-y-5">
-      <h2 id={`${id}-title`} className="text-base font-semibold text-gray-900">Réglages des emails</h2>
+      <h2 id={`${id}-title`} className="text-base font-semibold text-gray-900">Paramètres des emails</h2>
 
       <fieldset className="space-y-2">
         <legend className="text-sm text-gray-800 mb-1">Rappels automatiques aux bénévoles inscrits</legend>
-        <p id={`${id}-reminders-note`} className="text-xs text-gray-600 pb-1">Pour toute l&apos;organisation ; un événement peut en plus couper tous ses rappels dans ses propres réglages.</p>
+        <p id={`${id}-reminders-note`} className="text-xs text-gray-600 pb-1">Pour toute l&apos;organisation ; un événement peut en plus couper tous ses rappels dans ses propres paramètres.</p>
         {(Object.keys(REMINDER_LABELS) as ReminderKey[]).map((k) => (
           <div key={k} className="flex items-start gap-3">
             <input id={`${id}-${k}`} type="checkbox" checked={settings.reminders[k]} onChange={() => toggle(k)} aria-describedby={`${id}-${k}-help ${id}-reminders-note`} className={checkboxClass} />
@@ -104,8 +104,8 @@ export default function NotificationSettingsForm({ initialSettings, initialReply
       <div className="flex items-start gap-3">
         <input id={`${id}-signup`} type="checkbox" checked={settings.signupAdminEmail} onChange={(e) => setSettings((s) => ({ ...s, signupAdminEmail: e.target.checked }))} aria-describedby={`${id}-signup-help`} className={checkboxClass} />
         <div>
-          <label htmlFor={`${id}-signup`} className="text-sm font-medium text-gray-800">Prévenir les administrateurs à chaque inscription</label>
-          <p id={`${id}-signup-help`} className="text-xs text-gray-600">Un email à chaque administrateur actif quand un bénévole s&apos;inscrit depuis la page publique, et quand il modifie ses réponses aux questions depuis sa page « Mes inscriptions » (plusieurs modifications rapprochées en un seul email). Une question rattachée à un poste prévient ses responsables à la place ; ce réglage coupe aussi leur email.</p>
+          <label htmlFor={`${id}-signup`} className="text-sm font-medium text-gray-800">Prévenir les organisateurs à chaque inscription</label>
+          <p id={`${id}-signup-help`} className="text-xs text-gray-600">Un email à chaque organisateur actif quand un bénévole s&apos;inscrit depuis la page d&apos;inscription, et quand il modifie ses réponses aux questions depuis sa page « Mes inscriptions » (plusieurs modifications rapprochées en un seul email). Une question rattachée à un poste prévient ses responsables à la place ; ce paramètre coupe aussi leur email.</p>
         </div>
       </div>
 
@@ -114,7 +114,7 @@ export default function NotificationSettingsForm({ initialSettings, initialReply
         <div>
           <label htmlFor={`${id}-withdrawal`} className="text-sm font-medium text-gray-800">Prévenir en cas de désistement</label>
           <p id={`${id}-withdrawal-help`} className="text-xs text-gray-600">
-            Un email aux administrateurs actifs et aux responsables du poste concerné quand un bénévole annule une place confirmée ou une demande, avec le message qu&apos;il a laissé le cas échéant. Réglage séparé de l&apos;inscription, coupe aussi l&apos;email aux responsables.
+            Un email aux organisateurs actifs et aux responsables du poste concerné quand un bénévole annule une place confirmée ou une demande, avec le message qu&apos;il a laissé le cas échéant. Paramètre séparé de l&apos;inscription, coupe aussi l&apos;email aux responsables.
           </p>
         </div>
       </div>
@@ -124,7 +124,7 @@ export default function NotificationSettingsForm({ initialSettings, initialReply
         <div>
           <label htmlFor={`${id}-addresses`} className="text-sm font-medium text-gray-800">Résumé quotidien des adresses à vérifier</label>
           <p id={`${id}-addresses-help`} className="text-xs text-gray-600">
-            Un email par jour aux administrateurs actifs, seulement quand une confirmation, une proposition de liste d&apos;attente ou un rappel a échoué définitivement depuis la veille.
+            Un email par jour aux organisateurs actifs, seulement quand une confirmation, une proposition de liste d&apos;attente ou un rappel a échoué définitivement depuis la veille.
           </p>
         </div>
       </div>
@@ -165,7 +165,7 @@ export default function NotificationSettingsForm({ initialSettings, initialReply
         >
           {testing ? "Envoi…" : "M'envoyer un email de test"}
         </button>
-        <span id={`${id}-test-help`} className="text-xs text-gray-600">{adminEmail ? `À ${adminEmail}, avec les réglages enregistrés.` : "Votre compte n'a pas d'adresse email (Paramètres → Administrateurs)."}</span>
+        <span id={`${id}-test-help`} className="text-xs text-gray-600">{adminEmail ? `À ${adminEmail}, avec les paramètres enregistrés.` : "Votre compte n'a pas d'adresse email (Paramètres → Organisateurs)."}</span>
       </div>
       {/* Both regions always mounted: an announcement never relies on the element being inserted. */}
       <p role="status" className="text-sm font-medium text-green-800 min-h-5">{message?.kind === "ok" ? message.text : ""}</p>

@@ -54,12 +54,12 @@ export async function recordOrgActivity(options: { page: Page; base: string; dir
     await at("Retrouvons une invitation puis un"); await entries().filter({ hasText: "a invité un admin" }).scrollIntoViewIfNeeded()
     await at("il n'accorde pas le droit"); await entries().filter({ hasText: "a changé le rôle" }).scrollIntoViewIfNeeded()
     await at("On peut aussi retrouver un"); await filter("Organization")
-    await entries().filter({ hasText: "réglages de notification" }).waitFor()
+    await entries().filter({ hasText: "paramètres des emails" }).waitFor()
     checks.actualInvitationRoleAndSetting = true
   })
   await scene("filters", async at => {
-    await at("Choisissons Membres, puis Comptes admin"); await filter("Member")
-    await at("Choisissons Membres, puis Comptes admin"); await filter("AdminUser")
+    await at("Choisissons Membres, puis Comptes organisateurs"); await filter("Member")
+    await at("Choisissons Membres, puis Comptes organisateurs"); await filter("AdminUser")
     if (await entries().count() !== 2) throw new Error("Admin filter must contain actual invitation and role change only")
     await at("Revenons ensuite à Tous les"); await filter("")
     if (await entries().count() !== 50 || await page.getByRole("tab", { name: "Rejouer", exact: true }).count()) throw new Error("Organization journal must show its actual controls, not event replay")

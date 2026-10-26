@@ -99,7 +99,7 @@ Principaux modèles Prisma (`prisma/schema.prisma`) :
 
 | Modèle | Rôle |
 |--------|------|
-| `Organization` | Tenant : slug, `active`, charte, assurance, titre de la page publique (`publicTitle`), fuseau horaire (`timeZone`, vide = `APP_TIME_ZONE`), adresse de réponse (`replyToEmail`), réglages des emails (`notificationSettings`) |
+| `Organization` | Tenant : slug, `active`, charte, assurance, titre de la page publique (`publicTitle`), fuseau horaire (`timeZone`, vide = `APP_TIME_ZONE`), adresse de réponse (`replyToEmail`), paramètres des emails (`notificationSettings`) |
 | `OrgSlugHistory` | Anciens slugs |
 | `AdminUser` | Compte propriétaire (`admin`), organisateur (`organizer`) ou super admin ; empreintes des jetons d'activation et de réinitialisation ; `sessionVersion` ; abonnement aux nouveautés produit (`receiveProductUpdates`, #200) |
 | `Event` | Événement : dates, statut de publication, répertorié ou non (`isListed`), fenêtre d'inscription (`registrationsOpen`, `registrationOpensAt`, `registrationClosesAt`), téléphone obligatoire, rappels activés |
@@ -144,7 +144,7 @@ Statuts d'une inscription : `active`, `waiting` (en liste d'attente), `offered` 
 3. Vérification que les créneaux existent, appartiennent à l'événement et sont ouverts (`409` sinon) ; deux créneaux choisis qui se chevauchent : `400`.
 4. Postes réservés : seul un membre invité portant l'une des étiquettes du poste peut s'y inscrire (`403`). Réponses aux questions de l'événement validées (`400`). Âge minimum : date de naissance requise (`400`) et vérifiée (`403`). Chevauchement avec les inscriptions existantes d'un bénévole connu : `409`.
 5. Dans une transaction qui verrouille les créneaux puis le bénévole : chevauchement vérifié à nouveau, plafond par bénévole du poste, créneau complet (refus, ou liste d'attente si elle est activée). Création du `Volunteer` s'il n'existe pas (unique par organisation et email), d'une `Registration` par créneau avec son jeton (`requested` sur un créneau « Sur validation »), des réponses aux questions et des notifications dans l'outbox.
-6. Emails de confirmation (ou d'accusé de demande), notification aux admins de l'organisation si le réglage `signupAdminEmail` est actif (à défaut d'admin, `ADMIN_NOTIFICATION_EMAIL`), aux responsables du poste (après acceptation pour une demande), email de liste d'attente pour les inscriptions `waiting` : envoyés juste après la réponse (voir Notifications).
+6. Emails de confirmation (ou d'accusé de demande), notification aux admins de l'organisation si le paramètre `signupAdminEmail` est actif (à défaut d'admin, `ADMIN_NOTIFICATION_EMAIL`), aux responsables du poste (après acceptation pour une demande), email de liste d'attente pour les inscriptions `waiting` : envoyés juste après la réponse (voir Notifications).
 
 ### Liste d'attente
 
@@ -165,7 +165,7 @@ Statuts d'une inscription : `active`, `waiting` (en liste d'attente), `offered` 
 
 Chaque envoi est enregistré (`reminderJ2Sent`, `reminderJ1Sent`, `reminderDdSent`) : un rappel n'est envoyé qu'une fois par inscription.
 
-Seules les inscriptions `active` d'un événement publié, aux rappels activés, sur un créneau non annulé, sont concernées. L'organisation peut couper chaque rappel dans ses réglages (#381). Les fenêtres sont calculées dans le fuseau horaire de l'organisation.
+Seules les inscriptions `active` d'un événement publié, aux rappels activés, sur un créneau non annulé, sont concernées. L'organisation peut couper chaque rappel dans ses paramètres (#381). Les fenêtres sont calculées dans le fuseau horaire de l'organisation.
 
 ### Purge
 
@@ -177,10 +177,10 @@ Seules les inscriptions `active` d'un événement publié, aux rappels activés,
 - Sans `SMTP_HOST` : en production, l'envoi échoue (« SMTP_HOST manquant ») sans rien écrire du destinataire ni du contenu, l'outbox le retente puis alerte Sentry ; en développement et en test, le contenu est affiché dans la console.
 - Le push est envoyé séparément (`src/lib/push.ts`) : `sendPushToVolunteer()` pour les rappels, `sendTargetedPush()` pour un message ciblé quand l'admin le demande. Il n'a d'effet que si les clés VAPID sont configurées.
 - **Outbox** (`src/lib/notifications/outbox.ts`, table `NotificationOutbox`) :
-  - Passent par l'outbox : inscription publique, offre et confirmation de liste d'attente, décision sur une demande, créneau modifié ou annulé, invitation d'un responsable, bienvenue et invitation d'un admin, réinitialisation de mot de passe, renvoi du lien par le bénévole, messages ciblés et renvoi de leurs échecs, email de test des réglages.
+  - Passent par l'outbox : inscription publique, offre et confirmation de liste d'attente, décision sur une demande, créneau modifié ou annulé, invitation d'un responsable, bienvenue et invitation d'un admin, réinitialisation de mot de passe, renvoi du lien par le bénévole, messages ciblés et renvoi de leurs échecs, email de test des paramètres.
   - Restent synchrones, parce que la réponse indique si l'email est parti : invitations de membres et relances, rappel manuel, « renvoyer le lien » depuis l'admin, communications produit, invitation envoyée par le super admin, lien renvoyé après une inscription en double.
   - Transactionnelle : chaque action écrit ses notifications avec le client de la transaction qui fait la modification (`enqueueNotifications(payloads, tx)`, y compris avec `db.$transaction` du client limité à l'organisation), puis les livre après validation (`deliverAfterResponse`, `after()` de Next). La modification et ses emails sont validés ou annulés ensemble. Pour l'inscription publique, les helpers (`sendConfirmationEmail`, `sendAdminNotification`, `notifySectorLeadersOfSignup`) reçoivent un collecteur au lieu de `sendNotification`.
-  - Nouvelles tentatives : `/api/cron/outbox` (toutes les 5 minutes) et `/api/cron/reminders` (toutes les heures) retentent les échecs dont le délai est écoulé, avec un délai croissant (5, 10, 20, 40, 80 min) ; après 6 tentatives, ou dès le premier refus définitif (5xx), la ligne passe en `failed` et Sentry est prévenu, sauf si le refus porte sur l'adresse du destinataire elle-même (boîte ou domaine inexistant, 5.1.x, `recipient-rejection.ts`) : une donnée à corriger, pas une erreur de l'application, journalisée en avertissement. Un propriétaire ou un organisateur peut la relancer depuis les réglages.
+  - Nouvelles tentatives : `/api/cron/outbox` (toutes les 5 minutes) et `/api/cron/reminders` (toutes les heures) retentent les échecs dont le délai est écoulé, avec un délai croissant (5, 10, 20, 40, 80 min) ; après 6 tentatives, ou dès le premier refus définitif (5xx), la ligne passe en `failed` et Sentry est prévenu, sauf si le refus porte sur l'adresse du destinataire elle-même (boîte ou domaine inexistant, 5.1.x, `recipient-rejection.ts`) : une donnée à corriger, pas une erreur de l'application, journalisée en avertissement. Un propriétaire ou un organisateur peut la relancer depuis les paramètres.
   - Concurrence : chaque ligne est réservée par une mise à jour conditionnelle ; une réservation abandonnée depuis 15 minutes est reprise. Livraison « au moins une fois » : un plantage entre l'acceptation SMTP et le passage à `sent` peut produire un doublon, préféré à un email perdu, qui porte le même `Message-ID` ; une clé métier (`dedupeKey`) évite de mettre deux fois en file la même notification.
   - Santé : le cron horaire alerte Sentry seulement quand l'envoi est bloqué (email en attente depuis plus de 2 h ou réservation abandonnée) ; une ligne passée en `failed` est signalée à son échec (voir ci-dessus), pas à nouveau. La page `/super-admin/health` affiche aussi les échecs des dernières 24 h.
   - Purge : `/api/cron/cleanup` supprime chaque nuit les lignes envoyées, et les échecs et annulations de plus de 30 jours, car elles contiennent des données personnelles.

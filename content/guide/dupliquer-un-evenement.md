@@ -2,7 +2,7 @@
 roles: [admin]
 group: preparer
 order: 20
-summary: Repartir d'un événement existant pour l'édition suivante, avec ses créneaux et réglages décalés à la nouvelle date.
+summary: Repartir d'un événement existant pour l'édition suivante, avec ses créneaux et paramètres décalés à la nouvelle date.
 related: [creer-un-evenement, permanences-recurrentes, ouvrir-et-fermer-les-inscriptions]
 legacy: []
 aliases: []
@@ -16,11 +16,11 @@ aliases: []
 
 - le **titre** de la copie (« (copie) » par défaut) ;
 - le **premier jour** de la copie : toutes les dates (fin, créneaux, spectacles) sont décalées du même nombre de jours ;
-- ce qui suit : les **créneaux** (postes, horaires, places, listes d'attente, âge minimum, infos pratiques, rouverts et sans inscriptions), les **messages et réglages d'inscription** (dont le délai d'annulation par le bénévole et le programme des spectacles), les **pages personnalisées**, et, décochés par défaut, les **responsables de secteur** (chacun reçoit alors un email avec son lien pour la copie). Les responsables d'un poste supprimé, dont tous les créneaux sont annulés, ne sont pas repris et ne reçoivent pas d'email.
+- ce qui suit : les **créneaux** (postes, horaires, places, listes d'attente, âge minimum, infos pratiques, rouverts et sans inscriptions), les **messages et paramètres d'inscription** (dont le délai d'annulation par le bénévole et le programme des spectacles), les **pages personnalisées**, et, décochés par défaut, les **responsables de secteur** (chacun reçoit alors un email avec son lien pour la copie). Les responsables d'un poste supprimé, dont tous les créneaux sont annulés, ne sont pas repris et ne reçoivent pas d'email.
 
 Les permanences récurrentes ne sont pas décalées comme les autres créneaux : chacune est recréée sur les mêmes jours de la semaine, avec les jours fériés de la nouvelle période (voir [Dupliquer une saison](permanences-recurrentes.md#dupliquer-une-saison)).
 
-Le réglage « Qui est inscrit » suit le choix des réglages : copié avec les **messages et réglages d'inscription**, sinon la copie reprend le réglage par défaut de l'organisation (voir [Qui est inscrit, réglage par défaut](personnaliser-l-organisation.md#qui-est-inscrit-reglage-par-defaut)). Les choix des bénévoles d'afficher leur nom ne sont jamais copiés.
+Le paramètre « Qui est inscrit » suit le choix des paramètres : copié avec les **messages et paramètres d'inscription**, sinon la copie reprend le paramètre par défaut de l'organisation (voir [Qui est inscrit, paramètre par défaut](personnaliser-l-organisation.md#qui-est-inscrit-parametre-par-defaut)). Les choix des bénévoles d'afficher leur nom ne sont jamais copiés.
 
 Un récapitulatif dit ce qui va être créé avant de confirmer. La copie est un brouillon ; les inscriptions et les jalons ne sont jamais copiés.
 

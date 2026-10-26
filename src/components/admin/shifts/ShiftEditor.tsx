@@ -246,7 +246,7 @@ export default function ShiftEditor({
       </div>
       <fieldset aria-describedby={`shiftinfo-hint-${sfx}`} className="border border-gray-200 rounded-xl p-3 space-y-3">
         <legend className="text-xs font-semibold text-gray-700 px-1">Infos pratiques pour les bénévoles</legend>
-        <p id={`shiftinfo-hint-${sfx}`} className="text-xs text-gray-600">Lieu et consigne sont visibles sur la page publique d&apos;inscription. La personne de contact et son téléphone ne sont envoyés qu&apos;aux inscrits : email de confirmation, rappels, page « Mes inscriptions ».</p>
+        <p id={`shiftinfo-hint-${sfx}`} className="text-xs text-gray-600">Lieu et consigne sont visibles sur la page d&apos;inscription. La personne de contact et son téléphone ne sont envoyés qu&apos;aux inscrits : email de confirmation, rappels, page « Mes inscriptions ».</p>
         <div className="grid grid-cols-1 sm:grid-cols-3 gap-3">
           <div>
             <label htmlFor={`locationDetails-${sfx}`} className="block text-xs font-medium text-gray-600 mb-1">Lieu de rendez-vous</label>

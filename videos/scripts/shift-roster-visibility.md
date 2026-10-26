@@ -2,11 +2,11 @@
 
 ## roster-setting
 
-Dans Paramètres, la case Par défaut, montrer aux bénévoles qui est inscrit définit le choix proposé pour les futurs événements. Par défaut, ce réglage est activé. Les événements existants gardent leur propre valeur. Ouvrons un nouvel événement. La case Montrer aux bénévoles qui est inscrit est déjà cochée. Vous pouvez la décocher pour cet événement. Le rappel demande d’informer les bénévoles, y compris du comptage des places dont le nom reste masqué. Le lien En savoir plus ouvre le guide. Activer le réglage ne donne jamais leur accord à leur place.
+Dans Paramètres, la case Par défaut, montrer aux bénévoles qui est inscrit définit le choix proposé pour les futurs événements. Par défaut, ce paramètre est activé. Les événements existants gardent leur propre valeur. Ouvrons un nouvel événement. La case Montrer aux bénévoles qui est inscrit est déjà cochée. Vous pouvez la décocher pour cet événement. Le rappel demande d’informer les bénévoles, y compris du comptage des places dont le nom reste masqué. Le lien En savoir plus ouvre le guide. Activer le paramètre ne donne jamais leur accord à leur place.
 
 ## roster-publication
 
-Retrouvons notre événement de démonstration. Dans ses réglages, la même option est activée. Vous pouvez la désactiver puis la réactiver. Sur Vérifier avant publication, la note Qui est inscrit est activé : prévenez vos bénévoles, rappelle votre information à transmettre. Les liens En savoir plus et Modifier le réglage permettent de poursuivre. Publions l’événement.
+Retrouvons notre événement de démonstration. Dans ses paramètres, la même option est activée. Vous pouvez la désactiver puis la réactiver. Sur Vérifier avant publication, la note Qui est inscrit est activé : prévenez vos bénévoles, rappelle votre information à transmettre. Les liens En savoir plus et Modifier le paramètre permettent de poursuivre. Publions l’événement.
 
 ## roster-signup
 

@@ -80,7 +80,7 @@ Cochez « Sur validation » sur ces créneaux : chaque inscription devient une d
 
 ### Le comité change. Comment les nouveaux membres reprennent-ils la main ?
 
-Un propriétaire de l'espace invite les nouveaux membres du comité dans l'équipe d'administration, comme propriétaires ou comme organisateurs. Les éditions passées restent dans l'espace, prêtes à être dupliquées, et le journal de chaque événement garde la trace de qui a fait quoi, et quand.
+Un propriétaire de l'espace invite les nouveaux membres du comité dans l'équipe d'organisation, comme propriétaires ou comme organisateurs. Les éditions passées restent dans l'espace, prêtes à être dupliquées, et le journal de chaque événement garde la trace de qui a fait quoi, et quand.
 
 ## Démarrer
 

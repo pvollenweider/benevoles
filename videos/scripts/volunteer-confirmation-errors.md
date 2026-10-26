@@ -139,7 +139,7 @@ La coupure réseau est explicitement annoncée comme une simulation. La capacit�
 
 ## Observation produit à évaluer
 
-Le modèle d’email `registration.ts` affiche le message personnalisé tel quel, sans interpoler les variables annoncées dans le formulaire de réglages. Le jeu de données utilise donc un texte sans variable. Ce comportement devra être évalué lors du module consacré aux modèles et variables ; la formation ne doit pas promettre cette interpolation dans l’email sans vérification.
+Le modèle d’email `registration.ts` affiche le message personnalisé tel quel, sans interpoler les variables annoncées dans le formulaire de paramètres. Le jeu de données utilise donc un texte sans variable. Ce comportement devra être évalué lors du module consacré aux modèles et variables ; la formation ne doit pas promettre cette interpolation dans l’email sans vérification.
 
 ## Appareils des personas — lot 8
 

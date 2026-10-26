@@ -36,7 +36,7 @@ import {
 } from "@/lib/shifts-admin"
 import StatusBadge from "./StatusBadge"
 
-const UNPUBLISHED_NOTICE = "C'était le dernier créneau : l'événement est repassé en brouillon, sa page publique n'est plus accessible."
+const UNPUBLISHED_NOTICE = "C'était le dernier créneau : l'événement est repassé en brouillon, sa page d'inscription n'est plus accessible."
 
 type Show = { name: string; date: string; startTime: string; endTime: string }
 

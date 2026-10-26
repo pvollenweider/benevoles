@@ -74,11 +74,11 @@ test("the guide says how to send feedback: email first, GitHub optional", async 
 })
 
 // #1096: the settings page's help is the organisation's settings; the team has its own link.
-test("the settings page opens « Personnaliser l'organisation », the team section « Gérer l'équipe admin »", async ({ page }) => {
+test("the settings page opens « Personnaliser l'organisation », the team section « Gérer l'équipe d'organisation »", async ({ page }) => {
   await newEvent(page)
   await page.goto("/admin/settings/admins")
   await expect(page.getByRole("link", { name: "Aide : Personnaliser l'organisation (ouvre dans un nouvel onglet)" })).toHaveAttribute("href", "/doc/personnaliser-l-organisation")
-  await expect(page.getByRole("link", { name: "En savoir plus sur l'équipe admin (ouvre dans un nouvel onglet)" })).toHaveAttribute("href", "/doc/equipe-admin")
+  await expect(page.getByRole("link", { name: "En savoir plus sur l'équipe d'organisation (ouvre dans un nouvel onglet)" })).toHaveAttribute("href", "/doc/equipe-d-organisation")
 })
 
 test("the dashboard and the members list have their help link", async ({ page }) => {

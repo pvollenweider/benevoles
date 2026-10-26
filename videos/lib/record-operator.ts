@@ -114,7 +114,7 @@ export async function recordOperator(options: { page: Page; base: string; direct
       await at(.22); await page.getByRole("row").filter({ hasText: "Formation Opérateur Réserve" }).scrollIntoViewIfNeeded()
       await at(.61); await tap(page, page.getByRole("link", { name: "Formation Opérateur Parc", exact: true }))
       await page.getByRole("heading", { name: "Formation Opérateur Parc", exact: true }).waitFor()
-      await at(.78); await page.getByRole("heading", { name: "Administrateurs", exact: true }).scrollIntoViewIfNeeded()
+      await at(.78); await page.getByRole("heading", { name: "Organisateurs", exact: true }).scrollIntoViewIfNeeded()
     })
     await scene("create", async at => {
       await at(.04); await go("/super-admin/organizations/new")

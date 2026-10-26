@@ -3,7 +3,7 @@ roles: [admin]
 group: organisation
 order: 40
 summary: Nom, adresse, logo, titre public, fuseau horaire, « Qui est inscrit » par défaut et taux horaire pour valoriser le bénévolat.
-related: [charte-du-benevole, equipe-admin, premiers-pas]
+related: [charte-du-benevole, equipe-d-organisation, premiers-pas]
 legacy: [admin#nom-et-adresse-de-l-organisation, admin#logo-de-l-organisation, admin#titre-de-la-page-publique, admin#fuseau-horaire]
 aliases: []
 ---
@@ -12,7 +12,7 @@ aliases: []
 
 <!-- video: ORG_PUBLIC_IDENTITY -->
 
-Ces réglages sont sur la page **Paramètres** et réservés aux propriétaires.
+Ces paramètres sont sur la page **Paramètres** et réservés aux propriétaires.
 
 ## Nom et adresse de l'organisation
 
@@ -40,11 +40,11 @@ Section **Titre de la page publique**. Le titre affiché en haut de la page publ
 
 ## Fuseau horaire
 
-Section **Fuseau horaire**. Les heures des créneaux sont des heures locales : ce réglage indique dans quel fuseau les lire. Il sert à envoyer les rappels au bon moment, à indiquer l'heure limite d'une place proposée en liste d'attente, et à afficher les heures du journal de l'événement et des **Documents à imprimer**. Par défaut, c'est le fuseau de la plateforme (Europe/Zurich) ; choisissez-en un autre si vos événements ont lieu ailleurs, puis **Enregistrer**. Changer de fuseau ne modifie pas les heures affichées des créneaux, mais décale le moment où leurs rappels partent.
+Section **Fuseau horaire**. Les heures des créneaux sont des heures locales : ce paramètre indique dans quel fuseau les lire. Il sert à envoyer les rappels au bon moment, à indiquer l'heure limite d'une place proposée en liste d'attente, et à afficher les heures du journal de l'événement et des **Documents à imprimer**. Par défaut, c'est le fuseau de la plateforme (Europe/Zurich) ; choisissez-en un autre si vos événements ont lieu ailleurs, puis **Enregistrer**. Changer de fuseau ne modifie pas les heures affichées des créneaux, mais décale le moment où leurs rappels partent.
 
-## Qui est inscrit, réglage par défaut
+## Qui est inscrit, paramètre par défaut
 
-Section **Qui est inscrit**. La case **Par défaut, montrer aux bénévoles qui est inscrit**, cochée par défaut, donne la valeur de départ du réglage de même nom des événements créés ensuite, sur une page blanche comme depuis un modèle (voir le réglage dans [Créer un événement](creer-un-evenement.md#page-blanche)). Sous la case, une phrase le résume et le lien **En savoir plus** ouvre cette page. Cochez-la ou décochez-la, puis **Enregistrer**. Les événements existants ne changent pas : chacun garde son propre réglage, modifiable dans ses réglages. Une copie faite avec **Dupliquer** reprend le réglage de l'événement d'origine quand ses réglages sont copiés, et ce réglage par défaut sinon (voir [Dupliquer un événement](dupliquer-un-evenement.md)). Dans tous les cas, un nom n'apparaît que si le bénévole l'accepte. En vidéo : [montrer aux bénévoles qui est inscrit](/videos/SHIFT_ROSTER_VISIBILITY#doc).
+Section **Qui est inscrit**. La case **Par défaut, montrer aux bénévoles qui est inscrit**, cochée par défaut, donne la valeur de départ du paramètre de même nom des événements créés ensuite, sur une page blanche comme depuis un modèle (voir le paramètre dans [Créer un événement](creer-un-evenement.md#page-blanche)). Sous la case, une phrase le résume et le lien **En savoir plus** ouvre cette page. Cochez-la ou décochez-la, puis **Enregistrer**. Les événements existants ne changent pas : chacun garde son propre paramètre, modifiable dans ses paramètres. Une copie faite avec **Dupliquer** reprend le paramètre de l'événement d'origine quand ses paramètres sont copiés, et ce paramètre par défaut sinon (voir [Dupliquer un événement](dupliquer-un-evenement.md)). Dans tous les cas, un nom n'apparaît que si le bénévole l'accepte. En vidéo : [montrer aux bénévoles qui est inscrit](/videos/SHIFT_ROSTER_VISIBILITY#doc).
 
 ## Valorisation du bénévolat
 

@@ -19,7 +19,7 @@ En complément du champ unique « instructions publiques », ajoutez autant de p
 - **Réordonner** les pages avec leurs flèches Monter et Descendre (aussi au clavier) : l'ordre est enregistré à chaque déplacement ; si l'enregistrement échoue, un message le dit et l'ordre enregistré est rétabli
 - **Supprimer** une page (confirmation demandée)
 
-Les pages apparaissent sous forme de liens juste après les instructions publiques, sur la page de l'événement.
+Les pages apparaissent sous forme de liens juste après les instructions publiques, sur la page d'inscription.
 
 ![Pages personnalisées d'un événement (« Accès et parking », « Questions fréquentes »), avec leur adresse et les actions modifier et supprimer](/doc-img/admin-pages.png)
 

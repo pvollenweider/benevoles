@@ -246,7 +246,7 @@ async function queueStep(facts: Facts, key: StepKey, plannedAt: Date, now: Date,
     await notifyOperator({
       key: `inactivity-last:${o.id}:${now.toISOString().slice(0, 10)}`,
       title: `${siteName()} : espace bientôt désactivé`,
-      message: `${plainLabel(o.name)} : dernier rappel mis en file d'attente pour ${admins.length} administrateur${admins.length > 1 ? "s" : ""}. Sans réponse, désactivation au plus tôt après le ${day(deadlineDay(plannedAt), timeZone, true)}, et seulement 15 jours après l'envoi effectif de ce rappel.${unreachableNote(reachability)}`,
+      message: `${plainLabel(o.name)} : dernier rappel mis en file d'attente pour ${admins.length} organisateur${admins.length > 1 ? "s" : ""}. Sans réponse, désactivation au plus tôt après le ${day(deadlineDay(plannedAt), timeZone, true)}, et seulement 15 jours après l'envoi effectif de ce rappel.${unreachableNote(reachability)}`,
       priority: 3,
       url: `${APP_URL()}/super-admin/organizations/${o.slug}`,
     }).catch(reportError("cleanup.inactivity_operator_alert"))

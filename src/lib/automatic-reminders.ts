@@ -74,7 +74,7 @@ const list = (keys: ReminderKey[]) => {
 export function remindersSummary(r: RemindersFacts & { eventId: string; published: boolean }): RemindersSummary {
   const state = remindersState(r)
   const eventLink = { href: `/admin/events/${r.eventId}/edit#event-reminders`, label: "Rappels automatiques de l'événement" }
-  const settingsLink = { href: EMAIL_SETTINGS_HREF, label: "Réglages des emails de l'organisation" }
+  const settingsLink = { href: EMAIL_SETTINGS_HREF, label: "Paramètres des emails de l'organisation" }
   const draftNote = "Ils ne partent que tant que l'événement est publié."
 
   switch (state.kind) {
@@ -88,13 +88,13 @@ export function remindersSummary(r: RemindersFacts & { eventId: string; publishe
       return {
         state: state.kind, ok: false, sent: [], links: [eventLink],
         title: "Rappels automatiques coupés pour cet événement",
-        notes: ["Aucun rappel J-2, J-1 ni du jour ne part pour cet événement, quels que soient les réglages de l'organisation. Cochez la case Rappels automatiques de l'événement pour les rétablir."],
+        notes: ["Aucun rappel J-2, J-1 ni du jour ne part pour cet événement, quels que soient les paramètres de l'organisation. Cochez la case Rappels automatiques de l'événement pour les rétablir."],
       }
     case "org-off":
       return {
         state: state.kind, ok: false, sent: [], links: [settingsLink, eventLink],
         title: "Aucun rappel automatique : désactivés pour l'organisation",
-        notes: ["Les bénévoles ne reçoivent aucun rappel avant leurs créneaux. Vous pouvez les réactiver dans les réglages des emails de l'organisation."],
+        notes: ["Les bénévoles ne reçoivent aucun rappel avant leurs créneaux. Vous pouvez les réactiver dans les paramètres des emails de l'organisation."],
       }
     default: {
       const sent = state.on.map((key) => ({ key, label: REMINDER_LABELS[key].label, timing: reminderTiming(key) }))

@@ -11,7 +11,7 @@ Les douze chapitres de répétition fonctionnent sur cette version. Une nouvelle
 narration Kore a été produite d'un seul tenant avec Gemini 3.8 Flash TTS et
 les douze découpes ont une reconnaissance indépendante conforme au texte
 courant. Le chapitre du message décrit désormais sa saisie pour laisser le
-temps de la voir. Le message adressé aux administrateurs les vouvoie.
+temps de la voir. Le message adressé aux organisateurs les vouvoie.
 
 Le MP4 de relecture est généré : `videos/output/platform-internal-administration/platform-internal-administration.mp4`,
 7 min 59 s (478,84 secondes), douze chapitres. Les titres de chapitre précèdent
@@ -62,7 +62,7 @@ Lors de la tentative du 5 octobre, la régénération continue était refusée p
 Gemini : **plafond mensuel de dépenses du projet atteint**, HTTP 429, avec renvoi
 vers AI Studio /spend. Ce n'était
 pas une simple temporisation de requêtes ; les crédits disponibles et ce plafond
-sont deux réglages différents. Ce blocage est levé lors de la reprise du 6 octobre. Le recorder
+sont deux paramètres différents. Ce blocage est levé lors de la reprise du 6 octobre. Le recorder
 refuse une prise narrée tant que chaque WAV ne correspond pas au script et à sa
 reconnaissance indépendante. Aucune vidéo opérateur finale n'est encore validée.
 
@@ -74,12 +74,12 @@ cette vidéo dans le carrousel public des bénévoles sans décision explicite.
 
 Prévoir une base vidéo dédiée à l'opérateur, distincte de la base des autres
 captures : cette console voit toutes les organisations et les communications
-peuvent concerner tous les administrateurs abonnés. Trois organisations fictives,
+peuvent concerner tous les organisateurs abonnés. Trois organisations fictives,
 dont une inactive, noms explicites de formation, comptes et emails réservés.
 Créer le nouveau quatrième espace par l'interface, pas par un faux résultat.
 SMTP local uniquement. Vérifier que la diffusion ne peut atteindre aucun compte
 extérieur à cette fixture. Pas de suppression globale ni de désabonnement des
-administrateurs des autres scénarios pour obtenir un compteur artificiel.
+organisateurs des autres scénarios pour obtenir un compteur artificiel.
 
 ## Séquences
 
@@ -87,7 +87,7 @@ administrateurs des autres scénarios pour obtenir un compteur artificiel.
    Ouvrir le menu Super Admin et sa liste d'organisations : noms, état, compteurs,
    détail. Expliquer qu'il s'agit de gérer la plateforme, pas d'un rôle bénévole.
 2. **Créer un espace.** Nouvelle organisation : nom, nom et email du premier
-   administrateur, validation. Montrer « Organisation créée » et le lien
+   organisateur, validation. Montrer « Organisation créée » et le lien
    d'activation, pas un mot de passe temporaire inventé. Le texte d'aide actuel
    évoque un mot de passe temporaire alors que le résultat montre un lien : ne pas
    le reprendre comme fonctionnement réel. Ouvrir le vrai email après son envoi.
@@ -139,7 +139,7 @@ migrations appliquées ; marqueur de propriété de fixture vérifié. Trois org
 Le serveur compilé local sur 43104 impose le SMTP de formation 41026. Les vraies
 connexions opérateur/propriétaire passent, ainsi que la sélection explicite du
 contexte, les refus 409/403/401/404 attendus et la page de santé réelle. Aucun faux
-heartbeat ; un seul administrateur actif abonné est présent. Preuves dans
+heartbeat ; un seul organisateur actif abonné est présent. Preuves dans
 `videos/output/platform-internal-administration/preparation.json`. Les actions de
 création, activation, modification et diffusion restent à enregistrer et vérifier.
 Le seed refuse une base déjà remplie : il ne supprime rien pour rejouer une prise.

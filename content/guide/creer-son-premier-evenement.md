@@ -44,7 +44,7 @@ La page **Vérifier avant publication** indique si les inscriptions seront ouver
 
 ## 6. Faire une inscription de test
 
-Dans l'onglet **Partage** de l'événement, **Ouvrir la page publique** ouvre la page d'inscription. Inscrivez-vous sur un créneau avec votre propre adresse, comme un bénévole, et vérifiez que l'email de confirmation arrive. Voir [S'inscrire](s-inscrire.md).
+Dans l'onglet **Partage** de l'événement, **Ouvrir la page d'inscription** ouvre la page d'inscription. Inscrivez-vous sur un créneau avec votre propre adresse, comme un bénévole, et vérifiez que l'email de confirmation arrive. Voir [S'inscrire](s-inscrire.md).
 
 ## 7. Partager le lien
 

@@ -37,7 +37,7 @@
     },
     {
       "id": "personal",
-      "transcript": "Sur la page Mes inscriptions, Jules retrouve son créneau et les actions prévues pour son inscription. Le panneau Ton lien personnel rappelle à quoi sert cet accès. Gardons ce lien pour son destinataire : une personne qui le reçoit peut accéder à la page correspondante. Ce n'est pas le lien public de recrutement. Utilisons Recevoir ce lien par email, puis ouvrons le nouveau message reçu. Cette action renvoie l'accès ; elle ne crée pas une deuxième inscription. Pour inviter des amis à participer, partagez plutôt la page publique de l'événement.",
+      "transcript": "Sur la page Mes inscriptions, Jules retrouve son créneau et les actions prévues pour son inscription. Le panneau Ton lien personnel rappelle à quoi sert cet accès. Gardons ce lien pour son destinataire : une personne qui le reçoit peut accéder à la page correspondante. Ce n'est pas le lien public de recrutement. Utilisons Recevoir ce lien par email, puis ouvrons le nouveau message reçu. Cette action renvoie l'accès ; elle ne crée pas une deuxième inscription. Pour inviter des amis à participer, partagez plutôt la page d'inscription de l'événement.",
       "fallbackDurationMs": 55000
     },
     {
@@ -72,7 +72,7 @@
     },
     {
       "id": "result",
-      "transcript": "Revenons à la page Mes inscriptions et à son avertissement. Pour recruter, partagez la page publique. Pour gérer une inscription, gardez le lien personnel pour son destinataire. Pour coordonner un poste, remettez le lien du responsable à la personne désignée. Si un accès a été diffusé par erreur, contactez l'organisation plutôt que de continuer à le faire circuler. Et avant d'envoyer un document, vérifiez son contenu et ses destinataires. Quelques gestes simples permettent de rester accueillant, tout en prenant soin des informations confiées par les bénévoles.",
+      "transcript": "Revenons à la page Mes inscriptions et à son avertissement. Pour recruter, partagez la page d’inscription. Pour gérer une inscription, gardez le lien personnel pour son destinataire. Pour coordonner un poste, remettez le lien du responsable à la personne désignée. Si un accès a été diffusé par erreur, contactez l'organisation plutôt que de continuer à le faire circuler. Et avant d'envoyer un document, vérifiez son contenu et ses destinataires. Quelques gestes simples permettent de rester accueillant, tout en prenant soin des informations confiées par les bénévoles.",
       "fallbackDurationMs": 56000
     }
   ],

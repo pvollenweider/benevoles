@@ -55,12 +55,12 @@ L’application ne vérifie pas administrativement la validité d’un permis. L
 - Toute la narration est régénérée en une seule prise continue avec la voix Kore, sans mélange d’extraits.
 
 
-Révision du 15 octobre 2026 (batch 22-1) : revue du build 43c1aae7 ; onglets persistants et accès Partage, Réglages et Documents contrôlés. Vocabulaire actualisé. Narration complète régénérée en une seule prise continue avec la même voix, continuousPauseTags: false ; aucun mélange d’extraits.
+Révision du 15 octobre 2026 (batch 22-1) : revue du build 43c1aae7 ; onglets persistants et accès Partage, Paramètres et Documents contrôlés. Vocabulaire actualisé. Narration complète régénérée en une seule prise continue avec la même voix, continuousPauseTags: false ; aucun mélange d’extraits.
 
 
 ## Révision du 2026-10-16 — lot 23-1
 
-Relecture sur main `89a884c8d58c22dda6800481e1238bdc4e219dff`, PR #1026–#1034. Suggestions de postes et rappel des réglages hérités ; Appliquer au poste : Ce jour / Tout l’événement ; fin de nuit conservée ; limite atteinte visible en Frise et Liste. Les parcours conservent les vrais formulaires et emails.
+Relecture sur main `89a884c8d58c22dda6800481e1238bdc4e219dff`, PR #1026–#1034. Suggestions de postes et rappel des paramètres hérités ; Appliquer au poste : Ce jour / Tout l’événement ; fin de nuit conservée ; limite atteinte visible en Frise et Liste. Les parcours conservent les vrais formulaires et emails.
 
 Narration finale de référence (génération intégrale si modifiée, même voix, sans balises de pause) :
 

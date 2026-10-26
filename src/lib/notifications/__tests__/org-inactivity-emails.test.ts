@@ -32,14 +32,14 @@ describe("periodic check emails (#811)", () => {
   it("dates the previous message instead of « a month ago », and says when the deadline moved", () => {
     const late = render(notice("second", { previousSentOn: "3 septembre 2026", previousDeactivationOn: "vendredi 18 décembre 2026" }))
     expect(late.text).not.toMatch(/il y a un mois/)
-    expect(late.text).toContain("Nous avons écrit aux administrateurs de l'espace le 3 septembre 2026, sans réponse.")
+    expect(late.text).toContain("Nous avons écrit aux organisateurs de l'espace le 3 septembre 2026, sans réponse.")
     expect(late.text).toContain("Cette date remplace celle du vendredi 18 décembre 2026, indiquée dans notre message précédent")
     expect(late.html).toContain("Cette date remplace celle du vendredi 18 décembre 2026")
     const onTime = render(notice("last", { previousSentOn: "3 octobre 2026", previousDeactivationOn: null }))
-    expect(onTime.text).toContain("Nous avons écrit aux administrateurs de l'espace le 3 octobre 2026, sans réponse. C'est notre dernier message avant la désactivation.")
+    expect(onTime.text).toContain("Nous avons écrit aux organisateurs de l'espace le 3 octobre 2026, sans réponse. C'est notre dernier message avant la désactivation.")
     expect(onTime.text).not.toContain("Cette date remplace")
     // An older payload without these fields still reads right.
-    expect(render(notice("second")).text).toContain("Nous avons déjà écrit aux administrateurs de l'espace, sans réponse.")
+    expect(render(notice("second")).text).toContain("Nous avons déjà écrit aux organisateurs de l'espace, sans réponse.")
     expect(render(notice("first")).text).not.toContain("Nous avons")
   })
 

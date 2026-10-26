@@ -110,7 +110,7 @@ test("archive then delete an event from the admin UI", async ({ browser }) => {
   })
   const { id } = await created.json()
 
-  // Réglages: the deletion section says how to get there.
+  // Paramètres: the deletion section says how to get there.
   await page.goto(`/admin/events/${id}/edit`)
   await expect(page.getByText(/Archivez cet événement pour pouvoir le supprimer/)).toBeVisible()
   await expect(page.getByRole("button", { name: /Supprimer l'événement/ })).toHaveCount(0)

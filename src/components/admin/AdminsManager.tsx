@@ -13,8 +13,8 @@ import DocMoreLink from "@/components/DocMoreLink"
 import { SECTION_DOC_LINKS, docHref } from "@/lib/help-links"
 
 const ROLE_HELP: Record<OrgRole, string> = {
-  admin: "Tous les droits, dont l'équipe d'administration et les réglages de l'organisation.",
-  organizer: "Événements, créneaux, inscriptions, membres et messages ; pas l'équipe ni les réglages de l'organisation.",
+  admin: "Tous les droits, dont la gestion de l'équipe d'organisation et les paramètres de l'organisation.",
+  organizer: "Événements, créneaux, inscriptions, membres et messages ; pas la gestion de l'équipe ni les paramètres de l'organisation.",
 }
 const roleLabel = (role: string) => ROLE_LABEL[role as OrgRole] ?? role
 
@@ -89,7 +89,7 @@ export default function AdminsManager({
     setRemoving(null)
     if (!outcome.ok) return
     setAdmins((prev) => prev.filter((a) => a.id !== adminId))
-    setStatus("Administrateur retiré.")
+    setStatus("Organisateur retiré de l'équipe.")
     headingRef.current?.focus()
   }
 
@@ -115,7 +115,7 @@ export default function AdminsManager({
     setAdmins((prev) => prev.map((a) => (a.id === admin.id ? { ...a, role } : a)))
     if (demotingSelf) {
       // The team controls go away: land on the heading, then let the server render the page for the new role.
-      setStatus("Votre rôle : organisateur. Vous ne gérez plus l'équipe ni les réglages de l'organisation.")
+      setStatus("Votre rôle : organisateur. Vous ne gérez plus l'équipe ni les paramètres de l'organisation.")
       headingRef.current?.focus()
       router.refresh()
       return
@@ -131,7 +131,7 @@ export default function AdminsManager({
       <div className="bg-white rounded-2xl border border-gray-200 overflow-hidden">
         <div className="px-4 py-3 border-b border-gray-100 flex items-center justify-between">
           <h2 ref={headingRef} tabIndex={-1} className="text-sm font-semibold text-gray-700 focus:outline-none">
-            Administrateurs ({admins.length})
+            Organisateurs ({admins.length})
           </h2>
           {canManage && canInvite && <button
             ref={inviteButtonRef}
@@ -141,21 +141,21 @@ export default function AdminsManager({
             <span aria-hidden="true">+ </span>Inviter
           </button>}
         </div>
-        <p className="px-4 pt-2 text-sm"><DocMoreLink href={docHref(SECTION_DOC_LINKS.admin.adminTeam)} about="l'équipe admin" /></p>
+        <p className="px-4 pt-2 text-sm"><DocMoreLink href={docHref(SECTION_DOC_LINKS.admin.adminTeam)} about="l'équipe d'organisation" /></p>
         {!canManage && (
           <p className="px-4 py-2 border-b border-gray-100 text-xs text-gray-700">
-            Votre rôle : organisateur. Seuls les propriétaires invitent, retirent ou changent le rôle des administrateurs.
+            Votre rôle : organisateur. Seuls les propriétaires peuvent inviter ou retirer des organisateurs, ou modifier leur rôle.
           </p>
         )}
         {canManage && !canInvite && (
           <p className="px-4 py-2 border-b border-gray-100 text-xs text-gray-700">
-            Votre espace est en attente de validation. Vous pourrez inviter d&apos;autres administrateurs une fois qu&apos;il sera validé ; vous recevrez un email.
+            Votre espace est en attente de validation. Vous pourrez inviter d&apos;autres organisateurs une fois qu&apos;il sera validé ; vous recevrez un email.
           </p>
         )}
 
         {showForm && (
           <form onSubmit={handleInvite} noValidate aria-labelledby={`${id}-invite-title`} className="px-4 py-4 border-b border-gray-100 bg-gray-50 space-y-3">
-            <h3 id={`${id}-invite-title`} className="text-sm font-medium text-gray-800">Inviter un administrateur</h3>
+            <h3 id={`${id}-invite-title`} className="text-sm font-medium text-gray-800">Inviter un organisateur</h3>
             <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
               <div>
                 <label htmlFor={`${id}-name`} className="block text-xs font-medium text-gray-700 mb-1">Nom</label>

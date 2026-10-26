@@ -10,7 +10,7 @@
       "Clique sur « Recevoir des rappels push », puis lis le nom du site avant d'autoriser les notifications.",
       "Vérifie que la page affiche « Rappels push activés ».",
       "Quand tu ouvres une notification, vérifie les horaires et les consignes sur ta page Mes inscriptions.",
-      "Pour arrêter, retire l'autorisation de notifications du site dans les réglages de ton navigateur."
+      "Pour arrêter, retire l'autorisation de notifications du site dans les paramètres de ton navigateur."
     ],
     "remember": [
       "Les notifications complètent les emails : elles ne changent pas ton inscription.",
@@ -64,12 +64,12 @@
     },
     {
       "id": "active",
-      "transcript": "Une activation réussie affiche Rappels push activés. Le site a alors accepté l'abonnement de ce navigateur pour cette bénévole. C'est une étape importante, mais ce texte ne prouve pas qu'un rappel est déjà arrivé sur l'appareil. L'autorisation du navigateur, l'abonnement enregistré et la notification effectivement reçue sont trois choses différentes. Sur un autre appareil ou un autre navigateur, il faut vérifier les réglages de ce nouvel environnement.",
+      "transcript": "Une activation réussie affiche Rappels push activés. Le site a alors accepté l'abonnement de ce navigateur pour cette bénévole. C'est une étape importante, mais ce texte ne prouve pas qu'un rappel est déjà arrivé sur l'appareil. L'autorisation du navigateur, l'abonnement enregistré et la notification effectivement reçue sont trois choses différentes. Sur un autre appareil ou un autre navigateur, il faut vérifier les paramètres de ce nouvel environnement.",
       "fallbackDurationMs": 37000
     },
     {
       "id": "reminders",
-      "transcript": "Pour tes places confirmées, l'organisation peut prévoir les rappels deux jours avant, la veille et le jour de tes créneaux. Les rappels d'un même événement et d'une même journée regroupent tes créneaux : un rappel ne veut pas dire un message pour chaque poste. Les demandes encore sur validation et les places en liste d'attente ne sont pas des places confirmées. Les réglages de l'organisation et de l'événement restent prioritaires : activer les notifications ne rallume pas un rappel que l'organisation a désactivé.",
+      "transcript": "Pour tes places confirmées, l'organisation peut prévoir les rappels deux jours avant, la veille et le jour de tes créneaux. Les rappels d'un même événement et d'une même journée regroupent tes créneaux : un rappel ne veut pas dire un message pour chaque poste. Les demandes encore sur validation et les places en liste d'attente ne sont pas des places confirmées. Les paramètres de l'organisation et de l'événement restent prioritaires : activer les notifications ne rallume pas un rappel que l'organisation a désactivé.",
       "fallbackDurationMs": 43000
     },
     {
@@ -79,17 +79,17 @@
     },
     {
       "id": "blocked",
-      "transcript": "Si tu refuses la demande, le site indique Notifications bloquées dans les paramètres du navigateur. Pour changer d'avis, il faudra passer par les réglages de ce navigateur. Si l'activation rencontre un problème, le message Les rappels n'ont pas pu être activés t'invite à réessayer dans un moment. Le site peut aussi ne pas proposer cette fonction. Ne multiplie pas les essais : vérifie d'abord ta connexion, les autorisations et l'appareil utilisé. Tu peux toujours consulter ton planning depuis ton lien personnel.",
+      "transcript": "Si tu refuses la demande, le site indique Notifications bloquées dans les paramètres du navigateur. Pour changer d'avis, il faudra passer par les paramètres de ce navigateur. Si l'activation rencontre un problème, le message Les rappels n'ont pas pu être activés t'invite à réessayer dans un moment. Le site peut aussi ne pas proposer cette fonction. Ne multiplie pas les essais : vérifie d'abord ta connexion, les autorisations et l'appareil utilisé. Tu peux toujours consulter ton planning depuis ton lien personnel.",
       "fallbackDurationMs": 43000
     },
     {
       "id": "disable",
-      "transcript": "Tu veux arrêter ces notifications ? Ouvre les autorisations du site dans les réglages du navigateur et retire l'autorisation d'envoyer des notifications. Le chemin exact dépend de ton appareil ; ce qui est montré ici correspond au navigateur de la démonstration. Ce choix ne supprime pas tes inscriptions, et ne modifie pas les emails prévus par l'organisation. Ce n'est pas non plus un bouton pour se désinscrire d'un créneau. Si tu réactives plus tard, reviens sur ta page Mes inscriptions et vérifie le résultat de l'activation.",
+      "transcript": "Tu veux arrêter ces notifications ? Ouvre les autorisations du site dans les paramètres du navigateur et retire l'autorisation d'envoyer des notifications. Le chemin exact dépend de ton appareil ; ce qui est montré ici correspond au navigateur de la démonstration. Ce choix ne supprime pas tes inscriptions, et ne modifie pas les emails prévus par l'organisation. Ce n'est pas non plus un bouton pour se désinscrire d'un créneau. Si tu réactives plus tard, reviens sur ta page Mes inscriptions et vérifie le résultat de l'activation.",
       "fallbackDurationMs": 44000
     },
     {
       "id": "result",
-      "transcript": "Voilà : tu sais où demander les rappels, ce que signifie l'activation et comment retirer ton autorisation. Les notifications sont un complément pratique, pas une garantie de réception à chaque instant. Les emails restent un canal séparé, selon les réglages de l'organisation, et ton lien personnel reste la référence pour tes créneaux. Le plus important, c'est que tu puisses choisir ce qui te convient, et retrouver facilement les bonnes informations avant de venir donner un coup de main.",
+      "transcript": "Voilà : tu sais où demander les rappels, ce que signifie l'activation et comment retirer ton autorisation. Les notifications sont un complément pratique, pas une garantie de réception à chaque instant. Les emails restent un canal séparé, selon les paramètres de l'organisation, et ton lien personnel reste la référence pour tes créneaux. Le plus important, c'est que tu puisses choisir ce qui te convient, et retrouver facilement les bonnes informations avant de venir donner un coup de main.",
       "fallbackDurationMs": 39000
     }
   ]

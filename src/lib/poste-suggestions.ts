@@ -50,5 +50,5 @@ export function matchingPoste(shifts: readonly PosteShift[], typed: string): str
 
 /** The hint under the field when an existing poste is chosen (non-breaking spaces inside « »). */
 export function posteSettingsHint(poste: string): string {
-  return `Les réglages du poste «\u00a0${poste}\u00a0» s'appliquent (couleur, limite, accès, chevauchement).`
+  return `Les paramètres du poste «\u00a0${poste}\u00a0» s'appliquent (couleur, limite, accès, chevauchement).`
 }

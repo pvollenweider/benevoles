@@ -83,7 +83,7 @@ export async function POST(req: Request) {
   // Check admin email is not already taken
   const existingAdmin = await db.adminUser.findUnique({ where: { email: adminEmail } })
   if (existingAdmin) {
-    return NextResponse.json({ error: "Cet email admin est déjà utilisé." }, { status: 409 })
+    return NextResponse.json({ error: "Cet email d'organisateur est déjà utilisé." }, { status: 409 })
   }
 
   const setupToken = generateToken()

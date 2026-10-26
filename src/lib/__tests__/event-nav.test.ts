@@ -92,7 +92,7 @@ describe("eventTabs", () => {
 describe("eventSubNav", () => {
   it("lists the pages of a tab that groups several, the current one marked", () => {
     const nav = eventSubNav(`${B}/questions`, "e1")!
-    expect(nav.tabLabel).toBe("Réglages")
+    expect(nav.tabLabel).toBe("Paramètres")
     expect(nav.links.map((l) => `${l.label}:${l.current ?? "-"}`)).toEqual(["Informations:-", "Questions:page", "Responsables de secteur:-"])
   })
 

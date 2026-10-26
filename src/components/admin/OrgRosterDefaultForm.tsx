@@ -30,13 +30,13 @@ export default function OrgRosterDefaultForm({ initialValue }: { initialValue: b
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ shiftRosterDefault: value }),
       })
-      if (res.ok) announce(setStatus, "Réglage enregistré.")
+      if (res.ok) announce(setStatus, "Paramètre enregistré.")
       else {
         const d = await res.json().catch(() => ({}))
-        announce(setError, typeof d.error === "string" ? d.error : "Le réglage n'a pas pu être enregistré. Réessayez.")
+        announce(setError, typeof d.error === "string" ? d.error : "Le paramètre n'a pas pu être enregistré. Réessayez.")
       }
     } catch {
-      announce(setError, "Le réglage n'a pas pu être enregistré. Vérifiez votre connexion, puis réessayez.")
+      announce(setError, "Le paramètre n'a pas pu être enregistré. Vérifiez votre connexion, puis réessayez.")
     }
     setSaving(false)
   }

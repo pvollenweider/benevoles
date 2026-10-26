@@ -8,7 +8,7 @@ import { useRouter } from "next/navigation"
 
 /**
  * Archives a published or draft event (PATCH publicStatus). Once archived the event can be deleted
- * for good from the « Suppression définitive » section of its Réglages page. A row of the event
+ * for good from the « Suppression définitive » section of its Paramètres page. A row of the event
  * header's « ⋯ » panel: `onDone` hands the outcome to the header, which announces it and moves the
  * focus, since this unmounts with the panel. `variant="inline"`: « L'archiver » in a list of things to
  * handle (#1098), a link-styled button naming its event, the confirmation in place as well.
@@ -85,7 +85,7 @@ export default function ArchiveButton({ eventId, currentStatus, onDone, variant 
               {inline && eventTitle ? `Archiver « ${eventTitle} » ?` : "Archiver cet événement ?"}
             </span>
             <span id={`${id}-desc`} className="text-xs text-yellow-900">
-              Il ne sera plus visible du public. Vous pourrez ensuite le supprimer définitivement depuis ses réglages.
+              Il ne sera plus visible du public. Vous pourrez ensuite le supprimer définitivement depuis ses paramètres.
             </span>
             <div className="flex items-center gap-2">
               <button

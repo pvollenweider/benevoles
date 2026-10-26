@@ -3687,7 +3687,7 @@ exports[`shift roster characterization (#1068) > exports the same names and the 
   "ROSTER_NOBODY_TEXT": "Personne d'autre pour l'instant.",
   "ROSTER_NOTICE_V1": "2026-10-21",
   "ROSTER_NOTICE_VERSION": "2026-10-21.2",
-  "ROSTER_ORG_DEFAULT_HINT": "S'applique aux événements créés ensuite ; les événements existants gardent leur réglage.",
+  "ROSTER_ORG_DEFAULT_HINT": "S'applique aux événements créés ensuite ; les événements existants conservent leur valeur actuelle.",
   "ROSTER_ORG_DEFAULT_LABEL": "Par défaut, montrer aux bénévoles qui est inscrit",
   "ROSTER_PUBLISH_NOTE": "« Qui est inscrit » est désactivé. L'activer, maintenant ou plus tard, ne change rien à la publication.",
   "ROSTER_PUBLISH_NOTE_ON": "« Qui est inscrit » est activé : prévenez vos bénévoles.",
@@ -3695,7 +3695,7 @@ exports[`shift roster characterization (#1068) > exports the same names and the 
   "ROSTER_SEE_OTHERS_LABEL": "Voir qui est inscrit sur les autres créneaux",
   "ROSTER_SETTING_HINT": "Les bénévoles confirmés et les membres invités voient le prénom et l'initiale de ceux qui l'acceptent.",
   "ROSTER_SETTING_LABEL": "Montrer aux bénévoles qui est inscrit",
-  "ROSTER_SETTING_LINK": "Modifier le réglage « Qui est inscrit »",
+  "ROSTER_SETTING_LINK": "Modifier le paramètre « Qui est inscrit »",
   "ROSTER_SIGNUP_HINT": "Ces personnes le voient, même sans créneau commun avec toi, jusqu'à la fin de l'événement, pour choisir leurs créneaux et savoir avec qui elles seront. Facultatif, sans effet sur ton inscription. Tu pourras le confirmer, ou le masquer à tout moment, sur ta page « Mes inscriptions ». Même si ton nom reste masqué, ta place confirmée est comptée dans le nombre de bénévoles affiché sur chaque créneau.",
   "ROSTER_SIGNUP_LABEL": "J'accepte que les bénévoles confirmés et les membres invités par l'organisation voient mon prénom et l'initiale de mon nom (par exemple « Aline M. ») sur mes créneaux confirmés.",
   "ROSTER_SWITCH_EXPLAIN": "Prénom et initiale des bénévoles confirmés qui l'ont accepté ; les autres sont comptés, sans leur nom.",
@@ -3708,7 +3708,7 @@ exports[`shift roster characterization (#1068) > exports the same names and the 
 }
 `;
 
-exports[`shift roster characterization (#1068) > exports the same names and the same texts and numbers 3`] = `"2803c240349b669565e1ee01a19c87241d18053d4ab79ec06596baa21b84d009"`;
+exports[`shift roster characterization (#1068) > exports the same names and the same texts and numbers 3`] = `"075ed36f6ab18ec8765340a42997b809e0953a07ae467d25bfea7e6fbf16d076"`;
 
 exports[`shift roster characterization (#1068) > minors, the sign-up box, the roster's opening and who may look 1`] = `
 {
