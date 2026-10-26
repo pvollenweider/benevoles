@@ -87,7 +87,8 @@ export function withDayContact<T extends ShiftInfo>(info: T, event: { dayContact
 }
 
 /** Names of the leaders of this role, trimmed, without blanks or repeats. */
-export function sectorLeaderNames(roleName: string, leaders: { roleName: string; name: string }[] | null | undefined): string[] {
+// Poste leaders only (#1169): a sector leader (roleName null) is not named to volunteers in this lot.
+export function sectorLeaderNames(roleName: string, leaders: { roleName: string | null; name: string }[] | null | undefined): string[] {
   return [...new Set((leaders ?? []).filter((l) => l.roleName === roleName).map((l) => clean(l.name)).filter(Boolean))]
 }
 
@@ -95,7 +96,7 @@ export function sectorLeaderNames(roleName: string, leaders: { roleName: string;
  * The shift's info with the names of its role's sector leaders attached (#560). For confirmed
  * volunteers only (personal page, reminders, individual printed sheet). Only `name` is read.
  */
-export function withSectorLeaders<T extends ShiftInfo>(info: T, roleName: string, leaders: { roleName: string; name: string }[] | null | undefined): T {
+export function withSectorLeaders<T extends ShiftInfo>(info: T, roleName: string, leaders: { roleName: string | null; name: string }[] | null | undefined): T {
   const names = sectorLeaderNames(roleName, leaders)
   return names.length ? { ...info, sectorLeaderNames: names } : info
 }

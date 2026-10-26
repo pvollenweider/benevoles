@@ -27,8 +27,9 @@ import { roleOverlapAllowed } from "./shift-overlap"
  * - sector (#1147): the same rule as the colour, on `sectorId`. The role route sets it on every shift
  *   of the poste, so a disagreement only comes from a race (a shift created while the sector was
  *   being changed): the sector most shifts carry wins, shifts « Sans secteur » are ignored, and the
- *   poste falls back to « Sans secteur » only when none has one. Grouping is organisers' display
- *   only (no access depends on it), so the value in force for most of the poste is the safe one.
+ *   poste falls back to « Sans secteur » only when none has one. Since #1169 a sector leader's
+ *   read-only access follows it too (src/lib/leader-scope.ts): the value in force for most of the
+ *   poste is the one every view reads, so the leader sees exactly what the organisers' grouping shows.
  *   An archived or unknown sector is shown as « Sans secteur » (src/lib/sectors.ts).
  * Pure, no Prisma import.
  */

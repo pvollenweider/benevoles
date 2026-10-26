@@ -7,7 +7,7 @@ import { civilDateSchema } from "./civil-date"
 import { duplicatedQuestionRole } from "./question-role"
 import { duplicatedParent } from "./question-follow-up"
 import { duplicatedScope } from "./question-scope"
-import { leadersOutsideDeletedPostes } from "./leader-postes"
+import { leadersForCopy } from "./leader-postes"
 
 /**
  * Event duplication with explicit choices (#378, on top of #356). The organizer picks a title,
@@ -113,7 +113,8 @@ export type DuplicableEvent = {
   pages: { slug: string; title: string; content: string; displayOrder: number }[]
   /** Active custom questions (#483); copied with the registration settings, never their answers. */
   questions?: { id?: string; label: string; type: string; options: string[]; required: boolean; position: number; roleName?: string | null; minValue?: number | null; maxValue?: number | null; parentId?: string | null; showIfValues?: string[]; displayScope?: string | null; displayRoleNames?: string[] | null }[]
-  leaders: { roleName: string; name: string; email: string }[]
+  /** A poste (`roleName`) or, since #1169, a sector (`sectorId`) leader. */
+  leaders: { roleName: string | null; sectorId?: string | null; name: string; email: string }[]
   /** Postes whose every shift is cancelled (#1010): their leaders don't follow. */
   deletedPostes?: string[]
   recurrences?: DuplicableRecurrence[]
@@ -259,8 +260,16 @@ export function duplicatePlan(source: DuplicableEvent, options: DuplicateOptions
     pages: copy.pages ? source.pages.map((p) => ({ slug: p.slug, title: p.title, content: p.content, displayOrder: p.displayOrder })) : [],
     questions: copy.settings ? duplicatedQuestions(source.questions ?? [], copiedRoles, newId) : [],
     // Never the leaders of a deleted poste (#1010): they would get a link to a poste the copy
-    // doesn't have. A poste typed before its shifts exist still follows.
-    leaders: copy.leaders ? leadersOutsideDeletedPostes(source.leaders, source.deletedPostes ?? []) : [],
+    // doesn't have. A poste typed before its shifts exist still follows. A sector leader (#1169)
+    // follows in the copy of their sector; never one of an archived sector, which is not copied.
+    leaders: copy.leaders
+      ? leadersForCopy(source.leaders, source.deletedPostes ?? [], (source.sectors ?? []).filter((s) => !s.archivedAt).map((s) => s.id)).taken
+        .flatMap((l) => {
+          if (!l.sectorId) return [{ roleName: l.roleName, name: l.name, email: l.email }]
+          const sectorId = sectorPlan.sectorOf(l.sectorId)
+          return sectorId ? [{ roleName: null, sectorId, name: l.name, email: l.email }] : []
+        })
+      : [],
   }
 }
 
@@ -286,10 +295,15 @@ function duplicatedQuestions(questions: NonNullable<DuplicableEvent["questions"]
 }
 
 /**
- * `leaders` counts the leaders a copy takes; `leadersLeftOut` those of a poste whose every shift is
- * cancelled (#1010), which it doesn't.
+ * `leaders` counts the leaders a copy takes; `leadersLeftOut` those it doesn't: of a poste whose every
+ * shift is cancelled (#1010) or, `leftOutSectors` of them, of an archived sector (#1169).
  */
-export type DuplicateCounts = { shifts: number; pages: number; leaders: number; leadersLeftOut?: number; hasSettings: boolean }
+export type DuplicateCounts = { shifts: number; pages: number; leaders: number; leadersLeftOut?: number; leftOutSectors?: number; hasSettings: boolean }
+
+/** Why leaders are left out: the wording of #1010 unless some lead an archived sector (#1169). */
+const leftOutReason = (c: DuplicateCounts, many: boolean) => (c.leftOutSectors ?? 0) > 0
+  ? (many ? "de postes ou de secteurs qui ne sont plus actifs" : "d'un poste ou d'un secteur qui n'est plus actif")
+  : (many ? "de postes aux créneaux tous annulés" : "d'un poste aux créneaux tous annulés")
 
 const n = (count: number, one: string, many: string) => `${count} ${count > 1 ? many : one}`
 
@@ -302,7 +316,7 @@ export function duplicateSummary(counts: DuplicateCounts, copy: CopyChoices, off
   else lines.push("Mêmes dates que l'original.")
   if (copy.pages && counts.pages > 0) lines.push(n(counts.pages, "page personnalisée copiée.", "pages personnalisées copiées."))
   if (copy.leaders && counts.leaders > 0) lines.push(`${n(counts.leaders, "responsable de secteur repris", "responsables de secteur repris")} : chacun reçoit un email avec son lien pour la copie.`)
-  else if (copy.leaders && (counts.leadersLeftOut ?? 0) > 0) lines.push("Aucun responsable de secteur repris : tous les créneaux de leur poste sont annulés.")
+  else if (copy.leaders && (counts.leadersLeftOut ?? 0) > 0) lines.push((counts.leftOutSectors ?? 0) > 0 ? "Aucun responsable repris : leur poste ou leur secteur n'est plus actif." : "Aucun responsable de secteur repris : tous les créneaux de leur poste sont annulés.")
   lines.push(copy.settings ? "Messages et paramètres d'inscription copiés." : "Messages et paramètres d'inscription remis à zéro.")
   lines.push("Les inscriptions et les jalons ne sont jamais copiés. La copie est un brouillon.")
   return lines
@@ -311,9 +325,9 @@ export function duplicateSummary(counts: DuplicateCounts, copy: CopyChoices, off
 /** The hint of the « Les responsables de secteur » choice: who follows, and who doesn't (#1010). */
 export function leadersChoiceHint(c: DuplicateCounts): string {
   const out = c.leadersLeftOut ?? 0
-  const leftOut = out === 0 ? "" : out > 1 ? `${out} autres, de postes aux créneaux tous annulés, ne sont pas repris.` : "1 autre, d'un poste aux créneaux tous annulés, n'est pas repris."
+  const leftOut = out === 0 ? "" : out > 1 ? `${out} autres, ${leftOutReason(c, true)}, ne sont pas repris.` : `1 autre, ${leftOutReason(c, false)}, n'est pas repris.`
   if (c.leaders > 0) return `${n(c.leaders, "responsable", "responsables")} : chacun reçoit tout de suite un email avec son lien pour la copie.${leftOut ? ` ${leftOut}` : ""}`
-  if (out > 0) return `Aucun responsable repris : ${out > 1 ? `${out} responsables, de postes aux créneaux tous annulés, ne sont pas repris.` : "1 responsable, d'un poste aux créneaux tous annulés, n'est pas repris."}`
+  if (out > 0) return `Aucun responsable repris : ${out > 1 ? `${out} responsables, ${leftOutReason(c, true)}, ne sont pas repris.` : `1 responsable, ${leftOutReason(c, false)}, n'est pas repris.`}`
   return "Aucun responsable sur l'événement d'origine."
 }
 

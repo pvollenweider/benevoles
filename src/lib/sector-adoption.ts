@@ -35,8 +35,8 @@ export async function lockEventSectors(tx: Tx, eventId: string, organizationId: 
   return rows[0] ?? null
 }
 
-/** Locks one sector's row (archive and poste assignment never cross), checking it belongs to the event. */
-async function lockSector(tx: Tx, eventId: string, sectorId: string): Promise<{ id: string; name: string; archivedAt: Date | null } | null> {
+/** Locks one sector's row (archive, poste assignment and a new sector leader never cross), checking it belongs to the event. */
+export async function lockSector(tx: Tx, eventId: string, sectorId: string): Promise<{ id: string; name: string; archivedAt: Date | null } | null> {
   const rows: { id: string; name: string; archivedAt: Date | null }[] = await tx.$queryRaw`SELECT "id", "name", "archivedAt" FROM "Sector" WHERE "id" = ${sectorId} AND "eventId" = ${eventId} FOR UPDATE`
   return rows[0] ?? null
 }

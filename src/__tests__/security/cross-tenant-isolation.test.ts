@@ -2056,4 +2056,31 @@ describe("Sectors — cross-tenant isolation (#1147)", () => {
     expect(res.status).toBe(404)
     expect(tx.shift.updateMany).not.toHaveBeenCalled()
   })
+
+  // #1169: a sector leader for an org-A event, naming an org-B sector, is never created.
+  it("POST sector-leaders with an org-B sector through an org-A event creates no leader", async () => {
+    // The beta gate open for org A: capability opened by the operator, org in the beta.
+    ;(prismaMock as Record<string, unknown>).platformSetting = { findUnique: vi.fn().mockResolvedValue({ value: { open: ["sectors", "sectorLeaders"] } }) }
+    prismaMock.organization.findUnique.mockResolvedValueOnce({ active: true, suspendedAt: null, betaOptInAt: new Date() })
+    const { POST } = await import("@/app/api/admin/events/[id]/sector-leaders/route")
+    const { db, tx } = sectorDb({ id: "evt-a", title: "Fête", organization: { slug: "org-a" } })
+    const create = vi.fn()
+    Object.assign(tx, { sectorLeader: { create } })
+    ;(db as Record<string, unknown>).sectorLeader = { findFirst: vi.fn().mockResolvedValue(null), create }
+    tx.$queryRaw.mockResolvedValueOnce([{ id: "evt-a", sectorsEnabled: true, sectorsAdoptedAt: new Date() }]).mockResolvedValueOnce([])
+    const res = await POST(makeRequest("/api/admin/events/evt-a/sector-leaders", "POST", { sectorId: "sec-b", name: "Paula", email: "p@x.com" }), params("evt-a"))
+    expect(res.status).toBe(404)
+    const [eventLock, sectorLock] = tx.$queryRaw.mock.calls
+    expect(eventLock.slice(1)).toEqual(["evt-a", ORG_A])
+    expect(sectorLock.slice(1)).toEqual(["sec-b", "evt-a"])
+    expect(create).not.toHaveBeenCalled()
+  })
+
+  it("POST sector-leaders with a sector for an org-B event returns 404 before any lock", async () => {
+    const { POST } = await import("@/app/api/admin/events/[id]/sector-leaders/route")
+    const { tx } = sectorDb()
+    const res = await POST(makeRequest("/api/admin/events/evt-b/sector-leaders", "POST", { sectorId: "sec-b", name: "Paula", email: "p@x.com" }), params("evt-b"))
+    expect(res.status).toBe(404)
+    expect(tx.$queryRaw).not.toHaveBeenCalled()
+  })
 })

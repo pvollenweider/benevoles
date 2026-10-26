@@ -1,3 +1,4 @@
+import { leaderRoleNamesOf } from "@/lib/leader-scope"
 import { notFound, redirect } from "next/navigation"
 import Link from "next/link"
 import { getOrgContext } from "@/lib/auth-guard"
@@ -55,7 +56,8 @@ export default async function AdminEventPage({ params }: { params: Promise<{ id:
         orderBy: [{ date: "asc" }, { startTime: "asc" }],
       },
       milestones: { orderBy: [{ dueDate: "asc" }, { createdAt: "asc" }], include: { owner: { select: { name: true } } } },
-      sectorLeaders: { select: { roleName: true } },
+      sectorLeaders: { select: { roleName: true, sectorId: true } },
+      sectors: { select: { id: true, archivedAt: true } },
     },
   })
 
@@ -94,7 +96,8 @@ export default async function AdminEventPage({ params }: { params: Promise<{ id:
       waiting: sh.registrations.filter((r) => r.status === "waiting" || r.status === "offered").length,
       requested: sh.registrations.filter((r) => r.status === "requested").length,
     })),
-    event.sectorLeaders.map((l) => l.roleName),
+    // A poste with its own leader or its sector's (#1169).
+    leaderRoleNamesOf(event.sectorLeaders, event.shifts, event.sectors),
   )
   const belowMinimum = belowMinimumSentence(staffing.belowMinimum.length)
 

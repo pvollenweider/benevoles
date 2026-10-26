@@ -35,7 +35,7 @@ describe("admin pages pass no secret field to client components (#1009)", () => 
 
   it("sector leaders page: initialLeaders carry who leads what, never the token", async () => {
     m.db = {
-      event: { findFirst: vi.fn(async () => ({ id: "evt-1", title: "Festival" })) },
+      event: { findFirst: vi.fn(async () => ({ id: "evt-1", title: "Festival", sectorsEnabled: false, sectorsAdoptedAt: null, sectors: [] })) },
       sectorLeader: { findMany: answers(() => [{ id: "l1", eventId: "evt-1", roleName: "Bar", name: "Alice", email: "a@x.com", createdAt: new Date("2026-09-01"), ...SECRETS }]) },
       shift: { findMany: vi.fn(async () => [{ roleName: "Bar" }]) },
       registration: { findMany: vi.fn(async () => []) },

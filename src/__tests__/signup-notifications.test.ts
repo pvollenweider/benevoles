@@ -153,8 +153,9 @@ describe("buildSignupNotifications", () => {
   })
 
   it("tells sector leaders of placed and waitlisted sign-ups, not of requests", async () => {
-    m.leaderFindMany.mockImplementation(async ({ where }: { where: { roleName: string } }) => [
-      { email: `lead-${where.roleName}@example.org`, name: `Lead ${where.roleName}`, roleName: where.roleName, tokenEnc: null, tokenLegacy: `ltok-${where.roleName}` },
+    // The poste's leaders and, since #1169, the sector leaders of the event (none here).
+    m.leaderFindMany.mockImplementation(async ({ where }: { where: { OR: [{ roleName: string }] } }) => [
+      { email: `lead-${where.OR[0].roleName}@example.org`, name: `Lead ${where.OR[0].roleName}`, roleName: where.OR[0].roleName, sectorId: null, sector: null, tokenEnc: null, tokenLegacy: `ltok-${where.OR[0].roleName}` },
     ])
     const shifts = [shift("s1", "Bar"), shift("s2", "Caisse"), shift("s3", "Accueil")]
     const out = await buildSignupNotifications(input({
@@ -165,7 +166,7 @@ describe("buildSignupNotifications", () => {
     const leaders = out.filter((p) => p.kind === "sector_leader_new_signup")
     expect(leaders.map((p) => p.recipient.email)).toEqual(["lead-Bar@example.org", "lead-Accueil@example.org"])
     expect(leaders[0].data).toMatchObject({ eventTitle: "Fête du village", volunteerName: "Ana Rossi", shiftLabel: "Créneau s1", orgSlug: "village", token: "ltok-Bar" })
-    expect(m.leaderFindMany).toHaveBeenCalledWith({ where: { eventId: "ev1", roleName: "Bar" } })
+    expect(m.leaderFindMany).toHaveBeenCalledWith(expect.objectContaining({ where: { eventId: "ev1", OR: [{ roleName: "Bar" }, { sectorId: { not: null } }] } }))
   })
 
   it("confirms each waitlisted shift with its position", async () => {
@@ -190,8 +191,8 @@ describe("buildSignupNotifications", () => {
   })
 
   it("keeps the order and keys every payload on the first registration and its recipient (#315)", async () => {
-    m.leaderFindMany.mockImplementation(async ({ where }: { where: { roleName: string } }) => [
-      { email: `lead-${where.roleName}@example.org`, name: "Lead", roleName: where.roleName, tokenEnc: null, tokenLegacy: "lt" },
+    m.leaderFindMany.mockImplementation(async ({ where }: { where: { OR: [{ roleName: string }] } }) => [
+      { email: `lead-${where.OR[0].roleName}@example.org`, name: "Lead", roleName: where.OR[0].roleName, sectorId: null, sector: null, tokenEnc: null, tokenLegacy: "lt" },
     ])
     const shifts = [shift("s1", "Bar"), shift("s2", "Caisse"), shift("s3", "Accueil")]
     const out = await buildSignupNotifications(input({

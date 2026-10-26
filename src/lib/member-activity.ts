@@ -26,7 +26,8 @@ export type ActivitySources = {
     shift: { roleName: string; label: string; date: Date }
     event: { id: string; title: string }
   }[]
-  leaders: { createdAt: Date; roleName: string; event: { id: string; title: string } }[]
+  /** A poste (`roleName`) or, since #1169, a sector. */
+  leaders: { createdAt: Date; roleName: string | null; sector?: { name: string } | null; event: { id: string; title: string } }[]
   orgLog: { createdAt: Date; action: string }[]
 }
 
@@ -59,7 +60,7 @@ export function memberTimeline(s: ActivitySources): ActivityFact[] {
     if (r.status === "cancelled") facts.push({ at: r.updatedAt, kind: "cancelled", text: `Inscription annulée : ${name}`, ...base })
     if (r.checkedInAt) facts.push({ at: r.checkedInAt, kind: "present", text: `Présent : ${name}`, ...base })
   }
-  for (const l of s.leaders) facts.push({ at: l.createdAt, kind: "leader", text: `Responsable du poste « ${l.roleName} »`, eventId: l.event.id, eventTitle: l.event.title })
+  for (const l of s.leaders) facts.push({ at: l.createdAt, kind: "leader", text: l.roleName ? `Responsable du poste « ${l.roleName} »` : `Responsable du secteur « ${l.sector?.name ?? ""} »`, eventId: l.event.id, eventTitle: l.event.title })
   for (const o of s.orgLog) {
     const text = PROFILE_ACTIONS[o.action]
     if (text) facts.push({ at: o.createdAt, kind: "profile", text })

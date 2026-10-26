@@ -28,6 +28,19 @@ Désignez un ou plusieurs bénévoles responsables d'un poste (ex. « Bar »). C
 - La fiche du bénévole concerné (**Membres**) reçoit automatiquement l'étiquette « responsable »
 - Les bénévoles confirmés du poste voient le **nom** de son ou ses responsables (« Responsable du poste : … ») sur leur page **Mes inscriptions**, dans les rappels automatiques et sur le planning individuel imprimé. Jamais son email ni son téléphone : pour que les bénévoles puissent l'appeler, indiquez-le comme contact du créneau ou comme **Contact le jour J**. Rien n'apparaît sur la page d'inscription
 
+## Confier tout un secteur (bêta)
+
+Dans un événement qui [utilise des secteurs](gerer-les-postes.md), un responsable peut suivre **tout un secteur** plutôt qu'un seul poste : le responsable du secteur « Parking » voit tous ses postes, par exemple « Parking Nord », « Parking Sud » et « École ». Cette possibilité fait partie des fonctions bêta : elle apparaît quand la fonction **Responsables de secteur** est active pour votre organisation (**Paramètres**).
+
+- Dans un tel événement, la page s'appelle **Responsables de poste et de secteur** et classe les responsables par secteur : pour chaque secteur, ses postes, la personne responsable de tout le secteur, puis les responsables de ses postes. Les postes qui ne sont dans aucun secteur viennent en dernier
+- **+ Ajouter un responsable** demande d'abord **Responsable de** : **Tout un secteur** (choisissez le secteur dans la liste) ou **Un poste précis** (comme dans un événement sans secteurs)
+- Le lien du responsable de secteur montre les postes qui sont **en ce moment** dans son secteur, classés par poste, avec un filtre **Jour**. Un poste que vous ajoutez au secteur dans **Gérer les postes** y apparaît aussitôt ; un poste que vous en retirez disparaît dès la page suivante. Les nombres affichés ne comptent que les postes du secteur
+- Il reçoit les emails de nouvelle inscription et de désistement de tous les postes du secteur. Une personne responsable à la fois du secteur et d'un de ses postes ne reçoit qu'un email, avec le lien du secteur
+- Renommer le secteur ne change rien pour ses responsables : leur lien affiche le nouveau nom. Archiver le secteur vide son lien, qui reste valable : les responsables ne voient plus aucun poste jusqu'à ce que vous rétablissiez le secteur et y replaciez des postes
+- Dupliquer l'événement avec ses responsables reprend les responsables de secteur dans la copie du secteur, sauf ceux d'un secteur archivé
+- Être responsable ne prend aucune place et ne compte aucune heure. Les bénévoles ne voient pas les secteurs : sur leur page, seul le nom des responsables de leur poste apparaît
+- Les modifications de réponse à une question rattachée à un poste vont aux responsables de ce poste, pas à ceux du secteur
+
 ![Page de la responsable du poste Buvette : chaque créneau avec ses bénévoles inscrits, leur email et leur téléphone, et les personnes en liste d'attente](/doc-img/leader-page.png)
 
 ## Questions fréquentes

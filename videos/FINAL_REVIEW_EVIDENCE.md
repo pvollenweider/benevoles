@@ -421,3 +421,21 @@ Les sélecteurs de `videos/tools/record.ts` et `videos/lib/record-accessibility.
 (bouton et titre « Gérer les postes », barres de la frise) ne changent pas. Aucune
 narration ni bloc `viewer` à modifier. Une future vidéo des secteurs demandera
 un scénario qui ouvre la bêta.
+
+## Vérifié sans écart : responsables de tout un secteur (#1169)
+
+Les responsables de secteur, le choix « Tout un secteur / Un poste précis », le
+classement par secteur et les nouveaux titres n'apparaissent que dans un événement
+qui a adopté les secteurs. Les scénarios `seed-video-*` n'en créent aucun : la page
+« Responsables de secteur », la page du responsable (« Responsable · Buvette »), les
+emails des responsables et le choix des responsables à la duplication restent
+identiques à l'écran.
+
+Vidéos vérifiées (sources, manifestes, bloc `viewer` et sélecteurs, sans rendu) :
+`sector-leaders`, `event-duplicate`, `staffing-gaps`, `registrations-management`,
+`admin-features-tour`, `admin-navigation`, `privacy-personal-links`,
+`data-exports-archives`, `event-review-publish`. Les sélecteurs de
+`videos/tools/record.ts` (bouton « + Ajouter un responsable », champ « Poste »,
+titre « Responsables de secteur ») ne changent pas ; seule une ligne de calcul y
+accepte désormais un responsable sans poste. Aucune narration à modifier. Une
+future vidéo des responsables de secteur demandera un scénario qui ouvre la bêta.

@@ -12,6 +12,7 @@ import { spokenStaffingState, staffingStateText, type StaffingState } from "@/li
 import { isTokenShaped, tokenPath } from "@/lib/token-path"
 import { mailtoHref } from "@/lib/email-address"
 import { telHref } from "@/lib/shift-info"
+import SectorLeaderRoster, { type RosterRegistration, type RosterStaffing } from "@/components/public/SectorLeaderRoster"
 
 type RegistrationItem = {
   id: string
@@ -30,6 +31,10 @@ type StaffingItem = {
 type PageData = {
   event: { title: string; slug: string }
   roleName: string
+  /** Since #1169: one poste or one sector, the h1, and the postes of the scope. */
+  scope?: { kind: "poste" | "sector"; name: string }
+  heading?: string
+  postes?: string[]
   leaderName: string
   registrations: RegistrationItem[]
   staffing?: StaffingItem[]
@@ -102,7 +107,7 @@ export default function SectorLeaderPage() {
   }, [token])
 
   useEffect(() => {
-    if (data) document.title = `Responsable · ${data.roleName} — Bénévoles`
+    if (data) document.title = `${data.heading ?? `Responsable · ${data.roleName}`} — Bénévoles`
   }, [data])
 
   if (loading) return <div role="status" className="flex items-center justify-center min-h-screen text-gray-500">Chargement…</div>
@@ -120,6 +125,24 @@ export default function SectorLeaderPage() {
     )
   }
 
+  // A sector leader (#1169): every poste of the sector, grouped by poste, with a day filter.
+  if (data.scope?.kind === "sector") {
+    return (
+      <>
+      <main className="flex-1 bg-gray-50 px-4 py-10">
+        <SectorLeaderRoster
+          heading={data.heading ?? `Responsable · ${data.roleName}`}
+          eventTitle={data.event.title}
+          postes={data.postes ?? []}
+          registrations={data.registrations as unknown as RosterRegistration[]}
+          staffing={(data.staffing ?? []) as unknown as RosterStaffing[]}
+        />
+      </main>
+      <div className="px-4"><PublicFooter site={orgPageFooterSite()} /></div>
+      </>
+    )
+  }
+
   const groups = groupByShift(data.registrations)
   const staffingByKey = new Map((data.staffing ?? []).map((s) => [shiftKey(s), s]))
   const belowMinimum = (data.staffing ?? []).filter((s) => s.state === "below_minimum")
@@ -130,7 +153,7 @@ export default function SectorLeaderPage() {
       <div className="max-w-lg mx-auto space-y-4">
         <div>
           <p className="text-sm text-gray-500">{data.event.title}</p>
-          <h1 className="text-xl font-bold text-gray-900">Responsable · {data.roleName}</h1>
+          <h1 className="text-xl font-bold text-gray-900">{data.heading ?? `Responsable · ${data.roleName}`}</h1>
           <p className="text-sm text-gray-600 mt-1">
             {data.registrations.length} bénévole{data.registrations.length > 1 ? "s" : ""} inscrit{data.registrations.length > 1 ? "s" : ""}
           </p>

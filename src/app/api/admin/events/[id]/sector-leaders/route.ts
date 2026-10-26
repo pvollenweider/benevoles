@@ -8,12 +8,16 @@ import { addSectorLeader } from "@/lib/admin-registration-actions"
 import { z } from "zod"
 import { validationError } from "@/lib/api-error"
 import { SECTOR_LEADER_ADMIN_SELECT } from "@/lib/admin-row-selects"
+import { canAdoptBeta } from "@/lib/beta-access"
+import { SECTOR_LEADERS_CLOSED_ERROR } from "@/lib/leader-scope"
 
+// One poste (`roleName`, as before #1169) or one sector (`sectorId`, beta): exactly one.
 const postSchema = z.object({
-  roleName: z.string().min(1).max(100),
+  roleName: z.string().min(1).max(100).optional(),
+  sectorId: z.string().min(1).max(100).optional(),
   name: z.string().min(1).max(100),
   email: z.string().trim().toLowerCase().email(),
-})
+}).refine((d) => (d.roleName === undefined) !== (d.sectorId === undefined), { message: "Indiquez un poste ou un secteur.", path: ["roleName"] })
 
 export async function GET(_req: Request, { params }: { params: Promise<{ id: string }> }) {
   const guard = await requireOrgSession()
@@ -49,13 +53,21 @@ export async function POST(req: Request, { params }: { params: Promise<{ id: str
   })
   if (!event) return NextResponse.json({ error: "Non trouvé" }, { status: 404 })
 
+  // A sector leader (#1169) is a new use of the beta capability « sectorLeaders »: refused while the
+  // operator has not opened it or the organisation has not joined the beta. The event's sectors
+  // are checked under their locks by addSectorLeader.
+  if (parsed.data.sectorId && !(await canAdoptBeta(guard.organizationId, "sectorLeaders"))) {
+    return NextResponse.json({ error: SECTOR_LEADERS_CLOSED_ERROR }, { status: 403 })
+  }
+
   // Same path as the bulk "Rendre responsable" on the registrations list (#292).
   const result = await addSectorLeader(
     db,
     { organizationId: guard.organizationId, actor: adminActor(guard.session), event: { id: eventId, ...event } },
     parsed.data,
   )
-  if (result.status === "exists") return NextResponse.json({ error: "Cette personne est déjà responsable de ce poste" }, { status: 409 })
+  if (result.status === "exists") return NextResponse.json({ error: parsed.data.sectorId ? "Cette personne est déjà responsable de ce secteur" : "Cette personne est déjà responsable de ce poste" }, { status: 409 })
+  if (result.status === "refused") return NextResponse.json({ error: result.error, field: "scope" }, { status: result.httpStatus })
 
   return NextResponse.json(result.leader, { status: 201 })
 }

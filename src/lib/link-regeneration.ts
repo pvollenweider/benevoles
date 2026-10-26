@@ -24,6 +24,7 @@
  * (and the blast radius of a mistake) small.
  */
 
+import { leaderInviteScope } from "./leader-scope"
 import { generateToken } from "./utils"
 import { registrationToken, linkToken } from "./token-vault"
 import { sendNotification } from "./notifications"
@@ -60,7 +61,9 @@ type RegistrationRow = {
 
 type LeaderRow = {
   id: string
-  roleName: string
+  /** Null for a sector leader (#1169), whose sector is then set. */
+  roleName: string | null
+  sector?: { name: string } | null
   name: string
   email: string
   event: { title: string; organizationId: string; organization: { slug: string } }
@@ -92,6 +95,7 @@ const registrationSelect = {
 const leaderSelect = {
   id: true,
   roleName: true,
+  sector: { select: { name: true } },
   name: true,
   email: true,
   event: { select: { title: true, organizationId: true, organization: { select: { slug: true } } } },
@@ -266,7 +270,7 @@ async function resendLeaderLinks(rows: LeaderRow[], newTokenById: Map<string, st
         kind: "sector_leader_invite",
         recipient: { email: l.email, name: l.name },
         organizationId: l.event.organizationId,
-        data: { leaderName: l.name, roleName: l.roleName, eventTitle: l.event.title, orgSlug: l.event.organization.slug, token: newTokenById.get(l.id)! },
+        data: { leaderName: l.name, ...leaderInviteScope(l), eventTitle: l.event.title, orgSlug: l.event.organization.slug, token: newTokenById.get(l.id)! },
       })
       if (result.ok) sent++; else failed++
     } catch {

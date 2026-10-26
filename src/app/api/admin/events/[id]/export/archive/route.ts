@@ -20,7 +20,7 @@ export async function GET(_req: Request, { params }: { params: Promise<{ id: str
       registrations: { include: { volunteer: true }, orderBy: { createdAt: "asc" } },
       pages: { orderBy: { displayOrder: "asc" } },
       questions: { orderBy: { position: "asc" }, include: { answers: { select: { volunteerId: true, values: true, updatedAt: true } } } },
-      sectorLeaders: { select: { roleName: true, name: true, email: true, createdAt: true }, orderBy: [{ roleName: "asc" }, { createdAt: "asc" }] },
+      sectorLeaders: { select: { roleName: true, sector: { select: { name: true } }, name: true, email: true, createdAt: true }, orderBy: [{ roleName: "asc" }, { createdAt: "asc" }] },
       milestones: { orderBy: { dueDate: "asc" } },
       logs: { orderBy: { createdAt: "asc" } },
     },

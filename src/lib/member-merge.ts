@@ -95,7 +95,8 @@ export interface DeliveryOutcomeLite {
 export interface SectorLeaderLite {
   id: string
   eventId: string
-  roleName: string
+  /** Null for a sector leader (#1169). */
+  roleName: string | null
   email: string
 }
 
