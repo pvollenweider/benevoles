@@ -106,10 +106,13 @@ export function typedPosteSector(shifts: readonly PosteSectorShift[], typed: str
 /**
  * The value of the form's « Secteur » select once the poste field changed: until the organiser
  * chose a sector (preset by « Ajouter un poste dans « S » » or changed by hand), it follows the
- * existing poste typed; a chosen sector, or a new name, keeps the current value.
+ * existing poste typed, and goes back to « Autres postes » (null) for a new name or an empty
+ * field, so a new poste never lands in a sector nobody chose (« Bar » then « Barrière »). A chosen
+ * sector keeps its value.
  */
 export function effectiveSector(chosen: boolean, typedSector: string | null | undefined, current: string | null): string | null {
-  return !chosen && typedSector !== undefined ? typedSector : current
+  if (chosen) return current
+  return typedSector ?? null
 }
 
 /** Under the poste field while the select follows the poste: where it is, then its settings. */
