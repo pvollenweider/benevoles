@@ -21,6 +21,10 @@ import { siteDomain } from "@/lib/site"
 import { spaceBaseDomain } from "@/lib/space-address"
 import { configuredAppUrl } from "@/lib/urls"
 import { canInviteAdmins } from "@/lib/org-approval"
+import OrgBetaForm from "@/components/admin/OrgBetaForm"
+import { readOpenBetaCapabilities } from "@/lib/beta-access"
+import { BETA_CAPABILITIES, betaCardVisible, betaReadOnlyValue, type BetaParticipation } from "@/lib/beta-capabilities"
+import { contactEmail } from "@/lib/site"
 
 export const dynamic = "force-dynamic"
 
@@ -34,7 +38,7 @@ export default async function AdminsSettingsPage() {
   // Computed here so the server and the client render the same address.
   const baseDomain = spaceBaseDomain(configuredAppUrl(), (await headers()).get("host"), siteDomain())
 
-  const [admins, org, slugHistory, publishedEventCount] = await Promise.all([
+  const [admins, org, slugHistory, publishedEventCount, openBeta] = await Promise.all([
     db.adminUser.findMany({
       where: { organizationId },
       select: {
@@ -48,13 +52,14 @@ export default async function AdminsSettingsPage() {
       },
       orderBy: { createdAt: "asc" },
     }),
-    db.organization.findUnique({ where: { id: organizationId }, select: { name: true, slug: true, outboundEmailApprovedAt: true, volunteerCharter: true, hasOrgInsurance: true, shiftRosterDefault: true, publicTitle: true, timeZone: true, volunteerHourRateCents: true, volunteerHourRateCurrency: true, volunteerHourRateSetAt: true, logo: ORG_LOGO_SELECT } }),
+    db.organization.findUnique({ where: { id: organizationId }, select: { name: true, slug: true, outboundEmailApprovedAt: true, volunteerCharter: true, hasOrgInsurance: true, shiftRosterDefault: true, publicTitle: true, timeZone: true, volunteerHourRateCents: true, volunteerHourRateCurrency: true, volunteerHourRateSetAt: true, betaOptInAt: true, betaOptInById: true, logo: ORG_LOGO_SELECT } }),
     db.orgSlugHistory.findMany({
       where: { organizationId },
       orderBy: { createdAt: "desc" },
       select: { slug: true, createdAt: true },
     }),
     db.event.count({ where: { organizationId, publicStatus: "published" } }),
+    readOpenBetaCapabilities(),
   ])
 
   const currentEmail = session.user?.email ?? ""
@@ -62,6 +67,16 @@ export default async function AdminsSettingsPage() {
   const isOwner = hasLevel(session.user?.role, "owner")
   const logo = org ? orgLogoOf(organizationId, org.logo) : null
   const hourRate = hourRateOf(org)
+  // Beta access (#1168): nothing new on this page unless something is open or the org takes part.
+  const betaOptInById = org?.betaOptInById
+  const betaAuthor = betaOptInById ? admins.find((a) => a.id === betaOptInById) : undefined
+  const beta: BetaParticipation = {
+    optedIn: !!org?.betaOptInAt,
+    optedInAt: org?.betaOptInAt?.toISOString() ?? null,
+    optedInByName: betaAuthor?.name ?? null,
+  }
+  const showBeta = !!org && betaCardVisible(openBeta, beta.optedIn)
+  const zone = org ? orgTimeZone(org) : APP_TIME_ZONE
 
   return (
     <div className="space-y-5">
@@ -98,6 +113,7 @@ export default async function AdminsSettingsPage() {
             <dt className="text-gray-600">Charte des bénévoles</dt><dd className="text-gray-900">{charterStatusLabel(org.volunteerCharter)}</dd>
             <dt className="text-gray-600">Qui est inscrit, nouveaux événements</dt><dd className="text-gray-900">{org.shiftRosterDefault ? "activé" : "désactivé"}</dd>
             <dt className="text-gray-600">Taux horaire de valorisation</dt><dd className="text-gray-900">{hourRate ? hourRateLabel(hourRate) : "aucun"}</dd>
+            {showBeta && <><dt className="text-gray-600">Participation à la bêta</dt><dd className="text-gray-900">{betaReadOnlyValue(beta, zone)}</dd></>}
           </dl>
         </section>
       )}
@@ -138,6 +154,15 @@ export default async function AdminsSettingsPage() {
         <OrgHourRateForm
           initial={{ cents: hourRate?.cents ?? null, currency: hourRate?.currency ?? "", setAt: hourRate?.setAt?.toISOString() ?? null }}
           timeZone={orgTimeZone(org)}
+        />
+      )}
+
+      {org && isOwner && showBeta && (
+        <OrgBetaForm
+          initial={beta}
+          capabilities={openBeta.map((id) => ({ id, label: BETA_CAPABILITIES[id].label, description: BETA_CAPABILITIES[id].description }))}
+          timeZone={zone}
+          contact={contactEmail()}
         />
       )}
 

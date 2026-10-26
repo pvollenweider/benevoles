@@ -86,6 +86,12 @@ model Organization {
   volunteerHourRateCents    Int?
   volunteerHourRateCurrency String?
   volunteerHourRateSetAt    DateTime?
+  // Beta access (#1168, src/lib/beta-capabilities.ts): when an owner turned on « Essayer les
+  // fonctions avancées en bêta » in Paramètres, and who (AdminUser.id, no relation: the account may
+  // be removed later; the OrgLog entry keeps the trace). Null = not taking part, the default.
+  // Leaving clears both and only blocks new adoptions: nothing already in use changes.
+  betaOptInAt   DateTime?
+  betaOptInById String?
   createdAt        DateTime @default(now())
   updatedAt        DateTime @updatedAt
 
@@ -1249,7 +1255,8 @@ model OperatorLog {
 }
 
 // A platform-wide setting changed from the super admin space, one row per key (#810): the
-// « Inscriptions fermées » switch (key "signup", value { closed }).
+// « Inscriptions fermées » switch (key "signup", value { closed }); the capabilities open for a
+// beta trial (#1168, key "beta.capabilities", value { open: string[] }, unknown ids ignored).
 model PlatformSetting {
   key         String   @id
   value       Json

@@ -1947,6 +1947,24 @@ describe("Organization settings — cross-tenant isolation (#1049)", () => {
     expect(arg.data).toEqual(expect.objectContaining({ volunteerHourRateCents: 2500, volunteerHourRateCurrency: "CHF" }))
   })
 
+  // #1168: joining the beta writes the session org only; an org-B id in the URL or the body has nowhere to go.
+  it("PUT /api/admin/settings/organization/beta opts in the session org only", async () => {
+    vi.doMock("@/lib/beta-access", () => ({ readOpenBetaCapabilities: vi.fn().mockResolvedValue(["sectors"]) }))
+    const { PUT } = await import("@/app/api/admin/settings/organization/beta/route")
+    setupGuard()
+    prismaMock.organization.findUnique.mockResolvedValueOnce({ betaOptInAt: null })
+    const updateMany = vi.fn().mockResolvedValue({ count: 1 })
+    ;(prismaMock.organization as Record<string, unknown>).updateMany = updateMany
+    const res = await PUT(makeRequest("/api/admin/settings/organization/beta?organizationId=org-b", "PUT", { organizationId: "org-b", optIn: true }))
+    expect(res.status).toBe(200)
+    expect(updateMany).toHaveBeenCalledTimes(1)
+    expect(updateMany.mock.calls[0][0].where).toEqual({ id: ORG_A, betaOptInAt: null })
+    expect(updateMany.mock.calls[0][0].data).not.toHaveProperty("organizationId")
+    for (const [args] of prismaMock.organization.findUnique.mock.calls) expect(args.where).toEqual({ id: ORG_A })
+    expect(prismaMock.orgLog.create).toHaveBeenCalledWith(expect.objectContaining({ data: expect.objectContaining({ organizationId: ORG_A, entityId: ORG_A, action: "organization.beta_opted_in" }) }))
+    vi.doUnmock("@/lib/beta-access")
+  })
+
   it("GET /api/admin/settings/notifications reads the session org's settings only", async () => {
     const { GET } = await import("@/app/api/admin/settings/notifications/route")
     setupGuard()
