@@ -20,12 +20,20 @@ import type { RawShift } from "./types"
 import SectorsSection from "./SectorsSection"
 import type { AdminSectorsState } from "../ShiftsManager"
 import { roleSectorOf } from "@/lib/role-settings"
-import { activeSectors, groupRolesBySector, postesCount, sectorsAdopted, sectorsManaged, type SectorGroup } from "@/lib/sectors"
+import { activeSectors, groupRolesBySector, sectorsAdopted, sectorsManaged, type SectorGroup } from "@/lib/sectors"
 
 /** Ref callback body: keeps `buttons` keyed by role while the button is mounted. */
 function setRoleButton(buttons: Map<string, HTMLButtonElement>, role: string, el: HTMLButtonElement | null) {
   if (el) buttons.set(role, el)
   else buttons.delete(role)
+}
+
+/**
+ * Draws one group's poste rows with the panel's `render`, as an element: the rows' ref callbacks and
+ * handlers run at commit and on events, never while the panel renders.
+ */
+function PosteRows({ render, group }: { render: (group: SectorGroup) => React.ReactNode; group: SectorGroup }) {
+  return <>{render(group)}</>
 }
 
 /**
@@ -42,7 +50,7 @@ function setRoleButton(buttons: Map<string, HTMLButtonElement>, role: string, el
 export default function RoleManagerPanel({
   open, panelId, eventId, shifts, setShifts, roles, setRoles, onClose, onAnnounce,
   onRequestDelete, onDeletingChange, onDeleteError, onRoleDeleted,
-  sectorsState = null, setSectorsState, onConfirmDone,
+  sectorsState = null, setSectorsState, onConfirmDone, onAddPoste,
 }: {
   open:             boolean
   /** Id of the panel's root, which « Gérer les postes » controls (`aria-controls`). */
@@ -66,6 +74,8 @@ export default function RoleManagerPanel({
   setSectorsState?: React.Dispatch<React.SetStateAction<AdminSectorsState | null>>
   /** Closes the parent's confirmation modal once a confirmed action is done (archiving a sector). */
   onConfirmDone?:   () => void
+  /** « Ajouter un poste dans « S » » (#1147): the parent opens the shift form in that sector. */
+  onAddPoste?:      (sector: { id: string; name: string }, opener: () => HTMLElement | null | undefined) => void
 }) {
   const [dragRoleIdx, setDragRoleIdx]     = useState<number | null>(null)
   const [savingOrder, setSavingOrder]     = useState(false)
@@ -91,7 +101,7 @@ export default function RoleManagerPanel({
   const [overlapRole, setOverlapRole] = useState<string | null>(null)
   const [overlapValue, setOverlapValue] = useState(false)
   const overlapBtnRefs = useRef(new Map<string, HTMLButtonElement>())
-  // A poste's sector (#1147): the inline editor, like the limit's.
+  // « Déplacer… » a poste to another sector (#1147): the inline editor, like the limit's.
   const [sectorRole, setSectorRole] = useState<string | null>(null)
   const [sectorValue, setSectorValue] = useState("")
   const sectorBtnRefs = useRef(new Map<string, HTMLButtonElement>())
@@ -135,7 +145,7 @@ export default function RoleManagerPanel({
   function handleRoleDragOver(e: React.DragEvent, toIdx: number) {
     e.preventDefault()
     if (dragRoleIdx === null || dragRoleIdx === toIdx) return
-    // Grouped by sector: a poste is dragged inside its sector only; « Secteur » moves it to another.
+    // Grouped by sector: a poste is dragged inside its sector only; « Déplacer… » moves it to another.
     if (groupOf(displayRoles[dragRoleIdx]) !== groupOf(displayRoles[toIdx])) return
     setRoles(moveItem(displayRoles, dragRoleIdx, toIdx))
     setDragRoleIdx(toIdx)
@@ -334,10 +344,17 @@ export default function RoleManagerPanel({
     return id && liveSectors.some((s) => s.id === id) ? id : null
   }
 
-  // Once the event uses sectors, the postes are listed under their sector (sector order, then
-  // « Autres postes »), like the timeline. The order shown is the order saved.
-  const grouped = sectorsInUse && liveSectors.length > 0
-  const roleGroups: SectorGroup[] = grouped ? groupRolesBySector(roles, sectorOfRole, liveSectors) : [{ id: null, name: "", roles }]
+  // Once the event uses sectors, one tree: every active sector (empty ones too, a poste is created
+  // from its sector), its postes under it, then « Autres postes », like the timeline. The order
+  // shown is the order saved.
+  const grouped = sectorsInUse
+  const roleGroups: SectorGroup[] = grouped ? groupRolesBySector(roles, sectorOfRole, liveSectors, { keepEmptySectors: true }) : [{ id: null, name: "", roles }]
+
+  /** The poste's place in the group it would move to (« Déplacer… »), for the announcement. */
+  function placeAfterMove(role: string, next: string | null): { index: number; total: number } {
+    const moved = groupRolesBySector(roles, (r) => (r === role ? next : sectorOfRole(r)), liveSectors).find((g) => g.roles.includes(role))
+    return moved ? { index: moved.roles.indexOf(role), total: moved.roles.length } : { index: 0, total: 1 }
+  }
   const displayRoles = roleGroups.flatMap((g) => g.roles)
   const groupOf = (role: string | undefined) => roleGroups.find((g) => role !== undefined && g.roles.includes(role))
 
@@ -366,46 +383,10 @@ export default function RoleManagerPanel({
 
   if (!open) return null
 
-  return (
-    <div id={panelId} className="bg-white rounded-2xl border border-gray-200 p-5 space-y-4">
-      <div>
-        {/* Focused by code only, when the row whose button should get focus back is gone. */}
-        <h2 ref={headingRef} tabIndex={-1} className="font-semibold text-gray-800 focus:outline-none">Gérer les postes</h2>
-        <p className="text-xs text-gray-500 mt-0.5">Réordonnez avec les flèches Monter et Descendre ou par glisser-déposer, puis enregistrez l&apos;ordre. Vous pouvez aussi renommer un poste, limiter le nombre de créneaux par personne, réserver un poste à certains membres ou à l&apos;organisation, le rendre cumulable avec un autre créneau ou le supprimer (avec tous ses créneaux).</p>
-      </div>
-      {roleActionError && (
-        <p role="alert" className="text-sm text-red-600 bg-red-50 rounded-lg px-3 py-2">{roleActionError}</p>
-      )}
-      {sectorsShown && sectorsState && setSectorsState && (
-        <SectorsSection
-          eventId={eventId}
-          state={sectorsState}
-          setState={setSectorsState}
-          shifts={shifts}
-          setShifts={setShifts}
-          onAnnounce={onAnnounce}
-          onRequestConfirm={onRequestDelete}
-          onConfirmBusy={onDeletingChange}
-          onConfirmError={onDeleteError}
-          onConfirmDone={() => onConfirmDone?.()}
-          // A poste editor offering an archived sector closes; its value would be refused.
-          onSectorGone={(id) => { if (sectorValue === id) setSectorRole(null) }}
-        />
-      )}
-      {/* With sectors, the postes get their own heading under « Secteurs » (outline). */}
-      {sectorsShown && <h3 className={grouped ? "text-sm font-semibold text-gray-800" : "sr-only"}>{grouped ? "Postes par secteur" : "Postes"}</h3>}
-      <div className={grouped ? "space-y-4" : undefined}>
-      {roleGroups.map((group) => {
-        const headingId = `${panelId}-group-${group.id ?? "none"}`
-        return (
-      <section key={group.id ?? "none"} aria-labelledby={grouped ? headingId : undefined} className={grouped ? "space-y-1.5" : undefined}>
-        {grouped && (
-          <h4 id={headingId} className="flex items-baseline gap-2 text-sm font-semibold text-gray-900">
-            {group.name}
-            <span className="text-xs font-normal text-gray-600">{postesCount(group.roles.length)}</span>
-          </h4>
-        )}
-      {/* role="list": Safari drops the list role of an <ol> without bullets. */}
+  /** The poste rows of one group (the whole list without sectors), in their own <ol>. */
+  function renderRoleList(group: SectorGroup) {
+    // role="list": Safari drops the list role of an <ol> without bullets.
+    return (
       <ol role="list" aria-label={grouped ? `Ordre des postes, ${group.name}` : "Ordre des postes"} className="space-y-1.5">
         {group.roles.map((role) => {
           const i = displayRoles.indexOf(role)
@@ -418,7 +399,6 @@ export default function RoleManagerPanel({
           const assignedOnly = assignedOnlyOf(role)
           const cumulable = overlapAllowedOf(role)
           const roleSectorId = sectorsInUse ? sectorOfRole(role) : null
-          const roleSectorName = liveSectors.find((s) => s.id === roleSectorId)?.name ?? null
           return (
           <li key={role}>
             <div
@@ -554,10 +534,10 @@ export default function RoleManagerPanel({
                       disabled={isBusy}
                       aria-expanded={sectorRole === role}
                       aria-controls={sectorRole === role ? `sector-form-${i}` : undefined}
-                      aria-label={`Secteur : ${roleSectorName ?? "aucun"}, poste « ${role} »`}
-                      className="text-xs text-gray-600 hover:text-blue-600 disabled:opacity-50 min-h-6 text-left min-w-0 [overflow-wrap:anywhere]"
+                      aria-label={`Déplacer le poste « ${role} »`}
+                      className="text-xs text-gray-600 hover:text-blue-600 disabled:opacity-50 min-h-6 flex-shrink-0"
                     >
-                      {`Secteur : ${roleSectorName ?? "aucun"}`}
+                      Déplacer…
                     </button>
                   )}
                   <button
@@ -634,10 +614,10 @@ export default function RoleManagerPanel({
                 onValueChange={setSectorValue}
                 busyRole={roleActionBusy}
                 onBusyRoleChange={setRoleActionBusy}
-                onActionError={setRoleActionError}
                 onClose={closeSector}
                 setShifts={setShifts}
                 onAnnounce={onAnnounce}
+                placeAfter={(next) => placeAfterMove(role, next)}
               />
             )}
             {limitRole === role && (
@@ -677,15 +657,56 @@ export default function RoleManagerPanel({
           )
         })}
       </ol>
-      </section>
-        )
-      })}
+    )
+  }
+
+  return (
+    <div id={panelId} className="bg-white rounded-2xl border border-gray-200 p-5 space-y-4">
+      <div>
+        {/* Focused by code only, when the row whose button should get focus back is gone. */}
+        <h2 ref={headingRef} tabIndex={-1} className="font-semibold text-gray-800 focus:outline-none">Gérer les postes</h2>
+        <p className="text-xs text-gray-500 mt-0.5">Réordonnez avec les flèches Monter et Descendre ou par glisser-déposer, puis enregistrez l&apos;ordre. Vous pouvez aussi renommer un poste, limiter le nombre de créneaux par personne, réserver un poste à certains membres ou à l&apos;organisation, le rendre cumulable avec un autre créneau ou le supprimer (avec tous ses créneaux).</p>
       </div>
+      {roleActionError && (
+        <p role="alert" className="text-sm text-red-600 bg-red-50 rounded-lg px-3 py-2">{roleActionError}</p>
+      )}
+      {sectorsShown && sectorsState && setSectorsState ? (
+        <>
+          <SectorsSection
+            eventId={eventId}
+            panelId={panelId}
+            state={sectorsState}
+            setState={setSectorsState}
+            shifts={shifts}
+            setShifts={setShifts}
+            groups={grouped ? roleGroups : []}
+            renderPostes={renderRoleList}
+            onAddPoste={(sector, opener) => onAddPoste?.(sector, opener)}
+            fallbackFocus={() => headingRef.current}
+            onAnnounce={onAnnounce}
+            onRequestConfirm={onRequestDelete}
+            onConfirmBusy={onDeletingChange}
+            onConfirmError={onDeleteError}
+            onConfirmDone={() => onConfirmDone?.()}
+            // A poste editor offering an archived sector closes; its value would be refused.
+            onSectorGone={(id) => { if (sectorValue === id) setSectorRole(null) }}
+          />
+          {/* Before the first sector, the postes follow under their own heading (outline). */}
+          {!grouped && roles.length > 0 && (
+            <div>
+              <h3 className="sr-only">Postes</h3>
+              <PosteRows render={renderRoleList} group={roleGroups[0]} />
+            </div>
+          )}
+        </>
+      ) : <PosteRows render={renderRoleList} group={roleGroups[0]} />}
       <div className="flex gap-3">
-        <button type="button" onClick={saveRoleOrder} aria-disabled={savingOrder || undefined}
-          className="bg-blue-600 text-white px-4 py-2 rounded-xl text-sm font-medium hover:bg-blue-700 aria-disabled:opacity-50">
-          Enregistrer l'ordre
-        </button>
+        {roles.length > 0 && (
+          <button type="button" onClick={saveRoleOrder} aria-disabled={savingOrder || undefined}
+            className="bg-blue-600 text-white px-4 py-2 rounded-xl text-sm font-medium hover:bg-blue-700 aria-disabled:opacity-50">
+            Enregistrer l'ordre
+          </button>
+        )}
         <button type="button" onClick={onClose}
           className="text-gray-500 px-3 py-2 text-sm hover:text-gray-800">
           Fermer

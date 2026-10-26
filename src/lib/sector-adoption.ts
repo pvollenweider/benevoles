@@ -180,16 +180,26 @@ export async function reorderSectors(db: OrgScopedPrisma, organizationId: string
  * another event's. Only for an event that adopted sectors.
  */
 export async function assignPosteSector(tx: Tx, organizationId: string, eventId: string, roleName: string, sectorId: string | null): Promise<SectorResult<{ name: string | null }>> {
+  const target = await lockPosteDestination(tx, organizationId, eventId, sectorId)
+  if (!target.ok) return target
+  await tx.shift.updateMany({ where: { eventId, roleName }, data: { sectorId } })
+  return target
+}
+
+/**
+ * Where a poste may go, checked under the locks every sector write takes (the event, then the
+ * sector): `sectorId` must be an active sector of this event, which adopted sectors; null is
+ * « Autres postes ». The caller writes the shifts in the same transaction, so an archive sent at
+ * the same time either runs first (refused here) or waits and detaches them. Used to move a poste
+ * and to create a new poste in a sector with its first shift (POST /api/admin/shifts).
+ */
+export async function lockPosteDestination(tx: Tx, organizationId: string, eventId: string, sectorId: string | null): Promise<SectorResult<{ name: string | null }>> {
   const event = await lockEventSectors(tx, eventId, organizationId)
   if (!event) return { ok: false, status: 404, error: "Non trouvé" }
   if (!event.sectorsAdoptedAt) return { ok: false, status: 409, error: "Cet événement n'utilise pas de secteurs : créez d'abord un secteur." }
-  let name: string | null = null
-  if (sectorId !== null) {
-    const sector = await lockSector(tx, eventId, sectorId)
-    if (!sector) return { ok: false, status: 404, error: SECTOR_NOT_FOUND_ERROR }
-    if (sector.archivedAt) return { ok: false, status: 409, error: SECTOR_ARCHIVED_ERROR }
-    name = sector.name
-  }
-  await tx.shift.updateMany({ where: { eventId, roleName }, data: { sectorId } })
-  return { ok: true, value: { name } }
+  if (sectorId === null) return { ok: true, value: { name: null } }
+  const sector = await lockSector(tx, eventId, sectorId)
+  if (!sector) return { ok: false, status: 404, error: SECTOR_NOT_FOUND_ERROR }
+  if (sector.archivedAt) return { ok: false, status: 409, error: SECTOR_ARCHIVED_ERROR }
+  return { ok: true, value: { name: sector.name } }
 }

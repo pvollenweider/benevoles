@@ -11,8 +11,8 @@ import { roleSectorOf, type RoleSettingsShift } from "./role-settings"
  * A sector leader covers every poste whose CURRENT sector is theirs, computed at each request with
  * the poste's majority rule (roleSectorOf, src/lib/role-settings.ts): a poste moved out of the
  * sector drops out of the leader's page and emails on the next request (B02), a poste added to
- * it comes in. An archived sector covers nothing: archiving already moves its postes to « Sans
- * secteur » (src/lib/sector-adoption.ts), and the scope also refuses an archived or unknown
+ * it comes in. An archived sector covers nothing: archiving already moves its postes to « Autres
+ * postes » (src/lib/sector-adoption.ts), and the scope also refuses an archived or unknown
  * sector, so a race never leaks a poste. The leader keeps their row and link; a restored sector
  * covers what the organiser places in it again.
  *

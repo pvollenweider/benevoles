@@ -4,6 +4,7 @@
 // SPDX-License-Identifier: AGPL-3.0-only
 
 import { useId, useRef, useState } from "react"
+import { flushSync } from "react-dom"
 import CoordinatesField from "@/components/admin/CoordinatesField"
 import { requestJson } from "@/lib/use-submit"
 import { matchingPoste, posteKey, posteSuggestions } from "@/lib/poste-suggestions"
@@ -13,6 +14,8 @@ import { fmtLongDate as fmtDate, normalizeTime } from "@/lib/shifts-admin"
 import { SHIFT_FIELD_ERRORS, missingFieldsSummary, missingShiftFields, type ShiftField } from "@/lib/shift-editor-form"
 import { minVolunteersProblem, parseMinVolunteers } from "@/lib/staffing"
 import PosteHint from "./PosteHint"
+import { posteSectorMessage, posteSectorMismatch, posteSectorOf, posteSuggestionsInSector, switchSectorLabel } from "@/lib/poste-sector"
+import { NO_SECTOR_LABEL, NO_SECTOR_OPTION } from "@/lib/sectors"
 import type { RawShift } from "./types"
 
 export const emptyShift = {
@@ -29,7 +32,7 @@ export type ShiftFormValues = typeof emptyShift
  * The parent remounts it (key) each time it opens it, which resets the values to `initial`.
  */
 export default function ShiftEditor({
-  ref, eventId, dates, editingId, initial, existingShifts, onSaved, onCancel,
+  ref, eventId, dates, editingId, initial, existingShifts, onSaved, onCancel, sectors = null, presetSector = null,
 }: {
   ref?:           React.Ref<HTMLDivElement>
   eventId:        string
@@ -40,6 +43,13 @@ export default function ShiftEditor({
   /** The saved shift as the API returned it, with the id it was edited under (null: created). */
   onSaved:        (data: RawShift & { date?: string }, editingId: string | null) => void
   onCancel:       () => void
+  /**
+   * Sectors (#1147): the event's active sectors, in order, once it adopted sectors; null otherwise
+   * (no sector field). A new shift then asks for the sector before the poste.
+   */
+  sectors?:       { id: string; name: string }[] | null
+  /** « Ajouter un poste dans « S » »: the sector preset, the poste field focused first. */
+  presetSector?:  { id: string; name: string } | null
 }) {
   const singleDay = dates.length === 1
   const [form, setForm] = useState<ShiftFormValues>({ ...emptyShift, ...initial })
@@ -76,7 +86,51 @@ export default function ShiftEditor({
   const poste = matchingPoste(existingShifts, form.roleName)
   const changedPoste = !editingId || posteKey(form.roleName) !== posteKey(initial.roleName ?? "")
   const hintPoste = changedPoste ? poste : null
-  const roleDescribedBy = [roleField.invalidProps["aria-describedby"], hintPoste ? hintId : undefined].filter(Boolean).join(" ") || undefined
+
+  // Sector first (#1147), for a new shift of an event that adopted sectors: the select comes
+  // before the poste and filters its suggestions; a poste typed that exists in another sector is
+  // never moved: the form says where it is, offers to switch the select, and saving waits.
+  // The select only when there is a sector to choose; with every sector archived, the new poste
+  // still goes to « Autres postes » explicitly (sendSector).
+  const sendSector = !!sectors && !editingId
+  const sectorFieldShown = sendSector && sectors.length > 0
+  const activeIds = new Set((sectors ?? []).map((s) => s.id))
+  const [sectorValue, setSectorValue] = useState(presetSector?.id ?? "")
+  // A sector archived while the form is open is no destination any more: « Autres postes ».
+  const chosenSector = sectorValue && activeIds.has(sectorValue) ? sectorValue : null
+  const sectorNameOf = (id: string | null) => (id ? sectors?.find((s) => s.id === id)?.name ?? null : null)
+  const mismatch = sectorFieldShown ? posteSectorMismatch(existingShifts, form.roleName, chosenSector, activeIds) : null
+  const mismatchText = mismatch ? `${posteSectorMessage(mismatch.poste, sectorNameOf(mismatch.sectorId))}${attempted ? " Choisissez ce secteur, ou un autre nom de poste." : ""}` : null
+  const mismatchInvalid = attempted && !!mismatch
+  // The live hint stays silent right after focus moved for it (switch, blocked save); typing again speaks.
+  const [hintQuiet, setHintQuiet] = useState(false)
+  const sectorSelectRef = useRef<HTMLSelectElement>(null)
+  const roleInputRef = useRef<HTMLInputElement>(null)
+  const suggestions = sectorFieldShown ? posteSuggestionsInSector(existingShifts, chosenSector, activeIds) : posteSuggestions(existingShifts)
+  // What the save will create, said under the heading while the poste typed is new.
+  const newPosteHint = sectorFieldShown && !poste && (presetSector || form.roleName.trim())
+    ? `Le poste sera créé dans « ${sectorNameOf(chosenSector) ?? NO_SECTOR_LABEL} » avec son premier créneau.`
+    : null
+  // Editing: the sector belongs to the poste, shown, changed with « Déplacer… » (the shift takes
+  // the sector of the poste it goes to; a new name keeps the shift's own).
+  const editSectorName = sectors && editingId
+    ? sectorNameOf(posteSectorOf(existingShifts, changedPoste && poste ? poste : initial.roleName ?? "", activeIds))
+    : undefined
+  const roleInvalidProps = mismatchInvalid && !roleField.invalidProps["aria-invalid"] ? { "aria-invalid": true as const } : roleField.invalidProps
+  const editSectorId = `roleName-sector-${sfx}`
+  const newPosteHintId = `new-poste-hint-${sfx}`
+  const roleDescribedBy = [roleField.invalidProps["aria-describedby"], hintPoste || mismatchText ? hintId : undefined, editSectorName !== undefined ? editSectorId : undefined].filter(Boolean).join(" ") || undefined
+
+  function switchToPosteSector() {
+    if (!mismatch) return
+    // The button goes with the disagreement: focus moves to the select in the same task, which
+    // reads its new value and, as its description, that the poste's settings apply.
+    flushSync(() => {
+      setSectorValue(mismatch.sectorId ?? "")
+      setHintQuiet(true)
+    })
+    sectorSelectRef.current?.focus()
+  }
   // Minimum of people (#949): optional, 1 to the places. Checked like the required fields, once
   // a save was attempted, and then live as it is corrected.
   const minimumProblem = minVolunteersProblem(parseMinVolunteers(form.minVolunteers), Number(form.capacity))
@@ -108,6 +162,14 @@ export default function ShiftEditor({
     if (saving) return
     const missingNow = missingShiftFields(form)
     const minimumNow = minVolunteersProblem(parseMinVolunteers(form.minVolunteers), Number(form.capacity))
+    if (mismatch && missingNow.length === 0 && !minimumNow) {
+      // The poste field says where the poste is and how to fix it, once focus reaches it.
+      setAttempted(true)
+      setError(null)
+      setHintQuiet(true)
+      requestAnimationFrame(() => roleInputRef.current?.focus())
+      return
+    }
     if (missingNow.length > 0 || minimumNow) {
       // Each message is tied to its field, not an alert: focus moves to the first invalid field
       // once it says it is invalid, so its message is read once, with the field.
@@ -133,7 +195,7 @@ export default function ShiftEditor({
       : resolveNewShiftDisplayOrder(existingShifts, roleName, form.displayOrder)
     const body   = editingId
       ? { ...form, roleName, label, capacity: Number(form.capacity), minVolunteers, minAge, displayOrder }
-      : { ...form, roleName, label, eventId, capacity: Number(form.capacity), minVolunteers, minAge, displayOrder }
+      : { ...form, roleName, label, eventId, capacity: Number(form.capacity), minVolunteers, minAge, displayOrder, ...(sendSector ? { sectorId: chosenSector } : {}) }
 
     const outcome = await requestJson<RawShift & { date?: string }>(() => fetch(url, { method, headers: { "Content-Type": "application/json" }, body: JSON.stringify(body) }), "Erreur lors de la sauvegarde.")
     setSaving(false)
@@ -146,26 +208,56 @@ export default function ShiftEditor({
   }
 
   return (
-    <div ref={ref} role="group" aria-labelledby={`shift-editor-title-${sfx}`} className="bg-white rounded-2xl border border-blue-200 p-5 space-y-4">
-      <h2 id={`shift-editor-title-${sfx}`} className="font-semibold text-gray-800">{editingId ? "Modifier le créneau" : "Nouveau créneau"}</h2>
+    <div ref={ref} role="group" aria-labelledby={`shift-editor-title-${sfx}`} aria-describedby={newPosteHint ? newPosteHintId : undefined} className="bg-white rounded-2xl border border-blue-200 p-5 space-y-4">
+      <div>
+        <h2 id={`shift-editor-title-${sfx}`} className="font-semibold text-gray-800">{editingId ? "Modifier le créneau" : presetSector ? "Nouveau poste : premier créneau" : "Nouveau créneau"}</h2>
+        {newPosteHint && <p id={newPosteHintId} className="text-xs text-gray-600 mt-0.5">{newPosteHint}</p>}
+      </div>
+      {sectorFieldShown && (
+        <div className="sm:w-1/2">
+          <label htmlFor={`sectorId-${sfx}`} className="block text-xs font-medium text-gray-600 mb-1">Secteur</label>
+          {/* First field: focused first, so the sector is heard before the poste (unless preset). */}
+          <select
+            ref={sectorSelectRef}
+            id={`sectorId-${sfx}`}
+            autoFocus={!presetSector}
+            value={chosenSector ?? ""}
+            onChange={(e) => { setSectorValue(e.target.value); setHintQuiet(false) }}
+            aria-describedby={hintQuiet && hintPoste && !mismatch ? hintId : undefined}
+            className="input"
+          >
+            {sectors!.map((s) => <option key={s.id} value={s.id}>{s.name}</option>)}
+            <option value="">{NO_SECTOR_OPTION}</option>
+          </select>
+        </div>
+      )}
       <div className="grid grid-cols-2 gap-3">
         <div>
           <label htmlFor={`roleName-${sfx}`} className="block text-xs font-medium text-gray-600 mb-1">Poste <span aria-hidden="true">*</span></label>
           {/* The editor remounts on every open (key): focus lands here each time. */}
           <input
+            ref={roleInputRef}
             id={`roleName-${sfx}`}
             type="text" list={listId}
-            autoFocus required {...roleField.invalidProps}
+            autoFocus={!sectorFieldShown || !!presetSector} required {...roleInvalidProps}
             aria-describedby={roleDescribedBy}
             value={form.roleName}
-            onChange={e => setField("roleName", e.target.value)}
+            onChange={e => { setField("roleName", e.target.value); setHintQuiet(false) }}
             placeholder="ex. Billetterie"
-            className={`input ${roleField.border}`}
+            className={`input ${roleField.border || (mismatchInvalid ? "!border-red-600" : "")}`}
           />
           {roleField.message}
-          <PosteHint id={hintId} poste={hintPoste} />
+          <PosteHint id={hintId} poste={hintPoste} message={mismatchText} invalid={mismatchInvalid} quiet={hintQuiet} />
+          {mismatch && (
+            <button type="button" onClick={switchToPosteSector} className="mt-1 text-xs font-medium text-blue-700 hover:text-blue-900 rounded-md min-h-6 text-left focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-blue-600">
+              {switchSectorLabel(sectorNameOf(mismatch.sectorId))}
+            </button>
+          )}
+          {editSectorName !== undefined && (
+            <p id={editSectorId} className="text-xs text-gray-600 mt-1">Secteur : {editSectorName ?? NO_SECTOR_LABEL}. Le secteur appartient au poste : pour le changer, utilisez « Déplacer… » dans « Gérer les postes ».</p>
+          )}
           <datalist id={listId}>
-            {posteSuggestions(existingShifts).map(r => <option key={r} value={r} />)}
+            {suggestions.map(r => <option key={r} value={r} />)}
           </datalist>
         </div>
         <div>
@@ -333,6 +425,7 @@ export default function ShiftEditor({
         <p className="text-xs text-red-700">{missingFieldsSummary(missing)}</p>
       )}
       {minimumInvalid && <p className="text-xs text-red-700">À corriger : le minimum.</p>}
+      {mismatchInvalid && <p className="text-xs text-red-700">À corriger : le secteur du poste.</p>}
 
       <div className="flex gap-3">
         <button type="button" onClick={handleSave} aria-disabled={saving || undefined}

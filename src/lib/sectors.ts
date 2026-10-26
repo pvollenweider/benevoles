@@ -28,6 +28,10 @@ export const SECTORS_OPTION_HINT = "Un secteur regroupe plusieurs postes, par ex
 export const SECTORS_FIRST_SAVE_NOTICE = "En créant ce premier secteur, vous conservez l'organisation par secteurs pour cet événement."
 export const SECTORS_ADOPTED_NOTICE = "Cet événement utilise des secteurs. Vous pouvez les réorganiser, mais vous ne pouvez plus désactiver cette organisation."
 export const NO_SECTOR_LABEL = "Autres postes"
+/** The « no sector » choice of the sector selects (« Déplacer… », the shift form): one wording for both. */
+export const NO_SECTOR_OPTION = "Autres postes (aucun secteur)"
+/** Under « Autres postes » while every poste is still there, right after the first sector is saved. */
+export const SECTORS_EXISTING_POSTES_NOTICE = "Vos postes existants restent dans « Autres postes ». Utilisez « Déplacer… » pour les ranger dans vos secteurs."
 
 export const SECTORS_CLOSED_ERROR = "Les secteurs ne sont pas disponibles pour votre organisation : ils font partie des fonctions bêta (Paramètres)."
 export const SECTORS_NOT_ENABLED_ERROR = "Activez d'abord « Organiser les postes par secteurs » dans les informations de l'événement."
@@ -139,10 +143,11 @@ export type SectorGroup = {
  * Postes grouped by sector, for the admin timeline and the PDF (#1147): the active sectors in
  * their order, each with its postes in `roles`' order (the event's poste order), then
  * « Autres postes » last. A poste whose sector is archived or unknown goes to « Autres postes »;
- * an empty group is left out. `sectorOf` gives each poste's sector (roleSectorOf, read over the
+ * an empty group is left out, except an active sector with `keepEmptySectors` (« Gérer les postes »
+ * shows empty sectors: a poste is created from its sector). `sectorOf` gives each poste's sector (roleSectorOf, read over the
  * whole event, not one day, so a poste never changes group from one day to the next).
  */
-export function groupRolesBySector(roles: string[], sectorOf: (role: string) => string | null | undefined, sectors: SectorLike[]): SectorGroup[] {
+export function groupRolesBySector(roles: string[], sectorOf: (role: string) => string | null | undefined, sectors: SectorLike[], { keepEmptySectors = false }: { keepEmptySectors?: boolean } = {}): SectorGroup[] {
   const ordered = activeSectors(sectors)
   const known = new Set(ordered.map((s) => s.id))
   const byId = new Map<string, string[]>()
@@ -155,7 +160,7 @@ export function groupRolesBySector(roles: string[], sectorOf: (role: string) => 
       byId.set(id, list)
     } else none.push(role)
   }
-  const groups: SectorGroup[] = ordered.filter((s) => byId.has(s.id)).map((s) => ({ id: s.id, name: s.name, roles: byId.get(s.id)! }))
+  const groups: SectorGroup[] = ordered.filter((s) => keepEmptySectors || byId.has(s.id)).map((s) => ({ id: s.id, name: s.name, roles: byId.get(s.id) ?? [] }))
   if (none.length > 0) groups.push({ id: null, name: NO_SECTOR_LABEL, roles: none })
   return groups
 }

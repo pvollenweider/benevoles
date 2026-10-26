@@ -2047,6 +2047,33 @@ describe("Sectors — cross-tenant isolation (#1147)", () => {
     expect(tx.sector.update).not.toHaveBeenCalled()
   })
 
+  const newShift = { roleName: "Accueil", label: "Accueil", date: "2026-07-04", startTime: "10:00", endTime: "12:00", capacity: 2 }
+
+  it("POST /api/admin/shifts with a sector returns 404 for an org-B event, locking and creating nothing", async () => {
+    const { POST } = await import("@/app/api/admin/shifts/route")
+    const { db, tx } = sectorDb()
+    const create = vi.fn()
+    Object.assign(tx.shift, { create })
+    const res = await POST(makeRequest("/api/admin/shifts", "POST", { ...newShift, eventId: "evt-b", sectorId: "sec-b" }))
+    expect(res.status).toBe(404)
+    expect(db.$transaction).not.toHaveBeenCalled()
+    expect(create).not.toHaveBeenCalled()
+  })
+
+  it("POST /api/admin/shifts with an org-B sector on an org-A event creates no shift: the sector lock filters on the event", async () => {
+    const { POST } = await import("@/app/api/admin/shifts/route")
+    const { tx } = sectorDb({ id: "evt-a", startDate: new Date("2026-07-01"), endDate: new Date("2026-07-31") })
+    const create = vi.fn()
+    Object.assign(tx.shift, { create })
+    tx.$queryRaw.mockResolvedValueOnce([{ id: "evt-a", sectorsEnabled: true, sectorsAdoptedAt: new Date() }]).mockResolvedValueOnce([])
+    const res = await POST(makeRequest("/api/admin/shifts", "POST", { ...newShift, eventId: "evt-a", sectorId: "sec-b" }))
+    expect(res.status).toBe(404)
+    const [eventLock, sectorLock] = tx.$queryRaw.mock.calls
+    expect(eventLock.slice(1)).toEqual(["evt-a", ORG_A])
+    expect(sectorLock.slice(1)).toEqual(["sec-b", "evt-a"])
+    expect(create).not.toHaveBeenCalled()
+  })
+
   it("PATCH roles/[roleName] with an org-B sector moves no shift", async () => {
     const { PATCH } = await import("@/app/api/admin/events/[id]/roles/[roleName]/route")
     const { db, tx } = sectorDb({ id: "evt-a" })

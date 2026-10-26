@@ -112,6 +112,14 @@ describe("groupRolesBySector", () => {
     expect(groupRolesBySector([], () => null, sectors)).toEqual([])
   })
 
+  it("keeps every active sector, empty ones included, with keepEmptySectors (« Gérer les postes »); never an archived one or an empty « Autres postes »", () => {
+    expect(groupRolesBySector(["Bar"], () => "s-scene", sectors, { keepEmptySectors: true })).toEqual([
+      { id: "s-scene", name: "Scène", roles: ["Bar"] },
+      { id: "s-parking", name: "Parking", roles: [] },
+    ])
+    expect(groupRolesBySector([], () => null, sectors, { keepEmptySectors: true }).map((g) => g.id)).toEqual(["s-scene", "s-parking"])
+  })
+
   it("keys the groups and words the archive confirmation", () => {
     expect(sectorGroupKey({ id: "s" })).toBe("s")
     expect(sectorGroupKey({ id: null })).toBe("none")

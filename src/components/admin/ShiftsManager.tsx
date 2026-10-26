@@ -36,7 +36,7 @@ import {
 } from "@/lib/shifts-admin"
 import StatusBadge from "./StatusBadge"
 import { roleSectorOf } from "@/lib/role-settings"
-import { sectorsAdopted, type SectorLike } from "@/lib/sectors"
+import { activeSectors, sectorsAdopted, sectorsManaged, type SectorLike } from "@/lib/sectors"
 
 /** The event's sectors as « Gérer les postes » holds them (#1147). */
 export type AdminSector = SectorLike & { archivedAt: string | null }
@@ -102,6 +102,8 @@ export default function ShiftsManager({
   // What the shift form opens with; a new key remounts ShiftEditor, which resets its values.
   const [formInitial, setFormInitial] = useState<Partial<ShiftFormValues>>({})
   const [formKey, setFormKey]         = useState(0)
+  // « Ajouter un poste dans « S » » (#1147): the sector the form opens in.
+  const [formSector, setFormSector]   = useState<{ id: string; name: string } | null>(null)
   const [view, setView]             = useState<"timeline" | "list">("timeline")
   const [showReorder, setShowReorder]     = useState(false)
   const [reorderRoles, setReorderRoles]   = useState<string[]>([])
@@ -121,12 +123,13 @@ export default function ShiftsManager({
   const editBtnRefs = useRef(new Map<string, HTMLButtonElement>())
   const formOpenerRef = useRef<FocusCandidate>(null)
 
-  function openForm(patch: Partial<ShiftFormValues>, editId: string | null) {
+  function openForm(patch: Partial<ShiftFormValues>, editId: string | null, inSector: { sector: { id: string; name: string }; opener: () => HTMLElement | null | undefined } | null = null) {
     // A getter: the row's « Modifier » may be gone by the time the editor closes (view switched).
-    formOpenerRef.current = editId ? () => editBtnRefs.current.get(editId) : () => addBtnRef.current
+    formOpenerRef.current = inSector ? inSector.opener : editId ? () => editBtnRefs.current.get(editId) : () => addBtnRef.current
     flushSync(() => {
       setShowSeries(false)
       setShowRecurrence(false)
+      setFormSector(inSector?.sector ?? null)
       setFormInitial(patch)
       setFormKey(k => k + 1)
       setEditingId(editId)
@@ -153,9 +156,11 @@ export default function ShiftsManager({
       ))
     } else {
       setShifts(prev => [...prev, { ...data, date: data.date.split("T")[0], registrationCount: 0 }])
+      // A new poste joins the order « Gérer les postes » is editing, so it shows in its sector there.
+      if (showReorder) setReorderRoles(prev => prev.includes(saved.roleName) ? prev : [...prev, saved.roleName])
     }
     // A shift saved in a collapsed sector shows again (#1147): it never changes out of sight.
-    const sectorKey = roleSectorOf(shifts.filter((s) => s.roleName === saved.roleName && s.status !== "cancelled")) ?? "none"
+    const sectorKey = roleSectorOf(shifts.filter((s) => s.roleName === saved.roleName && s.status !== "cancelled")) ?? saved.sectorId ?? "none"
     setCollapsedSectors((prev) => {
       if (!prev.has(sectorKey)) return prev
       const next = new Set(prev)
@@ -293,9 +298,14 @@ export default function ShiftsManager({
   // By sector (#1147), once the event adopted sectors: each poste's sector over the whole event.
   const sectorOf: Record<string, string | null> = {}
   for (const role of uniqueRoles) sectorOf[role] = roleSectorOf(shifts.filter((s) => s.roleName === role && s.status !== "cancelled"))
-  const sectorGrouping = sectorsState && sectorsAdopted({ sectorsEnabled: sectorsState.enabled, sectorsAdoptedAt: sectorsState.adoptedAt })
+  const sectorsInUse = !!sectorsState && sectorsAdopted({ sectorsEnabled: sectorsState.enabled, sectorsAdoptedAt: sectorsState.adoptedAt })
+  const sectorGrouping = sectorsInUse
     ? { sectors: sectorsState.sectors, sectorOf, collapsed: collapsedSectors, onToggle: toggleSector }
     : undefined
+  // The shift form asks for the sector first once the event adopted sectors (#1147).
+  const editorSectors = sectorsInUse ? activeSectors(sectorsState.sectors).map((s) => ({ id: s.id, name: s.name })) : null
+  // With sectors on, « Gérer les postes » is where the sectors are created: shown before any poste.
+  const sectorsShown = sectorsManaged(sectorsState ? { sectorsEnabled: sectorsState.enabled, sectorsAdoptedAt: sectorsState.adoptedAt } : null)
 
   // Group by day (all dates, not just those with shifts)
   const shiftsByDay = activeShiftsByDay(shifts)
@@ -334,7 +344,7 @@ export default function ShiftsManager({
               Liste
             </button>
           </div>
-          {uniqueRoles.length > 0 && (
+          {(uniqueRoles.length > 0 || sectorsShown) && (
             <button
               ref={manageRolesBtnRef}
               type="button"
@@ -439,6 +449,7 @@ export default function ShiftsManager({
         sectorsState={sectorsState}
         setSectorsState={setSectorsState}
         onConfirmDone={() => setPendingDelete(null)}
+        onAddPoste={(sector, opener) => openForm(singleDay ? { date: dates[0] } : {}, null, { sector, opener })}
       />
 
       {/* Quick-add / edit form */}
@@ -453,6 +464,8 @@ export default function ShiftsManager({
           existingShifts={shifts}
           onSaved={handleShiftSaved}
           onCancel={closeForm}
+          sectors={editorSectors}
+          presetSector={formSector}
         />
       )}
 

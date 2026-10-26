@@ -31,15 +31,23 @@ C'est une fonction en bêta. Pour l'utiliser :
 
 1. Un propriétaire active **Essayer les fonctions avancées en bêta** dans **Paramètres**, carte **Fonctions bêta** (voir [Personnaliser l'organisation](personnaliser-l-organisation.md#fonctions-beta)).
 2. Dans les informations de l'événement, carte **Secteurs**, activez l'interrupteur **Organiser les postes par secteurs**. Tant qu'aucun secteur n'est enregistré, vous pouvez le désactiver : l'événement reste tel qu'il était.
-3. Dans **Créneaux**, ouvrez **Gérer les postes** : la partie **Secteurs** apparaît en haut du panneau.
+3. Dans **Créneaux**, ouvrez **Gérer les postes** : la partie **Secteurs** apparaît en haut du panneau, même si l'événement n'a encore aucun poste.
 
-Dans **Secteurs** :
+Commencez par créer vos secteurs, puis ajoutez les postes dans chacun d'eux :
 
-- **Ajouter** : tapez le nom dans **Nouveau secteur**, puis **Ajouter le secteur**. Un nom n'est utilisé qu'une fois par événement, sans tenir compte des majuscules. En créant le premier secteur, vous conservez l'organisation par secteurs pour cet événement : l'option ne peut plus être désactivée, même si vous archivez ensuite tous les secteurs. La carte **Secteurs** de l'événement le dit alors.
-- **Réordonner** : les flèches Monter et Descendre enregistrent l'ordre tout de suite. La frise et le PDF suivent cet ordre, puis l'ordre des postes à l'intérieur de chaque secteur.
-- **Renommer** : « Renommer », tapez le nouveau nom, **Valider**.
+- **Ajouter un secteur** : tapez le nom dans **Nouveau secteur**, puis **Ajouter le secteur**. Un nom n'est utilisé qu'une fois par événement, sans tenir compte des majuscules. En créant le premier secteur, vous conservez l'organisation par secteurs pour cet événement : l'option ne peut plus être désactivée, même si vous archivez ensuite tous les secteurs. La carte **Secteurs** de l'événement le dit alors.
+- **Ajouter un poste dans un secteur** : le bouton **Ajouter un poste dans « Parking »**, sous le secteur, ouvre le formulaire de créneau avec ce secteur déjà choisi. Tapez le nom du nouveau poste et son premier créneau : le poste est créé avec ce créneau. **Annuler** ne crée rien.
+
+Dès le premier secteur, le panneau range les postes sous leur secteur, dans **Postes par secteur**. Chaque secteur y a son en-tête, avec son nom, son nombre de postes et ses actions, puis ses postes, ou « Aucun poste pour l'instant. ». Les postes sans secteur viennent à la fin, sous « Autres postes ». Les postes qui existaient avant le premier secteur y restent : rangez-les avec **Déplacer…**.
+
+- **Réordonner les secteurs** : les flèches Monter et Descendre d'un secteur enregistrent l'ordre tout de suite. La frise et le PDF suivent cet ordre, puis l'ordre des postes à l'intérieur de chaque secteur.
+- **Réordonner les postes** : les flèches et le glisser-déposer d'un poste le déplacent à l'intérieur de son secteur ; **Enregistrer l'ordre** ensuite.
+- **Renommer** un secteur : « Renommer », tapez le nouveau nom, **Valider**.
 - **Archiver** : un secteur n'est jamais supprimé. S'il regroupe encore des postes, une confirmation indique qu'ils passent dans « Autres postes » ; ils gardent leurs créneaux et leurs inscriptions. **Secteurs archivés** liste les secteurs archivés : **Rétablir** en remet un, vide, en fin de liste.
+- **Déplacer un poste** : le bouton **Déplacer…** de la ligne du poste propose les secteurs et « Autres postes (aucun secteur) » ; choisissez, puis **Déplacer**. Tous les créneaux du poste suivent, sur tous les jours.
 
-Chaque poste a ensuite un bouton **Secteur : aucun** : choisissez un secteur, ou « Autres postes », puis **Enregistrer**. Comme la couleur, le secteur appartient au poste : il s'applique à tous ses créneaux, à ceux que vous ajoutez ensuite au poste et à un créneau déplacé vers lui, et il suit le poste quand vous le renommez. Un poste n'appartient qu'à un secteur à la fois, et un nom de poste reste unique dans l'événement.
+Comme la couleur, le secteur appartient au poste : il s'applique à tous ses créneaux, à ceux que vous ajoutez ensuite au poste et à un créneau déplacé vers lui, et il suit le poste quand vous le renommez. Un poste n'appartient qu'à un secteur à la fois, et un nom de poste reste unique dans l'événement.
+
+Dans le formulaire **+ Ajouter un créneau**, le champ **Secteur** vient avant **Poste** ; il propose les secteurs et « Autres postes (aucun secteur) », choisi par défaut : un secteur n'est jamais obligatoire. Le champ **Poste** suggère alors les postes de ce secteur, et vous pouvez taper un nouveau nom. Si vous tapez un poste qui existe déjà dans un autre secteur, le formulaire l'indique (« Le poste « Accueil » est dans le secteur « Entrées ». ») et propose **Utiliser ce poste dans « Entrées »** ; le créneau ne s'enregistre pas tant que le secteur et le poste ne correspondent pas, et le poste n'est jamais déplacé par ce formulaire. En modifiant un créneau, le formulaire affiche le secteur du poste ; pour le changer, utilisez **Déplacer…**. **Créer une série** et **Répéter chaque semaine** n'ont pas de champ Secteur : un nouveau poste créé ainsi va dans « Autres postes ».
 
 Sur la frise, chaque secteur a une ligne d'en-tête avec son nom et son nombre de postes ; un clic sur cette ligne, ou Entrée au clavier, replie ou déplie ses postes, pour tous les jours de l'événement. Les postes sans secteur sont regroupés à la fin, sous « Autres postes ». La vue Liste ne change pas. **Dupliquer** l'événement reprend ses secteurs, le secteur de chaque poste et l'organisation par secteurs.
