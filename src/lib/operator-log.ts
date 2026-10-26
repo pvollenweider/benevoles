@@ -25,6 +25,8 @@ export const OPERATOR_ACTIONS = [
   "blocklist.removed",
   "signup.closed",
   "signup.opened",
+  "beta.capability_opened",
+  "beta.capability_closed",
 ] as const
 
 export type OperatorAction = (typeof OPERATOR_ACTIONS)[number]
@@ -45,6 +47,8 @@ export const OPERATOR_ACTION_LABELS: Record<OperatorAction, string> = {
   "blocklist.removed": "Retrait de la liste de blocage",
   "signup.closed": "Inscriptions fermées",
   "signup.opened": "Inscriptions rouvertes",
+  "beta.capability_opened": "Fonction bêta ouverte à l'essai",
+  "beta.capability_closed": "Fonction bêta fermée aux nouvelles adoptions",
 }
 
 /** The label of an action, or the raw action for an unknown one (an entry older than this list). */

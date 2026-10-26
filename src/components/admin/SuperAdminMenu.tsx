@@ -18,6 +18,7 @@ export const SUPER_ADMIN_ITEMS = [
   { href: "/super-admin/organizations", label: "Organisations" },
   { href: "/super-admin/stats", label: "Statistiques" },
   { href: "/super-admin/blocklist", label: "Inscriptions et blocage" },
+  { href: "/super-admin/beta", label: "Fonctions bêta" },
   { href: "/super-admin/journal", label: "Journal de l'opérateur" },
   { href: "/super-admin/inactivity", label: "Organisations bientôt inactives" },
   { href: "/super-admin/health", label: "Santé du service" },

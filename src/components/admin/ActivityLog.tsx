@@ -55,6 +55,9 @@ export const ACTION_LABEL: Record<string, string> = {
   "organization.reply_to_defaulted": "a activé son compte : son adresse email est devenue l'adresse de réponse de l'organisation",
   "organization.logo_updated": "a changé le logo de l'organisation",
   "organization.logo_removed": "a retiré le logo de l'organisation",
+  // #1168: joining or leaving the beta; neither changes an event.
+  "organization.beta_opted_in": "a fait participer l'organisation à la bêta des fonctions avancées",
+  "organization.beta_opted_out": "a arrêté la participation à la bêta : aucune nouvelle fonction bêta ne sera activée",
   "adminuser.removed": "a retiré un organisateur",
   "adminuser.role_changed": "a changé le rôle d'un organisateur",
   "member.merged": "a fusionné deux membres",

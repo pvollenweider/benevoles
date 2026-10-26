@@ -117,6 +117,8 @@ export const PERMISSIONS: Record<string, Partial<Record<Method, Level>>> = {
   "settings/organization": { PATCH: "owner" },
   // The organization's logo (#300): one of its settings, like its name and address.
   "settings/organization/logo": { PUT: "owner", DELETE: "owner" },
+  // Joining or leaving the beta (#1168) commits the whole organisation: owner only.
+  "settings/organization/beta": { PUT: "owner" },
   "settings/organization/slugs": { GET: "organizer", DELETE: "owner" },
   "settings/password": { POST: "organizer" },
   "shifts": { POST: "organizer" },
