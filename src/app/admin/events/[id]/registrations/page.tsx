@@ -47,7 +47,7 @@ export default async function RegistrationsPage({
       sectorLeaders: { select: { roleName: true, email: true } },
       // Share links per group (#947), for the « Par lien de groupe » filter.
       groupLinks: { orderBy: { createdAt: "asc" }, select: { id: true, name: true } },
-      organization: { select: { timeZone: true, volunteerCharter: true } },
+      organization: { select: { timeZone: true, volunteerCharter: true, hasOrgInsurance: true } },
       // Answers to the custom questions (#483), shown on each registration row.
       questions: { orderBy: [{ archivedAt: "asc" }, { position: "asc" }], select: { label: true, archivedAt: true, answers: { select: { volunteerId: true, values: true } } } },
     },
@@ -55,7 +55,7 @@ export default async function RegistrationsPage({
 
   if (!event) notFound()
   // The text a volunteer signing up now would accept (#569), to tell it apart from an older one.
-  const currentCharterHash = hashCharterText(resolveCharterText(event.organization.volunteerCharter))
+  const currentCharterHash = hashCharterText(resolveCharterText(event.organization.volunteerCharter, event.organization.hasOrgInsurance))
 
   const cancellations = await loadRecentCancellations(db, id, orgTimeZone(event.organization))
 

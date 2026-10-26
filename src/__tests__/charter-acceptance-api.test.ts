@@ -1,6 +1,6 @@
 import { describe, it, expect, vi, beforeEach } from "vitest"
 import { hashCharterText } from "@/lib/charter-hash"
-import { DEFAULT_VOLUNTEER_CHARTER } from "@/lib/volunteer-charter"
+import { buildVolunteerCharter, DEFAULT_VOLUNTEER_CHARTER } from "@/lib/volunteer-charter"
 
 // Proof of acceptance of the volunteer charter (#569): the public sign-up refuses without the
 // checkbox, and stores the hash of the exact text shown plus the acceptance date on every
@@ -55,7 +55,7 @@ describe("POST /api/public/registrations — proof of charter acceptance (#569)"
     vi.clearAllMocks()
     m.eventFindFirst.mockResolvedValue({
       id: "evt-1", organizationId: "org-a", title: "Fête", confirmationMessage: null,
-      organization: { slug: "a", timeZone: null, volunteerCharter: null },
+      organization: { slug: "a", timeZone: null, volunteerCharter: null, hasOrgInsurance: true },
     })
     m.shiftFindMany.mockResolvedValue([bar])
     m.txCreate.mockResolvedValue({ id: "reg-1", shiftId: "s1", status: "active", waitingPosition: null })
@@ -99,6 +99,21 @@ describe("POST /api/public/registrations — proof of charter acceptance (#569)"
       create: { organizationId: "org-a", hash: expectedHash, text: DEFAULT_VOLUNTEER_CHARTER },
       update: {},
     })
+  })
+
+  // Regression: with the switch off and no custom text, the « with insurance » default was hashed.
+  it("hashes the default for the organization's insurance choice when its switch is off", async () => {
+    m.eventFindFirst.mockResolvedValue({
+      id: "evt-1", organizationId: "org-a", title: "Fête", confirmationMessage: null,
+      organization: { slug: "a", timeZone: null, volunteerCharter: null, hasOrgInsurance: false },
+    })
+    const { POST } = await import("@/app/api/public/registrations/route")
+    await POST(post())
+    const shown = buildVolunteerCharter({ hasOrgInsurance: false })
+    expect(m.charterUpsert).toHaveBeenCalledWith(expect.objectContaining({
+      create: { organizationId: "org-a", hash: hashCharterText(shown), text: shown },
+    }))
+    expect(hashCharterText(shown)).not.toBe(hashCharterText(DEFAULT_VOLUNTEER_CHARTER))
   })
 
   it("hashes the organization's own custom text instead, when it set one", async () => {

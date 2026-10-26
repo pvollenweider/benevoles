@@ -24,7 +24,7 @@ const event = {
   id: "evt-1", slug: "fete", title: "Fête d'été", organizationName: "Amicale", description: null, location: "Genève",
   startDate: "2030-06-01T00:00:00.000Z", endDate: "2030-06-01T00:00:00.000Z", publicInstructions: null,
   confirmationMessage: null, requirePhone: false, registrationsOpen: true, registrationOpensAt: null, registrationClosesAt: null,
-  timeZone: "Europe/Zurich", accentColorKey: null, showSchedule: [], volunteerCharter: null, pages: [{ slug: "infos", title: "Infos pratiques" }], questions: [],
+  timeZone: "Europe/Zurich", accentColorKey: null, showSchedule: [], volunteerCharter: null, hasOrgInsurance: true, pages: [{ slug: "infos", title: "Infos pratiques" }], questions: [],
   shifts: [shift("s1")],
 } satisfies EventData
 

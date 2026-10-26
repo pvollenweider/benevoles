@@ -18,7 +18,8 @@ Dans les paramètres, elle s'appelle « Charte des bénévoles » ; sur la page 
 
 La charte est le texte que les bénévoles doivent lire et accepter avant de finaliser leur inscription. Un texte par défaut est fourni ; vous pouvez le personnaliser librement ou le réinitialiser.
 
-- Le commutateur **Assurance RC fournie par l'organisation** choisit la variante du texte par défaut : couverture par l'assurance responsabilité civile de l'organisation, ou couverture accidents personnelle à la charge de chaque bénévole. Changer le commutateur remplace le texte affiché dans la zone de saisie par la variante correspondante ; les modifications non enregistrées sont perdues.
+- Le commutateur **Assurance RC fournie par l'organisation** indique si votre organisation a une assurance responsabilité civile pour ces activités. Il ne change que le dernier paragraphe du texte par défaut : activé, l'assurance RC de l'organisation couvre les dommages causés à des tiers ; désactivé, chaque bénévole en répond lui-même et vérifie que son assurance RC privée le couvre. Dans les deux cas, la charte demande à chaque bénévole une couverture accidents personnelle (LAA ou assurance équivalente) : une assurance RC ne couvre pas les accidents dont le bénévole serait lui-même victime.
+- Si le texte est encore le texte par défaut, changer le commutateur le remplace par l'autre version. Si vous l'avez personnalisé, votre texte n'est pas modifié : un message le signale sous le commutateur, avec le bouton **Mettre à jour le paragraphe sur l'assurance**. Ce bouton montre d'abord ce qui va changer (le paragraphe sur l'assurance remplacé, ou ajouté à la fin s'il n'y en a pas), puis le change seulement si vous confirmez. Le reste de votre texte ne bouge pas.
 - Modifier le texte dans la zone de saisie et cliquer sur **Enregistrer**
 - Cliquer sur **Réinitialiser la charte par défaut** pour revenir au texte standard
 

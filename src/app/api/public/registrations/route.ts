@@ -132,7 +132,7 @@ export async function POST(req: Request) {
 
   const event = await prisma.event.findFirst({
     where: { id: eventId, publicStatus: "published", organization: PUBLIC_ORG_WHERE },
-    include: { organization: { select: { slug: true, timeZone: true, volunteerCharter: true } } },
+    include: { organization: { select: { slug: true, timeZone: true, volunteerCharter: true, hasOrgInsurance: true } } },
   })
   if (!event) return NextResponse.json({ error: "Événement introuvable" }, { status: 404 })
   const refuse = (r: SignupRefusal) => NextResponse.json(r.body, { status: r.status })
@@ -304,7 +304,7 @@ export async function POST(req: Request) {
   // Proof of acceptance (#569): the exact text shown to this volunteer, hashed. CharterVersion
   // resolves the hash back to its text later; upserted once per distinct text an organization has
   // shown (never overwritten: "create" wins a race, "update" is a no-op on an existing row).
-  const charterText = resolveCharterText(event.organization.volunteerCharter)
+  const charterText = resolveCharterText(event.organization.volunteerCharter, event.organization.hasOrgInsurance)
   const charterHash = hashCharterText(charterText)
   const charterAcceptedAt = new Date()
 

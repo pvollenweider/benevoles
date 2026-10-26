@@ -24,7 +24,7 @@ const event = {
   id: "evt-1", slug: "fete", title: "Fête d'été", organizationName: "Org", description: null, location: null,
   startDate: "2030-07-06T00:00:00.000Z", endDate: "2030-07-06T00:00:00.000Z", publicInstructions: null, confirmationMessage: null,
   requirePhone: false, registrationsOpen: true, registrationOpensAt: null, registrationClosesAt: null, timeZone: "Europe/Zurich",
-  accentColorKey: null, showSchedule: [], volunteerCharter: null, pages: [], questions: [],
+  accentColorKey: null, showSchedule: [], volunteerCharter: null, hasOrgInsurance: true, pages: [], questions: [],
   shifts: [{ id: "s-bar", roleName: "Bar", label: "Bar", description: null, date: "2030-07-06T00:00:00.000Z", startTime: "10:00", endTime: "12:00",
     capacity: 2, registered: 0, spotsLeft: 2, status: "open", locationDetails: null, displayOrder: 0, waitlistEnabled: false, minAge: null, colorKey: null }],
 } satisfies EventData

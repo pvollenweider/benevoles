@@ -17,6 +17,13 @@ responsabilité civile (`hasOrgInsurance: true`, texte par défaut) ou non (le b
 renvoyé à sa « couverture accidents personnelle adéquate (LAA ou assurance personnelle
 équivalente) »).
 
+Mise à jour (2026-10-26) : la clause d'assurance a été corrigée. Les deux versions demandent
+désormais, dans la partie 1, « une couverture accidents personnelle adéquate (LAA ou assurance
+équivalente) » ; la clause finale ne dit plus que la RC de l'organisation couvre le bénévole, mais
+qu'elle couvre les dommages causés à des tiers (avec RC), ou que le bénévole en répond lui-même et
+vérifie son assurance RC privée (sans RC). Le texte exact est dans `src/lib/volunteer-charter.ts`.
+Les citations « du texte d'aujourd'hui » plus bas datent d'avant cette correction.
+
 **Changement décidé le 2026-10-05, pas encore fait (changement de code, hors du périmètre
 documentaire de ce brouillon — voir [README.md](README.md))** : remplacer « De prévenir la
 responsable bénévole **au moins 48 heures à l'avance** en cas de désistement... » par « **dès que
