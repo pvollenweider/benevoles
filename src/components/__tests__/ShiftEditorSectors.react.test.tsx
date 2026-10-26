@@ -74,11 +74,10 @@ describe("ShiftEditor with sectors", () => {
     expect(screen.getByLabelText("Poste *")).toHaveFocus()
   })
 
-  it("starts in « Autres postes » (a sector is never required) and filters the poste suggestions to the chosen sector", () => {
+  it("starts in « Autres postes » (a sector is never required), suggests every poste until a sector is chosen, then filters to it", () => {
     const { view } = setup()
     expect(screen.getByLabelText("Secteur")).toHaveValue("")
-    expect(suggestions(view.container)).toContain("Montage")
-    expect(suggestions(view.container)).not.toContain("Accueil")
+    expect(suggestions(view.container)).toEqual(expect.arrayContaining(["Accueil", "Buvette", "Montage"]))
     fireEvent.change(screen.getByLabelText("Secteur"), { target: { value: "sec-entrees" } })
     expect(suggestions(view.container)).toContain("Accueil")
     expect(suggestions(view.container)).not.toContain("Buvette")
@@ -164,7 +163,67 @@ describe("ShiftEditor with sectors", () => {
     expect(screen.getByLabelText("Secteur")).toHaveValue("sec-bar")
     expect(screen.getByLabelText("Poste *")).toHaveFocus()
     expect(screen.getByLabelText("Poste *")).toHaveValue("")
-    expect(screen.getByRole("group", { name: "Nouveau poste : premier créneau" })).toHaveAccessibleDescription("Le poste sera créé dans « Bar » avec son premier créneau.")
+    // Said once, with the poste field that has focus (not again by the group around it).
+    expect(screen.getByLabelText("Poste *")).toHaveAccessibleDescription("Le poste sera créé dans « Bar » avec son premier créneau.")
+    expect(screen.getByRole("group", { name: "Nouveau poste : premier créneau" })).not.toHaveAttribute("aria-describedby")
+  })
+
+  it("until a sector is chosen, the select follows the existing poste typed, with no mismatch, and says where it is", () => {
+    setup()
+    const select = screen.getByLabelText("Secteur")
+    const poste = screen.getByLabelText("Poste *")
+    fireEvent.change(poste, { target: { value: " accueil" } })
+    expect(select).toHaveValue("sec-entrees")
+    expect(screen.queryByRole("button", { name: /Utiliser ce poste/ })).not.toBeInTheDocument()
+    expect(poste).toHaveAccessibleDescription(/^Secteur du poste : « Entrées »\. Les paramètres du poste/)
+    // Its description says why it changed, for whoever comes back to it.
+    expect(select).toHaveAccessibleDescription(/^Secteur du poste : « Entrées »\./)
+    fireEvent.change(poste, { target: { value: "Buvette" } })
+    expect(select).toHaveValue("sec-bar")
+    fireEvent.change(poste, { target: { value: "Montage" } })
+    expect(select).toHaveValue("")
+    expect(screen.getByText(/^Secteur du poste : « Autres postes »\./)).toBeInTheDocument()
+  })
+
+  it("a new name keeps the select's current value, said in the poste field's description", async () => {
+    fetchMock.mockResolvedValue({ ok: true, json: async () => ({ id: "new", roleName: "Buvette 2", date: "2026-07-04" }) })
+    setup()
+    const poste = screen.getByLabelText("Poste *")
+    fireEvent.change(poste, { target: { value: "Buvette" } })
+    fireEvent.change(poste, { target: { value: "Buvette 2" } })
+    expect(screen.getByLabelText("Secteur")).toHaveValue("sec-bar")
+    expect(poste).toHaveAccessibleDescription("Le poste sera créé dans « Bar » avec son premier créneau.")
+    fill()
+    fireEvent.click(screen.getByRole("button", { name: "Ajouter" }))
+    await waitFor(() => expect(fetchMock).toHaveBeenCalled())
+    expect(JSON.parse(fetchMock.mock.calls[0][1].body)).toMatchObject({ roleName: "Buvette 2", sectorId: "sec-bar" })
+  })
+
+  it("saves an existing poste typed in an untouched select with the poste's own sector", async () => {
+    fetchMock.mockResolvedValue({ ok: true, json: async () => ({ id: "new", roleName: "Accueil", date: "2026-07-04" }) })
+    setup()
+    fireEvent.change(screen.getByLabelText("Poste *"), { target: { value: "Accueil" } })
+    fill()
+    fireEvent.click(screen.getByRole("button", { name: "Ajouter" }))
+    await waitFor(() => expect(fetchMock).toHaveBeenCalled())
+    expect(JSON.parse(fetchMock.mock.calls[0][1].body)).toMatchObject({ roleName: "Accueil", sectorId: "sec-entrees" })
+  })
+
+  it("a select changed by hand is chosen: it no longer follows, and the mismatch rule applies", () => {
+    setup()
+    fireEvent.change(screen.getByLabelText("Poste *"), { target: { value: "Accueil" } })
+    fireEvent.change(screen.getByLabelText("Secteur"), { target: { value: "sec-bar" } })
+    expect(screen.getByText("Le poste « Accueil » est dans le secteur « Entrées ».")).toBeInTheDocument()
+    fireEvent.change(screen.getByLabelText("Poste *"), { target: { value: "Montage" } })
+    expect(screen.getByLabelText("Secteur")).toHaveValue("sec-bar")
+    expect(screen.getByText("Le poste « Montage » est dans « Autres postes ».")).toBeInTheDocument()
+  })
+
+  it("a preset sector is chosen: an existing poste of another sector shows the mismatch, the select stays", () => {
+    setup({ presetSector: { id: "sec-bar", name: "Bar" } })
+    fireEvent.change(screen.getByLabelText("Poste *"), { target: { value: "Accueil" } })
+    expect(screen.getByLabelText("Secteur")).toHaveValue("sec-bar")
+    expect(screen.getByRole("button", { name: "Utiliser ce poste dans « Entrées »" })).toBeInTheDocument()
   })
 
   it("editing a shift: no select, the poste's sector shown and how to change it, following the poste typed", () => {

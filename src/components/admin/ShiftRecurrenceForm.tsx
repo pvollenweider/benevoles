@@ -6,8 +6,12 @@
 import { useEffect, useId, useRef, useState } from "react"
 import { flushSync } from "react-dom"
 import { requestJson } from "@/lib/use-submit"
-import { matchingPoste, posteSuggestions } from "@/lib/poste-suggestions"
+import { matchingPoste } from "@/lib/poste-suggestions"
 import PosteHint from "@/components/admin/shifts/PosteHint"
+import SectorSelect from "@/components/admin/shifts/SectorSelect"
+import { usePosteSector, type SectorOption } from "@/components/admin/shifts/usePosteSector"
+import type { PosteSectorShift } from "@/lib/poste-sector"
+import { NO_SECTOR_LABEL } from "@/lib/sectors"
 import { resolveNewShiftDisplayOrder, toMin, toMinEnd } from "@/lib/gantt-utils"
 import { normalizeTime } from "@/lib/shifts-admin"
 import { isValidClock } from "@/lib/shift-time"
@@ -53,9 +57,11 @@ type Props = {
   eventStart: string
   eventEnd: string
   defaultHolidays: HolidayCalendar
-  existingShifts: { roleName: string; displayOrder: number; status?: string | null }[]
+  existingShifts: (PosteSectorShift & { displayOrder: number })[]
   onCreated: (shifts: AdminShift[], rule: AdminRecurrence) => void
   onClose: () => void
+  /** Sectors (#1147): the event's active sectors once it adopted sectors, null otherwise (no select). */
+  sectors?: SectorOption[] | null
 }
 
 /**
@@ -63,7 +69,7 @@ type Props = {
  * gives every date, public holidays and closures left out, previewed before creation. Same
  * generator as the API (src/lib/shift-recurrence.ts).
  */
-export default function ShiftRecurrenceForm({ panelId, eventId, eventStart, eventEnd, defaultHolidays, existingShifts, onCreated, onClose }: Props) {
+export default function ShiftRecurrenceForm({ panelId, eventId, eventStart, eventEnd, defaultHolidays, existingShifts, onCreated, onClose, sectors = null }: Props) {
   const id = useId()
   const headingRef = useRef<HTMLHeadingElement>(null)
   const [roleName, setRoleName] = useState("")
@@ -72,6 +78,12 @@ export default function ShiftRecurrenceForm({ panelId, eventId, eventStart, even
   const poste = matchingPoste(existingShifts, roleName)
   const sentRole = poste ?? roleName.trim()
   const hintId = `${id}-role-hint`
+  // Sector first (#1147), the same rule as one shift (usePosteSector).
+  const sector = usePosteSector({ sectors, existingShifts, roleName })
+  const [hintQuiet, setHintQuiet] = useState(false)
+  const sectorSelectRef = useRef<HTMLSelectElement>(null)
+  const newPosteHint = sector.newPosteHint(true)
+  const newPosteHintId = `${id}-new-poste`
   const [label, setLabel] = useState("")
   const [from, setFrom] = useState(eventStart)
   const [until, setUntil] = useState(eventEnd)
@@ -136,8 +148,23 @@ export default function ShiftRecurrenceForm({ panelId, eventId, eventStart, even
     closureInputRef.current?.focus()
   }
 
+  function switchToPosteSector() {
+    // Focus moves to the select in the same task, which reads its new value and the poste's settings.
+    flushSync(() => {
+      sector.switchToPoste()
+      setHintQuiet(true)
+    })
+    sectorSelectRef.current?.focus()
+  }
+
   async function handleCreate() {
     if (saving) return
+    if (sector.mismatch && complete) {
+      // The poste field says where the poste is and how to fix it, once focus reaches it.
+      flushSync(() => { setAttempted(true); setHintQuiet(true) })
+      document.getElementById(fieldId("roleName"))?.focus()
+      return
+    }
     if (!complete) {
       flushSync(() => setAttempted(true))
       const first = missingFields[0]
@@ -164,6 +191,7 @@ export default function ShiftRecurrenceForm({ panelId, eventId, eventStart, even
         eventId, roleName: sentRole, label: label.trim() || undefined, from, until, weekdays, everyWeeks,
         startTime, endTime, slotMinutes, breakMinutes: 0, capacity: Number(capacity), holidays, closures,
         waitlistEnabled, requiresApproval, displayOrder: resolveNewShiftDisplayOrder(existingShifts, sentRole, 0),
+        ...(sector.send ? { sectorId: sector.sectorId } : {}),
       }),
     }), "Erreur lors de la création.")
     setSaving(false)
@@ -186,10 +214,14 @@ export default function ShiftRecurrenceForm({ panelId, eventId, eventStart, even
   const shiftCount = preview?.shifts.length ?? 0
   const skippedCount = preview?.skipped.length ?? 0
   const people = Number(capacity) || 0
+  const mismatchInvalid = attempted && !!sector.mismatch
+  const mismatchText = sector.message ? `${sector.message}${mismatchInvalid ? " Choisissez ce secteur, ou un autre nom de poste." : ""}` : null
+  // Where the shifts go, in the summary the create button is described by.
+  const inSector = sector.shown ? `, dans « ${sector.sectorName ?? NO_SECTOR_LABEL} »` : ""
 
   const summary = !complete
     ? "Renseignez le poste, la période, les jours et les heures pour voir les dates."
-    : problem ?? `Aperçu : ${describeWeekdays(weekdays, everyWeeks)} de ${startTime} à ${endTime}, ${days.length} date${days.length > 1 ? "s" : ""}, ${shiftCount} créneau${shiftCount > 1 ? "x" : ""}${slotChoice !== WHOLE_RANGE ? ` de ${fmtDuration(slotChoice)}` : ""}, ${people} personne${people > 1 ? "s" : ""} par créneau${skippedCount > 0 ? `, ${skippedCount} date${skippedCount > 1 ? "s" : ""} exclue${skippedCount > 1 ? "s" : ""}` : ""}.`
+    : problem ?? `Aperçu : ${describeWeekdays(weekdays, everyWeeks)} de ${startTime} à ${endTime}, ${days.length} date${days.length > 1 ? "s" : ""}, ${shiftCount} créneau${shiftCount > 1 ? "x" : ""}${slotChoice !== WHOLE_RANGE ? ` de ${fmtDuration(slotChoice)}` : ""}, ${people} personne${people > 1 ? "s" : ""} par créneau${skippedCount > 0 ? `, ${skippedCount} date${skippedCount > 1 ? "s" : ""} exclue${skippedCount > 1 ? "s" : ""}` : ""}${inSector}.`
 
   // The visible summary follows each keystroke; the announced one waits for a pause.
   useEffect(() => {
@@ -209,13 +241,27 @@ export default function ShiftRecurrenceForm({ panelId, eventId, eventStart, even
         </p>
       </div>
 
+      {sector.shown && (
+        <SectorSelect
+          ref={sectorSelectRef} id={`${id}-sector`} sectors={sectors!} value={sector.sectorId ?? ""}
+          describedBy={poste && !sector.mismatch && (hintQuiet || sector.following) ? hintId : undefined}
+          // Choosing the sector it already follows says nothing new: the hint stays quiet.
+          onChange={(v) => { setHintQuiet(sector.following && v === (sector.sectorId ?? "")); sector.choose(v) }}
+        />
+      )}
       <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
         <div>
           <label htmlFor={fieldId("roleName")} className={labelClass("roleName")}>Poste <span aria-hidden="true">*</span></label>
-          <input id={fieldId("roleName")} type="text" list={`${id}-roles`} value={roleName} required aria-invalid={invalid("roleName") || undefined} aria-describedby={describedBy("roleName", ...(poste ? [hintId] : []))} onChange={(e) => setRoleName(e.target.value)} placeholder="ex. Accueil" className={fieldClass("roleName")} />
+          <input id={fieldId("roleName")} type="text" list={`${id}-roles`} value={roleName} required aria-invalid={invalid("roleName") || mismatchInvalid || undefined} aria-describedby={describedBy("roleName", ...(poste ? [hintId] : []), ...(newPosteHint ? [newPosteHintId] : []))} onChange={(e) => { setRoleName(e.target.value); sector.followPoste(e.target.value); setHintQuiet(false) }} placeholder="ex. Accueil" className={`${fieldClass("roleName")} ${mismatchInvalid ? "!border-red-600" : ""}`} />
           {fieldMessage("roleName")}
-          <PosteHint id={hintId} poste={poste} />
-          <datalist id={`${id}-roles`}>{posteSuggestions(existingShifts).map((r) => <option key={r} value={r} />)}</datalist>
+          <PosteHint id={hintId} poste={poste} message={mismatchText} invalid={mismatchInvalid} quiet={hintQuiet} />
+          {sector.mismatch && (
+            <button type="button" onClick={switchToPosteSector} className="mt-1 text-xs font-medium text-blue-700 hover:text-blue-900 rounded-md min-h-6 text-left focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-blue-600">
+              {sector.switchLabel}
+            </button>
+          )}
+          {newPosteHint && <p id={newPosteHintId} className="text-xs text-gray-600 mt-1">{newPosteHint}</p>}
+          <datalist id={`${id}-roles`}>{sector.suggestions.map((r) => <option key={r} value={r} />)}</datalist>
         </div>
         <div>
           <label htmlFor={`${id}-label`} className="block text-xs font-medium text-gray-600 mb-1">Libellé</label>
@@ -361,6 +407,7 @@ export default function ShiftRecurrenceForm({ panelId, eventId, eventStart, even
       {attempted && !complete && (
         <p className="text-xs text-red-700">À compléter : {missingFields.map((f) => FIELD_NOUNS[f]).join(", ")}.</p>
       )}
+      {mismatchInvalid && <p className="text-xs text-red-700">À corriger : le secteur du poste.</p>}
 
       <div className="flex gap-3 flex-wrap">
         <button type="button" onClick={handleCreate} aria-disabled={saving || undefined} aria-describedby={summaryId} className="min-h-11 bg-blue-600 text-white px-4 py-2 rounded-xl text-sm font-medium hover:bg-blue-700 aria-disabled:cursor-wait focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-blue-600">

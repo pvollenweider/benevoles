@@ -2,7 +2,7 @@
 // SPDX-License-Identifier: AGPL-3.0-only
 
 import { KNOWN_ROLES } from "./roles"
-import { eventPostes, posteKey, type PosteShift } from "./poste-suggestions"
+import { eventPostes, posteKey, posteSettingsHint, type PosteShift } from "./poste-suggestions"
 import { roleSectorOf } from "./role-settings"
 import { NO_SECTOR_LABEL } from "./sectors"
 
@@ -90,4 +90,37 @@ export type NewShiftSectorDecision =
 export function newShiftSectorDecision(existing: string | null | undefined, requested: string | null): NewShiftSectorDecision {
   if (existing === undefined) return { ok: true, sectorId: requested }
   return existing === requested ? { ok: true, sectorId: existing } : { ok: false, status: 409, posteSectorId: existing }
+}
+
+/**
+ * The sector of the existing poste typed (any spelling), for the form's « Secteur » select:
+ * undefined for a new name or an empty field, null for « Autres postes ».
+ */
+export function typedPosteSector(shifts: readonly PosteSectorShift[], typed: string, activeIds: ReadonlySet<string>): string | null | undefined {
+  const k = posteKey(typed)
+  if (!k) return undefined
+  const poste = eventPostes(shifts).find((p) => posteKey(p) === k)
+  return poste === undefined ? undefined : posteSectorOf(shifts, poste, activeIds)
+}
+
+/**
+ * The value of the form's « Secteur » select once the poste field changed: until the organiser
+ * chose a sector (preset by « Ajouter un poste dans « S » » or changed by hand), it follows the
+ * existing poste typed; a chosen sector, or a new name, keeps the current value.
+ */
+export function effectiveSector(chosen: boolean, typedSector: string | null | undefined, current: string | null): string | null {
+  return !chosen && typedSector !== undefined ? typedSector : current
+}
+
+/** Under the poste field while the select follows the poste: where it is, then its settings. */
+export function posteFollowHint(poste: string, sectorName: string | null): string {
+  return `Secteur du poste : « ${sectorName ?? NO_SECTOR_LABEL} ». ${posteSettingsHint(poste)}`
+}
+
+/**
+ * What saving creates while the poste typed is new: « Le poste sera créé dans « Bar » avec son
+ * premier créneau. » (one shift) or « … avec ses créneaux. » (a series or a weekly permanence).
+ */
+export function newPosteSectorHint(sectorName: string | null, many = false): string {
+  return `Le poste sera créé dans « ${sectorName ?? NO_SECTOR_LABEL} » avec ${many ? "ses créneaux" : "son premier créneau"}.`
 }

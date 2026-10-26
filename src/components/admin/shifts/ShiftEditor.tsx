@@ -7,15 +7,17 @@ import { useId, useRef, useState } from "react"
 import { flushSync } from "react-dom"
 import CoordinatesField from "@/components/admin/CoordinatesField"
 import { requestJson } from "@/lib/use-submit"
-import { matchingPoste, posteKey, posteSuggestions } from "@/lib/poste-suggestions"
+import { matchingPoste, posteKey } from "@/lib/poste-suggestions"
 import { resolveNewShiftDisplayOrder, isCompleteTime, endAfterStartChange } from "@/lib/gantt-utils"
 import { SHIFT_CONTACT_NAME_MAX, SHIFT_CONTACT_PHONE_MAX, SHIFT_INSTRUCTIONS_MAX } from "@/lib/shift-info"
 import { fmtLongDate as fmtDate, normalizeTime } from "@/lib/shifts-admin"
 import { SHIFT_FIELD_ERRORS, missingFieldsSummary, missingShiftFields, type ShiftField } from "@/lib/shift-editor-form"
 import { minVolunteersProblem, parseMinVolunteers } from "@/lib/staffing"
 import PosteHint from "./PosteHint"
-import { posteSectorMessage, posteSectorMismatch, posteSectorOf, posteSuggestionsInSector, switchSectorLabel } from "@/lib/poste-sector"
-import { NO_SECTOR_LABEL, NO_SECTOR_OPTION } from "@/lib/sectors"
+import { newPosteSectorHint, posteSectorOf } from "@/lib/poste-sector"
+import { usePosteSector } from "./usePosteSector"
+import { NO_SECTOR_LABEL } from "@/lib/sectors"
+import SectorSelect from "./SectorSelect"
 import type { RawShift } from "./types"
 
 export const emptyShift = {
@@ -88,28 +90,28 @@ export default function ShiftEditor({
   const hintPoste = changedPoste ? poste : null
 
   // Sector first (#1147), for a new shift of an event that adopted sectors: the select comes
-  // before the poste and filters its suggestions; a poste typed that exists in another sector is
-  // never moved: the form says where it is, offers to switch the select, and saving waits.
-  // The select only when there is a sector to choose; with every sector archived, the new poste
-  // still goes to « Autres postes » explicitly (sendSector).
-  const sendSector = !!sectors && !editingId
-  const sectorFieldShown = sendSector && sectors.length > 0
+  // before the poste. Until the organiser chooses a sector it follows the existing poste typed;
+  // once chosen, a poste typed that exists in another sector is never moved: the form says where
+  // it is, offers to switch the select, and saving waits (usePosteSector). The select only when
+  // there is a sector to choose; with every sector archived, the new poste still goes to
+  // « Autres postes » explicitly (sendSector).
+  const sector = usePosteSector({ sectors: editingId ? null : sectors, presetSector, existingShifts, roleName: form.roleName })
+  const sendSector = sector.send
+  const sectorFieldShown = sector.shown
   const activeIds = new Set((sectors ?? []).map((s) => s.id))
-  const [sectorValue, setSectorValue] = useState(presetSector?.id ?? "")
-  // A sector archived while the form is open is no destination any more: « Autres postes ».
-  const chosenSector = sectorValue && activeIds.has(sectorValue) ? sectorValue : null
+  const chosenSector = sector.sectorId
   const sectorNameOf = (id: string | null) => (id ? sectors?.find((s) => s.id === id)?.name ?? null : null)
-  const mismatch = sectorFieldShown ? posteSectorMismatch(existingShifts, form.roleName, chosenSector, activeIds) : null
-  const mismatchText = mismatch ? `${posteSectorMessage(mismatch.poste, sectorNameOf(mismatch.sectorId))}${attempted ? " Choisissez ce secteur, ou un autre nom de poste." : ""}` : null
+  const mismatch = sector.mismatch
+  const mismatchText = sector.message ? `${sector.message}${mismatch && attempted ? " Choisissez ce secteur, ou un autre nom de poste." : ""}` : null
   const mismatchInvalid = attempted && !!mismatch
   // The live hint stays silent right after focus moved for it (switch, blocked save); typing again speaks.
   const [hintQuiet, setHintQuiet] = useState(false)
   const sectorSelectRef = useRef<HTMLSelectElement>(null)
   const roleInputRef = useRef<HTMLInputElement>(null)
-  const suggestions = sectorFieldShown ? posteSuggestionsInSector(existingShifts, chosenSector, activeIds) : posteSuggestions(existingShifts)
+  const suggestions = sector.suggestions
   // What the save will create, said under the heading while the poste typed is new.
   const newPosteHint = sectorFieldShown && !poste && (presetSector || form.roleName.trim())
-    ? `Le poste sera créé dans « ${sectorNameOf(chosenSector) ?? NO_SECTOR_LABEL} » avec son premier créneau.`
+    ? newPosteSectorHint(sector.sectorName)
     : null
   // Editing: the sector belongs to the poste, shown, changed with « Déplacer… » (the shift takes
   // the sector of the poste it goes to; a new name keeps the shift's own).
@@ -119,14 +121,14 @@ export default function ShiftEditor({
   const roleInvalidProps = mismatchInvalid && !roleField.invalidProps["aria-invalid"] ? { "aria-invalid": true as const } : roleField.invalidProps
   const editSectorId = `roleName-sector-${sfx}`
   const newPosteHintId = `new-poste-hint-${sfx}`
-  const roleDescribedBy = [roleField.invalidProps["aria-describedby"], hintPoste || mismatchText ? hintId : undefined, editSectorName !== undefined ? editSectorId : undefined].filter(Boolean).join(" ") || undefined
+  const roleDescribedBy = [roleField.invalidProps["aria-describedby"], hintPoste || mismatchText ? hintId : undefined, newPosteHint ? newPosteHintId : undefined, editSectorName !== undefined ? editSectorId : undefined].filter(Boolean).join(" ") || undefined
 
   function switchToPosteSector() {
     if (!mismatch) return
     // The button goes with the disagreement: focus moves to the select in the same task, which
     // reads its new value and, as its description, that the poste's settings apply.
     flushSync(() => {
-      setSectorValue(mismatch.sectorId ?? "")
+      sector.switchToPoste()
       setHintQuiet(true)
     })
     sectorSelectRef.current?.focus()
@@ -208,28 +210,24 @@ export default function ShiftEditor({
   }
 
   return (
-    <div ref={ref} role="group" aria-labelledby={`shift-editor-title-${sfx}`} aria-describedby={newPosteHint ? newPosteHintId : undefined} className="bg-white rounded-2xl border border-blue-200 p-5 space-y-4">
+    <div ref={ref} role="group" aria-labelledby={`shift-editor-title-${sfx}`} className="bg-white rounded-2xl border border-blue-200 p-5 space-y-4">
       <div>
         <h2 id={`shift-editor-title-${sfx}`} className="font-semibold text-gray-800">{editingId ? "Modifier le créneau" : presetSector ? "Nouveau poste : premier créneau" : "Nouveau créneau"}</h2>
         {newPosteHint && <p id={newPosteHintId} className="text-xs text-gray-600 mt-0.5">{newPosteHint}</p>}
       </div>
       {sectorFieldShown && (
-        <div className="sm:w-1/2">
-          <label htmlFor={`sectorId-${sfx}`} className="block text-xs font-medium text-gray-600 mb-1">Secteur</label>
-          {/* First field: focused first, so the sector is heard before the poste (unless preset). */}
-          <select
-            ref={sectorSelectRef}
-            id={`sectorId-${sfx}`}
-            autoFocus={!presetSector}
-            value={chosenSector ?? ""}
-            onChange={(e) => { setSectorValue(e.target.value); setHintQuiet(false) }}
-            aria-describedby={hintQuiet && hintPoste && !mismatch ? hintId : undefined}
-            className="input"
-          >
-            {sectors!.map((s) => <option key={s.id} value={s.id}>{s.name}</option>)}
-            <option value="">{NO_SECTOR_OPTION}</option>
-          </select>
-        </div>
+        // First field: focused first, so the sector is heard before the poste (unless preset).
+        <SectorSelect
+          ref={sectorSelectRef}
+          id={`sectorId-${sfx}`}
+          sectors={sectors!}
+          value={chosenSector ?? ""}
+          autoFocus={!presetSector}
+          // Choosing the sector it already follows says nothing new: the hint stays quiet.
+          onChange={(v) => { setHintQuiet(sector.following && v === (sector.sectorId ?? "")); sector.choose(v) }}
+          // After a switch (quiet), or while it follows the poste typed: the reason is its description.
+          describedBy={hintPoste && !mismatch && (hintQuiet || sector.following) ? hintId : undefined}
+        />
       )}
       <div className="grid grid-cols-2 gap-3">
         <div>
@@ -242,7 +240,7 @@ export default function ShiftEditor({
             autoFocus={!sectorFieldShown || !!presetSector} required {...roleInvalidProps}
             aria-describedby={roleDescribedBy}
             value={form.roleName}
-            onChange={e => { setField("roleName", e.target.value); setHintQuiet(false) }}
+            onChange={e => { setField("roleName", e.target.value); sector.followPoste(e.target.value); setHintQuiet(false) }}
             placeholder="ex. Billetterie"
             className={`input ${roleField.border || (mismatchInvalid ? "!border-red-600" : "")}`}
           />
@@ -250,7 +248,7 @@ export default function ShiftEditor({
           <PosteHint id={hintId} poste={hintPoste} message={mismatchText} invalid={mismatchInvalid} quiet={hintQuiet} />
           {mismatch && (
             <button type="button" onClick={switchToPosteSector} className="mt-1 text-xs font-medium text-blue-700 hover:text-blue-900 rounded-md min-h-6 text-left focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-blue-600">
-              {switchSectorLabel(sectorNameOf(mismatch.sectorId))}
+              {sector.switchLabel}
             </button>
           )}
           {editSectorName !== undefined && (

@@ -15,6 +15,8 @@ export type ActionRecap = {
   lines: string[]
   confirmLabel: string
   danger: boolean
+  /** The safe button's label, « Annuler » by default (e.g. « Revenir aux postes » for a discard). */
+  cancelLabel?: string
   /**
    * Optional, for a longer recap (#516): the one sentence that matters most (e.g. irreversible),
    * shown first, then a warning shown in a box with a visible « Attention : », then headed lists
@@ -175,6 +177,21 @@ export function deleteRoleRecap(i: { role: string; shifts: number; registered: n
     ],
     confirmLabel: "Supprimer",
     danger: true,
+  }
+}
+
+/**
+ * « Fermer » in « Gérer les postes » with a poste order not saved: closing loses it. The safe
+ * button goes back to the panel, where « Enregistrer l'ordre » is.
+ */
+export function unsavedRoleOrderRecap(): ActionRecap {
+  return {
+    title: "L'ordre des postes n'est pas enregistré",
+    lead: "Si vous fermez maintenant, le nouvel ordre est perdu. Pour le garder, revenez aux postes et choisissez « Enregistrer l'ordre ».",
+    lines: [],
+    confirmLabel: "Fermer sans enregistrer",
+    cancelLabel: "Revenir aux postes",
+    danger: false,
   }
 }
 

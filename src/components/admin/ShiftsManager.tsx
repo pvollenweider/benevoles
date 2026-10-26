@@ -6,13 +6,14 @@
 import { useEffect, useId, useState, useRef } from "react"
 import { useRouter } from "next/navigation"
 import { announce } from "@/lib/announce"
-import type { ActionRecap } from "@/lib/action-recap"
+import { unsavedRoleOrderRecap, type ActionRecap } from "@/lib/action-recap"
+import { roleOrderUnsaved } from "@/lib/role-order"
 import ConfirmActionModal from "@/components/admin/ConfirmActionModal"
 import { requestJson } from "@/lib/use-submit"
 import { flushSync } from "react-dom"
 import { fmtRange } from "@/lib/gantt-utils"
 import { spokenShift, spokenTimeRange } from "@/lib/spoken-time"
-import { focusFirstAvailableNextFrame, type FocusCandidate } from "@/lib/focus-return"
+import { focusFirstAvailable, focusFirstAvailableNextFrame, type FocusCandidate } from "@/lib/focus-return"
 import { shiftSavedMessage } from "@/lib/shift-editor-form"
 import AdminDayTimeline, { type AdminShift } from "./AdminDayTimeline"
 import { StaffingStateLabel } from "./StaffingShiftLine"
@@ -36,7 +37,7 @@ import {
 } from "@/lib/shifts-admin"
 import StatusBadge from "./StatusBadge"
 import { roleSectorOf } from "@/lib/role-settings"
-import { activeSectors, sectorsAdopted, sectorsManaged, type SectorLike } from "@/lib/sectors"
+import { activeSectors, groupedRoleOrder, groupRolesBySector, sectorsAdopted, sectorsManaged, type SectorLike } from "@/lib/sectors"
 
 /** The event's sectors as « Gérer les postes » holds them (#1147). */
 export type AdminSector = SectorLike & { archivedAt: string | null }
@@ -280,6 +281,32 @@ export default function ShiftsManager({
     focusFirstAvailableNextFrame([() => manageRolesBtnRef.current, () => addBtnRef.current, () => outcomeRef.current])
   }
 
+  /** The poste order as « Gérer les postes » draws it: sector by sector once the event uses sectors. */
+  function drawnRoleOrder(roles: string[]): string[] {
+    if (!sectorsInUse) return roles
+    return groupedRoleOrder(groupRolesBySector(roles, (r) => sectorOf[r], sectorsState.sectors))
+  }
+
+  /**
+   * « Fermer » or the « Gérer les postes » toggle: an order changed and not saved is never dropped
+   * silently, the confirmation modal asks first. « Fermer sans enregistrer » closes both at once and
+   * gives focus to the toggle in the same task (the modal's opener is gone with the panel).
+   */
+  function requestCloseReorder() {
+    if (!roleOrderUnsaved(drawnRoleOrder(reorderRoles), drawnRoleOrder(uniqueRoles))) { closeReorder(); return }
+    setDeleteError(null)
+    setPendingDelete({
+      recap: unsavedRoleOrderRecap(),
+      run: async () => {
+        flushSync(() => {
+          setPendingDelete(null)
+          setShowReorder(false)
+        })
+        focusFirstAvailable([() => manageRolesBtnRef.current, () => addBtnRef.current, () => outcomeRef.current])
+      },
+    })
+  }
+
   function requestRoleDelete(pending: { recap: ActionRecap; run: () => Promise<void> }) {
     setDeleteError(null)
     setPendingDelete(pending)
@@ -348,7 +375,7 @@ export default function ShiftsManager({
             <button
               ref={manageRolesBtnRef}
               type="button"
-              onClick={showReorder ? closeReorder : openReorder}
+              onClick={showReorder ? requestCloseReorder : openReorder}
               aria-expanded={showReorder}
               aria-controls={showReorder ? rolesPanelId : undefined}
               className="text-xs text-gray-500 border border-gray-200 rounded-xl px-3 py-1.5 hover:bg-gray-50 transition-colors flex items-center gap-1.5"
@@ -407,6 +434,7 @@ export default function ShiftsManager({
           existingShifts={shifts}
           onCreated={handleRecurrenceCreated}
           onClose={closeRecurrence}
+          sectors={editorSectors}
         />
       )}
 
@@ -428,6 +456,7 @@ export default function ShiftsManager({
           existingShifts={shifts}
           onCreated={handleSeriesCreated}
           onClose={closeSeries}
+          sectors={editorSectors}
         />
       )}
 
@@ -441,6 +470,7 @@ export default function ShiftsManager({
         roles={reorderRoles}
         setRoles={setReorderRoles}
         onClose={closeReorder}
+        onRequestClose={requestCloseReorder}
         onAnnounce={(text) => announce(setRoleAnnouncement, text)}
         onRequestDelete={requestRoleDelete}
         onDeletingChange={setDeleting}
