@@ -3,7 +3,9 @@
 
 import { NextResponse } from "next/server"
 import { requireOrgSession } from "@/lib/auth-guard"
-import { buildDayParts, type VolData, type ShiftRow, type ShowEntry, directoryRegistrations } from "@/lib/pdf-export-gantt"
+import { buildDayParts, type PdfSectors, type VolData, type ShiftRow, type ShowEntry, directoryRegistrations } from "@/lib/pdf-export-gantt"
+import { roleSectorOf } from "@/lib/role-settings"
+import { sectorsAdopted } from "@/lib/sectors"
 import { contactPhone } from "@/lib/contact-phone"
 import { orgTimeZone } from "@/lib/time-zone"
 import { LIVE_STATUSES } from "@/lib/registration-capacity"
@@ -23,6 +25,7 @@ export async function GET(_req: Request, { params }: { params: Promise<{ id: str
     where: { id },
     include: {
       organization: { select: { timeZone: true } },
+      sectors: { select: { id: true, name: true, displayOrder: true, archivedAt: true } },
       shifts: {
         where: { status: { not: "cancelled" } },
         include: {
@@ -63,11 +66,19 @@ export async function GET(_req: Request, { params }: { params: Promise<{ id: str
 
   const showSchedule = (event.showSchedule as ShowEntry[] | null) ?? []
 
+  // By sector (#1147), once the event adopted sectors: each poste's sector over the whole event.
+  let bySector: PdfSectors | undefined
+  if (sectorsAdopted(event)) {
+    const sectorOf: Record<string, string | null> = {}
+    for (const role of new Set(event.shifts.map((s) => s.roleName))) sectorOf[role] = roleSectorOf(event.shifts.filter((s) => s.roleName === role))
+    bySector = { sectors: event.sectors, sectorOf }
+  }
+
   let allGantts = ""
   let allRecaps = ""
   for (const [key, { date, shifts }] of dayMap) {
     const dayShows = showSchedule.filter((s) => s.date === key)
-    const { gantt, recap } = buildDayParts(date, shifts, dayShows, showWaitlist)
+    const { gantt, recap } = buildDayParts(date, shifts, dayShows, showWaitlist, bySector)
     allGantts += gantt
     allRecaps += recap
   }
@@ -194,6 +205,9 @@ export async function GET(_req: Request, { params }: { params: Promise<{ id: str
     .gantt-table .shift-cell, .gantt-table .show-band-cell { padding: 3px 3px; overflow-wrap: anywhere; }
     .hour-th  { border-left: 2px solid #374151 !important; font-weight: 700; color: #111827; font-size: 9px; }
     .hour-mark { border-left: 2px solid #9CA3AF !important; }
+
+    /* A sector's first row (#1147): bold, framed, readable without its background in print. */
+    .sector-row .sector-cell { text-align: left; font-weight: 700; font-size: 10px; padding: 4px 6px; background: #F3F4F6; border-top: 2px solid #374151; }
 
     .role-cell {
       text-align: left;

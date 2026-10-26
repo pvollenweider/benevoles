@@ -35,6 +35,12 @@ import {
   spokenPlaces,
 } from "@/lib/shifts-admin"
 import StatusBadge from "./StatusBadge"
+import { roleSectorOf } from "@/lib/role-settings"
+import { sectorsAdopted, type SectorLike } from "@/lib/sectors"
+
+/** The event's sectors as « Gérer les postes » holds them (#1147). */
+export type AdminSector = SectorLike & { archivedAt: string | null }
+export type AdminSectorsState = { enabled: boolean; adoptedAt: string | null; sectors: AdminSector[] }
 
 const UNPUBLISHED_NOTICE = "C'était le dernier créneau : l'événement est repassé en brouillon, sa page d'inscription n'est plus accessible."
 
@@ -42,6 +48,7 @@ type Show = { name: string; date: string; startTime: string; endTime: string }
 
 export default function ShiftsManager({
   eventId, eventStartDate, eventEndDate, initialShifts, showSchedule = [], defaultHolidays = "none", initialRecurrences = [], today = "",
+  initialSectors = null,
 }: {
   eventId:        string
   eventStartDate: string
@@ -54,12 +61,25 @@ export default function ShiftsManager({
   initialRecurrences?: AdminRecurrence[]
   /** "YYYY-MM-DD" today in the organisation's zone. */
   today?: string
+  /** Sectors (#1147, beta): the event's option, adoption and sectors; null = nothing about sectors on the page. */
+  initialSectors?: AdminSectorsState | null
 }) {
   const formRef   = useRef<HTMLDivElement>(null)
   const dates     = eventDates(eventStartDate, eventEndDate)
   const singleDay = dates.length === 1
 
   const [shifts, setShifts] = useState<RawShift[]>(initialShifts)
+  const [sectorsState, setSectorsState] = useState<AdminSectorsState | null>(initialSectors)
+  // Sectors collapsed in the timeline (#1147): one state for every day, all expanded at load.
+  const [collapsedSectors, setCollapsedSectors] = useState<ReadonlySet<string>>(new Set())
+  function toggleSector(key: string) {
+    setCollapsedSectors((prev) => {
+      const next = new Set(prev)
+      if (next.has(key)) next.delete(key)
+      else next.add(key)
+      return next
+    })
+  }
   // The page header (wizard) says « Aucun créneau pour l'instant » from the server's count: refresh
   // it when the first shift appears or the last one goes. Client state survives a refresh.
   const router = useRouter()
@@ -134,6 +154,14 @@ export default function ShiftsManager({
     } else {
       setShifts(prev => [...prev, { ...data, date: data.date.split("T")[0], registrationCount: 0 }])
     }
+    // A shift saved in a collapsed sector shows again (#1147): it never changes out of sight.
+    const sectorKey = roleSectorOf(shifts.filter((s) => s.roleName === saved.roleName && s.status !== "cancelled")) ?? "none"
+    setCollapsedSectors((prev) => {
+      if (!prev.has(sectorKey)) return prev
+      const next = new Set(prev)
+      next.delete(sectorKey)
+      return next
+    })
     closeForm()
     announce(setRoleAnnouncement, shiftSavedMessage(editingId ? "edited" : "added", saved))
   }
@@ -261,6 +289,13 @@ export default function ShiftsManager({
     announce(setRoleAnnouncement, unpublished ? `Poste « ${role} » supprimé. ${UNPUBLISHED_NOTICE}` : `Poste « ${role} » supprimé.`)
     outcomeRef.current?.focus()
   }
+
+  // By sector (#1147), once the event adopted sectors: each poste's sector over the whole event.
+  const sectorOf: Record<string, string | null> = {}
+  for (const role of uniqueRoles) sectorOf[role] = roleSectorOf(shifts.filter((s) => s.roleName === role && s.status !== "cancelled"))
+  const sectorGrouping = sectorsState && sectorsAdopted({ sectorsEnabled: sectorsState.enabled, sectorsAdoptedAt: sectorsState.adoptedAt })
+    ? { sectors: sectorsState.sectors, sectorOf, collapsed: collapsedSectors, onToggle: toggleSector }
+    : undefined
 
   // Group by day (all dates, not just those with shifts)
   const shiftsByDay = activeShiftsByDay(shifts)
@@ -401,6 +436,9 @@ export default function ShiftsManager({
         onDeletingChange={setDeleting}
         onDeleteError={setDeleteError}
         onRoleDeleted={handleRoleDeleted}
+        sectorsState={sectorsState}
+        setSectorsState={setSectorsState}
+        onConfirmDone={() => setPendingDelete(null)}
       />
 
       {/* Quick-add / edit form */}
@@ -444,6 +482,7 @@ export default function ShiftsManager({
             eventShifts={shifts}
             shows={showSchedule.filter(s => s.date === day)}
             roleOrder={uniqueRoles}
+            sectorGrouping={sectorGrouping}
             onCreated={handleCreated}
             onUpdated={handleUpdated}
             onDeleted={handleDeleted}

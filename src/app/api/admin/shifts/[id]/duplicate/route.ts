@@ -52,6 +52,7 @@ export async function POST(_req: Request, { params }: { params: Promise<{ id: st
       reservedTags: source.reservedTags,
       overlapAllowed: source.overlapAllowed,
       assignedOnly: source.assignedOnly,
+      sectorId: source.sectorId,
       ...poste,
     },
   })

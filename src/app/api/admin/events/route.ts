@@ -11,6 +11,7 @@ import { z } from "zod"
 import { validationError } from "@/lib/api-error"
 import { dayContactSchema } from "@/lib/day-contact"
 import { cancelDeadlineSchema } from "@/lib/cancel-deadline-schema"
+import { newEventSectorsEnabled } from "@/lib/sector-adoption"
 
 const showSchema = z.object({
   name: z.string(),
@@ -96,13 +97,14 @@ export async function POST(req: Request) {
   if (existing) slug = `${slug}-${Date.now()}`
 
   // « Qui est inscrit » (#1068): what the form sent, else the organisation's default for new events.
-  const org = data.shiftRosterEnabled === undefined
-    ? await db.organization.findUnique({ where: { id: organizationId }, select: { shiftRosterDefault: true } })
-    : null
+  const org = await db.organization.findUnique({ where: { id: organizationId }, select: { shiftRosterDefault: true, sectorsDefault: true } })
+  // Sectors (#1147, beta): the organisation's default, only while the capability can be adopted.
+  const sectorsEnabled = await newEventSectorsEnabled(organizationId, org?.sectorsDefault)
   const event = await db.event.create({
     data: {
       ...data,
       shiftRosterEnabled: data.shiftRosterEnabled ?? org?.shiftRosterDefault ?? true,
+      sectorsEnabled,
       slug,
       organizationId,
       startDate: new Date(data.startDate),

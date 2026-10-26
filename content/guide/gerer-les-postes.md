@@ -2,7 +2,7 @@
 roles: [admin]
 group: preparer
 order: 70
-summary: Réordonner, renommer, colorer ou supprimer les postes, les limiter par personne, en réserver l'accès ou les rendre cumulables.
+summary: Réordonner, renommer, colorer, limiter, réserver, rendre cumulables ou regrouper en secteurs les postes.
 related: [configurer-les-creneaux, inviter-des-membres]
 legacy: [admin#gerer-les-postes]
 aliases: []
@@ -22,3 +22,24 @@ Dans la page des créneaux, le bouton **Gérer les postes** ouvre un panneau qui
 - **Cumul avec un autre créneau** : le bouton « Cumul : non » ouvre la case **Poste cumulable avec un autre créneau**. Cochée, une personne inscrite à un créneau de ce poste peut prendre en même temps un autre créneau, de ce poste ou d'un autre : par exemple assurer les premiers secours tout en tenant la buvette café, sans mobiliser une personne de plus. Il suffit qu'un des deux postes soit cumulable pour que les deux créneaux puissent se chevaucher ; entre deux postes ordinaires, le chevauchement reste refusé. Le bouton devient « Cumul : oui » et, dans la vue Liste des créneaux, le poste porte la mention « Cumulable avec un autre créneau ». La page d'inscription laisse alors sélectionner les deux créneaux, et le récapitulatif indique qu'ils ont lieu en même temps. Dans les heures de la personne (liste des membres, export, attestation, résumé de l'événement), le temps passé sur les deux créneaux à la fois n'est compté qu'une fois. Si vous le retirez, les inscriptions déjà faites restent. Le paramètre est copié avec l'événement.
 
 L'ordre, la couleur, la limite par personne, l'accès (réservé ou attribué par l'organisation) et le cumul appartiennent au poste. Un créneau ajouté ensuite au poste, seul, en série, en permanence récurrente ou en dupliquant un créneau, les prend, de même qu'un créneau déplacé vers ce poste. Dans les formulaires de créneau, le champ « Poste » propose en premier les postes de l'événement qui ont encore un créneau non annulé et rappelle, quand vous en choisissez un, que ses paramètres s'appliquent. Un créneau placé dans un poste qui n'existe pas encore garde les paramètres par défaut, ou les siens s'il vient d'un autre poste.
+
+## Organiser les postes par secteurs (bêta)
+
+Un secteur regroupe plusieurs postes d'un événement : le secteur **Parking** pour les postes « Parking Nord » et « Parking Mairie », le secteur **Scène** pour la régie et l'accueil des artistes. Les secteurs servent à l'organisation : la frise des créneaux et le PDF du planning rangent les postes par secteur. Les bénévoles ne voient aucun secteur : la page d'inscription, les emails et leur page **Mes inscriptions** ne changent pas. Les responsables de secteur restent attachés à leur poste.
+
+C'est une fonction en bêta. Pour l'utiliser :
+
+1. Un propriétaire active **Essayer les fonctions avancées en bêta** dans **Paramètres**, carte **Fonctions bêta** (voir [Personnaliser l'organisation](personnaliser-l-organisation.md#fonctions-beta)).
+2. Dans les informations de l'événement, carte **Secteurs**, activez l'interrupteur **Organiser les postes par secteurs**. Tant qu'aucun secteur n'est enregistré, vous pouvez le désactiver : l'événement reste tel qu'il était.
+3. Dans **Créneaux**, ouvrez **Gérer les postes** : la partie **Secteurs** apparaît en haut du panneau.
+
+Dans **Secteurs** :
+
+- **Ajouter** : tapez le nom dans **Nouveau secteur**, puis **Ajouter le secteur**. Un nom n'est utilisé qu'une fois par événement, sans tenir compte des majuscules. En créant le premier secteur, vous conservez l'organisation par secteurs pour cet événement : l'option ne peut plus être désactivée, même si vous archivez ensuite tous les secteurs. La carte **Secteurs** de l'événement le dit alors.
+- **Réordonner** : les flèches Monter et Descendre enregistrent l'ordre tout de suite. La frise et le PDF suivent cet ordre, puis l'ordre des postes à l'intérieur de chaque secteur.
+- **Renommer** : « Renommer », tapez le nouveau nom, **Valider**.
+- **Archiver** : un secteur n'est jamais supprimé. S'il regroupe encore des postes, une confirmation indique qu'ils passent dans « Sans secteur » ; ils gardent leurs créneaux et leurs inscriptions. **Secteurs archivés** liste les secteurs archivés : **Rétablir** en remet un, vide, en fin de liste.
+
+Chaque poste a ensuite un bouton **Secteur : aucun** : choisissez un secteur, ou « Sans secteur », puis **Enregistrer**. Comme la couleur, le secteur appartient au poste : il s'applique à tous ses créneaux, à ceux que vous ajoutez ensuite au poste et à un créneau déplacé vers lui, et il suit le poste quand vous le renommez. Un poste n'appartient qu'à un secteur à la fois, et un nom de poste reste unique dans l'événement.
+
+Sur la frise, chaque secteur a une ligne d'en-tête avec son nom et son nombre de postes ; un clic sur cette ligne, ou Entrée au clavier, replie ou déplie ses postes, pour tous les jours de l'événement. Les postes sans secteur sont regroupés à la fin, sous « Sans secteur ». La vue Liste ne change pas. **Dupliquer** l'événement reprend ses secteurs, le secteur de chaque poste et l'organisation par secteurs.

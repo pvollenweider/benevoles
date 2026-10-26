@@ -308,12 +308,12 @@ describe("Events — cross-tenant isolation", () => {
     expect(prismaMock.event.update).not.toHaveBeenCalled()
   })
 
-  it("POST /api/admin/events reads the « Qui est inscrit » default (#1068) of the caller's organisation only", async () => {
+  it("POST /api/admin/events reads the « Qui est inscrit » (#1068) and sectors (#1147) defaults of the caller's organisation only", async () => {
     const { POST } = await import("@/app/api/admin/events/route")
     const db = setupGuard()
     const res = await POST(makeRequest("/api/admin/events", "POST", { title: "Fête", startDate: "2031-06-06", endDate: "2031-06-06" }))
     expect(res.status).toBe(201)
-    expect(db.organization.findUnique).toHaveBeenCalledWith({ where: { id: ORG_A }, select: { shiftRosterDefault: true } })
+    expect(db.organization.findUnique).toHaveBeenCalledWith({ where: { id: ORG_A }, select: { shiftRosterDefault: true, sectorsDefault: true } })
   })
 
   it("POST /api/admin/events/[id]/duplicate returns 404 for an org-B event (its roster setting never copied)", async () => {
@@ -1991,5 +1991,69 @@ describe("Organization settings — cross-tenant isolation (#1049)", () => {
     expect(res.status).toBe(200)
     expect(prismaMock.organization.findUnique).toHaveBeenCalledWith(expect.objectContaining({ where: { id: ORG_A } }))
     expect(prismaMock.notificationOutbox.create).toHaveBeenCalledWith(expect.objectContaining({ data: expect.objectContaining({ organizationId: ORG_A }) }))
+  })
+})
+
+// ── Sectors (#1147) ──────────────────────────────────────────────────────────
+
+describe("Sectors — cross-tenant isolation (#1147)", () => {
+  beforeEach(() => vi.clearAllMocks())
+  const sectorParams = (id: string, sectorId: string) => ({ params: Promise.resolve({ id, sectorId }) })
+  /** A scoped db whose sector writes would be visible: none may run for an org-B event. */
+  const sectorDb = (event: unknown = null, locked: unknown[] = []) => {
+    const db = setupGuard({ event: { findFirst: vi.fn().mockResolvedValue(event) } })
+    const tx = {
+      $queryRaw: vi.fn().mockResolvedValue(locked),
+      sector: { findMany: vi.fn().mockResolvedValue([]), create: vi.fn(), update: vi.fn() },
+      shift: { findMany: vi.fn().mockResolvedValue([]), updateMany: vi.fn() },
+      event: { update: vi.fn() },
+    }
+    const extra = { sector: { findMany: vi.fn().mockResolvedValue([]) }, $transaction: vi.fn(async (fn: (t: typeof tx) => unknown) => fn(tx)) }
+    Object.assign(db, extra)
+    return { db: db as typeof db & typeof extra, tx }
+  }
+
+  it("GET and POST /api/admin/events/[id]/sectors return 404 for an org-B event and write nothing", async () => {
+    const { GET, POST } = await import("@/app/api/admin/events/[id]/sectors/route")
+    const { db, tx } = sectorDb()
+    expect((await GET(makeRequest("/api/admin/events/evt-b/sectors"), params("evt-b"))).status).toBe(404)
+    expect((await POST(makeRequest("/api/admin/events/evt-b/sectors", "POST", { name: "Parking" }), params("evt-b"))).status).toBe(404)
+    expect(db.sector.findMany).not.toHaveBeenCalled()
+    expect(tx.sector.create).not.toHaveBeenCalled()
+  })
+
+  it("PATCH sectors/[sectorId], POST sectors/reorder and PUT sectors/mode return 404 for an org-B event", async () => {
+    const one = await import("@/app/api/admin/events/[id]/sectors/[sectorId]/route")
+    const reorder = await import("@/app/api/admin/events/[id]/sectors/reorder/route")
+    const mode = await import("@/app/api/admin/events/[id]/sectors/mode/route")
+    const { db, tx } = sectorDb()
+    expect((await one.PATCH(makeRequest("/api/admin/events/evt-b/sectors/sec-b", "PATCH", { name: "X" }), sectorParams("evt-b", "sec-b"))).status).toBe(404)
+    expect((await reorder.POST(makeRequest("/api/admin/events/evt-b/sectors/reorder", "POST", { sectorIds: [] }), params("evt-b"))).status).toBe(404)
+    expect((await mode.PUT(makeRequest("/api/admin/events/evt-b/sectors/mode", "PUT", { enabled: false }), params("evt-b"))).status).toBe(404)
+    expect(db.$transaction).not.toHaveBeenCalled()
+    expect(tx.event.update).not.toHaveBeenCalled()
+  })
+
+  it("an org-B sector through an org-A event is not found: the row locks filter on the event and the organisation", async () => {
+    const one = await import("@/app/api/admin/events/[id]/sectors/[sectorId]/route")
+    const { tx } = sectorDb({ id: "evt-a" })
+    tx.$queryRaw.mockResolvedValueOnce([{ id: "evt-a", sectorsEnabled: true, sectorsAdoptedAt: new Date() }]).mockResolvedValueOnce([])
+    const res = await one.PATCH(makeRequest("/api/admin/events/evt-a/sectors/sec-b", "PATCH", { archived: true, detachPostes: true }), sectorParams("evt-a", "sec-b"))
+    expect(res.status).toBe(404)
+    const [eventLock, sectorLock] = tx.$queryRaw.mock.calls
+    expect(eventLock.slice(1)).toEqual(["evt-a", ORG_A])
+    expect(sectorLock.slice(1)).toEqual(["sec-b", "evt-a"])
+    expect(tx.shift.updateMany).not.toHaveBeenCalled()
+    expect(tx.sector.update).not.toHaveBeenCalled()
+  })
+
+  it("PATCH roles/[roleName] with an org-B sector moves no shift", async () => {
+    const { PATCH } = await import("@/app/api/admin/events/[id]/roles/[roleName]/route")
+    const { db, tx } = sectorDb({ id: "evt-a" })
+    db.shift.findMany = vi.fn().mockResolvedValue([{ id: "sh-1", sectorId: null, status: "open", _count: { registrations: 0 } }])
+    tx.$queryRaw.mockResolvedValueOnce([{ id: "evt-a", sectorsEnabled: true, sectorsAdoptedAt: new Date() }]).mockResolvedValueOnce([])
+    const res = await PATCH(makeRequest("/api/admin/events/evt-a/roles/Bar", "PATCH", { sectorId: "sec-b" }), { params: Promise.resolve({ id: "evt-a", roleName: "Bar" }) })
+    expect(res.status).toBe(404)
+    expect(tx.shift.updateMany).not.toHaveBeenCalled()
   })
 })

@@ -39,11 +39,11 @@ export type BetaRegistry = Record<string, BetaCapability>
 
 /** Every capability that can be opened for trial: id → what the owner reads in Paramètres. */
 export const BETA_CAPABILITIES = {
-  // #1147, lot A1: flips `shipped` when it is merged.
+  // #1147, lot A1: the event option « Organiser les postes par secteurs » (src/lib/sectors.ts).
   sectors: {
     label: "Secteurs",
     description: "Regrouper plusieurs postes sous une même coordination.",
-    shipped: false,
+    shipped: true,
   },
 } as const satisfies BetaRegistry
 

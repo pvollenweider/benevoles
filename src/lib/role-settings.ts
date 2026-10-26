@@ -23,7 +23,13 @@ import { roleOverlapAllowed } from "./shift-overlap"
  *   public page and the sign-up enforce;
  * - order: the smallest displayOrder (how the timelines and exports order postes);
  * - colour: the colour set on most shifts, shifts without a colour ignored; on a tie, the colour of
- *   the most recently updated of the tied shifts, then the first key in alphabetical order.
+ *   the most recently updated of the tied shifts, then the first key in alphabetical order;
+ * - sector (#1147): the same rule as the colour, on `sectorId`. The role route sets it on every shift
+ *   of the poste, so a disagreement only comes from a race (a shift created while the sector was
+ *   being changed): the sector most shifts carry wins, shifts « Sans secteur » are ignored, and the
+ *   poste falls back to « Sans secteur » only when none has one. Grouping is organisers' display
+ *   only (no access depends on it), so the value in force for most of the poste is the safe one.
+ *   An archived or unknown sector is shown as « Sans secteur » (src/lib/sectors.ts).
  * Pure, no Prisma import.
  */
 export type RoleSettings = {
@@ -33,6 +39,8 @@ export type RoleSettings = {
   overlapAllowed: boolean
   assignedOnly: boolean
   displayOrder: number
+  /** Sector of the poste (#1147), null = « Sans secteur ». */
+  sectorId: string | null
 }
 
 export type RoleSettingsShift = {
@@ -43,6 +51,7 @@ export type RoleSettingsShift = {
   overlapAllowed?: boolean | null
   assignedOnly?: boolean | null
   displayOrder?: number | null
+  sectorId?: string | null
   updatedAt?: Date | string | null
 }
 
@@ -53,20 +62,24 @@ export function liveRoleShifts(eventId: string, roleName: string) {
 
 /** What the routes read for `roleSettingsOf`. */
 export const ROLE_SETTINGS_SELECT = {
-  roleName: true, colorKey: true, maxPerVolunteer: true, reservedTags: true, overlapAllowed: true, assignedOnly: true, displayOrder: true, updatedAt: true,
+  roleName: true, colorKey: true, maxPerVolunteer: true, reservedTags: true, overlapAllowed: true, assignedOnly: true, displayOrder: true, sectorId: true, updatedAt: true,
 } as const
 
 const time = (d: Date | string | null | undefined) => (d == null ? 0 : new Date(d).getTime())
 
-/** The colour set on most shifts; tie: the most recently updated, then alphabetical. Null when none is set. */
-export function roleColorOf(shifts: RoleSettingsShift[]): string | null {
+/**
+ * The value set on most shifts, shifts without one ignored; tie: the most recently updated of the
+ * tied shifts, then alphabetical. Null when none is set. Shared by the colour and the sector.
+ */
+export function mostSetValue(shifts: RoleSettingsShift[], valueOf: (s: RoleSettingsShift) => string | null | undefined): string | null {
   const tally = new Map<string, { count: number; latest: number }>()
   for (const s of shifts) {
-    if (!s.colorKey) continue
-    const entry = tally.get(s.colorKey) ?? { count: 0, latest: 0 }
+    const value = valueOf(s)
+    if (!value) continue
+    const entry = tally.get(value) ?? { count: 0, latest: 0 }
     entry.count++
     entry.latest = Math.max(entry.latest, time(s.updatedAt))
-    tally.set(s.colorKey, entry)
+    tally.set(value, entry)
   }
   let best: [string, { count: number; latest: number }] | null = null
   for (const candidate of tally) {
@@ -76,6 +89,16 @@ export function roleColorOf(shifts: RoleSettingsShift[]): string | null {
     if (count > b.count || (count === b.count && (latest > b.latest || (latest === b.latest && key < bestKey)))) best = candidate
   }
   return best?.[0] ?? null
+}
+
+/** The colour set on most shifts; tie: the most recently updated, then alphabetical. Null when none is set. */
+export function roleColorOf(shifts: RoleSettingsShift[]): string | null {
+  return mostSetValue(shifts, (s) => s.colorKey)
+}
+
+/** The sector of a poste from its shifts (#1147): the same rule as the colour. Null = « Sans secteur ». */
+export function roleSectorOf(shifts: RoleSettingsShift[]): string | null {
+  return mostSetValue(shifts, (s) => s.sectorId)
 }
 
 /**
@@ -92,5 +115,6 @@ export function roleSettingsOf(shifts: RoleSettingsShift[], roleName: string): R
     overlapAllowed: roleOverlapAllowed(own, roleName),
     assignedOnly: roleAssignedOnly(own, roleName),
     displayOrder: Math.min(...own.map((s) => s.displayOrder ?? 0)),
+    sectorId: roleSectorOf(own),
   }
 }

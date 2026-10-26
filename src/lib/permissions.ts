@@ -76,6 +76,11 @@ export const PERMISSIONS: Record<string, Partial<Record<Method, Level>>> = {
   "events/[id]/reorder-roles": { POST: "organizer" },
   "events/[id]/roles/[roleName]": { PATCH: "organizer", DELETE: "organizer" },
   "events/[id]/sector-leaders": { GET: "organizer", POST: "organizer" },
+  // Sectors grouping postes (#1147, beta), like the postes: organiser level. Joining the beta stays owner-only.
+  "events/[id]/sectors": { GET: "organizer", POST: "organizer" },
+  "events/[id]/sectors/[sectorId]": { PATCH: "organizer" },
+  "events/[id]/sectors/mode": { PUT: "organizer" },
+  "events/[id]/sectors/reorder": { POST: "organizer" },
   "events/[id]/sector-leaders/[leaderId]": { DELETE: "organizer" },
   "events/[id]/send-reminder": { POST: "organizer" },
   "events/from-template": { POST: "organizer" },

@@ -48,13 +48,13 @@ describe("/api/super-admin/beta-capabilities (#1168)", () => {
   it("lists only known, shipped capabilities: unknown ids stored in PlatformSetting are ignored", async () => {
     m.stored = { open: ["teleportation", "sectors"] }
     const { GET } = await import("@/app/api/super-admin/beta-capabilities/route")
-    // sectors is declared but not shipped before #1147: nothing is effectively open.
-    expect(await (await GET()).json()).toEqual({ open: [] })
+    // sectors ships with #1147: it is open; the unknown id is not.
+    expect(await (await GET()).json()).toEqual({ open: ["sectors"] })
   })
 
   it("refuses to open a capability this version does not ship", async () => {
     const { PUT } = await import("@/app/api/super-admin/beta-capabilities/route")
-    expect((await PUT(put({ open: ["sectors"] }))).status).toBe(400)
+    expect((await PUT(put({ open: ["sectors", "teleportation"] }))).status).toBe(400)
     expect((await PUT(put({ open: ["teleportation"] }))).status).toBe(400)
     expect((await PUT(put({ closed: true }))).status).toBe(400)
     expect(m.upsert).not.toHaveBeenCalled()
@@ -78,9 +78,11 @@ describe("canAdoptBeta (#1168)", () => {
     expect(await canAdoptBeta("org-a", "sectors")).toBe(false)
   })
 
-  it("false for an unshipped capability even if the stored list says it is open", async () => {
+  it("sectors ship with #1147: true once open for an organisation taking part, false when it does not", async () => {
     m.stored = { open: ["sectors"] }
     const { canAdoptBeta } = await import("@/lib/beta-access")
+    expect(await canAdoptBeta("org-a", "sectors")).toBe(true)
+    m.org = { active: true, suspendedAt: null, betaOptInAt: null }
     expect(await canAdoptBeta("org-a", "sectors")).toBe(false)
   })
 

@@ -74,7 +74,7 @@ Après avoir ajouté, renommé ou retiré une page, mettre à jour la liste ci-d
 - [Permanences récurrentes](permanences-recurrentes.md) : Une permanence qui revient chaque semaine se décrit une fois ; toutes ses dates sont créées, jours fériés et fermetures exclus. Pour : organisateurs.
 - [Horaires et créneaux de nuit](horaires-et-nuit.md) : Saisir les horaires d'un créneau de 00:00 à 23:59, et poser un créneau qui passe minuit ou commence après minuit. Pour : organisateurs.
 - [Modifier vite depuis le planning](modifier-vite-depuis-le-planning.md) : Changer les places, les horaires ou l'état d'un créneau, le dupliquer ou le supprimer sans quitter le planning. Pour : organisateurs.
-- [Gérer les postes](gerer-les-postes.md) : Réordonner, renommer, colorer ou supprimer les postes, les limiter par personne, en réserver l'accès ou les rendre cumulables. Pour : organisateurs.
+- [Gérer les postes](gerer-les-postes.md) : Réordonner, renommer, colorer, limiter, réserver, rendre cumulables ou regrouper en secteurs les postes. Pour : organisateurs.
 - [Programme des spectacles](programme-des-spectacles.md) : Afficher les spectacles en fond coloré sur le planning, pour que les bénévoles situent leurs créneaux par rapport au programme. Pour : organisateurs.
 - [Questions aux bénévoles](questions-aux-benevoles.md) : Ajouter jusqu'à 5 questions au formulaire d'inscription, puis compter les réponses pour passer commande. Pour : organisateurs.
 - [Pages personnalisées de l'événement](pages-personnalisees.md) : Ajouter à un événement des pages libres (règlement, accès, ce qu'il faut apporter), liées depuis sa page d'inscription. Pour : organisateurs.

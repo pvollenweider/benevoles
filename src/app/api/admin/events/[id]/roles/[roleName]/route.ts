@@ -15,6 +15,7 @@ import { leaderRenamePlan } from "@/lib/sector-leader-rename"
 import { isCivilDate } from "@/lib/civil-date"
 import { labelUpdates, posteApplyCount, posteApplyTargets } from "@/lib/poste-apply"
 import { removeRoleFromScope, renameRoleInScope } from "@/lib/question-scope"
+import { assignPosteSector } from "@/lib/sector-adoption"
 
 /**
  * Share links per group (#947) name their roles: a rename or a deletion is carried into every link
@@ -74,13 +75,15 @@ const updateSchema = z.object({
   overlapAllowed: z.boolean().optional(),
   /** « Attribué par l'organisation uniquement » (#1145): never offered publicly, people added by hand. */
   assignedOnly: z.boolean().optional(),
+  /** Sector of the poste (#1147): an active sector of the event, or null for « Sans secteur ». */
+  sectorId: z.string().min(1).nullable().optional(),
   /** Label copied onto the live shifts, with the places and minimum (#1017). */
   label: z.string().trim().min(1).max(200).optional(),
   /** Day the places, minimum and label apply to (#1017, « ce jour »); absent: the whole event. */
   date: z.string().refine(isCivilDate).optional(),
-}).refine((d) => d.name !== undefined || d.colorKey !== undefined || d.capacity !== undefined || d.minVolunteers !== undefined || d.label !== undefined || d.maxPerVolunteer !== undefined || d.reservedTags !== undefined || d.overlapAllowed !== undefined || d.assignedOnly !== undefined, { message: "Rien à modifier." })
+}).refine((d) => d.name !== undefined || d.colorKey !== undefined || d.capacity !== undefined || d.minVolunteers !== undefined || d.label !== undefined || d.maxPerVolunteer !== undefined || d.reservedTags !== undefined || d.overlapAllowed !== undefined || d.assignedOnly !== undefined || d.sectorId !== undefined, { message: "Rien à modifier." })
   // A day only narrows the places, minimum and label: the poste's own settings are event-wide.
-  .refine((d) => d.date === undefined || (d.name === undefined && d.colorKey === undefined && d.maxPerVolunteer === undefined && d.reservedTags === undefined && d.overlapAllowed === undefined && d.assignedOnly === undefined), { message: "Un jour ne vaut que pour les places, le minimum et le libellé." })
+  .refine((d) => d.date === undefined || (d.name === undefined && d.colorKey === undefined && d.maxPerVolunteer === undefined && d.reservedTags === undefined && d.overlapAllowed === undefined && d.assignedOnly === undefined && d.sectorId === undefined), { message: "Un jour ne vaut que pour les places, le minimum et le libellé." })
 
 export async function PATCH(req: Request, { params }: { params: Promise<{ id: string; roleName: string }> }) {
   const guard = await requireOrgSession()
@@ -96,7 +99,7 @@ export async function PATCH(req: Request, { params }: { params: Promise<{ id: st
   if (!parsed.success) {
     return NextResponse.json({ error: "Données invalides." }, { status: 400 })
   }
-  const { name: newName, colorKey, capacity, minVolunteers, maxPerVolunteer, overlapAllowed, assignedOnly, label, date } = parsed.data
+  const { name: newName, colorKey, capacity, minVolunteers, maxPerVolunteer, overlapAllowed, assignedOnly, sectorId, label, date } = parsed.data
   const reservedTags = parsed.data.reservedTags === undefined ? undefined : parseTagList(parsed.data.reservedTags.join(","))
 
   const owned = await db.event.findFirst({ where: { id }, select: { id: true } })
@@ -106,7 +109,7 @@ export async function PATCH(req: Request, { params }: { params: Promise<{ id: st
   // on top of that, matching reorder-roles/route.ts's own pattern for the same raw-prisma calls.
   const shifts = await db.shift.findMany({
     where: { eventId: id, roleName: decodedRole, event: { organizationId } },
-    select: { id: true, label: true, date: true, colorKey: true, capacity: true, minVolunteers: true, status: true, maxPerVolunteer: true, reservedTags: true, overlapAllowed: true, assignedOnly: true, _count: { select: { registrations: { where: { status: "active" } } } } },
+    select: { id: true, label: true, date: true, colorKey: true, capacity: true, minVolunteers: true, status: true, maxPerVolunteer: true, reservedTags: true, overlapAllowed: true, assignedOnly: true, sectorId: true, _count: { select: { registrations: { where: { status: "active" } } } } },
   })
   if (shifts.length === 0) return NextResponse.json({ error: "Poste introuvable" }, { status: 404 })
 
@@ -129,6 +132,26 @@ export async function PATCH(req: Request, { params }: { params: Promise<{ id: st
   if (minPlan.problem) return NextResponse.json({ error: minPlan.problem }, { status: 400 })
 
   const actor = adminActor(guard.session)
+
+  if (sectorId !== undefined) {
+    // Before any other write, so a refused sector changes nothing. Every shift of the poste,
+    // cancelled ones too, so it keeps one value (#1147), like the colour; a later rename moves them
+    // with it. The sector is checked under its row lock (never an archived one or another
+    // event's), only for an event that adopted sectors. Volunteers see nothing of it.
+    const assigned = await db.$transaction((tx) => assignPosteSector(tx, organizationId, id, decodedRole, sectorId))
+    if (!assigned.ok) return NextResponse.json({ error: assigned.error }, { status: assigned.status })
+    const moved = shifts.filter((sh) => sh.sectorId !== sectorId)
+    if (moved.length > 0) {
+      const ids = [...new Set(moved.map((s) => s.sectorId).filter((x): x is string => !!x))]
+      const names = new Map((await db.sector.findMany({ where: { eventId: id, id: { in: ids } }, select: { id: true, name: true } })).map((x) => [x.id, x.name]))
+      for (const s of moved) {
+        await logEvent({
+          eventId: id, actor, action: "shift.updated", entityType: "Shift", entityId: s.id,
+          changes: { sector: { from: s.sectorId ? names.get(s.sectorId) ?? null : null, to: assigned.value.name } },
+        })
+      }
+    }
+  }
 
   if (newName !== undefined && newName !== decodedRole) {
     const clash = await db.shift.findFirst({ where: { eventId: id, roleName: newName, event: { organizationId } } })
