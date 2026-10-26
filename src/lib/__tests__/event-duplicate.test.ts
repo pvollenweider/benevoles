@@ -96,7 +96,7 @@ describe("duplicateSummary", () => {
     expect(lines[1]).toBe("Toutes les dates décalées de +364 jours.")
     expect(lines).toContain("2 pages personnalisées copiées.")
     expect(lines.some((l) => l.startsWith("1 responsable"))).toBe(false)
-    expect(lines).toContain("Messages et réglages d'inscription copiés.")
+    expect(lines).toContain("Messages et paramètres d'inscription copiés.")
     expect(lines.at(-1)).toContain("jamais copiés")
   })
 
@@ -105,7 +105,7 @@ describe("duplicateSummary", () => {
     expect(lines[0]).toBe("Aucun créneau : la copie démarre vide.")
     expect(lines[1]).toBe("Toutes les dates décalées de -1 jour.")
     expect(lines).toContain("1 responsable de secteur repris : chacun reçoit un email avec son lien pour la copie.")
-    expect(lines).toContain("Messages et réglages d'inscription remis à zéro.")
+    expect(lines).toContain("Messages et paramètres d'inscription remis à zéro.")
   })
 
 

@@ -4,7 +4,7 @@
 
 ## Utilité
 
-Comprendre les deux niveaux de l’administration évite de chercher un réglage d’organisation dans
+Comprendre les deux niveaux de l’administration évite de chercher un paramètre d’organisation dans
 un événement, ou de modifier le mauvais planning. La recherche et les raccourcis permettent aussi
 d’atteindre une information précise sans parcourir tous les écrans.
 
@@ -35,6 +35,6 @@ d’atteindre une information précise sans parcourir tous les écrans.
 - La vidéo montre le bouton de déconnexion mais ne l’active pas, afin de poursuivre la visite.
 
 
-Révision du 15 octobre 2026 (batch 22-1) : revue du build 43c1aae7 ; onglets persistants et accès Partage, Réglages et Documents contrôlés. Vocabulaire actualisé. Narration complète régénérée en une seule prise continue avec la même voix, continuousPauseTags: false ; aucun mélange d’extraits.
+Révision du 15 octobre 2026 (batch 22-1) : revue du build 43c1aae7 ; onglets persistants et accès Partage, Paramètres et Documents contrôlés. Vocabulaire actualisé. Narration complète régénérée en une seule prise continue avec la même voix, continuousPauseTags: false ; aucun mélange d’extraits.
 
-Les nouveaux passages Partage, Réglages, Autres actions et Aperçu attendent chacun leur phrase (ancres textuelles). Le retour Événements suit son nom accessible sans la flèche décorative.
+Les nouveaux passages Partage, Paramètres, Autres actions et Aperçu attendent chacun leur phrase (ancres textuelles). Le retour Événements suit son nom accessible sans la flèche décorative.

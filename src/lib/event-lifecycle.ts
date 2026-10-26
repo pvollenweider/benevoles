@@ -65,7 +65,7 @@ export function lifecycleNotes(f: LifecycleFacts, eventId: string): LifecycleNot
       }
     case "ready":
       return {
-        needs: noConfirmation ? [{ before: "Facultatif : la page publique n'a pas de message de confirmation. ", action: { label: "Ajouter un message de confirmation", href: `${base}/edit` } }] : [],
+        needs: noConfirmation ? [{ before: "Facultatif : la page d'inscription n'a pas de message de confirmation. ", action: { label: "Ajouter un message de confirmation", href: `${base}/edit` } }] : [],
         consequences: ["Toujours invisible pour les bénévoles : publiez pour ouvrir les inscriptions.", "Aucun rappel n'est envoyé."],
       }
     case "published": {
@@ -78,7 +78,7 @@ export function lifecycleNotes(f: LifecycleFacts, eventId: string): LifecycleNot
       return {
         needs: [
           invite,
-          ...(noConfirmation ? [{ before: "Facultatif : la page publique n'a pas de message de confirmation. ", action: { label: "Ajouter un message de confirmation", href: `${base}/edit` } }] : []),
+          ...(noConfirmation ? [{ before: "Facultatif : la page d'inscription n'a pas de message de confirmation. ", action: { label: "Ajouter un message de confirmation", href: `${base}/edit` } }] : []),
         ],
         consequences: [
           f.isListed ? "Visible sur la page publique de l'organisation, inscriptions ouvertes." : "Accessible par son lien seulement (non répertorié), inscriptions ouvertes.",
@@ -94,7 +94,7 @@ export function lifecycleNotes(f: LifecycleFacts, eventId: string): LifecycleNot
     case "archived":
       return {
         needs: [],
-        consequences: ["Invisible pour les bénévoles, inscriptions fermées, aucun rappel.", "La suppression définitive est possible, en bas de ses réglages."],
+        consequences: ["Invisible pour les bénévoles, inscriptions fermées, aucun rappel.", "La suppression définitive est possible, en bas de ses paramètres."],
       }
   }
 }

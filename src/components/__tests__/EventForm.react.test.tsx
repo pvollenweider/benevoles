@@ -184,7 +184,7 @@ describe("EventForm automatic reminders box", () => {
     const box = screen.getByRole("checkbox", { name: "Rappels automatiques" })
     expect(box).toBeChecked()
     expect(container.querySelector("#event-reminders")).toContainElement(box)
-    expect(box).toHaveAccessibleDescription("Les bénévoles reçoivent les rappels J-2, J-1 et du jour avant leurs créneaux. Les rappels désactivés dans « Réglages des emails » ne partent pas.")
+    expect(box).toHaveAccessibleDescription("Les bénévoles reçoivent les rappels J-2, J-1 et du jour avant leurs créneaux. Les rappels désactivés dans « Paramètres des emails » ne partent pas.")
   })
 
   it("takes focus when the page is opened on #event-reminders (the review's « Modifier » link)", () => {

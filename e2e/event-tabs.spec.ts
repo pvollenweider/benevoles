@@ -55,11 +55,11 @@ test("from one sub-page to another through the tabs, never through the overview"
   await expect(tabs.getByRole("link", { name: "Inscriptions" })).toHaveAttribute("aria-current", "true")
   await expect(sub.getByRole("link", { name: "Invitations" })).toHaveAttribute("aria-current", "page")
 
-  // Réglages, then Questions, with the keyboard.
-  await tabs.getByRole("link", { name: "Réglages" }).focus()
+  // Paramètres, then Questions, with the keyboard.
+  await tabs.getByRole("link", { name: "Paramètres de l'événement" }).focus()
   await page.keyboard.press("Enter")
   await expect(page).toHaveURL(new RegExp(`${base}/edit$`))
-  const settings = page.getByRole("navigation", { name: "Pages de la section Réglages" })
+  const settings = page.getByRole("navigation", { name: "Pages de la section Paramètres" })
   await settings.getByRole("link", { name: "Questions" }).click()
   await expect(page.getByRole("heading", { level: 1, name: "Questions aux bénévoles" })).toBeVisible()
 
@@ -88,7 +88,7 @@ test("at 390 px the tabs stay on one row that scrolls, the current one in view",
   const id = await draftEvent(page, `E2E Onglets mobile ${Date.now()}`)
   await page.goto(`/admin/events/${id}/edit`)
   const tabs = page.getByRole("navigation", { name: "Sections de l'événement" })
-  const current = tabs.getByRole("link", { name: "Réglages" })
+  const current = tabs.getByRole("link", { name: "Paramètres de l'événement" })
   await expect(current).toHaveAttribute("aria-current", "page")
   await expect(current).toBeInViewport()
   const first = await tabs.getByRole("link", { name: "Aperçu" }).boundingBox()

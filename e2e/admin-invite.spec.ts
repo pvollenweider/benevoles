@@ -20,7 +20,7 @@ test("an admin invitation sends the link by email and never shows it", async ({ 
 
   await page.goto("/admin/settings/admins")
   await page.getByRole("button", { name: "Inviter" }).click()
-  const form = page.locator("form", { has: page.getByRole("heading", { name: "Inviter un administrateur" }) })
+  const form = page.locator("form", { has: page.getByRole("heading", { name: "Inviter un organisateur" }) })
   await form.getByLabel("Nom").fill("Invitée E2E")
   await form.getByLabel("Email").fill(email)
   await form.getByRole("button", { name: "Envoyer l'invitation" }).click()

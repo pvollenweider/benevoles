@@ -203,8 +203,8 @@ describe("inactivity copy checked right before the send (#1114)", () => {
   })
 
   it("is cancelled for an administrator removed or whose address changed", () => {
-    expect(inactivityCopyVerdict(copy, { ...org, adminEmails: [] }, night(1))).toMatch(/Plus administrateur/)
-    expect(inactivityCopyVerdict(copy, { ...org, adminEmails: ["julie@new.example.org"] }, night(1))).toMatch(/Plus administrateur/)
+    expect(inactivityCopyVerdict(copy, { ...org, adminEmails: [] }, night(1))).toMatch(/Plus organisateur/)
+    expect(inactivityCopyVerdict(copy, { ...org, adminEmails: ["julie@new.example.org"] }, night(1))).toMatch(/Plus organisateur/)
   })
 
   it("is cancelled once the procedure stopped: activity, answer, exclusion, postponement", () => {

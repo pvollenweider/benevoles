@@ -226,6 +226,12 @@ describe("lookups", () => {
     expect(resolveDocSlug("nope", units)).toBeNull()
   })
 
+  it("redirects the units renamed by the vocabulary pass (#1099) from their former slugs", () => {
+    const real = readDocUnits()
+    expect(resolveDocSlug("reglages-et-suivi-des-emails", real)).toEqual({ redirectTo: "/doc/parametres-et-suivi-des-emails" })
+    expect(resolveDocSlug("equipe-admin", real)).toEqual({ redirectTo: "/doc/equipe-d-organisation" })
+  })
+
   it("finds where an anchor of the old guides now lives", () => {
     expect(resolveLegacyAnchor("benevole", "revenir", units)).toBe("/doc/a")
     expect(resolveLegacyAnchor("admin", "revenir", units)).toBeNull()

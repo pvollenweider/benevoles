@@ -18,10 +18,10 @@ Chaque question renvoie à sa réponse, dans la page de la documentation qui en 
 - [Mon activité revient chaque semaine toute l'année : je dois créer chaque date ?](permanences-recurrentes.md)
 - [J'ai un poste qui demande d'être majeur, ou d'avoir un âge minimum précis : je fais comment ?](age-minimum.md#cote-organisation)
 - [Je veux donner des infos pratiques (accès, parking, ce qu'il faut apporter) sans surcharger le message principal.](pages-personnalisees.md#je-veux-donner-des-infos-pratiques-acces-parking-ce-qu-il-faut-apporter-sans-surcharger-le-message-principal)
-- [Je veux qu'une personne suive « son » poste sans lui donner accès à tout l'admin.](responsables-de-secteur.md#je-veux-qu-une-personne-suive-son-poste-sans-lui-donner-acces-a-tout-l-admin)
+- [Je veux qu'une personne suive « son » poste sans lui donner accès à tout l'espace organisateur.](responsables-de-secteur.md#je-veux-qu-une-personne-suive-son-poste-sans-lui-donner-acces-a-tout-l-espace-organisateur)
 - [Les bénévoles aimeraient savoir qui est déjà inscrit sur un créneau.](responsables-de-secteur.md#les-benevoles-aimeraient-savoir-qui-est-deja-inscrit-sur-un-creneau)
 - [J'active « Qui est inscrit » alors que des bénévoles sont déjà inscrits : que se passe-t-il pour eux ?](creer-un-evenement.md#activer-qui-est-inscrit-sur-un-evenement-qui-a-deja-des-inscrits)
-- [Je ne veux pas que mes prochains événements montrent qui est inscrit.](personnaliser-l-organisation.md#qui-est-inscrit-reglage-par-defaut)
+- [Je ne veux pas que mes prochains événements montrent qui est inscrit.](personnaliser-l-organisation.md#qui-est-inscrit-parametre-par-defaut)
 - [Un membre que j'invite peut-il voir qui est inscrit avant de s'inscrire ?](inviter-des-membres.md#qui-est-inscrit-pour-les-membres-invites)
 
 ## Suivre l'événement

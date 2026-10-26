@@ -628,7 +628,7 @@ export default function EventForm({ initialData, createdHref, timeZone = "Europe
             <div>
               <label htmlFor="event-reminders-enabled" className="text-sm font-medium text-gray-700">Rappels automatiques</label>
               <p id="event-reminders-hint" className="text-xs text-gray-600 mt-0.5">
-                Les bénévoles reçoivent les rappels J-2, J-1 et du jour avant leurs créneaux. Les rappels désactivés dans « Réglages des emails » ne partent pas.
+                Les bénévoles reçoivent les rappels J-2, J-1 et du jour avant leurs créneaux. Les rappels désactivés dans « Paramètres des emails » ne partent pas.
               </p>
             </div>
           </div>
@@ -701,7 +701,7 @@ export default function EventForm({ initialData, createdHref, timeZone = "Europe
         )}
 
         <fieldset aria-describedby="event-accent-hint">
-          <legend className="text-sm font-medium text-gray-700 mb-1">Couleur de la page publique</legend>
+          <legend className="text-sm font-medium text-gray-700 mb-1">Couleur de la page d&apos;inscription</legend>
           <p id="event-accent-hint" className="text-xs text-gray-600 mb-2">Une couleur de la palette derrière le titre de la page d&apos;inscription (le texte reste lisible). Sans couleur, l&apos;en-tête reste blanc.</p>
           <div className="flex flex-wrap gap-2">
             {/* The radio covers its pill (screen-reader cursor and hit area match); the selected

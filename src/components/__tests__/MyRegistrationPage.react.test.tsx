@@ -256,14 +256,14 @@ describe("MyRegistrationPage — more shifts", () => {
     const link = screen.getByRole("link", { name: "S'inscrire à d'autres créneaux" })
     expect(link).toHaveAttribute("href", signUpUrl)
     expect(screen.getByRole("region", { name: "Tous mes créneaux" })).toContainElement(link)
-    expect(screen.queryByRole("link", { name: "Voir la page de l'événement" })).toBeNull()
+    expect(screen.queryByRole("link", { name: "Voir la page d'inscription" })).toBeNull()
     expect(screen.queryByRole("link", { name: "Retour à l'accueil" })).toBeNull()
   })
 
   it("without a sign-up possible, no sign-up link and the bottom link names the event page", async () => {
     await renderPage([bar], noop, { signUpUrl: null, eventPageUrl })
     expect(screen.queryByRole("link", { name: "S'inscrire à d'autres créneaux" })).toBeNull()
-    expect(screen.getByRole("link", { name: "Voir la page de l'événement" })).toHaveAttribute("href", eventPageUrl)
+    expect(screen.getByRole("link", { name: "Voir la page d'inscription" })).toHaveAttribute("href", eventPageUrl)
   })
 
   it("once the event is not published, « Retour à l'accueil » goes to the organisation's home", async () => {

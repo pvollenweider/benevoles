@@ -13,7 +13,7 @@ aliases: []
 
 ## Aide depuis chaque écran
 
-Le lien **Aide** de la barre du haut ouvre le guide organisateur, avec la liste de toutes les pages de la documentation. Chaque écran qui a sa page dans la documentation (tableau de bord, événements et chacun de leurs onglets, membres, recherche, mon compte, paramètres) a en plus, sous son titre, un lien **Aide : …** qui ouvre directement la page de la documentation consacrée à cet écran. Les sections qui ont leur propre page, comme les jalons, l'équipe admin ou la charte, ont un lien **En savoir plus**. Cette page s'ouvre dans un nouvel onglet, si bien que l'écran sur lequel vous travailliez reste tel quel, même avec un formulaire à moitié rempli.
+Le lien **Aide** de la barre du haut ouvre le guide organisateur, avec la liste de toutes les pages de la documentation. Chaque écran qui a sa page dans la documentation (tableau de bord, événements et chacun de leurs onglets, membres, recherche, mon compte, paramètres) a en plus, sous son titre, un lien **Aide : …** qui ouvre directement la page de la documentation consacrée à cet écran. Les sections qui ont leur propre page, comme les jalons, l'équipe d'organisation ou la charte, ont un lien **En savoir plus**. Cette page s'ouvre dans un nouvel onglet, si bien que l'écran sur lequel vous travailliez reste tel quel, même avec un formulaire à moitié rempli.
 
 ## Signaler un problème ou proposer une amélioration
 
@@ -28,6 +28,6 @@ Pour qu'on puisse vous aider vite, dites-nous :
 
 Inutile de joindre les noms, emails ou téléphones de vos bénévoles s'ils n'aident pas à comprendre le problème.
 
-Si votre organisation utilise sa propre installation de benevol.app, adressez-vous d'abord à la personne qui l'administre. Elle seule peut agir sur vos données et sur les réglages de cette installation.
+Si votre organisation utilise sa propre installation de benevol.app, adressez-vous d'abord à la personne qui l'administre. Elle seule peut agir sur vos données et sur les paramètres de cette installation.
 
 Les demandes et les corrections en cours figurent aussi dans [le suivi public sur GitHub](https://github.com/pvollenweider/benevoles/issues) (en anglais). Avec un compte GitHub, vous pouvez y suivre une demande existante, la commenter ou en ouvrir une, mais c'est facultatif : un email suffit.

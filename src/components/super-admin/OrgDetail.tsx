@@ -184,7 +184,7 @@ export default function OrgDetail({ org, cumulative, inactivity, limitHits, rece
       router.push("/super-admin/organizations")
       return
     }
-    announce(setOutcome, "Espace validé : ses administrateurs sont prévenus par email.")
+    announce(setOutcome, "Espace validé : ses organisateurs sont prévenus par email.")
     refresh()
   }
 
@@ -410,7 +410,7 @@ export default function OrgDetail({ org, cumulative, inactivity, limitHits, rece
       {/* Stats */}
       <div className="grid grid-cols-3 gap-4">
         <StatCard label="Événements" value={org._count.events} />
-        <StatCard label="Administrateurs" value={org._count.admins} />
+        <StatCard label="Organisateurs" value={org._count.admins} />
         <StatCard label="Membres" value={org._count.volunteers} />
       </div>
 
@@ -513,9 +513,9 @@ export default function OrgDetail({ org, cumulative, inactivity, limitHits, rece
 
       {/* Admins */}
       <div>
-        <h2 className="text-sm font-semibold text-gray-700 mb-3">Administrateurs</h2>
+        <h2 className="text-sm font-semibold text-gray-700 mb-3">Organisateurs</h2>
         {org.admins.length === 0 ? (
-          <p className="text-sm text-gray-500">Aucun administrateur.</p>
+          <p className="text-sm text-gray-500">Aucun organisateur.</p>
         ) : (
           <div className="bg-white border border-gray-200 rounded-xl overflow-hidden">
             <table className="w-full text-sm">

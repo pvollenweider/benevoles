@@ -64,7 +64,7 @@ La voix continue et les dix transcriptions audio sont préparées. Le recorder e
 ## Données isolées à créer
 
 - Organisations `video-privacy-a` / `video-privacy-b`, noms « Formation — confidentialité A/B », slugs `formation-confidentialite-a/b`.
-- Administrateurs propriétaires dédiés, mots de passe locaux copiés sans affichage depuis le compte de formation ; aucune création en production.
+- Organisateurs propriétaires dédiés, mots de passe locaux copiés sans affichage depuis le compte de formation ; aucune création en production.
 - Même slug d'événement `fete-des-liens`, dates futures et créneaux Accueil/Logistique non chevauchants, avec instructions et contact opérationnel fictifs.
 - Deux Léa Exemple, profils et adresses distincts ; un email commun dans deux fiches peut servir à vérifier le périmètre, mais ne doit pas être présenté comme un doublon à fusionner.
 - Au moins deux personnes par poste, réponses fictives à une question facultative, disponibilités et une note interne identifiable comme exemple.

@@ -88,7 +88,7 @@ export default async function AdminsSettingsPage() {
       {org && !isOwner && (
         <section aria-labelledby="org-readonly-heading" className="bg-white rounded-2xl border border-gray-200 p-4 space-y-2">
           <h2 id="org-readonly-heading" className="text-sm font-semibold text-gray-800">Organisation</h2>
-          <p className="text-sm text-gray-700">Votre rôle : organisateur. Ces réglages sont réservés aux propriétaires de l&apos;organisation.</p>
+          <p className="text-sm text-gray-700">Votre rôle : organisateur. Ces paramètres sont réservés aux propriétaires de l&apos;organisation.</p>
           <dl className="grid grid-cols-[auto_1fr] gap-x-3 gap-y-1 text-sm">
             <dt className="text-gray-600">Nom</dt><dd className="text-gray-900">{org.name}</dd>
             <dt className="text-gray-600">Logo</dt><dd className="text-gray-900">{logo ? "défini" : "aucun"}</dd>

@@ -573,7 +573,7 @@ async function main() {
         await page.getByRole("heading", { name: "Événements" }).waitFor()
       })
 
-      await page.screencast.showChapter("Toute l’organisation", { description: "Événements, membres et réglages communs", duration: 1_400 })
+      await page.screencast.showChapter("Toute l’organisation", { description: "Événements, membres et paramètres communs", duration: 1_400 })
       await scene("organization-navigation", async (at) => {
         await at("Le Tableau de bord rassemble")
         await tap(page, page.getByRole("link", { name: "Tableau de bord", exact: true }).first())
@@ -583,7 +583,7 @@ async function main() {
         await at("Membres réunit les personnes connues")
         await tap(page, page.getByRole("link", { name: "Membres", exact: true }).first())
         await page.getByRole("heading", { name: "Membres" }).waitFor()
-        await at("Paramètres concerne les réglages communs.")
+        await at("Paramètres concerne les paramètres communs.")
         await tap(page, page.getByRole("link", { name: "Paramètres", exact: true }).first())
         await page.getByRole("heading", { name: "Paramètres" }).waitFor()
         await at(0.91) /* mid-sentence */
@@ -599,8 +599,8 @@ async function main() {
         await page.getByRole("navigation", { name: "Sections de l'événement" }).scrollIntoViewIfNeeded()
         await at("Partage rassemble le lien public")
         await tap(page, page.getByRole("link", { name: "Partage", exact: true }))
-        await at("Réglages donne accès aux questions")
-        await tap(page, page.getByRole("link", { name: "Réglages", exact: true }))
+        await at("Paramètres donne accès aux questions")
+        await tap(page, page.getByRole("link", { name: "Paramètres de l'événement", exact: true }))
         await at("Le menu Autres actions contient")
         await tap(page, page.getByRole("button", { name: "Autres actions" }))
         await page.getByRole("link", { name: "Journal", exact: true }).waitFor()
@@ -891,7 +891,7 @@ async function main() {
       await scene("result", async (at) => {
         await page.goto(`${baseUrl}/?org=${encodeURIComponent(org)}`); await identitySettle()
         await page.getByText("Les bénévoles des Fêtes de Montvert").first().waitFor()
-        await at("Ces réglages sont réservés au")
+        await at("Ces paramètres sont réservés au")
         await page.goto(`${baseUrl}/admin/settings/admins`); await identitySettle()
         await page.getByRole("heading", { name: "Nom de l'organisation", exact: true }).scrollIntoViewIfNeeded()
         await at("Pour corriger un texte visible")
@@ -937,7 +937,7 @@ async function main() {
         const panel = heading.locator("xpath=ancestor::div[contains(@class,'rounded-2xl')]")
         const charter = panel.locator("textarea")
         const insurance = panel.getByRole("switch", { name: "Assurance RC fournie par l'organisation" })
-        await at("Le réglage Assurance RC fournie")
+        await at("Le paramètre Assurance RC fournie")
         await tap(page, insurance)
         await at(0.23) /* mid-sentence */
         await tap(page, insurance)
@@ -1410,7 +1410,7 @@ async function main() {
       await scene("describe", async (at) => {
         await typeNaturally(page, form.getByLabel(/^Poste/), "Caisse et accueil")
         await at("Le texte sous le champ rappelle")
-        await form.locator("p[id$='-role-hint']").filter({ hasText: /Les réglages du poste/ }).waitFor()
+        await form.locator("p[id$='-role-hint']").filter({ hasText: /Les paramètres du poste/ }).waitFor()
         await at("Cochez les jours")
         await tap(page, form.getByRole("checkbox", { name: "mardi", exact: true }))
         await tap(page, form.getByRole("checkbox", { name: "jeudi", exact: true }))
@@ -1946,7 +1946,7 @@ async function main() {
 
       await scene("result", async (at) => {
         await page.goto(`${baseUrl}/admin/events/${featureEventId}`); await settleEligibility()
-        await tap(page, page.getByRole("link", { name: "Réglages", exact: true }))
+        await tap(page, page.getByRole("link", { name: "Paramètres de l'événement", exact: true }))
         await settleEligibility()
         await page.getByLabel("Description", { exact: true }).scrollIntoViewIfNeeded()
         await at("Vérifions aussi le téléphone obligatoire")
@@ -3861,7 +3861,7 @@ async function main() {
       })
       await scene("nominate", async (at) => {
         await at("Dans l'événement, ouvrez les responsables")
-        await tap(page, page.getByRole("link", { name: "Réglages", exact: true }))
+        await tap(page, page.getByRole("link", { name: "Paramètres de l'événement", exact: true }))
         await tap(page, page.getByRole("link", { name: "Responsables de secteur", exact: true }))
         await tap(page, page.getByRole("button", { name: "+ Ajouter un responsable", exact: true }))
         await at("Choisissez le poste, puis renseignez")
@@ -4013,14 +4013,14 @@ async function main() {
         await tap(page, page.getByRole("button", { name: "Autres actions", exact: true }))
         await tap(page, page.getByRole("button", { name: "Archiver" }))
         await page.getByRole("button", { name: "Confirmer", exact: true }).waitFor()
-        await at("Après validation, la page publique disparaît")
+        await at("Après validation, la page d’inscription disparaît")
         await tap(page, page.getByRole("button", { name: "Confirmer" }))
         await page.getByText("Archivé", { exact: true }).first().waitFor()
       })
 
       await scene("delete-open", async (at) => {
         await at("La suppression définitive")
-        await tap(page, page.getByRole("link", { name: "Réglages", exact: true }))
+        await tap(page, page.getByRole("link", { name: "Paramètres de l'événement", exact: true }))
         await settle(page)
         await page.getByRole("heading", { name: "Suppression définitive" }).scrollIntoViewIfNeeded()
         await at("Le récapitulatif indique précisément combien")
@@ -4293,8 +4293,8 @@ async function main() {
         await page.getByRole("group", { name: "Ce qui est copié" }).scrollIntoViewIfNeeded()
         await at(0.22) /* mid-sentence */
         await page.getByRole("checkbox", { name: "Les créneaux" }).hover()
-        await at("Les réglages reprennent les messages")
-        await page.getByRole("checkbox", { name: "Les messages et réglages d'inscription" }).hover()
+        await at("Les paramètres reprennent les messages")
+        await page.getByRole("checkbox", { name: "Les messages et paramètres d'inscription" }).hover()
         await at("Les pages personnalisées peuvent aussi")
         await page.getByRole("checkbox", { name: "Les pages personnalisées" }).hover()
       })
@@ -4326,7 +4326,7 @@ async function main() {
         await page.getByRole("heading", { name: "Fête du village de Montvert 2027" }).waitFor()
         await at("Elle s’ouvre dans l’administration")
         await page.getByText("Prêt à publier", { exact: true }).first().scrollIntoViewIfNeeded()
-        await at("Vérifions ses réglages")
+        await at("Vérifions ses paramètres")
         await page.goto(`${baseUrl}/admin/events/${copyId}/edit`); await settle(page)
         await page.getByRole("checkbox", { name: "Inscriptions ouvertes" }).scrollIntoViewIfNeeded()
         if (await page.getByRole("checkbox", { name: "Inscriptions ouvertes" }).isChecked()) throw new Error("Copied event registrations must be closed")
@@ -4661,7 +4661,7 @@ async function main() {
         await tap(page, phone)
         await at("Choisissons Émeraude et regardons l’aperçu.")
         await tap(page, page.getByRole("radio", { name: /Émeraude/ }))
-        await at("Ces deux réglages pourront être")
+        await at("Ces deux paramètres pourront être")
         await page.getByText("Aperçu de l'en-tête").scrollIntoViewIfNeeded()
       })
 
@@ -4697,16 +4697,16 @@ async function main() {
       await page.goto(`${baseUrl}/admin/settings/admins`); await settle(page)
       await scene("welcome", async (at) => {
         await page.screencast.showChapter(manifest.title, { description: "Le bon accès pour chaque personne", duration: 2_300 })
-        await page.getByRole("heading", { name: /^Administrateurs/ }).waitFor()
+        await page.getByRole("heading", { name: /^Organisateurs/ }).waitFor()
         await at("Ici, trois personnes sont déjà")
         await page.getByText("Samira Diallo", { exact: true }).scrollIntoViewIfNeeded()
       })
 
-      await page.screencast.showChapter("Deux rôles complémentaires", { description: "Protéger les réglages sans bloquer l’équipe", duration: 1_400 })
+      await page.screencast.showChapter("Deux rôles complémentaires", { description: "Protéger les paramètres sans bloquer l’équipe", duration: 1_400 })
       await scene("roles", async (at) => {
         await at("L’organisateur prépare les événements, les")
         await tap(page, page.getByRole("button", { name: "Inviter" }))
-        await page.getByRole("heading", { name: "Inviter un administrateur" }).waitFor()
+        await page.getByRole("heading", { name: "Inviter un organisateur" }).waitFor()
         await at(0.34) /* mid-sentence */
         await page.getByText(/Tous les droits, dont l'équipe/).scrollIntoViewIfNeeded()
         await at("désigné pour un événement, il")
@@ -4717,7 +4717,7 @@ async function main() {
       await scene("invite", async (at) => {
         await at("Pour inviter Léa, ouvrez le")
         await tap(page, page.getByRole("button", { name: "Inviter" }))
-        const form = page.getByRole("heading", { name: "Inviter un administrateur" }).locator("xpath=ancestor::form")
+        const form = page.getByRole("heading", { name: "Inviter un organisateur" }).locator("xpath=ancestor::form")
         await fillVisibly(page, form.getByLabel("Nom"), "Léa Martin")
         await fillVisibly(page, form.getByLabel("Email"), "video.team.lea@example.org")
         await at("Prenons Organisateur")
@@ -4785,7 +4785,7 @@ async function main() {
       await page.goto(`${baseUrl}/admin/settings/notifications`); await settle(page)
       await scene("welcome", async () => {
         await page.screencast.showChapter(manifest.title, { description: "Rappels, alertes et réponses", duration: 2_300 })
-        await page.getByRole("heading", { name: "Réglages des emails" }).waitFor()
+        await page.getByRole("heading", { name: "Paramètres des emails" }).waitFor()
       })
 
       await page.screencast.showChapter("Les rappels automatiques", { description: "Choisir les moments vraiment utiles", duration: 1_400 })
@@ -4830,7 +4830,7 @@ async function main() {
 
       await scene("admin-alert", async (at) => {
         await page.goto(`${baseUrl}/admin/settings/notifications`); await settle(page)
-        const alert = page.getByRole("checkbox", { name: /Prévenir les administrateurs/ })
+        const alert = page.getByRole("checkbox", { name: /Prévenir les organisateurs/ })
         await alert.scrollIntoViewIfNeeded()
         await at(0.30)
         if (await alert.isChecked()) await tap(page, alert)
@@ -4870,11 +4870,11 @@ async function main() {
       })
 
       await scene("save", async (at) => {
-        await at("Enregistrez les réglages avant de les tester")
+        await at("Enregistrez les paramètres avant de les tester")
         await tap(page, page.getByRole("button", { name: "Enregistrer", exact: true }))
-        await page.getByRole("status").filter({ hasText: "Réglages enregistrés." }).waitFor()
-        await at("Le message Réglages enregistrés")
-        await page.getByRole("status").filter({ hasText: "Réglages enregistrés." }).scrollIntoViewIfNeeded()
+        await page.getByRole("status").filter({ hasText: "Paramètres enregistrés." }).waitFor()
+        await at("Le message Paramètres enregistrés")
+        await page.getByRole("status").filter({ hasText: "Paramètres enregistrés." }).scrollIntoViewIfNeeded()
       })
 
       await page.screencast.showChapter("Tester avant d’envoyer", { description: "Contrôler le transport et l’expéditeur", duration: 1_400 })
@@ -4904,9 +4904,9 @@ async function main() {
       })
 
       await scene("result", async (at) => {
-        await at("Les réglages sont enregistrés")
+        await at("Les paramètres sont enregistrés")
         await page.goto(`${baseUrl}/admin/settings/notifications`); await settle(page)
-        await page.getByRole("heading", { name: "Réglages des emails" }).waitFor()
+        await page.getByRole("heading", { name: "Paramètres des emails" }).waitFor()
         await at("Dans Emails envoyés")
         await page.getByRole("heading", { name: "Emails envoyés", exact: true }).scrollIntoViewIfNeeded()
         await page.getByRole("row").filter({ hasText: "video.email.owner@example.org" }).first().waitFor()
@@ -5106,7 +5106,7 @@ async function main() {
 
       await scene("team", async (at) => {
         await at(0.05) /* mid-sentence */
-        await page.getByRole("heading", { name: /Administrateurs/ }).scrollIntoViewIfNeeded()
+        await page.getByRole("heading", { name: /^Organisateurs/ }).scrollIntoViewIfNeeded()
         await at("Les responsables de secteur reçoivent")
         await page.goto(`${baseUrl}/admin/events/${featureEventId}/sector-leaders`); await settle(page)
         await page.getByRole("heading", { name: "Responsables de secteur" }).waitFor()
@@ -5129,7 +5129,7 @@ async function main() {
         const editHeading = page.getByRole("heading", { name: "Informations de l'événement" })
         if (await editHeading.isVisible()) await editHeading.scrollIntoViewIfNeeded()
         await at(0.35) /* mid-sentence: color in the first sentence */
-        await page.getByText("Couleur de la page publique").scrollIntoViewIfNeeded()
+        await page.getByText("Couleur de la page d'inscription").scrollIntoViewIfNeeded()
         await at("Le lieu peut recevoir des")
         await page.getByLabel("Lieu").scrollIntoViewIfNeeded()
         const coordinates = page.getByText(/coordonnées/i).first()
@@ -5494,7 +5494,7 @@ async function main() {
         await at(0.22) /* mid-sentence */
         await timezone.selectOption("Europe/Zurich")
         const timezoneForm = timezone.locator("xpath=ancestor::form")
-        await at("Changer ce réglage adapte les")
+        await at("Changer ce paramètre adapte les")
         await tap(page, timezoneForm.getByRole("button", { name: "Enregistrer" }))
         await timezoneForm.getByText(/Fuseau horaire enregistré/).waitFor()
       })

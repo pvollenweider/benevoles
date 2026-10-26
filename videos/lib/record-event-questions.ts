@@ -14,7 +14,7 @@ export const questionSingleCues = {
   type: "Dans Type de réponse, choisissons Choix unique",
   choices: "Les choix s'écrivent un par ligne",
 }
-export const questionFollowUpCue = "Le réglage Afficher seulement si"
+export const questionFollowUpCue = "Le paramètre Afficher seulement si"
 
 type QuestionKind = "text" | "yesno" | "single" | "multiple"
 export const trainingQuestions: { label: string; type: QuestionKind; required: boolean; options: string[] }[] = [
@@ -102,7 +102,7 @@ export async function recordEventQuestions(options: QuestionRecordingOptions) {
   await go(admin)
   await scene("welcome", async at => {
     await at("Ouvrons Questions aux bénévoles")
-    await tap(page, page.getByRole("link", { name: "Réglages", exact: true }))
+    await tap(page, page.getByRole("link", { name: "Paramètres de l'événement", exact: true }))
     await tap(page, page.getByRole("link", { name: "Questions", exact: true }))
     await page.getByRole("heading", { name: "Questions aux bénévoles", exact: true }).waitFor()
     await page.getByText(/Ne demandez que ce qui est nécessaire/).scrollIntoViewIfNeeded()

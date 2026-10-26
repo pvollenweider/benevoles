@@ -140,7 +140,7 @@ export default function ProductUpdatesManager({
       <div>
         <h1 className="text-xl font-bold text-gray-900">Communications admin</h1>
         <p className="text-sm text-gray-500">
-          {recipientCount} administrateur{recipientCount > 1 ? "s" : ""} abonné{recipientCount > 1 ? "s" : ""} à ces communications.
+          {recipientCount} organisateur{recipientCount > 1 ? "s" : ""} abonné{recipientCount > 1 ? "s" : ""} à ces communications.
         </p>
       </div>
 

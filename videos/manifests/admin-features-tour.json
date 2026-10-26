@@ -1,7 +1,7 @@
 {
   "id": "ADMIN_FEATURES_OVERVIEW",
   "slug": "admin-features-tour",
-  "title": "Organiser ses bénévoles, du premier réglage au jour J",
+  "title": "Organiser ses bénévoles, du premier paramètre au jour J",
   "description": "Visite complète de l’administration : organisation, équipe, événements, créneaux, inscriptions, membres, questions, messages, rappels et rapports.",
   "viewer": {
     "summary": "Dans cette vidéo, vous découvrez un tour d'ensemble de l'administration, de la création de votre organisation jusqu'à la préparation du jour J.",
@@ -15,7 +15,7 @@
       "Préparez le jour J avec les rapports, les badges et le journal d'activité."
     ],
     "remember": [
-      "Un organisateur ne voit pas les réglages réservés au propriétaire.",
+      "Un organisateur ne voit pas les paramètres réservés au propriétaire.",
       "Un événement publié peut rester non répertorié et accessible seulement par son lien.",
       "La recherche globale permet de retrouver rapidement une information."
     ]
@@ -57,7 +57,7 @@
     },
     {
       "id": "duplicate",
-      "transcript": "Pour repartir d’une édition précédente, dupliquez l’événement et décalez toutes les dates. Vous choisissez ce qui est repris : les créneaux, les réglages, les pages d’information et les responsables.",
+      "transcript": "Pour repartir d’une édition précédente, dupliquez l’événement et décalez toutes les dates. Vous choisissez ce qui est repris : les créneaux, les paramètres, les pages d’information et les responsables.",
       "fallbackDurationMs": 12000
     },
     {

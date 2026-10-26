@@ -7,13 +7,13 @@
     "summary": "Dans cette vidéo, vous réglez les emails automatiques de votre organisation et vérifiez un véritable email de test.",
     "steps": [
       "Dans Paramètres, puis Emails, activez les rappels utiles : deux jours avant, la veille et le jour même.",
-      "Choisissez si les administrateurs et les responsables sont prévenus en cas de désistement.",
+      "Choisissez si les organisateurs et les responsables sont prévenus en cas de désistement.",
       "Gardez le résumé quotidien des adresses à vérifier pour repérer les problèmes de contact.",
-      "Enregistrez, puis attendez le message « Réglages enregistrés ».",
+      "Enregistrez, puis attendez le message « Paramètres enregistrés ».",
       "Envoyez-vous un email de test et vérifiez l'expéditeur et l'adresse de réponse."
     ],
     "remember": [
-      "Ces réglages sont réservés au propriétaire ; les organisateurs suivent les envois.",
+      "Ces paramètres sont réservés au propriétaire ; les organisateurs suivent les envois.",
       "Un bénévole sur plusieurs créneaux le même jour reçoit un seul rappel qui les regroupe.",
       "Un événement peut couper tous ses rappels avec sa case « Rappels automatiques ».",
       "« Envoyé » signifie accepté par le serveur d'envoi, pas remis ni lu."
@@ -31,7 +31,7 @@
   "segments": [
     {
       "id": "welcome",
-      "transcript": "Dans Paramètres, Emails, le propriétaire choisit les messages utiles pour toute l’organisation. Les organisateurs peuvent suivre les envois, mais pas changer ces réglages. Voyons les rappels, les alertes et l’adresse de réponse, puis vérifions un vrai message de test, sans contacter les bénévoles.",
+      "transcript": "Dans Paramètres, Emails, le propriétaire choisit les messages utiles pour toute l’organisation. Les organisateurs peuvent suivre les envois, mais pas changer ces paramètres. Voyons les rappels, les alertes et l’adresse de réponse, puis vérifions un vrai message de test, sans contacter les bénévoles.",
       "fallbackDurationMs": 23000
     },
     {
@@ -41,17 +41,17 @@
     },
     {
       "id": "event-reminders",
-      "transcript": "Dans les réglages d’un événement, la case Rappels automatiques peut couper tous ses rappels, sans changer les autres événements. Son onglet Messages indique ce qui partira vraiment. Un brouillon n’envoie pas de rappel. Pour un événement publié, les rappels suivent les choix de l’organisation et son fuseau horaire.",
+      "transcript": "Dans les paramètres d’un événement, la case Rappels automatiques peut couper tous ses rappels, sans changer les autres événements. Son onglet Messages indique ce qui partira vraiment. Un brouillon n’envoie pas de rappel. Pour un événement publié, les rappels suivent les choix de l’organisation et son fuseau horaire.",
       "fallbackDurationMs": 26000
     },
     {
       "id": "admin-alert",
-      "transcript": "L’option Prévenir les administrateurs à chaque inscription envoie un email à chaque administrateur actif lorsqu’une personne s’inscrit depuis la page publique. Elle facilite le suivi d’un petit événement, mais peut devenir bruyante lorsque les inscriptions sont nombreuses.",
+      "transcript": "L’option Prévenir les organisateurs à chaque inscription envoie un email à chaque organisateur actif lorsqu’une personne s’inscrit depuis la page d’inscription. Elle facilite le suivi d’un petit événement, mais peut devenir bruyante lorsque les inscriptions sont nombreuses.",
       "fallbackDurationMs": 20000
     },
     {
       "id": "withdrawal",
-      "transcript": "Prévenir en cas de désistement est un réglage séparé. Il informe les administrateurs et les responsables du poste quand une place confirmée ou une demande est annulée, avec les places manquantes et le mot éventuel du bénévole. Décocher cette option coupe aussi l’email aux responsables. Quitter une liste d’attente ou refuser une place proposée n’envoie pas cette alerte.",
+      "transcript": "Prévenir en cas de désistement est un paramètre séparé. Il informe les organisateurs et les responsables du poste quand une place confirmée ou une demande est annulée, avec les places manquantes et le mot éventuel du bénévole. Décocher cette option coupe aussi l’email aux responsables. Quitter une liste d’attente ou refuser une place proposée n’envoie pas cette alerte.",
       "fallbackDurationMs": 31000
     },
     {
@@ -66,7 +66,7 @@
     },
     {
       "id": "save",
-      "transcript": "Enregistrez les réglages avant de les tester. Le message Réglages enregistrés confirme que vos choix sont conservés. Modifier les cases sans enregistrer ne change pas les prochains envois. Le test utilise lui aussi la dernière configuration enregistrée.",
+      "transcript": "Enregistrez les paramètres avant de les tester. Le message Paramètres enregistrés confirme que vos choix sont conservés. Modifier les cases sans enregistrer ne change pas les prochains envois. Le test utilise lui aussi la dernière configuration enregistrée.",
       "fallbackDurationMs": 20000
     },
     {
@@ -76,7 +76,7 @@
     },
     {
       "id": "result",
-      "transcript": "Les réglages sont enregistrés et le message de test est visible dans la boîte de démonstration. Dans Emails envoyés, Envoyé indique une acceptation par le serveur d’envoi, pas une preuve de remise ni de lecture par le bénévole. Pour écrire ponctuellement à un groupe, utilisez plutôt les messages ciblés de l’événement.",
+      "transcript": "Les paramètres sont enregistrés et le message de test est visible dans la boîte de démonstration. Dans Emails envoyés, Envoyé indique une acceptation par le serveur d’envoi, pas une preuve de remise ni de lecture par le bénévole. Pour écrire ponctuellement à un groupe, utilisez plutôt les messages ciblés de l’événement.",
       "fallbackDurationMs": 26000
     }
   ],

@@ -46,7 +46,7 @@ Après avoir ajouté, renommé ou retiré une page, mettre à jour la liste ci-d
 
 - [Mes inscriptions](ma-page-personnelle.md) : Ta page « Mes inscriptions » : prochain créneau, infos pratiques, tes réponses, d'autres créneaux, changer ou annuler, calendrier, disponibilités. Pour : bénévoles.
 - [Ton lien personnel](lien-personnel.md) : Le lien reçu par email qui ouvre tes inscriptions : le garder pour toi, le recevoir à nouveau si tu l'as perdu, et que faire s'il ne marche plus. Pour : bénévoles.
-- [Revenir sur la page d'inscription](revenir-sur-la-page-d-inscription.md) : Retrouver tes inscriptions en rouvrant la page de l'événement, et quitter la session sur un appareil partagé. Pour : bénévoles.
+- [Revenir sur la page d'inscription](revenir-sur-la-page-d-inscription.md) : Retrouver tes inscriptions en rouvrant la page d'inscription, et quitter la session sur un appareil partagé. Pour : bénévoles.
 - [Rappels et changements de créneau](rappels.md) : Les rappels envoyés avant chaque journée de créneaux, par email ou notification sur le téléphone, et les messages quand un créneau change ou est annulé. Pour : organisateurs, bénévoles.
 - [Questions fréquentes des bénévoles](questions-frequentes-benevole.md) : Les questions que les bénévoles posent le plus souvent, chacune avec un lien vers la page qui y répond. Pour : bénévoles.
 
@@ -68,7 +68,7 @@ Après avoir ajouté, renommé ou retiré une page, mettre à jour la liste ci-d
 ### Préparer l'événement
 
 - [Créer un événement](creer-un-evenement.md) : Créer un événement en trois étapes, depuis un modèle ou une page blanche, puis le modifier avec l'enregistrement automatique. Pour : organisateurs.
-- [Dupliquer un événement](dupliquer-un-evenement.md) : Repartir d'un événement existant pour l'édition suivante, avec ses créneaux et réglages décalés à la nouvelle date. Pour : organisateurs.
+- [Dupliquer un événement](dupliquer-un-evenement.md) : Repartir d'un événement existant pour l'édition suivante, avec ses créneaux et paramètres décalés à la nouvelle date. Pour : organisateurs.
 - [Configurer les créneaux](configurer-les-creneaux.md) : Poser les créneaux d'un événement sur le planning : poste, horaires, places, infos pratiques et notes internes. Pour : organisateurs.
 - [Créer une série de créneaux](creer-une-serie-de-creneaux.md) : Couvrir une plage horaire avec des créneaux qui se suivent, de même durée, en une seule saisie avec un aperçu. Pour : organisateurs.
 - [Permanences récurrentes](permanences-recurrentes.md) : Une permanence qui revient chaque semaine se décrit une fois ; toutes ses dates sont créées, jours fériés et fermetures exclus. Pour : organisateurs.
@@ -109,13 +109,13 @@ Après avoir ajouté, renommé ou retiré une page, mettre à jour la liste ci-d
 ### Communiquer avec les bénévoles
 
 - [Écrire aux bénévoles](ecrire-aux-benevoles.md) : Envoyer un email aux inscrits d'un événement, d'un poste ou d'un créneau, avec des modèles, et retrouver les messages envoyés. Pour : organisateurs.
-- [Réglages et suivi des emails](reglages-et-suivi-des-emails.md) : Régler les rappels, les alertes et l'adresse de réponse de l'organisation, et suivre l'état de chaque email envoyé. Pour : organisateurs.
+- [Paramètres et suivi des emails](parametres-et-suivi-des-emails.md) : Régler les rappels, les alertes et l'adresse de réponse de l'organisation, et suivre l'état de chaque email envoyé. Pour : organisateurs.
 
 ### Paramètres de l'organisation
 
-- [Gérer l'équipe admin](equipe-admin.md) : Les deux rôles d'administrateur, propriétaire et organisateur, et comment inviter, changer de rôle ou retirer un admin. Pour : organisateurs.
+- [Gérer l'équipe d'organisation](equipe-d-organisation.md) : Deux rôles, propriétaire et organisateur, et comment inviter un organisateur, changer son rôle ou le retirer de l'équipe. Pour : organisateurs.
 - [Exporter et conserver ses données](exporter-et-conserver-ses-donnees.md) : Exporter un événement, les membres ou le journal à tout moment, et savoir combien de temps chaque donnée est conservée. Pour : organisateurs.
-- [Journal d'activité de l'organisation](journal-d-activite-de-l-organisation.md) : La liste chronologique de ce qui concerne l'organisation plutôt qu'un événement : membres, comptes admin, emails, réglages. Pour : organisateurs.
+- [Journal d'activité de l'organisation](journal-d-activite-de-l-organisation.md) : La liste chronologique de ce qui concerne l'organisation plutôt qu'un événement : membres, comptes organisateurs, emails, paramètres. Pour : organisateurs.
 - [Personnaliser l'organisation](personnaliser-l-organisation.md) : Nom, adresse, logo, titre public, fuseau horaire, « Qui est inscrit » par défaut et taux horaire pour valoriser le bénévolat. Pour : organisateurs.
 - [Charte du bénévole](charte-du-benevole.md) : Personnaliser la convention que les bénévoles acceptent avant de s'inscrire, et retrouver la preuve de leur acceptation. Pour : organisateurs.
 

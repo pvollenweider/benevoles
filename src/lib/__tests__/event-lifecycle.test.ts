@@ -54,7 +54,7 @@ describe("lifecycleNotes", () => {
     const one = lifecycleNotes({ ...base, publicStatus: "published", confirmationMessage: "x", invitedCount: 1 }, "e1")
     expect(noteText(one.needs[0])).toBe("1 membre invité. Inviter d'autres membres")
     const many = lifecycleNotes({ ...base, publicStatus: "published", invitedCount: 12 }, "e1")
-    expect(many.needs.map(noteText)).toEqual(["12 membres invités. Inviter d'autres membres", "Facultatif : la page publique n'a pas de message de confirmation. Ajouter un message de confirmation"])
+    expect(many.needs.map(noteText)).toEqual(["12 membres invités. Inviter d'autres membres", "Facultatif : la page d'inscription n'a pas de message de confirmation. Ajouter un message de confirmation"])
     // Not once it is over, nor before it is published.
     expect(lifecycleNotes({ ...base, publicStatus: "published", today: "2026-08-01" }, "e1").needs.some((n) => n.action?.href.endsWith("/invitations"))).toBe(false)
     expect(lifecycleNotes({ ...base, shiftCount: 1 }, "e1").needs.some((n) => n.action?.href.endsWith("/invitations"))).toBe(false)

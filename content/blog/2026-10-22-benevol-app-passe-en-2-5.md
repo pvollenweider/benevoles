@@ -24,7 +24,7 @@ version: 2.5
 
 **Activé par défaut pour vos nouveaux événements.** Un propriétaire peut changer cette valeur dans « Paramètres », section « Qui est inscrit ». Chaque événement garde ensuite son propre réglage, « Montrer aux bénévoles qui est inscrit », dans ses Réglages. Vos événements existants ne changent pas.
 
-→ [Qui est inscrit, réglage par défaut](/doc/personnaliser-l-organisation#qui-est-inscrit-reglage-par-defaut)
+→ [Qui est inscrit, réglage par défaut](/doc/personnaliser-l-organisation#qui-est-inscrit-parametre-par-defaut)
 
 **Pensez à prévenir vos bénévoles.** Activer le réglage ne vaut pas leur accord, et aucun email ne part tout seul. Le guide propose un message à adapter, à envoyer depuis l'onglet Communication.
 
@@ -34,7 +34,7 @@ version: 2.5
 
 Quand un bénévole répond à un rappel ou à une confirmation, sa réponse doit bien arriver chez quelqu'un. Une nouvelle organisation reçoit maintenant comme adresse de réponse l'adresse email de son premier propriétaire, sans rien régler. Une organisation qui n'en avait jamais eu prend celle du premier propriétaire qui active son compte. Une adresse déjà réglée n'est jamais remplacée, et vous pouvez la changer dans « Paramètres », puis « Emails ».
 
-→ [Réglages des emails](/doc/reglages-et-suivi-des-emails#reglages-des-emails)
+→ [Réglages des emails](/doc/parametres-et-suivi-des-emails#parametres-des-emails)
 
 ## La Frise au clavier
 
@@ -49,7 +49,7 @@ Quand une place se libère, l'email de la liste d'attente ouvre maintenant une p
 
 ## Et aussi
 
-- Le lien d'activation d'un nouvel administrateur part uniquement par email, à la personne invitée. [Équipe admin](/doc/equipe-admin)
+- Le lien d'activation d'un nouvel administrateur part uniquement par email, à la personne invitée. [Équipe admin](/doc/equipe-d-organisation)
 - Une nouvelle page pour faire le point : un tableur et un groupe de discussion, ou un outil dédié ? [Tableur ou outil dédié](/tableur-ou-outil-dedie)
 - Plusieurs tutoriels ont été refilmés sur les écrans actuels, entre autres [Construire et entretenir sa liste de membres](/videos/MEMBERS_MANAGEMENT), [Inviter les bonnes personnes à son événement](/videos/MEMBERS_INVITATIONS), [Importer ses membres sans repartir de zéro](/videos/MEMBERS_IMPORT) et [Gérer l'équipe et les permissions](/videos/ORG_TEAM_PERMISSIONS).
 

@@ -41,7 +41,7 @@ export default async function InactivityPage() {
       <div>
         <h1 id="page-heading" tabIndex={-1} className="text-2xl font-bold text-gray-900 focus:outline-none">Organisations bientôt inactives</h1>
         <p className="text-sm text-gray-700 mt-1">
-          Après {INACTIVITY_MONTHS} mois sans activité et sans événement à venir, une organisation reçoit « Souhaitez-vous conserver votre espace ? », puis deux rappels ; un rappel ne part qu&apos;une fois le message précédent accepté par le serveur d&apos;envoi pour au moins un administrateur, au plus tôt {REMINDER_GAP_DAYS} jours de calendrier après lui. Sans réponse, elle est désactivée au plus tôt {FINAL_NOTICE_DAYS} jours après l&apos;envoi du dernier rappel, et jamais moins de {MIN_DEACTIVATION_DAYS} jours après l&apos;envoi du premier ; ses administrateurs peuvent la réactiver eux-mêmes. Un message accepté pour aucun administrateur bloque la procédure : pas de désactivation tant qu&apos;il n&apos;est pas accepté.
+          Après {INACTIVITY_MONTHS} mois sans activité et sans événement à venir, une organisation reçoit « Souhaitez-vous conserver votre espace ? », puis deux rappels ; un rappel ne part qu&apos;une fois le message précédent accepté par le serveur d&apos;envoi pour au moins un organisateur, au plus tôt {REMINDER_GAP_DAYS} jours de calendrier après lui. Sans réponse, elle est désactivée au plus tôt {FINAL_NOTICE_DAYS} jours après l&apos;envoi du dernier rappel, et jamais moins de {MIN_DEACTIVATION_DAYS} jours après l&apos;envoi du premier ; ses organisateurs peuvent la réactiver eux-mêmes. Un message accepté pour aucun organisateur bloque la procédure : pas de désactivation tant qu&apos;il n&apos;est pas accepté.
           {" "}
           {mode === "off"
             ? "La vérification est désactivée (ORG_INACTIVITY=off)."
@@ -64,7 +64,7 @@ export default async function InactivityPage() {
               {")"}
             </>
           )}
-          {" : un message n'a été accepté pour aucun administrateur, ou la procédure a commencé avant le suivi des envois. Pas de désactivation tant que c'est le cas ; traitez-les depuis leur page."}
+          {" : un message n'a été accepté pour aucun organisateur, ou la procédure a commencé avant le suivi des envois. Pas de désactivation tant que c'est le cas ; traitez-les depuis leur page."}
           {blocked.length > 5 && " Repérez-les par « Procédure bloquée » dans le tableau."}
         </p>
       )}
@@ -72,12 +72,12 @@ export default async function InactivityPage() {
       {mode !== "off" && unreachable.length > 0 && (
         <p className="text-sm text-gray-900 bg-amber-50 border border-amber-300 rounded-xl px-4 py-3">
           {unreachable.length === 1
-            ? "1 organisation n'a aucun administrateur joignable"
-            : `${unreachable.length} organisations n'ont aucun administrateur joignable`}
+            ? "1 organisation n'a aucun organisateur joignable"
+            : `${unreachable.length} organisations n'ont aucun organisateur joignable`}
           {unreachable.length <= 5 && ` (${unreachable.map((r) => r.name).join(", ")})`}
           {mode === "on"
-            ? " : aucun administrateur actif, ou adresses refusées. Les messages de la vérification ne leur parviennent pas. Contactez-les autrement, ou reportez la vérification depuis leur page. Sans réponse, elles seront désactivées comme les autres."
-            : " : aucun administrateur actif, ou adresses refusées. Les messages de la vérification ne leur parviendraient pas. Contactez-les autrement, ou reportez la vérification depuis leur page. Sans réponse, elles seraient désactivées comme les autres."}
+            ? " : aucun organisateur actif, ou adresses refusées. Les messages de la vérification ne leur parviennent pas. Contactez-les autrement, ou reportez la vérification depuis leur page. Sans réponse, elles seront désactivées comme les autres."
+            : " : aucun organisateur actif, ou adresses refusées. Les messages de la vérification ne leur parviendraient pas. Contactez-les autrement, ou reportez la vérification depuis leur page. Sans réponse, elles seraient désactivées comme les autres."}
         </p>
       )}
 
@@ -93,7 +93,7 @@ export default async function InactivityPage() {
                 <th scope="col" className="px-4 py-2 font-medium">Dernière activité</th>
                 <th scope="col" className="px-4 py-2 font-medium">Dernier événement</th>
                 <th scope="col" className="px-4 py-2 font-medium">Utilisée</th>
-                <th scope="col" className="px-4 py-2 font-medium">Administrateurs actifs</th>
+                <th scope="col" className="px-4 py-2 font-medium">Organisateurs actifs</th>
                 <th scope="col" className="px-4 py-2 font-medium">{mode === "on" ? "Où elle en est" : "Où elle en serait"}</th>
               </tr>
             </thead>
@@ -139,7 +139,7 @@ export default async function InactivityPage() {
       {mode !== "off" && deactivated.length > 0 && (
         <section aria-labelledby="inactivity-deactivated" className="space-y-2">
           <h2 id="inactivity-deactivated" className="text-base font-semibold text-gray-900">Désactivées faute d&apos;activité</h2>
-          <p className="text-sm text-gray-700">Désactivées faute de réponse à la vérification d&apos;inactivité. Leurs administrateurs peuvent les réactiver depuis la page de connexion ; leurs données sont gardées. L&apos;effacement automatique, 90 jours après la désactivation, n&apos;est pas activé : la date indiquée est celle qu&apos;il suivrait.</p>
+          <p className="text-sm text-gray-700">Désactivées faute de réponse à la vérification d&apos;inactivité. Leurs organisateurs peuvent les réactiver depuis la page de connexion ; leurs données sont gardées. L&apos;effacement automatique, 90 jours après la désactivation, n&apos;est pas activé : la date indiquée est celle qu&apos;il suivrait.</p>
           <ul className="list-disc pl-5 text-sm">
             {deactivated.map((o) => (
               <li key={o.id}>

@@ -70,7 +70,7 @@ En savoir plus : [les responsables de secteur](../guide/responsables-de-secteur.
 
 ### Les chefs d'équipe doivent-ils avoir accès à l'administration ?
 
-Non. Un responsable de secteur reçoit un lien personnel, sans compte à créer, qui affiche les bénévoles inscrits sur son poste avec leur email et leur téléphone. Il est prévenu des nouvelles inscriptions sur ce poste, et des désistements tant que le réglage qui les signale reste coché, ce qui est le cas par défaut. Il ne voit rien d'autre de l'événement.
+Non. Un responsable de secteur reçoit un lien personnel, sans compte à créer, qui affiche les bénévoles inscrits sur son poste avec leur email et leur téléphone. Il est prévenu des nouvelles inscriptions sur ce poste, et des désistements tant que le paramètre qui les signale reste coché, ce qui est le cas par défaut. Il ne voit rien d'autre de l'événement.
 
 ### Un bénévole peut-il prendre deux créneaux qui se chevauchent ?
 

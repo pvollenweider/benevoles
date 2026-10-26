@@ -1,0 +1,31 @@
+---
+roles: [admin]
+group: organisation
+order: 10
+summary: Deux rôles, propriétaire et organisateur, et comment inviter un organisateur, changer son rôle ou le retirer de l'équipe.
+related: [se-connecter, personnaliser-l-organisation]
+legacy: [admin#gerer-l-equipe-admin]
+aliases: [equipe-admin]
+---
+
+# Gérer l'équipe d'organisation
+
+<!-- video: ORG_TEAM_PERMISSIONS -->
+
+**Paramètres**, dans la barre du haut
+
+L'équipe d'organisation, ce sont les organisateurs de votre espace. Deux rôles :
+
+- **Propriétaire** : tous les droits, dont la gestion de l'équipe d'organisation, les paramètres de l'organisation (nom, titre public, adresse, fuseau horaire, charte, paramètres des emails, masquer les **Premiers pas**) et la suppression définitive d'un événement archivé.
+- **Organisateur** : événements (création, duplication, modification, publication, archivage), postes, créneaux, questions, pages personnalisées, responsables de secteur, jalons, inscriptions, demandes et présences, membres (import et export compris) et invitations, messages aux bénévoles et modèles de messages, rappel manuel, rapports et exports, journaux, et renvoi d'un email en échec. Il voit l'équipe et un résumé des paramètres de l'organisation, sans pouvoir les changer ; la page le dit.
+
+Dans la documentation, les paramètres marqués **(réservé aux propriétaires)** ne sont modifiables que par un propriétaire.
+
+Sur cette page, un propriétaire peut :
+
+- voir la **liste** des organisateurs de votre organisation (actifs et invitations en attente) ;
+- **inviter** un nouvel organisateur : saisir son nom et son email, et choisir son rôle (Organisateur par défaut). Le lien d'activation, valable 7 jours, part uniquement par email à cette adresse : la page ne l'affiche pas, et seule la personne qui reçoit l'email peut activer le compte. Tant que votre espace est en attente de validation, l'invitation d'autres organisateurs attend cette validation (voir [Créer son espace](creer-son-espace.md)). Une invitation dont le lien a expiré sans être utilisé ne bloque plus l'adresse une heure après l'expiration : vous pouvez inviter la personne à nouveau, et une autre organisation (ou la personne elle-même, en créant son espace) le peut aussi, ce qui remplace l'invitation expirée. Une adresse déjà active, ou dont l'invitation est encore valable, ne peut pas être invitée ; si elle n'est pas dans votre équipe, le message ne dit pas où elle est utilisée ;
+- **changer le rôle** d'un organisateur dans sa ligne ; le changement s'applique aussitôt, y compris à ses sessions ouvertes ;
+- **retirer** un organisateur de l'équipe. Il est impossible de se retirer soi-même ou de retirer le dernier organisateur actif, et l'organisation garde toujours au moins un propriétaire actif.
+
+La même page porte aussi les paramètres de l'organisation : voir [Personnaliser l'organisation](personnaliser-l-organisation.md) et [Charte du bénévole](charte-du-benevole.md).

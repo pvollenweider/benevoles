@@ -64,7 +64,7 @@ export default async function SharePage({ params }: { params: Promise<{ id: stri
                 <EventShareLink url={publicUrl} />
                 <p className="text-sm">
                   <a href={publicUrl} target="_blank" rel="noopener" className={linkClass}>
-                    Ouvrir la page publique<span className="sr-only"> (ouvre dans un nouvel onglet)</span>
+                    Ouvrir la page d&apos;inscription<span className="sr-only"> (ouvre dans un nouvel onglet)</span>
                     <span aria-hidden="true" className="ml-1 font-normal">↗</span>
                   </a>
                 </p>

@@ -23,13 +23,13 @@ Une messagerie peut garder l'ancien aperçu quelque temps après une modificatio
 
 ## QR code
 
-Dans l'onglet **Partage**, page **QR code**, télécharger le QR code de la page publique de l'événement (formats PNG ou SVG). Pratique pour l'affichage en salle ou sur une affiche. Pour un partage en ligne (messagerie, email, réseau social), utilisez plutôt **Copier le lien** ou **Partager**.
+Dans l'onglet **Partage**, page **QR code**, télécharger le QR code de la page d'inscription de l'événement (formats PNG ou SVG). Pratique pour l'affichage en salle ou sur une affiche. Pour un partage en ligne (messagerie, email, réseau social), utilisez plutôt **Copier le lien** ou **Partager**.
 
 ## Un lien par groupe
 
-Quand plusieurs clubs ou équipes recrutent chacun pour leurs propres postes, donnez à chacun son lien : il ouvre la page de l'événement sur les postes de ce groupe seulement, avec son propre QR code, et vous voyez combien d'inscriptions chaque lien a apportées.
+Quand plusieurs clubs ou équipes recrutent chacun pour leurs propres postes, donnez à chacun son lien : il ouvre la page d'inscription sur les postes de ce groupe seulement, avec son propre QR code, et vous voyez combien d'inscriptions chaque lien a apportées.
 
-Les liens par groupe se gèrent dans l'onglet **Partage**, section **Liens par groupe et intégration**. Vous pouvez les préparer avant de publier : ils ouvrent la page de l'événement une fois celui-ci publié, et tant qu'il ne l'est pas, ils mènent à la même page introuvable que le lien principal.
+Les liens par groupe se gèrent dans l'onglet **Partage**, section **Liens par groupe et intégration**. Vous pouvez les préparer avant de publier : ils ouvrent la page d'inscription une fois celui-ci publié, et tant qu'il ne l'est pas, ils mènent à la même page introuvable que le lien principal.
 
 ### Exemple : la fête du village et ses sociétés locales
 
@@ -49,7 +49,7 @@ Puis **Créer le lien**. Recommencez pour la fanfare, avec le poste Buvette.
 
 **3. Ce que voient les bénévoles.** La page ouverte par le lien n'affiche que les postes de la société, avec une ligne qui le dit, par exemple « Lien « Amicale des pompiers » : seuls ses 3 postes sont affichés. ». Le bouton **Voir tous les postes** montre tout l'événement, et **Revenir aux postes de « Amicale des pompiers »** remet le filtre. Les postes réservés à certains membres gardent leurs règles, quel que soit le lien ; un poste attribué par l'organisation uniquement n'est jamais affiché ni proposé au choix des postes d'un lien. Un lien par groupe ne montre jamais qui est inscrit, même à un bénévole confirmé : il est partagé, il n'identifie donc personne (voir [Voir qui est inscrit](choisir-ses-creneaux.md#voir-qui-est-inscrit)).
 
-![Page publique de la fête du village ouverte par le lien de l'Amicale des pompiers : la ligne « Lien « Amicale des pompiers » : seuls ses 3 postes sont affichés. » avec le bouton « Voir tous les postes », puis le planning limité aux postes Montage, Sécurité et Démontage](/doc-img/public-group-link.png)
+![Page d'inscription de la fête du village ouverte par le lien de l'Amicale des pompiers : la ligne « Lien « Amicale des pompiers » : seuls ses 3 postes sont affichés. » avec le bouton « Voir tous les postes », puis le planning limité aux postes Montage, Sécurité et Démontage](/doc-img/public-group-link.png)
 
 **4. Suivre les inscriptions par société.** Sous chaque lien, la section affiche les inscriptions qu'il a apportées (« 6 personnes inscrites, 6 créneaux »), avec **Voir ses inscriptions**. Sur la page des inscriptions, le filtre **Par lien de groupe** montre les inscriptions d'un lien, ou celles arrivées **Sans lien de groupe**. Vous voyez ainsi quelle société doit encore mobiliser ses membres. Une inscription compte pour le lien par lequel la page a été ouverte, même si le bénévole a choisi un poste d'un autre groupe après **Voir tous les postes**.
 
@@ -74,7 +74,7 @@ L'événement doit être publié. Dans l'onglet **Partage**, section **Liens par
 
 **Ajouter le code à votre site.** Dans l'éditeur de votre site, ouvrez la page voulue et ajoutez un bloc de type « HTML », « Code personnalisé » ou « Intégrer » (le nom change d'un éditeur à l'autre). Collez-y le code, puis enregistrez et publiez la page. Le code ne charge aucun script d'un autre site : seulement la page d'inscription de benevol.app dans un cadre.
 
-**Ce que voient les bénévoles.** Le même parcours que sur la page de l'événement : choix des créneaux, formulaire, récapitulatif, confirmation. Ce qui quitte l'inscription s'ouvre dans un nouvel onglet, pour que votre page reste en place : la page **Mes inscriptions**, les pages de l'événement, les mentions légales, la page d'accueil de benevol.app, le code source. La confirmation rappelle que l'email contient le lien personnel, pour modifier ou annuler. Les rappels par notification se proposent depuis la page **Mes inscriptions**, pas dans le cadre. L'inscription affichée sur votre site ne montre jamais qui est inscrit : l'interrupteur **Voir qui est inscrit** n'existe que sur la page de l'événement, pour les bénévoles confirmés et les membres invités.
+**Ce que voient les bénévoles.** Le même parcours que sur la page d'inscription : choix des créneaux, formulaire, récapitulatif, confirmation. Ce qui quitte l'inscription s'ouvre dans un nouvel onglet, pour que votre page reste en place : la page **Mes inscriptions**, les pages de l'événement, les mentions légales, la page d'accueil de benevol.app, le code source. La confirmation rappelle que l'email contient le lien personnel, pour modifier ou annuler. Les rappels par notification se proposent depuis la page **Mes inscriptions**, pas dans le cadre. L'inscription affichée sur votre site ne montre jamais qui est inscrit : l'interrupteur **Voir qui est inscrit** n'existe que sur la page d'inscription, pour les bénévoles confirmés et les membres invités.
 
 Certains navigateurs ne laissent pas une page affichée dans le site d'un autre retenir quoi que ce soit sur l'appareil. Le bénévole doit alors retaper ses coordonnées pour un autre événement, et la page ne le reconnaît pas en revenant : son lien personnel reste dans l'email.
 

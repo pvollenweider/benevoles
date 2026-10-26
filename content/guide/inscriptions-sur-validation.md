@@ -24,7 +24,7 @@ Tu t'inscris normalement, mais ton inscription est une **demande** : le récapit
 
 Cochez **Sur validation** dans le formulaire du créneau (ou dans la série de créneaux). Quand les demandes remplissent le créneau, les suivants vont en liste d'attente (ou le créneau est complet). Ensuite :
 
-- le bénévole voit le créneau marqué « Sur validation » sur la page publique et dans le récapitulatif, puis « Demande envoyée » après l'envoi. Il reçoit un email « Demande reçue » avec son lien personnel, où il suit sa demande et peut la retirer ;
+- le bénévole voit le créneau marqué « Sur validation » sur la page d'inscription et dans le récapitulatif, puis « Demande envoyée » après l'envoi. Il reçoit un email « Demande reçue » avec son lien personnel, où il suit sa demande et peut la retirer ;
 - dans les inscriptions de l'événement, chaque demande porte les boutons **Accepter** et **Refuser**, et la case **Demandes à traiter** n'affiche qu'elles. Un récapitulatif dit ce qui va se passer avant de confirmer ;
 - **Accepter** fait de la demande une inscription confirmée : le bénévole reçoit l'email de confirmation habituel, et les responsables du poste sont prévenus ;
 - **Refuser** libère la place, proposée ensuite à la liste d'attente. Le bénévole reçoit un email poli, sans raison, sauf si vous écrivez un message (facultatif) ;

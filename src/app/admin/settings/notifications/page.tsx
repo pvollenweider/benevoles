@@ -69,8 +69,8 @@ export default async function NotificationsPage({ searchParams }: { searchParams
       ) : (
         // Organisers see the deliveries below, not the email settings (#469).
         <section aria-labelledby="email-settings-ro" className="bg-white rounded-2xl border border-gray-200 p-4 space-y-2">
-          <h2 id="email-settings-ro" className="text-base font-semibold text-gray-900">Réglages des emails</h2>
-          <p className="text-sm text-gray-700">Votre rôle : organisateur. Ces réglages sont réservés aux propriétaires de l&apos;organisation.</p>
+          <h2 id="email-settings-ro" className="text-base font-semibold text-gray-900">Paramètres des emails</h2>
+          <p className="text-sm text-gray-700">Votre rôle : organisateur. Ces paramètres sont réservés aux propriétaires de l&apos;organisation.</p>
           <dl className="grid grid-cols-[auto_1fr] gap-x-3 text-sm">
             <dt className="text-gray-600">Adresse de réponse</dt>
             <dd className="text-gray-900 break-all">{org?.replyToEmail ?? "celle de la plateforme"}</dd>

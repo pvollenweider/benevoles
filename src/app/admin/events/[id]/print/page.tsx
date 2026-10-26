@@ -289,7 +289,7 @@ export default async function ReportsPage({ params }: { params: Promise<{ id: st
       <section aria-labelledby="reports-archive" className="space-y-2">
         <h2 id="reports-archive" className="text-base font-semibold text-gray-900">Archive</h2>
         <ul role="list" className="bg-white border border-gray-200 rounded-xl divide-y divide-gray-100">
-          {row(`${base}/archive`, "Archive de l'événement (JSON)", "Toutes les données de l'événement dans un fichier téléchargé : réglages, créneaux, inscriptions, pages, responsables, jalons et journal. Pour vos archives ou pour changer d'outil.", undefined, "download")}
+          {row(`${base}/archive`, "Archive de l'événement (JSON)", "Toutes les données de l'événement dans un fichier téléchargé : paramètres, créneaux, inscriptions, pages, responsables, jalons et journal. Pour vos archives ou pour changer d'outil.", undefined, "download")}
         </ul>
       </section>
     </div>

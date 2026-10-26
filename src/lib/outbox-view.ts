@@ -112,7 +112,7 @@ export function outboxErrorSentence(lastError: string | null): string | null {
   if (lastError === LEADER_LINK_REVOKED_REASON) return "Annulé : ce responsable de secteur a été retiré, ou son adresse a changé, depuis la mise en file."
   if (lastError === "limit:recipient_per_hour") return "Annulé : trop de demandes pour cette adresse en une heure."
   if (lastError === ORG_INACTIVE_REASON) return "Annulé : organisation désactivée, jamais envoyé."
-  if (lastError === ORG_PENDING_REASON) return "Annulé : espace en attente de validation, les emails ne partent qu'à ses administrateurs."
+  if (lastError === ORG_PENDING_REASON) return "Annulé : espace en attente de validation, les emails ne partent qu'à ses organisateurs."
   const decoded = decodeOutcomeReason(lastError)
   if (decoded) return sentenceFor(decoded)
   return "Échec technique de l'envoi (détail non disponible)."
@@ -124,13 +124,13 @@ export const KIND_LABELS: Record<NotificationKind, string> = {
   reminder_j2: "Rappel J-2",
   reminder_j1: "Rappel J-1",
   reminder_dd: "Rappel du jour",
-  manual_reminder: "Rappel envoyé par un admin",
+  manual_reminder: "Rappel envoyé par un organisateur",
   shift_modified: "Créneau modifié",
   shift_cancelled: "Créneau annulé",
-  registration_cancelled: "Désistement : notification aux admins",
+  registration_cancelled: "Désistement : notification aux organisateurs",
   admin_notification: "Notification à l'équipe",
-  admin_invite: "Invitation d'un administrateur",
-  admin_welcome: "Bienvenue administrateur",
+  admin_invite: "Invitation d'un organisateur",
+  admin_welcome: "Bienvenue organisateur",
   password_reset: "Réinitialisation du mot de passe",
   waitlist_confirmation: "Liste d'attente : confirmation",
   waitlist_offered: "Liste d'attente : place proposée",

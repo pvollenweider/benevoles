@@ -31,7 +31,7 @@ export type SendBatchView = {
 }
 
 const actorLabelOf = (actorId: string | null, names: Map<string, string>) =>
-  actorId ? (names.get(actorId) ?? "Un administrateur (compte supprimé)") : "Un administrateur"
+  actorId ? (names.get(actorId) ?? "Un organisateur (compte supprimé)") : "Un organisateur"
 
 /**
  * The batches of one organisation (#1101), newest first: of one event, or the given ids (the

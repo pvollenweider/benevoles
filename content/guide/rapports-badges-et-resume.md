@@ -27,7 +27,7 @@ aliases: []
 | Feuille de présence | par créneau, une case à cocher par bénévole (déjà cochée si la présence a été marquée dans l'application), son téléphone, heure d'arrivée, remarque, et des lignes vides pour les arrivées imprévues | organisateurs |
 | Liste avec téléphones | tous les bénévoles par ordre alphabétique, téléphone, email et créneaux | organisateurs seulement |
 | Synthèse des réponses | par question posée aux bénévoles, le nombre de réponses des confirmés et des personnes en attente, sans nom ni coordonnées (voir [Synthèse des réponses](questions-aux-benevoles.md#synthese-des-reponses)) | organisateurs, ou pour passer commande |
-| Archive de l'événement (JSON) | un fichier téléchargé avec toutes les données de l'événement : réglages, créneaux, inscriptions, pages, responsables, jalons et journal | vos archives, ou pour changer d'outil |
+| Archive de l'événement (JSON) | un fichier téléchargé avec toutes les données de l'événement : paramètres, créneaux, inscriptions, pages, responsables, jalons et journal | vos archives, ou pour changer d'outil |
 
 Dans les plannings par jour et par poste, la colonne **Effectif** ajoute « sous le minimum (2) » ou « minimum atteint » aux créneaux qui ont un minimum de personnes, avec une phrase qui l'explique sous le tableau. Sauf l'export complet, ces documents sont conçus pour le noir et blanc ; le logo de l'organisation, s'il y en a un, figure en gris à côté du titre. La feuille de présence en CSV se télécharge depuis les inscriptions (voir [Présences le jour J](presences-le-jour-j.md)). Les heures planifiées des membres n'y figurent jamais ; la liste avec téléphones porte la mention « Ne pas afficher ni distribuer ».
 

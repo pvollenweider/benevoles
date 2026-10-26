@@ -10,7 +10,7 @@
     "manual-message": "Préparer le rappel manuel",
     "manual-send": "Envoyer et vérifier le rappel",
     "organization": "Choisir les rappels de l'organisation",
-    "event-switch": "Comprendre les limites des réglages",
+    "event-switch": "Comprendre les limites des paramètres",
     "timing": "Trois échéances, des horaires locaux",
     "exclusions": "Qui reçoit un rappel ?",
     "changed": "Prévenir d'un nouvel horaire",
@@ -30,7 +30,7 @@
     },
     {
       "id": "manual-message",
-      "transcript": "Dans les réglages de l'événement, le Message de rappel complète le récapitulatif des créneaux. Écrivons une consigne simple : « Retrouve-nous au stand quinze minutes avant ton horaire. Prends une gourde. Merci pour ton aide ! » Le texte s'enregistre automatiquement : attendez la confirmation Modifications enregistrées avant de quitter la page. Ce message est propre à cet événement. Ce n'est pas un modèle de campagne ni une nouvelle invitation : il accompagne le planning des personnes déjà confirmées.",
+      "transcript": "Dans les paramètres de l'événement, le Message de rappel complète le récapitulatif des créneaux. Écrivons une consigne simple : « Retrouve-nous au stand quinze minutes avant ton horaire. Prends une gourde. Merci pour ton aide ! » Le texte s'enregistre automatiquement : attendez la confirmation Modifications enregistrées avant de quitter la page. Ce message est propre à cet événement. Ce n'est pas un modèle de campagne ni une nouvelle invitation : il accompagne le planning des personnes déjà confirmées.",
       "fallbackDurationMs": 42000
     },
     {
@@ -45,7 +45,7 @@
     },
     {
       "id": "event-switch",
-      "transcript": "Les trois cases que nous venons de voir concernent toute l'organisation. Dans le formulaire de l'événement, vous pouvez aussi couper seulement ses rappels automatiques. Décochons Rappels automatiques et attendons l'enregistrement. Réactivons-les pour poursuivre notre exemple. Ce réglage ne change pas le rappel manuel. Regardons maintenant notre événement en brouillon. Il ne reçoit pas les rappels automatiques réservés aux événements publiés.",
+      "transcript": "Les trois cases que nous venons de voir concernent toute l'organisation. Dans le formulaire de l'événement, vous pouvez aussi couper seulement ses rappels automatiques. Décochons Rappels automatiques et attendons l'enregistrement. Réactivons-les pour poursuivre notre exemple. Ce paramètre ne change pas le rappel manuel. Regardons maintenant notre événement en brouillon. Il ne reçoit pas les rappels automatiques réservés aux événements publiés.",
       "fallbackDurationMs": 40000
     },
     {
@@ -72,7 +72,7 @@
   "viewer": {
     "summary": "Dans cette vidéo, vous préparez le message de rappel d'un événement, réglez les rappels automatiques et voyez ce que reçoivent les bénévoles quand un créneau change ou est annulé.",
     "steps": [
-      "Dans les réglages de l'événement, écrivez le message de rappel et attendez la confirmation de l'enregistrement automatique.",
+      "Dans les paramètres de l'événement, écrivez le message de rappel et attendez la confirmation de l'enregistrement automatique.",
       "Dans Messages, cliquez sur « Envoyer le rappel », puis confirmez l'envoi.",
       "Dans Paramètres, puis Emails, choisissez les rappels automatiques de l'organisation et enregistrez.",
       "Modifiez l'horaire d'un créneau : les bénévoles confirmés reçoivent un message avec le nouvel horaire.",

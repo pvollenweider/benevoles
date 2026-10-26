@@ -18,7 +18,7 @@ Une checklist simple de dates clés pour l'événement (ex. « Fermer les inscri
 
 ## Qui s'occupe d'un jalon
 
-Le champ **Qui s'en occupe** est facultatif : **Aucun** par défaut, ou un membre de l'[équipe admin](equipe-admin.md) de l'organisation (propriétaire ou organisateur, compte activé). Les responsables de secteur n'y figurent pas : ils n'ont pas de compte et ne voient pas les jalons. Son nom s'affiche sous le titre du jalon (« Qui s'en occupe : … »).
+Le champ **Qui s'en occupe** est facultatif : **Aucun** par défaut, ou un membre de l'[équipe d'organisation](equipe-d-organisation.md) de l'organisation (propriétaire ou organisateur, compte activé). Les responsables de secteur n'y figurent pas : ils n'ont pas de compte et ne voient pas les jalons. Son nom s'affiche sous le titre du jalon (« Qui s'en occupe : … »).
 
 Trois jours avant l'échéance, cette personne reçoit un email de rappel, une seule fois, si le jalon n'est pas encore coché. Un jalon ajouté ou confié moins de trois jours avant son échéance déclenche le rappel dans l'heure qui suit. Si vous changez de personne ou d'échéance, le rappel repart pour la nouvelle personne ou la nouvelle date. Pas de rappel pour un événement archivé, ni pour un compte désactivé.
 

@@ -82,7 +82,7 @@ const inBackups = `oui, jusqu'à ${d.localBackup} jours sur le serveur et ${d.of
 
 export const RETENTION: readonly RetentionEntry[] = [
   {
-    data: "Membres, événements (dont le contact le jour J, nom et téléphone), créneaux, inscriptions (dont la preuve d'acceptation de la convention des bénévoles pour une inscription publique : empreinte du texte accepté et date), versions de la convention déjà montrées à des bénévoles (texte par empreinte), pages, journaux d'activité, comptes administrateurs, doublons possibles ignorés, logo de l'organisation",
+    data: "Membres, événements (dont le contact le jour J, nom et téléphone), créneaux, inscriptions (dont la preuve d'acceptation de la convention des bénévoles pour une inscription publique : empreinte du texte accepté et date), versions de la convention déjà montrées à des bénévoles (texte par empreinte), pages, journaux d'activité, comptes organisateurs, doublons possibles ignorés, logo de l'organisation",
     purpose: "Organiser les événements de l'organisation",
     duration: `tant que l'organisation est active, événements passés compris, sauf les données des bénévoles d'un événement terminé depuis plus de 3 ans (ligne « Événement terminé depuis plus de 3 ans ») ; effacés ${d.deactivatedOrganization} jours après sa désactivation par l'opérateur (délai compté depuis la dernière modification de l'organisation désactivée) ; une organisation sans activité depuis ${INACTIVITY_MONTHS} mois suit la ligne « Organisation désactivée faute d'activité »`,
     trigger: "désactivation de l'organisation",
@@ -100,11 +100,11 @@ export const RETENTION: readonly RetentionEntry[] = [
     public: true,
   },
   {
-    data: `Les mêmes données, pour une organisation désactivée faute d'activité : ${INACTIVITY_MONTHS} mois sans activité et sans événement prévu, puis trois messages à ses administrateurs (« Souhaitez-vous conserver votre espace ? » et deux rappels, chacun accepté par le serveur d'envoi pour au moins un administrateur, le suivant au plus tôt ${REMINDER_GAP_DAYS} jours de calendrier plus tard) restés sans réponse au moins ${FINAL_NOTICE_DAYS} jours après l'envoi du dernier rappel, et au moins ${MIN_DEACTIVATION_DAYS} jours après l'envoi du premier`,
-    purpose: "Permettre à ses administrateurs de la réactiver eux-mêmes",
+    data: `Les mêmes données, pour une organisation désactivée faute d'activité : ${INACTIVITY_MONTHS} mois sans activité et sans événement prévu, puis trois messages à ses organisateurs (« Souhaitez-vous conserver votre espace ? » et deux rappels, chacun accepté par le serveur d'envoi pour au moins un organisateur, le suivant au plus tôt ${REMINDER_GAP_DAYS} jours de calendrier plus tard) restés sans réponse au moins ${FINAL_NOTICE_DAYS} jours après l'envoi du dernier rappel, et au moins ${MIN_DEACTIVATION_DAYS} jours après l'envoi du premier`,
+    purpose: "Permettre à ses organisateurs de la réactiver eux-mêmes",
     duration: "conservées tant qu'elle est désactivée ; une réponse, une activité ou un événement prévu arrête la procédure avant la désactivation",
     trigger: "désactivation après trois messages sans réponse",
-    mechanism: "aucune suppression automatique ; réactivation par un administrateur depuis la page de connexion, ou suppression définitive par l'opérateur",
+    mechanism: "aucune suppression automatique ; réactivation par un organisateur depuis la page de connexion, ou suppression définitive par l'opérateur",
     backups: inBackups,
     public: true,
   },
@@ -145,7 +145,7 @@ export const RETENTION: readonly RetentionEntry[] = [
     public: true,
   },
   {
-    data: "Événement supprimé par un administrateur",
+    data: "Événement supprimé par un organisateur",
     purpose: "—",
     duration: "effacé immédiatement, avec ses créneaux, inscriptions, invitations, réponses aux questions, responsables, pages, jalons, messages ciblés et programmés et son journal",
     trigger: "suppression définitive d'un événement archivé",
@@ -156,7 +156,7 @@ export const RETENTION: readonly RetentionEntry[] = [
   {
     data: "Organisation supprimée par l'opérateur du service",
     purpose: "—",
-    duration: "effacée immédiatement, avec ses membres et ses administrateurs",
+    duration: "effacée immédiatement, avec ses membres et ses organisateurs",
     trigger: "suppression définitive d'une organisation désactivée",
     mechanism: "suppression en cascade",
     backups: inBackups,
@@ -235,7 +235,7 @@ export const RETENTION: readonly RetentionEntry[] = [
     public: false,
   },
   {
-    data: "Envois groupés d'emails (invitations, relances, rappels, messages) : type d'envoi, événement, administrateur qui l'a lancé, date, nombre de destinataires et nombres d'emails envoyés, retenus par un plafond d'envoi, en échec ou annulés ; ni destinataire, ni adresse, ni contenu ; et l'entrée correspondante du journal d'activité de l'organisation",
+    data: "Envois groupés d'emails (invitations, relances, rappels, messages) : type d'envoi, événement, organisateur qui l'a lancé, date, nombre de destinataires et nombres d'emails envoyés, retenus par un plafond d'envoi, en échec ou annulés ; ni destinataire, ni adresse, ni contenu ; et l'entrée correspondante du journal d'activité de l'organisation",
     purpose: "Permettre à l'organisation de suivre un envoi dans son ensemble, et de savoir plus tard ce qui a été envoyé pour un événement",
     duration: `${d.sendBatch} jours après l'envoi, ou avec l'événement`,
     trigger: "envoi groupé depuis un événement",
@@ -263,7 +263,7 @@ export const RETENTION: readonly RetentionEntry[] = [
     public: true,
   },
   {
-    data: "Invitations d'administrateur non acceptées",
+    data: "Invitations d'organisateur non acceptées",
     purpose: "Permettre d'accepter ou de renvoyer l'invitation",
     duration: `effacées ${d.deactivatedAdmin} jours après leur dernier envoi`,
     trigger: "invitation ou renvoi",
@@ -272,7 +272,7 @@ export const RETENTION: readonly RetentionEntry[] = [
     public: true,
   },
   {
-    data: "Administrateur retiré de l'équipe",
+    data: "Organisateur retiré de l'équipe",
     purpose: "—",
     duration: "effacé immédiatement",
     trigger: "retrait par un propriétaire",
@@ -326,7 +326,7 @@ export const RETENTION: readonly RetentionEntry[] = [
     public: false,
   },
   {
-    data: "Historique des nouveautés produit envoyées aux administrateurs (objet, contenu, auteur, nombres)",
+    data: "Historique des nouveautés produit envoyées aux organisateurs (objet, contenu, auteur, nombres)",
     purpose: "Historique des envois",
     duration: "sans limite : aucune purge",
     trigger: "envoi",

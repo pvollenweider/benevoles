@@ -31,7 +31,7 @@ Un membre au téléphone, quelqu'un devant vous au stand, ou vous-même ? Dans I
 
 **Plusieurs désistements, un seul email.** Trois annulations à la suite arrivent ensemble dans votre boîte, au lieu de trois messages.
 
-→ [Réglages et suivi des emails](/doc/reglages-et-suivi-des-emails)
+→ [Réglages et suivi des emails](/doc/parametres-et-suivi-des-emails)
 
 **Une erreur ?** « Annulations récentes » permet de rétablir une inscription annulée, tant que la place est libre. La personne en est prévenue.
 

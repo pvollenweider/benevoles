@@ -16,7 +16,7 @@ import { groupLinkUrl } from "./group-links"
 import { registrationState, type RegistrationWindow } from "./registration-window"
 
 export const SIGN_UP_MORE_LABEL = "S'inscrire à d'autres créneaux"
-export const EVENT_PAGE_LABEL = "Voir la page de l'événement"
+export const EVENT_PAGE_LABEL = "Voir la page d'inscription"
 export const ORG_HOME_LABEL = "Retour à l'accueil"
 
 const isoDay = (d: Date | string) => (d instanceof Date ? d : new Date(d)).toISOString().slice(0, 10)

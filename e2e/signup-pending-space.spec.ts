@@ -54,7 +54,7 @@ test("a confirmed sign-up creates a space with no public page until it is valida
   await page.getByRole("button", { name: "Se connecter" }).click()
   await expect(page).toHaveURL(/\/admin\/dashboard/)
   await page.goto("/admin/settings/admins")
-  await expect(page.getByText("Vous pourrez inviter d'autres administrateurs une fois qu'il sera validé")).toBeVisible()
+  await expect(page.getByText("Vous pourrez inviter d'autres organisateurs une fois qu'il sera validé")).toBeVisible()
   await expect(page.getByRole("button", { name: "Inviter" })).toHaveCount(0)
 
   // No public page, not even with the address: the space awaits validation.

@@ -150,7 +150,7 @@ export function inactivityStatusText(
   const last = `Dernière activité : ${info.lastActivityAt ? `le ${day(info.lastActivityAt)}` : "jamais mesurée"}.`
   if (mode === "off") return `${last} La vérification est désactivée (ORG_INACTIVITY=off).`
   const a = info.assessment
-  if (info.deactivatedAt) return `${last} Désactivée faute de réponse le ${day(info.deactivatedAt)} ; ses administrateurs peuvent la réactiver depuis la page de connexion.`
+  if (info.deactivatedAt) return `${last} Désactivée faute de réponse le ${day(info.deactivatedAt)} ; ses organisateurs peuvent la réactiver depuis la page de connexion.`
   if (info.procedure && a.state === "due") {
     const paused = mode === "report" ? " Mode observation : la procédure est en pause, rien de plus n'est envoyé ni désactivé." : ""
     return `${last} ${procedureText(info.procedure, now, day)}${paused}`
@@ -184,7 +184,7 @@ export function procedureText(p: ProcedureInput, now: Date, day: (d: Date) => st
   const done = steps.length > 0 ? `${steps.join(" ; ")}.` : ""
   if (v.blocked) {
     // The outcome first: what the operator scans for.
-    const todo = "à traiter manuellement (vérifier les adresses des administrateurs, les contacter autrement, reporter la vérification ou l'exclure)"
+    const todo = "à traiter manuellement (vérifier les adresses des organisateurs, les contacter autrement, reporter la vérification ou l'exclure)"
     if (v.blocked.reason === "legacy") {
       const floor = v.plannedAt ? ` Elle ne pourrait de toute façon pas être désactivée avant le ${day(v.plannedAt)}.` : ""
       return `Procédure bloquée : ${v.blocked.text}. Jamais de désactivation automatique pour elle : ${todo}.${done ? ` ${done}` : ""}${floor}`

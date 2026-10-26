@@ -46,7 +46,7 @@ export default function ReactivatePage() {
         <div className="text-center mb-8">
           <h1 className="text-2xl font-bold text-gray-900">Réactiver mon espace</h1>
           <p className="text-gray-600 text-sm mt-1">
-            Votre espace a été désactivé faute d&apos;activité ? Entrez l&apos;adresse de votre compte administrateur pour recevoir un lien qui le réactive.
+            Votre espace a été désactivé faute d&apos;activité ? Entrez l&apos;adresse de votre compte organisateur pour recevoir un lien qui le réactive.
           </p>
         </div>
 
@@ -54,7 +54,7 @@ export default function ReactivatePage() {
           <div className="bg-white rounded-2xl border border-gray-200 p-6 text-center space-y-3">
             <h2 ref={doneRef} tabIndex={-1} className="font-semibold text-gray-900 focus:outline-none">Demande envoyée</h2>
             <p className="text-sm text-gray-600">
-              Si cette adresse est celle d&apos;un administrateur d&apos;un espace désactivé faute d&apos;activité, vous recevrez un lien valable {REACTIVATION_LINK_HOURS} heures.
+              Si cette adresse est celle d&apos;un organisateur d&apos;un espace désactivé faute d&apos;activité, vous recevrez un lien valable {REACTIVATION_LINK_HOURS} heures.
             </p>
             <p className="text-sm text-gray-600">
               Un espace désactivé par l&apos;équipe du service ne se réactive pas ainsi : écrivez-lui.

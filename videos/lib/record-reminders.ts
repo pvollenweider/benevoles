@@ -89,7 +89,7 @@ export async function recordReminders(options: { page: Page; base: string; event
         await tap(page, page.getByRole("button", { name: "Enregistrer", exact: true }))
         const result = await response
         if (!result.ok() || (await result.json()).settings.reminders.j1 !== enabled) throw new Error("Organization reminder setting not persisted")
-        await page.getByText("Réglages enregistrés.", { exact: true }).waitFor()
+        await page.getByText("Paramètres enregistrés.", { exact: true }).waitFor()
       }
       if (!await checkbox.isChecked()) throw new Error("J-1 fixture must start enabled")
       await at("Nous coupons celui de la veille"); await save(false)

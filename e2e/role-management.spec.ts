@@ -299,7 +299,7 @@ test.describe("role management", () => {
     await expect(poste).toHaveAttribute("aria-describedby", /\S/)
     const hint = page.locator(`[id="${await poste.getAttribute("aria-describedby")}"]`)
     await expect(hint).toBeVisible()
-    await expect(hint).toHaveText(/Les réglages du poste\W+Sécurité\W+s'appliquent/)
+    await expect(hint).toHaveText(/Les paramètres du poste\W+Sécurité\W+s'appliquent/)
     await page.getByLabel("Début").fill("14:00")
     await page.getByRole("button", { name: "Ajouter", exact: true }).click()
 

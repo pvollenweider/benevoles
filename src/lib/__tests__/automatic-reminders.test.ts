@@ -8,7 +8,7 @@ const facts = (over: Partial<Parameters<typeof remindersSummary>[0]> = {}): Para
 })
 
 const EVENT_LINK = { href: "/admin/events/evt-1/edit#event-reminders", label: "Rappels automatiques de l'événement" }
-const SETTINGS_LINK = { href: "/admin/settings/notifications", label: "Réglages des emails de l'organisation" }
+const SETTINGS_LINK = { href: "/admin/settings/notifications", label: "Paramètres des emails de l'organisation" }
 
 /** Every piece of copy of a summary, to check the admin style rules on all of it. */
 const allText = (s: ReturnType<typeof remindersSummary>) =>
@@ -76,7 +76,7 @@ describe("reminders box (#705)", () => {
   it("off for this event: nothing goes out whatever the organization says, link to the event's checkbox", () => {
     const s = remindersSummary(facts({ eventEnabled: false }))
     expect(s).toMatchObject({ state: "event-off", ok: false, title: "Rappels automatiques coupés pour cet événement", sent: [] })
-    expect(s.notes[0]).toMatch(/quels que soient les réglages de l'organisation/)
+    expect(s.notes[0]).toMatch(/quels que soient les paramètres de l'organisation/)
     expect(s.links).toEqual([EVENT_LINK])
   })
 

@@ -15,7 +15,7 @@
   "segments": [
     {
       "id": "welcome",
-      "transcript": "La visibilité de l’événement et l’ouverture des inscriptions sont deux réglages différents. Les séparer permet de montrer une page d’information avant les inscriptions, de partager un événement seulement aux personnes concernées, puis de le ranger proprement après sa fin.",
+      "transcript": "La visibilité de l’événement et l’ouverture des inscriptions sont deux paramètres différents. Les séparer permet de montrer une page d’information avant les inscriptions, de partager un événement seulement aux personnes concernées, puis de le ranger proprement après sa fin.",
       "fallbackDurationMs": 21000
     },
     {

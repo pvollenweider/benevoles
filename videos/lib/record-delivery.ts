@@ -66,7 +66,7 @@ export async function recordDeliveryStates(options: {
     await tap(page, page.getByRole("button", { name: "Se connecter", exact: true }))
     await page.waitForURL(/\/admin\/dashboard/)
     await go()
-    await page.getByText("Votre rôle : organisateur. Ces réglages sont réservés aux propriétaires de l'organisation.", { exact: true }).scrollIntoViewIfNeeded()
+    await page.getByText("Votre rôle : organisateur. Ces paramètres sont réservés aux propriétaires de l'organisation.", { exact: true }).scrollIntoViewIfNeeded()
     checks.actualOrganizerReadOnlySettings = true
   })
   await scene("states", async at => {

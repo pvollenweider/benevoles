@@ -62,7 +62,7 @@ describe("AdminsManager — roles", () => {
     expect(screen.queryByRole("button", { name: /Inviter/ })).toBeNull()
     expect(screen.queryByRole("combobox")).toBeNull()
     expect(screen.queryByRole("button", { name: /Retirer/ })).toBeNull()
-    expect(screen.getByText(/Seuls les propriétaires invitent/)).toBeInTheDocument()
+    expect(screen.getByText(/Seuls les propriétaires peuvent inviter/)).toBeInTheDocument()
     expect(screen.getByText("Rôle : Propriétaire")).toBeInTheDocument()
   })
 })

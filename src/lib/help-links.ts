@@ -48,7 +48,7 @@ export const ADMIN_HELP_LINKS = {
   // Seven of the page's eight sections are the organisation's settings (#1096); the team and the
   // charter have their own « En savoir plus » (SECTION_DOC_LINKS).
   "/admin/settings/admins": { unit: "personnaliser-l-organisation" },
-  "/admin/settings/notifications": { unit: "reglages-et-suivi-des-emails" },
+  "/admin/settings/notifications": { unit: "parametres-et-suivi-des-emails" },
   "/admin/settings/message-templates": { unit: "ecrire-aux-benevoles", heading: "Modèles de messages" },
   "/admin/settings/activity": { unit: "journal-d-activite-de-l-organisation" },
 } as const satisfies Record<string, AdminHelpTarget>
@@ -64,7 +64,7 @@ export type AdminHelpRoute = keyof typeof ADMIN_HELP_LINKS
 export const SECTION_DOC_LINKS = {
   admin: {
     milestones: { unit: "jalons" },
-    adminTeam: { unit: "equipe-admin" },
+    adminTeam: { unit: "equipe-d-organisation" },
     charter: { unit: "charte-du-benevole" },
   },
   benevole: {

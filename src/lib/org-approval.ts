@@ -73,4 +73,4 @@ export function canInviteAdmins(org: Pick<OrgApprovals, "outboundEmailApprovedAt
 }
 
 export const ADMIN_INVITE_PENDING_ERROR =
-  "Votre espace est en attente de validation. Vous pourrez inviter d'autres administrateurs une fois qu'il sera validé ; vous recevrez un email."
+  "Votre espace est en attente de validation. Vous pourrez inviter d'autres organisateurs une fois qu'il sera validé ; vous recevrez un email."

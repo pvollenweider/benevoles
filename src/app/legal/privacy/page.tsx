@@ -37,7 +37,7 @@ export default function PrivacyPage() {
       <p>benevol.app est à la fois responsable du traitement et sous-traitant, selon les données :</p>
       <ul>
         <li>
-          <strong>Données des administrateurs d&apos;Organisations</strong> (nom, e-mail, mot de
+          <strong>Données des organisateurs d&apos;Organisations</strong> (nom, e-mail, mot de
           passe) : benevol.app est <strong>responsable du traitement</strong>.
         </li>
         <li>
@@ -53,7 +53,7 @@ export default function PrivacyPage() {
 
       <h2>2. Données que nous traitons en qualité de responsable</h2>
 
-      <h3 id="donnees-administrateurs">2.1 Administrateurs</h3>
+      <h3 id="donnees-administrateurs">2.1 Organisateurs</h3>
       {/* A wide table scrolls in its own focusable region, named by its heading, so the page
           reflows at 320 px (1.4.10); the hint says so where the table is wider than the screen. */}
       <p className="sm:hidden">Faites défiler le tableau horizontalement.</p>
@@ -307,7 +307,7 @@ export default function PrivacyPage() {
         </li>
       </ul>
       <p>
-        <strong>Pour les administrateurs</strong> : exercez vos droits à{" "}
+        <strong>Pour les organisateurs</strong> : exercez vos droits à{" "}
         <a href="mailto:contact@benevol.app">contact@benevol.app</a>.
       </p>
       <p>
@@ -338,22 +338,22 @@ export default function PrivacyPage() {
       <p>
         Un espace qui n&apos;est plus utilisé depuis {INACTIVITY_MONTHS} mois et qui n&apos;a aucun événement
         prévu peut être désactivé. Cette règle s&apos;applique lorsque l&apos;opérateur du service
-        l&apos;active. Avant toute désactivation, trois messages sont envoyés aux administrateurs de
+        l&apos;active. Avant toute désactivation, trois messages sont envoyés aux organisateurs de
         l&apos;Organisation ; pour garder l&apos;espace, il suffit d&apos;ouvrir le lien d&apos;un de ces messages,
         puis d&apos;appuyer sur « Conserver mon organisation » sur la page qui s&apos;affiche. Chaque
-        message doit avoir été accepté par notre serveur d&apos;envoi pour au moins un administrateur (ce qui
+        message doit avoir été accepté par notre serveur d&apos;envoi pour au moins un organisateur (ce qui
         ne garantit pas qu&apos;il ait été lu), et le suivant part au plus tôt {REMINDER_GAP_DAYS} jours de calendrier
         plus tard. Sans réponse, l&apos;espace est désactivé au plus tôt {FINAL_NOTICE_DAYS} jours après l&apos;envoi du
         dernier rappel, et jamais moins de {MIN_DEACTIVATION_DAYS} jours après l&apos;envoi du premier message ; chaque
         message indique jusqu&apos;à quel jour répondre. Tant qu&apos;un message n&apos;a été accepté pour aucun
-        administrateur, l&apos;espace ne peut pas être désactivé. Une fois l&apos;espace désactivé, ses données sont
-        gardées, et ses administrateurs peuvent le réactiver eux-mêmes : depuis la page de connexion, ils
+        organisateur, l&apos;espace ne peut pas être désactivé. Une fois l&apos;espace désactivé, ses données sont
+        gardées, et ses organisateurs peuvent le réactiver eux-mêmes : depuis la page de connexion, ils
         demandent un lien par email, utilisable une seule fois dans les {REACTIVATION_LINK_HOURS} heures, qui ouvre une page où
         confirmer la réactivation.
       </p>
       <p>
-        Le compte d&apos;un administrateur retiré de l&apos;équipe est supprimé immédiatement. Les comptes des
-        administrateurs d&apos;une Organisation sont supprimés avec elle. Une invitation d&apos;administrateur non acceptée est supprimée{" "}
+        Le compte d&apos;un organisateur retiré de l&apos;équipe est supprimé immédiatement. Les comptes des
+        organisateurs d&apos;une Organisation sont supprimés avec elle. Une invitation d&apos;organisateur non acceptée est supprimée{" "}
         {RETENTION_DAYS.deactivatedAdmin} jours après son dernier envoi.
       </p>
       <p>Plus précisément :</p>
@@ -372,7 +372,7 @@ export default function PrivacyPage() {
       <p>
         Nous pouvons mettre à jour cette politique à tout moment. La date de dernière mise à jour
         est indiquée en haut du document. Pour les modifications substantielles, nous notifierons
-        les administrateurs par e-mail.
+        les organisateurs par e-mail.
       </p>
 
       <h2>9. Contact</h2>

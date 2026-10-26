@@ -55,7 +55,7 @@ export default function ReactivateConfirm({ secret, organizationName }: { secret
     <form onSubmit={handleSubmit} noValidate className="space-y-4">
       <input type="hidden" name="token" value={secret} />
       <p className="text-sm text-gray-800">
-        L&apos;espace de <strong>{organizationName}</strong> a été désactivé faute d&apos;activité. Ses événements, ses membres et ses réglages sont toujours là. En le réactivant, vous confirmez que vous souhaitez le conserver.
+        L&apos;espace de <strong>{organizationName}</strong> a été désactivé faute d&apos;activité. Ses événements, ses membres et ses paramètres sont toujours là. En le réactivant, vous confirmez que vous souhaitez le conserver.
       </p>
       <FormStatus error={error} errorId={`${id}-error`} />
       <button

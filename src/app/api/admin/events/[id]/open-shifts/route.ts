@@ -168,7 +168,7 @@ export async function POST(req: Request, { params }: { params: Promise<{ id: str
         organizationId,
         eventId: id,
         authorId: guard.session.user?.id ?? null,
-        authorName: guard.session.user?.name || guard.session.user?.email || "Administrateur",
+        authorName: guard.session.user?.name || guard.session.user?.email || "Organisateur",
         subject: history.subject,
         message: history.message,
         audienceLabel: history.audienceLabel,

@@ -115,7 +115,7 @@ export default function EventMoreMenu({
                   href={`${eventHref(eventId, "edit")}#${DELETE_SECTION_ID}`}
                   onClick={() => {
                     setOpen(false)
-                    // Already on the Réglages page: no new page, the heading takes the focus here.
+                    // Already on the Paramètres page: no new page, the heading takes the focus here.
                     requestAnimationFrame(() => document.getElementById(DELETE_SECTION_ID)?.focus())
                   }}
                   className={`${ITEM_BASE} text-red-700 hover:bg-red-50`}

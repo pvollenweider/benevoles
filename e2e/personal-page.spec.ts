@@ -106,7 +106,7 @@ test("links to the event's sign-up page for more shifts, the bottom link gone (#
   await openMyPage(page)
   const more = page.getByRole("link", { name: "S'inscrire à d'autres créneaux" })
   await expect(more).toBeVisible()
-  await expect(page.getByRole("link", { name: "Voir la page de l'événement" })).toHaveCount(0)
+  await expect(page.getByRole("link", { name: "Voir la page d'inscription" })).toHaveCount(0)
   await expect(page.getByRole("link", { name: "Retour à l'accueil" })).toHaveCount(0)
   await more.click()
   await expect(page).toHaveURL((url) => url.pathname === `/${event.slug}`)

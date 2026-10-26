@@ -20,6 +20,6 @@ Tant que votre organisation n'a pas terminé sa mise en place, une liste **Premi
 3. créer votre premier événement : voir [Créer un événement](creer-un-evenement.md) ;
 4. définir les postes et les créneaux : voir [Configurer les créneaux](configurer-les-creneaux.md) ;
 5. publier l'événement : voir [Publier un événement](publier-un-evenement.md) ;
-6. faire une inscription de test depuis la page publique, pour vérifier le parcours et l'email reçu ; vous pourrez l'annuler ensuite.
+6. faire une inscription de test depuis la page d'inscription, pour vérifier le parcours et l'email reçu ; vous pourrez l'annuler ensuite.
 
-Les étapes se cochent d'elles-mêmes au fur et à mesure. La liste disparaît quand les étapes obligatoires sont faites ; un propriétaire peut la retirer plus tôt, pour tous les admins de l'organisation, avec **Masquer ces étapes**.
+Les étapes se cochent d'elles-mêmes au fur et à mesure. La liste disparaît quand les étapes obligatoires sont faites ; un propriétaire peut la retirer plus tôt, pour tous les organisateurs de l'organisation, avec **Masquer ces étapes**.

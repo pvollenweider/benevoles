@@ -36,7 +36,7 @@ export async function recordShiftRoster({ page, base, dir, scene, tap, settle, f
     await tap(page, box()); await page.getByText(/Informez vos bénévoles/).waitFor(); await page.waitForTimeout(1500)
     await at("Sur Vérifier avant publication")
     await go(`/admin/events/${eventId}/review`)
-    await page.getByRole("link", { name: "Modifier le réglage « Qui est inscrit »" }).scrollIntoViewIfNeeded()
+    await page.getByRole("link", { name: "Modifier le paramètre « Qui est inscrit »" }).scrollIntoViewIfNeeded()
     await at("Publions l’événement")
     await tap(page, page.getByRole("button", { name: "Publier", exact: true }))
     await page.getByText("L'événement est publié : les bénévoles peuvent s'inscrire.").waitFor()

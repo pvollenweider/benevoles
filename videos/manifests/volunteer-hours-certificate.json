@@ -64,7 +64,7 @@
     },
     {
       "id": "certificate-settings",
-      "transcript": "Préparons maintenant une attestation pour Aline. Depuis son activité, ouvrons Attestation de bénévolat. Choisissons une période du premier mai au trente septembre. Vous pouvez ajouter une remarque facultative : écrivons Accueil du public et rangement du matériel. L'aperçu reprend le nom du bénévole, celui de l'organisation, les dates et le détail par événement. Le logo enregistré dans les réglages de l'organisation apparaît aussi. Il est imprimé en gris pour garder un document adapté au noir et blanc. Prenez le temps de vérifier que cette période et ce commentaire correspondent bien au document que vous voulez remettre.",
+      "transcript": "Préparons maintenant une attestation pour Aline. Depuis son activité, ouvrons Attestation de bénévolat. Choisissons une période du premier mai au trente septembre. Vous pouvez ajouter une remarque facultative : écrivons Accueil du public et rangement du matériel. L'aperçu reprend le nom du bénévole, celui de l'organisation, les dates et le détail par événement. Le logo enregistré dans les paramètres de l'organisation apparaît aussi. Il est imprimé en gris pour garder un document adapté au noir et blanc. Prenez le temps de vérifier que cette période et ce commentaire correspondent bien au document que vous voulez remettre.",
       "fallbackDurationMs": 52000
     },
     {

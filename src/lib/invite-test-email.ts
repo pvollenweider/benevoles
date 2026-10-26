@@ -16,7 +16,7 @@ export const INVITE_TEST_RATE_ERROR = "Cinq emails de test par heure au plus. R�
 /** The status and French message of a refused test send; the SMTP reason never reaches the page. */
 export function inviteTestFailure(result: { reason: string; held?: true }): { status: number; error: string } {
   if (result.reason === ORG_PENDING_REASON) {
-    return { status: 403, error: "Votre espace est en attente de validation : l'email de test ne peut partir qu'à l'adresse d'un administrateur de l'espace qui a confirmé son adresse." }
+    return { status: 403, error: "Votre espace est en attente de validation : l'email de test ne peut partir qu'à l'adresse d'un organisateur de l'espace qui a confirmé son adresse." }
   }
   if (result.reason === ORG_INACTIVE_REASON) return { status: 403, error: "Votre espace est désactivé : aucun email ne part." }
   if (result.held) return { status: 429, error: "La limite d'envoi de votre espace est atteinte. Réessayez plus tard." }

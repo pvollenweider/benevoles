@@ -48,7 +48,7 @@ test("open a member page, open the certificate, see the headings and the table, 
   await expect(page).toHaveURL(/\/certificate$/)
 
   await expect(page.getByRole("heading", { level: 1, name: "Attestation de bénévolat" })).toBeVisible()
-  await expect(page.getByRole("heading", { name: "Réglages de l'attestation" })).toBeVisible()
+  await expect(page.getByRole("heading", { name: "Paramètres de l'attestation" })).toBeVisible()
 
   const table = page.getByRole("table")
   await expect(table).toBeVisible()
@@ -69,7 +69,7 @@ test("open a member page, open the certificate, see the headings and the table, 
   // on screen, and the table stays inside the document's width with the planned-hours column on.
   await page.emulateMedia({ media: "print" })
   await expect(page.getByRole("navigation", { name: "Navigation de l'administration" })).toBeHidden()
-  await expect(page.getByRole("heading", { name: "Réglages de l'attestation" })).toBeHidden()
+  await expect(page.getByRole("heading", { name: "Paramètres de l'attestation" })).toBeHidden()
   await expect(page.getByRole("heading", { level: 1, name: "Attestation de bénévolat" })).toBeVisible()
   const tableBox = await table.boundingBox()
   const articleBox = await page.locator("article.certificate").boundingBox()

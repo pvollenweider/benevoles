@@ -7,7 +7,7 @@ responsables de secteur s'authentifient par un jeton dans l'URL, sans compte à 
 |--------|------------------|-----------|
 | Bénévole | aucune ; jeton unique par inscription | Ses propres inscriptions |
 | Responsable de secteur | aucune ; jeton unique par désignation | Lecture seule du roster de son poste (#186) |
-| Organisateur (`organizer`) | email + mot de passe | Une organisation, sans l'équipe ni les réglages sensibles |
+| Organisateur (`organizer`) | email + mot de passe | Une organisation, sans l'équipe ni les paramètres sensibles |
 | Propriétaire (`admin`) | email + mot de passe | Tous les droits sur une organisation |
 | Super admin (`super_admin`) | email + mot de passe | Toutes les organisations |
 
@@ -26,7 +26,7 @@ Le rôle est stocké dans `AdminUser.role` : `admin` (valeur par défaut), `orga
 | Journaux, exports, rapports | — | — | oui | oui | oui |
 | Voir l'équipe, relancer un email en échec, email de test | — | — | oui | oui | oui |
 | Inviter, retirer un admin, changer son niveau | — | — | — | oui | oui |
-| Réglages de l'organisation et des emails | — | — | — | oui | oui |
+| Paramètres de l'organisation et des emails | — | — | — | oui | oui |
 | Supprimer définitivement un événement archivé | — | — | — | oui | oui |
 | Créer, désactiver, supprimer une organisation ; nouveautés produit | — | — | — | — | oui |
 
@@ -67,7 +67,7 @@ Un admin peut désigner un ou plusieurs bénévoles responsables d'un poste (`Sh
 Deux niveaux, pas davantage :
 
 - **Propriétaire** (rôle stocké `admin`) : tous les droits de l'organisation.
-- **Organisateur** (`organizer`) : les événements, postes, créneaux, inscriptions, présences, membres et leurs invitations, les messages, les exports et les journaux. Il voit la liste de l'équipe mais ne la gère pas, ne change pas les réglages de l'organisation (nom, adresse publique (slug) et anciennes adresses, logo, titre public, fuseau horaire, charte, assurance, réglages des emails, masquage de la liste « Premiers pas ») et ne supprime pas définitivement un événement.
+- **Organisateur** (`organizer`) : les événements, postes, créneaux, inscriptions, présences, membres et leurs invitations, les messages, les exports et les journaux. Il voit la liste de l'équipe mais ne la gère pas, ne change pas les paramètres de l'organisation (nom, adresse publique (slug) et anciennes adresses, logo, titre public, fuseau horaire, charte, assurance, paramètres des emails, masquage de la liste « Premiers pas ») et ne supprime pas définitivement un événement.
 
 La matrice route × méthode × niveau est `PERMISSIONS` dans `src/lib/permissions.ts`. Chaque route la respecte côté serveur (`requireOrgSession("owner")` pour les routes réservées aux propriétaires, 403 sinon), pas seulement en masquant l'interface. Un test vérifie que chaque route admin et chaque méthode y figurent, avec le bon appel. Un autre vérifie qu'un organisateur reçoit 403 sur chaque route réservée, sans qu'aucune donnée ne soit lue. Un changement de rôle s'applique aux sessions ouvertes dès leur requête suivante, car la session relit le rôle à chaque appel.
 

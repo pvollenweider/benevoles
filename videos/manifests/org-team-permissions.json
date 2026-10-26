@@ -4,9 +4,9 @@
   "title": "Gérer l’équipe et les permissions",
   "description": "Pour les propriétaires : inviter une personne, choisir son rôle et vérifier les droits d’un organisateur, distincts du lien de responsable de secteur.",
   "viewer": {
-    "summary": "Dans cette vidéo, vous gérez les membres de votre équipe d'administration et leurs rôles.",
+    "summary": "Dans cette vidéo, vous gérez les membres de votre équipe d'organisation et leurs rôles.",
     "steps": [
-      "Distinguez les rôles : le propriétaire gère tout, l'organisateur prépare les événements sans toucher à l'équipe ni aux réglages sensibles.",
+      "Distinguez les rôles : le propriétaire gère tout, l'organisateur prépare les événements sans toucher à l'équipe ni aux paramètres sensibles.",
       "Invitez une personne avec son nom, son adresse et son rôle.",
       "Suivez son statut « En attente » jusqu'à la création de son mot de passe.",
       "Changez un rôle en le sélectionnant puis en confirmant avec Appliquer.",
@@ -36,7 +36,7 @@
     },
     {
       "id": "roles",
-      "transcript": "Le propriétaire gère tout, y compris l’équipe et les réglages de l’organisation. L’organisateur prépare les événements, les créneaux, les inscriptions, les membres et les messages, mais ne change pas l’équipe ni ces réglages. Gardez si possible deux propriétaires actifs. Un responsable de secteur est différent : désigné pour un événement, il reçoit un lien personnel, pas un rôle dans cette équipe d’administration.",
+      "transcript": "Le propriétaire gère tout, y compris l’équipe et les paramètres de l’organisation. L’organisateur prépare les événements, les créneaux, les inscriptions, les membres et les messages, mais ne change pas l’équipe ni ces paramètres. Gardez si possible deux propriétaires actifs. Un responsable de secteur est différent : désigné pour un événement, il reçoit un lien personnel, pas un rôle dans cette équipe d’organisation.",
       "fallbackDurationMs": 32000
     },
     {
@@ -61,7 +61,7 @@
     },
     {
       "id": "limits",
-      "transcript": "La suppression définitive d’un événement et les réglages de l’organisation restent réservés aux propriétaires. Attribuez les droits selon la responsabilité réelle, retirez les accès devenus inutiles et utilisez un compte nominatif par personne. Changer un rôle s’applique aussitôt, y compris aux sessions déjà ouvertes : vérifiez donc la personne avant d’appliquer.",
+      "transcript": "La suppression définitive d’un événement et les paramètres de l’organisation restent réservés aux propriétaires. Attribuez les droits selon la responsabilité réelle, retirez les accès devenus inutiles et utilisez un compte nominatif par personne. Changer un rôle s’applique aussitôt, y compris aux sessions déjà ouvertes : vérifiez donc la personne avant d’appliquer.",
       "fallbackDurationMs": 26000
     },
     {

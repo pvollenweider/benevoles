@@ -62,7 +62,7 @@ describe("listOrgLogs", () => {
 describe("entityTypeLabel", () => {
   it("labels known entity types in French", () => {
     expect(entityTypeLabel("Member")).toBe("Membre")
-    expect(entityTypeLabel("AdminUser")).toBe("Compte admin")
+    expect(entityTypeLabel("AdminUser")).toBe("Compte organisateur")
   })
 
   it("falls back to the raw entityType for anything unmapped", () => {

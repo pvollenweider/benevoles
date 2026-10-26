@@ -51,7 +51,7 @@ export type BlockReason = "legacy" | "no-recipient" | "undelivered" | "held"
 
 export const BLOCK_REASONS: Record<BlockReason, string> = {
   legacy: "commencée avant le suivi des envois, aucun de ses messages n'est prouvé",
-  "no-recipient": "aucun administrateur avec une adresse email",
+  "no-recipient": "aucun organisateur avec une adresse email",
   undelivered: "aucune copie acceptée par le serveur d'envoi (envois échoués ou annulés)",
   held: `toujours en attente d'envoi après ${BLOCK_AFTER_DAYS} jours`,
 }
@@ -202,7 +202,7 @@ export function inactivityCopyVerdict(
 ): string | null {
   if (!org || !org.active) return null // the organisation guard of sendNotification refuses it
   const email = copy.recipientEmail.trim().toLowerCase()
-  if (!org.adminEmails.some((a) => a.trim().toLowerCase() === email)) return "Plus administrateur à cette adresse : message de la vérification d'inactivité annulé."
+  if (!org.adminEmails.some((a) => a.trim().toLowerCase() === email)) return "Plus organisateur à cette adresse : message de la vérification d'inactivité annulé."
   const stoppedAfter = (d: Date | null) => d !== null && d.getTime() > copy.queuedAt.getTime()
   if (org.exempt || (org.postponedUntil && org.postponedUntil.getTime() > now.getTime()) || stoppedAfter(org.lastActivityAt) || stoppedAfter(org.lastRetentionConfirmedAt)) {
     return "Vérification d'inactivité arrêtée : message annulé."

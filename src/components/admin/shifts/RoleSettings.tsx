@@ -135,7 +135,7 @@ export function RoleReserveForm({
         <>
           <p id={`reserve-help-${i}`} className="basis-full text-xs text-gray-600">Séparées par des virgules, 10 au plus. Laissez vide pour ouvrir le poste à tous.</p>
           <p className="basis-full text-xs text-gray-600">
-            Seuls les membres portant l&apos;une de ces étiquettes peuvent le prendre, et seulement avec le lien d&apos;invitation reçu par email : sans ce lien, la page publique affiche le poste comme « Réservé ». Les étiquettes ne sont jamais montrées aux bénévoles. Vous pouvez toujours ajouter quelqu&apos;un à la main.
+            Seuls les membres portant l&apos;une de ces étiquettes peuvent le prendre, et seulement avec le lien d&apos;invitation reçu par email : sans ce lien, la page d&apos;inscription affiche le poste comme « Réservé ». Les étiquettes ne sont jamais montrées aux bénévoles. Vous pouvez toujours ajouter quelqu&apos;un à la main.
           </p>
         </>
       )}
