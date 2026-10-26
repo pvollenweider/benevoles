@@ -176,7 +176,7 @@ export default function SectorsSection({
       if (postes > 0) setShifts((prev) => prev.map((s) => (s.sectorId === sector.id ? { ...s, sectorId: null } : s)))
     })
     focusAfterRemoval(index, ids)
-    onAnnounce(postes > 0 ? `Secteur « ${sector.name} » archivé ; ${postesCount(postes)} ${postes > 1 ? "passent" : "passe"} dans « Sans secteur ».` : `Secteur « ${sector.name} » archivé.`)
+    onAnnounce(postes > 0 ? `Secteur « ${sector.name} » archivé ; ${postesCount(postes)} ${postes > 1 ? "passent" : "passe"} dans « Autres postes ».` : `Secteur « ${sector.name} » archivé.`)
   }
 
   function archive(sector: AdminSector) {

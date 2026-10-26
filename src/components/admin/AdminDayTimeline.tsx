@@ -42,7 +42,7 @@ export type AdminShift = {
   requiresApproval?: boolean
   minAge?: number | null
   colorKey?: string | null
-  /** Sector of the poste (#1147), shared by its shifts; null = « Sans secteur ». */
+  /** Sector of the poste (#1147), shared by its shifts; null = « Autres postes ». */
   sectorId?: string | null
 }
 
@@ -117,7 +117,7 @@ export default function AdminDayTimeline({ eventId, date, shifts, eventShifts = 
   // ── Role rows ─────────────────────────────────────────────────────────────
   const layout = layoutRoles(visible, roleOrder)
   const { byRole, roleLane, roleHeight } = layout
-  // By sector (#1147): the groups of this day's postes, « Sans secteur » last, each with a header row.
+  // By sector (#1147): the groups of this day's postes, « Autres postes » last, each with a header row.
   const groups = sectorGrouping ? groupRolesBySector(layout.roles, (r) => sectorGrouping.sectorOf[r], sectorGrouping.sectors) : null
   const sectorRows = groups ? layoutSectorGroups(groups.map((g) => ({ key: sectorGroupKey(g), roles: g.roles })), roleHeight, sectorGrouping!.collapsed) : null
   const roles = sectorRows ? sectorRows.groups.flatMap((g) => g.roles) : layout.roles

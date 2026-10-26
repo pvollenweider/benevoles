@@ -103,7 +103,7 @@ export function buildDayParts(
     const d = (roleMinOrder.get(a) ?? 0) - (roleMinOrder.get(b) ?? 0)
     return d !== 0 ? d : roleFirstIndex.get(a)! - roleFirstIndex.get(b)!
   })
-  // By sector (#1147): sector by sector in their order, « Sans secteur » last, postes in their order.
+  // By sector (#1147): sector by sector in their order, « Autres postes » last, postes in their order.
   const sectorGroups: SectorGroup[] | null = bySector ? groupRolesBySector(posteOrder, (r) => bySector.sectorOf[r], bySector.sectors) : null
   const roleOrder = sectorGroups ? groupedRoleOrder(sectorGroups) : posteOrder
   const sorted = [...shifts].sort((a, b) => {

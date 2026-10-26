@@ -17,7 +17,7 @@
  *   even with every sector archived, and the option can no longer be turned off.
  *
  * Archiving a sector that holds postes needs the organiser's confirmation: its postes then move to
- * « Sans secteur » in the same transaction, so an archived sector never holds a poste. Sectors are
+ * « Autres postes » in the same transaction, so an archived sector never holds a poste. Sectors are
  * never deleted. Pure and Prisma-free: the client components read the texts and the grouping.
  */
 
@@ -27,7 +27,7 @@ export const SECTORS_OPTION_LABEL = "Organiser les postes par secteurs"
 export const SECTORS_OPTION_HINT = "Un secteur regroupe plusieurs postes, par exemple « Parking » pour « Parking Nord » et « Parking Mairie ». Les secteurs servent à l'organisation : les bénévoles ne les voient pas. Fonction en bêta."
 export const SECTORS_FIRST_SAVE_NOTICE = "En créant ce premier secteur, vous conservez l'organisation par secteurs pour cet événement."
 export const SECTORS_ADOPTED_NOTICE = "Cet événement utilise des secteurs. Vous pouvez les réorganiser, mais vous ne pouvez plus désactiver cette organisation."
-export const NO_SECTOR_LABEL = "Sans secteur"
+export const NO_SECTOR_LABEL = "Autres postes"
 
 export const SECTORS_CLOSED_ERROR = "Les secteurs ne sont pas disponibles pour votre organisation : ils font partie des fonctions bêta (Paramètres)."
 export const SECTORS_NOT_ENABLED_ERROR = "Activez d'abord « Organiser les postes par secteurs » dans les informations de l'événement."
@@ -129,7 +129,7 @@ export function isSectorPermutation(requested: string[], active: string[]): bool
 }
 
 export type SectorGroup = {
-  /** The sector's id, or null for « Sans secteur ». */
+  /** The sector's id, or null for « Autres postes ». */
   id: string | null
   name: string
   roles: string[]
@@ -138,7 +138,7 @@ export type SectorGroup = {
 /**
  * Postes grouped by sector, for the admin timeline and the PDF (#1147): the active sectors in
  * their order, each with its postes in `roles`' order (the event's poste order), then
- * « Sans secteur » last. A poste whose sector is archived or unknown goes to « Sans secteur »;
+ * « Autres postes » last. A poste whose sector is archived or unknown goes to « Autres postes »;
  * an empty group is left out. `sectorOf` gives each poste's sector (roleSectorOf, read over the
  * whole event, not one day, so a poste never changes group from one day to the next).
  */
@@ -160,7 +160,7 @@ export function groupRolesBySector(roles: string[], sectorOf: (role: string) => 
   return groups
 }
 
-/** The postes in grouped order (sector by sector, « Sans secteur » last): the order the grouped views draw them in. */
+/** The postes in grouped order (sector by sector, « Autres postes » last): the order the grouped views draw them in. */
 export function groupedRoleOrder(groups: SectorGroup[]): string[] {
   return groups.flatMap((g) => g.roles)
 }

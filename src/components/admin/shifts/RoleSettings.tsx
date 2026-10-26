@@ -428,12 +428,12 @@ export function RoleColorPicker({
 
 /** Announced once a poste's sector is saved (#1147). */
 export function sectorAnnouncement(role: string, sectorName: string | null): string {
-  return sectorName ? `Poste « ${role} » : secteur ${sectorName}.` : `Poste « ${role} » : sans secteur.`
+  return sectorName ? `Poste « ${role} » : secteur ${sectorName}.` : `Poste « ${role} » : aucun secteur, rangé dans « ${NO_SECTOR_LABEL} ».`
 }
 
 /**
  * The sector of a poste (#1147), in « Gérer les postes »: a select of the active sectors and
- * « Sans secteur », saved with « Enregistrer » onto every shift of the poste. Like the other
+ * « Autres postes », saved with « Enregistrer » onto every shift of the poste. Like the other
  * editors, the panel keeps which one is open and returns the focus to its « Secteur » button.
  */
 export function RoleSectorForm({
@@ -443,11 +443,11 @@ export function RoleSectorForm({
   autoFocus?:       boolean
   role:             string
   index:            number
-  /** The poste's saved sector, null = « Sans secteur ». */
+  /** The poste's saved sector, null = « Autres postes ». */
   sectorId:         string | null
   /** The active sectors, in their order. */
   sectors:          { id: string; name: string }[]
-  /** The select's value ("" = « Sans secteur »), kept by the panel while it is closed. */
+  /** The select's value ("" = « Autres postes »), kept by the panel while it is closed. */
   value:            string
   onValueChange:    (value: string) => void
   busyRole:         string | null
@@ -500,7 +500,7 @@ export function RoleSectorForm({
         onChange={(e) => onValueChange(e.target.value)}
         className="input py-1 text-sm min-w-40"
       >
-        <option value="">{NO_SECTOR_LABEL}</option>
+        <option value="">Aucun secteur</option>
         {sectors.map((s) => <option key={s.id} value={s.id}>{s.name}</option>)}
       </select>
       <button type="submit" aria-disabled={isBusy || undefined} className={`text-xs text-blue-700 font-medium hover:text-blue-900 py-1.5 ${isBusy ? "opacity-60 cursor-wait" : ""}`}>

@@ -110,7 +110,7 @@ export type SectorChange =
 
 /**
  * Renames, archives or restores a sector. Archiving a sector that holds postes needs
- * `detachPostes` (the organiser confirmed): its postes move to « Sans secteur » in the same
+ * `detachPostes` (the organiser confirmed): its postes move to « Autres postes » in the same
  * transaction, every shift (cancelled ones too) so the poste keeps one value. Without it, 409 with
  * the number of postes. A restored sector comes back empty, at the end of the order.
  */
@@ -130,7 +130,7 @@ export async function updateSector(
       if (patch.archived === true && !locked.archivedAt) {
         const live: { roleName: string }[] = await tx.shift.findMany({ where: { eventId, sectorId, status: { not: "cancelled" } }, select: { roleName: true }, distinct: ["roleName"] })
         if (live.length > 0 && !patch.detachPostes) {
-          return { ok: false, status: 409, error: `Ce secteur regroupe encore ${live.length} poste${live.length > 1 ? "s" : ""} : confirmez qu'ils passent dans « Sans secteur ».`, postes: live.length }
+          return { ok: false, status: 409, error: `Ce secteur regroupe encore ${live.length} poste${live.length > 1 ? "s" : ""} : confirmez qu'ils passent dans « Autres postes ».`, postes: live.length }
         }
         await tx.shift.updateMany({ where: { eventId, sectorId }, data: { sectorId: null } })
         const sector = await tx.sector.update({ where: { id: sectorId }, data: { archivedAt: new Date() }, select })
@@ -176,7 +176,7 @@ export async function reorderSectors(db: OrgScopedPrisma, organizationId: string
 
 /**
  * Puts every shift of the poste (cancelled ones too, so it keeps one value) in `sectorId`, or in
- * « Sans secteur » with null. The sector is locked and checked first: never an archived sector or
+ * « Autres postes » with null. The sector is locked and checked first: never an archived sector or
  * another event's. Only for an event that adopted sectors.
  */
 export async function assignPosteSector(tx: Tx, organizationId: string, eventId: string, roleName: string, sectorId: string | null): Promise<SectorResult<{ name: string | null }>> {

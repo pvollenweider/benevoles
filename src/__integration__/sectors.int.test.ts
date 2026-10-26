@@ -255,7 +255,7 @@ describe.skipIf(!url)("sectors on Postgres (#1147)", () => {
     expect(moved.status).toBe(200)
     expect((await moved.json()).sectorId).toBe(buvette.id)
 
-    // Back to « Sans secteur ».
+    // Back to « Autres postes ».
     expect((await r.role(id, "Bar", { sectorId: null })).status).toBe(200)
     expect((await sectorsOf(id)).filter((s) => s.roleName === "Bar").every((s) => s.sectorId === null)).toBe(true)
   })
@@ -274,7 +274,7 @@ describe.skipIf(!url)("sectors on Postgres (#1147)", () => {
     expect((await sectorsOf(id)).every((s) => s.sectorId === null)).toBe(true)
   })
 
-  it("archiving a sector that groups postes needs the confirmation, which moves them to « Sans secteur »", async () => {
+  it("archiving a sector that groups postes needs the confirmation, which moves them to « Autres postes »", async () => {
     const id = await newEvent()
     await r.mode(id, true)
     const parking = (await (await r.create(id, "Parking")).json()).sector

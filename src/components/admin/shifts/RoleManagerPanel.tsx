@@ -14,13 +14,13 @@ import { roleAssignedOnly } from "@/lib/role-assignment"
 import { roleOverlapAllowed } from "@/lib/shift-overlap"
 import { applyRoleOrder, moveItem, renameRole } from "@/lib/shifts-admin"
 import { focusFirstAvailable, isFocusDropped, type FocusCandidate } from "@/lib/focus-return"
-import { moveRole, roleMoveBoundaryMessage, roleMoveMessage, type MoveDirection } from "@/lib/role-order"
+import { moveRole, moveRoleInGroup, roleMoveBoundaryMessage, roleMoveMessage, type MoveDirection } from "@/lib/role-order"
 import { RoleColorPicker, RoleLimitForm, RoleOverlapForm, RoleReserveForm, RoleSectorForm } from "./RoleSettings"
 import type { RawShift } from "./types"
 import SectorsSection from "./SectorsSection"
 import type { AdminSectorsState } from "../ShiftsManager"
 import { roleSectorOf } from "@/lib/role-settings"
-import { activeSectors, sectorsAdopted, sectorsManaged } from "@/lib/sectors"
+import { activeSectors, groupRolesBySector, postesCount, sectorsAdopted, sectorsManaged, type SectorGroup } from "@/lib/sectors"
 
 /** Ref callback body: keeps `buttons` keyed by role while the button is mounted. */
 function setRoleButton(buttons: Map<string, HTMLButtonElement>, role: string, el: HTMLButtonElement | null) {
@@ -135,7 +135,9 @@ export default function RoleManagerPanel({
   function handleRoleDragOver(e: React.DragEvent, toIdx: number) {
     e.preventDefault()
     if (dragRoleIdx === null || dragRoleIdx === toIdx) return
-    setRoles(prev => moveItem(prev, dragRoleIdx, toIdx))
+    // Grouped by sector: a poste is dragged inside its sector only; « Secteur » moves it to another.
+    if (groupOf(displayRoles[dragRoleIdx]) !== groupOf(displayRoles[toIdx])) return
+    setRoles(moveItem(displayRoles, dragRoleIdx, toIdx))
     setDragRoleIdx(toIdx)
   }
 
@@ -145,7 +147,9 @@ export default function RoleManagerPanel({
    */
   function moveRoleBy(role: string, dir: MoveDirection) {
     if (savingOrder || renamingRole === role) return
-    const moved = moveRole(roles, role, dir)
+    const moved: { roles: string[]; index: number; total: number } | null = grouped
+      ? moveRoleInGroup(roleGroups, role, dir)
+      : (() => { const m = moveRole(roles, role, dir); return m && { ...m, total: m.roles.length } })()
     if (!moved) { onAnnounce(roleMoveBoundaryMessage(role, dir)); return }
     setRoles(moved.roles)
     setFocusRequest({ candidates: [
@@ -153,7 +157,7 @@ export default function RoleManagerPanel({
       () => moveBtnRefs.current.get(`${dir === "up" ? "down" : "up"}:${role}`),
       () => headingRef.current,
     ] })
-    onAnnounce(roleMoveMessage(role, moved.index, moved.roles.length))
+    onAnnounce(roleMoveMessage(role, moved.index, moved.total))
   }
 
   async function saveRoleOrder() {
@@ -163,11 +167,11 @@ export default function RoleManagerPanel({
     const outcome = await requestJson(() => fetch(`/api/admin/events/${eventId}/reorder-roles`, {
       method: "POST",
       headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({ roleOrder: roles }),
+      body: JSON.stringify({ roleOrder: displayRoles }),
     }), "L'ordre n'a pas pu être enregistré.")
     setSavingOrder(false)
     if (!outcome.ok) { setRoleActionError(outcome.error); return }
-    setShifts(prev => applyRoleOrder(prev, roles))
+    setShifts(prev => applyRoleOrder(prev, displayRoles))
     onClose()
     onAnnounce("Ordre des postes enregistré.")
   }
@@ -330,6 +334,13 @@ export default function RoleManagerPanel({
     return id && liveSectors.some((s) => s.id === id) ? id : null
   }
 
+  // Once the event uses sectors, the postes are listed under their sector (sector order, then
+  // « Autres postes »), like the timeline. The order shown is the order saved.
+  const grouped = sectorsInUse && liveSectors.length > 0
+  const roleGroups: SectorGroup[] = grouped ? groupRolesBySector(roles, sectorOfRole, liveSectors) : [{ id: null, name: "", roles }]
+  const displayRoles = roleGroups.flatMap((g) => g.roles)
+  const groupOf = (role: string | undefined) => roleGroups.find((g) => role !== undefined && g.roles.includes(role))
+
   function startSector(role: string) {
     setEditorAutoFocus(true)
     setRoleActionError(null)
@@ -382,10 +393,23 @@ export default function RoleManagerPanel({
         />
       )}
       {/* With sectors, the postes get their own heading under « Secteurs » (outline). */}
-      {sectorsShown && <h3 className="sr-only">Postes</h3>}
+      {sectorsShown && <h3 className={grouped ? "text-sm font-semibold text-gray-800" : "sr-only"}>{grouped ? "Postes par secteur" : "Postes"}</h3>}
+      <div className={grouped ? "space-y-4" : undefined}>
+      {roleGroups.map((group) => {
+        const headingId = `${panelId}-group-${group.id ?? "none"}`
+        return (
+      <section key={group.id ?? "none"} aria-labelledby={grouped ? headingId : undefined} className={grouped ? "space-y-1.5" : undefined}>
+        {grouped && (
+          <h4 id={headingId} className="flex items-baseline gap-2 text-sm font-semibold text-gray-900">
+            {group.name}
+            <span className="text-xs font-normal text-gray-600">{postesCount(group.roles.length)}</span>
+          </h4>
+        )}
       {/* role="list": Safari drops the list role of an <ol> without bullets. */}
-      <ol role="list" aria-label="Ordre des postes" className="space-y-1.5">
-        {roles.map((role, i) => {
+      <ol role="list" aria-label={grouped ? `Ordre des postes, ${group.name}` : "Ordre des postes"} className="space-y-1.5">
+        {group.roles.map((role) => {
+          const i = displayRoles.indexOf(role)
+          const siblings = group.roles
           const isRenaming = renamingRole === role
           const isBusy = roleActionBusy === role
           const isPickingColor = colorPickerRole === role
@@ -411,10 +435,10 @@ export default function RoleManagerPanel({
                 <circle cx="5" cy="4" r="1.2"/><circle cx="5" cy="8" r="1.2"/><circle cx="5" cy="12" r="1.2"/>
                 <circle cx="11" cy="4" r="1.2"/><circle cx="11" cy="8" r="1.2"/><circle cx="11" cy="12" r="1.2"/>
               </svg>
-              {roles.length > 1 && (
+              {siblings.length > 1 && (
                 <span className="flex gap-0.5 flex-shrink-0">
                   {(["up", "down"] as const).map((dir) => {
-                    const atEnd = dir === "up" ? i === 0 : i === roles.length - 1
+                    const atEnd = dir === "up" ? siblings[0] === role : siblings[siblings.length - 1] === role
                     return (
                       // aria-disabled, not disabled: the button just pressed keeps focus at an end.
                       <button
@@ -653,6 +677,10 @@ export default function RoleManagerPanel({
           )
         })}
       </ol>
+      </section>
+        )
+      })}
+      </div>
       <div className="flex gap-3">
         <button type="button" onClick={saveRoleOrder} aria-disabled={savingOrder || undefined}
           className="bg-blue-600 text-white px-4 py-2 rounded-xl text-sm font-medium hover:bg-blue-700 aria-disabled:opacity-50">
