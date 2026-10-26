@@ -84,6 +84,7 @@ export default function SectorLeadersManager({
   const [sectorId, setSectorId] = useState("")
   const scopeName = useId()
   const sectorFieldId = useId()
+  const noScopeHintId = useId()
   const [name, setName] = useState("")
   const [email, setEmail] = useState("")
   const { submit, busy: saving, error, fail, isInvalid, reset } = useSubmit()
@@ -290,7 +291,7 @@ export default function SectorLeadersManager({
             </fieldset>
           )}
           {sectors && !offerScope && (
-            <p className="text-xs text-gray-600">
+            <p id={noScopeHintId} className="text-xs text-gray-600">
               {sectors.canAdd
                 ? "Pour confier tout un secteur à un responsable, créez d'abord un secteur dans « Gérer les postes »."
                 : "Confier tout un secteur à un responsable fait partie des fonctions bêta, pas encore actives pour votre organisation (Paramètres)."}
@@ -341,7 +342,7 @@ export default function SectorLeadersManager({
               ref={roleInputRef}
               id={roleId}
               aria-invalid={isInvalid("role")}
-              aria-describedby={isInvalid("role") ? errorId : undefined}
+              aria-describedby={[isInvalid("role") ? errorId : null, sectors && !offerScope ? noScopeHintId : null].filter(Boolean).join(" ") || undefined}
               type="text"
               list={`${roleId}-options`}
               value={roleName}
@@ -433,12 +434,12 @@ export default function SectorLeadersManager({
             const hintId = `${groupId}-s-${i}-hint`
             const sectorLeadersHere = group.sector ? leaders.filter((l) => l.sectorId === group.sector!.id) : []
             const archived = !!group.sector?.archived
-            const name = group.sector ? group.sector.name : NO_SECTOR_LABEL
+            const groupName = group.sector ? group.sector.name : NO_SECTOR_LABEL
             return (
               <section key={group.sector?.id ?? "none"} className="bg-white border border-gray-200 rounded-xl p-4 space-y-3" aria-labelledby={headingId}>
                 <div>
                   <h2 id={headingId} className="text-sm font-semibold text-gray-900 flex flex-wrap items-center gap-2 break-words">
-                    {name}
+                    {groupName}
                     {archived && (
                       <span className="text-xs font-medium rounded-full px-2 py-0.5 bg-gray-100 text-gray-600">
                         <span className="sr-only">, </span>Secteur archivé
@@ -460,7 +461,7 @@ export default function SectorLeadersManager({
                     <h3 id={`${headingId}-all`} className="text-xs font-medium text-gray-700 mb-1">Responsable de secteur</h3>
                     {sectorLeadersHere.length > 0 ? (
                       <ul className="space-y-2" role="list" aria-labelledby={`${headingId}-all`}>
-                        {sectorLeadersHere.map((leader) => leaderItem(leader, `du secteur ${name}`, archived ? hintId : undefined))}
+                        {sectorLeadersHere.map((leader) => leaderItem(leader, `du secteur ${groupName}`, archived ? hintId : undefined))}
                       </ul>
                     ) : (
                       <p className="text-xs text-gray-600">Personne pour tout le secteur.</p>

@@ -33,6 +33,11 @@ export type RosterStaffing = {
 
 const longDay = (key: string) => new Date(`${key}T00:00:00Z`).toLocaleDateString("fr-FR", { weekday: "long", day: "numeric", month: "long", timeZone: "UTC" })
 
+/** « · » between parts, read as a comma. */
+function Dot() {
+  return <><span aria-hidden="true"> · </span><span className="sr-only">, </span></>
+}
+
 function StaffingLine({ s }: { s: RosterStaffing }) {
   const text = staffingStateText(s, s.state)
   if (!text) return null
@@ -85,7 +90,10 @@ export default function SectorLeaderRoster({ heading, eventTitle, postes, regist
         )}
         {/* The count follows the day filter; one region, never remounted, read in full. */}
         {showFilter ? (
-          <p role="status" aria-atomic="true" className="text-sm text-gray-600 mt-1">{countText}, {day ? longDay(day) : "tous les jours"}</p>
+          <p role="status" aria-atomic="true" className="text-sm text-gray-600 mt-1">
+            {countText}, {day ? longDay(day) : "tous les jours"}
+            {belowMinimum.length > 0 && <span className="sr-only">, {belowMinimum.length > 1 ? `${belowMinimum.length} créneaux sous leur minimum` : "1 créneau sous son minimum"}</span>}
+          </p>
         ) : (
           <p className="text-sm text-gray-600 mt-1">{countText}</p>
         )}
@@ -100,7 +108,7 @@ export default function SectorLeaderRoster({ heading, eventTitle, postes, regist
           <ul role="list" className="mt-2 space-y-1 text-sm text-gray-900">
             {belowMinimum.map((s, i) => (
               <li key={i} className="break-words">
-                {s.roleName} · {s.label}, {longDay(dayKey(s.date))} · {fmtRange(s.startTime, s.endTime)}
+                {s.roleName}<Dot />{s.label}, {longDay(dayKey(s.date))}<Dot />{fmtRange(s.startTime, s.endTime)}
                 <StaffingLine s={s} />
               </li>
             ))}
@@ -131,7 +139,7 @@ export default function SectorLeaderRoster({ heading, eventTitle, postes, regist
                   return (
                     <section key={g} aria-labelledby={shiftId} className="border-t border-gray-100 pt-3 first:border-t-0 first:pt-0">
                       <h3 id={shiftId} className="font-medium text-gray-900 text-sm break-words">{group.label}</h3>
-                      <p className={`text-xs text-gray-500 mt-0.5 ${st ? "" : "mb-2"}`}>{longDay(dayKey(group.date))} · {fmtRange(group.startTime, group.endTime)}</p>
+                      <p className={`text-xs text-gray-500 mt-0.5 ${st ? "" : "mb-2"}`}>{longDay(dayKey(group.date))}<Dot />{fmtRange(group.startTime, group.endTime)}</p>
                       {st && <div className="mb-2"><StaffingLine s={st} /></div>}
                       <ul className="space-y-2" role="list">
                         {group.registrations.map((reg) => (

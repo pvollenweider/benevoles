@@ -11,7 +11,13 @@ import { posteSectorsOf, scopeRoleNames } from "@/lib/leader-scope"
 import { activeSectors, sectorsAdopted } from "@/lib/sectors"
 
 export const dynamic = "force-dynamic"
-export const metadata: Metadata = { title: "Responsables de secteur" }
+// The title follows the h1 (#1169): « Responsables de poste et de secteur » once the event adopted sectors.
+export async function generateMetadata({ params }: { params: Promise<{ id: string }> }): Promise<Metadata> {
+  const ctx = await getOrgContext()
+  const { id } = await params
+  const event = ctx ? await ctx.db.event.findFirst({ where: { id }, select: { sectorsEnabled: true, sectorsAdoptedAt: true } }) : null
+  return { title: event && sectorsAdopted(event) ? "Responsables de poste et de secteur" : "Responsables de secteur" }
+}
 
 export default async function SectorLeadersPage({ params }: { params: Promise<{ id: string }> }) {
   const ctx = await getOrgContext()
