@@ -30,7 +30,7 @@ async function login(page: Page) {
   await page.getByLabel("Email").fill(ORG_ADMIN_EMAIL)
   await page.getByLabel("Mot de passe").fill(ORG_ADMIN_PASSWORD)
   await page.getByRole("button", { name: "Se connecter" }).click()
-  await expect(page).toHaveURL(/\/admin\/events/)
+  await expect(page).toHaveURL(/\/admin\/dashboard/)
 }
 
 /** A published event on one day with these shifts (one role per shift, named after its label), and these optional questions. */

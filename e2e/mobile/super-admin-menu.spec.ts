@@ -23,7 +23,7 @@ async function logIn(page: Page) {
   await page.getByLabel("Mot de passe").fill(SUPER_ADMIN_PASSWORD)
   await page.getByRole("button", { name: "Se connecter" }).tap()
   // A super admin with no organization picked yet lands on the org picker (#267).
-  await expect(page).toHaveURL(/\/admin\/events|\/super-admin\/organizations/)
+  await expect(page).toHaveURL(/\/admin\/dashboard|\/super-admin\/organizations/)
 }
 
 async function openSuperAdminMenu(page: Page) {

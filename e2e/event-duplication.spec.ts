@@ -16,7 +16,7 @@ test("duplicating an event does not bring back a shift already deleted from the 
   await page.getByLabel("Email").fill(ORG_ADMIN_EMAIL)
   await page.getByLabel("Mot de passe").fill(ORG_ADMIN_PASSWORD)
   await page.getByRole("button", { name: "Se connecter" }).click()
-  await expect(page).toHaveURL(/\/admin\/events/)
+  await expect(page).toHaveURL(/\/admin\/dashboard/)
 
   const eventRes = await page.request.post("/api/admin/events", {
     data: { title: `E2E Duplicate ${stamp}`, startDate: "2030-08-01", endDate: "2030-08-01", publicStatus: "draft" },
@@ -59,7 +59,7 @@ test("duplication with choices moves the dates and honours the checkboxes (#378)
   await page.getByLabel("Email").fill(ORG_ADMIN_EMAIL)
   await page.getByLabel("Mot de passe").fill(ORG_ADMIN_PASSWORD)
   await page.getByRole("button", { name: "Se connecter" }).click()
-  await expect(page).toHaveURL(/\/admin\/events/)
+  await expect(page).toHaveURL(/\/admin\/dashboard/)
 
   const created = await page.request.post("/api/admin/events", { data: { title: `E2E Choices ${stamp}`, startDate: "2030-08-01", endDate: "2030-08-02" } })
   expect(created.ok()).toBeTruthy()
@@ -100,7 +100,7 @@ test("leaders of a deleted poste are marked and left out of a duplication (#1010
   await page.getByLabel("Email").fill(ORG_ADMIN_EMAIL)
   await page.getByLabel("Mot de passe").fill(ORG_ADMIN_PASSWORD)
   await page.getByRole("button", { name: "Se connecter" }).click()
-  await expect(page).toHaveURL(/\/admin\/events/)
+  await expect(page).toHaveURL(/\/admin\/dashboard/)
 
   const created = await page.request.post("/api/admin/events", { data: { title: `E2E Leaders ${stamp}`, startDate: "2030-08-01", endDate: "2030-08-01" } })
   expect(created.ok()).toBeTruthy()

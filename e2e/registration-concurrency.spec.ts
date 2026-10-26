@@ -14,7 +14,7 @@ async function login(page: import("@playwright/test").Page) {
   await page.getByLabel("Email").fill(ORG_ADMIN_EMAIL)
   await page.getByLabel("Mot de passe").fill(ORG_ADMIN_PASSWORD)
   await page.getByRole("button", { name: "Se connecter" }).click()
-  await expect(page).toHaveURL(/\/admin\/events/)
+  await expect(page).toHaveURL(/\/admin\/dashboard/)
 }
 
 async function publishedShift(request: APIRequestContext, stamp: number, opts: { capacity: number; waitlistEnabled: boolean }) {

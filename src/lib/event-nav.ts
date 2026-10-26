@@ -173,6 +173,16 @@ export function eventPrimaryAction(f: PrimaryFacts): PrimaryAction | null {
   }
 }
 
+/**
+ * Whether the header shows its primary action on `pathname`: not on the page it leads to, and not
+ * on step 2 of the creation assistant (shifts?wizard=1), whose own « Continuer : vérification et
+ * publication » is that page's one primary action (#1098).
+ */
+export function showPrimaryAction(action: PrimaryAction, pathname: string, eventId: string, inWizard: boolean): boolean {
+  if (primaryIsCurrent(action, pathname, eventId)) return false
+  return !(inWizard && eventSubPath(pathname, eventId) === "shifts")
+}
+
 /** Whether the primary action leads to (or repeats) the page being read. */
 export function primaryIsCurrent(action: PrimaryAction, pathname: string, eventId: string): boolean {
   return eventSubPath(pathname, eventId) === action.path

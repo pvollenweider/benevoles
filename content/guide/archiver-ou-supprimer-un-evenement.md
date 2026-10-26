@@ -16,6 +16,8 @@ aliases: []
 
 En haut de n'importe quelle page de l'événement, ouvrir le bouton **⋯** (**Autres actions**), cliquer sur **Archiver** puis **Confirmer**. L'événement n'est plus visible du public ; il reste consultable dans la liste avec le statut **Archivé**. Le bouton **Publier** permet de le remettre en ligne.
 
+Un événement terminé mais toujours publié apparaît aussi dans **Ce qui demande votre attention** du [Tableau de bord](tableau-de-bord.md) et dans **À traiter** de son aperçu : **L'archiver** y ouvre la même confirmation, sur place.
+
 ## Supprimer définitivement
 
 Seul un événement archivé peut être supprimé, et seulement par un propriétaire. Dans le menu **⋯** (**Autres actions**), **Supprimer définitivement…** mène à la section **Suppression définitive**, en bas de l'onglet **Réglages** ; cliquer sur **Supprimer l'événement…**. La fenêtre de confirmation indique ce qui sera effacé : créneaux, inscriptions (listes d'attente comprises) et invitations. Les membres du pool et l'organisation sont conservés.

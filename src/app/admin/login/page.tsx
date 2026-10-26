@@ -10,6 +10,7 @@ import Link from "next/link"
 import FormStatus from "@/components/FormStatus"
 import { useSubmit } from "@/lib/use-submit"
 import { useHydrated } from "@/lib/use-hydrated"
+import { loginDestination } from "@/lib/admin-next"
 
 const inputClass = "w-full border border-gray-500 rounded-xl px-3 py-3 text-sm focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-blue-600"
 
@@ -44,7 +45,9 @@ export default function LoginPage() {
         fail("Email ou mot de passe incorrect.", "password", passwordRef.current)
         return
       }
-      router.push("/admin/events")
+      // Back to the admin page that sent here (the proxy's callbackUrl), the dashboard otherwise (#1098).
+      const callbackUrl = new URLSearchParams(window.location.search).get("callbackUrl")
+      router.push(loginDestination(callbackUrl))
       router.refresh()
     } catch {
       fail("Connexion impossible. Vérifiez votre réseau et réessayez.")

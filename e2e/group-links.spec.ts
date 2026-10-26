@@ -29,7 +29,7 @@ test("a group link: created by the organiser, filtered for volunteers, sign-ups 
   await page.getByLabel("Email").fill(ORG_ADMIN_EMAIL)
   await page.getByLabel("Mot de passe").fill(ORG_ADMIN_PASSWORD)
   await page.getByRole("button", { name: "Se connecter" }).click()
-  await expect(page).toHaveURL(/\/admin\/events/)
+  await expect(page).toHaveURL(/\/admin\/dashboard/)
 
   // ── Admin: create the link ────────────────────────────────────────────────
   await page.goto(`/admin/events/${event.eventId}/share`)

@@ -194,8 +194,12 @@ Liste exhaustive des fonctionnalités de l'application.
 
 ### Tableau de bord (`/admin/dashboard`)
 
+- Page d'arrivée de l'organisateur (#1098) : après la connexion (sauf `callbackUrl` d'une page `/admin/…` ou `/super-admin/…`, rouverte après la connexion, `loginDestination` dans `src/lib/admin-next.ts`), pour `/admin` et pour le nom de l'organisation dans la barre du haut
+- **Remplissage par événement** : jusqu'à dix événements avec créneaux, chaque ligne ouvrant l'aperçu de l'événement (#1098)
+
 - **Premiers pas** (aussi en haut de `/admin/events`) : checklist de mise en place d'une nouvelle organisation, dans l'ordre (page publique et charte, fuseau horaire, premier événement, créneaux, publication, inscription de test), cochée automatiquement d'après les données ; disparaît une fois les étapes obligatoires faites, ou masquée pour toute l'organisation
 - **Ce qui demande votre attention** : situations à traiter sur les événements publiés, de la plus urgente à la moins urgente, avec un lien vers chacune (créneaux des 7 prochains jours pas complets, demandes sur validation à traiter, places de liste d'attente qui expirent dans les 12 h, jalons en retard, bénévoles à la charge élevée selon `src/lib/workload.ts`, personnes invitées depuis plus de 3 jours toujours sans créneau confirmé ni réponse (les « pas disponible » exclus, #558), postes sans responsable quand l'événement en a déjà, événement qui commence dans la semaine, événement terminé à archiver) ; un item org-wide (pas lié à un événement) pour les membres avec une **adresse à vérifier** (#599, voir Gestion des membres), lien `?verify=1`
+- « L'archiver » (événement terminé encore publié) archive sur place après confirmation, ici comme dans « À traiter » de l'aperçu (#1098)
 - Compteurs : événements (publiés, à venir), bénévoles inscrits (et bénévoles uniques), taux de remplissage global
 - Répartition des membres : total, avec email, sans email (ne peuvent pas recevoir d'invitations)
 

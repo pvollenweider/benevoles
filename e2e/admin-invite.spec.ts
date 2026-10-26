@@ -16,7 +16,7 @@ test("an admin invitation sends the link by email and never shows it", async ({ 
   await page.getByLabel("Email").fill(ORG_ADMIN_EMAIL)
   await page.getByLabel("Mot de passe").fill(ORG_ADMIN_PASSWORD)
   await page.getByRole("button", { name: "Se connecter" }).click()
-  await expect(page).toHaveURL(/\/admin\/events/)
+  await expect(page).toHaveURL(/\/admin\/dashboard/)
 
   await page.goto("/admin/settings/admins")
   await page.getByRole("button", { name: "Inviter" }).click()

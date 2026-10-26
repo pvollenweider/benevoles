@@ -175,7 +175,7 @@ test("the organiser gets the code and a live preview from the Partage tab", asyn
   await page.getByLabel("Email").fill(process.env.ORG_ADMIN_EMAIL ?? "org-admin@localhost")
   await page.getByLabel("Mot de passe").fill(process.env.ORG_ADMIN_PASSWORD ?? "e2e-org-admin-password")
   await page.getByRole("button", { name: "Se connecter" }).click()
-  await expect(page).toHaveURL(/\/admin\/events/)
+  await expect(page).toHaveURL(/\/admin\/dashboard/)
 
   await page.goto(`/admin/events/${event.eventId}/share`)
   const section = page.getByRole("region", { name: "Liens par groupe et intégration" })

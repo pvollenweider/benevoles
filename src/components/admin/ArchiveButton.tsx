@@ -10,9 +10,17 @@ import { useRouter } from "next/navigation"
  * Archives a published or draft event (PATCH publicStatus). Once archived the event can be deleted
  * for good from the « Suppression définitive » section of its Réglages page. A row of the event
  * header's « ⋯ » panel: `onDone` hands the outcome to the header, which announces it and moves the
- * focus, since this unmounts with the panel.
+ * focus, since this unmounts with the panel. `variant="inline"`: « L'archiver » in a list of things to
+ * handle (#1098), a link-styled button naming its event, the confirmation in place as well.
  */
-export default function ArchiveButton({ eventId, currentStatus, onDone }: { eventId: string; currentStatus: string; onDone?: (message: string) => void }) {
+export default function ArchiveButton({ eventId, currentStatus, onDone, variant = "menu", eventTitle }: {
+  eventId: string
+  currentStatus: string
+  onDone?: (message: string) => void
+  variant?: "menu" | "inline"
+  /** Named in the inline button and its confirmation, which sit among other events. */
+  eventTitle?: string
+}) {
   const router = useRouter()
   const [confirming, setConfirming] = useState(false)
   const [loading, setLoading] = useState(false)
@@ -23,6 +31,7 @@ export default function ArchiveButton({ eventId, currentStatus, onDone }: { even
   const id = useId()
 
   const isArchived = currentStatus === "archived"
+  const inline = variant === "inline"
 
   useEffect(() => {
     if (confirming) confirmRef.current?.focus()
@@ -59,7 +68,7 @@ export default function ArchiveButton({ eventId, currentStatus, onDone }: { even
   }
 
   return (
-    <div className="flex flex-col items-stretch gap-1">
+    <div className={inline ? "flex flex-col items-start gap-1" : "flex flex-col items-stretch gap-1"}>
       {!isArchived &&
         (confirming ? (
           <div
@@ -72,7 +81,9 @@ export default function ArchiveButton({ eventId, currentStatus, onDone }: { even
             }}
             className="flex flex-col gap-2 bg-yellow-50 border border-yellow-300 rounded-xl px-3 py-2"
           >
-            <span id={`${id}-label`} className="text-sm text-yellow-900 font-semibold">Archiver cet événement ?</span>
+            <span id={`${id}-label`} className="text-sm text-yellow-900 font-semibold">
+              {inline && eventTitle ? `Archiver « ${eventTitle} » ?` : "Archiver cet événement ?"}
+            </span>
             <span id={`${id}-desc`} className="text-xs text-yellow-900">
               Il ne sera plus visible du public. Vous pourrez ensuite le supprimer définitivement depuis ses réglages.
             </span>
@@ -96,6 +107,16 @@ export default function ArchiveButton({ eventId, currentStatus, onDone }: { even
               </button>
             </div>
           </div>
+        ) : inline ? (
+          <button
+            ref={openerRef}
+            type="button"
+            onClick={() => setConfirming(true)}
+            className="inline-flex min-h-6 items-center py-1 text-sm font-medium text-blue-700 underline underline-offset-2 hover:text-blue-900 rounded focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-blue-600"
+          >
+            L&apos;archiver
+            {eventTitle && <span className="sr-only"> : {eventTitle}</span>}
+          </button>
         ) : (
           <button
             ref={openerRef}

@@ -13,7 +13,7 @@ test("an admin creates and publishes an event through the three steps", async ({
   await page.getByLabel("Email").fill(ORG_ADMIN_EMAIL)
   await page.getByLabel("Mot de passe").fill(ORG_ADMIN_PASSWORD)
   await page.getByRole("button", { name: "Se connecter" }).click()
-  await expect(page).toHaveURL(/\/admin\/events/)
+  await expect(page).toHaveURL(/\/admin\/dashboard/)
 
   // Step 1: blank form.
   await page.goto("/admin/events/new")
@@ -28,12 +28,15 @@ test("an admin creates and publishes an event through the three steps", async ({
   // Step 2: shifts, with the assistant's indicator; a series of shifts.
   await expect(page).toHaveURL(/\/admin\/events\/[^/]+\/shifts\?wizard=1$/)
   await expect(steps.getByRole("listitem").nth(1)).toHaveAttribute("aria-current", "step")
+  // One primary action on this step (#1098): « Continuer », not the header's « Publier » as well.
+  await expect(page.getByRole("link", { name: /Continuer : vérification et publication/ })).toBeVisible()
   await page.getByRole("button", { name: "Créer une série" }).click()
   await page.getByRole("combobox", { name: "Poste", exact: true }).fill("Bar")
   await page.getByRole("textbox", { name: "Début", exact: true }).fill("10:00")
   await page.getByRole("textbox", { name: "Fin", exact: true }).fill("14:00")
   await page.getByRole("button", { name: /^Créer 2 créneaux$/ }).click()
   await expect(page.getByRole("status").filter({ hasText: /2 créneaux créés/ })).toBeVisible()
+  await expect(page.getByRole("button", { name: "Publier" })).toHaveCount(0)
 
   // Step 3: review, then publish.
   await page.getByRole("link", { name: /Continuer : vérification et publication/ }).click()

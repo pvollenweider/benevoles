@@ -97,6 +97,11 @@ export default async function MessagePage({ params, searchParams }: { params: Pr
           <p className="text-sm text-gray-700 mt-1">
             Un email, à qui c&apos;est utile : tous les inscrits, un poste, un créneau, la liste d&apos;attente, ou les membres invités qui n&apos;ont pas encore de créneau confirmé (ils reçoivent leur lien d&apos;invitation). Chaque personne le reçoit une fois, avec ses créneaux concernés et le lien vers ses inscriptions.
           </p>
+          {/* Before the form, so following it never leaves a message half written (#1098). */}
+          <p className="text-sm text-gray-700 mt-1">
+            Les messages que vous envoyez souvent peuvent devenir des modèles, à choisir dans « Partir d&apos;un modèle » :{" "}
+            <Link href="/admin/settings/message-templates" className="font-medium text-blue-700 underline underline-offset-2 hover:text-blue-900 rounded focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-blue-600">gérer les modèles de messages</Link>.
+          </p>
         </div>
       <TargetedMessageForm eventId={event.id} roles={roles} shifts={shifts} initialAudience={valid ? initial : { kind: "event" }} templates={templates} timeZone={timeZone} canSchedule={event.publicStatus !== "archived"} />
       <p className="text-sm text-gray-600">

@@ -36,7 +36,7 @@ async function main() {
     await page.getByLabel("Email", { exact: true }).fill("video.delivery.owner@example.org")
     await page.getByLabel("Mot de passe", { exact: true }).fill(process.env.ORG_ADMIN_PASSWORD ?? "e2e-org-admin-password")
     await page.getByRole("button", { name: "Se connecter", exact: true }).click()
-    await page.waitForURL(/\/admin\/events/)
+    await page.waitForURL(/\/admin\/dashboard/)
     await page.goto(`${base}/admin/events/${eventId}/message`)
     await page.getByLabel("Objet *", { exact: true }).fill("Formation — adresse corrigée")
     await page.getByLabel("Message *", { exact: true }).fill("Bonjour {prénom}, voici ton nouveau message, préparé après correction de ton adresse. Merci pour ton aide !")

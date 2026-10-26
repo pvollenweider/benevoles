@@ -26,7 +26,7 @@ test("a published event has a rich link preview and a copyable link; a draft has
   await page.getByLabel("Email").fill(ORG_ADMIN_EMAIL)
   await page.getByLabel("Mot de passe").fill(ORG_ADMIN_PASSWORD)
   await page.getByRole("button", { name: "Se connecter" }).click()
-  await expect(page).toHaveURL(/\/admin\/events/)
+  await expect(page).toHaveURL(/\/admin\/dashboard/)
 
   const stamp = Date.now()
   const title = `E2E Partage ${stamp}`

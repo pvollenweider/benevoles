@@ -22,7 +22,7 @@ test("sending a test defaults to the super admin's own address", async ({ page }
   await page.getByLabel("Mot de passe").fill(SUPER_ADMIN_PASSWORD)
   await page.getByRole("button", { name: "Se connecter" }).click()
   // A super admin with no organization picked yet lands on the org picker (#267).
-  await expect(page).toHaveURL(/\/admin\/events|\/super-admin\/organizations/)
+  await expect(page).toHaveURL(/\/admin\/dashboard|\/super-admin\/organizations/)
 
   const stamp = Date.now()
   await page.goto("/super-admin/product-updates")
@@ -44,7 +44,7 @@ test("sending a test to a custom address delivers it there instead", async ({ pa
   await page.getByLabel("Mot de passe").fill(SUPER_ADMIN_PASSWORD)
   await page.getByRole("button", { name: "Se connecter" }).click()
   // A super admin with no organization picked yet lands on the org picker (#267).
-  await expect(page).toHaveURL(/\/admin\/events|\/super-admin\/organizations/)
+  await expect(page).toHaveURL(/\/admin\/dashboard|\/super-admin\/organizations/)
 
   const stamp = Date.now()
   const customEmail = `e2e-custom-test-${stamp}@example.com`
@@ -71,7 +71,7 @@ test("a test email starts from a version of the changelog, edited before sending
   await page.getByLabel("Email").fill(SUPER_ADMIN_EMAIL)
   await page.getByLabel("Mot de passe").fill(SUPER_ADMIN_PASSWORD)
   await page.getByRole("button", { name: "Se connecter" }).click()
-  await expect(page).toHaveURL(/\/admin\/events|\/super-admin\/organizations/)
+  await expect(page).toHaveURL(/\/admin\/dashboard|\/super-admin\/organizations/)
 
   const stamp = Date.now()
   await page.goto("/super-admin/product-updates")
@@ -101,7 +101,7 @@ test("rejects a malformed test email address", async ({ page }) => {
   await page.getByLabel("Mot de passe").fill(SUPER_ADMIN_PASSWORD)
   await page.getByRole("button", { name: "Se connecter" }).click()
   // A super admin with no organization picked yet lands on the org picker (#267).
-  await expect(page).toHaveURL(/\/admin\/events|\/super-admin\/organizations/)
+  await expect(page).toHaveURL(/\/admin\/dashboard|\/super-admin\/organizations/)
 
   const res = await page.request.post("/api/super-admin/product-updates/test", {
     data: { subject: "x", content: "y", email: "not-an-email" },

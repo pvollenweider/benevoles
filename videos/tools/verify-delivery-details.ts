@@ -30,7 +30,7 @@ async function main() {
     await page.getByLabel("Email", { exact: true }).fill("video.delivery.owner@example.org")
     await page.getByLabel("Mot de passe", { exact: true }).fill(process.env.ORG_ADMIN_PASSWORD ?? "e2e-org-admin-password")
     await page.getByRole("button", { name: "Se connecter", exact: true }).click()
-    await page.waitForURL(/\/admin\/events/)
+    await page.waitForURL(/\/admin\/dashboard/)
     await page.goto(`${base}/admin/settings/notifications`)
     for (const label of ["En attente d'envoi", "Nouvel essai prévu", "Échec définitif", "Envoyé"]) assert(await page.getByText(label, { exact: true }).count() > 0, `Missing actual UI state: ${label}`)
     const row = page.getByRole("row").filter({ hasText: "video.delivery.recoverable@example.org" })

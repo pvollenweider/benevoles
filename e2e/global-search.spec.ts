@@ -15,7 +15,7 @@ test("an admin finds an event from the top-bar search", async ({ page }) => {
   await page.getByLabel("Email").fill(ORG_ADMIN_EMAIL)
   await page.getByLabel("Mot de passe").fill(ORG_ADMIN_PASSWORD)
   await page.getByRole("button", { name: "Se connecter" }).click()
-  await expect(page).toHaveURL(/\/admin\/events/)
+  await expect(page).toHaveURL(/\/admin\/dashboard/)
 
   // An event of the list (its « Gérer » link), and its title as its own page shows it. Other links
   // to an event, such as the onboarding checklist's, carry other text.
@@ -47,7 +47,7 @@ test("the search ignores accents (#390)", async ({ page }) => {
   await page.getByLabel("Email").fill(ORG_ADMIN_EMAIL)
   await page.getByLabel("Mot de passe").fill(ORG_ADMIN_PASSWORD)
   await page.getByRole("button", { name: "Se connecter" }).click()
-  await expect(page).toHaveURL(/\/admin\/events/)
+  await expect(page).toHaveURL(/\/admin\/dashboard/)
 
   const stamp = Date.now()
   const created = await page.request.post("/api/admin/events", { data: { title: `Fête Élodie ${stamp}`, startDate: "2031-06-06", endDate: "2031-06-06" } })

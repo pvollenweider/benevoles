@@ -42,7 +42,7 @@ export async function preparePrivacyRecording(page: Page, base: string, director
     await b.getByLabel(/^Email(?:\s|$)/).fill("video.privacy.b.owner@example.org")
     await b.getByLabel("Mot de passe", { exact: true }).fill(process.env.ORG_ADMIN_PASSWORD ?? "e2e-org-admin-password")
     await b.getByRole("button", { name: "Se connecter", exact: true }).click()
-    await b.waitForURL(/\/admin\/events/)
+    await b.waitForURL(/\/admin\/dashboard/)
     const cookiesB = await other.cookies()
     const created = await page.request.post(`${base}/api/admin/events/video-privacy-a-event/sector-leaders`, { data: { roleName: "Accueil", name: "Camille Exemple", email: "video.privacy.a.leader@example.org" } })
     if (created.status() !== 201) throw new Error("Actual dedicated leader creation failed")

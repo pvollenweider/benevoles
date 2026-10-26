@@ -15,7 +15,7 @@ test("suspend for abuse, refuse a plain reactivation, lift, then reactivate", as
   await page.getByLabel("Email").fill(SUPER_ADMIN_EMAIL)
   await page.getByLabel("Mot de passe").fill(SUPER_ADMIN_PASSWORD)
   await page.getByRole("button", { name: "Se connecter" }).click()
-  await expect(page).toHaveURL(/\/admin\/events|\/super-admin\/organizations/)
+  await expect(page).toHaveURL(/\/admin\/dashboard|\/super-admin\/organizations/)
 
   const slug = `e2e-suspension-${Date.now()}`
   const createRes = await page.request.post("/api/super-admin/organizations", {

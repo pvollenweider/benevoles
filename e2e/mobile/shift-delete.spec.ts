@@ -19,7 +19,7 @@ async function logIn(page: Page) {
   await page.getByLabel("Email").fill(ORG_ADMIN_EMAIL)
   await page.getByLabel("Mot de passe").fill(ORG_ADMIN_PASSWORD)
   await page.getByRole("button", { name: "Se connecter" }).tap()
-  await expect(page).toHaveURL(/\/admin\/events/)
+  await expect(page).toHaveURL(/\/admin\/dashboard/)
 }
 
 async function createEvent(page: Page, title: string, shifts: { roleName: string; label?: string; date?: string; startTime: string; endTime: string }[]) {

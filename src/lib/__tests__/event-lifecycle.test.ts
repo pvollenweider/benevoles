@@ -46,9 +46,23 @@ describe("lifecycleNotes", () => {
     expect(off.consequences[1]).toBe("Les rappels sont désactivés.")
   })
 
+  it("published: inviting members is the first step, then inviting more (#1098)", () => {
+    const none = lifecycleNotes({ ...base, publicStatus: "published", shiftCount: 1, confirmationMessage: "x" }, "e1")
+    expect(none.needs).toHaveLength(1)
+    expect(noteText(none.needs[0])).toBe("Aucun membre invité pour l'instant : inviter des membres, chacun reçoit son lien par email.")
+    expect(none.needs[0].action).toEqual({ label: "inviter des membres", href: "/admin/events/e1/invitations" })
+    const one = lifecycleNotes({ ...base, publicStatus: "published", confirmationMessage: "x", invitedCount: 1 }, "e1")
+    expect(noteText(one.needs[0])).toBe("1 membre invité. Inviter d'autres membres")
+    const many = lifecycleNotes({ ...base, publicStatus: "published", invitedCount: 12 }, "e1")
+    expect(many.needs.map(noteText)).toEqual(["12 membres invités. Inviter d'autres membres", "Facultatif : la page publique n'a pas de message de confirmation. Ajouter un message de confirmation"])
+    // Not once it is over, nor before it is published.
+    expect(lifecycleNotes({ ...base, publicStatus: "published", today: "2026-08-01" }, "e1").needs.some((n) => n.action?.href.endsWith("/invitations"))).toBe(false)
+    expect(lifecycleNotes({ ...base, shiftCount: 1 }, "e1").needs.some((n) => n.action?.href.endsWith("/invitations"))).toBe(false)
+  })
+
   it("finished and archived: archive to close, delete only once archived", () => {
     const fin = lifecycleNotes({ ...base, publicStatus: "published", today: "2026-08-01" }, "e1")
-    expect(fin.needs[0]).toEqual({ before: "L'événement est passé : archivez-le (bouton « Autres actions », en haut, puis Archiver) pour le clore." })
+    expect(fin.needs[0]).toEqual({ before: "L'événement est passé : archivez-le pour le clore (« L'archiver » dans « À traiter », ou « Autres actions » en haut, puis Archiver)." })
     expect(fin.needs[0].action).toBeUndefined()
     expect(fin.consequences[1]).toContain("suppression définitive")
     const arch = lifecycleNotes({ ...base, publicStatus: "archived" }, "e1")

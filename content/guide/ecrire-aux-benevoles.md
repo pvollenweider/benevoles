@@ -52,7 +52,7 @@ Quand le plafond d'envoi a fait attendre une partie des emails, une phrase le di
 
 ## Modèles de messages
 
-**Paramètres**, puis **Modèles de messages** : enregistrez les messages que vous envoyez souvent (infos pratiques, convocation, remerciements), jusqu'à 20 par organisation, avec un nom, un objet et un texte. Dans « Écrire aux bénévoles », **Partir d'un modèle** remplit l'objet et le message, que vous modifiez librement avant l'envoi. Variables, remplacées pour chaque destinataire : `{prénom}`, `{événement}`, `{poste}` (public « un poste » ou « un créneau ») et `{créneau}` (public « un créneau ») ; pour écrire une accolade, doublez-la (`{{`). Une variable inconnue ou hors de son public est signalée et bloque l'envoi, elle n'est jamais envoyée telle quelle. Les modèles appartiennent à l'organisation (tous ses événements) et figurent dans le journal d'activité.
+**Paramètres**, puis **Modèles de messages**, ou le lien **gérer les modèles de messages** sous « Écrire aux bénévoles », dans l'onglet **Messages** : enregistrez les messages que vous envoyez souvent (infos pratiques, convocation, remerciements), jusqu'à 20 par organisation, avec un nom, un objet et un texte. Dans « Écrire aux bénévoles », **Partir d'un modèle** remplit l'objet et le message, que vous modifiez librement avant l'envoi. Variables, remplacées pour chaque destinataire : `{prénom}`, `{événement}`, `{poste}` (public « un poste » ou « un créneau ») et `{créneau}` (public « un créneau ») ; pour écrire une accolade, doublez-la (`{{`). Une variable inconnue ou hors de son public est signalée et bloque l'envoi, elle n'est jamais envoyée telle quelle. Les modèles appartiennent à l'organisation (tous ses événements) et figurent dans le journal d'activité.
 
 ## Messages envoyés
 

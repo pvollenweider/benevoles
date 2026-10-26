@@ -25,7 +25,7 @@ test("a milestone with an owner: added, shown, removed in place; a foreign owner
   await page.getByLabel("Email").fill(ORG_ADMIN_EMAIL)
   await page.getByLabel("Mot de passe").fill(ORG_ADMIN_PASSWORD)
   await page.getByRole("button", { name: "Se connecter" }).click()
-  await expect(page).toHaveURL(/\/admin\/events/)
+  await expect(page).toHaveURL(/\/admin\/dashboard/)
 
   await page.goto(`/admin/events/${event.eventId}`)
   const add = page.getByRole("button", { name: "+ Ajouter un jalon" })

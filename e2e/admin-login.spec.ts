@@ -3,14 +3,26 @@ import { test, expect } from "@playwright/test"
 const ORG_ADMIN_EMAIL = process.env.ORG_ADMIN_EMAIL ?? "org-admin@localhost"
 const ORG_ADMIN_PASSWORD = process.env.ORG_ADMIN_PASSWORD ?? "e2e-org-admin-password"
 
-test("org admin can log in and reach the events list", async ({ page }) => {
+test("org admin logs in and lands on the dashboard, with what needs attention (#1098)", async ({ page }) => {
   await page.goto("/admin/login")
 
   await page.getByLabel("Email").fill(ORG_ADMIN_EMAIL)
   await page.getByLabel("Mot de passe").fill(ORG_ADMIN_PASSWORD)
   await page.getByRole("button", { name: "Se connecter" }).click()
 
-  await expect(page).toHaveURL(/\/admin\/events/)
+  await expect(page).toHaveURL(/\/admin\/dashboard$/)
+  await expect(page.getByRole("heading", { level: 2, name: "Ce qui demande votre attention" })).toBeVisible()
+})
+
+test("a deep admin link opened signed out comes back to that page after login (#1098)", async ({ page }) => {
+  await page.goto("/admin/members?verify=1")
+  await expect(page).toHaveURL(/\/admin\/login\?callbackUrl=/)
+
+  await page.getByLabel("Email").fill(ORG_ADMIN_EMAIL)
+  await page.getByLabel("Mot de passe").fill(ORG_ADMIN_PASSWORD)
+  await page.getByRole("button", { name: "Se connecter" }).click()
+
+  await expect(page).toHaveURL(/\/admin\/members\?verify=1$/)
 })
 
 test("wrong password is rejected", async ({ page }) => {

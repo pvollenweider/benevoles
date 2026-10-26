@@ -28,6 +28,8 @@ export type LifecycleFacts = {
   shiftCount: number
   confirmationMessage: string | null
   remindersEnabled: boolean
+  /** Members invited to the event (#1098), for the published stage's « Inviter » step. */
+  invitedCount?: number
 }
 
 export function currentStage(f: LifecycleFacts): StageId {
@@ -66,17 +68,27 @@ export function lifecycleNotes(f: LifecycleFacts, eventId: string): LifecycleNot
         needs: noConfirmation ? [{ before: "Facultatif : la page publique n'a pas de message de confirmation. ", action: { label: "Ajouter un message de confirmation", href: `${base}/edit` } }] : [],
         consequences: ["Toujours invisible pour les bénévoles : publiez pour ouvrir les inscriptions.", "Aucun rappel n'est envoyé."],
       }
-    case "published":
+    case "published": {
+      // Inviting the members' list is the next step once published (#1098): one link, not the
+      // Inscriptions tab then its Invitations page.
+      const invited = f.invitedCount ?? 0
+      const invite: LifecycleNote = invited === 0
+        ? { before: "Aucun membre invité pour l'instant : ", action: { label: "inviter des membres", href: `${base}/invitations` }, after: ", chacun reçoit son lien par email." }
+        : { before: `${invited} ${invited > 1 ? "membres invités" : "membre invité"}. `, action: { label: "Inviter d'autres membres", href: `${base}/invitations` } }
       return {
-        needs: noConfirmation ? [{ before: "Facultatif : la page publique n'a pas de message de confirmation. ", action: { label: "Ajouter un message de confirmation", href: `${base}/edit` } }] : [],
+        needs: [
+          invite,
+          ...(noConfirmation ? [{ before: "Facultatif : la page publique n'a pas de message de confirmation. ", action: { label: "Ajouter un message de confirmation", href: `${base}/edit` } }] : []),
+        ],
         consequences: [
           f.isListed ? "Visible sur la page publique de l'organisation, inscriptions ouvertes." : "Accessible par son lien seulement (non répertorié), inscriptions ouvertes.",
           reminders,
         ],
       }
+    }
     case "finished":
       return {
-        needs: [{ before: "L'événement est passé : archivez-le (bouton « Autres actions », en haut, puis Archiver) pour le clore." }],
+        needs: [{ before: "L'événement est passé : archivez-le pour le clore (« L'archiver » dans « À traiter », ou « Autres actions » en haut, puis Archiver)." }],
         consequences: ["Toujours visible pour les bénévoles tant qu'il n'est pas archivé.", "La suppression définitive n'est possible qu'une fois archivé."],
       }
     case "archived":

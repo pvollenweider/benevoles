@@ -29,7 +29,7 @@ test("a role assigned by the organisation only: hidden publicly, refused by the 
   await page.getByLabel("Email").fill(ORG_ADMIN_EMAIL)
   await page.getByLabel("Mot de passe").fill(ORG_ADMIN_PASSWORD)
   await page.getByRole("button", { name: "Se connecter" }).click()
-  await expect(page).toHaveURL(/\/admin\/events/)
+  await expect(page).toHaveURL(/\/admin\/dashboard/)
 
   // ── Admin: the option in « Gérer les postes » › « Accès » ────────────────
   await page.goto(`/admin/events/${event.eventId}/shifts`)

@@ -109,7 +109,7 @@ test.describe("admin", () => {
     await page.getByLabel("Email").fill(ORG_ADMIN_EMAIL)
     await page.getByLabel("Mot de passe").fill(ORG_ADMIN_PASSWORD)
     await page.getByRole("button", { name: "Se connecter" }).click()
-    await expect(page).toHaveURL(/\/admin\/events/)
+    await expect(page).toHaveURL(/\/admin\/dashboard/)
     expect.soft(await seriousViolations(page)).toEqual([])
 
     await page.getByRole("link", { name: /Spectacle/ }).first().click()
@@ -133,7 +133,7 @@ test.describe("admin", () => {
     await page.getByLabel("Email").fill(ORG_ADMIN_EMAIL)
     await page.getByLabel("Mot de passe").fill(ORG_ADMIN_PASSWORD)
     await page.getByRole("button", { name: "Se connecter" }).click()
-    await expect(page).toHaveURL(/\/admin\/events/)
+    await expect(page).toHaveURL(/\/admin\/dashboard/)
 
     const res = await page.request.post("/api/admin/members", { data: { firstName: "E2E", lastName: `A11y${Date.now()}` } })
     expect(res.ok(), await res.text()).toBeTruthy()
@@ -156,7 +156,7 @@ test.describe("admin", () => {
     await page.getByLabel("Email").fill(ORG_ADMIN_EMAIL)
     await page.getByLabel("Mot de passe").fill(ORG_ADMIN_PASSWORD)
     await page.getByRole("button", { name: "Se connecter" }).click()
-    await expect(page).toHaveURL(/\/admin\/events/)
+    await expect(page).toHaveURL(/\/admin\/dashboard/)
     await page.goto("/admin/settings/admins")
     await expect(page.getByRole("region", { name: "Logo de l'organisation" })).toBeVisible()
     expect.soft(await seriousViolations(page), "organization settings").toEqual([])
@@ -169,7 +169,7 @@ test.describe("admin", () => {
     await page.getByLabel("Email").fill(ORG_ADMIN_EMAIL)
     await page.getByLabel("Mot de passe").fill(ORG_ADMIN_PASSWORD)
     await page.getByRole("button", { name: "Se connecter" }).click()
-    await expect(page).toHaveURL(/\/admin\/events/)
+    await expect(page).toHaveURL(/\/admin\/dashboard/)
 
     const res = await page.request.post("/api/admin/members", { data: { firstName: "E2E", lastName: `Del${Date.now()}`, active: false } })
     expect(res.ok(), await res.text()).toBeTruthy()
@@ -190,7 +190,7 @@ test.describe("admin", () => {
     await page.getByLabel("Email").fill(ORG_ADMIN_EMAIL)
     await page.getByLabel("Mot de passe").fill(ORG_ADMIN_PASSWORD)
     await page.getByRole("button", { name: "Se connecter" }).click()
-    await expect(page).toHaveURL(/\/admin\/events/)
+    await expect(page).toHaveURL(/\/admin\/dashboard/)
 
     const res = await page.request.post("/api/admin/members", { data: { firstName: "E2E", lastName: `Erase${Date.now()}` } })
     expect(res.ok(), await res.text()).toBeTruthy()
@@ -218,7 +218,7 @@ test.describe("admin", () => {
     await page.getByLabel("Email").fill(ORG_ADMIN_EMAIL)
     await page.getByLabel("Mot de passe").fill(ORG_ADMIN_PASSWORD)
     await page.getByRole("button", { name: "Se connecter" }).click()
-    await expect(page).toHaveURL(/\/admin\/events/)
+    await expect(page).toHaveURL(/\/admin\/dashboard/)
 
     await page.goto("/admin/dashboard")
     await expect(page.getByRole("heading", { name: "Ce qui demande votre attention" })).toBeVisible()
@@ -246,7 +246,7 @@ test.describe("admin", () => {
     await page.getByLabel("Email").fill(ORG_ADMIN_EMAIL)
     await page.getByLabel("Mot de passe").fill(ORG_ADMIN_PASSWORD)
     await page.getByRole("button", { name: "Se connecter" }).click()
-    await expect(page).toHaveURL(/\/admin\/events/)
+    await expect(page).toHaveURL(/\/admin\/dashboard/)
     await page.getByRole("link", { name: /Spectacle/ }).first().click()
     await expect(page).toHaveURL(/\/admin\/events\/[^/]+$/)
     await page.goto(page.url() + "/shifts")
@@ -269,7 +269,7 @@ test.describe("admin", () => {
     await page.getByLabel("Email").fill(ORG_ADMIN_EMAIL)
     await page.getByLabel("Mot de passe").fill(ORG_ADMIN_PASSWORD)
     await page.getByRole("button", { name: "Se connecter" }).click()
-    await expect(page).toHaveURL(/\/admin\/events/)
+    await expect(page).toHaveURL(/\/admin\/dashboard/)
 
     const post = async (url: string, body: unknown) => {
       const res = await page.request.post(url, { data: body })
@@ -304,7 +304,7 @@ test.describe("admin", () => {
     await page.getByLabel("Email").fill(ORG_ADMIN_EMAIL)
     await page.getByLabel("Mot de passe").fill(ORG_ADMIN_PASSWORD)
     await page.getByRole("button", { name: "Se connecter" }).click()
-    await expect(page).toHaveURL(/\/admin\/events/)
+    await expect(page).toHaveURL(/\/admin\/dashboard/)
 
     const post = async (url: string, body: unknown) => {
       const res = await page.request.post(url, { data: body })
@@ -342,7 +342,7 @@ test.describe("super admin", () => {
     await page.getByLabel("Email").fill(SUPER_ADMIN_EMAIL)
     await page.getByLabel("Mot de passe").fill(SUPER_ADMIN_PASSWORD)
     await page.getByRole("button", { name: "Se connecter" }).click()
-    await expect(page).toHaveURL(/\/admin\/events|\/super-admin\/organizations/)
+    await expect(page).toHaveURL(/\/admin\/dashboard|\/super-admin\/organizations/)
 
     await page.goto("/super-admin/organizations")
     await expect(page.getByRole("region", { name: "Nouvelle version disponible" })).toBeVisible()

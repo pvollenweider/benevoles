@@ -14,7 +14,7 @@ test("an admin previews an event as a volunteer and comes back", async ({ page }
   await page.getByLabel("Email").fill(ORG_ADMIN_EMAIL)
   await page.getByLabel("Mot de passe").fill(ORG_ADMIN_PASSWORD)
   await page.getByRole("button", { name: "Se connecter" }).click()
-  await expect(page).toHaveURL(/\/admin\/events/)
+  await expect(page).toHaveURL(/\/admin\/dashboard/)
 
   // An event page from the list (not /new, and not a sub-page such as the checklist's /shifts link).
   const hrefs = await page.locator('a[href^="/admin/events/"]').evaluateAll((as) => as.map((a) => a.getAttribute("href") ?? ""))

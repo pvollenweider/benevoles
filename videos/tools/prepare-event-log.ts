@@ -26,7 +26,7 @@ async function main() {
     await page.getByLabel("Email", { exact: true }).fill(videoAdminEmail())
     await page.getByLabel("Mot de passe", { exact: true }).fill(process.env.ORG_ADMIN_PASSWORD ?? "e2e-org-admin-password")
     await page.getByRole("button", { name: "Se connecter", exact: true }).click()
-    await page.waitForURL(/\/admin\/events/)
+    await page.waitForURL(/\/admin\/dashboard/)
     const initial = await page.request.post(`${base}/api/admin/events/${event.id}/log/baseline`)
     if (!initial.ok()) throw new Error(`Initial state HTTP ${initial.status()}`)
     const initialCount = (await initial.json()).created
