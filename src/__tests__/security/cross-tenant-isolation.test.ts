@@ -2149,3 +2149,46 @@ describe("Sectors — cross-tenant isolation (#1147)", () => {
     expect(tx.$queryRaw).not.toHaveBeenCalled()
   })
 })
+
+// ── « Secteur » filter on views and exports (#1170) ───────────────────────────
+
+describe("Sector filter of the exports — cross-tenant isolation (#1170)", () => {
+  beforeEach(() => vi.clearAllMocks())
+
+  const routes: [string, () => Promise<{ GET: (req: Request, ctx: { params: Promise<{ id: string; view: string }> }) => Promise<Response> }>, string][] = [
+    ["export/attendance", () => import("@/app/api/admin/events/[id]/export/attendance/route"), "day"],
+    ["export/answers", () => import("@/app/api/admin/events/[id]/export/answers/route"), "day"],
+    ["export/sheets/[view]", () => import("@/app/api/admin/events/[id]/export/sheets/[view]/route"), "day"],
+    ["export/badges", () => import("@/app/api/admin/events/[id]/export/badges/route"), "day"],
+    ["export/pdf", () => import("@/app/api/admin/events/[id]/export/pdf/route"), "day"],
+    ["day-of", () => import("@/app/api/admin/events/[id]/day-of/route"), "day"],
+  ]
+
+  for (const [name, load, view] of routes) {
+    it(`GET /api/admin/events/[id]/${name}?secteur= returns 404 for an org-B event, reading no shift and nothing unscoped`, async () => {
+      const { GET } = await load()
+      const db = setupGuard() // event.findFirst → null
+      const res = await GET(makeRequest(`/api/admin/events/evt-b/${name.replace("[view]", view)}?secteur=sec-b`), { params: Promise.resolve({ id: "evt-b", view }) })
+      expect(res.status).toBe(404)
+      expect(db.event.findFirst).toHaveBeenCalledWith(expect.objectContaining({ where: { id: "evt-b" } }))
+      expect(db.shift.findMany).not.toHaveBeenCalled()
+      expect(prismaMock.event.findFirst).not.toHaveBeenCalled()
+    })
+  }
+
+  it("an org-B sector id on an org-A event is ignored: the export is the whole event, no poste lookup", async () => {
+    const { GET } = await import("@/app/api/admin/events/[id]/export/attendance/route")
+    const findFirst = vi.fn(async (args: { select: Record<string, unknown> }) =>
+      "title" in args.select
+        ? { id: "evt-a", title: "A", slug: "a", organization: { timeZone: null }, questions: [], registrations: [] }
+        // The org-scoped read of the event's sectors: org-A's only.
+        : { sectorsEnabled: true, sectorsAdoptedAt: new Date("2026-10-01"), sectors: [{ id: "sec-a", name: "Parking", displayOrder: 0, archivedAt: null }] })
+    const db = setupGuard({ event: { findFirst } })
+    const res = await GET(makeRequest("/api/admin/events/evt-a/export/attendance?secteur=sec-b"), params("evt-a"))
+    expect(res.status).toBe(200)
+    const dataRead = findFirst.mock.calls.map((c) => c[0]).find((a) => "title" in a.select)!
+    expect((dataRead.select.registrations as { where: unknown }).where).toEqual({ status: "active" })
+    expect(db.shift.findMany).not.toHaveBeenCalled()
+    expect(prismaMock.event.findFirst).not.toHaveBeenCalled()
+  })
+})

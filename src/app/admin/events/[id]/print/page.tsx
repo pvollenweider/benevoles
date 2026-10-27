@@ -15,6 +15,9 @@ import { fmtDuration } from "@/lib/signup-recap"
 import { orgTimeZone } from "@/lib/time-zone"
 import { formatMoney, hourRateLabel, hourRateOf, hoursValuation } from "@/lib/volunteer-hour-value"
 import { StaffingStateSuffix } from "@/components/admin/StaffingShiftLine"
+import SectorFilter from "@/components/admin/SectorFilter"
+import { loadSectorFilter } from "@/lib/sector-filter-data"
+import { SECTOR_FILTER_PARAM, documentsScopeAnnouncement, sectorFilterCaption, sectorFilterValue, withSectorFilter } from "@/lib/sector-filter"
 
 export const dynamic = "force-dynamic"
 export const metadata: Metadata = { title: "Documents à imprimer" }
@@ -29,17 +32,23 @@ const day = (d: Date) => d.toLocaleDateString("fr-FR", { timeZone: "UTC", weekda
  * Reports of an event (#400): sheets for volunteers, then organizer-only documents (the full export
  * first), badges, and the JSON archive last. Reports open in a new tab and are printed from there.
  */
-export default async function ReportsPage({ params }: { params: Promise<{ id: string }> }) {
+export default async function ReportsPage({ params, searchParams }: { params: Promise<{ id: string }>; searchParams: Promise<{ secteur?: string | string[] }> }) {
   const ctx = await getOrgContext()
   if (!ctx) redirect("/admin/login")
   const { id } = await params
+  // The « Secteur » filter (#1170): the documents, the badges and the summary keep the sector's
+  // postes only, read now; the JSON archive stays whole.
+  const sector = await loadSectorFilter(ctx.db, id, (await searchParams).secteur)
+  if (!sector) notFound()
+  const sectorValue = sectorFilterValue(sector.filter)
+  const sectorCaption = sectorFilterCaption(sector.filter)
   const [event, org] = await Promise.all([
     ctx.db.event.findFirst({
       where: { id },
       select: {
         id: true, title: true, startDate: true, endDate: true,
         shifts: {
-          where: { status: { not: "cancelled" } },
+          where: { status: { not: "cancelled" }, ...sector.shiftWhere },
           orderBy: { displayOrder: "asc" },
           select: {
             id: true, roleName: true, sectorId: true, updatedAt: true, label: true, date: true, startTime: true, endTime: true, capacity: true, minVolunteers: true, status: true,
@@ -108,7 +117,7 @@ export default async function ReportsPage({ params }: { params: Promise<{ id: st
 
   // A report opens in a new tab and is printed from there; a download saves a file (#384).
   const row = (href: string, name: string, description: string, describedBy?: string, kind: "tab" | "download" = "tab") => {
-    const descId = `desc-${href.split("/").pop()}`
+    const descId = `desc-${href.split("?")[0].split("/").pop()}`
     const describes = [descId, describedBy].filter(Boolean).join(" ")
     return (
       <li key={href} className="px-4 py-3">
@@ -139,10 +148,19 @@ export default async function ReportsPage({ params }: { params: Promise<{ id: st
         </p>
       </div>
 
+      {sector.offered && (
+        <SectorFilter
+          options={sector.options}
+          value={sectorValue}
+          announcement={documentsScopeAnnouncement(sector.filter)}
+          hint="Le secteur choisi s'applique aussi aux documents, aux badges et au résumé ci-dessous, mais pas à l'archive de l'événement, toujours complète."
+        />
+      )}
+
       <section aria-labelledby="reports-volunteers" className="space-y-2">
         <h2 id="reports-volunteers" className="text-base font-semibold text-gray-900">À afficher ou à remettre aux bénévoles</h2>
         <ul role="list" className="bg-white border border-gray-200 rounded-xl divide-y divide-gray-100">
-          {forVolunteers.map((v) => row(`${base}/sheets/${v.id}`, v.name, v.description))}
+          {forVolunteers.map((v) => row(withSectorFilter(`${base}/sheets/${v.id}`, sector.filter), v.name, v.description))}
         </ul>
       </section>
 
@@ -150,17 +168,18 @@ export default async function ReportsPage({ params }: { params: Promise<{ id: st
         <h2 id="reports-organizers" className="text-base font-semibold text-gray-900">Pour les organisateurs seulement</h2>
         <p id="reports-organizers-note" className="text-sm text-gray-600">Ces documents, sauf la synthèse des réponses, contiennent des numéros de téléphone : à ne pas afficher ni distribuer.</p>
         <ul role="list" className="bg-white border border-gray-200 rounded-xl divide-y divide-gray-100">
-          {row(`${base}/pdf`, "Export complet", "Le planning en frise par jour, le récapitulatif par poste et la liste des bénévoles avec leurs coordonnées, en couleur.", "reports-organizers-note")}
+          {row(withSectorFilter(`${base}/pdf`, sector.filter), "Export complet", "Le planning en frise par jour, le récapitulatif par poste et la liste des bénévoles avec leurs coordonnées, en couleur.", "reports-organizers-note")}
           {/* The answers summary (#686) has counts only, no phone number: not described by the note. */}
-          {forOrganizers.map((v) => row(`${base}/sheets/${v.id}`, v.name, v.description, v.id === "answers" ? undefined : "reports-organizers-note"))}
+          {forOrganizers.map((v) => row(withSectorFilter(`${base}/sheets/${v.id}`, sector.filter), v.name, v.description, v.id === "answers" ? undefined : "reports-organizers-note"))}
         </ul>
       </section>
       <section aria-labelledby="reports-badges" className="space-y-2">
         <h2 id="reports-badges" className="text-base font-semibold text-gray-900">Badges</h2>
         <p id="reports-badges-desc" className="text-sm text-gray-600">Un badge par bénévole inscrit (prénom, nom, poste, créneaux), dix par feuille A4 à découper. Sans photo ni code QR. La couleur du bandeau est celle du poste, à défaut celle de l&apos;événement.</p>
         {/* A GET form: the options travel in the link, the page opens in a new tab and is printed from there. */}
-        <form action={`${base}/badges`} method="get" target="_blank" aria-labelledby="reports-badges" className="bg-white border border-gray-200 rounded-xl px-4 py-3 space-y-3">
+        <form key={sectorValue} action={`${base}/badges`} method="get" target="_blank" aria-labelledby="reports-badges" className="bg-white border border-gray-200 rounded-xl px-4 py-3 space-y-3">
           {/* Post and person side by side: they combine (a person on a post gets only that post's shifts). */}
+          {sectorValue && <input type="hidden" name={SECTOR_FILTER_PARAM} value={sectorValue} />}
           <div className="grid gap-3 sm:grid-cols-2">
             <div>
               <label htmlFor="badges-role" className="block text-sm font-medium text-gray-800 mb-1">Poste</label>
@@ -177,7 +196,7 @@ export default async function ReportsPage({ params }: { params: Promise<{ id: st
               </select>
             </div>
           </div>
-          <p id="badges-volunteer-help" className="text-xs text-gray-600 -mt-1">Pour réimprimer le badge d&apos;une seule personne. Si un poste est choisi, seuls ses créneaux sur ce poste figurent sur le badge ; laissez « Tous les postes » pour son badge complet.</p>
+          <p id="badges-volunteer-help" className="text-xs text-gray-600 -mt-1">Pour réimprimer le badge d&apos;une seule personne. Si un poste est choisi, seuls ses créneaux sur ce poste figurent sur le badge ; laissez « Tous les postes » pour son badge complet{sectorValue ? " dans ce secteur" : ""}.</p>
           <div>
             <label htmlFor="badges-color" className="block text-sm font-medium text-gray-800 mb-1">Couleur du bandeau</label>
             <select id="badges-color" name="color" className="w-full sm:w-auto border border-gray-500 rounded-xl px-3 py-2 text-sm focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-blue-600">
@@ -200,6 +219,7 @@ export default async function ReportsPage({ params }: { params: Promise<{ id: st
       </section>
       <section aria-labelledby="reports-summary" className="space-y-3">
         <h2 id="reports-summary" className="text-base font-semibold text-gray-900">Résumé de l&apos;événement</h2>
+        {sectorCaption && <p className="text-sm text-gray-700">{sectorCaption}. Les chiffres ne portent que sur ces postes.</p>}
         {provisional && (
           // Plain <p>, not role="status": this is static server-rendered content, present from the
           // first paint, not a live region update — nothing changes after the page loads (#557 a11y review).
@@ -244,7 +264,7 @@ export default async function ReportsPage({ params }: { params: Promise<{ id: st
           <div>
             <h3 className="text-sm font-semibold text-gray-900">Taux de remplissage</h3>
             <p className="text-sm text-gray-800 mt-1">
-              <strong className="tabular-nums">{summary.fillOverall.filled}</strong> place{summary.fillOverall.filled > 1 ? "s" : ""} occupée{summary.fillOverall.filled > 1 ? "s" : ""} sur <strong className="tabular-nums">{summary.fillOverall.capacity}</strong>, tous postes confondus.
+              <strong className="tabular-nums">{summary.fillOverall.filled}</strong> place{summary.fillOverall.filled > 1 ? "s" : ""} occupée{summary.fillOverall.filled > 1 ? "s" : ""} sur <strong className="tabular-nums">{summary.fillOverall.capacity}</strong>, {sectorCaption ? "sur ces postes" : "tous postes confondus"}.
             </p>
             {summary.fillByRole.length > 0 && (
               <table className="w-full text-sm border-collapse mt-2">

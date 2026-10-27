@@ -85,6 +85,20 @@ export const answerSummarySelect = {
   },
 }
 
+/**
+ * The same `select`, the registrations narrowed to some postes (the « Secteur » filter, #1170):
+ * `shiftWhere` is ANDed into the registration's shift condition; `{}` gives answerSummarySelect.
+ */
+export function answerSummarySelectFor(shiftWhere: { roleName?: { in: string[] } }) {
+  return {
+    ...answerSummarySelect,
+    registrations: {
+      ...answerSummarySelect.registrations,
+      where: { ...answerSummarySelect.registrations.where, shift: { ...answerSummarySelect.registrations.where.shift, ...shiftWhere } },
+    },
+  }
+}
+
 /** Each volunteer once: "confirmed" wins over "waiting"; volunteers with neither are left out. */
 export function countedPeople(registrations: SummaryRegistration[]): Map<string, "confirmed" | "waiting"> {
   const people = new Map<string, "confirmed" | "waiting">()

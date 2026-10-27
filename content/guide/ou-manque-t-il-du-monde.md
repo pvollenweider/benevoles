@@ -32,6 +32,8 @@ La question que se pose l'organisateur avant l'événement, en une page, du plus
 
 Chaque ligne mène là où on agit : les inscriptions filtrées sur le créneau, les créneaux du poste, ou les responsables de secteur.
 
+Dans un événement organisé par secteurs (bêta), le champ **Secteur** en haut de la page la limite aux postes d'un secteur, ou à « Autres postes » : la vue d'ensemble et chaque liste ne comptent alors que ces postes. Le choix figure dans l'adresse de la page.
+
 ## Chercher des bénévoles
 
 Depuis cette page, **Chercher des bénévoles** sur la ligne d'un créneau, ou **Chercher des bénévoles pour plusieurs créneaux** sous la liste.

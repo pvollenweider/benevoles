@@ -58,6 +58,8 @@ export type SheetData = {
   leaders: { roleName: string | null; name: string; email?: string | null }[]
   /** The answers to the custom questions (#686), only loaded for the « answers » view. */
   answers?: AnswerSummary
+  /** « Secteur : Parking » when the sheet is limited to one sector (#1170), under the title. */
+  sectorCaption?: string | null
 }
 
 export const esc = (s: string | null | undefined) =>
@@ -317,7 +319,7 @@ export function renderSheet(view: SheetView, d: SheetData): string {
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <meta name="robots" content="noindex">
-  <title>${esc(meta.name)} – ${esc(d.eventTitle)}</title>
+  <title>${esc(meta.name)} – ${esc(d.eventTitle)}${d.sectorCaption ? ` – ${esc(d.sectorCaption)}` : ""}</title>
   <style>
     *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
     :root { --ink: #111; --ink-2: #444; --rule: #bbb; --rule-soft: #ddd; --band: #f2f2f2; }
@@ -438,12 +440,13 @@ export function renderSheet(view: SheetView, d: SheetData): string {
       <div>
         <h1>${esc(d.eventTitle)}</h1>
         <p class="kind"><strong>${esc(meta.name)}</strong> · ${esc(d.organizationName)} · imprimé le ${esc(d.printedAt)}</p>
+        ${d.sectorCaption ? `<p class="kind"><strong>${esc(d.sectorCaption)}</strong></p>` : ""}
       </div>
     </div>
     <button type="button" class="print-btn" onclick="window.print()">Imprimer</button>
   </header>
   <main>
-    ${d.shifts.length === 0 && view !== "answers" ? `<p class="meta">Aucun créneau.</p>` : BUILDERS[view](d)}
+    ${d.shifts.length === 0 && view !== "answers" ? `<p class="meta">${d.sectorCaption ? `Aucun créneau dans ce choix (${esc(d.sectorCaption)}).` : "Aucun créneau."}</p>` : BUILDERS[view](d)}
   </main>
 </body>
 </html>`

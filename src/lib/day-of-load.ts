@@ -25,8 +25,11 @@ export type DayOfLoaded = DayOfSnapshot & {
   timeZone: string
 }
 
-/** Null when the event is not one of this organization's. */
-export async function loadDayOf(db: OrgScopedPrisma, eventId: string, now: Date): Promise<DayOfLoaded | null> {
+/**
+ * Null when the event is not one of this organization's. `shiftWhere` narrows the shifts to some
+ * postes (the « Secteur » filter, #1170, src/lib/sector-filter-data.ts); `{}` reads them all.
+ */
+export async function loadDayOf(db: OrgScopedPrisma, eventId: string, now: Date, shiftWhere: { roleName?: { in: string[] } } = {}): Promise<DayOfLoaded | null> {
   const range = dayOfDateRange(now)
   const event = await db.event.findFirst({
     where: { id: eventId },
@@ -34,7 +37,7 @@ export async function loadDayOf(db: OrgScopedPrisma, eventId: string, now: Date)
       id: true, startDate: true, endDate: true,
       organization: { select: { timeZone: true } },
       shifts: {
-        where: { status: { not: "cancelled" }, date: { gte: range.from, lte: range.to } },
+        where: { status: { not: "cancelled" }, date: { gte: range.from, lte: range.to }, ...shiftWhere },
         select: {
           id: true, roleName: true, label: true, date: true, startTime: true, endTime: true, capacity: true, displayOrder: true,
           contactName: true, contactPhone: true,

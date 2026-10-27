@@ -12,6 +12,9 @@ import { shiftDay, shiftHours, shiftName } from "@/lib/open-shifts"
 import { assignedOnlyRoles } from "@/lib/role-assignment"
 import HelpLink from "@/components/admin/HelpLink"
 import { Meter, ShiftLine, StaffingStateSuffix, staffingLinkClass } from "@/components/admin/StaffingShiftLine"
+import SectorFilter from "@/components/admin/SectorFilter"
+import { loadSectorFilter } from "@/lib/sector-filter-data"
+import { SHIFT_WORDS, sectorFilterAnnouncement, sectorFilterValue, withSectorFilter } from "@/lib/sector-filter"
 
 export const dynamic = "force-dynamic"
 export const metadata: Metadata = { title: "Où manque-t-il du monde ?" }
@@ -43,17 +46,20 @@ function Group({ id, title, count, hint, children }: { id: string; title: string
 }
 
 /** « Où manque-t-il encore du monde ? » (#394): the event's shifts grouped by what to do next. */
-export default async function StaffingPage({ params }: { params: Promise<{ id: string }> }) {
+export default async function StaffingPage({ params, searchParams }: { params: Promise<{ id: string }>; searchParams: Promise<{ secteur?: string | string[] }> }) {
   const ctx = await getOrgContext()
   if (!ctx) redirect("/admin/login")
   const { id } = await params
+  // The « Secteur » filter (#1170): the sector's postes only, read now; every figure below counts them alone.
+  const sector = await loadSectorFilter(ctx.db, id, (await searchParams).secteur)
+  if (!sector) notFound()
 
   const event = await ctx.db.event.findFirst({
     where: { id },
     select: {
       id: true, title: true,
       shifts: {
-        where: { status: { not: "cancelled" } },
+        where: { status: { not: "cancelled" }, ...sector.shiftWhere },
         select: {
           id: true, roleName: true, sectorId: true, updatedAt: true, label: true, date: true, startTime: true, endTime: true, capacity: true, minVolunteers: true, status: true, assignedOnly: true,
           registrations: { where: { status: { in: [...LIVE_STATUSES] } }, select: { status: true } },
@@ -89,7 +95,13 @@ export default async function StaffingPage({ params }: { params: Promise<{ id: s
         <HelpLink route="/admin/events/[id]/staffing" />
       </div>
 
-      {t.shifts === 0 ? (
+      {sector.offered && (
+        <SectorFilter options={sector.options} value={sectorFilterValue(sector.filter)} announcement={sectorFilterAnnouncement(sector.filter, t.shifts, SHIFT_WORDS)} />
+      )}
+
+      {t.shifts === 0 && sector.filter.kind !== "all" ? (
+        <p className="text-sm text-gray-700">Aucun créneau dans ce secteur.</p>
+      ) : t.shifts === 0 ? (
         <p className="text-sm text-gray-700">
           <Link href={`${base}/shifts`} className={linkClass}>Ajoutez des créneaux</Link> pour voir où il manque du monde.
         </p>
@@ -110,7 +122,7 @@ export default async function StaffingPage({ params }: { params: Promise<{ id: s
               {t.requested > 0 && (
                 <>
                   {" "}
-                  <Link href={`${base}/registrations?demandes=1`} className={linkClass}>{plural(t.requested, "demande")} à traiter</Link>
+                  <Link href={withSectorFilter(`${base}/registrations?demandes=1`, sector.filter)} className={linkClass}>{plural(t.requested, "demande")} à traiter</Link>
                   {t.requested > 1 ? " gardent leur place" : " garde sa place"} en attendant votre décision.
                 </>
               )}
@@ -151,7 +163,7 @@ export default async function StaffingPage({ params }: { params: Promise<{ id: s
                   s={s}
                   detail={<><strong><Ratio active={s.active} capacity={s.capacity} /></strong><StaffingStateSuffix s={s} />{s.requested ? ` · ${plural(s.requested, "demande")} à traiter` : ""} · manque {s.missing}</>}
                   action={assignedOnly.has(s.roleName) ? (
-                    <Link href={`${base}/registrations?shift=${encodeURIComponent(s.id)}`} className={`inline-block py-3 sm:py-0.5 text-sm ${linkClass}`}>
+                    <Link href={withSectorFilter(`${base}/registrations?shift=${encodeURIComponent(s.id)}`, sector.filter)} className={`inline-block py-3 sm:py-0.5 text-sm ${linkClass}`}>
                       Ajouter à la main depuis les inscriptions
                       <span className="sr-only"> pour {shiftName(s)}, {shiftDay(s.date)}, {shiftHours(s)}</span>
                     </Link>

@@ -130,6 +130,13 @@ describe("DayOfBoard", () => {
     expect(screen.getByText("Mis à jour à 14h07.")).toBeInTheDocument()
   })
 
+  it("with a « Secteur » filter, every read of the board keeps it (#1170)", async () => {
+    fetchMock.mockResolvedValue(jsonOk({ board, today: "2026-07-04", refreshedAt: "14h07" }))
+    render(<DayOfBoard eventId="evt-1" board={board} today="2026-07-04" refreshedAt="14h05" sector="sec-park" />)
+    fireEvent.click(screen.getByRole("button", { name: "Actualiser" }))
+    await waitFor(() => expect(fetchMock).toHaveBeenCalledWith("/api/admin/events/evt-1/day-of?secteur=sec-park", expect.anything()))
+  })
+
   it("« Actualiser » that fails says so at once and keeps the old time visible, never a fake success", async () => {
     fetchMock.mockResolvedValue({ ok: false, status: 500, json: async () => ({}) })
     renderBoard()
