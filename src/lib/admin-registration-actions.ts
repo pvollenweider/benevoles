@@ -16,6 +16,7 @@ import { SECTOR_LEADER_ADMIN_SELECT } from "./admin-row-selects"
 import { lockEventSectors, lockSector } from "./sector-adoption"
 import { SECTOR_NOT_FOUND_ERROR } from "./sectors"
 import { leaderInviteScope } from "./leader-scope"
+import { endSwapsIn } from "./shift-swap-server"
 
 /**
  * Admin actions on registrations, shared by the single-row routes and the bulk route (#292), so
@@ -44,6 +45,8 @@ export async function cancelRegistrations(db: OrgScopedPrisma, actor: LogActor, 
       })
       if (count > 0) done.push(reg)
     }
+    // Swap requests built on these places end with them (#1174), in the same commit.
+    if (done.length > 0) await endSwapsIn(tx, { registrationIds: done.map((r) => r.id) }, "registration_gone", actor)
     const outbox = collectNotifications()
     await queueRemovalEmails(tx, done.map((r) => r.id), outbox.send)
     return { done, outboxIds: await enqueueNotifications(outbox.payloads, tx) }

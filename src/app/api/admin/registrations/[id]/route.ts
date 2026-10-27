@@ -11,6 +11,7 @@ import { isUniqueViolation } from "@/lib/registration-capacity"
 import { reportError } from "@/lib/report-error"
 import { validationError } from "@/lib/api-error"
 import { REGISTRATION_ADMIN_SELECT } from "@/lib/admin-row-selects"
+import { endSwapsAfter } from "@/lib/shift-swap-server"
 
 const schema = z.object({
   status: z.enum(["active", "cancelled", "deleted"]).optional(),
@@ -51,6 +52,11 @@ export async function PATCH(req: Request, { params }: { params: Promise<{ id: st
       return NextResponse.json({ error: "Cette personne a déjà une inscription en cours sur ce créneau." }, { status: 409 })
     }
     throw e
+  }
+
+  // A cancelled or deleted place ends the swap requests built on it (#1174).
+  if (parsed.data.status && parsed.data.status !== "active" && owned.status === "active") {
+    await endSwapsAfter(db, { registrationIds: [id] }, "registration_gone", adminActor(guard.session))
   }
 
   const activeCount = await db.registration.count({

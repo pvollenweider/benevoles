@@ -37,6 +37,7 @@ import {
 } from "./member-erasure"
 import { erasureEmailHash, registerLine } from "./member-erasure-register"
 import { ANSWER_CHANGED_ACTION, ANSWER_LOG_FIELD } from "./answer-changes"
+import { endSwapsIn } from "./shift-swap-server"
 
 export class MemberErasureConflictError extends Error {
   constructor(message: string, readonly status: 404 | 409 = 409) {
@@ -202,6 +203,10 @@ export async function runMemberErasure(
 
     // 4. The record itself.
     await tx.volunteer.update({ where: { id }, data: erasedVolunteerData(now) })
+
+    // Swap requests of the person (#1174): ended now; the other person is told, never the erased one
+    // (the record has no address any more).
+    await endSwapsIn(tx, { volunteerIds: [id] }, "volunteer_gone", actor, now)
 
     // 5. Invariant: nothing the person owns is left.
     const [answers, invites, push] = await Promise.all([

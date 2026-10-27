@@ -153,15 +153,15 @@ describe("materialTerms (#1174 E09, E13)", () => {
     const s = shift({ locationDetails: "Entrée nord", reservedTags: ["sécurité"] })
     for (const change of [
       { startTime: "11:00" }, { endTime: "13:00" }, { date: new Date("2030-07-05T00:00:00Z") }, { locationDetails: "Entrée sud" },
-      { latitude: 46.2 }, { roleName: "Accueil" }, { minAge: 16 }, { reservedTags: ["secouriste"] }, { assignedOnly: true }, { status: "cancelled" }, { sectorId: "x" },
+      { latitude: 46.2 }, { roleName: "Accueil" }, { minAge: 16 }, { reservedTags: ["secouriste"] }, { assignedOnly: true }, { status: "cancelled" },
     ] as Partial<SwapShift>[]) {
       expect(shiftMateriallyChanged(s, { ...s, ...change })).toBe(true)
     }
   })
 
-  it("keeps the agreement for a typo in the label, the instructions, the capacity or « sur validation »", () => {
+  it("keeps the agreement for a typo in the label, the instructions, the capacity, « sur validation » or the sector", () => {
     const s = shift({ reservedTags: ["Sécurité", "secouriste"] })
-    expect(shiftMateriallyChanged(s, { ...s, requiresApproval: true, status: "full", reservedTags: ["secouriste", " sécurité "] })).toBe(false)
+    expect(shiftMateriallyChanged(s, { ...s, requiresApproval: true, status: "full", sectorId: "x", reservedTags: ["secouriste", " sécurité "] })).toBe(false)
     expect(materialTerms({ ...s, ...({ label: "Bar du soir", capacity: 9 } as object) })).toBe(materialTerms(s))
   })
 

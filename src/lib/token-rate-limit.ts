@@ -22,7 +22,7 @@ const HOUR = 60 * 60 * 1000
 export const TOKEN_MISS_LIMIT = 20
 
 /** Requests per valid link per hour, by use. */
-export const TOKEN_USE_LIMITS = { read: 60, withdraw: 30, availability: 30, answers: 30, roster: 60, calendar: 60 } as const
+export const TOKEN_USE_LIMITS = { read: 60, withdraw: 30, availability: 30, answers: 30, roster: 60, calendar: 60, swaps: 60, swap: 30 } as const
 export type TokenUse = keyof typeof TOKEN_USE_LIMITS
 
 /**

@@ -13,6 +13,7 @@ import { collectNotifications, deliverAfterResponse, enqueueNotifications } from
 import { planChange } from "@/lib/shift-recurrence"
 import { toMin, toMinEnd } from "@/lib/gantt-utils"
 import { loadRuleShifts } from "@/lib/shift-recurrence-data"
+import { endSwapsIn } from "@/lib/shift-swap-server"
 
 const schema = z.object({
   from: civilDateSchema,
@@ -69,6 +70,8 @@ export async function POST(req: Request, { params }: { params: Promise<{ id: str
         })
       : []
     await tx.shift.updateMany({ where: { id: { in: plan.update } }, data })
+    // New hours end the swap requests agreed on the old ones (#1174 E13).
+    if (timeChanged) await endSwapsIn(tx, { shiftIds: plan.update }, "shift_changed", adminActor(guard.session))
     // The rule shows the permanence as it now runs.
     await tx.shiftRecurrence.update({ where: { id }, data: ruleData })
 

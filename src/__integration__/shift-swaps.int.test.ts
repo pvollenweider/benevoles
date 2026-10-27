@@ -389,8 +389,9 @@ describe.skipIf(!url)("shift swaps on Postgres (#1174)", () => {
   })
 
   it("withdrawals: the offer goes back to open, the request ends, the other person is told", async () => {
-    const { pierre, jean, requestId } = await offered()
-    expect(await withdrawSwapOffer(prisma, { requestId, volunteerId: jean.id })).toMatchObject({ ok: true, status: "open" })
+    const { pierre, jean, requestId, revision } = await offered()
+    expect(await withdrawSwapOffer(prisma, { requestId, volunteerId: jean.id, revision: revision + 1 })).toMatchObject({ ok: false, code: "revision" })
+    expect(await withdrawSwapOffer(prisma, { requestId, volunteerId: jean.id, revision })).toMatchObject({ ok: true, status: "open" })
     expect(await withdrawSwapRequest(prisma, { requestId, volunteerId: pierre.id })).toMatchObject({ ok: true, status: "withdrawn" })
     expect(await withdrawSwapRequest(prisma, { requestId, volunteerId: pierre.id })).toMatchObject({ ok: false, status: "withdrawn" })
     expect(await outboxKinds("")).toEqual(expect.arrayContaining([expect.stringMatching(new RegExp(`^shift_swap_ended:${requestId}:\\d+:${pierre.id}:withdrawn$`))]))

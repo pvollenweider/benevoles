@@ -11,6 +11,7 @@ import { hashToken } from "./token-hash"
 import { MEMBER_ADDRESS_CHANGED_REASON } from "./outbox-address-changed-reason"
 import { LIVE_STATUSES, type Tx } from "./registration-capacity"
 import { linksToResend, memberLinkPayload } from "./member-address-change"
+import { endSwapsIn } from "./shift-swap-server"
 
 /**
  * The renewal of a member's links when an organiser corrects their address (rules in
@@ -128,6 +129,9 @@ export async function renewMemberLinks(tx: Tx, input: {
   if (plan.inviteIds.length && newEmail) {
     await tx.memberInvite.updateMany({ where: { id: { in: plan.inviteIds } }, data: { lastRemindedAt: now } })
   }
+
+  // An agreement given from an old link is not renewed by itself (#1174 E18): swap requests end.
+  await endSwapsIn(tx, { volunteerIds: [volunteer.id] }, "link_revoked", { type: "system" }, now)
 
   return { registrations: registrations.length, invites: invites.length, pushSubscriptions, cancelled: cancelled.length, outboxIds }
 }

@@ -15,6 +15,10 @@
  */
 
 import { describe, it, expect, vi, beforeEach } from "vitest"
+// Swap requests (#1174) ended by the hooks: tested on Postgres (src/__integration__/shift-swaps.int.test.ts).
+vi.mock("@/lib/shift-swap-server", async (orig) => ({ ...(await orig<typeof import("@/lib/shift-swap-server")>()), endSwapsIn: vi.fn(), endSwapsAfter: vi.fn(), decideSwap: vi.fn() }))
+// The capability is shipped by the lot with the pages: the routes are exercised as if it were.
+vi.mock("@/lib/shift-swap-gate", () => ({ swapsShipped: () => true }))
 
 // ── Shared mocks ──────────────────────────────────────────────────────────────
 
@@ -313,7 +317,7 @@ describe("Events — cross-tenant isolation", () => {
     const db = setupGuard()
     const res = await POST(makeRequest("/api/admin/events", "POST", { title: "Fête", startDate: "2031-06-06", endDate: "2031-06-06" }))
     expect(res.status).toBe(201)
-    expect(db.organization.findUnique).toHaveBeenCalledWith({ where: { id: ORG_A }, select: { shiftRosterDefault: true, sectorsDefault: true } })
+    expect(db.organization.findUnique).toHaveBeenCalledWith({ where: { id: ORG_A }, select: { shiftRosterDefault: true, sectorsDefault: true, shiftSwapsDefault: true } })
   })
 
   it("POST /api/admin/events/[id]/duplicate returns 404 for an org-B event (its roster setting never copied)", async () => {
@@ -2231,5 +2235,54 @@ describe("Sector-targeted messages — cross-tenant isolation (#1170)", () => {
     expect(res.status).toBe(404)
     expect(create).not.toHaveBeenCalled()
     expect(db.shift.findMany).not.toHaveBeenCalled()
+  })
+})
+
+describe("Shift swaps — cross-tenant isolation (#1174)", () => {
+  beforeEach(() => vi.clearAllMocks())
+  const swapParams = (id: string, requestId: string) => ({ params: Promise.resolve({ id, requestId }) })
+
+  it("GET /api/admin/events/[id]/swaps returns 404 for an org-B event and reads no request", async () => {
+    const { GET } = await import("@/app/api/admin/events/[id]/swaps/route")
+    const db = setupGuard()
+    const extra = { shiftSwapRequest: { findMany: vi.fn().mockResolvedValue([]) } }
+    Object.assign(db, extra)
+    expect((await GET(makeRequest("/api/admin/events/evt-b/swaps"), params("evt-b"))).status).toBe(404)
+    expect(extra.shiftSwapRequest.findMany).not.toHaveBeenCalled()
+  })
+
+  it("POST /api/admin/events/[id]/swaps/[requestId] returns 404 for an org-B request and decides nothing", async () => {
+    const { POST } = await import("@/app/api/admin/events/[id]/swaps/[requestId]/route")
+    const { decideSwap } = await import("@/lib/shift-swap-server")
+    const db = setupGuard()
+    const extra = { shiftSwapRequest: { findFirst: vi.fn().mockResolvedValue(null) } }
+    Object.assign(db, extra)
+    const res = await POST(makeRequest("/api/admin/events/evt-b/swaps/swap-b", "POST", { approve: true, revision: 1 }), swapParams("evt-b", "swap-b"))
+    expect(res.status).toBe(404)
+    expect(extra.shiftSwapRequest.findFirst).toHaveBeenCalledWith({ where: { id: "swap-b", eventId: "evt-b" }, select: { id: true } })
+    expect(decideSwap).not.toHaveBeenCalled()
+  })
+
+  it("POST /api/admin/events/[id]/swaps/[requestId] decides with the caller's organisation only", async () => {
+    const { POST } = await import("@/app/api/admin/events/[id]/swaps/[requestId]/route")
+    const { decideSwap } = await import("@/lib/shift-swap-server")
+    vi.mocked(decideSwap).mockResolvedValue({ ok: true, requestId: "swap-a", status: "applied" })
+    const db = setupGuard()
+    Object.assign(db, { shiftSwapRequest: { findFirst: vi.fn().mockResolvedValue({ id: "swap-a" }) } })
+    const res = await POST(makeRequest("/api/admin/events/evt-a/swaps/swap-a", "POST", { approve: true, revision: 2 }), swapParams("evt-a", "swap-a"))
+    expect(res.status).toBe(200)
+    expect(decideSwap).toHaveBeenCalledWith(db, expect.objectContaining({ organizationId: ORG_A, requestId: "swap-a", approve: true, revision: 2 }))
+  })
+
+  it("PUT /api/admin/events/[id]/swaps/mode returns 404 for an org-B event: the row lock filters on the organisation", async () => {
+    const { PUT } = await import("@/app/api/admin/events/[id]/swaps/mode/route")
+    const db = setupGuard()
+    const tx = { $queryRaw: vi.fn().mockResolvedValue([]), event: { update: vi.fn() } }
+    Object.assign(db, { $transaction: vi.fn(async (fn: (t: typeof tx) => unknown) => fn(tx)) })
+    const res = await PUT(makeRequest("/api/admin/events/evt-b/swaps/mode", "PUT", { enabled: false }), params("evt-b"))
+    expect(res.status).toBe(404)
+    expect(String(tx.$queryRaw.mock.calls[0][0].join("?"))).toContain('"organizationId" =')
+    expect(tx.$queryRaw.mock.calls[0]).toContain(ORG_A)
+    expect(tx.event.update).not.toHaveBeenCalled()
   })
 })

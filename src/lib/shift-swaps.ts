@@ -63,6 +63,7 @@ export type SwapEndReason =
   | SwapRefusalCode
   | "registration_gone"
   | "shift_changed"
+  | "link_revoked"
   | "option_off"
   | "organiser"
 
@@ -183,8 +184,8 @@ const dayString = (d: Date | string) => (typeof d === "string" ? new Date(d) : d
 /**
  * The material terms of a shift (#1174 E09, E13): what changes the mission (time, place, poste,
  * requirements), as one canonical string. Its label, description, instructions, contacts, capacity
- * and « sur validation » are left out: a typo fix keeps the agreement, and the approval rule is read
- * again at each step anyway.
+ * « sur validation » and sector are left out: a typo fix keeps the agreement, and the approval rule
+ * and the swap's scope (the poste, the sector in #1175) are read again at each step anyway.
  */
 export function materialTerms(shift: SwapShift): string {
   return JSON.stringify([
@@ -201,7 +202,6 @@ export function materialTerms(shift: SwapShift): string {
     shift.minAge ?? null,
     [...(shift.reservedTags ?? [])].map((t) => t.trim().toLocaleLowerCase("fr")).filter(Boolean).sort(),
     !!shift.assignedOnly,
-    shift.sectorId ?? null,
   ])
 }
 
@@ -242,6 +242,8 @@ export function swapRefusalMessage(code: SwapEndReason): string {
       return "L'un des deux créneaux a été annulé."
     case "shift_changed":
       return "L'un des deux créneaux a changé (horaire, lieu, poste ou conditions)."
+    case "link_revoked":
+      return "Le lien personnel de l'une des deux personnes a été renouvelé."
     case "option_off":
       return "L'organisation a désactivé les échanges de créneaux pour cet événement."
     case "organiser":

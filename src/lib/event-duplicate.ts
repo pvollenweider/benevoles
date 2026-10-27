@@ -126,6 +126,23 @@ export type DuplicableEvent = {
   sectorsGate?: boolean
   /** The option a new event of the organisation starts with (default and gate), when the settings are not copied. */
   newEventSectors?: boolean
+  /** Shift swaps (#1174): the source's options, whether the organisation can adopt them now, and a new event's value. */
+  shiftSwapsEnabled?: boolean
+  shiftSwapsApproval?: boolean
+  swapsGate?: boolean
+  newEventSwaps?: boolean
+}
+
+/**
+ * The shift swap options of a copy (#1174): with the settings, the source's choice, only while the
+ * capability can be adopted (a copy is a new adoption); else the organisation's rule for a new
+ * event. Never a request, an agreement or an approval: those belong to the source's registrations.
+ */
+export function duplicatedSwaps(source: Pick<DuplicableEvent, "shiftSwapsEnabled" | "shiftSwapsApproval" | "swapsGate" | "newEventSwaps">, copySettings: boolean) {
+  return {
+    shiftSwapsEnabled: copySettings ? !!source.shiftSwapsEnabled && !!source.swapsGate : !!source.newEventSwaps,
+    shiftSwapsApproval: copySettings ? !!source.shiftSwapsApproval : false,
+  }
 }
 
 /**
@@ -253,6 +270,7 @@ export function duplicatePlan(source: DuplicableEvent, options: DuplicateOptions
       showSchedule: copy.settings ? shows.map((s) => ({ ...s, date: shiftIsoDate(s.date, offsetDays) })) : [],
       sectorsEnabled: sectorPlan.sectorsEnabled,
       sectorsAdoptedAt: sectorPlan.sectorsAdoptedAt,
+      ...duplicatedSwaps(source, !!copy.settings),
     },
     sectors: sectorPlan.sectors,
     shifts,

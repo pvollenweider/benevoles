@@ -10,6 +10,7 @@ import { validationError } from "@/lib/api-error"
 import { findTemplate, templateToEvent } from "@/lib/event-templates"
 import { defaultHolidayCalendar } from "@/lib/shift-recurrence"
 import { orgTimeZone } from "@/lib/time-zone"
+import { newEventShiftSwapsEnabled } from "@/lib/shift-swap-data"
 import { newEventSectorsEnabled } from "@/lib/sector-adoption"
 
 const schema = z.object({
@@ -39,14 +40,17 @@ export async function POST(req: Request) {
   if (existing) slug = `${slug}-${Date.now()}`
 
   // « Qui est inscrit » (#1068): a new event starts with the organisation's default.
-  const org = await db.organization.findUnique({ where: { id: organizationId }, select: { shiftRosterDefault: true, sectorsDefault: true } })
+  const org = await db.organization.findUnique({ where: { id: organizationId }, select: { shiftRosterDefault: true, sectorsDefault: true, shiftSwapsDefault: true } })
   // Sectors (#1147, beta): the organisation's default, only while the capability can be adopted.
   const sectorsEnabled = await newEventSectorsEnabled(organizationId, org?.sectorsDefault)
+  // Shift swaps (#1174, beta): the organisation's default, only while the capability can be adopted.
+  const shiftSwapsEnabled = await newEventShiftSwapsEnabled(organizationId, org?.shiftSwapsDefault)
   const event = await db.event.create({
     data: {
       title: draft.title,
       shiftRosterEnabled: org?.shiftRosterDefault ?? true,
       sectorsEnabled,
+      shiftSwapsEnabled,
       slug,
       organizationId,
       startDate: new Date(draft.startDate),

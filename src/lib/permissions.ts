@@ -82,6 +82,10 @@ export const PERMISSIONS: Record<string, Partial<Record<Method, Level>>> = {
   "events/[id]/sectors/mode": { PUT: "organizer" },
   "events/[id]/sectors/reorder": { POST: "organizer" },
   "events/[id]/sector-leaders/[leaderId]": { DELETE: "organizer" },
+  // Shift swaps between volunteers (#1174, beta): the event's option and the approvals, organiser level.
+  "events/[id]/swaps": { GET: "organizer" },
+  "events/[id]/swaps/[requestId]": { POST: "organizer" },
+  "events/[id]/swaps/mode": { PUT: "organizer" },
   "events/[id]/send-reminder": { POST: "organizer" },
   "events/from-template": { POST: "organizer" },
   "members": { GET: "organizer", POST: "organizer" },

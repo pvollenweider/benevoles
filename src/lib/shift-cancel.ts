@@ -18,6 +18,7 @@ import { prisma } from "@/lib/prisma"
 import { logEvent, type LogActor } from "@/lib/event-log"
 import { formatDate } from "@/lib/utils"
 import { collectNotifications, deliverAfterResponse, enqueueNotifications } from "@/lib/notifications/outbox"
+import { endSwapsIn } from "./shift-swap-server"
 
 export type CancellableShift = {
   id: string
@@ -60,6 +61,8 @@ export async function cancelShift(shift: CancellableShift, actor: LogActor): Pro
     for (const reg of shift.registrations) {
       await tx.registration.update({ where: { id: reg.id }, data: { status: "cancelled" } })
     }
+    // Swap requests on this shift end with it (#1174 E09), in the same commit.
+    await endSwapsIn(tx, { shiftIds: [shift.id] }, "shift_cancelled", actor)
     // A published event can't be created or published without a live shift; losing its last
     // one puts it back to draft in the same transaction, so the public page never stays open on
     // nothing. Logged below as its own entry, caused by the cancellation.

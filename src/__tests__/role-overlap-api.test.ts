@@ -1,4 +1,6 @@
 import { describe, it, expect, vi, beforeEach } from "vitest"
+// Swap requests (#1174) end through their own module, tested on Postgres (src/__integration__/shift-swaps.int.test.ts).
+vi.mock("@/lib/shift-swap-server", () => ({ endSwapsIn: vi.fn(), endSwapsAfter: vi.fn() }))
 
 // « Cumulable avec un autre créneau » (#986): set on every shift of the role by the role route,
 // kept on rename, taken by a shift created in (or moved to) the role, copied by a shift duplicate.
