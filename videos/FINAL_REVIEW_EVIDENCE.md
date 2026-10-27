@@ -440,6 +440,21 @@ titre « Responsables de secteur ») ne changent pas ; seule une ligne de calcul
 accepte désormais un responsable sans poste. Aucune narration à modifier. Une
 future vidéo des responsables de secteur demandera un scénario qui ouvre la bêta.
 
+## À revoir : choix sous leur destinataire dans « Écrire aux bénévoles » (#1170)
+
+Dans le formulaire « Écrire aux bénévoles », les champs **Poste** et **Créneau** s'affichent
+désormais juste sous leur bouton radio (« Les bénévoles d'un poste », « Les bénévoles d'un
+créneau ») au lieu d'après toute la liste des destinataires. Le destinataire « Les bénévoles
+d'un secteur » n'apparaît qu'avec la bêta des secteurs, que les scénarios `seed-video-*`
+n'ouvrent pas. Les sélecteurs (`getByRole("radio", …)`, `getByLabel(/^Poste/)`) ne changent
+pas, mais l'image diffère quand un poste ou un créneau est choisi.
+
+Vidéos à revoir, non régénérées dans ce changement (pas de pile locale, disque Docker plein) :
+`targeted-messages` (choix du poste, puis du créneau), `last-minute-changes` (choix du
+créneau), `organizer-monitor-followup` (choix du poste) et la vidéo qui ouvre le message
+prérempli sur un créneau (`checks.messageAudiencePrefilled` dans `videos/tools/record.ts`).
+Aucune narration ni bloc `viewer` à modifier.
+
 ## Écart connu : réponses « Demande enregistrée » des demandes de lien
 
 « Mot de passe oublié » titre maintenant « Demande enregistrée » (au lieu de

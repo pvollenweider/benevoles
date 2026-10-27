@@ -122,6 +122,7 @@ export default async function RegistrationsPage({
         initialSearch={initialSearch}
         initialRequestsOnly={demandes === "1"}
         groupLinks={event.groupLinks}
+        sectorFilter={sectorValue ? { value: sectorValue, label: sector.options.find((o) => o.value === sectorValue)?.label ?? "" } : null}
         initialGroupFilter={lien && (lien === "none" || event.groupLinks.some((l) => l.id === lien)) ? lien : ""}
         initialRegistrations={event.registrations.map((r) => ({
           id: r.id,

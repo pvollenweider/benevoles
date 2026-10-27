@@ -106,7 +106,7 @@ async function dispatchOne(id: string, now: Date, deferPush?: DispatchOptions["d
   if (problems.length > 0) return skip(`variables du texte refusées (${problems.join(" ")})`)
 
   const build = await buildTargetedMessage(db, event, audience, sm.subject, sm.message)
-  const reason = skipReason({ eventStatus: event.publicStatus, audience, shiftAvailable, recipients: build.recipients.length })
+  const reason = skipReason({ eventStatus: event.publicStatus, audience, shiftAvailable, recipients: build.recipients.length, sectorGone: build.sectorGone })
   if (reason) return skip(reason)
 
   const pushDevices = sm.push ? await pushDeviceCount(build.recipients.map((r) => r.volunteerId)) : 0
