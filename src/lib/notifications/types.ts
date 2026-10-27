@@ -52,6 +52,8 @@ export type NotificationKind =
   | "sector_leader_answers_changed"
   | "shift_swap_applied"
   | "shift_swap_ended"
+  | "shift_swap_offered"
+  | "shift_swap_approval_needed"
 
 /** Delivery attempts before the outbox gives up (5 min, 10, 20, 40, 80 between them). */
 export const MAX_ATTEMPTS = 6

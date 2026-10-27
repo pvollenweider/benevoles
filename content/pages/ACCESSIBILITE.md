@@ -2,7 +2,7 @@
 
 benevol.app vise le niveau **AA des WCAG 2.2**. Cette page dit ce qui a été vérifié, comment, et ce qui ne l'est pas encore.
 
-Déclaration établie le 5 octobre 2026, mise à jour le 23 octobre 2026, sur la base d'une auto-évaluation à la même date.
+Déclaration établie le 5 octobre 2026, mise à jour le 27 octobre 2026, sur la base d'une auto-évaluation à la même date.
 
 ## Périmètre
 
@@ -36,6 +36,7 @@ Parcours concernés : découvrir un événement ; choisir ses créneaux ; rempli
 - Le **planning** d'une journée s'affiche par défaut en frise horizontale, qu'il faut faire défiler latéralement sur un petit écran. Le bouton « Liste », au-dessus du planning, présente les mêmes créneaux heure par heure, sans défilement horizontal ; ce choix est mémorisé sur l'appareil.
 - Le **planning**, les **feuilles** et les **badges** à imprimer sont des pages HTML, analysées par les tests automatiques comme le reste du site : ce sont elles, ouvertes dans le navigateur, la version accessible de ces documents. Un PDF enregistré depuis le navigateur n'est balisé pour les lecteurs d'écran que si le navigateur le fait. Les présences s'exportent aussi en CSV.
 - Sur une **frise** très resserrée, une barre trop étroite n'affiche que son heure de début, alors que son nom pour les lecteurs d'écran et la commande vocale dit toute la plage horaire (« 07h–09h ») : dire l'heure de début suffit à l'atteindre à la voix.
+- Sur la page **Mes inscriptions**, la partie **Échanger un créneau** ne se met pas à jour toute seule quand l'autre personne répond ou que l'organisation valide : il faut recharger la page. Chaque action dit son résultat, et l'email reçu le confirme.
 - Le lien **Voir sur la carte** ouvre OpenStreetMap, un service externe dont nous ne maîtrisons pas l'accessibilité.
 - Le contenu écrit par les organisateurs (messages, pages d'information, consignes) dépend de leur rédaction.
 - L'**inscription affichée sur le site d'une association** dépend aussi de ce site : le code fourni donne au cadre un titre (« Inscription bénévoles – » suivi du nom de l'événement), que l'association peut modifier ou retirer. Sans l'ajustement automatique de la hauteur, la page défile à l'intérieur d'un cadre lui-même placé dans une page qui défile. Les rappels par notification ne sont pas proposés dans ce cadre : ils restent disponibles depuis la page **Mes inscriptions**.

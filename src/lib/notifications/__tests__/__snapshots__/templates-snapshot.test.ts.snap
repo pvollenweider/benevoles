@@ -3542,6 +3542,54 @@ exports[`render — snapshot of every notification kind > shift_swap_applied 1`]
 }
 `;
 
+exports[`render — snapshot of every notification kind > shift_swap_approval_needed 1`] = `
+{
+  "html": [
+    "<!DOCTYPE html>",
+    "<html lang="fr">",
+    "<head>",
+    "<meta charset="UTF-8">",
+    "<meta name="viewport" content="width=device-width,initial-scale=1">",
+    "<meta http-equiv="X-UA-Compatible" content="IE=edge">",
+    "</head>",
+    "<body style="margin:0;padding:0;background:#f3f4f6;font-family:-apple-system,system-ui,BlinkMacSystemFont,'Segoe UI',Helvetica,Arial,sans-serif;">",
+    "<div style="display:none;font-size:1px;color:#f5f5f5;max-height:0;overflow:hidden;opacity:0;">Deux bénévoles de Fête &lt;Rhône&gt; &amp; &quot;Lac&quot; se sont mis d'accord pour échanger leurs créneaux. L'échange attend votre validation avant le samedi 11 juillet à 09:00 ; rien ne change d'ici là.&nbsp;&zwnj;&nbsp;&zwnj;&nbsp;&zwnj;&nbsp;&zwnj;&nbsp;&zwnj;</div>",
+    "<table role="presentation" width="100%" cellpadding="0" cellspacing="0" style="background:#f3f4f6;">",
+    "<tr><td align="center" style="padding:32px 16px 24px;">",
+    "<!-- align="center" above only centers this table CELL on the page; text-align is inherited CSS,",
+    "     so without an explicit override here every unstyled heading/paragraph inside would inherit",
+    "     "center" too instead of reading left-aligned like normal body text. -->",
+    "<div style="max-width:560px;text-align:left;background:#ffffff;border-radius:14px;padding:36px 36px 24px;color:#111111;line-height:1.6;box-shadow:0 1px 4px rgba(0,0,0,0.07);">",
+    "",
+    "    <h2 style="margin:0 0 0.25em">Bonjour,</h2>",
+    "    <p style="color:#555">Deux bénévoles de Fête &lt;Rhône&gt; &amp; &quot;Lac&quot; se sont mis d'accord pour échanger leurs créneaux. L'échange attend votre validation avant le samedi 11 juillet à 09:00 ; rien ne change d'ici là.</p>",
+    "    <ul style="color:#333;padding-left:1.25em;margin:0.5em 0 1em"><li>Julie Martin cède Accueil, samedi 11 juillet, de 9h à 12h30 et reçoit Accueil, dimanche 12 juillet, de 14h à 17h.</li><li>Jean Dupont cède Accueil, dimanche 12 juillet, de 14h à 17h et reçoit Accueil, samedi 11 juillet, de 9h à 12h30.</li></ul>",
+    "    <p style="margin-top:1.5em"><a href="https://www.benevol.app/admin/events/evt-1/registrations#echanges" style="background:#2563eb;color:#fff;padding:11px 22px;border-radius:8px;text-decoration:none;display:inline-block;font-weight:600;font-size:14px">Valider ou refuser l'échange</a></p>",
+    "  ",
+    "<div style="margin-top:32px;padding-top:16px;border-top:1px solid #f0f0f0;font-size:12px;color:#666;text-align:center;">",
+    "  <a href="https://benevol.app" style="color:#666;text-decoration:none;">benevol.app</a>",
+    "</div>",
+    "</div>",
+    "</td></tr>",
+    "</table>",
+    "</body>",
+    "</html>",
+  ],
+  "subject": "Échange de créneaux à valider : Fête <Rhône> & "Lac"",
+  "text": [
+    "Bonjour,",
+    "",
+    "Deux bénévoles de Fête <Rhône> & "Lac" se sont mis d'accord pour échanger leurs créneaux. L'échange attend votre validation avant le samedi 11 juillet à 09:00 ; rien ne change d'ici là.",
+    "",
+    "- Julie Martin cède Accueil, samedi 11 juillet, de 9h à 12h30 et reçoit Accueil, dimanche 12 juillet, de 14h à 17h.",
+    "- Jean Dupont cède Accueil, dimanche 12 juillet, de 14h à 17h et reçoit Accueil, samedi 11 juillet, de 9h à 12h30.",
+    "",
+    "Valider ou refuser l'échange :",
+    "https://www.benevol.app/admin/events/evt-1/registrations#echanges",
+  ],
+}
+`;
+
 exports[`render — snapshot of every notification kind > shift_swap_ended (declined) 1`] = `
 {
   "html": [
@@ -3636,6 +3684,62 @@ exports[`render — snapshot of every notification kind > shift_swap_ended (impo
     "",
     "Ton lien personnel pour voir et gérer tes inscriptions :",
     "https://rhone.benevol.app/my/edit-tok",
+  ],
+}
+`;
+
+exports[`render — snapshot of every notification kind > shift_swap_offered 1`] = `
+{
+  "html": [
+    "<!DOCTYPE html>",
+    "<html lang="fr">",
+    "<head>",
+    "<meta charset="UTF-8">",
+    "<meta name="viewport" content="width=device-width,initial-scale=1">",
+    "<meta http-equiv="X-UA-Compatible" content="IE=edge">",
+    "</head>",
+    "<body style="margin:0;padding:0;background:#f3f4f6;font-family:-apple-system,system-ui,BlinkMacSystemFont,'Segoe UI',Helvetica,Arial,sans-serif;">",
+    "<div style="display:none;font-size:1px;color:#f5f5f5;max-height:0;overflow:hidden;opacity:0;">Jean D. te propose d'échanger ton créneau pour Fête &lt;Rhône&gt; &amp; &quot;Lac&quot;.&nbsp;&zwnj;&nbsp;&zwnj;&nbsp;&zwnj;&nbsp;&zwnj;&nbsp;&zwnj;</div>",
+    "<table role="presentation" width="100%" cellpadding="0" cellspacing="0" style="background:#f3f4f6;">",
+    "<tr><td align="center" style="padding:32px 16px 24px;">",
+    "<!-- align="center" above only centers this table CELL on the page; text-align is inherited CSS,",
+    "     so without an explicit override here every unstyled heading/paragraph inside would inherit",
+    "     "center" too instead of reading left-aligned like normal body text. -->",
+    "<div style="max-width:560px;text-align:left;background:#ffffff;border-radius:14px;padding:36px 36px 24px;color:#111111;line-height:1.6;box-shadow:0 1px 4px rgba(0,0,0,0.07);">",
+    "",
+    "    <h2 style="margin:0 0 0.25em">Hello Julie,</h2>",
+    "    <p style="color:#555">Jean D. te propose d'échanger ton créneau pour Fête &lt;Rhône&gt; &amp; &quot;Lac&quot;.</p>",
+    "    <p style="margin:1em 0 0.25em;color:#333"><strong>Tu cèdes :</strong></p>",
+    "    <ul style="color:#333;padding-left:1.25em;margin:0 0 0.5em"><li>Accueil, samedi 11 juillet, de 9h à 12h30</li></ul>",
+    "    <p style="margin:1em 0 0.25em;color:#333"><strong>Tu reçois :</strong></p>",
+    "    <ul style="color:#333;padding-left:1.25em;margin:0 0 0.5em"><li>Accueil, dimanche 12 juillet, de 14h à 17h<br>Lieu : Entrée nord</li></ul>",
+    "    <p style="color:#555">Réponds avant le samedi 11 juillet à 09:00 depuis ta page « Mes inscriptions ». Rien ne change tant que tu n'as pas accepté.</p>",
+    "    <p style="margin-top:1.5em"><a href="https://rhone.benevol.app/my/edit-tok#echanges" style="background:#2563eb;color:#fff;padding:11px 22px;border-radius:8px;text-decoration:none;display:inline-block;font-weight:600;font-size:14px">Voir la proposition</a></p>",
+    "  ",
+    "<div style="margin-top:32px;padding-top:16px;border-top:1px solid #f0f0f0;font-size:12px;color:#666;text-align:center;">",
+    "  <a href="https://benevol.app" style="color:#666;text-decoration:none;">benevol.app</a>",
+    "</div>",
+    "</div>",
+    "</td></tr>",
+    "</table>",
+    "</body>",
+    "</html>",
+  ],
+  "subject": "Proposition d'échange : Fête <Rhône> & "Lac"",
+  "text": [
+    "Hello Julie,",
+    "",
+    "Jean D. te propose d'échanger ton créneau pour Fête <Rhône> & "Lac".",
+    "",
+    "Tu cèdes :",
+    "- Accueil, samedi 11 juillet, de 9h à 12h30",
+    "",
+    "Tu reçois :",
+    "- Accueil, dimanche 12 juillet, de 14h à 17h",
+    "- Lieu : Entrée nord",
+    "",
+    "Réponds avant le samedi 11 juillet à 09:00 depuis ta page « Mes inscriptions ». Rien ne change tant que tu n'as pas accepté.",
+    "https://rhone.benevol.app/my/edit-tok#echanges",
   ],
 }
 `;

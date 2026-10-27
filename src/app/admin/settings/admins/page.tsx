@@ -24,6 +24,7 @@ import { canInviteAdmins } from "@/lib/org-approval"
 import OrgBetaForm from "@/components/admin/OrgBetaForm"
 import { canAdoptBeta, readOpenBetaCapabilities } from "@/lib/beta-access"
 import OrgSectorsDefaultForm from "@/components/admin/OrgSectorsDefaultForm"
+import OrgShiftSwapsDefaultForm from "@/components/admin/OrgShiftSwapsDefaultForm"
 import { BETA_CAPABILITIES, betaCardVisible, betaReadOnlyValue, type BetaParticipation } from "@/lib/beta-capabilities"
 import { contactEmail } from "@/lib/site"
 
@@ -53,7 +54,7 @@ export default async function AdminsSettingsPage() {
       },
       orderBy: { createdAt: "asc" },
     }),
-    db.organization.findUnique({ where: { id: organizationId }, select: { name: true, slug: true, outboundEmailApprovedAt: true, volunteerCharter: true, hasOrgInsurance: true, shiftRosterDefault: true, sectorsDefault: true, publicTitle: true, timeZone: true, volunteerHourRateCents: true, volunteerHourRateCurrency: true, volunteerHourRateSetAt: true, betaOptInAt: true, betaOptInById: true, logo: ORG_LOGO_SELECT } }),
+    db.organization.findUnique({ where: { id: organizationId }, select: { name: true, slug: true, outboundEmailApprovedAt: true, volunteerCharter: true, hasOrgInsurance: true, shiftRosterDefault: true, sectorsDefault: true, shiftSwapsDefault: true, publicTitle: true, timeZone: true, volunteerHourRateCents: true, volunteerHourRateCurrency: true, volunteerHourRateSetAt: true, betaOptInAt: true, betaOptInById: true, logo: ORG_LOGO_SELECT } }),
     db.orgSlugHistory.findMany({
       where: { organizationId },
       orderBy: { createdAt: "desc" },
@@ -81,6 +82,8 @@ export default async function AdminsSettingsPage() {
   // Sectors for new events (#1147, beta): while the organisation can adopt them, or while the default is on.
   const sectorsAvailable = !!org && await canAdoptBeta(organizationId, "sectors")
   const showSectorsDefault = !!org && (sectorsAvailable || org.sectorsDefault)
+  // Shift swaps for new events (#1174, beta): while the organisation can adopt them (on by default).
+  const showSwapsDefault = !!org && await canAdoptBeta(organizationId, "shiftSwaps")
 
   return (
     <div className="space-y-5">
@@ -117,6 +120,7 @@ export default async function AdminsSettingsPage() {
             <dt className="text-gray-600">Charte des bénévoles</dt><dd className="text-gray-900">{charterStatusLabel(org.volunteerCharter)}</dd>
             <dt className="text-gray-600">Qui est inscrit, nouveaux événements</dt><dd className="text-gray-900">{org.shiftRosterDefault ? "activé" : "désactivé"}</dd>
             <dt className="text-gray-600">Taux horaire de valorisation</dt><dd className="text-gray-900">{hourRate ? hourRateLabel(hourRate) : "aucun"}</dd>
+            {showSwapsDefault && <><dt className="text-gray-600">Échanges de créneaux, nouveaux événements</dt><dd className="text-gray-900">{org.shiftSwapsDefault ? "activé" : "désactivé"}</dd></>}
             {showSectorsDefault && <><dt className="text-gray-600">Secteurs, nouveaux événements</dt><dd className="text-gray-900">{org.sectorsDefault ? "activé" : "désactivé"}</dd></>}
             {showBeta && <><dt className="text-gray-600">Participation à la bêta</dt><dd className="text-gray-900">{betaReadOnlyValue(beta, zone)}</dd></>}
           </dl>
@@ -162,6 +166,7 @@ export default async function AdminsSettingsPage() {
         />
       )}
 
+      {org && isOwner && showSwapsDefault && <OrgShiftSwapsDefaultForm initialValue={org.shiftSwapsDefault} />}
       {org && isOwner && showSectorsDefault && <OrgSectorsDefaultForm initialValue={org.sectorsDefault} available={sectorsAvailable} />}
 
       {org && isOwner && showBeta && (

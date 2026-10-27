@@ -469,6 +469,31 @@ const cases: [string, NotificationPayload][] = [
       editToken: "edit-tok",
     },
   }],
+  ["shift_swap_offered", {
+    kind: "shift_swap_offered",
+    recipient,
+    data: {
+      volunteerName: "Julie Martin",
+      eventTitle: tricky,
+      orgSlug: "rhone",
+      otherName: "Jean D.",
+      gives: { roleName: "Accueil", label: "Accueil", date: "2026-07-11", startTime: "09:00", endTime: "12:30", locationDetails: null, instructions: null },
+      receives: { roleName: "Accueil", label: "Accueil", date: "2026-07-12", startTime: "14:00", endTime: "17:00", locationDetails: "Entrée nord", instructions: null },
+      deadline: "samedi 11 juillet à 09:00",
+      editToken: "edit-tok",
+    },
+  }],
+  ["shift_swap_approval_needed", {
+    kind: "shift_swap_approval_needed",
+    recipient,
+    data: {
+      eventId: "evt-1",
+      eventTitle: tricky,
+      requester: { name: "Julie Martin", shift: { roleName: "Accueil", label: "Accueil", date: "2026-07-11", startTime: "09:00", endTime: "12:30", locationDetails: null, instructions: null } },
+      counterpart: { name: "Jean Dupont", shift: { roleName: "Accueil", label: "Accueil", date: "2026-07-12", startTime: "14:00", endTime: "17:00", locationDetails: null, instructions: null } },
+      deadline: "samedi 11 juillet à 09:00",
+    },
+  }],
   ["shift_swap_ended (impossible)", {
     kind: "shift_swap_ended",
     recipient,
@@ -791,6 +816,8 @@ describe("render — snapshot of every notification kind", () => {
       open_shifts: true,
       shift_swap_applied: true,
       shift_swap_ended: true,
+      shift_swap_offered: true,
+      shift_swap_approval_needed: true,
     }
     const covered = new Set(cases.map(([, p]) => p.kind))
     expect([...covered].sort()).toEqual(Object.keys(all).sort())

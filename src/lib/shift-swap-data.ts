@@ -11,6 +11,7 @@ import { assignedOnlyRoles } from "./role-assignment"
 import { reservedRoles } from "./role-reservation"
 import { roleLimits } from "./role-limit"
 import { orgTimeZone } from "./time-zone"
+import { rosterDisplayName } from "./shift-roster-text"
 import type { LogActor } from "./event-log"
 import { endSwapsIn } from "./shift-swap-server"
 import { needsSwapApproval, swapDeadline, swapRefusalMessage, SWAP_LIVE_STATUSES, type SwapEndReason, type SwapStatus } from "./shift-swaps"
@@ -34,7 +35,12 @@ export async function newEventShiftSwapsEnabled(organizationId: string, shiftSwa
 
 export type SwapOptionResult =
   | { ok: true; shiftSwapsEnabled: boolean; shiftSwapsApproval: boolean; changes: Record<string, { from: boolean; to: boolean }> }
-  | { ok: false; status: 403 | 404; error: string }
+  | { ok: false; status: 403 | 404 | 409; error: string; openCount?: number }
+
+/** Asked before switching swaps off while requests are under way. */
+export function swapsOffConfirmText(openCount: number): string {
+  return `${openCount} demande${openCount > 1 ? "s" : ""} d'échange en cours ${openCount > 1 ? "seront annulées" : "sera annulée"} et les bénévoles concernés prévenus par email.`
+}
 
 export const SWAPS_NOT_ADOPTABLE = "Les échanges de créneaux ne peuvent pas être activés pour cette organisation."
 
@@ -46,7 +52,7 @@ export const SWAPS_NOT_ADOPTABLE = "Les échanges de créneaux ne peuvent pas ê
  * confirmation waiting on a request's lock either applied before, or finds it cancelled). Turning
  * them back on revives nothing.
  */
-export async function setShiftSwapsOption(db: OrgScopedPrisma, organizationId: string, eventId: string, wanted: { enabled?: boolean; approval?: boolean }, actor: LogActor): Promise<SwapOptionResult> {
+export async function setShiftSwapsOption(db: OrgScopedPrisma, organizationId: string, eventId: string, wanted: { enabled?: boolean; approval?: boolean; confirm?: boolean }, actor: LogActor): Promise<SwapOptionResult> {
   return db.$transaction(async (raw) => {
     const tx = raw as unknown as Tx
     const rows = await tx.$queryRaw<{ id: string; shiftSwapsEnabled: boolean; shiftSwapsApproval: boolean }[]>`SELECT "id", "shiftSwapsEnabled", "shiftSwapsApproval" FROM "Event" WHERE "id" = ${eventId} AND "organizationId" = ${organizationId} FOR UPDATE`
@@ -56,6 +62,12 @@ export async function setShiftSwapsOption(db: OrgScopedPrisma, organizationId: s
     const approval = wanted.approval ?? event.shiftSwapsApproval
     if (enabled && !event.shiftSwapsEnabled && !(swapsShipped() && (await canAdoptBeta(organizationId, "shiftSwaps", tx)))) {
       return { ok: false as const, status: 403 as const, error: SWAPS_NOT_ADOPTABLE }
+    }
+    // Live requests would be cancelled and their people emailed: only once the organiser saw how
+    // many, counted now under the lock (a request may have come since the page loaded).
+    if (!enabled && event.shiftSwapsEnabled && !wanted.confirm) {
+      const openCount = await tx.shiftSwapRequest.count({ where: { eventId, status: { in: [...SWAP_LIVE_STATUSES] } } })
+      if (openCount > 0) return { ok: false as const, status: 409 as const, error: swapsOffConfirmText(openCount), openCount }
     }
     const changes: Record<string, { from: boolean; to: boolean }> = {}
     if (enabled !== event.shiftSwapsEnabled) changes.shiftSwapsEnabled = { from: event.shiftSwapsEnabled, to: enabled }
@@ -92,7 +104,7 @@ export async function loadVolunteerSwapView(eventId: string, volunteerId: string
     where: { id: eventId },
     select: { shiftSwapsEnabled: true, shiftSwapsApproval: true, cancelDeadlineDays: true, cancelDeadlineHours: true, organization: { select: { timeZone: true } } },
   })
-  if (!swapsShipped()) return { enabled: false, publishable: [], mine: [], offers: [] }
+  if (!swapsShipped()) return { enabled: false, publishable: [], mine: [], offers: [], ownShifts: {} }
   const [requests, eventShifts] = await Promise.all([
     prisma.shiftSwapRequest.findMany({
       where: { eventId, OR: [{ status: { in: [...SWAP_LIVE_STATUSES] } }, { volunteerId }, { counterVolunteerId: volunteerId }] },
@@ -107,6 +119,9 @@ export async function loadVolunteerSwapView(eventId: string, volunteerId: string
     prisma.volunteer.findMany({ where: { id: { in: people } }, select: PERSON_SELECT }),
     prisma.registration.findMany({ where: { eventId, volunteerId: { in: people }, status: { in: [...LIVE_STATUSES] } }, select: { id: true, volunteerId: true, eventId: true, status: true, shift: { select: SHIFT_SELECT } } }),
   ])
+  // The other party of my requests that have an offer, as « Jean D. » (owner decision, 2026-10-27).
+  const parties = [...new Set(requests.filter((r) => r.counterVolunteerId && (r.volunteerId === volunteerId || r.counterVolunteerId === volunteerId)).map((r) => (r.volunteerId === volunteerId ? r.counterVolunteerId! : r.volunteerId)))]
+  const named = parties.length ? await prisma.volunteer.findMany({ where: { id: { in: parties } }, select: { id: true, firstName: true, lastName: true } }) : []
   const byPerson = new Map<string, (ViewRegistration & { status: string })[]>()
   for (const h of held) byPerson.set(h.volunteerId, [...(byPerson.get(h.volunteerId) ?? []), h as ViewRegistration])
   const live = eventShifts.filter((s) => s.status !== "cancelled")
@@ -122,6 +137,7 @@ export async function loadVolunteerSwapView(eventId: string, volunteerId: string
     reserved: reservedRoles(live),
     limits: roleLimits(live),
     assignedOnlyRoles: assignedOnlyRoles(live),
+    names: new Map(named.map((v) => [v.id, rosterDisplayName(v.firstName, v.lastName)])),
   })
 }
 

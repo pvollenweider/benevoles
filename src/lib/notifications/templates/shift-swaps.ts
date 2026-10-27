@@ -10,7 +10,7 @@
 
 import { spokenShift } from "../../spoken-time"
 import type { NotificationPayload } from "../types"
-import { myPageUrl, escapeHtml, btn, wrap, type RenderedEmail } from "./shared"
+import { BASE_URL, myPageUrl, escapeHtml, btn, wrap, type RenderedEmail } from "./shared"
 
 type SwapShiftPart = { roleName: string; label?: string | null; date: string; startTime: string; endTime: string; locationDetails?: string | null; instructions?: string | null }
 
@@ -101,5 +101,56 @@ export function renderShiftSwapEnded(p: NotificationPayload): RenderedEmail {
     ${shiftHtml(keep, d.kept)}
     <p style="margin-top:1.5em">${btn(linkUrl, "Voir mes inscriptions")}</p>
   `, `${what} Tu conserves ton créneau.`)
+  return { subject, html, text }
+}
+
+// ── Proposition reçue ────────────────────────────────────────────────────────
+
+/**
+ * To the person who published the request: « Jean D. » offers a swap. Only a link to the personal
+ * page, where accepting or refusing is a POST bound to this offer (never an action by the link).
+ */
+export function renderShiftSwapOffered(p: NotificationPayload): RenderedEmail {
+  const d = p.data as { volunteerName: string; eventTitle: string; orgSlug?: string; otherName: string | null; gives: SwapShiftPart; receives: SwapShiftPart; deadline: string; editToken: string }
+  const firstName = d.volunteerName.split(" ")[0]
+  const linkUrl = `${myPageUrl(d.orgSlug, d.editToken)}#echanges`
+  const who = d.otherName?.trim() || "Un ou une bénévole"
+  const subject = `Proposition d'échange : ${d.eventTitle}`
+  const intro = `${who} te propose d'échanger ton créneau pour ${d.eventTitle}.`
+  const answer = `Réponds avant le ${d.deadline} depuis ta page « Mes inscriptions ». Rien ne change tant que tu n'as pas accepté.`
+  const text = [
+    `Hello ${firstName},`, ``, intro, ``,
+    `Tu cèdes :`, ...shiftLines(d.gives).map((l) => `- ${l}`), ``,
+    `Tu reçois :`, ...shiftLines(d.receives).map((l) => `- ${l}`), ``,
+    answer, linkUrl,
+  ].join("\n")
+  const html = wrap(`
+    <h2 style="margin:0 0 0.25em">Hello ${escapeHtml(firstName)},</h2>
+    <p style="color:#555">${escapeHtml(intro)}</p>
+    ${shiftHtml("Tu cèdes :", d.gives)}
+    ${shiftHtml("Tu reçois :", d.receives)}
+    <p style="color:#555">${escapeHtml(answer)}</p>
+    <p style="margin-top:1.5em">${btn(linkUrl, "Voir la proposition")}</p>
+  `, intro)
+  return { subject, html, text }
+}
+
+// ── Validation attendue (organisateurs) ─────────────────────────────────────
+
+/** To each active organiser: a swap waits for their approval before its deadline. */
+export function renderShiftSwapApprovalNeeded(p: NotificationPayload): RenderedEmail {
+  const d = p.data as { eventId: string; eventTitle: string; requester: { name: string; shift: SwapShiftPart }; counterpart: { name: string; shift: SwapShiftPart }; deadline: string }
+  const url = `${BASE_URL}/admin/events/${encodeURIComponent(d.eventId)}/registrations#echanges`
+  const subject = `Échange de créneaux à valider : ${d.eventTitle}`
+  const intro = `Deux bénévoles de ${d.eventTitle} se sont mis d'accord pour échanger leurs créneaux. L'échange attend votre validation avant le ${d.deadline} ; rien ne change d'ici là.`
+  const line = (who: string, gives: SwapShiftPart, receives: SwapShiftPart) => `${who} cède ${spokenShift(gives)} et reçoit ${spokenShift(receives)}.`
+  const lines = [line(d.requester.name, d.requester.shift, d.counterpart.shift), line(d.counterpart.name, d.counterpart.shift, d.requester.shift)]
+  const text = [`Bonjour,`, ``, intro, ``, ...lines.map((l) => `- ${l}`), ``, `Valider ou refuser l'échange :`, url].join("\n")
+  const html = wrap(`
+    <h2 style="margin:0 0 0.25em">Bonjour,</h2>
+    <p style="color:#555">${escapeHtml(intro)}</p>
+    <ul style="color:#333;padding-left:1.25em;margin:0.5em 0 1em">${lines.map((l) => `<li>${escapeHtml(l)}</li>`).join("")}</ul>
+    <p style="margin-top:1.5em">${btn(url, "Valider ou refuser l'échange")}</p>
+  `, intro)
   return { subject, html, text }
 }

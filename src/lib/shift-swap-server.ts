@@ -20,7 +20,8 @@ import {
   swapRefusalMessage, SWAP_COUNTER_LIVE_STATUSES, SWAP_LIVE_STATUSES,
   type SwapEndReason, type SwapRegistration, type SwapShift, type SwapStatus,
 } from "./shift-swaps"
-import { selfCancelDeadline } from "./cancel-deadline"
+import { deadlineMoment, selfCancelDeadline } from "./cancel-deadline"
+import { rosterDisplayName } from "./shift-roster-text"
 
 /**
  * The commands of a shift swap (#1174), server only. The rules are in src/lib/shift-swaps.ts; each
@@ -267,6 +268,45 @@ function appliedPayload(event: LoadedEvent, req: LockedRequest, person: LoadedRe
   }
 }
 
+/**
+ * To Pierre: someone offered a swap (#1174). Names the other person as « Jean D. » only (owner
+ * decision, 2026-10-27); the email only links to the personal page, where the answer is a POST
+ * bound to this offer's revision (never an action by GET).
+ */
+function offeredPayload(event: LoadedEvent, req: LockedRequest, mine: LoadedRegistration, theirs: LoadedRegistration, deadline: Date): NotificationPayload | null {
+  const editToken = registrationToken.reveal(mine)
+  if (!mine.volunteer.email || !editToken) return null
+  return {
+    kind: "shift_swap_offered",
+    recipient: { email: mine.volunteer.email, name: nameOf(mine) },
+    volunteerId: mine.volunteerId,
+    organizationId: event.organizationId,
+    dedupeKey: `shift_swap_offered:${req.id}:${req.revision}`,
+    data: {
+      volunteerName: nameOf(mine), eventTitle: event.title, orgSlug: event.organization.slug,
+      otherName: rosterDisplayName(theirs.volunteer.firstName, theirs.volunteer.lastName),
+      gives: shiftPart(mine.shift), receives: shiftPart(theirs.shift),
+      deadline: deadlineMoment(deadline, orgTimeZone(event.organization)), editToken,
+    },
+  }
+}
+
+/** To each active organiser: a swap waits for their approval, with both people and both missions. */
+function approvalPayload(event: LoadedEvent, req: LockedRequest, admin: { email: string; name: string | null }, mine: LoadedRegistration, theirs: LoadedRegistration, deadline: Date): NotificationPayload {
+  return {
+    kind: "shift_swap_approval_needed",
+    recipient: { email: admin.email, name: admin.name ?? undefined },
+    organizationId: event.organizationId,
+    dedupeKey: `shift_swap_approval_needed:${req.id}:${req.revision}:${admin.email.toLowerCase()}`,
+    data: {
+      eventId: event.id, eventTitle: event.title,
+      requester: { name: nameOf(mine), shift: shiftPart(mine.shift) },
+      counterpart: { name: nameOf(theirs), shift: shiftPart(theirs.shift) },
+      deadline: deadlineMoment(deadline, orgTimeZone(event.organization)),
+    },
+  }
+}
+
 export type SwapEndedOutcome = "expired" | "impossible" | "refused" | "cancelled" | "withdrawn" | "declined"
 
 function endedPayload(event: LoadedEvent, req: LockedRequest, person: LoadedRegistration | null, outcome: SwapEndedOutcome, reason: SwapEndReason | null): NotificationPayload | null {
@@ -431,6 +471,9 @@ export async function offerSwap(db: SwapDbLike, input: { requestId: string; regi
           changes: { swapStatus: { from: "open", to: "offered" }, shiftId: { from: null, to: theirs.shiftId } },
         },
       })
+      // Pierre is told, with « Jean D. » and both missions; he answers from his personal page.
+      const deadline = swapDeadline({ expiresAt: req.expiresAt, given: [mine!.shift, theirs.shift], setting: event, timeZone: orgTimeZone(event.organization) })
+      outboxIds = await queue(tx, event, [offeredPayload(event, { ...req, revision }, mine!, theirs, deadline)])
       return { ok: true, requestId: req.id, status: "offered" }
     })
     deliver(outboxIds)
@@ -524,6 +567,10 @@ export async function confirmSwap(db: SwapDbLike, input: { requestId: string; vo
           changes: { swapStatus: { from: "offered", to: "approval" } },
         },
       })
+      // The organisers are told: nothing changes until one of them approves, before the deadline.
+      const deadline = swapDeadline({ expiresAt: req.expiresAt, given: [mine!.shift, theirs!.shift], setting: event, timeZone: orgTimeZone(event.organization) })
+      const admins = await tx.adminUser.findMany({ where: { organizationId: event.organizationId, isActive: true }, select: { email: true, name: true } })
+      outboxIds = await queue(tx, event, admins.map((a) => approvalPayload(event, req, a, mine!, theirs!, deadline)))
       return { ok: true, requestId: req.id, status: "approval" }
     }
     outboxIds = await applySwap(tx, req, event, mine!, theirs!, { type: "volunteer", id: input.volunteerId }, now)

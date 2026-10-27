@@ -53,13 +53,12 @@ export const BETA_CAPABILITIES = {
     description: "Confier tous les postes d'un secteur à un même responsable, en lecture seule.",
     shipped: true,
   },
-  // #1174: the event option « Autoriser les demandes d'échange de créneaux » (src/lib/shift-swaps.ts).
-  // Not shipped yet: the rules and the swap transaction are in, the pages that use them come with
-  // the next lot of #1174, which flips it.
+  // #1174: the event option « Autoriser les demandes d'échange de créneaux » (src/lib/shift-swaps.ts),
+  // with « Mes inscriptions », the organisers' approvals and the emails.
   shiftSwaps: {
     label: "Échanges de créneaux",
     description: "Permettre à deux bénévoles inscrits sur le même poste d'échanger leurs créneaux.",
-    shipped: false,
+    shipped: true,
   },
 } as const satisfies BetaRegistry
 

@@ -13,6 +13,7 @@ import FocusTargetHeading from "@/components/admin/event-nav/FocusTargetHeading"
 import { hasLevel } from "@/lib/permissions"
 import { DELETE_SECTION_ID } from "@/lib/event-nav"
 import EventSectorsOption from "@/components/admin/EventSectorsOption"
+import EventShiftSwapsOption from "@/components/admin/EventShiftSwapsOption"
 import { canAdoptBeta } from "@/lib/beta-access"
 import { sectorsAdopted, sectorsOptionOffered } from "@/lib/sectors"
 
@@ -33,6 +34,9 @@ export default async function EditEventPage({ params, searchParams }: { params: 
   // Sectors (#1147, beta): offered while the organisation can adopt them, or once the event has them.
   // The gate is read only for an event that has neither.
   const sectorsOffered = sectorsOptionOffered(event, event.sectorsEnabled || sectorsAdopted(event) || await canAdoptBeta(event.organizationId, "sectors"))
+
+  // Shift swaps (#1174, beta): offered while the organisation can adopt them, or once the event has them.
+  const swapsOffered = event.shiftSwapsEnabled || await canAdoptBeta(event.organizationId, "shiftSwaps")
 
   // Everything that permanent deletion would erase (all statuses, cancelled shifts included),
   // only counted for an archived event.
@@ -90,6 +94,7 @@ export default async function EditEventPage({ params, searchParams }: { params: 
         )}
       </div>
       <EventForm initialData={initialData} timeZone={timeZone} />
+      {swapsOffered && <EventShiftSwapsOption eventId={event.id} initialEnabled={event.shiftSwapsEnabled} initialApproval={event.shiftSwapsApproval} />}
       {sectorsOffered && <EventSectorsOption eventId={event.id} initialEnabled={event.sectorsEnabled} adopted={sectorsAdopted(event)} />}
       {!wizard && (
         <section aria-labelledby={DELETE_SECTION_ID} className="border-t border-gray-200 pt-6 space-y-3">
