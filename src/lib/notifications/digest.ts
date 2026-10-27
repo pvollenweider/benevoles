@@ -66,19 +66,24 @@ export async function queueDigestItem<Item>(input: {
       } else {
         next = [...items, { key: input.itemKey, value: input.item, ...(merge ? { mergeKey: merge.key } : {}) }]
       }
+      // Only while the row is still waiting: a delivery may claim it after the read above (the cron
+      // does not take the group's lock), and then sends what it read. Claimed meanwhile, this item
+      // starts a row of its own below rather than being written into an email already leaving.
+      const stillPending = { id: pending.id, status: "pending", attempts: 0 }
       // Nothing left to say (a change undone before the email left): the email is dropped.
       if (next.length === 0) {
-        await tx.notificationOutbox.delete({ where: { id: pending.id } })
-        return null
+        const { count } = await tx.notificationOutbox.deleteMany({ where: stillPending })
+        if (count > 0) return null
+      } else {
+        const { count } = await tx.notificationOutbox.updateMany({
+          where: stillPending,
+          data: {
+            payload: sealPayload({ kind: input.kind, recipient: input.recipient, ...member, organizationId: input.organizationId, data: { ...input.base, items: next } }),
+            nextAttemptAt: sendAt,
+          },
+        })
+        if (count > 0) return due ? pending.id : null
       }
-      await tx.notificationOutbox.update({
-        where: { id: pending.id },
-        data: {
-          payload: sealPayload({ kind: input.kind, recipient: input.recipient, ...member, organizationId: input.organizationId, data: { ...input.base, items: next } }),
-          nextAttemptAt: sendAt,
-        },
-      })
-      return due ? pending.id : null
     }
     // An item already sent in an earlier email keeps its key: queued again, it is skipped.
     await tx.notificationOutbox.createMany({
