@@ -27,13 +27,18 @@ describe.skipIf(!url)("volunteer withdrawal confirmation digest (#1190)", () => 
   let prefixes: string[] = []
   const rows = () => prisma.notificationOutbox.findMany({ where: { OR: prefixes.map((p) => ({ dedupeKey: { startsWith: `${p}:` } })) }, orderBy: { createdAt: "asc" } })
 
+  // The CI job sets DIGEST_DELAY_SECONDS=0 (emails due at once); this test is about the delay.
+  const delayEnv = process.env.DIGEST_DELAY_SECONDS
   beforeAll(async () => {
+    delete process.env.DIGEST_DELAY_SECONDS
     orgId = (await prisma.organization.create({ data: { name: "Org wdc", slug: `${tag}-org`, timeZone: "Europe/Zurich" } })).id
     volunteerId = (await prisma.volunteer.create({ data: { organizationId: orgId, firstName: "Chloé", lastName: "Roy", email: `${tag}@example.org` } })).id
     prefixes = [withdrawalConfirmationGroupKey(`${tag}-e1`, volunteerId), withdrawalConfirmationGroupKey(`${tag}-e2`, volunteerId)]
   })
 
   afterAll(async () => {
+    if (delayEnv === undefined) delete process.env.DIGEST_DELAY_SECONDS
+    else process.env.DIGEST_DELAY_SECONDS = delayEnv
     if (orgId) {
       await prisma.notificationOutbox.deleteMany({ where: { organizationId: orgId } })
       await prisma.volunteer.deleteMany({ where: { organizationId: orgId } })
