@@ -1,5 +1,5 @@
 import { describe, it, expect } from "vitest"
-import { answerSummary, answerSummaryCsv, countedPeople, numberNote, rowLabel, scopeLine, stateAt, textKey, type SummaryQuestion } from "../question-answer-summary"
+import { answerSummary, answerSummaryCsv, answerSummarySelect, answerSummarySelectFor, countedPeople, numberNote, rowLabel, scopeLine, stateAt, textKey, type SummaryQuestion } from "../question-answer-summary"
 
 const sizes: SummaryQuestion = {
   id: "q1", label: "Taille de t-shirt", type: "single", options: ["S", "M", "L"],
@@ -179,3 +179,15 @@ describe("questions asked to some postes (#1140)", () => {
   })
 })
 
+
+describe("answerSummarySelectFor (#1170)", () => {
+  it("narrows the counted registrations to the sector's postes, keeping the cancelled-shift rule", () => {
+    const sel = answerSummarySelectFor({ roleName: { in: ["Parking Nord"] } })
+    expect(sel.registrations.where).toEqual({ status: answerSummarySelect.registrations.where.status, shift: { status: { not: "cancelled" }, roleName: { in: ["Parking Nord"] } } })
+    expect(sel.questions).toBe(answerSummarySelect.questions)
+  })
+
+  it("is answerSummarySelect when not filtered", () => {
+    expect(answerSummarySelectFor({})).toEqual(answerSummarySelect)
+  })
+})

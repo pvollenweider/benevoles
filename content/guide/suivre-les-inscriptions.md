@@ -6,7 +6,7 @@ summary: Le tableau des inscriptions d'un événement : coordonnées, statut, ac
 related: [presences-le-jour-j, ou-manque-t-il-du-monde, ecrire-aux-benevoles]
 legacy: [admin#suivre-les-inscriptions, admin#ajouter-quelqu-un-a-la-main]
 aliases: []
-updated: 2026-10-12
+updated: 2026-10-27
 ---
 
 # Suivre les inscriptions
@@ -25,6 +25,8 @@ Vue tabulaire des inscriptions, en quatre colonnes :
 ![Page des inscriptions d'un événement : compteurs (actives, liste d'attente, demandes à traiter), recherche et filtres, puis le tableau avec bénévole et coordonnées, créneau et source](/doc-img/admin-registrations.png)
 
 Au-dessus du tableau, la recherche (nom, email) et les filtres par poste et par créneau. Quand l'événement a des [liens par groupe](partager-le-lien.md#un-lien-par-groupe), un filtre (**Tous les liens de groupe**) montre les inscriptions venues d'un lien (« Lien : … »), ou celles arrivées **Sans lien de groupe**.
+
+Dans un événement organisé par secteurs (bêta, voir [Gérer les postes](gerer-les-postes.md#organiser-les-postes-par-secteurs-beta)), le champ **Secteur**, au-dessus des filtres, limite la page aux postes d'un secteur, ou à « Autres postes » pour les postes sans secteur : le tableau, les compteurs, les annulations récentes et le lien **Exporter les présences (CSV)**. Le choix figure dans l'adresse de la page, que vous pouvez transmettre à un autre organisateur. Un secteur limite ce que vous voyez, pas ce que vous pouvez faire.
 
 Seules les demandes sur un créneau sur validation ont leurs propres boutons, **Accepter** et **Refuser**, sur la ligne (voir [Inscriptions sur validation](inscriptions-sur-validation.md)). Tout le reste passe par la sélection : cocher une ou plusieurs inscriptions (case d'en-tête pour tout sélectionner d'un coup) fait apparaître une barre d'outils, appliquée à toute la sélection, même une inscription masquée entre-temps par un filtre ou une recherche :
 

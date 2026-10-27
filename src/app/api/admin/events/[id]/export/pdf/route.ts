@@ -9,17 +9,26 @@ import { sectorsAdopted } from "@/lib/sectors"
 import { contactPhone } from "@/lib/contact-phone"
 import { orgTimeZone } from "@/lib/time-zone"
 import { LIVE_STATUSES } from "@/lib/registration-capacity"
+import { sectorFilterOfRequest } from "@/lib/sector-filter-data"
+import { sectorFilterCaption } from "@/lib/sector-filter"
 
 function esc(s: string) {
   return s.replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;").replace(/"/g, "&quot;")
 }
 
-export async function GET(_req: Request, { params }: { params: Promise<{ id: string }> }) {
+/**
+ * GET /api/admin/events/[id]/export/pdf: the full export (planning, recap, volunteers).
+ * `?secteur=` (#1170) keeps the postes of one sector, read now, and says so under the title.
+ */
+export async function GET(req: Request, { params }: { params: Promise<{ id: string }> }) {
   const guard = await requireOrgSession()
   if (guard instanceof NextResponse) return guard
   const { db } = guard
 
   const { id } = await params
+  const sector = await sectorFilterOfRequest(db, id, req)
+  if (!sector) return NextResponse.json({ error: "Non trouvé" }, { status: 404 })
+  const caption = sectorFilterCaption(sector.filter)
 
   const event = await db.event.findFirst({
     where: { id },
@@ -27,7 +36,7 @@ export async function GET(_req: Request, { params }: { params: Promise<{ id: str
       organization: { select: { timeZone: true } },
       sectors: { select: { id: true, name: true, displayOrder: true, archivedAt: true } },
       shifts: {
-        where: { status: { not: "cancelled" } },
+        where: { status: { not: "cancelled" }, ...sector.shiftWhere },
         include: {
           registrations: {
             where: { status: { in: [...LIVE_STATUSES] } },
@@ -110,7 +119,7 @@ export async function GET(_req: Request, { params }: { params: Promise<{ id: str
 <html lang="fr">
 <head>
   <meta charset="UTF-8">
-  <title>${esc(event.title)} – Export</title>
+  <title>${esc(event.title)} – Export${caption ? ` – ${esc(caption)}` : ""}</title>
   <style>
     *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
 
@@ -309,6 +318,7 @@ export async function GET(_req: Request, { params }: { params: Promise<{ id: str
     <div>
       <div class="event-title">${esc(event.title)}</div>
       <div class="event-meta">Export du ${esc(ts)}</div>
+      ${caption ? `<div class="event-meta"><strong>${esc(caption)}</strong></div>` : ""}
     </div>
     <button class="print-btn" onclick="window.print()">Imprimer / Enregistrer en PDF</button>
   </div>

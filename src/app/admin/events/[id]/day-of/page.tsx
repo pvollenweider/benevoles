@@ -11,6 +11,9 @@ import { loadDayOf } from "@/lib/day-of-load"
 import DayOfBoard from "@/components/admin/DayOfBoard"
 import HelpLink from "@/components/admin/HelpLink"
 import { statusBoxClass } from "@/lib/status-message"
+import SectorFilter from "@/components/admin/SectorFilter"
+import { loadSectorFilter } from "@/lib/sector-filter-data"
+import { CURRENT_SHIFT_WORDS, sectorFilterAnnouncement, sectorFilterValue, withSectorFilter } from "@/lib/sector-filter"
 
 export const dynamic = "force-dynamic"
 
@@ -24,15 +27,19 @@ const navLinkClass =
  * the next hours, who is expected and who has arrived, one tap to mark someone present. Only the
  * name, the shift, the state and the phone: no email, answers or notes.
  */
-export default async function DayOfPage({ params }: { params: Promise<{ id: string }> }) {
+export default async function DayOfPage({ params, searchParams }: { params: Promise<{ id: string }>; searchParams: Promise<{ secteur?: string | string[] }> }) {
   const ctx = await getOrgContext()
   if (!ctx) redirect("/admin/login")
   const { id } = await params
   const now = new Date()
-  const loaded = await loadDayOf(ctx.db, id, now)
+  // The « Secteur » filter (#1170): the sector's postes only, on this read and on every poll.
+  const sector = await loadSectorFilter(ctx.db, id, (await searchParams).secteur)
+  if (!sector) notFound()
+  const loaded = await loadDayOf(ctx.db, id, now, sector.shiftWhere)
   if (!loaded) notFound()
   const { event, timeZone, board, today, refreshedAt } = loaded
   const base = `/admin/events/${event.id}`
+  const sectorValue = sectorFilterValue(sector.filter)
   const eventDay = isEventDay({ startDate: event.startDate.toISOString(), endDate: event.endDate.toISOString() }, now, timeZone)
 
   return (
@@ -51,13 +58,22 @@ export default async function DayOfPage({ params }: { params: Promise<{ id: stri
         </p>
       )}
 
-      <DayOfBoard eventId={event.id} board={board} today={today} refreshedAt={refreshedAt} />
+      {sector.offered && (
+        <SectorFilter
+          options={sector.options}
+          value={sectorValue}
+          announcement={sectorFilterAnnouncement(sector.filter, board.inProgress.concat(board.upcoming).reduce((n, g) => n + g.shifts.length, 0), CURRENT_SHIFT_WORDS)}
+        />
+      )}
+
+      {/* Keyed by the sector: the board's marks, search and polling restart on the sector's shifts. */}
+      <DayOfBoard key={sectorValue} eventId={event.id} board={board} today={today} refreshedAt={refreshedAt} sector={sectorValue} />
 
       <nav aria-labelledby="dayof-more" className="border-t border-gray-200 pt-4 space-y-2">
         <h2 id="dayof-more" className="text-sm font-semibold text-gray-700">Autres pages de l&apos;événement</h2>
         <ul role="list" className="flex flex-wrap gap-2">
-          <li><Link href={`${base}/registrations`} className={navLinkClass}>Inscriptions</Link></li>
-          <li><Link href={`${base}/staffing`} className={navLinkClass}>Où manque-t-il du monde ?</Link></li>
+          <li><Link href={withSectorFilter(`${base}/registrations`, sector.filter)} className={navLinkClass}>Inscriptions</Link></li>
+          <li><Link href={withSectorFilter(`${base}/staffing`, sector.filter)} className={navLinkClass}>Où manque-t-il du monde ?</Link></li>
           <li><Link href={`${base}/message`} className={navLinkClass}>Écrire aux bénévoles</Link></li>
         </ul>
       </nav>

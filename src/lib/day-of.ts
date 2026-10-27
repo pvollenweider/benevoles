@@ -15,6 +15,7 @@ import { shiftInstants } from "./ics"
 import { crossesMidnight } from "./gantt-utils"
 import { fmtHour } from "./registrations-list"
 import { fold } from "./text-fold"
+import { SECTOR_FILTER_PARAM } from "./sector-filter"
 
 /** « Dans les prochaines heures »: fixed by the owner (#561), not a setting. */
 export const DAY_OF_WINDOW_HOURS = 3
@@ -222,6 +223,12 @@ export function telHref(phone: string): string {
  * registrations list (#399), for one registration, so the same rules (active registrations only,
  * no double mark) and the same event log entries apply.
  */
+/** The board route the open page polls (#1141), with the page's « Secteur » filter (#1170) when one is chosen. */
+export function dayOfBoardUrl(eventId: string, sector = ""): string {
+  const base = `/api/admin/events/${encodeURIComponent(eventId)}/day-of`
+  return sector ? `${base}?${new URLSearchParams({ [SECTOR_FILTER_PARAM]: sector })}` : base
+}
+
 export function presenceRequest(eventId: string, registrationId: string, present: boolean): { url: string; body: { action: "check_in" | "undo_check_in"; registrationIds: string[] } } {
   return {
     url: `/api/admin/events/${encodeURIComponent(eventId)}/registrations/bulk`,

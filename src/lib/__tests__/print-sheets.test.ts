@@ -21,6 +21,15 @@ const data: SheetData = {
 }
 
 describe("print sheets", () => {
+  it("says the sector a sheet is limited to (#1170), under the title; nothing otherwise", () => {
+    const html = renderSheet("day", { ...data, sectorCaption: "Secteur : Autres postes" })
+    expect(html).toContain("<title>Planning par jour – Fête d&#39;été – Secteur : Autres postes</title>".replace("&#39;", "'"))
+    expect(html).toContain(`<p class="kind"><strong>Secteur : Autres postes</strong></p>`)
+    expect(renderSheet("day", data)).not.toContain("Secteur :")
+    // An empty filtered sheet reads as filtered, not broken.
+    expect(renderSheet("day", { ...data, shifts: [], sectorCaption: "Secteur : Parking" })).toContain("Aucun créneau dans ce choix (Secteur : Parking).")
+  })
+
   it("knows its six views, volunteers' first", () => {
     expect(SHEET_VIEWS.map((v) => v.id)).toEqual(["day", "role", "individual", "attendance", "phones", "answers"])
     expect(isSheetView("day")).toBe(true)

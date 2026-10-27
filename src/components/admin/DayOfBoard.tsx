@@ -9,6 +9,7 @@ import { focusFirstAvailable, isFocusDropped } from "@/lib/focus-return"
 import { statusBoxClass } from "@/lib/status-message"
 import {
   DAY_OF_WINDOW_HOURS,
+  dayOfBoardUrl,
   filterGroups,
   groupHeading,
   missingLine,
@@ -74,6 +75,8 @@ type Props = {
   today: string
   /** « 14h05 »: when the server built this board. */
   refreshedAt: string
+  /** The page's « Secteur » filter (#1170, `secteur` param value, "" for all): every read keeps it. */
+  sector?: string
 }
 
 type Snapshot = { board: Board; today: string; refreshedAt: string }
@@ -94,7 +97,7 @@ const telClass = `inline-flex items-center min-h-11 px-3 rounded-xl border borde
  * page. Search, focus, an action in flight and the marks made here survive each read (merge and
  * ordering rules in day-of-sync.ts). Polls are silent unless something changed elsewhere.
  */
-export default function DayOfBoard({ eventId, board: initialBoard, today: initialToday, refreshedAt: initialRefreshedAt }: Props) {
+export default function DayOfBoard({ eventId, board: initialBoard, today: initialToday, refreshedAt: initialRefreshedAt, sector = "" }: Props) {
   const [snap, setSnap] = useState<Snapshot>({ board: initialBoard, today: initialToday, refreshedAt: initialRefreshedAt })
   const { board, today, refreshedAt } = snap
   const [query, setQuery] = useState("")
@@ -201,7 +204,7 @@ export default function DayOfBoard({ eventId, board: initialBoard, today: initia
     let res: Response
     try {
       // A read that hangs (weak site network) would hold the next ones: given up after a while.
-      res = await fetch(`/api/admin/events/${encodeURIComponent(eventId)}/day-of`, { cache: "no-store", headers: { Accept: "application/json" }, signal: AbortSignal.timeout(SYNC_TIMEOUT_MS) })
+      res = await fetch(dayOfBoardUrl(eventId, sector), { cache: "no-store", headers: { Accept: "application/json" }, signal: AbortSignal.timeout(SYNC_TIMEOUT_MS) })
     } catch {
       fail(syncStatusOf({ network: true, online: typeof navigator === "undefined" || navigator.onLine !== false }))
       return

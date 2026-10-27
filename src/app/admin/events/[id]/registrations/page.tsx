@@ -13,6 +13,9 @@ import { hashCharterText } from "@/lib/charter-hash"
 import HelpLink from "@/components/admin/HelpLink"
 import RecentCancellations from "@/components/admin/registrations/RecentCancellations"
 import { loadRecentCancellations } from "@/lib/recent-cancellations-data"
+import SectorFilter from "@/components/admin/SectorFilter"
+import { loadSectorFilter } from "@/lib/sector-filter-data"
+import { REGISTRATION_WORDS, sectorFilterAnnouncement, sectorFilterValue, withSectorFilter } from "@/lib/sector-filter"
 
 export const dynamic = "force-dynamic"
 export const metadata: Metadata = { title: "Inscriptions" }
@@ -22,25 +25,28 @@ export default async function RegistrationsPage({
   searchParams,
 }: {
   params: Promise<{ id: string }>
-  searchParams: Promise<{ shift?: string; q?: string | string[]; demandes?: string; lien?: string }>
+  searchParams: Promise<{ shift?: string; q?: string | string[]; demandes?: string; lien?: string; secteur?: string | string[] }>
 }) {
   const ctx = await getOrgContext()
   if (!ctx) redirect("/admin/login")
   const { db } = ctx
 
   const { id } = await params
-  const { shift: initialShiftFilter, q, demandes, lien } = await searchParams
+  const { shift: shiftParam, q, demandes, lien, secteur } = await searchParams
   const initialSearch = (Array.isArray(q) ? q[0] : q)?.slice(0, SEARCH_MAX_LENGTH).trim() || undefined
+  // The « Secteur » filter (#1170): the shifts and registrations of the sector's postes only, read now.
+  const sector = await loadSectorFilter(db, id, secteur)
+  if (!sector) notFound()
 
   const event = await db.event.findFirst({
     where: { id },
     include: {
       shifts: {
-        where: { status: { not: "cancelled" } },
+        where: { status: { not: "cancelled" }, ...sector.shiftWhere },
         orderBy: [{ date: "asc" }, { startTime: "asc" }],
       },
       registrations: {
-        where: { status: { in: [...LIVE_STATUSES] } },
+        where: { status: { in: [...LIVE_STATUSES] }, ...sector.registrationWhere },
         include: { volunteer: true, shift: true },
         orderBy: [{ status: "asc" }, { createdAt: "desc" }],
       },
@@ -57,7 +63,10 @@ export default async function RegistrationsPage({
   // The text a volunteer signing up now would accept (#569), to tell it apart from an older one.
   const currentCharterHash = hashCharterText(resolveCharterText(event.organization.volunteerCharter, event.organization.hasOrgInsurance))
 
-  const cancellations = await loadRecentCancellations(db, id, orgTimeZone(event.organization))
+  const cancellations = await loadRecentCancellations(db, id, orgTimeZone(event.organization), new Date(), sector.shiftWhere)
+  // `?shift=` of a shift outside the sector is ignored: the list then opens on the whole sector.
+  const initialShiftFilter = shiftParam && event.shifts.some((s) => s.id === shiftParam) ? shiftParam : undefined
+  const sectorValue = sectorFilterValue(sector.filter)
 
   // Count active registrations per shift from the already-loaded list
   const regCountByShift = event.registrations.reduce<Record<string, number>>((acc, r) => {
@@ -75,7 +84,7 @@ export default async function RegistrationsPage({
         <div className="flex items-start justify-between gap-3 flex-wrap">
           <h1 id="page-heading" tabIndex={-1} className="text-xl font-bold text-gray-900 focus:outline-none">Inscriptions</h1>
           <a
-            href={`/api/admin/events/${id}/export/attendance`}
+            href={withSectorFilter(`/api/admin/events/${id}/export/attendance`, sector.filter)}
             className="text-sm font-medium text-blue-700 underline underline-offset-2 hover:text-blue-900 rounded focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-blue-600"
           >
             Exporter les présences (CSV)
@@ -91,7 +100,20 @@ export default async function RegistrationsPage({
         </p>
       </div>
 
+      {sector.offered && (
+        <SectorFilter
+          options={sector.options}
+          value={sectorValue}
+          announcement={sectorFilterAnnouncement(sector.filter, event.registrations.length, REGISTRATION_WORDS)}
+          hint="S'applique aussi à l'export des présences."
+          // A shift chosen before may not be in the new sector: the list opens on the whole sector.
+          clear={["shift"]}
+        />
+      )}
+
+      {/* Keyed by the sector: its client state (filters, selection) restarts from the sector's rows. */}
       <RegistrationsManager
+        key={sectorValue}
         eventId={id}
         timeZone={orgTimeZone(event.organization)}
         organizerEmail={ctx.session.user?.email ?? null}

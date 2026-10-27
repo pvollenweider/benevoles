@@ -30,6 +30,8 @@ De la veille du premier jour au dernier jour de l'événement, ses pages affiche
 
 La page reste accessible en dehors des dates, par exemple depuis un favori enregistré sur le téléphone : elle le signale et n'affiche que ce qui tombe dans la fenêtre du moment. Elle est ouverte aux propriétaires et aux organisateurs, pas aux responsables de secteur.
 
+Dans un événement organisé par secteurs (bêta), le champ **Secteur**, au-dessus de la recherche, limite la page aux postes d'un secteur, ou à « Autres postes » : pratique quand chaque responsable suit son secteur sur son téléphone. La mise à jour automatique garde ce choix, et les liens du bas aussi. Le choix figure dans l'adresse de la page, à garder en favori.
+
 ## Depuis les inscriptions
 
 Sans terminal ni badge : dans les [inscriptions](suivre-les-inscriptions.md), sélectionnez les lignes des personnes arrivées et cliquez **Marquer présents**. Un badge **Présent** apparaît sur la ligne, le compteur « N présents sur M inscrits » se met à jour, et l'action est notée dans le journal. **Annuler la présence** retire la marque (sélection de lignes déjà marquées). Seules les inscriptions confirmées peuvent être marquées.
