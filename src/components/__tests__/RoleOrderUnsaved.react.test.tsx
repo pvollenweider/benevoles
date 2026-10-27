@@ -140,11 +140,11 @@ describe("« Gérer les postes » with an unsaved poste order", () => {
       shift({ id: "s2", roleName: "Accueil", label: "Accueil", displayOrder: 100, sectorId: "sec-entrees" }),
       shift({ id: "s3", roleName: "Vestiaire", label: "Vestiaire", displayOrder: 200, sectorId: "sec-entrees" }),
     ], sectors)
-    fireEvent.click(manageRoles())
+    fireEvent.click(screen.getByRole("button", { name: "Gérer les secteurs et postes" }))
     // Nothing moved: no question, though the drawn order differs from the saved array.
     fireEvent.click(screen.getByRole("button", { name: "Fermer" }))
     expect(screen.queryByRole("dialog")).not.toBeInTheDocument()
-    fireEvent.click(manageRoles())
+    fireEvent.click(screen.getByRole("button", { name: "Gérer les secteurs et postes" }))
     fireEvent.click(screen.getByRole("button", { name: "Descendre le poste Accueil" }))
     fireEvent.click(screen.getByRole("button", { name: "Fermer" }))
     expect(screen.getByRole("dialog", { name: "L'ordre des postes n'est pas enregistré" })).toBeInTheDocument()
