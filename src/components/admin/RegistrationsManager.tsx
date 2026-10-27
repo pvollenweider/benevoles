@@ -33,6 +33,7 @@ import {
   type ShiftRef,
 } from "@/lib/registrations-list"
 import { statusBoxClass } from "@/lib/status-message"
+import { messagePageHref, writeToSectorLabel } from "@/lib/targeted-message"
 
 /** Typing in the search box: its count is announced once typing has paused this long. */
 const SEARCH_ANNOUNCE_MS = 500
@@ -56,10 +57,12 @@ type Props = {
   groupLinks?: { id: string; name: string }[]
   /** `?lien=`: a link id, or "none" for the sign-ups through no group link. */
   initialGroupFilter?: string
+  /** The page's « Secteur » filter (#1170) when one is chosen: « Écrire au secteur … » writes to it. */
+  sectorFilter?: { value: string; label: string } | null
 }
 
 // ── Main component ────────────────────────────────────────────────────────────
-export default function RegistrationsManager({ eventId, initialRegistrations, shifts, initialShiftFilter, initialSearch, initialRequestsOnly = false, timeZone, answersByVolunteer = {}, organizerEmail = null, groupLinks = [], initialGroupFilter = "" }: Props) {
+export default function RegistrationsManager({ eventId, initialRegistrations, shifts, initialShiftFilter, initialSearch, initialRequestsOnly = false, timeZone, answersByVolunteer = {}, organizerEmail = null, groupLinks = [], initialGroupFilter = "", sectorFilter = null }: Props) {
   const [registrations, setRegistrations] = useState<Registration[]>(initialRegistrations)
   // Non-blocking workload warnings per volunteer (#465), from the active registrations shown here.
   const workload = useMemo(
@@ -514,10 +517,10 @@ export default function RegistrationsManager({ eventId, initialRegistrations, sh
           />
         </div>
         <Link
-          href={`/admin/events/${eventId}/message${shiftFilter ? `?shift=${encodeURIComponent(shiftFilter)}` : roleFilter ? `?role=${encodeURIComponent(roleFilter)}` : ""}`}
+          href={messagePageHref(eventId, { shiftId: shiftFilter, roleName: roleFilter, sector: sectorFilter?.value })}
           className="border border-gray-300 text-gray-800 px-4 py-2 rounded-xl text-sm font-medium hover:bg-gray-50 transition-colors focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-blue-600"
         >
-          {shiftFilter ? "Écrire à ce créneau" : roleFilter ? "Écrire à ce poste" : "Écrire aux bénévoles"}
+          {shiftFilter ? "Écrire à ce créneau" : roleFilter ? "Écrire à ce poste" : sectorFilter ? writeToSectorLabel(sectorFilter) : "Écrire aux bénévoles"}
         </Link>
         <button
           ref={addButtonRef}

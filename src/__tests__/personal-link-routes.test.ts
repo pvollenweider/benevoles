@@ -72,7 +72,7 @@ describe("POST /api/public/registrations/link", () => {
     const { POST } = await import("@/app/api/public/registrations/link/route")
     const res = await POST(post({ email: "A@x.ch" }))
     expect(res.status).toBe(200)
-    expect((await res.json()).message).toMatch(/^Si une inscription existe/)
+    expect((await res.json()).message).toMatch(/^Demande enregistrée\. Si une inscription existe/)
     const where = m.findMany.mock.calls[0][0].where
     // Never for a deactivated or suspended organisation (src/lib/org-lifecycle.ts).
     expect(where.volunteer).toEqual({ email: { equals: "a@x.ch", mode: "insensitive" }, organization: { slug: "org", active: true, suspendedAt: null } })
@@ -81,7 +81,7 @@ describe("POST /api/public/registrations/link", () => {
     m.findMany.mockResolvedValue([])
     const unknown = await POST(post({ email: "nobody@x.ch" }))
     expect(unknown.status).toBe(200)
-    expect((await unknown.json()).message).toMatch(/^Si une inscription existe/)
+    expect((await unknown.json()).message).toMatch(/^Demande enregistrée\. Si une inscription existe/)
   })
 
   it("rejects a malformed address and sends nothing without the proxy header (a ?org= alone is ignored)", async () => {

@@ -2192,3 +2192,44 @@ describe("Sector filter of the exports — cross-tenant isolation (#1170)", () =
     expect(prismaMock.event.findFirst).not.toHaveBeenCalled()
   })
 })
+
+// ── Sector audience of the messages (#1170) ──────────────────────────────────
+
+describe("Sector-targeted messages — cross-tenant isolation (#1170)", () => {
+  beforeEach(() => vi.clearAllMocks())
+
+  it("POST /api/admin/events/[id]/message with a sector audience returns 404 for an org-B event, reading no sector and sending nothing", async () => {
+    const { POST } = await import("@/app/api/admin/events/[id]/message/route")
+    const db = setupGuard() // event.findFirst → null
+    const res = await POST(makeRequest("/api/admin/events/evt-b/message", "POST", { audience: { kind: "sector", sectorId: "sec-b" }, subject: "Hi", message: "Hello" }), params("evt-b"))
+    expect(res.status).toBe(404)
+    expect(db.shift.findMany).not.toHaveBeenCalled()
+    expect(db.registration.findMany).not.toHaveBeenCalled()
+    expect(prismaMock.notificationOutbox.createMany).not.toHaveBeenCalled()
+  })
+
+  it("POST /api/admin/events/[id]/message refuses an org-B sector on an org-A event like an unknown one (400), reading no registration", async () => {
+    const { POST } = await import("@/app/api/admin/events/[id]/message/route")
+    const findFirst = vi.fn(async (args: { select: Record<string, unknown> }) =>
+      "sectorsAdoptedAt" in args.select
+        ? { sectorsEnabled: true, sectorsAdoptedAt: new Date("2026-10-01"), sectors: [{ id: "sec-a", name: "Parking", displayOrder: 0, archivedAt: null }] }
+        : { id: "evt-a", title: "A", slug: "a", organizationId: ORG_A, organization: { name: "Org A", slug: "org-a" } })
+    const db = setupGuard({ event: { findFirst } })
+    const res = await POST(makeRequest("/api/admin/events/evt-a/message", "POST", { audience: { kind: "sector", sectorId: "sec-b" }, subject: "Hi", message: "Hello" }), params("evt-a"))
+    expect(res.status).toBe(400)
+    expect((await res.json()).error).toBe("Secteur introuvable dans cet événement.")
+    expect(db.registration.findMany).not.toHaveBeenCalled()
+    expect(prismaMock.notificationOutbox.createMany).not.toHaveBeenCalled()
+  })
+
+  it("POST /api/admin/events/[id]/scheduled-messages with a sector audience returns 404 for an org-B event, storing nothing", async () => {
+    const { POST } = await import("@/app/api/admin/events/[id]/scheduled-messages/route")
+    const create = vi.fn()
+    const db = { ...mockScopedDb(), scheduledMessage: { create } }
+    requireOrgSessionMock.mockResolvedValue({ db, organizationId: ORG_A, session: SESSION_A })
+    const res = await POST(makeRequest("/api/admin/events/evt-b/scheduled-messages", "POST", { audience: { kind: "sector", sectorId: "sec-b" }, subject: "Hi", message: "Hello", date: "2099-01-01", time: "10:00" }), params("evt-b"))
+    expect(res.status).toBe(404)
+    expect(create).not.toHaveBeenCalled()
+    expect(db.shift.findMany).not.toHaveBeenCalled()
+  })
+})
