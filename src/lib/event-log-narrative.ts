@@ -66,6 +66,9 @@ const FIELD_LABELS: Record<string, string> = {
   resent: "envois relancés",
   scheduledFor: "envoi prévu",
   reason: "raison",
+  // Shift swaps (#1174): the request's state and why it ended.
+  swapStatus: "demande d'échange",
+  swapReason: "motif",
   personalLink: "lien personnel",
   confirmationEmail: "email de confirmation",
   // Share links per group (#947).
@@ -192,6 +195,18 @@ export const ACTION_VERB: Record<string, (actor: string) => string> = {
   "sector.archived": (a) => `${a} a archivé un secteur`,
   "sector.restored": (a) => `${a} a rétabli un secteur`,
   "sector.reordered": (a) => `${a} a changé l'ordre des secteurs`,
+  // Shift swaps between volunteers (#1174): the request's steps, and each registration it moved.
+  "swap.published": (a) => `${a} a proposé d'échanger un de ses créneaux`,
+  "swap.offered": (a) => `${a} a proposé un de ses créneaux en échange`,
+  "swap.offer_declined": (a) => `${a} a refusé la proposition d'échange`,
+  "swap.offer_withdrawn": (a) => `${a} a retiré sa proposition d'échange`,
+  "swap.confirmed": (a) => `${a} a accepté l'échange, qui attend la validation de l'organisation`,
+  "swap.applied": () => "l'échange de créneaux a été effectué",
+  "swap.refused": (a) => `${a} n'a pas validé l'échange de créneaux`,
+  "swap.withdrawn": (a) => `${a} a retiré sa demande d'échange`,
+  "swap.expired": () => "la demande d'échange a expiré",
+  "swap.ended": () => "la demande d'échange a pris fin sans échange",
+  "registration.swapped": () => "l'inscription a changé de créneau par un échange entre bénévoles",
   "event.sectors_adopted": (a) => `${a} a enregistré le premier secteur : l'événement garde désormais l'organisation par secteurs`,
   // Not a real event: a synthetic snapshot of current state for entities that predate logging
   // (see the baseline endpoint). Worded as an observation, never as something that "happened".
@@ -206,7 +221,7 @@ const SHIFT_AWARE_ACTIONS = new Set([
   "registration.created", "registration.cancelled", "registration.restored", "registration.waitlist_joined",
   "registration.waitlist_offered", "registration.waitlist_confirmed", "registration.baseline",
   "registration.checked_in", "registration.check_in_undone",
-  "registration.requested", "registration.accepted", "registration.refused",
+  "registration.requested", "registration.accepted", "registration.refused", "registration.swapped",
 ])
 
 /** The question an answer change is about (#984), named by its label at the time: « … à « Repas ? » ». */

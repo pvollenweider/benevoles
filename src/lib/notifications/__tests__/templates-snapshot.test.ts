@@ -456,6 +456,45 @@ const cases: [string, NotificationPayload][] = [
       editToken: "edit-tok",
     },
   }],
+  // #1174: a swap between two volunteers, done, or ended without a swap.
+  ["shift_swap_applied", {
+    kind: "shift_swap_applied",
+    recipient,
+    data: {
+      volunteerName: "Julie Martin",
+      eventTitle: tricky,
+      orgSlug: "rhone",
+      gave: { roleName: "Accueil", label: "Accueil", date: "2026-07-11", startTime: "09:00", endTime: "12:30", locationDetails: null, instructions: null },
+      received: { roleName: "Accueil", label: "Accueil", date: "2026-07-12", startTime: "14:00", endTime: "17:00", locationDetails: "Entrée <nord>", instructions: "Gilet fourni" },
+      editToken: "edit-tok",
+    },
+  }],
+  ["shift_swap_ended (impossible)", {
+    kind: "shift_swap_ended",
+    recipient,
+    data: {
+      volunteerName: "Julie Martin",
+      eventTitle: tricky,
+      orgSlug: "rhone",
+      outcome: "impossible",
+      reason: "Cet échange crée un conflit d'horaire.",
+      kept: { roleName: "Accueil", label: "Accueil", date: "2026-07-11", startTime: "09:00", endTime: "12:30", locationDetails: null, instructions: null },
+      editToken: "edit-tok",
+    },
+  }],
+  ["shift_swap_ended (declined)", {
+    kind: "shift_swap_ended",
+    recipient,
+    data: {
+      volunteerName: "Julie Martin",
+      eventTitle: tricky,
+      orgSlug: "rhone",
+      outcome: "declined",
+      reason: null,
+      kept: { roleName: "Accueil", label: "Accueil", date: "2026-07-11", startTime: "09:00", endTime: "12:30", locationDetails: null, instructions: null },
+      editToken: "edit-tok",
+    },
+  }],
   ["registration_restored (new link)", {
     kind: "registration_restored",
     recipient,
@@ -750,6 +789,8 @@ describe("render — snapshot of every notification kind", () => {
       org_inactivity_notice: true,
       org_inactivity_deactivated: true,
       open_shifts: true,
+      shift_swap_applied: true,
+      shift_swap_ended: true,
     }
     const covered = new Set(cases.map(([, p]) => p.kind))
     expect([...covered].sort()).toEqual(Object.keys(all).sort())
