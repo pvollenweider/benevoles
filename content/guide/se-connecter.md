@@ -15,7 +15,7 @@ Cliquer sur **Espace organisateur**, en bas des pages publiques, et saisir vos i
 
 Si vous avez reçu un **lien d'invitation** (email « Invitation à rejoindre… »), cliquez sur le bouton « Créer mon compte » dans l'email pour définir votre mot de passe avant votre première connexion.
 
-**Mot de passe oublié ?** Depuis la page de connexion, utilisez le lien du même nom : un email contenant un lien de réinitialisation, valable une heure, vous est envoyé. Seul le dernier lien reçu fonctionne. Au-delà de cinq demandes en une heure pour la même adresse, les suivantes n'envoient rien et ne changent rien : le dernier lien reçu reste valable. Changer votre mot de passe rend inutilisable un lien de réinitialisation encore en attente.
+**Mot de passe oublié ?** Depuis la page de connexion, utilisez le lien du même nom et indiquez votre adresse. La page affiche « Demande enregistrée », la même réponse que l'adresse ait un compte ou non ; si elle en a un, un email contenant un lien de réinitialisation, valable une heure, vous est envoyé. Rien reçu ? Regardez dans vos indésirables. Seul le dernier lien reçu fonctionne. Au-delà de cinq demandes en une heure pour la même adresse, les suivantes n'envoient rien et ne changent rien : le dernier lien reçu reste valable. Changer votre mot de passe rend inutilisable un lien de réinitialisation encore en attente.
 
 Sur un téléphone ou un petit écran, les liens de la barre du haut (Tableau de bord, Événements, Membres, Paramètres, Aide) sont regroupés sous le bouton **Menu**.
 
