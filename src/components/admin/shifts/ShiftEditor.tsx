@@ -16,7 +16,7 @@ import { minVolunteersProblem, parseMinVolunteers } from "@/lib/staffing"
 import PosteHint from "./PosteHint"
 import { newPosteSectorHint, posteSectorOf } from "@/lib/poste-sector"
 import { usePosteSector } from "./usePosteSector"
-import { NO_SECTOR_LABEL } from "@/lib/sectors"
+import { MANAGE_SECTORS_POSTES_LABEL, NO_SECTOR_LABEL } from "@/lib/sectors"
 import SectorSelect from "./SectorSelect"
 import type { RawShift } from "./types"
 
@@ -252,7 +252,7 @@ export default function ShiftEditor({
             </button>
           )}
           {editSectorName !== undefined && (
-            <p id={editSectorId} className="text-xs text-gray-600 mt-1">Secteur : {editSectorName ?? NO_SECTOR_LABEL}. Le secteur appartient au poste : pour le changer, utilisez « Déplacer… » dans « Gérer les postes ».</p>
+            <p id={editSectorId} className="text-xs text-gray-600 mt-1">Secteur : {editSectorName ?? NO_SECTOR_LABEL}. Le secteur appartient au poste : pour le changer, utilisez « Déplacer… » dans « {MANAGE_SECTORS_POSTES_LABEL} ».</p>
           )}
           <datalist id={listId}>
             {suggestions.map(r => <option key={r} value={r} />)}
