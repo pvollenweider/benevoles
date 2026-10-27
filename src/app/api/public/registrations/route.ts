@@ -8,6 +8,8 @@ import { prisma } from "@/lib/prisma"
 import { generateToken } from "@/lib/utils"
 import { deliverAfterResponse, enqueueNotifications } from "@/lib/notifications/outbox"
 import { buildSignupNotifications, type CreatedRegistration } from "@/lib/signup-notifications"
+import { groupsConfirmation, queueAddedShiftsConfirmation } from "@/lib/notifications/added-shifts-confirmation"
+import { cancelPolicySentence } from "@/lib/cancel-deadline"
 import { rateLimit, getClientIp } from "@/lib/rate-limit"
 import { logEvent } from "@/lib/event-log"
 import { reportError } from "@/lib/report-error"
@@ -312,12 +314,13 @@ export async function POST(req: Request) {
   // Built and stored inside the registration transaction (#352): the registrations and their
   // notifications commit together, then delivery runs after the response. The helpers only read
   // (admins, sector leaders), so the shift locks are held a few queries longer, no more.
-  const buildNotifications = (registrations: CreatedRegistration[], volunteerId: string) => buildSignupNotifications({
+  const buildNotifications = (registrations: CreatedRegistration[], volunteerId: string, groupedConfirmation: boolean) => buildSignupNotifications({
     event,
     shifts,
     volunteer: { id: volunteerId, email, firstName, lastName },
     registrations,
     tokens,
+    groupedConfirmation,
   })
 
   let outcome!: {
@@ -441,7 +444,30 @@ export async function POST(req: Request) {
             })
           )
         }
-        const outboxIds = await enqueueNotifications(await buildNotifications(created, volunteerId), tx, { organizationId: event.organizationId })
+        // Shifts added to an event where the volunteer already holds a place or a request (#1191):
+        // their confirmation joins one grouped email instead of one per sign-up. A first sign-up's
+        // confirmation, with the personal link, still leaves at once.
+        const grouped = groupsConfirmation(liveNow)
+        const outboxIds = await enqueueNotifications(await buildNotifications(created, volunteerId, grouped), tx, { organizationId: event.organizationId })
+        const activeCreated = created.filter((r) => r.status === "active")
+        if (grouped && activeCreated.length > 0) {
+          const dueId = await queueAddedShiftsConfirmation(tx, {
+            volunteerId,
+            organizationId: event.organizationId,
+            recipient: { email, name: `${firstName} ${lastName}` },
+            data: {
+              volunteerName: `${firstName} ${lastName}`,
+              eventTitle: event.title,
+              orgSlug: event.organization.slug,
+              confirmationMessage: event.confirmationMessage ?? undefined,
+              cancelNotice: cancelPolicySentence(event),
+              eventId,
+            },
+            registrationIds: activeCreated.map((r) => r.id),
+            now: new Date(),
+          })
+          if (dueId) outboxIds.push(dueId)
+        }
         // Shift roster (#1068): the box counts only when the event offers it, and makes the name
         // visible only with proof of the address (the personal link, a member invite); otherwise
         // it waits for a confirmation from the personal page. Any sign-up without proof suspends an
