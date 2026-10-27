@@ -28,7 +28,10 @@ describe.skipIf(!url)("grouped confirmation of shifts added one by one (#1191)",
   let eventId = ""
   const shiftIds: string[] = []
 
+  // The CI job sets DIGEST_DELAY_SECONDS=0 (emails due at once); this test is about the delay.
+  const delayEnv = process.env.DIGEST_DELAY_SECONDS
   beforeAll(async () => {
+    delete process.env.DIGEST_DELAY_SECONDS
     const org = await prisma.organization.create({ data: { name: "Org added", slug: `${tag}-org`, timeZone: "Europe/Zurich", publicationApprovedAt: new Date() } })
     orgId = org.id
     const event = await prisma.event.create({
@@ -41,6 +44,8 @@ describe.skipIf(!url)("grouped confirmation of shifts added one by one (#1191)",
   })
 
   afterAll(async () => {
+    if (delayEnv === undefined) delete process.env.DIGEST_DELAY_SECONDS
+    else process.env.DIGEST_DELAY_SECONDS = delayEnv
     if (orgId) {
       await prisma.notificationOutbox.deleteMany({ where: { organizationId: orgId } })
       await prisma.registration.deleteMany({ where: { eventId } })
