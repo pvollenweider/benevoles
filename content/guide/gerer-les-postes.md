@@ -10,9 +10,9 @@ aliases: []
 
 # Gérer les postes
 
-Dans la page des créneaux, le bouton **Gérer les postes** ouvre un panneau qui regroupe ces actions, poste par poste :
+Dans la page des créneaux, le bouton **Gérer les postes** ouvre un panneau qui regroupe ces actions, poste par poste. Dans un événement qui utilise des secteurs, le bouton et le panneau s'appellent **Gérer les secteurs et postes** (voir [Organiser les postes par secteurs](#organiser-les-postes-par-secteurs-beta)) :
 
-- **Réordonner** : glissez-déposez une ligne, ou utilisez ses flèches Monter et Descendre (aussi au clavier), puis **Enregistrer l'ordre**. L'ordre défini ici s'applique au planning des créneaux **et** à la page d'inscription. Si vous fermez le panneau (**Fermer** ou le bouton **Gérer les postes**) avec un ordre non enregistré, une confirmation le signale : **Revenir aux postes** garde l'ordre en cours, **Fermer sans enregistrer** l'abandonne.
+- **Réordonner** : glissez-déposez une ligne, ou utilisez ses flèches Monter et Descendre (aussi au clavier), puis **Enregistrer l'ordre**. L'ordre défini ici s'applique au planning des créneaux **et** à la page d'inscription. Si vous fermez le panneau (**Fermer** ou le bouton qui l'a ouvert) avec un ordre non enregistré, une confirmation le signale : **Revenir aux postes** garde l'ordre en cours, **Fermer sans enregistrer** l'abandonne.
 - **Renommer** : cliquez sur « Renommer », tapez le nouveau nom, validez. Tous les créneaux de ce poste sont renommés d'un coup ; ses responsables de secteur, les questions qui lui sont rattachées et les liens de groupe qui l'affichent le suivent. Impossible de renommer vers un nom déjà utilisé par un autre poste (pour ne pas fusionner deux postes par erreur).
 - **Supprimer** : annule tous les créneaux de ce poste (comme une suppression de créneau individuelle). Une confirmation indique le nombre de créneaux et de bénévoles concernés ; ces derniers sont prévenus par email. Les responsables de secteur du poste restent désignés, marqués « Créneaux tous annulés » dans **Responsables de secteur**, où vous pouvez les retirer ; ils ne suivent pas une duplication de l'événement.
 - **Couleur** : le point coloré à gauche du nom ouvre un choix parmi 16 couleurs prédéfinies (ou « Automatique » pour revenir à la couleur assignée par défaut) ; la couleur choisie est cochée. S'applique au planning des créneaux et à la page d'inscription.
@@ -31,7 +31,7 @@ C'est une fonction en bêta. Pour l'utiliser :
 
 1. Un propriétaire active **Essayer les fonctions avancées en bêta** dans **Paramètres**, carte **Fonctions bêta** (voir [Personnaliser l'organisation](personnaliser-l-organisation.md#fonctions-beta)).
 2. Dans les informations de l'événement, carte **Secteurs**, activez l'interrupteur **Organiser les postes par secteurs**. Tant qu'aucun secteur n'est enregistré, vous pouvez le désactiver : l'événement reste tel qu'il était.
-3. Dans **Créneaux**, ouvrez **Gérer les postes** : la partie **Secteurs** apparaît en haut du panneau, même si l'événement n'a encore aucun poste.
+3. Dans **Créneaux**, ouvrez **Gérer les postes** : la partie **Secteurs** apparaît en haut du panneau, même si l'événement n'a encore aucun poste. Dès le premier secteur enregistré, le bouton et le panneau s'appellent **Gérer les secteurs et postes**.
 
 Commencez par créer vos secteurs, puis ajoutez les postes dans chacun d'eux :
 
