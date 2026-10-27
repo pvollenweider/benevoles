@@ -22,6 +22,9 @@ export async function queueDigestItem<Item>(input: {
   groupKey: string
   recipient: Recipient
   organizationId: string | null
+  /** The member the email is for (#598), when it goes to a volunteer: the address check before
+   * delivery (src/lib/outbox-recipient-check.ts) and the member cleanups read it off the payload. */
+  volunteerId?: string | null
   base: Record<string, unknown>
   item: Item
   /** Stable per item: repeated while its email is pending (retry, double click), it is added once.
@@ -40,6 +43,7 @@ export async function queueDigestItem<Item>(input: {
   const sendAt = new Date(input.now.getTime() + input.delayMs)
   const due = input.delayMs <= 0
   const prefix = `${input.groupKey}:`
+  const member = input.volunteerId ? { volunteerId: input.volunteerId } : {}
   return prisma.$transaction(async (tx) => {
     // Two items of one group at the same moment must find each other's row, not start two.
     await tx.$executeRaw`SELECT pg_advisory_xact_lock(hashtext(${input.groupKey}))`
@@ -70,7 +74,7 @@ export async function queueDigestItem<Item>(input: {
       await tx.notificationOutbox.update({
         where: { id: pending.id },
         data: {
-          payload: sealPayload({ kind: input.kind, recipient: input.recipient, organizationId: input.organizationId, data: { ...input.base, items: next } }),
+          payload: sealPayload({ kind: input.kind, recipient: input.recipient, ...member, organizationId: input.organizationId, data: { ...input.base, items: next } }),
           nextAttemptAt: sendAt,
         },
       })
@@ -79,7 +83,7 @@ export async function queueDigestItem<Item>(input: {
     // An item already sent in an earlier email keeps its key: queued again, it is skipped.
     await tx.notificationOutbox.createMany({
       data: [{
-        payload: sealPayload({ kind: input.kind, recipient: input.recipient, organizationId: input.organizationId, data: { ...input.base, items: [{ key: input.itemKey, value: input.item, ...(input.merge ? { mergeKey: input.merge.key } : {}) }] } }),
+        payload: sealPayload({ kind: input.kind, recipient: input.recipient, ...member, organizationId: input.organizationId, data: { ...input.base, items: [{ key: input.itemKey, value: input.item, ...(input.merge ? { mergeKey: input.merge.key } : {}) }] } }),
         dedupeKey: `${prefix}${input.itemKey}`,
         organizationId: input.organizationId,
         nextAttemptAt: sendAt,

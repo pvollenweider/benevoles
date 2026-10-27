@@ -15,7 +15,7 @@ const count = vi.hoisted(() => vi.fn())
 const promoteNextInWaitlist = vi.hoisted(() => vi.fn())
 const logEvent = vi.hoisted(() => vi.fn())
 const buildWithdrawalNotifications = vi.hoisted(() => vi.fn())
-const enqueueNotifications = vi.hoisted(() => vi.fn())
+const queueWithdrawalConfirmation = vi.hoisted(() => vi.fn())
 const deliverAfterResponse = vi.hoisted(() => vi.fn())
 vi.mock("@/lib/prisma", () => ({ prisma: { registration: { findFirst, updateMany, count } } }))
 vi.mock("@/lib/waitlist", () => ({ promoteNextInWaitlist }))
@@ -23,7 +23,9 @@ vi.mock("@/lib/event-log", () => ({ logEvent }))
 vi.mock("@/lib/report-error", () => ({ reportError: () => () => {} }))
 // Grouped since #869: the route hands each withdrawal to queueWithdrawalNotifications.
 vi.mock("@/lib/withdrawal-notifications", () => ({ queueWithdrawalNotifications: buildWithdrawalNotifications }))
-vi.mock("@/lib/notifications/outbox", () => ({ enqueueNotifications, deliverAfterResponse }))
+// Grouped since #1190: the volunteer's own confirmation goes through queueWithdrawalConfirmation.
+vi.mock("@/lib/withdrawal-confirmation", () => ({ queueWithdrawalConfirmation }))
+vi.mock("@/lib/notifications/outbox", () => ({ deliverAfterResponse }))
 
 const shift = { id: "s1", roleName: "Bar", label: "Bar", date: new Date("2026-07-04"), startTime: "10:00", endTime: "12:00", capacity: 2 }
 const event = { id: "e1", title: "Fête", organizationId: "org-1", organization: { ...OPEN_ORG, slug: "org", timeZone: "Europe/Zurich" } }
@@ -53,7 +55,7 @@ describe("DELETE /api/public/registrations/[token]", () => {
     promoteNextInWaitlist.mockResolvedValue(true)
     count.mockResolvedValue(2)
     buildWithdrawalNotifications.mockResolvedValue([{ kind: "registration_cancelled", recipient: { email: "a@org.ch" }, data: {}, dedupeKey: "k1" }])
-    enqueueNotifications.mockResolvedValue(["n1"])
+    queueWithdrawalConfirmation.mockResolvedValue(["n1"])
   })
 
   afterEach(() => {
@@ -171,28 +173,25 @@ describe("DELETE /api/public/registrations/[token]", () => {
   it.each(["waiting", "offered"])("does not notify the organization when leaving the waitlist or declining an offer (%s)", async (status) => {
     await withdraw(status)
     expect(buildWithdrawalNotifications).not.toHaveBeenCalled()
-    expect(enqueueNotifications.mock.calls.flatMap(([payloads]) => payloads).map((p: { kind: string }) => p.kind)).toEqual(["registration_withdrawn"])
+    expect(queueWithdrawalConfirmation).toHaveBeenCalledTimes(1)
   })
 
   // ── Telling the volunteer (#809) ───────────────────────────────────────────
 
-  const volunteerEmail = () => enqueueNotifications.mock.calls.flatMap(([payloads]) => payloads).find((p: { kind: string }) => p.kind === "registration_withdrawn")
+  const volunteerEmail = () => queueWithdrawalConfirmation.mock.calls[0]?.[0]
 
-  it.each([
-    ["active", "Ton inscription a été annulée"],
-    ["requested", "Ta demande d'inscription a été retirée"],
-    ["waiting", "Tu as quitté la liste d'attente"],
-    ["offered", "Tu as refusé la place qui t'était proposée"],
-  ])("tells the volunteer what was done from their link (%s)", async (status, what) => {
+  it.each(["active", "requested", "waiting", "offered"])("tells the volunteer what was done from their link (%s)", async (status) => {
     await withdraw(status)
-    expect(volunteerEmail()).toMatchObject({
-      recipient: { email: "chloe@example.com", name: "Chloé Roy" },
-      organizationId: "org-1",
-      volunteerId: "v1",
-      dedupeKey: "registration_withdrawn:r1",
-      data: { what, eventTitle: "Fête", shift: { roleName: "Bar", label: "Bar", date: "2026-07-04", startTime: "10:00", endTime: "12:00" } },
+    expect(volunteerEmail()).toEqual({
+      registrationId: "r1",
+      previousStatus: status,
+      event: expect.objectContaining({ id: "e1", title: "Fête", organizationId: "org-1" }),
+      shift,
+      volunteer: { id: "v1", firstName: "Chloé", lastName: "Roy", email: "chloe@example.com" },
+      timeZone: "Europe/Zurich",
     })
-    expect(volunteerEmail().data.when).toMatch(/^le \d{1,2} \S+ à \d{2}:\d{2}$/)
+    expect(queueWithdrawalConfirmation.mock.calls[0][1]).toEqual(new Date("2026-06-04T08:00:00Z"))
+    expect(deliverAfterResponse).toHaveBeenCalledWith(["n1"])
   })
 
   it("sends no confirmation to a volunteer without an email", async () => {
@@ -203,7 +202,7 @@ describe("DELETE /api/public/registrations/[token]", () => {
   })
 
   it("a failing confirmation does not fail the withdrawal", async () => {
-    enqueueNotifications.mockRejectedValue(new Error("db down"))
+    queueWithdrawalConfirmation.mockRejectedValue(new Error("db down"))
     const res = await withdraw("waiting")
     expect(res.status).toBe(200)
   })
@@ -217,6 +216,7 @@ describe("DELETE /api/public/registrations/[token]", () => {
     expect(first.status).toBe(200)
     expect(second.status).toBe(404)
     expect(buildWithdrawalNotifications).toHaveBeenCalledTimes(1)
+    expect(queueWithdrawalConfirmation).toHaveBeenCalledTimes(1)
   })
 
   // ── Self-cancellation deadline (#946) ──────────────────────────────────────
@@ -232,7 +232,7 @@ describe("DELETE /api/public/registrations/[token]", () => {
       expect(updateMany).not.toHaveBeenCalled()
       expect(logEvent).not.toHaveBeenCalled()
       expect(promoteNextInWaitlist).not.toHaveBeenCalled()
-      expect(enqueueNotifications).not.toHaveBeenCalled()
+      expect(queueWithdrawalConfirmation).not.toHaveBeenCalled()
     })
 
     it("refuses an ended shift (regression: it freed a past place and removed hours)", async () => {

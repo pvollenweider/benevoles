@@ -83,7 +83,7 @@ Tu peux modifier tes réponses aussi longtemps que tu peux annuler un de tes cr�
 
 Pour une place confirmée ou une demande, la confirmation propose un champ facultatif « Un mot pour l'organisation ? » (300 caractères maximum) : un message comme « Paul peut me remplacer » est transmis par email à l'organisation et aux responsables du poste, mais n'est pas conservé une fois l'email envoyé. N'y écris pas d'informations de santé ni d'autres détails sensibles.
 
-Chaque annulation, retrait de demande, sortie de liste d'attente ou refus d'une place proposée t'est confirmé par email : ce qui a été fait, quand, et sur quel créneau. Si ce n'était pas toi, réponds à cet email : ta réponse va à l'organisation, qui saura que quelqu'un d'autre utilise ton lien.
+Chaque annulation, retrait de demande, sortie de liste d'attente ou refus d'une place proposée t'est confirmé par email : ce qui a été fait, quand, et sur quel créneau. Si tu en fais plusieurs à la suite pour le même événement, tu reçois un seul email qui les liste toutes, quelques minutes après la dernière. Si ce n'était pas toi, réponds à cet email : ta réponse va à l'organisation, qui saura que quelqu'un d'autre utilise ton lien.
 
 Si l'annulation n'aboutit pas (connexion coupée, par exemple), un message sous le créneau dit ce qui s'est passé et le créneau reste affiché ; recharge la page pour vérifier avant de réessayer.
 
