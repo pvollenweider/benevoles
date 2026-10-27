@@ -69,6 +69,21 @@ beforeEach(() => {
 })
 
 describe("buildSignupNotifications", () => {
+  // #1191: shifts added where the volunteer already holds a place: confirmed by the grouped email.
+  it("leaves the confirmation out when it is grouped, and keeps everything else", async () => {
+    const out = await buildSignupNotifications(input({ groupedConfirmation: true }))
+    expect(out.map((p) => p.kind)).not.toContain("registration_confirmation")
+    expect(out.map((p) => p.kind)).toContain("admin_notification")
+    const plain = await buildSignupNotifications(input())
+    expect(plain.map((p) => p.kind)).toContain("registration_confirmation")
+  })
+
+  it("still acknowledges a request and a waitlist entry when the confirmation is grouped", async () => {
+    const shifts = [shift("s1", "Bar"), shift("s2", "Caisse")]
+    const out = await buildSignupNotifications(input({ shifts, registrations: [reg("r1", "s1", "requested"), reg("r2", "s2", "waiting", 1)], groupedConfirmation: true }))
+    expect(out.map((p) => p.kind)).toEqual(expect.arrayContaining(["registration_requested", "waitlist_confirmation"]))
+  })
+
   it("confirms active places with the shift info and the first registration's token", async () => {
     const shifts = [shift("s1", "Bar", { locationDetails: "Entrée B" }), shift("s2", "Caisse")]
     const out = await buildSignupNotifications(input({ shifts }))
