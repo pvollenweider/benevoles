@@ -19,6 +19,7 @@ Depuis l'onglet **Messages** de l'événement (**Événements**, puis l'événem
 Un email simple, à qui c'est utile :
 
 - **tous les bénévoles inscrits** de l'événement ;
+- **les bénévoles d'un secteur**, dans un événement organisé par secteurs (bêta, voir [Gérer les postes](gerer-les-postes.md#organiser-les-postes-par-secteurs-beta)) : choisissez le secteur, ou « Autres postes » pour les postes sans secteur. Le message part aux bénévoles confirmés des postes du secteur au moment de l'envoi : un poste déplacé entre-temps suit son nouveau secteur. Chacun le reçoit une fois, avec ses créneaux de ce secteur. Un message programmé vers un secteur archivé entre-temps ne part pas ;
 - **les bénévoles d'un poste** ;
 - **les bénévoles d'un créneau** ;
 - **les personnes en liste d'attente** (en attente ou à qui une place est proposée) ;

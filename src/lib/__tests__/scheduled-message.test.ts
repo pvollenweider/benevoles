@@ -96,3 +96,11 @@ describe("scheduledStateLabel", () => {
     expect(scheduledStateLabel({ ...row, status: "skipped", skipReason: "l'événement est archivé" }, fmt)).toBe("Non envoyé : l'événement est archivé")
   })
 })
+
+describe("skipReason, sector audience (#1170)", () => {
+  it("skips a message whose sector was archived, never sending it to everyone", () => {
+    expect(skipReason({ eventStatus: "published", audience: { kind: "sector", sectorId: "sec-bar" }, shiftAvailable: true, recipients: 0, sectorGone: true })).toBe("le secteur choisi a été archivé")
+    expect(skipReason({ eventStatus: "published", audience: { kind: "sector", sectorId: "sec-bar" }, shiftAvailable: true, recipients: 0 })).toBe("personne à qui écrire dans cette sélection au moment de l'envoi")
+    expect(skipReason({ eventStatus: "published", audience: { kind: "sector", sectorId: "sec-bar" }, shiftAvailable: true, recipients: 3 })).toBeNull()
+  })
+})

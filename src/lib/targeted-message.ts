@@ -2,6 +2,8 @@
 // SPDX-License-Identifier: AGPL-3.0-only
 
 import { z } from "zod"
+import { NO_SECTOR_LABEL } from "./sectors"
+import { SECTOR_FILTER_OTHERS, SECTOR_FILTER_PARAM } from "./sector-filter"
 
 /**
  * Targeted messages (#396): a subject and a plain-text message to the volunteers of an event,
@@ -18,6 +20,9 @@ export const audienceSchema = z.discriminatedUnion("kind", [
   z.object({ kind: z.literal("event") }),
   z.object({ kind: z.literal("role"), roleName: z.string().min(1) }),
   z.object({ kind: z.literal("shift"), shiftId: z.string().min(1) }),
+  // The confirmed people of the postes of one sector at send time (#1170): an active sector's id,
+  // or « autres » for « Autres postes ». Only once the event adopted sectors.
+  z.object({ kind: z.literal("sector"), sectorId: z.string().min(1).max(100) }),
   z.object({ kind: z.literal("waitlist") }),
   // Invited members of the event with no confirmed shift (#481), waitlist-only people included.
   z.object({ kind: z.literal("invited_without_shift") }),
@@ -64,10 +69,15 @@ export type Recipient<R extends RecipientRegistration = RecipientRegistration> =
   registrations: R[]
 }
 
-/** Live statuses of the audience: confirmed people, or the waitlist (waiting and offered). */
-function inAudience(r: RecipientRegistration, audience: Audience): boolean {
+/**
+ * Live statuses of the audience: confirmed people, or the waitlist (waiting and offered). A
+ * sector audience keeps the confirmed people of `sectorPostes`, the sector's postes resolved at
+ * send time (src/lib/sector-filter-data.ts); none when they are not given.
+ */
+function inAudience(r: RecipientRegistration, audience: Audience, sectorPostes: ReadonlySet<string>): boolean {
   switch (audience.kind) {
     case "event": return r.status === "active"
+    case "sector": return r.status === "active" && sectorPostes.has(r.shift.roleName)
     case "role": return r.status === "active" && r.shift.roleName === audience.roleName
     case "shift": return r.status === "active" && r.shiftId === audience.shiftId
     case "waitlist": return r.status === "waiting" || r.status === "offered"
@@ -80,10 +90,11 @@ function inAudience(r: RecipientRegistration, audience: Audience): boolean {
  * The people to write to, one entry per volunteer with an email, in the registrations' order.
  * Inactive members are still written to: they are registered on this event.
  */
-export function selectRecipients<R extends RecipientRegistration>(registrations: R[], audience: Audience): Recipient<R>[] {
+export function selectRecipients<R extends RecipientRegistration>(registrations: R[], audience: Audience, sectorPostes: readonly string[] = []): Recipient<R>[] {
   const byVolunteer = new Map<string, Recipient<R>>()
+  const postes = new Set(sectorPostes)
   for (const r of registrations) {
-    if (!inAudience(r, audience) || !r.volunteer.email) continue
+    if (!inAudience(r, audience, postes) || !r.volunteer.email) continue
     const entry = byVolunteer.get(r.volunteerId)
     if (entry) entry.registrations.push(r)
     else byVolunteer.set(r.volunteerId, { volunteerId: r.volunteerId, volunteer: r.volunteer, registrations: [r] })
@@ -92,9 +103,10 @@ export function selectRecipients<R extends RecipientRegistration>(registrations:
 }
 
 /** « les 12 bénévoles inscrits », « les 3 bénévoles du poste Bar »… for confirmations and the log. */
-export function audienceLabel(audience: Audience, shiftName?: string): string {
+export function audienceLabel(audience: Audience, shiftName?: string, sectorName?: string): string {
   switch (audience.kind) {
     case "event": return "tous les bénévoles inscrits"
+    case "sector": return audience.sectorId === SECTOR_FILTER_OTHERS ? `les bénévoles des « ${NO_SECTOR_LABEL} »` : `les bénévoles du secteur « ${sectorName ?? audience.sectorId} »`
     case "role": return `les bénévoles du poste « ${audience.roleName} »`
     case "shift": return `les bénévoles du créneau ${shiftName ?? audience.shiftId}`
     case "waitlist": return "les personnes en liste d'attente"
@@ -140,11 +152,29 @@ export function countDeclinedExcluded<I extends { volunteerId: string; declinedA
   return new Set(invites.filter((i) => i.declinedAt && !active.has(i.volunteerId)).map((i) => i.volunteerId)).size
 }
 
-/** Audience from the query string of the message page (`?shift=`, `?role=`, `?audience=waitlist`). */
-export function audienceFromQuery(q: { shift?: string; role?: string; audience?: string }): Audience {
+/** Audience from the query string of the message page (`?shift=`, `?role=`, `?secteur=`, `?audience=waitlist`). */
+export function audienceFromQuery(q: { shift?: string; role?: string; audience?: string; secteur?: string }): Audience {
   if (q.shift) return { kind: "shift", shiftId: q.shift }
   if (q.role) return { kind: "role", roleName: q.role }
+  if (q.secteur) return { kind: "sector", sectorId: q.secteur }
   if (q.audience === "waitlist") return { kind: "waitlist" }
   if (q.audience === "invited") return { kind: "invited_without_shift" }
   return { kind: "event" }
+}
+
+/**
+ * The « Écrire aux bénévoles » link of the registrations list: the narrowest filter shown there
+ * wins (créneau, then poste, then the page's « Secteur » filter, #1170), else everyone.
+ */
+export function messagePageHref(eventId: string, f: { shiftId?: string; roleName?: string; sector?: string }): string {
+  const base = `/admin/events/${eventId}/message`
+  if (f.shiftId) return `${base}?shift=${encodeURIComponent(f.shiftId)}`
+  if (f.roleName) return `${base}?role=${encodeURIComponent(f.roleName)}`
+  if (f.sector) return `${base}?${SECTOR_FILTER_PARAM}=${encodeURIComponent(f.sector)}`
+  return base
+}
+
+/** The link's text for a sector (#1170), naming it: « Écrire au secteur Parking », « Écrire aux « Autres postes » ». */
+export function writeToSectorLabel(sector: { value: string; label: string }): string {
+  return sector.value === SECTOR_FILTER_OTHERS ? `Écrire aux « ${NO_SECTOR_LABEL} »` : `Écrire au secteur ${sector.label}`
 }

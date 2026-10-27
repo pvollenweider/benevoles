@@ -20,6 +20,7 @@ import SendReminderButton from "@/components/admin/SendReminderButton"
 import { remindersSummary } from "@/lib/automatic-reminders"
 import { parseNotificationSettings } from "@/lib/notification-settings"
 import { hasUpcomingShift } from "@/lib/event-wizard"
+import { loadSectorFilter } from "@/lib/sector-filter-data"
 
 export const dynamic = "force-dynamic"
 export const metadata: Metadata = { title: "Messages" }
@@ -32,7 +33,7 @@ const day = (d: Date) => d.toLocaleDateString("fr-FR", { timeZone: "UTC", weekda
  * manual reminder; the scheduled messages (#1019), every batch of emails (#1101) and the messages
  * sent (#467).
  */
-export default async function MessagePage({ params, searchParams }: { params: Promise<{ id: string }>; searchParams: Promise<{ shift?: string; role?: string; audience?: string }> }) {
+export default async function MessagePage({ params, searchParams }: { params: Promise<{ id: string }>; searchParams: Promise<{ shift?: string; role?: string; audience?: string; secteur?: string }> }) {
   const ctx = await getOrgContext()
   if (!ctx) redirect("/admin/login")
   const { id } = await params
@@ -78,11 +79,15 @@ export default async function MessagePage({ params, searchParams }: { params: Pr
     roleName: s.roleName,
     name: `${s.label !== s.roleName ? `${s.roleName} · ${s.label}` : s.roleName} — ${day(s.date)}, ${fmtRange(s.startTime, s.endTime)}`,
   }))
+  // The sector audience (#1170), offered once the event adopted sectors: active sectors then « Autres postes ».
+  const sectorState = await loadSectorFilter(ctx.db, event.id, null)
+  const sectors = sectorState?.offered ? sectorState.options.filter((o) => o.value !== "") : []
   const initial = audienceFromQuery(q)
-  // A prefilled shift or role that no longer exists falls back to everyone.
+  // A prefilled shift, role or sector that no longer exists (or is not offered) falls back to everyone.
   const valid =
     (initial.kind === "shift" && shifts.some((s) => s.id === initial.shiftId)) ||
     (initial.kind === "role" && roles.includes(initial.roleName)) ||
+    (initial.kind === "sector" && sectors.some((s) => s.value === initial.sectorId)) ||
     initial.kind === "event" || initial.kind === "waitlist" || initial.kind === "invited_without_shift"
 
   return (
@@ -95,7 +100,7 @@ export default async function MessagePage({ params, searchParams }: { params: Pr
         <div>
           <h2 id="message-write" className="text-base font-semibold text-gray-900">Écrire aux bénévoles</h2>
           <p className="text-sm text-gray-700 mt-1">
-            Un email, à qui c&apos;est utile : tous les inscrits, un poste, un créneau, la liste d&apos;attente, ou les membres invités qui n&apos;ont pas encore de créneau confirmé (ils reçoivent leur lien d&apos;invitation). Chaque personne le reçoit une fois, avec ses créneaux concernés et le lien vers ses inscriptions.
+            Un email, à qui c&apos;est utile : tous les inscrits, {sectors.length > 0 ? "un secteur, " : ""}un poste, un créneau, la liste d&apos;attente, ou les membres invités qui n&apos;ont pas encore de créneau confirmé (ils reçoivent leur lien d&apos;invitation). Chaque personne le reçoit une fois, avec ses créneaux concernés et le lien vers ses inscriptions.
           </p>
           {/* Before the form, so following it never leaves a message half written (#1098). */}
           <p className="text-sm text-gray-700 mt-1">
@@ -103,7 +108,7 @@ export default async function MessagePage({ params, searchParams }: { params: Pr
             <Link href="/admin/settings/message-templates" className="font-medium text-blue-700 underline underline-offset-2 hover:text-blue-900 rounded focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-blue-600">gérer les modèles de messages</Link>.
           </p>
         </div>
-      <TargetedMessageForm eventId={event.id} roles={roles} shifts={shifts} initialAudience={valid ? initial : { kind: "event" }} templates={templates} timeZone={timeZone} canSchedule={event.publicStatus !== "archived"} />
+      <TargetedMessageForm eventId={event.id} roles={roles} shifts={shifts} sectors={sectors} initialAudience={valid ? initial : { kind: "event" }} templates={templates} timeZone={timeZone} canSchedule={event.publicStatus !== "archived"} />
       <p className="text-sm text-gray-600">
         Pour renvoyer leur lien d&apos;invitation aux membres invités sans créneau confirmé, utilisez « Relancer les … sans créneau » dans{" "}
         <Link href={`/admin/events/${event.id}/invitations`} className="font-medium text-blue-700 underline underline-offset-2 hover:text-blue-900">les invitations</Link>.
