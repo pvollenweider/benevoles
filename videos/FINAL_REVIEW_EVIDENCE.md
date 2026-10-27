@@ -454,3 +454,29 @@ Vidéos à revoir, non régénérées dans ce changement (pas de pile locale, di
 créneau), `organizer-monitor-followup` (choix du poste) et la vidéo qui ouvre le message
 prérempli sur un créneau (`checks.messageAudiencePrefilled` dans `videos/tools/record.ts`).
 Aucune narration ni bloc `viewer` à modifier.
+
+## Écart connu : réponses « Demande enregistrée » des demandes de lien
+
+« Mot de passe oublié » titre maintenant « Demande enregistrée » (au lieu de
+« Email envoyé »), et les réponses de la demande d'un lien personnel
+(`LINK_REQUEST_RESPONSE`) et de « Recevoir ce lien par email »
+(`LINK_RESENT_RESPONSE`, src/lib/personal-link.ts) commencent par « Demande
+enregistrée » au lieu de « vient de partir ». Aucune vidéo ne filme
+`/admin/forgot-password`.
+
+Vidéos dont l'image montre l'ancienne réponse, non régénérées dans ce
+changement (pas de rendu ici) :
+
+- `volunteer-session-availability` : scènes `resend` (« Un nouvel email avec ton
+  lien vient de partir. ») et `recover` (ancienne réponse de « Recevoir un nouveau
+  lien ») ;
+- `privacy-personal-links` : scènes `personal` (renvoi du lien) et `recovery`
+  (même réponse pour trois adresses).
+
+Sélecteurs mis à jour : `videos/tools/record.ts` attend la nouvelle réponse de
+« Recevoir ce lien par email » ; la scène `recover` cherche toujours « Si une
+inscription existe à cette adresse », contenu dans la nouvelle réponse ;
+`videos/lib/record-privacy.ts` lit la constante `LINK_REQUEST_RESPONSE`. La
+narration et les blocs `viewer` restent exacts (« la réponse reste la même »,
+« regarde aussi les indésirables ») : seule l'image est à reprendre au prochain
+rendu, avec `revision` et `updatedAt` dans `videos/catalog.json`.
