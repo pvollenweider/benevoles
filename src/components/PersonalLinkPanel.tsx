@@ -35,7 +35,7 @@ export default function PersonalLinkPanel({ token, linkEmailedAt, timeZone, cont
       const res = await fetch(requireTokenPath("/api/public/registrations", token, "/resend-link"), { method: "POST" })
       const data = await res.json().catch(() => ({}))
       setFailed(!res.ok)
-      setMessage(data.message ?? data.error ?? (res.ok ? "Email envoyé." : "L'email n'a pas pu être envoyé. Réessaie plus tard."))
+      setMessage(data.message ?? data.error ?? (res.ok ? "Demande enregistrée." : "L'email n'a pas pu être envoyé. Réessaie plus tard."))
     } catch {
       setFailed(true)
       setMessage("Connexion impossible. Vérifie ton réseau et réessaie.")

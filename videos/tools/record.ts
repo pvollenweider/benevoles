@@ -3784,7 +3784,7 @@ async function main() {
         await page.getByRole("heading", { name: "Ton lien personnel", exact: true }).scrollIntoViewIfNeeded()
         await at("Avec Recevoir ce lien par")
         await tap(page, page.getByRole("button", { name: "Recevoir ce lien par email", exact: true }))
-        await page.getByText("Un nouvel email avec ton lien vient de partir.", { exact: true }).waitFor()
+        await page.getByText(/^Demande enregistrée : tu vas recevoir ce lien par email/).waitFor()
         await at("Attendons le résultat, puis ouvrons")
         await page.goto("http://localhost:48026"); await settle(page)
         await tap(page, page.getByText(/Ton lien pour gérer tes inscriptions/).first())
