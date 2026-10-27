@@ -429,6 +429,20 @@ const cases: [string, NotificationPayload][] = [
       shift: { roleName: "Accueil", label: "Accueil", date: "2026-07-11", startTime: "09:00", endTime: "12:30" },
     },
   }],
+  // #1190: several withdrawals in a row, one email listing them, oldest first.
+  ["registration_withdrawn (grouped)", {
+    kind: "registration_withdrawn",
+    recipient,
+    data: {
+      volunteerName: "Julie Martin",
+      eventTitle: tricky,
+      items: [
+        { key: "r1", value: { what: "Ton inscription a été annulée", when: "le 9 octobre à 14:05", shift: { roleName: "Accueil", label: "Accueil", date: "2026-07-11", startTime: "09:00", endTime: "12:30" } } },
+        { key: "r2", value: { what: "Tu as quitté la liste d'attente", when: "le 9 octobre à 14:05", shift: { roleName: "Bar", label: "Bar <soir>", date: "2026-07-11", startTime: "18:00", endTime: "22:00" } } },
+        { key: "r3", value: { what: "Ta demande d'inscription a été retirée", when: "le 9 octobre à 14:06", shift: { roleName: "Caisse", label: "Caisse", date: "2026-07-12", startTime: "10:00", endTime: "12:00" } } },
+      ],
+    },
+  }],
   // #809: an organiser put back a cancelled place.
   ["registration_restored", {
     kind: "registration_restored",

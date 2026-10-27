@@ -20,10 +20,11 @@ import { registrationToken } from "@/lib/token-vault"
 import { calendarFeedKeyFromEnv, calendarFeedToken, calendarFeedUrls } from "@/lib/calendar-feed"
 import { pickShiftInfo, withDayContact, withSectorLeaders } from "@/lib/shift-info"
 import { LIVE_STATUSES, OCCUPYING_STATUSES } from "@/lib/registration-capacity"
-import { WITHDRAWABLE_STATUSES, planVolunteerWithdraw, withdrawalConfirmation, withdrawalMoment } from "@/lib/volunteer-withdraw"
+import { WITHDRAWABLE_STATUSES, planVolunteerWithdraw } from "@/lib/volunteer-withdraw"
 import { withdrawRequestSchema } from "@/lib/volunteer-withdraw-schema"
 import { queueWithdrawalNotifications } from "@/lib/withdrawal-notifications"
-import { deliverAfterResponse, enqueueNotifications } from "@/lib/notifications/outbox"
+import { queueWithdrawalConfirmation } from "@/lib/withdrawal-confirmation"
+import { deliverAfterResponse } from "@/lib/notifications/outbox"
 import { cancelRefusedError, isLateWithdrawal, selfCancelState, shiftStartsAt } from "@/lib/cancel-deadline"
 
 const tooManyAttempts = () => NextResponse.json({ error: "Trop de tentatives." }, { status: 429 })
@@ -267,23 +268,18 @@ export async function DELETE(req: Request, { params }: { params: Promise<{ token
   }
 
   // Says back to the volunteer what was just done from their link (#809): if the link is in
-  // someone else's hands, they learn it and can tell the organisation. Best-effort too.
+  // someone else's hands, they learn it and can tell the organisation. Grouped (#1190): several
+  // withdrawals of the event in a row make one email listing them. Best-effort too.
   if (registration.volunteer.email) {
     try {
-      const outboxIds = await enqueueNotifications([{
-        kind: "registration_withdrawn",
-        recipient: { email: registration.volunteer.email, name: `${registration.volunteer.firstName} ${registration.volunteer.lastName}` },
-        organizationId: registration.event.organizationId,
-        volunteerId: registration.volunteerId,
-        dedupeKey: `registration_withdrawn:${registration.id}`,
-        data: {
-          volunteerName: `${registration.volunteer.firstName} ${registration.volunteer.lastName}`,
-          eventTitle: registration.event.title,
-          what: withdrawalConfirmation(registration.status),
-          when: withdrawalMoment(now, timeZone),
-          shift: { roleName: registration.shift.roleName, label: registration.shift.label, date: registration.shift.date.toISOString().slice(0, 10), startTime: registration.shift.startTime, endTime: registration.shift.endTime },
-        },
-      }], prisma, { organizationId: registration.event.organizationId })
+      const outboxIds = await queueWithdrawalConfirmation({
+        registrationId: registration.id,
+        previousStatus: registration.status,
+        event: registration.event,
+        shift: registration.shift,
+        volunteer: { id: registration.volunteerId, firstName: registration.volunteer.firstName, lastName: registration.volunteer.lastName, email: registration.volunteer.email },
+        timeZone,
+      }, now)
       deliverAfterResponse(outboxIds)
     } catch (e) {
       reportError("withdrawal.confirm")(e)
