@@ -1,4 +1,6 @@
 import { describe, it, expect, vi, beforeEach } from "vitest"
+// Swap requests (#1174) end through their own module, tested on Postgres (src/__integration__/shift-swaps.int.test.ts).
+vi.mock("@/lib/shift-swap-server", () => ({ endSwapsIn: vi.fn(), endSwapsAfter: vi.fn() }))
 import { hashToken } from "../token-hash"
 
 // #542: bulk invalidation of volunteer-facing links after a leak. generateToken is mocked to a

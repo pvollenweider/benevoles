@@ -29,6 +29,7 @@ import {
 } from "./member-merge"
 import type { LogActor } from "./event-log"
 import { cancelOutboxForMergedMember } from "./outbox-merge-cancel"
+import { endSwapsIn } from "./shift-swap-server"
 
 export class MergeConflictError extends Error {
   constructor(message: string, readonly status: 404 | 409 = 409) {
@@ -139,6 +140,10 @@ export async function runMemberMerge(
     const finalEmail = resolvedFields(loaded, choices).email
     const input = withKeepAddressHash(loaded, finalEmail)
     const plan = buildMergePlan(input, choices)
+
+    // Swap requests of either record (#1174): the registrations change hands or links, so no
+    // agreement given before the merge is applied after it. Ended in the same commit.
+    await endSwapsIn(tx, { volunteerIds: [keepId, absorbId] }, "volunteer_gone", actor)
 
     // 1. Resolve same-shift conflicts first: cancel the losing registration(s) before reassigning,
     // so the partial unique index (shiftId, volunteerId) for live statuses is never hit.

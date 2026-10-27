@@ -11,6 +11,8 @@ import { orgBaseUrl } from "@/lib/urls"
 import { isReservedOrgSlug, RESERVED_SLUG_ERROR } from "@/lib/org-subdomain"
 import { parseHourRateInput } from "@/lib/volunteer-hour-value"
 import { canAdoptBeta } from "@/lib/beta-access"
+import { SWAPS_NOT_ADOPTABLE } from "@/lib/shift-swap-data"
+import { swapsShipped } from "@/lib/shift-swap-gate"
 import { SECTORS_CLOSED_ERROR } from "@/lib/sectors"
 
 const SLUG_RE = /^[a-z0-9]([a-z0-9-]*[a-z0-9])?$/
@@ -21,7 +23,7 @@ export async function PATCH(req: Request) {
   const { organizationId } = guard
 
   const body = await req.json().catch(() => ({}))
-  const updates: { name?: string; slug?: string; volunteerCharter?: string | null; hasOrgInsurance?: boolean; shiftRosterDefault?: boolean; sectorsDefault?: boolean; publicTitle?: string | null; timeZone?: string | null; onboardingDismissedAt?: Date | null; volunteerHourRateCents?: number | null; volunteerHourRateCurrency?: string | null; volunteerHourRateSetAt?: Date | null } = {}
+  const updates: { name?: string; slug?: string; volunteerCharter?: string | null; hasOrgInsurance?: boolean; shiftRosterDefault?: boolean; sectorsDefault?: boolean; shiftSwapsDefault?: boolean; publicTitle?: string | null; timeZone?: string | null; onboardingDismissedAt?: Date | null; volunteerHourRateCents?: number | null; volunteerHourRateCurrency?: string | null; volunteerHourRateSetAt?: Date | null } = {}
   let oldSlug: string | null = null
 
   if (typeof body.name === "string") {
@@ -87,6 +89,15 @@ export async function PATCH(req: Request) {
     updates.sectorsDefault = body.sectorsDefault
   }
 
+  // Shift swaps for the next new events (#1174, beta): on needs the capability open for the
+  // organisation (and shipped); off is always possible. No existing event changes.
+  if (typeof body.shiftSwapsDefault === "boolean") {
+    if (body.shiftSwapsDefault && !(swapsShipped() && (await canAdoptBeta(organizationId, "shiftSwaps")))) {
+      return NextResponse.json({ error: SWAPS_NOT_ADOPTABLE }, { status: 403 })
+    }
+    updates.shiftSwapsDefault = body.shiftSwapsDefault
+  }
+
   // Headline of the public events page. Empty means "use the default" (Bénévoles).
   if ("publicTitle" in body) {
     const title = typeof body.publicTitle === "string" ? body.publicTitle.trim() : ""
@@ -145,12 +156,12 @@ export async function PATCH(req: Request) {
     return tx.organization.update({
       where: { id: organizationId },
       data: updates,
-      select: { name: true, slug: true, volunteerCharter: true, hasOrgInsurance: true, shiftRosterDefault: true, sectorsDefault: true, publicTitle: true, timeZone: true, volunteerHourRateCents: true, volunteerHourRateCurrency: true, volunteerHourRateSetAt: true },
+      select: { name: true, slug: true, volunteerCharter: true, hasOrgInsurance: true, shiftRosterDefault: true, sectorsDefault: true, shiftSwapsDefault: true, publicTitle: true, timeZone: true, volunteerHourRateCents: true, volunteerHourRateCurrency: true, volunteerHourRateSetAt: true },
     })
   })
 
   const adminUrl = oldSlug ? `${orgBaseUrl(org.slug)}/admin/settings/admins` : null
-  return NextResponse.json({ name: org.name, slug: org.slug, publicTitle: org.publicTitle, timeZone: org.timeZone, shiftRosterDefault: org.shiftRosterDefault, sectorsDefault: org.sectorsDefault,
+  return NextResponse.json({ name: org.name, slug: org.slug, publicTitle: org.publicTitle, timeZone: org.timeZone, shiftRosterDefault: org.shiftRosterDefault, sectorsDefault: org.sectorsDefault, shiftSwapsDefault: org.shiftSwapsDefault,
     volunteerHourRateCents: org.volunteerHourRateCents, volunteerHourRateCurrency: org.volunteerHourRateCurrency,
     volunteerHourRateSetAt: org.volunteerHourRateSetAt?.toISOString() ?? null,
     adminUrl,

@@ -16,6 +16,8 @@ import { validationError } from "@/lib/api-error"
 import { SHIFT_CONTACT_NAME_MAX, SHIFT_CONTACT_PHONE_MAX, SHIFT_INSTRUCTIONS_MAX } from "@/lib/shift-info"
 import { minVolunteersProblem } from "@/lib/staffing"
 import { liveRoleShifts, ROLE_SETTINGS_SELECT, roleSettingsOf } from "@/lib/role-settings"
+import { endSwapsIn } from "@/lib/shift-swap-server"
+import { shiftMateriallyChanged } from "@/lib/shift-swaps"
 
 const schema = z.object({
   roleName: z.string().optional(),
@@ -101,6 +103,9 @@ export async function PATCH(req: Request, { params }: { params: Promise<{ id: st
   // unaware of a schedule change that was saved.
   const { after, outboxIds, notified } = await db.$transaction(async (tx) => {
     const after = await tx.shift.update({ where: { id }, data: updateData })
+    // A new time, day, place, poste or requirement ends the swap requests agreed on the old one
+    // (#1174 E13): never applied to terms nobody agreed to.
+    if (shiftMateriallyChanged(before, after)) await endSwapsIn(tx, { shiftIds: [id] }, "shift_changed", adminActor(guard.session))
 
     // Detect schedule changes worth notifying about (date / start / end).
     const scheduleChanged =

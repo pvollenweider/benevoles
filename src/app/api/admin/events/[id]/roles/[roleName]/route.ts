@@ -16,6 +16,7 @@ import { isCivilDate } from "@/lib/civil-date"
 import { labelUpdates, posteApplyCount, posteApplyTargets } from "@/lib/poste-apply"
 import { removeRoleFromScope, renameRoleInScope } from "@/lib/question-scope"
 import { assignPosteSector } from "@/lib/sector-adoption"
+import { endSwapsAfter, endSwapsIn } from "@/lib/shift-swap-server"
 
 /**
  * Share links per group (#947) name their roles: a rename or a deletion is carried into every link
@@ -174,6 +175,8 @@ export async function PATCH(req: Request, { params }: { params: Promise<{ id: st
         where: { eventId: id, roleName: newName, label: decodedRole, event: { organizationId } },
         data: { label: newName },
       })
+      // A renamed poste is a material change of its shifts (#1174 E13): their swap requests end.
+      await endSwapsIn(tx, { shiftIds: shifts.map((s) => s.id) }, "shift_changed", actor)
       await updateGroupLinks(tx, id, decodedRole, (names) => renameRoleInLink(names, decodedRole, newName))
       await tx.eventQuestion.updateMany({ where: { eventId: id, roleName: decodedRole }, data: { roleName: newName } })
       await updateQuestionScopes(tx, id, decodedRole, (names) => renameRoleInScope(names, decodedRole, newName))
@@ -235,6 +238,10 @@ export async function PATCH(req: Request, { params }: { params: Promise<{ id: st
       where: { eventId: id, roleName: newName ?? decodedRole, event: { organizationId } },
       data: { reservedTags },
     })
+    // New requirements end the swap requests of the poste (#1174 E13).
+    if (shifts.some((sh) => sh.reservedTags.join("|") !== reservedTags.join("|"))) {
+      await endSwapsAfter(db, { shiftIds: shifts.map((s) => s.id) }, "shift_changed", actor)
+    }
     for (const s of shifts.filter((sh) => sh.reservedTags.join("|") !== reservedTags.join("|"))) {
       await logEvent({
         eventId: id, actor, action: "shift.updated", entityType: "Shift", entityId: s.id,
@@ -265,6 +272,10 @@ export async function PATCH(req: Request, { params }: { params: Promise<{ id: st
       where: { eventId: id, roleName: newName ?? decodedRole, event: { organizationId } },
       data: { assignedOnly },
     })
+    // A poste now assigned by the organisation only no longer swaps between volunteers (#1145, #1174).
+    if (assignedOnly && shifts.some((sh) => !sh.assignedOnly)) {
+      await endSwapsAfter(db, { shiftIds: shifts.map((s) => s.id) }, "assigned_only", actor)
+    }
     for (const s of shifts.filter((sh) => sh.assignedOnly !== assignedOnly)) {
       await logEvent({
         eventId: id, actor, action: "shift.updated", entityType: "Shift", entityId: s.id,

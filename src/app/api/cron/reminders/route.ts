@@ -20,6 +20,7 @@ import { orgTimeZone } from "@/lib/time-zone"
 import { remindersDue, type GroupableRegistration } from "@/lib/reminder-groups"
 import { REMINDER_WINDOW_HOURS } from "@/lib/automatic-reminders"
 import { sendMilestoneOwnerReminders } from "@/lib/milestone-reminders"
+import { expireSwapRequests } from "@/lib/shift-swap-server"
 
 export const dynamic = "force-dynamic"
 
@@ -176,6 +177,12 @@ async function run(req: Request) {
     return null
   })
 
+  // Shift swap requests past their deadline (#1174): ended as expired, the people told.
+  const expiredSwaps = await expireSwapRequests(now).catch((e) => {
+    reportError("swaps.expire")(e)
+    return null
+  })
+
   // Milestone owners whose due day approaches (#985): queued here, delivered just below.
   const milestoneOwners = await sendMilestoneOwnerReminders(now).catch((e) => {
     reportError("milestones.owner_reminders")(e)
@@ -202,6 +209,7 @@ async function run(req: Request) {
     totals,
     expiredOffers: expiredOffers.length,
     waitlist,
+    expiredSwaps,
     milestoneOwners,
     outbox,
     outboxStatus,

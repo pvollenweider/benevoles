@@ -1,4 +1,6 @@
 import { describe, it, expect, vi, beforeEach } from "vitest"
+// Swap requests (#1174) end through their own module, tested on Postgres (src/__integration__/shift-swaps.int.test.ts).
+vi.mock("@/lib/shift-swap-server", () => ({ endSwapsIn: vi.fn(), endSwapsAfter: vi.fn() }))
 
 // « Retirer de leur créneau » (#703): the bulk route, with the real cancelRegistrations, queues
 // exactly the emails its confirmation recap announces: one per removed person with an address,

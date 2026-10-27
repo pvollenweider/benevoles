@@ -1,4 +1,6 @@
 import { describe, it, expect, vi, beforeEach } from "vitest"
+// Swap requests (#1174) end through their own module, tested on Postgres (src/__integration__/shift-swaps.int.test.ts).
+vi.mock("@/lib/shift-swap-server", () => ({ endSwapsIn: vi.fn(), endSwapsAfter: vi.fn() }))
 
 // Renaming a poste carries its sector leaders (#1001), in the same transaction as its shifts, its
 // share links and its questions. A person already leading a poste of the new name keeps one row,

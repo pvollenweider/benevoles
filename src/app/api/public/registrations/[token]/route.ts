@@ -26,6 +26,7 @@ import { queueWithdrawalNotifications } from "@/lib/withdrawal-notifications"
 import { queueWithdrawalConfirmation } from "@/lib/withdrawal-confirmation"
 import { deliverAfterResponse } from "@/lib/notifications/outbox"
 import { cancelRefusedError, isLateWithdrawal, selfCancelState, shiftStartsAt } from "@/lib/cancel-deadline"
+import { endSwapsAfter } from "@/lib/shift-swap-server"
 
 const tooManyAttempts = () => NextResponse.json({ error: "Trop de tentatives." }, { status: 429 })
 
@@ -221,6 +222,8 @@ export async function DELETE(req: Request, { params }: { params: Promise<{ token
   if (count === 0) {
     return NextResponse.json({ error: "Inscription introuvable ou déjà annulée." }, { status: 404 })
   }
+  // A swap request built on this place can no longer happen (#1174): ended, the other person told.
+  await endSwapsAfter(prisma, { registrationIds: [registration.id] }, "registration_gone", { type: "volunteer", id: registration.volunteerId }, now)
 
   const cancelLogId = await logEvent({
     eventId: registration.eventId,

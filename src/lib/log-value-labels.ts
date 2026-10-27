@@ -79,6 +79,7 @@ export const SWAP_REASON_LOG_LABELS: Record<SwapEndReason, string> = {
   not_confirmed: "inscription plus confirmée",
   shift_cancelled: "créneau annulé",
   shift_changed: "créneau modifié",
+  link_revoked: "lien personnel renouvelé",
   option_off: "échanges désactivés",
   organiser: "refus de l'organisation",
   assigned_only: "poste attribué par l'organisation",

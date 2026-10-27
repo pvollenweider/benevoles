@@ -12,9 +12,9 @@ import { orgLinksOpen } from "./org-lifecycle"
 import { orgTimeZone } from "./time-zone"
 import { hashToken } from "./token-hash"
 import { registrationToken } from "./token-vault"
-import { deliverAfterResponse, enqueueNotifications } from "./notifications/outbox"
 import type { NotificationPayload } from "./notifications/types"
 import type { LogActor } from "./event-log"
+import { reportError } from "./report-error"
 import {
   agreementTerms, beforeSwapDeadline, materialTerms, needsSwapApproval, personSwapCheck, swapCompatibility, swapDeadline,
   swapRefusalMessage, SWAP_COUNTER_LIVE_STATUSES, SWAP_LIVE_STATUSES,
@@ -288,13 +288,19 @@ function endedPayload(event: LoadedEvent, req: LockedRequest, person: LoadedRegi
 
 async function queue(tx: Tx, event: LoadedEvent, payloads: (NotificationPayload | null)[]): Promise<string[]> {
   const real = payloads.filter((p): p is NotificationPayload => p !== null)
-  return real.length ? enqueueNotifications(real, tx, { organizationId: event.organizationId }) : []
+  if (real.length === 0) return []
+  // Loaded on use: the hooks put this module in many routes, and the email channel behind the
+  // outbox validates the whole environment when it is first imported.
+  const { enqueueNotifications } = await import("./notifications/outbox")
+  return enqueueNotifications(real, tx, { organizationId: event.organizationId })
 }
 
 /** Delivery right after the response; outside a request (a job, a test) the outbox run sends them. */
 function deliver(ids: string[]): void {
   if (ids.length === 0) return
-  try { deliverAfterResponse(ids) } catch { /* outside a request: the next outbox run sends them */ }
+  void import("./notifications/outbox").then(({ deliverAfterResponse }) => {
+    try { deliverAfterResponse(ids) } catch { /* outside a request: the next outbox run sends them */ }
+  }, reportError("swap.deliver"))
 }
 
 const actorFields = (actor: LogActor) => ({ actorType: actor.type, actorId: ("id" in actor ? actor.id : undefined) ?? null })
@@ -319,7 +325,10 @@ async function endRequest(tx: Tx, req: LockedRequest, event: LoadedEvent, end: "
     },
   })
   const [mine, theirs] = await Promise.all([loadRegistration(tx, req.registrationId), loadRegistration(tx, req.counterRegistrationId)])
-  const people = [mine?.volunteerId === req.volunteerId ? mine : null, theirs?.volunteerId === req.counterVolunteerId ? theirs : null]
+  // Only a person who still holds their place is told « Tu conserves ton créneau »: one whose
+  // registration was withdrawn or removed already got that email.
+  const told = (r: LoadedRegistration | null, volunteerId: string | null) => (r && r.volunteerId === volunteerId && r.status === "active" ? r : null)
+  const people = [told(mine, req.volunteerId), told(theirs, req.counterVolunteerId)]
   return queue(tx, event, people.map((p) => endedPayload(event, req, p, end, reason)))
 }
 
@@ -594,7 +603,7 @@ export async function declineSwapOffer(db: SwapDbLike, input: { requestId: strin
  * Jean takes back his offer, before it is applied (also while it waits for an organiser): the
  * request is open again and Pierre is told.
  */
-export async function withdrawSwapOffer(db: SwapDbLike, input: { requestId: string; volunteerId: string }): Promise<SwapResult> {
+export async function withdrawSwapOffer(db: SwapDbLike, input: { requestId: string; volunteerId: string; revision: number }): Promise<SwapResult> {
   let outboxIds: string[] = []
   const result = await runSwapTransaction(asDb(db), async (tx): Promise<SwapResult> => {
     const locked = await lockForStep(tx, input.requestId)
@@ -603,6 +612,8 @@ export async function withdrawSwapOffer(db: SwapDbLike, input: { requestId: stri
     if (locked.req.counterVolunteerId !== input.volunteerId) return { ok: false, httpStatus: 409, error: SWAP_OFFER_GONE }
     const { req, event } = locked
     if (req.status !== "offered" && req.status !== "approval") return stateError(req.status)
+    // An old page's POST never takes back a later offer of the same person (Codex, PR 2).
+    if (locked.stale || req.revision !== input.revision) return { ok: false, httpStatus: 409, error: SWAP_OFFER_GONE, code: "revision" }
     await tx.shiftSwapRequest.update({
       where: { id: req.id },
       data: { status: "open", counterRegistrationId: null, counterVolunteerId: null, counterShiftId: null, termsHash: null, offeredAt: null, confirmedAt: null },
@@ -647,7 +658,7 @@ export async function withdrawSwapRequest(db: SwapDbLike, input: { requestId: st
   return result
 }
 
-export type SwapEndScope = { registrationIds?: string[]; shiftIds?: string[]; eventId?: string }
+export type SwapEndScope = { registrationIds?: string[]; shiftIds?: string[]; eventId?: string; volunteerIds?: string[] }
 
 /**
  * Ends the live requests touched by a change made elsewhere (#1174 E09, E13, E18, E19): a
@@ -661,6 +672,7 @@ export async function endSwapRequests(tx: Tx, scope: SwapEndScope, reason: Exclu
   if (scope.registrationIds?.length) or.push({ registrationId: { in: scope.registrationIds } }, { counterRegistrationId: { in: scope.registrationIds } })
   if (scope.shiftIds?.length) or.push({ shiftId: { in: scope.shiftIds } }, { counterShiftId: { in: scope.shiftIds } })
   if (scope.eventId) or.push({ eventId: scope.eventId })
+  if (scope.volunteerIds?.length) or.push({ volunteerId: { in: scope.volunteerIds } }, { counterVolunteerId: { in: scope.volunteerIds } })
   if (or.length === 0) return []
   const rows = await tx.shiftSwapRequest.findMany({ where: { status: { in: [...SWAP_LIVE_STATUSES] }, OR: or }, select: { id: true }, orderBy: { id: "asc" } })
   const ids: string[] = []
@@ -672,6 +684,31 @@ export async function endSwapRequests(tx: Tx, scope: SwapEndScope, reason: Exclu
     ids.push(...await endRequest(tx, req, event, reason === "option_off" ? "cancelled" : "impossible", reason, actor, now))
   }
   return ids
+}
+
+/** The reasons a change made elsewhere ends a request with. */
+export type SwapHookReason = Exclude<SwapEndReason, "deadline" | "organiser">
+
+/**
+ * Inside a mutation's own transaction (Codex, PR 2 of #1174): ends the requests it invalidates, in
+ * the same commit, and schedules their emails after the response (rows of a rolled-back
+ * transaction are simply never found by the delivery). Throws like any statement of the
+ * transaction. `tx` is the global client's or an organisation's transaction client.
+ */
+export async function endSwapsIn(tx: unknown, scope: SwapEndScope, reason: SwapHookReason, actor: LogActor, now: Date = new Date()): Promise<void> {
+  deliver(await endSwapRequests(tx as Tx, scope, reason, actor, now))
+}
+
+/**
+ * For a change written outside a transaction (one conditional update): the same, right after it,
+ * never failing the change itself. The hourly sweep catches up on anything missed.
+ */
+export async function endSwapsAfter(db: unknown, scope: SwapEndScope, reason: SwapHookReason, actor: LogActor, now: Date = new Date()): Promise<void> {
+  try {
+    await endSwapsIn(db, scope, reason, actor, now)
+  } catch (e) {
+    reportError("swap.end")(e)
+  }
 }
 
 /**

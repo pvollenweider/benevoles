@@ -10,6 +10,7 @@ import { adminActor } from "@/lib/event-log"
 import { validationError } from "@/lib/api-error"
 import { deletedPosteNames } from "@/lib/leader-postes"
 import { canAdoptBeta } from "@/lib/beta-access"
+import { newEventShiftSwapsEnabled } from "@/lib/shift-swap-data"
 import { newEventSectorsEnabled } from "@/lib/sector-adoption"
 
 /**
@@ -41,7 +42,7 @@ export async function POST(req: Request, { params }: { params: Promise<{ id: str
       sectorLeaders: { select: { roleName: true, sectorId: true, name: true, email: true } },
       shiftRecurrences: true,
       sectors: { select: { id: true, name: true, displayOrder: true, archivedAt: true } },
-      organization: { select: { slug: true, shiftRosterDefault: true, sectorsDefault: true } },
+      organization: { select: { slug: true, shiftRosterDefault: true, sectorsDefault: true, shiftSwapsDefault: true } },
     },
   })
 
@@ -61,7 +62,12 @@ export async function POST(req: Request, { params }: { params: Promise<{ id: str
     source.sectorsEnabled ? canAdoptBeta(organizationId, "sectors") : false,
     newEventSectorsEnabled(organizationId, source.organization.sectorsDefault),
   ])
-  const plan = duplicatePlan({ ...source, leaders: source.sectorLeaders, deletedPostes, recurrences: source.shiftRecurrences, organizationRosterDefault: source.organization.shiftRosterDefault, sectorsGate, newEventSectors }, parsed.data)
+  // Shift swaps (#1174): the source's option is a new adoption too; no request is ever copied.
+  const [swapsGate, newEventSwaps] = await Promise.all([
+    source.shiftSwapsEnabled ? canAdoptBeta(organizationId, "shiftSwaps") : false,
+    newEventShiftSwapsEnabled(organizationId, source.organization.shiftSwapsDefault),
+  ])
+  const plan = duplicatePlan({ ...source, leaders: source.sectorLeaders, deletedPostes, recurrences: source.shiftRecurrences, organizationRosterDefault: source.organization.shiftRosterDefault, sectorsGate, newEventSectors, swapsGate, newEventSwaps }, parsed.data)
 
   // A title whose slug is one of the site's own addresses (/tarifs, /admin…) is refused (src/lib/event-slug.ts).
   const slugged = eventSlugFromTitle(plan.event.title)

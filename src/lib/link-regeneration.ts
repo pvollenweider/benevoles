@@ -30,6 +30,7 @@ import { registrationToken, linkToken } from "./token-vault"
 import { sendNotification } from "./notifications"
 import { sendMemberInvite } from "./notification-helpers"
 import { LIVE_STATUSES } from "./registration-capacity"
+import { endSwapsIn } from "./shift-swap-server"
 
 const LIVE = new Set<string>(LIVE_STATUSES)
 
@@ -200,6 +201,8 @@ export async function regenerateLinks(
       ...leaders.map((l) => tx.sectorLeader.update({ where: { id: l.id }, data: linkToken.data(newTokenById.get(l.id)!) })),
       ...invites.map((i) => tx.memberInvite.update({ where: { id: i.id }, data: linkToken.data(newTokenById.get(i.id)!) })),
     ])
+    // Swap requests given from the old links end (#1174 E18): a new link means a new agreement.
+    if (registrations.length > 0) await endSwapsIn(tx, { registrationIds: registrations.map((r) => r.id) }, "link_revoked", { type: "system" })
   }, { maxWait: 10_000, timeout: 120_000 }) // a whole organization can hold thousands of rows: Prisma's 5 s default is too short
 
   const result: RegenerateLinksResult = {
