@@ -46,11 +46,16 @@ export type SignupNotificationInput = {
   registrations: CreatedRegistration[]
   /** Clear registration token per shift id (#290); the first registration's opens the management page. */
   tokens: Map<string, string>
+  /**
+   * The volunteer already held a place or a request on the event (#1191, `groupsConfirmation`):
+   * the confirmation of the active places is left out here, queued grouped by the caller instead.
+   */
+  groupedConfirmation?: boolean
 }
 
 /**
- * Confirmation (active places), request acknowledgement (#484), admin notification, sector leaders
- * (not for requests, #484) and waitlist confirmations, in that order.
+ * Confirmation (active places, unless grouped: #1191), request acknowledgement (#484), admin
+ * notification, sector leaders (not for requests, #484) and waitlist confirmations, in that order.
  */
 export async function buildSignupNotifications(
   input: SignupNotificationInput,
@@ -74,7 +79,7 @@ export async function buildSignupNotifications(
     }))
   const activeShiftData = shiftData(activeRegs)
   const outbox = collectNotifications()
-  if (activeRegs.length > 0) {
+  if (activeRegs.length > 0 && !input.groupedConfirmation) {
     await sendConfirmationEmail({
       to: email,
       volunteerName: `${firstName} ${lastName}`,

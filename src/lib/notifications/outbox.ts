@@ -12,6 +12,7 @@ import { MAX_ATTEMPTS } from "./types"
 import { decryptValue, encryptValue } from "../token-vault"
 import { siteDomain } from "@/lib/site"
 import { isAddedByOrganizer, resolveAddedByOrganizer } from "./added-by-organizer"
+import { isAddedShiftsConfirmation, resolveAddedShiftsConfirmation } from "./added-shifts-confirmation"
 import { outboxRecipientVerdict } from "../outbox-recipient-check"
 import { bestEffort, hourStart, recordLimitHit } from "./limit-hits"
 import type { SendBatchKind } from "../send-batches"
@@ -271,16 +272,17 @@ export async function deliverOutbox(opts: { ids?: string[]; limit?: number; now?
     if (count === 0) continue // claimed by another delivery meanwhile
 
     const claimed = await prisma.notificationOutbox.findUniqueOrThrow({ where: { id: row.id } })
-    // A grouped « added by an organizer » email (#916) lists what is still held when it leaves:
-    // nothing left, nothing to tell. A failed read is an ordinary failed attempt, retried.
+    // A grouped « added by an organizer » email (#916), or a grouped confirmation of shifts added
+    // by the volunteer (#1191), lists what is still held when it leaves: nothing left, nothing to
+    // tell. A failed read is an ordinary failed attempt, retried.
     let nothingLeft = false
     let recipientRefused: string | null = null
     let inactivityStopped: string | null = null
     const outcome = await Promise.resolve()
       .then(async () => {
         let payload = openPayload(claimed.payload)
-        if (isAddedByOrganizer(payload)) {
-          const resolved = await resolveAddedByOrganizer(payload)
+        if (isAddedByOrganizer(payload) || isAddedShiftsConfirmation(payload)) {
+          const resolved = isAddedByOrganizer(payload) ? await resolveAddedByOrganizer(payload) : await resolveAddedShiftsConfirmation(payload)
           if (!resolved) { nothingLeft = true; return { ok: true as const } }
           payload = resolved
         }
