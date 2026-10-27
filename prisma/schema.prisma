@@ -25,6 +25,10 @@ model Organization {
   // with (Event.sectorsEnabled), applied by the creation routes only while the beta capability
   // « sectors » can be adopted. Off by default; existing events keep their own value.
   sectorsDefault     Boolean @default(false)
+  // « Autoriser les demandes d'échange de créneaux » (#1174): the value a NEW event of this
+  // organisation starts with (Event.shiftSwapsEnabled), applied by the creation routes only while
+  // the beta capability « shiftSwaps » can be adopted. On by default; existing events keep theirs.
+  shiftSwapsDefault  Boolean @default(true)
   publicTitle      String? // headline of the public events page; null = "Bénévoles"
   // IANA time zone of the organization's events (#344): shift times are local wall-clock times in
   // this zone (reminders, emails, event log, PDF export). null = deployment default (APP_TIME_ZONE).
@@ -200,6 +204,13 @@ model Event {
   // structure, even with every sector archived, and the option can no longer be turned off.
   sectorsEnabled      Boolean   @default(false)
   sectorsAdoptedAt    DateTime?
+  // Shift swaps between volunteers (#1174, beta capability « shiftSwaps », src/lib/shift-swaps.ts):
+  // two confirmed volunteers of the same poste trade their shifts. Off for every existing event
+  // (column default); a new event starts with Organization.shiftSwapsDefault while the capability
+  // can be adopted. `shiftSwapsApproval`: every swap waits for an organiser's approval, not only
+  // those involving a shift « sur validation ».
+  shiftSwapsEnabled   Boolean   @default(false)
+  shiftSwapsApproval  Boolean   @default(false)
   // Retention of past events (#813): when its registrations were anonymised, 3 years after its end.
   personalDataAnonymizedAt DateTime?
   createdAt           DateTime  @default(now())
@@ -222,6 +233,7 @@ model Event {
   groupLinks       EventGroupLink[]
   rosterConsents   RosterConsent[]
   sectors          Sector[]
+  shiftSwapRequests ShiftSwapRequest[]
 
   @@unique([organizationId, slug])
   @@index([organizationId])
@@ -733,6 +745,8 @@ model Registration {
   shift     Shift           @relation(fields: [shiftId], references: [id], onDelete: Cascade)
   volunteer Volunteer       @relation(fields: [volunteerId], references: [id])
   groupLink EventGroupLink? @relation(fields: [groupLinkId], references: [id], onDelete: SetNull)
+  swapRequests      ShiftSwapRequest[] @relation("SwapRequester")
+  swapCounterOffers ShiftSwapRequest[] @relation("SwapCounterpart")
 
   // One live registration per volunteer and shift (#264). Partial: cancelled rows are kept for
   // history, and a volunteer may cancel then register again. Backstops the route-level check,
@@ -744,6 +758,60 @@ model Registration {
   @@index([status, shiftId])
   @@index([waitingPosition, shiftId])
   @@index([groupLinkId])
+}
+
+// A swap request between two volunteers (#1174, src/lib/shift-swaps.ts and shift-swap-server.ts):
+// Pierre publishes « Je cherche à échanger ce créneau » for one of his confirmed registrations; a
+// volunteer holding a compatible confirmed registration offers it in return (one offer at a time,
+// `revision` counts the offers, so a confirmation is bound to the terms it saw); Pierre confirms;
+// an organiser approves when needed; then one transaction swaps the two registrations' `shiftId`
+// (each person keeps their own registration, personal link and token). A pending request reserves
+// nothing. The shift ids and `termsHash` are what was agreed: an application that no longer finds
+// them ends the request as impossible. Never copied with an event; ids and states only, no PII.
+model ShiftSwapRequest {
+  id                    String    @id @default(cuid())
+  eventId               String
+  // "open" (published, no offer) | "offered" (an offer waits for the requester) | "approval"
+  // (both agreed, an organiser must approve) | "applied" | "withdrawn" | "refused" | "expired" |
+  // "impossible" | "cancelled" (by the organisation: option switched off).
+  status                String    @default("open")
+  registrationId        String
+  volunteerId           String
+  shiftId               String
+  counterRegistrationId String?
+  counterVolunteerId    String?
+  counterShiftId        String?
+  revision              Int       @default(0)
+  // Material terms of both shifts when the offer was made (src/lib/shift-swaps.ts, materialTerms).
+  termsHash             String?
+  // Material terms of the requester's shift at publication.
+  shiftHash             String
+  // Volunteers whose offer the requester declined: they cannot offer again on this request.
+  declinedVolunteerIds  String[]  @default([])
+  expiresAt             DateTime
+  offeredAt             DateTime?
+  confirmedAt           DateTime?
+  // The organiser who approved or refused (AdminUser.id, no relation: the account may go).
+  decidedById           String?
+  decidedAt             DateTime?
+  appliedAt             DateTime?
+  endedAt               DateTime?
+  // Why it ended, a code of SWAP_END_REASONS (src/lib/shift-swaps.ts).
+  endReason             String?
+  createdAt             DateTime  @default(now())
+  updatedAt             DateTime  @updatedAt
+
+  event        Event         @relation(fields: [eventId], references: [id], onDelete: Cascade)
+  registration Registration  @relation("SwapRequester", fields: [registrationId], references: [id], onDelete: Cascade)
+  counterRegistration Registration? @relation("SwapCounterpart", fields: [counterRegistrationId], references: [id], onDelete: SetNull)
+
+  // One open request per registration, on either side (the other side's exclusivity is checked
+  // under the volunteer lock): backstops a double submit racing itself.
+  @@unique([registrationId], map: "ShiftSwapRequest_registration_live_key", where: raw("status IN ('open', 'offered', 'approval')"))
+  @@unique([counterRegistrationId], map: "ShiftSwapRequest_counter_live_key", where: raw("status IN ('offered', 'approval')"))
+  @@index([eventId, status])
+  @@index([registrationId])
+  @@index([counterRegistrationId])
 }
 
 model MemberInvite {

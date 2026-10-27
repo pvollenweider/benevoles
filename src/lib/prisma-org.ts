@@ -27,7 +27,7 @@ import { touchOrgActivity } from "./org-activity"
 /** Models carrying organizationId themselves. */
 const DIRECT = ["event", "volunteer", "orgLog", "orgSlugHistory", "targetedMessage", "scheduledMessage", "sendBatch", "messageTemplate", "duplicateDismissal", "organizationLogo", "erasureRecord"] as const
 /** Models owned through their event (eventId → Event.organizationId). */
-const EVENT_OWNED = ["shift", "shiftRecurrence", "registration", "memberInvite", "eventPage", "sectorLeader", "eventMilestone", "eventLog", "eventQuestion", "questionAnswer", "eventGroupLink", "rosterConsent", "sector"] as const
+const EVENT_OWNED = ["shift", "shiftRecurrence", "registration", "memberInvite", "eventPage", "sectorLeader", "eventMilestone", "eventLog", "eventQuestion", "questionAnswer", "eventGroupLink", "rosterConsent", "sector", "shiftSwapRequest"] as const
 
 type DirectModel = (typeof DIRECT)[number]
 type EventOwnedModel = (typeof EVENT_OWNED)[number]
