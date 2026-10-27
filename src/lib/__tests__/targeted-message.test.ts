@@ -1,5 +1,5 @@
 import { describe, it, expect } from "vitest"
-import { audienceFromQuery, audienceLabel, countDeclinedExcluded, messageSchema, selectInvitedWithoutShift, selectRecipients, type RecipientRegistration } from "../targeted-message"
+import { audienceFromQuery, audienceLabel, countDeclinedExcluded, messagePageHref, messageSchema, writeToSectorLabel, selectInvitedWithoutShift, selectRecipients, type RecipientRegistration } from "../targeted-message"
 
 const reg = (id: string, over: Partial<RecipientRegistration> & { volunteerId: string; shiftId: string }): RecipientRegistration => ({
   status: "active",
@@ -93,5 +93,43 @@ describe("wording and query", () => {
     expect(audienceFromQuery({ role: "Bar" })).toEqual({ kind: "role", roleName: "Bar" })
     expect(audienceFromQuery({ audience: "waitlist" })).toEqual({ kind: "waitlist" })
     expect(audienceFromQuery({})).toEqual({ kind: "event" })
+  })
+})
+
+describe("sector audience (#1170)", () => {
+  it("keeps the confirmed people of the sector's postes, once each, with their shifts there only", () => {
+    const r = selectRecipients(regs, { kind: "sector", sectorId: "sec-bar" }, ["Bar"])
+    expect(r.map((x) => x.volunteerId)).toEqual(["alice"])
+    expect(r[0].registrations.map((x) => x.shiftId)).toEqual(["bar1", "bar2"])
+    expect(selectRecipients(regs, { kind: "sector", sectorId: "autres" }, ["Accueil"]).map((x) => x.volunteerId)).toEqual(["bob"])
+  })
+
+  it("writes to nobody when the sector's postes are not given or empty, never to everyone", () => {
+    expect(selectRecipients(regs, { kind: "sector", sectorId: "sec-bar" })).toEqual([])
+    expect(selectRecipients(regs, { kind: "sector", sectorId: "sec-bar" }, [])).toEqual([])
+  })
+
+  it("is a valid audience, named after the sector", () => {
+    expect(messageSchema.safeParse({ audience: { kind: "sector", sectorId: "sec-bar" }, subject: "a", message: "b" }).success).toBe(true)
+    expect(messageSchema.safeParse({ audience: { kind: "sector", sectorId: "" }, subject: "a", message: "b" }).success).toBe(false)
+    expect(audienceLabel({ kind: "sector", sectorId: "sec-bar" }, undefined, "Buvette")).toBe("les bénévoles du secteur « Buvette »")
+    expect(audienceLabel({ kind: "sector", sectorId: "autres" })).toBe("les bénévoles des « Autres postes »")
+  })
+
+  it("is prefilled from ?secteur=, after ?shift= and ?role=", () => {
+    expect(audienceFromQuery({ secteur: "sec-bar" })).toEqual({ kind: "sector", sectorId: "sec-bar" })
+    expect(audienceFromQuery({ secteur: "sec-bar", role: "Bar" })).toEqual({ kind: "role", roleName: "Bar" })
+  })
+
+  it("the registrations list writes to its narrowest filter: créneau, poste, then sector", () => {
+    expect(messagePageHref("e1", {})).toBe("/admin/events/e1/message")
+    expect(messagePageHref("e1", { sector: "sec-bar" })).toBe("/admin/events/e1/message?secteur=sec-bar")
+    expect(messagePageHref("e1", { sector: "sec-bar", roleName: "Bar & co" })).toBe("/admin/events/e1/message?role=Bar%20%26%20co")
+    expect(messagePageHref("e1", { sector: "sec-bar", roleName: "Bar", shiftId: "s1" })).toBe("/admin/events/e1/message?shift=s1")
+  })
+
+  it("names the sector in the link", () => {
+    expect(writeToSectorLabel({ value: "sec-bar", label: "Buvette" })).toBe("Écrire au secteur Buvette")
+    expect(writeToSectorLabel({ value: "autres", label: "Autres postes" })).toBe("Écrire aux « Autres postes »")
   })
 })

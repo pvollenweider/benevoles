@@ -88,9 +88,10 @@ export function isDue(row: { status: string; scheduledFor: Date; claimedAt: Date
  * Why a due message is not sent, or null to send it: the event archived, the chosen shift gone or
  * cancelled, nobody left in the audience. Never falls back to another audience.
  */
-export function skipReason(f: { eventStatus: string; audience: Audience; shiftAvailable: boolean; recipients: number }): string | null {
+export function skipReason(f: { eventStatus: string; audience: Audience; shiftAvailable: boolean; recipients: number; sectorGone?: boolean }): string | null {
   if (f.eventStatus === "archived") return "l'événement est archivé"
   if (f.audience.kind === "shift" && !f.shiftAvailable) return "le créneau choisi a été supprimé ou annulé"
+  if (f.audience.kind === "sector" && f.sectorGone) return "le secteur choisi a été archivé"
   if (f.recipients === 0) return "personne à qui écrire dans cette sélection au moment de l'envoi"
   return null
 }
