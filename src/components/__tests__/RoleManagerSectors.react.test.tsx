@@ -175,14 +175,29 @@ describe("RoleManagerPanel with sectors adopted", () => {
     fetchMock.mockResolvedValue({ ok: true, json: async () => ({ sector: { id: "sec-1", name: "Entrées", displayOrder: 0, archivedAt: null }, adopted: true }) })
     const onAnnounce = vi.fn()
     render(<Harness initialShifts={shifts.map((s) => ({ ...s, sectorId: null }))} initialRoles={roles} sectors={{ enabled: true, adoptedAt: null, sectors: [] }} onAnnounce={onAnnounce} />)
+    expect(screen.getByRole("heading", { level: 2, name: "Gérer les postes" })).toBeInTheDocument()
     const input = screen.getByLabelText("Nouveau secteur")
     input.focus()
     fireEvent.change(input, { target: { value: "Entrées" } })
     fireEvent.submit(input.closest("form")!)
     await waitFor(() => expect(onAnnounce).toHaveBeenCalledWith("Secteur « Entrées » ajouté. Cet événement utilise maintenant des secteurs."))
     expect(screen.getByRole("heading", { level: 3, name: /Postes par secteur/ })).toBeInTheDocument()
+    // The panel is renamed in place once the server confirmed the adoption.
+    expect(screen.getByRole("heading", { level: 2, name: "Gérer les secteurs et postes" })).toBeInTheDocument()
+    expect(screen.queryByRole("heading", { name: "Gérer les postes" })).not.toBeInTheDocument()
     await waitFor(() => expect(screen.getByLabelText("Nouveau secteur")).toHaveFocus())
     expect(screen.getByText(/Vos postes existants restent dans « Autres postes »/)).toBeInTheDocument()
+  })
+
+  it("a first sector the server refuses renames nothing: the panel stays « Gérer les postes »", async () => {
+    fetchMock.mockResolvedValue({ ok: false, status: 403, json: async () => ({ error: "Les secteurs ne sont pas disponibles." }) })
+    render(<Harness initialShifts={shifts.map((s) => ({ ...s, sectorId: null }))} initialRoles={roles} sectors={{ enabled: true, adoptedAt: null, sectors: [] }} />)
+    const input = screen.getByLabelText("Nouveau secteur")
+    fireEvent.change(input, { target: { value: "Entrées" } })
+    fireEvent.submit(input.closest("form")!)
+    await waitFor(() => expect(screen.getByText("Les secteurs ne sont pas disponibles.")).toBeInTheDocument())
+    expect(screen.getByRole("heading", { level: 2, name: "Gérer les postes" })).toBeInTheDocument()
+    expect(screen.queryByRole("heading", { name: "Gérer les secteurs et postes" })).not.toBeInTheDocument()
   })
 
   it("archiving a sector without postes gives focus to the previous sector's « Renommer », never to <body>", async () => {

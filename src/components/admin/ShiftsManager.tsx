@@ -37,7 +37,7 @@ import {
 } from "@/lib/shifts-admin"
 import StatusBadge from "./StatusBadge"
 import { roleSectorOf } from "@/lib/role-settings"
-import { activeSectors, groupedRoleOrder, groupRolesBySector, sectorsAdopted, sectorsManaged, type SectorLike } from "@/lib/sectors"
+import { activeSectors, groupedRoleOrder, groupRolesBySector, managePostesLabel, sectorsAdopted, sectorsManaged, type SectorLike } from "@/lib/sectors"
 
 /** The event's sectors as « Gérer les postes » holds them (#1147). */
 export type AdminSector = SectorLike & { archivedAt: string | null }
@@ -333,6 +333,8 @@ export default function ShiftsManager({
   const editorSectors = sectorsInUse ? activeSectors(sectorsState.sectors).map((s) => ({ id: s.id, name: s.name })) : null
   // With sectors on, « Gérer les postes » is where the sectors are created: shown before any poste.
   const sectorsShown = sectorsManaged(sectorsState ? { sectorsEnabled: sectorsState.enabled, sectorsAdoptedAt: sectorsState.adoptedAt } : null)
+  // « Gérer les secteurs et postes » once the event adopted sectors (server-confirmed adoptedAt), like the panel's heading.
+  const managePostes = managePostesLabel(sectorsState ? { sectorsEnabled: sectorsState.enabled, sectorsAdoptedAt: sectorsState.adoptedAt } : null)
 
   // Group by day (all dates, not just those with shifts)
   const shiftsByDay = activeShiftsByDay(shifts)
@@ -380,10 +382,10 @@ export default function ShiftsManager({
               aria-controls={showReorder ? rolesPanelId : undefined}
               className="text-xs text-gray-500 border border-gray-200 rounded-xl px-3 py-1.5 hover:bg-gray-50 transition-colors flex items-center gap-1.5"
             >
-              <svg aria-hidden="true" className="w-3.5 h-3.5" fill="none" stroke="currentColor" strokeWidth={2} viewBox="0 0 24 24">
+              <svg aria-hidden="true" className="w-3.5 h-3.5 shrink-0" fill="none" stroke="currentColor" strokeWidth={2} viewBox="0 0 24 24">
                 <path strokeLinecap="round" strokeLinejoin="round" d="M7 16V4m0 0L3 8m4-4l4 4M17 8v12m0 0l4-4m-4 4l-4-4" />
               </svg>
-              Gérer les postes
+              {managePostes}
             </button>
           )}
         </div>
@@ -509,7 +511,7 @@ export default function ShiftsManager({
       {/* What the figures on a bar mean (#925), once above the days; each bar's name says it in words. */}
       {view === "timeline" && daysWithShifts.length > 0 && (
         <p className="text-xs text-gray-600 pl-1">
-          Sur chaque créneau, « 2/4 inscrits » compte les inscriptions confirmées sur les places du créneau, suivies des places encore libres ou de « Complet » ; l&apos;âge minimum, s&apos;il y en a un, vient en premier. La limite de créneaux par personne, l&apos;accès réservé et le cumul avec un autre créneau se règlent sur le poste, dans « Gérer les postes ».
+          Sur chaque créneau, « 2/4 inscrits » compte les inscriptions confirmées sur les places du créneau, suivies des places encore libres ou de « Complet » ; l&apos;âge minimum, s&apos;il y en a un, vient en premier. La limite de créneaux par personne, l&apos;accès réservé et le cumul avec un autre créneau se règlent sur le poste, dans « {managePostes} ».
           {usesMinimum && " Un créneau avec un minimum de personnes affiche « sous le minimum (2) » tant qu'il ne l'a pas, encadré de pointillés, puis « minimum atteint » jusqu'à ce qu'il soit complet."}
         </p>
       )}

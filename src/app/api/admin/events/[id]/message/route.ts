@@ -9,7 +9,7 @@ import { render } from "@/lib/notifications/templates"
 import { deliverAfterResponse, enqueueBatch } from "@/lib/notifications/outbox"
 import { adminActor, logEvent } from "@/lib/event-log"
 import { messagePushPayload, messageSchema, MESSAGE_RATE_LIMIT } from "@/lib/targeted-message"
-import { buildTargetedMessage } from "@/lib/targeted-message-build"
+import { buildTargetedMessage, sectorAudienceAvailable, SECTOR_AUDIENCE_NOT_FOUND } from "@/lib/targeted-message-build"
 import { renderVariables, templateProblems } from "@/lib/message-template"
 import { eventPublicUrl } from "@/lib/urls"
 import { pushDeviceCount, sendTargetedPush } from "@/lib/push"
@@ -44,8 +44,13 @@ export async function POST(req: Request, { params }: { params: Promise<{ id: str
     const shift = await db.shift.findFirst({ where: { id: audience.shiftId, eventId: id }, select: { id: true } })
     if (!shift) return NextResponse.json({ error: "Créneau introuvable dans cet événement." }, { status: 400 })
   }
+  if (audience.kind === "sector" && !(await sectorAudienceAvailable(db, id, audience.sectorId))) {
+    return NextResponse.json({ error: SECTOR_AUDIENCE_NOT_FOUND }, { status: 400 })
+  }
 
-  const { recipients, label, declinedExcluded, vars, payloadFor: buildPayload } = await buildTargetedMessage(db, event, audience, subject, message)
+  const { recipients, label, declinedExcluded, sectorGone, vars, payloadFor: buildPayload } = await buildTargetedMessage(db, event, audience, subject, message)
+  // Archived between the check above and this read: the same refusal, never another audience.
+  if (sectorGone) return NextResponse.json({ error: SECTOR_AUDIENCE_NOT_FOUND }, { status: 400 })
   type Target = (typeof recipients)[number]
 
   // Template variables (#482): refused before anything is sent when unknown or out of place, then

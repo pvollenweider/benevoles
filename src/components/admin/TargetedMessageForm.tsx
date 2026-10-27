@@ -17,6 +17,11 @@ type Props = {
   eventId: string
   roles: string[]
   shifts: { id: string; roleName: string; name: string }[]
+  /**
+   * The sector choices (#1170), active sectors then « Autres postes » (value « autres »); empty
+   * when the event has not adopted sectors: no sector audience is offered then.
+   */
+  sectors?: { value: string; label: string }[]
   initialAudience: Audience
   /** The organisation's message templates (#482). */
   templates?: { id: string; name: string; subject: string; body: string }[]
@@ -32,12 +37,13 @@ type DryRun = { recipients: number; pushDevices?: number; waitlistOnly?: number;
  * Subject, message, audience; a live recipient count; a preview; then a confirmation naming the
  * number of people written to (#396). Sending goes through the outbox on the server.
  */
-export default function TargetedMessageForm({ eventId, roles, shifts, initialAudience, templates = [], timeZone = "Europe/Zurich", canSchedule = true }: Props) {
+export default function TargetedMessageForm({ eventId, roles, shifts, sectors = [], initialAudience, templates = [], timeZone = "Europe/Zurich", canSchedule = true }: Props) {
   const router = useRouter()
   const id = useId()
   const [kind, setKind] = useState<Audience["kind"]>(initialAudience.kind)
   const [roleName, setRoleName] = useState(initialAudience.kind === "role" ? initialAudience.roleName : roles[0] ?? "")
   const [shiftId, setShiftId] = useState(initialAudience.kind === "shift" ? initialAudience.shiftId : shifts[0]?.id ?? "")
+  const [sectorId, setSectorId] = useState(initialAudience.kind === "sector" ? initialAudience.sectorId : sectors[0]?.value ?? "")
   const [subject, setSubject] = useState("")
   const [message, setMessage] = useState("")
   // The count, tagged with the audience it was made for: a stale one means « counting ».
@@ -66,7 +72,7 @@ export default function TargetedMessageForm({ eventId, roles, shifts, initialAud
   const resultRef = useRef<HTMLHeadingElement>(null)
 
   const audience: Audience =
-    kind === "role" ? { kind, roleName } : kind === "shift" ? { kind, shiftId } : { kind }
+    kind === "role" ? { kind, roleName } : kind === "shift" ? { kind, shiftId } : kind === "sector" ? { kind, sectorId } : { kind }
   const audienceKey = JSON.stringify(audience)
   // Template variables (#482) checked as the text is typed, with the same rule as the server.
   const subjectProblems = templateProblems(subject, kind)
@@ -248,35 +254,47 @@ export default function TargetedMessageForm({ eventId, roles, shifts, initialAud
         <legend className="text-sm font-medium text-gray-800">Destinataires</legend>
         {([
           ["event", "Tous les bénévoles inscrits"],
+          ["sector", "Les bénévoles d'un secteur"],
           ["role", "Les bénévoles d'un poste"],
           ["shift", "Les bénévoles d'un créneau"],
           ["waitlist", "Les personnes en liste d'attente"],
           ["invited_without_shift", "Les invités sans créneau confirmé"],
-        ] as const).map(([k, label]) => (
-          <div key={k} className="flex items-center gap-2 min-h-8">
-            <input id={`${id}-kind-${k}`} type="radio" name={`${id}-kind`} value={k} checked={kind === k} onChange={() => setKind(k)} disabled={(k === "role" && roles.length === 0) || (k === "shift" && shifts.length === 0)} className="h-4 w-4 text-blue-600 focus:ring-2 focus:ring-blue-500" />
-            <label htmlFor={`${id}-kind-${k}`} className="text-sm text-gray-800">
-              {label}
-              {((k === "role" && roles.length === 0) || (k === "shift" && shifts.length === 0)) && <span className="text-gray-600"> (aucun créneau)</span>}
-            </label>
+        ] as const).filter(([k]) => k !== "sector" || sectors.length > 0).map(([k, label]) => (
+          <div key={k}>
+            <div className="flex items-center gap-2 min-h-8">
+              <input id={`${id}-kind-${k}`} type="radio" name={`${id}-kind`} value={k} checked={kind === k} onChange={() => setKind(k)} disabled={(k === "role" && roles.length === 0) || (k === "shift" && shifts.length === 0)} className="h-4 w-4 text-blue-600 focus:ring-2 focus:ring-blue-500" />
+              <label htmlFor={`${id}-kind-${k}`} className="text-sm text-gray-800">
+                {label}
+                {((k === "role" && roles.length === 0) || (k === "shift" && shifts.length === 0)) && <span className="text-gray-600"> (aucun créneau)</span>}
+              </label>
+            </div>
+            {/* Each choice's field right under its radio (#1170 review): read in that order. */}
+            {k === "sector" && kind === "sector" && (
+              <div className="pl-6 pb-1">
+                <label htmlFor={`${id}-sector`} className="block text-xs font-medium text-gray-600 mb-1">Secteur</label>
+                <select id={`${id}-sector`} value={sectorId} onChange={(e) => setSectorId(e.target.value)} className="input">
+                  {sectors.map((s) => <option key={s.value} value={s.value}>{s.label}</option>)}
+                </select>
+              </div>
+            )}
+            {k === "role" && kind === "role" && (
+              <div className="pl-6 pb-1">
+                <label htmlFor={`${id}-role`} className="block text-xs font-medium text-gray-600 mb-1">Poste</label>
+                <select id={`${id}-role`} value={roleName} onChange={(e) => setRoleName(e.target.value)} className="input">
+                  {roles.map((r) => <option key={r} value={r}>{r}</option>)}
+                </select>
+              </div>
+            )}
+            {k === "shift" && kind === "shift" && (
+              <div className="pl-6 pb-1">
+                <label htmlFor={`${id}-shift`} className="block text-xs font-medium text-gray-600 mb-1">Créneau</label>
+                <select id={`${id}-shift`} value={shiftId} onChange={(e) => setShiftId(e.target.value)} className="input">
+                  {shifts.map((s) => <option key={s.id} value={s.id}>{s.name}</option>)}
+                </select>
+              </div>
+            )}
           </div>
         ))}
-        {kind === "role" && (
-          <div className="pl-6">
-            <label htmlFor={`${id}-role`} className="block text-xs font-medium text-gray-600 mb-1">Poste</label>
-            <select id={`${id}-role`} value={roleName} onChange={(e) => setRoleName(e.target.value)} className="input">
-              {roles.map((r) => <option key={r} value={r}>{r}</option>)}
-            </select>
-          </div>
-        )}
-        {kind === "shift" && (
-          <div className="pl-6">
-            <label htmlFor={`${id}-shift`} className="block text-xs font-medium text-gray-600 mb-1">Créneau</label>
-            <select id={`${id}-shift`} value={shiftId} onChange={(e) => setShiftId(e.target.value)} className="input">
-              {shifts.map((s) => <option key={s.id} value={s.id}>{s.name}</option>)}
-            </select>
-          </div>
-        )}
         <p id={`${id}-count`} aria-live="polite" aria-atomic="true" className="text-sm text-gray-700 pt-1">
           {!counting && dry ? (recipients === 0 ? "Personne à qui écrire dans cette sélection." : later
             ? `${plural(recipients)} aujourd'hui${kind === "invited_without_shift" && (dry.waitlistOnly ?? 0) > 0 ? `, dont ${dry.waitlistOnly} en liste d'attente` : ""} ; le nombre est recalculé au moment de l'envoi.`

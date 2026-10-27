@@ -53,6 +53,18 @@ export function sectorsOptionOffered(event: SectorsEventState, canAdopt: boolean
   return canAdopt || event.sectorsEnabled || sectorsAdopted(event)
 }
 
+export const MANAGE_POSTES_LABEL = "Gérer les postes"
+export const MANAGE_SECTORS_POSTES_LABEL = "Gérer les secteurs et postes"
+
+/**
+ * The name of the roles panel and of the button that opens it: « Gérer les secteurs et postes »
+ * once the event adopted sectors (the panel then shows the sector → poste tree), else
+ * « Gérer les postes », also while the option is on with no sector saved yet.
+ */
+export function managePostesLabel(event: SectorsEventState | null | undefined): string {
+  return sectorsAdopted(event) ? MANAGE_SECTORS_POSTES_LABEL : MANAGE_POSTES_LABEL
+}
+
 /** Whether « Gérer les postes » shows the sectors: the option is on, or the event adopted them. */
 export function sectorsManaged(event: SectorsEventState | null | undefined): boolean {
   return !!event && (event.sectorsEnabled || sectorsAdopted(event))

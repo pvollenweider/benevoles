@@ -1,7 +1,7 @@
 import { describe, it, expect } from "vitest"
 import {
   activeSectors, archiveSectorSentence, archivedSectors, firstSectorDecision, groupedRoleOrder, groupRolesBySector,
-  isSectorPermutation, moveSector, NO_SECTOR_LABEL, sectorName, sectorNameTaken, sectorsAdopted, sectorsManaged,
+  isSectorPermutation, managePostesLabel, MANAGE_POSTES_LABEL, MANAGE_SECTORS_POSTES_LABEL, moveSector, NO_SECTOR_LABEL, sectorName, sectorNameTaken, sectorsAdopted, sectorsManaged,
   sectorsOptionOffered, sectorsSwitchDecision, sectorGroupKey, SECTORS_CLOSED_ERROR, SECTORS_LOCKED_ERROR,
   SECTORS_NOT_ENABLED_ERROR,
 } from "../sectors"
@@ -26,6 +26,19 @@ describe("the event option", () => {
     expect(sectorsManaged(null)).toBe(false)
     expect(sectorsAdopted(ON)).toBe(false)
     expect(sectorsAdopted(ADOPTED)).toBe(true)
+  })
+
+  it("names the panel and its button « Gérer les secteurs et postes » once sectors are adopted, else « Gérer les postes »", () => {
+    expect(MANAGE_POSTES_LABEL).toBe("Gérer les postes")
+    expect(MANAGE_SECTORS_POSTES_LABEL).toBe("Gérer les secteurs et postes")
+    expect(managePostesLabel(OFF)).toBe(MANAGE_POSTES_LABEL)
+    // The option on with no sector saved yet keeps the old name.
+    expect(managePostesLabel(ON)).toBe(MANAGE_POSTES_LABEL)
+    expect(managePostesLabel(null)).toBe(MANAGE_POSTES_LABEL)
+    expect(managePostesLabel(undefined)).toBe(MANAGE_POSTES_LABEL)
+    expect(managePostesLabel(ADOPTED)).toBe(MANAGE_SECTORS_POSTES_LABEL)
+    // Adoption stays even with the option flag off (every sector archived, BE06).
+    expect(managePostesLabel({ sectorsEnabled: false, sectorsAdoptedAt: new Date("2026-10-26T10:00:00Z") })).toBe(MANAGE_SECTORS_POSTES_LABEL)
   })
 
   it("turns on only through the gate, and off only before the first sector (A02, A03)", () => {

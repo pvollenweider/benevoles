@@ -10,7 +10,7 @@ import FormStatus from "@/components/FormStatus"
 import { useSubmit } from "@/lib/use-submit"
 import { leaderDesignatedAnnouncement, leaderRemovedAnnouncement } from "@/lib/registrations-list"
 import { outcomeClass } from "@/lib/status-message"
-import { NO_SECTOR_LABEL } from "@/lib/sectors"
+import { MANAGE_SECTORS_POSTES_LABEL, NO_SECTOR_LABEL } from "@/lib/sectors"
 import { leaderSectorGroups } from "@/lib/leader-groups"
 
 export type SectorLeaderRow = {
@@ -293,7 +293,7 @@ export default function SectorLeadersManager({
           {sectors && !offerScope && (
             <p id={noScopeHintId} className="text-xs text-gray-600">
               {sectors.canAdd
-                ? "Pour confier tout un secteur à un responsable, créez d'abord un secteur dans « Gérer les postes »."
+                ? `Pour confier tout un secteur à un responsable, créez d'abord un secteur dans « ${MANAGE_SECTORS_POSTES_LABEL} ».`
                 : "Confier tout un secteur à un responsable fait partie des fonctions bêta, pas encore actives pour votre organisation (Paramètres)."}
             </p>
           )}

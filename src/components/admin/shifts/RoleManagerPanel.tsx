@@ -20,7 +20,7 @@ import type { RawShift } from "./types"
 import SectorsSection from "./SectorsSection"
 import type { AdminSectorsState } from "../ShiftsManager"
 import { roleSectorOf } from "@/lib/role-settings"
-import { activeSectors, groupRolesBySector, sectorsAdopted, sectorsManaged, type SectorGroup } from "@/lib/sectors"
+import { activeSectors, groupRolesBySector, managePostesLabel, sectorsAdopted, sectorsManaged, type SectorGroup } from "@/lib/sectors"
 
 /** Ref callback body: keeps `buttons` keyed by role while the button is mounted. */
 function setRoleButton(buttons: Map<string, HTMLButtonElement>, role: string, el: HTMLButtonElement | null) {
@@ -667,7 +667,7 @@ export default function RoleManagerPanel({
     <div id={panelId} className="bg-white rounded-2xl border border-gray-200 p-5 space-y-4">
       <div>
         {/* Focused by code only, when the row whose button should get focus back is gone. */}
-        <h2 ref={headingRef} tabIndex={-1} className="font-semibold text-gray-800 focus:outline-none">Gérer les postes</h2>
+        <h2 ref={headingRef} tabIndex={-1} className="font-semibold text-gray-800 focus:outline-none">{managePostesLabel(sectorsState ? { sectorsEnabled: sectorsState.enabled, sectorsAdoptedAt: sectorsState.adoptedAt } : null)}</h2>
         <p className="text-xs text-gray-500 mt-0.5">Réordonnez avec les flèches Monter et Descendre ou par glisser-déposer, puis enregistrez l&apos;ordre. Vous pouvez aussi renommer un poste, limiter le nombre de créneaux par personne, réserver un poste à certains membres ou à l&apos;organisation, le rendre cumulable avec un autre créneau ou le supprimer (avec tous ses créneaux).</p>
       </div>
       {roleActionError && (

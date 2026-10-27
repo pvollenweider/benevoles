@@ -34,17 +34,42 @@ describe("ShiftsManager with sectors", () => {
   const renderManager = (initialSectors: AdminSectorsState | null = sectors) =>
     render(<ShiftsManager eventId="evt-1" eventStartDate="2026-07-04" eventEndDate="2026-07-04" initialShifts={[]} initialSectors={initialSectors} />)
 
-  it("offers « Gérer les postes » before the first poste once sectors are on, not without them", () => {
-    renderManager()
+  it("offers the panel before the first poste once sectors are on, not without them", () => {
+    renderManager({ enabled: true, adoptedAt: null, sectors: [] })
     expect(screen.getByRole("button", { name: "Gérer les postes" })).toBeInTheDocument()
     cleanup()
+    renderManager()
+    expect(screen.getByRole("button", { name: "Gérer les secteurs et postes" })).toBeInTheDocument()
+    cleanup()
     renderManager(null)
+    expect(screen.queryByRole("button", { name: /^Gérer les/ })).not.toBeInTheDocument()
+  })
+
+  it("names the button and the panel « Gérer les secteurs et postes » once sectors are adopted; « Fermer » gives the button its focus back", async () => {
+    renderManager()
+    const button = screen.getByRole("button", { name: "Gérer les secteurs et postes" })
     expect(screen.queryByRole("button", { name: "Gérer les postes" })).not.toBeInTheDocument()
+    fireEvent.click(button)
+    expect(button).toHaveAttribute("aria-expanded", "true")
+    const heading = screen.getByRole("heading", { level: 2, name: "Gérer les secteurs et postes" })
+    expect(document.getElementById(button.getAttribute("aria-controls")!)).toContainElement(heading)
+    const close = screen.getByRole("button", { name: "Fermer" })
+    close.focus()
+    fireEvent.click(close)
+    expect(screen.queryByRole("heading", { name: "Gérer les secteurs et postes" })).not.toBeInTheDocument()
+    await waitFor(() => expect(screen.getByRole("button", { name: "Gérer les secteurs et postes" })).toHaveFocus())
+  })
+
+  it("keeps « Gérer les postes » for the button and the panel while the option is on with no sector saved", () => {
+    renderManager({ enabled: true, adoptedAt: null, sectors: [] })
+    fireEvent.click(screen.getByRole("button", { name: "Gérer les postes" }))
+    expect(screen.getByRole("heading", { level: 2, name: "Gérer les postes" })).toBeInTheDocument()
+    expect(screen.queryByRole("button", { name: "Gérer les secteurs et postes" })).not.toBeInTheDocument()
   })
 
   it("« Ajouter un poste dans « Entrées » » opens the form in that sector; Annuler creates nothing and gives the button its focus back", async () => {
     renderManager()
-    fireEvent.click(screen.getByRole("button", { name: "Gérer les postes" }))
+    fireEvent.click(screen.getByRole("button", { name: "Gérer les secteurs et postes" }))
     fireEvent.click(screen.getByRole("button", { name: "Ajouter un poste dans « Entrées »" }))
     const editor = screen.getByRole("group", { name: "Nouveau poste : premier créneau" })
     expect(within(editor).getByLabelText("Secteur")).toHaveValue("sec-entrees")
@@ -60,7 +85,7 @@ describe("ShiftsManager with sectors", () => {
       json: async () => ({ id: "n1", roleName: "Accueil", label: "Accueil", date: "2026-07-04T00:00:00.000Z", startTime: "10:00", endTime: "12:00", capacity: 2, status: "open", displayOrder: 0, sectorId: "sec-entrees" }),
     })
     renderManager()
-    fireEvent.click(screen.getByRole("button", { name: "Gérer les postes" }))
+    fireEvent.click(screen.getByRole("button", { name: "Gérer les secteurs et postes" }))
     fireEvent.click(screen.getByRole("button", { name: "Ajouter un poste dans « Entrées »" }))
     const editor = screen.getByRole("group", { name: "Nouveau poste : premier créneau" })
     fireEvent.change(within(editor).getByLabelText("Poste *"), { target: { value: "Accueil" } })
