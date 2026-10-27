@@ -429,6 +429,20 @@ const cases: [string, NotificationPayload][] = [
       shift: { roleName: "Accueil", label: "Accueil", date: "2026-07-11", startTime: "09:00", endTime: "12:30" },
     },
   }],
+  // #1190: several withdrawals in a row, one email listing them, oldest first.
+  ["registration_withdrawn (grouped)", {
+    kind: "registration_withdrawn",
+    recipient,
+    data: {
+      volunteerName: "Julie Martin",
+      eventTitle: tricky,
+      items: [
+        { key: "r1", value: { what: "Ton inscription a été annulée", when: "le 9 octobre à 14:05", shift: { roleName: "Accueil", label: "Accueil", date: "2026-07-11", startTime: "09:00", endTime: "12:30" } } },
+        { key: "r2", value: { what: "Tu as quitté la liste d'attente", when: "le 9 octobre à 14:05", shift: { roleName: "Bar", label: "Bar <soir>", date: "2026-07-11", startTime: "18:00", endTime: "22:00" } } },
+        { key: "r3", value: { what: "Ta demande d'inscription a été retirée", when: "le 9 octobre à 14:06", shift: { roleName: "Caisse", label: "Caisse", date: "2026-07-12", startTime: "10:00", endTime: "12:00" } } },
+      ],
+    },
+  }],
   // #809: an organiser put back a cancelled place.
   ["registration_restored", {
     kind: "registration_restored",
@@ -439,6 +453,45 @@ const cases: [string, NotificationPayload][] = [
       orgSlug: "rhone",
       status: "active",
       shift: { roleName: "Accueil", label: "Accueil", date: "2026-07-11", startTime: "09:00", endTime: "12:30" },
+      editToken: "edit-tok",
+    },
+  }],
+  // #1174: a swap between two volunteers, done, or ended without a swap.
+  ["shift_swap_applied", {
+    kind: "shift_swap_applied",
+    recipient,
+    data: {
+      volunteerName: "Julie Martin",
+      eventTitle: tricky,
+      orgSlug: "rhone",
+      gave: { roleName: "Accueil", label: "Accueil", date: "2026-07-11", startTime: "09:00", endTime: "12:30", locationDetails: null, instructions: null },
+      received: { roleName: "Accueil", label: "Accueil", date: "2026-07-12", startTime: "14:00", endTime: "17:00", locationDetails: "Entrée <nord>", instructions: "Gilet fourni" },
+      editToken: "edit-tok",
+    },
+  }],
+  ["shift_swap_ended (impossible)", {
+    kind: "shift_swap_ended",
+    recipient,
+    data: {
+      volunteerName: "Julie Martin",
+      eventTitle: tricky,
+      orgSlug: "rhone",
+      outcome: "impossible",
+      reason: "Cet échange crée un conflit d'horaire.",
+      kept: { roleName: "Accueil", label: "Accueil", date: "2026-07-11", startTime: "09:00", endTime: "12:30", locationDetails: null, instructions: null },
+      editToken: "edit-tok",
+    },
+  }],
+  ["shift_swap_ended (declined)", {
+    kind: "shift_swap_ended",
+    recipient,
+    data: {
+      volunteerName: "Julie Martin",
+      eventTitle: tricky,
+      orgSlug: "rhone",
+      outcome: "declined",
+      reason: null,
+      kept: { roleName: "Accueil", label: "Accueil", date: "2026-07-11", startTime: "09:00", endTime: "12:30", locationDetails: null, instructions: null },
       editToken: "edit-tok",
     },
   }],
@@ -736,6 +789,8 @@ describe("render — snapshot of every notification kind", () => {
       org_inactivity_notice: true,
       org_inactivity_deactivated: true,
       open_shifts: true,
+      shift_swap_applied: true,
+      shift_swap_ended: true,
     }
     const covered = new Set(cases.map(([, p]) => p.kind))
     expect([...covered].sort()).toEqual(Object.keys(all).sort())

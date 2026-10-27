@@ -160,6 +160,8 @@ export const KIND_LABELS: Record<NotificationKind, string> = {
   milestone_owner_reminder: "Rappel à qui s'occupe d'un jalon",
   answers_changed: "Réponses aux questions modifiées par un bénévole",
   sector_leader_answers_changed: "Réponse modifiée, aux responsables du poste de la question",
+  shift_swap_applied: "Échange de créneaux effectué",
+  shift_swap_ended: "Échange de créneaux non effectué",
 }
 
 export function kindLabel(kind: string): string {

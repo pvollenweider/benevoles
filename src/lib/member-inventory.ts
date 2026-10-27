@@ -71,6 +71,12 @@ export const VOLUNTEER_RELATIONS: Record<string, VolunteerRelation> = {
     erasure: "delete",
     why: "pair-specific (#601): an erased record is never suggested again, so the dismissal is useless",
   },
+  ShiftSwapRequest: {
+    merge: "out_of_scope",
+    deletion: "no_fk",
+    erasure: "keep",
+    why: "a swap request between two volunteers (#1174): ids and states only, no personal data. Tied to the registrations (deleted with them); a live request of a merged or erased member can no longer be applied (its registration or member no longer matches, src/lib/shift-swap-server.ts) and ends as impossible at its next step",
+  },
   ErasureRecord: {
     merge: "out_of_scope",
     deletion: "no_fk",
