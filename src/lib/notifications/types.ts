@@ -50,6 +50,8 @@ export type NotificationKind =
   | "milestone_owner_reminder"
   | "answers_changed"
   | "sector_leader_answers_changed"
+  | "shift_swap_applied"
+  | "shift_swap_ended"
 
 /** Delivery attempts before the outbox gives up (5 min, 10, 20, 40, 80 between them). */
 export const MAX_ATTEMPTS = 6
