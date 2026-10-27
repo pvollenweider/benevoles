@@ -210,4 +210,56 @@ describe("POST /api/admin/events/[id]/message", () => {
     // The history keeps the text as written.
     expect(historyCreate.mock.calls.at(-1)![0].data.subject).toBe("Merci {prénom}")
   })
+
+  describe("sector audience (#1170)", () => {
+    const sectorEvent = { sectorsEnabled: true, sectorsAdoptedAt: new Date("2026-10-01"), sectors: [{ id: "sec-bar", name: "Buvette", displayOrder: 0, archivedAt: null }, { id: "sec-old", name: "Ancien", displayOrder: 1, archivedAt: new Date() }] }
+    const withSectors = (sectorRead: unknown, liveShifts: unknown[]) => {
+      const main = (db.event as { findFirst: ReturnType<typeof vi.fn> }).findFirst.getMockImplementation() as ((a: unknown) => unknown) | undefined
+      ;(db.event as { findFirst: ReturnType<typeof vi.fn> }).findFirst = vi.fn(async (args: { select: Record<string, unknown> }) =>
+        "sectorsAdoptedAt" in args.select ? sectorRead : (main ? main(args) : { id: "evt-a", title: "Fête", organizationId: "org-a", organization: { name: "Org", slug: "org" } }))
+      db.shift = { findFirst: vi.fn().mockResolvedValue({ id: "bar1" }), findMany: vi.fn().mockResolvedValue(liveShifts) }
+    }
+    const live = [
+      { roleName: "Bar", sectorId: "sec-bar", updatedAt: new Date("2026-10-02") },
+      { roleName: "Accueil", sectorId: null, updatedAt: new Date("2026-10-02") },
+    ]
+
+    it("counts and writes to the confirmed people of the sector's postes, once each, with their shifts there", async () => {
+      withSectors(sectorEvent, live)
+      const { POST } = await import("@/app/api/admin/events/[id]/message/route")
+      const dry = await (await POST(post({ ...base, audience: { kind: "sector", sectorId: "sec-bar" }, dryRun: true }), params)).json()
+      expect(dry).toMatchObject({ recipients: 1, audience: "les bénévoles du secteur « Buvette »" })
+      const res = await (await POST(post({ ...base, audience: { kind: "sector", sectorId: "sec-bar" } }), params)).json()
+      expect(res).toMatchObject({ sent: 1, audience: "les bénévoles du secteur « Buvette »" })
+      const payloads = enqueueNotifications.mock.calls[0][0]
+      // Alice only: Carla is waiting on the Bar, Bob is on the Accueil.
+      expect(payloads.map((p: { recipient: { email: string } }) => p.recipient.email)).toEqual(["alice@x.ch"])
+      expect(payloads[0].data.shifts).toHaveLength(2)
+    })
+
+    it("« Autres postes » writes to the postes without a sector", async () => {
+      withSectors(sectorEvent, live)
+      const { POST } = await import("@/app/api/admin/events/[id]/message/route")
+      const dry = await (await POST(post({ ...base, audience: { kind: "sector", sectorId: "autres" }, dryRun: true }), params)).json()
+      expect(dry).toMatchObject({ recipients: 1, audience: "les bénévoles des « Autres postes »" })
+    })
+
+    it("refuses an archived, unknown or foreign sector, and an event without sectors, sending nothing (never everyone)", async () => {
+      const { POST } = await import("@/app/api/admin/events/[id]/message/route")
+      for (const [read, sectorId] of [[sectorEvent, "sec-old"], [sectorEvent, "sec-of-org-b"], [{ sectorsEnabled: false, sectorsAdoptedAt: null, sectors: [] }, "autres"]] as const) {
+        withSectors(read, live)
+        enqueueNotifications.mockClear()
+        const res = await POST(post({ ...base, audience: { kind: "sector", sectorId } }), params)
+        expect(res.status).toBe(400)
+        expect((await res.json()).error).toBe("Secteur introuvable dans cet événement.")
+        expect(enqueueNotifications).not.toHaveBeenCalled()
+      }
+    })
+
+    it("refuses {poste} and {créneau} for a sector audience", async () => {
+      withSectors(sectorEvent, live)
+      const { POST } = await import("@/app/api/admin/events/[id]/message/route")
+      expect((await POST(post({ subject: "Salut", message: "Au {poste}", audience: { kind: "sector", sectorId: "sec-bar" } }), params)).status).toBe(400)
+    })
+  })
 })

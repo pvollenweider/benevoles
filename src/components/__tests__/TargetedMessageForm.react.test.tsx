@@ -57,6 +57,32 @@ describe("TargetedMessageForm", () => {
     await waitFor(() => expect(lastBody().audience).toEqual({ kind: "role", roleName: "Accueil" }))
   })
 
+  it("offers no sector audience without sectors (#1170)", () => {
+    setup()
+    expect(screen.queryByRole("radio", { name: "Les bénévoles d'un secteur" })).not.toBeInTheDocument()
+  })
+
+  it("writes to a sector: radio after « Tous », its select right under it, the count for that sector (#1170)", async () => {
+    render(<TargetedMessageForm eventId="evt-1" roles={["Bar"]} shifts={[]} sectors={[{ value: "sec-bar", label: "Buvette" }, { value: "autres", label: "Autres postes" }]} initialAudience={{ kind: "event" }} />)
+    const radios = screen.getAllByRole("radio").map((r) => r.getAttribute("value"))
+    expect(radios.slice(0, 3)).toEqual(["event", "sector", "role"])
+    fireEvent.click(screen.getByRole("radio", { name: "Les bénévoles d'un secteur" }))
+    const select = screen.getByRole("combobox", { name: "Secteur" })
+    // Read right after its own radio, before the next one.
+    expect(screen.getByRole("radio", { name: "Les bénévoles d'un secteur" }).compareDocumentPosition(select) & Node.DOCUMENT_POSITION_FOLLOWING).toBeTruthy()
+    expect(select.compareDocumentPosition(screen.getByRole("radio", { name: "Les bénévoles d'un poste" })) & Node.DOCUMENT_POSITION_FOLLOWING).toBeTruthy()
+    await waitFor(() => expect(lastBody().audience).toEqual({ kind: "sector", sectorId: "sec-bar" }))
+    fireEvent.change(select, { target: { value: "autres" } })
+    await waitFor(() => expect(lastBody().audience).toEqual({ kind: "sector", sectorId: "autres" }))
+    expect(await screen.findByText("12 personnes recevront ce message.")).toBeInTheDocument()
+  })
+
+  it("starts on a prefilled sector (#1170)", async () => {
+    render(<TargetedMessageForm eventId="evt-1" roles={["Bar"]} shifts={[]} sectors={[{ value: "sec-bar", label: "Buvette" }, { value: "autres", label: "Autres postes" }]} initialAudience={{ kind: "sector", sectorId: "autres" }} />)
+    expect(screen.getByRole("radio", { name: "Les bénévoles d'un secteur" })).toBeChecked()
+    expect(screen.getByRole("combobox", { name: "Secteur" })).toHaveValue("autres")
+  })
+
   it("names the missing fields instead of previewing", async () => {
     setup()
     await screen.findByText(/12 personnes/)
