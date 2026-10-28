@@ -3,6 +3,7 @@
 
 import type { PrismaClient } from "../src/generated/prisma/client"
 import { registrationToken } from "../src/lib/token-vault"
+import { surnameOf } from "../videos/lib/fixture-names"
 
 /** No fabricated history or causality: the recorder must create logs through actual routes. */
 export async function seedVideoEventLog(db: PrismaClient) {
@@ -12,7 +13,7 @@ export async function seedVideoEventLog(db: PrismaClient) {
   const people = []
   for (const [index, firstName] of ["Aline", "Nicolas", "Léa"].entries()) {
     const id = `video-event-log-person-${index}`
-    const data = { firstName, lastName: "Exemple", email: `video.event-log.${index}@example.org`, phone: null }
+    const data = { firstName, lastName: surnameOf(firstName), email: `video.event-log.${index}@example.org`, phone: null }
     people.push(await db.volunteer.upsert({ where: { id }, create: { id, organizationId: "default", ...data }, update: data }))
   }
   for (const [index, slug] of slugs.entries()) {

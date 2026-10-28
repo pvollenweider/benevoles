@@ -50,7 +50,7 @@ La voix continue et les dix transcriptions audio sont préparées. Le recorder e
 
 ## Parcours à filmer et à vérifier
 
-1. Deux organisations locales séparées, chacune avec sa propre session d'organisation, un événement portant le même identifiant et une fiche Léa Exemple. Montrer leurs listes et leurs coordonnées fictives différentes. Dans la session A, une lecture du détail de l'événement B doit être refusée ; ne pas fabriquer un écran de refus. Ce cas ne prouve pas à lui seul toutes les garanties de sécurité.
+1. Deux organisations locales séparées, chacune avec sa propre session d'organisation, un événement portant le même identifiant et une fiche Léa Müller. Montrer leurs listes et leurs coordonnées fictives différentes. Dans la session A, une lecture du détail de l'événement B doit être refusée ; ne pas fabriquer un écran de refus. Ce cas ne prouve pas à lui seul toutes les garanties de sécurité.
 2. Inscription publique sans invitation d'une nouvelle personne fictive. Montrer le formulaire, la confirmation et l'absence de lien de gestion révélé à l'écran ; rapprocher la vraie réponse de l'API (`editToken: null`, `linkSentByEmail: true`) et le vrai email reçu. Ouvrir le lien reçu dans cet email. Ne pas parler d'un code de vérification ou d'une validation préalable de l'adresse : cette inscription n'en demande pas.
 3. Page Mes inscriptions : inscriptions de cette personne, panneau « Ton lien personnel », avertissement de confidentialité, renvoi effectif du lien par email et résultat. Le lien est un moyen d'accès ; il n'est pas le QR code public à partager. Vérifier que la page ne contient ni l'autre organisation ni toute l'équipe.
 4. Lien invalide dans l'organisation A. Saisir l'adresse connue, envoyer, relever le message de réponse et recevoir l'email réel. Rejouer avec une adresse fictive inconnue : même message, pas de coordonnées ni de jeton dans la réponse. Faire une troisième demande pour une adresse présente seulement dans B depuis A : même réponse, aucun email provenant de B. Respecter la limite ; ne pas rendre cette protection inopérante dans le code applicatif.
@@ -66,7 +66,7 @@ La voix continue et les dix transcriptions audio sont préparées. Le recorder e
 - Organisations `video-privacy-a` / `video-privacy-b`, noms « Formation — confidentialité A/B », slugs `formation-confidentialite-a/b`.
 - Organisateurs propriétaires dédiés, mots de passe locaux copiés sans affichage depuis le compte de formation ; aucune création en production.
 - Même slug d'événement `fete-des-liens`, dates futures et créneaux Accueil/Logistique non chevauchants, avec instructions et contact opérationnel fictifs.
-- Deux Léa Exemple, profils et adresses distincts ; un email commun dans deux fiches peut servir à vérifier le périmètre, mais ne doit pas être présenté comme un doublon à fusionner.
+- Deux Léa Müller, profils et adresses distincts ; un email commun dans deux fiches peut servir à vérifier le périmètre, mais ne doit pas être présenté comme un doublon à fusionner.
 - Au moins deux personnes par poste, réponses fictives à une question facultative, disponibilités et une note interne identifiable comme exemple.
 - Une personne sans inscription pour la nouvelle inscription, une autre invitée et une adresse présente uniquement dans B. Toutes les adresses appartiennent à `example.org`, tous les téléphones sont fictifs.
 - Responsable Accueil A avec lien chiffré de démonstration. Produire invitation, inscription, renvoi et révocation via les vraies routes, pas des emails ou historiques dessinés.

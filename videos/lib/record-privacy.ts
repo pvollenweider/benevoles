@@ -11,6 +11,7 @@ import { linkToken, registrationToken } from "../../src/lib/token-vault"
 import { PERSONAL_LINK_NOTICE, LINK_REQUEST_RESPONSE } from "../../src/lib/personal-link"
 import { showMembersCsv } from "./show-export-files"
 import type { Cue } from "./sentence-timing"
+import { fullNameOf, surnameOf } from "./fixture-names"
 
 type Scene = (id: string, action: (at: Cue) => Promise<void>) => Promise<void>
 export type PrivacySetup = { cookiesA: Cookie[]; cookiesB: Cookie[]; leaderId: string; leaderToken: string }
@@ -44,11 +45,11 @@ export async function preparePrivacyRecording(page: Page, base: string, director
     await b.getByRole("button", { name: "Se connecter", exact: true }).click()
     await b.waitForURL(/\/admin\/dashboard/)
     const cookiesB = await other.cookies()
-    const created = await page.request.post(`${base}/api/admin/events/video-privacy-a-event/sector-leaders`, { data: { roleName: "Accueil", name: "Camille Exemple", email: "video.privacy.a.leader@example.org" } })
+    const created = await page.request.post(`${base}/api/admin/events/video-privacy-a-event/sector-leaders`, { data: { roleName: "Accueil", name: fullNameOf("Camille"), email: "video.privacy.a.leader@example.org" } })
     if (created.status() !== 201) throw new Error("Actual dedicated leader creation failed")
     const leader = await db.sectorLeader.findFirstOrThrow({ where: { eventId: "video-privacy-a-event", roleName: "Accueil" } })
     await page.goto(`${base}/admin/members`)
-    await page.getByRole("button", { name: "Modifier Léa Exemple", exact: true }).waitFor()
+    await page.getByRole("button", { name: `Modifier ${fullNameOf("Léa")}`, exact: true }).waitFor()
     return { cookiesA, cookiesB, leaderId: leader.id, leaderToken: linkToken.reveal(leader) }
   } finally { await other?.close(); await db.$disconnect() }
 }
@@ -115,7 +116,7 @@ export async function recordPrivacy(options: { page: Page; base: string; directo
       await at("Jules choisit un créneau et"); await tap(page, page.getByRole("button", { name: /^10h.*12h.*, [^:]*Accueil[^:]* : sélectionner/ }))
       await tap(page, page.getByRole("button", { name: /^Continuer/ }).first())
       await write(page.getByLabel(/^Prénom(?:\s|$)/), "Jules")
-      await write(page.getByLabel(/^Nom(?:\s|$)/), "Exemple")
+      await write(page.getByLabel(/^Nom(?:\s|$)/), surnameOf("Jules"))
       await write(page.getByLabel(/^Email(?:\s|$)/), "video.privacy.a.new@example.org")
       await write(page.getByLabel(/^Téléphone/), "+41 79 000 1999")
       await at("Il accepte ensuite les conditions")
@@ -169,7 +170,7 @@ export async function recordPrivacy(options: { page: Page; base: string; directo
       const before = await ids()
       await at("L'organisation l'envoie à Zoé, puis"); await tap(page, page.getByRole("button", { name: "+ Inviter des membres", exact: true }))
       const dialog = page.getByRole("dialog", { name: "Inviter des membres", exact: true })
-      await tap(page, dialog.getByRole("checkbox", { name: "Inviter Zoé Exemple", exact: true }))
+      await tap(page, dialog.getByRole("checkbox", { name: `Inviter ${fullNameOf("Zoé")}`, exact: true }))
       await tap(page, dialog.getByRole("button", { name: "Envoyer 1 invitation", exact: true }))
       await dialog.waitFor({ state: "hidden" })
       // Zoé is a different viewer, not Jules returning on his already-selected shift.
@@ -190,13 +191,13 @@ export async function recordPrivacy(options: { page: Page; base: string; directo
       await page.getByRole("heading", { name: "Responsable · Accueil", exact: true }).waitFor()
       await at("Il voit les bénévoles de"); await page.getByText("video.privacy.a.member.0@example.org", { exact: true }).scrollIntoViewIfNeeded()
       const body = await page.locator("body").innerText()
-      if (body.includes("Nicolas Exemple") || body.includes("Sarah Exemple") || body.includes("video.privacy.b.") || body.includes("Note interne fictive")) throw new Error("Leader view exceeds intended scope")
+      if (body.includes(fullNameOf("Nicolas")) || body.includes(fullNameOf("Sarah")) || body.includes("video.privacy.b.") || body.includes("Note interne fictive")) throw new Error("Leader view exceeds intended scope")
       const leaderFrame = await page.screenshot({ path: path.join(directory, "leader-before-revocation.png") })
       checks.leaderFrameSha256 = createHash("sha256").update(leaderFrame).digest("hex")
       await at("Revenons dans l'administration et retirons"); await session(setup.cookiesA); await go(`/admin/events/${eventId}/sector-leaders`)
-      await tap(page, page.getByRole("button", { name: "Retirer Camille Exemple des responsables de Accueil", exact: true }))
+      await tap(page, page.getByRole("button", { name: `Retirer ${fullNameOf("Camille")} des responsables de Accueil`, exact: true }))
       await at("En rouvrant son ancien lien"); await tap(page, page.getByRole("alertdialog").getByRole("button", { name: /^Retirer/ }))
-      await page.getByRole("button", { name: "Retirer Camille Exemple des responsables de Accueil", exact: true }).waitFor({ state: "hidden" })
+      await page.getByRole("button", { name: `Retirer ${fullNameOf("Camille")} des responsables de Accueil`, exact: true }).waitFor({ state: "hidden" })
       await at("Cela permet de retirer cet"); await go(`/leader/${setup.leaderToken}`)
       await page.getByRole("heading", { name: "Lien introuvable", exact: true }).waitFor()
       checks.actualLeaderRevocation = true
@@ -207,7 +208,7 @@ export async function recordPrivacy(options: { page: Page; base: string; directo
       await at("Dans les inscriptions, il retrouve"); await lea.scrollIntoViewIfNeeded()
       if (!(await lea.innerText()).includes("Taille du t-shirt : M")) throw new Error("Actual answer missing from admin row")
       await at("Dans les membres, il peut"); await go("/admin/members")
-      await at("Regardons la fiche de Léa"); await tap(page, page.getByRole("button", { name: "Modifier Léa Exemple", exact: true }))
+      await at("Regardons la fiche de Léa"); await tap(page, page.getByRole("button", { name: `Modifier ${fullNameOf("Léa")}`, exact: true }))
       if (await page.getByLabel("Notes", { exact: true }).inputValue() !== "Note interne fictive — organisation A") throw new Error("Dedicated internal note missing")
       await page.getByLabel("Notes", { exact: true }).scrollIntoViewIfNeeded()
       await at("Sa page Mes inscriptions ne montre"); await tap(page, page.getByRole("dialog").getByRole("button", { name: "Annuler", exact: true }))

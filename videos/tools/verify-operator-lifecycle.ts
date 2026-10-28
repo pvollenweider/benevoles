@@ -5,6 +5,7 @@ import assert from "node:assert/strict"
 import { mkdir, writeFile } from "node:fs/promises"
 import { chromium } from "playwright"
 import { launchVideoBrowser } from "../lib/public-hosts"
+import { fullNameOf } from "../lib/fixture-names"
 import { PrismaClient } from "../../src/generated/prisma/client"
 import { PrismaPg } from "@prisma/adapter-pg"
 
@@ -38,7 +39,7 @@ async function main() {
     }
     if (!resume) {
       assert.equal(await db.adminUser.count({ where: { email } }), 0)
-      const created = await platform.request.post(`${base}/api/super-admin/organizations`, { data: { name: "Formation Opérateur Jetable", adminName: "Lou Exemple", adminEmail: email } })
+      const created = await platform.request.post(`${base}/api/super-admin/organizations`, { data: { name: "Formation Opérateur Jetable", adminName: fullNameOf("Lou"), adminEmail: email } })
       assert.equal(created.status(), 201)
       assert.equal(typeof (await created.json()).inviteUrl, "string")
     }

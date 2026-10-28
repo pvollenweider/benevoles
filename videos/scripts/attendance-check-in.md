@@ -19,7 +19,7 @@ Organisation `video-dayof`, identifiant public `formation-jour-j`, propriétaire
 ### Démonstration
 
 1. `dayof-window` : visiter la vraie page Jour J ; montrer En cours, la veille commencée hier, les trois prochaines heures, puis ouvrir Plus tôt aujourd'hui. Préciser que la fenêtre 390 × 844 simule un affichage mobile, pas un appareil réel.
-2. `dayof-search` : chercher « zoe », retrouver Zoé Exemple, chercher Accueil, puis vider la recherche.
+2. `dayof-search` : chercher « zoe », retrouver Zoé Papadopoulos, chercher Accueil, puis vider la recherche.
 3. `dayof-phone` : montrer son lien téléphone et le contact du créneau ; **aucun clic `tel:` ni appel réel**.
 4. `dayof-checkin` : marquer uniquement Zoé ; constater le vrai POST et son `changedIds`, recharger, puis vérifier sa présence dans la fixture.
 5. `dayof-refresh` : Actualiser, lire l'annonce et l'heure de mise à jour ; ne pas prétendre montrer une modification depuis un autre téléphone.

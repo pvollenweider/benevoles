@@ -6,6 +6,7 @@ import { readFile, writeFile } from "node:fs/promises"
 import path from "node:path"
 import { PrismaClient } from "../../src/generated/prisma/client"
 import { PrismaPg } from "@prisma/adapter-pg"
+import { isFixtureSurname } from "../lib/fixture-names"
 
 async function main() {
   const url = new URL(process.env.DATABASE_URL ?? "")
@@ -18,7 +19,7 @@ async function main() {
     assert.equal(events.length, 2)
     for (const event of events) {
       assert(event.organizationId === "default" && ["atelier-journal", "atelier-journal-etat-initial"].includes(event.slug) && event.description?.startsWith("Données fictives de formation."))
-      assert(event.registrations.every(reg => /^video-event-log-person-[0-2]$/.test(reg.volunteerId) && /^video\.event-log\.[0-2]@example\.org$/.test(reg.volunteer.email ?? "") && reg.volunteer.lastName === "Exemple" && !reg.volunteer.phone))
+      assert(event.registrations.every(reg => /^video-event-log-person-[0-2]$/.test(reg.volunteerId) && /^video\.event-log\.[0-2]@example\.org$/.test(reg.volunteer.email ?? "") && isFixtureSurname(reg.volunteer.firstName, reg.volunteer.lastName) && !reg.volunteer.phone))
     }
     const logs = await db.eventLog.findMany({ where: { eventId: preparation.eventId }, orderBy: { createdAt: "asc" } })
     assert(logs.length > 50, "Real pagination data required")

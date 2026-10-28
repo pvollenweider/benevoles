@@ -4,6 +4,7 @@ import type { PrismaClient } from "../../src/generated/prisma/client"
 import { readFile } from "node:fs/promises"
 import path from "node:path"
 import { openPayload } from "../../src/lib/notifications/outbox"
+import { fullNameOf, surnameOf } from "./fixture-names"
 
 /** Exact dedicated classroom and received synthetic emails, before external video review. */
 export async function verifyLastMinuteReviewFixture(db: PrismaClient, directory: string) {
@@ -13,9 +14,9 @@ export async function verifyLastMinuteReviewFixture(db: PrismaClient, directory:
   if (org.slug !== "formation-imprevus" || org.name !== "Formation — imprévus") throw new Error("Wrong last-minute classroom")
   const names = ["Aline", "Nicolas", "Zoé", "Emma", "Sarah", "Lucas"]
   const people = await db.volunteer.findMany({ where: { organizationId }, orderBy: { id: "asc" } })
-  if (people.length !== 6 || people.some((person, index) => person.id !== `video-last-minute-person-${index}` || person.firstName !== names[index] || person.lastName !== "Exemple" || person.email !== `video.last-minute.person.${index}@example.org` || person.phone !== `+41 79 000 ${String(index).padStart(4, "0")}` || (person.availabilityNote && person.availabilityNote !== "Peut aussi aider en début d'après-midi après confirmation.") || person.notes)) throw new Error("Last-minute people are not exclusively synthetic")
+  if (people.length !== 6 || people.some((person, index) => person.id !== `video-last-minute-person-${index}` || person.firstName !== names[index] || person.lastName !== surnameOf(names[index]) || person.email !== `video.last-minute.person.${index}@example.org` || person.phone !== `+41 79 000 ${String(index).padStart(4, "0")}` || (person.availabilityNote && person.availabilityNote !== "Peut aussi aider en début d'après-midi après confirmation.") || person.notes)) throw new Error("Last-minute people are not exclusively synthetic")
   const admins = await db.adminUser.findMany({ where: { organizationId } })
-  if (admins.length !== 1 || admins[0].id !== "video-last-minute-owner" || admins[0].name !== "Colette Exemple" || admins[0].email !== "video.last-minute.owner@example.org") throw new Error("Last-minute administrator differs")
+  if (admins.length !== 1 || admins[0].id !== "video-last-minute-owner" || admins[0].name !== fullNameOf("Colette") || admins[0].email !== "video.last-minute.owner@example.org") throw new Error("Last-minute administrator differs")
   const events = await db.event.findMany({ where: { organizationId }, include: { shifts: true, registrations: true } })
   if (events.length !== 1 || events[0].id !== "video-last-minute-event" || events[0].title !== "Fête des imprévus — démonstration" || events[0].shifts.length !== 5 || events[0].shifts.some(shift => !/^video-last-minute-shift-[0-4]$/.test(shift.id)) || events[0].registrations.length !== 9 || events[0].registrations.some(reg => !people.some(person => person.id === reg.volunteerId))) throw new Error("Last-minute event is not exclusively synthetic")
   const capture = JSON.parse(await readFile(path.join(directory, "capture-checks.json"), "utf8"))

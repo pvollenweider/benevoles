@@ -12,6 +12,7 @@ import { PrismaClient } from "../../src/generated/prisma/client"
 import { PrismaPg } from "@prisma/adapter-pg"
 import assert from "node:assert/strict"
 import { pathToFileURL } from "node:url"
+import { ROSTER_SURNAMES, surnameOf } from "../lib/fixture-names"
 import { ownsRecordedNoEmailMember, ownsTargetedMessageNoEmailMember, recordedMembers } from "./prepare-demo"
 import { ownsImportedNoEmailMember, readImportOwnership, type ImportOwnership } from "../lib/member-import-ownership"
 import { ownsNaturalMemberSeed, readSeedProofV2, type SeedProofV2, type SeedIdentity } from "../lib/member-fixture-v2"
@@ -87,7 +88,7 @@ async function main() {
       const fixture = await db.organization.findUniqueOrThrow({ where: { id: "video-org-activity" }, include: { volunteers: true, admins: true, events: { include: { registrations: true } } } })
       const emails = new Set(["video.org-activity.owner@example.org", "video.org-activity.organizer@example.org", "video.org-activity.invited@example.org"])
       assert(fixture.slug === "formation-journal" && fixture.name === "Formation — journal d'organisation" && fixture.admins.length === 3 && fixture.admins.every(admin => emails.has(admin.email)), "Journal administrators must be exclusively synthetic")
-      assert(fixture.volunteers.length === 56 && fixture.volunteers.every(member => /^video\.org-activity\.member\.\d{1,2}@example\.org$/.test(member.email ?? "") && /^Exemple \d{2}$/.test(member.lastName) && /^\+41 79 000 \d{4}$/.test(member.phone ?? "")), "Journal members must be exclusively synthetic")
+      assert(fixture.volunteers.length === 56 && fixture.volunteers.every(member => /^video\.org-activity\.member\.\d{1,2}@example\.org$/.test(member.email ?? "") && (ROSTER_SURNAMES as readonly string[]).includes(member.lastName) && /^\+41 79 000 \d{4}$/.test(member.phone ?? "")), "Journal members must be exclusively synthetic")
       assert(fixture.events.length === 1 && fixture.events[0].slug === "atelier-journal-organisation" && fixture.events[0].registrations.length === 1 && fixture.volunteers.some(member => member.id === fixture.events[0].registrations[0].volunteerId), "Only the actual journal demonstration registration may be reviewed")
       const logs = await db.orgLog.findMany({ where: { organizationId: fixture.id } })
       assert(logs.length === 61 && logs.every(log => fixture.admins.some(admin => admin.id === log.actorId)), "Journal must contain the actual synthetic actors only")
@@ -181,7 +182,7 @@ async function main() {
     } else if (manifest.id === "REMINDERS_CHANGES") {
       const events = await db.event.findMany({ where: { organizationId: "default", slug: { in: ["atelier-rappels", "atelier-rappels-brouillon", "atelier-rappels-coupes"] } }, include: { registrations: { include: { volunteer: true } } } })
       if (events.length !== 3 || event.registrations.length !== 9 || events.flatMap(e => e.registrations).some(r => !/^video-reminder-(j2|j1|dd|request|waiting)$/.test(r.volunteerId) || !/^video\.reminder\.(j2|j1|dd|request|waiting)@example\.org$/.test(r.volunteer.email ?? "") || r.volunteer.phone)) throw new Error("Reminder events are not exclusively synthetic fixture data")
-    } else if (event.registrations.length !== 8 || event.registrations.some(r => !/^video-attendance-person-[0-6]$/.test(r.volunteerId) || !/^video\.attendance\.[0-6]@example\.org$/.test(r.volunteer.email ?? "") || r.volunteer.lastName !== "Exemple" || r.volunteer.phone)) {
+    } else if (event.registrations.length !== 8 || event.registrations.some(r => !/^video-attendance-person-[0-6]$/.test(r.volunteerId) || !/^video\.attendance\.[0-6]@example\.org$/.test(r.volunteer.email ?? "") || r.volunteer.lastName !== surnameOf(r.volunteer.firstName) || r.volunteer.phone)) {
       throw new Error("Attendance is not exclusively synthetic fixture data")
     }
     }

@@ -118,6 +118,8 @@ Format basé sur [Keep a Changelog](https://keepachangelog.com/fr/1.0.0/).
 
 ### Infrastructure
 
+- **Noms des personnes des vidéos** : les personnes fictives des données de démonstration filmées ne s'appellent plus « Exemple » mais portent un nom de famille courant en Europe (Martin, Müller, Peeters, García, Nováková, Tóth…), le même pour un prénom donné dans toutes les vidéos ; les adresses restent sur des domaines d'exemple. Huit vidéos sont à refilmer, dont une avec une phrase de narration modifiée (`videos/FINAL_REVIEW_EVIDENCE.md`). <!-- interne -->
+
 - **Suivi des erreurs** : une requête du navigateur restée sans réponse (« Load failed », « Failed to fetch »), sans pile d'appels, n'est plus remontée comme une erreur ; c'est ce que voit un onglet ouvert avant une mise à jour. <!-- interne -->
 
 - **Envoi des emails** : avant chaque email, les plafonds d'envoi sont lus en une seule requête au lieu d'une par plafond, ce qui allège l'envoi des lots. <!-- interne -->

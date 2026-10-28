@@ -4,6 +4,7 @@
 import assert from "node:assert/strict"
 import type { Locator, Page } from "playwright"
 import type { Cue } from "./sentence-timing"
+import { isFixtureFullName } from "./fixture-names"
 
 export type DayOfRecordingFixture = {
   eventId: string; registrationId: string; volunteerName: string; volunteerEmail: string; phone: string
@@ -15,7 +16,7 @@ export function validateDayOfFixture(fixture: DayOfRecordingFixture) {
   assert(/^video-dayof-registration-[a-z0-9-]+$/.test(fixture.registrationId))
   const shifts = [fixture.runningShiftId, fixture.upcomingShiftId, fixture.earlierShiftId, fixture.nightShiftId]
   assert(shifts.every(id => /^video-dayof-shift-[a-z0-9-]+$/.test(id)) && new Set(shifts).size === 4, "Four distinct owned real temporal cases required")
-  assert(/^[^@\s]+@example\.org$/.test(fixture.volunteerEmail) && /Exemple$/.test(fixture.volunteerName), "Fictional volunteer required")
+  assert(/^[^@\s]+@example\.org$/.test(fixture.volunteerEmail) && isFixtureFullName(fixture.volunteerName), "Fictional volunteer required")
   assert(/^079000\d{4}$/.test(fixture.phone.replace(/\s/g, "")), "Fictional phone required")
   assert(fixture.roleSearch && fixture.accentSearch && fixture.expectedAccentName.includes("é"), "Real role and accent-insensitive searches required")
 }

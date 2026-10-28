@@ -9,6 +9,7 @@ import { mkdir, writeFile } from "node:fs/promises"
 import path from "node:path"
 import { verifyDayOfReviewFixture } from "../lib/verify-dayof-review-fixture"
 import { videoAdminEmail } from "../lib/public-hosts"
+import { fullNameOf, isFixtureSurname, surnameOf } from "../lib/fixture-names"
 
 async function main() {
   assert(process.argv.slice(2).every(arg => arg === "--reset-owned") && process.argv.length <= 3)
@@ -20,9 +21,9 @@ async function main() {
     const existing = await db.organization.findUnique({ where: { id: orgId }, include: { volunteers: true, admins: true, events: { include: { shifts: true, registrations: true, sectorLeaders: true } } } })
     if (existing) {
       assert(process.argv.includes("--reset-owned"), "Fixture exists; explicit --reset-owned required")
-      await verifyDayOfReviewFixture(db)
+      await verifyDayOfReviewFixture(db, { legacySurnames: true })
       assert(existing.name === "Formation — accueil et jour J" && existing.slug === "formation-jour-j" && existing.admins.length === 1 && existing.admins[0].email === "video.dayof.owner@example.org")
-      assert(existing.volunteers.length === 8 && existing.volunteers.every(v => /^video-dayof-attendance-person-[0-7]$/.test(v.id) && /^video\.attendance\.[0-7]@example\.org$/.test(v.email ?? "") && v.lastName === "Exemple"))
+      assert(existing.volunteers.length === 8 && existing.volunteers.every(v => /^video-dayof-attendance-person-[0-7]$/.test(v.id) && /^video\.attendance\.[0-7]@example\.org$/.test(v.email ?? "") && isFixtureSurname(v.firstName, v.lastName, true)))
       assert(existing.events.length === 2 && existing.events.every(e => [eventId, liveId].includes(e.id) && !e.sectorLeaders.length && e.shifts.every(s => /^video-dayof-shift-(old-[0-2]|running|upcoming|earlier|night)$/.test(s.id)) && e.registrations.every(r => /^video-dayof-registration-(old-[0-7]|zoe|upcoming|earlier|night)$/.test(r.id))))
     } else assert.equal(await db.organization.count({ where: { slug: "formation-jour-j" } }), 0, "Slug belongs to another organization")
     const source = await db.adminUser.findFirstOrThrow({ where: { organizationId: "default", email: videoAdminEmail() }, select: { passwordHash: true } })
@@ -38,13 +39,17 @@ async function main() {
     const fmt = (minutes: number) => `${String(Math.floor(minutes / 60)).padStart(2, "0")}:${String(minutes % 60).padStart(2, "0")}`
     const slot = (start: number, end: number) => { const day = Math.floor(start / 1440); return { date: dateOffset(day), startTime: fmt(start - day * 1440), endTime: fmt(end - day * 1440) } }
     await db.$transaction(async tx => {
-      if (existing) await tx.event.deleteMany({ where: { organizationId: orgId, id: { in: [eventId, liveId] } } })
+      if (existing) {
+        await tx.event.deleteMany({ where: { organizationId: orgId, id: { in: [eventId, liveId] } } })
+        // Bases seeded before the surname cast keep their rows; only the display name moves.
+        await tx.adminUser.update({ where: { id: `${orgId}-owner` }, data: { name: fullNameOf("Élodie") } })
+      }
       else {
         await tx.organization.create({ data: { id: orgId, slug: "formation-jour-j", name: "Formation — accueil et jour J", timeZone: "Europe/Zurich", active: true, replyToEmail: "video.dayof.owner@example.org" } })
-        await tx.adminUser.create({ data: { id: `${orgId}-owner`, organizationId: orgId, email: "video.dayof.owner@example.org", name: "Élodie Exemple", passwordHash: source.passwordHash, role: "admin", isActive: true } })
+        await tx.adminUser.create({ data: { id: `${orgId}-owner`, organizationId: orgId, email: "video.dayof.owner@example.org", name: fullNameOf("Élodie"), passwordHash: source.passwordHash, role: "admin", isActive: true } })
       }
       const firstNames = ["Aline", "Nicolas", "Léa", "Noah", "Sarah", "Lucas", "Camille", "Zoé"]
-      for (const [index, firstName] of firstNames.entries()) await tx.volunteer.upsert({ where: { id: `video-dayof-attendance-person-${index}` }, create: { id: `video-dayof-attendance-person-${index}`, organizationId: orgId, firstName, lastName: "Exemple", email: `video.attendance.${index}@example.org`, phone: index === 7 ? "079 000 00 01" : null }, update: {} })
+      for (const [index, firstName] of firstNames.entries()) await tx.volunteer.upsert({ where: { id: `video-dayof-attendance-person-${index}` }, create: { id: `video-dayof-attendance-person-${index}`, organizationId: orgId, firstName, lastName: surnameOf(firstName), email: `video.attendance.${index}@example.org`, phone: index === 7 ? "079 000 00 01" : null }, update: { lastName: surnameOf(firstName) } })
       await tx.event.create({ data: { id: eventId, organizationId: orgId, slug: "atelier-pointage", title: "Accueil des bénévoles — pointage", description: "Données fictives de formation uniquement.", startDate: dateOffset(-2), endDate: dateOffset(-2), publicStatus: "published", remindersEnabled: false } })
       for (const [index, definition] of [["Accueil", "Accueil du matin", "08:00", "10:00"], ["Buvette", "Buvette de midi", "12:00", "14:00"], ["Logistique", "Installation à annuler après arrivée", "10:00", "12:00"]].entries()) await tx.shift.create({ data: { id: `video-dayof-shift-old-${index}`, eventId, roleName: definition[0], label: definition[1], startTime: definition[2], endTime: definition[3], date: dateOffset(-2), capacity: 8 } })
       for (let index = 0; index < 8; index++) await tx.registration.create({ data: { id: `video-dayof-registration-old-${index}`, eventId, volunteerId: `video-dayof-attendance-person-${index === 7 ? 2 : index}`, shiftId: `video-dayof-shift-old-${index === 7 ? 1 : index === 4 ? 2 : 0}`, status: index === 5 ? "requested" : index === 6 ? "waiting" : "active", checkedInAt: null, ...(index === 6 ? { waitingPosition: 1 } : {}), ...registrationToken.data(`demo-dayof-old-${index}`) } })
@@ -56,10 +61,11 @@ async function main() {
         ["night", "Veille", "Veille commencée hier", { date: dateOffset(-1), startTime: "23:00", endTime: fmt(minute + 60) }, 3],
       ] as const) {
         const shiftId = `video-dayof-shift-${key}`
-        await tx.shift.create({ data: { id: shiftId, eventId: liveId, roleName: role, label, ...timing, capacity: 3, contactName: "Élodie Exemple", contactPhone: "079 000 00 02" } })
+        await tx.shift.create({ data: { id: shiftId, eventId: liveId, roleName: role, label, ...timing, capacity: 3, contactName: fullNameOf("Élodie"), contactPhone: "079 000 00 02" } })
         await tx.registration.create({ data: { id: `video-dayof-registration-${key === "running" ? "zoe" : key}`, eventId: liveId, shiftId, volunteerId: `video-dayof-attendance-person-${person}`, status: "active", checkedInAt: null, ...registrationToken.data(`demo-dayof-live-${key}`) } })
       }
     })
+    await verifyDayOfReviewFixture(db)
     const directory = path.resolve("videos/output/attendance-check-in")
     await mkdir(directory, { recursive: true })
     await writeFile(path.join(directory, "dayof-preparation.json"), JSON.stringify({ preparedAt: now.toISOString(), organizationId: orgId, eventId, liveId, locale: "fr-CH", timeZone: "Europe/Zurich", currentServerWindow: true, captured: false }, null, 2))
