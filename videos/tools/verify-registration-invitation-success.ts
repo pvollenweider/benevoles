@@ -4,6 +4,7 @@
 import assert from "node:assert/strict"
 import { chromium } from "playwright"
 import { launchVideoBrowser } from "../lib/public-hosts"
+import { surnameOf } from "../lib/fixture-names"
 import { PrismaClient } from "../../src/generated/prisma/client"
 import { PrismaPg } from "@prisma/adapter-pg"
 import { linkToken, registrationToken } from "../../src/lib/token-vault"
@@ -73,7 +74,7 @@ async function main() {
     }
     await open("Vestiaire")
     await page.getByLabel("Prénom *", { exact: true }).fill("Zoé")
-    await page.getByLabel("Nom *", { exact: true }).fill("Exemple")
+    await page.getByLabel("Nom *", { exact: true }).fill(surnameOf("Zoé"))
     await page.getByLabel("Email *", { exact: true }).fill("video.errors.zoe@example.org")
     await agree()
     const publicResult = await submit()

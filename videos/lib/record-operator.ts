@@ -7,6 +7,7 @@ import path from "node:path"
 import { createHash } from "node:crypto"
 import { loadManifest } from "./manifest"
 import type { Cue } from "./sentence-timing"
+import { fullNameOf } from "./fixture-names"
 import { PrismaClient } from "../../src/generated/prisma/client"
 import { PrismaPg } from "@prisma/adapter-pg"
 
@@ -119,7 +120,7 @@ export async function recordOperator(options: { page: Page; base: string; direct
     await scene("create", async at => {
       await at(.04); await go("/super-admin/organizations/new")
       await at("Renseignons son nom"); await write(page.getByLabel(/^Nom de l'organisation/), "Formation Opérateur Jetable")
-      await write(page.getByLabel(/^Nom complet/), "Lou Exemple")
+      await write(page.getByLabel(/^Nom complet/), fullNameOf("Lou"))
       await write(page.getByLabel(/^Adresse email/), ownerEmail)
       await at("Créons l’espace")
       const response = page.waitForResponse(res => res.url().endsWith("/api/super-admin/organizations") && res.request().method() === "POST")

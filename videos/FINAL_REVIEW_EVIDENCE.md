@@ -480,3 +480,48 @@ inscription existe à cette adresse », contenu dans la nouvelle réponse ;
 narration et les blocs `viewer` restent exacts (« la réponse reste la même »,
 « regarde aussi les indésirables ») : seule l'image est à reprendre au prochain
 rendu, avec `revision` et `updatedAt` dans `videos/catalog.json`.
+
+## Écart connu : noms de famille réalistes des personnes filmées
+
+Les personnes fictives des données filmées ne s'appellent plus « Exemple ». Chaque
+prénom garde le même nom de famille courant dans toutes les vidéos
+(`videos/lib/fixture-names.ts`) : Aline Martin, Nicolas Peeters, Léa Müller,
+Noah De Jong, Sarah Smith, Lucas Silva, Camille Rossi, Zoé Papadopoulos,
+Emma Johansson, Élodie Nováková, Colette Jensen, Samira García, Paul Murphy,
+Morgane Korhonen, Lou Tóth, Alex Ivanov, Jules Hansen. Les 56 membres du journal
+d'organisation reçoivent des noms courants en alternance (`ROSTER_SURNAMES`),
+au lieu de « Exemple 01 » à « Exemple 56 » ; la personne ajoutée à chaque prise
+de `accessibility-keyboard-display` s'appelle « Clavier … Gruber ». Les adresses
+restent sur `example.org`.
+
+Vidéos dont l'image montre un ancien nom, non régénérées dans ce changement (pas
+de rendu ici) ; seeds, gardes de fixtures, sélecteurs et scripts sont déjà à jour :
+
+- `privacy-personal-links` : **narration à régénérer (TTS)**, segment `welcome`
+  (« deux organisations ont chacune une Léa Müller ») ; narration continue, donc
+  toute la piste est à refaire ; image : fiches et listes
+  des deux organisations, responsable Camille Rossi, inscription de Jules Hansen ;
+- `attendance-check-in` : image seulement (liste de pointage, Jour J, carte de
+  Zoé Papadopoulos, « Activité de Léa Müller ») ;
+- `event-activity-log` : image seulement (Aline, Nicolas et Léa dans le journal) ;
+- `last-minute-changes` : image seulement (inscriptions, membres, Zoé
+  Papadopoulos ajoutée à la main) ;
+- `organization-activity-log` : image seulement (auteurs Colette Jensen et Samira
+  García, « Activité de Aline Martin », invitation d'Alex Ivanov) ;
+- `platform-internal-administration` : image seulement (comptes Morgane Korhonen,
+  Élodie Nováková, Samira García, Paul Murphy, nouvel espace de Lou Tóth) ;
+- `accessibility-keyboard-display` : image seulement (membres et ajout manuel) ;
+- `volunteer-confirmation-errors` : image seulement (formulaires d'Aline, Alex,
+  Nicolas et Zoé, propriétaire Élodie Nováková).
+
+Non touchées : `data-exports-archives`, `email-delivery-failures`,
+`members-duplicates-merge`, `volunteer-hours-certificate` et `event-questions`
+avaient déjà des noms réalistes (registres `identity-version-2.json` et
+constantes de leurs fixtures) ; leurs seules mentions de « Exemple » sont les
+gardes des anciennes bases.
+
+Une base locale préparée avant ce changement : `prepare-day-of --reset-owned` et
+`prepare-registration-error-fixture` acceptent encore l'ancien nom pour la remise à
+zéro et renomment la fiche ; `prepare-accessibility` (créé une seule fois) demande
+une base vidéo remise à zéro. Au prochain rendu, incrémenter `revision` et mettre à
+jour `updatedAt` dans `videos/catalog.json` pour chacune de ces huit vidéos.

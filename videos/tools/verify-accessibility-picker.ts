@@ -4,6 +4,7 @@
 import assert from "node:assert/strict"
 import { chromium } from "playwright"
 import { launchVideoBrowser } from "../lib/public-hosts"
+import { surnameOf } from "../lib/fixture-names"
 import { mkdir, writeFile } from "node:fs/promises"
 import path from "node:path"
 
@@ -24,7 +25,7 @@ async function main() {
     await page.goto("http://localhost:43102/admin/events/video-accessibility-event/registrations")
     await page.getByRole("button", { name: "+ Ajouter manuellement", exact: true }).click()
     await page.getByRole("textbox", { name: "Prénom", exact: true }).fill("Aline")
-    await page.getByRole("textbox", { name: "Nom", exact: true }).fill("Exemple")
+    await page.getByRole("textbox", { name: "Nom", exact: true }).fill(surnameOf("Aline"))
     await page.getByLabel("Email", { exact: true }).fill("video.accessibility.0@example.org")
     // Main now hides the decorative asterisk from the accessible name;
     // aria-required carries the actual required state instead.

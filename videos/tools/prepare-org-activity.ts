@@ -3,6 +3,7 @@
 
 import { chromium } from "playwright"
 import { launchVideoBrowser } from "../lib/public-hosts"
+import { fullNameOf, rosterSurname } from "../lib/fixture-names"
 import { PrismaClient } from "../../src/generated/prisma/client"
 import { PrismaPg } from "@prisma/adapter-pg"
 import { mkdir, writeFile } from "node:fs/promises"
@@ -28,14 +29,14 @@ async function main() {
     const names = ["Aline", "Nicolas", "Léa", "Camille", "Noah", "Sarah", "Emma", "Lucas"]
     const ids: string[] = []
     for (let index = 0; index < 56; index++) {
-      const response = await pages[index % 2].request.post(`${base}/api/admin/members`, { data: { firstName: names[index % names.length], lastName: `Exemple ${String(index + 1).padStart(2, "0")}`, email: `video.org-activity.member.${index}@example.org`, phone: `+41 79 000 ${String(index).padStart(4, "0")}` } })
+      const response = await pages[index % 2].request.post(`${base}/api/admin/members`, { data: { firstName: names[index % names.length], lastName: rosterSurname(index), email: `video.org-activity.member.${index}@example.org`, phone: `+41 79 000 ${String(index).padStart(4, "0")}` } })
       if (!response.ok()) throw new Error(`Actual member creation ${index}: HTTP ${response.status()}`)
       ids.push((await response.json()).id)
     }
     const edited = await pages[1].request.patch(`${base}/api/admin/members/${ids[0]}`, { data: { phone: "+41 79 000 9900", notes: "CONSigne_FICTIVE_NE_PAS_RECOPIER" } })
     const deactivated = await pages[0].request.patch(`${base}/api/admin/members/${ids[1]}`, { data: { active: false } })
     if (!edited.ok() || !deactivated.ok()) throw new Error("Actual member modification/deactivation failed")
-    const invited = await pages[0].request.post(`${base}/api/admin/settings/admins`, { data: { name: "Alex Exemple", email: "video.org-activity.invited@example.org", role: "organizer" } })
+    const invited = await pages[0].request.post(`${base}/api/admin/settings/admins`, { data: { name: fullNameOf("Alex"), email: "video.org-activity.invited@example.org", role: "organizer" } })
     if (!invited.ok()) throw new Error(`Actual admin invitation HTTP ${invited.status()}`)
     const invitedId = (await invited.json()).id as string
     const changed = await pages[0].request.patch(`${base}/api/admin/settings/admins/${invitedId}`, { data: { role: "admin" } })

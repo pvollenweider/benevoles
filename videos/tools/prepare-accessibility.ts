@@ -8,6 +8,7 @@ import { registrationToken } from "../../src/lib/token-vault"
 import { mkdir, writeFile } from "node:fs/promises"
 import path from "node:path"
 import { videoAdminEmail } from "../lib/public-hosts"
+import { fullNameOf, surnameOf } from "../lib/fixture-names"
 
 async function main() {
   const url = new URL(process.env.DATABASE_URL ?? "")
@@ -27,8 +28,8 @@ async function main() {
     ]
     await db.$transaction(async tx => {
       await tx.organization.create({ data: { id: orgId, slug: "formation-clavier", name: "Formation — clavier et affichage", timeZone: "Europe/Zurich", active: true, replyToEmail: "video.accessibility.owner@example.org", hasOrgInsurance: true } })
-      await tx.adminUser.create({ data: { id: `${orgId}-owner`, organizationId: orgId, name: "Élodie Exemple", email: "video.accessibility.owner@example.org", passwordHash: source.passwordHash, role: "admin", isActive: true } })
-      for (const [index, firstName] of ["Aline", "Emma", "Nicolas", "Zoé", "Sarah"].entries()) await tx.volunteer.create({ data: { id: `${orgId}-member-${index}`, organizationId: orgId, firstName, lastName: "Exemple", email: `video.accessibility.${index}@example.org`, active: true, notes: "Données fictives de formation uniquement." } })
+      await tx.adminUser.create({ data: { id: `${orgId}-owner`, organizationId: orgId, name: fullNameOf("Élodie"), email: "video.accessibility.owner@example.org", passwordHash: source.passwordHash, role: "admin", isActive: true } })
+      for (const [index, firstName] of ["Aline", "Emma", "Nicolas", "Zoé", "Sarah"].entries()) await tx.volunteer.create({ data: { id: `${orgId}-member-${index}`, organizationId: orgId, firstName, lastName: surnameOf(firstName), email: `video.accessibility.${index}@example.org`, active: true, notes: "Données fictives de formation uniquement." } })
       await tx.event.create({ data: { id: eventId, organizationId: orgId, slug: "atelier-clavier", title: "Un planning accessible — démonstration", description: "Données fictives de formation uniquement.", startDate: date, endDate: date, publicStatus: "published", isListed: false, remindersEnabled: false } })
       for (const [index, [roleName, label, startTime, endTime]] of definitions.entries()) await tx.shift.create({ data: { id: `${orgId}-shift-${index}`, eventId, roleName, label, date, startTime, endTime, capacity: 3, status: "open", displayOrder: index === 4 ? 0 : index, requiresApproval: index === 2, instructions: "Retrouve le stand quinze minutes avant ton créneau." } })
       for (const [index, shiftIndex, status] of [[0, 0, "active"], [1, 2, "requested"]] as const) await tx.registration.create({ data: { id: `${orgId}-registration-${index}`, eventId, shiftId: `${orgId}-shift-${shiftIndex}`, volunteerId: `${orgId}-member-${index}`, status, source: "admin_manual", ...registrationToken.data(`demo-accessibility-registration-${index}`) } })

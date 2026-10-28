@@ -4,6 +4,7 @@
 import assert from "node:assert/strict"
 import { chromium } from "playwright"
 import { launchVideoBrowser, videoAdminEmail } from "../lib/public-hosts"
+import { fullNameOf, surnameOf } from "../lib/fixture-names"
 import { PrismaClient } from "../../src/generated/prisma/client"
 import { PrismaPg } from "@prisma/adapter-pg"
 import { registrationToken } from "../../src/lib/token-vault"
@@ -26,8 +27,8 @@ async function main() {
       const day = new Date("2026-11-14T00:00:00Z")
       await db.$transaction(async tx => {
         await tx.organization.create({ data: { id: orgId, slug: "formation-erreurs", name: "Formation — inscription robuste", timeZone: "Europe/Zurich", active: true, hasOrgInsurance: true, replyToEmail: "video.errors.owner@example.org" } })
-        await tx.adminUser.create({ data: { id: `${orgId}-owner`, organizationId: orgId, email: "video.errors.owner@example.org", name: "Élodie Exemple", role: "admin", isActive: true, passwordHash: source.passwordHash } })
-        await tx.volunteer.create({ data: { id: `${orgId}-aline`, organizationId: orgId, firstName: "Aline", lastName: "Exemple", email: "video.errors.aline@example.org", active: true } })
+        await tx.adminUser.create({ data: { id: `${orgId}-owner`, organizationId: orgId, email: "video.errors.owner@example.org", name: fullNameOf("Élodie"), role: "admin", isActive: true, passwordHash: source.passwordHash } })
+        await tx.volunteer.create({ data: { id: `${orgId}-aline`, organizationId: orgId, firstName: "Aline", lastName: surnameOf("Aline"), email: "video.errors.aline@example.org", active: true } })
         await tx.event.create({ data: { id: eventId, organizationId: orgId, slug: "atelier-inscription", title: "Inscription robuste — démonstration", description: "Données fictives de formation uniquement.", startDate: day, endDate: day, publicStatus: "published", isListed: false, remindersEnabled: false } })
         for (const [index, [roleName, startTime, endTime]] of [["Accueil", "10:00", "12:00"], ["Vestiaire", "11:00", "13:00"], ["Logistique", "14:00", "16:00"]].entries()) await tx.shift.create({ data: { id: `${orgId}-shift-${index}`, eventId, roleName, label: `${roleName} — démonstration`, date: day, startTime, endTime, capacity: 3, status: "open", displayOrder: index } })
         await tx.registration.create({ data: { id: `${orgId}-initial`, eventId, shiftId: `${orgId}-shift-0`, volunteerId: `${orgId}-aline`, status: "active", source: "admin_manual", ...registrationToken.data("demo-errors-aline-initial") } })
@@ -41,7 +42,7 @@ async function main() {
       await page.getByRole("button", { name: new RegExp(`, ${role}[^:]* : sélectionner`) }).click()
       await page.getByRole("button", { name: /^Continuer/ }).click()
       await page.getByLabel("Prénom *", { exact: true }).fill(firstName)
-      await page.getByLabel("Nom *", { exact: true }).fill("Exemple")
+      await page.getByLabel("Nom *", { exact: true }).fill(surnameOf(firstName))
       await page.getByLabel("Email *", { exact: true }).fill(email)
       const size = page.getByRole("radio", { name: "M", exact: true })
       if (await size.count()) await size.check()

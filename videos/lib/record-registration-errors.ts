@@ -11,6 +11,7 @@ import { linkToken } from "../../src/lib/token-vault"
 import { loadManifest, type AudioMetadata } from "./manifest"
 import { prepareRegistrationErrorFixture, registrationErrorFixtureIp } from "./prepare-registration-error-fixture"
 import type { Cue } from "./sentence-timing"
+import { surnameOf } from "./fixture-names"
 
 const eventId = "video-errors-event", publicPath = "/atelier-inscription?org=formation-erreurs"
 function database() { return new PrismaClient({ adapter: new PrismaPg({ connectionString: process.env.DATABASE_URL }) }) }
@@ -73,7 +74,7 @@ export async function recordRegistrationErrors(options: { page: Page; base: stri
       await tap(page, page.getByRole("button", { name: /^Continuer/ }))
       if (!token) {
         // Les champs restent visiblement remplis, sans consommer les phrases suivantes.
-        for (const [label, value] of [["Prénom *", name], ["Nom *", "Exemple"], ["Email *", email]]) {
+        for (const [label, value] of [["Prénom *", name], ["Nom *", surnameOf(name)], ["Email *", email]]) {
           const field = page.getByLabel(label, { exact: true })
           await tap(page, field)
           await field.fill(value)
@@ -106,7 +107,7 @@ export async function recordRegistrationErrors(options: { page: Page; base: stri
       await tap(page, page.getByRole("button", { name: /, Accueil[^:]* : sélectionner/ }))
       await tap(page, page.getByRole("button", { name: /^Continuer/ }))
       await write(page.getByLabel("Prénom *", { exact: true }), "Alex")
-      await write(page.getByLabel("Nom *", { exact: true }), "Exemple")
+      await write(page.getByLabel("Nom *", { exact: true }), surnameOf("Alex"))
       await write(page.getByLabel("Email *", { exact: true }), "video.errors.alex@example.org")
       await write(page.getByLabel(/Téléphone/), "079 000 12 34")
       await agree()

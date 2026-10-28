@@ -6,6 +6,7 @@ import { readFile, writeFile } from "node:fs/promises"
 import path from "node:path"
 import { showActivityCsv } from "./show-activity-csv"
 import type { Cue } from "./sentence-timing"
+import { fullNameOf, rosterSurname } from "./fixture-names"
 
 type Scene = (id: string, action: (at: Cue) => Promise<void>) => Promise<void>
 
@@ -32,10 +33,10 @@ export async function recordOrgActivity(options: { page: Page; base: string; dir
   })
   await scene("read", async at => {
     const texts = await entries().allTextContents()
-    if (texts.length !== 50 || !texts.some(text => text.includes("Colette Exemple")) || !texts.some(text => text.includes("Samira Exemple"))) throw new Error("Both actual authors must be visible in the first page")
-    await at("Lisons deux actions réalisées par"); await entries().filter({ hasText: "Colette Exemple" }).first().scrollIntoViewIfNeeded()
-    await at("Le nom affiché vient du"); await entries().filter({ hasText: "Samira Exemple" }).first().scrollIntoViewIfNeeded()
-    checks.realAuthors = ["Colette Exemple", "Samira Exemple"]
+    if (texts.length !== 50 || !texts.some(text => text.includes(fullNameOf("Colette"))) || !texts.some(text => text.includes(fullNameOf("Samira")))) throw new Error("Both actual authors must be visible in the first page")
+    await at("Lisons deux actions réalisées par"); await entries().filter({ hasText: fullNameOf("Colette") }).first().scrollIntoViewIfNeeded()
+    await at("Le nom affiché vient du"); await entries().filter({ hasText: fullNameOf("Samira") }).first().scrollIntoViewIfNeeded()
+    checks.realAuthors = [fullNameOf("Colette"), fullNameOf("Samira")]
   })
   await scene("members", async at => {
     await at(0.06) /* mid-sentence */; await filter("Member")
@@ -43,7 +44,7 @@ export async function recordOrgActivity(options: { page: Page; base: string; dir
     await at(0.24) /* mid-sentence */; await entries().filter({ hasText: "a modifié un membre" }).scrollIntoViewIfNeeded()
     await at(0.24) /* mid-sentence */; await entries().filter({ hasText: "a désactivé un membre" }).scrollIntoViewIfNeeded()
     await at("Pour comprendre ses inscriptions, ouvrons"); await go(`/admin/members/${prepared.firstMemberId}`)
-    await page.getByRole("heading", { name: "Activité de Aline Exemple 01", exact: true }).waitFor()
+    await page.getByRole("heading", { name: `Activité de Aline ${rosterSurname(0)}`, exact: true }).waitFor()
     if (!(await page.locator("ol li").allTextContents()).some(text => text.includes("Accueil"))) throw new Error("Real member registration missing from chronology")
     await at("Nous pouvons ensuite revenir au"); await go(journal)
     await at("Cette distinction évite de prendre")
@@ -95,12 +96,12 @@ export async function recordOrgActivity(options: { page: Page; base: string; dir
   })
   await scene("limits", async at => {
     await at("Gardons le fichier pour les"); await go(journal)
-    await entries().filter({ hasText: "Samira Exemple" }).first().scrollIntoViewIfNeeded()
+    await entries().filter({ hasText: fullNameOf("Samira") }).first().scrollIntoViewIfNeeded()
     checks.noRestoreOrProofOfReadingClaim = true
   })
   await scene("result", async at => {
     await at("Une fois le point compris"); await go(`/admin/members/${prepared.firstMemberId}`)
-    await page.getByRole("heading", { name: "Activité de Aline Exemple 01", exact: true }).waitFor()
+    await page.getByRole("heading", { name: `Activité de Aline ${rosterSurname(0)}`, exact: true }).waitFor()
   })
   await writeFile(path.join(directory, "organization-activity-capture-checks.json"), JSON.stringify({ checkedAt: new Date().toISOString(), scope: "actual local interactions and read-only CSV; not full audiovisual validation", ...checks }, null, 2))
 }

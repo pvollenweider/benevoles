@@ -4,6 +4,7 @@ import assert from "node:assert/strict"
 import type { Locator, Page } from "playwright"
 import { loadAccessibilityNativeEvidence, type NativeEvidenceContext, type NativeInsertionPlan } from "./accessibility-native-evidence"
 import type { Cue } from "./sentence-timing"
+import { surnameOf } from "./fixture-names"
 
 type Scene = (id: string, action: (at: Cue) => Promise<void>) => Promise<void>
 /** Native media are external timeline inserts, not a still page pretending to demonstrate them. */
@@ -90,11 +91,12 @@ export async function recordAccessibility(options: AccessibilityRecordingOptions
   assert.equal(zoomPlan.kind, "zoom")
   assert.equal(readerPlan.kind, "reader")
   const go = async (route: string) => { await page.goto(`${base}${route}`); await settle(page) }
-  const manual = async (first: string, email?: string) => {
+  // A cast member keeps their surname; the unique per-take person gets a common one.
+  const manual = async (first: string, email?: string, last = surnameOf(first)) => {
     await go(`${adminPath}/registrations`)
     await activate(page, page.getByRole("button", { name: "+ Ajouter manuellement", exact: true }))
     await type(page, page.getByLabel(/^Prénom(?: \*)?$/), first)
-    await type(page, page.getByLabel(/^Nom(?: \*)?$/), "Exemple")
+    await type(page, page.getByLabel(/^Nom(?: \*)?$/), last)
     if (email) await type(page, page.getByLabel("Email", { exact: true }), email)
     return page.getByRole("combobox", { name: "Créneau", exact: true })
   }
@@ -156,7 +158,7 @@ export async function recordAccessibility(options: AccessibilityRecordingOptions
   await scene("error", async at => {
     // Unique synthetic person per take; never add Aline a second time.
     const name = `Clavier ${Date.now()}`
-    const picker = await manual(name)
+    const picker = await manual(name, undefined, "Gruber")
     await at("Il n'est pas nécessaire de"); await activate(page, page.getByRole("button", { name: "Ajouter", exact: true }))
     await page.getByText("Sélectionnez un créneau.", { exact: true }).waitFor()
     await focused(picker); assert.equal(await picker.getAttribute("aria-invalid"), "true")
@@ -171,7 +173,7 @@ export async function recordAccessibility(options: AccessibilityRecordingOptions
     const submitted = page.waitForResponse(response => response.request().method() === "POST" && response.url().includes("registrations"))
     await activate(page, page.getByRole("button", { name: "Ajouter", exact: true }))
     const response = await submitted; assert(response.ok(), "Synthetic manual add must really succeed")
-    await page.getByText(`${name} Exemple`, { exact: true }).first().waitFor()
+    await page.getByText(`${name} Gruber`, { exact: true }).first().waitFor()
     await evidence("error", { genuineError: true, applicationRestoredFocus: true, actualAddedPerson: name, responseStatus: response.status() })
   })
   await scene("planning", async at => {

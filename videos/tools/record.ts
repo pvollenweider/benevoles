@@ -9,6 +9,7 @@ import { catalogEntry, loadManifest, videoDir, type AudioMetadata, type Timeline
 import { pinProductBuildForCapture } from "../lib/product-build"
 import { estimateSentences, sentenceFor, type Cue, type SentenceAnchor, type TimedSentence } from "../lib/sentence-timing"
 import { sentenceTimingsFromAudio } from "../lib/sentence-audio"
+import { fullNameOf } from "../lib/fixture-names"
 
 const reference = process.argv.find((arg) => !arg.startsWith("-") && arg !== process.argv[0] && arg !== process.argv[1])
 if (!reference) throw new Error("Usage: npm run video:record -- <VIDEO_ID>")
@@ -2454,7 +2455,7 @@ async function main() {
         await verifyDayOfReviewFixture(db)
         await recordAttendance({ page, base: baseUrl, eventId: featureEventId, directory: dir, title: manifest.title, personPrefix: "video-dayof-attendance-person-", scene, tap, settle })
         await recordDayOf({ page, base: baseUrl, productCommit: product.commit, scene, tap, settle, typeNaturally,
-          fixture: { eventId: "video-dayof-event-live", registrationId: "video-dayof-registration-zoe", volunteerName: "Zoé Exemple", volunteerEmail: "video.attendance.7@example.org", phone: "079 000 00 01", runningShiftId: "video-dayof-shift-running", upcomingShiftId: "video-dayof-shift-upcoming", earlierShiftId: "video-dayof-shift-earlier", nightShiftId: "video-dayof-shift-night", roleSearch: "Accueil", accentSearch: "zoe", expectedAccentName: "Zoé Exemple" },
+          fixture: { eventId: "video-dayof-event-live", registrationId: "video-dayof-registration-zoe", volunteerName: fullNameOf("Zoé"), volunteerEmail: "video.attendance.7@example.org", phone: "079 000 00 01", runningShiftId: "video-dayof-shift-running", upcomingShiftId: "video-dayof-shift-upcoming", earlierShiftId: "video-dayof-shift-earlier", nightShiftId: "video-dayof-shift-night", roleSearch: "Accueil", accentSearch: "zoe", expectedAccentName: fullNameOf("Zoé") },
           verifyFixture: async () => {
             await verifyDayOfReviewFixture(db)
             const r = await db.registration.findUniqueOrThrow({ where: { id: "video-dayof-registration-zoe" }, include: { volunteer: true } })

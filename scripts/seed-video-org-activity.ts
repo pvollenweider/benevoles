@@ -2,6 +2,7 @@
 // SPDX-License-Identifier: AGPL-3.0-only
 
 import type { PrismaClient } from "../src/generated/prisma/client"
+import { fullNameOf } from "../videos/lib/fixture-names"
 
 /** Isolated multi-admin classroom; never rename or change the active demo team's permissions. */
 export async function seedVideoOrgActivity(db: PrismaClient) {
@@ -20,8 +21,8 @@ export async function seedVideoOrgActivity(db: PrismaClient) {
   await db.organization.deleteMany({ where: { id, slug } })
   await db.organization.create({ data: { id, slug, name: "Formation — journal d'organisation", timeZone: "Europe/Zurich", active: true } })
   await db.adminUser.createMany({ data: [
-    { id: "video-org-activity-owner", organizationId: id, name: "Colette Exemple", email: "video.org-activity.owner@example.org", passwordHash: source.passwordHash, role: "admin", isActive: true },
-    { id: "video-org-activity-organizer", organizationId: id, name: "Samira Exemple", email: "video.org-activity.organizer@example.org", passwordHash: source.passwordHash, role: "organizer", isActive: true },
+    { id: "video-org-activity-owner", organizationId: id, name: fullNameOf("Colette"), email: "video.org-activity.owner@example.org", passwordHash: source.passwordHash, role: "admin", isActive: true },
+    { id: "video-org-activity-organizer", organizationId: id, name: fullNameOf("Samira"), email: "video.org-activity.organizer@example.org", passwordHash: source.passwordHash, role: "organizer", isActive: true },
   ] })
   if (await db.adminUser.count({ where: { organizationId: id } }) !== 2 || await db.orgLog.count({ where: { organizationId: id } })) throw new Error("Two separate fixture actors and no fabricated journal required")
   console.log("✓ Isolated organization-activity classroom: two fictitious admins, separate roles, no invented activity; active demonstration organization unchanged")

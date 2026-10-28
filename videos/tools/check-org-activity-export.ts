@@ -3,6 +3,7 @@
 
 import { chromium } from "playwright"
 import { launchVideoBrowser } from "../lib/public-hosts"
+import { fullNameOf, rosterSurname } from "../lib/fixture-names"
 import { PrismaClient } from "../../src/generated/prisma/client"
 import { PrismaPg } from "@prisma/adapter-pg"
 import { readFile, writeFile } from "node:fs/promises"
@@ -47,11 +48,11 @@ async function main() {
       if (!registered.ok()) throw new Error(`Actual member registration HTTP ${registered.status()}`)
     }
     await page.goto(`${base}/admin/members/${prepared.firstMemberId}`)
-    await page.getByRole("heading", { name: "Activité de Aline Exemple 01", exact: true }).waitFor()
+    await page.getByRole("heading", { name: `Activité de Aline ${rosterSurname(0)}`, exact: true }).waitFor()
     if (!(await page.locator("ol li").allTextContents()).some(text => text.includes("Accueil"))) throw new Error("Member activity does not show the actual registration")
     await page.goto(`${base}/admin/settings/activity`)
     await page.getByLabel("Filtrer par type", { exact: true }).selectOption("AdminUser")
-    await page.getByText("Colette Exemple a invité un admin", { exact: true }).waitFor()
+    await page.getByText(`${fullNameOf("Colette")} a invité un admin`, { exact: true }).waitFor()
     const downloadPromise = page.waitForEvent("download")
     await page.getByRole("link", { name: /Exporter tout le journal/ }).click()
     const download = await downloadPromise

@@ -4,6 +4,7 @@ import { readFile } from "node:fs/promises"
 import { createHash } from "node:crypto"
 import path from "node:path"
 import type { PrismaClient } from "../../src/generated/prisma/client"
+import { fullNameOf, surnameOf } from "./fixture-names"
 
 /** Refuse external visual review unless both captured classrooms are exclusively synthetic. */
 export async function verifyPrivacyReviewFixture(db: PrismaClient, directory: string) {
@@ -15,14 +16,14 @@ export async function verifyPrivacyReviewFixture(db: PrismaClient, directory: st
     const org = await db.organization.findUniqueOrThrow({ where: { id } })
     if (org.name !== `Formation — confidentialité ${side.toUpperCase()}` || org.slug !== `formation-confidentialite-${side}` || org.replyToEmail !== `video.privacy.${side}.owner@example.org`) throw new Error("Unexpected privacy classroom")
     const admins = await db.adminUser.findMany({ where: { organizationId: id } })
-    if (admins.length !== 1 || admins[0].id !== `${id}-owner` || admins[0].email !== org.replyToEmail || admins[0].name !== (side === "a" ? "Élodie Exemple" : "Colette Exemple")) throw new Error("Non-classroom administrator")
+    if (admins.length !== 1 || admins[0].id !== `${id}-owner` || admins[0].email !== org.replyToEmail || admins[0].name !== fullNameOf(side === "a" ? "Élodie" : "Colette")) throw new Error("Non-classroom administrator")
     const people = await db.volunteer.findMany({ where: { organizationId: id } })
     if (people.length !== (side === "a" ? 6 : 5)) throw new Error("Unexpected privacy member count")
     for (const person of people) {
       const index = names.findIndex((name, i) => name === person.firstName && person.id === `${id}-member-${i}`)
       const seeded = index >= 0 && person.email === `video.privacy.${side}.member.${index}@example.org`
       const signup = side === "a" && person.firstName === "Jules" && person.email === "video.privacy.a.new@example.org"
-      if ((!seeded && !signup) || person.lastName !== "Exemple" || !/^\+41\s?79\s?000\s?\d{4}$/.test(person.phone ?? "")) throw new Error("Non-synthetic privacy member")
+      if ((!seeded && !signup) || person.lastName !== surnameOf(person.firstName) || !/^\+41\s?79\s?000\s?\d{4}$/.test(person.phone ?? "")) throw new Error("Non-synthetic privacy member")
       if (seeded && person.notes !== (index === 0 ? `Note interne fictive — organisation ${side.toUpperCase()}` : "Exemple de formation uniquement.")) throw new Error("Unexpected member note")
     }
     const events = await db.event.findMany({ where: { organizationId: id }, include: { registrations: true, sectorLeaders: true, shifts: true } })

@@ -3,6 +3,7 @@
 
 import type { PrismaClient } from "../src/generated/prisma/client"
 import { registrationToken } from "../src/lib/token-vault"
+import { fullNameOf, surnameOf } from "../videos/lib/fixture-names"
 
 export async function seedVideoLastMinute(db: PrismaClient) {
   const databaseUrl = new URL(process.env.DATABASE_URL ?? "")
@@ -28,10 +29,10 @@ export async function seedVideoLastMinute(db: PrismaClient) {
   // Organization deletion retains administrators with a null organizationId.
   if (owner) await db.adminUser.delete({ where: { id: owner.id } })
   await db.organization.create({ data: { id: organizationId, slug, name, active: true, timeZone: "Europe/Zurich", notificationSettings: { reminders: { j2: false, j1: false, dd: false } } } })
-  await db.adminUser.create({ data: { id: "video-last-minute-owner", organizationId, name: "Colette Exemple", email: "video.last-minute.owner@example.org", passwordHash: source.passwordHash, role: "admin", isActive: true } })
+  await db.adminUser.create({ data: { id: "video-last-minute-owner", organizationId, name: fullNameOf("Colette"), email: "video.last-minute.owner@example.org", passwordHash: source.passwordHash, role: "admin", isActive: true } })
   const firstNames = ["Aline", "Nicolas", "Zoé", "Emma", "Sarah", "Lucas"]
   const people = []
-  for (const [index, firstName] of firstNames.entries()) people.push(await db.volunteer.create({ data: { id: `video-last-minute-person-${index}`, organizationId, firstName, lastName: "Exemple", email: `video.last-minute.person.${index}@example.org`, phone: `+41 79 000 ${String(index).padStart(4, "0")}`, ...(index === 2 ? { availabilityPeriods: ["morning"], availabilityNote: "Peut aussi aider en début d'après-midi après confirmation." } : {}) } }))
+  for (const [index, firstName] of firstNames.entries()) people.push(await db.volunteer.create({ data: { id: `video-last-minute-person-${index}`, organizationId, firstName, lastName: surnameOf(firstName), email: `video.last-minute.person.${index}@example.org`, phone: `+41 79 000 ${String(index).padStart(4, "0")}`, ...(index === 2 ? { availabilityPeriods: ["morning"], availabilityNote: "Peut aussi aider en début d'après-midi après confirmation." } : {}) } }))
   // Keep withdrawals and offers available when the batch is rendered after the original fixture date.
   const day = new Date()
   day.setUTCDate(day.getUTCDate() + 14)

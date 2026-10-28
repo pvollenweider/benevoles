@@ -5,6 +5,7 @@ import assert from "node:assert/strict"
 import { mkdir, writeFile } from "node:fs/promises"
 import { chromium } from "playwright"
 import { launchVideoBrowser } from "../lib/public-hosts"
+import { fullNameOf, surnameOf } from "../lib/fixture-names"
 import { PrismaClient } from "../../src/generated/prisma/client"
 import { PrismaPg } from "@prisma/adapter-pg"
 import { linkToken, registrationToken } from "../../src/lib/token-vault"
@@ -35,7 +36,7 @@ async function main() {
     const leaB = people.find(person => person.id === "video-privacy-b-member-0")!
     assert.equal(leaA.firstName, leaB.firstName)
     assert.notEqual(leaA.email, leaB.email)
-    const assigned = await a.request.post(`${base}/api/admin/events/video-privacy-a-event/sector-leaders`, { data: { roleName: "Accueil", name: "Camille Exemple", email: "video.privacy.a.leader@example.org" } })
+    const assigned = await a.request.post(`${base}/api/admin/events/video-privacy-a-event/sector-leaders`, { data: { roleName: "Accueil", name: fullNameOf("Camille"), email: "video.privacy.a.leader@example.org" } })
     assert.equal(assigned.status(), 201, "Actual leader creation required; rerun seed before repeating")
     const leader = await db.sectorLeader.findFirstOrThrow({ where: { eventId: "video-privacy-a-event", roleName: "Accueil" } })
     const rosterResponse = await publicPage.request.get(`${base}/api/public/leader/${linkToken.reveal(leader)}`)
@@ -57,7 +58,7 @@ async function main() {
     assert.equal(personal.volunteer.email, leaA.email)
     assert.equal(personal.volunteer.notes, undefined)
     assert.equal(personal.volunteer.availabilityPeriods[0], "morning")
-    const registrationResponse = await publicPage.request.post(`${base}/api/public/registrations?org=formation-confidentialite-a`, { data: { eventId: "video-privacy-a-event", shiftIds: ["video-privacy-a-shift-0"], firstName: "Jules", lastName: "Exemple", email: "video.privacy.a.new@example.org", phone: "+41 79 000 1999", consent: true, charterAccepted: true } })
+    const registrationResponse = await publicPage.request.post(`${base}/api/public/registrations?org=formation-confidentialite-a`, { data: { eventId: "video-privacy-a-event", shiftIds: ["video-privacy-a-shift-0"], firstName: "Jules", lastName: surnameOf("Jules"), email: "video.privacy.a.new@example.org", phone: "+41 79 000 1999", consent: true, charterAccepted: true } })
     assert.equal(registrationResponse.status(), 201)
     const signup = await registrationResponse.json()
     assert.equal(signup.editToken, null)

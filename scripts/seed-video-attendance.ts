@@ -3,6 +3,7 @@
 
 import type { PrismaClient, Shift, Volunteer } from "../src/generated/prisma/client"
 import { registrationToken } from "../src/lib/token-vault"
+import { surnameOf } from "../videos/lib/fixture-names"
 
 /** Dedicated fixture; every check-in shown in the lesson starts unset. */
 export async function seedVideoAttendance(db: PrismaClient) {
@@ -21,7 +22,7 @@ export async function seedVideoAttendance(db: PrismaClient) {
   const people: Volunteer[] = []
   for (const [index, firstName] of firstNames.entries()) {
     const id = `video-attendance-person-${index}`
-    const data = { firstName, lastName: "Exemple", email: `video.attendance.${index}@example.org` }
+    const data = { firstName, lastName: surnameOf(firstName), email: `video.attendance.${index}@example.org` }
     people.push(await db.volunteer.upsert({ where: { id }, create: { id, organizationId: "default", ...data }, update: data }))
   }
   for (const [index, person] of people.entries()) {

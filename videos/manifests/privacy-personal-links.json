@@ -27,7 +27,7 @@
   "segments": [
     {
       "id": "welcome",
-      "transcript": "Un lien pour recruter, un lien pour gérer son inscription, un lien pour suivre une équipe : ils ne servent pas à la même chose. Voyons lesquels partager, lesquels garder pour soi, et comment retrouver un accès perdu. Dans notre démonstration, deux organisations ont chacune une Léa Exemple et une fête portant le même identifiant. Les noms se ressemblent, mais les fiches et les adresses sont différentes. Chaque organisation retrouve son propre événement dans son administration. Toutes les personnes et coordonnées utilisées ici sont fictives.",
+      "transcript": "Un lien pour recruter, un lien pour gérer son inscription, un lien pour suivre une équipe : ils ne servent pas à la même chose. Voyons lesquels partager, lesquels garder pour soi, et comment retrouver un accès perdu. Dans notre démonstration, deux organisations ont chacune une Léa Müller et une fête portant le même identifiant. Les noms se ressemblent, mais les fiches et les adresses sont différentes. Chaque organisation retrouve son propre événement dans son administration. Toutes les personnes et coordonnées utilisées ici sont fictives.",
       "fallbackDurationMs": 54000
     },
     {

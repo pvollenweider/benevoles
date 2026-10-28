@@ -4,6 +4,7 @@
 import { createHash } from "node:crypto"
 import type { PrismaClient } from "../src/generated/prisma/client"
 import { registrationToken } from "../src/lib/token-vault"
+import { fullNameOf, isFixtureSurname, surnameOf } from "../videos/lib/fixture-names"
 
 /** Two recorder-owned organizations, never the shared demonstration organization. */
 export async function seedVideoPrivacy(db: PrismaClient) {
@@ -39,17 +40,17 @@ export async function seedVideoPrivacy(db: PrismaClient) {
     const retained = await db.volunteer.findMany({ where: { id: { in: ids } } })
     if (retained.some(person => (person.organizationId !== null && person.organizationId !== organizationId) || !person.email?.startsWith(`video.privacy.${side}.member.`))) throw new Error("Privacy fixture member belongs to another namespace")
     const newPeople = await db.volunteer.findMany({ where: { email: `video.privacy.${side}.new@example.org` } })
-    if (newPeople.some(person => person.firstName !== "Jules" || person.lastName !== "Exemple" || (person.organizationId !== null && person.organizationId !== organizationId))) throw new Error("Privacy signup fixture belongs to another namespace")
+    if (newPeople.some(person => person.firstName !== "Jules" || !isFixtureSurname("Jules", person.lastName, true) || (person.organizationId !== null && person.organizationId !== organizationId))) throw new Error("Privacy signup fixture belongs to another namespace")
     await db.notificationOutbox.deleteMany({ where: { organizationId } })
     if (existing) await db.organization.delete({ where: { id: organizationId } })
     await db.volunteer.deleteMany({ where: { id: { in: ids } } })
     await db.volunteer.deleteMany({ where: { id: { in: newPeople.map(person => person.id) } } })
     if (owner) await db.adminUser.delete({ where: { id: ownerId } })
     await db.organization.create({ data: { id: organizationId, slug, name, active: true, timeZone: "Europe/Zurich", hasOrgInsurance: true, replyToEmail: email, notificationSettings: { reminders: { j2: false, j1: false, dd: false } } } })
-    await db.adminUser.create({ data: { id: ownerId, organizationId, name: side === "a" ? "Élodie Exemple" : "Colette Exemple", email, passwordHash: source.passwordHash, role: "admin", isActive: true } })
+    await db.adminUser.create({ data: { id: ownerId, organizationId, name: fullNameOf(side === "a" ? "Élodie" : "Colette"), email, passwordHash: source.passwordHash, role: "admin", isActive: true } })
     const people = []
     for (const [index, firstName] of ["Léa", "Emma", "Nicolas", "Zoé", "Sarah"].entries()) people.push(await db.volunteer.create({ data: {
-      id: ids[index], organizationId, firstName, lastName: "Exemple", active: true,
+      id: ids[index], organizationId, firstName, lastName: surnameOf(firstName), active: true,
       email: `video.privacy.${side}.member.${index}@example.org`, phone: `+41 79 000 ${side === "a" ? "1" : "2"}${String(index).padStart(3, "0")}`,
       notes: index === 0 ? `Note interne fictive — organisation ${side.toUpperCase()}` : "Exemple de formation uniquement.",
       availabilityPeriods: ["morning"], availabilityNote: "Disponible le matin, à confirmer pour chaque mission.",

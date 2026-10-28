@@ -10,6 +10,7 @@ import { recordAttendanceActions } from "./record-attendance-actions"
 import { verifyAttendanceTransition } from "./attendance-capture-checks"
 import { showDownloadedCsv } from "./show-downloaded-csv"
 import type { Cue } from "./sentence-timing"
+import { fullNameOf } from "./fixture-names"
 
 type Scene = (id: string, action: (at: Cue) => Promise<void>) => Promise<void>
 
@@ -42,7 +43,7 @@ export async function recordAttendance(options: { page: Page; base: string; even
       await page.getByRole("columnheader", { name: /Heures prévues/ }).scrollIntoViewIfNeeded()
       if (!(await member.innerText()).includes("4h")) throw new Error("Expected four planned hours, not attested hours")
       await at(0.53) /* mid-sentence */; await tap(page, member.getByRole("link", { name: /^Activité/ }))
-      await page.getByRole("heading", { name: "Activité de Léa Exemple", exact: true }).waitFor()
+      await page.getByRole("heading", { name: `Activité de ${fullNameOf("Léa")}`, exact: true }).waitFor()
       await page.getByText(/présence|présent|point/i).last().scrollIntoViewIfNeeded()
     })
     let cancelledCheckIn = ""

@@ -9,6 +9,7 @@ import { registrationToken } from "../../src/lib/token-vault"
 import { readFile, writeFile } from "node:fs/promises"
 import path from "node:path"
 import type { Cue } from "./sentence-timing"
+import { fullNameOf, surnameOf } from "./fixture-names"
 
 type Scene = (id: string, action: (at: Cue) => Promise<void>) => Promise<void>
 type Mail = { ID: string; To: { Address: string }[] }
@@ -69,7 +70,7 @@ export async function recordLastMinute(options: { page: Page; base: string; dire
       await page.getByRole("heading", { name: "Place confirmée !", exact: true }).waitFor()
       await at("Maintenant seulement, sa participation est"); await registrations()
       if ((await reg(1)).status !== "active") throw new Error("Offer acceptance not active")
-      await page.getByRole("row").filter({ hasText: "Nicolas Exemple" }).scrollIntoViewIfNeeded()
+      await page.getByRole("row").filter({ hasText: fullNameOf("Nicolas") }).scrollIntoViewIfNeeded()
       checks.offerConfirmed = true
     })
     await scene("coverage", async at => {
@@ -82,15 +83,15 @@ export async function recordLastMinute(options: { page: Page; base: string; dire
     await scene("availability", async at => {
       await go(`${base}/admin/members`)
       await write(page.getByPlaceholder("Rechercher (nom, email, téléphone)…"), "Zoé")
-      await at("Ce renseignement aide à lui"); await page.getByRole("row").filter({ hasText: "Zoé Exemple" }).scrollIntoViewIfNeeded()
-      await at("il ne l'inscrit pas automatiquement"); await tap(page, page.getByRole("button", { name: "Modifier Zoé Exemple", exact: true }))
+      await at("Ce renseignement aide à lui"); await page.getByRole("row").filter({ hasText: fullNameOf("Zoé") }).scrollIntoViewIfNeeded()
+      await at("il ne l'inscrit pas automatiquement"); await tap(page, page.getByRole("button", { name: `Modifier ${fullNameOf("Zoé")}`, exact: true }))
       const note = page.getByLabel(/Sauf \/ à savoir/)
       await note.scrollIntoViewIfNeeded()
       if (await note.inputValue() !== "Peut aussi aider en début d'après-midi après confirmation.") throw new Error("Actual availability note missing")
       if (!await page.getByRole("checkbox", { name: "Matin", exact: true }).isChecked()) throw new Error("Actual morning availability missing")
       await at("Regardons aussi ses inscriptions pour"); await tap(page, page.getByRole("dialog").getByRole("button", { name: "Annuler", exact: true }))
       await at("Si la mission demande un"); await go(`${base}/admin/members/video-last-minute-person-2`)
-      await page.getByRole("heading", { name: "Activité de Zoé Exemple", exact: true }).waitFor()
+      await page.getByRole("heading", { name: `Activité de ${fullNameOf("Zoé")}`, exact: true }).waitFor()
       await page.getByText("Accueil du soir", { exact: false }).first().scrollIntoViewIfNeeded()
     })
     await scene("message", async at => {
@@ -107,7 +108,7 @@ export async function recordLastMinute(options: { page: Page; base: string; dire
       await at("Revenons aux inscriptions et ouvrons"); await registrations()
       await tap(page, page.getByRole("button", { name: "+ Ajouter manuellement", exact: true }))
       await write(page.getByLabel(/^Prénom(?: \*)?$/), "Zoé")
-      await write(page.getByLabel(/^Nom(?: \*)?$/), "Exemple")
+      await write(page.getByLabel(/^Nom(?: \*)?$/), surnameOf("Zoé"))
       await write(page.getByLabel("Email", { exact: true }), "video.last-minute.person.2@example.org")
       await at("Choisissons le créneau de logistique"); await tap(page, page.getByRole("combobox", { name: "Créneau", exact: true }))
       await tap(page, page.getByRole("option", { name: /12h–14h, Logistique/ }))
@@ -169,8 +170,8 @@ export async function recordLastMinute(options: { page: Page; base: string; dire
       if (await page.locator('section[aria-labelledby="staffing-underfilled"]').getByRole("link", { name: /Logistique|Caisse/ }).count()) throw new Error("Filled or cancelled mission still shown as missing")
       await registrations()
       await at("Nicolas a accepté sa place")
-      await page.getByRole("row").filter({ hasText: "Nicolas Exemple" }).scrollIntoViewIfNeeded()
-      await at(0.22) /* mid-sentence */; await page.getByRole("row").filter({ hasText: "Zoé Exemple" }).first().scrollIntoViewIfNeeded()
+      await page.getByRole("row").filter({ hasText: fullNameOf("Nicolas") }).scrollIntoViewIfNeeded()
+      await at(0.22) /* mid-sentence */; await page.getByRole("row").filter({ hasText: fullNameOf("Zoé") }).first().scrollIntoViewIfNeeded()
       await at("Nous avons vérifié les résultats"); await shifts()
       await page.getByRole("row").filter({ hasText: "Réception du matériel" }).getByText("14:30–16:30", { exact: true }).waitFor()
       if (await page.getByRole("row").filter({ hasText: "Caisse de la petite scène" }).count()) throw new Error("Cancelled shift remains in the current list")

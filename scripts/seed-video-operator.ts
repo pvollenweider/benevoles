@@ -6,6 +6,7 @@ import { PrismaPg } from "@prisma/adapter-pg"
 import { Client } from "pg"
 import bcrypt from "bcryptjs"
 import assert from "node:assert/strict"
+import { fullNameOf, surnameOf } from "../videos/lib/fixture-names"
 
 async function main() {
   const url = new URL(process.env.DATABASE_URL ?? "")
@@ -49,15 +50,16 @@ async function main() {
     const counts = await Promise.all([db.organization.count(), db.adminUser.count(), db.event.count(), db.volunteer.count()])
     if (counts.some(count => count !== 0)) throw new Error("Operator seed requires its new empty database; no existing data deleted")
     const passwordHash = await bcrypt.hash(process.env.ORG_ADMIN_PASSWORD ?? "e2e-org-admin-password", 10)
+    const memberFirstNames = ["Léa", "Emma", "Nicolas", "Zoé", "Sarah", "Lucas"]
     await db.$transaction(async tx => {
-      await tx.adminUser.create({ data: { id: "video-operator-platform", email: "video.operator.platform@example.org", name: "Morgane Exemple", role: "super_admin", passwordHash, receiveProductUpdates: false } })
+      await tx.adminUser.create({ data: { id: "video-operator-platform", email: "video.operator.platform@example.org", name: fullNameOf("Morgane"), role: "super_admin", passwordHash, receiveProductUpdates: false } })
       const day = new Date("2026-11-07T00:00:00Z")
       for (const [index, label] of ["Parc", "Quartier", "Réserve"].entries()) {
         const side = ["a", "b", "c"][index]
         const id = `video-operator-org-${side}`
         await tx.organization.create({ data: { id, name: `Formation Opérateur ${label}`, slug: `formation-operateur-${side}`, active: index !== 2, timeZone: "Europe/Zurich", hasOrgInsurance: true, replyToEmail: `video.operator.${side}.owner@example.org` } })
-        await tx.adminUser.create({ data: { id: `${id}-owner`, organizationId: id, name: ["Élodie Exemple", "Samira Exemple", "Paul Exemple"][index], email: `video.operator.${side}.owner@example.org`, passwordHash, role: "admin", isActive: index !== 2, receiveProductUpdates: index === 0 } })
-        for (let person = 0; person < (index === 0 ? 6 : index === 1 ? 3 : 0); person++) await tx.volunteer.create({ data: { id: `${id}-member-${person}`, organizationId: id, firstName: ["Léa", "Emma", "Nicolas", "Zoé", "Sarah", "Lucas"][person], lastName: "Exemple", email: `video.operator.${side}.member.${person}@example.org`, notes: "Donnée fictive pour la formation interne uniquement." } })
+        await tx.adminUser.create({ data: { id: `${id}-owner`, organizationId: id, name: fullNameOf(["Élodie", "Samira", "Paul"][index]), email: `video.operator.${side}.owner@example.org`, passwordHash, role: "admin", isActive: index !== 2, receiveProductUpdates: index === 0 } })
+        for (let person = 0; person < (index === 0 ? 6 : index === 1 ? 3 : 0); person++) await tx.volunteer.create({ data: { id: `${id}-member-${person}`, organizationId: id, firstName: memberFirstNames[person], lastName: surnameOf(memberFirstNames[person]), email: `video.operator.${side}.member.${person}@example.org`, notes: "Donnée fictive pour la formation interne uniquement." } })
         for (let event = 0; event < (index === 0 ? 2 : index === 1 ? 1 : 0); event++) await tx.event.create({ data: { id: `${id}-event-${event}`, organizationId: id, title: `${label} — ${event === 0 ? "Fête de formation" : "Préparation de formation"}`, slug: `formation-${event}`, description: "Données fictives de la formation opérateur.", startDate: day, endDate: day, publicStatus: event === 0 ? "published" : "draft", remindersEnabled: false } })
       }
     })
