@@ -125,6 +125,14 @@ export default function EventForm({ initialData, createdHref, timeZone = "Europe
   // The last status the server confirmed (each PATCH answers with the saved event), so a
   // refused publication restores what's really stored, not what the page loaded with.
   const savedStatusRef = useRef<EventFormData["publicStatus"]>(initialData?.publicStatus ?? "draft")
+  // The dates the server last accepted: new dates refused by the days-off rule (#1171) go back to
+  // them, so that the next autosave of another field is not refused again.
+  const savedDatesRef = useRef({ startDate: initialData?.startDate ?? "", endDate: initialData?.endDate ?? "" })
+  // That refusal, kept until the dates are typed again (a later save of another field keeps it).
+  const [datesError, setDatesError] = useState<{ message: string; lines: string[] } | null>(null)
+  // Going back to the saved dates changes the form but is not an edit: that change is not autosaved
+  // (it would say « Enregistré » right after « Dates non enregistrées »).
+  const skipNextAutosaveRef = useRef(false)
   // Latest state read by saveNow() so a retry sends what's on screen now, not what failed earlier.
   const formRef = useRef(form)
   const showsRef = useRef(shows)
@@ -152,6 +160,7 @@ export default function EventForm({ initialData, createdHref, timeZone = "Europe
       const data = await res.json().catch(() => ({}))
       if (res.ok) {
         if (data?.publicStatus) savedStatusRef.current = data.publicStatus
+        savedDatesRef.current = { startDate: formRef.current.startDate, endDate: formRef.current.endDate }
         setError(null)
         setSaveError(null)
         setSave({ kind: "saved", at: formatSavedAt(new Date()) })
@@ -163,6 +172,14 @@ export default function EventForm({ initialData, createdHref, timeZone = "Europe
       }
       // A refused publication (no shift yet) is a rule, not a glitch: say it and go back to
       // the last status the server confirmed.
+      if (res.status === 409 && data?.code === "workload") {
+        const saved = savedDatesRef.current
+        skipNextAutosaveRef.current = true
+        setForm((f) => ({ ...f, startDate: saved.startDate, endDate: saved.endDate }))
+        setDatesError({ message: typeof data.error === "string" ? data.error : "Dates non enregistrées.", lines: Array.isArray(data.workload) ? data.workload.filter((l: unknown): l is string => typeof l === "string") : [] })
+        setSave({ kind: "idle" })
+        return
+      }
       if (res.status === 409) {
         const previous = savedStatusRef.current
         setForm((f) => ({ ...f, publicStatus: previous }))
@@ -191,6 +208,7 @@ export default function EventForm({ initialData, createdHref, timeZone = "Europe
   useEffect(() => {
     if (!mounted.current) { mounted.current = true; return }
     if (!isEdit || !form.title) return
+    if (skipNextAutosaveRef.current) { skipNextAutosaveRef.current = false; return }
 
     const timer = setTimeout(() => { void saveNow() }, 800)
 
@@ -199,6 +217,7 @@ export default function EventForm({ initialData, createdHref, timeZone = "Europe
   }, [form, shows])
 
   function set(field: keyof EventFormData, value: string) {
+    if (field === "startDate" || field === "endDate") setDatesError(null)
     setForm((f) => {
       const next = { ...f, [field]: value }
       if (field === "startDate" && (!f.endDate || f.endDate < value)) {
@@ -341,12 +360,31 @@ export default function EventForm({ initialData, createdHref, timeZone = "Europe
         <div className="grid grid-cols-2 gap-4">
           <div>
             <label htmlFor="event-start" className="block text-sm font-medium text-gray-700 mb-1">Date début<RequiredMark /></label>
-            <input id="event-start" type="date" required value={form.startDate} onChange={(e) => set("startDate", e.target.value)} className={inputCls} />
+            <input id="event-start" type="date" required value={form.startDate} aria-describedby={datesError ? "event-dates-error" : undefined} onChange={(e) => set("startDate", e.target.value)} className={inputCls} />
           </div>
           <div>
             <label htmlFor="event-end" className="block text-sm font-medium text-gray-700 mb-1">Date fin<RequiredMark /></label>
-            <input id="event-end" type="date" required value={form.endDate} min={form.startDate || undefined} onChange={(e) => set("endDate", e.target.value)} className={inputCls} />
+            <input id="event-end" type="date" required value={form.endDate} min={form.startDate || undefined} aria-describedby={datesError ? "event-dates-error" : undefined} onChange={(e) => set("endDate", e.target.value)} className={inputCls} />
           </div>
+        </div>
+
+        {/* Always mounted, filled on a refusal: announced more reliably than a node added full. */}
+        <div role="alert" className={datesError ? "bg-red-50 border border-red-200 rounded-xl p-3 text-sm text-red-700" : "sr-only"} data-event-dates-workload="1">
+          {datesError && (
+            <div id="event-dates-error" className="space-y-1">
+              <p>{datesError.message}</p>
+              {datesError.lines.length > 0 && (
+                <ul role="list" className="list-disc pl-5 space-y-0.5">
+                  {datesError.lines.map((l) => <li key={l}>{l}</li>)}
+                </ul>
+              )}
+              <p>
+                <a href="#protection-charge" className="font-medium text-red-800 underline underline-offset-2 hover:text-red-900 rounded focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-blue-600">
+                  Voir la protection des pauses et de la charge
+                </a>
+              </p>
+            </div>
+          )}
         </div>
 
         {/* Spectacles — visible only once both dates are set */}

@@ -35,6 +35,7 @@ import { decideRequest } from "@/lib/registration-decision"
 import { restoreRegistration } from "@/lib/registration-restore-action"
 import { confirmSwap, offerSwap, publishSwapRequest } from "@/lib/shift-swap-server"
 import { GET as personalPage } from "@/app/api/public/registrations/[token]/route"
+import { PATCH as editEvent } from "@/app/api/admin/events/[id]/route"
 import { loadAttention } from "@/lib/attention-data"
 
 const url = process.env.DATABASE_URL
@@ -51,6 +52,8 @@ const VALUES: WorkloadPolicyValues = {
   maxIdleGapMinutes: 2 * 60,
 }
 const POLICY = buildPolicy(VALUES, TZ)
+// Every write answers the days-off rule (#1171, lot 2); « do not apply » is an answer.
+const ANSWERED: WorkloadPolicyValues = { ...VALUES, offDay: { apply: false } }
 const ADMIN = { type: "admin" as const, id: "admin-1" }
 const NOW = new Date("2031-06-01T08:00:00Z")
 
@@ -340,21 +343,21 @@ describe.skipIf(!url)("workload protection on Postgres (#1171)", () => {
       await hold(e.id, day.id, p.id)
       const extra = await hold(e.id, night.id, p.id)
       const db = getOrgClient(orgId)
-      const refused = await setWorkloadPolicy(db, orgId, e.id, { enabled: true, values: VALUES })
+      const refused = await setWorkloadPolicy(db, orgId, e.id, { enabled: true, values: ANSWERED })
       expect(refused).toMatchObject({ ok: false, status: 409, findings: [expect.objectContaining({ name: "Kim Martin", messages: [expect.stringContaining("5 h")] })] })
       expect((await prisma.event.findUniqueOrThrow({ where: { id: e.id } })).workloadProtectionEnabled).toBe(false)
       // Incomplete values are never « no limit ».
-      expect(await setWorkloadPolicy(db, orgId, e.id, { enabled: true, values: { ...VALUES, maxIdleGapMinutes: undefined } })).toMatchObject({ ok: false, status: 400 })
+      expect(await setWorkloadPolicy(db, orgId, e.id, { enabled: true, values: { ...ANSWERED, maxIdleGapMinutes: undefined } })).toMatchObject({ ok: false, status: 400 })
 
       await prisma.registration.update({ where: { id: extra.id }, data: { status: "cancelled" } })
-      const on = await setWorkloadPolicy(db, orgId, e.id, { enabled: true, values: VALUES })
+      const on = await setWorkloadPolicy(db, orgId, e.id, { enabled: true, values: ANSWERED })
       expect(on).toMatchObject({ ok: true, enabled: true, changes: { workloadProtectionEnabled: { from: false, to: true } } })
-      expect((await prisma.event.findUniqueOrThrow({ where: { id: e.id } })).workloadPolicy).toMatchObject({ version: 1, timeZone: TZ, serviceDayStart: "08:00" })
+      expect((await prisma.event.findUniqueOrThrow({ where: { id: e.id } })).workloadPolicy).toMatchObject({ version: 2, offDay: { apply: false }, timeZone: TZ, serviceDayStart: "08:00" })
 
       // A finding left by a later change (here written directly) does not block a loosening, but blocks a tightening.
       await prisma.registration.update({ where: { id: extra.id }, data: { status: "active" } })
-      expect(await setWorkloadPolicy(db, orgId, e.id, { enabled: true, values: { ...VALUES, maxDailyMinutes: 11 * 60 } })).toMatchObject({ ok: true })
-      expect(await setWorkloadPolicy(db, orgId, e.id, { enabled: true, values: { ...VALUES, maxIdleGapMinutes: 60 } })).toMatchObject({ ok: false, status: 409 })
+      expect(await setWorkloadPolicy(db, orgId, e.id, { enabled: true, values: { ...ANSWERED, maxDailyMinutes: 11 * 60 } })).toMatchObject({ ok: true })
+      expect(await setWorkloadPolicy(db, orgId, e.id, { enabled: true, values: { ...ANSWERED, maxIdleGapMinutes: 60 } })).toMatchObject({ ok: false, status: 409 })
       expect(await setWorkloadPolicy(db, orgId, e.id, { enabled: false })).toMatchObject({ ok: true, enabled: false })
     })
   })
@@ -435,6 +438,75 @@ describe.skipIf(!url)("workload protection on Postgres (#1171)", () => {
       release()
       await writer
       expect((await pending).status).toBe(409)
+    })
+  })
+
+  // #1171 lot 2: at least N days without mission in every P service days of the event (3 to 8 July).
+  describe("days without mission", () => {
+    const withOffDay = (minOffDays: number, windowDays: number) => buildPolicy({ ...VALUES, maxEventMinutes: 100 * 60, offDay: { apply: true, minOffDays, windowDays } }, TZ)
+    const DAYS = ["2031-07-03", "2031-07-04", "2031-07-05", "2031-07-06", "2031-07-07", "2031-07-08"]
+    const patchEvent = (id: string, body: Record<string, unknown>) => editEvent(
+      new Request(`http://localhost/api/admin/events/${id}`, { method: "PATCH", headers: { "content-type": "application/json" }, body: JSON.stringify(body) }),
+      { params: Promise.resolve({ id }) },
+    )
+
+    it("refuses the organiser's add of a sixth day in a row with 1 day off in 6, and says why", async () => {
+      const e = await event({ policy: withOffDay(1, 6) })
+      const shifts = await Promise.all(DAYS.map((d) => shift(e.id, d, "10:00", "14:00")))
+      const p = await person()
+      for (const sh of shifts.slice(0, 5)) await hold(e.id, sh.id, p.id)
+      const res = await add({ eventId: e.id, shiftId: shifts[5].id, volunteerId: p.id })
+      expect(res.status).toBe(409)
+      const body = await res.json()
+      expect(body.error).toContain("6 journées de service d'affilée, toutes avec une mission")
+      expect(await committed(e.id, p.id)).toBe(5)
+    })
+
+    it("a version-1 policy (saved before the rule existed) still reads and applies no days-off rule", async () => {
+      const e = await event({ policy: POLICY })
+      const shifts = await Promise.all(DAYS.map((d) => shift(e.id, d, "10:00", "14:00")))
+      const p = await person()
+      for (const sh of shifts.slice(0, 5)) await hold(e.id, sh.id, p.id)
+      expect((await add({ eventId: e.id, shiftId: shifts[5].id, volunteerId: p.id })).status).toBe(201)
+    })
+
+    it("turning the rule on is refused while a programme breaks it", async () => {
+      const e = await event({ policy: POLICY })
+      const shifts = await Promise.all(DAYS.map((d) => shift(e.id, d, "10:00", "14:00")))
+      const p = await person()
+      for (const sh of shifts) await hold(e.id, sh.id, p.id)
+      const refused = await setWorkloadPolicy(prisma, orgId, e.id, { enabled: true, values: { ...VALUES, offDay: { apply: true, minOffDays: 1, windowDays: 6 } } })
+      expect(refused.ok).toBe(false)
+      if (!refused.ok) expect(refused.status).toBe(409)
+      // « Ne pas appliquer » is an answer: saved, nothing to scan.
+      expect((await setWorkloadPolicy(prisma, orgId, e.id, { enabled: true, values: { ...VALUES, offDay: { apply: false } } })).ok).toBe(true)
+      expect((await prisma.event.findUniqueOrThrow({ where: { id: e.id } })).workloadPolicy).toMatchObject({ version: 2, offDay: { apply: false } })
+      // A save without the answer is refused, never read as « no rule ».
+      const blank = await setWorkloadPolicy(prisma, orgId, e.id, { enabled: true, values: VALUES })
+      expect(blank.ok).toBe(false)
+      if (!blank.ok) expect(blank.status).toBe(400)
+    })
+
+    it("longer event dates that would break the rule are refused for everyone, and the dates are kept", async () => {
+      const e = await event({ policy: withOffDay(2, 7) })
+      const shifts = await Promise.all(DAYS.map((d) => shift(e.id, d, "10:00", "14:00")))
+      const p = await person("Sami")
+      for (const sh of shifts) await hold(e.id, sh.id, p.id)
+      // 6 days: no complete period of 7. With 9 July, the period 3-9 July has only one day off.
+      const res = await patchEvent(e.id, { endDate: "2031-07-09" })
+      expect(res.status).toBe(409)
+      const body = await res.json()
+      expect(body.code).toBe("workload")
+      expect(body.error).toContain("Dates non enregistrées")
+      expect(body.workload[0]).toContain("Sami Martin : ")
+      expect((await prisma.event.findUniqueOrThrow({ where: { id: e.id } })).endDate.toISOString().slice(0, 10)).toBe("2031-07-08")
+      expect((await patchEvent(e.id, { startDate: "2031-07-02" })).status).toBe(409)
+      // Other edits, and the same dates, go through.
+      expect((await patchEvent(e.id, { title: "Festival 2031" })).status).toBe(200)
+      expect((await patchEvent(e.id, { startDate: "2031-07-03", endDate: "2031-07-08" })).status).toBe(200)
+      // Without anyone over the rule, longer dates are fine.
+      const other = await event({ policy: withOffDay(2, 7) })
+      expect((await patchEvent(other.id, { endDate: "2031-07-09" })).status).toBe(200)
     })
   })
 })

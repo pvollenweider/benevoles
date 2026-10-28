@@ -6,7 +6,7 @@ import "@testing-library/jest-dom/vitest"
 import { useState } from "react"
 import { render, screen, fireEvent, cleanup, waitFor, within } from "@testing-library/react"
 import ManualAddForm from "../admin/registrations/ManualAddForm"
-import { buildPolicy } from "@/lib/workload-policy"
+import { activePolicy, buildPolicy } from "@/lib/workload-policy"
 import { EMPTY_ADD_FORM, type AddFormValues, type Registration } from "../admin/registrations/types"
 
 // Manual addition of a registration by the organizer, on its own (#402, #465, #466).
@@ -330,7 +330,7 @@ describe("RegistrationsManager — focus and announcement around the manual add"
 describe("ManualAddForm — workload protection", () => {
   afterEach(cleanup)
   it("says the addition will be refused, from the person's confirmed places and requests", () => {
-    const policy = buildPolicy({ serviceDayStart: "08:00", maxContinuousMinutes: 360, minBreakMinutes: 30, maxDailyMinutes: 600, maxEventMinutes: 2400, minRestMinutes: 600, maxIdleGapMinutes: 120 }, "Europe/Zurich")
+    const policy = activePolicy(buildPolicy({ serviceDayStart: "08:00", maxContinuousMinutes: 360, minBreakMinutes: 30, maxDailyMinutes: 600, maxEventMinutes: 2400, minRestMinutes: 600, maxIdleGapMinutes: 120 }, "Europe/Zurich"), { startDate: "2020-01-01", endDate: "2040-12-31" })
     const night = { ...shift, id: "n1", date: "2026-07-05", startTime: "01:00", endTime: "03:00" }
     const held = {
       id: "r1", status: "requested", source: "public_form", comment: null, createdAt: "2026-06-01T00:00:00.000Z",

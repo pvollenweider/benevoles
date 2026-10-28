@@ -1,12 +1,14 @@
 import { describe, it, expect } from "vitest"
 import { applyDutyChange, judgeDutyChange, reproducibleFrom, scheduleEditRefusalBody, workloadGateOf, workloadRefusalBody } from "../workload-guard"
-import { buildPolicy, WORKLOAD_POLICY_INCOMPLETE, type DutyShift } from "../workload-policy"
+import { activePolicy, buildPolicy, WORKLOAD_POLICY_INCOMPLETE, type DutyShift } from "../workload-policy"
 import { duplicatedWorkload } from "../event-duplicate"
 
 // #1171 lot 1: the pure part of the enforcement (the locks and reads run on Postgres, workload-policy.int.test.ts).
-const POLICY = buildPolicy({
+const STORED = buildPolicy({
   serviceDayStart: "08:00", maxContinuousMinutes: 360, minBreakMinutes: 30, maxDailyMinutes: 600, maxEventMinutes: 2400, minRestMinutes: 600, maxIdleGapMinutes: 120,
 }, "Europe/Zurich")
+const DATES = { startDate: "2031-07-01", endDate: "2031-07-10" }
+const POLICY = activePolicy(STORED, DATES)
 const s = (id: string, date: string, startTime: string, endTime: string): DutyShift => ({ id, date, startTime, endTime })
 const day = s("day", "2031-07-04", "14:00", "20:00")
 const night = s("night", "2031-07-05", "01:00", "03:00")
@@ -14,10 +16,10 @@ const night = s("night", "2031-07-05", "01:00", "03:00")
 describe("workloadGateOf", () => {
   it("is off unless enabled, on with a policy that parses, closed otherwise", () => {
     expect(workloadGateOf(null)).toEqual({ kind: "off" })
-    expect(workloadGateOf({ workloadProtectionEnabled: false, workloadPolicy: POLICY })).toEqual({ kind: "off" })
-    expect(workloadGateOf({ workloadProtectionEnabled: true, workloadPolicy: POLICY })).toEqual({ kind: "on", policy: POLICY })
-    expect(workloadGateOf({ workloadProtectionEnabled: true, workloadPolicy: null })).toEqual({ kind: "incomplete" })
-    expect(workloadGateOf({ workloadProtectionEnabled: true, workloadPolicy: { ...POLICY, minRestMinutes: null } })).toEqual({ kind: "incomplete" })
+    expect(workloadGateOf({ workloadProtectionEnabled: false, workloadPolicy: STORED, ...DATES })).toEqual({ kind: "off" })
+    expect(workloadGateOf({ workloadProtectionEnabled: true, workloadPolicy: STORED, ...DATES })).toEqual({ kind: "on", policy: POLICY })
+    expect(workloadGateOf({ workloadProtectionEnabled: true, workloadPolicy: null, ...DATES })).toEqual({ kind: "incomplete" })
+    expect(workloadGateOf({ workloadProtectionEnabled: true, workloadPolicy: { ...STORED, minRestMinutes: null }, ...DATES })).toEqual({ kind: "incomplete" })
   })
 })
 
@@ -74,14 +76,14 @@ describe("refusal bodies", () => {
 describe("duplicatedWorkload", () => {
   const newEvent = { workloadProtectionEnabled: false }
   it("copies the source's values with the settings, the zone snapshotted again, only while it can be adopted", () => {
-    expect(duplicatedWorkload({ workloadProtectionEnabled: true, workloadPolicy: POLICY }, true, { gate: true, newEvent, timeZone: "Europe/Paris" }))
-      .toEqual({ workloadProtectionEnabled: true, workloadPolicy: { ...POLICY, timeZone: "Europe/Paris" } })
-    expect(duplicatedWorkload({ workloadProtectionEnabled: true, workloadPolicy: POLICY }, true, { gate: false, newEvent, timeZone: "Europe/Zurich" })).toEqual({ workloadProtectionEnabled: false })
+    expect(duplicatedWorkload({ workloadProtectionEnabled: true, workloadPolicy: STORED }, true, { gate: true, newEvent, timeZone: "Europe/Paris" }))
+      .toEqual({ workloadProtectionEnabled: true, workloadPolicy: { ...STORED, timeZone: "Europe/Paris" } })
+    expect(duplicatedWorkload({ workloadProtectionEnabled: true, workloadPolicy: STORED }, true, { gate: false, newEvent, timeZone: "Europe/Zurich" })).toEqual({ workloadProtectionEnabled: false })
     expect(duplicatedWorkload({ workloadProtectionEnabled: true, workloadPolicy: { broken: true } }, true, { gate: true, newEvent, timeZone: "Europe/Zurich" })).toEqual({ workloadProtectionEnabled: false })
   })
 
   it("follows the organisation's rule for a new event without the settings", () => {
-    const fromOrg = { workloadProtectionEnabled: true, workloadPolicy: POLICY }
+    const fromOrg = { workloadProtectionEnabled: true, workloadPolicy: STORED }
     expect(duplicatedWorkload({ workloadProtectionEnabled: false }, false, { gate: true, newEvent: fromOrg, timeZone: "Europe/Zurich" })).toBe(fromOrg)
   })
 })

@@ -19,6 +19,12 @@ import { EVENT_PUBLIC_STATUSES } from "@/lib/statuses"
 import { isPublishing, publishBlocker } from "@/lib/event-publish"
 import { dayContactSchema } from "@/lib/day-contact"
 import { cancelDeadlineSchema } from "@/lib/cancel-deadline-schema"
+import { eventDatesRefusalBody, eventDatesWorkloadCheck, type PersonFindings } from "@/lib/workload-policy-data"
+
+/** Raised inside the date change's transaction to roll it back (#1171, days-off rule). */
+class EventDatesRefusal extends Error {
+  constructor(readonly people: PersonFindings[]) { super("Workload protection refuses the new dates") }
+}
 
 const showSchema = z.object({
   name: z.string(),
@@ -125,7 +131,17 @@ export async function PATCH(req: Request, { params }: { params: Promise<{ id: st
   if (data.endDate) updateData.endDate = new Date(data.endDate)
 
   try {
-    const event = await db.event.update({ where: { id }, data: updateData })
+    // New dates of a protected event with a days-off rule (#1171, lot 2): the periods it checks
+    // follow the dates, so they are judged for everyone under the exclusive workload lock, and the
+    // whole change is refused if someone's programme would break the rule.
+    const datesChange = (data.startDate && data.startDate !== owned.startDate.toISOString().slice(0, 10)) || (data.endDate && data.endDate !== owned.endDate.toISOString().slice(0, 10))
+    const event = datesChange
+      ? await db.$transaction(async (tx) => {
+        const refused = await eventDatesWorkloadCheck(tx, id, { startDate: nextStart, endDate: nextEnd })
+        if (refused.length > 0) throw new EventDatesRefusal(refused)
+        return tx.event.update({ where: { id }, data: updateData })
+      })
+      : await db.event.update({ where: { id }, data: updateData })
 
     const { organization: _ownedOrg, ...ownedFields } = owned
     void _ownedOrg
@@ -159,6 +175,7 @@ export async function PATCH(req: Request, { params }: { params: Promise<{ id: st
 
     return NextResponse.json(event)
   } catch (err) {
+    if (err instanceof EventDatesRefusal) return NextResponse.json(eventDatesRefusalBody(err.people), { status: 409 })
     // Not in the response: details can name tables or constraints. The log line keeps a code and the
     // scrubbed message only, never the raw error with the event's fields (src/lib/report-error.ts).
     reportError("event.update")(err)

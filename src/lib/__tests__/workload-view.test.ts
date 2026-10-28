@@ -1,21 +1,23 @@
 import { describe, it, expect } from "vitest"
 import { blocksWorkload, newWorkloadNotices, recapWorkloadNotices, workloadByPerson, workloadModeOf, workloadNotices } from "../workload-view"
-import { buildPolicy, WORKLOAD_POLICY_INCOMPLETE } from "../workload-policy"
+import { activePolicy, buildPolicy, WORKLOAD_POLICY_INCOMPLETE } from "../workload-policy"
 import { describeSignupFailure } from "../form-errors"
 
 // #1171: one entry point for every surface; the #465 warnings stay for events without protection.
 const TZ = "Europe/Zurich"
-const POLICY = buildPolicy({ serviceDayStart: "08:00", maxContinuousMinutes: 360, minBreakMinutes: 30, maxDailyMinutes: 600, maxEventMinutes: 2400, minRestMinutes: 600, maxIdleGapMinutes: 120 }, TZ)
+const STORED = buildPolicy({ serviceDayStart: "08:00", maxContinuousMinutes: 360, minBreakMinutes: 30, maxDailyMinutes: 600, maxEventMinutes: 2400, minRestMinutes: 600, maxIdleGapMinutes: 120 }, TZ)
+const DATES = { startDate: "2026-07-01", endDate: "2026-07-10" }
+const POLICY = activePolicy(STORED, DATES)
 const s = (id: string, date: string, startTime: string, endTime: string) => ({ id, date, startTime, endTime })
 const day = s("day", "2026-07-04", "14:00", "20:00"), night = s("night", "2026-07-05", "01:00", "03:00")
 const long = s("long", "2026-07-04", "08:00", "15:00")
 
 describe("workloadModeOf", () => {
   it("reads the event's protection, else the #465 warnings", () => {
-    expect(workloadModeOf({}, TZ)).toEqual({ kind: "warnings", timeZone: TZ })
-    expect(workloadModeOf({ workloadProtectionEnabled: false, workloadPolicy: POLICY }, TZ)).toEqual({ kind: "warnings", timeZone: TZ })
-    expect(workloadModeOf({ workloadProtectionEnabled: true, workloadPolicy: POLICY }, TZ)).toEqual({ kind: "policy", policy: POLICY })
-    expect(workloadModeOf({ workloadProtectionEnabled: true, workloadPolicy: null }, TZ)).toEqual({ kind: "incomplete" })
+    expect(workloadModeOf({ ...DATES }, TZ)).toEqual({ kind: "warnings", timeZone: TZ })
+    expect(workloadModeOf({ workloadProtectionEnabled: false, workloadPolicy: STORED, ...DATES }, TZ)).toEqual({ kind: "warnings", timeZone: TZ })
+    expect(workloadModeOf({ workloadProtectionEnabled: true, workloadPolicy: STORED, ...DATES }, TZ)).toEqual({ kind: "policy", policy: POLICY })
+    expect(workloadModeOf({ workloadProtectionEnabled: true, workloadPolicy: null, ...DATES }, TZ)).toEqual({ kind: "incomplete" })
     expect(blocksWorkload({ kind: "warnings", timeZone: TZ })).toBe(false)
   })
 })

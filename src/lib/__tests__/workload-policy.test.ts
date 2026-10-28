@@ -1,7 +1,7 @@
 import { describe, it, expect } from "vitest"
 import {
-  buildPolicy, checkPolicyValues, evaluateWorkload, findingOnlyAbout, newFindings, parseWorkloadPolicy, policyChangeNeedsScan,
-  serviceDayExamples, serviceDayOf, workloadChange, workloadFindingMessage, type DutyShift, type WorkloadPolicy, type WorkloadPolicyValues,
+  activePolicy, buildPolicy, checkPolicyValues, evaluateWorkload, findingOnlyAbout, newFindings, parseWorkloadPolicy, policyChangeNeedsScan,
+  serviceDayExamples, serviceDayOf, workloadChange, workloadFindingMessage, type ActivePolicy, type DutyShift, type WorkloadPolicyValues,
 } from "../workload-policy"
 
 // #1171 lot 1. The values below illustrate the rules; they are not proposed defaults.
@@ -15,8 +15,9 @@ const VALUES: WorkloadPolicyValues = {
   maxIdleGapMinutes: 2 * 60,
 }
 const TZ = "Europe/Zurich"
-const POLICY: WorkloadPolicy = buildPolicy(VALUES, TZ)
-const policy = (over: Partial<WorkloadPolicy> = {}): WorkloadPolicy => ({ ...POLICY, ...over })
+const HORIZON = { startDate: "2026-01-01", endDate: "2026-12-31" }
+const POLICY: ActivePolicy = activePolicy(buildPolicy(VALUES, TZ), HORIZON)
+const policy = (over: Partial<ActivePolicy> = {}): ActivePolicy => ({ ...POLICY, ...over })
 
 let n = 0
 const s = (date: string, startTime: string, endTime: string, id = `s${++n}`): DutyShift => ({ id, date, startTime, endTime })
@@ -180,10 +181,16 @@ describe("policy values", () => {
   })
 
   it("reads a stored policy strictly", () => {
-    expect(parseWorkloadPolicy(POLICY)).toEqual({ ok: true, policy: POLICY })
-    expect(parseWorkloadPolicy({ ...POLICY, version: 2 }).ok).toBe(false)
-    expect(parseWorkloadPolicy({ ...POLICY, timeZone: "Mars/Olympus" }).ok).toBe(false)
-    expect(parseWorkloadPolicy({ ...POLICY, mealMinutes: 30 }).ok).toBe(false)
+    const stored = buildPolicy(VALUES, TZ)
+    expect(parseWorkloadPolicy(stored)).toEqual({ ok: true, policy: stored })
+    // Version 2 needs the days-off answer; version 1 must not have one.
+    expect(parseWorkloadPolicy({ ...stored, version: 2 }).ok).toBe(false)
+    expect(parseWorkloadPolicy({ ...stored, offDay: { apply: false } }).ok).toBe(false)
+    expect(parseWorkloadPolicy({ ...stored, version: 3 }).ok).toBe(false)
+    expect(parseWorkloadPolicy({ ...stored, timeZone: "Mars/Olympus" }).ok).toBe(false)
+    expect(parseWorkloadPolicy({ ...stored, mealMinutes: 30 }).ok).toBe(false)
+    // The horizon is never stored: an evaluated policy is not a stored one.
+    expect(parseWorkloadPolicy(POLICY).ok).toBe(false)
     expect(parseWorkloadPolicy(null).ok).toBe(false)
     expect(parseWorkloadPolicy({ version: 1, timeZone: TZ }).ok).toBe(false)
   })
@@ -203,5 +210,116 @@ describe("policy values", () => {
     expect(serviceDayExamples("08:00")[1]).toContain("commence à 1 h compte dans la journée de service de la veille")
     expect(serviceDayExamples("00:00")).toHaveLength(2)
     expect(serviceDayExamples("bad")).toEqual([])
+  })
+})
+
+// ── #1171 lot 2: days without mission ───────────────────────────────────────
+
+describe("policy version 2: the days-off answer", () => {
+  const ONE_IN_SIX = { apply: true as const, minOffDays: 1, windowDays: 6 }
+
+  it("writes version 2 with an answer, keeps version 1 without one, and reads both", () => {
+    const v2 = buildPolicy({ ...VALUES, offDay: ONE_IN_SIX }, TZ)
+    expect(v2.version).toBe(2)
+    expect(parseWorkloadPolicy(v2)).toEqual({ ok: true, policy: v2 })
+    const no = buildPolicy({ ...VALUES, offDay: { apply: false } }, TZ)
+    expect(parseWorkloadPolicy(no)).toEqual({ ok: true, policy: no })
+    const v1 = buildPolicy(VALUES, TZ)
+    expect(v1.version).toBe(1)
+    expect("offDay" in v1).toBe(false)
+    expect(parseWorkloadPolicy(v1).ok).toBe(true)
+  })
+
+  it("requires the answer on every write, never a blank read as « no rule »", () => {
+    const missing = checkPolicyValues(VALUES, { requireOffDay: true })
+    expect(missing.ok).toBe(false)
+    if (!missing.ok) expect(missing.problems).toEqual([{ field: "offDay", message: expect.stringContaining("choisissez d'appliquer ou non") }])
+    expect(checkPolicyValues({ ...VALUES, offDay: { apply: false } }, { requireOffDay: true }).ok).toBe(true)
+    expect(checkPolicyValues({ ...VALUES, offDay: ONE_IN_SIX }, { requireOffDay: true }).ok).toBe(true)
+  })
+
+  it("refuses incomplete, out-of-range or impossible numbers", () => {
+    const fields = (offDay: unknown) => { const r = checkPolicyValues({ ...VALUES, offDay }, { requireOffDay: true }); return r.ok ? [] : r.problems.map((p) => p.field) }
+    expect(fields({ apply: true })).toEqual(["offDayWindowDays", "offDayMinOffDays"])
+    expect(fields({ apply: true, minOffDays: 1, windowDays: 1 })).toEqual(["offDayWindowDays"])
+    expect(fields({ apply: true, minOffDays: 1, windowDays: 32 })).toEqual(["offDayWindowDays"])
+    expect(fields({ apply: true, minOffDays: 0, windowDays: 7 })).toEqual(["offDayMinOffDays"])
+    expect(fields({ apply: true, minOffDays: 7, windowDays: 7 })).toEqual(["offDayMinOffDays"])
+    expect(fields({ apply: true, minOffDays: 1.5, windowDays: 7 })).toEqual(["offDayMinOffDays"])
+    expect(fields({ apply: "yes" })).toEqual(["offDay"])
+    expect(fields({ apply: false, windowDays: 7 })).toEqual(["offDay"])
+    expect(fields({ apply: true, minOffDays: 1, windowDays: 7, extra: 1 })).toEqual(["offDay"])
+  })
+
+  it("scans again when the rule gets stricter, not when it is looser or not applied", () => {
+    const base = activePolicy(buildPolicy({ ...VALUES, offDay: { apply: true, minOffDays: 1, windowDays: 7 } }, TZ), HORIZON)
+    const with_ = (offDay: ActivePolicy["offDay"]) => ({ ...base, offDay })
+    expect(policyChangeNeedsScan(POLICY, base)).toBe(true) // a version-1 policy getting the rule
+    expect(policyChangeNeedsScan(base, base)).toBe(false)
+    expect(policyChangeNeedsScan(base, with_({ apply: false }))).toBe(false)
+    expect(policyChangeNeedsScan(POLICY, with_({ apply: false }))).toBe(false)
+    expect(policyChangeNeedsScan(base, with_({ apply: true, minOffDays: 1, windowDays: 8 }))).toBe(false)
+    expect(policyChangeNeedsScan(base, with_({ apply: true, minOffDays: 1, windowDays: 6 }))).toBe(true)
+    expect(policyChangeNeedsScan(base, with_({ apply: true, minOffDays: 2, windowDays: 7 }))).toBe(true)
+    expect(policyChangeNeedsScan(with_({ apply: false }), base)).toBe(true)
+  })
+})
+
+describe("evaluateWorkload: days without mission", () => {
+  // The pilot: 6 festival days, one main mission a day. 08:00 boundary.
+  const festival = { startDate: "2026-07-01", endDate: "2026-07-06" }
+  const rule = (minOffDays: number, windowDays: number, dates = festival) =>
+    activePolicy(buildPolicy({ ...VALUES, maxEventMinutes: 100 * 60, offDay: { apply: true, minOffDays, windowDays } }, TZ), dates)
+  const days = (from: number, to: number, start = "14:00", end = "20:00") =>
+    Array.from({ length: to - from + 1 }, (_, i) => s(`2026-07-${String(from + i).padStart(2, "0")}`, start, end, `d${from + i}`))
+  const offday = (shifts: DutyShift[], p: ActivePolicy) => evaluateWorkload(shifts, p).filter((f) => f.rule === "offday")
+
+  it("1 in 6 over a 6-day festival: every day worked is caught, one day off passes", () => {
+    const all = offday(days(1, 6), rule(1, 6))
+    expect(all).toEqual([expect.objectContaining({ rule: "offday", serviceDay: "2026-07-01", minutes: 0, limit: 1 })])
+    expect(workloadFindingMessage(all[0], rule(1, 6))).toBe("Du mercredi 1 juillet au lundi 6 juillet : 6 journées de service d'affilée, toutes avec une mission. Cet événement demande au moins 1 jour sans mission sur 6 journées de service.")
+    expect(offday([...days(1, 3), ...days(5, 6)], rule(1, 6))).toEqual([])
+  })
+
+  it("1 in 7 over a 6-day festival checks nothing: no complete period fits", () => {
+    expect(offday(days(1, 6), rule(1, 7))).toEqual([])
+  })
+
+  it("periods that fail and overlap are one finding, from first to last day", () => {
+    const tenDays = { startDate: "2026-07-01", endDate: "2026-07-10" }
+    const f = offday(days(1, 8), rule(1, 7, tenDays))
+    expect(f).toHaveLength(1)
+    expect(f[0]).toEqual(expect.objectContaining({ serviceDay: "2026-07-01", minutes: 0 }))
+    expect(workloadFindingMessage(f[0], rule(1, 7, tenDays))).toMatch(/^Du mercredi 1 juillet au mercredi 8 juillet : 8 journées de service d'affilée/)
+  })
+
+  it("counts empty days of the event as days off, and says how many were found when some", () => {
+    const p = rule(2, 7, { startDate: "2026-07-01", endDate: "2026-07-07" })
+    const f = offday([...days(1, 3), ...days(5, 7)], p)
+    expect(f).toEqual([expect.objectContaining({ minutes: 1, limit: 2 })])
+    expect(workloadFindingMessage(f[0], p)).toContain(": seulement 1 jour sans mission sur 7 journées de service d'affilée. Cet événement demande au moins 2 jours sans mission sur 7 journées de service.")
+  })
+
+  it("a night task and a standby make the day worked; a mission ending at the boundary does not work the next day", () => {
+    const p = rule(1, 3, { startDate: "2026-07-01", endDate: "2026-07-03" })
+    // Day 1 evening, a night task at 01h on the 3rd (service day of the 2nd), a standby on the 3rd.
+    const shifts = [s("2026-07-01", "18:00", "22:00"), s("2026-07-03", "01:00", "03:00"), s("2026-07-03", "10:00", "12:00")]
+    expect(offday(shifts, p)).toHaveLength(1)
+    // 2nd: only a mission from 02:00 to 08:00 on the 3rd belongs to the 2nd; nothing touches the 3rd.
+    expect(offday([s("2026-07-01", "18:00", "22:00"), s("2026-07-03", "02:00", "08:00")], p)).toEqual([])
+    // A night 22:00-10:00 crosses the boundary: it works both service days.
+    expect(offday([s("2026-07-01", "18:00", "22:00"), s("2026-07-02", "22:00", "10:00")], p)).toHaveLength(1)
+  })
+
+  it("is not applied when the answer is « do not apply » or missing (version 1)", () => {
+    const no = activePolicy(buildPolicy({ ...VALUES, maxEventMinutes: 100 * 60, offDay: { apply: false } }, TZ), festival)
+    expect(offday(days(1, 6), no)).toEqual([])
+    expect(offday(days(1, 6), { ...POLICY, maxEventMinutes: 100 * 60 })).toEqual([])
+  })
+
+  it("only a change that creates or extends a run of worked days is new", () => {
+    const p = rule(1, 6)
+    expect(workloadChange(days(1, 5), days(1, 6), p).map((f) => f.rule)).toEqual(["offday"])
+    expect(workloadChange([...days(1, 3), ...days(5, 6)], [...days(1, 3), ...days(5, 6), s("2026-07-05", "15:00", "16:00")], p)).toEqual([])
   })
 })

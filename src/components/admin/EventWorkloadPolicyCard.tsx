@@ -7,11 +7,12 @@ import { useRef, useState } from "react"
 import { flushSync } from "react-dom"
 import { announce } from "@/lib/announce"
 import ConfirmActionModal from "@/components/admin/ConfirmActionModal"
+import WorkloadBenchmarks from "@/components/admin/WorkloadBenchmarks"
 import WorkloadPolicyFields, { fieldInputId } from "@/components/admin/WorkloadPolicyFields"
-import type { WorkloadPolicyValues } from "@/lib/workload-policy"
+import type { EventHorizon, WorkloadBenchmark, WorkloadPolicyValues } from "@/lib/workload-policy"
 import {
-  checkPolicyForm, policyFormFrom, policySummaryLines, policyValuesFromForm, problemsByField, SUGGESTED_LABELS,
-  withWarningSuggestions, WORKLOAD_NOT_COVERED, type PolicyFormState,
+  benchmarkAnnouncement, benchmarkFields, checkPolicyForm, policyFormFrom, policySummaryLines, policyValuesFromForm, problemsByField, SUGGESTED_LABELS,
+  withBenchmark, withWarningSuggestions, WORKLOAD_NOT_COVERED, type PolicyFormState,
 } from "@/lib/workload-policy-form"
 
 type PersonFindings = { volunteerId: string; name: string; messages: string[] }
@@ -26,7 +27,7 @@ const ID = "event-wl"
  * judges the current programmes without saving; turning on or tightening is refused while one breaks
  * the limits, the people listed. Turning off asks first.
  */
-export default function EventWorkloadPolicyCard({ eventId, initialEnabled, initialValues, initialIncomplete, initialFindings, timeZone }: {
+export default function EventWorkloadPolicyCard({ eventId, initialEnabled, initialValues, initialIncomplete, initialFindings, timeZone, horizon }: {
   eventId: string
   initialEnabled: boolean
   initialValues: WorkloadPolicyValues | null
@@ -34,6 +35,8 @@ export default function EventWorkloadPolicyCard({ eventId, initialEnabled, initi
   initialIncomplete: boolean
   initialFindings: PersonFindings[]
   timeZone: string
+  /** The event's service days when the page was loaded (the days-off example). */
+  horizon: EventHorizon
 }) {
   const [enabled, setEnabled] = useState(initialEnabled)
   const [incomplete, setIncomplete] = useState(initialIncomplete)
@@ -59,7 +62,12 @@ export default function EventWorkloadPolicyCard({ eventId, initialEnabled, initi
     if (errors.size > 0) {
       const again = new Map(errors)
       if (next.serviceDayStart !== form.serviceDayStart) again.delete("serviceDayStart")
-      for (const key of Object.keys(next) as (keyof PolicyFormState)[]) if (key !== "serviceDayStart" && next[key] !== form[key]) again.delete(key)
+      for (const key of Object.keys(next) as (keyof PolicyFormState)[]) if (key !== "serviceDayStart" && key !== "offDay" && next[key] !== form[key]) again.delete(key)
+      if (next.offDay.apply !== form.offDay.apply) again.delete("offDay")
+      if (next.offDay.apply !== form.offDay.apply || next.offDay.minOffDays !== form.offDay.minOffDays || next.offDay.windowDays !== form.offDay.windowDays) {
+        again.delete("offDayMinOffDays")
+        again.delete("offDayWindowDays")
+      }
       setErrors(again)
     }
   }
@@ -79,6 +87,16 @@ export default function EventWorkloadPolicyCard({ eventId, initialEnabled, initi
   function fillSuggestions() {
     setForm(withWarningSuggestions(form))
     announce(setStatus, `Rempli avec les réglages d'avertissement existants : ${SUGGESTED_LABELS.join(", ")}. Vérifiez-les et complétez les autres.`)
+  }
+
+  function applyBenchmark(b: WorkloadBenchmark) {
+    setForm(withBenchmark(form, b))
+    if (errors.size > 0) {
+      const again = new Map(errors)
+      for (const key of benchmarkFields(b)) again.delete(key)
+      setErrors(again)
+    }
+    announce(setStatus, benchmarkAnnouncement(b))
   }
 
   async function send(path: string, method: string, body: unknown) {
@@ -200,8 +218,10 @@ export default function EventWorkloadPolicyCard({ eventId, initialEnabled, initi
         </p>
       </div>
 
+      <WorkloadBenchmarks onUse={applyBenchmark} />
+
       <form noValidate onSubmit={(e) => { e.preventDefault(); void save() }} className="space-y-4">
-        <WorkloadPolicyFields idPrefix={ID} form={form} onChange={change} errors={errors} />
+        <WorkloadPolicyFields idPrefix={ID} form={form} onChange={change} errors={errors} horizon={horizon} />
 
         {summary.length > 0 && (
           <div className="rounded-xl bg-gray-50 border border-gray-200 px-3 py-2 text-sm text-gray-800">
