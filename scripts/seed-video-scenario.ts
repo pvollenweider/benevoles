@@ -79,6 +79,14 @@ async function main() {
     const { seedVideoAttendance } = await import("./seed-video-attendance")
     return seedVideoAttendance(prisma)
   }
+  // The beta videos (#1168): their own organisation, never the demo one (scripts/seed-video-beta.ts).
+  if (scenario === "beta-access" || scenario === "sectors" || scenario === "sector-leaders" || scenario === "shift-swaps") {
+    const beta = await import("./seed-video-beta")
+    if (scenario === "beta-access") return beta.seedVideoBetaAccess(prisma)
+    if (scenario === "sectors") return beta.seedVideoSectors(prisma)
+    if (scenario === "sector-leaders") return beta.seedVideoSectorLeadersBeta(prisma)
+    return beta.seedVideoShiftSwaps(prisma)
+  }
   if (scenario === "event-reports" || scenario === "volunteer-badges") {
     const { seedVideoDocuments } = await import("./seed-video-documents")
     return seedVideoDocuments(prisma)

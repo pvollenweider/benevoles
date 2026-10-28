@@ -188,6 +188,8 @@ async function main() {
   const product = await pinProductBuildForCapture(localBaseUrl)
   if ((await catalogEntry(reference!)).captureReady === false) throw new Error(`${manifest.id}: real UI recorder and fixture are not ready; refusing a substitute capture`)
   const slug = manifest.slug
+  // The beta videos (#1168): their own organisation and recorder (videos/lib/record-beta-features.ts).
+  const betaSlugs = ["beta-access", "sectors", "shift-swaps"]
   const dir = videoDir(manifest.slug)
   const rawVideo = path.join(dir, "capture.webm")
   const timelineFile = path.join(dir, "timeline.json")
@@ -214,7 +216,7 @@ async function main() {
 
   // Native date controls also depend on Chromium's UI/process locale, not just
   // the context's Accept-Language. Keep French narration separate from this.
-  const batch22French = ["shift-roster-visibility", "volunteer-personal-registrations", "volunteer-calendar", "privacy-personal-links", "volunteer-discover-event", "volunteer-register-mobile", "volunteer-choose-shifts", "volunteer-form-recap", "volunteer-confirmation-errors", "volunteer-session-availability", "accessibility-keyboard-display", "org-email-settings", "org-public-identity", "org-team-permissions", "org-timezone-charter", "organization-activity-log", "email-delivery-failures", "data-exports-archives", "global-search", "platform-internal-administration", "members-management", "members-import", "members-invitations", "members-duplicates-merge", "members-reminders", "volunteer-hours-certificate", "volunteer-badges", "registrations-management", "registrations-place-member", "organizer-monitor-followup", "staffing-gaps", "sector-leaders", "attendance-check-in", "last-minute-changes", "targeted-messages", "reminders-changes", "shift-create-edit-detail", "shift-create-series", "shift-eligibility-rules", "shift-night-dst", "shift-timeline-quick-actions", "shift-waitlist-offer", "shifts-roles-views", "shift-recurrence", "shift-approval", "event-duplicate", "event-archive-delete", "event-milestones", "event-program-pages-qr", "event-questions", "event-reports", "event-visibility-registration-window", "event-activity-log", "admin-navigation", "admin-features-tour", "masterclass-03-first-steps", "event-create-blank", "event-create-template", "organizer-create-publish", "event-review-publish"].includes(slug)
+  const batch22French = ["shift-roster-visibility", "beta-access", "sectors", "shift-swaps", "volunteer-personal-registrations", "volunteer-calendar", "privacy-personal-links", "volunteer-discover-event", "volunteer-register-mobile", "volunteer-choose-shifts", "volunteer-form-recap", "volunteer-confirmation-errors", "volunteer-session-availability", "accessibility-keyboard-display", "org-email-settings", "org-public-identity", "org-team-permissions", "org-timezone-charter", "organization-activity-log", "email-delivery-failures", "data-exports-archives", "global-search", "platform-internal-administration", "members-management", "members-import", "members-invitations", "members-duplicates-merge", "members-reminders", "volunteer-hours-certificate", "volunteer-badges", "registrations-management", "registrations-place-member", "organizer-monitor-followup", "staffing-gaps", "sector-leaders", "attendance-check-in", "last-minute-changes", "targeted-messages", "reminders-changes", "shift-create-edit-detail", "shift-create-series", "shift-eligibility-rules", "shift-night-dst", "shift-timeline-quick-actions", "shift-waitlist-offer", "shifts-roles-views", "shift-recurrence", "shift-approval", "event-duplicate", "event-archive-delete", "event-milestones", "event-program-pages-qr", "event-questions", "event-reports", "event-visibility-registration-window", "event-activity-log", "admin-navigation", "admin-features-tour", "masterclass-03-first-steps", "event-create-blank", "event-create-template", "organizer-create-publish", "event-review-publish"].includes(slug)
   const questionsFrenchLauncher = (batch22French || ["event-questions", "volunteer-hours-certificate", "admin-navigation", "volunteer-confirmation-errors", "members-import", "data-exports-archives"].includes(slug)) && process.platform === "darwin"
   const frenchChromiumRevision = batch22French || slug === "members-import" ? "1248" : "1243"
   if (questionsFrenchLauncher && chromium.executablePath() !== `/Users/pol/Library/Caches/ms-playwright/chromium-${frenchChromiumRevision}/chrome-mac-arm64/Google Chrome for Testing.app/Contents/MacOS/Google Chrome for Testing`) throw new Error("Questions French launcher must be reverified against the current Playwright Chromium binary")
@@ -304,7 +306,7 @@ async function main() {
     try {
       await action(at)
     } catch (error) {
-      if (["members-management", "members-import", "members-invitations", "members-duplicates-merge", "members-reminders", "volunteer-hours-certificate", "volunteer-badges", "registrations-management", "registrations-place-member", "organizer-monitor-followup", "staffing-gaps", "sector-leaders", "attendance-check-in", "last-minute-changes", "targeted-messages", "reminders-changes", "shift-create-edit-detail", "shift-create-series", "shift-eligibility-rules", "shift-night-dst", "shift-timeline-quick-actions", "shift-waitlist-offer", "shifts-roles-views", "shift-recurrence", "shift-approval"].includes(slug)) {
+      if (["beta-access", "sectors", "shift-swaps", "members-management", "members-import", "members-invitations", "members-duplicates-merge", "members-reminders", "volunteer-hours-certificate", "volunteer-badges", "registrations-management", "registrations-place-member", "organizer-monitor-followup", "staffing-gaps", "sector-leaders", "attendance-check-in", "last-minute-changes", "targeted-messages", "reminders-changes", "shift-create-edit-detail", "shift-create-series", "shift-eligibility-rules", "shift-night-dst", "shift-timeline-quick-actions", "shift-waitlist-offer", "shifts-roles-views", "shift-recurrence", "shift-approval"].includes(slug)) {
         await mkdir(path.join(dir, "review"), { recursive: true })
         await page.screenshot({ path: path.join(dir, "review", "rehearsal-failure.png") }).catch(() => {})
         await writeFile(path.join(dir, "review", "rehearsal-failure.json"), JSON.stringify({ scene: id, url: page.url(), elapsedMs: Math.round(performance.now() - startedAt), error: String(error), purpose: rehearsal ? "rehearsal" : "narration-timed" }, null, 2))
@@ -355,7 +357,7 @@ async function main() {
       if (!(await heading.isVisible())) throw new Error("Demo event not found; run scripts/seed-demo.ts on the local database first")
     } else if (slug !== "volunteer-form-recap" && slug !== "volunteer-confirmation-errors") {
       await page.goto(`${baseUrl}/admin/login`)
-      await page.getByLabel("Email").fill(slug === "platform-internal-administration" ? "video.operator.platform@example.org" : slug === "privacy-personal-links" ? "video.privacy.a.owner@example.org" : slug === "last-minute-changes" ? "video.last-minute.owner@example.org" : slug === "organization-activity-log" ? "video.org-activity.owner@example.org" : slug === "data-exports-archives" ? "video.exports.owner@example.org" : videoAdminEmail())
+      await page.getByLabel("Email").fill(slug === "platform-internal-administration" ? "video.operator.platform@example.org" : slug === "privacy-personal-links" ? "video.privacy.a.owner@example.org" : slug === "last-minute-changes" ? "video.last-minute.owner@example.org" : slug === "organization-activity-log" ? "video.org-activity.owner@example.org" : slug === "data-exports-archives" ? "video.exports.owner@example.org" : betaSlugs.includes(slug) ? (await import("../lib/record-beta-features")).BETA_OWNER_EMAIL : videoAdminEmail())
       await page.getByLabel("Mot de passe").fill(process.env.ORG_ADMIN_PASSWORD ?? "e2e-org-admin-password")
       await page.getByRole("button", { name: "Se connecter" }).click()
       await page.waitForURL(slug === "platform-internal-administration" ? /\/super-admin\/organizations/ : /\/admin\/(events|dashboard)/)
@@ -500,6 +502,16 @@ async function main() {
     const operatorRecording = slug === "platform-internal-administration"
       ? await (await import("../lib/record-operator")).prepareOperatorRecording(page, baseUrl, dir, rehearsal)
       : undefined
+    // Real sessions of the beta videos, opened before the screencast: no login form is filmed.
+    const betaSessions = slug === "beta-access" || slug === "sector-leaders"
+      ? await (async () => {
+        const beta = await import("../lib/record-beta-features")
+        return {
+          owner: slug === "beta-access" ? await page.context().cookies() : await beta.betaSessionCookies(page, baseUrl, beta.BETA_OWNER_EMAIL),
+          operator: slug === "beta-access" ? await beta.betaSessionCookies(page, baseUrl, beta.BETA_OPERATOR_EMAIL) : [],
+        }
+      })()
+      : undefined
 
     await page.screencast.start({
       path: rawVideo,
@@ -511,6 +523,12 @@ async function main() {
 
     if (slug === "shift-roster-visibility") {
       await (await import("../lib/record-shift-roster")).recordShiftRoster({ page, base: baseUrl, dir, scene, tap, settle, fill: fillVisibly })
+    } else if (betaSlugs.includes(slug)) {
+      const beta = await import("../lib/record-beta-features")
+      const tools = { page, base: baseUrl, title: manifest.title, scene, tap, settle, typeNaturally }
+      if (slug === "beta-access") await beta.recordBetaAccess({ ...tools, operator: betaSessions!.operator, owner: betaSessions!.owner })
+      else if (slug === "sectors") await beta.recordSectors(tools)
+      else await beta.recordShiftSwaps(tools)
     } else if (slug === "platform-internal-administration" && operatorRecording) {
       const { recordOperator } = await import("../lib/record-operator")
       await recordOperator({ page, base: baseUrl, directory: dir, title: manifest.title, setup: operatorRecording, scene, tap, settle })
@@ -3987,6 +4005,8 @@ async function main() {
         await tap(page, page.getByRole("button", { name: "+ Ajouter un responsable", exact: true }))
         await page.getByLabel(/^Email(?: \*)?$/).waitFor()
       })
+      // Sector leaders (#1169): the same page in an event organised by sectors (beta organisation).
+      await (await import("../lib/record-beta-features")).recordSectorLeadersBySector({ page, base: baseUrl, title: manifest.title, scene, tap, settle, typeNaturally, owner: betaSessions!.owner })
     } else if (slug === "event-archive-delete") {
       const disposableTitle = "Ancienne fête de Montvert — copie de démonstration"
       await page.goto(`${baseUrl}/admin/events/${featureEventId}`); await settle(page)

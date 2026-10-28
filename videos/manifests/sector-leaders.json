@@ -1,8 +1,8 @@
 {
   "id": "SECTOR_LEADERS",
   "slug": "sector-leaders",
-  "title": "Responsable de poste : accompagner son équipe",
-  "description": "Désigner un responsable et découvrir son planning d'équipe depuis son lien personnel.",
+  "title": "Responsables de poste et de secteur : accompagner son équipe",
+  "description": "Désigner un responsable de poste ou de tout un secteur, et découvrir son planning d'équipe depuis son lien personnel.",
   "language": "fr-CH",
   "voice": "Puck",
   "continuousNarration": true,
@@ -15,8 +15,8 @@
   "segments": [
     {
       "id": "welcome",
-      "transcript": "Le jour de la fête, vous n'avez pas besoin de tout coordonner seul ou seule. Un responsable de poste peut suivre son équipe, retrouver les créneaux et contacter les bénévoles. Nous allons désigner une personne, ouvrir son vrai lien personnel et découvrir ce qu'elle peut consulter. Aucun accès à toute l'administration n'est nécessaire.",
-      "fallbackDurationMs": 29000
+      "transcript": "Le jour de la fête, vous n'avez pas besoin de tout coordonner seul ou seule. Un responsable de poste peut suivre son équipe, retrouver les créneaux et contacter les bénévoles. Nous allons désigner une personne, ouvrir son vrai lien personnel et découvrir ce qu'elle peut consulter. Dans un événement organisé par secteurs, un responsable peut aussi suivre tout un secteur. Aucun accès à toute l'administration n'est nécessaire.",
+      "fallbackDurationMs": 37990
     },
     {
       "id": "nominate",
@@ -67,22 +67,34 @@
       "id": "remove",
       "transcript": "Quand la responsabilité change, retirez la personne de ce poste et confirmez. Son ancien lien ne donne alors plus accès à cette équipe. Cette action retire la responsabilité, pas ses éventuelles inscriptions comme bénévole. Vous pouvez ensuite désigner la nouvelle personne et lui envoyer son propre lien : chacun dispose du bon accès, au bon moment.",
       "fallbackDurationMs": 35000
+    },
+    {
+      "id": "leaders-sector-scope",
+      "transcript": "Voyons maintenant un événement organisé par secteurs, le Festival de Montvert. Sa page s'appelle Responsables de poste et de secteur, et classe les responsables par secteur. En ajoutant un responsable, choisissez d'abord Responsable de. Tout un secteur, ou Un poste précis, comme dans un événement sans secteurs. Confions tout le secteur Parking à Paul. Renseignons son nom et son email, puis ajoutons et envoyons son lien. Cette possibilité fait partie des fonctions bêta.",
+      "fallbackDurationMs": 36810
+    },
+    {
+      "id": "leaders-sector-roster",
+      "transcript": "Le lien personnel de Paul montre tous les postes qui sont en ce moment dans le secteur Parking, classés par poste : Parking Nord et Parking Mairie. Un filtre Jour limite la liste à une journée. Un poste ajouté plus tard au secteur y apparaît aussitôt. Paul reçoit aussi les emails de nouvelle inscription et de désistement de tous les postes du secteur. Les bénévoles, eux, ne voient pas les secteurs.",
+      "fallbackDurationMs": 35870
     }
   ],
   "viewer": {
-    "summary": "Dans cette vidéo, vous désignez un responsable de poste et découvrez ce qu'il voit de son équipe depuis son lien personnel.",
+    "summary": "Dans cette vidéo, vous désignez un responsable de poste ou de tout un secteur, et découvrez ce qu'il voit de son équipe depuis son lien personnel.",
     "steps": [
       "Dans l'événement, ouvrez Paramètres, puis Responsables de secteur, et ajoutez une personne.",
       "Choisissez le poste, puis indiquez son nom et son email, en vérifiant bien l'adresse.",
       "Si elle est déjà inscrite, reprenez ses coordonnées depuis la liste des inscrits.",
       "Envoyez-lui son lien personnel : elle l'ouvre sans compte ni mot de passe.",
       "Sur ce lien, elle retrouve les inscrits de son poste, créneau par créneau, avec leurs coordonnées.",
+      "Dans un événement organisé par secteurs, choisissez Tout un secteur ou Un poste précis : le responsable d'un secteur voit tous les postes du secteur.",
       "Quand la responsabilité change, retirez la personne du poste et désignez la suivante."
     ],
     "remember": [
       "Le lien d'un responsable est confidentiel : il donne accès aux coordonnées de l'équipe et ne s'affiche jamais sur une page publique.",
-      "L'espace du responsable est en lecture seule et ne montre que son poste.",
-      "Être responsable ne remplace pas une inscription et ne publie pas ses coordonnées comme contact du créneau."
+      "L'espace du responsable est en lecture seule et ne montre que son poste, ou les postes de son secteur.",
+      "Être responsable ne remplace pas une inscription et ne publie pas ses coordonnées comme contact du créneau.",
+      "Confier tout un secteur fait partie des fonctions bêta et demande un événement organisé par secteurs."
     ]
   },
   "continuousPauseTags": false
