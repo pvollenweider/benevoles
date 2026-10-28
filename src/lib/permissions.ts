@@ -86,6 +86,9 @@ export const PERMISSIONS: Record<string, Partial<Record<Method, Level>>> = {
   "events/[id]/swaps": { GET: "organizer" },
   "events/[id]/swaps/[requestId]": { POST: "organizer" },
   "events/[id]/swaps/mode": { PUT: "organizer" },
+  // Breaks and workload protection (#1171, beta): the event's policy and its preview, like the swaps option.
+  "events/[id]/workload-policy": { GET: "organizer", PUT: "organizer" },
+  "events/[id]/workload-policy/preview": { POST: "organizer" },
   "events/[id]/send-reminder": { POST: "organizer" },
   "events/from-template": { POST: "organizer" },
   "members": { GET: "organizer", POST: "organizer" },

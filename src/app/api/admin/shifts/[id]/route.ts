@@ -18,6 +18,7 @@ import { minVolunteersProblem } from "@/lib/staffing"
 import { liveRoleShifts, ROLE_SETTINGS_SELECT, roleSettingsOf } from "@/lib/role-settings"
 import { endSwapsIn } from "@/lib/shift-swap-server"
 import { shiftMateriallyChanged } from "@/lib/shift-swaps"
+import { checkScheduleEdit, scheduleEditRefusalBody, ScheduleEditRefusalError } from "@/lib/workload-guard"
 
 const schema = z.object({
   roleName: z.string().optional(),
@@ -101,46 +102,67 @@ export async function PATCH(req: Request, { params }: { params: Promise<{ id: st
 
   // The update and its notifications commit together (#352): volunteers are never left
   // unaware of a schedule change that was saved.
-  const { after, outboxIds, notified } = await db.$transaction(async (tx) => {
-    const after = await tx.shift.update({ where: { id }, data: updateData })
-    // A new time, day, place, poste or requirement ends the swap requests agreed on the old one
-    // (#1174 E13): never applied to terms nobody agreed to.
-    if (shiftMateriallyChanged(before, after)) await endSwapsIn(tx, { shiftIds: [id] }, "shift_changed", adminActor(guard.session))
-
-    // Detect schedule changes worth notifying about (date / start / end).
-    const scheduleChanged =
-      (rest.date && before.date.toISOString() !== after.date.toISOString()) ||
-      (rest.startTime && before.startTime !== after.startTime) ||
-      (rest.endTime && before.endTime !== after.endTime)
-
-    // Through the outbox (#311): `notified` counts notifications queued, retried if SMTP fails.
-    const outbox = collectNotifications()
-    if (scheduleChanged && notifyVolunteers !== false && before.registrations.length > 0) {
-      for (const reg of before.registrations) {
-        await outbox.send({
-          kind: "shift_modified",
-          dedupeKey: `shift_modified:${reg.id}:${after.updatedAt.toISOString()}`,
-          recipient: { email: reg.volunteer.email, name: reg.volunteer.firstName },
-          volunteerId: reg.volunteerId,
-          organizationId: before.event.organizationId,
-          data: {
-            volunteerName: reg.volunteer.firstName,
-            eventTitle: before.event.title,
-            orgSlug: before.event.organization.slug,
-            shiftLabel: after.label,
-            oldDate: fmtDate(before.date),
-            newDate: fmtDate(after.date),
-            oldStart: before.startTime,
-            newStart: after.startTime,
-            oldEnd: before.endTime,
-            newEnd: after.endTime,
-            editToken: registrationToken.reveal(reg),
-          },
-        })
+  const timesMove = (rest.date !== undefined && rest.date !== before.date.toISOString().slice(0, 10))
+    || (rest.startTime !== undefined && rest.startTime !== before.startTime)
+    || (rest.endTime !== undefined && rest.endTime !== before.endTime)
+  let saved
+  try {
+    saved = await db.$transaction(async (tx) => {
+      // Workload protection (#1171): new hours are judged for every person holding the shift, before
+      // anything is written; one refusal refuses the edit.
+      if (timesMove) {
+        const refusals = await checkScheduleEdit(tx, before.eventId, [{
+          id,
+          date: rest.date ?? before.date,
+          startTime: rest.startTime ?? before.startTime,
+          endTime: rest.endTime ?? before.endTime,
+        }])
+        if (refusals.length > 0) throw new ScheduleEditRefusalError(refusals)
       }
-    }
-    return { after, outboxIds: await enqueueNotifications(outbox.payloads, tx, { organizationId: before.event.organizationId }), notified: outbox.payloads.length }
-  })
+      const after = await tx.shift.update({ where: { id }, data: updateData })
+      // A new time, day, place, poste or requirement ends the swap requests agreed on the old one
+      // (#1174 E13): never applied to terms nobody agreed to.
+      if (shiftMateriallyChanged(before, after)) await endSwapsIn(tx, { shiftIds: [id] }, "shift_changed", adminActor(guard.session))
+
+      // Detect schedule changes worth notifying about (date / start / end).
+      const scheduleChanged =
+        (rest.date && before.date.toISOString() !== after.date.toISOString()) ||
+        (rest.startTime && before.startTime !== after.startTime) ||
+        (rest.endTime && before.endTime !== after.endTime)
+
+      // Through the outbox (#311): `notified` counts notifications queued, retried if SMTP fails.
+      const outbox = collectNotifications()
+      if (scheduleChanged && notifyVolunteers !== false && before.registrations.length > 0) {
+        for (const reg of before.registrations) {
+          await outbox.send({
+            kind: "shift_modified",
+            dedupeKey: `shift_modified:${reg.id}:${after.updatedAt.toISOString()}`,
+            recipient: { email: reg.volunteer.email, name: reg.volunteer.firstName },
+            volunteerId: reg.volunteerId,
+            organizationId: before.event.organizationId,
+            data: {
+              volunteerName: reg.volunteer.firstName,
+              eventTitle: before.event.title,
+              orgSlug: before.event.organization.slug,
+              shiftLabel: after.label,
+              oldDate: fmtDate(before.date),
+              newDate: fmtDate(after.date),
+              oldStart: before.startTime,
+              newStart: after.startTime,
+              oldEnd: before.endTime,
+              newEnd: after.endTime,
+              editToken: registrationToken.reveal(reg),
+            },
+          })
+        }
+      }
+      return { after, outboxIds: await enqueueNotifications(outbox.payloads, tx, { organizationId: before.event.organizationId }), notified: outbox.payloads.length }
+    })
+  } catch (e) {
+    if (e instanceof ScheduleEditRefusalError) return NextResponse.json(scheduleEditRefusalBody(e.refusals), { status: 409 })
+    throw e
+  }
+  const { after, outboxIds, notified } = saved
 
   const shiftChanges = diffFields(before, after, [
     "roleName",

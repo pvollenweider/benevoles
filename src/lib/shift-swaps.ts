@@ -60,6 +60,13 @@ export type SwapRefusalCode =
   | "min_age"
   | "reserved"
   | "deadline"
+  // Workload protection (#1171): one code per rule, never which of the two plans breaks it.
+  | "workload_continuous"
+  | "workload_daily"
+  | "workload_event"
+  | "workload_rest"
+  | "workload_idle"
+  | "workload_incomplete"
 
 /** Why a request ended other than by a person's own choice. */
 export type SwapEndReason =
@@ -268,5 +275,17 @@ export function swapRefusalMessage(code: SwapEndReason): string {
     case "same_shift":
     case "other_event":
       return "Ces deux créneaux ne peuvent pas s'échanger."
+    case "workload_continuous":
+      return "Cet échange ne peut pas être effectué : la durée maximale sans vraie pause ne serait pas respectée."
+    case "workload_daily":
+      return "Cet échange ne peut pas être effectué : la durée maximale de missions par journée de service serait dépassée."
+    case "workload_event":
+      return "Cet échange ne peut pas être effectué : la durée maximale de missions sur l'événement serait dépassée."
+    case "workload_rest":
+      return "Cet échange ne peut pas être effectué : le repos minimum ne serait pas respecté."
+    case "workload_idle":
+      return "Cet échange ne peut pas être effectué : l'attente entre deux missions dépasserait la limite de l'événement."
+    case "workload_incomplete":
+      return "Cet échange ne peut pas être effectué : la protection des pauses et de la charge de l'événement est incomplète."
   }
 }

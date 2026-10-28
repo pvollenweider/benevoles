@@ -65,6 +65,8 @@ import { myAnswersQuery, storedAnswers } from "@/lib/my-answers"
 import { answerChanges, answersEditState, type AnswerChange } from "@/lib/answer-changes"
 import { recordAnswerChanges, writeAnswerChanges } from "@/lib/answer-change-save"
 import { contactChanges, type ContactChange, type SignupUpdates } from "@/lib/signup-updates"
+import { judgeDutyChange, lockWorkloadShared, readWorkloadGate, reproducibleFrom, workloadRefusalBody, WorkloadRefusalError } from "@/lib/workload-guard"
+import { WORKLOAD_PRIVATE_REFUSAL, type DutyShift } from "@/lib/workload-policy"
 
 const schema = z.object({
   eventId: z.string().max(SIGNUP_ID_MAX),
@@ -334,6 +336,9 @@ export async function POST(req: Request) {
   for (let attempt = 1; ; attempt++) {
     try {
       outcome = await prisma.$transaction(async (tx) => {
+        // Workload protection (#1171): its shared lock first, then the policy as it is now.
+        await lockWorkloadShared(tx, eventId)
+        const workloadGate = await readWorkloadGate(tx, eventId)
         await lockShifts(tx, shiftIds)
 
         // Resolve the hash back to its text later (#569): upserted once per distinct text, never
@@ -444,6 +449,18 @@ export async function POST(req: Request) {
             })
           )
         }
+        // Workload protection (#1171), on the whole resulting schedule, under the volunteer lock:
+        // the places and requests this sign-up creates (a waitlist entry is no mission yet) next to
+        // those already held. A refusal rolls everything back.
+        if (workloadGate.kind !== "off") {
+          const committed = new Set(["active", "requested"])
+          const added: DutyShift[] = created.filter((r) => committed.has(r.status)).map((r) => shifts.find((s) => s.id === r.shiftId)!)
+          if (added.length > 0) {
+            const before: DutyShift[] = liveNow.filter((r) => r.shift.status !== "cancelled").map((r) => r.shift)
+            const verdict = judgeDutyChange(workloadGate, before, { add: added })
+            if (!verdict.ok) throw new SignupWorkloadError(verdict, volunteerId, added, ownsEmail && !matchErased && !createdNow)
+          }
+        }
         // Shifts added to an event where the volunteer already holds a place or a request (#1191):
         // their confirmation joins one grouped email instead of one per sign-up. A first sign-up's
         // confirmation, with the personal link, still leaves at once.
@@ -540,6 +557,7 @@ export async function POST(req: Request) {
         return NextResponse.json({ error: roleLimitMessage(e.breach), roleLimit: e.breach.roleName }, { status: 409 })
       }
       if (e instanceof OverlapError) return refuse(overlapWithExisting(e.label))
+      if (e instanceof SignupWorkloadError) return NextResponse.json(signupWorkloadBody(e), { status: 409 })
       if (e instanceof StaleProofError) return refuse(staleLinkRefusal())
       if (e instanceof AssignedOnlyError) return NextResponse.json({ error: INVALID_SHIFTS }, { status: 409 })
       if (isUniqueViolation(e)) {
@@ -722,6 +740,27 @@ class AssignedOnlyError extends Error {
 
 /** Unknown, closed or not public (#1145): one answer for all, which reveals no role. */
 const INVALID_SHIFTS = "Un ou plusieurs créneaux sont invalides ou fermés. Recharge la page."
+
+/**
+ * A sign-up the workload protection refuses (#1171). Detailed only when the findings say nothing
+ * about the address's other registrations (Codex, PR 1): with proof of the address, or when every
+ * finding comes from the shifts submitted alone. Times and durations only, never a shift's label.
+ */
+class SignupWorkloadError extends WorkloadRefusalError {
+  constructor(verdict: ConstructorParameters<typeof WorkloadRefusalError>[0], volunteerId: string, readonly submitted: DutyShift[], readonly proven: boolean) {
+    super(verdict, volunteerId)
+  }
+}
+
+const SIGNUP_WORKLOAD_LEAD = "Inscription impossible : les pauses et limites de charge de cet événement ne seraient pas respectées."
+
+function signupWorkloadBody(e: SignupWorkloadError) {
+  const v = e.verdict
+  if (v.reason === "findings" && !e.proven && !v.findings.every((f) => reproducibleFrom(f, e.submitted, v.policy))) {
+    return { error: WORKLOAD_PRIVATE_REFUSAL, code: "workload" as const, workload: [] as string[] }
+  }
+  return workloadRefusalBody(v, SIGNUP_WORKLOAD_LEAD)
+}
 
 class OverlapError extends Error {
   constructor(readonly label: string | null) {

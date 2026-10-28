@@ -8,6 +8,7 @@ import { duplicatedQuestionRole } from "./question-role"
 import { duplicatedParent } from "./question-follow-up"
 import { duplicatedScope } from "./question-scope"
 import { leadersForCopy } from "./leader-postes"
+import { buildPolicy, parseWorkloadPolicy, policyValues, type WorkloadPolicy } from "./workload-policy"
 
 /**
  * Event duplication with explicit choices (#378, on top of #356). The organizer picks a title,
@@ -131,6 +132,22 @@ export type DuplicableEvent = {
   shiftSwapsApproval?: boolean
   swapsGate?: boolean
   newEventSwaps?: boolean
+}
+
+/**
+ * The workload protection of a copy (#1171): with the settings, the source's values, only while the
+ * capability can be adopted (a copy is a new adoption), the zone snapshotted again now; else the
+ * organisation's rule for a new event. A source whose stored policy does not parse gives nothing.
+ */
+export function duplicatedWorkload(
+  source: { workloadProtectionEnabled?: boolean; workloadPolicy?: unknown },
+  copySettings: boolean,
+  opts: { gate: boolean; newEvent: { workloadProtectionEnabled: boolean; workloadPolicy?: WorkloadPolicy }; timeZone: string },
+): { workloadProtectionEnabled: boolean; workloadPolicy?: WorkloadPolicy } {
+  if (!copySettings) return opts.newEvent
+  const parsed = parseWorkloadPolicy(source.workloadPolicy)
+  if (!parsed.ok || !opts.gate) return { workloadProtectionEnabled: false }
+  return { workloadProtectionEnabled: !!source.workloadProtectionEnabled, workloadPolicy: buildPolicy(policyValues(parsed.policy), opts.timeZone) }
 }
 
 /**

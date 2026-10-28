@@ -11,6 +11,8 @@ import { logEvent } from "@/lib/event-log"
 import { registrationToken } from "@/lib/token-vault"
 import { deliverAfterResponse, enqueueNotifications } from "@/lib/notifications/outbox"
 import { pickShiftInfo } from "@/lib/shift-info"
+import { lockShifts } from "@/lib/registration-capacity"
+import { checkDutyChange, lockVolunteerRows, lockWorkloadShared, readWorkloadGate, workloadRefusalBody, WorkloadRefusalError } from "@/lib/workload-guard"
 
 /**
  * Accepts a spot offered from the waitlist. POST only (#1044): the offer email's link opens a
@@ -46,54 +48,77 @@ export async function POST(_req: Request, { params }: { params: Promise<{ token:
   // The confirmation email is stored in the same transaction (#352).
   // On a « Sur validation » shift (#484) the offered spot becomes a request: the spot stays held,
   // the organizer still decides.
-  const next = reg.shift.requiresApproval ? "requested" : "active"
-  const outboxIds = await prisma.$transaction(async (tx) => {
-    const { count } = await tx.registration.updateMany({
-      where: {
-        id: reg.id,
-        status: "offered",
-        OR: [{ waitingExpiresAt: null }, { waitingExpiresAt: { gte: new Date() } }],
-      },
-      data: {
-        status: next,
-        waitingPosition: null,
-        waitingOfferedAt: null,
-        waitingExpiresAt: null,
-      },
-    })
-    if (count === 0) return null
-    const shift = {
-      label: reg.shift.label,
-      date: reg.shift.date.toLocaleDateString("fr-FR"),
-      startTime: reg.shift.startTime,
-      endTime: reg.shift.endTime,
-    }
-    if (next === "requested") {
+  let next: "requested" | "active" = reg.shift.requiresApproval ? "requested" : "active"
+  let outboxIds: string[] | null
+  try {
+    outboxIds = await prisma.$transaction(async (tx) => {
+      // Workload protection (#1171): taking the place creates a commitment. Locks in the global order
+      // (workload, shift, volunteer); the shift's hours and approval mode are read again under them.
+      await lockWorkloadShared(tx, reg.eventId)
+      const gate = await readWorkloadGate(tx, reg.eventId)
+      if (gate.kind !== "off") {
+        await lockShifts(tx, [reg.shiftId])
+        await lockVolunteerRows(tx, [reg.volunteerId])
+        const shift = await tx.shift.findFirst({ where: { id: reg.shiftId }, select: { id: true, date: true, startTime: true, endTime: true, requiresApproval: true } })
+        if (!shift) return null
+        next = shift.requiresApproval ? "requested" : "active"
+        const verdict = await checkDutyChange(tx, gate, reg.eventId, reg.volunteerId, { add: [shift] })
+        if (!verdict.ok) throw new WorkloadRefusalError(verdict, reg.volunteerId)
+      }
+      const { count } = await tx.registration.updateMany({
+        where: {
+          id: reg.id,
+          status: "offered",
+          OR: [{ waitingExpiresAt: null }, { waitingExpiresAt: { gte: new Date() } }],
+        },
+        data: {
+          status: next,
+          waitingPosition: null,
+          waitingOfferedAt: null,
+          waitingExpiresAt: null,
+        },
+      })
+      if (count === 0) return null
+      const shift = {
+        label: reg.shift.label,
+        date: reg.shift.date.toLocaleDateString("fr-FR"),
+        startTime: reg.shift.startTime,
+        endTime: reg.shift.endTime,
+      }
+      if (next === "requested") {
+        return enqueueNotifications([{
+          kind: "registration_requested",
+          organizationId: reg.event.organizationId,
+          volunteerId: reg.volunteerId,
+          dedupeKey: `waitlist_requested:${reg.id}`,
+          recipient: { email: reg.volunteer.email, name: reg.volunteer.firstName },
+          data: { volunteerName: reg.volunteer.firstName, eventTitle: reg.event.title, shifts: [shift], editToken: token, orgSlug: reg.event.organization.slug },
+        }], tx)
+      }
       return enqueueNotifications([{
-        kind: "registration_requested",
+        kind: "registration_confirmation",
         organizationId: reg.event.organizationId,
         volunteerId: reg.volunteerId,
-        dedupeKey: `waitlist_requested:${reg.id}`,
+        dedupeKey: `waitlist_confirmed:${reg.id}`,
         recipient: { email: reg.volunteer.email, name: reg.volunteer.firstName },
-        data: { volunteerName: reg.volunteer.firstName, eventTitle: reg.event.title, shifts: [shift], editToken: token, orgSlug: reg.event.organization.slug },
+        data: {
+          volunteerName: reg.volunteer.firstName,
+          eventTitle: reg.event.title,
+          shifts: [{ ...shift, ...pickShiftInfo(reg.shift, reg.event) }],
+          editToken: token,
+          orgSlug: reg.event.organization.slug,
+          cancelNotice: cancelPolicySentence(reg.event),
+        },
       }], tx)
+    })
+  } catch (e) {
+    // Their own offer, from their own link: the details are theirs. The offer stays until it expires
+    // or is declined; nothing changed.
+    if (e instanceof WorkloadRefusalError) {
+      return NextResponse.json(workloadRefusalBody(e.verdict, "Tu ne peux pas prendre cette place : les pauses et limites de charge de cet événement ne seraient pas respectées."), { status: 409 })
     }
-    return enqueueNotifications([{
-      kind: "registration_confirmation",
-      organizationId: reg.event.organizationId,
-      volunteerId: reg.volunteerId,
-      dedupeKey: `waitlist_confirmed:${reg.id}`,
-      recipient: { email: reg.volunteer.email, name: reg.volunteer.firstName },
-      data: {
-        volunteerName: reg.volunteer.firstName,
-        eventTitle: reg.event.title,
-        shifts: [{ ...shift, ...pickShiftInfo(reg.shift, reg.event) }],
-        editToken: token,
-        orgSlug: reg.event.organization.slug,
-        cancelNotice: cancelPolicySentence(reg.event),
-      },
-    }], tx)
-  })
+    throw e
+  }
   if (!outboxIds) {
     return NextResponse.json({ error: "Lien invalide, déjà confirmé ou expiré." }, { status: 404 })
   }

@@ -29,6 +29,11 @@ model Organization {
   // organisation starts with (Event.shiftSwapsEnabled), applied by the creation routes only while
   // the beta capability « shiftSwaps » can be adopted. On by default; existing events keep theirs.
   shiftSwapsDefault  Boolean @default(true)
+  // « Protection des pauses et de la charge » (#1171, beta capability « workloadProtection »): the
+  // values a NEW event of this organisation starts with ({ enabled, values }, src/lib/workload-policy.ts),
+  // copied by the creation routes only while the capability can be adopted, never inherited live.
+  // Null = new events start without protection. Existing events keep their own policy.
+  workloadPolicyDefault Json?
   publicTitle      String? // headline of the public events page; null = "Bénévoles"
   // IANA time zone of the organization's events (#344): shift times are local wall-clock times in
   // this zone (reminders, emails, event log, PDF export). null = deployment default (APP_TIME_ZONE).
@@ -211,6 +216,13 @@ model Event {
   // those involving a shift « sur validation ».
   shiftSwapsEnabled   Boolean   @default(false)
   shiftSwapsApproval  Boolean   @default(false)
+  // Protection des pauses et de la charge (#1171, beta capability « workloadProtection »,
+  // src/lib/workload-policy.ts): when on, every assignment path refuses a change that leaves a
+  // person over the event's limits. `workloadPolicy` is the versioned policy, the time zone
+  // snapshotted when protection was turned on; an enabled event whose policy does not parse refuses
+  // every new commitment (fail closed). Off for every existing event (column default).
+  workloadProtectionEnabled Boolean @default(false)
+  workloadPolicy            Json?
   // Retention of past events (#813): when its registrations were anonymised, 3 years after its end.
   personalDataAnonymizedAt DateTime?
   createdAt           DateTime  @default(now())

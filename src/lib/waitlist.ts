@@ -11,6 +11,10 @@ import { orgTimeZone } from "./time-zone"
 import { deliverAfterResponse, enqueueNotifications } from "./notifications/outbox"
 import { shiftStartsAt } from "./cancel-deadline"
 import { waitlistOfferExpiry } from "./waitlist-offer"
+import { committedDuty, judgeDutyChange, readWorkloadGate } from "./workload-guard"
+
+/** Waiting people looked at for one freed spot, at most (a shift's waitlist is small). */
+const PROMOTION_CANDIDATES = 50
 
 /**
  * When a spot opens on a shift, offer it to the first person on the waitlist.
@@ -30,7 +34,7 @@ export async function promoteNextInWaitlist(shiftId: string, causedByLogId?: str
     await lockShifts(tx, [shiftId])
     const shift = await tx.shift.findUnique({
       where: { id: shiftId },
-      select: { capacity: true, status: true, date: true, startTime: true, event: { select: { publicStatus: true, registrationsOpen: true, registrationOpensAt: true, registrationClosesAt: true, organization: { select: { timeZone: true } } } } },
+      select: { id: true, eventId: true, capacity: true, status: true, date: true, startTime: true, endTime: true, event: { select: { publicStatus: true, registrationsOpen: true, registrationOpensAt: true, registrationClosesAt: true, organization: { select: { timeZone: true } } } } },
     })
     if (!shift) return null
     // The answer window never runs past the shift's start, and a shift starting within the hour
@@ -42,12 +46,35 @@ export async function promoteNextInWaitlist(shiftId: string, causedByLogId?: str
     const occupied = await tx.registration.count({ where: { shiftId, status: { in: [...OCCUPYING_STATUSES] } } })
     if (!canOfferSpot({ capacity: shift.capacity, occupied, shiftStatus: shift.status })) return null
 
-    // First waiting registration for this shift (oldest = lowest position)
-    const candidate = await tx.registration.findFirst({
-      where: { shiftId, status: "waiting" },
-      orderBy: { waitingPosition: "asc" },
-      select: { id: true },
-    })
+    // First waiting registration for this shift (oldest = lowest position). Under workload protection
+    // (#1171), someone whose acceptance would break a limit is passed over and stays waiting: the
+    // spot goes to the next person instead of being held by an offer that cannot be taken. Best
+    // effort, without their locks (an offer is no commitment): the acceptance checks again.
+    const gate = await readWorkloadGate(tx, shift.eventId)
+    // A policy that does not parse accepts nothing: no offer either, until the organisation fixes it.
+    if (gate.kind === "incomplete") return null
+    let candidate: { id: string } | null = null
+    if (gate.kind === "off") {
+      candidate = await tx.registration.findFirst({
+        where: { shiftId, status: "waiting" },
+        orderBy: { waitingPosition: "asc" },
+        select: { id: true },
+      })
+    } else {
+      const waiting = await tx.registration.findMany({
+        where: { shiftId, status: "waiting" },
+        orderBy: { waitingPosition: "asc" },
+        select: { id: true, volunteerId: true },
+        take: PROMOTION_CANDIDATES,
+      })
+      for (const w of waiting) {
+        const before = await committedDuty(tx, shift.eventId, w.volunteerId)
+        if (judgeDutyChange(gate, before, { add: [shift] }).ok) {
+          candidate = w
+          break
+        }
+      }
+    }
     if (!candidate) return null
 
     await tx.registration.update({

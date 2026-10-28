@@ -12,6 +12,7 @@ import { registrationToken, linkToken } from "@/lib/token-vault"
 import { sendNotification } from "@/lib/notifications"
 import { sendMemberInvite } from "@/lib/notification-helpers"
 import { reportError } from "@/lib/report-error"
+import { personWorkloadReport } from "@/lib/workload-policy-data"
 
 /**
  * Executes a member merge (#600): one transaction (src/lib/member-merge-transaction.ts), then —
@@ -49,8 +50,17 @@ export async function POST(req: Request, { params }: { params: Promise<{ id: str
     resend = await sendMergedLinks(db, keepId, result.plan.tokenRegeneration)
   }
 
+  // Workload protection (#1171): a merge is never refused for it, but the limits the merged
+  // programme now breaks are reported, per protected event.
+  const movedEvents = await db.registration.findMany({ where: { id: { in: result.plan.registrationsToReassign } }, select: { eventId: true } })
+  const workload = await personWorkloadReport(db, result.keepId, movedEvents.map((r: { eventId: string }) => r.eventId)).catch((e: unknown) => {
+    reportError("member.merge.workload")(e)
+    return []
+  })
+
   return NextResponse.json({
     keepId: result.keepId,
+    workload,
     absorbId: result.absorbId,
     counts: {
       registrationsMoved: result.plan.registrationsToReassign.length,

@@ -15,6 +15,12 @@
  */
 
 import { describe, it, expect, vi, beforeEach } from "vitest"
+// Workload protection (#1171) runs on Postgres (src/__integration__/workload-policy.int.test.ts): off here.
+vi.mock("@/lib/workload-guard", async (importOriginal) => ({
+  ...(await importOriginal<typeof import("@/lib/workload-guard")>()),
+  lockWorkloadShared: vi.fn(), lockVolunteerRows: vi.fn(), readWorkloadGate: vi.fn(async () => ({ kind: "off" })),
+  committedDuty: vi.fn(async () => []), checkScheduleEdit: vi.fn(async () => []),
+}))
 // Swap requests (#1174) ended by the hooks: tested on Postgres (src/__integration__/shift-swaps.int.test.ts).
 vi.mock("@/lib/shift-swap-server", async (orig) => ({ ...(await orig<typeof import("@/lib/shift-swap-server")>()), endSwapsIn: vi.fn(), endSwapsAfter: vi.fn(), decideSwap: vi.fn() }))
 // The capability is shipped by the lot with the pages: the routes are exercised as if it were.
@@ -312,12 +318,12 @@ describe("Events — cross-tenant isolation", () => {
     expect(prismaMock.event.update).not.toHaveBeenCalled()
   })
 
-  it("POST /api/admin/events reads the « Qui est inscrit » (#1068) and sectors (#1147) defaults of the caller's organisation only", async () => {
+  it("POST /api/admin/events reads the « Qui est inscrit » (#1068), sectors (#1147) and workload (#1171) defaults of the caller's organisation only", async () => {
     const { POST } = await import("@/app/api/admin/events/route")
     const db = setupGuard()
     const res = await POST(makeRequest("/api/admin/events", "POST", { title: "Fête", startDate: "2031-06-06", endDate: "2031-06-06" }))
     expect(res.status).toBe(201)
-    expect(db.organization.findUnique).toHaveBeenCalledWith({ where: { id: ORG_A }, select: { shiftRosterDefault: true, sectorsDefault: true, shiftSwapsDefault: true } })
+    expect(db.organization.findUnique).toHaveBeenCalledWith({ where: { id: ORG_A }, select: { shiftRosterDefault: true, sectorsDefault: true, shiftSwapsDefault: true, workloadPolicyDefault: true, timeZone: true } })
   })
 
   it("POST /api/admin/events/[id]/duplicate returns 404 for an org-B event (its roster setting never copied)", async () => {
@@ -2284,5 +2290,36 @@ describe("Shift swaps — cross-tenant isolation (#1174)", () => {
     expect(String(tx.$queryRaw.mock.calls[0][0].join("?"))).toContain('"organizationId" =')
     expect(tx.$queryRaw.mock.calls[0]).toContain(ORG_A)
     expect(tx.event.update).not.toHaveBeenCalled()
+  })
+})
+
+describe("Workload protection — cross-tenant isolation (#1171)", () => {
+  beforeEach(() => vi.clearAllMocks())
+
+  it("GET /api/admin/events/[id]/workload-policy returns 404 for an org-B event and scans no registration", async () => {
+    const { GET } = await import("@/app/api/admin/events/[id]/workload-policy/route")
+    const db = setupGuard()
+    expect((await GET(makeRequest("/api/admin/events/evt-b/workload-policy"), params("evt-b"))).status).toBe(404)
+    expect(db.event.findFirst).toHaveBeenCalledWith(expect.objectContaining({ where: { id: "evt-b" } }))
+    expect(db.registration.findMany).not.toHaveBeenCalled()
+  })
+
+  it("PUT /api/admin/events/[id]/workload-policy returns 404 for an org-B event: read through the organisation's client, nothing written", async () => {
+    const { PUT } = await import("@/app/api/admin/events/[id]/workload-policy/route")
+    const db = setupGuard()
+    const tx = { $executeRaw: vi.fn(), event: { findFirst: vi.fn().mockResolvedValue(null), update: vi.fn() }, registration: { findMany: vi.fn() } }
+    Object.assign(db, { $transaction: vi.fn(async (fn: (t: typeof tx) => unknown) => fn(tx)) })
+    const res = await PUT(makeRequest("/api/admin/events/evt-b/workload-policy", "PUT", { enabled: false }), params("evt-b"))
+    expect(res.status).toBe(404)
+    expect(tx.event.update).not.toHaveBeenCalled()
+    expect(tx.registration.findMany).not.toHaveBeenCalled()
+  })
+
+  it("POST /api/admin/events/[id]/workload-policy/preview returns 404 for an org-B event and scans no registration", async () => {
+    const { POST } = await import("@/app/api/admin/events/[id]/workload-policy/preview/route")
+    const db = setupGuard()
+    const values = { serviceDayStart: "08:00", maxContinuousMinutes: 360, minBreakMinutes: 30, maxDailyMinutes: 600, maxEventMinutes: 2400, minRestMinutes: 600, maxIdleGapMinutes: 120 }
+    expect((await POST(makeRequest("/api/admin/events/evt-b/workload-policy/preview", "POST", { values }), params("evt-b"))).status).toBe(404)
+    expect(db.registration.findMany).not.toHaveBeenCalled()
   })
 })
