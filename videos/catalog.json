@@ -917,10 +917,11 @@
         "équipe",
         "lien-personnel",
         "coordonnées",
-        "poste"
+        "poste",
+        "secteur"
       ],
       "published": true,
-      "seedScenario": "demo",
+      "seedScenario": "sector-leaders",
       "themes": [
         "membres-invitations",
         "jour-j"
@@ -929,9 +930,85 @@
         "organisateur"
       ],
       "feature": "Responsables de secteur",
-      "updatedAt": "2026-10-16",
-      "revision": 5,
+      "updatedAt": "2026-10-28",
+      "revision": 6,
       "level": "essentiel"
+    },
+    {
+      "id": "BETA_ACCESS",
+      "manifest": "beta-access",
+      "category": "organization-settings",
+      "tags": [
+        "bêta",
+        "fonctions-avancées",
+        "paramètres",
+        "opérateur"
+      ],
+      "published": false,
+      "seedScenario": "beta-access",
+      "themes": [
+        "organisation-equipe"
+      ],
+      "audience": [
+        "organisateur",
+        "super-admin"
+      ],
+      "feature": "Fonctions bêta",
+      "updatedAt": "2026-10-28",
+      "revision": 1,
+      "level": "avance"
+    },
+    {
+      "id": "SECTORS",
+      "manifest": "sectors",
+      "category": "planning",
+      "tags": [
+        "secteurs",
+        "postes",
+        "frise",
+        "filtre",
+        "messages",
+        "bêta"
+      ],
+      "published": false,
+      "seedScenario": "sectors",
+      "themes": [
+        "planning-creneaux",
+        "inscriptions-communication"
+      ],
+      "audience": [
+        "organisateur"
+      ],
+      "feature": "Secteurs",
+      "updatedAt": "2026-10-28",
+      "revision": 1,
+      "level": "avance"
+    },
+    {
+      "id": "SHIFT_SWAPS",
+      "manifest": "shift-swaps",
+      "category": "registrations-followup",
+      "tags": [
+        "échanges",
+        "créneaux",
+        "mes-inscriptions",
+        "validation",
+        "bêta"
+      ],
+      "published": false,
+      "seedScenario": "shift-swaps",
+      "themes": [
+        "inscriptions-communication",
+        "parcours-benevole"
+      ],
+      "audience": [
+        "organisateur",
+        "benevole"
+      ],
+      "feature": "Échanges de créneaux",
+      "updatedAt": "2026-10-28",
+      "revision": 1,
+      "level": "avance"
     },
     {
       "id": "MEMBERS_MANAGEMENT",

@@ -81,6 +81,10 @@ async function main() {
   // Retries of recorder scenarios share one local browser IP. Production rate limits are correct,
   // but stale counters must not leak from one disposable take into the next one.
   await prisma.rateLimit.deleteMany()
+  // The beta videos (scripts/seed-video-beta.ts) open capabilities for their own organisation; the
+  // open list is platform-wide, so the demo starts without any (no « Fonctions bêta » card in
+  // Paramètres, no beta option on its events), as on a fresh database.
+  await prisma.platformSetting.deleteMany({ where: { key: "beta.capabilities" } })
 
   const org = await prisma.organization.update({
     where: { id: "default" },
@@ -89,6 +93,8 @@ async function main() {
       publicTitle: "Bénévoles des Fêtes de Montvert",
       timeZone: "Europe/Zurich",
       volunteerCharter: "Je m'engage à venir à l'heure à mes créneaux, à prévenir si j'ai un empêchement et à suivre les consignes des responsables.",
+      betaOptInAt: null,
+      betaOptInById: null,
     },
   })
 

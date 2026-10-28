@@ -1,0 +1,64 @@
+{
+  "id": "BETA_ACCESS",
+  "slug": "beta-access",
+  "title": "Fonctions bêta : ouvrir et essayer une fonction avancée",
+  "description": "L'opérateur ouvre une fonction à l'essai, puis la propriétaire inscrit son organisation à la bêta depuis Paramètres.",
+  "language": "fr-CH",
+  "voice": "Kore",
+  "continuousNarration": true,
+  "continuousPauseTags": false,
+  "voiceStyle": "Speak with an audible smile throughout. Use a warm, friendly adult female voice, as if helping another association organizer beside you. Natural conversational French, patient pace around 130 words per minute and clear articulation. Read every provided sentence verbatim: never omit, paraphrase or summarize any words. Keep exactly the same voice identity, pitch, smile and energy from beginning to end. Never sound corporate, theatrical, childish or rushed.",
+  "viewport": {
+    "width": 1280,
+    "height": 800,
+    "deviceScaleFactor": 1
+  },
+  "chapterTitles": {
+    "beta-operator": "Ouvrir une fonction à l'essai",
+    "beta-owner": "Inscrire son organisation",
+    "beta-event": "Rien ne change sans l'événement",
+    "beta-close": "Fermer ou quitter la bêta"
+  },
+  "segments": [
+    {
+      "id": "beta-welcome",
+      "transcript": "Certaines fonctions avancées s'essaient d'abord en bêta, avant leur sortie pour tous. Trois accords sont nécessaires. L'opérateur de la plateforme ouvre une fonction à l'essai. Un propriétaire de l'organisation choisit de participer à la bêta. Puis chaque événement adopte, ou non, la fonction dans ses propres paramètres. Voyons les deux premières étapes.",
+      "fallbackDurationMs": 26940
+    },
+    {
+      "id": "beta-operator",
+      "transcript": "Dans l'espace super admin, ouvrons Fonctions bêta depuis le menu Super Admin. La page liste les fonctions disponibles dans cette version, avec une phrase pour chacune. Cochons Secteurs, puis Échanges de créneaux, et enregistrons. Une fonction ouverte peut être adoptée par les organisations qui participent à la bêta. Pour l'instant, aucune organisation n'y participe. Chaque changement est inscrit au journal de l'opérateur.",
+      "fallbackDurationMs": 31640
+    },
+    {
+      "id": "beta-owner",
+      "transcript": "Passons maintenant du côté de l'association, avec sa propriétaire. Dans Paramètres, une nouvelle carte Fonctions bêta est apparue. Elle liste ce que la bêta permet d'essayer. Activons l'interrupteur Essayer les fonctions avancées en bêta. La phrase au-dessus indique depuis quand l'organisation participe, et qui l'a activée. Seuls les propriétaires voient cet interrupteur. Les organisateurs voient la ligne Participation à la bêta, en lecture seule.",
+      "fallbackDurationMs": 32580
+    },
+    {
+      "id": "beta-event",
+      "transcript": "Participer à la bêta ne change aucun événement, et rien n'est envoyé aux bénévoles. Ouvrons les informations du Festival de Montvert. Deux cartes proposent maintenant leur option, encore désactivée : Échanges de créneaux et Secteurs. Chaque événement choisit lui-même ce qu'il adopte.",
+      "fallbackDurationMs": 22240
+    },
+    {
+      "id": "beta-close",
+      "transcript": "Revenons chez l'opérateur. L'association figure maintenant dans Organisations participantes, avec la date de son inscription. Si l'opérateur ferme une fonction, seules les nouvelles adoptions sont bloquées : les événements qui l'utilisent déjà la gardent. Et si la propriétaire désactive son interrupteur, ce que ses événements utilisent déjà continue de fonctionner. Rien n'est supprimé.",
+      "fallbackDurationMs": 27410
+    }
+  ],
+  "viewer": {
+    "summary": "Dans cette vidéo, l'opérateur de la plateforme ouvre une fonction avancée à l'essai, puis la propriétaire d'une organisation inscrit celle-ci à la bêta depuis Paramètres.",
+    "steps": [
+      "Dans l'espace super admin, ouvrez Fonctions bêta, cochez les fonctions à ouvrir et enregistrez.",
+      "Dans Paramètres, carte Fonctions bêta, la propriétaire active Essayer les fonctions avancées en bêta.",
+      "Ouvrez ensuite les informations d'un événement : chaque fonction ouverte y propose son option, à activer événement par événement.",
+      "Côté opérateur, retrouvez les organisations inscrites dans Organisations participantes."
+    ],
+    "remember": [
+      "Trois accords sont nécessaires : la fonction ouverte par l'opérateur, l'organisation inscrite, puis l'option choisie dans l'événement.",
+      "Participer à la bêta ne change aucun événement et n'envoie rien aux bénévoles.",
+      "Fermer une fonction ou quitter la bêta bloque seulement les nouvelles adoptions : ce qui est déjà utilisé continue de fonctionner.",
+      "Seuls les propriétaires peuvent inscrire l'organisation ; les organisateurs voient son état en lecture seule."
+    ]
+  }
+}

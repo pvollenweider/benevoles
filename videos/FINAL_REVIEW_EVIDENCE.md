@@ -525,3 +525,36 @@ Une base locale préparée avant ce changement : `prepare-day-of --reset-owned` 
 zéro et renomment la fiche ; `prepare-accessibility` (créé une seule fois) demande
 une base vidéo remise à zéro. Au prochain rendu, incrémenter `revision` et mettre à
 jour `updatedAt` dans `videos/catalog.json` pour chacune de ces huit vidéos.
+
+## Sources prêtes, rendu en attente : vidéos des fonctions bêta (#1168, #1147, #1169, #1174)
+
+Sources ajoutées sans rendu (aucune capture, aucune voix, aucune publication) ; le rendu se fait
+depuis un checkout à jour de `origin/main`, avec le seed de chaque scénario avant chaque prise
+(chaque prise modifie sa fixture : secteurs enregistrés, échanges, responsables) :
+
+- `beta-access` (`BETA_ACCESS`, nouvelle, `published: false`) : sources prêtes, rendu en attente.
+  Seed `scripts/seed-video-scenario.ts beta-access`.
+- `sectors` (`SECTORS`, nouvelle, `published: false`) : sources prêtes, rendu en attente.
+  Seed `scripts/seed-video-scenario.ts sectors`.
+- `sector-leaders` (`SECTOR_LEADERS`, mise à jour, révision 6) : sources prêtes, rendu en attente.
+  Narration modifiée (`welcome`) et deux scènes ajoutées (`leaders-sector-scope`,
+  `leaders-sector-roster`) : toute la piste continue est à régénérer. Seed : démo, puis
+  `scripts/seed-video-scenario.ts sector-leaders` (`videos/tools/build.ts` enchaîne les deux).
+  La vidéo publiée garde l'ancien rendu jusqu'à la régénération : titre, bloc `viewer` et
+  transcription de la page de la vidéo décrivent déjà la nouvelle version.
+- `shift-swaps` (`SHIFT_SWAPS`, nouvelle, `published: false`) : sources prêtes, rendu en attente.
+  Seed `scripts/seed-video-scenario.ts shift-swaps`.
+
+Les quatre scénarios utilisent l'organisation fictive dédiée `formation-beta`
+(`scripts/seed-video-beta.ts`), jamais l'organisation de démonstration ; ils ouvrent seulement les
+fonctions bêta dont leur vidéo a besoin. La liste des fonctions ouvertes est commune à la
+plateforme locale : `scripts/seed-demo.ts` la retire, et désinscrit l'organisation de démonstration,
+pour que les autres vidéos ne montrent ni la carte « Fonctions bêta » ni les options bêta.
+Le recorder (`videos/lib/record-beta-features.ts`) n'a pas encore été répété sur la pile locale :
+une répétition `--rehearse --quick-rehearse` (après un seed neuf) est à faire avant la prise
+narrée. Les prises de `shift-swaps` et de `sector-leaders` attendent les vrais emails dans la boîte
+locale (« Échange effectué », nomination du responsable de secteur).
+
+`workload-protection` (protection des pauses et de la charge, #1171) ne fait pas partie de ce lot :
+son lot 2 (repas, trajets, journée OFF, limites individuelles) est encore en cours. Sa vidéo suivra
+après le lot 2 de #1171.

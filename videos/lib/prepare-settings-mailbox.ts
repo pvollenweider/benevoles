@@ -10,6 +10,11 @@ export async function prepareSettingsMailbox(slug: string, directory: string) {
     "org-team-permissions": /^video\.team\.[a-z-]+@example\.org$/,
     "email-delivery-failures": /^video\.delivery\.[a-z-]+@example\.org$/,
     "platform-internal-administration": /^video\.operator\.(?:platform|[abc]\.owner|disposable\.owner|lifecycle\.owner)@example\.org$/,
+    // The beta videos' organisation (scripts/seed-video-beta.ts): members, leader, owner, operator.
+    "beta-access": /^video\.beta\.[a-z]+@example\.org$/,
+    "sectors": /^video\.beta\.[a-z]+@example\.org$/,
+    "shift-swaps": /^video\.beta\.[a-z]+@example\.org$/,
+    "sector-leaders": /^video\.beta\.[a-z]+@example\.org$/,
   }
   const pattern = patterns[slug]
   if (!pattern) return

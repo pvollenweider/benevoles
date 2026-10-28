@@ -1,0 +1,101 @@
+{
+  "id": "SECTORS",
+  "slug": "sectors",
+  "title": "Organiser les postes par secteurs",
+  "description": "Activer les secteurs sur un événement, y ranger les postes, puis suivre chaque secteur avec son filtre et lui écrire.",
+  "language": "fr-CH",
+  "voice": "Puck",
+  "continuousNarration": true,
+  "continuousPauseTags": false,
+  "voiceStyle": "Warm smiling adult male voice. Friendly, reassuring conversational French. Patient clear articulation with a smile audible throughout. Read every provided sentence verbatim: never omit, paraphrase or summarize any words. Keep the exact same voice identity and energy for the whole recording. Never rushed or theatrical.",
+  "viewport": {
+    "width": 1280,
+    "height": 800,
+    "deviceScaleFactor": 1
+  },
+  "chapterTitles": {
+    "sectors-enable": "Activer les secteurs",
+    "sectors-create": "Créer les secteurs",
+    "sectors-poste": "Un poste dans un secteur",
+    "sectors-move": "Ranger les postes existants",
+    "sectors-timeline": "La frise par secteur",
+    "sectors-pdf": "L'export complet",
+    "sectors-filter": "Le filtre Secteur",
+    "sectors-message": "Écrire à un secteur"
+  },
+  "segments": [
+    {
+      "id": "sectors-welcome",
+      "transcript": "Quand un événement compte beaucoup de postes, les secteurs aident à s'y retrouver. Un secteur Parking regroupe par exemple Parking Nord et Parking Mairie. C'est une fonction en bêta, proposée aux organisations qui y participent. Les bénévoles ne voient jamais les secteurs : leur page d'inscription, leurs emails et leur page Mes inscriptions ne changent pas.",
+      "fallbackDurationMs": 28820
+    },
+    {
+      "id": "sectors-enable",
+      "transcript": "Dans les informations de l'événement, la carte Secteurs propose l'interrupteur Organiser les postes par secteurs. Activons-le. Tant qu'aucun secteur n'est enregistré, vous pouvez encore le désactiver. Suivons le lien Organiser les secteurs dans Créneaux.",
+      "fallbackDurationMs": 18480
+    },
+    {
+      "id": "sectors-create",
+      "transcript": "Ouvrons Gérer les postes. La partie Secteurs apparaît en haut du panneau. Commencez par créer vos secteurs. Tapons Parking dans Nouveau secteur, puis Ajouter le secteur. Ajoutons de même Backline. En créant ce premier secteur, vous conservez l'organisation par secteurs pour cet événement. Le bouton et le panneau s'appellent désormais Gérer les secteurs et postes.",
+      "fallbackDurationMs": 28350
+    },
+    {
+      "id": "sectors-poste",
+      "transcript": "Ajoutons ensuite les postes dans chaque secteur. Sous Backline, le bouton Ajouter un poste dans Backline ouvre le formulaire de créneau, avec ce secteur déjà choisi. Tapons le nom du nouveau poste, Backline Scène du Lac, puis son premier créneau, avec le jour, les horaires et les places. Le poste est créé avec ce créneau, directement dans son secteur.",
+      "fallbackDurationMs": 30230
+    },
+    {
+      "id": "sectors-move",
+      "transcript": "Les postes qui existaient avant le premier secteur restent dans Autres postes. Rangeons-les avec Déplacer. Pour Parking Nord, choisissons Parking, puis Déplacer. Tous les créneaux du poste suivent, sur tous les jours. Faisons de même pour Parking Mairie. Le bar de la Grande Scène et l'accueil du Chapiteau restent dans Autres postes.",
+      "fallbackDurationMs": 26940
+    },
+    {
+      "id": "sectors-timeline",
+      "transcript": "Revenons à la frise. Chaque secteur y a sa ligne d'en-tête, avec son nom et son nombre de postes. Un clic sur cette ligne replie ses postes, un autre les déplie. Les postes sans secteur sont regroupés à la fin, sous Autres postes. La vue Liste, elle, ne change pas.",
+      "fallbackDurationMs": 26000
+    },
+    {
+      "id": "sectors-pdf",
+      "transcript": "Le planning imprimé suit le même ordre. Dans Documents, ouvrons l'export complet. La frise de chaque jour et le récapitulatif par poste sont rangés secteur par secteur, puis Autres postes.",
+      "fallbackDurationMs": 16600
+    },
+    {
+      "id": "sectors-filter",
+      "transcript": "Une fois les secteurs en place, le champ Secteur limite plusieurs pages à un seul secteur. Dans Inscriptions, choisissons Parking. La liste, les compteurs et l'export des présences ne portent plus que sur ses postes. Le choix figure dans l'adresse de la page. En la rouvrant, ou en la transmettant à un autre organisateur, on retrouve le même secteur.",
+      "fallbackDurationMs": 30230
+    },
+    {
+      "id": "sectors-pages",
+      "transcript": "Le même champ existe dans Où manque-t-il du monde, dans Jour J et dans Documents, avec leurs exports. Il ne propose que les secteurs actifs. Un secteur limite ce que vous voyez, pas ce que vous pouvez faire.",
+      "fallbackDurationMs": 20360
+    },
+    {
+      "id": "sectors-message",
+      "transcript": "Revenons aux inscriptions du secteur Parking. Le bouton Écrire au secteur Parking ouvre Écrire aux bénévoles, avec ce secteur déjà choisi. Le compteur indique combien de personnes recevront le message. Ce sont les bénévoles confirmés des postes du secteur au moment de l'envoi, chacun une seule fois. Un poste déplacé entre-temps suit son nouveau secteur.",
+      "fallbackDurationMs": 28350
+    },
+    {
+      "id": "sectors-result",
+      "transcript": "Votre événement est maintenant organisé par secteurs. Créez d'abord les secteurs, ajoutez-y les postes, rangez les anciens avec Déplacer, puis suivez chaque secteur avec son filtre. Pour confier tout un secteur à une seule personne, voyez la vidéo sur les responsables de secteur.",
+      "fallbackDurationMs": 22710
+    }
+  ],
+  "viewer": {
+    "summary": "Dans cette vidéo, vous organisez les postes d'un événement par secteurs, puis vous suivez un secteur avec son filtre et lui écrivez.",
+    "steps": [
+      "Dans les informations de l'événement, carte Secteurs, activez Organiser les postes par secteurs.",
+      "Dans Créneaux, ouvrez Gérer les postes et créez vos secteurs avec Nouveau secteur.",
+      "Sous un secteur, Ajouter un poste dans le secteur crée un poste et son premier créneau.",
+      "Rangez les postes existants avec Déplacer… ; ceux sans secteur restent dans Autres postes.",
+      "Lisez la frise et l'export complet, rangés par secteur.",
+      "Choisissez un secteur dans le champ Secteur des Inscriptions, de Où manque-t-il du monde, de Jour J ou des Documents.",
+      "Depuis les Inscriptions filtrées, Écrire au secteur prépare un message à ses bénévoles confirmés."
+    ],
+    "remember": [
+      "Les bénévoles ne voient jamais les secteurs.",
+      "Dès le premier secteur enregistré, l'événement garde son organisation par secteurs : l'option ne peut plus être désactivée.",
+      "Le choix du filtre Secteur figure dans l'adresse de la page ; il limite ce que vous voyez, pas ce que vous pouvez faire.",
+      "C'est une fonction en bêta : votre organisation doit participer à la bêta."
+    ]
+  }
+}
