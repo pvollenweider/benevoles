@@ -759,6 +759,36 @@ export async function endSwapsAfter(db: unknown, scope: SwapEndScope, reason: Sw
 }
 
 /**
+ * A poste moved to another sector, or its sector archived (#1175 A07): inside that change's
+ * transaction, after the shifts' `sectorId` was written. Every live request with an offer that
+ * touches these shifts is checked again with the new sectors; a pair no longer compatible ends as
+ * impossible (« devenu impossible »), the people told. An open request without an offer stays: its
+ * own poste did not change, and who may answer it is read again on every page. Request locks only,
+ * the last in the lock order.
+ */
+export async function recomputeSwapsIn(tx: unknown, scope: { shiftIds: string[] }, actor: LogActor, now: Date = new Date()): Promise<void> {
+  const db = tx as Tx
+  if (scope.shiftIds.length === 0) return
+  const rows = await db.shiftSwapRequest.findMany({
+    where: { status: { in: [...SWAP_COUNTER_LIVE_STATUSES] }, OR: [{ shiftId: { in: scope.shiftIds } }, { counterShiftId: { in: scope.shiftIds } }] },
+    select: { id: true },
+    orderBy: { id: "asc" },
+  })
+  const ids: string[] = []
+  for (const { id } of rows) {
+    const req = await lockRequest(db, id)
+    if (!req || !(SWAP_COUNTER_LIVE_STATUSES as readonly string[]).includes(req.status)) continue
+    const [event, mine, theirs] = await Promise.all([loadEvent(db, req.eventId), loadRegistration(db, req.registrationId), loadRegistration(db, req.counterRegistrationId)])
+    if (!event || !mine || !theirs) continue
+    const hidden = assignedOnlyRoles(await db.shift.findMany({ where: { eventId: event.id, status: { not: "cancelled" }, assignedOnly: true }, select: { roleName: true, assignedOnly: true } }))
+    const check = swapCompatibility(asSwapRegistration(mine), asSwapRegistration(theirs), { assignedOnlyRoles: hidden })
+    if (check.ok) continue
+    ids.push(...await endRequest(db, req, event, "impossible", "sector_changed", actor, now))
+  }
+  deliver(ids)
+}
+
+/**
  * The hourly sweep: every live request past its deadline (its expiry, or a given-away shift's
  * self-cancellation deadline) ends as expired, and the people are told. Request locks only.
  */

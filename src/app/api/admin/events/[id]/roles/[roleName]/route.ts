@@ -139,7 +139,7 @@ export async function PATCH(req: Request, { params }: { params: Promise<{ id: st
     // cancelled ones too, so it keeps one value (#1147), like the colour; a later rename moves them
     // with it. The sector is checked under its row lock (never an archived one or another
     // event's), only for an event that adopted sectors. Volunteers see nothing of it.
-    const assigned = await db.$transaction((tx) => assignPosteSector(tx, organizationId, id, decodedRole, sectorId))
+    const assigned = await db.$transaction((tx) => assignPosteSector(tx, organizationId, id, decodedRole, sectorId, actor))
     if (!assigned.ok) return NextResponse.json({ error: assigned.error }, { status: assigned.status })
     const moved = shifts.filter((sh) => sh.sectorId !== sectorId)
     if (moved.length > 0) {

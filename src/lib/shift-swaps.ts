@@ -13,9 +13,11 @@ import { shiftsTooYoungFor } from "./utils"
  * transaction (src/lib/shift-swap-server.ts) reads the rows under lock and asks these functions.
  *
  * - Compatible shifts (`swapCompatibility`): two confirmed (`active`) registrations of two people,
- *   on two different live shifts of the same event and the same poste, neither poste « attribué par
- *   l'organisation uniquement » (#1145). The follow-up (#1175) widens « the same poste » to the
- *   same sector in this one function.
+ *   on two different live shifts of the same event, neither poste « attribué par l'organisation
+ *   uniquement » (#1145), and the same poste, or two postes of the same identified sector (#1175:
+ *   `Shift.sectorId`, shared by every shift of a poste; a poste without a sector is compatible with
+ *   itself only, null never equals null). The scope comes from the missions' postes, never from
+ *   the people (no team, no membership opens a way across sectors).
  * - Each person (`personSwapCheck`): their plan with the shift they give away removed must accept
  *   the shift they receive, with the sign-up's own functions: overlap (#986), limit per volunteer
  *   (#466), minimum age (#192), reserved tags (#470), no second live registration on that shift.
@@ -50,6 +52,7 @@ export type SwapRefusalCode =
   | "same_shift"
   | "assigned_only"
   | "other_poste"
+  | "other_sector"
   | "volunteer_gone"
   | "already_on_shift"
   | "overlap"
@@ -63,6 +66,7 @@ export type SwapEndReason =
   | SwapRefusalCode
   | "registration_gone"
   | "shift_changed"
+  | "sector_changed"
   | "link_revoked"
   | "option_off"
   | "organiser"
@@ -108,8 +112,10 @@ export function swapCompatibility(a: SwapRegistration, b: SwapRegistration, ctx:
   for (const s of [a.shift, b.shift]) {
     if (s.assignedOnly || ctx.assignedOnlyRoles.has(s.roleName)) return refuse("assigned_only")
   }
-  // First scope (#1174): the same poste. #1175 adds « the same identified sector » here.
-  if (a.shift.roleName !== b.shift.roleName) return refuse("other_poste")
+  if (a.shift.roleName === b.shift.roleName) return OK
+  // Two postes (#1175): only inside one identified sector. Without any sector, the postes differ.
+  if (!a.shift.sectorId && !b.shift.sectorId) return refuse("other_poste")
+  if (!a.shift.sectorId || !b.shift.sectorId || a.shift.sectorId !== b.shift.sectorId) return refuse("other_sector")
   return OK
 }
 
@@ -251,7 +257,12 @@ export function swapRefusalMessage(code: SwapEndReason): string {
     case "assigned_only":
       return "Ce poste est attribué par l'organisation : il ne s'échange pas entre bénévoles."
     case "other_poste":
-      return "Seuls deux créneaux du même poste peuvent s'échanger."
+      return "Ces deux créneaux ne sont pas du même poste : ils ne peuvent pas s'échanger."
+    case "other_sector":
+      // Volunteers never see sectors (#1175): the words say the postes, not why.
+      return "Ces deux postes ne permettent pas un échange de créneaux."
+    case "sector_changed":
+      return "L'organisation des postes a changé : cet échange n'est plus possible."
     case "same_person":
     case "same_registration":
     case "same_shift":

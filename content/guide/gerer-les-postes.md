@@ -44,7 +44,7 @@ Dès le premier secteur, le panneau range les postes sous leur secteur, dans **P
 - **Réordonner les postes** : les flèches et le glisser-déposer d'un poste le déplacent à l'intérieur de son secteur ; **Enregistrer l'ordre** ensuite.
 - **Renommer** un secteur : « Renommer », tapez le nouveau nom, **Valider**.
 - **Archiver** : un secteur n'est jamais supprimé. S'il regroupe encore des postes, une confirmation indique qu'ils passent dans « Autres postes » ; ils gardent leurs créneaux et leurs inscriptions. **Secteurs archivés** liste les secteurs archivés : **Rétablir** en remet un, vide, en fin de liste.
-- **Déplacer un poste** : le bouton **Déplacer…** de la ligne du poste propose les secteurs et « Autres postes (aucun secteur) » ; choisissez, puis **Déplacer**. Tous les créneaux du poste suivent, sur tous les jours.
+- **Déplacer un poste** : le bouton **Déplacer…** de la ligne du poste propose les secteurs et « Autres postes (aucun secteur) » ; choisissez, puis **Déplacer**. Tous les créneaux du poste suivent, sur tous les jours. Si l'événement autorise les échanges de créneaux, un échange en cours entre ce poste et un poste qui n'est plus dans le même secteur prend fin, et les deux bénévoles sont prévenus ; il en va de même quand un secteur est archivé (voir [Échanges de créneaux entre bénévoles](suivre-les-inscriptions.md#echanges-de-creneaux-entre-benevoles-beta)).
 
 Comme la couleur, le secteur appartient au poste : il s'applique à tous ses créneaux, à ceux que vous ajoutez ensuite au poste et à un créneau déplacé vers lui, et il suit le poste quand vous le renommez. Un poste n'appartient qu'à un secteur à la fois, et un nom de poste reste unique dans l'événement.
 

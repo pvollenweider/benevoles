@@ -27,6 +27,35 @@ describe("swapCompatibility (#1174)", () => {
     expect(swapCompatibility(pierre, { ...jean, shift: { ...jean.shift, roleName: "Accueil" } }, none)).toEqual({ ok: false, code: "other_poste" })
   })
 
+  describe("postes of the same sector (#1175)", () => {
+    const nord = { ...pierre, shift: { ...pierre.shift, roleName: "Parking Nord", sectorId: "sec-parking" } }
+    const sud = { ...jean, shift: { ...jean.shift, roleName: "Parking Sud", sectorId: "sec-parking" } }
+
+    it("E01: two ordinary postes of the same identified sector are compatible", () => {
+      expect(swapCompatibility(nord, sud, none)).toEqual({ ok: true })
+    })
+
+    it("E02: two postes of two sectors are refused, whatever the people share", () => {
+      expect(swapCompatibility(nord, { ...sud, shift: { ...sud.shift, sectorId: "sec-bar" } }, none)).toEqual({ ok: false, code: "other_sector" })
+    })
+
+    it("E03: without a sector, two postes never form one (null is not a sector); the same poste still swaps", () => {
+      const plain = (r: typeof nord) => ({ ...r, shift: { ...r.shift, sectorId: null } })
+      expect(swapCompatibility(plain(nord), plain(sud), none)).toEqual({ ok: false, code: "other_poste" })
+      expect(swapCompatibility(nord, plain(sud), none)).toEqual({ ok: false, code: "other_sector" })
+      expect(swapCompatibility(plain(nord), { ...plain(nord), id: "rx", volunteerId: "vx", shift: { ...plain(nord).shift, id: "sx" } }, none)).toEqual({ ok: true })
+    })
+
+    it("still refuses a poste assigned by the organisation only inside the sector", () => {
+      expect(swapCompatibility(nord, sud, { assignedOnlyRoles: new Set(["Parking Sud"]) })).toEqual({ ok: false, code: "assigned_only" })
+    })
+
+    it("says neither the sector nor why to volunteers", () => {
+      expect(swapRefusalMessage("other_sector")).not.toMatch(/secteur/i)
+      expect(swapRefusalMessage("sector_changed")).toBe("L'organisation des postes a changé : cet échange n'est plus possible.")
+    })
+  })
+
   it("refuses a swap with oneself, the same registration or the same shift", () => {
     expect(swapCompatibility(pierre, { ...jean, volunteerId: "vp" }, none)).toEqual({ ok: false, code: "same_person" })
     expect(swapCompatibility(pierre, pierre, none)).toEqual({ ok: false, code: "same_registration" })

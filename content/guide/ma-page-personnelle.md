@@ -97,9 +97,9 @@ Quand tu annules ton dernier créneau, la page affiche « Toutes tes inscription
 
 ## Échanger un créneau
 
-Quand l'organisation l'autorise pour l'événement, ta page a une partie **Échanger un créneau**. Tu peux y échanger une place confirmée avec une personne inscrite sur un autre créneau du même poste, sans perdre ta place ni demander à l'organisation de tout refaire. Rien ne change tant que l'échange n'est pas effectué.
+Quand l'organisation l'autorise pour l'événement, ta page a une partie **Échanger un créneau**. Tu peux y échanger une place confirmée avec une personne inscrite sur un autre créneau du même poste (ou, selon l'organisation de l'événement, d'un autre poste où tu peux aller : le nom du poste est toujours indiqué), sans perdre ta place ni demander à l'organisation de tout refaire. Rien ne change tant que l'échange n'est pas effectué.
 
-- **Je cherche à échanger ce créneau** publie ta demande. Les personnes inscrites sur un autre créneau du même poste, et qui pourraient le prendre, voient le créneau que tu cèdes : la date, les horaires, le poste et le lieu, jamais ton nom.
+- **Je cherche à échanger ce créneau** publie ta demande. Les personnes inscrites sur un autre créneau qu'elles pourraient échanger avec le tien, et qui pourraient le prendre, voient le créneau que tu cèdes : la date, les horaires, le poste et le lieu, jamais ton nom.
 - De ton côté, **Échanges proposés par d'autres bénévoles** montre les demandes auxquelles tu peux répondre. Choisis le créneau que tu cèdes, puis **Proposer cet échange** : si la personne accepte, l'échange se fait.
 - Quand quelqu'un te propose un échange, tu reçois un email, et ta page indique son prénom et l'initiale de son nom, avec **Tu cèdes** et **Tu reçois**. **Accepter l'échange** te demande une confirmation, puis échange les deux créneaux ; **Refuser** garde ta demande ouverte pour quelqu'un d'autre.
 - Si l'un des deux créneaux est sur validation, ou si l'organisation valide chaque échange, l'échange attend sa validation : ton planning ne change qu'une fois validé.
@@ -107,7 +107,7 @@ Quand l'organisation l'autorise pour l'événement, ta page a une partie **Écha
 
 Une fois l'échange effectué, chacun garde son lien personnel et reçoit un email « Échange effectué » ; le nouveau créneau apparaît dans **Tous mes créneaux**. Les rappels repartent pour ce créneau.
 
-Un échange n'est possible qu'entre deux places confirmées du même poste, avant le début du premier des deux créneaux et avant le délai d'annulation de l'événement, s'il y en a un. Il doit respecter les mêmes règles qu'une inscription : pas de chevauchement avec tes autres créneaux, nombre de créneaux par personne, âge minimum, postes réservés. Une demande prend fin, et tu es prévenu par email, si l'un des créneaux est annulé ou change d'horaire, de lieu ou de conditions, si l'une des places est annulée, ou si l'organisation désactive les échanges. Une seule demande à la fois par créneau.
+Un échange n'est possible qu'entre deux places confirmées du même poste, ou de deux postes que l'organisation a regroupés, avant le début du premier des deux créneaux et avant le délai d'annulation de l'événement, s'il y en a un. Il doit respecter les mêmes règles qu'une inscription : pas de chevauchement avec tes autres créneaux, nombre de créneaux par personne, âge minimum, postes réservés. Une demande prend fin, et tu es prévenu par email, si l'un des créneaux est annulé ou change d'horaire, de lieu ou de conditions, si l'organisation regroupe ses postes autrement, si l'une des places est annulée, ou si l'organisation désactive les échanges. Une seule demande à la fois par créneau.
 
 ## Changer de créneau
 

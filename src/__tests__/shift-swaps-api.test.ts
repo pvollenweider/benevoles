@@ -74,7 +74,7 @@ describe("GET /api/public/registrations/[token]/swaps (#1174)", () => {
 
   it("shows nothing before the capability is shipped, or to an erased record", async () => {
     shipped.value = false
-    expect(await (await get()).json()).toEqual({ enabled: false, publishable: [], mine: [], offers: [], ownShifts: {} })
+    expect(await (await get()).json()).toEqual({ enabled: false, scope: "poste", publishable: [], mine: [], offers: [], ownShifts: {} })
   })
 
   it("answers 403 while the organisation is closed", async () => {

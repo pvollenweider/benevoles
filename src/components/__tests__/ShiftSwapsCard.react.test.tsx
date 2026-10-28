@@ -22,7 +22,7 @@ const offeredToMe = {
 }
 
 function view(over: Partial<VolunteerSwapView> = {}): VolunteerSwapView {
-  return { enabled: true, publishable: [], mine: [], offers: [], ownShifts: {}, ...over }
+  return { enabled: true, scope: "poste", publishable: [], mine: [], offers: [], ownShifts: {}, ...over }
 }
 
 const json = (body: unknown, status = 200) => ({ ok: status >= 200 && status < 300, status, json: async () => body })

@@ -84,6 +84,8 @@ export const SWAP_REASON_LOG_LABELS: Record<SwapEndReason, string> = {
   organiser: "refus de l'organisation",
   assigned_only: "poste attribué par l'organisation",
   other_poste: "postes différents",
+  other_sector: "postes de secteurs différents",
+  sector_changed: "poste déplacé dans un autre secteur",
   same_person: "même personne",
   same_registration: "même inscription",
   same_shift: "même créneau",

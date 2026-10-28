@@ -34,7 +34,7 @@ export async function PATCH(req: Request, { params }: { params: Promise<{ id: st
   const event = await db.event.findFirst({ where: { id }, select: { id: true } })
   if (!event) return NextResponse.json({ error: "Non trouvé" }, { status: 404 })
 
-  const result = await updateSector(db, organizationId, id, sectorId, { name, archived: parsed.data.archived, detachPostes: parsed.data.detachPostes })
+  const result = await updateSector(db, organizationId, id, sectorId, { name, archived: parsed.data.archived, detachPostes: parsed.data.detachPostes }, adminActor(guard.session))
   if (!result.ok) {
     return NextResponse.json({
       error: result.error,
