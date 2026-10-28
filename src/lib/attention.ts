@@ -30,8 +30,13 @@ export type AttentionEvent = {
   overdueMilestones: OverdueMilestone[]
   /** Invited people (invited more than INVITE_NUDGE_DAYS ago) still without a confirmed shift (#481). */
   unansweredInvites: number
-  /** Volunteers with a workload warning on this event (#465). */
+  /** Volunteers with a workload warning on this event (#465), or over its protection's limits (#1171). */
   overloadedVolunteers?: number
+  /**
+   * How the event judges workload (#1171): the #465 warnings (default), its protection policy (the
+   * people counted break a limit the event enforces), or a protection that does not parse.
+   */
+  workloadMode?: "warnings" | "policy" | "incomplete"
   /** Sign-up requests waiting for a decision on « Sur validation » shifts (#484). */
   pendingRequests?: number
 }
@@ -151,7 +156,19 @@ export function attentionItems({ now, events, offers, addressesToVerifyCount = 0
     }
 
     const overloaded = e.overloadedVolunteers ?? 0
-    if (overloaded > 0) {
+    if (e.workloadMode === "incomplete") {
+      items.push({
+        id: `workload:${e.id}`, severity: "high", eventTitle: e.title,
+        message: "La protection des pauses et de la charge est incomplète : plus aucune inscription n'est acceptée tant qu'elle n'est pas complétée.",
+        action: "La compléter", href: `${base}/edit#protection-charge`,
+      })
+    } else if (e.workloadMode === "policy" && overloaded > 0) {
+      items.push({
+        id: `workload:${e.id}`, severity: "high", eventTitle: e.title,
+        message: `Le programme de ${overloaded} ${plural(overloaded, "bénévole", "bénévoles")} dépasse les limites de pauses et de charge de l'événement, par exemple après une annulation.`,
+        action: "Voir les inscriptions", href: `${base}/registrations`,
+      })
+    } else if (overloaded > 0) {
       items.push({
         id: `workload:${e.id}`, severity: "medium", eventTitle: e.title,
         message: `${overloaded} ${plural(overloaded, "bénévole a", "bénévoles ont")} une charge élevée : plus de ${WORKLOAD_LIMITS.dailyMinutes / 60} h dans la journée, ou plus de ${WORKLOAD_LIMITS.continuousMinutes / 60} h d'affilée sans vraie pause.`,

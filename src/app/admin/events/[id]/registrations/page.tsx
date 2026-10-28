@@ -1,7 +1,9 @@
 import type { Metadata } from "next"
 import { notFound, redirect } from "next/navigation"
 import { getOrgContext } from "@/lib/auth-guard"
+import Link from "next/link"
 import RegistrationsManager from "@/components/admin/RegistrationsManager"
+import { workloadModeOf } from "@/lib/workload-view"
 import { leaderKeySet, isSectorLeader } from "@/lib/sector-leaders"
 import { SEARCH_MAX_LENGTH } from "@/lib/admin-search"
 import { orgTimeZone } from "@/lib/time-zone"
@@ -63,6 +65,8 @@ export default async function RegistrationsPage({
   })
 
   if (!event) notFound()
+  // Workload (#465, #1171): the #465 warnings, or the event's protection.
+  const workloadMode = workloadModeOf(event, orgTimeZone(event.organization))
   // The text a volunteer signing up now would accept (#569), to tell it apart from an older one.
   const currentCharterHash = hashCharterText(resolveCharterText(event.organization.volunteerCharter, event.organization.hasOrgInsurance))
 
@@ -117,11 +121,19 @@ export default async function RegistrationsPage({
         />
       )}
 
+      {workloadMode.kind === "incomplete" && (
+        <p className="rounded-xl bg-red-50 border border-red-200 px-3 py-2 text-sm text-red-800">
+          <strong>Protection des pauses et de la charge incomplète :</strong> plus aucune inscription n&apos;est acceptée.{" "}
+          <Link href={`/admin/events/${id}/edit#protection-charge`} className="font-medium underline underline-offset-2 hover:text-red-950 rounded focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-blue-600">La compléter</Link>
+        </p>
+      )}
+
       {/* Keyed by the sector: its client state (filters, selection) restarts from the sector's rows. */}
       <RegistrationsManager
         key={sectorValue}
         eventId={id}
         timeZone={orgTimeZone(event.organization)}
+        workloadMode={workloadMode}
         organizerEmail={ctx.session.user?.email ?? null}
         answersByVolunteer={answersByVolunteer(event.questions)}
         initialShiftFilter={initialShiftFilter}

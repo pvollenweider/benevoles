@@ -34,6 +34,8 @@ import { promoteNextInWaitlist } from "@/lib/waitlist"
 import { decideRequest } from "@/lib/registration-decision"
 import { restoreRegistration } from "@/lib/registration-restore-action"
 import { confirmSwap, offerSwap, publishSwapRequest } from "@/lib/shift-swap-server"
+import { GET as personalPage } from "@/app/api/public/registrations/[token]/route"
+import { loadAttention } from "@/lib/attention-data"
 
 const url = process.env.DATABASE_URL
 const tag = `int-workload-${Date.now()}`
@@ -354,6 +356,27 @@ describe.skipIf(!url)("workload protection on Postgres (#1171)", () => {
       expect(await setWorkloadPolicy(db, orgId, e.id, { enabled: true, values: { ...VALUES, maxDailyMinutes: 11 * 60 } })).toMatchObject({ ok: true })
       expect(await setWorkloadPolicy(db, orgId, e.id, { enabled: true, values: { ...VALUES, maxIdleGapMinutes: 60 } })).toMatchObject({ ok: false, status: 409 })
       expect(await setWorkloadPolicy(db, orgId, e.id, { enabled: false })).toMatchObject({ ok: true, enabled: false })
+    })
+  })
+
+  describe("what the pages read", () => {
+    it("the personal page, the dashboard and the public page see the findings left by a cancellation", async () => {
+      const e = await event()
+      const a = await shift(e.id, "2031-07-04", "08:00", "10:00")
+      const middle = await shift(e.id, "2031-07-04", "10:00", "16:00")
+      const c = await shift(e.id, "2031-07-04", "16:00", "17:00")
+      const p = await person("Eva")
+      const token = generateToken()
+      await hold(e.id, a.id, p.id, "active", token)
+      const gone = await hold(e.id, middle.id, p.id, "active")
+      await hold(e.id, c.id, p.id, "active")
+      // 9 h in a row: written directly (as before protection), then the middle shift withdrawn.
+      await prisma.registration.update({ where: { id: gone.id }, data: { status: "cancelled" } })
+      const res = await personalPage(new Request(`http://localhost/api/public/registrations/${token}`, { headers: { "x-forwarded-for": `${tag}-ip-${ip++}` } }), { params: Promise.resolve({ token }) })
+      expect(res.status).toBe(200)
+      expect((await res.json()).workload).toEqual([expect.stringContaining("ces deux missions laissent 6 h entre elles, de 10 h à 16 h")])
+      const items = await loadAttention(getOrgClient(orgId), orgId, NOW, { eventId: e.id })
+      expect(items.find((i) => i.id === `workload:${e.id}`)).toMatchObject({ severity: "high" })
     })
   })
 

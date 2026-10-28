@@ -112,6 +112,15 @@ describe("attentionItems", () => {
     expect(ids(attentionItems({ now, events: [ev({ overloadedVolunteers: 0 })], offers: [] }))).not.toContain("workload:e1")
   })
 
+  it("on a protected event, names programmes over its limits, high, and an unreadable protection (#1171)", () => {
+    const item = attentionItems({ now, events: [ev({ overloadedVolunteers: 1, workloadMode: "policy" })], offers: [] }).find((i) => i.id === "workload:e1")
+    expect(item).toMatchObject({ severity: "high", href: "/admin/events/e1/registrations" })
+    expect(item?.message).toBe("Le programme de 1 bénévole dépasse les limites de pauses et de charge de l'événement, par exemple après une annulation.")
+    expect(ids(attentionItems({ now, events: [ev({ overloadedVolunteers: 0, workloadMode: "policy" })], offers: [] }))).not.toContain("workload:e1")
+    const broken = attentionItems({ now, events: [ev({ workloadMode: "incomplete" })], offers: [] }).find((i) => i.id === "workload:e1")
+    expect(broken).toMatchObject({ severity: "high", href: "/admin/events/e1/edit#protection-charge" })
+  })
+
   it("flags addresses to verify, org-wide, linking to the filtered members list (#599)", () => {
     const items = attentionItems({ now, events: [], offers: [], addressesToVerifyCount: 1 })
     expect(items).toEqual([{

@@ -25,6 +25,9 @@ import OrgBetaForm from "@/components/admin/OrgBetaForm"
 import { canAdoptBeta, readOpenBetaCapabilities } from "@/lib/beta-access"
 import OrgSectorsDefaultForm from "@/components/admin/OrgSectorsDefaultForm"
 import OrgShiftSwapsDefaultForm from "@/components/admin/OrgShiftSwapsDefaultForm"
+import OrgWorkloadDefaultForm from "@/components/admin/OrgWorkloadDefaultForm"
+import { parseWorkloadDefault } from "@/lib/workload-policy-data"
+import { workloadProtectionShipped } from "@/lib/workload-shipped"
 import { BETA_CAPABILITIES, betaCardVisible, betaReadOnlyValue, type BetaParticipation } from "@/lib/beta-capabilities"
 import { contactEmail } from "@/lib/site"
 
@@ -54,7 +57,7 @@ export default async function AdminsSettingsPage() {
       },
       orderBy: { createdAt: "asc" },
     }),
-    db.organization.findUnique({ where: { id: organizationId }, select: { name: true, slug: true, outboundEmailApprovedAt: true, volunteerCharter: true, hasOrgInsurance: true, shiftRosterDefault: true, sectorsDefault: true, shiftSwapsDefault: true, publicTitle: true, timeZone: true, volunteerHourRateCents: true, volunteerHourRateCurrency: true, volunteerHourRateSetAt: true, betaOptInAt: true, betaOptInById: true, logo: ORG_LOGO_SELECT } }),
+    db.organization.findUnique({ where: { id: organizationId }, select: { name: true, slug: true, outboundEmailApprovedAt: true, volunteerCharter: true, hasOrgInsurance: true, shiftRosterDefault: true, sectorsDefault: true, shiftSwapsDefault: true, workloadPolicyDefault: true, publicTitle: true, timeZone: true, volunteerHourRateCents: true, volunteerHourRateCurrency: true, volunteerHourRateSetAt: true, betaOptInAt: true, betaOptInById: true, logo: ORG_LOGO_SELECT } }),
     db.orgSlugHistory.findMany({
       where: { organizationId },
       orderBy: { createdAt: "desc" },
@@ -84,6 +87,9 @@ export default async function AdminsSettingsPage() {
   const showSectorsDefault = !!org && (sectorsAvailable || org.sectorsDefault)
   // Shift swaps for new events (#1174, beta): while the organisation can adopt them (on by default).
   const showSwapsDefault = !!org && await canAdoptBeta(organizationId, "shiftSwaps")
+  // Breaks and workload protection for new events (#1171, beta): while it can be adopted, or while a default is stored.
+  const workloadDefault = parseWorkloadDefault(org?.workloadPolicyDefault)
+  const showWorkloadDefault = !!org && ((workloadProtectionShipped() && await canAdoptBeta(organizationId, "workloadProtection")) || workloadDefault !== null)
 
   return (
     <div className="space-y-5">
@@ -121,6 +127,7 @@ export default async function AdminsSettingsPage() {
             <dt className="text-gray-600">Qui est inscrit, nouveaux événements</dt><dd className="text-gray-900">{org.shiftRosterDefault ? "activé" : "désactivé"}</dd>
             <dt className="text-gray-600">Taux horaire de valorisation</dt><dd className="text-gray-900">{hourRate ? hourRateLabel(hourRate) : "aucun"}</dd>
             {showSwapsDefault && <><dt className="text-gray-600">Échanges de créneaux, nouveaux événements</dt><dd className="text-gray-900">{org.shiftSwapsDefault ? "activé" : "désactivé"}</dd></>}
+            {showWorkloadDefault && <><dt className="text-gray-600">Protection des pauses et de la charge, nouveaux événements</dt><dd className="text-gray-900">{workloadDefault ? (workloadDefault.enabled ? "activée" : "limites recopiées, désactivée") : "aucune"}</dd></>}
             {showSectorsDefault && <><dt className="text-gray-600">Secteurs, nouveaux événements</dt><dd className="text-gray-900">{org.sectorsDefault ? "activé" : "désactivé"}</dd></>}
             {showBeta && <><dt className="text-gray-600">Participation à la bêta</dt><dd className="text-gray-900">{betaReadOnlyValue(beta, zone)}</dd></>}
           </dl>
@@ -167,6 +174,7 @@ export default async function AdminsSettingsPage() {
       )}
 
       {org && isOwner && showSwapsDefault && <OrgShiftSwapsDefaultForm initialValue={org.shiftSwapsDefault} />}
+      {org && isOwner && showWorkloadDefault && <OrgWorkloadDefaultForm initial={workloadDefault} />}
       {org && isOwner && showSectorsDefault && <OrgSectorsDefaultForm initialValue={org.sectorsDefault} available={sectorsAvailable} />}
 
       {org && isOwner && showBeta && (

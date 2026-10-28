@@ -5,11 +5,17 @@ import { leaderRoleNamesOf } from "./leader-scope"
 import type { OrgScopedPrisma } from "./prisma-org"
 import { attentionItems, INVITE_NUDGE_DAYS, type AttentionItem } from "./attention"
 import { orgTimeZone } from "./time-zone"
-import { workloadByVolunteer } from "./workload"
+import { workloadByPerson, workloadModeOf } from "./workload-view"
 import { selectInvitedWithoutShift } from "./targeted-message"
 import { loadOrganizationsWithNewAddressesToVerify } from "./delivery-summary-data"
 import { daysAgo, RETENTION_DAYS } from "./retention"
 import { isMilestoneOverdue } from "./milestones"
+
+/** The workload facts of one event (#465, #1171): who is counted, and in which mode. */
+function workloadAttention(e: { registrations: { volunteerId: string; status: string; shift: { id: string; date: Date; startTime: string; endTime: string } }[]; organization: { timeZone: string | null }; workloadProtectionEnabled: boolean; workloadPolicy: unknown }) {
+  const mode = workloadModeOf(e, orgTimeZone(e.organization))
+  return { overloadedVolunteers: workloadByPerson(e.registrations, mode).size, workloadMode: mode.kind }
+}
 
 /** Facts for « Ce qui demande votre attention » (#372), read with the organization-scoped client;
  * with `eventId`, one event's only (its overview page's « À traiter »).
@@ -39,12 +45,15 @@ export async function loadAttention(db: OrgScopedPrisma, organizationId: string,
         // Invited more than INVITE_NUDGE_DAYS ago; those with a confirmed shift or who declined
         // are left out below (#481, #558).
         memberInvites: { where: { sentAt: { lt: inviteCutoff } }, select: { volunteerId: true, sentAt: true, declinedAt: true, volunteer: { select: { email: true } } } },
-        // Firm places only: waitlist entries and offers may never become shifts (#465).
+        // Firm places, and pending requests for a protected event (#1171); waitlist entries and offers
+        // may never become shifts (#465).
         registrations: {
-          where: { status: "active", shift: { status: { not: "cancelled" } } },
+          where: { status: { in: ["active", "requested"] }, shift: { status: { not: "cancelled" } } },
           select: { volunteerId: true, status: true, shift: { select: { id: true, date: true, startTime: true, endTime: true } } },
         },
         organization: { select: { timeZone: true } },
+        workloadProtectionEnabled: true,
+        workloadPolicy: true,
         _count: { select: { registrations: { where: { status: "requested", shift: { status: { not: "cancelled" } } } } } },
       },
     }),
@@ -68,8 +77,8 @@ export async function loadAttention(db: OrgScopedPrisma, organizationId: string,
       overdueMilestones: e.milestones
         .filter((m) => isMilestoneOverdue(m, now, orgTimeZone(e.organization)))
         .map((m) => ({ title: m.title, ownerName: m.owner?.name ?? null })),
-      unansweredInvites: selectInvitedWithoutShift(e.memberInvites, e.registrations).length,
-      overloadedVolunteers: workloadByVolunteer(e.registrations, orgTimeZone(e.organization)).size,
+      unansweredInvites: selectInvitedWithoutShift(e.memberInvites, e.registrations.filter((r) => r.status === "active")).length,
+      ...workloadAttention(e),
       pendingRequests: e._count.registrations,
     })),
     offers: offers.map((o) => ({ eventId: o.eventId, expiresAt: o.waitingExpiresAt })),

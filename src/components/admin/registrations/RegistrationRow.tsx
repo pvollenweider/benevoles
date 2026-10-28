@@ -5,7 +5,7 @@
 
 import StatusBadge from "../StatusBadge"
 import { contactPhone } from "@/lib/contact-phone"
-import { workloadMessage, type WorkloadWarning } from "@/lib/workload"
+import type { WorkloadNotice } from "@/lib/workload-view"
 import { availabilityLabel, hasAvailability } from "@/lib/availability"
 import { spokenShortWhen } from "@/lib/spoken-time"
 import { personName, shiftName, shiftSpoken, type Registration } from "./types"
@@ -24,11 +24,14 @@ type Props = {
   /** Answers to the event's custom questions (#483) of this volunteer. */
   answers: { label: string; text: string }[]
   /** Workload warnings (#465) of this volunteer. */
-  workload: WorkloadWarning[]
+  /** The person's workload notices (#465 warnings, or #1171 protection findings when `workloadBlocks`). */
+  workload: WorkloadNotice[]
+  /** The event's protection is on (#1171): the notices are limits the event enforces, not warnings. */
+  workloadBlocks?: boolean
 }
 
 // ── One row of the registrations table ──────────────────────────────────────
-export default function RegistrationRow({ reg, selected, onToggleSelected, onDecision, answers, workload }: Props) {
+export default function RegistrationRow({ reg, selected, onToggleSelected, onDecision, answers, workload, workloadBlocks = false }: Props) {
   return (
     <tr className={`hover:bg-gray-50 ${selected ? "bg-blue-50/60" : ""}`}>
       <td className="px-4 py-3">
@@ -85,8 +88,10 @@ export default function RegistrationRow({ reg, selected, onToggleSelected, onDec
             {answers.map((a) => <li key={a.label}><span className="text-gray-600">{a.label} :</span> {a.text}</li>)}
           </ul>
         )}
-        {reg.status === "active" && workload.filter((w) => w.shiftIds.includes(reg.shift.id)).map((w) => (
-          <p key={`${w.kind}-${w.day}`} className="text-xs text-amber-900 mt-0.5"><span className="font-semibold">Charge élevée :</span> {workloadMessage(w)}</p>
+        {(reg.status === "active" || (workloadBlocks && reg.status === "requested")) && workload.filter((w) => w.shiftIds.includes(reg.shift.id)).map((w) => (
+          workloadBlocks
+            ? <p key={w.key} className="text-xs text-red-700 mt-0.5"><span className="font-semibold">Limite dépassée :</span> {w.text}</p>
+            : <p key={w.key} className="text-xs text-amber-900 mt-0.5"><span className="font-semibold">Charge élevée :</span> {w.text}</p>
         ))}
         {contactPhone(reg) && <p className="text-xs text-gray-500">{contactPhone(reg)}</p>}
         {hasAvailability(reg.volunteer) && <p className="text-xs text-gray-700"><span className="sr-only">Disponible : </span><span aria-hidden="true">🕒 </span>{availabilityLabel(reg.volunteer)}</p>}

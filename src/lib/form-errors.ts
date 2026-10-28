@@ -24,7 +24,7 @@ export type Failure = {
 export type FailureInput = {
   /** HTTP status; absent when the request never got an answer. */
   status?: number
-  body?: { error?: unknown; duplicate?: unknown; staleLink?: unknown } | null
+  body?: { error?: unknown; duplicate?: unknown; staleLink?: unknown; code?: unknown } | null
   /** fetch threw, or the answer wasn't JSON. */
   network?: boolean
 }
@@ -53,6 +53,10 @@ export function describeSignupFailure(i: FailureInput): Failure {
     // The link the page was opened with was replaced meanwhile (#1138 follow-up): going back to
     // the planning would hit the same refusal, the newest link is the way on.
     return { kind: "stale_link", title: "Ce lien n'est plus valable", message: msg ?? "Le lien avec lequel tu t'inscris a été remplacé.", hint: "Ouvre le dernier lien reçu par email, puis recommence ton inscription.", retryable: false, maybeRecorded: false }
+  }
+  if (i.status === 409 && i.body?.code === "workload") {
+    // Breaks and workload protection (#1171): the server's sentence says which limit, when, by how much.
+    return { kind: "conflict", title: "Ces créneaux dépassent les limites de l'événement", message: msg ?? "Les pauses et limites de charge de cet événement ne seraient pas respectées.", hint: "Reviens au planning pour retirer ou changer un créneau ; tes informations restent remplies.", retryable: false, maybeRecorded: false }
   }
   if (i.status === 409) {
     return { kind: "conflict", title: "Ta sélection n'est plus disponible", message: msg ?? "Un créneau choisi n'est plus disponible.", hint: "Reviens au planning pour ajuster ton choix ; tes informations restent remplies.", retryable: false, maybeRecorded: false }

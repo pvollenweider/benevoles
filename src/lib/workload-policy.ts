@@ -92,7 +92,9 @@ const HHMM = /^([01]\d|2[0-3]):[0-5]\d$/
 export function checkPolicyValues(value: unknown): { ok: true; values: WorkloadPolicyValues } | { ok: false; problems: PolicyProblem[] } {
   const v = (value && typeof value === "object" ? value : {}) as Record<string, unknown>
   const problems: PolicyProblem[] = []
-  if (typeof v.serviceDayStart !== "string" || !HHMM.test(v.serviceDayStart)) {
+  if (v.serviceDayStart === undefined || v.serviceDayStart === null || v.serviceDayStart === "") {
+    problems.push({ field: "serviceDayStart", message: `${SERVICE_DAY_START_LABEL} : à compléter. Aucune heure n'est choisie à votre place.` })
+  } else if (typeof v.serviceDayStart !== "string" || !HHMM.test(v.serviceDayStart)) {
     problems.push({ field: "serviceDayStart", message: `${SERVICE_DAY_START_LABEL} : indiquez une heure (par exemple 08:00).` })
   }
   for (const f of WORKLOAD_LIMIT_FIELDS) {

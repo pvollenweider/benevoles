@@ -39,7 +39,7 @@ Seules les demandes sur un créneau sur validation ont leurs propres boutons, **
 
 Un badge **Responsable** s'affiche sur une ligne quand ce bénévole est déjà responsable du poste de son créneau.
 
-**Charge élevée** : une ligne l'indique, en toutes lettres, quand ce bénévole cumule plus de 8 h de créneaux dans une journée, ou plus de 6 h d'affilée sans pause d'au moins 30 minutes (une pause plus courte compte comme du temps continu). Un créneau qui passe minuit compte pour le jour où il commence ; le temps d'affilée se suit d'un jour à l'autre. Seules les inscriptions confirmées comptent, pas la liste d'attente. C'est une information, rien n'est bloqué. En ajoutant quelqu'un à la main, le formulaire prévient avant l'ajout si ce créneau le ferait dépasser ces seuils, quand la personne est déjà inscrite (même email).
+**Charge élevée** : une ligne l'indique, en toutes lettres, quand ce bénévole cumule plus de 8 h de créneaux dans une journée, ou plus de 6 h d'affilée sans pause d'au moins 30 minutes (une pause plus courte compte comme du temps continu). Un créneau qui passe minuit compte pour le jour où il commence ; le temps d'affilée se suit d'un jour à l'autre. Seules les inscriptions confirmées comptent, pas la liste d'attente. C'est une information, rien n'est bloqué. En ajoutant quelqu'un à la main, le formulaire prévient avant l'ajout si ce créneau le ferait dépasser ces seuils, quand la personne est déjà inscrite (même email). Dans un événement protégé (voir [Protection des pauses et de la charge](#protection-des-pauses-et-de-la-charge-beta)), ces alertes laissent la place aux limites de l'événement : la ligne dit **Limite dépassée**, et le formulaire d'ajout prévient que l'ajout sera refusé.
 
 ## Rétablir une inscription annulée
 
@@ -58,6 +58,25 @@ Un échange respecte les règles d'une inscription (chevauchements, nombre de cr
 Si l'un des deux créneaux est sur validation, ou si vous activez **Valider chaque échange**, l'échange attend votre accord : vous recevez un email, et la section **Échanges de créneaux** de cette page le montre sous **À valider**, avec ce que chaque personne cède et reçoit et la date limite. **Valider l'échange** vérifie à nouveau toutes les règles puis l'effectue ; **Refuser** le termine, et les deux personnes sont prévenues. Rien ne change dans le planning avant votre validation. Désactiver **Valider chaque échange** ne valide pas les échanges qui attendent déjà : ils restent à valider.
 
 Une demande prend fin d'elle-même, et les personnes sont prévenues, quand l'une des places est annulée, quand un des créneaux est annulé ou change d'horaire, de jour, de lieu, de poste ou de conditions, quand un poste change de secteur ou que son secteur est archivé et que les deux postes ne sont plus dans le même secteur, quand une personne est effacée ou fusionnée, ou quand ses liens personnels sont renouvelés. Désactiver les échanges sur l'événement annule les demandes en cours, après une confirmation qui dit combien ; les échanges déjà effectués restent. Chaque étape est inscrite au journal de l'événement.
+
+## Protection des pauses et de la charge (bêta)
+
+Pour une organisation qui participe à la bêta, la carte **Protection des pauses et de la charge** des informations de l'événement fixe des limites que personne ne peut dépasser, ni un bénévole en s'inscrivant, ni un organisateur en ajoutant quelqu'un :
+
+- **Durée maximale sans vraie pause**, et **Durée minimale d'une vraie pause** : un écart plus court ne compte pas comme une pause ;
+- **Durée maximale de missions par journée de service**, et **sur tout l'événement** ;
+- **Repos minimum entre deux journées de service** ;
+- **Attente maximale entre deux missions d'une même journée**, par exemple pour éviter une mission de 14 h à 20 h suivie d'une tâche de nuit à 1 h.
+
+Vous choisissez chaque valeur, en heures et minutes. Aucune n'est imposée, et un champ vide ne veut jamais dire « sans limite » : la protection ne s'active qu'une fois tout rempli. **Reprendre les réglages d'avertissement existants** remplit trois champs avec les seuils des alertes **Charge élevée** (6 h sans vraie pause, une pause de 30 min, 8 h par journée) : ce ne sont ni des seuils légaux ni des recommandations, modifiez-les si besoin.
+
+Le **Début de la journée de service** dit à quelle heure une journée commence : avec 8 h, une tâche de nuit à 1 h compte dans la journée de la veille, et l'écart depuis une mission du soir est une attente, pas un repos. Des exemples s'affichent sous le champ, et un résumé en toutes lettres sous les limites. Les heures sont lues dans le fuseau de l'organisation, figé au moment de l'activation.
+
+Les limites portent sur toutes les missions de la personne dans l'événement, tous postes confondus, les demandes sur validation comprises ; deux missions en même temps comptent une fois. Une mission de « standby » (rester disponible sur place) est un poste comme un autre : elle compte comme du travail, jamais comme une pause.
+
+**Aperçu** montre, sans rien enregistrer, les programmes actuels qui dépasseraient ces limites. **Activer la protection** les vérifie à nouveau : tant qu'un programme les dépasse, rien n'est activé et la carte liste les personnes concernées, à modifier d'abord. Une fois activée, toute inscription, tout ajout à la main, tout échange de créneaux, toute acceptation d'une demande, tout **Rétablir**, toute place de liste d'attente acceptée et tout changement d'horaire d'un créneau ou d'une série qui dépasserait ces limites est refusé, avec la limite, le jour, les heures et la durée en cause. Il n'y a pas d'**Ajouter quand même**. Une personne de la liste d'attente qui ne pourrait pas accepter la place est passée, la place va à la suivante. Une annulation reste toujours possible : si elle laisse une attente trop longue, la ligne de la personne et le tableau de bord le signalent. Assouplir les limites est toujours possible ; les resserrer demande que tous les programmes les respectent. **Désactiver la protection** garde les valeurs pour plus tard.
+
+Pas encore pris en compte : les repas, le temps de trajet entre deux lieux, des limites plus strictes pour une personne, les jours de repos.
 
 ## Ajouter quelqu'un à la main
 

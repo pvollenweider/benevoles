@@ -18,7 +18,7 @@ import BulkActionsBar from "./registrations/BulkActionsBar"
 import UndoRemovalBar, { type HoldReason } from "./registrations/UndoRemovalBar"
 import RegistrationRow from "./registrations/RegistrationRow"
 import { EMPTY_ADD_FORM, personName, type AddFormValues, type Registration } from "./registrations/types"
-import { workloadByVolunteer } from "@/lib/workload"
+import { blocksWorkload, workloadByPerson, type WorkloadMode } from "@/lib/workload-view"
 import {
   cancelAnnouncement,
   heldAnnouncement,
@@ -49,6 +49,8 @@ type Props = {
   initialRequestsOnly?: boolean
   /** Organisation time zone, for the workload warnings (#465). */
   timeZone: string
+  /** How the event judges workload (#465 warnings, or its #1171 protection); warnings by default. */
+  workloadMode?: WorkloadMode
   /** Answers to the event's custom questions (#483), by volunteer. */
   answersByVolunteer?: Record<string, { label: string; text: string }[]>
   /** The signed-in organizer's email: placing oneself sends no confirmation email (#916). */
@@ -62,12 +64,14 @@ type Props = {
 }
 
 // ── Main component ────────────────────────────────────────────────────────────
-export default function RegistrationsManager({ eventId, initialRegistrations, shifts, initialShiftFilter, initialSearch, initialRequestsOnly = false, timeZone, answersByVolunteer = {}, organizerEmail = null, groupLinks = [], initialGroupFilter = "", sectorFilter = null }: Props) {
+export default function RegistrationsManager({ eventId, initialRegistrations, shifts, initialShiftFilter, initialSearch, initialRequestsOnly = false, timeZone, workloadMode, answersByVolunteer = {}, organizerEmail = null, groupLinks = [], initialGroupFilter = "", sectorFilter = null }: Props) {
   const [registrations, setRegistrations] = useState<Registration[]>(initialRegistrations)
-  // Non-blocking workload warnings per volunteer (#465), from the active registrations shown here.
+  // Workload per volunteer, from the registrations shown here: the non-blocking #465 warnings, or,
+  // on a protected event (#1171), the limits it enforces that a programme no longer respects.
+  const mode: WorkloadMode = useMemo(() => workloadMode ?? { kind: "warnings", timeZone }, [workloadMode, timeZone])
   const workload = useMemo(
-    () => workloadByVolunteer(registrations.map((r) => ({ volunteerId: r.volunteer.id, status: r.status, shift: r.shift })), timeZone),
-    [registrations, timeZone],
+    () => workloadByPerson(registrations.map((r) => ({ volunteerId: r.volunteer.id, status: r.status, shift: r.shift })), mode),
+    [registrations, mode],
   )
   const [search, setSearch] = useState(initialSearch ?? "")
   const initialShift = initialShiftFilter ? shifts.find(s => s.id === initialShiftFilter) ?? null : null
@@ -538,6 +542,7 @@ export default function RegistrationsManager({ eventId, initialRegistrations, sh
           shifts={shifts}
           registrations={registrations}
           timeZone={timeZone}
+          workloadMode={mode}
           organizerEmail={organizerEmail}
           form={addForm}
           onFormChange={setAddForm}
@@ -602,6 +607,7 @@ export default function RegistrationsManager({ eventId, initialRegistrations, sh
                   onDecision={(kind) => openDecision(reg, kind)}
                   answers={answersByVolunteer[reg.volunteer.id] ?? []}
                   workload={workload.get(reg.volunteer.id) ?? []}
+                workloadBlocks={blocksWorkload(mode)}
                 />
               ))}
             </tbody>
