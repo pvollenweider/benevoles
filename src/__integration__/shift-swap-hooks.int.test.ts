@@ -107,7 +107,10 @@ describe.skipIf(!url)("what ends a shift swap request, on Postgres (#1174)", () 
   it("switching the option off ends live requests as cancelled by the organisation; on is refused while not shipped", async () => {
     const { event, requestId } = await offered()
     const db = getOrgClient(orgId)
-    const off = await setShiftSwapsOption(db, orgId, event.id, { enabled: false }, ADMIN)
+    // With requests under way, the organiser is asked first: nothing changes without the confirmation.
+    expect(await setShiftSwapsOption(db, orgId, event.id, { enabled: false }, ADMIN)).toMatchObject({ ok: false, status: 409, openCount: 1 })
+    expect((await request(requestId)).status).toBe("offered")
+    const off = await setShiftSwapsOption(db, orgId, event.id, { enabled: false, confirm: true }, ADMIN)
     expect(off).toMatchObject({ ok: true, shiftSwapsEnabled: false, changes: { shiftSwapsEnabled: { from: true, to: false } } })
     expect(await request(requestId)).toMatchObject({ status: "cancelled", endReason: "option_off" })
     // Turning it back on revives nothing, and needs the beta gate: closed in this version.
@@ -131,12 +134,15 @@ describe.skipIf(!url)("what ends a shift swap request, on Postgres (#1174)", () 
     expect(await request(requestId)).toMatchObject({ status: "impossible", endReason: "link_revoked" })
   })
 
-  it("the personal page shows Pierre « Tu cèdes / Tu reçois » and Jean the request he answered, never a name", async () => {
+  it("the personal page shows Pierre « Tu cèdes / Tu reçois » and Jean the request he answered, with first name and initial only", async () => {
     const { event, pierre, jean, a, b, requestId } = await offered()
     const mine = await loadVolunteerSwapView(event.id, pierre.id, NOW)
     expect(mine.mine).toEqual([expect.objectContaining({ requestId, side: "requester", status: "offered", gives: expect.objectContaining({ id: a.id }), receives: expect.objectContaining({ id: b.id }) })])
     const theirs = await loadVolunteerSwapView(event.id, jean.id, NOW)
     expect(theirs.mine[0]).toMatchObject({ side: "counterpart", gives: { id: b.id }, receives: { id: a.id } })
-    expect(JSON.stringify([mine, theirs])).not.toMatch(/Pierre|Jean|@example/)
+    // Once an offer exists, each sees the other as « Jean T. » (owner decision, 2026-10-27), nothing more.
+    expect(mine.mine[0].otherName).toBe("Jean T.")
+    expect(theirs.mine[0].otherName).toBe("Pierre T.")
+    expect(JSON.stringify([mine, theirs])).not.toMatch(/Test|@example/)
   })
 })

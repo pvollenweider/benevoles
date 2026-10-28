@@ -13,7 +13,7 @@ import { setShiftSwapsOption } from "@/lib/shift-swap-data"
  * (beta gate); off ends the live requests as cancelled by the organisation, the people told. Its
  * own route, not a field of the autosaved event form, so a form save never switches swaps.
  */
-const schema = z.object({ enabled: z.boolean().optional(), approval: z.boolean().optional() }).refine((v) => v.enabled !== undefined || v.approval !== undefined)
+const schema = z.object({ enabled: z.boolean().optional(), approval: z.boolean().optional(), confirm: z.boolean().optional() }).refine((v) => v.enabled !== undefined || v.approval !== undefined)
 
 export async function PUT(req: Request, { params }: { params: Promise<{ id: string }> }) {
   const guard = await requireOrgSession()
@@ -25,7 +25,7 @@ export async function PUT(req: Request, { params }: { params: Promise<{ id: stri
 
   const actor = adminActor(guard.session)
   const result = await setShiftSwapsOption(db, organizationId, id, parsed.data, actor)
-  if (!result.ok) return NextResponse.json({ error: result.error }, { status: result.status })
+  if (!result.ok) return NextResponse.json({ error: result.error, ...(result.openCount ? { openCount: result.openCount } : {}) }, { status: result.status })
   if (Object.keys(result.changes).length > 0) {
     await logEvent({ eventId: id, actor, action: "event.updated", entityType: "Event", entityId: id, changes: result.changes })
   }

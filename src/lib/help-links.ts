@@ -72,6 +72,7 @@ export const SECTION_DOC_LINKS = {
     signUp: { unit: "s-inscrire" },
     personalPage: { unit: "ma-page-personnelle" },
     cancelShift: { unit: "ma-page-personnelle", heading: "Annuler un créneau" },
+    swapShift: { unit: "ma-page-personnelle", heading: "Échanger un créneau" },
     brokenLink: { unit: "lien-personnel", heading: "La page « Ce lien ne fonctionne pas » s'affiche" },
   },
 } as const satisfies Record<"admin" | "benevole", Record<string, AdminHelpTarget>>

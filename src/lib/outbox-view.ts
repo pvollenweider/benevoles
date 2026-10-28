@@ -162,6 +162,8 @@ export const KIND_LABELS: Record<NotificationKind, string> = {
   sector_leader_answers_changed: "Réponse modifiée, aux responsables du poste de la question",
   shift_swap_applied: "Échange de créneaux effectué",
   shift_swap_ended: "Échange de créneaux non effectué",
+  shift_swap_offered: "Proposition d'échange de créneaux reçue",
+  shift_swap_approval_needed: "Échange de créneaux à valider, aux organisateurs",
 }
 
 export function kindLabel(kind: string): string {

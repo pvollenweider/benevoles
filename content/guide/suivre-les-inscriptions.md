@@ -49,6 +49,16 @@ Une liste d'attente quittée ou une place proposée refusée ne se rétablissent
 
 Quand une personne vous répond « ce n'était pas moi » après l'email qui lui confirme une annulation, son lien personnel est entre d'autres mains. Cochez alors **Le lien a été utilisé par quelqu'un d'autre : envoyer un nouveau lien** dans la confirmation : tous ses liens pour l'événement sont remplacés, l'ancien n'ouvre plus rien, et le nouveau part avec l'email. L'email de désistement envoyé à l'organisation contient aussi un lien vers cette liste.
 
+## Échanges de créneaux entre bénévoles (bêta)
+
+Pour une organisation qui participe à la bêta, la carte **Échanges de créneaux** des informations de l'événement propose **Autoriser les demandes d'échange de créneaux**. Deux bénévoles confirmés sur deux créneaux du même poste peuvent alors échanger leurs créneaux depuis leur page « Mes inscriptions » : l'un publie sa demande, un autre lui propose l'un de ses créneaux, le premier accepte. Chacun garde son inscription et son lien personnel ; seuls les créneaux sont échangés, d'un seul coup, et les deux reçoivent un email « Échange effectué ». Les nouveaux événements prennent la valeur choisie dans les Paramètres ; les événements existants restent sans échanges tant que vous ne l'activez pas.
+
+Un échange respecte les règles d'une inscription (chevauchements, nombre de créneaux par personne, âge minimum, postes réservés) et le délai d'annulation de l'événement pour chaque créneau cédé ; il se fait au plus tard avant le début du premier des deux créneaux. Un poste attribué par l'organisation uniquement ne s'échange pas.
+
+Si l'un des deux créneaux est sur validation, ou si vous activez **Valider chaque échange**, l'échange attend votre accord : vous recevez un email, et la section **Échanges de créneaux** de cette page le montre sous **À valider**, avec ce que chaque personne cède et reçoit et la date limite. **Valider l'échange** vérifie à nouveau toutes les règles puis l'effectue ; **Refuser** le termine, et les deux personnes sont prévenues. Rien ne change dans le planning avant votre validation. Désactiver **Valider chaque échange** ne valide pas les échanges qui attendent déjà : ils restent à valider.
+
+Une demande prend fin d'elle-même, et les personnes sont prévenues, quand l'une des places est annulée, quand un des créneaux est annulé ou change d'horaire, de jour, de lieu, de poste ou de conditions, quand une personne est effacée ou fusionnée, ou quand ses liens personnels sont renouvelés. Désactiver les échanges sur l'événement annule les demandes en cours, après une confirmation qui dit combien ; les échanges déjà effectués restent. Chaque étape est inscrite au journal de l'événement.
+
 ## Ajouter quelqu'un à la main
 
 **+ Ajouter manuellement** ouvre le formulaire **Inscription manuelle**. En vidéo : [placer un membre sur plusieurs créneaux](/videos/REGISTRATIONS_PLACE_MEMBER).

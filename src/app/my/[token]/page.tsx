@@ -28,6 +28,7 @@ import CalendarSubscribeCard from "@/components/public/CalendarSubscribeCard"
 import { calendarCard, type CalendarFeedUrls } from "@/lib/calendar-card-copy"
 import MyAnswersCard from "@/components/public/MyAnswersCard"
 import ShiftRosterCard, { type RosterData } from "@/components/public/ShiftRosterCard"
+import ShiftSwapsCard from "@/components/public/ShiftSwapsCard"
 import type { KeptAnswerRow, MyAnswerRow } from "@/lib/my-answers"
 import type { AnswersEditState } from "@/lib/answer-changes"
 import { MISSION_BRIEF_ID, MISSION_BRIEF_TITLE, nextConfirmedRegistration, type BriefEvent } from "@/lib/mission-brief"
@@ -191,6 +192,22 @@ export default function MyRegistrationPage() {
       })
   }, [token])
 
+  // After a swap (#1174) the page's registrations changed: reloaded quietly (no announcement, the
+  // swap card says what was done), with the roster that depends on them. Only the latest lands.
+  const pageSeq = useRef(0)
+  const [swapsKey, setSwapsKey] = useState(0)
+  function reloadPage() {
+    const url = tokenPath("/api/public/registrations", token)
+    if (!url) return
+    const n = ++pageSeq.current
+    void fetch(url).then((r) => r.json()).then((d) => {
+      if (n !== pageSeq.current || d?.error || isOrgUnavailable(d)) return
+      setPendingCancel(null)
+      setData(d)
+      reloadRoster(rosterToken)
+    }).catch(() => undefined)
+  }
+
   function setWithdrawError(regId: string, text: string | null) {
     setWithdrawErrors((prev) => {
       const next = { ...prev }
@@ -276,6 +293,8 @@ export default function MyRegistrationPage() {
     }
 
     setData((d) => d ? { ...d, registrations: d.registrations.filter((r) => r.editToken !== reg.editToken) } : d)
+    // The swap card reads again (#1174): the withdrawn place can no longer be published or swapped.
+    setSwapsKey((k) => k + 1)
     // The roster needs a confirmed place (#1068): reloaded once one is withdrawn, through a link
     // still live (the page's own may be the one just cancelled), or gone with the last one.
     const remaining = list.filter((r) => r.editToken !== reg.editToken)
@@ -519,6 +538,9 @@ export default function MyRegistrationPage() {
             </div>
           )}
         </section>
+
+        {/* Shift swaps (#1174): renders nothing while the event has none and the person no request. */}
+        <ShiftSwapsCard token={token} timeZone={data.timeZone ?? APP_TIME_ZONE} onShiftsChanged={reloadPage} refreshKey={swapsKey} />
 
         {/* Who else is signed up (#1068): only when the event has the roster on. */}
         {roster?.available && <ShiftRosterCard token={rosterToken} data={roster} eventPageUrl={data.eventPageUrl} beginChange={() => {

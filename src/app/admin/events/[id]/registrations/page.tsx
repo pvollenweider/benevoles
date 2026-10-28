@@ -14,6 +14,9 @@ import HelpLink from "@/components/admin/HelpLink"
 import RecentCancellations from "@/components/admin/registrations/RecentCancellations"
 import { loadRecentCancellations } from "@/lib/recent-cancellations-data"
 import SectorFilter from "@/components/admin/SectorFilter"
+import ShiftSwapsPanel from "@/components/admin/registrations/ShiftSwapsPanel"
+import { loadOrganiserSwaps } from "@/lib/shift-swap-data"
+import { swapsShipped } from "@/lib/shift-swap-gate"
 import { loadSectorFilter } from "@/lib/sector-filter-data"
 import { REGISTRATION_WORDS, sectorFilterAnnouncement, sectorFilterValue, withSectorFilter } from "@/lib/sector-filter"
 
@@ -63,6 +66,9 @@ export default async function RegistrationsPage({
   // The text a volunteer signing up now would accept (#569), to tell it apart from an older one.
   const currentCharterHash = hashCharterText(resolveCharterText(event.organization.volunteerCharter, event.organization.hasOrgInsurance))
 
+  // Shift swaps (#1174, beta): shown once the event allows them, or while it has some to show.
+  const swaps = swapsShipped() ? await loadOrganiserSwaps(db, id) : null
+  const showSwaps = !!swaps && (swaps.shiftSwapsEnabled || swaps.requests.length > 0)
   const cancellations = await loadRecentCancellations(db, id, orgTimeZone(event.organization), new Date(), sector.shiftWhere)
   // `?shift=` of a shift outside the sector is ignored: the list then opens on the whole sector.
   const initialShiftFilter = shiftParam && event.shifts.some((s) => s.id === shiftParam) ? shiftParam : undefined
@@ -164,6 +170,8 @@ export default async function RegistrationsPage({
           overlapAllowed: s.overlapAllowed,
         }))}
       />
+
+      {showSwaps && <ShiftSwapsPanel eventId={id} requests={swaps!.requests} timeZone={orgTimeZone(event.organization)} />}
 
       <RecentCancellations rows={cancellations} />
     </div>

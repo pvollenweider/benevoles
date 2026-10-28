@@ -36,15 +36,22 @@ export type MySwap = {
   receives: SwapShiftView | null
   /** Why it ended, in the volunteers' words; null while live, or ended by a person's choice. */
   endMessage: string | null
+  /**
+   * The other person, « Jean D. », once an offer exists, and only for the two of them (owner
+   * decision, 2026-10-27); null before any offer. Open requests of others never carry a name.
+   */
+  otherName: string | null
 }
 
 export type SwapOfferable = { requestId: string; shift: SwapShiftView; deadline: string; registrationIds: string[] }
 
 export type VolunteerSwapView = {
   enabled: boolean
-  publishable: { registrationId: string; deadline: string }[]
+  publishable: { registrationId: string; deadline: string; shift: SwapShiftView }[]
   mine: MySwap[]
   offers: SwapOfferable[]
+  /** The shift of each of my confirmed registrations, by registration id, to name what I would give. */
+  ownShifts: Record<string, SwapShiftView>
 }
 
 export type ViewShift = SwapShift & { label: string; instructions?: string | null }
@@ -71,6 +78,8 @@ export type VolunteerSwapInput = {
   reserved: Map<string, string[]>
   limits: Map<string, number>
   assignedOnlyRoles: Set<string>
+  /** « Jean D. » of the other party of my requests, by volunteer id (rosterDisplayName). */
+  names?: Map<string, string | null>
 }
 
 export function shiftView(s: ViewShift): SwapShiftView {
@@ -82,7 +91,7 @@ const PERSONAL_ENDS = new Set(["withdrawn", "applied"])
 
 export function buildVolunteerSwapView(input: VolunteerSwapInput): VolunteerSwapView {
   const { now, timeZone, event, me } = input
-  const empty: VolunteerSwapView = { enabled: event.shiftSwapsEnabled, publishable: [], mine: [], offers: [] }
+  const empty: VolunteerSwapView = { enabled: event.shiftSwapsEnabled, publishable: [], mine: [], offers: [], ownShifts: {} }
   const myHeld = input.held.get(me) ?? []
   const deadlineOf = (expiresAt: Date, shifts: (ViewShift | undefined)[]) =>
     swapDeadline({ expiresAt, given: shifts.filter((s): s is ViewShift => !!s), setting: event, timeZone })
@@ -104,6 +113,7 @@ export function buildVolunteerSwapView(input: VolunteerSwapInput): VolunteerSwap
       gives: shiftView(own),
       receives: other ? shiftView(other) : null,
       endMessage: !isLiveSwapStatus(r.status) && !PERSONAL_ENDS.has(r.status) && r.endReason ? swapRefusalMessage(r.endReason as SwapEndReason) : null,
+      otherName: r.counterVolunteerId ? input.names?.get(side === "requester" ? r.counterVolunteerId : r.volunteerId) ?? null : null,
     })
   }
   if (!event.shiftSwapsEnabled) return { ...empty, mine }
@@ -120,7 +130,7 @@ export function buildVolunteerSwapView(input: VolunteerSwapInput): VolunteerSwap
     .filter((h) => h.status === "active" && !busy.has(h.id) && h.shift.status !== "cancelled" && !h.shift.assignedOnly && !input.assignedOnlyRoles.has(h.shift.roleName))
     .map((h) => ({ registrationId: h.id, deadline: selfCancelDeadline(h.shift, event, timeZone) }))
     .filter((p) => beforeSwapDeadline(now, p.deadline))
-    .map((p) => ({ registrationId: p.registrationId, deadline: p.deadline.toISOString() }))
+    .map((p) => ({ registrationId: p.registrationId, deadline: p.deadline.toISOString(), shift: shiftView(myHeld.find((h) => h.id === p.registrationId)!.shift) }))
 
   const meAsPerson = input.persons.get(me)
   const offers: SwapOfferable[] = []
@@ -146,5 +156,6 @@ export function buildVolunteerSwapView(input: VolunteerSwapInput): VolunteerSwap
     if (ids.length > 0 && deadline) offers.push({ requestId: r.id, shift: shiftView(theirs.shift), deadline: deadline.toISOString(), registrationIds: ids })
   }
 
-  return { enabled: true, publishable, mine, offers }
+  const ownShifts = Object.fromEntries(myHeld.filter((h) => h.status === "active").map((h) => [h.id, shiftView(h.shift)]))
+  return { enabled: true, publishable, mine, offers, ownShifts }
 }
