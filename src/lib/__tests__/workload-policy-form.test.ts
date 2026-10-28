@@ -1,12 +1,12 @@
 import { describe, it, expect } from "vitest"
 import {
   benchmarkAnnouncement, checkPolicyForm, durationMinutes, emptyPolicyForm, offDayExample, policyFormFrom, policySummaryLines, policyValuesFromForm,
-  withBenchmark, withWarningSuggestions,
+  mealDayOptions, withBenchmark, withMealWindow, withWarningSuggestions,
 } from "../workload-policy-form"
 import { WORKLOAD_BENCHMARKS, type WorkloadPolicyValues } from "../workload-policy"
 
 // #1171: the organiser's form, hours and minutes, never a hidden default.
-const VALUES: WorkloadPolicyValues = { serviceDayStart: "08:00", maxContinuousMinutes: 360, minBreakMinutes: 30, maxDailyMinutes: 600, maxEventMinutes: 2400, minRestMinutes: 600, maxIdleGapMinutes: 120, offDay: { apply: false } }
+const VALUES: WorkloadPolicyValues = { serviceDayStart: "08:00", maxContinuousMinutes: 360, minBreakMinutes: 30, maxDailyMinutes: 600, maxEventMinutes: 2400, minRestMinutes: 600, maxIdleGapMinutes: 120, offDay: { apply: false }, meal: { apply: false } }
 
 describe("durations", () => {
   it("reads hours and minutes, empty as missing, nonsense as invalid", () => {
@@ -29,7 +29,7 @@ describe("checkPolicyForm", () => {
   it("an empty form is incomplete, field by field", () => {
     const r = checkPolicyForm(emptyPolicyForm())
     expect(r.ok).toBe(false)
-    if (!r.ok) expect(r.problems).toHaveLength(8)
+    if (!r.ok) expect(r.problems).toHaveLength(9)
     if (!r.ok) expect(r.problems.map((p) => p.field)).toContain("offDay")
     expect(policyValuesFromForm(emptyPolicyForm()).maxDailyMinutes).toBeUndefined()
   })
@@ -115,5 +115,41 @@ describe("benchmarks", () => {
       expect(b.source.length).toBeGreaterThan(10)
       expect(`${b.text} ${b.source}`).not.toMatch(/obligatoire|légal pour/i)
     }
+  })
+})
+
+describe("meal (#1171, lot 2)", () => {
+  const MEAL = { apply: true as const, minutes: 30, windows: [{ start: "11:30", end: "14:00" }, { start: "18:00", end: "21:00" }], days: ["2026-07-04"] }
+  it("round-trips, keeps typed values under « do not apply », and sends them only with « apply »", () => {
+    const form = policyFormFrom({ ...VALUES, meal: MEAL })
+    expect(form.meal).toMatchObject({ apply: "yes", minutes: "30", days: "some", dates: ["2026-07-04"] })
+    expect(form.meal.windows.map((w) => [w.start, w.end])).toEqual([["11:30", "14:00"], ["18:00", "21:00"]])
+    expect(checkPolicyForm(form)).toEqual({ ok: true, values: { ...VALUES, meal: MEAL } })
+    const no = { ...form, meal: { ...form.meal, apply: "no" as const } }
+    expect(policyValuesFromForm(no).meal).toEqual({ apply: false })
+    expect(no.meal.minutes).toBe("30")
+    expect(policyFormFrom({ ...VALUES, meal: undefined }).meal.apply).toBe("")
+  })
+
+  it("adds up to three windows, never removes the last one, and keeps row keys stable", () => {
+    const one = policyFormFrom(VALUES).meal
+    const three = withMealWindow(withMealWindow(one, { add: true }), { add: true })
+    expect(three.windows).toHaveLength(3)
+    expect(withMealWindow(three, { add: true }).windows).toHaveLength(3)
+    const removed = withMealWindow(three, { remove: 0 })
+    expect(removed.windows.map((w) => w.key)).toEqual(three.windows.slice(1).map((w) => w.key))
+    expect(withMealWindow(one, { remove: 0 }).windows).toHaveLength(1)
+  })
+
+  it("lists the event's days, says the rule in the summary, and the meal suggestion fills only the meal", () => {
+    expect(mealDayOptions({ firstDay: "2026-07-04", lastDay: "2026-07-05" })).toEqual([{ date: "2026-07-04", label: "samedi 4 juillet" }, { date: "2026-07-05", label: "dimanche 5 juillet" }])
+    expect(policySummaryLines(VALUES)).toContain("Aucune pause repas demandée.")
+    expect(policySummaryLines({ ...VALUES, meal: { ...MEAL, days: "all" } })).toContain("Au moins 30 min de repas sans mission dans chaque plage qu'une mission touche (de 11 h 30 à 14 h, de 18 h à 21 h), tous les jours ; une mission où le repas sur le pouce est possible ne retire pas ce temps.")
+    const b = WORKLOAD_BENCHMARKS.find((x) => x.id === "meal")!
+    const filled = withBenchmark(emptyPolicyForm(), b)
+    expect(filled.meal).toMatchObject({ apply: "yes", minutes: "30", days: "all" })
+    expect(filled.maxDailyMinutes).toEqual({ hours: "", minutes: "" })
+    expect(benchmarkAnnouncement(b)).toBe("Rempli : pause repas : règle appliquée, 30 min entre 11 h 30 et 14 h, puis entre 18 h et 21 h, tous les jours. Les autres champs n'ont pas changé.")
+    expect(b.source).toContain("pas une règle du droit du travail")
   })
 })

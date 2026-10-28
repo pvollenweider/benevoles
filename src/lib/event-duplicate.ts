@@ -53,6 +53,8 @@ export type DuplicableShift = {
   displayOrder: number
   internalNotes: string | null
   minAge: number | null
+  /** « Repas sur le pouce possible » (#1171); optional so older callers copy it as false. */
+  mealOnTheGo?: boolean
   waitlistEnabled: boolean
   requiresApproval: boolean
   colorKey: string | null
@@ -204,6 +206,7 @@ export function copiedShift(s: DuplicableShift) {
     displayOrder: s.displayOrder,
     internalNotes: s.internalNotes,
     minAge: s.minAge,
+    mealOnTheGo: s.mealOnTheGo ?? false,
     waitlistEnabled: s.waitlistEnabled,
     requiresApproval: s.requiresApproval,
     colorKey: s.colorKey,

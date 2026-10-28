@@ -23,16 +23,25 @@
  * days without any mission in every P consecutive service days of the event. Version 1 policies
  * (saved before) keep reading: the rule is then « not chosen yet » and not applied.
  *
- * Still out (follow-ups): meal protection, travel margins, individual stricter limits, draft
- * publication (#1146).
+ * Lot 2 also adds meal protection (version 3): on the chosen days, when a person's duty touches a
+ * meal window (local times inside one service day), the window must hold a stretch of the meal's
+ * length free of any mission, except missions marked « repas sur le pouce possible » (the meal is
+ * taken during them; they still count as work). A gap between two missions that holds that meal may
+ * be longer than the idle limit by the meal's length, once per window.
+ *
+ * Still out (follow-ups): travel margins, individual stricter limits, draft publication (#1146).
  */
 import { fmtDay, fmtDuration } from "./signup-recap"
 import { toMin, toMinEnd } from "./gantt-utils"
 import { isValidTimeZone, localDateTimeToUtc } from "./time-zone"
 import { mergeIntervals } from "./interval-union"
 
-/** The version written when every lot-2 section is answered; version 1 (lot 1 only) stays readable. */
-export const WORKLOAD_POLICY_VERSION = 2
+/**
+ * The version written when every delivered section is answered. Older versions stay readable:
+ * 1 (lot 1 only), 2 (with the days-off answer); 3 adds the meal answer.
+ */
+export const WORKLOAD_POLICY_VERSION = 3
+export type WorkloadPolicyVersion = 1 | 2 | 3
 
 /**
  * The days-off rule: an explicit answer, never a blank. `apply: false` is a saved « do not apply »;
@@ -42,6 +51,18 @@ export type OffDayRule = { apply: false } | { apply: true; minOffDays: number; w
 
 /** Accepted range of the period of the days-off rule, in service days. */
 export const OFF_DAY_WINDOW_RANGE = { min: 2, max: 31 } as const
+
+/** A meal window, local times "HH:MM", inside one service day. */
+export type MealWindow = { start: string; end: string }
+
+/**
+ * The meal answer: `apply: false` is a saved « do not apply »; absent before version 3. `days` is
+ * "all" (every service day) or the service days it applies to ("YYYY-MM-DD").
+ */
+export type MealRule = { apply: false } | { apply: true; minutes: number; windows: MealWindow[]; days: "all" | string[] }
+
+export const MEAL_MINUTES_RANGE = { min: 10, max: 120 } as const
+export const MEAL_WINDOWS_MAX = 3
 
 /** The limits of a policy, in minutes. Every one is required to turn protection on. */
 export type WorkloadLimitsV1 = {
@@ -61,19 +82,21 @@ export type WorkloadLimitsV1 = {
 
 export type WorkloadPolicy = WorkloadLimitsV1 & {
   /** 1: lot 1 only (no `offDay`); 2: with the days-off answer. */
-  version: 1 | 2
+  version: WorkloadPolicyVersion
   /** IANA zone the boundary and the labels are read in, snapshotted when protection is turned on. */
   timeZone: string
   /** Local time a service day starts at, "HH:MM". Required: no hidden default. */
   serviceDayStart: string
   /** The days-off answer; absent only in a version-1 policy (not chosen yet, not applied). */
   offDay?: OffDayRule
+  /** The meal answer; absent before version 3 (not chosen yet, not applied). */
+  meal?: MealRule
 }
 
 /** What the organiser sets: the policy without its version and time zone (the server adds both). */
 export type WorkloadPolicyValues = Omit<WorkloadPolicy, "version" | "timeZone">
 
-export type WorkloadField = keyof WorkloadPolicyValues | "offDayMinOffDays" | "offDayWindowDays"
+export type WorkloadField = keyof WorkloadPolicyValues | "offDayMinOffDays" | "offDayWindowDays" | "mealMinutes" | "mealWindows" | `mealWindow${number}` | "mealDays"
 
 type LimitField = keyof WorkloadLimitsV1
 
@@ -93,6 +116,11 @@ export const OFF_DAY_LABEL = "Jours sans mission"
 export const OFF_DAY_MIN_LABEL = "Jours sans mission au minimum"
 export const OFF_DAY_WINDOW_LABEL = "Période, en journées de service d'affilée"
 
+export const MEAL_LABEL = "Pause repas"
+export const MEAL_MINUTES_LABEL = "Durée du repas, en minutes"
+export const MEAL_WINDOWS_LABEL = "Plages du repas"
+export const MEAL_DAYS_LABEL = "Jours concernés"
+
 /**
  * The values of the existing #465 warnings, offered as editable suggestions only: they are
  * « réglages d'avertissement existants », never legal, recommended or approved pilot thresholds.
@@ -111,7 +139,7 @@ export const EXISTING_WARNING_SUGGESTIONS: Partial<WorkloadLimitsV1> = {
  * asks for 24 h + 11 h of uninterrupted rest per 7-day period, not an empty service day).
  */
 export type WorkloadBenchmark = {
-  id: "daily" | "rest" | "break" | "offDay"
+  id: "daily" | "rest" | "break" | "offDay" | "meal"
   /** The value, as the organiser reads it. */
   text: string
   /** Where it comes from. */
@@ -120,6 +148,7 @@ export type WorkloadBenchmark = {
   action: string
   limits?: Partial<WorkloadLimitsV1>
   offDay?: OffDayRule
+  meal?: MealRule
 }
 
 export const WORKLOAD_BENCHMARKS: WorkloadBenchmark[] = [
@@ -127,6 +156,7 @@ export const WORKLOAD_BENCHMARKS: WorkloadBenchmark[] = [
   { id: "rest", text: "11 h de repos au moins entre deux journées de service.", source: "Directive européenne 2003/88/CE, Code du travail français, loi suisse sur le travail.", action: "Utiliser 11 h de repos entre deux journées", limits: { minRestMinutes: 11 * 60 } },
   { id: "break", text: "Une pause d'au moins 20 min avant 6 h de missions d'affilée.", source: "Approximation du Code du travail français (20 min dès 6 h de travail dans la journée). La loi suisse sur le travail prévoit 15 min au-delà de 5 h 30, 30 min au-delà de 7 h et 1 h au-delà de 9 h.", action: "Utiliser une pause de 20 min avant 6 h d'affilée", limits: { maxContinuousMinutes: 6 * 60, minBreakMinutes: 20 } },
   { id: "offDay", text: "1 jour sans mission sur 7 journées de service d'affilée.", source: "Approximation du repos hebdomadaire de la directive européenne 2003/88/CE (24 h, plus les 11 h de repos quotidien, par période de 7 jours).", action: "Utiliser 1 jour sans mission sur 7", offDay: { apply: true, minOffDays: 1, windowDays: 7 } },
+  { id: "meal", text: "30 min de repas entre 11 h 30 et 14 h et entre 18 h et 21 h, tous les jours.", source: "Suggestion pour l'événementiel, pas une règle du droit du travail.", action: "Utiliser 30 min de repas entre 11 h 30 et 14 h et entre 18 h et 21 h", meal: { apply: true, minutes: 30, windows: [{ start: "11:30", end: "14:00" }, { start: "18:00", end: "21:00" }], days: "all" } },
 ]
 
 export type PolicyProblem = { field: WorkloadField | "timeZone" | "version"; message: string }
@@ -174,12 +204,88 @@ export type PolicyParse = { ok: true; policy: WorkloadPolicy } | { ok: false; pr
 
 const HHMM = /^([01]\d|2[0-3]):[0-5]\d$/
 
+const ISO_DAY = /^\d{4}-\d{2}-\d{2}$/
+
+/** Minutes of a window's bounds counted from the service-day boundary: [start, end), end 0 read as 24 h. */
+export function mealWindowOffsets(w: MealWindow, serviceDayStart: string): { start: number; end: number } {
+  const b = toMin(serviceDayStart)
+  const off = (t: string) => (toMin(t) - b + 1440) % 1440
+  const end = off(w.end)
+  return { start: off(w.start), end: end === 0 ? 1440 : end }
+}
+
+/** Checks the meal answer against the service-day boundary; `undefined` comes back as « not answered ». */
+function checkMeal(value: unknown, serviceDayStart: unknown, problems: PolicyProblem[]): MealRule | undefined {
+  if (value === undefined || value === null) return undefined
+  const v = (typeof value === "object" ? value : {}) as Record<string, unknown>
+  if (Object.keys(v).some((k) => !["apply", "minutes", "windows", "days"].includes(k))) {
+    problems.push({ field: "meal", message: `${MEAL_LABEL} : réglage inconnu.` })
+    return undefined
+  }
+  if (v.apply === false) {
+    if (v.minutes !== undefined || v.windows !== undefined || v.days !== undefined) problems.push({ field: "meal", message: `${MEAL_LABEL} : sans règle, aucune valeur n'est attendue.` })
+    return { apply: false }
+  }
+  if (v.apply !== true) {
+    problems.push({ field: "meal", message: `${MEAL_LABEL} : choisissez d'appliquer ou non cette règle.` })
+    return undefined
+  }
+  let ok = true
+  const { min, max } = MEAL_MINUTES_RANGE
+  if (v.minutes === undefined || v.minutes === null || v.minutes === "") {
+    problems.push({ field: "mealMinutes", message: `${MEAL_MINUTES_LABEL} : à compléter.` }); ok = false
+  } else if (!isInt(v.minutes) || v.minutes < min || v.minutes > max) {
+    problems.push({ field: "mealMinutes", message: `${MEAL_MINUTES_LABEL} : un nombre entier de ${min} à ${max} minutes.` }); ok = false
+  }
+  const windows = Array.isArray(v.windows) ? v.windows : null
+  if (!windows || windows.length === 0) {
+    problems.push({ field: "mealWindows", message: `${MEAL_WINDOWS_LABEL} : indiquez au moins une plage.` }); ok = false
+  } else if (windows.length > MEAL_WINDOWS_MAX) {
+    problems.push({ field: "mealWindows", message: `${MEAL_WINDOWS_LABEL} : ${MEAL_WINDOWS_MAX} plages au plus.` }); ok = false
+  } else {
+    windows.forEach((w, i) => {
+      if (!w || typeof w !== "object" || Object.keys(w).some((k) => k !== "start" && k !== "end") || typeof w.start !== "string" || typeof w.end !== "string" || !HHMM.test(w.start) || !HHMM.test(w.end)) {
+        problems.push({ field: `mealWindow${i}`, message: `Plage ${i + 1} : indiquez son début et sa fin (par exemple 11:30 et 14:00).` }); ok = false
+      }
+    })
+  }
+  // The windows are checked against each other and the boundary even when another part is missing,
+  // so every row says its own problem at once (accessibility review).
+  const windowsOk = !!windows && windows.length > 0 && windows.length <= MEAL_WINDOWS_MAX && !problems.some((p) => p.field.startsWith("mealWindow"))
+  const minutesOk = isInt(v.minutes) && v.minutes >= min && v.minutes <= max
+  if (windowsOk && typeof serviceDayStart === "string" && HHMM.test(serviceDayStart)) {
+    // Each problem on its own row: the row's two fields carry it.
+    const offsets = (windows as MealWindow[]).map((w) => mealWindowOffsets(w, serviceDayStart))
+    offsets.forEach((o, i) => {
+      if (o.start >= o.end) { problems.push({ field: `mealWindow${i}`, message: `Plage ${i + 1} : elle ne peut pas passer le début de la journée de service (${serviceDayStart}) ni finir avant de commencer.` }); ok = false }
+      else if (minutesOk && o.end - o.start < (v.minutes as number)) { problems.push({ field: `mealWindow${i}`, message: `Plage ${i + 1} : elle doit durer au moins le temps du repas.` }); ok = false }
+      else {
+        const other = offsets.findIndex((p, j) => j < i && p.start < p.end && o.start < p.end && p.start < o.end)
+        if (other >= 0) { problems.push({ field: `mealWindow${i}`, message: `La plage ${i + 1} chevauche la plage ${other + 1}.` }); ok = false }
+      }
+    })
+  }
+  // The days last, in the order of the form (the first problem takes the focus).
+  const days = v.days
+  if (days === undefined || days === null) {
+    problems.push({ field: "mealDays", message: `${MEAL_DAYS_LABEL} : choisissez tous les jours ou certains jours.` }); ok = false
+  } else if (days !== "all" && (!Array.isArray(days) || days.length === 0 || days.length > 62 || days.some((d) => typeof d !== "string" || !ISO_DAY.test(d)) || new Set(days).size !== days.length)) {
+    problems.push({ field: "mealDays", message: `${MEAL_DAYS_LABEL} : cochez au moins un jour.` }); ok = false
+  }
+  if (!ok) return undefined
+  const rule = { apply: true as const, minutes: v.minutes as number, windows: (windows as MealWindow[]).map((w) => ({ start: w.start, end: w.end })), days: days === "all" ? "all" as const : [...(days as string[])].sort() }
+  return rule
+}
+
+/** What a write must answer: every section of the current version. */
+export const WRITE_SECTIONS = { requireOffDay: true, requireMeal: true } as const
+
 /**
  * Checks the organiser's values (no version, no zone): every field present, whole minutes in range,
  * consistent. `requireOffDay`: the days-off answer is required (every write from the forms); only a
  * stored version-1 policy or default is read without it.
  */
-export function checkPolicyValues(value: unknown, opts: { requireOffDay?: boolean } = {}): { ok: true; values: WorkloadPolicyValues } | { ok: false; problems: PolicyProblem[] } {
+export function checkPolicyValues(value: unknown, opts: { requireOffDay?: boolean; requireMeal?: boolean } = {}): { ok: true; values: WorkloadPolicyValues } | { ok: false; problems: PolicyProblem[] } {
   const v = (value && typeof value === "object" ? value : {}) as Record<string, unknown>
   const problems: PolicyProblem[] = []
   if (v.serviceDayStart === undefined || v.serviceDayStart === null || v.serviceDayStart === "") {
@@ -201,11 +307,16 @@ export function checkPolicyValues(value: unknown, opts: { requireOffDay?: boolea
   if (offDay === undefined && opts.requireOffDay && !problems.some((p) => p.field.startsWith("offDay"))) {
     problems.push({ field: "offDay", message: `${OFF_DAY_LABEL} : choisissez d'appliquer ou non cette règle. Rien n'est choisi à votre place.` })
   }
+  const meal = checkMeal(v.meal, v.serviceDayStart, problems)
+  if (meal === undefined && opts.requireMeal && !problems.some((p) => p.field.startsWith("meal"))) {
+    problems.push({ field: "meal", message: `${MEAL_LABEL} : choisissez d'appliquer ou non cette règle. Rien n'est choisi à votre place.` })
+  }
   if (problems.length > 0) return { ok: false, problems }
   const values = {
     serviceDayStart: v.serviceDayStart as string,
     ...Object.fromEntries(WORKLOAD_LIMIT_FIELDS.map((f) => [f.key, v[f.key] as number])),
     ...(offDay ? { offDay } : {}),
+    ...(meal ? { meal } : {}),
   } as WorkloadPolicyValues
   // Consistency: a smaller daily or event cap than the one it contains is almost always hours typed
   // as minutes (or the reverse); refused rather than guessed.
@@ -227,16 +338,16 @@ export function parseWorkloadPolicy(value: unknown): PolicyParse {
   const v = (value && typeof value === "object" ? value : {}) as Record<string, unknown>
   const problems: PolicyProblem[] = []
   const version = v.version
-  if (version !== 1 && version !== 2) problems.push({ field: "version", message: "Version de réglage inconnue." })
+  if (version !== 1 && version !== 2 && version !== 3) problems.push({ field: "version", message: "Version de réglage inconnue." })
   if (typeof v.timeZone !== "string" || !isValidTimeZone(v.timeZone)) problems.push({ field: "timeZone", message: "Fuseau horaire inconnu." })
   // A key this version does not know is a rule it cannot enforce: never silently ignored. Version 1
   // has no days-off answer; version 2 must have one.
-  const known = new Set<string>(["version", "timeZone", "serviceDayStart", ...WORKLOAD_LIMIT_FIELDS.map((f) => f.key), ...(version === 2 ? ["offDay"] : [])])
+  const known = new Set<string>(["version", "timeZone", "serviceDayStart", ...WORKLOAD_LIMIT_FIELDS.map((f) => f.key), ...(version === 2 || version === 3 ? ["offDay"] : []), ...(version === 3 ? ["meal"] : [])])
   if (Object.keys(v).some((k) => !known.has(k))) problems.push({ field: "version", message: "Réglage inconnu de cette version." })
-  const values = checkPolicyValues(v, { requireOffDay: version === 2 })
+  const values = checkPolicyValues(v, { requireOffDay: version === 2 || version === 3, requireMeal: version === 3 })
   if (!values.ok) problems.push(...values.problems)
   if (problems.length > 0 || !values.ok) return { ok: false, problems }
-  return { ok: true, policy: { version: version as 1 | 2, timeZone: v.timeZone as string, ...values.values } }
+  return { ok: true, policy: { version: version as WorkloadPolicyVersion, timeZone: v.timeZone as string, ...values.values } }
 }
 
 /** The organiser's values of a policy (no version, no zone). */
@@ -245,6 +356,7 @@ export function policyValues(p: WorkloadPolicy): WorkloadPolicyValues {
     serviceDayStart: p.serviceDayStart,
     ...Object.fromEntries(WORKLOAD_LIMIT_FIELDS.map((f) => [f.key, p[f.key]])),
     ...(p.offDay ? { offDay: p.offDay } : {}),
+    ...(p.meal ? { meal: p.meal } : {}),
   } as WorkloadPolicyValues
 }
 
@@ -254,8 +366,14 @@ export function policyValues(p: WorkloadPolicy): WorkloadPolicyValues {
  * so that what is stored always parses.
  */
 export function buildPolicy(values: WorkloadPolicyValues, timeZone: string): WorkloadPolicy {
-  const { offDay, ...rest } = values
-  return offDay ? { version: WORKLOAD_POLICY_VERSION, timeZone, ...rest, offDay } : { version: 1, timeZone, ...rest }
+  const { offDay, meal, ...rest } = values
+  if (offDay && meal) return { version: 3, timeZone, ...rest, offDay, meal }
+  return offDay ? { version: 2, timeZone, ...rest, offDay } : { version: 1, timeZone, ...rest }
+}
+
+/** Whether a meal rule is enforced. */
+export function mealApplies(p: Pick<WorkloadPolicy, "meal">): p is { meal: Extract<MealRule, { apply: true }> } {
+  return p.meal?.apply === true
 }
 
 /** Whether a days-off rule is enforced (a saved « apply »; « do not apply » and « not chosen » are not). */
@@ -291,14 +409,20 @@ export function policyChangeNeedsScan(prev: WorkloadPolicy | null, next: Workloa
     || next.minRestMinutes > prev.minRestMinutes
     || next.maxIdleGapMinutes < prev.maxIdleGapMinutes
     || offDayTightens(prev, next)
+    // Any change of an applied meal rule, turning it off included (it also takes away the meal's
+    // credit against waiting), is checked: no loosening is proven for it.
+    || ((mealApplies(prev) || mealApplies(next)) && JSON.stringify(prev.meal) !== JSON.stringify(next.meal))
 }
 
 // ── Evaluation ──────────────────────────────────────────────────────────────
 
-/** A committed mission of the person (confirmed place or pending request). */
-export type DutyShift = { id: string; date: string | Date; startTime: string; endTime: string }
+/**
+ * A committed mission of the person (confirmed place or pending request). `mealOnTheGo`: the
+ * organiser marked it « repas sur le pouce possible » (the meal can be taken during it).
+ */
+export type DutyShift = { id: string; date: string | Date; startTime: string; endTime: string; mealOnTheGo?: boolean | null }
 
-export type WorkloadRule = "continuous" | "daily" | "event" | "rest" | "idle" | "offday"
+export type WorkloadRule = "continuous" | "daily" | "event" | "rest" | "idle" | "meal" | "offday"
 
 /**
  * One rule broken by a schedule. `start`/`end` are instants (ms): the continuous run, the gap for
@@ -323,14 +447,14 @@ const dayKey = (d: string | Date) => (typeof d === "string" ? d.slice(0, 10) : d
 const hhmm = (minutes: number) => `${Math.floor(minutes / 60)}:${String(minutes % 60).padStart(2, "0")}`
 const addDays = (iso: string, n: number) => new Date(Date.parse(`${iso}T00:00:00Z`) + n * DAY_MS).toISOString().slice(0, 10)
 
-type Duty = { id: string; start: number; end: number }
+type Duty = { id: string; start: number; end: number; mealOnTheGo?: boolean | null }
 
 /** A mission's real instants; an end at or before the start is on the next day (a night). */
 export function dutyInterval(s: DutyShift, timeZone: string): Duty {
   const base = new Date(`${dayKey(s.date)}T00:00:00Z`)
   const start = localDateTimeToUtc(base, hhmm(toMin(s.startTime)), timeZone).getTime()
   const end = localDateTimeToUtc(base, hhmm(toMinEnd(s.endTime, s.startTime)), timeZone).getTime()
-  return { id: s.id, start, end }
+  return { id: s.id, start, end, ...(s.mealOnTheGo ? { mealOnTheGo: true } : {}) }
 }
 
 /** The local civil date and minutes since local midnight of an instant. */
@@ -437,6 +561,16 @@ export function evaluateWorkload(shifts: DutyShift[], policy: ActivePolicy): Wor
   }
   flushRun()
 
+  // Meals: the windows the person's duty touches, each checked, and their credit against waiting.
+  const mealMinutes = mealApplies(policy) ? policy.meal.minutes : null
+  const meals = mealApplies(policy) ? mealWindowsTouched(duties, policy) : []
+  for (const m of meals) {
+    if (mealMinutes !== null && m.longest < mealMinutes) findings.push({ rule: "meal", serviceDay: m.day, start: m.start, end: m.end, minutes: m.longest, limit: mealMinutes, shiftIds: m.ids })
+  }
+  // Credit against waiting: every window of the gap's service day counts, touched or not (a wait
+  // across lunch holds lunch), each window once.
+  const creditUsed = new Set<string>()
+
   // Gaps between two blocks: within a service day, the wait between missions; across, the rest.
   for (let i = 0; i + 1 < blocks.length; i++) {
     const a = blocks[i], b = blocks[i + 1]
@@ -446,7 +580,15 @@ export function evaluateWorkload(shifts: DutyShift[], policy: ActivePolicy): Wor
     const dayB = serviceDayOf(b.start, policy)
     const ids = [...a.ids, ...b.ids]
     if (dayA === dayB) {
-      if (minutes > policy.maxIdleGapMinutes) findings.push({ rule: "idle", serviceDay: dayA, start: a.end, end: b.start, minutes, limit: policy.maxIdleGapMinutes, shiftIds: ids })
+      // A gap that holds a protected meal may be longer by the meal's length, once per window.
+      let limit = policy.maxIdleGapMinutes
+      if (minutes > limit && mealMinutes !== null) {
+        const meal = mealMinutes
+        const w = mealWindowsOf(dayA, policy as ActivePolicy & { meal: Extract<MealRule, { apply: true }> })
+          .find((m) => !creditUsed.has(m.key) && (Math.min(b.start, m.end) - Math.max(a.end, m.start)) / MIN >= meal)
+        if (w) { creditUsed.add(w.key); limit += meal }
+      }
+      if (minutes > limit) findings.push({ rule: "idle", serviceDay: dayA, start: a.end, end: b.start, minutes, limit, shiftIds: ids })
     } else if (minutes < policy.minRestMinutes) {
       findings.push({ rule: "rest", serviceDay: dayA, start: a.end, end: b.start, minutes, limit: policy.minRestMinutes, shiftIds: ids })
     }
@@ -474,8 +616,54 @@ export function evaluateWorkload(shifts: DutyShift[], policy: ActivePolicy): Wor
   // Days off: a service day with any minute of duty is worked (a standby or a night task included).
   if (offDayApplies(policy)) findings.push(...offDayFindings(byDay, policy))
 
-  const order: Record<WorkloadRule, number> = { continuous: 0, idle: 1, rest: 2, daily: 3, offday: 4, event: 5 }
+  const order: Record<WorkloadRule, number> = { continuous: 0, idle: 1, meal: 2, rest: 3, daily: 4, offday: 5, event: 6 }
   return findings.sort((a, b) => (a.serviceDay ?? "~").localeCompare(b.serviceDay ?? "~") || order[a.rule] - order[b.rule] || (a.start ?? 0) - (b.start ?? 0))
+}
+
+/** One meal window a person's duty touches, with the longest stretch free of missions that do not allow a meal. */
+type MealWindowCheck = { day: string; start: number; end: number; longest: number; ids: string[] }
+
+/** The instant of a minute counted from the start of service day `day`. */
+function serviceDayInstant(day: string, offset: number, policy: Pick<WorkloadPolicy, "timeZone" | "serviceDayStart">): number {
+  const minutes = toMin(policy.serviceDayStart) + offset
+  const date = minutes >= 1440 ? addDays(day, Math.floor(minutes / 1440)) : day
+  return localDateTimeToUtc(new Date(`${date}T00:00:00Z`), hhmm(minutes % 1440), policy.timeZone).getTime()
+}
+
+/** The meal windows of one service day, as instants, when the rule applies to that day. */
+function mealWindowsOf(day: string, policy: ActivePolicy & { meal: Extract<MealRule, { apply: true }> }): { key: string; start: number; end: number }[] {
+  if (policy.meal.days !== "all" && !policy.meal.days.includes(day)) return []
+  return policy.meal.windows.map((w, i) => {
+    const o = mealWindowOffsets(w, policy.serviceDayStart)
+    return { key: `${day}|${i}`, start: serviceDayInstant(day, o.start, policy), end: serviceDayInstant(day, o.end, policy) }
+  })
+}
+
+/**
+ * The meal windows (Codex, lot 2): on each applicable service day, a window is required when any
+ * mission has a positive overlap with it (touching an end does not count). Missions marked
+ * « repas sur le pouce possible » may hold the meal, so only the others take time out of it.
+ */
+function mealWindowsTouched(duties: Duty[], policy: ActivePolicy & { meal: Extract<MealRule, { apply: true }> }): MealWindowCheck[] {
+  const days = new Set<string>()
+  for (const d of duties) {
+    if (d.end <= d.start) continue
+    const last = serviceDayOf(d.end - 1, policy)
+    for (let day = serviceDayOf(d.start, policy), i = 0; day <= last && i < 400; day = addDays(day, 1), i++) days.add(day)
+  }
+  const out: MealWindowCheck[] = []
+  for (const day of [...days].sort()) {
+    for (const { start, end } of mealWindowsOf(day, policy).sort((x, y) => x.start - y.start)) {
+      const touching = duties.filter((d) => d.start < end && d.end > start)
+      if (touching.length === 0) continue
+      const busy = mergeIntervals(touching.filter((d) => !d.mealOnTheGo).map((d) => ({ start: Math.max(d.start, start), end: Math.min(d.end, end) })))
+      let longest = 0, cur = start
+      for (const b of busy) { longest = Math.max(longest, b.start - cur); cur = Math.max(cur, b.end) }
+      longest = Math.max(longest, end - cur)
+      out.push({ day, start, end, longest: Math.round(longest / MIN), ids: touching.map((d) => d.id) })
+    }
+  }
+  return out
 }
 
 /**
@@ -557,14 +745,20 @@ const lowerFirst = (s: string) => s.charAt(0).toLocaleLowerCase("fr-FR") + s.sli
  * One sentence per finding, the same on every page (no « tu » nor « vous »): the rule, the service
  * day, the times, what was measured and the event's limit.
  */
-export function workloadFindingMessage(f: WorkloadFinding, policy: Pick<WorkloadPolicy, "timeZone" | "offDay">): string {
+export function workloadFindingMessage(f: WorkloadFinding, policy: Pick<WorkloadPolicy, "timeZone" | "offDay" | "meal"> & Partial<Pick<WorkloadPolicy, "maxIdleGapMinutes">>): string {
   const day = f.serviceDay ? `Journée de service du ${lowerFirst(fmtDay(f.serviceDay))}` : ""
   const at = (ms: number | null) => (ms === null ? "" : clockLabel(ms, policy.timeZone))
   switch (f.rule) {
     case "continuous":
       return `${day} : ${fmtDuration(f.minutes)} de missions d'affilée, de ${at(f.start)} à ${at(f.end)}, sans vraie pause. La limite de cet événement est de ${fmtDuration(f.limit)}.`
-    case "idle":
-      return `${day} : ces deux missions laissent ${fmtDuration(f.minutes)} entre elles, de ${at(f.start)} à ${at(f.end)}. La limite de cet événement est de ${fmtDuration(f.limit)}.`
+    case "idle": {
+      const withMeal = policy.meal?.apply && f.limit > (policy.maxIdleGapMinutes ?? f.limit) ? ", pause repas comprise" : ""
+      return `${day} : ces deux missions laissent ${fmtDuration(f.minutes)} entre elles, de ${at(f.start)} à ${at(f.end)}. La limite de cet événement est de ${fmtDuration(f.limit)}${withMeal}.`
+    }
+    case "meal": {
+      const found = f.minutes === 0 ? "aucun moment sans mission" : `au plus ${fmtDuration(f.minutes)} sans mission`
+      return `${day} : pas de pause repas de ${fmtDuration(f.limit)} entre ${at(f.start)} et ${at(f.end)} (${found} dans cette plage). Cet événement demande ${fmtDuration(f.limit)} de repas dans cette plage, ou une mission où le repas sur le pouce est possible.`
+    }
     case "rest":
       return `${day} : seulement ${fmtDuration(f.minutes)} de repos avant la journée suivante, de ${at(f.start)} à ${at(f.end)}. Le repos minimum de cet événement est de ${fmtDuration(f.limit)}.`
     case "daily":

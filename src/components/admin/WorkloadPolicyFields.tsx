@@ -3,9 +3,16 @@
 // SPDX-FileCopyrightText: 2026 Philippe Vollenweider
 // SPDX-License-Identifier: AGPL-3.0-only
 
+import { flushSync } from "react-dom"
 import RequiredMark from "@/components/RequiredMark"
-import { OFF_DAY_LABEL, OFF_DAY_MIN_LABEL, OFF_DAY_WINDOW_LABEL, SERVICE_DAY_START_LABEL, serviceDayExamples, WORKLOAD_LIMIT_FIELDS, type EventHorizon, type WorkloadLimitsV1 } from "@/lib/workload-policy"
-import { OFF_DAY_HELP, offDayExample, SERVICE_DAY_START_HELP, WORKLOAD_FIELD_HELP, type DurationInput, type OffDayInput, type PolicyFormState } from "@/lib/workload-policy-form"
+import {
+  MEAL_DAYS_LABEL, MEAL_LABEL, MEAL_MINUTES_LABEL, MEAL_WINDOWS_LABEL, MEAL_WINDOWS_MAX, OFF_DAY_LABEL, OFF_DAY_MIN_LABEL, OFF_DAY_WINDOW_LABEL,
+  SERVICE_DAY_START_LABEL, serviceDayExamples, WORKLOAD_LIMIT_FIELDS, type EventHorizon, type WorkloadLimitsV1,
+} from "@/lib/workload-policy"
+import {
+  MEAL_HELP, mealDayOptions, OFF_DAY_HELP, offDayExample, SERVICE_DAY_START_HELP, withMealWindow, WORKLOAD_FIELD_HELP,
+  type DurationInput, type MealInput, type OffDayInput, type PolicyFormState,
+} from "@/lib/workload-policy-form"
 
 type LimitField = keyof WorkloadLimitsV1
 
@@ -13,8 +20,9 @@ type LimitField = keyof WorkloadLimitsV1
  * The fields of the workload protection (#1171), shared by the event's card and the organisation's
  * default: the start of the service day (with worked examples, not live), then one fieldset per
  * limit with « heures » and « minutes », then the days-off rule (an explicit answer: two radios, the
- * two numbers shown only with « Appliquer »). Errors sit under their field, with `aria-invalid`; the
- * parent focuses the first invalid input (`fieldInputId`).
+ * two numbers shown only with « Appliquer »), then the meal rule (same pattern: duration, one to three
+ * windows, days). Errors sit under their field, with `aria-invalid`; the parent focuses the first
+ * invalid input (`fieldInputId`).
  */
 export default function WorkloadPolicyFields({ idPrefix, form, onChange, errors, disabled = false, horizon }: {
   idPrefix: string
@@ -23,7 +31,10 @@ export default function WorkloadPolicyFields({ idPrefix, form, onChange, errors,
   /** Field key → message (from the local check or the server's 400). */
   errors: Map<string, string>
   disabled?: boolean
-  /** The event's service days (event card only): the days-off example under the period. */
+  /**
+   * The event's service days (event card only): the days-off example under the period, and the
+   * days to tick for the meal. Without it (organisation default), the meal applies every day.
+   */
   horizon?: EventHorizon
 }) {
   const startError = errors.get("serviceDayStart")
@@ -97,7 +108,191 @@ export default function WorkloadPolicyFields({ idPrefix, form, onChange, errors,
       })}
 
       <OffDayFieldset idPrefix={idPrefix} value={form.offDay} onChange={(offDay) => onChange({ ...form, offDay })} errors={errors} disabled={disabled} example={horizon ? offDayExample(form, horizon) : null} />
+
+      <MealFieldset idPrefix={idPrefix} value={form.meal} onChange={(meal) => onChange({ ...form, meal })} errors={errors} disabled={disabled} horizon={horizon} />
     </div>
+  )
+}
+
+const errorText = "mt-1 text-sm text-red-700"
+const smallButton = "min-h-11 sm:min-h-6 rounded-xl border border-blue-600 px-3 py-1 text-sm font-medium text-blue-700 hover:bg-blue-50"
+
+/**
+ * « Pause repas » (#1171, lot 2): apply or not (required), then the duration, one to three windows
+ * (each problem under its own row) and the days. Two levels of fieldsets at most; the rows are not
+ * fieldsets. Added rows take the focus on their « Début »; a removed row hands it to the previous one.
+ */
+function MealFieldset({ idPrefix, value, onChange, errors, disabled, horizon }: {
+  idPrefix: string
+  value: MealInput
+  onChange: (next: MealInput) => void
+  errors: Map<string, string>
+  disabled: boolean
+  horizon?: EventHorizon
+}) {
+  const id = `${idPrefix}-meal`
+  const choiceError = errors.get("meal")
+  const minutesError = errors.get("mealMinutes")
+  const windowsError = errors.get("mealWindows")
+  const daysError = errors.get("mealDays")
+  const days = horizon ? mealDayOptions(horizon) : []
+  const set = (next: Partial<MealInput>) => { if (!disabled) onChange({ ...value, ...next }) }
+  const focus = (elementId: string) => document.getElementById(elementId)?.focus()
+
+  function addWindow() {
+    if (disabled) return
+    const next = withMealWindow(value, { add: true })
+    flushSync(() => onChange(next))
+    focus(`${id}-w${next.windows.length - 1}-start`)
+  }
+
+  function removeWindow(i: number) {
+    if (disabled) return
+    flushSync(() => onChange(withMealWindow(value, { remove: i })))
+    focus(`${id}-w${Math.max(0, i - 1)}-start`)
+  }
+
+  return (
+    <fieldset className="rounded-xl bg-gray-50 border border-gray-200 px-3 py-2" data-workload-meal="1">
+      <legend className="px-1 text-sm font-medium text-gray-800">{MEAL_LABEL} <RequiredMark /></legend>
+      <p id={`${id}-intro`} className="text-xs text-gray-600">Un temps pour manger, dans les plages que vous choisissez, pour chaque personne dont une mission touche une plage.</p>
+      <div className="flex flex-wrap gap-x-6">
+        {([["yes", "Appliquer cette règle"], ["no", "Ne pas appliquer cette règle"]] as const).map(([v, label]) => (
+          <label key={v} htmlFor={`${id}-${v}`} className="flex min-h-11 cursor-pointer items-center gap-2 text-sm text-gray-800">
+            <input
+              id={`${id}-${v}`}
+              type="radio"
+              name={`${id}-apply`}
+              value={v}
+              required
+              checked={value.apply === v}
+              aria-describedby={[`${id}-intro`, choiceError && `${id}-error`].filter(Boolean).join(" ")}
+              onChange={() => set({ apply: v })}
+              className="h-5 w-5 shrink-0"
+            />
+            {label}
+          </label>
+        ))}
+      </div>
+      {choiceError && <p id={`${id}-error`} className={errorText}>{choiceError}</p>}
+
+      {value.apply === "yes" && (
+        <div className="mt-1 space-y-4">
+          <div className="w-24">
+            <label htmlFor={`${id}-minutes`} className="block text-xs font-medium text-gray-600 mb-1">{MEAL_MINUTES_LABEL}</label>
+            <input
+              id={`${id}-minutes`}
+              type="text"
+              inputMode="numeric"
+              autoComplete="off"
+              className="input"
+              value={value.minutes}
+              readOnly={disabled}
+              aria-required
+              aria-invalid={minutesError ? true : undefined}
+              aria-describedby={[`${id}-help`, minutesError && `${id}-minutes-error`].filter(Boolean).join(" ")}
+              onChange={(e) => set({ minutes: e.target.value })}
+            />
+          </div>
+          {minutesError && <p id={`${id}-minutes-error`} className={errorText}>{minutesError}</p>}
+
+          <fieldset className="border-0 p-0 m-0">
+            <legend className="text-xs font-medium text-gray-600 mb-1">{MEAL_WINDOWS_LABEL}</legend>
+            <ul role="list" className="space-y-2">
+              {value.windows.map((w, i) => {
+                const rowError = errors.get(`mealWindow${i}`)
+                // The error about the plages as a whole sits on the first row's fields (where focus goes).
+                const listError = i === 0 ? windowsError : undefined
+                const describedBy = [rowError && `${id}-w${i}-error`, listError && `${id}-windows-error`].filter(Boolean).join(" ") || undefined
+                return (
+                  <li key={w.key}>
+                    <p className="text-xs font-medium text-gray-800">Plage {i + 1}</p>
+                    <div className="flex flex-wrap items-end gap-3">
+                      {(["start", "end"] as const).map((part) => (
+                        <div key={part} className="w-40">
+                          <label htmlFor={`${id}-w${i}-${part}`} className="block text-xs font-medium text-gray-600 mb-1">
+                            {part === "start" ? "Début" : "Fin"}{" "}<span className="sr-only">{`de la plage ${i + 1}`}</span>
+                          </label>
+                          <input
+                            id={`${id}-w${i}-${part}`}
+                            type="time"
+                            step={60}
+                            className="input"
+                            value={w[part]}
+                            readOnly={disabled}
+                            aria-required
+                            aria-invalid={rowError || listError ? true : undefined}
+                            aria-describedby={describedBy}
+                            onChange={(e) => set({ windows: value.windows.map((x, j) => (j === i ? { ...x, [part]: e.target.value } : x)) })}
+                          />
+                        </div>
+                      ))}
+                      {value.windows.length > 1 && (
+                        <button type="button" onClick={() => removeWindow(i)} className={smallButton}>
+                          Retirer{" "}<span className="sr-only">{`la plage ${i + 1}`}</span>
+                        </button>
+                      )}
+                    </div>
+                    {rowError && <p id={`${id}-w${i}-error`} className={errorText}>{rowError}</p>}
+                  </li>
+                )
+              })}
+            </ul>
+            {windowsError && <p id={`${id}-windows-error`} className={errorText}>{windowsError}</p>}
+            <div className="mt-2">
+              {value.windows.length < MEAL_WINDOWS_MAX
+                ? <button type="button" onClick={addWindow} className={smallButton}>Ajouter une plage</button>
+                : <p className="text-xs text-gray-600">{MEAL_WINDOWS_MAX} plages au plus.</p>}
+            </div>
+          </fieldset>
+
+          {horizon ? (
+            <fieldset className="border-0 p-0 m-0">
+              <legend className="text-xs font-medium text-gray-600 mb-1">{MEAL_DAYS_LABEL}</legend>
+              {([["all", "Tous les jours de l'événement"], ["some", "Certains jours"]] as const).map(([v, label]) => (
+                <label key={v} htmlFor={`${id}-days-${v}`} className="flex min-h-11 cursor-pointer items-center gap-2 text-sm text-gray-800">
+                  <input
+                    id={`${id}-days-${v}`}
+                    type="radio"
+                    name={`${id}-days`}
+                    value={v}
+                    checked={value.days === v}
+                    onChange={() => set({ days: v })}
+                    className="h-5 w-5 shrink-0"
+                  />
+                  {label}
+                </label>
+              ))}
+              {value.days === "some" && (
+                <ul role="list" className="ml-7 space-y-0.5">
+                  {days.map((d, k) => (
+                    <li key={d.date}>
+                      <label htmlFor={`${id}-day-${k}`} className="flex min-h-11 sm:min-h-6 cursor-pointer items-center gap-2 text-sm text-gray-800">
+                        <input
+                          id={`${id}-day-${k}`}
+                          type="checkbox"
+                          checked={value.dates.includes(d.date)}
+                          aria-invalid={daysError ? true : undefined}
+                          aria-describedby={daysError ? `${id}-days-error` : undefined}
+                          onChange={(e) => set({ dates: e.target.checked ? [...value.dates, d.date] : value.dates.filter((x) => x !== d.date) })}
+                          className="h-4 w-4 shrink-0"
+                        />
+                        {d.label}
+                      </label>
+                    </li>
+                  ))}
+                </ul>
+              )}
+              {daysError && <p id={`${id}-days-error`} className={errorText}>{daysError}</p>}
+            </fieldset>
+          ) : (
+            <p className="text-xs text-gray-700">Pour les nouveaux événements, la règle vaut pour tous les jours.</p>
+          )}
+
+          <p id={`${id}-help`} className="text-xs text-gray-600">{MEAL_HELP}</p>
+        </div>
+      )}
+    </fieldset>
   )
 }
 
@@ -181,5 +376,10 @@ export function fieldInputId(idPrefix: string, field: string): string {
   if (field === "offDay") return `${idPrefix}-offDay-yes`
   if (field === "offDayMinOffDays") return `${idPrefix}-offDay-minOffDays`
   if (field === "offDayWindowDays") return `${idPrefix}-offDay-windowDays`
+  if (field === "meal") return `${idPrefix}-meal-yes`
+  if (field === "mealMinutes") return `${idPrefix}-meal-minutes`
+  if (field === "mealWindows") return `${idPrefix}-meal-w0-start`
+  if (field.startsWith("mealWindow")) return `${idPrefix}-meal-w${field.slice("mealWindow".length)}-start`
+  if (field === "mealDays") return `${idPrefix}-meal-day-0`
   return `${idPrefix}-${field}-hours`
 }

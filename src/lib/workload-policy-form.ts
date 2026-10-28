@@ -9,8 +9,8 @@
  */
 import { fmtDay, fmtDuration } from "./signup-recap"
 import {
-  checkPolicyValues, EXISTING_WARNING_SUGGESTIONS, horizonDays, WORKLOAD_BENCHMARKS, WORKLOAD_LIMIT_FIELDS,
-  type EventHorizon, type PolicyProblem, type WorkloadBenchmark, type WorkloadField, type WorkloadLimitsV1, type WorkloadPolicyValues,
+  checkPolicyValues, EXISTING_WARNING_SUGGESTIONS, horizonDays, WRITE_SECTIONS, WORKLOAD_BENCHMARKS, WORKLOAD_LIMIT_FIELDS,
+  MEAL_WINDOWS_MAX, type EventHorizon, type MealRule, type PolicyProblem, type WorkloadBenchmark, type WorkloadField, type WorkloadLimitsV1, type WorkloadPolicyValues,
 } from "./workload-policy"
 
 type LimitField = keyof WorkloadLimitsV1
@@ -25,10 +25,23 @@ export type DurationInput = { hours: string; minutes: string }
  */
 export type OffDayInput = { apply: "" | "yes" | "no"; minOffDays: string; windowDays: string }
 
+/**
+ * The meal answer as typed (#1171, lot 2): no choice yet, apply, or do not apply; what was typed is
+ * kept under « do not apply » and sent only with « apply ». `days`: every day, or the dates ticked.
+ */
+export type MealInput = { apply: "" | "yes" | "no"; minutes: string; windows: MealWindowInput[]; days: "all" | "some"; dates: string[] }
+
+/** One window as typed; `key` keeps its row stable when another one is removed (never sent). */
+export type MealWindowInput = { key: string; start: string; end: string }
+
+let windowKeys = 0
+const windowRow = (start = "", end = ""): MealWindowInput => ({ key: `w${++windowKeys}`, start, end })
+
 /** The whole form as typed. */
-export type PolicyFormState = { serviceDayStart: string; offDay: OffDayInput } & Record<LimitField, DurationInput>
+export type PolicyFormState = { serviceDayStart: string; offDay: OffDayInput; meal: MealInput } & Record<LimitField, DurationInput>
 
 const EMPTY_OFF_DAY: OffDayInput = { apply: "", minOffDays: "", windowDays: "" }
+const emptyMeal = (): MealInput => ({ apply: "", minutes: "", windows: [windowRow()], days: "all", dates: [] })
 
 const EMPTY: DurationInput = { hours: "", minutes: "" }
 
@@ -44,10 +57,12 @@ export const WORKLOAD_FIELD_HELP: Record<LimitField, string> = {
 
 export const OFF_DAY_HELP = "Une journée de service avec la moindre mission compte comme travaillée, une mission de standby ou de nuit comprise. Chaque période complète de journées d'affilée dans les dates de l'événement est vérifiée."
 
+export const MEAL_HELP = "Quand une mission touche une plage, la personne doit y avoir au moins la durée du repas sans mission. Une mission où le repas sur le pouce est possible ne retire pas ce temps, mais compte comme du travail. Une attente entre deux missions qui contient ce repas peut dépasser l'attente maximale de la durée du repas, une fois par plage."
+
 export const SERVICE_DAY_START_HELP = "L'heure à laquelle une journée de service commence. Une mission de nuit avant cette heure compte dans la journée de la veille."
 
 export function emptyPolicyForm(): PolicyFormState {
-  return { serviceDayStart: "", offDay: { ...EMPTY_OFF_DAY }, ...Object.fromEntries(WORKLOAD_LIMIT_FIELDS.map((f) => [f.key, { ...EMPTY }])) } as PolicyFormState
+  return { serviceDayStart: "", offDay: { ...EMPTY_OFF_DAY }, meal: emptyMeal(), ...Object.fromEntries(WORKLOAD_LIMIT_FIELDS.map((f) => [f.key, { ...EMPTY }])) } as PolicyFormState
 }
 
 function offDayInputFrom(values: WorkloadPolicyValues): OffDayInput {
@@ -56,12 +71,18 @@ function offDayInputFrom(values: WorkloadPolicyValues): OffDayInput {
   return { apply: "yes", minOffDays: String(values.offDay.minOffDays), windowDays: String(values.offDay.windowDays) }
 }
 
+function mealInputFrom(rule: MealRule | undefined): MealInput {
+  if (!rule) return emptyMeal()
+  if (!rule.apply) return { ...emptyMeal(), apply: "no" }
+  return { apply: "yes", minutes: String(rule.minutes), windows: rule.windows.map((w) => windowRow(w.start, w.end)), days: rule.days === "all" ? "all" : "some", dates: rule.days === "all" ? [] : [...rule.days] }
+}
+
 const toInput = (minutes: number): DurationInput => ({ hours: String(Math.floor(minutes / 60)), minutes: String(minutes % 60) })
 
 /** The form filled from stored values, or empty. */
 export function policyFormFrom(values: WorkloadPolicyValues | null | undefined): PolicyFormState {
   if (!values) return emptyPolicyForm()
-  return { serviceDayStart: values.serviceDayStart, offDay: offDayInputFrom(values), ...Object.fromEntries(WORKLOAD_LIMIT_FIELDS.map((f) => [f.key, toInput(values[f.key])])) } as PolicyFormState
+  return { serviceDayStart: values.serviceDayStart, offDay: offDayInputFrom(values), meal: mealInputFrom(values.meal), ...Object.fromEntries(WORKLOAD_LIMIT_FIELDS.map((f) => [f.key, toInput(values[f.key])])) } as PolicyFormState
 }
 
 /** The existing #465 warning settings filled in, the other fields left as they were. */
@@ -76,18 +97,36 @@ export function withBenchmark(form: PolicyFormState, b: WorkloadBenchmark): Poli
   const next = { ...form }
   for (const [key, minutes] of Object.entries(b.limits ?? {}) as [LimitField, number][]) next[key] = toInput(minutes)
   if (b.offDay) next.offDay = b.offDay.apply ? { apply: "yes", minOffDays: String(b.offDay.minOffDays), windowDays: String(b.offDay.windowDays) } : { ...form.offDay, apply: "no" }
+  if (b.meal) next.meal = mealInputFrom(b.meal)
   return next
+}
+
+/** A meal window added (at most MEAL_WINDOWS_MAX), or removed. */
+export function withMealWindow(meal: MealInput, change: { add: true } | { remove: number }): MealInput {
+  if ("add" in change) return meal.windows.length >= MEAL_WINDOWS_MAX ? meal : { ...meal, windows: [...meal.windows, windowRow()] }
+  return meal.windows.length <= 1 ? meal : { ...meal, windows: meal.windows.filter((_, i) => i !== change.remove) }
+}
+
+/** The event's days to tick for « Certains jours ». */
+export function mealDayOptions(horizon: EventHorizon): { date: string; label: string }[] {
+  const out: { date: string; label: string }[] = []
+  for (let i = 0; i < Math.min(horizonDays(horizon), 62); i++) {
+    const date = new Date(Date.parse(`${horizon.firstDay}T00:00:00Z`) + i * 86_400_000).toISOString().slice(0, 10)
+    out.push({ date, label: lowerFirstLabel(fmtDay(date)) })
+  }
+  return out
 }
 
 /** The fields a benchmark fills (their error is cleared once filled). */
 export function benchmarkFields(b: WorkloadBenchmark): string[] {
-  return [...Object.keys(b.limits ?? {}), ...(b.offDay ? ["offDay", "offDayMinOffDays", "offDayWindowDays"] : [])]
+  return [...Object.keys(b.limits ?? {}), ...(b.offDay ? ["offDay", "offDayMinOffDays", "offDayWindowDays"] : []), ...(b.meal ? ["meal", "mealMinutes", "mealWindows", "mealDays"] : [])]
 }
 
 /** What the announcement says after a benchmark was used. */
 export function benchmarkAnnouncement(b: WorkloadBenchmark): string {
   const parts = WORKLOAD_LIMIT_FIELDS.filter((f) => b.limits && f.key in b.limits).map((f) => `${lowerFirstLabel(f.label)} ${fmtDuration(b.limits![f.key]!)}`)
   if (b.offDay?.apply) parts.push(`jours sans mission : règle appliquée, ${b.offDay.minOffDays} jour sur ${b.offDay.windowDays} journées de service`)
+  if (b.meal?.apply) parts.push(`pause repas : règle appliquée, ${fmtDuration(b.meal.minutes)} entre ${b.meal.windows.map((w) => `${clock(w.start)} et ${clock(w.end)}`).join(", puis entre ")}, ${b.meal.days === "all" ? "tous les jours" : "certains jours"}`)
   return `Rempli : ${parts.join(", ")}. Les autres champs n'ont pas changé.`
 }
 
@@ -118,6 +157,16 @@ export function policyValuesFromForm(form: PolicyFormState): Record<string, unkn
   const o = form.offDay
   if (o.apply === "no") out.offDay = { apply: false }
   else if (o.apply === "yes") out.offDay = { apply: true, minOffDays: wholeNumber(o.minOffDays), windowDays: wholeNumber(o.windowDays) }
+  const m = form.meal
+  if (m.apply === "no") out.meal = { apply: false }
+  else if (m.apply === "yes") {
+    out.meal = {
+      apply: true,
+      minutes: wholeNumber(m.minutes),
+      windows: m.windows.map((w) => ({ start: w.start.trim(), end: w.end.trim() })),
+      days: m.days === "all" ? "all" : [...m.dates].sort(),
+    }
+  }
   return out
 }
 
@@ -135,7 +184,7 @@ export function checkPolicyForm(form: PolicyFormState): { ok: true; values: Work
   for (const f of WORKLOAD_LIMIT_FIELDS) {
     if (raw[f.key] === "invalide") problems.push({ field: f.key, message: `${f.label} : indiquez des heures et des minutes en chiffres (minutes de 0 à 59).` })
   }
-  const checked = checkPolicyValues(raw, { requireOffDay: true })
+  const checked = checkPolicyValues(raw, WRITE_SECTIONS)
   if (!checked.ok) problems.push(...checked.problems.filter((p) => !problems.some((q) => q.field === p.field)))
   return problems.length > 0 ? { ok: false, problems } : checked
 }
@@ -168,13 +217,16 @@ export function policySummaryLines(values: WorkloadPolicyValues): string[] {
     !values.offDay || !values.offDay.apply
       ? "Aucun jour sans mission demandé."
       : `Au moins ${values.offDay.minOffDays} jour${values.offDay.minOffDays > 1 ? "s" : ""} sans mission sur toute période de ${values.offDay.windowDays} journées de service d'affilée.`,
+    !values.meal || !values.meal.apply
+      ? "Aucune pause repas demandée."
+      : `Au moins ${d(values.meal.minutes)} de repas sans mission dans chaque plage qu'une mission touche (${values.meal.windows.map((w) => `de ${clock(w.start)} à ${clock(w.end)}`).join(", ")}), ${values.meal.days === "all" ? "tous les jours" : `${values.meal.days.length} jour${values.meal.days.length > 1 ? "s" : ""} choisi${values.meal.days.length > 1 ? "s" : ""}`} ; une mission où le repas sur le pouce est possible ne retire pas ce temps.`,
     "Une mission de « standby » compte comme du travail, jamais comme une pause.",
     "Toute inscription, tout ajout, tout échange ou changement d'horaire qui dépasserait ces limites est refusé, pour les bénévoles comme pour les organisateurs.",
   ]
 }
 
 /** What the protection does not cover yet, said next to the summary. */
-export const WORKLOAD_NOT_COVERED = "Pas encore pris en compte : les repas, le temps de trajet entre deux lieux, des limites plus strictes pour une personne."
+export const WORKLOAD_NOT_COVERED = "Pas encore pris en compte : le temps de trajet entre deux lieux, des limites plus strictes pour une personne."
 
 /**
  * The days-off rule against the event's dates, under the period field (not live): with fewer

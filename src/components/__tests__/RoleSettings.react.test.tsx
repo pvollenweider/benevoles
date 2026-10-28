@@ -6,7 +6,7 @@ import "@testing-library/jest-dom/vitest"
 import { render, screen, fireEvent, cleanup, waitFor, act } from "@testing-library/react"
 import { useState } from "react"
 
-import { RoleColorPicker, RoleLimitForm, RoleOverlapForm, RoleReserveForm } from "../admin/shifts/RoleSettings"
+import { RoleColorPicker, RoleLimitForm, RoleMealForm, RoleOverlapForm, RoleReserveForm } from "../admin/shifts/RoleSettings"
 import type { RawShift } from "../admin/shifts/types"
 
 // Inline editors of a role in « Gérer les postes »: limit per person (#466), reserved tags (#470), colour.
@@ -37,6 +37,42 @@ describe("RoleSettings", () => {
   afterEach(() => {
     cleanup()
     vi.unstubAllGlobals()
+  })
+
+  // « Repas sur le pouce possible » on all of a poste's shifts (#1171, lot 2).
+  describe("RoleMealForm", () => {
+    const setup = (value: boolean | null, saved: "all" | "none" | "some") => {
+      const cb = { ...callbacks(), onValueChange: vi.fn() }
+      render(<RoleMealForm eventId="evt-1" role="Bar" index={0} saved={saved} value={value} busyRole={null} {...cb} />)
+      return cb
+    }
+
+    it("is indeterminate for a mixed poste, says so, and saving it untouched changes nothing", () => {
+      const cb = setup(null, "some")
+      const box = screen.getByRole("checkbox", { name: "Poste « Bar » : repas sur le pouce possible sur ses créneaux" }) as HTMLInputElement
+      expect(box.indeterminate).toBe(true)
+      expect(box).not.toHaveAttribute("aria-checked")
+      expect(box).toHaveAccessibleDescription(/Pour l'instant : sur certains créneaux seulement\..*cochée, sur tous ; décochée, sur aucun/)
+      fireEvent.click(screen.getByRole("button", { name: "Enregistrer" }))
+      expect(fetchMock).not.toHaveBeenCalled()
+      expect(cb.onAnnounce).toHaveBeenCalledWith("Poste « Bar » : aucune modification.")
+    })
+
+    it("saves for all live shifts and announces; a refusal stays in the panel's alert", async () => {
+      fetchMock.mockResolvedValueOnce({ ok: true, json: async () => ({}) })
+      const cb = setup(true, "some")
+      fireEvent.click(screen.getByRole("button", { name: "Enregistrer" }))
+      await waitFor(() => expect(cb.onClose).toHaveBeenCalledWith("Bar"))
+      expect(JSON.parse(fetchMock.mock.calls[0][1].body)).toEqual({ mealOnTheGo: true })
+      expect(applied(cb.setShifts, [shift({}), shift({ id: "s2", status: "cancelled" }), shift({ id: "s3", roleName: "Scène" })]).map((s) => s.mealOnTheGo)).toEqual([true, undefined, undefined])
+      expect(cb.onAnnounce).toHaveBeenCalledWith("Poste « Bar » : repas sur le pouce possible sur tous ses créneaux.")
+      cleanup()
+      fetchMock.mockResolvedValueOnce({ ok: false, status: 409, json: async () => ({ error: "Modification impossible : sans repas sur le pouce sur les créneaux de ce poste, le programme de Lou Martin ne respecterait plus les pauses et limites de charge de cet événement." }) })
+      const cb2 = setup(false, "all")
+      fireEvent.click(screen.getByRole("button", { name: "Enregistrer" }))
+      await waitFor(() => expect(cb2.onActionError).toHaveBeenLastCalledWith(expect.stringContaining("Lou Martin")))
+      expect(cb2.onClose).not.toHaveBeenCalled()
+    })
   })
 
   // « Cumulable avec un autre créneau » (#986).

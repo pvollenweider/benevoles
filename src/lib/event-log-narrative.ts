@@ -45,6 +45,8 @@ const FIELD_LABELS: Record<string, string> = {
   overlapAllowed: "cumulable avec un autre créneau",
   // « Attribué par l'organisation uniquement » (#1145).
   assignedOnly: "attribué par l'organisation uniquement",
+  // « Repas sur le pouce possible » (#1171, lot 2).
+  mealOnTheGo: "repas sur le pouce possible",
   shiftId: "créneau",
   source: "origine",
   comment: "commentaire",

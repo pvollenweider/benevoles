@@ -62,7 +62,8 @@ export default function EventWorkloadPolicyCard({ eventId, initialEnabled, initi
     if (errors.size > 0) {
       const again = new Map(errors)
       if (next.serviceDayStart !== form.serviceDayStart) again.delete("serviceDayStart")
-      for (const key of Object.keys(next) as (keyof PolicyFormState)[]) if (key !== "serviceDayStart" && key !== "offDay" && next[key] !== form[key]) again.delete(key)
+      for (const key of Object.keys(next) as (keyof PolicyFormState)[]) if (key !== "serviceDayStart" && key !== "offDay" && key !== "meal" && next[key] !== form[key]) again.delete(key)
+      if (next.meal !== form.meal) for (const key of [...again.keys()]) if (key.startsWith("meal")) again.delete(key)
       if (next.offDay.apply !== form.offDay.apply) again.delete("offDay")
       if (next.offDay.apply !== form.offDay.apply || next.offDay.minOffDays !== form.offDay.minOffDays || next.offDay.windowDays !== form.offDay.windowDays) {
         again.delete("offDayMinOffDays")
@@ -94,6 +95,8 @@ export default function EventWorkloadPolicyCard({ eventId, initialEnabled, initi
     if (errors.size > 0) {
       const again = new Map(errors)
       for (const key of benchmarkFields(b)) again.delete(key)
+      // The meal suggestion refills every row: their own errors go too.
+      if (b.meal) for (const key of [...again.keys()]) if (key.startsWith("meal")) again.delete(key)
       setErrors(again)
     }
     announce(setStatus, benchmarkAnnouncement(b))

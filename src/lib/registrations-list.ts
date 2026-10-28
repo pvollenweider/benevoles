@@ -18,6 +18,8 @@ export type ShiftRef = {
   startTime: string; endTime: string; capacity: number; registrationCount: number
   /** Its role may overlap another shift (#986): no overlap warning. */
   overlapAllowed?: boolean
+  /** « Repas sur le pouce possible » (#1171, lot 2), read by the workload check. */
+  mealOnTheGo?: boolean
 }
 
 type ListRegistration = {

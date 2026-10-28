@@ -49,7 +49,7 @@ type Show = { name: string; date: string; startTime: string; endTime: string }
 
 export default function ShiftsManager({
   eventId, eventStartDate, eventEndDate, initialShifts, showSchedule = [], defaultHolidays = "none", initialRecurrences = [], today = "",
-  initialSectors = null,
+  initialSectors = null, mealOnTheGoShown = false,
 }: {
   eventId:        string
   eventStartDate: string
@@ -64,6 +64,8 @@ export default function ShiftsManager({
   today?: string
   /** Sectors (#1147, beta): the event's option, adoption and sectors; null = nothing about sectors on the page. */
   initialSectors?: AdminSectorsState | null
+  /** « Repas sur le pouce possible » (#1171, lot 2): shown where the workload protection can be used. */
+  mealOnTheGoShown?: boolean
 }) {
   const formRef   = useRef<HTMLDivElement>(null)
   const dates     = eventDates(eventStartDate, eventEndDate)
@@ -482,6 +484,7 @@ export default function ShiftsManager({
         setSectorsState={setSectorsState}
         onConfirmDone={() => setPendingDelete(null)}
         onAddPoste={(sector, opener) => openForm(singleDay ? { date: dates[0] } : {}, null, { sector, opener })}
+        mealOnTheGoShown={mealOnTheGoShown}
       />
 
       {/* Quick-add / edit form */}
@@ -498,6 +501,7 @@ export default function ShiftsManager({
           onCancel={closeForm}
           sectors={editorSectors}
           presetSector={formSector}
+          mealOnTheGoShown={mealOnTheGoShown}
         />
       )}
 
@@ -616,6 +620,7 @@ export default function ShiftsManager({
                         internalNotes: s.internalNotes ?? "",
                         waitlistEnabled: s.waitlistEnabled ?? false,
                         requiresApproval: s.requiresApproval ?? false,
+                        mealOnTheGo: s.mealOnTheGo ?? false,
                         minAge: s.minAge ?? "",
                         locationDetails: s.locationDetails ?? "",
                         latitude: s.latitude ?? null,

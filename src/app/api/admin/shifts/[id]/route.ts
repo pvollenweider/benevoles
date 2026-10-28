@@ -42,6 +42,8 @@ const schema = z.object({
   waitlistEnabled: z.boolean().optional(),
   requiresApproval: z.boolean().optional(),
   minAge: z.number().int().min(0).max(120).nullable().optional(),
+  /** « Repas sur le pouce possible » (#1171, lot 2); removing it is judged like new hours. */
+  mealOnTheGo: z.boolean().optional(),
   // Caller can opt out of notifying volunteers (default true).
   notifyVolunteers: z.boolean().optional(),
 }).refine((d) => !(d.startTime && d.endTime) || d.startTime !== d.endTime, { message: SAME_TIME_ERROR, path: ["endTime"] }).refine(isCoordinatePair, { message: COORDINATE_PAIR_ERROR, path: ["longitude"] })
@@ -105,19 +107,23 @@ export async function PATCH(req: Request, { params }: { params: Promise<{ id: st
   const timesMove = (rest.date !== undefined && rest.date !== before.date.toISOString().slice(0, 10))
     || (rest.startTime !== undefined && rest.startTime !== before.startTime)
     || (rest.endTime !== undefined && rest.endTime !== before.endTime)
+  // Removing « repas sur le pouce possible » can take the meal away from people holding the shift
+  // (Codex, lot 2): judged like new hours. Setting it can only help, judged all the same (cheap).
+  const mealMoves = rest.mealOnTheGo !== undefined && rest.mealOnTheGo !== before.mealOnTheGo
   let saved
   try {
     saved = await db.$transaction(async (tx) => {
       // Workload protection (#1171): new hours are judged for every person holding the shift, before
       // anything is written; one refusal refuses the edit.
-      if (timesMove) {
+      if (timesMove || mealMoves) {
         const refusals = await checkScheduleEdit(tx, before.eventId, [{
           id,
           date: rest.date ?? before.date,
           startTime: rest.startTime ?? before.startTime,
           endTime: rest.endTime ?? before.endTime,
+          mealOnTheGo: rest.mealOnTheGo ?? before.mealOnTheGo,
         }])
-        if (refusals.length > 0) throw new ScheduleEditRefusalError(refusals)
+        if (refusals.length > 0) throw new ScheduleEditRefusalError(refusals, timesMove ? undefined : "sans repas sur le pouce sur ce créneau")
       }
       const after = await tx.shift.update({ where: { id }, data: updateData })
       // A new time, day, place, poste or requirement ends the swap requests agreed on the old one
@@ -159,7 +165,7 @@ export async function PATCH(req: Request, { params }: { params: Promise<{ id: st
       return { after, outboxIds: await enqueueNotifications(outbox.payloads, tx, { organizationId: before.event.organizationId }), notified: outbox.payloads.length }
     })
   } catch (e) {
-    if (e instanceof ScheduleEditRefusalError) return NextResponse.json(scheduleEditRefusalBody(e.refusals), { status: 409 })
+    if (e instanceof ScheduleEditRefusalError) return NextResponse.json(scheduleEditRefusalBody(e.refusals, e.cause), { status: 409 })
     throw e
   }
   const { after, outboxIds, notified } = saved
@@ -176,6 +182,7 @@ export async function PATCH(req: Request, { params }: { params: Promise<{ id: st
     "waitlistEnabled",
     "requiresApproval",
     "minAge",
+    "mealOnTheGo",
   ])
   if (shiftChanges) {
     await logEvent({

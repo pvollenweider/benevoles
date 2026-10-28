@@ -9,6 +9,8 @@ import { defaultHolidayCalendar } from "@/lib/shift-recurrence"
 import { orgTimeZone } from "@/lib/time-zone"
 import { localDay } from "@/lib/day-of"
 import { sectorsManaged } from "@/lib/sectors"
+import { canAdoptBeta } from "@/lib/beta-access"
+import { workloadProtectionShipped } from "@/lib/workload-shipped"
 
 export const dynamic = "force-dynamic"
 export const metadata: Metadata = { title: "Créneaux" }
@@ -41,6 +43,9 @@ export default async function ShiftsPage({ params, searchParams }: { params: Pro
   const showSchedule = (event.showSchedule as Show[]) ?? []
 
   const shiftCount = event.shifts.filter((s) => s.status !== "cancelled").length
+  // « Repas sur le pouce possible » (#1171, lot 2): offered where the workload protection can be
+  // used (as its card is), so pages of other organisations do not change.
+  const mealOnTheGoShown = event.workloadProtectionEnabled || (workloadProtectionShipped() && await canAdoptBeta(event.organizationId, "workloadProtection"))
 
   return (
     <div className="space-y-6">
@@ -75,6 +80,7 @@ export default async function ShiftsPage({ params, searchParams }: { params: Pro
           adoptedAt: event.sectorsAdoptedAt?.toISOString() ?? null,
           sectors: event.sectors.map((s) => ({ ...s, archivedAt: s.archivedAt?.toISOString() ?? null })),
         } : null}
+        mealOnTheGoShown={mealOnTheGoShown}
         initialRecurrences={event.shiftRecurrences.map((r) => ({ ...r, fromDate: r.fromDate.toISOString().slice(0, 10), untilDate: r.untilDate.toISOString().slice(0, 10) }))}
         initialShifts={event.shifts.map(({ registrations, ...s }) => ({
           ...s,

@@ -16,7 +16,7 @@ import { swapsShipped } from "@/lib/shift-swap-gate"
 import { SECTORS_CLOSED_ERROR } from "@/lib/sectors"
 import { WORKLOAD_NOT_ADOPTABLE } from "@/lib/workload-policy-data"
 import { workloadProtectionShipped } from "@/lib/workload-shipped"
-import { checkPolicyValues } from "@/lib/workload-policy"
+import { checkPolicyValues, WRITE_SECTIONS } from "@/lib/workload-policy"
 import { Prisma } from "@/generated/prisma/client"
 
 const SLUG_RE = /^[a-z0-9]([a-z0-9-]*[a-z0-9])?$/
@@ -113,10 +113,14 @@ export async function PATCH(req: Request) {
       if (!(workloadProtectionShipped() && (await canAdoptBeta(organizationId, "workloadProtection")))) {
         return NextResponse.json({ error: WORKLOAD_NOT_ADOPTABLE }, { status: 403 })
       }
-      const checked = checkPolicyValues(value?.values, { requireOffDay: true })
+      const checked = checkPolicyValues(value?.values, WRITE_SECTIONS)
       if (typeof value?.enabled !== "boolean" || !checked.ok) {
         const problems = checked.ok ? [] : checked.problems
         return NextResponse.json({ error: problems[0]?.message ?? "Indiquez si les nouveaux événements commencent protégés.", problems }, { status: 400 })
+      }
+      // Dates mean nothing before an event exists: a default's meal rule applies every day.
+      if (checked.values.meal?.apply && checked.values.meal.days !== "all") {
+        return NextResponse.json({ error: "Pause repas : pour les nouveaux événements, la règle vaut pour tous les jours.", problems: [{ field: "mealDays", message: "Pause repas : pour les nouveaux événements, la règle vaut pour tous les jours." }] }, { status: 400 })
       }
       updates.workloadPolicyDefault = { enabled: value.enabled, values: checked.values }
     }

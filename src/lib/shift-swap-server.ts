@@ -152,6 +152,8 @@ const SHIFT_SELECT = {
   id: true, eventId: true, roleName: true, label: true, status: true, date: true, startTime: true, endTime: true,
   overlapAllowed: true, assignedOnly: true, requiresApproval: true, minAge: true, reservedTags: true,
   locationDetails: true, latitude: true, longitude: true, sectorId: true, instructions: true,
+  // Read by the workload check (#1171, meals); not a term of the swap agreement.
+  mealOnTheGo: true,
 } as const
 
 const REG_SELECT = {

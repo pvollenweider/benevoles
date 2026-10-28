@@ -10,6 +10,8 @@ vi.mock("@/lib/auth-guard", () => ({ getOrgContext: async () => ({ organizationI
 vi.mock("@/components/admin/SectorLeadersManager", () => ({ default: function SectorLeadersManager() { return null } }))
 vi.mock("@/components/admin/ShiftsManager", () => ({ default: function ShiftsManager() { return null } }))
 vi.mock("@/components/admin/WizardSteps", () => ({ default: () => null }))
+// Beta gates (#1171, « repas sur le pouce possible » on the shifts page): closed here.
+vi.mock("@/lib/beta-access", () => ({ canAdoptBeta: async () => false }))
 vi.mock("@/components/admin/HelpLink", () => ({ default: () => null }))
 
 function find(node: ReactNode, name: string): ReactElement | null {
