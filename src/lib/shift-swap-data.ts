@@ -102,9 +102,9 @@ const PERSON_SELECT = { id: true, active: true, erasedAt: true, mergedIntoId: tr
 export async function loadVolunteerSwapView(eventId: string, volunteerId: string, now: Date = new Date()): Promise<VolunteerSwapView> {
   const event = await prisma.event.findUniqueOrThrow({
     where: { id: eventId },
-    select: { shiftSwapsEnabled: true, shiftSwapsApproval: true, cancelDeadlineDays: true, cancelDeadlineHours: true, organization: { select: { timeZone: true } } },
+    select: { shiftSwapsEnabled: true, shiftSwapsApproval: true, sectorsAdoptedAt: true, cancelDeadlineDays: true, cancelDeadlineHours: true, organization: { select: { timeZone: true } } },
   })
-  if (!swapsShipped()) return { enabled: false, publishable: [], mine: [], offers: [], ownShifts: {} }
+  if (!swapsShipped()) return { enabled: false, scope: "poste", publishable: [], mine: [], offers: [], ownShifts: {} }
   const [requests, eventShifts] = await Promise.all([
     prisma.shiftSwapRequest.findMany({
       where: { eventId, OR: [{ status: { in: [...SWAP_LIVE_STATUSES] } }, { volunteerId }, { counterVolunteerId: volunteerId }] },

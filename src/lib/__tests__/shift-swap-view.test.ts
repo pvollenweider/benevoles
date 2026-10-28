@@ -76,6 +76,31 @@ describe("buildVolunteerSwapView (#1174)", () => {
   })
 })
 
+describe("buildVolunteerSwapView across a sector (#1175)", () => {
+  const nord = shift("sa", { roleName: "Parking Nord", label: "Parking Nord", sectorId: "sec-p" })
+  const sud = shift("sb", { roleName: "Parking Sud", label: "Parking Sud", sectorId: "sec-p", date: new Date("2030-07-05T00:00:00Z") })
+  const bar = shift("sc", { roleName: "Bar", label: "Bar", sectorId: "sec-b", date: new Date("2030-07-06T00:00:00Z") })
+  const sectorInput = (mine: ViewRegistration[]) => input({
+    event: { shiftSwapsEnabled: true, shiftSwapsApproval: false, sectorsAdoptedAt: new Date() },
+    held: new Map([["vj", mine], ["vp", [reg("rp", "vp", nord)]]]),
+    shifts: new Map([nord, sud, bar].map((s) => [s.id, s])),
+  })
+
+  it("offers Pierre's Parking Nord to Jean on Parking Sud, naming the poste, and says the scope", () => {
+    const view = buildVolunteerSwapView(sectorInput([reg("rj", "vj", sud)]))
+    expect(view.scope).toBe("secteur")
+    expect(view.offers).toEqual([expect.objectContaining({ requestId: "q1", shift: expect.objectContaining({ roleName: "Parking Nord" }), registrationIds: ["rj"] })])
+  })
+
+  it("never to someone on a poste of another sector", () => {
+    expect(buildVolunteerSwapView(sectorInput([reg("rj", "vj", bar)])).offers).toEqual([])
+  })
+
+  it("an event without sectors keeps the same-poste scope", () => {
+    expect(buildVolunteerSwapView(input()).scope).toBe("poste")
+  })
+})
+
 describe("duplicatedSwaps (#1174)", () => {
   it("copies the options with the settings only while they can be adopted, never otherwise", () => {
     expect(duplicatedSwaps({ shiftSwapsEnabled: true, shiftSwapsApproval: true, swapsGate: true }, true)).toEqual({ shiftSwapsEnabled: true, shiftSwapsApproval: true })

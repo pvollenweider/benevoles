@@ -65,7 +65,7 @@ export async function GET(req: Request, { params }: { params: Promise<{ token: s
   }
   if (!orgLinksOpen(h.event.organization)) return orgUnavailableResponse()
   if (!(await tokenUseAllowed(token, "swaps"))) return tooManyAttempts()
-  if (!swapsShipped() || h.volunteer.erasedAt || h.volunteer.mergedIntoId) return json({ enabled: false, publishable: [], mine: [], offers: [], ownShifts: {} })
+  if (!swapsShipped() || h.volunteer.erasedAt || h.volunteer.mergedIntoId) return json({ enabled: false, scope: "poste", publishable: [], mine: [], offers: [], ownShifts: {} })
   return json(await loadVolunteerSwapView(h.eventId, h.volunteerId))
 }
 

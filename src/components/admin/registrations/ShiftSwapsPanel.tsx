@@ -91,7 +91,7 @@ export default function ShiftSwapsPanel({ eventId, requests, timeZone }: { event
       <h2 id="echanges-heading" ref={headingRef} tabIndex={-1} className="text-lg font-semibold text-gray-900 focus:outline-none">
         Échanges de créneaux <span className="ml-1 rounded-md bg-gray-100 px-1.5 py-0.5 text-xs font-medium text-gray-700">bêta</span>
       </h2>
-      <p className="text-sm text-gray-700">Deux bénévoles confirmés sur le même poste peuvent échanger leurs créneaux. Un échange qui touche un créneau sur validation, ou tous si l&apos;événement le demande, attend ici votre accord : rien ne change avant.</p>
+      <p className="text-sm text-gray-700">Deux bénévoles confirmés sur le même poste, ou sur deux postes du même secteur, peuvent échanger leurs créneaux. Un échange qui touche un créneau sur validation, ou tous si l&apos;événement le demande, attend ici votre accord : rien ne change avant.</p>
       <p role="status" className="text-sm font-medium text-green-800">{status}</p>
       <p role="alert" className={conflict ? "text-sm text-red-800" : "sr-only"}>{conflict}</p>
 

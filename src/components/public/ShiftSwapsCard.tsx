@@ -14,7 +14,7 @@ import ShiftInfoList from "@/components/ShiftInfoList"
 import { docHref, SECTION_DOC_LINKS } from "@/lib/help-links"
 import type { MySwap, SwapOfferable, SwapShiftView, VolunteerSwapView } from "@/lib/shift-swap-view"
 import {
-  SWAPS_INTRO, SWAPS_MINE_TITLE, SWAPS_NEW_TERMS, SWAPS_OFFER_BUTTON, SWAPS_OFFERS_TITLE, SWAPS_PUBLISH_BUTTON, SWAPS_PUBLISH_TITLE,
+  SWAPS_INTRO, SWAPS_INTRO_SECTORS, SWAPS_MINE_TITLE, SWAPS_NEW_TERMS, SWAPS_OFFER_BUTTON, SWAPS_OFFERS_TITLE, SWAPS_PUBLISH_BUTTON, SWAPS_PUBLISH_TITLE,
   SWAPS_SECTION_ID, SWAPS_SECTION_TITLE, swapDoneText, swapMission, swapState, swapStateText, swapWhen,
 } from "@/lib/shift-swap-text"
 
@@ -218,7 +218,7 @@ export default function ShiftSwapsCard({ token, timeZone, onShiftsChanged, refre
     <section aria-labelledby={TITLE_ID} className="bg-white rounded-xl border border-gray-200 p-4 space-y-4" data-swaps-card="1">
       <div>
         <h2 id={TITLE_ID} tabIndex={-1} className="text-sm font-semibold text-gray-900 focus:outline-none">{SWAPS_SECTION_TITLE}</h2>
-        {view.enabled && <p className="mt-1 text-sm text-gray-700">{SWAPS_INTRO}</p>}
+        {view.enabled && <p className="mt-1 text-sm text-gray-700">{view.scope === "secteur" ? SWAPS_INTRO_SECTORS : SWAPS_INTRO}</p>}
         <p className="mt-1 text-sm text-gray-700">Comment ça marche : <DocMoreLink href={docHref(SECTION_DOC_LINKS.benevole.swapShift)} about="l'échange de créneaux" /></p>
       </div>
       {isBusy && <p className="text-xs text-gray-700">Envoi en cours…</p>}

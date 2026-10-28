@@ -47,6 +47,12 @@ export type SwapOfferable = { requestId: string; shift: SwapShiftView; deadline:
 
 export type VolunteerSwapView = {
   enabled: boolean
+  /**
+   * Whom a swap can be with (#1175): « poste » (the same poste only), or « secteur » once the event
+   * organises its postes by sectors (any poste of the same sector). Words only: volunteers never
+   * see sectors, the page says « un poste où tu peux aller » and names each poste.
+   */
+  scope: "poste" | "secteur"
   publishable: { registrationId: string; deadline: string; shift: SwapShiftView }[]
   mine: MySwap[]
   offers: SwapOfferable[]
@@ -65,7 +71,7 @@ export type ViewRequest = {
 export type VolunteerSwapInput = {
   now: Date
   timeZone: string
-  event: CancelDeadlineSetting & { shiftSwapsEnabled: boolean; shiftSwapsApproval: boolean }
+  event: CancelDeadlineSetting & { shiftSwapsEnabled: boolean; shiftSwapsApproval: boolean; sectorsAdoptedAt?: Date | string | null }
   me: string
   /** Each person concerned (me and the requesters of open requests), by volunteer id. */
   persons: Map<string, SwapPerson>
@@ -91,7 +97,8 @@ const PERSONAL_ENDS = new Set(["withdrawn", "applied"])
 
 export function buildVolunteerSwapView(input: VolunteerSwapInput): VolunteerSwapView {
   const { now, timeZone, event, me } = input
-  const empty: VolunteerSwapView = { enabled: event.shiftSwapsEnabled, publishable: [], mine: [], offers: [], ownShifts: {} }
+  const scope = event.sectorsAdoptedAt ? "secteur" as const : "poste" as const
+  const empty: VolunteerSwapView = { enabled: event.shiftSwapsEnabled, scope, publishable: [], mine: [], offers: [], ownShifts: {} }
   const myHeld = input.held.get(me) ?? []
   const deadlineOf = (expiresAt: Date, shifts: (ViewShift | undefined)[]) =>
     swapDeadline({ expiresAt, given: shifts.filter((s): s is ViewShift => !!s), setting: event, timeZone })
@@ -157,5 +164,5 @@ export function buildVolunteerSwapView(input: VolunteerSwapInput): VolunteerSwap
   }
 
   const ownShifts = Object.fromEntries(myHeld.filter((h) => h.status === "active").map((h) => [h.id, shiftView(h.shift)]))
-  return { enabled: true, publishable, mine, offers, ownShifts }
+  return { enabled: true, scope, publishable, mine, offers, ownShifts }
 }

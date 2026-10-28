@@ -10,6 +10,8 @@ import {
 import { newShiftSectorDecision, posteSectorConflictError, posteSectorOf } from "@/lib/poste-sector"
 import { eventPostes, posteKey } from "@/lib/poste-suggestions"
 import { ROLE_SETTINGS_SELECT, roleSettingsOf, type RoleSettings } from "@/lib/role-settings"
+import { recomputeSwapsIn } from "@/lib/shift-swap-server"
+import type { LogActor } from "@/lib/event-log"
 
 /**
  * Writes of the sectors (#1147), server only. Every change of the event's sector mode goes through
@@ -120,6 +122,7 @@ export type SectorChange =
 export async function updateSector(
   db: OrgScopedPrisma, organizationId: string, eventId: string, sectorId: string,
   patch: { name?: string; archived?: boolean; detachPostes?: boolean },
+  actor: LogActor = { type: "system" },
 ): Promise<UpdateResult> {
   try {
     return await db.$transaction(async (tx: Tx): Promise<UpdateResult> => {
@@ -135,7 +138,10 @@ export async function updateSector(
         if (live.length > 0 && !patch.detachPostes) {
           return { ok: false, status: 409, error: `Ce secteur regroupe encore ${live.length} poste${live.length > 1 ? "s" : ""} : confirmez qu'ils passent dans « Autres postes ».`, postes: live.length }
         }
+        const moved: { id: string }[] = await tx.shift.findMany({ where: { eventId, sectorId }, select: { id: true } })
         await tx.shift.updateMany({ where: { eventId, sectorId }, data: { sectorId: null } })
+        // Its postes leave the sector (#1175 A07): swaps between two of them no longer hold.
+        await recomputeSwapsIn(tx, { shiftIds: moved.map((s) => s.id) }, actor)
         const sector = await tx.sector.update({ where: { id: sectorId }, data: { archivedAt: new Date() }, select })
         return { ok: true, value: { sector, change: { kind: "archived", name: sector.name, postes: live.length } } }
       }
@@ -182,10 +188,14 @@ export async function reorderSectors(db: OrgScopedPrisma, organizationId: string
  * « Autres postes » with null. The sector is locked and checked first: never an archived sector or
  * another event's. Only for an event that adopted sectors.
  */
-export async function assignPosteSector(tx: Tx, organizationId: string, eventId: string, roleName: string, sectorId: string | null): Promise<SectorResult<{ name: string | null }>> {
+export async function assignPosteSector(tx: Tx, organizationId: string, eventId: string, roleName: string, sectorId: string | null, actor: LogActor = { type: "system" }): Promise<SectorResult<{ name: string | null }>> {
   const target = await lockPosteDestination(tx, organizationId, eventId, sectorId)
   if (!target.ok) return target
+  const moved: { id: string; sectorId: string | null }[] = await tx.shift.findMany({ where: { eventId, roleName }, select: { id: true, sectorId: true } })
   await tx.shift.updateMany({ where: { eventId, roleName }, data: { sectorId } })
+  // A poste moved to another sector (#1175 A07): its swap requests are checked again.
+  const changed = moved.filter((s) => s.sectorId !== sectorId).map((s) => s.id)
+  if (changed.length > 0) await recomputeSwapsIn(tx, { shiftIds: changed }, actor)
   return target
 }
 
