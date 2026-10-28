@@ -5,7 +5,8 @@ import ShiftInfoList from "@/components/ShiftInfoList"
 import { REQUEST_SHORT, WAITLIST_SHORT } from "@/lib/waitlist-copy"
 import { gapAfter, gapLabel, hasOverlap, personalDataLines, recapShifts, totalLabel, type RecapShiftInput } from "@/lib/signup-recap"
 import type { ShiftInfo } from "@/lib/shift-info"
-import { workloadMessage, workloadWarnings, type WorkloadShift } from "@/lib/workload"
+import type { WorkloadShift } from "@/lib/workload"
+import { blocksWorkload, recapWorkloadNotices, type WorkloadMode } from "@/lib/workload-view"
 
 type Props = {
   shifts: (RecapShiftInput & ShiftInfo)[]
@@ -17,6 +18,8 @@ type Props = {
   /** Shifts this volunteer already holds on the event, counted in the workload warnings (#465). */
   heldShifts?: WorkloadShift[]
   timeZone: string
+  /** How the event judges workload (#465 warnings, or its #1171 protection); warnings by default. */
+  workload?: WorkloadMode
   /** Compact for the sidebar, roomier inside the form card. */
   variant: "card" | "sidebar"
 }
@@ -26,10 +29,11 @@ type Props = {
  * what sits between them, waitlist and age flags, and the personal data that will be sent.
  * Pure render; the same component sits in the form card (phone) and the sidebar (desktop).
  */
-export default function SignupRecap({ shifts, requirePhone, phoneGiven, commentGiven, answeredQuestions = [], heldShifts = [], timeZone, variant }: Props) {
+export default function SignupRecap({ shifts, requirePhone, phoneGiven, commentGiven, answeredQuestions = [], heldShifts = [], timeZone, workload: mode = { kind: "warnings", timeZone }, variant }: Props) {
   const rows = recapShifts(shifts)
   // Waitlist entries may never become shifts: only firm places count (#465).
-  const workload = workloadWarnings([...shifts.filter((sh) => !rows.find((r) => r.id === sh.id)?.waitlist), ...heldShifts], timeZone)
+  const workload = recapWorkloadNotices(shifts.filter((sh) => !rows.find((r) => r.id === sh.id)?.waitlist), heldShifts, mode)
+  const blocks = blocksWorkload(mode)
   const byId = new Map(shifts.map((s) => [s.id, s]))
   const needsBirthDate = rows.some((r) => r.minAge !== null)
   const overlap = hasOverlap(rows)
@@ -49,15 +53,24 @@ export default function SignupRecap({ shifts, requirePhone, phoneGiven, commentG
           <strong>Attention :</strong> deux de tes créneaux se chevauchent, retires-en un avant de confirmer.
         </p>
       )}
-      {workload.length > 0 && (
+      {workload.length > 0 && (blocks ? (
+        // A protected event (#1171): the server refuses this sign-up, said before confirming.
+        <div className={`${dense ? "mx-4 mb-2" : ""} rounded-lg bg-red-50 border border-red-300 px-3 py-2 text-xs text-red-800`}>
+          <p className="font-semibold">Ces créneaux dépassent les limites de l&apos;événement</p>
+          <ul role="list" className="mt-1 space-y-0.5">
+            {workload.map((w) => <li key={w.key}>{w.text}</li>)}
+          </ul>
+          <p className="mt-1">Retire ou change un créneau pour pouvoir confirmer.</p>
+        </div>
+      ) : (
         <div className={`${dense ? "mx-4 mb-2" : ""} rounded-lg bg-amber-50 border border-amber-300 px-3 py-2 text-xs text-amber-950`}>
           <p className="font-semibold">Journée chargée</p>
           <ul role="list" className="mt-1 space-y-0.5">
-            {workload.map((w) => <li key={`${w.kind}-${w.day}-${w.shiftIds.join()}`}>{workloadMessage(w)}</li>)}
+            {workload.map((w) => <li key={w.key}>{w.text}</li>)}
           </ul>
           <p className="mt-1">Ces créneaux restent possibles : tu peux confirmer.</p>
         </div>
-      )}
+      ))}
       {/* role="list": Safari/VoiceOver drops list semantics once Tailwind removes the markers. */}
       <ol role="list" className={dense ? "divide-y divide-gray-100" : "space-y-2"}>
         {rows.map((r, i) => {

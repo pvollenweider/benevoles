@@ -25,7 +25,7 @@ En haut, **Ce qui demande votre attention** liste, du plus urgent au moins urgen
 - jalons en retard, avec leur titre et la personne qui s'en occupe (les trois premiers, puis le nombre des autres) ;
 - personnes invitées il y a plus de 3 jours qui n'ont encore aucun créneau confirmé ni répondu ne pas être disponibles (avec un lien pour leur écrire) ;
 - postes sans responsable de secteur, quand l'événement en a déjà d'autres ;
-- bénévoles avec une charge élevée (plus de 8 h dans la journée, ou plus de 6 h d'affilée sans vraie pause) ;
+- bénévoles avec une charge élevée (plus de 8 h dans la journée, ou plus de 6 h d'affilée sans vraie pause) ; dans un événement qui protège les pauses et la charge, bénévoles dont le programme dépasse ses limites, et protection incomplète ;
 - événement qui commence dans la semaine ;
 - événement terminé mais toujours publié : **L'archiver** demande une confirmation sur place, puis l'archive sans quitter la page ;
 - membres avec une adresse à vérifier, quand un message important (confirmation, proposition de liste d'attente ou rappel) a été refusé définitivement : lien vers la liste des membres déjà filtrée.

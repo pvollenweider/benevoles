@@ -2,6 +2,7 @@
 // SPDX-License-Identifier: AGPL-3.0-only
 
 import { NextResponse } from "next/server"
+import { blocksWorkload, workloadModeOf, workloadNotices, type WorkloadMode } from "@/lib/workload-view"
 import { orgTimeZone } from "@/lib/time-zone"
 import { prisma } from "@/lib/prisma"
 import { ORG_LIFECYCLE_SELECT, orgLinksOpen } from "@/lib/org-lifecycle"
@@ -30,6 +31,13 @@ import { endSwapsAfter } from "@/lib/shift-swap-server"
 
 const tooManyAttempts = () => NextResponse.json({ error: "Trop de tentatives." }, { status: 429 })
 
+/** The personal page's workload notices (#1171): protected events only, committed missions only. */
+function personalWorkload(regs: { status: string; shift: { id: string; date: Date; startTime: string; endTime: string; status: string } }[], mode: WorkloadMode): string[] {
+  if (!blocksWorkload(mode)) return []
+  const held = regs.filter((r) => (r.status === "active" || r.status === "requested") && r.shift.status !== "cancelled").map((r) => r.shift)
+  return workloadNotices(held, mode).map((n) => n.text)
+}
+
 export async function GET(req: Request, { params }: { params: Promise<{ token: string }> }) {
   // Failed lookups count per IP, valid use per link (#609).
   if (await tokenLookupsBlocked(req)) return tooManyAttempts()
@@ -48,6 +56,8 @@ export async function GET(req: Request, { params }: { params: Promise<{ token: s
           location: true, latitude: true, longitude: true, publicInstructions: true,
           dayContactName: true, dayContactPhone: true,
           cancelDeadlineDays: true, cancelDeadlineHours: true,
+          // Workload protection (#1171): the limits this person's own programme is judged against.
+          workloadProtectionEnabled: true, workloadPolicy: true,
           // Whether a sign-up for more shifts is possible (#988).
           endDate: true, registrationsOpen: true, registrationOpensAt: true, registrationClosesAt: true,
           pages: { select: { slug: true, title: true }, orderBy: { displayOrder: "asc" } },
@@ -121,6 +131,10 @@ export async function GET(req: Request, { params }: { params: Promise<{ token: s
     eventPageUrl: event.publicStatus === "published" ? publicUrl : null,
     signUpUrl: signUpUrl({ event, eventUrl: publicUrl, groupCode, now, timeZone }),
     timeZone,
+    // Workload protection (#1171): the limits the person's own programme no longer respects (left
+    // by a cancellation, say), from their confirmed places and pending requests. Their own data,
+    // behind their link; nothing for an event without protection.
+    workload: personalWorkload(allRegistrations, workloadModeOf(event, timeZone)),
     // The calendar subscription of this link (#961): a read-only address of its own, never the link.
     calendarFeed: feedKey ? calendarFeedUrls(baseUrl, calendarFeedToken(registration.id, registration.editTokenHash, feedKey)) : null,
     // The newest email carrying the link, across the volunteer's registrations on this event (#376).

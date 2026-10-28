@@ -73,7 +73,7 @@ export async function POST(req: Request, { params }: { params: Promise<{ id: str
   // Workload protection (#1171): with the settings, the source's values (a new adoption, the zone
   // snapshotted again); else the organisation's values for a new event.
   const [workloadGate, newEventWorkloadValue] = await Promise.all([
-    workloadProtectionShipped() ? canAdoptBeta(organizationId, "workloadProtection") : false,
+    workloadProtectionShipped() && source.workloadPolicy != null ? canAdoptBeta(organizationId, "workloadProtection") : false,
     newEventWorkload(organizationId, source.organization),
   ])
   const workload = duplicatedWorkload(source, (parsed.data.copy?.settings ?? DEFAULT_COPY.settings), { gate: workloadGate, newEvent: newEventWorkloadValue, timeZone: orgTimeZone(source.organization) })

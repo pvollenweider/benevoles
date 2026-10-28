@@ -29,6 +29,7 @@ import { calendarCard, type CalendarFeedUrls } from "@/lib/calendar-card-copy"
 import MyAnswersCard from "@/components/public/MyAnswersCard"
 import ShiftRosterCard, { type RosterData } from "@/components/public/ShiftRosterCard"
 import ShiftSwapsCard from "@/components/public/ShiftSwapsCard"
+import MyWorkloadCard from "@/components/public/MyWorkloadCard"
 import type { KeptAnswerRow, MyAnswerRow } from "@/lib/my-answers"
 import type { AnswersEditState } from "@/lib/answer-changes"
 import { MISSION_BRIEF_ID, MISSION_BRIEF_TITLE, nextConfirmedRegistration, type BriefEvent } from "@/lib/mission-brief"
@@ -91,6 +92,8 @@ type PageData = {
   keptAnswers?: KeptAnswerRow[]
   /** Whether they can still change from this page (#984): the withdrawals' lock. */
   answersEdit?: AnswersEditState
+  /** Workload protection (#1171): the event's limits this programme no longer respects. */
+  workload?: string[]
 }
 
 const LIST_TITLE_ID = "my-registrations-title"
@@ -387,6 +390,8 @@ export default function MyRegistrationPage() {
 
         {/* The caveat of the one-shift calendar links (the card above only shows with several shifts). */}
         <p id="calendar-hint-shift" className="sr-only">Fichier pour l&apos;agenda de ton téléphone ou ordinateur. Il ne se met pas à jour : si un horaire change, tu recevras un email. Pour un agenda qui se met à jour tout seul, voir « Mon calendrier ».</p>
+
+        <MyWorkloadCard messages={data.workload ?? []} contactEmail={data.contactEmail ?? null} />
 
         <section aria-labelledby="shifts-title" className="space-y-3">
           <h2 id="shifts-title" className="text-sm font-semibold text-gray-900">Tous mes créneaux</h2>

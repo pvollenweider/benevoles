@@ -5,7 +5,7 @@
 
 import { useMemo, useRef, useState, type Dispatch, type SetStateAction } from "react"
 import ShiftSelect from "./ShiftSelect"
-import { workloadMessage, workloadWarnings } from "@/lib/workload"
+import { blocksWorkload, newWorkloadNotices, type WorkloadMode } from "@/lib/workload-view"
 import { availabilityLabel, hasAvailability } from "@/lib/availability"
 import { addConflictMessage, chosenOverlapMessage, isAddFormPerson, MEMBER_CHOICES_SHOWN, memberChoiceLabel, memberResultsSentence, shiftsOfAddFormPerson, type MemberChoice, type ShiftRef } from "@/lib/registrations-list"
 import type { AddFormValues, Registration } from "./types"
@@ -20,6 +20,8 @@ type Props = {
   registrations: Registration[]
   /** Organisation time zone, for the workload warnings (#465). */
   timeZone: string
+  /** How the event judges workload (#465 warnings, or its #1171 protection); warnings by default. */
+  workloadMode?: WorkloadMode
   /** The signed-in organizer's email: placing oneself sends no confirmation email (#916). */
   organizerEmail?: string | null
   /** The values typed so far: kept by the parent so they survive closing and reopening the form. */
@@ -31,7 +33,7 @@ type Props = {
 }
 
 // ── Manual registration by the organizer ─────────────────────────────────────
-export default function ManualAddForm({ eventId, shifts, registrations, timeZone, organizerEmail = null, form: addForm, onFormChange: setAddForm, onAdded, onCancel }: Props) {
+export default function ManualAddForm({ eventId, shifts, registrations, timeZone, workloadMode, organizerEmail = null, form: addForm, onFormChange: setAddForm, onAdded, onCancel }: Props) {
   // The request the role-limit warning is about: the override only applies to that exact form.
   const [overLimitFor, setOverLimitFor] = useState<string | null>(null)
   // Manual addition: what this shift would add to the workload of a volunteer already registered.
@@ -40,13 +42,17 @@ export default function ManualAddForm({ eventId, shifts, registrations, timeZone
   // empty line is simply left out.
   const chosenIds = useMemo(() => [...new Set([addForm.shiftId, ...addForm.extraShiftIds].filter(Boolean))], [addForm.shiftId, addForm.extraShiftIds])
   const chosenShifts = useMemo(() => chosenIds.flatMap((id) => shifts.filter((s) => s.id === id)), [chosenIds, shifts])
+  // On a protected event (#1171) the same check as the server's: what the addition creates or worsens,
+  // on the confirmed places and pending requests; otherwise the non-blocking #465 warnings.
+  const mode: WorkloadMode = useMemo(() => workloadMode ?? { kind: "warnings", timeZone }, [workloadMode, timeZone])
+  const blocks = blocksWorkload(mode)
   const addWarnings = useMemo(() => {
     if (chosenShifts.length === 0) return []
-    const held = registrations.filter((r) => r.status === "active" && isAddFormPerson(r.volunteer, person) && !chosenIds.includes(r.shift.id))
-    if (held.length === 0 && chosenShifts.length === 1) return []
-    const before = new Set(workloadWarnings(held.map((r) => r.shift), timeZone).map(workloadMessage))
-    return workloadWarnings([...held.map((r) => r.shift), ...chosenShifts], timeZone).map(workloadMessage).filter((m) => !before.has(m))
-  }, [person, chosenIds, chosenShifts, registrations, timeZone])
+    const counted = blocks ? ["active", "requested"] : ["active"]
+    const held = registrations.filter((r) => counted.includes(r.status) && isAddFormPerson(r.volunteer, person) && !chosenIds.includes(r.shift.id))
+    if (!blocks && held.length === 0 && chosenShifts.length === 1) return []
+    return newWorkloadNotices(held.map((r) => r.shift), [...held.map((r) => r.shift), ...chosenShifts], mode).map((n) => n.text)
+  }, [person, chosenIds, chosenShifts, registrations, mode, blocks])
   const overLimit = overLimitFor === JSON.stringify(addForm)
   // What the volunteer will receive (#916), said before submitting, once a shift is chosen. The
   // server decides the same way; « now » is the moment the form opened.
@@ -391,13 +397,19 @@ export default function ManualAddForm({ eventId, shifts, registrations, timeZone
 
       {/* Always mounted, so the warning is announced when the email and shift make it appear. */}
       <div id="add-workload" role="status" className={addWarnings.length > 0 ? "" : "sr-only"}>
-        {addWarnings.length > 0 && (
+        {addWarnings.length > 0 && (blocks ? (
+          <div className="bg-red-50 border border-red-300 rounded-xl p-3 text-sm text-red-800">
+            <p className="font-semibold">L&apos;ajout sera refusé : {chosenShifts.length > 1 ? "avec ces créneaux" : "avec ce créneau"}, le programme de cette personne ne respecterait plus les limites de pauses et de charge de l&apos;événement.</p>
+            <ul role="list" className="mt-1 space-y-0.5">{addWarnings.map((m) => <li key={m}>{m}</li>)}</ul>
+            <p className="mt-1">Choisissez un autre créneau ou une autre personne.</p>
+          </div>
+        ) : (
           <div className="bg-amber-50 border border-amber-300 rounded-xl p-3 text-sm text-amber-950">
             <p className="font-medium">{chosenShifts.length > 1 ? "Si vous ajoutez ces créneaux" : "Si vous ajoutez ce créneau"}, cette personne aura :</p>
             <ul role="list" className="mt-1 space-y-0.5">{addWarnings.map((m) => <li key={m}>{m}</li>)}</ul>
             <p className="mt-1">L&apos;ajout reste possible.</p>
           </div>
-        )}
+        ))}
       </div>
       {showError && (
         <div role="alert" className="bg-red-50 border border-red-200 rounded-xl p-3 text-sm text-red-700">

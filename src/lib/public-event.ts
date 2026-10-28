@@ -7,6 +7,7 @@ import { coordinatesOf } from "@/lib/map-link"
 import { OCCUPYING_STATUSES } from "@/lib/registration-capacity"
 import { ORG_LOGO_SELECT, orgLogoOf } from "@/lib/org-logo"
 import { publicShifts } from "@/lib/role-assignment"
+import { workloadModeOf } from "@/lib/workload-view"
 
 /**
  * What volunteers see of an event on its public page. Shared by the public API and the admin
@@ -100,6 +101,10 @@ export function toPublicEvent(event: PublicEventRow) {
     registrationOpensAt: event.registrationOpensAt,
     registrationClosesAt: event.registrationClosesAt,
     timeZone: orgTimeZone(event.organization),
+    // Workload (#465, #1171): the #465 warnings, or the event's protection limits, which the sign-up
+    // recap applies to the shifts chosen (and to those held, from the personal link). The limits are
+    // the event's rules, not anyone's data.
+    workload: workloadModeOf(event, orgTimeZone(event.organization)),
     accentColorKey: event.accentColorKey,
     showSchedule: event.showSchedule,
     // Both needed to show the exact charter text the sign-up route hashes (#569): resolveCharterText.

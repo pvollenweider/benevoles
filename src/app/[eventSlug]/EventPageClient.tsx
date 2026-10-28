@@ -12,6 +12,8 @@ import { coordinatesOf, MAP_LINK_LABEL, MAP_LINK_SR_SUFFIX, osmLink } from "@/li
 import { describeSignupFailure, type Failure } from "@/lib/form-errors"
 import { SIGNUP_COMMENT_MAX, SIGNUP_PHONE_MAX } from "@/lib/signup-limits"
 import SignupRecap from "@/components/public/SignupRecap"
+import { blocksWorkload, recapWorkloadNotices, type WorkloadMode } from "@/lib/workload-view"
+import { isWaitlistShift } from "@/lib/signup-recap"
 import ShiftRow from "@/components/public/ShiftRow"
 import { useRouter, useSearchParams } from "next/navigation"
 import Link from "next/link"
@@ -131,6 +133,8 @@ export type EventData = {
   registrationOpensAt: string | null
   registrationClosesAt: string | null
   timeZone: string
+  /** Workload (#465 warnings, or the #1171 protection limits); absent from an older payload = warnings. */
+  workload?: WorkloadMode
   accentColorKey: string | null
   showSchedule: Show[]
   volunteerCharter: string | null
@@ -335,6 +339,13 @@ export default function EventPageClient({ orgSlug, eventSlug, preview, initialEv
     () => (event?.shifts ?? []).filter((s) => myShiftIds.has(s.id) && !selectedShifts.has(s.id)),
     [event, myShiftIds, selectedShifts],
   )
+
+  // The protection's limits (#1171) the selection would break: read with the confirm button.
+  const workloadBlocked = useMemo(() => {
+    if (!event?.workload || !blocksWorkload(event.workload)) return false
+    const chosen = event.shifts.filter((shift) => selectedShifts.has(shift.id) && !isWaitlistShift(shift))
+    return recapWorkloadNotices(chosen, heldShifts, event.workload).length > 0
+  }, [event, selectedShifts, heldShifts])
 
   // Shifts among the current selection that require a minimum age (#192) — drives whether the
   // form asks for a date of birth.
@@ -1220,6 +1231,7 @@ export default function EventPageClient({ orgSlug, eventSlug, preview, initialEv
                   answeredQuestions={visibleQuestions(formQuestions, answers).filter((q) => { const v = answers[q.id]; return Array.isArray(v) ? v.length > 0 : !!v && String(v).trim() !== "" }).map((q) => q.label)}
                   heldShifts={heldShifts}
                   timeZone={event.timeZone}
+                  workload={event.workload}
                   variant="sidebar"
                 />
                 <div className="px-4 py-3 border-t border-gray-100 bg-gray-50">
@@ -1246,6 +1258,7 @@ export default function EventPageClient({ orgSlug, eventSlug, preview, initialEv
                   answeredQuestions={visibleQuestions(formQuestions, answers).filter((q) => { const v = answers[q.id]; return Array.isArray(v) ? v.length > 0 : !!v && String(v).trim() !== "" }).map((q) => q.label)}
                   heldShifts={heldShifts}
                   timeZone={event.timeZone}
+                  workload={event.workload}
                   variant="card"
                 />
               </div>
@@ -1463,10 +1476,12 @@ export default function EventPageClient({ orgSlug, eventSlug, preview, initialEv
                   </div>
                 )}
 
+                {workloadBlocked && <p id="signup-workload-blocked" className="sr-only">Ces créneaux dépassent les limites de pauses et de charge de l&apos;événement : retire ou change un créneau.</p>}
                 <button
                   ref={submitButtonRef}
                   type="submit"
                   aria-disabled={submitting || undefined}
+                  aria-describedby={workloadBlocked ? "signup-workload-blocked" : undefined}
                   className={`w-full bg-blue-600 text-white rounded-2xl py-4 text-base font-semibold hover:bg-blue-700 motion-safe:active:scale-[0.98] transition-all ${submitting ? "opacity-50 cursor-not-allowed" : ""}`}
                 >
                   {submitting ? "Envoi en cours…" : preview ? "Voir la confirmation (aperçu)" : "Confirmer mon inscription"}

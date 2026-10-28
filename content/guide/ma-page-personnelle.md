@@ -36,6 +36,10 @@ Un créneau en liste d'attente ou sur validation n'y figure pas tant qu'il n'est
 
 Tes créneaux sont ensuite listés sous **Tous mes créneaux** ; celui de l'encadré y renvoie par un lien. Chacun montre ses **infos pratiques** : lieu de rendez-vous (et **Voir sur la carte**), consigne, et la personne de contact avec son téléphone (pour le créneau repris dans **Avant ta mission**, elles sont dans l'encadré).
 
+## Pauses et charge
+
+Si l'événement protège les pauses et la charge et que ton programme ne respecte plus ses limites (par exemple après une annulation qui laisse une longue attente entre deux missions), l'encadré **Pauses et charge** le dit en toutes lettres. Tant que c'est le cas, tu ne peux pas ajouter de créneau qui aggrave la situation ; tu peux retirer un créneau, ou écrire à l'organisation pour trouver un autre arrangement.
+
 ## S'inscrire à d'autres créneaux
 
 Encore un peu de temps ? Sous tes créneaux, le lien **S'inscrire à d'autres créneaux** t'emmène sur la page d'inscription de l'événement, qui te reconnaît : choisis-y de nouveaux créneaux comme la première fois. Le formulaire reprend ton nom, ton téléphone et tes réponses aux questions de l'événement : si tu les modifies au passage, ils sont mis à jour pour tous tes créneaux, comme avec **Modifier mes réponses**, et la confirmation dit ce qui a changé. L'adresse email ne change pas ainsi : avec une autre adresse, ce serait une nouvelle inscription, séparée de la tienne. Si tu t'étais inscrit par le lien d'un groupe (ton club, ton équipe), tu retrouves ses postes. Les créneaux ajoutés ainsi te sont confirmés par un seul email, quelques minutes après le dernier ajout : si tu en ajoutes plusieurs à la suite, il les liste tous (sauf ceux que tu as annulés entre-temps).
