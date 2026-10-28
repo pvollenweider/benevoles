@@ -113,7 +113,7 @@ export async function PATCH(req: Request) {
       if (!(workloadProtectionShipped() && (await canAdoptBeta(organizationId, "workloadProtection")))) {
         return NextResponse.json({ error: WORKLOAD_NOT_ADOPTABLE }, { status: 403 })
       }
-      const checked = checkPolicyValues(value?.values)
+      const checked = checkPolicyValues(value?.values, { requireOffDay: true })
       if (typeof value?.enabled !== "boolean" || !checked.ok) {
         const problems = checked.ok ? [] : checked.problems
         return NextResponse.json({ error: problems[0]?.message ?? "Indiquez si les nouveaux événements commencent protégés.", problems }, { status: 400 })

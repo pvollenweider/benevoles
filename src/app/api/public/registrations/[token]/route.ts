@@ -57,7 +57,7 @@ export async function GET(req: Request, { params }: { params: Promise<{ token: s
           dayContactName: true, dayContactPhone: true,
           cancelDeadlineDays: true, cancelDeadlineHours: true,
           // Workload protection (#1171): the limits this person's own programme is judged against.
-          workloadProtectionEnabled: true, workloadPolicy: true,
+          workloadProtectionEnabled: true, workloadPolicy: true, startDate: true,
           // Whether a sign-up for more shifts is possible (#988).
           endDate: true, registrationsOpen: true, registrationOpensAt: true, registrationClosesAt: true,
           pages: { select: { slug: true, title: true }, orderBy: { displayOrder: "asc" } },

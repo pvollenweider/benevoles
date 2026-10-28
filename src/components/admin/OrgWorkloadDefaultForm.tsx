@@ -6,9 +6,10 @@
 import { useRef, useState } from "react"
 import { flushSync } from "react-dom"
 import { announce } from "@/lib/announce"
+import WorkloadBenchmarks from "@/components/admin/WorkloadBenchmarks"
 import WorkloadPolicyFields, { fieldInputId } from "@/components/admin/WorkloadPolicyFields"
 import type { WorkloadPolicyValues } from "@/lib/workload-policy"
-import { checkPolicyForm, policyFormFrom, problemsByField, SUGGESTED_LABELS, withWarningSuggestions, type PolicyFormState } from "@/lib/workload-policy-form"
+import { benchmarkAnnouncement, benchmarkFields, checkPolicyForm, policyFormFrom, problemsByField, SUGGESTED_LABELS, withBenchmark, withWarningSuggestions, type PolicyFormState } from "@/lib/workload-policy-form"
 
 const ID = "org-wl"
 
@@ -97,6 +98,7 @@ export default function OrgWorkloadDefaultForm({ initial }: { initial: { enabled
           </button>
           <p id="org-wl-suggest-note" className="mt-1 text-xs text-gray-600">Ce sont les seuils des alertes « Charge élevée », ni des seuils légaux ni des recommandations.</p>
         </div>
+        <WorkloadBenchmarks onUse={(b) => { setForm(withBenchmark(form, b)); setErrors((prev) => { const next = new Map(prev); for (const key of benchmarkFields(b)) next.delete(key); return next }); announce(setStatus, benchmarkAnnouncement(b)) }} />
         <WorkloadPolicyFields idPrefix={ID} form={form} onChange={(next) => { setForm(next); setErrors(new Map()) }} errors={errors} />
         <div className="flex flex-wrap gap-2">
           <button ref={submitRef} type="submit" aria-disabled={saving || undefined} className={`min-h-11 sm:min-h-6 rounded-xl bg-blue-600 px-4 py-2 text-sm font-medium text-white hover:bg-blue-700 ${saving ? "opacity-50" : ""}`}>

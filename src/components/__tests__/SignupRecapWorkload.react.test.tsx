@@ -6,7 +6,7 @@ import "@testing-library/jest-dom/vitest"
 import { render, screen, cleanup } from "@testing-library/react"
 
 import SignupRecap from "../public/SignupRecap"
-import { buildPolicy } from "@/lib/workload-policy"
+import { activePolicy, buildPolicy } from "@/lib/workload-policy"
 
 // Workload warning in the sign-up recap (#465): text, non-blocking, firm places only.
 const shift = (id: string, startTime: string, endTime: string, status = "open") => ({
@@ -32,7 +32,7 @@ describe("SignupRecap — workload", () => {
 // #1171: on a protected event, the limits the server enforces, said before confirming.
 describe("SignupRecap — workload protection", () => {
   afterEach(cleanup)
-  const policy = buildPolicy({ serviceDayStart: "08:00", maxContinuousMinutes: 360, minBreakMinutes: 30, maxDailyMinutes: 600, maxEventMinutes: 2400, minRestMinutes: 600, maxIdleGapMinutes: 120 }, "Europe/Zurich")
+  const policy = activePolicy(buildPolicy({ serviceDayStart: "08:00", maxContinuousMinutes: 360, minBreakMinutes: 30, maxDailyMinutes: 600, maxEventMinutes: 2400, minRestMinutes: 600, maxIdleGapMinutes: 120 }, "Europe/Zurich"), { startDate: "2020-01-01", endDate: "2040-12-31" })
   const mode = { kind: "policy" as const, policy }
 
   it("says the sign-up will be refused, with the limit, instead of the #465 warning", () => {

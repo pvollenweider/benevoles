@@ -107,6 +107,7 @@ export default async function EditEventPage({ params, searchParams }: { params: 
           initialIncomplete={workload.incomplete}
           initialFindings={workload.findings}
           timeZone={workload.timeZone}
+          horizon={workload.horizon}
         />
       )}
       {sectorsOffered && <EventSectorsOption eventId={event.id} initialEnabled={event.sectorsEnabled} adopted={sectorsAdopted(event)} />}

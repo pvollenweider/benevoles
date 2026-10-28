@@ -226,3 +226,42 @@ describe("EventForm automatic reminders box", () => {
     expect(screen.queryByRole("checkbox", { name: "Rappels automatiques" })).toBeNull()
   })
 })
+
+describe("EventForm: dates refused by the days-off rule (#1171, lot 2)", () => {
+  afterEach(() => { cleanup(); vi.useRealTimers(); vi.unstubAllGlobals(); announceMock.mockClear() })
+
+  it("goes back to the saved dates, lists who, and keeps the alert until the dates are typed again", async () => {
+    vi.useFakeTimers()
+    const refusal = { error: "Dates non enregistrées : avec ces dates, le programme de Sami Martin ne respecterait plus la règle des jours sans mission de cet événement. Les dates précédentes sont gardées.", code: "workload", workload: ["Sami Martin : Du jeudi 3 juillet au mercredi 9 juillet : seulement 1 jour sans mission."] }
+    const fetchMock = vi.fn()
+      .mockResolvedValueOnce({ ok: false, status: 409, json: async () => refusal })
+      .mockResolvedValue({ ok: true, status: 200, json: async () => ({ publicStatus: "draft" }) })
+    vi.stubGlobal("fetch", fetchMock)
+    render(<EventForm initialData={{ ...initialData, startDate: "2031-07-03", endDate: "2031-07-08" }} />)
+
+    const end = screen.getByLabelText(/Date fin/)
+    fireEvent.change(end, { target: { value: "2031-07-09" } })
+    await debounce()
+    expect(end).toHaveValue("2031-07-08")
+    const alert = screen.getAllByRole("alert").find((el) => el.textContent?.includes("Dates non enregistrées"))!
+    expect(alert).toHaveTextContent("Sami Martin : Du jeudi 3 juillet")
+    expect(end).toHaveAccessibleDescription(/Dates non enregistrées/)
+    expect(screen.getByRole("link", { name: "Voir la protection des pauses et de la charge" })).toHaveAttribute("href", "#protection-charge")
+    // The status is not touched (that 409 is a publication refusal's).
+    expect(screen.queryByText(/Le statut a été remis/)).toBeNull()
+
+    // Going back to the saved dates is not an edit: nothing is saved nor announced as saved.
+    await debounce()
+    expect(fetchMock).toHaveBeenCalledTimes(1)
+    expect(announceMock).not.toHaveBeenCalledWith(expect.any(Function), "Modifications enregistrées.")
+    expect(screen.queryByText("Modifications enregistrées à", { exact: false })).toBeNull()
+    // A later edit of another field saves, and the alert stays until the dates are typed again.
+    editTitle("Festival 2031")
+    await debounce()
+    expect(fetchMock).toHaveBeenCalledTimes(2)
+    expect(JSON.parse(fetchMock.mock.calls[1][1].body)).toMatchObject({ endDate: "2031-07-08" })
+    expect(screen.getAllByRole("alert").some((el) => el.textContent?.includes("Dates non enregistrées"))).toBe(true)
+    fireEvent.change(end, { target: { value: "2031-07-07" } })
+    expect(screen.getAllByRole("alert").some((el) => el.textContent?.includes("Dates non enregistrées"))).toBe(false)
+  })
+})
