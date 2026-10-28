@@ -8,9 +8,10 @@ import EventWorkloadPolicyCard from "../admin/EventWorkloadPolicyCard"
 import MyWorkloadCard from "../public/MyWorkloadCard"
 
 // #1171: the organiser's card. Every value is theirs; empty is « à compléter ».
-const VALUES = { serviceDayStart: "08:00", maxContinuousMinutes: 360, minBreakMinutes: 30, maxDailyMinutes: 600, maxEventMinutes: 2400, minRestMinutes: 600, maxIdleGapMinutes: 120 }
+const VALUES = { serviceDayStart: "08:00", maxContinuousMinutes: 360, minBreakMinutes: 30, maxDailyMinutes: 600, maxEventMinutes: 2400, minRestMinutes: 600, maxIdleGapMinutes: 120, offDay: { apply: false as const } }
+const LEGACY = { serviceDayStart: "08:00", maxContinuousMinutes: 360, minBreakMinutes: 30, maxDailyMinutes: 600, maxEventMinutes: 2400, minRestMinutes: 600, maxIdleGapMinutes: 120 }
 const card = (over: Partial<Parameters<typeof EventWorkloadPolicyCard>[0]> = {}) =>
-  render(<EventWorkloadPolicyCard eventId="e1" initialEnabled={false} initialValues={null} initialIncomplete={false} initialFindings={[]} timeZone="Europe/Zurich" {...over} />)
+  render(<EventWorkloadPolicyCard eventId="e1" initialEnabled={false} initialValues={null} initialIncomplete={false} initialFindings={[]} timeZone="Europe/Zurich" horizon={{ firstDay: "2026-07-01", lastDay: "2026-07-06" }} {...over} />)
 
 describe("EventWorkloadPolicyCard", () => {
   const fetchMock = vi.fn()
@@ -62,6 +63,40 @@ describe("EventWorkloadPolicyCard", () => {
     expect(screen.getByText("Désactivée")).toBeInTheDocument()
   })
 
+  it("asks for the days-off answer on a policy saved before it existed, and focuses it", () => {
+    card({ initialEnabled: true, initialValues: LEGACY })
+    const apply = screen.getByRole("radio", { name: "Appliquer cette règle" })
+    expect(apply).not.toBeChecked()
+    expect(screen.getByRole("radio", { name: "Ne pas appliquer cette règle" })).not.toBeChecked()
+    fireEvent.click(screen.getByRole("button", { name: "Enregistrer les limites" }))
+    expect(fetchMock).not.toHaveBeenCalled()
+    expect(apply).toHaveFocus()
+    expect(apply).toHaveAccessibleDescription(/choisissez d'appliquer ou non/)
+  })
+
+  it("shows the two numbers only with « Appliquer », with the event's dates in the example", () => {
+    card({ initialValues: VALUES })
+    expect(screen.queryByLabelText("Jours sans mission au minimum")).toBeNull()
+    fireEvent.click(screen.getByRole("radio", { name: "Appliquer cette règle" }))
+    fireEvent.change(screen.getByLabelText("Jours sans mission au minimum"), { target: { value: "1" } })
+    const period = screen.getByLabelText("Période, en journées de service d'affilée")
+    fireEvent.change(period, { target: { value: "7" } })
+    expect(period).toHaveAccessibleDescription(/une période de 7 journées n'y tient jamais/)
+    expect(screen.getByRole("heading", { name: "En résumé" }).parentElement).toHaveTextContent("Au moins 1 jour sans mission sur toute période de 7 journées de service d'affilée.")
+  })
+
+  it("benchmarks are behind a disclosure, each button named by what it fills, and announced", () => {
+    card()
+    const details = screen.getByText("Repères du droit du travail salarié").closest("details") as HTMLDetailsElement
+    expect(details).not.toHaveAttribute("open")
+    details.open = true
+    fireEvent.click(screen.getByRole("button", { name: "Utiliser 10 h par journée de service" }))
+    expect(screen.getByRole("status")).toHaveTextContent("Rempli : durée maximale de missions par journée de service 10 h.")
+    expect(within(screen.getByRole("group", { name: /Durée maximale de missions par journée de service/ })).getByLabelText("heures")).toHaveValue("10")
+    fireEvent.click(screen.getByRole("button", { name: "Utiliser 1 jour sans mission sur 7" }))
+    expect(screen.getByRole("radio", { name: "Appliquer cette règle" })).toBeChecked()
+  })
+
   it("asks before turning protection off", () => {
     card({ initialEnabled: true, initialValues: VALUES })
     fireEvent.click(screen.getByRole("button", { name: "Désactiver la protection" }))
@@ -86,7 +121,7 @@ describe("EventWorkloadPolicyCard — focus after turning off", () => {
   beforeEach(() => { fetchMock.mockReset(); vi.stubGlobal("fetch", fetchMock); vi.stubGlobal("requestAnimationFrame", (f: () => void) => { f(); return 0 }) })
   afterEach(() => { cleanup(); vi.unstubAllGlobals() })
   it("lands on « Activer la protection » once the opener is gone", async () => {
-    render(<EventWorkloadPolicyCard eventId="e1" initialEnabled initialValues={VALUES} initialIncomplete={false} initialFindings={[]} timeZone="Europe/Zurich" />)
+    render(<EventWorkloadPolicyCard eventId="e1" initialEnabled initialValues={VALUES} initialIncomplete={false} initialFindings={[]} timeZone="Europe/Zurich" horizon={{ firstDay: "2026-07-01", lastDay: "2026-07-06" }} />)
     fetchMock.mockResolvedValue({ ok: true, status: 200, json: async () => ({ enabled: false }) })
     fireEvent.click(screen.getByRole("button", { name: "Désactiver la protection" }))
     fireEvent.click(within(screen.getByRole("alertdialog")).getByRole("button", { name: "Désactiver la protection" }))

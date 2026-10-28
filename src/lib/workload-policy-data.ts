@@ -4,12 +4,12 @@
 import { canAdoptBeta } from "./beta-access"
 import { COMMITTED_STATUSES } from "./registration-capacity"
 import { orgTimeZone } from "./time-zone"
-import { committedDuty, lockWorkloadExclusive, workloadGateOf } from "./workload-guard"
+import { committedDuty, lockWorkloadExclusive, workloadGateOf, type WorkloadEventRow } from "./workload-guard"
 import { workloadProtectionShipped } from "./workload-shipped"
 import {
-  buildPolicy, checkPolicyValues, evaluateWorkload, EXISTING_WARNING_SUGGESTIONS, parseWorkloadPolicy, policyChangeNeedsScan, policyValues,
-  serviceDayExamples, workloadFindingMessage, WORKLOAD_LIMIT_FIELDS,
-  type PolicyProblem, type WorkloadFinding, type WorkloadPolicy, type WorkloadPolicyValues,
+  activePolicy, buildPolicy, checkPolicyValues, eventHorizon, evaluateWorkload, EXISTING_WARNING_SUGGESTIONS, newFindings, offDayApplies, parseWorkloadPolicy,
+  policyChangeNeedsScan, policyValues, serviceDayExamples, workloadFindingMessage, WORKLOAD_BENCHMARKS, WORKLOAD_LIMIT_FIELDS,
+  type ActivePolicy, type DutyShift, type EventHorizon, type PolicyProblem, type WorkloadFinding, type WorkloadPolicy, type WorkloadPolicyValues,
 } from "./workload-policy"
 
 /**
@@ -30,25 +30,36 @@ type Db = any
 /** One person whose current schedule breaks the policy, for the organiser. */
 export type PersonFindings = { volunteerId: string; name: string; findings: WorkloadFinding[]; messages: string[] }
 
-/** Every committed person of the event judged with `policy`: those with findings, by name. */
-export async function scanEventWorkload(db: Db, eventId: string, policy: WorkloadPolicy): Promise<PersonFindings[]> {
+/** Every committed person of the event and their missions (confirmed places and pending requests). */
+async function commitmentsByPerson(db: Db, eventId: string): Promise<Map<string, { name: string; shifts: DutyShift[] }>> {
   const rows: { volunteerId: string; volunteer: { firstName: string; lastName: string }; shift: { id: string; date: Date; startTime: string; endTime: string } }[] = await db.registration.findMany({
     where: { eventId, status: { in: [...COMMITTED_STATUSES] }, shift: { status: { not: "cancelled" } } },
     select: { volunteerId: true, volunteer: { select: { firstName: true, lastName: true } }, shift: { select: { id: true, date: true, startTime: true, endTime: true } } },
   })
-  const byPerson = new Map<string, { name: string; shifts: typeof rows[number]["shift"][] }>()
+  const byPerson = new Map<string, { name: string; shifts: DutyShift[] }>()
   for (const r of rows) {
     const entry = byPerson.get(r.volunteerId) ?? { name: `${r.volunteer.firstName} ${r.volunteer.lastName}`.trim(), shifts: [] }
     entry.shifts.push(r.shift)
     byPerson.set(r.volunteerId, entry)
   }
+  return byPerson
+}
+
+const byName = (a: PersonFindings, b: PersonFindings) => a.name.localeCompare(b.name, "fr")
+
+/** Every committed person of the event judged with `policy`: those with findings, by name. */
+export async function scanEventWorkload(db: Db, eventId: string, policy: ActivePolicy): Promise<PersonFindings[]> {
   const out: PersonFindings[] = []
-  for (const [volunteerId, { name, shifts }] of byPerson) {
+  for (const [volunteerId, { name, shifts }] of await commitmentsByPerson(db, eventId)) {
     const findings = evaluateWorkload(shifts, policy)
     if (findings.length > 0) out.push({ volunteerId, name, findings, messages: findings.map((f) => workloadFindingMessage(f, policy)) })
   }
-  return out.sort((a, b) => a.name.localeCompare(b.name, "fr"))
+  return out.sort(byName)
 }
+
+/** The event row a policy is read with: protection, dates, organisation zone. */
+const EVENT_SELECT = { workloadProtectionEnabled: true, workloadPolicy: true, startDate: true, endDate: true, organization: { select: { timeZone: true } } } as const
+type EventRow = WorkloadEventRow & { organization: { timeZone: string | null } }
 
 /** What the organiser's page reads: the state, the values, the suggestions and the current findings. */
 export type WorkloadPolicyState = {
@@ -61,7 +72,10 @@ export type WorkloadPolicyState = {
   /** Enabled with a stored policy that does not parse: nothing new is accepted. */
   incomplete: boolean
   suggestions: typeof EXISTING_WARNING_SUGGESTIONS
+  benchmarks: typeof WORKLOAD_BENCHMARKS
   fields: typeof WORKLOAD_LIMIT_FIELDS
+  /** The event's service days, for the days-off examples. */
+  horizon: EventHorizon
   serviceDayExamples: string[]
   /** People whose schedule breaks the enabled policy now (left by cancellations, say). */
   findings: Omit<PersonFindings, "findings">[]
@@ -71,10 +85,7 @@ export type WorkloadPolicyState = {
 const forPage = (people: PersonFindings[]): Omit<PersonFindings, "findings">[] => people.map((p) => ({ volunteerId: p.volunteerId, name: p.name, messages: p.messages }))
 
 export async function loadWorkloadPolicyState(db: Db, organizationId: string, eventId: string): Promise<WorkloadPolicyState | null> {
-  const event = await db.event.findFirst({
-    where: { id: eventId },
-    select: { workloadProtectionEnabled: true, workloadPolicy: true, organization: { select: { timeZone: true } } },
-  })
+  const event: EventRow | null = await db.event.findFirst({ where: { id: eventId }, select: EVENT_SELECT })
   if (!event) return null
   const parsed = parseWorkloadPolicy(event.workloadPolicy)
   const gate = workloadGateOf(event)
@@ -87,7 +98,9 @@ export async function loadWorkloadPolicyState(db: Db, organizationId: string, ev
     adoptable,
     incomplete: gate.kind === "incomplete",
     suggestions: EXISTING_WARNING_SUGGESTIONS,
+    benchmarks: WORKLOAD_BENCHMARKS,
     fields: WORKLOAD_LIMIT_FIELDS,
+    horizon: eventHorizon(event),
     serviceDayExamples: parsed.ok ? serviceDayExamples(parsed.policy.serviceDayStart) : [],
     findings: forPage(findings),
   }
@@ -103,11 +116,11 @@ export type WorkloadPreview =
  * enabled, else the organisation's.
  */
 export async function previewWorkloadPolicy(db: Db, eventId: string, values: unknown): Promise<WorkloadPreview> {
-  const event = await db.event.findFirst({ where: { id: eventId }, select: { workloadProtectionEnabled: true, workloadPolicy: true, organization: { select: { timeZone: true } } } })
+  const event: EventRow | null = await db.event.findFirst({ where: { id: eventId }, select: EVENT_SELECT })
   if (!event) return { ok: false, status: 404, error: "Non trouvé" }
-  const checked = checkPolicyValues(values)
+  const checked = checkPolicyValues(values, { requireOffDay: true })
   if (!checked.ok) return { ok: false, status: 400, error: checked.problems[0].message, problems: checked.problems }
-  const policy = buildPolicy(checked.values, snapshotZone(event))
+  const policy = activePolicy(buildPolicy(checked.values, snapshotZone(event)), event)
   const findings = await scanEventWorkload(db, eventId, policy)
   return { ok: true, timeZone: policy.timeZone, serviceDayExamples: serviceDayExamples(policy.serviceDayStart), findings: forPage(findings) }
 }
@@ -128,7 +141,8 @@ export type WorkloadSetResult =
 export function policySummary(p: WorkloadPolicy | null): string {
   if (!p) return "(aucune)"
   const h = (m: number) => `${Math.floor(m / 60)} h${m % 60 ? ` ${String(m % 60).padStart(2, "0")}` : ""}`
-  return `journée dès ${p.serviceDayStart}, ${h(p.maxContinuousMinutes)} sans pause de ${p.minBreakMinutes} min, ${h(p.maxDailyMinutes)}/journée, ${h(p.maxEventMinutes)} au total, repos ${h(p.minRestMinutes)}, attente ${h(p.maxIdleGapMinutes)}`
+  const off = !p.offDay ? "" : p.offDay.apply ? `, ${p.offDay.minOffDays} jour(s) sans mission sur ${p.offDay.windowDays}` : ", sans règle de jours sans mission"
+  return `journée dès ${p.serviceDayStart}, ${h(p.maxContinuousMinutes)} sans pause de ${p.minBreakMinutes} min, ${h(p.maxDailyMinutes)}/journée, ${h(p.maxEventMinutes)} au total, repos ${h(p.minRestMinutes)}, attente ${h(p.maxIdleGapMinutes)}${off}`
 }
 
 /**
@@ -139,7 +153,7 @@ export function policySummary(p: WorkloadPolicy | null): string {
 export async function setWorkloadPolicy(db: Db, organizationId: string, eventId: string, input: { enabled: boolean; values?: unknown }): Promise<WorkloadSetResult> {
   return db.$transaction(async (tx: Db): Promise<WorkloadSetResult> => {
     await lockWorkloadExclusive(tx, eventId)
-    const event = await tx.event.findFirst({ where: { id: eventId }, select: { workloadProtectionEnabled: true, workloadPolicy: true, organization: { select: { timeZone: true } } } })
+    const event: EventRow | null = await tx.event.findFirst({ where: { id: eventId }, select: EVENT_SELECT })
     if (!event) return { ok: false, status: 404, error: "Non trouvé" }
     const stored = parseWorkloadPolicy(event.workloadPolicy)
     const prev = event.workloadProtectionEnabled && stored.ok ? stored.policy : null
@@ -150,7 +164,7 @@ export async function setWorkloadPolicy(db: Db, organizationId: string, eventId:
       return { ok: true, enabled: false, policy: stored.ok ? stored.policy : null, changes: { workloadProtectionEnabled: { from: true, to: false } } }
     }
 
-    const checked = checkPolicyValues(input.values)
+    const checked = checkPolicyValues(input.values, { requireOffDay: true })
     if (!checked.ok) return { ok: false, status: 400, error: checked.problems[0].message, problems: checked.problems }
     // A new adoption (BE06): only while the capability is shipped and the beta gate allows it; an
     // event that has protection keeps it, and its values can still change, after an opt-out.
@@ -159,7 +173,7 @@ export async function setWorkloadPolicy(db: Db, organizationId: string, eventId:
     }
     const next = buildPolicy(checked.values, snapshotZone(event))
     if (policyChangeNeedsScan(prev, next)) {
-      const findings = await scanEventWorkload(tx, eventId, next)
+      const findings = await scanEventWorkload(tx, eventId, activePolicy(next, event))
       if (findings.length > 0) {
         const who = findings.length === 1 ? findings[0].name : `${findings.length} personnes`
         return {
@@ -183,7 +197,10 @@ export async function setWorkloadPolicy(db: Db, organizationId: string, eventId:
 /** The organisation's default as stored: `{ enabled, values }`. */
 export type WorkloadDefault = { enabled: boolean; values: WorkloadPolicyValues }
 
-/** Strict read of the stored default; anything else is no default. */
+/**
+ * Strict read of the stored default; anything else is no default. A default saved before lot 2 has
+ * no days-off answer and still reads (it is copied as a version-1 policy); every new save answers it.
+ */
 export function parseWorkloadDefault(value: unknown): WorkloadDefault | null {
   const v = (value && typeof value === "object" ? value : null) as { enabled?: unknown; values?: unknown } | null
   if (!v || typeof v.enabled !== "boolean") return null
@@ -208,9 +225,9 @@ export async function newEventWorkload(organizationId: string, org: { workloadPo
  */
 export async function personWorkloadReport(db: Db, volunteerId: string, eventIds: string[]): Promise<{ eventId: string; eventTitle: string; messages: string[] }[]> {
   if (eventIds.length === 0) return []
-  const events: { id: string; title: string; workloadProtectionEnabled: boolean; workloadPolicy: unknown }[] = await db.event.findMany({
+  const events: ({ id: string; title: string } & WorkloadEventRow)[] = await db.event.findMany({
     where: { id: { in: [...new Set(eventIds)] }, workloadProtectionEnabled: true },
-    select: { id: true, title: true, workloadProtectionEnabled: true, workloadPolicy: true },
+    select: { id: true, title: true, workloadProtectionEnabled: true, workloadPolicy: true, startDate: true, endDate: true },
   })
   const out: { eventId: string; eventTitle: string; messages: string[] }[] = []
   for (const event of events) {
@@ -221,4 +238,39 @@ export async function personWorkloadReport(db: Db, volunteerId: string, eventIds
     if (findings.length > 0) out.push({ eventId: event.id, eventTitle: event.title, messages: findings.map((f) => workloadFindingMessage(f, gate.policy)) })
   }
   return out
+}
+
+// ── The event's dates (the days-off rule's horizon) ─────────────────────────
+
+/**
+ * New dates for a protected event (#1171, lot 2): with a days-off rule, the periods it checks are
+ * the event's service days, so longer dates can create findings for people whose missions did not
+ * change (Codex: an event-wide check). Called inside the date change's transaction, after the
+ * EXCLUSIVE workload lock (the same as a policy write): returns the people the new dates would put
+ * over the limits with a new or worsened finding; empty when the dates may change. Without a
+ * days-off rule the dates change nothing the evaluator reads.
+ */
+export async function eventDatesWorkloadCheck(tx: Db, eventId: string, next: { startDate: Date | string; endDate: Date | string }): Promise<PersonFindings[]> {
+  await lockWorkloadExclusive(tx, eventId)
+  const event: EventRow | null = await tx.event.findFirst({ where: { id: eventId }, select: EVENT_SELECT })
+  const gate = workloadGateOf(event)
+  if (!event || gate.kind !== "on" || !offDayApplies(gate.policy)) return []
+  const after = activePolicy(gate.policy, next)
+  if (after.horizon.firstDay === gate.policy.horizon.firstDay && after.horizon.lastDay === gate.policy.horizon.lastDay) return []
+  const out: PersonFindings[] = []
+  for (const [volunteerId, { name, shifts }] of await commitmentsByPerson(tx, eventId)) {
+    const findings = newFindings(evaluateWorkload(shifts, gate.policy), evaluateWorkload(shifts, after))
+    if (findings.length > 0) out.push({ volunteerId, name, findings, messages: findings.map((f) => workloadFindingMessage(f, after)) })
+  }
+  return out.sort(byName)
+}
+
+/** The refusal of new dates, for the organiser: who, and the first new finding of each. */
+export function eventDatesRefusalBody(people: PersonFindings[]): { error: string; code: "workload"; workload: string[] } {
+  const who = people.length === 1 ? people[0].name : `${people.length} personnes`
+  return {
+    error: `Dates non enregistrées : avec ces dates, le programme de ${who} ne respecterait plus la règle des jours sans mission de cet événement. Les dates précédentes sont gardées. Modifiez ces programmes ou la règle (Protection des pauses et de la charge), puis enregistrez à nouveau.`,
+    code: "workload",
+    workload: people.map((p) => `${p.name} : ${p.messages[0]}`),
+  }
 }

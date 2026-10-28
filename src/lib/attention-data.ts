@@ -12,7 +12,7 @@ import { daysAgo, RETENTION_DAYS } from "./retention"
 import { isMilestoneOverdue } from "./milestones"
 
 /** The workload facts of one event (#465, #1171): who is counted, and in which mode. */
-function workloadAttention(e: { registrations: { volunteerId: string; status: string; shift: { id: string; date: Date; startTime: string; endTime: string } }[]; organization: { timeZone: string | null }; workloadProtectionEnabled: boolean; workloadPolicy: unknown }) {
+function workloadAttention(e: { registrations: { volunteerId: string; status: string; shift: { id: string; date: Date; startTime: string; endTime: string } }[]; organization: { timeZone: string | null }; workloadProtectionEnabled: boolean; workloadPolicy: unknown; startDate: Date; endDate: Date }) {
   const mode = workloadModeOf(e, orgTimeZone(e.organization))
   return { overloadedVolunteers: workloadByPerson(e.registrations, mode).size, workloadMode: mode.kind }
 }

@@ -8,18 +8,18 @@
  * Pure and Prisma-free (the sign-up page, the organiser lists and the personal page read it).
  */
 import { workloadMessage, workloadWarnings } from "./workload"
-import { evaluateWorkload, findingKey, workloadFindingMessage, WORKLOAD_POLICY_INCOMPLETE, type DutyShift, type WorkloadPolicy } from "./workload-policy"
+import { evaluateWorkload, findingKey, workloadFindingMessage, WORKLOAD_POLICY_INCOMPLETE, type ActivePolicy, type DutyShift } from "./workload-policy"
 import { workloadGateOf } from "./workload-guard"
 
 /** How an event judges workload: #465 warnings, its protection policy, or a protection that does not parse. */
 export type WorkloadMode =
   | { kind: "warnings"; timeZone: string }
-  | { kind: "policy"; policy: WorkloadPolicy }
+  | { kind: "policy"; policy: ActivePolicy }
   | { kind: "incomplete" }
 
 /** The mode of a stored event; the zone is the organisation's, used by the #465 warnings only. */
-export function workloadModeOf(event: { workloadProtectionEnabled?: boolean | null; workloadPolicy?: unknown }, timeZone: string): WorkloadMode {
-  const gate = workloadGateOf({ workloadProtectionEnabled: !!event.workloadProtectionEnabled, workloadPolicy: event.workloadPolicy })
+export function workloadModeOf(event: { workloadProtectionEnabled?: boolean | null; workloadPolicy?: unknown; startDate: Date | string; endDate: Date | string }, timeZone: string): WorkloadMode {
+  const gate = workloadGateOf({ workloadProtectionEnabled: !!event.workloadProtectionEnabled, workloadPolicy: event.workloadPolicy, startDate: event.startDate, endDate: event.endDate })
   if (gate.kind === "on") return { kind: "policy", policy: gate.policy }
   if (gate.kind === "incomplete") return { kind: "incomplete" }
   return { kind: "warnings", timeZone }

@@ -19,15 +19,29 @@
  * - a service day starts at the event's boundary (`serviceDayStart`, local time), not at midnight:
  *   with 08:00, a night task at 01:00 belongs to the service day of the evening before.
  *
- * Out of lot 1 (follow-ups): meal protection, travel margins, individual stricter limits, a rule
- * on days off, draft publication (#1146).
+ * Lot 2 adds a rule on days off (« jours sans mission », policy version 2): at least N service
+ * days without any mission in every P consecutive service days of the event. Version 1 policies
+ * (saved before) keep reading: the rule is then « not chosen yet » and not applied.
+ *
+ * Still out (follow-ups): meal protection, travel margins, individual stricter limits, draft
+ * publication (#1146).
  */
 import { fmtDay, fmtDuration } from "./signup-recap"
 import { toMin, toMinEnd } from "./gantt-utils"
 import { isValidTimeZone, localDateTimeToUtc } from "./time-zone"
 import { mergeIntervals } from "./interval-union"
 
-export const WORKLOAD_POLICY_VERSION = 1
+/** The version written when every lot-2 section is answered; version 1 (lot 1 only) stays readable. */
+export const WORKLOAD_POLICY_VERSION = 2
+
+/**
+ * The days-off rule: an explicit answer, never a blank. `apply: false` is a saved « do not apply »;
+ * a version-1 policy has no answer at all (« pas encore choisi », not applied).
+ */
+export type OffDayRule = { apply: false } | { apply: true; minOffDays: number; windowDays: number }
+
+/** Accepted range of the period of the days-off rule, in service days. */
+export const OFF_DAY_WINDOW_RANGE = { min: 2, max: 31 } as const
 
 /** The limits of a policy, in minutes. Every one is required to turn protection on. */
 export type WorkloadLimitsV1 = {
@@ -46,17 +60,20 @@ export type WorkloadLimitsV1 = {
 }
 
 export type WorkloadPolicy = WorkloadLimitsV1 & {
-  version: typeof WORKLOAD_POLICY_VERSION
+  /** 1: lot 1 only (no `offDay`); 2: with the days-off answer. */
+  version: 1 | 2
   /** IANA zone the boundary and the labels are read in, snapshotted when protection is turned on. */
   timeZone: string
   /** Local time a service day starts at, "HH:MM". Required: no hidden default. */
   serviceDayStart: string
+  /** The days-off answer; absent only in a version-1 policy (not chosen yet, not applied). */
+  offDay?: OffDayRule
 }
 
 /** What the organiser sets: the policy without its version and time zone (the server adds both). */
 export type WorkloadPolicyValues = Omit<WorkloadPolicy, "version" | "timeZone">
 
-export type WorkloadField = keyof WorkloadPolicyValues
+export type WorkloadField = keyof WorkloadPolicyValues | "offDayMinOffDays" | "offDayWindowDays"
 
 type LimitField = keyof WorkloadLimitsV1
 
@@ -72,6 +89,10 @@ export const WORKLOAD_LIMIT_FIELDS: { key: LimitField; label: string; min: numbe
 
 export const SERVICE_DAY_START_LABEL = "Début de la journée de service"
 
+export const OFF_DAY_LABEL = "Jours sans mission"
+export const OFF_DAY_MIN_LABEL = "Jours sans mission au minimum"
+export const OFF_DAY_WINDOW_LABEL = "Période, en journées de service d'affilée"
+
 /**
  * The values of the existing #465 warnings, offered as editable suggestions only: they are
  * « réglages d'avertissement existants », never legal, recommended or approved pilot thresholds.
@@ -82,14 +103,83 @@ export const EXISTING_WARNING_SUGGESTIONS: Partial<WorkloadLimitsV1> = {
   maxDailyMinutes: 8 * 60,
 }
 
+/**
+ * Benchmarks from employees' working-time law, offered as editable suggestions, each with its
+ * source and exactly the fields it fills. They are never presented as obligations for volunteers.
+ * Figures checked on 2026-10-28 against service-public.gouv.fr (F990, F18205), the European
+ * Commission's page on directive 2003/88/EC and Swiss labour-office summaries of LTr art. 15 and 15a; the days-off one is an approximation (the directive
+ * asks for 24 h + 11 h of uninterrupted rest per 7-day period, not an empty service day).
+ */
+export type WorkloadBenchmark = {
+  id: "daily" | "rest" | "break" | "offDay"
+  /** The value, as the organiser reads it. */
+  text: string
+  /** Where it comes from. */
+  source: string
+  /** Accessible name of its button. */
+  action: string
+  limits?: Partial<WorkloadLimitsV1>
+  offDay?: OffDayRule
+}
+
+export const WORKLOAD_BENCHMARKS: WorkloadBenchmark[] = [
+  { id: "daily", text: "10 h au plus par journée de service.", source: "Code du travail français, durée maximale quotidienne.", action: "Utiliser 10 h par journée de service", limits: { maxDailyMinutes: 10 * 60 } },
+  { id: "rest", text: "11 h de repos au moins entre deux journées de service.", source: "Directive européenne 2003/88/CE, Code du travail français, loi suisse sur le travail.", action: "Utiliser 11 h de repos entre deux journées", limits: { minRestMinutes: 11 * 60 } },
+  { id: "break", text: "Une pause d'au moins 20 min avant 6 h de missions d'affilée.", source: "Approximation du Code du travail français (20 min dès 6 h de travail dans la journée). La loi suisse sur le travail prévoit 15 min au-delà de 5 h 30, 30 min au-delà de 7 h et 1 h au-delà de 9 h.", action: "Utiliser une pause de 20 min avant 6 h d'affilée", limits: { maxContinuousMinutes: 6 * 60, minBreakMinutes: 20 } },
+  { id: "offDay", text: "1 jour sans mission sur 7 journées de service d'affilée.", source: "Approximation du repos hebdomadaire de la directive européenne 2003/88/CE (24 h, plus les 11 h de repos quotidien, par période de 7 jours).", action: "Utiliser 1 jour sans mission sur 7", offDay: { apply: true, minOffDays: 1, windowDays: 7 } },
+]
+
 export type PolicyProblem = { field: WorkloadField | "timeZone" | "version"; message: string }
+
+const isInt = (n: unknown): n is number => typeof n === "number" && Number.isInteger(n)
+
+/** Checks the days-off answer; `undefined` comes back as « not answered ». */
+function checkOffDay(value: unknown, problems: PolicyProblem[]): OffDayRule | undefined {
+  if (value === undefined || value === null) return undefined
+  const v = (typeof value === "object" ? value : {}) as Record<string, unknown>
+  if (Object.keys(v).some((k) => !["apply", "minOffDays", "windowDays"].includes(k))) {
+    problems.push({ field: "offDay", message: `${OFF_DAY_LABEL} : réglage inconnu.` })
+    return undefined
+  }
+  if (v.apply === false) {
+    if (v.minOffDays !== undefined || v.windowDays !== undefined) problems.push({ field: "offDay", message: `${OFF_DAY_LABEL} : sans règle, aucune valeur n'est attendue.` })
+    return { apply: false }
+  }
+  if (v.apply !== true) {
+    problems.push({ field: "offDay", message: `${OFF_DAY_LABEL} : choisissez d'appliquer ou non cette règle.` })
+    return undefined
+  }
+  const { min, max } = OFF_DAY_WINDOW_RANGE
+  let ok = true
+  if (v.windowDays === undefined || v.windowDays === null || v.windowDays === "") {
+    problems.push({ field: "offDayWindowDays", message: `${OFF_DAY_WINDOW_LABEL} : à compléter. Une valeur vide ne veut pas dire « sans limite ».` }); ok = false
+  } else if (!isInt(v.windowDays) || v.windowDays < min || v.windowDays > max) {
+    problems.push({ field: "offDayWindowDays", message: `${OFF_DAY_WINDOW_LABEL} : un nombre entier de ${min} à ${max} journées.` }); ok = false
+  }
+  if (v.minOffDays === undefined || v.minOffDays === null || v.minOffDays === "") {
+    problems.push({ field: "offDayMinOffDays", message: `${OFF_DAY_MIN_LABEL} : à compléter. Une valeur vide ne veut pas dire « sans limite ».` }); ok = false
+  } else if (!isInt(v.minOffDays) || v.minOffDays < 1) {
+    problems.push({ field: "offDayMinOffDays", message: `${OFF_DAY_MIN_LABEL} : un nombre entier, au moins 1.` }); ok = false
+  }
+  if (!ok) return undefined
+  const rule = { apply: true as const, minOffDays: v.minOffDays as number, windowDays: v.windowDays as number }
+  if (rule.minOffDays >= rule.windowDays) {
+    problems.push({ field: "offDayMinOffDays", message: "Le nombre de jours sans mission doit être plus petit que la période : sinon personne ne pourrait avoir de mission." })
+    return undefined
+  }
+  return rule
+}
 
 export type PolicyParse = { ok: true; policy: WorkloadPolicy } | { ok: false; problems: PolicyProblem[] }
 
 const HHMM = /^([01]\d|2[0-3]):[0-5]\d$/
 
-/** Checks the organiser's values (no version, no zone): every field present, whole minutes in range, consistent. */
-export function checkPolicyValues(value: unknown): { ok: true; values: WorkloadPolicyValues } | { ok: false; problems: PolicyProblem[] } {
+/**
+ * Checks the organiser's values (no version, no zone): every field present, whole minutes in range,
+ * consistent. `requireOffDay`: the days-off answer is required (every write from the forms); only a
+ * stored version-1 policy or default is read without it.
+ */
+export function checkPolicyValues(value: unknown, opts: { requireOffDay?: boolean } = {}): { ok: true; values: WorkloadPolicyValues } | { ok: false; problems: PolicyProblem[] } {
   const v = (value && typeof value === "object" ? value : {}) as Record<string, unknown>
   const problems: PolicyProblem[] = []
   if (v.serviceDayStart === undefined || v.serviceDayStart === null || v.serviceDayStart === "") {
@@ -107,10 +197,15 @@ export function checkPolicyValues(value: unknown): { ok: true; values: WorkloadP
       problems.push({ field: f.key, message: `${f.label} : entre ${fmtDuration(f.min)} et ${fmtDuration(f.max)}.` })
     }
   }
+  const offDay = checkOffDay(v.offDay, problems)
+  if (offDay === undefined && opts.requireOffDay && !problems.some((p) => p.field.startsWith("offDay"))) {
+    problems.push({ field: "offDay", message: `${OFF_DAY_LABEL} : choisissez d'appliquer ou non cette règle. Rien n'est choisi à votre place.` })
+  }
   if (problems.length > 0) return { ok: false, problems }
   const values = {
     serviceDayStart: v.serviceDayStart as string,
     ...Object.fromEntries(WORKLOAD_LIMIT_FIELDS.map((f) => [f.key, v[f.key] as number])),
+    ...(offDay ? { offDay } : {}),
   } as WorkloadPolicyValues
   // Consistency: a smaller daily or event cap than the one it contains is almost always hours typed
   // as minutes (or the reverse); refused rather than guessed.
@@ -131,15 +226,17 @@ export function checkPolicyValues(value: unknown): { ok: true; values: WorkloadP
 export function parseWorkloadPolicy(value: unknown): PolicyParse {
   const v = (value && typeof value === "object" ? value : {}) as Record<string, unknown>
   const problems: PolicyProblem[] = []
-  if (v.version !== WORKLOAD_POLICY_VERSION) problems.push({ field: "version", message: "Version de réglage inconnue." })
+  const version = v.version
+  if (version !== 1 && version !== 2) problems.push({ field: "version", message: "Version de réglage inconnue." })
   if (typeof v.timeZone !== "string" || !isValidTimeZone(v.timeZone)) problems.push({ field: "timeZone", message: "Fuseau horaire inconnu." })
-  // A key this version does not know is a rule it cannot enforce: never silently ignored.
-  const known = new Set<string>(["version", "timeZone", "serviceDayStart", ...WORKLOAD_LIMIT_FIELDS.map((f) => f.key)])
+  // A key this version does not know is a rule it cannot enforce: never silently ignored. Version 1
+  // has no days-off answer; version 2 must have one.
+  const known = new Set<string>(["version", "timeZone", "serviceDayStart", ...WORKLOAD_LIMIT_FIELDS.map((f) => f.key), ...(version === 2 ? ["offDay"] : [])])
   if (Object.keys(v).some((k) => !known.has(k))) problems.push({ field: "version", message: "Réglage inconnu de cette version." })
-  const values = checkPolicyValues(v)
+  const values = checkPolicyValues(v, { requireOffDay: version === 2 })
   if (!values.ok) problems.push(...values.problems)
   if (problems.length > 0 || !values.ok) return { ok: false, problems }
-  return { ok: true, policy: { version: WORKLOAD_POLICY_VERSION, timeZone: v.timeZone as string, ...values.values } }
+  return { ok: true, policy: { version: version as 1 | 2, timeZone: v.timeZone as string, ...values.values } }
 }
 
 /** The organiser's values of a policy (no version, no zone). */
@@ -147,12 +244,34 @@ export function policyValues(p: WorkloadPolicy): WorkloadPolicyValues {
   return {
     serviceDayStart: p.serviceDayStart,
     ...Object.fromEntries(WORKLOAD_LIMIT_FIELDS.map((f) => [f.key, p[f.key]])),
+    ...(p.offDay ? { offDay: p.offDay } : {}),
   } as WorkloadPolicyValues
 }
 
-/** The policy to store: the organiser's values, the version, and the zone snapshotted now. */
+/**
+ * The policy to store: the organiser's values, the version, and the zone snapshotted now. Values
+ * without the days-off answer (an organisation default saved before lot 2) stay a version-1 policy,
+ * so that what is stored always parses.
+ */
 export function buildPolicy(values: WorkloadPolicyValues, timeZone: string): WorkloadPolicy {
-  return { version: WORKLOAD_POLICY_VERSION, timeZone, ...values }
+  const { offDay, ...rest } = values
+  return offDay ? { version: WORKLOAD_POLICY_VERSION, timeZone, ...rest, offDay } : { version: 1, timeZone, ...rest }
+}
+
+/** Whether a days-off rule is enforced (a saved « apply »; « do not apply » and « not chosen » are not). */
+export function offDayApplies(p: Pick<WorkloadPolicy, "offDay">): p is { offDay: Extract<OffDayRule, { apply: true }> } {
+  return p.offDay?.apply === true
+}
+
+/**
+ * Whether `next` days-off rule can find something `prev` does not. N days off in every P days is
+ * looser when N does not grow and P does not shrink: every window of P' ≥ P days holds a window of
+ * P days, with at least N ≥ N' days off.
+ */
+function offDayTightens(prev: WorkloadPolicy, next: WorkloadPolicy): boolean {
+  if (!offDayApplies(next)) return false
+  if (!offDayApplies(prev)) return true
+  return next.offDay.minOffDays > prev.offDay.minOffDays || next.offDay.windowDays < prev.offDay.windowDays
 }
 
 /**
@@ -163,13 +282,15 @@ export function buildPolicy(values: WorkloadPolicyValues, timeZone: string): Wor
  */
 export function policyChangeNeedsScan(prev: WorkloadPolicy | null, next: WorkloadPolicy): boolean {
   if (!prev) return true
-  if (prev.serviceDayStart !== next.serviceDayStart || prev.timeZone !== next.timeZone || prev.version !== next.version) return true
+  // Version 1 → 2 alone changes nothing enforced (a version-1 policy has no days-off rule).
+  if (prev.serviceDayStart !== next.serviceDayStart || prev.timeZone !== next.timeZone) return true
   return next.maxContinuousMinutes < prev.maxContinuousMinutes
     || next.minBreakMinutes > prev.minBreakMinutes
     || next.maxDailyMinutes < prev.maxDailyMinutes
     || next.maxEventMinutes < prev.maxEventMinutes
     || next.minRestMinutes > prev.minRestMinutes
     || next.maxIdleGapMinutes < prev.maxIdleGapMinutes
+    || offDayTightens(prev, next)
 }
 
 // ── Evaluation ──────────────────────────────────────────────────────────────
@@ -177,12 +298,14 @@ export function policyChangeNeedsScan(prev: WorkloadPolicy | null, next: Workloa
 /** A committed mission of the person (confirmed place or pending request). */
 export type DutyShift = { id: string; date: string | Date; startTime: string; endTime: string }
 
-export type WorkloadRule = "continuous" | "daily" | "event" | "rest" | "idle"
+export type WorkloadRule = "continuous" | "daily" | "event" | "rest" | "idle" | "offday"
 
 /**
- * One rule broken by a schedule. `start`/`end` are instants (ms): the continuous run, or the gap
- * for rest and idle; `minutes` what was measured and `limit` the policy's value. `serviceDay` is the
- * service day the finding belongs to ("YYYY-MM-DD"; for a gap, the one of the mission before it).
+ * One rule broken by a schedule. `start`/`end` are instants (ms): the continuous run, the gap for
+ * rest and idle, or the service days concerned for « offday »; `minutes` what was measured (for
+ * « offday », the fewest days without mission found in one period) and `limit` the policy's value.
+ * `serviceDay` is the service day the finding belongs to ("YYYY-MM-DD"; for a gap, the one of the
+ * mission before it; for « offday », the first day concerned).
  */
 export type WorkloadFinding = {
   rule: WorkloadRule
@@ -233,6 +356,33 @@ export function serviceDayStartsAt(day: string, policy: Pick<WorkloadPolicy, "ti
 
 type Block = { start: number; end: number; ids: string[] }
 
+/**
+ * The service days of the event, from its first to its last date (shifts always lie within them).
+ * The days-off rule looks at every complete period of P days inside them, empty days included, and
+ * never at days outside the event (other commitments are not known here).
+ */
+export type EventHorizon = { firstDay: string; lastDay: string }
+
+/** A stored policy with the event it judges: what the evaluator needs. */
+export type ActivePolicy = WorkloadPolicy & { horizon: EventHorizon }
+
+/** The horizon of an event's dates. */
+export function eventHorizon(event: { startDate: string | Date; endDate: string | Date }): EventHorizon {
+  return { firstDay: dayKey(event.startDate), lastDay: dayKey(event.endDate) }
+}
+
+/** The policy, ready to judge the event's schedules. */
+export function activePolicy(policy: WorkloadPolicy, event: { startDate: string | Date; endDate: string | Date }): ActivePolicy {
+  return { ...policy, horizon: eventHorizon(event) }
+}
+
+const daysBetween = (a: string, b: string) => Math.round((Date.parse(`${b}T00:00:00Z`) - Date.parse(`${a}T00:00:00Z`)) / DAY_MS)
+
+/** Number of service days of a horizon. */
+export function horizonDays(h: EventHorizon): number {
+  return daysBetween(h.firstDay, h.lastDay) + 1
+}
+
 /** Missions merged where they overlap or touch: time on two missions at once counts once. */
 function dutyBlocks(duties: Duty[]): Block[] {
   const merged = mergeIntervals(duties)
@@ -260,7 +410,7 @@ function splitByServiceDay(block: Block, policy: WorkloadPolicy): { day: string;
 }
 
 /** Every rule the schedule breaks, in time order. Pure; the same shifts always give the same findings. */
-export function evaluateWorkload(shifts: DutyShift[], policy: WorkloadPolicy): WorkloadFinding[] {
+export function evaluateWorkload(shifts: DutyShift[], policy: ActivePolicy): WorkloadFinding[] {
   const duties = shifts.map((s) => dutyInterval(s, policy.timeZone))
   const blocks = dutyBlocks(duties)
   const findings: WorkloadFinding[] = []
@@ -321,8 +471,49 @@ export function evaluateWorkload(shifts: DutyShift[], policy: WorkloadPolicy): W
   const total = Math.round(blocks.reduce((n, b) => n + (b.end - b.start), 0) / MIN)
   if (total > policy.maxEventMinutes) findings.push({ rule: "event", serviceDay: null, start: null, end: null, minutes: total, limit: policy.maxEventMinutes, shiftIds: blocks.flatMap((b) => b.ids) })
 
-  const order: Record<WorkloadRule, number> = { continuous: 0, idle: 1, rest: 2, daily: 3, event: 4 }
+  // Days off: a service day with any minute of duty is worked (a standby or a night task included).
+  if (offDayApplies(policy)) findings.push(...offDayFindings(byDay, policy))
+
+  const order: Record<WorkloadRule, number> = { continuous: 0, idle: 1, rest: 2, daily: 3, offday: 4, event: 5 }
   return findings.sort((a, b) => (a.serviceDay ?? "~").localeCompare(b.serviceDay ?? "~") || order[a.rule] - order[b.rule] || (a.start ?? 0) - (b.start ?? 0))
+}
+
+/**
+ * « Au moins N jours sans mission sur toute période de P journées de service d'affilée » (Codex,
+ * lot 2): every complete period of P days inside the event (widened to the person's own service days
+ * outside it, if any) is checked; periods that fail and overlap or touch are reported as one finding,
+ * from its first to its last day, with the fewest days off found. An event shorter than P days has
+ * no complete period: nothing to check, which the organiser's form says before saving.
+ */
+function offDayFindings(byDay: Map<string, { minutes: number; ids: Set<string> }>, policy: ActivePolicy & { offDay: Extract<OffDayRule, { apply: true }> }): WorkloadFinding[] {
+  const { minOffDays: n, windowDays: p } = policy.offDay
+  const worked = new Set([...byDay].filter(([, e]) => e.minutes > 0).map(([d]) => d))
+  if (worked.size === 0) return []
+  const days = [...worked].sort()
+  const first = days[0] < policy.horizon.firstDay ? days[0] : policy.horizon.firstDay
+  const last = days[days.length - 1] > policy.horizon.lastDay ? days[days.length - 1] : policy.horizon.lastDay
+  const span = daysBetween(first, last) + 1
+  const out: WorkloadFinding[] = []
+  let run: { from: string; to: string; minOff: number } | null = null
+  const flush = () => {
+    if (!run) return
+    const ids = new Set<string>()
+    for (let d = run.from; d <= run.to; d = addDays(d, 1)) byDay.get(d)?.ids.forEach((id) => ids.add(id))
+    out.push({ rule: "offday", serviceDay: run.from, start: serviceDayStartsAt(run.from, policy), end: serviceDayStartsAt(addDays(run.to, 1), policy), minutes: run.minOff, limit: n, shiftIds: [...ids] })
+    run = null
+  }
+  for (let i = 0; i + p <= span; i++) {
+    const from = addDays(first, i)
+    const to = addDays(from, p - 1)
+    let workedInWindow = 0
+    for (let d = from; d <= to; d = addDays(d, 1)) if (worked.has(d)) workedInWindow++
+    const off = p - workedInWindow
+    if (off >= n) { flush(); continue }
+    if (run && from <= addDays(run.to, 1)) run = { from: run.from, to, minOff: Math.min(run.minOff, off) }
+    else { flush(); run = { from, to, minOff: off } }
+  }
+  flush()
+  return out
 }
 
 /** What identifies a finding: the same rule, place in time and measured amount. */
@@ -342,7 +533,7 @@ export function newFindings(before: WorkloadFinding[], after: WorkloadFinding[])
 }
 
 /** The prospective check of a change on one person: their schedule before, and after the change. */
-export function workloadChange(before: DutyShift[], after: DutyShift[], policy: WorkloadPolicy): WorkloadFinding[] {
+export function workloadChange(before: DutyShift[], after: DutyShift[], policy: ActivePolicy): WorkloadFinding[] {
   return newFindings(evaluateWorkload(before, policy), evaluateWorkload(after, policy))
 }
 
@@ -366,7 +557,7 @@ const lowerFirst = (s: string) => s.charAt(0).toLocaleLowerCase("fr-FR") + s.sli
  * One sentence per finding, the same on every page (no « tu » nor « vous »): the rule, the service
  * day, the times, what was measured and the event's limit.
  */
-export function workloadFindingMessage(f: WorkloadFinding, policy: Pick<WorkloadPolicy, "timeZone">): string {
+export function workloadFindingMessage(f: WorkloadFinding, policy: Pick<WorkloadPolicy, "timeZone" | "offDay">): string {
   const day = f.serviceDay ? `Journée de service du ${lowerFirst(fmtDay(f.serviceDay))}` : ""
   const at = (ms: number | null) => (ms === null ? "" : clockLabel(ms, policy.timeZone))
   switch (f.rule) {
@@ -380,8 +571,19 @@ export function workloadFindingMessage(f: WorkloadFinding, policy: Pick<Workload
       return `${day} : ${fmtDuration(f.minutes)} de missions. La limite de cet événement est de ${fmtDuration(f.limit)} par journée de service.`
     case "event":
       return `Sur tout l'événement : ${fmtDuration(f.minutes)} de missions. La limite de cet événement est de ${fmtDuration(f.limit)}.`
+    case "offday": {
+      const lastDay = f.end === null ? (f.serviceDay ?? "") : addDays(localParts(f.end, policy.timeZone).date, -1)
+      const from = f.serviceDay ?? lastDay
+      const span = `Du ${lowerFirst(fmtDay(from))} au ${lowerFirst(fmtDay(lastDay))}`
+      const window = policy.offDay?.apply ? policy.offDay.windowDays : null
+      const per = window === null ? "" : ` sur ${window}`
+      const ask = `Cet événement demande au moins ${f.limit} jour${f.limit > 1 ? "s" : ""} sans mission${per}${window === null ? "" : " journées de service"}.`
+      if (f.minutes === 0) return `${span} : ${daysBetween(from, lastDay) + 1} journées de service d'affilée, toutes avec une mission. ${ask}`
+      return `${span} : seulement ${f.minutes} jour${f.minutes > 1 ? "s" : ""} sans mission${window === null ? "" : ` sur ${window} journées de service d'affilée`}. ${ask}`
+    }
   }
 }
+
 
 /** The configuration of an enabled event does not parse: nothing new is accepted until it is fixed. */
 export const WORKLOAD_POLICY_INCOMPLETE = "La protection des pauses et de la charge de cet événement est incomplète : aucune nouvelle inscription n'est possible tant que l'organisation ne l'a pas complétée."

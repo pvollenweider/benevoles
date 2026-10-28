@@ -3,8 +3,8 @@
 
 import { COMMITTED_STATUSES, lockShifts } from "./registration-capacity"
 import {
-  evaluateWorkload, findingKey, parseWorkloadPolicy, workloadChange, workloadFindingMessage, WORKLOAD_POLICY_INCOMPLETE,
-  type DutyShift, type WorkloadFinding, type WorkloadPolicy,
+  activePolicy, evaluateWorkload, findingKey, parseWorkloadPolicy, workloadChange, workloadFindingMessage, WORKLOAD_POLICY_INCOMPLETE,
+  type ActivePolicy, type DutyShift, type WorkloadFinding,
 } from "./workload-policy"
 
 /**
@@ -47,18 +47,24 @@ export async function lockWorkloadSharedMany(tx: Tx, eventIds: string[]): Promis
 }
 
 /** What the event's protection says: off, on with a policy, or on with one that does not parse. */
-export type WorkloadGate = { kind: "off" } | { kind: "on"; policy: WorkloadPolicy } | { kind: "incomplete" }
+export type WorkloadGate = { kind: "off" } | { kind: "on"; policy: ActivePolicy } | { kind: "incomplete" }
+
+/** The event fields a gate is built from: the protection and the dates (the days-off rule's horizon). */
+export type WorkloadEventRow = { workloadProtectionEnabled: boolean; workloadPolicy: unknown; startDate: Date | string; endDate: Date | string }
 
 /** The gate of a stored event row. Enabled with a policy that does not parse: closed, never open. */
-export function workloadGateOf(event: { workloadProtectionEnabled: boolean; workloadPolicy: unknown } | null | undefined): WorkloadGate {
+export function workloadGateOf(event: WorkloadEventRow | null | undefined): WorkloadGate {
   if (!event?.workloadProtectionEnabled) return { kind: "off" }
   const parsed = parseWorkloadPolicy(event.workloadPolicy)
-  return parsed.ok ? { kind: "on", policy: parsed.policy } : { kind: "incomplete" }
+  return parsed.ok ? { kind: "on", policy: activePolicy(parsed.policy, event) } : { kind: "incomplete" }
 }
+
+/** What a gate reads of the event row. */
+export const WORKLOAD_EVENT_SELECT = { workloadProtectionEnabled: true, workloadPolicy: true, startDate: true, endDate: true } as const
 
 /** The gate read inside the transaction, after the shared lock. */
 export async function readWorkloadGate(tx: Tx, eventId: string): Promise<WorkloadGate> {
-  const event = await tx.event.findFirst({ where: { id: eventId }, select: { workloadProtectionEnabled: true, workloadPolicy: true } })
+  const event = await tx.event.findFirst({ where: { id: eventId }, select: WORKLOAD_EVENT_SELECT })
   return workloadGateOf(event)
 }
 
@@ -84,7 +90,7 @@ export type DutyChange = {
 export type WorkloadVerdict =
   | { ok: true }
   | { ok: false; reason: "incomplete" }
-  | { ok: false; reason: "findings"; findings: WorkloadFinding[]; policy: WorkloadPolicy; before: DutyShift[]; after: DutyShift[] }
+  | { ok: false; reason: "findings"; findings: WorkloadFinding[]; policy: ActivePolicy; before: DutyShift[]; after: DutyShift[] }
 
 /** The schedule after a change. */
 export function applyDutyChange(before: DutyShift[], change: DutyChange): DutyShift[] {
@@ -130,7 +136,7 @@ export async function lockVolunteerRows(tx: Tx, ids: string[]): Promise<void> {
  * describing it reveals nothing the submitter did not type. Merged blocks and totals can include
  * duty already held, so the check is on the submission's own findings, not on shift ids.
  */
-export function reproducibleFrom(finding: WorkloadFinding, submitted: DutyShift[], policy: WorkloadPolicy): boolean {
+export function reproducibleFrom(finding: WorkloadFinding, submitted: DutyShift[], policy: ActivePolicy): boolean {
   const own = new Set(evaluateWorkload(submitted, policy).map(findingKey))
   return own.has(findingKey(finding))
 }
