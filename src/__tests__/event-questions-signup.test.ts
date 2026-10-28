@@ -1,4 +1,10 @@
 import { describe, it, expect, vi, beforeEach } from "vitest"
+// Workload protection (#1171) runs on Postgres (src/__integration__/workload-policy.int.test.ts): off here.
+vi.mock("@/lib/workload-guard", async (importOriginal) => ({
+  ...(await importOriginal<typeof import("@/lib/workload-guard")>()),
+  lockWorkloadShared: vi.fn(), lockVolunteerRows: vi.fn(), readWorkloadGate: vi.fn(async () => ({ kind: "off" })),
+  committedDuty: vi.fn(async () => []), checkScheduleEdit: vi.fn(async () => []),
+}))
 
 // Custom questions (#483) at sign-up: answers stored in the registration transaction, replaced
 // only with proof the submitter owns the address.

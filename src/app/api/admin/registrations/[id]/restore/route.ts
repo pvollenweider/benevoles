@@ -19,6 +19,7 @@ export async function POST(req: Request, { params }: { params: Promise<{ id: str
   const parsed = schema.safeParse(await req.json().catch(() => ({})))
   if (!parsed.success) return validationError(parsed.error)
   const result = await restoreRegistration(guard.db, adminActor(guard.session), id, new Date(), { newLink: parsed.data.newLink })
-  if (!result.ok) return NextResponse.json({ error: result.error }, { status: result.httpStatus })
+  // A workload refusal (#1171) carries its findings for the page.
+  if (!result.ok) return NextResponse.json({ error: result.error, ...(result.code ? { code: result.code, workload: result.workload } : {}) }, { status: result.httpStatus })
   return NextResponse.json({ status: result.status })
 }

@@ -4,7 +4,7 @@
 import { eventSlugFromTitle } from "@/lib/event-slug"
 import { NextResponse } from "next/server"
 import { requireOrgSession } from "@/lib/auth-guard"
-import { duplicateOptionsSchema, duplicatePlan } from "@/lib/event-duplicate"
+import { DEFAULT_COPY, duplicatedWorkload, duplicateOptionsSchema, duplicatePlan } from "@/lib/event-duplicate"
 import { addSectorLeader } from "@/lib/admin-registration-actions"
 import { adminActor } from "@/lib/event-log"
 import { validationError } from "@/lib/api-error"
@@ -12,6 +12,9 @@ import { deletedPosteNames } from "@/lib/leader-postes"
 import { canAdoptBeta } from "@/lib/beta-access"
 import { newEventShiftSwapsEnabled } from "@/lib/shift-swap-data"
 import { newEventSectorsEnabled } from "@/lib/sector-adoption"
+import { newEventWorkload } from "@/lib/workload-policy-data"
+import { workloadProtectionShipped } from "@/lib/workload-shipped"
+import { orgTimeZone } from "@/lib/time-zone"
 
 /**
  * Duplicates an event as a draft (#378): title, new start date (every date moves by the same
@@ -42,7 +45,7 @@ export async function POST(req: Request, { params }: { params: Promise<{ id: str
       sectorLeaders: { select: { roleName: true, sectorId: true, name: true, email: true } },
       shiftRecurrences: true,
       sectors: { select: { id: true, name: true, displayOrder: true, archivedAt: true } },
-      organization: { select: { slug: true, shiftRosterDefault: true, sectorsDefault: true, shiftSwapsDefault: true } },
+      organization: { select: { slug: true, shiftRosterDefault: true, sectorsDefault: true, shiftSwapsDefault: true, workloadPolicyDefault: true, timeZone: true } },
     },
   })
 
@@ -67,6 +70,13 @@ export async function POST(req: Request, { params }: { params: Promise<{ id: str
     source.shiftSwapsEnabled ? canAdoptBeta(organizationId, "shiftSwaps") : false,
     newEventShiftSwapsEnabled(organizationId, source.organization.shiftSwapsDefault),
   ])
+  // Workload protection (#1171): with the settings, the source's values (a new adoption, the zone
+  // snapshotted again); else the organisation's values for a new event.
+  const [workloadGate, newEventWorkloadValue] = await Promise.all([
+    workloadProtectionShipped() ? canAdoptBeta(organizationId, "workloadProtection") : false,
+    newEventWorkload(organizationId, source.organization),
+  ])
+  const workload = duplicatedWorkload(source, (parsed.data.copy?.settings ?? DEFAULT_COPY.settings), { gate: workloadGate, newEvent: newEventWorkloadValue, timeZone: orgTimeZone(source.organization) })
   const plan = duplicatePlan({ ...source, leaders: source.sectorLeaders, deletedPostes, recurrences: source.shiftRecurrences, organizationRosterDefault: source.organization.shiftRosterDefault, sectorsGate, newEventSectors, swapsGate, newEventSwaps }, parsed.data)
 
   // A title whose slug is one of the site's own addresses (/tarifs, /admin…) is refused (src/lib/event-slug.ts).
@@ -82,6 +92,7 @@ export async function POST(req: Request, { params }: { params: Promise<{ id: str
       slug,
       organizationId,
       ...plan.event,
+      ...workload,
       publicStatus: "draft",
       // The unlisted choice is a deliberate decision per event, never copied.
       isListed: true,

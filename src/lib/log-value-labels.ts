@@ -90,6 +90,12 @@ export const SWAP_REASON_LOG_LABELS: Record<SwapEndReason, string> = {
   same_registration: "même inscription",
   same_shift: "même créneau",
   other_event: "autre événement",
+  workload_continuous: "durée sans vraie pause",
+  workload_daily: "durée par journée de service",
+  workload_event: "durée sur l'événement",
+  workload_rest: "repos minimum",
+  workload_idle: "attente entre deux missions",
+  workload_incomplete: "protection des pauses incomplète",
 }
 
 function lookup(map: Record<string, string>, value: string): string | undefined {

@@ -14,6 +14,10 @@ import { canAdoptBeta } from "@/lib/beta-access"
 import { SWAPS_NOT_ADOPTABLE } from "@/lib/shift-swap-data"
 import { swapsShipped } from "@/lib/shift-swap-gate"
 import { SECTORS_CLOSED_ERROR } from "@/lib/sectors"
+import { WORKLOAD_NOT_ADOPTABLE } from "@/lib/workload-policy-data"
+import { workloadProtectionShipped } from "@/lib/workload-shipped"
+import { checkPolicyValues } from "@/lib/workload-policy"
+import { Prisma } from "@/generated/prisma/client"
 
 const SLUG_RE = /^[a-z0-9]([a-z0-9-]*[a-z0-9])?$/
 
@@ -23,7 +27,7 @@ export async function PATCH(req: Request) {
   const { organizationId } = guard
 
   const body = await req.json().catch(() => ({}))
-  const updates: { name?: string; slug?: string; volunteerCharter?: string | null; hasOrgInsurance?: boolean; shiftRosterDefault?: boolean; sectorsDefault?: boolean; shiftSwapsDefault?: boolean; publicTitle?: string | null; timeZone?: string | null; onboardingDismissedAt?: Date | null; volunteerHourRateCents?: number | null; volunteerHourRateCurrency?: string | null; volunteerHourRateSetAt?: Date | null } = {}
+  const updates: { name?: string; slug?: string; volunteerCharter?: string | null; hasOrgInsurance?: boolean; shiftRosterDefault?: boolean; sectorsDefault?: boolean; shiftSwapsDefault?: boolean; publicTitle?: string | null; timeZone?: string | null; onboardingDismissedAt?: Date | null; volunteerHourRateCents?: number | null; volunteerHourRateCurrency?: string | null; volunteerHourRateSetAt?: Date | null; workloadPolicyDefault?: Prisma.InputJsonValue | typeof Prisma.DbNull } = {}
   let oldSlug: string | null = null
 
   if (typeof body.name === "string") {
@@ -96,6 +100,26 @@ export async function PATCH(req: Request) {
       return NextResponse.json({ error: SWAPS_NOT_ADOPTABLE }, { status: 403 })
     }
     updates.shiftSwapsDefault = body.shiftSwapsDefault
+  }
+
+  // Workload protection for the next new events (#1171, beta): `{ enabled, values }` copied to each
+  // new event, every value required; null removes it. Setting one needs the capability open for the
+  // organisation (and shipped); removing it is always possible. No existing event changes.
+  if ("workloadPolicyDefault" in body) {
+    const value = body.workloadPolicyDefault
+    if (value === null) {
+      updates.workloadPolicyDefault = Prisma.DbNull
+    } else {
+      if (!(workloadProtectionShipped() && (await canAdoptBeta(organizationId, "workloadProtection")))) {
+        return NextResponse.json({ error: WORKLOAD_NOT_ADOPTABLE }, { status: 403 })
+      }
+      const checked = checkPolicyValues(value?.values)
+      if (typeof value?.enabled !== "boolean" || !checked.ok) {
+        const problems = checked.ok ? [] : checked.problems
+        return NextResponse.json({ error: problems[0]?.message ?? "Indiquez si les nouveaux événements commencent protégés.", problems }, { status: 400 })
+      }
+      updates.workloadPolicyDefault = { enabled: value.enabled, values: checked.values }
+    }
   }
 
   // Headline of the public events page. Empty means "use the default" (Bénévoles).

@@ -11,6 +11,8 @@ import { collectNotifications, deliverAfterResponse, enqueueNotifications } from
 import { notifySectorLeadersOfSignup } from "./sector-leaders"
 import { promoteNextInWaitlist } from "./waitlist"
 import { reportError } from "./report-error"
+import { lockShifts } from "./registration-capacity"
+import { checkDutyChange, lockVolunteerRows, lockWorkloadShared, readWorkloadGate, workloadRefusalBody, WorkloadRefusalError } from "./workload-guard"
 
 /**
  * Sign-up approval (#484): the organizer accepts or refuses a request on a « Sur validation »
@@ -31,7 +33,7 @@ export const decidedStatus = (decision: Decision["decision"]) => (decision === "
 
 export type DecisionResult =
   | { ok: true; status: "active" | "refused" }
-  | { ok: false; httpStatus: 404 | 409; error: string }
+  | { ok: false; httpStatus: 404 | 409; error: string; code?: "workload"; workload?: string[] }
 
 export const ALREADY_SETTLED = "Cette demande a déjà été traitée ou annulée. Rechargez la page."
 
@@ -53,59 +55,84 @@ export async function decideRequest(db: OrgScopedPrisma, actor: LogActor, id: st
 
   // Conditional on the request still standing: the volunteer may withdraw it, or another
   // organizer decide, at the same moment. The decision and its email commit together (#352).
-  const outboxIds = await db.$transaction(async (tx) => {
-    const { count } = await tx.registration.updateMany({ where: { id, status: "requested" }, data: { status } })
-    if (count === 0) return null
-    const outbox = collectNotifications()
-    if (status === "active") {
-      await outbox.send({
-        kind: "registration_confirmation",
-        recipient: { email: reg.volunteer.email, name },
-        volunteerId: reg.volunteerId,
-        organizationId: reg.event.organizationId,
-        dedupeKey: `registration_accepted:${id}`,
-        data: {
-          volunteerName: name,
+  let outboxIds: string[] | null
+  try {
+    outboxIds = await db.$transaction(async (tx) => {
+      // Workload protection (#1171): accepting turns the request into a place. The request already
+      // counted, but it is judged again as added, under the locks (workload, shift, volunteer): an
+      // approval never turns a violation into a valid plan.
+      if (status === "active") {
+        await lockWorkloadShared(tx, reg.eventId)
+        const gate = await readWorkloadGate(tx, reg.eventId)
+        if (gate.kind !== "off") {
+          await lockShifts(tx, [reg.shiftId])
+          await lockVolunteerRows(tx, [reg.volunteerId])
+          const shift = await tx.shift.findFirst({ where: { id: reg.shiftId }, select: { id: true, date: true, startTime: true, endTime: true } })
+          if (shift) {
+            const verdict = await checkDutyChange(tx, gate, reg.eventId, reg.volunteerId, { add: [shift] }, { exceptRegistrationIds: [id] })
+            if (!verdict.ok) throw new WorkloadRefusalError(verdict, reg.volunteerId)
+          }
+        }
+      }
+      const { count } = await tx.registration.updateMany({ where: { id, status: "requested" }, data: { status } })
+      if (count === 0) return null
+      const outbox = collectNotifications()
+      if (status === "active") {
+        await outbox.send({
+          kind: "registration_confirmation",
+          recipient: { email: reg.volunteer.email, name },
+          volunteerId: reg.volunteerId,
+          organizationId: reg.event.organizationId,
+          dedupeKey: `registration_accepted:${id}`,
+          data: {
+            volunteerName: name,
+            eventTitle: reg.event.title,
+            shifts: [{
+              label: reg.shift.label,
+              date: reg.shift.date.toLocaleDateString("fr-FR"),
+              startTime: reg.shift.startTime,
+              endTime: reg.shift.endTime,
+              ...pickShiftInfo(reg.shift, reg.event),
+            }],
+            editToken: registrationToken.reveal(reg),
+            orgSlug: reg.event.organization.slug,
+            confirmationMessage: reg.event.confirmationMessage ?? undefined,
+            cancelNotice: cancelPolicySentence(reg.event),
+          },
+        })
+        await notifySectorLeadersOfSignup({
+          eventId: reg.eventId,
           eventTitle: reg.event.title,
-          shifts: [{
-            label: reg.shift.label,
-            date: reg.shift.date.toLocaleDateString("fr-FR"),
-            startTime: reg.shift.startTime,
-            endTime: reg.shift.endTime,
-            ...pickShiftInfo(reg.shift, reg.event),
-          }],
-          editToken: registrationToken.reveal(reg),
           orgSlug: reg.event.organization.slug,
-          confirmationMessage: reg.event.confirmationMessage ?? undefined,
-          cancelNotice: cancelPolicySentence(reg.event),
-        },
-      })
-      await notifySectorLeadersOfSignup({
-        eventId: reg.eventId,
-        eventTitle: reg.event.title,
-        orgSlug: reg.event.organization.slug,
-        volunteerName: name,
-        shift: reg.shift,
-      }, outbox.send)
-    } else {
-      await outbox.send({
-        kind: "registration_refused",
-        recipient: { email: reg.volunteer.email, name },
-        volunteerId: reg.volunteerId,
-        organizationId: reg.event.organizationId,
-        dedupeKey: `registration_refused:${id}`,
-        data: {
           volunteerName: name,
-          eventTitle: reg.event.title,
-          shiftLabel: reg.shift.label,
-          note,
-          orgSlug: reg.event.organization.slug,
-          eventSlug: reg.event.slug,
-        },
-      })
+          shift: reg.shift,
+        }, outbox.send)
+      } else {
+        await outbox.send({
+          kind: "registration_refused",
+          recipient: { email: reg.volunteer.email, name },
+          volunteerId: reg.volunteerId,
+          organizationId: reg.event.organizationId,
+          dedupeKey: `registration_refused:${id}`,
+          data: {
+            volunteerName: name,
+            eventTitle: reg.event.title,
+            shiftLabel: reg.shift.label,
+            note,
+            orgSlug: reg.event.organization.slug,
+            eventSlug: reg.event.slug,
+          },
+        })
+      }
+      return enqueueNotifications(outbox.payloads, tx, { organizationId: reg.event.organizationId })
+    })
+  } catch (e) {
+    if (e instanceof WorkloadRefusalError) {
+      const body = workloadRefusalBody(e.verdict, `Acceptation impossible : le programme de ${name} ne respecterait plus les pauses et limites de charge de cet événement.`)
+      return { ok: false, httpStatus: 409, ...body }
     }
-    return enqueueNotifications(outbox.payloads, tx, { organizationId: reg.event.organizationId })
-  })
+    throw e
+  }
   if (!outboxIds) return { ok: false, httpStatus: 409, error: ALREADY_SETTLED }
 
   const logId = await logEvent({

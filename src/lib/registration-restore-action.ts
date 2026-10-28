@@ -9,6 +9,7 @@ import { LIVE_STATUSES, OCCUPYING_STATUSES, isUniqueViolation, lockShifts } from
 import { cancelledFrom, planRestore, type RestoredStatus } from "./registration-restore"
 import { localDateTimeToUtc, orgTimeZone } from "./time-zone"
 import { generateToken } from "./utils"
+import { checkDutyChange, lockVolunteerRows, lockWorkloadShared, readWorkloadGate, workloadRefusalBody, WorkloadRefusalError } from "./workload-guard"
 
 /**
  * « Rétablir » (#809): puts a cancelled place or request back, as it was. Server only. The
@@ -18,7 +19,7 @@ import { generateToken } from "./utils"
 
 export type RestoreResult =
   | { ok: true; status: RestoredStatus }
-  | { ok: false; httpStatus: 404 | 409; error: string }
+  | { ok: false; httpStatus: 404 | 409; error: string; code?: "workload"; workload?: string[] }
 
 export const ALREADY_LIVE = "Cette personne a déjà une inscription en cours sur ce créneau."
 
@@ -54,6 +55,9 @@ export async function restoreRegistration(db: OrgScopedPrisma, actor: LogActor, 
   let outcome: { ok: true; status: RestoredStatus; outboxIds: string[] } | { ok: false; error: string }
   try {
     outcome = await db.$transaction(async (tx) => {
+      // Workload protection (#1171): its shared lock first, as every path that adds duty.
+      await lockWorkloadShared(tx, reg.eventId)
+      const workloadGate = await readWorkloadGate(tx, reg.eventId)
       await lockShifts(tx, [reg.shiftId])
       const [current, shift, occupied] = await Promise.all([
         tx.registration.findFirst({ where: { id }, select: { status: true } }),
@@ -70,6 +74,12 @@ export async function restoreRegistration(db: OrgScopedPrisma, actor: LogActor, 
         now,
       })
       if (!plan.ok) return { ok: false as const, error: plan.message }
+      // A place or a request taken back is a commitment again: judged on the whole schedule.
+      if (workloadGate.kind !== "off") {
+        await lockVolunteerRows(tx, [reg.volunteerId])
+        const verdict = await checkDutyChange(tx, workloadGate, reg.eventId, reg.volunteerId, { add: [reg.shift] }, { exceptRegistrationIds: [id] })
+        if (!verdict.ok) throw new WorkloadRefusalError(verdict, reg.volunteerId)
+      }
 
       const { count } = await tx.registration.updateMany({ where: { id, status: "cancelled" }, data: { status: plan.status } })
       if (count === 0) return { ok: false as const, error: "Cette inscription n'est pas annulée." }
@@ -118,6 +128,9 @@ export async function restoreRegistration(db: OrgScopedPrisma, actor: LogActor, 
       return { ok: true as const, status: plan.status, outboxIds: await enqueueNotifications(outbox.payloads, tx, { organizationId: reg.event.organizationId }) }
     })
   } catch (e) {
+    if (e instanceof WorkloadRefusalError) {
+      return { ok: false, httpStatus: 409, ...workloadRefusalBody(e.verdict, `Impossible de rétablir : le programme de ${name} ne respecterait plus les pauses et limites de charge de cet événement.`) }
+    }
     // A newer live registration of the same person on this shift (Registration_shift_volunteer_live_key, #264).
     if (isUniqueViolation(e)) return { ok: false, httpStatus: 409, error: ALREADY_LIVE }
     throw e

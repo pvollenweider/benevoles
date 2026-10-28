@@ -2,6 +2,12 @@
 // SPDX-License-Identifier: AGPL-3.0-only
 
 import { describe, it, expect, vi, beforeEach } from "vitest"
+// Workload protection (#1171) runs on Postgres (src/__integration__/workload-policy.int.test.ts): off here.
+vi.mock("@/lib/workload-guard", async (importOriginal) => ({
+  ...(await importOriginal<typeof import("@/lib/workload-guard")>()),
+  lockWorkloadShared: vi.fn(), lockVolunteerRows: vi.fn(), readWorkloadGate: vi.fn(async () => ({ kind: "off" })),
+  committedDuty: vi.fn(async () => []), checkScheduleEdit: vi.fn(async () => []),
+}))
 
 // Share links per group (#947): a public sign-up made through `?groupe=<code>` records that link,
 // resolved by the server from the code within the event. An unknown code, another event's code or

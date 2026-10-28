@@ -92,6 +92,9 @@ const FIELD_LABELS: Record<string, string> = {
   // Shift swaps (#1174): the event's options.
   shiftSwapsEnabled: "demandes d'échange de créneaux",
   shiftSwapsApproval: "validation de chaque échange",
+  // Breaks and workload protection (#1171): the event's option and a summary of its limits.
+  workloadProtectionEnabled: "protection des pauses et de la charge",
+  workloadPolicy: "limites de pauses et de charge",
   postes: "postes",
 }
 

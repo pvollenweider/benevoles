@@ -18,10 +18,17 @@ import { reportError } from "./report-error"
 import {
   agreementTerms, beforeSwapDeadline, materialTerms, needsSwapApproval, personSwapCheck, swapCompatibility, swapDeadline,
   swapRefusalMessage, SWAP_COUNTER_LIVE_STATUSES, SWAP_LIVE_STATUSES,
-  type SwapEndReason, type SwapRegistration, type SwapShift, type SwapStatus,
+  type SwapEndReason, type SwapRefusalCode, type SwapRegistration, type SwapShift, type SwapStatus,
 } from "./shift-swaps"
 import { deadlineMoment, selfCancelDeadline } from "./cancel-deadline"
 import { rosterDisplayName } from "./shift-roster-text"
+import { checkDutyChange, lockWorkloadShared, readWorkloadGate, type WorkloadVerdict } from "./workload-guard"
+
+/** The swap code of a workload refusal (#1171): the first rule broken, never whose plan. */
+function workloadSwapCode(v: Exclude<WorkloadVerdict, { ok: true }>): SwapRefusalCode {
+  if (v.reason === "incomplete") return "workload_incomplete"
+  return `workload_${v.findings[0].rule}` as SwapRefusalCode
+}
 
 /**
  * The commands of a shift swap (#1174), server only. The rules are in src/lib/shift-swaps.ts; each
@@ -29,7 +36,8 @@ import { rosterDisplayName } from "./shift-roster-text"
  * emails (outbox) in one transaction, delivered after the commit (#352): an SMTP failure never
  * undoes a swap (E16).
  *
- * Lock order, the sign-up's (shifts first, then people): the shifts involved `ORDER BY id`
+ * Lock order, the sign-up's (shifts first, then people), after the event's workload lock (#1171,
+ * src/lib/workload-guard.ts): the shifts involved `ORDER BY id`
  * (lockShifts), then the volunteers `ORDER BY id`, then the request row. Erasure, merge and
  * deletion lock volunteers only, the waitlist and restore shifts only: no cycle. The issue's text
  * proposed volunteers first; the public sign-up locks a shift then its volunteer, so that order
@@ -230,6 +238,14 @@ async function evaluateSwap(tx: Tx, req: LockedRequest, event: LoadedEvent, mine
   for (const [giving, receiving] of [[a, b.shift], [b, a.shift]] as const) {
     const check = await personCheck(tx, event, giving, receiving)
     if (!check.ok) return { ok: false, end: "impossible", reason: check.code }
+  }
+  // Workload protection (#1171), for both people: each gives their shift away, then takes the other
+  // one, judged on their whole schedule. The callers hold the event's workload lock and both
+  // volunteers' locks.
+  const gate = await readWorkloadGate(tx, event.id)
+  for (const [giving, receiving] of [[a, b.shift], [b, a.shift]] as const) {
+    const verdict = await checkDutyChange(tx, gate, event.id, giving.volunteerId, { removeShiftIds: [giving.shiftId], add: [receiving] })
+    if (!verdict.ok) return { ok: false, end: "impossible", reason: workloadSwapCode(verdict) }
   }
   return { ok: true, approval: needsSwapApproval(a.shift, b.shift, event) }
 }
@@ -432,6 +448,7 @@ export async function offerSwap(db: SwapDbLike, input: { requestId: string; regi
   let outboxIds: string[] = []
   try {
     const result = await runSwapTransaction(asDb(db), async (tx): Promise<SwapResult> => {
+      await lockWorkloadShared(tx, preReq.eventId)
       await lockShifts(tx, [preReq.shiftId, preReg.shiftId])
       await lockVolunteers(tx, [preReq.volunteerId, input.volunteerId])
       const req = await lockRequest(tx, input.requestId)
@@ -486,8 +503,10 @@ export async function offerSwap(db: SwapDbLike, input: { requestId: string; regi
 
 /** Locks what a step on an existing request needs, in the lock order, and reads it again. */
 async function lockForStep(tx: Tx, requestId: string, organizationId?: string) {
-  const pre = await tx.shiftSwapRequest.findFirst({ where: { id: requestId }, select: { shiftId: true, counterShiftId: true, volunteerId: true, counterVolunteerId: true } })
+  const pre = await tx.shiftSwapRequest.findFirst({ where: { id: requestId }, select: { eventId: true, shiftId: true, counterShiftId: true, volunteerId: true, counterVolunteerId: true } })
   if (!pre) return null
+  // The event's workload lock first (#1171): a step may apply the swap.
+  await lockWorkloadShared(tx, pre.eventId)
   await lockShifts(tx, [pre.shiftId, ...(pre.counterShiftId ? [pre.counterShiftId] : [])])
   await lockVolunteers(tx, [pre.volunteerId, ...(pre.counterVolunteerId ? [pre.counterVolunteerId] : [])])
   const req = await lockRequest(tx, requestId, organizationId)

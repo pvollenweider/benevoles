@@ -15,6 +15,13 @@ import { LIVE_STATUSES } from "@/lib/registration-capacity"
 import { queueAddedByOrganizer } from "@/lib/notifications/added-by-organizer"
 import { manualAddNotice, manualAddNoticeLog } from "@/lib/manual-add-notice"
 import { localDateTimeToUtc, orgTimeZone } from "@/lib/time-zone"
+import { checkDutyChange, judgeDutyChange, lockVolunteerRows, lockWorkloadShared, readWorkloadGate, workloadRefusalBody, WorkloadRefusalError } from "@/lib/workload-guard"
+
+/** The organiser's refusal (#1171): who, and the first limit the addition would break. */
+function manualAddWorkloadBody(e: WorkloadRefusalError, name: string, shiftCount: number) {
+  const lead = `Ajout impossible : avec ${shiftCount > 1 ? "ces créneaux" : "ce créneau"}, le programme de ${name} ne respecterait plus les pauses et limites de charge de cet événement.`
+  return workloadRefusalBody(e.verdict, lead)
+}
 
 /** Shifts at most in one submit (#918): a person's whole programme, not a bulk import. */
 const MAX_SHIFTS = 30
@@ -95,6 +102,16 @@ export async function POST(req: Request) {
     }
   }
 
+  // Workload protection (#1171): a new person holds nothing yet, so these shifts alone are judged
+  // before the member record is created; the authoritative check runs below, under the locks.
+  // There is no « add anyway »: allowOverLimit concerns the role limit only.
+  if (!volunteer) {
+    const verdict = judgeDutyChange(await readWorkloadGate(db, eventId), [], { add: shifts })
+    if (!verdict.ok) {
+      return NextResponse.json(manualAddWorkloadBody(new WorkloadRefusalError(verdict, ""), `${firstName!.trim()} ${lastName!.trim()}`, shifts.length), { status: 409 })
+    }
+  }
+
   if (!volunteer) {
     volunteer = await db.volunteer.create({
       data: { firstName: firstName!.trim(), lastName: lastName!.trim(), email: usedEmail, phone: phone || null, organizationId },
@@ -118,6 +135,15 @@ export async function POST(req: Request) {
   try {
     const added = volunteer
     registrations = await db.$transaction(async (tx) => {
+      // Workload protection (#1171): its shared lock first, then the person's row, then their
+      // whole resulting schedule. Every shift added counts, all or nothing.
+      await lockWorkloadShared(tx, eventId)
+      const gate = await readWorkloadGate(tx, eventId)
+      if (gate.kind !== "off") {
+        await lockVolunteerRows(tx, [added.id])
+        const verdict = await checkDutyChange(tx, gate, eventId, added.id, { add: shifts })
+        if (!verdict.ok) throw new WorkloadRefusalError(verdict, added.id)
+      }
       const created = []
       for (const shift of shifts) {
         const registration = await tx.registration.create({
@@ -159,6 +185,9 @@ export async function POST(req: Request) {
       return created
     })
   } catch (e) {
+    if (e instanceof WorkloadRefusalError) {
+      return NextResponse.json(manualAddWorkloadBody(e, `${volunteer.firstName} ${volunteer.lastName}`, shifts.length), { status: 409 })
+    }
     if (isUniqueViolation(e)) {
       const message = shifts.length > 1
         ? "Cette personne est déjà inscrite sur l'un de ces créneaux : rien n'a été ajouté."

@@ -1,4 +1,10 @@
 import { describe, it, expect, vi, beforeEach } from "vitest"
+// Workload protection (#1171) runs on Postgres (src/__integration__/workload-policy.int.test.ts): off here.
+vi.mock("@/lib/workload-guard", async (importOriginal) => ({
+  ...(await importOriginal<typeof import("@/lib/workload-guard")>()),
+  lockWorkloadShared: vi.fn(), lockVolunteerRows: vi.fn(), readWorkloadGate: vi.fn(async () => ({ kind: "off" })),
+  committedDuty: vi.fn(async () => []), checkScheduleEdit: vi.fn(async () => []),
+}))
 
 // Placing a member already in the list on a shift (#914): the add form sends the member's id, the
 // server links the registration to that member, email or not, and never creates a new one. The

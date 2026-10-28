@@ -60,6 +60,14 @@ export const BETA_CAPABILITIES = {
     description: "Permettre à deux bénévoles inscrits sur le même poste d'échanger leurs créneaux.",
     shipped: true,
   },
+  // #1171: the event option « Protection des pauses et de la charge » (src/lib/workload-policy.ts).
+  // Not shipped until the organiser and volunteer pages come (lot 1, second PR): the enforcement and
+  // the organiser API are in, but no event can turn it on yet.
+  workloadProtection: {
+    label: "Protection des pauses et de la charge",
+    description: "Refuser toute affectation qui dépasse les limites de travail continu, de charge, de repos ou d'attente fixées pour l'événement.",
+    shipped: false,
+  },
 } as const satisfies BetaRegistry
 
 export type BetaCapabilityId = keyof typeof BETA_CAPABILITIES
