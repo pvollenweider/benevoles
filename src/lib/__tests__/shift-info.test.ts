@@ -94,3 +94,14 @@ describe("onSiteContact and withDayContact", () => {
     expect(telHref("+41 (0)79 111-11-11")).toBe("tel:+410791111111")
   })
 })
+
+describe("repas sur le pouce (#1171, lot 2)", () => {
+  it("says it on the shift's info, in the plain-text version too, and only when set", async () => {
+    const { shiftInfoLines, shiftInfoText, pickShiftInfo } = await import("../shift-info")
+    expect(shiftInfoLines({ mealOnTheGo: true })).toEqual([{ kind: "meal", label: "Repas", text: "sur le pouce possible pendant cette mission" }])
+    expect(shiftInfoText({ mealOnTheGo: true })).toEqual(["Repas : sur le pouce possible pendant cette mission"])
+    expect(shiftInfoLines({ mealOnTheGo: false })).toEqual([])
+    expect(pickShiftInfo({ mealOnTheGo: true })).toMatchObject({ mealOnTheGo: true })
+    expect("mealOnTheGo" in pickShiftInfo({ mealOnTheGo: false })).toBe(false)
+  })
+})

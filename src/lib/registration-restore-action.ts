@@ -37,7 +37,7 @@ export async function restoreRegistration(db: OrgScopedPrisma, actor: LogActor, 
     where: { id },
     include: {
       volunteer: { select: { firstName: true, lastName: true, email: true } },
-      shift: { select: { id: true, roleName: true, label: true, date: true, startTime: true, endTime: true, capacity: true, status: true } },
+      shift: { select: { id: true, roleName: true, label: true, date: true, startTime: true, endTime: true, mealOnTheGo: true, capacity: true, status: true } },
       event: { select: { id: true, title: true, organizationId: true, organization: { select: { slug: true, timeZone: true } } } },
     },
   })

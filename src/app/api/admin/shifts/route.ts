@@ -36,6 +36,8 @@ const schema = z.object({
   waitlistEnabled: z.boolean().optional(),
   requiresApproval: z.boolean().optional(),
   minAge: z.number().int().min(0).max(120).nullable().optional(),
+  /** « Repas sur le pouce possible » (#1171, lot 2): the meal can be taken during this mission. */
+  mealOnTheGo: z.boolean().optional(),
   /**
    * Sector chosen in the form (#1147), for an event that adopted sectors: an active sector of the
    * event, or null for « Autres postes ». A new poste is created in it; an existing poste keeps its

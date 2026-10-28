@@ -36,6 +36,7 @@ import { restoreRegistration } from "@/lib/registration-restore-action"
 import { confirmSwap, offerSwap, publishSwapRequest } from "@/lib/shift-swap-server"
 import { GET as personalPage } from "@/app/api/public/registrations/[token]/route"
 import { PATCH as editEvent } from "@/app/api/admin/events/[id]/route"
+import { PATCH as editPoste } from "@/app/api/admin/events/[id]/roles/[roleName]/route"
 import { loadAttention } from "@/lib/attention-data"
 
 const url = process.env.DATABASE_URL
@@ -53,7 +54,7 @@ const VALUES: WorkloadPolicyValues = {
 }
 const POLICY = buildPolicy(VALUES, TZ)
 // Every write answers the days-off rule (#1171, lot 2); « do not apply » is an answer.
-const ANSWERED: WorkloadPolicyValues = { ...VALUES, offDay: { apply: false } }
+const ANSWERED: WorkloadPolicyValues = { ...VALUES, offDay: { apply: false }, meal: { apply: false } }
 const ADMIN = { type: "admin" as const, id: "admin-1" }
 const NOW = new Date("2031-06-01T08:00:00Z")
 
@@ -352,7 +353,7 @@ describe.skipIf(!url)("workload protection on Postgres (#1171)", () => {
       await prisma.registration.update({ where: { id: extra.id }, data: { status: "cancelled" } })
       const on = await setWorkloadPolicy(db, orgId, e.id, { enabled: true, values: ANSWERED })
       expect(on).toMatchObject({ ok: true, enabled: true, changes: { workloadProtectionEnabled: { from: false, to: true } } })
-      expect((await prisma.event.findUniqueOrThrow({ where: { id: e.id } })).workloadPolicy).toMatchObject({ version: 2, offDay: { apply: false }, timeZone: TZ, serviceDayStart: "08:00" })
+      expect((await prisma.event.findUniqueOrThrow({ where: { id: e.id } })).workloadPolicy).toMatchObject({ version: 3, offDay: { apply: false }, meal: { apply: false }, timeZone: TZ, serviceDayStart: "08:00" })
 
       // A finding left by a later change (here written directly) does not block a loosening, but blocks a tightening.
       await prisma.registration.update({ where: { id: extra.id }, data: { status: "active" } })
@@ -475,12 +476,12 @@ describe.skipIf(!url)("workload protection on Postgres (#1171)", () => {
       const shifts = await Promise.all(DAYS.map((d) => shift(e.id, d, "10:00", "14:00")))
       const p = await person()
       for (const sh of shifts) await hold(e.id, sh.id, p.id)
-      const refused = await setWorkloadPolicy(prisma, orgId, e.id, { enabled: true, values: { ...VALUES, offDay: { apply: true, minOffDays: 1, windowDays: 6 } } })
+      const refused = await setWorkloadPolicy(prisma, orgId, e.id, { enabled: true, values: { ...VALUES, offDay: { apply: true, minOffDays: 1, windowDays: 6 }, meal: { apply: false } } })
       expect(refused.ok).toBe(false)
       if (!refused.ok) expect(refused.status).toBe(409)
       // « Ne pas appliquer » is an answer: saved, nothing to scan.
-      expect((await setWorkloadPolicy(prisma, orgId, e.id, { enabled: true, values: { ...VALUES, offDay: { apply: false } } })).ok).toBe(true)
-      expect((await prisma.event.findUniqueOrThrow({ where: { id: e.id } })).workloadPolicy).toMatchObject({ version: 2, offDay: { apply: false } })
+      expect((await setWorkloadPolicy(prisma, orgId, e.id, { enabled: true, values: { ...VALUES, offDay: { apply: false }, meal: { apply: false } } })).ok).toBe(true)
+      expect((await prisma.event.findUniqueOrThrow({ where: { id: e.id } })).workloadPolicy).toMatchObject({ version: 3, offDay: { apply: false }, meal: { apply: false } })
       // A save without the answer is refused, never read as « no rule ».
       const blank = await setWorkloadPolicy(prisma, orgId, e.id, { enabled: true, values: VALUES })
       expect(blank.ok).toBe(false)
@@ -507,6 +508,64 @@ describe.skipIf(!url)("workload protection on Postgres (#1171)", () => {
       // Without anyone over the rule, longer dates are fine.
       const other = await event({ policy: withOffDay(2, 7) })
       expect((await patchEvent(other.id, { endDate: "2031-07-09" })).status).toBe(200)
+    })
+  })
+
+  // #1171 lot 2: meals. 30 min inside 11:30-14:00 when a mission touches it; « repas sur le pouce ».
+  describe("meals", () => {
+    const MEAL_POLICY = buildPolicy({ ...VALUES, maxContinuousMinutes: 10 * 60, maxDailyMinutes: 12 * 60, maxEventMinutes: 100 * 60, offDay: { apply: false }, meal: { apply: true, minutes: 30, windows: [{ start: "11:30", end: "14:00" }], days: "all" } }, TZ)
+    const flag = (id: string, mealOnTheGo: boolean) => prisma.shift.update({ where: { id }, data: { mealOnTheGo } })
+
+    it("refuses a mission that leaves no lunch, accepts it when the meal can be taken on the go", async () => {
+      const e = await event({ policy: MEAL_POLICY })
+      const long = await shift(e.id, "2031-07-04", "10:00", "15:00")
+      const p = await person()
+      const res = await add({ eventId: e.id, shiftId: long.id, volunteerId: p.id })
+      expect(res.status).toBe(409)
+      expect((await res.json()).error).toContain("pas de pause repas de 30 min entre 11 h 30 et 14 h")
+      await flag(long.id, true)
+      expect((await add({ eventId: e.id, shiftId: long.id, volunteerId: p.id })).status).toBe(201)
+    })
+
+    it("removing « repas sur le pouce » from a shift someone holds is refused when it takes their lunch away", async () => {
+      const e = await event({ policy: MEAL_POLICY })
+      const long = await shift(e.id, "2031-07-04", "10:00", "15:00", { roleName: "Bar" })
+      const other = await shift(e.id, "2031-07-05", "10:00", "15:00", { roleName: "Bar" })
+      await flag(long.id, true)
+      await flag(other.id, true)
+      const p = await person("Lou")
+      await hold(e.id, long.id, p.id)
+      const res = await editShift(new Request("http://localhost", { method: "PATCH", body: JSON.stringify({ mealOnTheGo: false }) }), { params: Promise.resolve({ id: long.id }) })
+      expect(res.status).toBe(409)
+      expect((await res.json()).error).toContain("sans repas sur le pouce sur ce créneau, le programme de Lou Martin")
+      expect((await prisma.shift.findUniqueOrThrow({ where: { id: long.id } })).mealOnTheGo).toBe(true)
+      // Nobody holds the other one: removing it is fine.
+      expect((await editShift(new Request("http://localhost", { method: "PATCH", body: JSON.stringify({ mealOnTheGo: false }) }), { params: Promise.resolve({ id: other.id }) })).status).toBe(200)
+      // The poste-wide switch is judged the same way and changes nothing when refused.
+      const patchPoste = (body: Record<string, unknown>) => editPoste(new Request("http://localhost", { method: "PATCH", body: JSON.stringify(body) }), { params: Promise.resolve({ id: e.id, roleName: "Bar" }) })
+      const poste = await patchPoste({ mealOnTheGo: false })
+      expect(poste.status).toBe(409)
+      expect((await prisma.shift.findUniqueOrThrow({ where: { id: long.id } })).mealOnTheGo).toBe(true)
+      expect((await patchPoste({ mealOnTheGo: true })).status).toBe(200)
+      expect((await prisma.shift.findUniqueOrThrow({ where: { id: other.id } })).mealOnTheGo).toBe(true)
+    })
+
+    it("a wait across lunch may be longer by the meal; turning the meal rule on is refused while a programme lacks lunch", async () => {
+      const e = await event({ policy: POLICY })
+      const morning = await shift(e.id, "2031-07-04", "09:00", "11:30")
+      const afternoon = await shift(e.id, "2031-07-04", "14:00", "16:00")
+      const long = await shift(e.id, "2031-07-05", "10:00", "15:00")
+      const p = await person()
+      await hold(e.id, morning.id, p.id)
+      await hold(e.id, long.id, p.id)
+      // 2 h 30 between the two: over the 2 h idle limit of version 1, but it holds lunch with meals.
+      expect((await add({ eventId: e.id, shiftId: afternoon.id, volunteerId: p.id })).status).toBe(409)
+      const values = { ...VALUES, offDay: { apply: false }, meal: { apply: true, minutes: 30, windows: [{ start: "11:30", end: "14:00" }], days: "all" } }
+      const refused = await setWorkloadPolicy(prisma, orgId, e.id, { enabled: true, values })
+      expect(refused).toMatchObject({ ok: false, status: 409 })
+      await prisma.registration.updateMany({ where: { shiftId: long.id }, data: { status: "cancelled" } })
+      expect((await setWorkloadPolicy(prisma, orgId, e.id, { enabled: true, values })).ok).toBe(true)
+      expect((await add({ eventId: e.id, shiftId: afternoon.id, volunteerId: p.id })).status).toBe(201)
     })
   })
 })

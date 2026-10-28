@@ -23,6 +23,7 @@ import type { RawShift } from "./types"
 export const emptyShift = {
   roleName: "", label: "", description: "", date: "", startTime: "", endTime: "",
   capacity: 2, minVolunteers: "" as number | string, locationDetails: "", latitude: null as number | null, longitude: null as number | null, displayOrder: 0, internalNotes: "", waitlistEnabled: false, requiresApproval: false,
+  mealOnTheGo: false,
   minAge: "" as number | string,
   contactName: "", contactPhone: "", instructions: "",
 }
@@ -34,7 +35,7 @@ export type ShiftFormValues = typeof emptyShift
  * The parent remounts it (key) each time it opens it, which resets the values to `initial`.
  */
 export default function ShiftEditor({
-  ref, eventId, dates, editingId, initial, existingShifts, onSaved, onCancel, sectors = null, presetSector = null,
+  ref, eventId, dates, editingId, initial, existingShifts, onSaved, onCancel, sectors = null, presetSector = null, mealOnTheGoShown = false,
 }: {
   ref?:           React.Ref<HTMLDivElement>
   eventId:        string
@@ -52,6 +53,8 @@ export default function ShiftEditor({
   sectors?:       { id: string; name: string }[] | null
   /** « Ajouter un poste dans « S » »: the sector preset, the poste field focused first. */
   presetSector?:  { id: string; name: string } | null
+  /** « Repas sur le pouce possible » (#1171, lot 2): only where the workload protection can be used. */
+  mealOnTheGoShown?: boolean
 }) {
   const singleDay = dates.length === 1
   const [form, setForm] = useState<ShiftFormValues>({ ...emptyShift, ...initial })
@@ -414,6 +417,26 @@ export default function ShiftEditor({
           Pour un poste sensible (conduite, caisse, sécurité). Une demande garde sa place jusqu&apos;à votre décision ; les inscriptions déjà confirmées ne changent pas.
         </p>
       </div>
+      {mealOnTheGoShown && (
+        <div>
+          <div className="flex items-center gap-2">
+            <input
+              type="checkbox"
+              id={`mealOnTheGo-${sfx}`}
+              checked={Boolean(form.mealOnTheGo)}
+              onChange={e => setField("mealOnTheGo", e.target.checked)}
+              aria-describedby={`mealOnTheGo-hint-${sfx}`}
+              className="h-4 w-4 rounded border-gray-500 text-blue-600 focus:ring-2 focus:ring-blue-500"
+            />
+            <label htmlFor={`mealOnTheGo-${sfx}`} className="text-xs font-medium text-gray-600 select-none cursor-pointer">
+              Repas sur le pouce possible
+            </label>
+          </div>
+          <p id={`mealOnTheGo-hint-${sfx}`} className="text-xs text-gray-600 mt-1 ml-6">
+            Le repas peut se prendre pendant cette mission. Pour la pause repas de l&apos;événement, elle ne compte pas comme du temps pris ; elle reste comptée comme du travail.
+          </p>
+        </div>
+      )}
 
       {/* The server's error: focus stays on the submit button, so it is an alert. It is rendered only
           when set, so the same error after a new attempt is announced again. */}

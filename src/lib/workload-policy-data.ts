@@ -8,7 +8,7 @@ import { committedDuty, lockWorkloadExclusive, workloadGateOf, type WorkloadEven
 import { workloadProtectionShipped } from "./workload-shipped"
 import {
   activePolicy, buildPolicy, checkPolicyValues, eventHorizon, evaluateWorkload, EXISTING_WARNING_SUGGESTIONS, newFindings, offDayApplies, parseWorkloadPolicy,
-  policyChangeNeedsScan, policyValues, serviceDayExamples, workloadFindingMessage, WORKLOAD_BENCHMARKS, WORKLOAD_LIMIT_FIELDS,
+  policyChangeNeedsScan, policyValues, serviceDayExamples, WRITE_SECTIONS, workloadFindingMessage, WORKLOAD_BENCHMARKS, WORKLOAD_LIMIT_FIELDS,
   type ActivePolicy, type DutyShift, type EventHorizon, type PolicyProblem, type WorkloadFinding, type WorkloadPolicy, type WorkloadPolicyValues,
 } from "./workload-policy"
 
@@ -32,9 +32,9 @@ export type PersonFindings = { volunteerId: string; name: string; findings: Work
 
 /** Every committed person of the event and their missions (confirmed places and pending requests). */
 async function commitmentsByPerson(db: Db, eventId: string): Promise<Map<string, { name: string; shifts: DutyShift[] }>> {
-  const rows: { volunteerId: string; volunteer: { firstName: string; lastName: string }; shift: { id: string; date: Date; startTime: string; endTime: string } }[] = await db.registration.findMany({
+  const rows: { volunteerId: string; volunteer: { firstName: string; lastName: string }; shift: { id: string; date: Date; startTime: string; endTime: string; mealOnTheGo: boolean } }[] = await db.registration.findMany({
     where: { eventId, status: { in: [...COMMITTED_STATUSES] }, shift: { status: { not: "cancelled" } } },
-    select: { volunteerId: true, volunteer: { select: { firstName: true, lastName: true } }, shift: { select: { id: true, date: true, startTime: true, endTime: true } } },
+    select: { volunteerId: true, volunteer: { select: { firstName: true, lastName: true } }, shift: { select: { id: true, date: true, startTime: true, endTime: true, mealOnTheGo: true } } },
   })
   const byPerson = new Map<string, { name: string; shifts: DutyShift[] }>()
   for (const r of rows) {
@@ -118,11 +118,22 @@ export type WorkloadPreview =
 export async function previewWorkloadPolicy(db: Db, eventId: string, values: unknown): Promise<WorkloadPreview> {
   const event: EventRow | null = await db.event.findFirst({ where: { id: eventId }, select: EVENT_SELECT })
   if (!event) return { ok: false, status: 404, error: "Non trouvé" }
-  const checked = checkPolicyValues(values, { requireOffDay: true })
+  const checked = checkPolicyValues(values, WRITE_SECTIONS)
   if (!checked.ok) return { ok: false, status: 400, error: checked.problems[0].message, problems: checked.problems }
+  const outside = mealDaysOutside(checked.values, event)
+  if (outside) return { ok: false, status: 400, error: outside.message, problems: [outside] }
   const policy = activePolicy(buildPolicy(checked.values, snapshotZone(event)), event)
   const findings = await scanEventWorkload(db, eventId, policy)
   return { ok: true, timeZone: policy.timeZone, serviceDayExamples: serviceDayExamples(policy.serviceDayStart), findings: forPage(findings) }
+}
+
+/** A meal day outside the event's dates: refused rather than silently never checked. */
+function mealDaysOutside(values: WorkloadPolicyValues, event: { startDate: Date | string; endDate: Date | string }): PolicyProblem | null {
+  if (!values.meal?.apply || values.meal.days === "all") return null
+  const h = eventHorizon(event)
+  return values.meal.days.some((d) => d < h.firstDay || d > h.lastDay)
+    ? { field: "mealDays", message: "Pause repas : un jour coché n'est pas dans les dates de l'événement." }
+    : null
 }
 
 /** The zone a policy uses: kept once snapshotted (an organisation setting change reinterprets nothing). */
@@ -142,7 +153,8 @@ export function policySummary(p: WorkloadPolicy | null): string {
   if (!p) return "(aucune)"
   const h = (m: number) => `${Math.floor(m / 60)} h${m % 60 ? ` ${String(m % 60).padStart(2, "0")}` : ""}`
   const off = !p.offDay ? "" : p.offDay.apply ? `, ${p.offDay.minOffDays} jour(s) sans mission sur ${p.offDay.windowDays}` : ", sans règle de jours sans mission"
-  return `journée dès ${p.serviceDayStart}, ${h(p.maxContinuousMinutes)} sans pause de ${p.minBreakMinutes} min, ${h(p.maxDailyMinutes)}/journée, ${h(p.maxEventMinutes)} au total, repos ${h(p.minRestMinutes)}, attente ${h(p.maxIdleGapMinutes)}${off}`
+  const meal = !p.meal ? "" : p.meal.apply ? `, repas ${p.meal.minutes} min (${p.meal.windows.map((w) => `${w.start}-${w.end}`).join(", ")}, ${p.meal.days === "all" ? "tous les jours" : `${p.meal.days.length} jour(s)`})` : ", sans règle de repas"
+  return `journée dès ${p.serviceDayStart}, ${h(p.maxContinuousMinutes)} sans pause de ${p.minBreakMinutes} min, ${h(p.maxDailyMinutes)}/journée, ${h(p.maxEventMinutes)} au total, repos ${h(p.minRestMinutes)}, attente ${h(p.maxIdleGapMinutes)}${off}${meal}`
 }
 
 /**
@@ -164,8 +176,10 @@ export async function setWorkloadPolicy(db: Db, organizationId: string, eventId:
       return { ok: true, enabled: false, policy: stored.ok ? stored.policy : null, changes: { workloadProtectionEnabled: { from: true, to: false } } }
     }
 
-    const checked = checkPolicyValues(input.values, { requireOffDay: true })
+    const checked = checkPolicyValues(input.values, WRITE_SECTIONS)
     if (!checked.ok) return { ok: false, status: 400, error: checked.problems[0].message, problems: checked.problems }
+    const outside = mealDaysOutside(checked.values, event)
+    if (outside) return { ok: false, status: 400, error: outside.message, problems: [outside] }
     // A new adoption (BE06): only while the capability is shipped and the beta gate allows it; an
     // event that has protection keeps it, and its values can still change, after an opt-out.
     if (!event.workloadProtectionEnabled && !(workloadProtectionShipped() && (await canAdoptBeta(organizationId, "workloadProtection", tx)))) {

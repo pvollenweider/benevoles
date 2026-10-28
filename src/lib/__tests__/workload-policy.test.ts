@@ -323,3 +323,116 @@ describe("evaluateWorkload: days without mission", () => {
     expect(workloadChange([...days(1, 3), ...days(5, 6)], [...days(1, 3), ...days(5, 6), s("2026-07-05", "15:00", "16:00")], p)).toEqual([])
   })
 })
+
+// ── #1171 lot 2: meals ──────────────────────────────────────────────────────
+
+describe("policy version 3: the meal answer", () => {
+  const MEAL = { apply: true as const, minutes: 30, windows: [{ start: "11:30", end: "14:00" }, { start: "18:00", end: "21:00" }], days: "all" as const }
+  const OFF = { apply: false as const }
+
+  it("writes version 3 with both answers, reads 1, 2 and 3, and requires the meal answer on writes", () => {
+    const v3 = buildPolicy({ ...VALUES, offDay: OFF, meal: MEAL }, TZ)
+    expect(v3.version).toBe(3)
+    expect(parseWorkloadPolicy(v3)).toEqual({ ok: true, policy: v3 })
+    expect(parseWorkloadPolicy({ ...v3, version: 2 }).ok).toBe(false) // a version-2 policy has no meal
+    const { meal: _m, ...noMeal } = v3
+    void _m
+    expect(parseWorkloadPolicy(noMeal).ok).toBe(false) // version 3 needs it
+    const r = checkPolicyValues({ ...VALUES, offDay: OFF }, { requireOffDay: true, requireMeal: true })
+    expect(r.ok).toBe(false)
+    if (!r.ok) expect(r.problems).toEqual([{ field: "meal", message: expect.stringContaining("Rien n'est choisi à votre place") }])
+  })
+
+  it("refuses incomplete or impossible windows", () => {
+    const fields = (meal: unknown, start = "08:00") => { const r = checkPolicyValues({ ...VALUES, serviceDayStart: start, offDay: OFF, meal }, { requireOffDay: true, requireMeal: true }); return r.ok ? [] : r.problems.map((p) => p.field) }
+    expect(fields(MEAL)).toEqual([])
+    expect(fields({ apply: true })).toEqual(["mealMinutes", "mealWindows", "mealDays"])
+    expect(fields({ ...MEAL, minutes: 5 })).toEqual(["mealMinutes"])
+    expect(fields({ ...MEAL, windows: [] })).toEqual(["mealWindows"])
+    expect(fields({ ...MEAL, windows: [{ start: "11:30" }] })).toEqual(["mealWindow0"])
+    expect(fields({ ...MEAL, windows: [{ start: "11:30", end: "11:50" }] })).toEqual(["mealWindow0"]) // shorter than the meal
+    // Overlap: on the later row, naming the other one.
+    const overlap = checkPolicyValues({ ...VALUES, offDay: OFF, meal: { ...MEAL, windows: [{ start: "11:30", end: "14:00" }, { start: "13:00", end: "15:00" }] } }, { requireOffDay: true, requireMeal: true })
+    expect(overlap.ok ? [] : overlap.problems).toEqual([{ field: "mealWindow1", message: "La plage 2 chevauche la plage 1." }])
+    expect(fields(MEAL, "12:00")).toEqual(["mealWindow0"]) // 11:30-14:00 crosses a 12:00 service-day start
+    expect(fields({ ...MEAL, windows: [{ start: "23:30", end: "01:00" }] }, "08:00")).toEqual([]) // midnight inside one service day
+    expect(fields({ ...MEAL, days: [] })).toEqual(["mealDays"])
+    expect(fields({ ...MEAL, days: ["2026-07-04", "2026-07-04"] })).toEqual(["mealDays"])
+    expect(fields({ apply: false, minutes: 30 })).toEqual(["meal"])
+  })
+
+  it("scans again on any change of an applied meal rule, turning it off included", () => {
+    const withMeal = activePolicy(buildPolicy({ ...VALUES, offDay: OFF, meal: MEAL }, TZ), HORIZON)
+    const noMeal = { ...withMeal, meal: { apply: false as const } }
+    expect(policyChangeNeedsScan(withMeal, withMeal)).toBe(false)
+    expect(policyChangeNeedsScan(withMeal, noMeal)).toBe(true)
+    expect(policyChangeNeedsScan(noMeal, withMeal)).toBe(true)
+    expect(policyChangeNeedsScan(noMeal, { ...noMeal })).toBe(false)
+    expect(policyChangeNeedsScan(withMeal, { ...withMeal, meal: { ...MEAL, minutes: 20 } })).toBe(true)
+  })
+})
+
+describe("evaluateWorkload: meals", () => {
+  const MEAL = { apply: true as const, minutes: 30, windows: [{ start: "11:30", end: "14:00" }, { start: "18:00", end: "21:00" }], days: "all" as const }
+  const meal = (over: Partial<WorkloadPolicyValues> = {}, rule: typeof MEAL | { apply: true; minutes: number; windows: { start: string; end: string }[]; days: "all" | string[] } = MEAL) =>
+    activePolicy(buildPolicy({ ...VALUES, maxContinuousMinutes: 10 * 60, maxDailyMinutes: 14 * 60, maxEventMinutes: 100 * 60, offDay: { apply: false }, meal: rule, ...over }, TZ), HORIZON)
+  const m = (date: string, start: string, end: string, onTheGo = false, id = `m${++n}`): DutyShift => ({ id, date, startTime: start, endTime: end, mealOnTheGo: onTheGo })
+  const of = (shifts: DutyShift[], p = meal()) => evaluateWorkload(shifts, p).filter((f) => f.rule === "meal")
+
+  it("a mission covering the whole lunch window leaves no meal, with a specific message", () => {
+    const f = of([m("2026-07-04", "10:00", "15:00")])
+    expect(f).toEqual([expect.objectContaining({ rule: "meal", serviceDay: "2026-07-04", minutes: 0, limit: 30 })])
+    expect(workloadFindingMessage(f[0], meal())).toBe("Journée de service du samedi 4 juillet : pas de pause repas de 30 min entre 11 h 30 et 14 h (aucun moment sans mission dans cette plage). Cet événement demande 30 min de repas dans cette plage, ou une mission où le repas sur le pouce est possible.")
+  })
+
+  it("free time before or after the mission inside the window holds the meal; touching an end does not trigger", () => {
+    expect(of([m("2026-07-04", "08:00", "12:00")])).toEqual([]) // 12:00-14:00 free
+    expect(of([m("2026-07-04", "12:00", "13:00")])).toEqual([]) // 11:30-12:00 free: exactly 30 min
+    expect(of([m("2026-07-04", "08:00", "11:30"), m("2026-07-04", "14:00", "18:00")])).toEqual([]) // touches both ends only
+    const short = of([m("2026-07-04", "08:00", "11:45"), m("2026-07-04", "12:00", "14:00")])
+    expect(short).toEqual([expect.objectContaining({ minutes: 15 })]) // 11:45-12:00 is only 15 min
+  })
+
+  it("a mission marked « repas sur le pouce possible » holds the meal but stays work", () => {
+    const flagged = [m("2026-07-04", "10:00", "15:00", true)]
+    expect(of(flagged)).toEqual([])
+    // Still 5 h of work: a 4 h daily cap catches it.
+    expect(evaluateWorkload(flagged, meal({ maxDailyMinutes: 4 * 60, maxContinuousMinutes: 4 * 60 })).map((f) => f.rule)).toEqual(["continuous", "daily"])
+    // An unflagged mission at the same time takes the time back.
+    expect(of([...flagged, m("2026-07-04", "11:00", "14:30")])).toEqual([expect.objectContaining({ minutes: 0 })])
+  })
+
+  it("applies only on the chosen days, and checks every window the duty touches", () => {
+    const some = meal({}, { ...MEAL, days: ["2026-07-05"] })
+    expect(of([m("2026-07-04", "10:00", "15:00")], some)).toEqual([])
+    expect(of([m("2026-07-05", "10:00", "15:00")], some)).toHaveLength(1)
+    expect(of([m("2026-07-04", "10:00", "22:00")]).map((f) => f.start)).toHaveLength(2)
+  })
+
+  it("a night window past midnight belongs to the service day it sits in", () => {
+    const night = meal({}, { ...MEAL, windows: [{ start: "23:30", end: "01:00" }] })
+    const f = of([m("2026-07-04", "22:00", "02:00")], night)
+    expect(f).toEqual([expect.objectContaining({ serviceDay: "2026-07-04" })])
+  })
+
+  it("a wait that holds the meal may be longer by the meal's length, once per window", () => {
+    // 2 h idle limit. 09-11:30 then 14:00-16: a 2 h 30 gap holding lunch is fine.
+    const lunch = [m("2026-07-04", "09:00", "11:30"), m("2026-07-04", "14:00", "16:00")]
+    expect(evaluateWorkload(lunch, meal()).filter((f) => f.rule === "idle")).toEqual([])
+    // Without the meal rule the same gap breaks the 2 h limit.
+    expect(evaluateWorkload(lunch, activePolicy(buildPolicy({ ...VALUES, maxEventMinutes: 100 * 60 }, TZ), HORIZON)).map((f) => f.rule)).toEqual(["idle"])
+    // 2 h 31 is over 2 h + 30 min: refused, and the message says the meal was counted.
+    const longer = evaluateWorkload([m("2026-07-04", "09:00", "11:29"), m("2026-07-04", "14:00", "16:00")], meal()).filter((f) => f.rule === "idle")
+    expect(longer).toEqual([expect.objectContaining({ minutes: 151, limit: 150 })])
+    expect(workloadFindingMessage(longer[0], meal())).toContain("La limite de cet événement est de 2 h 30, pause repas comprise.")
+    // A gap outside any window gets no credit.
+    expect(evaluateWorkload([m("2026-07-04", "14:00", "15:00"), m("2026-07-04", "17:20", "18:00")], meal({}, { ...MEAL, windows: [{ start: "11:30", end: "14:00" }] })).filter((f) => f.rule === "idle")).toHaveLength(1)
+  })
+
+  it("only a change that shrinks the meal is new", () => {
+    const p = meal()
+    const base = [m("2026-07-04", "08:00", "11:45", false, "a")]
+    expect(workloadChange(base, [...base, m("2026-07-04", "12:10", "14:00", false, "b")], p).map((f) => f.rule)).toEqual(["meal"])
+    expect(workloadChange(base, [...base, m("2026-07-04", "12:10", "14:00", true, "b")], p)).toEqual([])
+  })
+})

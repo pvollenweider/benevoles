@@ -17,6 +17,7 @@ import { labelUpdates, posteApplyCount, posteApplyTargets } from "@/lib/poste-ap
 import { removeRoleFromScope, renameRoleInScope } from "@/lib/question-scope"
 import { assignPosteSector } from "@/lib/sector-adoption"
 import { endSwapsAfter, endSwapsIn } from "@/lib/shift-swap-server"
+import { checkScheduleEdit, scheduleEditRefusalBody, ScheduleEditRefusalError } from "@/lib/workload-guard"
 
 /**
  * Share links per group (#947) name their roles: a rename or a deletion is carried into every link
@@ -78,13 +79,18 @@ const updateSchema = z.object({
   assignedOnly: z.boolean().optional(),
   /** Sector of the poste (#1147): an active sector of the event, or null for « Autres postes ». */
   sectorId: z.string().min(1).nullable().optional(),
+  /**
+   * « Repas sur le pouce possible » (#1171, lot 2) on every shift of the poste at once: a shortcut,
+   * each shift keeps its own value afterwards. Judged for the people holding them, like new hours.
+   */
+  mealOnTheGo: z.boolean().optional(),
   /** Label copied onto the live shifts, with the places and minimum (#1017). */
   label: z.string().trim().min(1).max(200).optional(),
   /** Day the places, minimum and label apply to (#1017, « ce jour »); absent: the whole event. */
   date: z.string().refine(isCivilDate).optional(),
-}).refine((d) => d.name !== undefined || d.colorKey !== undefined || d.capacity !== undefined || d.minVolunteers !== undefined || d.label !== undefined || d.maxPerVolunteer !== undefined || d.reservedTags !== undefined || d.overlapAllowed !== undefined || d.assignedOnly !== undefined || d.sectorId !== undefined, { message: "Rien à modifier." })
+}).refine((d) => d.name !== undefined || d.colorKey !== undefined || d.capacity !== undefined || d.minVolunteers !== undefined || d.label !== undefined || d.maxPerVolunteer !== undefined || d.reservedTags !== undefined || d.overlapAllowed !== undefined || d.assignedOnly !== undefined || d.sectorId !== undefined || d.mealOnTheGo !== undefined, { message: "Rien à modifier." })
   // A day only narrows the places, minimum and label: the poste's own settings are event-wide.
-  .refine((d) => d.date === undefined || (d.name === undefined && d.colorKey === undefined && d.maxPerVolunteer === undefined && d.reservedTags === undefined && d.overlapAllowed === undefined && d.assignedOnly === undefined && d.sectorId === undefined), { message: "Un jour ne vaut que pour les places, le minimum et le libellé." })
+  .refine((d) => d.date === undefined || (d.name === undefined && d.colorKey === undefined && d.maxPerVolunteer === undefined && d.reservedTags === undefined && d.overlapAllowed === undefined && d.assignedOnly === undefined && d.sectorId === undefined && d.mealOnTheGo === undefined), { message: "Un jour ne vaut que pour les places, le minimum et le libellé." })
 
 export async function PATCH(req: Request, { params }: { params: Promise<{ id: string; roleName: string }> }) {
   const guard = await requireOrgSession()
@@ -100,7 +106,7 @@ export async function PATCH(req: Request, { params }: { params: Promise<{ id: st
   if (!parsed.success) {
     return NextResponse.json({ error: "Données invalides." }, { status: 400 })
   }
-  const { name: newName, colorKey, capacity, minVolunteers, maxPerVolunteer, overlapAllowed, assignedOnly, sectorId, label, date } = parsed.data
+  const { name: newName, colorKey, capacity, minVolunteers, maxPerVolunteer, overlapAllowed, assignedOnly, sectorId, mealOnTheGo, label, date } = parsed.data
   const reservedTags = parsed.data.reservedTags === undefined ? undefined : parseTagList(parsed.data.reservedTags.join(","))
 
   const owned = await db.event.findFirst({ where: { id }, select: { id: true } })
@@ -110,7 +116,7 @@ export async function PATCH(req: Request, { params }: { params: Promise<{ id: st
   // on top of that, matching reorder-roles/route.ts's own pattern for the same raw-prisma calls.
   const shifts = await db.shift.findMany({
     where: { eventId: id, roleName: decodedRole, event: { organizationId } },
-    select: { id: true, label: true, date: true, colorKey: true, capacity: true, minVolunteers: true, status: true, maxPerVolunteer: true, reservedTags: true, overlapAllowed: true, assignedOnly: true, sectorId: true, _count: { select: { registrations: { where: { status: "active" } } } } },
+    select: { id: true, label: true, date: true, startTime: true, endTime: true, colorKey: true, capacity: true, minVolunteers: true, status: true, maxPerVolunteer: true, reservedTags: true, overlapAllowed: true, assignedOnly: true, sectorId: true, mealOnTheGo: true, _count: { select: { registrations: { where: { status: "active" } } } } },
   })
   if (shifts.length === 0) return NextResponse.json({ error: "Poste introuvable" }, { status: 404 })
 
@@ -133,6 +139,31 @@ export async function PATCH(req: Request, { params }: { params: Promise<{ id: st
   if (minPlan.problem) return NextResponse.json({ error: minPlan.problem }, { status: 400 })
 
   const actor = adminActor(guard.session)
+
+  if (mealOnTheGo !== undefined) {
+    // First, so that a refusal changes nothing. Every shift of the poste whose value changes, in one
+    // transaction with the workload check of everyone holding one (#1171, lot 2).
+    const changing = shifts.filter((sh) => sh.mealOnTheGo !== mealOnTheGo)
+    if (changing.length > 0) {
+      try {
+        await db.$transaction(async (tx) => {
+          const live = changing.filter((sh) => sh.status !== "cancelled")
+          const refusals = await checkScheduleEdit(tx, id, live.map((sh) => ({ id: sh.id, date: sh.date, startTime: sh.startTime, endTime: sh.endTime, mealOnTheGo })))
+          if (refusals.length > 0) throw new ScheduleEditRefusalError(refusals, mealOnTheGo ? "avec ce changement" : "sans repas sur le pouce sur les créneaux de ce poste")
+          await tx.shift.updateMany({ where: { id: { in: changing.map((sh) => sh.id) }, eventId: id }, data: { mealOnTheGo } })
+        })
+      } catch (e) {
+        if (e instanceof ScheduleEditRefusalError) return NextResponse.json(scheduleEditRefusalBody(e.refusals, e.cause), { status: 409 })
+        throw e
+      }
+      for (const s of changing) {
+        await logEvent({
+          eventId: id, actor, action: "shift.updated", entityType: "Shift", entityId: s.id,
+          changes: { mealOnTheGo: { from: s.mealOnTheGo, to: mealOnTheGo } },
+        })
+      }
+    }
+  }
 
   if (sectorId !== undefined) {
     // Before any other write, so a refused sector changes nothing. Every shift of the poste,

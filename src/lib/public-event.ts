@@ -69,6 +69,9 @@ export function toPublicEvent(event: PublicEventRow) {
     waitlistEnabled: shift.waitlistEnabled,
     requiresApproval: shift.requiresApproval,
     minAge: shift.minAge,
+    // « Repas sur le pouce possible » (#1171, lot 2): said to the volunteer before signing up, and
+    // read by the recap's workload check.
+    mealOnTheGo: shift.mealOnTheGo,
     colorKey: shift.colorKey,
     maxPerVolunteer: shift.maxPerVolunteer,
     // Role cumulable with another shift (#986): the page does not mark its overlaps as conflicts.

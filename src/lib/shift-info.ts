@@ -45,9 +45,14 @@ export type ShiftInfo = {
    * unless the leader is also entered as the shift's or the day-of contact.
    */
   sectorLeaderNames?: string[] | null
+  /** « Repas sur le pouce possible » (#1171, lot 2): the meal can be taken during the mission. */
+  mealOnTheGo?: boolean | null
 }
 
-export type ShiftInfoLine = { kind: "place" | "contact" | "dayContact" | "leader" | "instructions"; label: string; text: string; /** Map link of the place, when coordinates are known. */ href?: string }
+/** What a volunteer reads about a mission marked « repas sur le pouce possible ». */
+export const MEAL_ON_THE_GO_TEXT = "sur le pouce possible pendant cette mission"
+
+export type ShiftInfoLine = { kind: "place" | "contact" | "dayContact" | "leader" | "instructions" | "meal"; label: string; text: string; /** Map link of the place, when coordinates are known. */ href?: string }
 
 const clean = (v: string | null | undefined) => (v ?? "").trim()
 
@@ -121,6 +126,7 @@ export function shiftInfoLines(info: ShiftInfo): ShiftInfoLine[] {
   if (leaders.length) lines.push({ kind: "leader", label: sectorLeaderLabel(leaders.length), text: leaders.join(", ") })
   const instructions = clean(info.instructions)
   if (instructions) lines.push({ kind: "instructions", label: "À savoir", text: instructions })
+  if (info.mealOnTheGo) lines.push({ kind: "meal", label: "Repas", text: MEAL_ON_THE_GO_TEXT })
   return lines
 }
 
@@ -140,7 +146,7 @@ export function shiftInfoText(info: ShiftInfo): string[] {
  * The same fields picked from a shift row, for a notification payload. With the event, a shift
  * without its own coordinates takes the event's (#191).
  */
-export function pickShiftInfo<T extends ShiftInfo>(s: T, event?: { latitude?: number | null; longitude?: number | null } | null): Required<Omit<ShiftInfo, "dayContactName" | "dayContactPhone" | "sectorLeaderNames">> {
+export function pickShiftInfo<T extends ShiftInfo>(s: T, event?: { latitude?: number | null; longitude?: number | null } | null): Required<Omit<ShiftInfo, "dayContactName" | "dayContactPhone" | "sectorLeaderNames" | "mealOnTheGo">> & Pick<ShiftInfo, "mealOnTheGo"> {
   const coords = coordinatesOf(s) ?? coordinatesOf(event)
   return {
     locationDetails: s.locationDetails ?? null,
@@ -149,5 +155,7 @@ export function pickShiftInfo<T extends ShiftInfo>(s: T, event?: { latitude?: nu
     instructions: s.instructions ?? null,
     latitude: coords?.latitude ?? null,
     longitude: coords?.longitude ?? null,
+    // Only when set, so payloads of the other shifts keep their shape.
+    ...(s.mealOnTheGo ? { mealOnTheGo: true } : {}),
   }
 }

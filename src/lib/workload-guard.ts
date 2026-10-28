@@ -70,11 +70,11 @@ export async function readWorkloadGate(tx: Tx, eventId: string): Promise<Workloa
 
 /** A person's committed missions on the event (confirmed places and pending requests). */
 export async function committedDuty(tx: Tx, eventId: string, volunteerId: string): Promise<(DutyShift & { registrationId: string; assignedOnly: boolean })[]> {
-  const rows: { id: string; shift: { id: string; date: Date; startTime: string; endTime: string; assignedOnly: boolean } }[] = await tx.registration.findMany({
+  const rows: { id: string; shift: { id: string; date: Date; startTime: string; endTime: string; assignedOnly: boolean; mealOnTheGo: boolean } }[] = await tx.registration.findMany({
     where: { eventId, volunteerId, status: { in: [...COMMITTED_STATUSES] }, shift: { status: { not: "cancelled" } } },
-    select: { id: true, shift: { select: { id: true, date: true, startTime: true, endTime: true, assignedOnly: true } } },
+    select: { id: true, shift: { select: { id: true, date: true, startTime: true, endTime: true, assignedOnly: true, mealOnTheGo: true } } },
   })
-  return rows.map((r) => ({ id: r.shift.id, registrationId: r.id, date: r.shift.date, startTime: r.shift.startTime, endTime: r.shift.endTime, assignedOnly: r.shift.assignedOnly }))
+  return rows.map((r) => ({ id: r.shift.id, registrationId: r.id, date: r.shift.date, startTime: r.shift.startTime, endTime: r.shift.endTime, assignedOnly: r.shift.assignedOnly, mealOnTheGo: r.shift.mealOnTheGo }))
 }
 
 /** The change a path makes to one person's schedule. */
@@ -97,7 +97,8 @@ export function applyDutyChange(before: DutyShift[], change: DutyChange): DutySh
   const removed = new Set(change.removeShiftIds ?? [])
   const replaced = new Map((change.replace ?? []).map((s) => [s.id, s]))
   return [
-    ...before.filter((s) => !removed.has(s.id)).map((s) => replaced.get(s.id) ?? s),
+    // A replacement keeps what it does not say (a series edit sends the hours, not the meal flag).
+    ...before.filter((s) => !removed.has(s.id)).map((s) => (replaced.has(s.id) ? { ...s, ...replaced.get(s.id)! } : s)),
     ...(change.add ?? []),
   ]
 }
@@ -121,7 +122,7 @@ export async function checkDutyChange(tx: Tx, gate: WorkloadGate, eventId: strin
   // judged as added, never as already there.
   const except = new Set(opts.exceptRegistrationIds ?? [])
   const before = (await committedDuty(tx, eventId, volunteerId)).filter((d) => !except.has(d.registrationId))
-  return judgeDutyChange(gate, before.map(({ id, date, startTime, endTime }) => ({ id, date, startTime, endTime })), change)
+  return judgeDutyChange(gate, before.map(({ id, date, startTime, endTime, mealOnTheGo }) => ({ id, date, startTime, endTime, mealOnTheGo })), change)
 }
 
 /** Locks the given volunteers' rows, ORDER BY id (after the shift locks). */
@@ -186,11 +187,11 @@ export async function checkScheduleEdit(tx: Tx, eventId: string, moved: DutyShif
 }
 
 /** The organiser's refusal of an edit: who, and the first limit broken for each. */
-export function scheduleEditRefusalBody(refusals: ScheduleEditRefusal[]): { error: string; code: "workload"; workload: string[] } {
+export function scheduleEditRefusalBody(refusals: ScheduleEditRefusal[], cause = "avec ces horaires"): { error: string; code: "workload"; workload: string[] } {
   const lines = refusals.map((r) => (r.verdict.reason === "incomplete" ? WORKLOAD_POLICY_INCOMPLETE : `${r.name} : ${workloadFindingMessage(r.verdict.findings[0], r.verdict.policy)}`))
   const who = refusals.length === 1 ? refusals[0].name : `${refusals.length} personnes`
   return {
-    error: `Modification impossible : avec ces horaires, le programme de ${who} ne respecterait plus les pauses et limites de charge de cet événement. Rien n'a été modifié. ${lines[0]}`,
+    error: `Modification impossible : ${cause}, le programme de ${who} ne respecterait plus les pauses et limites de charge de cet événement. Rien n'a été modifié. ${lines[0]}`,
     code: "workload",
     workload: lines,
   }
@@ -198,7 +199,7 @@ export function scheduleEditRefusalBody(refusals: ScheduleEditRefusal[]): { erro
 
 /** Raised inside an edit's transaction to roll it back. */
 export class ScheduleEditRefusalError extends Error {
-  constructor(readonly refusals: ScheduleEditRefusal[]) {
+  constructor(readonly refusals: ScheduleEditRefusal[], readonly cause?: string) {
     super("Workload protection refuses the schedule edit")
   }
 }

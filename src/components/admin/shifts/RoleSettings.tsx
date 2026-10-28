@@ -3,7 +3,7 @@
 // SPDX-FileCopyrightText: 2026 Philippe Vollenweider
 // SPDX-License-Identifier: AGPL-3.0-only
 
-import { useRef, useState } from "react"
+import { useEffect, useRef, useState } from "react"
 import { flushSync } from "react-dom"
 import { requestJson } from "@/lib/use-submit"
 import { COLOR_OPTIONS } from "@/lib/roles"
@@ -11,6 +11,7 @@ import { parseTagList } from "@/lib/role-reservation"
 import { ASSIGNED_ONLY_HELP } from "@/lib/role-assignment"
 import type { RawShift } from "./types"
 import { NO_SECTOR_LABEL, NO_SECTOR_OPTION } from "@/lib/sectors"
+import { mealOnTheGoAnnouncement, type PosteMealOnTheGo } from "@/lib/meal-on-the-go"
 
 // The inline editors of one role in the « Gérer les postes » panel: its access, tags reserving it
 // (#470) or assigned by the organisation only (#1145),
@@ -332,6 +333,94 @@ export function RoleOverlapForm({
       <button type="button" onClick={() => onClose(role)} className="text-xs text-gray-600 hover:text-gray-900 py-1.5">Annuler</button>
       <p id={`overlap-help-${i}`} className="basis-full text-xs text-gray-600">
         Une personne inscrite à un créneau de ce poste peut prendre en même temps un autre créneau, de ce poste ou d&apos;un autre, par exemple assurer les premiers secours tout en tenant la buvette ; le temps passé sur deux créneaux à la fois ne compte qu&apos;une fois dans ses heures. Sans cette option, une personne ne peut pas s&apos;inscrire à deux créneaux qui se chevauchent. Si vous la retirez, les inscriptions déjà faites sont conservées ; vous pouvez toujours ajouter quelqu&apos;un à la main.
+      </p>
+    </form>
+  )
+}
+
+/**
+ * « Repas sur le pouce possible » for all of a poste's live shifts (#1171, lot 2), the inline editor
+ * of the poste panel, like « Cumul ». The saved value may be mixed (some shifts only): the checkbox
+ * is then indeterminate until changed, and saving it untouched changes nothing. A refusal (409: the
+ * meal would be missing for someone) keeps the form open with the panel's alert.
+ */
+export function RoleMealForm({
+  eventId, autoFocus = true, role, index, saved, value, onValueChange, busyRole, onBusyRoleChange, onActionError, onClose, setShifts, onAnnounce,
+}: {
+  eventId:          string
+  autoFocus?:       boolean
+  role:             string
+  index:            number
+  /** The poste's saved value across its live shifts. */
+  saved:            PosteMealOnTheGo
+  /** The checkbox: null while a mixed value is left untouched. */
+  value:            boolean | null
+  onValueChange:    (value: boolean) => void
+  busyRole:         string | null
+  onBusyRoleChange: (role: string | null) => void
+  onActionError:    (error: string | null) => void
+  onClose:          (role: string) => void
+  setShifts:        SetShifts
+  onAnnounce:       (text: string) => void
+}) {
+  const i = index
+  const isBusy = busyRole === role
+  const box = useRef<HTMLInputElement>(null)
+  // React has no `indeterminate` prop: set on the element (never aria-checked on a native checkbox).
+  useEffect(() => { if (box.current) box.current.indeterminate = value === null }, [value])
+
+  async function save(next: boolean | null) {
+    if (busyRole) return
+    if (next === null || (next && saved === "all") || (!next && saved === "none")) {
+      onClose(role)
+      onAnnounce(`Poste « ${role} » : aucune modification.`)
+      return
+    }
+    onActionError(null)
+    onBusyRoleChange(role)
+    const outcome = await requestJson(() => fetch(`/api/admin/events/${eventId}/roles/${encodeURIComponent(role)}`, {
+      method: "PATCH",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ mealOnTheGo: next }),
+    }), "Erreur lors de l'enregistrement.")
+    onBusyRoleChange(null)
+    if (!outcome.ok) {
+      onActionError(outcome.error)
+      return
+    }
+    setShifts(prev => prev.map(s => s.roleName === role && s.status !== "cancelled" ? { ...s, mealOnTheGo: next } : s))
+    onClose(role)
+    onAnnounce(mealOnTheGoAnnouncement(role, next))
+  }
+
+  return (
+    <form
+      id={`meal-form-${i}`}
+      noValidate
+      onSubmit={(e) => { e.preventDefault(); save(value) }}
+      onKeyDown={(e) => { if (e.key === "Escape") { e.stopPropagation(); if (!isBusy) onClose(role) } }}
+      className="flex flex-wrap items-center gap-2 px-3 py-2.5 mt-1 rounded-xl border border-blue-100 bg-blue-50/50"
+    >
+      <div className="flex-1 min-w-48 min-h-6 flex items-center gap-2">
+        <input
+          ref={box}
+          id={`meal-${i}`}
+          type="checkbox"
+          checked={value === true}
+          autoFocus={autoFocus}
+          onChange={(e) => onValueChange(e.target.checked)}
+          aria-describedby={[saved === "some" ? `meal-saved-${i}` : "", `meal-help-${i}`].filter(Boolean).join(" ")}
+          className="w-4 h-4 flex-shrink-0"
+        />
+        <label htmlFor={`meal-${i}`} className="text-xs font-medium text-gray-700">Poste « {role} » : repas sur le pouce possible sur ses créneaux</label>
+      </div>
+      <button type="submit" aria-disabled={isBusy || undefined} className={`text-xs text-blue-700 font-medium hover:text-blue-900 py-1.5 ${isBusy ? "opacity-60 cursor-wait" : ""}`}>
+        {isBusy ? "Enregistrement…" : "Enregistrer"}
+      </button>
+      <button type="button" onClick={() => onClose(role)} className="text-xs text-gray-600 hover:text-gray-900 py-1.5">Annuler</button>
+      {saved === "some" && <p id={`meal-saved-${i}`} className="basis-full text-xs text-gray-700">Pour l&apos;instant : sur certains créneaux seulement.</p>}
+      <p id={`meal-help-${i}`} className="basis-full text-xs text-gray-600">
+        Tous les créneaux du poste suivent : cochée, sur tous ; décochée, sur aucun. Chaque créneau peut ensuite être réglé dans sa fiche. Le repas peut se prendre pendant ces missions, qui restent comptées comme du travail. Retirer ce réglage est refusé s&apos;il privait quelqu&apos;un de sa pause repas.
       </p>
     </form>
   )

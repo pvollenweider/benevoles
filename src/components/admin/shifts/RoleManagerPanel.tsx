@@ -15,7 +15,8 @@ import { roleOverlapAllowed } from "@/lib/shift-overlap"
 import { applyRoleOrder, moveItem, renameRole } from "@/lib/shifts-admin"
 import { focusFirstAvailable, isFocusDropped, type FocusCandidate } from "@/lib/focus-return"
 import { moveRole, moveRoleInGroup, roleMoveBoundaryMessage, roleMoveMessage, type MoveDirection } from "@/lib/role-order"
-import { RoleColorPicker, RoleLimitForm, RoleOverlapForm, RoleReserveForm, RoleSectorForm } from "./RoleSettings"
+import { RoleColorPicker, RoleLimitForm, RoleMealForm, RoleOverlapForm, RoleReserveForm, RoleSectorForm } from "./RoleSettings"
+import { posteMealOnTheGo, posteMealOnTheGoLabel } from "@/lib/meal-on-the-go"
 import type { RawShift } from "./types"
 import SectorsSection from "./SectorsSection"
 import type { AdminSectorsState } from "../ShiftsManager"
@@ -50,7 +51,7 @@ function PosteRows({ render, group }: { render: (group: SectorGroup) => React.Re
 export default function RoleManagerPanel({
   open, panelId, eventId, shifts, setShifts, roles, setRoles, onClose, onRequestClose, onAnnounce,
   onRequestDelete, onDeletingChange, onDeleteError, onRoleDeleted,
-  sectorsState = null, setSectorsState, onConfirmDone, onAddPoste,
+  sectorsState = null, setSectorsState, onConfirmDone, onAddPoste, mealOnTheGoShown = false,
 }: {
   open:             boolean
   /** Id of the panel's root, which « Gérer les postes » controls (`aria-controls`). */
@@ -79,6 +80,8 @@ export default function RoleManagerPanel({
   onConfirmDone?:   () => void
   /** « Ajouter un poste dans « S » » (#1147): the parent opens the shift form in that sector. */
   onAddPoste?:      (sector: { id: string; name: string }, opener: () => HTMLElement | null | undefined) => void
+  /** « Repas sur le pouce possible » (#1171, lot 2): only where the workload protection can be used. */
+  mealOnTheGoShown?: boolean
 }) {
   const [dragRoleIdx, setDragRoleIdx]     = useState<number | null>(null)
   const [savingOrder, setSavingOrder]     = useState(false)
@@ -104,6 +107,11 @@ export default function RoleManagerPanel({
   const [overlapRole, setOverlapRole] = useState<string | null>(null)
   const [overlapValue, setOverlapValue] = useState(false)
   const overlapBtnRefs = useRef(new Map<string, HTMLButtonElement>())
+  // « Repas sur le pouce possible » (#1171, lot 2): the inline editor, like « Cumul ». null = a
+  // mixed value left untouched.
+  const [mealRole, setMealRole] = useState<string | null>(null)
+  const [mealValue, setMealValue] = useState<boolean | null>(null)
+  const mealBtnRefs = useRef(new Map<string, HTMLButtonElement>())
   // « Déplacer… » a poste to another sector (#1147): the inline editor, like the limit's.
   const [sectorRole, setSectorRole] = useState<string | null>(null)
   const [sectorValue, setSectorValue] = useState("")
@@ -196,6 +204,7 @@ export default function RoleManagerPanel({
     setLimitRole(null)
     setReserveRole(null)
     setOverlapRole(null)
+    setMealRole(null)
     setColorPickerRole(null)
     setRenameError(null)
     setRenamingRole(role)
@@ -278,6 +287,7 @@ export default function RoleManagerPanel({
     setRenamingRole(null)
     setReserveRole(null)
     setOverlapRole(null)
+    setMealRole(null)
     setLimitRole(limitRole === role ? null : role)
     setLimitValue(String(roleLimitOf(role) ?? ""))
   }
@@ -294,6 +304,7 @@ export default function RoleManagerPanel({
     setRenamingRole(null)
     setLimitRole(null)
     setOverlapRole(null)
+    setMealRole(null)
     setReserveRole(reserveRole === role ? null : role)
     setReserveValue(reservedTagsOf(role).join(", "))
     setAssignedOnlyValue(assignedOnlyOf(role))
@@ -307,8 +318,29 @@ export default function RoleManagerPanel({
     return roleOverlapAllowed(shifts, role)
   }
 
+  function startMeal(role: string) {
+    setEditorAutoFocus(true)
+    setSectorRole(null)
+    setRoleActionError(null)
+    setColorPickerRole(null)
+    setRenamingRole(null)
+    setLimitRole(null)
+    setReserveRole(null)
+    setOverlapRole(null)
+    setMealRole(mealRole === role ? null : role)
+    const saved = posteMealOnTheGo(shifts, role)
+    setMealValue(saved === "some" ? null : saved === "all")
+  }
+
+  function closeMeal(role: string) {
+    setMealRole(null)
+    setRoleActionError(null)
+    focusRoleButton(mealBtnRefs, role)
+  }
+
   function startOverlap(role: string) {
     setEditorAutoFocus(true)
+    setMealRole(null)
     setSectorRole(null)
     setRoleActionError(null)
     setColorPickerRole(null)
@@ -321,6 +353,7 @@ export default function RoleManagerPanel({
 
   function closeOverlap(role: string) {
     setOverlapRole(null)
+    setMealRole(null)
     setRoleActionError(null)
     focusRoleButton(overlapBtnRefs, role)
   }
@@ -369,6 +402,7 @@ export default function RoleManagerPanel({
     setLimitRole(null)
     setReserveRole(null)
     setOverlapRole(null)
+    setMealRole(null)
     setSectorRole(sectorRole === role ? null : role)
     setSectorValue(sectorOfRole(role) ?? "")
   }
@@ -401,6 +435,8 @@ export default function RoleManagerPanel({
           const reservedTags = reservedTagsOf(role)
           const assignedOnly = assignedOnlyOf(role)
           const cumulable = overlapAllowedOf(role)
+          const meal = posteMealOnTheGo(shifts, role)
+          const mealLabel = posteMealOnTheGoLabel(meal, role)
           const roleSectorId = sectorsInUse ? sectorOfRole(role) : null
           return (
           <li key={role}>
@@ -446,7 +482,7 @@ export default function RoleManagerPanel({
               <button
                 ref={(el) => setRoleButton(colorBtnRefs.current, role, el)}
                 type="button"
-                onClick={() => { setLimitRole(null); setReserveRole(null); setOverlapRole(null); setColorPickerRole(isPickingColor ? null : role) }}
+                onClick={() => { setLimitRole(null); setReserveRole(null); setOverlapRole(null); setMealRole(null); setColorPickerRole(isPickingColor ? null : role) }}
                 disabled={isBusy || isRenaming}
                 aria-label={`Changer la couleur du poste ${role}`}
                 aria-expanded={isPickingColor}
@@ -529,6 +565,20 @@ export default function RoleManagerPanel({
                   >
                     {cumulable ? "Cumul : oui" : "Cumul : non"}
                   </button>
+                  {mealOnTheGoShown && (
+                    <button
+                      ref={(el) => setRoleButton(mealBtnRefs.current, role, el)}
+                      type="button"
+                      onClick={() => startMeal(role)}
+                      disabled={isBusy}
+                      aria-expanded={mealRole === role}
+                      aria-controls={mealRole === role ? `meal-form-${i}` : undefined}
+                      aria-label={mealLabel.name}
+                      className="text-xs text-gray-600 hover:text-blue-600 disabled:opacity-50 flex-shrink-0"
+                    >
+                      {mealLabel.text}
+                    </button>
+                  )}
                   {sectorsInUse && (liveSectors.length > 0 || roleSectorId) && (
                     <button
                       ref={(el) => setRoleButton(sectorBtnRefs.current, role, el)}
@@ -601,6 +651,23 @@ export default function RoleManagerPanel({
                 onBusyRoleChange={setRoleActionBusy}
                 onActionError={setRoleActionError}
                 onClose={closeOverlap}
+                setShifts={setShifts}
+                onAnnounce={onAnnounce}
+              />
+            )}
+            {mealRole === role && mealOnTheGoShown && (
+              <RoleMealForm
+                eventId={eventId}
+                autoFocus={editorAutoFocus}
+                role={role}
+                index={i}
+                saved={meal}
+                value={mealValue}
+                onValueChange={setMealValue}
+                busyRole={roleActionBusy}
+                onBusyRoleChange={setRoleActionBusy}
+                onActionError={setRoleActionError}
+                onClose={closeMeal}
                 setShifts={setShifts}
                 onAnnounce={onAnnounce}
               />
