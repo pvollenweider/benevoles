@@ -31,6 +31,8 @@ import {
 import type { LogActor } from "./event-log"
 import { cancelOutboxForMergedMember } from "./outbox-merge-cancel"
 import { endSwapsIn } from "./shift-swap-server"
+import { mergeAvailability } from "./event-availability-data"
+import type { Tx } from "./registration-capacity"
 
 export class MergeConflictError extends Error {
   constructor(message: string, readonly status: 404 | 409 = 409) {
@@ -192,6 +194,9 @@ export async function runMemberMerge(
       if (merged) await tx.eventVolunteerLimit.update({ where: { id: kept.id }, data: { values: merged } })
       await tx.eventVolunteerLimit.delete({ where: { id: l.id } })
     }
+    // Dated availability (#1146): moved event by event; where both records answered differently,
+    // the kept record's answers stay, flagged for review, never united (src/lib/event-availability.ts).
+    await mergeAvailability(tx as unknown as Tx, keepId, absorbId)
     // Shift roster choices (#1068) are dropped too: a merge is not the person's consent. The
     // absorbed record's choices go, and so do the kept record's on the events where registrations
     // just moved to it, so nobody is shown on those events until they choose again.
@@ -251,14 +256,15 @@ export async function runMemberMerge(
 
     // 7. Invariant: no relation may remain on the absorbed record, except the DeliveryOutcome
     // rows deliberately left (owner decision, #600) for the retention purge to cascade-delete.
-    const [regCount, inviteCount, answerCount, pushCount] = await Promise.all([
+    const [regCount, inviteCount, answerCount, pushCount, availabilityCount] = await Promise.all([
       tx.registration.count({ where: { volunteerId: absorbId } }),
       tx.memberInvite.count({ where: { volunteerId: absorbId } }),
       tx.questionAnswer.count({ where: { volunteerId: absorbId } }),
       tx.pushSubscription.count({ where: { volunteerId: absorbId } }),
+      tx.availabilityRequest.count({ where: { volunteerId: absorbId } }),
     ])
-    if (regCount || inviteCount || answerCount || pushCount) {
-      throw new Error(`member merge invariant violated: absorbed record ${absorbId} still has relations (reg=${regCount} invite=${inviteCount} answer=${answerCount} push=${pushCount})`)
+    if (regCount || inviteCount || answerCount || pushCount || availabilityCount) {
+      throw new Error(`member merge invariant violated: absorbed record ${absorbId} still has relations (reg=${regCount} invite=${inviteCount} answer=${answerCount} push=${pushCount} availability=${availabilityCount})`)
     }
 
     // 8. Audit, written with the transaction's own client so it commits with the merge (unlike

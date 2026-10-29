@@ -91,6 +91,8 @@ export async function anonymisePastEvent(
     const sectorLeaders = await tx.sectorLeader.deleteMany({ where: { eventId } })
     // Shift roster choices (#1068): personal, and the roster is closed for good.
     await tx.rosterConsent.deleteMany({ where: { eventId } })
+    // Dated availability (#1146): personal, and of no use once the event is over.
+    await tx.availabilityRequest.deleteMany({ where: { eventId } })
     await tx.event.update({ where: { id: eventId }, data: { personalDataAnonymizedAt: now } })
     const counts = { registrations: registrations.length, anonymousRecords, answers: answers.count, invites: invites.count, sectorLeaders: sectorLeaders.count }
     await tx.eventLog.create({

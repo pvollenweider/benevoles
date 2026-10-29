@@ -223,6 +223,17 @@ model Event {
   // every new commitment (fail closed). Off for every existing event (column default).
   workloadProtectionEnabled Boolean @default(false)
   workloadPolicy            Json?
+  // Dated availability (#1146, lot A, beta capability « availability », src/lib/event-availability.ts):
+  // each person asked gives free time ranges per date of the event (AvailabilityRequest). Off for
+  // every existing event (column default). `availabilityAdoptedAt` is set when collection is first
+  // turned on; `availabilityTimeZone` is the zone snapshotted then, in which every range was entered
+  // and resolved to instants, so a later change of the organisation's zone never reinterprets the
+  // saved answers. `availabilityDeadline`: the answer deadline given to the people asked, an
+  // instant. None of these is copied with the event.
+  availabilityEnabled       Boolean   @default(false)
+  availabilityAdoptedAt     DateTime?
+  availabilityTimeZone      String?
+  availabilityDeadline      DateTime?
   // Retention of past events (#813): when its registrations were anonymised, 3 years after its end.
   personalDataAnonymizedAt DateTime?
   createdAt           DateTime  @default(now())
@@ -248,6 +259,9 @@ model Event {
   places           EventPlace[]
   volunteerLimits  EventVolunteerLimit[]
   shiftSwapRequests ShiftSwapRequest[]
+  availabilityRequests AvailabilityRequest[]
+  availabilityDays     AvailabilityDay[]
+  availabilityRanges   AvailabilityRange[]
 
   @@unique([organizationId, slug])
   @@index([organizationId])
@@ -283,6 +297,75 @@ model EventVolunteerLimit {
 
   @@unique([eventId, volunteerId])
   @@index([volunteerId])
+}
+
+// Dated availability of one person for one event (#1146, lot A, src/lib/event-availability.ts):
+// what they answered, date by date, apart from the general hints Volunteer.availabilityPeriods /
+// availabilityNote (« matin » is never certain availability on a date). A date with no
+// AvailabilityDay row is unknown (no answer); a day row with no range is « pas disponible » that
+// date; a day row with ranges is free during those ranges only. `revision` counts the saved
+// answers, so a later review can tell that an answer changed since it was read. `reviewNeededAt` /
+// `reviewReason` flag an answer the organisers should look at again ("merge": two member records
+// merged while both had answered differently, the kept record's answers kept). Personal data:
+// organisers only, never public; deleted with the person's data on erasure and with the event's
+// personal data (src/lib/past-event-anonymisation.ts). Never copied with an event.
+model AvailabilityRequest {
+  id             String    @id @default(cuid())
+  eventId        String
+  volunteerId    String
+  revision       Int       @default(0)
+  // Last saved answer, and who saved it: "volunteer" or "admin".
+  answeredAt     DateTime?
+  answeredBy     String?
+  reviewNeededAt DateTime?
+  reviewReason   String?
+  createdAt      DateTime  @default(now())
+  updatedAt      DateTime  @updatedAt
+
+  event     Event             @relation(fields: [eventId], references: [id], onDelete: Cascade)
+  volunteer Volunteer         @relation(fields: [volunteerId], references: [id], onDelete: Cascade)
+  days      AvailabilityDay[]
+
+  @@unique([eventId, volunteerId])
+  @@index([volunteerId])
+}
+
+// One answered date of an AvailabilityRequest (#1146): `date` is the civil date at UTC midnight, as
+// Shift.date. Its ranges start on that date; a range whose end is earlier than its start ends the
+// next morning (« 20:00 → 03:00 »), as for shifts. `eventId` is the request's, for tenant scoping.
+model AvailabilityDay {
+  id        String   @id @default(cuid())
+  requestId String
+  eventId   String
+  date      DateTime
+  createdAt DateTime @default(now())
+
+  request AvailabilityRequest @relation(fields: [requestId], references: [id], onDelete: Cascade)
+  event   Event               @relation(fields: [eventId], references: [id], onDelete: Cascade)
+  ranges  AvailabilityRange[]
+
+  @@unique([requestId, date])
+  @@index([eventId])
+}
+
+// One free range of an AvailabilityDay (#1146): the clock times the person entered ("HH:MM", in the
+// event's availabilityTimeZone) and the real instants they resolve to, [startsAt, endsAt). The check
+// "AvailabilityRange_order_check" (endsAt > startsAt) is created by the migration
+// 20261029180000_event_availability; it can't be declared here.
+model AvailabilityRange {
+  id        String   @id @default(cuid())
+  dayId     String
+  eventId   String
+  startTime String
+  endTime   String
+  startsAt  DateTime
+  endsAt    DateTime
+
+  day   AvailabilityDay @relation(fields: [dayId], references: [id], onDelete: Cascade)
+  event Event           @relation(fields: [eventId], references: [id], onDelete: Cascade)
+
+  @@index([dayId])
+  @@index([eventId, startsAt])
 }
 
 model EventPlace {
@@ -756,6 +839,7 @@ model Volunteer {
   deliveryOutcomes  DeliveryOutcome[]
   rosterConsents    RosterConsent[]
   workloadLimits    EventVolunteerLimit[]
+  availabilityRequests AvailabilityRequest[]
   mergedInto        Volunteer?     @relation("VolunteerMerge", fields: [mergedIntoId], references: [id], onDelete: SetNull)
   mergedFrom        Volunteer[]    @relation("VolunteerMerge")
   // Possible-duplicate dismissals (#601) naming this record as either side of the pair.
