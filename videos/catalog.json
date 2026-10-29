@@ -1014,6 +1014,35 @@
       "level": "avance"
     },
     {
+      "id": "WORKLOAD_PROTECTION",
+      "manifest": "workload-protection",
+      "category": "planning",
+      "tags": [
+        "pauses",
+        "charge",
+        "limites",
+        "lieux",
+        "repas",
+        "mes-inscriptions",
+        "bêta"
+      ],
+      "published": false,
+      "seedScenario": "workload-protection",
+      "themes": [
+        "planning-creneaux",
+        "inscriptions-communication",
+        "parcours-benevole"
+      ],
+      "audience": [
+        "organisateur",
+        "benevole"
+      ],
+      "feature": "Protection des pauses et de la charge",
+      "updatedAt": "2026-10-29",
+      "revision": 1,
+      "level": "avance"
+    },
+    {
       "id": "MEMBERS_MANAGEMENT",
       "manifest": "members-management",
       "category": "members-invitations",
