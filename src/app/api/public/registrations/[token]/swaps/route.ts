@@ -35,7 +35,7 @@ const tooManyAttempts = () => json({ error: "Trop de tentatives." }, 429)
 const notFound = () => json({ error: "Inscription introuvable ou déjà annulée." }, 404)
 
 /** Publications and offers per person and day: plenty for real use, a wall against bulk requests. */
-export const SWAP_PROPOSALS_PER_DAY = 10
+const SWAP_PROPOSALS_PER_DAY = 10
 const DAY = 24 * 60 * 60 * 1000
 
 const id = z.string().min(1).max(64)
