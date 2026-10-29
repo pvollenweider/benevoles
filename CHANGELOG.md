@@ -77,6 +77,7 @@ Format basé sur [Keep a Changelog](https://keepachangelog.com/fr/1.0.0/).
 
 ### Corrigé
 
+- **Route des échanges de créneaux** : une constante interne n'est plus exportée par la route du lien personnel, ce que le contrôle de types de `next build` refusait. Rien ne change pour les utilisateurs. <!-- interne -->
 - **Un seul certificat pour le domaine** : l'Ingress de l'application ne demande plus son propre certificat à cert-manager ; le certificat wildcard `benevol-app-wildcard` reste le seul à remplir le secret TLS, et le second certificat en conflit, toujours en échec, disparaît. Rien ne change pour les visiteurs. <!-- interne -->
 - **Test des anciennes ancres du guide** : le test qui rend toutes les pages du guide administrateur a un délai de 20 secondes au lieu de 5, comme le test des liens d'aide ; il dépassait parfois le délai sur la CI. <!-- interne -->
 - **Un seul email de confirmation pour des créneaux ajoutés un par un** (#1191) : un bénévole déjà inscrit à un événement qui y ajoute des créneaux en plusieurs fois (depuis « Mes inscriptions » ou la page d'inscription) reçoit un seul email de confirmation qui les liste tous, quelques minutes après le dernier ajout, au lieu d'un email par ajout. Avant, au-delà de cinq emails en une heure, les derniers ajouts n'étaient plus confirmés. L'email ne cite que les créneaux encore confirmés au moment de l'envoi. La première inscription reste confirmée tout de suite, avec le lien personnel.
