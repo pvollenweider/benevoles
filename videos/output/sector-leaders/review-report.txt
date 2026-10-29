@@ -1,6 +1,18 @@
-STATUS: NOT READY
-Batch: 32
-Target commit: e924abdc35bb03c19a99f1d3126bd06ecc6abc82
-Next.js route type validation rejects exported SWAP_PROPOSALS_PER_DAY in src/app/api/public/registrations/[token]/swaps/route.ts:38. Product source fixes are forbidden in this batch. No verified product BUILD_ID; no rehearsal, narrated capture, assembly or publication.
-Duration / music gaps / viewer tu count: not measured (no new final MP4).
-Previous artifacts archived before the attempt; tracked baseline evidence retained and superseded by this report.
+STATUS: READY
+Batch:32 (resume)
+ID:SECTOR_LEADERS
+Duration:296.760 s
+Product commit:9831e86e40ae3dd1ba60eb632b8e90951483a11c
+BUILD_ID:jJH5zvJlD2hQBFLXtZa0x
+One full Puck TTS generation, same-master silence recut; all13 source and final chapter audits PASS.
+Fresh demo+beta seeds and owned mailbox cleanup before successful quick rehearsal and first narrated take.
+validate PASS; tools typecheck204 sources PASS;34 video files/1144 tests PASS.
+13 AV chapters/48 checkpoints, zero flags; actual chapter frames inspected including phone, real email body, revoked link, new sector nomination and day filter.
+Mailpit real body-only intervals63720–70640 and170960–185960ms are outside phone/restoration103741–139900ms; assembler guards overlap. No fake email or still hold.
+Music13.7–19.1LU under voice; music-only minimum-32.9LUFS; zero gap violations.
+Synced soft effects:36 actual clicks,152 actual keys.
+Full final multilingual ASR and VTT:0 viewer tu; no stray English/instructions.
+No localhost/dev overlay/outdated Timeline label found in inspected frames.
+Revision6 is the predeclared new story; do not increment again. Real-time subjective listening unavailable per standing rules.
+Source fixes: public-host routing, Mailpit port, sector heading selectors, disjoint phone/email composition. No product or guide edits.
+Evidence:videos/evidence/sector-leaders/batch32/.

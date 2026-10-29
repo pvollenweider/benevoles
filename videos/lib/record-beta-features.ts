@@ -328,10 +328,11 @@ export async function recordShiftSwaps(options: Options) {
     await status(/^Demande publiée/)
     await card.getByRole("heading", { name: /^En attente d'une proposition/ }).waitFor()
   }
-  const accept = async (key: string, after: RegExp) => {
+  const accept = async (key: string, after: RegExp, beforeAccept?: () => Promise<void>) => {
     const card = await personal(key)
     const offered = card.getByRole("heading", { name: /te propose un échange/ })
     await offered.scrollIntoViewIfNeeded()
+    await beforeAccept?.()
     await tap(page, card.getByRole("button", { name: /^Accepter l'échange/ }))
     const confirm = card.getByRole("alertdialog")
     await confirm.waitFor()
@@ -380,7 +381,10 @@ export async function recordShiftSwaps(options: Options) {
   })
   await scene("swaps-accept", async at => {
     await at("Léa reçoit un email")
-    const { confirm, run } = await accept("lea", /^Échange effectué : ton créneau est maintenant Bar Grande Scène, dimanche/)
+    const { confirm, run } = await accept("lea", /^Échange effectué : ton créneau est maintenant Bar Grande Scène, dimanche/, async () => {
+      await at("Elle relit Tu cèdes et Tu reçois")
+      await at(0.5) /* mid-sentence: « puis choisit Accepter l'échange » */
+    })
     await at("Une confirmation récapitule les deux créneaux")
     await confirm.scrollIntoViewIfNeeded()
     await at("Oui, échanger")
@@ -417,8 +421,8 @@ export async function recordShiftSwaps(options: Options) {
     await at("Cette fois, la confirmation prévient")
     await confirm.getByText(/L'organisation devra encore le valider\./).waitFor()
     await confirm.scrollIntoViewIfNeeded()
-    await run()
     await at("Leur planning ne change pas avant cette validation")
+    await run()
     await page.locator('[data-swaps-card="1"]').getByRole("heading", { name: /^En attente de la validation de l'organisation/ }).scrollIntoViewIfNeeded()
   })
   await scene("swaps-validate", async at => {
@@ -440,6 +444,9 @@ export async function recordShiftSwaps(options: Options) {
     await at("Il se fait avant le début du premier des deux créneaux")
     const card = await personal("noah")
     await card.getByRole("heading", { level: 3, name: "Échanges terminés", exact: true }).scrollIntoViewIfNeeded()
+    await at("Chaque étape est inscrite au journal")
+    await go(`/admin/events/${EVENT_ID}/log`)
+    await page.locator("#panel-explore > div > div").first().waitFor()
   })
 }
 
@@ -479,9 +486,9 @@ export async function recordSectorLeadersBySector(options: Options & { owner: Co
     await page.goto(`${base}/leader/${link[1]}`); await settleDom(page)
     await page.getByRole("heading", { level: 1, name: "Responsable de secteur · Parking", exact: true }).waitFor()
     await at("Parking Nord et Parking Mairie")
-    await page.getByRole("heading", { level: 2, name: /^Parking Nord(?:\s|$)/ }).scrollIntoViewIfNeeded()
-    await page.getByRole("heading", { level: 2, name: /^Parking Mairie(?:\s|$)/ }).scrollIntoViewIfNeeded()
-    assert.equal(await page.getByRole("heading", { level: 2, name: /^Backline Grande Scène(?:\s|$)/ }).count(), 0, "A sector leader sees only the postes of the sector")
+    await page.getByRole("heading", { level: 2, name: /^Parking Nord/ }).scrollIntoViewIfNeeded()
+    await page.getByRole("heading", { level: 2, name: /^Parking Mairie/ }).scrollIntoViewIfNeeded()
+    assert.equal(await page.getByRole("heading", { level: 2, name: /^Backline Grande Scène/ }).count(), 0, "A sector leader sees only the postes of the sector")
     await at("Un filtre Jour limite la liste à une journée")
     await page.evaluate(() => window.scrollTo(0, 0))
     const day = page.getByLabel("Jour", { exact: true })

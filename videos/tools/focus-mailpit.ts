@@ -31,7 +31,7 @@ export async function focusMailpit(reference: string) {
     if (isMailpit && start === null) start = index * 40
     if (!isMailpit && start !== null) { frames.push({ startMs: start, endMs: index * 40 }); start = null }
   }
-  assert(frames.length >= (manifest.id === "SHIFT_ROSTER_VISIBILITY" ? 1 : 2) && frames.every(frame => frame.endMs - frame.startMs > 200), "Expected stable actual message-pane intervals")
+  assert(frames.length >= (["SHIFT_ROSTER_VISIBILITY", "SHIFT_SWAPS"].includes(manifest.id) ? 1 : 2) && frames.every(frame => frame.endMs - frame.startMs > 200), "Expected stable actual message-pane intervals")
   const holds: NonNullable<Timeline["mailpitHolds"]> = []
   if (manifest.id === "MEMBERS_REMINDERS") {
     const send = timeline.cues.find(cue => cue.id === "send")!

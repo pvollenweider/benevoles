@@ -1,0 +1,60 @@
+{
+  "model": "gemini-3.8-flash",
+  "reviewedAt": "2026-10-29T06:54:58.321Z",
+  "videoSha256": "8223c82b5a20cc6e1d9009cedbdcfb681a9f382e0813f57eb27a8d468cc620cf",
+  "promptSha256": "f7eef07efbb05f08ebf753e06c4e991ae3f729fac6b5dec2433996170d104f7c",
+  "clipSha256": "ae35838ebb5253a2cf60194dd51e75bf89611b2217bf963b3ab8ffd51d735a74",
+  "scene": "leaders-sector-scope",
+  "review": {
+    "heardOpening": "Voyons maintenant un événement organisé par secteurs",
+    "checkpoints": [
+      {
+        "spokenSeconds": 5.4,
+        "spoken": "Sa page s'appelle Responsables de poste et de secteur",
+        "visibleSeconds": 5,
+        "visible": "Page 'Responsables de poste et de secteur' affichée avec la liste des secteurs Parking et Backline",
+        "sync": "aligned",
+        "severity": "none"
+      },
+      {
+        "spokenSeconds": 10.8,
+        "spoken": "En ajoutant un responsable, choisissez d'abord Responsable de",
+        "visibleSeconds": 11.2,
+        "visible": "Clic sur '+ Ajouter un responsable' et apparition du formulaire avec le choix 'Responsable de'",
+        "sync": "aligned",
+        "severity": "none"
+      },
+      {
+        "spokenSeconds": 21,
+        "spoken": "Confions tout le secteur Parking à Paul",
+        "visibleSeconds": 22.3,
+        "visible": "Sélection du secteur 'Parking' dans la liste déroulante",
+        "sync": "aligned",
+        "severity": "none"
+      },
+      {
+        "spokenSeconds": 24.1,
+        "spoken": "Renseignons son nom et son email",
+        "visibleSeconds": 25,
+        "visible": "Saisie de 'Paul Murphy' dans le champ Nom puis de l'adresse email",
+        "sync": "aligned",
+        "severity": "none"
+      },
+      {
+        "spokenSeconds": 26.8,
+        "spoken": "puis ajoutons et envoyons son lien",
+        "visibleSeconds": 28.9,
+        "visible": "Clic sur le bouton bleu 'Ajouter et envoyer le lien' et ajout de Paul Murphy au secteur Parking",
+        "sync": "aligned",
+        "severity": "none"
+      }
+    ],
+    "issues": [],
+    "voice": {
+      "consistent": true,
+      "warm": true,
+      "observation": "Voix masculine claire, posée et bien articulée, synchronisée avec les actions à l'écran."
+    }
+  },
+  "note": "Automated observation of actual final video audio and images; not a claim of complete human validation"
+}

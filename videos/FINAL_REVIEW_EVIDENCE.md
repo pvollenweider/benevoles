@@ -528,16 +528,10 @@ jour `updatedAt` dans `videos/catalog.json` pour chacune de ces huit vidéos.
 
 ## Sources prêtes, rendu en attente : vidéos des fonctions bêta (#1168, #1147, #1169, #1174)
 
-Sources ajoutées sans rendu (aucune capture, aucune voix, aucune publication) ; le rendu se fait
-depuis un checkout à jour de `origin/main`, avec le seed de chaque scénario avant chaque prise
+Cette liste ne contient que les rendus finaux encore attendus. Le rendu se fait
+depuis le build vérifié de `origin/main`, avec le seed de chaque scénario avant chaque prise
 (chaque prise modifie sa fixture : secteurs enregistrés, échanges, responsables) :
 
-- `sector-leaders` (`SECTOR_LEADERS`, mise à jour, révision 6) : sources prêtes, rendu en attente.
-  Narration modifiée (`welcome`) et deux scènes ajoutées (`leaders-sector-scope`,
-  `leaders-sector-roster`) : toute la piste continue est à régénérer. Seed : démo, puis
-  `scripts/seed-video-scenario.ts sector-leaders` (`videos/tools/build.ts` enchaîne les deux).
-  La vidéo publiée garde l'ancien rendu jusqu'à la régénération : titre, bloc `viewer` et
-  transcription de la page de la vidéo décrivent déjà la nouvelle version.
 - `shift-swaps` (`SHIFT_SWAPS`, nouvelle, `published: false`) : sources prêtes, rendu en attente.
   Seed `scripts/seed-video-scenario.ts shift-swaps`.
 
@@ -546,9 +540,8 @@ Les quatre scénarios utilisent l'organisation fictive dédiée `formation-beta`
 fonctions bêta dont leur vidéo a besoin. La liste des fonctions ouvertes est commune à la
 plateforme locale : `scripts/seed-demo.ts` la retire, et désinscrit l'organisation de démonstration,
 pour que les autres vidéos ne montrent ni la carte « Fonctions bêta » ni les options bêta.
-Le recorder (`videos/lib/record-beta-features.ts`) n'a pas encore été répété sur la pile locale :
-une répétition `--rehearse --quick-rehearse` (après un seed neuf) est à faire avant la prise
-narrée. Les prises de `shift-swaps` et de `sector-leaders` attendent les vrais emails dans la boîte
+Les quatre scénarios ont réussi leur répétition `--rehearse --quick-rehearse` sur
+un seed neuf. Chaque prise narrée est également précédée d'un nouveau seed. Les prises de `shift-swaps` et de `sector-leaders` attendent les vrais emails dans la boîte
 locale (« Échange effectué », nomination du responsable de secteur).
 
 `workload-protection` (protection des pauses et de la charge, #1171) ne fait pas partie de ce lot :
@@ -621,3 +614,23 @@ et cinq inscriptions actives. Détail : `videos/evidence/sectors/batch32/source-
 Les correctifs des répétitions restent sous vidéos et seeds : Mailpit configurable,
 titres de postes sans virgule, dates de confidentialité relatives à la prise,
 cadrage du corps réel des emails. Contrôle de types 204 sources et 1142 tests verts.
+
+**SECTOR_LEADERS : READY et publiée**, première parmi les vidéos déjà publiées du lot.
+Aperçu puis APPLY=1 (default), cinq fichiers, notification après publication.
+Révision 6 préannoncée conservée ; `updatedAt` et le badge `updated` au 2026-10-29.
+L'ancien MP4 a été remplacé par le récit qu'annonçait déjà le catalogue.
+Durée 296,760 s ; treize audits de narration source et finale réussis, treize
+chapitres AV / 48 points sans signalement. Images téléphone et secteur relues.
+Musique 13,7–19,1 LU sous la voix, musique seule au minimum -32,9 LUFS ; zéro trou.
+36 clics et 152 frappes réelles sonorisés. ASR intégrale et VTT : zéro tutoiement,
+pas de paroles parasites. Deux cadrages de vrais corps Mailpit sans en-tête anglais,
+disjoints du cadrage téléphone avec refus explicite de tout chevauchement.
+Preuves : `videos/evidence/sector-leaders/batch32/`.
+
+SHIFT_SWAPS reste NOT READY à ce stade : la première prise avait un clic d'acceptation
+anticipé ; la seule reprise narrée prévue par les règles a échoué dans la dernière
+scène sur une référence `event` non définie ajoutée dans le recorder vidéo. Le correctif
+utilise l'EVENT_ID explicite et la vraie route du journal a été vérifiée (13 entrées).
+Aucune modification produit. Les deux prises sont archivées, jamais publiées.
+Une dérogation à « One re-film per video within a batch » a été demandée au propriétaire,
+sans supposer sa réponse. Les travaux autorisés sur PRIVACY continuent.

@@ -1,34 +1,34 @@
 {
   "model": "gemini-3.8-flash",
-  "reviewedAt": "2026-10-16T11:49:25.942Z",
-  "videoSha256": "949a76fee33cca820f70783696fb92f8d02de328080f31fc8fdc39b5ee331c2b",
+  "reviewedAt": "2026-10-29T06:53:27.355Z",
+  "videoSha256": "8223c82b5a20cc6e1d9009cedbdcfb681a9f382e0813f57eb27a8d468cc620cf",
   "promptSha256": "9596e7c9b64e1c7512eba1ec275bae89d3e26e33efc5df775e7b9463ea2dc8b1",
-  "clipSha256": "e8b1b852e2861e4e5cce6be15c6e3456fbc3b957498d2abb0bf85be619a6e379",
+  "clipSha256": "4aa6118fc32a4b01c8efee98f6f6dc1fcae324d0576c94f1354353b55fa2d08c",
   "scene": "email",
   "review": {
-    "heardOpening": "Voici l'email reçu",
+    "heardOpening": "Voici l'email reçu.",
     "checkpoints": [
       {
         "spokenSeconds": 0,
         "spoken": "Voici l'email reçu.",
         "visibleSeconds": 0,
-        "visible": "Affichage du client de messagerie Mailpit avec l'e-mail de notification adressé à Samira",
+        "visible": "Affichage du message email adressé à Samira avec le bouton 'Voir qui est inscrit'.",
         "sync": "aligned",
         "severity": "none"
       },
       {
-        "spokenSeconds": 1.6,
+        "spokenSeconds": 1.8,
         "spoken": "Le responsable ouvre son lien personnel directement",
-        "visibleSeconds": 2.5,
-        "visible": "Clic sur le lien et chargement vers l'espace du responsable",
+        "visibleSeconds": 3.5,
+        "visible": "Transition vers la page 'Responsable - Montage' listant les bénévoles inscrits.",
         "sync": "aligned",
         "severity": "none"
       },
       {
-        "spokenSeconds": 7.3,
-        "spoken": "il donne accès aux coordonnées de l'équipe",
-        "visibleSeconds": 4,
-        "visible": "Page 'Responsable - Montage' affichant la liste des 4 bénévoles avec leurs numéros de téléphone et e-mails",
+        "spokenSeconds": 8,
+        "spoken": "il donne accès aux coordonnées de l'équipe.",
+        "visibleSeconds": 8,
+        "visible": "Détail des coordonnées (noms, emails, numéros de téléphone) des 4 bénévoles visibles à l'écran.",
         "sync": "aligned",
         "severity": "none"
       }
@@ -37,7 +37,7 @@
     "voice": {
       "consistent": true,
       "warm": true,
-      "observation": "Voix claire, posée et bien articulée, synchronisée avec les transitions à l'écran."
+      "observation": "Voix claire, posée et parfaitement intelligible, bien rythmée avec l'affichage."
     }
   },
   "note": "Automated observation of actual final video audio and images; not a claim of complete human validation"

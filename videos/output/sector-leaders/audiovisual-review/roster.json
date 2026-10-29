@@ -1,42 +1,42 @@
 {
   "model": "gemini-3.8-flash",
-  "reviewedAt": "2026-10-16T11:49:37.753Z",
-  "videoSha256": "949a76fee33cca820f70783696fb92f8d02de328080f31fc8fdc39b5ee331c2b",
+  "reviewedAt": "2026-10-29T06:53:39.416Z",
+  "videoSha256": "8223c82b5a20cc6e1d9009cedbdcfb681a9f382e0813f57eb27a8d468cc620cf",
   "promptSha256": "1d2d62b22d9ea7722de99fd68c6d428234a5a86f22114394c19ca95d2d557e33",
-  "clipSha256": "4cb6701ff0d24c4f136ceab8f55bce2f84625ba47662172be7869122e83269d6",
+  "clipSha256": "da1b2c3d6d9f29e3318d237478dee473c62190c2aa6dd468effc7d760731665b",
   "scene": "roster",
   "review": {
     "heardOpening": "Sur ce lien, la responsable de la Buvette",
     "checkpoints": [
       {
-        "spokenSeconds": 0.8,
+        "spokenSeconds": 0.6,
         "spoken": "la responsable de la Buvette retrouve uniquement les inscriptions de son poste",
-        "visibleSeconds": 0.5,
-        "visible": "Page intitulée « Responsable - Buvette » affichant les bénévoles inscrits pour ce poste",
+        "visibleSeconds": 0,
+        "visible": "En-tête 'Responsable - Buvette' affichant 16 bénévoles inscrits",
         "sync": "aligned",
         "severity": "none"
       },
       {
-        "spokenSeconds": 4.5,
+        "spokenSeconds": 5.4,
         "spoken": "Les personnes sont regroupées par créneau, avec la date et les horaires",
-        "visibleSeconds": 4.5,
-        "visible": "En-têtes de créneaux visibles : « samedi 28 octobre, 10:00-14:00 » et « samedi 28 octobre, 14:00-18:00 »",
+        "visibleSeconds": 5.4,
+        "visible": "Blocs de créneaux avec date 'Samedi 7 décembre' et plages horaires '10:00-14:00' et '14:00-18:00'",
         "sync": "aligned",
         "severity": "none"
       },
       {
-        "spokenSeconds": 8,
+        "spokenSeconds": 9.3,
         "spoken": "Chaque ligne donne le nom, l'email, le téléphone lorsqu'il est renseigné",
-        "visibleSeconds": 8,
-        "visible": "Lignes de bénévoles affichant le nom, l'adresse email et le numéro de téléphone",
+        "visibleSeconds": 9.3,
+        "visible": "Lignes de contact détaillant nom, adresse email et numéro de téléphone pour chaque inscrit",
         "sync": "aligned",
         "severity": "none"
       },
       {
-        "spokenSeconds": 13.5,
+        "spokenSeconds": 15.9,
         "spoken": "La mention Liste d'attente distingue les personnes qui n'ont pas encore une place confirmée",
-        "visibleSeconds": 13.5,
-        "visible": "Badges jaunes « Liste d'attente » visibles à droite de certains inscrits",
+        "visibleSeconds": 15.9,
+        "visible": "Badges 'Liste d'attente' visibles à droite des personnes concernées (Camille Rochat, Anna Bührer)",
         "sync": "aligned",
         "severity": "none"
       }
@@ -45,7 +45,7 @@
     "voice": {
       "consistent": true,
       "warm": true,
-      "observation": "Voix off posée, claire et intelligible, accompagnée d'un fond musical discret."
+      "observation": "Voix off masculine fluide, bien articulée et posée, accompagnée d'une musique de fond discrète."
     }
   },
   "note": "Automated observation of actual final video audio and images; not a claim of complete human validation"

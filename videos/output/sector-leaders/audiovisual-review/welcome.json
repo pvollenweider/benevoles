@@ -1,42 +1,34 @@
 {
   "model": "gemini-3.8-flash",
-  "reviewedAt": "2026-10-16T11:48:53.231Z",
-  "videoSha256": "949a76fee33cca820f70783696fb92f8d02de328080f31fc8fdc39b5ee331c2b",
-  "promptSha256": "f25bcca0ca41c2107e32b3aa90885b8fabfef2a39912fda93b046fdf336baa8d",
-  "clipSha256": "e3bad3cebefde6e1b2beb81358acbf6e4fe32877d46d5e86a9baa4e73dcc678e",
+  "reviewedAt": "2026-10-29T06:52:52.436Z",
+  "videoSha256": "8223c82b5a20cc6e1d9009cedbdcfb681a9f382e0813f57eb27a8d468cc620cf",
+  "promptSha256": "a749edb625ce9738ae0a0032ecf33243a48127682ab9ff0bf085fd25e44da2e5",
+  "clipSha256": "7229985b549b7c7b32b21476814f1f5f6f928c93f1b29f369c040af281b39a6d",
   "scene": "welcome",
   "review": {
-    "heardOpening": "Le jour de la fête, vous n'avez pas besoin de tout coordonner",
+    "heardOpening": "Le jour de la fête",
     "checkpoints": [
       {
-        "spokenSeconds": 0.5,
+        "spokenSeconds": 0,
         "spoken": "Le jour de la fête, vous n'avez pas besoin de tout coordonner seul ou seule.",
         "visibleSeconds": 0.5,
-        "visible": "Cartouche titre affiché : « Responsable de poste : accompagner son équipe » au centre de la page de l'événement.",
+        "visible": "Encart de titre « Responsables de poste et de secteur : accompagner son équipe » affiché au centre de l'écran.",
         "sync": "aligned",
         "severity": "none"
       },
       {
-        "spokenSeconds": 4.1,
-        "spoken": "Un responsable de poste peut suivre son équipe, retrouver les créneaux et contacter les bénévoles.",
+        "spokenSeconds": 4.5,
+        "spoken": "Un responsable de poste peut suivre son équipe",
         "visibleSeconds": 3.5,
-        "visible": "Le cartouche d'introduction disparaît pour laisser place à la vue Aperçu de l'événement « Fête du village de Montvert ».",
+        "visible": "L'encart disparaît pour laisser place à la vue d'ensemble « Aperçu » de l'événement « Fête du village de Montvert ».",
         "sync": "aligned",
         "severity": "none"
       },
       {
-        "spokenSeconds": 9.3,
-        "spoken": "Nous allons désigner une personne, ouvrir son vrai lien personnel et découvrir ce qu'elle peut consulter.",
-        "visibleSeconds": 9.5,
-        "visible": "Écran stable sur l'onglet Aperçu présentant l'état des besoins et la section À traiter (annonce des étapes à venir).",
-        "sync": "aligned",
-        "severity": "none"
-      },
-      {
-        "spokenSeconds": 15,
-        "spoken": "Aucun accès à toute l'administration n'est nécessaire.",
-        "visibleSeconds": 15,
-        "visible": "Vue d'ensemble de l'événement toujours visible en arrière-plan sans modification.",
+        "spokenSeconds": 10,
+        "spoken": "Nous allons désigner une personne, ouvrir son vrai lien personnel",
+        "visibleSeconds": 10,
+        "visible": "Écran d'accueil de l'événement stable présentant la synthèse et les alertes (annonce générale des étapes à venir).",
         "sync": "aligned",
         "severity": "none"
       }
@@ -45,7 +37,7 @@
     "voice": {
       "consistent": true,
       "warm": true,
-      "observation": "Voix off posée, claire et bien articulée, parfaitement synchronisée avec cette séquence d'introduction."
+      "observation": "Voix off masculine posée, fluide et claire, sans bruit parasite."
     }
   },
   "note": "Automated observation of actual final video audio and images; not a claim of complete human validation"

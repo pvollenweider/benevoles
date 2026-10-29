@@ -1,34 +1,42 @@
 {
   "model": "gemini-3.8-flash",
-  "reviewedAt": "2026-10-16T11:49:51.297Z",
-  "videoSha256": "949a76fee33cca820f70783696fb92f8d02de328080f31fc8fdc39b5ee331c2b",
+  "reviewedAt": "2026-10-29T06:53:51.255Z",
+  "videoSha256": "8223c82b5a20cc6e1d9009cedbdcfb681a9f382e0813f57eb27a8d468cc620cf",
   "promptSha256": "71e9915e46bd0167f2f73a6064bea0845b1a6b44cd5c875f98d3291bcdc522f8",
-  "clipSha256": "575d5900ee2299c3cac4c1c039f3b8a2285b0a2cf794a8128f2042218ec45df5",
+  "clipSha256": "d98859effdbe9d44b5b1e1c8e91e136f575b120b52deee231bae6d278ce34af3",
   "scene": "mobile",
   "review": {
-    "heardOpening": "Sur téléphone, la même page accompagne le responsable",
+    "heardOpening": "Sur téléphone, la même page",
     "checkpoints": [
       {
-        "spokenSeconds": 0,
+        "spokenSeconds": 0.5,
         "spoken": "Sur téléphone, la même page accompagne le responsable sur le terrain.",
-        "visibleSeconds": 0,
-        "visible": "Affichage au format smartphone de la page Responsable - Buvette avec les créneaux et bénévoles inscrits.",
+        "visibleSeconds": 0.5,
+        "visible": "Affichage de la page de gestion des bénévoles au format mobile avec les créneaux et inscrits.",
         "sync": "aligned",
         "severity": "none"
       },
       {
-        "spokenSeconds": 3.4,
-        "spoken": "Les liens email et téléphone permettent de préparer un message ou un appel avec les applications du téléphone.",
-        "visibleSeconds": 3.4,
-        "visible": "Adresses e-mail et numéros de téléphone affichés sous forme de liens pour chaque bénévole.",
+        "spokenSeconds": 4.1,
+        "spoken": "Les liens email et téléphone permettent de préparer un message ou un appel",
+        "visibleSeconds": 4.1,
+        "visible": "Présence visible des adresses email et des numéros de téléphone associés à chaque bénévole.",
         "sync": "aligned",
         "severity": "none"
       },
       {
-        "spokenSeconds": 8.4,
+        "spokenSeconds": 9.4,
         "spoken": "On peut ainsi retrouver l'équipe du prochain créneau et vérifier les horaires.",
-        "visibleSeconds": 8.5,
-        "visible": "Défilement montrant les créneaux suivants (18:00 - 22:00 et dimanche 10:00 - 14:00) avec les noms associés.",
+        "visibleSeconds": 9.5,
+        "visible": "Défilement vers le bas révélant les créneaux suivants et leurs horaires respectifs.",
+        "sync": "aligned",
+        "severity": "none"
+      },
+      {
+        "spokenSeconds": 14.1,
+        "spoken": "Les coordonnées servent à l'organisation de la mission",
+        "visibleSeconds": 14.1,
+        "visible": "Vue stabilisée sur la liste des bénévoles et le pied de page.",
         "sync": "aligned",
         "severity": "none"
       }
@@ -37,7 +45,7 @@
     "voice": {
       "consistent": true,
       "warm": true,
-      "observation": "Voix claire, posée et naturelle, parfaitement synchronisée avec le défilement de l'écran."
+      "observation": "Voix off masculine fluide, claire et bien synchronisée avec le défilement de l'interface."
     }
   },
   "note": "Automated observation of actual final video audio and images; not a claim of complete human validation"

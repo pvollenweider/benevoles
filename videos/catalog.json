@@ -930,9 +930,10 @@
         "organisateur"
       ],
       "feature": "Responsables de secteur",
-      "updatedAt": "2026-10-28",
+      "updatedAt": "2026-10-29",
       "revision": 6,
-      "level": "essentiel"
+      "level": "essentiel",
+      "updated": "2026-10-29"
     },
     {
       "id": "BETA_ACCESS",
