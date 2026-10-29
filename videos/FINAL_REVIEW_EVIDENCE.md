@@ -532,8 +532,6 @@ Sources ajoutées sans rendu (aucune capture, aucune voix, aucune publication) ;
 depuis un checkout à jour de `origin/main`, avec le seed de chaque scénario avant chaque prise
 (chaque prise modifie sa fixture : secteurs enregistrés, échanges, responsables) :
 
-- `beta-access` (`BETA_ACCESS`, nouvelle, `published: false`) : sources prêtes, rendu en attente.
-  Seed `scripts/seed-video-scenario.ts beta-access`.
 - `sectors` (`SECTORS`, nouvelle, `published: false`) : sources prêtes, rendu en attente.
   Seed `scripts/seed-video-scenario.ts sectors`.
 - `sector-leaders` (`SECTOR_LEADERS`, mise à jour, révision 6) : sources prêtes, rendu en attente.
@@ -591,3 +589,21 @@ découpage entre `beta-operator` (16,7 % d’écart, fin déplacée/manquante) e
 `beta-owner` (15,7 %, début déplacé/manquant). Elle ne doit pas servir à une prise
 avant correction des frontières et nouvel audit. Ce défaut s’ajoute au blocage
 commun du build ; aucune narration n’est déclarée contrôlée à tort.
+
+### Lot 32 — reprise du 2026-10-29
+
+Le build produit est débloqué sur `9831e86e40ae3dd1ba60eb632b8e90951483a11c`
+(origin/main, incluant #1206). BUILD_ID : `jJH5zvJlD2hQBFLXtZa0x`.
+Les ports isolés de cette reprise sont 45436 / 41033 / 48033 ; le serveur vérifié
+écoute sur 43102. Aucun conteneur tiers ni fichier produit du checkout n'est modifié.
+
+**BETA_ACCESS : READY et publiée** après aperçu puis APPLY=1 sur le contexte default.
+Première publication : `published: true`, `added` et `updatedAt` au 2026-10-29,
+révision 1 conservée. Narration Kore entièrement régénérée en une passe, sans balises.
+Répétition rapide réussie, puis nouveau seed et prise narrée. La passerelle publique
+locale évite le refus légitime de l'origine localhost sans modifier le produit.
+Durée 126,5 s ; musique 15,4–18,9 LU sous la voix ; musique seule au minimum -34,2 LUFS.
+Zéro tutoiement dans l'ASR intégrale et les VTT, aucun anglais parasite ; cinq audits
+AV / 16 points, zéro signalement. Images réelles inspectées. Six clics sonorisés.
+Contrôle de types (204 sources) et 34 fichiers / 1142 tests vidéo réussis.
+Preuves : `videos/evidence/beta-access/batch32/`. `videos/renders.json` inchangé.

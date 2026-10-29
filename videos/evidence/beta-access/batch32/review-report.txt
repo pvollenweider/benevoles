@@ -1,0 +1,17 @@
+STATUS: READY
+Batch: 32 (resume)
+ID: BETA_ACCESS
+Duration: 126.507 s
+Product commit: 9831e86e40ae3dd1ba60eb632b8e90951483a11c
+BUILD_ID: jJH5zvJlD2hQBFLXtZa0x
+Full Kore narration generated in one pass; all five source and final-audio audits pass.
+Fresh seed before quick rehearsal and narrated take; public-host gateway stays local.
+validate PASS; 34 video test files / 1142 tests PASS; video tools typecheck PASS.
+Five audiovisual chapter reports, 16 checkpoints, zero flags; actual MP4 chapter frames inspected.
+Music gaps: 15.4–18.9 LU under voice; music-only -34.2 to -33.2 LUFS; no gap violation.
+Input effects: 6 actual clicks, 0 keys, soft-input-v2; no invented keystrokes.
+Entire final soundtrack multilingual ASR: no stray English/instructions; viewer tu count 0; VTT count 0.
+No localhost, development overlay or non-fixture identity found in chapter frames.
+No unresolved problem. Real-time subjective listening unavailable, per standing rules.
+Source changes: public-host routing; synthetic beta audiovisual guard; full-soundtrack ASR tool.
+Evidence: videos/evidence/beta-access/batch32/.

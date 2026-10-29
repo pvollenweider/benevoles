@@ -22,6 +22,7 @@ const reference = process.argv[2]
 const selected = process.argv.slice(3).find(arg => !arg.startsWith("--"))
 const force = process.argv.includes("--force")
 const commonDemoVideos = ["SHIFT_RECURRENCE", "ADMIN_FEATURES_OVERVIEW", "EVENT_CREATE_PUBLISH_OVERVIEW", "REGISTRATION_MONITOR_FOLLOWUP", "SECTOR_LEADERS", "EVENT_DUPLICATE", "EVENT_REVIEW_PUBLISH", "EVENT_ARCHIVE_DELETE", "SHIFT_CREATE_EDIT_DETAIL", "SHIFT_CREATE_SERIES", "SHIFT_TIMELINE_QUICK_ACTIONS", "SHIFT_NIGHT_DST", "SHIFT_WAITLIST_OFFER", "SHIFT_APPROVAL", "SHIFT_ELIGIBILITY_RULES", "VOLUNTEER_DISCOVER_EVENT", "VOLUNTEER_CHOOSE_SHIFTS", "VOLUNTEER_FORM_RECAP"]
+const betaVideos = ["BETA_ACCESS", "SECTORS", "SHIFT_SWAPS"]
 const memberDemoVideos = ["MEMBERS_MANAGEMENT", "MEMBERS_IMPORT", "MEMBERS_INVITATIONS", "MEMBERS_REMINDERS", "REGISTRATIONS_PLACE_MEMBER", "REGISTRATIONS_MANAGEMENT", "STAFFING_GAPS", "TARGETED_MESSAGES", "REMINDERS_CHANGES"]
 type Member = Parameters<typeof ownsRecordedNoEmailMember>[0]
 type Ownership = Parameters<typeof ownsRecordedNoEmailMember>[1]
@@ -61,7 +62,7 @@ async function main() {
   const manifest = await loadManifest(reference)
   // External visual review is opt-in here only for the fixture we can prove synthetic.
   // Do not export arbitrary videos, production captures or real volunteer information.
-  if (!["SHIFT_ROSTER_VISIBILITY", "ORG_FIRST_STEPS", "ORGANIZATION_ACTIVITY_LOG", "ADMIN_NAVIGATION", "GLOBAL_SEARCH", "ORG_PUBLIC_IDENTITY", "ORG_TEAM_PERMISSIONS", "EVENT_CREATE_BLANK", "EVENT_CREATE_TEMPLATE", "SHIFTS_ROLES_VIEWS", "ORG_EMAIL_SETTINGS", "EVENT_PROGRAM_PAGES_QR", "ORG_TIMEZONE_CHARTER", "EVENT_MILESTONES", "EVENT_REPORTS", "VOLUNTEER_BADGES", "ATTENDANCE_CHECK_IN", "REMINDERS_CHANGES", "DATA_EXPORTS_ARCHIVES", "LAST_MINUTE_CHANGES", "PRIVACY_PERSONAL_LINKS", "PLATFORM_INTERNAL_ADMINISTRATION", "EMAIL_DELIVERY_FAILURES", "MEMBERS_DUPLICATES_MERGE", "EVENT_QUESTIONS", "VOLUNTEER_HOURS_CERTIFICATE", ...commonDemoVideos, ...memberDemoVideos].includes(manifest.id) || !process.env.DATABASE_URL?.includes("benevoles_video")) throw new Error("External audiovisual review currently restricted to verified synthetic local fixtures")
+  if (!["SHIFT_ROSTER_VISIBILITY", "ORG_FIRST_STEPS", "ORGANIZATION_ACTIVITY_LOG", "ADMIN_NAVIGATION", "GLOBAL_SEARCH", "ORG_PUBLIC_IDENTITY", "ORG_TEAM_PERMISSIONS", "EVENT_CREATE_BLANK", "EVENT_CREATE_TEMPLATE", "SHIFTS_ROLES_VIEWS", "ORG_EMAIL_SETTINGS", "EVENT_PROGRAM_PAGES_QR", "ORG_TIMEZONE_CHARTER", "EVENT_MILESTONES", "EVENT_REPORTS", "VOLUNTEER_BADGES", "ATTENDANCE_CHECK_IN", "REMINDERS_CHANGES", "DATA_EXPORTS_ARCHIVES", "LAST_MINUTE_CHANGES", "PRIVACY_PERSONAL_LINKS", "PLATFORM_INTERNAL_ADMINISTRATION", "EMAIL_DELIVERY_FAILURES", "MEMBERS_DUPLICATES_MERGE", "EVENT_QUESTIONS", "VOLUNTEER_HOURS_CERTIFICATE", ...betaVideos, ...commonDemoVideos, ...memberDemoVideos].includes(manifest.id) || !process.env.DATABASE_URL?.includes("benevoles_video")) throw new Error("External audiovisual review currently restricted to verified synthetic local fixtures")
   if (memberDemoVideos.includes(manifest.id) || manifest.id === "ATTENDANCE_CHECK_IN" || manifest.id === "MEMBERS_DUPLICATES_MERGE") {
     const url = new URL(process.env.DATABASE_URL!)
     assert(["localhost", "127.0.0.1", "[::1]"].includes(url.hostname) && url.port === "45433" && url.pathname === "/benevoles_video", "Member review requires isolated video database before connection")
@@ -74,7 +75,27 @@ async function main() {
       validateMemberReviewFixture(process.env.DATABASE_URL!, fixture, await memberOwnership(), Date.now(), await readImportOwnership("owned-import-members-v2.json"), await readSeedProofV2())
     }
     // Keep the existing reminder-specific nine-registration / three-event guard below as well.
-    if (manifest.id === "SHIFT_ROSTER_VISIBILITY") {
+    if (betaVideos.includes(manifest.id) || manifest.id === "SECTOR_LEADERS") {
+      const url = new URL(process.env.DATABASE_URL!)
+      assert(["localhost", "127.0.0.1", "[::1]"].includes(url.hostname) && ["45433", "45436"].includes(url.port) && url.pathname === "/benevoles_video", "Beta review requires isolated local video database")
+      const fixture = await db.organization.findUniqueOrThrow({ where: { id: "video-beta" }, include: { admins: true, volunteers: true, events: { include: { registrations: true, sectorLeaders: true } } } })
+      assert(fixture.slug === "formation-beta" && fixture.name === "Association du Festival de Montvert")
+      assert(fixture.admins.length === 1 && fixture.admins[0].id === "video-beta-owner" && fixture.admins[0].email === "video.beta.owner@example.org")
+      assert(fixture.volunteers.every(v => /^video-beta-person-[a-z]+$/.test(v.id) && /^video\.beta\.[a-z]+@example\.org$/.test(v.email ?? "") && v.lastName === surnameOf(v.firstName) && !v.phone))
+      assert(fixture.events.length === 1 && fixture.events[0].id === "video-beta-event" && fixture.events[0].title === "Festival de Montvert")
+      assert(fixture.events[0].registrations.every(r => fixture.volunteers.some(v => v.id === r.volunteerId)))
+      assert(fixture.events[0].sectorLeaders.every(l => /^video\.beta\.[a-z]+@example\.org$/.test(l.email)))
+      if (manifest.id === "SECTOR_LEADERS") {
+        const demo = await db.organization.findUniqueOrThrow({ where: { id: "default" }, include: { admins: true, events: { include: { sectorLeaders: true, registrations: { include: { volunteer: true } } } } } })
+        assert(demo.name === "Fêtes de Montvert" && demo.events.some(e => e.slug === "fete-du-village") && demo.admins.every(a => a.email.endsWith("@example.org")))
+        assert(demo.events.every(e => e.sectorLeaders.every(l => l.email.endsWith("@example.org")) && e.registrations.every(r => r.volunteer.email?.endsWith("@example.org"))))
+      }
+      const operator = await db.adminUser.findUniqueOrThrow({ where: { id: "video-beta-operator" } })
+      assert(operator.email === "video.beta.operator@example.org" && operator.role === "super_admin" && operator.organizationId === null)
+      const setting = await db.platformSetting.findUniqueOrThrow({ where: { key: "beta.capabilities" } })
+      const open = (setting.value as { open?: unknown }).open
+      assert(Array.isArray(open) && open.every(id => ["sectors", "sectorLeaders", "shiftSwaps"].includes(id)), "Unrelated beta capability opened")
+    } else if (manifest.id === "SHIFT_ROSTER_VISIBILITY") {
       const fixture = await db.organization.findUniqueOrThrow({ where: { id: "video-shift-roster" }, include: { admins: true, volunteers: true, events: { include: { registrations: true, sectorLeaders: true } } } })
       assert(fixture.slug === "formation-roster" && fixture.name === "Les amis de Montvert")
       assert(fixture.admins.length === 1 && fixture.admins[0].email === "video.roster.owner@example.org")
@@ -106,7 +127,7 @@ async function main() {
       // The whole organization, including every displayable volunteer, was checked above.
     } else if (commonDemoVideos.includes(manifest.id)) {
       const url = new URL(process.env.DATABASE_URL!)
-      if (!["localhost", "127.0.0.1"].includes(url.hostname) || url.port !== "45433" || url.pathname !== "/benevoles_video") throw new Error("Common demo review requires isolated video database")
+      if (!["localhost", "127.0.0.1"].includes(url.hostname) || !["45433", "45436"].includes(url.port) || url.pathname !== "/benevoles_video") throw new Error("Common demo review requires isolated video database")
       const fixture = await db.organization.findUniqueOrThrow({ where: { id: "default" }, include: { admins: true, events: { include: { sectorLeaders: true, registrations: { include: { volunteer: true } } } } } })
       if (fixture.name !== "Fêtes de Montvert" || !fixture.events.some(event => event.slug === "fete-du-village") || fixture.admins.some(admin => !admin.email.endsWith("@example.org") && admin.email !== "org-admin@localhost")) throw new Error("Common training organization changed")
       if (fixture.events.some(event => event.sectorLeaders.some(leader => !leader.email.endsWith("@example.org")) || event.registrations.some(registration => !registration.volunteer.email?.endsWith("@example.org")))) throw new Error("Common demo contains non-synthetic recipients")

@@ -944,7 +944,7 @@
         "paramètres",
         "opérateur"
       ],
-      "published": false,
+      "published": true,
       "seedScenario": "beta-access",
       "themes": [
         "organisation-equipe"
@@ -954,9 +954,10 @@
         "super-admin"
       ],
       "feature": "Fonctions bêta",
-      "updatedAt": "2026-10-28",
+      "updatedAt": "2026-10-29",
       "revision": 1,
-      "level": "avance"
+      "level": "avance",
+      "added": "2026-10-29"
     },
     {
       "id": "SECTORS",

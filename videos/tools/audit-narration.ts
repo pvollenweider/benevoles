@@ -85,7 +85,10 @@ async function main() {
           { inlineData: { mimeType: "audio/wav", data: bytes.toString("base64") } },
         ] }] }),
       })
-      if (!response.ok) throw new Error(`Narration audit HTTP ${response.status}`)
+      if (!response.ok) {
+        const failure = await response.json().catch(() => null) as { error?: { message?: string } } | null
+        throw new Error(`${segment.id}: narration audit HTTP ${response.status}: ${failure?.error?.message?.slice(0, 1200) ?? "no service detail"}`)
+      }
       const body = await response.json() as { candidates?: { content?: { parts?: { text?: string; thought?: boolean }[] } }[] }
       responseText = body.candidates?.[0]?.content?.parts?.filter(p => !p.thought).map(p => p.text ?? "").join("").trim() ?? ""
       if (responseText && !String((JSON.parse(responseText) as { transcription?: string }).transcription ?? "").trim()) responseText = ""
