@@ -558,3 +558,36 @@ locale (« Échange effectué », nomination du responsable de secteur).
 `workload-protection` (protection des pauses et de la charge, #1171) ne fait pas partie de ce lot :
 son lot 2 (repas, trajets, journée OFF, limites individuelles) est encore en cours. Sa vidéo suivra
 après le lot 2 de #1171.
+
+### Lot 32 — tentative du 2026-10-29 : build produit bloqué
+
+Les cinq vidéos restent **NOT READY** et ne sont pas publiées. La branche
+`video-batch32` cible `origin/main` à `e924abdc35bb03c19a99f1d3126bd06ecc6abc82`.
+Le build propre via `build-main-product.ts --commit` compile le JavaScript, puis
+Next.js refuse l’export `SWAP_PROPOSALS_PER_DAY` de la route
+`src/app/api/public/registrations/[token]/swaps/route.ts:38` : cet export ne fait
+pas partie des exports autorisés d’une route. Aucune correction produit n’est
+faite, conformément à l’interdiction de modifier `src/` dans ce lot.
+
+Aucun BUILD_ID vérifié, aucune répétition ni prise narrée, aucun nouveau MP4.
+Les lignes « sources prêtes, rendu en attente » ci-dessus restent valables.
+Catalogue (`published`, dates, révisions) et `videos/renders.json` inchangés.
+La révision 6 de SECTOR_LEADERS reste donc à tourner en priorité parmi les vidéos
+publiées ; le MP4 en ligne n’a pas été remplacé. PRIVACY_PERSONAL_LINKS reste à
+régénérer intégralement avec la même voix et à refilmer.
+
+Préparation : PostgreSQL 45435, SMTP 41032 et Mailpit 48032 dans deux conteneurs
+créés pour ce lot ; aucun conteneur existant repris ou arrêté. Le nettoyage des
+messages vidéo utilise maintenant `VIDEO_MAILPIT_URL`, au lieu du port historique
+codé en dur. Le contrôle de types des outils passe (203 sources), ainsi que les
+23 fichiers de tests vidéo (1123 tests), sur le client Prisma généré dans la copie
+jetable. Aucun fichier `src/` ni `content/guide/` du checkout n’a été modifié.
+Les anciens artefacts ont été archivés ; les preuves versionnées précédentes
+sont conservées et leurs rapports sont explicitement remplacés par NOT READY.
+
+La nouvelle narration continue de BETA_ACCESS (Kore, sans balises de pause) est
+conservée localement mais **non validée** : l’audit indépendant signale un mauvais
+découpage entre `beta-operator` (16,7 % d’écart, fin déplacée/manquante) et
+`beta-owner` (15,7 %, début déplacé/manquant). Elle ne doit pas servir à une prise
+avant correction des frontières et nouvel audit. Ce défaut s’ajoute au blocage
+commun du build ; aucune narration n’est déclarée contrôlée à tort.

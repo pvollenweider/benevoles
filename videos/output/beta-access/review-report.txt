@@ -1,0 +1,7 @@
+STATUS: NOT READY
+Batch: 32
+Target commit: e924abdc35bb03c19a99f1d3126bd06ecc6abc82
+Next.js route type validation rejects exported SWAP_PROPOSALS_PER_DAY in src/app/api/public/registrations/[token]/swaps/route.ts:38. Product source fixes are forbidden in this batch. No verified product BUILD_ID; no rehearsal, narrated capture, assembly or publication.
+Duration / music gaps / viewer tu count: not measured (no new final MP4).
+Previous artifacts archived before the attempt; tracked baseline evidence retained and superseded by this report.
+New continuous Kore TTS generated, independent audit FAILED: beta-operator 16.7% and beta-owner 15.7%, displaced boundary words. Audio retained, not approved for capture.

@@ -1,8 +1,6 @@
-STATUS: READY
-SECTOR_LEADERS — batch 23-3 — 2026-10-16
-BUILD_ID gHYEjPtpdQYUNytuIhMkh; commit 89a884c8d58c22dda6800481e1238bdc4e219dff
-Duration 217.56 s; music 14.1–19.4 LU below voice. Music-only floor and real click/key effects validated.
-Whole narration regenerated in one pass with original voice; boundaries measured and independently audited.
-Full final soundtrack ASR (all languages), subtitles, chapter and sentence/action frames reviewed. Final VTT raw « tu » count 0; viewer register vous.
-Whole Puck narration regenerated in one pass with continuousPauseTags false; first drifted generation archived, retained whole take passes all ten audio-only opening/chapter comparisons before filming. Eleven audiovisual chapters, eight chapter/anchor sheets, real nomination and signup emails with take-only sidebars, mobile roster, scope and invalidated leader link reviewed. Flag at registered +11.8–12.1 s is a natural breath with negligible impact per independent source-audio countercheck, not laughter, added words or voice discontinuity. Whole final ASRs agree; no informal viewer address or blocking issue.
-No product edit, commit, push or publication in batch 23-3. Real-time subjective listening unavailable as permitted.
+STATUS: NOT READY
+Batch: 32
+Target commit: e924abdc35bb03c19a99f1d3126bd06ecc6abc82
+Next.js route type validation rejects exported SWAP_PROPOSALS_PER_DAY in src/app/api/public/registrations/[token]/swaps/route.ts:38. Product source fixes are forbidden in this batch. No verified product BUILD_ID; no rehearsal, narrated capture, assembly or publication.
+Duration / music gaps / viewer tu count: not measured (no new final MP4).
+Previous artifacts archived before the attempt; tracked baseline evidence retained and superseded by this report.

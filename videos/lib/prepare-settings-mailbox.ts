@@ -18,7 +18,7 @@ export async function prepareSettingsMailbox(slug: string, directory: string) {
   }
   const pattern = patterns[slug]
   if (!pattern) return
-  const base = "http://localhost:48026/api/v1/messages"
+  const base = `${process.env.VIDEO_MAILPIT_URL ?? "http://localhost:48026"}/api/v1/messages`
   type Mail = { ID: string; To?: { Address: string }[]; Cc?: { Address: string }[]; Bcc?: { Address: string }[] }
   const inventory = async () => {
     const messages: Mail[] = []
