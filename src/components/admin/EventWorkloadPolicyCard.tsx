@@ -11,7 +11,7 @@ import WorkloadBenchmarks from "@/components/admin/WorkloadBenchmarks"
 import WorkloadPolicyFields, { fieldInputId } from "@/components/admin/WorkloadPolicyFields"
 import type { EventHorizon, WorkloadBenchmark, WorkloadPolicyValues } from "@/lib/workload-policy"
 import {
-  benchmarkAnnouncement, benchmarkFields, checkPolicyForm, policyFormFrom, policySummaryLines, policyValuesFromForm, problemsByField, SUGGESTED_LABELS,
+  benchmarkAnnouncement, benchmarkFields, checkPolicyForm, shiftsWithoutPlaceText, policyFormFrom, policySummaryLines, policyValuesFromForm, problemsByField, SUGGESTED_LABELS,
   withBenchmark, withWarningSuggestions, WORKLOAD_NOT_COVERED, type PolicyFormState,
 } from "@/lib/workload-policy-form"
 
@@ -27,7 +27,7 @@ const ID = "event-wl"
  * judges the current programmes without saving; turning on or tightening is refused while one breaks
  * the limits, the people listed. Turning off asks first.
  */
-export default function EventWorkloadPolicyCard({ eventId, initialEnabled, initialValues, initialIncomplete, initialFindings, timeZone, horizon }: {
+export default function EventWorkloadPolicyCard({ eventId, initialEnabled, initialValues, initialIncomplete, initialFindings, timeZone, horizon, placesInfo }: {
   eventId: string
   initialEnabled: boolean
   initialValues: WorkloadPolicyValues | null
@@ -37,6 +37,8 @@ export default function EventWorkloadPolicyCard({ eventId, initialEnabled, initi
   timeZone: string
   /** The event's service days when the page was loaded (the days-off example). */
   horizon: EventHorizon
+  /** Live shifts without a place and active places (#1171, travel), when the page was loaded. */
+  placesInfo?: { shiftsWithoutPlace: number; activePlaces: number }
 }) {
   const [enabled, setEnabled] = useState(initialEnabled)
   const [incomplete, setIncomplete] = useState(initialIncomplete)
@@ -62,8 +64,9 @@ export default function EventWorkloadPolicyCard({ eventId, initialEnabled, initi
     if (errors.size > 0) {
       const again = new Map(errors)
       if (next.serviceDayStart !== form.serviceDayStart) again.delete("serviceDayStart")
-      for (const key of Object.keys(next) as (keyof PolicyFormState)[]) if (key !== "serviceDayStart" && key !== "offDay" && key !== "meal" && next[key] !== form[key]) again.delete(key)
+      for (const key of Object.keys(next) as (keyof PolicyFormState)[]) if (key !== "serviceDayStart" && key !== "offDay" && key !== "meal" && key !== "travel" && next[key] !== form[key]) again.delete(key)
       if (next.meal !== form.meal) for (const key of [...again.keys()]) if (key.startsWith("meal")) again.delete(key)
+      if (next.travel !== form.travel) { again.delete("travel"); again.delete("travelMinutes") }
       if (next.offDay.apply !== form.offDay.apply) again.delete("offDay")
       if (next.offDay.apply !== form.offDay.apply || next.offDay.minOffDays !== form.offDay.minOffDays || next.offDay.windowDays !== form.offDay.windowDays) {
         again.delete("offDayMinOffDays")
@@ -224,7 +227,7 @@ export default function EventWorkloadPolicyCard({ eventId, initialEnabled, initi
       <WorkloadBenchmarks onUse={applyBenchmark} />
 
       <form noValidate onSubmit={(e) => { e.preventDefault(); void save() }} className="space-y-4">
-        <WorkloadPolicyFields idPrefix={ID} form={form} onChange={change} errors={errors} horizon={horizon} />
+        <WorkloadPolicyFields idPrefix={ID} form={form} onChange={change} errors={errors} horizon={horizon} places={placesInfo ? { text: shiftsWithoutPlaceText(placesInfo.shiftsWithoutPlace, placesInfo.activePlaces), href: `/admin/events/${eventId}/shifts#lieux` } : undefined} />
 
         {summary.length > 0 && (
           <div className="rounded-xl bg-gray-50 border border-gray-200 px-3 py-2 text-sm text-gray-800">

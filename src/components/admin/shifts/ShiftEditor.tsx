@@ -19,11 +19,14 @@ import { usePosteSector } from "./usePosteSector"
 import { MANAGE_SECTORS_POSTES_LABEL, NO_SECTOR_LABEL } from "@/lib/sectors"
 import SectorSelect from "./SectorSelect"
 import type { RawShift } from "./types"
+import { NO_PLACE_LABEL, selectablePlaces } from "@/lib/places"
 
 export const emptyShift = {
   roleName: "", label: "", description: "", date: "", startTime: "", endTime: "",
   capacity: 2, minVolunteers: "" as number | string, locationDetails: "", latitude: null as number | null, longitude: null as number | null, displayOrder: 0, internalNotes: "", waitlistEnabled: false, requiresApproval: false,
   mealOnTheGo: false,
+  /** Place of the mission (#1171, lot 2): an EventPlace id, "" for none. */
+  placeId: "",
   minAge: "" as number | string,
   contactName: "", contactPhone: "", instructions: "",
 }
@@ -35,7 +38,7 @@ export type ShiftFormValues = typeof emptyShift
  * The parent remounts it (key) each time it opens it, which resets the values to `initial`.
  */
 export default function ShiftEditor({
-  ref, eventId, dates, editingId, initial, existingShifts, onSaved, onCancel, sectors = null, presetSector = null, mealOnTheGoShown = false,
+  ref, eventId, dates, editingId, initial, existingShifts, onSaved, onCancel, sectors = null, presetSector = null, mealOnTheGoShown = false, places = null,
 }: {
   ref?:           React.Ref<HTMLDivElement>
   eventId:        string
@@ -55,6 +58,8 @@ export default function ShiftEditor({
   presetSector?:  { id: string; name: string } | null
   /** « Repas sur le pouce possible » (#1171, lot 2): only where the workload protection can be used. */
   mealOnTheGoShown?: boolean
+  /** Places of the event (#1171, lot 2), where the workload protection can be used; null: no field. */
+  places?: { id: string; name: string; displayOrder: number; archivedAt: string | null }[] | null
 }) {
   const singleDay = dates.length === 1
   const [form, setForm] = useState<ShiftFormValues>({ ...emptyShift, ...initial })
@@ -198,9 +203,12 @@ export default function ShiftEditor({
     const displayOrder = editingId
       ? form.displayOrder
       : resolveNewShiftDisplayOrder(existingShifts, roleName, form.displayOrder)
+    // The place is sent only where the field is shown, so an edit elsewhere never clears it.
+    const { placeId: chosenPlace, ...values } = form
+    const place = places ? { placeId: chosenPlace || null } : {}
     const body   = editingId
-      ? { ...form, roleName, label, capacity: Number(form.capacity), minVolunteers, minAge, displayOrder }
-      : { ...form, roleName, label, eventId, capacity: Number(form.capacity), minVolunteers, minAge, displayOrder, ...(sendSector ? { sectorId: chosenSector } : {}) }
+      ? { ...values, ...place, roleName, label, capacity: Number(form.capacity), minVolunteers, minAge, displayOrder }
+      : { ...values, ...place, roleName, label, eventId, capacity: Number(form.capacity), minVolunteers, minAge, displayOrder, ...(sendSector ? { sectorId: chosenSector } : {}) }
 
     const outcome = await requestJson<RawShift & { date?: string }>(() => fetch(url, { method, headers: { "Content-Type": "application/json" }, body: JSON.stringify(body) }), "Erreur lors de la sauvegarde.")
     setSaving(false)
@@ -369,6 +377,27 @@ export default function ShiftEditor({
           <p id={`instructions-hint-${sfx}`} className="text-xs text-gray-600 mt-1">{form.instructions.length}/{SHIFT_INSTRUCTIONS_MAX} caractères</p>
         </div>
       </fieldset>
+      {places && (
+        <div>
+          <label htmlFor={`placeId-${sfx}`} className="block text-xs font-medium text-gray-600 mb-1">Lieu de la mission</label>
+          <select
+            id={`placeId-${sfx}`}
+            value={form.placeId}
+            onChange={e => setField("placeId", e.target.value)}
+            aria-describedby={`placeId-hint-${sfx}`}
+            className="input"
+          >
+            <option value="">{NO_PLACE_LABEL}</option>
+            {selectablePlaces(places, form.placeId || null).map((p) => (
+              <option key={p.id} value={p.id}>{p.archivedAt ? `${p.name} (archivé)` : p.name}</option>
+            ))}
+          </select>
+          <p id={`placeId-hint-${sfx}`} className="text-xs text-gray-600 mt-1">
+            Pour la marge de trajet de la protection des pauses et de la charge. Les bénévoles lisent toujours le champ « Lieu de rendez-vous ».
+            {places.filter((p) => !p.archivedAt).length === 0 && " Créez les lieux dans « Lieux des missions », sur cette page."}
+          </p>
+        </div>
+      )}
       <div>
         <label htmlFor={`internalNotes-${sfx}`} className="block text-xs font-medium text-gray-600 mb-1">Notes internes (jamais montrées aux bénévoles)</label>
         <input id={`internalNotes-${sfx}`} type="text" value={form.internalNotes} onChange={e => setField("internalNotes", e.target.value)} className="input" />

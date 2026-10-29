@@ -70,11 +70,26 @@ export async function readWorkloadGate(tx: Tx, eventId: string): Promise<Workloa
 
 /** A person's committed missions on the event (confirmed places and pending requests). */
 export async function committedDuty(tx: Tx, eventId: string, volunteerId: string): Promise<(DutyShift & { registrationId: string; assignedOnly: boolean })[]> {
-  const rows: { id: string; shift: { id: string; date: Date; startTime: string; endTime: string; assignedOnly: boolean; mealOnTheGo: boolean } }[] = await tx.registration.findMany({
+  const rows: { id: string; shift: { id: string; date: Date; startTime: string; endTime: string; assignedOnly: boolean; mealOnTheGo: boolean; placeId: string | null; place: { name: string } | null } }[] = await tx.registration.findMany({
     where: { eventId, volunteerId, status: { in: [...COMMITTED_STATUSES] }, shift: { status: { not: "cancelled" } } },
-    select: { id: true, shift: { select: { id: true, date: true, startTime: true, endTime: true, assignedOnly: true, mealOnTheGo: true } } },
+    select: { id: true, shift: { select: { id: true, date: true, startTime: true, endTime: true, assignedOnly: true, mealOnTheGo: true, placeId: true, place: { select: { name: true } } } } },
   })
-  return rows.map((r) => ({ id: r.shift.id, registrationId: r.id, date: r.shift.date, startTime: r.shift.startTime, endTime: r.shift.endTime, assignedOnly: r.shift.assignedOnly, mealOnTheGo: r.shift.mealOnTheGo }))
+  return rows.map((r) => ({
+    id: r.shift.id, registrationId: r.id, date: r.shift.date, startTime: r.shift.startTime, endTime: r.shift.endTime,
+    assignedOnly: r.shift.assignedOnly, mealOnTheGo: r.shift.mealOnTheGo, placeId: r.shift.placeId, placeName: r.shift.place?.name ?? null,
+  }))
+}
+
+/**
+ * The place names of missions that carry a place id only (a shift row read without its place), for
+ * the travel messages (#1171, lot 2). One query; missions without a place are left as they are.
+ */
+export async function withPlaceNames<S extends DutyShift>(tx: Tx, shifts: S[]): Promise<S[]> {
+  const ids = [...new Set(shifts.filter((s) => s.placeId && !s.placeName).map((s) => s.placeId as string))]
+  if (ids.length === 0) return shifts
+  const rows: { id: string; name: string }[] = await tx.eventPlace.findMany({ where: { id: { in: ids } }, select: { id: true, name: true } })
+  const names = new Map(rows.map((r) => [r.id, r.name]))
+  return shifts.map((s) => (s.placeId && !s.placeName ? { ...s, placeName: names.get(s.placeId) ?? null } : s))
 }
 
 /** The change a path makes to one person's schedule. */
@@ -122,7 +137,8 @@ export async function checkDutyChange(tx: Tx, gate: WorkloadGate, eventId: strin
   // judged as added, never as already there.
   const except = new Set(opts.exceptRegistrationIds ?? [])
   const before = (await committedDuty(tx, eventId, volunteerId)).filter((d) => !except.has(d.registrationId))
-  return judgeDutyChange(gate, before.map(({ id, date, startTime, endTime, mealOnTheGo }) => ({ id, date, startTime, endTime, mealOnTheGo })), change)
+  const named: DutyChange = { ...change, add: change.add && await withPlaceNames(tx, change.add), replace: change.replace && await withPlaceNames(tx, change.replace) }
+  return judgeDutyChange(gate, before.map(({ id, date, startTime, endTime, mealOnTheGo, placeId, placeName }) => ({ id, date, startTime, endTime, mealOnTheGo, placeId, placeName })), named)
 }
 
 /** Locks the given volunteers' rows, ORDER BY id (after the shift locks). */

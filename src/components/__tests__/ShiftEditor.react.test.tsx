@@ -42,6 +42,29 @@ describe("ShiftEditor", () => {
     return { onSaved, onCancel }
   }
 
+  // #1171 lot 2: « Repas sur le pouce possible » and « Lieu de la mission », only where the protection can be used.
+  it("offers the place of the mission (active places, its own archived one) and sends it; nothing otherwise", async () => {
+    setup()
+    expect(screen.queryByLabelText("Lieu de la mission")).toBeNull()
+    expect(screen.queryByLabelText("Repas sur le pouce possible")).toBeNull()
+    cleanup()
+    const places = [
+      { id: "p1", name: "Grande Scène", displayOrder: 0, archivedAt: null },
+      { id: "p2", name: "Le Dôme", displayOrder: 1, archivedAt: "2026-10-29T10:00:00Z" },
+      { id: "p3", name: "Chapiteau", displayOrder: 2, archivedAt: null },
+    ]
+    setup({ places, mealOnTheGoShown: true, editingId: "s9", initial: { roleName: "Bar", date: "2026-07-04", startTime: "10:00", endTime: "11:00", placeId: "p2" } })
+    const select = screen.getByLabelText("Lieu de la mission")
+    expect(select).toHaveAccessibleDescription(/Les bénévoles lisent toujours le champ « Lieu de rendez-vous »/)
+    expect([...(select as HTMLSelectElement).options].map((o) => o.text)).toEqual(["Aucun lieu (trajet non vérifié)", "Grande Scène", "Chapiteau", "Le Dôme (archivé)"])
+    expect(screen.getByLabelText("Repas sur le pouce possible")).toHaveAccessibleDescription(/reste comptée comme du travail/)
+    fireEvent.change(select, { target: { value: "" } })
+    fetchMock.mockResolvedValue({ ok: true, status: 200, json: async () => ({ id: "s9", roleName: "Bar" }) })
+    fireEvent.click(screen.getByRole("button", { name: /Enregistrer/ }))
+    await waitFor(() => expect(fetchMock).toHaveBeenCalled())
+    expect(JSON.parse(fetchMock.mock.calls[0][1].body)).toMatchObject({ placeId: null })
+  })
+
   it("is a group named by its title, with focus on « Poste * » when it opens (#554)", () => {
     setup()
     expect(screen.getByRole("group", { name: "Nouveau créneau" })).toBeInTheDocument()

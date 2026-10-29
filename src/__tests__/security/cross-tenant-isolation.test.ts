@@ -2323,3 +2323,37 @@ describe("Workload protection — cross-tenant isolation (#1171)", () => {
     expect(db.registration.findMany).not.toHaveBeenCalled()
   })
 })
+
+// ── Places of an event (#1171, lot 2) ────────────────────────────────────────
+
+describe("Places — cross-tenant isolation (#1171)", () => {
+  beforeEach(() => vi.clearAllMocks())
+  const placeParams = (id: string, placeId: string) => ({ params: Promise.resolve({ id, placeId }) })
+  const placeDb = (event: unknown = null, places: unknown[] = []) => {
+    const db = setupGuard({ event: { findFirst: vi.fn().mockResolvedValue(event) } })
+    const extra = { eventPlace: { findMany: vi.fn().mockResolvedValue(places), create: vi.fn(), update: vi.fn() } }
+    Object.assign(db, extra)
+    return db as typeof db & typeof extra
+  }
+
+  it("GET and POST /api/admin/events/[id]/places return 404 for an org-B event and write nothing", async () => {
+    const { GET, POST } = await import("@/app/api/admin/events/[id]/places/route")
+    const db = placeDb()
+    expect((await GET(makeRequest("/api/admin/events/evt-b/places"), params("evt-b"))).status).toBe(404)
+    expect((await POST(makeRequest("/api/admin/events/evt-b/places", "POST", { name: "Grande Scène" }), params("evt-b"))).status).toBe(404)
+    expect(db.eventPlace.findMany).not.toHaveBeenCalled()
+    expect(db.eventPlace.create).not.toHaveBeenCalled()
+  })
+
+  it("PATCH places/[placeId] returns 404 for an org-B event, and for a place that is not the event's", async () => {
+    const one = await import("@/app/api/admin/events/[id]/places/[placeId]/route")
+    const db = placeDb()
+    expect((await one.PATCH(makeRequest("/api/admin/events/evt-b/places/pl-b", "PATCH", { name: "X" }), placeParams("evt-b", "pl-b"))).status).toBe(404)
+    expect(db.eventPlace.update).not.toHaveBeenCalled()
+    // An event of org A, but a place id from elsewhere: the event's list does not have it.
+    const own = placeDb({ id: "evt-a" }, [{ id: "pl-a", name: "Chapiteau", displayOrder: 0, archivedAt: null }])
+    expect((await one.PATCH(makeRequest("/api/admin/events/evt-a/places/pl-b", "PATCH", { archived: true }), placeParams("evt-a", "pl-b"))).status).toBe(404)
+    expect(own.eventPlace.findMany).toHaveBeenCalledWith(expect.objectContaining({ where: { eventId: "evt-a" } }))
+    expect(own.eventPlace.update).not.toHaveBeenCalled()
+  })
+})

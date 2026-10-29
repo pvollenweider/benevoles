@@ -45,6 +45,7 @@ export async function POST(req: Request, { params }: { params: Promise<{ id: str
       sectorLeaders: { select: { roleName: true, sectorId: true, name: true, email: true } },
       shiftRecurrences: true,
       sectors: { select: { id: true, name: true, displayOrder: true, archivedAt: true } },
+      places: { select: { id: true, name: true, displayOrder: true, archivedAt: true } },
       organization: { select: { slug: true, shiftRosterDefault: true, sectorsDefault: true, shiftSwapsDefault: true, workloadPolicyDefault: true, timeZone: true } },
     },
   })
@@ -86,7 +87,8 @@ export async function POST(req: Request, { params }: { params: Promise<{ id: str
   const existing = await db.event.findFirst({ where: { slug } })
   if (existing) slug = `${slug}-${Date.now()}`
 
-  const withSectors = plan.sectors.length > 0
+  // Shifts point to the copies of sectors and places by the plan's ids: written once those exist.
+  const withSectors = plan.sectors.length > 0 || plan.places.length > 0
   const newEvent = await db.event.create({
     data: {
       slug,
@@ -98,7 +100,7 @@ export async function POST(req: Request, { params }: { params: Promise<{ id: str
       isListed: true,
       // With sectors (#1147), the shifts are written once the sectors exist (below): they point
       // to them by the ids of the plan, and a nested write does not promise that order.
-      ...(withSectors ? { sectors: { create: plan.sectors } } : { shifts: { create: plan.shifts } }),
+      ...(withSectors ? { sectors: { create: plan.sectors }, places: { create: plan.places } } : { shifts: { create: plan.shifts } }),
       pages: { create: plan.pages },
       // One insert: a follow-up (#1016) points to its parent's copy, whose id the plan gave.
       questions: { createMany: { data: plan.questions } },

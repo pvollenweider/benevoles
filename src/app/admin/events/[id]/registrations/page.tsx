@@ -67,6 +67,8 @@ export default async function RegistrationsPage({
   if (!event) notFound()
   // Workload (#465, #1171): the #465 warnings, or the event's protection.
   const workloadMode = workloadModeOf(event, orgTimeZone(event.organization))
+  // Place names (#1171, lot 2), for the travel findings of the rows and of the add form.
+  const placeNames = new Map((await db.eventPlace.findMany({ where: { eventId: event.id }, select: { id: true, name: true } })).map((p) => [p.id, p.name]))
   // The text a volunteer signing up now would accept (#569), to tell it apart from an older one.
   const currentCharterHash = hashCharterText(resolveCharterText(event.organization.volunteerCharter, event.organization.hasOrgInsurance))
 
@@ -169,6 +171,8 @@ export default async function RegistrationsPage({
             overlapAllowed: r.shift.overlapAllowed,
             // Read by the workload check of the rows and of the add form (#1171, meals).
             mealOnTheGo: r.shift.mealOnTheGo,
+            placeId: r.shift.placeId,
+            placeName: placeNames.get(r.shift.placeId ?? "") ?? null,
           },
         }))}
         shifts={event.shifts.map((s) => ({
@@ -183,6 +187,8 @@ export default async function RegistrationsPage({
           // A cumulable role (#986): no overlap warning when adding someone by hand.
           overlapAllowed: s.overlapAllowed,
           mealOnTheGo: s.mealOnTheGo,
+          placeId: s.placeId,
+          placeName: placeNames.get(s.placeId ?? "") ?? null,
         }))}
       />
 

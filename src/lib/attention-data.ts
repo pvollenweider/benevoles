@@ -12,7 +12,7 @@ import { daysAgo, RETENTION_DAYS } from "./retention"
 import { isMilestoneOverdue } from "./milestones"
 
 /** The workload facts of one event (#465, #1171): who is counted, and in which mode. */
-function workloadAttention(e: { registrations: { volunteerId: string; status: string; shift: { id: string; date: Date; startTime: string; endTime: string; mealOnTheGo: boolean } }[]; organization: { timeZone: string | null }; workloadProtectionEnabled: boolean; workloadPolicy: unknown; startDate: Date; endDate: Date }) {
+function workloadAttention(e: { registrations: { volunteerId: string; status: string; shift: { id: string; date: Date; startTime: string; endTime: string; mealOnTheGo: boolean; placeId: string | null } }[]; organization: { timeZone: string | null }; workloadProtectionEnabled: boolean; workloadPolicy: unknown; startDate: Date; endDate: Date }) {
   const mode = workloadModeOf(e, orgTimeZone(e.organization))
   return { overloadedVolunteers: workloadByPerson(e.registrations, mode).size, workloadMode: mode.kind }
 }
@@ -49,7 +49,7 @@ export async function loadAttention(db: OrgScopedPrisma, organizationId: string,
         // may never become shifts (#465).
         registrations: {
           where: { status: { in: ["active", "requested"] }, shift: { status: { not: "cancelled" } } },
-          select: { volunteerId: true, status: true, shift: { select: { id: true, date: true, startTime: true, endTime: true, mealOnTheGo: true } } },
+          select: { volunteerId: true, status: true, shift: { select: { id: true, date: true, startTime: true, endTime: true, mealOnTheGo: true, placeId: true } } },
         },
         organization: { select: { timeZone: true } },
         workloadProtectionEnabled: true,

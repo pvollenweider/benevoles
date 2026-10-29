@@ -32,14 +32,15 @@ export type PersonFindings = { volunteerId: string; name: string; findings: Work
 
 /** Every committed person of the event and their missions (confirmed places and pending requests). */
 async function commitmentsByPerson(db: Db, eventId: string): Promise<Map<string, { name: string; shifts: DutyShift[] }>> {
-  const rows: { volunteerId: string; volunteer: { firstName: string; lastName: string }; shift: { id: string; date: Date; startTime: string; endTime: string; mealOnTheGo: boolean } }[] = await db.registration.findMany({
+  const rows: { volunteerId: string; volunteer: { firstName: string; lastName: string }; shift: { id: string; date: Date; startTime: string; endTime: string; mealOnTheGo: boolean; placeId: string | null; place: { name: string } | null } }[] = await db.registration.findMany({
     where: { eventId, status: { in: [...COMMITTED_STATUSES] }, shift: { status: { not: "cancelled" } } },
-    select: { volunteerId: true, volunteer: { select: { firstName: true, lastName: true } }, shift: { select: { id: true, date: true, startTime: true, endTime: true, mealOnTheGo: true } } },
+    select: { volunteerId: true, volunteer: { select: { firstName: true, lastName: true } }, shift: { select: { id: true, date: true, startTime: true, endTime: true, mealOnTheGo: true, placeId: true, place: { select: { name: true } } } } },
   })
   const byPerson = new Map<string, { name: string; shifts: DutyShift[] }>()
   for (const r of rows) {
     const entry = byPerson.get(r.volunteerId) ?? { name: `${r.volunteer.firstName} ${r.volunteer.lastName}`.trim(), shifts: [] }
-    entry.shifts.push(r.shift)
+    const { place, ...shift } = r.shift
+    entry.shifts.push({ ...shift, placeName: place?.name ?? null })
     byPerson.set(r.volunteerId, entry)
   }
   return byPerson
@@ -76,6 +77,9 @@ export type WorkloadPolicyState = {
   fields: typeof WORKLOAD_LIMIT_FIELDS
   /** The event's service days, for the days-off examples. */
   horizon: EventHorizon
+  /** Live shifts without a place, and the event's active places (#1171, travel: not checked without one). */
+  shiftsWithoutPlace: number
+  activePlaces: number
   serviceDayExamples: string[]
   /** People whose schedule breaks the enabled policy now (left by cancellations, say). */
   findings: Omit<PersonFindings, "findings">[]
@@ -101,6 +105,8 @@ export async function loadWorkloadPolicyState(db: Db, organizationId: string, ev
     benchmarks: WORKLOAD_BENCHMARKS,
     fields: WORKLOAD_LIMIT_FIELDS,
     horizon: eventHorizon(event),
+    shiftsWithoutPlace: await db.shift.count({ where: { eventId, status: { not: "cancelled" }, placeId: null } }),
+    activePlaces: await db.eventPlace.count({ where: { eventId, archivedAt: null } }),
     serviceDayExamples: parsed.ok ? serviceDayExamples(parsed.policy.serviceDayStart) : [],
     findings: forPage(findings),
   }
@@ -153,8 +159,9 @@ export function policySummary(p: WorkloadPolicy | null): string {
   if (!p) return "(aucune)"
   const h = (m: number) => `${Math.floor(m / 60)} h${m % 60 ? ` ${String(m % 60).padStart(2, "0")}` : ""}`
   const off = !p.offDay ? "" : p.offDay.apply ? `, ${p.offDay.minOffDays} jour(s) sans mission sur ${p.offDay.windowDays}` : ", sans règle de jours sans mission"
+  const travel = !p.travel ? "" : p.travel.apply ? `, ${p.travel.minutes} min entre deux lieux` : ", sans règle de trajet"
   const meal = !p.meal ? "" : p.meal.apply ? `, repas ${p.meal.minutes} min (${p.meal.windows.map((w) => `${w.start}-${w.end}`).join(", ")}, ${p.meal.days === "all" ? "tous les jours" : `${p.meal.days.length} jour(s)`})` : ", sans règle de repas"
-  return `journée dès ${p.serviceDayStart}, ${h(p.maxContinuousMinutes)} sans pause de ${p.minBreakMinutes} min, ${h(p.maxDailyMinutes)}/journée, ${h(p.maxEventMinutes)} au total, repos ${h(p.minRestMinutes)}, attente ${h(p.maxIdleGapMinutes)}${off}${meal}`
+  return `journée dès ${p.serviceDayStart}, ${h(p.maxContinuousMinutes)} sans pause de ${p.minBreakMinutes} min, ${h(p.maxDailyMinutes)}/journée, ${h(p.maxEventMinutes)} au total, repos ${h(p.minRestMinutes)}, attente ${h(p.maxIdleGapMinutes)}${off}${meal}${travel}`
 }
 
 /**

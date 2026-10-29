@@ -249,3 +249,19 @@ describe("duplicatePlan — sector leaders (#1169)", () => {
       .toBe("Aucun responsable repris : 1 responsable, d'un poste aux créneaux tous annulés, n'est pas repris.")
   })
 })
+
+// #1171 lot 2: the event's places follow the shifts, with fresh ids; an archived one is left out.
+describe("duplicatePlan: places", () => {
+  it("copies the active places and points each shift to its copy, none for an archived place", () => {
+    let n = 0
+    const withPlaces: DuplicableEvent = {
+      ...source,
+      places: [{ id: "gs", name: "Grande Scène", displayOrder: 0, archivedAt: null }, { id: "old", name: "Ancienne scène", displayOrder: 1, archivedAt: new Date("2026-01-01") }],
+      shifts: [{ ...shift, placeId: "gs", mealOnTheGo: true }, { ...shift, date: new Date("2026-07-05T00:00:00Z"), placeId: "old" }],
+    }
+    const plan = duplicatePlan(withPlaces, {}, () => `new-${++n}`)
+    expect(plan.places).toEqual([{ id: "new-1", name: "Grande Scène", displayOrder: 0 }])
+    expect(plan.shifts.map((s) => [s.placeId, s.mealOnTheGo])).toEqual([["new-1", true], [null, false]])
+    expect(duplicatePlan(withPlaces, { copy: { shifts: false, pages: true, leaders: false, settings: true } }).places).toEqual([])
+  })
+})
