@@ -9,6 +9,7 @@ import { PrismaPg } from "@prisma/adapter-pg"
 import { linkToken } from "../../src/lib/token-vault"
 
 async function main() {
+  const mailpit = process.env.VIDEO_MAILPIT_URL ?? "http://localhost:48026"
   const base = process.env.VIDEO_BASE_URL ?? "http://localhost:43100"
   const url = new URL(process.env.DATABASE_URL ?? "")
   if (!["localhost", "127.0.0.1"].includes(new URL(base).hostname) || !["localhost", "127.0.0.1", "[::1]"].includes(url.hostname) || url.pathname !== "/benevoles_video") throw new Error("Local video environment required")
@@ -40,14 +41,14 @@ async function main() {
     const oldLink = await page.request.get(`${base}${leaderPath}`)
     assert.equal(oldLink.status(), 404)
     assert.deepEqual(await oldLink.json(), { error: "Lien introuvable." })
-    const inboxResponse = await page.request.get("http://localhost:48026/api/v1/messages?limit=1000")
+    const inboxResponse = await page.request.get(`${mailpit}/api/v1/messages?limit=1000`)
     assert.equal(inboxResponse.status(), 200)
     const inbox = await inboxResponse.json() as { messages: { ID: string; To: { Address: string }[] }[] }
     const received: { recipient: string; mailId: string; personalLink: boolean }[] = []
     for (const [recipient, personalLink] of [["video.privacy.a.new@example.org", true], ["video.privacy.a.member.0@example.org", true], ["video.privacy.a.member.3@example.org", false]] as const) {
       const mail = inbox.messages.find(item => item.To.some(to => to.Address === recipient))
       assert(mail, "Expected actual fictitious email missing")
-      const response = await page.request.get(`http://localhost:48026/api/v1/message/${mail.ID}`)
+      const response = await page.request.get(`${mailpit}/api/v1/message/${mail.ID}`)
       const content = await response.json() as { Text: string }
       assert(personalLink ? content.Text.includes("/my/") : content.Text.includes("?token="), "Actual email must contain the expected kind of link")
       received.push({ recipient, mailId: mail.ID, personalLink })

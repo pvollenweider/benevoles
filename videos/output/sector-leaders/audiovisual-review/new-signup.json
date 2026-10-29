@@ -1,66 +1,50 @@
 {
   "model": "gemini-3.8-flash",
-  "reviewedAt": "2026-10-16T11:50:10.998Z",
-  "videoSha256": "949a76fee33cca820f70783696fb92f8d02de328080f31fc8fdc39b5ee331c2b",
+  "reviewedAt": "2026-10-29T06:54:11.394Z",
+  "videoSha256": "8223c82b5a20cc6e1d9009cedbdcfb681a9f382e0813f57eb27a8d468cc620cf",
   "promptSha256": "da9e5bcccd2005c8c2da85a1633b65752f4426987efca5076c3d4d8840475740",
-  "clipSha256": "86e1f0ec0b5add8c426d36fcbace8ba1d392e6f89c442d1ac929e07e663c8851",
+  "clipSha256": "40208cb7dd40053015a5ba7f485f6cbcffdb0ae19bd3cb0d1a3cd4e3ffed58ae",
   "scene": "new-signup",
   "review": {
     "heardOpening": "Pour voir comment une équipe évolue",
     "checkpoints": [
       {
-        "spokenSeconds": 0.8,
-        "spoken": "Pour voir comment une équipe évolue, inscrivons une nouvelle personne à la Buvette du dimanche",
+        "spokenSeconds": 1.2,
+        "spoken": "inscrivons une nouvelle personne à la Buvette du dimanche.",
         "visibleSeconds": 1.5,
-        "visible": "Page du planning avec le créneau Buvette dimanche sélectionné",
+        "visible": "Planning du dimanche 8 novembre affiché avec le créneau Buvette sélectionné",
         "sync": "aligned",
         "severity": "none"
       },
       {
-        "spokenSeconds": 5.3,
-        "spoken": "Nora choisit ce créneau, puis continue vers le formulaire",
-        "visibleSeconds": 5.8,
-        "visible": "Clic sur Continuer et affichage de la page Tes informations",
+        "spokenSeconds": 5.4,
+        "spoken": "Nora choisit ce créneau, puis continue vers le formulaire.",
+        "visibleSeconds": 5.6,
+        "visible": "Affichage de la page de formulaire « Tes informations »",
         "sync": "aligned",
         "severity": "none"
       },
       {
-        "spokenSeconds": 8.8,
-        "spoken": "Elle renseigne son prénom et son nom",
-        "visibleSeconds": 10.3,
-        "visible": "Saisie de Nora Perrin dans les champs Prénom et Nom",
+        "spokenSeconds": 9.2,
+        "spoken": "Elle renseigne son prénom et son nom, son adresse email et son téléphone.",
+        "visibleSeconds": 9.8,
+        "visible": "Saisie successive des champs Nora Perrin, adresse e-mail et numéro de téléphone",
         "sync": "aligned",
         "severity": "none"
       },
       {
-        "spokenSeconds": 11.7,
-        "spoken": "son adresse email et son téléphone",
-        "visibleSeconds": 15.8,
-        "visible": "Saisie de l'adresse email et du numéro de téléphone",
-        "sync": "aligned",
-        "severity": "none"
-      },
-      {
-        "spokenSeconds": 15.7,
-        "spoken": "Elle choisit une taille, accepte la convention",
-        "visibleSeconds": 16.8,
-        "visible": "Sélection taille S et coches des cases de consentement",
-        "sync": "aligned",
-        "severity": "none"
-      },
-      {
-        "spokenSeconds": 25.2,
-        "spoken": "Nous confirmons maintenant",
-        "visibleSeconds": 25.8,
-        "visible": "Clic sur Confirmer mon inscription (Envoi en cours)",
+        "spokenSeconds": 17,
+        "spoken": "Elle choisit une taille, accepte la convention et l'utilisation de ses données",
+        "visibleSeconds": 17.5,
+        "visible": "Sélection de la taille S puis cochage des deux cases de consentement",
         "sync": "aligned",
         "severity": "none"
       },
       {
         "spokenSeconds": 27,
-        "spoken": "la page indique que son inscription est enregistrée",
-        "visibleSeconds": 27.4,
-        "visible": "Message Inscription confirmée affiché",
+        "spoken": "Nous confirmons maintenant : la page indique que son inscription est enregistrée.",
+        "visibleSeconds": 27.5,
+        "visible": "Clic sur « Confirmer mon inscription » puis écran « Inscription confirmée ! »",
         "sync": "aligned",
         "severity": "none"
       }
@@ -69,7 +53,7 @@
     "voice": {
       "consistent": true,
       "warm": true,
-      "observation": "Voix off fluide, claire et bien articulée, synchronisée avec les actions à l'écran."
+      "observation": "Voix masculine claire, fluide et parfaitement synchronisée avec la démonstration à l'écran."
     }
   },
   "note": "Automated observation of actual final video audio and images; not a claim of complete human validation"

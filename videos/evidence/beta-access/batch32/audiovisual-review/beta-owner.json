@@ -1,0 +1,44 @@
+{
+  "model": "gemini-3.8-flash",
+  "reviewedAt": "2026-10-29T06:19:58.612Z",
+  "videoSha256": "819011bf3a95717efc2c92dc32721a4c7974fe5f11f7b8097c4f78e0e98ccf62",
+  "promptSha256": "9f7ef5235957b87168b3b1a1804ccca6735e8b155a1d01740f927f3fcda25b43",
+  "clipSha256": "c8354485ab7658bfd7689c32c4dab50b73e6342c0cce0ebb1622e6b887297b4f",
+  "scene": "beta-owner",
+  "review": {
+    "heardOpening": "Passons maintenant du côté de l'association",
+    "checkpoints": [
+      {
+        "spokenSeconds": 4.1,
+        "spoken": "Dans Paramètres, une nouvelle carte Fonctions bêta est apparue.",
+        "visibleSeconds": 4.8,
+        "visible": "Navigation vers l'onglet Paramètres et affichage de la section Fonctions bêta.",
+        "sync": "aligned",
+        "severity": "none"
+      },
+      {
+        "spokenSeconds": 12,
+        "spoken": "Activons l'interrupteur Essayer les fonctions avancées en bêta.",
+        "visibleSeconds": 12.2,
+        "visible": "Activation de l'interrupteur Essayer les fonctions avancées en bêta.",
+        "sync": "aligned",
+        "severity": "none"
+      },
+      {
+        "spokenSeconds": 16.8,
+        "spoken": "La phrase au-dessus indique depuis quand l'organisation participe, et qui l'a activée.",
+        "visibleSeconds": 16.8,
+        "visible": "Affichage de la mention « Votre organisation participe à la bêta depuis le 29 octobre 2026 (activée par Élodie Novakova) ».",
+        "sync": "aligned",
+        "severity": "none"
+      }
+    ],
+    "issues": [],
+    "voice": {
+      "consistent": true,
+      "warm": true,
+      "observation": "Voix claire, posée et parfaitement synchronisée avec les actions à l'écran."
+    }
+  },
+  "note": "Automated observation of actual final video audio and images; not a claim of complete human validation"
+}

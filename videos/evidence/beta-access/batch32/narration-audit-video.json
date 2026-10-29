@@ -1,0 +1,61 @@
+{
+  "model": "gemini-3.8-flash",
+  "promptVersion": 2,
+  "auditedAt": "2026-10-29T06:19:58.628Z",
+  "revalidatedAt": "2026-10-29T06:19:58.629Z",
+  "source": "actual final MP4 audio",
+  "videoSha256": "819011bf3a95717efc2c92dc32721a4c7974fe5f11f7b8097c4f78e0e98ccf62",
+  "note": "Independent multilingual ASR evidence, reused only for identical audio/text and audit instructions; not a full audiovisual or voice-quality validation",
+  "segments": [
+    {
+      "id": "beta-welcome",
+      "audioSha256": "8416fbe57d659f31d18e27e20f3b4a0296ee033dafd4624f133f1ca22a62015d",
+      "recognized": "Certaines fonctions avancées s'essaient d'abord en bêta, avant leur sortie pour tous. Trois accords sont nécessaires : l'opérateur de la plateforme ouvre une fonction à l'essai, un propriétaire de l'organisation choisit de participer à la bêta, puis chaque événement adopte, ou non, la fonction dans ses propres paramètres. Voyons les deux premières étapes.",
+      "expected": "Certaines fonctions avancées s'essaient d'abord en bêta, avant leur sortie pour tous. Trois accords sont nécessaires. L'opérateur de la plateforme ouvre une fonction à l'essai. Un propriétaire de l'organisation choisit de participer à la bêta. Puis chaque événement adopte, ou non, la fonction dans ses propres paramètres. Voyons les deux premières étapes.",
+      "wordErrorRate": 0,
+      "needsReview": false,
+      "unexpectedInstructions": [],
+      "edgeIssues": []
+    },
+    {
+      "id": "beta-operator",
+      "audioSha256": "b7200af3e81809d81b65cfc2b84690a8a175ec132023dbfb7eb75745982047e2",
+      "recognized": "Dans l'espace super admin, ouvrons Fonction bêta depuis le menu super admin. La page liste les fonctions disponibles dans cette version avec une phrase pour chacune. Cochons Secteur puis Échange de créneau et enregistrons. Une fonction ouverte peut être adoptée par les organisations qui participent à la bêta. Pour l'instant, aucune organisation n'y participe. Chaque changement est inscrit au journal de l'opérateur.",
+      "expected": "Dans l'espace super admin, ouvrons Fonctions bêta depuis le menu Super Admin. La page liste les fonctions disponibles dans cette version, avec une phrase pour chacune. Cochons Secteurs, puis Échanges de créneaux, et enregistrons. Une fonction ouverte peut être adoptée par les organisations qui participent à la bêta. Pour l'instant, aucune organisation n'y participe. Chaque changement est inscrit au journal de l'opérateur.",
+      "wordErrorRate": 0.06060606060606061,
+      "needsReview": false,
+      "unexpectedInstructions": [],
+      "edgeIssues": []
+    },
+    {
+      "id": "beta-owner",
+      "audioSha256": "f3da5cc89b82ecfc781a6d8a1a548e66a26847507927e569b00cf2ae77519baf",
+      "recognized": "Passons maintenant du côté de l'association avec sa propriétaire. Dans Paramètres, une nouvelle carte Fonctions bêta est apparue. Elle liste ce que la bêta permet d'essayer. Activons l'interrupteur Essayer des fonctions avancées en bêta. La phrase au-dessus indique depuis quand l'organisation participe et qui l'a activé. Seuls les propriétaires voient cet interrupteur. Les organisateurs voient la ligne Participation à la bêta en lecture seule.",
+      "expected": "Passons maintenant du côté de l'association, avec sa propriétaire. Dans Paramètres, une nouvelle carte Fonctions bêta est apparue. Elle liste ce que la bêta permet d'essayer. Activons l'interrupteur Essayer les fonctions avancées en bêta. La phrase au-dessus indique depuis quand l'organisation participe, et qui l'a activée. Seuls les propriétaires voient cet interrupteur. Les organisateurs voient la ligne Participation à la bêta, en lecture seule.",
+      "wordErrorRate": 0.02857142857142857,
+      "needsReview": false,
+      "unexpectedInstructions": [],
+      "edgeIssues": []
+    },
+    {
+      "id": "beta-event",
+      "audioSha256": "f49afa7e826ae5ed35f0a489c5b27b865a920b4d38d812fdcb4f39374740c710",
+      "recognized": "Participer à la bêta ne change aucun événement et rien n'est envoyé aux bénévoles. Ouvrons les informations du festival de Montvert. Deux cartes proposent maintenant leur option, encore désactivée, échanges de créneaux et secteurs. Chaque événement choisit lui-même ce qu'il adopte.",
+      "expected": "Participer à la bêta ne change aucun événement, et rien n'est envoyé aux bénévoles. Ouvrons les informations du Festival de Montvert. Deux cartes proposent maintenant leur option, encore désactivée : Échanges de créneaux et Secteurs. Chaque événement choisit lui-même ce qu'il adopte.",
+      "wordErrorRate": 0,
+      "needsReview": false,
+      "unexpectedInstructions": [],
+      "edgeIssues": []
+    },
+    {
+      "id": "beta-close",
+      "audioSha256": "6d40ad4c9b75238cbb11d970e73722d6b27f3566072adeacdea7bbc6ea09e158",
+      "recognized": "Revenons chez l'opérateur. L'association figure maintenant dans Organisations participantes avec la date de son inscription. Si l'opérateur ferme une fonction, seules les nouvelles adoptions sont bloquées. Les événements qui l'utilisent déjà la gardent. Et si la propriétaire désactive son interrupteur, ce que ses événements utilisent déjà continue de fonctionner. Rien n'est supprimé.",
+      "expected": "Revenons chez l'opérateur. L'association figure maintenant dans Organisations participantes, avec la date de son inscription. Si l'opérateur ferme une fonction, seules les nouvelles adoptions sont bloquées : les événements qui l'utilisent déjà la gardent. Et si la propriétaire désactive son interrupteur, ce que ses événements utilisent déjà continue de fonctionner. Rien n'est supprimé.",
+      "wordErrorRate": 0,
+      "needsReview": false,
+      "unexpectedInstructions": [],
+      "edgeIssues": []
+    }
+  ]
+}

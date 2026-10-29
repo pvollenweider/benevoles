@@ -1,0 +1,44 @@
+{
+  "model": "gemini-3.8-flash",
+  "reviewedAt": "2026-10-29T06:54:46.292Z",
+  "videoSha256": "8223c82b5a20cc6e1d9009cedbdcfb681a9f382e0813f57eb27a8d468cc620cf",
+  "promptSha256": "0963e0e8f9f2ae169306bd1acec0016e62cbc2ae7e030c1c674d9fd3e74320d9",
+  "clipSha256": "aaeee4ae9c14790980630a9ffeb299934999abdccebec5e9c5b1b88ce7e76e24",
+  "scene": "remove",
+  "review": {
+    "heardOpening": "Quand la responsabilité change",
+    "checkpoints": [
+      {
+        "spokenSeconds": 1.2,
+        "spoken": "retirez la personne de ce poste et confirmez",
+        "visibleSeconds": 1.5,
+        "visible": "Clic sur Retirer à côté d'Élodie Rochat puis confirmation dans la boîte de dialogue",
+        "sync": "aligned",
+        "severity": "none"
+      },
+      {
+        "spokenSeconds": 5.2,
+        "spoken": "Son ancien lien ne donne alors plus accès à cette équipe",
+        "visibleSeconds": 5,
+        "visible": "Affichage de la page d'erreur indiquant Lien introuvable",
+        "sync": "aligned",
+        "severity": "none"
+      },
+      {
+        "spokenSeconds": 14.1,
+        "spoken": "Vous pouvez ensuite désigner la nouvelle personne et lui envoyer son propre lien",
+        "visibleSeconds": 14.5,
+        "visible": "Clic sur le bouton + Ajouter un responsable et affichage du formulaire de saisie",
+        "sync": "aligned",
+        "severity": "none"
+      }
+    ],
+    "issues": [],
+    "voice": {
+      "consistent": true,
+      "warm": true,
+      "observation": "Voix masculine claire, posée et pédagogique, accompagnée d'un fond musical léger."
+    }
+  },
+  "note": "Automated observation of actual final video audio and images; not a claim of complete human validation"
+}

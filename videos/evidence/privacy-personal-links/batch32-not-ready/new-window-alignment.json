@@ -1,0 +1,45 @@
+{
+  "locatedAt": "2026-10-29T07:26:26.835Z",
+  "masterSha256": "01549fe2072994242ba39dab8a9ae2a8dab028f5f455a2fcb38e355e0d4449ef",
+  "totalSeconds": 339.36,
+  "cuts": [
+    {
+      "id": "signup",
+      "seconds": 31.843666499999998
+    },
+    {
+      "id": "personal",
+      "seconds": 70.956875
+    },
+    {
+      "id": "recovery",
+      "seconds": 102.85175
+    },
+    {
+      "id": "invitation",
+      "seconds": 139.657625
+    },
+    {
+      "id": "leader",
+      "seconds": 169.6685
+    },
+    {
+      "id": "admin",
+      "seconds": 202.35595849999999
+    },
+    {
+      "id": "legal",
+      "seconds": 239.321771
+    },
+    {
+      "id": "copies",
+      "seconds": 274.8714375
+    },
+    {
+      "id": "result",
+      "seconds": 306.1432085
+    }
+  ],
+  "applied": true,
+  "independentContentAuditRequired": true
+}

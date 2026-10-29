@@ -11,6 +11,7 @@ export async function prepareSettingsMailbox(slug: string, directory: string) {
     "email-delivery-failures": /^video\.delivery\.[a-z-]+@example\.org$/,
     "platform-internal-administration": /^video\.operator\.(?:platform|[abc]\.owner|disposable\.owner|lifecycle\.owner)@example\.org$/,
     // The beta videos' organisation (scripts/seed-video-beta.ts): members, leader, owner, operator.
+    "privacy-personal-links": /^video\.privacy\.(?:[ab]\.(?:member\.[0-4]|new|owner|leader)|unknown)@example\.org$/,
     "beta-access": /^video\.beta\.[a-z]+@example\.org$/,
     "sectors": /^video\.beta\.[a-z]+@example\.org$/,
     "shift-swaps": /^video\.beta\.[a-z]+@example\.org$/,
@@ -18,7 +19,7 @@ export async function prepareSettingsMailbox(slug: string, directory: string) {
   }
   const pattern = patterns[slug]
   if (!pattern) return
-  const base = "http://localhost:48026/api/v1/messages"
+  const base = `${process.env.VIDEO_MAILPIT_URL ?? "http://localhost:48026"}/api/v1/messages`
   type Mail = { ID: string; To?: { Address: string }[]; Cc?: { Address: string }[]; Bcc?: { Address: string }[] }
   const inventory = async () => {
     const messages: Mail[] = []

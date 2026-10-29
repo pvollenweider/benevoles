@@ -1,0 +1,9 @@
+
+ RUN  v5.0.3 /private/tmp/benevoles-video-production.h6qj9dqj
+
+
+ Test Files  34 passed (34)
+      Tests  1144 passed (1144)
+   Start at  08:34:16
+   Duration  956ms (import 45%, transform 38%, tests 14%, worker 2%)
+

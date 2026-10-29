@@ -1,0 +1,21 @@
+{
+  "model": "gemini-3.8-flash",
+  "reviewedAt": "2026-10-29T07:22:53.608Z",
+  "videoSha256": "0bd199ef36f81f83361e907d5de6a272f7c728b00cdd40164c92b4320b5a3792",
+  "audioSha256": "f9e45d291be15861965b46f7318c7978830394b5b8bcf89f596457f46c14b0cb",
+  "startSeconds": 337.459,
+  "prompt": "Écoute uniquement cet audio réel. Évalue l'identité vocale de la narration du début à la fin : combien de personnes parlent réellement ? Distingue un changement de locutrice d'une variation normale d'intonation, de sourire ou de rythme chez une même personne. N'invente pas de changement. Sans texte attendu, rends uniquement JSON {speakers:number,consistentVoice:boolean,changes:[{seconds:number,observation:string}],deliveryVariation:string,evidence:string}. Les secondes sont relatives à cet extrait entier. Aucun contenu visuel n'est fourni.",
+  "result": {
+    "speakers": 2,
+    "consistentVoice": false,
+    "changes": [
+      {
+        "seconds": 27,
+        "observation": "Transition vers une seconde locutrice, reconnaissable à un timbre plus clair, une hauteur vocale plus aiguë et une texture vocale différente de la première narratrice."
+      }
+    ],
+    "deliveryVariation": "La première voix adopte un ton posé, directif et informatif, tandis que la seconde voix adopte un ton plus chaleureux, souriant et conclusif.",
+    "evidence": "De 0:00 à environ 0:26, une première voix féminine au timbre plus grave et posé présente les consignes. À 0:27, une nouvelle voix féminine nettement plus aiguë et jeune intervient pour la conclusion ('Et avant d'envoyer un document...')."
+  },
+  "note": "Independent audio-only countercheck of final chapter and preceding transition; original AV flag retained for adjudication"
+}

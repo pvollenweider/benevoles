@@ -1,406 +1,478 @@
 {
   "video": "sector-leaders",
-  "source": "/private/tmp/codex-video/videos/output/sector-leaders/sector-leaders.mp4",
-  "sourceSha256": "949a76fee33cca820f70783696fb92f8d02de328080f31fc8fdc39b5ee331c2b",
+  "source": "/Users/pol/Desktop/benevoles/.claude/worktrees/video-batch25-26-sources/videos/output/sector-leaders/sector-leaders.mp4",
+  "sourceSha256": "8223c82b5a20cc6e1d9009cedbdcfb681a9f382e0813f57eb27a8d468cc620cf",
   "capturePurpose": "narration-timed",
-  "extractedAt": "2026-10-16T11:48:40.960Z",
+  "extractedAt": "2026-10-29T06:52:48.788Z",
   "note": "Six actual MP4 frames per scene, including chapter start, midpoint and end; not a full audiovisual verification",
   "frames": [
     {
       "scene": "welcome",
-      "fraction": 0.033489618218352314,
-      "seconds": 1.193,
-      "file": "/private/tmp/codex-video/videos/output/sector-leaders/review-frames/welcome-3.png"
+      "fraction": 0.026268552164966506,
+      "seconds": 1.207,
+      "file": "/Users/pol/Desktop/benevoles/.claude/worktrees/video-batch25-26-sources/videos/output/sector-leaders/review-frames/welcome-3.png"
     },
     {
       "scene": "welcome",
       "fraction": 0.25,
-      "seconds": 5.072,
-      "file": "/private/tmp/codex-video/videos/output/sector-leaders/review-frames/welcome-25.png"
+      "seconds": 6.31725,
+      "file": "/Users/pol/Desktop/benevoles/.claude/worktrees/video-batch25-26-sources/videos/output/sector-leaders/review-frames/welcome-25.png"
     },
     {
       "scene": "welcome",
       "fraction": 0.45,
-      "seconds": 8.6552,
-      "file": "/private/tmp/codex-video/videos/output/sector-leaders/review-frames/welcome-45.png"
+      "seconds": 10.88545,
+      "file": "/Users/pol/Desktop/benevoles/.claude/worktrees/video-batch25-26-sources/videos/output/sector-leaders/review-frames/welcome-45.png"
     },
     {
       "scene": "welcome",
       "fraction": 0.6,
-      "seconds": 11.342600000000001,
-      "file": "/private/tmp/codex-video/videos/output/sector-leaders/review-frames/welcome-60.png"
+      "seconds": 14.3116,
+      "file": "/Users/pol/Desktop/benevoles/.claude/worktrees/video-batch25-26-sources/videos/output/sector-leaders/review-frames/welcome-60.png"
     },
     {
       "scene": "welcome",
       "fraction": 0.85,
-      "seconds": 15.8216,
-      "file": "/private/tmp/codex-video/videos/output/sector-leaders/review-frames/welcome-85.png"
+      "seconds": 20.021849999999997,
+      "file": "/Users/pol/Desktop/benevoles/.claude/worktrees/video-batch25-26-sources/videos/output/sector-leaders/review-frames/welcome-85.png"
     },
     {
       "scene": "welcome",
-      "fraction": 0.9832551908908238,
-      "seconds": 18.209,
-      "file": "/private/tmp/codex-video/videos/output/sector-leaders/review-frames/welcome-end.png"
+      "fraction": 0.9868657239175167,
+      "seconds": 23.148,
+      "file": "/Users/pol/Desktop/benevoles/.claude/worktrees/video-batch25-26-sources/videos/output/sector-leaders/review-frames/welcome-end.png"
     },
     {
       "scene": "nominate",
-      "fraction": 0.032706459525756335,
-      "seconds": 19.561,
-      "file": "/private/tmp/codex-video/videos/output/sector-leaders/review-frames/nominate-3.png"
+      "fraction": 0.028807374687920106,
+      "seconds": 24.5,
+      "file": "/Users/pol/Desktop/benevoles/.claude/worktrees/video-batch25-26-sources/videos/output/sector-leaders/review-frames/nominate-3.png"
     },
     {
       "scene": "nominate",
       "fraction": 0.25,
-      "seconds": 23.54725,
-      "file": "/private/tmp/codex-video/videos/output/sector-leaders/review-frames/nominate-25.png"
+      "seconds": 29.107,
+      "file": "/Users/pol/Desktop/benevoles/.claude/worktrees/video-batch25-26-sources/videos/output/sector-leaders/review-frames/nominate-25.png"
     },
     {
       "scene": "nominate",
       "fraction": 0.45,
-      "seconds": 27.21625,
-      "file": "/private/tmp/codex-video/videos/output/sector-leaders/review-frames/nominate-45.png"
+      "seconds": 33.2726,
+      "file": "/Users/pol/Desktop/benevoles/.claude/worktrees/video-batch25-26-sources/videos/output/sector-leaders/review-frames/nominate-45.png"
     },
     {
       "scene": "nominate",
       "fraction": 0.6,
-      "seconds": 29.968,
-      "file": "/private/tmp/codex-video/videos/output/sector-leaders/review-frames/nominate-60.png"
+      "seconds": 36.396800000000006,
+      "file": "/Users/pol/Desktop/benevoles/.claude/worktrees/video-batch25-26-sources/videos/output/sector-leaders/review-frames/nominate-60.png"
     },
     {
       "scene": "nominate",
       "fraction": 0.85,
-      "seconds": 34.55425,
-      "file": "/private/tmp/codex-video/videos/output/sector-leaders/review-frames/nominate-85.png"
+      "seconds": 41.6038,
+      "file": "/Users/pol/Desktop/benevoles/.claude/worktrees/video-batch25-26-sources/videos/output/sector-leaders/review-frames/nominate-85.png"
     },
     {
       "scene": "nominate",
-      "fraction": 0.9836467702371219,
-      "seconds": 37.006,
-      "file": "/private/tmp/codex-video/videos/output/sector-leaders/review-frames/nominate-end.png"
+      "fraction": 0.98559631265604,
+      "seconds": 44.428,
+      "file": "/Users/pol/Desktop/benevoles/.claude/worktrees/video-batch25-26-sources/videos/output/sector-leaders/review-frames/nominate-end.png"
     },
     {
       "scene": "registered",
-      "fraction": 0.036895830771122864,
-      "seconds": 38.365,
-      "file": "/private/tmp/codex-video/videos/output/sector-leaders/review-frames/registered-4.png"
+      "fraction": 0.03349148758024002,
+      "seconds": 45.786,
+      "file": "/Users/pol/Desktop/benevoles/.claude/worktrees/video-batch25-26-sources/videos/output/sector-leaders/review-frames/registered-3.png"
     },
     {
       "scene": "registered",
       "fraction": 0.25,
-      "seconds": 41.8305,
-      "file": "/private/tmp/codex-video/videos/output/sector-leaders/review-frames/registered-25.png"
+      "seconds": 49.66475,
+      "file": "/Users/pol/Desktop/benevoles/.claude/worktrees/video-batch25-26-sources/videos/output/sector-leaders/review-frames/registered-25.png"
     },
     {
       "scene": "registered",
       "fraction": 0.45,
-      "seconds": 45.0829,
-      "file": "/private/tmp/codex-video/videos/output/sector-leaders/review-frames/registered-45.png"
+      "seconds": 53.24775,
+      "file": "/Users/pol/Desktop/benevoles/.claude/worktrees/video-batch25-26-sources/videos/output/sector-leaders/review-frames/registered-45.png"
     },
     {
       "scene": "registered",
       "fraction": 0.6,
-      "seconds": 47.5222,
-      "file": "/private/tmp/codex-video/videos/output/sector-leaders/review-frames/registered-60.png"
+      "seconds": 55.935,
+      "file": "/Users/pol/Desktop/benevoles/.claude/worktrees/video-batch25-26-sources/videos/output/sector-leaders/review-frames/registered-60.png"
     },
     {
       "scene": "registered",
       "fraction": 0.85,
-      "seconds": 51.5877,
-      "file": "/private/tmp/codex-video/videos/output/sector-leaders/review-frames/registered-85.png"
+      "seconds": 60.41375,
+      "file": "/Users/pol/Desktop/benevoles/.claude/worktrees/video-batch25-26-sources/videos/output/sector-leaders/review-frames/registered-85.png"
     },
     {
       "scene": "registered",
-      "fraction": 0.9815520846144385,
-      "seconds": 53.727,
-      "file": "/private/tmp/codex-video/videos/output/sector-leaders/review-frames/registered-end.png"
+      "fraction": 0.9832542562098799,
+      "seconds": 62.801,
+      "file": "/Users/pol/Desktop/benevoles/.claude/worktrees/video-batch25-26-sources/videos/output/sector-leaders/review-frames/registered-end.png"
     },
     {
       "scene": "email",
-      "fraction": 0.04252906152537567,
-      "seconds": 58.298,
-      "file": "/private/tmp/codex-video/videos/output/sector-leaders/review-frames/email-4.png"
+      "fraction": 0.0384196708714862,
+      "seconds": 67.436,
+      "file": "/Users/pol/Desktop/benevoles/.claude/worktrees/video-batch25-26-sources/videos/output/sector-leaders/review-frames/email-4.png"
     },
     {
       "scene": "email",
       "fraction": 0.25,
-      "seconds": 61.225,
-      "file": "/private/tmp/codex-video/videos/output/sector-leaders/review-frames/email-25.png"
+      "seconds": 70.74025,
+      "file": "/Users/pol/Desktop/benevoles/.claude/worktrees/video-batch25-26-sources/videos/output/sector-leaders/review-frames/email-25.png"
     },
     {
       "scene": "email",
       "fraction": 0.45,
-      "seconds": 64.0466,
-      "file": "/private/tmp/codex-video/videos/output/sector-leaders/review-frames/email-45.png"
+      "seconds": 73.86364999999999,
+      "file": "/Users/pol/Desktop/benevoles/.claude/worktrees/video-batch25-26-sources/videos/output/sector-leaders/review-frames/email-45.png"
     },
     {
       "scene": "email",
       "fraction": 0.6,
-      "seconds": 66.1628,
-      "file": "/private/tmp/codex-video/videos/output/sector-leaders/review-frames/email-60.png"
+      "seconds": 76.2062,
+      "file": "/Users/pol/Desktop/benevoles/.claude/worktrees/video-batch25-26-sources/videos/output/sector-leaders/review-frames/email-60.png"
     },
     {
       "scene": "email",
       "fraction": 0.85,
-      "seconds": 69.6898,
-      "file": "/private/tmp/codex-video/videos/output/sector-leaders/review-frames/email-85.png"
+      "seconds": 80.11045,
+      "file": "/Users/pol/Desktop/benevoles/.claude/worktrees/video-batch25-26-sources/videos/output/sector-leaders/review-frames/email-85.png"
     },
     {
       "scene": "email",
-      "fraction": 0.9787354692373121,
-      "seconds": 71.506,
-      "file": "/private/tmp/codex-video/videos/output/sector-leaders/review-frames/email-end.png"
+      "fraction": 0.9807901645642569,
+      "seconds": 82.153,
+      "file": "/Users/pol/Desktop/benevoles/.claude/worktrees/video-batch25-26-sources/videos/output/sector-leaders/review-frames/email-end.png"
     },
     {
       "scene": "roster",
-      "fraction": 0.03441353599082306,
-      "seconds": 73.403,
-      "file": "/private/tmp/codex-video/videos/output/sector-leaders/review-frames/roster-3.png"
+      "fraction": 0.0302678706552994,
+      "seconds": 84.066,
+      "file": "/Users/pol/Desktop/benevoles/.claude/worktrees/video-batch25-26-sources/videos/output/sector-leaders/review-frames/roster-3.png"
     },
     {
       "scene": "roster",
       "fraction": 0.25,
-      "seconds": 77.16175,
-      "file": "/private/tmp/codex-video/videos/output/sector-leaders/review-frames/roster-25.png"
+      "seconds": 88.42175,
+      "file": "/Users/pol/Desktop/benevoles/.claude/worktrees/video-batch25-26-sources/videos/output/sector-leaders/review-frames/roster-25.png"
     },
     {
       "scene": "roster",
       "fraction": 0.45,
-      "seconds": 80.64875,
-      "file": "/private/tmp/codex-video/videos/output/sector-leaders/review-frames/roster-45.png"
+      "seconds": 92.38635000000001,
+      "file": "/Users/pol/Desktop/benevoles/.claude/worktrees/video-batch25-26-sources/videos/output/sector-leaders/review-frames/roster-45.png"
     },
     {
       "scene": "roster",
       "fraction": 0.6,
-      "seconds": 83.264,
-      "file": "/private/tmp/codex-video/videos/output/sector-leaders/review-frames/roster-60.png"
+      "seconds": 95.3598,
+      "file": "/Users/pol/Desktop/benevoles/.claude/worktrees/video-batch25-26-sources/videos/output/sector-leaders/review-frames/roster-60.png"
     },
     {
       "scene": "roster",
       "fraction": 0.85,
-      "seconds": 87.62275,
-      "file": "/private/tmp/codex-video/videos/output/sector-leaders/review-frames/roster-85.png"
+      "seconds": 100.31555,
+      "file": "/Users/pol/Desktop/benevoles/.claude/worktrees/video-batch25-26-sources/videos/output/sector-leaders/review-frames/roster-85.png"
     },
     {
       "scene": "roster",
-      "fraction": 0.9827932320045885,
-      "seconds": 89.938,
-      "file": "/private/tmp/codex-video/videos/output/sector-leaders/review-frames/roster-end.png"
+      "fraction": 0.9848660646723503,
+      "seconds": 102.989,
+      "file": "/Users/pol/Desktop/benevoles/.claude/worktrees/video-batch25-26-sources/videos/output/sector-leaders/review-frames/roster-end.png"
     },
     {
       "scene": "mobile",
-      "fraction": 0.03285330997097958,
-      "seconds": 91.289,
-      "file": "/private/tmp/codex-video/videos/output/sector-leaders/review-frames/mobile-3.png"
+      "fraction": 0.02957121734844751,
+      "seconds": 104.341,
+      "file": "/Users/pol/Desktop/benevoles/.claude/worktrees/video-batch25-26-sources/videos/output/sector-leaders/review-frames/mobile-3.png"
     },
     {
       "scene": "mobile",
       "fraction": 0.25,
-      "seconds": 95.25475,
-      "file": "/private/tmp/codex-video/videos/output/sector-leaders/review-frames/mobile-25.png"
+      "seconds": 108.8135,
+      "file": "/Users/pol/Desktop/benevoles/.claude/worktrees/video-batch25-26-sources/videos/output/sector-leaders/review-frames/mobile-25.png"
     },
     {
       "scene": "mobile",
       "fraction": 0.45,
-      "seconds": 98.90735000000001,
-      "file": "/private/tmp/codex-video/videos/output/sector-leaders/review-frames/mobile-45.png"
+      "seconds": 112.8715,
+      "file": "/Users/pol/Desktop/benevoles/.claude/worktrees/video-batch25-26-sources/videos/output/sector-leaders/review-frames/mobile-45.png"
     },
     {
       "scene": "mobile",
       "fraction": 0.6,
-      "seconds": 101.6468,
-      "file": "/private/tmp/codex-video/videos/output/sector-leaders/review-frames/mobile-60.png"
+      "seconds": 115.915,
+      "file": "/Users/pol/Desktop/benevoles/.claude/worktrees/video-batch25-26-sources/videos/output/sector-leaders/review-frames/mobile-60.png"
     },
     {
       "scene": "mobile",
       "fraction": 0.85,
-      "seconds": 106.21255000000001,
-      "file": "/private/tmp/codex-video/videos/output/sector-leaders/review-frames/mobile-85.png"
+      "seconds": 120.9875,
+      "file": "/Users/pol/Desktop/benevoles/.claude/worktrees/video-batch25-26-sources/videos/output/sector-leaders/review-frames/mobile-85.png"
     },
     {
       "scene": "mobile",
-      "fraction": 0.9835733450145102,
-      "seconds": 108.652,
-      "file": "/private/tmp/codex-video/videos/output/sector-leaders/review-frames/mobile-end.png"
+      "fraction": 0.9852143913257763,
+      "seconds": 123.731,
+      "file": "/Users/pol/Desktop/benevoles/.claude/worktrees/video-batch25-26-sources/videos/output/sector-leaders/review-frames/mobile-end.png"
     },
     {
       "scene": "scope",
-      "fraction": 0.043134435657800146,
-      "seconds": 110.004,
-      "file": "/private/tmp/codex-video/videos/output/sector-leaders/review-frames/scope-4.png"
+      "fraction": 0.042967631051274706,
+      "seconds": 125.083,
+      "file": "/Users/pol/Desktop/benevoles/.claude/worktrees/video-batch25-26-sources/videos/output/sector-leaders/review-frames/scope-4.png"
     },
     {
       "scene": "scope",
       "fraction": 0.25,
-      "seconds": 112.8815,
-      "file": "/private/tmp/codex-video/videos/output/sector-leaders/review-frames/scope-25.png"
+      "seconds": 127.974,
+      "file": "/Users/pol/Desktop/benevoles/.claude/worktrees/video-batch25-26-sources/videos/output/sector-leaders/review-frames/scope-25.png"
     },
     {
       "scene": "scope",
       "fraction": 0.45,
-      "seconds": 115.6635,
-      "file": "/private/tmp/codex-video/videos/output/sector-leaders/review-frames/scope-45.png"
+      "seconds": 130.7668,
+      "file": "/Users/pol/Desktop/benevoles/.claude/worktrees/video-batch25-26-sources/videos/output/sector-leaders/review-frames/scope-45.png"
     },
     {
       "scene": "scope",
       "fraction": 0.6,
-      "seconds": 117.75,
-      "file": "/private/tmp/codex-video/videos/output/sector-leaders/review-frames/scope-60.png"
+      "seconds": 132.8614,
+      "file": "/Users/pol/Desktop/benevoles/.claude/worktrees/video-batch25-26-sources/videos/output/sector-leaders/review-frames/scope-60.png"
     },
     {
       "scene": "scope",
       "fraction": 0.85,
-      "seconds": 121.2275,
-      "file": "/private/tmp/codex-video/videos/output/sector-leaders/review-frames/scope-85.png"
+      "seconds": 136.3524,
+      "file": "/Users/pol/Desktop/benevoles/.claude/worktrees/video-batch25-26-sources/videos/output/sector-leaders/review-frames/scope-85.png"
     },
     {
       "scene": "scope",
-      "fraction": 0.9784327821711,
-      "seconds": 123.014,
-      "file": "/private/tmp/codex-video/videos/output/sector-leaders/review-frames/scope-end.png"
+      "fraction": 0.9785161844743626,
+      "seconds": 138.147,
+      "file": "/Users/pol/Desktop/benevoles/.claude/worktrees/video-batch25-26-sources/videos/output/sector-leaders/review-frames/scope-end.png"
     },
     {
       "scene": "new-signup",
-      "fraction": 0.019948798084915384,
-      "seconds": 124.366,
-      "file": "/private/tmp/codex-video/videos/output/sector-leaders/review-frames/new-signup-2.png"
+      "fraction": 0.0190500381000762,
+      "seconds": 139.5,
+      "file": "/Users/pol/Desktop/benevoles/.claude/worktrees/video-batch25-26-sources/videos/output/sector-leaders/review-frames/new-signup-2.png"
     },
     {
       "scene": "new-signup",
       "fraction": 0.25,
-      "seconds": 131.28525,
-      "file": "/private/tmp/codex-video/videos/output/sector-leaders/review-frames/new-signup-25.png"
+      "seconds": 146.774,
+      "file": "/Users/pol/Desktop/benevoles/.claude/worktrees/video-batch25-26-sources/videos/output/sector-leaders/review-frames/new-signup-25.png"
     },
     {
       "scene": "new-signup",
       "fraction": 0.45,
-      "seconds": 137.30065,
-      "file": "/private/tmp/codex-video/videos/output/sector-leaders/review-frames/new-signup-45.png"
+      "seconds": 153.0732,
+      "file": "/Users/pol/Desktop/benevoles/.claude/worktrees/video-batch25-26-sources/videos/output/sector-leaders/review-frames/new-signup-45.png"
     },
     {
       "scene": "new-signup",
       "fraction": 0.6,
-      "seconds": 141.81220000000002,
-      "file": "/private/tmp/codex-video/videos/output/sector-leaders/review-frames/new-signup-60.png"
+      "seconds": 157.79760000000002,
+      "file": "/Users/pol/Desktop/benevoles/.claude/worktrees/video-batch25-26-sources/videos/output/sector-leaders/review-frames/new-signup-60.png"
     },
     {
       "scene": "new-signup",
       "fraction": 0.85,
-      "seconds": 149.33145000000002,
-      "file": "/private/tmp/codex-video/videos/output/sector-leaders/review-frames/new-signup-85.png"
+      "seconds": 165.6716,
+      "file": "/Users/pol/Desktop/benevoles/.claude/worktrees/video-batch25-26-sources/videos/output/sector-leaders/review-frames/new-signup-85.png"
     },
     {
       "scene": "new-signup",
-      "fraction": 0.9900256009575423,
-      "seconds": 153.543,
-      "file": "/private/tmp/codex-video/videos/output/sector-leaders/review-frames/new-signup-end.png"
+      "fraction": 0.9904749809499619,
+      "seconds": 170.096,
+      "file": "/Users/pol/Desktop/benevoles/.claude/worktrees/video-batch25-26-sources/videos/output/sector-leaders/review-frames/new-signup-end.png"
     },
     {
       "scene": "notification",
-      "fraction": 0.02933411557641537,
-      "seconds": 158.11,
-      "file": "/private/tmp/codex-video/videos/output/sector-leaders/review-frames/notification-3.png"
+      "fraction": 0.02856598743096553,
+      "seconds": 174.723,
+      "file": "/Users/pol/Desktop/benevoles/.claude/worktrees/video-batch25-26-sources/videos/output/sector-leaders/review-frames/notification-3.png"
     },
     {
       "scene": "notification",
       "fraction": 0.25,
-      "seconds": 162.6235,
-      "file": "/private/tmp/codex-video/videos/output/sector-leaders/review-frames/notification-25.png"
+      "seconds": 179.374,
+      "file": "/Users/pol/Desktop/benevoles/.claude/worktrees/video-batch25-26-sources/videos/output/sector-leaders/review-frames/notification-25.png"
     },
     {
       "scene": "notification",
       "fraction": 0.45,
-      "seconds": 166.71429999999998,
-      "file": "/private/tmp/codex-video/videos/output/sector-leaders/review-frames/notification-45.png"
+      "seconds": 183.57479999999998,
+      "file": "/Users/pol/Desktop/benevoles/.claude/worktrees/video-batch25-26-sources/videos/output/sector-leaders/review-frames/notification-45.png"
     },
     {
       "scene": "notification",
       "fraction": 0.6,
-      "seconds": 169.7824,
-      "file": "/private/tmp/codex-video/videos/output/sector-leaders/review-frames/notification-60.png"
+      "seconds": 186.7254,
+      "file": "/Users/pol/Desktop/benevoles/.claude/worktrees/video-batch25-26-sources/videos/output/sector-leaders/review-frames/notification-60.png"
     },
     {
       "scene": "notification",
       "fraction": 0.85,
-      "seconds": 174.89589999999998,
-      "file": "/private/tmp/codex-video/videos/output/sector-leaders/review-frames/notification-85.png"
+      "seconds": 191.97639999999998,
+      "file": "/Users/pol/Desktop/benevoles/.claude/worktrees/video-batch25-26-sources/videos/output/sector-leaders/review-frames/notification-85.png"
     },
     {
       "scene": "notification",
-      "fraction": 0.9853329422117924,
-      "seconds": 177.664,
-      "file": "/private/tmp/codex-video/videos/output/sector-leaders/review-frames/notification-end.png"
+      "fraction": 0.9857170062845172,
+      "seconds": 194.827,
+      "file": "/Users/pol/Desktop/benevoles/.claude/worktrees/video-batch25-26-sources/videos/output/sector-leaders/review-frames/notification-end.png"
     },
     {
       "scene": "contact",
-      "fraction": 0.03571853792118109,
-      "seconds": 179.016,
-      "file": "/private/tmp/codex-video/videos/output/sector-leaders/review-frames/contact-4.png"
+      "fraction": 0.03411610848922499,
+      "seconds": 196.179,
+      "file": "/Users/pol/Desktop/benevoles/.claude/worktrees/video-batch25-26-sources/videos/output/sector-leaders/review-frames/contact-3.png"
     },
     {
       "scene": "contact",
       "fraction": 0.25,
-      "seconds": 182.6155,
-      "file": "/private/tmp/codex-video/videos/output/sector-leaders/review-frames/contact-25.png"
+      "seconds": 199.97575,
+      "file": "/Users/pol/Desktop/benevoles/.claude/worktrees/video-batch25-26-sources/videos/output/sector-leaders/review-frames/contact-25.png"
     },
     {
       "scene": "contact",
       "fraction": 0.45,
-      "seconds": 185.9751,
-      "file": "/private/tmp/codex-video/videos/output/sector-leaders/review-frames/contact-45.png"
+      "seconds": 203.49314999999999,
+      "file": "/Users/pol/Desktop/benevoles/.claude/worktrees/video-batch25-26-sources/videos/output/sector-leaders/review-frames/contact-45.png"
     },
     {
       "scene": "contact",
       "fraction": 0.6,
-      "seconds": 188.4948,
-      "file": "/private/tmp/codex-video/videos/output/sector-leaders/review-frames/contact-60.png"
+      "seconds": 206.1312,
+      "file": "/Users/pol/Desktop/benevoles/.claude/worktrees/video-batch25-26-sources/videos/output/sector-leaders/review-frames/contact-60.png"
     },
     {
       "scene": "contact",
       "fraction": 0.85,
-      "seconds": 192.6943,
-      "file": "/private/tmp/codex-video/videos/output/sector-leaders/review-frames/contact-85.png"
+      "seconds": 210.52795,
+      "file": "/Users/pol/Desktop/benevoles/.claude/worktrees/video-batch25-26-sources/videos/output/sector-leaders/review-frames/contact-85.png"
     },
     {
       "scene": "contact",
-      "fraction": 0.9821407310394095,
-      "seconds": 194.914,
-      "file": "/private/tmp/codex-video/videos/output/sector-leaders/review-frames/contact-end.png"
+      "fraction": 0.9829419457553875,
+      "seconds": 212.866,
+      "file": "/Users/pol/Desktop/benevoles/.claude/worktrees/video-batch25-26-sources/videos/output/sector-leaders/review-frames/contact-end.png"
     },
     {
       "scene": "remove",
-      "fraction": 0.03006012024048096,
-      "seconds": 196.265,
-      "file": "/private/tmp/codex-video/videos/output/sector-leaders/review-frames/remove-3.png"
+      "fraction": 0.0273224043715847,
+      "seconds": 214.218,
+      "file": "/Users/pol/Desktop/benevoles/.claude/worktrees/video-batch25-26-sources/videos/output/sector-leaders/review-frames/remove-3.png"
     },
     {
       "scene": "remove",
       "fraction": 0.25,
-      "seconds": 200.655,
-      "file": "/private/tmp/codex-video/videos/output/sector-leaders/review-frames/remove-25.png"
+      "seconds": 219.108,
+      "file": "/Users/pol/Desktop/benevoles/.claude/worktrees/video-batch25-26-sources/videos/output/sector-leaders/review-frames/remove-25.png"
     },
     {
       "scene": "remove",
       "fraction": 0.45,
-      "seconds": 204.647,
-      "file": "/private/tmp/codex-video/videos/output/sector-leaders/review-frames/remove-45.png"
+      "seconds": 223.5,
+      "file": "/Users/pol/Desktop/benevoles/.claude/worktrees/video-batch25-26-sources/videos/output/sector-leaders/review-frames/remove-45.png"
     },
     {
       "scene": "remove",
       "fraction": 0.6,
-      "seconds": 207.641,
-      "file": "/private/tmp/codex-video/videos/output/sector-leaders/review-frames/remove-60.png"
+      "seconds": 226.794,
+      "file": "/Users/pol/Desktop/benevoles/.claude/worktrees/video-batch25-26-sources/videos/output/sector-leaders/review-frames/remove-60.png"
     },
     {
       "scene": "remove",
       "fraction": 0.85,
-      "seconds": 212.631,
-      "file": "/private/tmp/codex-video/videos/output/sector-leaders/review-frames/remove-85.png"
+      "seconds": 232.284,
+      "file": "/Users/pol/Desktop/benevoles/.claude/worktrees/video-batch25-26-sources/videos/output/sector-leaders/review-frames/remove-85.png"
     },
     {
       "scene": "remove",
-      "fraction": 0.9849699398797596,
-      "seconds": 215.325,
-      "file": "/private/tmp/codex-video/videos/output/sector-leaders/review-frames/remove-end.png"
+      "fraction": 0.9863387978142076,
+      "seconds": 235.278,
+      "file": "/Users/pol/Desktop/benevoles/.claude/worktrees/video-batch25-26-sources/videos/output/sector-leaders/review-frames/remove-end.png"
+    },
+    {
+      "scene": "leaders-sector-scope",
+      "fraction": 0.018807008745259066,
+      "seconds": 237.866,
+      "file": "/Users/pol/Desktop/benevoles/.claude/worktrees/video-batch25-26-sources/videos/output/sector-leaders/review-frames/leaders-sector-scope-2.png"
+    },
+    {
+      "scene": "leaders-sector-scope",
+      "fraction": 0.25,
+      "seconds": 245.24175,
+      "file": "/Users/pol/Desktop/benevoles/.claude/worktrees/video-batch25-26-sources/videos/output/sector-leaders/review-frames/leaders-sector-scope-25.png"
+    },
+    {
+      "scene": "leaders-sector-scope",
+      "fraction": 0.45,
+      "seconds": 251.62235,
+      "file": "/Users/pol/Desktop/benevoles/.claude/worktrees/video-batch25-26-sources/videos/output/sector-leaders/review-frames/leaders-sector-scope-45.png"
+    },
+    {
+      "scene": "leaders-sector-scope",
+      "fraction": 0.6,
+      "seconds": 256.4078,
+      "file": "/Users/pol/Desktop/benevoles/.claude/worktrees/video-batch25-26-sources/videos/output/sector-leaders/review-frames/leaders-sector-scope-60.png"
+    },
+    {
+      "scene": "leaders-sector-scope",
+      "fraction": 0.85,
+      "seconds": 264.38355,
+      "file": "/Users/pol/Desktop/benevoles/.claude/worktrees/video-batch25-26-sources/videos/output/sector-leaders/review-frames/leaders-sector-scope-85.png"
+    },
+    {
+      "scene": "leaders-sector-scope",
+      "fraction": 0.9905964956273705,
+      "seconds": 268.869,
+      "file": "/Users/pol/Desktop/benevoles/.claude/worktrees/video-batch25-26-sources/videos/output/sector-leaders/review-frames/leaders-sector-scope-end.png"
+    },
+    {
+      "scene": "leaders-sector-roster",
+      "fraction": 0.025389302640487475,
+      "seconds": 270.256,
+      "file": "/Users/pol/Desktop/benevoles/.claude/worktrees/video-batch25-26-sources/videos/output/sector-leaders/review-frames/leaders-sector-roster-3.png"
+    },
+    {
+      "scene": "leaders-sector-roster",
+      "fraction": 0.25,
+      "seconds": 275.564,
+      "file": "/Users/pol/Desktop/benevoles/.claude/worktrees/video-batch25-26-sources/videos/output/sector-leaders/review-frames/leaders-sector-roster-25.png"
+    },
+    {
+      "scene": "leaders-sector-roster",
+      "fraction": 0.45,
+      "seconds": 280.29040000000003,
+      "file": "/Users/pol/Desktop/benevoles/.claude/worktrees/video-batch25-26-sources/videos/output/sector-leaders/review-frames/leaders-sector-roster-45.png"
+    },
+    {
+      "scene": "leaders-sector-roster",
+      "fraction": 0.6,
+      "seconds": 283.8352,
+      "file": "/Users/pol/Desktop/benevoles/.claude/worktrees/video-batch25-26-sources/videos/output/sector-leaders/review-frames/leaders-sector-roster-60.png"
+    },
+    {
+      "scene": "leaders-sector-roster",
+      "fraction": 0.85,
+      "seconds": 289.7432,
+      "file": "/Users/pol/Desktop/benevoles/.claude/worktrees/video-batch25-26-sources/videos/output/sector-leaders/review-frames/leaders-sector-roster-85.png"
+    },
+    {
+      "scene": "leaders-sector-roster",
+      "fraction": 0.9873053486797563,
+      "seconds": 292.988,
+      "file": "/Users/pol/Desktop/benevoles/.claude/worktrees/video-batch25-26-sources/videos/output/sector-leaders/review-frames/leaders-sector-roster-end.png"
     }
   ]
 }

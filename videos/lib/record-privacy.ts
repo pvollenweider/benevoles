@@ -11,6 +11,8 @@ import { linkToken, registrationToken } from "../../src/lib/token-vault"
 import { PERSONAL_LINK_NOTICE, LINK_REQUEST_RESPONSE } from "../../src/lib/personal-link"
 import { showMembersCsv } from "./show-export-files"
 import type { Cue } from "./sentence-timing"
+import { PUBLIC_APP_URL } from "./public-hosts"
+const MAILPIT = process.env.VIDEO_MAILPIT_URL ?? "http://localhost:48026"
 import { fullNameOf, surnameOf } from "./fixture-names"
 
 type Scene = (id: string, action: (at: Cue) => Promise<void>) => Promise<void>
@@ -25,7 +27,7 @@ function localDatabase() {
 
 /** Actual A/B logins prepared before the screencast, not fabricated session cookies. */
 export async function preparePrivacyRecording(page: Page, base: string, directory: string): Promise<PrivacySetup> {
-  if (!["localhost", "127.0.0.1"].includes(new URL(base).hostname)) throw new Error("Local video host required")
+  if (base !== PUBLIC_APP_URL && !["localhost", "127.0.0.1"].includes(new URL(base).hostname)) throw new Error("Local video host required")
   const proof = JSON.parse(await readFile(path.join(directory, "preparation.json"), "utf8"))
   if (!proof.crossOrganizationDetailRefusedBothWays || !proof.leaderRevocationRefusesOldLink || proof.actualEmailsReceived?.length !== 3) throw new Error("Actual privacy preflight required")
   const db = localDatabase()
@@ -58,22 +60,22 @@ export async function recordPrivacy(options: { page: Page; base: string; directo
   const { page, base, directory, title, setup, scene, tap, settle } = options
   const db = localDatabase()
   const eventId = "video-privacy-a-event"
-  const go = async (route: string) => { await page.goto(route.startsWith("http://localhost:48026/") ? route : `${base}${route}`); await settle(page) }
+  const go = async (route: string) => { await page.goto(route.startsWith(`${MAILPIT}/`) ? route : `${base}${route}`); await settle(page) }
   const session = async (cookies: Cookie[] | null) => { await page.context().clearCookies(); if (cookies) await page.context().addCookies(cookies) }
   const write = async (field: Locator, value: string, delay = 110) => { await field.scrollIntoViewIfNeeded(); await tap(page, field); await field.press("ControlOrMeta+A"); await field.pressSequentially(value, { delay }) }
-  const inbox = async (): Promise<Mail[]> => (await (await page.request.get("http://localhost:48026/api/v1/messages?limit=1000")).json()).messages
+  const inbox = async (): Promise<Mail[]> => (await (await page.request.get(`${MAILPIT}/api/v1/messages?limit=1000`)).json()).messages
   const ids = async () => new Set((await inbox()).map(mail => mail.ID))
   const openMail = async (before: Set<string>, recipient: string, kind: "personal" | "invitation") => {
     let found: Mail | undefined
     for (let attempt = 0; attempt < 40 && !found; attempt++) {
       for (const mail of (await inbox()).filter(mail => !before.has(mail.ID) && mail.To.some(to => to.Address === recipient))) {
-        const detail = await (await page.request.get(`http://localhost:48026/api/v1/message/${mail.ID}`)).json() as { Text: string }
+        const detail = await (await page.request.get(`${MAILPIT}/api/v1/message/${mail.ID}`)).json() as { Text: string }
         if (detail.Text.includes(kind === "personal" ? "/my/" : "?token=")) { found = mail; break }
       }
       if (!found) await page.waitForTimeout(250)
     }
     if (!found) throw new Error("New actual privacy demonstration email missing")
-    await go(`http://localhost:48026/view/${found.ID}`)
+    await go(`${MAILPIT}/view/${found.ID}`)
     const link = page.frameLocator("iframe").locator(kind === "personal" ? 'a[href*="/my/"]' : 'a[href*="?token="]').first()
     await link.waitFor()
     const href = await link.getAttribute("href")
@@ -238,7 +240,15 @@ export async function recordPrivacy(options: { page: Page; base: string; directo
       const popup = await ready; await popup.waitForLoadState("networkidle")
       const url = new URL(popup.url()); await popup.close()
       if (url.origin !== new URL(base).origin || !url.pathname.endsWith("/sheets/day")) throw new Error("Unexpected real report")
+      // Closing the foreground popup can leave the main tab's compositor suspended.
+      // Restore its real focus before showing the actual report on the filmed page.
+      await page.bringToFront()
       await page.goto(url.href); await settle(page)
+      await page.bringToFront()
+      await page.getByRole("heading", { level: 1, name: "Fête des liens — organisation A", exact: true }).waitFor()
+      await page.getByText(/^Planning par jour · Formation/).waitFor()
+      await page.screenshot({ path: path.join(directory, "report-before-csv.png") })
+      await page.waitForTimeout(600)
       const body = await page.locator("body").innerText()
       if (body.includes("Note interne fictive") || body.includes("video.privacy.a.member.0@example.org")) throw new Error("Stand report contains private member fields")
       await at("Comparons-le au CSV des membres"); await go("/admin/members")

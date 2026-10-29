@@ -1,6 +1,6 @@
-Responsable de poste : accompagner son équipe
+Responsables de poste et de secteur : accompagner son équipe
 
-Le jour de la fête, vous n'avez pas besoin de tout coordonner seul ou seule. Un responsable de poste peut suivre son équipe, retrouver les créneaux et contacter les bénévoles. Nous allons désigner une personne, ouvrir son vrai lien personnel et découvrir ce qu'elle peut consulter. Aucun accès à toute l'administration n'est nécessaire.
+Le jour de la fête, vous n'avez pas besoin de tout coordonner seul ou seule. Un responsable de poste peut suivre son équipe, retrouver les créneaux et contacter les bénévoles. Nous allons désigner une personne, ouvrir son vrai lien personnel et découvrir ce qu'elle peut consulter. Dans un événement organisé par secteurs, un responsable peut aussi suivre tout un secteur. Aucun accès à toute l'administration n'est nécessaire.
 
 Dans l'événement, ouvrez les responsables et ajoutez une personne. Choisissez le poste, puis renseignez son nom et son email. Vérifiez bien cette adresse : c'est là que son lien sera envoyé. Vous pouvez désigner quelqu'un qui n'est pas lui-même inscrit à un créneau. Ajouter et envoyer le lien enregistre la nomination et prépare son email.
 
@@ -21,3 +21,7 @@ Côté responsable, voici l'email réellement reçu à la suite de cette inscrip
 Attention à une autre distinction : le contact opérationnel indiqué sur un créneau est la personne que les bénévoles doivent joindre sur place. Désigner un responsable ne publie pas automatiquement ses coordonnées comme contact. L'organisateur renseigne ce contact séparément dans le créneau, si c'est bien la personne à appeler.
 
 Quand la responsabilité change, retirez la personne de ce poste et confirmez. Son ancien lien ne donne alors plus accès à cette équipe. Cette action retire la responsabilité, pas ses éventuelles inscriptions comme bénévole. Vous pouvez ensuite désigner la nouvelle personne et lui envoyer son propre lien : chacun dispose du bon accès, au bon moment.
+
+Voyons maintenant un événement organisé par secteurs, le Festival de Montvert. Sa page s'appelle Responsables de poste et de secteur, et classe les responsables par secteur. En ajoutant un responsable, choisissez d'abord Responsable de. Tout un secteur, ou Un poste précis, comme dans un événement sans secteurs. Confions tout le secteur Parking à Paul. Renseignons son nom et son email, puis ajoutons et envoyons son lien. Cette possibilité fait partie des fonctions bêta.
+
+Le lien personnel de Paul montre tous les postes qui sont en ce moment dans le secteur Parking, classés par poste : Parking Nord et Parking Mairie. Un filtre Jour limite la liste à une journée. Un poste ajouté plus tard au secteur y apparaît aussitôt. Paul reçoit aussi les emails de nouvelle inscription et de désistement de tous les postes du secteur. Les bénévoles, eux, ne voient pas les secteurs.

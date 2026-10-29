@@ -26,7 +26,7 @@ export async function seedVideoPrivacy(db: PrismaClient) {
   await db.rateLimit.deleteMany({ where: { OR: recipients.map(email => ({
     key: { startsWith: `email:recipient:${createHash("sha256").update(email).digest("hex").slice(0, 32)}:` },
   })) } })
-  const day = new Date("2026-10-24T00:00:00Z")
+  const day = new Date(`${new Date(Date.now() + 14 * 86_400_000).toISOString().slice(0, 10)}T00:00:00Z`)
   for (const side of ["a", "b"] as const) {
     const organizationId = `video-privacy-${side}`
     const slug = `formation-confidentialite-${side}`

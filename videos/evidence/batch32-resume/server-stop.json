@@ -1,0 +1,19 @@
+{
+  "stoppedAt": "2026-10-29T07:36:41.141741+00:00",
+  "pid": 8876,
+  "snapshot": "/tmp/benevoles-video-production.h6qj9dqj",
+  "listeningPidAndCwdVerified": true,
+  "containers": [
+    {
+      "name": "benevoles_batch32_resume_postgres",
+      "id": "c4953bfa2ae3729aeb669ac1d6bfda1b19da7f9f67882411fd767418ff39886a",
+      "stopped": true
+    },
+    {
+      "name": "benevoles_batch32_resume_mailpit",
+      "id": "791526915a4a61d4604fd92660ee8bb2d143e87a6f3d5b2cbb6e3ecada560e7a",
+      "stopped": true
+    }
+  ],
+  "unrelatedContainersUntouched": true
+}

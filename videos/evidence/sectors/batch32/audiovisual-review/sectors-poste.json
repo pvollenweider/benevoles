@@ -1,0 +1,52 @@
+{
+  "model": "gemini-3.8-flash",
+  "reviewedAt": "2026-10-29T06:31:56.980Z",
+  "videoSha256": "360d0218823ac42402d2a5ba46bd6a89cb939710c3aa2e8fd8d6325c9a84c2cc",
+  "promptSha256": "4f765dd7923e73d1f925efdcc98fc70a6de6aa4f5585bba086de2d9914b28e59",
+  "clipSha256": "e31f4b55059955bd9542f55291a4565ab9abc18d5df46338517d3e7aa4f8a6bc",
+  "scene": "sectors-poste",
+  "review": {
+    "heardOpening": "Ajoutons ensuite les postes dans chaque secteur.",
+    "checkpoints": [
+      {
+        "spokenSeconds": 3.5,
+        "spoken": "Sous Backline, le bouton Ajouter un poste dans Backline ouvre le formulaire de créneau",
+        "visibleSeconds": 3,
+        "visible": "Affichage du formulaire Nouveau poste : premier créneau avec le secteur Backline prérempli",
+        "sync": "aligned",
+        "severity": "none"
+      },
+      {
+        "spokenSeconds": 9.5,
+        "spoken": "Tapons le nom du nouveau poste, Backline Scène du Lac",
+        "visibleSeconds": 10,
+        "visible": "Saisie de Backline Scène du Lac dans le champ Poste",
+        "sync": "aligned",
+        "severity": "none"
+      },
+      {
+        "spokenSeconds": 12.8,
+        "spoken": "puis son premier créneau, avec le jour, les horaires et les places",
+        "visibleSeconds": 13,
+        "visible": "Renseignement de la date, des heures de début et fin ainsi que du nombre de places",
+        "sync": "aligned",
+        "severity": "none"
+      },
+      {
+        "spokenSeconds": 16.8,
+        "spoken": "Le poste est créé avec ce créneau, directement dans son secteur.",
+        "visibleSeconds": 17.5,
+        "visible": "Retour à la liste des secteurs avec le nouveau poste Backline Scène du Lac affiché sous Backline",
+        "sync": "aligned",
+        "severity": "none"
+      }
+    ],
+    "issues": [],
+    "voice": {
+      "consistent": true,
+      "warm": true,
+      "observation": "Voix claire, posée et bien synchronisée avec les actions à l'écran."
+    }
+  },
+  "note": "Automated observation of actual final video audio and images; not a claim of complete human validation"
+}

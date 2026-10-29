@@ -15,7 +15,7 @@ const reference = process.argv.find((arg) => !arg.startsWith("-") && arg !== pro
 if (!reference) throw new Error("Usage: npm run video:record -- <VIDEO_ID>")
 
 const localBaseUrl = (process.env.VIDEO_BASE_URL ?? "http://localhost:43100").replace(/\/$/, "")
-const publicOperator = reference === "SHIFT_ROSTER_VISIBILITY" || (reference === "PLATFORM_INTERNAL_ADMINISTRATION" && process.env.VIDEO_OPERATOR_PUBLIC === "1") || (reference === "ORG_TEAM_PERMISSIONS" && process.env.VIDEO_PUBLIC_CAPTURE === "1")
+const publicOperator = ["BETA_ACCESS", "SECTORS", "SHIFT_SWAPS", "SECTOR_LEADERS", "PRIVACY_PERSONAL_LINKS"].includes(reference) || reference === "SHIFT_ROSTER_VISIBILITY" || (reference === "PLATFORM_INTERNAL_ADMINISTRATION" && process.env.VIDEO_OPERATOR_PUBLIC === "1") || (reference === "ORG_TEAM_PERMISSIONS" && process.env.VIDEO_PUBLIC_CAPTURE === "1")
 const baseUrl = publicOperator ? "https://www.benevol.app" : localBaseUrl
 const host = new URL(localBaseUrl).hostname
 if (host !== "localhost" && host !== "127.0.0.1" && host !== "::1") {
@@ -24,6 +24,7 @@ if (host !== "localhost" && host !== "127.0.0.1" && host !== "::1") {
 
 const org = process.env.VIDEO_ORG ?? "default"
 const eventSlug = process.env.VIDEO_EVENT_SLUG ?? "fete-du-village"
+const mailpitBase = process.env.VIDEO_MAILPIT_URL ?? "http://localhost:48026"
 const gapMs = 450
 const rehearsal = process.argv.includes("--rehearse")
 const quickRehearsal = process.argv.includes("--quick-rehearse")
@@ -52,7 +53,7 @@ async function settle(page: Page) {
 
 async function verifyRegistrationTakeMailbox(page: Page, dir: string, query = 'subject:"Fête du village de Montvert"') {
   const reset = JSON.parse(await readFile(path.join(dir, "mailbox-reset-proof.json"), "utf8")) as { preservedMessageIds: string[] }
-  const response = await page.request.get("http://localhost:48026/api/v1/search", { params: { query, limit: 500 } })
+  const response = await page.request.get(`${mailpitBase}/api/v1/search`, { params: { query, limit: 500 } })
   if (!response.ok()) throw new Error("Take mailbox search unavailable")
   const result = await response.json() as { messages: { ID: string; Subject: string; To: { Address: string }[] }[]; messages_count: number }
   if (!result.messages.length || result.messages.length !== result.messages_count || result.messages.some(m => reset.preservedMessageIds.includes(m.ID))) throw new Error("Mailpit list contains an earlier or unverified email")
@@ -66,7 +67,7 @@ async function verifyRegistrationTakeMailbox(page: Page, dir: string, query = 's
 
 async function openRegistrationTakeMailbox(page: Page, dir: string, id: string, query = 'subject:"Fête du village de Montvert"') {
   const messages = await verifyRegistrationTakeMailbox(page, dir, query)
-  await page.goto(`http://localhost:48026/search?q=${encodeURIComponent(query)}`); await settle(page)
+  await page.goto(`${mailpitBase}/search?q=${encodeURIComponent(query)}`); await settle(page)
   // Preserve Mailpit's in-memory searched list by following its result link.
   await tap(page, page.locator(`a[href="/view/${id}"]`).first()); await settle(page)
   const visibleIds = await page.locator('a[href^="/view/"]').evaluateAll(links => links.filter(link => link.textContent?.trim()).map(link => link.getAttribute("href")!.slice("/view/".length)))
@@ -3906,7 +3907,7 @@ async function main() {
       })
       let nominationMail: { ID: string } | undefined
       for (let attempt = 0; attempt < 40 && !nominationMail; attempt++) {
-        const response = await page.request.get("http://localhost:48026/api/v1/search", { params: { query: 'subject:"Fête du village de Montvert"', limit: 500 } })
+        const response = await page.request.get(`${mailpitBase}/api/v1/search`, { params: { query: 'subject:"Fête du village de Montvert"', limit: 500 } })
         const result = await response.json() as { messages: { ID: string; Subject: string; To: { Address: string }[] }[] }
         nominationMail = result.messages.find(m => m.To.some(to => to.Address === "samira.perrin@example.org") && /responsable/i.test(m.Subject))
         if (!nominationMail) await page.waitForTimeout(250)

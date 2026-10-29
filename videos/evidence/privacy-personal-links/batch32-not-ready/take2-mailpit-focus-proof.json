@@ -1,0 +1,30 @@
+{
+  "sourceSha256": "334da2602a2d794d0bda44b78921fa9ae61bb152ba5300835b2653e3f9d532c7",
+  "frames": [
+    {
+      "startMs": 66120,
+      "endMs": 70160
+    },
+    {
+      "startMs": 97600,
+      "endMs": 103360
+    },
+    {
+      "startMs": 122080,
+      "endMs": 125320
+    },
+    {
+      "startMs": 160400,
+      "endMs": 161760
+    }
+  ],
+  "holds": [],
+  "sampling": "Actual toolbar RGB every frame at 25 fps",
+  "crop": {
+    "x": 320,
+    "y": 264,
+    "width": 960,
+    "height": 536
+  },
+  "note": "Actual message body cropped below Mailpit headers: its fixed English date and unrelated inbox excluded. No email text or product state changed; raw capture retained. No still holds."
+}

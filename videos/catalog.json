@@ -930,9 +930,10 @@
         "organisateur"
       ],
       "feature": "Responsables de secteur",
-      "updatedAt": "2026-10-28",
+      "updatedAt": "2026-10-29",
       "revision": 6,
-      "level": "essentiel"
+      "level": "essentiel",
+      "updated": "2026-10-29"
     },
     {
       "id": "BETA_ACCESS",
@@ -944,7 +945,7 @@
         "paramètres",
         "opérateur"
       ],
-      "published": false,
+      "published": true,
       "seedScenario": "beta-access",
       "themes": [
         "organisation-equipe"
@@ -954,9 +955,10 @@
         "super-admin"
       ],
       "feature": "Fonctions bêta",
-      "updatedAt": "2026-10-28",
+      "updatedAt": "2026-10-29",
       "revision": 1,
-      "level": "avance"
+      "level": "avance",
+      "added": "2026-10-29"
     },
     {
       "id": "SECTORS",
@@ -970,7 +972,7 @@
         "messages",
         "bêta"
       ],
-      "published": false,
+      "published": true,
       "seedScenario": "sectors",
       "themes": [
         "planning-creneaux",
@@ -980,9 +982,10 @@
         "organisateur"
       ],
       "feature": "Secteurs",
-      "updatedAt": "2026-10-28",
+      "updatedAt": "2026-10-29",
       "revision": 1,
-      "level": "avance"
+      "level": "avance",
+      "added": "2026-10-29"
     },
     {
       "id": "SHIFT_SWAPS",

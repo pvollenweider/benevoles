@@ -528,20 +528,10 @@ jour `updatedAt` dans `videos/catalog.json` pour chacune de ces huit vidéos.
 
 ## Sources prêtes, rendu en attente : vidéos des fonctions bêta (#1168, #1147, #1169, #1174)
 
-Sources ajoutées sans rendu (aucune capture, aucune voix, aucune publication) ; le rendu se fait
-depuis un checkout à jour de `origin/main`, avec le seed de chaque scénario avant chaque prise
+Cette liste ne contient que les rendus finaux encore attendus. Le rendu se fait
+depuis le build vérifié de `origin/main`, avec le seed de chaque scénario avant chaque prise
 (chaque prise modifie sa fixture : secteurs enregistrés, échanges, responsables) :
 
-- `beta-access` (`BETA_ACCESS`, nouvelle, `published: false`) : sources prêtes, rendu en attente.
-  Seed `scripts/seed-video-scenario.ts beta-access`.
-- `sectors` (`SECTORS`, nouvelle, `published: false`) : sources prêtes, rendu en attente.
-  Seed `scripts/seed-video-scenario.ts sectors`.
-- `sector-leaders` (`SECTOR_LEADERS`, mise à jour, révision 6) : sources prêtes, rendu en attente.
-  Narration modifiée (`welcome`) et deux scènes ajoutées (`leaders-sector-scope`,
-  `leaders-sector-roster`) : toute la piste continue est à régénérer. Seed : démo, puis
-  `scripts/seed-video-scenario.ts sector-leaders` (`videos/tools/build.ts` enchaîne les deux).
-  La vidéo publiée garde l'ancien rendu jusqu'à la régénération : titre, bloc `viewer` et
-  transcription de la page de la vidéo décrivent déjà la nouvelle version.
 - `shift-swaps` (`SHIFT_SWAPS`, nouvelle, `published: false`) : sources prêtes, rendu en attente.
   Seed `scripts/seed-video-scenario.ts shift-swaps`.
 
@@ -550,11 +540,135 @@ Les quatre scénarios utilisent l'organisation fictive dédiée `formation-beta`
 fonctions bêta dont leur vidéo a besoin. La liste des fonctions ouvertes est commune à la
 plateforme locale : `scripts/seed-demo.ts` la retire, et désinscrit l'organisation de démonstration,
 pour que les autres vidéos ne montrent ni la carte « Fonctions bêta » ni les options bêta.
-Le recorder (`videos/lib/record-beta-features.ts`) n'a pas encore été répété sur la pile locale :
-une répétition `--rehearse --quick-rehearse` (après un seed neuf) est à faire avant la prise
-narrée. Les prises de `shift-swaps` et de `sector-leaders` attendent les vrais emails dans la boîte
+Les quatre scénarios ont réussi leur répétition `--rehearse --quick-rehearse` sur
+un seed neuf. Chaque prise narrée est également précédée d'un nouveau seed. Les prises de `shift-swaps` et de `sector-leaders` attendent les vrais emails dans la boîte
 locale (« Échange effectué », nomination du responsable de secteur).
 
 `workload-protection` (protection des pauses et de la charge, #1171) ne fait pas partie de ce lot :
 son lot 2 (repas, trajets, journée OFF, limites individuelles) est encore en cours. Sa vidéo suivra
 après le lot 2 de #1171.
+
+### Lot 32 — tentative du 2026-10-29 : build produit bloqué
+
+Les cinq vidéos restent **NOT READY** et ne sont pas publiées. La branche
+`video-batch32` cible `origin/main` à `e924abdc35bb03c19a99f1d3126bd06ecc6abc82`.
+Le build propre via `build-main-product.ts --commit` compile le JavaScript, puis
+Next.js refuse l’export `SWAP_PROPOSALS_PER_DAY` de la route
+`src/app/api/public/registrations/[token]/swaps/route.ts:38` : cet export ne fait
+pas partie des exports autorisés d’une route. Aucune correction produit n’est
+faite, conformément à l’interdiction de modifier `src/` dans ce lot.
+
+Aucun BUILD_ID vérifié, aucune répétition ni prise narrée, aucun nouveau MP4.
+Les lignes « sources prêtes, rendu en attente » ci-dessus restent valables.
+Catalogue (`published`, dates, révisions) et `videos/renders.json` inchangés.
+La révision 6 de SECTOR_LEADERS reste donc à tourner en priorité parmi les vidéos
+publiées ; le MP4 en ligne n’a pas été remplacé. PRIVACY_PERSONAL_LINKS reste à
+régénérer intégralement avec la même voix et à refilmer.
+
+Préparation : PostgreSQL 45435, SMTP 41032 et Mailpit 48032 dans deux conteneurs
+créés pour ce lot ; aucun conteneur existant repris ou arrêté. Le nettoyage des
+messages vidéo utilise maintenant `VIDEO_MAILPIT_URL`, au lieu du port historique
+codé en dur. Le contrôle de types des outils passe (203 sources), ainsi que les
+23 fichiers de tests vidéo (1123 tests), sur le client Prisma généré dans la copie
+jetable. Aucun fichier `src/` ni `content/guide/` du checkout n’a été modifié.
+Les anciens artefacts ont été archivés ; les preuves versionnées précédentes
+sont conservées et leurs rapports sont explicitement remplacés par NOT READY.
+
+La nouvelle narration continue de BETA_ACCESS (Kore, sans balises de pause) est
+conservée localement mais **non validée** : l’audit indépendant signale un mauvais
+découpage entre `beta-operator` (16,7 % d’écart, fin déplacée/manquante) et
+`beta-owner` (15,7 %, début déplacé/manquant). Elle ne doit pas servir à une prise
+avant correction des frontières et nouvel audit. Ce défaut s’ajoute au blocage
+commun du build ; aucune narration n’est déclarée contrôlée à tort.
+
+### Lot 32 — reprise du 2026-10-29
+
+Le build produit est débloqué sur `9831e86e40ae3dd1ba60eb632b8e90951483a11c`
+(origin/main, incluant #1206). BUILD_ID : `jJH5zvJlD2hQBFLXtZa0x`.
+Les ports isolés de cette reprise sont 45436 / 41033 / 48033 ; le serveur vérifié
+écoute sur 43102. Aucun conteneur tiers ni fichier produit du checkout n'est modifié.
+
+**BETA_ACCESS : READY et publiée** après aperçu puis APPLY=1 sur le contexte default.
+Première publication : `published: true`, `added` et `updatedAt` au 2026-10-29,
+révision 1 conservée. Narration Kore entièrement régénérée en une passe, sans balises.
+Répétition rapide réussie, puis nouveau seed et prise narrée. La passerelle publique
+locale évite le refus légitime de l'origine localhost sans modifier le produit.
+Durée 126,5 s ; musique 15,4–18,9 LU sous la voix ; musique seule au minimum -34,2 LUFS.
+Zéro tutoiement dans l'ASR intégrale et les VTT, aucun anglais parasite ; cinq audits
+AV / 16 points, zéro signalement. Images réelles inspectées. Six clics sonorisés.
+Contrôle de types (204 sources) et 34 fichiers / 1142 tests vidéo réussis.
+Preuves : `videos/evidence/beta-access/batch32/`. `videos/renders.json` inchangé.
+
+**SECTORS : READY et publiée** après aperçu puis APPLY=1 (default), cinq fichiers.
+Première publication : `published: true`, `added` et `updatedAt` au 2026-10-29,
+révision 1 conservée. Piste Puck entièrement régénérée et découpée sur les silences
+du même enregistrement ; onze audits source et onze audits du MP4 final réussis.
+Durée 222,280 s ; musique 14,5–19,2 LU sous la voix, minimum sans voix -34,1 LUFS.
+ASR intégrale et VTT : zéro tutoiement ; pas de paroles parasites. Onze chapitres AV,
+41 points, dix sans signalement et un point de cadrage résolu : la phrase expliquant
+le filtre dans l'URL accompagne son résultat et sa persistance après un vrai
+rechargement, sans annoncer une action sur la barre d'adresse. Le recorder vérifie
+la query réelle et la valeur conservée ; l'image après rechargement montre Parking
+et cinq inscriptions actives. Détail : `videos/evidence/sectors/batch32/source-review.json`.
+28 clics et 47 frappes réelles sonorisés. Preuves : `videos/evidence/sectors/batch32/`.
+Les correctifs des répétitions restent sous vidéos et seeds : Mailpit configurable,
+titres de postes sans virgule, dates de confidentialité relatives à la prise,
+cadrage du corps réel des emails. Contrôle de types 204 sources et 1142 tests verts.
+
+**SECTOR_LEADERS : READY et publiée**, première parmi les vidéos déjà publiées du lot.
+Aperçu puis APPLY=1 (default), cinq fichiers, notification après publication.
+Révision 6 préannoncée conservée ; `updatedAt` et le badge `updated` au 2026-10-29.
+L'ancien MP4 a été remplacé par le récit qu'annonçait déjà le catalogue.
+Durée 296,760 s ; treize audits de narration source et finale réussis, treize
+chapitres AV / 48 points sans signalement. Images téléphone et secteur relues.
+Musique 13,7–19,1 LU sous la voix, musique seule au minimum -32,9 LUFS ; zéro trou.
+36 clics et 152 frappes réelles sonorisés. ASR intégrale et VTT : zéro tutoiement,
+pas de paroles parasites. Deux cadrages de vrais corps Mailpit sans en-tête anglais,
+disjoints du cadrage téléphone avec refus explicite de tout chevauchement.
+Preuves : `videos/evidence/sector-leaders/batch32/`.
+
+SHIFT_SWAPS reste NOT READY à ce stade : la première prise avait un clic d'acceptation
+anticipé ; la seule reprise narrée prévue par les règles a échoué dans la dernière
+scène sur une référence `event` non définie ajoutée dans le recorder vidéo. Le correctif
+utilise l'EVENT_ID explicite et la vraie route du journal a été vérifiée (13 entrées).
+Aucune modification produit. Les deux prises sont archivées, jamais publiées.
+Une dérogation à « One re-film per video within a batch » a été demandée au propriétaire,
+sans supposer sa réponse. Les travaux autorisés sur PRIVACY continuent.
+
+
+### État final provisoire du lot 32 — dérogations de tournage en attente
+
+**PRIVACY_PERSONAL_LINKS : NOT READY, aucun nouveau MP4 publié.** L'ancien film
+reste en ligne ; catalogue `published: true`, révision 4 et dates conservés.
+La première prise ne montrait pas réellement le rapport annoncé. Le focus du tab
+filmé est restauré après fermeture du popup et le vrai H1/sous-titre du rapport
+sont désormais exigés. Un diagnostic enregistré puis la seconde prise montrent
+le vrai rapport avant le CSV ; ce point passe la revue AV.
+La seconde prise est rejetée pour une dérive de timbre à 22–22,5 s du chapitre
+`result`, signalée par l'AV, l'audio final seul et la comparaison source/mix.
+Une reconnaissance de la narration seule contredit ces résultats et est également
+conservée. La provenance prouve une seule génération continue : la spéculation du
+modèle sur un assemblage de voix n'est pas reprise comme un fait.
+
+Toute la narration a été régénérée de nouveau en une passe avec **Kore**, sans
+balises de pause et avec une consigne d'identité constante jusqu'à la conclusion.
+Les dix nouveaux audits de paroles passent (0–1,7 %, aucune fin/début déplacé), et
+le contrôle vocal du fichier entier relève une seule voix constante. Cette nouvelle
+piste n'est pas montée sur les images rejetées : elle nécessite une nouvelle prise.
+La limite « One re-film per video within a batch » étant atteinte, une dérogation
+explicite a été demandée au propriétaire, comme pour SHIFT_SWAPS. Aucune réponse
+n'est supposée. Preuves : `videos/evidence/privacy-personal-links/batch32-not-ready/`.
+
+Au stade présent : BETA_ACCESS, SECTORS et SECTOR_LEADERS READY et publiées ;
+SHIFT_SWAPS et PRIVACY_PERSONAL_LINKS NOT READY, sources corrigées/préparées,
+nouvelle prise bloquée uniquement par la limite de reprise sans dérogation.
+Les lignes du bloc « sources prêtes, rendu en attente » sont retirées uniquement
+pour les vidéos READY. Aucun `videos/renders.json`, `src/` ou guide modifié.
+
+Vérification de clôture : 204 sources vidéo et 34 fichiers / 1144 tests réussis ;
+les 15 fichiers des trois publications ont les mêmes SHA-256 distants et locaux,
+et neuf vérifications HTTP (MP4, VTT, JPEG) réussissent. Source produit, guides et
+`videos/renders.json` inchangés contre origin/main. Seuls le PID vidéo 8876 et les
+deux conteneurs créés pour cette reprise ont été arrêtés ; aucun tiers touché.
+Synthèse : `videos/evidence/batch32-resume/summary.json`. Les fichiers antérieurs,
+ignorés et non suivis sont conservés, y compris toutes les prises rejetées.
