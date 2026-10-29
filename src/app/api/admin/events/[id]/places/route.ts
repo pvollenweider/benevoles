@@ -12,7 +12,7 @@ import { orderedPlaces, placeName, placeNameTaken, PLACE_NAME_MAX, PLACE_NAME_TA
  * unique among the active places (case and spaces ignored), also enforced by the database.
  */
 
-export const PLACE_SELECT = { id: true, name: true, displayOrder: true, archivedAt: true } as const
+const PLACE_SELECT = { id: true, name: true, displayOrder: true, archivedAt: true } as const
 
 const isUniqueViolation = (e: unknown) => (e as { code?: string } | null)?.code === "P2002"
 
