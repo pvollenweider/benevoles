@@ -21,7 +21,8 @@ export const publicEventInclude = {
     where: { status: { not: "cancelled" } },
     // Every spot taken counts, a pending request or a waitlist offer included (#484): the page
     // agrees with the placement the server will make.
-    include: { registrations: { where: { status: { in: [...OCCUPYING_STATUSES] } } } },
+    // The place's name (#1171, lot 2): read by the recap's travel check, said in its messages.
+    include: { registrations: { where: { status: { in: [...OCCUPYING_STATUSES] } } }, place: { select: { name: true } } },
     orderBy: [{ date: "asc" }, { displayOrder: "asc" }, { startTime: "asc" }],
   },
   pages: {
@@ -72,6 +73,9 @@ export function toPublicEvent(event: PublicEventRow) {
     // « Repas sur le pouce possible » (#1171, lot 2): said to the volunteer before signing up, and
     // read by the recap's workload check.
     mealOnTheGo: shift.mealOnTheGo,
+    // Place of the mission (#1171, lot 2): its id and name, for the recap's travel check.
+    placeId: shift.placeId,
+    placeName: shift.place?.name ?? null,
     colorKey: shift.colorKey,
     maxPerVolunteer: shift.maxPerVolunteer,
     // Role cumulable with another shift (#986): the page does not mark its overlaps as conflicts.

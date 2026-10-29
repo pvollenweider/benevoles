@@ -59,7 +59,7 @@ export async function POST(_req: Request, { params }: { params: Promise<{ token:
       if (gate.kind !== "off") {
         await lockShifts(tx, [reg.shiftId])
         await lockVolunteerRows(tx, [reg.volunteerId])
-        const shift = await tx.shift.findFirst({ where: { id: reg.shiftId }, select: { id: true, date: true, startTime: true, endTime: true, mealOnTheGo: true, requiresApproval: true } })
+        const shift = await tx.shift.findFirst({ where: { id: reg.shiftId }, select: { id: true, date: true, startTime: true, endTime: true, mealOnTheGo: true, placeId: true, requiresApproval: true } })
         if (!shift) return null
         next = shift.requiresApproval ? "requested" : "active"
         const verdict = await checkDutyChange(tx, gate, reg.eventId, reg.volunteerId, { add: [shift] })

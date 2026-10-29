@@ -67,7 +67,7 @@ export async function decideRequest(db: OrgScopedPrisma, actor: LogActor, id: st
         if (gate.kind !== "off") {
           await lockShifts(tx, [reg.shiftId])
           await lockVolunteerRows(tx, [reg.volunteerId])
-          const shift = await tx.shift.findFirst({ where: { id: reg.shiftId }, select: { id: true, date: true, startTime: true, endTime: true, mealOnTheGo: true } })
+          const shift = await tx.shift.findFirst({ where: { id: reg.shiftId }, select: { id: true, date: true, startTime: true, endTime: true, mealOnTheGo: true, placeId: true } })
           if (shift) {
             const verdict = await checkDutyChange(tx, gate, reg.eventId, reg.volunteerId, { add: [shift] }, { exceptRegistrationIds: [id] })
             if (!verdict.ok) throw new WorkloadRefusalError(verdict, reg.volunteerId)

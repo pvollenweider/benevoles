@@ -10,7 +10,7 @@
 import { fmtDay, fmtDuration } from "./signup-recap"
 import {
   checkPolicyValues, EXISTING_WARNING_SUGGESTIONS, horizonDays, WRITE_SECTIONS, WORKLOAD_BENCHMARKS, WORKLOAD_LIMIT_FIELDS,
-  MEAL_WINDOWS_MAX, type EventHorizon, type MealRule, type PolicyProblem, type WorkloadBenchmark, type WorkloadField, type WorkloadLimitsV1, type WorkloadPolicyValues,
+  MEAL_WINDOWS_MAX, type EventHorizon, type MealRule, type TravelRule, type PolicyProblem, type WorkloadBenchmark, type WorkloadField, type WorkloadLimitsV1, type WorkloadPolicyValues,
 } from "./workload-policy"
 
 type LimitField = keyof WorkloadLimitsV1
@@ -37,8 +37,11 @@ export type MealWindowInput = { key: string; start: string; end: string }
 let windowKeys = 0
 const windowRow = (start = "", end = ""): MealWindowInput => ({ key: `w${++windowKeys}`, start, end })
 
+/** The travel answer as typed (#1171, lot 2); the margin is kept under « do not apply ». */
+export type TravelInput = { apply: "" | "yes" | "no"; minutes: string }
+
 /** The whole form as typed. */
-export type PolicyFormState = { serviceDayStart: string; offDay: OffDayInput; meal: MealInput } & Record<LimitField, DurationInput>
+export type PolicyFormState = { serviceDayStart: string; offDay: OffDayInput; meal: MealInput; travel: TravelInput } & Record<LimitField, DurationInput>
 
 const EMPTY_OFF_DAY: OffDayInput = { apply: "", minOffDays: "", windowDays: "" }
 const emptyMeal = (): MealInput => ({ apply: "", minutes: "", windows: [windowRow()], days: "all", dates: [] })
@@ -59,10 +62,19 @@ export const OFF_DAY_HELP = "Une journée de service avec la moindre mission com
 
 export const MEAL_HELP = "Quand une mission touche une plage, la personne doit y avoir au moins la durée du repas sans mission. Une mission où le repas sur le pouce est possible ne retire pas ce temps, mais compte comme du travail. Une attente entre deux missions qui contient ce repas peut dépasser l'attente maximale de la durée du repas, une fois par plage."
 
+export const TRAVEL_HELP = "Au moins cette marge entre deux missions à des lieux différents de l'événement. Deux missions en même temps à deux lieux différents (sur un poste cumulable, par exemple) sont toujours refusées ; avec 0, c'est la seule vérification. Le lieu se choisit sur chaque créneau ; le trajet d'une mission sans lieu n'est pas vérifié."
+
+/** The line under the margin about shifts without a place (event card), or null at 0. */
+export function shiftsWithoutPlaceText(count: number, activePlaces: number): string | null {
+  if (activePlaces === 0) return "Cet événement n'a encore aucun lieu : créez-les dans « Lieux des missions », sur la page Créneaux."
+  if (count === 0) return null
+  return count === 1 ? "1 créneau n'a pas de lieu : son trajet n'est pas vérifié." : `${count} créneaux n'ont pas de lieu : leur trajet n'est pas vérifié.`
+}
+
 export const SERVICE_DAY_START_HELP = "L'heure à laquelle une journée de service commence. Une mission de nuit avant cette heure compte dans la journée de la veille."
 
 export function emptyPolicyForm(): PolicyFormState {
-  return { serviceDayStart: "", offDay: { ...EMPTY_OFF_DAY }, meal: emptyMeal(), ...Object.fromEntries(WORKLOAD_LIMIT_FIELDS.map((f) => [f.key, { ...EMPTY }])) } as PolicyFormState
+  return { serviceDayStart: "", offDay: { ...EMPTY_OFF_DAY }, meal: emptyMeal(), travel: { apply: "", minutes: "" }, ...Object.fromEntries(WORKLOAD_LIMIT_FIELDS.map((f) => [f.key, { ...EMPTY }])) } as PolicyFormState
 }
 
 function offDayInputFrom(values: WorkloadPolicyValues): OffDayInput {
@@ -77,12 +89,17 @@ function mealInputFrom(rule: MealRule | undefined): MealInput {
   return { apply: "yes", minutes: String(rule.minutes), windows: rule.windows.map((w) => windowRow(w.start, w.end)), days: rule.days === "all" ? "all" : "some", dates: rule.days === "all" ? [] : [...rule.days] }
 }
 
+function travelInputFrom(rule: TravelRule | undefined): TravelInput {
+  if (!rule) return { apply: "", minutes: "" }
+  return rule.apply ? { apply: "yes", minutes: String(rule.minutes) } : { apply: "no", minutes: "" }
+}
+
 const toInput = (minutes: number): DurationInput => ({ hours: String(Math.floor(minutes / 60)), minutes: String(minutes % 60) })
 
 /** The form filled from stored values, or empty. */
 export function policyFormFrom(values: WorkloadPolicyValues | null | undefined): PolicyFormState {
   if (!values) return emptyPolicyForm()
-  return { serviceDayStart: values.serviceDayStart, offDay: offDayInputFrom(values), meal: mealInputFrom(values.meal), ...Object.fromEntries(WORKLOAD_LIMIT_FIELDS.map((f) => [f.key, toInput(values[f.key])])) } as PolicyFormState
+  return { serviceDayStart: values.serviceDayStart, offDay: offDayInputFrom(values), meal: mealInputFrom(values.meal), travel: travelInputFrom(values.travel), ...Object.fromEntries(WORKLOAD_LIMIT_FIELDS.map((f) => [f.key, toInput(values[f.key])])) } as PolicyFormState
 }
 
 /** The existing #465 warning settings filled in, the other fields left as they were. */
@@ -98,6 +115,7 @@ export function withBenchmark(form: PolicyFormState, b: WorkloadBenchmark): Poli
   for (const [key, minutes] of Object.entries(b.limits ?? {}) as [LimitField, number][]) next[key] = toInput(minutes)
   if (b.offDay) next.offDay = b.offDay.apply ? { apply: "yes", minOffDays: String(b.offDay.minOffDays), windowDays: String(b.offDay.windowDays) } : { ...form.offDay, apply: "no" }
   if (b.meal) next.meal = mealInputFrom(b.meal)
+  if (b.travel) next.travel = travelInputFrom(b.travel)
   return next
 }
 
@@ -119,13 +137,14 @@ export function mealDayOptions(horizon: EventHorizon): { date: string; label: st
 
 /** The fields a benchmark fills (their error is cleared once filled). */
 export function benchmarkFields(b: WorkloadBenchmark): string[] {
-  return [...Object.keys(b.limits ?? {}), ...(b.offDay ? ["offDay", "offDayMinOffDays", "offDayWindowDays"] : []), ...(b.meal ? ["meal", "mealMinutes", "mealWindows", "mealDays"] : [])]
+  return [...Object.keys(b.limits ?? {}), ...(b.offDay ? ["offDay", "offDayMinOffDays", "offDayWindowDays"] : []), ...(b.meal ? ["meal", "mealMinutes", "mealWindows", "mealDays"] : []), ...(b.travel ? ["travel", "travelMinutes"] : [])]
 }
 
 /** What the announcement says after a benchmark was used. */
 export function benchmarkAnnouncement(b: WorkloadBenchmark): string {
   const parts = WORKLOAD_LIMIT_FIELDS.filter((f) => b.limits && f.key in b.limits).map((f) => `${lowerFirstLabel(f.label)} ${fmtDuration(b.limits![f.key]!)}`)
   if (b.offDay?.apply) parts.push(`jours sans mission : règle appliquée, ${b.offDay.minOffDays} jour sur ${b.offDay.windowDays} journées de service`)
+  if (b.travel?.apply) parts.push(`trajet entre deux lieux : règle appliquée, ${fmtDuration(b.travel.minutes)} de marge`)
   if (b.meal?.apply) parts.push(`pause repas : règle appliquée, ${fmtDuration(b.meal.minutes)} entre ${b.meal.windows.map((w) => `${clock(w.start)} et ${clock(w.end)}`).join(", puis entre ")}, ${b.meal.days === "all" ? "tous les jours" : "certains jours"}`)
   return `Rempli : ${parts.join(", ")}. Les autres champs n'ont pas changé.`
 }
@@ -157,6 +176,9 @@ export function policyValuesFromForm(form: PolicyFormState): Record<string, unkn
   const o = form.offDay
   if (o.apply === "no") out.offDay = { apply: false }
   else if (o.apply === "yes") out.offDay = { apply: true, minOffDays: wholeNumber(o.minOffDays), windowDays: wholeNumber(o.windowDays) }
+  const t = form.travel
+  if (t.apply === "no") out.travel = { apply: false }
+  else if (t.apply === "yes") out.travel = { apply: true, minutes: wholeNumber(t.minutes) }
   const m = form.meal
   if (m.apply === "no") out.meal = { apply: false }
   else if (m.apply === "yes") {
@@ -220,13 +242,18 @@ export function policySummaryLines(values: WorkloadPolicyValues): string[] {
     !values.meal || !values.meal.apply
       ? "Aucune pause repas demandée."
       : `Au moins ${d(values.meal.minutes)} de repas sans mission dans chaque plage qu'une mission touche (${values.meal.windows.map((w) => `de ${clock(w.start)} à ${clock(w.end)}`).join(", ")}), ${values.meal.days === "all" ? "tous les jours" : `${values.meal.days.length} jour${values.meal.days.length > 1 ? "s" : ""} choisi${values.meal.days.length > 1 ? "s" : ""}`} ; une mission où le repas sur le pouce est possible ne retire pas ce temps.`,
+    !values.travel || !values.travel.apply
+      ? "Aucune marge de trajet demandée entre deux lieux."
+      : values.travel.minutes === 0
+        ? "Jamais deux missions en même temps à deux lieux différents, sans marge demandée entre elles ; le trajet d'une mission sans lieu n'est pas vérifié."
+        : `Au moins ${d(values.travel.minutes)} entre deux missions à des lieux différents, et jamais deux lieux à la fois ; le trajet d'une mission sans lieu n'est pas vérifié.`,
     "Une mission de « standby » compte comme du travail, jamais comme une pause.",
     "Toute inscription, tout ajout, tout échange ou changement d'horaire qui dépasserait ces limites est refusé, pour les bénévoles comme pour les organisateurs.",
   ]
 }
 
 /** What the protection does not cover yet, said next to the summary. */
-export const WORKLOAD_NOT_COVERED = "Pas encore pris en compte : le temps de trajet entre deux lieux, des limites plus strictes pour une personne."
+export const WORKLOAD_NOT_COVERED = "Pas encore pris en compte : des limites plus strictes pour une personne."
 
 /**
  * The days-off rule against the event's dates, under the period field (not live): with fewer

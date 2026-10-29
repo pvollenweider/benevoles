@@ -29,7 +29,11 @@
  * taken during them; they still count as work). A gap between two missions that holds that meal may
  * be longer than the idle limit by the meal's length, once per window.
  *
- * Still out (follow-ups): travel margins, individual stricter limits, draft publication (#1146).
+ * Version 4 adds the travel margin between places: two missions at different places of the event
+ * (Shift.placeId) need at least the margin between them, and never at the same time. A mission
+ * without a place is not checked (the organiser's screens say so).
+ *
+ * Still out (follow-ups): individual stricter limits, draft publication (#1146).
  */
 import { fmtDay, fmtDuration } from "./signup-recap"
 import { toMin, toMinEnd } from "./gantt-utils"
@@ -40,8 +44,8 @@ import { mergeIntervals } from "./interval-union"
  * The version written when every delivered section is answered. Older versions stay readable:
  * 1 (lot 1 only), 2 (with the days-off answer); 3 adds the meal answer.
  */
-export const WORKLOAD_POLICY_VERSION = 3
-export type WorkloadPolicyVersion = 1 | 2 | 3
+export const WORKLOAD_POLICY_VERSION = 4
+export type WorkloadPolicyVersion = 1 | 2 | 3 | 4
 
 /**
  * The days-off rule: an explicit answer, never a blank. `apply: false` is a saved « do not apply »;
@@ -63,6 +67,11 @@ export type MealRule = { apply: false } | { apply: true; minutes: number; window
 
 export const MEAL_MINUTES_RANGE = { min: 10, max: 120 } as const
 export const MEAL_WINDOWS_MAX = 3
+
+/** The travel answer (#1171, lot 2, version 4): the margin between missions at different places. */
+export type TravelRule = { apply: false } | { apply: true; minutes: number }
+
+export const TRAVEL_MINUTES_RANGE = { min: 0, max: 15 } as const
 
 /** The limits of a policy, in minutes. Every one is required to turn protection on. */
 export type WorkloadLimitsV1 = {
@@ -91,12 +100,14 @@ export type WorkloadPolicy = WorkloadLimitsV1 & {
   offDay?: OffDayRule
   /** The meal answer; absent before version 3 (not chosen yet, not applied). */
   meal?: MealRule
+  /** The travel answer; absent before version 4 (not chosen yet, not applied). */
+  travel?: TravelRule
 }
 
 /** What the organiser sets: the policy without its version and time zone (the server adds both). */
 export type WorkloadPolicyValues = Omit<WorkloadPolicy, "version" | "timeZone">
 
-export type WorkloadField = keyof WorkloadPolicyValues | "offDayMinOffDays" | "offDayWindowDays" | "mealMinutes" | "mealWindows" | `mealWindow${number}` | "mealDays"
+export type WorkloadField = keyof WorkloadPolicyValues | "offDayMinOffDays" | "offDayWindowDays" | "mealMinutes" | "mealWindows" | `mealWindow${number}` | "mealDays" | "travelMinutes"
 
 type LimitField = keyof WorkloadLimitsV1
 
@@ -121,6 +132,9 @@ export const MEAL_MINUTES_LABEL = "Durée du repas, en minutes"
 export const MEAL_WINDOWS_LABEL = "Plages du repas"
 export const MEAL_DAYS_LABEL = "Jours concernés"
 
+export const TRAVEL_LABEL = "Trajet entre deux lieux"
+export const TRAVEL_MINUTES_LABEL = "Marge entre deux lieux, en minutes"
+
 /**
  * The values of the existing #465 warnings, offered as editable suggestions only: they are
  * « réglages d'avertissement existants », never legal, recommended or approved pilot thresholds.
@@ -139,7 +153,7 @@ export const EXISTING_WARNING_SUGGESTIONS: Partial<WorkloadLimitsV1> = {
  * asks for 24 h + 11 h of uninterrupted rest per 7-day period, not an empty service day).
  */
 export type WorkloadBenchmark = {
-  id: "daily" | "rest" | "break" | "offDay" | "meal"
+  id: "daily" | "rest" | "break" | "offDay" | "meal" | "travel"
   /** The value, as the organiser reads it. */
   text: string
   /** Where it comes from. */
@@ -149,6 +163,7 @@ export type WorkloadBenchmark = {
   limits?: Partial<WorkloadLimitsV1>
   offDay?: OffDayRule
   meal?: MealRule
+  travel?: TravelRule
 }
 
 export const WORKLOAD_BENCHMARKS: WorkloadBenchmark[] = [
@@ -157,6 +172,7 @@ export const WORKLOAD_BENCHMARKS: WorkloadBenchmark[] = [
   { id: "break", text: "Une pause d'au moins 20 min avant 6 h de missions d'affilée.", source: "Approximation du Code du travail français (20 min dès 6 h de travail dans la journée). La loi suisse sur le travail prévoit 15 min au-delà de 5 h 30, 30 min au-delà de 7 h et 1 h au-delà de 9 h.", action: "Utiliser une pause de 20 min avant 6 h d'affilée", limits: { maxContinuousMinutes: 6 * 60, minBreakMinutes: 20 } },
   { id: "offDay", text: "1 jour sans mission sur 7 journées de service d'affilée.", source: "Approximation du repos hebdomadaire de la directive européenne 2003/88/CE (24 h, plus les 11 h de repos quotidien, par période de 7 jours).", action: "Utiliser 1 jour sans mission sur 7", offDay: { apply: true, minOffDays: 1, windowDays: 7 } },
   { id: "meal", text: "30 min de repas entre 11 h 30 et 14 h et entre 18 h et 21 h, tous les jours.", source: "Suggestion pour l'événementiel, pas une règle du droit du travail.", action: "Utiliser 30 min de repas entre 11 h 30 et 14 h et entre 18 h et 21 h", meal: { apply: true, minutes: 30, windows: [{ start: "11:30", end: "14:00" }, { start: "18:00", end: "21:00" }], days: "all" } },
+  { id: "travel", text: "15 min entre deux missions à des lieux différents.", source: "Suggestion pour l'événementiel, pas une règle du droit du travail : le temps d'aller d'une scène à l'autre.", action: "Utiliser 15 min entre deux lieux", travel: { apply: true, minutes: 15 } },
 ]
 
 export type PolicyProblem = { field: WorkloadField | "timeZone" | "version"; message: string }
@@ -277,15 +293,43 @@ function checkMeal(value: unknown, serviceDayStart: unknown, problems: PolicyPro
   return rule
 }
 
+/** Checks the travel answer; `undefined` comes back as « not answered ». */
+function checkTravel(value: unknown, problems: PolicyProblem[]): TravelRule | undefined {
+  if (value === undefined || value === null) return undefined
+  const v = (typeof value === "object" ? value : {}) as Record<string, unknown>
+  if (Object.keys(v).some((k) => k !== "apply" && k !== "minutes")) {
+    problems.push({ field: "travel", message: `${TRAVEL_LABEL} : réglage inconnu.` })
+    return undefined
+  }
+  if (v.apply === false) {
+    if (v.minutes !== undefined) problems.push({ field: "travel", message: `${TRAVEL_LABEL} : sans règle, aucune valeur n'est attendue.` })
+    return { apply: false }
+  }
+  if (v.apply !== true) {
+    problems.push({ field: "travel", message: `${TRAVEL_LABEL} : choisissez d'appliquer ou non cette règle.` })
+    return undefined
+  }
+  const { min, max } = TRAVEL_MINUTES_RANGE
+  if (v.minutes === undefined || v.minutes === null || v.minutes === "") {
+    problems.push({ field: "travelMinutes", message: `${TRAVEL_MINUTES_LABEL} : à compléter. Une valeur vide ne veut pas dire « sans limite ».` })
+    return undefined
+  }
+  if (!isInt(v.minutes) || v.minutes < min || v.minutes > max) {
+    problems.push({ field: "travelMinutes", message: `${TRAVEL_MINUTES_LABEL} : indiquez une marge de ${min} à ${max} minutes.` })
+    return undefined
+  }
+  return { apply: true, minutes: v.minutes }
+}
+
 /** What a write must answer: every section of the current version. */
-export const WRITE_SECTIONS = { requireOffDay: true, requireMeal: true } as const
+export const WRITE_SECTIONS = { requireOffDay: true, requireMeal: true, requireTravel: true } as const
 
 /**
  * Checks the organiser's values (no version, no zone): every field present, whole minutes in range,
  * consistent. `requireOffDay`: the days-off answer is required (every write from the forms); only a
  * stored version-1 policy or default is read without it.
  */
-export function checkPolicyValues(value: unknown, opts: { requireOffDay?: boolean; requireMeal?: boolean } = {}): { ok: true; values: WorkloadPolicyValues } | { ok: false; problems: PolicyProblem[] } {
+export function checkPolicyValues(value: unknown, opts: { requireOffDay?: boolean; requireMeal?: boolean; requireTravel?: boolean } = {}): { ok: true; values: WorkloadPolicyValues } | { ok: false; problems: PolicyProblem[] } {
   const v = (value && typeof value === "object" ? value : {}) as Record<string, unknown>
   const problems: PolicyProblem[] = []
   if (v.serviceDayStart === undefined || v.serviceDayStart === null || v.serviceDayStart === "") {
@@ -311,12 +355,17 @@ export function checkPolicyValues(value: unknown, opts: { requireOffDay?: boolea
   if (meal === undefined && opts.requireMeal && !problems.some((p) => p.field.startsWith("meal"))) {
     problems.push({ field: "meal", message: `${MEAL_LABEL} : choisissez d'appliquer ou non cette règle. Rien n'est choisi à votre place.` })
   }
+  const travel = checkTravel(v.travel, problems)
+  if (travel === undefined && opts.requireTravel && !problems.some((p) => p.field.startsWith("travel"))) {
+    problems.push({ field: "travel", message: `${TRAVEL_LABEL} : choisissez d'appliquer ou non cette règle. Rien n'est choisi à votre place.` })
+  }
   if (problems.length > 0) return { ok: false, problems }
   const values = {
     serviceDayStart: v.serviceDayStart as string,
     ...Object.fromEntries(WORKLOAD_LIMIT_FIELDS.map((f) => [f.key, v[f.key] as number])),
     ...(offDay ? { offDay } : {}),
     ...(meal ? { meal } : {}),
+    ...(travel ? { travel } : {}),
   } as WorkloadPolicyValues
   // Consistency: a smaller daily or event cap than the one it contains is almost always hours typed
   // as minutes (or the reverse); refused rather than guessed.
@@ -338,13 +387,13 @@ export function parseWorkloadPolicy(value: unknown): PolicyParse {
   const v = (value && typeof value === "object" ? value : {}) as Record<string, unknown>
   const problems: PolicyProblem[] = []
   const version = v.version
-  if (version !== 1 && version !== 2 && version !== 3) problems.push({ field: "version", message: "Version de réglage inconnue." })
+  if (version !== 1 && version !== 2 && version !== 3 && version !== 4) problems.push({ field: "version", message: "Version de réglage inconnue." })
   if (typeof v.timeZone !== "string" || !isValidTimeZone(v.timeZone)) problems.push({ field: "timeZone", message: "Fuseau horaire inconnu." })
   // A key this version does not know is a rule it cannot enforce: never silently ignored. Version 1
   // has no days-off answer; version 2 must have one.
-  const known = new Set<string>(["version", "timeZone", "serviceDayStart", ...WORKLOAD_LIMIT_FIELDS.map((f) => f.key), ...(version === 2 || version === 3 ? ["offDay"] : []), ...(version === 3 ? ["meal"] : [])])
+  const known = new Set<string>(["version", "timeZone", "serviceDayStart", ...WORKLOAD_LIMIT_FIELDS.map((f) => f.key), ...(version !== 1 ? ["offDay"] : []), ...(version === 3 || version === 4 ? ["meal"] : []), ...(version === 4 ? ["travel"] : [])])
   if (Object.keys(v).some((k) => !known.has(k))) problems.push({ field: "version", message: "Réglage inconnu de cette version." })
-  const values = checkPolicyValues(v, { requireOffDay: version === 2 || version === 3, requireMeal: version === 3 })
+  const values = checkPolicyValues(v, { requireOffDay: version !== 1, requireMeal: version === 3 || version === 4, requireTravel: version === 4 })
   if (!values.ok) problems.push(...values.problems)
   if (problems.length > 0 || !values.ok) return { ok: false, problems }
   return { ok: true, policy: { version: version as WorkloadPolicyVersion, timeZone: v.timeZone as string, ...values.values } }
@@ -357,6 +406,7 @@ export function policyValues(p: WorkloadPolicy): WorkloadPolicyValues {
     ...Object.fromEntries(WORKLOAD_LIMIT_FIELDS.map((f) => [f.key, p[f.key]])),
     ...(p.offDay ? { offDay: p.offDay } : {}),
     ...(p.meal ? { meal: p.meal } : {}),
+    ...(p.travel ? { travel: p.travel } : {}),
   } as WorkloadPolicyValues
 }
 
@@ -366,9 +416,15 @@ export function policyValues(p: WorkloadPolicy): WorkloadPolicyValues {
  * so that what is stored always parses.
  */
 export function buildPolicy(values: WorkloadPolicyValues, timeZone: string): WorkloadPolicy {
-  const { offDay, meal, ...rest } = values
+  const { offDay, meal, travel, ...rest } = values
+  if (offDay && meal && travel) return { version: 4, timeZone, ...rest, offDay, meal, travel }
   if (offDay && meal) return { version: 3, timeZone, ...rest, offDay, meal }
   return offDay ? { version: 2, timeZone, ...rest, offDay } : { version: 1, timeZone, ...rest }
+}
+
+/** Whether a travel margin is enforced. */
+export function travelApplies(p: Pick<WorkloadPolicy, "travel">): p is { travel: Extract<TravelRule, { apply: true }> } {
+  return p.travel?.apply === true
 }
 
 /** Whether a meal rule is enforced. */
@@ -412,6 +468,8 @@ export function policyChangeNeedsScan(prev: WorkloadPolicy | null, next: Workloa
     // Any change of an applied meal rule, turning it off included (it also takes away the meal's
     // credit against waiting), is checked: no loosening is proven for it.
     || ((mealApplies(prev) || mealApplies(next)) && JSON.stringify(prev.meal) !== JSON.stringify(next.meal))
+    // Travel: turning it on or a longer margin can create findings; off or shorter cannot.
+    || (travelApplies(next) && (!travelApplies(prev) || next.travel.minutes > prev.travel.minutes))
 }
 
 // ── Evaluation ──────────────────────────────────────────────────────────────
@@ -420,9 +478,13 @@ export function policyChangeNeedsScan(prev: WorkloadPolicy | null, next: Workloa
  * A committed mission of the person (confirmed place or pending request). `mealOnTheGo`: the
  * organiser marked it « repas sur le pouce possible » (the meal can be taken during it).
  */
-export type DutyShift = { id: string; date: string | Date; startTime: string; endTime: string; mealOnTheGo?: boolean | null }
+export type DutyShift = {
+  id: string; date: string | Date; startTime: string; endTime: string; mealOnTheGo?: boolean | null
+  /** The mission's place (#1171, lot 2, EventPlace), and its name for the messages; null: not checked for travel. */
+  placeId?: string | null; placeName?: string | null
+}
 
-export type WorkloadRule = "continuous" | "daily" | "event" | "rest" | "idle" | "meal" | "offday"
+export type WorkloadRule = "continuous" | "daily" | "event" | "rest" | "idle" | "meal" | "offday" | "travel" | "places"
 
 /**
  * One rule broken by a schedule. `start`/`end` are instants (ms): the continuous run, the gap for
@@ -439,6 +501,8 @@ export type WorkloadFinding = {
   minutes: number
   limit: number
   shiftIds: string[]
+  /** For « travel » and « places »: the names of the two places, in time order. */
+  places?: [string, string]
 }
 
 const MIN = 60_000
@@ -447,14 +511,14 @@ const dayKey = (d: string | Date) => (typeof d === "string" ? d.slice(0, 10) : d
 const hhmm = (minutes: number) => `${Math.floor(minutes / 60)}:${String(minutes % 60).padStart(2, "0")}`
 const addDays = (iso: string, n: number) => new Date(Date.parse(`${iso}T00:00:00Z`) + n * DAY_MS).toISOString().slice(0, 10)
 
-type Duty = { id: string; start: number; end: number; mealOnTheGo?: boolean | null }
+type Duty = { id: string; start: number; end: number; mealOnTheGo?: boolean | null; placeId?: string | null; placeName?: string | null }
 
 /** A mission's real instants; an end at or before the start is on the next day (a night). */
 export function dutyInterval(s: DutyShift, timeZone: string): Duty {
   const base = new Date(`${dayKey(s.date)}T00:00:00Z`)
   const start = localDateTimeToUtc(base, hhmm(toMin(s.startTime)), timeZone).getTime()
   const end = localDateTimeToUtc(base, hhmm(toMinEnd(s.endTime, s.startTime)), timeZone).getTime()
-  return { id: s.id, start, end, ...(s.mealOnTheGo ? { mealOnTheGo: true } : {}) }
+  return { id: s.id, start, end, ...(s.mealOnTheGo ? { mealOnTheGo: true } : {}), ...(s.placeId ? { placeId: s.placeId, placeName: s.placeName ?? null } : {}) }
 }
 
 /** The local civil date and minutes since local midnight of an instant. */
@@ -613,11 +677,40 @@ export function evaluateWorkload(shifts: DutyShift[], policy: ActivePolicy): Wor
   const total = Math.round(blocks.reduce((n, b) => n + (b.end - b.start), 0) / MIN)
   if (total > policy.maxEventMinutes) findings.push({ rule: "event", serviceDay: null, start: null, end: null, minutes: total, limit: policy.maxEventMinutes, shiftIds: blocks.flatMap((b) => b.ids) })
 
+  // Travel between places (Codex, lot 2): two missions at known, different places at the same time,
+  // or with less than the margin between them. Original missions, not merged blocks, so a place
+  // keeps its identity through overlaps. A mission without a place is never checked.
+  if (travelApplies(policy)) findings.push(...travelFindings(duties, policy))
+
   // Days off: a service day with any minute of duty is worked (a standby or a night task included).
   if (offDayApplies(policy)) findings.push(...offDayFindings(byDay, policy))
 
-  const order: Record<WorkloadRule, number> = { continuous: 0, idle: 1, meal: 2, rest: 3, daily: 4, offday: 5, event: 6 }
+  const order: Record<WorkloadRule, number> = { continuous: 0, places: 1, travel: 2, idle: 3, meal: 4, rest: 5, daily: 6, offday: 7, event: 8 }
   return findings.sort((a, b) => (a.serviceDay ?? "~").localeCompare(b.serviceDay ?? "~") || order[a.rule] - order[b.rule] || (a.start ?? 0) - (b.start ?? 0))
+}
+
+/** Missions at two places at once, or too close: one finding per pair, in time order. */
+function travelFindings(duties: Duty[], policy: ActivePolicy & { travel: Extract<TravelRule, { apply: true }> }): WorkloadFinding[] {
+  const placed = duties.filter((d) => d.placeId && d.end > d.start).sort((a, b) => a.start - b.start || a.end - b.end)
+  const margin = policy.travel.minutes * MIN
+  const out: WorkloadFinding[] = []
+  const name = (d: Duty) => d.placeName ?? "lieu sans nom"
+  for (let i = 0; i < placed.length; i++) {
+    for (let j = i + 1; j < placed.length; j++) {
+      const a = placed[i], b = placed[j]
+      if (a.placeId === b.placeId) continue
+      if (a.start < b.end && b.start < a.end) {
+        const start = Math.max(a.start, b.start), end = Math.min(a.end, b.end)
+        out.push({ rule: "places", serviceDay: serviceDayOf(start, policy), start, end, minutes: Math.round((end - start) / MIN), limit: 0, shiftIds: [a.id, b.id], places: [name(a), name(b)] })
+        continue
+      }
+      // Not overlapping: the earlier-ending one first.
+      const [x, y] = a.end <= b.start ? [a, b] : [b, a]
+      const gap = y.start - x.end
+      if (gap < margin) out.push({ rule: "travel", serviceDay: serviceDayOf(x.end - 1, policy), start: x.end, end: y.start, minutes: Math.round(gap / MIN), limit: policy.travel.minutes, shiftIds: [x.id, y.id], places: [name(x), name(y)] })
+    }
+  }
+  return out
 }
 
 /** One meal window a person's duty touches, with the longest stretch free of missions that do not allow a meal. */
@@ -754,6 +847,15 @@ export function workloadFindingMessage(f: WorkloadFinding, policy: Pick<Workload
     case "idle": {
       const withMeal = policy.meal?.apply && f.limit > (policy.maxIdleGapMinutes ?? f.limit) ? ", pause repas comprise" : ""
       return `${day} : ces deux missions laissent ${fmtDuration(f.minutes)} entre elles, de ${at(f.start)} à ${at(f.end)}. La limite de cet événement est de ${fmtDuration(f.limit)}${withMeal}.`
+    }
+    case "places": {
+      const [p1, p2] = f.places ?? ["un lieu", "un autre lieu"]
+      return `${day} : deux missions en même temps à deux lieux différents, « ${p1} » et « ${p2} », de ${at(f.start)} à ${at(f.end)}. Une personne ne peut pas être à deux endroits à la fois.`
+    }
+    case "travel": {
+      const [p1, p2] = f.places ?? ["un lieu", "un autre lieu"]
+      const gap = f.minutes === 0 ? "aucun temps" : `seulement ${fmtDuration(f.minutes)}`
+      return `${day} : ${gap} entre une mission à « ${p1} » qui finit à ${at(f.start)} et une mission à « ${p2} » qui commence à ${at(f.end)}. Cet événement demande ${fmtDuration(f.limit)} entre deux lieux différents.`
     }
     case "meal": {
       const found = f.minutes === 0 ? "aucun moment sans mission" : `au plus ${fmtDuration(f.minutes)} sans mission`

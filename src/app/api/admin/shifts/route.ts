@@ -2,6 +2,7 @@
 // SPDX-License-Identifier: AGPL-3.0-only
 
 import { NextResponse } from "next/server"
+import { placeChoiceProblem } from "@/lib/places"
 import { civilDateSchema, isDayInPeriod, SHIFT_OUTSIDE_EVENT_ERROR } from "@/lib/civil-date"
 import { COORDINATE_PAIR_ERROR, isCoordinatePair } from "@/lib/map-link"
 import { requireOrgSession } from "@/lib/auth-guard"
@@ -38,6 +39,8 @@ const schema = z.object({
   minAge: z.number().int().min(0).max(120).nullable().optional(),
   /** « Repas sur le pouce possible » (#1171, lot 2): the meal can be taken during this mission. */
   mealOnTheGo: z.boolean().optional(),
+  /** Place of the mission (#1171, lot 2): an active place of the event, or null (not checked for travel). */
+  placeId: z.string().min(1).nullable().optional(),
   /**
    * Sector chosen in the form (#1147), for an event that adopted sectors: an active sector of the
    * event, or null for « Autres postes ». A new poste is created in it; an existing poste keeps its
@@ -66,6 +69,10 @@ export async function POST(req: Request) {
   const owned = await db.event.findFirst({ where: { id: data.eventId }, select: { id: true, startDate: true, endDate: true } })
   if (!owned) return NextResponse.json({ error: "Événement introuvable" }, { status: 404 })
   if (!isDayInPeriod(data.date, owned.startDate, owned.endDate)) return NextResponse.json({ error: SHIFT_OUTSIDE_EVENT_ERROR }, { status: 400 })
+  if (data.placeId) {
+    const placeProblem = placeChoiceProblem(await db.eventPlace.findMany({ where: { eventId: data.eventId }, select: { id: true, name: true, archivedAt: true } }), data.placeId, null)
+    if (placeProblem) return NextResponse.json({ error: placeProblem, field: "placeId" }, { status: 400 })
+  }
 
   let shift: Awaited<ReturnType<typeof db.shift.create>>
   let sectorName: string | null = null

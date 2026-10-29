@@ -2,6 +2,7 @@
 // SPDX-License-Identifier: AGPL-3.0-only
 
 import { NextResponse } from "next/server"
+import { placeChoiceProblem } from "@/lib/places"
 import { COMMITTED_STATUSES } from "@/lib/registration-capacity"
 import { civilDateSchema, isDayInPeriod, SHIFT_OUTSIDE_EVENT_ERROR } from "@/lib/civil-date"
 import { COORDINATE_PAIR_ERROR, isCoordinatePair } from "@/lib/map-link"
@@ -44,6 +45,8 @@ const schema = z.object({
   minAge: z.number().int().min(0).max(120).nullable().optional(),
   /** « Repas sur le pouce possible » (#1171, lot 2); removing it is judged like new hours. */
   mealOnTheGo: z.boolean().optional(),
+  /** Place of the mission (#1171, lot 2); a new place is judged like new hours. */
+  placeId: z.string().min(1).nullable().optional(),
   // Caller can opt out of notifying volunteers (default true).
   notifyVolunteers: z.boolean().optional(),
 }).refine((d) => !(d.startTime && d.endTime) || d.startTime !== d.endTime, { message: SAME_TIME_ERROR, path: ["endTime"] }).refine(isCoordinatePair, { message: COORDINATE_PAIR_ERROR, path: ["longitude"] })
@@ -90,6 +93,10 @@ export async function PATCH(req: Request, { params }: { params: Promise<{ id: st
     parsed.data.capacity ?? before.capacity,
   )
   if (minProblem) return NextResponse.json({ error: minProblem }, { status: 400 })
+  if (parsed.data.placeId !== undefined && parsed.data.placeId !== before.placeId) {
+    const placeProblem = placeChoiceProblem(await db.eventPlace.findMany({ where: { eventId: before.eventId }, select: { id: true, name: true, archivedAt: true } }), parsed.data.placeId, before.placeId)
+    if (placeProblem) return NextResponse.json({ error: placeProblem, field: "placeId" }, { status: 400 })
+  }
 
   const { notifyVolunteers, ...rest } = parsed.data
   const updateData: Record<string, unknown> = { ...rest }
@@ -110,20 +117,24 @@ export async function PATCH(req: Request, { params }: { params: Promise<{ id: st
   // Removing « repas sur le pouce possible » can take the meal away from people holding the shift
   // (Codex, lot 2): judged like new hours. Setting it can only help, judged all the same (cheap).
   const mealMoves = rest.mealOnTheGo !== undefined && rest.mealOnTheGo !== before.mealOnTheGo
+  // A new place is judged too (travel margin): a mission elsewhere may be too close now.
+  const placeMoves = rest.placeId !== undefined && (rest.placeId ?? null) !== before.placeId
   let saved
   try {
     saved = await db.$transaction(async (tx) => {
       // Workload protection (#1171): new hours are judged for every person holding the shift, before
       // anything is written; one refusal refuses the edit.
-      if (timesMove || mealMoves) {
+      if (timesMove || mealMoves || placeMoves) {
         const refusals = await checkScheduleEdit(tx, before.eventId, [{
           id,
           date: rest.date ?? before.date,
           startTime: rest.startTime ?? before.startTime,
           endTime: rest.endTime ?? before.endTime,
           mealOnTheGo: rest.mealOnTheGo ?? before.mealOnTheGo,
+          placeId: rest.placeId !== undefined ? rest.placeId : before.placeId,
+          placeName: null,
         }])
-        if (refusals.length > 0) throw new ScheduleEditRefusalError(refusals, timesMove ? undefined : "sans repas sur le pouce sur ce créneau")
+        if (refusals.length > 0) throw new ScheduleEditRefusalError(refusals, timesMove ? undefined : placeMoves ? "avec ce lieu" : "sans repas sur le pouce sur ce créneau")
       }
       const after = await tx.shift.update({ where: { id }, data: updateData })
       // A new time, day, place, poste or requirement ends the swap requests agreed on the old one
@@ -183,6 +194,7 @@ export async function PATCH(req: Request, { params }: { params: Promise<{ id: st
     "requiresApproval",
     "minAge",
     "mealOnTheGo",
+    "placeId",
   ])
   if (shiftChanges) {
     await logEvent({
