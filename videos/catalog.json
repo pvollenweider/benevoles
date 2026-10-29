@@ -971,7 +971,7 @@
         "messages",
         "bêta"
       ],
-      "published": false,
+      "published": true,
       "seedScenario": "sectors",
       "themes": [
         "planning-creneaux",
@@ -981,9 +981,10 @@
         "organisateur"
       ],
       "feature": "Secteurs",
-      "updatedAt": "2026-10-28",
+      "updatedAt": "2026-10-29",
       "revision": 1,
-      "level": "avance"
+      "level": "avance",
+      "added": "2026-10-29"
     },
     {
       "id": "SHIFT_SWAPS",

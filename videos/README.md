@@ -775,3 +775,38 @@ La narration et les sources du lot 30 décrivent les interrupteurs de #1083 et
 le clavier de la Frise de #1088 : un arrêt Tab par jour, flèches entre les barres.
 La vidéo d'accessibilité exige toujours ses inserts natifs ; un refus TCC laisse
 son statut NOT READY et l'écart #1075 ouvert.
+
+
+### Reprise du lot 32 : fonctions bêta et confidentialité
+
+Le build propre de main inclut #1206. Les conteneurs de cette reprise sont dédiés :
+PostgreSQL **45436**, SMTP **41033**, Mailpit **48033**, serveur vérifié **43102**.
+Ne pas reprendre les conteneurs historiques du port 45433. Transmettre
+`VIDEO_SMTP_PORT=41033` et `VIDEO_MAILPIT_URL=http://localhost:48033` au serveur,
+aux seeds et aux outils. Le client Prisma du snapshot est généré sur son schéma
+courant ; les outils peuvent y tourner sans régénérer `src/generated` du checkout.
+
+Les prises BETA_ACCESS, SECTORS, SHIFT_SWAPS, SECTOR_LEADERS et
+PRIVACY_PERSONAL_LINKS naviguent sur les domaines publics via la passerelle locale
+vérifiée, avec le même contrôle du PID et du BUILD_ID. Cela permet les vraies
+écritures depuis le navigateur sans présenter une origine localhost au produit.
+Les seeds bêta restent limités à leurs capacités ; la protection des pauses et de
+la charge n'est jamais ouverte par ces scénarios.
+
+Avant chaque répétition ou prise de SECTOR_LEADERS : seed démo, seed
+`sector-leaders`, puis `prepare-registration-mailbox.ts sector-leaders` (le port
+45436 est admis pour ce seul scénario). Le recorder nettoie séparément les emails
+de la fixture bêta. Pour PRIVACY, les précontrôles `prepare-privacy.ts` et
+`verify-privacy-details.ts` passent d'abord via `local-production.ts run` ; rejouer
+ensuite le seed `privacy-personal-links` avant la répétition et avant la prise,
+en conservant le rapport de précontrôle. Les dates de cette fixture sont à deux
+semaines de la prise, sans date fixe devenue passée.
+
+Les montages SHIFT_SWAPS, SECTOR_LEADERS et PRIVACY cadrent le corps réel Mailpit
+(x=320, y=264, 960×536), comme la vidéo du planning partagé. Les intervalles sont
+mesurés image par image dans la capture brute ; aucun contenu reçu n'est réécrit,
+aucune image fixe n'est ajoutée. Le rapport conserve l'empreinte de la capture.
+`audit-full-final-audio.ts ID` complète les audits de chapitres par une ASR sans
+texte attendu de la bande-son entière, transitions et musique comprises. Son
+contrôle du registre utilise les frontières Unicode : « bêta » ne contient pas
+le mot « ta ». Les correspondances restent à relire en contexte.

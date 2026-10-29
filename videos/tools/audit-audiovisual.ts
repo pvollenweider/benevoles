@@ -127,7 +127,7 @@ async function main() {
       // The whole organization, including every displayable volunteer, was checked above.
     } else if (commonDemoVideos.includes(manifest.id)) {
       const url = new URL(process.env.DATABASE_URL!)
-      if (!["localhost", "127.0.0.1"].includes(url.hostname) || !["45433", "45436"].includes(url.port) || url.pathname !== "/benevoles_video") throw new Error("Common demo review requires isolated video database")
+      if (!["localhost", "127.0.0.1"].includes(url.hostname) || url.port !== "45433" || url.pathname !== "/benevoles_video") throw new Error("Common demo review requires isolated video database")
       const fixture = await db.organization.findUniqueOrThrow({ where: { id: "default" }, include: { admins: true, events: { include: { sectorLeaders: true, registrations: { include: { volunteer: true } } } } } })
       if (fixture.name !== "Fêtes de Montvert" || !fixture.events.some(event => event.slug === "fete-du-village") || fixture.admins.some(admin => !admin.email.endsWith("@example.org") && admin.email !== "org-admin@localhost")) throw new Error("Common training organization changed")
       if (fixture.events.some(event => event.sectorLeaders.some(leader => !leader.email.endsWith("@example.org")) || event.registrations.some(registration => !registration.volunteer.email?.endsWith("@example.org")))) throw new Error("Common demo contains non-synthetic recipients")

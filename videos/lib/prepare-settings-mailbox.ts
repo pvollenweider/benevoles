@@ -11,6 +11,7 @@ export async function prepareSettingsMailbox(slug: string, directory: string) {
     "email-delivery-failures": /^video\.delivery\.[a-z-]+@example\.org$/,
     "platform-internal-administration": /^video\.operator\.(?:platform|[abc]\.owner|disposable\.owner|lifecycle\.owner)@example\.org$/,
     // The beta videos' organisation (scripts/seed-video-beta.ts): members, leader, owner, operator.
+    "privacy-personal-links": /^video\.privacy\.(?:[ab]\.(?:member\.[0-4]|new|owner|leader)|unknown)@example\.org$/,
     "beta-access": /^video\.beta\.[a-z]+@example\.org$/,
     "sectors": /^video\.beta\.[a-z]+@example\.org$/,
     "shift-swaps": /^video\.beta\.[a-z]+@example\.org$/,

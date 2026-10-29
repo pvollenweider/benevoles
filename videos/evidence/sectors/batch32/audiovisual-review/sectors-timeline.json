@@ -1,0 +1,60 @@
+{
+  "model": "gemini-3.8-flash",
+  "reviewedAt": "2026-10-29T06:32:21.435Z",
+  "videoSha256": "360d0218823ac42402d2a5ba46bd6a89cb939710c3aa2e8fd8d6325c9a84c2cc",
+  "promptSha256": "6fcb54458dfb4d7beada167a99d0ca8f16a81abe03db3c585b88d63ee78be5ce",
+  "clipSha256": "a0dbf83f1dc749b74d9f7f6c10aa72b2d3d96fa4700e514c7e1b026aeb1a52f4",
+  "scene": "sectors-timeline",
+  "review": {
+    "heardOpening": "Revenons à la frise",
+    "checkpoints": [
+      {
+        "spokenSeconds": 0.5,
+        "spoken": "Revenons à la frise.",
+        "visibleSeconds": 0,
+        "visible": "L'onglet Frise est sélectionné dans la section Créneaux.",
+        "sync": "aligned",
+        "severity": "none"
+      },
+      {
+        "spokenSeconds": 2.3,
+        "spoken": "Chaque secteur y a sa ligne d'en-tête, avec son nom et son nombre de postes.",
+        "visibleSeconds": 2.3,
+        "visible": "Affichage des lignes d'en-tête de secteur (ex. 'Parking · 2 postes', 'Backline · 1 poste').",
+        "sync": "aligned",
+        "severity": "none"
+      },
+      {
+        "spokenSeconds": 6.1,
+        "spoken": "Un clic sur cette ligne replie ses postes,",
+        "visibleSeconds": 6.6,
+        "visible": "Clic sur la ligne Parking qui replie les postes associés.",
+        "sync": "aligned",
+        "severity": "none"
+      },
+      {
+        "spokenSeconds": 7.9,
+        "spoken": "un autre les déplie.",
+        "visibleSeconds": 8.5,
+        "visible": "Deuxième clic sur Parking qui déplie à nouveau les postes.",
+        "sync": "aligned",
+        "severity": "none"
+      },
+      {
+        "spokenSeconds": 10.3,
+        "spoken": "Les postes sans secteur sont regroupés à la fin, sous Autres postes.",
+        "visibleSeconds": 10,
+        "visible": "Défilement vers le bas révélant la section 'Autres postes · 1 poste'.",
+        "sync": "aligned",
+        "severity": "none"
+      }
+    ],
+    "issues": [],
+    "voice": {
+      "consistent": true,
+      "warm": true,
+      "observation": "Voix masculine claire, posée et bien synchronisée avec les manipulations à l'écran."
+    }
+  },
+  "note": "Automated observation of actual final video audio and images; not a claim of complete human validation"
+}

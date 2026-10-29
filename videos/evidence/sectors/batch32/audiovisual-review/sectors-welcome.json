@@ -1,0 +1,44 @@
+{
+  "model": "gemini-3.8-flash",
+  "reviewedAt": "2026-10-29T06:31:15.645Z",
+  "videoSha256": "360d0218823ac42402d2a5ba46bd6a89cb939710c3aa2e8fd8d6325c9a84c2cc",
+  "promptSha256": "9c1ea4ae9dcfe82a8f1a239000dfd4b1d0260d7d1c0ca040d2bfdb72bbb5f2d9",
+  "clipSha256": "2fcd7d5435c5a5972b8c83c00a7f611a2b2f81e8fc73af9b812972ffaab5b3ae",
+  "scene": "sectors-welcome",
+  "review": {
+    "heardOpening": "Quand un événement compte beaucoup de postes",
+    "checkpoints": [
+      {
+        "spokenSeconds": 0,
+        "spoken": "Quand un événement compte beaucoup de postes, les secteurs aident à s'y retrouver.",
+        "visibleSeconds": 0,
+        "visible": "Titre d'introduction affiché en encart : 'Organiser les postes par secteurs / Regrouper les postes sans rien changer pour les bénévoles'",
+        "sync": "aligned",
+        "severity": "none"
+      },
+      {
+        "spokenSeconds": 4.1,
+        "spoken": "Un secteur Parking regroupe par exemple Parking Nord et Parking Mairie.",
+        "visibleSeconds": 4,
+        "visible": "Page des paramètres de l'événement affichée en fond après disparition du titre d'introduction",
+        "sync": "aligned",
+        "severity": "none"
+      },
+      {
+        "spokenSeconds": 12.2,
+        "spoken": "Les bénévoles ne voient jamais les secteurs : leur page d'inscription, leurs emails et leur page Mes inscriptions ne changent pas.",
+        "visibleSeconds": 12.2,
+        "visible": "Écran stable sur les paramètres généraux de l'événement pendant l'explication conceptuelle",
+        "sync": "aligned",
+        "severity": "none"
+      }
+    ],
+    "issues": [],
+    "voice": {
+      "consistent": true,
+      "warm": true,
+      "observation": "Voix claire, posée, bien articulée et sans bruit parasite."
+    }
+  },
+  "note": "Automated observation of actual final video audio and images; not a claim of complete human validation"
+}

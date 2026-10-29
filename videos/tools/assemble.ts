@@ -46,7 +46,7 @@ async function main() {
   const musicGainDb = manifest.musicGainDb ?? 0
   if (!Number.isFinite(musicGainDb) || Math.abs(musicGainDb) > 3) throw new Error("Music gain must be finite and between -3 and 3 dB; the measured music rule is unchanged")
   const musicMix = { ...MUSIC_MIX, volume: MUSIC_MIX.volume * 10 ** (musicGainDb / 20), gainDb: musicGainDb }
-  if (["SHIFT_ROSTER_VISIBILITY", "MEMBERS_INVITATIONS", "MEMBERS_REMINDERS", "PLATFORM_INTERNAL_ADMINISTRATION"].includes(manifest.id)) {
+  if (["SHIFT_SWAPS", "SECTOR_LEADERS", "PRIVACY_PERSONAL_LINKS", "SHIFT_ROSTER_VISIBILITY", "MEMBERS_INVITATIONS", "MEMBERS_REMINDERS", "PLATFORM_INTERNAL_ADMINISTRATION"].includes(manifest.id)) {
     await (await import("./focus-mailpit")).focusMailpit(manifest.id)
   }
   const timeline = await json<Timeline>(path.join(dir, "timeline.json"))
@@ -160,12 +160,12 @@ async function main() {
       previousEnd = frame.endMs
     }
     const enabled = timeline.mailpitFocusFrames.map(frame => `between(t,${(frame.startMs / 1000).toFixed(3)},${((frame.endMs - 1) / 1000).toFixed(3)})`).join("+")
-    // Frame actual Mailpit pixels only. Operator shots exclude its fixed English
-    // date above the body; other shots keep headers at their original scale.
+    // Frame actual Mailpit pixels only. Approved body-only shots exclude its fixed
+    // English date; other shots keep headers at their original scale.
     filters.push("[0:v]split=2[mailpitBase][mailpitSource]")
-    if (timeline.mailpitBodyOnly && (!["PLATFORM_INTERNAL_ADMINISTRATION", "SHIFT_ROSTER_VISIBILITY"].includes(manifest.id) || timeline.mailpitHolds?.length)) throw new Error("Body-only Mailpit framing requires an approved operator or roster capture without holds")
+    if (timeline.mailpitBodyOnly && (!["SHIFT_SWAPS", "SECTOR_LEADERS", "PRIVACY_PERSONAL_LINKS", "PLATFORM_INTERNAL_ADMINISTRATION", "SHIFT_ROSTER_VISIBILITY"].includes(manifest.id) || timeline.mailpitHolds?.length)) throw new Error("Body-only Mailpit framing requires an approved capture without holds")
     filters.push(timeline.mailpitBodyOnly
-      ? (manifest.id === "SHIFT_ROSTER_VISIBILITY" ? "[mailpitSource]crop=960:536:320:264,scale=1280:714,pad=1280:800:0:43:color=0xf8fafc[mailpitPane]" : "[mailpitSource]crop=960:576:320:224,scale=1280:768,pad=1280:800:0:16:color=0xf8fafc[mailpitPane]")
+      ? (["SHIFT_SWAPS", "SECTOR_LEADERS", "PRIVACY_PERSONAL_LINKS", "SHIFT_ROSTER_VISIBILITY"].includes(manifest.id) ? "[mailpitSource]crop=960:536:320:264,scale=1280:714,pad=1280:800:0:43:color=0xf8fafc[mailpitPane]" : "[mailpitSource]crop=960:576:320:224,scale=1280:768,pad=1280:800:0:16:color=0xf8fafc[mailpitPane]")
       : "[mailpitSource]crop=960:800:320:0,pad=1280:800:160:0:color=0xf8fafc[mailpitPane]")
     filters.push(`[mailpitBase][mailpitPane]overlay=0:0:enable='${enabled}'[mailpitFocused]`)
     videoMap = "[mailpitFocused]"

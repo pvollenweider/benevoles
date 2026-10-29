@@ -1,0 +1,120 @@
+{
+  "model": "gemini-3.8-flash",
+  "promptVersion": 2,
+  "auditedAt": "2026-10-29T06:24:15.196Z",
+  "revalidatedAt": "2026-10-29T06:24:15.197Z",
+  "source": "generated narration WAV",
+  "note": "Independent multilingual ASR evidence, reused only for identical audio/text and audit instructions; not a full audiovisual or voice-quality validation",
+  "segments": [
+    {
+      "id": "sectors-welcome",
+      "audioSha256": "b9a130899e3c97b9f30519131b29840c183fb29d793d4bbd1514f938559732da",
+      "recognized": "Quand un événement compte beaucoup de postes, les secteurs aident à s'y retrouver. Un secteur parking regroupe par exemple parking nord et parking mairie. C'est une fonction en bêta, proposée aux organisations qui y participent. Les bénévoles ne voient jamais les secteurs. Leur page d'inscription, leurs emails et leur page mes inscriptions ne changent pas.",
+      "expected": "Quand un événement compte beaucoup de postes, les secteurs aident à s'y retrouver. Un secteur Parking regroupe par exemple Parking Nord et Parking Mairie. C'est une fonction en bêta, proposée aux organisations qui y participent. Les bénévoles ne voient jamais les secteurs : leur page d'inscription, leurs emails et leur page Mes inscriptions ne changent pas.",
+      "wordErrorRate": 0,
+      "needsReview": false,
+      "unexpectedInstructions": [],
+      "edgeIssues": []
+    },
+    {
+      "id": "sectors-enable",
+      "audioSha256": "44c80d47bc4f807480c72cb661524f94589bc1d152e2fcd2f3644682eb74e6bd",
+      "recognized": "Dans les informations de l'événement, la carte secteur propose l'interrupteur organiser les postes par secteur. Activons-le. Tant qu'aucun secteur n'est enregistré, vous pouvez encore le désactiver. Suivons le lien organiser les secteurs dans créneaux.",
+      "expected": "Dans les informations de l'événement, la carte Secteurs propose l'interrupteur Organiser les postes par secteurs. Activons-le. Tant qu'aucun secteur n'est enregistré, vous pouvez encore le désactiver. Suivons le lien Organiser les secteurs dans Créneaux.",
+      "wordErrorRate": 0.05128205128205128,
+      "needsReview": false,
+      "unexpectedInstructions": [],
+      "edgeIssues": []
+    },
+    {
+      "id": "sectors-create",
+      "audioSha256": "77870be50b4ad2ef4e918a53114ee352578602fcd463b51ba9b043b7ce1a19cc",
+      "recognized": "Ouvrons gérer les postes. La partie secteur apparaît en haut du panneau. Commencez par créer vos secteurs. Tapons parking dans nouveau secteur, puis ajouter le secteur. Ajoutons de même backline. En créant ce premier secteur, vous conservez l'organisation par secteur pour cet événement. Le bouton et le panneau s'appellent désormais gérer les secteurs et postes.",
+      "expected": "Ouvrons Gérer les postes. La partie Secteurs apparaît en haut du panneau. Commencez par créer vos secteurs. Tapons Parking dans Nouveau secteur, puis Ajouter le secteur. Ajoutons de même Backline. En créant ce premier secteur, vous conservez l'organisation par secteurs pour cet événement. Le bouton et le panneau s'appellent désormais Gérer les secteurs et postes.",
+      "wordErrorRate": 0.03508771929824561,
+      "needsReview": false,
+      "unexpectedInstructions": [],
+      "edgeIssues": []
+    },
+    {
+      "id": "sectors-poste",
+      "audioSha256": "642c7ff2a3ae21435c4539e87677264ecc37e5cda2e7e5a5fd8a7c346e021a3f",
+      "recognized": "Ajoutons ensuite les postes dans chaque secteur. Sous Backline, le bouton Ajouter un poste dans Backline ouvre le formulaire de créneau, avec ce secteur déjà choisi. Tapons le nom du nouveau poste: Backline scène du lac, puis son premier créneau, avec le jour, les horaires et les places. Le poste est créé avec ce créneau directement dans son secteur.",
+      "expected": "Ajoutons ensuite les postes dans chaque secteur. Sous Backline, le bouton Ajouter un poste dans Backline ouvre le formulaire de créneau, avec ce secteur déjà choisi. Tapons le nom du nouveau poste, Backline Scène du Lac, puis son premier créneau, avec le jour, les horaires et les places. Le poste est créé avec ce créneau, directement dans son secteur.",
+      "wordErrorRate": 0,
+      "needsReview": false,
+      "unexpectedInstructions": [],
+      "edgeIssues": []
+    },
+    {
+      "id": "sectors-move",
+      "audioSha256": "6c51d21d62e88273acac7a21813d3dc3d0a9931d2c67dd6b4f2ee4a3e38d8438",
+      "recognized": "Les postes qui existaient avant le premier secteur restent dans autre poste. Rangeons-les avec Déplacer. Pour Parking Nord, choisissons Parking, puis Déplacer. Tous les créneaux du poste suivent sur tous les jours. Faisons de même pour Parking Mairie. Le bar de la grande scène et l'accueil du chapiteau restent dans autre poste.",
+      "expected": "Les postes qui existaient avant le premier secteur restent dans Autres postes. Rangeons-les avec Déplacer. Pour Parking Nord, choisissons Parking, puis Déplacer. Tous les créneaux du poste suivent, sur tous les jours. Faisons de même pour Parking Mairie. Le bar de la Grande Scène et l'accueil du Chapiteau restent dans Autres postes.",
+      "wordErrorRate": 0.07407407407407407,
+      "needsReview": false,
+      "unexpectedInstructions": [],
+      "edgeIssues": []
+    },
+    {
+      "id": "sectors-timeline",
+      "audioSha256": "f3c4dda6918b21493dc3ffc8fc39b899289568f3fa951c1e0107530355741c88",
+      "recognized": "Revenons à la frise. Chaque secteur y a sa ligne d'en-tête, avec son nom et son nombre de postes. Un clic sur cette ligne replie ses postes, un autre les déplie. Les postes sans secteur sont regroupés à la fin, sous autres postes. La vue liste, elle, ne change pas.",
+      "expected": "Revenons à la frise. Chaque secteur y a sa ligne d'en-tête, avec son nom et son nombre de postes. Un clic sur cette ligne replie ses postes, un autre les déplie. Les postes sans secteur sont regroupés à la fin, sous Autres postes. La vue Liste, elle, ne change pas.",
+      "wordErrorRate": 0,
+      "needsReview": false,
+      "unexpectedInstructions": [],
+      "edgeIssues": []
+    },
+    {
+      "id": "sectors-pdf",
+      "audioSha256": "62d0458bbdf08533903efdd01f4edfc4562cd00deb9a979f7393822861e33e81",
+      "recognized": "Le planning imprimé suit le même ordre. Dans documents, ouvrons l'export complet. La frise de chaque jour et le récapitulatif par poste sont rangés secteur par secteur, puis autre poste.",
+      "expected": "Le planning imprimé suit le même ordre. Dans Documents, ouvrons l'export complet. La frise de chaque jour et le récapitulatif par poste sont rangés secteur par secteur, puis Autres postes.",
+      "wordErrorRate": 0.06451612903225806,
+      "needsReview": false,
+      "unexpectedInstructions": [],
+      "edgeIssues": []
+    },
+    {
+      "id": "sectors-filter",
+      "audioSha256": "fc5ef94667c98af7110869a2d1a2d15163fb094d0a2de1e660ee413b45032e97",
+      "recognized": "Une fois les secteurs en place, le champ secteur limite plusieurs pages à un seul secteur. Dans inscription, choisissons parking. La liste, les compteurs et l'export des présences ne portent plus que sur ces postes. Le choix figure dans l'adresse de la page. En la rouvrant ou en la transmettant à un autre organisateur, on retrouve le même secteur.",
+      "expected": "Une fois les secteurs en place, le champ Secteur limite plusieurs pages à un seul secteur. Dans Inscriptions, choisissons Parking. La liste, les compteurs et l'export des présences ne portent plus que sur ses postes. Le choix figure dans l'adresse de la page. En la rouvrant, ou en la transmettant à un autre organisateur, on retrouve le même secteur.",
+      "wordErrorRate": 0.03278688524590164,
+      "needsReview": false,
+      "unexpectedInstructions": [],
+      "edgeIssues": []
+    },
+    {
+      "id": "sectors-pages",
+      "audioSha256": "3f452ff6d7bec5bd9a219f10aef223640332eb75f92c2e3d0dd02d816ffe8ae5",
+      "recognized": "Le même champ existe dans Où manque-t-il du monde ?, dans Jour J et dans Documents avec leurs exports. Il ne propose que les secteurs actifs. Un secteur limite ce que vous voyez, pas ce que vous pouvez faire.",
+      "expected": "Le même champ existe dans Où manque-t-il du monde, dans Jour J et dans Documents, avec leurs exports. Il ne propose que les secteurs actifs. Un secteur limite ce que vous voyez, pas ce que vous pouvez faire.",
+      "wordErrorRate": 0,
+      "needsReview": false,
+      "unexpectedInstructions": [],
+      "edgeIssues": []
+    },
+    {
+      "id": "sectors-message",
+      "audioSha256": "bef57fca05a174d88db8076020bab3fdee70e81ddf7c1c5ad9b3e5a2a89bc46d",
+      "recognized": "Revenons aux inscriptions du secteur parking. Le bouton écrire au secteur parking ouvre écrire aux bénévoles avec ce secteur déjà choisi. Le compteur indique combien de personnes recevront le message. Ce sont les bénévoles confirmés des postes du secteur au moment de l'envoi, chacun une seule fois. Un poste déplacé entre-temps suit son nouveau secteur.",
+      "expected": "Revenons aux inscriptions du secteur Parking. Le bouton Écrire au secteur Parking ouvre Écrire aux bénévoles, avec ce secteur déjà choisi. Le compteur indique combien de personnes recevront le message. Ce sont les bénévoles confirmés des postes du secteur au moment de l'envoi, chacun une seule fois. Un poste déplacé entre-temps suit son nouveau secteur.",
+      "wordErrorRate": 0,
+      "needsReview": false,
+      "unexpectedInstructions": [],
+      "edgeIssues": []
+    },
+    {
+      "id": "sectors-result",
+      "audioSha256": "6829ec237b842ddd4dfab0f22400219ac8108bfad40f4a23eaf800ae7c5b2a79",
+      "recognized": "Votre événement est maintenant organisé par secteur. Créez d'abord les secteurs, ajoutez-y les postes, rangez les anciens avec Déplacer, puis suivez chaque secteur avec son filtre. Pour confier tout un secteur à une seule personne, voyez la vidéo sur les responsables de secteur.",
+      "expected": "Votre événement est maintenant organisé par secteurs. Créez d'abord les secteurs, ajoutez-y les postes, rangez les anciens avec Déplacer, puis suivez chaque secteur avec son filtre. Pour confier tout un secteur à une seule personne, voyez la vidéo sur les responsables de secteur.",
+      "wordErrorRate": 0.022222222222222223,
+      "needsReview": false,
+      "unexpectedInstructions": [],
+      "edgeIssues": []
+    }
+  ]
+}

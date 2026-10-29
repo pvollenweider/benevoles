@@ -11,10 +11,10 @@ import { expectedMemberV2 } from "../lib/member-fixture-v2"
 const scenario = process.argv[2]
 assert(["members-invitations", "members-reminders", "registrations-place-member", "registrations-management", "sector-leaders", "staffing-gaps", "organizer-monitor-followup", "targeted-messages", "last-minute-changes", "reminders-changes"].includes(scenario))
 const url = new URL(process.env.DATABASE_URL ?? "")
-assert(["localhost", "127.0.0.1"].includes(url.hostname) && url.port === "45433" && url.pathname === "/benevoles_video")
+assert(["localhost", "127.0.0.1"].includes(url.hostname) && (url.port === "45433" || scenario === "sector-leaders" && url.port === "45436") && url.pathname === "/benevoles_video")
 const db = new PrismaClient({ adapter: new PrismaPg({ connectionString: url.href }) })
 type Message = { ID: string; Subject: string; To: { Address: string }[]; Cc?: { Address: string }[]; Bcc?: { Address: string }[] }
-const mailbox = "http://localhost:48026"
+const mailbox = process.env.VIDEO_MAILPIT_URL ?? "http://localhost:48026"
 const inventory = async () => {
   const messages: Message[] = []
   for (let start = 0; ; start += 500) {

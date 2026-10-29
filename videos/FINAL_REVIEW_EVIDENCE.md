@@ -532,8 +532,6 @@ Sources ajoutées sans rendu (aucune capture, aucune voix, aucune publication) ;
 depuis un checkout à jour de `origin/main`, avec le seed de chaque scénario avant chaque prise
 (chaque prise modifie sa fixture : secteurs enregistrés, échanges, responsables) :
 
-- `sectors` (`SECTORS`, nouvelle, `published: false`) : sources prêtes, rendu en attente.
-  Seed `scripts/seed-video-scenario.ts sectors`.
 - `sector-leaders` (`SECTOR_LEADERS`, mise à jour, révision 6) : sources prêtes, rendu en attente.
   Narration modifiée (`welcome`) et deux scènes ajoutées (`leaders-sector-scope`,
   `leaders-sector-roster`) : toute la piste continue est à régénérer. Seed : démo, puis
@@ -607,3 +605,19 @@ Zéro tutoiement dans l'ASR intégrale et les VTT, aucun anglais parasite ; cinq
 AV / 16 points, zéro signalement. Images réelles inspectées. Six clics sonorisés.
 Contrôle de types (204 sources) et 34 fichiers / 1142 tests vidéo réussis.
 Preuves : `videos/evidence/beta-access/batch32/`. `videos/renders.json` inchangé.
+
+**SECTORS : READY et publiée** après aperçu puis APPLY=1 (default), cinq fichiers.
+Première publication : `published: true`, `added` et `updatedAt` au 2026-10-29,
+révision 1 conservée. Piste Puck entièrement régénérée et découpée sur les silences
+du même enregistrement ; onze audits source et onze audits du MP4 final réussis.
+Durée 222,280 s ; musique 14,5–19,2 LU sous la voix, minimum sans voix -34,1 LUFS.
+ASR intégrale et VTT : zéro tutoiement ; pas de paroles parasites. Onze chapitres AV,
+41 points, dix sans signalement et un point de cadrage résolu : la phrase expliquant
+le filtre dans l'URL accompagne son résultat et sa persistance après un vrai
+rechargement, sans annoncer une action sur la barre d'adresse. Le recorder vérifie
+la query réelle et la valeur conservée ; l'image après rechargement montre Parking
+et cinq inscriptions actives. Détail : `videos/evidence/sectors/batch32/source-review.json`.
+28 clics et 47 frappes réelles sonorisés. Preuves : `videos/evidence/sectors/batch32/`.
+Les correctifs des répétitions restent sous vidéos et seeds : Mailpit configurable,
+titres de postes sans virgule, dates de confidentialité relatives à la prise,
+cadrage du corps réel des emails. Contrôle de types 204 sources et 1142 tests verts.

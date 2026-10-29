@@ -1,0 +1,52 @@
+{
+  "model": "gemini-3.8-flash",
+  "reviewedAt": "2026-10-29T06:33:20.930Z",
+  "videoSha256": "360d0218823ac42402d2a5ba46bd6a89cb939710c3aa2e8fd8d6325c9a84c2cc",
+  "promptSha256": "2d9178611c5e6d56f41f3a1a5befcf812003cce108e1327d4ca429cbbd873b3a",
+  "clipSha256": "1ce2caa39b77f05a684872f17760210fcfbdfb31cf2357c01994eebaa2bd15f9",
+  "scene": "sectors-result",
+  "review": {
+    "heardOpening": "Votre événement est maintenant organisé par secteurs.",
+    "checkpoints": [
+      {
+        "spokenSeconds": 0.5,
+        "spoken": "Votre événement est maintenant organisé par secteurs",
+        "visibleSeconds": 0,
+        "visible": "Vue frise des créneaux affichant les secteurs 'Parking' et 'Backline' regroupant leurs postes",
+        "sync": "aligned",
+        "severity": "none"
+      },
+      {
+        "spokenSeconds": 2.8,
+        "spoken": "Créez d'abord les secteurs, ajoutez-y les postes",
+        "visibleSeconds": 0,
+        "visible": "Option 'Gérer les secteurs et postes' visible au-dessus de la frise",
+        "sync": "aligned",
+        "severity": "none"
+      },
+      {
+        "spokenSeconds": 8,
+        "spoken": "suivez chaque secteur avec son filtre",
+        "visibleSeconds": 0,
+        "visible": "Bouton 'Filtrer' visible en tête du planning",
+        "sync": "aligned",
+        "severity": "none"
+      },
+      {
+        "spokenSeconds": 12,
+        "spoken": "voyez la vidéo sur les responsables de secteur",
+        "visibleSeconds": 12,
+        "visible": "Écran stable pertinent servant de support visuel de conclusion",
+        "sync": "aligned",
+        "severity": "none"
+      }
+    ],
+    "issues": [],
+    "voice": {
+      "consistent": true,
+      "warm": true,
+      "observation": "Voix masculine claire, posée et dynamique, accompagnée d'une musique de fond légère."
+    }
+  },
+  "note": "Automated observation of actual final video audio and images; not a claim of complete human validation"
+}

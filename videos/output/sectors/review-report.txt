@@ -1,6 +1,18 @@
-STATUS: NOT READY
-Batch: 32
-Target commit: e924abdc35bb03c19a99f1d3126bd06ecc6abc82
-Next.js route type validation rejects exported SWAP_PROPOSALS_PER_DAY in src/app/api/public/registrations/[token]/swaps/route.ts:38. Product source fixes are forbidden in this batch. No verified product BUILD_ID; no rehearsal, narrated capture, assembly or publication.
-Duration / music gaps / viewer tu count: not measured (no new final MP4).
-Previous artifacts archived before the attempt; tracked baseline evidence retained and superseded by this report.
+STATUS: READY
+Batch: 32 (resume)
+ID: SECTORS
+Duration: 222.280 s
+Product commit: 9831e86e40ae3dd1ba60eb632b8e90951483a11c
+BUILD_ID: jJH5zvJlD2hQBFLXtZa0x
+Whole Puck track regenerated in one pass; silence-based same-master recut; all 11 source/final chapter audits PASS.
+Fresh seed quick rehearsal PASS; freshly reseeded narrated take PASS; first narrated take retained.
+validate PASS; 34 video files / 1142 tests and tools typecheck PASS.
+11 AV chapters / 41 checkpoints; one framing observation resolved in source-review.json, no unresolved defect.
+Actual MP4 chapter frames inspected, including export, filter after reload, and sector message count.
+Music gap 14.5–19.2 LU under voice; music-only minimum -34.1 LUFS; zero music rule violations.
+Soft synced effects: 28 actual clicks and 47 actual keys; no invented input.
+Whole final multilingual soundtrack ASR: no stray English/instructions; viewer tu 0; VTT 0.
+No localhost, dev overlay or outdated Timeline label found in inspected frames.
+Source changes: common public-host routing, beta fixture AV guard, whole-final-audio ASR. No editorial text change.
+Real-time subjective listening unavailable per standing rules.
+Evidence: videos/evidence/sectors/batch32/.
