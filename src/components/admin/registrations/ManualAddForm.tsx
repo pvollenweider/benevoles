@@ -5,7 +5,8 @@
 
 import { useMemo, useRef, useState, type Dispatch, type SetStateAction } from "react"
 import ShiftSelect from "./ShiftSelect"
-import { blocksWorkload, newWorkloadNotices, type WorkloadMode } from "@/lib/workload-view"
+import { blocksWorkload, newWorkloadNotices, workloadNeedsBirthDate, type WorkloadMode } from "@/lib/workload-view"
+import { WORKLOAD_BIRTHDATE_REQUIRED } from "@/lib/workload-policy"
 import { availabilityLabel, hasAvailability } from "@/lib/availability"
 import { addConflictMessage, chosenOverlapMessage, isAddFormPerson, MEMBER_CHOICES_SHOWN, memberChoiceLabel, memberResultsSentence, shiftsOfAddFormPerson, type MemberChoice, type ShiftRef } from "@/lib/registrations-list"
 import type { AddFormValues, Registration } from "./types"
@@ -46,6 +47,9 @@ export default function ManualAddForm({ eventId, shifts, registrations, timeZone
   // on the confirmed places and pending requests; otherwise the non-blocking #465 warnings.
   const mode: WorkloadMode = useMemo(() => workloadMode ?? { kind: "warnings", timeZone }, [workloadMode, timeZone])
   const blocks = blocksWorkload(mode)
+  // The event protects minors (#1171, lot 2): the form asks for a birth date.
+  const minorsProtected = workloadNeedsBirthDate(mode)
+  const [birthError, setBirthError] = useState<string | null>(null)
   const addWarnings = useMemo(() => {
     if (chosenShifts.length === 0) return []
     const counted = blocks ? ["active", "requested"] : ["active"]
@@ -203,6 +207,7 @@ export default function ManualAddForm({ eventId, shifts, registrations, timeZone
         email: addForm.email,
         phone: addForm.phone,
         comment: addForm.comment,
+        ...(minorsProtected && addForm.birthDate ? { birthDate: addForm.birthDate } : {}),
         shiftIds: chosenIds,
         ...(allowOverLimit ? { allowOverLimit: true } : {}),
       }),
@@ -214,6 +219,10 @@ export default function ManualAddForm({ eventId, shifts, registrations, timeZone
     // The role's limit per person (#466): the organiser may go over it, after reading why.
     if (res.status === 409 && data.code === "role_limit") { setAddError(data.error); setOverLimitFor(JSON.stringify(addForm)); return }
     setOverLimitFor(null)
+    // A birth date the minors' protection needs (#1171, lot 2): said on the field too, which takes focus.
+    const missingBirth = res.status === 409 && Array.isArray(data.workload) && data.workload[0] === WORKLOAD_BIRTHDATE_REQUIRED
+    setBirthError(missingBirth ? WORKLOAD_BIRTHDATE_REQUIRED : null)
+    if (missingBirth) requestAnimationFrame(() => document.getElementById("add-birthdate")?.focus())
     if (!res.ok) { setAddError(data.error ?? "Erreur."); setErrorFor(JSON.stringify(addForm)); return }
     setAddError(null)
     setErrorFor(null)
@@ -336,6 +345,23 @@ export default function ManualAddForm({ eventId, shifts, registrations, timeZone
           <label htmlFor="add-phone" className="block text-xs font-medium text-gray-600 mb-1">Téléphone</label>
           <input id="add-phone" type="tel" value={addForm.phone} onChange={(e) => setAddForm((f) => ({ ...f, phone: e.target.value }))} className="input" />
         </div>
+        {minorsProtected && (
+          <div>
+            <label htmlFor="add-birthdate" className="block text-xs font-medium text-gray-600 mb-1">Date de naissance</label>
+            <input
+              id="add-birthdate"
+              type="date"
+              autoComplete="off"
+              value={addForm.birthDate ?? ""}
+              aria-invalid={birthError ? true : undefined}
+              aria-describedby={["add-birthdate-hint", birthError && "add-birthdate-error"].filter(Boolean).join(" ")}
+              onChange={(e) => { setAddForm((f) => ({ ...f, birthDate: e.target.value })); setBirthError(null) }}
+              className="input"
+            />
+            <p id="add-birthdate-hint" className="text-xs text-gray-600 mt-1">Nécessaire si la personne n&apos;en a pas encore : cet événement protège les moins de 18 ans. Une date déjà enregistrée n&apos;est pas remplacée.</p>
+            {birthError && <p id="add-birthdate-error" className="text-sm text-red-700 mt-1">{birthError}</p>}
+          </div>
+        )}
       </div>
       </>
       )}

@@ -47,6 +47,12 @@ export const VOLUNTEER_RELATIONS: Record<string, VolunteerRelation> = {
     erasure: "delete",
     why: "free answers given by the person",
   },
+  EventVolunteerLimit: {
+    merge: "reassign",
+    deletion: "cascade",
+    erasure: "delete",
+    why: "the person's own workload limits on an event (#1171): moved to the kept record, the stricter value of each field kept where both had a row; erased with the person's data",
+  },
   RosterConsent: {
     merge: "drop",
     deletion: "cascade",

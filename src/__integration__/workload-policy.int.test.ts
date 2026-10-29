@@ -22,7 +22,7 @@ import { prisma } from "@/lib/prisma"
 import { getOrgClient } from "@/lib/prisma-org"
 import { generateToken } from "@/lib/utils"
 import { registrationToken } from "@/lib/token-vault"
-import { buildPolicy, WORKLOAD_POLICY_INCOMPLETE, WORKLOAD_PRIVATE_REFUSAL, type WorkloadPolicyValues } from "@/lib/workload-policy"
+import { buildPolicy, WORKLOAD_BIRTHDATE_REQUIRED, WORKLOAD_POLICY_INCOMPLETE, WORKLOAD_PRIVATE_REFUSAL, type WorkloadPolicyValues } from "@/lib/workload-policy"
 import { lockWorkloadExclusive } from "@/lib/workload-guard"
 import { setWorkloadPolicy } from "@/lib/workload-policy-data"
 import { POST as publicSignup } from "@/app/api/public/registrations/route"
@@ -40,6 +40,8 @@ import { PATCH as editPoste } from "@/app/api/admin/events/[id]/roles/[roleName]
 import { GET as listPlaces, POST as addPlace } from "@/app/api/admin/events/[id]/places/route"
 import { PATCH as editPlace } from "@/app/api/admin/events/[id]/places/[placeId]/route"
 import { POST as createShift } from "@/app/api/admin/shifts/route"
+import { PUT as putLimits, DELETE as deleteLimits } from "@/app/api/admin/events/[id]/workload-limits/[volunteerId]/route"
+import { GET as myLimitsGet, PUT as myLimitsPut, DELETE as myLimitsDelete } from "@/app/api/public/registrations/[token]/workload-limits/route"
 import { loadAttention } from "@/lib/attention-data"
 
 const url = process.env.DATABASE_URL
@@ -57,7 +59,7 @@ const VALUES: WorkloadPolicyValues = {
 }
 const POLICY = buildPolicy(VALUES, TZ)
 // Every write answers the days-off rule (#1171, lot 2); « do not apply » is an answer.
-const ANSWERED: WorkloadPolicyValues = { ...VALUES, offDay: { apply: false }, meal: { apply: false }, travel: { apply: false } }
+const ANSWERED: WorkloadPolicyValues = { ...VALUES, offDay: { apply: false }, meal: { apply: false }, travel: { apply: false }, minors: { apply: false } }
 const ADMIN = { type: "admin" as const, id: "admin-1" }
 const NOW = new Date("2031-06-01T08:00:00Z")
 
@@ -356,7 +358,7 @@ describe.skipIf(!url)("workload protection on Postgres (#1171)", () => {
       await prisma.registration.update({ where: { id: extra.id }, data: { status: "cancelled" } })
       const on = await setWorkloadPolicy(db, orgId, e.id, { enabled: true, values: ANSWERED })
       expect(on).toMatchObject({ ok: true, enabled: true, changes: { workloadProtectionEnabled: { from: false, to: true } } })
-      expect((await prisma.event.findUniqueOrThrow({ where: { id: e.id } })).workloadPolicy).toMatchObject({ version: 4, offDay: { apply: false }, meal: { apply: false }, travel: { apply: false }, timeZone: TZ, serviceDayStart: "08:00" })
+      expect((await prisma.event.findUniqueOrThrow({ where: { id: e.id } })).workloadPolicy).toMatchObject({ version: 5, offDay: { apply: false }, meal: { apply: false }, travel: { apply: false }, timeZone: TZ, serviceDayStart: "08:00" })
 
       // A finding left by a later change (here written directly) does not block a loosening, but blocks a tightening.
       await prisma.registration.update({ where: { id: extra.id }, data: { status: "active" } })
@@ -479,12 +481,12 @@ describe.skipIf(!url)("workload protection on Postgres (#1171)", () => {
       const shifts = await Promise.all(DAYS.map((d) => shift(e.id, d, "10:00", "14:00")))
       const p = await person()
       for (const sh of shifts) await hold(e.id, sh.id, p.id)
-      const refused = await setWorkloadPolicy(prisma, orgId, e.id, { enabled: true, values: { ...VALUES, offDay: { apply: true, minOffDays: 1, windowDays: 6 }, meal: { apply: false }, travel: { apply: false } } })
+      const refused = await setWorkloadPolicy(prisma, orgId, e.id, { enabled: true, values: { ...VALUES, offDay: { apply: true, minOffDays: 1, windowDays: 6 }, meal: { apply: false }, travel: { apply: false }, minors: { apply: false } } })
       expect(refused.ok).toBe(false)
       if (!refused.ok) expect(refused.status).toBe(409)
       // « Ne pas appliquer » is an answer: saved, nothing to scan.
-      expect((await setWorkloadPolicy(prisma, orgId, e.id, { enabled: true, values: { ...VALUES, offDay: { apply: false }, meal: { apply: false }, travel: { apply: false } } })).ok).toBe(true)
-      expect((await prisma.event.findUniqueOrThrow({ where: { id: e.id } })).workloadPolicy).toMatchObject({ version: 4, offDay: { apply: false }, meal: { apply: false }, travel: { apply: false } })
+      expect((await setWorkloadPolicy(prisma, orgId, e.id, { enabled: true, values: { ...VALUES, offDay: { apply: false }, meal: { apply: false }, travel: { apply: false }, minors: { apply: false } } })).ok).toBe(true)
+      expect((await prisma.event.findUniqueOrThrow({ where: { id: e.id } })).workloadPolicy).toMatchObject({ version: 5, offDay: { apply: false }, meal: { apply: false }, travel: { apply: false }, minors: { apply: false } })
       // A save without the answer is refused, never read as « no rule ».
       const blank = await setWorkloadPolicy(prisma, orgId, e.id, { enabled: true, values: VALUES })
       expect(blank.ok).toBe(false)
@@ -563,7 +565,7 @@ describe.skipIf(!url)("workload protection on Postgres (#1171)", () => {
       await hold(e.id, long.id, p.id)
       // 2 h 30 between the two: over the 2 h idle limit of version 1, but it holds lunch with meals.
       expect((await add({ eventId: e.id, shiftId: afternoon.id, volunteerId: p.id })).status).toBe(409)
-      const values = { ...VALUES, offDay: { apply: false }, meal: { apply: true, minutes: 30, windows: [{ start: "11:30", end: "14:00" }], days: "all" }, travel: { apply: false } }
+      const values = { ...VALUES, offDay: { apply: false }, meal: { apply: true, minutes: 30, windows: [{ start: "11:30", end: "14:00" }], days: "all" }, travel: { apply: false }, minors: { apply: false } }
       const refused = await setWorkloadPolicy(prisma, orgId, e.id, { enabled: true, values })
       expect(refused).toMatchObject({ ok: false, status: 409 })
       await prisma.registration.updateMany({ where: { shiftId: long.id }, data: { status: "cancelled" } })
@@ -631,6 +633,72 @@ describe.skipIf(!url)("workload protection on Postgres (#1171)", () => {
       expect((await refused.json()).error).toContain("Noa Martin")
       // A shift without a place is never checked.
       expect((await move({ placeId: null, startTime: "14:00" })).status).toBe(200)
+    })
+  })
+  // #1171 lot 2: minors and personal limits.
+  describe("minors and personal limits", () => {
+    const MINORS = { apply: true, maxContinuousMinutes: 270, minBreakMinutes: 30, maxDailyMinutes: 480, minRestMinutes: 720 }
+    const MINOR_POLICY = buildPolicy({ ...VALUES, maxEventMinutes: 100 * 60, offDay: { apply: false }, meal: { apply: false }, travel: { apply: false }, minors: MINORS } as WorkloadPolicyValues, TZ)
+    const born = (id: string, birthDate: string | null) => prisma.volunteer.update({ where: { id }, data: { birthDate: birthDate ? new Date(birthDate) : null } })
+    const limitsRoute = (eventId: string, volunteerId: string, method: "PUT" | "DELETE", limits?: unknown) =>
+      (method === "PUT" ? putLimits : deleteLimits)(new Request("http://localhost", { method, body: limits === undefined ? undefined : JSON.stringify({ limits }) }), { params: Promise.resolve({ id: eventId, volunteerId }) })
+
+    it("a minor gets the minors' limits, an adult the event's; no birth date: no new commitment until one is given", async () => {
+      const e = await event({ policy: MINOR_POLICY })
+      const five = await shift(e.id, "2031-07-04", "09:00", "14:00")
+      const young = await person("Ines")
+      await born(young.id, "2015-03-01")
+      const res = await add({ eventId: e.id, shiftId: five.id, volunteerId: young.id })
+      expect(res.status).toBe(409)
+      expect((await res.json()).error).toContain("La limite de cet événement pour les moins de 18 ans est de 4 h 30.")
+      const grown = await person("Marc")
+      await born(grown.id, "1990-03-01")
+      expect((await add({ eventId: e.id, shiftId: five.id, volunteerId: grown.id })).status).toBe(201)
+      // Unknown birth date: refused, then accepted once given (and stored, never replaced).
+      const unknown = await person("Noe")
+      const refused = await add({ eventId: e.id, shiftId: five.id, volunteerId: unknown.id })
+      expect(refused.status).toBe(409)
+      expect((await refused.json()).workload).toEqual([WORKLOAD_BIRTHDATE_REQUIRED])
+      expect((await add({ eventId: e.id, shiftId: five.id, volunteerId: unknown.id, birthDate: "1995-05-05" })).status).toBe(201)
+      expect((await prisma.volunteer.findUniqueOrThrow({ where: { id: unknown.id } })).birthDate?.toISOString().slice(0, 10)).toBe("1995-05-05")
+    })
+
+    it("personal limits: stricter or equal only, refused while the programme breaks them, enforced afterwards; the person's own layer stays", async () => {
+      const e = await event({ policy: MINOR_POLICY })
+      const morning = await shift(e.id, "2031-07-04", "09:00", "12:00")
+      const afternoon = await shift(e.id, "2031-07-04", "13:00", "17:00")
+      const p = await person("Lea")
+      await born(p.id, "1990-01-01")
+      await hold(e.id, morning.id, p.id)
+      expect((await limitsRoute(e.id, p.id, "PUT", { maxDailyMinutes: 11 * 60 })).status).toBe(400) // looser than the event
+      expect((await limitsRoute(e.id, p.id, "PUT", { maxDailyMinutes: 2 * 60 })).status).toBe(409) // breaks the 3 h held
+      expect((await limitsRoute(e.id, p.id, "PUT", { maxDailyMinutes: 6 * 60 })).status).toBe(200)
+      const res = await add({ eventId: e.id, shiftId: afternoon.id, volunteerId: p.id })
+      expect(res.status).toBe(409)
+      expect((await res.json()).error).toContain("La limite personnelle de cette personne est de 6 h par journée de service.")
+      // The person's own, stricter limit stays when the organisation removes its own.
+      await prisma.eventVolunteerLimit.update({ where: { eventId_volunteerId: { eventId: e.id, volunteerId: p.id } }, data: { values: { version: 1, admin: { maxDailyMinutes: 360 }, volunteer: { maxDailyMinutes: 300 } } } })
+      expect((await limitsRoute(e.id, p.id, "DELETE")).status).toBe(200)
+      const left = await prisma.eventVolunteerLimit.findUniqueOrThrow({ where: { eventId_volunteerId: { eventId: e.id, volunteerId: p.id } } })
+      expect(left.values).toEqual({ version: 1, volunteer: { maxDailyMinutes: 300 } })
+    })
+    it("from the personal link: the person sets, changes and removes their own layer only", async () => {
+      const e = await event({ policy: MINOR_POLICY })
+      const s1 = await shift(e.id, "2031-07-04", "09:00", "11:00")
+      const p = await person("Yan")
+      await born(p.id, "1990-01-01")
+      const link = generateToken()
+      await hold(e.id, s1.id, p.id, "active", link)
+      const call = (method: "GET" | "PUT" | "DELETE", limits?: unknown) => {
+        const handler = method === "GET" ? myLimitsGet : method === "PUT" ? myLimitsPut : myLimitsDelete
+        return handler(new Request("http://localhost", { method, headers: { "x-forwarded-for": `${tag}-ip-${ip++}` }, body: limits === undefined ? undefined : JSON.stringify({ limits }) }), { params: Promise.resolve({ token: link }) })
+      }
+      expect(await (await call("GET")).json()).toMatchObject({ available: true, mine: null, organisation: null })
+      expect((await call("PUT", { maxDailyMinutes: 5 * 60 })).status).toBe(200)
+      await limitsRoute(e.id, p.id, "PUT", { maxDailyMinutes: 4 * 60 })
+      // Removing their own leaves the organisation's.
+      const after = await (await call("DELETE")).json()
+      expect(after).toMatchObject({ mine: null, organisation: { maxDailyMinutes: 240 } })
     })
   })
 })

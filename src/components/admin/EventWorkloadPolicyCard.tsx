@@ -8,10 +8,13 @@ import { flushSync } from "react-dom"
 import { announce } from "@/lib/announce"
 import ConfirmActionModal from "@/components/admin/ConfirmActionModal"
 import WorkloadBenchmarks from "@/components/admin/WorkloadBenchmarks"
+import PersonalLimitsEditor from "@/components/admin/PersonalLimitsEditor"
 import WorkloadPolicyFields, { fieldInputId } from "@/components/admin/WorkloadPolicyFields"
-import type { EventHorizon, WorkloadBenchmark, WorkloadPolicyValues } from "@/lib/workload-policy"
+import { PERSONAL_FIELDS, type EventHorizon, type PersonalField, type WorkloadBenchmark, type WorkloadPolicyValues } from "@/lib/workload-policy"
+
+const pickLimits = (v: WorkloadPolicyValues) => Object.fromEntries(PERSONAL_FIELDS.map((f) => [f, v[f]])) as Record<PersonalField, number>
 import {
-  benchmarkAnnouncement, benchmarkFields, checkPolicyForm, shiftsWithoutPlaceText, policyFormFrom, policySummaryLines, policyValuesFromForm, problemsByField, SUGGESTED_LABELS,
+  benchmarkAnnouncement, benchmarkFields, checkPolicyForm, peopleWithoutBirthDateText, shiftsWithoutPlaceText, policyFormFrom, policySummaryLines, policyValuesFromForm, problemsByField, SUGGESTED_LABELS,
   withBenchmark, withWarningSuggestions, WORKLOAD_NOT_COVERED, type PolicyFormState,
 } from "@/lib/workload-policy-form"
 
@@ -27,7 +30,7 @@ const ID = "event-wl"
  * judges the current programmes without saving; turning on or tightening is refused while one breaks
  * the limits, the people listed. Turning off asks first.
  */
-export default function EventWorkloadPolicyCard({ eventId, initialEnabled, initialValues, initialIncomplete, initialFindings, timeZone, horizon, placesInfo }: {
+export default function EventWorkloadPolicyCard({ eventId, initialEnabled, initialValues, initialIncomplete, initialFindings, timeZone, horizon, placesInfo, peopleWithoutBirthDate = 0 }: {
   eventId: string
   initialEnabled: boolean
   initialValues: WorkloadPolicyValues | null
@@ -39,6 +42,8 @@ export default function EventWorkloadPolicyCard({ eventId, initialEnabled, initi
   horizon: EventHorizon
   /** Live shifts without a place and active places (#1171, travel), when the page was loaded. */
   placesInfo?: { shiftsWithoutPlace: number; activePlaces: number }
+  /** Committed people without a birth date (#1171, minors), when the page was loaded. */
+  peopleWithoutBirthDate?: number
 }) {
   const [enabled, setEnabled] = useState(initialEnabled)
   const [incomplete, setIncomplete] = useState(initialIncomplete)
@@ -56,6 +61,8 @@ export default function EventWorkloadPolicyCard({ eventId, initialEnabled, initi
   const submitRef = useRef<HTMLButtonElement>(null)
 
   const checked = checkPolicyForm(form)
+  // The event's saved limits, for the personal limits' help (what the server compares with).
+  const [savedLimits, setSavedLimits] = useState<Record<PersonalField, number> | null>(() => (initialValues ? pickLimits(initialValues) : null))
   const summary = checked.ok ? policySummaryLines(checked.values) : []
 
   function change(next: PolicyFormState) {
@@ -64,9 +71,10 @@ export default function EventWorkloadPolicyCard({ eventId, initialEnabled, initi
     if (errors.size > 0) {
       const again = new Map(errors)
       if (next.serviceDayStart !== form.serviceDayStart) again.delete("serviceDayStart")
-      for (const key of Object.keys(next) as (keyof PolicyFormState)[]) if (key !== "serviceDayStart" && key !== "offDay" && key !== "meal" && key !== "travel" && next[key] !== form[key]) again.delete(key)
+      for (const key of Object.keys(next) as (keyof PolicyFormState)[]) if (key !== "serviceDayStart" && key !== "offDay" && key !== "meal" && key !== "travel" && key !== "minors" && next[key] !== form[key]) again.delete(key)
       if (next.meal !== form.meal) for (const key of [...again.keys()]) if (key.startsWith("meal")) again.delete(key)
       if (next.travel !== form.travel) { again.delete("travel"); again.delete("travelMinutes") }
+      if (next.minors !== form.minors) for (const key of [...again.keys()]) if (key.startsWith("minors")) again.delete(key)
       if (next.offDay.apply !== form.offDay.apply) again.delete("offDay")
       if (next.offDay.apply !== form.offDay.apply || next.offDay.minOffDays !== form.offDay.minOffDays || next.offDay.windowDays !== form.offDay.windowDays) {
         again.delete("offDayMinOffDays")
@@ -149,6 +157,7 @@ export default function EventWorkloadPolicyCard({ eventId, initialEnabled, initi
         const wasOn = enabled
         setEnabled(true)
         setIncomplete(false)
+        if (local.ok) setSavedLimits(pickLimits(local.values))
         setErrors(new Map())
         setPeople(null)
         announce(setStatus, wasOn ? "Limites enregistrées." : "Protection activée : toute affectation qui dépasse ces limites est désormais refusée.")
@@ -227,7 +236,7 @@ export default function EventWorkloadPolicyCard({ eventId, initialEnabled, initi
       <WorkloadBenchmarks onUse={applyBenchmark} />
 
       <form noValidate onSubmit={(e) => { e.preventDefault(); void save() }} className="space-y-4">
-        <WorkloadPolicyFields idPrefix={ID} form={form} onChange={change} errors={errors} horizon={horizon} places={placesInfo ? { text: shiftsWithoutPlaceText(placesInfo.shiftsWithoutPlace, placesInfo.activePlaces), href: `/admin/events/${eventId}/shifts#lieux` } : undefined} />
+        <WorkloadPolicyFields idPrefix={ID} form={form} onChange={change} errors={errors} horizon={horizon} places={placesInfo ? { text: shiftsWithoutPlaceText(placesInfo.shiftsWithoutPlace, placesInfo.activePlaces), href: `/admin/events/${eventId}/shifts#lieux` } : undefined} minorsNote={peopleWithoutBirthDateText(peopleWithoutBirthDate)} />
 
         {summary.length > 0 && (
           <div className="rounded-xl bg-gray-50 border border-gray-200 px-3 py-2 text-sm text-gray-800">
@@ -253,6 +262,9 @@ export default function EventWorkloadPolicyCard({ eventId, initialEnabled, initi
           )}
         </div>
       </form>
+
+      {/* Personal limits (#1171, lot 2): their own form, never nested in the card's; while on. */}
+      {enabled && !incomplete && savedLimits && <PersonalLimitsEditor eventId={eventId} event={savedLimits} />}
 
       <p role="status" className={status ? "text-sm text-green-800" : "sr-only"}>{status}</p>
       <p role="alert" className={error ? "text-sm text-red-700" : "sr-only"}>{error}</p>

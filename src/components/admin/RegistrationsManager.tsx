@@ -19,6 +19,7 @@ import UndoRemovalBar, { type HoldReason } from "./registrations/UndoRemovalBar"
 import RegistrationRow from "./registrations/RegistrationRow"
 import { EMPTY_ADD_FORM, personName, type AddFormValues, type Registration } from "./registrations/types"
 import { blocksWorkload, workloadByPerson, type WorkloadMode } from "@/lib/workload-view"
+import type { PersonalLimits } from "@/lib/workload-policy"
 import {
   cancelAnnouncement,
   heldAnnouncement,
@@ -51,6 +52,8 @@ type Props = {
   timeZone: string
   /** How the event judges workload (#465 warnings, or its #1171 protection); warnings by default. */
   workloadMode?: WorkloadMode
+  /** Personal workload limits by volunteer (#1171, lot 2), for the rows' findings. */
+  personalLimits?: Record<string, PersonalLimits>
   /** Answers to the event's custom questions (#483), by volunteer. */
   answersByVolunteer?: Record<string, { label: string; text: string }[]>
   /** The signed-in organizer's email: placing oneself sends no confirmation email (#916). */
@@ -64,14 +67,19 @@ type Props = {
 }
 
 // ── Main component ────────────────────────────────────────────────────────────
-export default function RegistrationsManager({ eventId, initialRegistrations, shifts, initialShiftFilter, initialSearch, initialRequestsOnly = false, timeZone, workloadMode, answersByVolunteer = {}, organizerEmail = null, groupLinks = [], initialGroupFilter = "", sectorFilter = null }: Props) {
+export default function RegistrationsManager({ eventId, initialRegistrations, shifts, initialShiftFilter, initialSearch, initialRequestsOnly = false, timeZone, workloadMode, personalLimits, answersByVolunteer = {}, organizerEmail = null, groupLinks = [], initialGroupFilter = "", sectorFilter = null }: Props) {
   const [registrations, setRegistrations] = useState<Registration[]>(initialRegistrations)
   // Workload per volunteer, from the registrations shown here: the non-blocking #465 warnings, or,
   // on a protected event (#1171), the limits it enforces that a programme no longer respects.
   const mode: WorkloadMode = useMemo(() => workloadMode ?? { kind: "warnings", timeZone }, [workloadMode, timeZone])
   const workload = useMemo(
-    () => workloadByPerson(registrations.map((r) => ({ volunteerId: r.volunteer.id, status: r.status, shift: r.shift })), mode),
-    [registrations, mode],
+    () => workloadByPerson(
+      registrations.map((r) => ({ volunteerId: r.volunteer.id, status: r.status, shift: r.shift })),
+      mode,
+      // Each person's birth date and own limits (#1171, lot 2): the minors' and personal limits.
+      new Map(registrations.map((r) => [r.volunteer.id, { birthDate: r.volunteer.birthDate ?? null, personal: personalLimits?.[r.volunteer.id] ?? null }])),
+    ),
+    [registrations, mode, personalLimits],
   )
   const [search, setSearch] = useState(initialSearch ?? "")
   const initialShift = initialShiftFilter ? shifts.find(s => s.id === initialShiftFilter) ?? null : null

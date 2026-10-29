@@ -11,7 +11,7 @@ import { orgTimeZone } from "./time-zone"
 import { deliverAfterResponse, enqueueNotifications } from "./notifications/outbox"
 import { shiftStartsAt } from "./cancel-deadline"
 import { waitlistOfferExpiry } from "./waitlist-offer"
-import { committedDuty, judgeDutyChange, readWorkloadGate } from "./workload-guard"
+import { committedDuty, judgeDutyChange, readWorkloadGate, readWorkloadPerson } from "./workload-guard"
 
 /** Waiting people looked at for one freed spot, at most (a shift's waitlist is small). */
 const PROMOTION_CANDIDATES = 50
@@ -69,7 +69,8 @@ export async function promoteNextInWaitlist(shiftId: string, causedByLogId?: str
       })
       for (const w of waiting) {
         const before = await committedDuty(tx, shift.eventId, w.volunteerId)
-        if (judgeDutyChange(gate, before, { add: [shift] }).ok) {
+        // Their birth date and own limits too (#1171, lot 2): a skip, never a lock (Codex, PR 1).
+        if (judgeDutyChange(gate, before, { add: [shift] }, await readWorkloadPerson(tx, shift.eventId, w.volunteerId)).ok) {
           candidate = w
           break
         }

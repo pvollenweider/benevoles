@@ -27,6 +27,7 @@ import { checkDutyChange, lockWorkloadShared, readWorkloadGate, type WorkloadVer
 /** The swap code of a workload refusal (#1171): the first rule broken, never whose plan. */
 function workloadSwapCode(v: Exclude<WorkloadVerdict, { ok: true }>): SwapRefusalCode {
   if (v.reason === "incomplete") return "workload_incomplete"
+  if (v.reason === "birthdate") return "workload_birthdate"
   return `workload_${v.findings[0].rule}` as SwapRefusalCode
 }
 

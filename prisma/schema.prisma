@@ -246,6 +246,7 @@ model Event {
   rosterConsents   RosterConsent[]
   sectors          Sector[]
   places           EventPlace[]
+  volunteerLimits  EventVolunteerLimit[]
   shiftSwapRequests ShiftSwapRequest[]
 
   @@unique([organizationId, slug])
@@ -261,6 +262,29 @@ model Event {
 // Per event, archivable, never deleted by the app. A shift points to one (Shift.placeId) or none:
 // a shift without a place is not checked for travel. Organisers only; volunteers see the shift's
 // own place text (locationDetails) as before.
+// A person's own workload limits on one event (#1171, lot 2): stricter than the event's
+// protection, never looser; set by an organiser or by the person from their personal link, without
+// any reason. `values` is versioned JSON ({ version: 1, maxDailyMinutes?, maxContinuousMinutes?,
+// minBreakMinutes?, maxEventMinutes?, minRestMinutes? }, src/lib/workload-personal.ts); a field
+// absent follows the event. One row per event and person; merged keeping the stricter value of
+// each field (src/lib/member-merge-transaction.ts), deleted with the person's data on erasure.
+model EventVolunteerLimit {
+  id          String   @id @default(cuid())
+  eventId     String
+  volunteerId String
+  values      Json
+  // "admin" or "volunteer": who saved it last. A person may loosen only what they set themselves.
+  updatedBy   String
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+
+  event     Event     @relation(fields: [eventId], references: [id], onDelete: Cascade)
+  volunteer Volunteer @relation(fields: [volunteerId], references: [id], onDelete: Cascade)
+
+  @@unique([eventId, volunteerId])
+  @@index([volunteerId])
+}
+
 model EventPlace {
   id           String    @id @default(cuid())
   eventId      String
@@ -731,6 +755,7 @@ model Volunteer {
   questionAnswers   QuestionAnswer[]
   deliveryOutcomes  DeliveryOutcome[]
   rosterConsents    RosterConsent[]
+  workloadLimits    EventVolunteerLimit[]
   mergedInto        Volunteer?     @relation("VolunteerMerge", fields: [mergedIntoId], references: [id], onDelete: SetNull)
   mergedFrom        Volunteer[]    @relation("VolunteerMerge")
   // Possible-duplicate dismissals (#601) naming this record as either side of the pair.

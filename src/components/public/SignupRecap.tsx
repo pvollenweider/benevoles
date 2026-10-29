@@ -6,7 +6,7 @@ import { REQUEST_SHORT, WAITLIST_SHORT } from "@/lib/waitlist-copy"
 import { gapAfter, gapLabel, hasOverlap, personalDataLines, recapShifts, totalLabel, type RecapShiftInput } from "@/lib/signup-recap"
 import type { ShiftInfo } from "@/lib/shift-info"
 import type { WorkloadShift } from "@/lib/workload"
-import { blocksWorkload, recapWorkloadNotices, type WorkloadMode } from "@/lib/workload-view"
+import { blocksWorkload, recapWorkloadNotices, workloadNeedsBirthDate, type WorkloadMode } from "@/lib/workload-view"
 
 type Props = {
   shifts: (RecapShiftInput & ShiftInfo)[]
@@ -20,6 +20,8 @@ type Props = {
   timeZone: string
   /** How the event judges workload (#465 warnings, or its #1171 protection); warnings by default. */
   workload?: WorkloadMode
+  /** The birth date typed in the form (#1171, lot 2): the minors' limits apply to the recap too. */
+  birthDate?: string
   /** Compact for the sidebar, roomier inside the form card. */
   variant: "card" | "sidebar"
 }
@@ -29,13 +31,13 @@ type Props = {
  * what sits between them, waitlist and age flags, and the personal data that will be sent.
  * Pure render; the same component sits in the form card (phone) and the sidebar (desktop).
  */
-export default function SignupRecap({ shifts, requirePhone, phoneGiven, commentGiven, answeredQuestions = [], heldShifts = [], timeZone, workload: mode = { kind: "warnings", timeZone }, variant }: Props) {
+export default function SignupRecap({ shifts, requirePhone, phoneGiven, commentGiven, answeredQuestions = [], heldShifts = [], timeZone, workload: mode = { kind: "warnings", timeZone }, birthDate, variant }: Props) {
   const rows = recapShifts(shifts)
   // Waitlist entries may never become shifts: only firm places count (#465).
-  const workload = recapWorkloadNotices(shifts.filter((sh) => !rows.find((r) => r.id === sh.id)?.waitlist), heldShifts, mode)
+  const workload = recapWorkloadNotices(shifts.filter((sh) => !rows.find((r) => r.id === sh.id)?.waitlist), heldShifts, mode, birthDate ? { birthDate } : null)
   const blocks = blocksWorkload(mode)
   const byId = new Map(shifts.map((s) => [s.id, s]))
-  const needsBirthDate = rows.some((r) => r.minAge !== null)
+  const needsBirthDate = rows.some((r) => r.minAge !== null) || workloadNeedsBirthDate(mode)
   const overlap = hasOverlap(rows)
   const dense = variant === "sidebar"
   const text = dense ? "text-xs" : "text-sm"

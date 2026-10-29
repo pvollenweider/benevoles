@@ -65,8 +65,8 @@ import { myAnswersQuery, storedAnswers } from "@/lib/my-answers"
 import { answerChanges, answersEditState, type AnswerChange } from "@/lib/answer-changes"
 import { recordAnswerChanges, writeAnswerChanges } from "@/lib/answer-change-save"
 import { contactChanges, type ContactChange, type SignupUpdates } from "@/lib/signup-updates"
-import { judgeDutyChange, lockWorkloadShared, readWorkloadGate, reproducibleFrom, withPlaceNames, workloadRefusalBody, WorkloadRefusalError } from "@/lib/workload-guard"
-import { WORKLOAD_PRIVATE_REFUSAL, type DutyShift } from "@/lib/workload-policy"
+import { judgeDutyChange, lockWorkloadShared, readWorkloadGate, readWorkloadPerson, reproducibleFrom, withPlaceNames, workloadRefusalBody, WorkloadRefusalError } from "@/lib/workload-guard"
+import { WORKLOAD_PRIVATE_REFUSAL, type DutyShift, type WorkloadFinding, type WorkloadPerson } from "@/lib/workload-policy"
 
 const schema = z.object({
   eventId: z.string().max(SIGNUP_ID_MAX),
@@ -457,8 +457,12 @@ export async function POST(req: Request) {
           const added: DutyShift[] = await withPlaceNames(tx, created.filter((r) => committed.has(r.status)).map((r) => shifts.find((s) => s.id === r.shiftId)!))
           if (added.length > 0) {
             const before: DutyShift[] = await withPlaceNames(tx, liveNow.filter((r) => r.shift.status !== "cancelled").map((r) => r.shift))
-            const verdict = judgeDutyChange(workloadGate, before, { add: added })
-            if (!verdict.ok) throw new SignupWorkloadError(verdict, volunteerId, added, ownsEmail && !matchErased && !createdNow)
+            // The stored birth date wins; without one, the date typed now (#1171, lot 2: minors). The
+            // person's own limits come from their record.
+            const stored = await readWorkloadPerson(tx, eventId, volunteerId)
+            const person = { ...stored, birthDate: stored.birthDate ?? birthDateValue ?? null }
+            const verdict = judgeDutyChange(workloadGate, before, { add: added }, person)
+            if (!verdict.ok) throw new SignupWorkloadError(verdict, volunteerId, added, ownsEmail && !matchErased && !createdNow, person, !stored.birthDate)
           }
         }
         // Shifts added to an event where the volunteer already holds a place or a request (#1191):
@@ -747,7 +751,12 @@ const INVALID_SHIFTS = "Un ou plusieurs créneaux sont invalides ou fermés. Rec
  * finding comes from the shifts submitted alone. Times and durations only, never a shift's label.
  */
 class SignupWorkloadError extends WorkloadRefusalError {
-  constructor(verdict: ConstructorParameters<typeof WorkloadRefusalError>[0], volunteerId: string, readonly submitted: DutyShift[], readonly proven: boolean) {
+  constructor(
+    verdict: ConstructorParameters<typeof WorkloadRefusalError>[0], volunteerId: string, readonly submitted: DutyShift[], readonly proven: boolean,
+    readonly person: WorkloadPerson | null = null,
+    /** The minor status came from the date typed in this submission, not from the stored record. */
+    readonly typedBirthDate = false,
+  ) {
     super(verdict, volunteerId)
   }
 }
@@ -756,7 +765,10 @@ const SIGNUP_WORKLOAD_LEAD = "Inscription impossible : les pauses et limites de 
 
 function signupWorkloadBody(e: SignupWorkloadError) {
   const v = e.verdict
-  if (v.reason === "findings" && !e.proven && !v.findings.every((f) => reproducibleFrom(f, e.submitted, v.policy))) {
+  // Without proof of the address, details only for what the submission alone shows (Codex, lot 2:
+  // and only from public inputs): never a person's own limits, nor an age read from their record.
+  const publicFinding = (f: WorkloadFinding) => f.scope !== "personal" && (f.scope !== "minor" || e.typedBirthDate)
+  if (v.reason === "findings" && !e.proven && !v.findings.every((f) => publicFinding(f) && reproducibleFrom(f, e.submitted, v.policy, { birthDate: e.person?.birthDate }))) {
     return { error: WORKLOAD_PRIVATE_REFUSAL, code: "workload" as const, workload: [] as string[] }
   }
   return workloadRefusalBody(v, SIGNUP_WORKLOAD_LEAD)

@@ -4,6 +4,7 @@ import { getOrgContext } from "@/lib/auth-guard"
 import Link from "next/link"
 import RegistrationsManager from "@/components/admin/RegistrationsManager"
 import { workloadModeOf } from "@/lib/workload-view"
+import { parsePersonalLimits } from "@/lib/workload-personal"
 import { leaderKeySet, isSectorLeader } from "@/lib/sector-leaders"
 import { SEARCH_MAX_LENGTH } from "@/lib/admin-search"
 import { orgTimeZone } from "@/lib/time-zone"
@@ -68,6 +69,9 @@ export default async function RegistrationsPage({
   // Workload (#465, #1171): the #465 warnings, or the event's protection.
   const workloadMode = workloadModeOf(event, orgTimeZone(event.organization))
   // Place names (#1171, lot 2), for the travel findings of the rows and of the add form.
+  // Personal workload limits (#1171, lot 2), for the rows' findings (organisers only).
+  const personalLimits = Object.fromEntries((await db.eventVolunteerLimit.findMany({ where: { eventId: event.id }, select: { volunteerId: true, values: true } }))
+    .flatMap((l) => { const p = parsePersonalLimits(l.values); return p ? [[l.volunteerId, p]] : [] }))
   const placeNames = new Map((await db.eventPlace.findMany({ where: { eventId: event.id }, select: { id: true, name: true } })).map((p) => [p.id, p.name]))
   // The text a volunteer signing up now would accept (#569), to tell it apart from an older one.
   const currentCharterHash = hashCharterText(resolveCharterText(event.organization.volunteerCharter, event.organization.hasOrgInsurance))
@@ -136,6 +140,7 @@ export default async function RegistrationsPage({
         eventId={id}
         timeZone={orgTimeZone(event.organization)}
         workloadMode={workloadMode}
+        personalLimits={personalLimits}
         organizerEmail={ctx.session.user?.email ?? null}
         answersByVolunteer={answersByVolunteer(event.questions)}
         initialShiftFilter={initialShiftFilter}
