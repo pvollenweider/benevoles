@@ -87,6 +87,11 @@ async function main() {
     if (scenario === "sector-leaders") return beta.seedVideoSectorLeadersBeta(prisma)
     return beta.seedVideoShiftSwaps(prisma)
   }
+  // Breaks and workload protection (#1171): its own organisation (scripts/seed-video-workload.ts).
+  if (scenario === "workload-protection") {
+    const { seedVideoWorkloadProtection } = await import("./seed-video-workload")
+    return seedVideoWorkloadProtection(prisma)
+  }
   if (scenario === "event-reports" || scenario === "volunteer-badges") {
     const { seedVideoDocuments } = await import("./seed-video-documents")
     return seedVideoDocuments(prisma)
