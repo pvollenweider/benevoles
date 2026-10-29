@@ -70,7 +70,7 @@ export const STATIC_ROUTES: ReadonlySet<string> = new Set([
 ])
 
 /** Folders whose second segment is a parameter of their own (`/doc/<slug>`, `/my/<token>`...): never the event segment. */
-export const DYNAMIC_CHILD_FOLDERS: ReadonlySet<string> = new Set(["blog", "doc", "videos", "my", "leader"])
+export const DYNAMIC_CHILD_FOLDERS: ReadonlySet<string> = new Set(["blog", "doc", "videos", "my", "leader", "disponibilites"])
 
 /** Folders left entirely to their own routes and guards: the administration and the API. */
 export const OWN_FOLDERS: ReadonlySet<string> = new Set(["admin", "super-admin", "api", "_next", "monitoring"])

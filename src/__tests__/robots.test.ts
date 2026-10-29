@@ -33,7 +33,7 @@ describe("robots (production domain: benevol.app)", () => {
     withHost("benevol.app")
     const robots = (await import("../app/robots")).default
     const result = await robots()
-    const disallow = ["/admin", "/api/", "/my/", "/waitlist/", "/leader/"]
+    const disallow = ["/admin", "/api/", "/my/", "/waitlist/", "/leader/", "/disponibilites/"]
     const rules = result.rules as { userAgent: string | string[]; allow: string; disallow: string[] }[]
     expect(rules[0]).toEqual({ userAgent: "*", allow: "/", disallow })
     // The search and AI crawlers are named and allowed, with the same private areas closed.
@@ -50,7 +50,7 @@ describe("robots (production domain: benevol.app)", () => {
     const robots = (await import("../app/robots")).default
     const result = await robots()
     // Unchanged on an organisation's host: one group, its own sitemap.
-    expect(result.rules).toEqual({ userAgent: "*", allow: "/", disallow: ["/admin", "/api/", "/my/", "/waitlist/", "/leader/"] })
+    expect(result.rules).toEqual({ userAgent: "*", allow: "/", disallow: ["/admin", "/api/", "/my/", "/waitlist/", "/leader/", "/disponibilites/"] })
     expect(result.sitemap).toBe("https://lausanne-rocks.benevol.app/sitemap.xml")
   })
 })

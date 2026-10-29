@@ -94,7 +94,7 @@ describe("resolveDay", () => {
   })
   it("refuses an empty range", () => {
     const r = resolveDay({ date: "2026-07-10", ranges: [{ start: "10:00", end: "10:00" }] }, TZ)
-    expect(r).toEqual({ ok: false, error: expect.stringContaining("commence et finit à 10:00") })
+    expect(r).toEqual({ ok: false, error: expect.stringContaining("commence et finit à 10:00"), at: { date: "2026-07-10", range: 0, field: "end" } })
   })
   it("refuses an end inside the hour lived twice, on the next date", () => {
     const r = resolveDay({ date: "2026-10-24", ranges: [{ start: "22:00", end: "02:30" }] }, TZ)
@@ -112,7 +112,7 @@ describe("checkAnswerSet", () => {
   const dates = ["2026-07-10", "2026-07-11"]
   it("refuses a date outside the event", () => {
     const r = checkAnswerSet([resolved("2026-07-12", [])], dates)
-    expect(r).toEqual({ ok: false, error: "Le dimanche 12 juillet ne fait pas partie de l'événement." })
+    expect(r).toEqual({ ok: false, error: "Le dimanche 12 juillet ne fait pas partie de l'événement.", at: { date: "2026-07-12" } })
   })
   it("refuses two ranges sharing time on one date", () => {
     const r = checkAnswerSet([resolved("2026-07-10", [["08:00", "14:00"], ["13:00", "18:00"]])], dates)
@@ -168,10 +168,10 @@ describe("answerState", () => {
   it("is « Réponse complète » once every date is answered with some range", () => {
     expect(answerState(dates, [{ date: "2026-07-10", rangeCount: 0 }, { date: "2026-07-11", rangeCount: 1 }])).toBe("complete")
   })
-  it("is « Indisponible » when every date is « pas disponible »", () => {
+  it("is « Aucune date disponible » when every date is « pas disponible »", () => {
     const days = wholeEventUnavailable(dates).map((d) => ({ date: d.date, rangeCount: d.ranges.length }))
     expect(answerState(dates, days)).toBe("unavailable")
-    expect(ANSWER_STATE_LABELS.unavailable).toBe("Indisponible")
+    expect(ANSWER_STATE_LABELS.unavailable).toBe("Aucune date disponible")
   })
   it("leaves a date added to the event later unknown", () => {
     const answered = wholeEventUnavailable(dates).map((d) => ({ date: d.date, rangeCount: 0 }))

@@ -115,7 +115,7 @@ export default function ConfirmActionModal({ recap, busy, onConfirm, onCancel, e
           type="button"
           onClick={() => { if (!busy) onCancel() }}
           aria-disabled={busy || undefined}
-          className="text-sm font-medium border border-gray-300 text-gray-800 rounded-xl px-4 py-2 hover:bg-gray-50 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-blue-600"
+          className="min-h-11 text-sm font-medium border border-gray-300 text-gray-800 rounded-xl px-4 py-2 hover:bg-gray-50 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-blue-600"
         >
           {recap.cancelLabel ?? "Annuler"}
         </button>
@@ -123,7 +123,7 @@ export default function ConfirmActionModal({ recap, busy, onConfirm, onCancel, e
           type="submit"
           aria-disabled={busy || undefined}
           aria-busy={busy || undefined}
-          className={`text-sm font-semibold text-white rounded-xl px-4 py-2 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 ${
+          className={`min-h-11 text-sm font-semibold text-white rounded-xl px-4 py-2 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 ${
             recap.danger ? "bg-red-600 hover:bg-red-700 focus-visible:outline-red-700" : "bg-blue-600 hover:bg-blue-700 focus-visible:outline-blue-600"
           } ${busy ? "cursor-wait" : ""}`}
         >

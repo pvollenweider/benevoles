@@ -76,7 +76,16 @@ function inviteRow(overrides: Partial<{
 }
 
 /** Builds a fake db that records every findMany `where` and every update's `data`. */
-function fakeDb(rows: { registrations?: ReturnType<typeof regRow>[]; leaders?: ReturnType<typeof leaderRow>[]; invites?: ReturnType<typeof inviteRow>[] }) {
+function availabilityRow(overrides: Partial<{ id: string; enabled: boolean; deadline: Date | null; email: string | null }> = {}) {
+  return {
+    id: overrides.id ?? "av-1",
+    volunteerId: "vol-1",
+    volunteer: { firstName: "Cathy", lastName: "Morel", email: overrides.email === undefined ? "cathy@x.ch" : overrides.email, active: true },
+    event: { id: "evt-1", title: "Fête", startDate: new Date("2099-06-01"), endDate: new Date("2099-06-02"), organizationId: orgA, availabilityEnabled: overrides.enabled ?? true, availabilityDeadline: overrides.deadline ?? null, availabilityTimeZone: "Europe/Zurich", organization: { name: "Orga", slug: "orga", timeZone: null } },
+  }
+}
+
+function fakeDb(rows: { registrations?: ReturnType<typeof regRow>[]; leaders?: ReturnType<typeof leaderRow>[]; invites?: ReturnType<typeof inviteRow>[]; availability?: ReturnType<typeof availabilityRow>[] }) {
   const calls = {
     registrationWhere: [] as unknown[],
     leaderWhere: [] as unknown[],
@@ -84,6 +93,8 @@ function fakeDb(rows: { registrations?: ReturnType<typeof regRow>[]; leaders?: R
     registrationUpdates: [] as { id: string; data: Record<string, unknown> }[],
     leaderUpdates: [] as { id: string; data: Record<string, unknown> }[],
     inviteUpdates: [] as { id: string; data: Record<string, unknown> }[],
+    availabilityWhere: [] as unknown[],
+    availabilityUpdates: [] as { id: string; data: Record<string, unknown> }[],
     registrationUpdateMany: [] as unknown[],
   }
   const db: LinkRegenerationDb = {
@@ -100,10 +111,32 @@ function fakeDb(rows: { registrations?: ReturnType<typeof regRow>[]; leaders?: R
       findMany: vi.fn(async ({ where }) => { calls.inviteWhere.push(where); return rows.invites ?? [] }),
       update: vi.fn(async ({ where, data }) => { calls.inviteUpdates.push({ id: where.id, data }); return {} }),
     },
+    availabilityRequest: {
+      findMany: vi.fn(async ({ where }) => { calls.availabilityWhere.push(where); return rows.availability ?? [] }),
+      update: vi.fn(async ({ where, data }) => { calls.availabilityUpdates.push({ id: where.id, data }); return {} }),
+    },
     $transaction: (async (fn) => fn(db)) as LinkRegenerationDb["$transaction"],
   }
   return { db, calls }
 }
+
+describe("regenerateLinks — availability links (#1146)", () => {
+  it("rotates only live availability links, in the organisation's scope", async () => {
+    const { db, calls } = fakeDb({ availability: [availabilityRow()] })
+    const result = await regenerateLinks(db, { organizationId: orgA })
+    expect(calls.availabilityWhere).toEqual([{ tokenHash: { not: null }, event: { organizationId: orgA } }])
+    expect(calls.availabilityUpdates.map((u) => u.id)).toEqual(["av-1"])
+    expect(calls.availabilityUpdates[0].data.tokenHash).not.toBe(hashToken("anything"))
+    expect(result.counts.availabilityLinks).toBe(1)
+  })
+
+  it("re-sends a new link only while the event collects, before its deadline, to an address", async () => {
+    const rows = [availabilityRow({ id: "a" }), availabilityRow({ id: "b", enabled: false }), availabilityRow({ id: "c", deadline: new Date("2000-01-01") }), availabilityRow({ id: "d", email: null })]
+    const { db } = fakeDb({ availability: rows })
+    const result = await regenerateLinks(db, { availabilityIds: ["a", "b", "c", "d"] }, { resend: true })
+    expect(result.resend?.availabilityLinks).toEqual({ sent: 1, failed: 0, skipped: 3 })
+  })
+})
 
 describe("regenerateLinks — scope selection", () => {
   it("organization scope filters every model by event.organizationId (cross-tenant)", async () => {
@@ -130,7 +163,7 @@ describe("regenerateLinks — scope selection", () => {
     expect(calls.registrationWhere).toEqual([{ id: { in: ["reg-9"] } }])
     expect(calls.leaderWhere).toEqual([])
     expect(calls.inviteWhere).toEqual([])
-    expect(result.counts).toEqual({ registrations: 1, leaders: 0, invites: 0 })
+    expect(result.counts).toEqual({ registrations: 1, leaders: 0, invites: 0, availabilityLinks: 0 })
   })
 })
 
@@ -232,7 +265,7 @@ describe("countLinksInScope — dry run", () => {
   it("reports counts without changing anything", async () => {
     const { db, calls } = fakeDb({ registrations: [regRow(), regRow({ id: "r2" })], leaders: [leaderRow()], invites: [inviteRow()] })
     const counts = await countLinksInScope(db, { eventId: "evt-1" })
-    expect(counts).toEqual({ registrations: 2, leaders: 1, invites: 1 })
+    expect(counts).toEqual({ registrations: 2, leaders: 1, invites: 1, availabilityLinks: 0 })
     expect(calls.registrationUpdates).toHaveLength(0)
     expect(calls.leaderUpdates).toHaveLength(0)
     expect(calls.inviteUpdates).toHaveLength(0)

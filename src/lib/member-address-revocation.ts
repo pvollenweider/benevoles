@@ -10,7 +10,8 @@ import { inviteEmailDedupeKey } from "./invitation-sending"
 import { hashToken } from "./token-hash"
 import { MEMBER_ADDRESS_CHANGED_REASON } from "./outbox-address-changed-reason"
 import { LIVE_STATUSES, type Tx } from "./registration-capacity"
-import { linksToResend, memberLinkPayload } from "./member-address-change"
+import { availabilityLinksToResend, linksToResend, memberLinkPayload } from "./member-address-change"
+import { availabilityEmailKey, availabilityRequestPayload } from "./event-availability-server"
 import { endSwapsIn } from "./shift-swap-server"
 
 /**
@@ -26,7 +27,8 @@ import { endSwapsIn } from "./shift-swap-server"
  *     cancelled, not redirected (the delivery check, src/lib/outbox-recipient-check.ts, catches
  *     one queued concurrently);
  *  4. the new links are queued for the new address, in the same transaction: the personal link of
- *     each upcoming event where the member holds a place, and each invitation still unanswered.
+ *     each upcoming event where the member holds a place, each invitation still unanswered, and
+ *     each live availability link (#1146) of an event still collecting before its deadline.
  * Returns what changed, and the outbox ids to deliver once the transaction has committed.
  */
 export async function renewMemberLinks(tx: Tx, input: {
@@ -35,7 +37,7 @@ export async function renewMemberLinks(tx: Tx, input: {
   oldEmail: string
   newEmail: string | null
   now: Date
-}): Promise<{ registrations: number; invites: number; pushSubscriptions: number; cancelled: number; outboxIds: string[] }> {
+}): Promise<{ registrations: number; invites: number; availabilityLinks: number; pushSubscriptions: number; cancelled: number; outboxIds: string[] }> {
   const { organizationId, volunteer, newEmail, now } = input
   const eventSelect = {
     select: { title: true, slug: true, startDate: true, endDate: true, location: true, organizationId: true, organization: { select: { name: true, slug: true } } },
@@ -60,6 +62,17 @@ export async function renewMemberLinks(tx: Tx, input: {
     const token = generateToken()
     tokens.set(i.id, token)
     await tx.memberInvite.update({ where: { id: i.id }, data: linkToken.data(token) })
+  }
+
+  // 1b. Dated availability links (#1146): every live one gets a new secret; a revoked one stays revoked.
+  const availability = await tx.availabilityRequest.findMany({
+    where: { volunteerId: volunteer.id, tokenHash: { not: null } },
+    select: { id: true, eventId: true, event: { select: { id: true, title: true, startDate: true, endDate: true, organizationId: true, availabilityEnabled: true, availabilityDeadline: true, availabilityTimeZone: true, organization: { select: { name: true, slug: true, timeZone: true } } } } },
+  })
+  for (const a of availability) {
+    const token = generateToken()
+    tokens.set(a.id, token)
+    await tx.availabilityRequest.update({ where: { id: a.id }, data: linkToken.data(token) })
   }
 
   // 2. Devices subscribed with an old link.
@@ -118,6 +131,19 @@ export async function renewMemberLinks(tx: Tx, input: {
       }, inviteEmailDedupeKey(i.id, now)))
     }
   }
+  const availabilityIds = availabilityLinksToResend({
+    newEmail,
+    active: volunteer.active,
+    requests: availability.map((a) => ({ id: a.id, hasLink: true, collecting: a.event.availabilityEnabled, deadline: a.event.availabilityDeadline, eventEndDate: a.event.endDate })),
+  }, now)
+  if (newEmail) {
+    for (const a of availability.filter((x) => availabilityIds.includes(x.id))) {
+      payloads.push(availabilityRequestPayload(a.event, { id: volunteer.id, firstName: volunteer.firstName, lastName: volunteer.lastName, email: newEmail }, tokens.get(a.id)!, availabilityEmailKey(a.eventId, a.id, now), false))
+    }
+  }
+  if (availabilityIds.length && newEmail) {
+    await tx.availabilityRequest.updateMany({ where: { id: { in: availabilityIds } }, data: { lastRemindedAt: now } })
+  }
   const outboxIds = payloads.length ? await enqueueNotifications(payloads, tx) : []
   const resentEvents = registrations.filter((r) => plan.registrationIds.includes(r.id)).map((r) => r.eventId)
   if (resentEvents.length) {
@@ -133,5 +159,5 @@ export async function renewMemberLinks(tx: Tx, input: {
   // An agreement given from an old link is not renewed by itself (#1174 E18): swap requests end.
   await endSwapsIn(tx, { volunteerIds: [volunteer.id] }, "link_revoked", { type: "system" }, now)
 
-  return { registrations: registrations.length, invites: invites.length, pushSubscriptions, cancelled: cancelled.length, outboxIds }
+  return { registrations: registrations.length, invites: invites.length, availabilityLinks: availability.length, pushSubscriptions, cancelled: cancelled.length, outboxIds }
 }

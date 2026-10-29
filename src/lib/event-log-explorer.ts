@@ -33,6 +33,7 @@ export const ENTITY_LABELS: Record<string, string> = {
   EventQuestion: "Question",
   GroupLink: "Lien de groupe",
   ShiftSwap: "Échange de créneaux",
+  Availability: "Disponibilités",
 }
 
 /** « Historique de créneau », « Historique d'inscription » : elides « de » before a vowel. */

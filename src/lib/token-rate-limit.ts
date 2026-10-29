@@ -22,7 +22,7 @@ const HOUR = 60 * 60 * 1000
 export const TOKEN_MISS_LIMIT = 20
 
 /** Requests per valid link per hour, by use. */
-export const TOKEN_USE_LIMITS = { read: 60, withdraw: 30, availability: 30, answers: 30, roster: 60, calendar: 60, swaps: 60, swap: 30, limits: 30 } as const
+export const TOKEN_USE_LIMITS = { read: 60, withdraw: 30, availability: 30, answers: 30, roster: 60, calendar: 60, swaps: 60, swap: 30, limits: 30, availabilityLink: 60, availabilityAnswer: 30 } as const
 export type TokenUse = keyof typeof TOKEN_USE_LIMITS
 
 /**
@@ -32,8 +32,8 @@ export type TokenUse = keyof typeof TOKEN_USE_LIMITS
  * (Google's fetchers): a stale subscription there must never lock a volunteer out of their own
  * page, nor the other way round. The same limit applies to both.
  */
-export type TokenFamily = "personal" | "calendar"
-const MISS_ROUTES: Record<TokenFamily, string> = { personal: "reg-token-miss", calendar: "reg-feed-miss" }
+export type TokenFamily = "personal" | "calendar" | "availability"
+const MISS_ROUTES: Record<TokenFamily, string> = { personal: "reg-token-miss", calendar: "reg-feed-miss", availability: "avail-token-miss" }
 
 /** Seconds to tell a blocked client to wait (Retry-After). */
 export const TOKEN_MISS_RETRY_AFTER = HOUR / 1000

@@ -14,7 +14,7 @@
 /** The anchor of « Envois groupés » in the event's Communication tab, target of the activity log. */
 export const SEND_BATCHES_ANCHOR = "envois-groupes"
 
-export const SEND_BATCH_KINDS = ["member_invite", "invite_reminder", "manual_reminder", "targeted_message", "scheduled_message", "open_shifts"] as const
+export const SEND_BATCH_KINDS = ["member_invite", "invite_reminder", "manual_reminder", "targeted_message", "scheduled_message", "open_shifts", "availability_request", "availability_reminder"] as const
 export type SendBatchKind = (typeof SEND_BATCH_KINDS)[number]
 
 const KIND_LABELS: Record<SendBatchKind, string> = {
@@ -24,6 +24,8 @@ const KIND_LABELS: Record<SendBatchKind, string> = {
   targeted_message: "Message aux bénévoles",
   scheduled_message: "Message programmé",
   open_shifts: "Créneaux à compléter",
+  availability_request: "Demande de disponibilités",
+  availability_reminder: "Relance des disponibilités sans réponse",
 }
 
 export function sendBatchKindLabel(kind: string): string {

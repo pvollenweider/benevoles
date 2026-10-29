@@ -15,6 +15,8 @@ import { DELETE_SECTION_ID } from "@/lib/event-nav"
 import EventSectorsOption from "@/components/admin/EventSectorsOption"
 import EventShiftSwapsOption from "@/components/admin/EventShiftSwapsOption"
 import EventWorkloadPolicyCard from "@/components/admin/EventWorkloadPolicyCard"
+import EventAvailabilityOption from "@/components/admin/EventAvailabilityOption"
+import { loadAvailabilityOption } from "@/lib/event-availability-server"
 import { loadWorkloadPolicyState } from "@/lib/workload-policy-data"
 import { canAdoptBeta } from "@/lib/beta-access"
 import { sectorsAdopted, sectorsOptionOffered } from "@/lib/sectors"
@@ -41,6 +43,8 @@ export default async function EditEventPage({ params, searchParams }: { params: 
   const swapsOffered = event.shiftSwapsEnabled || await canAdoptBeta(event.organizationId, "shiftSwaps")
   // Breaks and workload protection (#1171, beta): offered while it can be adopted, or once the event has it.
   const workload = await loadWorkloadPolicyState(db, event.organizationId, event.id)
+  // Dated availability (#1146, beta): offered while it can be adopted, or once the event has it.
+  const availability = await loadAvailabilityOption(db, event.organizationId, event.id)
 
   // Everything that permanent deletion would erase (all statuses, cancelled shifts included),
   // only counted for an archived event.
@@ -112,6 +116,7 @@ export default async function EditEventPage({ params, searchParams }: { params: 
           peopleWithoutBirthDate={workload.peopleWithoutBirthDate}
         />
       )}
+      {availability && <EventAvailabilityOption eventId={event.id} initial={availability} />}
       {sectorsOffered && <EventSectorsOption eventId={event.id} initialEnabled={event.sectorsEnabled} adopted={sectorsAdopted(event)} />}
       {!wizard && (
         <section aria-labelledby={DELETE_SECTION_ID} className="border-t border-gray-200 pt-6 space-y-3">

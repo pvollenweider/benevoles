@@ -27,6 +27,12 @@ export function docUrl(target: AdminHelpTarget): string {
   return `${BASE_URL}${docHref(target)}`
 }
 
+/** The page « Mes disponibilités » of a person asked (#1146): their own link, on the organisation's host. */
+export function availabilityPageUrl(orgSlug: string | undefined, token: string): string {
+  const base = orgSlug ? orgBaseUrl(orgSlug) : BASE_URL
+  return `${base}/disponibilites/${token}`
+}
+
 export function leaderPageUrl(orgSlug: string | undefined, token: string): string {
   const base = orgSlug ? orgBaseUrl(orgSlug) : BASE_URL
   return `${base}/leader/${token}`

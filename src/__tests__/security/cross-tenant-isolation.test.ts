@@ -2296,6 +2296,66 @@ describe("Shift swaps — cross-tenant isolation (#1174)", () => {
   })
 })
 
+describe("Dated availability — cross-tenant isolation (#1146)", () => {
+  beforeEach(() => vi.clearAllMocks())
+  const personParams = (id: string, volunteerId: string) => ({ params: Promise.resolve({ id, volunteerId }) })
+  const withTx = (db: ReturnType<typeof setupGuard>, tx: Record<string, unknown>) => Object.assign(db, { $transaction: vi.fn(async (fn: (t: unknown) => unknown) => fn(tx)) })
+
+  it("GET /api/admin/events/[id]/availability returns 404 for an org-B event and reads no answer", async () => {
+    const { GET } = await import("@/app/api/admin/events/[id]/availability/route")
+    const db = setupGuard()
+    const extra = { availabilityRequest: { findMany: vi.fn().mockResolvedValue([]) } }
+    Object.assign(db, extra)
+    expect((await GET(makeRequest("/api/admin/events/evt-b/availability"), params("evt-b"))).status).toBe(404)
+    expect(db.event.findFirst).toHaveBeenCalledWith(expect.objectContaining({ where: { id: "evt-b" } }))
+    expect(extra.availabilityRequest.findMany).not.toHaveBeenCalled()
+  })
+
+  it("POST /api/admin/events/[id]/availability returns 404 for an org-B event and creates no link", async () => {
+    const { POST } = await import("@/app/api/admin/events/[id]/availability/route")
+    const db = setupGuard()
+    const tx = { $queryRaw: vi.fn().mockResolvedValue([]), availabilityRequest: { create: vi.fn(), findMany: vi.fn() } }
+    withTx(db, tx)
+    const res = await POST(makeRequest("/api/admin/events/evt-b/availability", "POST", { volunteerIds: ["vol-b"] }), params("evt-b"))
+    expect(res.status).toBe(404)
+    expect(tx.availabilityRequest.create).not.toHaveBeenCalled()
+  })
+
+  it("POST /api/admin/events/[id]/availability/remind returns 404 for an org-B event and emails nobody", async () => {
+    const { POST } = await import("@/app/api/admin/events/[id]/availability/remind/route")
+    const db = setupGuard()
+    const tx = { $queryRaw: vi.fn().mockResolvedValue([]), availabilityRequest: { findMany: vi.fn() } }
+    withTx(db, tx)
+    expect((await POST(makeRequest("/api/admin/events/evt-b/availability/remind", "POST"), params("evt-b"))).status).toBe(404)
+    expect(tx.availabilityRequest.findMany).not.toHaveBeenCalled()
+  })
+
+  it("PUT /api/admin/events/[id]/availability/mode returns 404 for an org-B event: the row lock filters on the organisation", async () => {
+    const { PUT } = await import("@/app/api/admin/events/[id]/availability/mode/route")
+    const db = setupGuard()
+    const tx = { $queryRaw: vi.fn().mockResolvedValue([]), event: { update: vi.fn() }, availabilityRequest: { updateMany: vi.fn() } }
+    withTx(db, tx)
+    const res = await PUT(makeRequest("/api/admin/events/evt-b/availability/mode", "PUT", { enabled: false, confirm: true }), params("evt-b"))
+    expect(res.status).toBe(404)
+    expect(String(tx.$queryRaw.mock.calls[0][0].join("?"))).toContain('"organizationId" =')
+    expect(tx.$queryRaw.mock.calls[0]).toContain(ORG_A)
+    expect(tx.event.update).not.toHaveBeenCalled()
+    expect(tx.availabilityRequest.updateMany).not.toHaveBeenCalled()
+  })
+
+  it("GET and PUT /api/admin/events/[id]/availability/[volunteerId] return 404 for an org-B event or person, and write nothing", async () => {
+    const route = await import("@/app/api/admin/events/[id]/availability/[volunteerId]/route")
+    const db = setupGuard()
+    const tx = { $queryRaw: vi.fn(), availabilityDay: { create: vi.fn() } }
+    const scoped = withTx(db, tx)
+    expect((await route.GET(makeRequest("/api/admin/events/evt-b/availability/vol-b"), personParams("evt-b", "vol-b"))).status).toBe(404)
+    const res = await route.PUT(makeRequest("/api/admin/events/evt-b/availability/vol-b", "PUT", { days: [{ date: "2030-06-01", ranges: [] }] }), personParams("evt-b", "vol-b"))
+    expect(res.status).toBe(404)
+    expect(scoped.$transaction).not.toHaveBeenCalled()
+    expect(tx.availabilityDay.create).not.toHaveBeenCalled()
+  })
+})
+
 describe("Workload protection — cross-tenant isolation (#1171)", () => {
   beforeEach(() => vi.clearAllMocks())
 

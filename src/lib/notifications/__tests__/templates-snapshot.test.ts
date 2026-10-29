@@ -483,6 +483,16 @@ const cases: [string, NotificationPayload][] = [
       editToken: "edit-tok",
     },
   }],
+  ["availability_request", {
+    kind: "availability_request",
+    recipient,
+    data: { firstName: "Julie", organizationName: "Comité <Rhône>", eventTitle: tricky, datesLabel: "du vendredi 10 juillet au dimanche 12 juillet", deadlineLabel: "dimanche 28 juin à 23h59", orgSlug: "rhone", token: "avail-tok" },
+  }],
+  ["availability_request (reminder, no deadline)", {
+    kind: "availability_request",
+    recipient,
+    data: { firstName: "Julie", organizationName: "Comité", eventTitle: "Festival", datesLabel: "le samedi 4 juillet", deadlineLabel: null, orgSlug: "rhone", token: "avail-tok", reminder: true },
+  }],
   ["shift_swap_approval_needed", {
     kind: "shift_swap_approval_needed",
     recipient,
@@ -818,6 +828,7 @@ describe("render — snapshot of every notification kind", () => {
       shift_swap_ended: true,
       shift_swap_offered: true,
       shift_swap_approval_needed: true,
+      availability_request: true,
     }
     const covered = new Set(cases.map(([, p]) => p.kind))
     expect([...covered].sort()).toEqual(Object.keys(all).sort())

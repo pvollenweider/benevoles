@@ -5,12 +5,14 @@ const m = vi.hoisted(() => ({
   regFindMany: vi.fn(), regUpdateMany: vi.fn(),
   leaderFindMany: vi.fn(), leaderUpdateMany: vi.fn(),
   inviteFindMany: vi.fn(), inviteUpdateMany: vi.fn(),
+  availabilityFindMany: vi.fn().mockResolvedValue([]), availabilityUpdateMany: vi.fn(),
 }))
 vi.mock("../prisma", () => ({
   prisma: {
     registration: { findMany: m.regFindMany, updateMany: m.regUpdateMany },
     sectorLeader: { findMany: m.leaderFindMany, updateMany: m.leaderUpdateMany },
     memberInvite: { findMany: m.inviteFindMany, updateMany: m.inviteUpdateMany },
+    availabilityRequest: { findMany: m.availabilityFindMany, updateMany: m.availabilityUpdateMany },
   },
 }))
 
@@ -31,6 +33,8 @@ function rows(legacy: unknown[], encrypted: unknown[]) {
 
 beforeEach(() => {
   for (const fn of Object.values(m)) fn.mockReset()
+  // The availability links (#1146): none in these cases.
+  m.availabilityFindMany.mockResolvedValue([])
   m.regFindMany.mockImplementation(rows([], []))
   m.leaderFindMany.mockImplementation(rows([], []))
   m.inviteFindMany.mockImplementation(rows([], []))
@@ -52,7 +56,7 @@ describe("encryptLegacyTokens (#290, #313)", () => {
     m.leaderFindMany.mockImplementation(rows([{ id: "l1", tokenLegacy: "leader-tok" }], []))
 
     const res = await encryptLegacyTokens()
-    expect(res).toMatchObject({ enabled: true, keyId: "k2", encrypted: { registrations: 1, sectorLeaders: 1, memberInvites: 0 } })
+    expect(res).toMatchObject({ enabled: true, keyId: "k2", encrypted: { registrations: 1, sectorLeaders: 1, memberInvites: 0, availabilityRequests: 0 } })
 
     const call = m.regUpdateMany.mock.calls[0][0]
     expect(call.where).toEqual({ id: "r1", editTokenLegacy: "reg-tok" })

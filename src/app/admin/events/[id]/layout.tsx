@@ -42,7 +42,7 @@ export default async function EventLayout({ children, params }: { children: Reac
   const event = await ctx.db.event.findFirst({
     where: { id },
     select: {
-      id: true, title: true, startDate: true, endDate: true, location: true, publicStatus: true, isListed: true,
+      id: true, title: true, startDate: true, endDate: true, location: true, publicStatus: true, isListed: true, availabilityEnabled: true, availabilityAdoptedAt: true,
       organization: { select: { timeZone: true, publicationApprovedAt: true } },
       _count: { select: { shifts: { where: { status: { not: "cancelled" } } } } },
     },
@@ -73,6 +73,7 @@ export default async function EventLayout({ children, params }: { children: Reac
         awaitingValidation={!orgCanPublish(event.organization)}
         // Permanent deletion is for owners (#469), once archived; the route refuses it otherwise too.
         canDelete={event.publicStatus === "archived" && hasLevel(ctx.session.user?.role, "owner")}
+        availabilityPage={event.availabilityEnabled || !!event.availabilityAdoptedAt}
       />
       {children}
     </div>

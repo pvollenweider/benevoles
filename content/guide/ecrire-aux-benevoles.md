@@ -45,7 +45,7 @@ Dans l'onglet **Messages**, au-dessus des messages envoyés, **Messages programm
 
 ## Envois groupés
 
-Dans l'onglet **Messages**, entre les messages programmés et les messages envoyés, **Envois groupés** liste chaque envoi à plusieurs personnes fait depuis l'événement, du plus récent au plus ancien : invitations, relance des invités sans réponse, rappel aux inscrits, message aux bénévoles, message programmé, créneaux à compléter. Pour chacun : la date et l'heure, qui l'a lancé (qui l'a programmé, pour un message programmé), le nombre de destinataires et la remise en toutes lettres, mise à jour à chaque visite (envoyés, en attente, en échec, annulés).
+Dans l'onglet **Messages**, entre les messages programmés et les messages envoyés, **Envois groupés** liste chaque envoi à plusieurs personnes fait depuis l'événement, du plus récent au plus ancien : invitations, relance des invités sans réponse, rappel aux inscrits, message aux bénévoles, message programmé, créneaux à compléter, demande et relance des disponibilités. Pour chacun : la date et l'heure, qui l'a lancé (qui l'a programmé, pour un message programmé), le nombre de destinataires et la remise en toutes lettres, mise à jour à chaque visite (envoyés, en attente, en échec, annulés).
 
 Quand le plafond d'envoi a fait attendre une partie des emails, une phrase le dit, par exemple « 1 email a attendu une minute avant de partir, à cause du plafond d'envoi. », ou, tant qu'ils attendent encore, combien partiront dès que le plafond le permet. Ce n'est pas une erreur : ces emails partent d'eux-mêmes.
 

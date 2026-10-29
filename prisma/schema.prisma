@@ -319,6 +319,16 @@ model AvailabilityRequest {
   answeredBy     String?
   reviewNeededAt DateTime?
   reviewReason   String?
+  // The link « Indiquer mes disponibilités » (#1146), its own secret, never the invitation's. Looked
+  // up by `tokenHash` (SHA-256); re-sent from `tokenEnc` (AES-256-GCM, src/lib/token-vault.ts);
+  // `tokenLegacy` only while no key is configured, as for MemberInvite. All three null = no live
+  // link: never sent yet, or revoked (collection turned off). A new secret on every renewal.
+  tokenLegacy    String?   @map("token")
+  tokenHash      String?   @unique
+  tokenEnc       String?
+  // The request email: first sent, last re-sent (the 48 h reminder cooldown, src/lib/invitation-sending.ts).
+  sentAt         DateTime?
+  lastRemindedAt DateTime?
   createdAt      DateTime  @default(now())
   updatedAt      DateTime  @updatedAt
 

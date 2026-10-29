@@ -6,9 +6,9 @@ import { apexRobotsRules } from "@/lib/crawlers"
 import { VIDEO_SITEMAP_PATH } from "@/lib/video-seo"
 
 // Token-bearing and admin/API surfaces: never worth indexing, and some carry secrets in the URL
-// (/my/[token], /waitlist/[token]/confirm, /leader/[token] (#186), /admin/accept-invite?token=...).
+// (/my/[token], /waitlist/[token]/confirm, /leader/[token] (#186), /disponibilites/[token] (#1146), /admin/accept-invite?token=...).
 // /videos is public and indexed since 2026-10-07 (src/lib/video-seo.ts): no longer listed here.
-const DISALLOW = ["/admin", "/api/", "/my/", "/waitlist/", "/leader/"]
+const DISALLOW = ["/admin", "/api/", "/my/", "/waitlist/", "/leader/", "/disponibilites/"]
 
 export default async function robots(): Promise<MetadataRoute.Robots> {
   const host = (await headers()).get("host") ?? ""

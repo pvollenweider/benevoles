@@ -68,12 +68,13 @@ export const BETA_CAPABILITIES = {
     description: "Refuser toute affectation qui dépasse les limites de travail continu, de charge, de repos ou d'attente fixées pour l'événement.",
     shipped: true,
   },
-  // #1146, lot A: the event option collecting dated availability from each person asked
-  // (src/lib/event-availability.ts). Declared, not shipped: the links and pages come with the next lot.
+  // #1146, lot A: the event option « Recueillir les disponibilités pour cet événement »
+  // (src/lib/event-availability*.ts), the link « Indiquer mes disponibilités » and the organisers'
+  // page « Disponibilités ». Drafts and publication (lots B, C) are not part of it yet.
   availability: {
     label: "Disponibilités datées",
-    description: "Demander à chaque bénévole ses plages libres, date par date, avant de préparer les affectations.",
-    shipped: false,
+    description: "Demander à chaque membre ses plages libres, date par date, par un lien personnel, et voir qui a répondu.",
+    shipped: true,
   },
 } as const satisfies BetaRegistry
 
