@@ -634,3 +634,41 @@ utilise l'EVENT_ID explicite et la vraie route du journal a été vérifiée (13
 Aucune modification produit. Les deux prises sont archivées, jamais publiées.
 Une dérogation à « One re-film per video within a batch » a été demandée au propriétaire,
 sans supposer sa réponse. Les travaux autorisés sur PRIVACY continuent.
+
+
+### État final provisoire du lot 32 — dérogations de tournage en attente
+
+**PRIVACY_PERSONAL_LINKS : NOT READY, aucun nouveau MP4 publié.** L'ancien film
+reste en ligne ; catalogue `published: true`, révision 4 et dates conservés.
+La première prise ne montrait pas réellement le rapport annoncé. Le focus du tab
+filmé est restauré après fermeture du popup et le vrai H1/sous-titre du rapport
+sont désormais exigés. Un diagnostic enregistré puis la seconde prise montrent
+le vrai rapport avant le CSV ; ce point passe la revue AV.
+La seconde prise est rejetée pour une dérive de timbre à 22–22,5 s du chapitre
+`result`, signalée par l'AV, l'audio final seul et la comparaison source/mix.
+Une reconnaissance de la narration seule contredit ces résultats et est également
+conservée. La provenance prouve une seule génération continue : la spéculation du
+modèle sur un assemblage de voix n'est pas reprise comme un fait.
+
+Toute la narration a été régénérée de nouveau en une passe avec **Kore**, sans
+balises de pause et avec une consigne d'identité constante jusqu'à la conclusion.
+Les dix nouveaux audits de paroles passent (0–1,7 %, aucune fin/début déplacé), et
+le contrôle vocal du fichier entier relève une seule voix constante. Cette nouvelle
+piste n'est pas montée sur les images rejetées : elle nécessite une nouvelle prise.
+La limite « One re-film per video within a batch » étant atteinte, une dérogation
+explicite a été demandée au propriétaire, comme pour SHIFT_SWAPS. Aucune réponse
+n'est supposée. Preuves : `videos/evidence/privacy-personal-links/batch32-not-ready/`.
+
+Au stade présent : BETA_ACCESS, SECTORS et SECTOR_LEADERS READY et publiées ;
+SHIFT_SWAPS et PRIVACY_PERSONAL_LINKS NOT READY, sources corrigées/préparées,
+nouvelle prise bloquée uniquement par la limite de reprise sans dérogation.
+Les lignes du bloc « sources prêtes, rendu en attente » sont retirées uniquement
+pour les vidéos READY. Aucun `videos/renders.json`, `src/` ou guide modifié.
+
+Vérification de clôture : 204 sources vidéo et 34 fichiers / 1144 tests réussis ;
+les 15 fichiers des trois publications ont les mêmes SHA-256 distants et locaux,
+et neuf vérifications HTTP (MP4, VTT, JPEG) réussissent. Source produit, guides et
+`videos/renders.json` inchangés contre origin/main. Seuls le PID vidéo 8876 et les
+deux conteneurs créés pour cette reprise ont été arrêtés ; aucun tiers touché.
+Synthèse : `videos/evidence/batch32-resume/summary.json`. Les fichiers antérieurs,
+ignorés et non suivis sont conservés, y compris toutes les prises rejetées.

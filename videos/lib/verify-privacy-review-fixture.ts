@@ -40,7 +40,8 @@ export async function verifyPrivacyReviewFixture(db: PrismaClient, directory: st
   const emails = csv.toString("utf8").match(/[A-Za-z0-9._%+-]+@[A-Za-z0-9.-]+\.[A-Za-z]{2,}/g) ?? []
   if (emails.length !== 6 || emails.some(email => !/^video\.privacy\.a\.(?:member\.[0-4]|new)@example\.org$/.test(email))) throw new Error("Captured member CSV is not exclusively synthetic")
   // The Mailpit inbox is visible during capture: its other recipients must also be fictitious.
-  const response = await fetch("http://localhost:48026/api/v1/messages?limit=1000")
+  const mailbox = process.env.VIDEO_MAILPIT_URL ?? "http://localhost:48026"
+  const response = await fetch(`${mailbox}/api/v1/messages?limit=1000`)
   if (!response.ok) throw new Error("Local demonstration inbox unavailable")
   const inbox = await response.json() as { total: number; messages: { ID: string; To: { Address: string }[] }[] }
   const syntheticRecipient = (address: string) => /@example\.(?:org|com|net)$/.test(address) || address === "org-admin@localhost"

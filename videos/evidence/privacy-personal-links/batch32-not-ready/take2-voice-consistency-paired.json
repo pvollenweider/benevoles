@@ -1,0 +1,22 @@
+{
+  "model": "gemini-3.8-flash",
+  "reviewedAt": "2026-10-29T07:27:38.079Z",
+  "videoSha256": "0bd199ef36f81f83361e907d5de6a272f7c728b00cdd40164c92b4320b5a3792",
+  "sourceSha256": "5713eacb20e9fae12dc5b3fbdc05d008efd81d14406f502329bae46f548bca48",
+  "mixSha256": "4f1dde2c3509ab090892c475d4c39e663d305d6af6e64f61e684f8a32c7179c2",
+  "prompt": "Comparaison contrôlée de deux audios du même passage. A est la narration originale seule. B est le même passage décodé du MP4 final avec musique et effets. Détermine si l'identité de la narratrice change réellement en cours de passage, ou si les différences perçues viennent d'une variation naturelle de rythme/intonation/sourire, ou du fond musical. Compare le grain, l'articulation et l'identité vocale sur les mots parlés, pas seulement la hauteur ou l'énergie. Ne suppose ni une ni plusieurs voix. Rends seulement JSON {sourceConsistent:boolean,finalNarrationConsistent:boolean,sameNarratorInAAndB:boolean,changes:[{seconds:number,kind:string,evidence:string}],conclusion:string}. Les timestamps sont relatifs à chaque extrait. Aucun texte attendu n'est fourni.",
+  "result": {
+    "sourceConsistent": false,
+    "finalNarrationConsistent": false,
+    "sameNarratorInAAndB": true,
+    "changes": [
+      {
+        "seconds": 22.5,
+        "kind": "speaker_change",
+        "evidence": "Changement net d'identité vocale à partir de « Et avant d'envoyer un document » : la première narratrice présente un timbre plus grave, posé et une résonance de poitrine marquée, tandis que la seconde voix possède des formants nettement plus clairs, un registre plus aigu et un profil articulatoire/spectral distinct qui dépasse une simple inflexion souriante."
+      }
+    ],
+    "conclusion": "Il y a un changement d'identité de narratrice bien réel à environ 22,5 secondes, identique dans les extraits A et B. La musique présente sur B n'altère pas l'analyse : deux voix différentes (très probablement deux profils vocaux TTS ou comédiennes distinctes) ont été assemblées pour ce passage."
+  },
+  "note": "Controlled source/final comparison after contradictory mixed-audio and narration-only observations; all original flags retained"
+}

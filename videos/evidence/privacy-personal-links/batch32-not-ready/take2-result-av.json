@@ -1,0 +1,62 @@
+{
+  "model": "gemini-3.8-flash",
+  "reviewedAt": "2026-10-29T07:20:18.656Z",
+  "videoSha256": "0bd199ef36f81f83361e907d5de6a272f7c728b00cdd40164c92b4320b5a3792",
+  "promptSha256": "3897ad9ef40c1fd2ca3fe25647b4c5bac12203dc8686ff2fd1c932269ed6e28b",
+  "clipSha256": "5760b6dc5ca34b6ac383c898e61487a1cccd02d50ade530d38ef0abe4cd167bb",
+  "scene": "result",
+  "review": {
+    "heardOpening": "Revenons à la page Mes inscriptions",
+    "checkpoints": [
+      {
+        "spokenSeconds": 1,
+        "spoken": "Revenons à la page Mes inscriptions et à son avertissement.",
+        "visibleSeconds": 0,
+        "visible": "Page Mes inscriptions affichant l'encadré 'Ton lien personnel' et sa mise en garde.",
+        "sync": "aligned",
+        "severity": "none"
+      },
+      {
+        "spokenSeconds": 4,
+        "spoken": "Pour recruter, partagez la page d’inscription.",
+        "visibleSeconds": 3.8,
+        "visible": "Affichage de la page publique de sélection des créneaux de mission.",
+        "sync": "aligned",
+        "severity": "none"
+      },
+      {
+        "spokenSeconds": 7,
+        "spoken": "Pour gérer une inscription, gardez le lien personnel pour son destinataire.",
+        "visibleSeconds": 6.8,
+        "visible": "Retour à la page Mes inscriptions.",
+        "sync": "aligned",
+        "severity": "none"
+      },
+      {
+        "spokenSeconds": 11.5,
+        "spoken": "Pour coordonner un poste, remettez le lien du responsable à la personne désignée.",
+        "visibleSeconds": 11.2,
+        "visible": "Affichage de la page de gestion Responsable - Accueil.",
+        "sync": "aligned",
+        "severity": "none"
+      },
+      {
+        "spokenSeconds": 18,
+        "spoken": "contactez l'organisation plutôt que de continuer à le faire circuler.",
+        "visibleSeconds": 15.6,
+        "visible": "Retour à l'écran Mes inscriptions montrant le bouton Écrire à l'organisation.",
+        "sync": "aligned",
+        "severity": "none"
+      }
+    ],
+    "issues": [
+      "À 00:22, changement inattendu de voix pour la conclusion."
+    ],
+    "voice": {
+      "consistent": false,
+      "warm": true,
+      "observation": "Une première voix féminine pose le sujet jusqu'à 00:22, puis une seconde voix féminine plus enjouée prend le relais."
+    }
+  },
+  "note": "Automated observation of actual final video audio and images; not a claim of complete human validation"
+}

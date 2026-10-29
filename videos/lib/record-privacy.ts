@@ -240,7 +240,15 @@ export async function recordPrivacy(options: { page: Page; base: string; directo
       const popup = await ready; await popup.waitForLoadState("networkidle")
       const url = new URL(popup.url()); await popup.close()
       if (url.origin !== new URL(base).origin || !url.pathname.endsWith("/sheets/day")) throw new Error("Unexpected real report")
+      // Closing the foreground popup can leave the main tab's compositor suspended.
+      // Restore its real focus before showing the actual report on the filmed page.
+      await page.bringToFront()
       await page.goto(url.href); await settle(page)
+      await page.bringToFront()
+      await page.getByRole("heading", { level: 1, name: "Fête des liens — organisation A", exact: true }).waitFor()
+      await page.getByText(/^Planning par jour · Formation/).waitFor()
+      await page.screenshot({ path: path.join(directory, "report-before-csv.png") })
+      await page.waitForTimeout(600)
       const body = await page.locator("body").innerText()
       if (body.includes("Note interne fictive") || body.includes("video.privacy.a.member.0@example.org")) throw new Error("Stand report contains private member fields")
       await at("Comparons-le au CSV des membres"); await go("/admin/members")

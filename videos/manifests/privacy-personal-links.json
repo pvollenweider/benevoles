@@ -7,7 +7,7 @@
   "voice": "Kore",
   "continuousNarration": true,
   "continuousPauseTags": false,
-  "voiceStyle": "French. Warm, reassuring and conversational with an audible smile. Clear patient delivery, natural pauses, same timbre throughout.",
+  "voiceStyle": "French. Warm adult female narrator, reassuring and conversational, with an audible smile. Clear patient delivery and natural pauses. Keep exactly one voice identity, timbre and pitch from the first sentence through the final conclusion; never change speaker or sound like a second narrator.",
   "viewport": {
     "width": 1280,
     "height": 800,

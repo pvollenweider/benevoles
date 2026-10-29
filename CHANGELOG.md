@@ -57,6 +57,7 @@ Format basé sur [Keep a Changelog](https://keepachangelog.com/fr/1.0.0/).
 - **Situations types dans la documentation, légende simplifiée** : la citation reste attribuée à un prénom et un rôle (« Léa, bénévole occasionnelle »), sans astérisque ni note sous l'encadré.
 
 ### Modifié
+- **Reprise vidéo de confidentialité préparée** : focus du vrai rapport corrigé et nouvelle piste Kore complète auditée ; la version de ce lot reste non publiée après le rejet des prises, dans l’attente d’une dérogation de tournage. <!-- interne -->
 - **Tutoriel des responsables de poste et de secteur** : la révision 6 est en ligne, avec la nomination d’un responsable de tout un secteur et son planning limité à cette équipe.
 
 - **« Gérer les secteurs et postes »** (#1147, bêta) : dans un événement qui utilise des secteurs, le bouton de la page des créneaux et le panneau qu'il ouvre s'appellent « Gérer les secteurs et postes » dès le premier secteur enregistré. Sans secteurs, ou tant qu'aucun secteur n'est enregistré, ils restent « Gérer les postes ».
