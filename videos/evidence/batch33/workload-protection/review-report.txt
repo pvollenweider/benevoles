@@ -1,0 +1,8 @@
+STATUS: NOT READY
+Batch33: first narrated take stopped by wl-signup overrun1565ms; one allowed refilm completed19scenes after fresh seed, then rejected by final audiovisual/frame review. No third take, no publication. Catalog remains published:false, revision1, no added date.
+Product commit f8357a76441c78fe64cbf378fd76694a1ab0ef37; BUILD_ID hxc0T9m6qdNq_z0QuUTy4. Rejected MP4 duration406920ms.
+Confirmed blocker: wl-result+2s onward centers the oversized policy-card container on meal/travel fields; the announced activated heading and 1 programme à revoir are outside the frame (wl-result-25/60.png). Product state was asserted by recorder; this is a recorder framing defect, not a product failure.
+Other AV flags retained: wl-activate rule selection not held visibly; wl-withdraw existing programme shown about5s after its spoken enumeration. wl-limits missing-values claim contradicted by final frames:6/30/8 at25%,20/3 at85% and end. Never discard the original reports.
+Source-only corrections prepared for a future authorized take: explicit heading framing in conclusion, visible checked off-day option held700ms, withdrawal programme on its own sentence anchor. These three corrections are NOT filmed or rehearsed in this batch. Form fill timing correction WAS filmed in take2 and passes.
+Technical validatePASS;19 source/final chapter ASRsPASS; whole-master voice consistent; whole final multilingual soundtrack ASR zero register candidates and zero VTT tokens, no stray instructions. Music15–19.5LU, music-onlymin-33.6LUFS, no gaps. Measurements describe the rejected render, not a READY film.
+Real-time subjective listening unavailable; actual AV observations and frame inspection performed. No product src/ changes.

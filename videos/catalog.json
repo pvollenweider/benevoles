@@ -998,7 +998,7 @@
         "validation",
         "bêta"
       ],
-      "published": false,
+      "published": true,
       "seedScenario": "shift-swaps",
       "themes": [
         "inscriptions-communication",
@@ -1009,9 +1009,10 @@
         "benevole"
       ],
       "feature": "Échanges de créneaux",
-      "updatedAt": "2026-10-28",
+      "updatedAt": "2026-10-29",
       "revision": 1,
-      "level": "avance"
+      "level": "avance",
+      "added": "2026-10-29"
     },
     {
       "id": "WORKLOAD_PROTECTION",
@@ -1554,9 +1555,10 @@
         "organisateur"
       ],
       "feature": "Liens publics, personnels et de responsables",
-      "updatedAt": "2026-10-16",
-      "revision": 4,
-      "level": "essentiel"
+      "updatedAt": "2026-10-29",
+      "revision": 5,
+      "level": "essentiel",
+      "updated": "2026-10-29"
     },
     {
       "id": "LAST_MINUTE_CHANGES",

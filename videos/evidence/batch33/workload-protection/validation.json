@@ -1,0 +1,137 @@
+{
+  "id": "WORKLOAD_PROTECTION",
+  "slug": "workload-protection",
+  "validatedAt": "2026-10-29T15:41:25.286Z",
+  "continuousNarration": true,
+  "sentenceRevision": false,
+  "narrationContentChecked": true,
+  "voice": "Kore",
+  "captureMs": 406920,
+  "scenes": [
+    {
+      "id": "wl-welcome",
+      "visualMs": 19673,
+      "audioMs": 19670,
+      "driftMs": 3
+    },
+    {
+      "id": "wl-places",
+      "visualMs": 26149,
+      "audioMs": 26140,
+      "driftMs": 9
+    },
+    {
+      "id": "wl-meal-on-the-go",
+      "visualMs": 21285,
+      "audioMs": 21284,
+      "driftMs": 1
+    },
+    {
+      "id": "wl-card",
+      "visualMs": 16956,
+      "audioMs": 16952,
+      "driftMs": 4
+    },
+    {
+      "id": "wl-service-day",
+      "visualMs": 14595,
+      "audioMs": 14594,
+      "driftMs": 1
+    },
+    {
+      "id": "wl-limits",
+      "visualMs": 24372,
+      "audioMs": 24372,
+      "driftMs": 0
+    },
+    {
+      "id": "wl-benchmarks",
+      "visualMs": 28547,
+      "audioMs": 28538,
+      "driftMs": 9
+    },
+    {
+      "id": "wl-offday",
+      "visualMs": 16439,
+      "audioMs": 16438,
+      "driftMs": 1
+    },
+    {
+      "id": "wl-meal-travel",
+      "visualMs": 22900,
+      "audioMs": 22900,
+      "driftMs": 0
+    },
+    {
+      "id": "wl-minors",
+      "visualMs": 20907,
+      "audioMs": 20906,
+      "driftMs": 1
+    },
+    {
+      "id": "wl-preview",
+      "visualMs": 13682,
+      "audioMs": 13682,
+      "driftMs": 0
+    },
+    {
+      "id": "wl-refused",
+      "visualMs": 14362,
+      "audioMs": 14357,
+      "driftMs": 5
+    },
+    {
+      "id": "wl-activate",
+      "visualMs": 18129,
+      "audioMs": 18127,
+      "driftMs": 2
+    },
+    {
+      "id": "wl-personal",
+      "visualMs": 18818,
+      "audioMs": 18816,
+      "driftMs": 2
+    },
+    {
+      "id": "wl-signup",
+      "visualMs": 29648,
+      "audioMs": 29647,
+      "driftMs": 1
+    },
+    {
+      "id": "wl-withdraw",
+      "visualMs": 19709,
+      "audioMs": 19708,
+      "driftMs": 1
+    },
+    {
+      "id": "wl-registrations",
+      "visualMs": 10648,
+      "audioMs": 10644,
+      "driftMs": 4
+    },
+    {
+      "id": "wl-my-card",
+      "visualMs": 19036,
+      "audioMs": 19029,
+      "driftMs": 7
+    },
+    {
+      "id": "wl-result",
+      "visualMs": 17198,
+      "audioMs": 17196,
+      "driftMs": 2
+    }
+  ],
+  "anchorsChecked": 44,
+  "music": {
+    "voicedWindows": 361,
+    "musicOnlyWindows": 4,
+    "smallestGapLu": 15,
+    "largestGapLu": 19.5,
+    "quietestMusicOnlyLufs": -33.6,
+    "loudestMusicOnlyLufs": -33.2,
+    "medianVoiceLufs": -16.4
+  },
+  "issues": []
+}

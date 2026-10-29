@@ -1,0 +1,13 @@
+{
+  "model": "gemini-3.8-flash",
+  "reviewedAt": "2026-10-29T15:21:35.081Z",
+  "masterSha256": "01549fe2072994242ba39dab8a9ae2a8dab028f5f455a2fcb38e355e0d4449ef",
+  "prompt": "Écoute uniquement cet enregistrement vocal entier sans musique ni images. Combien de personnes parlent réellement ? L'identité vocale reste-t-elle constante du début à la fin, y compris la conclusion ? Distingue les changements de locutrice des variations naturelles d'intonation, de sourire ou de rythme. Rends seulement JSON {speakers:number,consistentVoice:boolean,changes:[{seconds:number,observation:string}],evidence:string}. Les secondes partent du début du fichier. Aucun texte attendu n'est fourni.",
+  "result": {
+    "speakers": 1,
+    "consistentVoice": true,
+    "changes": [],
+    "evidence": "Une seule et même voix féminine assure l'intégralité du tutoriel explicatif du début à la fin, avec un timbre, une diction et une acoustique constants."
+  },
+  "note": "Automated whole-master audio observation; not film validation"
+}

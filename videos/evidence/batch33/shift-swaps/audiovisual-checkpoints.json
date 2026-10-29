@@ -1,0 +1,534 @@
+[
+  {
+    "model": "gemini-3.8-flash",
+    "reviewedAt": "2026-10-29T15:16:12.794Z",
+    "videoSha256": "77fad28087c51697a1742d5bcffc6075bb0f4e4054ffe6ed8210c82ef74a2ad2",
+    "promptSha256": "1bcfafa95a4b499b7314ecabd8ecbebb1f2a0a929ff95c5daed2326c00975fd1",
+    "clipSha256": "61cb84d6f877adb1c5b755335aff91e4d4d08804cbe53e4e61ec59f47520b567",
+    "scene": "swaps-publish",
+    "review": {
+      "heardOpening": "Léa ne peut plus venir au bar de la Grande Scène",
+      "checkpoints": [
+        {
+          "spokenSeconds": 3.6,
+          "spoken": "Elle ouvre sa page Mes inscriptions, à la partie Échanger un créneau.",
+          "visibleSeconds": 4.1,
+          "visible": "Affichage de la page Mes inscriptions avec la section Échanger un créneau.",
+          "sync": "aligned",
+          "severity": "none"
+        },
+        {
+          "spokenSeconds": 7.8,
+          "spoken": "Elle choisit Je cherche à échanger ce créneau.",
+          "visibleSeconds": 8.7,
+          "visible": "Clic sur le bouton Je cherche à échanger ce créneau.",
+          "sync": "aligned",
+          "severity": "none"
+        },
+        {
+          "spokenSeconds": 11.1,
+          "spoken": "Sa demande est publiée.",
+          "visibleSeconds": 9.4,
+          "visible": "Le bandeau de confirmation 'Demande publiée' et le bloc 'Mes échanges' apparaissent.",
+          "sync": "aligned",
+          "severity": "none"
+        },
+        {
+          "spokenSeconds": 13.5,
+          "spoken": "Les personnes inscrites sur un autre créneau du même poste peuvent lui proposer le leur, jusqu'à la date limite indiquée.",
+          "visibleSeconds": 11,
+          "visible": "Affichage du texte explicatif précisant la date limite sous la demande en attente.",
+          "sync": "aligned",
+          "severity": "none"
+        }
+      ],
+      "issues": [],
+      "voice": {
+        "consistent": true,
+        "warm": true,
+        "observation": "Voix féminine claire, posée et bien articulée, parfaitement synchronisée avec la démonstration."
+      }
+    },
+    "note": "Automated observation of actual final video audio and images; not a claim of complete human validation"
+  },
+  {
+    "model": "gemini-3.8-flash",
+    "reviewedAt": "2026-10-29T15:17:35.591Z",
+    "videoSha256": "77fad28087c51697a1742d5bcffc6075bb0f4e4054ffe6ed8210c82ef74a2ad2",
+    "promptSha256": "e6616e45c0ef84d465e90b6d9959af1e09e5bb5dd6b879dd6211d786e5e3aa03",
+    "clipSha256": "35c220011be4844324ebd092a73e9e073441e205137d86e1bc28aad4e919a9c3",
+    "scene": "swaps-sector-accept",
+    "review": {
+      "heardOpening": "Noah relit la proposition et l'accepte",
+      "checkpoints": [
+        {
+          "spokenSeconds": 0,
+          "spoken": "Noah relit la proposition et l'accepte",
+          "visibleSeconds": 0.8,
+          "visible": "Affichage de la boîte de dialogue 'Faire l'échange ?' avec le récapitulatif des créneaux",
+          "sync": "aligned",
+          "severity": "none"
+        },
+        {
+          "spokenSeconds": 3.3,
+          "spoken": "Cette fois, la confirmation prévient que l'organisation devra encore valider l'échange",
+          "visibleSeconds": 3.5,
+          "visible": "Lecture de la mention 'L'organisation devra encore le valider', suivie du clic sur 'Oui, échanger' à 6s",
+          "sync": "aligned",
+          "severity": "none"
+        },
+        {
+          "spokenSeconds": 7.1,
+          "spoken": "Leur planning ne change pas avant cette validation",
+          "visibleSeconds": 7.3,
+          "visible": "Statut 'En attente de la validation de l'organisation' et mention 'Ton planning n'a pas changé'",
+          "sync": "aligned",
+          "severity": "none"
+        }
+      ],
+      "issues": [],
+      "voice": {
+        "consistent": true,
+        "warm": true,
+        "observation": "Voix claire, naturelle et parfaitement synchronisée avec l'action à l'écran."
+      }
+    },
+    "note": "Automated observation of actual final video audio and images; not a claim of complete human validation"
+  },
+  {
+    "model": "gemini-3.8-flash",
+    "reviewedAt": "2026-10-29T15:16:51.713Z",
+    "videoSha256": "77fad28087c51697a1742d5bcffc6075bb0f4e4054ffe6ed8210c82ef74a2ad2",
+    "promptSha256": "3874cc261c3f9cedea6160acde134a2c3bf27bb1cc5c2efcb864fa7b9fe63b58",
+    "clipSha256": "c220ddcfd6f1271a87bfefa81abccd5fee5883d67ba85b9a07ef98ae9937343a",
+    "scene": "swaps-done",
+    "review": {
+      "heardOpening": "Échange effectué. Léa a maintenant le créneau",
+      "checkpoints": [
+        {
+          "spokenSeconds": 0.5,
+          "spoken": "Échange effectué. Léa a maintenant le créneau du dimanche",
+          "visibleSeconds": 1,
+          "visible": "Affichage de la page avec la notification d'échange et le créneau du dimanche 15 novembre",
+          "sync": "aligned",
+          "severity": "none"
+        },
+        {
+          "spokenSeconds": 8.8,
+          "spoken": "Le nouveau créneau apparaît dans Tous mes créneaux",
+          "visibleSeconds": 8.8,
+          "visible": "Section Tous mes créneaux bien visible affichant le créneau du dimanche 15 novembre",
+          "sync": "aligned",
+          "severity": "none"
+        },
+        {
+          "spokenSeconds": 13,
+          "spoken": "Tous deux reçoivent un email Échange effectué.",
+          "visibleSeconds": 14,
+          "visible": "Affichage de l'e-mail de confirmation d'échange adressé à Léa",
+          "sync": "aligned",
+          "severity": "none"
+        }
+      ],
+      "issues": [],
+      "voice": {
+        "consistent": true,
+        "warm": true,
+        "observation": "Voix claire, posée et bien synchronisée avec les transitions à l'écran."
+      }
+    },
+    "note": "Automated observation of actual final video audio and images; not a claim of complete human validation"
+  },
+  {
+    "model": "gemini-3.8-flash",
+    "reviewedAt": "2026-10-29T15:16:39.518Z",
+    "videoSha256": "77fad28087c51697a1742d5bcffc6075bb0f4e4054ffe6ed8210c82ef74a2ad2",
+    "promptSha256": "7ccdea291ddccc2f3112964561f5398d0b7bf4d6821c263deb556a7710570d91",
+    "clipSha256": "5c88418eb6dea3bf581460d6ad068d455104a72b28d87408a966bfe9a78ec594",
+    "scene": "swaps-accept",
+    "review": {
+      "heardOpening": "Léa reçoit un e-mail et sa page indique",
+      "checkpoints": [
+        {
+          "spokenSeconds": 2.2,
+          "spoken": "Jules, initiale H, lui propose un échange",
+          "visibleSeconds": 1.5,
+          "visible": "La section Mes échanges affiche la proposition de Jules H.",
+          "sync": "aligned",
+          "severity": "none"
+        },
+        {
+          "spokenSeconds": 8,
+          "spoken": "puis choisit Accepter l'échange",
+          "visibleSeconds": 8,
+          "visible": "Clic sur le bouton Accepter l'échange",
+          "sync": "aligned",
+          "severity": "none"
+        },
+        {
+          "spokenSeconds": 11,
+          "spoken": "Une confirmation récapitule les deux créneaux",
+          "visibleSeconds": 9.5,
+          "visible": "Affichage de l'encadré Faire l'échange récapitulant les créneaux",
+          "sync": "aligned",
+          "severity": "none"
+        },
+        {
+          "spokenSeconds": 13.5,
+          "spoken": "Oui, échanger",
+          "visibleSeconds": 13.5,
+          "visible": "Clic sur le bouton Oui, échanger",
+          "sync": "aligned",
+          "severity": "none"
+        },
+        {
+          "spokenSeconds": 14.8,
+          "spoken": "L'échange se fait tout de suite",
+          "visibleSeconds": 14.8,
+          "visible": "Mise à jour immédiate avec la mention Échange effectué",
+          "sync": "aligned",
+          "severity": "none"
+        }
+      ],
+      "issues": [],
+      "voice": {
+        "consistent": true,
+        "warm": true,
+        "observation": "Voix claire, posée et bien synchronisée avec les interactions à l'écran."
+      }
+    },
+    "note": "Automated observation of actual final video audio and images; not a claim of complete human validation"
+  },
+  {
+    "model": "gemini-3.8-flash",
+    "reviewedAt": "2026-10-29T15:17:49.904Z",
+    "videoSha256": "77fad28087c51697a1742d5bcffc6075bb0f4e4054ffe6ed8210c82ef74a2ad2",
+    "promptSha256": "99ecbdece985070e23d08082c76738cdb22855abdcbb49560e72f00f82063e07",
+    "clipSha256": "1d29886162b21c76e278c4ea93369067a58771aed03a5a34fe3671b457edcc3a",
+    "scene": "swaps-validate",
+    "review": {
+      "heardOpening": "Dans Inscriptions, la section Échanges de créneaux",
+      "checkpoints": [
+        {
+          "spokenSeconds": 2.2,
+          "spoken": "la section Échanges de créneaux montre cet échange sous À valider",
+          "visibleSeconds": 2,
+          "visible": "Affichage de la section Échanges de créneaux avec la demande sous À valider",
+          "sync": "aligned",
+          "severity": "none"
+        },
+        {
+          "spokenSeconds": 6.3,
+          "spoken": "avec ce que chaque personne cède et reçoit, et la date limite",
+          "visibleSeconds": 6,
+          "visible": "Détails des créneaux cédés/reçus par Noah et Lou avec la mention À valider avant le samedi 14 novembre",
+          "sync": "aligned",
+          "severity": "none"
+        },
+        {
+          "spokenSeconds": 9.2,
+          "spoken": "Valider l'échange vérifie à nouveau toutes les règles, puis échange les deux créneaux",
+          "visibleSeconds": 9.8,
+          "visible": "Clic sur Valider l'échange dans la modale et apparition de la confirmation Échange validé",
+          "sync": "aligned",
+          "severity": "none"
+        }
+      ],
+      "issues": [],
+      "voice": {
+        "consistent": true,
+        "warm": true,
+        "observation": "Voix féminine posée, claire et bien articulée, accompagnée d'un fond musical discret."
+      }
+    },
+    "note": "Automated observation of actual final video audio and images; not a claim of complete human validation"
+  },
+  {
+    "model": "gemini-3.8-flash",
+    "reviewedAt": "2026-10-29T15:16:27.393Z",
+    "videoSha256": "77fad28087c51697a1742d5bcffc6075bb0f4e4054ffe6ed8210c82ef74a2ad2",
+    "promptSha256": "fd0282e0e0cd2f64f40815657268f699eff66cefda96802015253c667342b6af",
+    "clipSha256": "da857ee6a2f6b87fc9cbca8d6b6191069ed9019da444e4d42d79c5449b8dfd73",
+    "scene": "swaps-offer",
+    "review": {
+      "heardOpening": "Jules est inscrit à deux créneaux",
+      "checkpoints": [
+        {
+          "spokenSeconds": 0,
+          "spoken": "Jules est inscrit à deux créneaux du même bar, le dimanche.",
+          "visibleSeconds": 2.5,
+          "visible": "Affichage de la page de Jules montrant ses créneaux du dimanche.",
+          "sync": "aligned",
+          "severity": "none"
+        },
+        {
+          "spokenSeconds": 3.6,
+          "spoken": "Échanges proposés par d'autres bénévoles montre le créneau que Léa cède, sans son nom.",
+          "visibleSeconds": 4,
+          "visible": "Section 'Échanges proposés par d'autres bénévoles' visible avec l'intitulé anonyme 'Quelqu'un cède'.",
+          "sync": "aligned",
+          "severity": "none"
+        },
+        {
+          "spokenSeconds": 8.8,
+          "spoken": "Jules choisit celui qu'il cède, dimanche après-midi, puis Proposer cet échange.",
+          "visibleSeconds": 9.2,
+          "visible": "Sélection du bouton radio dimanche après-midi puis clic sur le bouton 'Proposer cet échange'.",
+          "sync": "aligned",
+          "severity": "none"
+        },
+        {
+          "spokenSeconds": 14,
+          "spoken": "C'est maintenant à Léa de répondre.",
+          "visibleSeconds": 11.5,
+          "visible": "Confirmation à l'écran sous 'Mes échanges' indiquant 'En attente de la réponse de Léa M.'.",
+          "sync": "aligned",
+          "severity": "none"
+        }
+      ],
+      "issues": [],
+      "voice": {
+        "consistent": true,
+        "warm": true,
+        "observation": "Voix naturelle, claire et parfaitement synchronisée avec la démonstration visuelle."
+      }
+    },
+    "note": "Automated observation of actual final video audio and images; not a claim of complete human validation"
+  },
+  {
+    "model": "gemini-3.8-flash",
+    "reviewedAt": "2026-10-29T15:17:02.201Z",
+    "videoSha256": "77fad28087c51697a1742d5bcffc6075bb0f4e4054ffe6ed8210c82ef74a2ad2",
+    "promptSha256": "f01a8ef68898e43e2da12ac5707f9d6a36be23c61d6cc2a1f000e43cffaeec2b",
+    "clipSha256": "52b116c155c119e62de7c552e656128e6394aff12dfb91628b34465998cf55de",
+    "scene": "swaps-approval",
+    "review": {
+      "heardOpening": "Côté organisation, vous pouvez faire valider",
+      "checkpoints": [
+        {
+          "spokenSeconds": 3.2,
+          "spoken": "Dans les informations de l'événement",
+          "visibleSeconds": 3.7,
+          "visible": "Transition vers l'onglet Paramètres > Informations de l'événement",
+          "sync": "aligned",
+          "severity": "none"
+        },
+        {
+          "spokenSeconds": 5.1,
+          "spoken": "activons Valider chaque échange",
+          "visibleSeconds": 5.8,
+          "visible": "Activation par clic de la case à cocher 'Valider chaque échange'",
+          "sync": "aligned",
+          "severity": "none"
+        },
+        {
+          "spokenSeconds": 7.4,
+          "spoken": "Désormais, chaque échange attend votre accord, même entre deux créneaux ordinaires",
+          "visibleSeconds": 7,
+          "visible": "Affichage de la mention explicative correspondante sous l'option cochée",
+          "sync": "aligned",
+          "severity": "none"
+        }
+      ],
+      "issues": [],
+      "voice": {
+        "consistent": true,
+        "warm": true,
+        "observation": "Voix féminine claire, naturelle, bien articulée et parfaitement synchronisée avec l'interface."
+      }
+    },
+    "note": "Automated observation of actual final video audio and images; not a claim of complete human validation"
+  },
+  {
+    "model": "gemini-3.8-flash",
+    "reviewedAt": "2026-10-29T15:18:01.563Z",
+    "videoSha256": "77fad28087c51697a1742d5bcffc6075bb0f4e4054ffe6ed8210c82ef74a2ad2",
+    "promptSha256": "dfd58672b7c77aae333a123f412a3db6a1cdf74272314aa38e2420d11fea0a05",
+    "clipSha256": "7a37a28a9c88164d38fafba802a39e7d2690d2dad1c74981d63632918fe732ee",
+    "scene": "swaps-result",
+    "review": {
+      "heardOpening": "Un échange respecte les règles d'une inscription",
+      "checkpoints": [
+        {
+          "spokenSeconds": 0.5,
+          "spoken": "Un échange respecte les règles d'une inscription : chevauchements, nombre de créneaux par personne",
+          "visibleSeconds": 0.5,
+          "visible": "Section Échanges de créneaux affichée avec les états À valider, En cours et Terminés récemment",
+          "sync": "aligned",
+          "severity": "none"
+        },
+        {
+          "spokenSeconds": 7.3,
+          "spoken": "Il se fait avant le début du premier des deux créneaux.",
+          "visibleSeconds": 7.6,
+          "visible": "Affichage de la page de gestion personnelle avec les options Proposer un échange et Échanges terminés",
+          "sync": "aligned",
+          "severity": "none"
+        },
+        {
+          "spokenSeconds": 15.3,
+          "spoken": "Chaque étape est inscrite au journal de l'événement.",
+          "visibleSeconds": 15.7,
+          "visible": "Affichage de l'onglet Journal de l'événement listant les inscriptions modifiées par échange",
+          "sync": "aligned",
+          "severity": "none"
+        }
+      ],
+      "issues": [],
+      "voice": {
+        "consistent": true,
+        "warm": true,
+        "observation": "Voix féminine claire, posée et bien articulée, synchronisée avec les transitions d'écran."
+      }
+    },
+    "note": "Automated observation of actual final video audio and images; not a claim of complete human validation"
+  },
+  {
+    "model": "gemini-3.8-flash",
+    "reviewedAt": "2026-10-29T15:17:19.220Z",
+    "videoSha256": "77fad28087c51697a1742d5bcffc6075bb0f4e4054ffe6ed8210c82ef74a2ad2",
+    "promptSha256": "c6328d9d5ba1d1c49cda06158174e5a0bc1af3ace82868f38523d4b878546c30",
+    "clipSha256": "71e218dc921988848642819fb87edf7558a6192071c8b9ff4ee65fb54fcfc18d",
+    "scene": "swaps-sector",
+    "review": {
+      "heardOpening": "Dans cet événement, les postes sont rangés par secteurs.",
+      "checkpoints": [
+        {
+          "spokenSeconds": 0.8,
+          "spoken": "Dans cet événement, les postes sont rangés par secteurs.",
+          "visibleSeconds": 0.5,
+          "visible": "Page des paramètres affichant la section 'Secteurs' et la configuration des échanges.",
+          "sync": "aligned",
+          "severity": "none"
+        },
+        {
+          "spokenSeconds": 3.4,
+          "spoken": "Noah est à l'accueil de la Scène du Lac, samedi matin, et publie sa demande.",
+          "visibleSeconds": 4.1,
+          "visible": "Page de Noah affichée, clic sur 'Je cherche à échanger ce créneau' et confirmation de publication.",
+          "sync": "aligned",
+          "severity": "none"
+        },
+        {
+          "spokenSeconds": 7.3,
+          "spoken": "Lou est à l'accueil de la Grande Scène, dimanche matin, un autre poste du même secteur.",
+          "visibleSeconds": 7.5,
+          "visible": "Transition vers la page de Lou avec 'Accueil Grande Scène, dimanche 15 novembre'.",
+          "sync": "aligned",
+          "severity": "none"
+        },
+        {
+          "spokenSeconds": 12,
+          "spoken": "Sur sa page, le nom du poste est toujours indiqué, jamais le secteur.",
+          "visibleSeconds": 12.5,
+          "visible": "Détail de la proposition affichant les noms des postes 'Accueil Scène du Lac' et 'Accueil Grande Scène'.",
+          "sync": "aligned",
+          "severity": "none"
+        },
+        {
+          "spokenSeconds": 16.2,
+          "spoken": "Lou propose son créneau.",
+          "visibleSeconds": 16.8,
+          "visible": "Clic sur le bouton 'Proposer cet échange' et bandeau 'Proposition envoyée'.",
+          "sync": "aligned",
+          "severity": "none"
+        }
+      ],
+      "issues": [],
+      "voice": {
+        "consistent": true,
+        "warm": true,
+        "observation": "Alternance fluide et dynamique entre voix féminine et masculine, diction claire et naturelle."
+      }
+    },
+    "note": "Automated observation of actual final video audio and images; not a claim of complete human validation"
+  },
+  {
+    "model": "gemini-3.8-flash",
+    "reviewedAt": "2026-10-29T15:15:58.456Z",
+    "videoSha256": "77fad28087c51697a1742d5bcffc6075bb0f4e4054ffe6ed8210c82ef74a2ad2",
+    "promptSha256": "11e4f193fad331f0e8fdb7e1b745d39a9fb992a477f1c523f5f0293a8580d2d7",
+    "clipSha256": "99773d56da6601337a7f21ae47031f43de41ce70efa9e13fdfe1da7e1c811e30",
+    "scene": "swaps-enable",
+    "review": {
+      "heardOpening": "Dans les informations de l'événement, la carte Échanges de créneaux propose",
+      "checkpoints": [
+        {
+          "spokenSeconds": 2.6,
+          "spoken": "la carte Échanges de créneaux propose Autoriser les demandes d'échange de créneaux",
+          "visibleSeconds": 2.6,
+          "visible": "La section Échanges de créneaux est affichée avec la case Autoriser les demandes d'échange de créneaux non cochée",
+          "sync": "aligned",
+          "severity": "none"
+        },
+        {
+          "spokenSeconds": 6.7,
+          "spoken": "Activons-la.",
+          "visibleSeconds": 7.1,
+          "visible": "La case Autoriser les demandes d'échange de créneaux est activée, faisant apparaître les options additionnelles",
+          "sync": "aligned",
+          "severity": "none"
+        },
+        {
+          "spokenSeconds": 16.9,
+          "spoken": "Laissons pour l'instant Valider chaque échange désactivé.",
+          "visibleSeconds": 17.5,
+          "visible": "L'option Valider chaque échange apparaît bien décochée",
+          "sync": "aligned",
+          "severity": "none"
+        }
+      ],
+      "issues": [],
+      "voice": {
+        "consistent": true,
+        "warm": true,
+        "observation": "Voix claire, posée et bien articulée, synchronisation précise avec les actions à l'écran."
+      }
+    },
+    "note": "Automated observation of actual final video audio and images; not a claim of complete human validation"
+  },
+  {
+    "model": "gemini-3.8-flash",
+    "reviewedAt": "2026-10-29T15:15:46.446Z",
+    "videoSha256": "77fad28087c51697a1742d5bcffc6075bb0f4e4054ffe6ed8210c82ef74a2ad2",
+    "promptSha256": "b89252e44ee797d648282d4684dd474e69c5b2bd4aceecca92b25c0355d48629",
+    "clipSha256": "3a61fb9adf887d759b7b86eb8702c3401e7047b7272c10ad89b5a046994adb4e",
+    "scene": "swaps-welcome",
+    "review": {
+      "heardOpening": "Un bénévole ne peut plus venir à son créneau ?",
+      "checkpoints": [
+        {
+          "spokenSeconds": 0,
+          "spoken": "Un bénévole ne peut plus venir à son créneau ?",
+          "visibleSeconds": 0,
+          "visible": "Encart de titre « Échanges de créneaux entre bénévoles » sur fond des paramètres de l'événement",
+          "sync": "aligned",
+          "severity": "none"
+        },
+        {
+          "spokenSeconds": 2.7,
+          "spoken": "Avec les échanges de créneaux, en bêta",
+          "visibleSeconds": 3,
+          "visible": "L'encart de titre disparaît, affichant la page des paramètres de l'événement Festival de Montvert",
+          "sync": "aligned",
+          "severity": "none"
+        },
+        {
+          "spokenSeconds": 10,
+          "spoken": "Voyons l'option de l'événement",
+          "visibleSeconds": 10,
+          "visible": "Page stable des paramètres de l'événement prête pour aborder les options",
+          "sync": "aligned",
+          "severity": "none"
+        }
+      ],
+      "issues": [],
+      "voice": {
+        "consistent": true,
+        "warm": true,
+        "observation": "Voix off féminine claire, posée et bien articulée, sans bruit parasite."
+      }
+    },
+    "note": "Automated observation of actual final video audio and images; not a claim of complete human validation"
+  }
+]

@@ -526,14 +526,12 @@ zéro et renomment la fiche ; `prepare-accessibility` (créé une seule fois) de
 une base vidéo remise à zéro. Au prochain rendu, incrémenter `revision` et mettre à
 jour `updatedAt` dans `videos/catalog.json` pour chacune de ces huit vidéos.
 
-## Sources prêtes, rendu en attente : vidéos des fonctions bêta (#1168, #1147, #1169, #1174)
+## Vidéos des fonctions bêta : sources et production (#1168, #1147, #1169, #1174)
 
-Cette liste ne contient que les rendus finaux encore attendus. Le rendu se fait
-depuis le build vérifié de `origin/main`, avec le seed de chaque scénario avant chaque prise
-(chaque prise modifie sa fixture : secteurs enregistrés, échanges, responsables) :
+Les quatre rendus ont été publiés dans les lots 32 et 33. Chaque rendu utilise
+le build vérifié de `origin/main`, avec le seed de son scénario avant chaque prise
+(chaque prise modifie sa fixture : secteurs enregistrés, échanges, responsables).
 
-- `shift-swaps` (`SHIFT_SWAPS`, nouvelle, `published: false`) : sources prêtes, rendu en attente.
-  Seed `scripts/seed-video-scenario.ts shift-swaps`.
 
 Les quatre scénarios utilisent l'organisation fictive dédiée `formation-beta`
 (`scripts/seed-video-beta.ts`), jamais l'organisation de démonstration ; ils ouvrent seulement les
@@ -691,3 +689,71 @@ avec les valeurs que la prise tape. Le recorder (`videos/lib/record-workload-pro
 écrit d'après le code de l'interface et n'a pas encore été répété sur la pile locale : une
 répétition `--rehearse --quick-rehearse` (après un seed neuf) est à faire avant la prise narrée.
 L'annulation filmée envoie les vrais emails dans la boîte locale ; ils ne sont pas montrés.
+
+## Lot 33 — reprises autorisées du 2026-10-29
+
+Cette reprise remplace les statuts NOT READY historiques de SHIFT_SWAPS et
+PRIVACY_PERSONAL_LINKS ci-dessus. Le propriétaire a explicitement autorisé leur
+troisième prise, et aucune quatrième n'a été faite. Build produit commun vérifié :
+`f8357a76441c78fe64cbf378fd76694a1ab0ef37`, BUILD_ID `hxc0T9m6qdNq_z0QuUTy4`.
+Les dépendances du lockfile sont installées dans la copie jetable (Next 16.4.2),
+sans modifier les dépendances ou `src/` du worktree. Pile propre sur
+45437/41034/48034, serveur local vérifié sur 43102.
+
+- **SHIFT_SWAPS : READY, publiée.** Troisième prise après seed neuf, 208,4 s.
+  Onze chapitres et 39 points de contrôle audiovisuels sans signalement ; audits
+  des WAV et du MP4 réussis, bande-son complète reconnue sans consigne parasite.
+  Musique 15–19,3 LU sous la voix, minimum musique seule −33,6 LUFS, aucun trou.
+  Zéro tutoiement du spectateur ; deux citations exactes « Tu cèdes / Tu reçois ».
+  Confirmation d'acceptation et journal final vérifiés sur les images réelles.
+  Catalogue : `published: true`, `added` et `updatedAt` au 2026-10-29, révision 1.
+- **PRIVACY_PERSONAL_LINKS : READY, publiée.** Troisième prise après précontrôles
+  réels et seed neuf, master Kore entier du lot 32 revalidé, 365,36 s. Dix
+  chapitres et 43 points de contrôle sans signalement, conclusion comprise ;
+  audits source/final réussis et voix constante sur le master entier. Le rapport
+  de stand réel est visible à copies +6,5 s ; les copies CSV et la page personnelle
+  sont vérifiées. Musique 14,8–19,5 LU, minimum seule −33,6 LUFS, aucun trou.
+  Zéro tutoiement du spectateur ; une citation « Ton lien personnel ». L'ancien
+  MP4 est resté en ligne jusqu'au remplacement READY. Catalogue : révision 5,
+  `updatedAt` et `updated` au 2026-10-29, `published: true` conservé. Aucune ligne
+  PRIVACY ne figurait dans le bloc des nouvelles sources en attente.
+
+Chaque publication a eu son aperçu puis `APPLY=1` sur le contexte `default`,
+cinq fichiers envoyés, suivis de la notification demandée. Les rapports et
+images sélectionnés sont conservés dans `videos/evidence/batch33/`. L'écoute
+subjective en temps réel est indisponible ; les observations audio/vidéo
+assistées et l'inspection des images ne sont pas présentées comme une écoute humaine.
+
+
+**WORKLOAD_PROTECTION : NOT READY, aucun fichier publié.** Première répétition
+sur seed neuf réussie sur les 19 scènes. La première prise narrée a dépassé
+la durée du chapitre d'inscription de 1,565 s ; la saisie directe des trois
+champs d'identité a corrigé ce dépassement dans l'unique reprise autorisée,
+précédée d'une répétition et d'un seed neufs. Cette reprise dure 406,92 s.
+La revue finale confirme cependant que la conclusion cadre le milieu de la
+carte trop haute (repas/trajets), sans son état activé ni le lien « 1 programme
+à revoir » annoncés. La limite d'une reprise est atteinte : aucune troisième
+prise ni publication. La ligne des sources en attente et `published: false`,
+révision 1, restent en place.
+
+Les signalements audiovisuels sont conservés : choix de règle insuffisamment
+visible à l'activation, programme de Sarah montré après son énumération,
+cadrage final. Le signalement des valeurs prétendument absentes du chapitre
+Limites est contredit par les images réelles : 6 h / 30 min / 8 h au quart du
+chapitre, puis 20 h / 3 h à 85 % et à la fin. L'erreur 503 du service pour le
+repas a été relancée avec succès. Les corrections de cadrage et de repères
+supplémentaires sont préparées sous `videos/`, mais non filmées ou répétées.
+Ce sont des défauts de capture ; aucun défaut produit n'a été contourné.
+
+Sur ce rendu **rejeté** : validation technique et 19 ASR source/final réussies,
+voix Kore constante sur le master entier, bande-son complète et VTT sans
+tutoiement ni consigne parasite, musique 15–19,5 LU sous la voix, minimum seule
+−33,6 LUFS, aucun trou. Ces mesures ne le rendent pas publiable. Les sources
+narratives sont une nouvelle génération entière Kore, jamais un mélange de
+phrases ; le premier master rejeté et toutes les prises sont archivés.
+
+Derniers contrôles du lot : 208 sources typées, 35 fichiers / 1 200 tests vidéo
+réussis (dont les repères de phrases). `src/`, `content/guide/` et
+`videos/renders.json` inchangés. Synthèse et preuves :
+`videos/evidence/batch33/summary.json`. Commits locaux uniquement, sans push
+ni fusion. Les fichiers ignorés et non suivis sont conservés.

@@ -1,0 +1,136 @@
+{
+  "updatedAt": "2026-10-29T15:46:43.030240+00:00",
+  "branch": "video-batch33",
+  "base": "origin/main",
+  "productBuild": {
+    "commit": "f8357a76441c78fe64cbf378fd76694a1ab0ef37",
+    "sourceTree": "347b128cb6a34d247448d0d1603bd29bbaca126b",
+    "productSourceSha256": "317cd65f6cb6ec1db17d9353484809df6f4f0659fd1c35e353e937ef02517962",
+    "buildId": "hxc0T9m6qdNq_z0QuUTy4",
+    "snapshot": "/tmp/benevoles-video-production.oec4m5el",
+    "builtAt": "2026-10-29T15:10:44.051Z"
+  },
+  "videos": [
+    {
+      "id": "SHIFT_SWAPS",
+      "status": "READY",
+      "publishedInBatch": true,
+      "durationMs": 208400,
+      "measurementsFromRejectedTake": false,
+      "buildId": "hxc0T9m6qdNq_z0QuUTy4",
+      "filmedCommit": "f8357a76441c78fe64cbf378fd76694a1ab0ef37",
+      "musicGapLu": [
+        15,
+        19.3
+      ],
+      "musicOnlyMinLufs": -33.6,
+      "musicGaps": 0,
+      "viewerTu": 0,
+      "quotedRegister": 2,
+      "subtitleQuotedRegister": 2,
+      "videoSha256": "77fad28087c51697a1742d5bcffc6075bb0f4e4054ffe6ed8210c82ef74a2ad2",
+      "clicks": 14,
+      "keys": 0,
+      "audiovisualChapters": 11,
+      "audiovisualCheckpoints": 39,
+      "problems": [],
+      "sourceChanges": [
+        "beta audiovisual guard accepts dedicated45437; no recorder/editorial change"
+      ]
+    },
+    {
+      "id": "PRIVACY_PERSONAL_LINKS",
+      "status": "READY",
+      "publishedInBatch": true,
+      "durationMs": 365360,
+      "measurementsFromRejectedTake": false,
+      "buildId": "hxc0T9m6qdNq_z0QuUTy4",
+      "filmedCommit": "f8357a76441c78fe64cbf378fd76694a1ab0ef37",
+      "musicGapLu": [
+        14.8,
+        19.5
+      ],
+      "musicOnlyMinLufs": -33.6,
+      "musicGaps": 0,
+      "viewerTu": 0,
+      "quotedRegister": 1,
+      "subtitleQuotedRegister": 1,
+      "videoSha256": "ab1c2898c8acab7f1e9b3dec3f4680d7cd55a19b09c5f33554501071111fb658",
+      "clicks": 29,
+      "keys": 176,
+      "audiovisualChapters": 10,
+      "audiovisualCheckpoints": 43,
+      "problems": [],
+      "sourceChanges": [
+        "audited entire batch32 Kore master retained; whole-master review tool"
+      ]
+    },
+    {
+      "id": "WORKLOAD_PROTECTION",
+      "status": "NOT READY",
+      "publishedInBatch": false,
+      "durationMs": 406920,
+      "measurementsFromRejectedTake": true,
+      "buildId": "hxc0T9m6qdNq_z0QuUTy4",
+      "filmedCommit": "f8357a76441c78fe64cbf378fd76694a1ab0ef37",
+      "musicGapLu": [
+        15,
+        19.5
+      ],
+      "musicOnlyMinLufs": -33.6,
+      "musicGaps": 0,
+      "viewerTu": 0,
+      "quotedRegister": 0,
+      "subtitleQuotedRegister": 0,
+      "videoSha256": "de9ce043f75f33eab2f7720732b6a4939427fbe9a000b67727b1bb0d29ac88cd",
+      "clicks": 39,
+      "keys": 12,
+      "audiovisualChapters": 19,
+      "audiovisualCheckpoints": 68,
+      "problems": [
+        "take1 signup overrun1565ms corrected in take2",
+        "take2 conclusion frames meal/travel fields instead of activated heading/1programme",
+        "AV flags rule-selection visibility and late programme overview",
+        "one allowed refilm consumed; no third take"
+      ],
+      "sourceChanges": [
+        "full Kore narration regenerated as one pass; silence cuts independently audited",
+        "identity form directfill filmed in take2",
+        "future heading framing, checked-rule hold700ms, withdrawal sentence anchor NOT filmed/rehearsed",
+        "synthetic fixture AV guard and whole-final soundtrack support"
+      ]
+    }
+  ],
+  "checks": {
+    "typecheckedSources": 208,
+    "videoTestFiles": 35,
+    "videoTests": 1200,
+    "passed": true
+  },
+  "publications": "preview then APPLY=1 default for each READY ID, followed by requested ntfy; WORKLOAD never published",
+  "catalog": "SHIFT published=true added=updatedAt2026-10-29 revision1; PRIVACY revision5 updatedAt+updated2026-10-29 publishedtrue retained; WORKLOAD publishedfalse revision1 noadded unchanged",
+  "publishedChecksums": "10/10 remote SHA equal, zero uploads in final preview",
+  "httpChecks": "6/6 MP4/VTT/JPG successful for the two published IDs",
+  "ownedResourcesStopped": {
+    "stoppedAt": "2026-10-29T15:46:20.932932+00:00",
+    "pid": 56950,
+    "snapshot": "/tmp/benevoles-video-production.oec4m5el",
+    "listeningPidAndCwdVerified": true,
+    "containers": [
+      {
+        "name": "benevoles_batch33_postgres",
+        "id": "16fc989e474c279b6e57d6c201acb555f7116d45a0b6acfcc79717c61f1a66fc",
+        "stopped": true
+      },
+      {
+        "name": "benevoles_batch33_mailpit",
+        "id": "018bbd3164fcb576021c4d9eb937b011089c8b335faa56a07b911c99327276be",
+        "stopped": true
+      }
+    ],
+    "unrelatedContainersUntouched": true
+  },
+  "noPushOrMerge": true,
+  "srcGuideAndRendersUnchanged": true,
+  "preservedIgnoredAndUntrackedFiles": true
+}
