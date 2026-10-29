@@ -29,7 +29,7 @@ type ListRegistration = {
   status?: string
   groupLinkId?: string | null
   shift: ShiftRef
-  volunteer: { id: string; firstName: string; lastName: string; email: string | null }
+  volunteer: { id: string; firstName: string; lastName: string; email: string | null; birthDate?: string | Date | null }
 }
 
 /** Short date, e.g. "sam. 1 juin". */

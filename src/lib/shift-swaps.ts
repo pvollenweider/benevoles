@@ -67,6 +67,12 @@ export type SwapRefusalCode =
   | "workload_rest"
   | "workload_idle"
   | "workload_incomplete"
+  // Lot 2 (#1171): days off, meals, travel between places, two places at once, a missing birth date.
+  | "workload_offday"
+  | "workload_meal"
+  | "workload_travel"
+  | "workload_places"
+  | "workload_birthdate"
 
 /** Why a request ended other than by a person's own choice. */
 export type SwapEndReason =
@@ -287,5 +293,15 @@ export function swapRefusalMessage(code: SwapEndReason): string {
       return "Cet échange ne peut pas être effectué : l'attente entre deux missions dépasserait la limite de l'événement."
     case "workload_incomplete":
       return "Cet échange ne peut pas être effectué : la protection des pauses et de la charge de l'événement est incomplète."
+    case "workload_offday":
+      return "Cet échange ne peut pas être effectué : les jours sans mission demandés par l'événement ne seraient pas respectés."
+    case "workload_meal":
+      return "Cet échange ne peut pas être effectué : la pause repas ne serait pas respectée."
+    case "workload_travel":
+      return "Cet échange ne peut pas être effectué : la marge de trajet entre deux lieux ne serait pas respectée."
+    case "workload_places":
+      return "Cet échange ne peut pas être effectué : deux missions auraient lieu en même temps à deux lieux différents."
+    case "workload_birthdate":
+      return "Cet échange ne peut pas être effectué : cet événement protège les moins de 18 ans et une date de naissance manque."
   }
 }

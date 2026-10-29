@@ -593,6 +593,7 @@ describe("Members — cross-tenant isolation", () => {
       pushSubscription: { findMany: none(), deleteMany: vi.fn(), count: vi.fn().mockResolvedValue(0) },
       // The shift roster choices (#1068): the person's own.
       rosterConsent: { deleteMany: writes.rosterConsentDeleteMany },
+      eventVolunteerLimit: { deleteMany: vi.fn().mockResolvedValue({ count: 0 }) },
       sectorLeader: { findMany: none(), deleteMany: vi.fn() },
       duplicateDismissal: { findMany: none(), deleteMany: vi.fn() },
       notificationOutbox: { findMany: none(), deleteMany: writes.outboxDeleteMany },
@@ -2355,5 +2356,28 @@ describe("Places — cross-tenant isolation (#1171)", () => {
     expect((await one.PATCH(makeRequest("/api/admin/events/evt-a/places/pl-b", "PATCH", { archived: true }), placeParams("evt-a", "pl-b"))).status).toBe(404)
     expect(own.eventPlace.findMany).toHaveBeenCalledWith(expect.objectContaining({ where: { eventId: "evt-a" } }))
     expect(own.eventPlace.update).not.toHaveBeenCalled()
+  })
+})
+
+// ── Personal workload limits (#1171, lot 2) ──────────────────────────────────
+
+describe("Personal workload limits — cross-tenant isolation (#1171)", () => {
+  beforeEach(() => vi.clearAllMocks())
+  const limitParams = (id: string, volunteerId: string) => ({ params: Promise.resolve({ id, volunteerId }) })
+
+  it("GET workload-limits and PUT/DELETE workload-limits/[volunteerId] return 404 for an org-B event, and for a member of another organisation", async () => {
+    const list = await import("@/app/api/admin/events/[id]/workload-limits/route")
+    const one = await import("@/app/api/admin/events/[id]/workload-limits/[volunteerId]/route")
+    const db = setupGuard({ event: { findFirst: vi.fn().mockResolvedValue(null) }, volunteer: { findFirst: vi.fn().mockResolvedValue(null) } })
+    const extra = { eventVolunteerLimit: { findMany: vi.fn(), upsert: vi.fn(), deleteMany: vi.fn() }, $transaction: vi.fn() }
+    Object.assign(db, extra)
+    expect((await list.GET(makeRequest("/api/admin/events/evt-b/workload-limits"), params("evt-b"))).status).toBe(404)
+    expect((await one.PUT(makeRequest("/api/admin/events/evt-b/workload-limits/vol-b", "PUT", { limits: { maxDailyMinutes: 300 } }), limitParams("evt-b", "vol-b"))).status).toBe(404)
+    expect((await one.DELETE(makeRequest("/api/admin/events/evt-b/workload-limits/vol-b", "DELETE"), limitParams("evt-b", "vol-b"))).status).toBe(404)
+    // An org-A event, but a member the scoped client does not find (another organisation's).
+    ;(db as unknown as { event: { findFirst: ReturnType<typeof vi.fn> } }).event.findFirst.mockResolvedValue({ id: "evt-a" })
+    expect((await one.PUT(makeRequest("/api/admin/events/evt-a/workload-limits/vol-b", "PUT", { limits: { maxDailyMinutes: 300 } }), limitParams("evt-a", "vol-b"))).status).toBe(404)
+    expect(extra.$transaction).not.toHaveBeenCalled()
+    expect(extra.eventVolunteerLimit.upsert).not.toHaveBeenCalled()
   })
 })

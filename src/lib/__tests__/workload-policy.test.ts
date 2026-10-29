@@ -1,6 +1,6 @@
 import { describe, it, expect } from "vitest"
 import {
-  activePolicy, buildPolicy, checkPolicyValues, evaluateWorkload, findingOnlyAbout, newFindings, parseWorkloadPolicy, policyChangeNeedsScan,
+  activePolicy, buildPolicy, minorOn, checkPolicyValues, evaluateWorkload, findingOnlyAbout, newFindings, parseWorkloadPolicy, policyChangeNeedsScan,
   serviceDayExamples, serviceDayOf, workloadChange, workloadFindingMessage, type ActivePolicy, type DutyShift, type WorkloadPolicyValues,
 } from "../workload-policy"
 
@@ -501,5 +501,69 @@ describe("evaluateWorkload: travel between places", () => {
     const close = [at("gs", "2026-07-04", "10:00", "14:00"), at("dome", "2026-07-04", "14:05", "16:00")]
     expect(of(close, { ...travel(), travel: { apply: false } })).toEqual([])
     expect(of(close, { ...POLICY, maxEventMinutes: 100 * 60 })).toEqual([])
+  })
+})
+
+// ── #1171 lot 2: minors and personal limits ─────────────────────────────────
+
+describe("policy version 5: minors", () => {
+  const OFF = { apply: false as const }
+  const ALL = { requireOffDay: true, requireMeal: true, requireTravel: true, requireMinors: true }
+  const MINORS = { apply: true as const, maxContinuousMinutes: 270, minBreakMinutes: 30, maxDailyMinutes: 480, minRestMinutes: 720 }
+  it("writes version 5, requires the answer, and never accepts looser values than the event's", () => {
+    const v5 = buildPolicy({ ...VALUES, offDay: OFF, meal: OFF, travel: OFF, minors: MINORS }, TZ)
+    expect(v5.version).toBe(5)
+    expect(parseWorkloadPolicy(v5)).toEqual({ ok: true, policy: v5 })
+    const fields = (minors: unknown) => { const r = checkPolicyValues({ ...VALUES, offDay: OFF, meal: OFF, travel: OFF, minors }, ALL); return r.ok ? [] : r.problems.map((p) => p.field) }
+    expect(fields(undefined)).toEqual(["minors"])
+    expect(fields(OFF)).toEqual([])
+    expect(fields({ ...MINORS, maxDailyMinutes: 11 * 60 })).toEqual(["minorsMaxDailyMinutes"]) // the event allows 10 h
+    expect(fields({ ...MINORS, minRestMinutes: 9 * 60 })).toEqual(["minorsMinRestMinutes"]) // the event asks 10 h
+    expect(fields({ ...MINORS, minBreakMinutes: 20 })).toEqual(["minorsMinBreakMinutes"])
+    expect(fields({ apply: true })).toEqual(["minorsMaxContinuousMinutes", "minorsMinBreakMinutes", "minorsMaxDailyMinutes", "minorsMinRestMinutes"])
+  })
+
+  it("knows who is under 18 on a given day", () => {
+    expect(minorOn("2008-07-05", "2026-07-04")).toBe(true)
+    expect(minorOn("2008-07-05", "2026-07-05")).toBe(false)
+    expect(minorOn(null, "2026-07-04")).toBe(false)
+  })
+})
+
+describe("evaluateWorkload: minors and personal limits", () => {
+  const MINORS = { apply: true as const, maxContinuousMinutes: 270, minBreakMinutes: 30, maxDailyMinutes: 480, minRestMinutes: 720 }
+  const p = activePolicy(buildPolicy({ ...VALUES, offDay: { apply: false }, meal: { apply: false }, travel: { apply: false }, minors: MINORS }, TZ), HORIZON)
+  const minor = { birthDate: "2010-01-01" }
+  const adult = { birthDate: "1990-01-01" }
+
+  it("applies the minors' limits to a minor only, and says whose limit it is", () => {
+    const day = [s("2026-07-04", "09:00", "14:00")]
+    expect(evaluateWorkload(day, p, adult)).toEqual([])
+    const f = evaluateWorkload(day, p, minor)
+    expect(f).toEqual([expect.objectContaining({ rule: "continuous", limit: 270, scope: "minor" })])
+    expect(workloadFindingMessage(f[0], p)).toContain("La limite de cet événement pour les moins de 18 ans est de 4 h 30.")
+    // Rest between two days: 12 h for a minor, 10 h for an adult.
+    const nights = [s("2026-07-04", "17:00", "21:00"), s("2026-07-05", "08:00", "11:00")]
+    expect(evaluateWorkload(nights, p, adult).map((x) => x.rule)).toEqual([])
+    expect(evaluateWorkload(nights, p, minor).map((x) => [x.rule, x.limit, x.scope])).toEqual([["rest", 720, "minor"]])
+  })
+
+  it("an unknown birth date is checked as an adult; the age is the one of each service day", () => {
+    const day = [s("2026-07-04", "09:00", "14:00")]
+    expect(evaluateWorkload(day, p, { birthDate: null })).toEqual([])
+    // 18 on 5 July: the 4th is a minor's day, the 5th an adult's.
+    const turning = { birthDate: "2008-07-05" }
+    expect(evaluateWorkload([s("2026-07-04", "09:00", "14:00")], p, turning)).toHaveLength(1)
+    expect(evaluateWorkload([s("2026-07-05", "09:00", "14:00")], p, turning)).toEqual([])
+  })
+
+  it("a personal limit is used where stricter, never where looser, and is named", () => {
+    const day = [s("2026-07-04", "09:00", "16:00")] // 7 h, a 6 h continuous event limit
+    const strict = evaluateWorkload([s("2026-07-04", "09:00", "14:00")], p, { personal: { maxContinuousMinutes: 240, maxDailyMinutes: 1000 } })
+    expect(strict).toEqual([expect.objectContaining({ rule: "continuous", limit: 240, scope: "personal" })])
+    expect(workloadFindingMessage(strict[0], p)).toContain("La limite personnelle de cette personne est de 4 h.")
+    expect(evaluateWorkload(day, p, { personal: { maxContinuousMinutes: 600 } })).toEqual([expect.objectContaining({ rule: "continuous", limit: 360 })])
+    // The strictest of the three wins.
+    expect(evaluateWorkload([s("2026-07-04", "09:00", "13:30")], p, { ...minor, personal: { maxContinuousMinutes: 240 } })).toEqual([expect.objectContaining({ limit: 240, scope: "personal" })])
   })
 })

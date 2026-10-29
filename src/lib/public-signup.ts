@@ -103,6 +103,8 @@ export function validateSignup(input: {
   charterAccepted: boolean
   requirePhone: boolean
   ageGatedShifts: SignupShift[]
+  /** The event protects minors (#1171, lot 2): the birth date is required. */
+  minorsProtected?: boolean
 }): string | null {
   const { form } = input
   if (!input.charterAccepted) return "Accepte la convention des bénévoles."
@@ -113,6 +115,7 @@ export function validateSignup(input: {
   // #1047: a phone saved before the limit may come back pre-filled, longer than the field allows.
   const tooLong = tooLongSignupField(form)
   if (tooLong) return tooLong.message
+  if (input.minorsProtected && !form.birthDate) return "Date de naissance requise : cet événement protège les moins de 18 ans (pauses et charge)."
   if (input.ageGatedShifts.length > 0) {
     if (!form.birthDate) return "Date de naissance requise pour au moins un des créneaux sélectionnés."
     const tooYoungFor = shiftsTooYoungFor(form.birthDate, input.ageGatedShifts)
@@ -192,4 +195,12 @@ export function proposedShiftText(state: ProposedShiftState, name: string): stri
     case "held": return `Tu es déjà inscrit·e sur ce créneau : ${name}.`
     case "unavailable": return "Le créneau proposé n'est plus disponible. D'autres créneaux sont peut-être encore ouverts ci-dessous."
   }
+}
+
+/** The hint under the birth date field: the shifts with a minimum age, and the minors' protection. */
+export function birthDateHint(ageGated: { label: string; minAge: number | null }[], minorsProtected: boolean): string {
+  const shifts = ageGated.map((s) => `${s.label} (${s.minAge} ans min.)`).join(", ")
+  if (shifts && minorsProtected) return `Requise : ${shifts} ; cet événement protège aussi les moins de 18 ans (pauses et charge).`
+  if (minorsProtected) return "Requise : cet événement protège les moins de 18 ans (pauses et charge)."
+  return `Requis : ${shifts}`
 }

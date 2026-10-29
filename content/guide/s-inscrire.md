@@ -26,7 +26,7 @@ Renseigne :
 - **Email** (obligatoire : tu y recevras la confirmation) ;
 - **Téléphone** (facultatif, sauf si l'organisation l'a rendu obligatoire pour cet événement : il est alors marqué d'un *) ;
 - **Commentaire** (facultatif : informations utiles pour l'organisation) ;
-- **Date de naissance** : demandée uniquement si l'un des créneaux choisis a un âge minimum (voir [Âge minimum sur un poste](age-minimum.md)) ;
+- **Date de naissance** : demandée uniquement si l'un des créneaux choisis a un âge minimum (voir [Âge minimum sur un poste](age-minimum.md)), ou si l'événement protège les moins de 18 ans dans ses pauses et sa charge ;
 - **Réponses aux questions de l'organisation** : selon l'événement, quelques questions (taille de t-shirt, permis…). Celles marquées d'un astérisque sont obligatoires ; certaines n'apparaissent, juste en dessous, qu'après une réponse donnée (par exemple « Combien de personnes ? » si tu réponds « Oui » au repas) ; tes réponses sont transmises à l'organisation avec ton inscription ;
 - **Convention des bénévoles** : coche « J'ai lu et j'accepte la convention des bénévoles » ; le lien « convention des bénévoles » ouvre le texte complet, dont le bouton « J'ai lu et j'accepte » coche la case pour toi ;
 - **Consentement** : coche « J'accepte que l'association qui organise cet événement utilise mes données pour gérer ses bénévoles, pour cet événement et les suivants. » Tes coordonnées rejoignent la liste des bénévoles de l'organisation, qui peut t'inviter à ses prochains événements. Le lien juste en dessous ouvre, dans un nouvel onglet, la politique de confidentialité : tes droits et la durée de conservation de tes données.

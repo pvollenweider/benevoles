@@ -8,7 +8,7 @@
  * Pure and Prisma-free (the sign-up page, the organiser lists and the personal page read it).
  */
 import { workloadMessage, workloadWarnings } from "./workload"
-import { evaluateWorkload, findingKey, workloadFindingMessage, WORKLOAD_POLICY_INCOMPLETE, type ActivePolicy, type DutyShift } from "./workload-policy"
+import { evaluateWorkload, findingKey, workloadFindingMessage, WORKLOAD_POLICY_INCOMPLETE, type ActivePolicy, type DutyShift, type WorkloadPerson } from "./workload-policy"
 import { workloadGateOf } from "./workload-guard"
 
 /** How an event judges workload: #465 warnings, its protection policy, or a protection that does not parse. */
@@ -32,17 +32,17 @@ export const blocksWorkload = (mode: WorkloadMode) => mode.kind !== "warnings"
 export type WorkloadNotice = { key: string; text: string; shiftIds: string[] }
 
 /** The notices of a schedule. */
-export function workloadNotices(shifts: DutyShift[], mode: WorkloadMode): WorkloadNotice[] {
+export function workloadNotices(shifts: DutyShift[], mode: WorkloadMode, person?: WorkloadPerson | null): WorkloadNotice[] {
   if (mode.kind === "incomplete") return shifts.length > 0 ? [{ key: "incomplete", text: WORKLOAD_POLICY_INCOMPLETE, shiftIds: shifts.map((x) => x.id) }] : []
-  if (mode.kind === "policy") return evaluateWorkload(shifts, mode.policy).map((f) => ({ key: findingKey(f), text: workloadFindingMessage(f, mode.policy), shiftIds: f.shiftIds }))
+  if (mode.kind === "policy") return evaluateWorkload(shifts, mode.policy, person).map((f) => ({ key: findingKey(f), text: workloadFindingMessage(f, mode.policy), shiftIds: f.shiftIds }))
   return workloadWarnings(shifts, mode.timeZone).map((w) => ({ key: `${w.kind}|${w.day}|${w.shiftIds.join()}|${w.minutes}`, text: workloadMessage(w), shiftIds: w.shiftIds }))
 }
 
 /** The notices a change adds: those of the schedule after it that the schedule before did not have. */
-export function newWorkloadNotices(before: DutyShift[], after: DutyShift[], mode: WorkloadMode): WorkloadNotice[] {
+export function newWorkloadNotices(before: DutyShift[], after: DutyShift[], mode: WorkloadMode, person?: WorkloadPerson | null): WorkloadNotice[] {
   if (mode.kind === "incomplete") return after.length > before.length ? workloadNotices(after, mode) : []
-  const known = new Set(workloadNotices(before, mode).map((n) => n.text))
-  return workloadNotices(after, mode).filter((n) => !known.has(n.text))
+  const known = new Set(workloadNotices(before, mode, person).map((n) => n.text))
+  return workloadNotices(after, mode, person).filter((n) => !known.has(n.text))
 }
 
 /**
@@ -50,7 +50,7 @@ export function newWorkloadNotices(before: DutyShift[], after: DutyShift[], mode
  * confirmed places only; a protected event judges what the policy enforces, confirmed places and
  * pending requests (COMMITTED_STATUSES).
  */
-export function workloadByPerson(registrations: { volunteerId: string; status: string; shift: DutyShift }[], mode: WorkloadMode): Map<string, WorkloadNotice[]> {
+export function workloadByPerson(registrations: { volunteerId: string; status: string; shift: DutyShift }[], mode: WorkloadMode, people?: Map<string, WorkloadPerson>): Map<string, WorkloadNotice[]> {
   const counted = mode.kind === "warnings" ? new Set(["active"]) : new Set(["active", "requested"])
   const shifts = new Map<string, DutyShift[]>()
   for (const r of registrations) {
@@ -60,7 +60,7 @@ export function workloadByPerson(registrations: { volunteerId: string; status: s
   const out = new Map<string, WorkloadNotice[]>()
   for (const [id, list] of shifts) {
     // An unreadable policy is said once on the page, not on every row.
-    const notices = mode.kind === "incomplete" ? [] : workloadNotices(list, mode)
+    const notices = mode.kind === "incomplete" ? [] : workloadNotices(list, mode, people?.get(id))
     if (notices.length > 0) out.set(id, notices)
   }
   return out
@@ -72,8 +72,13 @@ export function workloadByPerson(registrations: { volunteerId: string; status: s
  * On a protected event, only what the sign-up would create or worsen: what is already there is
  * shown on the personal page, and never blocks this sign-up.
  */
-export function recapWorkloadNotices(chosen: DutyShift[], held: DutyShift[], mode: WorkloadMode): WorkloadNotice[] {
+export function recapWorkloadNotices(chosen: DutyShift[], held: DutyShift[], mode: WorkloadMode, person?: WorkloadPerson | null): WorkloadNotice[] {
   if (mode.kind === "warnings") return workloadNotices([...chosen, ...held], mode)
   if (chosen.length === 0) return []
-  return newWorkloadNotices(held, [...held, ...chosen], mode)
+  return newWorkloadNotices(held, [...held, ...chosen], mode, person)
+}
+
+/** Whether the event's protection asks for a birth date (minors' limits applied, #1171, lot 2). */
+export function workloadNeedsBirthDate(mode: WorkloadMode): boolean {
+  return mode.kind === "policy" && mode.policy.minors?.apply === true
 }

@@ -79,6 +79,9 @@ export const PERMISSIONS: Record<string, Partial<Record<Method, Level>>> = {
   // Sectors grouping postes (#1147, beta), like the postes: organiser level. Joining the beta stays owner-only.
   // Places of an event (#1171, lot 2): where missions happen, for the travel margin.
   "events/[id]/places": { GET: "organizer", POST: "organizer" },
+  // Personal workload limits (#1171, lot 2): one person's own, stricter limits on an event.
+  "events/[id]/workload-limits": { GET: "organizer" },
+  "events/[id]/workload-limits/[volunteerId]": { PUT: "organizer", DELETE: "organizer" },
   "events/[id]/places/[placeId]": { PATCH: "organizer" },
   "events/[id]/sectors": { GET: "organizer", POST: "organizer" },
   "events/[id]/sectors/[sectorId]": { PATCH: "organizer" },

@@ -210,6 +210,9 @@ export const ACTION_VERB: Record<string, (actor: string) => string> = {
   "place.updated": (a) => `${a} a renommé un lieu`,
   "place.archived": (a) => `${a} a archivé un lieu`,
   "place.restored": (a) => `${a} a rétabli un lieu`,
+  // Personal workload limits (#1171, lot 2): that they changed, never the values.
+  "workload.personal_limits_set": (a) => `${a} a fixé des limites personnelles de charge`,
+  "workload.personal_limits_removed": (a) => `${a} a retiré des limites personnelles de charge`,
   // Shift swaps between volunteers (#1174): the request's steps, and each registration it moved.
   "swap.published": (a) => `${a} a proposé d'échanger un de ses créneaux`,
   "swap.offered": (a) => `${a} a proposé un de ses créneaux en échange`,

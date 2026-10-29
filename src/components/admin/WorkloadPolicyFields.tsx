@@ -7,11 +7,13 @@ import { flushSync } from "react-dom"
 import RequiredMark from "@/components/RequiredMark"
 import {
   MEAL_DAYS_LABEL, MEAL_LABEL, MEAL_MINUTES_LABEL, MEAL_WINDOWS_LABEL, MEAL_WINDOWS_MAX, OFF_DAY_LABEL, OFF_DAY_MIN_LABEL, OFF_DAY_WINDOW_LABEL,
-  SERVICE_DAY_START_LABEL, serviceDayExamples, TRAVEL_LABEL, TRAVEL_MINUTES_LABEL, WORKLOAD_LIMIT_FIELDS, type EventHorizon, type WorkloadLimitsV1,
+  isMinimumField, MINORS_LABEL, SERVICE_DAY_START_LABEL, serviceDayExamples, STRICTER_FIELDS, STRICTER_LABELS, TRAVEL_LABEL, TRAVEL_MINUTES_LABEL, WORKLOAD_LIMIT_FIELDS,
+  type EventHorizon, type StricterField, type WorkloadLimitsV1,
 } from "@/lib/workload-policy"
+import { fmtDuration } from "@/lib/signup-recap"
 import {
-  MEAL_HELP, mealDayOptions, OFF_DAY_HELP, offDayExample, SERVICE_DAY_START_HELP, TRAVEL_HELP, withMealWindow, WORKLOAD_FIELD_HELP,
-  type DurationInput, type MealInput, type OffDayInput, type PolicyFormState, type TravelInput,
+  durationMinutes, MEAL_HELP, mealDayOptions, MINORS_HELP, OFF_DAY_HELP, offDayExample, SERVICE_DAY_START_HELP, TRAVEL_HELP, withMealWindow, WORKLOAD_FIELD_HELP,
+  type DurationInput, type MealInput, type MinorsInput, type OffDayInput, type PolicyFormState, type TravelInput,
 } from "@/lib/workload-policy-form"
 
 type LimitField = keyof WorkloadLimitsV1
@@ -24,7 +26,7 @@ type LimitField = keyof WorkloadLimitsV1
  * windows, days). Errors sit under their field, with `aria-invalid`; the parent focuses the first
  * invalid input (`fieldInputId`).
  */
-export default function WorkloadPolicyFields({ idPrefix, form, onChange, errors, disabled = false, horizon, places }: {
+export default function WorkloadPolicyFields({ idPrefix, form, onChange, errors, disabled = false, horizon, places, minorsNote }: {
   idPrefix: string
   form: PolicyFormState
   onChange: (next: PolicyFormState) => void
@@ -41,6 +43,8 @@ export default function WorkloadPolicyFields({ idPrefix, form, onChange, errors,
    * places section of the shifts page. Absent in the organisation default.
    */
   places?: { text: string | null; href: string }
+  /** The line on people without a birth date (event card), or nothing. */
+  minorsNote?: string | null
 }) {
   const startError = errors.get("serviceDayStart")
   const examples = serviceDayExamples(form.serviceDayStart)
@@ -117,11 +121,101 @@ export default function WorkloadPolicyFields({ idPrefix, form, onChange, errors,
       <MealFieldset idPrefix={idPrefix} value={form.meal} onChange={(meal) => onChange({ ...form, meal })} errors={errors} disabled={disabled} horizon={horizon} />
 
       <TravelFieldset idPrefix={idPrefix} value={form.travel} onChange={(travel) => onChange({ ...form, travel })} errors={errors} disabled={disabled} places={places} />
+
+      <MinorsFieldset idPrefix={idPrefix} value={form.minors} onChange={(minors) => onChange({ ...form, minors })} errors={errors} disabled={disabled} eventValues={form} note={minorsNote ?? null} />
     </div>
   )
 }
 
 const errorText = "mt-1 text-sm text-red-700"
+
+/** The key of a minors field in the problems (`minorsMaxDailyMinutes`) and in the ids. */
+export const minorsKey = (f: StricterField) => `minors${f.charAt(0).toUpperCase()}${f.slice(1)}`
+
+/**
+ * « Moins de 18 ans » (#1171, lot 2): apply or not (required), then four durations, each at least as
+ * strict as the event's (whose current value, as typed above, is said under it). Two levels of
+ * fieldsets, the inner ones plain like the meal's.
+ */
+function MinorsFieldset({ idPrefix, value, onChange, errors, disabled, eventValues, note }: {
+  idPrefix: string
+  value: MinorsInput
+  onChange: (next: MinorsInput) => void
+  errors: Map<string, string>
+  disabled: boolean
+  eventValues: PolicyFormState
+  note: string | null
+}) {
+  const id = `${idPrefix}-minors`
+  const choiceError = errors.get("minors")
+  const eventValue = (f: StricterField) => {
+    const n = durationMinutes(eventValues[f])
+    return n === undefined || Number.isNaN(n) ? "renseignez d'abord la limite de l'événement" : `${fmtDuration(n)}${isMinimumField(f) ? " au moins" : " au plus"}`
+  }
+  return (
+    <fieldset className="rounded-xl bg-gray-50 border border-gray-200 px-3 py-2" data-workload-minors="1">
+      <legend className="px-1 text-sm font-medium text-gray-800">{MINORS_LABEL} <RequiredMark /></legend>
+      <p id={`${id}-intro`} className="text-xs text-gray-600">{MINORS_HELP}</p>
+      <div className="flex flex-wrap gap-x-6">
+        {([["yes", "Appliquer cette règle"], ["no", "Ne pas appliquer cette règle"]] as const).map(([v, label]) => (
+          <label key={v} htmlFor={`${id}-${v}`} className="flex min-h-11 cursor-pointer items-center gap-2 text-sm text-gray-800">
+            <input
+              id={`${id}-${v}`}
+              type="radio"
+              name={`${id}-apply`}
+              value={v}
+              required
+              checked={value.apply === v}
+              aria-describedby={[`${id}-intro`, choiceError && `${id}-error`].filter(Boolean).join(" ")}
+              onChange={() => { if (!disabled) onChange({ ...value, apply: v }) }}
+              className="h-5 w-5 shrink-0"
+            />
+            {label}
+          </label>
+        ))}
+      </div>
+      {choiceError && <p id={`${id}-error`} className={errorText}>{choiceError}</p>}
+      {value.apply === "yes" && (
+        <div className="mt-1 flex flex-col gap-4">
+          {STRICTER_FIELDS.map((f) => {
+            const key = minorsKey(f)
+            const error = errors.get(key)
+            const helpId = `${idPrefix}-${key}-help`
+            const errorId = `${idPrefix}-${key}-error`
+            return (
+              <fieldset key={f} className="border-0 p-0 m-0">
+                <legend className="text-xs font-medium text-gray-700 mb-1">{STRICTER_LABELS[f]}</legend>
+                <div className="flex flex-wrap items-end gap-3">
+                  {(["hours", "minutes"] as const).map((part) => (
+                    <div key={part} className="w-24">
+                      <label htmlFor={`${idPrefix}-${key}-${part}`} className="block text-xs font-medium text-gray-600 mb-1">{part === "hours" ? "heures" : "minutes"}</label>
+                      <input
+                        id={`${idPrefix}-${key}-${part}`}
+                        type="text"
+                        inputMode="numeric"
+                        autoComplete="off"
+                        className="input"
+                        value={value[f][part]}
+                        readOnly={disabled}
+                        aria-required={part === "hours" ? true : undefined}
+                        aria-invalid={error ? true : undefined}
+                        aria-describedby={[helpId, error && errorId].filter(Boolean).join(" ")}
+                        onChange={(e) => onChange({ ...value, [f]: { ...value[f], [part]: e.target.value } })}
+                      />
+                    </div>
+                  ))}
+                </div>
+                <p id={helpId} className="mt-1 text-xs text-gray-600">Événement : {eventValue(f)}</p>
+                {error && <p id={errorId} className={errorText}>{error}</p>}
+              </fieldset>
+            )
+          })}
+          {note && <p className="text-xs text-gray-700">{note}</p>}
+        </div>
+      )}
+    </fieldset>
+  )
+}
 
 /** « Trajet entre deux lieux » (#1171, lot 2): apply or not (required), then the margin (0 to 15 min). */
 function TravelFieldset({ idPrefix, value, onChange, errors, disabled, places }: {
@@ -251,7 +345,7 @@ function MealFieldset({ idPrefix, value, onChange, errors, disabled, horizon }: 
       {choiceError && <p id={`${id}-error`} className={errorText}>{choiceError}</p>}
 
       {value.apply === "yes" && (
-        <div className="mt-1 space-y-4">
+        <div className="mt-1 flex flex-col gap-4">
           <div className="w-24">
             <label htmlFor={`${id}-minutes`} className="block text-xs font-medium text-gray-600 mb-1">{MEAL_MINUTES_LABEL}</label>
             <input
@@ -456,6 +550,7 @@ export function fieldInputId(idPrefix: string, field: string): string {
   if (field.startsWith("mealWindow")) return `${idPrefix}-meal-w${field.slice("mealWindow".length)}-start`
   if (field === "mealDays") return `${idPrefix}-meal-day-0`
   if (field === "travel") return `${idPrefix}-travel-yes`
+  if (field === "minors") return `${idPrefix}-minors-yes`
   if (field === "travelMinutes") return `${idPrefix}-travel-minutes`
   return `${idPrefix}-${field}-hours`
 }

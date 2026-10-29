@@ -2,6 +2,7 @@
 // SPDX-License-Identifier: AGPL-3.0-only
 
 import { NextResponse } from "next/server"
+import { birthDateSchema } from "@/lib/civil-date"
 import { requireOrgSession } from "@/lib/auth-guard"
 import { REGISTRATION_ADMIN_SELECT } from "@/lib/admin-row-selects"
 import { generateToken } from "@/lib/utils"
@@ -41,6 +42,11 @@ const schema = z.object({
   comment: z.string().optional(),
   /** The admin saw the role-limit warning and adds anyway (#466). */
   allowOverLimit: z.boolean().optional(),
+  /**
+   * Birth date (#1171, lot 2): asked when the event protects minors and the person has none on
+   * file. Stored on a new person, or on a member without one; an existing date is never replaced.
+   */
+  birthDate: z.preprocess((v) => (v === "" ? undefined : v), birthDateSchema.optional()),
 }).refine((d) => d.volunteerId || (d.firstName?.trim() && d.lastName?.trim()), {
   message: "Prénom et nom requis pour une nouvelle personne.",
   path: ["firstName"],
@@ -58,7 +64,8 @@ export async function POST(req: Request) {
   const parsed = schema.safeParse(body)
   if (!parsed.success) return validationError(parsed.error)
 
-  const { eventId, shiftId, shiftIds, volunteerId, firstName, lastName, email, phone, comment, allowOverLimit } = parsed.data
+  const { eventId, shiftId, shiftIds, volunteerId, firstName, lastName, email, phone, comment, allowOverLimit, birthDate } = parsed.data
+  const birthDateValue = birthDate ? new Date(birthDate) : null
   const ids = [...new Set([...(shiftIds ?? []), ...(shiftId ? [shiftId] : [])])]
 
   const found = await Promise.all(ids.map((id) => db.shift.findFirst({
@@ -106,7 +113,7 @@ export async function POST(req: Request) {
   // before the member record is created; the authoritative check runs below, under the locks.
   // There is no « add anyway »: allowOverLimit concerns the role limit only.
   if (!volunteer) {
-    const verdict = judgeDutyChange(await readWorkloadGate(db, eventId), [], { add: await withPlaceNames(db, shifts) })
+    const verdict = judgeDutyChange(await readWorkloadGate(db, eventId), [], { add: await withPlaceNames(db, shifts) }, { birthDate: birthDateValue })
     if (!verdict.ok) {
       return NextResponse.json(manualAddWorkloadBody(new WorkloadRefusalError(verdict, ""), `${firstName!.trim()} ${lastName!.trim()}`, shifts.length), { status: 409 })
     }
@@ -114,7 +121,7 @@ export async function POST(req: Request) {
 
   if (!volunteer) {
     volunteer = await db.volunteer.create({
-      data: { firstName: firstName!.trim(), lastName: lastName!.trim(), email: usedEmail, phone: phone || null, organizationId },
+      data: { firstName: firstName!.trim(), lastName: lastName!.trim(), email: usedEmail, phone: phone || null, organizationId, ...(birthDateValue ? { birthDate: birthDateValue } : {}) },
     })
   }
 
@@ -141,6 +148,8 @@ export async function POST(req: Request) {
       const gate = await readWorkloadGate(tx, eventId)
       if (gate.kind !== "off") {
         await lockVolunteerRows(tx, [added.id])
+        // A birth date given here fills a member's missing one (never replaces it), before the check.
+        if (birthDateValue) await tx.volunteer.updateMany({ where: { id: added.id, birthDate: null }, data: { birthDate: birthDateValue } })
         const verdict = await checkDutyChange(tx, gate, eventId, added.id, { add: shifts })
         if (!verdict.ok) throw new WorkloadRefusalError(verdict, added.id)
       }

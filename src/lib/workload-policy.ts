@@ -33,7 +33,12 @@
  * (Shift.placeId) need at least the margin between them, and never at the same time. A mission
  * without a place is not checked (the organiser's screens say so).
  *
- * Still out (follow-ups): individual stricter limits, draft publication (#1146).
+ * Version 5 adds stricter limits for minors (age on the service day of each mission, from the
+ * stored birth date), and every policy also reads a person's own limits (`PersonalLimits`, stored
+ * per event and person): the strictest of the event's, the minors' and the person's applies, never
+ * looser than the event.
+ *
+ * Still out (follow-up): draft publication (#1146).
  */
 import { fmtDay, fmtDuration } from "./signup-recap"
 import { toMin, toMinEnd } from "./gantt-utils"
@@ -44,8 +49,8 @@ import { mergeIntervals } from "./interval-union"
  * The version written when every delivered section is answered. Older versions stay readable:
  * 1 (lot 1 only), 2 (with the days-off answer); 3 adds the meal answer.
  */
-export const WORKLOAD_POLICY_VERSION = 4
-export type WorkloadPolicyVersion = 1 | 2 | 3 | 4
+export const WORKLOAD_POLICY_VERSION = 5
+export type WorkloadPolicyVersion = 1 | 2 | 3 | 4 | 5
 
 /**
  * The days-off rule: an explicit answer, never a blank. `apply: false` is a saved « do not apply »;
@@ -72,6 +77,38 @@ export const MEAL_WINDOWS_MAX = 3
 export type TravelRule = { apply: false } | { apply: true; minutes: number }
 
 export const TRAVEL_MINUTES_RANGE = { min: 0, max: 15 } as const
+
+/** The limits a stricter rule can set: for minors, or for one person (#1171, lot 2). */
+export const STRICTER_FIELDS = ["maxContinuousMinutes", "minBreakMinutes", "maxDailyMinutes", "minRestMinutes"] as const
+export type StricterField = (typeof STRICTER_FIELDS)[number]
+
+/** The minors answer (version 5): apply with stricter values, or not. Never looser than the event. */
+export type MinorsRule = { apply: false } | ({ apply: true } & Record<StricterField, number>)
+
+/**
+ * A person's own limits on an event (EventVolunteerLimit): each field overrides the event's when
+ * stricter, and is ignored otherwise (the event, if tightened later, wins). No reason, ever.
+ */
+export type PersonalLimits = Partial<Record<StricterField | "maxEventMinutes", number>>
+export const PERSONAL_FIELDS = [...STRICTER_FIELDS, "maxEventMinutes"] as const
+export type PersonalField = (typeof PERSONAL_FIELDS)[number]
+
+/** Whether a limit field is a maximum (stricter = smaller) or a minimum (stricter = larger). */
+export const isMinimumField = (f: string) => f === "minBreakMinutes" || f === "minRestMinutes"
+
+/** The stricter of two values of a field. */
+export const stricterOf = (f: string, a: number, b: number) => (isMinimumField(f) ? Math.max(a, b) : Math.min(a, b))
+
+/** The person a schedule belongs to, for the stricter rules: their birth date and own limits. */
+export type WorkloadPerson = { birthDate?: Date | string | null; personal?: PersonalLimits | null }
+
+/** Under 18 on that day ("YYYY-MM-DD"), from a birth date; unknown birth date: not known as a minor. */
+export function minorOn(birthDate: Date | string | null | undefined, day: string): boolean {
+  if (!birthDate) return false
+  const b = typeof birthDate === "string" ? birthDate.slice(0, 10) : birthDate.toISOString().slice(0, 10)
+  const eighteen = `${String(Number(b.slice(0, 4)) + 18).padStart(4, "0")}${b.slice(4)}`
+  return day < eighteen
+}
 
 /** The limits of a policy, in minutes. Every one is required to turn protection on. */
 export type WorkloadLimitsV1 = {
@@ -102,12 +139,14 @@ export type WorkloadPolicy = WorkloadLimitsV1 & {
   meal?: MealRule
   /** The travel answer; absent before version 4 (not chosen yet, not applied). */
   travel?: TravelRule
+  /** The minors answer; absent before version 5 (not chosen yet, not applied). */
+  minors?: MinorsRule
 }
 
 /** What the organiser sets: the policy without its version and time zone (the server adds both). */
 export type WorkloadPolicyValues = Omit<WorkloadPolicy, "version" | "timeZone">
 
-export type WorkloadField = keyof WorkloadPolicyValues | "offDayMinOffDays" | "offDayWindowDays" | "mealMinutes" | "mealWindows" | `mealWindow${number}` | "mealDays" | "travelMinutes"
+export type WorkloadField = keyof WorkloadPolicyValues | "offDayMinOffDays" | "offDayWindowDays" | "mealMinutes" | "mealWindows" | `mealWindow${number}` | "mealDays" | "travelMinutes" | `minors${string}`
 
 type LimitField = keyof WorkloadLimitsV1
 
@@ -135,6 +174,16 @@ export const MEAL_DAYS_LABEL = "Jours concernés"
 export const TRAVEL_LABEL = "Trajet entre deux lieux"
 export const TRAVEL_MINUTES_LABEL = "Marge entre deux lieux, en minutes"
 
+export const MINORS_LABEL = "Moins de 18 ans"
+/** The label of each stricter field, for minors and personal limits. */
+export const STRICTER_LABELS: Record<PersonalField, string> = {
+  maxContinuousMinutes: "Durée maximale sans vraie pause",
+  minBreakMinutes: "Durée minimale d'une vraie pause",
+  maxDailyMinutes: "Durée maximale par journée de service",
+  minRestMinutes: "Repos minimum entre deux journées de service",
+  maxEventMinutes: "Durée maximale sur tout l'événement",
+}
+
 /**
  * The values of the existing #465 warnings, offered as editable suggestions only: they are
  * « réglages d'avertissement existants », never legal, recommended or approved pilot thresholds.
@@ -153,7 +202,7 @@ export const EXISTING_WARNING_SUGGESTIONS: Partial<WorkloadLimitsV1> = {
  * asks for 24 h + 11 h of uninterrupted rest per 7-day period, not an empty service day).
  */
 export type WorkloadBenchmark = {
-  id: "daily" | "rest" | "break" | "offDay" | "meal" | "travel"
+  id: "daily" | "rest" | "break" | "offDay" | "meal" | "travel" | "minors"
   /** The value, as the organiser reads it. */
   text: string
   /** Where it comes from. */
@@ -164,6 +213,7 @@ export type WorkloadBenchmark = {
   offDay?: OffDayRule
   meal?: MealRule
   travel?: TravelRule
+  minors?: MinorsRule
 }
 
 export const WORKLOAD_BENCHMARKS: WorkloadBenchmark[] = [
@@ -173,6 +223,7 @@ export const WORKLOAD_BENCHMARKS: WorkloadBenchmark[] = [
   { id: "offDay", text: "1 jour sans mission sur 7 journées de service d'affilée.", source: "Approximation du repos hebdomadaire de la directive européenne 2003/88/CE (24 h, plus les 11 h de repos quotidien, par période de 7 jours).", action: "Utiliser 1 jour sans mission sur 7", offDay: { apply: true, minOffDays: 1, windowDays: 7 } },
   { id: "meal", text: "30 min de repas entre 11 h 30 et 14 h et entre 18 h et 21 h, tous les jours.", source: "Suggestion pour l'événementiel, pas une règle du droit du travail.", action: "Utiliser 30 min de repas entre 11 h 30 et 14 h et entre 18 h et 21 h", meal: { apply: true, minutes: 30, windows: [{ start: "11:30", end: "14:00" }, { start: "18:00", end: "21:00" }], days: "all" } },
   { id: "travel", text: "15 min entre deux missions à des lieux différents.", source: "Suggestion pour l'événementiel, pas une règle du droit du travail : le temps d'aller d'une scène à l'autre.", action: "Utiliser 15 min entre deux lieux", travel: { apply: true, minutes: 15 } },
+  { id: "minors", text: "Moins de 18 ans (France) : 8 h au plus par journée de service, une pause d'au moins 30 min avant 4 h 30 d'affilée, 12 h de repos entre deux journées.", source: "Code du travail français pour les travailleurs de moins de 18 ans : 8 h par jour, une pause de 30 min dès 4 h 30 de travail continu, 12 h de repos (14 h avant 16 ans).", action: "Utiliser les repères pour les moins de 18 ans", minors: { apply: true, maxDailyMinutes: 8 * 60, maxContinuousMinutes: 4 * 60 + 30, minBreakMinutes: 30, minRestMinutes: 12 * 60 } },
 ]
 
 export type PolicyProblem = { field: WorkloadField | "timeZone" | "version"; message: string }
@@ -321,15 +372,64 @@ function checkTravel(value: unknown, problems: PolicyProblem[]): TravelRule | un
   return { apply: true, minutes: v.minutes }
 }
 
+/** Why stricter values are not valid against the event's (minors or a person): one problem per field. */
+export function stricterProblems(values: Partial<Record<PersonalField, unknown>>, event: Pick<WorkloadLimitsV1, PersonalField>, fieldOf: (f: PersonalField) => string, who: string, required: boolean): PolicyProblem[] {
+  const problems: PolicyProblem[] = []
+  for (const f of PERSONAL_FIELDS) {
+    const v = values[f]
+    if (v === undefined || v === null || v === "") {
+      if (required && f !== "maxEventMinutes") problems.push({ field: fieldOf(f) as WorkloadField, message: `${who} — ${STRICTER_LABELS[f]} : à compléter.` })
+      continue
+    }
+    const range = WORKLOAD_LIMIT_FIELDS.find((x) => x.key === f)!
+    if (!isInt(v) || v < range.min || v > range.max) {
+      problems.push({ field: fieldOf(f) as WorkloadField, message: `${who} — ${STRICTER_LABELS[f]} : entre ${fmtDuration(range.min)} et ${fmtDuration(range.max)}.` })
+    } else if (isMinimumField(f) ? v < event[f] : v > event[f]) {
+      problems.push({ field: fieldOf(f) as WorkloadField, message: `${who} — ${STRICTER_LABELS[f]} : jamais moins stricte que la limite de l'événement (${fmtDuration(event[f])}).` })
+    }
+  }
+  return problems
+}
+
+/** Checks the minors answer against the event's limits; `undefined` comes back as « not answered ». */
+function checkMinors(value: unknown, event: Partial<WorkloadLimitsV1>, problems: PolicyProblem[]): MinorsRule | undefined {
+  if (value === undefined || value === null) return undefined
+  const v = (typeof value === "object" ? value : {}) as Record<string, unknown>
+  if (Object.keys(v).some((k) => k !== "apply" && !(STRICTER_FIELDS as readonly string[]).includes(k))) {
+    problems.push({ field: "minors", message: `${MINORS_LABEL} : réglage inconnu.` })
+    return undefined
+  }
+  if (v.apply === false) {
+    if (Object.keys(v).length > 1) problems.push({ field: "minors", message: `${MINORS_LABEL} : sans règle, aucune valeur n'est attendue.` })
+    return { apply: false }
+  }
+  if (v.apply !== true) {
+    problems.push({ field: "minors", message: `${MINORS_LABEL} : choisissez d'appliquer ou non cette règle.` })
+    return undefined
+  }
+  // Compared with the event's values only when those are valid (their own problems come first).
+  const known = WORKLOAD_LIMIT_FIELDS.every((f) => isInt(event[f.key]))
+  const base = known ? (event as WorkloadLimitsV1) : { maxContinuousMinutes: 24 * 60, minBreakMinutes: 0, maxDailyMinutes: 24 * 60, minRestMinutes: 0, maxEventMinutes: 30 * 24 * 60 }
+  const before = problems.length
+  problems.push(...stricterProblems(v, base, (f) => `minors${f.charAt(0).toUpperCase()}${f.slice(1)}`, MINORS_LABEL, true))
+  if (problems.length > before) return undefined
+  const rule = { apply: true as const, ...Object.fromEntries(STRICTER_FIELDS.map((f) => [f, v[f] as number])) } as Extract<MinorsRule, { apply: true }>
+  if (rule.maxContinuousMinutes > rule.maxDailyMinutes) {
+    problems.push({ field: "minorsMaxContinuousMinutes", message: `${MINORS_LABEL} — la durée sans vraie pause ne peut pas dépasser la durée par journée.` })
+    return undefined
+  }
+  return rule
+}
+
 /** What a write must answer: every section of the current version. */
-export const WRITE_SECTIONS = { requireOffDay: true, requireMeal: true, requireTravel: true } as const
+export const WRITE_SECTIONS = { requireOffDay: true, requireMeal: true, requireTravel: true, requireMinors: true } as const
 
 /**
  * Checks the organiser's values (no version, no zone): every field present, whole minutes in range,
  * consistent. `requireOffDay`: the days-off answer is required (every write from the forms); only a
  * stored version-1 policy or default is read without it.
  */
-export function checkPolicyValues(value: unknown, opts: { requireOffDay?: boolean; requireMeal?: boolean; requireTravel?: boolean } = {}): { ok: true; values: WorkloadPolicyValues } | { ok: false; problems: PolicyProblem[] } {
+export function checkPolicyValues(value: unknown, opts: { requireOffDay?: boolean; requireMeal?: boolean; requireTravel?: boolean; requireMinors?: boolean } = {}): { ok: true; values: WorkloadPolicyValues } | { ok: false; problems: PolicyProblem[] } {
   const v = (value && typeof value === "object" ? value : {}) as Record<string, unknown>
   const problems: PolicyProblem[] = []
   if (v.serviceDayStart === undefined || v.serviceDayStart === null || v.serviceDayStart === "") {
@@ -359,6 +459,10 @@ export function checkPolicyValues(value: unknown, opts: { requireOffDay?: boolea
   if (travel === undefined && opts.requireTravel && !problems.some((p) => p.field.startsWith("travel"))) {
     problems.push({ field: "travel", message: `${TRAVEL_LABEL} : choisissez d'appliquer ou non cette règle. Rien n'est choisi à votre place.` })
   }
+  const minors = checkMinors(v.minors, v as Partial<WorkloadLimitsV1>, problems)
+  if (minors === undefined && opts.requireMinors && !problems.some((p) => p.field.startsWith("minors"))) {
+    problems.push({ field: "minors", message: `${MINORS_LABEL} : choisissez d'appliquer ou non cette règle. Rien n'est choisi à votre place.` })
+  }
   if (problems.length > 0) return { ok: false, problems }
   const values = {
     serviceDayStart: v.serviceDayStart as string,
@@ -366,6 +470,7 @@ export function checkPolicyValues(value: unknown, opts: { requireOffDay?: boolea
     ...(offDay ? { offDay } : {}),
     ...(meal ? { meal } : {}),
     ...(travel ? { travel } : {}),
+    ...(minors ? { minors } : {}),
   } as WorkloadPolicyValues
   // Consistency: a smaller daily or event cap than the one it contains is almost always hours typed
   // as minutes (or the reverse); refused rather than guessed.
@@ -387,13 +492,14 @@ export function parseWorkloadPolicy(value: unknown): PolicyParse {
   const v = (value && typeof value === "object" ? value : {}) as Record<string, unknown>
   const problems: PolicyProblem[] = []
   const version = v.version
-  if (version !== 1 && version !== 2 && version !== 3 && version !== 4) problems.push({ field: "version", message: "Version de réglage inconnue." })
+  if (version !== 1 && version !== 2 && version !== 3 && version !== 4 && version !== 5) problems.push({ field: "version", message: "Version de réglage inconnue." })
   if (typeof v.timeZone !== "string" || !isValidTimeZone(v.timeZone)) problems.push({ field: "timeZone", message: "Fuseau horaire inconnu." })
   // A key this version does not know is a rule it cannot enforce: never silently ignored. Version 1
   // has no days-off answer; version 2 must have one.
-  const known = new Set<string>(["version", "timeZone", "serviceDayStart", ...WORKLOAD_LIMIT_FIELDS.map((f) => f.key), ...(version !== 1 ? ["offDay"] : []), ...(version === 3 || version === 4 ? ["meal"] : []), ...(version === 4 ? ["travel"] : [])])
+  const known = new Set<string>(["version", "timeZone", "serviceDayStart", ...WORKLOAD_LIMIT_FIELDS.map((f) => f.key), ...(version !== 1 ? ["offDay"] : []), ...(typeof version === "number" && version >= 3 ? ["meal"] : []), ...(typeof version === "number" && version >= 4 ? ["travel"] : []), ...(version === 5 ? ["minors"] : [])])
   if (Object.keys(v).some((k) => !known.has(k))) problems.push({ field: "version", message: "Réglage inconnu de cette version." })
-  const values = checkPolicyValues(v, { requireOffDay: version !== 1, requireMeal: version === 3 || version === 4, requireTravel: version === 4 })
+  const n = typeof version === "number" ? version : 0
+  const values = checkPolicyValues(v, { requireOffDay: n >= 2, requireMeal: n >= 3, requireTravel: n >= 4, requireMinors: n >= 5 })
   if (!values.ok) problems.push(...values.problems)
   if (problems.length > 0 || !values.ok) return { ok: false, problems }
   return { ok: true, policy: { version: version as WorkloadPolicyVersion, timeZone: v.timeZone as string, ...values.values } }
@@ -407,6 +513,7 @@ export function policyValues(p: WorkloadPolicy): WorkloadPolicyValues {
     ...(p.offDay ? { offDay: p.offDay } : {}),
     ...(p.meal ? { meal: p.meal } : {}),
     ...(p.travel ? { travel: p.travel } : {}),
+    ...(p.minors ? { minors: p.minors } : {}),
   } as WorkloadPolicyValues
 }
 
@@ -416,10 +523,16 @@ export function policyValues(p: WorkloadPolicy): WorkloadPolicyValues {
  * so that what is stored always parses.
  */
 export function buildPolicy(values: WorkloadPolicyValues, timeZone: string): WorkloadPolicy {
-  const { offDay, meal, travel, ...rest } = values
+  const { offDay, meal, travel, minors, ...rest } = values
+  if (offDay && meal && travel && minors) return { version: 5, timeZone, ...rest, offDay, meal, travel, minors }
   if (offDay && meal && travel) return { version: 4, timeZone, ...rest, offDay, meal, travel }
   if (offDay && meal) return { version: 3, timeZone, ...rest, offDay, meal }
   return offDay ? { version: 2, timeZone, ...rest, offDay } : { version: 1, timeZone, ...rest }
+}
+
+/** Whether minors' limits are enforced. */
+export function minorsApply(p: Pick<WorkloadPolicy, "minors">): p is { minors: Extract<MinorsRule, { apply: true }> } {
+  return p.minors?.apply === true
 }
 
 /** Whether a travel margin is enforced. */
@@ -470,6 +583,8 @@ export function policyChangeNeedsScan(prev: WorkloadPolicy | null, next: Workloa
     || ((mealApplies(prev) || mealApplies(next)) && JSON.stringify(prev.meal) !== JSON.stringify(next.meal))
     // Travel: turning it on or a longer margin can create findings; off or shorter cannot.
     || (travelApplies(next) && (!travelApplies(prev) || next.travel.minutes > prev.travel.minutes))
+    // Minors: turning it on, or any change while on (conservative).
+    || (minorsApply(next) && JSON.stringify(prev.minors) !== JSON.stringify(next.minors))
 }
 
 // ── Evaluation ──────────────────────────────────────────────────────────────
@@ -503,6 +618,8 @@ export type WorkloadFinding = {
   shiftIds: string[]
   /** For « travel » and « places »: the names of the two places, in time order. */
   places?: [string, string]
+  /** The limit applied came from the minors' rule or from the person's own limits, not the event's. */
+  scope?: "minor" | "personal"
 }
 
 const MIN = 60_000
@@ -511,7 +628,7 @@ const dayKey = (d: string | Date) => (typeof d === "string" ? d.slice(0, 10) : d
 const hhmm = (minutes: number) => `${Math.floor(minutes / 60)}:${String(minutes % 60).padStart(2, "0")}`
 const addDays = (iso: string, n: number) => new Date(Date.parse(`${iso}T00:00:00Z`) + n * DAY_MS).toISOString().slice(0, 10)
 
-type Duty = { id: string; start: number; end: number; mealOnTheGo?: boolean | null; placeId?: string | null; placeName?: string | null }
+type Duty = { id: string; start: number; end: number; mealOnTheGo?: boolean | null; placeId?: string | null; placeName?: string | null; minor?: boolean }
 
 /** A mission's real instants; an end at or before the start is on the next day (a night). */
 export function dutyInterval(s: DutyShift, timeZone: string): Duty {
@@ -542,7 +659,7 @@ export function serviceDayStartsAt(day: string, policy: Pick<WorkloadPolicy, "ti
   return localDateTimeToUtc(new Date(`${day}T00:00:00Z`), policy.serviceDayStart, policy.timeZone).getTime()
 }
 
-type Block = { start: number; end: number; ids: string[] }
+type Block = { start: number; end: number; ids: string[]; minor?: boolean }
 
 /**
  * The service days of the event, from its first to its last date (shifts always lie within them).
@@ -574,11 +691,10 @@ export function horizonDays(h: EventHorizon): number {
 /** Missions merged where they overlap or touch: time on two missions at once counts once. */
 function dutyBlocks(duties: Duty[]): Block[] {
   const merged = mergeIntervals(duties)
-  return merged.map((m) => ({
-    start: m.start,
-    end: m.end,
-    ids: duties.filter((d) => d.end > d.start && d.start < m.end && d.end > m.start).map((d) => d.id),
-  }))
+  return merged.map((m) => {
+    const inside = duties.filter((d) => d.end > d.start && d.start < m.end && d.end > m.start)
+    return { start: m.start, end: m.end, ids: inside.map((d) => d.id), minor: inside.some((d) => d.minor) }
+  })
 }
 
 /** Duty time of a block per service day, the block cut at each boundary it crosses. */
@@ -598,11 +714,30 @@ function splitByServiceDay(block: Block, policy: WorkloadPolicy): { day: string;
 }
 
 /** Every rule the schedule breaks, in time order. Pure; the same shifts always give the same findings. */
-export function evaluateWorkload(shifts: DutyShift[], policy: ActivePolicy): WorkloadFinding[] {
-  const duties = shifts.map((s) => dutyInterval(s, policy.timeZone))
+export function evaluateWorkload(shifts: DutyShift[], policy: ActivePolicy, person?: WorkloadPerson | null): WorkloadFinding[] {
+  const minorRule = minorsApply(policy) && person?.birthDate ? policy.minors : null
+  const duties = shifts.map((s) => {
+    const d = dutyInterval(s, policy.timeZone)
+    return minorRule && minorOn(person?.birthDate, serviceDayOf(d.start, policy)) ? { ...d, minor: true } : d
+  })
   const blocks = dutyBlocks(duties)
   const findings: WorkloadFinding[] = []
   if (blocks.length === 0) return findings
+  // The limits that apply (#1171, lot 2): the event's, made stricter by the person's own limits,
+  // and by the minors' rule on minor duty. `limit(f, minor)` gives the value and where it came from.
+  const personal = person?.personal ?? null
+  const limit = (f: PersonalField, minor: boolean): { value: number; scope?: "minor" | "personal" } => {
+    let value = policy[f]
+    let scope: "minor" | "personal" | undefined
+    const own = personal?.[f]
+    if (typeof own === "number" && stricterOf(f, value, own) !== value) { value = own; scope = "personal" }
+    if (minor && minorRule && f !== "maxEventMinutes") {
+      const m = minorRule[f]
+      if (stricterOf(f, value, m) !== value) { value = m; scope = "minor" }
+    }
+    return { value, scope }
+  }
+  const scoped = (scope?: "minor" | "personal") => (scope ? { scope } : {})
 
   // Continuous duty: blocks separated by less than a real break form one run, gaps included.
   let run: Block[] = []
@@ -611,13 +746,15 @@ export function evaluateWorkload(shifts: DutyShift[], policy: ActivePolicy): Wor
     const start = run[0].start
     const end = run[run.length - 1].end
     const minutes = Math.round((end - start) / MIN)
-    if (minutes > policy.maxContinuousMinutes) {
-      findings.push({ rule: "continuous", serviceDay: serviceDayOf(start, policy), start, end, minutes, limit: policy.maxContinuousMinutes, shiftIds: run.flatMap((b) => b.ids) })
+    const max = limit("maxContinuousMinutes", run.some((b) => b.minor))
+    if (minutes > max.value) {
+      findings.push({ rule: "continuous", serviceDay: serviceDayOf(start, policy), start, end, minutes, limit: max.value, shiftIds: run.flatMap((b) => b.ids), ...scoped(max.scope) })
     }
   }
   for (const b of blocks) {
     const last = run[run.length - 1]
-    if (last && b.start - last.end < policy.minBreakMinutes * MIN) run.push(b)
+    // A real break next to minor duty is the minors' (longer) one.
+    if (last && b.start - last.end < limit("minBreakMinutes", !!(last.minor || b.minor)).value * MIN) run.push(b)
     else {
       flushRun()
       run = [b]
@@ -653,8 +790,9 @@ export function evaluateWorkload(shifts: DutyShift[], policy: ActivePolicy): Wor
         if (w) { creditUsed.add(w.key); limit += meal }
       }
       if (minutes > limit) findings.push({ rule: "idle", serviceDay: dayA, start: a.end, end: b.start, minutes, limit, shiftIds: ids })
-    } else if (minutes < policy.minRestMinutes) {
-      findings.push({ rule: "rest", serviceDay: dayA, start: a.end, end: b.start, minutes, limit: policy.minRestMinutes, shiftIds: ids })
+    } else {
+      const rest = limit("minRestMinutes", !!(a.minor || b.minor))
+      if (minutes < rest.value) findings.push({ rule: "rest", serviceDay: dayA, start: a.end, end: b.start, minutes, limit: rest.value, shiftIds: ids, ...scoped(rest.scope) })
     }
   }
 
@@ -670,12 +808,15 @@ export function evaluateWorkload(shifts: DutyShift[], policy: ActivePolicy): Wor
   }
   for (const [day, entry] of [...byDay].sort(([a], [b]) => a.localeCompare(b))) {
     const minutes = Math.round(entry.minutes)
-    if (minutes > policy.maxDailyMinutes) findings.push({ rule: "daily", serviceDay: day, start: null, end: null, minutes, limit: policy.maxDailyMinutes, shiftIds: [...entry.ids] })
+    // Minor on that service day: the minors' daily cap.
+    const max = limit("maxDailyMinutes", !!minorRule && minorOn(person?.birthDate, day))
+    if (minutes > max.value) findings.push({ rule: "daily", serviceDay: day, start: null, end: null, minutes, limit: max.value, shiftIds: [...entry.ids], ...scoped(max.scope) })
   }
 
   // The whole event.
   const total = Math.round(blocks.reduce((n, b) => n + (b.end - b.start), 0) / MIN)
-  if (total > policy.maxEventMinutes) findings.push({ rule: "event", serviceDay: null, start: null, end: null, minutes: total, limit: policy.maxEventMinutes, shiftIds: blocks.flatMap((b) => b.ids) })
+  const eventMax = limit("maxEventMinutes", false)
+  if (total > eventMax.value) findings.push({ rule: "event", serviceDay: null, start: null, end: null, minutes: total, limit: eventMax.value, shiftIds: blocks.flatMap((b) => b.ids), ...scoped(eventMax.scope) })
 
   // Travel between places (Codex, lot 2): two missions at known, different places at the same time,
   // or with less than the margin between them. Original missions, not merged blocks, so a place
@@ -814,8 +955,8 @@ export function newFindings(before: WorkloadFinding[], after: WorkloadFinding[])
 }
 
 /** The prospective check of a change on one person: their schedule before, and after the change. */
-export function workloadChange(before: DutyShift[], after: DutyShift[], policy: ActivePolicy): WorkloadFinding[] {
-  return newFindings(evaluateWorkload(before, policy), evaluateWorkload(after, policy))
+export function workloadChange(before: DutyShift[], after: DutyShift[], policy: ActivePolicy, person?: WorkloadPerson | null): WorkloadFinding[] {
+  return newFindings(evaluateWorkload(before, policy, person), evaluateWorkload(after, policy, person))
 }
 
 /** Whether every shift of the finding is among `ids` (a finding about the submission alone). */
@@ -841,9 +982,12 @@ const lowerFirst = (s: string) => s.charAt(0).toLocaleLowerCase("fr-FR") + s.sli
 export function workloadFindingMessage(f: WorkloadFinding, policy: Pick<WorkloadPolicy, "timeZone" | "offDay" | "meal"> & Partial<Pick<WorkloadPolicy, "maxIdleGapMinutes">>): string {
   const day = f.serviceDay ? `Journée de service du ${lowerFirst(fmtDay(f.serviceDay))}` : ""
   const at = (ms: number | null) => (ms === null ? "" : clockLabel(ms, policy.timeZone))
+  // Whose limit: the event's, the minors' or the person's own.
+  const of = f.scope === "minor" ? "La limite de cet événement pour les moins de 18 ans" : f.scope === "personal" ? "La limite personnelle de cette personne" : "La limite de cet événement"
+  const restOf = f.scope === "minor" ? "Le repos minimum de cet événement pour les moins de 18 ans" : f.scope === "personal" ? "Le repos minimum personnel de cette personne" : "Le repos minimum de cet événement"
   switch (f.rule) {
     case "continuous":
-      return `${day} : ${fmtDuration(f.minutes)} de missions d'affilée, de ${at(f.start)} à ${at(f.end)}, sans vraie pause. La limite de cet événement est de ${fmtDuration(f.limit)}.`
+      return `${day} : ${fmtDuration(f.minutes)} de missions d'affilée, de ${at(f.start)} à ${at(f.end)}, sans vraie pause. ${of} est de ${fmtDuration(f.limit)}.`
     case "idle": {
       const withMeal = policy.meal?.apply && f.limit > (policy.maxIdleGapMinutes ?? f.limit) ? ", pause repas comprise" : ""
       return `${day} : ces deux missions laissent ${fmtDuration(f.minutes)} entre elles, de ${at(f.start)} à ${at(f.end)}. La limite de cet événement est de ${fmtDuration(f.limit)}${withMeal}.`
@@ -862,11 +1006,11 @@ export function workloadFindingMessage(f: WorkloadFinding, policy: Pick<Workload
       return `${day} : pas de pause repas de ${fmtDuration(f.limit)} entre ${at(f.start)} et ${at(f.end)} (${found} dans cette plage). Cet événement demande ${fmtDuration(f.limit)} de repas dans cette plage, ou une mission où le repas sur le pouce est possible.`
     }
     case "rest":
-      return `${day} : seulement ${fmtDuration(f.minutes)} de repos avant la journée suivante, de ${at(f.start)} à ${at(f.end)}. Le repos minimum de cet événement est de ${fmtDuration(f.limit)}.`
+      return `${day} : seulement ${fmtDuration(f.minutes)} de repos avant la journée suivante, de ${at(f.start)} à ${at(f.end)}. ${restOf} est de ${fmtDuration(f.limit)}.`
     case "daily":
-      return `${day} : ${fmtDuration(f.minutes)} de missions. La limite de cet événement est de ${fmtDuration(f.limit)} par journée de service.`
+      return `${day} : ${fmtDuration(f.minutes)} de missions. ${of} est de ${fmtDuration(f.limit)} par journée de service.`
     case "event":
-      return `Sur tout l'événement : ${fmtDuration(f.minutes)} de missions. La limite de cet événement est de ${fmtDuration(f.limit)}.`
+      return `Sur tout l'événement : ${fmtDuration(f.minutes)} de missions. ${of} est de ${fmtDuration(f.limit)}.`
     case "offday": {
       const lastDay = f.end === null ? (f.serviceDay ?? "") : addDays(localParts(f.end, policy.timeZone).date, -1)
       const from = f.serviceDay ?? lastDay
@@ -880,6 +1024,9 @@ export function workloadFindingMessage(f: WorkloadFinding, policy: Pick<Workload
   }
 }
 
+
+/** Minors protected and the birth date unknown: no new commitment until it is given. */
+export const WORKLOAD_BIRTHDATE_REQUIRED = "Cet événement protège les moins de 18 ans : une date de naissance est nécessaire pour cette inscription."
 
 /** The configuration of an enabled event does not parse: nothing new is accepted until it is fixed. */
 export const WORKLOAD_POLICY_INCOMPLETE = "La protection des pauses et de la charge de cet événement est incomplète : aucune nouvelle inscription n'est possible tant que l'organisation ne l'a pas complétée."
