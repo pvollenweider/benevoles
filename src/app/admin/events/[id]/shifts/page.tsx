@@ -29,6 +29,7 @@ export default async function ShiftsPage({ params, searchParams }: { params: Pro
       organization: { select: { timeZone: true } },
       shiftRecurrences: { orderBy: { createdAt: "asc" } },
       sectors: { select: { id: true, name: true, displayOrder: true, archivedAt: true }, orderBy: { displayOrder: "asc" } },
+      places: { select: { id: true, name: true, displayOrder: true, archivedAt: true }, orderBy: { displayOrder: "asc" } },
       shifts: {
         // Only counted: the rows (and their link token) never go to the browser (#1009).
         include: { registrations: { where: { status: "active" }, select: { id: true } } },
@@ -81,6 +82,7 @@ export default async function ShiftsPage({ params, searchParams }: { params: Pro
           sectors: event.sectors.map((s) => ({ ...s, archivedAt: s.archivedAt?.toISOString() ?? null })),
         } : null}
         mealOnTheGoShown={mealOnTheGoShown}
+        initialPlaces={mealOnTheGoShown ? event.places.map((p) => ({ ...p, archivedAt: p.archivedAt?.toISOString() ?? null })) : null}
         initialRecurrences={event.shiftRecurrences.map((r) => ({ ...r, fromDate: r.fromDate.toISOString().slice(0, 10), untilDate: r.untilDate.toISOString().slice(0, 10) }))}
         initialShifts={event.shifts.map(({ registrations, ...s }) => ({
           ...s,

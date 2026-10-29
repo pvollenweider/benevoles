@@ -65,7 +65,7 @@ import { myAnswersQuery, storedAnswers } from "@/lib/my-answers"
 import { answerChanges, answersEditState, type AnswerChange } from "@/lib/answer-changes"
 import { recordAnswerChanges, writeAnswerChanges } from "@/lib/answer-change-save"
 import { contactChanges, type ContactChange, type SignupUpdates } from "@/lib/signup-updates"
-import { judgeDutyChange, lockWorkloadShared, readWorkloadGate, reproducibleFrom, workloadRefusalBody, WorkloadRefusalError } from "@/lib/workload-guard"
+import { judgeDutyChange, lockWorkloadShared, readWorkloadGate, reproducibleFrom, withPlaceNames, workloadRefusalBody, WorkloadRefusalError } from "@/lib/workload-guard"
 import { WORKLOAD_PRIVATE_REFUSAL, type DutyShift } from "@/lib/workload-policy"
 
 const schema = z.object({
@@ -454,9 +454,9 @@ export async function POST(req: Request) {
         // those already held. A refusal rolls everything back.
         if (workloadGate.kind !== "off") {
           const committed = new Set(["active", "requested"])
-          const added: DutyShift[] = created.filter((r) => committed.has(r.status)).map((r) => shifts.find((s) => s.id === r.shiftId)!)
+          const added: DutyShift[] = await withPlaceNames(tx, created.filter((r) => committed.has(r.status)).map((r) => shifts.find((s) => s.id === r.shiftId)!))
           if (added.length > 0) {
-            const before: DutyShift[] = liveNow.filter((r) => r.shift.status !== "cancelled").map((r) => r.shift)
+            const before: DutyShift[] = await withPlaceNames(tx, liveNow.filter((r) => r.shift.status !== "cancelled").map((r) => r.shift))
             const verdict = judgeDutyChange(workloadGate, before, { add: added })
             if (!verdict.ok) throw new SignupWorkloadError(verdict, volunteerId, added, ownsEmail && !matchErased && !createdNow)
           }

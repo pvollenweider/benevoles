@@ -34,7 +34,7 @@ export async function promoteNextInWaitlist(shiftId: string, causedByLogId?: str
     await lockShifts(tx, [shiftId])
     const shift = await tx.shift.findUnique({
       where: { id: shiftId },
-      select: { id: true, eventId: true, capacity: true, status: true, date: true, startTime: true, endTime: true, mealOnTheGo: true, event: { select: { publicStatus: true, registrationsOpen: true, registrationOpensAt: true, registrationClosesAt: true, organization: { select: { timeZone: true } } } } },
+      select: { id: true, eventId: true, capacity: true, status: true, date: true, startTime: true, endTime: true, mealOnTheGo: true, placeId: true, event: { select: { publicStatus: true, registrationsOpen: true, registrationOpensAt: true, registrationClosesAt: true, organization: { select: { timeZone: true } } } } },
     })
     if (!shift) return null
     // The answer window never runs past the shift's start, and a shift starting within the hour

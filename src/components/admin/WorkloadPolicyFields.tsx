@@ -7,11 +7,11 @@ import { flushSync } from "react-dom"
 import RequiredMark from "@/components/RequiredMark"
 import {
   MEAL_DAYS_LABEL, MEAL_LABEL, MEAL_MINUTES_LABEL, MEAL_WINDOWS_LABEL, MEAL_WINDOWS_MAX, OFF_DAY_LABEL, OFF_DAY_MIN_LABEL, OFF_DAY_WINDOW_LABEL,
-  SERVICE_DAY_START_LABEL, serviceDayExamples, WORKLOAD_LIMIT_FIELDS, type EventHorizon, type WorkloadLimitsV1,
+  SERVICE_DAY_START_LABEL, serviceDayExamples, TRAVEL_LABEL, TRAVEL_MINUTES_LABEL, WORKLOAD_LIMIT_FIELDS, type EventHorizon, type WorkloadLimitsV1,
 } from "@/lib/workload-policy"
 import {
-  MEAL_HELP, mealDayOptions, OFF_DAY_HELP, offDayExample, SERVICE_DAY_START_HELP, withMealWindow, WORKLOAD_FIELD_HELP,
-  type DurationInput, type MealInput, type OffDayInput, type PolicyFormState,
+  MEAL_HELP, mealDayOptions, OFF_DAY_HELP, offDayExample, SERVICE_DAY_START_HELP, TRAVEL_HELP, withMealWindow, WORKLOAD_FIELD_HELP,
+  type DurationInput, type MealInput, type OffDayInput, type PolicyFormState, type TravelInput,
 } from "@/lib/workload-policy-form"
 
 type LimitField = keyof WorkloadLimitsV1
@@ -24,7 +24,7 @@ type LimitField = keyof WorkloadLimitsV1
  * windows, days). Errors sit under their field, with `aria-invalid`; the parent focuses the first
  * invalid input (`fieldInputId`).
  */
-export default function WorkloadPolicyFields({ idPrefix, form, onChange, errors, disabled = false, horizon }: {
+export default function WorkloadPolicyFields({ idPrefix, form, onChange, errors, disabled = false, horizon, places }: {
   idPrefix: string
   form: PolicyFormState
   onChange: (next: PolicyFormState) => void
@@ -36,6 +36,11 @@ export default function WorkloadPolicyFields({ idPrefix, form, onChange, errors,
    * days to tick for the meal. Without it (organisation default), the meal applies every day.
    */
   horizon?: EventHorizon
+  /**
+   * The event's places (event card only): the line on shifts without a place, and the link to the
+   * places section of the shifts page. Absent in the organisation default.
+   */
+  places?: { text: string | null; href: string }
 }) {
   const startError = errors.get("serviceDayStart")
   const examples = serviceDayExamples(form.serviceDayStart)
@@ -110,11 +115,80 @@ export default function WorkloadPolicyFields({ idPrefix, form, onChange, errors,
       <OffDayFieldset idPrefix={idPrefix} value={form.offDay} onChange={(offDay) => onChange({ ...form, offDay })} errors={errors} disabled={disabled} example={horizon ? offDayExample(form, horizon) : null} />
 
       <MealFieldset idPrefix={idPrefix} value={form.meal} onChange={(meal) => onChange({ ...form, meal })} errors={errors} disabled={disabled} horizon={horizon} />
+
+      <TravelFieldset idPrefix={idPrefix} value={form.travel} onChange={(travel) => onChange({ ...form, travel })} errors={errors} disabled={disabled} places={places} />
     </div>
   )
 }
 
 const errorText = "mt-1 text-sm text-red-700"
+
+/** « Trajet entre deux lieux » (#1171, lot 2): apply or not (required), then the margin (0 to 15 min). */
+function TravelFieldset({ idPrefix, value, onChange, errors, disabled, places }: {
+  idPrefix: string
+  value: TravelInput
+  onChange: (next: TravelInput) => void
+  errors: Map<string, string>
+  disabled: boolean
+  places?: { text: string | null; href: string }
+}) {
+  const id = `${idPrefix}-travel`
+  const choiceError = errors.get("travel")
+  const minutesError = errors.get("travelMinutes")
+  return (
+    <fieldset className="rounded-xl bg-gray-50 border border-gray-200 px-3 py-2" data-workload-travel="1">
+      <legend className="px-1 text-sm font-medium text-gray-800">{TRAVEL_LABEL} <RequiredMark /></legend>
+      <p id={`${id}-intro`} className="text-xs text-gray-600">Le temps d&apos;aller d&apos;un lieu de l&apos;événement à un autre, une scène à l&apos;autre par exemple.</p>
+      <div className="flex flex-wrap gap-x-6">
+        {([["yes", "Appliquer cette règle"], ["no", "Ne pas appliquer cette règle"]] as const).map(([v, label]) => (
+          <label key={v} htmlFor={`${id}-${v}`} className="flex min-h-11 cursor-pointer items-center gap-2 text-sm text-gray-800">
+            <input
+              id={`${id}-${v}`}
+              type="radio"
+              name={`${id}-apply`}
+              value={v}
+              required
+              checked={value.apply === v}
+              aria-describedby={[`${id}-intro`, choiceError && `${id}-error`].filter(Boolean).join(" ")}
+              onChange={() => { if (!disabled) onChange({ ...value, apply: v }) }}
+              className="h-5 w-5 shrink-0"
+            />
+            {label}
+          </label>
+        ))}
+      </div>
+      {choiceError && <p id={`${id}-error`} className={errorText}>{choiceError}</p>}
+      {value.apply === "yes" && (
+        <div className="mt-1">
+          <div className="w-40">
+            <label htmlFor={`${id}-minutes`} className="block text-xs font-medium text-gray-600 mb-1">{TRAVEL_MINUTES_LABEL}</label>
+            <input
+              id={`${id}-minutes`}
+              type="text"
+              inputMode="numeric"
+              autoComplete="off"
+              className="input"
+              value={value.minutes}
+              readOnly={disabled}
+              aria-required
+              aria-invalid={minutesError ? true : undefined}
+              aria-describedby={[`${id}-help`, places?.text && `${id}-places`, minutesError && `${id}-minutes-error`].filter(Boolean).join(" ")}
+              onChange={(e) => onChange({ ...value, minutes: e.target.value })}
+            />
+          </div>
+          {minutesError && <p id={`${id}-minutes-error`} className={errorText}>{minutesError}</p>}
+          <p id={`${id}-help`} className="mt-1 text-xs text-gray-600">{TRAVEL_HELP}</p>
+          {places?.text && (
+            <p className="mt-2 text-xs text-gray-700">
+              <span id={`${id}-places`}>{places.text}</span>{" "}
+              <a href={places.href} className="font-medium text-blue-700 underline underline-offset-2 hover:text-blue-900 rounded focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-blue-600">Choisir les lieux dans Créneaux</a>
+            </p>
+          )}
+        </div>
+      )}
+    </fieldset>
+  )
+}
 const smallButton = "min-h-11 sm:min-h-6 rounded-xl border border-blue-600 px-3 py-1 text-sm font-medium text-blue-700 hover:bg-blue-50"
 
 /**
@@ -381,5 +455,7 @@ export function fieldInputId(idPrefix: string, field: string): string {
   if (field === "mealWindows") return `${idPrefix}-meal-w0-start`
   if (field.startsWith("mealWindow")) return `${idPrefix}-meal-w${field.slice("mealWindow".length)}-start`
   if (field === "mealDays") return `${idPrefix}-meal-day-0`
+  if (field === "travel") return `${idPrefix}-travel-yes`
+  if (field === "travelMinutes") return `${idPrefix}-travel-minutes`
   return `${idPrefix}-${field}-hours`
 }

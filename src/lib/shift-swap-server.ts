@@ -153,7 +153,7 @@ const SHIFT_SELECT = {
   overlapAllowed: true, assignedOnly: true, requiresApproval: true, minAge: true, reservedTags: true,
   locationDetails: true, latitude: true, longitude: true, sectorId: true, instructions: true,
   // Read by the workload check (#1171, meals); not a term of the swap agreement.
-  mealOnTheGo: true,
+  mealOnTheGo: true, placeId: true,
 } as const
 
 const REG_SELECT = {

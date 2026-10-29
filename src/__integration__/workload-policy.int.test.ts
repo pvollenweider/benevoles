@@ -37,6 +37,9 @@ import { confirmSwap, offerSwap, publishSwapRequest } from "@/lib/shift-swap-ser
 import { GET as personalPage } from "@/app/api/public/registrations/[token]/route"
 import { PATCH as editEvent } from "@/app/api/admin/events/[id]/route"
 import { PATCH as editPoste } from "@/app/api/admin/events/[id]/roles/[roleName]/route"
+import { GET as listPlaces, POST as addPlace } from "@/app/api/admin/events/[id]/places/route"
+import { PATCH as editPlace } from "@/app/api/admin/events/[id]/places/[placeId]/route"
+import { POST as createShift } from "@/app/api/admin/shifts/route"
 import { loadAttention } from "@/lib/attention-data"
 
 const url = process.env.DATABASE_URL
@@ -54,7 +57,7 @@ const VALUES: WorkloadPolicyValues = {
 }
 const POLICY = buildPolicy(VALUES, TZ)
 // Every write answers the days-off rule (#1171, lot 2); « do not apply » is an answer.
-const ANSWERED: WorkloadPolicyValues = { ...VALUES, offDay: { apply: false }, meal: { apply: false } }
+const ANSWERED: WorkloadPolicyValues = { ...VALUES, offDay: { apply: false }, meal: { apply: false }, travel: { apply: false } }
 const ADMIN = { type: "admin" as const, id: "admin-1" }
 const NOW = new Date("2031-06-01T08:00:00Z")
 
@@ -353,7 +356,7 @@ describe.skipIf(!url)("workload protection on Postgres (#1171)", () => {
       await prisma.registration.update({ where: { id: extra.id }, data: { status: "cancelled" } })
       const on = await setWorkloadPolicy(db, orgId, e.id, { enabled: true, values: ANSWERED })
       expect(on).toMatchObject({ ok: true, enabled: true, changes: { workloadProtectionEnabled: { from: false, to: true } } })
-      expect((await prisma.event.findUniqueOrThrow({ where: { id: e.id } })).workloadPolicy).toMatchObject({ version: 3, offDay: { apply: false }, meal: { apply: false }, timeZone: TZ, serviceDayStart: "08:00" })
+      expect((await prisma.event.findUniqueOrThrow({ where: { id: e.id } })).workloadPolicy).toMatchObject({ version: 4, offDay: { apply: false }, meal: { apply: false }, travel: { apply: false }, timeZone: TZ, serviceDayStart: "08:00" })
 
       // A finding left by a later change (here written directly) does not block a loosening, but blocks a tightening.
       await prisma.registration.update({ where: { id: extra.id }, data: { status: "active" } })
@@ -476,12 +479,12 @@ describe.skipIf(!url)("workload protection on Postgres (#1171)", () => {
       const shifts = await Promise.all(DAYS.map((d) => shift(e.id, d, "10:00", "14:00")))
       const p = await person()
       for (const sh of shifts) await hold(e.id, sh.id, p.id)
-      const refused = await setWorkloadPolicy(prisma, orgId, e.id, { enabled: true, values: { ...VALUES, offDay: { apply: true, minOffDays: 1, windowDays: 6 }, meal: { apply: false } } })
+      const refused = await setWorkloadPolicy(prisma, orgId, e.id, { enabled: true, values: { ...VALUES, offDay: { apply: true, minOffDays: 1, windowDays: 6 }, meal: { apply: false }, travel: { apply: false } } })
       expect(refused.ok).toBe(false)
       if (!refused.ok) expect(refused.status).toBe(409)
       // « Ne pas appliquer » is an answer: saved, nothing to scan.
-      expect((await setWorkloadPolicy(prisma, orgId, e.id, { enabled: true, values: { ...VALUES, offDay: { apply: false }, meal: { apply: false } } })).ok).toBe(true)
-      expect((await prisma.event.findUniqueOrThrow({ where: { id: e.id } })).workloadPolicy).toMatchObject({ version: 3, offDay: { apply: false }, meal: { apply: false } })
+      expect((await setWorkloadPolicy(prisma, orgId, e.id, { enabled: true, values: { ...VALUES, offDay: { apply: false }, meal: { apply: false }, travel: { apply: false } } })).ok).toBe(true)
+      expect((await prisma.event.findUniqueOrThrow({ where: { id: e.id } })).workloadPolicy).toMatchObject({ version: 4, offDay: { apply: false }, meal: { apply: false }, travel: { apply: false } })
       // A save without the answer is refused, never read as « no rule ».
       const blank = await setWorkloadPolicy(prisma, orgId, e.id, { enabled: true, values: VALUES })
       expect(blank.ok).toBe(false)
@@ -560,12 +563,74 @@ describe.skipIf(!url)("workload protection on Postgres (#1171)", () => {
       await hold(e.id, long.id, p.id)
       // 2 h 30 between the two: over the 2 h idle limit of version 1, but it holds lunch with meals.
       expect((await add({ eventId: e.id, shiftId: afternoon.id, volunteerId: p.id })).status).toBe(409)
-      const values = { ...VALUES, offDay: { apply: false }, meal: { apply: true, minutes: 30, windows: [{ start: "11:30", end: "14:00" }], days: "all" } }
+      const values = { ...VALUES, offDay: { apply: false }, meal: { apply: true, minutes: 30, windows: [{ start: "11:30", end: "14:00" }], days: "all" }, travel: { apply: false } }
       const refused = await setWorkloadPolicy(prisma, orgId, e.id, { enabled: true, values })
       expect(refused).toMatchObject({ ok: false, status: 409 })
       await prisma.registration.updateMany({ where: { shiftId: long.id }, data: { status: "cancelled" } })
       expect((await setWorkloadPolicy(prisma, orgId, e.id, { enabled: true, values })).ok).toBe(true)
       expect((await add({ eventId: e.id, shiftId: afternoon.id, volunteerId: p.id })).status).toBe(201)
+    })
+  })
+
+  // #1171 lot 2: places and the travel margin (invented stage names).
+  describe("places and travel", () => {
+    const TRAVEL_POLICY = buildPolicy({ ...VALUES, maxEventMinutes: 100 * 60, offDay: { apply: false }, meal: { apply: false }, travel: { apply: true, minutes: 15 } }, TZ)
+    const json = (body: unknown) => ({ method: "POST", headers: { "content-type": "application/json" }, body: JSON.stringify(body) })
+    const newPlace = async (eventId: string, name: string) => {
+      const res = await addPlace(new Request("http://localhost", json({ name })), { params: Promise.resolve({ id: eventId }) })
+      return { res, body: await res.json() }
+    }
+
+    it("creates, renames, archives and restores places; names are unique among active places", async () => {
+      const e = await event({ policy: TRAVEL_POLICY })
+      const gs = await newPlace(e.id, "Grande Scène")
+      expect(gs.res.status).toBe(201)
+      expect((await newPlace(e.id, " grande  scène ")).res.status).toBe(409)
+      expect((await newPlace(e.id, "")).res.status).toBe(400)
+      const patch = (placeId: string, body: unknown) => editPlace(new Request("http://localhost", { method: "PATCH", body: JSON.stringify(body) }), { params: Promise.resolve({ id: e.id, placeId }) })
+      expect((await patch(gs.body.place.id, { name: "Scène du Lac" })).status).toBe(200)
+      expect((await patch(gs.body.place.id, { archived: true })).status).toBe(200)
+      // An archived name never blocks a new place; restoring it is refused while an active one has it.
+      const again = await newPlace(e.id, "Scène du Lac")
+      expect(again.res.status).toBe(201)
+      expect((await patch(gs.body.place.id, { archived: false })).status).toBe(409)
+      const list = await (await listPlaces(new Request("http://localhost"), { params: Promise.resolve({ id: e.id }) })).json()
+      expect(list.places.map((p: { name: string; archivedAt: string | null }) => [p.name, !!p.archivedAt])).toEqual([["Scène du Lac", false], ["Scène du Lac", true]])
+    })
+
+    it("a shift takes an active place of the event only; another event's or an archived one is refused", async () => {
+      const e = await event({ policy: TRAVEL_POLICY })
+      const other = await event({ policy: TRAVEL_POLICY })
+      const mine = (await newPlace(e.id, "Chapiteau")).body.place
+      const theirs = (await newPlace(other.id, "La Ruche")).body.place
+      const create = (placeId: string) => createShift(new Request("http://localhost", json({ eventId: e.id, roleName: `Poste ${n++}`, label: "Mission", date: "2031-07-04", startTime: "10:00", endTime: "12:00", capacity: 2, placeId })))
+      expect((await create(mine.id)).status).toBe(201)
+      expect((await create(theirs.id)).status).toBe(400)
+      await editPlace(new Request("http://localhost", { method: "PATCH", body: JSON.stringify({ archived: true }) }), { params: Promise.resolve({ id: e.id, placeId: mine.id }) })
+      expect((await create(mine.id)).status).toBe(400)
+    })
+
+    it("refuses missions too close at two places, and at two places at once; a new place is judged like new hours", async () => {
+      const e = await event({ policy: TRAVEL_POLICY })
+      const gs = (await newPlace(e.id, "Grande Scène")).body.place
+      const dome = (await newPlace(e.id, "Le Dôme")).body.place
+      const morning = await prisma.shift.create({ data: { eventId: e.id, roleName: "Backline", label: "Mission", date: new Date("2031-07-04T00:00:00Z"), startTime: "10:00", endTime: "14:00", capacity: 3, placeId: gs.id } })
+      const close = await prisma.shift.create({ data: { eventId: e.id, roleName: "Câbles", label: "Mission", date: new Date("2031-07-04T00:00:00Z"), startTime: "14:05", endTime: "16:00", capacity: 3, placeId: dome.id } })
+      const later = await prisma.shift.create({ data: { eventId: e.id, roleName: "Praticables", label: "Mission", date: new Date("2031-07-04T00:00:00Z"), startTime: "14:15", endTime: "16:00", capacity: 3, placeId: gs.id } })
+      const p = await person("Noa")
+      await hold(e.id, morning.id, p.id)
+      const res = await add({ eventId: e.id, shiftId: close.id, volunteerId: p.id })
+      expect(res.status).toBe(409)
+      expect((await res.json()).error).toContain("seulement 5 min entre une mission à « Grande Scène » qui finit à 14 h et une mission à « Le Dôme » qui commence à 14 h 05")
+      expect((await add({ eventId: e.id, shiftId: later.id, volunteerId: p.id })).status).toBe(201)
+      // Moving the later shift to Le Dôme: 15 min, still enough. Moving it to start at 14:05 there is not.
+      const move = (body: unknown) => editShift(new Request("http://localhost", { method: "PATCH", body: JSON.stringify(body) }), { params: Promise.resolve({ id: later.id }) })
+      expect((await move({ placeId: dome.id })).status).toBe(200)
+      const refused = await move({ startTime: "14:05" })
+      expect(refused.status).toBe(409)
+      expect((await refused.json()).error).toContain("Noa Martin")
+      // A shift without a place is never checked.
+      expect((await move({ placeId: null, startTime: "14:00" })).status).toBe(200)
     })
   })
 })

@@ -15,7 +15,7 @@ import { LIVE_STATUSES } from "@/lib/registration-capacity"
 import { queueAddedByOrganizer } from "@/lib/notifications/added-by-organizer"
 import { manualAddNotice, manualAddNoticeLog } from "@/lib/manual-add-notice"
 import { localDateTimeToUtc, orgTimeZone } from "@/lib/time-zone"
-import { checkDutyChange, judgeDutyChange, lockVolunteerRows, lockWorkloadShared, readWorkloadGate, workloadRefusalBody, WorkloadRefusalError } from "@/lib/workload-guard"
+import { checkDutyChange, judgeDutyChange, lockVolunteerRows, lockWorkloadShared, readWorkloadGate, withPlaceNames, workloadRefusalBody, WorkloadRefusalError } from "@/lib/workload-guard"
 
 /** The organiser's refusal (#1171): who, and the first limit the addition would break. */
 function manualAddWorkloadBody(e: WorkloadRefusalError, name: string, shiftCount: number) {
@@ -106,7 +106,7 @@ export async function POST(req: Request) {
   // before the member record is created; the authoritative check runs below, under the locks.
   // There is no « add anyway »: allowOverLimit concerns the role limit only.
   if (!volunteer) {
-    const verdict = judgeDutyChange(await readWorkloadGate(db, eventId), [], { add: shifts })
+    const verdict = judgeDutyChange(await readWorkloadGate(db, eventId), [], { add: await withPlaceNames(db, shifts) })
     if (!verdict.ok) {
       return NextResponse.json(manualAddWorkloadBody(new WorkloadRefusalError(verdict, ""), `${firstName!.trim()} ${lastName!.trim()}`, shifts.length), { status: 409 })
     }

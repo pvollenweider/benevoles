@@ -8,7 +8,7 @@ import EventWorkloadPolicyCard from "../admin/EventWorkloadPolicyCard"
 import MyWorkloadCard from "../public/MyWorkloadCard"
 
 // #1171: the organiser's card. Every value is theirs; empty is « à compléter ».
-const VALUES = { serviceDayStart: "08:00", maxContinuousMinutes: 360, minBreakMinutes: 30, maxDailyMinutes: 600, maxEventMinutes: 2400, minRestMinutes: 600, maxIdleGapMinutes: 120, offDay: { apply: false as const }, meal: { apply: false as const } }
+const VALUES = { serviceDayStart: "08:00", maxContinuousMinutes: 360, minBreakMinutes: 30, maxDailyMinutes: 600, maxEventMinutes: 2400, minRestMinutes: 600, maxIdleGapMinutes: 120, offDay: { apply: false as const }, meal: { apply: false as const }, travel: { apply: false as const } }
 const LEGACY = { serviceDayStart: "08:00", maxContinuousMinutes: 360, minBreakMinutes: 30, maxDailyMinutes: 600, maxEventMinutes: 2400, minRestMinutes: 600, maxIdleGapMinutes: 120 }
 const offDayGroup = () => within(screen.getByRole("group", { name: /^Jours sans mission/ }))
 const mealGroup = () => within(screen.getByRole("group", { name: /^Pause repas/ }))
@@ -136,6 +136,19 @@ describe("EventWorkloadPolicyCard", () => {
     expect(mealGroup().getByLabelText("Début de la plage 2")).toHaveValue("18:00")
     expect(mealGroup().getByLabelText("Début de la plage 2")).not.toHaveAttribute("aria-invalid")
     expect(mealGroup().queryByText("La plage 2 chevauche la plage 1.")).toBeNull()
+  })
+
+  it("travel: the margin with its help, and how many shifts have no place, linked to the places section", () => {
+    card({ initialValues: VALUES, placesInfo: { shiftsWithoutPlace: 3, activePlaces: 2 } })
+    const group = within(screen.getByRole("group", { name: /^Trajet entre deux lieux/ }))
+    fireEvent.click(group.getByRole("radio", { name: "Appliquer cette règle" }))
+    const margin = group.getByLabelText("Marge entre deux lieux, en minutes")
+    expect(margin).toHaveAccessibleDescription(/avec 0, c'est la seule vérification.*3 créneaux n'ont pas de lieu/)
+    expect(group.getByRole("link", { name: "Choisir les lieux dans Créneaux" })).toHaveAttribute("href", "/admin/events/e1/shifts#lieux")
+    fireEvent.change(margin, { target: { value: "20" } })
+    fireEvent.click(screen.getByRole("button", { name: "Activer la protection" }))
+    expect(margin).toHaveFocus()
+    expect(margin).toHaveAccessibleDescription(/indiquez une marge de 0 à 15 minutes/)
   })
 
   it("asks before turning protection off", () => {

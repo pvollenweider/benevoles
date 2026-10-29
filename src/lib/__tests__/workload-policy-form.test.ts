@@ -1,12 +1,12 @@
 import { describe, it, expect } from "vitest"
 import {
   benchmarkAnnouncement, checkPolicyForm, durationMinutes, emptyPolicyForm, offDayExample, policyFormFrom, policySummaryLines, policyValuesFromForm,
-  mealDayOptions, withBenchmark, withMealWindow, withWarningSuggestions,
+  mealDayOptions, shiftsWithoutPlaceText, withBenchmark, withMealWindow, withWarningSuggestions,
 } from "../workload-policy-form"
 import { WORKLOAD_BENCHMARKS, type WorkloadPolicyValues } from "../workload-policy"
 
 // #1171: the organiser's form, hours and minutes, never a hidden default.
-const VALUES: WorkloadPolicyValues = { serviceDayStart: "08:00", maxContinuousMinutes: 360, minBreakMinutes: 30, maxDailyMinutes: 600, maxEventMinutes: 2400, minRestMinutes: 600, maxIdleGapMinutes: 120, offDay: { apply: false }, meal: { apply: false } }
+const VALUES: WorkloadPolicyValues = { serviceDayStart: "08:00", maxContinuousMinutes: 360, minBreakMinutes: 30, maxDailyMinutes: 600, maxEventMinutes: 2400, minRestMinutes: 600, maxIdleGapMinutes: 120, offDay: { apply: false }, meal: { apply: false }, travel: { apply: false } }
 
 describe("durations", () => {
   it("reads hours and minutes, empty as missing, nonsense as invalid", () => {
@@ -29,7 +29,7 @@ describe("checkPolicyForm", () => {
   it("an empty form is incomplete, field by field", () => {
     const r = checkPolicyForm(emptyPolicyForm())
     expect(r.ok).toBe(false)
-    if (!r.ok) expect(r.problems).toHaveLength(9)
+    if (!r.ok) expect(r.problems).toHaveLength(10)
     if (!r.ok) expect(r.problems.map((p) => p.field)).toContain("offDay")
     expect(policyValuesFromForm(emptyPolicyForm()).maxDailyMinutes).toBeUndefined()
   })
@@ -151,5 +151,30 @@ describe("meal (#1171, lot 2)", () => {
     expect(filled.maxDailyMinutes).toEqual({ hours: "", minutes: "" })
     expect(benchmarkAnnouncement(b)).toBe("Rempli : pause repas : règle appliquée, 30 min entre 11 h 30 et 14 h, puis entre 18 h et 21 h, tous les jours. Les autres champs n'ont pas changé.")
     expect(b.source).toContain("pas une règle du droit du travail")
+  })
+})
+
+describe("travel (#1171, lot 2)", () => {
+  it("round-trips, sends the margin only with « apply », and says the rule", () => {
+    const form = policyFormFrom({ ...VALUES, travel: { apply: true, minutes: 15 } })
+    expect(form.travel).toEqual({ apply: "yes", minutes: "15" })
+    expect(checkPolicyForm(form)).toEqual({ ok: true, values: { ...VALUES, travel: { apply: true, minutes: 15 } } })
+    expect(policyValuesFromForm({ ...form, travel: { apply: "no", minutes: "15" } }).travel).toEqual({ apply: false })
+    expect(policySummaryLines(VALUES)).toContain("Aucune marge de trajet demandée entre deux lieux.")
+    expect(policySummaryLines({ ...VALUES, travel: { apply: true, minutes: 15 } })).toContain("Au moins 15 min entre deux missions à des lieux différents, et jamais deux lieux à la fois ; le trajet d'une mission sans lieu n'est pas vérifié.")
+    expect(policySummaryLines({ ...VALUES, travel: { apply: true, minutes: 0 } })[7]).toMatch(/^Jamais deux missions en même temps/)
+  })
+
+  it("says how many shifts have no place, in the singular too, nothing at 0, and when there is no place at all", () => {
+    expect(shiftsWithoutPlaceText(12, 3)).toBe("12 créneaux n'ont pas de lieu : leur trajet n'est pas vérifié.")
+    expect(shiftsWithoutPlaceText(1, 3)).toBe("1 créneau n'a pas de lieu : son trajet n'est pas vérifié.")
+    expect(shiftsWithoutPlaceText(0, 3)).toBeNull()
+    expect(shiftsWithoutPlaceText(5, 0)).toContain("aucun lieu")
+  })
+
+  it("the 15 min suggestion fills only the travel answer", () => {
+    const b = WORKLOAD_BENCHMARKS.find((x) => x.id === "travel")!
+    expect(withBenchmark(emptyPolicyForm(), b).travel).toEqual({ apply: "yes", minutes: "15" })
+    expect(benchmarkAnnouncement(b)).toBe("Rempli : trajet entre deux lieux : règle appliquée, 15 min de marge. Les autres champs n'ont pas changé.")
   })
 })

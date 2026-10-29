@@ -47,6 +47,8 @@ const FIELD_LABELS: Record<string, string> = {
   assignedOnly: "attribué par l'organisation uniquement",
   // « Repas sur le pouce possible » (#1171, lot 2).
   mealOnTheGo: "repas sur le pouce possible",
+  // Place of a mission (#1171, lot 2).
+  placeId: "lieu de la mission",
   shiftId: "créneau",
   source: "origine",
   comment: "commentaire",
@@ -203,6 +205,11 @@ export const ACTION_VERB: Record<string, (actor: string) => string> = {
   "sector.archived": (a) => `${a} a archivé un secteur`,
   "sector.restored": (a) => `${a} a rétabli un secteur`,
   "sector.reordered": (a) => `${a} a changé l'ordre des secteurs`,
+  // Places of an event (#1171, lot 2).
+  "place.created": (a) => `${a} a créé un lieu`,
+  "place.updated": (a) => `${a} a renommé un lieu`,
+  "place.archived": (a) => `${a} a archivé un lieu`,
+  "place.restored": (a) => `${a} a rétabli un lieu`,
   // Shift swaps between volunteers (#1174): the request's steps, and each registration it moved.
   "swap.published": (a) => `${a} a proposé d'échanger un de ses créneaux`,
   "swap.offered": (a) => `${a} a proposé un de ses créneaux en échange`,

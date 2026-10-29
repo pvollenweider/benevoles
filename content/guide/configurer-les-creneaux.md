@@ -30,10 +30,16 @@ Un créneau correspond à un poste de bénévolat sur une plage horaire précise
 | Minimum (optionnel) | Nombre de personnes sous lequel le créneau ne peut pas tourner, de 1 au nombre de places (ex. : `2` pour un bar prévu à 4). Vide : le créneau a besoin de toutes ses places. Voir [Minimum de personnes](#minimum-de-personnes). |
 | Description | Texte court, qui n'est affiché ni sur la page d'inscription ni dans les emails. Ce n'est pas un champ confidentiel : pour ce qui doit rester à l'organisation, utilisez les notes internes ; pour ce que les bénévoles doivent savoir, les infos pratiques |
 | Infos pratiques pour les bénévoles | Lieu de rendez-vous et consigne pratique, visibles sur la page d'inscription et dans les emails ; personne de contact (nom, téléphone), envoyée seulement aux inscrits (email de confirmation, rappels, page **Mes inscriptions**), jamais affichée publiquement, sous le libellé « Contact pour ce créneau ». Sans contact sur le créneau, les bénévoles confirmés voient le **Contact le jour J** de l'événement, s'il est renseigné. Facultatifs, courts : pas de fiche de mission. |
+| Lieu de la mission (bêta) | Pour une organisation qui utilise la [protection des pauses et de la charge](suivre-les-inscriptions.md#protection-des-pauses-et-de-la-charge-beta) : le lieu où se passe la mission, choisi parmi les **Lieux des missions** de l'événement (une scène, un chapiteau, un dépôt), ou **Aucun lieu (trajet non vérifié)**. Il sert à la marge de trajet ; les bénévoles lisent toujours le lieu de rendez-vous. |
 | Notes internes | Jamais montrées aux bénévoles |
 | Âge minimum (optionnel) | Condition d'âge pour ce poste (ex. : `18` pour un poste avec permis de conduire). Affiché en info sur le planning public ; vérifié à l'inscription : voir [Âge minimum sur un poste](age-minimum.md). |
 | Activer la liste d'attente | Une fois le créneau complet, les bénévoles peuvent s'inscrire en liste d'attente : voir [Liste d'attente](liste-d-attente.md) |
 | Sur validation | Chaque inscription devient une demande à accepter ou refuser : voir [Inscriptions sur validation](inscriptions-sur-validation.md) |
+| Repas sur le pouce possible (bêta) | Même condition : le repas peut se prendre pendant cette mission, qui compte toujours comme du travail (voir la pause repas de la protection). Se règle aussi pour tous les créneaux d'un poste dans « Gérer les postes ». |
+
+## Lieux des missions (bêta)
+
+Pour une organisation qui utilise la protection des pauses et de la charge, la section **Lieux des missions** de la page Créneaux liste les lieux de l'événement, par exemple « Grande Scène », « Le Dôme » ou « Chapiteau ». **Ajouter le lieu** en crée un ; **Renommer** le change ; **Archiver** le retire des choix pour les autres créneaux, sans rien changer aux créneaux qui l'ont : ils le gardent et restent vérifiés. **Rétablir** le propose à nouveau. Deux lieux actifs ne peuvent pas porter le même nom. Les bénévoles ne voient pas ces lieux. Une copie de l'événement reprend ses lieux actifs avec les créneaux.
 
 ## Minimum de personnes
 

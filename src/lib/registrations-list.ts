@@ -20,6 +20,9 @@ export type ShiftRef = {
   overlapAllowed?: boolean
   /** « Repas sur le pouce possible » (#1171, lot 2), read by the workload check. */
   mealOnTheGo?: boolean
+  /** Place of the mission and its name (#1171, lot 2), read by the travel check. */
+  placeId?: string | null
+  placeName?: string | null
 }
 
 type ListRegistration = {

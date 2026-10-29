@@ -55,6 +55,8 @@ export type DuplicableShift = {
   minAge: number | null
   /** « Repas sur le pouce possible » (#1171); optional so older callers copy it as false. */
   mealOnTheGo?: boolean
+  /** Place of the mission (#1171): remapped to the copy of the place, or none. */
+  placeId?: string | null
   waitlistEnabled: boolean
   requiresApproval: boolean
   colorKey: string | null
@@ -125,6 +127,8 @@ export type DuplicableEvent = {
   sectorsEnabled?: boolean
   sectorsAdoptedAt?: Date | null
   sectors?: { id: string; name: string; displayOrder: number; archivedAt: Date | null }[]
+  /** Places of the event (#1171, lot 2); the active ones are copied with fresh ids. */
+  places?: { id: string; name: string; displayOrder: number; archivedAt: Date | null }[]
   /** Whether the organisation can adopt sectors now (canAdoptBeta): needed to copy the option of a source that has not adopted them. */
   sectorsGate?: boolean
   /** The option a new event of the organisation starts with (default and gate), when the settings are not copied. */
@@ -207,6 +211,7 @@ export function copiedShift(s: DuplicableShift) {
     internalNotes: s.internalNotes,
     minAge: s.minAge,
     mealOnTheGo: s.mealOnTheGo ?? false,
+    placeId: s.placeId ?? null,
     waitlistEnabled: s.waitlistEnabled,
     requiresApproval: s.requiresApproval,
     colorKey: s.colorKey,
@@ -256,7 +261,11 @@ export function duplicatePlan(source: DuplicableEvent, options: DuplicateOptions
   // isn't a whole number of weeks, they would land on other weekdays and miss the new holidays.
   const shiftsCopied = copy.shifts ? source.shifts.filter((s) => !isRecurring(s, source)).map((s) => ({ ...copiedShift(s), date: shiftDate(s.date, offsetDays) })) : []
   const sectorPlan = duplicatedSectors(source, copy.settings, newId)
-  const inSector = <S extends { sectorId: string | null }>(s: S): S => ({ ...s, sectorId: sectorPlan.sectorOf(s.sectorId) })
+  // Places (#1171, lot 2): the active ones, fresh ids, same names and order; a shift keeps the copy
+  // of its place, or none when it was archived.
+  const places = (copy.shifts ? source.places ?? [] : []).filter((p) => !p.archivedAt).sort((a, b) => a.displayOrder - b.displayOrder).map((p, i) => ({ from: p.id, id: newId(), name: p.name, displayOrder: i }))
+  const placeIds = new Map(places.map((p) => [p.from, p.id]))
+  const inSector = <S extends { sectorId: string | null; placeId?: string | null }>(s: S): S => ({ ...s, sectorId: sectorPlan.sectorOf(s.sectorId), ...("placeId" in s ? { placeId: s.placeId ? placeIds.get(s.placeId) ?? null : null } : {}) })
   const shifts = shiftsCopied.map(inSector)
   const recurrences = (copy.shifts ? duplicatedRecurrences(source, offsetDays) : []).map((r) => ({ ...r, shifts: r.shifts.map(inSector) }))
   // A question's poste (#984, part 3) follows when the copy has that poste, by the same name.
@@ -293,6 +302,7 @@ export function duplicatePlan(source: DuplicableEvent, options: DuplicateOptions
       ...duplicatedSwaps(source, !!copy.settings),
     },
     sectors: sectorPlan.sectors,
+    places: places.map(({ id, name, displayOrder }) => ({ id, name, displayOrder })),
     shifts,
     recurrences,
     pages: copy.pages ? source.pages.map((p) => ({ slug: p.slug, title: p.title, content: p.content, displayOrder: p.displayOrder })) : [],

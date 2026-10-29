@@ -108,6 +108,7 @@ export default async function EditEventPage({ params, searchParams }: { params: 
           initialFindings={workload.findings}
           timeZone={workload.timeZone}
           horizon={workload.horizon}
+          placesInfo={{ shiftsWithoutPlace: workload.shiftsWithoutPlace, activePlaces: workload.activePlaces }}
         />
       )}
       {sectorsOffered && <EventSectorsOption eventId={event.id} initialEnabled={event.sectorsEnabled} adopted={sectorsAdopted(event)} />}

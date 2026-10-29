@@ -436,3 +436,70 @@ describe("evaluateWorkload: meals", () => {
     expect(workloadChange(base, [...base, m("2026-07-04", "12:10", "14:00", true, "b")], p)).toEqual([])
   })
 })
+
+// ── #1171 lot 2: travel between places ──────────────────────────────────────
+
+describe("policy version 4: the travel answer", () => {
+  const OFF = { apply: false as const }
+  const ALL = { requireOffDay: true, requireMeal: true, requireTravel: true }
+  it("writes version 4 with every answer, reads 1 to 4, and requires the travel answer on writes", () => {
+    const v4 = buildPolicy({ ...VALUES, offDay: OFF, meal: OFF, travel: { apply: true, minutes: 15 } }, TZ)
+    expect(v4.version).toBe(4)
+    expect(parseWorkloadPolicy(v4)).toEqual({ ok: true, policy: v4 })
+    expect(parseWorkloadPolicy({ ...v4, version: 3 }).ok).toBe(false)
+    const r = checkPolicyValues({ ...VALUES, offDay: OFF, meal: OFF }, ALL)
+    expect(r.ok ? [] : r.problems.map((p) => p.field)).toEqual(["travel"])
+    const fields = (travel: unknown) => { const x = checkPolicyValues({ ...VALUES, offDay: OFF, meal: OFF, travel }, ALL); return x.ok ? [] : x.problems.map((p) => p.field) }
+    expect(fields({ apply: true, minutes: 0 })).toEqual([])
+    expect(fields({ apply: true, minutes: 16 })).toEqual(["travelMinutes"])
+    expect(fields({ apply: true })).toEqual(["travelMinutes"])
+    expect(fields({ apply: false, minutes: 5 })).toEqual(["travel"])
+  })
+
+  it("scans again when the margin starts or grows, not when it shrinks or stops", () => {
+    const base = activePolicy(buildPolicy({ ...VALUES, offDay: OFF, meal: OFF, travel: { apply: true, minutes: 10 } }, TZ), HORIZON)
+    const t = (travel: ActivePolicy["travel"]) => ({ ...base, travel })
+    expect(policyChangeNeedsScan(base, t({ apply: true, minutes: 15 }))).toBe(true)
+    expect(policyChangeNeedsScan(base, t({ apply: true, minutes: 5 }))).toBe(false)
+    expect(policyChangeNeedsScan(base, t({ apply: false }))).toBe(false)
+    expect(policyChangeNeedsScan(t({ apply: false }), base)).toBe(true)
+  })
+})
+
+describe("evaluateWorkload: travel between places", () => {
+  const travel = (minutes = 15) => activePolicy(buildPolicy({ ...VALUES, maxEventMinutes: 100 * 60, offDay: { apply: false }, meal: { apply: false }, travel: { apply: true, minutes } }, TZ), HORIZON)
+  const at = (place: string | null, date: string, start: string, end: string, id = `t${++n}`): DutyShift => ({ id, date, startTime: start, endTime: end, placeId: place, placeName: place === "gs" ? "Grande Scène" : place === "dome" ? "Le Dôme" : place })
+  const of = (shifts: DutyShift[], p = travel()) => evaluateWorkload(shifts, p).filter((f) => f.rule === "travel" || f.rule === "places")
+
+  it("two missions at different places too close: refused with both places and the margin", () => {
+    const f = of([at("gs", "2026-07-04", "10:00", "14:00"), at("dome", "2026-07-04", "14:05", "16:00")])
+    expect(f).toEqual([expect.objectContaining({ rule: "travel", minutes: 5, limit: 15, places: ["Grande Scène", "Le Dôme"] })])
+    expect(workloadFindingMessage(f[0], travel())).toBe("Journée de service du samedi 4 juillet : seulement 5 min entre une mission à « Grande Scène » qui finit à 14 h et une mission à « Le Dôme » qui commence à 14 h 05. Cet événement demande 15 min entre deux lieux différents.")
+  })
+
+  it("the same place, enough margin, or a mission without a place is not a finding", () => {
+    expect(of([at("gs", "2026-07-04", "10:00", "14:00"), at("gs", "2026-07-04", "14:00", "16:00")])).toEqual([])
+    expect(of([at("gs", "2026-07-04", "10:00", "14:00"), at("dome", "2026-07-04", "14:15", "16:00")])).toEqual([])
+    expect(of([at("gs", "2026-07-04", "10:00", "14:00"), at(null, "2026-07-04", "14:00", "16:00")])).toEqual([])
+  })
+
+  it("two places at the same time are refused, even with a margin of 0 (a cumulable poste included)", () => {
+    const f = of([at("gs", "2026-07-04", "10:00", "15:00"), at("dome", "2026-07-04", "14:00", "16:00")], travel(0))
+    expect(f).toEqual([expect.objectContaining({ rule: "places", minutes: 60, places: ["Grande Scène", "Le Dôme"] })])
+    expect(workloadFindingMessage(f[0], travel(0))).toBe("Journée de service du samedi 4 juillet : deux missions en même temps à deux lieux différents, « Grande Scène » et « Le Dôme », de 14 h à 15 h. Une personne ne peut pas être à deux endroits à la fois.")
+    // Back to back at two places with a margin of 0 is fine.
+    expect(of([at("gs", "2026-07-04", "10:00", "14:00"), at("dome", "2026-07-04", "14:00", "16:00")], travel(0))).toEqual([])
+  })
+
+  it("checks across midnight and through a mission at a third place in between", () => {
+    expect(of([at("gs", "2026-07-04", "22:00", "01:00"), at("dome", "2026-07-05", "01:10", "03:00")])).toHaveLength(1)
+    const chain = of([at("gs", "2026-07-04", "10:00", "12:00"), at(null, "2026-07-04", "12:00", "12:05"), at("dome", "2026-07-04", "12:05", "14:00")])
+    expect(chain).toEqual([expect.objectContaining({ rule: "travel", minutes: 5 })])
+  })
+
+  it("is not applied without the answer or with « do not apply »", () => {
+    const close = [at("gs", "2026-07-04", "10:00", "14:00"), at("dome", "2026-07-04", "14:05", "16:00")]
+    expect(of(close, { ...travel(), travel: { apply: false } })).toEqual([])
+    expect(of(close, { ...POLICY, maxEventMinutes: 100 * 60 })).toEqual([])
+  })
+})

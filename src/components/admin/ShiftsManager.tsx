@@ -37,6 +37,7 @@ import {
 } from "@/lib/shifts-admin"
 import StatusBadge from "./StatusBadge"
 import { roleSectorOf } from "@/lib/role-settings"
+import PlacesSection, { type AdminPlace } from "./shifts/PlacesSection"
 import { activeSectors, groupedRoleOrder, groupRolesBySector, managePostesLabel, sectorsAdopted, sectorsManaged, type SectorLike } from "@/lib/sectors"
 
 /** The event's sectors as « Gérer les postes » holds them (#1147). */
@@ -49,7 +50,7 @@ type Show = { name: string; date: string; startTime: string; endTime: string }
 
 export default function ShiftsManager({
   eventId, eventStartDate, eventEndDate, initialShifts, showSchedule = [], defaultHolidays = "none", initialRecurrences = [], today = "",
-  initialSectors = null, mealOnTheGoShown = false,
+  initialSectors = null, mealOnTheGoShown = false, initialPlaces = null,
 }: {
   eventId:        string
   eventStartDate: string
@@ -66,12 +67,16 @@ export default function ShiftsManager({
   initialSectors?: AdminSectorsState | null
   /** « Repas sur le pouce possible » (#1171, lot 2): shown where the workload protection can be used. */
   mealOnTheGoShown?: boolean
+  /** Places of the event (#1171, lot 2): null where the workload protection cannot be used (no section, no field). */
+  initialPlaces?: AdminPlace[] | null
 }) {
   const formRef   = useRef<HTMLDivElement>(null)
   const dates     = eventDates(eventStartDate, eventEndDate)
   const singleDay = dates.length === 1
 
   const [shifts, setShifts] = useState<RawShift[]>(initialShifts)
+  // Shared by the places section and the shift form, so a place just added can be chosen at once.
+  const [places, setPlaces] = useState<AdminPlace[]>(initialPlaces ?? [])
   const [sectorsState, setSectorsState] = useState<AdminSectorsState | null>(initialSectors)
   // Sectors collapsed in the timeline (#1147): one state for every day, all expanded at load.
   const [collapsedSectors, setCollapsedSectors] = useState<ReadonlySet<string>>(new Set())
@@ -464,6 +469,10 @@ export default function ShiftsManager({
         />
       )}
 
+      {initialPlaces && (
+        <PlacesSection eventId={eventId} places={places} setPlaces={setPlaces} onAnnounce={(text) => announce(setRoleAnnouncement, text)} />
+      )}
+
       {/* Role management panel: reorder, rename, delete */}
       <RoleManagerPanel
         open={showReorder}
@@ -502,6 +511,7 @@ export default function ShiftsManager({
           sectors={editorSectors}
           presetSector={formSector}
           mealOnTheGoShown={mealOnTheGoShown}
+          places={initialPlaces ? places : null}
         />
       )}
 
@@ -621,6 +631,7 @@ export default function ShiftsManager({
                         waitlistEnabled: s.waitlistEnabled ?? false,
                         requiresApproval: s.requiresApproval ?? false,
                         mealOnTheGo: s.mealOnTheGo ?? false,
+                        placeId: s.placeId ?? "",
                         minAge: s.minAge ?? "",
                         locationDetails: s.locationDetails ?? "",
                         latitude: s.latitude ?? null,
