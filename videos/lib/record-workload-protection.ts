@@ -132,6 +132,8 @@ export async function recordWorkloadProtection(options: Options) {
     await at("Complétons vingt heures")
     await typeNaturally(page, field("event-wl-maxEventMinutes-hours"), WL_TYPED.maxEventHours)
     await typeNaturally(page, field("event-wl-maxIdleGapMinutes-hours"), WL_TYPED.maxIdleGapHours)
+    assert.equal(await field("event-wl-maxEventMinutes-hours").inputValue(), "20")
+    assert.equal(await field("event-wl-maxIdleGapMinutes-hours").inputValue(), "3")
   })
 
   await scene("wl-benchmarks", async at => {
@@ -270,10 +272,13 @@ export async function recordWorkloadProtection(options: Options) {
     await at("Emma remplit tout de même")
     // This complete form follows the recap sentence. Direct input keeps the
     // actual refusal inside its narrated chapter; fill emits no invented keys.
-    await fill(field("reg-firstname"), "Emma")
-    await fill(field("reg-lastname"), surnameOf("Emma"))
-    await fill(field("reg-email"), "video.workload.emma@example.org")
-    await fill(field("reg-birthdate"), "1994-03-14")
+    // Fill focuses each real input without an invented click or key event.
+    // Four full touch-marker animations delayed the refusal past its sentence.
+    for (const [id, value] of [["reg-firstname", "Emma"], ["reg-lastname", surnameOf("Emma")], ["reg-email", "video.workload.emma@example.org"], ["reg-birthdate", "1994-03-14"]]) {
+      await field(id).scrollIntoViewIfNeeded()
+      await field(id).fill(value)
+      await page.waitForTimeout(150)
+    }
     await tap(page, field("reg-charter"))
     await tap(page, field("reg-consent"))
     const response = page.waitForResponse(item => item.url().endsWith("/api/public/registrations") && item.request().method() === "POST")
@@ -324,6 +329,12 @@ export async function recordWorkloadProtection(options: Options) {
     await go(`${event}/edit`)
     await card.getByRole("link", { name: "1 programme à revoir", exact: true }).waitFor()
     // The card is taller than a viewport: centering its container hid its state.
-    await card.getByRole("heading", { level: 2, name: /^Protection des pauses et de la charge/ }).scrollIntoViewIfNeeded()
+    const heading = card.getByRole("heading", { level: 2, name: /^Protection des pauses et de la charge/ })
+    await heading.scrollIntoViewIfNeeded()
+    // Fail the take if the actual state and programme link cannot share this frame.
+    for (const target of [heading, card.locator('[data-workload-state="1"]'), card.getByRole("link", { name: "1 programme à revoir", exact: true })]) {
+      const bounds = await target.boundingBox()
+      assert(bounds && bounds.y >= 0 && bounds.y + bounds.height <= page.viewportSize()!.height, "Final workload heading, active state and programme link must all be in frame")
+    }
   })
 }

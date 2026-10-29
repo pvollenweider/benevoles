@@ -833,3 +833,13 @@ et refuse plusieurs générations ou un changement de voix signalé ; il ne
 remplace ni l'ASR indépendante ni la revue du MP4 final. Les contrôles
 `audit-audiovisual.ts` et `audit-full-final-audio.ts` acceptent désormais la
 fixture WORKLOAD explicitement vérifiée.
+
+### Lot 34 : terminer la protection de la charge
+
+`WORKLOAD_PROTECTION` utilise une pile dédiée : PostgreSQL **45438**, SMTP
+**41035**, Mailpit **48035**, serveur vérifié **43102**. Les conteneurs des lots
+précédents restent intacts. Transmettre `VIDEO_SMTP_PORT=41035` et
+`VIDEO_MAILPIT_URL=http://localhost:48035` au serveur et aux outils. Le seed
+`seed-video-scenario.ts workload-protection` précède chaque répétition et prise.
+Le recorder exige que le titre, l'état activé et « 1 programme à revoir » soient
+tous dans le cadre final, et vérifie les valeurs 6 h / 30 min / 8 h puis 20 h / 3 h.
