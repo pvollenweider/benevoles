@@ -545,8 +545,8 @@ un seed neuf. Chaque prise narrée est également précédée d'un nouveau seed.
 locale (« Échange effectué », nomination du responsable de secteur).
 
 `workload-protection` (protection des pauses et de la charge, #1171) ne fait pas partie de ce lot :
-son lot 2 (repas, trajets, journée OFF, limites individuelles) est encore en cours. Sa vidéo suivra
-après le lot 2 de #1171.
+ses sources ont suivi le lot 2 de #1171, voir « Sources prêtes, rendu en attente : protection des
+pauses et de la charge » plus bas.
 
 ### Lot 32 — tentative du 2026-10-29 : build produit bloqué
 
@@ -672,3 +672,22 @@ et neuf vérifications HTTP (MP4, VTT, JPEG) réussissent. Source produit, guide
 deux conteneurs créés pour cette reprise ont été arrêtés ; aucun tiers touché.
 Synthèse : `videos/evidence/batch32-resume/summary.json`. Les fichiers antérieurs,
 ignorés et non suivis sont conservés, y compris toutes les prises rejetées.
+
+## Sources prêtes, rendu en attente : protection des pauses et de la charge (#1171)
+
+Sources ajoutées sans rendu (aucune capture, aucune voix, aucune publication) ; le rendu se fait
+depuis un checkout à jour de `origin/main`, avec un seed neuf avant chaque prise (la prise ajoute
+un lieu, règle le repas sur le pouce, active la protection, enregistre une limite personnelle et
+annule un créneau) :
+
+- `workload-protection` (`WORKLOAD_PROTECTION`, nouvelle, `published: false`) : sources prêtes,
+  rendu en attente. Seed `scripts/seed-video-scenario.ts workload-protection`.
+
+Le scénario utilise l'organisation fictive dédiée `formation-charge`
+(`scripts/seed-video-workload.ts`), jamais l'organisation de démonstration ni celle des vidéos
+bêta ; il n'ouvre que la fonction bêta « Protection des pauses et de la charge ». Le planning
+fictif est jugé d'avance par le vrai évaluateur (`videos/lib/__tests__/workload-fixture.test.ts`)
+avec les valeurs que la prise tape. Le recorder (`videos/lib/record-workload-protection.ts`) est
+écrit d'après le code de l'interface et n'a pas encore été répété sur la pile locale : une
+répétition `--rehearse --quick-rehearse` (après un seed neuf) est à faire avant la prise narrée.
+L'annulation filmée envoie les vrais emails dans la boîte locale ; ils ne sont pas montrés.

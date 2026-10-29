@@ -16,6 +16,8 @@ export async function prepareSettingsMailbox(slug: string, directory: string) {
     "sectors": /^video\.beta\.[a-z]+@example\.org$/,
     "shift-swaps": /^video\.beta\.[a-z]+@example\.org$/,
     "sector-leaders": /^video\.beta\.[a-z]+@example\.org$/,
+    // The workload protection video's organisation (scripts/seed-video-workload.ts): members and owner.
+    "workload-protection": /^video\.workload\.[a-z]+@example\.org$/,
   }
   const pattern = patterns[slug]
   if (!pattern) return

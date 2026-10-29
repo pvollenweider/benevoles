@@ -1,0 +1,144 @@
+{
+  "id": "WORKLOAD_PROTECTION",
+  "slug": "workload-protection",
+  "title": "Protéger les pauses et la charge des bénévoles",
+  "description": "Préparer les lieux et le repas sur le pouce, fixer les limites d'un événement, vérifier l'aperçu et activer la protection, puis voir ce qu'elle change pour les bénévoles.",
+  "language": "fr-CH",
+  "voice": "Kore",
+  "continuousNarration": true,
+  "continuousPauseTags": false,
+  "voiceStyle": "Speak with an audible smile throughout. Use a warm, friendly adult female voice, as if helping another association organizer beside you. Natural conversational French, patient pace around 130 words per minute and clear articulation. Read every provided sentence verbatim: never omit, paraphrase or summarize any words. Keep exactly the same voice identity, pitch, smile and energy from beginning to end. Never sound corporate, theatrical, childish or rushed.",
+  "viewport": {
+    "width": 1280,
+    "height": 800,
+    "deviceScaleFactor": 1
+  },
+  "chapterTitles": {
+    "wl-places": "Lieux des missions",
+    "wl-meal-on-the-go": "Repas sur le pouce",
+    "wl-card": "La carte de l'événement",
+    "wl-limits": "Les limites",
+    "wl-benchmarks": "Repères et suggestions",
+    "wl-offday": "Jours sans mission",
+    "wl-meal-travel": "Repas et trajets",
+    "wl-minors": "Moins de 18 ans",
+    "wl-preview": "Aperçu et activation",
+    "wl-personal": "Limites personnelles",
+    "wl-signup": "Une inscription refusée",
+    "wl-withdraw": "Après une annulation"
+  },
+  "segments": [
+    {
+      "id": "wl-welcome",
+      "transcript": "Pendant un festival, des bénévoles enchaînent parfois les missions sans vraie pause. La protection des pauses et de la charge fixe des limites que personne ne peut dépasser, ni à l'inscription, ni à l'ajout à la main. C'est une fonction en bêta, proposée aux organisations qui y participent. Chaque événement l'active lui-même, et vous choisissez chaque valeur.",
+      "fallbackDurationMs": 26220
+    },
+    {
+      "id": "wl-places",
+      "transcript": "Commençons par Créneaux. La section Lieux des missions liste les endroits où se passent les missions : la Grande Scène, la Scène du Lac et le Chapiteau. Ajoutons Le Dôme, puis Ajouter le lieu. Chaque créneau reçoit ensuite son lieu dans sa fiche, au champ Lieu de la mission. Le vestiaire du Dôme n'en a pas encore. Les bénévoles ne voient pas ces lieux : ils lisent toujours le lieu de rendez-vous de chaque créneau.",
+      "fallbackDurationMs": 33580
+    },
+    {
+      "id": "wl-meal-on-the-go",
+      "transcript": "Au bar de la Grande Scène, on peut manger pendant le service du soir. Ouvrons Gérer les postes, puis le bouton Repas, non, du bar. Cochons repas sur le pouce possible, et enregistrons. Le bouton indique maintenant Repas, sur le pouce. Ces missions ne retirent pas le temps du repas, mais elles comptent toujours comme du travail.",
+      "fallbackDurationMs": 26220
+    },
+    {
+      "id": "wl-card",
+      "transcript": "Ouvrons maintenant les informations de l'événement. La carte Protection des pauses et de la charge est encore désactivée. Aucune valeur n'est imposée, et un champ vide ne veut jamais dire sans limite. La protection ne s'active qu'une fois tout rempli. Les heures sont lues dans le fuseau de l'organisation.",
+      "fallbackDurationMs": 22540
+    },
+    {
+      "id": "wl-service-day",
+      "transcript": "D'abord, le début de la journée de service. Tapons six heures. Une mission de nuit avant cette heure compte dans la journée de la veille. Des exemples apparaissent aussitôt sous le champ, pour vérifier à quelle journée chaque mission appartient.",
+      "fallbackDurationMs": 18400
+    },
+    {
+      "id": "wl-limits",
+      "transcript": "Viennent ensuite six durées, en heures et en minutes. Reprendre les réglages d'avertissement existants remplit six heures sans vraie pause, une pause de trente minutes et huit heures par journée de service. Ce sont les seuils des alertes Charge élevée de l'application, ni des seuils légaux ni des recommandations. Complétons vingt heures sur tout l'événement, et trois heures d'attente au plus entre deux missions d'une même journée.",
+      "fallbackDurationMs": 30820
+    },
+    {
+      "id": "wl-benchmarks",
+      "transcript": "Ouvrons Repères et suggestions. Chaque repère indique sa source : le droit du travail des salariés, ou une suggestion pour l'événementiel. Rien de tout cela ne s'impose aux bénévoles, et chaque bouton remplit seulement ses propres champs. Utilisons onze heures de repos entre deux journées. Puis trente minutes de repas entre onze heures trente et quatorze heures, et entre dix-huit et vingt et une heures. Quinze minutes entre deux lieux. Et les repères pour les moins de dix-huit ans.",
+      "fallbackDurationMs": 35880
+    },
+    {
+      "id": "wl-offday",
+      "transcript": "Plus bas, Jours sans mission demande une réponse explicite. Appliquons la règle : au moins un jour sans mission, sur une période de trois journées de service d'affilée. L'exemple relit les dates de l'événement, du vendredi au dimanche. Chaque période de trois journées d'affilée y sera vérifiée.",
+      "fallbackDurationMs": 21160
+    },
+    {
+      "id": "wl-meal-travel",
+      "transcript": "La pause repas est déjà remplie : trente minutes de repas dans chaque plage qu'une mission touche, tous les jours de l'événement. Une mission où le repas sur le pouce est possible, comme au bar, ne retire pas ce temps. Le trajet entre deux lieux demande quinze minutes de marge. La carte signale qu'un créneau n'a pas de lieu, et que son trajet n'est pas vérifié. Le lien Choisir les lieux dans Créneaux y ramène.",
+      "fallbackDurationMs": 34040
+    },
+    {
+      "id": "wl-minors",
+      "transcript": "Pour les moins de dix-huit ans, les repères ont rempli quatre limites plus strictes. Sous chacune, la limite de l'événement est rappelée : elles ne peuvent jamais être moins strictes. L'âge est celui du jour de chaque mission. L'événement demandera donc la date de naissance à l'inscription. Une personne déjà inscrite sans date de naissance est vérifiée comme majeure.",
+      "fallbackDurationMs": 26680
+    },
+    {
+      "id": "wl-preview",
+      "transcript": "L'encadré En résumé reprend ensuite chaque règle en clair. Avant d'activer, Aperçu juge les programmes actuels, sans rien enregistrer. Une personne dépasserait ces limites. Noah est inscrit à l'accueil les trois jours, sans aucun jour sans mission.",
+      "fallbackDurationMs": 17020
+    },
+    {
+      "id": "wl-refused",
+      "transcript": "Essayons tout de même Activer la protection. Elle est refusée, et rien n'a été activé ni modifié. La carte liste les programmes à modifier d'abord, avec la règle en cause et les dates. Il faut changer ces programmes, ou les limites.",
+      "fallbackDurationMs": 18860
+    },
+    {
+      "id": "wl-activate",
+      "transcript": "Pour un festival de trois jours, cette règle est trop stricte. Choisissons Ne pas appliquer cette règle, puis Aperçu. Aucun programme actuel ne dépasse plus les limites. Activons la protection. Désormais, toute affectation qui dépasse ces limites est refusée, pour les bénévoles comme pour les organisateurs.",
+      "fallbackDurationMs": 21160
+    },
+    {
+      "id": "wl-personal",
+      "transcript": "Une fois la protection active, Limites personnelles fixe une limite plus stricte pour une personne, sans motif à donner. Choisissons Camille, avec six heures au plus par journée de service, et enregistrons. Une limite personnelle n'est jamais moins stricte que celle de l'événement. Chaque bénévole peut aussi demander les siennes depuis son lien personnel.",
+      "fallbackDurationMs": 24840
+    },
+    {
+      "id": "wl-signup",
+      "transcript": "Côté bénévole, Emma s'inscrit sur la page du festival. Elle choisit l'accueil du Chapiteau samedi après-midi, puis le bar de la Grande Scène le soir. Avant même de confirmer, le récapitulatif affiche Ces créneaux dépassent les limites de l'événement. Sept heures trente d'affilée sans vraie pause, et aucun temps pour aller du Chapiteau à la Grande Scène. Emma remplit tout de même ses informations, avec sa date de naissance, et confirme. L'inscription est refusée, avec la même explication précise. Rien n'est enregistré.",
+      "fallbackDurationMs": 37720
+    },
+    {
+      "id": "wl-withdraw",
+      "transcript": "Une annulation, elle, n'est jamais refusée à cause de ces limites. Dimanche, Sarah est inscrite à l'accueil de la Scène du Lac le matin, au Chapiteau l'après-midi et au bar le soir. Sur sa page Mes inscriptions, elle annule son créneau du Chapiteau, puis Oui, annuler. Entre le matin et le soir, elle attendrait maintenant bien plus longtemps que l'événement ne le permet.",
+      "fallbackDurationMs": 28980
+    },
+    {
+      "id": "wl-registrations",
+      "transcript": "Dans Inscriptions, ses deux créneaux restants portent maintenant la mention Limite dépassée, avec la règle, les heures et l'écart. L'organisation voit tout de suite quel programme revoir.",
+      "fallbackDurationMs": 12420
+    },
+    {
+      "id": "wl-my-card",
+      "transcript": "Sur la page Mes inscriptions de Sarah, la carte Pauses et charge explique ce qui ne va plus. Tant que c'est le cas, elle ne peut pas ajouter de créneau qui aggrave la situation. Elle peut retirer un créneau, ou écrire à l'organisation. Juste en dessous, Mes limites lui permet de demander moins que l'événement, sans donner de raison.",
+      "fallbackDurationMs": 27140
+    },
+    {
+      "id": "wl-result",
+      "transcript": "De retour dans les informations de l'événement, la carte est activée et signale un programme à revoir. Préparez les lieux et le repas sur le pouce dans Créneaux, choisissez chaque limite, vérifiez avec Aperçu, puis activez. Dans Paramètres, des valeurs peuvent aussi être proposées pour les nouveaux événements.",
+      "fallbackDurationMs": 22080
+    }
+  ],
+  "viewer": {
+    "summary": "Dans cette vidéo, vous préparez les lieux et le repas sur le pouce, fixez les limites de pauses et de charge d'un événement, vérifiez l'aperçu, puis activez la protection et voyez ce qu'elle change pour les bénévoles.",
+    "steps": [
+      "Dans Créneaux, ajoutez les endroits des missions dans Lieux des missions, puis choisissez le lieu de chaque créneau dans sa fiche.",
+      "Dans Gérer les postes, activez Repas sur le pouce possible pour un poste où l'on mange pendant la mission.",
+      "Dans les informations de l'événement, carte Protection des pauses et de la charge, indiquez le début de la journée de service et chaque limite.",
+      "Reprenez si besoin les réglages d'avertissement existants ou un repère de Repères et suggestions, puis ajustez les valeurs.",
+      "Répondez pour les jours sans mission, la pause repas, le trajet entre deux lieux et les moins de 18 ans.",
+      "Vérifiez avec Aperçu, puis choisissez Activer la protection ; ajoutez ensuite des limites personnelles si besoin."
+    ],
+    "remember": [
+      "Aucune valeur n'est imposée : un champ vide ne veut jamais dire sans limite.",
+      "L'activation est refusée tant qu'un programme actuel dépasse les limites : rien n'est activé ni modifié.",
+      "Une inscription qui dépasserait les limites est refusée avec un message précis ; une annulation n'est jamais bloquée par ces limites, et le programme à revoir est signalé.",
+      "Les repères viennent du droit du travail des salariés ou sont des suggestions, jamais des obligations pour les bénévoles. C'est une fonction en bêta : votre organisation doit participer à la bêta."
+    ]
+  }
+}
