@@ -13,6 +13,7 @@
  * by client components (see CLAUDE.md) — only from the API route.
  */
 
+import { parsePersonalLayers, storedPersonalLayers, stricterLimits } from "./workload-personal"
 import type { OrgScopedPrisma } from "./prisma-org"
 import { generateToken } from "./utils"
 import { registrationToken, linkToken } from "./token-vault"
@@ -176,6 +177,21 @@ export async function runMemberMerge(
     // Push subscriptions are dropped, never moved (owner decision, #600): a device subscribed
     // through the absorbed record's wrong-address link may belong to someone else.
     if (plan.pushSubscriptionIdsToDelete.length) await tx.pushSubscription.deleteMany({ where: { id: { in: plan.pushSubscriptionIdsToDelete } } })
+    // Personal workload limits (#1171, lot 2): moved to the kept record; where both had a row on
+    // the same event, the stricter value of each field is kept (Codex), then reported below.
+    const absorbLimits: { id: string; eventId: string; values: unknown; updatedBy: string }[] = await tx.eventVolunteerLimit.findMany({ where: { volunteerId: absorbId }, select: { id: true, eventId: true, values: true, updatedBy: true } })
+    for (const l of absorbLimits) {
+      const kept: { id: string; values: unknown; updatedBy: string } | null = await tx.eventVolunteerLimit.findFirst({ where: { volunteerId: keepId, eventId: l.eventId }, select: { id: true, values: true, updatedBy: true } })
+      if (!kept) {
+        await tx.eventVolunteerLimit.update({ where: { id: l.id }, data: { volunteerId: keepId } })
+        continue
+      }
+      // Layer by layer: the organisation's with the organisation's, the person's with the person's.
+      const k = parsePersonalLayers(kept.values), x = parsePersonalLayers(l.values)
+      const merged = storedPersonalLayers({ admin: stricterLimits(k.admin, x.admin), volunteer: stricterLimits(k.volunteer, x.volunteer) })
+      if (merged) await tx.eventVolunteerLimit.update({ where: { id: kept.id }, data: { values: merged } })
+      await tx.eventVolunteerLimit.delete({ where: { id: l.id } })
+    }
     // Shift roster choices (#1068) are dropped too: a merge is not the person's consent. The
     // absorbed record's choices go, and so do the kept record's on the events where registrations
     // just moved to it, so nobody is shown on those events until they choose again.

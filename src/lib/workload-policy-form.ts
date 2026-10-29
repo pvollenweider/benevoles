@@ -10,7 +10,7 @@
 import { fmtDay, fmtDuration } from "./signup-recap"
 import {
   checkPolicyValues, EXISTING_WARNING_SUGGESTIONS, horizonDays, WRITE_SECTIONS, WORKLOAD_BENCHMARKS, WORKLOAD_LIMIT_FIELDS,
-  MEAL_WINDOWS_MAX, type EventHorizon, type MealRule, type TravelRule, type PolicyProblem, type WorkloadBenchmark, type WorkloadField, type WorkloadLimitsV1, type WorkloadPolicyValues,
+  MEAL_WINDOWS_MAX, PERSONAL_FIELDS, STRICTER_FIELDS, type EventHorizon, type MealRule, type MinorsRule, type PersonalField, type PersonalLimits, type StricterField, type TravelRule, type PolicyProblem, type WorkloadBenchmark, type WorkloadField, type WorkloadLimitsV1, type WorkloadPolicyValues,
 } from "./workload-policy"
 
 type LimitField = keyof WorkloadLimitsV1
@@ -40,8 +40,11 @@ const windowRow = (start = "", end = ""): MealWindowInput => ({ key: `w${++windo
 /** The travel answer as typed (#1171, lot 2); the margin is kept under « do not apply ». */
 export type TravelInput = { apply: "" | "yes" | "no"; minutes: string }
 
+/** The minors answer as typed (#1171, lot 2): four durations, kept under « do not apply ». */
+export type MinorsInput = { apply: "" | "yes" | "no" } & Record<StricterField, DurationInput>
+
 /** The whole form as typed. */
-export type PolicyFormState = { serviceDayStart: string; offDay: OffDayInput; meal: MealInput; travel: TravelInput } & Record<LimitField, DurationInput>
+export type PolicyFormState = { serviceDayStart: string; offDay: OffDayInput; meal: MealInput; travel: TravelInput; minors: MinorsInput } & Record<LimitField, DurationInput>
 
 const EMPTY_OFF_DAY: OffDayInput = { apply: "", minOffDays: "", windowDays: "" }
 const emptyMeal = (): MealInput => ({ apply: "", minutes: "", windows: [windowRow()], days: "all", dates: [] })
@@ -71,10 +74,20 @@ export function shiftsWithoutPlaceText(count: number, activePlaces: number): str
   return count === 1 ? "1 créneau n'a pas de lieu : son trajet n'est pas vérifié." : `${count} créneaux n'ont pas de lieu : leur trajet n'est pas vérifié.`
 }
 
+export const MINORS_HELP = "L'âge est celui du jour de chaque mission, d'après la date de naissance. Cet événement demandera la date de naissance à l'inscription et à l'ajout à la main. Chaque valeur est au moins aussi stricte que celle de l'événement."
+
+/** The line under the minors' values about people without a birth date (event card), or null at 0. */
+export function peopleWithoutBirthDateText(count: number): string | null {
+  if (count === 0) return null
+  return count === 1
+    ? "1 personne inscrite n'a pas de date de naissance : elle est vérifiée comme majeure tant qu'elle n'est pas connue."
+    : `${count} personnes inscrites n'ont pas de date de naissance : elles sont vérifiées comme majeures tant qu'elle n'est pas connue.`
+}
+
 export const SERVICE_DAY_START_HELP = "L'heure à laquelle une journée de service commence. Une mission de nuit avant cette heure compte dans la journée de la veille."
 
 export function emptyPolicyForm(): PolicyFormState {
-  return { serviceDayStart: "", offDay: { ...EMPTY_OFF_DAY }, meal: emptyMeal(), travel: { apply: "", minutes: "" }, ...Object.fromEntries(WORKLOAD_LIMIT_FIELDS.map((f) => [f.key, { ...EMPTY }])) } as PolicyFormState
+  return { serviceDayStart: "", offDay: { ...EMPTY_OFF_DAY }, meal: emptyMeal(), travel: { apply: "", minutes: "" }, minors: minorsInputFrom(undefined), ...Object.fromEntries(WORKLOAD_LIMIT_FIELDS.map((f) => [f.key, { ...EMPTY }])) } as PolicyFormState
 }
 
 function offDayInputFrom(values: WorkloadPolicyValues): OffDayInput {
@@ -89,6 +102,11 @@ function mealInputFrom(rule: MealRule | undefined): MealInput {
   return { apply: "yes", minutes: String(rule.minutes), windows: rule.windows.map((w) => windowRow(w.start, w.end)), days: rule.days === "all" ? "all" : "some", dates: rule.days === "all" ? [] : [...rule.days] }
 }
 
+function minorsInputFrom(rule: MinorsRule | undefined): MinorsInput {
+  const durations = Object.fromEntries(STRICTER_FIELDS.map((f) => [f, rule?.apply ? toInput(rule[f]) : { ...EMPTY }])) as Record<StricterField, DurationInput>
+  return { apply: !rule ? "" : rule.apply ? "yes" : "no", ...durations }
+}
+
 function travelInputFrom(rule: TravelRule | undefined): TravelInput {
   if (!rule) return { apply: "", minutes: "" }
   return rule.apply ? { apply: "yes", minutes: String(rule.minutes) } : { apply: "no", minutes: "" }
@@ -99,7 +117,7 @@ const toInput = (minutes: number): DurationInput => ({ hours: String(Math.floor(
 /** The form filled from stored values, or empty. */
 export function policyFormFrom(values: WorkloadPolicyValues | null | undefined): PolicyFormState {
   if (!values) return emptyPolicyForm()
-  return { serviceDayStart: values.serviceDayStart, offDay: offDayInputFrom(values), meal: mealInputFrom(values.meal), travel: travelInputFrom(values.travel), ...Object.fromEntries(WORKLOAD_LIMIT_FIELDS.map((f) => [f.key, toInput(values[f.key])])) } as PolicyFormState
+  return { serviceDayStart: values.serviceDayStart, offDay: offDayInputFrom(values), meal: mealInputFrom(values.meal), travel: travelInputFrom(values.travel), minors: minorsInputFrom(values.minors), ...Object.fromEntries(WORKLOAD_LIMIT_FIELDS.map((f) => [f.key, toInput(values[f.key])])) } as PolicyFormState
 }
 
 /** The existing #465 warning settings filled in, the other fields left as they were. */
@@ -116,6 +134,7 @@ export function withBenchmark(form: PolicyFormState, b: WorkloadBenchmark): Poli
   if (b.offDay) next.offDay = b.offDay.apply ? { apply: "yes", minOffDays: String(b.offDay.minOffDays), windowDays: String(b.offDay.windowDays) } : { ...form.offDay, apply: "no" }
   if (b.meal) next.meal = mealInputFrom(b.meal)
   if (b.travel) next.travel = travelInputFrom(b.travel)
+  if (b.minors) next.minors = minorsInputFrom(b.minors)
   return next
 }
 
@@ -137,13 +156,14 @@ export function mealDayOptions(horizon: EventHorizon): { date: string; label: st
 
 /** The fields a benchmark fills (their error is cleared once filled). */
 export function benchmarkFields(b: WorkloadBenchmark): string[] {
-  return [...Object.keys(b.limits ?? {}), ...(b.offDay ? ["offDay", "offDayMinOffDays", "offDayWindowDays"] : []), ...(b.meal ? ["meal", "mealMinutes", "mealWindows", "mealDays"] : []), ...(b.travel ? ["travel", "travelMinutes"] : [])]
+  return [...Object.keys(b.limits ?? {}), ...(b.offDay ? ["offDay", "offDayMinOffDays", "offDayWindowDays"] : []), ...(b.meal ? ["meal", "mealMinutes", "mealWindows", "mealDays"] : []), ...(b.travel ? ["travel", "travelMinutes"] : []), ...(b.minors ? ["minors", ...STRICTER_FIELDS.map((f) => `minors${f.charAt(0).toUpperCase()}${f.slice(1)}`)] : [])]
 }
 
 /** What the announcement says after a benchmark was used. */
 export function benchmarkAnnouncement(b: WorkloadBenchmark): string {
   const parts = WORKLOAD_LIMIT_FIELDS.filter((f) => b.limits && f.key in b.limits).map((f) => `${lowerFirstLabel(f.label)} ${fmtDuration(b.limits![f.key]!)}`)
   if (b.offDay?.apply) parts.push(`jours sans mission : règle appliquée, ${b.offDay.minOffDays} jour sur ${b.offDay.windowDays} journées de service`)
+  if (b.minors?.apply) parts.push(`moins de 18 ans : règle appliquée, ${fmtDuration(b.minors.maxDailyMinutes)} par journée, une pause de ${fmtDuration(b.minors.minBreakMinutes)} avant ${fmtDuration(b.minors.maxContinuousMinutes)} d'affilée, ${fmtDuration(b.minors.minRestMinutes)} de repos`)
   if (b.travel?.apply) parts.push(`trajet entre deux lieux : règle appliquée, ${fmtDuration(b.travel.minutes)} de marge`)
   if (b.meal?.apply) parts.push(`pause repas : règle appliquée, ${fmtDuration(b.meal.minutes)} entre ${b.meal.windows.map((w) => `${clock(w.start)} et ${clock(w.end)}`).join(", puis entre ")}, ${b.meal.days === "all" ? "tous les jours" : "certains jours"}`)
   return `Rempli : ${parts.join(", ")}. Les autres champs n'ont pas changé.`
@@ -176,6 +196,11 @@ export function policyValuesFromForm(form: PolicyFormState): Record<string, unkn
   const o = form.offDay
   if (o.apply === "no") out.offDay = { apply: false }
   else if (o.apply === "yes") out.offDay = { apply: true, minOffDays: wholeNumber(o.minOffDays), windowDays: wholeNumber(o.windowDays) }
+  const mi = form.minors
+  if (mi.apply === "no") out.minors = { apply: false }
+  else if (mi.apply === "yes") {
+    out.minors = { apply: true, ...Object.fromEntries(STRICTER_FIELDS.map((f) => { const n = durationMinutes(mi[f]); return [f, n === undefined ? undefined : Number.isNaN(n) ? "invalide" : n] })) }
+  }
   const t = form.travel
   if (t.apply === "no") out.travel = { apply: false }
   else if (t.apply === "yes") out.travel = { apply: true, minutes: wholeNumber(t.minutes) }
@@ -247,13 +272,36 @@ export function policySummaryLines(values: WorkloadPolicyValues): string[] {
       : values.travel.minutes === 0
         ? "Jamais deux missions en même temps à deux lieux différents, sans marge demandée entre elles ; le trajet d'une mission sans lieu n'est pas vérifié."
         : `Au moins ${d(values.travel.minutes)} entre deux missions à des lieux différents, et jamais deux lieux à la fois ; le trajet d'une mission sans lieu n'est pas vérifié.`,
+    !values.minors || !values.minors.apply
+      ? "Aucune limite particulière pour les moins de 18 ans."
+      : `Moins de 18 ans : au plus ${d(values.minors.maxDailyMinutes)} par journée de service, une pause d'au moins ${d(values.minors.minBreakMinutes)} avant ${d(values.minors.maxContinuousMinutes)} de missions d'affilée, et ${d(values.minors.minRestMinutes)} de repos entre deux journées.`,
     "Une mission de « standby » compte comme du travail, jamais comme une pause.",
     "Toute inscription, tout ajout, tout échange ou changement d'horaire qui dépasserait ces limites est refusé, pour les bénévoles comme pour les organisateurs.",
   ]
 }
 
 /** What the protection does not cover yet, said next to the summary. */
-export const WORKLOAD_NOT_COVERED = "Pas encore pris en compte : des limites plus strictes pour une personne."
+/** What the protection does not cover, said next to the summary. */
+export const WORKLOAD_NOT_COVERED = "Ne couvre que les missions de cet événement : celles d'autres événements ne sont pas connues ici."
+
+// ── Personal limits (#1171, lot 2) ──────────────────────────────────────────
+
+/** A person's own limits as typed: five optional durations, empty = same as the event. */
+export type PersonalFormState = Record<PersonalField, DurationInput>
+
+export function personalFormFrom(limits: PersonalLimits | null | undefined): PersonalFormState {
+  return Object.fromEntries(PERSONAL_FIELDS.map((f) => [f, limits?.[f] !== undefined ? toInput(limits[f]!) : { ...EMPTY }])) as PersonalFormState
+}
+
+/** The values to send: typed durations only (unchecked; the server decides), "invalide" when not numbers. */
+export function personalValuesFromForm(form: PersonalFormState): Record<string, unknown> {
+  const out: Record<string, unknown> = {}
+  for (const f of PERSONAL_FIELDS) {
+    const n = durationMinutes(form[f])
+    if (n !== undefined) out[f] = Number.isNaN(n) ? "invalide" : n
+  }
+  return out
+}
 
 /**
  * The days-off rule against the event's dates, under the period field (not live): with fewer

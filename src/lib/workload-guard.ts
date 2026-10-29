@@ -3,9 +3,10 @@
 
 import { COMMITTED_STATUSES, lockShifts } from "./registration-capacity"
 import {
-  activePolicy, evaluateWorkload, findingKey, parseWorkloadPolicy, workloadChange, workloadFindingMessage, WORKLOAD_POLICY_INCOMPLETE,
-  type ActivePolicy, type DutyShift, type WorkloadFinding,
+  activePolicy, evaluateWorkload, findingKey, minorsApply, parseWorkloadPolicy, workloadChange, workloadFindingMessage, WORKLOAD_BIRTHDATE_REQUIRED, WORKLOAD_POLICY_INCOMPLETE,
+  type ActivePolicy, type DutyShift, type WorkloadFinding, type WorkloadPerson,
 } from "./workload-policy"
+import { parsePersonalLimits } from "./workload-personal"
 
 /**
  * Enforcement of the workload protection (#1171), server only: what every assignment path calls
@@ -105,7 +106,9 @@ export type DutyChange = {
 export type WorkloadVerdict =
   | { ok: true }
   | { ok: false; reason: "incomplete" }
-  | { ok: false; reason: "findings"; findings: WorkloadFinding[]; policy: ActivePolicy; before: DutyShift[]; after: DutyShift[] }
+  /** The event protects minors and the person's birth date is unknown: no new commitment until given. */
+  | { ok: false; reason: "birthdate" }
+  | { ok: false; reason: "findings"; findings: WorkloadFinding[]; policy: ActivePolicy; before: DutyShift[]; after: DutyShift[]; person?: WorkloadPerson | null }
 
 /** The schedule after a change. */
 export function applyDutyChange(before: DutyShift[], change: DutyChange): DutyShift[] {
@@ -118,13 +121,28 @@ export function applyDutyChange(before: DutyShift[], change: DutyChange): DutySh
   ]
 }
 
-/** The verdict of a change on a schedule, under a gate. Pure. */
-export function judgeDutyChange(gate: WorkloadGate, before: DutyShift[], change: DutyChange): WorkloadVerdict {
+/**
+ * The verdict of a change on a schedule, under a gate, for a person (birth date, own limits). Pure.
+ * Minors protected and no birth date: a change that adds a commitment is refused (Codex: require
+ * the date before another commitment); one that only moves hours is judged as for an adult, the
+ * gap shown on the organiser's card.
+ */
+export function judgeDutyChange(gate: WorkloadGate, before: DutyShift[], change: DutyChange, person?: WorkloadPerson | null): WorkloadVerdict {
   if (gate.kind === "off") return { ok: true }
   if (gate.kind === "incomplete") return { ok: false, reason: "incomplete" }
+  if (minorsApply(gate.policy) && (change.add?.length ?? 0) > 0 && !person?.birthDate) return { ok: false, reason: "birthdate" }
   const after = applyDutyChange(before, change)
-  const findings = workloadChange(before, after, gate.policy)
-  return findings.length === 0 ? { ok: true } : { ok: false, reason: "findings", findings, policy: gate.policy, before, after }
+  const findings = workloadChange(before, after, gate.policy, person)
+  return findings.length === 0 ? { ok: true } : { ok: false, reason: "findings", findings, policy: gate.policy, before, after, person }
+}
+
+/** A person's birth date and own limits on the event, read after their Volunteer lock. */
+export async function readWorkloadPerson(tx: Tx, eventId: string, volunteerId: string): Promise<WorkloadPerson> {
+  const [volunteer, limit] = await Promise.all([
+    tx.volunteer.findFirst({ where: { id: volunteerId }, select: { birthDate: true } }),
+    tx.eventVolunteerLimit.findFirst({ where: { eventId, volunteerId }, select: { values: true } }),
+  ])
+  return { birthDate: volunteer?.birthDate ?? null, personal: parsePersonalLimits(limit?.values) }
 }
 
 /**
@@ -138,7 +156,8 @@ export async function checkDutyChange(tx: Tx, gate: WorkloadGate, eventId: strin
   const except = new Set(opts.exceptRegistrationIds ?? [])
   const before = (await committedDuty(tx, eventId, volunteerId)).filter((d) => !except.has(d.registrationId))
   const named: DutyChange = { ...change, add: change.add && await withPlaceNames(tx, change.add), replace: change.replace && await withPlaceNames(tx, change.replace) }
-  return judgeDutyChange(gate, before.map(({ id, date, startTime, endTime, mealOnTheGo, placeId, placeName }) => ({ id, date, startTime, endTime, mealOnTheGo, placeId, placeName })), named)
+  const person = await readWorkloadPerson(tx, eventId, volunteerId)
+  return judgeDutyChange(gate, before.map(({ id, date, startTime, endTime, mealOnTheGo, placeId, placeName }) => ({ id, date, startTime, endTime, mealOnTheGo, placeId, placeName })), named, person)
 }
 
 /** Locks the given volunteers' rows, ORDER BY id (after the shift locks). */
@@ -153,14 +172,15 @@ export async function lockVolunteerRows(tx: Tx, ids: string[]): Promise<void> {
  * describing it reveals nothing the submitter did not type. Merged blocks and totals can include
  * duty already held, so the check is on the submission's own findings, not on shift ids.
  */
-export function reproducibleFrom(finding: WorkloadFinding, submitted: DutyShift[], policy: ActivePolicy): boolean {
-  const own = new Set(evaluateWorkload(submitted, policy).map(findingKey))
+export function reproducibleFrom(finding: WorkloadFinding, submitted: DutyShift[], policy: ActivePolicy, person?: WorkloadPerson | null): boolean {
+  const own = new Set(evaluateWorkload(submitted, policy, person).map(findingKey))
   return own.has(findingKey(finding))
 }
 
 /** The verdict as a refusal error: one specific sentence (the first finding), and every finding for the page. */
 export function workloadRefusalBody(verdict: Exclude<WorkloadVerdict, { ok: true }>, lead: string): { error: string; code: "workload"; workload: string[] } {
   if (verdict.reason === "incomplete") return { error: WORKLOAD_POLICY_INCOMPLETE, code: "workload", workload: [WORKLOAD_POLICY_INCOMPLETE] }
+  if (verdict.reason === "birthdate") return { error: WORKLOAD_BIRTHDATE_REQUIRED, code: "workload", workload: [WORKLOAD_BIRTHDATE_REQUIRED] }
   const messages = verdict.findings.map((f) => workloadFindingMessage(f, verdict.policy))
   const more = messages.length > 1 ? ` (et ${messages.length - 1} autre${messages.length > 2 ? "s" : ""} limite${messages.length > 2 ? "s" : ""})` : ""
   return { error: `${lead} ${messages[0]}${more}`, code: "workload", workload: messages }
@@ -204,7 +224,7 @@ export async function checkScheduleEdit(tx: Tx, eventId: string, moved: DutyShif
 
 /** The organiser's refusal of an edit: who, and the first limit broken for each. */
 export function scheduleEditRefusalBody(refusals: ScheduleEditRefusal[], cause = "avec ces horaires"): { error: string; code: "workload"; workload: string[] } {
-  const lines = refusals.map((r) => (r.verdict.reason === "incomplete" ? WORKLOAD_POLICY_INCOMPLETE : `${r.name} : ${workloadFindingMessage(r.verdict.findings[0], r.verdict.policy)}`))
+  const lines = refusals.map((r) => (r.verdict.reason === "incomplete" ? WORKLOAD_POLICY_INCOMPLETE : r.verdict.reason === "birthdate" ? `${r.name} : ${WORKLOAD_BIRTHDATE_REQUIRED}` : `${r.name} : ${workloadFindingMessage(r.verdict.findings[0], r.verdict.policy)}`))
   const who = refusals.length === 1 ? refusals[0].name : `${refusals.length} personnes`
   return {
     error: `Modification impossible : ${cause}, le programme de ${who} ne respecterait plus les pauses et limites de charge de cet événement. Rien n'a été modifié. ${lines[0]}`,

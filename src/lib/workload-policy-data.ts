@@ -4,12 +4,13 @@
 import { canAdoptBeta } from "./beta-access"
 import { COMMITTED_STATUSES } from "./registration-capacity"
 import { orgTimeZone } from "./time-zone"
-import { committedDuty, lockWorkloadExclusive, workloadGateOf, type WorkloadEventRow } from "./workload-guard"
+import { committedDuty, lockWorkloadExclusive, readWorkloadPerson, workloadGateOf, type WorkloadEventRow } from "./workload-guard"
+import { parsePersonalLimits } from "./workload-personal"
 import { workloadProtectionShipped } from "./workload-shipped"
 import {
   activePolicy, buildPolicy, checkPolicyValues, eventHorizon, evaluateWorkload, EXISTING_WARNING_SUGGESTIONS, newFindings, offDayApplies, parseWorkloadPolicy,
   policyChangeNeedsScan, policyValues, serviceDayExamples, WRITE_SECTIONS, workloadFindingMessage, WORKLOAD_BENCHMARKS, WORKLOAD_LIMIT_FIELDS,
-  type ActivePolicy, type DutyShift, type EventHorizon, type PolicyProblem, type WorkloadFinding, type WorkloadPolicy, type WorkloadPolicyValues,
+  type ActivePolicy, type DutyShift, type EventHorizon, type WorkloadPerson, type PolicyProblem, type WorkloadFinding, type WorkloadPolicy, type WorkloadPolicyValues,
 } from "./workload-policy"
 
 /**
@@ -31,14 +32,16 @@ type Db = any
 export type PersonFindings = { volunteerId: string; name: string; findings: WorkloadFinding[]; messages: string[] }
 
 /** Every committed person of the event and their missions (confirmed places and pending requests). */
-async function commitmentsByPerson(db: Db, eventId: string): Promise<Map<string, { name: string; shifts: DutyShift[] }>> {
-  const rows: { volunteerId: string; volunteer: { firstName: string; lastName: string }; shift: { id: string; date: Date; startTime: string; endTime: string; mealOnTheGo: boolean; placeId: string | null; place: { name: string } | null } }[] = await db.registration.findMany({
+async function commitmentsByPerson(db: Db, eventId: string): Promise<Map<string, { name: string; shifts: DutyShift[]; person: WorkloadPerson }>> {
+  const limits: { volunteerId: string; values: unknown }[] = await db.eventVolunteerLimit.findMany({ where: { eventId }, select: { volunteerId: true, values: true } })
+  const personal = new Map(limits.map((l) => [l.volunteerId, parsePersonalLimits(l.values)]))
+  const rows: { volunteerId: string; volunteer: { firstName: string; lastName: string; birthDate: Date | null }; shift: { id: string; date: Date; startTime: string; endTime: string; mealOnTheGo: boolean; placeId: string | null; place: { name: string } | null } }[] = await db.registration.findMany({
     where: { eventId, status: { in: [...COMMITTED_STATUSES] }, shift: { status: { not: "cancelled" } } },
-    select: { volunteerId: true, volunteer: { select: { firstName: true, lastName: true } }, shift: { select: { id: true, date: true, startTime: true, endTime: true, mealOnTheGo: true, placeId: true, place: { select: { name: true } } } } },
+    select: { volunteerId: true, volunteer: { select: { firstName: true, lastName: true, birthDate: true } }, shift: { select: { id: true, date: true, startTime: true, endTime: true, mealOnTheGo: true, placeId: true, place: { select: { name: true } } } } },
   })
-  const byPerson = new Map<string, { name: string; shifts: DutyShift[] }>()
+  const byPerson = new Map<string, { name: string; shifts: DutyShift[]; person: WorkloadPerson }>()
   for (const r of rows) {
-    const entry = byPerson.get(r.volunteerId) ?? { name: `${r.volunteer.firstName} ${r.volunteer.lastName}`.trim(), shifts: [] }
+    const entry = byPerson.get(r.volunteerId) ?? { name: `${r.volunteer.firstName} ${r.volunteer.lastName}`.trim(), shifts: [], person: { birthDate: r.volunteer.birthDate, personal: personal.get(r.volunteerId) ?? null } }
     const { place, ...shift } = r.shift
     entry.shifts.push({ ...shift, placeName: place?.name ?? null })
     byPerson.set(r.volunteerId, entry)
@@ -51,8 +54,8 @@ const byName = (a: PersonFindings, b: PersonFindings) => a.name.localeCompare(b.
 /** Every committed person of the event judged with `policy`: those with findings, by name. */
 export async function scanEventWorkload(db: Db, eventId: string, policy: ActivePolicy): Promise<PersonFindings[]> {
   const out: PersonFindings[] = []
-  for (const [volunteerId, { name, shifts }] of await commitmentsByPerson(db, eventId)) {
-    const findings = evaluateWorkload(shifts, policy)
+  for (const [volunteerId, { name, shifts, person }] of await commitmentsByPerson(db, eventId)) {
+    const findings = evaluateWorkload(shifts, policy, person)
     if (findings.length > 0) out.push({ volunteerId, name, findings, messages: findings.map((f) => workloadFindingMessage(f, policy)) })
   }
   return out.sort(byName)
@@ -80,6 +83,8 @@ export type WorkloadPolicyState = {
   /** Live shifts without a place, and the event's active places (#1171, travel: not checked without one). */
   shiftsWithoutPlace: number
   activePlaces: number
+  /** Committed people without a birth date (#1171, minors): not checked as minors until it is given. */
+  peopleWithoutBirthDate: number
   serviceDayExamples: string[]
   /** People whose schedule breaks the enabled policy now (left by cancellations, say). */
   findings: Omit<PersonFindings, "findings">[]
@@ -107,6 +112,7 @@ export async function loadWorkloadPolicyState(db: Db, organizationId: string, ev
     horizon: eventHorizon(event),
     shiftsWithoutPlace: await db.shift.count({ where: { eventId, status: { not: "cancelled" }, placeId: null } }),
     activePlaces: await db.eventPlace.count({ where: { eventId, archivedAt: null } }),
+    peopleWithoutBirthDate: await db.volunteer.count({ where: { birthDate: null, registrations: { some: { eventId, status: { in: [...COMMITTED_STATUSES] } } } } }),
     serviceDayExamples: parsed.ok ? serviceDayExamples(parsed.policy.serviceDayStart) : [],
     findings: forPage(findings),
   }
@@ -159,9 +165,11 @@ export function policySummary(p: WorkloadPolicy | null): string {
   if (!p) return "(aucune)"
   const h = (m: number) => `${Math.floor(m / 60)} h${m % 60 ? ` ${String(m % 60).padStart(2, "0")}` : ""}`
   const off = !p.offDay ? "" : p.offDay.apply ? `, ${p.offDay.minOffDays} jour(s) sans mission sur ${p.offDay.windowDays}` : ", sans règle de jours sans mission"
+  // Minors: their values, never anyone's data.
+  const minors = !p.minors ? "" : p.minors.apply ? `, moins de 18 ans ${h(p.minors.maxDailyMinutes)}/journée, ${h(p.minors.maxContinuousMinutes)} sans pause de ${p.minors.minBreakMinutes} min, repos ${h(p.minors.minRestMinutes)}` : ", sans règle pour les moins de 18 ans"
   const travel = !p.travel ? "" : p.travel.apply ? `, ${p.travel.minutes} min entre deux lieux` : ", sans règle de trajet"
   const meal = !p.meal ? "" : p.meal.apply ? `, repas ${p.meal.minutes} min (${p.meal.windows.map((w) => `${w.start}-${w.end}`).join(", ")}, ${p.meal.days === "all" ? "tous les jours" : `${p.meal.days.length} jour(s)`})` : ", sans règle de repas"
-  return `journée dès ${p.serviceDayStart}, ${h(p.maxContinuousMinutes)} sans pause de ${p.minBreakMinutes} min, ${h(p.maxDailyMinutes)}/journée, ${h(p.maxEventMinutes)} au total, repos ${h(p.minRestMinutes)}, attente ${h(p.maxIdleGapMinutes)}${off}${meal}${travel}`
+  return `journée dès ${p.serviceDayStart}, ${h(p.maxContinuousMinutes)} sans pause de ${p.minBreakMinutes} min, ${h(p.maxDailyMinutes)}/journée, ${h(p.maxEventMinutes)} au total, repos ${h(p.minRestMinutes)}, attente ${h(p.maxIdleGapMinutes)}${off}${meal}${travel}${minors}`
 }
 
 /**
@@ -255,7 +263,7 @@ export async function personWorkloadReport(db: Db, volunteerId: string, eventIds
     const gate = workloadGateOf(event)
     if (gate.kind !== "on") continue
     const shifts = await committedDuty(db, event.id, volunteerId)
-    const findings = evaluateWorkload(shifts, gate.policy)
+    const findings = evaluateWorkload(shifts, gate.policy, await readWorkloadPerson(db, event.id, volunteerId))
     if (findings.length > 0) out.push({ eventId: event.id, eventTitle: event.title, messages: findings.map((f) => workloadFindingMessage(f, gate.policy)) })
   }
   return out
@@ -279,8 +287,8 @@ export async function eventDatesWorkloadCheck(tx: Db, eventId: string, next: { s
   const after = activePolicy(gate.policy, next)
   if (after.horizon.firstDay === gate.policy.horizon.firstDay && after.horizon.lastDay === gate.policy.horizon.lastDay) return []
   const out: PersonFindings[] = []
-  for (const [volunteerId, { name, shifts }] of await commitmentsByPerson(tx, eventId)) {
-    const findings = newFindings(evaluateWorkload(shifts, gate.policy), evaluateWorkload(shifts, after))
+  for (const [volunteerId, { name, shifts, person }] of await commitmentsByPerson(tx, eventId)) {
+    const findings = newFindings(evaluateWorkload(shifts, gate.policy, person), evaluateWorkload(shifts, after, person))
     if (findings.length > 0) out.push({ volunteerId, name, findings, messages: findings.map((f) => workloadFindingMessage(f, after)) })
   }
   return out.sort(byName)

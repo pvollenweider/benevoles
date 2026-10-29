@@ -12,7 +12,7 @@ import { coordinatesOf, MAP_LINK_LABEL, MAP_LINK_SR_SUFFIX, osmLink } from "@/li
 import { describeSignupFailure, type Failure } from "@/lib/form-errors"
 import { SIGNUP_COMMENT_MAX, SIGNUP_PHONE_MAX } from "@/lib/signup-limits"
 import SignupRecap from "@/components/public/SignupRecap"
-import { blocksWorkload, recapWorkloadNotices, type WorkloadMode } from "@/lib/workload-view"
+import { blocksWorkload, recapWorkloadNotices, workloadNeedsBirthDate, type WorkloadMode } from "@/lib/workload-view"
 import { isWaitlistShift } from "@/lib/signup-recap"
 import ShiftRow from "@/components/public/ShiftRow"
 import { useRouter, useSearchParams } from "next/navigation"
@@ -30,6 +30,7 @@ import {
   shiftsByDay as groupShiftsByDay,
   toMyRegistrations,
   validateSignup,
+  birthDateHint,
   type MyRegistration,
   type SignupForm,
 } from "@/lib/public-signup"
@@ -354,6 +355,11 @@ export default function EventPageClient({ orgSlug, eventSlug, preview, initialEv
     [event, selectedShifts, myShiftIds]
   )
 
+  // Minors protected by the event's workload protection (#1171, lot 2): the birth date is asked too.
+  const minorsProtected = !!event?.workload && workloadNeedsBirthDate(event.workload)
+  const asksBirthDate = ageGatedSelectedShifts.length > 0 || minorsProtected
+  const [birthDateInvalid, setBirthDateInvalid] = useState(false)
+
   // The shift roster's box (#1068): shown when the event has the roster, replaced by a sentence
   // when the birth date asked for an age-gated shift says under 18.
   const rosterBox = signupRosterBox(!!event?.shiftRosterEnabled, ageGatedSelectedShifts.length > 0 ? form.birthDate : "", event?.startDate ?? "")
@@ -540,12 +546,17 @@ export default function EventPageClient({ orgSlug, eventSlug, preview, initialEv
       charterAccepted,
       requirePhone: event?.requirePhone ?? false,
       ageGatedShifts: ageGatedSelectedShifts,
+      minorsProtected,
     })
     if (invalid) {
       setFailure(null); setQuestionErrors(new Map()); setError(invalid)
       const box = !charterAccepted ? "charter" : !form.consent ? "consent" : null
       setInvalidCheckbox(box)
+      // A missing birth date (minimum age, minors' protection) is said on its field, which takes focus.
+      const birth = !box && asksBirthDate && !form.birthDate
+      setBirthDateInvalid(birth)
       if (box) requestAnimationFrame(() => document.getElementById(`reg-${box}`)?.focus())
+      else if (birth) requestAnimationFrame(() => document.getElementById("reg-birthdate")?.focus())
       return
     }
     setInvalidCheckbox(null)
@@ -1232,6 +1243,7 @@ export default function EventPageClient({ orgSlug, eventSlug, preview, initialEv
                   heldShifts={heldShifts}
                   timeZone={event.timeZone}
                   workload={event.workload}
+                  birthDate={form.birthDate}
                   variant="sidebar"
                 />
                 <div className="px-4 py-3 border-t border-gray-100 bg-gray-50">
@@ -1259,6 +1271,7 @@ export default function EventPageClient({ orgSlug, eventSlug, preview, initialEv
                   heldShifts={heldShifts}
                   timeZone={event.timeZone}
                   workload={event.workload}
+                  birthDate={form.birthDate}
                   variant="card"
                 />
               </div>
@@ -1339,7 +1352,7 @@ export default function EventPageClient({ orgSlug, eventSlug, preview, initialEv
                     className="w-full border border-gray-500 rounded-xl px-3 py-3 text-sm focus:outline-hidden focus:ring-2 focus:ring-blue-500"
                   />
                 </div>
-                {ageGatedSelectedShifts.length > 0 && (
+                {asksBirthDate && (
                   <div>
                     <label htmlFor="reg-birthdate" className="block text-sm font-medium text-gray-700 mb-1">Date de naissance<RequiredMark /></label>
                     <input
@@ -1348,12 +1361,13 @@ export default function EventPageClient({ orgSlug, eventSlug, preview, initialEv
                       required
                       autoComplete="bday"
                       aria-describedby="reg-birthdate-hint"
+                      aria-invalid={birthDateInvalid && !form.birthDate ? true : undefined}
                       value={form.birthDate}
-                      onChange={(e) => setForm((f) => ({ ...f, birthDate: e.target.value }))}
+                      onChange={(e) => { setForm((f) => ({ ...f, birthDate: e.target.value })); setBirthDateInvalid(false) }}
                       className="w-full border border-gray-500 rounded-xl px-3 py-3 text-sm focus:outline-hidden focus:ring-2 focus:ring-blue-500"
                     />
                     <p id="reg-birthdate-hint" className="text-xs text-gray-500 mt-1">
-                      Requis : {ageGatedSelectedShifts.map((s) => `${s.label} (${s.minAge} ans min.)`).join(", ")}
+                      {birthDateHint(ageGatedSelectedShifts, minorsProtected)}
                     </p>
                   </div>
                 )}

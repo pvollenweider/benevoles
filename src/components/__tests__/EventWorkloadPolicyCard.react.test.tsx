@@ -8,7 +8,7 @@ import EventWorkloadPolicyCard from "../admin/EventWorkloadPolicyCard"
 import MyWorkloadCard from "../public/MyWorkloadCard"
 
 // #1171: the organiser's card. Every value is theirs; empty is « à compléter ».
-const VALUES = { serviceDayStart: "08:00", maxContinuousMinutes: 360, minBreakMinutes: 30, maxDailyMinutes: 600, maxEventMinutes: 2400, minRestMinutes: 600, maxIdleGapMinutes: 120, offDay: { apply: false as const }, meal: { apply: false as const }, travel: { apply: false as const } }
+const VALUES = { serviceDayStart: "08:00", maxContinuousMinutes: 360, minBreakMinutes: 30, maxDailyMinutes: 600, maxEventMinutes: 2400, minRestMinutes: 600, maxIdleGapMinutes: 120, offDay: { apply: false as const }, meal: { apply: false as const }, travel: { apply: false as const }, minors: { apply: false as const } }
 const LEGACY = { serviceDayStart: "08:00", maxContinuousMinutes: 360, minBreakMinutes: 30, maxDailyMinutes: 600, maxEventMinutes: 2400, minRestMinutes: 600, maxIdleGapMinutes: 120 }
 const offDayGroup = () => within(screen.getByRole("group", { name: /^Jours sans mission/ }))
 const mealGroup = () => within(screen.getByRole("group", { name: /^Pause repas/ }))
@@ -71,7 +71,8 @@ describe("EventWorkloadPolicyCard", () => {
     expect(apply).not.toBeChecked()
     expect(offDayGroup().getByRole("radio", { name: "Ne pas appliquer cette règle" })).not.toBeChecked()
     fireEvent.click(screen.getByRole("button", { name: "Enregistrer les limites" }))
-    expect(fetchMock).not.toHaveBeenCalled()
+    // Only the personal limits' list is read: nothing is saved.
+    expect(fetchMock.mock.calls.filter((c) => c[1]?.method === "PUT")).toHaveLength(0)
     expect(apply).toHaveFocus()
     expect(apply).toHaveAccessibleDescription(/choisissez d'appliquer ou non/)
   })
@@ -149,6 +150,21 @@ describe("EventWorkloadPolicyCard", () => {
     fireEvent.click(screen.getByRole("button", { name: "Activer la protection" }))
     expect(margin).toHaveFocus()
     expect(margin).toHaveAccessibleDescription(/indiquez une marge de 0 à 15 minutes/)
+  })
+
+  it("minors: the event's current value under each field, a looser value refused on its field, the people without birth date said", () => {
+    card({ initialValues: VALUES, peopleWithoutBirthDate: 2 })
+    const group = within(screen.getByRole("group", { name: /^Moins de 18 ans/ }))
+    fireEvent.click(group.getByRole("radio", { name: "Appliquer cette règle" }))
+    const daily = within(group.getByRole("group", { name: "Durée maximale par journée de service" })).getByLabelText("heures")
+    expect(daily).toHaveAccessibleDescription("Événement : 10 h au plus")
+    expect(group.getByText(/2 personnes inscrites n'ont pas de date de naissance/)).toBeInTheDocument()
+    for (const [name, hours] of [["Durée maximale sans vraie pause", "4"], ["Durée minimale d'une vraie pause", "1"], ["Durée maximale par journée de service", "11"], ["Repos minimum entre deux journées de service", "12"]] as const) {
+      fireEvent.change(within(group.getByRole("group", { name })).getByLabelText("heures"), { target: { value: hours } })
+    }
+    fireEvent.click(screen.getByRole("button", { name: "Activer la protection" }))
+    expect(daily).toHaveFocus()
+    expect(daily).toHaveAccessibleDescription(/jamais moins stricte que la limite de l'événement \(10 h\)/)
   })
 
   it("asks before turning protection off", () => {

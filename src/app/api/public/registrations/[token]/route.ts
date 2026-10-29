@@ -28,16 +28,16 @@ import { queueWithdrawalConfirmation } from "@/lib/withdrawal-confirmation"
 import { deliverAfterResponse } from "@/lib/notifications/outbox"
 import { cancelRefusedError, isLateWithdrawal, selfCancelState, shiftStartsAt } from "@/lib/cancel-deadline"
 import { endSwapsAfter } from "@/lib/shift-swap-server"
-import { withPlaceNames } from "@/lib/workload-guard"
+import { readWorkloadPerson, withPlaceNames } from "@/lib/workload-guard"
 
 const tooManyAttempts = () => NextResponse.json({ error: "Trop de tentatives." }, { status: 429 })
 
 /** The personal page's workload notices (#1171): protected events only, committed missions only. */
-async function personalWorkload(regs: { status: string; shift: { id: string; date: Date; startTime: string; endTime: string; status: string; placeId?: string | null } }[], mode: WorkloadMode): Promise<string[]> {
+async function personalWorkload(regs: { status: string; shift: { id: string; date: Date; startTime: string; endTime: string; status: string; placeId?: string | null } }[], mode: WorkloadMode, eventId: string, volunteerId: string): Promise<string[]> {
   if (!blocksWorkload(mode)) return []
   const held = regs.filter((r) => (r.status === "active" || r.status === "requested") && r.shift.status !== "cancelled").map((r) => r.shift)
-  // The places' names for the travel messages (#1171, lot 2), read only when a held shift has one.
-  return workloadNotices(await withPlaceNames(prisma, held), mode).map((n) => n.text)
+  // The places' names for the travel messages, the person's birth date and own limits (#1171, lot 2).
+  return workloadNotices(await withPlaceNames(prisma, held), mode, await readWorkloadPerson(prisma, eventId, volunteerId)).map((n) => n.text)
 }
 
 export async function GET(req: Request, { params }: { params: Promise<{ token: string }> }) {
@@ -136,7 +136,7 @@ export async function GET(req: Request, { params }: { params: Promise<{ token: s
     // Workload protection (#1171): the limits the person's own programme no longer respects (left
     // by a cancellation, say), from their confirmed places and pending requests. Their own data,
     // behind their link; nothing for an event without protection.
-    workload: await personalWorkload(allRegistrations, workloadModeOf(event, timeZone)),
+    workload: await personalWorkload(allRegistrations, workloadModeOf(event, timeZone), registration.eventId, registration.volunteerId),
     // The calendar subscription of this link (#961): a read-only address of its own, never the link.
     calendarFeed: feedKey ? calendarFeedUrls(baseUrl, calendarFeedToken(registration.id, registration.editTokenHash, feedKey)) : null,
     // The newest email carrying the link, across the volunteer's registrations on this event (#376).

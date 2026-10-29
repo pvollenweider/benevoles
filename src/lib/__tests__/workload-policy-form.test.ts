@@ -1,12 +1,12 @@
 import { describe, it, expect } from "vitest"
 import {
   benchmarkAnnouncement, checkPolicyForm, durationMinutes, emptyPolicyForm, offDayExample, policyFormFrom, policySummaryLines, policyValuesFromForm,
-  mealDayOptions, shiftsWithoutPlaceText, withBenchmark, withMealWindow, withWarningSuggestions,
+  mealDayOptions, peopleWithoutBirthDateText, personalFormFrom, personalValuesFromForm, shiftsWithoutPlaceText, withBenchmark, withMealWindow, withWarningSuggestions,
 } from "../workload-policy-form"
 import { WORKLOAD_BENCHMARKS, type WorkloadPolicyValues } from "../workload-policy"
 
 // #1171: the organiser's form, hours and minutes, never a hidden default.
-const VALUES: WorkloadPolicyValues = { serviceDayStart: "08:00", maxContinuousMinutes: 360, minBreakMinutes: 30, maxDailyMinutes: 600, maxEventMinutes: 2400, minRestMinutes: 600, maxIdleGapMinutes: 120, offDay: { apply: false }, meal: { apply: false }, travel: { apply: false } }
+const VALUES: WorkloadPolicyValues = { serviceDayStart: "08:00", maxContinuousMinutes: 360, minBreakMinutes: 30, maxDailyMinutes: 600, maxEventMinutes: 2400, minRestMinutes: 600, maxIdleGapMinutes: 120, offDay: { apply: false }, meal: { apply: false }, travel: { apply: false }, minors: { apply: false } }
 
 describe("durations", () => {
   it("reads hours and minutes, empty as missing, nonsense as invalid", () => {
@@ -29,7 +29,7 @@ describe("checkPolicyForm", () => {
   it("an empty form is incomplete, field by field", () => {
     const r = checkPolicyForm(emptyPolicyForm())
     expect(r.ok).toBe(false)
-    if (!r.ok) expect(r.problems).toHaveLength(10)
+    if (!r.ok) expect(r.problems).toHaveLength(11)
     if (!r.ok) expect(r.problems.map((p) => p.field)).toContain("offDay")
     expect(policyValuesFromForm(emptyPolicyForm()).maxDailyMinutes).toBeUndefined()
   })
@@ -176,5 +176,28 @@ describe("travel (#1171, lot 2)", () => {
     const b = WORKLOAD_BENCHMARKS.find((x) => x.id === "travel")!
     expect(withBenchmark(emptyPolicyForm(), b).travel).toEqual({ apply: "yes", minutes: "15" })
     expect(benchmarkAnnouncement(b)).toBe("Rempli : trajet entre deux lieux : règle appliquée, 15 min de marge. Les autres champs n'ont pas changé.")
+  })
+})
+
+describe("minors (#1171, lot 2)", () => {
+  const MINORS = { apply: true as const, maxContinuousMinutes: 270, minBreakMinutes: 30, maxDailyMinutes: 480, minRestMinutes: 720 }
+  it("round-trips, says the rule, and the suggestion fills the four values", () => {
+    const form = policyFormFrom({ ...VALUES, minors: MINORS })
+    expect(form.minors.maxContinuousMinutes).toEqual({ hours: "4", minutes: "30" })
+    expect(checkPolicyForm(form)).toEqual({ ok: true, values: { ...VALUES, minors: MINORS } })
+    expect(policySummaryLines(VALUES)).toContain("Aucune limite particulière pour les moins de 18 ans.")
+    expect(policySummaryLines({ ...VALUES, minors: MINORS })).toContain("Moins de 18 ans : au plus 8 h par journée de service, une pause d'au moins 30 min avant 4 h 30 de missions d'affilée, et 12 h de repos entre deux journées.")
+    const b = WORKLOAD_BENCHMARKS.find((x) => x.id === "minors")!
+    expect(withBenchmark(emptyPolicyForm(), b).minors.apply).toBe("yes")
+    expect(b.source).toContain("Code du travail français")
+    expect(peopleWithoutBirthDateText(0)).toBeNull()
+    expect(peopleWithoutBirthDateText(1)).toBe("1 personne inscrite n'a pas de date de naissance : elle est vérifiée comme majeure tant qu'elle n'est pas connue.")
+  })
+
+  it("personal limits: empty fields follow the event, typed ones are sent", () => {
+    const form = personalFormFrom({ maxDailyMinutes: 480 })
+    expect(form.maxDailyMinutes).toEqual({ hours: "8", minutes: "0" })
+    expect(personalValuesFromForm(form)).toEqual({ maxDailyMinutes: 480 })
+    expect(personalValuesFromForm({ ...form, minRestMinutes: { hours: "x", minutes: "" } })).toEqual({ maxDailyMinutes: 480, minRestMinutes: "invalide" })
   })
 })

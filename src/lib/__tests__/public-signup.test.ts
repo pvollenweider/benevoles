@@ -182,3 +182,14 @@ describe("proposedShiftState", () => {
     expect(proposedShiftText("unavailable", "")).toBe("Le créneau proposé n'est plus disponible. D'autres créneaux sont peut-être encore ouverts ci-dessous.")
   })
 })
+
+// #1171 lot 2: the minors' protection asks the birth date too.
+describe("birth date for the minors' protection", () => {
+  it("is required, and the hint says why, with the minimum ages when any", async () => {
+    const { birthDateHint, validateSignup } = await import("../public-signup")
+    const form = { firstName: "A", lastName: "B", email: "a@b.c", phone: "", birthDate: "", comment: "", consent: true }
+    expect(validateSignup({ form, charterAccepted: true, requirePhone: false, ageGatedShifts: [], minorsProtected: true } as never)).toContain("protège les moins de 18 ans")
+    expect(birthDateHint([], true)).toBe("Requise : cet événement protège les moins de 18 ans (pauses et charge).")
+    expect(birthDateHint([{ label: "Bar", minAge: 16 }], true)).toBe("Requise : Bar (16 ans min.) ; cet événement protège aussi les moins de 18 ans (pauses et charge).")
+  })
+})

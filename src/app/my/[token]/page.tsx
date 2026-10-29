@@ -30,6 +30,7 @@ import MyAnswersCard from "@/components/public/MyAnswersCard"
 import ShiftRosterCard, { type RosterData } from "@/components/public/ShiftRosterCard"
 import ShiftSwapsCard from "@/components/public/ShiftSwapsCard"
 import MyWorkloadCard from "@/components/public/MyWorkloadCard"
+import MyWorkloadLimits from "@/components/public/MyWorkloadLimits"
 import type { KeptAnswerRow, MyAnswerRow } from "@/lib/my-answers"
 import type { AnswersEditState } from "@/lib/answer-changes"
 import { MISSION_BRIEF_ID, MISSION_BRIEF_TITLE, nextConfirmedRegistration, type BriefEvent } from "@/lib/mission-brief"
@@ -392,6 +393,7 @@ export default function MyRegistrationPage() {
         <p id="calendar-hint-shift" className="sr-only">Fichier pour l&apos;agenda de ton téléphone ou ordinateur. Il ne se met pas à jour : si un horaire change, tu recevras un email. Pour un agenda qui se met à jour tout seul, voir « Mon calendrier ».</p>
 
         <MyWorkloadCard messages={data.workload ?? []} contactEmail={data.contactEmail ?? null} />
+        <MyWorkloadLimits token={token} />
 
         <section aria-labelledby="shifts-title" className="space-y-3">
           <h2 id="shifts-title" className="text-sm font-semibold text-gray-900">Tous mes créneaux</h2>

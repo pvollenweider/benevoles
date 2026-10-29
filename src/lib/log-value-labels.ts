@@ -96,6 +96,11 @@ export const SWAP_REASON_LOG_LABELS: Record<SwapEndReason, string> = {
   workload_rest: "repos minimum",
   workload_idle: "attente entre deux missions",
   workload_incomplete: "protection des pauses incomplète",
+  workload_offday: "jours sans mission",
+  workload_meal: "pause repas",
+  workload_travel: "trajet entre deux lieux",
+  workload_places: "deux lieux à la fois",
+  workload_birthdate: "date de naissance manquante",
 }
 
 function lookup(map: Record<string, string>, value: string): string | undefined {

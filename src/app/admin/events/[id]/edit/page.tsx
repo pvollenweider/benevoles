@@ -109,6 +109,7 @@ export default async function EditEventPage({ params, searchParams }: { params: 
           timeZone={workload.timeZone}
           horizon={workload.horizon}
           placesInfo={{ shiftsWithoutPlace: workload.shiftsWithoutPlace, activePlaces: workload.activePlaces }}
+          peopleWithoutBirthDate={workload.peopleWithoutBirthDate}
         />
       )}
       {sectorsOffered && <EventSectorsOption eventId={event.id} initialEnabled={event.sectorsEnabled} adopted={sectorsAdopted(event)} />}
