@@ -62,7 +62,7 @@ async function main() {
   const manifest = await loadManifest(reference)
   // External visual review is opt-in here only for the fixture we can prove synthetic.
   // Do not export arbitrary videos, production captures or real volunteer information.
-  if (!["SHIFT_ROSTER_VISIBILITY", "ORG_FIRST_STEPS", "ORGANIZATION_ACTIVITY_LOG", "ADMIN_NAVIGATION", "GLOBAL_SEARCH", "ORG_PUBLIC_IDENTITY", "ORG_TEAM_PERMISSIONS", "EVENT_CREATE_BLANK", "EVENT_CREATE_TEMPLATE", "SHIFTS_ROLES_VIEWS", "ORG_EMAIL_SETTINGS", "EVENT_PROGRAM_PAGES_QR", "ORG_TIMEZONE_CHARTER", "EVENT_MILESTONES", "EVENT_REPORTS", "VOLUNTEER_BADGES", "ATTENDANCE_CHECK_IN", "REMINDERS_CHANGES", "DATA_EXPORTS_ARCHIVES", "LAST_MINUTE_CHANGES", "PRIVACY_PERSONAL_LINKS", "PLATFORM_INTERNAL_ADMINISTRATION", "EMAIL_DELIVERY_FAILURES", "MEMBERS_DUPLICATES_MERGE", "EVENT_QUESTIONS", "VOLUNTEER_HOURS_CERTIFICATE", ...betaVideos, ...commonDemoVideos, ...memberDemoVideos].includes(manifest.id) || !process.env.DATABASE_URL?.includes("benevoles_video")) throw new Error("External audiovisual review currently restricted to verified synthetic local fixtures")
+  if (!["SHIFT_ROSTER_VISIBILITY", "ORG_FIRST_STEPS", "ORGANIZATION_ACTIVITY_LOG", "ADMIN_NAVIGATION", "GLOBAL_SEARCH", "ORG_PUBLIC_IDENTITY", "ORG_TEAM_PERMISSIONS", "EVENT_CREATE_BLANK", "EVENT_CREATE_TEMPLATE", "SHIFTS_ROLES_VIEWS", "ORG_EMAIL_SETTINGS", "EVENT_PROGRAM_PAGES_QR", "ORG_TIMEZONE_CHARTER", "EVENT_MILESTONES", "EVENT_REPORTS", "VOLUNTEER_BADGES", "ATTENDANCE_CHECK_IN", "REMINDERS_CHANGES", "DATA_EXPORTS_ARCHIVES", "LAST_MINUTE_CHANGES", "PRIVACY_PERSONAL_LINKS", "PLATFORM_INTERNAL_ADMINISTRATION", "EMAIL_DELIVERY_FAILURES", "MEMBERS_DUPLICATES_MERGE", "EVENT_QUESTIONS", "VOLUNTEER_HOURS_CERTIFICATE", "WORKLOAD_PROTECTION", ...betaVideos, ...commonDemoVideos, ...memberDemoVideos].includes(manifest.id) || !process.env.DATABASE_URL?.includes("benevoles_video")) throw new Error("External audiovisual review currently restricted to verified synthetic local fixtures")
   if (memberDemoVideos.includes(manifest.id) || manifest.id === "ATTENDANCE_CHECK_IN" || manifest.id === "MEMBERS_DUPLICATES_MERGE") {
     const url = new URL(process.env.DATABASE_URL!)
     assert(["localhost", "127.0.0.1", "[::1]"].includes(url.hostname) && url.port === "45433" && url.pathname === "/benevoles_video", "Member review requires isolated video database before connection")
@@ -77,7 +77,7 @@ async function main() {
     // Keep the existing reminder-specific nine-registration / three-event guard below as well.
     if (betaVideos.includes(manifest.id) || manifest.id === "SECTOR_LEADERS") {
       const url = new URL(process.env.DATABASE_URL!)
-      assert(["localhost", "127.0.0.1", "[::1]"].includes(url.hostname) && ["45433", "45436"].includes(url.port) && url.pathname === "/benevoles_video", "Beta review requires isolated local video database")
+      assert(["localhost", "127.0.0.1", "[::1]"].includes(url.hostname) && ["45433", "45436", "45437"].includes(url.port) && url.pathname === "/benevoles_video", "Beta review requires isolated local video database")
       const fixture = await db.organization.findUniqueOrThrow({ where: { id: "video-beta" }, include: { admins: true, volunteers: true, events: { include: { registrations: true, sectorLeaders: true } } } })
       assert(fixture.slug === "formation-beta" && fixture.name === "Association du Festival de Montvert")
       assert(fixture.admins.length === 1 && fixture.admins[0].id === "video-beta-owner" && fixture.admins[0].email === "video.beta.owner@example.org")
@@ -186,6 +186,9 @@ async function main() {
     } else if (manifest.id === "PLATFORM_INTERNAL_ADMINISTRATION") {
       const { verifyOperatorReviewFixture } = await import("../lib/verify-operator-review-fixture")
       await verifyOperatorReviewFixture(db, videoDir(manifest.slug))
+    } else if (manifest.id === "WORKLOAD_PROTECTION") {
+      const { verifyWorkloadReviewFixture } = await import("../lib/verify-workload-review-fixture")
+      await verifyWorkloadReviewFixture(db)
     } else if (manifest.id === "PRIVACY_PERSONAL_LINKS") {
       const { verifyPrivacyReviewFixture } = await import("../lib/verify-privacy-review-fixture")
       await verifyPrivacyReviewFixture(db, videoDir(manifest.slug))

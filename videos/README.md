@@ -810,3 +810,26 @@ aucune image fixe n'est ajoutée. Le rapport conserve l'empreinte de la capture.
 texte attendu de la bande-son entière, transitions et musique comprises. Son
 contrôle du registre utilise les frontières Unicode : « bêta » ne contient pas
 le mot « ta ». Les correspondances restent à relire en contexte.
+
+### Lot 33 : reprises autorisées et première protection de la charge
+
+Le lot 33 utilise PostgreSQL **45437**, SMTP **41034**, Mailpit **48034** et le
+serveur vérifié **43102**. Les ports historiques et leurs conteneurs restent
+intacts. Installer les dépendances du lockfile dans la copie jetable avant le
+build vérifié ; les dépendances déjà présentes dans le worktree peuvent être
+plus anciennes que celles de `main`. Les outils tournent avec le client Prisma
+généré dans cette copie, sans régénérer `src/` du worktree.
+
+`WORKLOAD_PROTECTION` utilise son organisation `formation-charge`. Son seed
+ouvre seulement `workloadProtection` dans la liste bêta globale : filmer les
+reprises bêta précédentes avant de le lancer. Faire une première répétition
+`--rehearse --quick-rehearse`, puis re-semer avant chaque prise narrée. Conserver
+la page d'édition ouverte entre la saisie des valeurs et l'activation : les
+valeurs de la carte restent locales à cette page jusque-là.
+
+`audit-whole-voice.ts ID` complète les audits de chapitres par une observation
+audio du master continu entier, conclusion comprise. Il conserve son empreinte
+et refuse plusieurs générations ou un changement de voix signalé ; il ne
+remplace ni l'ASR indépendante ni la revue du MP4 final. Les contrôles
+`audit-audiovisual.ts` et `audit-full-final-audio.ts` acceptent désormais la
+fixture WORKLOAD explicitement vérifiée.

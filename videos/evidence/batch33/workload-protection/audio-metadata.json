@@ -1,0 +1,102 @@
+{
+  "model": "gemini-3.8-flash-tts",
+  "voice": "Kore",
+  "generatedAt": "2026-10-29T15:13:02.801Z",
+  "segments": {
+    "wl-welcome": {
+      "file": "audio/wl-welcome.wav",
+      "durationMs": 19670,
+      "generationSha256": "e8e27fe5effd42d28bd5c75724e7605cd49a258a6007b21ec93aa903abac7cb0"
+    },
+    "wl-places": {
+      "file": "audio/wl-places.wav",
+      "durationMs": 26140,
+      "generationSha256": "e8e27fe5effd42d28bd5c75724e7605cd49a258a6007b21ec93aa903abac7cb0"
+    },
+    "wl-meal-on-the-go": {
+      "file": "audio/wl-meal-on-the-go.wav",
+      "durationMs": 21284,
+      "generationSha256": "e8e27fe5effd42d28bd5c75724e7605cd49a258a6007b21ec93aa903abac7cb0"
+    },
+    "wl-card": {
+      "file": "audio/wl-card.wav",
+      "durationMs": 16952,
+      "generationSha256": "e8e27fe5effd42d28bd5c75724e7605cd49a258a6007b21ec93aa903abac7cb0"
+    },
+    "wl-service-day": {
+      "file": "audio/wl-service-day.wav",
+      "durationMs": 14594,
+      "generationSha256": "e8e27fe5effd42d28bd5c75724e7605cd49a258a6007b21ec93aa903abac7cb0"
+    },
+    "wl-limits": {
+      "file": "audio/wl-limits.wav",
+      "durationMs": 24372,
+      "generationSha256": "e8e27fe5effd42d28bd5c75724e7605cd49a258a6007b21ec93aa903abac7cb0"
+    },
+    "wl-benchmarks": {
+      "file": "audio/wl-benchmarks.wav",
+      "durationMs": 28538,
+      "generationSha256": "e8e27fe5effd42d28bd5c75724e7605cd49a258a6007b21ec93aa903abac7cb0"
+    },
+    "wl-offday": {
+      "file": "audio/wl-offday.wav",
+      "durationMs": 16438,
+      "generationSha256": "e8e27fe5effd42d28bd5c75724e7605cd49a258a6007b21ec93aa903abac7cb0"
+    },
+    "wl-meal-travel": {
+      "file": "audio/wl-meal-travel.wav",
+      "durationMs": 22900,
+      "generationSha256": "e8e27fe5effd42d28bd5c75724e7605cd49a258a6007b21ec93aa903abac7cb0"
+    },
+    "wl-minors": {
+      "file": "audio/wl-minors.wav",
+      "durationMs": 20906,
+      "generationSha256": "e8e27fe5effd42d28bd5c75724e7605cd49a258a6007b21ec93aa903abac7cb0"
+    },
+    "wl-preview": {
+      "file": "audio/wl-preview.wav",
+      "durationMs": 13682,
+      "generationSha256": "e8e27fe5effd42d28bd5c75724e7605cd49a258a6007b21ec93aa903abac7cb0"
+    },
+    "wl-refused": {
+      "file": "audio/wl-refused.wav",
+      "durationMs": 14357,
+      "generationSha256": "e8e27fe5effd42d28bd5c75724e7605cd49a258a6007b21ec93aa903abac7cb0"
+    },
+    "wl-activate": {
+      "file": "audio/wl-activate.wav",
+      "durationMs": 18127,
+      "generationSha256": "e8e27fe5effd42d28bd5c75724e7605cd49a258a6007b21ec93aa903abac7cb0"
+    },
+    "wl-personal": {
+      "file": "audio/wl-personal.wav",
+      "durationMs": 18816,
+      "generationSha256": "e8e27fe5effd42d28bd5c75724e7605cd49a258a6007b21ec93aa903abac7cb0"
+    },
+    "wl-signup": {
+      "file": "audio/wl-signup.wav",
+      "durationMs": 29647,
+      "generationSha256": "e8e27fe5effd42d28bd5c75724e7605cd49a258a6007b21ec93aa903abac7cb0"
+    },
+    "wl-withdraw": {
+      "file": "audio/wl-withdraw.wav",
+      "durationMs": 19708,
+      "generationSha256": "e8e27fe5effd42d28bd5c75724e7605cd49a258a6007b21ec93aa903abac7cb0"
+    },
+    "wl-registrations": {
+      "file": "audio/wl-registrations.wav",
+      "durationMs": 10644,
+      "generationSha256": "e8e27fe5effd42d28bd5c75724e7605cd49a258a6007b21ec93aa903abac7cb0"
+    },
+    "wl-my-card": {
+      "file": "audio/wl-my-card.wav",
+      "durationMs": 19029,
+      "generationSha256": "e8e27fe5effd42d28bd5c75724e7605cd49a258a6007b21ec93aa903abac7cb0"
+    },
+    "wl-result": {
+      "file": "audio/wl-result.wav",
+      "durationMs": 17196,
+      "generationSha256": "e8e27fe5effd42d28bd5c75724e7605cd49a258a6007b21ec93aa903abac7cb0"
+    }
+  }
+}

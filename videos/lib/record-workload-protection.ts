@@ -226,6 +226,10 @@ export async function recordWorkloadProtection(options: Options) {
     await at("Choisissons Ne pas appliquer")
     await offDay.scrollIntoViewIfNeeded()
     await tap(page, field("event-wl-offDay-no"))
+    assert(await field("event-wl-offDay-no").isChecked())
+    // Keep the actual chosen rule in the screencast before scrolling to Aperçu.
+    await field("event-wl-offDay-no").scrollIntoViewIfNeeded()
+    await page.waitForTimeout(700)
     await tap(page, card.getByRole("button", { name: "Aperçu", exact: true }))
     await card.getByRole("status").filter({ hasText: "Aperçu : aucun programme actuel ne dépasse ces limites. Rien n'est encore activé." }).waitFor()
     await at("Activons la protection")
@@ -264,9 +268,11 @@ export async function recordWorkloadProtection(options: Options) {
     const recap = page.getByText("Ces créneaux dépassent les limites de l'événement", { exact: true }).filter({ visible: true }).first()
     await recap.scrollIntoViewIfNeeded()
     await at("Emma remplit tout de même")
-    await typeNaturally(page, field("reg-firstname"), "Emma")
-    await typeNaturally(page, field("reg-lastname"), surnameOf("Emma"))
-    await typeNaturally(page, field("reg-email"), "video.workload.emma@example.org")
+    // This complete form follows the recap sentence. Direct input keeps the
+    // actual refusal inside its narrated chapter; fill emits no invented keys.
+    await fill(field("reg-firstname"), "Emma")
+    await fill(field("reg-lastname"), surnameOf("Emma"))
+    await fill(field("reg-email"), "video.workload.emma@example.org")
     await fill(field("reg-birthdate"), "1994-03-14")
     await tap(page, field("reg-charter"))
     await tap(page, field("reg-consent"))
@@ -282,6 +288,8 @@ export async function recordWorkloadProtection(options: Options) {
   await scene("wl-withdraw", async at => {
     await personalPage("sarah")
     assert.equal(await page.locator('[data-my-workload="1"]').count(), 0, "Sarah's programme must respect the limits before her withdrawal")
+    await at("Dimanche, Sarah est inscrite")
+    await page.getByRole("heading", { level: 2, name: "Tous mes créneaux", exact: true }).scrollIntoViewIfNeeded()
     await at("Sur sa page Mes inscriptions")
     const cancel = page.getByRole("button", { name: "Annuler le créneau Accueil Chapiteau", exact: true })
     await cancel.scrollIntoViewIfNeeded()
@@ -315,6 +323,7 @@ export async function recordWorkloadProtection(options: Options) {
   await scene("wl-result", async () => {
     await go(`${event}/edit`)
     await card.getByRole("link", { name: "1 programme à revoir", exact: true }).waitFor()
-    await card.scrollIntoViewIfNeeded()
+    // The card is taller than a viewport: centering its container hid its state.
+    await card.getByRole("heading", { level: 2, name: /^Protection des pauses et de la charge/ }).scrollIntoViewIfNeeded()
   })
 }
