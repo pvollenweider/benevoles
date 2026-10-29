@@ -53,6 +53,12 @@ export const VOLUNTEER_RELATIONS: Record<string, VolunteerRelation> = {
     erasure: "delete",
     why: "the person's own workload limits on an event (#1171): moved to the kept record, the stricter value of each field kept where both had a row; erased with the person's data",
   },
+  AvailabilityRequest: {
+    merge: "reassign",
+    deletion: "cascade",
+    erasure: "delete",
+    why: "the person's dated availability on an event (#1146), with its days and ranges: moved to the kept record; where both records answered on the same event, the kept record's answers stay and are flagged for review when they differ, never united into more availability (src/lib/event-availability.ts); erased with the person's data",
+  },
   RosterConsent: {
     merge: "drop",
     deletion: "cascade",

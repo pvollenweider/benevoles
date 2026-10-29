@@ -182,6 +182,8 @@ export async function runMemberErasure(
     await tx.rosterConsent.deleteMany({ where: { volunteerId: { in: authors } } })
     // Personal workload limits (#1171, lot 2): the person's own settings, gone with their data.
     await tx.eventVolunteerLimit.deleteMany({ where: { volunteerId: { in: authors } } })
+    // Dated availability (#1146): the person's own answers, with their days and ranges (cascade).
+    await tx.availabilityRequest.deleteMany({ where: { volunteerId: { in: authors } } })
     if (del.sectorLeaderIds.length) await tx.sectorLeader.deleteMany({ where: { id: { in: del.sectorLeaderIds } } })
     if (del.duplicateDismissalIds.length) await tx.duplicateDismissal.deleteMany({ where: { id: { in: del.duplicateDismissalIds } } })
     // SMTP outcomes (#598): the member's own, and any other row of the organisation with their
@@ -211,12 +213,13 @@ export async function runMemberErasure(
     await endSwapsIn(tx, { volunteerIds: [id] }, "volunteer_gone", actor, now)
 
     // 5. Invariant: nothing the person owns is left.
-    const [answers, invites, push] = await Promise.all([
+    const [answers, invites, push, availability] = await Promise.all([
       tx.questionAnswer.count({ where: { volunteerId: id } }),
       tx.memberInvite.count({ where: { volunteerId: id } }),
       tx.pushSubscription.count({ where: { volunteerId: id } }),
+      tx.availabilityRequest.count({ where: { volunteerId: id } }),
     ])
-    if (answers || invites || push) throw new Error(`member erasure invariant violated for ${id} (answers=${answers} invites=${invites} push=${push})`)
+    if (answers || invites || push || availability) throw new Error(`member erasure invariant violated for ${id} (answers=${answers} invites=${invites} push=${push} availability=${availability})`)
 
     // 6. Register (replay after a restore) and log: an erasure happened, never who. The admin who
     // did it is the actor, as for every other action.
