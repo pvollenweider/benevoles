@@ -160,3 +160,15 @@ describe("eventDatesLabel", () => {
     expect(eventDatesLabel("2026-12-31", "2027-01-01")).toBe("31 décembre 2026 au 1 janvier 2027")
   })
 })
+
+describe("eventSubNav — Disponibilités (#1146)", () => {
+  const labels = (optional: { availability?: boolean }, path = "registrations") => eventSubNav(`/admin/events/e1/${path}`, "e1", optional)?.links.map((l) => l.label)
+  it("lists « Disponibilités » only for an event that collects availability", () => {
+    expect(labels({})).toEqual(["Inscriptions", "Invitations"])
+    expect(labels({ availability: true })).toEqual(["Inscriptions", "Invitations", "Disponibilités"])
+  })
+  it("keeps it listed, as the current page, while on it", () => {
+    const nav = eventSubNav("/admin/events/e1/availability", "e1")
+    expect(nav?.links.find((l) => l.label === "Disponibilités")?.current).toBe("page")
+  })
+})

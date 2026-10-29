@@ -17,7 +17,7 @@ import { decryptValue, encryptValue, keyring, needsReencryption } from "./token-
 
 type Row = { id: string; value: string | null }
 type Table = {
-  name: "registrations" | "sectorLeaders" | "memberInvites"
+  name: "registrations" | "sectorLeaders" | "memberInvites" | "availabilityRequests"
   legacy?: (take: number) => Promise<Row[]>
   encrypted: (take: number, notPrefix: string) => Promise<Row[]>
   update: (id: string, from: { legacy?: string; enc?: string }, enc: string) => Promise<number>
@@ -57,6 +57,18 @@ const tables: Table[] = [
       data: { tokenEnc: enc, tokenLegacy: null },
     }).then((r) => r.count),
   },
+  {
+    // The availability links (#1146), same columns as MemberInvite.
+    name: "availabilityRequests",
+    legacy: (take) => prisma.availabilityRequest.findMany({ where: { tokenLegacy: { not: null } }, select: { id: true, tokenLegacy: true }, take })
+      .then((rows) => rows.map((r) => ({ id: r.id, value: r.tokenLegacy }))),
+    encrypted: (take, notPrefix) => prisma.availabilityRequest.findMany({ where: { tokenEnc: { not: null }, NOT: { tokenEnc: { startsWith: notPrefix } } }, select: { id: true, tokenEnc: true }, take })
+      .then((rows) => rows.map((r) => ({ id: r.id, value: r.tokenEnc }))),
+    update: (id, from, enc) => prisma.availabilityRequest.updateMany({
+      where: { id, ...(from.legacy ? { tokenLegacy: from.legacy } : { tokenEnc: from.enc }) },
+      data: { tokenEnc: enc, tokenLegacy: null },
+    }).then((r) => r.count),
+  },
 ]
 
 export async function encryptLegacyTokens(opts: { batchSize?: number; maxBatches?: number } = {}) {
@@ -66,8 +78,8 @@ export async function encryptLegacyTokens(opts: { batchSize?: number; maxBatches
   const maxBatches = opts.maxBatches ?? 20
   const prefix = `v2:${ring.current.id}:`
 
-  const encrypted = { registrations: 0, sectorLeaders: 0, memberInvites: 0 }
-  const reencrypted = { registrations: 0, sectorLeaders: 0, memberInvites: 0 }
+  const encrypted = { registrations: 0, sectorLeaders: 0, memberInvites: 0, availabilityRequests: 0 }
+  const reencrypted = { registrations: 0, sectorLeaders: 0, memberInvites: 0, availabilityRequests: 0 }
 
   for (const t of tables) {
     const name = t.name as keyof typeof encrypted

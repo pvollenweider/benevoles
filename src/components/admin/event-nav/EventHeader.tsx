@@ -27,6 +27,8 @@ export type EventHeaderProps = {
   awaitingValidation: boolean
   /** Owner of the organisation and event archived: the menu offers the permanent deletion. */
   canDelete: boolean
+  /** The event collects dated availability (#1146): « Disponibilités » in the Inscriptions tab. */
+  availabilityPage?: boolean
 }
 
 /**
@@ -35,13 +37,13 @@ export type EventHeaderProps = {
  * then the tabs and, for a tab of several pages, their own navigation. The title is the page's
  * <h1> on the overview only; every other page has its own <h1 id="page-heading">.
  */
-export default function EventHeader({ facts, title, dates, location, stage, unlisted, awaitingValidation, canDelete }: EventHeaderProps) {
+export default function EventHeader({ facts, title, dates, location, stage, unlisted, awaitingValidation, canDelete, availabilityPage = false }: EventHeaderProps) {
   const segments = useSelectedLayoutSegments()
   const subPath = segments.join("/")
   const pathname = eventHref(facts.eventId, subPath)
   const isOverview = segments.length === 0
   const tabs = eventTabs(facts, pathname)
-  const subNav = eventSubNav(pathname, facts.eventId)
+  const subNav = eventSubNav(pathname, facts.eventId, { availability: availabilityPage })
   const primary = eventPrimaryAction(facts)
   // Step 2 of the creation assistant has its own « Continuer » (#1098): no competing « Publier ».
   const inWizard = useSearchParams()?.has("wizard") ?? false

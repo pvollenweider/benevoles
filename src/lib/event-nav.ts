@@ -14,7 +14,17 @@ import { currentStage, type StageId } from "./event-lifecycle"
 export type EventTabId = "overview" | "day-of" | "shifts" | "registrations" | "communication" | "share" | "documents" | "settings"
 
 /** A page of a tab: its path under /admin/events/[id] ("" = the overview) and its label in the tab's own navigation. */
-export type EventSubPage = { path: string; label: string; /** Deeper pages shown as this one (staffing/search under staffing). */ nested?: string[] }
+export type EventSubPage = {
+  path: string
+  label: string
+  /** Deeper pages shown as this one (staffing/search under staffing). */
+  nested?: string[]
+  /** Listed only for an event that uses this beta option (#1146), or while on the page itself. */
+  when?: "availability"
+}
+
+/** The optional pages an event shows (#1146: « Disponibilités » once the event collects availability). */
+export type EventOptionalPages = { availability?: boolean }
 
 export type EventTabDef = { id: EventTabId; label: string; pages: EventSubPage[] }
 
@@ -23,7 +33,7 @@ export const EVENT_TABS: EventTabDef[] = [
   { id: "overview", label: "Aperçu", pages: [{ path: "", label: "Aperçu" }, { path: "review", label: "Vérification et publication" }] },
   { id: "day-of", label: "Jour J", pages: [{ path: "day-of", label: "Jour J" }] },
   { id: "shifts", label: "Créneaux", pages: [{ path: "shifts", label: "Créneaux" }, { path: "staffing", label: "Où manque-t-il du monde ?", nested: ["staffing/search"] }] },
-  { id: "registrations", label: "Inscriptions", pages: [{ path: "registrations", label: "Inscriptions" }, { path: "invitations", label: "Invitations" }] },
+  { id: "registrations", label: "Inscriptions", pages: [{ path: "registrations", label: "Inscriptions" }, { path: "invitations", label: "Invitations" }, { path: "availability", label: "Disponibilités", when: "availability" }] },
   { id: "communication", label: "Messages", pages: [{ path: "message", label: "Messages" }] },
   {
     id: "share", label: "Partage",
@@ -126,15 +136,16 @@ export type SubNavLink = { label: string; href: string; current: Current }
  * Inscriptions, Partage, Paramètres). Null otherwise. The review page, reached from the overview's
  * checklist, is not listed: it is a step, not a page of the tab.
  */
-export function eventSubNav(pathname: string, eventId: string): { tabLabel: string; links: SubNavLink[] } | null {
+export function eventSubNav(pathname: string, eventId: string, optional: EventOptionalPages = {}): { tabLabel: string; links: SubNavLink[] } | null {
   const sub = eventSubPath(pathname, eventId)
   const located = locatePage(sub)
   if (!located || located.tab === "overview") return null
   const tab = EVENT_TABS.find((t) => t.id === located.tab)!
-  if (tab.pages.length < 2) return null
+  const pages = tab.pages.filter((p) => !p.when || optional[p.when] || p.path === located.page)
+  if (pages.length < 2) return null
   return {
     tabLabel: tab.label,
-    links: tab.pages.map((p) => ({
+    links: pages.map((p) => ({
       label: p.label,
       href: eventHref(eventId, p.path),
       current: p.path === located.page ? (sub === p.path ? "page" : "true") : undefined,

@@ -34,7 +34,7 @@ import { siteName } from "@/lib/site"
 /** What an email counts against, by kind. Platform emails (no organisation) only meet the global rate. */
 export type SendCategory = "bulk" | "automatic" | "account"
 
-const BULK: readonly NotificationKind[] = ["targeted_message", "member_invite", "manual_reminder", "open_shifts"]
+const BULK: readonly NotificationKind[] = ["targeted_message", "member_invite", "manual_reminder", "open_shifts", "availability_request"]
 // Admin invitations come from an authenticated owner or the super admin. A password reset is not
 // here: anyone can request one, so it has its per-recipient cap instead of an organisation-wide one
 // that a stranger could use up.

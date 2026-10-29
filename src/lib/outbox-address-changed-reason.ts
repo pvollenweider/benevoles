@@ -30,6 +30,9 @@ export const PERSONAL_LINK_REVOKED_REASON = "personal_link_revoked"
 /** A sector leader email whose leader was removed, or whose link or address changed, since it was queued. */
 export const LEADER_LINK_REVOKED_REASON = "leader_link_revoked"
 
+/** An availability request (#1146) whose link was renewed or revoked (collection turned off) since it was queued. */
+export const AVAILABILITY_LINK_REVOKED_REASON = "availability_link_revoked"
+
 const norm = (email: string | null | undefined) => (email ?? "").trim().toLowerCase()
 
 /** True when the queued address is no longer the member's (or the member is gone). */

@@ -202,6 +202,17 @@ export default function PrivacyPage() {
         <a href="#conservation">conservation des données</a>). L&apos;Organisation informe ses
         bénévoles de ce traitement, peut le désactiver pour un événement, et en reste responsable.
       </p>
+      {/* Dated availability (#1146, beta). */}
+      <p id="disponibilites-datees">
+        <strong>Disponibilités datées.</strong> Pour un événement où elle l&apos;active, l&apos;Organisation
+        peut demander à des membres, par un lien personnel envoyé par email, leurs plages libres date par
+        date (par exemple « de 20h à 3h le lendemain ») ou « pas disponible ». Seuls les organisateurs de
+        l&apos;Organisation voient ces réponses, jamais les autres bénévoles ni une page publique. Elles
+        sont effacées avec les données personnelles du membre s&apos;il le demande, et avec celles de
+        l&apos;événement {PAST_EVENT_RETENTION_YEARS} ans après sa fin (voir la{" "}
+        <a href="#conservation">conservation des données</a>) ; elles ne sont jamais copiées avec
+        l&apos;événement. Le lien cesse de fonctionner quand l&apos;Organisation arrête la collecte.
+      </p>
       <p>
         En tant que sous-traitant, nous nous engageons à :
       </p>

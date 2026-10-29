@@ -74,3 +74,19 @@ export function memberLinkPayload(
   if (payload.kind === "member_invite" && typeof data.token === "string" && data.token && oldLinks.inviteHashes.has(hash(data.token))) return true
   return false
 }
+
+/** A dated-availability request of the member (#1146), as read for the renewal. */
+export type RenewedAvailability = { id: string; hasLink: boolean; collecting: boolean; deadline: Date | null; eventEndDate: Date }
+
+/**
+ * Which availability links (#1146) go to the new address: every live link (not revoked) of an
+ * upcoming event still collecting, before its deadline. Each live link gets a new secret either
+ * way; the others are sent by the organiser when they ask again. Only to an active member.
+ */
+export function availabilityLinksToResend(input: { newEmail: string | null | undefined; active: boolean; requests: RenewedAvailability[] }, now: Date): string[] {
+  if (!norm(input.newEmail) || !input.active) return []
+  const horizon = now.getTime() - UPCOMING_GRACE_MS
+  return input.requests
+    .filter((r) => r.hasLink && r.collecting && r.eventEndDate.getTime() >= horizon && (!r.deadline || r.deadline.getTime() > now.getTime()))
+    .map((r) => r.id)
+}

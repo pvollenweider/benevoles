@@ -6,8 +6,8 @@
  * `TOKEN_ENCRYPTION_KEY` (src/lib/token-vault.ts) does not revoke a single link, because lookups
  * only need the row's hash to still match — the key only controls whether the clear token can be
  * re-sent. The only way to make a leaked link stop resolving is to give its row a brand new
- * token, which is what this module does, for `Registration.editToken`, `SectorLeader.token` and
- * `MemberInvite.token`.
+ * token, which is what this module does, for `Registration.editToken`, `SectorLeader.token`,
+ * `MemberInvite.token` and the live `AvailabilityRequest.token` (#1146).
  *
  * Scope is either every row of an organization, every row of one event, or an explicit list of
  * row ids (the last form is for #600: a member merge moves a registration/invite to the
@@ -31,13 +31,15 @@ import { sendNotification } from "./notifications"
 import { sendMemberInvite } from "./notification-helpers"
 import { LIVE_STATUSES } from "./registration-capacity"
 import { endSwapsIn } from "./shift-swap-server"
+import { availabilityEmailKey, availabilityRequestPayload, type EventForSend } from "./event-availability-server"
+import { answersOpen } from "./event-availability-text"
 
 const LIVE = new Set<string>(LIVE_STATUSES)
 
 export type LinkScope =
   | { organizationId: string }
   | { eventId: string }
-  | { registrationIds?: string[]; leaderIds?: string[]; inviteIds?: string[] }
+  | { registrationIds?: string[]; leaderIds?: string[]; inviteIds?: string[]; availabilityIds?: string[] }
 
 export type RegenerateLinksOptions = {
   /** Also email every affected volunteer/leader/member their new link (#542, point 2). */
@@ -47,8 +49,8 @@ export type RegenerateLinksOptions = {
 export type ResendCounts = { sent: number; failed: number; skipped: number }
 
 export type RegenerateLinksResult = {
-  counts: { registrations: number; leaders: number; invites: number }
-  resend?: { registrations: ResendCounts; leaders: ResendCounts; invites: ResendCounts }
+  counts: { registrations: number; leaders: number; invites: number; availabilityLinks: number }
+  resend?: { registrations: ResendCounts; leaders: ResendCounts; invites: ResendCounts; availabilityLinks: ResendCounts }
 }
 
 type RegistrationRow = {
@@ -102,6 +104,21 @@ const leaderSelect = {
   event: { select: { title: true, organizationId: true, organization: { select: { slug: true } } } },
 } as const
 
+type AvailabilityRow = {
+  id: string
+  volunteerId: string
+  volunteer: { firstName: string; lastName: string; email: string | null; active: boolean }
+  event: EventForSend
+}
+
+/** Only live links (#1146): a revoked one (collection turned off) stays revoked. */
+const availabilitySelect = {
+  id: true,
+  volunteerId: true,
+  volunteer: { select: { firstName: true, lastName: true, email: true, active: true } },
+  event: { select: { id: true, title: true, startDate: true, endDate: true, organizationId: true, availabilityEnabled: true, availabilityDeadline: true, availabilityTimeZone: true, organization: { select: { name: true, slug: true, timeZone: true } } } },
+} as const
+
 const inviteSelect = {
   id: true,
   volunteerId: true,
@@ -138,6 +155,10 @@ export interface LinkRegenerationDb {
     findMany(args: { where: Record<string, unknown>; select: typeof inviteSelect }): Promise<InviteRow[]>
     update(args: { where: { id: string }; data: Record<string, unknown> }): Promise<unknown>
   }
+  availabilityRequest: {
+    findMany(args: { where: Record<string, unknown>; select: typeof availabilitySelect }): Promise<AvailabilityRow[]>
+    update(args: { where: { id: string }; data: Record<string, unknown> }): Promise<unknown>
+  }
   $transaction<T>(fn: (tx: LinkRegenerationDb) => Promise<T>, options?: { maxWait?: number; timeout?: number }): Promise<T>
 }
 
@@ -159,14 +180,22 @@ function inviteWhere(scope: LinkScope): Record<string, unknown> | null {
   return scope.inviteIds?.length ? { id: { in: scope.inviteIds } } : null
 }
 
+function availabilityWhere(scope: LinkScope): Record<string, unknown> | null {
+  const live = { tokenHash: { not: null } }
+  if ("organizationId" in scope) return { ...live, event: { organizationId: scope.organizationId } }
+  if ("eventId" in scope) return { ...live, eventId: scope.eventId }
+  return scope.availabilityIds?.length ? { ...live, id: { in: scope.availabilityIds } } : null
+}
+
 /** Rows a scope would touch, without changing anything — used for the CLI's dry run. */
 export async function countLinksInScope(db: LinkRegenerationDb, scope: LinkScope): Promise<RegenerateLinksResult["counts"]> {
-  const [registrations, leaders, invites] = await Promise.all([
+  const [registrations, leaders, invites, availability] = await Promise.all([
     registrationWhere(scope) ? db.registration.findMany({ where: registrationWhere(scope)!, select: registrationSelect }) : [],
     leaderWhere(scope) ? db.sectorLeader.findMany({ where: leaderWhere(scope)!, select: leaderSelect }) : [],
     inviteWhere(scope) ? db.memberInvite.findMany({ where: inviteWhere(scope)!, select: inviteSelect }) : [],
+    availabilityWhere(scope) ? db.availabilityRequest.findMany({ where: availabilityWhere(scope)!, select: availabilitySelect }) : [],
   ])
-  return { registrations: registrations.length, leaders: leaders.length, invites: invites.length }
+  return { registrations: registrations.length, leaders: leaders.length, invites: invites.length, availabilityLinks: availability.length }
 }
 
 /**
@@ -182,31 +211,34 @@ export async function regenerateLinks(
   const regWhere = registrationWhere(scope)
   const leadWhere = leaderWhere(scope)
   const invWhere = inviteWhere(scope)
+  const avWhere = availabilityWhere(scope)
 
-  const [registrations, leaders, invites] = await Promise.all([
+  const [registrations, leaders, invites, availability] = await Promise.all([
     regWhere ? db.registration.findMany({ where: regWhere, select: registrationSelect }) : Promise.resolve([]),
     leadWhere ? db.sectorLeader.findMany({ where: leadWhere, select: leaderSelect }) : Promise.resolve([]),
     invWhere ? db.memberInvite.findMany({ where: invWhere, select: inviteSelect }) : Promise.resolve([]),
+    avWhere ? db.availabilityRequest.findMany({ where: avWhere, select: availabilitySelect }) : Promise.resolve([]),
   ])
 
   // One fresh token per row, generated up front: the new clear token is needed for the resend
   // step below, and sealing (registrationToken.data / linkToken.data) can't be reversed from the
   // stored columns without the encryption key, which the resend step shouldn't have to assume.
   const newTokenById = new Map<string, string>()
-  for (const row of [...registrations, ...leaders, ...invites]) newTokenById.set(row.id, generateToken())
+  for (const row of [...registrations, ...leaders, ...invites, ...availability]) newTokenById.set(row.id, generateToken())
 
   await db.$transaction(async (tx) => {
     await Promise.all([
       ...registrations.map((r) => tx.registration.update({ where: { id: r.id }, data: registrationToken.data(newTokenById.get(r.id)!) })),
       ...leaders.map((l) => tx.sectorLeader.update({ where: { id: l.id }, data: linkToken.data(newTokenById.get(l.id)!) })),
       ...invites.map((i) => tx.memberInvite.update({ where: { id: i.id }, data: linkToken.data(newTokenById.get(i.id)!) })),
+      ...availability.map((a) => tx.availabilityRequest.update({ where: { id: a.id }, data: linkToken.data(newTokenById.get(a.id)!) })),
     ])
     // Swap requests given from the old links end (#1174 E18): a new link means a new agreement.
     if (registrations.length > 0) await endSwapsIn(tx, { registrationIds: registrations.map((r) => r.id) }, "link_revoked", { type: "system" })
   }, { maxWait: 10_000, timeout: 120_000 }) // a whole organization can hold thousands of rows: Prisma's 5 s default is too short
 
   const result: RegenerateLinksResult = {
-    counts: { registrations: registrations.length, leaders: leaders.length, invites: invites.length },
+    counts: { registrations: registrations.length, leaders: leaders.length, invites: invites.length, availabilityLinks: availability.length },
   }
 
   if (options.resend) {
@@ -214,6 +246,7 @@ export async function regenerateLinks(
       registrations: await resendRegistrationLinks(registrations, newTokenById),
       leaders: await resendLeaderLinks(leaders, newTokenById),
       invites: await resendInviteLinks(invites, newTokenById),
+      availabilityLinks: await resendAvailabilityLinks(availability, newTokenById),
     }
     // Best-effort bookkeeping (same field the existing resend routes update); failure here must
     // not undo the rotation or be reported as a resend failure.
@@ -303,6 +336,26 @@ async function resendInviteLinks(rows: InviteRow[], newTokenById: Map<string, st
         volunteerId: i.volunteerId,
         organizationId: i.event.organizationId,
       })
+      if (result.ok) sent++; else failed++
+    } catch {
+      failed++
+    }
+  }
+  return { sent, failed, skipped }
+}
+
+/**
+ * One email per availability link (#1146) still useful: the event still collects, before its
+ * deadline, and the member is active with an address. Sent directly, like the other re-sends here.
+ */
+async function resendAvailabilityLinks(rows: AvailabilityRow[], newTokenById: Map<string, string>): Promise<ResendCounts> {
+  let sent = 0, failed = 0, skipped = 0
+  const now = new Date()
+  for (const a of rows) {
+    const email = a.volunteer.email
+    if (!email || !a.volunteer.active || !a.event.availabilityEnabled || !answersOpen(a.event.availabilityDeadline, now)) { skipped++; continue }
+    try {
+      const result = await sendNotification(availabilityRequestPayload(a.event, { id: a.volunteerId, firstName: a.volunteer.firstName, lastName: a.volunteer.lastName, email }, newTokenById.get(a.id)!, availabilityEmailKey(a.event.id, a.id, now), false))
       if (result.ok) sent++; else failed++
     } catch {
       failed++

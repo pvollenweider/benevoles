@@ -99,6 +99,10 @@ const FIELD_LABELS: Record<string, string> = {
   // Breaks and workload protection (#1171): the event's option and a summary of its limits.
   workloadProtectionEnabled: "protection des pauses et de la charge",
   workloadPolicy: "limites de pauses et de charge",
+  // Dated availability (#1146): the event's option and its deadline; how many dates an answer gave.
+  availabilityEnabled: "collecte des disponibilités",
+  availabilityDeadline: "date limite des disponibilités",
+  dates: "dates",
   postes: "postes",
 }
 
@@ -225,6 +229,10 @@ export const ACTION_VERB: Record<string, (actor: string) => string> = {
   "swap.expired": () => "la demande d'échange a expiré",
   "swap.ended": () => "la demande d'échange a pris fin sans échange",
   "registration.swapped": () => "l'inscription a changé de créneau par un échange entre bénévoles",
+  // Dated availability (#1146): that someone answered or was asked, never the ranges.
+  "availability.requested": (a) => `${a} a demandé ses disponibilités à un membre`,
+  "availability.answered": (a) => `${a} a indiqué ses disponibilités`,
+  "availability.corrected": (a) => `${a} a corrigé les disponibilités d'un membre`,
   "event.sectors_adopted": (a) => `${a} a enregistré le premier secteur : l'événement garde désormais l'organisation par secteurs`,
   // Not a real event: a synthetic snapshot of current state for entities that predate logging
   // (see the baseline endpoint). Worded as an observation, never as something that "happened".

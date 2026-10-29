@@ -106,10 +106,14 @@ export function nextDate(date: string): string {
 
 // ── Resolution and validation ─────────────────────────────────────────────────────────────────
 
-export type ResolvedRange = { startTime: string; endTime: string; startsAt: Date; endsAt: Date }
+/** `input`: the range's position in the submitted date (from 0), to point an error at its field; never stored. */
+export type ResolvedRange = { startTime: string; endTime: string; startsAt: Date; endsAt: Date; input?: number }
 export type ResolvedDay = { date: string; ranges: ResolvedRange[] }
 
-export type AvailabilityCheck<T> = { ok: true; value: T } | { ok: false; error: string }
+/** Where an error is, for the form to mark that field: the date, the range (from 0) and which time. */
+export type AvailabilityErrorAt = { date: string; range?: number; field?: "start" | "end" }
+
+export type AvailabilityCheck<T> = { ok: true; value: T } | { ok: false; error: string; at?: AvailabilityErrorAt }
 
 /** « 20:00 → 03:00 (lendemain) » for one range of a date. */
 export function rangeLabel(r: { startTime: string; endTime: string }): string {
@@ -128,14 +132,14 @@ function timeError(date: string, time: string, reason: "missing" | "repeated"): 
 /** One date's ranges as real instants, in time order; an end earlier than the start is the next day. */
 export function resolveDay(day: DayAnswerInput, timeZone: string): AvailabilityCheck<ResolvedDay> {
   const ranges: ResolvedRange[] = []
-  for (const r of day.ranges) {
-    if (r.start === r.end) return { ok: false, error: `Une plage du ${lower(dayLabel(day.date))} commence et finit à ${r.start} : l'heure de fin doit être différente du début.` }
+  for (const [i, r] of day.ranges.entries()) {
+    if (r.start === r.end) return { ok: false, error: `Une plage du ${lower(dayLabel(day.date))} commence et finit à ${r.start} : l'heure de fin doit être différente du début.`, at: { date: day.date, range: i, field: "end" } }
     const endDate = r.end < r.start ? nextDate(day.date) : day.date
     const start = resolveLocalTime(day.date, r.start, timeZone)
-    if (!start.ok) return { ok: false, error: timeError(day.date, r.start, start.reason) }
+    if (!start.ok) return { ok: false, error: timeError(day.date, r.start, start.reason), at: { date: day.date, range: i, field: "start" } }
     const end = resolveLocalTime(endDate, r.end, timeZone)
-    if (!end.ok) return { ok: false, error: timeError(endDate, r.end, end.reason) }
-    ranges.push({ startTime: r.start, endTime: r.end, startsAt: start.instant, endsAt: end.instant })
+    if (!end.ok) return { ok: false, error: timeError(endDate, r.end, end.reason), at: { date: day.date, range: i, field: "end" } }
+    ranges.push({ startTime: r.start, endTime: r.end, startsAt: start.instant, endsAt: end.instant, input: i })
   }
   ranges.sort((a, b) => a.startsAt.getTime() - b.startsAt.getTime())
   return { ok: true, value: { date: day.date, ranges } }
@@ -150,13 +154,13 @@ export function resolveDay(day: DayAnswerInput, timeZone: string): AvailabilityC
 export function checkAnswerSet(days: readonly ResolvedDay[], eventDates: readonly string[]): AvailabilityCheck<ResolvedDay[]> {
   const allowed = new Set(eventDates)
   const outside = days.find((d) => !allowed.has(d.date))
-  if (outside) return { ok: false, error: `Le ${lower(dayLabel(outside.date))} ne fait pas partie de l'événement.` }
+  if (outside) return { ok: false, error: `Le ${lower(dayLabel(outside.date))} ne fait pas partie de l'événement.`, at: { date: outside.date } }
   const all = days.flatMap((d) => d.ranges.map((r) => ({ date: d.date, r }))).sort((a, b) => a.r.startsAt.getTime() - b.r.startsAt.getTime())
   for (let i = 1; i < all.length; i++) {
     const prev = all[i - 1], cur = all[i]
     if (cur.r.startsAt < prev.r.endsAt) {
       const where = prev.date === cur.date ? `le ${lower(dayLabel(cur.date))}` : `le ${lower(dayLabel(prev.date))} et le ${lower(dayLabel(cur.date))}`
-      return { ok: false, error: `Deux plages se chevauchent ${where} (${rangeLabel(prev.r)} et ${rangeLabel(cur.r)}) : il faut les réunir en une seule.` }
+      return { ok: false, error: `Deux plages se chevauchent ${where} (${rangeLabel(prev.r)} et ${rangeLabel(cur.r)}) : il faut les réunir en une seule.`, at: { date: cur.date, ...(cur.r.input !== undefined ? { range: cur.r.input, field: "start" as const } : {}) } }
     }
   }
   return { ok: true, value: [...days].sort((a, b) => a.date.localeCompare(b.date)) }
@@ -178,14 +182,14 @@ export function applySubmission(submitted: readonly DayAnswerInput[], storedOthe
 
 // ── Where an answer stands ────────────────────────────────────────────────────────────────────
 
-/** « Sans réponse », « Réponse partielle » (some dates unanswered), « Réponse complète », « Indisponible » (every date, no range). */
+/** « Sans réponse », « Réponse partielle » (some dates unanswered), « Réponse complète », « Aucune date disponible » (every date, no range). */
 export type AnswerState = "none" | "partial" | "complete" | "unavailable"
 
 export const ANSWER_STATE_LABELS: Record<AnswerState, string> = {
   none: "Sans réponse",
   partial: "Réponse partielle",
   complete: "Réponse complète",
-  unavailable: "Indisponible",
+  unavailable: "Aucune date disponible",
 }
 
 /** Where a person's answer stands against the event's dates; a stored date outside them is ignored. */

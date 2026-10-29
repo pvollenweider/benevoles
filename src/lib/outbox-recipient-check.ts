@@ -6,6 +6,7 @@ import { hashToken } from "./token-hash"
 import type { NotificationPayload } from "./notifications/types"
 import {
   ACCOUNT_LINK_REVOKED_REASON,
+  AVAILABILITY_LINK_REVOKED_REASON,
   LEADER_LINK_REVOKED_REASON,
   MEMBER_ADDRESS_CHANGED_REASON,
   PERSONAL_LINK_REVOKED_REASON,
@@ -29,6 +30,9 @@ import {
  *   exist and its member have the recipient's address (previews are rendered, never queued).
  * - Sector leader emails (`sector_leader_*`, `data.token`): the leader must still exist, with
  *   this link and this address. They carry the role's roster link and volunteers' names.
+ * - Availability requests (`availability_request`, #1146, `data.token`): the request must still hold
+ *   this link (renewed on an address change, revoked when collection is turned off), then the
+ *   member's address is checked as for every member email.
  * - Account emails with a single-use link (password_reset, admin_invite, signup_account_link,
  *   org_reactivation): the link must still be the account's current one, for this address.
  * - Inactivity messages: their own check (inactivityCopyBlocked in outbox.ts).
@@ -39,13 +43,19 @@ import {
  */
 export async function outboxRecipientVerdict(payload: NotificationPayload): Promise<string | null> {
   const recipient = payload.recipient?.email ?? null
+  const data = (payload.data ?? {}) as Record<string, unknown>
+
+  if (payload.kind === "availability_request") {
+    const live = typeof data.token === "string" && data.token
+      ? await prisma.availabilityRequest.findUnique({ where: { tokenHash: hashToken(data.token) }, select: { id: true } })
+      : null
+    if (!live) return AVAILABILITY_LINK_REVOKED_REASON
+  }
 
   if (payload.volunteerId) {
     const member = await prisma.volunteer.findUnique({ where: { id: payload.volunteerId }, select: { email: true } })
     return memberAddressChanged(recipient, member) ? MEMBER_ADDRESS_CHANGED_REASON : null
   }
-
-  const data = (payload.data ?? {}) as Record<string, unknown>
 
   if (typeof data.editToken === "string" && data.editToken) {
     const reg = await prisma.registration.findUnique({

@@ -49,7 +49,7 @@ describe.skipIf(!url)("dated availability (#1146)", () => {
   const member = (organizationId = orgId, extra: Record<string, unknown> = {}) =>
     prisma.volunteer.create({ data: { organizationId, firstName: "Alice", lastName: `D-${++n}`, email: `${tag}-${n}@example.org`, ...extra } })
   const save = (volunteerId: string, days: DayAnswerInput[], on = eventId) =>
-    prisma.$transaction((tx) => saveAvailabilityAnswers(tx, { eventId: on, volunteerId, days, by: "volunteer" }))
+    prisma.$transaction((tx) => saveAvailabilityAnswers(tx, { eventId: on, volunteerId, days, by: "admin" }))
   const range = (start: string, end: string) => ({ start, end })
 
   it("stores dated ranges as instants, a night ending the next morning, and replaces only the dates submitted", async () => {
@@ -57,7 +57,7 @@ describe.skipIf(!url)("dated availability (#1146)", () => {
     const first = await save(v.id, [{ date: "2030-07-10", ranges: [range("08:00", "14:00"), range("20:00", "03:00")] }, { date: "2030-07-11", ranges: [] }])
     expect(first).toMatchObject({ ok: true, revision: 1 })
     let stored = await readAvailability(prisma, eventId, v.id)
-    expect(stored?.answeredBy).toBe("volunteer")
+    expect(stored?.answeredBy).toBe("admin")
     expect(stored?.days.map((d) => [d.date, d.ranges.length])).toEqual([["2030-07-10", 2], ["2030-07-11", 0]])
     expect(stored?.days[0].ranges[1]).toMatchObject({ startTime: "20:00", endTime: "03:00", startsAt: new Date("2030-07-10T18:00:00Z"), endsAt: new Date("2030-07-11T01:00:00Z") })
 
