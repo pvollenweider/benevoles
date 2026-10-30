@@ -82,7 +82,7 @@ export const BETA_CAPABILITIES = {
   assignmentProposals: {
     label: "Proposition d'affectations",
     description: "Proposer une répartition des créneaux en brouillon, selon les disponibilités, les règles de l'événement et l'objectif d'heures de chacun ; rien n'est publié sans vous.",
-    shipped: false,
+    shipped: true,
   },
 } as const satisfies BetaRegistry
 

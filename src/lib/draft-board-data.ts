@@ -42,7 +42,7 @@ async function loadContext(db: Db, eventId: string, scope: "event" | "all", only
 
   const drafts: BoardDraft[] = await db.draftAssignment.findMany({
     where: { eventId, status: "draft", ...(onlyVolunteerId ? { volunteerId: onlyVolunteerId } : {}) },
-    select: { id: true, revision: true, shiftId: true, volunteerId: true, source: true, shiftTerms: true, availabilityStamp: true, ackKey: true },
+    select: { id: true, revision: true, shiftId: true, volunteerId: true, source: true, shiftTerms: true, availabilityStamp: true, ackKey: true, locked: true },
     orderBy: { id: "asc" },
   })
   const shiftRows = await db.shift.findMany({ where: { eventId, OR: [{ status: { not: "cancelled" } }, { id: { in: drafts.map((d) => d.shiftId) } }] }, select: SHIFT_SELECT }) as unknown as ShiftRow[]

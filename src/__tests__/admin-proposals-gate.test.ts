@@ -5,7 +5,7 @@ import { describe, it, expect, vi, beforeEach } from "vitest"
 
 /**
  * Generated proposals (#1172): every new route sits behind the beta capability « assignmentProposals »
- * (not shipped yet, so nobody can adopt it) unless the event already has a run (BE06), and needs an
+ * (the operator opens it, an owner opts in) unless the event already has a run (BE06), and needs an
  * event that uses dated availability. A refusal reads and writes nothing else.
  */
 
@@ -62,8 +62,8 @@ async function everyRoute() {
 describe("proposal routes behind the beta capability (#1172)", () => {
   beforeEach(() => { vi.clearAllMocks(); beta.open = false })
 
-  it("is declared and not shipped yet", () => {
-    expect(BETA_CAPABILITIES.assignmentProposals.shipped).toBe(false)
+  it("is declared and shipped", () => {
+    expect(BETA_CAPABILITIES.assignmentProposals.shipped).toBe(true)
   })
 
   it("every route refuses with 403 while the organisation cannot adopt it, touching nothing", async () => {

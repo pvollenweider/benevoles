@@ -461,7 +461,7 @@ export async function readRun(db: Db, eventId: string, runId: string): Promise<R
     // A written run is compared with the input as written, its own drafts being the ones a new run would replace.
     const replacement: Replacement = run.writtenAt ? (written?.created ?? []).map((c) => ({ id: c.draftId, revision: 1 })) : (run.replacement as Replacement)
     const baseline = (run.writtenAt ? run.baselineHashes : run.hashes) as Record<InputPart, string> | null
-    const snap = await buildProposalSnapshot(db, eventId, run.configuration as ProposalConfig, replacement, new Date())
+    const snap = await buildProposalSnapshot(db, eventId, run.configuration as ProposalConfig, replacement, new Date(), { ownDrafts: !!run.writtenAt })
     if (run.inputHash === SCRUBBED_HASH || !baseline) stale = ["people"]
     else stale = snap.ok ? changedParts(baseline, snap.hashes) : ["shifts"]
   }

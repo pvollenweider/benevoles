@@ -162,6 +162,15 @@ describe.skipIf(!url)("generated proposals on Postgres (#1172)", () => {
       expect(after.filter((d) => d.proposalRunId === id2)).toHaveLength(1)
     })
 
+    it("locking or reviewing its own drafts never makes a written run stale", async () => {
+      const { e, c } = await team()
+      const id = await launch(e.id, c)
+      await drainProposalRuns({ wait: true })
+      const [d] = await pending(e.id)
+      await setDraftLock(db(), { eventId: e.id, draftId: d.id, revision: d.revision, locked: true })
+      expect((await readRun(db(), e.id, id))!.stale).toEqual([])
+    })
+
     it("a reviewed generated draft becomes locked", async () => {
       const { e, c } = await team()
       await launch(e.id, c)

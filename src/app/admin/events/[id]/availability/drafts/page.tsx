@@ -8,6 +8,7 @@ import { getOrgContext } from "@/lib/auth-guard"
 import HelpLink from "@/components/admin/HelpLink"
 import DraftBoard from "@/components/admin/DraftBoard"
 import { loadDraftBoard } from "@/lib/draft-board-data"
+import { proposalAvailable } from "@/lib/proposal-page-data"
 
 export const dynamic = "force-dynamic"
 export const metadata: Metadata = { title: "Affectations en brouillon" }
@@ -30,6 +31,7 @@ export default async function DraftAssignmentsPage({ params, searchParams }: { p
   const scope = first(q.scope) === "all" ? "all" : "event"
   const data = await loadDraftBoard(ctx.db, id, scope)
   if (!data) notFound()
+  const proposals = await proposalAvailable(ctx.db, ctx.organizationId, id)
   const wanted = first(q.day)
   const day = wanted && data.dates.includes(wanted) ? wanted : data.dates[0] ?? null
   const view = first(q.view) === "day" ? "day" : "grid"
@@ -46,10 +48,11 @@ export default async function DraftAssignmentsPage({ params, searchParams }: { p
         <p className="text-sm text-gray-700 mt-1">
           Pour un créneau précis : <Link href={`/admin/events/${id}/availability/assign`} className={linkClass}>Affecter selon les disponibilités</Link>
         </p>
+        {proposals && <p className="text-sm text-gray-700 mt-1">Pour tout un périmètre : <Link href={`/admin/events/${id}/availability/proposal`} className={linkClass}>Générer une proposition</Link></p>}
         {!data.collecting && <p className="mt-2 text-sm text-gray-800 bg-gray-50 border border-gray-200 rounded-xl px-3 py-2">La collecte est arrêtée : les réponses déjà données restent utilisées ici.</p>}
         {data.protection === "incomplete" && <p className="mt-2 text-sm text-red-800">La protection des pauses et de la charge est incomplète : aucune affectation ne peut être publiée.</p>}
       </div>
-      <DraftBoard key={`${scope}-${view}`} eventId={id} board={data} day={day} view={view} scope={scope} basePath={base} />
+      <DraftBoard key={`${scope}-${view}`} eventId={id} board={data} day={day} view={view} scope={scope} basePath={base} proposals={proposals} />
     </div>
   )
 }

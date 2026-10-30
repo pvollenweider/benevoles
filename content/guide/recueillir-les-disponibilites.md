@@ -2,7 +2,7 @@
 roles: [admin]
 group: membres
 order: 50
-summary: Demander les plages libres de chaque membre par un lien personnel, préparer des affectations en brouillon puis les publier en une fois (bêta).
+summary: Demander les plages libres de chaque membre, préparer des affectations en brouillon, à la main ou par une proposition, puis les publier (bêta).
 related: [inviter-des-membres, gerer-les-membres, lien-personnel]
 legacy: []
 aliases: []
@@ -74,6 +74,24 @@ Page **Affectations en brouillon**, ouverte depuis la page **Disponibilités** o
 - Sur la page **Affecter selon les disponibilités**, **Ajouter en brouillon** prépare la même affectation pour un créneau précis.
 
 Un brouillon ne prend aucune place, n'envoie aucun email et n'apparaît ni sur la page publique, ni dans les inscriptions, les exports, les rappels ou les statistiques. Un brouillon devient « À revoir » quand le créneau change (horaires, lieu, conditions) ou quand la personne change ses disponibilités : il faut le relire avant de le publier, même si la nouvelle réponse convient.
+
+## Générer une proposition d'affectations
+
+Fonction bêta « Proposition d'affectations ». Depuis la page **Affectations en brouillon**, **Générer une proposition** ouvre la page **Proposition d'affectations** : vous choisissez un périmètre, et une répartition est proposée puis écrite dans les affectations en brouillon. Rien n'est publié et personne n'est prévenu : vous relisez, verrouillez ou corrigez les brouillons, puis vous publiez vous-même.
+
+- **Ce qui est vérifié** : une personne n'est placée que sur un créneau entièrement couvert par les disponibilités qu'elle a indiquées (une date sans réponse ne compte jamais comme libre), et toujours en respectant les places, l'âge minimum, les postes réservés, les chevauchements, le nombre de créneaux par personne d'un poste et la protection des pauses et de la charge. La protection doit être activée et complète dans les informations de l'événement ; sinon le bouton reste indisponible. Les inscriptions existantes et les brouillons manuels ou verrouillés ne bougent jamais.
+- **Périmètre** : les dates, les postes (regroupés par secteur) et les personnes. Une ligne indique combien de créneaux et de places sont à pourvoir. Les personnes qui n'ont pas répondu peuvent être incluses, mais ne sont placées nulle part : la proposition peut se faire avec les réponses déjà reçues.
+- **Objectif d'heures** : pour chaque personne incluse, en heures sur l'événement (0 pour aucun objectif). **Appliquer la suggestion** remplit 6 h par date où la personne a indiqué une plage libre, plafonnées par le maximum de l'événement ; vous ajustez ensuite. La charge de chacun est comparée à son propre objectif : une personne qui vise 10 h n'est pas mise au même niveau qu'une personne qui en vise 20. Vous pouvez aussi indiquer un **Poste souhaité** et un **Poste à éviter** ; ces souhaits passent après toutes les règles.
+- **Rotation, nuit et réserve** : par poste, une **Catégorie de rotation** (les postes qui ont le même nom de catégorie comptent ensemble, un poste sans catégorie est la sienne), **Ajout de nuit** pour les missions courtes après une soirée, et la **Réserve à garder par créneau** pour un poste de renfort sur place. Les deux limites, **Jours d'affilée sur une même catégorie, au plus** et **Ajouts de nuit par personne, au plus**, peuvent être remplies avec **Utiliser 2 jours et 2 ajouts de nuit**, ou laissées vides.
+- **Paramètres de calcul** : la **Graine**. Avec la même graine et les mêmes données, la proposition est toujours la même ; une autre graine donne une autre répartition qui respecte les mêmes critères.
+
+**Générer une proposition** lance le calcul, qui dure au plus 30 secondes ; **Arrêter la recherche** l'interrompt. Les objectifs passent avant tout dans cet ordre : couvrir les minimums des créneaux et la réserve demandée, puis les autres places, puis rapprocher la charge de chacun de son objectif, puis varier les activités, puis les souhaits.
+
+Le résultat dit **Complet** (tout est couvert), **Incomplet** (des places restent sans personne, sans preuve qu'on ne pouvait pas faire mieux), **Impossible démontré** (certaines places ne peuvent être prises par personne, quelle que soit la répartition) ou **Recherche interrompue** (calcul arrêté avant la fin). Il montre les places couvertes, les affectations écrites, les **Places restées vides** avec leur raison, la **Charge par personne** et, pour chaque affectation proposée, pourquoi elle a été retenue. Une recherche interrompue n'écrit rien : **Utiliser ce résultat partiel** l'écrit si vous le décidez.
+
+Au moment d'écrire, tout est vérifié de nouveau sur les données du moment : une affectation qui ne convient plus (disponibilité changée, inscription arrivée entre-temps) est écartée et signalée. Une nouvelle proposition remplace seulement les brouillons proposés et non verrouillés de son périmètre. Si les données changent ensuite, la proposition est signalée **Proposition périmée** ; la publication vérifie de toute façon chaque règle.
+
+Sur la page **Affectations en brouillon**, un brouillon venu d'une proposition est noté **Proposé**. **Voir le brouillon** permet de le **Verrouiller** : une nouvelle proposition ne le remplace jamais. Enregistrer la relecture d'un brouillon proposé le verrouille aussi.
 
 ## Publier les affectations
 

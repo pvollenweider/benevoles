@@ -25,7 +25,7 @@ export default function PrivacyPage() {
     <>
       <JsonLd data={publicPageJsonLd("/legal/privacy", apexBaseUrl())} />
       <h1>Politique de confidentialité</h1>
-      <p className="text-gray-500 dark:text-gray-400 text-sm">Dernière mise à jour : 24 octobre 2026</p>
+      <p className="text-gray-500 dark:text-gray-400 text-sm">Dernière mise à jour : 30 octobre 2026</p>
 
       <p>
         La présente politique décrit comment <strong>benevol.app</strong>, éditée par{" "}
@@ -217,6 +217,12 @@ export default function PrivacyPage() {
         trace de la publication ; elles sont effacées dans les mêmes cas. Une personne à qui des
         affectations ont été publiées peut encore corriger ses disponibilités jusqu&apos;à la fin de
         l&apos;événement ; les organisateurs en sont prévenus par email, sans le détail des plages.
+        Elle peut aussi demander une proposition de répartition : à partir des disponibilités, des
+        âges, des étiquettes, des missions déjà prévues, des limites de charge et d&apos;un objectif
+        d&apos;heures par personne qu&apos;elle fixe, un calcul propose des
+        affectations en brouillon, jamais publiées sans un organisateur. Les données lues pour le calcul,
+        son résultat et ses explications restent visibles des organisateurs seulement et sont effacées
+        dans les mêmes cas.
       </p>
       <p>
         En tant que sous-traitant, nous nous engageons à :

@@ -179,7 +179,7 @@ Pour rester simple, benevol.app s'en tient au planning des bénévoles. Il ne fa
 
 - de paiement, de billetterie ni de cotisations ;
 - d'accréditation ni de zones d'accès, ni de gestion des repas et de l'hébergement ;
-- d'attribution automatique : chaque bénévole choisit ses créneaux, vous gardez la main ;
+- d'affectation publiée sans vous : chaque bénévole choisit ses créneaux ; si vous préparez vous-même le planning, une proposition de répartition (en bêta) reste un brouillon tant que vous ne la publiez pas ;
 - de CRM, de campagnes SMS ni de constructeur de formulaires et de workflows ;
 - de compte à créer pour les bénévoles : un lien personnel suffit ;
 - d'application à installer depuis un store : tout se fait dans le navigateur, sur téléphone comme sur ordinateur.
