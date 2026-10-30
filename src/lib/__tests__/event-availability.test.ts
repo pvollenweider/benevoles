@@ -13,6 +13,7 @@ import {
   nextDate,
   rangeLabel,
   resolveDay,
+  submissionIssue,
   resolveLocalTime,
   wholeEventUnavailable,
   type ResolvedDay,
@@ -117,12 +118,19 @@ describe("checkAnswerSet", () => {
   it("refuses two ranges sharing time on one date", () => {
     const r = checkAnswerSet([resolved("2026-07-10", [["08:00", "14:00"], ["13:00", "18:00"]])], dates)
     expect(r.ok).toBe(false)
-    if (!r.ok) expect(r.error).toContain("se chevauchent le vendredi 10 juillet")
+    expect(r).toEqual({ ok: false, error: "Deux horaires se recouvrent : le vendredi 10 juillet de 8h à 14h, et de 13h à 18h. Il faut raccourcir l'un des deux.", at: { date: "2026-07-10", range: 1, field: "start" } })
   })
   it("refuses a night range running into an early range of the next date", () => {
     const r = checkAnswerSet([resolved("2026-07-10", [["20:00", "03:00"]]), resolved("2026-07-11", [["01:00", "05:00"]])], dates)
     expect(r.ok).toBe(false)
-    if (!r.ok) expect(r.error).toContain("le vendredi 10 juillet et le samedi 11 juillet")
+    if (!r.ok) expect(r.error).toBe("Deux horaires se recouvrent : vendredi 10 juillet de 20h à 3h le lendemain, et samedi 11 juillet de 1h à 5h. Il faut raccourcir l'un des deux.")
+  })
+  it("points an overlap across midnight at the night range's end, in the page's voice", () => {
+    const day = (date: string, ranges: [string, string][]) => ({ date, ranges: ranges.map(([start, end]) => ({ start, end })) })
+    const r = applySubmission([day("2026-07-10", [["20:00", "03:00"]]), day("2026-07-11", [["01:00", "05:00"]])], [], dates, "Europe/Zurich", "tu")
+    expect(r).toEqual({ ok: false, error: expect.stringMatching(/Raccourcis l'un des deux\.$/), at: { date: "2026-07-10", range: 0, field: "end" } })
+    const same = applySubmission([day("2026-07-10", [["08:00", "14:00"], ["13:00", "18:00"]])], [], dates, "Europe/Zurich", "vous")
+    expect(same).toEqual({ ok: false, error: expect.stringMatching(/Raccourcissez l'un des deux\.$/), at: { date: "2026-07-10", range: 1, field: "start" } })
   })
   it("accepts ranges that only touch, and a night range before a « pas disponible » date", () => {
     expect(checkAnswerSet([resolved("2026-07-10", [["08:00", "14:00"], ["14:00", "20:00"]])], dates).ok).toBe(true)
@@ -198,10 +206,29 @@ describe("availabilityMergeAction", () => {
   })
 })
 
+describe("submissionIssue", () => {
+  const issue = (body: unknown) => {
+    const r = availabilitySubmissionSchema.safeParse(body)
+    if (r.success) throw new Error("expected a refusal")
+    return submissionIssue(r.error, body)
+  }
+  it("says a wrong time in plain words, at its field, with no « HH:MM » nor organiser voice", () => {
+    const body = { days: [{ date: "2026-07-10", ranges: [{ start: "8h", end: "12:00" }] }] }
+    expect(issue(body)).toEqual({ error: "Une heure n'est pas valable : elle doit être comprise entre 0h00 et 23h59.", at: { date: "2026-07-10", range: 0, field: "start" } })
+  })
+  it("says an empty submission without « Indiquez »", () => {
+    expect(issue({ days: [] }).error).toBe("Au moins une date est nécessaire.")
+    expect(issue({ days: [] }).error).not.toMatch(/\b(Indiquez|saisissez|vous)\b/)
+  })
+  it("never shows a library message", () => {
+    expect(issue(null).error).toBe("Les disponibilités envoyées ne sont pas lisibles : recharger la page puis recommencer.")
+  })
+})
+
 describe("labels", () => {
   it("shows the next morning on an overnight range", () => {
-    expect(rangeLabel({ startTime: "20:00", endTime: "03:00" })).toBe("20:00 → 03:00 (lendemain)")
-    expect(rangeLabel({ startTime: "08:00", endTime: "14:00" })).toBe("08:00 → 14:00")
+    expect(rangeLabel({ startTime: "20:00", endTime: "03:00" })).toBe("de 20h à 3h le lendemain")
+    expect(rangeLabel({ startTime: "08:30", endTime: "14:00" })).toBe("de 8h30 à 14h")
   })
   it("gives the next calendar day across a month", () => {
     expect(nextDate("2026-07-31")).toBe("2026-08-01")

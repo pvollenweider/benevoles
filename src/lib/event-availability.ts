@@ -3,8 +3,9 @@
 
 import { z } from "zod"
 import { civilDateSchema } from "./civil-date"
-import { clockSchema } from "./shift-time"
+import { CLOCK_RE } from "./shift-time"
 import { dayLabel } from "./spoken-time"
+import { fmtHour } from "./registrations-list"
 
 /**
  * Dated availability for one event (#1146, lot A): each person asked says, date by date, when they
@@ -21,7 +22,8 @@ import { dayLabel } from "./spoken-time"
  * starts that date; the night before may still run into its first hours. Comparisons use the real
  * instants each range resolves to in the event's snapshotted zone, half-open [start, end).
  *
- * The messages avoid « tu » and « vous »: the same rules answer the person asked and the organisers.
+ * The messages avoid « tu » and « vous »: the same rules answer the person asked and the organisers;
+ * only the last advice of an overlap takes the page's voice when the caller gives it (`Voice`).
  * Pure and Prisma-free: the volunteer page and the organiser screens read the same rules.
  */
 
@@ -42,13 +44,36 @@ export function availabilityDates(startDate: Date, endDate: Date): string[] {
   return out
 }
 
-const rangeSchema = z.object({ start: clockSchema, end: clockSchema })
-const daySchema = z.object({ date: civilDateSchema, ranges: z.array(rangeSchema).max(AVAILABILITY_MAX_RANGES_PER_DAY, `Au plus ${AVAILABILITY_MAX_RANGES_PER_DAY} plages par date.`) })
+/** Who reads a message: the person asked (« tu ») or the organisers (« vous »). */
+export type Voice = "tu" | "vous"
+
+// Plain words, never « HH:MM » nor an organiser's « saisissez » (independent review, #1146): the
+// person asked reads these messages too.
+const AVAILABILITY_CLOCK_ERROR = "Une heure n'est pas valable : elle doit être comprise entre 0h00 et 23h59."
+const availabilityClock = z.string().regex(CLOCK_RE, AVAILABILITY_CLOCK_ERROR)
+const rangeSchema = z.object({ start: availabilityClock, end: availabilityClock })
+const daySchema = z.object({ date: civilDateSchema, ranges: z.array(rangeSchema).max(AVAILABILITY_MAX_RANGES_PER_DAY, `Au plus ${AVAILABILITY_MAX_RANGES_PER_DAY} horaires par date.`) })
 
 /** One submission: the dates answered now, each with its ranges (none = « pas disponible » that date). */
 export const availabilitySubmissionSchema = z.object({
-  days: z.array(daySchema).min(1, "Indiquez au moins une date.").max(AVAILABILITY_MAX_DAYS),
+  days: z.array(daySchema).min(1, "Au moins une date est nécessaire.").max(AVAILABILITY_MAX_DAYS, `Au plus ${AVAILABILITY_MAX_DAYS} dates.`),
 }).refine((v) => new Set(v.days.map((d) => d.date)).size === v.days.length, { message: "Une même date est indiquée deux fois." })
+
+/**
+ * The first problem of a refused submission, in plain words, with the date (and time field) it
+ * concerns when the body says it, so the form can point at it.
+ */
+export function submissionIssue(error: z.ZodError, body: unknown): { error: string; at?: AvailabilityErrorAt } {
+  const issue = error.issues[0]
+  const message = issue?.message && !/^(Invalid|Expected|Required)/.test(issue.message) ? issue.message : "Les disponibilités envoyées ne sont pas lisibles : recharger la page puis recommencer."
+  const path = issue?.path ?? []
+  if (path[0] !== "days" || typeof path[1] !== "number") return { error: message }
+  const day = (body as { days?: { date?: unknown }[] } | null)?.days?.[path[1]]
+  const date = typeof day?.date === "string" && /^\d{4}-\d{2}-\d{2}$/.test(day.date) ? day.date : null
+  if (!date) return { error: message }
+  const field = path[4] === "start" || path[4] === "end" ? path[4] : undefined
+  return { error: message, at: path[2] === "ranges" && typeof path[3] === "number" && field ? { date, range: path[3], field } : { date } }
+}
 
 export type AvailabilitySubmission = z.infer<typeof availabilitySubmissionSchema>
 export type DayAnswerInput = AvailabilitySubmission["days"][number]
@@ -115,9 +140,15 @@ export type AvailabilityErrorAt = { date: string; range?: number; field?: "start
 
 export type AvailabilityCheck<T> = { ok: true; value: T } | { ok: false; error: string; at?: AvailabilityErrorAt }
 
-/** « 20:00 → 03:00 (lendemain) » for one range of a date. */
+/** « de 20h à 3h le lendemain » for one range of a date. */
 export function rangeLabel(r: { startTime: string; endTime: string }): string {
-  return r.endTime < r.startTime ? `${r.startTime} → ${r.endTime} (lendemain)` : `${r.startTime} → ${r.endTime}`
+  return `de ${fmtHour(r.startTime)} à ${fmtHour(r.endTime)}${r.endTime < r.startTime ? " le lendemain" : ""}`
+}
+
+const OVERLAP_ADVICE: Record<Voice | "neutral", string> = {
+  tu: "Raccourcis l'un des deux.",
+  vous: "Raccourcissez l'un des deux.",
+  neutral: "Il faut raccourcir l'un des deux.",
 }
 
 const lower = (s: string) => s.charAt(0).toLowerCase() + s.slice(1)
@@ -133,7 +164,7 @@ function timeError(date: string, time: string, reason: "missing" | "repeated"): 
 export function resolveDay(day: DayAnswerInput, timeZone: string): AvailabilityCheck<ResolvedDay> {
   const ranges: ResolvedRange[] = []
   for (const [i, r] of day.ranges.entries()) {
-    if (r.start === r.end) return { ok: false, error: `Une plage du ${lower(dayLabel(day.date))} commence et finit à ${r.start} : l'heure de fin doit être différente du début.`, at: { date: day.date, range: i, field: "end" } }
+    if (r.start === r.end) return { ok: false, error: `Un horaire du ${lower(dayLabel(day.date))} commence et finit à ${r.start} : l'heure de fin doit être différente du début.`, at: { date: day.date, range: i, field: "end" } }
     const endDate = r.end < r.start ? nextDate(day.date) : day.date
     const start = resolveLocalTime(day.date, r.start, timeZone)
     if (!start.ok) return { ok: false, error: timeError(day.date, r.start, start.reason), at: { date: day.date, range: i, field: "start" } }
@@ -151,7 +182,7 @@ export function resolveDay(day: DayAnswerInput, timeZone: string): AvailabilityC
  * same date or across midnight (a night range of one date and an early range of the next). Ranges
  * that only touch (one ends at 14:00, the next starts at 14:00) are fine.
  */
-export function checkAnswerSet(days: readonly ResolvedDay[], eventDates: readonly string[]): AvailabilityCheck<ResolvedDay[]> {
+export function checkAnswerSet(days: readonly ResolvedDay[], eventDates: readonly string[], voice?: Voice): AvailabilityCheck<ResolvedDay[]> {
   const allowed = new Set(eventDates)
   const outside = days.find((d) => !allowed.has(d.date))
   if (outside) return { ok: false, error: `Le ${lower(dayLabel(outside.date))} ne fait pas partie de l'événement.`, at: { date: outside.date } }
@@ -159,15 +190,22 @@ export function checkAnswerSet(days: readonly ResolvedDay[], eventDates: readonl
   for (let i = 1; i < all.length; i++) {
     const prev = all[i - 1], cur = all[i]
     if (cur.r.startsAt < prev.r.endsAt) {
-      const where = prev.date === cur.date ? `le ${lower(dayLabel(cur.date))}` : `le ${lower(dayLabel(prev.date))} et le ${lower(dayLabel(cur.date))}`
-      return { ok: false, error: `Deux plages se chevauchent ${where} (${rangeLabel(prev.r)} et ${rangeLabel(cur.r)}) : il faut les réunir en une seule.`, at: { date: cur.date, ...(cur.r.input !== undefined ? { range: cur.r.input, field: "start" as const } : {}) } }
+      const what = prev.date === cur.date
+        ? `le ${lower(dayLabel(cur.date))} ${rangeLabel(prev.r)}, et ${rangeLabel(cur.r)}`
+        : `${lower(dayLabel(prev.date))} ${rangeLabel(prev.r)}, et ${lower(dayLabel(cur.date))} ${rangeLabel(cur.r)}`
+      // Shown where the person looks for it: on a night range that runs into the next date, its
+      // « Fin » (the date it starts on, the range that spills over); otherwise the later range's start.
+      const at: AvailabilityErrorAt = prev.date !== cur.date && prev.r.input !== undefined
+        ? { date: prev.date, range: prev.r.input, field: "end" }
+        : { date: cur.date, ...(cur.r.input !== undefined ? { range: cur.r.input, field: "start" as const } : {}) }
+      return { ok: false, error: `Deux horaires se recouvrent : ${what}. ${OVERLAP_ADVICE[voice ?? "neutral"]}`, at }
     }
   }
   return { ok: true, value: [...days].sort((a, b) => a.date.localeCompare(b.date)) }
 }
 
 /** Resolves a submission and checks it against what stays stored for the other dates. */
-export function applySubmission(submitted: readonly DayAnswerInput[], storedOthers: readonly ResolvedDay[], eventDates: readonly string[], timeZone: string): AvailabilityCheck<{ submitted: ResolvedDay[]; all: ResolvedDay[] }> {
+export function applySubmission(submitted: readonly DayAnswerInput[], storedOthers: readonly ResolvedDay[], eventDates: readonly string[], timeZone: string, voice?: Voice): AvailabilityCheck<{ submitted: ResolvedDay[]; all: ResolvedDay[] }> {
   const resolved: ResolvedDay[] = []
   for (const day of submitted) {
     const r = resolveDay(day, timeZone)
@@ -175,7 +213,7 @@ export function applySubmission(submitted: readonly DayAnswerInput[], storedOthe
     resolved.push(r.value)
   }
   const submittedDates = new Set(resolved.map((d) => d.date))
-  const check = checkAnswerSet([...storedOthers.filter((d) => !submittedDates.has(d.date)), ...resolved], eventDates)
+  const check = checkAnswerSet([...storedOthers.filter((d) => !submittedDates.has(d.date)), ...resolved], eventDates, voice)
   if (!check.ok) return check
   return { ok: true, value: { submitted: resolved, all: check.value } }
 }

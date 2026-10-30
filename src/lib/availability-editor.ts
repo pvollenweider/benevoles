@@ -1,22 +1,32 @@
 // SPDX-FileCopyrightText: 2026 Philippe Vollenweider
 // SPDX-License-Identifier: AGPL-3.0-only
 
-import { AVAILABILITY_MAX_RANGES_PER_DAY, nextDate, type AvailabilityErrorAt, type DayAnswerInput } from "./event-availability"
+import { AVAILABILITY_MAX_RANGES_PER_DAY, nextDate, type AvailabilityErrorAt, type DayAnswerInput, type Voice } from "./event-availability"
 import { dayLabel } from "./spoken-time"
 import { fmtHour } from "./registrations-list"
 
 /**
  * The form of the dated availability (#1146), shared by the page of the person asked (« tu ») and
  * the organisers' correction (« vous »). Pure, for the component and its tests. Per date: no choice
- * yet (never answered: nothing is sent for it), « Disponible sur des plages » with its ranges, or
- * « Pas disponible ». Choosing « Pas disponible » keeps the ranges typed, so choosing « Disponible »
- * again brings them back (accessibility review).
+ * yet (never answered: nothing is sent for it, « sans réponse »), « Disponible à certaines heures »
+ * with its ranges (« horaires » on screen), or « Pas disponible ». Choosing « Pas disponible » keeps
+ * the ranges typed, so choosing « Disponible » again brings them back (accessibility review).
  */
+
+/** The one word for a date or a person with no answer yet, on every screen (independent review). */
+export const NO_ANSWER = "sans réponse"
+export const AVAILABLE_CHOICE_LABEL = "Disponible à certaines heures"
+export const UNAVAILABLE_CHOICE_LABEL = "Pas disponible"
+
+/** French quotes keep their words on the same line: « x » with non-breaking spaces inside. */
+export function nbspQuotes(text: string): string {
+  return text.replace(/« /g, "«\u00a0").replace(/ »/g, "\u00a0»")
+}
 
 export type EditorRange = { key: number; start: string; end: string }
 export type EditorDay = { date: string; choice: "available" | "unavailable" | null; ranges: EditorRange[] }
 export type EditorState = { days: EditorDay[]; nextKey: number }
-export type Voice = "tu" | "vous"
+export type { Voice }
 
 type StoredLike = { date: string; ranges: { startTime: string; endTime: string }[] }
 
@@ -72,10 +82,13 @@ const lower = (s: string) => s.charAt(0).toLowerCase() + s.slice(1)
 
 /**
  * What is sent: the dates with a choice, in order; an unanswered date is left out (stays « sans
- * réponse »). Checked first in the browser for what needs no server: a time left empty.
+ * réponse »). Checked first in the browser for what needs no server: every time left empty, all
+ * at once (independent review: never one round per error), in the order of the page.
  */
-export function editorSubmission(state: EditorState, voice: Voice): { ok: true; days: DayAnswerInput[] } | { ok: false; error: EditorError } {
+export function editorSubmission(state: EditorState, voice: Voice): { ok: true; days: DayAnswerInput[] } | { ok: false; errors: EditorError[] } {
   const days: DayAnswerInput[] = []
+  const errors: EditorError[] = []
+  const verb = voice === "tu" ? "Indique" : "Indiquez"
   for (const d of state.days) {
     if (!d.choice) continue
     if (d.choice === "unavailable") { days.push({ date: d.date, ranges: [] }); continue }
@@ -83,15 +96,55 @@ export function editorSubmission(state: EditorState, voice: Voice): { ok: true; 
       for (const field of ["start", "end"] as const) {
         if (!r[field]) {
           const what = field === "start" ? "l'heure de début" : "l'heure de fin"
-          const verb = voice === "tu" ? "Indique" : "Indiquez"
-          return { ok: false, error: { message: `${verb} ${what} de la plage ${i + 1} du ${lower(dayLabel(d.date))}.`, at: { date: d.date, range: i, field } } }
+          const which = d.ranges.length > 1 ? `de l'horaire ${i + 1} ` : ""
+          errors.push({ message: `${verb} ${what} ${which}du ${lower(dayLabel(d.date))}.`, at: { date: d.date, range: i, field } })
         }
       }
     }
     days.push({ date: d.date, ranges: d.ranges.map((r) => ({ start: r.start, end: r.end })) })
   }
-  if (days.length === 0) return { ok: false, error: { message: voice === "tu" ? "Choisis au moins une date : disponible sur des plages ou pas disponible." : "Choisissez au moins une date : disponible sur des plages ou pas disponible.", at: { date: state.days[0]?.date ?? "" } } }
+  if (errors.length > 0) return { ok: false, errors }
+  if (days.length === 0) {
+    const message = voice === "tu" ? "Choisis au moins une date : « Disponible à certaines heures » ou « Pas disponible »." : "Choisissez au moins une date : « Disponible à certaines heures » ou « Pas disponible »."
+    return { ok: false, errors: [{ message: nbspQuotes(message), at: { date: state.days[0]?.date ?? "" } }] }
+  }
   return { ok: true, days }
+}
+
+/** The form's answer in a comparable form: what would be sent, date by date. */
+function signature(state: EditorState): string {
+  return state.days.map((d) => `${d.date}:${d.choice ?? "-"}:${d.choice === "available" ? d.ranges.map((r) => `${r.start}-${r.end}`).join(",") : ""}`).join(";")
+}
+
+/** Whether the form says something else than what was last saved (« Changements non enregistrés »). */
+export function editorDirty(state: EditorState, saved: EditorState): boolean {
+  return signature(state) !== signature(saved)
+}
+
+/** The date answered just before `date` in the form, whose hours can be copied; null for the first. */
+export function previousDay(state: EditorState, date: string): EditorDay | null {
+  const i = state.days.findIndex((d) => d.date === date)
+  return i > 0 ? state.days[i - 1] : null
+}
+
+/**
+ * « Reprendre les horaires du … »: the date takes the previous date's choice and hours (replacing
+ * its own); nothing when the previous date has no choice yet.
+ */
+export function copyPreviousDay(state: EditorState, date: string): EditorState {
+  const prev = previousDay(state, date)
+  if (!prev?.choice) return state
+  return update(state, date, (d, s) => ({
+    ...d,
+    choice: prev.choice,
+    ranges: prev.choice === "available" ? prev.ranges.map((r, i) => ({ key: s.nextKey + i, start: r.start, end: r.end })) : d.ranges,
+  }))
+}
+
+/** What a copy did, said after it (« Horaires du jeudi 9 juillet repris pour le vendredi 10 juillet : 2 horaires. »). */
+export function copiedText(from: EditorDay, to: string): string {
+  const what = from.choice === "unavailable" ? "« Pas disponible »" : `${from.ranges.length} horaire${from.ranges.length > 1 ? "s" : ""}`
+  return nbspQuotes(`${from.choice === "unavailable" ? "Réponse" : "Horaires"} du ${lower(dayLabel(from.date))} ${from.choice === "unavailable" ? "reprise" : "repris"} pour le ${lower(dayLabel(to))} : ${what}.`)
 }
 
 /** Whether a range ends the next morning (an end earlier than its start). */
@@ -106,7 +159,7 @@ export function nextDayHint(date: string): string {
 
 /** One date in words, for the read-only list and the organisers: « disponible de 9h à 12h et de 20h à 3h le lendemain ». */
 export function dayAnswerText(day: StoredLike | undefined): string {
-  if (!day) return "pas de réponse"
+  if (!day) return NO_ANSWER
   if (day.ranges.length === 0) return "pas disponible"
   const parts = day.ranges.map((r) => `de ${fmtHour(r.startTime)} à ${fmtHour(r.endTime)}${r.endTime < r.startTime ? " le lendemain" : ""}`)
   return `disponible ${parts.length > 1 ? `${parts.slice(0, -1).join(", ")} et ${parts[parts.length - 1]}` : parts[0]}`

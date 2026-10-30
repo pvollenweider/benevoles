@@ -2,7 +2,7 @@
 roles: [admin]
 group: membres
 order: 50
-summary: Demander les plages libres de chaque membre, préparer des affectations en brouillon, à la main ou par une proposition, puis les publier (bêta).
+summary: Demander à chaque membre les heures où il est libre, préparer des affectations en brouillon, à la main ou par une proposition, puis les publier (bêta).
 related: [inviter-des-membres, gerer-les-membres, lien-personnel]
 legacy: []
 aliases: []
@@ -11,7 +11,7 @@ added: 2026-10-29
 
 # Recueillir les disponibilités
 
-Fonction bêta « Disponibilités datées ». Elle s'adresse aux événements où l'organisation prépare elle-même les missions : chaque membre sollicité indique, pour chaque date de l'événement, ses plages libres ou « Pas disponible ». Les inscriptions restent ouvertes comme d'habitude : rien ne change pour les bénévoles qui choisissent leurs créneaux eux-mêmes.
+Fonction bêta « Disponibilités datées ». Elle s'adresse aux événements où l'organisation prépare elle-même les missions : chaque membre sollicité indique, pour chaque date de l'événement, les heures où il est libre ou « Pas disponible ». Les inscriptions restent ouvertes comme d'habitude : rien ne change pour les bénévoles qui choisissent leurs créneaux eux-mêmes.
 
 Ces réponses sont séparées des disponibilités générales de la fiche du membre (« Matin », « Soir »), qui ne disent jamais si une personne est libre une date précise.
 
@@ -20,20 +20,20 @@ Ces réponses sont séparées des disponibilités générales de la fiche du mem
 **Événements**, puis l'événement, puis l'onglet **Paramètres**, **Informations**, carte **Disponibilités datées**. La carte apparaît quand votre organisation participe à la bêta et que la fonction est ouverte à l'essai (voir [Fonctions bêta](personnaliser-l-organisation.md#fonctions-beta)).
 
 - **Recueillir les disponibilités pour cet événement** active la collecte. Les heures sont celles du fuseau horaire de l'organisation au moment de l'activation : il reste celui de l'événement pour toutes les réponses, même si vous changez ensuite le fuseau de l'organisation.
-- **Date limite des réponses** (facultatif) : après cette date, les personnes ne peuvent plus changer leurs réponses depuis leur lien ; vous pouvez toujours les corriger. Une nouvelle date limite, plus tard, rouvre la collecte. **Sans date limite** la retire.
+- **Date limite des réponses** (facultatif), en heure de l'événement (heure suisse pour une organisation en Suisse) : après cette date, les personnes ne peuvent plus changer leurs réponses depuis leur lien ; vous pouvez toujours les corriger. Une nouvelle date limite, plus tard, rouvre la collecte. **Sans date limite** la retire. Une date limite déjà passée demande une confirmation : dès son enregistrement, les personnes ne peuvent plus répondre.
 - Désactiver la collecte demande une confirmation qui dit combien de liens cesseront de fonctionner. Les réponses déjà données sont gardées. Si vous réactivez la collecte, il faut envoyer de nouveaux liens.
 
 ## Demander les disponibilités
 
 Onglet **Inscriptions**, page **Disponibilités** (elle apparaît une fois la collecte activée).
 
-- **Demander leurs disponibilités** : choisissez des membres actifs de l'organisation (recherche, filtre par étiquette). Chacun reçoit par email son lien personnel **Indiquer mes disponibilités**. Une personne déjà sollicitée reçoit le même lien ; personne ne reçoit deux emails à quelques minutes d'intervalle. Un membre sans adresse email est ajouté à la liste sans email : vous saisissez ses réponses vous-même.
-- **Relancer les personnes sans réponse** : le même lien, de nouveau, aux personnes qui n'ont rien répondu, sauf celles contactées il y a moins de 48 heures.
+- **Demander leurs disponibilités** : choisissez des membres actifs de l'organisation (recherche, filtre par étiquette, **Sélectionner les membres affichés**). Chacun reçoit par email son lien personnel **Indiquer mes disponibilités**. Une personne déjà sollicitée reçoit le même lien ; personne ne reçoit deux emails à quelques minutes d'intervalle. Une personne dont le lien a été désactivé (collecte arrêtée puis réactivée) reçoit tout de suite un nouveau lien. Un envoi qui n'a envoyé aucun email s'affiche comme un avertissement, avec la raison. Un membre sans adresse email est ajouté à la liste sans email : vous saisissez ses réponses vous-même.
+- **Relancer les personnes sans réponse** : le même lien, de nouveau, aux personnes qui n'ont rien répondu, sauf celles contactées il y a moins de 48 heures. La relance ne renvoie que des liens encore valables : sous le bouton, la page indique combien de personnes sans réponse n'ont plus de lien valable ; demandez-leur de nouveau avec **Demander leurs disponibilités**. Quand la relance n'est pas possible, la raison est écrite sous le bouton.
 - Les emails passent par la file d'envoi, comme les invitations : chaque envoi figure dans les [envois groupés](ecrire-aux-benevoles.md#envois-groupes) de l'onglet **Messages**.
 
 ## Voir qui a répondu
 
-Les compteurs **Sans réponse**, **Réponse partielle**, **Réponse complète** et **Aucune date disponible** filtrent la liste ; **Toutes les personnes sollicitées** la montre en entier. Pour chaque personne : son état, le nombre de dates répondues, sa dernière réponse (par la personne ou par l'organisation) et l'état de son lien.
+Les filtres **Sans réponse**, **Réponse partielle**, **Réponse complète** et **Aucune date disponible**, chacun avec son nombre, filtrent la liste ; **Toutes** la montre en entier. Pour chaque personne : son état, le nombre de dates répondues, sa dernière réponse (par la personne ou par l'organisation) et l'état de son lien. Sur un téléphone, la liste montre ces informations personne par personne.
 
 **Voir et corriger** ouvre ses réponses date par date. Votre correction remplace la réponse des dates modifiées et reste possible après la date limite ; elle est notée « par l'organisation ». Une réponse marquée « À revoir » a changé après la publication des affectations (voir plus bas), ou vient de la fusion de deux fiches qui avaient répondu différemment : la réponse de la fiche gardée est conservée, jamais un mélange des deux. **Marquer comme vu** retire la mention quand vous avez relu la réponse ; si la personne la change encore entre-temps, la mention reste.
 
@@ -44,7 +44,7 @@ Seuls les organisateurs voient les réponses. Elles ne sont jamais copiées quan
 Page **Affecter selon les disponibilités**, ouverte depuis la page **Disponibilités**, depuis la liste des inscriptions filtrée sur un créneau (**Voir qui est disponible pour ce créneau**) ou depuis un créneau à compléter de **Où manque-t-il du monde ?** (**Voir les disponibilités**). Choisissez un créneau puis **Afficher** : chaque personne apparaît sur une carte. Vous décidez qui ajouter ; personne n'est placé automatiquement.
 
 - **Qui est listé** : les personnes sollicitées pour leurs disponibilités et celles déjà prévues sur l'événement, membres actifs de l'organisation. **Voir tous les membres actifs** élargit la liste. Les personnes déjà sur ce créneau (place confirmée, demande, liste d'attente) ne sont pas listées : leur nombre est indiqué.
-- **Disponibilité pour ce créneau**, d'après les réponses, dans le fuseau de l'événement : **Disponible sur tout le créneau**, **Disponible sur une partie du créneau** (avec le temps libre et le reste), **Sans réponse pour ces heures** ou **Pas disponible à ces heures**, et les plages indiquées. Pour un créneau de nuit, la réponse de la veille compte aussi : une plage de 20h à 3h couvre le début de la journée suivante. Tant que la date du créneau ou la veille n'a pas de réponse, ces heures restent « sans réponse », jamais « pas disponible ».
+- **Disponibilité pour ce créneau**, d'après les réponses, dans le fuseau de l'événement : **Disponible sur tout le créneau**, **Disponible sur une partie du créneau** (avec le temps libre et le reste), **Sans réponse pour ces heures** ou **Pas disponible à ces heures**, et les horaires indiqués. Pour un créneau de nuit, la réponse de la veille compte aussi : un horaire de 20h à 3h couvre le début de la journée suivante. Tant que la date du créneau ou la veille n'a pas de réponse, ces heures restent « sans réponse », jamais « pas disponible ».
 - **Heures déjà prévues** sur l'événement (places confirmées et demandes en attente de validation), dont celles du même jour (de la même journée de service quand l'événement protège les pauses et la charge), les missions qui s'enchaînent **sans pause** avec ce créneau et celles qui le **chevauchent**.
 - **Pauses et charge** : si l'événement les protège, une personne que ses limites empêchent d'ajouter n'a pas de bouton, et la carte dit pourquoi ; sinon, les alertes habituelles s'affichent et l'ajout reste possible.
 - **Trier** : **Par nom**, ou **Pour répartir la charge** : d'abord les personnes qui peuvent être ajoutées, puis selon leur disponibilité, puis celles qui ont le moins d'heures déjà prévues sur l'événement, puis par nom. **Disponibles sur tout le créneau seulement** masque les autres.
@@ -107,10 +107,11 @@ Une correction ne déplace et ne désinscrit jamais personne. Sa réponse est ma
 
 ## Ce que voit la personne sollicitée
 
-Le lien **Indiquer mes disponibilités** de l'email ouvre la page **Mes disponibilités pour** suivie du nom de l'événement, sans compte à créer. Elle y voit ses propres réponses, jamais celles des autres.
+Le lien **Indiquer mes disponibilités** de l'email ouvre la page **Mes disponibilités pour** suivie du nom de l'événement, sans compte à créer. Elle y voit ses propres réponses, jamais celles des autres. Une date sans réponse porte la mention « (sans réponse) » sous son titre.
 
-- Pour chaque date, elle choisit **Disponible sur des plages** et indique le début et la fin de chaque plage, ou **Pas disponible**. Une plage du soir peut finir le lendemain matin : de 20h à 3h, par exemple. Une date laissée sans choix reste « sans réponse ».
-- **Pas disponible pendant tout l'événement** coche « Pas disponible » pour chaque date ; il faut ensuite enregistrer.
-- Elle peut changer ses réponses jusqu'à la date limite indiquée en haut de la page ; ensuite, la page les affiche sans pouvoir les modifier, sauf si des affectations lui ont été publiées : elle peut alors encore les corriger jusqu'à la fin de l'événement.
+- Pour chaque date, elle choisit **Disponible à certaines heures** et indique le début et la fin de chaque horaire (**Ajouter un autre horaire**, **Retirer cet horaire**), ou **Pas disponible**. Un horaire du soir peut finir le lendemain matin : de 20h à 3h, par exemple. Une date laissée sans choix reste « sans réponse ». **Reprendre les horaires du …** recopie la réponse de la date précédente.
+- Sous les dates, **Je ne peux pas venir du tout** : **Pas disponible pendant tout l'événement** coche « Pas disponible » pour chaque date ; il faut ensuite enregistrer. Un lien en haut du formulaire y mène directement.
+- Tant que des changements ne sont pas enregistrés, « Changements non enregistrés » s'affiche près du bouton. Les heures manquantes sont toutes signalées en une fois, avec une liste de liens vers les champs à compléter ; deux horaires qui se recouvrent sont décrits en clair sous l'horaire à raccourcir. Une fois enregistré, la page dit que c'est fait et jusqu'à quand les réponses peuvent encore changer.
+- Elle peut changer ses réponses jusqu'à la date limite indiquée en haut de la page ; ensuite, la page les affiche sans pouvoir les modifier, avec l'adresse de l'organisation pour une correction (l'adresse de réponse des [paramètres des emails](parametres-et-suivi-des-emails.md)), sauf si des affectations lui ont été publiées : elle peut alors encore les corriger jusqu'à la fin de l'événement. Si la date limite passe pendant qu'elle remplit la page, celle-ci lui dit que ses derniers changements n'ont pas été enregistrés et montre les réponses reçues.
 - Une heure qui n'existe pas ou existe deux fois la nuit d'un changement d'heure est refusée : il faut choisir une heure juste avant ou après.
-- Le lien est personnel. Il cesse de fonctionner si vous arrêtez la collecte ou corrigez son adresse email ; dans ce dernier cas, un nouveau lien part à la nouvelle adresse.
+- Le lien est personnel. Il cesse de fonctionner si vous arrêtez la collecte ou corrigez son adresse email ; dans ce dernier cas, un nouveau lien part à la nouvelle adresse. Un lien qui ne fonctionne plus affiche « Lien introuvable » avec le nom de l'organisation et l'invitation à répondre à son email ; trop de tentatives ou une connexion perdue ont leur propre message, avec **Réessayer**.

@@ -31,7 +31,7 @@ export function renderAvailabilityRequest(p: NotificationPayload): RenderedEmail
   const lead = d.reminder
     ? `Petit rappel : nous n'avons pas encore tes disponibilités pour ${d.eventTitle}, ${d.datesLabel}.`
     : `Pour préparer ${d.eventTitle}, ${d.datesLabel}, ${d.organizationName} aimerait savoir quand tu es libre.`
-  const how = "Pour chaque date, indique tes plages libres (une nuit peut finir le lendemain matin) ou « pas disponible »."
+  const how = "Pour chaque date, indique les heures où tu es libre (un horaire du soir peut finir le lendemain matin) ou « pas disponible ». Pas besoin de compte : le lien suffit."
   const deadline = d.deadlineLabel ? `Merci de répondre avant le ${d.deadlineLabel}. Tu peux changer tes réponses jusque-là.` : "Tu peux changer tes réponses à tout moment."
   const notice = "Ce lien est personnel : ne le transmets pas. Seule l'organisation voit tes réponses."
   const text = [
@@ -47,16 +47,16 @@ export function renderAvailabilityRequest(p: NotificationPayload): RenderedEmail
     notice,
     ``,
     `Merci !`,
-    `L'équipe ${d.organizationName}`,
+    d.organizationName,
   ].join("\n")
   const html = wrap(`
-    <h2 style="margin:0 0 0.5em">Bonjour ${escapeHtml(d.firstName)},</h2>
+    <p style="margin:0 0 0.75em">Bonjour ${escapeHtml(d.firstName)},</p>
     <p style="margin:0 0 0.75em">${escapeHtml(lead)}</p>
     <p style="margin:0 0 0.75em">${escapeHtml(how)}</p>
     <p style="margin:0 0 0.75em">${escapeHtml(deadline)}</p>
     <p style="margin-top:1.25em">${btn(url, AVAILABILITY_LINK_LABEL)}</p>
     <p style="color:#555;font-size:0.85em;margin-top:1.25em">${escapeHtml(notice)}</p>
-    <p style="margin-top:1.25em">Merci !<br>L'équipe ${escapeHtml(d.organizationName)}</p>
+    <p style="margin-top:1.25em">Merci !<br>${escapeHtml(d.organizationName)}</p>
   `, lead)
   return { subject, text, html }
 }

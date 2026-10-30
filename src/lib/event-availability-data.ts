@@ -114,7 +114,7 @@ export async function saveAvailabilityAnswers(tx: Tx, input: { eventId: string; 
   if (!timeZone || !isValidTimeZone(timeZone)) return { ok: false, status: 409, error: "Le fuseau horaire des disponibilités de cet événement est inconnu." }
 
   const existing = await readAvailability(tx, eventId, volunteerId)
-  const applied = applySubmission(days, existing?.days ?? [], availabilityDates(event.startDate, event.endDate), timeZone)
+  const applied = applySubmission(days, existing?.days ?? [], availabilityDates(event.startDate, event.endDate), timeZone, by === "volunteer" ? "tu" : "vous")
   if (!applied.ok) return { ok: false, status: 400, error: applied.error, at: applied.at }
 
   const changed = answerChanged(existing?.days ?? [], applied.value.submitted)

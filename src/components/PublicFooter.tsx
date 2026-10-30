@@ -12,7 +12,7 @@ import { apexHomeHref, apexHref } from "@/lib/apex-links"
  * rest and full on hover; at least 24 px tall (WCAG 2.5.8); the focus outline of DESIGN.md §4.
  */
 const linkClass =
-  "inline-flex items-center min-h-6 max-w-full break-words rounded underline underline-offset-2 decoration-gray-300 dark:decoration-gray-600 hover:decoration-current hover:text-gray-900 dark:hover:text-gray-100 transition-colors focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-blue-600 dark:focus-visible:outline-blue-400"
+  "inline-flex items-center min-h-6 max-w-full [overflow-wrap:anywhere] rounded underline underline-offset-2 decoration-gray-300 dark:decoration-gray-600 hover:decoration-current hover:text-gray-900 dark:hover:text-gray-100 transition-colors focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-blue-600 dark:focus-visible:outline-blue-400"
 
 const NEW_TAB = "(ouvre dans un nouvel onglet)"
 const REPOSITORY_URL = "https://github.com/pvollenweider/benevoles"
@@ -160,7 +160,7 @@ export default function PublicFooter({ variant = "event", site }: { variant?: "s
       <nav aria-label="Liens utiles" className={`grid grid-cols-2 gap-x-6 sm:gap-x-8 gap-y-6 ${variant === "event" ? "" : columns.length > 3 ? "md:grid-cols-4" : "sm:grid-cols-3"}`}>
         {columns.map((col) => (
           <div key={col.id} role="group" aria-labelledby={`footer-${variant}-${col.id}`} className="min-w-0">
-            <p id={`footer-${variant}-${col.id}`} className="font-semibold text-gray-900 dark:text-gray-100">{col.title}</p>
+            <p id={`footer-${variant}-${col.id}`} className="font-semibold text-gray-900 dark:text-gray-100 hyphens-auto [overflow-wrap:anywhere]">{col.title}</p>
             <ul className="mt-2 space-y-1">
               {col.links.map((l) => (
                 <li key={l.href}><FooterAnchor link={l} /></li>
