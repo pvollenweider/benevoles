@@ -2,7 +2,7 @@
   "id": "ASSIGNMENT_PROPOSALS",
   "slug": "assignment-proposals",
   "title": "Générer une proposition d'affectations",
-  "description": "Choisir le périmètre, les objectifs d'heures et les souhaits, lancer une proposition et lire son résultat, puis verrouiller, corriger et décider de publier les affectations en brouillon.",
+  "description": "Générer une proposition d'affectations en brouillon, lire son résultat, verrouiller et corriger, puis décider de publier.",
   "language": "fr-CH",
   "voice": "Kore",
   "continuousNarration": true,
