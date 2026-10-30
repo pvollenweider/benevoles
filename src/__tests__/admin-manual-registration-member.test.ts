@@ -31,6 +31,8 @@ const shift = () => ({
 vi.mock("@/lib/auth-guard", () => ({
   requireOrgSession: vi.fn(async () => {
     const db = {
+      // An event without dated availability (#1146, lot B): nothing more is read or locked.
+      event: { findFirst: vi.fn(async () => null) },
       shift: {
         findFirst: vi.fn(async ({ where }: { where: { id: string } }) => (where.id === "gone" ? null : { ...shift(), id: where.id, roleName: where.id === "s3" ? "Loge" : "Bar" })),
         findMany: vi.fn(async () => m.limits),

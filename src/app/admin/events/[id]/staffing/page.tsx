@@ -10,6 +10,7 @@ import { belowMinimumSentence, staffingHeadline, staffingSummary } from "@/lib/s
 import { LIVE_STATUSES } from "@/lib/registration-capacity"
 import { shiftDay, shiftHours, shiftName } from "@/lib/open-shifts"
 import { assignedOnlyRoles } from "@/lib/role-assignment"
+import { usesAvailability } from "@/lib/availability-assist"
 import HelpLink from "@/components/admin/HelpLink"
 import { Meter, ShiftLine, StaffingStateSuffix, staffingLinkClass } from "@/components/admin/StaffingShiftLine"
 import SectorFilter from "@/components/admin/SectorFilter"
@@ -57,7 +58,7 @@ export default async function StaffingPage({ params, searchParams }: { params: P
   const event = await ctx.db.event.findFirst({
     where: { id },
     select: {
-      id: true, title: true,
+      id: true, title: true, availabilityEnabled: true, availabilityAdoptedAt: true,
       shifts: {
         where: { status: { not: "cancelled" }, ...sector.shiftWhere },
         select: {
@@ -162,7 +163,7 @@ export default async function StaffingPage({ params, searchParams }: { params: P
                   group="underfilled"
                   s={s}
                   detail={<><strong><Ratio active={s.active} capacity={s.capacity} /></strong><StaffingStateSuffix s={s} />{s.requested ? ` · ${plural(s.requested, "demande")} à traiter` : ""} · manque {s.missing}</>}
-                  action={assignedOnly.has(s.roleName) ? (
+                  action={<span className="flex flex-wrap gap-x-4">{assignedOnly.has(s.roleName) ? (
                     <Link href={withSectorFilter(`${base}/registrations?shift=${encodeURIComponent(s.id)}`, sector.filter)} className={`inline-block py-3 sm:py-0.5 text-sm ${linkClass}`}>
                       Ajouter à la main depuis les inscriptions
                       <span className="sr-only"> pour {shiftName(s)}, {shiftDay(s.date)}, {shiftHours(s)}</span>
@@ -173,6 +174,13 @@ export default async function StaffingPage({ params, searchParams }: { params: P
                       <span className="sr-only"> pour {shiftName(s)}, {shiftDay(s.date)}, {shiftHours(s)}</span>
                     </Link>
                   )}
+                  {/* Dated availability (#1146, lot B): who is free for this shift, to add by hand. */}
+                  {usesAvailability(event) && (
+                    <Link href={`${base}/availability/assign?shift=${encodeURIComponent(s.id)}`} className={`inline-block py-3 sm:py-0.5 text-sm ${linkClass}`}>
+                      Voir les disponibilités
+                      <span className="sr-only"> pour {shiftName(s)}, {shiftDay(s.date)}, {shiftHours(s)}</span>
+                    </Link>
+                  )}</span>}
                 />
               ))}
             </Group>

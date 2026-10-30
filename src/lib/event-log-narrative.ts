@@ -103,6 +103,8 @@ const FIELD_LABELS: Record<string, string> = {
   availabilityEnabled: "collecte des disponibilités",
   availabilityDeadline: "date limite des disponibilités",
   dates: "dates",
+  // Added by an organiser outside the person's declared availability, knowingly (#1146, lot B).
+  outsideAvailability: "ajout confirmé hors des disponibilités indiquées",
   postes: "postes",
 }
 

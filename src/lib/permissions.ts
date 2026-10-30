@@ -100,6 +100,8 @@ export const PERMISSIONS: Record<string, Partial<Record<Method, Level>>> = {
   "events/[id]/availability/mode": { PUT: "organizer" },
   "events/[id]/availability/remind": { POST: "organizer" },
   "events/[id]/availability/[volunteerId]": { GET: "organizer", PUT: "organizer" },
+  // Assisted manual assignment (#1146, lot B): one person's fit for the shifts of the add form.
+  "events/[id]/availability/fit": { GET: "organizer" },
   "events/[id]/send-reminder": { POST: "organizer" },
   "events/from-template": { POST: "organizer" },
   "members": { GET: "organizer", POST: "organizer" },

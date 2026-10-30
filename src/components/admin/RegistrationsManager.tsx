@@ -64,10 +64,12 @@ type Props = {
   initialGroupFilter?: string
   /** The page's « Secteur » filter (#1170) when one is chosen: « Écrire au secteur … » writes to it. */
   sectorFilter?: { value: string; label: string } | null
+  /** The event uses dated availability (#1146, lot B): the add form shows each person's fit, a shift filter links to « Affecter selon les disponibilités ». */
+  availability?: boolean
 }
 
 // ── Main component ────────────────────────────────────────────────────────────
-export default function RegistrationsManager({ eventId, initialRegistrations, shifts, initialShiftFilter, initialSearch, initialRequestsOnly = false, timeZone, workloadMode, personalLimits, answersByVolunteer = {}, organizerEmail = null, groupLinks = [], initialGroupFilter = "", sectorFilter = null }: Props) {
+export default function RegistrationsManager({ eventId, initialRegistrations, shifts, initialShiftFilter, initialSearch, initialRequestsOnly = false, timeZone, workloadMode, personalLimits, answersByVolunteer = {}, organizerEmail = null, groupLinks = [], initialGroupFilter = "", sectorFilter = null, availability = false }: Props) {
   const [registrations, setRegistrations] = useState<Registration[]>(initialRegistrations)
   // Workload per volunteer, from the registrations shown here: the non-blocking #465 warnings, or,
   // on a protected event (#1171), the limits it enforces that a programme no longer respects.
@@ -541,6 +543,14 @@ export default function RegistrationsManager({ eventId, initialRegistrations, sh
         >
           + Ajouter manuellement
         </button>
+        {availability && shiftFilter && (
+          <Link
+            href={`/admin/events/${eventId}/availability/assign?shift=${encodeURIComponent(shiftFilter)}`}
+            className="min-h-11 inline-flex items-center text-sm font-medium text-blue-700 underline underline-offset-2 hover:text-blue-900 rounded focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-blue-600"
+          >
+            Voir qui est disponible pour ce créneau
+          </Link>
+        )}
       </div>
 
       {showAddForm && (
@@ -552,6 +562,7 @@ export default function RegistrationsManager({ eventId, initialRegistrations, sh
           timeZone={timeZone}
           workloadMode={mode}
           organizerEmail={organizerEmail}
+          availability={availability}
           form={addForm}
           onFormChange={setAddForm}
           onAdded={handleAdded}

@@ -33,6 +33,7 @@ export const ADMIN_HELP_LINKS = {
   "/admin/events/[id]/registrations": { unit: "suivre-les-inscriptions" },
   "/admin/events/[id]/invitations": { unit: "inviter-des-membres" },
   "/admin/events/[id]/availability": { unit: "recueillir-les-disponibilites" },
+  "/admin/events/[id]/availability/assign": { unit: "recueillir-les-disponibilites", heading: "Affecter selon les disponibilités" },
   "/admin/events/[id]/message": { unit: "ecrire-aux-benevoles" },
   "/admin/events/[id]/staffing": { unit: "ou-manque-t-il-du-monde" },
   "/admin/events/[id]/day-of": { unit: "presences-le-jour-j" },

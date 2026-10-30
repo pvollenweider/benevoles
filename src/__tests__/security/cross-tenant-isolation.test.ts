@@ -2356,6 +2356,21 @@ describe("Dated availability — cross-tenant isolation (#1146)", () => {
   })
 })
 
+describe("Assisted manual assignment — cross-tenant isolation (#1146, lot B)", () => {
+  beforeEach(() => vi.clearAllMocks())
+
+  it("GET /api/admin/events/[id]/availability/fit returns 404 for an org-B event or person and reads no answer", async () => {
+    const { GET } = await import("@/app/api/admin/events/[id]/availability/fit/route")
+    const db = setupGuard()
+    const extra = { availabilityRequest: { findFirst: vi.fn().mockResolvedValue(null) } }
+    Object.assign(db, extra)
+    const res = await GET(makeRequest("/api/admin/events/evt-b/availability/fit?volunteerId=vol-b&shiftId=shift-b"), params("evt-b"))
+    expect(res.status).toBe(404)
+    expect(db.event.findFirst).toHaveBeenCalledWith(expect.objectContaining({ where: { id: "evt-b" } }))
+    expect(extra.availabilityRequest.findFirst).not.toHaveBeenCalled()
+  })
+})
+
 describe("Workload protection — cross-tenant isolation (#1171)", () => {
   beforeEach(() => vi.clearAllMocks())
 

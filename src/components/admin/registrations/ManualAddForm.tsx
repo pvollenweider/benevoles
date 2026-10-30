@@ -3,7 +3,8 @@
 // SPDX-FileCopyrightText: 2026 Philippe Vollenweider
 // SPDX-License-Identifier: AGPL-3.0-only
 
-import { useMemo, useRef, useState, type Dispatch, type SetStateAction } from "react"
+import { useEffect, useMemo, useRef, useState, type Dispatch, type SetStateAction } from "react"
+import { flushSync } from "react-dom"
 import ShiftSelect from "./ShiftSelect"
 import { blocksWorkload, newWorkloadNotices, workloadNeedsBirthDate, type WorkloadMode } from "@/lib/workload-view"
 import { WORKLOAD_BIRTHDATE_REQUIRED } from "@/lib/workload-policy"
@@ -13,6 +14,8 @@ import type { AddFormValues, Registration } from "./types"
 import { spokenShiftName } from "@/lib/spoken-time"
 import { manualAddNotice, manualAddNoticeSentence } from "@/lib/manual-add-notice"
 import { localDateTimeToUtc } from "@/lib/time-zone"
+import { ackLabel } from "@/lib/availability-assist"
+import type { PersonFit } from "@/lib/availability-assist-data"
 
 type Props = {
   eventId: string
@@ -25,6 +28,12 @@ type Props = {
   workloadMode?: WorkloadMode
   /** The signed-in organizer's email: placing oneself sends no confirmation email (#916). */
   organizerEmail?: string | null
+  /**
+   * The event uses dated availability (#1146, lot B): once a member and shifts are chosen, each
+   * shift says what the person answered, and a shift they said they are not available for needs
+   * the acknowledgement ticked before the addition.
+   */
+  availability?: boolean
   /** The values typed so far: kept by the parent so they survive closing and reopening the form. */
   form: AddFormValues
   onFormChange: Dispatch<SetStateAction<AddFormValues>>
@@ -34,7 +43,7 @@ type Props = {
 }
 
 // ── Manual registration by the organizer ─────────────────────────────────────
-export default function ManualAddForm({ eventId, shifts, registrations, timeZone, workloadMode, organizerEmail = null, form: addForm, onFormChange: setAddForm, onAdded, onCancel }: Props) {
+export default function ManualAddForm({ eventId, shifts, registrations, timeZone, workloadMode, organizerEmail = null, availability = false, form: addForm, onFormChange: setAddForm, onAdded, onCancel }: Props) {
   // The request the role-limit warning is about: the override only applies to that exact form.
   const [overLimitFor, setOverLimitFor] = useState<string | null>(null)
   // Manual addition: what this shift would add to the workload of a volunteer already registered.
@@ -43,6 +52,76 @@ export default function ManualAddForm({ eventId, shifts, registrations, timeZone
   // empty line is simply left out.
   const chosenIds = useMemo(() => [...new Set([addForm.shiftId, ...addForm.extraShiftIds].filter(Boolean))], [addForm.shiftId, addForm.extraShiftIds])
   const chosenShifts = useMemo(() => chosenIds.flatMap((id) => shifts.filter((s) => s.id === id)), [chosenIds, shifts])
+
+  // Dated availability (#1146, lot B): the chosen member's fit for each chosen shift, read from the
+  // server (never the ranges themselves), and the acknowledgements ticked, by key: a key changes
+  // with the shift, the person or their answer, so an acknowledgement never outlives its context.
+  // The fits of the current choice only: a result for another person or other shifts is ignored
+  // (derived, never cleared by an effect). `served`: fits the server sent with a refusal.
+  const chosenKey = chosenIds.join(",")
+  const fitQuery = availability && addForm.volunteerId && chosenKey ? `${addForm.volunteerId}|${chosenKey}` : ""
+  const [fetched, setFetched] = useState<{ query: string; fits: Record<string, PersonFit> } | null>(null)
+  const [served, setServed] = useState<{ form: string; fits: Record<string, PersonFit> } | null>(null)
+  const fits: Record<string, PersonFit> = {
+    ...(fetched && fetched.query === fitQuery ? fetched.fits : {}),
+    ...(served && served.form === `${addForm.volunteerId}|${addForm.email}|${chosenKey}` ? served.fits : {}),
+  }
+  const fitsLoading = fitQuery !== "" && fetched?.query !== fitQuery
+  const [acked, setAcked] = useState<Set<string>>(new Set())
+  const [ackErrors, setAckErrors] = useState<Set<string>>(new Set())
+  useEffect(() => {
+    if (!fitQuery) return
+    let current = true
+    const qs = new URLSearchParams([["volunteerId", addForm.volunteerId], ...chosenKey.split(",").map((id) => ["shiftId", id] as [string, string])])
+    fetch(`/api/admin/events/${eventId}/availability/fit?${qs}`)
+      .then((res) => (res.ok ? res.json() : null))
+      .catch(() => null)
+      .then((data: { inUse: boolean; fits: PersonFit[] } | null) => {
+        // An answer to an older choice is dropped: only the latest request is shown.
+        if (!current) return
+        setFetched({ query: fitQuery, fits: Object.fromEntries((data?.fits ?? []).map((f) => [f.shiftId, f])) })
+        const outside = (data?.fits ?? []).filter((f) => f.ackKey)
+        if (outside.length > 0) say(`Disponibilités indiquées : ${outside.map((f) => `${spokenShiftName(shifts.find((s) => s.id === f.shiftId) ?? { roleName: "créneau" })}, ${f.label.toLowerCase()}`).join(" ; ")}. Une confirmation est demandée.`)
+      })
+    return () => { current = false }
+    // The request depends on the person and the shifts only (`say` and `shifts` are read when it answers).
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [fitQuery])
+  const fitIdOf = (n: number) => `add-shift-fit-${n}`
+  function toggleAck(key: string, on: boolean) {
+    setAcked((a) => { const next = new Set(a); if (on) next.add(key); else next.delete(key); return next })
+    if (on) setAckErrors((e) => { const next = new Set(e); next.delete(key); return next })
+  }
+  // The availability line under a shift field, and its acknowledgement when one is needed.
+  function fitLine(shiftId: string, n: number) {
+    if (!shiftId) return null
+    const fit = fits[shiftId]
+    if (!fit) return fitsLoading && availability && addForm.volunteerId ? <p id={fitIdOf(n)} className="text-xs text-gray-700 mt-1">Vérification des disponibilités…</p> : null
+    const key = fit.ackKey
+    return (
+      <div className="mt-1">
+        <p id={fitIdOf(n)} className="text-xs text-gray-700">Disponibilités indiquées : {fit.label}.{fit.detail ? ` ${fit.detail}` : ""}</p>
+        {key && (
+          <>
+            <label className="flex min-h-11 items-start gap-2 py-1 text-sm text-gray-900 cursor-pointer">
+              <input
+                id={`add-ack-${n}`}
+                data-ack-key={key}
+                type="checkbox"
+                checked={acked.has(key)}
+                onChange={(e) => toggleAck(key, e.target.checked)}
+                aria-invalid={ackErrors.has(key) || undefined}
+                aria-describedby={[ackErrors.has(key) && `add-ack-error-${n}`, fitIdOf(n)].filter(Boolean).join(" ")}
+                className="mt-0.5 h-6 w-6 shrink-0 accent-blue-600"
+              />
+              <span>{ackLabel(addForm.firstName || "cette personne")}<span className="sr-only">{` (créneau ${n})`}</span></span>
+            </label>
+            {ackErrors.has(key) && <p id={`add-ack-error-${n}`} className="text-xs text-red-700">Cochez cette case pour ajouter cette personne sur ce créneau malgré ses disponibilités : rien n&apos;a encore été ajouté.</p>}
+          </>
+        )}
+      </div>
+    )
+  }
   // On a protected event (#1171) the same check as the server's: what the addition creates or worsens,
   // on the confirmed places and pending requests; otherwise the non-blocking #465 warnings.
   const mode: WorkloadMode = useMemo(() => workloadMode ?? { kind: "warnings", timeZone }, [workloadMode, timeZone])
@@ -192,6 +271,14 @@ export default function ManualAddForm({ eventId, shifts, registrations, timeZone
       requestAnimationFrame(() => document.getElementById("add-shift")?.focus())
       return
     }
+    // Dated availability (#1146, lot B): a shift outside the person's declared availability needs
+    // its acknowledgement; the box is marked and focused, nothing is sent.
+    const missingAcks = chosenIds.map((id) => fits[id]?.ackKey).filter((k): k is string => !!k && !acked.has(k))
+    if (missingAcks.length > 0) {
+      flushSync(() => setAckErrors(new Set(missingAcks)))
+      document.querySelector<HTMLInputElement>(`input[data-ack-key="${CSS.escape(missingAcks[0])}"]`)?.focus()
+      return
+    }
     setAdding(true)
     // Forcing past the role limit: the alert and its button stay until the answer, so focus stays put.
     if (!allowOverLimit) { setAddError(null); setErrorFor(null); setOverLimitFor(null) }
@@ -210,6 +297,7 @@ export default function ManualAddForm({ eventId, shifts, registrations, timeZone
         ...(minorsProtected && addForm.birthDate ? { birthDate: addForm.birthDate } : {}),
         shiftIds: chosenIds,
         ...(allowOverLimit ? { allowOverLimit: true } : {}),
+        ...(acked.size > 0 ? { availabilityAck: chosenIds.map((id) => fits[id]?.ackKey).filter((k): k is string => !!k && acked.has(k)) } : {}),
       }),
     })
 
@@ -223,6 +311,21 @@ export default function ManualAddForm({ eventId, shifts, registrations, timeZone
     const missingBirth = res.status === 409 && Array.isArray(data.workload) && data.workload[0] === WORKLOAD_BIRTHDATE_REQUIRED
     setBirthError(missingBirth ? WORKLOAD_BIRTHDATE_REQUIRED : null)
     if (missingBirth) requestAnimationFrame(() => document.getElementById("add-birthdate")?.focus())
+    // Availability (#1146, lot B): answered meanwhile, or a member found by their email: the shifts
+    // to acknowledge come back with the refusal; the first box takes focus.
+    if (res.status === 409 && data.code === "availability" && Array.isArray(data.outside)) {
+      const outside = data.outside as { shiftId: string; key: string; state: PersonFit["state"]; label: string; detail: string }[]
+      flushSync(() => {
+        setServed({ form: `${addForm.volunteerId}|${addForm.email}|${chosenKey}`, fits: Object.fromEntries(outside.map((o) => [o.shiftId, { shiftId: o.shiftId, state: o.state, label: o.label, detail: o.detail, ackKey: o.key }])) })
+        setAckErrors(new Set(outside.filter((o) => !acked.has(o.key)).map((o) => o.key)))
+        // The refusal is said by the box that takes focus (its error), never a second time by an alert.
+        setAddError(null)
+        setErrorFor(null)
+      })
+      const first = outside.find((o) => !acked.has(o.key)) ?? outside[0]
+      if (first) document.querySelector<HTMLInputElement>(`input[data-ack-key="${CSS.escape(first.key)}"]`)?.focus()
+      return
+    }
     if (!res.ok) { setAddError(data.error ?? "Erreur."); setErrorFor(JSON.stringify(addForm)); return }
     setAddError(null)
     setErrorFor(null)
@@ -373,7 +476,7 @@ export default function ManualAddForm({ eventId, shifts, registrations, timeZone
           required
           invalid={shiftInvalid}
           // The conflict is a warning, not an error: it describes the field without making it invalid.
-          describedBy={[shiftInvalid && "add-shift-error", conflictMessage && "add-shift-conflict"].filter(Boolean).join(" ") || undefined}
+          describedBy={[shiftInvalid && "add-shift-error", conflictMessage && "add-shift-conflict", addForm.shiftId && fits[addForm.shiftId] && fitIdOf(1)].filter(Boolean).join(" ") || undefined}
           shifts={offeredFor(addForm.shiftId)}
           value={addForm.shiftId}
           onChange={(id) => chooseShift((f) => ({ ...f, shiftId: id }), id)}
@@ -384,6 +487,7 @@ export default function ManualAddForm({ eventId, shifts, registrations, timeZone
         {conflictMessage && (
           <p id="add-shift-conflict" className="text-xs text-orange-800 mt-1 ml-0.5">{conflictMessage}</p>
         )}
+        {fitLine(addForm.shiftId, 1)}
       </div>
       {/* More shifts for the same person (#918): one line each, all added together. */}
       {addForm.extraShiftIds.map((id, index) => {
@@ -400,7 +504,7 @@ export default function ManualAddForm({ eventId, shifts, registrations, timeZone
             <ShiftSelect
               id={`add-shift-${n}`}
               labelledBy={`add-shift-${n}-label`}
-              describedBy={lineConflict ? `add-shift-${n}-conflict` : undefined}
+              describedBy={[lineConflict && `add-shift-${n}-conflict`, id && fits[id] && fitIdOf(n)].filter(Boolean).join(" ") || undefined}
               shifts={offeredFor(id)}
               value={id}
               onChange={(value) => setShiftLine(index, value)}
@@ -408,6 +512,7 @@ export default function ManualAddForm({ eventId, shifts, registrations, timeZone
               existingShifts={volunteerShifts}
             />
             {lineConflict && <p id={`add-shift-${n}-conflict`} className="text-xs text-orange-800 mt-1 ml-0.5">{lineConflict}</p>}
+            {fitLine(id, n)}
           </div>
         )
       })}
