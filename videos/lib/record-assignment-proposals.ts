@@ -54,8 +54,8 @@ export const AP_EXPECTED = {
   written: "29 affectations écrites dans les brouillons.",
   gapPoste: "Rangement du Kiosque",
   gapReason: "Aucune disponibilité ne couvre entièrement ce créneau.",
-  targetLoad: "6 h prévues pour un objectif de 6 h : objectif atteint.",
-  wishSentence: "Disponible sur tout le créneau. Place du minimum de ce créneau. Charge prévue : 8 h pour un objectif de 12 h. Poste souhaité.",
+  targetLoad: "6 h prévues pour un objectif de 6 h : objectif atteint.",
+  wishSentence: "Disponible sur tout le créneau. Place du minimum de ce créneau. Charge prévue : 8 h pour un objectif de 12 h. Poste souhaité.",
   drafts: "29 affectations en brouillon pour 11 personnes.",
 } as const
 
@@ -93,7 +93,7 @@ export async function recordAssignmentProposals(options: Options) {
     await page.getByRole("heading", { level: 2, name: "Nouvelle proposition", exact: true }).waitFor()
     const checks = page.getByRole("heading", { level: 3, name: "Ce qui est vérifié", exact: true })
     await checks.scrollIntoViewIfNeeded()
-    await page.getByText("Protection des pauses et de la charge : activée.", exact).waitFor()
+    await page.getByText("Protection des pauses et de la charge : activée.", exact).waitFor()
     await at("Dans Périmètre")
     const scope = page.getByRole("heading", { level: 3, name: "Périmètre", exact: true })
     await scope.scrollIntoViewIfNeeded()
@@ -113,7 +113,7 @@ export async function recordAssignmentProposals(options: Options) {
     // No target is ever filled in for the organiser: the fields start empty (explicit targets, P14).
     assert.equal(await noah.inputValue(), "", "Noah has no target before the suggestion is applied")
     await at("Appliquer la suggestion les remplit")
-    await tap(page, page.getByRole("button", { name: "Appliquer la suggestion : 6 h par date où la personne a indiqué une plage libre", exact: true }))
+    await tap(page, page.getByRole("button", { name: "Appliquer la suggestion : 6 h par date où la personne a indiqué une plage libre", exact: true }))
     assert.equal(await noah.inputValue(), "12", "Noah's suggestion: two available dates")
     await at("Noah ne veut que six heures")
     await noah.scrollIntoViewIfNeeded()

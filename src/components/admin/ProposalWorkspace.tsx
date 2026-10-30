@@ -15,7 +15,7 @@ import { fmtDuration } from "@/lib/signup-recap"
 import { staleSentence, type InputPart, type ProposalConfig } from "@/lib/proposal-config"
 import { assignmentSentence, gapSentence, personSentence, stateSentence, type ProposalReport } from "@/lib/proposal-explanations"
 import {
-  coverageLine, droppedSentence, fillMissingTargets, formatHours, formToConfig, historyEntry, posteChoicesFrom, replacedDraftCount, rotationSummary, runStateLabel, runTone,
+  coverageDetails, coverageLine, droppedSentence, fillMissingTargets, formatHours, formToConfig, historyEntry, posteChoicesFrom, replacedDraftCount, rotationSummary, runStateLabel, runTone,
   scopeShiftIds, summaryProblems, TARGET_FIELD_ERROR, withoutProblem, type FormProblem, type PersonChoice, type PosteChoice, type RunTone,
 } from "@/lib/proposal-view"
 import type { ProposalPageData } from "@/lib/proposal-page-data"
@@ -51,9 +51,9 @@ const runDate = (d: Date | string) => new Date(d).toLocaleString("fr-FR", { time
 
 /** What is announced when a run changes state: its state and, once done, the key counts. */
 function doneText(r: Run): string {
-  if (!isDone(r)) return `Proposition : ${runStateLabel(r).toLowerCase()}.`
+  if (!isDone(r)) return `Proposition : ${runStateLabel(r).toLowerCase()}.`
   const cov = r.report?.coverage
-  const parts = [`Proposition terminée : ${runStateLabel(r).toLowerCase()}.`]
+  const parts = [`Proposition terminée : ${runStateLabel(r).toLowerCase()}.`]
   if (cov) parts.push(`${coverageLine(cov)}.`)
   if (r.writtenAt) parts.push(`${plural(r.writtenCount, "affectation écrite", "affectations écrites")} en brouillon.`)
   return parts.join(" ")
@@ -162,7 +162,7 @@ export default function ProposalWorkspace({ data, suggestedSeed, eventInfoHref, 
   const countLine = `${plural(scope.length, "créneau", "créneaux")}, ${plural(seats, "place à pourvoir", "places à pourvoir")}`
   const protectionOn = data.protection === "on"
   const active = !!run && !isDone(run)
-  const launchBlocked = !protectionOn ? "La protection des pauses et de la charge n'est pas activée et complète : activez-la dans les informations de l'événement." : active ? "Une proposition est en cours : attendez qu'elle finisse ou arrêtez-la." : null
+  const launchBlocked = !protectionOn ? "La protection des pauses et de la charge n'est pas activée et complète : activez-la dans les informations de l'événement." : active ? "Une proposition est en cours : attendez qu'elle finisse ou arrêtez-la." : null
   const items = summaryProblems(problems)
   const suggestionOf = (id: string) => data.people.find((x) => x.volunteerId === id)?.suggestionMinutes ?? 0
 
@@ -198,7 +198,7 @@ export default function ProposalWorkspace({ data, suggestedSeed, eventInfoHref, 
         } else setRun(next)
       } catch {
         // Said once, visibly; it goes away as soon as a reading succeeds again.
-        if (!pollFailed.current) { pollFailed.current = true; setAlert({ text: "Le suivi du calcul est interrompu : rechargez la page pour voir où il en est.", reload: true }) }
+        if (!pollFailed.current) { pollFailed.current = true; setAlert({ text: "Le suivi du calcul est interrompu : rechargez la page pour voir où il en est.", reload: true }) }
       }
     }, POLL_MS)
     return () => clearInterval(timer)
@@ -232,7 +232,7 @@ export default function ProposalWorkspace({ data, suggestedSeed, eventInfoHref, 
     setPeople(next)
     setProblems((list) => list.filter((p) => !p.field.startsWith("target-") || next.find((x) => `target-${x.volunteerId}` === p.field && x.targetHours.trim() === "")))
     const included = next.filter((p) => p.included).length
-    announce(setStatus, changed === 0 ? "Aucun objectif modifié : la suggestion est déjà appliquée." : `Objectif rempli pour ${plural(changed, "personne", "personnes")} ; ${included - changed} inchangé${included - changed > 1 ? "s" : ""}.`)
+    announce(setStatus, changed === 0 ? "Aucun objectif modifié : la suggestion est déjà appliquée." : `Objectif rempli pour ${plural(changed, "personne", "personnes")} ; ${included - changed} inchangé${included - changed > 1 ? "s" : ""}.`)
   }
 
   /** From the error summary: the suggestion for the people without a target only, never over a typed value. */
@@ -303,7 +303,7 @@ export default function ProposalWorkspace({ data, suggestedSeed, eventInfoHref, 
       setLaunching(false)
       if (!next) {
         // Launched, but its follow-up could not be read: said visibly, and the page reloads its data.
-        flushSync(() => setAlert({ text: "La proposition est lancée, mais son suivi ne s'affiche pas : rechargez la page pour voir où elle en est.", reload: true }))
+        flushSync(() => setAlert({ text: "La proposition est lancée, mais son suivi ne s'affiche pas : rechargez la page pour voir où elle en est.", reload: true }))
         document.getElementById("proposal-alert-reload")?.focus()
         startTransition(() => router.refresh())
         return
@@ -312,7 +312,7 @@ export default function ProposalWorkspace({ data, suggestedSeed, eventInfoHref, 
       shownId.current = next.id
       flushSync(() => setRun(next))
       resultHeading.current?.focus()
-      announce(setStatus, body.notice ? `Proposition lancée. ${body.notice}` : "Proposition lancée : calcul en attente.")
+      announce(setStatus, body.notice ? `Proposition lancée. ${body.notice}` : "Proposition lancée : calcul en attente.")
       startTransition(() => router.refresh())
     } catch {
       fail(NETWORK_ERROR)
@@ -332,7 +332,7 @@ export default function ProposalWorkspace({ data, suggestedSeed, eventInfoHref, 
     try {
       const res = await fetch(`/api/admin/events/${data.eventId}/proposals/${run.id}/cancel`, { method: "POST" })
       const body = await res.json().catch(() => ({}))
-      if (res.ok) announce(setStatus, "Arrêt demandé : la recherche s'arrête dans quelques secondes.")
+      if (res.ok) announce(setStatus, "Arrêt demandé : la recherche s'arrête dans quelques secondes.")
       else {
         // Refused because the computation ended meanwhile: show that end, not a stale refusal.
         const read = await fetch(`/api/admin/events/${data.eventId}/proposals/${run.id}`, { cache: "no-store" }).catch(() => null)
@@ -365,7 +365,7 @@ export default function ProposalWorkspace({ data, suggestedSeed, eventInfoHref, 
       // The dialog gave the focus back while unmounting (flushSync): now the heading of what changed.
       resultHeading.current?.focus()
       const written = body.written ?? 0
-      announce(setStatus, written === 0 ? "Aucune affectation écrite : toutes ont été écartées, les données ayant changé. Relancez la proposition." : `${plural(written, "affectation écrite", "affectations écrites")} en brouillon.`)
+      announce(setStatus, written === 0 ? "Aucune affectation écrite : toutes ont été écartées, les données ayant changé. Relancez la proposition." : `${plural(written, "affectation écrite", "affectations écrites")} en brouillon.`)
       startTransition(() => router.refresh())
     } catch {
       setBusy(null)
@@ -408,26 +408,26 @@ export default function ProposalWorkspace({ data, suggestedSeed, eventInfoHref, 
           <div className="space-y-1">
             <h2 id="proposal-result" ref={resultHeading} tabIndex={-1} className="text-base font-semibold text-gray-900 rounded focus:outline-none">{isDone(run) ? "Résultat de la proposition" : "Proposition en cours"}</h2>
             {isDone(run) && report && <p className="text-lg font-semibold text-gray-900">{coverageLine(report.coverage)}</p>}
-            <p className="flex flex-wrap items-center gap-x-2 gap-y-1 text-sm text-gray-700"><StateBadge run={run} /><span>Lancée le {runDate(run.createdAt)}, tirage n° {run.seed}.</span></p>
+            <p className="flex flex-wrap items-center gap-x-2 gap-y-1 text-sm text-gray-700"><StateBadge run={run} /><span>Lancée le {runDate(run.createdAt)}, tirage n° {run.seed}.</span></p>
           </div>
           {!isDone(run) && (
             <div className="space-y-2">
-              <p id="proposal-progress" className="text-sm text-gray-800">{run.status === "queued" ? "En attente d'une place de calcul." : `Calcul en cours${(run.progress as { evaluations?: number } | null)?.evaluations ? ` : ${(run.progress as { evaluations: number }).evaluations.toLocaleString("fr-FR")} essais` : ""}.`}{run.cancelRequested ? " Arrêt demandé." : ""}</p>
+              <p id="proposal-progress" className="text-sm text-gray-800">{run.status === "queued" ? "En attente d'une place de calcul." : `Calcul en cours${(run.progress as { evaluations?: number } | null)?.evaluations ? ` : ${(run.progress as { evaluations: number }).evaluations.toLocaleString("fr-FR")} essais` : ""}.`}{run.cancelRequested ? " Arrêt demandé." : ""}</p>
               <button id="proposal-cancel" type="button" onClick={() => void cancel()} aria-describedby={run.cancelRequested ? "proposal-progress" : undefined} aria-disabled={busy === "cancel" || run.cancelRequested || undefined} aria-busy={busy === "cancel" || undefined} className={smallButton}>{busy === "cancel" ? "Arrêt…" : "Arrêter la recherche"}</button>
             </div>
           )}
           {isDone(run) && (
             <>
               {report && <p className="max-w-[75ch] text-sm text-gray-800">{stateSentence({ outcome: report.outcome, execution: run.status === "interrupted" ? "interrupted" : "finished", stopReason: (run.stopReason ?? "budget") as ProposalReport["stopReason"] })}</p>}
-              {run.status === "failed" && <p className="max-w-[75ch] text-sm text-gray-800">Le calcul a échoué ; rien n&apos;a été écrit. Relancez la proposition.</p>}
-              {run.stopReason === "lease_expired" && <p className="max-w-[75ch] text-sm text-gray-800">Le calcul a été interrompu par un redémarrage du service ; rien n&apos;a été écrit. Relancez la proposition avec le même numéro de tirage pour obtenir le même résultat.</p>}
+              {run.status === "failed" && <p className="max-w-[75ch] text-sm text-gray-800">Le calcul a échoué ; rien n&apos;a été écrit. Relancez la proposition.</p>}
+              {run.stopReason === "lease_expired" && <p className="max-w-[75ch] text-sm text-gray-800">Le calcul a été interrompu par un redémarrage du service ; rien n&apos;a été écrit. Relancez la proposition avec le même numéro de tirage pour obtenir le même résultat.</p>}
               {run.stale.length > 0 && <p className="max-w-[75ch] text-sm text-[#92400e]">{staleSentence(run.stale)}</p>}
               {run.writtenAt && run.writtenCount === 0 && (
-                <p className="max-w-[75ch] rounded-lg border border-amber-300 bg-amber-50 px-3 py-2 text-sm text-amber-900 forced-colors:border-[CanvasText]">Aucune affectation n&apos;a été écrite : toutes ont été écartées à l&apos;écriture, les données ayant changé. Relancez la proposition pour tenir compte des données actuelles.</p>
+                <p className="max-w-[75ch] rounded-lg border border-amber-300 bg-amber-50 px-3 py-2 text-sm text-amber-900 forced-colors:border-[CanvasText]">Aucune affectation n&apos;a été écrite : toutes ont été écartées à l&apos;écriture, les données ayant changé. Relancez la proposition pour tenir compte des données actuelles.</p>
               )}
               <ul role="list" className="max-w-[75ch] text-sm text-gray-800 space-y-0.5">
-                {report && <li>Minimums{" "}: {report.coverage.criticalFilled} sur {report.coverage.criticalSeats}{report.coverage.reserveSeats > 0 ? ` ; réserve : ${report.coverage.reserveFilled} sur ${report.coverage.reserveSeats}` : ""}</li>}
-                {run.writtenAt && run.writtenCount > 0 && <li>{plural(run.writtenCount, "affectation écrite", "affectations écrites")} dans les brouillons{written?.replaced?.length ? ` ; ${plural(written.replaced.length, "brouillon proposé remplacé", "brouillons proposés remplacés")}` : ""}.</li>}
+                {report && coverageDetails(report.coverage).map((line) => <li key={line}>{line}</li>)}
+                {run.writtenAt && run.writtenCount > 0 && <li>{plural(run.writtenCount, "affectation écrite", "affectations écrites")} dans les brouillons{written?.replaced?.length ? ` ; ${plural(written.replaced.length, "brouillon proposé remplacé", "brouillons proposés remplacés")}` : ""}.</li>}
                 {written?.dropped && droppedSentence(written.dropped) && <li>{droppedSentence(written.dropped)}</li>}
                 {written?.error && <li className="text-[#b91c1c]">{written.error}</li>}
                 {!run.writtenAt && run.status === "interrupted" && report && <li>Rien n&apos;a été écrit dans les brouillons.</li>}
@@ -441,7 +441,7 @@ export default function ProposalWorkspace({ data, suggestedSeed, eventInfoHref, 
                 <div className="space-y-1">
                   <h3 className="text-sm font-semibold text-gray-900">Places restées vides ({report.gaps.length})</h3>
                   <ul role="list" className="max-w-[75ch] space-y-1 text-sm text-gray-800">
-                    {report.gaps.map((g) => <li key={g.shiftId}><span className="font-medium">{data.shiftWords[g.shiftId] ?? "Créneau"}</span> : {gapSentence(g)}</li>)}
+                    {report.gaps.map((g) => <li key={g.shiftId}><span className="font-medium">{data.shiftWords[g.shiftId] ?? "Créneau"}</span> : {gapSentence(g)}</li>)}
                   </ul>
                 </div>
               )}
@@ -452,7 +452,7 @@ export default function ProposalWorkspace({ data, suggestedSeed, eventInfoHref, 
                   <details>
                     <summary className={summaryClass}>Afficher chaque affectation et sa raison</summary>
                     <ul role="list" className="mt-1 max-w-[75ch] space-y-2 text-sm text-gray-800">
-                      {report.assignments.map((a) => <li key={`${a.shiftId}-${a.volunteerId}`}><span className="font-medium">{nameOf(a.volunteerId)}</span>, {data.shiftWords[a.shiftId] ?? "créneau"} : {assignmentSentence(a)}</li>)}
+                      {report.assignments.map((a) => <li key={`${a.shiftId}-${a.volunteerId}`}><span className="font-medium">{nameOf(a.volunteerId)}</span>, {data.shiftWords[a.shiftId] ?? "créneau"} : {assignmentSentence(a)}</li>)}
                     </ul>
                   </details>
                 </div>
@@ -469,8 +469,8 @@ export default function ProposalWorkspace({ data, suggestedSeed, eventInfoHref, 
           <h3 id="proposal-checks" className="text-base font-semibold text-gray-900">Ce qui est vérifié</h3>
           <p className="max-w-[75ch] text-sm text-gray-800">La proposition ne place une personne que sur un créneau couvert entièrement par ses disponibilités, et respecte les places, l&apos;âge, les postes réservés, les chevauchements, les limites par poste et la protection des pauses et de la charge. Les inscriptions et les brouillons manuels ou verrouillés restent tels quels.</p>
           {protectionOn
-            ? <p className="text-sm text-gray-800">Protection des pauses et de la charge : activée.</p>
-            : <p className="text-sm text-[#b91c1c]">Protection des pauses et de la charge : {data.protection === "off" ? "désactivée" : "incomplète"}. <Link href={eventInfoHref} className={linkClass}>Activer la protection dans les informations de l&apos;événement</Link></p>}
+            ? <p className="text-sm text-gray-800">Protection des pauses et de la charge : activée.</p>
+            : <p className="text-sm text-[#b91c1c]">Protection des pauses et de la charge : {data.protection === "off" ? "désactivée" : "incomplète"}. <Link href={eventInfoHref} className={linkClass}>Activer la protection dans les informations de l&apos;événement</Link></p>}
         </section>
 
         <section aria-labelledby="proposal-scope" className="space-y-4">
@@ -515,8 +515,8 @@ export default function ProposalWorkspace({ data, suggestedSeed, eventInfoHref, 
 
         <section aria-labelledby="proposal-people" className="space-y-3">
           <h3 id="proposal-people" ref={peopleHeading} tabIndex={-1} className="text-base font-semibold text-gray-900 rounded focus:outline-none">Personnes et objectifs d&apos;heures</h3>
-          <p className="max-w-[75ch] text-sm text-gray-700">L&apos;objectif est l&apos;engagement de chaque personne, en heures sur l&apos;événement (0 pour aucun objectif) : la proposition compare la charge de chacun à son propre objectif, sans chercher l&apos;égalité. Les valeurs d&apos;une personne non incluse sont gardées mais ne servent pas.</p>
-          <button type="button" className={smallButton} onClick={applySuggestion}>Appliquer la suggestion : 6 h par date où la personne a indiqué une plage libre</button>
+          <p className="max-w-[75ch] text-sm text-gray-700">L&apos;objectif est l&apos;engagement de chaque personne, en heures sur l&apos;événement (0 pour aucun objectif) : la proposition compare la charge de chacun à son propre objectif, sans chercher l&apos;égalité. Les valeurs d&apos;une personne non incluse sont gardées mais ne servent pas.</p>
+          <button type="button" className={smallButton} onClick={applySuggestion}>Appliquer la suggestion : 6 h par date où la personne a indiqué une plage libre</button>
           <p id="target-hint" className="max-w-[75ch] text-sm text-gray-600">En heures, par exemple 12 ou 7,5. Suggestion plafonnée par le maximum de l&apos;événement{data.maxEventMinutes ? ` (${fmtDuration(data.maxEventMinutes)})` : ""}.</p>
           {problemOf("proposal-people") && <p className="text-sm text-red-700">{problemOf("proposal-people")!.message}</p>}
           {data.people.length === 0 && <p className="text-sm text-gray-800">Personne n&apos;a encore été sollicité pour ses disponibilités sur cet événement.</p>}
@@ -587,7 +587,7 @@ export default function ProposalWorkspace({ data, suggestedSeed, eventInfoHref, 
                   <fieldset className="rounded-xl border border-gray-200 bg-white p-3 space-y-2">
                     <legend className="px-1 text-sm font-medium text-gray-900 break-words">{who}</legend>
                     <label className="flex min-h-11 items-center gap-2 text-sm text-gray-900"><input type="checkbox" className="h-6 w-6 accent-blue-600" checked={c.included} onChange={(e) => updatePerson(p.volunteerId, { included: e.target.checked })} />Inclure{" "}<span className="sr-only">{who}</span></label>
-                    <p className="text-sm text-gray-800">{p.answered ? "A répondu" : "Sans réponse"}. Suggestion : {formatHours(p.suggestionMinutes)} heure{p.suggestionMinutes >= 120 ? "s" : ""}.</p>
+                    <p className="text-sm text-gray-800">{p.answered ? "A répondu" : "Sans réponse"}. Suggestion : {formatHours(p.suggestionMinutes)} heure{p.suggestionMinutes >= 120 ? "s" : ""}.</p>
                     <div>
                       <label htmlFor={`m-target-${p.volunteerId}`} className="block text-sm font-medium text-gray-900">Objectif d&apos;heures{" "}<span className="sr-only">{who}</span></label>
                       <input id={`m-target-${p.volunteerId}`} type="text" inputMode="decimal" autoComplete="off" className={`${input} w-28`} aria-describedby={[err && `m-target-err-${p.volunteerId}`, "target-hint"].filter(Boolean).join(" ")} aria-invalid={err ? true : undefined} value={c.targetHours} onChange={(e) => updatePerson(p.volunteerId, { targetHours: e.target.value })} />
@@ -624,9 +624,9 @@ export default function ProposalWorkspace({ data, suggestedSeed, eventInfoHref, 
           </summary>
           <div className="space-y-3 pb-4 pt-1">
             <ul role="list" className="max-w-[75ch] space-y-1 text-sm text-gray-700">
-              <li id="category-hint"><span className="font-medium text-gray-900">Catégorie de rotation</span> : les postes au même nom comptent ensemble ; vide, le poste est seul dans la sienne (80 caractères au plus).</li>
-              <li id="night-hint"><span className="font-medium text-gray-900">Ajout de nuit</span> : une mission courte après une soirée, répartie entre les personnes.</li>
-              <li id="reserve-hint"><span className="font-medium text-gray-900">Réserve</span> : des personnes présentes sur place, gardées en priorité comme un minimum.</li>
+              <li id="category-hint"><span className="font-medium text-gray-900">Catégorie de rotation</span> : les postes au même nom comptent ensemble ; vide, le poste est seul dans la sienne (80 caractères au plus).</li>
+              <li id="night-hint"><span className="font-medium text-gray-900">Ajout de nuit</span> : une mission courte après une soirée, répartie entre les personnes.</li>
+              <li id="reserve-hint"><span className="font-medium text-gray-900">Réserve</span> : des personnes présentes sur place, gardées en priorité comme un minimum.</li>
             </ul>
             <div className="hidden md:block space-y-1">
               {hidesPostes && <p id="poste-scroll-hint" className="text-sm text-gray-600">{TABLE_SCROLL_HINT}</p>}
@@ -717,12 +717,12 @@ export default function ProposalWorkspace({ data, suggestedSeed, eventInfoHref, 
         <details className="rounded-xl border border-gray-200 bg-white px-3 sm:px-4">
           <summary className={summaryClass}>
             Paramètres de calcul (facultatif)
-            <span className="block text-sm font-normal text-gray-700">Numéro de tirage : {seed.trim() || "à indiquer"}</span>
+            <span className="block text-sm font-normal text-gray-700">Numéro de tirage : {seed.trim() || "à indiquer"}</span>
           </summary>
           <div className="pb-4 pt-1">
             <label htmlFor="proposal-seed" className="block text-sm font-medium text-gray-900">Numéro de tirage</label>
             <input id="proposal-seed" type="text" inputMode="numeric" autoComplete="off" className={`${input} w-36`} aria-describedby={["seed-hint", problemOf("proposal-seed") && "proposal-seed-error"].filter(Boolean).join(" ")} aria-invalid={problemOf("proposal-seed") ? true : undefined} value={seed} onChange={(e) => { setSeed(e.target.value); clear("proposal-seed") }} />
-            <p id="seed-hint" className="max-w-[75ch] text-sm text-gray-600">Même numéro et mêmes données : même proposition. Changez-le pour essayer une autre répartition.</p>
+            <p id="seed-hint" className="max-w-[75ch] text-sm text-gray-600">Même numéro et mêmes données : même proposition. Changez-le pour essayer une autre répartition.</p>
             {problemOf("proposal-seed") && <p id="proposal-seed-error" className="text-xs text-red-700">{problemOf("proposal-seed")!.message}</p>}
           </div>
         </details>
@@ -784,7 +784,7 @@ export default function ProposalWorkspace({ data, suggestedSeed, eventInfoHref, 
       {confirmRelaunch !== null && (
         <ConfirmActionModal
           recap={{
-            title: `Remplacer ${plural(confirmRelaunch, "brouillon proposé", "brouillons proposés")} ?`,
+            title: `Remplacer ${plural(confirmRelaunch, "brouillon proposé", "brouillons proposés")} ?`,
             lead: `La nouvelle proposition remplace ${confirmRelaunch > 1 ? `les ${confirmRelaunch} brouillons proposés non verrouillés` : "le brouillon proposé non verrouillé"} de ce périmètre.`,
             lines: ["Les brouillons verrouillés et manuels ne changent pas.", "Rien n'est publié et personne n'est prévenu."],
             confirmLabel: "Remplacer et générer",
@@ -816,8 +816,8 @@ export default function ProposalWorkspace({ data, suggestedSeed, eventInfoHref, 
         ) : (
           <ConfirmActionModal
             recap={{
-              title: "Utiliser ce résultat partiel ?",
-              lead: `${plural(report.assignments.length, "affectation sera écrite", "affectations seront écrites")} dans les brouillons, après une nouvelle vérification ; les brouillons proposés non verrouillés de ce périmètre seront remplacés. Les brouillons verrouillés et manuels ne changent pas.`,
+              title: "Utiliser ce résultat partiel ?",
+              lead: `${plural(report.assignments.length, "affectation sera écrite", "affectations seront écrites")} dans les brouillons, après une nouvelle vérification ; les brouillons proposés non verrouillés de ce périmètre seront remplacés. Les brouillons verrouillés et manuels ne changent pas.`,
               lines: ["Rien n'est publié et personne n'est prévenu."],
               confirmLabel: "Écrire dans les brouillons",
               danger: false,
@@ -836,7 +836,7 @@ export default function ProposalWorkspace({ data, suggestedSeed, eventInfoHref, 
 /** The error under a target field: short, with the suggested value when the field is empty. */
 function targetError(p: FormProblem, suggestionMinutes: number): string {
   if (p.kind !== "target_missing") return p.message
-  return `${TARGET_FIELD_ERROR} Suggestion : ${formatHours(suggestionMinutes)} h.`
+  return `${TARGET_FIELD_ERROR} Suggestion : ${formatHours(suggestionMinutes)} h.`
 }
 
 /** Each person's target against what is planned: a table from md up, a list below (no sideways scroll at 320 px). */

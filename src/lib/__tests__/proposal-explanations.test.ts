@@ -38,7 +38,7 @@ describe("report", () => {
     expect(report.gaps).toHaveLength(1)
     const gap = report.gaps[0]
     expect(gap).toMatchObject({ shiftId: "drive", missing: 1, missingCritical: 1, eligible: 0, excluded: { reserved: 2 }, proven: true })
-    expect(gapSentence(gap)).toBe("1 place reste sans personne, dont 1 place du minimum. Parmi les personnes choisies, 2 n'ont pas l'étiquette requise. Impossible à pourvoir : il n'y a pas assez de personnes pouvant prendre ce créneau.")
+    expect(gapSentence(gap)).toBe("1 place reste sans personne, dont 1 place du minimum. Parmi les personnes choisies, 2 n'ont pas l'étiquette requise. Impossible à pourvoir : il n'y a pas assez de personnes pouvant prendre ce créneau.")
     expect(report.outcome).toBe("proven_impossible")
     expect(report.coverage).toMatchObject({ reserveSeats: 1, reserveFilled: 1 })
   })
@@ -46,15 +46,15 @@ describe("report", () => {
   it("gives each person's target against what is planned", () => {
     const p = report.people.find((x) => x.volunteerId === "p")!
     expect(p.targetMinutes).toBe(10 * H)
-    expect(personSentence({ ...p, plannedMinutes: 8 * H, gapMinutes: -2 * H })).toBe("8 h prévues pour un objectif de 10 h : 2 h sous l'objectif.")
-    expect(personSentence({ ...p, targetMinutes: 0, plannedMinutes: 4 * H, gapMinutes: 4 * H })).toBe("4 h prévues, sans objectif d'heures.")
+    expect(personSentence({ ...p, plannedMinutes: 8 * H, gapMinutes: -2 * H })).toBe("8 h prévues pour un objectif de 10 h : 2 h sous l'objectif.")
+    expect(personSentence({ ...p, targetMinutes: 0, plannedMinutes: 4 * H, gapMinutes: 4 * H })).toBe("4 h prévues, sans objectif d'heures.")
   })
 })
 
 describe("words", () => {
   it("says nobody's availability covers the shift when that is the only reason", () => {
     const g: GapReport = { shiftId: "s", missing: 2, missingCritical: 0, reserveMissing: 0, eligible: 0, excluded: { no_answer: 1, availability_partial: 3 }, blocked: {}, workloadRules: {}, proven: true }
-    expect(gapSentence(g)).toBe("2 places restent sans personne. Aucune disponibilité ne couvre entièrement ce créneau. Impossible à pourvoir : il n'y a pas assez de personnes pouvant prendre ce créneau.")
+    expect(gapSentence(g)).toBe("2 places restent sans personne. Aucune disponibilité ne couvre entièrement ce créneau. Impossible à pourvoir : il n'y a pas assez de personnes pouvant prendre ce créneau.")
   })
 
   it("names what blocks the available people here, and a search that stopped first", () => {

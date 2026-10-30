@@ -82,7 +82,7 @@ export function formToConfig(form: ProposalForm, shifts: readonly PageShift[], n
     const minutes = parseHours(p.targetHours)
     // The person's name leads the message: a list of these must tell its links apart (WCAG 2.4.4).
     const who = nameOf(p.volunteerId)
-    const lead = (text: string) => (who ? `${who} : ${text.charAt(0).toLocaleLowerCase("fr-FR")}${text.slice(1)}` : text)
+    const lead = (text: string) => (who ? `${who} : ${text.charAt(0).toLocaleLowerCase("fr-FR")}${text.slice(1)}` : text)
     if (p.targetHours.trim() === "") problems.push({ field: `target-${p.volunteerId}`, message: lead("Indiquez un objectif en heures (0 pour aucun objectif), par exemple 12 ou 7,5."), kind: "target_missing" })
     else if (minutes === null) problems.push({ field: `target-${p.volunteerId}`, message: lead("Indiquez un objectif en heures (0 pour aucun objectif), par exemple 12 ou 7,5.") })
     else targets.push({ volunteerId: p.volunteerId, targetMinutes: minutes })
@@ -93,12 +93,12 @@ export function formToConfig(form: ProposalForm, shifts: readonly PageShift[], n
   const maxNightAddOns = wholeOrNull(form.maxNightAddOns)
   if (maxNightAddOns !== null && !(maxNightAddOns >= 0 && maxNightAddOns <= 100)) problems.push({ field: "proposal-nights", message: "Indiquez un nombre entre 0 et 100, ou laissez vide." })
   const seed = wholeOrNull(form.seed)
-  if (seed === null || Number.isNaN(seed) || seed > 4_294_967_295) problems.push({ field: "proposal-seed", message: "Indiquez un numéro de tirage : un nombre entier positif." })
+  if (seed === null || Number.isNaN(seed) || seed > 4_294_967_295) problems.push({ field: "proposal-seed", message: "Indiquez un numéro de tirage : un nombre entier positif." })
   form.posteChoices.forEach((c, i) => {
     const cap = Math.max(0, ...shifts.filter((s) => s.roleName === c.roleName).map((s) => s.capacity))
     const bad = (c.reserveText !== undefined && !/^\d+$/.test(c.reserveText.trim())) || !Number.isInteger(c.reserve) || c.reserve < 0 || c.reserve > cap
-    if (bad) problems.push({ field: `reserve-${i}`, message: `${c.roleName} : indiquez une réserve entre 0 et ${cap}.` })
-    if (c.category.trim().length > 80) problems.push({ field: `category-${i}`, message: `${c.roleName} : un nom de catégorie tient en 80 caractères.` })
+    if (bad) problems.push({ field: `reserve-${i}`, message: `${c.roleName} : indiquez une réserve entre 0 et ${cap}.` })
+    if (c.category.trim().length > 80) problems.push({ field: `category-${i}`, message: `${c.roleName} : un nom de catégorie tient en 80 caractères.` })
   })
   if (problems.length > 0) return { ok: false, problems }
 
@@ -174,9 +174,20 @@ export function coverageLine(c: { filled: number; seats: number }): string {
   return `${c.filled} ${c.filled > 1 ? "places couvertes" : "place couverte"} sur ${c.seats}`
 }
 
+/**
+ * The result's lines under the coverage, in plain words, never repeating it: the places of each
+ * shift's minimum only when they are not all the places, and the reserve when one was asked.
+ */
+export function coverageDetails(c: { seats: number; filled: number; criticalSeats: number; criticalFilled: number; reserveSeats: number; reserveFilled: number }): string[] {
+  const out: string[] = []
+  if (c.criticalSeats > 0 && c.criticalSeats !== c.seats) out.push(`Places du minimum de chaque créneau : ${c.criticalFilled} ${c.criticalFilled > 1 ? "couvertes" : "couverte"} sur ${c.criticalSeats}`)
+  if (c.reserveSeats > 0) out.push(`Réserve gardée sur place : ${c.reserveFilled} ${c.reserveFilled > 1 ? "personnes" : "personne"} sur ${c.reserveSeats}`)
+  return out
+}
+
 /** The text of a run in « Propositions précédentes »: date, state, coverage, draw number, what was written. */
 export function historyEntry(r: { status: string; outcome: string | null; seed: number; writtenAt: Date | string | null; writtenCount: number; coverage?: { filled: number; seats: number } | null }, date: string): string {
-  const parts = [`${date} : ${runStateLabel(r).toLowerCase()}`]
+  const parts = [`${date} : ${runStateLabel(r).toLowerCase()}`]
   if (r.coverage) parts.push(coverageLine(r.coverage))
   parts.push(`tirage ${r.seed}`)
   parts.push(r.writtenAt ? `${r.writtenCount} ${r.writtenCount > 1 ? "affectations écrites" : "affectation écrite"}` : "rien d'écrit")
@@ -270,5 +281,5 @@ export function droppedSentence(dropped: readonly { reason: string }[]): string 
   const counts = new Map<string, number>()
   for (const d of dropped) counts.set(d.reason, (counts.get(d.reason) ?? 0) + 1)
   const parts = [...counts].sort((a, b) => b[1] - a[1]).map(([r, n]) => `${DROP_WORDS[r] ?? "règle non respectée"} (${n})`)
-  return `${dropped.length} ${dropped.length > 1 ? "affectations écartées" : "affectation écartée"} à l'écriture, les données ayant changé pendant le calcul : ${parts.join(", ")}.`
+  return `${dropped.length} ${dropped.length > 1 ? "affectations écartées" : "affectation écartée"} à l'écriture, les données ayant changé pendant le calcul : ${parts.join(", ")}.`
 }

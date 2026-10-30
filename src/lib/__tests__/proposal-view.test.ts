@@ -63,9 +63,9 @@ describe("form to configuration", () => {
     expect(r.ok).toBe(false)
     if (r.ok) return
     expect(r.problems).toEqual([
-      { field: "target-p1", message: "Léa Favre : indiquez un objectif en heures (0 pour aucun objectif), par exemple 12 ou 7,5." },
-      { field: "reserve-0", message: "Renfort : indiquez une réserve entre 0 et 1." },
-      { field: "reserve-1", message: "Nuit : indiquez une réserve entre 0 et 2." },
+      { field: "target-p1", message: "Léa Favre : indiquez un objectif en heures (0 pour aucun objectif), par exemple 12 ou 7,5." },
+      { field: "reserve-0", message: "Renfort : indiquez une réserve entre 0 et 1." },
+      { field: "reserve-1", message: "Nuit : indiquez une réserve entre 0 et 2." },
     ])
   })
 
@@ -114,7 +114,7 @@ describe("helpers", () => {
     expect(runStateLabel({ status: "finished", outcome: "proven_impossible" })).toBe("Couverture complète impossible")
     expect(runStateLabel({ status: "failed", outcome: null })).toBe("Échec du calcul")
     expect(droppedSentence([])).toBeNull()
-    expect(droppedSentence([{ reason: "availability" }, { reason: "capacity" }, { reason: "availability" }])).toBe("3 affectations écartées à l'écriture, les données ayant changé pendant le calcul : disponibilités changées (2), plus de place (1).")
+    expect(droppedSentence([{ reason: "availability" }, { reason: "capacity" }, { reason: "availability" }])).toBe("3 affectations écartées à l'écriture, les données ayant changé pendant le calcul : disponibilités changées (2), plus de place (1).")
     expect(freshSeed(() => 0.5)).toBe(500000)
   })
 })
@@ -138,8 +138,8 @@ describe("outcome wording (#1172 review)", () => {
     expect(coverageLine({ filled: 29, seats: 31 })).toBe("29 places couvertes sur 31")
     expect(coverageLine({ filled: 1, seats: 1 })).toBe("1 place couverte sur 1")
     const base = { status: "finished", outcome: "proven_impossible", seed: 2026, writtenAt: new Date(), writtenCount: 29, coverage: { filled: 29, seats: 31 } }
-    expect(historyEntry(base, "30 octobre à 22:59")).toBe("30 octobre à 22:59 : couverture complète impossible, 29 places couvertes sur 31, tirage 2026, 29 affectations écrites")
-    expect(historyEntry({ ...base, seed: 7, writtenAt: null, coverage: null, status: "failed", outcome: null }, "1 mai à 10:00")).toBe("1 mai à 10:00 : échec du calcul, tirage 7, rien d'écrit")
+    expect(historyEntry(base, "30 octobre à 22:59")).toBe("30 octobre à 22:59 : couverture complète impossible, 29 places couvertes sur 31, tirage 2026, 29 affectations écrites")
+    expect(historyEntry({ ...base, seed: 7, writtenAt: null, coverage: null, status: "failed", outcome: null }, "1 mai à 10:00")).toBe("1 mai à 10:00 : échec du calcul, tirage 7, rien d'écrit")
   })
 })
 
@@ -158,14 +158,14 @@ describe("missing hour targets (#1172 review)", () => {
     if (r.ok) return
     expect(r.problems.filter((p) => p.kind === "target_missing").map((p) => p.field)).toEqual(["target-p1", "target-p2"])
     const items = summaryProblems(r.problems)
-    expect(items.map((i) => i.message)).toEqual(["2 personnes sans objectif d'heures", "P3 : indiquez un objectif en heures (0 pour aucun objectif), par exemple 12 ou 7,5."])
+    expect(items.map((i) => i.message)).toEqual(["2 personnes sans objectif d'heures", "P3 : indiquez un objectif en heures (0 pour aucun objectif), par exemple 12 ou 7,5."])
     expect(items[0]).toMatchObject({ field: "target-p1", missingTargets: 2 })
   })
 
   it("keeps a single missing target as its own named item", () => {
     const r = formToConfig(form({ people: [people[0], people[4]] }), shifts, () => "Noah De Jong")
     if (r.ok) throw new Error("expected problems")
-    expect(summaryProblems(r.problems).map((i) => i.message)).toEqual(["Noah De Jong : indiquez un objectif en heures (0 pour aucun objectif), par exemple 12 ou 7,5."])
+    expect(summaryProblems(r.problems).map((i) => i.message)).toEqual(["Noah De Jong : indiquez un objectif en heures (0 pour aucun objectif), par exemple 12 ou 7,5."])
   })
 
   it("fills the suggestion only where an included person has no target, never over a typed value", () => {
@@ -187,7 +187,7 @@ describe("folded settings and relaunch (#1172 review)", () => {
     { roleName: "B", category: "", night: false, reserve: 0 },
   ]
 
-  it("sums up « Rotation, nuit et réserve » in one line", () => {
+  it("sums up « Rotation, nuit et réserve » in one line", () => {
     expect(rotationSummary(choices, "", "")).toBe("Aucun réglage")
     expect(rotationSummary([{ ...choices[0], category: "Bars", night: true }, { ...choices[1], category: "bars", reserve: 1 }], "2", "1"))
       .toBe("Catégorie sur 2 postes, ajout de nuit sur 1 poste, réserve sur 1 poste, 2 jours d'affilée au plus, 1 ajout de nuit par personne au plus")

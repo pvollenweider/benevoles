@@ -76,7 +76,7 @@ export default function ConfirmActionModal({ recap, busy, onConfirm, onCancel, e
       {recap.lead && <p id={`${id}-lead`} className="text-sm font-medium text-gray-900">{recap.lead}</p>}
       {recap.warning && (
         <p id={`${id}-warning`} className="mt-3 rounded-xl border border-amber-300 bg-amber-50 px-4 py-3 text-sm text-amber-900 forced-colors:border-[CanvasText]">
-          <strong className="font-semibold">Attention :</strong> {recap.warning}
+          <strong className="font-semibold">Attention :</strong> {recap.warning}
         </p>
       )}
       {recap.groups?.map((g) => (
@@ -132,7 +132,7 @@ export default function ConfirmActionModal({ recap, busy, onConfirm, onCancel, e
             aria-busy={secondaryAction.busy || undefined}
             className="min-h-11 text-sm font-medium border border-blue-600 text-blue-700 rounded-xl px-4 py-2 hover:bg-blue-50 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-blue-600"
           >
-            {secondaryAction.busy ? "En cours…" : secondaryAction.failed ? `${secondaryAction.label} : réessayer` : secondaryAction.label}
+            {secondaryAction.busy ? "En cours…" : secondaryAction.failed ? `${secondaryAction.label} : réessayer` : secondaryAction.label}
           </button>
         )}
         <button

@@ -59,7 +59,7 @@ describe("ProposalWorkspace", () => {
     expect(within(table).getByRole("textbox", { name: "Objectif d'heures Marco Rossi" })).toHaveValue("6")
     expect(within(table).getByRole("combobox", { name: "Poste à éviter Léa Favre" })).toBeInTheDocument()
     const postes = screen.getByRole("table", { name: /Catégorie de rotation, ajout de nuit et réserve/ })
-    expect(within(postes).getByRole("textbox", { name: "Réserve à garder par créneau Renfort" })).toHaveAccessibleDescription(/^0 à 1 Réserve : /)
+    expect(within(postes).getByRole("textbox", { name: "Réserve à garder par créneau Renfort" })).toHaveAccessibleDescription(/^0 à 1 Réserve\s: /)
     expect(within(postes).getByRole("textbox", { name: "Catégorie de rotation Camion 1" })).toBeInTheDocument() // a poste name with a space
     expect(within(postes).getByRole("checkbox", { name: "Ajout de nuit Camion 1" })).toBeInTheDocument()
   })
@@ -87,7 +87,7 @@ describe("ProposalWorkspace", () => {
     fireEvent.click(screen.getByRole("button", { name: "Générer une proposition" }))
     const heading = screen.getByRole("heading", { name: "1 point à corriger" })
     expect(heading).toHaveFocus()
-    expect(screen.getByRole("link", { name: /^Léa Favre : indiquez un objectif en heures/ })).toHaveAttribute("href", "#target-v1")
+    expect(screen.getByRole("link", { name: /^Léa Favre\s: indiquez un objectif en heures/ })).toHaveAttribute("href", "#target-v1")
     expect(fetchMock).not.toHaveBeenCalled()
   })
 
@@ -139,7 +139,7 @@ describe("ProposalWorkspace", () => {
     expect(screen.getByText("Calcul arrêté avant la fin")).toBeInTheDocument()
     expect(screen.getByRole("link", { name: /3 places couvertes sur 3, tirage 42, rien d'écrit/ })).toHaveAttribute("aria-current", "page")
     fireEvent.click(screen.getByRole("button", { name: "Utiliser ce résultat partiel" }))
-    const dialog = screen.getByRole("dialog", { name: "Utiliser ce résultat partiel ?" })
+    const dialog = screen.getByRole("dialog", { name: "Utiliser ce résultat partiel ?" })
     fireEvent.click(within(dialog).getByRole("button", { name: "Écrire dans les brouillons" }))
     await waitFor(() => expect(screen.getByRole("heading", { name: "Résultat de la proposition" })).toHaveFocus())
     expect(fetchMock).toHaveBeenCalledWith("/api/admin/events/evt/proposals/run-1/write", { method: "POST" })
@@ -161,7 +161,7 @@ describe("ProposalWorkspace", () => {
     expect(screen.getByRole("heading", { name: "1 point à corriger" })).toHaveFocus()
     expect(screen.getByRole("link", { name: "2 personnes sans objectif d'heures" })).toHaveAttribute("href", "#target-v1")
     expect(within(table).getByRole("textbox", { name: "Objectif d'heures Léa Favre" })).toHaveAttribute("aria-invalid", "true")
-    expect(within(table).getByRole("textbox", { name: "Objectif d'heures Léa Favre" })).toHaveAccessibleDescription(/Objectif à indiquer \(0 pour aucun\)\. Suggestion : 12 h\./)
+    expect(within(table).getByRole("textbox", { name: "Objectif d'heures Léa Favre" })).toHaveAccessibleDescription(/Objectif à indiquer \(0 pour aucun\)\. Suggestion\s: 12 h\./)
     fireEvent.click(screen.getByRole("button", { name: "Appliquer la suggestion aux 2 personnes sans objectif" }))
     expect(within(table).getByRole("textbox", { name: "Objectif d'heures Léa Favre" })).toHaveValue("12")
     expect(within(table).getByRole("textbox", { name: "Objectif d'heures Noah De Jong" })).toHaveValue("6")
@@ -193,7 +193,7 @@ describe("ProposalWorkspace", () => {
     const details = document.getElementById("proposal-rotation") as HTMLDetailsElement
     expect(details.open).toBe(true)
     details.open = false
-    const link = screen.getByRole("link", { name: /Camion 1 : un nom de catégorie tient en 80 caractères/ })
+    const link = screen.getByRole("link", { name: /Camion 1\s: un nom de catégorie tient en 80 caractères/ })
     fireEvent.click(link)
     expect(details.open).toBe(true)
     expect(field).toHaveFocus()
@@ -205,7 +205,7 @@ describe("ProposalWorkspace", () => {
     expect(screen.getByText("Rotation, nuit et réserve (facultatif)").closest("summary")).toHaveTextContent("Aucun réglage")
     fireEvent.click(screen.getByRole("button", { name: "Remplir avec 2 jours d'affilée et 2 ajouts de nuit au plus" }))
     expect(screen.getByText("Rotation, nuit et réserve (facultatif)").closest("summary")).toHaveTextContent("2 jours d'affilée au plus, 2 ajouts de nuit par personne au plus")
-    expect(screen.getByRole("textbox", { name: "Numéro de tirage" })).toHaveAccessibleDescription(/Même numéro et mêmes données : même proposition\./)
+    expect(screen.getByRole("textbox", { name: "Numéro de tirage" })).toHaveAccessibleDescription(/Même numéro et mêmes données\s: même proposition\./)
   })
 
   it("asks before replacing proposed drafts of the scope, and launches only after confirmation (finding 6)", async () => {
@@ -214,7 +214,7 @@ describe("ProposalWorkspace", () => {
       .mockResolvedValue(ok({ run: { ...baseRun, status: "queued" } }))
     view(data({ proposedByShift: { s1: 2, other: 4 }, people: [{ ...data().people[0], targetMinutes: 600 }] }))
     fireEvent.click(screen.getByRole("button", { name: "Générer une proposition" }))
-    const dialog = screen.getByRole("alertdialog", { name: "Remplacer 2 brouillons proposés ?" })
+    const dialog = screen.getByRole("alertdialog", { name: "Remplacer 2 brouillons proposés ?" })
     expect(fetchMock).not.toHaveBeenCalled()
     fireEvent.click(within(dialog).getByRole("button", { name: "Annuler" }))
     expect(fetchMock).not.toHaveBeenCalled()
@@ -284,11 +284,11 @@ describe("ProposalWorkspace", () => {
     const buttons = within(dialog).getAllByRole("button").map((b) => b.textContent)
     expect(buttons.slice(-3)).toEqual(["Annuler", "Écrire quand même", "Relancer la proposition"])
     fireEvent.click(within(dialog).getByRole("button", { name: "Écrire quand même" }))
-    await waitFor(() => expect(screen.getByText(/Aucune affectation n'a été écrite : toutes ont été écartées/)).toBeInTheDocument())
+    await waitFor(() => expect(screen.getByText(/Aucune affectation n'a été écrite\s: toutes ont été écartées/)).toBeInTheDocument())
     await waitFor(() => expect(status()).toHaveTextContent("Aucune affectation écrite"))
   })
 
-  it("keeps « Relancer la proposition » as is when « Écrire quand même » fails", async () => {
+  it("keeps « Relancer la proposition » as is when « Écrire quand même » fails", async () => {
     const run = { ...baseRun, status: "interrupted", stopReason: "cancelled", outcome: "complete", report, stale: ["availability"] }
     fetchMock.mockResolvedValueOnce(ok({ error: "L'écriture n'a pas abouti." }, 409))
     view(data({ run: run as never }))
@@ -297,7 +297,7 @@ describe("ProposalWorkspace", () => {
     fireEvent.click(within(dialog).getByRole("button", { name: "Écrire quand même" }))
     await waitFor(() => expect(within(dialog).getByRole("alert")).toHaveTextContent("L'écriture n'a pas abouti."))
     expect(within(dialog).getByRole("button", { name: "Relancer la proposition" })).toBeInTheDocument()
-    expect(within(dialog).getByRole("button", { name: "Écrire quand même : réessayer" })).toBeInTheDocument()
+    expect(within(dialog).getByRole("button", { name: "Écrire quand même : réessayer" })).toBeInTheDocument()
   })
 
   it("names each control of the phone layout with its person or poste, and lists the load without a table (findings 8, 13)", () => {
@@ -322,5 +322,38 @@ describe("ProposalWorkspace", () => {
     const badge = screen.getByText("Couverture complète impossible")
     expect(badge.className).not.toMatch(/fee2e2|b91c1c/)
     expect(screen.queryByText(/Impossible démontré|graine|Aller au résultat/i)).not.toBeInTheDocument()
+  })
+
+  it("puts a no-break space before « : ; ? ! » and inside « » in every text the page shows (French typography)", async () => {
+    const bad = /[ \t\n][:;?!]|« | »/
+    const scan = () => {
+      const texts = [document.body.textContent ?? "", ...[...document.querySelectorAll("[aria-label]")].map((e) => e.getAttribute("aria-label") ?? "")]
+      return texts.flatMap((t) => (t.match(new RegExp(`.{0,30}(${bad.source}).{0,10}`, "g")) ?? []))
+    }
+    const gapReport = {
+      ...report, outcome: "proven_impossible",
+      gaps: [{ shiftId: "s2", missing: 1, missingCritical: 1, reserveMissing: 0, eligible: 0, excluded: { no_answer: 1 }, blocked: {}, workloadRules: {}, proven: true }],
+      coverage: { seats: 4, filled: 3, criticalSeats: 2, criticalFilled: 2, reserveSeats: 1, reserveFilled: 0 },
+    }
+    const finished = { ...baseRun, status: "finished", outcome: "proven_impossible", writtenAt: new Date(), writtenCount: 1, report: gapReport, stale: ["availability"], written: { created: [], dropped: [{ shiftId: "s1", volunteerId: "v1", reason: "capacity" }], replaced: ["d"] } }
+    const runs = [{ id: "run-1", status: "finished", stopReason: null, outcome: "proven_impossible", seed: 42, createdAt: new Date("2031-06-01T10:00:00Z"), finishedAt: null, writtenAt: new Date(), writtenCount: 1, droppedCount: 0, coverage: { filled: 3, seats: 4 } }]
+    const r = render(<ProposalWorkspace data={data({ run: finished as never, runs, proposedByShift: { s1: 1 }, protection: "incomplete" })} suggestedSeed={42} eventInfoHref="/e" draftsHref="/d" basePath="/b" />)
+    fireEvent.click(screen.getByRole("button", { name: "Générer une proposition" }))
+    expect(scan()).toEqual([])
+    r.unmount()
+    // The form's errors, with every kind of problem.
+    view(twoMissing())
+    fireEvent.change(screen.getAllByRole("textbox", { name: "Numéro de tirage" })[0], { target: { value: "x" } })
+    fireEvent.click(screen.getByRole("button", { name: "Générer une proposition" }))
+    expect(scan()).toEqual([])
+    cleanup()
+    // The two confirmations, and a stopped run with changed data.
+    view(data({ proposedByShift: { s1: 2 }, people: [{ ...data().people[0], targetMinutes: 600 }] }))
+    fireEvent.click(screen.getByRole("button", { name: "Générer une proposition" }))
+    expect(scan()).toEqual([])
+    cleanup()
+    view(data({ run: { ...baseRun, status: "interrupted", stopReason: "cancelled", outcome: "complete", report, stale: ["availability"] } as never }))
+    fireEvent.click(screen.getByRole("button", { name: "Utiliser ce résultat partiel" }))
+    expect(scan()).toEqual([])
   })
 })

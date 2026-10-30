@@ -8,6 +8,9 @@ import type { ProposalAssignment, SolveOutcome } from "./proposal-solver"
 import { fmtDuration } from "./signup-recap"
 import type { WorkloadRule } from "./workload-policy"
 
+/** A duration that never breaks between the number and its unit (« 12 h »). */
+const dur = (minutes: number) => fmtDuration(minutes).replace(/ /g, " ")
+
 /**
  * The assignment proposal (#1172): why each person got each seat, why a seat stayed empty, and
  * each person's target against what is planned, as structured, versioned reasons (stored with the
@@ -169,12 +172,12 @@ export function stateLabel(r: Pick<ProposalReport, "outcome" | "execution">): st
 export function stateSentence(r: Pick<ProposalReport, "outcome" | "execution" | "stopReason">): string {
   if (r.execution === "interrupted") {
     return r.stopReason === "cancelled"
-      ? "Vous avez arrêté la recherche : la proposition montrée est la meilleure trouvée jusque-là. Elle n'est écrite dans les brouillons que si vous le choisissez."
-      : "Le temps de calcul est écoulé : la proposition montrée est la meilleure trouvée jusque-là. Elle n'est écrite dans les brouillons que si vous le choisissez."
+      ? "Vous avez arrêté la recherche : la proposition montrée est la meilleure trouvée jusque-là. Elle n'est écrite dans les brouillons que si vous le choisissez."
+      : "Le temps de calcul est écoulé : la proposition montrée est la meilleure trouvée jusque-là. Elle n'est écrite dans les brouillons que si vous le choisissez."
   }
-  if (r.outcome === "complete") return "Tous les besoins choisis sont couverts, réserve comprise, sans enfreindre aucune règle. Les objectifs d'heures, la rotation et les préférences restent des objectifs : comparez avant de publier."
-  if (r.outcome === "proven_impossible") return "Certains besoins de ce périmètre ne peuvent être couverts par personne, quelle que soit la répartition : les places restantes sont signalées ci-dessous, avec leur raison."
-  return "Des besoins restent sans personne. Rien ne prouve qu'ils sont impossibles à couvrir : la recherche n'a pas trouvé de répartition qui les couvre en respectant toutes les règles."
+  if (r.outcome === "complete") return "Tous les besoins choisis sont couverts, réserve comprise, sans enfreindre aucune règle. Les objectifs d'heures, la rotation et les préférences restent des objectifs : comparez avant de publier."
+  if (r.outcome === "proven_impossible") return "Certains besoins de ce périmètre ne peuvent être couverts par personne, quelle que soit la répartition : les places restantes sont signalées ci-dessous, avec leur raison."
+  return "Des besoins restent sans personne. Rien ne prouve qu'ils sont impossibles à couvrir : la recherche n'a pas trouvé de répartition qui les couvre en respectant toutes les règles."
 }
 
 const EXCLUSION_WORDS: Record<ExclusionCode, [string, string]> = {
@@ -212,10 +215,10 @@ export function assignmentSentence(r: AssignmentReason): string {
   const parts = ["Disponible sur tout le créneau."]
   if (r.seat === "reserve") parts.push("Place de la réserve demandée.")
   else if (r.seat === "critical") parts.push("Place du minimum de ce créneau.")
-  parts.push(r.targetMinutes > 0 ? `Charge prévue : ${fmtDuration(r.plannedMinutes)} pour un objectif de ${fmtDuration(r.targetMinutes)}.` : `Charge prévue : ${fmtDuration(r.plannedMinutes)}, sans objectif d'heures.`)
+  parts.push(r.targetMinutes > 0 ? `Charge prévue : ${dur(r.plannedMinutes)} pour un objectif de ${dur(r.targetMinutes)}.` : `Charge prévue : ${dur(r.plannedMinutes)}, sans objectif d'heures.`)
   if (r.otherCategoryThanDayBefore) parts.push("Autre activité que la veille.")
   if (r.preferred) parts.push("Poste souhaité.")
-  if (r.avoided) parts.push("Poste à éviter : aucune autre personne ne convenait mieux selon les critères de la proposition.")
+  if (r.avoided) parts.push("Poste à éviter : aucune autre personne ne convenait mieux selon les critères de la proposition.")
   return parts.join(" ")
 }
 
@@ -238,15 +241,15 @@ export function gapSentence(g: GapReport): string {
     if (words.length > 0) parts.push(`Parmi les ${count(g.eligible, "personne disponible", "personnes disponibles")} sur tout le créneau, ${words.join(", ")}.`)
     if (blocked.addable) parts.push("Aucune affectation supplémentaire trouvée dans le temps de calcul.")
   }
-  if (g.proven) parts.push("Impossible à pourvoir : il n'y a pas assez de personnes pouvant prendre ce créneau.")
+  if (g.proven) parts.push("Impossible à pourvoir : il n'y a pas assez de personnes pouvant prendre ce créneau.")
   return parts.join(" ")
 }
 
 /** The person's line: target, planned and the gap, in words. */
 export function personSentence(p: PersonReport): string {
-  if (p.targetMinutes === 0) return `${fmtDuration(p.plannedMinutes)} prévues, sans objectif d'heures.`
-  const gap = p.gapMinutes === 0 ? "objectif atteint" : p.gapMinutes < 0 ? `${fmtDuration(-p.gapMinutes)} sous l'objectif` : `${fmtDuration(p.gapMinutes)} au-dessus de l'objectif`
-  return `${fmtDuration(p.plannedMinutes)} prévues pour un objectif de ${fmtDuration(p.targetMinutes)} : ${gap}.`
+  if (p.targetMinutes === 0) return `${dur(p.plannedMinutes)} prévues, sans objectif d'heures.`
+  const gap = p.gapMinutes === 0 ? "objectif atteint" : p.gapMinutes < 0 ? `${dur(-p.gapMinutes)} sous l'objectif` : `${dur(p.gapMinutes)} au-dessus de l'objectif`
+  return `${dur(p.plannedMinutes)} prévues pour un objectif de ${dur(p.targetMinutes)} : ${gap}.`
 }
 
 /** The generated assignments a report explains, for a caller that only kept the report. */

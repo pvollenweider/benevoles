@@ -146,7 +146,7 @@ export function changedParts(before: Partial<Record<InputPart, string>>, after: 
 /** « Proposition périmée : des disponibilités ont changé, des créneaux ont changé. » */
 export function staleSentence(parts: readonly InputPart[]): string | null {
   if (parts.length === 0) return null
-  return `Proposition périmée : ${parts.map((p) => INPUT_PART_WORDS[p]).join(", ")}. Relancez une proposition pour en tenir compte ; la publication vérifie de toute façon chaque règle.`
+  return `Proposition périmée : ${parts.map((p) => INPUT_PART_WORDS[p]).join(", ")}. Relancez une proposition pour en tenir compte ; la publication vérifie de toute façon chaque règle.`
 }
 
 // ── Scrubbing ─────────────────────────────────────────────────────────────────────────────────

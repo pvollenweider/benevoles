@@ -105,7 +105,7 @@ export async function launchProposal(db: Db, input: { eventId: string; actorId: 
   const requestHash = runRequestHash(input.config)
   const existing = await db.proposalRun.findFirst({ where: { eventId: input.eventId, idempotencyKey: input.idempotencyKey }, select: { id: true, requestHash: true } })
   if (existing) {
-    if (existing.requestHash !== requestHash) return { ok: false, status: 409, error: "Cette proposition a déjà été lancée avec d'autres choix : rechargez la page.", code: "key_reused" }
+    if (existing.requestHash !== requestHash) return { ok: false, status: 409, error: "Cette proposition a déjà été lancée avec d'autres choix : rechargez la page.", code: "key_reused" }
     return { ok: true, runId: existing.id, replay: true, notice: null }
   }
   const problem = configProblem(input.config)
@@ -118,7 +118,7 @@ export async function launchProposal(db: Db, input: { eventId: string; actorId: 
   if (!check.ok) return { ok: false, status: 409, error: check.message, code: check.code, counts: check.counts }
 
   const queued = await prisma.proposalRun.count({ where: { status: "queued" } })
-  if (queued >= MAX_QUEUED) return { ok: false, status: 429, error: "Trop de propositions sont en attente sur le service : réessayez dans une minute.", code: "busy" }
+  if (queued >= MAX_QUEUED) return { ok: false, status: 429, error: "Trop de propositions sont en attente sur le service : réessayez dans une minute.", code: "busy" }
 
   try {
     const run = await db.proposalRun.create({
@@ -134,8 +134,8 @@ export async function launchProposal(db: Db, input: { eventId: string; actorId: 
     if ((e as { code?: string }).code !== "P2002") throw e
     // Two launches at once: the same key (a double click) returns the first; another run already active is refused.
     const again = await db.proposalRun.findFirst({ where: { eventId: input.eventId, idempotencyKey: input.idempotencyKey }, select: { id: true, requestHash: true } })
-    if (again) return again.requestHash === requestHash ? { ok: true, runId: again.id, replay: true, notice: null } : { ok: false, status: 409, error: "Cette proposition a déjà été lancée avec d'autres choix : rechargez la page.", code: "key_reused" }
-    return { ok: false, status: 409, error: "Une proposition est déjà en cours pour cet événement : attendez qu'elle finisse ou arrêtez-la.", code: "active" }
+    if (again) return again.requestHash === requestHash ? { ok: true, runId: again.id, replay: true, notice: null } : { ok: false, status: 409, error: "Cette proposition a déjà été lancée avec d'autres choix : rechargez la page.", code: "key_reused" }
+    return { ok: false, status: 409, error: "Une proposition est déjà en cours pour cet événement : attendez qu'elle finisse ou arrêtez-la.", code: "active" }
   }
 }
 
@@ -307,7 +307,7 @@ async function materialise(tx: Tx, run: RunRow, assignments: readonly ProposalAs
   const snap = await buildProposalSnapshot(tx, run.eventId, config, frozen, now)
   const refuse = (error: string): Receipt => ({ writtenAt: null, writtenById: null, writtenCount: 0, droppedCount: 0, written: { error } })
   if (!snap.ok) return refuse(snap.error)
-  if (!snap.input.policy) return refuse("La protection des pauses et de la charge n'est plus complète et active : rien n'a été écrit dans les brouillons.")
+  if (!snap.input.policy) return refuse("La protection des pauses et de la charge n'est plus complète et active : rien n'a été écrit dans les brouillons.")
   const current = snap.input
 
   // Pairs that cannot be written at all: the shift is no longer open, the person no longer selected,
@@ -348,7 +348,7 @@ async function materialise(tx: Tx, run: RunRow, assignments: readonly ProposalAs
   const replaceable = await tx.draftAssignment.findMany({ where: { eventId: run.eventId, id: { in: frozen.map((r) => r.id) }, status: "draft", locked: false, source: "proposal" }, select: { id: true, revision: true } })
   const revisionOf = new Map(frozen.map((r) => [r.id, r.revision]))
   const discard = replaceable.filter((d) => revisionOf.get(d.id) === d.revision).map((d) => d.id)
-  if (pending - discard.length + kept.length > MAX_EVENT_DRAFTS) return refuse(`Au plus ${MAX_EVENT_DRAFTS} affectations en brouillon par événement : publiez ou retirez-en d'abord.`)
+  if (pending - discard.length + kept.length > MAX_EVENT_DRAFTS) return refuse(`Au plus ${MAX_EVENT_DRAFTS} affectations en brouillon par événement : publiez ou retirez-en d'abord.`)
   if (discard.length > 0) await tx.draftAssignment.updateMany({ where: { id: { in: discard }, eventId: run.eventId }, data: { status: "discarded", discardedAt: now, revision: { increment: 1 } } })
 
   const shiftRows = kept.length > 0 ? await tx.shift.findMany({
