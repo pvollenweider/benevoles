@@ -82,6 +82,8 @@ describe("no personal token in the proxy access log", () => {
       "envoi",
       // a draft assignment's revision and a cell's person and date (#1146, lot C), behind the admin login
       "revision", "volunteerId", "date",
+      // the proposal run shown (#1172, `?run=`), behind the admin login: an id, no secret
+      "run",
       // external links, never to this server: OpenStreetMap (map-link.ts), mailto subject
       "mlat", "mlon", "subject"])
     const files = execFileSync("git", ["ls-files", "src"], { encoding: "utf8" }).split("\n").filter((f) => /\.(ts|tsx)$/.test(f) && !f.includes("__tests__") && !f.includes("__integration__"))
