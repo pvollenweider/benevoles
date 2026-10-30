@@ -6,7 +6,7 @@ import { readAnswersForFit, readAvailabilityGate } from "./availability-assist-d
 import { canAdoptBeta } from "./beta-access"
 import { shiftEndsAt } from "./cancel-deadline"
 import { suggestedTargetMinutes } from "./proposal-input"
-import { latestConfiguration, listRuns, readRun, type RunView } from "./proposal-runs-server"
+import { latestConfiguration, listRuns, readRun, runCoverages, type RunView } from "./proposal-runs-server"
 import type { OrgScopedPrisma } from "./prisma-org"
 import { OCCUPYING_STATUSES } from "./registration-capacity"
 import { spokenShift } from "./spoken-time"
@@ -45,7 +45,10 @@ export type ProposalPageData = {
   protection: "off" | "on" | "incomplete"
   maxEventMinutes: number | null
   lastConfiguration: unknown
-  runs: Awaited<ReturnType<typeof listRuns>>
+  /** The latest runs, each with the coverage of its report when it has one. */
+  runs: (Awaited<ReturnType<typeof listRuns>>[number] & { coverage: { filled: number; seats: number } | null })[]
+  /** Unlocked proposed drafts still pending, by shift: what a new run on those shifts replaces. */
+  proposedByShift: Record<string, number>
   run: RunView | null
   /** Words of the run shown: people and shifts by id. */
   names: Record<string, string>
@@ -104,7 +107,12 @@ export async function loadProposalPage(db: Db, organizationId: string, eventId: 
     }
   }).sort((a, b) => a.lastName.localeCompare(b.lastName, "fr") || a.firstName.localeCompare(b.firstName, "fr") || (a.volunteerId < b.volunteerId ? -1 : 1))
 
-  const runs = await listRuns(db, eventId)
+  const listed = await listRuns(db, eventId)
+  const coverages = await runCoverages(db, eventId, listed.map((r) => r.id))
+  const runs = listed.map((r) => ({ ...r, coverage: coverages.get(r.id) ?? null }))
+  // The replacement set of a new run (src/lib/proposal-runs-data.ts): pending, unlocked, proposed.
+  const proposed = await db.draftAssignment.groupBy({ by: ["shiftId"], where: { eventId, status: "draft", locked: false, source: "proposal" }, _count: { _all: true } })
+  const proposedByShift = Object.fromEntries(proposed.map((p) => [p.shiftId, p._count._all]))
   const shownId = runId && runs.some((r) => r.id === runId) ? runId : runs[0]?.id ?? null
   const run = shownId ? await readRun(db, eventId, shownId) : null
 
@@ -122,6 +130,6 @@ export async function loadProposalPage(db: Db, organizationId: string, eventId: 
 
   return {
     eventId, dates: gate.dates, shifts, postes, people, protection: workload.kind, maxEventMinutes: cap,
-    lastConfiguration: await latestConfiguration(db, eventId), runs, run, names, shiftWords,
+    lastConfiguration: await latestConfiguration(db, eventId), runs, proposedByShift, run, names, shiftWords,
   }
 }

@@ -62,7 +62,11 @@ const wholeOrNull = (text: string): number | null => {
   return /^\d+$/.test(t) ? Number(t) : Number.NaN
 }
 
-export type FormProblem = { field: string; message: string }
+/**
+ * A problem to fix, with its field id. `kind: "target_missing"`: an included person without any
+ * hour target; several of them are listed as one item of the error summary (`summaryProblems`).
+ */
+export type FormProblem = { field: string; message: string; kind?: "target_missing" }
 
 /** What the form says, as a configuration, or the problems to fix (each with its field id). */
 export function formToConfig(form: ProposalForm, shifts: readonly PageShift[], nameOf: (volunteerId: string) => string = () => ""): { ok: true; config: ProposalConfig; targets: { volunteerId: string; targetMinutes: number }[] } | { ok: false; problems: FormProblem[] } {
@@ -78,8 +82,9 @@ export function formToConfig(form: ProposalForm, shifts: readonly PageShift[], n
     const minutes = parseHours(p.targetHours)
     // The person's name leads the message: a list of these must tell its links apart (WCAG 2.4.4).
     const who = nameOf(p.volunteerId)
-    const lead = (text: string) => (who ? `${who} : ${text.charAt(0).toLocaleLowerCase("fr-FR")}${text.slice(1)}` : text)
-    if (minutes === null) problems.push({ field: `target-${p.volunteerId}`, message: lead("Indiquez un objectif en heures (0 pour aucun objectif), par exemple 12 ou 7,5.") })
+    const lead = (text: string) => (who ? `${who} : ${text.charAt(0).toLocaleLowerCase("fr-FR")}${text.slice(1)}` : text)
+    if (p.targetHours.trim() === "") problems.push({ field: `target-${p.volunteerId}`, message: lead("Indiquez un objectif en heures (0 pour aucun objectif), par exemple 12 ou 7,5."), kind: "target_missing" })
+    else if (minutes === null) problems.push({ field: `target-${p.volunteerId}`, message: lead("Indiquez un objectif en heures (0 pour aucun objectif), par exemple 12 ou 7,5.") })
     else targets.push({ volunteerId: p.volunteerId, targetMinutes: minutes })
     if (p.prefer && p.prefer === p.avoid) problems.push({ field: `avoid-${p.volunteerId}`, message: lead("Un poste ne peut pas être à la fois souhaité et à éviter.") })
   }
@@ -88,12 +93,12 @@ export function formToConfig(form: ProposalForm, shifts: readonly PageShift[], n
   const maxNightAddOns = wholeOrNull(form.maxNightAddOns)
   if (maxNightAddOns !== null && !(maxNightAddOns >= 0 && maxNightAddOns <= 100)) problems.push({ field: "proposal-nights", message: "Indiquez un nombre entre 0 et 100, ou laissez vide." })
   const seed = wholeOrNull(form.seed)
-  if (seed === null || Number.isNaN(seed) || seed > 4_294_967_295) problems.push({ field: "proposal-seed", message: "Indiquez une graine : un nombre entier positif." })
+  if (seed === null || Number.isNaN(seed) || seed > 4_294_967_295) problems.push({ field: "proposal-seed", message: "Indiquez un numéro de tirage : un nombre entier positif." })
   form.posteChoices.forEach((c, i) => {
     const cap = Math.max(0, ...shifts.filter((s) => s.roleName === c.roleName).map((s) => s.capacity))
     const bad = (c.reserveText !== undefined && !/^\d+$/.test(c.reserveText.trim())) || !Number.isInteger(c.reserve) || c.reserve < 0 || c.reserve > cap
-    if (bad) problems.push({ field: `reserve-${i}`, message: `${c.roleName} : indiquez une réserve entre 0 et ${cap}.` })
-    if (c.category.trim().length > 80) problems.push({ field: `category-${i}`, message: `${c.roleName} : un nom de catégorie tient en 80 caractères.` })
+    if (bad) problems.push({ field: `reserve-${i}`, message: `${c.roleName} : indiquez une réserve entre 0 et ${cap}.` })
+    if (c.category.trim().length > 80) problems.push({ field: `category-${i}`, message: `${c.roleName} : un nom de catégorie tient en 80 caractères.` })
   })
   if (problems.length > 0) return { ok: false, problems }
 
@@ -139,13 +144,122 @@ export function freshSeed(random: () => number = Math.random): number {
   return Math.floor(random() * 1_000_000)
 }
 
-/** The state of a run in words, for its heading and the announcement. */
+/**
+ * The state of a run in plain words, for its badge, the history and the announcement. Never solver
+ * terms: a run that proved full coverage impossible is a normal outcome, said as such.
+ */
 export function runStateLabel(run: { status: string; outcome: string | null }): string {
   if (run.status === "queued") return "En attente"
   if (run.status === "running") return "Calcul en cours"
   if (run.status === "failed") return "Échec du calcul"
-  if (run.status === "interrupted") return "Recherche interrompue"
-  return run.outcome === "complete" ? "Complet" : run.outcome === "proven_impossible" ? "Impossible démontré" : "Incomplet"
+  if (run.status === "interrupted") return "Calcul arrêté avant la fin"
+  return run.outcome === "complete" ? "Toutes les places couvertes" : run.outcome === "proven_impossible" ? "Couverture complète impossible" : "Couverture partielle"
+}
+
+/**
+ * The tone of a run's badge (DESIGN.md §2 status pairs): red only for a real failure; amber when
+ * something may still be done (partial coverage, a search stopped early); blue when all is covered;
+ * neutral while waiting and when full coverage is impossible (nothing better exists to look for).
+ */
+export type RunTone = "neutral" | "complete" | "warning" | "error"
+export function runTone(run: { status: string; outcome: string | null }): RunTone {
+  if (run.status === "failed") return "error"
+  if (run.status === "interrupted") return "warning"
+  if (run.status !== "finished") return "neutral"
+  return run.outcome === "complete" ? "complete" : run.outcome === "proven_impossible" ? "neutral" : "warning"
+}
+
+/** « 29 places couvertes sur 31 » (« 1 place couverte sur 1 »). */
+export function coverageLine(c: { filled: number; seats: number }): string {
+  return `${c.filled} ${c.filled > 1 ? "places couvertes" : "place couverte"} sur ${c.seats}`
+}
+
+/**
+ * The result's lines under the coverage, in plain words, never repeating it: the places of each
+ * shift's minimum only when they are not all the places, and the reserve when one was asked.
+ */
+export function coverageDetails(c: { seats: number; filled: number; criticalSeats: number; criticalFilled: number; reserveSeats: number; reserveFilled: number }): string[] {
+  const out: string[] = []
+  if (c.criticalSeats > 0 && c.criticalSeats !== c.seats) out.push(`Places du minimum de chaque créneau : ${c.criticalFilled} ${c.criticalFilled > 1 ? "couvertes" : "couverte"} sur ${c.criticalSeats}`)
+  if (c.reserveSeats > 0) out.push(`Réserve gardée sur place : ${c.reserveFilled} ${c.reserveFilled > 1 ? "personnes" : "personne"} sur ${c.reserveSeats}`)
+  return out
+}
+
+/** The text of a run in « Propositions précédentes »: date, state, coverage, draw number, what was written. */
+export function historyEntry(r: { status: string; outcome: string | null; seed: number; writtenAt: Date | string | null; writtenCount: number; coverage?: { filled: number; seats: number } | null }, date: string): string {
+  const parts = [`${date} : ${runStateLabel(r).toLowerCase()}`]
+  if (r.coverage) parts.push(coverageLine(r.coverage))
+  parts.push(`tirage ${r.seed}`)
+  parts.push(r.writtenAt ? `${r.writtenCount} ${r.writtenCount > 1 ? "affectations écrites" : "affectation écrite"}` : "rien d'écrit")
+  return parts.join(", ")
+}
+
+/**
+ * The error summary's items: an included person without a target is one problem each (its field
+ * shows its own error), but several are one item, « 11 personnes sans objectif d'heures », linked
+ * to the first field. Malformed targets and every other problem keep their own item.
+ */
+export type SummaryItem = FormProblem & { missingTargets?: number }
+export function summaryProblems(problems: readonly FormProblem[]): SummaryItem[] {
+  const missing = problems.filter((p) => p.kind === "target_missing")
+  if (missing.length < 2) return [...problems]
+  const out: SummaryItem[] = []
+  for (const p of problems) {
+    if (p.kind !== "target_missing") out.push(p)
+    else if (p === missing[0]) out.push({ field: p.field, message: `${missing.length} personnes sans objectif d'heures`, kind: "target_missing", missingTargets: missing.length })
+  }
+  return out
+}
+
+/** The short error under a target field (the summary names the person). */
+export const TARGET_FIELD_ERROR = "Objectif à indiquer (0 pour aucun)."
+
+/**
+ * Fills the suggestion only where an included person has no target yet: a typed value is never
+ * overwritten. Returns the new list and how many targets were filled.
+ */
+export function fillMissingTargets(people: readonly PersonChoice[], suggestionOf: (volunteerId: string) => number): { people: PersonChoice[]; filled: number } {
+  let filled = 0
+  const next = people.map((p) => {
+    if (!p.included || p.targetHours.trim() !== "") return p
+    filled++
+    return { ...p, targetHours: formatHours(suggestionOf(p.volunteerId)) }
+  })
+  return { people: next, filled }
+}
+
+/** The problems left once a field has changed: its own problem goes, the others stay (never moved). */
+export function withoutProblem(problems: readonly FormProblem[], field: string): FormProblem[] {
+  return problems.some((p) => p.field === field) ? problems.filter((p) => p.field !== field) : [...problems]
+}
+
+/**
+ * The one-line recap of « Rotation, nuit et réserve » when folded: what differs from nothing set,
+ * or « Aucun réglage ».
+ */
+export function rotationSummary(choices: readonly PosteChoice[], maxConsecutiveDays: string, maxNightAddOns: string): string {
+  const n = (count: number) => `${count} ${count > 1 ? "postes" : "poste"}`
+  const parts: string[] = []
+  const categories = choices.filter((c) => c.category.trim() !== "").length
+  const nights = choices.filter((c) => c.night).length
+  const reserves = choices.filter((c) => c.reserve > 0).length
+  if (categories > 0) parts.push(`catégorie sur ${n(categories)}`)
+  if (nights > 0) parts.push(`ajout de nuit sur ${n(nights)}`)
+  if (reserves > 0) parts.push(`réserve sur ${n(reserves)}`)
+  const days = maxConsecutiveDays.trim(), nightMax = maxNightAddOns.trim()
+  if (days !== "") parts.push(`${days} ${Number(days) > 1 ? "jours" : "jour"} d'affilée au plus`)
+  if (nightMax !== "") parts.push(`${nightMax} ${Number(nightMax) > 1 ? "ajouts" : "ajout"} de nuit par personne au plus`)
+  if (parts.length === 0) return "Aucun réglage"
+  const text = parts.join(", ")
+  return text.charAt(0).toLocaleUpperCase("fr-FR") + text.slice(1)
+}
+
+/**
+ * How many unlocked proposed drafts a new run would replace: those on a shift of its scope (the
+ * server's replacement set, src/lib/proposal-runs-data.ts), counted from `proposedByShift`.
+ */
+export function replacedDraftCount(proposedByShift: Readonly<Record<string, number>>, scope: readonly string[]): number {
+  return scope.reduce((n, id) => n + (proposedByShift[id] ?? 0), 0)
 }
 
 const DROP_WORDS: Record<string, string> = {
@@ -167,5 +281,5 @@ export function droppedSentence(dropped: readonly { reason: string }[]): string 
   const counts = new Map<string, number>()
   for (const d of dropped) counts.set(d.reason, (counts.get(d.reason) ?? 0) + 1)
   const parts = [...counts].sort((a, b) => b[1] - a[1]).map(([r, n]) => `${DROP_WORDS[r] ?? "règle non respectée"} (${n})`)
-  return `${dropped.length} ${dropped.length > 1 ? "affectations écartées" : "affectation écartée"} à l'écriture, les données ayant changé pendant le calcul : ${parts.join(", ")}.`
+  return `${dropped.length} ${dropped.length > 1 ? "affectations écartées" : "affectation écartée"} à l'écriture, les données ayant changé pendant le calcul : ${parts.join(", ")}.`
 }

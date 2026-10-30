@@ -330,7 +330,7 @@ export default function DraftBoard({ eventId, board, day, view: initialView, sco
           onCancel={() => { publishKey.current = null; setConfirming(null) }}
         />
       )}
-      {draftOpen && <DraftDialog eventId={eventId} target={draftOpen} canLock={proposals} onClose={(removed, text) => afterDraftClose(draftOpen, removed, text)} />}
+      {draftOpen && <DraftDialog eventId={eventId} target={draftOpen} live={liveDraft(board, draftOpen.item.draft?.id)} canLock={proposals} onClose={(removed, text) => afterDraftClose(draftOpen, removed, text)} />}
       {cellOpen && <OptionsDialog eventId={eventId} target={cellOpen} onClose={() => { setCellOpen(null); startTransition(() => router.refresh()) }} />}
     </div>
   )
@@ -351,6 +351,19 @@ function RowSummary({ row }: { row: BoardRow }) {
   )
 }
 
+/**
+ * « Verrouillé » (#1172): a lock and the word, outlined in dark ink, so it never reads as one more
+ * grey « Brouillon » or « Proposé » pill, and never in the action blue.
+ */
+function LockedChip() {
+  return (
+    <span className="inline-flex items-center gap-1 rounded-full border border-gray-700 bg-white px-2 py-0.5 font-medium text-gray-900 forced-colors:border-[CanvasText]">
+      <svg aria-hidden="true" viewBox="0 0 16 16" className="h-3 w-3 shrink-0" fill="currentColor"><path d="M8 1a3.5 3.5 0 0 0-3.5 3.5V6H4a1.5 1.5 0 0 0-1.5 1.5v6A1.5 1.5 0 0 0 4 15h8a1.5 1.5 0 0 0 1.5-1.5v-6A1.5 1.5 0 0 0 12 6h-.5V4.5A3.5 3.5 0 0 0 8 1Zm2 5H6V4.5a2 2 0 1 1 4 0V6Z" /></svg>
+      Verrouillé
+    </span>
+  )
+}
+
 function CellContent({ row, cell, layout, onDraft, onAdd }: { row: BoardRow; cell: BoardRow["cells"][number]; layout: Layout; onDraft: (item: BoardItem) => void; onAdd: () => void }) {
   const who = `${personName(row)}${row.sameNameHint ? ` (${row.sameNameHint})` : ""}`
   const date = lowerFirst(dayLabel(cell.date))
@@ -366,7 +379,7 @@ function CellContent({ row, cell, layout, onDraft, onAdd }: { row: BoardRow; cel
                 <span className={`inline-block rounded-full border border-transparent px-2 py-0.5 font-medium ${KIND_BADGE[item.kind].className}`}>{KIND_BADGE[item.kind].label}</span>
                 {item.fit && OUTSIDE_FITS.includes(item.fit) && <span className="inline-block rounded-full border border-transparent px-2 py-0.5 font-medium bg-[#f3f4f6] text-[#374151]">{item.fitLabel}</span>}
                 {item.draft?.source === "proposal" && <span className="inline-block rounded-full border border-transparent px-2 py-0.5 font-medium bg-[#f3f4f6] text-[#4b5563]">Proposé</span>}
-                {item.draft?.locked && <span className="inline-block rounded-full border border-transparent px-2 py-0.5 font-medium bg-[#f3f4f6] text-[#4b5563]">Verrouillé</span>}
+                {item.draft?.locked && <LockedChip />}
               </p>
               {item.draft?.staleText && <p className="text-[#92400e]">{item.draft.staleText}</p>}
               {item.draft && !item.draft.stale && item.draft.ackKey && !item.draft.acked && <p className="text-[#92400e]">Confirmation à donner avant publication.</p>}
@@ -387,7 +400,14 @@ function CellContent({ row, cell, layout, onDraft, onAdd }: { row: BoardRow; cel
   )
 }
 
-function DraftDialog({ eventId, target, canLock, onClose }: { eventId: string; target: DraftTarget; canLock: boolean; onClose: (removed: boolean, text: string | null) => void }) {
+/** The draft as the board reads it now (after a refresh), to keep an open dialog in step. */
+function liveDraft(board: DraftBoardData, id: string | undefined): { locked: boolean; revision: number } | null {
+  if (!id) return null
+  for (const r of board.rows) for (const c of r.cells) for (const i of c.items) if (i.draft?.id === id) return { locked: i.draft.locked, revision: i.draft.revision }
+  return null
+}
+
+function DraftDialog({ eventId, target, live, canLock, onClose }: { eventId: string; target: DraftTarget; live: { locked: boolean; revision: number } | null; canLock: boolean; onClose: (removed: boolean, text: string | null) => void }) {
   const router = useRouter()
   const { row, item, date } = target
   const draft = item.draft!
@@ -397,7 +417,20 @@ function DraftDialog({ eventId, target, canLock, onClose }: { eventId: string; t
   const [busy, setBusy] = useState<"review" | "remove" | "lock" | null>(null)
   const [locked, setLocked] = useState(draft.locked)
   const [revision, setRevision] = useState(draft.revision)
+  // After a refresh (a lock refused because the draft changed elsewhere), the dialog takes the
+  // draft's real state, in place: the focused button keeps the focus, its label follows.
   const [dialogStatus, setDialogStatus] = useState("")
+  const liveKey = live ? `${live.locked}:${live.revision}` : null
+  const [seenLive, setSeenLive] = useState(liveKey)
+  if (liveKey !== seenLive) {
+    setSeenLive(liveKey)
+    if (live) {
+      // A label change on the focused button is not reliably voiced: the real state is said.
+      if (live.locked !== locked) announce(setDialogStatus, live.locked ? "Ce brouillon est verrouillé." : "Ce brouillon n'est plus verrouillé.")
+      setLocked(live.locked)
+      setRevision(live.revision)
+    }
+  }
   const [error, setError] = useState<string | null>(null)
   const who = personName(row)
   const title = `Brouillon : ${spokenName(item.name)}, ${lowerFirst(dayLabel(date))}, ${item.time}`

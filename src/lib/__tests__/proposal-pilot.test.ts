@@ -31,7 +31,7 @@ describe("pilot planning", () => {
     expect(out.score.critical).toBe(0)
     expect(out.score.needs).toBe(0)
     expect(report.outcome).toBe("complete")
-    expect(stateLabel(report)).toBe("Complet")
+    expect(stateLabel(report)).toBe("Toutes les places couvertes")
     expect(report.coverage).toMatchObject({ reserveSeats: 6, reserveFilled: 6, seats: 210, filled: 210 })
   })
 

@@ -40,8 +40,8 @@
     },
     {
       "id": "ap-targets",
-      "transcript": "Jules n'a pas répondu : il n'est pas inclus. Appliquer la suggestion remplit l'objectif d'heures, six heures par date où la personne est libre. Noah ne veut que six heures en tout : tapons six.",
-      "fallbackDurationMs": 15180
+      "transcript": "Jules n'a pas répondu : il n'est pas inclus. Les objectifs d'heures sont vides : Appliquer la suggestion les remplit, six heures par date où la personne est libre. Noah ne veut que six heures en tout : tapons six.",
+      "fallbackDurationMs": 16750
     },
     {
       "id": "ap-wishes",
@@ -50,13 +50,13 @@
     },
     {
       "id": "ap-launch",
-      "transcript": "Dans Paramètres de calcul, tapons la graine deux mille vingt-six : mêmes données, même graine, même proposition. Puis Générer une proposition.",
-      "fallbackDurationMs": 9200
+      "transcript": "Rotation, nuit et réserve reste replié, sans réglage. Dans Paramètres de calcul, tapons le numéro de tirage deux mille vingt-six : même numéro, mêmes données, même proposition. Puis Générer une proposition.",
+      "fallbackDurationMs": 13350
     },
     {
       "id": "ap-result",
-      "transcript": "En quelques secondes, le résultat s'affiche : vingt-neuf places couvertes sur trente et une, écrites dans les brouillons. Impossible démontré : personne n'est disponible pour tout le rangement du Kiosque, dimanche soir, et la raison est écrite.",
-      "fallbackDurationMs": 16100
+      "transcript": "En quelques secondes, le résultat s'affiche en haut de la page : vingt-neuf places couvertes sur trente et une, écrites dans les brouillons. Couverture complète impossible : personne n'est disponible pour tout le rangement du Kiosque, dimanche soir, et la raison est écrite.",
+      "fallbackDurationMs": 18080
     },
     {
       "id": "ap-load",
@@ -65,8 +65,8 @@
     },
     {
       "id": "ap-lock",
-      "transcript": "De retour au planning, chaque brouillon proposé porte la mention Proposé. Ouvrons celui d'Emma, puis Verrouiller : une nouvelle proposition ne le remplacera pas.",
-      "fallbackDurationMs": 10580
+      "transcript": "De retour au planning, chaque brouillon proposé porte la mention Proposé. Ouvrons celui d'Emma, puis Verrouiller : une nouvelle proposition ne le remplacera pas. Le cadenas le signale sur le planning.",
+      "fallbackDurationMs": 13140
     },
     {
       "id": "ap-adjust",
@@ -83,16 +83,16 @@
     "summary": "Dans cette vidéo, vous générez une proposition d'affectations sur un événement qui recueille les disponibilités, vous lisez son résultat, puis vous verrouillez, corrigez et gardez la main sur la publication.",
     "steps": [
       "Sur la page Affectations en brouillon, ouvrez Générer une proposition.",
-      "Vérifiez Ce qui est vérifié, puis choisissez les dates et les postes dans Périmètre.",
-      "Incluez les personnes, choisissez Appliquer la suggestion pour l'objectif d'heures et ajustez celui de chacun.",
-      "Indiquez si besoin un Poste souhaité ou un Poste à éviter, puis choisissez Générer une proposition.",
-      "Lisez le résultat : l'état, les places couvertes, les Places restées vides avec leur raison, la Charge par personne et les Affectations proposées.",
+      "Dans Nouvelle proposition, vérifiez Ce qui est vérifié, puis choisissez les dates et les postes dans Périmètre.",
+      "Incluez les personnes, choisissez Appliquer la suggestion pour remplir les objectifs d'heures et ajustez celui de chacun.",
+      "Indiquez si besoin un Poste souhaité ou un Poste à éviter, ouvrez au besoin Rotation, nuit et réserve ou Paramètres de calcul, puis choisissez Générer une proposition.",
+      "Lisez le résultat, en haut de la page : les places couvertes, l'état, les Places restées vides avec leur raison, la Charge par personne et les Affectations proposées.",
       "Dans Affectations en brouillon, verrouillez ou corrigez les brouillons, puis choisissez Publier les affectations quand vous êtes prêt."
     ],
     "remember": [
       "Une personne n'est placée que sur un créneau entièrement couvert par ses disponibilités, en respectant les règles de l'événement et la protection des pauses et de la charge, qui doit être activée.",
-      "Avec la même graine et les mêmes données, la proposition est toujours la même.",
-      "Une nouvelle proposition ne remplace jamais un brouillon verrouillé ou manuel.",
+      "Avec le même numéro de tirage et les mêmes données, la proposition est toujours la même.",
+      "Une nouvelle proposition ne remplace jamais un brouillon verrouillé, marqué d'un cadenas, ni un brouillon manuel.",
       "Rien n'est publié et aucun bénévole n'est prévenu avant Publier les affectations. C'est une fonction en bêta : votre organisation doit participer à la bêta."
     ]
   }
