@@ -13,7 +13,8 @@ import { describe, it, expect, vi, beforeAll, afterAll } from "vitest"
  */
 
 vi.mock("next/server", async (orig) => ({ ...(await orig<typeof import("next/server")>()), after: vi.fn() }))
-vi.mock("next/headers", () => ({ headers: async () => new Headers() }))
+const site = vi.hoisted(() => ({ slug: null as string | null }))
+vi.mock("next/headers", () => ({ headers: async () => new Headers(site.slug ? { "x-org-slug": site.slug } : {}) }))
 vi.mock("@/lib/notifications", () => ({ sendNotification: vi.fn().mockResolvedValue({ ok: true }) }))
 vi.mock("@/lib/notifications/outbox", async (orig) => ({ ...(await orig<typeof import("@/lib/notifications/outbox")>()), deliverAfterResponse: vi.fn() }))
 const guard = vi.hoisted(() => ({ value: null as unknown }))
@@ -189,6 +190,36 @@ describe.skipIf(!url)("availability links (#1146)", () => {
     expect((await mode({ enabled: true })).status).toBe(200)
     expect(await (await send([alice])).json()).toMatchObject({ emailsQueued: 1 })
     expect((await linkGet(await tokenOf(alice))).status).toBe(200)
+  })
+
+  it("after turning off then on, asks again at once with new links; a reminder never re-sends a revoked link", async () => {
+    // Alice was emailed a moment ago (previous test): her link is revoked with the collection.
+    expect((await mode({ enabled: false, confirm: true })).status).toBe(200)
+    expect((await mode({ enabled: true })).status).toBe(200)
+    // No live link left: the reminder (« same link again ») has nobody to email.
+    expect(await (await remind()).json()).toMatchObject({ emailsQueued: 0, recentlySkipped: 0 })
+    // « Demander » right away: a revoked link is no link, the recent-contact guard does not hold it back.
+    expect(await (await send([alice, bruno])).json()).toMatchObject({ emailsQueued: 2, recentlySkipped: 0 })
+    expect((await linkGet(await tokenOf(alice))).status).toBe(200)
+    expect((await linkGet(await tokenOf(bruno))).status).toBe(200)
+    // A double click still sends nothing twice.
+    expect(await (await send([alice, bruno])).json()).toMatchObject({ emailsQueued: 0, recentlySkipped: 2 })
+  })
+
+  it("names the site's organisation on a dead link, never an address; a valid link gives the reply address", async () => {
+    await prisma.organization.update({ where: { id: orgId }, data: { replyToEmail: `${tag}-contact@example.org` } })
+    site.slug = tag
+    try {
+      const dead = await linkGet("abcdefghijklmnopqrstuvwx")
+      expect(dead.status).toBe(404)
+      const body = await dead.json()
+      expect(body).toEqual({ error: "Lien introuvable ou plus valable.", organizationName: `Comité ${tag}` })
+      expect((await (await linkGet(await tokenOf(alice))).json()).contactEmail).toBe(`${tag}-contact@example.org`)
+    } finally {
+      site.slug = null
+    }
+    // Off the organisation's site: the same answer as before, without a name.
+    expect(await (await linkGet("abcdefghijklmnopqrstuvwx")).json()).toEqual({ error: "Lien introuvable ou plus valable." })
   })
 
   it("never lets one organisation read or ask on another's event", async () => {

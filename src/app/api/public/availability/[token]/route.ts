@@ -11,11 +11,10 @@ import { recordTokenMiss, tokenLookupsBlocked, tokenUseAllowed } from "@/lib/tok
 import { hashToken } from "@/lib/token-hash"
 import { isTokenShaped } from "@/lib/token-path"
 import { logEvent } from "@/lib/event-log"
-import { availabilitySubmissionSchema } from "@/lib/event-availability"
+import { availabilitySubmissionSchema, submissionIssue } from "@/lib/event-availability"
 import { saveAvailabilityAnswers } from "@/lib/event-availability-data"
 import { availabilityLinkView, resolveAvailabilityLink } from "@/lib/event-availability-server"
 import { LINK_NOT_FOUND_ERROR } from "@/lib/event-availability-text"
-import { firstIssueMessage } from "@/lib/shift-time"
 import { queueAvailabilityChangeNotifications } from "@/lib/availability-change-notifications"
 import { randomUUID } from "node:crypto"
 import { deliverAfterResponse } from "@/lib/notifications/outbox"
@@ -32,23 +31,28 @@ import { reportError } from "@/lib/report-error"
 const NO_STORE = { "Cache-Control": "private, no-store" }
 const json = (body: unknown, status = 200) => NextResponse.json(body, { status, headers: NO_STORE })
 const tooMany = () => json({ error: "Trop de tentatives." }, 429)
-const notFound = () => json({ error: LINK_NOT_FOUND_ERROR }, 404)
+/**
+ * The same answer for an unknown, revoked or foreign link. The organisation's name comes from the
+ * site the page is on (its subdomain), never from the link: the person learns whom to ask for a new
+ * link, and nothing about the link. No address here (the organisation's reply address is shown only
+ * behind a valid link); the email that carried the link can be answered.
+ */
+const notFound = (site: { name: string } | null) => json({ error: LINK_NOT_FOUND_ERROR, ...(site ? { organizationName: site.name } : {}) }, 404)
 
 async function open(req: Request, token: string, use: "availabilityLink" | "availabilityAnswer") {
+  // The site's organisation (#541): the header comes from the proxy alone.
+  const orgSlug = (await headers()).get("x-org-slug")
+  const site = orgSlug ? (await resolveOrgSlug(orgSlug))?.org ?? null : null
   if (await tokenLookupsBlocked(req, undefined, "availability")) return { response: tooMany() }
   const request = isTokenShaped(token) ? await resolveAvailabilityLink(token) : null
   if (!request) {
     await recordTokenMiss(req, undefined, "availability")
-    return { response: notFound() }
+    return { response: notFound(site) }
   }
-  // Not on another organisation's site (#541): the header comes from the proxy alone.
-  const orgSlug = (await headers()).get("x-org-slug")
-  if (orgSlug) {
-    const resolved = await resolveOrgSlug(orgSlug)
-    if (!resolved || resolved.org.id !== request.event.organizationId) {
-      await recordTokenMiss(req, undefined, "availability")
-      return { response: notFound() }
-    }
+  // Not on another organisation's site.
+  if (orgSlug && (!site || site.id !== request.event.organizationId)) {
+    await recordTokenMiss(req, undefined, "availability")
+    return { response: notFound(site) }
   }
   if (!orgLinksOpen(request.event.organization)) return { response: orgUnavailableResponse() }
   if (!(await tokenUseAllowed(token, use))) return { response: tooMany() }
@@ -66,10 +70,11 @@ export async function PUT(req: Request, { params }: { params: Promise<{ token: s
   const { token } = await params
   const { request, response } = await open(req, token, "availabilityAnswer")
   if (response) return response
-  const parsed = availabilitySubmissionSchema.safeParse(await req.json().catch(() => null))
-  if (!parsed.success) return json({ error: firstIssueMessage(parsed.error) }, 400)
+  const body = await req.json().catch(() => null)
+  const parsed = availabilitySubmissionSchema.safeParse(body)
+  if (!parsed.success) return json(submissionIssue(parsed.error, body), 400)
   const result = await prisma.$transaction((tx) => saveAvailabilityAnswers(tx, { eventId: request.eventId, volunteerId: request.volunteerId, days: parsed.data.days, by: "volunteer", tokenHash: hashToken(token) }))
-  if (!result.ok) return result.status === 404 ? notFound() : json({ error: result.error, ...(result.at ? { at: result.at } : {}) }, result.status)
+  if (!result.ok) return result.status === 404 ? notFound(null) : json({ error: result.error, ...(result.at ? { at: result.at } : {}) }, result.status)
   // Which dates changed, never the ranges (personal data stays out of the log).
   await logEvent({ eventId: request.eventId, actor: { type: "volunteer", id: request.volunteerId }, action: "availability.answered", entityType: "Availability", entityId: request.id, changes: { dates: { from: null, to: parsed.data.days.length } } })
   // Corrected after a publication of drafts (#1146, lot C): the organisers are told, nobody moves.

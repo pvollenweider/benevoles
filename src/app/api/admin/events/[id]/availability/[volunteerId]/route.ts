@@ -4,10 +4,9 @@
 import { NextResponse } from "next/server"
 import { requireOrgSession } from "@/lib/auth-guard"
 import { adminActor, logEvent } from "@/lib/event-log"
-import { availabilitySubmissionSchema } from "@/lib/event-availability"
+import { availabilitySubmissionSchema, submissionIssue } from "@/lib/event-availability"
 import { saveAvailabilityAnswers } from "@/lib/event-availability-data"
 import { loadPersonAvailability } from "@/lib/event-availability-server"
-import { firstIssueMessage } from "@/lib/shift-time"
 import type { Tx } from "@/lib/registration-capacity"
 
 /**
@@ -33,8 +32,9 @@ export async function PUT(req: Request, { params }: { params: Promise<{ id: stri
     guard.db.volunteer.findFirst({ where: { id: volunteerId }, select: { id: true } }),
   ])
   if (!event || !person) return NextResponse.json({ error: "Non trouvé" }, { status: 404 })
-  const parsed = availabilitySubmissionSchema.safeParse(await req.json().catch(() => null))
-  if (!parsed.success) return NextResponse.json({ error: firstIssueMessage(parsed.error) }, { status: 400 })
+  const body = await req.json().catch(() => null)
+  const parsed = availabilitySubmissionSchema.safeParse(body)
+  if (!parsed.success) return NextResponse.json(submissionIssue(parsed.error, body), { status: 400 })
   const result = await guard.db.$transaction((tx) => saveAvailabilityAnswers(tx as unknown as Tx, { eventId: id, volunteerId, days: parsed.data.days, by: "admin" }))
   if (!result.ok) return NextResponse.json({ error: result.error, ...(result.at ? { at: result.at } : {}) }, { status: result.status })
   await logEvent({ eventId: id, actor: adminActor(guard.session), action: "availability.corrected", entityType: "Availability", entityId: volunteerId, changes: { dates: { from: null, to: parsed.data.days.length } } })

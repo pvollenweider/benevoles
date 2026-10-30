@@ -9,7 +9,7 @@ import Link from "next/link"
 import { announce } from "@/lib/announce"
 import Switch from "@/components/public/Switch"
 import ConfirmActionModal from "@/components/admin/ConfirmActionModal"
-import { AVAILABILITY_OPTION_HINT, AVAILABILITY_OPTION_LABEL, organiserDeadlineSentence } from "@/lib/event-availability-text"
+import { AVAILABILITY_OPTION_HINT, AVAILABILITY_OPTION_LABEL, deadlineInputIsPast, organiserDeadlineSentence, zoneLabel } from "@/lib/event-availability-text"
 
 type OptionState = { enabled: boolean; deadline: string | null; deadlineInput: string; timeZone: string; open: boolean }
 
@@ -31,6 +31,9 @@ export default function EventAvailabilityOption({ eventId, initial }: { eventId:
   const [deadlineError, setDeadlineError] = useState("")
   const [confirmOff, setConfirmOff] = useState<string | null>(null)
   const [confirmError, setConfirmError] = useState<string | null>(null)
+  // A deadline already past closes the collection as soon as it is saved: asked first.
+  const [confirmPast, setConfirmPast] = useState(false)
+  const saveRef = useRef<HTMLButtonElement>(null)
   const switchRef = useRef<HTMLButtonElement>(null)
   const deadlineRef = useRef<HTMLInputElement>(null)
 
@@ -67,16 +70,18 @@ export default function EventAvailabilityOption({ eventId, initial }: { eventId:
       setState(data)
       setConfirmOff(null)
       switchRef.current?.focus()
-      announce(setStatus, "Collecte arrêtée : les liens envoyés ne fonctionnent plus, les réponses sont gardées.")
+      announce(setStatus, "Collecte arrêtée : les liens envoyés ne fonctionnent plus, les réponses sont gardées.")
     } catch {
       setSaving(false)
-      setConfirmError("La connexion a échoué : rien n'a été fait. Réessayez.")
+      setConfirmError("La connexion a échoué : rien n'a été fait. Réessayez.")
     }
   }
 
-  async function saveDeadline(value: string | null) {
+  async function saveDeadline(value: string | null, pastConfirmed = false) {
     if (saving) return
-    if (value !== null && !value) { flushSync(() => setDeadlineError("Indiquez une date et une heure, ou choisissez « Sans date limite ».")); deadlineRef.current?.focus(); return }
+    if (value !== null && !value) { flushSync(() => setDeadlineError("Indiquez une date et une heure, ou choisissez « Sans date limite ».")); deadlineRef.current?.focus(); return }
+    if (value !== null && !pastConfirmed && deadlineInputIsPast(value, state.timeZone)) { setDeadlineError(""); setConfirmPast(true); return }
+    setConfirmPast(false)
     setSaving(true); setStatus(""); setDeadlineError("")
     try {
       const { res, data } = await put({ deadline: value })
@@ -87,10 +92,10 @@ export default function EventAvailabilityOption({ eventId, initial }: { eventId:
         return
       }
       setState(data); setDeadline(data.deadlineInput ?? "")
-      announce(setStatus, data.deadline ? (data.open ? "Date limite enregistrée." : "Date limite enregistrée : elle est déjà passée, les personnes ne peuvent plus répondre.") : "Pas de date limite : les personnes peuvent répondre tant que la collecte est active.")
+      announce(setStatus, data.deadline ? (data.open ? "Date limite enregistrée." : "Date limite enregistrée : elle est déjà passée, les personnes ne peuvent plus répondre.") : "Pas de date limite : les personnes peuvent répondre tant que la collecte est active.")
     } catch {
       setSaving(false)
-      flushSync(() => setDeadlineError("La connexion a échoué : rien n'a été enregistré. Réessayez."))
+      flushSync(() => setDeadlineError("La connexion a échoué : rien n'a été enregistré. Réessayez."))
       deadlineRef.current?.focus()
     }
   }
@@ -104,13 +109,13 @@ export default function EventAvailabilityOption({ eventId, initial }: { eventId:
       <Switch checked={state.enabled} onToggle={() => void toggle()} busy={saving} buttonRef={switchRef} describedBy={error ? "event-availability-hint event-availability-error" : "event-availability-hint"} data-availability-switch="1">
         {AVAILABILITY_OPTION_LABEL}
       </Switch>
-      <p id="event-availability-hint" className="text-xs text-gray-600">{AVAILABILITY_OPTION_HINT}</p>
+      <p id="event-availability-hint" className="text-sm text-gray-600">{AVAILABILITY_OPTION_HINT}</p>
       {state.enabled && (
         <div className="space-y-2">
           <form noValidate className="space-y-2" onSubmit={(e) => { e.preventDefault(); void saveDeadline(deadline) }}>
           <div>
             <label htmlFor="event-availability-deadline" className="block text-sm font-medium text-gray-900">Date limite des réponses (facultatif)</label>
-            <p id="event-availability-deadline-hint" className="text-xs text-gray-600">Heure de l&apos;événement ({state.timeZone}). {organiserDeadlineSentence(state.deadline, state.open, state.timeZone)}</p>
+            <p id="event-availability-deadline-hint" className="text-sm text-gray-600">En {zoneLabel(state.timeZone)}. {organiserDeadlineSentence(state.deadline, state.open, state.timeZone)}</p>
             <input
               ref={deadlineRef}
               id="event-availability-deadline"
@@ -124,7 +129,7 @@ export default function EventAvailabilityOption({ eventId, initial }: { eventId:
             {deadlineError && <p id="event-availability-deadline-error" className="mt-1 text-sm text-red-800">{deadlineError}</p>}
           </div>
           <div className="flex flex-wrap gap-2">
-            <button type="submit" aria-disabled={saving || undefined} className={`min-h-11 rounded-xl bg-blue-600 px-4 py-2 text-sm font-medium text-white hover:bg-blue-700 aria-disabled:cursor-wait ${focusRing}`}>
+            <button ref={saveRef} type="submit" aria-disabled={saving || undefined} className={`min-h-11 rounded-xl bg-blue-600 px-4 py-2 text-sm font-medium text-white hover:bg-blue-700 aria-disabled:cursor-wait ${focusRing}`}>
               Enregistrer la date limite
             </button>
             <button
@@ -137,7 +142,7 @@ export default function EventAvailabilityOption({ eventId, initial }: { eventId:
               Sans date limite
             </button>
           </div>
-          {noDeadline && <p id="event-availability-no-deadline" className="text-xs text-gray-600">Aucune date limite n&apos;est fixée.</p>}
+          {noDeadline && <p id="event-availability-no-deadline" className="text-sm text-gray-600">Aucune date limite n&apos;est fixée.</p>}
           </form>
           <p className="text-sm">
             <Link href={`/admin/events/${eventId}/availability`} className={`font-medium text-blue-700 underline underline-offset-2 hover:text-blue-900 rounded ${focusRing}`}>Voir les réponses et demander les disponibilités</Link>
@@ -146,12 +151,28 @@ export default function EventAvailabilityOption({ eventId, initial }: { eventId:
       )}
       <p role="status" className={status ? "text-sm text-green-800" : "sr-only"}>{status}</p>
       <p id="event-availability-error" role="alert" className={error ? "text-sm text-red-700" : "sr-only"}>{error}</p>
+      {confirmPast && (
+        <ConfirmActionModal
+          recap={{
+            title: "Enregistrer une date limite déjà passée ?",
+            lead: "Cette date limite est déjà passée : dès l'enregistrement, les personnes ne pourront plus répondre ni changer leurs réponses depuis leur lien.",
+            lines: ["Vous pourrez toujours corriger leurs réponses vous-même, ou choisir plus tard une nouvelle date limite pour rouvrir la collecte."],
+            confirmLabel: "Enregistrer quand même",
+            cancelLabel: "Changer la date",
+            danger: false,
+          }}
+          busy={saving}
+          error={null}
+          onConfirm={() => void saveDeadline(deadline, true)}
+          onCancel={() => { setConfirmPast(false); requestAnimationFrame(() => deadlineRef.current?.focus()) }}
+        />
+      )}
       {confirmOff !== null && (
         <ConfirmActionModal
           recap={{
-            title: "Arrêter de recueillir les disponibilités ?",
+            title: "Arrêter de recueillir les disponibilités ?",
             lead: confirmOff,
-            lines: ["Vous pourrez réactiver la collecte plus tard : il faudra alors envoyer de nouveaux liens.", "L'action est journalisée : vous la retrouverez dans le journal de l'événement."],
+            lines: ["Si vous réactivez la collecte plus tard, vous retrouverez ces réponses, mais il faudra envoyer de nouveaux liens.", "L'action est journalisée : vous la retrouverez dans le journal de l'événement."],
             confirmLabel: "Arrêter et désactiver les liens",
             cancelLabel: "Continuer à recueillir",
             danger: true,

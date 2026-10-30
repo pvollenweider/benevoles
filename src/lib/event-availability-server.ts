@@ -108,7 +108,7 @@ export async function setAvailabilityOption(db: OrgScopedPrisma, organizationId:
       if (wanted.deadline === null || wanted.deadline.trim() === "") deadline = null
       else {
         deadline = localInputToUtc(wanted.deadline, timeZone, localDateTimeToUtc)
-        if (!deadline) return { ok: false as const, status: 400 as const, error: "Date limite invalide : indiquez une date et une heure." }
+        if (!deadline) return { ok: false as const, status: 400 as const, error: "Date limite invalide : indiquez une date et une heure." }
       }
     }
     const turningOff = !enabled && event.availabilityEnabled
@@ -175,10 +175,10 @@ export function availabilityRequestPayload(event: EventForSend, volunteer: { id:
  * Asks these members for their availability (or, with `reminder`, re-asks everyone asked who has
  * not answered yet), in one transaction with the outbox rows (#1105 pattern). Only active members of
  * the organisation (owner decision 1). A request gets its link on first send; a request whose link
- * was revoked gets a new one; otherwise the same link is sent again. Nobody is emailed twice within
- * RESEND_GUARD_MS (a double click), nor within REMIND_COOLDOWN_MS by a reminder, nor while a copy
- * still waits in the outbox. Members without an address are asked (their answers can be entered by
- * an organiser) but not emailed.
+ * was revoked gets a new one, at once; otherwise the same link is sent again. Nobody holding a live
+ * link is emailed twice within RESEND_GUARD_MS (a double click), nor within REMIND_COOLDOWN_MS by a
+ * reminder, nor while a copy still waits in the outbox. A reminder goes only to live links. Members
+ * without an address are asked (their answers can be entered by an organiser) but not emailed.
  */
 export async function sendAvailabilityRequests(db: OrgScopedPrisma, eventId: string, input: { volunteerIds?: string[]; reminder?: boolean; actorId: string | null }, now: Date = new Date()): Promise<SendRequestsResult> {
   return db.$transaction(async (raw) => {
@@ -189,12 +189,14 @@ export async function sendAvailabilityRequests(db: OrgScopedPrisma, eventId: str
     })
     if (!event) return { ok: false as const, status: 404 as const, error: "Non trouvé" }
     await tx.$queryRaw`SELECT id FROM "Event" WHERE id = ${eventId} FOR SHARE`
-    if (!event.availabilityEnabled) return { ok: false as const, status: 409 as const, error: "Activez d'abord « Recueillir les disponibilités pour cet événement »." }
-    if (!answersOpen(event.availabilityDeadline, now)) return { ok: false as const, status: 409 as const, error: "La date limite est passée : choisissez une nouvelle date limite pour rouvrir la collecte, puis envoyez les demandes." }
+    if (!event.availabilityEnabled) return { ok: false as const, status: 409 as const, error: "Activez d'abord « Recueillir les disponibilités pour cet événement »." }
+    if (!answersOpen(event.availabilityDeadline, now)) return { ok: false as const, status: 409 as const, error: "La date limite est passée : choisissez une nouvelle date limite pour rouvrir la collecte, puis envoyez les demandes." }
 
     let targetIds: string[]
     if (input.reminder) {
-      const pending = await tx.availabilityRequest.findMany({ where: { eventId, answeredAt: null, sentAt: { not: null } }, select: { volunteerId: true } })
+      // The reminder re-sends the same link: a person whose link was revoked is asked again with
+      // « Demander leurs disponibilités » (a new link), never by a reminder.
+      const pending = await tx.availabilityRequest.findMany({ where: { eventId, answeredAt: null, sentAt: { not: null }, tokenHash: { not: null } }, select: { volunteerId: true } })
       targetIds = pending.map((r) => r.volunteerId)
     } else {
       targetIds = [...new Set(input.volunteerIds ?? [])]
@@ -224,7 +226,9 @@ export async function sendAvailabilityRequests(db: OrgScopedPrisma, eventId: str
       const row = byVolunteer.get(m.id)
       if (input.reminder && row?.answeredAt) continue
       const lastEmail = row ? [row.sentAt, row.lastRemindedAt].filter((d): d is Date => !!d).sort((a, b) => b.getTime() - a.getTime())[0] : undefined
-      const recent = (lastEmail && lastEmail > cutoff) || (row && outstanding.has(row.id))
+      // A revoked link (collection turned off, then on again) is no link at all: the guard against a
+      // second email would leave the person without a working link, so a new one always goes.
+      const recent = !!row?.tokenHash && ((lastEmail && lastEmail > cutoff) || outstanding.has(row.id))
       if (row && m.email && recent) { recentlySkipped++; continue }
       let token: string
       let requestId: string
@@ -267,6 +271,8 @@ export type AvailabilityLinkView = {
    * correction cancels nothing; `viaCorrection`, open only as such a correction, until `until`.
    */
   correction: { published: boolean; viaCorrection: boolean; until: string | null }
+  /** Whom to write to (the organisation's reply address), as on the personal page; null without one. */
+  contactEmail: string | null
 }
 
 /** The request behind a link, when it may be used: event collecting, person an active member. */
@@ -276,7 +282,7 @@ export async function resolveAvailabilityLink(token: string) {
     select: {
       id: true, eventId: true, volunteerId: true,
       volunteer: { select: { active: true, erasedAt: true, mergedIntoId: true, organizationId: true } },
-      event: { select: { title: true, startDate: true, endDate: true, organizationId: true, availabilityEnabled: true, availabilityDeadline: true, availabilityTimeZone: true, organization: { select: { name: true, slug: true, timeZone: true, active: true, suspendedAt: true } } } },
+      event: { select: { title: true, startDate: true, endDate: true, organizationId: true, availabilityEnabled: true, availabilityDeadline: true, availabilityTimeZone: true, organization: { select: { name: true, slug: true, timeZone: true, active: true, suspendedAt: true, replyToEmail: true } } } },
     },
   })
   if (!request) return null
@@ -306,6 +312,7 @@ export async function availabilityLinkView(request: ResolvedLink, now: Date = ne
     answeredAt: stored?.answeredAt?.toISOString() ?? null,
     answeredBy: stored?.answeredBy ?? null,
     days: stored?.days ?? [],
+    contactEmail: e.organization.replyToEmail || process.env.EMAIL_REPLY_TO || null,
   }
 }
 
