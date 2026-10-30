@@ -25,7 +25,7 @@ import type { DutyShift, WorkloadPerson } from "./workload-policy"
 
 export type BoardShift = BatchShift & { mealOnTheGo: boolean; placeId: string | null; placeName: string | null }
 export type BoardMission = { registrationId: string; status: string; shift: BoardShift }
-export type BoardDraft = { id: string; revision: number; shiftId: string; volunteerId: string; source: string; shiftTerms: string; availabilityStamp: string; ackKey: string | null }
+export type BoardDraft = { id: string; revision: number; shiftId: string; volunteerId: string; source: string; shiftTerms: string; availabilityStamp: string; ackKey: string | null; locked?: boolean }
 export type BoardPerson = BatchPerson & { email: string | null; sameNameHint: string | null; reviewReason: string | null; personal?: WorkloadPerson["personal"] }
 
 export type BoardInput = {
@@ -57,6 +57,8 @@ export type BoardItem = {
     id: string
     revision: number
     source: string
+    /** Locked (#1172): a new proposal never replaces it. */
+    locked: boolean
     /** The shift or the answer changed since the review. */
     stale: boolean
     staleText: string | null
@@ -176,7 +178,7 @@ export function buildBoard(input: BoardInput): Board {
       push(day(s.date), {
         kind: "draft", shiftId: s.id, name: shiftName(s), time: spokenTimeRange(s.startTime, s.endTime), ...fitOf(s),
         draft: {
-          id: d.id, revision: d.revision, source: d.source, stale: review.stale,
+          id: d.id, revision: d.revision, source: d.source, locked: !!d.locked, stale: review.stale,
           staleText: review.shiftChanged ? "À revoir : le créneau a changé depuis le brouillon." : review.availabilityChanged ? "À revoir : les disponibilités ont changé depuis le brouillon." : null,
           ackKey, acked,
           problems: [...(problemsOfDraft.get(d.id) ?? []), ...(problemsOfShift.get(s.id) ?? [])],

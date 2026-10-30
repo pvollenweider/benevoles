@@ -67,7 +67,7 @@ const day = (d: Date | string) => (typeof d === "string" ? d.slice(0, 10) : d.to
  * Builds the input of a run on `eventId`. `replacement`: the frozen set of a run, or "compute" at
  * launch. `now` is the reference instant written in the input (shifts already over are not open).
  */
-export async function buildProposalSnapshot(db: Db, eventId: string, config: ProposalConfig, replacement: Replacement | "compute", now: Date): Promise<SnapshotResult> {
+export async function buildProposalSnapshot(db: Db, eventId: string, config: ProposalConfig, replacement: Replacement | "compute", now: Date, opts: { ownDrafts?: boolean } = {}): Promise<SnapshotResult> {
   const event = await db.event.findFirst({
     where: { id: eventId },
     select: { id: true, organizationId: true, availabilityEnabled: true, availabilityAdoptedAt: true, organization: { select: { timeZone: true } }, ...WORKLOAD_EVENT_SELECT },
@@ -108,7 +108,8 @@ export async function buildProposalSnapshot(db: Db, eventId: string, config: Pro
     ? drafts.filter((d) => d.source === "proposal" && !d.locked && scope.has(d.shiftId)).map((d) => ({ id: d.id, revision: d.revision }))
     : replacement
   const frozenRevision = new Map(frozen.map((r) => [r.id, r.revision]))
-  const replaced = new Set(drafts.filter((d) => frozenRevision.get(d.id) === d.revision && !d.locked && d.source === "proposal").map((d) => d.id))
+  // `ownDrafts` (a written run's freshness): its own drafts stay its own, locked or reviewed since.
+  const replaced = new Set(drafts.filter((d) => frozenRevision.has(d.id) && (opts.ownDrafts || (frozenRevision.get(d.id) === d.revision && !d.locked)) && d.source === "proposal").map((d) => d.id))
   const kept = drafts.filter((d) => !replaced.has(d.id) && live.has(d.shiftId))
 
   const held = new Map<string, number>()

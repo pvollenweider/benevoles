@@ -74,9 +74,11 @@ type CellTarget = { row: BoardRow; date: string; layout: Layout }
  * visible cell; one page-level polite status outside the dialogs; publish confirmation is a plain
  * dialog; a refusal is a focused block, not a live region; focus after every action.
  */
-export default function DraftBoard({ eventId, board, day, view: initialView, scope, basePath }: {
+export default function DraftBoard({ eventId, board, day, view: initialView, scope, basePath, proposals = false }: {
   eventId: string
   board: DraftBoardData
+  /** Generated proposals are available (#1172): drafts can be locked. */
+  proposals?: boolean
   day: string | null
   view: Layout
   scope: "event" | "all"
@@ -328,7 +330,7 @@ export default function DraftBoard({ eventId, board, day, view: initialView, sco
           onCancel={() => { publishKey.current = null; setConfirming(null) }}
         />
       )}
-      {draftOpen && <DraftDialog eventId={eventId} target={draftOpen} onClose={(removed, text) => afterDraftClose(draftOpen, removed, text)} />}
+      {draftOpen && <DraftDialog eventId={eventId} target={draftOpen} canLock={proposals} onClose={(removed, text) => afterDraftClose(draftOpen, removed, text)} />}
       {cellOpen && <OptionsDialog eventId={eventId} target={cellOpen} onClose={() => { setCellOpen(null); startTransition(() => router.refresh()) }} />}
     </div>
   )
@@ -363,13 +365,15 @@ function CellContent({ row, cell, layout, onDraft, onAdd }: { row: BoardRow; cel
               <p className="flex flex-wrap gap-1">
                 <span className={`inline-block rounded-full border border-transparent px-2 py-0.5 font-medium ${KIND_BADGE[item.kind].className}`}>{KIND_BADGE[item.kind].label}</span>
                 {item.fit && OUTSIDE_FITS.includes(item.fit) && <span className="inline-block rounded-full border border-transparent px-2 py-0.5 font-medium bg-[#f3f4f6] text-[#374151]">{item.fitLabel}</span>}
+                {item.draft?.source === "proposal" && <span className="inline-block rounded-full border border-transparent px-2 py-0.5 font-medium bg-[#f3f4f6] text-[#4b5563]">Proposé</span>}
+                {item.draft?.locked && <span className="inline-block rounded-full border border-transparent px-2 py-0.5 font-medium bg-[#f3f4f6] text-[#4b5563]">Verrouillé</span>}
               </p>
               {item.draft?.staleText && <p className="text-[#92400e]">{item.draft.staleText}</p>}
               {item.draft && !item.draft.stale && item.draft.ackKey && !item.draft.acked && <p className="text-[#92400e]">Confirmation à donner avant publication.</p>}
               {item.draft && item.draft.problems.length > 0 && <p className="text-red-800">{item.draft.problems[0]}</p>}
               {item.draft && (
                 <button id={ids.draft(layout, item.draft.id)} type="button" onClick={() => onDraft(item)} className={smallButton}>
-                  Voir le brouillon<span className="sr-only">, {who}, {spokenName(item.name)}, {item.time}, {date}</span>
+                  Voir le brouillon<span className="sr-only">, {who}, {spokenName(item.name)}, {item.time}, {date}{item.draft.source === "proposal" ? ", proposé" : ""}{item.draft.locked ? ", verrouillé" : ""}</span>
                 </button>
               )}
             </li>
@@ -383,13 +387,17 @@ function CellContent({ row, cell, layout, onDraft, onAdd }: { row: BoardRow; cel
   )
 }
 
-function DraftDialog({ eventId, target, onClose }: { eventId: string; target: DraftTarget; onClose: (removed: boolean, text: string | null) => void }) {
+function DraftDialog({ eventId, target, canLock, onClose }: { eventId: string; target: DraftTarget; canLock: boolean; onClose: (removed: boolean, text: string | null) => void }) {
+  const router = useRouter()
   const { row, item, date } = target
   const draft = item.draft!
   const needsAck = !!draft.ackKey && !draft.acked
   const [acked, setAcked] = useState(false)
   const [ackError, setAckError] = useState(false)
-  const [busy, setBusy] = useState<"review" | "remove" | null>(null)
+  const [busy, setBusy] = useState<"review" | "remove" | "lock" | null>(null)
+  const [locked, setLocked] = useState(draft.locked)
+  const [revision, setRevision] = useState(draft.revision)
+  const [dialogStatus, setDialogStatus] = useState("")
   const [error, setError] = useState<string | null>(null)
   const who = personName(row)
   const title = `Brouillon : ${spokenName(item.name)}, ${lowerFirst(dayLabel(date))}, ${item.time}`
@@ -407,8 +415,8 @@ function DraftDialog({ eventId, target, onClose }: { eventId: string; target: Dr
     try {
       const url = `/api/admin/events/${eventId}/drafts/${draft.id}`
       const res = kind === "review"
-        ? await fetch(url, { method: "PATCH", headers: { "Content-Type": "application/json" }, body: JSON.stringify({ revision: draft.revision, ackKey: acked ? draft.ackKey : null }) })
-        : await fetch(`${url}?revision=${draft.revision}`, { method: "DELETE" })
+        ? await fetch(url, { method: "PATCH", headers: { "Content-Type": "application/json" }, body: JSON.stringify({ revision, ackKey: acked ? draft.ackKey : null }) })
+        : await fetch(`${url}?revision=${revision}`, { method: "DELETE" })
       const data = await res.json().catch(() => ({}))
       if (!res.ok) {
         setBusy(null)
@@ -424,6 +432,30 @@ function DraftDialog({ eventId, target, onClose }: { eventId: string; target: Dr
     onClose(kind === "remove", kind === "remove" ? `Brouillon retiré : ${what}.` : `Relecture enregistrée : ${what}.`)
   }
 
+  /** « Verrouiller » / « Déverrouiller » (#1172): the dialog stays open, its own status says the result. */
+  async function toggleLock() {
+    if (busy) return
+    setBusy("lock")
+    setError(null)
+    try {
+      const res = await fetch(`/api/admin/events/${eventId}/drafts/${draft.id}/lock`, { method: "POST", headers: { "Content-Type": "application/json" }, body: JSON.stringify({ revision, locked: !locked }) })
+      const data = await res.json().catch(() => ({}))
+      setBusy(null)
+      if (!res.ok) {
+        setError(typeof data.error === "string" ? data.error : "L'action n'a pas abouti.")
+        startTransition(() => router.refresh())
+        return
+      }
+      setLocked(!!data.draft?.locked)
+      setRevision(data.draft?.revision ?? revision + 1)
+      announce(setDialogStatus, data.draft?.locked ? "Brouillon verrouillé." : "Brouillon déverrouillé.")
+      startTransition(() => router.refresh())
+    } catch {
+      setBusy(null)
+      setError(NETWORK_ERROR)
+    }
+  }
+
   return (
     <ModalShell title={title} onClose={() => onClose(false, null)} busy={!!busy}>
       <div className="space-y-3 text-sm text-gray-800">
@@ -437,6 +469,8 @@ function DraftDialog({ eventId, target, onClose }: { eventId: string; target: Dr
           </div>
         )}
         {draft.acked && !draft.stale && <p>Affectation confirmée malgré les disponibilités indiquées.</p>}
+        {canLock && <p>{locked ? "Ce brouillon est verrouillé." : "Ce brouillon n'est pas verrouillé."} <span id="draft-lock-hint">Une nouvelle proposition ne remplace jamais un brouillon verrouillé.</span></p>}
+        <p role="status" className="sr-only">{dialogStatus}</p>
         {needsAck && (
           <label className="flex min-h-11 items-start gap-2 py-1 cursor-pointer">
             <input id="draft-ack" type="checkbox" checked={acked} onChange={(e) => { setAcked(e.target.checked); if (e.target.checked) setAckError(false) }}
@@ -453,6 +487,11 @@ function DraftDialog({ eventId, target, onClose }: { eventId: string; target: Dr
           {canReview && (
             <button type="button" onClick={() => void send("review")} aria-disabled={!!busy || undefined} aria-busy={busy === "review" || undefined} className={`min-h-11 rounded-xl bg-blue-600 px-4 py-2 text-sm font-medium text-white hover:bg-blue-700 aria-disabled:opacity-60 ${focusRing}`}>
               {busy === "review" ? "Enregistrement…" : "Enregistrer la relecture"}
+            </button>
+          )}
+          {canLock && (
+            <button type="button" onClick={() => void toggleLock()} aria-describedby="draft-lock-hint" aria-disabled={!!busy || undefined} aria-busy={busy === "lock" || undefined} className={`min-h-11 rounded-xl border border-gray-500 bg-white px-4 py-2 text-sm font-medium text-gray-900 hover:bg-gray-50 aria-disabled:opacity-60 ${focusRing}`}>
+              {busy === "lock" ? "Enregistrement…" : locked ? "Déverrouiller" : "Verrouiller"}
             </button>
           )}
           <button type="button" onClick={() => void send("remove")} aria-disabled={!!busy || undefined} aria-busy={busy === "remove" || undefined} className={`min-h-11 rounded-xl border border-[#b91c1c] bg-white px-4 py-2 text-sm font-medium text-[#b91c1c] hover:bg-red-50 aria-disabled:opacity-60 ${focusRing}`}>

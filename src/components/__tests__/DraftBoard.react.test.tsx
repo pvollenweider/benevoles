@@ -22,7 +22,7 @@ afterEach(() => { cleanup(); vi.unstubAllGlobals() })
 
 const draftItem: BoardItem = {
   kind: "draft", shiftId: "s2", name: "Bar · Nuit", time: "de 22h à 2h, jusqu'au lendemain", fit: "outside", fitLabel: "Pas disponible à ces heures", fitDetail: "",
-  draft: { id: "d1", revision: 2, source: "manual", stale: false, staleText: null, ackKey: "a1|key", acked: false, problems: ["Nadia Rochat a indiqué ne pas être disponible : confirmez."] },
+  draft: { id: "d1", revision: 2, source: "manual", locked: false, stale: false, staleText: null, ackKey: "a1|key", acked: false, problems: ["Nadia Rochat a indiqué ne pas être disponible : confirmez."] },
 }
 const row = (extra: Partial<BoardRow> = {}): BoardRow => ({
   volunteerId: "v-n", firstName: "Nadia", lastName: "Rochat", sameNameHint: null, reviewTexts: [], committedMinutes: 240, draftMinutes: 240, findings: [], problemCount: 1,
@@ -152,5 +152,33 @@ describe("DraftBoard", () => {
     expect(screen.getByRole("heading", { level: 3, name: "Vendredi 11 juillet" })).toBeInTheDocument()
     expect(screen.getByRole("heading", { level: 4, name: "Nadia Rochat" })).toBeInTheDocument()
     expect(screen.getByRole("button", { name: "Par jour" })).toHaveAttribute("aria-pressed", "true")
+  })
+})
+
+describe("DraftBoard with generated proposals (#1172)", () => {
+  const proposed: BoardItem = { ...draftItem, draft: { ...draftItem.draft!, source: "proposal", locked: false } }
+  const proposalBoard = () => board({ rows: [row({ cells: [{ date: "2031-07-11", availability: "Libre de 9h à 16h", availabilityKind: "ranges", items: [proposed] }] })] })
+
+  it("says « Proposé », and the draft dialog locks it, stays open and says so", async () => {
+    fetchMock.mockResolvedValue({ ok: true, status: 200, json: async () => ({ draft: { id: "d1", revision: 3, locked: true } }) })
+    render(<DraftBoard eventId="evt" board={proposalBoard()} day="2031-07-11" view="grid" scope="event" basePath="/x" proposals />)
+    const table = screen.getByRole("table", { name: /Affectations par personne et par jour/ })
+    expect(within(table).getByText("Proposé")).toBeInTheDocument()
+    fireEvent.click(within(table).getByRole("button", { name: /^Voir le brouillon, Nadia Rochat.*, proposé$/ }))
+    const dialog = screen.getByRole("dialog")
+    expect(within(dialog).getByText("Ce brouillon n'est pas verrouillé.")).toBeInTheDocument()
+    const lock = within(dialog).getByRole("button", { name: "Verrouiller" })
+    expect(lock).toHaveAccessibleDescription("Une nouvelle proposition ne remplace jamais un brouillon verrouillé.")
+    fireEvent.click(lock)
+    await waitFor(() => expect(within(dialog).getByRole("button", { name: "Déverrouiller" })).toBeInTheDocument())
+    expect(fetchMock).toHaveBeenCalledWith("/api/admin/events/evt/drafts/d1/lock", expect.objectContaining({ method: "POST", body: JSON.stringify({ revision: 2, locked: true }) }))
+    expect(within(dialog).getByText("Ce brouillon est verrouillé.")).toBeInTheDocument()
+    await waitFor(() => expect(within(dialog).getByRole("status")).toHaveTextContent("Brouillon verrouillé."))
+  })
+
+  it("offers no lock without proposals", () => {
+    render(<DraftBoard eventId="evt" board={proposalBoard()} day="2031-07-11" view="grid" scope="event" basePath="/x" />)
+    fireEvent.click(within(screen.getByRole("table", { name: /Affectations par personne/ })).getByRole("button", { name: /^Voir le brouillon/ }))
+    expect(within(screen.getByRole("dialog")).queryByRole("button", { name: "Verrouiller" })).not.toBeInTheDocument()
   })
 })

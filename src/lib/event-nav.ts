@@ -33,7 +33,7 @@ export const EVENT_TABS: EventTabDef[] = [
   { id: "overview", label: "Aperçu", pages: [{ path: "", label: "Aperçu" }, { path: "review", label: "Vérification et publication" }] },
   { id: "day-of", label: "Jour J", pages: [{ path: "day-of", label: "Jour J" }] },
   { id: "shifts", label: "Créneaux", pages: [{ path: "shifts", label: "Créneaux" }, { path: "staffing", label: "Où manque-t-il du monde ?", nested: ["staffing/search"] }] },
-  { id: "registrations", label: "Inscriptions", pages: [{ path: "registrations", label: "Inscriptions" }, { path: "invitations", label: "Invitations" }, { path: "availability", label: "Disponibilités", when: "availability", nested: ["availability/assign", "availability/drafts"] }] },
+  { id: "registrations", label: "Inscriptions", pages: [{ path: "registrations", label: "Inscriptions" }, { path: "invitations", label: "Invitations" }, { path: "availability", label: "Disponibilités", when: "availability", nested: ["availability/assign", "availability/drafts", "availability/proposal"] }] },
   { id: "communication", label: "Messages", pages: [{ path: "message", label: "Messages" }] },
   {
     id: "share", label: "Partage",
