@@ -224,7 +224,12 @@ export async function loadShiftAssist(db: Db, eventId: string, shiftId: string |
   const committed = regs.filter((r) => (COMMITTED_STATUSES as readonly string[]).includes(r.status))
   const answers: AnswerRow[] = await db.availabilityRequest.findMany({ where: { eventId }, select: ANSWER_SELECT })
 
-  const related = [...new Set([...answers.map((a) => a.volunteerId), ...committed.map((r) => r.volunteerId)])]
+  // Pending drafts (#1146, lot C): their own hours, never judged as committed duty.
+  const drafts: { volunteerId: string; shift: { id: string; roleName: string; label: string; date: Date; startTime: string; endTime: string; mealOnTheGo: boolean; placeId: string | null; place: { name: string } | null } }[] = await db.draftAssignment.findMany({
+    where: { eventId, status: "draft", shift: { status: { not: "cancelled" } } },
+    select: { volunteerId: true, shift: { select: { id: true, roleName: true, label: true, date: true, startTime: true, endTime: true, mealOnTheGo: true, placeId: true, place: { select: { name: true } } } } },
+  })
+  const related = [...new Set([...answers.map((a) => a.volunteerId), ...committed.map((r) => r.volunteerId), ...drafts.map((d) => d.volunteerId)])]
   const people: { id: string; firstName: string; lastName: string; email: string | null; birthDate: Date | null }[] = await db.volunteer.findMany({
     where: { active: true, erasedAt: null, mergedIntoId: null, ...(scope === "event" ? { id: { in: related } } : {}) },
     select: { id: true, firstName: true, lastName: true, email: true, birthDate: true },
@@ -238,6 +243,14 @@ export async function loadShiftAssist(db: Db, eventId: string, shiftId: string |
     heldOf.set(r.volunteerId, [...(heldOf.get(r.volunteerId) ?? []), {
       id: s.id, date: s.date, startTime: s.startTime, endTime: s.endTime, mealOnTheGo: s.mealOnTheGo, placeId: s.placeId, placeName: s.place?.name ?? null,
       kind: r.status === "active" ? "confirmed" : "pending", name: shiftName(s),
+    }])
+  }
+
+  const draftOnShift = new Set(drafts.filter((d) => d.shift.id === chosenRow.id).map((d) => d.volunteerId))
+  for (const d of drafts) {
+    const s = d.shift
+    heldOf.set(d.volunteerId, [...(heldOf.get(d.volunteerId) ?? []), {
+      id: s.id, date: s.date, startTime: s.startTime, endTime: s.endTime, mealOnTheGo: s.mealOnTheGo, placeId: s.placeId, placeName: s.place?.name ?? null, kind: "draft", name: shiftName(s),
     }])
   }
 
@@ -255,6 +268,7 @@ export async function loadShiftAssist(db: Db, eventId: string, shiftId: string |
       person: { birthDate: p.birthDate, personal: limitOf.get(p.id) ?? null },
       reviewReason: a?.reviewReason ?? null,
       sameNameHint: hints.get(p.id) ?? null,
+      draftOnShift: draftOnShift.has(p.id),
     })
   })
   const shift = shifts.find((s) => s.id === chosenRow.id)!

@@ -5,6 +5,7 @@
 
 import { startTransition, useEffect, useMemo, useRef, useState } from "react"
 import { flushSync } from "react-dom"
+import Link from "next/link"
 import { useRouter } from "next/navigation"
 import { announce } from "@/lib/announce"
 import { focusFirstAvailable } from "@/lib/focus-return"
@@ -54,7 +55,8 @@ export default function ShiftAssistPanel({ eventId, shift, rows }: {
   const [acks, setAcks] = useState<Record<string, boolean>>({})
   const [ackErrors, setAckErrors] = useState<Record<string, boolean>>({})
   const [errors, setErrors] = useState<Record<string, string>>({})
-  const [busy, setBusy] = useState<string | null>(null)
+  // Which action runs, for whom: only the pressed button says so, both stay aria-disabled.
+  const [busy, setBusy] = useState<{ id: string; action: "add" | "draft" } | null>(null)
   const focusAfter = useRef<number | null>(null)
   // A refusal that re-reads the page: focus stays on that person's button, else their heading.
   const focusRow = useRef<string | null>(null)
@@ -67,7 +69,8 @@ export default function ShiftAssistPanel({ eventId, shift, rows }: {
     const rowId = focusRow.current
     if (rowId) {
       focusRow.current = null
-      focusFirstAvailable([() => document.getElementById(`assist-add-${rowId}`), () => document.getElementById(`assist-name-${rowId}`), listHeading.current])
+      // After a draft (#1146, lot C) the person stays listed: focus the sentence that replaced the button.
+      focusFirstAvailable([() => document.getElementById(`assist-draft-done-${rowId}`), () => document.getElementById(`assist-add-${rowId}`), () => document.getElementById(`assist-name-${rowId}`), listHeading.current])
       return
     }
     const index = focusAfter.current
@@ -97,7 +100,7 @@ export default function ShiftAssistPanel({ eventId, shift, rows }: {
       document.getElementById(`assist-ack-${row.volunteerId}`)?.focus()
       return
     }
-    setBusy(row.volunteerId)
+    setBusy({ id: row.volunteerId, action: "add" })
     setErrors((e) => ({ ...e, [row.volunteerId]: "" }))
     let error: string | null = null
     try {
@@ -125,6 +128,41 @@ export default function ShiftAssistPanel({ eventId, shift, rows }: {
     startTransition(() => router.refresh())
   }
 
+  /** « Ajouter en brouillon » (#1146, lot C): prepared, not published, no place held, nobody told. */
+  async function addDraft(row: CandidateRow) {
+    if (busy) { announce(setStatus, "Un ajout est en cours : attendez sa réponse."); return }
+    if (row.ackKey && !acks[row.volunteerId]) {
+      flushSync(() => setAckErrors((e) => ({ ...e, [row.volunteerId]: true })))
+      document.getElementById(`assist-ack-${row.volunteerId}`)?.focus()
+      return
+    }
+    setBusy({ id: row.volunteerId, action: "draft" })
+    setErrors((e) => ({ ...e, [row.volunteerId]: "" }))
+    let error: string | null = null
+    try {
+      const res = await fetch(`/api/admin/events/${eventId}/drafts`, {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ shiftId: shift.id, volunteerId: row.volunteerId, ackKey: row.ackKey ?? null }),
+      })
+      if (!res.ok) {
+        const data = await res.json().catch(() => ({}))
+        error = typeof data?.error === "string" ? data.error : "Le brouillon n'a pas été ajouté."
+        if (data?.code === "availability") { focusRow.current = row.volunteerId; startTransition(() => router.refresh()) }
+      }
+    } catch {
+      error = NETWORK_ERROR
+    }
+    setBusy(null)
+    if (error) {
+      setErrors((e) => ({ ...e, [row.volunteerId]: error! }))
+      return
+    }
+    announce(setStatus, `Brouillon ajouté : ${spokenName(row)} sur ${shift.name}. Il ne prend pas de place avant la publication.`)
+    focusRow.current = row.volunteerId
+    startTransition(() => router.refresh())
+  }
+
   const explanationId = "assist-sort-explanation"
   return (
     <section aria-labelledby="assist-list-heading" className="space-y-4">
@@ -139,7 +177,7 @@ export default function ShiftAssistPanel({ eventId, shift, rows }: {
                 aria-pressed={sort === value}
                 aria-describedby={value === "spread" && sort === "spread" ? explanationId : undefined}
                 onClick={() => chooseSort(value)}
-                className={`min-h-11 sm:min-h-9 border border-gray-500 px-3 py-1.5 text-sm font-medium first:rounded-l-xl last:rounded-r-xl -ml-px first:ml-0 ${sort === value ? "bg-blue-50 text-blue-800 border-blue-600 relative z-10" : "bg-white text-gray-800 hover:bg-gray-50"} forced-colors:aria-pressed:bg-[Highlight] ${focusRing} focus-visible:relative focus-visible:z-20`}
+                className={`min-h-11 sm:min-h-9 border border-gray-500 px-3 py-1.5 text-sm font-medium first:rounded-l-xl last:rounded-r-xl -ml-px first:ml-0 ${sort === value ? "bg-blue-50 text-blue-800 border-blue-600 font-semibold ring-2 ring-inset ring-blue-600 relative z-10" : "bg-white text-gray-800 hover:bg-gray-50"} forced-colors:aria-pressed:bg-[Highlight] ${focusRing} focus-visible:relative focus-visible:z-20`}
               >
                 {label}
               </button>
@@ -167,12 +205,15 @@ export default function ShiftAssistPanel({ eventId, shift, rows }: {
             <CandidateCard
               key={row.volunteerId}
               row={row}
-              busy={busy === row.volunteerId}
+              busy={busy?.id === row.volunteerId ? busy.action : null}
+              anyBusy={!!busy}
+              draftsHref={`/admin/events/${eventId}/availability/drafts`}
               acked={!!acks[row.volunteerId]}
               ackError={!!ackErrors[row.volunteerId]}
               error={errors[row.volunteerId] || null}
               onAck={(v) => { setAcks((a) => ({ ...a, [row.volunteerId]: v })); if (v) setAckErrors((e) => ({ ...e, [row.volunteerId]: false })) }}
               onAdd={() => void add(row, index)}
+              onDraft={() => void addDraft(row)}
             />
           ))}
         </ul>
@@ -181,9 +222,12 @@ export default function ShiftAssistPanel({ eventId, shift, rows }: {
   )
 }
 
-function CandidateCard({ row, busy, acked, ackError, error, onAck, onAdd }: {
+function CandidateCard({ row, busy, anyBusy, draftsHref, acked, ackError, error, onAck, onAdd, onDraft }: {
   row: CandidateRow
-  busy: boolean
+  busy: "add" | "draft" | null
+  anyBusy: boolean
+  draftsHref: string
+  onDraft: () => void
   acked: boolean
   ackError: boolean
   error: string | null
@@ -205,7 +249,7 @@ function CandidateCard({ row, busy, acked, ackError, error, onAck, onAdd }: {
         <span className={`inline-block rounded-full border border-transparent px-2 py-0.5 text-xs font-medium ${FIT_BADGE[row.fit.state]}`}>{FIT_LABELS[row.fit.state]}</span>
       </div>
       {detail && <p id={`assist-detail-${id}`} className="text-sm text-gray-700">{detail}</p>}
-      {row.reviewNeeded && <p className="text-sm text-[#92400e]">À revoir : cette réponse vient de la fusion de deux fiches qui avaient répondu différemment.</p>}
+      {row.reviewTexts.map((t) => <p key={t} className="text-sm text-[#92400e]">{t}</p>)}
       <ul role="list" className="text-sm text-gray-700 space-y-0.5">
         <li>{committedHoursText(row.minutes)}{row.minutes.sameDay > 0 ? `, dont ${fmtDuration(row.minutes.sameDay)} ${row.sameDayLabel}` : ""}.</li>
         {row.backToBack.length > 0 && <li>Enchaîne sans pause avec {row.backToBack.join(", ")}.</li>}
@@ -242,16 +286,38 @@ function CandidateCard({ row, busy, acked, ackError, error, onAck, onAdd }: {
               {ackError && <p id={`assist-ack-error-${id}`} className="text-sm text-red-700">Cochez cette case pour ajouter {name} malgré ses disponibilités.</p>}
             </div>
           )}
-          <button
-            id={`assist-add-${id}`}
-            type="button"
-            onClick={onAdd}
-            aria-disabled={busy || undefined}
-            aria-describedby={error ? `assist-error-${id}` : undefined}
-            className={`min-h-11 rounded-xl bg-blue-600 px-4 py-2 text-sm font-medium text-white hover:bg-blue-700 ${busy ? "opacity-60 cursor-wait" : ""} ${focusRing}`}
-          >
-            {busy ? "Ajout en cours…" : "Ajouter à ce créneau"}{" "}<span className="sr-only">: {name}</span>
-          </button>
+          <div className="flex flex-wrap gap-2">
+            <button
+              id={`assist-add-${id}`}
+              type="button"
+              onClick={onAdd}
+              aria-disabled={anyBusy || undefined}
+              aria-busy={busy === "add" || undefined}
+              aria-describedby={error ? `assist-error-${id}` : undefined}
+              className={`min-h-11 rounded-xl bg-blue-600 px-4 py-2 text-sm font-medium text-white hover:bg-blue-700 ${anyBusy ? "opacity-60" : ""} ${busy === "add" ? "cursor-wait" : ""} ${focusRing}`}
+            >
+              {busy === "add" ? "Ajout en cours…" : "Ajouter à ce créneau"}{" "}<span className="sr-only">: {name}</span>
+            </button>
+            {!row.draftOnShift && (
+              <button
+                id={`assist-draft-${id}`}
+                type="button"
+                onClick={onDraft}
+                aria-disabled={anyBusy || undefined}
+                aria-busy={busy === "draft" || undefined}
+                aria-describedby={error ? `assist-error-${id}` : undefined}
+                className={`min-h-11 rounded-xl border border-blue-600 bg-white px-4 py-2 text-sm font-medium text-blue-700 hover:bg-blue-50 ${anyBusy ? "opacity-60" : ""} ${busy === "draft" ? "cursor-wait" : ""} ${focusRing}`}
+              >
+                {busy === "draft" ? "Ajout en cours…" : "Ajouter en brouillon"}{" "}<span className="sr-only">: {name}</span>
+              </button>
+            )}
+          </div>
+          {row.draftOnShift && (
+            <p id={`assist-draft-done-${id}`} tabIndex={-1} className={`text-sm text-gray-800 rounded ${focusRing}`}>
+              Un brouillon existe déjà pour ce créneau. « Ajouter à ce créneau » inscrit la personne tout de suite ; retirez alors le brouillon dans{" "}
+              <Link href={draftsHref} className={`font-medium text-blue-700 underline underline-offset-2 hover:text-blue-900 rounded ${focusRing}`}>Affectations en brouillon</Link>.
+            </p>
+          )}
           {error && <p id={`assist-error-${id}`} role="alert" className="text-sm text-red-700">{error}</p>}
         </>
       )}

@@ -119,7 +119,8 @@ describe("assessCandidate", () => {
     }))
     expect(row.minutes).toEqual({ confirmed: 240, pending: 120, draft: 180, committed: 360, sameDay: 240 })
     expect(row.sameDayLabel).toBe("le jeudi 11 juillet")
-    expect(committedHoursText(row.minutes)).toBe("Déjà prévu sur l'événement : 4 h confirmées, 2 h en attente de validation")
+    // Drafts (#1146, lot C) said apart, never as committed.
+    expect(committedHoursText(row.minutes)).toBe("Déjà prévu sur l'événement : 4 h confirmées, 2 h en attente de validation ; 3 h en brouillon, pas encore publiées")
   })
 
   it("names missions back to back without a break and missions that overlap", () => {
@@ -167,6 +168,15 @@ describe("assessCandidate", () => {
     const row = assessCandidate(warningsCtx({ ...shift("2030-07-11", "12:00", "20:00"), name: "Bar" }), person("Meyer", { held: [held("a", "2030-07-11", "06:00", "12:00")] }))
     expect(row.eligible).toBe(true)
     expect(row.workload.length).toBeGreaterThan(0)
+  })
+})
+
+describe("review flags on the cards", () => {
+  it("says why an answer needs another look, a change after a publication included (#1146, lot C)", () => {
+    const ctx = warningsCtx()
+    expect(assessCandidate(ctx, person("Morel", { reviewReason: "published" })).reviewTexts).toEqual(["À revoir : disponibilités modifiées après la publication des affectations."])
+    expect(assessCandidate(ctx, person("Morel", { reviewReason: "merge" })).reviewTexts).toEqual(["À revoir : deux fiches fusionnées avaient répondu différemment."])
+    expect(assessCandidate(ctx, person("Morel")).reviewTexts).toEqual([])
   })
 })
 

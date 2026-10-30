@@ -10,7 +10,7 @@ const row = { id: "o1", status: "pending", attempts: 0, nextAttemptAt: new Date(
 // Email delivery page (#382).
 describe("outbox view", () => {
   it("labels every notification kind, and falls back to the raw kind", () => {
-    expect(Object.keys(KIND_LABELS)).toHaveLength(46)
+    expect(Object.keys(KIND_LABELS)).toHaveLength(47)
     expect(kindLabel("open_shifts")).toBe("Créneaux à compléter proposés à des membres")
     expect(kindLabel("registration_added_by_organizer")).toBe("Inscription ajoutée par l'organisation")
     expect(kindLabel("member_invite")).toBe("Invitation d'un membre")

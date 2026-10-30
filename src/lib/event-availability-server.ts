@@ -5,7 +5,8 @@ import { prisma } from "./prisma"
 import { canAdoptBeta } from "./beta-access"
 import { availabilityShipped } from "./event-availability-gate"
 import { availabilityDates, answerState, type AnswerState } from "./event-availability"
-import { readAvailability, type StoredDay } from "./event-availability-data"
+import { publishedMissionWindow, readAvailability, type StoredDay } from "./event-availability-data"
+import { answersEditable } from "./availability-correction"
 import {
   AVAILABILITY_NOT_ADOPTABLE,
   answersOpen,
@@ -261,6 +262,11 @@ export type AvailabilityLinkView = {
   answeredAt: string | null
   answeredBy: string | null
   days: StoredDay[]
+  /**
+   * A mission given by a publication of drafts (#1146, lot C): `published`, the page says a
+   * correction cancels nothing; `viaCorrection`, open only as such a correction, until `until`.
+   */
+  correction: { published: boolean; viaCorrection: boolean; until: string | null }
 }
 
 /** The request behind a link, when it may be used: event collecting, person an active member. */
@@ -287,12 +293,15 @@ export async function availabilityLinkView(request: ResolvedLink, now: Date = ne
   const e = request.event
   const stored = await readAvailability(prisma, request.eventId, request.volunteerId)
   const dates = availabilityDates(e.startDate, e.endDate)
+  const mission = await publishedMissionWindow(prisma, request.eventId, request.volunteerId)
+  const window = answersEditable({ deadline: e.availabilityDeadline, published: mission.published, until: mission.until, now })
   return {
     event: { title: e.title, organizationName: e.organization.name, datesLabel: eventDatesLabel(e.startDate, e.endDate) },
     timeZone: e.availabilityTimeZone ?? orgTimeZone(e.organization),
     dates,
     deadline: e.availabilityDeadline?.toISOString() ?? null,
-    open: answersOpen(e.availabilityDeadline, now),
+    open: window.open,
+    correction: { published: window.published, viaCorrection: window.viaCorrection, until: window.until?.toISOString() ?? null },
     state: answerState(dates, (stored?.days ?? []).map((d) => ({ date: d.date, rangeCount: d.ranges.length }))),
     answeredAt: stored?.answeredAt?.toISOString() ?? null,
     answeredBy: stored?.answeredBy ?? null,
@@ -315,6 +324,8 @@ export type AvailabilityOverviewRow = {
   lastRemindedAt: string | null
   hasLink: boolean
   reviewReason: string | null
+  /** The answer's revision: « Marquer comme vu » clears its flag only at this revision. */
+  revision: number
 }
 
 export type AvailabilityOverview = {
@@ -332,7 +343,7 @@ export async function loadAvailabilityOverview(db: OrgScopedPrisma, eventId: str
   const requests = await db.availabilityRequest.findMany({
     where: { eventId },
     select: {
-      volunteerId: true, answeredAt: true, answeredBy: true, sentAt: true, lastRemindedAt: true, tokenHash: true, reviewReason: true,
+      volunteerId: true, answeredAt: true, answeredBy: true, sentAt: true, lastRemindedAt: true, tokenHash: true, reviewReason: true, revision: true,
       volunteer: { select: { firstName: true, lastName: true, email: true } },
       days: { select: { date: true, _count: { select: { ranges: true } } } },
     },
@@ -356,6 +367,7 @@ export async function loadAvailabilityOverview(db: OrgScopedPrisma, eventId: str
       lastRemindedAt: r.lastRemindedAt?.toISOString() ?? null,
       hasLink: !!r.tokenHash,
       reviewReason: r.reviewReason,
+      revision: r.revision,
     }
   }).sort((a, b) => a.lastName.localeCompare(b.lastName, "fr") || a.firstName.localeCompare(b.firstName, "fr"))
   return { dates, timeZone: event.availabilityTimeZone ?? orgTimeZone(event.organization), counts, rows }
@@ -380,4 +392,19 @@ export async function loadPersonAvailability(db: OrgScopedPrisma, eventId: strin
     reviewReason: stored?.reviewReason ?? null,
     days: stored?.days ?? [],
   }
+}
+
+/**
+ * An organiser read a flagged answer (#1146, lot C): its « à revoir » flag goes, only at the
+ * revision they saw (a newer answer keeps it). Under the person's lock, as every answer write.
+ */
+export async function markAvailabilityReviewed(db: OrgScopedPrisma, eventId: string, volunteerId: string, revision: number): Promise<"ok" | "changed" | "not_found"> {
+  return db.$transaction(async (raw) => {
+    const tx = raw as unknown as Tx
+    const request = await tx.availabilityRequest.findFirst({ where: { eventId, volunteerId }, select: { id: true } })
+    if (!request) return "not_found" as const
+    await tx.$queryRaw`SELECT id FROM "Volunteer" WHERE id = ${volunteerId} FOR UPDATE`
+    const { count } = await tx.availabilityRequest.updateMany({ where: { id: request.id, eventId, revision }, data: { reviewNeededAt: null, reviewReason: null } })
+    return count === 1 ? "ok" as const : "changed" as const
+  })
 }

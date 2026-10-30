@@ -41,6 +41,10 @@ export default async function EventAvailabilityPage({ params }: { params: Promis
           Pour placer des personnes sur un créneau selon leurs réponses :{" "}
           <Link href={`/admin/events/${id}/availability/assign`} className="font-medium text-blue-700 underline underline-offset-2 hover:text-blue-900 rounded focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-blue-600">Affecter selon les disponibilités</Link>
         </p>
+        <p className="text-sm text-gray-700 mt-1">
+          Pour préparer tout le planning et le publier d&apos;un coup :{" "}
+          <Link href={`/admin/events/${id}/availability/drafts`} className="font-medium text-blue-700 underline underline-offset-2 hover:text-blue-900 rounded focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-blue-600">Affectations en brouillon</Link>
+        </p>
       </div>
       <AvailabilityManager
         eventId={id}

@@ -25,8 +25,11 @@ function sources(dir: string): string[] {
 
 /** Who may touch the drafts, and why. */
 const ALLOWED = [
-  // The drafts themselves: writing, reviewing, publishing.
+  // The drafts themselves: writing, reviewing, publishing, and the organisers' review screen.
   "src/lib/draft-assignments-server.ts",
+  "src/lib/draft-board-data.ts",
+  // The per-shift panel shows a person's draft hours, apart from their committed ones (lot B).
+  "src/lib/availability-assist-data.ts",
   // A member merge moves them (#600), then checks none is left on the absorbed record.
   "src/lib/draft-assignments-lifecycle.ts",
   "src/lib/member-merge-transaction.ts",

@@ -47,6 +47,10 @@ export default async function AssignByAvailabilityPage({ params, searchParams }:
         <p className="text-sm text-gray-700 mt-1">
           Choisissez un créneau : chaque personne apparaît avec ses disponibilités indiquées, les heures déjà prévues et les limites de charge. Vous décidez qui ajouter ; personne n&apos;est ajouté sans votre clic.
         </p>
+        <p className="text-sm text-gray-700 mt-1">
+          Pour préparer tout le planning avant de le publier d&apos;un coup :{" "}
+          <Link href={`/admin/events/${id}/availability/drafts`} className={linkClass}>Affectations en brouillon</Link>
+        </p>
         {!data.collecting && <p className="mt-2 text-sm text-gray-800 bg-gray-50 border border-gray-200 rounded-xl px-3 py-2">La collecte est arrêtée : les réponses déjà données restent utilisées ici.</p>}
       </div>
 

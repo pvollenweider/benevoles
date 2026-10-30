@@ -105,7 +105,7 @@ Après avoir ajouté, renommé ou retiré une page, mettre à jour la liste ci-d
 - [Doublons et fusion de fiches](doublons-et-fusion.md) : Repérer les fiches de membres qui désignent sans doute la même personne, puis fusionner deux fiches avec un aperçu complet. Pour : organisateurs.
 - [Effacer ou supprimer un membre](effacer-ou-supprimer-un-membre.md) : Supprimer une fiche inactive sans inscription, ou effacer les données personnelles d'un membre qui le demande. Pour : organisateurs.
 - [Inviter des membres à un événement](inviter-des-membres.md) : Inviter des membres à un événement par email, suivre qui a répondu, et relancer les invités qui n'ont pas encore de créneau. Pour : organisateurs.
-- [Recueillir les disponibilités](recueillir-les-disponibilites.md) : Demander à des membres leurs plages libres, date par date, par un lien personnel, voir qui a répondu et corriger une réponse (fonction bêta). Pour : organisateurs.
+- [Recueillir les disponibilités](recueillir-les-disponibilites.md) : Demander les plages libres de chaque membre par un lien personnel, préparer des affectations en brouillon puis les publier en une fois (bêta). Pour : organisateurs.
 
 ### Communiquer avec les bénévoles
 

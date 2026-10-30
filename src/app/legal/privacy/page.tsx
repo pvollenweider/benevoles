@@ -212,6 +212,11 @@ export default function PrivacyPage() {
         l&apos;événement {PAST_EVENT_RETENTION_YEARS} ans après sa fin (voir la{" "}
         <a href="#conservation">conservation des données</a>) ; elles ne sont jamais copiées avec
         l&apos;événement. Le lien cesse de fonctionner quand l&apos;Organisation arrête la collecte.
+        L&apos;Organisation peut aussi y préparer des affectations en brouillon (une personne sur un
+        créneau), vues par ses organisateurs seulement jusqu&apos;à leur publication, puis gardées comme
+        trace de la publication ; elles sont effacées dans les mêmes cas. Une personne à qui des
+        affectations ont été publiées peut encore corriger ses disponibilités jusqu&apos;à la fin de
+        l&apos;événement ; les organisateurs en sont prévenus par email, sans le détail des plages.
       </p>
       <p>
         En tant que sous-traitant, nous nous engageons à :
