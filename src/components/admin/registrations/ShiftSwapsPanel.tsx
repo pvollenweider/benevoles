@@ -3,7 +3,7 @@
 // SPDX-FileCopyrightText: 2026 Philippe Vollenweider
 // SPDX-License-Identifier: AGPL-3.0-only
 
-import { useRef, useState } from "react"
+import { useEffect, useRef, useState } from "react"
 import { flushSync } from "react-dom"
 import { useRouter } from "next/navigation"
 import ConfirmActionModal from "../ConfirmActionModal"
@@ -55,6 +55,9 @@ export default function ShiftSwapsPanel({ eventId, requests, timeZone, availabil
   const [error, setError] = useState<string | null>(null)
   const [status, setStatus] = useState("")
   const [conflict, setConflict] = useState("")
+  // The result said just after the focus move: cleared if the panel goes first (page reloaded).
+  const announceTimer = useRef<ReturnType<typeof setTimeout> | null>(null)
+  useEffect(() => () => { if (announceTimer.current) clearTimeout(announceTimer.current) }, [])
   // Each person and the shift they would receive.
   const swapPeople = (r: OrganiserSwap) => (r.counterpart
     ? [
@@ -101,7 +104,8 @@ export default function ShiftSwapsPanel({ eventId, requests, timeZone, availabil
     // heading, the message just after (an alert for a conflict, never as a success), then reload.
     flushSync(() => setTarget(null))
     headingRef.current?.focus()
-    setTimeout(() => (res.ok ? setStatus(done) : setConflict(done)), 150)
+    if (announceTimer.current) clearTimeout(announceTimer.current)
+    announceTimer.current = setTimeout(() => (res.ok ? setStatus(done) : setConflict(done)), 150)
     router.refresh()
   }
 

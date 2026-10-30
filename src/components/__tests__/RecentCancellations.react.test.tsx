@@ -62,6 +62,23 @@ describe("RecentCancellations", () => {
     expect(refresh).toHaveBeenCalled()
   })
 
+  it("drops the pending message when the section is unmounted before it is said (no update after unmount)", async () => {
+    const setTimeoutSpy = vi.spyOn(globalThis, "setTimeout")
+    const clearTimeoutSpy = vi.spyOn(globalThis, "clearTimeout")
+    const { unmount } = render(<RecentCancellations rows={[row]} />)
+    fireEvent.click(screen.getByRole("button", { name: /^Rétablir l'inscription/ }))
+    fireEvent.click(screen.getByRole("button", { name: "Rétablir" }))
+    // The focus moves and the message is scheduled in the same step: the timer is pending here.
+    await waitFor(() => expect(screen.getByRole("heading", { name: "Annulations récentes" })).toHaveFocus())
+    const announce = setTimeoutSpy.mock.calls.findIndex(([, ms]) => ms === 150)
+    expect(announce).toBeGreaterThanOrEqual(0)
+    unmount()
+    // Left pending, it ran after the test file's jsdom was gone (« window is not defined »).
+    expect(clearTimeoutSpy).toHaveBeenCalledWith(setTimeoutSpy.mock.results[announce].value)
+    setTimeoutSpy.mockRestore()
+    clearTimeoutSpy.mockRestore()
+  })
+
   it("sends the new-link option when checked", async () => {
     render(<RecentCancellations rows={[row]} />)
     fireEvent.click(screen.getByRole("button", { name: /^Rétablir l'inscription/ }))

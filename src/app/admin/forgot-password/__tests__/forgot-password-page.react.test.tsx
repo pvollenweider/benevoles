@@ -3,7 +3,7 @@
  */
 import { describe, it, expect, vi, afterEach } from "vitest"
 import "@testing-library/jest-dom/vitest"
-import { render, screen, cleanup, fireEvent } from "@testing-library/react"
+import { render, screen, cleanup, fireEvent, waitFor } from "@testing-library/react"
 import ForgotPasswordPage from "../page"
 import { FORGOT_PASSWORD_DONE } from "@/lib/forgot-password-copy"
 
@@ -25,7 +25,9 @@ describe("/admin/forgot-password confirmation", () => {
   it("says the request is recorded, not that an email was sent, and what to do when nothing arrives", async () => {
     const { heading } = await submitWith({ ok: true, status: 200, body: { ok: true } })
     expect(heading).toHaveTextContent("Demande enregistrée")
-    expect(heading).toHaveFocus()
+    // The heading is focused by an effect, which React may run just after the commit that shows it
+    // (the update comes from the fetch, outside act): wait for the focus rather than read it at once.
+    await waitFor(() => expect(heading).toHaveFocus())
     expect(heading).toHaveAttribute("tabindex", "-1")
     expect(screen.getByText("Si cette adresse est associée à un compte, vous recevrez un lien valable 1 heure.")).toBeInTheDocument()
     expect(screen.getByText("Rien reçu ? Regardez dans vos indésirables. Le dernier lien reçu reste valable. Après plusieurs demandes, attendez une heure avant de redemander.")).toBeInTheDocument()
