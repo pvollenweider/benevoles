@@ -2,7 +2,7 @@
 
 benevol.app vise le niveau **AA des WCAG 2.2**. Cette page dit ce qui a été vérifié, comment, et ce qui ne l'est pas encore.
 
-Déclaration établie le 5 octobre 2026, mise à jour le 27 octobre 2026, sur la base d'une auto-évaluation à la même date.
+Déclaration établie le 5 octobre 2026, mise à jour le 30 octobre 2026, sur la base d'une auto-évaluation à la même date.
 
 ## Périmètre
 
@@ -28,7 +28,7 @@ Parcours concernés : découvrir un événement ; choisir ses créneaux ; rempli
 
 - Aucun essai complet avec un lecteur d'écran (NVDA, JAWS, VoiceOver) n'a encore été mené sur ces parcours.
 - Aucun audit n'a été réalisé par un organisme indépendant.
-- Certains écrans ne sont pas encore analysés automatiquement : la page du responsable de secteur, la confirmation d'une inscription, l'acceptation d'une place de liste d'attente et les conditions d'utilisation ; dans l'administration, les journaux, les paramètres des emails, les modèles de messages et une partie des fenêtres qui s'ouvrent par-dessus la page.
+- Certains écrans ne sont pas encore analysés automatiquement : la page du responsable de secteur, la confirmation d'une inscription, l'acceptation d'une place de liste d'attente et les conditions d'utilisation ; dans l'administration, les journaux, les paramètres des emails, les modèles de messages, les pages des disponibilités datées et des affectations en brouillon (en bêta) et une partie des fenêtres qui s'ouvrent par-dessus la page.
 - Le formulaire d'inscription, surtout utilisé sur téléphone, n'est analysé qu'en affichage ordinateur.
 
 ## Limites connues

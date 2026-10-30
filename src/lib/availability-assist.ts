@@ -8,6 +8,7 @@ import { newWorkloadNotices, type WorkloadMode } from "./workload-view"
 import { mergeIntervals, unionLength, type Interval } from "./interval-union"
 import { localDateTimeToUtc } from "./time-zone"
 import { fmtDay, fmtDuration } from "./signup-recap"
+import { reviewReasonTexts } from "./event-availability-text"
 
 /**
  * Assisted manual assignment (#1146, lot B): what an organiser sees before adding a person to a
@@ -146,7 +147,7 @@ export function availabilityAckKey(p: { eventId: string; volunteerId: string; sh
 }
 
 /** What the organiser must tick, said about the person: no « tu », no blame. `verb`: the action. */
-export const ackLabel = (firstName: string, verb: "Ajouter" | "Accepter" | "Rétablir" | "Valider" = "Ajouter") => `${verb} quand même : je sais que ${firstName} n'a pas indiqué être disponible à ces heures`
+export const ackLabel = (firstName: string, verb: "Ajouter" | "Accepter" | "Rétablir" | "Valider" | "Publier" = "Ajouter") => `${verb} quand même : je sais que ${firstName} n'a pas indiqué être disponible à ces heures`
 
 /** The server's refusal when an acknowledgement is missing or stale. */
 export const AVAILABILITY_ACK_REQUIRED = "Cette personne a indiqué ne pas être disponible pendant une partie de ce créneau : cochez la confirmation pour l'ajouter quand même."
@@ -182,6 +183,8 @@ export type CandidateInput = {
   reviewReason?: string | null
   /** What tells this person apart from another listed under the same name (sameNameHints). */
   sameNameHint?: string | null
+  /** The person already has a pending draft on this shift (#1146, lot C). */
+  draftOnShift?: boolean
 }
 
 export type CandidateRow = {
@@ -203,6 +206,10 @@ export type CandidateRow = {
   /** Why it would be refused, or the #465 warnings it would raise (non-blocking). */
   workload: string[]
   reviewNeeded: boolean
+  /** Why the answer needs another look, in words (a merge, a change after a publication). */
+  reviewTexts: string[]
+  /** A pending draft on this shift already exists: no second « Ajouter en brouillon ». */
+  draftOnShift: boolean
 }
 
 const lowerFirst = (s: string) => s.charAt(0).toLocaleLowerCase("fr-FR") + s.slice(1)
@@ -258,6 +265,8 @@ export function assessCandidate(ctx: AssistContext, c: CandidateInput): Candidat
     eligible: verdict.ok,
     workload,
     reviewNeeded: !!c.reviewReason,
+    reviewTexts: reviewReasonTexts(c.reviewReason),
+    draftOnShift: !!c.draftOnShift,
   }
 }
 
@@ -295,7 +304,9 @@ export function committedHoursText(m: CandidateRow["minutes"]): string {
   const parts: string[] = []
   if (m.confirmed > 0) parts.push(`${fmtDuration(m.confirmed)} confirmée${m.confirmed === 60 ? "" : "s"}`)
   if (m.pending > 0) parts.push(`${fmtDuration(m.pending)} en attente de validation`)
-  return parts.length > 0 ? `Déjà prévu sur l'événement : ${parts.join(", ")}` : "Aucune mission sur l'événement pour l'instant"
+  const base = parts.length > 0 ? `Déjà prévu sur l'événement : ${parts.join(", ")}` : "Aucune mission sur l'événement pour l'instant"
+  // Drafts (#1146, lot C) apart: prepared, not published, never counted as committed.
+  return m.draft > 0 ? `${base} ; ${fmtDuration(m.draft)} en brouillon, pas encore publiée${m.draft === 60 ? "" : "s"}` : base
 }
 
 // ── The server's check ────────────────────────────────────────────────────────────────────────

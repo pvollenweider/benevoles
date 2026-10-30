@@ -15,7 +15,7 @@ import { isTokenShaped, tokenPath } from "@/lib/token-path"
 import { dayLabel } from "@/lib/spoken-time"
 import { dayAnswerText, datesCountText } from "@/lib/availability-editor"
 import { answerState, type AnswerState, type DayAnswerInput } from "@/lib/event-availability"
-import { AVAILABILITY_LINK_NOTICE, DEADLINE_PASSED_ERROR, LINK_NOT_FOUND_ERROR, deadlineSentence, myAvailabilityTitle } from "@/lib/event-availability-text"
+import { AVAILABILITY_LINK_NOTICE, CORRECTION_NOTICE, CORRECTION_SAVED_TEXT, DEADLINE_PASSED_ERROR, LINK_NOT_FOUND_ERROR, correctionDeadlineSentence, deadlineSentence, myAvailabilityTitle } from "@/lib/event-availability-text"
 
 type View = {
   event: { title: string; organizationName: string; datesLabel: string }
@@ -25,6 +25,8 @@ type View = {
   open: boolean
   state: AnswerState
   days: { date: string; ranges: { startTime: string; endTime: string }[] }[]
+  /** A mission given by a publication (#1146, lot C): corrections stay possible, they cancel nothing. */
+  correction?: { published: boolean; viaCorrection: boolean; until: string | null }
 }
 
 /** Where the answer stands, in words: « Réponse partielle : 3 dates sur 11 ». */
@@ -108,7 +110,10 @@ export default function MyAvailabilityPage() {
   }
 
   const byDate = new Map(view.days.map((d) => [d.date, d]))
-  const deadline = deadlineSentence(view.deadline, view.open, view.timeZone)
+  const published = !!view.correction?.published
+  const deadline = view.correction?.viaCorrection && view.correction.until
+    ? correctionDeadlineSentence(new Date(view.correction.until), view.timeZone)
+    : deadlineSentence(view.deadline, view.open, view.timeZone)
   // The state is shown from what is stored, so it follows each save.
   const state = answerState(view.dates, view.days.map((d) => ({ date: d.date, rangeCount: d.ranges.length })))
 
@@ -123,11 +128,12 @@ export default function MyAvailabilityPage() {
           <div className="bg-white border border-gray-200 rounded-2xl p-4 space-y-2 text-sm text-gray-800">
             {view.open && <p>Pour chaque date, indique tes plages libres ou « Pas disponible ». Une plage du soir peut finir le lendemain matin (par exemple de 20h à 3h). Seule l&apos;organisation voit tes réponses.</p>}
             {deadline && <p className="font-medium text-gray-900">{deadline}</p>}
+            {published && view.open && <p data-availability-correction="1">{CORRECTION_NOTICE}</p>}
             <p className="text-gray-700">{view.open ? AVAILABILITY_LINK_NOTICE : "Ce lien est personnel : ne le transmets pas. Seule l'organisation voit tes réponses."}</p>
           </div>
           <section aria-labelledby="my-availability-answers" className="bg-white border border-gray-200 rounded-2xl p-4 space-y-3">
             <h2 ref={answersHeading} tabIndex={-1} id="my-availability-answers" className="text-base font-semibold text-gray-900 focus:outline-none">Tes réponses</h2>
-            {closedNow && <p className="text-sm font-medium text-gray-900" data-availability-closed-now="1">La date limite vient de passer : tes réponses ne peuvent plus être changées ici. Voici ce que l&apos;organisation a reçu.</p>}
+            {closedNow && <p className="text-sm font-medium text-gray-900" data-availability-closed-now="1">{published ? "La période de correction vient de se terminer" : "La date limite vient de passer"} : tes réponses ne peuvent plus être changées ici. Voici ce que l&apos;organisation a reçu.</p>}
             <p className="text-sm text-gray-700" data-availability-state={state}>{stateLine({ ...view, state })}</p>
             {view.open ? (
               <AvailabilityEditor
@@ -136,7 +142,7 @@ export default function MyAvailabilityPage() {
                 initialDays={view.days}
                 voice="tu"
                 submitLabel="Enregistrer mes disponibilités"
-                savedText="Disponibilités enregistrées. Tu peux les changer jusqu'à la date limite."
+                savedText={published ? CORRECTION_SAVED_TEXT : "Disponibilités enregistrées. Tu peux les changer jusqu'à la date limite."}
                 onSave={save}
               />
             ) : (

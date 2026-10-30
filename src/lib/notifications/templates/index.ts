@@ -21,6 +21,7 @@ import { renderAdminNotification, renderPasswordReset, renderAdminWelcome, rende
 import { renderSectorLeaderWithdrawalDigest, renderWithdrawalAdminDigest } from "./withdrawal-digest"
 import { renderAnswersChanged, renderSectorLeaderAnswersChanged } from "./answers-changed"
 import { renderAvailabilityRequest } from "./availability"
+import { renderAvailabilityChanged } from "./availability-changed"
 import { renderShiftSwapApplied, renderShiftSwapApprovalNeeded, renderShiftSwapEnded, renderShiftSwapOffered } from "./shift-swaps"
 
 export type { RenderedEmail } from "./shared"
@@ -126,6 +127,8 @@ function renderKind(payload: NotificationPayload): RenderedEmail {
       return renderShiftSwapOffered(payload)
     case "availability_request":
       return renderAvailabilityRequest(payload)
+    case "availability_changed":
+      return renderAvailabilityChanged(payload)
     case "shift_swap_approval_needed":
       return renderShiftSwapApprovalNeeded(payload)
   }

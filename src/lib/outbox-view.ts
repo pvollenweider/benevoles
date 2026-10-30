@@ -166,6 +166,7 @@ export const KIND_LABELS: Record<NotificationKind, string> = {
   shift_swap_offered: "Proposition d'échange de créneaux reçue",
   shift_swap_approval_needed: "Échange de créneaux à valider, aux organisateurs",
   availability_request: "Demande de disponibilités à un membre",
+  availability_changed: "Disponibilités corrigées après la publication des affectations",
 }
 
 export function kindLabel(kind: string): string {

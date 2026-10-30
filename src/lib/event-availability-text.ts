@@ -78,3 +78,36 @@ export function eventDatesLabel(startDate: Date | string, endDate: Date | string
   const a = fmt(startDate), b = fmt(endDate)
   return a === b ? `le ${a}` : `du ${a} au ${b}`
 }
+
+// ── Corrections after a publication (#1146, lot C) ─────────────────────────────────────────────
+
+/** On the person's page, once they hold a mission given by a publication (« tu »). */
+export const CORRECTION_NOTICE = "Tu peux corriger tes disponibilités. Cela ne modifie ni n'annule tes missions. Préviens aussi les organisateurs en cas de difficulté."
+
+/** After the deadline, for a person who may still correct. */
+export function correctionDeadlineSentence(until: Date, timeZone: string): string {
+  return `La date limite est passée, mais comme des missions t'ont été confiées, tu peux encore corriger tes disponibilités jusqu'au ${formatMoment(until, timeZone)}.`
+}
+
+export const CORRECTION_SAVED_TEXT = "Disponibilités enregistrées. Si elles ont changé, l'organisation est prévenue ; tes missions restent les mêmes."
+
+/** Why an answer needs another look; stored together in `reviewReason`, comma separated. */
+export const REVIEW_MERGE = "merge"
+export const REVIEW_PUBLISHED = "published"
+
+export function reviewReasons(stored: string | null | undefined): string[] {
+  return [...new Set((stored ?? "").split(",").map((s) => s.trim()).filter(Boolean))].sort()
+}
+
+/** The stored value with one more reason (never losing a merge's). */
+export function withReviewReason(stored: string | null | undefined, reason: string): string {
+  return reviewReasons(`${stored ?? ""},${reason}`).join(",")
+}
+
+/** What the organisers read about a flagged answer, one sentence per reason. */
+export function reviewReasonTexts(stored: string | null | undefined): string[] {
+  return reviewReasons(stored).map((r) =>
+    r === REVIEW_MERGE ? "À revoir : deux fiches fusionnées avaient répondu différemment."
+      : r === REVIEW_PUBLISHED ? "À revoir : disponibilités modifiées après la publication des affectations."
+        : "À revoir.")
+}

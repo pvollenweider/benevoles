@@ -1,8 +1,11 @@
 // SPDX-FileCopyrightText: 2026 Philippe Vollenweider
 // SPDX-License-Identifier: AGPL-3.0-only
 
-import { isValidTimeZone } from "./time-zone"
-import { COLLECTION_CLOSED_ERROR, DEADLINE_PASSED_ERROR, answersOpen } from "./event-availability-text"
+import { isValidTimeZone, orgTimeZone } from "./time-zone"
+import { answerChanged, answersEditable, correctionUntil, newlyOutside, withReviewReason, REVIEW_PUBLISHED, type Mission } from "./availability-correction"
+import type { AnswerForFit } from "./availability-assist"
+import { COMMITTED_STATUSES, LIVE_STATUSES } from "./registration-capacity"
+import { COLLECTION_CLOSED_ERROR, DEADLINE_PASSED_ERROR } from "./event-availability-text"
 import type { Tx } from "./registration-capacity"
 import { linkToken } from "./token-vault"
 import { generateToken } from "./utils"
@@ -56,8 +59,11 @@ export async function readAvailability(tx: Pick<Tx, "availabilityRequest">, even
   return { ...request, days: request.days.map(toDay) }
 }
 
+/** A correction after a publication (#1146, lot C): what the organisers are told. */
+export type AfterPublication = { changed: boolean; newlyOutside: Mission[] }
+
 export type SaveAvailabilityResult =
-  | { ok: true; revision: number; days: ResolvedDay[] }
+  | { ok: true; revision: number; days: ResolvedDay[]; afterPublication?: AfterPublication }
   | { ok: false; status: 404 | 409 | 400; error: string; at?: AvailabilityErrorAt }
 
 const NOT_FOUND = { ok: false as const, status: 404 as const, error: "Personne ou événement introuvable." }
@@ -71,8 +77,11 @@ const NOT_FOUND = { ok: false as const, status: 404 as const, error: "Personne o
  *
  * From the person's link (`by: "volunteer"`, `tokenHash` given): the link must still be the
  * request's, re-read under the locks (a link revoked or renewed meanwhile answers 404), and the
- * deadline must not be past (owner decision: read-only after it). An organiser's correction
- * (`by: "admin"`) is not bound by the deadline, and clears a review flag.
+ * deadline must not be past (owner decision: read-only after it), unless the person holds a mission
+ * given by a publication of drafts (#1146, lot C): then they may correct until the event's last
+ * shift ends, and a real change flags the answer « à revoir » (`afterPublication`, for the
+ * organisers' digest). An organiser's correction (`by: "admin"`) is not bound by the deadline, and
+ * clears a review flag.
  *
  * Locks: the event row FOR SHARE (turning collection off takes it FOR UPDATE, so an answer and a
  * revocation never interleave), then the person's Volunteer row FOR UPDATE.
@@ -95,7 +104,12 @@ export async function saveAvailabilityAnswers(tx: Tx, input: { eventId: string; 
     if (!holder) return NOT_FOUND
   }
   if (!event.availabilityEnabled) return { ok: false, status: 409, error: COLLECTION_CLOSED_ERROR }
-  if (by === "volunteer" && !answersOpen(event.availabilityDeadline, now)) return { ok: false, status: 409, error: DEADLINE_PASSED_ERROR }
+  // A mission given by a publication (#1146, lot C): the person may correct after the deadline,
+  // until the event's last shift ends; read under the person's lock, as the publication writes it.
+  const published = by === "volunteer" ? await publishedMissionWindow(tx, eventId, volunteerId) : null
+  if (by === "volunteer" && !answersEditable({ deadline: event.availabilityDeadline, published: !!published?.published, until: published?.until ?? null, now }).open) {
+    return { ok: false, status: 409, error: DEADLINE_PASSED_ERROR }
+  }
   const timeZone = event.availabilityTimeZone
   if (!timeZone || !isValidTimeZone(timeZone)) return { ok: false, status: 409, error: "Le fuseau horaire des disponibilités de cet événement est inconnu." }
 
@@ -103,10 +117,17 @@ export async function saveAvailabilityAnswers(tx: Tx, input: { eventId: string; 
   const applied = applySubmission(days, existing?.days ?? [], availabilityDates(event.startDate, event.endDate), timeZone)
   if (!applied.ok) return { ok: false, status: 400, error: applied.error, at: applied.at }
 
+  const changed = answerChanged(existing?.days ?? [], applied.value.submitted)
+  const flag = !!published?.published && changed
   const request = await tx.availabilityRequest.upsert({
     where: { eventId_volunteerId: { eventId, volunteerId } },
     create: { eventId, volunteerId, revision: 1, answeredAt: now, answeredBy: by },
-    update: { revision: { increment: 1 }, answeredAt: now, answeredBy: by, ...(by === "admin" ? { reviewNeededAt: null, reviewReason: null } : {}) },
+    update: {
+      revision: { increment: 1 }, answeredAt: now, answeredBy: by,
+      ...(by === "admin" ? { reviewNeededAt: null, reviewReason: null } : {}),
+      // Changed after a publication: « à revoir » until an organiser looked (never losing a merge's flag).
+      ...(flag ? { reviewNeededAt: now, reviewReason: withReviewReason(existing?.reviewReason, REVIEW_PUBLISHED) } : {}),
+    },
     select: { id: true, revision: true },
   })
   const dates = applied.value.submitted.map((d) => new Date(`${d.date}T00:00:00Z`))
@@ -121,7 +142,31 @@ export async function saveAvailabilityAnswers(tx: Tx, input: { eventId: string; 
       },
     })
   }
-  return { ok: true, revision: request.revision, days: applied.value.all }
+  if (!published?.published) return { ok: true, revision: request.revision, days: applied.value.all }
+  // A brand new request (never answered) has nothing to compare: every mission is judged against nothing.
+  const after = await readAvailability(tx, eventId, volunteerId)
+  const toFit = (a: StoredAvailability | null): AnswerForFit | null => (a ? { requestId: request.id, revision: a.revision, days: a.days } : null)
+  const outside = changed ? newlyOutside(published.missions, toFit(existing), toFit(after), availabilityDates(event.startDate, event.endDate), timeZone) : []
+  return { ok: true, revision: request.revision, days: applied.value.all, afterPublication: { changed, newlyOutside: outside } }
+}
+
+/**
+ * Whether the person holds a live registration created by publishing drafts on the event (#1146,
+ * lot C), and until when they may correct their availability: the end of the event's last live
+ * shift, in the organisation's zone. With their committed missions, to tell which ones end up
+ * outside a new answer.
+ */
+export async function publishedMissionWindow(tx: Pick<Tx, "registration" | "shift" | "event">, eventId: string, volunteerId: string): Promise<{ published: boolean; until: Date | null; missions: Mission[] }> {
+  const count = await tx.registration.count({ where: { eventId, volunteerId, source: "admin_draft", status: { in: [...LIVE_STATUSES] }, shift: { status: { not: "cancelled" } } } })
+  if (count === 0) return { published: false, until: null, missions: [] }
+  const event = await tx.event.findUnique({ where: { id: eventId }, select: { organization: { select: { timeZone: true } } } })
+  const shifts = await tx.shift.findMany({ where: { eventId, status: { not: "cancelled" } }, select: { date: true, startTime: true, endTime: true, status: true } })
+  const regs = await tx.registration.findMany({
+    where: { eventId, volunteerId, status: { in: [...COMMITTED_STATUSES] }, shift: { status: { not: "cancelled" } } },
+    select: { shift: { select: { id: true, roleName: true, label: true, date: true, startTime: true, endTime: true } } },
+  })
+  const missions = regs.map((r) => ({ id: r.shift.id, name: r.shift.label && r.shift.label !== r.shift.roleName ? `${r.shift.roleName} · ${r.shift.label}` : r.shift.roleName, date: r.shift.date, startTime: r.shift.startTime, endTime: r.shift.endTime }))
+  return { published: true, until: correctionUntil(shifts, orgTimeZone(event?.organization ?? { timeZone: null })), missions }
 }
 
 /**

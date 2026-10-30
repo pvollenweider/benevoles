@@ -324,6 +324,101 @@ exports[`render — snapshot of every notification kind > answers_changed 1`] = 
 }
 `;
 
+exports[`render — snapshot of every notification kind > availability_changed (mission outside, several people) 1`] = `
+{
+  "html": [
+    "<!DOCTYPE html>",
+    "<html lang="fr">",
+    "<head>",
+    "<meta charset="UTF-8">",
+    "<meta name="viewport" content="width=device-width,initial-scale=1">",
+    "<meta http-equiv="X-UA-Compatible" content="IE=edge">",
+    "</head>",
+    "<body style="margin:0;padding:0;background:#f3f4f6;font-family:-apple-system,system-ui,BlinkMacSystemFont,'Segoe UI',Helvetica,Arial,sans-serif;">",
+    "<div style="display:none;font-size:1px;color:#f5f5f5;max-height:0;overflow:hidden;opacity:0;">Missions hors disponibilités — Festival&nbsp;&zwnj;&nbsp;&zwnj;&nbsp;&zwnj;&nbsp;&zwnj;&nbsp;&zwnj;</div>",
+    "<table role="presentation" width="100%" cellpadding="0" cellspacing="0" style="background:#f3f4f6;">",
+    "<tr><td align="center" style="padding:32px 16px 24px;">",
+    "<!-- align="center" above only centers this table CELL on the page; text-align is inherited CSS,",
+    "     so without an explicit override here every unstyled heading/paragraph inside would inherit",
+    "     "center" too instead of reading left-aligned like normal body text. -->",
+    "<div style="max-width:560px;text-align:left;background:#ffffff;border-radius:14px;padding:36px 36px 24px;color:#111111;line-height:1.6;box-shadow:0 1px 4px rgba(0,0,0,0.07);">",
+    "",
+    "    <p>Après la publication des affectations de Festival :</p>",
+    "    <ul style="color:#333;padding-left:1.25em;margin:0.25em 0 0.75em"><li style="margin:0.3em 0"><strong>Nadia Rochat a corrigé ses disponibilités. Mission désormais hors de ses disponibilités : Bar, samedi 11 juillet, de 10h à 14h.</strong></li><li style="margin:0.3em 0">Luca Bianchi a corrigé ses disponibilités ; ses missions restent dans ses disponibilités.</li></ul>",
+    "    <p style="color:#555">Personne n'a été déplacé ni désinscrit. Vérifiez les affectations concernées et contactez les personnes si besoin.</p>",
+    "    <p style="margin-top:1.25em"><a href="https://www.benevol.app/admin/events/evt-1/availability/drafts" style="background:#2563eb;color:#fff;padding:11px 22px;border-radius:8px;text-decoration:none;display:inline-block;font-weight:600;font-size:14px">Voir les affectations</a></p>",
+    "  ",
+    "<div style="margin-top:32px;padding-top:16px;border-top:1px solid #f0f0f0;font-size:12px;color:#666;text-align:center;">",
+    "  <a href="https://benevol.app" style="color:#666;text-decoration:none;">benevol.app</a>",
+    "</div>",
+    "</div>",
+    "</td></tr>",
+    "</table>",
+    "</body>",
+    "</html>",
+  ],
+  "subject": "Missions hors disponibilités — Festival",
+  "text": [
+    "Après la publication des affectations de Festival :",
+    "",
+    "- Nadia Rochat a corrigé ses disponibilités. Mission désormais hors de ses disponibilités : Bar, samedi 11 juillet, de 10h à 14h.",
+    "- Luca Bianchi a corrigé ses disponibilités ; ses missions restent dans ses disponibilités.",
+    "",
+    "Personne n'a été déplacé ni désinscrit. Vérifiez les affectations concernées et contactez les personnes si besoin.",
+    "",
+    "Affectations de l'événement :",
+    "https://www.benevol.app/admin/events/evt-1/availability/drafts",
+  ],
+}
+`;
+
+exports[`render — snapshot of every notification kind > availability_changed 1`] = `
+{
+  "html": [
+    "<!DOCTYPE html>",
+    "<html lang="fr">",
+    "<head>",
+    "<meta charset="UTF-8">",
+    "<meta name="viewport" content="width=device-width,initial-scale=1">",
+    "<meta http-equiv="X-UA-Compatible" content="IE=edge">",
+    "</head>",
+    "<body style="margin:0;padding:0;background:#f3f4f6;font-family:-apple-system,system-ui,BlinkMacSystemFont,'Segoe UI',Helvetica,Arial,sans-serif;">",
+    "<div style="display:none;font-size:1px;color:#f5f5f5;max-height:0;overflow:hidden;opacity:0;">Disponibilités corrigées — Fête &lt;Rhône&gt; &amp; &quot;Lac&quot;&nbsp;&zwnj;&nbsp;&zwnj;&nbsp;&zwnj;&nbsp;&zwnj;&nbsp;&zwnj;</div>",
+    "<table role="presentation" width="100%" cellpadding="0" cellspacing="0" style="background:#f3f4f6;">",
+    "<tr><td align="center" style="padding:32px 16px 24px;">",
+    "<!-- align="center" above only centers this table CELL on the page; text-align is inherited CSS,",
+    "     so without an explicit override here every unstyled heading/paragraph inside would inherit",
+    "     "center" too instead of reading left-aligned like normal body text. -->",
+    "<div style="max-width:560px;text-align:left;background:#ffffff;border-radius:14px;padding:36px 36px 24px;color:#111111;line-height:1.6;box-shadow:0 1px 4px rgba(0,0,0,0.07);">",
+    "",
+    "    <p>Après la publication des affectations de Fête &lt;Rhône&gt; &amp; &quot;Lac&quot; :</p>",
+    "    <ul style="color:#333;padding-left:1.25em;margin:0.25em 0 0.75em"><li style="margin:0.3em 0">Nadia &lt;Rochat&gt; a corrigé ses disponibilités ; ses missions restent dans ses disponibilités.</li></ul>",
+    "    <p style="color:#555">Personne n'a été déplacé ni désinscrit. Vérifiez les affectations concernées et contactez les personnes si besoin.</p>",
+    "    <p style="margin-top:1.25em"><a href="https://www.benevol.app/admin/events/evt-1/availability/drafts" style="background:#2563eb;color:#fff;padding:11px 22px;border-radius:8px;text-decoration:none;display:inline-block;font-weight:600;font-size:14px">Voir les affectations</a></p>",
+    "  ",
+    "<div style="margin-top:32px;padding-top:16px;border-top:1px solid #f0f0f0;font-size:12px;color:#666;text-align:center;">",
+    "  <a href="https://benevol.app" style="color:#666;text-decoration:none;">benevol.app</a>",
+    "</div>",
+    "</div>",
+    "</td></tr>",
+    "</table>",
+    "</body>",
+    "</html>",
+  ],
+  "subject": "Disponibilités corrigées — Fête <Rhône> & "Lac"",
+  "text": [
+    "Après la publication des affectations de Fête <Rhône> & "Lac" :",
+    "",
+    "- Nadia <Rochat> a corrigé ses disponibilités ; ses missions restent dans ses disponibilités.",
+    "",
+    "Personne n'a été déplacé ni désinscrit. Vérifiez les affectations concernées et contactez les personnes si besoin.",
+    "",
+    "Affectations de l'événement :",
+    "https://www.benevol.app/admin/events/evt-1/availability/drafts",
+  ],
+}
+`;
+
 exports[`render — snapshot of every notification kind > availability_request (reminder, no deadline) 1`] = `
 {
   "html": [

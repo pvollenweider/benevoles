@@ -13,6 +13,7 @@ import { personName, shiftName, shiftSpoken, type Registration } from "./types"
 const sourceLabels: Record<string, string> = {
   public_form: "Formulaire",
   admin_manual: "Manuel",
+  admin_draft: "Affectation publiée",
 }
 
 type Props = {

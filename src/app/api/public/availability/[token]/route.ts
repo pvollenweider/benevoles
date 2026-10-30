@@ -16,6 +16,10 @@ import { saveAvailabilityAnswers } from "@/lib/event-availability-data"
 import { availabilityLinkView, resolveAvailabilityLink } from "@/lib/event-availability-server"
 import { LINK_NOT_FOUND_ERROR } from "@/lib/event-availability-text"
 import { firstIssueMessage } from "@/lib/shift-time"
+import { queueAvailabilityChangeNotifications } from "@/lib/availability-change-notifications"
+import { randomUUID } from "node:crypto"
+import { deliverAfterResponse } from "@/lib/notifications/outbox"
+import { reportError } from "@/lib/report-error"
 
 /**
  * The link « Indiquer mes disponibilités » (#1146): GET reads the person's own answer, PUT saves the
@@ -68,5 +72,21 @@ export async function PUT(req: Request, { params }: { params: Promise<{ token: s
   if (!result.ok) return result.status === 404 ? notFound() : json({ error: result.error, ...(result.at ? { at: result.at } : {}) }, result.status)
   // Which dates changed, never the ranges (personal data stays out of the log).
   await logEvent({ eventId: request.eventId, actor: { type: "volunteer", id: request.volunteerId }, action: "availability.answered", entityType: "Availability", entityId: request.id, changes: { dates: { from: null, to: parsed.data.days.length } } })
+  // Corrected after a publication of drafts (#1146, lot C): the organisers are told, nobody moves.
+  if (result.afterPublication?.changed) {
+    try {
+      const person = await prisma.volunteer.findUnique({ where: { id: request.volunteerId }, select: { firstName: true, lastName: true } })
+      deliverAfterResponse(await queueAvailabilityChangeNotifications({
+        event: { id: request.eventId, title: request.event.title, organizationId: request.event.organizationId },
+        volunteerId: request.volunteerId,
+        volunteerName: `${person?.firstName ?? ""} ${person?.lastName ?? ""}`.trim(),
+        outside: result.afterPublication.newlyOutside,
+        changeId: randomUUID(),
+      }))
+    } catch (e) {
+      // The answer and its « à revoir » flag are saved: the page shows it even without the email.
+      reportError("availability.notify")(e)
+    }
+  }
   return json(await availabilityLinkView(request))
 }

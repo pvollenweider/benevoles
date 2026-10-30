@@ -172,7 +172,7 @@ export const RETENTION: readonly RetentionEntry[] = [
     public: true,
   },
   {
-    data: "Événement terminé depuis plus de 3 ans : sur ses inscriptions, l'identité des bénévoles (nom, email, téléphone, par leur fiche de membre), leurs commentaires et téléphones ; ses réponses aux questions (aussi celles que le journal a notées quand un bénévole les a modifiées), invitations, disponibilités datées et responsables de secteur",
+    data: "Événement terminé depuis plus de 3 ans : sur ses inscriptions, l'identité des bénévoles (nom, email, téléphone, par leur fiche de membre), leurs commentaires et téléphones ; ses réponses aux questions (aussi celles que le journal a notées quand un bénévole les a modifiées), invitations, disponibilités datées, affectations en brouillon et responsables de secteur",
     purpose: "Ne pas garder sans fin les données personnelles d'événements anciens",
     duration: `anonymisées 3 ans après la fin de l'événement : ses inscriptions passent à une fiche « Bénévole effacé » par personne, sans lien avec sa fiche de membre (effectifs, heures et présences gardés, sans nom), le reste est effacé ; l'événement lui-même (titre, dates, créneaux, totaux) et les fiches des membres restent. L'organisation est prévenue ${PAST_EVENT_NOTICE_DAYS} jours avant la première anonymisation, puis les événements qui atteignent 3 ans sont anonymisés chaque mois. Règle appliquée lorsque l'opérateur du service l'active`,
     trigger: "3 ans après la fin de l'événement",
@@ -181,7 +181,7 @@ export const RETENTION: readonly RetentionEntry[] = [
     public: true,
   },
   {
-    data: "Disponibilités datées d'un membre pour un événement : plages libres ou « pas disponible » date par date, qui les a saisies et quand, et le lien personnel « Indiquer mes disponibilités » (son empreinte et sa copie chiffrée)",
+    data: "Disponibilités datées d'un membre pour un événement : plages libres ou « pas disponible » date par date, qui les a saisies et quand, et le lien personnel « Indiquer mes disponibilités » (son empreinte et sa copie chiffrée) ; affectations en brouillon de l'organisation (une personne sur un créneau, en attente, publiée ou retirée) et la trace de leurs publications",
     purpose: "Préparer les affectations de l'événement ; vues par les organisateurs seulement",
     duration: "avec l'événement : effacées 3 ans après sa fin (ligne « Événement terminé depuis plus de 3 ans »), à l'effacement des données du membre, ou avec l'événement ; le lien est révoqué quand la collecte est arrêtée, les réponses restent",
     trigger: "fin de l'événement, effacement du membre, suppression de l'événement",
@@ -199,7 +199,7 @@ export const RETENTION: readonly RetentionEntry[] = [
     public: true,
   },
   {
-    data: "Données personnelles d'un membre dont l'effacement est demandé : nom, email, téléphone, date de naissance, notes, étiquettes, disponibilités, commentaires et téléphones de ses inscriptions, invitations (dont « pas disponible »), disponibilités datées des événements, réponses aux questions, abonnements aux notifications, choix d'afficher son nom aux autres bénévoles, désignations comme responsable de secteur à son adresse, emails en file d'envoi qui la concernent, résultats d'envoi",
+    data: "Données personnelles d'un membre dont l'effacement est demandé : nom, email, téléphone, date de naissance, notes, étiquettes, disponibilités, commentaires et téléphones de ses inscriptions, invitations (dont « pas disponible »), disponibilités datées des événements, affectations en brouillon, réponses aux questions, abonnements aux notifications, choix d'afficher son nom aux autres bénévoles, désignations comme responsable de secteur à son adresse, emails en file d'envoi qui la concernent, résultats d'envoi",
     purpose: "Droit à l'effacement",
     duration: "effacées immédiatement ; la fiche devient « Bénévole effacé » et ses inscriptions restent, sans identité, pour les effectifs, les heures et l'historique",
     trigger: "effacement par un propriétaire ou un organisateur depuis la page du membre",

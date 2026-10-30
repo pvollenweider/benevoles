@@ -23,7 +23,7 @@ const row = (lastName: string, extra: Partial<CandidateRow> = {}): CandidateRow 
   fit: { state: "full", totalMinutes: 360, coveredMinutes: 360, outsideMinutes: 0, unknownMinutes: 0, needsAck: false, ranges: [{ date: "2031-07-11", startTime: "08:00", endTime: "22:00" }] },
   ackKey: null,
   minutes: { confirmed: 0, pending: 0, draft: 0, committed: 0, sameDay: 0 }, sameDayLabel: "le vendredi 11 juillet",
-  backToBack: [], overlaps: [], eligible: true, workload: [], reviewNeeded: false,
+  backToBack: [], overlaps: [], eligible: true, workload: [], reviewNeeded: false, reviewTexts: [], draftOnShift: false,
   ...extra,
 })
 const outside = (lastName: string) => row(lastName, {
@@ -76,6 +76,19 @@ describe("ShiftAssistPanel", () => {
     await waitFor(() => expect(refresh).toHaveBeenCalled())
     expect(JSON.parse(fetchMock.mock.calls[0][1].body)).toEqual({ eventId: "evt", volunteerId: "v-Bonvin", shiftIds: ["s1"], availabilityAck: ["a1|evt|v-Bonvin|s1|1|2|req|3|Europe/Zurich"] })
     await waitFor(() => expect(screen.getByRole("status")).toHaveTextContent("Nadia Bonvin est maintenant sur Bar · Soir."))
+  })
+
+  it("adds a draft (#1146, lot C): the person stays listed, focus goes to the sentence that replaced the button", async () => {
+    fetchMock.mockResolvedValue({ ok: true, status: 201, json: async () => ({ draft: { id: "d1", revision: 1 } }) })
+    const { rerender } = panel([row("Aebi")])
+    fireEvent.click(screen.getByRole("button", { name: "Ajouter en brouillon : Nadia Aebi" }))
+    await waitFor(() => expect(refresh).toHaveBeenCalled())
+    expect(fetchMock.mock.calls[0][0]).toBe("/api/admin/events/evt/drafts")
+    expect(JSON.parse(fetchMock.mock.calls[0][1].body)).toEqual({ shiftId: "s1", volunteerId: "v-Aebi", ackKey: null })
+    rerender(<ShiftAssistPanel eventId="evt" shift={{ id: "s1", name: "Bar · Soir" }} rows={[row("Aebi", { draftOnShift: true })]} />)
+    await waitFor(() => expect(screen.getByText(/Un brouillon existe déjà pour ce créneau/)).toHaveFocus())
+    expect(screen.queryByRole("button", { name: /Ajouter en brouillon/ })).not.toBeInTheDocument()
+    await waitFor(() => expect(screen.getByRole("status")).toHaveTextContent("Brouillon ajouté : Nadia Aebi sur Bar · Soir."))
   })
 
   it("moves focus to the card now in the added person's place once the list comes back", async () => {

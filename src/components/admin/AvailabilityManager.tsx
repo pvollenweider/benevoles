@@ -18,6 +18,8 @@ import { ANSWER_STATE_LABELS, type AnswerState, type DayAnswerInput } from "@/li
 import { datesCountText } from "@/lib/availability-editor"
 import { sendResultText, type SendResult } from "@/lib/event-availability-text"
 import type { AvailabilityOverview, AvailabilityOverviewRow } from "@/lib/event-availability-server"
+import { reviewReasonTexts } from "@/lib/availability-correction"
+import { flushSync } from "react-dom"
 
 type Member = { id: string; firstName: string; lastName: string; email: string | null; tags: string[] }
 type Filter = AnswerState | "all"
@@ -64,6 +66,19 @@ export default function AvailabilityManager({ eventId, enabled, open, deadlineSe
   const [asking, setAsking] = useState(false)
   const [reminding, setReminding] = useState<{ busy: boolean; error: string | null } | null>(null)
   const [editing, setEditing] = useState<AvailabilityOverviewRow | null>(null)
+  // « Marquer comme vu » (#1146, lot C): the row whose flag is being cleared, and its error.
+  const [seen, setSeen] = useState<{ id: string; error: string | null } | null>(null)
+
+  async function markSeen(r: AvailabilityOverviewRow) {
+    if (seen && !seen.error) { announce(setStatus, "Une action est en cours : attendez sa réponse."); return }
+    setSeen({ id: r.volunteerId, error: null })
+    const res = await requestJson(() => fetch(`/api/admin/events/${eventId}/availability/${r.volunteerId}/review`, { method: "POST", headers: { "Content-Type": "application/json" }, body: JSON.stringify({ revision: r.revision }) }))
+    if (!res.ok) { setSeen({ id: r.volunteerId, error: res.error }); return }
+    flushSync(() => setSeen(null))
+    document.getElementById(`availability-edit-${r.volunteerId}`)?.focus()
+    announce(setStatus, `Disponibilités de ${r.firstName} ${r.lastName} marquées comme vues.`)
+    router.refresh()
+  }
   const regionRef = useRef<HTMLDivElement>(null)
   const hintId = useId()
 
@@ -151,16 +166,25 @@ export default function AvailabilityManager({ eventId, enabled, open, deadlineSe
                   <tr key={r.volunteerId} data-availability-row={r.volunteerId}>
                     <th scope="row" className="text-left px-4 py-2 font-medium text-gray-900">
                       {r.firstName} {r.lastName}
-                      {r.reviewReason === "merge" && <span className="block text-xs font-normal text-[#92400e]">À revoir : deux fiches fusionnées avaient répondu différemment.</span>}
+                      {reviewReasonTexts(r.reviewReason).map((t) => <span key={t} className="block text-xs font-normal text-[#92400e]">{t}</span>)}
                     </th>
                     <td className="px-4 py-2"><span className={`inline-block whitespace-nowrap rounded-full px-2 py-0.5 text-xs font-medium ${STATE_BADGE[r.state]}`}>{ANSWER_STATE_LABELS[r.state]}</span></td>
                     <td className="px-4 py-2 text-gray-800 whitespace-nowrap">{datesCountText(r.answeredDates, overview.dates.length)}</td>
                     <td className="px-4 py-2 text-gray-800">{r.answeredAt ? `${when(r.answeredAt, overview.timeZone)}, ${r.answeredBy === "admin" ? "par l'organisation" : "par la personne"}` : "—"}</td>
                     <td className="px-4 py-2 text-gray-800">{linkText(r, enabled, overview.timeZone)}</td>
                     <td className="px-4 py-2">
-                      <button type="button" onClick={() => setEditing(r)} className={`min-h-11 whitespace-nowrap text-sm font-medium text-blue-700 underline underline-offset-2 hover:text-blue-900 rounded ${focusRing}`}>
-                        Voir et corriger<span className="sr-only">{` les disponibilités de ${r.firstName} ${r.lastName}`}</span>
-                      </button>
+                      <div className="flex gap-2 whitespace-nowrap">
+                        <button id={`availability-edit-${r.volunteerId}`} type="button" onClick={() => setEditing(r)} className={`min-h-11 whitespace-nowrap text-sm font-medium text-blue-700 underline underline-offset-2 hover:text-blue-900 rounded ${focusRing}`}>
+                          Voir et corriger<span className="sr-only">{` les disponibilités de ${r.firstName} ${r.lastName}`}</span>
+                        </button>
+                        {r.reviewReason && (
+                          <button type="button" onClick={() => void markSeen(r)} aria-disabled={(!!seen && !seen.error) || undefined} aria-busy={(seen?.id === r.volunteerId && !seen.error) || undefined} aria-describedby={seen?.id === r.volunteerId && seen.error ? `availability-seen-error-${r.volunteerId}` : undefined}
+                            className={`min-h-11 whitespace-nowrap rounded-xl border border-gray-500 bg-white px-3 py-1 text-sm font-medium text-gray-900 hover:bg-gray-50 aria-disabled:opacity-60 ${focusRing}`}>
+                            {seen?.id === r.volunteerId && !seen.error ? "Enregistrement…" : "Marquer comme vu"}<span className="sr-only">{` : disponibilités de ${r.firstName} ${r.lastName}`}</span>
+                          </button>
+                        )}
+                      </div>
+                      {r.reviewReason && <p id={seen?.id === r.volunteerId && seen.error ? `availability-seen-error-${r.volunteerId}` : undefined} role="alert" className={seen?.id === r.volunteerId && seen.error ? "text-xs text-red-700 whitespace-normal" : "sr-only"}>{seen?.id === r.volunteerId ? seen.error : null}</p>}
                     </td>
                   </tr>
                 ))}

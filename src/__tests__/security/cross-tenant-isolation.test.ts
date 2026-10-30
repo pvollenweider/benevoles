@@ -2486,3 +2486,69 @@ describe("Personal workload limits — cross-tenant isolation (#1171)", () => {
     expect(extra.eventVolunteerLimit.upsert).not.toHaveBeenCalled()
   })
 })
+
+describe("Draft assignments and their publication — cross-tenant isolation (#1146, lot C)", () => {
+  beforeEach(() => vi.clearAllMocks())
+
+  /** The scoped db of org A, which sees no org-B row, with the transaction and draft delegates. */
+  function draftsDb() {
+    const db = setupGuard() as ReturnType<typeof setupGuard> & Record<string, unknown>
+    const writes = {
+      draftCreate: vi.fn(), draftUpdate: vi.fn(), registrationCreate: vi.fn(), requestUpdate: vi.fn(),
+    }
+    Object.assign(db, {
+      $transaction: async (fn: (tx: unknown) => unknown) => fn(db),
+      $queryRaw: vi.fn().mockResolvedValue([]),
+      $executeRaw: vi.fn().mockResolvedValue(0),
+      draftAssignment: { findFirst: vi.fn().mockResolvedValue(null), findMany: vi.fn().mockResolvedValue([]), count: vi.fn().mockResolvedValue(0), create: writes.draftCreate, updateMany: writes.draftUpdate },
+      draftPublication: { findFirst: vi.fn().mockResolvedValue(null), updateMany: vi.fn() },
+      availabilityRequest: { findFirst: vi.fn().mockResolvedValue(null), findMany: vi.fn().mockResolvedValue([]), updateMany: writes.requestUpdate },
+      adminUser: { findFirst: vi.fn().mockResolvedValue(null) },
+    })
+    ;(db.registration as Record<string, unknown>).create = writes.registrationCreate
+    return { db, writes }
+  }
+  const p2 = (id: string, draftId: string) => ({ params: Promise.resolve({ id, draftId }) })
+
+  it("POST /api/admin/events/[id]/drafts returns 404 for an org-B event and creates nothing", async () => {
+    const { POST } = await import("@/app/api/admin/events/[id]/drafts/route")
+    const { db, writes } = draftsDb()
+    const res = await POST(makeRequest("/api/admin/events/evt-b/drafts", "POST", { shiftId: "shift-b", volunteerId: "vol-b" }), params("evt-b"))
+    expect(res.status).toBe(404)
+    expect(db.event.findFirst).toHaveBeenCalledWith(expect.objectContaining({ where: { id: "evt-b" } }))
+    expect(writes.draftCreate).not.toHaveBeenCalled()
+  })
+
+  it("GET /api/admin/events/[id]/drafts/options returns 404 for an org-B event and reads no draft", async () => {
+    const { GET } = await import("@/app/api/admin/events/[id]/drafts/options/route")
+    const { db } = draftsDb()
+    const res = await GET(makeRequest("/api/admin/events/evt-b/drafts/options?volunteerId=vol-b&date=2031-07-11"), params("evt-b"))
+    expect(res.status).toBe(404)
+    expect((db.draftAssignment as { findMany: ReturnType<typeof vi.fn> }).findMany).not.toHaveBeenCalled()
+  })
+
+  it("PATCH and DELETE /api/admin/events/[id]/drafts/[draftId] return 404 for an org-B event and write nothing", async () => {
+    const { PATCH, DELETE } = await import("@/app/api/admin/events/[id]/drafts/[draftId]/route")
+    const { writes } = draftsDb()
+    expect((await PATCH(makeRequest("/api/admin/events/evt-b/drafts/d-b", "PATCH", { revision: 1 }), p2("evt-b", "d-b"))).status).toBe(404)
+    expect((await DELETE(makeRequest("/api/admin/events/evt-b/drafts/d-b?revision=1", "DELETE"), p2("evt-b", "d-b"))).status).toBe(404)
+    expect(writes.draftUpdate).not.toHaveBeenCalled()
+  })
+
+  it("POST /api/admin/events/[id]/drafts/publish returns 404 for an org-B event and registers nobody", async () => {
+    const { POST } = await import("@/app/api/admin/events/[id]/drafts/publish/route")
+    const { writes } = draftsDb()
+    const res = await POST(makeRequest("/api/admin/events/evt-b/drafts/publish", "POST", { selection: [{ id: "d-b", revision: 1 }], idempotencyKey: "key-12345678" }), params("evt-b"))
+    expect(res.status).toBe(404)
+    expect(writes.registrationCreate).not.toHaveBeenCalled()
+    expect(prismaMock.registration.create).not.toHaveBeenCalled()
+  })
+
+  it("POST /api/admin/events/[id]/availability/[volunteerId]/review returns 404 for an org-B answer and clears nothing", async () => {
+    const { POST } = await import("@/app/api/admin/events/[id]/availability/[volunteerId]/review/route")
+    const { writes } = draftsDb()
+    const res = await POST(makeRequest("/api/admin/events/evt-b/availability/vol-b/review", "POST", { revision: 2 }), { params: Promise.resolve({ id: "evt-b", volunteerId: "vol-b" }) })
+    expect(res.status).toBe(404)
+    expect(writes.requestUpdate).not.toHaveBeenCalled()
+  })
+})

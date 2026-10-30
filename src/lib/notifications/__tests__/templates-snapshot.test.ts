@@ -493,6 +493,23 @@ const cases: [string, NotificationPayload][] = [
     recipient,
     data: { firstName: "Julie", organizationName: "Comité", eventTitle: "Festival", datesLabel: "le samedi 4 juillet", deadlineLabel: null, orgSlug: "rhone", token: "avail-tok", reminder: true },
   }],
+  // A person with a published mission corrected their availability (#1146, lot C): one, then several.
+  ["availability_changed", {
+    kind: "availability_changed",
+    recipient: { email: "org-admin@example.org", name: "Camille" },
+    data: { eventId: "evt-1", eventTitle: tricky, items: [{ key: "c1", mergeKey: "volunteer:v1", value: { volunteerName: "Nadia <Rochat>", outside: [] } }] },
+  }],
+  ["availability_changed (mission outside, several people)", {
+    kind: "availability_changed",
+    recipient: { email: "org-admin@example.org", name: "Camille" },
+    data: {
+      eventId: "evt-1", eventTitle: "Festival",
+      items: [
+        { key: "c1", mergeKey: "volunteer:v1", value: { volunteerName: "Nadia Rochat", outside: ["Bar, samedi 11 juillet, de 10h à 14h"] } },
+        { key: "c2", mergeKey: "volunteer:v2", value: { volunteerName: "Luca Bianchi", outside: [] } },
+      ],
+    },
+  }],
   ["shift_swap_approval_needed", {
     kind: "shift_swap_approval_needed",
     recipient,
@@ -829,6 +846,7 @@ describe("render — snapshot of every notification kind", () => {
       shift_swap_offered: true,
       shift_swap_approval_needed: true,
       availability_request: true,
+      availability_changed: true,
     }
     const covered = new Set(cases.map(([, p]) => p.kind))
     expect([...covered].sort()).toEqual(Object.keys(all).sort())

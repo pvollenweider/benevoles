@@ -36,7 +36,7 @@ import {
  * - Account emails with a single-use link (password_reset, admin_invite, signup_account_link,
  *   org_reactivation): the link must still be the account's current one, for this address.
  * - Inactivity messages: their own check (inactivityCopyBlocked in outbox.ts).
- * - Organiser-facing emails (admin_notification, registration_cancelled, digests, answers_changed,
+ * - Organiser-facing emails (admin_notification, registration_cancelled, digests, answers_changed, availability_changed,
  *   addresses_to_verify_summary, milestone_owner_reminder, past_event_notice), platform emails
  *   (product_update, release_available, operator_alert, space_approved, signup_confirmation,
  *   admin_welcome): no personal link of a member; not checked here.
