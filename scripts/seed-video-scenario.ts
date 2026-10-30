@@ -92,6 +92,11 @@ async function main() {
     const { seedVideoWorkloadProtection } = await import("./seed-video-workload")
     return seedVideoWorkloadProtection(prisma)
   }
+  // Assignment proposals (#1172): its own organisation (scripts/seed-video-proposals.ts).
+  if (scenario === "assignment-proposals") {
+    const { seedVideoAssignmentProposals } = await import("./seed-video-proposals")
+    return seedVideoAssignmentProposals(prisma)
+  }
   if (scenario === "event-reports" || scenario === "volunteer-badges") {
     const { seedVideoDocuments } = await import("./seed-video-documents")
     return seedVideoDocuments(prisma)
