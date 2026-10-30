@@ -65,6 +65,12 @@ export const VOLUNTEER_RELATIONS: Record<string, VolunteerRelation> = {
     erasure: "delete",
     why: "an organiser's draft assignment of the person (#1146, lot C), pending or kept as provenance once published or discarded: moved to the kept record and marked « à revoir », a pending draft on a shift the kept record already has one on is discarded; erased with the person's data (the registrations it became stay, scrubbed like any other)",
   },
+  EventVolunteerTarget: {
+    merge: "reassign",
+    deletion: "cascade",
+    erasure: "delete",
+    why: "the organiser's hour target of the person on an event (#1172), a wish for generated proposals, never a limit: moved to the kept record where it has none on that event, else the kept record's stays (never summed); erased with the person's data. The person's place in proposal runs (JSON) is scrubbed on erasure and merge (src/lib/proposal-runs-lifecycle.ts)",
+  },
   RosterConsent: {
     merge: "drop",
     deletion: "cascade",

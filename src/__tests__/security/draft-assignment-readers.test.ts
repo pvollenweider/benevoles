@@ -38,6 +38,9 @@ const ALLOWED = [
   // Erasure and the past-event anonymisation delete them (#516, #813).
   "src/lib/member-erasure-transaction.ts",
   "src/lib/past-event-anonymisation.ts",
+  // Generated proposals (#1172): read the kept drafts into a run's input, write a run's result as drafts.
+  "src/lib/proposal-runs-data.ts",
+  "src/lib/proposal-runs-server.ts",
   // The tenant scoping of every model (#268).
   "src/lib/prisma-org.ts",
 ].sort()

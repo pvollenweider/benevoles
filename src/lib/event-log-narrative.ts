@@ -263,6 +263,8 @@ export const ACTION_VERB: Record<string, (actor: string) => string> = {
   "availability.corrected": (a) => `${a} a corrigé les disponibilités d'un membre`,
   // Draft assignments (#1146, lot C): one entry per publication, each registration it created after it.
   "drafts.published": (a) => `${a} a publié des affectations en brouillon`,
+  // Generated proposals (#1172): a run written into the drafts (nothing published).
+  "proposal.written": (a) => `${a} a écrit une proposition d'affectations dans les brouillons`,
   "event.sectors_adopted": (a) => `${a} a enregistré le premier secteur : l'événement garde désormais l'organisation par secteurs`,
   // Not a real event: a synthetic snapshot of current state for entities that predate logging
   // (see the baseline endpoint). Worded as an observation, never as something that "happened".

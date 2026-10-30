@@ -108,6 +108,13 @@ export const PERMISSIONS: Record<string, Partial<Record<Method, Level>>> = {
   "events/[id]/drafts/[draftId]": { PATCH: "organizer", DELETE: "organizer" },
   "events/[id]/drafts/options": { GET: "organizer" },
   "events/[id]/drafts/publish": { POST: "organizer" },
+  // Generated assignment proposals (#1172): organisers, like the drafts they write.
+  "events/[id]/drafts/[draftId]/lock": { POST: "organizer" },
+  "events/[id]/proposals": { GET: "organizer", POST: "organizer" },
+  "events/[id]/proposals/[runId]": { GET: "organizer" },
+  "events/[id]/proposals/[runId]/cancel": { POST: "organizer" },
+  "events/[id]/proposals/[runId]/write": { POST: "organizer" },
+  "events/[id]/proposal-targets": { GET: "organizer", PUT: "organizer" },
   "events/[id]/send-reminder": { POST: "organizer" },
   "events/from-template": { POST: "organizer" },
   "members": { GET: "organizer", POST: "organizer" },

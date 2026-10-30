@@ -264,6 +264,8 @@ model Event {
   availabilityRanges   AvailabilityRange[]
   draftAssignments     DraftAssignment[]
   draftPublications    DraftPublication[]
+  proposalRuns         ProposalRun[]
+  volunteerTargets     EventVolunteerTarget[]
 
   @@unique([organizationId, slug])
   @@index([organizationId])
@@ -417,6 +419,9 @@ model DraftAssignment {
   // The registration it became: no foreign key, the archive outlives a registration's changes.
   registrationId    String?
   discardedAt       DateTime?
+  // Locked by the organiser (#1172): a new proposal never replaces it. Reviewing a generated draft
+  // locks it too, so a later proposal never erases a correction. Manual drafts are never replaced.
+  locked            Boolean   @default(false)
   createdAt         DateTime  @default(now())
   updatedAt         DateTime  @updatedAt
 
@@ -424,6 +429,7 @@ model DraftAssignment {
   shift       Shift             @relation(fields: [shiftId], references: [id], onDelete: Cascade)
   volunteer   Volunteer         @relation(fields: [volunteerId], references: [id], onDelete: Cascade)
   publication DraftPublication? @relation(fields: [publicationId], references: [id], onDelete: SetNull)
+  proposalRun ProposalRun?      @relation(fields: [proposalRunId], references: [id], onDelete: SetNull)
 
   // One pending draft per person and shift; published and discarded rows are kept as provenance.
   @@unique([shiftId, volunteerId], map: "DraftAssignment_shift_volunteer_pending_key", where: raw("status = 'draft'"))
@@ -431,6 +437,84 @@ model DraftAssignment {
   @@index([eventId, volunteerId, status])
   @@index([volunteerId])
   @@index([publicationId])
+  @@index([proposalRunId])
+}
+
+// A generated assignment proposal (#1172, src/lib/proposal-runs-server.ts): one computation on an
+// event, from its frozen input (`snapshot`, src/lib/proposal-input.ts) to the drafts it wrote. Never
+// a publication: it writes draft assignments (`source: "proposal"`) and nothing else, no
+// registration, no email. `status`: "queued", "running" (an attempt holds the lease `leaseToken`
+// until `leaseExpiresAt`, renewed while it runs), "finished" (the search ran to its budget),
+// "interrupted" (deadline, cancellation, lost lease) or "failed". `writtenAt`: when its result became
+// drafts (a finished run at once, an interrupted one only on the organiser's request), once.
+// `configuration`: the organiser's choices (scope, reserve, night add-ons, rotation categories,
+// preferences, seed, budget); `replacement`: the earlier unlocked proposal drafts it may replace,
+// frozen with their revisions; `hashes`: the input's fingerprints, to tell when it is stale.
+// Personal data of the organisation's planning: organisers only; a person's entries are scrubbed
+// on erasure and merge; deleted with the event's personal data; never copied with an event.
+model ProposalRun {
+  id                String    @id @default(cuid())
+  eventId           String
+  createdById       String?
+  idempotencyKey    String
+  requestHash       String
+  status            String    @default("queued")
+  stopReason        String?
+  outcome           String?
+  seed              Int
+  configuration     Json
+  replacement       Json
+  snapshot          Json?
+  inputVersion      Int
+  inputHash         String
+  hashes            Json
+  solverVersion     String?
+  result            Json?
+  progress          Json?
+  attempt           Int       @default(0)
+  leaseToken        String?
+  leaseExpiresAt    DateTime?
+  cancelRequestedAt DateTime?
+  startedAt         DateTime?
+  finishedAt        DateTime?
+  writtenAt         DateTime?
+  writtenById       String?
+  writtenCount      Int       @default(0)
+  droppedCount      Int       @default(0)
+  written           Json?
+  baselineHashes    Json?
+  createdAt         DateTime  @default(now())
+  updatedAt         DateTime  @updatedAt
+
+  event  Event             @relation(fields: [eventId], references: [id], onDelete: Cascade)
+  drafts DraftAssignment[]
+
+  @@unique([eventId, idempotencyKey])
+  // At most one run waiting or computing per event.
+  @@unique([eventId], map: "ProposalRun_one_active_per_event_key", where: raw("status IN ('queued', 'running')"))
+  @@index([eventId, createdAt])
+  @@index([status, createdAt])
+}
+
+// The organiser's hour target of a person for an event (#1172): what a proposal aims at for them,
+// in minutes (0: no target). A wish, never a limit (limits are EventVolunteerLimit). `revision`
+// counts saves. Personal data: organisers only; erased with the person, moved on a merge (the kept
+// record's target wins, never summed), deleted with the event's personal data; never copied.
+model EventVolunteerTarget {
+  id            String   @id @default(cuid())
+  eventId       String
+  volunteerId   String
+  targetMinutes Int
+  revision      Int      @default(1)
+  updatedById   String?
+  createdAt     DateTime @default(now())
+  updatedAt     DateTime @updatedAt
+
+  event     Event     @relation(fields: [eventId], references: [id], onDelete: Cascade)
+  volunteer Volunteer @relation(fields: [volunteerId], references: [id], onDelete: Cascade)
+
+  @@unique([eventId, volunteerId])
+  @@index([volunteerId])
 }
 
 // One publication of draft assignments (#1146, lot C): the exact drafts and revisions an organiser
@@ -929,6 +1013,7 @@ model Volunteer {
   workloadLimits    EventVolunteerLimit[]
   availabilityRequests AvailabilityRequest[]
   draftAssignments  DraftAssignment[]
+  proposalTargets   EventVolunteerTarget[]
   mergedInto        Volunteer?     @relation("VolunteerMerge", fields: [mergedIntoId], references: [id], onDelete: SetNull)
   mergedFrom        Volunteer[]    @relation("VolunteerMerge")
   // Possible-duplicate dismissals (#601) naming this record as either side of the pair.

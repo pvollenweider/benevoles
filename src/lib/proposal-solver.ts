@@ -447,10 +447,11 @@ export function solveProposal(input: ProposalInput, opts: SolveOptions = {}): So
  * Runs a search in slices, yielding to the event loop between them so the server keeps answering
  * (setImmediate), until it finishes, the deadline passes or `shouldStop` says so (a cancellation).
  */
-export async function runProposalSearch(input: ProposalInput, opts: SolveOptions & { onProgress?: (p: { evaluations: number; iterations: number }) => void | Promise<void>; sliceMs?: number } = {}): Promise<SolveOutcome> {
+export async function runProposalSearch(input: ProposalInput, opts: SolveOptions & { onProgress?: (p: { evaluations: number; iterations: number }) => void | Promise<void>; sliceMs?: number; search?: ProposalSearch } = {}): Promise<SolveOutcome> {
   const clock = opts.clock ?? (() => performance.now())
   const start = clock()
-  const search = new ProposalSearch(input)
+  // A caller that needs the model afterwards (the report) builds the search itself.
+  const search = opts.search ?? new ProposalSearch(input)
   const sliceMs = opts.sliceMs ?? 15
   while (!search.done) {
     const sliceStart = clock()

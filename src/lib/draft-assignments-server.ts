@@ -47,9 +47,11 @@ export type DraftRow = {
   revision: number
   status: string
   ackKey: string | null
+  /** Locked (#1172): a new proposal never replaces it. */
+  locked: boolean
 }
 
-const DRAFT_SELECT = { id: true, eventId: true, shiftId: true, volunteerId: true, source: true, revision: true, status: true, ackKey: true, shiftTerms: true, availabilityStamp: true } as const
+const DRAFT_SELECT = { id: true, eventId: true, shiftId: true, volunteerId: true, source: true, revision: true, status: true, ackKey: true, shiftTerms: true, availabilityStamp: true, locked: true } as const
 
 const SHIFT_SELECT = {
   id: true, eventId: true, roleName: true, label: true, date: true, startTime: true, endTime: true, status: true, capacity: true, maxPerVolunteer: true,
@@ -188,9 +190,28 @@ export async function reviewDraft(db: Db, input: { eventId: string; draftId: str
       data: {
         shiftTerms: draftShiftTerms(shift), availabilityStamp: availabilityStamp(answer), reviewedAt: now, reviewedById: input.actorId,
         ackKey: ack.key, acknowledgedAt: ack.key ? now : null, acknowledgedById: ack.key ? input.actorId : null,
+        // A generated draft the organiser reviewed is theirs now: a new proposal never replaces it (#1172).
+        ...(draft.source === "proposal" ? { locked: true } : {}),
         revision: { increment: 1 },
       },
     })
+    const row = await tx.draftAssignment.findFirst({ where: { id: draft.id, eventId: input.eventId }, select: DRAFT_SELECT })
+    return { ok: true as const, value: row! }
+  })
+}
+
+/**
+ * Locks or unlocks a draft (#1172): a locked draft is kept by every new proposal, as an input that is
+ * never moved. Bound to the revision the organiser saw; nothing else changes.
+ */
+export async function setDraftLock(db: Db, input: { eventId: string; draftId: string; revision: number; locked: boolean }): Promise<DraftResult<DraftRow>> {
+  return db.$transaction(async (raw) => {
+    const tx = raw as unknown as Tx
+    const event = await tx.event.findFirst({ where: { id: input.eventId }, select: { id: true } })
+    if (!event) return fail(404, NOT_FOUND)
+    const draft = await lockDraft(tx, input.eventId, input.draftId, input.revision)
+    if (!draft) return fail(409, DRAFT_GONE, "drafts_changed")
+    await tx.draftAssignment.updateMany({ where: { id: draft.id, eventId: input.eventId }, data: { locked: input.locked, revision: { increment: 1 } } })
     const row = await tx.draftAssignment.findFirst({ where: { id: draft.id, eventId: input.eventId }, select: DRAFT_SELECT })
     return { ok: true as const, value: row! }
   })
