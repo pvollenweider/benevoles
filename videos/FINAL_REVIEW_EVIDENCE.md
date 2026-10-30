@@ -873,3 +873,5 @@ Sources mises à jour dans la même PR : narration de `ap-targets`, `ap-launch`,
 bout en bout sur un seed neuf contre le build de la branche (repères de phrase
 sans effet), sans rendu ni voix. Révision du catalogue inchangée : elle sera
 incrémentée au nouveau rendu (nouvelle prise, nouvelle voix Kore, publication).
+En attendant, l'entrée du catalogue est masquée (#1226) : la remettre en ligne
+avec le nouveau rendu.
