@@ -1056,7 +1056,7 @@
         "objectif-heures",
         "bêta"
       ],
-      "published": true,
+      "published": false,
       "seedScenario": "assignment-proposals",
       "themes": [
         "planning-creneaux"
