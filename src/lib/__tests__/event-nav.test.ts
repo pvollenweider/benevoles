@@ -171,4 +171,8 @@ describe("eventSubNav — Disponibilités (#1146)", () => {
     const nav = eventSubNav("/admin/events/e1/availability", "e1")
     expect(nav?.links.find((l) => l.label === "Disponibilités")?.current).toBe("page")
   })
+  it("shows « Affecter selon les disponibilités » (#1146, lot B) as part of « Disponibilités »", () => {
+    const nav = eventSubNav("/admin/events/e1/availability/assign", "e1", { availability: true })
+    expect(nav?.links.find((l) => l.label === "Disponibilités")?.current).toBe("true")
+  })
 })

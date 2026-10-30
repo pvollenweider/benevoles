@@ -17,6 +17,10 @@ import { queueAddedByOrganizer } from "@/lib/notifications/added-by-organizer"
 import { manualAddNotice, manualAddNoticeLog } from "@/lib/manual-add-notice"
 import { localDateTimeToUtc, orgTimeZone } from "@/lib/time-zone"
 import { checkDutyChange, judgeDutyChange, lockVolunteerRows, lockWorkloadShared, readWorkloadGate, withPlaceNames, workloadRefusalBody, WorkloadRefusalError } from "@/lib/workload-guard"
+import { lockShifts } from "@/lib/registration-capacity"
+import { AvailabilityAckError, availabilityAckBody, checkAvailabilityAcks, readAvailabilityGate } from "@/lib/availability-assist-data"
+import type { AckGiven } from "@/lib/availability-assist"
+import { fmtDuration } from "@/lib/signup-recap"
 
 /** The organiser's refusal (#1171): who, and the first limit the addition would break. */
 function manualAddWorkloadBody(e: WorkloadRefusalError, name: string, shiftCount: number) {
@@ -43,6 +47,12 @@ const schema = z.object({
   /** The admin saw the role-limit warning and adds anyway (#466). */
   allowOverLimit: z.boolean().optional(),
   /**
+   * Dated availability (#1146, lot B): the acknowledgements ticked for shifts the person said they
+   * are not available for, each bound to their answer's revision and the shift's hours
+   * (src/lib/availability-assist.ts). Never a way past the workload protection.
+   */
+  availabilityAck: z.array(z.string().max(400)).max(MAX_SHIFTS).optional(),
+  /**
    * Birth date (#1171, lot 2): asked when the event protects minors and the person has none on
    * file. Stored on a new person, or on a member without one; an existing date is never replaced.
    */
@@ -64,7 +74,7 @@ export async function POST(req: Request) {
   const parsed = schema.safeParse(body)
   if (!parsed.success) return validationError(parsed.error)
 
-  const { eventId, shiftId, shiftIds, volunteerId, firstName, lastName, email, phone, comment, allowOverLimit, birthDate } = parsed.data
+  const { eventId, shiftId, shiftIds, volunteerId, firstName, lastName, email, phone, comment, allowOverLimit, birthDate, availabilityAck } = parsed.data
   const birthDateValue = birthDate ? new Date(birthDate) : null
   const ids = [...new Set([...(shiftIds ?? []), ...(shiftId ? [shiftId] : [])])]
 
@@ -139,6 +149,8 @@ export async function POST(req: Request) {
     : null
 
   let registrations
+  // The shifts added outside the person's declared availability, acknowledged (#1146, lot B).
+  let acknowledged: AckGiven[] = []
   try {
     const added = volunteer
     registrations = await db.$transaction(async (tx) => {
@@ -146,8 +158,17 @@ export async function POST(req: Request) {
       // whole resulting schedule. Every shift added counts, all or nothing.
       await lockWorkloadShared(tx, eventId)
       const gate = await readWorkloadGate(tx, eventId)
-      if (gate.kind !== "off") {
+      // Dated availability (#1146, lot B), on an event that uses it: the shifts' hours and the
+      // person's answer read under the shift and person locks (workload → shifts → people), so an
+      // acknowledgement given on older ones never applies. Nothing is created without it.
+      const availability = await readAvailabilityGate(tx, eventId)
+      if (availability.inUse) {
+        await lockShifts(tx, ids)
         await lockVolunteerRows(tx, [added.id])
+        acknowledged = await checkAvailabilityAcks(tx, availability, eventId, added.id, ids, availabilityAck ?? [])
+      }
+      if (gate.kind !== "off") {
+        if (!availability.inUse) await lockVolunteerRows(tx, [added.id])
         // A birth date given here fills a member's missing one (never replaces it), before the check.
         if (birthDateValue) await tx.volunteer.updateMany({ where: { id: added.id, birthDate: null }, data: { birthDate: birthDateValue } })
         const verdict = await checkDutyChange(tx, gate, eventId, added.id, { add: shifts })
@@ -194,6 +215,9 @@ export async function POST(req: Request) {
       return created
     })
   } catch (e) {
+    if (e instanceof AvailabilityAckError) {
+      return NextResponse.json(availabilityAckBody(e, `${volunteer.firstName} ${volunteer.lastName}`), { status: 409 })
+    }
     if (e instanceof WorkloadRefusalError) {
       return NextResponse.json(manualAddWorkloadBody(e, `${volunteer.firstName} ${volunteer.lastName}`, shifts.length), { status: 409 })
     }
@@ -212,6 +236,7 @@ export async function POST(req: Request) {
     }
   }
 
+  const ackOf = new Map(acknowledged.map((a) => [a.shiftId, a]))
   for (const { registration, shiftId: addedShiftId } of registrations) {
     await logEvent({
       eventId,
@@ -224,6 +249,8 @@ export async function POST(req: Request) {
         source: { from: null, to: "admin_manual" },
         confirmationEmail: { from: null, to: manualAddNoticeLog(notices.get(addedShiftId)!) },
         ...(allowOverLimit ? { overRoleLimit: { from: null, to: true } } : {}),
+        // Added outside the person's declared availability, knowingly (#1146, lot B).
+        ...(ackOf.has(addedShiftId) ? { outsideAvailability: { from: null, to: fmtDuration(ackOf.get(addedShiftId)!.outsideMinutes) } } : {}),
       },
     })
   }

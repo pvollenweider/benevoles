@@ -91,6 +91,8 @@ describe("public sign-up and the role limit", () => {
 describe("manual addition and the role limit", () => {
   const regCreate = vi.fn()
   const db = {
+    // An event without dated availability (#1146, lot B).
+    event: { findFirst: vi.fn().mockResolvedValue(null) },
     shift: {
       findFirst: vi.fn().mockResolvedValue({ id: "s2", roleName: "Loge", label: "Loge", capacity: 5, registrations: [], date: new Date("2030-06-01T00:00:00Z"), startTime: "14:00", endTime: "16:00", event: { title: "Festival", organization: { name: "Org A", slug: "a", timeZone: null } } }),
       findMany: vi.fn().mockResolvedValue([{ roleName: "Loge", maxPerVolunteer: 1 }]),
