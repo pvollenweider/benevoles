@@ -59,6 +59,12 @@ export const VOLUNTEER_RELATIONS: Record<string, VolunteerRelation> = {
     erasure: "delete",
     why: "the person's dated availability on an event (#1146), with its days and ranges: moved to the kept record; where both records answered on the same event, the kept record's answers stay and are flagged for review when they differ, never united into more availability (src/lib/event-availability.ts); erased with the person's data",
   },
+  DraftAssignment: {
+    merge: "reassign",
+    deletion: "cascade",
+    erasure: "delete",
+    why: "an organiser's draft assignment of the person (#1146, lot C), pending or kept as provenance once published or discarded: moved to the kept record and marked « à revoir », a pending draft on a shift the kept record already has one on is discarded; erased with the person's data (the registrations it became stay, scrubbed like any other)",
+  },
   RosterConsent: {
     merge: "drop",
     deletion: "cascade",

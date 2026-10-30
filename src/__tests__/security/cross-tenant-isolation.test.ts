@@ -596,6 +596,8 @@ describe("Members — cross-tenant isolation", () => {
       eventVolunteerLimit: { deleteMany: vi.fn().mockResolvedValue({ count: 0 }) },
       // Dated availability (#1146): the person's own answers.
       availabilityRequest: { deleteMany: vi.fn().mockResolvedValue({ count: 0 }), count: vi.fn().mockResolvedValue(0) },
+      // Draft assignments (#1146, lot C): the organisation's plans for the person.
+      draftAssignment: { deleteMany: vi.fn().mockResolvedValue({ count: 0 }), count: vi.fn().mockResolvedValue(0) },
       sectorLeader: { findMany: none(), deleteMany: vi.fn() },
       duplicateDismissal: { findMany: none(), deleteMany: vi.fn() },
       notificationOutbox: { findMany: none(), deleteMany: writes.outboxDeleteMany },
