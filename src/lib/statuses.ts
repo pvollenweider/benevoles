@@ -43,6 +43,14 @@ export type DraftAssignmentStatus = (typeof DRAFT_ASSIGNMENT_STATUSES)[number]
 export const DRAFT_ASSIGNMENT_SOURCES = ["manual", "proposal"] as const
 export type DraftAssignmentSource = (typeof DRAFT_ASSIGNMENT_SOURCES)[number]
 
+// Generated assignment proposals (#1172), see src/lib/proposal-runs-server.ts.
+export const PROPOSAL_RUN_STATUSES = ["queued", "running", "finished", "interrupted", "failed"] as const
+export type ProposalRunStatus = (typeof PROPOSAL_RUN_STATUSES)[number]
+export const PROPOSAL_STOP_REASONS = ["budget", "iterations", "deadline", "cancelled", "lease_expired", "error"] as const
+export type ProposalStopReason = (typeof PROPOSAL_STOP_REASONS)[number]
+export const PROPOSAL_OUTCOMES = ["complete", "incomplete", "proven_impossible"] as const
+export type ProposalOutcomeValue = (typeof PROPOSAL_OUTCOMES)[number]
+
 export const EVENT_LOG_ACTOR_TYPES = ["admin", "volunteer", "system"] as const
 export const ORG_LOG_ACTOR_TYPES = ["admin", "system"] as const
 
@@ -61,4 +69,7 @@ export const CHECKED_COLUMNS = {
   "ScheduledMessage.status": SCHEDULED_MESSAGE_STATUSES,
   "DraftAssignment.status": DRAFT_ASSIGNMENT_STATUSES,
   "DraftAssignment.source": DRAFT_ASSIGNMENT_SOURCES,
+  "ProposalRun.status": PROPOSAL_RUN_STATUSES,
+  "ProposalRun.stopReason": PROPOSAL_STOP_REASONS,
+  "ProposalRun.outcome": PROPOSAL_OUTCOMES,
 } as const

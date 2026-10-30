@@ -598,6 +598,10 @@ describe("Members — cross-tenant isolation", () => {
       availabilityRequest: { deleteMany: vi.fn().mockResolvedValue({ count: 0 }), count: vi.fn().mockResolvedValue(0) },
       // Draft assignments (#1146, lot C): the organisation's plans for the person.
       draftAssignment: { deleteMany: vi.fn().mockResolvedValue({ count: 0 }), count: vi.fn().mockResolvedValue(0) },
+      // Hour targets of generated proposals (#1172), and the runs that name the person (found by an
+      // organisation-filtered raw query, the $queryRaw above).
+      eventVolunteerTarget: { deleteMany: vi.fn().mockResolvedValue({ count: 0 }), count: vi.fn().mockResolvedValue(0) },
+      proposalRun: { update: vi.fn() },
       sectorLeader: { findMany: none(), deleteMany: vi.fn() },
       duplicateDismissal: { findMany: none(), deleteMany: vi.fn() },
       notificationOutbox: { findMany: none(), deleteMany: writes.outboxDeleteMany },
@@ -2550,5 +2554,88 @@ describe("Draft assignments and their publication — cross-tenant isolation (#1
     const res = await POST(makeRequest("/api/admin/events/evt-b/availability/vol-b/review", "POST", { revision: 2 }), { params: Promise.resolve({ id: "evt-b", volunteerId: "vol-b" }) })
     expect(res.status).toBe(404)
     expect(writes.requestUpdate).not.toHaveBeenCalled()
+  })
+})
+
+describe("Generated assignment proposals — cross-tenant isolation (#1172)", () => {
+  beforeEach(() => vi.clearAllMocks())
+
+  /** The scoped db of org A, which sees no org-B row, with the run, target and draft delegates. */
+  function proposalsDb() {
+    const db = setupGuard() as ReturnType<typeof setupGuard> & Record<string, unknown>
+    const writes = { runCreate: vi.fn(), runUpdate: vi.fn(), targetCreate: vi.fn(), targetUpdate: vi.fn(), draftUpdate: vi.fn(), draftCreate: vi.fn() }
+    Object.assign(db, {
+      $transaction: async (fn: (tx: unknown) => unknown) => fn(db),
+      $queryRaw: vi.fn().mockResolvedValue([]),
+      $executeRaw: vi.fn().mockResolvedValue(0),
+      proposalRun: { findFirst: vi.fn().mockResolvedValue(null), findMany: vi.fn().mockResolvedValue([]), count: vi.fn().mockResolvedValue(0), create: writes.runCreate, updateMany: writes.runUpdate },
+      eventVolunteerTarget: { findMany: vi.fn().mockResolvedValue([]), create: writes.targetCreate, updateMany: writes.targetUpdate, deleteMany: writes.targetUpdate },
+      draftAssignment: { findFirst: vi.fn().mockResolvedValue(null), findMany: vi.fn().mockResolvedValue([]), updateMany: writes.draftUpdate, create: writes.draftCreate },
+    })
+    return { db, writes }
+  }
+  const run = (id: string, runId: string) => ({ params: Promise.resolve({ id, runId }) })
+  const config = { scope: { shiftIds: ["shift-b"], volunteerIds: ["vol-b"] }, rotation: { maxConsecutiveDays: 2, maxNightAddOns: 2 }, seed: 1 }
+
+  it("GET and POST /api/admin/events/[id]/proposals return 404 for an org-B event and launch nothing", async () => {
+    const { GET, POST } = await import("@/app/api/admin/events/[id]/proposals/route")
+    const { db, writes } = proposalsDb()
+    expect((await GET(makeRequest("/api/admin/events/evt-b/proposals"), params("evt-b"))).status).toBe(404)
+    expect((await POST(makeRequest("/api/admin/events/evt-b/proposals", "POST", { idempotencyKey: "key-12345678", configuration: config }), params("evt-b"))).status).toBe(404)
+    expect(db.event.findFirst).toHaveBeenCalledWith(expect.objectContaining({ where: { id: "evt-b" } }))
+    expect(writes.runCreate).not.toHaveBeenCalled()
+    expect((db.proposalRun as { findMany: ReturnType<typeof vi.fn> }).findMany).not.toHaveBeenCalled()
+  })
+
+  it("GET …/proposals/[runId], POST …/cancel and …/write return 404 for an org-B event and change nothing", async () => {
+    const one = await import("@/app/api/admin/events/[id]/proposals/[runId]/route")
+    const cancel = await import("@/app/api/admin/events/[id]/proposals/[runId]/cancel/route")
+    const write = await import("@/app/api/admin/events/[id]/proposals/[runId]/write/route")
+    const { writes } = proposalsDb()
+    expect((await one.GET(makeRequest("/api/admin/events/evt-b/proposals/run-b"), run("evt-b", "run-b"))).status).toBe(404)
+    expect((await cancel.POST(makeRequest("/api/admin/events/evt-b/proposals/run-b/cancel", "POST"), run("evt-b", "run-b"))).status).toBe(404)
+    expect((await write.POST(makeRequest("/api/admin/events/evt-b/proposals/run-b/write", "POST"), run("evt-b", "run-b"))).status).toBe(404)
+    expect(writes.runUpdate).not.toHaveBeenCalled()
+    expect(writes.draftCreate).not.toHaveBeenCalled()
+  })
+
+  it("an org-A event with an org-B run id finds no run and writes nothing", async () => {
+    const one = await import("@/app/api/admin/events/[id]/proposals/[runId]/route")
+    const cancel = await import("@/app/api/admin/events/[id]/proposals/[runId]/cancel/route")
+    const { db, writes } = proposalsDb()
+    ;(db.event.findFirst as ReturnType<typeof vi.fn>).mockResolvedValue({ id: "evt-a", availabilityEnabled: true, availabilityAdoptedAt: new Date() })
+    ;(db.proposalRun as { count: ReturnType<typeof vi.fn> }).count.mockResolvedValue(1) // adopted: no beta check
+    expect((await one.GET(makeRequest("/api/admin/events/evt-a/proposals/run-b"), run("evt-a", "run-b"))).status).toBe(404)
+    expect((await cancel.POST(makeRequest("/api/admin/events/evt-a/proposals/run-b/cancel", "POST"), run("evt-a", "run-b"))).status).toBe(404)
+    expect((db.proposalRun as { findFirst: ReturnType<typeof vi.fn> }).findFirst).toHaveBeenCalledWith(expect.objectContaining({ where: { id: "run-b", eventId: "evt-a" } }))
+    expect(writes.runUpdate).not.toHaveBeenCalled()
+  })
+
+  it("GET and PUT /api/admin/events/[id]/proposal-targets return 404 for an org-B event and save nothing", async () => {
+    const { GET, PUT } = await import("@/app/api/admin/events/[id]/proposal-targets/route")
+    const { writes } = proposalsDb()
+    expect((await GET(makeRequest("/api/admin/events/evt-b/proposal-targets"), params("evt-b"))).status).toBe(404)
+    expect((await PUT(makeRequest("/api/admin/events/evt-b/proposal-targets", "PUT", { targets: [{ volunteerId: "vol-b", targetMinutes: 600 }] }), params("evt-b"))).status).toBe(404)
+    expect(writes.targetCreate).not.toHaveBeenCalled()
+    expect(writes.targetUpdate).not.toHaveBeenCalled()
+  })
+
+  it("an org-A event refuses a target for an org-B member", async () => {
+    const { PUT } = await import("@/app/api/admin/events/[id]/proposal-targets/route")
+    const { db, writes } = proposalsDb()
+    ;(db.event.findFirst as ReturnType<typeof vi.fn>).mockResolvedValue({ id: "evt-a", availabilityEnabled: true, availabilityAdoptedAt: new Date() })
+    ;(db.proposalRun as { count: ReturnType<typeof vi.fn> }).count.mockResolvedValue(1)
+    const res = await PUT(makeRequest("/api/admin/events/evt-a/proposal-targets", "PUT", { targets: [{ volunteerId: "vol-b", targetMinutes: 600 }] }), params("evt-a"))
+    expect(res.status).toBe(404)
+    expect(db.volunteer.findMany).toHaveBeenCalledWith(expect.objectContaining({ where: expect.objectContaining({ id: { in: ["vol-b"] }, organizationId: ORG_A }) }))
+    expect(writes.targetCreate).not.toHaveBeenCalled()
+  })
+
+  it("POST /api/admin/events/[id]/drafts/[draftId]/lock returns 404 for an org-B event and locks nothing", async () => {
+    const { POST } = await import("@/app/api/admin/events/[id]/drafts/[draftId]/lock/route")
+    const { writes } = proposalsDb()
+    const res = await POST(makeRequest("/api/admin/events/evt-b/drafts/d-b/lock", "POST", { revision: 1, locked: true }), { params: Promise.resolve({ id: "evt-b", draftId: "d-b" }) })
+    expect(res.status).toBe(404)
+    expect(writes.draftUpdate).not.toHaveBeenCalled()
   })
 })

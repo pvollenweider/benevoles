@@ -96,6 +96,9 @@ export async function anonymisePastEvent(
     // Draft assignments and their publications (#1146, lot C): plans for named people, done with.
     await tx.draftAssignment.deleteMany({ where: { eventId } })
     await tx.draftPublication.deleteMany({ where: { eventId } })
+    // Generated proposals and hour targets (#1172): planning data about named people, done with.
+    await tx.proposalRun.deleteMany({ where: { eventId } })
+    await tx.eventVolunteerTarget.deleteMany({ where: { eventId } })
     await tx.event.update({ where: { id: eventId }, data: { personalDataAnonymizedAt: now } })
     const counts = { registrations: registrations.length, anonymousRecords, answers: answers.count, invites: invites.count, sectorLeaders: sectorLeaders.count }
     await tx.eventLog.create({
