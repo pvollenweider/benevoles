@@ -108,6 +108,8 @@ describe("« Rétablir » when the answer changed meanwhile", () => {
     fireEvent.submit(screen.getByRole("dialog").querySelector("form")!)
     await waitFor(() => expect(refresh).toHaveBeenCalled())
     expect(actions.at(-1)).toEqual({ newLink: true, availabilityAck: ["key-new"] })
+    // The message is said 150 ms after the focus move: wait for it, so that no timer outlives the test.
+    await waitFor(() => expect(screen.getByText("Inscription de Chloé Roy rétablie, avec un nouveau lien personnel.")).toBeInTheDocument())
   })
 })
 
@@ -154,6 +156,8 @@ describe("validating a swap", () => {
     fireEvent.click(jean)
     fireEvent.submit(screen.getByRole("dialog").querySelector("form")!)
     await waitFor(() => expect(actions).toEqual([{ approve: true, revision: 2, availabilityAck: ["key-pierre", "key-jean"] }]))
+    // The result is said 150 ms after the focus move: wait for it, so that no timer outlives the test.
+    await waitFor(() => expect(screen.getByText(/^Échange validé et effectué entre Pierre Dupont et Jean Martin\./)).toBeInTheDocument())
   })
 
   it("reads nothing to refuse a swap", async () => {

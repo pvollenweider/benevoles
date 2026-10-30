@@ -3,7 +3,7 @@
 // SPDX-FileCopyrightText: 2026 Philippe Vollenweider
 // SPDX-License-Identifier: AGPL-3.0-only
 
-import { useId, useRef, useState } from "react"
+import { useEffect, useId, useRef, useState } from "react"
 import { flushSync } from "react-dom"
 import { useRouter } from "next/navigation"
 import ConfirmActionModal from "../ConfirmActionModal"
@@ -30,6 +30,9 @@ export default function RecentCancellations({ rows, eventId = "", availability =
   const [busy, setBusy] = useState(false)
   const [error, setError] = useState<string | null>(null)
   const [status, setStatus] = useState("")
+  // The message said just after the focus move: cleared if the section goes first (page reloaded).
+  const announceTimer = useRef<ReturnType<typeof setTimeout> | null>(null)
+  useEffect(() => () => { if (announceTimer.current) clearTimeout(announceTimer.current) }, [])
   const people = target ? [{ volunteerId: target.volunteerId, shiftId: target.shiftId, firstName: target.volunteerName, fullName: target.volunteerName }] : []
   const ack = useAvailabilityAck(eventId, people, availability && !!target, "Rétablir")
 
@@ -68,7 +71,8 @@ export default function RecentCancellations({ rows, eventId = "", availability =
     // The message comes just after, so a screen reader doesn't drop it for the focus change.
     flushSync(() => setTarget(null))
     headingRef.current?.focus()
-    setTimeout(() => setStatus(done), 150)
+    if (announceTimer.current) clearTimeout(announceTimer.current)
+    announceTimer.current = setTimeout(() => setStatus(done), 150)
     router.refresh()
   }
 
