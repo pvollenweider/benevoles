@@ -29,7 +29,7 @@ describe("RequestDecisionModal", () => {
   it("sends a refusal with its message and reports the decision", async () => {
     fetchMock.mockResolvedValue({ ok: true, json: async () => ({ ok: true }) })
     const onDecided = vi.fn()
-    render(<RequestDecisionModal reg={reg} kind="refuse" waitlist={false} onCancel={() => {}} onDecided={onDecided} />)
+    render(<RequestDecisionModal eventId="evt-1" reg={reg} kind="refuse" waitlist={false} onCancel={() => {}} onDecided={onDecided} />)
     const note = screen.getByLabelText("Message à la personne (facultatif)")
     expect(note).toHaveAccessibleDescription(/Ajouté tel quel à l'email/)
     fireEvent.change(note, { target: { value: "Complet, désolé." } })
@@ -44,18 +44,18 @@ describe("RequestDecisionModal", () => {
 
   // #582: the dialog says which shift, with its day and hours, in words.
   it("names the shift with its day and hours in both dialogs", () => {
-    const { unmount } = render(<RequestDecisionModal reg={reg} kind="accept" waitlist={false} onCancel={() => {}} onDecided={() => {}} />)
+    const { unmount } = render(<RequestDecisionModal eventId="evt-1" reg={reg} kind="accept" waitlist={false} onCancel={() => {}} onDecided={() => {}} />)
     expect(screen.getByText("La demande de Alice Martin sur « Bar, Soir, samedi 4 juillet, de 18h à 20h » devient une inscription confirmée.")).toBeInTheDocument()
     expect(screen.getByRole("dialog").textContent).not.toMatch(/[·–—]/)
     unmount()
-    render(<RequestDecisionModal reg={reg} kind="refuse" waitlist={false} onCancel={() => {}} onDecided={() => {}} />)
+    render(<RequestDecisionModal eventId="evt-1" reg={reg} kind="refuse" waitlist={false} onCancel={() => {}} onDecided={() => {}} />)
     expect(screen.getByText("La demande sur « Bar, Soir, samedi 4 juillet, de 18h à 20h » est refusée et la place est libérée.")).toBeInTheDocument()
   })
 
   it("accepts without a message field", async () => {
     fetchMock.mockResolvedValue({ ok: true, json: async () => ({ ok: true }) })
     const onDecided = vi.fn()
-    render(<RequestDecisionModal reg={reg} kind="accept" waitlist={false} onCancel={() => {}} onDecided={onDecided} />)
+    render(<RequestDecisionModal eventId="evt-1" reg={reg} kind="accept" waitlist={false} onCancel={() => {}} onDecided={onDecided} />)
     expect(screen.queryByLabelText("Message à la personne (facultatif)")).toBeNull()
     fireEvent.submit(screen.getByRole("dialog").querySelector("form")!)
     await waitFor(() => expect(onDecided).toHaveBeenCalled())
@@ -65,7 +65,7 @@ describe("RequestDecisionModal", () => {
   it("keeps the dialog open with the server's reason when the decision fails", async () => {
     fetchMock.mockResolvedValue({ ok: false, json: async () => ({ error: "Cette demande a déjà été traitée." }) })
     const onDecided = vi.fn()
-    render(<RequestDecisionModal reg={reg} kind="accept" waitlist={false} onCancel={() => {}} onDecided={onDecided} />)
+    render(<RequestDecisionModal eventId="evt-1" reg={reg} kind="accept" waitlist={false} onCancel={() => {}} onDecided={onDecided} />)
     fireEvent.submit(screen.getByRole("dialog").querySelector("form")!)
     expect(await screen.findByText("Cette demande a déjà été traitée.")).toBeInTheDocument()
     expect(onDecided).not.toHaveBeenCalled()
@@ -73,7 +73,7 @@ describe("RequestDecisionModal", () => {
 
   it("says nothing was done when the connection fails", async () => {
     fetchMock.mockRejectedValue(new TypeError("offline"))
-    render(<RequestDecisionModal reg={reg} kind="accept" waitlist={false} onCancel={() => {}} onDecided={() => {}} />)
+    render(<RequestDecisionModal eventId="evt-1" reg={reg} kind="accept" waitlist={false} onCancel={() => {}} onDecided={() => {}} />)
     fireEvent.submit(screen.getByRole("dialog").querySelector("form")!)
     expect(await screen.findByText("La connexion a échoué : rien n'a été fait. Réessayez.")).toBeInTheDocument()
   })

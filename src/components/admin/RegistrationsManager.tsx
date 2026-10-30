@@ -427,8 +427,10 @@ export default function RegistrationsManager({ eventId, initialRegistrations, sh
       {decision && (
         <RequestDecisionModal
           key={`${decision.reg.id}-${decision.kind}`}
+          eventId={eventId}
           reg={decision.reg}
           kind={decision.kind}
+          availability={availability}
           waitlist={registrations.some((r) => r.shift.id === decision.reg.shift.id && r.status === "waiting")}
           onCancel={() => setDecision(null)}
           onDecided={(startedAt) => handleDecided(decision.reg, decision.kind, startedAt)}

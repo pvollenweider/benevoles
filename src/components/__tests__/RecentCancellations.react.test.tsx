@@ -15,6 +15,8 @@ import type { RecentCancellation } from "@/lib/registration-restore"
 
 const row: RecentCancellation = {
   id: "r1",
+  volunteerId: "v1",
+  shiftId: "s1",
   volunteerName: "Chloé Roy",
   hasEmail: true,
   shift: "Bar, samedi 4 juillet, de 10h à 12h",

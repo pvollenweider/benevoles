@@ -10,6 +10,7 @@ import ConfirmActionModal from "../ConfirmActionModal"
 import { deadlineMoment } from "@/lib/cancel-deadline"
 import { swapMission, swapWhen } from "@/lib/shift-swap-text"
 import type { OrganiserSwap } from "@/lib/shift-swap-data"
+import { AvailabilityAckFields, useAvailabilityAck } from "../AvailabilityAck"
 
 /**
  * « Échanges de créneaux » (#1174, beta), on the registrations page: the swaps waiting for the
@@ -40,7 +41,13 @@ function Person({ name, gives, receives }: { name: string; gives: OrganiserSwap[
   )
 }
 
-export default function ShiftSwapsPanel({ eventId, requests, timeZone }: { eventId: string; requests: OrganiserSwap[]; timeZone: string }) {
+export default function ShiftSwapsPanel({ eventId, requests, timeZone, availability = false }: {
+  eventId: string
+  requests: OrganiserSwap[]
+  timeZone: string
+  /** The event uses dated availability (#1146, lot B): validating asks for the acknowledgement when a person said they are not available for the shift they receive. */
+  availability?: boolean
+}) {
   const router = useRouter()
   const headingRef = useRef<HTMLHeadingElement>(null)
   const [target, setTarget] = useState<{ swap: OrganiserSwap; approve: boolean } | null>(null)
@@ -48,6 +55,15 @@ export default function ShiftSwapsPanel({ eventId, requests, timeZone }: { event
   const [error, setError] = useState<string | null>(null)
   const [status, setStatus] = useState("")
   const [conflict, setConflict] = useState("")
+  // Each person and the shift they would receive.
+  const swapPeople = (r: OrganiserSwap) => (r.counterpart
+    ? [
+      { volunteerId: r.requester.volunteerId, shiftId: r.counterpart.shift.id, firstName: r.requester.name, fullName: r.requester.name },
+      { volunteerId: r.counterpart.volunteerId, shiftId: r.requester.shift.id, firstName: r.counterpart.name, fullName: r.counterpart.name },
+    ]
+    : [])
+  const people = target?.approve ? swapPeople(target.swap) : []
+  const ack = useAvailabilityAck(eventId, people, availability && !!target?.approve && people.length > 0, "Valider")
 
   const toApprove = requests.filter((r) => r.status === "approval")
   const underway = requests.filter((r) => r.status === "open" || r.status === "offered")
@@ -55,6 +71,8 @@ export default function ShiftSwapsPanel({ eventId, requests, timeZone }: { event
 
   async function decide() {
     if (!target || busy) return
+    if (target.approve && !ack.check()) return
+    const availabilityAck = target.approve ? ack.keys() : []
     setBusy(true)
     setError(null)
     let res: Response
@@ -62,7 +80,7 @@ export default function ShiftSwapsPanel({ eventId, requests, timeZone }: { event
       res = await fetch(`/api/admin/events/${eventId}/swaps/${target.swap.requestId}`, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ approve: target.approve, revision: target.swap.revision }),
+        body: JSON.stringify({ approve: target.approve, revision: target.swap.revision, ...(availabilityAck.length > 0 ? { availabilityAck } : {}) }),
       })
     } catch {
       setBusy(false)
@@ -71,6 +89,9 @@ export default function ShiftSwapsPanel({ eventId, requests, timeZone }: { event
     }
     const data = await res.json().catch(() => null)
     setBusy(false)
+    // A received shift outside declared availability (#1146, lot B): the request still waits, the
+    // dialog stays open with the box to tick, never the dialog's error too.
+    if (res.status === 409 && ack.refused(data)) { setError(null); return }
     const names = `${target.swap.requester.name} et ${target.swap.counterpart?.name ?? "l'autre bénévole"}`
     const done = res.ok
       ? (data?.status === "applied" ? `Échange validé et effectué entre ${names}. Ils sont prévenus par email.` : `Échange refusé entre ${names}. Ils sont prévenus par email.`)
@@ -172,7 +193,9 @@ export default function ShiftSwapsPanel({ eventId, requests, timeZone }: { event
           error={error}
           onConfirm={() => void decide()}
           onCancel={() => setTarget(null)}
-        />
+        >
+          {target.approve && availability && people.length > 0 && <AvailabilityAckFields prefix={`swap-${target.swap.requestId}`} people={people} verb="Valider" state={ack} />}
+        </ConfirmActionModal>
       )}
     </section>
   )

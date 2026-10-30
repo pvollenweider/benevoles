@@ -1306,6 +1306,16 @@ describe("Registrations — cross-tenant isolation", () => {
     expect(prismaMock.registration.update).not.toHaveBeenCalled()
   })
 
+  it("POST decision and restore with an availability acknowledgement (#1146, lot B) still return 404 for an org-B registration", async () => {
+    const decision = await import("@/app/api/admin/registrations/[id]/decision/route")
+    const restore = await import("@/app/api/admin/registrations/[id]/restore/route")
+    setupGuard()
+    const ack = ["a1|evt-b|vol-b|shift-b|1|2|req-b|1|Europe/Zurich"]
+    expect((await decision.POST(makeRequest("/api/admin/registrations/reg-b/decision", "POST", { decision: "accept", availabilityAck: ack }), params("reg-b"))).status).toBe(404)
+    expect((await restore.POST(makeRequest("/api/admin/registrations/reg-b/restore", "POST", { availabilityAck: ack }), params("reg-b"))).status).toBe(404)
+    expect(prismaMock.registration.update).not.toHaveBeenCalled()
+  })
+
   it("POST /api/admin/registrations returns 404 when shift belongs to org-B", async () => {
     const { POST } = await import("@/app/api/admin/registrations/route")
     setupGuard() // shift.findFirst → null (org-B shift not visible to org-A)
@@ -2281,6 +2291,22 @@ describe("Shift swaps — cross-tenant isolation (#1174)", () => {
     const res = await POST(makeRequest("/api/admin/events/evt-a/swaps/swap-a", "POST", { approve: true, revision: 2 }), swapParams("evt-a", "swap-a"))
     expect(res.status).toBe(200)
     expect(decideSwap).toHaveBeenCalledWith(db, expect.objectContaining({ organizationId: ORG_A, requestId: "swap-a", approve: true, revision: 2 }))
+  })
+
+  it("POST /api/admin/events/[id]/swaps/[requestId] passes the availability acknowledgements (#1146, lot B) with the caller's organisation, and relays a refusal", async () => {
+    const { POST } = await import("@/app/api/admin/events/[id]/swaps/[requestId]/route")
+    const { decideSwap } = await import("@/lib/shift-swap-server")
+    const outside = [{ volunteerId: "vol-a", shiftId: "shift-a", name: "Bar", key: "k", state: "outside" as const, detail: "", label: "Pas disponible à ces heures" }]
+    vi.mocked(decideSwap).mockResolvedValue({ ok: false, httpStatus: 409, error: "Refus", status: "approval", code: "availability", outside })
+    const db = setupGuard()
+    Object.assign(db, { shiftSwapRequest: { findFirst: vi.fn().mockResolvedValue({ id: "swap-a" }) } })
+    const res = await POST(makeRequest("/api/admin/events/evt-a/swaps/swap-a", "POST", { approve: true, revision: 2, availabilityAck: ["k"] }), swapParams("evt-a", "swap-a"))
+    expect(res.status).toBe(409)
+    expect(await res.json()).toMatchObject({ code: "availability", status: "approval", outside })
+    expect(decideSwap).toHaveBeenCalledWith(db, expect.objectContaining({ organizationId: ORG_A, availabilityAck: ["k"] }))
+    // More than one acknowledgement per person is refused before anything is read.
+    const tooMany = await POST(makeRequest("/api/admin/events/evt-a/swaps/swap-a", "POST", { approve: true, revision: 2, availabilityAck: ["a", "b", "c"] }), swapParams("evt-a", "swap-a"))
+    expect(tooMany.status).toBe(400)
   })
 
   it("PUT /api/admin/events/[id]/swaps/mode returns 404 for an org-B event: the row lock filters on the organisation", async () => {

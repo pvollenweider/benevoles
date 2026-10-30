@@ -198,9 +198,9 @@ export default async function RegistrationsPage({
         }))}
       />
 
-      {showSwaps && <ShiftSwapsPanel eventId={id} requests={swaps!.requests} timeZone={orgTimeZone(event.organization)} />}
+      {showSwaps && <ShiftSwapsPanel eventId={id} requests={swaps!.requests} timeZone={orgTimeZone(event.organization)} availability={event.availabilityEnabled || !!event.availabilityAdoptedAt} />}
 
-      <RecentCancellations rows={cancellations} />
+      <RecentCancellations rows={cancellations} eventId={id} availability={event.availabilityEnabled || !!event.availabilityAdoptedAt} />
     </div>
   )
 }

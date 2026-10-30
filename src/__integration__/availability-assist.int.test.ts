@@ -7,7 +7,7 @@ import { describe, it, expect, vi, beforeAll, afterAll } from "vitest"
  * Assisted manual assignment (#1146, lot B) against a real Postgres: the per-shift panel's
  * candidates (scope, people already on the shift, inactive members, other organisations), the
  * manual add's acknowledgement (refused without it, nothing created; accepted with the key the
- * form received; stale once the answer changed), and the lock order: an organiser's correction
+ * form received, its evidence written with the registration; stale once the answer changed), and the lock order: an organiser's correction
  * that holds the person's row makes a waiting addition read the new answer. Only email is mocked.
  */
 
@@ -112,8 +112,9 @@ describe.skipIf(!url)("assisted manual assignment on Postgres (#1146, lot B)", (
     const key = fits!.fits[0].ackKey!
     const added = await add({ eventId: e.id, volunteerId: p.id, shiftIds: [bar.id], availabilityAck: [key] })
     expect(added.status).toBe(201)
-    const log = await prisma.eventLog.findFirst({ where: { eventId: e.id, action: "registration.created" } })
-    expect((log?.changes as Record<string, { to: unknown }>).outsideAvailability.to).toBe("5 h")
+    // The evidence, committed with the registration (#1146, lot B follow-up): one entry, versioned.
+    const log = await prisma.eventLog.findFirst({ where: { eventId: e.id, action: "registration.availability_acknowledged" } })
+    expect(log?.changes).toMatchObject({ availabilityAck: { to: { v: 1, via: "manual_add", state: "partial", coveredMinutes: 60, outsideMinutes: 300 } } })
   })
 
   it("an addition waiting behind a correction of the same person reads the new answer: the old acknowledgement no longer applies", async () => {

@@ -19,7 +19,7 @@ import type { CandidateRow } from "@/lib/availability-assist"
 
 // Assisted manual assignment (#1146, lot B): the per-shift panel and the add form's acknowledgement.
 const row = (lastName: string, extra: Partial<CandidateRow> = {}): CandidateRow => ({
-  volunteerId: `v-${lastName}`, firstName: "Nadia", lastName,
+  volunteerId: `v-${lastName}`, firstName: "Nadia", lastName, sameNameHint: null,
   fit: { state: "full", totalMinutes: 360, coveredMinutes: 360, outsideMinutes: 0, unknownMinutes: 0, needsAck: false, ranges: [{ date: "2031-07-11", startTime: "08:00", endTime: "22:00" }] },
   ackKey: null,
   minutes: { confirmed: 0, pending: 0, draft: 0, committed: 0, sameDay: 0 }, sameDayLabel: "le vendredi 11 juillet",
@@ -46,6 +46,16 @@ describe("ShiftAssistPanel", () => {
     expect(screen.getByText("Pas disponible à ces heures")).toBeInTheDocument()
     expect(screen.getByRole("button", { name: "Ajouter à ce créneau : Nadia Rochat" })).toBeInTheDocument()
     expect(screen.getByText(/Déjà prévu sur l'événement : 4 h confirmées/)).toBeInTheDocument()
+  })
+
+  it("tells two people of the same name apart by their email, in the heading and the button (#1146, lot B)", () => {
+    panel([
+      row("Rochat", { volunteerId: "v-1", sameNameHint: "nadia.rochat@example.org" }),
+      row("Rochat", { volunteerId: "v-2", sameNameHint: "sans email" }),
+    ])
+    expect(screen.getAllByRole("heading", { level: 3 }).map((h) => h.textContent)).toEqual(["Nadia Rochat, nadia.rochat@example.org", "Nadia Rochat, sans email"])
+    expect(screen.getByRole("button", { name: "Ajouter à ce créneau : Nadia Rochat (nadia.rochat@example.org)" })).toBeInTheDocument()
+    expect(screen.getByRole("button", { name: "Ajouter à ce créneau : Nadia Rochat (sans email)" })).toBeInTheDocument()
   })
 
   it("asks for the acknowledgement on click: the box is marked and focused, nothing is sent", () => {

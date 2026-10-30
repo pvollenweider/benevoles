@@ -10,6 +10,7 @@ import { cancelledFrom, planRestore, type RestoredStatus } from "./registration-
 import { localDateTimeToUtc, orgTimeZone } from "./time-zone"
 import { generateToken } from "./utils"
 import { checkDutyChange, lockVolunteerRows, lockWorkloadShared, readWorkloadGate, workloadRefusalBody, WorkloadRefusalError } from "./workload-guard"
+import { AvailabilityAckError, availabilityAckBody, checkAvailabilityAcks, logAvailabilityAcks, readAvailabilityGate } from "./availability-assist-data"
 
 /**
  * « Rétablir » (#809): puts a cancelled place or request back, as it was. Server only. The
@@ -20,6 +21,7 @@ import { checkDutyChange, lockVolunteerRows, lockWorkloadShared, readWorkloadGat
 export type RestoreResult =
   | { ok: true; status: RestoredStatus }
   | { ok: false; httpStatus: 404 | 409; error: string; code?: "workload"; workload?: string[] }
+  | { ok: false; httpStatus: 409; error: string; code: "availability"; outside: ReturnType<typeof availabilityAckBody>["outside"] }
 
 export const ALREADY_LIVE = "Cette personne a déjà une inscription en cours sur ce créneau."
 
@@ -30,6 +32,11 @@ export type RestoreOptions = {
    * most restores fix a mistake, and a new link breaks the ones in earlier emails and calendars.
    */
   newLink?: boolean
+  /**
+   * Dated availability (#1146, lot B): the organiser's acknowledgement of hours the person said
+   * they are not available for (availabilityAckKey), needed on an event that uses it.
+   */
+  availabilityAck?: readonly string[]
 }
 
 export async function restoreRegistration(db: OrgScopedPrisma, actor: LogActor, id: string, now: Date = new Date(), options: RestoreOptions = {}): Promise<RestoreResult> {
@@ -74,15 +81,22 @@ export async function restoreRegistration(db: OrgScopedPrisma, actor: LogActor, 
         now,
       })
       if (!plan.ok) return { ok: false as const, error: plan.message }
-      // A place or a request taken back is a commitment again: judged on the whole schedule.
+      // A place or a request taken back is a commitment again: judged on the whole schedule. Then
+      // dated availability (#1146, lot B), on an event that uses it: hours the person said they are
+      // not available for need the organiser's acknowledgement (a request too: it holds a spot
+      // again; its acceptance checks again), on the answer read under the person's lock.
+      const availability = await readAvailabilityGate(tx, reg.eventId)
+      if (workloadGate.kind !== "off" || availability.inUse) await lockVolunteerRows(tx, [reg.volunteerId])
       if (workloadGate.kind !== "off") {
-        await lockVolunteerRows(tx, [reg.volunteerId])
         const verdict = await checkDutyChange(tx, workloadGate, reg.eventId, reg.volunteerId, { add: [reg.shift] }, { exceptRegistrationIds: [id] })
         if (!verdict.ok) throw new WorkloadRefusalError(verdict, reg.volunteerId)
       }
+      const acknowledged = availability.inUse ? await checkAvailabilityAcks(tx, availability, reg.eventId, reg.volunteerId, [reg.shiftId], options.availabilityAck ?? []) : []
 
       const { count } = await tx.registration.updateMany({ where: { id, status: "cancelled" }, data: { status: plan.status } })
       if (count === 0) return { ok: false as const, error: "Cette inscription n'est pas annulée." }
+      // The acknowledgement's evidence commits with the restore (#1146, lot B).
+      await logAvailabilityAcks(tx, { eventId: reg.eventId, actor, via: "restore", acks: acknowledged, registrationOf: () => id })
       // New links for every live registration of the person on the event: the personal page
       // opens all of them from any one link. Clear tokens only in memory, for the email.
       let editToken = registrationToken.reveal(reg)
@@ -128,6 +142,7 @@ export async function restoreRegistration(db: OrgScopedPrisma, actor: LogActor, 
       return { ok: true as const, status: plan.status, outboxIds: await enqueueNotifications(outbox.payloads, tx, { organizationId: reg.event.organizationId }) }
     })
   } catch (e) {
+    if (e instanceof AvailabilityAckError) return { ok: false, httpStatus: 409, ...availabilityAckBody(e, name, "restore") }
     if (e instanceof WorkloadRefusalError) {
       return { ok: false, httpStatus: 409, ...workloadRefusalBody(e.verdict, `Impossible de rétablir : le programme de ${name} ne respecterait plus les pauses et limites de charge de cet événement.`) }
     }

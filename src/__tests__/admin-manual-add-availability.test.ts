@@ -6,7 +6,7 @@ import { describe, it, expect, vi, beforeEach } from "vitest"
 vi.mock("@/lib/workload-guard", async (importOriginal) => ({
   ...(await importOriginal<typeof import("@/lib/workload-guard")>()),
   lockWorkloadShared: vi.fn(), lockVolunteerRows: vi.fn(), readWorkloadGate: vi.fn(async () => ({ kind: "off" })),
-  committedDuty: vi.fn(async () => []),
+  committedDuty: vi.fn(async () => []), checkDutyChange: vi.fn(async () => ({ ok: true })),
 }))
 
 /**
@@ -22,6 +22,7 @@ const m = vi.hoisted(() => ({
   logEvent: vi.fn(),
   queryRaw: vi.fn(),
   requestRead: vi.fn(),
+  logCreate: vi.fn(),
 }))
 
 const EVENT_IN_USE = {
@@ -51,6 +52,7 @@ vi.mock("@/lib/auth-guard", () => ({
       registration: { findMany: vi.fn(async () => []), create: m.registrationCreate },
       availabilityRequest: { findFirst: vi.fn(async (args: unknown) => { m.requestRead(args); return m.answer }) },
       adminUser: { findFirst: vi.fn(async () => null) },
+      eventLog: { create: m.logCreate },
       $queryRaw: m.queryRaw,
       $transaction: async (fn: (tx: unknown) => unknown) => fn(db),
     }
@@ -98,7 +100,30 @@ describe("POST /api/admin/registrations on an event collecting availability (#11
     const res = await POST(post({ availabilityAck: [key] }))
     expect(res.status).toBe(201)
     expect(m.registrationCreate).toHaveBeenCalledTimes(1)
-    expect(m.logEvent.mock.calls[0][0].changes.outsideAvailability).toEqual({ from: null, to: "6 h" })
+    // The evidence is written in the transaction, server-derived and versioned; no second line after.
+    expect(m.logCreate).toHaveBeenCalledTimes(1)
+    const entry = m.logCreate.mock.calls[0][0].data
+    expect(entry).toMatchObject({ action: "registration.availability_acknowledged", entityType: "Registration", entityId: "r-s1", actorType: "admin", actorId: "adm-1" })
+    expect(entry.changes).toEqual({
+      shiftId: { from: "s1", to: "s1" },
+      availabilityAck: { from: null, to: {
+        v: 1, via: "manual_add", requestId: "req-1", revision: 2, shiftStart: "2030-07-11T12:00:00.000Z", shiftEnd: "2030-07-11T18:00:00.000Z",
+        timeZone: "Europe/Zurich", state: "outside", totalMinutes: 360, coveredMinutes: 0, outsideMinutes: 360, unknownMinutes: 0,
+      } },
+    })
+    expect(m.logEvent.mock.calls[0][0].changes.outsideAvailability).toBeUndefined()
+  })
+
+  it("checks the workload protection first: a hard refusal never asks for the acknowledgement", async () => {
+    const guard = await import("@/lib/workload-guard")
+    vi.mocked(guard.readWorkloadGate).mockResolvedValueOnce({ kind: "incomplete" } as never)
+    vi.mocked(guard.checkDutyChange).mockResolvedValueOnce({ ok: false, reason: "incomplete" })
+    const { POST } = await import("@/app/api/admin/registrations/route")
+    const res = await POST(post())
+    expect(res.status).toBe(409)
+    expect((await res.json()).code).toBe("workload")
+    expect(m.requestRead).not.toHaveBeenCalled()
+    expect(m.registrationCreate).not.toHaveBeenCalled()
   })
 
   it("refuses an acknowledgement given on an older answer", async () => {
@@ -117,7 +142,7 @@ describe("POST /api/admin/registrations on an event collecting availability (#11
     expect((await POST(post())).status).toBe(201)
     m.answer = null
     expect((await POST(post())).status).toBe(201)
-    expect(m.logEvent.mock.calls[0][0].changes.outsideAvailability).toBeUndefined()
+    expect(m.logCreate).not.toHaveBeenCalled()
   })
 
   it("keeps the acknowledgement after collection is turned off: the answers are kept", async () => {

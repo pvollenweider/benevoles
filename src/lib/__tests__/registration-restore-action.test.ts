@@ -22,6 +22,7 @@ vi.mock("../token-vault", () => ({ registrationToken: { reveal: () => "tok-1", d
 vi.mock("../utils", () => { let n = 0; return { generateToken: () => `new-${++n}` } })
 
 import { ALREADY_LIVE, restoreRegistration } from "../registration-restore-action"
+import { answerRow, availabilityShift, availabilityTx } from "./fixtures/availability-tx"
 
 const reg = {
   id: "r1", eventId: "e1", shiftId: "s1", volunteerId: "v1", status: "cancelled",
@@ -30,8 +31,12 @@ const reg = {
   event: { id: "e1", title: "Fête", organizationId: "org-1", organization: { slug: "org", timeZone: "Europe/Zurich" } },
 }
 
-function makeDb(over: { reg?: unknown; from?: string; status?: string; occupied?: number; shiftStatus?: string; updateError?: unknown } = {}) {
+function makeDb(over: { reg?: unknown; from?: string; status?: string; occupied?: number; shiftStatus?: string; updateError?: unknown; availability?: ReturnType<typeof availabilityTx> } = {}) {
+  const availability = over.availability ?? availabilityTx({ inUse: false })
   const tx = {
+    event: availability.event,
+    availabilityRequest: availability.availabilityRequest,
+    eventLog: availability.eventLog,
     $queryRaw: vi.fn().mockResolvedValue([]),
     registration: {
       findFirst: vi.fn().mockResolvedValue({ status: over.status ?? "cancelled" }),
@@ -42,6 +47,7 @@ function makeDb(over: { reg?: unknown; from?: string; status?: string; occupied?
     },
     shift: {
       findFirst: vi.fn().mockResolvedValue({ status: over.shiftStatus ?? "open", capacity: 2 }),
+      findMany: availability.shiftRows.findMany,
       updateMany: vi.fn().mockResolvedValue({ count: 1 }),
     },
   }
@@ -151,5 +157,57 @@ describe("restoreRegistration (#809)", () => {
     expect(tokens).toContain(`h:${data.editToken}`)
     expect(data.editToken).not.toBe("tok-1")
     expect(logEvent).toHaveBeenCalledWith(expect.objectContaining({ changes: expect.objectContaining({ personalLink: { from: "(ancien)", to: "(renouvelé)" } }) }))
+  })
+})
+
+// Dated availability (#1146, lot B): « Rétablir » on hours the person said they are not available
+// for needs the organiser's acknowledgement, a place as well as a request (it holds a spot again).
+describe("restoreRegistration on an event collecting availability", () => {
+  beforeEach(() => {
+    vi.clearAllMocks()
+    enqueueNotifications.mockResolvedValue(["n1"])
+    logEvent.mockResolvedValue("log-1")
+  })
+  // Chloé's place on s1, the 11th 14:00–20:00: she said she is free 09:00–12:00 only.
+  const later = { ...reg, shift: { ...reg.shift, date: new Date("2030-07-11T00:00:00Z"), startTime: "14:00", endTime: "20:00" } }
+  const inUse = () => availabilityTx({ answers: { v1: answerRow("v1") }, shifts: [availabilityShift("s1")] })
+  const key = "a1|e1|v1|s1|1910001600000|1910023200000|req-v1|2|Europe/Zurich"
+  const early = new Date("2030-07-01T10:00:00Z")
+
+  it("refuses without the acknowledgement: nothing restored, no email, no log", async () => {
+    const { db, tx } = makeDb({ reg: later, availability: inUse() })
+    const out = await restoreRegistration(db, actor, "r1", early)
+    expect(out).toMatchObject({ ok: false, httpStatus: 409, code: "availability", outside: [{ volunteerId: "v1", shiftId: "s1", key }] })
+    expect((out as { error: string }).error).toContain("cochez la confirmation pour rétablir son inscription quand même. Rien n'a été rétabli.")
+    expect(tx.registration.updateMany).not.toHaveBeenCalled()
+    expect(enqueueNotifications).not.toHaveBeenCalled()
+    expect(logEvent).not.toHaveBeenCalled()
+  })
+
+  it("restores with the acknowledgement, its evidence in the same transaction", async () => {
+    const availability = inUse()
+    const { db } = makeDb({ reg: later, availability })
+    expect(await restoreRegistration(db, actor, "r1", early, { availabilityAck: [key] })).toEqual({ ok: true, status: "active" })
+    expect(availability.eventLog.create.mock.calls[0]).toMatchObject([{ data: { action: "registration.availability_acknowledged", entityId: "r1", changes: { availabilityAck: { to: { via: "restore", outsideMinutes: 360 } } } } }])
+  })
+
+  it("asks it for a request too", async () => {
+    const { db } = makeDb({ reg: later, from: "requested", availability: inUse() })
+    expect(await restoreRegistration(db, actor, "r1", early)).toMatchObject({ ok: false, code: "availability" })
+  })
+
+  it("a full shift is refused for that reason first, without asking", async () => {
+    const availability = inUse()
+    const { db } = makeDb({ reg: later, occupied: 2, availability })
+    expect(await restoreRegistration(db, actor, "r1", early)).toMatchObject({ ok: false, httpStatus: 409, error: "Ce créneau est complet : la place a été reprise." })
+    expect(availability.availabilityRequest.findFirst).not.toHaveBeenCalled()
+  })
+
+  it("reads no answer on an event that never used the option", async () => {
+    const availability = availabilityTx({ inUse: false })
+    const { db } = makeDb({ reg: later, availability })
+    expect(await restoreRegistration(db, actor, "r1", early)).toEqual({ ok: true, status: "active" })
+    expect(availability.availabilityRequest.findFirst).not.toHaveBeenCalled()
+    expect(availability.eventLog.create).not.toHaveBeenCalled()
   })
 })

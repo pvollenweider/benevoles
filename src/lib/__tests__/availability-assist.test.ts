@@ -3,7 +3,7 @@
 
 import { describe, it, expect } from "vitest"
 import {
-  assessCandidate, availabilityAckKey, committedHoursText, filterCandidates, fitDetail, shiftFit, shiftInterval, sortCandidates,
+  assessCandidate, availabilityAckChanges, availabilityAckKey, committedHoursText, judgeAvailabilityAcks, sameNameHints, filterCandidates, fitDetail, shiftFit, shiftInterval, sortCandidates,
   type AnswerForFit, type AssistContext, type CandidateInput, type HeldMission,
 } from "../availability-assist"
 import { activePolicy, buildPolicy, type WorkloadPolicyValues } from "../workload-policy"
@@ -197,5 +197,54 @@ describe("sortCandidates and filterCandidates", () => {
   it("keeps only people free for the whole shift when asked", () => {
     expect(filterCandidates(rows, true).map((r) => r.lastName)).toEqual(["Zbinden", "Muller"])
     expect(filterCandidates(rows, false)).toHaveLength(4)
+  })
+})
+
+describe("judgeAvailabilityAcks: evidence of an acknowledgement (#1146, lot B)", () => {
+  const a = answer([{ date: "2030-07-10", ranges: [] }, { date: "2030-07-11", ranges: [range("2030-07-11", "09:00", "15:00")] }], 4)
+  const bar = { ...shift("2030-07-11", "14:00", "20:00"), name: "Bar" }
+  const base = { eventId: "e1", volunteerId: "v1", shifts: [bar], answer: a, eventDates: DATES, timeZone: TZ }
+
+  it("names the person in what is missing, and keeps the server's evidence for what was given", () => {
+    const missing = judgeAvailabilityAcks({ ...base, acks: [] })
+    expect(missing.missing).toEqual([expect.objectContaining({ volunteerId: "v1", shiftId: "s1", state: "partial" })])
+    const key = missing.missing[0].key
+    const given = judgeAvailabilityAcks({ ...base, acks: [key] })
+    expect(given.missing).toEqual([])
+    expect(given.acknowledged).toEqual([{
+      volunteerId: "v1", shiftId: "s1", key, requestId: "req-1", revision: 4, interval: shiftInterval(bar, TZ), timeZone: TZ,
+      state: "partial", totalMinutes: 360, coveredMinutes: 60, outsideMinutes: 300, unknownMinutes: 0,
+    }])
+  })
+
+  it("writes versioned evidence, never a range, and the shift unchanged so the journal names it", () => {
+    const [ack] = judgeAvailabilityAcks({ ...base, acks: [judgeAvailabilityAcks({ ...base, acks: [] }).missing[0].key] }).acknowledged
+    const changes = availabilityAckChanges(ack, "swap")
+    expect(changes).toEqual({
+      shiftId: { from: "s1", to: "s1" },
+      availabilityAck: { from: null, to: {
+        v: 1, via: "swap", requestId: "req-1", revision: 4, shiftStart: "2030-07-11T12:00:00.000Z", shiftEnd: "2030-07-11T18:00:00.000Z", timeZone: TZ,
+        state: "partial", totalMinutes: 360, coveredMinutes: 60, outsideMinutes: 300, unknownMinutes: 0,
+      } },
+    })
+    expect(JSON.stringify(changes)).not.toContain("09:00")
+  })
+})
+
+describe("sameNameHints (#1146, lot B)", () => {
+  const p = (id: string, firstName: string, lastName: string, email: string | null) => ({ id, firstName, lastName, email })
+
+  it("says nothing for a name listed once", () => {
+    expect(sameNameHints([p("1", "Nadia", "Rochat", "n@example.org"), p("2", "Léa", "Rochat", null)]).size).toBe(0)
+  })
+
+  it("tells homonyms apart by their email, or « sans email », whatever the case and spaces", () => {
+    const hints = sameNameHints([p("1", "Nadia", "Rochat", "nadia.rochat@example.org"), p("2", " nadia ", "ROCHAT", null), p("3", "Marc", "Favre", null)])
+    expect(Object.fromEntries(hints)).toEqual({ 1: "nadia.rochat@example.org", 2: "sans email" })
+  })
+
+  it("numbers what is still shared, in a stable order", () => {
+    const hints = sameNameHints([p("b", "Nadia", "Rochat", null), p("a", "Nadia", "Rochat", null), p("c", "Nadia", "Rochat", "n@example.org")])
+    expect(Object.fromEntries(hints)).toEqual({ a: "sans email, fiche 1 sur 2", b: "sans email, fiche 2 sur 2", c: "n@example.org" })
   })
 })

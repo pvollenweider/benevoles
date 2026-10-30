@@ -147,8 +147,9 @@ export type OrganiserSwap = {
   revision: number
   deadline: string
   needsApproval: boolean
-  requester: { name: string; shift: SwapShiftView }
-  counterpart: { name: string; shift: SwapShiftView } | null
+  /** `volunteerId` (#1146, lot B): each person's availability for the shift they would receive. */
+  requester: { volunteerId: string; name: string; shift: SwapShiftView }
+  counterpart: { volunteerId: string; name: string; shift: SwapShiftView } | null
   endMessage: string | null
   updatedAt: string
 }
@@ -192,8 +193,8 @@ export async function loadOrganiserSwaps(db: OrgScopedPrisma, eventId: string): 
       revision: r.revision,
       deadline: swapDeadline({ expiresAt: r.expiresAt, given: b ? [a, b] : [a], setting: event, timeZone }).toISOString(),
       needsApproval: !!b && needsSwapApproval(a, b, event),
-      requester: { name: nameOf(r.volunteerId), shift: shiftView(a) },
-      counterpart: b && r.counterVolunteerId ? { name: nameOf(r.counterVolunteerId), shift: shiftView(b) } : null,
+      requester: { volunteerId: r.volunteerId, name: nameOf(r.volunteerId), shift: shiftView(a) },
+      counterpart: b && r.counterVolunteerId ? { volunteerId: r.counterVolunteerId, name: nameOf(r.counterVolunteerId), shift: shiftView(b) } : null,
       endMessage: r.endReason && !["withdrawn", "applied"].includes(r.status) ? swapRefusalMessage(r.endReason as SwapEndReason) : null,
       updatedAt: r.updatedAt.toISOString(),
     })

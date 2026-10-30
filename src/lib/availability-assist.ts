@@ -145,8 +145,8 @@ export function availabilityAckKey(p: { eventId: string; volunteerId: string; sh
   return ["a1", p.eventId, p.volunteerId, p.shiftId, p.interval.start, p.interval.end, p.requestId, p.revision, p.timeZone].join("|")
 }
 
-/** What the organiser must tick, said about the person: no « tu », no blame. */
-export const ackLabel = (firstName: string) => `Ajouter quand même : je sais que ${firstName} n'a pas indiqué être disponible à ces heures`
+/** What the organiser must tick, said about the person: no « tu », no blame. `verb`: the action. */
+export const ackLabel = (firstName: string, verb: "Ajouter" | "Accepter" | "Rétablir" | "Valider" = "Ajouter") => `${verb} quand même : je sais que ${firstName} n'a pas indiqué être disponible à ces heures`
 
 /** The server's refusal when an acknowledgement is missing or stale. */
 export const AVAILABILITY_ACK_REQUIRED = "Cette personne a indiqué ne pas être disponible pendant une partie de ce créneau : cochez la confirmation pour l'ajouter quand même."
@@ -180,12 +180,16 @@ export type CandidateInput = {
   person?: WorkloadPerson | null
   /** The answer is flagged for review (two merged records answered differently). */
   reviewReason?: string | null
+  /** What tells this person apart from another listed under the same name (sameNameHints). */
+  sameNameHint?: string | null
 }
 
 export type CandidateRow = {
   volunteerId: string
   firstName: string
   lastName: string
+  /** Set when another person listed has the same name: their email, or « sans email ». */
+  sameNameHint: string | null
   fit: ShiftFit
   /** Set when the fit needs an acknowledgement; the key to send back with the addition. */
   ackKey: string | null
@@ -244,6 +248,7 @@ export function assessCandidate(ctx: AssistContext, c: CandidateInput): Candidat
     volunteerId: c.volunteerId,
     firstName: c.firstName,
     lastName: c.lastName,
+    sameNameHint: c.sameNameHint ?? null,
     fit,
     ackKey,
     minutes: { confirmed: minutesOf(["confirmed"]), pending: minutesOf(["pending"]), draft: minutesOf(["draft"]), committed: minutesOf(["confirmed", "pending"]), sameDay },
@@ -303,8 +308,26 @@ export function usesAvailability(e: { availabilityEnabled: boolean; availability
 export type AckShift = Pick<DutyShift, "id" | "date" | "startTime" | "endTime"> & { name: string }
 
 /** A shift added outside declared availability: without its acknowledgement, or with it. */
-export type AckMissing = { shiftId: string; name: string; key: string; state: FitState; detail: string }
-export type AckGiven = { shiftId: string; key: string; outsideMinutes: number }
+export type AckMissing = { volunteerId: string; shiftId: string; name: string; key: string; state: FitState; detail: string }
+/**
+ * An acknowledgement the server accepted, with the evidence it judged on (server-derived, never
+ * the client's): the answer's identity and revision, the shift's real interval and zone, and the
+ * minutes covered, declared unavailable and unknown. Never the ranges themselves.
+ */
+export type AckGiven = {
+  volunteerId: string
+  shiftId: string
+  key: string
+  requestId: string
+  revision: number
+  interval: Interval
+  timeZone: string
+  state: FitState
+  totalMinutes: number
+  coveredMinutes: number
+  outsideMinutes: number
+  unknownMinutes: number
+}
 
 /**
  * Which shifts of an addition need an acknowledgement the request does not carry (`missing`: the
@@ -322,8 +345,87 @@ export function judgeAvailabilityAcks(p: { eventId: string; volunteerId: string;
     const fit = shiftFit(interval, p.answer, p.eventDates, p.timeZone)
     if (!fit.needsAck) continue
     const key = availabilityAckKey({ eventId: p.eventId, volunteerId: p.volunteerId, shiftId: s.id, interval, requestId: p.answer.requestId, revision: p.answer.revision, timeZone: p.timeZone })
-    if (given.has(key)) acknowledged.push({ shiftId: s.id, key, outsideMinutes: fit.outsideMinutes })
-    else missing.push({ shiftId: s.id, name: s.name, key, state: fit.state, detail: fitDetail(fit) })
+    if (given.has(key)) {
+      acknowledged.push({
+        volunteerId: p.volunteerId, shiftId: s.id, key, requestId: p.answer.requestId, revision: p.answer.revision, interval, timeZone: p.timeZone,
+        state: fit.state, totalMinutes: fit.totalMinutes, coveredMinutes: fit.coveredMinutes, outsideMinutes: fit.outsideMinutes, unknownMinutes: fit.unknownMinutes,
+      })
+    } else missing.push({ volunteerId: p.volunteerId, shiftId: s.id, name: s.name, key, state: fit.state, detail: fitDetail(fit) })
   }
   return { missing, acknowledged }
+}
+
+// ── The acknowledgement's log entry ───────────────────────────────────────────────────────────
+
+/** The organiser action an acknowledgement was given for. */
+export type AckVia = "manual_add" | "accept" | "restore" | "swap"
+
+/** Version of the evidence stored in `availabilityAck`: raised whenever its shape changes. */
+export const AVAILABILITY_ACK_EVIDENCE_VERSION = 1
+
+export type AckEvidence = {
+  v: typeof AVAILABILITY_ACK_EVIDENCE_VERSION
+  via: AckVia
+  requestId: string
+  revision: number
+  shiftStart: string
+  shiftEnd: string
+  timeZone: string
+  state: FitState
+  totalMinutes: number
+  coveredMinutes: number
+  outsideMinutes: number
+  unknownMinutes: number
+}
+
+/**
+ * The `changes` of the acknowledgement's log entry, written in the same transaction as the
+ * registration change (Codex, #1146): the shift (unchanged, so the journal can name it) and the
+ * versioned evidence the server judged on. No name, no range: the log is read by the whole team
+ * and outlives the answer.
+ */
+export function availabilityAckChanges(a: AckGiven, via: AckVia): { shiftId: { from: string; to: string }; availabilityAck: { from: null; to: AckEvidence } } {
+  return {
+    shiftId: { from: a.shiftId, to: a.shiftId },
+    availabilityAck: {
+      from: null,
+      to: {
+        v: AVAILABILITY_ACK_EVIDENCE_VERSION, via, requestId: a.requestId, revision: a.revision,
+        shiftStart: new Date(a.interval.start).toISOString(), shiftEnd: new Date(a.interval.end).toISOString(), timeZone: a.timeZone,
+        state: a.state, totalMinutes: a.totalMinutes, coveredMinutes: a.coveredMinutes, outsideMinutes: a.outsideMinutes, unknownMinutes: a.unknownMinutes,
+      },
+    },
+  }
+}
+
+// ── People of the same name ───────────────────────────────────────────────────────────────────
+
+const nameKey = (firstName: string, lastName: string) => `${firstName} ${lastName}`.normalize("NFKC").trim().replace(/\s+/g, " ").toLocaleLowerCase("fr-FR")
+
+/**
+ * What tells apart people listed together under the same name (the badge reprint's rule,
+ * src/lib/print-badges.ts): their email, which organisers already see on the member's page, or
+ * « sans email »; then « fiche 1 sur 2 », « fiche 2 sur 2 » in a stable order when even that is shared.
+ * Nothing for a name listed once.
+ */
+export function sameNameHints(people: readonly { id: string; firstName: string; lastName: string; email: string | null }[]): Map<string, string> {
+  const groups = new Map<string, (typeof people)[number][]>()
+  for (const p of people) groups.set(nameKey(p.firstName, p.lastName), [...(groups.get(nameKey(p.firstName, p.lastName)) ?? []), p])
+  const hints = new Map<string, string>()
+  for (const group of groups.values()) {
+    if (group.length < 2) continue
+    const byHint = new Map<string, (typeof people)[number][]>()
+    for (const p of group) {
+      const hint = p.email?.trim() || "sans email"
+      byHint.set(hint.toLowerCase(), [...(byHint.get(hint.toLowerCase()) ?? []), p])
+    }
+    for (const same of byHint.values()) {
+      const sorted = [...same].sort((a, b) => (a.id < b.id ? -1 : a.id > b.id ? 1 : 0))
+      sorted.forEach((p, i) => {
+        const hint = p.email?.trim() || "sans email"
+        hints.set(p.id, sorted.length > 1 ? `${hint}, fiche ${i + 1} sur ${sorted.length}` : hint)
+      })
+    }
+  }
+  return hints
 }

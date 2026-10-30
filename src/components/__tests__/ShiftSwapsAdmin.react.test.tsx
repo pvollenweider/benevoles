@@ -21,7 +21,7 @@ const bar = { id: "s-bar", roleName: "Bar", label: "Bar", date: "2030-07-04", st
 const barSun = { ...bar, id: "s-bar-sun", date: "2030-07-05", startTime: "14:00", endTime: "16:00" }
 const waiting: OrganiserSwap = {
   requestId: "q1", status: "approval", revision: 2, deadline: "2030-07-04T08:00:00.000Z", needsApproval: true,
-  requester: { name: "Pierre Dupont", shift: bar }, counterpart: { name: "Jean Martin", shift: barSun }, endMessage: null, updatedAt: "2030-06-01T08:00:00.000Z",
+  requester: { volunteerId: "v-pierre", name: "Pierre Dupont", shift: bar }, counterpart: { volunteerId: "v-jean", name: "Jean Martin", shift: barSun }, endMessage: null, updatedAt: "2030-06-01T08:00:00.000Z",
 }
 
 const json = (body: unknown, status = 200) => ({ ok: status >= 200 && status < 300, status, json: async () => body })

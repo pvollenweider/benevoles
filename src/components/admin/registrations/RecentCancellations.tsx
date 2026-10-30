@@ -9,13 +9,19 @@ import { useRouter } from "next/navigation"
 import ConfirmActionModal from "../ConfirmActionModal"
 import { restoreRecap } from "@/lib/action-recap"
 import type { RecentCancellation } from "@/lib/registration-restore"
+import { AvailabilityAckFields, useAvailabilityAck } from "../AvailabilityAck"
 
 /**
  * « Annulations récentes » (#809): a place or a request cancelled by mistake, or from a personal
  * link someone else used, put back with « Rétablir » while the shift hasn't started and the spot
  * is free. The rules are `recentCancellations` and `planRestore` (src/lib/registration-restore.ts).
  */
-export default function RecentCancellations({ rows }: { rows: RecentCancellation[] }) {
+export default function RecentCancellations({ rows, eventId = "", availability = false }: {
+  rows: RecentCancellation[]
+  eventId?: string
+  /** The event uses dated availability (#1146, lot B): « Rétablir » asks for the acknowledgement when needed. */
+  availability?: boolean
+}) {
   const router = useRouter()
   const headingRef = useRef<HTMLHeadingElement>(null)
   const checkboxId = useId()
@@ -24,6 +30,8 @@ export default function RecentCancellations({ rows }: { rows: RecentCancellation
   const [busy, setBusy] = useState(false)
   const [error, setError] = useState<string | null>(null)
   const [status, setStatus] = useState("")
+  const people = target ? [{ volunteerId: target.volunteerId, shiftId: target.shiftId, firstName: target.volunteerName, fullName: target.volunteerName }] : []
+  const ack = useAvailabilityAck(eventId, people, availability && !!target, "Rétablir")
 
   function open(row: RecentCancellation) {
     setStatus("")
@@ -34,6 +42,8 @@ export default function RecentCancellations({ rows }: { rows: RecentCancellation
 
   async function restore() {
     if (!target || busy) return
+    if (!ack.check()) return
+    const availabilityAck = ack.keys()
     setBusy(true)
     setError(null)
     let res: Response
@@ -41,7 +51,7 @@ export default function RecentCancellations({ rows }: { rows: RecentCancellation
       res = await fetch(`/api/admin/registrations/${target.id}/restore`, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ newLink }),
+        body: JSON.stringify({ newLink, ...(availabilityAck.length > 0 ? { availabilityAck } : {}) }),
       })
     } catch {
       setBusy(false)
@@ -50,6 +60,8 @@ export default function RecentCancellations({ rows }: { rows: RecentCancellation
     }
     const data = await res.json().catch(() => null)
     setBusy(false)
+    // The answer changed meanwhile (#1146, lot B): the box says it, never the dialog's error too.
+    if (res.status === 409 && ack.refused(data)) { setError(null); return }
     if (!res.ok) { setError(data?.error ?? "L'inscription n'a pas pu être rétablie."); return }
     const done = `Inscription de ${target.volunteerName} rétablie${newLink ? ", avec un nouveau lien personnel" : ""}.`
     // The row leaves the list: the focus goes to the section's heading, not back to a removed button.
@@ -102,6 +114,7 @@ export default function RecentCancellations({ rows }: { rows: RecentCancellation
           onConfirm={() => void restore()}
           onCancel={() => setTarget(null)}
         >
+          {availability && <AvailabilityAckFields prefix={`restore-${target.id}`} people={people} verb="Rétablir" state={ack} />}
           <div className="mt-4 flex items-start gap-2">
             <input
               id={checkboxId}

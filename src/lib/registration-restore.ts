@@ -52,6 +52,8 @@ export function cancelledFrom(changes: unknown): string | null {
 /** A cancelled registration as the page reads it, before the rules are applied. */
 export type CancelledRegistration = {
   id: string
+  volunteerId: string
+  shiftId: string
   volunteerName: string
   hasEmail: boolean
   /** The shift, spoken: « Bar, samedi 4 juillet, de 10h à 12h ». */
@@ -68,6 +70,9 @@ export type CancelledRegistration = {
 
 export type RecentCancellation = {
   id: string
+  /** The person and the shift (#1146, lot B): their availability is read when « Rétablir » opens. */
+  volunteerId: string
+  shiftId: string
   volunteerName: string
   hasEmail: boolean
   shift: string
@@ -104,6 +109,8 @@ export function recentCancellations(rows: CancelledRegistration[], now: Date, ti
     const time = r.cancellation.at.toLocaleTimeString("fr-FR", { timeZone, hour: "2-digit", minute: "2-digit" })
     out.push({ at: r.cancellation.at.getTime(), row: {
       id: r.id,
+      volunteerId: r.volunteerId,
+      shiftId: r.shiftId,
       volunteerName: r.volunteerName,
       hasEmail: r.hasEmail,
       shift: r.shift,
