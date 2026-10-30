@@ -160,7 +160,7 @@ export default function PublicFooter({ variant = "event", site }: { variant?: "s
       <nav aria-label="Liens utiles" className={`grid grid-cols-2 gap-x-6 sm:gap-x-8 gap-y-6 ${variant === "event" ? "" : columns.length > 3 ? "md:grid-cols-4" : "sm:grid-cols-3"}`}>
         {columns.map((col) => (
           <div key={col.id} role="group" aria-labelledby={`footer-${variant}-${col.id}`} className="min-w-0">
-            <p id={`footer-${variant}-${col.id}`} className="font-semibold text-gray-900 dark:text-gray-100 hyphens-auto [overflow-wrap:anywhere]">{col.title}</p>
+            <p id={`footer-${variant}-${col.id}`} className="font-semibold text-gray-900 dark:text-gray-100 [overflow-wrap:anywhere]">{col.title}</p>
             <ul className="mt-2 space-y-1">
               {col.links.map((l) => (
                 <li key={l.href}><FooterAnchor link={l} /></li>
