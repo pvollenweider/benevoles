@@ -54,6 +54,25 @@ describe("ShiftSwapsPanel (#1174)", () => {
     expect(screen.getByRole("heading", { name: /Échanges de créneaux/ })).toHaveFocus()
   })
 
+  it("drops the pending result when the panel is unmounted before it is said (no update after unmount)", async () => {
+    vi.stubGlobal("fetch", vi.fn(async () => json({ ok: true, requestId: "q1", status: "applied" })))
+    const setTimeoutSpy = vi.spyOn(globalThis, "setTimeout")
+    const clearTimeoutSpy = vi.spyOn(globalThis, "clearTimeout")
+    const { unmount } = render(<ShiftSwapsPanel eventId="evt-1" requests={[waiting]} timeZone="Europe/Zurich" />)
+    fireEvent.click(screen.getByRole("button", { name: "Valider l'échange, Pierre Dupont et Jean Martin" }))
+    const dialog = await screen.findByRole("dialog", { name: "Valider cet échange ?" })
+    fireEvent.click(dialog.querySelector("button[type=submit]")!)
+    // The focus moves and the result is scheduled in the same step: the timer is pending here.
+    await waitFor(() => expect(screen.getByRole("heading", { name: /Échanges de créneaux/ })).toHaveFocus())
+    const announce = setTimeoutSpy.mock.calls.findIndex(([, ms]) => ms === 150)
+    expect(announce).toBeGreaterThanOrEqual(0)
+    unmount()
+    // Left pending, it ran after the test file's jsdom was gone (« window is not defined »).
+    expect(clearTimeoutSpy).toHaveBeenCalledWith(setTimeoutSpy.mock.results[announce].value)
+    setTimeoutSpy.mockRestore()
+    clearTimeoutSpy.mockRestore()
+  })
+
   it("says when nothing waits for approval", () => {
     render(<ShiftSwapsPanel eventId="evt-1" requests={[]} timeZone="Europe/Zurich" />)
     expect(screen.getByText("Aucun échange n'attend votre validation.")).toBeInTheDocument()
