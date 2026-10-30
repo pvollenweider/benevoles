@@ -484,6 +484,15 @@ export async function listRuns(db: Db, eventId: string, take = 10) {
   })
 }
 
+/** The coverage of each run's report (« 29 places couvertes sur 31 » in the history), read without the whole result. */
+export async function runCoverages(db: Pick<Db, "$queryRaw">, eventId: string, ids: string[]): Promise<Map<string, { filled: number; seats: number }>> {
+  if (ids.length === 0) return new Map()
+  const rows = await db.$queryRaw<{ id: string; filled: number | null; seats: number | null }[]>`
+    SELECT id, (result->'report'->'coverage'->>'filled')::int AS filled, (result->'report'->'coverage'->>'seats')::int AS seats
+    FROM "ProposalRun" WHERE "eventId" = ${eventId} AND id = ANY(${ids})`
+  return new Map(rows.filter((r) => r.filled != null && r.seats != null).map((r) => [r.id, { filled: r.filled!, seats: r.seats! }]))
+}
+
 /** The configuration of the event's latest run, to prefill the next one (categories, night add-ons, reserve). */
 export async function latestConfiguration(db: Db, eventId: string): Promise<unknown> {
   const run = await db.proposalRun.findFirst({ where: { eventId }, select: { configuration: true }, orderBy: [{ createdAt: "desc" }, { id: "desc" }] })

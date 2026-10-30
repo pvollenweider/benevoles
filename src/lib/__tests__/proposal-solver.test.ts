@@ -137,7 +137,7 @@ describe("framing scenarios", () => {
     const report = buildReport(buildModel(input), out)
     expect(report.certificates).toEqual([])
     expect(report.outcome).toBe("incomplete")
-    expect(stateLabel(report)).toBe("Incomplet")
+    expect(stateLabel(report)).toBe("Couverture partielle")
     expect(gapSentence(report.gaps[0])).toContain("la durée maximale par journée de service")
   })
 
@@ -146,7 +146,7 @@ describe("framing scenarios", () => {
     const r1 = buildReport(buildModel(lone), solveProposal(lone))
     expect(r1.outcome).toBe("proven_impossible")
     expect(r1.certificates).toEqual([{ kind: "shift", level: "minimum", shiftId: "drive", need: 1, eligible: 0 }])
-    expect(stateLabel(r1)).toBe("Impossible démontré")
+    expect(stateLabel(r1)).toBe("Couverture complète impossible")
 
     const crowd = tInput([tShift("a", D1, "09:00", "12:00", { capacity: 2 }), tShift("b", D1, "10:00", "11:00", { capacity: 2 })], [tPerson("p"), tPerson("q"), tPerson("r")])
     expect(certificates(buildModel(crowd))).toEqual([{ kind: "simultaneous", level: "minimum", shiftIds: ["a", "b"], need: 4, eligible: 3 }])
@@ -207,7 +207,7 @@ describe("reproducibility and interruption", () => {
     const out = solveProposal(input, { clock: () => (t += 1_000), deadlineMs: 3_000, slice: 1 })
     expect(out).toMatchObject({ execution: "interrupted", stopReason: "deadline" })
     expect(validateAssignments(input, out.assignments)).toEqual([])
-    expect(stateLabel({ outcome: "complete", execution: out.execution })).toBe("Recherche interrompue")
+    expect(stateLabel({ outcome: "complete", execution: out.execution })).toBe("Calcul arrêté avant la fin")
   })
 
   it("D08: a cancellation stops it too, identifiably, and nothing else happens", async () => {

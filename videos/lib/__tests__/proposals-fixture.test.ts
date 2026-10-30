@@ -9,7 +9,7 @@ import { assignmentSentence, buildReport, gapSentence, personSentence, stateLabe
 import { DEFAULT_PROPOSAL_BUDGET, PROPOSAL_INPUT_VERSION, suggestedTargetMinutes, type ProposalInput } from "../../../src/lib/proposal-input"
 import { validateAssignments } from "../../../src/lib/proposal-proofs"
 import { ProposalSearch } from "../../../src/lib/proposal-solver"
-import { formatHours, formToConfig, posteChoicesFrom, scopeShiftIds, type PersonChoice } from "../../../src/lib/proposal-view"
+import { coverageLine, formatHours, formToConfig, posteChoicesFrom, runStateLabel, runTone, scopeShiftIds, type PersonChoice } from "../../../src/lib/proposal-view"
 import { addDays } from "../../../src/lib/shift-series"
 import { activePolicy, buildPolicy, checkPolicyValues, evaluateWorkload, parseWorkloadPolicy, WRITE_SECTIONS, type DutyShift } from "../../../src/lib/workload-policy"
 import { AP_EXPECTED, AP_TYPED, PROPOSALS_OWNER_EMAIL } from "../record-assignment-proposals"
@@ -145,10 +145,13 @@ describe("assignment proposals video fixture (scripts/seed-video-proposals.ts)",
     expect(noah.targetMinutes).toBe(Number(AP_TYPED.target.hours) * 60)
   })
 
-  test("the result: « Impossible démontré », 29 seats of 31, every one written", () => {
+  test("the result: « Couverture complète impossible », 29 seats of 31, every one written", () => {
     expect(stateLabel(RESULT.report)).toBe(AP_EXPECTED.state)
+    // The page's own words: the badge of a finished run and its coverage line.
+    expect(runStateLabel({ status: "finished", outcome: RESULT.report.outcome })).toBe(AP_EXPECTED.state)
+    expect(runTone({ status: "finished", outcome: RESULT.report.outcome })).toBe("neutral") // a normal outcome, never the red error pair
     const { coverage } = RESULT.report
-    expect(`${coverage.filled} places couvertes sur ${coverage.seats}`).toBe(AP_EXPECTED.covered)
+    expect(coverageLine(coverage)).toBe(AP_EXPECTED.covered)
     // Every assignment passes the independent check: the write keeps them all.
     expect(validateAssignments(RESULT.input, RESULT.assignments)).toEqual([])
     expect(`${plural(RESULT.assignments.length, "affectation écrite", "affectations écrites")} dans les brouillons.`).toBe(AP_EXPECTED.written)

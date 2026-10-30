@@ -161,8 +161,8 @@ export function buildReport(model: Model, result: Pick<SolveOutcome, "assignment
 
 /** The state shown to the organiser: the execution first (an interruption), then the outcome. */
 export function stateLabel(r: Pick<ProposalReport, "outcome" | "execution">): string {
-  if (r.execution === "interrupted") return "Recherche interrompue"
-  return r.outcome === "complete" ? "Complet" : r.outcome === "proven_impossible" ? "Impossible démontré" : "Incomplet"
+  if (r.execution === "interrupted") return "Calcul arrêté avant la fin"
+  return r.outcome === "complete" ? "Toutes les places couvertes" : r.outcome === "proven_impossible" ? "Couverture complète impossible" : "Couverture partielle"
 }
 
 /** One sentence about the state, never a claim of optimality. */
@@ -173,7 +173,7 @@ export function stateSentence(r: Pick<ProposalReport, "outcome" | "execution" | 
       : "Le temps de calcul est écoulé : la proposition montrée est la meilleure trouvée jusque-là. Elle n'est écrite dans les brouillons que si vous le choisissez."
   }
   if (r.outcome === "complete") return "Tous les besoins choisis sont couverts, réserve comprise, sans enfreindre aucune règle. Les objectifs d'heures, la rotation et les préférences restent des objectifs : comparez avant de publier."
-  if (r.outcome === "proven_impossible") return "Couverture complète impossible sur ce périmètre : certains besoins ne peuvent être couverts par personne, quelle que soit la répartition. Les places restantes sont signalées ci-dessous."
+  if (r.outcome === "proven_impossible") return "Certains besoins de ce périmètre ne peuvent être couverts par personne, quelle que soit la répartition : les places restantes sont signalées ci-dessous, avec leur raison."
   return "Des besoins restent sans personne. Rien ne prouve qu'ils sont impossibles à couvrir : la recherche n'a pas trouvé de répartition qui les couvre en respectant toutes les règles."
 }
 
@@ -236,9 +236,9 @@ export function gapSentence(g: GapReport): string {
       words.push(`${blocked.workload} ${blocked.workload > 1 ? "dépasseraient" : "dépasserait"} ${rules.join(", ")}`)
     }
     if (words.length > 0) parts.push(`Parmi les ${count(g.eligible, "personne disponible", "personnes disponibles")} sur tout le créneau, ${words.join(", ")}.`)
-    if (blocked.addable) parts.push("Aucune affectation supplémentaire trouvée dans le budget de recherche.")
+    if (blocked.addable) parts.push("Aucune affectation supplémentaire trouvée dans le temps de calcul.")
   }
-  if (g.proven) parts.push("Démontré : il n'y a pas assez de personnes pouvant prendre ce créneau.")
+  if (g.proven) parts.push("Impossible à pourvoir : il n'y a pas assez de personnes pouvant prendre ce créneau.")
   return parts.join(" ")
 }
 

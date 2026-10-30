@@ -2,7 +2,7 @@
 // SPDX-License-Identifier: AGPL-3.0-only
 
 import { describe, it, expect } from "vitest"
-import { droppedSentence, formatHours, formToConfig, freshSeed, parseHours, posteChoicesFrom, runStateLabel, scopeShiftIds, type PageShift, type ProposalForm } from "../proposal-view"
+import { coverageLine, droppedSentence, fillMissingTargets, formatHours, formToConfig, freshSeed, historyEntry, parseHours, posteChoicesFrom, replacedDraftCount, rotationSummary, runStateLabel, runTone, scopeShiftIds, summaryProblems, withoutProblem, type PageShift, type ProposalForm } from "../proposal-view"
 
 // The page « Proposition d'affectations » (#1172): the form turned into a run's configuration.
 const shifts: PageShift[] = [
@@ -108,13 +108,93 @@ describe("helpers", () => {
   it("names the states and the drops", () => {
     expect(runStateLabel({ status: "queued", outcome: null })).toBe("En attente")
     expect(runStateLabel({ status: "running", outcome: null })).toBe("Calcul en cours")
-    expect(runStateLabel({ status: "interrupted", outcome: "complete" })).toBe("Recherche interrompue")
-    expect(runStateLabel({ status: "finished", outcome: "complete" })).toBe("Complet")
-    expect(runStateLabel({ status: "finished", outcome: "incomplete" })).toBe("Incomplet")
-    expect(runStateLabel({ status: "finished", outcome: "proven_impossible" })).toBe("Impossible démontré")
+    expect(runStateLabel({ status: "interrupted", outcome: "complete" })).toBe("Calcul arrêté avant la fin")
+    expect(runStateLabel({ status: "finished", outcome: "complete" })).toBe("Toutes les places couvertes")
+    expect(runStateLabel({ status: "finished", outcome: "incomplete" })).toBe("Couverture partielle")
+    expect(runStateLabel({ status: "finished", outcome: "proven_impossible" })).toBe("Couverture complète impossible")
     expect(runStateLabel({ status: "failed", outcome: null })).toBe("Échec du calcul")
     expect(droppedSentence([])).toBeNull()
     expect(droppedSentence([{ reason: "availability" }, { reason: "capacity" }, { reason: "availability" }])).toBe("3 affectations écartées à l'écriture, les données ayant changé pendant le calcul : disponibilités changées (2), plus de place (1).")
     expect(freshSeed(() => 0.5)).toBe(500000)
+  })
+})
+
+describe("outcome wording (#1172 review)", () => {
+  const states = [
+    { status: "queued", outcome: null }, { status: "running", outcome: null }, { status: "failed", outcome: null },
+    { status: "interrupted", outcome: "incomplete" }, { status: "finished", outcome: "complete" },
+    { status: "finished", outcome: "incomplete" }, { status: "finished", outcome: "proven_impossible" },
+  ]
+
+  it("never uses solver words in any state", () => {
+    for (const r of states) expect(runStateLabel(r)).not.toMatch(/démontr|impossible démontré|recherche|graine|budget|incomplet\b/i)
+  })
+
+  it("keeps red for a real failure only; a proven maximum is neutral, partial coverage amber", () => {
+    expect(states.map(runTone)).toEqual(["neutral", "neutral", "error", "warning", "complete", "warning", "neutral"])
+  })
+
+  it("leads with the coverage and names the history entries apart", () => {
+    expect(coverageLine({ filled: 29, seats: 31 })).toBe("29 places couvertes sur 31")
+    expect(coverageLine({ filled: 1, seats: 1 })).toBe("1 place couverte sur 1")
+    const base = { status: "finished", outcome: "proven_impossible", seed: 2026, writtenAt: new Date(), writtenCount: 29, coverage: { filled: 29, seats: 31 } }
+    expect(historyEntry(base, "30 octobre à 22:59")).toBe("30 octobre à 22:59 : couverture complète impossible, 29 places couvertes sur 31, tirage 2026, 29 affectations écrites")
+    expect(historyEntry({ ...base, seed: 7, writtenAt: null, coverage: null, status: "failed", outcome: null }, "1 mai à 10:00")).toBe("1 mai à 10:00 : échec du calcul, tirage 7, rien d'écrit")
+  })
+})
+
+describe("missing hour targets (#1172 review)", () => {
+  const people = [
+    { volunteerId: "p1", included: true, targetHours: "", prefer: "", avoid: "" },
+    { volunteerId: "p2", included: true, targetHours: " ", prefer: "", avoid: "" },
+    { volunteerId: "p3", included: true, targetHours: "beaucoup", prefer: "", avoid: "" },
+    { volunteerId: "p4", included: false, targetHours: "", prefer: "", avoid: "" },
+    { volunteerId: "p5", included: true, targetHours: "4", prefer: "", avoid: "" },
+  ]
+
+  it("tells an empty target from a malformed one, and collapses empty ones into one summary item", () => {
+    const r = formToConfig(form({ people }), shifts, (id) => id.toUpperCase())
+    expect(r.ok).toBe(false)
+    if (r.ok) return
+    expect(r.problems.filter((p) => p.kind === "target_missing").map((p) => p.field)).toEqual(["target-p1", "target-p2"])
+    const items = summaryProblems(r.problems)
+    expect(items.map((i) => i.message)).toEqual(["2 personnes sans objectif d'heures", "P3 : indiquez un objectif en heures (0 pour aucun objectif), par exemple 12 ou 7,5."])
+    expect(items[0]).toMatchObject({ field: "target-p1", missingTargets: 2 })
+  })
+
+  it("keeps a single missing target as its own named item", () => {
+    const r = formToConfig(form({ people: [people[0], people[4]] }), shifts, () => "Noah De Jong")
+    if (r.ok) throw new Error("expected problems")
+    expect(summaryProblems(r.problems).map((i) => i.message)).toEqual(["Noah De Jong : indiquez un objectif en heures (0 pour aucun objectif), par exemple 12 ou 7,5."])
+  })
+
+  it("fills the suggestion only where an included person has no target, never over a typed value", () => {
+    const r = fillMissingTargets(people, () => 720)
+    expect(r.filled).toBe(2)
+    expect(r.people.map((p) => p.targetHours)).toEqual(["12", "12", "beaucoup", "", "4"])
+  })
+
+  it("clears only the fixed field's problem", () => {
+    const problems = [{ field: "a", message: "x" }, { field: "b", message: "y" }]
+    expect(withoutProblem(problems, "a")).toEqual([{ field: "b", message: "y" }])
+    expect(withoutProblem(problems, "c")).toEqual(problems)
+  })
+})
+
+describe("folded settings and relaunch (#1172 review)", () => {
+  const choices = [
+    { roleName: "A", category: "", night: false, reserve: 0 },
+    { roleName: "B", category: "", night: false, reserve: 0 },
+  ]
+
+  it("sums up « Rotation, nuit et réserve » in one line", () => {
+    expect(rotationSummary(choices, "", "")).toBe("Aucun réglage")
+    expect(rotationSummary([{ ...choices[0], category: "Bars", night: true }, { ...choices[1], category: "bars", reserve: 1 }], "2", "1"))
+      .toBe("Catégorie sur 2 postes, ajout de nuit sur 1 poste, réserve sur 1 poste, 2 jours d'affilée au plus, 1 ajout de nuit par personne au plus")
+  })
+
+  it("counts the proposed drafts a relaunch would replace, on the scope's shifts only", () => {
+    expect(replacedDraftCount({ a1: 2, b1: 1, a2: 5 }, ["a1", "b1", "n1"])).toBe(3)
+    expect(replacedDraftCount({}, ["a1"])).toBe(0)
   })
 })

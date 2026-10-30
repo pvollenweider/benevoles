@@ -38,7 +38,7 @@ describe("report", () => {
     expect(report.gaps).toHaveLength(1)
     const gap = report.gaps[0]
     expect(gap).toMatchObject({ shiftId: "drive", missing: 1, missingCritical: 1, eligible: 0, excluded: { reserved: 2 }, proven: true })
-    expect(gapSentence(gap)).toBe("1 place reste sans personne, dont 1 place du minimum. Parmi les personnes choisies, 2 n'ont pas l'étiquette requise. Démontré : il n'y a pas assez de personnes pouvant prendre ce créneau.")
+    expect(gapSentence(gap)).toBe("1 place reste sans personne, dont 1 place du minimum. Parmi les personnes choisies, 2 n'ont pas l'étiquette requise. Impossible à pourvoir : il n'y a pas assez de personnes pouvant prendre ce créneau.")
     expect(report.outcome).toBe("proven_impossible")
     expect(report.coverage).toMatchObject({ reserveSeats: 1, reserveFilled: 1 })
   })
@@ -54,19 +54,19 @@ describe("report", () => {
 describe("words", () => {
   it("says nobody's availability covers the shift when that is the only reason", () => {
     const g: GapReport = { shiftId: "s", missing: 2, missingCritical: 0, reserveMissing: 0, eligible: 0, excluded: { no_answer: 1, availability_partial: 3 }, blocked: {}, workloadRules: {}, proven: true }
-    expect(gapSentence(g)).toBe("2 places restent sans personne. Aucune disponibilité ne couvre entièrement ce créneau. Démontré : il n'y a pas assez de personnes pouvant prendre ce créneau.")
+    expect(gapSentence(g)).toBe("2 places restent sans personne. Aucune disponibilité ne couvre entièrement ce créneau. Impossible à pourvoir : il n'y a pas assez de personnes pouvant prendre ce créneau.")
   })
 
   it("names what blocks the available people here, and a search that stopped first", () => {
     const g: GapReport = { shiftId: "s", missing: 1, missingCritical: 0, reserveMissing: 1, eligible: 4, excluded: {}, blocked: { overlap: 1, workload: 2, addable: 1 }, workloadRules: { daily: 2, rest: 1 }, proven: false }
-    expect(gapSentence(g)).toBe("1 place reste sans personne et 1 place de la réserve. Parmi les 4 personnes disponibles sur tout le créneau, 1 a une autre mission proposée à la même heure, 2 dépasseraient la durée maximale par journée de service, le repos entre deux journées de service. Aucune affectation supplémentaire trouvée dans le budget de recherche.")
+    expect(gapSentence(g)).toBe("1 place reste sans personne et 1 place de la réserve. Parmi les 4 personnes disponibles sur tout le créneau, 1 a une autre mission proposée à la même heure, 2 dépasseraient la durée maximale par journée de service, le repos entre deux journées de service. Aucune affectation supplémentaire trouvée dans le temps de calcul.")
   })
 
   it("labels the four states and never claims an optimum", () => {
-    expect(stateLabel({ outcome: "complete", execution: "finished" })).toBe("Complet")
-    expect(stateLabel({ outcome: "incomplete", execution: "finished" })).toBe("Incomplet")
-    expect(stateLabel({ outcome: "proven_impossible", execution: "finished" })).toBe("Impossible démontré")
-    expect(stateLabel({ outcome: "complete", execution: "interrupted" })).toBe("Recherche interrompue")
+    expect(stateLabel({ outcome: "complete", execution: "finished" })).toBe("Toutes les places couvertes")
+    expect(stateLabel({ outcome: "incomplete", execution: "finished" })).toBe("Couverture partielle")
+    expect(stateLabel({ outcome: "proven_impossible", execution: "finished" })).toBe("Couverture complète impossible")
+    expect(stateLabel({ outcome: "complete", execution: "interrupted" })).toBe("Calcul arrêté avant la fin")
     for (const outcome of ["complete", "incomplete", "proven_impossible"] as const) {
       expect(stateSentence({ outcome, execution: "finished", stopReason: "budget" })).not.toMatch(/optimal|meilleure possible/i)
     }

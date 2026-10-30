@@ -41,6 +41,8 @@ const ALLOWED = [
   // Generated proposals (#1172): read the kept drafts into a run's input, write a run's result as drafts.
   "src/lib/proposal-runs-data.ts",
   "src/lib/proposal-runs-server.ts",
+  // The proposal page counts, per shift, the unlocked proposed drafts a relaunch would replace (a count, never shown to volunteers).
+  "src/lib/proposal-page-data.ts",
   // The tenant scoping of every model (#268).
   "src/lib/prisma-org.ts",
 ].sort()
