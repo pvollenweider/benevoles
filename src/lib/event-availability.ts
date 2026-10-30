@@ -49,7 +49,7 @@ export type Voice = "tu" | "vous"
 
 // Plain words, never « HH:MM » nor an organiser's « saisissez » (independent review, #1146): the
 // person asked reads these messages too.
-const AVAILABILITY_CLOCK_ERROR = "Une heure n'est pas valable : elle doit être comprise entre 0h00 et 23h59."
+const AVAILABILITY_CLOCK_ERROR = "Une heure n'est pas valable : elle doit être comprise entre 0h00 et 23h59."
 const availabilityClock = z.string().regex(CLOCK_RE, AVAILABILITY_CLOCK_ERROR)
 const rangeSchema = z.object({ start: availabilityClock, end: availabilityClock })
 const daySchema = z.object({ date: civilDateSchema, ranges: z.array(rangeSchema).max(AVAILABILITY_MAX_RANGES_PER_DAY, `Au plus ${AVAILABILITY_MAX_RANGES_PER_DAY} horaires par date.`) })
@@ -65,7 +65,7 @@ export const availabilitySubmissionSchema = z.object({
  */
 export function submissionIssue(error: z.ZodError, body: unknown): { error: string; at?: AvailabilityErrorAt } {
   const issue = error.issues[0]
-  const message = issue?.message && !/^(Invalid|Expected|Required)/.test(issue.message) ? issue.message : "Les disponibilités envoyées ne sont pas lisibles : recharger la page puis recommencer."
+  const message = issue?.message && !/^(Invalid|Expected|Required)/.test(issue.message) ? issue.message : "Les disponibilités envoyées ne sont pas lisibles : recharger la page puis recommencer."
   const path = issue?.path ?? []
   if (path[0] !== "days" || typeof path[1] !== "number") return { error: message }
   const day = (body as { days?: { date?: unknown }[] } | null)?.days?.[path[1]]
@@ -156,15 +156,15 @@ const lower = (s: string) => s.charAt(0).toLowerCase() + s.slice(1)
 function timeError(date: string, time: string, reason: "missing" | "repeated"): string {
   const day = lower(dayLabel(date))
   return reason === "missing"
-    ? `${time} n'existe pas le ${day} : les horloges avancent d'une heure cette nuit-là : il faut choisir une autre heure.`
-    : `${time} existe deux fois le ${day} : les horloges reculent d'une heure cette nuit-là : il faut choisir une heure avant ou après ce changement.`
+    ? `${time} n'existe pas le ${day} : les horloges avancent d'une heure cette nuit-là : il faut choisir une autre heure.`
+    : `${time} existe deux fois le ${day} : les horloges reculent d'une heure cette nuit-là : il faut choisir une heure avant ou après ce changement.`
 }
 
 /** One date's ranges as real instants, in time order; an end earlier than the start is the next day. */
 export function resolveDay(day: DayAnswerInput, timeZone: string): AvailabilityCheck<ResolvedDay> {
   const ranges: ResolvedRange[] = []
   for (const [i, r] of day.ranges.entries()) {
-    if (r.start === r.end) return { ok: false, error: `Un horaire du ${lower(dayLabel(day.date))} commence et finit à ${r.start} : l'heure de fin doit être différente du début.`, at: { date: day.date, range: i, field: "end" } }
+    if (r.start === r.end) return { ok: false, error: `Un horaire du ${lower(dayLabel(day.date))} commence et finit à ${r.start} : l'heure de fin doit être différente du début.`, at: { date: day.date, range: i, field: "end" } }
     const endDate = r.end < r.start ? nextDate(day.date) : day.date
     const start = resolveLocalTime(day.date, r.start, timeZone)
     if (!start.ok) return { ok: false, error: timeError(day.date, r.start, start.reason), at: { date: day.date, range: i, field: "start" } }
@@ -198,7 +198,7 @@ export function checkAnswerSet(days: readonly ResolvedDay[], eventDates: readonl
       const at: AvailabilityErrorAt = prev.date !== cur.date && prev.r.input !== undefined
         ? { date: prev.date, range: prev.r.input, field: "end" }
         : { date: cur.date, ...(cur.r.input !== undefined ? { range: cur.r.input, field: "start" as const } : {}) }
-      return { ok: false, error: `Deux horaires se recouvrent : ${what}. ${OVERLAP_ADVICE[voice ?? "neutral"]}`, at }
+      return { ok: false, error: `Deux horaires se recouvrent : ${what}. ${OVERLAP_ADVICE[voice ?? "neutral"]}`, at }
     }
   }
   return { ok: true, value: [...days].sort((a, b) => a.date.localeCompare(b.date)) }

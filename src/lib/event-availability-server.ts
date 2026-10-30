@@ -108,7 +108,7 @@ export async function setAvailabilityOption(db: OrgScopedPrisma, organizationId:
       if (wanted.deadline === null || wanted.deadline.trim() === "") deadline = null
       else {
         deadline = localInputToUtc(wanted.deadline, timeZone, localDateTimeToUtc)
-        if (!deadline) return { ok: false as const, status: 400 as const, error: "Date limite invalide : indiquez une date et une heure." }
+        if (!deadline) return { ok: false as const, status: 400 as const, error: "Date limite invalide : indiquez une date et une heure." }
       }
     }
     const turningOff = !enabled && event.availabilityEnabled
@@ -189,8 +189,8 @@ export async function sendAvailabilityRequests(db: OrgScopedPrisma, eventId: str
     })
     if (!event) return { ok: false as const, status: 404 as const, error: "Non trouvé" }
     await tx.$queryRaw`SELECT id FROM "Event" WHERE id = ${eventId} FOR SHARE`
-    if (!event.availabilityEnabled) return { ok: false as const, status: 409 as const, error: "Activez d'abord « Recueillir les disponibilités pour cet événement »." }
-    if (!answersOpen(event.availabilityDeadline, now)) return { ok: false as const, status: 409 as const, error: "La date limite est passée : choisissez une nouvelle date limite pour rouvrir la collecte, puis envoyez les demandes." }
+    if (!event.availabilityEnabled) return { ok: false as const, status: 409 as const, error: "Activez d'abord « Recueillir les disponibilités pour cet événement »." }
+    if (!answersOpen(event.availabilityDeadline, now)) return { ok: false as const, status: 409 as const, error: "La date limite est passée : choisissez une nouvelle date limite pour rouvrir la collecte, puis envoyez les demandes." }
 
     let targetIds: string[]
     if (input.reminder) {

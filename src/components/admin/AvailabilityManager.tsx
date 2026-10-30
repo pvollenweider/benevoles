@@ -16,7 +16,7 @@ import ConfirmActionModal from "@/components/admin/ConfirmActionModal"
 import AvailabilityEditor, { type SaveOutcome } from "@/components/AvailabilityEditor"
 import { ANSWER_STATE_LABELS, type AnswerState, type DayAnswerInput } from "@/lib/event-availability"
 import { datesCountText } from "@/lib/availability-editor"
-import { remindHintText, sendResultIsWarning, sendResultText, type SendResult } from "@/lib/event-availability-text"
+import { linkStateText, remindHintText, sendResultIsWarning, sendResultText, type SendResult } from "@/lib/event-availability-text"
 import type { AvailabilityOverview, AvailabilityOverviewRow } from "@/lib/event-availability-server"
 import { reviewReasonTexts } from "@/lib/availability-correction"
 import { flushSync } from "react-dom"
@@ -48,10 +48,7 @@ function lastAnswerText(r: AvailabilityOverviewRow, timeZone: string): string {
 }
 
 function linkText(r: AvailabilityOverviewRow, enabled: boolean, timeZone: string): string {
-  if (!r.email) return "Pas d'adresse email : réponses à saisir par l'organisation"
-  if (!r.hasLink) return enabled ? "Lien désactivé : demandez de nouveau" : "Lien désactivé (collecte arrêtée)"
-  const last = r.lastRemindedAt ?? r.sentAt
-  return last ? `${r.lastRemindedAt ? "Relancé" : "Envoyé"} le ${when(last, timeZone)}` : "Lien prêt"
+  return linkStateText({ email: r.email, hasLink: r.hasLink, sentAt: r.sentAt, lastRemindedAt: r.lastRemindedAt }, enabled, (iso) => when(iso, timeZone))
 }
 
 /**
@@ -84,7 +81,7 @@ export default function AvailabilityManager({ eventId, enabled, open, deadlineSe
   const [seen, setSeen] = useState<{ id: string; error: string | null } | null>(null)
 
   async function markSeen(r: AvailabilityOverviewRow) {
-    if (seen && !seen.error) { announce(setStatus, "Une action est en cours : attendez sa réponse."); return }
+    if (seen && !seen.error) { announce(setStatus, "Une action est en cours : attendez sa réponse."); return }
     setSeen({ id: r.volunteerId, error: null })
     const res = await requestJson(() => fetch(`/api/admin/events/${eventId}/availability/${r.volunteerId}/review`, { method: "POST", headers: { "Content-Type": "application/json" }, body: JSON.stringify({ revision: r.revision }) }))
     if (!res.ok) { setSeen({ id: r.volunteerId, error: res.error }); return }
@@ -104,7 +101,7 @@ export default function AvailabilityManager({ eventId, enabled, open, deadlineSe
   // Unanswered, with an address, but no valid link (collection turned off then on): asked again, not reminded.
   const withoutLink = enabled ? overview.rows.filter((r) => r.state === "none" && r.email && !r.hasLink).length : 0
   const canSend = enabled && open
-  const sendBlocked = !enabled ? "La collecte est arrêtée : réactivez-la dans Informations pour envoyer des demandes." : !open ? "La date limite est passée : choisissez une nouvelle date limite dans Informations pour rouvrir la collecte." : null
+  const sendBlocked = !enabled ? "La collecte est arrêtée : réactivez-la dans Informations pour envoyer des demandes." : !open ? "La date limite est passée : choisissez une nouvelle date limite dans Informations pour rouvrir la collecte." : null
 
   function chooseFilter(f: Filter) {
     setFilter(f)
@@ -142,7 +139,7 @@ export default function AvailabilityManager({ eventId, enabled, open, deadlineSe
           {r.reviewReason && (
             <button type="button" onClick={() => void markSeen(r)} aria-disabled={(!!seen && !seen.error) || undefined} aria-busy={(seen?.id === r.volunteerId && !seen.error) || undefined} aria-describedby={failed ? errorId : undefined}
               className={`min-h-11 whitespace-nowrap rounded-xl border border-gray-500 bg-white px-3 py-1 text-sm font-medium text-gray-900 hover:bg-gray-50 aria-disabled:opacity-60 ${focusRing}`}>
-              {seen?.id === r.volunteerId && !seen.error ? "Enregistrement…" : "Marquer comme vu"}<span className="sr-only">{` : disponibilités de ${r.firstName} ${r.lastName}`}</span>
+              {seen?.id === r.volunteerId && !seen.error ? "Enregistrement…" : "Marquer comme vu"}<span className="sr-only">{` : disponibilités de ${r.firstName} ${r.lastName}`}</span>
             </button>
           )}
         </div>
@@ -154,7 +151,7 @@ export default function AvailabilityManager({ eventId, enabled, open, deadlineSe
   return (
     <div className="space-y-4">
       <p className="text-sm text-gray-700">{deadlineSentence}{" "}<Link href={`/admin/events/${eventId}/edit`} className={`font-medium text-blue-700 underline underline-offset-2 hover:text-blue-900 rounded ${focusRing}`}>Changer la date limite dans Informations</Link></p>
-      {!enabled && <p className="text-sm text-gray-800 bg-gray-50 border border-gray-200 rounded-xl px-3 py-2">La collecte est arrêtée : les liens envoyés ne fonctionnent plus. Les réponses ci-dessous sont gardées et restent modifiables par l&apos;organisation.</p>}
+      {!enabled && <p className="text-sm text-gray-800 bg-gray-50 border border-gray-200 rounded-xl px-3 py-2">La collecte est arrêtée : les liens envoyés ne fonctionnent plus. Les réponses ci-dessous sont gardées et restent modifiables par l&apos;organisation.</p>}
 
       <div className="space-y-1">
         <p id="availability-filter-label" className="text-sm font-medium text-gray-700">Personnes sollicitées, par état de réponse</p>
@@ -190,7 +187,7 @@ export default function AvailabilityManager({ eventId, enabled, open, deadlineSe
       <p role="status" className={!status ? "sr-only" : warning ? "text-sm text-amber-900 bg-amber-50 border border-amber-300 rounded-xl px-3 py-2" : "text-sm text-gray-800"} data-availability-send-result={status ? (warning ? "warning" : "ok") : undefined}>{status}</p>
 
       {overview.rows.length === 0 ? (
-        <p className="text-sm text-gray-700 bg-white border border-gray-200 rounded-xl p-6 text-center">Personne n&apos;a encore été sollicité. Choisissez des membres avec « Demander leurs disponibilités ».</p>
+        <p className="text-sm text-gray-700 bg-white border border-gray-200 rounded-xl p-6 text-center">Personne n&apos;a encore été sollicité. Choisissez des membres avec « Demander leurs disponibilités ».</p>
       ) : (
         <>
           {/* Phones: one entry per person, every column in words (no table to scroll sideways). */}
@@ -200,8 +197,8 @@ export default function AvailabilityManager({ eventId, enabled, open, deadlineSe
                 <p className="font-medium text-gray-900">{r.firstName} {r.lastName}</p>
                 {reviewReasonTexts(r.reviewReason).map((t) => <p key={t} className="text-xs text-amber-800">{t}</p>)}
                 <p><span className={`inline-block whitespace-nowrap rounded-full px-2 py-0.5 text-xs font-medium ${STATE_BADGE[r.state]}`}>{ANSWER_STATE_LABELS[r.state]}</span> <span className="text-gray-800">{datesCountText(r.answeredDates, overview.dates.length)}</span></p>
-                <p className="text-gray-700">Dernière réponse : {lastAnswerText(r, overview.timeZone)}</p>
-                <p className="text-gray-700">Lien : {linkText(r, enabled, overview.timeZone)}</p>
+                <p className="text-gray-700">Dernière réponse : {lastAnswerText(r, overview.timeZone)}</p>
+                <p className="text-gray-700">{linkText(r, enabled, overview.timeZone)}</p>
                 {rowActions(r, "m")}
               </li>
             ))}
@@ -261,9 +258,9 @@ export default function AvailabilityManager({ eventId, enabled, open, deadlineSe
       {reminding && (
         <ConfirmActionModal
           recap={{
-            title: "Relancer les personnes sans réponse ?",
+            title: "Relancer les personnes sans réponse ?",
             lead: `${remindable} personne${remindable > 1 ? "s" : ""} sans réponse recevr${remindable > 1 ? "ont" : "a"} de nouveau son lien par email, sauf celles contactées il y a moins de 48 h.`,
-            lines: ["Le lien reste le même : les réponses déjà commencées ne sont pas perdues."],
+            lines: ["Le lien reste le même : les réponses déjà commencées ne sont pas perdues."],
             confirmLabel: "Relancer",
             danger: false,
           }}
@@ -331,7 +328,7 @@ function AskModal({ eventId, members, allTags, askedIds, onClose, onDone }: { ev
 
   return (
     <ModalShell title="Demander leurs disponibilités" onClose={onClose} panelClassName="max-w-2xl flex flex-col" initialFocusRef={searchRef} closeOnBackdrop={false} busy={busy}>
-      <p className="text-sm text-gray-700 mb-3">Chaque personne choisie reçoit par email son lien « Indiquer mes disponibilités ». Une personne déjà sollicitée reçoit le même lien.</p>
+      <p className="text-sm text-gray-700 mb-3">Chaque personne choisie reçoit par email son lien « Indiquer mes disponibilités ». Une personne déjà sollicitée reçoit le même lien.</p>
       <div className="flex flex-wrap gap-2 mb-3">
         <label className="flex-1 min-w-[180px]">
           <span className="block text-xs font-medium text-gray-800 mb-1">Rechercher un membre</span>
@@ -368,7 +365,7 @@ function AskModal({ eventId, members, allTags, askedIds, onClose, onDone }: { ev
                   <input type="checkbox" checked={selected.has(m.id)} onChange={() => toggle(m.id)} className="h-5 w-5" />
                   <span className="flex-1 min-w-0">
                     <span className="block text-sm font-medium text-gray-900">{m.firstName} {m.lastName}</span>
-                    <span className="block text-xs text-gray-700 truncate">{m.email ?? "Pas d'adresse email : vous saisirez ses réponses"}{m.tags.length > 0 && <> · {m.tags.join(", ")}</>}{askedIds.has(m.id) && " · déjà sollicité"}</span>
+                    <span className="block text-xs text-gray-700 truncate">{m.email ?? "Pas d'adresse email : vous saisirez ses réponses"}{m.tags.length > 0 && <> · {m.tags.join(", ")}</>}{askedIds.has(m.id) && " · déjà sollicité"}</span>
                   </span>
                 </label>
               </li>
@@ -420,7 +417,7 @@ function CorrectModal({ eventId, row, onClose, onSaved }: { eventId: string; row
   return (
     <ModalShell title={`Disponibilités de ${name}`} onClose={onClose} panelClassName="max-w-2xl flex flex-col max-sm:h-full" initialFocusRef={titleRef} closeOnBackdrop={false}>
       <div className="overflow-y-auto overflow-x-hidden space-y-3">
-        <p ref={titleRef} tabIndex={-1} className="text-sm text-gray-700 focus:outline-none">Votre correction remplace la réponse de ces dates ; elle est enregistrée « par l&apos;organisation », même après la date limite.</p>
+        <p ref={titleRef} tabIndex={-1} className="text-sm text-gray-700 focus:outline-none">Votre correction remplace la réponse de ces dates ; elle est enregistrée « par l&apos;organisation », même après la date limite.</p>
         {loadError ? <p role="alert" className="text-sm text-red-800">{loadError}</p> : !person ? <p role="status" className="text-sm text-gray-700">Chargement…</p> : (
           <AvailabilityEditor idPrefix={`fix-${row.volunteerId}`} dates={person.dates} initialDays={person.days} voice="vous" submitLabel="Enregistrer la correction" savedText="Correction enregistrée." onSave={save} />
         )}

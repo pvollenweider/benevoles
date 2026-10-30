@@ -101,7 +101,7 @@ export default function AvailabilityEditor({ idPrefix, dates, initialDays, voice
     setError("")
     flushSync(() => { setFieldErrors([]); setSummary(false) })
     announce(setStatus, "Enregistrement en cours…")
-    const outcome = await onSave(built.days).catch((): SaveOutcome => ({ ok: false, error: tu ? "La connexion a échoué : rien n'a été enregistré. Vérifie ta connexion, puis réessaie." : "La connexion a échoué : rien n'a été enregistré. Vérifiez votre connexion, puis réessayez." }))
+    const outcome = await onSave(built.days).catch((): SaveOutcome => ({ ok: false, error: tu ? "La connexion a échoué : rien n'a été enregistré. Vérifie ta connexion, puis réessaie." : "La connexion a échoué : rien n'a été enregistré. Vérifiez votre connexion, puis réessayez." }))
     setBusy(false)
     if (!outcome.ok) { setStatus(""); showErrors([{ message: outcome.error, at: outcome.at ?? { date: "" } }], true); return }
     setSaved(state)
@@ -150,7 +150,7 @@ export default function AvailabilityEditor({ idPrefix, dates, initialDays, voice
             onClick={(ev) => { ev.preventDefault(); const el = document.getElementById(allId); el?.focus(); el?.scrollIntoView?.({ block: "center" }) }}
             className={`font-medium text-blue-700 underline underline-offset-2 hover:text-blue-900 rounded ${focusRing}`}
           >
-            {tu ? "Tu ne peux pas venir du tout ?" : "La personne ne peut pas venir du tout ?"}
+            {tu ? "Tu ne peux pas venir du tout ?" : "La personne ne peut pas venir du tout ?"}
           </a>
         </p>
       )}
@@ -233,7 +233,7 @@ export default function AvailabilityEditor({ idPrefix, dates, initialDays, voice
                               )
                             })}
                           </div>
-                          {night && <p id={hintId} className="text-sm text-gray-700">Fin : {nextDayHint(d.date)}</p>}
+                          {night && <p id={hintId} className="text-sm text-gray-700">Fin : {nextDayHint(d.date)}</p>}
                           {(["start", "end"] as const).map((field) => {
                             const id = rangeFieldId(idPrefix, d.date, i, field)
                             const err = errorOf(id)
@@ -293,7 +293,7 @@ export default function AvailabilityEditor({ idPrefix, dates, initialDays, voice
           onClick={() => {
             setState((s) => allUnavailable(s))
             setFieldErrors([]); setSummary(false); setError(""); setStatus("")
-            announce(setAllStatus, nbspQuotes(tu ? `Toutes les dates sont sur « Pas disponible ». Rien n'est encore enregistré : appuie sur « ${submitLabel} ».` : `Toutes les dates sont sur « Pas disponible ». Rien n'est encore enregistré : appuyez sur « ${submitLabel} ».`))
+            announce(setAllStatus, nbspQuotes(tu ? `Toutes les dates sont sur « Pas disponible ». Rien n'est encore enregistré : appuie sur « ${submitLabel} ».` : `Toutes les dates sont sur « Pas disponible ». Rien n'est encore enregistré : appuyez sur « ${submitLabel} ».`))
           }}
           className={secondaryButton}
           data-availability-all-unavailable="1"
@@ -303,7 +303,7 @@ export default function AvailabilityEditor({ idPrefix, dates, initialDays, voice
         <p role="status" className={allStatus ? "text-sm text-gray-700" : "sr-only"}>{allStatus}</p>
       </div>}
 
-      <p className="text-sm text-gray-700">{nbspQuotes(`Les dates laissées sans choix restent « ${NO_ANSWER} ».`)}</p>
+      <p className="text-sm text-gray-700">{nbspQuotes(`Les dates laissées sans choix restent « ${NO_ANSWER} ».`)}</p>
       {/* Read out always; shown here only when no field carries the message already. */}
       <p role="alert" className={error && fieldErrors.length === 0 ? "text-sm text-red-800 bg-red-50 border border-red-200 px-3 py-2 rounded-lg" : "sr-only"}>{error}</p>
       <p role="status" className={status ? "text-sm text-green-800" : "sr-only"}>{status}</p>

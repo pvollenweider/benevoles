@@ -102,7 +102,7 @@ describe("resolveDay", () => {
     expect(r.ok).toBe(false)
     if (!r.ok) expect(r.error).toContain("existe deux fois le dimanche 25 octobre")
   })
-  it("says nothing with « tu » or « vous » (shared by volunteers and organisers)", () => {
+  it("says nothing with « tu » or « vous » (shared by volunteers and organisers)", () => {
     const r = resolveDay({ date: "2026-03-29", ranges: [{ start: "02:15", end: "05:00" }] }, TZ)
     expect(r.ok).toBe(false)
     if (!r.ok) expect(r.error).not.toMatch(/\b(tu|vous|choisissez|choisis)\b/i)
@@ -118,12 +118,12 @@ describe("checkAnswerSet", () => {
   it("refuses two ranges sharing time on one date", () => {
     const r = checkAnswerSet([resolved("2026-07-10", [["08:00", "14:00"], ["13:00", "18:00"]])], dates)
     expect(r.ok).toBe(false)
-    expect(r).toEqual({ ok: false, error: "Deux horaires se recouvrent : le vendredi 10 juillet de 8h à 14h, et de 13h à 18h. Il faut raccourcir l'un des deux.", at: { date: "2026-07-10", range: 1, field: "start" } })
+    expect(r).toEqual({ ok: false, error: "Deux horaires se recouvrent : le vendredi 10 juillet de 8h à 14h, et de 13h à 18h. Il faut raccourcir l'un des deux.", at: { date: "2026-07-10", range: 1, field: "start" } })
   })
   it("refuses a night range running into an early range of the next date", () => {
     const r = checkAnswerSet([resolved("2026-07-10", [["20:00", "03:00"]]), resolved("2026-07-11", [["01:00", "05:00"]])], dates)
     expect(r.ok).toBe(false)
-    if (!r.ok) expect(r.error).toBe("Deux horaires se recouvrent : vendredi 10 juillet de 20h à 3h le lendemain, et samedi 11 juillet de 1h à 5h. Il faut raccourcir l'un des deux.")
+    if (!r.ok) expect(r.error).toBe("Deux horaires se recouvrent : vendredi 10 juillet de 20h à 3h le lendemain, et samedi 11 juillet de 1h à 5h. Il faut raccourcir l'un des deux.")
   })
   it("points an overlap across midnight at the night range's end, in the page's voice", () => {
     const day = (date: string, ranges: [string, string][]) => ({ date, ranges: ranges.map(([start, end]) => ({ start, end })) })
@@ -132,7 +132,7 @@ describe("checkAnswerSet", () => {
     const same = applySubmission([day("2026-07-10", [["08:00", "14:00"], ["13:00", "18:00"]])], [], dates, "Europe/Zurich", "vous")
     expect(same).toEqual({ ok: false, error: expect.stringMatching(/Raccourcissez l'un des deux\.$/), at: { date: "2026-07-10", range: 1, field: "start" } })
   })
-  it("accepts ranges that only touch, and a night range before a « pas disponible » date", () => {
+  it("accepts ranges that only touch, and a night range before a « pas disponible » date", () => {
     expect(checkAnswerSet([resolved("2026-07-10", [["08:00", "14:00"], ["14:00", "20:00"]])], dates).ok).toBe(true)
     expect(checkAnswerSet([resolved("2026-07-10", [["20:00", "03:00"]]), resolved("2026-07-11", [])], dates).ok).toBe(true)
   })
@@ -166,17 +166,17 @@ describe("applySubmission", () => {
 
 describe("answerState", () => {
   const dates = ["2026-07-10", "2026-07-11"]
-  it("is « Sans réponse » with nothing answered, dates outside the event ignored", () => {
+  it("is « Sans réponse » with nothing answered, dates outside the event ignored", () => {
     expect(answerState(dates, [])).toBe("none")
     expect(answerState(dates, [{ date: "2026-07-20", rangeCount: 2 }])).toBe("none")
   })
-  it("is « Réponse partielle » while a date is unanswered", () => {
+  it("is « Réponse partielle » while a date is unanswered", () => {
     expect(answerState(dates, [{ date: "2026-07-10", rangeCount: 0 }])).toBe("partial")
   })
-  it("is « Réponse complète » once every date is answered with some range", () => {
+  it("is « Réponse complète » once every date is answered with some range", () => {
     expect(answerState(dates, [{ date: "2026-07-10", rangeCount: 0 }, { date: "2026-07-11", rangeCount: 1 }])).toBe("complete")
   })
-  it("is « Aucune date disponible » when every date is « pas disponible »", () => {
+  it("is « Aucune date disponible » when every date is « pas disponible »", () => {
     const days = wholeEventUnavailable(dates).map((d) => ({ date: d.date, rangeCount: d.ranges.length }))
     expect(answerState(dates, days)).toBe("unavailable")
     expect(ANSWER_STATE_LABELS.unavailable).toBe("Aucune date disponible")
@@ -212,16 +212,16 @@ describe("submissionIssue", () => {
     if (r.success) throw new Error("expected a refusal")
     return submissionIssue(r.error, body)
   }
-  it("says a wrong time in plain words, at its field, with no « HH:MM » nor organiser voice", () => {
+  it("says a wrong time in plain words, at its field, with no « HH:MM » nor organiser voice", () => {
     const body = { days: [{ date: "2026-07-10", ranges: [{ start: "8h", end: "12:00" }] }] }
-    expect(issue(body)).toEqual({ error: "Une heure n'est pas valable : elle doit être comprise entre 0h00 et 23h59.", at: { date: "2026-07-10", range: 0, field: "start" } })
+    expect(issue(body)).toEqual({ error: "Une heure n'est pas valable : elle doit être comprise entre 0h00 et 23h59.", at: { date: "2026-07-10", range: 0, field: "start" } })
   })
-  it("says an empty submission without « Indiquez »", () => {
+  it("says an empty submission without « Indiquez »", () => {
     expect(issue({ days: [] }).error).toBe("Au moins une date est nécessaire.")
     expect(issue({ days: [] }).error).not.toMatch(/\b(Indiquez|saisissez|vous)\b/)
   })
   it("never shows a library message", () => {
-    expect(issue(null).error).toBe("Les disponibilités envoyées ne sont pas lisibles : recharger la page puis recommencer.")
+    expect(issue(null).error).toBe("Les disponibilités envoyées ne sont pas lisibles : recharger la page puis recommencer.")
   })
 })
 

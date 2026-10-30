@@ -13,7 +13,7 @@ describe("availability editor (#1146)", () => {
     expect(s.days[0].ranges).toEqual([{ key: 0, start: "20:00", end: "03:00" }])
   })
 
-  it("adds an empty range when « Disponible » is chosen, keeps ranges through « Pas disponible »", () => {
+  it("adds an empty range when « Disponible » is chosen, keeps ranges through « Pas disponible »", () => {
     let s = editorFrom(dates, [])
     s = chooseDay(s, "2099-07-12", "available")
     expect(s.days[2].ranges).toHaveLength(1)
@@ -32,7 +32,7 @@ describe("availability editor (#1146)", () => {
     expect(s.days[0].ranges).toHaveLength(5)
   })
 
-  it("sends only the dates with a choice; « tout l'événement » answers every date", () => {
+  it("sends only the dates with a choice; « tout l'événement » answers every date", () => {
     let s = editorFrom(dates, [])
     s = chooseDay(s, "2099-07-10", "available")
     s = setRangeTime(s, "2099-07-10", 0, "start", "08:00")
@@ -57,7 +57,7 @@ describe("availability editor (#1146)", () => {
     const v = editorSubmission(s, "vous")
     expect(!v.ok && v.errors[0].message).toMatch(/^Indiquez/)
     const none = editorSubmission(editorFrom(dates, []), "tu")
-    expect(!none.ok && none.errors).toEqual([{ message: "Choisis au moins une date : «\u00a0Disponible à certaines heures\u00a0» ou «\u00a0Pas disponible\u00a0».", at: { date: "2099-07-10" } }])
+    expect(!none.ok && none.errors).toEqual([{ message: "Choisis au moins une date : «\u00a0Disponible à certaines heures\u00a0» ou «\u00a0Pas disponible\u00a0».", at: { date: "2099-07-10" } }])
   })
 
   it("tells unsaved changes from the last save", () => {
@@ -79,12 +79,12 @@ describe("availability editor (#1146)", () => {
     expect(new Set(copied.days.flatMap((d) => d.ranges.map((r) => r.key))).size).toBe(4)
     expect(copyPreviousDay(copied, "2099-07-12").days[2].choice).toBe("available")
     expect(copyPreviousDay(editorFrom(dates, []), "2099-07-11")).toEqual(editorFrom(dates, []))
-    expect(copiedText(s.days[0], "2099-07-11")).toBe("Horaires du vendredi 10 juillet repris pour le samedi 11 juillet : 2 horaires.")
-    expect(copiedText({ date: "2099-07-10", choice: "unavailable", ranges: [] }, "2099-07-11")).toBe("Réponse du vendredi 10 juillet reprise pour le samedi 11 juillet : «\u00a0Pas disponible\u00a0».")
+    expect(copiedText(s.days[0], "2099-07-11")).toBe("Horaires du vendredi 10 juillet repris pour le samedi 11 juillet : 2 horaires.")
+    expect(copiedText({ date: "2099-07-10", choice: "unavailable", ranges: [] }, "2099-07-11")).toBe("Réponse du vendredi 10 juillet reprise pour le samedi 11 juillet : «\u00a0Pas disponible\u00a0».")
   })
 
   it("keeps French quotes with their words", () => {
-    expect(nbspQuotes("« Pas disponible »")).toBe("«\u00a0Pas disponible\u00a0»")
+    expect(nbspQuotes("« Pas disponible »")).toBe("«\u00a0Pas disponible\u00a0»")
   })
 
   it("says a night range in words", () => {

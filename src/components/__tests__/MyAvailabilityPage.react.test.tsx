@@ -42,7 +42,7 @@ describe("MyAvailabilityPage", () => {
     expect(screen.getByText("pied")).toBeInTheDocument()
   })
 
-  it("says « Trop de tentatives », not « Lien introuvable », on a 429", async () => {
+  it("says « Trop de tentatives », not « Lien introuvable », on a 429", async () => {
     vi.stubGlobal("fetch", vi.fn(() => res({ error: "Trop de tentatives." }, 429)))
     render(<MyAvailabilityPage />)
     expect(await screen.findByRole("heading", { level: 1, name: "Trop de tentatives" })).toBeInTheDocument()

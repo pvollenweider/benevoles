@@ -105,7 +105,7 @@ export function editorSubmission(state: EditorState, voice: Voice): { ok: true; 
   }
   if (errors.length > 0) return { ok: false, errors }
   if (days.length === 0) {
-    const message = voice === "tu" ? "Choisis au moins une date : « Disponible à certaines heures » ou « Pas disponible »." : "Choisissez au moins une date : « Disponible à certaines heures » ou « Pas disponible »."
+    const message = voice === "tu" ? "Choisis au moins une date : « Disponible à certaines heures » ou « Pas disponible »." : "Choisissez au moins une date : « Disponible à certaines heures » ou « Pas disponible »."
     return { ok: false, errors: [{ message: nbspQuotes(message), at: { date: state.days[0]?.date ?? "" } }] }
   }
   return { ok: true, days }
@@ -143,8 +143,8 @@ export function copyPreviousDay(state: EditorState, date: string): EditorState {
 
 /** What a copy did, said after it (« Horaires du jeudi 9 juillet repris pour le vendredi 10 juillet : 2 horaires. »). */
 export function copiedText(from: EditorDay, to: string): string {
-  const what = from.choice === "unavailable" ? "« Pas disponible »" : `${from.ranges.length} horaire${from.ranges.length > 1 ? "s" : ""}`
-  return nbspQuotes(`${from.choice === "unavailable" ? "Réponse" : "Horaires"} du ${lower(dayLabel(from.date))} ${from.choice === "unavailable" ? "reprise" : "repris"} pour le ${lower(dayLabel(to))} : ${what}.`)
+  const what = from.choice === "unavailable" ? "« Pas disponible »" : `${from.ranges.length} horaire${from.ranges.length > 1 ? "s" : ""}`
+  return nbspQuotes(`${from.choice === "unavailable" ? "Réponse" : "Horaires"} du ${lower(dayLabel(from.date))} ${from.choice === "unavailable" ? "reprise" : "repris"} pour le ${lower(dayLabel(to))} : ${what}.`)
 }
 
 /** Whether a range ends the next morning (an end earlier than its start). */

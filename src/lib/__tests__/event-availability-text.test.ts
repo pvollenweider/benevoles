@@ -2,7 +2,7 @@
 // SPDX-License-Identifier: AGPL-3.0-only
 
 import { describe, expect, it } from "vitest"
-import { answersOpen, availabilityOffConfirmText, closedNowSentence, contactLine, deadlineInputIsPast, deadlineSentence, eventDatesLabel, myAvailabilityTitle, organiserDeadlineSentence, remindHintText, savedSentence, sendResultIsWarning, sendResultText, zoneLabel } from "../event-availability-text"
+import { answersOpen, availabilityOffConfirmText, closedNowSentence, contactLine, linkStateText, deadlineInputIsPast, deadlineSentence, eventDatesLabel, myAvailabilityTitle, organiserDeadlineSentence, remindHintText, savedSentence, sendResultIsWarning, sendResultText, zoneLabel } from "../event-availability-text"
 import { availabilityLinksToResend } from "../member-address-change"
 
 const TZ = "Europe/Zurich"
@@ -35,9 +35,9 @@ describe("dated availability texts (#1146)", () => {
   })
 
   it("reports a send and a reminder", () => {
-    expect(sendResultText({ asked: 3, emailsQueued: 2, recentlySkipped: 0, withoutEmail: 1 })).toBe("2 demandes envoyées. 1 sans adresse email : vous pouvez saisir leurs réponses vous-même.")
-    expect(sendResultText({ asked: 1, emailsQueued: 0, recentlySkipped: 1, withoutEmail: 0 }, true)).toBe("Attention : aucune relance envoyée. 1 personne déjà contactée il y a moins de 48 h, laissée de côté.")
-    expect(sendResultText({ asked: 4, emailsQueued: 0, recentlySkipped: 4, withoutEmail: 0 })).toBe("Attention : aucun email envoyé. 4 personnes déjà contactées il y a moins de 5 minutes, laissées de côté.")
+    expect(sendResultText({ asked: 3, emailsQueued: 2, recentlySkipped: 0, withoutEmail: 1 })).toBe("2 demandes envoyées. 1 sans adresse email : vous pouvez saisir leurs réponses vous-même.")
+    expect(sendResultText({ asked: 1, emailsQueued: 0, recentlySkipped: 1, withoutEmail: 0 }, true)).toBe("Attention : aucune relance envoyée. 1 personne déjà contactée il y a moins de 48 h, laissée de côté.")
+    expect(sendResultText({ asked: 4, emailsQueued: 0, recentlySkipped: 4, withoutEmail: 0 })).toBe("Attention : aucun email envoyé. 4 personnes déjà contactées il y a moins de 5 minutes, laissées de côté.")
     expect(sendResultIsWarning({ asked: 4, emailsQueued: 0, recentlySkipped: 4, withoutEmail: 0 })).toBe(true)
     expect(sendResultIsWarning({ asked: 3, emailsQueued: 2, recentlySkipped: 0, withoutEmail: 1 })).toBe(false)
   })
@@ -45,24 +45,35 @@ describe("dated availability texts (#1146)", () => {
   it("tells the organisers who has no valid link any more (independent review)", () => {
     expect(remindHintText(0, 0)).toBe("Personne à relancer avec son lien actuel.")
     expect(remindHintText(2, 0)).toBe("2 personnes sans réponse. Une personne contactée il y a moins de 48 h n'est pas relancée.")
-    expect(remindHintText(0, 4)).toBe("Personne à relancer avec son lien actuel. 4 personnes sans réponse n'ont plus de lien valable : demandez de nouveau.")
+    expect(remindHintText(0, 4)).toBe("Personne à relancer avec son lien actuel. 4 personnes sans réponse n'ont plus de lien valable : demandez de nouveau.")
     expect(remindHintText(1, 1)).toContain("1 personne sans réponse n'a plus de lien valable")
   })
 
   it("says the save is done, with or without a deadline", () => {
     expect(savedSentence(null, "Europe/Zurich")).toBe("C'est enregistré. Tu peux fermer cette page, et revenir changer tes réponses avec ce même lien.")
-    expect(savedSentence("2099-07-01T21:59:00Z", "Europe/Zurich")).toMatch(/^C'est enregistré\. Tu peux fermer cette page ; tu pourras changer tes réponses avec ce même lien jusqu'au .*1 juillet/)
+    expect(savedSentence("2099-07-01T21:59:00Z", "Europe/Zurich")).toMatch(/^C'est enregistré\. Tu peux fermer cette page\u00a0; tu pourras changer tes réponses avec ce même lien jusqu'au .*1 juillet/)
   })
 
   it("says whether the last changes were lost when the deadline passed mid-edit", () => {
-    expect(closedNowSentence(false, true)).toBe("La date limite vient de passer : tes derniers changements n'ont pas été enregistrés. Voici les réponses que l'organisation a reçues.")
-    expect(closedNowSentence(true, true)).toMatch(/^La période de correction vient de se terminer : tes derniers changements/)
+    expect(closedNowSentence(false, true)).toBe("La date limite vient de passer : tes derniers changements n'ont pas été enregistrés. Voici les réponses que l'organisation a reçues.")
+    expect(closedNowSentence(true, true)).toMatch(/^La période de correction vient de se terminer\u00a0: tes derniers changements/)
     expect(closedNowSentence(false, false)).not.toContain("pas été enregistrés")
   })
 
   it("gives whom to write to: the address when known, else the email that carried the link", () => {
-    expect(contactLine("Les Amis du Parc", "contact@example.org")).toEqual({ lead: "Pour une correction ou un nouveau lien, écris à Les Amis du Parc :", email: "contact@example.org" })
+    expect(contactLine("Les Amis du Parc", "contact@example.org")).toEqual({ lead: "Pour une correction ou un nouveau lien, écris à Les Amis du Parc :", email: "contact@example.org" })
     expect(contactLine(null, null).lead).toBe("Pour une correction ou un nouveau lien, réponds à l'email de l'organisation qui contenait ce lien.")
+  })
+
+  it("says each link state on its own, with at most one colon", () => {
+    const when = () => "vendredi 30 octobre à 23h51"
+    const link = (over: Partial<{ email: string | null; hasLink: boolean; sentAt: string | null; lastRemindedAt: string | null }>, enabled = true) => linkStateText({ email: "a@example.org", hasLink: true, sentAt: null, lastRemindedAt: null, ...over }, enabled, when)
+    expect(link({ hasLink: false })).toBe("Lien désactivé, à demander de nouveau")
+    expect(link({ hasLink: false }, false)).toBe("Lien désactivé (collecte arrêtée)")
+    expect(link({ sentAt: "x" })).toBe("Lien envoyé le vendredi 30 octobre à 23h51")
+    expect(link({ sentAt: "x", lastRemindedAt: "y" })).toBe("Lien renvoyé le vendredi 30 octobre à 23h51")
+    expect(link({})).toBe("Lien prêt")
+    for (const t of [link({ email: null }), link({ hasLink: false }), link({ sentAt: "x" })]) expect(t.split(":").length).toBeLessThanOrEqual(2)
   })
 
   it("names the zone and spots a deadline already past", () => {

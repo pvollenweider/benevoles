@@ -27,13 +27,13 @@ export type AvailabilityRequestData = {
 export function renderAvailabilityRequest(p: NotificationPayload): RenderedEmail {
   const d = p.data as AvailabilityRequestData
   const url = availabilityPageUrl(d.orgSlug, d.token)
-  const subject = d.reminder ? `[${d.organizationName}] Rappel : tes disponibilités pour ${d.eventTitle}` : `[${d.organizationName}] Tes disponibilités pour ${d.eventTitle}`
+  const subject = d.reminder ? `[${d.organizationName}] Rappel : tes disponibilités pour ${d.eventTitle}` : `[${d.organizationName}] Tes disponibilités pour ${d.eventTitle}`
   const lead = d.reminder
-    ? `Petit rappel : nous n'avons pas encore tes disponibilités pour ${d.eventTitle}, ${d.datesLabel}.`
+    ? `Petit rappel : nous n'avons pas encore tes disponibilités pour ${d.eventTitle}, ${d.datesLabel}.`
     : `Pour préparer ${d.eventTitle}, ${d.datesLabel}, ${d.organizationName} aimerait savoir quand tu es libre.`
-  const how = "Pour chaque date, indique les heures où tu es libre (un horaire du soir peut finir le lendemain matin) ou « pas disponible ». Pas besoin de compte : le lien suffit."
+  const how = "Pour chaque date, indique les heures où tu es libre (un horaire du soir peut finir le lendemain matin) ou « pas disponible ». Pas besoin de compte : le lien suffit."
   const deadline = d.deadlineLabel ? `Merci de répondre avant le ${d.deadlineLabel}. Tu peux changer tes réponses jusque-là.` : "Tu peux changer tes réponses à tout moment."
-  const notice = "Ce lien est personnel : ne le transmets pas. Seule l'organisation voit tes réponses."
+  const notice = "Ce lien est personnel : ne le transmets pas. Seule l'organisation voit tes réponses."
   const text = [
     `Bonjour ${d.firstName},`,
     ``,
@@ -41,12 +41,12 @@ export function renderAvailabilityRequest(p: NotificationPayload): RenderedEmail
     how,
     deadline,
     ``,
-    `${AVAILABILITY_LINK_LABEL} :`,
+    `${AVAILABILITY_LINK_LABEL} :`,
     url,
     ``,
     notice,
     ``,
-    `Merci !`,
+    `Merci !`,
     d.organizationName,
   ].join("\n")
   const html = wrap(`
@@ -56,7 +56,7 @@ export function renderAvailabilityRequest(p: NotificationPayload): RenderedEmail
     <p style="margin:0 0 0.75em">${escapeHtml(deadline)}</p>
     <p style="margin-top:1.25em">${btn(url, AVAILABILITY_LINK_LABEL)}</p>
     <p style="color:#555;font-size:0.85em;margin-top:1.25em">${escapeHtml(notice)}</p>
-    <p style="margin-top:1.25em">Merci !<br>${escapeHtml(d.organizationName)}</p>
+    <p style="margin-top:1.25em">Merci !<br>${escapeHtml(d.organizationName)}</p>
   `, lead)
   return { subject, text, html }
 }

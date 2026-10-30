@@ -22,7 +22,7 @@ describe("AvailabilityEditor", () => {
     render(<AvailabilityEditor idPrefix="t" dates={dates} initialDays={[{ date: "2099-07-10", ranges: [{ startTime: "20:00", endTime: "03:00" }] }]} voice="tu" submitLabel="Enregistrer mes disponibilités" savedText="OK" onSave={vi.fn()} />)
     const end = screen.getByLabelText("Fin de l'horaire 1, vendredi 10 juillet")
     expect(end).toHaveValue("03:00")
-    expect(end).toHaveAccessibleDescription("Fin : se termine le lendemain, samedi 11 juillet")
+    expect(end).toHaveAccessibleDescription("Fin : se termine le lendemain, samedi 11 juillet")
     // The heading is the date only; the legend, the group's name, adds « (sans réponse) » on its own line.
     expect(screen.getByRole("heading", { level: 3, name: "Samedi 11 juillet" })).toBeInTheDocument()
     expect(screen.getByRole("group", { name: "Samedi 11 juillet (sans réponse)" })).toBeInTheDocument()
@@ -73,7 +73,7 @@ describe("AvailabilityEditor", () => {
     expect(screen.queryByText(/Choisis au moins une date/)).toBeNull()
   })
 
-  it("says « Changements non enregistrés » next to the save button until the save", async () => {
+  it("says « Changements non enregistrés » next to the save button until the save", async () => {
     const onSave = vi.fn().mockResolvedValue({ ok: true })
     render(<AvailabilityEditor idPrefix="t" dates={dates} initialDays={[]} voice="tu" submitLabel="Enregistrer" savedText="C'est enregistré." onSave={onSave} />)
     expect(screen.queryByText("Changements non enregistrés")).toBeNull()
@@ -88,7 +88,7 @@ describe("AvailabilityEditor", () => {
     render(<AvailabilityEditor idPrefix="t" dates={dates} initialDays={[{ date: "2099-07-10", ranges: [{ startTime: "20:00", endTime: "03:00" }] }]} voice="tu" submitLabel="Enregistrer" savedText="OK" onSave={vi.fn()} />)
     fireEvent.click(screen.getByRole("button", { name: "Reprendre les horaires du vendredi 10 juillet" }))
     expect(screen.getByLabelText("Début de l'horaire 1, samedi 11 juillet")).toHaveValue("20:00")
-    await waitFor(() => expect(screen.getAllByRole("status").some((s) => s.textContent === "Horaires du vendredi 10 juillet repris pour le samedi 11 juillet : 1 horaire.")).toBe(true))
+    await waitFor(() => expect(screen.getAllByRole("status").some((s) => s.textContent === "Horaires du vendredi 10 juillet repris pour le samedi 11 juillet : 1 horaire.")).toBe(true))
   })
 
   it("offers the copy only once the previous date has an answer", () => {
@@ -120,7 +120,7 @@ describe("AvailabilityEditor", () => {
     await waitFor(() => expect(screen.getAllByRole("status").some((s) => s.textContent === "Correction enregistrée.")).toBe(true))
   })
 
-  it("« Pas disponible pendant tout l'événement » fills every date and says nothing is saved yet", async () => {
+  it("« Pas disponible pendant tout l'événement » fills every date and says nothing is saved yet", async () => {
     const onSave = vi.fn().mockResolvedValue({ ok: true })
     render(<AvailabilityEditor idPrefix="t" dates={dates} initialDays={[]} voice="tu" submitLabel="Enregistrer" savedText="OK" onSave={onSave} />)
     fireEvent.click(screen.getByRole("button", { name: "Pas disponible pendant tout l'événement" }))
@@ -144,7 +144,7 @@ describe("EventAvailabilityOption", () => {
     expect(JSON.parse(String(fetchMock.mock.calls[1][1]?.body))).toEqual({ enabled: false, confirm: true })
   })
 
-  it("keeps « Sans date limite » on screen, unavailable when there is none", () => {
+  it("keeps « Sans date limite » on screen, unavailable when there is none", () => {
     render(<EventAvailabilityOption eventId="e1" initial={{ enabled: true, deadline: null, deadlineInput: "", timeZone: "Europe/Zurich", open: true }} />)
     expect(screen.getByRole("button", { name: "Sans date limite" })).toHaveAttribute("aria-disabled", "true")
     expect(screen.getByLabelText("Date limite des réponses (facultatif)")).toHaveAccessibleDescription(/^En heure suisse \(Europe\/Zurich\)\./)

@@ -70,16 +70,16 @@ export default function EventAvailabilityOption({ eventId, initial }: { eventId:
       setState(data)
       setConfirmOff(null)
       switchRef.current?.focus()
-      announce(setStatus, "Collecte arrêtée : les liens envoyés ne fonctionnent plus, les réponses sont gardées.")
+      announce(setStatus, "Collecte arrêtée : les liens envoyés ne fonctionnent plus, les réponses sont gardées.")
     } catch {
       setSaving(false)
-      setConfirmError("La connexion a échoué : rien n'a été fait. Réessayez.")
+      setConfirmError("La connexion a échoué : rien n'a été fait. Réessayez.")
     }
   }
 
   async function saveDeadline(value: string | null, pastConfirmed = false) {
     if (saving) return
-    if (value !== null && !value) { flushSync(() => setDeadlineError("Indiquez une date et une heure, ou choisissez « Sans date limite ».")); deadlineRef.current?.focus(); return }
+    if (value !== null && !value) { flushSync(() => setDeadlineError("Indiquez une date et une heure, ou choisissez « Sans date limite ».")); deadlineRef.current?.focus(); return }
     if (value !== null && !pastConfirmed && deadlineInputIsPast(value, state.timeZone)) { setDeadlineError(""); setConfirmPast(true); return }
     setConfirmPast(false)
     setSaving(true); setStatus(""); setDeadlineError("")
@@ -92,10 +92,10 @@ export default function EventAvailabilityOption({ eventId, initial }: { eventId:
         return
       }
       setState(data); setDeadline(data.deadlineInput ?? "")
-      announce(setStatus, data.deadline ? (data.open ? "Date limite enregistrée." : "Date limite enregistrée : elle est déjà passée, les personnes ne peuvent plus répondre.") : "Pas de date limite : les personnes peuvent répondre tant que la collecte est active.")
+      announce(setStatus, data.deadline ? (data.open ? "Date limite enregistrée." : "Date limite enregistrée : elle est déjà passée, les personnes ne peuvent plus répondre.") : "Pas de date limite : les personnes peuvent répondre tant que la collecte est active.")
     } catch {
       setSaving(false)
-      flushSync(() => setDeadlineError("La connexion a échoué : rien n'a été enregistré. Réessayez."))
+      flushSync(() => setDeadlineError("La connexion a échoué : rien n'a été enregistré. Réessayez."))
       deadlineRef.current?.focus()
     }
   }
@@ -154,8 +154,8 @@ export default function EventAvailabilityOption({ eventId, initial }: { eventId:
       {confirmPast && (
         <ConfirmActionModal
           recap={{
-            title: "Enregistrer une date limite déjà passée ?",
-            lead: "Cette date limite est déjà passée : dès l'enregistrement, les personnes ne pourront plus répondre ni changer leurs réponses depuis leur lien.",
+            title: "Enregistrer une date limite déjà passée ?",
+            lead: "Cette date limite est déjà passée : dès l'enregistrement, les personnes ne pourront plus répondre ni changer leurs réponses depuis leur lien.",
             lines: ["Vous pourrez toujours corriger leurs réponses vous-même, ou choisir plus tard une nouvelle date limite pour rouvrir la collecte."],
             confirmLabel: "Enregistrer quand même",
             cancelLabel: "Changer la date",
@@ -170,9 +170,9 @@ export default function EventAvailabilityOption({ eventId, initial }: { eventId:
       {confirmOff !== null && (
         <ConfirmActionModal
           recap={{
-            title: "Arrêter de recueillir les disponibilités ?",
+            title: "Arrêter de recueillir les disponibilités ?",
             lead: confirmOff,
-            lines: ["Si vous réactivez la collecte plus tard, vous retrouverez ces réponses, mais il faudra envoyer de nouveaux liens.", "L'action est journalisée : vous la retrouverez dans le journal de l'événement."],
+            lines: ["Si vous réactivez la collecte plus tard, vous retrouverez ces réponses, mais il faudra envoyer de nouveaux liens.", "L'action est journalisée : vous la retrouverez dans le journal de l'événement."],
             confirmLabel: "Arrêter et désactiver les liens",
             cancelLabel: "Continuer à recueillir",
             danger: true,

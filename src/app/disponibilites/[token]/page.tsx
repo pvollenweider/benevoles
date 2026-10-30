@@ -47,7 +47,7 @@ function stateLine(v: View): string {
   const answered = v.days.filter((d) => v.dates.includes(d.date)).length
   switch (v.state) {
     case "none": return "Tu n'as pas encore répondu."
-    case "partial": return `Réponse partielle : ${datesCountText(answered, v.dates.length)}.`
+    case "partial": return `Réponse partielle : ${datesCountText(answered, v.dates.length)}.`
     case "complete": return "Tu as répondu pour toutes les dates."
     default: return "Tu as indiqué n'être disponible à aucune date."
   }
@@ -150,7 +150,7 @@ export default function MyAvailabilityPage() {
         const fresh = await fetch(url!, { cache: "no-store" }).then((r) => (r.ok ? r.json() : null)).catch(() => null)
         if (fresh && fresh.open === false) { showClosed(fresh as View, true); return { ok: true } }
       }
-      if (res.status === 429) return { ok: false, error: "Trop de tentatives : rien n'a été enregistré. Attends quelques minutes, puis réessaie." }
+      if (res.status === 429) return { ok: false, error: "Trop de tentatives : rien n'a été enregistré. Attends quelques minutes, puis réessaie." }
       return { ok: false, error: typeof data.error === "string" ? data.error : "Tes disponibilités n'ont pas pu être enregistrées. Réessaie.", at: data.at }
     }
     if ((data as View).open === false) { showClosed(data as View, false); return { ok: true } }
@@ -179,7 +179,7 @@ export default function MyAvailabilityPage() {
                 <p className="text-sm text-gray-700">
                   {f.kind === "too_many"
                     ? "Ce lien a été ouvert trop de fois en peu de temps. Attends quelques minutes, puis réessaie."
-                    : "La page n'a pas pu être chargée : vérifie ta connexion à internet, puis réessaie. Tes réponses déjà enregistrées ne sont pas perdues."}
+                    : "La page n'a pas pu être chargée : vérifie ta connexion à internet, puis réessaie. Tes réponses déjà enregistrées ne sont pas perdues."}
                 </p>
                 <button
                   type="button"
@@ -218,11 +218,11 @@ export default function MyAvailabilityPage() {
             <p className="text-sm text-gray-700">{view.event.organizationName} · {view.event.datesLabel.charAt(0).toUpperCase() + view.event.datesLabel.slice(1)}</p>
           </div>
           <div className="bg-white border border-gray-200 rounded-2xl p-4 space-y-2 text-sm text-gray-800">
-            {view.open && <p>{nbspQuotes("Pour chaque date, indique les heures où tu es libre, ou « Pas disponible ». Un horaire du soir peut finir le lendemain matin, par exemple de 20h à 3h. Pas besoin de compte. Seule l'organisation voit tes réponses.")}</p>}
+            {view.open && <p>{nbspQuotes("Pour chaque date, indique les heures où tu es libre, ou « Pas disponible ». Un horaire du soir peut finir le lendemain matin, par exemple de 20h à 3h. Pas besoin de compte. Seule l'organisation voit tes réponses.")}</p>}
             {/* Said once: after a deadline that just passed, the sentence under « Tes réponses » says it. */}
             {deadline && !closedNow && <p className="font-medium text-gray-900">{deadline}</p>}
             {published && view.open && <p data-availability-correction="1">{CORRECTION_NOTICE}</p>}
-            <p className="text-gray-700">{view.open ? AVAILABILITY_LINK_NOTICE : "Ce lien est personnel : ne le transmets pas. Seule l'organisation voit tes réponses."}</p>
+            <p className="text-gray-700">{view.open ? AVAILABILITY_LINK_NOTICE : "Ce lien est personnel : ne le transmets pas. Seule l'organisation voit tes réponses."}</p>
           </div>
           <section aria-labelledby="my-availability-answers" className="bg-white border border-gray-200 rounded-2xl p-4 space-y-3">
             <h2 id="my-availability-answers" className="text-base font-semibold text-gray-900">Tes réponses</h2>
