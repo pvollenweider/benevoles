@@ -3,9 +3,11 @@
 
 import { availabilityDates } from "./event-availability"
 import {
-  assessCandidate, fitDetail, judgeAvailabilityAcks, shiftFit, shiftInterval, usesAvailability, availabilityAckKey, FIT_LABELS,
-  type AckGiven, type AckMissing, type AnswerForFit, type CandidateRow, type FitState, type HeldMission,
+  assessCandidate, fitDetail, judgeAvailabilityAcks, sameNameHints, shiftFit, shiftInterval, usesAvailability, availabilityAckChanges, availabilityAckKey,
+  FIT_LABELS,
+  type AckGiven, type AckMissing, type AckVia, type AnswerForFit, type CandidateRow, type FitState, type HeldMission,
 } from "./availability-assist"
+import type { LogActor } from "./event-log"
 import { COMMITTED_STATUSES, LIVE_STATUSES } from "./registration-capacity"
 import { orgTimeZone } from "./time-zone"
 import { WORKLOAD_EVENT_SELECT, workloadGateOf } from "./workload-guard"
@@ -63,27 +65,77 @@ export class AvailabilityAckError extends Error {
 }
 
 /**
- * The server check of an organiser's addition (owner decision 6), inside its transaction, after
- * the event's workload lock, the shift locks and the person's Volunteer lock: the shift hours and
- * the answer are re-read now, so an acknowledgement given on older ones does not apply. Throws
- * AvailabilityAckError when a shift outside declared availability lacks its acknowledgement.
+ * The server check of an organiser's assignment (owner decision 6), inside its transaction, after
+ * the event's workload lock, the shift locks and the people's Volunteer locks (workload → shifts →
+ * people): the shift hours and the answers are re-read now, so an acknowledgement given on older
+ * ones does not apply. `items`: each person and the shifts they would hold after the change (an
+ * addition, an accepted request, a restored place, the shift received in a swap). Throws
+ * AvailabilityAckError, every missing acknowledgement listed, when one is missing: the caller's
+ * transaction rolls back as a whole. Returns the acknowledgements accepted, with their evidence.
  */
-export async function checkAvailabilityAcks(tx: Db, gate: AvailabilityGate, eventId: string, volunteerId: string, shiftIds: string[], acks: readonly string[]): Promise<AckGiven[]> {
-  if (!gate.inUse) return []
+export async function checkAvailabilityAcksFor(tx: Db, gate: AvailabilityGate, eventId: string, items: readonly { volunteerId: string; shiftIds: readonly string[] }[], acks: readonly string[]): Promise<AckGiven[]> {
+  if (!gate.inUse || items.length === 0) return []
+  const shiftIds = [...new Set(items.flatMap((i) => i.shiftIds))]
   const shifts: { id: string; roleName: string; label: string; date: Date; startTime: string; endTime: string }[] = await tx.shift.findMany({
     where: { id: { in: shiftIds }, eventId },
     select: { id: true, roleName: true, label: true, date: true, startTime: true, endTime: true },
   })
-  const answer = await readAnswerForFit(tx, eventId, volunteerId)
-  const verdict = judgeAvailabilityAcks({ eventId, volunteerId, shifts: shifts.map((s) => ({ ...s, name: shiftName(s) })), answer, eventDates: gate.dates, timeZone: gate.timeZone, acks })
-  if (verdict.missing.length > 0) throw new AvailabilityAckError(verdict.missing)
-  return verdict.acknowledged
+  const named = new Map(shifts.map((s) => [s.id, { ...s, name: shiftName(s) }]))
+  const missing: AckMissing[] = []
+  const acknowledged: AckGiven[] = []
+  for (const item of items) {
+    const answer = await readAnswerForFit(tx, eventId, item.volunteerId)
+    const verdict = judgeAvailabilityAcks({ eventId, volunteerId: item.volunteerId, shifts: item.shiftIds.flatMap((id) => named.get(id) ?? []), answer, eventDates: gate.dates, timeZone: gate.timeZone, acks })
+    missing.push(...verdict.missing)
+    acknowledged.push(...verdict.acknowledged)
+  }
+  if (missing.length > 0) throw new AvailabilityAckError(missing)
+  return acknowledged
+}
+
+/** One person's addition: checkAvailabilityAcksFor with a single item. */
+export function checkAvailabilityAcks(tx: Db, gate: AvailabilityGate, eventId: string, volunteerId: string, shiftIds: string[], acks: readonly string[]): Promise<AckGiven[]> {
+  return checkAvailabilityAcksFor(tx, gate, eventId, [{ volunteerId, shiftIds }], acks)
+}
+
+/**
+ * The acknowledgements' log entries, in the caller's transaction so they commit (or roll back)
+ * with the registration change they document: one per registration, versioned evidence derived by
+ * the server (availabilityAckChanges). `registrationOf` maps a person and shift to the registration.
+ */
+export async function logAvailabilityAcks(tx: Db, p: { eventId: string; actor: LogActor; via: AckVia; acks: readonly AckGiven[]; registrationOf: (a: AckGiven) => string | undefined; causedByLogId?: string }): Promise<void> {
+  for (const a of p.acks) {
+    const registrationId = p.registrationOf(a)
+    if (!registrationId) continue
+    await tx.eventLog.create({
+      data: {
+        eventId: p.eventId,
+        actorType: p.actor.type,
+        actorId: ("id" in p.actor ? p.actor.id : undefined) ?? null,
+        // One entry per registration placed outside declared availability, knowingly; a literal (#704).
+        action: "registration.availability_acknowledged",
+        entityType: "Registration",
+        entityId: registrationId,
+        changes: availabilityAckChanges(a, p.via),
+        causedByLogId: p.causedByLogId ?? null,
+      },
+    })
+  }
+}
+
+/** What the refusal asks for, by action: « pour l'ajouter quand même », and what was not done. */
+const ACK_WORDS: Record<AckVia, { confirm: string; nothing: string }> = {
+  manual_add: { confirm: "l'ajouter quand même", nothing: "Rien n'a été ajouté." },
+  accept: { confirm: "accepter sa demande quand même", nothing: "La demande n'a pas été acceptée." },
+  restore: { confirm: "rétablir son inscription quand même", nothing: "Rien n'a été rétabli." },
+  swap: { confirm: "valider l'échange quand même", nothing: "L'échange n'a pas été effectué." },
 }
 
 /** The refusal's body: the first shift said, every one listed for the form. */
-export function availabilityAckBody(e: AvailabilityAckError, name: string) {
+export function availabilityAckBody(e: AvailabilityAckError, name: string, via: AckVia = "manual_add") {
   const n = e.missing.length
-  const error = `${name} a indiqué ne pas être disponible pendant ${n > 1 ? `${n} de ces créneaux` : "une partie de ce créneau"} : cochez la confirmation pour l'ajouter quand même. Rien n'a été ajouté.`
+  const words = ACK_WORDS[via]
+  const error = `${name} a indiqué ne pas être disponible pendant ${n > 1 ? `${n} de ces créneaux` : "une partie de ce créneau"} : cochez la confirmation pour ${words.confirm}. ${words.nothing}`
   return { error, code: "availability" as const, outside: e.missing.map((m) => ({ ...m, label: FIT_LABELS[m.state] })) }
 }
 
@@ -165,9 +217,9 @@ export async function loadShiftAssist(db: Db, eventId: string, shiftId: string |
   const answers: AnswerRow[] = await db.availabilityRequest.findMany({ where: { eventId }, select: ANSWER_SELECT })
 
   const related = [...new Set([...answers.map((a) => a.volunteerId), ...committed.map((r) => r.volunteerId)])]
-  const people: { id: string; firstName: string; lastName: string; birthDate: Date | null }[] = await db.volunteer.findMany({
+  const people: { id: string; firstName: string; lastName: string; email: string | null; birthDate: Date | null }[] = await db.volunteer.findMany({
     where: { active: true, erasedAt: null, mergedIntoId: null, ...(scope === "event" ? { id: { in: related } } : {}) },
-    select: { id: true, firstName: true, lastName: true, birthDate: true },
+    select: { id: true, firstName: true, lastName: true, email: true, birthDate: true },
   })
   const limits: { volunteerId: string; values: unknown }[] = await db.eventVolunteerLimit.findMany({ where: { eventId }, select: { volunteerId: true, values: true } })
   const limitOf = new Map(limits.map((l) => [l.volunteerId, parsePersonalLimits(l.values)]))
@@ -183,7 +235,10 @@ export async function loadShiftAssist(db: Db, eventId: string, shiftId: string |
 
   const target = { id: chosenRow.id, date: chosenRow.date, startTime: chosenRow.startTime, endTime: chosenRow.endTime, mealOnTheGo: chosenRow.mealOnTheGo, placeId: chosenRow.placeId, placeName: chosenRow.place?.name ?? null, name: shiftName(chosenRow) }
   const ctx = { eventId, shift: target, eventDates: gate.dates, timeZone: gate.timeZone, gate: workloadGate, mode: workloadModeOf(event, orgTimeZone(event.organization)) }
-  const rows = people.filter((p) => !onShift.has(p.id)).map((p) => {
+  const listed = people.filter((p) => !onShift.has(p.id))
+  // Two people listed under the same name are told apart (their email, seen on the member's page).
+  const hints = sameNameHints(listed)
+  const rows = listed.map((p) => {
     const a = answerOf.get(p.id)
     return assessCandidate(ctx, {
       volunteerId: p.id, firstName: p.firstName, lastName: p.lastName,
@@ -191,6 +246,7 @@ export async function loadShiftAssist(db: Db, eventId: string, shiftId: string |
       held: heldOf.get(p.id) ?? [],
       person: { birthDate: p.birthDate, personal: limitOf.get(p.id) ?? null },
       reviewReason: a?.reviewReason ?? null,
+      sameNameHint: hints.get(p.id) ?? null,
     })
   })
   const shift = shifts.find((s) => s.id === chosenRow.id)!

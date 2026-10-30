@@ -12,7 +12,12 @@ import { decideSwap, SWAP_NOT_FOUND, SWAP_UNAVAILABLE } from "@/lib/shift-swap-s
  * request's `revision` shown: a second click or another organiser's decision answers with the
  * current state. Approving runs every rule again; an approval never overrides one.
  */
-const schema = z.object({ approve: z.boolean(), revision: z.number().int().min(0) })
+const schema = z.object({
+  approve: z.boolean(),
+  revision: z.number().int().min(0),
+  /** Dated availability (#1146, lot B): the acknowledgements of received shifts outside declared availability, one per person at most. */
+  availabilityAck: z.array(z.string().max(400)).max(2).optional(),
+})
 
 export async function POST(req: Request, { params }: { params: Promise<{ id: string; requestId: string }> }) {
   const guard = await requireOrgSession()
@@ -24,7 +29,7 @@ export async function POST(req: Request, { params }: { params: Promise<{ id: str
   const request = await db.shiftSwapRequest.findFirst({ where: { id: requestId, eventId: id }, select: { id: true } })
   if (!request) return NextResponse.json({ error: SWAP_NOT_FOUND }, { status: 404 })
   if (!swapsShipped()) return NextResponse.json({ error: SWAP_UNAVAILABLE, code: "unavailable" }, { status: 403 })
-  const result = await decideSwap(db, { organizationId, requestId, adminId: session.user?.id ?? "", approve: parsed.data.approve, revision: parsed.data.revision })
-  if (!result.ok) return NextResponse.json({ error: result.error, status: result.status, code: result.code }, { status: result.httpStatus })
+  const result = await decideSwap(db, { organizationId, requestId, adminId: session.user?.id ?? "", approve: parsed.data.approve, revision: parsed.data.revision, availabilityAck: parsed.data.availabilityAck })
+  if (!result.ok) return NextResponse.json({ error: result.error, status: result.status, code: result.code, ...(result.outside ? { outside: result.outside } : {}) }, { status: result.httpStatus })
   return NextResponse.json(result)
 }

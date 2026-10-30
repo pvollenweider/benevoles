@@ -50,6 +50,8 @@ export async function loadRecentCancellations(db: OrgScopedPrisma, eventId: stri
     const log = latest.get(r.id)
     return {
       id: r.id,
+      volunteerId: r.volunteerId,
+      shiftId: r.shiftId,
       volunteerName: `${r.volunteer.firstName} ${r.volunteer.lastName}`,
       hasEmail: !!r.volunteer.email,
       shift: spokenShift({ ...r.shift, date: r.shift.date.toISOString().slice(0, 10) }),

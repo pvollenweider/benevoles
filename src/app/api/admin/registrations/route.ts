@@ -18,9 +18,7 @@ import { manualAddNotice, manualAddNoticeLog } from "@/lib/manual-add-notice"
 import { localDateTimeToUtc, orgTimeZone } from "@/lib/time-zone"
 import { checkDutyChange, judgeDutyChange, lockVolunteerRows, lockWorkloadShared, readWorkloadGate, withPlaceNames, workloadRefusalBody, WorkloadRefusalError } from "@/lib/workload-guard"
 import { lockShifts } from "@/lib/registration-capacity"
-import { AvailabilityAckError, availabilityAckBody, checkAvailabilityAcks, readAvailabilityGate } from "@/lib/availability-assist-data"
-import type { AckGiven } from "@/lib/availability-assist"
-import { fmtDuration } from "@/lib/signup-recap"
+import { AvailabilityAckError, availabilityAckBody, checkAvailabilityAcks, logAvailabilityAcks, readAvailabilityGate } from "@/lib/availability-assist-data"
 
 /** The organiser's refusal (#1171): who, and the first limit the addition would break. */
 function manualAddWorkloadBody(e: WorkloadRefusalError, name: string, shiftCount: number) {
@@ -149,8 +147,6 @@ export async function POST(req: Request) {
     : null
 
   let registrations
-  // The shifts added outside the person's declared availability, acknowledged (#1146, lot B).
-  let acknowledged: AckGiven[] = []
   try {
     const added = volunteer
     registrations = await db.$transaction(async (tx) => {
@@ -158,23 +154,24 @@ export async function POST(req: Request) {
       // whole resulting schedule. Every shift added counts, all or nothing.
       await lockWorkloadShared(tx, eventId)
       const gate = await readWorkloadGate(tx, eventId)
-      // Dated availability (#1146, lot B), on an event that uses it: the shifts' hours and the
-      // person's answer read under the shift and person locks (workload → shifts → people), so an
-      // acknowledgement given on older ones never applies. Nothing is created without it.
+      // Dated availability (#1146, lot B), on an event that uses it: the shifts and the person are
+      // locked too (workload → shifts → people), so the shifts' hours and the person's answer read
+      // below are those of the commit. An event without it takes no extra lock or read.
       const availability = await readAvailabilityGate(tx, eventId)
-      if (availability.inUse) {
-        await lockShifts(tx, ids)
-        await lockVolunteerRows(tx, [added.id])
-        acknowledged = await checkAvailabilityAcks(tx, availability, eventId, added.id, ids, availabilityAck ?? [])
-      }
+      if (availability.inUse) await lockShifts(tx, ids)
+      if (availability.inUse || gate.kind !== "off") await lockVolunteerRows(tx, [added.id])
       if (gate.kind !== "off") {
-        if (!availability.inUse) await lockVolunteerRows(tx, [added.id])
         // A birth date given here fills a member's missing one (never replaces it), before the check.
         if (birthDateValue) await tx.volunteer.updateMany({ where: { id: added.id, birthDate: null }, data: { birthDate: birthDateValue } })
         const verdict = await checkDutyChange(tx, gate, eventId, added.id, { add: shifts })
         if (!verdict.ok) throw new WorkloadRefusalError(verdict, added.id)
       }
+      // After the workload protection (a hard refusal is never preceded by a request to tick):
+      // a shift outside the person's declared availability needs its acknowledgement, or nothing
+      // is created. An acknowledgement never bypasses the protection.
+      const acknowledged = availability.inUse ? await checkAvailabilityAcks(tx, availability, eventId, added.id, ids, availabilityAck ?? []) : []
       const created = []
+      const registrationOfShift = new Map<string, string>()
       for (const shift of shifts) {
         const registration = await tx.registration.create({
           data: {
@@ -211,7 +208,10 @@ export async function POST(req: Request) {
           })
         }
         created.push({ registration, shiftId: shift.id })
+        registrationOfShift.set(shift.id, registration.id)
       }
+      // The acknowledgements' evidence, committed with the registrations (#1146, lot B).
+      await logAvailabilityAcks(tx, { eventId, actor: adminActor(guard.session), via: "manual_add", acks: acknowledged, registrationOf: (a) => registrationOfShift.get(a.shiftId) })
       return created
     })
   } catch (e) {
@@ -236,7 +236,6 @@ export async function POST(req: Request) {
     }
   }
 
-  const ackOf = new Map(acknowledged.map((a) => [a.shiftId, a]))
   for (const { registration, shiftId: addedShiftId } of registrations) {
     await logEvent({
       eventId,
@@ -249,8 +248,6 @@ export async function POST(req: Request) {
         source: { from: null, to: "admin_manual" },
         confirmationEmail: { from: null, to: manualAddNoticeLog(notices.get(addedShiftId)!) },
         ...(allowOverLimit ? { overRoleLimit: { from: null, to: true } } : {}),
-        // Added outside the person's declared availability, knowingly (#1146, lot B).
-        ...(ackOf.has(addedShiftId) ? { outsideAvailability: { from: null, to: fmtDuration(ackOf.get(addedShiftId)!.outsideMinutes) } } : {}),
       },
     })
   }

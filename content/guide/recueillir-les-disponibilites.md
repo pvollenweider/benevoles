@@ -49,8 +49,17 @@ Page **Affecter selon les disponibilités**, ouverte depuis la page **Disponibil
 - **Pauses et charge** : si l'événement les protège, une personne que ses limites empêchent d'ajouter n'a pas de bouton, et la carte dit pourquoi ; sinon, les alertes habituelles s'affichent et l'ajout reste possible.
 - **Trier** : **Par nom**, ou **Pour répartir la charge** : d'abord les personnes qui peuvent être ajoutées, puis selon leur disponibilité, puis celles qui ont le moins d'heures déjà prévues sur l'événement, puis par nom. **Disponibles sur tout le créneau seulement** masque les autres.
 - **Ajouter à ce créneau** inscrit la personne comme l'ajout manuel des inscriptions (même email de confirmation, mêmes contrôles).
+- Deux personnes du même nom sont distinguées par leur adresse email (ou « sans email ») sous leur nom.
 
-Une personne qui a indiqué ne pas être disponible pendant une partie du créneau peut tout de même être ajoutée : cochez d'abord **Ajouter quand même : je sais que … n'a pas indiqué être disponible à ces heures**. La même case apparaît dans **+ Ajouter manuellement** des inscriptions, sous le créneau choisi, quand vous choisissez un membre. Si sa réponse change entre-temps, l'ajout est refusé sans rien enregistrer et la case est à cocher de nouveau. Le journal de l'événement garde la trace de l'ajout confirmé hors des disponibilités indiquées. Une réponse « sans réponse » ne demande aucune confirmation.
+Une personne qui a indiqué ne pas être disponible pendant une partie du créneau peut tout de même être ajoutée : cochez d'abord **Ajouter quand même : je sais que … n'a pas indiqué être disponible à ces heures**. La même case apparaît dans **+ Ajouter manuellement** des inscriptions, sous le créneau choisi, quand vous choisissez un membre.
+
+La même confirmation est demandée, dans la fenêtre de confirmation, quand vous placez quelqu'un autrement sur des heures où il a indiqué ne pas être disponible :
+
+- **Accepter** une demande d'inscription sur un créneau « sur validation » : case **Accepter quand même : je sais que …** ;
+- **Rétablir** une inscription annulée (place ou demande) : case **Rétablir quand même : je sais que …** ;
+- **Valider l'échange** de deux bénévoles : pour chacune des deux personnes, sa disponibilité pour le créneau qu'elle recevrait et, si besoin, sa case **Valider quand même : je sais que …**. Sans confirmation, l'échange reste à valider. Un échange que les bénévoles font entre eux sans validation de l'organisation ne demande rien.
+
+Si la réponse de la personne change entre-temps, rien n'est enregistré : la fenêtre reste ouverte, indique que ses disponibilités ont changé et la case est à cocher de nouveau. La confirmation ne passe jamais outre la protection des pauses et de la charge. Le journal de l'événement garde, pour chaque inscription placée ainsi, l'action, le créneau et le temps hors des disponibilités indiquées (**a confirmé l'affectation malgré les disponibilités indiquées**). Une réponse « sans réponse » ne demande aucune confirmation.
 
 ## Ce que voit la personne sollicitée
 

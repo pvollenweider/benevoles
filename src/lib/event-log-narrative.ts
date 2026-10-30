@@ -13,9 +13,31 @@ import type { EventLogEntry, ShiftLabel } from "./event-log-read"
 import { APP_TIME_ZONE } from "./time-zone"
 import { listingChangeLabel } from "./event-visibility"
 import { logValueLabel } from "./log-value-labels"
+import { fmtDuration } from "./signup-recap"
 
 const dateFmt = new Intl.DateTimeFormat("fr-FR", { day: "numeric", month: "long" })
 
+
+/** The action an availability acknowledgement was given for (#1146, lot B), as stored in `via`. */
+const ACK_VIA_WORDS: Record<string, string> = {
+  manual_add: "ajout par l'organisation",
+  accept: "acceptation d'une demande",
+  restore: "inscription rétablie",
+  swap: "échange validé",
+}
+
+/**
+ * The evidence of an availability acknowledgement (src/lib/availability-assist.ts
+ * availabilityAckChanges): « pas disponible 1 h 30 sur 6 h (acceptation d'une demande) ». Never
+ * the ranges, which the entry does not hold.
+ */
+export function ackEvidenceText(v: unknown): string | null {
+  if (!v || typeof v !== "object") return null
+  const e = v as { via?: unknown; outsideMinutes?: unknown; totalMinutes?: unknown }
+  if (typeof e.outsideMinutes !== "number" || typeof e.totalMinutes !== "number") return null
+  const how = typeof e.via === "string" && ACK_VIA_WORDS[e.via] ? ` (${ACK_VIA_WORDS[e.via]})` : ""
+  return `pas disponible ${fmtDuration(e.outsideMinutes)} sur ${fmtDuration(e.totalMinutes)}${how}`
+}
 
 function fmtValue(v: unknown): string {
   if (v === null || v === undefined) return "—"
@@ -105,6 +127,7 @@ const FIELD_LABELS: Record<string, string> = {
   dates: "dates",
   // Added by an organiser outside the person's declared availability, knowingly (#1146, lot B).
   outsideAvailability: "ajout confirmé hors des disponibilités indiquées",
+  availabilityAck: "hors des disponibilités indiquées",
   postes: "postes",
 }
 
@@ -135,6 +158,7 @@ export function describeChanges(changes: EventLogEntry["changes"], shiftLabels?:
         : field === "isListed" ? listingChangeLabel(v)
         : field === "answer" && (v === null || v === undefined) ? "pas de réponse"
         : field === "checkedInAt" && v === "set" ? "enregistrée"
+        : field === "availabilityAck" && v !== null && v !== undefined ? ackEvidenceText(v) ?? "confirmé"
         : logValueLabel(field, v, entityType) ?? fmtValue(v)
       return `${label} : ${fmt(from)} → ${fmt(to)}`
     })
@@ -231,6 +255,8 @@ export const ACTION_VERB: Record<string, (actor: string) => string> = {
   "swap.expired": () => "la demande d'échange a expiré",
   "swap.ended": () => "la demande d'échange a pris fin sans échange",
   "registration.swapped": () => "l'inscription a changé de créneau par un échange entre bénévoles",
+  // Dated availability (#1146, lot B): an organiser's acknowledgement, committed with the assignment.
+  "registration.availability_acknowledged": (a) => `${a} a confirmé l'affectation malgré les disponibilités indiquées`,
   // Dated availability (#1146): that someone answered or was asked, never the ranges.
   "availability.requested": (a) => `${a} a demandé ses disponibilités à un membre`,
   "availability.answered": (a) => `${a} a indiqué ses disponibilités`,
@@ -250,6 +276,7 @@ const SHIFT_AWARE_ACTIONS = new Set([
   "registration.waitlist_offered", "registration.waitlist_confirmed", "registration.baseline",
   "registration.checked_in", "registration.check_in_undone",
   "registration.requested", "registration.accepted", "registration.refused", "registration.swapped",
+  "registration.availability_acknowledged",
 ])
 
 /** The question an answer change is about (#984), named by its label at the time: « … à « Repas ? » ». */

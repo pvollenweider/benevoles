@@ -54,8 +54,10 @@ describe("cancelledFrom", () => {
 
 describe("recentCancellations (#809)", () => {
   const now = new Date("2026-07-01T10:00:00Z")
-  const row = (over: Partial<import("../registration-restore").CancelledRegistration> = {}) => ({
+  const row = (over: Partial<import("../registration-restore").CancelledRegistration> = {}): import("../registration-restore").CancelledRegistration => ({
     id: "r1",
+    volunteerId: "v1",
+    shiftId: "s1",
     volunteerName: "Chloé Roy",
     hasEmail: true,
     shift: "Bar, samedi 4 juillet, de 10h à 12h",
@@ -70,7 +72,7 @@ describe("recentCancellations (#809)", () => {
 
   it("offers « Rétablir » with who cancelled and when, in the organisation's time zone", () => {
     expect(recentCancellations([row()], now, "Europe/Zurich")).toEqual([{
-      id: "r1", volunteerName: "Chloé Roy", hasEmail: true, shift: "Bar, samedi 4 juillet, de 10h à 12h",
+      id: "r1", volunteerId: "v1", shiftId: "s1", volunteerName: "Chloé Roy", hasEmail: true, shift: "Bar, samedi 4 juillet, de 10h à 12h",
       previousStatus: "active", cancelled: "Annulée par la personne le 30 juin à 14:05", blocked: null,
     }])
     expect(recentCancellations([row({ cancellation: { actorType: "admin", at: new Date("2026-06-30T12:05:00Z"), changes: { status: { from: "requested" } } } })], now, "UTC")[0])

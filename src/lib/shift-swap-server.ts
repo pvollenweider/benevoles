@@ -23,6 +23,8 @@ import {
 import { deadlineMoment, selfCancelDeadline } from "./cancel-deadline"
 import { rosterDisplayName } from "./shift-roster-text"
 import { checkDutyChange, lockWorkloadShared, readWorkloadGate, type WorkloadVerdict } from "./workload-guard"
+import { AvailabilityAckError, checkAvailabilityAcksFor, logAvailabilityAcks, readAvailabilityGate } from "./availability-assist-data"
+import { FIT_LABELS, type AckGiven, type AckMissing } from "./availability-assist"
 
 /** The swap code of a workload refusal (#1171): the first rule broken, never whose plan. */
 function workloadSwapCode(v: Exclude<WorkloadVerdict, { ok: true }>): SwapRefusalCode {
@@ -76,7 +78,9 @@ export type SwapResult =
       error: string
       /** The request's current status, when it exists: a replayed or late action shows where it stands. */
       status?: SwapStatus
-      code?: SwapEndReason | "unavailable" | "busy" | "revision" | "declined"
+      code?: SwapEndReason | "unavailable" | "busy" | "revision" | "declined" | "availability"
+      /** Missing availability acknowledgements (#1146, lot B), per person and shift received. */
+      outside?: (AckMissing & { label: string })[]
     }
 
 export const SWAP_NOT_FOUND = "Demande d'échange introuvable."
@@ -523,7 +527,7 @@ async function lockForStep(tx: Tx, requestId: string, organizationId?: string) {
 }
 
 /** The swap itself, inside the step's transaction once every rule passed (E14, E15). */
-async function applySwap(tx: Tx, req: LockedRequest, event: LoadedEvent, mine: LoadedRegistration, theirs: LoadedRegistration, actor: LogActor, now: Date, extra: { decidedById?: string } = {}): Promise<string[]> {
+async function applySwap(tx: Tx, req: LockedRequest, event: LoadedEvent, mine: LoadedRegistration, theirs: LoadedRegistration, actor: LogActor, now: Date, extra: { decidedById?: string; acks?: AckGiven[] } = {}): Promise<string[]> {
   const resets = { reminderJ2Sent: null, reminderJ1Sent: null, reminderDdSent: null, checkedInAt: null, waitingPosition: null, waitingOfferedAt: null, waitingExpiresAt: null }
   const moved = [
     await tx.registration.updateMany({ where: { id: mine.id, volunteerId: mine.volunteerId, shiftId: mine.shiftId, status: "active" }, data: { shiftId: theirs.shiftId, ...resets } }),
@@ -555,6 +559,11 @@ async function applySwap(tx: Tx, req: LockedRequest, event: LoadedEvent, mine: L
       eventId: req.eventId, ...actorFields(actor), action: "registration.swapped", entityType: "Registration", entityId: theirs.id,
       changes: { shiftId: { from: theirs.shiftId, to: mine.shiftId } }, causedByLogId: applied.id,
     },
+  })
+  // An organiser's approval outside declared availability (#1146, lot B): its evidence, with the swap.
+  await logAvailabilityAcks(tx, {
+    eventId: req.eventId, actor, via: "swap", acks: extra.acks ?? [], causedByLogId: applied.id,
+    registrationOf: (a) => (a.volunteerId === mine.volunteerId && a.shiftId === theirs.shiftId ? mine.id : a.volunteerId === theirs.volunteerId && a.shiftId === mine.shiftId ? theirs.id : undefined),
   })
   return queue(tx, event, [appliedPayload(event, req, mine, mine.shift, theirs.shift), appliedPayload(event, req, theirs, theirs.shift, mine.shift)])
 }
@@ -606,9 +615,31 @@ export async function confirmSwap(db: SwapDbLike, input: { requestId: string; vo
  * An organiser approves or refuses a swap waiting for validation (`revision` as shown). Approving
  * runs every rule again (an approval never overrides one) and applies the swap; refusing ends it.
  */
-export async function decideSwap(db: SwapDbLike, input: { organizationId: string; requestId: string; adminId: string; approve: boolean; revision: number; now?: Date }): Promise<SwapResult> {
+export async function decideSwap(db: SwapDbLike, input: { organizationId: string; requestId: string; adminId: string; approve: boolean; revision: number; availabilityAck?: readonly string[]; now?: Date }): Promise<SwapResult> {
   const now = input.now ?? new Date()
   const actor: LogActor = { type: "admin", id: input.adminId }
+  let outboxIds: string[] = []
+  let result: SwapResult
+  try {
+    result = await decideSwapIn(db, input, actor, now, (ids) => { outboxIds = ids })
+  } catch (e) {
+    // A received shift outside declared availability without its acknowledgement: nothing was
+    // written, the request still waits for approval (unlike a broken rule, it does not end).
+    if (e instanceof AvailabilityAckError) return swapAckRefusal(e)
+    throw e
+  }
+  deliver(outboxIds)
+  return result
+}
+
+/** The refusal of an approval missing an availability acknowledgement: who, and which shift. */
+export function swapAckRefusal(e: AvailabilityAckError): SwapResult {
+  const n = new Set(e.missing.map((m) => m.volunteerId)).size
+  const error = `${n > 1 ? "Les deux personnes ont" : "Une des personnes a"} indiqué ne pas être disponible${n > 1 ? "s" : ""} pendant une partie du créneau ${n > 1 ? "qu'elles recevraient" : "qu'elle recevrait"} : cochez la confirmation pour valider l'échange quand même. L'échange n'a pas été effectué.`
+  return { ok: false, httpStatus: 409, error, status: "approval", code: "availability", outside: e.missing.map((m) => ({ ...m, label: FIT_LABELS[m.state] })) }
+}
+
+async function decideSwapIn(db: SwapDbLike, input: { organizationId: string; requestId: string; adminId: string; approve: boolean; revision: number; availabilityAck?: readonly string[] }, actor: LogActor, now: Date, setOutbox: (ids: string[]) => void): Promise<SwapResult> {
   let outboxIds: string[] = []
   const result = await runSwapTransaction(asDb(db), async (tx): Promise<SwapResult> => {
     const locked = await lockForStep(tx, input.requestId, input.organizationId)
@@ -627,10 +658,20 @@ export async function decideSwap(db: SwapDbLike, input: { organizationId: string
       outboxIds = await endRequest(tx, req, event, verdict.end, verdict.reason, actor, now)
       return { ok: false, httpStatus: 409, error: swapRefusalMessage(verdict.reason), status: verdict.end, code: verdict.reason }
     }
-    outboxIds = await applySwap(tx, req, event, mine!, theirs!, actor, now, { decidedById: input.adminId })
+    // Dated availability (#1146, lot B), once every rule passed (the workload protection
+    // included): each person's received shift, on their answer read under the locks of
+    // lockForStep. A missing acknowledgement throws, before any write.
+    const availability = await readAvailabilityGate(tx, event.id)
+    const acks = availability.inUse
+      ? await checkAvailabilityAcksFor(tx, availability, event.id, [
+        { volunteerId: mine!.volunteerId, shiftIds: [theirs!.shiftId] },
+        { volunteerId: theirs!.volunteerId, shiftIds: [mine!.shiftId] },
+      ], input.availabilityAck ?? [])
+      : []
+    outboxIds = await applySwap(tx, req, event, mine!, theirs!, actor, now, { decidedById: input.adminId, acks })
     return { ok: true, requestId: req.id, status: "applied" }
   })
-  deliver(outboxIds)
+  setOutbox(outboxIds)
   return result
 }
 

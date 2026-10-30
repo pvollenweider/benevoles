@@ -30,6 +30,9 @@ const FIT_BADGE: Record<FitState, string> = {
 
 const plural = (n: number, one: string, many: string) => `${n} ${n > 1 ? many : one}`
 
+/** « Nadia Rochat », or « Nadia Rochat (nadia.rochat@example.org) » when another listed person has the same name. */
+const spokenName = (row: CandidateRow) => `${row.firstName} ${row.lastName}${row.sameNameHint ? ` (${row.sameNameHint})` : ""}`
+
 /**
  * The per-shift panel « Affecter selon les disponibilités » (#1146, lot B): one card per person,
  * with their availability for the shift, hours already planned, breaks and the workload verdict,
@@ -88,7 +91,7 @@ export default function ShiftAssistPanel({ eventId, shift, rows }: {
 
   async function add(row: CandidateRow, index: number) {
     if (busy) { announce(setStatus, "Un ajout est en cours : attendez sa réponse."); return }
-    const name = `${row.firstName} ${row.lastName}`
+    const name = spokenName(row)
     if (row.ackKey && !acks[row.volunteerId]) {
       flushSync(() => setAckErrors((e) => ({ ...e, [row.volunteerId]: true })))
       document.getElementById(`assist-ack-${row.volunteerId}`)?.focus()
@@ -188,13 +191,17 @@ function CandidateCard({ row, busy, acked, ackError, error, onAck, onAdd }: {
   onAdd: () => void
 }) {
   const id = row.volunteerId
-  const name = `${row.firstName} ${row.lastName}`
+  const name = spokenName(row)
   const detail = fitDetail(row.fit)
   const [firstWorkload, ...otherWorkload] = row.workload
   return (
     <li className="bg-white border border-gray-200 rounded-xl p-4 space-y-2" data-assist-row={id}>
       <div className="flex flex-wrap items-baseline justify-between gap-x-3 gap-y-1">
-        <h3 id={`assist-name-${id}`} tabIndex={-1} className="text-base font-semibold text-gray-900 rounded focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-blue-600">{name}</h3>
+        <h3 id={`assist-name-${id}`} tabIndex={-1} className="text-base font-semibold text-gray-900 rounded focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-blue-600">
+          {row.firstName} {row.lastName}
+          {/* Two people of the same name (#1146, lot B): told apart by their email, inside the heading. */}
+          {row.sameNameHint && <><span className="sr-only">, </span><span className="block text-sm font-normal text-gray-700 break-all">{row.sameNameHint}</span></>}
+        </h3>
         <span className={`inline-block rounded-full border border-transparent px-2 py-0.5 text-xs font-medium ${FIT_BADGE[row.fit.state]}`}>{FIT_LABELS[row.fit.state]}</span>
       </div>
       {detail && <p id={`assist-detail-${id}`} className="text-sm text-gray-700">{detail}</p>}
@@ -230,7 +237,7 @@ function CandidateCard({ row, busy, acked, ackError, error, onAck, onAdd }: {
                   aria-describedby={[ackError && `assist-ack-error-${id}`, detail && `assist-detail-${id}`].filter(Boolean).join(" ") || undefined}
                   className="mt-0.5 h-6 w-6 shrink-0 accent-blue-600"
                 />
-                <span>{ackLabel(row.firstName)}</span>
+                <span>{ackLabel(row.firstName)}{row.sameNameHint && <span className="sr-only">{` (${row.sameNameHint})`}</span>}</span>
               </label>
               {ackError && <p id={`assist-ack-error-${id}`} className="text-sm text-red-700">Cochez cette case pour ajouter {name} malgré ses disponibilités.</p>}
             </div>

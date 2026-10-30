@@ -17,7 +17,13 @@ export async function POST(req: Request, { params }: { params: Promise<{ id: str
   if (!parsed.success) return validationError(parsed.error)
 
   const result = await decideRequest(guard.db, adminActor(guard.session), id, parsed.data)
-  // A workload refusal (#1171) carries its findings for the page.
-  if (!result.ok) return NextResponse.json({ error: result.error, ...(result.code ? { code: result.code, workload: result.workload } : {}) }, { status: result.httpStatus })
+  // A workload refusal (#1171) carries its findings for the page; a missing availability
+  // acknowledgement (#1146, lot B) the shifts to acknowledge.
+  if (!result.ok) {
+    const body: Record<string, unknown> = { ...result }
+    delete body.ok
+    delete body.httpStatus
+    return NextResponse.json(body, { status: result.httpStatus })
+  }
   return NextResponse.json({ status: result.status })
 }
