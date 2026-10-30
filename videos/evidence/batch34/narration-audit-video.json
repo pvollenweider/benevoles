@@ -1,0 +1,203 @@
+{
+  "model": "gemini-3.8-flash",
+  "promptVersion": 2,
+  "auditedAt": "2026-10-29T20:56:48.565Z",
+  "revalidatedAt": "2026-10-29T20:56:48.567Z",
+  "source": "actual final MP4 audio",
+  "videoSha256": "6c46cb19015bd1d74ef7ffb1a00878b300299a02bf1bf181389cf014075adb02",
+  "note": "Independent multilingual ASR evidence, reused only for identical audio/text and audit instructions; not a full audiovisual or voice-quality validation",
+  "segments": [
+    {
+      "id": "wl-welcome",
+      "audioSha256": "6c79f72e1059cbc867f3a981989bc8e6fb1b0c701a0c702545b1d46854a3a51c",
+      "recognized": "Pendant un festival, des bénévoles enchaînent parfois les missions sans vraie pause. La protection des pauses et de la charge fixe des limites que personne ne peut dépasser, ni à l'inscription, ni à l'ajout à la main. C'est une fonction en bêta, proposée aux organisations qui y participent. Chaque événement l'active lui-même, et vous choisissez chaque valeur.",
+      "expected": "Pendant un festival, des bénévoles enchaînent parfois les missions sans vraie pause. La protection des pauses et de la charge fixe des limites que personne ne peut dépasser, ni à l'inscription, ni à l'ajout à la main. C'est une fonction en bêta, proposée aux organisations qui y participent. Chaque événement l'active lui-même, et vous choisissez chaque valeur.",
+      "wordErrorRate": 0,
+      "needsReview": false,
+      "unexpectedInstructions": [],
+      "edgeIssues": []
+    },
+    {
+      "id": "wl-places",
+      "audioSha256": "a32f25642cb7b342b18a8a089a9577c7dc6857c06bc8683380ce55b7b8290c87",
+      "recognized": "Commençons par créneau. La section lieux des missions liste les endroits où se passent les missions : la grande scène, la scène du lac et le chapiteau. Ajoutons le dôme, puis ajouter le lieu. Chaque créneau reçoit ensuite son lieu dans sa fiche, au champ lieu de la mission. Le vestiaire du dôme n'en a pas encore. Les bénévoles ne voient pas ces lieux. Ils lisent toujours le lieu de rendez-vous de chaque créneau",
+      "expected": "Commençons par Créneaux. La section Lieux des missions liste les endroits où se passent les missions : la Grande Scène, la Scène du Lac et le Chapiteau. Ajoutons Le Dôme, puis Ajouter le lieu. Chaque créneau reçoit ensuite son lieu dans sa fiche, au champ Lieu de la mission. Le vestiaire du Dôme n'en a pas encore. Les bénévoles ne voient pas ces lieux : ils lisent toujours le lieu de rendez-vous de chaque créneau.",
+      "wordErrorRate": 0.013333333333333334,
+      "needsReview": false,
+      "unexpectedInstructions": [],
+      "edgeIssues": []
+    },
+    {
+      "id": "wl-meal-on-the-go",
+      "audioSha256": "41fe3f10c475030ca5910cd7b2ef2895fdd1ebefb9e8424f0273d84b47d38ea2",
+      "recognized": "Au bar de la grande scène, on peut manger pendant le service du soir. Ouvrons gérer les postes, puis le bouton repas, nom du bar. Cochons repas sur le pouce possible et enregistrons. Le bouton indique maintenant repas sur le pouce. Ces missions ne retirent pas le temps du repas, mais elles comptent toujours comme du travail.",
+      "expected": "Au bar de la Grande Scène, on peut manger pendant le service du soir. Ouvrons Gérer les postes, puis le bouton Repas, non, du bar. Cochons repas sur le pouce possible, et enregistrons. Le bouton indique maintenant Repas, sur le pouce. Ces missions ne retirent pas le temps du repas, mais elles comptent toujours comme du travail.",
+      "wordErrorRate": 0.017543859649122806,
+      "needsReview": false,
+      "unexpectedInstructions": [],
+      "edgeIssues": []
+    },
+    {
+      "id": "wl-card",
+      "audioSha256": "184b402d3c02e6146a3614fe5e767afd6949d5404b0d72b0426056f0efbf9304",
+      "recognized": "Ouvrons maintenant les informations de l'événement. La carte Protection des pauses et de la charge est encore désactivée. Aucune valeur n'est imposée et un champ vide ne veut jamais dire sans limite. La protection ne s'active qu'une fois tout rempli. Les heures sont lues dans le fuseau de l'organisation.",
+      "expected": "Ouvrons maintenant les informations de l'événement. La carte Protection des pauses et de la charge est encore désactivée. Aucune valeur n'est imposée, et un champ vide ne veut jamais dire sans limite. La protection ne s'active qu'une fois tout rempli. Les heures sont lues dans le fuseau de l'organisation.",
+      "wordErrorRate": 0,
+      "needsReview": false,
+      "unexpectedInstructions": [],
+      "edgeIssues": []
+    },
+    {
+      "id": "wl-service-day",
+      "audioSha256": "2ed3595f13492d01f1a7df30601d5a093899d7031ea3c782f53f458d59618b1a",
+      "recognized": "D'abord, le début de la journée de service. Tapons six heures. Une mission de nuit avant cette heure compte dans la journée de la veille. Des exemples apparaissent aussitôt sous le champ pour vérifier à quelle journée chaque mission appartient.",
+      "expected": "D'abord, le début de la journée de service. Tapons six heures. Une mission de nuit avant cette heure compte dans la journée de la veille. Des exemples apparaissent aussitôt sous le champ, pour vérifier à quelle journée chaque mission appartient.",
+      "wordErrorRate": 0,
+      "needsReview": false,
+      "unexpectedInstructions": [],
+      "edgeIssues": []
+    },
+    {
+      "id": "wl-limits",
+      "audioSha256": "b75f7d0081fbde5ea298a5759e288f9b3c260810f894e444518fd0d3d86d8ae3",
+      "recognized": "Viennent ensuite six durées en heures et en minutes. Reprendre les réglages d'avertissement existants remplit : six heures sans vraie pause, une pause de trente minutes, et huit heures par journée de service. Ce sont les seuils des alertes charge élevée de l'application, ni des seuils légaux, ni des recommandations. Complétons vingt heures sur tout l'événement et trois heures d'attente au plus entre deux missions d'une même journée.",
+      "expected": "Viennent ensuite six durées, en heures et en minutes. Reprendre les réglages d'avertissement existants remplit six heures sans vraie pause, une pause de trente minutes et huit heures par journée de service. Ce sont les seuils des alertes Charge élevée de l'application, ni des seuils légaux ni des recommandations. Complétons vingt heures sur tout l'événement, et trois heures d'attente au plus entre deux missions d'une même journée.",
+      "wordErrorRate": 0,
+      "needsReview": false,
+      "unexpectedInstructions": [],
+      "edgeIssues": []
+    },
+    {
+      "id": "wl-benchmarks",
+      "audioSha256": "181cf1455ff51081fc5460644a4b95e5d1717de1f512ab4a50133baf2297c0dd",
+      "recognized": "Ouvrons repères et suggestions. Chaque repère indique sa source, le droit du travail des salariés ou une suggestion pour l'événementiel. Rien de tout cela ne s'impose aux bénévoles et chaque bouton remplit seulement ses propres champs. Utilisons onze heures de repos entre deux journées, puis trente minutes de repas entre onze heures trente et quatorze heures et entre dix-huit et vingt et une heures, quinze minutes entre deux lieux et les repères pour les moins de dix-huit ans.",
+      "expected": "Ouvrons Repères et suggestions. Chaque repère indique sa source : le droit du travail des salariés, ou une suggestion pour l'événementiel. Rien de tout cela ne s'impose aux bénévoles, et chaque bouton remplit seulement ses propres champs. Utilisons onze heures de repos entre deux journées. Puis trente minutes de repas entre onze heures trente et quatorze heures, et entre dix-huit et vingt et une heures. Quinze minutes entre deux lieux. Et les repères pour les moins de dix-huit ans.",
+      "wordErrorRate": 0,
+      "needsReview": false,
+      "unexpectedInstructions": [],
+      "edgeIssues": []
+    },
+    {
+      "id": "wl-offday",
+      "audioSha256": "b0ec8d48f2e2857a9aba2293425af1dcceca27696ad2c3b60c398559e2844d95",
+      "recognized": "Plus bas, jour sans mission demande une réponse explicite. Appliquons la règle, au moins un jour sans mission sur une période de trois journées de service d'affilée. L'exemple relie les dates de l'événement, du vendredi au dimanche. Chaque période de trois journées d'affilée y sera vérifiée.",
+      "expected": "Plus bas, Jours sans mission demande une réponse explicite. Appliquons la règle : au moins un jour sans mission, sur une période de trois journées de service d'affilée. L'exemple relit les dates de l'événement, du vendredi au dimanche. Chaque période de trois journées d'affilée y sera vérifiée.",
+      "wordErrorRate": 0.04,
+      "needsReview": false,
+      "unexpectedInstructions": [],
+      "edgeIssues": []
+    },
+    {
+      "id": "wl-meal-travel",
+      "audioSha256": "bd929d12bee2f9bdad6ea33931759043f49452293ac77918b366472ed6ed6b9e",
+      "recognized": "La pause repas est déjà remplie. Trente minutes de repas dans chaque plage qu'une mission touche tous les jours de l'événement. Une mission où le repas sur le pouce est possible comme au bar ne retire pas ce temps. Le trajet entre deux lieux demande quinze minutes de marche. La carte signale qu'un créneau n'a pas de lieu et que son trajet n'est pas vérifié. Le lien Choisir les lieux d'un créneau y ramène.",
+      "expected": "La pause repas est déjà remplie : trente minutes de repas dans chaque plage qu'une mission touche, tous les jours de l'événement. Une mission où le repas sur le pouce est possible, comme au bar, ne retire pas ce temps. Le trajet entre deux lieux demande quinze minutes de marge. La carte signale qu'un créneau n'a pas de lieu, et que son trajet n'est pas vérifié. Le lien Choisir les lieux dans Créneaux y ramène.",
+      "wordErrorRate": 0.05063291139240506,
+      "needsReview": true,
+      "unexpectedInstructions": [],
+      "edgeIssues": [
+        "ending words displaced or missing"
+      ]
+    },
+    {
+      "id": "wl-minors",
+      "audioSha256": "bce5e483ba91972ad8d675485bbfe032ac9af4408188f79eb208a026a4209616",
+      "recognized": "Pour les moins dix-huit ans, les repères ont rempli quatre limites plus strictes. Sous chacune, la limite de l'événement est rappelée. Elles ne peuvent jamais être moins strictes. L'âge est celui du jour de chaque mission. L'événement demandera donc la date de naissance à l'inscription. Une personne déjà inscrite sans date de naissance est vérifiée comme majeure.",
+      "expected": "Pour les moins de dix-huit ans, les repères ont rempli quatre limites plus strictes. Sous chacune, la limite de l'événement est rappelée : elles ne peuvent jamais être moins strictes. L'âge est celui du jour de chaque mission. L'événement demandera donc la date de naissance à l'inscription. Une personne déjà inscrite sans date de naissance est vérifiée comme majeure.",
+      "wordErrorRate": 0.015873015873015872,
+      "needsReview": false,
+      "unexpectedInstructions": [],
+      "edgeIssues": []
+    },
+    {
+      "id": "wl-preview",
+      "audioSha256": "42e95f1dc5f18cd3a0131e71c79d77530d749c0ce7874233f72aa12f479bd2d6",
+      "recognized": "L'encadré en résumé reprend ensuite chaque règle en clair. Avant d'activer, aperçu juge les programmes actuels sans rien enregistrer. Une personne dépasserait ses limites. Noah est inscrit à l'accueil les trois jours, sans aucun jour sans mission.",
+      "expected": "L'encadré En résumé reprend ensuite chaque règle en clair. Avant d'activer, Aperçu juge les programmes actuels, sans rien enregistrer. Une personne dépasserait ces limites. Noah est inscrit à l'accueil les trois jours, sans aucun jour sans mission.",
+      "wordErrorRate": 0.025,
+      "needsReview": false,
+      "unexpectedInstructions": [],
+      "edgeIssues": []
+    },
+    {
+      "id": "wl-refused",
+      "audioSha256": "3314a60d1a588d63786900424cfb2b935a5a68f6e94d5a442222c0db41dbdbf7",
+      "recognized": "Essayons tout de même. Activer la protection. Elle est refusée et rien n'a été activé ni modifié. La carte liste les programmes à modifier d'abord avec la règle en cause et les dates. Il faut changer ces programmes ou les limites.",
+      "expected": "Essayons tout de même Activer la protection. Elle est refusée, et rien n'a été activé ni modifié. La carte liste les programmes à modifier d'abord, avec la règle en cause et les dates. Il faut changer ces programmes, ou les limites.",
+      "wordErrorRate": 0,
+      "needsReview": false,
+      "unexpectedInstructions": [],
+      "edgeIssues": []
+    },
+    {
+      "id": "wl-activate",
+      "audioSha256": "58590d3d1ed426a005c83a23a7d6343047bebd67077c1d76a4de17d11cdd13da",
+      "recognized": "Pour un festival de trois jours, cette règle est trop stricte. Choisissons de ne pas appliquer cette règle, puis Aperçu. Aucun programme actuel ne dépasse plus les limites. Activons la protection. Désormais, toute affectation qui dépasse ces limites est refusée, pour les bénévoles comme pour les organisateurs.",
+      "expected": "Pour un festival de trois jours, cette règle est trop stricte. Choisissons Ne pas appliquer cette règle, puis Aperçu. Aucun programme actuel ne dépasse plus les limites. Activons la protection. Désormais, toute affectation qui dépasse ces limites est refusée, pour les bénévoles comme pour les organisateurs.",
+      "wordErrorRate": 0.021739130434782608,
+      "needsReview": false,
+      "unexpectedInstructions": [],
+      "edgeIssues": []
+    },
+    {
+      "id": "wl-personal",
+      "audioSha256": "00796a8c66be00cc2173aaa396e7bfe125818865b8f94016d5b45a63efc87a60",
+      "recognized": "Une fois la protection active, limite personnelle fixe une limite plus stricte pour une personne, sans motif à donner. Choisissons Camille, avec six heures au plus par journée de service, et enregistrons. Une limite personnelle n'est jamais moins stricte que celle de l'événement. Chaque bénévole peut aussi demander les siennes depuis son lien personnel.",
+      "expected": "Une fois la protection active, Limites personnelles fixe une limite plus stricte pour une personne, sans motif à donner. Choisissons Camille, avec six heures au plus par journée de service, et enregistrons. Une limite personnelle n'est jamais moins stricte que celle de l'événement. Chaque bénévole peut aussi demander les siennes depuis son lien personnel.",
+      "wordErrorRate": 0.03571428571428571,
+      "needsReview": false,
+      "unexpectedInstructions": [],
+      "edgeIssues": []
+    },
+    {
+      "id": "wl-signup",
+      "audioSha256": "0eacb8b39c5a1229e8acfacf0535f0c1725fd549b4fc9823b3e4703a09055c32",
+      "recognized": "Côté bénévole, Emma s'inscrit sur la page du festival. Elle choisit l'accueil du chapiteau samedi après-midi, puis le bar de la grande scène le soir. Avant même de confirmer, le récapitulatif affiche : ces créneaux dépassent les limites de l'événement. Sept heures trente d'affilée sans vraie pause, et aucun temps pour aller du chapiteau à la grande scène. Emma remplit tout de même ses informations avec sa date de naissance et confirme. L'inscription est refusée avec la même explication précise. Rien n'est enregistré.",
+      "expected": "Côté bénévole, Emma s'inscrit sur la page du festival. Elle choisit l'accueil du Chapiteau samedi après-midi, puis le bar de la Grande Scène le soir. Avant même de confirmer, le récapitulatif affiche Ces créneaux dépassent les limites de l'événement. Sept heures trente d'affilée sans vraie pause, et aucun temps pour aller du Chapiteau à la Grande Scène. Emma remplit tout de même ses informations, avec sa date de naissance, et confirme. L'inscription est refusée, avec la même explication précise. Rien n'est enregistré.",
+      "wordErrorRate": 0,
+      "needsReview": false,
+      "unexpectedInstructions": [],
+      "edgeIssues": []
+    },
+    {
+      "id": "wl-withdraw",
+      "audioSha256": "41ad7c101339f99cee47666e9dd8c99aa44e78b366ba2cd5c8e53d42ee6177b3",
+      "recognized": "Une annulation, elle, n'est jamais refusée à cause de ces limites. Dimanche, Sarah est inscrite à l'accueil de la scène du lac le matin, au chapiteau l'après-midi, et au bar le soir. Sur sa page Mes inscriptions, elle annule son créneau du chapiteau, puis oui, annuler. Entre le matin et le soir, elle attendrait maintenant bien plus longtemps que l'événement ne le permet.",
+      "expected": "Une annulation, elle, n'est jamais refusée à cause de ces limites. Dimanche, Sarah est inscrite à l'accueil de la Scène du Lac le matin, au Chapiteau l'après-midi et au bar le soir. Sur sa page Mes inscriptions, elle annule son créneau du Chapiteau, puis Oui, annuler. Entre le matin et le soir, elle attendrait maintenant bien plus longtemps que l'événement ne le permet.",
+      "wordErrorRate": 0,
+      "needsReview": false,
+      "unexpectedInstructions": [],
+      "edgeIssues": []
+    },
+    {
+      "id": "wl-registrations",
+      "audioSha256": "73ac4c61ab6460f84bf935a87344588e5855cad55b0e4a0d3b5550cfa240325b",
+      "recognized": "Dans Inscriptions, ces deux créneaux restants portent maintenant la mention limite dépassée. Avec la règle, les heures et l'écart, l'organisation voit tout de suite quel programme revoir.",
+      "expected": "Dans Inscriptions, ses deux créneaux restants portent maintenant la mention Limite dépassée, avec la règle, les heures et l'écart. L'organisation voit tout de suite quel programme revoir.",
+      "wordErrorRate": 0.034482758620689655,
+      "needsReview": false,
+      "unexpectedInstructions": [],
+      "edgeIssues": []
+    },
+    {
+      "id": "wl-my-card",
+      "audioSha256": "a44612c5ff12efd4ce706210e5ab76548e528a1cf7e6e5cbaec1a64070bcedd6",
+      "recognized": "Sur la page Mes inscriptions de Sarah, la carte Pause et charge explique ce qui ne va plus. Tant que c'est le cas, elle ne peut pas ajouter de créneaux qui aggravent la situation. Elle peut retirer un créneau ou écrire à l'organisation. Juste en dessous, Mes limites lui permet de demander moins que l'événement sans donner de raison.",
+      "expected": "Sur la page Mes inscriptions de Sarah, la carte Pauses et charge explique ce qui ne va plus. Tant que c'est le cas, elle ne peut pas ajouter de créneau qui aggrave la situation. Elle peut retirer un créneau, ou écrire à l'organisation. Juste en dessous, Mes limites lui permet de demander moins que l'événement, sans donner de raison.",
+      "wordErrorRate": 0.04838709677419355,
+      "needsReview": false,
+      "unexpectedInstructions": [],
+      "edgeIssues": []
+    },
+    {
+      "id": "wl-result",
+      "audioSha256": "61cebc3356928ff8c7b4fd5eb2a89c055f2ccaa2fdf96adef26c84f98bf3af47",
+      "recognized": "De retour dans les informations de l'événement, la carte est activée et signale un programme à revoir. Préparez les lieux et le repas sur le pouce dans Créneaux, choisissez chaque limite, vérifiez avec Aperçu, puis activez. Dans Paramètres, des valeurs peuvent aussi être proposées pour les nouveaux événements.",
+      "expected": "De retour dans les informations de l'événement, la carte est activée et signale un programme à revoir. Préparez les lieux et le repas sur le pouce dans Créneaux, choisissez chaque limite, vérifiez avec Aperçu, puis activez. Dans Paramètres, des valeurs peuvent aussi être proposées pour les nouveaux événements.",
+      "wordErrorRate": 0,
+      "needsReview": false,
+      "unexpectedInstructions": [],
+      "edgeIssues": []
+    }
+  ]
+}

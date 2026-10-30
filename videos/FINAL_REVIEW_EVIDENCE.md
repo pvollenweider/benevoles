@@ -686,8 +686,8 @@ Le scénario utilise l'organisation fictive dédiée `formation-charge`
 bêta ; il n'ouvre que la fonction bêta « Protection des pauses et de la charge ». Le planning
 fictif est jugé d'avance par le vrai évaluateur (`videos/lib/__tests__/workload-fixture.test.ts`)
 avec les valeurs que la prise tape. Le recorder (`videos/lib/record-workload-protection.ts`) est
-écrit d'après le code de l'interface et n'a pas encore été répété sur la pile locale : une
-répétition `--rehearse --quick-rehearse` (après un seed neuf) est à faire avant la prise narrée.
+répété sur la pile locale aux lots 33 et 34 ; le rendu reste NOT READY après les deux prises
+autorisées du lot 34 (voir le compte rendu ci-dessous).
 L'annulation filmée envoie les vrais emails dans la boîte locale ; ils ne sont pas montrés.
 
 ## Lot 33 — reprises autorisées du 2026-10-29
@@ -757,3 +757,48 @@ réussis (dont les repères de phrases). `src/`, `content/guide/` et
 `videos/renders.json` inchangés. Synthèse et preuves :
 `videos/evidence/batch33/summary.json`. Commits locaux uniquement, sans push
 ni fusion. Les fichiers ignorés et non suivis sont conservés.
+
+## Lot 34 — protection de la charge, 2026-10-29
+
+**WORKLOAD_PROTECTION : NOT READY, aucune publication.** Deux répétitions
+`--rehearse --quick-rehearse` passent sur seed neuf ; chacune des deux prises
+narrées autorisées est aussi précédée d'un seed neuf. La première prise est
+rejetée : clic de confirmation à +27,238 s, après la phrase de refus à +24,779 s.
+La seconde remplace les quatre animations de clic sur les champs par leur vraie
+saisie `fill()`, sans inventer de clic ni de touche. Confirmation à +23,059 s ;
+le véritable refus 409 est visible à +24,8 s.
+
+La seconde prise échoue cependant à la revue : dans Inscriptions, seul le
+premier des deux créneaux restants de Sarah est visible. Le second reste sous
+le cadre durant le chapitre, alors que les deux sont annoncés. L'image finale
+confirme ce signalement. Les deux prises sont utilisées : arrêt de la production,
+aucune troisième prise, catalogue `published: false`, révision 1, aucune date `added`.
+La ligne des sources en attente reste en place. Aucun défaut produit constaté
+ni contourné ; la limite restante est un défaut de cadrage du recorder.
+
+Les points du lot 33 sont vérifiés sur ce rendu : titre et état activé avec
+« 1 programme à revoir » visibles de +2 s à la fin de la conclusion ; option
+« Ne pas appliquer cette règle » cochée et tenue 700 ms ; les trois créneaux de
+Sarah sont cadrés durant leur énumération. Les images des limites montrent
+6 h / 30 min / 8 h à 25 %, puis 20 h / 3 h à 85 %. Le texte ne prétend pas que
+ces valeurs manquent : la narration Kore vérifiée est donc conservée sans
+modification ni nouvelle génération. Les signalements automatisés de valeurs
+ou d'état final absents sont conservés, mais contredits par ces images ; la
+conclusion récapitule le parcours sans promettre de le rejouer.
+
+Rendu rejeté : **406,64 s**, build **4SZGZi_wlBN3PZTL_VMhp**, commit produit
+`463644b712c5cde8c7c96549631b0fb5949202a2`. Validation technique réussie,
+36 fichiers / 1 203 tests vidéo et 208 sources typées réussis. ASR de la bande-son
+entière : zéro tutoiement, zéro dans le VTT, aucune consigne parasite relevée.
+Musique 15–19,6 LU sous la voix, minimum seule −33,6 LUFS, aucun trou ; effets
+doux sur les interactions réellement enregistrées. Le contrôle ASR final du
+chapitre repas/trajets signale une fin omise dans sa reconnaissance : il reste
+consigné, sans annoncer une validation de tous les chapitres. Une reconnaissance
+indépendante de ce chapitre sur la première prise retrouvait sa fin et le WAV
+source vérifié est inchangé. Cela ne résout pas le blocage visuel de la seconde prise.
+
+Preuves et résolution des signalements : `videos/evidence/batch34/summary.json`,
+images et rapports adjacents ; rapport complet local dans
+`videos/output/workload-protection/review-report.txt`. Écoute subjective en temps
+réel indisponible ; inspection des images et contrôles audio/vidéo assistés
+effectués. `src/`, `content/guide/` et `videos/renders.json` inchangés.

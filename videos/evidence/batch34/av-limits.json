@@ -1,0 +1,47 @@
+{
+  "model": "gemini-3.8-flash",
+  "reviewedAt": "2026-10-29T20:55:26.430Z",
+  "videoSha256": "6c46cb19015bd1d74ef7ffb1a00878b300299a02bf1bf181389cf014075adb02",
+  "promptSha256": "3018cbbccb0fe7f7d06b66ae0926cef96e922ae377924123f81cfa0bcac23dbf",
+  "clipSha256": "a5d453c82eaf542db2d27bd1ff2bdfed25895f78bad3837b96f56aa6f0798b3f",
+  "scene": "wl-limits",
+  "review": {
+    "heardOpening": "Viennent ensuite six durées, en heures et en minutes.",
+    "checkpoints": [
+      {
+        "spokenSeconds": 3,
+        "spoken": "Reprendre les réglages d'avertissement existants remplit six heures sans vraie pause, une pause de trente minutes et huit heures par journée de service.",
+        "visibleSeconds": 17.5,
+        "visible": "Le lien est cliqué à 00:03 mais les champs restent vides jusqu'à 00:17 ; les valeurs 6 h, 30 min et 8 h n'apparaissent qu'à 00:18.",
+        "sync": "late",
+        "severity": "major"
+      },
+      {
+        "spokenSeconds": 11.5,
+        "spoken": "Ce sont les seuils des alertes Charge élevée de l'application, ni des seuils légaux ni des recommandations.",
+        "visibleSeconds": 11.5,
+        "visible": "Explication générale sur fond de formulaire encore vide avant le rafraîchissement tardif des données.",
+        "sync": "aligned",
+        "severity": "none"
+      },
+      {
+        "spokenSeconds": 17.5,
+        "spoken": "Complétons vingt heures sur tout l'événement, et trois heures d'attente au plus entre deux missions d'une même journée.",
+        "visibleSeconds": 19,
+        "visible": "Le champ d'attente maximale est sélectionné à 00:19 mais aucune valeur n'est saisie dans les champs mentionnés avant la fin de l'extrait.",
+        "sync": "missing",
+        "severity": "major"
+      }
+    ],
+    "issues": [
+      "Désynchronisation majeure (00:03 - 00:18) : le clic sur 'Reprendre les réglages d'avertissement existants' laisse les champs vides pendant l'énumération audio ; les valeurs n'apparaissent qu'à 00:18.",
+      "Action non réalisée (00:17 - 00:23) : la voix annonce la saisie de 20 heures sur tout l'événement et 3 heures d'attente maximale, mais aucun texte n'est tapé à l'écran."
+    ],
+    "voice": {
+      "consistent": true,
+      "warm": true,
+      "observation": "Voix claire, posée et bien articulée, sans parasite audio."
+    }
+  },
+  "note": "Automated observation of actual final video audio and images; not a claim of complete human validation"
+}

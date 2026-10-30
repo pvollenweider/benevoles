@@ -7,7 +7,7 @@ import { surnameOf } from "./fixture-names"
 /** Check the complete dedicated classroom before sending its rendered pixels for review. */
 export async function verifyWorkloadReviewFixture(db: PrismaClient) {
   const url = new URL(process.env.DATABASE_URL ?? "")
-  assert(["localhost", "127.0.0.1", "[::1]"].includes(url.hostname) && url.port === "45437" && url.pathname === "/benevoles_video", "Dedicated batch33 video database required")
+  assert(["localhost", "127.0.0.1", "[::1]"].includes(url.hostname) && ["45437", "45438"].includes(url.port) && url.pathname === "/benevoles_video", "Dedicated batch33/34 video database required")
   const org = await db.organization.findUniqueOrThrow({ where: { id: "video-workload" }, include: { admins: true, volunteers: true, events: { include: { registrations: true, shifts: true, sectorLeaders: true, places: true } } } })
   assert(org.slug === "formation-charge" && org.name === "Association du Lac de Montvert")
   assert(org.admins.length === 1 && org.admins[0].id === "video-workload-owner" && org.admins[0].email === "video.workload.owner@example.org")
