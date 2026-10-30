@@ -1,0 +1,55 @@
+{
+  "model": "gemini-3.8-flash",
+  "reviewedAt": "2026-10-30T21:02:43.802Z",
+  "videoSha256": "eaa9a44b7afc91cfbde9b6abc9ef27bb8d8fb00fac628ed746ea94225a53891f",
+  "promptSha256": "3018cbbccb0fe7f7d06b66ae0926cef96e922ae377924123f81cfa0bcac23dbf",
+  "clipSha256": "2332722aa9e1ed0379af5ce379f97c2c853e7bf11ddfa49624d581561f0b8e03",
+  "scene": "wl-limits",
+  "review": {
+    "heardOpening": "Viennent ensuite six durées, en heures et en minutes.",
+    "checkpoints": [
+      {
+        "spokenSeconds": 3,
+        "spoken": "Reprendre les réglages d'avertissement existants remplit",
+        "visibleSeconds": 3.2,
+        "visible": "Clic sur le lien 'Reprendre les réglages d'avertissement existants'",
+        "sync": "aligned",
+        "severity": "none"
+      },
+      {
+        "spokenSeconds": 6.5,
+        "spoken": "six heures sans vraie pause, une pause de trente minutes et huit heures",
+        "visibleSeconds": 17.8,
+        "visible": "Les valeurs 6, 30 et 8 apparaissent dans les champs correspondants après être restés vides pendant toute l'explication",
+        "sync": "late",
+        "severity": "major"
+      },
+      {
+        "spokenSeconds": 18.5,
+        "spoken": "Complétons vingt heures sur tout l'événement",
+        "visibleSeconds": 20,
+        "visible": "Le champ 'Durée maximale de missions sur tout l'événement' reste vide et n'est pas rempli",
+        "sync": "missing",
+        "severity": "major"
+      },
+      {
+        "spokenSeconds": 21,
+        "spoken": "et trois heures d'attente au plus",
+        "visibleSeconds": 19.5,
+        "visible": "Sélection du champ des heures sous 'Attente maximale entre deux missions', mais aucun chiffre n'est saisi",
+        "sync": "missing",
+        "severity": "major"
+      }
+    ],
+    "issues": [
+      "Entre 00:04 et 00:17, les champs de durée restent vides alors que la voix décrit leur pré-remplissage ; les valeurs n'apparaissent qu'à 00:18.",
+      "La saisie des 20 heures sur tout l'événement et des 3 heures d'attente maximale annoncée à partir de 00:18 n'est pas effectuée à l'écran."
+    ],
+    "voice": {
+      "consistent": true,
+      "warm": true,
+      "observation": "Voix off posée, claire et bien articulée."
+    }
+  },
+  "note": "Automated observation of actual final video audio and images; not a claim of complete human validation"
+}

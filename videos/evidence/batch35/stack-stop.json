@@ -1,0 +1,13 @@
+{
+  "serverPid": 82111,
+  "snapshot": "/tmp/benevoles-video-production.batch35",
+  "buildId": "5Oaosk5GvwNjq85Z4bYwR",
+  "pidAndCwdVerifiedBeforeStop": true,
+  "serverNoLongerListening": true,
+  "ownedContainersStopped": [
+    "benevoles_batch35_mailpit",
+    "benevoles_batch35_postgres"
+  ],
+  "unrelatedContainersUntouched": true,
+  "output": "benevoles_batch35_mailpit\nbenevoles_batch35_postgres"
+}

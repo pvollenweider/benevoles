@@ -1,0 +1,60 @@
+{
+  "model": "gemini-3.8-flash",
+  "reviewedAt": "2026-10-30T21:14:26.299Z",
+  "videoSha256": "f9629af999e4fc5b6388f31de6776045399e91f9d33467acc782d52436658263",
+  "promptSha256": "5c03378fa59bbab0024889e160a69b851511ac506f08f0e8aa942c750d7d391a",
+  "clipSha256": "50640ab0780cdcefd3c6046a0ddc399c7c8915c8b5f79957577c082c4d25810a",
+  "scene": "ap-lock",
+  "review": {
+    "heardOpening": "De retour au planning",
+    "checkpoints": [
+      {
+        "spokenSeconds": 0.8,
+        "spoken": "De retour au planning",
+        "visibleSeconds": 1.5,
+        "visible": "Défilement vers la section Planning par personne et par jour affichant la grille des affectations.",
+        "sync": "aligned",
+        "severity": "none"
+      },
+      {
+        "spokenSeconds": 2.2,
+        "spoken": "chaque brouillon proposé porte la mention Proposé.",
+        "visibleSeconds": 2.5,
+        "visible": "Affichage de la mention Proposé à côté du statut Brouillon pour les bénévoles concernés.",
+        "sync": "aligned",
+        "severity": "none"
+      },
+      {
+        "spokenSeconds": 4.5,
+        "spoken": "Ouvrons celui d'Emma",
+        "visibleSeconds": 5.2,
+        "visible": "Clic sur Voir le brouillon sur la ligne d'Emma Johansson et ouverture de la fenêtre contextuelle.",
+        "sync": "aligned",
+        "severity": "none"
+      },
+      {
+        "spokenSeconds": 6.2,
+        "spoken": "puis Verrouiller",
+        "visibleSeconds": 6.5,
+        "visible": "Clic sur le bouton Verrouiller dans la modale de détail du brouillon.",
+        "sync": "aligned",
+        "severity": "none"
+      },
+      {
+        "spokenSeconds": 7.8,
+        "spoken": "une nouvelle proposition ne le remplacera pas.",
+        "visibleSeconds": 8.5,
+        "visible": "Fermeture de la modale, le créneau d'Emma Johansson affiche désormais le statut Verrouillé.",
+        "sync": "aligned",
+        "severity": "none"
+      }
+    ],
+    "issues": [],
+    "voice": {
+      "consistent": true,
+      "warm": true,
+      "observation": "Voix féminine claire, posée et bien articulée, parfaitement synchronisée avec les actions à l'écran."
+    }
+  },
+  "note": "Automated observation of actual final video audio and images; not a claim of complete human validation"
+}

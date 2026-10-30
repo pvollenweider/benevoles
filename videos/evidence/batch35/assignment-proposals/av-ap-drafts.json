@@ -1,0 +1,52 @@
+{
+  "model": "gemini-3.8-flash",
+  "reviewedAt": "2026-10-30T21:13:09.067Z",
+  "videoSha256": "f9629af999e4fc5b6388f31de6776045399e91f9d33467acc782d52436658263",
+  "promptSha256": "3c78b041487671afedbd87afee58445ae3c2f060bb38a79a0bc06a181a2586ca",
+  "clipSha256": "0e9180a5202936ad7ebb9775b3b011381147a631645b2a2781a812e13cbbc76a",
+  "scene": "ap-drafts",
+  "review": {
+    "heardOpening": "Aux Rencontres du Val d'Orsel",
+    "checkpoints": [
+      {
+        "spokenSeconds": 1.8,
+        "spoken": "onze personnes ont indiqué leurs disponibilités",
+        "visibleSeconds": 1,
+        "visible": "Page Disponibilités avec le compteur de 11 réponses complètes",
+        "sync": "aligned",
+        "severity": "none"
+      },
+      {
+        "spokenSeconds": 6.8,
+        "spoken": "ouvrons Affectations en brouillon",
+        "visibleSeconds": 5.8,
+        "visible": "Affichage de la page Affectations en brouillon",
+        "sync": "aligned",
+        "severity": "none"
+      },
+      {
+        "spokenSeconds": 9.2,
+        "spoken": "une ligne par personne, une colonne par date, et encore aucune affectation",
+        "visibleSeconds": 9.5,
+        "visible": "Tableau avec les personnes en ligne, créneaux/dates en colonnes et mention Aucune mission",
+        "sync": "aligned",
+        "severity": "none"
+      },
+      {
+        "spokenSeconds": 14,
+        "spoken": "Cliquons sur Générer une proposition",
+        "visibleSeconds": 14.5,
+        "visible": "Clic sur Générer une proposition puis ouverture de la page Proposition d'affectations",
+        "sync": "aligned",
+        "severity": "none"
+      }
+    ],
+    "issues": [],
+    "voice": {
+      "consistent": true,
+      "warm": true,
+      "observation": "Voix féminine claire, posée et bien articulée, parfaitement synchronisée avec la navigation."
+    }
+  },
+  "note": "Automated observation of actual final video audio and images; not a claim of complete human validation"
+}
