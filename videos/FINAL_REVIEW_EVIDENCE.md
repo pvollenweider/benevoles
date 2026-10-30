@@ -690,6 +690,24 @@ répété sur la pile locale aux lots 33 et 34 ; le rendu reste NOT READY après
 autorisées du lot 34 (voir le compte rendu ci-dessous).
 L'annulation filmée envoie les vrais emails dans la boîte locale ; ils ne sont pas montrés.
 
+## Sources prêtes, rendu en attente : proposition d'affectations (#1172)
+
+Sources ajoutées sans rendu (aucune capture, aucune voix, aucune publication) ; le rendu se fait
+depuis un checkout à jour de `origin/main`, avec un seed neuf avant chaque prise (la prise
+enregistre des objectifs d'heures, écrit une proposition dans les brouillons, en verrouille un, en
+retire un et en ajoute un) :
+
+- `assignment-proposals` (`ASSIGNMENT_PROPOSALS`, nouvelle, `published: false`) : sources prêtes,
+  rendu en attente. Seed `scripts/seed-video-scenario.ts assignment-proposals`.
+
+Le scénario utilise l'organisation fictive dédiée `formation-propositions`
+(`scripts/seed-video-proposals.ts`), jamais l'organisation de démonstration ni celle des autres
+vidéos bêta ; la liste bêta globale n'ouvre que `workloadProtection`, `availability` et
+`assignmentProposals`. Le résultat filmé est jugé d'avance par le vrai moteur de proposition
+(`videos/lib/__tests__/proposals-fixture.test.ts`) avec les choix et la graine que la prise tape.
+La fenêtre « Publier les affectations ? » est refermée par « Annuler » : rien n'est publié et
+aucun email n'est envoyé.
+
 ## Lot 33 — reprises autorisées du 2026-10-29
 
 Cette reprise remplace les statuts NOT READY historiques de SHIFT_SWAPS et

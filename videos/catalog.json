@@ -1044,6 +1044,31 @@
       "level": "avance"
     },
     {
+      "id": "ASSIGNMENT_PROPOSALS",
+      "manifest": "assignment-proposals",
+      "category": "planning",
+      "tags": [
+        "proposition",
+        "affectations",
+        "brouillons",
+        "disponibilités",
+        "objectif-heures",
+        "bêta"
+      ],
+      "published": false,
+      "seedScenario": "assignment-proposals",
+      "themes": [
+        "planning-creneaux"
+      ],
+      "audience": [
+        "organisateur"
+      ],
+      "feature": "Proposition d'affectations",
+      "updatedAt": "2026-10-30",
+      "revision": 1,
+      "level": "avance"
+    },
+    {
       "id": "MEMBERS_MANAGEMENT",
       "manifest": "members-management",
       "category": "members-invitations",
