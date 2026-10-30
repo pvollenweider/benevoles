@@ -57,6 +57,13 @@ export async function readAnswerForFit(tx: Db, eventId: string, volunteerId: str
   return row ? toAnswer(row) : null
 }
 
+/** Several people's answers on the event, by person (absent: never asked). */
+export async function readAnswersForFit(tx: Db, eventId: string, volunteerIds: readonly string[]): Promise<Map<string, AnswerForFit>> {
+  if (volunteerIds.length === 0) return new Map()
+  const rows: AnswerRow[] = await tx.availabilityRequest.findMany({ where: { eventId, volunteerId: { in: [...new Set(volunteerIds)] } }, select: ANSWER_SELECT })
+  return new Map(rows.map((r) => [r.volunteerId, toAnswer(r)]))
+}
+
 /** Refused inside the addition's transaction (rolls it back): the shifts still to acknowledge. */
 export class AvailabilityAckError extends Error {
   constructor(readonly missing: AckMissing[]) {
@@ -129,6 +136,7 @@ const ACK_WORDS: Record<AckVia, { confirm: string; nothing: string }> = {
   accept: { confirm: "accepter sa demande quand même", nothing: "La demande n'a pas été acceptée." },
   restore: { confirm: "rétablir son inscription quand même", nothing: "Rien n'a été rétabli." },
   swap: { confirm: "valider l'échange quand même", nothing: "L'échange n'a pas été effectué." },
+  publish: { confirm: "publier l'affectation quand même", nothing: "Rien n'a été publié." },
 }
 
 /** The refusal's body: the first shift said, every one listed for the form. */

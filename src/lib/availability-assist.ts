@@ -357,8 +357,8 @@ export function judgeAvailabilityAcks(p: { eventId: string; volunteerId: string;
 
 // ── The acknowledgement's log entry ───────────────────────────────────────────────────────────
 
-/** The organiser action an acknowledgement was given for. */
-export type AckVia = "manual_add" | "accept" | "restore" | "swap"
+/** The organiser action an acknowledgement was given for; « publish »: a draft published (#1146, lot C). */
+export type AckVia = "manual_add" | "accept" | "restore" | "swap" | "publish"
 
 /** Version of the evidence stored in `availabilityAck`: raised whenever its shape changes. */
 export const AVAILABILITY_ACK_EVIDENCE_VERSION = 1

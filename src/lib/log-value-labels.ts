@@ -32,6 +32,7 @@ export const SHIFT_STATUS_LOG_LABELS: Record<ShiftStatus, string> = {
 export const REGISTRATION_SOURCE_LOG_LABELS: Record<RegistrationSource, string> = {
   public_form: "formulaire",
   admin_manual: "manuel",
+  admin_draft: "affectation publiée",
 }
 
 export const EVENT_PUBLIC_STATUS_LOG_LABELS: Record<EventPublicStatus, string> = {

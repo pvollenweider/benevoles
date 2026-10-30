@@ -262,6 +262,8 @@ model Event {
   availabilityRequests AvailabilityRequest[]
   availabilityDays     AvailabilityDay[]
   availabilityRanges   AvailabilityRange[]
+  draftAssignments     DraftAssignment[]
+  draftPublications    DraftPublication[]
 
   @@unique([organizationId, slug])
   @@index([organizationId])
@@ -376,6 +378,81 @@ model AvailabilityRange {
 
   @@index([dayId])
   @@index([eventId, startsAt])
+}
+
+// A draft assignment (#1146, lot C, src/lib/draft-assignments.ts): an organiser's « this person on
+// this shift », prepared on an event that uses dated availability and published later with others,
+// all at once (DraftPublication). Never a Registration: a draft holds no place, sends nothing, and no
+// count, export, reminder or public page reads it. `source` says who wrote it: "manual" (an
+// organiser) or "proposal" (a generated proposal, #1172, `proposalRunId` its run). `status`:
+// "draft" (pending), "published" (turned into `registrationId` by `publicationId`; the registration's
+// own status may change later, the draft never goes back) or "discarded". `revision` counts every
+// change, so a publication or an edit bound to an older one is refused. The review snapshot is what
+// the organiser last looked at: `shiftTerms` (the shift's material terms, draftShiftTerms) and
+// `availabilityStamp` (the person's answer, request id and revision, or "none"); a change of either
+// makes the draft « à revoir » and publication refuses it until reviewed again. `ackKey`: the
+// acknowledgement that the person is placed outside their declared availability (lot B's
+// availabilityAckKey, bound to that answer's revision and the shift's hours), checked again at
+// publication. Personal data of the organisation's planning: organisers only; deleted with the
+// person's data on erasure and with the event's personal data; never copied with an event.
+model DraftAssignment {
+  id                String    @id @default(cuid())
+  eventId           String
+  shiftId           String
+  volunteerId       String
+  source            String    @default("manual")
+  proposalRunId     String?
+  status            String    @default("draft")
+  revision          Int       @default(1)
+  note              String?
+  createdById       String?
+  shiftTerms        String
+  availabilityStamp String
+  reviewedAt        DateTime
+  reviewedById      String?
+  ackKey            String?
+  acknowledgedAt    DateTime?
+  acknowledgedById  String?
+  publicationId     String?
+  // The registration it became: no foreign key, the archive outlives a registration's changes.
+  registrationId    String?
+  discardedAt       DateTime?
+  createdAt         DateTime  @default(now())
+  updatedAt         DateTime  @updatedAt
+
+  event       Event             @relation(fields: [eventId], references: [id], onDelete: Cascade)
+  shift       Shift             @relation(fields: [shiftId], references: [id], onDelete: Cascade)
+  volunteer   Volunteer         @relation(fields: [volunteerId], references: [id], onDelete: Cascade)
+  publication DraftPublication? @relation(fields: [publicationId], references: [id], onDelete: SetNull)
+
+  // One pending draft per person and shift; published and discarded rows are kept as provenance.
+  @@unique([shiftId, volunteerId], map: "DraftAssignment_shift_volunteer_pending_key", where: raw("status = 'draft'"))
+  @@index([eventId, status])
+  @@index([eventId, volunteerId, status])
+  @@index([volunteerId])
+  @@index([publicationId])
+}
+
+// One publication of draft assignments (#1146, lot C): the exact drafts and revisions an organiser
+// published together, in one transaction, all or nothing. Written only when it succeeded, with the
+// registrations created; `idempotencyKey` (from the organiser's page) makes a retry return this
+// result instead of publishing twice, `requestHash` refuses the same key for another set of drafts.
+// `result`: ids only ({ drafts: [{ draftId, registrationId }] }), no personal data.
+model DraftPublication {
+  id             String   @id @default(cuid())
+  eventId        String
+  idempotencyKey String
+  requestHash    String
+  actorId        String?
+  draftCount     Int      @default(0)
+  personCount    Int      @default(0)
+  result         Json?
+  createdAt      DateTime @default(now())
+
+  event  Event             @relation(fields: [eventId], references: [id], onDelete: Cascade)
+  drafts DraftAssignment[]
+
+  @@unique([eventId, idempotencyKey])
 }
 
 model EventPlace {
@@ -769,6 +846,7 @@ model Shift {
   sector        Sector?          @relation(fields: [sectorId], references: [id], onDelete: SetNull)
   place         EventPlace?      @relation(fields: [placeId], references: [id], onDelete: SetNull)
   registrations Registration[]
+  draftAssignments DraftAssignment[]
 
   @@index([recurrenceId])
   @@index([sectorId])
@@ -850,6 +928,7 @@ model Volunteer {
   rosterConsents    RosterConsent[]
   workloadLimits    EventVolunteerLimit[]
   availabilityRequests AvailabilityRequest[]
+  draftAssignments  DraftAssignment[]
   mergedInto        Volunteer?     @relation("VolunteerMerge", fields: [mergedIntoId], references: [id], onDelete: SetNull)
   mergedFrom        Volunteer[]    @relation("VolunteerMerge")
   // Possible-duplicate dismissals (#601) naming this record as either side of the pair.

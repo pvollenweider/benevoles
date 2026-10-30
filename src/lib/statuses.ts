@@ -17,7 +17,8 @@ import { QUESTION_TYPES } from "./event-questions"
 export const REGISTRATION_STATUSES = ["active", "waiting", "offered", "requested", "cancelled", "refused", "deleted"] as const
 export type RegistrationStatus = (typeof REGISTRATION_STATUSES)[number]
 
-export const REGISTRATION_SOURCES = ["public_form", "admin_manual"] as const
+// « admin_draft » (#1146, lot C): created by publishing draft assignments (src/lib/draft-assignments.ts).
+export const REGISTRATION_SOURCES = ["public_form", "admin_manual", "admin_draft"] as const
 export type RegistrationSource = (typeof REGISTRATION_SOURCES)[number]
 
 export const SHIFT_STATUSES = ["open", "full", "closed", "cancelled"] as const
@@ -36,6 +37,12 @@ export type OutboxStatus = (typeof OUTBOX_STATUSES)[number]
 // Scheduled messages (#1019), see src/lib/scheduled-message.ts.
 export const SCHEDULED_MESSAGE_STATUSES = ["scheduled", "sending", "sent", "cancelled", "skipped"] as const
 
+// Draft assignments (#1146, lot C), see src/lib/draft-assignments.ts.
+export const DRAFT_ASSIGNMENT_STATUSES = ["draft", "published", "discarded"] as const
+export type DraftAssignmentStatus = (typeof DRAFT_ASSIGNMENT_STATUSES)[number]
+export const DRAFT_ASSIGNMENT_SOURCES = ["manual", "proposal"] as const
+export type DraftAssignmentSource = (typeof DRAFT_ASSIGNMENT_SOURCES)[number]
+
 export const EVENT_LOG_ACTOR_TYPES = ["admin", "volunteer", "system"] as const
 export const ORG_LOG_ACTOR_TYPES = ["admin", "system"] as const
 
@@ -52,4 +59,6 @@ export const CHECKED_COLUMNS = {
   // Question types (#483), widened for « Nombre » (#1015).
   "EventQuestion.type": QUESTION_TYPES,
   "ScheduledMessage.status": SCHEDULED_MESSAGE_STATUSES,
+  "DraftAssignment.status": DRAFT_ASSIGNMENT_STATUSES,
+  "DraftAssignment.source": DRAFT_ASSIGNMENT_SOURCES,
 } as const

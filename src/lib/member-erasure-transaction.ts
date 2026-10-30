@@ -184,6 +184,8 @@ export async function runMemberErasure(
     await tx.eventVolunteerLimit.deleteMany({ where: { volunteerId: { in: authors } } })
     // Dated availability (#1146): the person's own answers, with their days and ranges (cascade).
     await tx.availabilityRequest.deleteMany({ where: { volunteerId: { in: authors } } })
+    // Draft assignments (#1146, lot C): the organisation's plans for the person, pending or archived.
+    await tx.draftAssignment.deleteMany({ where: { volunteerId: { in: authors } } })
     if (del.sectorLeaderIds.length) await tx.sectorLeader.deleteMany({ where: { id: { in: del.sectorLeaderIds } } })
     if (del.duplicateDismissalIds.length) await tx.duplicateDismissal.deleteMany({ where: { id: { in: del.duplicateDismissalIds } } })
     // SMTP outcomes (#598): the member's own, and any other row of the organisation with their
@@ -213,13 +215,14 @@ export async function runMemberErasure(
     await endSwapsIn(tx, { volunteerIds: [id] }, "volunteer_gone", actor, now)
 
     // 5. Invariant: nothing the person owns is left.
-    const [answers, invites, push, availability] = await Promise.all([
+    const [answers, invites, push, availability, drafts] = await Promise.all([
       tx.questionAnswer.count({ where: { volunteerId: id } }),
       tx.memberInvite.count({ where: { volunteerId: id } }),
       tx.pushSubscription.count({ where: { volunteerId: id } }),
       tx.availabilityRequest.count({ where: { volunteerId: id } }),
+      tx.draftAssignment.count({ where: { volunteerId: id } }),
     ])
-    if (answers || invites || push || availability) throw new Error(`member erasure invariant violated for ${id} (answers=${answers} invites=${invites} push=${push} availability=${availability})`)
+    if (answers || invites || push || availability || drafts) throw new Error(`member erasure invariant violated for ${id} (answers=${answers} invites=${invites} push=${push} availability=${availability} drafts=${drafts})`)
 
     // 6. Register (replay after a restore) and log: an erasure happened, never who. The admin who
     // did it is the actor, as for every other action.
