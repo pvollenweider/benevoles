@@ -1,0 +1,36 @@
+{
+  "candidates": [
+    {
+      "content": {
+        "parts": [
+          {
+            "text": "La carte signale qu'un créneau n'a pas de lieu et que son trajet n'est pas vérifié. Le lien Choisir les lieux dans Créneau y ramène.",
+            "thoughtSignature": "EqoHCqcHAWkUfROnHEgAFKr5fzTy5mXLBw/MFTMzGLFe346PYh37zJxFMiqGLUWHCokZP8I6IExerT+KLk4CNsvxstZaSIr8ck5vXVsBudlqvfg+Z20uzMVzzNJZOkEdheMAkkq8KGxuB6raNJXXFp093iZgcux5U0b2FWjjmZJ1zLZu5bHeO/KxfEC7AK7SZw2/m50zJfSKOcjlttlG4XbzzuTUI5MGQ3RtEoEq2AvIx1Bc3KRwRxIkFzCoblJLwGReGR6u1SsGXZZ/MWdtRmWjoskL4f2SppZHv6r693NY9JbFNXvpNK5EevW8iZRg1j4O+OSoKmv7dnQ30jURwpwRaI0+H+VcmUOUuEI7J/l1KcK2inwq48YJZ0HqwZvIa1d6uvZLc5c2yzDw3+DO4TrAkU0UF38ueYXr1dy9GFVbbowSVHpltknrgHYKHUis3KVLR6al0/cT3lIYQkvEWPNpa9swRkXPuO4ToEWOfXqafFapQkXEke0MPIZACNf64SBJNKwjDQ8eVM846yshIg5YeAQneU5GJy1rLM7yGTbvP1OaUSpoEMKXdNihdUT2lGYeNYjb7qTi5K68m1XgU3Rj/AQYjC6t3nnCuOQfy5N6uysGR1/neXAZyXUZ+P4hn6YRqKqfh9vN7gg4lBZeZEGeFmYyvQ8X5PxGwA6vZ4L5g3Efynsvj35pP9YdFiXNj0w5rvU+WHrAd8OjuFBqsvpTv7aNy2K4OYvkhkaJ79Ch6N89lN8YmE+1yLWpaqA+KIb4sz+zqHEIknswsYBlUKF0jUq9CeGOS2qmedfTPMQl6eaNEihlHdJzk2OhBG73X8G2JKZSuJP/rJ2L7hx3GwzgS8UoKVMXm2TqLu2ECBtBMAUlz1B/AnDh8ekCiFY0Mwue/YITZLARyH5qmUUqBafqoundhfbwXYQhKkzsuQm9rRTIJnqq4Rkyhz7XrRePD3wt5Yjp81/ss3QfCm3CxV7Xuz9LsH+Ex10VV0mzwxxPkuvNRf7Vv4K9/KdUUIOtFygok+UOEb5MTO0r7xQBFFq4WFyiNUsN+Z+jpTTBFaGQCetcfdudUwd97OkTDP/Eitlx//bxsi35nV843bgwA57CBKLZHtfIg3tkalrtgkSba6Z1Nx2SXVs3YC9VN4RpNYSZGiDyk6BEPTbUavTbYb9k1+ffjdxQEeGtsVUguZNGMtB8aV9eFKKLoW9TRBCDz9Gqj9QfZinYZwyvskR7AjTRF1Pt+4gEwWDg/ZU="
+          }
+        ],
+        "role": "model"
+      },
+      "finishReason": "STOP",
+      "index": 0
+    }
+  ],
+  "usageMetadata": {
+    "promptTokenCount": 207,
+    "candidatesTokenCount": 38,
+    "totalTokenCount": 522,
+    "promptTokensDetails": [
+      {
+        "modality": "AUDIO",
+        "tokenCount": 175
+      },
+      {
+        "modality": "TEXT",
+        "tokenCount": 32
+      }
+    ],
+    "thoughtsTokenCount": 277,
+    "serviceTier": "standard"
+  },
+  "modelVersion": "gemini-3.6-flash",
+  "responseId": "AAblatqwCp7KkdUPgoGJmAY"
+}

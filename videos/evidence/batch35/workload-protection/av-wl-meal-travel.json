@@ -1,0 +1,44 @@
+{
+  "model": "gemini-3.8-flash",
+  "reviewedAt": "2026-10-30T21:03:20.814Z",
+  "videoSha256": "eaa9a44b7afc91cfbde9b6abc9ef27bb8d8fb00fac628ed746ea94225a53891f",
+  "promptSha256": "0c4b7017089ef1710ccff933e35a94badc587e9aa21e2963f00255780d6fc352",
+  "clipSha256": "d904c1062d8860968b0f192d4ea9c98f8383f1a692d6b9de2623c5542d2aac70",
+  "scene": "wl-meal-travel",
+  "review": {
+    "heardOpening": "La pause repas est déjà remplie",
+    "checkpoints": [
+      {
+        "spokenSeconds": 1,
+        "spoken": "La pause repas est déjà remplie : trente minutes de repas",
+        "visibleSeconds": 1,
+        "visible": "Section de configuration des repas avec 30 minutes, plages horaires définies et option Tous les jours de l'événement cochée",
+        "sync": "aligned",
+        "severity": "none"
+      },
+      {
+        "spokenSeconds": 12.5,
+        "spoken": "Le trajet entre deux lieux demande quinze minutes de marge",
+        "visibleSeconds": 12.5,
+        "visible": "Défilement révélant la section Trajet entre deux lieux avec la marge paramétrée à 15 minutes",
+        "sync": "aligned",
+        "severity": "none"
+      },
+      {
+        "spokenSeconds": 16,
+        "spoken": "La carte signale qu'un créneau n'a pas de lieu, et que son trajet n'est pas vérifié",
+        "visibleSeconds": 16,
+        "visible": "Mention textuelle sous le bloc trajet indiquant qu'un créneau n'a pas de lieu avec le lien Choisir les lieux dans Créneaux",
+        "sync": "aligned",
+        "severity": "none"
+      }
+    ],
+    "issues": [],
+    "voice": {
+      "consistent": true,
+      "warm": true,
+      "observation": "Voix off fluide, claire et bien articulée, synchronisée avec l'affichage à l'écran."
+    }
+  },
+  "note": "Automated observation of actual final video audio and images; not a claim of complete human validation"
+}

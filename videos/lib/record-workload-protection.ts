@@ -313,7 +313,18 @@ export async function recordWorkloadProtection(options: Options) {
     const flagged = page.getByText("Limite dépassée :", { exact: true })
     await flagged.first().waitFor()
     assert.equal(await flagged.count(), 2, "Sarah's two remaining rows carry the finding")
-    await flagged.first().scrollIntoViewIfNeeded()
+    // Centre the two actual findings together before naming Sarah's remaining rows.
+    await flagged.evaluateAll(nodes => {
+      const boxes = nodes.map(node => (node.closest("tr") ?? node).getBoundingClientRect())
+      const top = Math.min(...boxes.map(box => box.top))
+      const bottom = Math.max(...boxes.map(box => box.bottom))
+      window.scrollBy(0, (top + bottom) / 2 - window.innerHeight / 2)
+    })
+    await page.waitForTimeout(400)
+    assert(await flagged.evaluateAll(nodes => nodes.every(node => {
+      const box = (node.closest("tr") ?? node).getBoundingClientRect()
+      return box.top >= 0 && box.bottom <= window.innerHeight && box.left >= 0 && box.right <= window.innerWidth
+    })), "Both of Sarah's Limite dépassée rows must be inside the viewport during the narration")
   })
 
   await scene("wl-my-card", async at => {

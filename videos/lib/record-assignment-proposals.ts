@@ -134,6 +134,7 @@ export async function recordAssignmentProposals(options: Options) {
     await rowOf(AP_TYPED.prefer.key).scrollIntoViewIfNeeded()
   })
 
+  let proposalStartedAt = 0
   await scene("ap-launch", async at => {
     await at("Dans Paramètres de calcul")
     const details = page.locator("details").filter({ has: page.locator("summary", { hasText: "Paramètres de calcul" }) })
@@ -144,6 +145,7 @@ export async function recordAssignmentProposals(options: Options) {
     await seed.pressSequentially(AP_TYPED.seed, { delay: 95 })
     assert.equal(await seed.inputValue(), AP_TYPED.seed)
     await at("Puis Générer une proposition")
+    proposalStartedAt = performance.now()
     await tap(page, page.getByRole("button", { name: "Générer une proposition", exact: true }))
   })
 
@@ -151,6 +153,9 @@ export async function recordAssignmentProposals(options: Options) {
   await scene("ap-result", async at => {
     await page.getByRole("heading", { level: 2, name: "Résultat de la proposition", exact: true }).waitFor({ timeout: 40_000 })
     await result.getByText(AP_EXPECTED.written, exact).waitFor({ timeout: 20_000 })
+    const calculationMs = Math.round(performance.now() - proposalStartedAt)
+    console.log(`Proposal written after ${calculationMs} ms on the verified build`)
+    assert(calculationMs < 10_000, "En quelques secondes requires the actual proposal to finish promptly")
     await page.getByRole("heading", { level: 2, name: "Résultat de la proposition", exact: true }).scrollIntoViewIfNeeded()
     await result.getByText(AP_EXPECTED.covered, exact).waitFor()
     await at("Impossible démontré")
@@ -203,9 +208,12 @@ export async function recordAssignmentProposals(options: Options) {
     const lea = cellOf(AP_TYPED.removed.key, AP_TYPED.removed.day)
     await lea.scrollIntoViewIfNeeded()
     const open = lea.getByRole("button", { name: new RegExp(`^Voir le brouillon\\W+${fullNameOf(AP_TYPED.removed.firstName)}, ${AP_TYPED.removed.poste},`) })
+    await at("ouvrons son brouillon de billetterie")
     await tap(page, open)
     const dialog = page.getByRole("dialog", { name: new RegExp(`^Brouillon : ${AP_TYPED.removed.poste}, vendredi`) })
     await dialog.waitFor()
+    // Keep the actual draft readable while the voice names the removal.
+    await page.waitForTimeout(600)
     await tap(page, dialog.getByRole("button", { name: "Retirer ce brouillon", exact: true }))
     await dialog.waitFor({ state: "detached" })
     await open.waitFor({ state: "detached" })

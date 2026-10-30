@@ -1,0 +1,44 @@
+{
+  "model": "gemini-3.8-flash",
+  "reviewedAt": "2026-10-30T21:13:32.385Z",
+  "videoSha256": "f9629af999e4fc5b6388f31de6776045399e91f9d33467acc782d52436658263",
+  "promptSha256": "e5ab1f60d9e7ca95e0696192081f37a07b7ed26b923c2cd7ea95b20f7a3cef1e",
+  "clipSha256": "81234267817adce9b81558bb27892d495fd044a241e9ec718628b107b2105075",
+  "scene": "ap-targets",
+  "review": {
+    "heardOpening": "Jules n'a pas répondu",
+    "checkpoints": [
+      {
+        "spokenSeconds": 0,
+        "spoken": "Jules n'a pas répondu : il n'est pas inclus",
+        "visibleSeconds": 0,
+        "visible": "Dans le tableau, la ligne Jules Hansen a la case Inclure non cochée et la réponse Sans réponse",
+        "sync": "aligned",
+        "severity": "none"
+      },
+      {
+        "spokenSeconds": 3,
+        "spoken": "Appliquer la suggestion remplit l'objectif d'heures",
+        "visibleSeconds": 3.2,
+        "visible": "Clic sur le bouton 'Appliquer la suggestion', la case Objectif d'heures de Noah se remplit avec 12",
+        "sync": "aligned",
+        "severity": "none"
+      },
+      {
+        "spokenSeconds": 9.5,
+        "spoken": "tapons six",
+        "visibleSeconds": 9.8,
+        "visible": "La valeur 6 est saisie dans le champ Objectif d'heures de Noah De Jong",
+        "sync": "aligned",
+        "severity": "none"
+      }
+    ],
+    "issues": [],
+    "voice": {
+      "consistent": true,
+      "warm": true,
+      "observation": "Voix de synthèse féminine fluide, posée et bien articulée."
+    }
+  },
+  "note": "Automated observation of actual final video audio and images; not a claim of complete human validation"
+}

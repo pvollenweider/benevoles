@@ -1,0 +1,89 @@
+{
+  "id": "WORKLOAD_PROTECTION",
+  "status": "READY",
+  "date": "2026-10-30",
+  "narratedTakes": 1,
+  "durationMs": 406480,
+  "product": {
+    "commit": "aed410c8139e479c4730cfbce58c8307b645b878",
+    "sourceTree": "ea6fb1556a83fa4ab93d8cf0b33d68461949836d",
+    "productSourceSha256": "da7297346541261bb95dabdb3c0f5e4fad44a51363982a880905b173695f2868",
+    "buildId": "5Oaosk5GvwNjq85Z4bYwR",
+    "snapshot": "/tmp/benevoles-video-production.batch35",
+    "builtAt": "2026-10-30T20:49:12.848Z"
+  },
+  "videoSha256": "eaa9a44b7afc91cfbde9b6abc9ef27bb8d8fb00fac628ed746ea94225a53891f",
+  "music": {
+    "voicedWindows": 361,
+    "musicOnlyWindows": 6,
+    "smallestGapLu": 14.7,
+    "largestGapLu": 19.7,
+    "quietestMusicOnlyLufs": -33.6,
+    "loudestMusicOnlyLufs": -33,
+    "medianVoiceLufs": -16.4
+  },
+  "musicGaps": 0,
+  "registerCandidates": 0,
+  "subtitleRegisterTokens": 0,
+  "tests": {
+    "files": 37,
+    "passed": 1244,
+    "explicitTypedSources": 211
+  },
+  "blockers": [],
+  "resolved": [
+    {
+      "scene": "wl-limits",
+      "automatedFinding": "Fields absent until18s;20h/3h allegedly not typed",
+      "resolution": "Direct final MP4 frames at25% and85% show6h/30min/8h and20h/3h respectively; automated absence claims contradicted by observed pixels.",
+      "frames": [
+        "full-frames/wl-limits-25.png",
+        "full-frames/wl-limits-85.png"
+      ]
+    },
+    {
+      "scene": "wl-meal-travel",
+      "automatedFinding": "Full-chapter ASR ending mismatch",
+      "resolution": "Independent7second ending ASR of actual final MP4 with gemini-3.5-flash hears: La carte signale qu’un créneau n’a pas de lieu et que son trajet n’est pas vérifié. Le lien Choisir les lieux dans Créneau y ramène. Créneau/Créneaux are homophones. No ending omitted; source master unchanged.",
+      "report": "meal-travel-ending-final-asr.json",
+      "audioSha256": "e7cdce8108fc3efdf4a0ad6ebca1cf1c99431fb018cbc26ddc2b589861fe0069"
+    },
+    {
+      "scene": "wl-registrations",
+      "resolution": "Both complete Sarah rows in frame during actual narration; whole-row bounds asserted in recorder.",
+      "frames": [
+        "full-frames/wl-registrations-25.png",
+        "full-frames/wl-registrations-60.png",
+        "full-frames/wl-registrations-85.png"
+      ]
+    },
+    {
+      "scene": "wl-result",
+      "automatedFinding": "Conclusion allegedly requires replay of setup/actions",
+      "resolution": "The announced current result is visible: active card heading and 1 programme à revoir. Subsequent imperatives recap the earlier demonstrated workflow; the conclusion does not promise to replay each action. Stable relevant screen is allowed by the review rules.",
+      "frames": [
+        "full-frames/wl-result-25.png",
+        "full-frames/wl-result-60.png",
+        "full-frames/wl-result-85.png"
+      ]
+    }
+  ],
+  "publication": true,
+  "sourceChanges": [
+    "Recorder: centre both Sarah rows,stabilize400ms and assert both whole rows in viewport",
+    "Dedicated45439fixture review guard and wrapper",
+    "No narration text change;verified Kore master retained"
+  ],
+  "notes": [
+    "Real-time subjective listening unavailable;assisted AV/audio and actual-frame inspection completed",
+    "No src/,content/guide/ or renders.json changes",
+    "No push or merge"
+  ],
+  "publishedFiles": 5,
+  "catalog": {
+    "published": true,
+    "revision": 1,
+    "added": "2026-10-30",
+    "updatedAt": "2026-10-30"
+  }
+}

@@ -1,0 +1,52 @@
+{
+  "model": "gemini-3.8-flash",
+  "reviewedAt": "2026-10-30T21:14:12.045Z",
+  "videoSha256": "f9629af999e4fc5b6388f31de6776045399e91f9d33467acc782d52436658263",
+  "promptSha256": "c4ce2242d9c68e42ec36250078fe5c679e80cec98849396b714e85a2454b42f4",
+  "clipSha256": "001f948f778ec05efa408d0e8b3c0809f6b1de29211568246e5f8cd0d33db343",
+  "scene": "ap-load",
+  "review": {
+    "heardOpening": "La charge par personne",
+    "checkpoints": [
+      {
+        "spokenSeconds": 0.8,
+        "spoken": "La charge par personne compare les heures prévues à l'objectif de chacun",
+        "visibleSeconds": 0,
+        "visible": "Tableau 'Charge par personne' affichant le nom, la charge prévue vs objectif et le nombre d'activités",
+        "sync": "aligned",
+        "severity": "none"
+      },
+      {
+        "spokenSeconds": 4.1,
+        "spoken": "Noah a ses six heures.",
+        "visibleSeconds": 4,
+        "visible": "Ligne Noah De Jong indiquant '6 h prévues pour un objectif de 6 h : objectif atteint.'",
+        "sync": "aligned",
+        "severity": "none"
+      },
+      {
+        "spokenSeconds": 6.8,
+        "spoken": "Dans Affectations proposées, chaque ligne dit pourquoi.",
+        "visibleSeconds": 7,
+        "visible": "Déroulement de la section 'Affectations proposées (29)' affichant les détails de chaque affectation",
+        "sync": "aligned",
+        "severity": "none"
+      },
+      {
+        "spokenSeconds": 9.8,
+        "spoken": "Emma est au bar vendredi : disponible sur tout le créneau, c'est son poste souhaité.",
+        "visibleSeconds": 10,
+        "visible": "Ligne Emma Johansson, Bar des Tilleuls, vendredi 13 novembre avec la mention 'Disponible sur tout le créneau [...] Poste souhaité.'",
+        "sync": "aligned",
+        "severity": "none"
+      }
+    ],
+    "issues": [],
+    "voice": {
+      "consistent": true,
+      "warm": true,
+      "observation": "Voix claire, posée et bien synchronisée avec les éléments affichés à l'écran."
+    }
+  },
+  "note": "Automated observation of actual final video audio and images; not a claim of complete human validation"
+}

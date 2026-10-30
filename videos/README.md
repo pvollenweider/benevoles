@@ -843,3 +843,24 @@ précédents restent intacts. Transmettre `VIDEO_SMTP_PORT=41035` et
 `seed-video-scenario.ts workload-protection` précède chaque répétition et prise.
 Le recorder exige que le titre, l'état activé et « 1 programme à revoir » soient
 tous dans le cadre final, et vérifie les valeurs 6 h / 30 min / 8 h puis 20 h / 3 h.
+
+### Lot 35 : charge et propositions d'affectations
+
+La pile dédiée utilise PostgreSQL **45439**, SMTP **41036**, Mailpit **48036**,
+avec le serveur **43102** construit depuis le main courant et vérifié par PID et
+BUILD_ID. Les conteneurs historiques ne sont pas réutilisés. Le wrapper
+`local-production.ts run` admet les seeds `workload-protection` et
+`assignment-proposals` et leurs recorders/revues sur cette seule base.
+
+Filmer WORKLOAD_PROTECTION en premier : le seed des propositions remplace la
+liste bêta globale. Refaire le seed correspondant avant chaque répétition et
+chaque prise. Dans Inscriptions, le recorder centre les deux lignes de Sarah,
+attend leur stabilisation et exige que les deux lignes entières soient dans le
+viewport. La narration Kore existante est conservée si son texte reste identique.
+
+ASSIGNMENT_PROPOSALS conserve la graine saisie **2026** et mesure le délai réel
+jusqu'aux affectations écrites. `verify-proposals-review-fixture.ts` vérifie
+l'organisation dédiée, ses douze membres fictifs, les quatorze créneaux, les trois
+lieux et l'absence d'inscription publiée avant l'envoi à la revue audiovisuelle.
+Le verrouillage et la correction restent de vraies écritures en brouillon ;
+la confirmation de publication est annulée.

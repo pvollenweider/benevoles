@@ -1,0 +1,19 @@
+{
+  "registrations": 0,
+  "activeDrafts": 29,
+  "lockedEmma": 1,
+  "manualLou": 1,
+  "activeLeaFriday": 0,
+  "notifications": 0,
+  "runs": [
+    {
+      "status": "finished",
+      "outcome": "proven_impossible",
+      "seed": 2026,
+      "writtenCount": 29,
+      "startedAt": "2026-10-30T21:10:41.757Z",
+      "finishedAt": "2026-10-30T21:10:42.004Z",
+      "writtenAt": "2026-10-30T21:10:42.004Z"
+    }
+  ]
+}

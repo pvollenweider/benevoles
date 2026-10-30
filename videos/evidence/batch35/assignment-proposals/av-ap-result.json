@@ -1,0 +1,44 @@
+{
+  "model": "gemini-3.8-flash",
+  "reviewedAt": "2026-10-30T21:14:02.146Z",
+  "videoSha256": "f9629af999e4fc5b6388f31de6776045399e91f9d33467acc782d52436658263",
+  "promptSha256": "feb473f4a511fc9889734fde4f3613db55830ecb0f1a4cc6d46b03c55ce9567c",
+  "clipSha256": "d0d95dbfbcd53c37247b22c5468d9c0bba8e136f3b1730d6e32b0319ac56e257",
+  "scene": "ap-result",
+  "review": {
+    "heardOpening": "En quelques secondes, le résultat s'affiche",
+    "checkpoints": [
+      {
+        "spokenSeconds": 1.2,
+        "spoken": "le résultat s'affiche",
+        "visibleSeconds": 1,
+        "visible": "Section 'Résultat de la proposition' affichée à l'écran",
+        "sync": "aligned",
+        "severity": "none"
+      },
+      {
+        "spokenSeconds": 3.2,
+        "spoken": "29 places couvertes sur 31, écrites dans les brouillons.",
+        "visibleSeconds": 3,
+        "visible": "Mention '29 places couvertes sur 31' et '29 affectations écrites dans les brouillons.'",
+        "sync": "aligned",
+        "severity": "none"
+      },
+      {
+        "spokenSeconds": 7,
+        "spoken": "Impossible démontré : personne n'est disponible pour tout le rangement du Kiosque dimanche soir",
+        "visibleSeconds": 7,
+        "visible": "Défilement montrant 'Places restées vides (1) - Rangement du Kiosque, dimanche 15 novembre' avec l'explication",
+        "sync": "aligned",
+        "severity": "none"
+      }
+    ],
+    "issues": [],
+    "voice": {
+      "consistent": true,
+      "warm": true,
+      "observation": "Voix claire, posée et parfaitement intelligible, bien synchronisée avec les éléments affichés."
+    }
+  },
+  "note": "Automated observation of actual final video audio and images; not a claim of complete human validation"
+}

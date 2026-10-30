@@ -1027,7 +1027,7 @@
         "mes-inscriptions",
         "bêta"
       ],
-      "published": false,
+      "published": true,
       "seedScenario": "workload-protection",
       "themes": [
         "planning-creneaux",
@@ -1039,9 +1039,10 @@
         "benevole"
       ],
       "feature": "Protection des pauses et de la charge",
-      "updatedAt": "2026-10-29",
+      "updatedAt": "2026-10-30",
       "revision": 1,
-      "level": "avance"
+      "level": "avance",
+      "added": "2026-10-30"
     },
     {
       "id": "ASSIGNMENT_PROPOSALS",
@@ -1055,7 +1056,7 @@
         "objectif-heures",
         "bêta"
       ],
-      "published": false,
+      "published": true,
       "seedScenario": "assignment-proposals",
       "themes": [
         "planning-creneaux"
@@ -1066,7 +1067,8 @@
       "feature": "Proposition d'affectations",
       "updatedAt": "2026-10-30",
       "revision": 1,
-      "level": "avance"
+      "level": "avance",
+      "added": "2026-10-30"
     },
     {
       "id": "MEMBERS_MANAGEMENT",

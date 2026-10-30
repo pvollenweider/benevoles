@@ -1,0 +1,19 @@
+{
+  "id": "ASSIGNMENT_PROPOSALS",
+  "status": "NOT READY",
+  "take": 1,
+  "product": {
+    "commit": "aed410c8139e479c4730cfbce58c8307b645b878",
+    "sourceTree": "ea6fb1556a83fa4ab93d8cf0b33d68461949836d",
+    "productSourceSha256": "da7297346541261bb95dabdb3c0f5e4fad44a51363982a880905b173695f2868",
+    "buildId": "5Oaosk5GvwNjq85Z4bYwR",
+    "snapshot": "/tmp/benevoles-video-production.batch35",
+    "builtAt": "2026-10-30T20:49:12.848Z"
+  },
+  "openClickMs": 564,
+  "removeClickMs": 1348,
+  "actionSentenceStartMs": 2391,
+  "reason": "Real correction occurs before action sentence; clicks exist despite automated missing-action claim",
+  "fix": "Sentence anchor before opening;600ms actual-dialog hold;no text or TTS change",
+  "published": false
+}

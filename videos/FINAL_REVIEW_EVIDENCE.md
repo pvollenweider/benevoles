@@ -543,8 +543,8 @@ un seed neuf. Chaque prise narrée est également précédée d'un nouveau seed.
 locale (« Échange effectué », nomination du responsable de secteur).
 
 `workload-protection` (protection des pauses et de la charge, #1171) ne fait pas partie de ce lot :
-ses sources ont suivi le lot 2 de #1171, voir « Sources prêtes, rendu en attente : protection des
-pauses et de la charge » plus bas.
+ses sources ont suivi le lot 2 de #1171 ; voir les comptes rendus des lots 33 à 35
+plus bas pour les prises, puis la première publication.
 
 ### Lot 32 — tentative du 2026-10-29 : build produit bloqué
 
@@ -671,43 +671,6 @@ deux conteneurs créés pour cette reprise ont été arrêtés ; aucun tiers tou
 Synthèse : `videos/evidence/batch32-resume/summary.json`. Les fichiers antérieurs,
 ignorés et non suivis sont conservés, y compris toutes les prises rejetées.
 
-## Sources prêtes, rendu en attente : protection des pauses et de la charge (#1171)
-
-Sources ajoutées sans rendu (aucune capture, aucune voix, aucune publication) ; le rendu se fait
-depuis un checkout à jour de `origin/main`, avec un seed neuf avant chaque prise (la prise ajoute
-un lieu, règle le repas sur le pouce, active la protection, enregistre une limite personnelle et
-annule un créneau) :
-
-- `workload-protection` (`WORKLOAD_PROTECTION`, nouvelle, `published: false`) : sources prêtes,
-  rendu en attente. Seed `scripts/seed-video-scenario.ts workload-protection`.
-
-Le scénario utilise l'organisation fictive dédiée `formation-charge`
-(`scripts/seed-video-workload.ts`), jamais l'organisation de démonstration ni celle des vidéos
-bêta ; il n'ouvre que la fonction bêta « Protection des pauses et de la charge ». Le planning
-fictif est jugé d'avance par le vrai évaluateur (`videos/lib/__tests__/workload-fixture.test.ts`)
-avec les valeurs que la prise tape. Le recorder (`videos/lib/record-workload-protection.ts`) est
-répété sur la pile locale aux lots 33 et 34 ; le rendu reste NOT READY après les deux prises
-autorisées du lot 34 (voir le compte rendu ci-dessous).
-L'annulation filmée envoie les vrais emails dans la boîte locale ; ils ne sont pas montrés.
-
-## Sources prêtes, rendu en attente : proposition d'affectations (#1172)
-
-Sources ajoutées sans rendu (aucune capture, aucune voix, aucune publication) ; le rendu se fait
-depuis un checkout à jour de `origin/main`, avec un seed neuf avant chaque prise (la prise
-enregistre des objectifs d'heures, écrit une proposition dans les brouillons, en verrouille un, en
-retire un et en ajoute un) :
-
-- `assignment-proposals` (`ASSIGNMENT_PROPOSALS`, nouvelle, `published: false`) : sources prêtes,
-  rendu en attente. Seed `scripts/seed-video-scenario.ts assignment-proposals`.
-
-Le scénario utilise l'organisation fictive dédiée `formation-propositions`
-(`scripts/seed-video-proposals.ts`), jamais l'organisation de démonstration ni celle des autres
-vidéos bêta ; la liste bêta globale n'ouvre que `workloadProtection`, `availability` et
-`assignmentProposals`. Le résultat filmé est jugé d'avance par le vrai moteur de proposition
-(`videos/lib/__tests__/proposals-fixture.test.ts`) avec les choix et la graine que la prise tape.
-La fenêtre « Publier les affectations ? » est refermée par « Annuler » : rien n'est publié et
-aucun email n'est envoyé.
-
 ## Lot 33 — reprises autorisées du 2026-10-29
 
 Cette reprise remplace les statuts NOT READY historiques de SHIFT_SWAPS et
@@ -820,3 +783,75 @@ images et rapports adjacents ; rapport complet local dans
 `videos/output/workload-protection/review-report.txt`. Écoute subjective en temps
 réel indisponible ; inspection des images et contrôles audio/vidéo assistés
 effectués. `src/`, `content/guide/` et `videos/renders.json` inchangés.
+
+
+## Lot 35 — protection des pauses et de la charge (2026-10-30)
+
+**WORKLOAD_PROTECTION : READY, publiée.** Une prise narrée après deux répétitions
+rapides réussies, chacune sur seed neuf ; main `aed410c8`, BUILD_ID
+`5Oaosk5GvwNjq85Z4bYwR`, durée 406,48 s. Les deux lignes complètes de Sarah sont
+centrées, stabilisées et vérifiées dans le viewport ; les images du MP4 à
+25/60/85 % les montrent ensemble pendant la narration. La confirmation
+d'inscription arrive à +22,927 s, avant la phrase du refus à +24,779 s.
+
+La narration Kore vérifiée reste inchangée. Le signalement ASR de fin
+repas/trajets est résolu par une reconnaissance indépendante des sept dernières
+secondes du son final : le lien « Choisir les lieux dans Créneaux y ramène »
+est entendu en entier. Les deux signalements audiovisuels automatisés restent
+conservés : les images montrent les valeurs 6 h / 30 min / 8 h puis 20 h / 3 h ;
+la conclusion récapitule le parcours sur la carte activée avec son lien
+« 1 programme à revoir », sans promettre de rejouer chaque action.
+
+Validation, 1 244 tests vidéo et 211 sources typées réussis. Musique
+14,7–19,7 LU sous la voix, minimum seule −33,6 LUFS, aucun trou ; effets sur
+35 clics et 12 touches réels. ASR intégrale multilingue et VTT : zéro tutoiement.
+OCR des 57 images : aucun ancien libellé ni adresse locale interdits. Affiches
+générées avec un index de métadonnées isolé ; `videos/renders.json` inchangé.
+Aperçu puis publication effective des cinq fichiers via le contexte `default`.
+Catalogue publié, révision 1, `added` et `updatedAt` au 2026-10-30.
+
+Preuves : `videos/evidence/batch35/workload-protection/`. Écoute subjective
+en temps réel indisponible ; revue audio/vidéo assistée et inspection des images
+réelles effectuées. Aucun changement produit, aucun push ni merge.
+
+
+## Lot 35 — proposition d'affectations (2026-10-30)
+
+**ASSIGNMENT_PROPOSALS : READY, publiée.** Deux prises narrées après seed neuf,
+chacune précédée d'une répétition rapide réussie sur le build main vérifié
+`aed410c8`, BUILD_ID `5Oaosk5GvwNjq85Z4bYwR`. Une génération Kore entière,
+recoupée sur des silences mesurés puis reconnue indépendamment ; aucun texte
+modifié, aucune voix mélangée.
+
+La première prise est rejetée : ouverture de Léa à +0,564 s et retrait
+à +1,348 s, avant la phrase d'action à +2,391 s. Les clics existent, malgré
+le signalement automatisé d'absence ; leur avance est corrigée par un repère
+de phrase et 600 ms de maintien du vrai dialogue. La seconde et dernière prise
+ouvre à +2,862 s et retire à +4,245 s. Les onze revues audiovisuelles du nouveau
+MP4 sont sans signalement, dont la correction désormais alignée.
+
+Rendu final : 160,20 s ; onze chapitres et onze ASR finales réussis, validation
+et repères de phrase réussis. `ap-lock` tient en 10,322 s pour 10,321 s de voix.
+La proposition est affichée en 4,163 s, avec la graine saisie 2026. La preuve
+en base confirme le résultat impossible démontré, 29 brouillons actifs, Emma
+verrouillée, Lou ajoutée manuellement à la billetterie et Léa retirée vendredi ;
+aucune inscription ni notification. La confirmation de publication est annulée.
+
+Musique 14,7–19,2 LU sous la voix, minimum seule −33,7 LUFS, aucun trou ;
+21 clics et 7 touches réels avec leurs effets. ASR intégrale multilingue et VTT :
+zéro tutoiement, aucune consigne parasite ; OCR des 33 images sans libellé ni
+adresse locale interdits. Revue des images réelles des onze chapitres effectuée.
+1 244 tests vidéo, 211 sources typées et lint des six fichiers TypeScript modifiés
+réussis. L'écoute subjective en temps réel est indisponible, conformément aux
+règles du lot. Aucun défaut produit constaté.
+
+Le garde-fou `verify-proposals-review-fixture.ts` autorise la revue des seules
+données fictives vérifiées sur la pile dédiée 45439/41036/48036. WORKLOAD a été
+filmée avant le seed des propositions. Affiches avec métadonnées isolées,
+`videos/renders.json` inchangé. Aperçu puis `APPLY=1`, cinq fichiers publiés sur
+le contexte `default`, notification envoyée. Catalogue publié, révision 1,
+`added` et `updatedAt` au 2026-10-30 ; ligne des sources en attente retirée.
+
+Preuves finales : `videos/evidence/batch35/assignment-proposals/`. Première prise
+rejetée : `videos/evidence/batch35/assignment-proposals-rejected-take1/`,
+avec les fichiers lourds locaux archivés. Aucun push ni merge.
