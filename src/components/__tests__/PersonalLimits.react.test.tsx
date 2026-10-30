@@ -48,7 +48,9 @@ describe("PersonalLimitsEditor", () => {
     fireEvent.change(within(screen.getByRole("group", { name: "Durée maximale par journée de service" })).getByLabelText("heures"), { target: { value: "4" } })
     fetchMock.mockResolvedValueOnce(ok({ error: "Ces limites ne sont pas respectées par le programme actuel : rien n'a été enregistré.", workload: ["Journée de service du samedi 4 juillet : 6 h de missions."] }, 409))
     fireEvent.click(screen.getByRole("button", { name: "Enregistrer les limites de la personne" }))
-    expect(await screen.findByRole("alert")).toHaveTextContent("Ces limites ne sont pas respectées")
+    // The alert is always in the page, empty: wait for its text, which announce() sets one frame
+    // later through a render React schedules itself, not for the region.
+    await waitFor(() => expect(screen.getByRole("alert")).toHaveTextContent("Ces limites ne sont pas respectées"))
     expect(screen.getByText("Journée de service du samedi 4 juillet : 6 h de missions.")).toBeInTheDocument()
     expect(screen.getByLabelText("Personne")).toBeInTheDocument()
   })
@@ -76,7 +78,8 @@ describe("MyWorkloadLimits", () => {
     fireEvent.click(screen.getByRole("button", { name: "Retirer mes limites" }))
     await waitFor(() => expect(screen.getByRole("button", { name: "Enregistrer mes limites" })).toHaveFocus())
     expect(fetchMock.mock.calls[1]).toEqual(["/api/public/registrations/t1/workload-limits", expect.objectContaining({ method: "DELETE" })])
-    expect(screen.getByRole("status")).toHaveTextContent("Tes limites sont retirées : celles de l'événement s'appliquent.")
+    // The focus moves at once, the status text one frame later (announce): wait for it too.
+    await waitFor(() => expect(screen.getByRole("status")).toHaveTextContent("Tes limites sont retirées : celles de l'événement s'appliquent."))
     expect(screen.queryByRole("button", { name: "Retirer mes limites" })).toBeNull()
   })
 })

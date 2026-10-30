@@ -421,7 +421,9 @@ describe("the units of content/guide/", () => {
         expect(docUnitHeadingIds(units.find((other) => other.slug === slug)!), `${u.slug} links to ${slug}.md#${id}`).toContain(id)
       }
     }
-  })
+    // Renders the target unit of every such link: over 5 s on a loaded CI runner with coverage, as
+    // legacy-doc-anchors.test.ts.
+  }, 20_000)
 
   it("render without an <h1> of their own: the page gives the only one", () => {
     for (const u of units) expect(renderDocUnit(u)).not.toContain("<h1")
