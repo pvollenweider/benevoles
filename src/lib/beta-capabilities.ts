@@ -76,6 +76,14 @@ export const BETA_CAPABILITIES = {
     description: "Demander à chaque membre ses plages libres, date par date, par un lien personnel, et voir qui a répondu.",
     shipped: true,
   },
+  // #1172: « Générer une proposition » on the page « Affectations en brouillon »: a proposal written
+  // into the drafts, never published (src/lib/proposal-*.ts). Needs an event that uses dated
+  // availability and a complete workload protection. Not shipped until its last lot is merged.
+  assignmentProposals: {
+    label: "Proposition d'affectations",
+    description: "Proposer une répartition des créneaux en brouillon, selon les disponibilités, les règles de l'événement et l'objectif d'heures de chacun ; rien n'est publié sans vous.",
+    shipped: false,
+  },
 } as const satisfies BetaRegistry
 
 export type BetaCapabilityId = keyof typeof BETA_CAPABILITIES

@@ -26,6 +26,8 @@ Référence pour trier les demandes de fonctionnalités (revue produit du 29 sep
 
 **Boucle centrale** : créer un planning, partager un lien, laisser les bénévoles choisir leurs créneaux. On ne court pas après les outils d'accréditation fonctionnalité par fonctionnalité.
 
+Le libre choix des créneaux par les bénévoles reste le fonctionnement par défaut. Sur un périmètre choisi, l'organisation peut aussi générer une proposition d'affectations en brouillon, comparer, verrouiller et ajuster les affectations, puis décider de les publier. La génération ne publie jamais d'inscription et n'envoie aucun message aux bénévoles.
+
 **Six capacités essentielles** ; toute autre fonctionnalité doit clairement en améliorer une :
 
 1. Créer ou dupliquer un événement.
@@ -35,7 +37,7 @@ Référence pour trier les demandes de fonctionnalités (revue produit du 29 sep
 5. Communiquer simplement avec les personnes concernées.
 6. Disposer d'un planning fiable, à l'écran comme sur papier.
 
-**Volontairement pas construit** : accréditations et zones d'accès ; badges complexes ; repas et hébergement ; signature électronique ; attribution automatique des bénévoles ; CRM marketing ; campagnes SMS bidirectionnelles ; gestion documentaire générique ; application mobile native ; workflows configurables ; constructeur de formulaires libre ; des dizaines de rôles et de permissions ; facturation à la fonctionnalité.
+**Volontairement pas construit** : accréditations et zones d'accès ; badges complexes ; repas et hébergement ; signature électronique ; affectation et publication des bénévoles sans validation explicite de l'organisation ; CRM marketing ; campagnes SMS bidirectionnelles ; gestion documentaire générique ; application mobile native ; workflows configurables ; constructeur de formulaires libre ; des dizaines de rôles et de permissions ; facturation à la fonctionnalité.
 
 **Positionnement** : « Organisez les créneaux de vos bénévoles en quelques minutes. Aucun compte à créer, aucun logiciel compliqué à apprendre. » ou « Le planning des bénévoles, simplement. » Objectif : une petite association publie son premier planning correctement en quinze minutes, sans formation ni démonstration commerciale.
 

@@ -638,10 +638,37 @@ export function dutyInterval(s: DutyShift, timeZone: string): Duty {
   return { id: s.id, start, end, ...(s.mealOnTheGo ? { mealOnTheGo: true } : {}), ...(s.placeId ? { placeId: s.placeId, placeName: s.placeName ?? null } : {}) }
 }
 
+const partsFormats = new Map<string, Intl.DateTimeFormat>()
+
+/** One formatter per zone, reused: building one costs far more than formatting with it (#1172). */
+function partsFormat(timeZone: string): Intl.DateTimeFormat {
+  let f = partsFormats.get(timeZone)
+  if (!f) {
+    f = new Intl.DateTimeFormat("en-CA", { timeZone, year: "numeric", month: "2-digit", day: "2-digit", hour: "2-digit", minute: "2-digit", hourCycle: "h23" })
+    partsFormats.set(timeZone, f)
+  }
+  return f
+}
+
+/** Results already computed, per zone and instant (pure, bounded): the search of #1172 asks the same instants again and again. */
+const partsMemo = new Map<string, Map<number, { date: string; minutes: number }>>()
+const PARTS_MEMO_MAX = 50_000
+
 /** The local civil date and minutes since local midnight of an instant. */
 export function localParts(ms: number, timeZone: string): { date: string; minutes: number } {
+  let memo = partsMemo.get(timeZone)
+  const known = memo?.get(ms)
+  if (known) return { date: known.date, minutes: known.minutes }
+  const value = computeLocalParts(ms, timeZone)
+  if (!memo) partsMemo.set(timeZone, (memo = new Map()))
+  if (memo.size >= PARTS_MEMO_MAX) memo.clear()
+  memo.set(ms, value)
+  return { date: value.date, minutes: value.minutes }
+}
+
+function computeLocalParts(ms: number, timeZone: string): { date: string; minutes: number } {
   const parts = Object.fromEntries(
-    new Intl.DateTimeFormat("en-CA", { timeZone, year: "numeric", month: "2-digit", day: "2-digit", hour: "2-digit", minute: "2-digit", hourCycle: "h23" })
+    partsFormat(timeZone)
       .formatToParts(new Date(ms))
       .map((p) => [p.type, p.value]),
   )
