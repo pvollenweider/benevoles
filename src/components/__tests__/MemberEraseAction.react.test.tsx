@@ -44,7 +44,7 @@ describe("MemberEraseAction (#516)", () => {
   it("is described by the irreversible sentence and the warning only, not the whole recap nor the field's label", () => {
     const dialog = openDialog()
     expect(dialog).toHaveAccessibleDescription(
-      "Cette action est irréversible : rien ne pourra être récupéré. Attention : 1 inscription à venir reste comptée dans les effectifs. Retirez-la d'abord si la personne ne viendra pas. ",
+      "Cette action est irréversible : rien ne pourra être récupéré. Attention : 1 inscription à venir reste comptée dans les effectifs. Retirez-la d'abord si la personne ne viendra pas. ",
     )
   })
 

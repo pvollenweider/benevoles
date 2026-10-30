@@ -57,7 +57,7 @@ describe("fingerprints", () => {
     const noAnswer = inputParts({ ...input, people: [{ ...input.people[0], answer: null }] })
     expect(changedParts(before, noAnswer)).toEqual(["availability"])
     expect(staleSentence([])).toBeNull()
-    expect(staleSentence(["availability", "targets"])).toBe("Proposition périmée : des disponibilités ont changé, des objectifs d'heures ont changé. Relancez une proposition pour en tenir compte ; la publication vérifie de toute façon chaque règle.")
+    expect(staleSentence(["availability", "targets"])).toBe("Proposition périmée : des disponibilités ont changé, des objectifs d'heures ont changé. Relancez une proposition pour en tenir compte ; la publication vérifie de toute façon chaque règle.")
   })
 })
 

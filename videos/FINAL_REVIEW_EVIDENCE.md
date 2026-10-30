@@ -855,3 +855,23 @@ le contexte `default`, notification envoyée. Catalogue publié, révision 1,
 Preuves finales : `videos/evidence/batch35/assignment-proposals/`. Première prise
 rejetée : `videos/evidence/batch35/assignment-proposals-rejected-take1/`,
 avec les fichiers lourds locaux archivés. Aucun push ni merge.
+
+## À refilmer — ASSIGNMENT_PROPOSALS après la revue indépendante (#1172)
+
+**ASSIGNMENT_PROPOSALS : à refilmer.** La version publiée au lot 35 montre
+l'écran d'avant la revue indépendante de la page « Proposition d'affectations » :
+résultat sous le formulaire, pastille rouge « Impossible démontré », champ
+« Graine », « Rotation, nuit et réserve » déplié, mention « Verrouillé » grise
+comme « Brouillon ». Le produit montre désormais le résultat en haut de la page
+(« 29 places couvertes sur 31 » en tête, pastille neutre « Couverture complète
+impossible », « tirage n° 2026 »), « Nouvelle proposition » dessous, les réglages
+facultatifs repliés, « Numéro de tirage », et un cadenas sur « Verrouillé ».
+
+Sources mises à jour dans la même PR : narration de `ap-targets`, `ap-launch`,
+`ap-result`, `ap-lock` et bloc `viewer` du manifeste, script, sélecteurs et
+`AP_EXPECTED.state` du recorder, test du fixture. Le recorder a été exécuté de
+bout en bout sur un seed neuf contre le build de la branche (repères de phrase
+sans effet), sans rendu ni voix. Révision du catalogue inchangée : elle sera
+incrémentée au nouveau rendu (nouvelle prise, nouvelle voix Kore, publication).
+En attendant, l'entrée du catalogue est masquée (#1226) : la remettre en ligne
+avec le nouveau rendu.

@@ -37,7 +37,7 @@ export default async function ProposalPage({ params, searchParams }: { params: P
         <h1 id="page-heading" tabIndex={-1} className="text-xl font-bold text-gray-900 focus:outline-none">Proposition d&apos;affectations</h1>
         <HelpLink route="/admin/events/[id]/availability/proposal" />
         <p className="max-w-[75ch] text-sm text-gray-700 mt-1">
-          Choisissez les dates, les postes et les personnes : une répartition est proposée selon les disponibilités, les règles de l&apos;événement et l&apos;objectif d&apos;heures de chacun, puis écrite dans les affectations en brouillon. Rien n&apos;est publié : vous comparez, verrouillez ou corrigez les brouillons, puis vous publiez vous-même.
+          Choisissez les dates, les postes et les personnes : une répartition est proposée selon les disponibilités, les règles de l&apos;événement et l&apos;objectif d&apos;heures de chacun, puis écrite dans les affectations en brouillon. Rien n&apos;est publié : vous comparez, verrouillez ou corrigez les brouillons, puis vous publiez vous-même.
         </p>
         <p className="text-sm text-gray-700 mt-1"><Link href={drafts} className={linkClass}>Retour aux affectations en brouillon</Link></p>
       </div>

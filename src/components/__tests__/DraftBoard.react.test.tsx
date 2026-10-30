@@ -176,6 +176,39 @@ describe("DraftBoard with generated proposals (#1172)", () => {
     await waitFor(() => expect(within(dialog).getByRole("status")).toHaveTextContent("Brouillon verrouillé."))
   })
 
+  it("marks a locked draft with a lock and the word, apart from the grey « Brouillon » and « Proposé » pills (finding 10)", () => {
+    const locked: BoardItem = { ...proposed, draft: { ...proposed.draft!, locked: true } }
+    render(<DraftBoard eventId="evt" board={board({ rows: [row({ cells: [{ date: "2031-07-11", availability: "Libre", availabilityKind: "ranges", items: [locked] }] })] })} day="2031-07-11" view="grid" scope="event" basePath="/x" proposals />)
+    const table = screen.getByRole("table", { name: /Affectations par personne et par jour/ })
+    const chip = within(table).getByText("Verrouillé")
+    expect(chip.querySelector("svg[aria-hidden='true']")).not.toBeNull()
+    expect(chip.className).not.toBe(within(table).getByText("Proposé").className)
+    expect(chip.className).not.toMatch(/f3f4f6|blue/)
+  })
+
+  it("takes the draft's real state after a refused lock, in place (finding 12)", async () => {
+    fetchMock.mockResolvedValue({ ok: false, status: 409, json: async () => ({ error: "Ce brouillon a changé entre-temps." }) })
+    const r = render(<DraftBoard eventId="evt" board={proposalBoard()} day="2031-07-11" view="grid" scope="event" basePath="/x" proposals />)
+    fireEvent.click(within(screen.getByRole("table", { name: /Affectations par personne/ })).getByRole("button", { name: /^Voir le brouillon/ }))
+    const dialog = screen.getByRole("dialog")
+    const lock = within(dialog).getByRole("button", { name: "Verrouiller" })
+    lock.focus()
+    fireEvent.click(lock)
+    await waitFor(() => expect(within(dialog).getByRole("alert")).toHaveTextContent("Ce brouillon a changé entre-temps."))
+    expect(refresh).toHaveBeenCalled()
+    // The refresh brings the draft locked elsewhere, at a new revision.
+    const lockedElsewhere: BoardItem = { ...proposed, draft: { ...proposed.draft!, locked: true, revision: 5 } }
+    r.rerender(<DraftBoard eventId="evt" board={board({ rows: [row({ cells: [{ date: "2031-07-11", availability: "Libre", availabilityKind: "ranges", items: [lockedElsewhere] }] })] })} day="2031-07-11" view="grid" scope="event" basePath="/x" proposals />)
+    const toggle = within(screen.getByRole("dialog")).getByRole("button", { name: "Déverrouiller" })
+    expect(toggle).toBe(lock) // the same button, focus kept
+    expect(toggle).toHaveFocus()
+    expect(within(screen.getByRole("dialog")).getByText("Ce brouillon est verrouillé.")).toBeInTheDocument()
+    await waitFor(() => expect(within(screen.getByRole("dialog")).getByRole("status")).toHaveTextContent("Ce brouillon est verrouillé."))
+    fetchMock.mockResolvedValue({ ok: true, status: 200, json: async () => ({ draft: { id: "d1", revision: 6, locked: false } }) })
+    fireEvent.click(toggle)
+    await waitFor(() => expect(fetchMock).toHaveBeenLastCalledWith("/api/admin/events/evt/drafts/d1/lock", expect.objectContaining({ body: JSON.stringify({ revision: 5, locked: false }) })))
+  })
+
   it("offers no lock without proposals", () => {
     render(<DraftBoard eventId="evt" board={proposalBoard()} day="2031-07-11" view="grid" scope="event" basePath="/x" />)
     fireEvent.click(within(screen.getByRole("table", { name: /Affectations par personne/ })).getByRole("button", { name: /^Voir le brouillon/ }))

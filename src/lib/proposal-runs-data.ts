@@ -81,7 +81,7 @@ export async function buildProposalSnapshot(db: Db, eventId: string, config: Pro
   const live = new Set(shiftRows.map((s) => s.id))
   const scope = new Set(config.scope.shiftIds)
   if ([...scope].some((id) => !live.has(id)) || config.nightShiftIds.some((id) => !live.has(id)) || config.categories.some((k) => k.shiftIds.some((id) => !live.has(id)))) {
-    return { ok: false, status: 409, error: "Un créneau choisi n'existe plus ou est annulé : rechargez la page.", code: "shift_gone" }
+    return { ok: false, status: 409, error: "Un créneau choisi n'existe plus ou est annulé : rechargez la page.", code: "shift_gone" }
   }
 
   const people = await db.volunteer.findMany({
@@ -89,7 +89,7 @@ export async function buildProposalSnapshot(db: Db, eventId: string, config: Pro
     select: { id: true, birthDate: true, tags: true },
     orderBy: { id: "asc" },
   })
-  if (people.length !== new Set(config.scope.volunteerIds).size) return { ok: false, status: 409, error: "Une personne choisie n'est plus membre actif de l'organisation : rechargez la page.", code: "person_gone" }
+  if (people.length !== new Set(config.scope.volunteerIds).size) return { ok: false, status: 409, error: "Une personne choisie n'est plus membre actif de l'organisation : rechargez la page.", code: "person_gone" }
   const ids = people.map((p) => p.id)
 
   const [regs, drafts, answers, limits, targets] = await Promise.all([
@@ -101,7 +101,7 @@ export async function buildProposalSnapshot(db: Db, eventId: string, config: Pro
   ])
   const targetOf = new Map(targets.map((t) => [t.volunteerId, t.targetMinutes]))
   const missing = ids.filter((id) => !targetOf.has(id)).length
-  if (missing > 0) return { ok: false, status: 409, error: `Fixez un objectif d'heures pour chaque personne choisie (0 pour aucun objectif) : ${missing} n'en ${missing > 1 ? "ont" : "a"} pas.`, code: "targets_missing" }
+  if (missing > 0) return { ok: false, status: 409, error: `Fixez un objectif d'heures pour chaque personne choisie (0 pour aucun objectif) : ${missing} n'en ${missing > 1 ? "ont" : "a"} pas.`, code: "targets_missing" }
 
   // The replacement set, and the drafts the run keeps.
   const frozen: Replacement = replacement === "compute"

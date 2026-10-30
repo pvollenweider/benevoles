@@ -37,7 +37,7 @@ export async function saveTargets(db: OrgScopedPrisma, input: { eventId: string;
     return await saveInTransaction(db, input, ids)
   } catch (e) {
     // Two first saves for the same person at once: the second meets the unique key.
-    if ((e as { code?: string }).code === "P2002") return { ok: false, status: 409, error: "Des objectifs d'heures ont changé depuis l'ouverture de la page : rechargez-la." }
+    if ((e as { code?: string }).code === "P2002") return { ok: false, status: 409, error: "Des objectifs d'heures ont changé depuis l'ouverture de la page : rechargez-la." }
     throw e
   }
 }
@@ -52,7 +52,7 @@ async function saveInTransaction(db: OrgScopedPrisma, input: { eventId: string; 
     const rows = await tx.eventVolunteerTarget.findMany({ where: { eventId: input.eventId, volunteerId: { in: ids } }, select: { id: true, volunteerId: true, revision: true } })
     const rowOf = new Map(rows.map((r) => [r.volunteerId, r]))
     if (input.changes.some((c) => c.revision != null && (rowOf.get(c.volunteerId)?.revision ?? 0) !== c.revision)) {
-      return { ok: false as const, status: 409 as const, error: "Des objectifs d'heures ont changé depuis l'ouverture de la page : rechargez-la." }
+      return { ok: false as const, status: 409 as const, error: "Des objectifs d'heures ont changé depuis l'ouverture de la page : rechargez-la." }
     }
     let saved = 0, removed = 0
     for (const c of [...input.changes].sort((a, b) => (a.volunteerId < b.volunteerId ? -1 : 1))) {

@@ -23,6 +23,7 @@ import { createDraft, publishDrafts, reviewDraft, setDraftLock } from "@/lib/dra
 import { proposalConfigSchema, type ProposalConfig } from "@/lib/proposal-config"
 import { cancelRun, claimNext, drainProposalRuns, executeRun, expireRuns, launchProposal, listRuns, readRun, writeRunResult } from "@/lib/proposal-runs-server"
 import { saveTargets } from "@/lib/proposal-targets-server"
+import { loadProposalPage } from "@/lib/proposal-page-data"
 import { runMemberMerge } from "@/lib/member-merge-transaction"
 import { runMemberErasure } from "@/lib/member-erasure-transaction"
 import { anonymisePastEvent } from "@/lib/past-event-anonymisation"
@@ -160,6 +161,20 @@ describe.skipIf(!url)("generated proposals on Postgres (#1172)", () => {
       // One pending draft per seat: the locked and manual ones held theirs, the run filled the rest.
       expect(after.filter((d) => d.shiftId === morning.id || d.shiftId === evening.id)).toHaveLength(2)
       expect(after.filter((d) => d.proposalRunId === id2)).toHaveLength(1)
+    })
+
+    it("the page reads each run's coverage and counts the proposed drafts a relaunch would replace (locked ones never)", async () => {
+      const { e, c } = await team()
+      const id = await launch(e.id, c)
+      await drainProposalRuns({ wait: true })
+      const page = (await loadProposalPage(db(), orgId, e.id, null))!
+      expect(page.runs.find((r) => r.id === id)?.coverage).toEqual({ filled: 2, seats: 2 })
+      expect(Object.values(page.proposedByShift).reduce((a, b) => a + b, 0)).toBe(2)
+      const [d] = await pending(e.id)
+      await setDraftLock(db(), { eventId: e.id, draftId: d.id, revision: d.revision, locked: true })
+      const after = (await loadProposalPage(db(), orgId, e.id, null))!
+      expect(after.proposedByShift[d.shiftId] ?? 0).toBe(0)
+      expect(Object.values(after.proposedByShift).reduce((a, b) => a + b, 0)).toBe(1)
     })
 
     it("locking or reviewing its own drafts never makes a written run stale", async () => {

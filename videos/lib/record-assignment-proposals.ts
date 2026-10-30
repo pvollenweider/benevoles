@@ -49,13 +49,13 @@ export const AP_TYPED = {
 /** What the screens must show for the narration to hold (checked by the fixture test and during the take). */
 export const AP_EXPECTED = {
   countLine: "14 créneaux, 31 places à pourvoir",
-  state: "Impossible démontré",
+  state: "Couverture complète impossible",
   covered: "29 places couvertes sur 31",
   written: "29 affectations écrites dans les brouillons.",
   gapPoste: "Rangement du Kiosque",
   gapReason: "Aucune disponibilité ne couvre entièrement ce créneau.",
-  targetLoad: "6 h prévues pour un objectif de 6 h : objectif atteint.",
-  wishSentence: "Disponible sur tout le créneau. Place du minimum de ce créneau. Charge prévue : 8 h pour un objectif de 12 h. Poste souhaité.",
+  targetLoad: "6 h prévues pour un objectif de 6 h : objectif atteint.",
+  wishSentence: "Disponible sur tout le créneau. Place du minimum de ce créneau. Charge prévue : 8 h pour un objectif de 12 h. Poste souhaité.",
   drafts: "29 affectations en brouillon pour 11 personnes.",
 } as const
 
@@ -90,11 +90,12 @@ export async function recordAssignmentProposals(options: Options) {
   })
 
   await scene("ap-scope", async at => {
-    const checks = page.getByRole("heading", { level: 2, name: "Ce qui est vérifié", exact: true })
+    await page.getByRole("heading", { level: 2, name: "Nouvelle proposition", exact: true }).waitFor()
+    const checks = page.getByRole("heading", { level: 3, name: "Ce qui est vérifié", exact: true })
     await checks.scrollIntoViewIfNeeded()
-    await page.getByText("Protection des pauses et de la charge : activée.", exact).waitFor()
+    await page.getByText("Protection des pauses et de la charge : activée.", exact).waitFor()
     await at("Dans Périmètre")
-    const scope = page.getByRole("heading", { level: 2, name: "Périmètre", exact: true })
+    const scope = page.getByRole("heading", { level: 3, name: "Périmètre", exact: true })
     await scope.scrollIntoViewIfNeeded()
     for (const box of await page.locator("#proposal-dates input[type=checkbox], #proposal-postes input[type=checkbox]").all()) assert(await box.isChecked(), "every date and poste starts checked")
     assert.equal(await page.locator("#proposal-dates input[type=checkbox]").count(), 3)
@@ -108,9 +109,11 @@ export async function recordAssignmentProposals(options: Options) {
     await jules.scrollIntoViewIfNeeded()
     await jules.getByText("Sans réponse", exact).waitFor()
     assert.equal(await jules.locator("input[type=checkbox]").isChecked(), false, "Jules is not included")
-    await at("Appliquer la suggestion remplit")
-    await tap(page, page.getByRole("button", { name: "Appliquer la suggestion : 6 h par date où la personne a indiqué une plage libre", exact: true }))
     const noah = page.locator(`#target-${person(AP_TYPED.target.key)}`)
+    // No target is ever filled in for the organiser: the fields start empty (explicit targets, P14).
+    assert.equal(await noah.inputValue(), "", "Noah has no target before the suggestion is applied")
+    await at("Appliquer la suggestion les remplit")
+    await tap(page, page.getByRole("button", { name: "Appliquer la suggestion : 6 h par date où la personne a indiqué une plage libre", exact: true }))
     assert.equal(await noah.inputValue(), "12", "Noah's suggestion: two available dates")
     await at("Noah ne veut que six heures")
     await noah.scrollIntoViewIfNeeded()
@@ -137,9 +140,13 @@ export async function recordAssignmentProposals(options: Options) {
   let proposalStartedAt = 0
   await scene("ap-launch", async at => {
     await at("Dans Paramètres de calcul")
-    const details = page.locator("details").filter({ has: page.locator("summary", { hasText: "Paramètres de calcul" }) })
+    // « Rotation, nuit et réserve » stays folded, with nothing set.
+    const rotation = page.locator("details").filter({ has: page.locator("summary", { hasText: "Rotation, nuit et réserve (facultatif)" }) })
+    await rotation.locator("summary", { hasText: "Aucun réglage" }).waitFor()
+    assert.equal(await rotation.evaluate((d) => (d as HTMLDetailsElement).open), false, "rotation settings stay folded")
+    const details = page.locator("details").filter({ has: page.locator("summary", { hasText: "Paramètres de calcul (facultatif)" }) })
     await tap(page, details.locator("summary"))
-    const seed = page.locator("#proposal-seed")
+    const seed = page.getByRole("textbox", { name: "Numéro de tirage", exact: true })
     await tap(page, seed)
     await seed.fill("")
     await seed.pressSequentially(AP_TYPED.seed, { delay: 95 })
@@ -158,8 +165,11 @@ export async function recordAssignmentProposals(options: Options) {
     assert(calculationMs < 10_000, "En quelques secondes requires the actual proposal to finish promptly")
     await page.getByRole("heading", { level: 2, name: "Résultat de la proposition", exact: true }).scrollIntoViewIfNeeded()
     await result.getByText(AP_EXPECTED.covered, exact).waitFor()
-    await at("Impossible démontré")
+    // The result comes first on the page, above « Nouvelle proposition ».
+    assert(await page.locator("#proposal-result").evaluate((h) => !!(h.compareDocumentPosition(document.getElementById("proposal-new")!) & Node.DOCUMENT_POSITION_FOLLOWING)), "the result is above the form")
+    await at("Couverture complète impossible")
     await result.getByText(AP_EXPECTED.state, exact).waitFor()
+    await result.getByText(`tirage n° ${AP_TYPED.seed}.`, { exact: false }).waitFor()
     const gaps = result.getByRole("heading", { level: 3, name: "Places restées vides (1)", exact: true })
     await gaps.scrollIntoViewIfNeeded()
     await result.locator("li").filter({ hasText: AP_EXPECTED.gapPoste }).filter({ hasText: AP_EXPECTED.gapReason }).waitFor()
@@ -173,7 +183,8 @@ export async function recordAssignmentProposals(options: Options) {
     await noah.getByText(AP_EXPECTED.targetLoad, exact).waitFor()
     await noah.scrollIntoViewIfNeeded()
     await at("Dans Affectations proposées")
-    const summary = result.locator("summary", { hasText: /^Affectations proposées \(29\)$/ })
+    await result.getByRole("heading", { level: 3, name: "Affectations proposées (29)", exact: true }).scrollIntoViewIfNeeded()
+    const summary = result.locator("summary", { hasText: /^Afficher chaque affectation et sa raison$/ })
     await tap(page, summary)
     await at("Emma est au bar vendredi")
     const line = result.locator("li").filter({ hasText: `${fullNameOf(AP_TYPED.prefer.firstName)}, ${AP_TYPED.prefer.poste}, vendredi` })
@@ -200,7 +211,10 @@ export async function recordAssignmentProposals(options: Options) {
     await page.waitForTimeout(600)
     await tap(page, dialog.getByRole("button", { name: "Fermer", exact: true }))
     await dialog.waitFor({ state: "detached" })
-    await emma.getByText("Verrouillé", exact).waitFor()
+    await at("Le cadenas le signale")
+    const chip = emma.getByText("Verrouillé", exact)
+    await chip.waitFor()
+    assert.equal(await chip.locator("svg").count(), 1, "the locked chip shows a lock")
   })
 
   await scene("ap-adjust", async at => {
