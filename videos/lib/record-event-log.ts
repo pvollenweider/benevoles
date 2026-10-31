@@ -6,14 +6,14 @@ import { readFile, writeFile } from "node:fs/promises"
 import path from "node:path"
 import type { Cue } from "./sentence-timing"
 import { PrismaClient } from "../../src/generated/prisma/client"
-import { PrismaPg } from "@prisma/adapter-pg"
+import { pgAdapter } from "../../src/lib/prisma-adapter"
 
 type Scene = (id: string, action: (at: Cue) => Promise<void>) => Promise<void>
 
 export async function recordEventLog(options: { page: Page; base: string; eventId: string; directory: string; title: string; scene: Scene; tap: (page: Page, target: Locator) => Promise<void>; settle: (page: Page) => Promise<void> }) {
   const { page, base, eventId, directory, title, scene, tap, settle } = options
   if (!process.env.DATABASE_URL?.includes("benevoles_video")) throw new Error("Isolated video database required")
-  const db = new PrismaClient({ adapter: new PrismaPg({ connectionString: process.env.DATABASE_URL }) })
+  const db = new PrismaClient({ adapter: pgAdapter(process.env.DATABASE_URL) })
   try {
     const prepared = JSON.parse(await readFile(path.join(directory, "preparation.json"), "utf8")) as { eventId: string; shiftId: string; baselineWitnessId: string; rootLogId: string; pageId: string; causalLinkVerified: boolean; volunteerActorVerified: boolean; pageContentNotCopied: boolean }
     if (prepared.eventId !== eventId || !prepared.causalLinkVerified || !prepared.volunteerActorVerified || !prepared.pageContentNotCopied) throw new Error("Current actual-route preparation required")

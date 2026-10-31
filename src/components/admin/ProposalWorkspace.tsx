@@ -15,7 +15,7 @@ import { fmtDuration } from "@/lib/signup-recap"
 import { staleSentence, type InputPart, type ProposalConfig } from "@/lib/proposal-config"
 import { assignmentSentence, gapSentence, personSentence, stateSentence, type ProposalReport } from "@/lib/proposal-explanations"
 import {
-  ANOTHER_HINT, anotherOffer, anotherReplaceRecap, coverageDetails, coverageLine, droppedSentence, fillMissingTargets, formatHours, formToConfig, historyEntry, NO_OTHER_SENTENCE, ONLY_ONE_SENTENCE,
+  ANOTHER_HINT, anotherOffer, anotherReplaceRecap, coverageDetails, coverageLine, droppedSentence, expiredSentence, fillMissingTargets, formatHours, formToConfig, historyEntry, NO_OTHER_SENTENCE, ONLY_ONE_SENTENCE,
   posteChoicesFrom, replacedDraftCount, rotationSummary, runLine, runStateLabel, runTone, sameAsSentence, scopeShiftIds, summaryProblems, TARGET_FIELD_ERROR, withoutProblem,
   type FormProblem, type PersonChoice, type PosteChoice, type RunTone,
 } from "@/lib/proposal-view"
@@ -58,7 +58,8 @@ function doneText(r: Run): string {
   if (cov) parts.push(`${coverageLine(cov)}.`)
   if (r.writtenAt) parts.push(`${plural(r.writtenCount, "affectation écrite", "affectations écrites")} en brouillon.`)
   // Said once the run ends, as the page shows it under the result.
-  if (r.stopReason === "no_other") parts.push(NO_OTHER_SENTENCE)
+  if (expiredSentence(r.stopReason)) parts.push(expiredSentence(r.stopReason)!)
+  else if (r.stopReason === "no_other") parts.push(NO_OTHER_SENTENCE)
   else if (r.sameAs) parts.push(sameAsSentence(r.sameAs))
   else if (anotherOffer(r) === "only_one") parts.push(ONLY_ONE_SENTENCE)
   return parts.join(" ")
@@ -472,7 +473,7 @@ export default function ProposalWorkspace({ data, eventInfoHref, draftsHref, bas
             <>
               {report && <p className="max-w-[75ch] text-sm text-gray-800">{stateSentence({ outcome: report.outcome, execution: run.status === "interrupted" ? "interrupted" : "finished", stopReason: (run.stopReason ?? "budget") as ProposalReport["stopReason"] })}</p>}
               {run.status === "failed" && <p className="max-w-[75ch] text-sm text-gray-800">Le calcul a échoué ; rien n&apos;a été écrit. Relancez la proposition.</p>}
-              {run.stopReason === "lease_expired" && <p className="max-w-[75ch] text-sm text-gray-800">Le calcul a été interrompu par un redémarrage du service ; rien n&apos;a été écrit. Relancez un calcul depuis Nouvelle proposition.</p>}
+              {expiredSentence(run.stopReason) && <p className="max-w-[75ch] text-sm text-gray-800">{expiredSentence(run.stopReason)}</p>}
               {run.stale.length > 0 && <p className="max-w-[75ch] text-sm text-[#92400e]">{staleSentence(run.stale)}</p>}
               {run.writtenAt && run.writtenCount === 0 && (
                 <p className="max-w-[75ch] rounded-lg border border-amber-300 bg-amber-50 px-3 py-2 text-sm text-amber-900 forced-colors:border-[CanvasText]">Aucune affectation n&apos;a été écrite : toutes ont été écartées à l&apos;écriture, les données ayant changé. Relancez la proposition pour tenir compte des données actuelles.</p>

@@ -6,7 +6,7 @@ import { chromium } from "playwright"
 import { launchVideoBrowser, videoAdminEmail } from "../lib/public-hosts"
 import { fullNameOf, surnameOf } from "../lib/fixture-names"
 import { PrismaClient } from "../../src/generated/prisma/client"
-import { PrismaPg } from "@prisma/adapter-pg"
+import { pgAdapter } from "../../src/lib/prisma-adapter"
 import { registrationToken } from "../../src/lib/token-vault"
 import { mkdir, writeFile } from "node:fs/promises"
 import path from "node:path"
@@ -15,7 +15,7 @@ async function main() {
   assert.equal(process.env.VIDEO_BASE_URL, "http://localhost:43102")
   const url = new URL(process.env.DATABASE_URL ?? "")
   assert(url.hostname === "localhost" && url.port === "45433" && url.pathname === "/benevoles_video")
-  const db = new PrismaClient({ adapter: new PrismaPg({ connectionString: url.toString() }) })
+  const db = new PrismaClient({ adapter: pgAdapter(url.toString()) })
   const orgId = "video-errors", eventId = `${orgId}-event`
   const directory = path.resolve("videos/output/volunteer-confirmation-errors/server-preflight")
   await mkdir(directory, { recursive: true })

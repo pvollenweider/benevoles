@@ -5,7 +5,7 @@ import { chromium } from "playwright"
 import { launchVideoBrowser } from "../lib/public-hosts"
 import { fullNameOf, rosterSurname } from "../lib/fixture-names"
 import { PrismaClient } from "../../src/generated/prisma/client"
-import { PrismaPg } from "@prisma/adapter-pg"
+import { pgAdapter } from "../../src/lib/prisma-adapter"
 import { readFile, writeFile } from "node:fs/promises"
 import { parse } from "csv-parse/sync"
 import { createHash } from "node:crypto"
@@ -18,7 +18,7 @@ async function main() {
   const directory = "videos/output/organization-activity-log"
   const prepared = JSON.parse(await readFile(path.join(directory, "preparation.json"), "utf8"))
   if (prepared.organizationId !== "video-org-activity" || prepared.distinctActors !== 2) throw new Error("Actual two-session preparation required")
-  const db = new PrismaClient({ adapter: new PrismaPg({ connectionString: process.env.DATABASE_URL }) })
+  const db = new PrismaClient({ adapter: pgAdapter(process.env.DATABASE_URL) })
   const browser = await launchVideoBrowser(chromium)
   try {
     const page = await browser.newPage({ acceptDownloads: true })

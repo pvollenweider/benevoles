@@ -239,11 +239,16 @@ jobs:
           npx prisma migrate deploy
           npx prisma db seed
 
-      - name: Integration tests (real Postgres)
+      - name: Integration tests (real Postgres, not in UTC)
         # Migrations on a database with data (#318) and the outbox under concurrency (#319).
         # Once per run, in the first shard (before its Playwright specs, on the same database as before).
+        # The database's default time zone is Europe/Zurich meanwhile (#1172): the app forces UTC on
+        # its sessions (src/lib/prisma-adapter.ts), and this keeps it proven on a server not in UTC.
         if: matrix.shard == 1
-        run: npm run test:integration
+        run: |
+          node scripts/ci-database-timezone.mjs Europe/Zurich
+          npm run test:integration
+          node scripts/ci-database-timezone.mjs reset
 
       - name: Install Playwright browsers
         # WebKit for the "webkit-iphone" project (e2e/mobile/, iPhone emulation).

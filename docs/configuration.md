@@ -11,7 +11,7 @@ Modèles de fichiers fournis :
 
 | Variable | Requis | Description |
 |----------|--------|-------------|
-| `DATABASE_URL` | oui | URL PostgreSQL (`postgresql://utilisateur:motdepasse@hôte:5432/benevoles?schema=public`, caractères réservés du mot de passe encodés en `%XX`). Dans l'image, si elle est vide, `docker-entrypoint.sh` la construit à partir de `POSTGRES_USER`, `POSTGRES_PASSWORD` (alors obligatoire), `POSTGRES_DB`, `POSTGRES_HOST` et `POSTGRES_PORT` (`scripts/database-url.mjs`) : c'est le cas avec Docker Compose |
+| `DATABASE_URL` | oui | URL PostgreSQL (`postgresql://utilisateur:motdepasse@hôte:5432/benevoles?schema=public`, caractères réservés du mot de passe encodés en `%XX`). Dans l'image, si elle est vide, `docker-entrypoint.sh` la construit à partir de `POSTGRES_USER`, `POSTGRES_PASSWORD` (alors obligatoire), `POSTGRES_DB`, `POSTGRES_HOST` et `POSTGRES_PORT` (`scripts/database-url.mjs`) : c'est le cas avec Docker Compose. Le fuseau horaire du serveur PostgreSQL est indifférent : l'application ouvre chaque connexion en UTC (`-c TimeZone=UTC`, `src/lib/prisma-adapter.ts`), y compris dans les scripts de seed |
 | `AUTH_SECRET` | oui | Secret NextAuth, 32 caractères minimum (`openssl rand -base64 48`). Il sert aussi de clé aux empreintes d'adresse du registre des effacements (#516) : avant de le changer, exporter ce registre (`scripts/erasure-register.ts export`), car les empreintes antérieures ne permettront plus de retrouver une fiche par son adresse ; le rejeu par identifiant fonctionne toujours. Voir [rgpd/procedure-effacement.md](rgpd/procedure-effacement.md). |
 | `AUTH_URL` | en production | URL publique, requise par NextAuth v5 derrière un reverse proxy |
 | `AUTH_TRUST_HOST` | en production | `true` derrière un reverse proxy |

@@ -4,7 +4,7 @@ import type { Page, Locator } from "playwright"
 import { execFile } from "node:child_process"
 import { promisify } from "node:util"
 import { PrismaClient } from "../../src/generated/prisma/client"
-import { PrismaPg } from "@prisma/adapter-pg"
+import { pgAdapter } from "../../src/lib/prisma-adapter"
 import { registrationToken } from "../../src/lib/token-vault"
 import { readFile, writeFile } from "node:fs/promises"
 import path from "node:path"
@@ -19,7 +19,7 @@ export async function recordLastMinute(options: { page: Page; base: string; dire
   const proof = JSON.parse(await readFile(path.join(directory, "functional-checks.json"), "utf8"))
   const mailProof = JSON.parse(await readFile(path.join(directory, "mail-checks.json"), "utf8"))
   if (!proof.priorAttendancePreserved || !proof.actualCausalJournal || !mailProof.schedulePendingExcluded) throw new Error("Actual functional and SMTP preflight required")
-  const db = new PrismaClient({ adapter: new PrismaPg({ connectionString: process.env.DATABASE_URL }) })
+  const db = new PrismaClient({ adapter: pgAdapter(process.env.DATABASE_URL) })
   const eventId = "video-last-minute-event", url = `${base}/admin/events/${eventId}`
   const go = async (target: string) => { await page.goto(target); await settle(page) }
   const write = async (field: Locator, value: string) => { await tap(page, field); await field.press("ControlOrMeta+A"); await field.pressSequentially(value, { delay: 110 }) }

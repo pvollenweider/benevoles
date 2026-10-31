@@ -4,13 +4,13 @@ import assert from "node:assert/strict"
 import { chromium } from "playwright"
 import { launchVideoBrowser } from "../lib/public-hosts"
 import { PrismaClient } from "../../src/generated/prisma/client"
-import { PrismaPg } from "@prisma/adapter-pg"
+import { pgAdapter } from "../../src/lib/prisma-adapter"
 import { registrationToken } from "../../src/lib/token-vault"
 async function main() {
   assert.equal(process.env.VIDEO_BASE_URL, "http://localhost:43102")
   const url = new URL(process.env.DATABASE_URL ?? "")
   assert(url.pathname === "/benevoles_video" && url.port === "45433" && ["localhost", "127.0.0.1"].includes(url.hostname))
-  const db = new PrismaClient({ adapter: new PrismaPg({ connectionString: process.env.DATABASE_URL }) })
+  const db = new PrismaClient({ adapter: pgAdapter(process.env.DATABASE_URL) })
   const browser = await launchVideoBrowser(chromium)
   try {
     const row = await db.registration.findUniqueOrThrow({ where: { id: "video-last-minute-registration-0" } })

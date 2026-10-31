@@ -2,7 +2,7 @@
 // SPDX-License-Identifier: AGPL-3.0-only
 
 import { describe, it, expect } from "vitest"
-import { coverageLine, droppedSentence, fillMissingTargets, formatHours, ANOTHER_HINT, anotherOffer, anotherReplaceRecap, formToConfig, historyEntry, NO_OTHER_SENTENCE, ONLY_ONE_SENTENCE, runLine, sameAsSentence, parseHours, posteChoicesFrom, replacedDraftCount, rotationSummary, runStateLabel, runTone, scopeShiftIds, summaryProblems, withoutProblem, type PageShift, type ProposalForm } from "../proposal-view"
+import { coverageLine, droppedSentence, expiredSentence, LEASE_EXPIRED_SENTENCE, QUEUE_EXPIRED_SENTENCE, fillMissingTargets, formatHours, ANOTHER_HINT, anotherOffer, anotherReplaceRecap, formToConfig, historyEntry, NO_OTHER_SENTENCE, ONLY_ONE_SENTENCE, runLine, sameAsSentence, parseHours, posteChoicesFrom, replacedDraftCount, rotationSummary, runStateLabel, runTone, scopeShiftIds, summaryProblems, withoutProblem, type PageShift, type ProposalForm } from "../proposal-view"
 
 // The page « Proposition d'affectations » (#1172): the form turned into a run's configuration.
 const shifts: PageShift[] = [
@@ -109,6 +109,13 @@ describe("helpers", () => {
     expect(runStateLabel({ status: "queued", outcome: null })).toBe("En attente")
     expect(runStateLabel({ status: "running", outcome: null })).toBe("Calcul en cours")
     expect(runStateLabel({ status: "interrupted", outcome: "complete" })).toBe("Calcul arrêté avant la fin")
+    expect(runStateLabel({ status: "interrupted", outcome: null, stopReason: "lease_expired" })).toBe("Calcul arrêté avant la fin")
+    expect(runStateLabel({ status: "interrupted", outcome: null, stopReason: "queue_expired" })).toBe("Calcul non démarré")
+    expect(historyEntry({ ordinal: 2, status: "interrupted", outcome: null, stopReason: "queue_expired", writtenAt: null, writtenCount: 0 }, "31 octobre")).toMatch(/calcul non démarré/)
+    expect(expiredSentence("lease_expired")).toBe(LEASE_EXPIRED_SENTENCE)
+    expect(expiredSentence("queue_expired")).toBe(QUEUE_EXPIRED_SENTENCE)
+    expect(expiredSentence("cancelled")).toBeNull()
+    expect(expiredSentence(null)).toBeNull()
     expect(runStateLabel({ status: "finished", outcome: "complete" })).toBe("Toutes les places couvertes")
     expect(runStateLabel({ status: "finished", outcome: "incomplete" })).toBe("Couverture partielle")
     expect(runStateLabel({ status: "finished", outcome: "proven_impossible" })).toBe("Couverture complète impossible")

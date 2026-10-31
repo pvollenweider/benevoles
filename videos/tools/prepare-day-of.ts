@@ -3,7 +3,7 @@
 /** Only this exact independent synthetic organization; no reset of default or other fixtures. */
 import assert from "node:assert/strict"
 import { PrismaClient } from "../../src/generated/prisma/client"
-import { PrismaPg } from "@prisma/adapter-pg"
+import { pgAdapter } from "../../src/lib/prisma-adapter"
 import { registrationToken } from "../../src/lib/token-vault"
 import { mkdir, writeFile } from "node:fs/promises"
 import path from "node:path"
@@ -15,7 +15,7 @@ async function main() {
   assert(process.argv.slice(2).every(arg => arg === "--reset-owned") && process.argv.length <= 3)
   const url = new URL(process.env.DATABASE_URL ?? "")
   assert(["localhost", "127.0.0.1"].includes(url.hostname) && url.port === "45433" && url.pathname === "/benevoles_video")
-  const db = new PrismaClient({ adapter: new PrismaPg({ connectionString: url.href }) })
+  const db = new PrismaClient({ adapter: pgAdapter(url.href) })
   const orgId = "video-dayof", eventId = "video-dayof-event-pointage", liveId = "video-dayof-event-live"
   try {
     const existing = await db.organization.findUnique({ where: { id: orgId }, include: { volunteers: true, admins: true, events: { include: { shifts: true, registrations: true, sectorLeaders: true } } } })

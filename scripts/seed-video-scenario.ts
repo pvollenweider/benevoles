@@ -3,7 +3,7 @@
 
 /** Focused, idempotent datasets for the video masterclass. Never run outside the video DB. */
 import { PrismaClient } from "../src/generated/prisma/client"
-import { PrismaPg } from "@prisma/adapter-pg"
+import { pgAdapter } from "../src/lib/prisma-adapter"
 import { registrationToken, linkToken } from "../src/lib/token-vault"
 import { workloadWarnings } from "../src/lib/workload"
 import { staffingSummary } from "../src/lib/staffing"
@@ -18,7 +18,7 @@ if (!process.env.DATABASE_URL?.includes("benevoles_video")) {
   throw new Error("Refusing to seed a database whose URL does not contain benevoles_video")
 }
 
-const prisma = new PrismaClient({ adapter: new PrismaPg({ connectionString: process.env.DATABASE_URL }) })
+const prisma = new PrismaClient({ adapter: pgAdapter(process.env.DATABASE_URL) })
 
 async function freshOrganization() {
   const organizationId = "default"

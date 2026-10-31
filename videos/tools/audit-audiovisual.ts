@@ -9,7 +9,7 @@ import path from "node:path"
 import { promisify } from "node:util"
 import { loadManifest, videoDir, type Timeline } from "../lib/manifest"
 import { PrismaClient } from "../../src/generated/prisma/client"
-import { PrismaPg } from "@prisma/adapter-pg"
+import { pgAdapter } from "../../src/lib/prisma-adapter"
 import assert from "node:assert/strict"
 import { pathToFileURL } from "node:url"
 import { ROSTER_SURNAMES, surnameOf } from "../lib/fixture-names"
@@ -68,7 +68,7 @@ async function main() {
     assert(["localhost", "127.0.0.1", "[::1]"].includes(url.hostname) && url.port === "45433" && url.pathname === "/benevoles_video", "Member review requires isolated video database before connection")
   }
   const currentMerge = manifest.id === "SHIFT_ROSTER_VISIBILITY" ? await (await import("../lib/current-product-prisma")).loadCurrentVideoPrisma("http://localhost:43102") : manifest.id === "MEMBERS_DUPLICATES_MERGE" ? await (await import("../lib/current-product-prisma")).loadCurrentVideoPrisma("http://localhost:43110") : manifest.id === "EVENT_QUESTIONS" ? await (await import("../lib/current-product-prisma")).loadCurrentVideoPrisma("http://localhost:43112") : manifest.id === "VOLUNTEER_HOURS_CERTIFICATE" ? await (await import("../lib/current-product-prisma")).loadCurrentVideoPrisma("http://localhost:43114") : manifest.id === "DATA_EXPORTS_ARCHIVES" ? await (await import("../lib/current-product-prisma")).loadCurrentVideoPrisma("http://localhost:43102") : null
-  const db = currentMerge?.db ?? new PrismaClient({ adapter: new PrismaPg({ connectionString: process.env.DATABASE_URL }) })
+  const db = currentMerge?.db ?? new PrismaClient({ adapter: pgAdapter(process.env.DATABASE_URL) })
   try {
     if (memberDemoVideos.includes(manifest.id)) {
       const fixture = await db.organization.findUniqueOrThrow({ where: { id: "default" }, include: { volunteers: true, admins: true, events: { include: { sectorLeaders: true, registrations: { include: { volunteer: true } } } } } })

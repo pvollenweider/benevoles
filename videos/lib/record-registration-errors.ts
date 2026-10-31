@@ -6,7 +6,7 @@ import { readFile, writeFile } from "node:fs/promises"
 import path from "node:path"
 import type { Locator, Page } from "playwright"
 import { PrismaClient } from "../../src/generated/prisma/client"
-import { PrismaPg } from "@prisma/adapter-pg"
+import { pgAdapter } from "../../src/lib/prisma-adapter"
 import { linkToken } from "../../src/lib/token-vault"
 import { loadManifest, type AudioMetadata } from "./manifest"
 import { prepareRegistrationErrorFixture, registrationErrorFixtureIp } from "./prepare-registration-error-fixture"
@@ -14,7 +14,7 @@ import type { Cue } from "./sentence-timing"
 import { surnameOf } from "./fixture-names"
 
 const eventId = "video-errors-event", publicPath = "/atelier-inscription?org=formation-erreurs"
-function database() { return new PrismaClient({ adapter: new PrismaPg({ connectionString: process.env.DATABASE_URL }) }) }
+function database() { return new PrismaClient({ adapter: pgAdapter(process.env.DATABASE_URL) }) }
 
 export async function validateRegistrationErrorNarration(directory: string) {
   const manifest = await loadManifest("VOLUNTEER_CONFIRMATION_ERRORS")

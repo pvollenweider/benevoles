@@ -5,7 +5,7 @@ import assert from "node:assert/strict"
 import { readFile, writeFile } from "node:fs/promises"
 import path from "node:path"
 import { PrismaClient } from "../../src/generated/prisma/client"
-import { PrismaPg } from "@prisma/adapter-pg"
+import { pgAdapter } from "../../src/lib/prisma-adapter"
 import { isFixtureSurname } from "../lib/fixture-names"
 
 async function main() {
@@ -13,7 +13,7 @@ async function main() {
   assert(["localhost", "127.0.0.1"].includes(url.hostname) && url.port === "45433" && url.pathname === "/benevoles_video", "Dedicated local video database required")
   const directory = path.resolve("videos/output/event-activity-log")
   const preparation = JSON.parse(await readFile(path.join(directory, "preparation.json"), "utf8"))
-  const db = new PrismaClient({ adapter: new PrismaPg({ connectionString: url.toString() }) })
+  const db = new PrismaClient({ adapter: pgAdapter(url.toString()) })
   try {
     const events = await db.event.findMany({ where: { id: { in: [preparation.eventId, preparation.baselineWitnessId] } }, include: { registrations: { include: { volunteer: true } } } })
     assert.equal(events.length, 2)

@@ -5,7 +5,7 @@
 import { chromium } from "playwright"
 import { launchVideoBrowser, videoAdminEmail } from "../lib/public-hosts"
 import { PrismaClient } from "../../src/generated/prisma/client"
-import { PrismaPg } from "@prisma/adapter-pg"
+import { pgAdapter } from "../../src/lib/prisma-adapter"
 import { addMinutes } from "../../src/lib/gantt-utils"
 import { openPayload } from "../../src/lib/notifications/outbox"
 import { mkdir, writeFile } from "node:fs/promises"
@@ -13,7 +13,7 @@ import { mkdir, writeFile } from "node:fs/promises"
 async function main() {
   const base = process.env.VIDEO_BASE_URL ?? "http://localhost:43100"
   if (!["localhost", "127.0.0.1"].includes(new URL(base).hostname) || !process.env.DATABASE_URL?.includes("benevoles_video")) throw new Error("Only local video fixtures are allowed")
-  const db = new PrismaClient({ adapter: new PrismaPg({ connectionString: process.env.DATABASE_URL }) })
+  const db = new PrismaClient({ adapter: pgAdapter(process.env.DATABASE_URL) })
   const browser = await launchVideoBrowser(chromium)
   try {
     const page = await browser.newPage()

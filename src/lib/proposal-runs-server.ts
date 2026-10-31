@@ -30,9 +30,11 @@ import { lockVolunteerRows, lockWorkloadShared } from "./workload-guard"
  * Execution (Codex 2026-10-30): in the Node process that took the request, after the response
  * (`after()` in the route), in cooperative slices that yield to the event loop, at most
  * `MAX_RUNNING_PER_PROCESS` at once; others wait « queued » and are claimed when a slot frees. An
- * attempt holds a lease (`leaseToken`, `leaseExpiresAt` in database time), renewed every few seconds
- * only while still current; a lost or expired lease ends the attempt without writing anything. Any
- * read or launch on the event turns an expired run into « recherche interrompue » (lease_expired).
+ * attempt holds a lease (`leaseToken`, `leaseExpiresAt` in database time, read in UTC sessions:
+ * src/lib/prisma-adapter.ts), renewed every few seconds only while still current, through the
+ * report and the write too; a lost or expired lease ends the attempt without writing anything. Any
+ * read or launch on the event turns an expired run into « Calcul arrêté avant la fin » (lease_expired),
+ * and a run still waiting after `QUEUE_MAX_AGE_SECONDS` into « Calcul non démarré » (queue_expired).
  * No checkpoint: a run lost with its process is retried by the organiser.
  *
  * Writing (one transaction, the global lock order): the event's shared workload lock, the event
@@ -95,7 +97,7 @@ export async function expireRuns(db: Pick<Db, "$executeRaw">, eventId?: string):
     UPDATE "ProposalRun" SET status = 'interrupted', "stopReason" = 'lease_expired', "leaseToken" = NULL, "finishedAt" = now(), "updatedAt" = now()
     WHERE status = 'running' AND "leaseExpiresAt" < now() AND (${scope}::text IS NULL OR "eventId" = ${scope})`
   const b = await db.$executeRaw`
-    UPDATE "ProposalRun" SET status = 'interrupted', "stopReason" = 'lease_expired', "finishedAt" = now(), "updatedAt" = now()
+    UPDATE "ProposalRun" SET status = 'interrupted', "stopReason" = 'queue_expired', "finishedAt" = now(), "updatedAt" = now()
     WHERE status = 'queued' AND "createdAt" < now() - make_interval(secs => ${QUEUE_MAX_AGE_SECONDS}) AND (${scope}::text IS NULL OR "eventId" = ${scope})`
   return a + b
 }
@@ -254,6 +256,38 @@ async function heartbeat(c: Claimed, progress: object): Promise<{ cancelRequeste
   return rows[0] ? { cancelRequested: rows[0].cancelRequestedAt != null } : null
 }
 
+/** Renews the lease alone (no progress to report); false when the attempt is no longer current. */
+async function renewLease(c: Claimed): Promise<boolean> {
+  const n = await prisma.$executeRaw`
+    UPDATE "ProposalRun" SET "leaseExpiresAt" = clock_timestamp() + make_interval(secs => ${LEASE_SECONDS}), "updatedAt" = clock_timestamp()
+    WHERE id = ${c.id} AND "leaseToken" = ${c.leaseToken} AND status = 'running' AND "leaseExpiresAt" > clock_timestamp()`
+  return n > 0
+}
+
+/**
+ * Ends an attempt with its lease kept alive until the end: renewed once first (the search's last
+ * heartbeat can be seconds old, and the report was built synchronously since), then every heartbeat
+ * while the write waits for its locks, one renewal at a time, so a slow tail never silently drops a
+ * finished result. Nothing is ended when the lease is already lost (the next read reports it).
+ * Exported for tests.
+ */
+export async function finishWithLease(c: Claimed, finish: () => Promise<void>): Promise<boolean> {
+  if (!(await renewLease(c))) return false
+  let inFlight = false
+  const timer = setInterval(() => {
+    if (inFlight) return
+    inFlight = true
+    // A renewal waiting on the run row locked by the write finds it ended, and changes nothing.
+    renewLease(c).catch((e) => console.error("proposal lease renewal failed", e)).finally(() => { inFlight = false })
+  }, HEARTBEAT_MS)
+  try {
+    await finish()
+  } finally {
+    clearInterval(timer)
+  }
+  return true
+}
+
 /** At most this many seeds for one « Proposer une autre répartition », within the run's deadline. */
 export const MAX_ALTERNATIVE_ATTEMPTS = 20
 
@@ -307,7 +341,8 @@ export async function executeRun(c: Claimed, opts: { deadlineMs?: number; wait?:
   if (!run.alternative) {
     const done = await attempt(input.seed)
     if (!done || lost) return
-    await completeRun(db, c, done.outcome, buildReport(done.search.model, done.outcome))
+    const report = buildReport(done.search.model, done.outcome)
+    await finishWithLease(c, () => completeRun(db, c, done.outcome, report))
     return
   }
 
@@ -338,7 +373,8 @@ export async function executeRun(c: Claimed, opts: { deadlineMs?: number; wait?:
   if (lost) return
   if (found.kind === "found") {
     const { outcome, search } = found.value
-    await completeRun(db, c, outcome, buildReport(search.model, outcome), { seed: found.seed, snapshot: { ...input, seed: found.seed, diversify: true }, seedsTried: found.seedsTried })
+    const report = buildReport(search.model, outcome)
+    await finishWithLease(c, () => completeRun(db, c, outcome, report, { seed: found.seed, snapshot: { ...input, seed: found.seed, diversify: true }, seedsTried: found.seedsTried }))
     return
   }
   // A failed search already ended the run as failed.
@@ -367,10 +403,16 @@ type RunRow = {
   createdById: string | null; configuration: unknown; replacement: unknown; result: unknown; written: unknown; leaseValid: boolean
 }
 
-async function lockRun(tx: Tx, runId: string): Promise<RunRow | null> {
+/**
+ * Locks the run row, last in the global order, and says whether its lease still holds at that
+ * moment: `clock_timestamp()`, not `now()`, which is the start of the transaction, before every
+ * lock wait (a lease that ran out while the write waited for its locks would still pass). Exported
+ * for tests.
+ */
+export async function lockRun(tx: Tx, runId: string): Promise<RunRow | null> {
   const rows = await tx.$queryRaw<RunRow[]>`
     SELECT id, "eventId", status, "leaseToken", "cancelRequestedAt", "writtenAt", "createdById", configuration, replacement, result, written,
-      ("leaseExpiresAt" IS NOT NULL AND "leaseExpiresAt" > now()) AS "leaseValid"
+      ("leaseExpiresAt" IS NOT NULL AND "leaseExpiresAt" > clock_timestamp()) AS "leaseValid"
     FROM "ProposalRun" WHERE id = ${runId} FOR UPDATE`
   return rows[0] ?? null
 }

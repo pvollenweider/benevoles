@@ -19,7 +19,7 @@
  */
 
 import { PrismaClient } from "../src/generated/prisma/client"
-import { PrismaPg } from "@prisma/adapter-pg"
+import { pgAdapter } from "../src/lib/prisma-adapter"
 import { linkToken, registrationToken } from "../src/lib/token-vault"
 
 export const DEMO_EVENT_SLUG = "fete-du-village"
@@ -34,7 +34,7 @@ export const DEMO_TOKENS = {
   leader: "demo-leader-buvette-0001",
 } as const
 
-const prisma = new PrismaClient({ adapter: new PrismaPg({ connectionString: process.env.DATABASE_URL! }) })
+const prisma = new PrismaClient({ adapter: pgAdapter(process.env.DATABASE_URL!) })
 
 const DAY = 86_400_000
 const today = new Date(Date.UTC(new Date().getUTCFullYear(), new Date().getUTCMonth(), new Date().getUTCDate()))

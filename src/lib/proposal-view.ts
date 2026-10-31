@@ -146,6 +146,7 @@ export function runStateLabel(run: { status: string; outcome: string | null; sto
   if (run.status === "finished" && run.stopReason === "no_other") return "Aucune autre répartition"
   if (run.status === "running") return "Calcul en cours"
   if (run.status === "failed") return "Échec du calcul"
+  if (run.status === "interrupted" && run.stopReason === "queue_expired") return "Calcul non démarré"
   if (run.status === "interrupted") return "Calcul arrêté avant la fin"
   return run.outcome === "complete" ? "Toutes les places couvertes" : run.outcome === "proven_impossible" ? "Couverture complète impossible" : "Couverture partielle"
 }
@@ -198,6 +199,20 @@ export const ANOTHER_HINT = "Même périmètre et mêmes réglages : rechercher
 
 /** Said on an alternative whose search found nothing different: nothing written (coordinator review 2026-10-31). */
 export const NO_OTHER_SENTENCE = "Aucune autre répartition trouvée avec ces données et ces réglages. Vos brouillons n'ont pas changé."
+
+/**
+ * Said on a run whose attempt stopped renewing its lease (lease_expired): its process was lost,
+ * stalled or too slow to finish. The cause is not known, so none is named.
+ */
+export const LEASE_EXPIRED_SENTENCE = "Le calcul s'est arrêté avant la fin ; rien n'a été écrit dans les brouillons. Relancez-le depuis « Nouvelle proposition »."
+
+/** Said on a run that waited too long for a place and never started (queue_expired). */
+export const QUEUE_EXPIRED_SENTENCE = "Le calcul n'a pas pu démarrer ; rien n'a été écrit dans les brouillons. Relancez-le depuis « Nouvelle proposition »."
+
+/** Said when a run stopped without a result of its own (no report): why, and what to do. */
+export function expiredSentence(stopReason: string | null | undefined): string | null {
+  return stopReason === "lease_expired" ? LEASE_EXPIRED_SENTENCE : stopReason === "queue_expired" ? QUEUE_EXPIRED_SENTENCE : null
+}
 
 /** Said instead of the button when the search proved no other assignment covers as many seats. */
 export const ONLY_ONE_SENTENCE = "Aucune autre répartition ne peut couvrir autant de places avec ces données et ces règles."

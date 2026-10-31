@@ -16,12 +16,14 @@ vi.mock("next/server", async (orig) => ({ ...(await orig<typeof import("next/ser
 vi.mock("@/lib/notifications", () => ({ sendNotification: vi.fn().mockResolvedValue({ ok: true }) }))
 vi.mock("@/lib/notification-helpers", () => ({ sendMemberInvite: vi.fn().mockResolvedValue({ ok: true }) }))
 
+import { PrismaClient } from "@/generated/prisma/client"
 import { prisma } from "@/lib/prisma"
+import { pgAdapter } from "@/lib/prisma-adapter"
 import { getOrgClient } from "@/lib/prisma-org"
 import { saveAvailabilityAnswers } from "@/lib/event-availability-data"
 import { createDraft, publishDrafts, reviewDraft, setDraftLock } from "@/lib/draft-assignments-server"
 import { proposalConfigSchema, type ProposalConfig } from "@/lib/proposal-config"
-import { cancelRun, claimNext, drainProposalRuns, executeRun, expireRuns, launchProposal, listRuns, readRun, writeRunResult } from "@/lib/proposal-runs-server"
+import { cancelRun, claimNext, drainProposalRuns, executeRun, expireRuns, finishWithLease, launchProposal, listRuns, lockRun, readRun, writeRunResult } from "@/lib/proposal-runs-server"
 import { saveTargets } from "@/lib/proposal-targets-server"
 import { loadProposalPage } from "@/lib/proposal-page-data"
 import { runMemberMerge } from "@/lib/member-merge-transaction"
@@ -288,12 +290,95 @@ describe.skipIf(!url)("generated proposals on Postgres (#1172)", () => {
       expect(await prisma.proposalRun.findUniqueOrThrow({ where: { id } })).toMatchObject({ status: "interrupted", stopReason: "lease_expired" })
     })
 
-    it("a run left queued too long is given up", async () => {
+    it("a run left queued too long is given up: « Calcul non démarré » (queue_expired)", async () => {
       const { e, c } = await team()
       const id = await launch(e.id, c)
       await prisma.$executeRaw`UPDATE "ProposalRun" SET "createdAt" = now() - interval '1 hour' WHERE id = ${id}`
       await expireRuns(db(), e.id)
-      expect(await prisma.proposalRun.findUniqueOrThrow({ where: { id } })).toMatchObject({ status: "interrupted", stopReason: "lease_expired" })
+      expect(await prisma.proposalRun.findUniqueOrThrow({ where: { id } })).toMatchObject({ status: "interrupted", stopReason: "queue_expired", leaseToken: null })
+    })
+  })
+
+  // Columns are TIMESTAMP without time zone, written in UTC by Prisma; raw SQL compares them with
+  // now(). On a Postgres whose time zone is not UTC, a just-created run was expired as « waiting too
+  // long » 6 ms after it was created. CI runs this suite on a database set to Europe/Zurich.
+  describe("database time zone", () => {
+    it("every session of the app's client reads and writes UTC", async () => {
+      const rows = await prisma.$queryRaw<{ tz: string }[]>`SELECT current_setting('TimeZone') AS tz`
+      expect(rows[0].tz).toBe("UTC")
+      // Inside a transaction too (another pooled connection).
+      const inTx = await prisma.$transaction((tx) => tx.$queryRaw<{ tz: string }[]>`SELECT current_setting('TimeZone') AS tz`)
+      expect(inTx[0].tz).toBe("UTC")
+    })
+
+    it("stays in UTC when the connection string asks for another zone in its own options", async () => {
+      const u = new URL(url!)
+      u.searchParams.set("options", "-c TimeZone=Europe/Zurich")
+      const other = new PrismaClient({ adapter: pgAdapter(u.toString()) })
+      try {
+        const rows = await other.$queryRaw<{ tz: string }[]>`SELECT current_setting('TimeZone') AS tz`
+        expect(rows[0].tz).toBe("UTC")
+      } finally {
+        await other.$disconnect()
+      }
+    })
+
+    it("a just-launched run stays queued through expiry, and its times agree with the database clock", async () => {
+      const { e, c } = await team()
+      const id = await launch(e.id, c)
+      expect(await expireRuns(db(), e.id)).toBe(0)
+      expect(await prisma.proposalRun.findUniqueOrThrow({ where: { id } })).toMatchObject({ status: "queued", stopReason: null })
+      // createdAt (written by Prisma) and now() (raw SQL) are seconds apart, not a time zone offset.
+      const [{ lag }] = await prisma.$queryRaw<{ lag: number }[]>`SELECT abs(extract(epoch FROM (now()::timestamp - "createdAt")))::float8 AS lag FROM "ProposalRun" WHERE id = ${id}`
+      expect(lag).toBeLessThan(60)
+      const claimed = (await claimNext())!
+      expect(claimed.id).toBe(id)
+      const run = await prisma.proposalRun.findUniqueOrThrow({ where: { id } })
+      expect(Math.abs(run.startedAt!.getTime() - Date.now())).toBeLessThan(60_000)
+      expect(run.leaseExpiresAt!.getTime() - Date.now()).toBeGreaterThan(0)
+    })
+  })
+
+  describe("lease through the end of an attempt", () => {
+    it("the write's fence reads the clock when it locks the run, not the start of its transaction", async () => {
+      const { e, c } = await team()
+      const id = await launch(e.id, c)
+      await claimNext()
+      await prisma.$executeRaw`UPDATE "ProposalRun" SET "leaseExpiresAt" = clock_timestamp() + interval '400 milliseconds' WHERE id = ${id}`
+      const valid = await prisma.$transaction(async (tx) => {
+        await tx.$queryRaw`SELECT now()`
+        await tx.$executeRaw`SELECT pg_sleep(0.8)`
+        return (await lockRun(tx as never, id))!.leaseValid
+      })
+      expect(valid).toBe(false)
+    })
+
+    it("renews the lease before the write and while it waits, so a slow end keeps its result", async () => {
+      const { e, c } = await team()
+      const id = await launch(e.id, c)
+      const claimed = (await claimNext())!
+      // The last heartbeat almost out of date when the search ends.
+      await prisma.$executeRaw`UPDATE "ProposalRun" SET "leaseExpiresAt" = clock_timestamp() + interval '300 milliseconds' WHERE id = ${id}`
+      const leaseAt = async () => (await prisma.proposalRun.findUniqueOrThrow({ where: { id }, select: { leaseExpiresAt: true } })).leaseExpiresAt!.getTime()
+      let first = 0, later = 0
+      const ran = await finishWithLease(claimed, async () => {
+        first = await leaseAt()
+        await new Promise((r) => setTimeout(r, 2_600))
+        later = await leaseAt()
+      })
+      expect(ran).toBe(true)
+      expect(first - Date.now()).toBeGreaterThan(10_000)
+      expect(later).toBeGreaterThan(first)
+    })
+
+    it("ends nothing when the lease is already lost", async () => {
+      const { e, c } = await team()
+      const id = await launch(e.id, c)
+      const claimed = (await claimNext())!
+      await prisma.$executeRaw`UPDATE "ProposalRun" SET "leaseExpiresAt" = clock_timestamp() - interval '1 second' WHERE id = ${id}`
+      const finish = vi.fn(async () => {})
+      expect(await finishWithLease(claimed, finish)).toBe(false)
+      expect(finish).not.toHaveBeenCalled()
     })
   })
 

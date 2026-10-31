@@ -2360,8 +2360,8 @@ async function main() {
         await page.getByRole("heading", { name: "Toutes tes inscriptions ont été annulées" }).waitFor()
         if (!process.env.DATABASE_URL?.includes("benevoles_video")) throw new Error("Refusing personal state verification outside video DB")
         const { PrismaClient } = await import("../../src/generated/prisma/client")
-        const { PrismaPg } = await import("@prisma/adapter-pg")
-        const verificationDb = new PrismaClient({ adapter: new PrismaPg({ connectionString: process.env.DATABASE_URL }) })
+        const { pgAdapter } = await import("../../src/lib/prisma-adapter")
+        const verificationDb = new PrismaClient({ adapter: pgAdapter(process.env.DATABASE_URL) })
         try {
           const remaining = await verificationDb.registration.count({ where: {
             eventId: featureEventId, volunteer: { email: "camille.rochat@example.org" },
@@ -2504,9 +2504,9 @@ async function main() {
       const { recordDayOf } = await import("../lib/record-day-of")
       const { verifyDayOfReviewFixture } = await import("../lib/verify-dayof-review-fixture")
       const { PrismaClient } = await import("../../src/generated/prisma/client")
-      const { PrismaPg } = await import("@prisma/adapter-pg")
+      const { pgAdapter } = await import("../../src/lib/prisma-adapter")
       if (baseUrl !== "http://localhost:43108") throw new Error("Attendance requires its independent Jour J server")
-      const db = new PrismaClient({ adapter: new PrismaPg({ connectionString: process.env.DATABASE_URL }) })
+      const db = new PrismaClient({ adapter: pgAdapter(process.env.DATABASE_URL) })
       try {
         await verifyDayOfReviewFixture(db)
         await recordAttendance({ page, base: baseUrl, eventId: featureEventId, directory: dir, title: manifest.title, personPrefix: "video-dayof-attendance-person-", scene, tap, settle })
@@ -2534,9 +2534,9 @@ async function main() {
     } else if (slug === "targeted-messages") {
       if (!process.env.DATABASE_URL?.includes("benevoles_video")) throw new Error("Messages require isolated video DB")
       const { PrismaClient } = await import("../../src/generated/prisma/client")
-      const { PrismaPg } = await import("@prisma/adapter-pg")
+      const { pgAdapter } = await import("../../src/lib/prisma-adapter")
       const { selectRecipients, selectInvitedWithoutShift } = await import("../../src/lib/targeted-message")
-      const db = new PrismaClient({ adapter: new PrismaPg({ connectionString: process.env.DATABASE_URL }) })
+      const db = new PrismaClient({ adapter: pgAdapter(process.env.DATABASE_URL) })
       const url = `${baseUrl}/admin/events/${featureEventId}/message`
       const templatesUrl = `${baseUrl}/admin/settings/message-templates`
       const modelName = "Briefing avant le créneau"
@@ -2713,9 +2713,9 @@ async function main() {
     } else if (slug === "staffing-gaps") {
       if (!process.env.DATABASE_URL?.includes("benevoles_video")) throw new Error("Staffing checks require isolated video DB")
       const { PrismaClient } = await import("../../src/generated/prisma/client")
-      const { PrismaPg } = await import("@prisma/adapter-pg")
+      const { pgAdapter } = await import("../../src/lib/prisma-adapter")
       const { staffingSummary } = await import("../../src/lib/staffing")
-      const db = new PrismaClient({ adapter: new PrismaPg({ connectionString: process.env.DATABASE_URL }) })
+      const db = new PrismaClient({ adapter: pgAdapter(process.env.DATABASE_URL) })
       const staffingUrl = `${baseUrl}/admin/events/${featureEventId}/staffing`
       const readSummary = async () => {
         const shifts = await db.shift.findMany({ where: { eventId: featureEventId, status: { not: "cancelled" } }, include: { registrations: true } })
@@ -2840,8 +2840,8 @@ async function main() {
     } else if (slug === "registrations-place-member") {
       if (!process.env.DATABASE_URL?.includes("benevoles_video")) throw new Error("Placement requires isolated video database")
       const { PrismaClient } = await import("../../src/generated/prisma/client")
-      const { PrismaPg } = await import("@prisma/adapter-pg")
-      const db = new PrismaClient({ adapter: new PrismaPg({ connectionString: process.env.DATABASE_URL }) })
+      const { pgAdapter } = await import("../../src/lib/prisma-adapter")
+      const db = new PrismaClient({ adapter: pgAdapter(process.env.DATABASE_URL) })
       const member = await db.volunteer.findFirstOrThrow({ where: { organizationId: "default", email: "sarah.jaquet@example.org" } })
       const shiftIds = (await db.shift.findMany({ where: { eventId: featureEventId, OR: [{ roleName: "Accueil", startTime: "15:00" }, { roleName: "Démontage", startTime: "15:00" }] } })).map(s => s.id)
       const choose = async (name: string, option: RegExp) => {
@@ -2922,8 +2922,8 @@ async function main() {
     } else if (slug === "registrations-management") {
       if (!process.env.DATABASE_URL?.includes("benevoles_video")) throw new Error("Registration checks require isolated video DB")
       const { PrismaClient } = await import("../../src/generated/prisma/client")
-      const { PrismaPg } = await import("@prisma/adapter-pg")
-      const db = new PrismaClient({ adapter: new PrismaPg({ connectionString: process.env.DATABASE_URL }) })
+      const { pgAdapter } = await import("../../src/lib/prisma-adapter")
+      const db = new PrismaClient({ adapter: pgAdapter(process.env.DATABASE_URL) })
       const checks: Record<string, unknown> = {}
       const adminUrl = `${baseUrl}/admin/events/${featureEventId}/registrations`
       const search = () => page.getByRole("textbox", { name: "Rechercher un bénévole", exact: true })
@@ -3175,9 +3175,9 @@ async function main() {
       const initialSummary = await summary()
       if (!process.env.DATABASE_URL?.includes("benevoles_video")) throw new Error("Reminder checks require isolated video DB")
       const { PrismaClient } = await import("../../src/generated/prisma/client")
-      const { PrismaPg } = await import("@prisma/adapter-pg")
+      const { pgAdapter } = await import("../../src/lib/prisma-adapter")
       const { linkToken } = await import("../../src/lib/token-vault")
-      const db = new PrismaClient({ adapter: new PrismaPg({ connectionString: process.env.DATABASE_URL }) })
+      const db = new PrismaClient({ adapter: pgAdapter(process.env.DATABASE_URL) })
       const originalInvites = await db.memberInvite.findMany({ where: { eventId: featureEventId }, select: { id: true, volunteerId: true, volunteer: { select: { email: true } }, ...linkToken.select } })
       const originalTokens = new Map(originalInvites.map(i => [i.id, linkToken.reveal(i)]))
       await db.$disconnect()
@@ -3492,9 +3492,9 @@ async function main() {
         const dbUrl = new URL(process.env.DATABASE_URL ?? "")
         if (!["localhost", "127.0.0.1"].includes(dbUrl.hostname) || dbUrl.port !== "45433" || dbUrl.pathname !== "/benevoles_video") throw new Error("Import ownership requires isolated video DB")
         const { PrismaClient } = await import("../../src/generated/prisma/client")
-        const { PrismaPg } = await import("@prisma/adapter-pg")
+        const { pgAdapter } = await import("../../src/lib/prisma-adapter")
         const { collectImportOwnership } = await import("../lib/member-import-ownership")
-        const ownershipDb = new PrismaClient({ adapter: new PrismaPg({ connectionString: dbUrl.href }) })
+        const ownershipDb = new PrismaClient({ adapter: pgAdapter(dbUrl.href) })
         try {
         const beforeMembers = await ownershipDb.volunteer.findMany({ where: { organizationId: "default" } })
         await at("Quand l'aperçu vous convient")
@@ -3819,8 +3819,8 @@ async function main() {
         // journeys, never the resend counters whose real limit is demonstrated above.
         if (!process.env.DATABASE_URL?.includes("benevoles_video")) throw new Error("Read-counter fixture requires isolated video DB")
         const { PrismaClient } = await import("../../src/generated/prisma/client")
-        const { PrismaPg } = await import("@prisma/adapter-pg")
-        const db = new PrismaClient({ adapter: new PrismaPg({ connectionString: process.env.DATABASE_URL }) })
+        const { pgAdapter } = await import("../../src/lib/prisma-adapter")
+        const db = new PrismaClient({ adapter: pgAdapter(process.env.DATABASE_URL) })
         try { await db.rateLimit.deleteMany({ where: { key: { startsWith: "reg-token-read:" } } }) }
         finally { await db.$disconnect() }
       }
