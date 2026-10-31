@@ -1,0 +1,108 @@
+{
+  "id": "ASSIGNMENT_PUBLICATION",
+  "slug": "assignment-publication",
+  "title": "Publier les affectations et suivre les retours",
+  "description": "Publier les brouillons, voir l'email de chaque bénévole, puis ce que vous voyez quand il annule un créneau ou corrige ses disponibilités.",
+  "language": "fr-CH",
+  "voice": "Kore",
+  "continuousNarration": true,
+  "continuousPauseTags": false,
+  "voiceStyle": "Speak with an audible smile throughout. Use a warm, friendly adult female voice, as if helping another association organizer beside you. Natural conversational French, patient pace around 130 words per minute and clear articulation. Read every provided sentence verbatim: never omit, paraphrase or summarize any words. Keep exactly the same voice identity, pitch, smile and energy from beginning to end. Never sound corporate, theatrical, childish or rushed.",
+  "viewport": {
+    "width": 1280,
+    "height": 800,
+    "deviceScaleFactor": 1
+  },
+  "chapterTitles": {
+    "pb-publish": "Publier",
+    "pb-registrations": "Les inscriptions",
+    "pb-email": "L'email des bénévoles",
+    "pb-volunteer": "Ce que voit le bénévole",
+    "pb-withdrawal": "Un désistement",
+    "pb-correct": "Corriger ses disponibilités",
+    "pb-review": "Une mission à revoir"
+  },
+  "segments": [
+    {
+      "id": "pb-welcome",
+      "transcript": "Les affectations sont prêtes en brouillon. Voyons ce que change la publication : les places prises, l'email reçu par chaque bénévole, et ce que les bénévoles peuvent faire ensuite.",
+      "fallbackDurationMs": 14430
+    },
+    {
+      "id": "pb-ready",
+      "transcript": "Aux Rencontres du Val d'Orsel, la page Affectations en brouillon compte vingt-neuf affectations en brouillon, pour onze personnes. Sur le planning, ce sont encore des brouillons : aucun bénévole ne les voit.",
+      "fallbackDurationMs": 15820
+    },
+    {
+      "id": "pb-publish",
+      "transcript": "Cliquons sur Publier les affectations. La confirmation le rappelle : les places sont prises maintenant, et chaque personne reçoit un seul email avec ses missions. Confirmons avec Publier.",
+      "fallbackDurationMs": 14320
+    },
+    {
+      "id": "pb-done",
+      "transcript": "Publication faite : vingt-neuf affectations publiées pour onze personnes, et plus aucun brouillon. Sur le planning, chaque mission est maintenant Confirmée.",
+      "fallbackDurationMs": 10740
+    },
+    {
+      "id": "pb-registrations",
+      "transcript": "Ouvrons Voir les inscriptions. La liste compte vingt-neuf inscriptions actives, chacune avec la source Affectation publiée.",
+      "fallbackDurationMs": 8080
+    },
+    {
+      "id": "pb-email",
+      "transcript": "Les emails partent une dizaine de minutes après la publication : un seul par personne, avec toutes ses missions. Voici celui d'Emma : ses deux soirées au Bar des Tilleuls, et le bouton Gérer mes inscriptions.",
+      "fallbackDurationMs": 18020
+    },
+    {
+      "id": "pb-email-noah",
+      "transcript": "Et celui de Noah : l'accueil samedi, le parking dimanche. En bas, l'email le dit : un créneau qui ne convient pas s'annule depuis le lien personnel, ou par une réponse à l'email.",
+      "fallbackDurationMs": 16630
+    },
+    {
+      "id": "pb-volunteer",
+      "transcript": "Voici ce que voit Noah s'il appuie sur Gérer mes inscriptions. Sa page Mes inscriptions liste Tous mes créneaux. Ici, pas de bouton pour changer de mission : il peut annuler un créneau, ou Écrire à l'organisation.",
+      "fallbackDurationMs": 18480
+    },
+    {
+      "id": "pb-cancel",
+      "transcript": "Le parking de dimanche ne lui convient plus : il appuie sur Annuler. Il peut laisser un mot pour l'organisation. Il écrit son message, puis il confirme avec Oui, annuler. Il lui reste son créneau de samedi.",
+      "fallbackDurationMs": 18830
+    },
+    {
+      "id": "pb-withdrawal",
+      "transcript": "De votre côté, quelques minutes plus tard, un email vous prévient du désistement : qui se désiste, de quel créneau, son message, et la place qui manque maintenant. Trouver un remplaçant mène aux membres libres à cet horaire.",
+      "fallbackDurationMs": 18590
+    },
+    {
+      "id": "pb-correct",
+      "transcript": "Emma, elle, n'est plus libre vendredi soir. Voici ce qu'elle voit avec le lien reçu pour ses disponibilités. La page le dit : elle peut les corriger, et cela ne modifie ni n'annule ses missions. Pour vendredi, elle choisit Pas disponible.",
+      "fallbackDurationMs": 20670
+    },
+    {
+      "id": "pb-saved",
+      "transcript": "Puis Enregistrer mes disponibilités. La page confirme : l'organisation est prévenue, et ses missions restent les mêmes.",
+      "fallbackDurationMs": 8900
+    },
+    {
+      "id": "pb-review",
+      "transcript": "Sur Affectations en brouillon, vous voyez une mission à revoir après une correction des disponibilités : Emma, vendredi, au Bar des Tilleuls. Personne n'a été déplacé ni désinscrit. Dans sa case, Voir l'inscription mène à son inscription, si vous devez la changer.",
+      "fallbackDurationMs": 20780
+    }
+  ],
+  "viewer": {
+    "summary": "Dans cette vidéo, vous publiez les affectations en brouillon d'un événement, vous voyez l'email que reçoit chaque bénévole, puis ce qu'un bénévole peut faire ensuite et ce que vous en voyez.",
+    "steps": [
+      "Sur la page Affectations en brouillon, choisissez Publier les affectations, puis confirmez avec Publier.",
+      "Lisez Publication faite : le nombre d'affectations publiées et de personnes ; Voir les inscriptions mène à la liste, où chaque mission porte la source Affectation publiée.",
+      "Une dizaine de minutes plus tard, chaque personne avec une adresse email reçoit un seul email avec toutes ses missions et le bouton Gérer mes inscriptions.",
+      "Depuis Mes inscriptions, un bénévole peut annuler un créneau, avec un mot pour l'organisation : quelques minutes plus tard, un email de désistement vous prévient, avec Trouver un remplaçant.",
+      "Avec le lien de ses disponibilités, une personne peut les corriger ; sur Affectations en brouillon, la mission concernée apparaît à revoir, et Voir l'inscription mène à son inscription."
+    ],
+    "remember": [
+      "Tout est publié d'un coup, ou rien si un point bloque ; les places sont prises dès la publication.",
+      "Un bénévole ne peut pas déplacer lui-même une mission publiée. Il peut l'annuler jusqu'au début du créneau, ou jusqu'à une limite plus tôt si l'événement en fixe une. Si les échanges de créneaux sont activés pour l'événement (fonction bêta), il peut aussi proposer d'échanger un créneau du même poste ou du même secteur.",
+      "Après la publication, une personne qui a une mission peut corriger ses disponibilités jusqu'à la fin du dernier créneau de l'événement. Personne n'est déplacé ni désinscrit : vous recevez un email récapitulatif et décidez de la suite.",
+      "C'est une fonction en bêta : votre organisation doit participer à la bêta."
+    ]
+  }
+}

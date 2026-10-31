@@ -19,6 +19,7 @@ import {
   PR_BETA_OPEN, PR_EVENT, PR_OWNER, PR_PEOPLE, PR_PERSON_EMAIL, PR_POLICY_VALUES, PR_POSTES, PR_TIME_ZONE, prPersonId, prShiftId, resolvedAnswer,
 } from "../../../scripts/seed-video-proposals"
 import { fridayAfter } from "../../../scripts/seed-video-workload"
+import { PB_PLAN } from "../../../scripts/seed-video-publication"
 
 /**
  * The ASSIGNMENT_PROPOSALS take judged before it is filmed: the seeded event
@@ -210,6 +211,11 @@ describe("assignment proposals video fixture (scripts/seed-video-proposals.ts)",
       const on = Object.keys(PR_PEOPLE).filter((p) => programmeAfterTake(p).some((d) => d.id === prShiftId(s.key))).length
       expect(on, s.key).toBeLessThanOrEqual(s.capacity)
     }
+  })
+
+  test("ASSIGNMENT_PUBLICATION starts from the drafts this take ends with (scripts/seed-video-publication.ts PB_PLAN)", () => {
+    const after = Object.fromEntries(Object.keys(PR_PEOPLE).map((p) => [p, programmeAfterTake(p).map((d) => key(d.id)).sort()]).filter(([, list]) => list.length > 0))
+    expect(Object.fromEntries(Object.entries(PB_PLAN).map(([p, list]) => [p, [...list].sort()]))).toEqual(after)
   })
 
   test("the take types no seed: the first proposal uses the fixed default seed, as the server does", () => {

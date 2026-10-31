@@ -975,3 +975,37 @@ la copie vérifiée avec le client courant. Le commit local suivant ne relance
 pas ce hook afin d'éviter une nouvelle sauvegarde automatique. Aucun `src/`
 n'est régénéré dans le worktree. Détail : `commit-hook-incident.json` dans les
 preuves du lot.
+
+## Sources prêtes, rendu en attente : publication des affectations et suite du parcours (#1172)
+
+Demande du propriétaire (2026-10-31) : voir tout le parcours, de la publication à
+l'email reçu par quelques bénévoles, puis ce que les bénévoles peuvent changer.
+Choix (avis Codex en lecture seule, CONFIDENT) : une troisième vidéo liée plutôt
+qu'une `ASSIGNMENT_PROPOSALS` portée au-delà de quatre minutes. Sources ajoutées
+sans rendu (aucune capture narrée, aucune voix, aucune publication) :
+
+- `assignment-publication` (`ASSIGNMENT_PUBLICATION`, nouvelle, `published: false`,
+  révision 1) : sources prêtes, rendu en attente. Seed
+  `scripts/seed-video-scenario.ts assignment-publication`, neuf avant chaque prise
+  (la prise publie, annule une inscription et enregistre une réponse). Recadrage
+  Mailpit x320/y312/960×488 comme `VOLUNTEER_EVENT_AVAILABILITY` : à vérifier sur
+  les quatre emails filmés (deux placements, le désistement, le lien de
+  disponibilités d'Emma), le sujet n'est jamais lu par la narration.
+- `assignment-proposals` (`ASSIGNMENT_PROPOSALS`) : **À refilmer**. La dernière
+  phrase de `ap-publish` annonce maintenant la vidéo suivante ; nouvelle narration
+  de ce segment, puis nouvelle prise. Ses deux clics suivent maintenant leur annonce (ouverture sur « alors seulement les places sont prises », « Annuler » sur « Tant que vous ne publiez pas »). La révision publiée
+  (3) reste en ligne jusque-là ; la révision est à incrémenter au rendu.
+
+Organisation fictive dédiée `formation-publication`
+(`scripts/seed-video-publication.ts`), jamais celle des propositions ; la liste
+bêta globale n'ouvre que `availability` et `workloadProtection`. Les 29 brouillons
+semés sont ceux par lesquels se termine la prise des propositions (test de
+continuité dans `videos/lib/__tests__/proposals-fixture.test.ts`). Emails réels du
+produit : la prise rend seulement échues, hors champ, les lignes en attente
+(placements dix minutes, désistement cinq) puis appelle la vraie route
+`/api/cron/outbox`. Phrases lues vérifiées par
+`videos/lib/__tests__/publication-fixture.test.ts` ; contrôle de fixture pour
+`videos/tools/audit-audiovisual.ts` : `videos/lib/verify-publication-review-fixture.ts`
+(base dédiée 45439 ou 45441). Recorder prouvé de bout en bout depuis un harnais
+Playwright jetable (repères neutralisés) contre `next dev`, PostgreSQL et Mailpit
+jetables, sur deux seeds neufs, sans voix ni rendu.

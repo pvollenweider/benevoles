@@ -20,6 +20,8 @@ export async function prepareSettingsMailbox(slug: string, directory: string) {
     "workload-protection": /^video\.workload\.[a-z]+@example\.org$/,
     // The assignment proposals video's organisation (scripts/seed-video-proposals.ts): members and owner.
     "assignment-proposals": /^video\.proposals\.[a-z]+@example\.org$/,
+    // The assignment publication video's organisation (scripts/seed-video-publication.ts): members and owner.
+    "assignment-publication": /^video\.publication\.[a-z]+@example\.org$/,
     // The volunteer event availability video's organisation (scripts/seed-video-volunteer-availability.ts): Morgane and owner.
     "volunteer-event-availability": /^video\.disponibilites\.[a-z]+@example\.org$/,
   }
