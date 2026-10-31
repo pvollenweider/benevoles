@@ -113,6 +113,8 @@ Le lien de l'email ouvre **Affectations en brouillon** : en tête, les missions 
 
 ## Ce que voit la personne sollicitée
 
+<!-- video: VOLUNTEER_EVENT_AVAILABILITY -->
+
 Le lien **Indiquer mes disponibilités** de l'email ouvre la page **Mes disponibilités pour** suivie du nom de l'événement, sans compte à créer. Elle y voit ses propres réponses, jamais celles des autres. Une date sans réponse porte la mention « (sans réponse) » sous son titre.
 
 - Pour chaque date, elle choisit **Disponible à certaines heures** et indique le début et la fin de chaque horaire (**Ajouter un autre horaire**, **Retirer cet horaire**), ou **Pas disponible**. Un horaire du soir peut finir le lendemain matin : de 20h à 3h, par exemple. Une date laissée sans choix reste « sans réponse ». **Reprendre les horaires du …** recopie la réponse de la date précédente.

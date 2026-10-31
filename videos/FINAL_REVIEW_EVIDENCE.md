@@ -671,6 +671,27 @@ deux conteneurs créés pour cette reprise ont été arrêtés ; aucun tiers tou
 Synthèse : `videos/evidence/batch32-resume/summary.json`. Les fichiers antérieurs,
 ignorés et non suivis sont conservés, y compris toutes les prises rejetées.
 
+## Sources prêtes, rendu en attente : disponibilités datées côté bénévole (#1146)
+
+Sources ajoutées sans rendu (aucune capture, aucune voix, aucune publication) ; le rendu se fait
+depuis un checkout à jour de `origin/main`, avec un seed neuf avant chaque prise (la prise demande
+ses disponibilités à Morgane par la vraie route des organisateurs, hors champ, puis enregistre sa
+réponse) :
+
+- `volunteer-event-availability` (`VOLUNTEER_EVENT_AVAILABILITY`, nouvelle, `published: false`) :
+  sources prêtes, rendu en attente. Seed `scripts/seed-video-scenario.ts volunteer-event-availability`.
+
+Le scénario utilise l'organisation fictive dédiée `formation-disponibilites`
+(`scripts/seed-video-volunteer-availability.ts`), jamais l'organisation de démonstration ni celle
+des autres vidéos bêta ; la liste bêta globale n'ouvre que `availability`. L'email filmé est celui
+que le produit remet au Mailpit local ; son lien est lu par le recorder sans être affiché. Les
+phrases lues (date limite, dates, indication de nuit, confirmation, état enregistré) sont vérifiées
+d'avance par `videos/lib/__tests__/volunteer-availability-fixture.test.ts`. Vidéo distincte de
+`VOLUNTEER_SESSION_AVAILABILITY` (disponibilités habituelles de « Mes inscriptions »), inchangée.
+À prévoir avec le lot de rendu : le recadrage de l'email sous les en-têtes de Mailpit (sujet sur
+deux lignes : la zone de `SHIFT_SWAPS` laisserait voir les onglets) et un contrôle de fixture pour
+`videos/tools/audit-audiovisual.ts`.
+
 ## Lot 33 — reprises autorisées du 2026-10-29
 
 Cette reprise remplace les statuts NOT READY historiques de SHIFT_SWAPS et
