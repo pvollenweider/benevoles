@@ -1,0 +1,97 @@
+{
+  "id": "ASSIGNMENT_PROPOSALS",
+  "status": "READY",
+  "date": "2026-10-31",
+  "narratedTakes": 2,
+  "durationMs": 167640,
+  "product": {
+    "commit": "eed7abaae331f8d15ca9adf3948b105366812fe7",
+    "sourceTree": "4eaedd3ceb7fc7242d8bf916f0e21eb73c3d912d",
+    "productSourceSha256": "46abd85bbe435ab4540c4c515cf47d09492473d346b97e1972b11e938f46156c",
+    "buildId": "XkyJ_3vtHOL38BaQPtehJ",
+    "snapshot": "/tmp/benevoles-video-production.Batch36",
+    "builtAt": "2026-10-31T07:02:56.481Z"
+  },
+  "videoSha256": "e6dc71ff2e1714b399cf4dbd57a2ce4312fd6bbf433d59c7564f74bc70b788ed",
+  "music": {
+    "voicedWindows": 143,
+    "musicOnlyWindows": 0,
+    "smallestGapLu": 12.5,
+    "largestGapLu": 19.1,
+    "quietestMusicOnlyLufs": null,
+    "loudestMusicOnlyLufs": null,
+    "medianVoiceLufs": -16.3
+  },
+  "musicGaps": 0,
+  "registerCandidates": 0,
+  "subtitleRegisterTokens": 0,
+  "tests": {
+    "files": 37,
+    "passed": 1247,
+    "explicitTypedSources": 211,
+    "eslint": "PASS"
+  },
+  "blockers": [],
+  "calculationDisplayedAfterMs": 4035,
+  "descriptionAuditedBytes": 130,
+  "allFinalAudiovisualChaptersUnflagged": 11,
+  "finalChapterASRResolutions": [
+    {
+      "id": "ap-launch",
+      "originalModel": "gemini-3.8-flash",
+      "originalWordErrorRate": 0.12903225806451613,
+      "independentModel": "gemini-3.1-pro-preview",
+      "wordErrorRate": 0.03225806451612903,
+      "audioSha256": "6a906f3b9ee1bc858f051f09ee727c9fe71877ac41bbea1dfd0e57fe388c6918",
+      "resolution": "Original report retained; homophones/numeral notation resolved by independent ASR of identical final audio."
+    },
+    {
+      "id": "ap-result",
+      "originalModel": "gemini-3.8-flash",
+      "originalWordErrorRate": 0.13636363636363635,
+      "independentModel": "gemini-3.1-pro-preview",
+      "wordErrorRate": 0,
+      "audioSha256": "3504b78cee1272c61824d35d485889b461062bf5a8d078671741ed61257f65c5",
+      "resolution": "Original report retained; homophones/numeral notation resolved by independent ASR of identical final audio."
+    }
+  ],
+  "databaseFinalProof": {
+    "registrations": 0,
+    "activeDrafts": 29,
+    "lockedEmma": 1,
+    "manualLou": 1,
+    "activeLeaFridayBilletterie": 0,
+    "notifications": 0,
+    "runs": [
+      {
+        "status": "finished",
+        "outcome": "proven_impossible",
+        "seed": 2026,
+        "writtenCount": 29,
+        "startedAt": "2026-10-31T07:13:34.160Z",
+        "finishedAt": "2026-10-31T07:13:34.444Z",
+        "writtenAt": "2026-10-31T07:13:34.444Z"
+      }
+    ]
+  },
+  "sourceChanges": [
+    "Recorder sentence/action timing and650ms Noah hold",
+    "Center Emma explanation",
+    "Catalogue revision2/publication metadata",
+    "Review evidence, script production note, CHANGELOG"
+  ],
+  "limitations": [
+    "Real-time subjective listening unavailable, per batch rules."
+  ],
+  "publication": {
+    "context": "default",
+    "uploadedFiles": 5,
+    "postPublishUploads": 0,
+    "unchangedFiles": 5,
+    "notification": "sent",
+    "catalogRevision": 2,
+    "catalogPublished": true,
+    "updatedAt": "2026-10-31"
+  },
+  "metaLengthTests": "8 PASS"
+}

@@ -1,0 +1,172 @@
+[
+  {
+    "scene": "ap-welcome",
+    "seconds": 4.7025,
+    "file": "videos/output/assignment-proposals/review/full-frames/ap-welcome-25.png"
+  },
+  {
+    "scene": "ap-welcome",
+    "seconds": 9.524799999999999,
+    "file": "videos/output/assignment-proposals/review/full-frames/ap-welcome-60.png"
+  },
+  {
+    "scene": "ap-welcome",
+    "seconds": 12.969299999999999,
+    "file": "videos/output/assignment-proposals/review/full-frames/ap-welcome-85.png"
+  },
+  {
+    "scene": "ap-drafts",
+    "seconds": 19.58675,
+    "file": "videos/output/assignment-proposals/review/full-frames/ap-drafts-25.png"
+  },
+  {
+    "scene": "ap-drafts",
+    "seconds": 25.3236,
+    "file": "videos/output/assignment-proposals/review/full-frames/ap-drafts-60.png"
+  },
+  {
+    "scene": "ap-drafts",
+    "seconds": 29.421349999999997,
+    "file": "videos/output/assignment-proposals/review/full-frames/ap-drafts-85.png"
+  },
+  {
+    "scene": "ap-scope",
+    "seconds": 37.3215,
+    "file": "videos/output/assignment-proposals/review/full-frames/ap-scope-25.png"
+  },
+  {
+    "scene": "ap-scope",
+    "seconds": 41.777,
+    "file": "videos/output/assignment-proposals/review/full-frames/ap-scope-60.png"
+  },
+  {
+    "scene": "ap-scope",
+    "seconds": 44.9595,
+    "file": "videos/output/assignment-proposals/review/full-frames/ap-scope-85.png"
+  },
+  {
+    "scene": "ap-targets",
+    "seconds": 52.21275,
+    "file": "videos/output/assignment-proposals/review/full-frames/ap-targets-25.png"
+  },
+  {
+    "scene": "ap-targets",
+    "seconds": 56.5272,
+    "file": "videos/output/assignment-proposals/review/full-frames/ap-targets-60.png"
+  },
+  {
+    "scene": "ap-targets",
+    "seconds": 59.60895,
+    "file": "videos/output/assignment-proposals/review/full-frames/ap-targets-85.png"
+  },
+  {
+    "scene": "ap-targets",
+    "seconds": 61.258,
+    "file": "videos/output/assignment-proposals/review/full-frames/ap-targets-end.png"
+  },
+  {
+    "scene": "ap-wishes",
+    "seconds": 64.298,
+    "file": "videos/output/assignment-proposals/review/full-frames/ap-wishes-25.png"
+  },
+  {
+    "scene": "ap-wishes",
+    "seconds": 67.6412,
+    "file": "videos/output/assignment-proposals/review/full-frames/ap-wishes-60.png"
+  },
+  {
+    "scene": "ap-wishes",
+    "seconds": 70.0292,
+    "file": "videos/output/assignment-proposals/review/full-frames/ap-wishes-85.png"
+  },
+  {
+    "scene": "ap-launch",
+    "seconds": 76.93325,
+    "file": "videos/output/assignment-proposals/review/full-frames/ap-launch-25.png"
+  },
+  {
+    "scene": "ap-launch",
+    "seconds": 81.422,
+    "file": "videos/output/assignment-proposals/review/full-frames/ap-launch-60.png"
+  },
+  {
+    "scene": "ap-launch",
+    "seconds": 84.62825,
+    "file": "videos/output/assignment-proposals/review/full-frames/ap-launch-85.png"
+  },
+  {
+    "scene": "ap-result",
+    "seconds": 92.22825,
+    "file": "videos/output/assignment-proposals/review/full-frames/ap-result-25.png"
+  },
+  {
+    "scene": "ap-result",
+    "seconds": 97.0054,
+    "file": "videos/output/assignment-proposals/review/full-frames/ap-result-60.png"
+  },
+  {
+    "scene": "ap-result",
+    "seconds": 100.41765,
+    "file": "videos/output/assignment-proposals/review/full-frames/ap-result-85.png"
+  },
+  {
+    "scene": "ap-load",
+    "seconds": 106.31425,
+    "file": "videos/output/assignment-proposals/review/full-frames/ap-load-25.png"
+  },
+  {
+    "scene": "ap-load",
+    "seconds": 111.07039999999999,
+    "file": "videos/output/assignment-proposals/review/full-frames/ap-load-60.png"
+  },
+  {
+    "scene": "ap-load",
+    "seconds": 114.46764999999999,
+    "file": "videos/output/assignment-proposals/review/full-frames/ap-load-85.png"
+  },
+  {
+    "scene": "ap-lock",
+    "seconds": 121.9775,
+    "file": "videos/output/assignment-proposals/review/full-frames/ap-lock-25.png"
+  },
+  {
+    "scene": "ap-lock",
+    "seconds": 126.4736,
+    "file": "videos/output/assignment-proposals/review/full-frames/ap-lock-60.png"
+  },
+  {
+    "scene": "ap-lock",
+    "seconds": 129.6851,
+    "file": "videos/output/assignment-proposals/review/full-frames/ap-lock-85.png"
+  },
+  {
+    "scene": "ap-adjust",
+    "seconds": 138.23675,
+    "file": "videos/output/assignment-proposals/review/full-frames/ap-adjust-25.png"
+  },
+  {
+    "scene": "ap-adjust",
+    "seconds": 144.346,
+    "file": "videos/output/assignment-proposals/review/full-frames/ap-adjust-60.png"
+  },
+  {
+    "scene": "ap-adjust",
+    "seconds": 148.70975,
+    "file": "videos/output/assignment-proposals/review/full-frames/ap-adjust-85.png"
+  },
+  {
+    "scene": "ap-publish",
+    "seconds": 156.993,
+    "file": "videos/output/assignment-proposals/review/full-frames/ap-publish-25.png"
+  },
+  {
+    "scene": "ap-publish",
+    "seconds": 161.7544,
+    "file": "videos/output/assignment-proposals/review/full-frames/ap-publish-60.png"
+  },
+  {
+    "scene": "ap-publish",
+    "seconds": 165.1554,
+    "file": "videos/output/assignment-proposals/review/full-frames/ap-publish-85.png"
+  }
+]

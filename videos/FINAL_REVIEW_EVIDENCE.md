@@ -856,32 +856,50 @@ Preuves finales : `videos/evidence/batch35/assignment-proposals/`. Première pri
 rejetée : `videos/evidence/batch35/assignment-proposals-rejected-take1/`,
 avec les fichiers lourds locaux archivés. Aucun push ni merge.
 
-## À refilmer — ASSIGNMENT_PROPOSALS après la revue indépendante (#1172)
+## Lot 36 — ASSIGNMENT_PROPOSALS après la refonte des écrans
 
-**ASSIGNMENT_PROPOSALS : à refilmer.** La version publiée au lot 35 montre
-l'écran d'avant la revue indépendante de la page « Proposition d'affectations » :
-résultat sous le formulaire, pastille rouge « Impossible démontré », champ
-« Graine », « Rotation, nuit et réserve » déplié, mention « Verrouillé » grise
-comme « Brouillon ». Le produit montre désormais le résultat en haut de la page
-(« 29 places couvertes sur 31 » en tête, pastille neutre « Couverture complète
-impossible », « tirage n° 2026 »), « Nouvelle proposition » dessous, les réglages
-facultatifs repliés, « Numéro de tirage », et un cadenas sur « Verrouillé ».
+**ASSIGNMENT_PROPOSALS : READY, republiée, révision 2.** Deux prises narrées,
+chacune après seed neuf et répétition rapide réussie, sur le main épinglé
+`eed7abaae331f8d15ca9adf3948b105366812fe7`, BUILD_ID `XkyJ_3vtHOL38BaQPtehJ`.
+Une nouvelle génération Kore entière, recoupée sur les silences réels puis auditée,
+sans mélange de voix. Les PR #1227, #1228 et #1229 sont intégrées au build filmé.
 
-Sources mises à jour dans la même PR : narration de `ap-targets`, `ap-launch`,
-`ap-result`, `ap-lock` et bloc `viewer` du manifeste, script, sélecteurs et
-`AP_EXPECTED.state` du recorder, test du fixture. Le recorder a été exécuté de
-bout en bout sur un seed neuf contre le build de la branche (repères de phrase
-sans effet), sans rendu ni voix. Révision du catalogue inchangée : elle sera
-incrémentée au nouveau rendu (nouvelle prise, nouvelle voix Kore, publication).
-En attendant, l'entrée du catalogue est masquée (#1226) : la remettre en ligne
-avec le nouveau rendu.
+La première prise n'est pas retenue : le six de Noah apparaît trop près de la fin
+du chapitre ; l'explication d'Emma, visible en bas d'écran, est centrée pour la
+seconde. Les seules corrections de sources sont dans le recorder : repère
+« tapons six », maintien de 650 ms après la saisie, attentes après les instructions
+de verrouillage, retrait, confirmation et ajout, et centrage de l'explication.
+La seconde et dernière prise montre le six dans son chapitre et Emma au centre.
 
-Revue indépendante des écrans d'affectation (#1146, PR « Assisted assignment and drafts:
-independent review fixes ») : la ligne « À pourvoir » sous les dates, une seule pastille
-« Proposé » par brouillon généré, la personne dans le titre de la fenêtre d'un brouillon et
-la confirmation « Retirer ce brouillon ? » changent `ap-drafts`, `ap-lock` et `ap-adjust`.
-Narration (`ap-drafts`, `ap-adjust`), bloc `viewer`, script, sélecteurs et
-`AP_EXPECTED.coverage` mis à jour dans la même PR ; le recorder a été rejoué de bout en bout
-sur deux seeds neufs contre le build de la branche (repères sans effet), sans rendu ni voix.
-La vidéo reste à refilmer et masquée du catalogue jusqu'au nouveau rendu.
+Rendu final : 167,64 s ; onze revues audiovisuelles sans signalement, ASR intégrale
+multilingue sans tutoiement ni consigne parasite, VTT sans tutoiement. Les onze ASR
+de chapitres sont vérifiées : les signalements du modèle standard sur le lancement
+(homophones) et le résultat (nombres écrits en chiffres) sont contre-vérifiés sur
+les mêmes octets audio par le modèle indépendant (3,2 % et 0 %). Les rapports
+initiaux sont conservés. Un premier appel ASR complet a expiré ; il ne sert pas
+de preuve. Les 34 images du MP4 contrôlées par OCR ne portent aucun ancien libellé
+ni adresse locale interdits ; les images réelles des onze chapitres sont relues.
 
+Le résultat précède le formulaire, affiche « 29 places couvertes sur 31 »,
+« Couverture complète impossible » et « tirage n° 2026 ». Réglages facultatifs
+repliés, objectifs initialement vides puis suggestion, ligne « À pourvoir »,
+« Proposé », cadenas et confirmation du retrait sont montrés. Calcul affiché
+en 4,035 s. `ap-lock` : 12,846 s pour 12,845 s de voix ; `ap-adjust` : 17,455 s
+pour 17,453 s. Verrouillage à +7,919 s après l'instruction finie à +7,286 s ;
+correction : ouverture +3,029 s, retrait +6,427 s, confirmation +8,144 s,
+ajout +13,760 s, après leurs annonces. La confirmation de publication est annulée.
+
+Musique 12,5–19,1 LU sous la voix, aucun trou ; aucune fenêtre de trois secondes
+sans voix dans ce rendu. 22 clics et 7 touches réels avec effets synchronisés.
+Preuve en base : 29 brouillons, Emma verrouillée, Lou ajoutée manuellement,
+Léa retirée de la billetterie du vendredi, aucune inscription ni notification.
+1 247 tests vidéo (37 fichiers), 211 sources typées et lint du recorder réussis.
+Description : 130 octets audités, sous la limite de 160. L'écoute subjective en
+temps réel est indisponible, conformément aux règles. Aucun défaut produit constaté.
+
+Affiches et métadonnées isolées ; `videos/renders.json` inchangé. Aperçu puis
+`APPLY=1` sur `default` : cinq fichiers envoyés. Catalogue publié, révision 2,
+`updatedAt` et `updated` au 2026-10-31. Preuves :
+`videos/evidence/batch36/assignment-proposals/` ; première prise conservée et
+non retenue : `videos/evidence/batch36/assignment-proposals-rejected-take1/`.
+Aucun changement sous `src/` ou `content/guide/`, aucun push ni merge.

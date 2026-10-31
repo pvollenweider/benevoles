@@ -1,0 +1,278 @@
+{
+  "videoSha256": "e6dc71ff2e1714b399cf4dbd57a2ce4312fd6bbf433d59c7564f74bc70b788ed",
+  "chapters": {
+    "ap-welcome": {
+      "durationMs": 13778,
+      "clicksMs": []
+    },
+    "ap-drafts": {
+      "durationMs": 16391,
+      "clicksMs": [
+        5174,
+        14637
+      ]
+    },
+    "ap-scope": {
+      "durationMs": 12730,
+      "clicksMs": []
+    },
+    "ap-targets": {
+      "durationMs": 12327,
+      "clicksMs": [
+        5091,
+        11257
+      ]
+    },
+    "ap-wishes": {
+      "durationMs": 9552,
+      "clicksMs": [
+        826,
+        4078
+      ]
+    },
+    "ap-launch": {
+      "durationMs": 12825,
+      "clicksMs": [
+        4076,
+        4876,
+        11526
+      ]
+    },
+    "ap-result": {
+      "durationMs": 13649,
+      "clicksMs": []
+    },
+    "ap-load": {
+      "durationMs": 13589,
+      "clicksMs": [
+        6119
+      ]
+    },
+    "ap-lock": {
+      "durationMs": 12846,
+      "clicksMs": [
+        808,
+        5169,
+        7919,
+        9302
+      ]
+    },
+    "ap-adjust": {
+      "durationMs": 17455,
+      "clicksMs": [
+        3029,
+        6427,
+        8144,
+        8978,
+        13760,
+        15261
+      ]
+    },
+    "ap-publish": {
+      "durationMs": 13604,
+      "clicksMs": [
+        708,
+        7709
+      ]
+    }
+  },
+  "sentenceAnchors": [
+    {
+      "segmentId": "ap-drafts",
+      "phrase": "Depuis la page Disponibilit\u00e9s",
+      "startMs": 4676,
+      "endMs": 7992,
+      "cueMs": 20166
+    },
+    {
+      "segmentId": "ap-drafts",
+      "phrase": "une ligne par personne",
+      "startMs": 8466,
+      "endMs": 13956,
+      "cueMs": 23957
+    },
+    {
+      "segmentId": "ap-drafts",
+      "phrase": "Cliquons sur G\u00e9n\u00e9rer une proposition",
+      "startMs": 14117,
+      "endMs": 16020,
+      "cueMs": 29608
+    },
+    {
+      "segmentId": "ap-scope",
+      "phrase": "Dans P\u00e9rim\u00e8tre",
+      "startMs": 7086,
+      "endMs": 9975,
+      "cueMs": 41228
+    },
+    {
+      "segmentId": "ap-targets",
+      "phrase": "Jules n'a pas r\u00e9pondu",
+      "startMs": 300,
+      "endMs": 1221,
+      "cueMs": 49433
+    },
+    {
+      "segmentId": "ap-targets",
+      "phrase": "Appliquer la suggestion les remplit",
+      "startMs": 4593,
+      "endMs": 8458,
+      "cueMs": 53727
+    },
+    {
+      "segmentId": "ap-targets",
+      "phrase": "tapons six",
+      "startMs": 10745,
+      "endMs": 11319,
+      "cueMs": 59878
+    },
+    {
+      "segmentId": "ap-wishes",
+      "phrase": "Pour Emma",
+      "startMs": 328,
+      "endMs": 3142,
+      "cueMs": 62239
+    },
+    {
+      "segmentId": "ap-wishes",
+      "phrase": "pour Lucas",
+      "startMs": 3600,
+      "endMs": 5986,
+      "cueMs": 65510
+    },
+    {
+      "segmentId": "ap-wishes",
+      "phrase": "Ces souhaits passent apr\u00e8s",
+      "startMs": 6676,
+      "endMs": 9263,
+      "cueMs": 68586
+    },
+    {
+      "segmentId": "ap-launch",
+      "phrase": "Dans Param\u00e8tres de calcul",
+      "startMs": 3596,
+      "endMs": 7247,
+      "cueMs": 77324
+    },
+    {
+      "segmentId": "ap-launch",
+      "phrase": "Puis G\u00e9n\u00e9rer une proposition",
+      "startMs": 11058,
+      "endMs": 12417,
+      "cueMs": 84786
+    },
+    {
+      "segmentId": "ap-result",
+      "phrase": "Couverture compl\u00e8te impossible",
+      "startMs": 7118,
+      "endMs": 8816,
+      "cueMs": 95935
+    },
+    {
+      "segmentId": "ap-load",
+      "phrase": "La charge par personne",
+      "startMs": 362,
+      "endMs": 3316,
+      "cueMs": 103280
+    },
+    {
+      "segmentId": "ap-load",
+      "phrase": "Dans Affectations propos\u00e9es",
+      "startMs": 5607,
+      "endMs": 8542,
+      "cueMs": 108524
+    },
+    {
+      "segmentId": "ap-load",
+      "phrase": "Emma est au bar vendredi",
+      "startMs": 9271,
+      "endMs": 10400,
+      "cueMs": 112189
+    },
+    {
+      "segmentId": "ap-lock",
+      "phrase": "De retour au planning",
+      "startMs": 329,
+      "endMs": 4022,
+      "cueMs": 119098
+    },
+    {
+      "segmentId": "ap-lock",
+      "phrase": "Ouvrons celui d'Emma",
+      "startMs": 4689,
+      "endMs": 7286,
+      "cueMs": 123458
+    },
+    {
+      "segmentId": "ap-lock",
+      "phrase": "une nouvelle proposition ne le remplacera pas",
+      "startMs": 7880,
+      "endMs": 9944,
+      "cueMs": 126994
+    },
+    {
+      "segmentId": "ap-lock",
+      "phrase": "Le cadenas le signale",
+      "startMs": 10331,
+      "endMs": 12508,
+      "cueMs": 129100
+    },
+    {
+      "segmentId": "ap-adjust",
+      "phrase": "L\u00e9a doit partir plus t\u00f4t vendredi",
+      "startMs": 378,
+      "endMs": 2329,
+      "cueMs": 134254
+    },
+    {
+      "segmentId": "ap-adjust",
+      "phrase": "ouvrons son brouillon de billetterie",
+      "startMs": 2563,
+      "endMs": 7502,
+      "cueMs": 136438
+    },
+    {
+      "segmentId": "ap-adjust",
+      "phrase": "et confirmons",
+      "startMs": 2563,
+      "endMs": 7502,
+      "cueMs": 140606
+    },
+    {
+      "segmentId": "ap-adjust",
+      "phrase": "Dans la case de Lou",
+      "startMs": 8285,
+      "endMs": 13062,
+      "cueMs": 142329
+    },
+    {
+      "segmentId": "ap-adjust",
+      "phrase": "Une proposition ne remplace jamais",
+      "startMs": 13793,
+      "endMs": 17312,
+      "cueMs": 147939
+    },
+    {
+      "segmentId": "ap-publish",
+      "phrase": "Publier les affectations demande une confirmation",
+      "startMs": 213,
+      "endMs": 2525,
+      "cueMs": 153807
+    },
+    {
+      "segmentId": "ap-publish",
+      "phrase": "Annulons ici",
+      "startMs": 7235,
+      "endMs": 8069,
+      "cueMs": 160829
+    },
+    {
+      "segmentId": "ap-publish",
+      "phrase": "Tant que vous ne publiez pas",
+      "startMs": 8260,
+      "endMs": 13300,
+      "cueMs": 161854
+    }
+  ],
+  "note": "Actual input events and measured sentence anchors; full final frames inspected, including Noah end hold and centered Emma explanation."
+}

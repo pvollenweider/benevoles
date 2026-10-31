@@ -1056,7 +1056,7 @@
         "objectif-heures",
         "bêta"
       ],
-      "published": false,
+      "published": true,
       "seedScenario": "assignment-proposals",
       "themes": [
         "planning-creneaux"
@@ -1065,10 +1065,11 @@
         "organisateur"
       ],
       "feature": "Proposition d'affectations",
-      "updatedAt": "2026-10-30",
-      "revision": 1,
+      "updatedAt": "2026-10-31",
+      "revision": 2,
       "level": "avance",
-      "added": "2026-10-30"
+      "added": "2026-10-30",
+      "updated": "2026-10-31"
     },
     {
       "id": "MEMBERS_MANAGEMENT",

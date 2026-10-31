@@ -1,0 +1,21 @@
+{
+  "model": "gemini-3.1-pro-preview",
+  "promptVersion": 2,
+  "auditedAt": "2026-10-31T07:19:14.584Z",
+  "revalidatedAt": "2026-10-31T07:19:14.585Z",
+  "source": "actual final MP4 audio",
+  "videoSha256": "e6dc71ff2e1714b399cf4dbd57a2ce4312fd6bbf433d59c7564f74bc70b788ed",
+  "note": "Independent multilingual ASR evidence, reused only for identical audio/text and audit instructions; not a full audiovisual or voice-quality validation",
+  "segments": [
+    {
+      "id": "ap-launch",
+      "audioSha256": "6a906f3b9ee1bc858f051f09ee727c9fe71877ac41bbea1dfd0e57fe388c6918",
+      "recognized": "Rotation nue et réserve reste replié sans réglage. Dans paramètres de calcul, tapons le numéro de tirage deux mille vingt-six. Même numéro, mêmes données, même proposition. Puis générer une proposition.",
+      "expected": "Rotation, nuit et réserve reste replié, sans réglage. Dans Paramètres de calcul, tapons le numéro de tirage deux mille vingt-six : même numéro, mêmes données, même proposition. Puis Générer une proposition.",
+      "wordErrorRate": 0.03225806451612903,
+      "needsReview": false,
+      "unexpectedInstructions": [],
+      "edgeIssues": []
+    }
+  ]
+}
