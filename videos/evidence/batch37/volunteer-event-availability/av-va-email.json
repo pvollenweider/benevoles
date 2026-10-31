@@ -1,0 +1,44 @@
+{
+  "model": "gemini-3.8-flash",
+  "reviewedAt": "2026-10-31T14:40:24.000Z",
+  "videoSha256": "8775699edadf67e7e03e3448f38b52d6bb12ac7017d155b7a4a0b5d228cd1362",
+  "promptSha256": "a50546f6c7fc3a555c5307f0c1ff6ebb71e5eda22f7d1c62b081a91fdb060aa9",
+  "clipSha256": "f19f6aa10d4a2ab2789bbec2dc6511dd54aa9b0c32912105e29fa0a5a67d3938",
+  "scene": "va-email",
+  "review": {
+    "heardOpening": "Morgane a reçu cet e-mail",
+    "checkpoints": [
+      {
+        "spokenSeconds": 0.8,
+        "spoken": "Morgane a reçu cet email de l'association",
+        "visibleSeconds": 0.8,
+        "visible": "Affichage de l'email de l'association adressé à Morgane",
+        "sync": "aligned",
+        "severity": "none"
+      },
+      {
+        "spokenSeconds": 2.5,
+        "spoken": "Il donne la date limite pour répondre",
+        "visibleSeconds": 2.5,
+        "visible": "Mention visible dans l'email : 'Merci de répondre avant le vendredi 13 novembre à 20h'",
+        "sync": "aligned",
+        "severity": "none"
+      },
+      {
+        "spokenSeconds": 5,
+        "spoken": "Elle appuie sur Indiquer mes disponibilités",
+        "visibleSeconds": 5.5,
+        "visible": "Transition vers la page 'Mes disponibilités pour Fête des Lanternes de Combe-Aurel'",
+        "sync": "aligned",
+        "severity": "none"
+      }
+    ],
+    "issues": [],
+    "voice": {
+      "consistent": true,
+      "warm": true,
+      "observation": "Voix féminine claire et posée avec fond musical discret."
+    }
+  },
+  "note": "Automated observation of actual final video audio and images; not a claim of complete human validation"
+}

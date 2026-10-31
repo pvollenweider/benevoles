@@ -1,0 +1,52 @@
+{
+  "model": "gemini-3.8-flash",
+  "reviewedAt": "2026-10-31T14:41:32.455Z",
+  "videoSha256": "8775699edadf67e7e03e3448f38b52d6bb12ac7017d155b7a4a0b5d228cd1362",
+  "promptSha256": "e5720dfad474eddd0b265237de09008820f39a2e0b5680021406b47f684d889a",
+  "clipSha256": "d8b7a99c24457058301a1cd7fb6d0a5185b603eb844ac329bb8e0fb4b0714661",
+  "scene": "va-change",
+  "review": {
+    "heardOpening": "Un changement de programme ?",
+    "checkpoints": [
+      {
+        "spokenSeconds": 0.5,
+        "spoken": "Un changement de programme ?",
+        "visibleSeconds": 0,
+        "visible": "Page confirmant l'enregistrement précédent avec indication de possibilité de modification",
+        "sync": "aligned",
+        "severity": "none"
+      },
+      {
+        "spokenSeconds": 1.7,
+        "spoken": "Rouvrons le même lien :",
+        "visibleSeconds": 1.8,
+        "visible": "Réaffichage du lien de formulaire avec le titre 'Mes disponibilités pour Fête des Lanternes de Combe-Aurel'",
+        "sync": "aligned",
+        "severity": "none"
+      },
+      {
+        "spokenSeconds": 3.2,
+        "spoken": "les réponses de Morgane sont là,",
+        "visibleSeconds": 2,
+        "visible": "Section 'Tes réponses' affichant les créneaux horaires précédemment sélectionnés pour le vendredi 20 novembre",
+        "sync": "aligned",
+        "severity": "none"
+      },
+      {
+        "spokenSeconds": 5.2,
+        "spoken": "et elle peut encore les modifier jusqu'à la date limite.",
+        "visibleSeconds": 2,
+        "visible": "Consigne 'Tu peux répondre ou changer tes réponses jusqu'au vendredi 13 novembre à 20h' et champs éditables à l'écran",
+        "sync": "aligned",
+        "severity": "none"
+      }
+    ],
+    "issues": [],
+    "voice": {
+      "consistent": true,
+      "warm": true,
+      "observation": "Voix féminine naturelle, claire et bien articulée, synchronisée avec l'affichage."
+    }
+  },
+  "note": "Automated observation of actual final video audio and images; not a claim of complete human validation"
+}

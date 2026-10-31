@@ -1,0 +1,46 @@
+{
+  "model": "gemini-3.8-flash",
+  "reviewedAt": "2026-10-31T14:34:10.766Z",
+  "videoSha256": "3bc34758496ffea1125527f351c25a0eba25ad6878abd1f583c55a6d537e368b",
+  "promptSha256": "dce1c524b57cb30b191051692747b6c4f3e6f664a7887348502d767e3c3150f4",
+  "clipSha256": "01cf0fce39c25461d8766f980f24ffee698897562425a6cf363140fc832253b4",
+  "scene": "va-copy",
+  "review": {
+    "heardOpening": "Le samedi",
+    "checkpoints": [
+      {
+        "spokenSeconds": 1,
+        "spoken": "Le samedi",
+        "visibleSeconds": 1,
+        "visible": "Affichage de la section Samedi 21 novembre à l'écran",
+        "sync": "aligned",
+        "severity": "none"
+      },
+      {
+        "spokenSeconds": 2.1,
+        "spoken": "Reprendre les horaires du vendredi",
+        "visibleSeconds": 0.8,
+        "visible": "L'action associée au lien « Reprendre les horaires du vendredi » a été déclenchée",
+        "sync": "early",
+        "severity": "minor"
+      },
+      {
+        "spokenSeconds": 3.8,
+        "spoken": "recopie les deux horaires d'un coup",
+        "visibleSeconds": 1,
+        "visible": "Les deux plages horaires (09h-12h et 20h-03h) sont déjà affichées sous le samedi",
+        "sync": "early",
+        "severity": "minor"
+      }
+    ],
+    "issues": [
+      "À 00:01, le résultat de la recopie des horaires du vendredi sur le samedi est déjà affiché avant que la voix n'explique le fonctionnement du lien (00:02 - 00:05)."
+    ],
+    "voice": {
+      "consistent": true,
+      "warm": true,
+      "observation": "Voix claire, posée et bien articulée."
+    }
+  },
+  "note": "Automated observation of actual final video audio and images; not a claim of complete human validation"
+}

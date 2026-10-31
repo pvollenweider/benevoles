@@ -1,0 +1,54 @@
+{
+  "va-welcome": {
+    "durationMs": 7906,
+    "clicksAtSeconds": []
+  },
+  "va-email": {
+    "durationMs": 8858,
+    "clicksAtSeconds": [
+      6.01
+    ]
+  },
+  "va-page": {
+    "durationMs": 14357,
+    "clicksAtSeconds": []
+  },
+  "va-hours": {
+    "durationMs": 7232,
+    "clicksAtSeconds": [
+      3.671,
+      4.503,
+      5.885
+    ]
+  },
+  "va-night": {
+    "durationMs": 10483,
+    "clicksAtSeconds": [
+      2.669,
+      3.5,
+      4.9
+    ]
+  },
+  "va-copy": {
+    "durationMs": 5704,
+    "clicksAtSeconds": [
+      5.165
+    ]
+  },
+  "va-unavailable": {
+    "durationMs": 8498,
+    "clicksAtSeconds": [
+      3.809
+    ]
+  },
+  "va-save": {
+    "durationMs": 9350,
+    "clicksAtSeconds": [
+      3.583
+    ]
+  },
+  "va-change": {
+    "durationMs": 7671,
+    "clicksAtSeconds": []
+  }
+}

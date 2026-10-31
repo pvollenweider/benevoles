@@ -671,26 +671,6 @@ deux conteneurs créés pour cette reprise ont été arrêtés ; aucun tiers tou
 Synthèse : `videos/evidence/batch32-resume/summary.json`. Les fichiers antérieurs,
 ignorés et non suivis sont conservés, y compris toutes les prises rejetées.
 
-## Sources prêtes, rendu en attente : disponibilités datées côté bénévole (#1146)
-
-Sources ajoutées sans rendu (aucune capture, aucune voix, aucune publication) ; le rendu se fait
-depuis un checkout à jour de `origin/main`, avec un seed neuf avant chaque prise (la prise demande
-ses disponibilités à Morgane par la vraie route des organisateurs, hors champ, puis enregistre sa
-réponse) :
-
-- `volunteer-event-availability` (`VOLUNTEER_EVENT_AVAILABILITY`, nouvelle, `published: false`) :
-  sources prêtes, rendu en attente. Seed `scripts/seed-video-scenario.ts volunteer-event-availability`.
-
-Le scénario utilise l'organisation fictive dédiée `formation-disponibilites`
-(`scripts/seed-video-volunteer-availability.ts`), jamais l'organisation de démonstration ni celle
-des autres vidéos bêta ; la liste bêta globale n'ouvre que `availability`. L'email filmé est celui
-que le produit remet au Mailpit local ; son lien est lu par le recorder sans être affiché. Les
-phrases lues (date limite, dates, indication de nuit, confirmation, état enregistré) sont vérifiées
-d'avance par `videos/lib/__tests__/volunteer-availability-fixture.test.ts`. Vidéo distincte de
-`VOLUNTEER_SESSION_AVAILABILITY` (disponibilités habituelles de « Mes inscriptions »), inchangée.
-À prévoir avec le lot de rendu : le recadrage de l'email sous les en-têtes de Mailpit (sujet sur
-deux lignes : la zone de `SHIFT_SWAPS` laisserait voir les onglets) et un contrôle de fixture pour
-`videos/tools/audit-audiovisual.ts`.
 
 ## Lot 33 — reprises autorisées du 2026-10-29
 
@@ -925,24 +905,73 @@ Affiches et métadonnées isolées ; `videos/renders.json` inchangé. Aperçu pu
 non retenue : `videos/evidence/batch36/assignment-proposals-rejected-take1/`.
 Aucun changement sous `src/` ou `content/guide/`, aucun push ni merge.
 
-## À refilmer : ASSIGNMENT_PROPOSALS, « Proposer une autre répartition » (#1172)
 
-Publiée en révision 2 avec « Numéro de tirage » 2026 tapé dans « Paramètres de
-calcul (facultatif) » et « tirage n° 2026 » sous le résultat. La PR qui remplace
-ce champ par le bouton « Proposer une autre répartition » retire les deux : la
-graine reste interne, et une première proposition prend toujours la graine fixe
-2026, donc le même résultat (29 places couvertes sur 31, `AP_EXPECTED` inchangé,
-vérifié par `videos/lib/__tests__/proposals-fixture.test.ts`). Sources mises à
-jour dans la même PR : narration de `ap-launch` sans le numéro, phrase sur le
-bouton à la fin de `ap-result`, bloc `viewer`, script et recorder (le bouton est
-montré, jamais cliqué ; la ligne lit « Proposition 1, lancée le … »). Image et
-narration publiées ne correspondent plus au produit : à refilmer, `revision` du
-catalogue à incrémenter au moment de la publication.
+## Lot 37 — disponibilités datées et autre répartition (2026-10-31)
 
-Même PR, revue du coordinateur : la ligne des places restées vides devient
-« 2 places vides. Personne n'est disponible sur tout ce créneau. » (au lieu de
-« 2 places restent sans personne, dont 2 places du minimum. Aucune disponibilité
-ne couvre entièrement ce créneau. Impossible à pourvoir : … »). `AP_EXPECTED`,
-recorder et script suivent ; la narration (« personne n'est disponible pour tout
-le rangement du Kiosque ») reste juste. Recorder rejoué de bout en bout sur deux
-seeds neufs, sans rendu.
+**Deux vidéos READY et publiées.** Build main commun vérifié :
+`3a76e5dbad281961182eba67ffaec0b6dcd67ada`, BUILD_ID
+`HMN0A-g7F4Mdz4O4q0eoc`. Dépendances du lockfile et client Prisma générés dans
+la copie jetable ; pile propre 45441/41038/48038, serveur vérifié par PID,
+répertoire standalone et deux BUILD_ID sur 43102. Aucune ancienne compilation.
+
+- **VOLUNTEER_EVENT_AVAILABILITY : révision 1, 90,80 s, seconde prise.**
+  Demande organisateur réelle, email reçu uniquement par Morgane, session fermée
+  avant le film ; le véritable bouton est pressé puis le même lien s'ouvre dans
+  l'onglet filmé. Recadrage Mailpit x320/y312/960×488 dès la première image,
+  sous le sujet sur deux lignes et les onglets anglais. Réponse enregistrée par
+  la bénévole : trois dates, quatre plages ; relecture par le même lien.
+  Neuf revues audiovisuelles / 28 points sans signalement ; les deux horaires
+  du samedi sont visibles avant la fin du chapitre. Dix clics et seize touches
+  réels avec effets ; l'iframe Mailpit impose de relever l'envoi du vrai
+  `mouse.down()`, car son sandbox bloque les scripts de suivi. Premier essai
+  narré rejeté : recopie trop tôt, enregistrement avant la fin de l'annonce et
+  repère sonore manquant dans l'iframe. Corrections répétées sur seed neuf,
+  puis seconde prise après un nouveau seed ; aucune troisième prise.
+  Musique 14,6–18,5 LU sous la voix, minimum seule −33,3 LUFS, aucun trou.
+  ASR multilingue intégrale et VTT : sept formes attendues du tutoiement,
+  dont quatre « tu », conformes au public exclusivement bénévole ; aucune
+  consigne parasite. OCR de 27 images sans Mailpit anglais ni adresse locale.
+  Catalogue publié, `added` et `updatedAt` au 2026-10-31.
+- **ASSIGNMENT_PROPOSALS : révision 3, 172,88 s, première prise.** Onze
+  chapitres / 38 points audiovisuels sans signalement. Aucun champ de tirage
+  ni « Paramètres de calcul » ; « Proposition 1 », bouton « Proposer une autre
+  répartition » et son indication montrés sans clic, nouvelle phrase des deux
+  places vides visible. Le six de Noah reste visible dans son chapitre.
+  Verrouillage à +7,553 s après l'annonce finie à +6,671 s ; confirmation du
+  retrait à +7,554 s après +6,979 s ; ajout à +12,721 s après +11,870 s.
+  Résultat vérifié à 9,605 s depuis le lancement. Vingt-neuf brouillons actifs,
+  Emma verrouillée, Lou ajoutée manuellement, Léa retirée vendredi ; aucune
+  inscription ni notification, confirmation de publication annulée.
+  ASR intégrale et VTT sans tutoiement ni consigne parasite ; onze ASR finales
+  réussies (une réponse vide du service a été relancée sur le même son).
+  Musique 15,1–19,0 LU sous la voix, minimum seule −33,7 LUFS, aucun trou.
+  OCR de 33 images sans ancien libellé ni adresse locale. Catalogue publié,
+  `updatedAt` et `updated` au 2026-10-31.
+
+Chaque narration est une nouvelle génération Kore entière, voix constante sur
+le master entier ; frontières recoupées sur des silences mesurés, puis ASR
+indépendante de tous les chapitres source et finaux. Images réelles de tous les
+chapitres inspectées ; écoute subjective en temps réel indisponible, sans la
+présenter comme une écoute humaine. Aucun défaut produit constaté ni contourné.
+
+Validation des deux vidéos, 1 279 tests vidéo/métadonnées et 214 sources typées
+réussis ; lint sans erreur (deux avertissements préexistants du recorder).
+Descriptions inchangées : 148 et 130 octets audités, sous 160. Le test d'un
+ancien registre d'import utilisait le 1er octobre avec l'horloge réelle : son
+horloge est maintenant figée pour conserver le contrôle de fraîcheur voulu.
+Affiches avec métadonnées isolées ; `videos/renders.json` inchangé.
+
+Pour chacune : aperçu puis `APPLY=1` sur `default`, cinq fichiers envoyés,
+nouvelle comparaison identique (cinq inchangés), HTTP 200 / types et CORS vérifiés,
+notification demandée envoyée. Preuves : `videos/evidence/batch37/`. Sources
+produit et guides inchangés ; commit local uniquement, aucun push ni merge.
+
+Le premier commit a été refusé par le hook : `lint-staged` a créé puis nettoyé
+sa sauvegarde automatique temporaire, malgré la consigne de ne pas utiliser
+le stash (erreur de procédure de l'agent). Le stash préexistant reste intact.
+Le `tsc` global du worktree utilise un ancien client Prisma et inclut des
+fichiers de travail archivés ; le contrôle équivalent est donc exécuté dans
+la copie vérifiée avec le client courant. Le commit local suivant ne relance
+pas ce hook afin d'éviter une nouvelle sauvegarde automatique. Aucun `src/`
+n'est régénéré dans le worktree. Détail : `commit-hook-incident.json` dans les
+preuves du lot.

@@ -1,0 +1,44 @@
+{
+  "model": "gemini-3.8-flash",
+  "reviewedAt": "2026-10-31T14:37:35.181Z",
+  "videoSha256": "6ac074191afa66f7007ead2cb6c69dc3e64f8e4556de1240226d5d80c7c0a7b2",
+  "promptSha256": "5194a48f14282b52e945f2b785a552b7c896fced468e44fdccdf8e789e09b49e",
+  "clipSha256": "d233497cbd6ed028a3535330a929195e2cb782dc9d3213f6a396229ebded449f",
+  "scene": "ap-launch",
+  "review": {
+    "heardOpening": "Rotation, nuit et réserve reste replié",
+    "checkpoints": [
+      {
+        "spokenSeconds": 0.8,
+        "spoken": "Rotation, nuit et réserve reste replié, sans réglage.",
+        "visibleSeconds": 0,
+        "visible": "La section repliée 'Rotation, nuit et réserve (facultatif)' avec la mention 'Aucun réglage' est visible.",
+        "sync": "aligned",
+        "severity": "none"
+      },
+      {
+        "spokenSeconds": 4.5,
+        "spoken": "Puis Générer une proposition",
+        "visibleSeconds": 4.7,
+        "visible": "Lancement du calcul et affichage de l'écran 'Proposition en cours'.",
+        "sync": "aligned",
+        "severity": "none"
+      },
+      {
+        "spokenSeconds": 8,
+        "spoken": "ce premier calcul donne la même proposition.",
+        "visibleSeconds": 6.8,
+        "visible": "Affichage de la section 'Résultat de la proposition' avec 29 places couvertes sur 31.",
+        "sync": "aligned",
+        "severity": "none"
+      }
+    ],
+    "issues": [],
+    "voice": {
+      "consistent": true,
+      "warm": true,
+      "observation": "Voix claire, posée et parfaitement synchronisée avec les transitions à l'écran."
+    }
+  },
+  "note": "Automated observation of actual final video audio and images; not a claim of complete human validation"
+}

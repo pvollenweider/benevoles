@@ -107,6 +107,9 @@ async function ensureTouchMarker(page: Page) {
   })
 }
 
+// Mailpit sandboxed iframes do not run context init scripts. Retain the actual
+// mouse-down dispatch timestamp, then relay it without inventing a click.
+let reportIframePointerDown: ((epochMs: number) => void) | undefined
 async function tap(page: Page, target: Locator) {
   await target.scrollIntoViewIfNeeded()
   const box = await target.boundingBox()
@@ -125,7 +128,16 @@ async function tap(page: Page, target: Locator) {
     void marker.getBoundingClientRect()
     marker.classList.add("video-tap")
   })
-  await target.click()
+  const inFrame = await target.evaluate(element => element.ownerDocument.defaultView !== element.ownerDocument.defaultView?.top)
+  if (inFrame) {
+    // The sandbox also blocks injected event callbacks. Dispatch the actual mouse
+    // press explicitly, retaining its timestamp only after the command succeeds.
+    await page.mouse.move(box.x + box.width / 2, box.y + box.height / 2)
+    const epochMs = Date.now()
+    await page.mouse.down()
+    reportIframePointerDown?.(epochMs)
+    await page.mouse.up()
+  } else await target.click()
   await page.waitForTimeout(300)
   await page.evaluate(() => {
     const marker = document.getElementById("video-touch-marker")
@@ -247,6 +259,11 @@ async function main() {
   let recording = false
   let captureFailed = false
   const inputEvents: NonNullable<Timeline["inputEvents"]> = []
+  reportIframePointerDown = epochMs => {
+    if (!recording) return
+    const atMs = Math.round(performance.now() - startedAt - (Date.now() - epochMs))
+    if (!inputEvents.some(event => event.kind === "click" && Math.abs(event.atMs - atMs) < 80)) inputEvents.push({ kind: "click", atMs })
+  }
   await context.exposeBinding("videoInputSound", (_source, kind: "click" | "key") => {
     if (recording && (kind === "click" || kind === "key")) inputEvents.push({ kind, atMs: Math.round(performance.now() - startedAt) })
   })

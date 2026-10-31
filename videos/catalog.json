@@ -780,7 +780,7 @@
         "date-limite",
         "bêta"
       ],
-      "published": false,
+      "published": true,
       "seedScenario": "volunteer-event-availability",
       "themes": [
         "parcours-benevole"
@@ -791,7 +791,8 @@
       "feature": "Disponibilités datées pour un événement",
       "updatedAt": "2026-10-31",
       "revision": 1,
-      "level": "essentiel"
+      "level": "essentiel",
+      "added": "2026-10-31"
     },
     {
       "id": "VOLUNTEER_PHONE_NOTIFICATIONS",
@@ -1091,7 +1092,7 @@
       ],
       "feature": "Proposition d'affectations",
       "updatedAt": "2026-10-31",
-      "revision": 2,
+      "revision": 3,
       "level": "avance",
       "added": "2026-10-30",
       "updated": "2026-10-31"

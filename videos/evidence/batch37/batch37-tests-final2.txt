@@ -1,0 +1,11 @@
+
+ RUN  v5.0.5 /private/tmp/benevoles-video-production.785n8ook
+
+
+ Test Files  38 passed (38)
+      Tests  1279 passed (1279)
+   Start at  15:37:42
+   Duration  1.58s (import 50%, tests 30%, transform 17%, worker 2%)
+
+    Isolate  38 workers spawned · ~95ms startup each (spawn + environment, per file)
+             at least ~307ms faster with isolate: false — reuses workers across files instead of one per file

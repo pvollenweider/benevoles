@@ -1,0 +1,44 @@
+{
+  "model": "gemini-3.8-flash",
+  "reviewedAt": "2026-10-31T14:36:40.933Z",
+  "videoSha256": "6ac074191afa66f7007ead2cb6c69dc3e64f8e4556de1240226d5d80c7c0a7b2",
+  "promptSha256": "9e7642f497f9756f62bf9b69e6d0223c0516e6d517385e68bb8352a4eb646fe9",
+  "clipSha256": "82379545c0564dc9714150688cab27a245a1e6cc9f0c73b29609ec94123c7808",
+  "scene": "ap-welcome",
+  "review": {
+    "heardOpening": "La proposition d'affectations en bêta",
+    "checkpoints": [
+      {
+        "spokenSeconds": 0.5,
+        "spoken": "La proposition d'affectations, en bêta",
+        "visibleSeconds": 0,
+        "visible": "Titre central affiché : « Générer une proposition d'affectations »",
+        "sync": "aligned",
+        "severity": "none"
+      },
+      {
+        "spokenSeconds": 2.8,
+        "spoken": "prépare un planning en brouillon selon les disponibilités",
+        "visibleSeconds": 2.5,
+        "visible": "Masquage du titre d'introduction et affichage de la page de gestion des disponibilités",
+        "sync": "aligned",
+        "severity": "none"
+      },
+      {
+        "spokenSeconds": 8.7,
+        "spoken": "Rien n'est publié, et aucun bénévole n'est prévenu, sans votre décision.",
+        "visibleSeconds": 8.7,
+        "visible": "Écran stable sur le tableau des disponibilités de l'événement pendant l'explication conceptuelle",
+        "sync": "aligned",
+        "severity": "none"
+      }
+    ],
+    "issues": [],
+    "voice": {
+      "consistent": true,
+      "warm": true,
+      "observation": "Voix claire, posée et parfaitement audible, débit naturel."
+    }
+  },
+  "note": "Automated observation of actual final video audio and images; not a claim of complete human validation"
+}

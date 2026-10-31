@@ -1,0 +1,7 @@
+STATUS: READY
+Batch37, take 1, 172.88 s. Product main 3a76e5dbad281961182eba67ffaec0b6dcd67ada; BUILD_ID HMN0A-g7F4Mdz4O4q0eoc.
+One complete new Kore master, independently recognized after measured silence recuts; one consistent voice across complete master. All eleven source and final chapter ASR pass; unconstrained multilingual final ASR and VTT contain zero viewer register tokens or stray instructions.
+Eleven audiovisual chapters / 38 checkpoints unflagged, and actual frames of every chapter inspected. Noah's six stays visible before chapter end; lock at +7.553 s after instruction end +6.671 s; removal confirmation +7.554 s after +6.979 s; add +12.721 s after +11.870 s. Button and hint shown, never clicked. Current empty-seat sentence and Proposition 1 visible. No seed field or computation settings.
+29 active drafts, Emma locked, Lou manual, Lea discarded, no registrations or notifications. Publication confirmation cancelled.
+Music 15.1–19.0 LU below voice, music-only minimum -33.7 LUFS; zero gaps. Soft effects on all real recorded interactions. OCR 33 actual full frames: no forbidden strings. Posters from final MP4 with isolated metadata. Validation passes. 1279 video/meta tests and 214 typed sources pass.
+No product bug observed. Real-time subjective listening unavailable; assisted sound/video review and actual image inspection performed. No src/ or content/guide/ modifications.

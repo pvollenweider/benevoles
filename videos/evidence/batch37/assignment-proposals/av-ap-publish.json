@@ -1,0 +1,52 @@
+{
+  "model": "gemini-3.8-flash",
+  "reviewedAt": "2026-10-31T14:38:35.499Z",
+  "videoSha256": "6ac074191afa66f7007ead2cb6c69dc3e64f8e4556de1240226d5d80c7c0a7b2",
+  "promptSha256": "8fe0f6f9bfc7562aeb592345884792aee20a85407ac249e7cc95e61e4c198b3d",
+  "clipSha256": "f6abee03401339ba5cf005351740906d2d22a7506ba14b1a2788f8a4768dbf01",
+  "scene": "ap-publish",
+  "review": {
+    "heardOpening": "Publier les affectations demande une confirmation",
+    "checkpoints": [
+      {
+        "spokenSeconds": 0.5,
+        "spoken": "Publier les affectations demande une confirmation",
+        "visibleSeconds": 0.5,
+        "visible": "Ouverture de la fenêtre modale de confirmation « Publier les affectations ? »",
+        "sync": "aligned",
+        "severity": "none"
+      },
+      {
+        "spokenSeconds": 4.5,
+        "spoken": "chacun reçoit son email",
+        "visibleSeconds": 4.5,
+        "visible": "Texte explicatif dans la modale indiquant que chaque personne reçoit un email avec ses missions",
+        "sync": "aligned",
+        "severity": "none"
+      },
+      {
+        "spokenSeconds": 7,
+        "spoken": "Annulons ici",
+        "visibleSeconds": 7.3,
+        "visible": "Fermeture de la modale de confirmation et retour à la page des affectations",
+        "sync": "aligned",
+        "severity": "none"
+      },
+      {
+        "spokenSeconds": 9.5,
+        "spoken": "la proposition reste un brouillon",
+        "visibleSeconds": 9.5,
+        "visible": "Affichage de la page « Affectations en brouillon » avec le bouton Publier toujours disponible",
+        "sync": "aligned",
+        "severity": "none"
+      }
+    ],
+    "issues": [],
+    "voice": {
+      "consistent": true,
+      "warm": true,
+      "observation": "Voix claire, posée et parfaitement synchronisée avec les actions à l'écran."
+    }
+  },
+  "note": "Automated observation of actual final video audio and images; not a claim of complete human validation"
+}

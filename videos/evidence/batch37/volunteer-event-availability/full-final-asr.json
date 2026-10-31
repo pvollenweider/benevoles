@@ -1,0 +1,26 @@
+{
+  "auditedAt": "2026-10-31T14:40:12.959Z",
+  "model": "gemini-3.8-flash",
+  "videoSha256": "8775699edadf67e7e03e3448f38b52d6bb12ac7017d155b7a4a0b5d228cd1362",
+  "audioSha256": "fa1b78bc1a84c882e95f1ce6e7db4376bd0a401bf4e42aa047b087256e1a890c",
+  "recognized": "L'association te demande quand tu es libre pour sa prochaine fête ? Tu lui réponds pour cet événement précis, date par date, avec le lien reçu par e-mail. Morgane a reçu cet e-mail de l'association. Il donne la date limite pour répondre. Elle appuie sur « Indiquer mes disponibilités ». La page « Mes disponibilités » s'ouvre. Pas besoin de compte, et seule l'organisation voit tes réponses. Juste en dessous, la date limite. Jusque-là, tu peux répondre ou changer tes réponses. Pour l'instant, Morgane n'a pas encore répondu. Le vendredi, Morgane choisit « Disponible à certaines heures ». Elle indique le début : 9h, et la fin : midi. Elle est aussi libre le soir : « Ajouter un autre horaire », de 20h jusqu'à 3h. Un horaire du soir peut finir le lendemain matin, la page le précise sous l'heure de fin. Le samedi, « Reprendre les horaires du vendredi » recopie les deux horaires d'un coup. Le dimanche, elle ne peut pas venir : « Pas disponible ». Si tu ne peux pas venir du tout, il y a le bouton « Pas disponible pendant tout l'événement ». Enfin, « Enregistrer mes disponibilités ». La page confirme que c'est enregistré. Et jusqu'à quand, ce même lien permet de changer les réponses. Un changement de programme ? Rouvrons le même lien. Les réponses de Morgane sont là et elle peut encore les modifier jusqu'à la date limite.",
+  "registerTokens": [
+    "te",
+    "tu",
+    "Tu",
+    "tes",
+    "tu",
+    "tes",
+    "tu"
+  ],
+  "subtitleRegisterTokens": [
+    "te",
+    "tu",
+    "Tu",
+    "tes",
+    "tu",
+    "tes",
+    "tu"
+  ],
+  "note": "Unconstrained entire final soundtrack; register matches require context review, music vocals must be compared with narration-only audio"
+}

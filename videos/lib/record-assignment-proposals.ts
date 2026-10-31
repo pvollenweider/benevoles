@@ -218,7 +218,7 @@ export async function recordAssignmentProposals(options: Options) {
     // The dialog names the person (independent review): « Brouillon d'Emma Johansson : Bar des Tilleuls, vendredi… ».
     const dialog = page.getByRole("dialog", { name: new RegExp(`^Brouillon d'${fullNameOf(AP_TYPED.locked.firstName)}\\W+${AP_TYPED.locked.poste}, vendredi`) })
     await dialog.waitFor()
-    // Mid-sentence control: this take finishes saying « puis Verrouiller » at 7.286 s.
+    // Mid-sentence control: batch37 master finishes saying « puis Verrouiller » at 6.671 s.
     await at(0.58) /* mid-sentence: wait until the named lock action has been spoken */
     await tap(page, dialog.getByRole("button", { name: "Verrouiller", exact: true }))
     await dialog.getByText(/^Ce brouillon est verrouillé\./).waitFor()
@@ -248,7 +248,7 @@ export async function recordAssignmentProposals(options: Options) {
     await tap(page, dialog.getByRole("button", { name: "Retirer ce brouillon", exact: true }))
     // The removal asks first (independent review): « Retirer ce brouillon ? », then « Retirer le brouillon ».
     await at("et confirmons")
-    await at(0.44) /* mid-sentence: the complete removal/confirmation sentence ends at 7.502 s */
+    await at(0.44) /* mid-sentence: batch37 removal/confirmation sentence ends at 6.979 s */
     const confirm = page.getByRole("alertdialog", { name: /^Retirer ce brouillon\W+$/ })
     await confirm.waitFor()
     await tap(page, confirm.getByRole("button", { name: "Retirer le brouillon", exact: true }))
@@ -266,7 +266,7 @@ export async function recordAssignmentProposals(options: Options) {
     // By its heading: once added, the button gives way to « Brouillon ajouté », with the shift for screen readers.
     const option = options.locator("li").filter({ has: page.getByRole("heading", { level: 3, name: new RegExp(`^${AP_TYPED.added.poste},`) }) })
     assert.equal(await option.getByText(/^Une fois publié avec ses autres brouillons/).count(), 0, "Lou's programme stays within the limits")
-    await at(0.76) /* mid-sentence: after the complete « Ajouter en brouillon » instruction at 13.062 s */
+    await at(0.76) /* mid-sentence: after the complete « Ajouter en brouillon » instruction at 11.870 s */
     await tap(page, add)
     await option.getByText(/^Brouillon ajouté\W/).waitFor()
     await at("Une proposition ne remplace jamais")

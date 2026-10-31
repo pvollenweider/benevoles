@@ -46,7 +46,7 @@ async function main() {
   const musicGainDb = manifest.musicGainDb ?? 0
   if (!Number.isFinite(musicGainDb) || Math.abs(musicGainDb) > 3) throw new Error("Music gain must be finite and between -3 and 3 dB; the measured music rule is unchanged")
   const musicMix = { ...MUSIC_MIX, volume: MUSIC_MIX.volume * 10 ** (musicGainDb / 20), gainDb: musicGainDb }
-  if (["SHIFT_SWAPS", "SECTOR_LEADERS", "PRIVACY_PERSONAL_LINKS", "SHIFT_ROSTER_VISIBILITY", "MEMBERS_INVITATIONS", "MEMBERS_REMINDERS", "PLATFORM_INTERNAL_ADMINISTRATION"].includes(manifest.id)) {
+  if (["VOLUNTEER_EVENT_AVAILABILITY", "SHIFT_SWAPS", "SECTOR_LEADERS", "PRIVACY_PERSONAL_LINKS", "SHIFT_ROSTER_VISIBILITY", "MEMBERS_INVITATIONS", "MEMBERS_REMINDERS", "PLATFORM_INTERNAL_ADMINISTRATION"].includes(manifest.id)) {
     await (await import("./focus-mailpit")).focusMailpit(manifest.id)
   }
   const timeline = await json<Timeline>(path.join(dir, "timeline.json"))
@@ -166,9 +166,9 @@ async function main() {
     // English date; other shots keep headers at their original scale.
     // Compose on the existing frame only after proving the intervals are disjoint.
     filters.push(`${videoMap === "0:v:0" ? "[0:v]" : videoMap}split=2[mailpitBase][mailpitSource]`)
-    if (timeline.mailpitBodyOnly && (!["SHIFT_SWAPS", "SECTOR_LEADERS", "PRIVACY_PERSONAL_LINKS", "PLATFORM_INTERNAL_ADMINISTRATION", "SHIFT_ROSTER_VISIBILITY"].includes(manifest.id) || timeline.mailpitHolds?.length)) throw new Error("Body-only Mailpit framing requires an approved capture without holds")
+    if (timeline.mailpitBodyOnly && (!["VOLUNTEER_EVENT_AVAILABILITY", "SHIFT_SWAPS", "SECTOR_LEADERS", "PRIVACY_PERSONAL_LINKS", "PLATFORM_INTERNAL_ADMINISTRATION", "SHIFT_ROSTER_VISIBILITY"].includes(manifest.id) || timeline.mailpitHolds?.length)) throw new Error("Body-only Mailpit framing requires an approved capture without holds")
     filters.push(timeline.mailpitBodyOnly
-      ? (["SHIFT_SWAPS", "SECTOR_LEADERS", "PRIVACY_PERSONAL_LINKS", "SHIFT_ROSTER_VISIBILITY"].includes(manifest.id) ? "[mailpitSource]crop=960:536:320:264,scale=1280:714,pad=1280:800:0:43:color=0xf8fafc[mailpitPane]" : "[mailpitSource]crop=960:576:320:224,scale=1280:768,pad=1280:800:0:16:color=0xf8fafc[mailpitPane]")
+      ? (["VOLUNTEER_EVENT_AVAILABILITY", "SHIFT_SWAPS", "SECTOR_LEADERS", "PRIVACY_PERSONAL_LINKS", "SHIFT_ROSTER_VISIBILITY"].includes(manifest.id) ? (manifest.id === "VOLUNTEER_EVENT_AVAILABILITY" ? "[mailpitSource]crop=960:488:320:312,scale=1280:650,pad=1280:800:0:75:color=0xf8fafc[mailpitPane]" : "[mailpitSource]crop=960:536:320:264,scale=1280:714,pad=1280:800:0:43:color=0xf8fafc[mailpitPane]") : "[mailpitSource]crop=960:576:320:224,scale=1280:768,pad=1280:800:0:16:color=0xf8fafc[mailpitPane]")
       : "[mailpitSource]crop=960:800:320:0,pad=1280:800:160:0:color=0xf8fafc[mailpitPane]")
     filters.push(`[mailpitBase][mailpitPane]overlay=0:0:enable='${enabled}'[mailpitFocused]`)
     videoMap = "[mailpitFocused]"

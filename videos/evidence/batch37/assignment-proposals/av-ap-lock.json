@@ -1,0 +1,52 @@
+{
+  "model": "gemini-3.8-flash",
+  "reviewedAt": "2026-10-31T14:38:09.186Z",
+  "videoSha256": "6ac074191afa66f7007ead2cb6c69dc3e64f8e4556de1240226d5d80c7c0a7b2",
+  "promptSha256": "902c298d2c433bc606bad42ee9416c496b2a4dcc02b3f08784a25b43e5237a0b",
+  "clipSha256": "bfcdb62f55f00ef95bf023a9cad7d72fdfd2e44e4d38e6a2837d125c89683ae3",
+  "scene": "ap-lock",
+  "review": {
+    "heardOpening": "De retour au planning",
+    "checkpoints": [
+      {
+        "spokenSeconds": 1.5,
+        "spoken": "chaque brouillon proposé porte la mention Proposé",
+        "visibleSeconds": 1.2,
+        "visible": "Affichage de la grille de planning avec les blocs marqués Proposé",
+        "sync": "aligned",
+        "severity": "none"
+      },
+      {
+        "spokenSeconds": 4.2,
+        "spoken": "Ouvrons celui d'Emma",
+        "visibleSeconds": 4.5,
+        "visible": "Ouverture de la fenêtre modale du brouillon d'Emma Johansson",
+        "sync": "aligned",
+        "severity": "none"
+      },
+      {
+        "spokenSeconds": 5.8,
+        "spoken": "puis Verrouiller",
+        "visibleSeconds": 6.8,
+        "visible": "Clic sur le bouton Verrouiller dans la modale",
+        "sync": "aligned",
+        "severity": "none"
+      },
+      {
+        "spokenSeconds": 9.6,
+        "spoken": "Le cadenas le signale sur le planning",
+        "visibleSeconds": 9,
+        "visible": "L'icône de cadenas avec la mention Verrouillé s'affiche dans la case d'Emma",
+        "sync": "aligned",
+        "severity": "none"
+      }
+    ],
+    "issues": [],
+    "voice": {
+      "consistent": true,
+      "warm": true,
+      "observation": "Voix off naturelle, fluide et parfaitement calée sur les manipulations de l'interface."
+    }
+  },
+  "note": "Automated observation of actual final video audio and images; not a claim of complete human validation"
+}
