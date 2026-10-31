@@ -2,7 +2,7 @@
 // SPDX-License-Identifier: AGPL-3.0-only
 
 import { describe, it, expect } from "vitest"
-import { coverageLine, droppedSentence, fillMissingTargets, formatHours, formToConfig, freshSeed, historyEntry, parseHours, posteChoicesFrom, replacedDraftCount, rotationSummary, runStateLabel, runTone, scopeShiftIds, summaryProblems, withoutProblem, type PageShift, type ProposalForm } from "../proposal-view"
+import { coverageLine, droppedSentence, fillMissingTargets, formatHours, ANOTHER_HINT, anotherOffer, anotherReplaceRecap, formToConfig, historyEntry, NO_OTHER_SENTENCE, ONLY_ONE_SENTENCE, runLine, sameAsSentence, parseHours, posteChoicesFrom, replacedDraftCount, rotationSummary, runStateLabel, runTone, scopeShiftIds, summaryProblems, withoutProblem, type PageShift, type ProposalForm } from "../proposal-view"
 
 // The page « Proposition d'affectations » (#1172): the form turned into a run's configuration.
 const shifts: PageShift[] = [
@@ -29,7 +29,6 @@ const form = (extra: Partial<ProposalForm> = {}): ProposalForm => ({
   ],
   maxConsecutiveDays: "2",
   maxNightAddOns: "2",
-  seed: "1172",
   ...extra,
 })
 
@@ -45,15 +44,16 @@ describe("form to configuration", () => {
     expect(r.config.reserve).toEqual([{ shiftId: "r1", count: 1 }])
     expect(r.config.rotation).toEqual({ maxConsecutiveDays: 2, maxNightAddOns: 2 })
     expect(r.config.preferences).toEqual([{ volunteerId: "p1", prefer: ["Camion 1"], avoid: [] }, { volunteerId: "p2", prefer: [], avoid: ["Nuit"] }])
-    expect(r.config.seed).toBe(1172)
+    // No seed from the page: the server gives a first proposal its fixed seed.
+    expect(r.config).not.toHaveProperty("seed")
     expect(r.targets).toEqual([{ volunteerId: "p1", targetMinutes: 720 }, { volunteerId: "p2", targetMinutes: 450 }])
   })
 
   it("lists every problem with the field to fix", () => {
-    const r = formToConfig(form({ dates: [], seed: "x", maxConsecutiveDays: "0", people: [{ volunteerId: "p1", included: true, targetHours: "beaucoup", prefer: "Nuit", avoid: "Nuit" }] }), shifts)
+    const r = formToConfig(form({ dates: [], maxConsecutiveDays: "0", people: [{ volunteerId: "p1", included: true, targetHours: "beaucoup", prefer: "Nuit", avoid: "Nuit" }] }), shifts)
     expect(r.ok).toBe(false)
     if (r.ok) return
-    expect(r.problems.map((p) => p.field)).toEqual(["proposal-dates", "target-p1", "avoid-p1", "proposal-consecutive", "proposal-seed"])
+    expect(r.problems.map((p) => p.field)).toEqual(["proposal-dates", "target-p1", "avoid-p1", "proposal-consecutive"])
     expect(formToConfig(form({ people: [] }), shifts)).toMatchObject({ ok: false, problems: [{ field: "proposal-people" }] })
     expect(formToConfig(form({ dates: ["2031-07-01"] }), shifts)).toMatchObject({ ok: false, problems: [{ field: "proposal-postes", message: expect.stringContaining("Aucun créneau") }] })
   })
@@ -115,7 +115,6 @@ describe("helpers", () => {
     expect(runStateLabel({ status: "failed", outcome: null })).toBe("Échec du calcul")
     expect(droppedSentence([])).toBeNull()
     expect(droppedSentence([{ reason: "availability" }, { reason: "capacity" }, { reason: "availability" }])).toBe("3 affectations écartées à l'écriture, les données ayant changé pendant le calcul : disponibilités changées (2), plus de place (1).")
-    expect(freshSeed(() => 0.5)).toBe(500000)
   })
 })
 
@@ -137,9 +136,53 @@ describe("outcome wording (#1172 review)", () => {
   it("leads with the coverage and names the history entries apart", () => {
     expect(coverageLine({ filled: 29, seats: 31 })).toBe("29 places couvertes sur 31")
     expect(coverageLine({ filled: 1, seats: 1 })).toBe("1 place couverte sur 1")
-    const base = { status: "finished", outcome: "proven_impossible", seed: 2026, writtenAt: new Date(), writtenCount: 29, coverage: { filled: 29, seats: 31 } }
-    expect(historyEntry(base, "30 octobre à 22:59")).toBe("30 octobre à 22:59 : couverture complète impossible, 29 places couvertes sur 31, tirage 2026, 29 affectations écrites")
-    expect(historyEntry({ ...base, seed: 7, writtenAt: null, coverage: null, status: "failed", outcome: null }, "1 mai à 10:00")).toBe("1 mai à 10:00 : échec du calcul, tirage 7, rien d'écrit")
+    // Runs are told apart by their ordinal, never by a draw number (owner decision 2026-10-31).
+    const base = { ordinal: 3, status: "finished", outcome: "proven_impossible", writtenAt: new Date(), writtenCount: 29, coverage: { filled: 29, seats: 31 } }
+    expect(historyEntry(base, "30 octobre à 22:59")).toBe("Proposition 3, 30 octobre à 22:59\u00a0: couverture complète impossible, 29 places couvertes sur 31, 29 affectations écrites")
+    expect(historyEntry({ ...base, ordinal: 1, writtenAt: null, coverage: null, status: "failed", outcome: null }, "1 mai à 10:00")).toBe("Proposition 1, 1 mai à 10:00\u00a0: échec du calcul, rien d'écrit")
+    expect(historyEntry(base, "x")).not.toMatch(/tirage|graine|seed/i)
+    expect(runLine(3, "31 octobre à 14:05")).toBe("Proposition 3, lancée le 31 octobre à 14:05.")
+  })
+})
+
+describe("« Proposer une autre répartition » (owner decision 2026-10-31)", () => {
+  const finished = { status: "finished", stale: [] as string[], report: {} }
+
+  it("is offered on a finished run with a report, whatever its coverage", () => {
+    expect(anotherOffer(finished)).toBe("button")
+    expect(anotherOffer({ ...finished, report: { onlyOne: false } })).toBe("button")
+    for (const status of ["queued", "running", "interrupted", "failed"]) expect(anotherOffer({ ...finished, status })).toBeNull()
+    expect(anotherOffer({ ...finished, report: null })).toBeNull()
+  })
+
+  it("says plainly that no other assignment covers as many seats when the search proved it, unless the data changed since", () => {
+    expect(anotherOffer({ ...finished, report: { onlyOne: true } })).toBe("only_one")
+    expect(anotherOffer({ ...finished, report: { onlyOne: true }, stale: ["availability"] })).toBe("button")
+    expect(ONLY_ONE_SENTENCE).toBe("Aucune autre répartition ne peut couvrir autant de places avec ces données et ces règles.")
+  })
+
+  it("explains itself in one line and names the earlier proposal it found again", () => {
+    expect(ANOTHER_HINT).toBe("Même périmètre et mêmes réglages\u00a0: rechercher une autre répartition, si elle existe.")
+    expect(sameAsSentence(2)).toBe("Aucune autre répartition trouvée\u00a0: cette recherche a retrouvé la même répartition que la proposition 2.")
+  })
+
+  it("says plainly when nothing different was found, keeps the drafts and still offers to try again", () => {
+    const none = { status: "finished", outcome: null, stopReason: "no_other" }
+    expect(runStateLabel(none)).toBe("Aucune autre répartition")
+    expect(runTone(none)).toBe("neutral")
+    expect(anotherOffer({ ...none, stale: [], report: null })).toBe("button")
+    expect(NO_OTHER_SENTENCE).toBe("Aucune autre répartition trouvée avec ces données et ces réglages. Vos brouillons n'ont pas changé.")
+    expect(historyEntry({ ...none, ordinal: 4, writtenAt: null, writtenCount: 0, coverage: null }, "1 mai à 10:00")).toBe("Proposition 4, 1 mai à 10:00\u00a0: aucune autre répartition, rien d'écrit")
+  })
+
+  it("asks before replacing proposed drafts, with its own words", () => {
+    const one = anotherReplaceRecap(1, 3)
+    expect(one.title).toBe("Remplacer 1 brouillon proposé\u00a0?")
+    expect(one.lead).toBe("Si une autre répartition est trouvée, elle remplace le brouillon proposé non verrouillé de ce périmètre. Sinon, rien ne change.")
+    expect(one.lines[0]).toBe("La proposition 3 reste consultable dans Propositions précédentes.")
+    expect(one.confirmLabel).toBe("Remplacer et proposer")
+    expect(anotherReplaceRecap(29, 1).title).toBe("Remplacer 29 brouillons proposés\u00a0?")
+    expect(anotherReplaceRecap(29, 1).lead).toContain("les 29 brouillons proposés non verrouillés")
   })
 })
 

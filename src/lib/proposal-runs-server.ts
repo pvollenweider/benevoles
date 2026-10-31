@@ -2,9 +2,14 @@
 // SPDX-License-Identifier: AGPL-3.0-only
 
 import { createHash, randomUUID } from "node:crypto"
+import { Prisma } from "@/generated/prisma/client"
 import { availabilityStamp, draftAvailabilityStamp, draftShiftTerms, MAX_EVENT_DRAFTS } from "./draft-assignments"
 import { readAnswersForFit, readAvailabilityGate } from "./availability-assist-data"
-import { canonicalConfig, changedParts, configProblem, SCRUBBED_HASH, type InputPart, type ProposalConfig } from "./proposal-config"
+import {
+  anotherSeed, canonicalConfig, changedParts, choicesKey, configProblem, DEFAULT_PROPOSAL_SEED, proposalConfigSchema, SCRUBBED_HASH, stableStringify,
+  type InputPart, type ProposalConfig, type ResolvedProposalConfig,
+} from "./proposal-config"
+import { assignmentSet, findAlternative } from "./proposal-alternative"
 import { buildReport, type ProposalReport } from "./proposal-explanations"
 import { PROPOSAL_DEADLINE_MS, type ProposalInput } from "./proposal-input"
 import { preflight } from "./proposal-preflight"
@@ -28,7 +33,7 @@ import { lockVolunteerRows, lockWorkloadShared } from "./workload-guard"
  * attempt holds a lease (`leaseToken`, `leaseExpiresAt` in database time), renewed every few seconds
  * only while still current; a lost or expired lease ends the attempt without writing anything. Any
  * read or launch on the event turns an expired run into « recherche interrompue » (lease_expired).
- * No checkpoint: a run lost with its process is retried by the organiser, with the same seed.
+ * No checkpoint: a run lost with its process is retried by the organiser.
  *
  * Writing (one transaction, the global lock order): the event's shared workload lock, the event
  * FOR SHARE, the shifts ORDER BY id, the volunteers ORDER BY id, the replaced drafts ORDER BY id, then
@@ -60,7 +65,13 @@ export type RunView = {
   status: string
   stopReason: string | null
   outcome: string | null
-  seed: number
+  /** Its rank among the event's runs, oldest first (« Proposition 3 »): how the organiser tells runs apart. */
+  ordinal: number
+  /**
+   * The ordinal of an earlier run with the same choices, the same data and another seed whose search
+   * found exactly the same assignments (« Aucune autre répartition trouvée »); null otherwise.
+   */
+  sameAs: number | null
   createdAt: Date
   startedAt: Date | null
   finishedAt: Date | null
@@ -93,38 +104,87 @@ export async function expireRuns(db: Pick<Db, "$executeRaw">, eventId?: string):
 
 export type LaunchResult = { ok: true; runId: string; replay: boolean; notice: string | null } | RunFailure
 
-const runRequestHash = (config: ProposalConfig) => sha(canonicalConfig(config))
+/**
+ * What one launch asks for: the page's configuration (its seed omitted: the first proposal's), or
+ * « Proposer une autre répartition » on an earlier run (`anotherOf`), whose stored choices are taken
+ * again with the next seed. The request hash names the request, not the seed it resolves to, so a
+ * retry with the same key returns the same run before anything is read again (Codex 2026-10-31).
+ */
+export type LaunchRequest = { config: ProposalConfig; anotherOf?: undefined } | { anotherOf: string; config?: undefined }
+
+const requestHashOf = (r: LaunchRequest) => sha(r.anotherOf !== undefined ? stableStringify({ anotherOf: r.anotherOf }) : canonicalConfig(r.config))
+
+const ANOTHER_UNAVAILABLE = "Les choix de cette proposition ne peuvent plus être repris : préparez une nouvelle proposition."
+
+/** The configuration a launch computes, its seed resolved, or why it cannot. */
+async function resolveConfig(db: Db, eventId: string, r: LaunchRequest): Promise<{ ok: true; config: ResolvedProposalConfig } | RunFailure> {
+  if (r.anotherOf === undefined) return { ok: true, config: { ...r.config, seed: r.config.seed ?? DEFAULT_PROPOSAL_SEED } }
+  const source = await db.proposalRun.findFirst({ where: { id: r.anotherOf, eventId }, select: { status: true, configuration: true, inputHash: true } })
+  if (!source) return { ok: false, status: 404, error: "Proposition introuvable.", code: "not_found" }
+  if (source.status !== "finished") return { ok: false, status: 409, error: "Cette proposition n'est pas terminée : attendez sa fin ou préparez une nouvelle proposition.", code: "source_unfinished" }
+  const parsed = proposalConfigSchema.safeParse(source.configuration)
+  if (source.inputHash === SCRUBBED_HASH || !parsed.success) return { ok: false, status: 409, error: ANOTHER_UNAVAILABLE, code: "source_unavailable" }
+  // Every seed already tried with these choices, whatever became of its run (failed, stopped, written).
+  const used = (await sameChoiceRuns(db, eventId, choicesKey(parsed.data))).flatMap((x) => x.seeds)
+  return { ok: true, config: { ...parsed.data, seed: anotherSeed(used) } }
+}
+
+/** The seeds an alternative's search tried, as stored in its progress (validated: stored JSON). */
+export function seedsTriedOf(progress: unknown): number[] {
+  const list = (progress as { seedsTried?: unknown } | null)?.seedsTried
+  return Array.isArray(list) ? list.filter((s): s is number => Number.isInteger(s) && s >= 0) : []
+}
+
+/**
+ * The event's runs with these choices (never a scrubbed one), oldest first: each one's seeds (its own
+ * and those its search tried) and, when it finished with a result, its assignments.
+ */
+async function sameChoiceRuns(db: Pick<Db, "proposalRun">, eventId: string, key: string) {
+  const runs = await db.proposalRun.findMany({
+    where: { eventId, inputHash: { not: SCRUBBED_HASH } },
+    select: { id: true, seed: true, status: true, configuration: true, progress: true, result: true, createdAt: true },
+    orderBy: [{ createdAt: "asc" }, { id: "asc" }],
+  })
+  return runs.filter((x) => { const c = proposalConfigSchema.safeParse(x.configuration); return c.success && choicesKey(c.data) === key }).map((x) => ({
+    id: x.id, createdAt: x.createdAt, seeds: [x.seed, ...seedsTriedOf(x.progress)],
+    assignments: x.status === "finished" ? ((x.result as { assignments?: ProposalAssignment[] } | null)?.assignments ?? null) : null,
+  }))
+}
 
 /**
  * Records a run, queued, with its frozen input; the caller starts `drainProposalRuns` after the
- * response. The same idempotency key with the same choices returns that run, whatever changed since
- * (checked before any new preflight); with other choices it is refused.
+ * response. The same idempotency key with the same request returns that run, whatever changed since
+ * (checked before any new read); with another request it is refused.
  */
-export async function launchProposal(db: Db, input: { eventId: string; actorId: string | null; idempotencyKey: string; config: ProposalConfig; now?: Date }): Promise<LaunchResult> {
+export async function launchProposal(db: Db, input: { eventId: string; actorId: string | null; idempotencyKey: string; now?: Date } & LaunchRequest): Promise<LaunchResult> {
   const now = input.now ?? new Date()
-  const requestHash = runRequestHash(input.config)
+  const request: LaunchRequest = input.anotherOf !== undefined ? { anotherOf: input.anotherOf } : { config: input.config! }
+  const requestHash = requestHashOf(request)
   const existing = await db.proposalRun.findFirst({ where: { eventId: input.eventId, idempotencyKey: input.idempotencyKey }, select: { id: true, requestHash: true } })
   if (existing) {
-    if (existing.requestHash !== requestHash) return { ok: false, status: 409, error: "Cette proposition a déjà été lancée avec d'autres choix : rechargez la page.", code: "key_reused" }
+    if (existing.requestHash !== requestHash) return { ok: false, status: 409, error: "Cette proposition a déjà été lancée avec d'autres choix : rechargez la page.", code: "key_reused" }
     return { ok: true, runId: existing.id, replay: true, notice: null }
   }
-  const problem = configProblem(input.config)
+  const resolved = await resolveConfig(db, input.eventId, request)
+  if (!resolved.ok) return resolved
+  const config = resolved.config
+  const problem = configProblem(config)
   if (problem) return { ok: false, status: 400, error: problem, code: "invalid" }
   await expireRuns(db, input.eventId)
 
-  const snap = await buildProposalSnapshot(db, input.eventId, input.config, "compute", now)
+  const snap = await buildProposalSnapshot(db, input.eventId, config, "compute", now)
   if (!snap.ok) return { ok: false, status: snap.status, error: snap.error, code: snap.code }
   const check = preflight(snap.input)
   if (!check.ok) return { ok: false, status: 409, error: check.message, code: check.code, counts: check.counts }
 
   const queued = await prisma.proposalRun.count({ where: { status: "queued" } })
-  if (queued >= MAX_QUEUED) return { ok: false, status: 429, error: "Trop de propositions sont en attente sur le service : réessayez dans une minute.", code: "busy" }
+  if (queued >= MAX_QUEUED) return { ok: false, status: 429, error: "Trop de propositions sont en attente sur le service : réessayez dans une minute.", code: "busy" }
 
   try {
     const run = await db.proposalRun.create({
       data: {
         eventId: input.eventId, createdById: input.actorId, idempotencyKey: input.idempotencyKey, requestHash, status: "queued",
-        seed: input.config.seed, configuration: input.config as object, replacement: snap.replacement, snapshot: snap.input as object,
+        seed: config.seed, configuration: config as object, replacement: snap.replacement, snapshot: snap.input as object, alternative: request.anotherOf !== undefined,
         inputVersion: snap.input.version, inputHash: snap.inputHash, hashes: snap.hashes,
       },
       select: { id: true },
@@ -134,8 +194,8 @@ export async function launchProposal(db: Db, input: { eventId: string; actorId: 
     if ((e as { code?: string }).code !== "P2002") throw e
     // Two launches at once: the same key (a double click) returns the first; another run already active is refused.
     const again = await db.proposalRun.findFirst({ where: { eventId: input.eventId, idempotencyKey: input.idempotencyKey }, select: { id: true, requestHash: true } })
-    if (again) return again.requestHash === requestHash ? { ok: true, runId: again.id, replay: true, notice: null } : { ok: false, status: 409, error: "Cette proposition a déjà été lancée avec d'autres choix : rechargez la page.", code: "key_reused" }
-    return { ok: false, status: 409, error: "Une proposition est déjà en cours pour cet événement : attendez qu'elle finisse ou arrêtez-la.", code: "active" }
+    if (again) return again.requestHash === requestHash ? { ok: true, runId: again.id, replay: true, notice: null } : { ok: false, status: 409, error: "Cette proposition a déjà été lancée avec d'autres choix : rechargez la page.", code: "key_reused" }
+    return { ok: false, status: 409, error: "Une proposition est déjà en cours pour cet événement : attendez qu'elle finisse ou arrêtez-la.", code: "active" }
   }
 }
 
@@ -166,7 +226,7 @@ export async function claimNext(): Promise<Claimed | null> {
  * Starts queued runs while this process has free slots, each to its end; called after a launch
  * response, and again whenever a run ends. Never throws (errors end the run as failed).
  */
-export async function drainProposalRuns(opts: { deadlineMs?: number; wait?: boolean } = {}): Promise<void> {
+export async function drainProposalRuns(opts: { deadlineMs?: number; wait?: boolean; maxAttempts?: number } = {}): Promise<void> {
   while (running < MAX_RUNNING_PER_PROCESS) {
     let claimed: Claimed | null
     try {
@@ -194,40 +254,104 @@ async function heartbeat(c: Claimed, progress: object): Promise<{ cancelRequeste
   return rows[0] ? { cancelRequested: rows[0].cancelRequestedAt != null } : null
 }
 
-/** Computes a claimed run and ends it (fenced). Exported for tests, which interleave other writes with it. */
-export async function executeRun(c: Claimed, opts: { deadlineMs?: number; wait?: boolean } = {}): Promise<void> {
-  const run = await prisma.proposalRun.findUnique({ where: { id: c.id }, select: { snapshot: true, event: { select: { organizationId: true } } } })
+/** At most this many seeds for one « Proposer une autre répartition », within the run's deadline. */
+export const MAX_ALTERNATIVE_ATTEMPTS = 20
+
+/**
+ * Computes a claimed run and ends it (fenced). Exported for tests, which interleave other writes
+ * with it. An alternative (« Proposer une autre répartition ») tries seed after seed on the same
+ * frozen input, within one deadline, until its result differs from every earlier finished run with
+ * the same choices; only then it writes, with the seed that gave it (Codex 2026-10-31). Nothing
+ * different: nothing written, the drafts untouched (`no_other`).
+ */
+export async function executeRun(c: Claimed, opts: { deadlineMs?: number; wait?: boolean; maxAttempts?: number } = {}): Promise<void> {
+  const deadlineAt = performance.now() + (opts.deadlineMs ?? PROPOSAL_DEADLINE_MS)
+  const run = await prisma.proposalRun.findUnique({ where: { id: c.id }, select: { snapshot: true, alternative: true, configuration: true, event: { select: { organizationId: true } } } })
   if (!run?.snapshot || !run.event.organizationId) {
     await prisma.$executeRaw`UPDATE "ProposalRun" SET status = 'failed', "stopReason" = 'error', "leaseToken" = NULL, "finishedAt" = now(), "updatedAt" = now() WHERE id = ${c.id} AND "leaseToken" = ${c.leaseToken}`
     return
   }
+  const db = getOrgClient(run.event.organizationId)
   const input = run.snapshot as unknown as ProposalInput
-  const search = new ProposalSearch(input)
   let lost = false
   let cancel = false
   let last = performance.now()
-  let outcome: SolveOutcome
-  try {
-    outcome = await runProposalSearch(input, {
-      search,
-      deadlineMs: opts.deadlineMs ?? PROPOSAL_DEADLINE_MS,
-      shouldStop: () => lost || cancel,
-      onProgress: async (p) => {
-        if (performance.now() - last < HEARTBEAT_MS) return
-        last = performance.now()
-        const beat = await heartbeat(c, { evaluations: p.evaluations, iterations: p.iterations, stage: search.stage })
-        if (!beat) lost = true
-        else if (beat.cancelRequested) cancel = true
-      },
-    })
-  } catch (e) {
-    console.error("proposal search failed", e)
-    await prisma.$executeRaw`UPDATE "ProposalRun" SET status = 'failed', "stopReason" = 'error', "leaseToken" = NULL, "finishedAt" = now(), "updatedAt" = now() WHERE id = ${c.id} AND "leaseToken" = ${c.leaseToken}`
+  const seedsTried: number[] = []
+  const progressOf = (p: { evaluations: number; iterations: number }, stage: string) => (run.alternative ? { ...p, stage, seedsTried } : { ...p, stage })
+  /** One search on the frozen input with this seed, within what is left of the deadline. */
+  async function attempt(seed: number): Promise<{ outcome: SolveOutcome; search: ProposalSearch } | null> {
+    // An alternative breaks the construction's ties by its seed (src/lib/proposal-solver.ts `diversify`).
+    const attemptInput: ProposalInput = run!.alternative ? { ...input, seed, diversify: true } : { ...input, seed }
+    const search = new ProposalSearch(attemptInput)
+    try {
+      const outcome = await runProposalSearch(attemptInput, {
+        search,
+        deadlineMs: Math.max(0, deadlineAt - performance.now()),
+        shouldStop: () => lost || cancel,
+        onProgress: async (p) => {
+          if (performance.now() - last < HEARTBEAT_MS) return
+          last = performance.now()
+          const beat = await heartbeat(c, progressOf(p, search.stage))
+          if (!beat) lost = true
+          else if (beat.cancelRequested) cancel = true
+        },
+      })
+      return { outcome, search }
+    } catch (e) {
+      console.error("proposal search failed", e)
+      await prisma.$executeRaw`UPDATE "ProposalRun" SET status = 'failed', "stopReason" = 'error', "leaseToken" = NULL, "finishedAt" = now(), "updatedAt" = now() WHERE id = ${c.id} AND "leaseToken" = ${c.leaseToken}`
+      return null
+    }
+  }
+
+  if (!run.alternative) {
+    const done = await attempt(input.seed)
+    if (!done || lost) return
+    await completeRun(db, c, done.outcome, buildReport(done.search.model, done.outcome))
     return
   }
+
+  // The earlier results to differ from, and every seed already tried with these choices.
+  const config = proposalConfigSchema.safeParse(run.configuration)
+  const others = config.success ? (await sameChoiceRuns(db, c.eventId, choicesKey(config.data))).filter((r) => r.id !== c.id) : []
+  const avoid = new Set(others.filter((r) => r.assignments).map((r) => assignmentSet(r.assignments)))
+  const tried = others.flatMap((r) => r.seeds)
+  const found = await findAlternative({
+    firstSeed: input.seed, tried, avoid,
+    maxAttempts: opts.maxAttempts ?? MAX_ALTERNATIVE_ATTEMPTS,
+    timeLeft: () => deadlineAt - performance.now(),
+    beforeAttempt: async (list) => {
+      seedsTried.splice(0, seedsTried.length, ...list)
+      // Each seed is recorded before its search (a lost attempt never tries it again unseen).
+      const beat = await heartbeat(c, progressOf({ evaluations: 0, iterations: 0 }, "setup"))
+      if (!beat) { lost = true; return false }
+      if (beat.cancelRequested) { cancel = true; return false }
+      await new Promise<void>((resolve) => setImmediate(resolve))
+      return true
+    },
+    attempt: async (seed) => {
+      const done = await attempt(seed)
+      if (!done || lost || cancel) return null
+      return { execution: done.outcome.execution, assignments: done.outcome.assignments, value: done }
+    },
+  })
   if (lost) return
-  const report = buildReport(search.model, outcome)
-  await completeRun(getOrgClient(run.event.organizationId), c, outcome, report)
+  if (found.kind === "found") {
+    const { outcome, search } = found.value
+    await completeRun(db, c, outcome, buildReport(search.model, outcome), { seed: found.seed, snapshot: { ...input, seed: found.seed, diversify: true }, seedsTried: found.seedsTried })
+    return
+  }
+  // A failed search already ended the run as failed.
+  if (found.kind === "stopped" && !cancel) return
+  // Nothing different (or stopped): nothing written, the drafts as they are. A stop asked meanwhile wins.
+  const progress = JSON.stringify({ evaluations: 0, iterations: 0, stage: "done", seedsTried })
+  const reason = cancel ? "cancelled" : "no_other"
+  await prisma.$executeRaw`
+    UPDATE "ProposalRun" SET
+      status = CASE WHEN ${reason} = 'cancelled' OR "cancelRequestedAt" IS NOT NULL THEN 'interrupted' ELSE 'finished' END,
+      "stopReason" = CASE WHEN ${reason} = 'cancelled' OR "cancelRequestedAt" IS NOT NULL THEN 'cancelled' ELSE 'no_other' END,
+      result = NULL, outcome = NULL, "leaseToken" = NULL, progress = ${progress}::jsonb, "finishedAt" = now(), "updatedAt" = now()
+    WHERE id = ${c.id} AND "leaseToken" = ${c.leaseToken} AND status = 'running' AND "leaseExpiresAt" > now()`
 }
 
 /** The stored result of a search: the assignments found and the report on them (the solver's evidence). */
@@ -252,7 +376,7 @@ async function lockRun(tx: Tx, runId: string): Promise<RunRow | null> {
 }
 
 /** The end of an attempt: interrupted (stored, nothing written) or finished (written into drafts). Fenced. */
-async function completeRun(db: Db, c: Claimed, outcome: SolveOutcome, report: ProposalReport): Promise<void> {
+async function completeRun(db: Db, c: Claimed, outcome: SolveOutcome, report: ProposalReport, accepted?: { seed: number; snapshot: ProposalInput; seedsTried: number[] }): Promise<void> {
   const result = resultOf(outcome, report)
   await db.$transaction(async (raw) => {
     const tx = raw as unknown as Tx
@@ -260,11 +384,18 @@ async function completeRun(db: Db, c: Claimed, outcome: SolveOutcome, report: Pr
     if (!peek) return
     const write = outcome.execution === "finished"
     const locked = write ? await lockForWrite(tx, c.eventId, outcome.assignments, peek.replacement as Replacement) : true
-    const run = await lockRun(tx, c.id)
-    if (!run || run.status !== "running" || run.leaseToken !== c.leaseToken || !run.leaseValid || !locked) return
-    const base = { result: result as object, solverVersion: outcome.solverVersion, outcome: report.outcome, leaseToken: null, finishedAt: new Date() }
+    const locked2 = await lockRun(tx, c.id)
+    if (!locked2 || locked2.status !== "running" || locked2.leaseToken !== c.leaseToken || !locked2.leaseValid || !locked) return
+    // An alternative's accepted seed is stored with its result, atomically: the run replays as written.
+    const run = accepted ? { ...locked2, configuration: { ...(locked2.configuration as object), seed: accepted.seed } } : locked2
+    const seedData = accepted
+      ? { seed: accepted.seed, configuration: run.configuration as object, snapshot: accepted.snapshot as object, progress: { evaluations: outcome.evaluations, iterations: outcome.iterations, stage: "done", seedsTried: accepted.seedsTried } }
+      : {}
+    const base = { result: result as object, solverVersion: outcome.solverVersion, outcome: report.outcome, leaseToken: null, finishedAt: new Date(), ...seedData }
     if (!write || run.cancelRequestedAt) {
-      await tx.proposalRun.updateMany({ where: { id: c.id }, data: { ...base, status: "interrupted", stopReason: run.cancelRequestedAt ? "cancelled" : outcome.stopReason } })
+      // An alternative never keeps a partial result to write: stopped, it is only stopped.
+      const kept = accepted ? { result: Prisma.DbNull, outcome: null } : {}
+      await tx.proposalRun.updateMany({ where: { id: c.id }, data: { ...base, ...kept, status: "interrupted", stopReason: run.cancelRequestedAt ? "cancelled" : outcome.stopReason } })
       return
     }
     const receipt = await materialise(tx, run, outcome.assignments, run.createdById)
@@ -402,9 +533,11 @@ export async function writeRunResult(db: Db, input: { eventId: string; runId: st
   await expireRuns(db, input.eventId)
   return db.$transaction(async (raw) => {
     const tx = raw as unknown as Tx
-    const peek = await tx.proposalRun.findFirst({ where: { id: input.runId, eventId: input.eventId }, select: { result: true, replacement: true, writtenAt: true, writtenCount: true, droppedCount: true } })
+    const peek = await tx.proposalRun.findFirst({ where: { id: input.runId, eventId: input.eventId }, select: { result: true, replacement: true, writtenAt: true, writtenCount: true, droppedCount: true, alternative: true, status: true } })
     if (!peek) return { ok: false as const, status: 404 as const, error: "Proposition introuvable.", code: "not_found" }
     if (peek.writtenAt) return { ok: true as const, replay: true, writtenCount: peek.writtenCount, droppedCount: peek.droppedCount }
+    // An alternative writes only a complete result that differs from the earlier ones, never a partial one.
+    if (peek.alternative && peek.status !== "finished") return { ok: false as const, status: 409 as const, error: "Cette proposition n'a pas de résultat à écrire.", code: "no_result" }
     const assignments = ((peek.result as { assignments?: ProposalAssignment[] } | null)?.assignments ?? [])
     await lockForWrite(tx, input.eventId, assignments, peek.replacement as Replacement)
     const run = await lockRun(tx, input.runId)
@@ -468,23 +601,61 @@ export async function readRun(db: Db, eventId: string, runId: string): Promise<R
     if (run.inputHash === SCRUBBED_HASH || !baseline) stale = ["people"]
     else stale = snap.ok ? changedParts(baseline, snap.hashes) : ["shifts"]
   }
+  const ordinals = await runOrdinals(db, eventId)
+  const sameAs = run.status === "finished" && run.inputHash !== SCRUBBED_HASH ? await sameResultAs(db, eventId, run, ordinals) : null
   return {
-    id: run.id, status: run.status, stopReason: run.stopReason, outcome: run.outcome, seed: run.seed, createdAt: run.createdAt, startedAt: run.startedAt,
+    id: run.id, status: run.status, stopReason: run.stopReason, outcome: run.outcome, ordinal: ordinals.get(run.id) ?? 0, sameAs, createdAt: run.createdAt, startedAt: run.startedAt,
     finishedAt: run.finishedAt, writtenAt: run.writtenAt, writtenCount: run.writtenCount, droppedCount: run.droppedCount, progress: run.progress,
     configuration: run.configuration, report: ((run.result as { report?: ProposalReport } | null)?.report) ?? null, written: run.written, stale,
     cancelRequested: !!run.cancelRequestedAt,
   }
 }
 
-/** The event's latest runs, newest first, without their payloads. */
+/** The event's latest runs, newest first, without their payloads, each with its ordinal. */
 export async function listRuns(db: Db, eventId: string, take = 10) {
   await expireRuns(db, eventId)
-  return db.proposalRun.findMany({
-    where: { eventId },
-    select: { id: true, status: true, stopReason: true, outcome: true, seed: true, createdAt: true, finishedAt: true, writtenAt: true, writtenCount: true, droppedCount: true },
-    orderBy: [{ createdAt: "desc" }, { id: "desc" }],
-    take,
-  })
+  const [runs, ordinals] = await Promise.all([
+    db.proposalRun.findMany({
+      where: { eventId },
+      select: { id: true, status: true, stopReason: true, outcome: true, createdAt: true, finishedAt: true, writtenAt: true, writtenCount: true, droppedCount: true },
+      orderBy: [{ createdAt: "desc" }, { id: "desc" }],
+      take,
+    }),
+    runOrdinals(db, eventId),
+  ])
+  return runs.map((r) => ({ ...r, ordinal: ordinals.get(r.id) ?? 0 }))
+}
+
+/** Each run's rank among all the event's runs, oldest first, by (createdAt, id): « Proposition 1 », « 2 »… */
+export async function runOrdinals(db: Pick<Db, "$queryRaw">, eventId: string): Promise<Map<string, number>> {
+  const rows = await db.$queryRaw<{ id: string; n: number }[]>`
+    SELECT id, (row_number() OVER (ORDER BY "createdAt", id))::int AS n FROM "ProposalRun" WHERE "eventId" = ${eventId}`
+  return new Map(rows.map((r) => [r.id, Number(r.n)]))
+}
+
+/**
+ * The ordinal of the first earlier run with the same choices, the same data (input hash), the same
+ * solver and another seed whose search found exactly the same assignments; null when there is none.
+ * Scrubbed runs never count.
+ */
+async function sameResultAs(db: Db, eventId: string, run: { id: string; seed: number; configuration: unknown; inputHash: string; result: unknown }, ordinals: Map<string, number>): Promise<number | null> {
+  const own = proposalConfigSchema.safeParse(run.configuration)
+  const mine = run.result as { assignments?: { shiftId: string; volunteerId: string }[]; solverVersion?: string } | null
+  if (!own.success || !mine?.assignments) return null
+  const rows = await db.$queryRaw<{ id: string; configuration: unknown; assignments: { shiftId: string; volunteerId: string }[] | null; solverVersion: string | null }[]>`
+    SELECT id, configuration, result->'assignments' AS assignments, result->>'solverVersion' AS "solverVersion"
+    FROM "ProposalRun"
+    WHERE "eventId" = ${eventId} AND id <> ${run.id} AND status = 'finished' AND "inputHash" = ${run.inputHash} AND seed <> ${run.seed} AND result IS NOT NULL`
+  const key = choicesKey(own.data)
+  const target = assignmentSet(mine.assignments)
+  const self = ordinals.get(run.id) ?? 0
+  const matches = rows.filter((r) => {
+    const n = ordinals.get(r.id) ?? 0
+    if (n === 0 || n >= self || r.solverVersion !== (mine.solverVersion ?? null)) return false
+    const c = proposalConfigSchema.safeParse(r.configuration)
+    return c.success && choicesKey(c.data) === key && assignmentSet(r.assignments) === target
+  }).map((r) => ordinals.get(r.id)!)
+  return matches.length > 0 ? Math.min(...matches) : null
 }
 
 /** The coverage of each run's report (« 29 places couvertes sur 31 » in the history), read without the whole result. */

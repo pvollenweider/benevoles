@@ -74,6 +74,13 @@ export type ProposalReport = {
   gaps: GapReport[]
   people: PersonReport[]
   coverage: { seats: number; filled: number; criticalSeats: number; criticalFilled: number; reserveSeats: number; reserveFilled: number }
+  /**
+   * Set (true) when no other assignment can cover as many seats: every statically eligible pair of the
+   * scope is used, so any other valid set is a strict subset and covers fewer seats (Codex
+   * 2026-10-31). Absent otherwise, and on runs stored before it existed. Dropped when a person is
+   * scrubbed from the run.
+   */
+  onlyOne?: true
 }
 
 /** The report of a search's result on its model (the model's eligibility computed). */
@@ -153,10 +160,13 @@ export function buildReport(model: Model, result: Pick<SolveOutcome, "assignment
     filled += Math.min(got, free); criticalFilled += Math.min(got, crit); reserveFilled += Math.min(got, reserve)
   }
 
+  const eligiblePairs = model.open.reduce((n, s) => n + model.candidates.get(s.id)!.length, 0)
+  const onlyOne = result.execution === "finished" && model.ready() && assignments.length === eligiblePairs
   return {
     version: REPORT_VERSION, outcome: outcomeOf(result.score, certs), execution: result.execution, stopReason: result.stopReason,
     certificates: certs, assignments, gaps, people,
     coverage: { seats, filled, criticalSeats, criticalFilled, reserveSeats, reserveFilled },
+    ...(onlyOne ? { onlyOne: true as const } : {}),
   }
 }
 
@@ -222,11 +232,21 @@ export function assignmentSentence(r: AssignmentReason): string {
   return parts.join(" ")
 }
 
-/** Why a seat is empty, in words: who is excluded and why, then what blocks the others here. */
+/**
+ * Why a seat is empty, in one or two plain sentences (coordinator review 2026-10-31): how many places
+ * are empty, then why. The shift's minimum is named only when it is below its places (otherwise every
+ * empty place is « du minimum » and saying so adds nothing); the proof is said only when the reason
+ * given does not already explain it.
+ */
 export function gapSentence(g: GapReport): string {
-  const parts = [`${count(g.missing, "place reste", "places restent")} sans personne${g.missingCritical > 0 ? `, dont ${count(g.missingCritical, "place", "places")} du minimum` : ""}${g.reserveMissing > 0 ? ` et ${count(g.reserveMissing, "place", "places")} de la réserve` : ""}.`]
+  const details: string[] = []
+  if (g.missingCritical > 0 && g.missingCritical < g.missing) details.push(`dont ${g.missingCritical} pour atteindre le minimum du créneau`)
+  if (g.reserveMissing > 0) details.push(`dont ${g.reserveMissing} de la réserve`)
+  const parts = [`${count(g.missing, "place vide", "places vides")}${details.length > 0 ? `, ${details.join(", ")}` : ""}.`]
+  let explained = false
   if (g.eligible === 0 && (g.excluded.no_answer ?? 0) + (g.excluded.availability_unknown ?? 0) + (g.excluded.availability_partial ?? 0) + (g.excluded.availability_outside ?? 0) === Object.values(g.excluded).reduce((n, v) => n + (v ?? 0), 0)) {
-    parts.push("Aucune disponibilité ne couvre entièrement ce créneau.")
+    parts.push("Personne n'est disponible sur tout ce créneau.")
+    explained = true
   } else {
     const excluded = (Object.entries(g.excluded) as [ExclusionCode, number][]).filter(([, n]) => n > 0)
     if (excluded.length > 0) parts.push(`Parmi les personnes choisies, ${excluded.map(([code, n]) => `${n} ${EXCLUSION_WORDS[code][n > 1 ? 1 : 0]}`).join(", ")}.`)
@@ -241,7 +261,7 @@ export function gapSentence(g: GapReport): string {
     if (words.length > 0) parts.push(`Parmi les ${count(g.eligible, "personne disponible", "personnes disponibles")} sur tout le créneau, ${words.join(", ")}.`)
     if (blocked.addable) parts.push("Aucune affectation supplémentaire trouvée dans le temps de calcul.")
   }
-  if (g.proven) parts.push("Impossible à pourvoir : il n'y a pas assez de personnes pouvant prendre ce créneau.")
+  if (g.proven && !explained) parts.push("Trop peu de personnes peuvent prendre ce créneau, quelle que soit la répartition.")
   return parts.join(" ")
 }
 

@@ -3,7 +3,6 @@
 
 import type { Metadata } from "next"
 import Link from "next/link"
-import { randomInt } from "node:crypto"
 import { notFound, redirect } from "next/navigation"
 import { getOrgContext } from "@/lib/auth-guard"
 import HelpLink from "@/components/admin/HelpLink"
@@ -41,7 +40,7 @@ export default async function ProposalPage({ params, searchParams }: { params: P
         </p>
         <p className="text-sm text-gray-700 mt-1"><Link href={drafts} className={linkClass}>Retour aux affectations en brouillon</Link></p>
       </div>
-      <ProposalWorkspace key={id} data={data} suggestedSeed={randomInt(1, 1_000_000)} eventInfoHref={`/admin/events/${id}/edit`} draftsHref={drafts} basePath={`/admin/events/${id}/availability/proposal`} />
+      <ProposalWorkspace key={id} data={data} eventInfoHref={`/admin/events/${id}/edit`} draftsHref={drafts} basePath={`/admin/events/${id}/availability/proposal`} />
     </div>
   )
 }

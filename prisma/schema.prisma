@@ -483,6 +483,8 @@ model ProposalRun {
   droppedCount      Int       @default(0)
   written           Json?
   baselineHashes    Json?
+  /// « Proposer une autre répartition »: its search tries further seeds until its result differs from the earlier ones with the same choices.
+  alternative       Boolean   @default(false)
   createdAt         DateTime  @default(now())
   updatedAt         DateTime  @updatedAt
 

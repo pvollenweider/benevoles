@@ -924,3 +924,25 @@ Affiches et métadonnées isolées ; `videos/renders.json` inchangé. Aperçu pu
 `videos/evidence/batch36/assignment-proposals/` ; première prise conservée et
 non retenue : `videos/evidence/batch36/assignment-proposals-rejected-take1/`.
 Aucun changement sous `src/` ou `content/guide/`, aucun push ni merge.
+
+## À refilmer : ASSIGNMENT_PROPOSALS, « Proposer une autre répartition » (#1172)
+
+Publiée en révision 2 avec « Numéro de tirage » 2026 tapé dans « Paramètres de
+calcul (facultatif) » et « tirage n° 2026 » sous le résultat. La PR qui remplace
+ce champ par le bouton « Proposer une autre répartition » retire les deux : la
+graine reste interne, et une première proposition prend toujours la graine fixe
+2026, donc le même résultat (29 places couvertes sur 31, `AP_EXPECTED` inchangé,
+vérifié par `videos/lib/__tests__/proposals-fixture.test.ts`). Sources mises à
+jour dans la même PR : narration de `ap-launch` sans le numéro, phrase sur le
+bouton à la fin de `ap-result`, bloc `viewer`, script et recorder (le bouton est
+montré, jamais cliqué ; la ligne lit « Proposition 1, lancée le … »). Image et
+narration publiées ne correspondent plus au produit : à refilmer, `revision` du
+catalogue à incrémenter au moment de la publication.
+
+Même PR, revue du coordinateur : la ligne des places restées vides devient
+« 2 places vides. Personne n'est disponible sur tout ce créneau. » (au lieu de
+« 2 places restent sans personne, dont 2 places du minimum. Aucune disponibilité
+ne couvre entièrement ce créneau. Impossible à pourvoir : … »). `AP_EXPECTED`,
+recorder et script suivent ; la narration (« personne n'est disponible pour tout
+le rangement du Kiosque ») reste juste. Recorder rejoué de bout en bout sur deux
+seeds neufs, sans rendu.

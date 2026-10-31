@@ -35,12 +35,12 @@ const data = (extra: Partial<ProposalPageData> = {}): ProposalPageData => ({
   names: { v1: "Léa Favre", v2: "Marco Rossi" }, shiftWords: { s1: "Camion 1, jeudi 10 juillet, de 9h à 15h", s2: "Renfort, vendredi 11 juillet, de 12h à 18h" },
   ...extra,
 })
-const view = (d = data()) => render(<ProposalWorkspace data={d} suggestedSeed={42} eventInfoHref="/admin/events/evt/edit" draftsHref="/admin/events/evt/availability/drafts" basePath="/admin/events/evt/availability/proposal" />)
+const view = (d = data()) => render(<ProposalWorkspace data={d} eventInfoHref="/admin/events/evt/edit" draftsHref="/admin/events/evt/availability/drafts" basePath="/admin/events/evt/availability/proposal" />)
 const ok = (body: unknown, status = 200) => ({ ok: status < 400, status, json: async () => body })
 const status = () => document.querySelector('p[role="status"]')!
 
 const baseRun = {
-  id: "run-1", seed: 42, createdAt: new Date("2031-06-01T10:00:00Z"), startedAt: null, finishedAt: null, writtenAt: null, writtenCount: 0, droppedCount: 0, progress: null,
+  id: "run-1", ordinal: 1, sameAs: null, createdAt: new Date("2031-06-01T10:00:00Z"), startedAt: null, finishedAt: null, writtenAt: null, writtenCount: 0, droppedCount: 0, progress: null,
   configuration: null, written: null, stale: [], cancelRequested: false, stopReason: null, outcome: null, report: null,
 }
 const report = {
@@ -106,7 +106,8 @@ describe("ProposalWorkspace", () => {
     await waitFor(() => expect(screen.getByRole("heading", { name: "Proposition en cours" })).toHaveFocus())
     expect(JSON.parse(fetchMock.mock.calls[0][1].body)).toEqual({ targets: [{ volunteerId: "v1", targetMinutes: 450, revision: null }] })
     const launched = JSON.parse(fetchMock.mock.calls[1][1].body)
-    expect(launched).toMatchObject({ idempotencyKey: "uuid-12345678", configuration: { scope: { shiftIds: ["s1", "s2"], volunteerIds: ["v1"] }, seed: 42 } })
+    expect(launched).toMatchObject({ idempotencyKey: "uuid-12345678", configuration: { scope: { shiftIds: ["s1", "s2"], volunteerIds: ["v1"] } } })
+    expect(launched.configuration).not.toHaveProperty("seed") // the server gives a first proposal its fixed seed
     expect(screen.getByRole("button", { name: "Arrêter la recherche" })).toBeInTheDocument()
     await act(async () => { await vi.advanceTimersByTimeAsync(1_600) })
     await waitFor(() => expect(status()).toHaveTextContent("Proposition : calcul en cours."))
@@ -122,22 +123,23 @@ describe("ProposalWorkspace", () => {
 
   it("keeps its state when the server sends the same run again, and focuses the result when another run is shown", () => {
     const first = { ...baseRun, status: "finished", outcome: "complete", writtenAt: new Date(), writtenCount: 1, report }
-    const r = render(<ProposalWorkspace data={data({ run: first as never })} suggestedSeed={42} eventInfoHref="/e" draftsHref="/d" basePath="/b" />)
+    const r = render(<ProposalWorkspace data={data({ run: first as never })} eventInfoHref="/e" draftsHref="/d" basePath="/b" />)
     fireEvent.change(within(screen.getByRole("table", { name: /Personnes à inclure/ })).getByRole("textbox", { name: "Objectif d'heures Léa Favre" }), { target: { value: "9" } })
-    r.rerender(<ProposalWorkspace data={data({ run: { ...first } as never })} suggestedSeed={42} eventInfoHref="/e" draftsHref="/d" basePath="/b" />)
+    r.rerender(<ProposalWorkspace data={data({ run: { ...first } as never })} eventInfoHref="/e" draftsHref="/d" basePath="/b" />)
     expect(within(screen.getByRole("table", { name: /Personnes à inclure/ })).getByRole("textbox", { name: "Objectif d'heures Léa Favre" })).toHaveValue("9")
-    r.rerender(<ProposalWorkspace data={data({ run: { ...first, id: "run-2", seed: 7 } as never })} suggestedSeed={42} eventInfoHref="/e" draftsHref="/d" basePath="/b" />)
+    r.rerender(<ProposalWorkspace data={data({ run: { ...first, id: "run-2", ordinal: 2 } as never })} eventInfoHref="/e" draftsHref="/d" basePath="/b" />)
     expect(screen.getByRole("heading", { name: "Résultat de la proposition" })).toHaveFocus()
-    expect(screen.getByText(/tirage n° 7\./)).toBeInTheDocument()
+    expect(screen.getByText(/^Proposition 2, lancée le /)).toBeInTheDocument()
+    expect(document.body.textContent).not.toMatch(/tirage/i)
   })
 
   it("shows a stored interrupted run without announcing it, and writes its partial result only after confirmation", async () => {
     const run = { ...baseRun, status: "interrupted", stopReason: "cancelled", outcome: "complete", report }
     fetchMock.mockResolvedValueOnce(ok({ replay: false, written: 1, dropped: 0 })).mockResolvedValueOnce(ok({ run: { ...run, writtenAt: new Date(), writtenCount: 1 } }))
-    view(data({ run: run as never, runs: [{ id: "run-1", status: "interrupted", stopReason: "cancelled", outcome: "complete", seed: 42, createdAt: new Date("2031-06-01T10:00:00Z"), finishedAt: null, writtenAt: null, writtenCount: 0, droppedCount: 0, coverage: { filled: 3, seats: 3 } }] }))
+    view(data({ run: run as never, runs: [{ id: "run-1", status: "interrupted", stopReason: "cancelled", outcome: "complete", ordinal: 1, createdAt: new Date("2031-06-01T10:00:00Z"), finishedAt: null, writtenAt: null, writtenCount: 0, droppedCount: 0, coverage: { filled: 3, seats: 3 } }] }))
     expect(status()).toHaveTextContent("")
     expect(screen.getByText("Calcul arrêté avant la fin")).toBeInTheDocument()
-    expect(screen.getByRole("link", { name: /3 places couvertes sur 3, tirage 42, rien d'écrit/ })).toHaveAttribute("aria-current", "page")
+    expect(screen.getByRole("link", { name: /^Proposition 1, .*3 places couvertes sur 3, rien d'écrit$/ })).toHaveAttribute("aria-current", "page")
     fireEvent.click(screen.getByRole("button", { name: "Utiliser ce résultat partiel" }))
     const dialog = screen.getByRole("dialog", { name: "Utiliser ce résultat partiel ?" })
     fireEvent.click(within(dialog).getByRole("button", { name: "Écrire dans les brouillons" }))
@@ -205,7 +207,9 @@ describe("ProposalWorkspace", () => {
     expect(screen.getByText("Rotation, nuit et réserve (facultatif)").closest("summary")).toHaveTextContent("Aucun réglage")
     fireEvent.click(screen.getByRole("button", { name: "Remplir avec 2 jours d'affilée et 2 ajouts de nuit au plus" }))
     expect(screen.getByText("Rotation, nuit et réserve (facultatif)").closest("summary")).toHaveTextContent("2 jours d'affilée au plus, 2 ajouts de nuit par personne au plus")
-    expect(screen.getByRole("textbox", { name: "Numéro de tirage" })).toHaveAccessibleDescription(/Même numéro et mêmes données\s: même proposition\./)
+    // No computation settings any more: the seed is internal (owner decision 2026-10-31).
+    expect(screen.queryByText(/Paramètres de calcul|Numéro de tirage/)).toBeNull()
+    expect(document.getElementById("proposal-seed")).toBeNull()
   })
 
   it("asks before replacing proposed drafts of the scope, and launches only after confirmation (finding 6)", async () => {
@@ -336,14 +340,14 @@ describe("ProposalWorkspace", () => {
       coverage: { seats: 4, filled: 3, criticalSeats: 2, criticalFilled: 2, reserveSeats: 1, reserveFilled: 0 },
     }
     const finished = { ...baseRun, status: "finished", outcome: "proven_impossible", writtenAt: new Date(), writtenCount: 1, report: gapReport, stale: ["availability"], written: { created: [], dropped: [{ shiftId: "s1", volunteerId: "v1", reason: "capacity" }], replaced: ["d"] } }
-    const runs = [{ id: "run-1", status: "finished", stopReason: null, outcome: "proven_impossible", seed: 42, createdAt: new Date("2031-06-01T10:00:00Z"), finishedAt: null, writtenAt: new Date(), writtenCount: 1, droppedCount: 0, coverage: { filled: 3, seats: 4 } }]
-    const r = render(<ProposalWorkspace data={data({ run: finished as never, runs, proposedByShift: { s1: 1 }, protection: "incomplete" })} suggestedSeed={42} eventInfoHref="/e" draftsHref="/d" basePath="/b" />)
+    const runs = [{ id: "run-1", status: "finished", stopReason: null, outcome: "proven_impossible", ordinal: 1, createdAt: new Date("2031-06-01T10:00:00Z"), finishedAt: null, writtenAt: new Date(), writtenCount: 1, droppedCount: 0, coverage: { filled: 3, seats: 4 } }]
+    const r = render(<ProposalWorkspace data={data({ run: finished as never, runs, proposedByShift: { s1: 1 }, protection: "incomplete" })} eventInfoHref="/e" draftsHref="/d" basePath="/b" />)
     fireEvent.click(screen.getByRole("button", { name: "Générer une proposition" }))
     expect(scan()).toEqual([])
     r.unmount()
     // The form's errors, with every kind of problem.
     view(twoMissing())
-    fireEvent.change(screen.getAllByRole("textbox", { name: "Numéro de tirage" })[0], { target: { value: "x" } })
+    fireEvent.change(screen.getByRole("textbox", { name: "Jours d'affilée sur une même catégorie, au plus" }), { target: { value: "x" } })
     fireEvent.click(screen.getByRole("button", { name: "Générer une proposition" }))
     expect(scan()).toEqual([])
     cleanup()
@@ -355,5 +359,116 @@ describe("ProposalWorkspace", () => {
     view(data({ run: { ...baseRun, status: "interrupted", stopReason: "cancelled", outcome: "complete", report, stale: ["availability"] } as never }))
     fireEvent.click(screen.getByRole("button", { name: "Utiliser ce résultat partiel" }))
     expect(scan()).toEqual([])
+  })
+})
+
+describe("« Proposer une autre répartition » (owner decision 2026-10-31)", () => {
+  const finished = { ...baseRun, status: "finished", outcome: "complete", writtenAt: new Date(), writtenCount: 1, report, configuration: { scope: { shiftIds: ["s1"], volunteerIds: ["v1"] } } }
+  const another = () => screen.getByRole("button", { name: "Proposer une autre répartition" })
+
+  it("offers it under a finished result, explained in one line, never with a draw number", () => {
+    view(data({ run: finished as never }))
+    expect(another()).toHaveAccessibleDescription(/^Même périmètre et mêmes réglages\s: rechercher une autre répartition, si elle existe\.$/)
+    expect(screen.getByText(/^Proposition 1, lancée le /)).toBeInTheDocument()
+    expect(document.body.textContent).not.toMatch(/tirage/i)
+  })
+
+  it("is not offered while computing, on a stopped or failed run, or without a report", () => {
+    for (const run of [{ ...baseRun, status: "queued" }, { ...baseRun, status: "running" }, { ...finished, status: "interrupted" }, { ...finished, status: "failed", report: null }, { ...finished, report: null }]) {
+      view(data({ run: run as never }))
+      expect(screen.queryByRole("button", { name: "Proposer une autre répartition" })).toBeNull()
+      cleanup()
+    }
+  })
+
+  it("launches the shown run's choices again, never the form's, and focuses the result heading", async () => {
+    fetchMock
+      .mockResolvedValueOnce(ok({ runId: "run-2", replay: false, notice: null }, 202))
+      .mockResolvedValue(ok({ run: { ...baseRun, id: "run-2", ordinal: 2, status: "queued" } }))
+    view(data({ run: finished as never }))
+    fireEvent.click(another())
+    await waitFor(() => expect(screen.getByRole("heading", { name: "Proposition en cours" })).toHaveFocus())
+    expect(fetchMock.mock.calls[0][0]).toBe("/api/admin/events/evt/proposals")
+    // No targets saved and no form checked (Léa has no target in the form): only the run named.
+    expect(JSON.parse(fetchMock.mock.calls[0][1].body)).toEqual({ idempotencyKey: "uuid-12345678", anotherOf: "run-1" })
+    await waitFor(() => expect(status()).toHaveTextContent(/Autre répartition demandée\s: calcul en attente\./))
+    expect(screen.queryByRole("heading", { name: /point à corriger/ })).toBeNull()
+  })
+
+  it("asks first with its own words when proposed drafts of that scope would be replaced; cancelling gives the focus back", async () => {
+    fetchMock
+      .mockResolvedValueOnce(ok({ runId: "run-2", replay: false, notice: null }, 202))
+      .mockResolvedValue(ok({ run: { ...baseRun, id: "run-2", ordinal: 2, status: "queued" } }))
+    view(data({ run: finished as never, proposedByShift: { s1: 2, s2: 5 } }))
+    another().focus()
+    fireEvent.click(another())
+    const dialog = screen.getByRole("alertdialog", { name: /^Remplacer 2 brouillons proposés\s\?$/ })
+    expect(dialog).toHaveTextContent("La proposition 1 reste consultable dans Propositions précédentes.")
+    fireEvent.click(within(dialog).getByRole("button", { name: "Annuler" }))
+    expect(screen.queryByRole("alertdialog")).toBeNull()
+    await waitFor(() => expect(another()).toHaveFocus())
+    expect(fetchMock).not.toHaveBeenCalled()
+    fireEvent.click(another())
+    fireEvent.click(within(screen.getByRole("alertdialog")).getByRole("button", { name: "Remplacer et proposer" }))
+    await waitFor(() => expect(screen.getByRole("heading", { name: "Proposition en cours" })).toHaveFocus())
+    expect(JSON.parse(fetchMock.mock.calls[0][1].body)).toMatchObject({ anotherOf: "run-1" })
+  })
+
+  it("says a refusal once, in the page's alert, and keeps the focus on the button", async () => {
+    fetchMock.mockResolvedValueOnce(ok({ error: "Les choix de cette proposition ne peuvent plus être repris\u00a0: préparez une nouvelle proposition.", code: "source_unavailable" }, 409))
+    view(data({ run: finished as never }))
+    another().focus()
+    fireEvent.click(another())
+    await waitFor(() => expect(screen.getByRole("alert")).toHaveTextContent("préparez une nouvelle proposition. Rien n'a été remplacé."))
+    expect(another()).toHaveFocus()
+    expect(status()).not.toHaveTextContent("préparez")
+  })
+
+  it("stays focusable with its reason when it cannot be used", () => {
+    view(data({ run: finished as never, protection: "off" }))
+    expect(another()).toHaveAttribute("aria-disabled", "true")
+    expect(another()).toHaveAccessibleDescription(/rechercher une autre répartition, si elle existe\. La protection des pauses/)
+    fireEvent.click(another())
+    expect(fetchMock).not.toHaveBeenCalled()
+  })
+
+  it("says plainly when no other assignment can cover as many seats, instead of the button", () => {
+    view(data({ run: { ...finished, report: { ...report, onlyOne: true } } as never }))
+    expect(screen.getByText("Aucune autre répartition ne peut couvrir autant de places avec ces données et ces règles.")).toBeInTheDocument()
+    expect(screen.queryByRole("button", { name: "Proposer une autre répartition" })).toBeNull()
+    cleanup()
+    // A proof on data that changed since no longer holds.
+    view(data({ run: { ...finished, report: { ...report, onlyOne: true }, stale: ["availability"] } as never }))
+    expect(another()).toBeInTheDocument()
+  })
+
+  it("says when the search found the same assignments as an earlier proposal, and still offers to try again", () => {
+    view(data({ run: { ...finished, id: "run-2", ordinal: 2, sameAs: 1 } as never }))
+    expect(screen.getByText(/^Aucune autre répartition trouvée\s: cette recherche a retrouvé la même répartition que la proposition 1\.$/)).toBeInTheDocument()
+    expect(another()).toBeInTheDocument()
+  })
+
+  it("announces that sentence when the run ends", async () => {
+    vi.useFakeTimers({ shouldAdvanceTime: true })
+    fetchMock
+      .mockResolvedValueOnce(ok({ runId: "run-2", replay: false, notice: null }, 202))
+      .mockResolvedValueOnce(ok({ run: { ...baseRun, id: "run-2", ordinal: 2, status: "queued" } }))
+      .mockResolvedValue(ok({ run: { ...finished, id: "run-2", ordinal: 2, sameAs: 1 } }))
+    view(data({ run: finished as never }))
+    fireEvent.click(another())
+    await waitFor(() => expect(screen.getByRole("heading", { name: "Proposition en cours" })).toHaveFocus())
+    await act(async () => { await vi.advanceTimersByTimeAsync(1_600) })
+    await waitFor(() => expect(status()).toHaveTextContent(/Aucune autre répartition trouvée\s: cette recherche a retrouvé la même répartition que la proposition 1\./))
+  })
+})
+
+describe("an alternative that found nothing different (coordinator review 2026-10-31)", () => {
+  it("says so plainly, shows no result to write, and still offers to try again", () => {
+    const none = { ...baseRun, id: "run-2", ordinal: 2, status: "finished", stopReason: "no_other", outcome: null, report: null, configuration: { scope: { shiftIds: ["s1"], volunteerIds: ["v1"] } } }
+    view(data({ run: none as never }))
+    expect(screen.getByText("Aucune autre répartition", { selector: "span" })).toBeInTheDocument()
+    expect(screen.getByText(/^Aucune autre répartition trouvée avec ces données et ces réglages\. Vos brouillons n'ont pas changé\.$/)).toBeInTheDocument()
+    expect(screen.queryByRole("button", { name: "Utiliser ce résultat partiel" })).toBeNull()
+    expect(screen.getByRole("button", { name: "Proposer une autre répartition" })).toBeInTheDocument()
   })
 })

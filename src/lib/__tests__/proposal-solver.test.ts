@@ -235,3 +235,26 @@ describe("the independent validator", () => {
     expect(validateAssignments({ ...input, policy: null }, [])).toEqual([{ code: "policy_missing" }])
   })
 })
+
+describe("« Proposer une autre répartition »: a diversified construction (#1172, coordinator review 2026-10-31)", () => {
+  const D = DATES[1]
+  const shifts = [tShift("a", D, "08:00", "12:00"), tShift("b", D, "12:30", "16:30"), tShift("c", D, "08:00", "12:00", { roleName: "Bar" }), tShift("d", D, "12:30", "16:30", { roleName: "Bar" })]
+  const people = ["n", "l", "m", "o"].map((id) => tPerson(id, { targetMinutes: 240 }))
+  const shape = (extra: Parameters<typeof tInput>[2]) => solveProposal(tInput(shifts, people, extra)).assignments.map((a) => `${a.shiftId}:${a.volunteerId}`).sort().join(",")
+
+  it("without it, the seed alone does not change a small result (fixed construction order)", () => {
+    expect(new Set([2026, 2027, 2028, 2029].map((seed) => shape({ seed }))).size).toBe(1)
+  })
+
+  it("with it, other seeds lead to other valid assignments, each one reproducible", () => {
+    const seen = new Set([2027, 2028, 2029, 2030, 2031, 2032].map((seed) => shape({ seed, diversify: true })))
+    expect(seen.size).toBeGreaterThan(1)
+    expect(shape({ seed: 2028, diversify: true })).toBe(shape({ seed: 2028, diversify: true }))
+    for (const seed of [2027, 2028]) {
+      const input = tInput(shifts, people, { seed, diversify: true })
+      const out = solveProposal(input)
+      expect(validateAssignments(input, out.assignments)).toEqual([])
+      expect(out.assignments).toHaveLength(4)
+    }
+  })
+})

@@ -2,7 +2,7 @@
 // SPDX-License-Identifier: AGPL-3.0-only
 
 import { z } from "zod"
-import { MAX_PROPOSAL_PEOPLE, MAX_PROPOSAL_SHIFTS, type ProposalInput } from "./proposal-input"
+import { DEFAULT_PROPOSAL_BUDGET, MAX_PROPOSAL_PEOPLE, MAX_PROPOSAL_SHIFTS, type ProposalInput } from "./proposal-input"
 
 /**
  * The assignment proposal (#1172): what the organiser chooses for one run, its checks, its
@@ -14,7 +14,16 @@ import { MAX_PROPOSAL_PEOPLE, MAX_PROPOSAL_SHIFTS, type ProposalInput } from "./
  * rotation categories (Codex 2026-10-30: kept with the run, not on the shifts; a poste outside every
  * category is its own category, never matched by name), the preferences per person, the seed and
  * the budget.
+ *
+ * The seed is internal (owner decision 2026-10-31, Codex): the organiser never sees or types it. A
+ * first proposal uses `DEFAULT_PROPOSAL_SEED`, so the same choices on the same data always give the
+ * same first proposal; « Proposer une autre répartition » takes the next seed of the sequence not yet
+ * tried for the same choices (`anotherSeed`). The run stores the seed it used.
  */
+
+/** The seed of a first proposal: a constant, so it never depends on ids, time or chance. */
+export const DEFAULT_PROPOSAL_SEED = 2026
+const MAX_SEED = 4_294_967_295
 
 const id = z.string().min(1).max(100)
 const roleName = z.string().min(1).max(200)
@@ -43,11 +52,14 @@ export const proposalConfigSchema = z.object({
     prefer: z.array(roleName).max(30).default([]),
     avoid: z.array(roleName).max(30).default([]),
   })).max(MAX_PROPOSAL_PEOPLE).default([]),
-  seed: z.number().int().min(0).max(4_294_967_295),
+  /** Optional: omitted, the server resolves it (`DEFAULT_PROPOSAL_SEED`, or the next one for « another »). */
+  seed: z.number().int().min(0).max(MAX_SEED).optional(),
   budget: z.object({ evaluations: z.number().int().min(PROPOSAL_BUDGET_RANGE.min).max(PROPOSAL_BUDGET_RANGE.max) }).optional(),
 })
 
 export type ProposalConfig = z.infer<typeof proposalConfigSchema>
+/** A configuration whose seed is resolved: what a run stores and computes. */
+export type ResolvedProposalConfig = ProposalConfig & { seed: number }
 
 const duplicates = (list: readonly string[]) => list.length !== new Set(list).size
 
@@ -87,9 +99,29 @@ export function canonicalConfig(c: ProposalConfig): string {
     categories: [...c.categories].map((k) => ({ ...k, shiftIds: sortIds(k.shiftIds) })).sort((a, b) => (a.key < b.key ? -1 : 1)),
     rotation: c.rotation,
     preferences: [...c.preferences].map((p) => ({ volunteerId: p.volunteerId, prefer: sortIds(p.prefer), avoid: sortIds(p.avoid) })).sort((a, b) => (a.volunteerId < b.volunteerId ? -1 : 1)),
-    seed: c.seed,
+    seed: c.seed ?? null,
     budget: c.budget ?? null,
   })
+}
+
+/**
+ * The choices of a configuration without its seed, the budget at its effective value: two runs with
+ * the same key are « the same scope and the same rules », whatever seed each one used.
+ */
+export function choicesKey(c: ProposalConfig): string {
+  return canonicalConfig({ ...c, seed: undefined, budget: { evaluations: c.budget?.evaluations ?? DEFAULT_PROPOSAL_BUDGET.evaluations } })
+}
+
+/**
+ * The seed of « Proposer une autre répartition »: the first of DEFAULT_PROPOSAL_SEED + 1, + 2, … not
+ * already used by a run with the same choices (`used`). Deterministic; never repeats a seed tried.
+ */
+export function anotherSeed(used: Iterable<number>): number {
+  const taken = new Set(used)
+  for (let k = 1; ; k++) {
+    const seed = (DEFAULT_PROPOSAL_SEED + k) % (MAX_SEED + 1)
+    if (!taken.has(seed)) return seed
+  }
 }
 
 /** JSON with object keys sorted at every level; Dates as ISO strings. Deterministic. */
@@ -172,10 +204,13 @@ export function scrubPersonFromRun(run: { configuration: Json; snapshot: Json; r
   const snapshot = snap ? { ...snap, people: ((snap.people as unknown[] | undefined) ?? []).filter((p) => asObject(p)?.id !== personId) } : run.snapshot
   const res = asObject(run.result)
   const report = asObject(res?.report)
+  // `onlyOne` was proven on the whole input: without the person it no longer holds.
+  const { onlyOne: _onlyOne, ...reportRest } = report ?? {}
+  void _onlyOne
   const result = res ? {
     ...res,
     assignments: ((res.assignments as unknown[] | undefined) ?? []).filter(notMe),
-    ...(report ? { report: { ...report, assignments: ((report.assignments as unknown[] | undefined) ?? []).filter(notMe), people: ((report.people as unknown[] | undefined) ?? []).filter(notMe) } } : {}),
+    ...(report ? { report: { ...reportRest, assignments: ((report.assignments as unknown[] | undefined) ?? []).filter(notMe), people: ((report.people as unknown[] | undefined) ?? []).filter(notMe) } } : {}),
   } : run.result
   const w = asObject(run.written)
   const written = w ? { ...w, created: ((w.created as unknown[] | undefined) ?? []).filter(notMe), dropped: ((w.dropped as unknown[] | undefined) ?? []).filter(notMe) } : run.written

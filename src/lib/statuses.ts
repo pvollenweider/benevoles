@@ -46,7 +46,7 @@ export type DraftAssignmentSource = (typeof DRAFT_ASSIGNMENT_SOURCES)[number]
 // Generated assignment proposals (#1172), see src/lib/proposal-runs-server.ts.
 export const PROPOSAL_RUN_STATUSES = ["queued", "running", "finished", "interrupted", "failed"] as const
 export type ProposalRunStatus = (typeof PROPOSAL_RUN_STATUSES)[number]
-export const PROPOSAL_STOP_REASONS = ["budget", "iterations", "deadline", "cancelled", "lease_expired", "error"] as const
+export const PROPOSAL_STOP_REASONS = ["budget", "iterations", "deadline", "cancelled", "lease_expired", "error", "no_other"] as const
 export type ProposalStopReason = (typeof PROPOSAL_STOP_REASONS)[number]
 export const PROPOSAL_OUTCOMES = ["complete", "incomplete", "proven_impossible"] as const
 export type ProposalOutcomeValue = (typeof PROPOSAL_OUTCOMES)[number]

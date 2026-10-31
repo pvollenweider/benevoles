@@ -10,16 +10,20 @@ import { proposalConfigSchema } from "@/lib/proposal-config"
 import { drainProposalRuns, latestConfiguration, launchProposal, listRuns } from "@/lib/proposal-runs-server"
 import { rateLimit } from "@/lib/rate-limit"
 
-const launchSchema = z.object({
-  /** One per click on « Générer une proposition » (the page's own): a retry returns the same run. */
-  idempotencyKey: z.string().min(8).max(100),
-  configuration: proposalConfigSchema,
-})
+/** One per click (« Générer une proposition » or « Proposer une autre répartition »): a retry returns the same run. */
+const idempotencyKey = z.string().min(8).max(100)
+const launchSchema = z.union([
+  // The page's choices; `configuration.seed` stays optional (omitted: the first proposal's seed).
+  z.strictObject({ idempotencyKey, configuration: proposalConfigSchema }),
+  // « Proposer une autre répartition »: the stored choices of that run of the event, the next seed.
+  z.strictObject({ idempotencyKey, anotherOf: z.string().min(1).max(100) }),
+])
 
 /**
  * GET /api/admin/events/[id]/proposals (#1172): the event's latest runs and the configuration of the
  * last one (to prefill the next). POST: launch a run on the configuration (scope, reserve, night
- * add-ons, rotation categories, preferences, seed); it is computed after the response and writes
+ * add-ons, rotation categories, preferences), or again on an earlier run's choices with another seed
+ * (`anotherOf`, « Proposer une autre répartition »); it is computed after the response and writes
  * draft assignments only, never a registration or an email. Organisers only, behind the beta
  * capability « assignmentProposals ».
  */
@@ -43,7 +47,9 @@ export async function POST(req: Request, { params }: { params: Promise<{ id: str
   if (!parsed.success) return validationError(parsed.error)
   const rl = await rateLimit(`org:${guard.organizationId}`, "proposal-launch", 30, 60 * 60 * 1000)
   if (!rl.ok) return NextResponse.json({ error: "Trop de propositions lancées : réessayez dans un moment." }, { status: 429, headers: { "Retry-After": String(rl.retryAfter) } })
-  const result = await launchProposal(guard.db, { eventId: id, actorId: guard.session.user?.id ?? null, idempotencyKey: parsed.data.idempotencyKey, config: parsed.data.configuration })
+  const body = parsed.data
+  const base = { eventId: id, actorId: guard.session.user?.id ?? null, idempotencyKey: body.idempotencyKey }
+  const result = await launchProposal(guard.db, "anotherOf" in body ? { ...base, anotherOf: body.anotherOf } : { ...base, config: body.configuration })
   if (!result.ok) return NextResponse.json({ error: result.error, code: result.code, ...(result.counts ? { counts: result.counts } : {}) }, { status: result.status })
   // Computed after the response, in this process (src/lib/proposal-runs-server.ts).
   after(() => drainProposalRuns())

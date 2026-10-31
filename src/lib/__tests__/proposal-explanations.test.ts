@@ -38,7 +38,8 @@ describe("report", () => {
     expect(report.gaps).toHaveLength(1)
     const gap = report.gaps[0]
     expect(gap).toMatchObject({ shiftId: "drive", missing: 1, missingCritical: 1, eligible: 0, excluded: { reserved: 2 }, proven: true })
-    expect(gapSentence(gap)).toBe("1 place reste sans personne, dont 1 place du minimum. Parmi les personnes choisies, 2 n'ont pas l'étiquette requise. Impossible à pourvoir : il n'y a pas assez de personnes pouvant prendre ce créneau.")
+    // Its minimum is all its places: « du minimum » would add nothing.
+    expect(gapSentence(gap)).toBe("1 place vide. Parmi les personnes choisies, 2 n'ont pas l'étiquette requise. Trop peu de personnes peuvent prendre ce créneau, quelle que soit la répartition.")
     expect(report.outcome).toBe("proven_impossible")
     expect(report.coverage).toMatchObject({ reserveSeats: 1, reserveFilled: 1 })
   })
@@ -54,12 +55,20 @@ describe("report", () => {
 describe("words", () => {
   it("says nobody's availability covers the shift when that is the only reason", () => {
     const g: GapReport = { shiftId: "s", missing: 2, missingCritical: 0, reserveMissing: 0, eligible: 0, excluded: { no_answer: 1, availability_partial: 3 }, blocked: {}, workloadRules: {}, proven: true }
-    expect(gapSentence(g)).toBe("2 places restent sans personne. Aucune disponibilité ne couvre entièrement ce créneau. Impossible à pourvoir : il n'y a pas assez de personnes pouvant prendre ce créneau.")
+    // Plain words, the proof not repeated: the reason already says why (coordinator review 2026-10-31).
+    expect(gapSentence(g)).toBe("2 places vides. Personne n'est disponible sur tout ce créneau.")
+    expect(gapSentence({ ...g, missingCritical: 2 })).toBe("2 places vides. Personne n'est disponible sur tout ce créneau.")
   })
 
   it("names what blocks the available people here, and a search that stopped first", () => {
     const g: GapReport = { shiftId: "s", missing: 1, missingCritical: 0, reserveMissing: 1, eligible: 4, excluded: {}, blocked: { overlap: 1, workload: 2, addable: 1 }, workloadRules: { daily: 2, rest: 1 }, proven: false }
-    expect(gapSentence(g)).toBe("1 place reste sans personne et 1 place de la réserve. Parmi les 4 personnes disponibles sur tout le créneau, 1 a une autre mission proposée à la même heure, 2 dépasseraient la durée maximale par journée de service, le repos entre deux journées de service. Aucune affectation supplémentaire trouvée dans le temps de calcul.")
+    expect(gapSentence(g)).toBe("1 place vide, dont 1 de la réserve. Parmi les 4 personnes disponibles sur tout le créneau, 1 a une autre mission proposée à la même heure, 2 dépasseraient la durée maximale par journée de service, le repos entre deux journées de service. Aucune affectation supplémentaire trouvée dans le temps de calcul.")
+  })
+
+  it("names the minimum only when it is below the shift's places", () => {
+    const g: GapReport = { shiftId: "s", missing: 3, missingCritical: 1, reserveMissing: 0, eligible: 0, excluded: { availability_outside: 2 }, blocked: {}, workloadRules: {}, proven: false }
+    expect(gapSentence(g)).toBe("3 places vides, dont 1 pour atteindre le minimum du créneau. Personne n'est disponible sur tout ce créneau.")
+    expect(gapSentence(g)).not.toMatch(/places? du minimum|Impossible à pourvoir|sans personne/)
   })
 
   it("labels the four states and never claims an optimum", () => {
@@ -85,5 +94,37 @@ describe("memoised time zone arithmetic (the search's speed-up)", () => {
     first.minutes = -1 // a caller changing its copy never changes the memo
     expect(localParts(Date.parse("2031-10-26T01:30:00.000Z"), "Europe/Zurich")).toEqual({ date: "2031-10-26", minutes: 2 * 60 + 30 })
     expect(() => localDateTimeToUtc(new Date("2031-01-01T00:00:00Z"), "10:00", "Not/AZone")).toThrow()
+  })
+})
+
+describe("proof that no other assignment covers as many seats (« Proposer une autre répartition », Codex 2026-10-31)", () => {
+  it("is set when every statically eligible pair is used: any other set would cover fewer seats", () => {
+    // One person, two shifts she can both take, nobody else: one assignment only.
+    const input = tInput([tShift("a", D1, "09:00", "12:00"), tShift("b", D2, "09:00", "12:00")], [tPerson("p", { targetMinutes: 6 * H })])
+    const report = buildReport(buildModel(input), solveProposal(input))
+    expect(report.assignments).toHaveLength(2)
+    expect(report.onlyOne).toBe(true)
+  })
+
+  it("holds when nobody can take any seat (no pair at all)", () => {
+    const input = tInput([tShift("drive", D1, "09:00", "12:00", { reservedTags: ["Permis"] })], [tPerson("p")])
+    expect(buildReport(buildModel(input), solveProposal(input)).onlyOne).toBe(true)
+  })
+
+  it("is absent when someone else could take a seat, and on an interrupted search", () => {
+    const input = tInput([tShift("a", D1, "09:00", "12:00")], [tPerson("p", { targetMinutes: 3 * H }), tPerson("q", { targetMinutes: 3 * H })])
+    const out = solveProposal(input)
+    const report = buildReport(buildModel(input), out)
+    expect(report.assignments).toHaveLength(1)
+    expect(report).not.toHaveProperty("onlyOne")
+    const lone = tInput([tShift("a", D1, "09:00", "12:00")], [tPerson("p", { targetMinutes: 3 * H })])
+    expect(buildReport(buildModel(lone), { ...solveProposal(lone), execution: "interrupted" })).not.toHaveProperty("onlyOne")
+  })
+
+  it("is absent when a seat stays empty although someone could take it (a heuristic result proves nothing)", () => {
+    const input = tInput([tShift("a", D1, "09:00", "12:00", { capacity: 2 })], [tPerson("p", { targetMinutes: 3 * H }), tPerson("q", { targetMinutes: 3 * H })])
+    const model = buildModel(input)
+    const out = solveProposal(input)
+    expect(buildReport(model, { ...out, assignments: out.assignments.slice(0, 1) })).not.toHaveProperty("onlyOne")
   })
 })

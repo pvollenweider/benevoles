@@ -2,7 +2,7 @@
 // SPDX-License-Identifier: AGPL-3.0-only
 
 import { describe, it, expect } from "vitest"
-import { canonicalConfig, changedParts, configProblem, configShiftIds, inputParts, proposalConfigSchema, scrubPersonFromRun, staleSentence, stableStringify, type ProposalConfig } from "../proposal-config"
+import { anotherSeed, canonicalConfig, changedParts, choicesKey, DEFAULT_PROPOSAL_SEED, configProblem, configShiftIds, inputParts, proposalConfigSchema, scrubPersonFromRun, staleSentence, stableStringify, type ProposalConfig } from "../proposal-config"
 import { tInput, tPerson, tShift, DATES } from "./fixtures/proposal-tiny"
 
 // The assignment proposal (#1172): a run's choices, their canonical form, fingerprints and scrubbing.
@@ -18,6 +18,10 @@ describe("configuration", () => {
     const c = base()
     expect(c).toMatchObject({ reserve: [], nightShiftIds: [], categories: [], preferences: [] })
     expect(proposalConfigSchema.safeParse({ ...c, seed: -1 }).success).toBe(false)
+    // The seed is optional: the page no longer sends one (owner decision 2026-10-31).
+    const { seed: _seed, ...withoutSeed } = c
+    void _seed
+    expect(proposalConfigSchema.safeParse(withoutSeed).success).toBe(true)
     expect(proposalConfigSchema.safeParse({ ...c, budget: { evaluations: 10 } }).success).toBe(false)
     expect(proposalConfigSchema.safeParse({ ...c, categories: [{ key: "Bad Key", name: "X", shiftIds: ["s1"] }] }).success).toBe(false)
   })
@@ -38,7 +42,33 @@ describe("configuration", () => {
     const shuffled = base({ scope: { shiftIds: ["s1", "s2"], volunteerIds: ["a", "b"] }, nightShiftIds: ["n1"], categories: [{ key: "x", name: "X", shiftIds: ["o1"] }] })
     expect(canonicalConfig(shuffled)).toBe(canonicalConfig(c))
     expect(canonicalConfig(base({ seed: 1 }))).not.toBe(canonicalConfig(base()))
+    expect(canonicalConfig(base({ seed: undefined }))).not.toBe(canonicalConfig(base()))
     expect(stableStringify({ b: 1, a: { d: new Date("2031-01-01T00:00:00Z"), c: [2, 1] } })).toBe('{"a":{"c":[2,1],"d":"2031-01-01T00:00:00.000Z"},"b":1}')
+  })
+})
+
+describe("internal seed (owner decision 2026-10-31, Codex)", () => {
+  it("gives a first proposal a fixed seed, never one from ids, time or chance", () => {
+    expect(DEFAULT_PROPOSAL_SEED).toBe(2026)
+  })
+
+  it("compares choices without the seed, the budget at its effective value", () => {
+    expect(choicesKey(base({ seed: 1 }))).toBe(choicesKey(base({ seed: 99 })))
+    expect(choicesKey(base({ seed: undefined }))).toBe(choicesKey(base()))
+    expect(choicesKey(base({ budget: { evaluations: 20_000 } }))).toBe(choicesKey(base()))
+    expect(choicesKey(base({ budget: { evaluations: 500 } }))).not.toBe(choicesKey(base()))
+    expect(choicesKey(base({ rotation: { maxConsecutiveDays: 3, maxNightAddOns: 2 } }))).not.toBe(choicesKey(base()))
+    expect(choicesKey(base({ scope: { shiftIds: ["s1"], volunteerIds: ["a", "b"] } }))).not.toBe(choicesKey(base()))
+  })
+
+  it("takes the next seed of the sequence not yet tried for these choices, deterministically", () => {
+    expect(anotherSeed([])).toBe(2027)
+    expect(anotherSeed([2026])).toBe(2027)
+    expect(anotherSeed([2026, 2027])).toBe(2028)
+    // Viewing the first run again and asking once more never redoes a seed already tried.
+    expect(anotherSeed([2026, 2027, 2028, 2030])).toBe(2029)
+    expect(anotherSeed(new Set([2027]))).toBe(2028)
+    expect(anotherSeed([2026, 2027])).toBe(anotherSeed([2027, 2026]))
   })
 })
 
@@ -66,7 +96,7 @@ describe("scrubbing a person from a run", () => {
     const run = {
       configuration: { scope: { shiftIds: ["s1"], volunteerIds: ["a", "b"] }, preferences: [{ volunteerId: "a", prefer: ["Bar"], avoid: [] }] },
       snapshot: { people: [{ id: "a" }, { id: "b" }] },
-      result: { assignments: [{ shiftId: "s1", volunteerId: "a" }, { shiftId: "s1", volunteerId: "b" }], report: { assignments: [{ volunteerId: "a" }], people: [{ volunteerId: "a" }, { volunteerId: "b" }], gaps: [{ shiftId: "s2", missing: 1 }] } },
+      result: { assignments: [{ shiftId: "s1", volunteerId: "a" }, { shiftId: "s1", volunteerId: "b" }], report: { assignments: [{ volunteerId: "a" }], people: [{ volunteerId: "a" }, { volunteerId: "b" }], gaps: [{ shiftId: "s2", missing: 1 }], onlyOne: true } },
       written: { created: [{ draftId: "d1", volunteerId: "a" }], dropped: [{ volunteerId: "b", reason: "capacity" }] },
       progress: { evaluations: 10 },
     }
@@ -74,6 +104,8 @@ describe("scrubbing a person from a run", () => {
     expect(JSON.stringify(out)).not.toContain('"a"')
     expect(out.result).toMatchObject({ assignments: [{ volunteerId: "b" }], report: { gaps: [{ shiftId: "s2", missing: 1 }], people: [{ volunteerId: "b" }] } })
     expect(out.written).toMatchObject({ dropped: [{ volunteerId: "b" }] })
+    // The proof that no other assignment exists held on the whole input only.
+    expect((out.result as { report: object }).report).not.toHaveProperty("onlyOne")
     expect(scrubPersonFromRun({ configuration: null, snapshot: null, result: null, written: null, progress: null }, "a")).toEqual({ configuration: null, snapshot: null, result: null, written: null, progress: null })
   })
 })
