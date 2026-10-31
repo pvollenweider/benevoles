@@ -1,0 +1,19 @@
+{
+  "status": "READY",
+  "take": 1,
+  "durationSeconds": 172.88,
+  "buildId": "HMN0A-g7F4Mdz4O4q0eoc",
+  "productCommit": "3a76e5dbad281961182eba67ffaec0b6dcd67ada",
+  "avScenes": 11,
+  "avFlagged": 0,
+  "fullFinalAsrRegisterTokens": 0,
+  "vttRegisterTokens": 0,
+  "musicGaps": 0,
+  "musicGapLu": [
+    15.1,
+    19.0
+  ],
+  "musicOnlyMinimumLufs": -33.7,
+  "problems": [],
+  "review": "Actual MP4 frames inspected across every chapter; audiovisual and audio observations assisted. Real-time subjective listening unavailable. No product bug observed."
+}

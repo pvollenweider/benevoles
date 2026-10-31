@@ -1,0 +1,6 @@
+
+/Users/pol/Desktop/benevoles/.claude/worktrees/video-batch25-26-sources/videos/tools/record.ts
+  2679:23  warning  'index' is assigned a value but never used              @typescript-eslint/no-unused-vars
+  5501:11  warning  'onboardingEventId' is assigned a value but never used  @typescript-eslint/no-unused-vars
+
+✖ 2 problems (0 errors, 2 warnings)

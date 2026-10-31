@@ -1,7 +1,8 @@
 // SPDX-FileCopyrightText: 2026 Philippe Vollenweider
 // SPDX-License-Identifier: AGPL-3.0-only
 import assert from "node:assert/strict"
-import { test } from "vitest"
+import { afterEach, test, vi } from "vitest"
+afterEach(() => vi.useRealTimers())
 import { correctedCsvSha, correctedXlsxSha, correctedCsvShaV2, correctedXlsxShaV2, ownsImportedNoEmailMember, validateImportBaseline, type ImportPerson, type ImportOwnership } from "../member-import-ownership"
 import { createSeedProofV2, expectedMemberV2 } from "../member-fixture-v2"
 test("no-email import ownership requires exact global ID, all source/default fields and ledger", () => {
@@ -32,6 +33,8 @@ test("no-email import ownership requires exact global ID, all source/default fie
   assert(!ownsImportedNoEmailMember(natural, { ...v2, manualContact: { ...manualContact, responseStatus: 200 } }, now))
 })
 test("baseline permits only 24 email fixtures and both exact persistent no-email seeds", () => {
+  vi.useFakeTimers()
+  vi.setSystemTime(new Date("2026-10-06T12:00:00Z"))
   const defaults: ImportPerson = { id: "cmuww4yid000an3a5bttlnq7r", organizationId: "default", firstName: "René", lastName: "Aubert", email: null, phone: "079 000 90 02", tags: [], active: true, notes: null, birthDate: null, availabilityPeriods: [], availabilityNote: null, createdAt: "2026-10-01T12:00:00Z" }
   const evidence = [{ ...defaults, organizationId: "default", createdAt: "2026-10-01T12:00:00Z", responseStatus: 201 }]
   const management = { ...defaults, id: "video-member-management-2", lastName: "Sansmail", phone: "079 000 02 00", tags: ["accueil"], notes: "Contact à joindre par téléphone pour les horaires.", availabilityPeriods: ["evening"] }

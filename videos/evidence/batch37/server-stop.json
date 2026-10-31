@@ -1,0 +1,9 @@
+{
+  "at": "2026-10-31T14:44:00.250044+00:00",
+  "serverPidTerminated": 38751,
+  "containersStopped": [
+    "e2fe53d36b29b14c9fd620436cb31720f5b1bd2049327bcaeed72fde5ba3c57e",
+    "b96d1760367dfd5a74201a67957218e80d50621bb9963eee1c3d506e4d3fa513"
+  ],
+  "onlyBatch37OwnedResources": true
+}

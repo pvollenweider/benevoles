@@ -1,0 +1,44 @@
+{
+  "model": "gemini-3.8-flash",
+  "reviewedAt": "2026-10-31T14:40:53.537Z",
+  "videoSha256": "8775699edadf67e7e03e3448f38b52d6bb12ac7017d155b7a4a0b5d228cd1362",
+  "promptSha256": "9e8ccbff6fd630a9385a40e701dccb4a477434d0f2f88c5e9245ebe7d803af35",
+  "clipSha256": "70beeef902a2d886c77717acf0a0a080b3899e86618a709db2bea5103219b003",
+  "scene": "va-night",
+  "review": {
+    "heardOpening": "Elle est aussi libre le soir",
+    "checkpoints": [
+      {
+        "spokenSeconds": 1.7,
+        "spoken": "Ajouter un autre horaire",
+        "visibleSeconds": 2.4,
+        "visible": "Clic sur 'Ajouter un autre horaire' et apparition du bloc Horaire 2",
+        "sync": "aligned",
+        "severity": "none"
+      },
+      {
+        "spokenSeconds": 3.4,
+        "spoken": "de vingt heures jusqu'à trois heures",
+        "visibleSeconds": 4.8,
+        "visible": "Saisie de 20:00 pour le début et 03:00 pour la fin",
+        "sync": "aligned",
+        "severity": "none"
+      },
+      {
+        "spokenSeconds": 7.9,
+        "spoken": "la page le précise sous l'heure de fin",
+        "visibleSeconds": 5.2,
+        "visible": "Affichage de la mention 'Ce créneau se termine le lendemain, samedi 21 novembre' sous le champ d'heure de fin",
+        "sync": "aligned",
+        "severity": "none"
+      }
+    ],
+    "issues": [],
+    "voice": {
+      "consistent": true,
+      "warm": true,
+      "observation": "Voix naturelle, claire et bien articulée, parfaitement synchronisée avec les actions à l'écran."
+    }
+  },
+  "note": "Automated observation of actual final video audio and images; not a claim of complete human validation"
+}

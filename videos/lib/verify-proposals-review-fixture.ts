@@ -7,7 +7,7 @@ import { surnameOf } from "./fixture-names"
 /** Prove the entire dedicated classroom is synthetic before sending its rendered pixels. */
 export async function verifyProposalsReviewFixture(db: PrismaClient) {
   const url = new URL(process.env.DATABASE_URL ?? "")
-  assert(["localhost", "127.0.0.1", "[::1]"].includes(url.hostname) && url.port === "45439" && url.pathname === "/benevoles_video", "Dedicated batch35 video database required")
+  assert(["localhost", "127.0.0.1", "[::1]"].includes(url.hostname) && ["45439", "45441"].includes(url.port) && url.pathname === "/benevoles_video", "Dedicated batch35 video database required")
   const org = await db.organization.findUniqueOrThrow({ where: { id: "video-proposals" }, include: { admins: true, volunteers: true, events: { include: { registrations: true, shifts: true, sectorLeaders: true, places: true } } } })
   assert(org.slug === "formation-propositions" && org.name === "Association des Rencontres du Val d'Orsel")
   assert(org.admins.length === 1 && org.admins[0].id === "video-proposals-owner" && org.admins[0].email === "video.proposals.owner@example.org")

@@ -1,0 +1,8 @@
+
+ RUN  v5.0.3 /Users/pol/Desktop/benevoles/.claude/worktrees/video-batch25-26-sources
+
+
+ Test Files  1 passed (1)
+      Tests  8 passed (8)
+   Start at  15:42:29
+   Duration  276ms (import 59%, transform 37%, tests 3%, worker 1%)

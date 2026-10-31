@@ -864,3 +864,25 @@ l'organisation dédiée, ses douze membres fictifs, les quatorze créneaux, les 
 lieux et l'absence d'inscription publiée avant l'envoi à la revue audiovisuelle.
 Le verrouillage et la correction restent de vraies écritures en brouillon ;
 la confirmation de publication est annulée.
+
+
+### Lot 37 : disponibilités datées côté bénévole et propositions
+
+Pile dédiée : PostgreSQL **45441**, SMTP **41038**, Mailpit **48038** et serveur
+produit vérifié **43102**. Le wrapper charge les outils avec le client Prisma
+généré dans la copie jetable vérifiée, sans régénérer `src/` du worktree.
+Rejouer le seed `volunteer-event-availability` ou `assignment-proposals` avant
+chaque répétition et chaque prise : chacun remplace la liste bêta globale.
+
+La première proposition utilise maintenant sa graine interne par défaut ; aucun
+numéro n'est saisi ni montré. Le bouton « Proposer une autre répartition » et
+son indication sont montrés sans clic. Les deux narrations sont des générations
+Kore entières. Le tutoiement est attendu pour la vidéo exclusivement bénévole.
+
+Le message de Morgane est demandé par la vraie route organisateur après chaque
+seed neuf, puis ouvert avant le premier chapitre. Son sujet sur deux lignes
+exige un cadrage sous les onglets Mailpit : x=320, y=312, 960×488. Le cadrage
+s'applique aux pixels réels de la capture, sans modifier le message.
+Les iframes Mailpit bloquent le script d'instrumentation initial : `tap` conserve
+alors l'horodatage de l'envoi du véritable `mouse.down()` sur le bouton, relayé et
+dédoublonné avant l'effet sonore. Aucun clic n'est inventé.

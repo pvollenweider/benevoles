@@ -1,0 +1,77 @@
+{
+  "id": "VOLUNTEER_EVENT_AVAILABILITY",
+  "slug": "volunteer-event-availability",
+  "validatedAt": "2026-10-31T14:32:16.309Z",
+  "continuousNarration": true,
+  "sentenceRevision": false,
+  "narrationContentChecked": true,
+  "voice": "Kore",
+  "captureMs": 91560,
+  "scenes": [
+    {
+      "id": "va-welcome",
+      "visualMs": 7905,
+      "audioMs": 7903,
+      "driftMs": 2
+    },
+    {
+      "id": "va-email",
+      "visualMs": 8856,
+      "audioMs": 8856,
+      "driftMs": 0
+    },
+    {
+      "id": "va-page",
+      "visualMs": 14356,
+      "audioMs": 14355,
+      "driftMs": 1
+    },
+    {
+      "id": "va-hours",
+      "visualMs": 7230,
+      "audioMs": 7229,
+      "driftMs": 1
+    },
+    {
+      "id": "va-night",
+      "visualMs": 10484,
+      "audioMs": 10481,
+      "driftMs": 3
+    },
+    {
+      "id": "va-copy",
+      "visualMs": 5701,
+      "audioMs": 5701,
+      "driftMs": 0
+    },
+    {
+      "id": "va-unavailable",
+      "visualMs": 8498,
+      "audioMs": 8497,
+      "driftMs": 1
+    },
+    {
+      "id": "va-save",
+      "visualMs": 9350,
+      "audioMs": 9349,
+      "driftMs": 1
+    },
+    {
+      "id": "va-change",
+      "visualMs": 7675,
+      "audioMs": 7671,
+      "driftMs": 4
+    }
+  ],
+  "anchorsChecked": 14,
+  "music": {
+    "voicedWindows": 77,
+    "musicOnlyWindows": 0,
+    "smallestGapLu": 14.3,
+    "largestGapLu": 18.7,
+    "quietestMusicOnlyLufs": null,
+    "loudestMusicOnlyLufs": null,
+    "medianVoiceLufs": -16.4
+  },
+  "issues": []
+}

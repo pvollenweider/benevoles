@@ -101,6 +101,13 @@ export async function prepareVolunteerAvailability(page: Page, base: string): Pr
   assert(link, "The availability request email has no personal link")
   // The volunteer has no session: the owner signs out before the take.
   await page.context().clearCookies()
+  // Put the delivered message on screen before recording starts: never retain
+  // even an initial frame of the organiser's off-screen preparation.
+  await page.goto(`${MAILPIT}/search?q=${encodeURIComponent(`to:${VOLUNTEER_EMAIL}`)}`)
+  const listed = page.locator(`a[href="/view/${mail.ID}"]`).first()
+  await listed.waitFor()
+  await listed.click()
+  await page.frameLocator("iframe").first().getByText(`Bonjour ${VA_TYPED.firstName},`, { exact: true }).waitFor()
   return { mailId: mail.ID, linkPath: link[1] }
 }
 
@@ -122,17 +129,14 @@ export async function recordVolunteerEventAvailability(options: Options) {
     assert.equal(await field.inputValue(), value, `the time field shows ${value}`)
   }
 
-  // The take's own email, alone in the list of Morgane's messages.
-  await page.goto(`${MAILPIT}/search?q=${encodeURIComponent(`to:${VOLUNTEER_EMAIL}`)}`); await settle(page)
-  const listed = page.locator(`a[href="/view/${setup.mailId}"]`).first()
-  await listed.waitFor()
+  // The take's own delivered message was opened before capture, after signing out.
+  await page.frameLocator("iframe").first().getByText(`Bonjour ${VA_TYPED.firstName},`, exact).waitFor()
 
   await scene("va-welcome", async () => {
     await page.screencast.showChapter(title, { description: "Tes heures libres, date par date, avec le lien reçu par email", duration: 2_400 })
   })
 
   await scene("va-email", async at => {
-    await tap(page, listed)
     const body = page.frameLocator("iframe").first()
     await body.getByText(`Bonjour ${VA_TYPED.firstName},`, exact).waitFor()
     await at("Il donne la date limite pour répondre")
@@ -160,6 +164,7 @@ export async function recordVolunteerEventAvailability(options: Options) {
   await scene("va-hours", async at => {
     await day(0).scrollIntoViewIfNeeded()
     await at("Le vendredi")
+    await at(0.44) /* mid-sentence: choose after « Disponible à certaines heures » is announced */
     await tap(page, day(0).getByRole("radio", { name: VA_EXPECTED.available, exact: true }))
     await at("Elle indique le début, neuf heures, et la fin, midi")
     await typeTime(timeField(0, 0, "Début"), VA_TYPED.friday[0].start)
@@ -182,6 +187,7 @@ export async function recordVolunteerEventAvailability(options: Options) {
     const copy = day(1).getByRole("button", { name: /^Reprendre les horaires du vendredi / })
     await copy.scrollIntoViewIfNeeded()
     await at("Le samedi")
+    await at(0.82) /* mid-sentence: copy after the complete named instruction, then retain the result */
     await tap(page, copy)
     assert.equal(await day(1).locator("[data-availability-range]").count(), 2, "Saturday takes Friday's two ranges")
     assert.equal(await timeField(1, 1, "Fin").inputValue(), VA_TYPED.friday[1].end)
@@ -191,6 +197,7 @@ export async function recordVolunteerEventAvailability(options: Options) {
   await scene("va-unavailable", async at => {
     await day(2).scrollIntoViewIfNeeded()
     await at("Le dimanche, elle ne peut pas venir")
+    await at(0.39) /* mid-sentence: after the spoken « Pas disponible » */
     await tap(page, day(2).getByRole("radio", { name: VA_EXPECTED.unavailable, exact: true }))
     assert.equal(await page.locator("[data-availability-no-answer]").count(), 0, "every date has a choice")
     await at("Si tu ne peux pas venir du tout")
@@ -202,6 +209,8 @@ export async function recordVolunteerEventAvailability(options: Options) {
     const save = page.getByRole("button", { name: VA_EXPECTED.save, exact: true })
     await save.scrollIntoViewIfNeeded()
     await page.getByText("Changements non enregistrés", exact).waitFor()
+    await at("Enfin, Enregistrer mes disponibilités")
+    await at(0.33) /* mid-sentence: after the complete save instruction at 2.949 s */
     await tap(page, save)
     await at("La page confirme que c'est enregistré")
     const saved = page.getByRole("status").filter({ hasText: VA_EXPECTED.savedLead })

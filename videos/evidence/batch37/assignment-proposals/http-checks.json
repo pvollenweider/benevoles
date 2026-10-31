@@ -1,0 +1,23 @@
+[
+  {
+    "file": "assignment-proposals.mp4",
+    "status": 200,
+    "contentType": "video/mp4",
+    "cors": "https://www.benevol.app",
+    "bytes": "11417611"
+  },
+  {
+    "file": "assignment-proposals.vtt",
+    "status": 200,
+    "contentType": "text/vtt",
+    "cors": "https://www.benevol.app",
+    "bytes": "3749"
+  },
+  {
+    "file": "assignment-proposals.jpg",
+    "status": 200,
+    "contentType": "image/jpeg",
+    "cors": "https://www.benevol.app",
+    "bytes": "88210"
+  }
+]

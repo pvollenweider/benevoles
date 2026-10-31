@@ -1,0 +1,44 @@
+{
+  "model": "gemini-3.8-flash",
+  "reviewedAt": "2026-10-31T14:40:12.569Z",
+  "videoSha256": "8775699edadf67e7e03e3448f38b52d6bb12ac7017d155b7a4a0b5d228cd1362",
+  "promptSha256": "46a0897cf707b403ffdbb3d14b327eeba7248f0694c6b25746d032e5f50ad5b2",
+  "clipSha256": "4bd6e7568f9d3dbfb53b8ce7e0e375a0fd9b529b614e052911a9349041d362b0",
+  "scene": "va-welcome",
+  "review": {
+    "heardOpening": "L'association te demande quand tu es libre",
+    "checkpoints": [
+      {
+        "spokenSeconds": 0.5,
+        "spoken": "L'association te demande quand tu es libre pour sa prochaine fête ?",
+        "visibleSeconds": 0.5,
+        "visible": "Titre 'Indiquer ses disponibilités date par date' superposé à un e-mail demandant les disponibilités pour la Fête des Lanternes de Combe-Aurel",
+        "sync": "aligned",
+        "severity": "none"
+      },
+      {
+        "spokenSeconds": 3,
+        "spoken": "Tu lui réponds pour cet événement précis, date par date",
+        "visibleSeconds": 3,
+        "visible": "L'e-mail s'affiche clairement invitant à indiquer les heures libres pour chaque date de l'événement",
+        "sync": "aligned",
+        "severity": "none"
+      },
+      {
+        "spokenSeconds": 5.2,
+        "spoken": "avec le lien reçu par email.",
+        "visibleSeconds": 5.2,
+        "visible": "Bouton d'action bleu 'Indiquer mes disponibilités' visible au sein de l'e-mail reçu",
+        "sync": "aligned",
+        "severity": "none"
+      }
+    ],
+    "issues": [],
+    "voice": {
+      "consistent": true,
+      "warm": true,
+      "observation": "Voix féminine naturelle, claire et engageante, accompagnée d'un léger fond musical."
+    }
+  },
+  "note": "Automated observation of actual final video audio and images; not a claim of complete human validation"
+}

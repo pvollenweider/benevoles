@@ -1,0 +1,13 @@
+Scene va-welcome: rehearsal
+Scene va-email: rehearsal
+Error: Scene va-email failed
+    at scene (/private/tmp/benevoles-video-production.785n8ook/videos/tools/record.ts:334:13)
+    at async Object.recordVolunteerEventAvailability (/private/tmp/benevoles-video-production.785n8ook/videos/lib/record-volunteer-event-availability.ts:137:3)
+    at async main (/private/tmp/benevoles-video-production.785n8ook/videos/tools/record.ts:564:7) {
+  [cause]: Error: Iframe click has no actual pointerdown proof
+      at tap (/private/tmp/benevoles-video-production.785n8ook/videos/tools/record.ts:140:25)
+      at async <anonymous> (/private/tmp/benevoles-video-production.785n8ook/videos/lib/record-volunteer-event-availability.ts:146:5)
+      at async scene (/private/tmp/benevoles-video-production.785n8ook/videos/tools/record.ts:327:7)
+      at async Object.recordVolunteerEventAvailability (/private/tmp/benevoles-video-production.785n8ook/videos/lib/record-volunteer-event-availability.ts:137:3)
+      at async main (/private/tmp/benevoles-video-production.785n8ook/videos/tools/record.ts:564:7)
+}
