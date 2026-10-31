@@ -98,6 +98,11 @@ async function main() {
     return seedVideoAssignmentProposals(prisma)
   }
   // The volunteer's dated availability link (#1146): its own organisation (scripts/seed-video-volunteer-availability.ts).
+  // Publishing the drafts and what volunteers can do next (#1172): its own organisation (scripts/seed-video-publication.ts).
+  if (scenario === "assignment-publication") {
+    const { seedVideoAssignmentPublication } = await import("./seed-video-publication")
+    return seedVideoAssignmentPublication(prisma)
+  }
   if (scenario === "volunteer-event-availability") {
     const { seedVideoVolunteerAvailability } = await import("./seed-video-volunteer-availability")
     return seedVideoVolunteerAvailability(prisma)

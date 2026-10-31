@@ -1098,6 +1098,32 @@
       "updated": "2026-10-31"
     },
     {
+      "id": "ASSIGNMENT_PUBLICATION",
+      "manifest": "assignment-publication",
+      "category": "planning",
+      "tags": [
+        "publication",
+        "affectations",
+        "emails",
+        "annulation",
+        "disponibilités",
+        "bêta"
+      ],
+      "published": false,
+      "seedScenario": "assignment-publication",
+      "themes": [
+        "planning-creneaux"
+      ],
+      "audience": [
+        "organisateur"
+      ],
+      "feature": "Publication des affectations en brouillon",
+      "updatedAt": "2026-10-31",
+      "revision": 1,
+      "level": "avance",
+      "added": "2026-10-31"
+    },
+    {
       "id": "MEMBERS_MANAGEMENT",
       "manifest": "members-management",
       "category": "members-invitations",

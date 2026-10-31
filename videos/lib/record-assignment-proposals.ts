@@ -280,17 +280,19 @@ export async function recordAssignmentProposals(options: Options) {
     const heading = page.getByRole("heading", { level: 2, name: "Publier les affectations", exact: true })
     await heading.scrollIntoViewIfNeeded()
     await page.getByText(AP_EXPECTED.drafts, exact).waitFor()
-    await at("Publier les affectations demande une confirmation")
+    // After the spoken label (independent review, 2026-10-31): the next clause of the same sentence.
+    await at("alors seulement les places sont prises")
     await tap(page, page.getByRole("button", { name: "Publier les affectations", exact: true }))
     const confirm = page.getByRole("dialog", { name: /^Publier les affectations\W+$/ })
     await confirm.waitFor()
     await confirm.getByText(/^29 affectations pour 11 personnes\W+chaque personne avec une adresse email reçoit un seul email avec ses missions\.$/).waitFor()
     // Everyone has an address here: no « … n'ont pas d'adresse email » line to read.
     assert.equal(await confirm.getByText(/pas d'adresse email/).count(), 0, "every person of the fixture has an email")
-    await at("Annulons ici")
+    // « Annulons ici » announces it; the tap follows that sentence.
+    await at("Tant que vous ne publiez pas")
     await tap(page, confirm.getByRole("button", { name: "Annuler", exact: true }))
     await confirm.waitFor({ state: "detached" })
-    await at("Tant que vous ne publiez pas")
+    await at("La vidéo suivante montre la publication")
     // Nothing was published: the heading, the counts and the button share the final frame.
     for (const target of [heading, page.getByText(AP_EXPECTED.drafts, exact), page.getByRole("button", { name: "Publier les affectations", exact: true })]) {
       const bounds = await target.boundingBox()

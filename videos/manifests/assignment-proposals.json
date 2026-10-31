@@ -75,8 +75,8 @@
     },
     {
       "id": "ap-publish",
-      "transcript": "Publier les affectations demande une confirmation : alors seulement les places sont prises, et chacun reçoit son email. Annulons ici. Tant que vous ne publiez pas, la proposition reste un brouillon, et aucun bénévole n'est prévenu.",
-      "fallbackDurationMs": 16100
+      "transcript": "Publier les affectations demande une confirmation : alors seulement les places sont prises, et chacun reçoit son email. Annulons ici. Tant que vous ne publiez pas, la proposition reste un brouillon, et aucun bénévole n'est prévenu. La vidéo suivante montre la publication, et ce que reçoivent les bénévoles.",
+      "fallbackDurationMs": 20300
     }
   ],
   "viewer": {
