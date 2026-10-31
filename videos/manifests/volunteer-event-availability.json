@@ -1,0 +1,84 @@
+{
+  "id": "VOLUNTEER_EVENT_AVAILABILITY",
+  "slug": "volunteer-event-availability",
+  "title": "Indiquer ses disponibilités date par date",
+  "description": "Répondre à l'organisation avec le lien reçu par email : pour chaque date de l'événement, tes horaires libres ou « Pas disponible ».",
+  "language": "fr-CH",
+  "voice": "Kore",
+  "continuousNarration": true,
+  "continuousPauseTags": false,
+  "voiceStyle": "Speak with an audible smile throughout. Use a warm, friendly adult female voice, as if helping a volunteer who is not at ease with computers, sitting beside them. Natural conversational French, calm pace around 125 words per minute and clear articulation. Read every provided sentence verbatim: never omit, paraphrase or summarize any words. Keep exactly the same voice identity, pitch, smile and energy from beginning to end. Never sound corporate, theatrical, childish or rushed.",
+  "viewport": {
+    "width": 1280,
+    "height": 800,
+    "deviceScaleFactor": 1
+  },
+  "chapterTitles": {
+    "va-hours": "Tes heures, date par date",
+    "va-save": "Enregistrer",
+    "va-change": "Changer tes réponses"
+  },
+  "segments": [
+    {
+      "id": "va-welcome",
+      "transcript": "L'association te demande quand tu es libre pour sa prochaine fête ? Tu lui réponds pour cet événement précis, date par date, avec le lien reçu par email.",
+      "fallbackDurationMs": 9000
+    },
+    {
+      "id": "va-email",
+      "transcript": "Morgane a reçu cet email de l'association. Il donne la date limite pour répondre. Elle appuie sur Indiquer mes disponibilités.",
+      "fallbackDurationMs": 9000
+    },
+    {
+      "id": "va-page",
+      "transcript": "La page Mes disponibilités s'ouvre. Pas besoin de compte, et seule l'organisation voit tes réponses. Juste en dessous, la date limite : jusque-là, tu peux répondre ou changer tes réponses. Pour l'instant, Morgane n'a pas encore répondu.",
+      "fallbackDurationMs": 15000
+    },
+    {
+      "id": "va-hours",
+      "transcript": "Le vendredi, Morgane choisit Disponible à certaines heures. Elle indique le début, neuf heures, et la fin, midi.",
+      "fallbackDurationMs": 9500
+    },
+    {
+      "id": "va-night",
+      "transcript": "Elle est aussi libre le soir : Ajouter un autre horaire, de vingt heures jusqu'à trois heures. Un horaire du soir peut finir le lendemain matin : la page le précise sous l'heure de fin.",
+      "fallbackDurationMs": 13500
+    },
+    {
+      "id": "va-copy",
+      "transcript": "Le samedi, Reprendre les horaires du vendredi recopie les deux horaires d'un coup.",
+      "fallbackDurationMs": 6500
+    },
+    {
+      "id": "va-unavailable",
+      "transcript": "Le dimanche, elle ne peut pas venir : Pas disponible. Si tu ne peux pas venir du tout, il y a le bouton Pas disponible pendant tout l'événement.",
+      "fallbackDurationMs": 10500
+    },
+    {
+      "id": "va-save",
+      "transcript": "Enfin, Enregistrer mes disponibilités. La page confirme que c'est enregistré, et jusqu'à quand ce même lien permet de changer les réponses.",
+      "fallbackDurationMs": 10000
+    },
+    {
+      "id": "va-change",
+      "transcript": "Un changement de programme ? Rouvrons le même lien : les réponses de Morgane sont là, et elle peut encore les modifier jusqu'à la date limite.",
+      "fallbackDurationMs": 10000
+    }
+  ],
+  "viewer": {
+    "summary": "Dans cette vidéo, tu réponds à la demande de disponibilités d'une organisation pour un événement : avec le lien reçu par email, tu indiques tes heures libres date par date, puis tu enregistres.",
+    "steps": [
+      "Dans l'email de l'organisation, appuie sur « Indiquer mes disponibilités » : la page « Mes disponibilités pour » suivie du nom de l'événement s'ouvre, sans compte à créer.",
+      "Pour chaque date, choisis « Disponible à certaines heures » et indique le début et la fin, ou choisis « Pas disponible ».",
+      "Pour un deuxième moment dans la même journée, appuie sur « Ajouter un autre horaire ». Un horaire du soir peut finir le lendemain matin, par exemple de 20h à 3h.",
+      "« Reprendre les horaires du … » recopie la réponse de la date précédente.",
+      "Appuie sur « Enregistrer mes disponibilités » et lis la confirmation."
+    ],
+    "remember": [
+      "Le lien est personnel : ne le transmets pas. Seule l'organisation voit tes réponses.",
+      "Tu peux changer tes réponses avec le même lien jusqu'à la date limite indiquée en haut de la page. Ensuite, écris à l'organisation pour une correction.",
+      "Si tu ne peux pas venir du tout, le bouton « Pas disponible pendant tout l'événement » coche « Pas disponible » pour toutes les dates ; il faut ensuite enregistrer.",
+      "Ces disponibilités concernent un seul événement. Tes disponibilités habituelles, sur ta page « Mes inscriptions », sont une autre chose."
+    ]
+  }
+}

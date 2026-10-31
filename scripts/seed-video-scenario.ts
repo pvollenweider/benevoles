@@ -97,6 +97,11 @@ async function main() {
     const { seedVideoAssignmentProposals } = await import("./seed-video-proposals")
     return seedVideoAssignmentProposals(prisma)
   }
+  // The volunteer's dated availability link (#1146): its own organisation (scripts/seed-video-volunteer-availability.ts).
+  if (scenario === "volunteer-event-availability") {
+    const { seedVideoVolunteerAvailability } = await import("./seed-video-volunteer-availability")
+    return seedVideoVolunteerAvailability(prisma)
+  }
   if (scenario === "event-reports" || scenario === "volunteer-badges") {
     const { seedVideoDocuments } = await import("./seed-video-documents")
     return seedVideoDocuments(prisma)

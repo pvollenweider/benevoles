@@ -10,7 +10,7 @@ import { loadManifest, videoDir } from "../lib/manifest"
 
 async function main() {
   const manifest = await loadManifest(process.argv[2])
-  if (!["BETA_ACCESS", "SECTORS", "SHIFT_SWAPS", "SECTOR_LEADERS", "PRIVACY_PERSONAL_LINKS", "WORKLOAD_PROTECTION", "ASSIGNMENT_PROPOSALS"].includes(manifest.id)) throw new Error("Only explicitly supported synthetic recordings accepted")
+  if (!["BETA_ACCESS", "SECTORS", "SHIFT_SWAPS", "SECTOR_LEADERS", "PRIVACY_PERSONAL_LINKS", "WORKLOAD_PROTECTION", "ASSIGNMENT_PROPOSALS", "VOLUNTEER_EVENT_AVAILABILITY"].includes(manifest.id)) throw new Error("Only explicitly supported synthetic recordings accepted")
   const key = process.env.GEMINI_API_KEY
   if (!key) throw new Error("GEMINI_API_KEY missing")
   const directory = videoDir(manifest.slug)
