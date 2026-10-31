@@ -43,7 +43,7 @@ const partial = (lastName: string) => row(lastName, {
 const cardNames = () => screen.getAllByRole("heading", { level: 4 }).map((h) => h.textContent)
 const groupNames = () => screen.getAllByRole("heading", { level: 3 }).map((h) => h.textContent)
 /** Accessible names keep the no-break space before « : » (French typography). */
-const NAME = (text: string) => new RegExp(`^${text.replace(/[()]/g, "\\$&").replace(" : ", "\\W+")}$`)
+const NAME = (text: string) => new RegExp(`^${text.replace(/[.*+?^${}()|[\]\\]/g, "\\$&").replace(" : ", "\\W+")}$`)
 
 describe("ShiftAssistPanel", () => {
   const panel = (rows: CandidateRow[]) => render(<ShiftAssistPanel eventId="evt" shift={{ id: "s1", name: "Bar · Soir" }} rows={rows} />)
