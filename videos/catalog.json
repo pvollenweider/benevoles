@@ -769,6 +769,31 @@
       ]
     },
     {
+      "id": "VOLUNTEER_EVENT_AVAILABILITY",
+      "manifest": "volunteer-event-availability",
+      "category": "volunteer-experience",
+      "tags": [
+        "disponibilités",
+        "lien-personnel",
+        "horaires",
+        "nuit",
+        "date-limite",
+        "bêta"
+      ],
+      "published": false,
+      "seedScenario": "volunteer-event-availability",
+      "themes": [
+        "parcours-benevole"
+      ],
+      "audience": [
+        "benevole"
+      ],
+      "feature": "Disponibilités datées pour un événement",
+      "updatedAt": "2026-10-31",
+      "revision": 1,
+      "level": "essentiel"
+    },
+    {
       "id": "VOLUNTEER_PHONE_NOTIFICATIONS",
       "manifest": "volunteer-phone-notifications",
       "category": "volunteer-experience",
