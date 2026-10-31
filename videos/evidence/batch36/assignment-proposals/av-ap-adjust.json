@@ -1,0 +1,60 @@
+{
+  "model": "gemini-3.8-flash",
+  "reviewedAt": "2026-10-31T07:16:27.862Z",
+  "videoSha256": "e6dc71ff2e1714b399cf4dbd57a2ce4312fd6bbf433d59c7564f74bc70b788ed",
+  "promptSha256": "b7bd2412d79bae5f70af332b3381365f9ac56e55be58fb4357bbfc39ff2a75b5",
+  "clipSha256": "d976ab6a7401993ee96e1a0a344b54fd63bf1c8f24ce7a42abba27a1b41a4a9f",
+  "scene": "ap-adjust",
+  "review": {
+    "heardOpening": "Léa doit partir plus tôt vendredi",
+    "checkpoints": [
+      {
+        "spokenSeconds": 2.1,
+        "spoken": "ouvrons son brouillon de billetterie",
+        "visibleSeconds": 2.5,
+        "visible": "Ouverture de la fenêtre modale du brouillon de billetterie de Léa Müller",
+        "sync": "aligned",
+        "severity": "none"
+      },
+      {
+        "spokenSeconds": 4.5,
+        "spoken": "puis Retirer ce brouillon",
+        "visibleSeconds": 5.1,
+        "visible": "Clic sur le bouton Retirer ce brouillon",
+        "sync": "aligned",
+        "severity": "none"
+      },
+      {
+        "spokenSeconds": 6.2,
+        "spoken": "et confirmons",
+        "visibleSeconds": 7,
+        "visible": "Clic sur Retirer le brouillon dans la fenêtre de confirmation",
+        "sync": "aligned",
+        "severity": "none"
+      },
+      {
+        "spokenSeconds": 8,
+        "spoken": "Dans la case de Lou, Ajouter",
+        "visibleSeconds": 8.8,
+        "visible": "Affichage de la modale Ajouter une affectation pour Lou Toth",
+        "sync": "aligned",
+        "severity": "none"
+      },
+      {
+        "spokenSeconds": 10.9,
+        "spoken": "puis Ajouter en brouillon sur la billetterie",
+        "visibleSeconds": 12.8,
+        "visible": "Clic sur Ajouter en brouillon sous le créneau Billetterie",
+        "sync": "aligned",
+        "severity": "none"
+      }
+    ],
+    "issues": [],
+    "voice": {
+      "consistent": true,
+      "warm": true,
+      "observation": "Voix féminine claire, posée et bien articulée, synchronisation fluide avec les actions à l'écran."
+    }
+  },
+  "note": "Automated observation of actual final video audio and images; not a claim of complete human validation"
+}
