@@ -24,8 +24,8 @@ describe("review reasons", () => {
 
   it("says each reason in words", () => {
     expect(reviewReasonTexts("merge,published")).toEqual([
-      "À revoir : deux fiches fusionnées avaient répondu différemment.",
-      "À revoir : disponibilités modifiées après la publication des affectations.",
+      "À revoir : deux fiches fusionnées avaient répondu différemment.",
+      "À revoir : disponibilités modifiées après la publication des affectations.",
     ])
     expect(reviewReasonTexts(null)).toEqual([])
   })

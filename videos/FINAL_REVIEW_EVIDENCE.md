@@ -875,3 +875,13 @@ sans effet), sans rendu ni voix. Révision du catalogue inchangée : elle sera
 incrémentée au nouveau rendu (nouvelle prise, nouvelle voix Kore, publication).
 En attendant, l'entrée du catalogue est masquée (#1226) : la remettre en ligne
 avec le nouveau rendu.
+
+Revue indépendante des écrans d'affectation (#1146, PR « Assisted assignment and drafts:
+independent review fixes ») : la ligne « À pourvoir » sous les dates, une seule pastille
+« Proposé » par brouillon généré, la personne dans le titre de la fenêtre d'un brouillon et
+la confirmation « Retirer ce brouillon ? » changent `ap-drafts`, `ap-lock` et `ap-adjust`.
+Narration (`ap-drafts`, `ap-adjust`), bloc `viewer`, script, sélecteurs et
+`AP_EXPECTED.coverage` mis à jour dans la même PR ; le recorder a été rejoué de bout en bout
+sur deux seeds neufs contre le build de la branche (repères sans effet), sans rendu ni voix.
+La vidéo reste à refilmer et masquée du catalogue jusqu'au nouveau rendu.
+

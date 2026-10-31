@@ -19,6 +19,9 @@ function Harness({ initial = EMPTY_ADD_FORM, onAdded = () => {}, onCancel = () =
 
 const combo = () => screen.getByRole("combobox", { name: "Créneau" })
 
+/** The alerts that say something: the search's alert is mounted empty from the start. */
+const filledAlerts = () => screen.queryAllByRole("alert").filter((a) => a.textContent?.trim())
+
 describe("ManualAddForm", () => {
   const fetchMock = vi.fn()
   beforeEach(() => {
@@ -85,7 +88,7 @@ describe("ManualAddForm", () => {
 
     fireEvent.submit(screen.getByRole("button", { name: "Ajouter" }).closest("form")!)
     expect(fetchMock).not.toHaveBeenCalled()
-    expect(screen.queryByRole("alert")).toBeNull()
+    expect(filledAlerts()).toEqual([])
     expect(combo()).toHaveAttribute("aria-invalid", "true")
     const error = screen.getByText("Sélectionnez un créneau.")
     expect(combo().getAttribute("aria-describedby")).toBe(error.id)
@@ -120,13 +123,13 @@ describe("ManualAddForm", () => {
     fetchMock.mockResolvedValueOnce({ ok: false, status: 409, json: async () => ({ code: "role_limit", error: "Limite atteinte pour ce poste." }) })
     render(<Harness initial={{ ...EMPTY_ADD_FORM, firstName: "A", lastName: "B", shiftId: "s1" }} />)
     fireEvent.click(screen.getByRole("button", { name: "Ajouter" }))
-    const force = await screen.findByRole("button", { name: "Ajouter quand même" })
-    expect(screen.getByRole("alert")).toHaveTextContent("Limite atteinte pour ce poste.")
+    const force = await screen.findByRole("button", { name: "Ajouter malgré la limite" })
+    expect(filledAlerts()[0]).toHaveTextContent("Limite atteinte pour ce poste.")
     expect(force).toHaveAccessibleDescription("Limite atteinte pour ce poste.")
 
     fireEvent.change(screen.getByRole("textbox", { name: "Nom" }), { target: { value: "C" } })
-    expect(screen.queryByRole("button", { name: "Ajouter quand même" })).toBeNull()
-    expect(screen.getByRole("alert")).toHaveTextContent("Le formulaire a changé : validez à nouveau.")
+    expect(screen.queryByRole("button", { name: "Ajouter malgré la limite" })).toBeNull()
+    expect(filledAlerts()[0]).toHaveTextContent("Le formulaire a changé : validez à nouveau.")
   })
 
   // #914: a member already in the list is placed without retyping, email or not.
@@ -175,9 +178,9 @@ describe("ManualAddForm", () => {
     fetchMock.mockResolvedValueOnce({ ok: false, status: 409, json: async () => ({ error: "Cette personne est déjà inscrite sur ce créneau." }) })
     render(<Harness initial={{ ...EMPTY_ADD_FORM, firstName: "A", lastName: "B", shiftId: "s1" }} />)
     fireEvent.click(screen.getByRole("button", { name: "Ajouter" }))
-    expect(await screen.findByRole("alert")).toHaveTextContent("Cette personne est déjà inscrite sur ce créneau.")
+    await waitFor(() => expect(filledAlerts()[0]).toHaveTextContent("Cette personne est déjà inscrite sur ce créneau."))
     fireEvent.change(screen.getByRole("textbox", { name: "Nom" }), { target: { value: "C" } })
-    expect(screen.queryByRole("alert")).toBeNull()
+    expect(filledAlerts()).toEqual([])
   })
 
   // #916: what the volunteer will receive is said before submitting, and describes the button.

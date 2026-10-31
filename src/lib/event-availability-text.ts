@@ -187,7 +187,7 @@ export function withReviewReason(stored: string | null | undefined, reason: stri
 /** What the organisers read about a flagged answer, one sentence per reason. */
 export function reviewReasonTexts(stored: string | null | undefined): string[] {
   return reviewReasons(stored).map((r) =>
-    r === REVIEW_MERGE ? "À revoir : deux fiches fusionnées avaient répondu différemment."
-      : r === REVIEW_PUBLISHED ? "À revoir : disponibilités modifiées après la publication des affectations."
+    r === REVIEW_MERGE ? "À revoir : deux fiches fusionnées avaient répondu différemment."
+      : r === REVIEW_PUBLISHED ? "À revoir : disponibilités modifiées après la publication des affectations."
         : "À revoir.")
 }

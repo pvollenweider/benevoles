@@ -48,7 +48,10 @@ trackPointerOpener()
  * Accessible modal dialog: role="dialog" + aria-modal, labelled by its title,
  * Escape to close, focus trap, focus moved in on open and restored to the
  * opener on close, body scroll locked while open.
- * Nested modals are not supported.
+ * A second dialog may open over a first (a confirmation, ConfirmActionModal): only the topmost
+ * handles keys, and the one below is `inert` while it is open, so browse mode and the rotor do
+ * not reach it either (accessibility review of #1146). The two are siblings in the DOM, never
+ * nested.
  *
  * Focus (#585): the trap skips hidden, inert and disabled elements and brings focus back in when it
  * is outside the dialog. The opener is the focused element, or the control last pressed with a
@@ -72,6 +75,8 @@ export default function ModalShell({
   const onCloseRef = useRef(onClose)
   const busyRef = useRef(busy)
   const fallbackFocusOnCloseRef = useRef(fallbackFocusOnClose)
+  // The dialog below this one, made inert while this one is open.
+  const madeInert = useRef<HTMLElement | null>(null)
 
   useEffect(() => {
     onCloseRef.current = onClose
@@ -91,6 +96,9 @@ export default function ModalShell({
     document.body.style.overflow = "hidden"
     return () => {
       document.body.style.overflow = previousOverflow
+      // The dialog below takes focus back: it is no longer inert (before the focus is returned).
+      madeInert.current?.removeAttribute("inert")
+      madeInert.current = null
       // Only if focus was dropped (the dialog is gone, or WebKit left it on <main>): a parent that
       // moved it on close in a layout effect, or with flushSync then focus, has already run and
       // wins (a passive effect or next-frame focus would run after this, with a brief flash). The
@@ -120,6 +128,11 @@ export default function ModalShell({
     const target = canTakeFocus(preferred) ? preferred : tabbables(el)[0]
     target?.focus()
 
+    const below = openDialogs[openDialogs.length - 1]
+    if (below && !below.contains(el) && !below.hasAttribute("inert")) {
+      below.setAttribute("inert", "")
+      madeInert.current = below
+    }
     openDialogs.push(el)
 
     function onKeyDown(e: KeyboardEvent) {

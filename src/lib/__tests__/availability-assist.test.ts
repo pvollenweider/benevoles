@@ -3,7 +3,7 @@
 
 import { describe, it, expect } from "vitest"
 import {
-  assessCandidate, availabilityAckChanges, availabilityAckKey, committedHoursText, judgeAvailabilityAcks, sameNameHints, filterCandidates, fitDetail, shiftFit, shiftInterval, sortCandidates,
+  ackLabel, assessCandidate, availabilityAckChanges, groupCandidates, availabilityAckKey, committedHoursText, judgeAvailabilityAcks, sameNameHints, filterCandidates, fitDetail, shiftFit, shiftInterval, sortCandidates,
   type AnswerForFit, type AssistContext, type CandidateInput, type HeldMission,
 } from "../availability-assist"
 import { activePolicy, buildPolicy, type WorkloadPolicyValues } from "../workload-policy"
@@ -37,10 +37,10 @@ describe("shiftFit (#1146, lot B)", () => {
     const a = answer([{ date: "2030-07-10", ranges: [] }, { date: "2030-07-11", ranges: [range("2030-07-11", "09:00", "12:00")] }])
     const f = fitOf(shift("2030-07-11", "10:00", "16:00"), a)
     expect(f).toMatchObject({ state: "partial", coveredMinutes: 120, outsideMinutes: 240, unknownMinutes: 0, needsAck: true })
-    expect(fitDetail(f)).toBe("Libre 2 h sur 6 h, pas disponible 4 h. Plages indiquées : de 09:00 à 12:00.")
+    expect(fitDetail(f)).toBe("Libre 2 h sur 6 h, pas disponible 4 h. Plages indiquées : de 09:00 à 12:00.")
   })
 
-  it("is outside when nothing is covered and the dates are answered « pas disponible »", () => {
+  it("is outside when nothing is covered and the dates are answered « pas disponible »", () => {
     const a = answer([{ date: "2030-07-10", ranges: [] }, { date: "2030-07-11", ranges: [] }])
     expect(fitOf(shift("2030-07-11", "14:00", "20:00"), a)).toMatchObject({ state: "outside", outsideMinutes: 360, needsAck: true })
   })
@@ -66,7 +66,7 @@ describe("shiftFit (#1146, lot B)", () => {
     const a = answer([{ date: "2030-07-09", ranges: [] }, { date: "2030-07-10", ranges: [range("2030-07-10", "18:00", "22:00")] }])
     const f = shiftFit(shiftInterval(shift("2030-07-10", "20:00", "02:00"), TZ), a, ["2030-07-09", ...DATES], TZ)
     expect(f).toMatchObject({ state: "partial", coveredMinutes: 120, outsideMinutes: 120, unknownMinutes: 120, needsAck: true })
-    expect(fitDetail(f)).toBe("Libre 2 h sur 6 h, pas disponible 2 h, sans réponse 2 h. Plages indiquées : de 18:00 à 22:00.")
+    expect(fitDetail(f)).toBe("Libre 2 h sur 6 h, pas disponible 2 h, sans réponse 2 h. Plages indiquées : de 18:00 à 22:00.")
   })
 
   it("ignores answers on dates outside the event", () => {
@@ -120,7 +120,7 @@ describe("assessCandidate", () => {
     expect(row.minutes).toEqual({ confirmed: 240, pending: 120, draft: 180, committed: 360, sameDay: 240 })
     expect(row.sameDayLabel).toBe("le jeudi 11 juillet")
     // Drafts (#1146, lot C) said apart, never as committed.
-    expect(committedHoursText(row.minutes)).toBe("Déjà prévu sur l'événement : 4 h confirmées, 2 h en attente de validation ; 3 h en brouillon, pas encore publiées")
+    expect(committedHoursText(row.minutes)).toBe("Déjà prévu sur l'événement : 4 h confirmées, 2 h en attente de validation ; 3 h en brouillon, pas encore publiées")
   })
 
   it("names missions back to back without a break and missions that overlap", () => {
@@ -174,8 +174,8 @@ describe("assessCandidate", () => {
 describe("review flags on the cards", () => {
   it("says why an answer needs another look, a change after a publication included (#1146, lot C)", () => {
     const ctx = warningsCtx()
-    expect(assessCandidate(ctx, person("Morel", { reviewReason: "published" })).reviewTexts).toEqual(["À revoir : disponibilités modifiées après la publication des affectations."])
-    expect(assessCandidate(ctx, person("Morel", { reviewReason: "merge" })).reviewTexts).toEqual(["À revoir : deux fiches fusionnées avaient répondu différemment."])
+    expect(assessCandidate(ctx, person("Morel", { reviewReason: "published" })).reviewTexts).toEqual(["À revoir : disponibilités modifiées après la publication des affectations."])
+    expect(assessCandidate(ctx, person("Morel", { reviewReason: "merge" })).reviewTexts).toEqual(["À revoir : deux fiches fusionnées avaient répondu différemment."])
     expect(assessCandidate(ctx, person("Morel")).reviewTexts).toEqual([])
   })
 })
@@ -248,7 +248,7 @@ describe("sameNameHints (#1146, lot B)", () => {
     expect(sameNameHints([p("1", "Nadia", "Rochat", "n@example.org"), p("2", "Léa", "Rochat", null)]).size).toBe(0)
   })
 
-  it("tells homonyms apart by their email, or « sans email », whatever the case and spaces", () => {
+  it("tells homonyms apart by their email, or « sans email », whatever the case and spaces", () => {
     const hints = sameNameHints([p("1", "Nadia", "Rochat", "nadia.rochat@example.org"), p("2", " nadia ", "ROCHAT", null), p("3", "Marc", "Favre", null)])
     expect(Object.fromEntries(hints)).toEqual({ 1: "nadia.rochat@example.org", 2: "sans email" })
   })
@@ -256,5 +256,32 @@ describe("sameNameHints (#1146, lot B)", () => {
   it("numbers what is still shared, in a stable order", () => {
     const hints = sameNameHints([p("b", "Nadia", "Rochat", null), p("a", "Nadia", "Rochat", null), p("c", "Nadia", "Rochat", "n@example.org")])
     expect(Object.fromEntries(hints)).toEqual({ a: "sans email, fiche 1 sur 2", b: "sans email, fiche 2 sur 2", c: "n@example.org" })
+  })
+})
+
+describe("independent review: groups and the acknowledgement's words", () => {
+  it("names the action the box allows, elides « que » before a vowel", () => {
+    const N = " "
+    expect(ackLabel("Aline")).toBe(`Ajouter quand même${N}: je sais qu'Aline n'a pas indiqué être disponible à ces heures`)
+    expect(ackLabel("Lucas", "Garder")).toBe(`Garder ce brouillon${N}: je sais que Lucas n'a pas indiqué être disponible à ces heures`)
+    expect(ackLabel("Emma Johansson", "Valider")).toMatch(/^Valider quand même\W+je sais qu'Emma Johansson/)
+  })
+
+  it("groups the rows by availability, best first, each sorted, empty groups left out", () => {
+    const r = (lastName: string, state: "full" | "partial" | "unknown" | "outside", committed = 0, eligible = true) => ({
+      volunteerId: lastName, firstName: "N", lastName, sameNameHint: null,
+      fit: { state, totalMinutes: 60, coveredMinutes: 0, outsideMinutes: 0, unknownMinutes: 0, needsAck: false, ranges: [] },
+      ackKey: null, minutes: { confirmed: committed, pending: 0, draft: 0, committed, sameDay: 0 }, sameDayLabel: "", backToBack: [], overlaps: [],
+      eligible, workload: [], reviewNeeded: false, reviewTexts: [], draftOnShift: false,
+    })
+    const rows = [r("Aebi", "outside"), r("Zbinden", "full", 300), r("Muller", "full"), r("Morel", "full", 0, false), r("Blanc", "unknown")]
+    const spread = groupCandidates(rows, "spread")
+    expect(spread.map((g) => [g.state, g.label, g.rows.map((x) => x.lastName)])).toEqual([
+      ["full", "Disponibles sur tout le créneau", ["Muller", "Zbinden", "Morel"]],
+      ["unknown", "Sans réponse pour ces heures", ["Blanc"]],
+      ["outside", "Pas disponibles à ces heures", ["Aebi"]],
+    ])
+    expect(groupCandidates(rows, "name")[0].rows.map((x) => x.lastName)).toEqual(["Morel", "Muller", "Zbinden"])
+    expect(groupCandidates([], "spread")).toEqual([])
   })
 })

@@ -6,7 +6,10 @@ import { canAdoptBeta } from "./beta-access"
 import { availabilityShipped } from "./event-availability-gate"
 import { availabilityDates, answerState, type AnswerState } from "./event-availability"
 import { publishedMissionWindow, readAvailability, type StoredDay } from "./event-availability-data"
-import { answersEditable } from "./availability-correction"
+import { answersEditable, reviewReasons, REVIEW_PUBLISHED } from "./availability-correction"
+import { shiftFit, shiftInterval } from "./availability-assist"
+import { readAnswersForFit, readAvailabilityGate } from "./availability-assist-data"
+import { shiftWords } from "./draft-assignments"
 import {
   AVAILABILITY_NOT_ADOPTABLE,
   answersOpen,
@@ -333,6 +336,11 @@ export type AvailabilityOverviewRow = {
   reviewReason: string | null
   /** The answer's revision: « Marquer comme vu » clears its flag only at this revision. */
   revision: number
+  /**
+   * Flagged « modifiées après la publication »: the missions (confirmed or pending) now outside the
+   * answer, in words (« Bar, samedi 14 novembre, de 18h à 23h »). Empty otherwise.
+   */
+  outsideMissions: string[]
 }
 
 export type AvailabilityOverview = {
@@ -375,8 +383,29 @@ export async function loadAvailabilityOverview(db: OrgScopedPrisma, eventId: str
       hasLink: !!r.tokenHash,
       reviewReason: r.reviewReason,
       revision: r.revision,
+      outsideMissions: [] as string[],
     }
   }).sort((a, b) => a.lastName.localeCompare(b.lastName, "fr") || a.firstName.localeCompare(b.firstName, "fr"))
+  // After a publication (independent review, P1 #4): which missions of a flagged person are now
+  // outside their answer, so the page names them instead of a bare « à revoir ».
+  const flagged = rows.filter((r) => reviewReasons(r.reviewReason).includes(REVIEW_PUBLISHED)).map((r) => r.volunteerId)
+  if (flagged.length > 0) {
+    const gate = await readAvailabilityGate(db, eventId)
+    if (gate.inUse) {
+      const [answers, held] = await Promise.all([
+        readAnswersForFit(db, eventId, flagged),
+        db.registration.findMany({
+          where: { eventId, volunteerId: { in: flagged }, status: { in: ["active", "requested"] }, shift: { status: { not: "cancelled" } } },
+          select: { volunteerId: true, shift: { select: { id: true, roleName: true, label: true, date: true, startTime: true, endTime: true } } },
+        }),
+      ])
+      const byPerson = new Map(rows.map((r) => [r.volunteerId, r]))
+      for (const h of [...held].sort((a, b) => a.shift.date.getTime() - b.shift.date.getTime() || a.shift.startTime.localeCompare(b.shift.startTime))) {
+        const fit = shiftFit(shiftInterval(h.shift, gate.timeZone), answers.get(h.volunteerId) ?? null, gate.dates, gate.timeZone)
+        if (fit.needsAck) byPerson.get(h.volunteerId)?.outsideMissions.push(shiftWords(h.shift))
+      }
+    }
+  }
   return { dates, timeZone: event.availabilityTimeZone ?? orgTimeZone(event.organization), counts, rows }
 }
 

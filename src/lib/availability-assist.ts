@@ -9,6 +9,7 @@ import { mergeIntervals, unionLength, type Interval } from "./interval-union"
 import { localDateTimeToUtc } from "./time-zone"
 import { fmtDay, fmtDuration } from "./signup-recap"
 import { reviewReasonTexts } from "./event-availability-text"
+import { que } from "./french-elision"
 
 /**
  * Assisted manual assignment (#1146, lot B): what an organiser sees before adding a person to a
@@ -131,7 +132,7 @@ export function fitDetail(fit: ShiftFit): string {
   if (fit.state === "partial") parts.push(`libre ${fmtDuration(fit.coveredMinutes)} sur ${fmtDuration(fit.totalMinutes)}`)
   if (fit.state !== "outside" && fit.outsideMinutes > 0) parts.push(`pas disponible ${fmtDuration(fit.outsideMinutes)}`)
   if (fit.state !== "unknown" && fit.unknownMinutes > 0) parts.push(`sans réponse ${fmtDuration(fit.unknownMinutes)}`)
-  const ranges = fit.ranges.length > 0 ? `Plages indiquées : ${fit.ranges.map(spokenRange).join(", ")}` : ""
+  const ranges = fit.ranges.length > 0 ? `Plages indiquées : ${fit.ranges.map(spokenRange).join(", ")}` : ""
   const head = parts.length > 0 ? parts.join(", ") : ""
   const sentence = [head && head.charAt(0).toUpperCase() + head.slice(1), ranges].filter(Boolean).join(". ")
   return sentence ? `${sentence}.` : ""
@@ -146,11 +147,27 @@ export function availabilityAckKey(p: { eventId: string; volunteerId: string; sh
   return ["a1", p.eventId, p.volunteerId, p.shiftId, p.interval.start, p.interval.end, p.requestId, p.revision, p.timeZone].join("|")
 }
 
-/** What the organiser must tick, said about the person: no « tu », no blame. `verb`: the action. */
-export const ackLabel = (firstName: string, verb: "Ajouter" | "Accepter" | "Rétablir" | "Valider" | "Publier" = "Ajouter") => `${verb} quand même : je sais que ${firstName} n'a pas indiqué être disponible à ces heures`
+/** The action an acknowledgement allows: its box starts with it, so the box names what it unlocks. */
+export type AckAction = "Ajouter" | "Accepter" | "Rétablir" | "Valider" | "Garder"
+
+const ACK_LEADS: Record<AckAction, string> = {
+  Ajouter: "Ajouter quand même",
+  Accepter: "Accepter quand même",
+  Rétablir: "Rétablir quand même",
+  Valider: "Valider quand même",
+  // A draft reviewed again (#1146, lot C): the box keeps the draft, it publishes nothing.
+  Garder: "Garder ce brouillon",
+}
+
+/**
+ * What the organiser must tick, said about the person: no « tu », no blame, « qu'Aline » elided.
+ * `action`: what the box allows (the button it goes with).
+ */
+export const ackLabel = (firstName: string, action: AckAction = "Ajouter") =>
+  `${ACK_LEADS[action]} : je sais ${que(firstName)} n'a pas indiqué être disponible à ces heures`
 
 /** The server's refusal when an acknowledgement is missing or stale. */
-export const AVAILABILITY_ACK_REQUIRED = "Cette personne a indiqué ne pas être disponible pendant une partie de ce créneau : cochez la confirmation pour l'ajouter quand même."
+export const AVAILABILITY_ACK_REQUIRED = "Cette personne a indiqué ne pas être disponible pendant une partie de ce créneau : cochez la confirmation pour l'ajouter quand même."
 
 // ── Candidates for one shift ──────────────────────────────────────────────────────────────────
 
@@ -281,17 +298,38 @@ const byName = (a: CandidateRow, b: CandidateRow) =>
 
 /** The sentence that explains « Pour répartir la charge », shown above the list. */
 export const SPREAD_SORT_EXPLANATION =
-  "Ordre : d'abord les personnes qui peuvent être ajoutées, puis selon leurs disponibilités pour ce créneau (tout le créneau, une partie, sans réponse, pas disponible), puis celles qui ont le moins d'heures déjà prévues sur l'événement, puis par nom. Ces heures ne comptent que cet événement."
+  "Dans chaque groupe : d'abord les personnes qui peuvent être ajoutées, puis celles qui ont le moins d'heures déjà prévues sur l'événement, puis par nom. Ces heures ne comptent que cet événement."
 
 /**
- * By name (the default), or « Pour répartir la charge »: rows that can be added before refused
- * ones, then availability, then fewest committed hours on the event, then name and id (Codex: a
- * deterministic order whose criteria are said; it suggests, the organiser decides).
+ * Inside a group of the same availability: « Pour répartir la charge » (the default) puts the rows
+ * that can be added before refused ones, then the fewest committed hours on the event, then name
+ * and id (Codex: a deterministic order whose criteria are said; it suggests, the organiser
+ * decides); « Par nom » by name. Availability itself is the grouping (groupCandidates), never mixed
+ * into the order: the independent review saw « Pas disponible » first under « Par nom ».
  */
 export function sortCandidates(rows: readonly CandidateRow[], sort: AssistSort): CandidateRow[] {
   if (sort === "name") return [...rows].sort(byName)
   return [...rows].sort((a, b) =>
     Number(b.eligible) - Number(a.eligible) || FIT_ORDER[a.fit.state] - FIT_ORDER[b.fit.state] || a.minutes.committed - b.minutes.committed || byName(a, b))
+}
+
+/** The groups of the per-shift list, best availability first; each heading says its count. */
+export const FIT_GROUP_LABELS: Record<FitState, string> = {
+  full: "Disponibles sur tout le créneau",
+  partial: "Disponibles sur une partie du créneau",
+  unknown: "Sans réponse pour ces heures",
+  outside: "Pas disponibles à ces heures",
+}
+
+export type CandidateGroup = { state: FitState; label: string; rows: CandidateRow[] }
+
+/** The rows by availability (full, partial, unknown, outside), each sorted; empty groups left out. */
+export function groupCandidates(rows: readonly CandidateRow[], sort: AssistSort): CandidateGroup[] {
+  const sorted = sortCandidates(rows, sort)
+  return (Object.keys(FIT_ORDER) as FitState[])
+    .sort((a, b) => FIT_ORDER[a] - FIT_ORDER[b])
+    .map((state) => ({ state, label: FIT_GROUP_LABELS[state], rows: sorted.filter((r) => r.fit.state === state) }))
+    .filter((g) => g.rows.length > 0)
 }
 
 /** « Disponibles sur tout le créneau » only, or everyone. */
@@ -304,9 +342,9 @@ export function committedHoursText(m: CandidateRow["minutes"]): string {
   const parts: string[] = []
   if (m.confirmed > 0) parts.push(`${fmtDuration(m.confirmed)} confirmée${m.confirmed === 60 ? "" : "s"}`)
   if (m.pending > 0) parts.push(`${fmtDuration(m.pending)} en attente de validation`)
-  const base = parts.length > 0 ? `Déjà prévu sur l'événement : ${parts.join(", ")}` : "Aucune mission sur l'événement pour l'instant"
+  const base = parts.length > 0 ? `Déjà prévu sur l'événement : ${parts.join(", ")}` : "Aucune mission sur l'événement pour l'instant"
   // Drafts (#1146, lot C) apart: prepared, not published, never counted as committed.
-  return m.draft > 0 ? `${base} ; ${fmtDuration(m.draft)} en brouillon, pas encore publiée${m.draft === 60 ? "" : "s"}` : base
+  return m.draft > 0 ? `${base} ; ${fmtDuration(m.draft)} en brouillon, pas encore publiée${m.draft === 60 ? "" : "s"}` : base
 }
 
 // ── The server's check ────────────────────────────────────────────────────────────────────────

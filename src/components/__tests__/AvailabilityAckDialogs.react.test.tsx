@@ -13,6 +13,7 @@ import RecentCancellations from "../admin/registrations/RecentCancellations"
 import ShiftSwapsPanel from "../admin/registrations/ShiftSwapsPanel"
 import type { Registration } from "../admin/registrations/types"
 import type { OrganiserSwap } from "@/lib/shift-swap-data"
+import { AvailabilityAckFields, useAvailabilityAck, type AckPerson } from "../admin/AvailabilityAck"
 
 // Dated availability (#1146, lot B): accepting a request, « Rétablir » and validating a swap ask for
 // the acknowledgement inline, in their confirmation dialog, when a person said they are not
@@ -51,9 +52,9 @@ describe("accepting a request outside declared availability", () => {
     const { actions } = server({ v1: outsideFit("s1", "key-1") }, () => json({ status: "active" }))
     const onDecided = vi.fn()
     render(<RequestDecisionModal eventId="evt-1" reg={reg} kind="accept" waitlist={false} availability onCancel={() => {}} onDecided={onDecided} />)
-    const box = await screen.findByRole("checkbox", { name: "Accepter quand même : je sais que Nadia n'a pas indiqué être disponible à ces heures" })
+    const box = await screen.findByRole("checkbox", { name: "Accepter quand même : je sais que Nadia n'a pas indiqué être disponible à ces heures" })
     expect(box).toHaveAccessibleDescription("Disponibilités indiquées : Pas disponible à ces heures.")
-    await waitFor(() => expect(screen.getAllByRole("status").some((s) => /Nadia Rochat : pas disponible à ces heures\. Une confirmation est demandée avant d'accepter la demande/.test(s.textContent ?? ""))).toBe(true))
+    await waitFor(() => expect(screen.getAllByRole("status").some((s) => /Nadia Rochat\W+pas disponible à ces heures\. Une confirmation est demandée avant d'accepter la demande/.test(s.textContent ?? ""))).toBe(true))
 
     fireEvent.submit(screen.getByRole("dialog").querySelector("form")!)
     expect(actions).toHaveLength(0)
@@ -91,7 +92,7 @@ describe("« Rétablir » when the answer changed meanwhile", () => {
       : json({ error: "Chloé Roy a indiqué…", code: "availability", outside: [{ volunteerId: "v2", shiftId: "s2", key: "key-new", state: "partial", label: "Disponible sur une partie du créneau", detail: "Libre 1 h sur 6 h." }] }, 409)))
     render(<RecentCancellations rows={[row]} eventId="evt-1" availability />)
     fireEvent.click(screen.getByRole("button", { name: /^Rétablir/ }))
-    const box = await screen.findByRole("checkbox", { name: /^Rétablir quand même : je sais que Chloé Roy/ })
+    const box = await screen.findByRole("checkbox", { name: /^Rétablir quand même\W+je sais que Chloé Roy/ })
     fireEvent.click(box)
     fireEvent.click(screen.getByRole("checkbox", { name: /envoyer un nouveau lien/ }))
     fireEvent.submit(screen.getByRole("dialog").querySelector("form")!)
@@ -143,8 +144,8 @@ describe("validating a swap", () => {
     const { fetchMock, actions } = server({ "v-pierre": outsideFit("s-late", "key-pierre"), "v-jean": outsideFit("s-bar", "key-jean") }, () => json({ ok: true, requestId: "q1", status: "applied" }))
     render(<ShiftSwapsPanel eventId="evt-1" requests={[waiting]} timeZone="Europe/Zurich" availability />)
     fireEvent.click(screen.getByRole("button", { name: "Valider l'échange, Pierre Dupont et Jean Martin" }))
-    const pierre = await screen.findByRole("checkbox", { name: "Valider quand même : je sais que Pierre Dupont n'a pas indiqué être disponible à ces heures" })
-    const jean = screen.getByRole("checkbox", { name: "Valider quand même : je sais que Jean Martin n'a pas indiqué être disponible à ces heures" })
+    const pierre = await screen.findByRole("checkbox", { name: "Valider quand même : je sais que Pierre Dupont n'a pas indiqué être disponible à ces heures" })
+    const jean = screen.getByRole("checkbox", { name: "Valider quand même : je sais que Jean Martin n'a pas indiqué être disponible à ces heures" })
     expect(fetchMock).toHaveBeenCalledWith("/api/admin/events/evt-1/availability/fit?volunteerId=v-pierre&shiftId=s-late")
     expect(fetchMock).toHaveBeenCalledWith("/api/admin/events/evt-1/availability/fit?volunteerId=v-jean&shiftId=s-bar")
     expect(pierre).toHaveAccessibleDescription("Disponibilités indiquées par Pierre Dupont pour le créneau reçu : Pas disponible à ces heures.")
@@ -169,3 +170,23 @@ describe("validating a swap", () => {
     expect(fetchMock).not.toHaveBeenCalled()
   })
 })
+
+describe("the acknowledgement after a dialog closes (independent review, P3)", () => {
+  const people: AckPerson[] = [{ volunteerId: "v1", shiftId: "s1", firstName: "Emma", fullName: "Emma Johansson" }]
+  function Harness({ open }: { open: boolean }) {
+    const state = useAvailabilityAck("evt-1", people, open, "Rétablir")
+    return open ? <AvailabilityAckFields prefix="t" people={people} verb="Rétablir" state={state} /> : <p>Fermé</p>
+  }
+
+  it("never carries a tick or an error over to the next opening", async () => {
+    server({ v1: outsideFit("s1", "key-1") }, () => json({}))
+    const r = render(<Harness open />)
+    const box = await screen.findByRole("checkbox", { name: /^Rétablir quand même\W+je sais qu'Emma n'a pas indiqué/ })
+    fireEvent.click(box)
+    expect(box).toBeChecked()
+    r.rerender(<Harness open={false} />)
+    r.rerender(<Harness open />)
+    expect(await screen.findByRole("checkbox", { name: /^Rétablir quand même/ })).not.toBeChecked()
+  })
+})
+

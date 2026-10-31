@@ -32,7 +32,7 @@ export async function DELETE(req: Request, { params }: { params: Promise<{ id: s
   if (guard instanceof NextResponse) return guard
   const { id, draftId } = await params
   const revision = Number(new URL(req.url).searchParams.get("revision"))
-  if (!Number.isInteger(revision) || revision < 1) return NextResponse.json({ error: "Révision manquante : rechargez la page." }, { status: 400 })
+  if (!Number.isInteger(revision) || revision < 1) return NextResponse.json({ error: "Révision manquante : rechargez la page." }, { status: 400 })
   const result = await discardDraft(guard.db, { eventId: id, draftId, revision })
   if (!result.ok) return respond(result)
   return NextResponse.json({ ok: true })

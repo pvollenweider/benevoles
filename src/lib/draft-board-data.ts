@@ -101,6 +101,9 @@ export async function loadDraftOptions(db: Db, eventId: string, volunteerId: str
   if (!ctx) return null
   const person = ctx.people.find((p) => p.id === volunteerId)
   if (!person) return null
-  const options = draftOptions({ eventId, date, person, drafts: ctx.drafts, shifts: [...ctx.shifts.values()], availability: ctx.availability, gate: ctx.gate })
+  // Everyone's pending drafts per shift (« 2 brouillons déjà prévus »): the context read only this person's.
+  const counted = await db.draftAssignment.groupBy({ by: ["shiftId"], where: { eventId, status: "draft" }, _count: { _all: true } })
+  const draftsOn = new Map(counted.map((c) => [c.shiftId, c._count._all]))
+  const options = draftOptions({ eventId, date, person, drafts: ctx.drafts, shifts: [...ctx.shifts.values()], availability: ctx.availability, gate: ctx.gate, draftsOn })
   return { person: { firstName: person.firstName, lastName: person.lastName }, options }
 }

@@ -3,19 +3,20 @@
 // SPDX-FileCopyrightText: 2026 Philippe Vollenweider
 // SPDX-License-Identifier: AGPL-3.0-only
 
-import { startTransition, useEffect, useMemo, useRef, useState } from "react"
+import { startTransition, useEffect, useLayoutEffect, useMemo, useRef, useState } from "react"
 import { flushSync } from "react-dom"
 import Link from "next/link"
 import { useRouter } from "next/navigation"
 import { announce } from "@/lib/announce"
 import { focusFirstAvailable } from "@/lib/focus-return"
-import { NETWORK_ERROR } from "@/lib/use-submit"
+import { NETWORK_ERROR, requestJson } from "@/lib/use-submit"
 import { TABLE_SCROLL_HINT } from "@/lib/table-overflow"
 import { fmtShortDate } from "@/lib/registrations-list"
 import { dayLabel } from "@/lib/spoken-time"
 import { fmtDuration } from "@/lib/signup-recap"
 import { ackLabel, type FitState } from "@/lib/availability-assist"
-import type { BoardItem, BoardRow, DraftOption } from "@/lib/draft-board"
+import { de } from "@/lib/french-elision"
+import { placesToFillText, type BoardItem, type BoardRow, type DayCoverage, type DraftOption } from "@/lib/draft-board"
 import type { DraftBoardData } from "@/lib/draft-board-data"
 import type { DraftProblem } from "@/lib/draft-assignments"
 import { useHidesColumns } from "@/components/admin/members/useHidesColumns"
@@ -26,14 +27,18 @@ const focusRing = "focus-visible:outline focus-visible:outline-2 focus-visible:o
 const linkClass = `font-medium text-blue-700 underline underline-offset-2 hover:text-blue-900 rounded ${focusRing}`
 /** A jump target (the summary's links): a visible mark where focus lands, inset so the scroll region does not clip it. */
 const targetRing = "outline-hidden focus:ring-2 focus:ring-inset focus:ring-blue-600"
-const smallButton = `min-h-9 rounded-lg border border-gray-500 bg-white px-3 py-1 text-xs font-medium text-gray-900 hover:bg-gray-50 ${focusRing}`
+const smallButton = `min-h-9 rounded-lg border border-gray-500 bg-white px-3 py-1 text-xs font-medium text-gray-900 hover:bg-gray-50 aria-disabled:opacity-60 ${focusRing}`
+const pill = "inline-block rounded-full border border-transparent px-2 py-0.5 font-medium"
 
 type Layout = "grid" | "day"
 
-/** Status pairs of DESIGN.md §2, never colour alone: the word is always there. */
+/**
+ * One pill per item, its kind (DESIGN.md §2 pairs, never colour alone: the word is always there). A
+ * generated draft says « Proposé » instead of « Brouillon », never both (independent review, P1 #5).
+ */
 const KIND_BADGE: Record<BoardItem["kind"], { label: string; className: string }> = {
   confirmed: { label: "Confirmée", className: "bg-[#dcfce7] text-[#15803d]" },
-  pending: { label: "En attente", className: "bg-[#fef3c7] text-[#92400e]" },
+  pending: { label: "En attente", className: "bg-[#fef3c7] text-[#78350f]" },
   draft: { label: "Brouillon", className: "bg-[#f3f4f6] text-[#4b5563]" },
 }
 const OUTSIDE_FITS: FitState[] = ["partial", "outside"]
@@ -43,7 +48,10 @@ const ids = {
   add: (l: Layout, v: string, d: string) => `${l}-add-${v}-${d}`,
   draft: (l: Layout, id: string) => `${l}-draft-${id}`,
   row: (l: Layout, v: string) => `${l}-row-${v}`,
+  seen: (l: Layout, v: string) => `${l}-seen-${v}`,
 }
+/** The day view's list of shifts still missing people (the capacity links land there). */
+const COVERAGE_ID = "day-coverage"
 
 const lowerFirst = (s: string) => s.charAt(0).toLowerCase() + s.slice(1)
 const personName = (r: Pick<BoardRow, "firstName" | "lastName">) => `${r.firstName} ${r.lastName}`.trim()
@@ -57,22 +65,48 @@ function ShiftName({ name }: { name: string }) {
 }
 const spokenName = (name: string) => name.replace(" · ", ", ")
 
+/** A warning triangle, before the words that carry the meaning. */
+function WarningIcon() {
+  return <svg aria-hidden="true" viewBox="0 0 16 16" className="mt-px h-3.5 w-3.5 shrink-0" fill="currentColor"><path d="M8.9 1.6a1 1 0 0 0-1.8 0L.2 13.5A1 1 0 0 0 1.1 15h13.8a1 1 0 0 0 .9-1.5L8.9 1.6ZM8 5a.8.8 0 0 1 .8.8v3.6a.8.8 0 0 1-1.6 0V5.8A.8.8 0 0 1 8 5Zm0 6.2a1 1 0 1 1 0 2 1 1 0 0 1 0-2Z" /></svg>
+}
+
 function hoursText(r: BoardRow): string {
   const parts = [r.committedMinutes > 0 ? `${fmtDuration(r.committedMinutes)} confirmées ou en attente` : "Aucune mission", r.draftMinutes > 0 ? `${fmtDuration(r.draftMinutes)} en brouillon` : null]
   return parts.filter(Boolean).join(", ")
 }
 
+const missingText = placesToFillText
+
+/** The registrations page, on the mission's shift and the person (« Voir l'inscription »). */
+const registrationHref = (eventId: string, shiftId: string, row: BoardRow) => `/admin/events/${eventId}/registrations?${new URLSearchParams({ shift: shiftId, q: personName(row) })}`
+
 type DraftTarget = { row: BoardRow; date: string; item: BoardItem; layout: Layout }
 type CellTarget = { row: BoardRow; date: string; layout: Layout }
+type SummaryProblem = DraftBoardData["summary"]["problems"][number]
+const problemKey = (p: Pick<DraftProblem, "code" | "draftId" | "volunteerId" | "shiftId">) => `${p.code}|${p.draftId ?? p.volunteerId ?? p.shiftId ?? ""}`
+
+/** A page-level status said after a focus move (RecentCancellations pattern): 150 ms later, the timer cleared on unmount. */
+function useLaterStatus() {
+  const [status, setStatus] = useState("")
+  const timer = useRef<ReturnType<typeof setTimeout> | null>(null)
+  useEffect(() => () => { if (timer.current) clearTimeout(timer.current) }, [])
+  function later(text: string) {
+    if (timer.current) clearTimeout(timer.current)
+    setStatus("")
+    timer.current = setTimeout(() => setStatus(text), 150)
+  }
+  return { status, later }
+}
 
 /**
  * « Affectations en brouillon » (#1146, lot C): the summary and « Publier les affectations », then
  * the person × day planning (a captioned table in a labelled scroll region on a wide screen, a day
- * list below md or on demand). Accessibility review (2026-10-30, accessibility-lead): ids prefixed
- * by layout (both are in the DOM, one hidden); the row header holds the name only, hours and
- * findings in a « Résumé » column; short dates shown, full dates read; summary links focus the
- * visible cell; one page-level polite status outside the dialogs; publish confirmation is a plain
- * dialog; a refusal is a focused block, not a live region; focus after every action.
+ * list below md or on demand). Accessibility reviews (2026-10-30, and the independent review's
+ * plan, 2026-10-31): ids prefixed by layout (both are in the DOM, one hidden); the row header holds
+ * the name only, hours and short markers in a « Résumé » column; short dates shown, full dates read;
+ * the places still to fill in a second header row, read once with their date; summary links focus
+ * the visible cell; one page-level polite status outside the dialogs, said 150 ms after a focus
+ * move; a refusal and a publication are focused blocks, not live regions; focus after every action.
  */
 export default function DraftBoard({ eventId, board, day, view: initialView, scope, basePath, proposals = false }: {
   eventId: string
@@ -85,15 +119,22 @@ export default function DraftBoard({ eventId, board, day, view: initialView, sco
   basePath: string
 }) {
   const router = useRouter()
-  const [status, setStatus] = useState("")
+  const { status, later } = useLaterStatus()
   const [view, setView] = useState<Layout>(initialView)
   const [confirming, setConfirming] = useState<{ busy: boolean; error: string | null } | null>(null)
-  const [refusal, setRefusal] = useState<{ lead: string; problems: DraftProblem[] } | null>(null)
+  // `unlisted`: the problems the refreshed summary does not list, frozen once the page has been read
+  // again (null until then): the block appears and takes focus only then, so its words never change
+  // under the reader (accessibility review), and never repeat the summary (independent review, P2 #9).
+  const [refusal, setRefusal] = useState<{ lead: string; problems: DraftProblem[]; unlisted: DraftProblem[] | null; board: DraftBoardData } | null>(null)
+  const [published, setPublished] = useState<{ count: number; people: number; withoutEmail: number } | null>(null)
   const [draftOpen, setDraftOpen] = useState<DraftTarget | null>(null)
   const [cellOpen, setCellOpen] = useState<CellTarget | null>(null)
+  const [seen, setSeen] = useState<{ id: string; error: string | null } | null>(null)
   const publishKey = useRef<string | null>(null)
   const publishHeading = useRef<HTMLHeadingElement>(null)
-  const refusalHeading = useRef<HTMLHeadingElement>(null)
+  const publishedRef = useRef<HTMLDivElement>(null)
+  const refusalRef = useRef<HTMLDivElement>(null)
+  const focusAfterClose = useRef<"published" | "refusal" | null>(null)
   const regionRef = useRef<HTMLDivElement>(null)
   const hides = useHidesColumns(regionRef, [board.rows.length, board.dates.length, view])
 
@@ -103,14 +144,33 @@ export default function DraftBoard({ eventId, board, day, view: initialView, sco
   const nothing = summary.selection.length === 0
   const publishBlocked = nothing ? "Aucune affectation en brouillon à publier." : blocking > 0 ? `Réglez d'abord ${blocking > 1 ? `les ${blocking} points listés` : "le point listé"} ci-dessus.` : null
 
+  // A server refusal: its problems the summary does not list are shown in the block itself.
+  const listed = useMemo(() => new Set(summary.problems.map(problemKey)), [summary.problems])
+  const unlisted = refusal?.unlisted ?? []
+  useEffect(() => {
+    if (!refusal || refusal.unlisted !== null) return
+    const settle = () => {
+      focusAfterClose.current = "refusal"
+      setRefusal((r) => (r && r.unlisted === null ? { ...r, unlisted: r.problems.filter((p) => !listed.has(problemKey(p))) } : r))
+    }
+    // The refreshed board has arrived; or, if it never does, the block shows its whole list.
+    if (board !== refusal.board) { settle(); return }
+    const t = setTimeout(settle, 3000)
+    return () => clearTimeout(t)
+  }, [board, refusal, listed])
+
+  // After the publication dialog closed: focus on the result block, before ModalShell gives it back to its trigger.
+  useLayoutEffect(() => {
+    const target = focusAfterClose.current
+    if (!target || confirming) return
+    focusAfterClose.current = null
+    ;(target === "published" ? publishedRef : refusalRef).current?.focus()
+  }, [confirming, published, refusal])
+
   const query = (extra: Record<string, string>) => {
     const p = new URLSearchParams({ ...(scope === "all" ? { scope: "all" } : {}), ...extra })
     const s = p.toString()
     return s ? `${basePath}?${s}` : basePath
-  }
-
-  function publishedText(published: number, people: number) {
-    return `${plural(published, "affectation publiée", "affectations publiées")} pour ${plural(people, "personne", "personnes")}.`
   }
 
   async function publish() {
@@ -128,16 +188,19 @@ export default function DraftBoard({ eventId, board, day, view: initialView, sco
     }
     if (res.ok) {
       publishKey.current = null
-      flushSync(() => { setConfirming(null); setRefusal(null) })
-      publishHeading.current?.focus()
-      announce(setStatus, publishedText(data.published ?? 0, data.people ?? 0))
+      // The block says the result (focused, never also a status: it would be read twice).
+      focusAfterClose.current = "published"
+      setRefusal(null)
+      setPublished({ count: data.published ?? 0, people: data.people ?? 0, withoutEmail: summary.withoutEmail })
+      setConfirming(null)
       startTransition(() => router.refresh())
       return
     }
     publishKey.current = null
     if (data.problems && data.problems.length > 0) {
-      flushSync(() => { setConfirming(null); setRefusal({ lead: data.error ?? "La publication n'a pas eu lieu.", problems: data.problems! }) })
-      refusalHeading.current?.focus()
+      setPublished(null)
+      setRefusal({ lead: data.error ?? "Rien n'a été publié.", problems: data.problems, unlisted: null, board })
+      setConfirming(null)
       startTransition(() => router.refresh())
       return
     }
@@ -154,13 +217,24 @@ export default function DraftBoard({ eventId, board, day, view: initialView, sco
     target.focus()
   }
 
-  const problemLink = (p: DraftProblem & { anchor: string | null }) => {
-    const row = p.volunteerId ? rowsById.get(p.volunteerId) : undefined
-    const date = p.anchor?.match(/(\d{4}-\d{2}-\d{2})$/)?.[1] ?? null
+  /**
+   * The link before a problem: the person and the day (their cell), the person (their row), or the
+   * day alone (a shift's capacity: the day's places to fill). A link that changes `?day=` targets the
+   * day list's id, the layout shown below md (independent review, P2 #11).
+   */
+  function personLink(volunteerId: string, date: string | null) {
+    const row = rowsById.get(volunteerId)
     if (!row) return null
     const text = date ? `${personName(row)}, ${lowerFirst(dayLabel(date))}` : personName(row)
-    const href = date ? `${query({ day: date, ...(view === "day" ? { view: "day" } : {}) })}#${ids.cell(view === "day" ? "day" : "grid", row.volunteerId, date)}` : `#${ids.row("grid", row.volunteerId)}`
+    const sameDay = !date || date === day
+    const layout: Layout = view === "day" || !sameDay ? "day" : "grid"
+    const href = date ? `${query({ day: date, ...(view === "day" ? { view: "day" } : {}) })}#${ids.cell(layout, row.volunteerId, date)}` : `#${ids.row("grid", row.volunteerId)}`
     return <a href={href} onClick={(e) => jump(e, row.volunteerId, date)} className={linkClass}>{text}</a>
+  }
+  function problemLink(p: SummaryProblem) {
+    if (p.volunteerId) return personLink(p.volunteerId, p.anchor ? p.date : null)
+    if (p.date) return <a href={`${query({ day: p.date, view: "day" })}#${COVERAGE_ID}`} className={linkClass}>{dayLabel(p.date)}</a>
+    return null
   }
 
   function afterDraftClose(target: DraftTarget, removed: boolean, text: string | null) {
@@ -168,12 +242,27 @@ export default function DraftBoard({ eventId, board, day, view: initialView, sco
       flushSync(() => setDraftOpen(null))
       focusFirstAvailable([() => document.getElementById(ids.add(target.layout, target.row.volunteerId, target.date)), () => document.getElementById(ids.cell(target.layout, target.row.volunteerId, target.date))])
     } else setDraftOpen(null)
-    if (text) announce(setStatus, text)
+    if (text) later(text)
+    startTransition(() => router.refresh())
+  }
+
+  /** « Marquer comme vu » (#1146, lot C): the person's flag goes, at the revision shown. */
+  async function markSeen(row: BoardRow, layout: Layout) {
+    if (row.seenRevision === null) return
+    if (seen && !seen.error) { later("Une action est en cours : attendez sa réponse."); return }
+    setSeen({ id: row.volunteerId, error: null })
+    const res = await requestJson(() => fetch(`/api/admin/events/${eventId}/availability/${row.volunteerId}/review`, { method: "POST", headers: { "Content-Type": "application/json" }, body: JSON.stringify({ revision: row.seenRevision }) }))
+    if (!res.ok) { setSeen({ id: row.volunteerId, error: res.error }); return }
+    flushSync(() => setSeen(null))
+    document.getElementById(ids.row(layout, row.volunteerId))?.focus()
+    later(`Disponibilités ${de(personName(row))} marquées comme vues.`)
     startTransition(() => router.refresh())
   }
 
   const showDay = view === "day"
   const dayRows = day ? board.rows : []
+  const dayCoverage = day ? summary.coverage.find((c) => c.date === day) ?? null : null
+  const rowProps = { seen, onSeen: markSeen }
 
   return (
     <div className="space-y-8">
@@ -181,30 +270,61 @@ export default function DraftBoard({ eventId, board, day, view: initialView, sco
 
       <section aria-labelledby="drafts-publish-heading" className="bg-white border border-gray-200 rounded-xl p-4 space-y-3">
         <h2 id="drafts-publish-heading" ref={publishHeading} tabIndex={-1} className="text-base font-semibold text-gray-900 rounded focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-blue-600">Publier les affectations</h2>
+        {published && (
+          <div ref={publishedRef} tabIndex={-1} role="group" aria-labelledby="drafts-published-heading" aria-describedby="drafts-published-text" className="rounded-lg border border-[#15803d] bg-[#f0fdf4] px-3 py-2 text-sm text-gray-900 outline-none">
+            <h3 id="drafts-published-heading" className="font-semibold text-[#15803d]">Publication faite</h3>
+            <p id="drafts-published-text">
+              {plural(published.count, "affectation publiée", "affectations publiées")} pour {plural(published.people, "personne", "personnes")}. Chaque personne avec une adresse email reçoit un seul email avec ses missions.
+              {published.withoutEmail > 0 && ` ${published.withoutEmail > 1 ? `${published.withoutEmail} personnes n'ont pas d'adresse email` : "1 personne n'a pas d'adresse email"} : prévenez-les vous-même.`}
+            </p>
+            <p className="mt-1"><Link href={`/admin/events/${eventId}/registrations`} className={linkClass}>Voir les inscriptions</Link></p>
+          </div>
+        )}
         <p className="text-sm text-gray-800" data-drafts-counts="1">
           {nothing ? "Aucune affectation en brouillon pour l'instant." : `${plural(summary.drafts, "affectation en brouillon", "affectations en brouillon")} pour ${plural(summary.people, "personne", "personnes")}`}
-          {!nothing && summary.stale > 0 && ` ; ${plural(summary.stale, "à revoir", "à revoir")}`}
-          {!nothing && summary.ackMissing > 0 && ` ; ${plural(summary.ackMissing, "confirmation à donner", "confirmations à donner")}`}
+          {!nothing && summary.stale > 0 && ` ; ${plural(summary.stale, "à revoir", "à revoir")}`}
+          {!nothing && summary.ackMissing > 0 && ` ; ${plural(summary.ackMissing, "confirmation à donner", "confirmations à donner")}`}
           {!nothing && "."}
         </p>
+        {summary.toReview.length > 0 && (
+          <div>
+            <h3 className="text-sm font-semibold text-gray-900">{summary.toReview.length > 1 ? `${summary.toReview.length} missions à revoir` : "1 mission à revoir"} après une correction des disponibilités</h3>
+            <p className="text-sm text-gray-700">Ces missions sont actuellement en dehors des disponibilités corrigées. Personne n&apos;a été déplacé ni désinscrit.</p>
+            <ul role="list" className="mt-1 space-y-1 text-sm text-gray-800">
+              {summary.toReview.map((m) => <li key={`${m.volunteerId}-${m.date}-${m.name}-${m.time}`}>{personLink(m.volunteerId, m.date)} : <ShiftName name={m.name} />, {m.time}</li>)}
+            </ul>
+          </div>
+        )}
         {blocking > 0 && (
           <div>
             <h3 className="text-sm font-semibold text-gray-900">{blocking > 1 ? `${blocking} points empêchent la publication` : "1 point empêche la publication"}</h3>
             <ul role="list" className="mt-1 space-y-1 text-sm text-gray-800">
-              {summary.problems.map((p, i) => <li key={`${p.code}-${p.draftId ?? p.volunteerId ?? p.shiftId}-${i}`}>{problemLink(p)}{problemLink(p) ? " : " : ""}{p.message}</li>)}
+              {summary.problems.map((p, i) => {
+                const link = problemLink(p)
+                return (
+                  <li key={`${problemKey(p)}-${i}`}>
+                    {link}{link ? " : " : ""}{link && p.volunteerId ? (p.short ?? p.message) : p.message}
+                    {p.details && p.details.length > 1 && <ul role="list" className="mt-0.5 list-disc pl-5">{p.details.slice(1).map((d) => <li key={d}>{d}</li>)}</ul>}
+                  </li>
+                )
+              })}
             </ul>
           </div>
         )}
-        {refusal && (
-          <div className="rounded-lg border border-red-300 bg-red-50 px-3 py-2 text-sm text-red-900">
-            <h3 ref={refusalHeading} tabIndex={-1} className="font-semibold rounded focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-blue-600">La publication n&apos;a pas eu lieu</h3>
-            <p>{refusal.lead}</p>
-            <ul role="list" className="mt-1 list-disc pl-5 space-y-0.5">{refusal.problems.map((p, i) => <li key={i}>{p.message}</li>)}</ul>
+        {refusal && refusal.unlisted !== null && (
+          <div ref={refusalRef} tabIndex={-1} role="group" aria-labelledby="drafts-refusal-heading" aria-describedby="drafts-refusal-lead" className="rounded-lg border border-red-300 bg-red-50 px-3 py-2 text-sm text-red-900 outline-none">
+            <h3 id="drafts-refusal-heading" className="font-semibold">La publication n&apos;a pas eu lieu</h3>
+            <p id="drafts-refusal-lead">
+              Rien n&apos;a été publié : la situation a changé pendant la confirmation.
+              {unlisted.length < refusal.problems.length && " Les points à régler sont listés ci-dessus."}
+              {unlisted.length > 0 && ` ${unlisted.length < refusal.problems.length ? "Et aussi" : "Points à régler"} :`}
+            </p>
+            {unlisted.length > 0 && <ul role="list" className="mt-1 list-disc pl-5 space-y-0.5">{unlisted.map((p, i) => <li key={i}>{p.message}</li>)}</ul>}
           </div>
         )}
         <button
           type="button"
-          onClick={() => { if (!publishBlocked) { setRefusal(null); setConfirming({ busy: false, error: null }) } }}
+          onClick={() => { if (!publishBlocked) { setRefusal(null); setPublished(null); setConfirming({ busy: false, error: null }) } }}
           aria-disabled={!!publishBlocked || undefined}
           aria-describedby={publishBlocked ? "drafts-publish-blocked" : undefined}
           className={`min-h-11 rounded-xl bg-blue-600 px-4 py-2 text-sm font-medium text-white hover:bg-blue-700 aria-disabled:opacity-60 aria-disabled:cursor-not-allowed ${focusRing}`}
@@ -237,7 +357,7 @@ export default function DraftBoard({ eventId, board, day, view: initialView, sco
         </div>
 
         {board.rows.length === 0 ? (
-          <p className="text-sm text-gray-700 bg-white border border-gray-200 rounded-xl p-6 text-center">Personne à afficher : demandez d&apos;abord leurs disponibilités, ou voyez tous les membres actifs.</p>
+          <p className="text-sm text-gray-700 bg-white border border-gray-200 rounded-xl p-6 text-center">Personne à afficher : demandez d&apos;abord leurs disponibilités, ou voyez tous les membres actifs.</p>
         ) : (
           <>
             {!showDay && (
@@ -245,30 +365,43 @@ export default function DraftBoard({ eventId, board, day, view: initialView, sco
                 <a href="#drafts-after-grid" className={`text-sm ${linkClass}`}>Passer le planning</a>
                 {hides && <p id="drafts-grid-hint" className="max-w-[65ch] text-sm text-gray-600">{TABLE_SCROLL_HINT}</p>}
                 <div ref={regionRef} role="region" aria-label="Planning des affectations" aria-describedby={hides ? "drafts-grid-hint" : undefined} tabIndex={hides ? 0 : undefined} className={`relative bg-white border border-gray-200 rounded-xl overflow-x-auto ${focusRing}`}>
-                  <table className="text-sm border-collapse">
-                    <caption className="sr-only">Affectations par personne et par jour, avec les brouillons</caption>
+                  {/* Fixed layout (polish pass): every date column the same width, the table never narrower than its columns. */}
+                  <table className="w-full table-fixed text-sm border-collapse" style={{ minWidth: `${21 + board.dates.length * 11}rem` }}>
+                    <caption className="sr-only">Affectations par personne et par jour, avec les brouillons et les places à pourvoir</caption>
                     <thead className="bg-gray-50 text-xs text-gray-700">
                       <tr>
-                        <th scope="col" className="text-left px-3 py-2 font-medium min-w-[10rem]">Personne</th>
-                        <th scope="col" className="text-left px-3 py-2 font-medium min-w-[12rem]">Résumé</th>
+                        <th scope="col" className="text-left px-3 py-2 font-medium w-40">Personne</th>
+                        <th scope="col" className="text-left px-3 py-2 font-medium w-44">Résumé</th>
                         {board.dates.map((d) => (
-                          <th key={d} scope="col" className="text-left px-3 py-2 font-medium min-w-[11rem] whitespace-nowrap">
+                          <th key={d} scope="col" className="text-left px-3 py-2 font-medium whitespace-nowrap">
                             <span aria-hidden="true">{fmtShortDate(d)}</span><span className="sr-only">{dayLabel(d)}</span>
                           </th>
+                        ))}
+                      </tr>
+                      {/* Coverage (PRODUCT.md capability 4): one row, read once with its date (accessibility plan review). */}
+                      <tr className="border-t border-gray-200">
+                        <th scope="row" className="text-left px-3 py-1.5 font-medium">À pourvoir</th>
+                        <td className="px-3 py-1.5 text-gray-700">après les brouillons</td>
+                        {summary.coverage.map((c) => (
+                          <td key={c.date} className="px-3 py-1.5">
+                            {c.missing === 0 ? <span className="text-gray-700">{missingText(0)}</span> : (
+                              <a href={`${query({ day: c.date, view: "day" })}#${COVERAGE_ID}`} className={linkClass}>{missingText(c.missing)}<span className="sr-only">, voir les créneaux du {lowerFirst(dayLabel(c.date))}</span></a>
+                            )}
+                          </td>
                         ))}
                       </tr>
                     </thead>
                     <tbody className="divide-y divide-gray-100 align-top">
                       {board.rows.map((r) => (
                         <tr key={r.volunteerId}>
-                          <th scope="row" id={ids.row("grid", r.volunteerId)} tabIndex={-1} className={`text-left px-3 py-2 font-medium text-gray-900 ${targetRing}`}>
+                          <th scope="row" id={ids.row("grid", r.volunteerId)} tabIndex={-1} className={`text-left px-3 py-2 font-medium text-gray-900 break-words ${targetRing}`}>
                             {personName(r)}
                             {r.sameNameHint && <><span className="sr-only">, </span><span className="block text-xs font-normal text-gray-700 break-all">{r.sameNameHint}</span></>}
                           </th>
-                          <td className="px-3 py-2"><RowSummary row={r} /></td>
+                          <td className="px-3 py-2"><RowSummary row={r} layout="grid" {...rowProps} /></td>
                           {r.cells.map((c) => (
-                            <td key={c.date} id={ids.cell("grid", r.volunteerId, c.date)} tabIndex={-1} className={`px-3 py-2 ${targetRing}`}>
-                              <CellContent row={r} cell={c} layout="grid" onDraft={(item) => setDraftOpen({ row: r, date: c.date, item, layout: "grid" })} onAdd={() => setCellOpen({ row: r, date: c.date, layout: "grid" })} />
+                            <td key={c.date} id={ids.cell("grid", r.volunteerId, c.date)} tabIndex={-1} className={`px-3 py-2 break-words ${targetRing}`}>
+                              <CellContent eventId={eventId} row={r} cell={c} layout="grid" onDraft={(item) => setDraftOpen({ row: r, date: c.date, item, layout: "grid" })} onAdd={() => setCellOpen({ row: r, date: c.date, layout: "grid" })} />
                             </td>
                           ))}
                         </tr>
@@ -294,6 +427,7 @@ export default function DraftBoard({ eventId, board, day, view: initialView, sco
                 </form>
               )}
               {day && <h3 className="text-sm font-semibold text-gray-900">{dayLabel(day)}</h3>}
+              {dayCoverage && <DayCoverageList coverage={dayCoverage} />}
               <ul role="list" className="space-y-3">
                 {dayRows.map((r) => {
                   const c = r.cells.find((x) => x.date === day)!
@@ -303,8 +437,8 @@ export default function DraftBoard({ eventId, board, day, view: initialView, sco
                         {personName(r)}
                         {r.sameNameHint && <><span className="sr-only">, </span><span className="block text-xs font-normal text-gray-700 break-all">{r.sameNameHint}</span></>}
                       </h4>
-                      <RowSummary row={r} />
-                      <CellContent row={r} cell={c} layout="day" onDraft={(item) => setDraftOpen({ row: r, date: c.date, item, layout: "day" })} onAdd={() => setCellOpen({ row: r, date: c.date, layout: "day" })} />
+                      <RowSummary row={r} layout="day" {...rowProps} />
+                      <CellContent eventId={eventId} row={r} cell={c} layout="day" onDraft={(item) => setDraftOpen({ row: r, date: c.date, item, layout: "day" })} onAdd={() => setCellOpen({ row: r, date: c.date, layout: "day" })} />
                     </li>
                   )
                 })}
@@ -318,9 +452,12 @@ export default function DraftBoard({ eventId, board, day, view: initialView, sco
       {confirming && (
         <ConfirmActionModal
           recap={{
-            title: "Publier les affectations ?",
-            lead: `${plural(summary.drafts, "affectation", "affectations")} pour ${plural(summary.people, "personne", "personnes")} : chaque personne avec une adresse email reçoit un seul email avec ses missions.`,
-            lines: ["Les places sont prises maintenant ; tout est publié d'un coup, ou rien si un point bloque."],
+            title: "Publier les affectations ?",
+            lead: `${plural(summary.drafts, "affectation", "affectations")} pour ${plural(summary.people, "personne", "personnes")} : chaque personne avec une adresse email reçoit un seul email avec ses missions.`,
+            lines: [
+              "Les places sont prises maintenant ; tout est publié d'un coup, ou rien si un point bloque.",
+              ...(summary.withoutEmail > 0 ? [`${summary.withoutEmail > 1 ? `${summary.withoutEmail} personnes n'ont pas d'adresse email` : "1 personne n'a pas d'adresse email"} : elles ne reçoivent rien, prévenez-les vous-même.`] : []),
+            ],
             confirmLabel: "Publier",
             danger: false,
           }}
@@ -336,17 +473,38 @@ export default function DraftBoard({ eventId, board, day, view: initialView, sco
   )
 }
 
-function RowSummary({ row }: { row: BoardRow }) {
+/** The day view's places to fill, shift by shift (the capacity and coverage links land here). */
+function DayCoverageList({ coverage }: { coverage: DayCoverage }) {
+  return (
+    <div id={COVERAGE_ID} tabIndex={-1} className={`rounded-xl border border-gray-200 bg-white p-3 text-sm ${targetRing}`}>
+      <h4 className="font-semibold text-gray-900">À pourvoir ce jour</h4>
+      {coverage.shifts.length === 0 ? <p className="text-gray-700">Tous les créneaux de ce jour sont pourvus, brouillons compris.</p> : (
+        <ul role="list" className="mt-1 space-y-0.5 text-gray-800">
+          {coverage.shifts.map((s) => <li key={s.shiftId} className="break-words"><ShiftName name={s.name} />, {s.time} : {missingText(s.missing).toLowerCase()}</li>)}
+        </ul>
+      )}
+    </div>
+  )
+}
+
+function RowSummary({ row, layout, seen, onSeen }: { row: BoardRow; layout: Layout; seen: { id: string; error: string | null } | null; onSeen: (row: BoardRow, layout: Layout) => void }) {
+  const errorId = ids.seen(layout, row.volunteerId)
+  const mine = seen?.id === row.volunteerId
+  const busy = mine && !seen!.error
+  const failed = mine && !!seen!.error
   return (
     <div className="space-y-1 text-xs text-gray-700">
       <p>{hoursText(row)}</p>
       {row.reviewTexts.map((t) => <p key={t} className="text-[#92400e]">{t}</p>)}
-      {row.findings.length > 0 && (
-        <div className="text-red-800">
-          <p className="font-medium">Ne peut pas être publié ainsi :</p>
-          <ul role="list" className="space-y-0.5">{row.findings.map((f) => <li key={f}>{f}</li>)}</ul>
-        </div>
+      {row.seenRevision !== null && (
+        <>
+          <button type="button" onClick={() => onSeen(row, layout)} aria-disabled={(!!seen && !seen.error) || undefined} aria-busy={busy || undefined} aria-describedby={failed ? errorId : undefined} className={smallButton}>
+            {busy ? "Enregistrement…" : "Marquer comme vu"}<span className="sr-only">{` : disponibilités ${de(personName(row))}`}</span>
+          </button>
+          <p id={errorId} role="alert" className={failed ? "text-red-700" : "sr-only"}>{failed ? seen!.error : null}</p>
+        </>
       )}
+      {row.markers.map((m) => <p key={m} className="font-medium text-red-800">{m}</p>)}
     </div>
   )
 }
@@ -364,7 +522,15 @@ function LockedChip() {
   )
 }
 
-function CellContent({ row, cell, layout, onDraft, onAdd }: { row: BoardRow; cell: BoardRow["cells"][number]; layout: Layout; onDraft: (item: BoardItem) => void; onAdd: () => void }) {
+/** The item's kind, in one word: « Proposé » for a generated draft, never next to « Brouillon ». */
+const kindLabel = (item: BoardItem) => (item.draft?.source === "proposal" ? "Proposé" : KIND_BADGE[item.kind].label)
+
+/**
+ * One cell (independent review, P1 #5): the shift, then the most important fact, availability
+ * outside the answer (a warning line, never a pill), then one pill for the kind and the lock, then
+ * what is left to do in short words; the full sentences are in the summary and the dialog.
+ */
+function CellContent({ eventId, row, cell, layout, onDraft, onAdd }: { eventId: string; row: BoardRow; cell: BoardRow["cells"][number]; layout: Layout; onDraft: (item: BoardItem) => void; onAdd: () => void }) {
   const who = `${personName(row)}${row.sameNameHint ? ` (${row.sameNameHint})` : ""}`
   const date = lowerFirst(dayLabel(cell.date))
   return (
@@ -372,25 +538,34 @@ function CellContent({ row, cell, layout, onDraft, onAdd }: { row: BoardRow; cel
       <p className="text-xs text-gray-700">{cell.availability}</p>
       {cell.items.length > 0 && (
         <ul role="list" className="space-y-1.5">
-          {cell.items.map((item) => (
-            <li key={`${item.kind}-${item.draft?.id ?? item.shiftId}`} className="rounded-lg border border-gray-200 bg-gray-50 px-2 py-1.5 text-xs text-gray-900 space-y-1">
-              <p><span className="font-medium"><ShiftName name={item.name} /></span>, {item.time}</p>
-              <p className="flex flex-wrap gap-1">
-                <span className={`inline-block rounded-full border border-transparent px-2 py-0.5 font-medium ${KIND_BADGE[item.kind].className}`}>{KIND_BADGE[item.kind].label}</span>
-                {item.fit && OUTSIDE_FITS.includes(item.fit) && <span className="inline-block rounded-full border border-transparent px-2 py-0.5 font-medium bg-[#f3f4f6] text-[#374151]">{item.fitLabel}</span>}
-                {item.draft?.source === "proposal" && <span className="inline-block rounded-full border border-transparent px-2 py-0.5 font-medium bg-[#f3f4f6] text-[#4b5563]">Proposé</span>}
-                {item.draft?.locked && <LockedChip />}
-              </p>
-              {item.draft?.staleText && <p className="text-[#92400e]">{item.draft.staleText}</p>}
-              {item.draft && !item.draft.stale && item.draft.ackKey && !item.draft.acked && <p className="text-[#92400e]">Confirmation à donner avant publication.</p>}
-              {item.draft && item.draft.problems.length > 0 && <p className="text-red-800">{item.draft.problems[0]}</p>}
-              {item.draft && (
-                <button id={ids.draft(layout, item.draft.id)} type="button" onClick={() => onDraft(item)} className={smallButton}>
-                  Voir le brouillon<span className="sr-only">, {who}, {spokenName(item.name)}, {item.time}, {date}{item.draft.source === "proposal" ? ", proposé" : ""}{item.draft.locked ? ", verrouillé" : ""}</span>
-                </button>
-              )}
-            </li>
-          ))}
+          {cell.items.map((item) => {
+            const outside = !!item.fit && OUTSIDE_FITS.includes(item.fit)
+            return (
+              <li key={`${item.kind}-${item.draft?.id ?? item.shiftId}`} className="rounded-lg border border-gray-200 bg-gray-50 px-2 py-1.5 text-xs text-gray-900 space-y-1">
+                <p><span className="font-medium"><ShiftName name={item.name} /></span>, {item.time}</p>
+                {item.review ? (
+                  <p className="flex items-start gap-1 font-semibold text-[#92400e]"><WarningIcon />{item.review}</p>
+                ) : outside && (
+                  <p className="flex items-start gap-1 font-semibold text-[#92400e]"><WarningIcon />{item.fitLabel}</p>
+                )}
+                <p className="flex flex-wrap items-center gap-1">
+                  <span className={`${pill} ${KIND_BADGE[item.kind].className}`}>{kindLabel(item)}</span>
+                  {item.draft?.locked && <><span className="sr-only">, </span><LockedChip /></>}
+                </p>
+                {item.draft?.staleText && <p className="text-[#92400e]">{item.draft.staleText}</p>}
+                {item.draft && !item.draft.stale && item.draft.ackKey && !item.draft.acked && <p className="text-[#92400e]">Confirmation à donner avant publication.</p>}
+                {item.draft?.markers.map((m) => <p key={m} className="font-medium text-red-800">{m}</p>)}
+                {item.registrationId && item.review && (
+                  <p><Link href={registrationHref(eventId, item.shiftId, row)} className={linkClass}>Voir l&apos;inscription<span className="sr-only">, {who}, {spokenName(item.name)}, {date}</span></Link></p>
+                )}
+                {item.draft && (
+                  <button id={ids.draft(layout, item.draft.id)} type="button" onClick={() => onDraft(item)} className={smallButton}>
+                    Voir le brouillon<span className="sr-only">, {who}, {spokenName(item.name)}, {item.time}, {date}{item.draft.source === "proposal" ? ", proposé" : ""}{item.draft.locked ? ", verrouillé" : ""}{outside ? `, ${lowerFirst(item.fitLabel ?? "")}` : ""}</span>
+                  </button>
+                )}
+              </li>
+            )
+          })}
         </ul>
       )}
       <button id={ids.add(layout, row.volunteerId, cell.date)} type="button" onClick={onAdd} className={`${smallButton} ${layout === "day" ? "min-h-11" : ""}`}>
@@ -415,6 +590,8 @@ function DraftDialog({ eventId, target, live, canLock, onClose }: { eventId: str
   const [acked, setAcked] = useState(false)
   const [ackError, setAckError] = useState(false)
   const [busy, setBusy] = useState<"review" | "remove" | "lock" | null>(null)
+  // « Retirer ce brouillon » asks first (independent review, P3): a stacked confirmation, Cancel focused.
+  const [removing, setRemoving] = useState<{ error: string | null } | null>(null)
   const [locked, setLocked] = useState(draft.locked)
   const [revision, setRevision] = useState(draft.revision)
   // After a refresh (a lock refused because the draft changed elsewhere), the dialog takes the
@@ -433,8 +610,12 @@ function DraftDialog({ eventId, target, live, canLock, onClose }: { eventId: str
   }
   const [error, setError] = useState<string | null>(null)
   const who = personName(row)
-  const title = `Brouillon : ${spokenName(item.name)}, ${lowerFirst(dayLabel(date))}, ${item.time}`
+  const day = lowerFirst(dayLabel(date))
+  // The person in the title (independent review, P2 #12), as in the « Voir le brouillon » name.
+  const title = `Brouillon ${de(who)} : ${spokenName(item.name)}, ${day}, ${item.time}`
   const canReview = draft.stale || needsAck
+  // Reviewing a generated draft locks it (#1172): said before the button, not discovered after.
+  const reviewLocks = canLock && draft.source === "proposal" && !locked
 
   async function send(kind: "review" | "remove") {
     if (busy) return
@@ -444,25 +625,25 @@ function DraftDialog({ eventId, target, live, canLock, onClose }: { eventId: str
       return
     }
     setBusy(kind)
-    setError(null)
+    if (kind === "review") setError(null)
+    const fail = (text: string) => {
+      setBusy(null)
+      if (kind === "remove") setRemoving({ error: text })
+      else setError(text)
+    }
     try {
       const url = `/api/admin/events/${eventId}/drafts/${draft.id}`
       const res = kind === "review"
         ? await fetch(url, { method: "PATCH", headers: { "Content-Type": "application/json" }, body: JSON.stringify({ revision, ackKey: acked ? draft.ackKey : null }) })
         : await fetch(`${url}?revision=${revision}`, { method: "DELETE" })
       const data = await res.json().catch(() => ({}))
-      if (!res.ok) {
-        setBusy(null)
-        setError(typeof data.error === "string" ? data.error : "L'action n'a pas abouti.")
-        return
-      }
+      if (!res.ok) { fail(typeof data.error === "string" ? data.error : "L'action n'a pas abouti."); return }
     } catch {
-      setBusy(null)
-      setError(NETWORK_ERROR)
+      fail(NETWORK_ERROR)
       return
     }
-    const what = `${who}, ${spokenName(item.name)}, ${lowerFirst(dayLabel(date))}`
-    onClose(kind === "remove", kind === "remove" ? `Brouillon retiré : ${what}.` : `Relecture enregistrée : ${what}.`)
+    const what = `${who}, ${spokenName(item.name)}, ${day}`
+    onClose(kind === "remove", kind === "remove" ? `Brouillon retiré : ${what}.` : reviewLocks ? `Relecture enregistrée, brouillon verrouillé : ${what}.` : `Relecture enregistrée : ${what}.`)
   }
 
   /** « Verrouiller » / « Déverrouiller » (#1172): the dialog stays open, its own status says the result. */
@@ -490,49 +671,72 @@ function DraftDialog({ eventId, target, live, canLock, onClose }: { eventId: str
   }
 
   return (
-    <ModalShell title={title} onClose={() => onClose(false, null)} busy={!!busy}>
-      <div className="space-y-3 text-sm text-gray-800">
-        <p>{who}{row.sameNameHint ? ` (${row.sameNameHint})` : ""}. {draft.source === "proposal" ? "Brouillon venu d'une proposition." : "Brouillon préparé par l'organisation."} Il ne prend aucune place et n&apos;envoie rien avant la publication.</p>
-        {item.fitLabel && <p id="draft-fit"><span className="font-medium">{item.fitLabel}.</span> {item.fitDetail}</p>}
-        {draft.staleText && <p className="text-[#92400e]">{draft.staleText} Relisez-le, puis enregistrez la relecture.</p>}
-        {draft.problems.length > 0 && (
-          <div className="text-red-800">
-            <p className="font-medium">Empêche la publication :</p>
-            <ul role="list" className="space-y-0.5">{draft.problems.map((p) => <li key={p}>{p}</li>)}</ul>
+    <>
+      <ModalShell title={title} onClose={() => onClose(false, null)} busy={!!busy}>
+        <div className="space-y-3 text-sm text-gray-800">
+          <p>{who}{row.sameNameHint ? ` (${row.sameNameHint})` : ""}. {draft.source === "proposal" ? "Brouillon venu d'une proposition." : "Brouillon préparé par l'organisation."} Il ne prend aucune place et n&apos;envoie rien avant la publication.</p>
+          {item.fitLabel && (
+            <p id="draft-fit" className={item.fit && OUTSIDE_FITS.includes(item.fit) ? "flex items-start gap-1 text-[#92400e]" : undefined}>
+              {item.fit && OUTSIDE_FITS.includes(item.fit) && <WarningIcon />}
+              <span><span className="font-semibold">{item.fitLabel}.</span> {item.fitDetail}</span>
+            </p>
+          )}
+          {draft.staleText && <p className="text-[#92400e]">{draft.staleText} Relisez-le, puis enregistrez la relecture.</p>}
+          {draft.problems.length > 0 && (
+            <div className="text-red-800">
+              <p className="font-medium">Empêche la publication :</p>
+              <ul role="list" className="space-y-0.5">{draft.problems.map((p) => <li key={p}>{p}</li>)}</ul>
+            </div>
+          )}
+          {draft.acked && !draft.stale && <p>Affectation confirmée malgré les disponibilités indiquées.</p>}
+          {canLock && <p>{locked ? "Ce brouillon est verrouillé." : "Ce brouillon n'est pas verrouillé."} <span id="draft-lock-hint">Une nouvelle proposition ne remplace jamais un brouillon verrouillé.</span></p>}
+          {canReview && reviewLocks && <p id="draft-review-locks">Enregistrer la relecture verrouille ce brouillon : une nouvelle proposition ne le remplacera pas.</p>}
+          <p role="status" className="sr-only">{dialogStatus}</p>
+          {needsAck && (
+            <label className="flex min-h-11 items-start gap-2 py-1 cursor-pointer">
+              <input id="draft-ack" type="checkbox" checked={acked} onChange={(e) => { setAcked(e.target.checked); if (e.target.checked) setAckError(false) }}
+                aria-invalid={ackError || undefined}
+                aria-describedby={[ackError && "draft-ack-error", item.fitLabel && "draft-fit"].filter(Boolean).join(" ") || undefined}
+                className="mt-0.5 h-6 w-6 shrink-0 accent-blue-600" />
+              <span>{ackLabel(who, "Garder")}</span>
+            </label>
+          )}
+          {needsAck && ackError && <p id="draft-ack-error" className="text-red-700">Cochez cette case pour garder ce brouillon malgré ses disponibilités.</p>}
+          {/* Mounted from the start, filled on error: an alert that appears with its text is not always read. */}
+          <p role="alert" className={error ? "text-red-700" : "sr-only"}>{error}</p>
+          <div className="flex flex-wrap gap-2 pt-1">
+            {canReview && (
+              <button type="button" onClick={() => void send("review")} aria-disabled={!!busy || undefined} aria-busy={busy === "review" || undefined} aria-describedby={reviewLocks ? "draft-review-locks" : undefined} className={`min-h-11 rounded-xl bg-blue-600 px-4 py-2 text-sm font-medium text-white hover:bg-blue-700 aria-disabled:opacity-60 ${focusRing}`}>
+                {busy === "review" ? "Enregistrement…" : "Enregistrer la relecture"}
+              </button>
+            )}
+            {canLock && (
+              <button type="button" onClick={() => void toggleLock()} aria-describedby="draft-lock-hint" aria-disabled={!!busy || undefined} aria-busy={busy === "lock" || undefined} className={`min-h-11 rounded-xl border border-gray-500 bg-white px-4 py-2 text-sm font-medium text-gray-900 hover:bg-gray-50 aria-disabled:opacity-60 ${focusRing}`}>
+                {busy === "lock" ? "Enregistrement…" : locked ? "Déverrouiller" : "Verrouiller"}
+              </button>
+            )}
+            <button type="button" onClick={() => { if (!busy) setRemoving({ error: null }) }} aria-disabled={!!busy || undefined} className={`min-h-11 rounded-xl border border-[#b91c1c] bg-white px-4 py-2 text-sm font-medium text-[#b91c1c] hover:bg-red-50 aria-disabled:opacity-60 ${focusRing}`}>
+              Retirer ce brouillon
+            </button>
           </div>
-        )}
-        {draft.acked && !draft.stale && <p>Affectation confirmée malgré les disponibilités indiquées.</p>}
-        {canLock && <p>{locked ? "Ce brouillon est verrouillé." : "Ce brouillon n'est pas verrouillé."} <span id="draft-lock-hint">Une nouvelle proposition ne remplace jamais un brouillon verrouillé.</span></p>}
-        <p role="status" className="sr-only">{dialogStatus}</p>
-        {needsAck && (
-          <label className="flex min-h-11 items-start gap-2 py-1 cursor-pointer">
-            <input id="draft-ack" type="checkbox" checked={acked} onChange={(e) => { setAcked(e.target.checked); if (e.target.checked) setAckError(false) }}
-              aria-invalid={ackError || undefined}
-              aria-describedby={[ackError && "draft-ack-error", item.fitLabel && "draft-fit"].filter(Boolean).join(" ") || undefined}
-              className="mt-0.5 h-6 w-6 shrink-0 accent-blue-600" />
-            <span>{ackLabel(who, "Publier")}</span>
-          </label>
-        )}
-        {needsAck && ackError && <p id="draft-ack-error" className="text-red-700">Cochez cette case pour enregistrer la relecture malgré ses disponibilités.</p>}
-        {/* Mounted from the start, filled on error: an alert that appears with its text is not always read. */}
-        <p role="alert" className={error ? "text-red-700" : "sr-only"}>{error}</p>
-        <div className="flex flex-wrap gap-2 pt-1">
-          {canReview && (
-            <button type="button" onClick={() => void send("review")} aria-disabled={!!busy || undefined} aria-busy={busy === "review" || undefined} className={`min-h-11 rounded-xl bg-blue-600 px-4 py-2 text-sm font-medium text-white hover:bg-blue-700 aria-disabled:opacity-60 ${focusRing}`}>
-              {busy === "review" ? "Enregistrement…" : "Enregistrer la relecture"}
-            </button>
-          )}
-          {canLock && (
-            <button type="button" onClick={() => void toggleLock()} aria-describedby="draft-lock-hint" aria-disabled={!!busy || undefined} aria-busy={busy === "lock" || undefined} className={`min-h-11 rounded-xl border border-gray-500 bg-white px-4 py-2 text-sm font-medium text-gray-900 hover:bg-gray-50 aria-disabled:opacity-60 ${focusRing}`}>
-              {busy === "lock" ? "Enregistrement…" : locked ? "Déverrouiller" : "Verrouiller"}
-            </button>
-          )}
-          <button type="button" onClick={() => void send("remove")} aria-disabled={!!busy || undefined} aria-busy={busy === "remove" || undefined} className={`min-h-11 rounded-xl border border-[#b91c1c] bg-white px-4 py-2 text-sm font-medium text-[#b91c1c] hover:bg-red-50 aria-disabled:opacity-60 ${focusRing}`}>
-            {busy === "remove" ? "Retrait…" : "Retirer ce brouillon"}
-          </button>
         </div>
-      </div>
-    </ModalShell>
+      </ModalShell>
+      {removing && (
+        <ConfirmActionModal
+          recap={{
+            title: "Retirer ce brouillon ?",
+            lead: `${who}, ${spokenName(item.name)}, ${day} : le brouillon disparaît du planning. Rien n'a été publié ni envoyé.`,
+            lines: [],
+            confirmLabel: "Retirer le brouillon",
+            danger: true,
+          }}
+          busy={busy === "remove"}
+          error={removing.error}
+          onConfirm={() => void send("remove")}
+          onCancel={() => setRemoving(null)}
+        />
+      )}
+    </>
   )
 }
 
@@ -566,7 +770,7 @@ function OptionsDialog({ eventId, target, onClose }: { eventId: string; target: 
   const update = (shiftId: string, patch: Partial<OptionState>) => setItems((list) => list?.map((x) => (x.option.shiftId === shiftId ? { ...x, ...patch } : x)) ?? null)
 
   async function add(it: OptionState) {
-    if (busy) { announce(setStatus, "Un ajout est en cours : attendez sa réponse."); return }
+    if (busy) { announce(setStatus, "Un ajout est en cours : attendez sa réponse."); return }
     const o = it.option
     if (o.ackKey && !it.acked) {
       flushSync(() => update(o.shiftId, { ackError: true }))
@@ -587,9 +791,9 @@ function OptionsDialog({ eventId, target, onClose }: { eventId: string; target: 
     }
     setBusy(null)
     if (error) { update(o.shiftId, { error }); return }
+    // Said once, by the focused sentence (never also by the status: it was read twice).
     flushSync(() => update(o.shiftId, { added: true }))
     document.getElementById(`option-added-${o.shiftId}`)?.focus()
-    announce(setStatus, `Brouillon ajouté : ${who} sur ${spokenName(o.name)}. Il ne prend pas de place avant la publication.`)
   }
 
   return (
@@ -597,7 +801,7 @@ function OptionsDialog({ eventId, target, onClose }: { eventId: string; target: 
       <div className="space-y-3 text-sm text-gray-800">
         <p role="status" className={status ? "text-sm text-gray-800" : "sr-only"}>{status}</p>
         <div role="alert">{loadError && <p className="text-red-700">{loadError}</p>}</div>
-        {items && items.length > 0 && <p className="text-xs text-gray-700">Les places indiquées ne comptent que les inscriptions : les brouillons ne prennent pas de place.</p>}
+        {items && items.length > 0 && <p className="text-xs text-gray-700">Un brouillon ne prend une place qu&apos;à la publication : les places prises et les brouillons déjà prévus sont comptés à part.</p>}
         {items && (
           <ul role="list" className="space-y-3">
             {items.map((it) => {
@@ -606,18 +810,26 @@ function OptionsDialog({ eventId, target, onClose }: { eventId: string; target: 
               return (
                 <li key={o.shiftId} className="rounded-xl border border-gray-200 p-3 space-y-1.5">
                   <h3 className="text-sm font-semibold text-gray-900"><ShiftName name={o.name} />, {o.time}</h3>
-                  <p className="text-xs text-gray-700">{o.occupied === 0 ? "Aucune place prise" : `${o.occupied} ${o.occupied > 1 ? "places prises" : "place prise"}`} sur {o.capacity}</p>
-                  {o.fitLabel ? <p id={`option-fit-${o.shiftId}`} className="text-xs"><span className="font-medium">{o.fitLabel}.</span> {o.fitDetail}</p> : <p className="text-xs text-gray-700">Pas de disponibilités indiquées.</p>}
+                  <p className="text-xs text-gray-700">
+                    {o.occupied === 0 ? "Aucune place prise" : `${o.occupied} ${o.occupied > 1 ? "places prises" : "place prise"}`} sur {o.capacity}
+                    {o.drafted > 0 && ` ; ${plural(o.drafted, "brouillon déjà prévu", "brouillons déjà prévus")}`}
+                  </p>
+                  {o.fitLabel ? (
+                    <p id={`option-fit-${o.shiftId}`} className={`text-xs ${o.fit && OUTSIDE_FITS.includes(o.fit) ? "flex items-start gap-1 text-[#92400e]" : ""}`}>
+                      {o.fit && OUTSIDE_FITS.includes(o.fit) && <WarningIcon />}
+                      <span><span className="font-semibold">{o.fitLabel}.</span> {o.fitDetail}</span>
+                    </p>
+                  ) : <p className="text-xs text-gray-700">Pas de disponibilités indiquées.</p>}
                   {o.workload.length > 0 && (
                     <div id={workloadId} className="text-xs text-amber-950 bg-amber-50 border border-amber-300 rounded-lg px-2 py-1">
-                      <p className="font-medium">Une fois publié avec ses autres brouillons, ce programme ne respecterait plus les limites :</p>
+                      <p className="font-medium">Une fois publié avec ses autres brouillons, ce programme ne respecterait plus les limites :</p>
                       <ul role="list">{o.workload.map((w) => <li key={w}>{w}</li>)}</ul>
-                      <p>Le brouillon reste possible ; la publication sera refusée tant que ce point demeure.</p>
+                      <p>Le brouillon reste possible ; la publication sera refusée tant que ce point demeure.</p>
                     </div>
                   )}
                   {o.taken === "registered" ? <p className="text-xs text-gray-700">Déjà inscrit·e sur ce créneau.</p>
                     : o.taken === "draft" ? <p className="text-xs text-gray-700">Brouillon déjà prévu sur ce créneau.</p>
-                      : it.added ? <p id={`option-added-${o.shiftId}`} tabIndex={-1} className={`text-xs font-medium text-[#15803d] rounded ${focusRing}`}>Brouillon ajouté.</p>
+                      : it.added ? <p id={`option-added-${o.shiftId}`} tabIndex={-1} className={`text-xs font-medium text-[#15803d] rounded ${focusRing}`}>Brouillon ajouté<span className="sr-only"> : {spokenName(o.name)}, {o.time}</span>.</p>
                         : (
                           <>
                             {o.ackKey && (

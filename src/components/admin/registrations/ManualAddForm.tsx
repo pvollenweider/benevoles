@@ -69,6 +69,8 @@ export default function ManualAddForm({ eventId, shifts, registrations, timeZone
   const fitsLoading = fitQuery !== "" && fetched?.query !== fitQuery
   const [acked, setAcked] = useState<Set<string>>(new Set())
   const [ackErrors, setAckErrors] = useState<Set<string>>(new Set())
+  // Boxes that came back from a refusal under a new key: the answer changed since it was shown.
+  const [changedKeys, setChangedKeys] = useState<Set<string>>(new Set())
   useEffect(() => {
     if (!fitQuery) return
     let current = true
@@ -81,7 +83,7 @@ export default function ManualAddForm({ eventId, shifts, registrations, timeZone
         if (!current) return
         setFetched({ query: fitQuery, fits: Object.fromEntries((data?.fits ?? []).map((f) => [f.shiftId, f])) })
         const outside = (data?.fits ?? []).filter((f) => f.ackKey)
-        if (outside.length > 0) say(`Disponibilités indiquées : ${outside.map((f) => `${spokenShiftName(shifts.find((s) => s.id === f.shiftId) ?? { roleName: "créneau" })}, ${f.label.toLowerCase()}`).join(" ; ")}. Une confirmation est demandée.`)
+        if (outside.length > 0) say(`Disponibilités indiquées : ${outside.map((f) => `${spokenShiftName(shifts.find((s) => s.id === f.shiftId) ?? { roleName: "créneau" })}, ${f.label.toLowerCase()}`).join(" ; ")}. Une confirmation est demandée.`)
       })
     return () => { current = false }
     // The request depends on the person and the shifts only (`say` and `shifts` are read when it answers).
@@ -100,7 +102,7 @@ export default function ManualAddForm({ eventId, shifts, registrations, timeZone
     const key = fit.ackKey
     return (
       <div className="mt-1">
-        <p id={fitIdOf(n)} className="text-xs text-gray-700">Disponibilités indiquées : {fit.label}.{fit.detail ? ` ${fit.detail}` : ""}</p>
+        <p id={fitIdOf(n)} className="text-xs text-gray-700">Disponibilités indiquées : {fit.label}.{fit.detail ? ` ${fit.detail}` : ""}</p>
         {key && (
           <>
             <label className="flex min-h-11 items-start gap-2 py-1 text-sm text-gray-900 cursor-pointer">
@@ -116,7 +118,7 @@ export default function ManualAddForm({ eventId, shifts, registrations, timeZone
               />
               <span>{ackLabel(addForm.firstName || "cette personne")}<span className="sr-only">{` (créneau ${n})`}</span></span>
             </label>
-            {ackErrors.has(key) && <p id={`add-ack-error-${n}`} className="text-xs text-red-700">Cochez cette case pour ajouter cette personne sur ce créneau malgré ses disponibilités : rien n&apos;a encore été ajouté.</p>}
+            {ackErrors.has(key) && <p id={`add-ack-error-${n}`} className="text-xs text-red-700">{changedKeys.has(key) ? "Les disponibilités ont changé entre-temps : relisez-les, puis cochez de nouveau. " : ""}Cochez cette case pour ajouter cette personne sur ce créneau malgré ses disponibilités : rien n&apos;a encore été ajouté.</p>}
           </>
         )}
       </div>
@@ -176,7 +178,7 @@ export default function ManualAddForm({ eventId, shifts, registrations, timeZone
       requestAnimationFrame(() => setAnnouncement(memberResultsSentence(rows.length)))
     } catch {
       setChoices(null)
-      setSearchError("Connexion interrompue : la recherche n'a pas abouti. Réessayez.")
+      setSearchError("Connexion interrompue : la recherche n'a pas abouti. Réessayez.")
     } finally {
       setSearching(false)
     }
@@ -318,6 +320,8 @@ export default function ManualAddForm({ eventId, shifts, registrations, timeZone
       flushSync(() => {
         setServed({ form: `${addForm.volunteerId}|${addForm.email}|${chosenKey}`, fits: Object.fromEntries(outside.map((o) => [o.shiftId, { shiftId: o.shiftId, state: o.state, label: o.label, detail: o.detail, ackKey: o.key }])) })
         setAckErrors(new Set(outside.filter((o) => !acked.has(o.key)).map((o) => o.key)))
+        // « changed » when a different key was shown for that shift; a box never shown is just missing.
+        setChangedKeys(new Set(outside.filter((o) => { const shown = fits[o.shiftId]?.ackKey; return !!shown && shown !== o.key }).map((o) => o.key)))
         // The refusal is said by the box that takes focus (its error), never a second time by an alert.
         setAddError(null)
         setErrorFor(null)
@@ -378,7 +382,7 @@ export default function ManualAddForm({ eventId, shifts, registrations, timeZone
             {addForm.phone && <span>, {addForm.phone}</span>}
           </p>
           {knownVolunteer && hasAvailability(knownVolunteer) && (
-            <p className="text-xs text-gray-700 mt-1">Disponible en général : {availabilityLabel(knownVolunteer)}</p>
+            <p className="text-xs text-gray-700 mt-1">Disponible en général : {availabilityLabel(knownVolunteer)}</p>
           )}
           <button type="button" onClick={changeMember} className="mt-2 min-h-11 sm:min-h-6 text-sm font-medium text-blue-700 underline underline-offset-2 hover:text-blue-900 rounded focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-blue-600">
             Changer de personne
@@ -407,7 +411,8 @@ export default function ManualAddForm({ eventId, shifts, registrations, timeZone
             {searching ? "Recherche…" : "Chercher"}
           </button>
         </div>
-        {searchError && <p role="alert" className="text-xs text-red-700 mt-1">{searchError}</p>}
+        {/* Always mounted, filled on error: an alert that appears with its text is not always read. */}
+        <p role="alert" className={searchError ? "text-xs text-red-700 mt-1" : "sr-only"}>{searchError}</p>
         {choices && choices.length > 0 && (
           <ul role="list" aria-label="Membres trouvés" className="mt-2 space-y-1">
             {choices.slice(0, MEMBER_CHOICES_SHOWN).map((m) => (
@@ -421,7 +426,7 @@ export default function ManualAddForm({ eventId, shifts, registrations, timeZone
           </ul>
         )}
         {choices && choices.length > MEMBER_CHOICES_SHOWN && (
-          <p className="text-xs text-gray-700 mt-1">{choices.length} membres trouvés, les {MEMBER_CHOICES_SHOWN} premiers affichés : précisez la recherche.</p>
+          <p className="text-xs text-gray-700 mt-1">{choices.length} membres trouvés, les {MEMBER_CHOICES_SHOWN} premiers affichés : précisez la recherche.</p>
         )}
         {choices && choices.length === 0 && <p className="text-xs text-gray-700 mt-1">Aucun membre trouvé.</p>}
       </div>
@@ -441,7 +446,7 @@ export default function ManualAddForm({ eventId, shifts, registrations, timeZone
           <input id="add-email" type="email" value={addForm.email} aria-describedby={knownVolunteer && hasAvailability(knownVolunteer) ? "add-email-availability" : undefined} onChange={(e) => setAddForm((f) => ({ ...f, email: e.target.value }))} className="input" />
           {/* Always mounted, so the polite region announces the text when it appears. */}
           <p id="add-email-availability" aria-live="polite" className={knownVolunteer && hasAvailability(knownVolunteer) ? "text-xs text-gray-700 mt-1" : "sr-only"}>
-            {knownVolunteer && hasAvailability(knownVolunteer) ? `Disponible en général : ${availabilityLabel(knownVolunteer)}` : ""}
+            {knownVolunteer && hasAvailability(knownVolunteer) ? `Disponible en général : ${availabilityLabel(knownVolunteer)}` : ""}
           </p>
         </div>
         <div>
@@ -461,7 +466,7 @@ export default function ManualAddForm({ eventId, shifts, registrations, timeZone
               onChange={(e) => { setAddForm((f) => ({ ...f, birthDate: e.target.value })); setBirthError(null) }}
               className="input"
             />
-            <p id="add-birthdate-hint" className="text-xs text-gray-600 mt-1">Nécessaire si la personne n&apos;en a pas encore : cet événement protège les moins de 18 ans. Une date déjà enregistrée n&apos;est pas remplacée.</p>
+            <p id="add-birthdate-hint" className="text-xs text-gray-600 mt-1">Nécessaire si la personne n&apos;en a pas encore : cet événement protège les moins de 18 ans. Une date déjà enregistrée n&apos;est pas remplacée.</p>
             {birthError && <p id="add-birthdate-error" className="text-sm text-red-700 mt-1">{birthError}</p>}
           </div>
         )}
@@ -530,13 +535,13 @@ export default function ManualAddForm({ eventId, shifts, registrations, timeZone
       <div id="add-workload" role="status" className={addWarnings.length > 0 ? "" : "sr-only"}>
         {addWarnings.length > 0 && (blocks ? (
           <div className="bg-red-50 border border-red-300 rounded-xl p-3 text-sm text-red-800">
-            <p className="font-semibold">L&apos;ajout sera refusé : {chosenShifts.length > 1 ? "avec ces créneaux" : "avec ce créneau"}, le programme de cette personne ne respecterait plus les limites de pauses et de charge de l&apos;événement.</p>
+            <p className="font-semibold">L&apos;ajout sera refusé : {chosenShifts.length > 1 ? "avec ces créneaux" : "avec ce créneau"}, le programme de cette personne ne respecterait plus les limites de pauses et de charge de l&apos;événement.</p>
             <ul role="list" className="mt-1 space-y-0.5">{addWarnings.map((m) => <li key={m}>{m}</li>)}</ul>
             <p className="mt-1">Choisissez un autre créneau ou une autre personne.</p>
           </div>
         ) : (
           <div className="bg-amber-50 border border-amber-300 rounded-xl p-3 text-sm text-amber-950">
-            <p className="font-medium">{chosenShifts.length > 1 ? "Si vous ajoutez ces créneaux" : "Si vous ajoutez ce créneau"}, cette personne aura :</p>
+            <p className="font-medium">{chosenShifts.length > 1 ? "Si vous ajoutez ces créneaux" : "Si vous ajoutez ce créneau"}, cette personne aura :</p>
             <ul role="list" className="mt-1 space-y-0.5">{addWarnings.map((m) => <li key={m}>{m}</li>)}</ul>
             <p className="mt-1">L&apos;ajout reste possible.</p>
           </div>
@@ -545,10 +550,10 @@ export default function ManualAddForm({ eventId, shifts, registrations, timeZone
       {showError && (
         <div role="alert" className="bg-red-50 border border-red-200 rounded-xl p-3 text-sm text-red-700">
           <p id="add-error">{addError}</p>
-          {overLimitFor !== null && !overLimit && <p className="mt-1">Le formulaire a changé : validez à nouveau.</p>}
+          {overLimitFor !== null && !overLimit && <p className="mt-1">Le formulaire a changé : validez à nouveau.</p>}
           {overLimit && (
             <button type="button" onClick={() => { if (!adding) handleAdd(null, true) }} aria-disabled={adding || undefined} aria-describedby="add-error" className={`mt-2 min-h-11 sm:min-h-6 text-sm font-medium text-red-800 underline underline-offset-2 hover:text-red-950 ${adding ? "opacity-60 cursor-wait" : ""}`}>
-              {adding ? "Ajout en cours…" : "Ajouter quand même"}
+              {adding ? "Ajout en cours…" : "Ajouter malgré la limite"}
             </button>
           )}
         </div>

@@ -167,7 +167,7 @@ describe.skipIf(!url)("draft board, publication and correction after it (#1146, 
     expect((openPayload(again[0].payload).data as { items: unknown[] }).items).toHaveLength(1)
 
     const board = await loadDraftBoard(getOrgClient(orgId), eventId, "event")
-    expect(board!.rows.find((r) => r.volunteerId === nadia)!.reviewTexts).toEqual(["À revoir : disponibilités modifiées après la publication des affectations."])
+    expect(board!.rows.find((r) => r.volunteerId === nadia)!.reviewTexts).toEqual(["À revoir : disponibilités modifiées après la publication des affectations."])
   })
 
   it("clears the flag only at the revision seen", async () => {

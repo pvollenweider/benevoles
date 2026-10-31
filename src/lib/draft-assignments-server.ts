@@ -6,7 +6,7 @@ import { availabilityAckKey, shiftFit, shiftInterval, usesAvailability, type Ans
 import { logAvailabilityAcks, readAnswerForFit, readAnswersForFit, readAvailabilityGate } from "./availability-assist-data"
 import { shiftStartsAt } from "./cancel-deadline"
 import {
-  availabilityStamp, draftShiftTerms, judgeDraftBatch, publicationRefusalText, selectionCanonical,
+  draftAvailabilityStamp, draftShiftTerms, judgeDraftBatch, publicationRefusalText, selectionCanonical,
   DRAFTS_CHANGED_TEXT, MAX_EVENT_DRAFTS, MAX_PUBLISH_DRAFTS, PUBLICATION_KEY_REUSED_TEXT,
   type BatchHeld, type BatchPerson, type BatchShift, type DraftProblem,
 } from "./draft-assignments"
@@ -66,8 +66,8 @@ export type DraftResult<T> = { ok: true; value: T } | { ok: false; status: 400 |
 const fail = (status: 400 | 404 | 409, error: string, code?: string) => ({ ok: false as const, status, error, ...(code ? { code } : {}) })
 
 const NOT_FOUND = "Événement, créneau ou personne introuvable."
-const DRAFT_GONE = "Ce brouillon a changé ou n'existe plus : rechargez la page."
-const STALE_ACK = "Les disponibilités de cette personne ou les horaires du créneau ont changé : relisez-les avant de confirmer."
+const DRAFT_GONE = "Ce brouillon a changé ou n'existe plus : rechargez la page."
+const STALE_ACK = "Les disponibilités de cette personne ou les horaires du créneau ont changé : relisez-les avant de confirmer."
 
 /** The draft's acknowledgement, judged now: the key the organiser must send, if any. */
 function currentAck(p: { eventId: string; volunteerId: string; shift: { id: string; date: Date; startTime: string; endTime: string }; answer: AnswerForFit | null; dates: readonly string[]; timeZone: string }): string | null {
@@ -137,7 +137,7 @@ export async function createDraft(db: Db, input: CreateDraftInput): Promise<Draf
     const pending = await tx.draftAssignment.findFirst({ where: { eventId: input.eventId, shiftId: shift.id, volunteerId: input.volunteerId, status: "draft" }, select: { id: true } })
     if (pending) return fail(409, "Cette personne a déjà une affectation en brouillon sur ce créneau.", "draft_exists")
     const count = await tx.draftAssignment.count({ where: { eventId: input.eventId, status: "draft" } })
-    if (count >= MAX_EVENT_DRAFTS) return fail(409, `Au plus ${MAX_EVENT_DRAFTS} affectations en brouillon par événement : publiez ou retirez-en d'abord.`)
+    if (count >= MAX_EVENT_DRAFTS) return fail(409, `Au plus ${MAX_EVENT_DRAFTS} affectations en brouillon par événement : publiez ou retirez-en d'abord.`)
 
     const answer = await readAnswerForFit(tx, input.eventId, input.volunteerId)
     const ack = ackToStore(currentAck({ eventId: input.eventId, volunteerId: input.volunteerId, shift, answer, dates: found.gate.dates, timeZone: found.gate.timeZone }), input.ackKey)
@@ -146,7 +146,7 @@ export async function createDraft(db: Db, input: CreateDraftInput): Promise<Draf
       data: {
         eventId: input.eventId, shiftId: shift.id, volunteerId: input.volunteerId,
         source: input.source ?? "manual", proposalRunId: input.proposalRunId ?? null, note: input.note?.trim() || null,
-        createdById: input.actorId, shiftTerms: draftShiftTerms(shift), availabilityStamp: availabilityStamp(answer),
+        createdById: input.actorId, shiftTerms: draftShiftTerms(shift), availabilityStamp: draftAvailabilityStamp(answer, shift, found.gate.timeZone),
         reviewedAt: now, reviewedById: input.actorId,
         ...(ack.key ? { ackKey: ack.key, acknowledgedAt: now, acknowledgedById: input.actorId } : {}),
       },
@@ -181,14 +181,14 @@ export async function reviewDraft(db: Db, input: { eventId: string; draftId: str
     const draft = await lockDraft(tx, input.eventId, input.draftId, input.revision)
     if (!draft) return fail(409, DRAFT_GONE, "drafts_changed")
     const shift = await tx.shift.findFirst({ where: { id: draft.shiftId, eventId: input.eventId }, select: SHIFT_SELECT }) as ShiftRow | null
-    if (!shift || shift.status === "cancelled") return fail(409, "Ce créneau est annulé : retirez ce brouillon.")
+    if (!shift || shift.status === "cancelled") return fail(409, "Ce créneau est annulé : retirez ce brouillon.")
     const answer = await readAnswerForFit(tx, input.eventId, draft.volunteerId)
     const ack = ackToStore(currentAck({ eventId: input.eventId, volunteerId: draft.volunteerId, shift, answer, dates: found.gate.dates, timeZone: found.gate.timeZone }), input.ackKey)
     if (!ack.ok) return fail(409, STALE_ACK, "availability")
     await tx.draftAssignment.updateMany({
       where: { id: draft.id, eventId: input.eventId },
       data: {
-        shiftTerms: draftShiftTerms(shift), availabilityStamp: availabilityStamp(answer), reviewedAt: now, reviewedById: input.actorId,
+        shiftTerms: draftShiftTerms(shift), availabilityStamp: draftAvailabilityStamp(answer, shift, found.gate.timeZone), reviewedAt: now, reviewedById: input.actorId,
         ackKey: ack.key, acknowledgedAt: ack.key ? now : null, acknowledgedById: ack.key ? input.actorId : null,
         // A generated draft the organiser reviewed is theirs now: a new proposal never replaces it (#1172).
         ...(draft.source === "proposal" ? { locked: true } : {}),
@@ -367,7 +367,7 @@ export async function publishDrafts(db: Db, input: PublishInput): Promise<Publis
         const workload = await checkDutyChange(tx, gate, eventId, volunteerId, { add })
         if (!workload.ok) {
           const p = personMap.get(volunteerId)!
-          const body = workloadRefusalBody(workload, `${`${p.firstName} ${p.lastName}`.trim()} : avec ces affectations, son programme ne respecterait plus les pauses et limites de charge de cet événement.`)
+          const body = workloadRefusalBody(workload, `${`${p.firstName} ${p.lastName}`.trim()} : avec ces affectations, son programme ne respecterait plus les pauses et limites de charge de cet événement.`)
           problems.push({ code: "workload", volunteerId, message: body.error, details: body.workload })
         }
       }

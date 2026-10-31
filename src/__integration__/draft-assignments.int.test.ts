@@ -37,6 +37,8 @@ import { prisma } from "@/lib/prisma"
 import { getOrgClient } from "@/lib/prisma-org"
 import { saveAvailabilityAnswers } from "@/lib/event-availability-data"
 import { loadPersonFits } from "@/lib/availability-assist-data"
+import { loadDraftBoard, loadDraftOptions } from "@/lib/draft-board-data"
+import { loadAvailabilityOverview, markAvailabilityReviewed } from "@/lib/event-availability-server"
 import { createDraft, discardDraft, publishDrafts, reviewDraft, type PublishInput } from "@/lib/draft-assignments-server"
 import { MERGE_STAMP } from "@/lib/draft-assignments"
 import { runMemberMerge } from "@/lib/member-merge-transaction"
@@ -277,6 +279,74 @@ describe.skipIf(!url)("draft assignments and publication on Postgres (#1146, lot
       const again = await reviewDraft(db(), { eventId: e.id, draftId: d.id, revision: d.revision, actorId: "admin-1" })
       if (!again.ok) throw new Error(again.error)
       expect(await publish(e.id, [again.value])).toMatchObject({ ok: true })
+    })
+
+    it("leaves a draft alone when another date of the answer changes, and refuses it when its own date changes (independent review, P2 #13)", async () => {
+      const e = await event()
+      const s = await shift(e.id, "10:00", "14:00")
+      const nadia = await member("Nadia", "Rochat")
+      const days = (d12: { start: string; end: string }[], d11 = [{ start: "08:00", end: "20:00" }]) =>
+        prisma.$transaction((tx) => saveAvailabilityAnswers(tx, { eventId: e.id, volunteerId: nadia.id, days: [{ date: "2031-07-10", ranges: [] }, { date: "2031-07-11", ranges: d11 }, { date: "2031-07-12", ranges: d12 }], by: "admin" }))
+      await days([])
+      const d = await draftOn(e.id, s.id, nadia.id)
+      expect((await prisma.draftAssignment.findUniqueOrThrow({ where: { id: d.id } })).availabilityStamp).toMatch(/^a2:/)
+      // Sunday answered meanwhile: a new revision, but not of the dates that reach Friday's shift.
+      await days([{ start: "09:00", end: "12:00" }])
+      const board = await loadDraftBoard(db(), e.id, "event", NOW)
+      expect(board!.summary).toMatchObject({ stale: 0, problems: [] })
+      // Its own date changed: « à revoir », publication refused, until reviewed again.
+      await days([{ start: "09:00", end: "12:00" }], [{ start: "07:00", end: "21:00" }])
+      expect(await publish(e.id, [d])).toMatchObject({ ok: false, code: "refused", problems: [expect.objectContaining({ code: "availability_changed" })] })
+      const again = await reviewDraft(db(), { eventId: e.id, draftId: d.id, revision: d.revision, actorId: "admin-1" })
+      if (!again.ok) throw new Error(again.error)
+      await days([{ start: "10:00", end: "11:00" }], [{ start: "07:00", end: "21:00" }])
+      expect(await publish(e.id, [again.value])).toMatchObject({ ok: true })
+    })
+
+    it("keeps the acknowledgement bound to the answer's revision: another date changed, the old key no longer publishes (owner decision 6)", async () => {
+      const e = await event()
+      const s = await shift(e.id, "10:00", "14:00")
+      const nadia = await member("Nadia", "Rochat")
+      const days = (d12: { start: string; end: string }[]) =>
+        prisma.$transaction((tx) => saveAvailabilityAnswers(tx, { eventId: e.id, volunteerId: nadia.id, days: [{ date: "2031-07-10", ranges: [] }, { date: "2031-07-11", ranges: [{ start: "15:00", end: "18:00" }] }, { date: "2031-07-12", ranges: d12 }], by: "admin" }))
+      await days([])
+      const oldKey = (await loadPersonFits(db(), e.id, nadia.id, [s.id]))!.fits[0].ackKey!
+      const d = await draftOn(e.id, s.id, nadia.id, oldKey)
+      await days([{ start: "09:00", end: "12:00" }])
+      const refused = await publish(e.id, [d])
+      expect(refused).toMatchObject({ ok: false, code: "refused" })
+      if (refused.ok) throw new Error("expected a refusal")
+      expect(refused.problems!.map((p) => p.code)).toEqual(["ack_missing"])
+      expect(await reviewDraft(db(), { eventId: e.id, draftId: d.id, revision: d.revision, ackKey: oldKey, actorId: "admin-1" })).toMatchObject({ ok: false, code: "availability" })
+      const newKey = (await loadPersonFits(db(), e.id, nadia.id, [s.id]))!.fits[0].ackKey!
+      expect(newKey).not.toBe(oldKey)
+      const again = await reviewDraft(db(), { eventId: e.id, draftId: d.id, revision: d.revision, ackKey: newKey, actorId: "admin-1" })
+      if (!again.ok) throw new Error(again.error)
+      expect(await publish(e.id, [again.value])).toMatchObject({ ok: true })
+    })
+
+    it("names the missions outside a corrected answer after a publication, and counts other people's drafts per option (P1 #4, P2 #14)", async () => {
+      const e = await event()
+      const s = await shift(e.id, "10:00", "14:00")
+      const nadia = await member("Nadia", "Rochat")
+      const luca = await member("Luca", "Bianchi")
+      await answerOn(e.id, nadia.id, [{ start: "08:00", end: "20:00" }])
+      const d = await draftOn(e.id, s.id, nadia.id)
+      await draftOn(e.id, s.id, luca.id)
+      const options = await loadDraftOptions(db(), e.id, nadia.id, "2031-07-11")
+      expect(options!.options.find((o) => o.shiftId === s.id)).toMatchObject({ taken: "draft", drafted: 1 })
+      expect(await publish(e.id, [d])).toMatchObject({ ok: true })
+      // The person corrects their answer after the publication: the mission is now outside it.
+      await answerOn(e.id, nadia.id, [{ start: "15:00", end: "20:00" }])
+      await prisma.availabilityRequest.updateMany({ where: { eventId: e.id, volunteerId: nadia.id }, data: { reviewReason: "published", reviewNeededAt: NOW } })
+      const overview = await loadAvailabilityOverview(db(), e.id)
+      expect(overview!.rows.find((r) => r.volunteerId === nadia.id)!.outsideMissions).toEqual(["Bar, vendredi 11 juillet, de 10h à 14h"])
+      const board = await loadDraftBoard(db(), e.id, "event", NOW)
+      expect(board!.summary.toReview).toEqual([{ volunteerId: nadia.id, date: "2031-07-11", name: "Bar", time: "de 10h à 14h" }])
+      // Seen: the flag goes, the mission stays a plain fit.
+      expect(await markAvailabilityReviewed(db(), e.id, nadia.id, board!.rows.find((r) => r.volunteerId === nadia.id)!.seenRevision!)).toBe("ok")
+      expect((await loadAvailabilityOverview(db(), e.id))!.rows.find((r) => r.volunteerId === nadia.id)!.outsideMissions).toEqual([])
+      expect((await loadDraftBoard(db(), e.id, "event", NOW))!.summary.toReview).toEqual([])
     })
 
     it("judges each person's whole batch with the workload protection, not each draft alone", async () => {
