@@ -133,6 +133,22 @@ describe("ProposalWorkspace", () => {
     expect(document.body.textContent).not.toMatch(/tirage/i)
   })
 
+  it("says a run stopped without a result in plain words: stopped before the end, or never started", () => {
+    const bad = /[ \t\n][:;?!]|« | »/
+    const stopped = { ...baseRun, status: "interrupted", stopReason: "lease_expired", outcome: null, report: null }
+    const r = view(data({ run: stopped as never }))
+    expect(screen.getByText("Calcul arrêté avant la fin")).toBeInTheDocument()
+    expect(screen.getByText(/^Le calcul s'est arrêté avant la fin.*rien n'a été écrit dans les brouillons\. Relancez-le depuis «\sNouvelle proposition\s»\.$/)).toBeInTheDocument()
+    expect(document.body.textContent).not.toMatch(/redémarrage|bail|lease/i)
+    expect(document.body.textContent).not.toMatch(bad)
+    r.unmount()
+    view(data({ run: { ...stopped, stopReason: "queue_expired" } as never }))
+    expect(screen.getByText("Calcul non démarré")).toBeInTheDocument()
+    expect(screen.getByText(/^Le calcul n'a pas pu démarrer.*rien n'a été écrit dans les brouillons\. Relancez-le depuis «\sNouvelle proposition\s»\.$/)).toBeInTheDocument()
+    expect(screen.queryByText(/s'est arrêté avant la fin/)).not.toBeInTheDocument()
+    expect(document.body.textContent).not.toMatch(bad)
+  })
+
   it("shows a stored interrupted run without announcing it, and writes its partial result only after confirmation", async () => {
     const run = { ...baseRun, status: "interrupted", stopReason: "cancelled", outcome: "complete", report }
     fetchMock.mockResolvedValueOnce(ok({ replay: false, written: 1, dropped: 0 })).mockResolvedValueOnce(ok({ run: { ...run, writtenAt: new Date(), writtenCount: 1 } }))

@@ -2,7 +2,7 @@
 // SPDX-License-Identifier: AGPL-3.0-only
 /** Three synthetic organizations in the separately marked operator database. */
 import { PrismaClient } from "../src/generated/prisma/client"
-import { PrismaPg } from "@prisma/adapter-pg"
+import { pgAdapter } from "../src/lib/prisma-adapter"
 import { Client } from "pg"
 import bcrypt from "bcryptjs"
 import assert from "node:assert/strict"
@@ -18,7 +18,7 @@ async function main() {
     const ownership = await marker.query("SELECT purpose FROM public._video_operator_fixture")
     if (ownership.rowCount !== 1 || ownership.rows[0].purpose !== "benevol-masterclass-53-synthetic-only") throw new Error("Operator database is not our synthetic fixture")
   } finally { await marker.end() }
-  const db = new PrismaClient({ adapter: new PrismaPg({ connectionString: url.href }) })
+  const db = new PrismaClient({ adapter: pgAdapter(url.href) })
   try {
     if (process.argv[2] === "--reset-owned") {
       // Opt-in replay, only after a complete take deleted its fourth disposable space.

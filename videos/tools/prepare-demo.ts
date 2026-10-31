@@ -3,7 +3,7 @@
 // Reset only the already-owned, synthetic common video fixture.
 import assert from "node:assert/strict"
 import { PrismaClient } from "../../src/generated/prisma/client"
-import { PrismaPg } from "@prisma/adapter-pg"
+import { pgAdapter } from "../../src/lib/prisma-adapter"
 import { readFile } from "node:fs/promises"
 import path from "node:path"
 import { pathToFileURL } from "node:url"
@@ -54,7 +54,7 @@ assert(["localhost", "127.0.0.1", "[::1]"].includes(url.hostname))
 assert.equal(url.port, "45433")
 assert.equal(url.pathname, "/benevoles_video")
 assert.equal(process.env.VIDEO_BASE_URL, "http://localhost:43102")
-const db = new PrismaClient({ adapter: new PrismaPg({ connectionString: url.href }) })
+const db = new PrismaClient({ adapter: pgAdapter(url.href) })
 try {
   const owned = await recordedMembers()
   const seedProof = await readSeedProofV2()

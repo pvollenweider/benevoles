@@ -3,7 +3,7 @@
 /** Off-screen elapsed-time preparation; the actual compiled cron sends every email. */
 import assert from "node:assert/strict"
 import { PrismaClient } from "../../src/generated/prisma/client"
-import { PrismaPg } from "@prisma/adapter-pg"
+import { pgAdapter } from "../../src/lib/prisma-adapter"
 import { writeFile } from "node:fs/promises"
 import { openPayload } from "../../src/lib/notifications/outbox"
 import { verifyProductBuild } from "../lib/product-build"
@@ -11,7 +11,7 @@ async function main() {
   const url = new URL(process.env.DATABASE_URL ?? "")
   assert(["localhost", "127.0.0.1"].includes(url.hostname) && url.port === "45433" && url.pathname === "/benevoles_video")
   const product = await verifyProductBuild("http://localhost:43102")
-  const db = new PrismaClient({ adapter: new PrismaPg({ connectionString: url.href }) })
+  const db = new PrismaClient({ adapter: pgAdapter(url.href) })
   const heldUntil = new Date(Date.now() + 3600000)
   const held: { id: string; nextAttemptAt: Date }[] = []
   try {

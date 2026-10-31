@@ -4,7 +4,7 @@
 import { describe, it, expect } from "vitest"
 import { INPUT_PART_WORDS, staleSentence, type InputPart } from "../proposal-config"
 import { assignmentSentence, gapSentence, personSentence, stateLabel, stateSentence, type GapReport } from "../proposal-explanations"
-import { ANOTHER_HINT, anotherReplaceRecap, NO_OTHER_SENTENCE, coverageDetails, coverageLine, droppedSentence, formToConfig, historyEntry, ONLY_ONE_SENTENCE, runLine, sameAsSentence, rotationSummary, runStateLabel, summaryProblems, TARGET_FIELD_ERROR, type PageShift, type ProposalForm } from "../proposal-view"
+import { ANOTHER_HINT, anotherReplaceRecap, LEASE_EXPIRED_SENTENCE, NO_OTHER_SENTENCE, QUEUE_EXPIRED_SENTENCE, coverageDetails, coverageLine, droppedSentence, formToConfig, historyEntry, ONLY_ONE_SENTENCE, runLine, sameAsSentence, rotationSummary, runStateLabel, summaryProblems, TARGET_FIELD_ERROR, type PageShift, type ProposalForm } from "../proposal-view"
 
 /**
  * French typography of the proposal's words (#1172 review): a no-break space (U+00A0 or U+202F)
@@ -42,6 +42,7 @@ describe("no-break spaces in the proposal's words", () => {
     texts.push(coverageLine(coverage), ...coverageDetails(coverage))
     texts.push(historyEntry({ ordinal: 3, status: "finished", outcome: "proven_impossible", writtenAt: new Date(), writtenCount: 29, coverage }, "30 octobre à 23:22"))
     texts.push(runStateLabel({ status: "finished", outcome: null, stopReason: "no_other" }), NO_OTHER_SENTENCE)
+    texts.push(runStateLabel({ status: "interrupted", outcome: null, stopReason: "queue_expired" }), LEASE_EXPIRED_SENTENCE, QUEUE_EXPIRED_SENTENCE)
     texts.push(runLine(3, "30 octobre à 23:22"), ANOTHER_HINT, ONLY_ONE_SENTENCE, sameAsSentence(2))
     for (const n of [1, 2]) { const r = anotherReplaceRecap(n, 3); texts.push(r.title, r.lead, ...r.lines, r.confirmLabel) }
     texts.push(rotationSummary([{ roleName: "Bar", category: "Bars", night: true, reserve: 1 }], "2", "2"))

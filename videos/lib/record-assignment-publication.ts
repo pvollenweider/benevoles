@@ -132,10 +132,10 @@ async function mailLink(page: Page, mail: Mail, kind: "my" | "disponibilites"): 
  */
 async function deliverWaitingEmails(kinds: string[]): Promise<number> {
   const { PrismaClient } = await import("../../src/generated/prisma/client")
-  const { PrismaPg } = await import("@prisma/adapter-pg")
+  const { pgAdapter } = await import("../../src/lib/prisma-adapter")
   assert(process.env.DATABASE_URL?.includes("benevoles_video"), "The outbox shortcut runs on the video database only")
   assert(process.env.CRON_SECRET, "Real cron authentication required")
-  const db = new PrismaClient({ adapter: new PrismaPg({ connectionString: process.env.DATABASE_URL }) })
+  const db = new PrismaClient({ adapter: pgAdapter(process.env.DATABASE_URL) })
   try {
     const waiting = await db.notificationOutbox.findMany({ where: { organizationId: ORG_ID, status: "pending" }, select: { id: true, dedupeKey: true } })
     const due = waiting.filter((row) => kinds.some((kind) => row.dedupeKey?.startsWith(`${kind}:`)))

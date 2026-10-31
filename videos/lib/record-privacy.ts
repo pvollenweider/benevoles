@@ -6,7 +6,7 @@ import { readFile, writeFile } from "node:fs/promises"
 import path from "node:path"
 import { createHash } from "node:crypto"
 import { PrismaClient } from "../../src/generated/prisma/client"
-import { PrismaPg } from "@prisma/adapter-pg"
+import { pgAdapter } from "../../src/lib/prisma-adapter"
 import { linkToken, registrationToken } from "../../src/lib/token-vault"
 import { PERSONAL_LINK_NOTICE, LINK_REQUEST_RESPONSE } from "../../src/lib/personal-link"
 import { showMembersCsv } from "./show-export-files"
@@ -22,7 +22,7 @@ type Mail = { ID: string; To: { Address: string }[] }
 function localDatabase() {
   const url = new URL(process.env.DATABASE_URL ?? "")
   if (!["localhost", "127.0.0.1", "[::1]"].includes(url.hostname) || url.pathname !== "/benevoles_video") throw new Error("Isolated local video DB required")
-  return new PrismaClient({ adapter: new PrismaPg({ connectionString: process.env.DATABASE_URL }) })
+  return new PrismaClient({ adapter: pgAdapter(process.env.DATABASE_URL) })
 }
 
 /** Actual A/B logins prepared before the screencast, not fabricated session cookies. */

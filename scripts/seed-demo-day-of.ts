@@ -15,12 +15,12 @@
  */
 
 import { PrismaClient } from "../src/generated/prisma/client"
-import { PrismaPg } from "@prisma/adapter-pg"
+import { pgAdapter } from "../src/lib/prisma-adapter"
 import { registrationToken } from "../src/lib/token-vault"
 
 export const DEMO_DAY_OF_EVENT_SLUG = "inventaire"
 
-const prisma = new PrismaClient({ adapter: new PrismaPg({ connectionString: process.env.DATABASE_URL! }) })
+const prisma = new PrismaClient({ adapter: pgAdapter(process.env.DATABASE_URL!) })
 
 // Not imported from seed-demo-permanences.ts: importing it would run that seed.
 const DEMO_PERMANENCES_ORG_SLUG = "epicerie-de-la-gare"

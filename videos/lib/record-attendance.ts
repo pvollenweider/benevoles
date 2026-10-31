@@ -3,7 +3,7 @@
 
 import type { Locator, Page } from "playwright"
 import { PrismaClient } from "../../src/generated/prisma/client"
-import { PrismaPg } from "@prisma/adapter-pg"
+import { pgAdapter } from "../../src/lib/prisma-adapter"
 import { mkdir, writeFile } from "node:fs/promises"
 import path from "node:path"
 import { recordAttendanceActions } from "./record-attendance-actions"
@@ -18,7 +18,7 @@ export async function recordAttendance(options: { page: Page; base: string; even
   const { page, base, eventId, directory, title, scene, tap, settle } = options
   const personPrefix = options.personPrefix ?? "video-attendance-person-"
   if (!process.env.DATABASE_URL?.includes("benevoles_video")) throw new Error("Isolated video DB required")
-  const db = new PrismaClient({ adapter: new PrismaPg({ connectionString: process.env.DATABASE_URL }) })
+  const db = new PrismaClient({ adapter: pgAdapter(process.env.DATABASE_URL) })
   const registrationsUrl = `${base}/admin/events/${eventId}/registrations`
   const go = async (url = registrationsUrl) => { await page.goto(url); await settle(page) }
   const snapshot = () => db.registration.findMany({ where: { eventId }, select: { id: true, status: true, checkedInAt: true } })

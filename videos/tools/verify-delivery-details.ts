@@ -5,7 +5,7 @@ import { readFile, writeFile } from "node:fs/promises"
 import { chromium } from "playwright"
 import { launchVideoBrowser } from "../lib/public-hosts"
 import { PrismaClient } from "../../src/generated/prisma/client"
-import { PrismaPg } from "@prisma/adapter-pg"
+import { pgAdapter } from "../../src/lib/prisma-adapter"
 
 async function main() {
   const base = process.env.VIDEO_BASE_URL
@@ -14,7 +14,7 @@ async function main() {
   assert(["localhost", "127.0.0.1", "[::1]"].includes(url.hostname) && url.port === "45433" && url.pathname === "/benevoles_video")
   const preparation = JSON.parse(await readFile("videos/output/email-delivery-failures/outbox-preparation.json", "utf8"))
   assert.equal(preparation.organizationId, "video-delivery")
-  const db = new PrismaClient({ adapter: new PrismaPg({ connectionString: process.env.DATABASE_URL }) })
+  const db = new PrismaClient({ adapter: pgAdapter(process.env.DATABASE_URL) })
   const browser = await launchVideoBrowser(chromium)
   try {
     const org = await db.organization.findUniqueOrThrow({ where: { id: "video-delivery" } })

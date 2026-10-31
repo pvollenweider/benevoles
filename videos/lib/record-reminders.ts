@@ -3,7 +3,7 @@
 
 import type { Locator, Page } from "playwright"
 import { PrismaClient } from "../../src/generated/prisma/client"
-import { PrismaPg } from "@prisma/adapter-pg"
+import { pgAdapter } from "../../src/lib/prisma-adapter"
 import { addMinutes } from "../../src/lib/gantt-utils"
 import { writeFile } from "node:fs/promises"
 import path from "node:path"
@@ -15,7 +15,7 @@ type Mail = { ID: string; To: { Address: string }[]; Subject: string }
 export async function recordReminders(options: { page: Page; base: string; eventId: string; directory: string; title: string; scene: Scene; tap: (page: Page, locator: Locator) => Promise<void>; settle: (page: Page) => Promise<void> }) {
   const { page, base, eventId, directory, title, scene, tap, settle } = options
   if (!process.env.DATABASE_URL?.includes("benevoles_video")) throw new Error("Local video DB required")
-  const db = new PrismaClient({ adapter: new PrismaPg({ connectionString: process.env.DATABASE_URL }) })
+  const db = new PrismaClient({ adapter: pgAdapter(process.env.DATABASE_URL) })
   const eventUrl = `${base}/admin/events/${eventId}`
   const go = async (url: string) => { await page.goto(url); await settle(page) }
   const inbox = async (): Promise<Mail[]> => {

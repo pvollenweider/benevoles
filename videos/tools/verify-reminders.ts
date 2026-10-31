@@ -3,7 +3,7 @@
 
 /** Runs the real local cron twice. No production endpoint, tokens or secrets in reports. */
 import { PrismaClient } from "../../src/generated/prisma/client"
-import { PrismaPg } from "@prisma/adapter-pg"
+import { pgAdapter } from "../../src/lib/prisma-adapter"
 import { mkdir, writeFile } from "node:fs/promises"
 
 type Mail = { ID: string; Subject: string; To: { Address: string }[] }
@@ -11,7 +11,7 @@ type Mail = { ID: string; Subject: string; To: { Address: string }[] }
 async function main() {
   const base = process.env.VIDEO_BASE_URL ?? "http://localhost:43100"
   if (!["localhost", "127.0.0.1"].includes(new URL(base).hostname) || !process.env.DATABASE_URL?.includes("benevoles_video")) throw new Error("Requires local video environment")
-  const db = new PrismaClient({ adapter: new PrismaPg({ connectionString: process.env.DATABASE_URL }) })
+  const db = new PrismaClient({ adapter: pgAdapter(process.env.DATABASE_URL) })
   try {
     const inbox = async (): Promise<Mail[]> => {
       const response = await fetch("http://localhost:48026/api/v1/messages?limit=1000")

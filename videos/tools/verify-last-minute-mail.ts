@@ -2,13 +2,13 @@
 // SPDX-License-Identifier: AGPL-3.0-only
 import { request } from "playwright"
 import { PrismaClient } from "../../src/generated/prisma/client"
-import { PrismaPg } from "@prisma/adapter-pg"
+import { pgAdapter } from "../../src/lib/prisma-adapter"
 import { openPayload } from "../../src/lib/notifications/outbox"
 import { readFile, writeFile } from "node:fs/promises"
 
 async function main() {
   if (!process.env.DATABASE_URL?.includes("benevoles_video")) throw new Error("Local video database required")
-  const db = new PrismaClient({ adapter: new PrismaPg({ connectionString: process.env.DATABASE_URL }) })
+  const db = new PrismaClient({ adapter: pgAdapter(process.env.DATABASE_URL) })
   const http = await request.newContext()
   try {
     const directory = "videos/output/last-minute-changes"

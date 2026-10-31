@@ -21,7 +21,7 @@
  */
 
 import { PrismaClient } from "../src/generated/prisma/client"
-import { PrismaPg } from "@prisma/adapter-pg"
+import { pgAdapter } from "../src/lib/prisma-adapter"
 import { registrationToken } from "../src/lib/token-vault"
 import { ROSTER_NOTICE_VERSION } from "../src/lib/shift-roster"
 
@@ -31,7 +31,7 @@ export const DEMO_ROSTER_ADMIN_EMAIL = "marche.admin@example.org"
 export const DEMO_ROSTER_EVENT_SLUG = "marche-de-noel"
 export const DEMO_ROSTER_TOKEN = "demo-roster-lea-0001"
 
-const prisma = new PrismaClient({ adapter: new PrismaPg({ connectionString: process.env.DATABASE_URL! }) })
+const prisma = new PrismaClient({ adapter: pgAdapter(process.env.DATABASE_URL!) })
 
 const DAY = 86_400_000
 const today = new Date(Date.UTC(new Date().getUTCFullYear(), new Date().getUTCMonth(), new Date().getUTCDate()))

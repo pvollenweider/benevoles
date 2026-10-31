@@ -4,7 +4,7 @@
 import assert from "node:assert/strict"
 import { mkdir, writeFile } from "node:fs/promises"
 import { PrismaClient } from "../../src/generated/prisma/client"
-import { PrismaPg } from "@prisma/adapter-pg"
+import { pgAdapter } from "../../src/lib/prisma-adapter"
 import { openPayload } from "../../src/lib/notifications/outbox"
 import { expectedMemberV2 } from "../lib/member-fixture-v2"
 
@@ -12,7 +12,7 @@ const scenario = process.argv[2]
 assert(["members-invitations", "members-reminders", "registrations-place-member", "registrations-management", "sector-leaders", "staffing-gaps", "organizer-monitor-followup", "targeted-messages", "last-minute-changes", "reminders-changes"].includes(scenario))
 const url = new URL(process.env.DATABASE_URL ?? "")
 assert(["localhost", "127.0.0.1"].includes(url.hostname) && (url.port === "45433" || scenario === "sector-leaders" && url.port === "45436") && url.pathname === "/benevoles_video")
-const db = new PrismaClient({ adapter: new PrismaPg({ connectionString: url.href }) })
+const db = new PrismaClient({ adapter: pgAdapter(url.href) })
 type Message = { ID: string; Subject: string; To: { Address: string }[]; Cc?: { Address: string }[]; Bcc?: { Address: string }[] }
 const mailbox = process.env.VIDEO_MAILPIT_URL ?? "http://localhost:48026"
 const inventory = async () => {
