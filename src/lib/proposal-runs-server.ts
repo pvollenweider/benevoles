@@ -2,8 +2,8 @@
 // SPDX-License-Identifier: AGPL-3.0-only
 
 import { createHash, randomUUID } from "node:crypto"
-import { availabilityStamp, draftShiftTerms, MAX_EVENT_DRAFTS } from "./draft-assignments"
-import { readAnswersForFit } from "./availability-assist-data"
+import { availabilityStamp, draftAvailabilityStamp, draftShiftTerms, MAX_EVENT_DRAFTS } from "./draft-assignments"
+import { readAnswersForFit, readAvailabilityGate } from "./availability-assist-data"
 import { canonicalConfig, changedParts, configProblem, SCRUBBED_HASH, type InputPart, type ProposalConfig } from "./proposal-config"
 import { buildReport, type ProposalReport } from "./proposal-explanations"
 import { PROPOSAL_DEADLINE_MS, type ProposalInput } from "./proposal-input"
@@ -357,12 +357,15 @@ async function materialise(tx: Tx, run: RunRow, assignments: readonly ProposalAs
   }) : []
   const shiftOf = new Map(shiftRows.map((s) => [s.id, s]))
   const answers = await readAnswersForFit(tx as never, run.eventId, [...new Set(kept.map((a) => a.volunteerId))])
+  // The answer of the dates that reach each shift, in the event's frozen zone (src/lib/draft-assignments.ts).
+  const gate = await readAvailabilityGate(tx as never, run.eventId)
+  const stampZone = gate.inUse ? gate.timeZone : null
   const created: { draftId: string; shiftId: string; volunteerId: string }[] = []
   for (const a of kept) {
     const row = await tx.draftAssignment.create({
       data: {
         eventId: run.eventId, shiftId: a.shiftId, volunteerId: a.volunteerId, source: "proposal", proposalRunId: run.id, createdById: run.createdById,
-        shiftTerms: draftShiftTerms(shiftOf.get(a.shiftId)! as never), availabilityStamp: availabilityStamp(answers.get(a.volunteerId) ?? null),
+        shiftTerms: draftShiftTerms(shiftOf.get(a.shiftId)! as never), availabilityStamp: stampZone ? draftAvailabilityStamp(answers.get(a.volunteerId) ?? null, shiftOf.get(a.shiftId)!, stampZone) : availabilityStamp(answers.get(a.volunteerId) ?? null),
         reviewedAt: now, reviewedById: run.createdById,
       },
       select: { id: true },

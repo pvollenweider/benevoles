@@ -80,7 +80,7 @@ describe("buildBoard", () => {
 
     const stale = buildBoard(input([busy], [bar], [draft("d1", bar, busy, { availabilityStamp: "req-n:0" })]))
     expect(stale.summary.stale).toBe(1)
-    expect(stale.rows[0].cells[1].items[0].draft?.staleText).toBe("À revoir : les disponibilités ont changé depuis le brouillon.")
+    expect(stale.rows[0].cells[1].items[0].draft?.staleText).toBe("À revoir : ses disponibilités de ces heures ont changé depuis le brouillon.")
   })
 
   it("judges the workload protection on the projection with every draft, as a finding of the row", () => {
@@ -97,7 +97,7 @@ describe("buildBoard", () => {
 
   it("shows the organisers' review flags", () => {
     const flagged = person("v-n", "Nadia", "Rochat", { reviewReason: "published" })
-    expect(buildBoard(input([flagged], [bar], [])).rows[0].reviewTexts).toEqual(["À revoir : disponibilités modifiées après la publication des affectations."])
+    expect(buildBoard(input([flagged], [bar], [])).rows[0].reviewTexts).toEqual(["À revoir : disponibilités modifiées après la publication des affectations."])
   })
 
   it("adds a column for a mission outside the event's dates, and sorts people by name", () => {

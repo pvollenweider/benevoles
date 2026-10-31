@@ -203,8 +203,8 @@ describe("judgeDraftBatch", () => {
 })
 
 describe("words and canonical forms", () => {
-  it("says how many problems and that nothing was published", () => {
-    expect(publicationRefusalText([{ code: "capacity", message: "Bar : complet." }, { code: "overlap", message: "x" }])).toBe("Publication impossible : 2 points à corriger. Rien n'a été publié. Bar : complet.")
+  it("says how many problems and that nothing was published, never one of them again (independent review, P2 #9)", () => {
+    expect(publicationRefusalText([{ code: "capacity", message: "Bar : complet." }, { code: "overlap", message: "x" }])).toBe("Rien n'a été publié : 2 points à régler.")
   })
 
   it("puts a selection in one order, so a retry hashes the same", () => {

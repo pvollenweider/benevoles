@@ -20,6 +20,7 @@ import { linkStateText, remindHintText, sendResultIsWarning, sendResultText, typ
 import type { AvailabilityOverview, AvailabilityOverviewRow } from "@/lib/event-availability-server"
 import { reviewReasonTexts } from "@/lib/availability-correction"
 import { flushSync } from "react-dom"
+import { de } from "@/lib/french-elision"
 
 type Member = { id: string; firstName: string; lastName: string; email: string | null; tags: string[] }
 type Filter = AnswerState | "all"
@@ -88,11 +89,19 @@ export default function AvailabilityManager({ eventId, enabled, open, deadlineSe
     flushSync(() => setSeen(null))
     visibleEditButton(r.volunteerId)?.focus()
     setWarning(false)
-    announce(setStatus, `Disponibilités de ${r.firstName} ${r.lastName} marquées comme vues.`)
+    sayLater(`Disponibilités ${de(`${r.firstName} ${r.lastName}`)} marquées comme vues.`)
     router.refresh()
   }
   const regionRef = useRef<HTMLDivElement>(null)
   const hintId = useId()
+  // A result said after a dialog gave focus back (150 ms later), the timer cleared on unmount.
+  const statusTimer = useRef<ReturnType<typeof setTimeout> | null>(null)
+  useEffect(() => () => { if (statusTimer.current) clearTimeout(statusTimer.current) }, [])
+  function sayLater(text: string) {
+    if (statusTimer.current) clearTimeout(statusTimer.current)
+    setStatus("")
+    statusTimer.current = setTimeout(() => setStatus(text), 150)
+  }
 
   const rows = useMemo(() => overview.rows.filter((r) => filter === "all" || r.state === filter || sticky.has(r.volunteerId)), [overview.rows, filter, sticky])
   const hides = useHidesColumns(regionRef, [rows.length])
@@ -134,12 +143,12 @@ export default function AvailabilityManager({ eventId, enabled, open, deadlineSe
       <>
         <div className="flex flex-wrap gap-2 sm:flex-nowrap sm:whitespace-nowrap">
           <button id={editButtonId(r.volunteerId, at)} type="button" onClick={() => setEditing(r)} className={`min-h-11 whitespace-nowrap text-sm font-medium text-blue-700 underline underline-offset-2 hover:text-blue-900 rounded ${focusRing}`}>
-            Voir et corriger<span className="sr-only">{` les disponibilités de ${r.firstName} ${r.lastName}`}</span>
+            Voir et corriger<span className="sr-only">{` les disponibilités ${de(`${r.firstName} ${r.lastName}`)}`}</span>
           </button>
           {r.reviewReason && (
             <button type="button" onClick={() => void markSeen(r)} aria-disabled={(!!seen && !seen.error) || undefined} aria-busy={(seen?.id === r.volunteerId && !seen.error) || undefined} aria-describedby={failed ? errorId : undefined}
               className={`min-h-11 whitespace-nowrap rounded-xl border border-gray-500 bg-white px-3 py-1 text-sm font-medium text-gray-900 hover:bg-gray-50 aria-disabled:opacity-60 ${focusRing}`}>
-              {seen?.id === r.volunteerId && !seen.error ? "Enregistrement…" : "Marquer comme vu"}<span className="sr-only">{` : disponibilités de ${r.firstName} ${r.lastName}`}</span>
+              {seen?.id === r.volunteerId && !seen.error ? "Enregistrement…" : "Marquer comme vu"}<span className="sr-only">{` : disponibilités ${de(`${r.firstName} ${r.lastName}`)}`}</span>
             </button>
           )}
         </div>
@@ -196,6 +205,7 @@ export default function AvailabilityManager({ eventId, enabled, open, deadlineSe
               <li key={r.volunteerId} className="px-4 py-3 space-y-1 text-sm" data-availability-row={r.volunteerId}>
                 <p className="font-medium text-gray-900">{r.firstName} {r.lastName}</p>
                 {reviewReasonTexts(r.reviewReason).map((t) => <p key={t} className="text-xs text-amber-800">{t}</p>)}
+                <OutsideMissions missions={r.outsideMissions} />
                 <p><span className={`inline-block whitespace-nowrap rounded-full px-2 py-0.5 text-xs font-medium ${STATE_BADGE[r.state]}`}>{ANSWER_STATE_LABELS[r.state]}</span> <span className="text-gray-800">{datesCountText(r.answeredDates, overview.dates.length)}</span></p>
                 <p className="text-gray-700">Dernière réponse : {lastAnswerText(r, overview.timeZone)}</p>
                 <p className="text-gray-700">{linkText(r, enabled, overview.timeZone)}</p>
@@ -215,7 +225,7 @@ export default function AvailabilityManager({ eventId, enabled, open, deadlineSe
                   <th scope="col" className="text-left px-4 py-2 font-medium">Dates répondues</th>
                   <th scope="col" className="text-left px-4 py-2 font-medium">Dernière réponse</th>
                   <th scope="col" className="text-left px-4 py-2 font-medium">Lien</th>
-                  <th scope="col" className="text-left px-4 py-2 font-medium"><span className="sr-only">Actions</span></th>
+                  <th scope="col" className="text-left px-4 py-2 font-medium"><span className="sr-only">Missions à revoir et actions</span></th>
                 </tr>
               </thead>
               <tbody className="divide-y divide-gray-100">
@@ -229,7 +239,7 @@ export default function AvailabilityManager({ eventId, enabled, open, deadlineSe
                     <td className="px-4 py-2 text-gray-800 whitespace-nowrap">{datesCountText(r.answeredDates, overview.dates.length)}</td>
                     <td className="px-4 py-2 text-gray-800">{lastAnswerText(r, overview.timeZone)}</td>
                     <td className="px-4 py-2 text-gray-800">{linkText(r, enabled, overview.timeZone)}</td>
-                    <td className="px-4 py-2">{rowActions(r, "t")}</td>
+                    <td className="px-4 py-2"><OutsideMissions missions={r.outsideMissions} />{rowActions(r, "t")}</td>
                   </tr>
                 ))}
               </tbody>
@@ -250,7 +260,7 @@ export default function AvailabilityManager({ eventId, enabled, open, deadlineSe
             setAsking(false)
             setWarning(isWarning)
             // After the dialog gave focus back to its button, so the result is not cut off.
-            setTimeout(() => announce(setStatus, text), 150)
+            sayLater(text)
             router.refresh()
           }}
         />
@@ -280,7 +290,7 @@ export default function AvailabilityManager({ eventId, enabled, open, deadlineSe
             setSticky((s) => new Set([...s, editing.volunteerId]))
             setEditing(null)
             setWarning(false)
-            announce(setStatus, `Correction enregistrée pour ${name}.`)
+            sayLater(`Correction enregistrée pour ${name}.`)
             router.refresh()
           }}
         />
@@ -365,7 +375,7 @@ function AskModal({ eventId, members, allTags, askedIds, onClose, onDone }: { ev
                   <input type="checkbox" checked={selected.has(m.id)} onChange={() => toggle(m.id)} className="h-5 w-5" />
                   <span className="flex-1 min-w-0">
                     <span className="block text-sm font-medium text-gray-900">{m.firstName} {m.lastName}</span>
-                    <span className="block text-xs text-gray-700 truncate">{m.email ?? "Pas d'adresse email : vous saisirez ses réponses"}{m.tags.length > 0 && <> · {m.tags.join(", ")}</>}{askedIds.has(m.id) && " · déjà sollicité"}</span>
+                    <span className="block text-xs text-gray-700 [overflow-wrap:anywhere]">{m.email ?? "Pas d'adresse email : vous saisirez ses réponses"}{m.tags.length > 0 && <> · {m.tags.join(", ")}</>}{askedIds.has(m.id) && " · déjà sollicité"}</span>
                   </span>
                 </label>
               </li>
@@ -406,22 +416,43 @@ function CorrectModal({ eventId, row, onClose, onSaved }: { eventId: string; row
     return () => { live = false }
   }, [url])
 
+  // While a correction is saved, the dialog keeps its focus and cannot be closed (ModalShell `busy`).
+  const [busy, setBusy] = useState(false)
   async function save(days: DayAnswerInput[]): Promise<SaveOutcome> {
-    const res = await fetch(url, { method: "PUT", headers: { "Content-Type": "application/json" }, body: JSON.stringify({ days }) })
-    const data = await res.json().catch(() => ({}))
-    if (!res.ok) return { ok: false, error: typeof data.error === "string" ? data.error : "La correction n'a pas pu être enregistrée. Réessayez.", at: data.at }
+    setBusy(true)
+    try {
+      const res = await fetch(url, { method: "PUT", headers: { "Content-Type": "application/json" }, body: JSON.stringify({ days }) })
+      const data = await res.json().catch(() => ({}))
+      if (!res.ok) return { ok: false, error: typeof data.error === "string" ? data.error : "La correction n'a pas pu être enregistrée. Réessayez.", at: data.at }
+    } finally {
+      setBusy(false)
+    }
     onSaved()
     return { ok: true }
   }
 
   return (
-    <ModalShell title={`Disponibilités de ${name}`} onClose={onClose} panelClassName="max-w-2xl flex flex-col max-sm:h-full" initialFocusRef={titleRef} closeOnBackdrop={false}>
+    <ModalShell title={`Disponibilités ${de(name)}`} onClose={onClose} panelClassName="max-w-2xl flex flex-col max-sm:h-full" initialFocusRef={titleRef} closeOnBackdrop={false} busy={busy}>
       <div className="overflow-y-auto overflow-x-hidden space-y-3">
         <p ref={titleRef} tabIndex={-1} className="text-sm text-gray-700 focus:outline-none">Votre correction remplace la réponse de ces dates ; elle est enregistrée « par l&apos;organisation », même après la date limite.</p>
-        {loadError ? <p role="alert" className="text-sm text-red-800">{loadError}</p> : !person ? <p role="status" className="text-sm text-gray-700">Chargement…</p> : (
+        {/* Both always mounted (accessibility plan review): the load's outcome is said when it changes. */}
+        <p role="alert" className={loadError ? "text-sm text-red-800" : "sr-only"}>{loadError}</p>
+        <p role="status" className={!loadError && !person ? "text-sm text-gray-700" : "sr-only"}>{!loadError && !person ? "Chargement…" : ""}</p>
+        {loadError || !person ? null : (
           <AvailabilityEditor idPrefix={`fix-${row.volunteerId}`} dates={person.dates} initialDays={person.days} voice="vous" submitLabel="Enregistrer la correction" savedText="Correction enregistrée." onSave={save} />
         )}
       </div>
     </ModalShell>
+  )
+}
+
+/** After a publication (independent review, P1 #4): the person's missions now outside their answer, named. */
+function OutsideMissions({ missions }: { missions: string[] }) {
+  if (missions.length === 0) return null
+  return (
+    <div className="mb-1 text-xs text-[#92400e]">
+      <p className="font-medium">{missions.length > 1 ? "Missions actuellement en dehors de ses disponibilités :" : "Mission actuellement en dehors de ses disponibilités :"}</p>
+      <ul role="list" className="space-y-0.5">{missions.map((m) => <li key={m}>{m}</li>)}</ul>
+    </div>
   )
 }

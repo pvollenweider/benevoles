@@ -217,8 +217,8 @@ test.describe("admin", () => {
     `)
     await expect(combo).toHaveAccessibleDescription("Sélectionnez un créneau.")
     await expect(combo).toBeFocused()
-    // The message is tied to the field, not repeated by an alert.
-    await expect(form.getByRole("alert")).toHaveCount(0)
+    // The message is tied to the field, not repeated by an alert (the search's alert is mounted empty).
+    await expect(form.getByRole("alert").filter({ hasText: /\S/ })).toHaveCount(0)
 
     await page.keyboard.press("ArrowDown")
     await expect(form).toMatchAriaSnapshot(`

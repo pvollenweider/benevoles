@@ -43,14 +43,14 @@ export default async function DraftAssignmentsPage({ params, searchParams }: { p
         <h1 id="page-heading" tabIndex={-1} className="text-xl font-bold text-gray-900 focus:outline-none">Affectations en brouillon</h1>
         <HelpLink route="/admin/events/[id]/availability/drafts" />
         <p className="max-w-[75ch] text-sm text-gray-700 mt-1">
-          Préparez les affectations personne par personne et jour par jour. Un brouillon ne prend aucune place et n&apos;envoie rien : rien n&apos;est visible des bénévoles avant que vous publiiez. La publication se fait tout d&apos;un coup, ou pas du tout si un point bloque.
+          Préparez les affectations personne par personne et jour par jour. Un brouillon ne prend aucune place et n&apos;envoie rien : rien n&apos;est visible des bénévoles avant que vous publiiez. La publication se fait tout d&apos;un coup, ou pas du tout si un point bloque.
         </p>
         <p className="text-sm text-gray-700 mt-1">
-          Pour un créneau précis : <Link href={`/admin/events/${id}/availability/assign`} className={linkClass}>Affecter selon les disponibilités</Link>
+          Pour un créneau précis : <Link href={`/admin/events/${id}/availability/assign`} className={linkClass}>Affecter selon les disponibilités</Link>
         </p>
-        {proposals && <p className="text-sm text-gray-700 mt-1">Pour tout un périmètre : <Link href={`/admin/events/${id}/availability/proposal`} className={linkClass}>Générer une proposition</Link></p>}
-        {!data.collecting && <p className="mt-2 text-sm text-gray-800 bg-gray-50 border border-gray-200 rounded-xl px-3 py-2">La collecte est arrêtée : les réponses déjà données restent utilisées ici.</p>}
-        {data.protection === "incomplete" && <p className="mt-2 text-sm text-red-800">La protection des pauses et de la charge est incomplète : aucune affectation ne peut être publiée.</p>}
+        {proposals && <p className="text-sm text-gray-700 mt-1">Pour tout un périmètre : <Link href={`/admin/events/${id}/availability/proposal`} className={linkClass}>Générer une proposition</Link></p>}
+        {!data.collecting && <p className="mt-2 text-sm text-gray-800 bg-gray-50 border border-gray-200 rounded-xl px-3 py-2">La collecte est arrêtée : les réponses déjà données restent utilisées ici.</p>}
+        {data.protection === "incomplete" && <p className="mt-2 text-sm text-red-800">La protection des pauses et de la charge est incomplète : aucune affectation ne peut être publiée.</p>}
       </div>
       <DraftBoard key={`${scope}-${view}`} eventId={id} board={data} day={day} view={view} scope={scope} basePath={base} proposals={proposals} />
     </div>

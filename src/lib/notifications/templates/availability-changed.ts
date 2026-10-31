@@ -17,8 +17,8 @@ export const availabilityAdminUrl = (eventId: string) => `${BASE_URL}/admin/even
 
 const line = (i: AvailabilityChangeItem) =>
   i.outside.length > 0
-    ? `${i.volunteerName} a corrigé ses disponibilités. ${i.outside.length > 1 ? "Missions désormais" : "Mission désormais"} hors de ses disponibilités : ${i.outside.join(" ; ")}.`
-    : `${i.volunteerName} a corrigé ses disponibilités ; ses missions restent dans ses disponibilités.`
+    ? `${i.volunteerName} a corrigé ses disponibilités. ${i.outside.length > 1 ? "Missions désormais" : "Mission désormais"} hors de ses disponibilités : ${i.outside.join(" ; ")}.`
+    : `${i.volunteerName} a corrigé ses disponibilités ; ses missions restent dans ses disponibilités.`
 
 export function renderAvailabilityChanged(p: NotificationPayload): RenderedEmail {
   const data = p.data as Record<string, unknown>
@@ -30,9 +30,9 @@ export function renderAvailabilityChanged(p: NotificationPayload): RenderedEmail
   const subject = outside
     ? `${one ? "Mission hors disponibilités" : "Missions hors disponibilités"} — ${eventTitle}`
     : `${one ? "Disponibilités corrigées" : `${items.length} bénévoles ont corrigé leurs disponibilités`} — ${eventTitle}`
-  const heading = `Après la publication des affectations de ${eventTitle} :`
+  const heading = `Après la publication des affectations de ${eventTitle} :`
   const footer = "Personne n'a été déplacé ni désinscrit. Vérifiez les affectations concernées et contactez les personnes si besoin."
-  const text = [heading, "", ...items.map((i) => `- ${line(i)}`), "", footer, "", "Affectations de l'événement :", url].join("\n")
+  const text = [heading, "", ...items.map((i) => `- ${line(i)}`), "", footer, "", "Affectations de l'événement :", url].join("\n")
   const html = wrap(`
     <p>${escapeHtml(heading)}</p>
     <ul style="color:#333;padding-left:1.25em;margin:0.25em 0 0.75em">${items.map((i) => `<li style="margin:0.3em 0">${i.outside.length > 0 ? "<strong>" : ""}${escapeHtml(line(i))}${i.outside.length > 0 ? "</strong>" : ""}</li>`).join("")}</ul>

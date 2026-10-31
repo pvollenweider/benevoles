@@ -30,8 +30,8 @@
     },
     {
       "id": "ap-drafts",
-      "transcript": "Aux Rencontres du Val d'Orsel, onze personnes ont indiqué leurs disponibilités. Depuis la page Disponibilités, ouvrons Affectations en brouillon : une ligne par personne, une colonne par date, et encore aucune affectation. Cliquons sur Générer une proposition.",
-      "fallbackDurationMs": 16560
+      "transcript": "Aux Rencontres du Val d'Orsel, onze personnes ont indiqué leurs disponibilités. Depuis la page Disponibilités, ouvrons Affectations en brouillon : une ligne par personne, une colonne par date avec les places à pourvoir, et encore aucune affectation. Cliquons sur Générer une proposition.",
+      "fallbackDurationMs": 18100
     },
     {
       "id": "ap-scope",
@@ -70,8 +70,8 @@
     },
     {
       "id": "ap-adjust",
-      "transcript": "Léa doit partir plus tôt vendredi : ouvrons son brouillon de billetterie, puis Retirer ce brouillon. Dans la case de Lou, Ajouter, puis Ajouter en brouillon sur la billetterie. Une proposition ne remplace jamais un brouillon manuel.",
-      "fallbackDurationMs": 16560
+      "transcript": "Léa doit partir plus tôt vendredi : ouvrons son brouillon de billetterie, puis Retirer ce brouillon, et confirmons. Dans la case de Lou, Ajouter, puis Ajouter en brouillon sur la billetterie. Une proposition ne remplace jamais un brouillon manuel.",
+      "fallbackDurationMs": 17500
     },
     {
       "id": "ap-publish",
@@ -87,7 +87,7 @@
       "Incluez les personnes, choisissez Appliquer la suggestion pour remplir les objectifs d'heures et ajustez celui de chacun.",
       "Indiquez si besoin un Poste souhaité ou un Poste à éviter, ouvrez au besoin Rotation, nuit et réserve ou Paramètres de calcul, puis choisissez Générer une proposition.",
       "Lisez le résultat, en haut de la page : les places couvertes, l'état, les Places restées vides avec leur raison, la Charge par personne et les Affectations proposées.",
-      "Dans Affectations en brouillon, verrouillez ou corrigez les brouillons, puis choisissez Publier les affectations quand vous êtes prêt."
+      "Dans Affectations en brouillon, verrouillez ou corrigez les brouillons (un retrait demande une confirmation), puis choisissez Publier les affectations quand vous êtes prêt."
     ],
     "remember": [
       "Une personne n'est placée que sur un créneau entièrement couvert par ses disponibilités, en respectant les règles de l'événement et la protection des pauses et de la charge, qui doit être activée.",

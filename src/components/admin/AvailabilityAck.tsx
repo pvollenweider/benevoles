@@ -7,6 +7,7 @@ import { useEffect, useState } from "react"
 import { flushSync } from "react-dom"
 import { announce } from "@/lib/announce"
 import { ackLabel, type FitState } from "@/lib/availability-assist"
+import { de } from "@/lib/french-elision"
 import type { PersonFit } from "@/lib/availability-assist-data"
 
 /**
@@ -47,6 +48,15 @@ export function useAvailabilityAck(eventId: string, people: AckPerson[], enabled
   const [acked, setAcked] = useState<Set<string>>(new Set())
   const [errors, setErrors] = useState<Record<string, "missing" | "changed">>({})
   const [status, setStatus] = useState("")
+  // The dialog closed (or now concerns other people or shifts): nothing ticked or marked carries
+  // over to the next opening (independent review, P3); keys already bind a tick to its answer.
+  const [seenQuery, setSeenQuery] = useState(query)
+  if (seenQuery !== query) {
+    setSeenQuery(query)
+    setAcked(new Set())
+    setErrors({})
+    setServed(null)
+  }
 
   useEffect(() => {
     if (!query) return
@@ -62,7 +72,7 @@ export function useAvailabilityAck(eventId: string, people: AckPerson[], enabled
       setFetched({ query, fits })
       const needed = people.filter((p) => fits[rowOf(p)]?.ackKey)
       if (needed.length > 0) {
-        announce(setStatus, `${needed.map((p) => `${p.fullName} : ${fits[rowOf(p)].label.toLowerCase()}`).join(" ; ")}. Une confirmation est demandée ${BEFORE[verb]}.`)
+        announce(setStatus, `${needed.map((p) => `${p.fullName} : ${fits[rowOf(p)].label.toLowerCase()}`).join(" ; ")}. Une confirmation est demandée ${BEFORE[verb]}.`)
       }
     })
     return () => { current = false }
@@ -149,7 +159,7 @@ export function AvailabilityAckFields({ prefix, people, verb, state }: {
         const who = many ? ` par ${p.fullName} pour le créneau reçu` : ""
         if (!fit) {
           // A failed read shows that it was not checked; the server checks again anyway.
-          return <p key={row} id={fitId} className="text-sm text-gray-700">{state.loading ? `Vérification des disponibilités${many ? ` de ${p.fullName}` : ""}…` : `Disponibilités${many ? ` de ${p.fullName}` : ""} non vérifiées : elles le sont à la confirmation.`}</p>
+          return <p key={row} id={fitId} className="text-sm text-gray-700">{state.loading ? `Vérification des disponibilités${many ? ` ${de(p.fullName)}` : ""}…` : `Disponibilités${many ? ` ${de(p.fullName)}` : ""} non vérifiées : elles le sont à la confirmation.`}</p>
         }
         const key = fit.ackKey
         return (
@@ -172,7 +182,7 @@ export function AvailabilityAckFields({ prefix, people, verb, state }: {
                 </label>
                 {error && (
                   <p id={errorId} className="text-sm text-red-700">
-                    {error === "changed" ? `Les disponibilités de ${p.fullName} ont changé entre-temps. ` : ""}Cochez cette case pour {ACTION[verb]} malgré ses disponibilités : rien n&apos;a encore été fait.
+                    {error === "changed" ? `Les disponibilités ${de(p.fullName)} ont changé entre-temps. ` : ""}Cochez cette case pour {ACTION[verb]} malgré ses disponibilités : rien n&apos;a encore été fait.
                   </p>
                 )}
               </>

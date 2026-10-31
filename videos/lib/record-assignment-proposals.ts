@@ -57,6 +57,8 @@ export const AP_EXPECTED = {
   targetLoad: "6 h prévues pour un objectif de 6 h : objectif atteint.",
   wishSentence: "Disponible sur tout le créneau. Place du minimum de ce créneau. Charge prévue : 8 h pour un objectif de 12 h. Poste souhaité.",
   drafts: "29 affectations en brouillon pour 11 personnes.",
+  /** The planning's « À pourvoir » row before the proposal, Friday to Sunday (capacities of the seed). */
+  coverage: ["7 places à pourvoir", "11 places à pourvoir", "13 places à pourvoir"],
 } as const
 
 export async function recordAssignmentProposals(options: Options) {
@@ -82,7 +84,12 @@ export async function recordAssignmentProposals(options: Options) {
     await page.getByText("Aucune affectation en brouillon pour l'instant.", exact).waitFor()
     assert.equal(await page.getByText("Proposé", exact).count(), 0, "Proposals fixture already used: run the assignment-proposals seed")
     await at("une ligne par personne")
-    await page.getByRole("region", { name: "Planning des affectations" }).scrollIntoViewIfNeeded()
+    const planning = page.getByRole("region", { name: "Planning des affectations" })
+    await planning.scrollIntoViewIfNeeded()
+    // « une colonne par date avec les places à pourvoir »: the header row, read per date.
+    const toFill = planning.locator("thead tr").nth(1)
+    await toFill.getByRole("rowheader", { name: "À pourvoir", exact: true }).waitFor()
+    for (const text of AP_EXPECTED.coverage) await toFill.getByText(text, { exact: false }).first().waitFor()
     await at("Cliquons sur Générer une proposition")
     await page.getByRole("heading", { level: 1, name: "Affectations en brouillon", exact: true }).scrollIntoViewIfNeeded()
     await tap(page, page.getByRole("link", { name: "Générer une proposition", exact: true }))
@@ -200,9 +207,12 @@ export async function recordAssignmentProposals(options: Options) {
     const emma = cellOf(AP_TYPED.locked.key, AP_TYPED.locked.day)
     await emma.scrollIntoViewIfNeeded()
     await emma.getByText("Proposé", exact).waitFor()
+    // One pill per draft (independent review): « Proposé » replaces « Brouillon », never both.
+    assert.equal(await emma.getByText("Brouillon", exact).count(), 0, "a proposed draft shows « Proposé » only")
     await at("Ouvrons celui d'Emma")
-    await tap(page, emma.getByRole("button", { name: new RegExp(`^Voir le brouillon\\W+${fullNameOf(AP_TYPED.locked.firstName)}, ${AP_TYPED.locked.poste},`) }))
-    const dialog = page.getByRole("dialog", { name: new RegExp(`^Brouillon : ${AP_TYPED.locked.poste}, vendredi`) })
+    await tap(page, emma.getByRole("button", { name: new RegExp(`^${fullNameOf(AP_TYPED.locked.firstName)}, vendredi \\d+ \\p{L}+\\W+${AP_TYPED.locked.poste},`, "u") }))
+    // The dialog names the person (independent review): « Brouillon d'Emma Johansson : Bar des Tilleuls, vendredi… ».
+    const dialog = page.getByRole("dialog", { name: new RegExp(`^Brouillon d'${fullNameOf(AP_TYPED.locked.firstName)}\\W+${AP_TYPED.locked.poste}, vendredi`) })
     await dialog.waitFor()
     await tap(page, dialog.getByRole("button", { name: "Verrouiller", exact: true }))
     await dialog.getByText(/^Ce brouillon est verrouillé\./).waitFor()
@@ -221,14 +231,20 @@ export async function recordAssignmentProposals(options: Options) {
     await at("Léa doit partir plus tôt vendredi")
     const lea = cellOf(AP_TYPED.removed.key, AP_TYPED.removed.day)
     await lea.scrollIntoViewIfNeeded()
-    const open = lea.getByRole("button", { name: new RegExp(`^Voir le brouillon\\W+${fullNameOf(AP_TYPED.removed.firstName)}, ${AP_TYPED.removed.poste},`) })
+    const open = lea.getByRole("button", { name: new RegExp(`^${fullNameOf(AP_TYPED.removed.firstName)}, vendredi \\d+ \\p{L}+\\W+${AP_TYPED.removed.poste},`, "u") })
     await at("ouvrons son brouillon de billetterie")
     await tap(page, open)
-    const dialog = page.getByRole("dialog", { name: new RegExp(`^Brouillon : ${AP_TYPED.removed.poste}, vendredi`) })
+    const dialog = page.getByRole("dialog", { name: new RegExp(`^Brouillon de ${fullNameOf(AP_TYPED.removed.firstName)}\\W+${AP_TYPED.removed.poste}, vendredi`) })
     await dialog.waitFor()
     // Keep the actual draft readable while the voice names the removal.
     await page.waitForTimeout(600)
     await tap(page, dialog.getByRole("button", { name: "Retirer ce brouillon", exact: true }))
+    // The removal asks first (independent review): « Retirer ce brouillon ? », then « Retirer le brouillon ».
+    await at("et confirmons")
+    const confirm = page.getByRole("alertdialog", { name: /^Retirer ce brouillon\W+$/ })
+    await confirm.waitFor()
+    await tap(page, confirm.getByRole("button", { name: "Retirer le brouillon", exact: true }))
+    await confirm.waitFor({ state: "detached" })
     await dialog.waitFor({ state: "detached" })
     await open.waitFor({ state: "detached" })
     await at("Dans la case de Lou")
@@ -239,11 +255,11 @@ export async function recordAssignmentProposals(options: Options) {
     await options.waitFor()
     const add = options.getByRole("button", { name: new RegExp(`^Ajouter en brouillon\\W+${AP_TYPED.added.poste},`) })
     await add.waitFor()
-    // By its heading: once added, the button gives way to « Brouillon ajouté. ».
+    // By its heading: once added, the button gives way to « Brouillon ajouté », with the shift for screen readers.
     const option = options.locator("li").filter({ has: page.getByRole("heading", { level: 3, name: new RegExp(`^${AP_TYPED.added.poste},`) }) })
     assert.equal(await option.getByText(/^Une fois publié avec ses autres brouillons/).count(), 0, "Lou's programme stays within the limits")
     await tap(page, add)
-    await option.getByText("Brouillon ajouté.", exact).waitFor()
+    await option.getByText(/^Brouillon ajouté\W/).waitFor()
     await at("Une proposition ne remplace jamais")
     await page.waitForTimeout(700)
     await tap(page, options.getByRole("button", { name: "Fermer", exact: true }))
@@ -257,9 +273,11 @@ export async function recordAssignmentProposals(options: Options) {
     await page.getByText(AP_EXPECTED.drafts, exact).waitFor()
     await at("Publier les affectations demande une confirmation")
     await tap(page, page.getByRole("button", { name: "Publier les affectations", exact: true }))
-    const confirm = page.getByRole("dialog", { name: "Publier les affectations ?" })
+    const confirm = page.getByRole("dialog", { name: /^Publier les affectations\W+$/ })
     await confirm.waitFor()
-    await confirm.getByText(/^29 affectations pour 11 personnes : chaque personne avec une adresse email reçoit un seul email avec ses missions\.$/).waitFor()
+    await confirm.getByText(/^29 affectations pour 11 personnes\W+chaque personne avec une adresse email reçoit un seul email avec ses missions\.$/).waitFor()
+    // Everyone has an address here: no « … n'ont pas d'adresse email » line to read.
+    assert.equal(await confirm.getByText(/pas d'adresse email/).count(), 0, "every person of the fixture has an email")
     await at("Annulons ici")
     await tap(page, confirm.getByRole("button", { name: "Annuler", exact: true }))
     await confirm.waitFor({ state: "detached" })

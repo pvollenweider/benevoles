@@ -1,7 +1,10 @@
 // SPDX-FileCopyrightText: 2026 Philippe Vollenweider
 // SPDX-License-Identifier: AGPL-3.0-only
 
-import { judgeAvailabilityAcks, type AckGiven, type AnswerForFit } from "./availability-assist"
+import { judgeAvailabilityAcks, shiftInterval, type AckGiven, type AnswerForFit } from "./availability-assist"
+import { nextDate } from "./event-availability"
+import type { Interval } from "./interval-union"
+import { localParts } from "./workload-policy"
 import { shiftEndsAt } from "./cancel-deadline"
 import { roleLimitBreaches } from "./role-limit"
 import { memberMayTake } from "./role-reservation"
@@ -20,9 +23,12 @@ import { shiftsTooYoungFor } from "./utils"
  *   reminder or statistic reads it. A generated proposal (#1172) writes ordinary draft rows with
  *   `source: "proposal"`; nothing is ever published without an organiser.
  * - Review snapshot: what the organiser last looked at, the shift's material terms
- *   (`draftShiftTerms`) and the person's answer (`availabilityStamp`). When either changes, the draft
- *   is « à revoir » and publication refuses it, even when the new answer fits (Codex): the organiser
- *   looks again, never a silent refresh.
+ *   (`draftShiftTerms`) and the person's answer for the dates that can reach the shift
+ *   (`availabilityStamp`, independent review: a change of another date leaves the draft alone). When
+ *   either changes, the draft is « à revoir » and publication refuses it, even when the new answer
+ *   fits (Codex): the organiser looks again, never a silent refresh. The acknowledgement stays bound
+ *   to the answer's revision (owner decision 6, Codex): after any change, a draft outside the
+ *   answer needs a new confirmation.
  * - Publication (`judgeDraftBatch`): the selected drafts, all or nothing. Hard refusals: the event
  *   archived, a shift cancelled or over, a review out of date, a person no longer an active member,
  *   already on the shift, overlapping hours (#986), the shift's capacity counting the batch, a poste
@@ -53,7 +59,40 @@ export type DraftProblemCode =
   | "ack_missing"
   | "workload"
 
-export type DraftProblem = { code: DraftProblemCode; message: string; draftId?: string; volunteerId?: string; shiftId?: string; details?: string[] }
+export type DraftProblem = {
+  code: DraftProblemCode
+  /** The full sentence, with the person's name: the server's refusal and the draft's dialog. */
+  message: string
+  /** The same without the person (the summary puts their name in its link), when one is named. */
+  short?: string
+  draftId?: string
+  volunteerId?: string
+  shiftId?: string
+  details?: string[]
+}
+
+/** The cell's short marker of a problem: « Bloque la publication : places ». The sentence is in the summary. */
+export const PROBLEM_MARKERS: Record<DraftProblemCode, string> = {
+  event_archived: "événement archivé",
+  not_in_use: "disponibilités non recueillies",
+  drafts_changed: "brouillons modifiés",
+  shift_cancelled: "créneau annulé",
+  shift_ended: "créneau terminé",
+  shift_changed: "créneau modifié",
+  availability_changed: "disponibilités modifiées",
+  person_gone: "plus membre actif",
+  already_on_shift: "déjà inscrit·e",
+  overlap: "chevauchement",
+  capacity: "places",
+  reserved: "poste réservé",
+  min_age: "âge minimum",
+  birthdate_missing: "date de naissance inconnue",
+  role_limit: "limite du poste",
+  ack_missing: "confirmation à donner",
+  workload: "pauses et charge",
+}
+
+export const blockingMarker = (code: DraftProblemCode) => `Bloque la publication : ${PROBLEM_MARKERS[code]}`
 
 /** At most this many drafts in one publication: a festival's planning, not a bulk import. */
 export const MAX_PUBLISH_DRAFTS = 500
@@ -69,9 +108,57 @@ export function draftShiftTerms(shift: SwapShift): string {
   return `${TERMS_VERSION}:${materialTerms(shift)}`
 }
 
-/** The person's answer as the review saw it: its request and revision, or « none » (never asked). */
-export function availabilityStamp(answer: Pick<AnswerForFit, "requestId" | "revision"> | null): string {
-  return answer ? `${answer.requestId}:${answer.revision}` : "none"
+/** The answer's dates as stamped: « 2099-07-10=09:00-12:00,20:00-03:00 », « …=none » (not available), « …=? » (no answer). */
+type StampAnswer = Pick<AnswerForFit, "requestId" | "revision"> & { days?: AnswerForFit["days"] }
+
+const prevDate = (date: string) => new Date(Date.parse(`${date}T00:00:00Z`) - 86_400_000).toISOString().slice(0, 10)
+
+/**
+ * The civil dates whose answer can cover some instant of `interval` in `timeZone`: a range belongs
+ * to the date it starts on and lasts less than 24 h (src/lib/availability-assist.ts), so an instant
+ * of date D is covered by a range of D or of D-1. From the day before the start to the date of the
+ * last minute.
+ */
+export function reachDates(interval: Interval, timeZone: string): string[] {
+  const first = prevDate(localParts(interval.start, timeZone).date)
+  const last = localParts(Math.max(interval.start, interval.end - 60_000), timeZone).date
+  const dates: string[] = []
+  for (let d = first; d <= last && dates.length < 10; d = nextDate(d)) dates.push(d)
+  return dates
+}
+
+/**
+ * The person's answer as the review saw it: « none » (never asked); with `reach`, the request and
+ * the answer of the dates that can reach the shift (« a2:… »); without, the legacy request and
+ * revision (drafts stamped before the independent review, compared the old way).
+ */
+export function availabilityStamp(answer: StampAnswer | null, reach?: { interval: Interval; timeZone: string }): string {
+  if (!answer) return "none"
+  if (!reach || !answer.days) return `${answer.requestId}:${answer.revision}`
+  const byDate = new Map(answer.days.map((d) => [d.date, d]))
+  const [before, ...own] = reachDates(reach.interval, reach.timeZone)
+  // The day before reaches the shift only by a range past midnight, and by being answered or not
+  // (declared or unknown minutes): its daytime ranges are left out, so changing them changes nothing.
+  const prior = byDate.get(before)
+  const words = [`${before}=${prior ? prior.ranges.filter((r) => r.endTime <= r.startTime).map((r) => `${r.startTime}-${r.endTime}`).sort().join(",") || "-" : "?"}`]
+  for (const date of own) {
+    const d = byDate.get(date)
+    words.push(d ? `${date}=${d.ranges.map((r) => `${r.startTime}-${r.endTime}`).sort().join(",") || "none"}` : `${date}=?`)
+  }
+  return `${STAMP_VERSION}:${answer.requestId}:${words.join(";")}`
+}
+
+const STAMP_VERSION = "a2"
+
+/** The stamp to compare a stored one with: the same form (per shift, or legacy). */
+export function currentStampFor(stored: string, answer: StampAnswer | null, shift: { id: string; date: Date | string; startTime: string; endTime: string }, timeZone: string): string {
+  if (stored.startsWith(`${STAMP_VERSION}:`)) return availabilityStamp(answer, { interval: shiftInterval(shift, timeZone), timeZone })
+  return availabilityStamp(answer && { requestId: answer.requestId, revision: answer.revision })
+}
+
+/** The stamp a draft is written with now (creation, review, proposal). */
+export function draftAvailabilityStamp(answer: StampAnswer | null, shift: { id: string; date: Date | string; startTime: string; endTime: string }, timeZone: string): string {
+  return availabilityStamp(answer, { interval: shiftInterval(shift, timeZone), timeZone })
 }
 
 /** Set on drafts moved by a member merge (#600): never equal to a real answer, so they need a review. */
@@ -132,6 +219,8 @@ const COMMITTED = new Set(["active", "requested"])
 
 const day = (d: Date | string) => (typeof d === "string" ? d.slice(0, 10) : d.toISOString().slice(0, 10))
 const nameOf = (p: Pick<BatchPerson, "firstName" | "lastName">) => `${p.firstName} ${p.lastName}`.trim()
+/** « Bar, Soir, samedi… » → itself; « le créneau… » → « Le créneau… ». */
+const capFirst = (t: string) => t.charAt(0).toLocaleUpperCase("fr-FR") + t.slice(1)
 /** « Bar, Soir, samedi 11 juillet, de 18h à 23h ». */
 export const shiftWords = (s: Pick<BatchShift, "roleName" | "label" | "date" | "startTime" | "endTime">) => spokenShift({ roleName: s.roleName, label: s.label, date: day(s.date), startTime: s.startTime, endTime: s.endTime })
 
@@ -160,9 +249,11 @@ export function judgeDraftBatch(input: BatchInput): BatchVerdict {
     if (!s || s.status === "cancelled") continue
     const over = s.occupied + added - s.capacity
     if (over > 0) {
+      // Who is drafted there (independent review): the organiser sees whom to move without searching.
+      const names = input.drafts.filter((d) => d.shiftId === shiftId).map((d) => input.people.get(d.volunteerId)).flatMap((p) => (p ? [nameOf(p)] : [])).sort((a, b) => a.localeCompare(b, "fr"))
       problems.push({
         code: "capacity", shiftId,
-        message: `${shiftWords(s)} : ${s.capacity} place${s.capacity > 1 ? "s" : ""}, ${s.occupied} déjà prise${s.occupied > 1 ? "s" : ""} et ${added} affectation${added > 1 ? "s" : ""} à publier. Retirez-en ${over} ou augmentez la capacité.`,
+        message: `${shiftWords(s)} : ${s.capacity} place${s.capacity > 1 ? "s" : ""}, ${s.occupied} déjà prise${s.occupied > 1 ? "s" : ""} et ${added} affectation${added > 1 ? "s" : ""} à publier${names.length > 0 ? ` (${names.join(", ")})` : ""}. Retirez-en ${over} ou augmentez la capacité.`,
       })
     }
   }
@@ -170,7 +261,8 @@ export function judgeDraftBatch(input: BatchInput): BatchVerdict {
   for (const [volunteerId, drafts] of byPerson) {
     const person = input.people.get(volunteerId)
     if (!person || !person.active || person.erasedAt || person.mergedIntoId || person.organizationId !== input.organizationId) {
-      problems.push({ code: "person_gone", volunteerId, message: "Une personne n'est plus membre actif de l'organisation : retirez ses affectations en brouillon." })
+      const short = "n'est plus membre actif de l'organisation : retirez ses affectations en brouillon."
+      problems.push({ code: "person_gone", volunteerId, message: person && nameOf(person) ? `${nameOf(person)} ${short}` : `Une personne ${short}`, short: `${short.charAt(0).toUpperCase()}${short.slice(1)}` })
       continue
     }
     const who = nameOf(person)
@@ -182,39 +274,39 @@ export function judgeDraftBatch(input: BatchInput): BatchVerdict {
       const shift = input.shifts.get(draft.shiftId)
       const at = { draftId: draft.id, volunteerId, shiftId: draft.shiftId }
       if (!shift || shift.eventId !== input.eventId || shift.status === "cancelled") {
-        problems.push({ ...at, code: "shift_cancelled", message: `${who} : le créneau${shift ? ` ${shiftWords(shift)}` : ""} est annulé.` })
+        problems.push({ ...at, code: "shift_cancelled", message: `${who} : le créneau${shift ? ` ${shiftWords(shift)}` : ""} est annulé.`, short: `Le créneau${shift ? ` ${shiftWords(shift)}` : ""} est annulé.` })
         continue
       }
       if (shiftEndsAt(shift, input.timeZone).getTime() <= input.now.getTime()) {
-        problems.push({ ...at, code: "shift_ended", message: `${who} : ${shiftWords(shift)} est déjà terminé. Ajoutez la personne à la main si c'est une correction après coup.` })
+        problems.push({ ...at, code: "shift_ended", message: `${who} : ${shiftWords(shift)} est déjà terminé. Ajoutez la personne à la main si c'est une correction après coup.`, short: capFirst(`${shiftWords(shift)} est déjà terminé. Ajoutez la personne à la main si c'est une correction après coup.`) })
         continue
       }
-      const review = draftReviewState(draft, { shiftTerms: draftShiftTerms(shift), availabilityStamp: availabilityStamp(person.answer) })
+      const review = draftReviewState(draft, { shiftTerms: draftShiftTerms(shift), availabilityStamp: currentStampFor(draft.availabilityStamp, person.answer, shift, input.availability.timeZone) })
       if (review.shiftChanged) {
-        problems.push({ ...at, code: "shift_changed", message: `${who} : ${shiftWords(shift)} a changé depuis le brouillon. Revoyez cette affectation.` })
+        problems.push({ ...at, code: "shift_changed", message: `${who} : ${shiftWords(shift)} a changé depuis le brouillon. Revoyez cette affectation.`, short: capFirst(`${shiftWords(shift)} a changé depuis le brouillon. Revoyez cette affectation.`) })
         continue
       }
       if (review.availabilityChanged) {
-        problems.push({ ...at, code: "availability_changed", message: `${who} : ses disponibilités ont changé depuis le brouillon. Revoyez cette affectation.` })
+        problems.push({ ...at, code: "availability_changed", message: `${who} : ses disponibilités ont changé depuis le brouillon. Revoyez cette affectation.`, short: `Ses disponibilités ont changé depuis le brouillon. Revoyez cette affectation.` })
         continue
       }
       if (live.some((h) => h.shift.id === shift.id)) {
-        problems.push({ ...at, code: "already_on_shift", message: `${who} est déjà inscrit·e sur ${shiftWords(shift)}.` })
+        problems.push({ ...at, code: "already_on_shift", message: `${who} est déjà inscrit·e sur ${shiftWords(shift)}.`, short: `Déjà inscrit·e sur ${shiftWords(shift)}.` })
         continue
       }
       if (shift.minAge != null) {
         if (!person.birthDate) {
-          problems.push({ ...at, code: "birthdate_missing", message: `${who} : ${shiftWords(shift)} demande ${shift.minAge} ans au moins, et sa date de naissance n'est pas connue.` })
+          problems.push({ ...at, code: "birthdate_missing", message: `${who} : ${shiftWords(shift)} demande ${shift.minAge} ans au moins, et sa date de naissance n'est pas connue.`, short: capFirst(`${shiftWords(shift)} demande ${shift.minAge} ans au moins, et sa date de naissance n'est pas connue.`) })
           continue
         }
         if (shiftsTooYoungFor(person.birthDate, [{ minAge: shift.minAge, date: shift.date }]).length > 0) {
-          problems.push({ ...at, code: "min_age", message: `${who} n'a pas l'âge minimum de ${shift.minAge} ans pour ${shiftWords(shift)}.` })
+          problems.push({ ...at, code: "min_age", message: `${who} n'a pas l'âge minimum de ${shift.minAge} ans pour ${shiftWords(shift)}.`, short: `Âge minimum de ${shift.minAge} ans non atteint pour ${shiftWords(shift)}.` })
           continue
         }
       }
       const required = input.reserved.get(shift.roleName)
       if (required && !memberMayTake(person.tags, required)) {
-        problems.push({ ...at, code: "reserved", message: `${who} : le poste « ${shift.roleName} » est réservé aux membres ${required.map((t) => `« ${t} »`).join(" ou ")}.` })
+        problems.push({ ...at, code: "reserved", message: `${who} : le poste « ${shift.roleName} » est réservé aux membres ${required.map((t) => `« ${t} »`).join(" ou ")}.`, short: `Le poste « ${shift.roleName} » est réservé aux membres ${required.map((t) => `« ${t} »`).join(" ou ")}.` })
         continue
       }
       usable.push({ draft, shift })
@@ -225,19 +317,19 @@ export function judgeDraftBatch(input: BatchInput): BatchVerdict {
       const { draft, shift } = usable[i]
       const held = committed.find((h) => shiftsClash(h.shift, shift))
       if (held) {
-        problems.push({ draftId: draft.id, volunteerId, shiftId: shift.id, code: "overlap", message: `${who} : ${shiftWords(shift)} chevauche ${shiftWords(held.shift)}, déjà prévu.` })
+        problems.push({ draftId: draft.id, volunteerId, shiftId: shift.id, code: "overlap", message: `${who} : ${shiftWords(shift)} chevauche ${shiftWords(held.shift)}, déjà prévu.`, short: capFirst(`${shiftWords(shift)} chevauche ${shiftWords(held.shift)}, déjà prévu.`) })
         continue
       }
       for (let j = i + 1; j < usable.length; j++) {
         if (shiftsClash(usable[j].shift, shift)) {
-          problems.push({ draftId: draft.id, volunteerId, shiftId: shift.id, code: "overlap", message: `${who} : ${shiftWords(shift)} chevauche ${shiftWords(usable[j].shift)}, deux affectations à publier.` })
+          problems.push({ draftId: draft.id, volunteerId, shiftId: shift.id, code: "overlap", message: `${who} : ${shiftWords(shift)} chevauche ${shiftWords(usable[j].shift)}, deux affectations à publier.`, short: capFirst(`${shiftWords(shift)} chevauche ${shiftWords(usable[j].shift)}, deux affectations à publier.`) })
         }
       }
     }
 
     // The limit per person of a poste (#466): what is held, plus the whole batch.
     for (const b of roleLimitBreaches(usable.map((u) => u.shift), live.map((h) => h.shift), new Map(input.limits))) {
-      problems.push({ volunteerId, code: "role_limit", message: `${who} : au plus ${b.max} créneau${b.max > 1 ? "x" : ""} « ${b.roleName} » par personne, ${b.held} déjà prévu${b.held > 1 ? "s" : ""} et ${b.asked} à publier.` })
+      problems.push({ volunteerId, code: "role_limit", message: `${who} : au plus ${b.max} créneau${b.max > 1 ? "x" : ""} « ${b.roleName} » par personne, ${b.held} déjà prévu${b.held > 1 ? "s" : ""} et ${b.asked} à publier.`, short: `Au plus ${b.max} créneau${b.max > 1 ? "x" : ""} « ${b.roleName} » par personne, ${b.held} déjà prévu${b.held > 1 ? "s" : ""} et ${b.asked} à publier.` })
     }
 
     // Outside declared availability: the draft's own acknowledgement, checked on the current answer.
@@ -252,7 +344,7 @@ export function judgeDraftBatch(input: BatchInput): BatchVerdict {
     })
     for (const m of acks.missing) {
       const u = usable.find((x) => x.shift.id === m.shiftId)!
-      problems.push({ draftId: u.draft.id, volunteerId, shiftId: m.shiftId, code: "ack_missing", message: `${who} a indiqué ne pas être disponible pendant ${shiftWords(u.shift)} : confirmez cette affectation dans le brouillon pour la publier.` })
+      problems.push({ draftId: u.draft.id, volunteerId, shiftId: m.shiftId, code: "ack_missing", message: `${who} a indiqué ne pas être disponible pendant ${shiftWords(u.shift)} : confirmez cette affectation dans le brouillon pour la publier.`, short: `A indiqué ne pas être disponible pendant ${shiftWords(u.shift)} : confirmez cette affectation dans le brouillon pour la publier.` })
     }
     acknowledged.push(...acks.acknowledged)
     usableOf.set(volunteerId, usable.map((u) => ({ draftId: u.draft.id, shift: u.shift })))
@@ -260,17 +352,17 @@ export function judgeDraftBatch(input: BatchInput): BatchVerdict {
   return { problems, acknowledged, usable: usableOf }
 }
 
-/** The refusal's lead sentence: how many problems, and that nothing was published. */
+/** The refusal's lead sentence: how many problems, and that nothing was published (the list follows, never repeated here). */
 export function publicationRefusalText(problems: readonly DraftProblem[]): string {
   const n = problems.length
-  return `Publication impossible : ${n} point${n > 1 ? "s" : ""} à corriger. Rien n'a été publié. ${problems[0]?.message ?? ""}`.trim()
+  return `Rien n'a été publié : ${n} point${n > 1 ? "s" : ""} à régler.`
 }
 
 /** When the selection sent no longer matches the drafts (edited, discarded or published meanwhile). */
-export const DRAFTS_CHANGED_TEXT = "Les brouillons ont changé depuis l'ouverture de la page : rechargez-la avant de publier. Rien n'a été publié."
+export const DRAFTS_CHANGED_TEXT = "Les brouillons ont changé depuis l'ouverture de la page : rechargez-la avant de publier. Rien n'a été publié."
 
 /** The same idempotency key sent again for another selection. */
-export const PUBLICATION_KEY_REUSED_TEXT = "Cette publication a déjà été faite avec d'autres affectations : rechargez la page. Rien n'a été publié."
+export const PUBLICATION_KEY_REUSED_TEXT = "Cette publication a déjà été faite avec d'autres affectations : rechargez la page. Rien n'a été publié."
 
 /** The canonical form of a selection, hashed by the server to tell a retry from another request. */
 export function selectionCanonical(drafts: readonly { id: string; revision: number }[]): string {

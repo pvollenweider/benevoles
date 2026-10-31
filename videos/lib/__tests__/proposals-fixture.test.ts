@@ -11,6 +11,7 @@ import { validateAssignments } from "../../../src/lib/proposal-proofs"
 import { ProposalSearch } from "../../../src/lib/proposal-solver"
 import { coverageLine, formatHours, formToConfig, posteChoicesFrom, runStateLabel, runTone, scopeShiftIds, type PersonChoice } from "../../../src/lib/proposal-view"
 import { addDays } from "../../../src/lib/shift-series"
+import { placesToFillText } from "../../../src/lib/draft-board"
 import { activePolicy, buildPolicy, checkPolicyValues, evaluateWorkload, parseWorkloadPolicy, WRITE_SECTIONS, type DutyShift } from "../../../src/lib/workload-policy"
 import { AP_EXPECTED, AP_TYPED, PROPOSALS_OWNER_EMAIL } from "../record-assignment-proposals"
 import {
@@ -130,6 +131,12 @@ describe("assignment proposals video fixture (scripts/seed-video-proposals.ts)",
     expect(answered).toHaveLength(11)
     expect(PR_PEOPLE[AP_TYPED.unanswered.key].answer).toBeNull()
     expect(RESULT.config.scope.volunteerIds).toEqual(answered.map(prPersonId).sort())
+  })
+
+  test("the planning's « À pourvoir » row reads each date's places before the proposal", () => {
+    const perDate = [0, 1, 2].map((day) => shifts.filter((s) => s.day === day).reduce((n, s) => n + s.capacity, 0))
+    expect(perDate.map(placesToFillText)).toEqual([...AP_EXPECTED.coverage])
+    expect(perDate.reduce((a, b) => a + b, 0)).toBe(31)
   })
 
   test("the scope line reads « 14 créneaux, 31 places à pourvoir »", () => {
