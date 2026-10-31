@@ -25,13 +25,13 @@
   "segments": [
     {
       "id": "pb-welcome",
-      "transcript": "Les affectations sont prêtes en brouillon. Voyons ce que change la publication : les places prises, l'email reçu par chaque bénévole, et ce que les bénévoles peuvent faire ensuite.",
-      "fallbackDurationMs": 14430
+      "transcript": "Les affectations sont prêtes en brouillon. Voyons ce que change la publication, pour vous et pour les bénévoles.",
+      "fallbackDurationMs": 9010
     },
     {
       "id": "pb-ready",
-      "transcript": "Aux Rencontres du Val d'Orsel, la page Affectations en brouillon compte vingt-neuf affectations en brouillon, pour onze personnes. Sur le planning, ce sont encore des brouillons : aucun bénévole ne les voit.",
-      "fallbackDurationMs": 15820
+      "transcript": "Aux Rencontres du Val d'Orsel, vingt-neuf affectations en brouillon attendent, pour onze personnes. Sur le planning, ce sont encore des brouillons : aucun bénévole ne les voit.",
+      "fallbackDurationMs": 13510
     },
     {
       "id": "pb-publish",
@@ -54,14 +54,9 @@
       "fallbackDurationMs": 18020
     },
     {
-      "id": "pb-email-noah",
-      "transcript": "Et celui de Noah : l'accueil samedi, le parking dimanche. En bas, l'email le dit : un créneau qui ne convient pas s'annule depuis le lien personnel, ou par une réponse à l'email.",
-      "fallbackDurationMs": 16630
-    },
-    {
       "id": "pb-volunteer",
-      "transcript": "Voici ce que voit Noah s'il appuie sur Gérer mes inscriptions. Sa page Mes inscriptions liste Tous mes créneaux. Ici, pas de bouton pour changer de mission : il peut annuler un créneau, ou Écrire à l'organisation.",
-      "fallbackDurationMs": 18480
+      "transcript": "Noah a reçu le même email, avec ses deux créneaux. Voici ce qu'il voit en appuyant sur Gérer mes inscriptions. Sa page Mes inscriptions liste Tous mes créneaux. Ici, pas de bouton pour changer de mission : il peut annuler un créneau, ou Écrire à l'organisation.",
+      "fallbackDurationMs": 22980
     },
     {
       "id": "pb-cancel",
@@ -70,8 +65,8 @@
     },
     {
       "id": "pb-withdrawal",
-      "transcript": "De votre côté, quelques minutes plus tard, un email vous prévient du désistement : qui se désiste, de quel créneau, son message, et la place qui manque maintenant. Trouver un remplaçant mène aux membres libres à cet horaire.",
-      "fallbackDurationMs": 18590
+      "transcript": "De votre côté, quelques minutes plus tard, un email vous prévient : qui se désiste, de quel créneau, son message, et la place qui manque maintenant. Trouver un remplaçant mène aux membres libres à cet horaire.",
+      "fallbackDurationMs": 17670
     },
     {
       "id": "pb-correct",
@@ -85,8 +80,8 @@
     },
     {
       "id": "pb-review",
-      "transcript": "Sur Affectations en brouillon, vous voyez une mission à revoir après une correction des disponibilités : Emma, vendredi, au Bar des Tilleuls. Personne n'a été déplacé ni désinscrit. Dans sa case, Voir l'inscription mène à son inscription, si vous devez la changer.",
-      "fallbackDurationMs": 20780
+      "transcript": "Sur Affectations en brouillon, vous voyez une mission à revoir après une correction des disponibilités : Emma, vendredi, au Bar des Tilleuls. Personne n'a été déplacé ni désinscrit. Dans sa case, Voir l'inscription mène à son inscription.",
+      "fallbackDurationMs": 18480
     }
   ],
   "viewer": {

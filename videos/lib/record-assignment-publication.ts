@@ -5,7 +5,7 @@
  * Capture of ASSIGNMENT_PUBLICATION (#1172): what follows ASSIGNMENT_PROPOSALS. On the dedicated
  * organisation of scripts/seed-video-publication.ts (scenario assignment-publication), the owner
  * publishes the 29 drafts for real, reads « Publication faite » and the registrations; then the
- * emails the product delivers to the local Mailpit (Emma's and Noah's), what Noah sees from
+ * emails the product delivers to the local Mailpit (Emma's, then Noah's), what Noah sees from
  * « Gérer mes inscriptions » and his cancellation, the owner's « Désistement » email, Emma's
  * correction of her availability from her availability link, and the mission « à revoir » it
  * leaves on the owner's « Affectations en brouillon ».
@@ -270,20 +270,15 @@ export async function recordAssignmentPublication(options: Options) {
     await mailBody().getByRole("link", { name: PB_EXPECTED.emailButton, exact: true }).waitFor()
   })
 
-  let noahLink = ""
-  await scene("pb-email-noah", async at => {
+  const cards = page.locator("[id^='registration-']")
+  const card = (poste: string) => cards.filter({ has: page.getByText(poste, exact) })
+  await scene("pb-volunteer", async at => {
+    // « Noah a reçu le même email »: his own, delivered by the same cron run.
     await openMail(noahMail!.ID, `Hello ${PB_TYPED.noah.firstName},`)
     await mailBody().getByText(PB_EXPECTED.emailLead(PB_TYPED.noah.firstName, 2), exact).waitFor()
     await mailBody().getByRole("listitem").filter({ hasText: /^Accueil, samedi / }).waitFor()
     await mailBody().getByRole("listitem").filter({ hasText: /^Parking, dimanche / }).waitFor()
-    noahLink = await mailLink(page, noahMail!, "my")
-    await at("En bas, l'email le dit")
-    await mailBody().getByText(PB_EXPECTED.emailUnwanted, exact).scrollIntoViewIfNeeded()
-  })
-
-  const cards = page.locator("[id^='registration-']")
-  const card = (poste: string) => cards.filter({ has: page.getByText(poste, exact) })
-  await scene("pb-volunteer", async at => {
+    const noahLink = await mailLink(page, noahMail!, "my")
     await asVolunteer()
     await at("Sa page Mes inscriptions")
     await followMailLink(PB_EXPECTED.emailButton, noahLink)
