@@ -15,7 +15,7 @@ import { fmtDuration } from "@/lib/signup-recap"
 import { staleSentence, type InputPart, type ProposalConfig } from "@/lib/proposal-config"
 import { assignmentSentence, gapSentence, personSentence, stateSentence, type ProposalReport } from "@/lib/proposal-explanations"
 import {
-  ANOTHER_HINT, anotherOffer, anotherReplaceRecap, coverageDetails, coverageLine, droppedSentence, fillMissingTargets, formatHours, formToConfig, historyEntry, ONLY_ONE_SENTENCE,
+  ANOTHER_HINT, anotherOffer, anotherReplaceRecap, coverageDetails, coverageLine, droppedSentence, fillMissingTargets, formatHours, formToConfig, historyEntry, NO_OTHER_SENTENCE, ONLY_ONE_SENTENCE,
   posteChoicesFrom, replacedDraftCount, rotationSummary, runLine, runStateLabel, runTone, sameAsSentence, scopeShiftIds, summaryProblems, TARGET_FIELD_ERROR, withoutProblem,
   type FormProblem, type PersonChoice, type PosteChoice, type RunTone,
 } from "@/lib/proposal-view"
@@ -42,7 +42,7 @@ const TONE_CLASS: Record<RunTone, string> = {
   warning: "bg-[#fef3c7] text-[#92400e]",
   error: "bg-[#fee2e2] text-[#b91c1c]",
 }
-function StateBadge({ run }: { run: { status: string; outcome: string | null } }) {
+function StateBadge({ run }: { run: { status: string; outcome: string | null; stopReason?: string | null } }) {
   return <span className={`inline-block rounded-full border border-transparent px-2 py-0.5 text-xs font-medium ${TONE_CLASS[runTone(run)]}`}>{runStateLabel(run)}</span>
 }
 
@@ -58,7 +58,8 @@ function doneText(r: Run): string {
   if (cov) parts.push(`${coverageLine(cov)}.`)
   if (r.writtenAt) parts.push(`${plural(r.writtenCount, "affectation écrite", "affectations écrites")} en brouillon.`)
   // Said once the run ends, as the page shows it under the result.
-  if (r.sameAs) parts.push(sameAsSentence(r.sameAs))
+  if (r.stopReason === "no_other") parts.push(NO_OTHER_SENTENCE)
+  else if (r.sameAs) parts.push(sameAsSentence(r.sameAs))
   else if (anotherOffer(r) === "only_one") parts.push(ONLY_ONE_SENTENCE)
   return parts.join(" ")
 }
@@ -483,6 +484,7 @@ export default function ProposalWorkspace({ data, eventInfoHref, draftsHref, bas
                 {written?.error && <li className="text-[#b91c1c]">{written.error}</li>}
                 {!run.writtenAt && run.status === "interrupted" && report && <li>Rien n&apos;a été écrit dans les brouillons.</li>}
               </ul>
+              {run.stopReason === "no_other" && <p className="max-w-[75ch] text-sm text-gray-800">{NO_OTHER_SENTENCE}</p>}
               {offer === "only_one" && !run.sameAs && <p className="max-w-[75ch] text-sm text-gray-800">{ONLY_ONE_SENTENCE}</p>}
               {run.sameAs && <p className="max-w-[75ch] text-sm text-gray-800">{sameAsSentence(run.sameAs)}</p>}
               {offer === "button" && (

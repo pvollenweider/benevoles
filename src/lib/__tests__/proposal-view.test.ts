@@ -2,7 +2,7 @@
 // SPDX-License-Identifier: AGPL-3.0-only
 
 import { describe, it, expect } from "vitest"
-import { coverageLine, droppedSentence, fillMissingTargets, formatHours, ANOTHER_HINT, anotherOffer, anotherReplaceRecap, formToConfig, historyEntry, ONLY_ONE_SENTENCE, runLine, sameAsSentence, parseHours, posteChoicesFrom, replacedDraftCount, rotationSummary, runStateLabel, runTone, scopeShiftIds, summaryProblems, withoutProblem, type PageShift, type ProposalForm } from "../proposal-view"
+import { coverageLine, droppedSentence, fillMissingTargets, formatHours, ANOTHER_HINT, anotherOffer, anotherReplaceRecap, formToConfig, historyEntry, NO_OTHER_SENTENCE, ONLY_ONE_SENTENCE, runLine, sameAsSentence, parseHours, posteChoicesFrom, replacedDraftCount, rotationSummary, runStateLabel, runTone, scopeShiftIds, summaryProblems, withoutProblem, type PageShift, type ProposalForm } from "../proposal-view"
 
 // The page « Proposition d'affectations » (#1172): the form turned into a run's configuration.
 const shifts: PageShift[] = [
@@ -166,10 +166,19 @@ describe("« Proposer une autre répartition » (owner decision 2026-10-31)", ()
     expect(sameAsSentence(2)).toBe("Aucune autre répartition trouvée\u00a0: cette recherche a retrouvé la même répartition que la proposition 2.")
   })
 
+  it("says plainly when nothing different was found, keeps the drafts and still offers to try again", () => {
+    const none = { status: "finished", outcome: null, stopReason: "no_other" }
+    expect(runStateLabel(none)).toBe("Aucune autre répartition")
+    expect(runTone(none)).toBe("neutral")
+    expect(anotherOffer({ ...none, stale: [], report: null })).toBe("button")
+    expect(NO_OTHER_SENTENCE).toBe("Aucune autre répartition trouvée avec ces données et ces réglages. Vos brouillons n'ont pas changé.")
+    expect(historyEntry({ ...none, ordinal: 4, writtenAt: null, writtenCount: 0, coverage: null }, "1 mai à 10:00")).toBe("Proposition 4, 1 mai à 10:00\u00a0: aucune autre répartition, rien d'écrit")
+  })
+
   it("asks before replacing proposed drafts, with its own words", () => {
     const one = anotherReplaceRecap(1, 3)
     expect(one.title).toBe("Remplacer 1 brouillon proposé\u00a0?")
-    expect(one.lead).toBe("L'autre répartition remplace le brouillon proposé non verrouillé de ce périmètre.")
+    expect(one.lead).toBe("Si une autre répartition est trouvée, elle remplace le brouillon proposé non verrouillé de ce périmètre. Sinon, rien ne change.")
     expect(one.lines[0]).toBe("La proposition 3 reste consultable dans Propositions précédentes.")
     expect(one.confirmLabel).toBe("Remplacer et proposer")
     expect(anotherReplaceRecap(29, 1).title).toBe("Remplacer 29 brouillons proposés\u00a0?")

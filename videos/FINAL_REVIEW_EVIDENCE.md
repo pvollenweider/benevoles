@@ -917,3 +917,11 @@ bouton à la fin de `ap-result`, bloc `viewer`, script et recorder (le bouton es
 montré, jamais cliqué ; la ligne lit « Proposition 1, lancée le … »). Image et
 narration publiées ne correspondent plus au produit : à refilmer, `revision` du
 catalogue à incrémenter au moment de la publication.
+
+Même PR, revue du coordinateur : la ligne des places restées vides devient
+« 2 places vides. Personne n'est disponible sur tout ce créneau. » (au lieu de
+« 2 places restent sans personne, dont 2 places du minimum. Aucune disponibilité
+ne couvre entièrement ce créneau. Impossible à pourvoir : … »). `AP_EXPECTED`,
+recorder et script suivent ; la narration (« personne n'est disponible pour tout
+le rangement du Kiosque ») reste juste. Recorder rejoué de bout en bout sur deux
+seeds neufs, sans rendu.

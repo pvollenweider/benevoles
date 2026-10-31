@@ -61,12 +61,14 @@ export class ProposalSearch {
   private sinceBest = 0
   private readonly maxIterations: number
   private readonly targetOf = new Map<string, boolean>()
+  private readonly diversify: boolean
 
   constructor(input: ProposalInput) {
     this.model = startModel(input)
     this.rng = createPrng(normaliseSeed(input.seed))
     this.budget = input.budget
     this.maxIterations = Math.max(1_000, input.budget.evaluations * 4)
+    this.diversify = input.diversify === true
     for (const p of this.model.people) {
       this.gen.set(p.id, [])
       this.targetOf.set(p.id, p.targetMinutes > 0)
@@ -103,7 +105,7 @@ export class ProposalSearch {
       if (this.phase === "setup") {
         this.work ??= this.model.prepare()
         if (this.work.next().done) {
-          this.work = this.construct(false)
+          this.work = this.construct(this.diversify)
           this.phase = "construct"
         }
         continue

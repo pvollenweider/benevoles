@@ -461,3 +461,14 @@ describe("« Proposer une autre répartition » (owner decision 2026-10-31)", ()
     await waitFor(() => expect(status()).toHaveTextContent(/Aucune autre répartition trouvée\s: cette recherche a retrouvé la même répartition que la proposition 1\./))
   })
 })
+
+describe("an alternative that found nothing different (coordinator review 2026-10-31)", () => {
+  it("says so plainly, shows no result to write, and still offers to try again", () => {
+    const none = { ...baseRun, id: "run-2", ordinal: 2, status: "finished", stopReason: "no_other", outcome: null, report: null, configuration: { scope: { shiftIds: ["s1"], volunteerIds: ["v1"] } } }
+    view(data({ run: none as never }))
+    expect(screen.getByText("Aucune autre répartition", { selector: "span" })).toBeInTheDocument()
+    expect(screen.getByText(/^Aucune autre répartition trouvée avec ces données et ces réglages\. Vos brouillons n'ont pas changé\.$/)).toBeInTheDocument()
+    expect(screen.queryByRole("button", { name: "Utiliser ce résultat partiel" })).toBeNull()
+    expect(screen.getByRole("button", { name: "Proposer une autre répartition" })).toBeInTheDocument()
+  })
+})

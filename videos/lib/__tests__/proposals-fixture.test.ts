@@ -172,7 +172,7 @@ describe("assignment proposals video fixture (scripts/seed-video-proposals.ts)",
     const [gap] = RESULT.report.gaps
     expect(key(gap.shiftId)).toBe("ran-sun")
     expect(shifts.find((s) => s.key === "ran-sun")!.poste.roleName).toBe(AP_EXPECTED.gapPoste)
-    expect(gapSentence(gap)).toContain(AP_EXPECTED.gapReason)
+    expect(gapSentence(gap)).toBe(AP_EXPECTED.gapReason)
     expect(gap.missing).toBe(2)
   })
 

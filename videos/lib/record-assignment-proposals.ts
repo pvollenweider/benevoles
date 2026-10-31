@@ -52,7 +52,7 @@ export const AP_EXPECTED = {
   covered: "29 places couvertes sur 31",
   written: "29 affectations écrites dans les brouillons.",
   gapPoste: "Rangement du Kiosque",
-  gapReason: "Aucune disponibilité ne couvre entièrement ce créneau.",
+  gapReason: "2 places vides. Personne n'est disponible sur tout ce créneau.",
   targetLoad: "6 h prévues pour un objectif de 6 h : objectif atteint.",
   wishSentence: "Disponible sur tout le créneau. Place du minimum de ce créneau. Charge prévue : 8 h pour un objectif de 12 h. Poste souhaité.",
   drafts: "29 affectations en brouillon pour 11 personnes.",

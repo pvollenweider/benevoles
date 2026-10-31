@@ -141,8 +141,9 @@ export function posteChoicesFrom(config: Partial<ProposalConfig> | null, shifts:
  * The state of a run in plain words, for its badge, the history and the announcement. Never solver
  * terms: a run that proved full coverage impossible is a normal outcome, said as such.
  */
-export function runStateLabel(run: { status: string; outcome: string | null }): string {
+export function runStateLabel(run: { status: string; outcome: string | null; stopReason?: string | null }): string {
   if (run.status === "queued") return "En attente"
+  if (run.status === "finished" && run.stopReason === "no_other") return "Aucune autre répartition"
   if (run.status === "running") return "Calcul en cours"
   if (run.status === "failed") return "Échec du calcul"
   if (run.status === "interrupted") return "Calcul arrêté avant la fin"
@@ -155,8 +156,9 @@ export function runStateLabel(run: { status: string; outcome: string | null }): 
  * neutral while waiting and when full coverage is impossible (nothing better exists to look for).
  */
 export type RunTone = "neutral" | "complete" | "warning" | "error"
-export function runTone(run: { status: string; outcome: string | null }): RunTone {
+export function runTone(run: { status: string; outcome: string | null; stopReason?: string | null }): RunTone {
   if (run.status === "failed") return "error"
+  if (run.status === "finished" && run.stopReason === "no_other") return "neutral"
   if (run.status === "interrupted") return "warning"
   if (run.status !== "finished") return "neutral"
   return run.outcome === "complete" ? "complete" : run.outcome === "proven_impossible" ? "neutral" : "warning"
@@ -179,7 +181,7 @@ export function coverageDetails(c: { seats: number; filled: number; criticalSeat
 }
 
 /** The text of a run in « Propositions précédentes »: its ordinal, date, state, coverage, what was written. */
-export function historyEntry(r: { ordinal: number; status: string; outcome: string | null; writtenAt: Date | string | null; writtenCount: number; coverage?: { filled: number; seats: number } | null }, date: string): string {
+export function historyEntry(r: { ordinal: number; status: string; outcome: string | null; stopReason?: string | null; writtenAt: Date | string | null; writtenCount: number; coverage?: { filled: number; seats: number } | null }, date: string): string {
   const parts = [`Proposition ${r.ordinal}, ${date} : ${runStateLabel(r).toLowerCase()}`]
   if (r.coverage) parts.push(coverageLine(r.coverage))
   parts.push(r.writtenAt ? `${r.writtenCount} ${r.writtenCount > 1 ? "affectations écrites" : "affectation écrite"}` : "rien d'écrit")
@@ -194,6 +196,9 @@ export function runLine(ordinal: number, date: string): string {
 /** What « Proposer une autre répartition » does, in one plain line (Codex 2026-10-31: no promise of quality). */
 export const ANOTHER_HINT = "Même périmètre et mêmes réglages : rechercher une autre répartition, si elle existe."
 
+/** Said on an alternative whose search found nothing different: nothing written (coordinator review 2026-10-31). */
+export const NO_OTHER_SENTENCE = "Aucune autre répartition trouvée avec ces données et ces réglages. Vos brouillons n'ont pas changé."
+
 /** Said instead of the button when the search proved no other assignment covers as many seats. */
 export const ONLY_ONE_SENTENCE = "Aucune autre répartition ne peut couvrir autant de places avec ces données et ces règles."
 
@@ -206,7 +211,9 @@ export function sameAsSentence(ordinal: number): string {
  * Whether « Proposer une autre répartition » is offered for a run: finished with a report, and the
  * search did not prove that no other assignment covers as many seats (a stale proof does not count).
  */
-export function anotherOffer(run: { status: string; stale: readonly unknown[]; report: { onlyOne?: boolean } | null }): "button" | "only_one" | null {
+export function anotherOffer(run: { status: string; stopReason?: string | null; stale: readonly unknown[]; report: { onlyOne?: boolean } | null }): "button" | "only_one" | null {
+  // Nothing different found within the budget proves nothing: further seeds may still differ.
+  if (run.status === "finished" && run.stopReason === "no_other") return "button"
   if (run.status !== "finished" || !run.report) return null
   return run.report.onlyOne && run.stale.length === 0 ? "only_one" : "button"
 }
@@ -215,7 +222,7 @@ export function anotherOffer(run: { status: string; stale: readonly unknown[]; r
 export function anotherReplaceRecap(count: number, ordinal: number) {
   return {
     title: `Remplacer ${count} ${count > 1 ? "brouillons proposés" : "brouillon proposé"} ?`,
-    lead: `L'autre répartition remplace ${count > 1 ? `les ${count} brouillons proposés non verrouillés` : "le brouillon proposé non verrouillé"} de ce périmètre.`,
+    lead: `Si une autre répartition est trouvée, elle remplace ${count > 1 ? `les ${count} brouillons proposés non verrouillés` : "le brouillon proposé non verrouillé"} de ce périmètre. Sinon, rien ne change.`,
     lines: [`La proposition ${ordinal} reste consultable dans Propositions précédentes.`, "Les brouillons verrouillés et manuels ne changent pas.", "Rien n'est publié et personne n'est prévenu."],
     confirmLabel: "Remplacer et proposer",
     danger: true,

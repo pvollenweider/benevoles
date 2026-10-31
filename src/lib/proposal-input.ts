@@ -102,6 +102,12 @@ export type ProposalInput = {
   policy: ActivePolicy | null
   rotation: { maxConsecutiveDays: number | null; maxNightAddOns: number | null }
   seed: number
+  /**
+   * « Proposer une autre répartition »: the first construction already breaks ties by the seed
+   * (as a restart does), so another seed can lead to another assignment. Absent: false (a first
+   * proposal is built in a fixed order).
+   */
+  diversify?: boolean
   budget: ProposalBudget
   shifts: ProposalShift[]
   people: ProposalPerson[]

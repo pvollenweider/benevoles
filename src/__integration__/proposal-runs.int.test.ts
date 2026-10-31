@@ -362,15 +362,15 @@ describe.skipIf(!url)("generated proposals on Postgres (#1172)", () => {
       expect((b.result as { assignments: unknown[] }).assignments).toEqual((a.result as { assignments: unknown[] }).assignments)
     })
 
-    it("takes the run's stored choices with the next untried seed, once per key, and replaces the drafts the page counted", async () => {
+    it("takes the run's stored choices, writes once a result that differs, with the seed that gave it, and replaces the drafts the page counted", async () => {
       const { e, morning, evening, nadia, luca } = await team()
       const first = await launch(e.id, pageConfig([morning.id, evening.id], [nadia.id, luca.id]))
       await drainProposalRuns({ wait: true })
-      const written = (await prisma.proposalRun.findUniqueOrThrow({ where: { id: first } })).writtenCount
-      expect(written).toBeGreaterThan(0)
+      const run1 = await prisma.proposalRun.findUniqueOrThrow({ where: { id: first } })
+      expect(run1.writtenCount).toBeGreaterThan(0)
       // What the page's confirmation counts for this run's scope (src/lib/proposal-view.ts replacedDraftCount).
       const page = (await loadProposalPage(db(), orgId, e.id, first))!
-      expect([morning.id, evening.id].reduce((k, id) => k + (page.proposedByShift[id] ?? 0), 0)).toBe(written)
+      expect([morning.id, evening.id].reduce((k, id) => k + (page.proposedByShift[id] ?? 0), 0)).toBe(run1.writtenCount)
       expect(page.runs[0]).toMatchObject({ id: first, ordinal: 1 })
       expect(page.run).toMatchObject({ id: first, ordinal: 1, sameAs: null })
       expect(page.run).not.toHaveProperty("seed")
@@ -380,22 +380,46 @@ describe.skipIf(!url)("generated proposals on Postgres (#1172)", () => {
       expect(await another(e.id, first, "another-key-1")).toEqual({ ok: true, runId: r.runId, replay: true, notice: null })
       expect(await launchProposal(db(), { eventId: e.id, actorId: null, idempotencyKey: "another-key-1", config: pageConfig([morning.id], [nadia.id]) })).toMatchObject({ ok: false, code: "key_reused" })
       expect(await another(e.id, first, "another-key-2")).toMatchObject({ ok: false, status: 409, code: "active" })
-      const second = await prisma.proposalRun.findUniqueOrThrow({ where: { id: r.runId } })
-      expect(second.seed).toBe(2027)
-      expect({ ...(second.configuration as object), seed: 0 }).toEqual({ ...(await prisma.proposalRun.findUniqueOrThrow({ where: { id: first } })).configuration as object, seed: 0 })
+      const queued = await prisma.proposalRun.findUniqueOrThrow({ where: { id: r.runId } })
+      expect(queued).toMatchObject({ seed: 2027, alternative: true })
+      expect({ ...(queued.configuration as object), seed: 0 }).toEqual({ ...(run1.configuration as object), seed: 0 })
       await drainProposalRuns({ wait: true })
-      const done = await prisma.proposalRun.findUniqueOrThrow({ where: { id: r.runId } })
-      expect(done.status).toBe("finished")
-      expect((done.written as { replaced: string[] }).replaced).toHaveLength(written)
-      // From the first run again: never a seed already tried for these choices.
+      const run2 = await prisma.proposalRun.findUniqueOrThrow({ where: { id: r.runId } })
+      // Two people, two shifts of 4 h, a 4 h target each: the swap is the other assignment.
+      expect(run2.status).toBe("finished")
+      expect(run2.writtenCount).toBe(run1.writtenCount)
+      const set = (x: typeof run1) => (x.result as { assignments: { shiftId: string; volunteerId: string }[] }).assignments.map((a) => `${a.shiftId}|${a.volunteerId}`).sort()
+      expect(set(run2)).not.toEqual(set(run1))
+      expect((run2.written as { replaced: string[] }).replaced).toHaveLength(run1.writtenCount)
+      expect(await prisma.eventLog.count({ where: { entityId: run2.id, action: "proposal.written" } })).toBe(1)
+      // Reproducible: the seed that gave it is stored everywhere, and the frozen input with it gives it again.
+      const tried = (run2.progress as { seedsTried: number[] }).seedsTried
+      expect(tried[0]).toBe(2027)
+      expect(tried.at(-1)).toBe(run2.seed)
+      expect((run2.configuration as { seed: number }).seed).toBe(run2.seed)
+      expect((run2.snapshot as { seed: number }).seed).toBe(run2.seed)
+      const { ProposalSearch } = await import("@/lib/proposal-solver")
+      const replay = new ProposalSearch(run2.snapshot as never)
+      while (!replay.step(10)) { /* the whole budget */ }
+      expect(replay.best().assignments.map((a) => `${a.shiftId}|${a.volunteerId}`).sort()).toEqual(set(run2))
+
+      // Nothing else to find: the next one writes nothing and keeps the drafts.
+      const drafts = (await pending(e.id)).map((d) => d.id)
       const third = await another(e.id, first)
       if (!third.ok) throw new Error(third.error)
-      expect((await prisma.proposalRun.findUniqueOrThrow({ where: { id: third.runId } })).seed).toBe(2028)
-      await drainProposalRuns({ wait: true })
+      const third0 = await prisma.proposalRun.findUniqueOrThrow({ where: { id: third.runId } })
+      expect(tried).not.toContain(third0.seed) // never a seed already tried
+      await drainProposalRuns({ wait: true, maxAttempts: 6 })
+      const run3 = await prisma.proposalRun.findUniqueOrThrow({ where: { id: third.runId } })
+      expect(run3).toMatchObject({ status: "finished", stopReason: "no_other", writtenAt: null, result: null, outcome: null })
+      expect((run3.progress as { seedsTried: number[] }).seedsTried).toHaveLength(6)
+      expect((await pending(e.id)).map((d) => d.id)).toEqual(drafts)
+      expect((await readRun(db(), e.id, third.runId))).toMatchObject({ ordinal: 3, stopReason: "no_other", report: null })
+      expect(await writeRunResult(db(), { eventId: e.id, runId: third.runId, actorId: null })).toMatchObject({ ok: false, code: "no_result" })
       expect((await listRuns(db(), e.id)).map((x) => x.ordinal)).toEqual([3, 2, 1])
     })
 
-    it("says when another seed found the same assignments, and proves when no other can cover as many seats", async () => {
+    it("writes nothing when the only possible assignment is found again, and proves it on the first run", async () => {
       const e = await event()
       const only = await shift(e.id, "08:00", "12:00")
       const ana = await member("Ana", "Silva")
@@ -406,10 +430,36 @@ describe.skipIf(!url)("generated proposals on Postgres (#1172)", () => {
       const shown = (await readRun(db(), e.id, first))!
       expect(shown.report?.onlyOne).toBe(true)
       expect(shown.sameAs).toBeNull()
+      const before = await pending(e.id)
+      expect(before).toHaveLength(1)
       const r = await another(e.id, first)
       if (!r.ok) throw new Error(r.error)
+      await drainProposalRuns({ wait: true, maxAttempts: 4 })
+      const run = await prisma.proposalRun.findUniqueOrThrow({ where: { id: r.runId } })
+      expect(run).toMatchObject({ status: "finished", stopReason: "no_other", writtenAt: null, writtenCount: 0 })
+      expect((run.progress as { seedsTried: number[] }).seedsTried).toEqual([2027, 2028, 2029, 2030])
+      // The drafts are those of the first run, untouched.
+      expect(await pending(e.id)).toEqual(before)
+      expect(await prisma.eventLog.count({ where: { entityId: run.id } })).toBe(0)
+      // A later click never tries those seeds again.
+      const next = await another(e.id, first)
+      if (!next.ok) throw new Error(next.error)
+      expect((await prisma.proposalRun.findUniqueOrThrow({ where: { id: next.runId } })).seed).toBe(2031)
+    })
+
+    it("a stop asked during the attempts writes nothing and offers no partial result", async () => {
+      const { e, c } = await team()
+      const first = await launch(e.id, c)
       await drainProposalRuns({ wait: true })
-      expect((await readRun(db(), e.id, r.runId))).toMatchObject({ ordinal: 2, sameAs: 1 })
+      const r = await another(e.id, first)
+      if (!r.ok) throw new Error(r.error)
+      const claimed = (await claimNext())!
+      await prisma.proposalRun.update({ where: { id: r.runId }, data: { cancelRequestedAt: new Date() } })
+      await executeRun(claimed)
+      const run = await prisma.proposalRun.findUniqueOrThrow({ where: { id: r.runId } })
+      expect(run).toMatchObject({ status: "interrupted", stopReason: "cancelled", writtenAt: null })
+      expect(run.result).toBeNull()
+      expect(await writeRunResult(db(), { eventId: e.id, runId: r.runId, actorId: null })).toMatchObject({ ok: false, code: "no_result" })
     })
 
     it("refuses a run still computing, one of another event, and choices that can no longer be taken again", async () => {
