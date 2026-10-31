@@ -6,10 +6,11 @@ import { describe, expect, test } from "vitest"
 import { BETA_CAPABILITIES } from "../../../src/lib/beta-capabilities"
 import { availabilityDates } from "../../../src/lib/event-availability"
 import { assignmentSentence, buildReport, gapSentence, personSentence, stateLabel } from "../../../src/lib/proposal-explanations"
+import { DEFAULT_PROPOSAL_SEED } from "../../../src/lib/proposal-config"
 import { DEFAULT_PROPOSAL_BUDGET, PROPOSAL_INPUT_VERSION, suggestedTargetMinutes, type ProposalInput } from "../../../src/lib/proposal-input"
 import { validateAssignments } from "../../../src/lib/proposal-proofs"
 import { ProposalSearch } from "../../../src/lib/proposal-solver"
-import { coverageLine, formatHours, formToConfig, posteChoicesFrom, runStateLabel, runTone, scopeShiftIds, type PersonChoice } from "../../../src/lib/proposal-view"
+import { ANOTHER_HINT, anotherOffer, coverageLine, formatHours, formToConfig, posteChoicesFrom, runStateLabel, runTone, scopeShiftIds, type PersonChoice } from "../../../src/lib/proposal-view"
 import { addDays } from "../../../src/lib/shift-series"
 import { placesToFillText } from "../../../src/lib/draft-board"
 import { activePolicy, buildPolicy, checkPolicyValues, evaluateWorkload, parseWorkloadPolicy, WRITE_SECTIONS, type DutyShift } from "../../../src/lib/workload-policy"
@@ -51,13 +52,15 @@ function takeInput(today: string) {
   }))
   people.find((p) => p.volunteerId === prPersonId(AP_TYPED.target.key))!.targetHours = AP_TYPED.target.hours
   const postes = PR_POSTES.map((p) => p.roleName)
-  const form = formToConfig({ dates, postes, people, posteChoices: posteChoicesFrom(null, pageShifts, postes), maxConsecutiveDays: "", maxNightAddOns: "", seed: AP_TYPED.seed }, pageShifts)
+  const form = formToConfig({ dates, postes, people, posteChoices: posteChoicesFrom(null, pageShifts, postes), maxConsecutiveDays: "", maxNightAddOns: "" }, pageShifts)
   if (!form.ok) throw new Error(JSON.stringify(form.problems))
   const { config, targets } = form
   const scope = new Set(config.scope.shiftIds)
   const input: ProposalInput = {
     version: PROPOSAL_INPUT_VERSION, eventId: PR_EVENT.id, now: `${today}T12:00:00.000Z`, timeZone: PR_TIME_ZONE,
-    availability: { timeZone: PR_TIME_ZONE, dates }, policy, rotation: config.rotation, seed: config.seed,
+    availability: { timeZone: PR_TIME_ZONE, dates }, policy, rotation: config.rotation,
+    // The page sends no seed: the server gives a first proposal DEFAULT_PROPOSAL_SEED (src/lib/proposal-runs-data.ts).
+    seed: config.seed ?? DEFAULT_PROPOSAL_SEED,
     budget: { evaluations: DEFAULT_PROPOSAL_BUDGET.evaluations, stagnation: DEFAULT_PROPOSAL_BUDGET.stagnation },
     shifts: shifts.map((s) => ({
       id: prShiftId(s.key), roleName: s.poste.roleName, date: addDays(firstDay, s.day), startTime: s.start, endTime: s.end, capacity: s.capacity, minVolunteers: null,
@@ -209,7 +212,22 @@ describe("assignment proposals video fixture (scripts/seed-video-proposals.ts)",
     }
   })
 
-  test("the same seed gives the same proposal whatever the take's day, clock changes included", () => {
+  test("the take types no seed: the first proposal uses the fixed default seed, as the server does", () => {
+    expect(RESULT.config).not.toHaveProperty("seed")
+    expect(RESULT.input.seed).toBe(DEFAULT_PROPOSAL_SEED)
+    expect(DEFAULT_PROPOSAL_SEED).toBe(2026)
+    // The server's own default, read from its snapshot builder's source (it needs a database to run).
+    expect(readFileSync(path.join(root, "src/lib/proposal-runs-data.ts"), "utf8")).toContain("seed: config.seed ?? DEFAULT_PROPOSAL_SEED,")
+    expect(recorder).not.toMatch(/Numéro de tirage|tirage n°|AP_TYPED\.seed/)
+  })
+
+  test("the result offers « Proposer une autre répartition » with its line: other assignments may cover as many seats", () => {
+    expect(RESULT.report.onlyOne).toBeUndefined()
+    expect(anotherOffer({ status: "finished", stale: [], report: RESULT.report })).toBe("button")
+    expect(AP_EXPECTED.anotherHint).toBe(ANOTHER_HINT)
+  })
+
+  test("the first proposal is the same whatever the take's day, clock changes included", () => {
     const shape = (today: string) => solve(today).assignments.map((a) => `${key(a.shiftId)}:${key(a.volunteerId)}`).sort()
     const reference = shape(TODAY)
     // 2026-10-09: the event ends on the Sunday clocks go back; 2027-03-12: the Sunday they go forward.

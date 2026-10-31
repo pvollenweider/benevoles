@@ -15,8 +15,9 @@ import { fmtDuration } from "@/lib/signup-recap"
 import { staleSentence, type InputPart, type ProposalConfig } from "@/lib/proposal-config"
 import { assignmentSentence, gapSentence, personSentence, stateSentence, type ProposalReport } from "@/lib/proposal-explanations"
 import {
-  coverageDetails, coverageLine, droppedSentence, fillMissingTargets, formatHours, formToConfig, historyEntry, posteChoicesFrom, replacedDraftCount, rotationSummary, runStateLabel, runTone,
-  scopeShiftIds, summaryProblems, TARGET_FIELD_ERROR, withoutProblem, type FormProblem, type PersonChoice, type PosteChoice, type RunTone,
+  ANOTHER_HINT, anotherOffer, anotherReplaceRecap, coverageDetails, coverageLine, droppedSentence, fillMissingTargets, formatHours, formToConfig, historyEntry, ONLY_ONE_SENTENCE,
+  posteChoicesFrom, replacedDraftCount, rotationSummary, runLine, runStateLabel, runTone, sameAsSentence, scopeShiftIds, summaryProblems, TARGET_FIELD_ERROR, withoutProblem,
+  type FormProblem, type PersonChoice, type PosteChoice, type RunTone,
 } from "@/lib/proposal-view"
 import type { ProposalPageData } from "@/lib/proposal-page-data"
 import { useHidesColumns } from "@/components/admin/members/useHidesColumns"
@@ -56,6 +57,9 @@ function doneText(r: Run): string {
   const parts = [`Proposition terminée : ${runStateLabel(r).toLowerCase()}.`]
   if (cov) parts.push(`${coverageLine(cov)}.`)
   if (r.writtenAt) parts.push(`${plural(r.writtenCount, "affectation écrite", "affectations écrites")} en brouillon.`)
+  // Said once the run ends, as the page shows it under the result.
+  if (r.sameAs) parts.push(sameAsSentence(r.sameAs))
+  else if (anotherOffer(r) === "only_one") parts.push(ONLY_ONE_SENTENCE)
   return parts.join(" ")
 }
 
@@ -83,11 +87,13 @@ function openFoldsOf(problems: readonly FormProblem[]) {
  * when it cannot be used (aria-disabled with the reason); people and postes as tables from md up,
  * one fieldset per row below, each control named with its person or poste; an error link opens the
  * folded settings and focuses the field shown at this width; several people without a target are
- * one error item with its own « Appliquer la suggestion » button.
+ * one error item with its own « Appliquer la suggestion » button. « Proposer une autre répartition »
+ * (owner decision 2026-10-31, replacing the seed field): under a finished result, the stored choices
+ * of that run again with another seed, never the form's; its own confirmation when it replaces
+ * proposed drafts, its failures in the page's alert, the focus kept on it (accessibility review).
  */
-export default function ProposalWorkspace({ data, suggestedSeed, eventInfoHref, draftsHref, basePath }: {
+export default function ProposalWorkspace({ data, eventInfoHref, draftsHref, basePath }: {
   data: ProposalPageData
-  suggestedSeed: number
   eventInfoHref: string
   draftsHref: string
   basePath: string
@@ -121,7 +127,6 @@ export default function ProposalWorkspace({ data, suggestedSeed, eventInfoHref, 
   const [posteChoices, setPosteChoices] = useState<PosteChoice[]>(() => posteChoicesFrom(last, pageShifts, data.postes.map((p) => p.roleName)))
   const [maxConsecutive, setMaxConsecutive] = useState(last?.rotation ? (last.rotation.maxConsecutiveDays == null ? "" : String(last.rotation.maxConsecutiveDays)) : "")
   const [maxNights, setMaxNights] = useState(last?.rotation ? (last.rotation.maxNightAddOns == null ? "" : String(last.rotation.maxNightAddOns)) : "")
-  const [seed, setSeed] = useState(String(last?.seed ?? suggestedSeed))
   const [problems, setProblems] = useState<FormProblem[]>([])
   const [serverError, setServerError] = useState<string | null>(null)
   const [launching, setLaunching] = useState(false)
@@ -146,7 +151,10 @@ export default function ProposalWorkspace({ data, suggestedSeed, eventInfoHref, 
   const [busy, setBusy] = useState<"cancel" | "write" | null>(null)
   const [confirmWrite, setConfirmWrite] = useState<{ error: string | null } | null>(null)
   const [confirmRelaunch, setConfirmRelaunch] = useState<number | null>(null)
+  const [confirmAnother, setConfirmAnother] = useState<{ count: number; runId: string; ordinal: number } | null>(null)
   const launchKey = useRef<string | null>(null)
+  /** The key of one « another » request, kept through a retry: the same run comes back. */
+  const anotherKey = useRef<{ runId: string; key: string } | null>(null)
   const errorHeading = useRef<HTMLHeadingElement>(null)
   const peopleHeading = useRef<HTMLHeadingElement>(null)
   const newHeading = useRef<HTMLHeadingElement>(null)
@@ -253,7 +261,7 @@ export default function ProposalWorkspace({ data, suggestedSeed, eventInfoHref, 
   }
 
   function checkForm() {
-    return formToConfig({ dates, postes, people, posteChoices, maxConsecutiveDays: maxConsecutive, maxNightAddOns: maxNights, seed }, pageShifts, nameOf)
+    return formToConfig({ dates, postes, people, posteChoices, maxConsecutiveDays: maxConsecutive, maxNightAddOns: maxNights }, pageShifts, nameOf)
   }
 
   /** « Générer une proposition »: checks the form, then asks first when proposed drafts would be replaced. */
@@ -295,25 +303,7 @@ export default function ProposalWorkspace({ data, suggestedSeed, eventInfoHref, 
       const body = await res.json().catch(() => ({}))
       if (!res.ok) { launchKey.current = null; return fail(typeof body.error === "string" ? body.error : "La proposition n'a pas pu être lancée.") }
       launchKey.current = null
-      let next: Run | null = null
-      try {
-        const read = await fetch(`/api/admin/events/${data.eventId}/proposals/${body.runId}`, { cache: "no-store" })
-        next = read.ok ? ((await read.json()) as { run: Run }).run : null
-      } catch { next = null }
-      setLaunching(false)
-      if (!next) {
-        // Launched, but its follow-up could not be read: said visibly, and the page reloads its data.
-        flushSync(() => setAlert({ text: "La proposition est lancée, mais son suivi ne s'affiche pas : rechargez la page pour voir où elle en est.", reload: true }))
-        document.getElementById("proposal-alert-reload")?.focus()
-        startTransition(() => router.refresh())
-        return
-      }
-      lastState.current = `${next.status}:${next.outcome}`
-      shownId.current = next.id
-      flushSync(() => setRun(next))
-      resultHeading.current?.focus()
-      announce(setStatus, body.notice ? `Proposition lancée. ${body.notice}` : "Proposition lancée : calcul en attente.")
-      startTransition(() => router.refresh())
+      await follow(body.runId, body.notice ? `Proposition lancée. ${body.notice}` : "Proposition lancée : calcul en attente.")
     } catch {
       fail(NETWORK_ERROR)
     }
@@ -322,6 +312,66 @@ export default function ProposalWorkspace({ data, suggestedSeed, eventInfoHref, 
       flushSync(() => setServerError(text))
       errorHeading.current?.focus()
       announce(setStatus, text)
+    }
+  }
+
+  /** After a launch: the new run is read and shown, the focus on its heading, its state announced. */
+  async function follow(runId: string, said: string) {
+    let next: Run | null = null
+    try {
+      const read = await fetch(`/api/admin/events/${data.eventId}/proposals/${runId}`, { cache: "no-store" })
+      next = read.ok ? ((await read.json()) as { run: Run }).run : null
+    } catch { next = null }
+    setLaunching(false)
+    if (!next) {
+      // Launched, but its follow-up could not be read: said visibly, and the page reloads its data.
+      flushSync(() => setAlert({ text: "La proposition est lancée, mais son suivi ne s'affiche pas : rechargez la page pour voir où elle en est.", reload: true }))
+      document.getElementById("proposal-alert-reload")?.focus()
+      startTransition(() => router.refresh())
+      return
+    }
+    lastState.current = `${next.status}:${next.outcome}`
+    shownId.current = next.id
+    flushSync(() => setRun(next))
+    resultHeading.current?.focus()
+    announce(setStatus, said)
+    startTransition(() => router.refresh())
+  }
+
+  /**
+   * « Proposer une autre répartition »: the shown run's stored choices with another seed (the server
+   * picks it). Never the form: nothing is checked or saved there. Asks first when proposed drafts
+   * of that scope would be replaced.
+   */
+  function requestAnother() {
+    if (launching || !run) return
+    if (launchBlocked) { announce(setStatus, launchBlocked); return }
+    const scope = ((run.configuration as Partial<ProposalConfig> | null)?.scope?.shiftIds) ?? []
+    const replaced = replacedDraftCount(data.proposedByShift ?? {}, scope)
+    if (replaced > 0) { setConfirmAnother({ count: replaced, runId: run.id, ordinal: run.ordinal }); return }
+    void launchAnother(run.id)
+  }
+
+  async function launchAnother(runId: string) {
+    setAlert(null)
+    setLaunching(true)
+    if (anotherKey.current?.runId !== runId) anotherKey.current = { runId, key: crypto.randomUUID() }
+    try {
+      const res = await fetch(`/api/admin/events/${data.eventId}/proposals`, { method: "POST", headers: { "Content-Type": "application/json" }, body: JSON.stringify({ idempotencyKey: anotherKey.current.key, anotherOf: runId }) })
+      const body = await res.json().catch(() => ({}))
+      if (!res.ok) {
+        anotherKey.current = null
+        setLaunching(false)
+        // In the page's alert, above the result; the focus stays on the button (no second announcement).
+        setAlert({ text: `${typeof body.error === "string" ? body.error : "L'autre répartition n'a pas pu être lancée."} Rien n'a été remplacé.`, reload: false })
+        return
+      }
+      anotherKey.current = null
+      await follow(body.runId, body.notice ? `Autre répartition demandée. ${body.notice}` : "Autre répartition demandée : calcul en attente.")
+    } catch {
+      // A network failure keeps the key: trying again returns the same run if it was recorded.
+      setLaunching(false)
+      setAlert({ text: NETWORK_ERROR, reload: false })
     }
   }
 
@@ -391,6 +441,7 @@ export default function ProposalWorkspace({ data, suggestedSeed, eventInfoHref, 
   const report = run?.report ?? null
   const written = (run?.written ?? null) as Written
   const recap = rotationSummary(posteChoices, maxConsecutive, maxNights)
+  const offer = run ? anotherOffer(run) : null
   const canWritePartial = !!run && !run.writtenAt && !!report && (run.status === "interrupted" || run.status === "finished") && report.assignments.length > 0
 
   return (
@@ -408,7 +459,7 @@ export default function ProposalWorkspace({ data, suggestedSeed, eventInfoHref, 
           <div className="space-y-1">
             <h2 id="proposal-result" ref={resultHeading} tabIndex={-1} className="text-base font-semibold text-gray-900 rounded focus:outline-none">{isDone(run) ? "Résultat de la proposition" : "Proposition en cours"}</h2>
             {isDone(run) && report && <p className="text-lg font-semibold text-gray-900">{coverageLine(report.coverage)}</p>}
-            <p className="flex flex-wrap items-center gap-x-2 gap-y-1 text-sm text-gray-700"><StateBadge run={run} /><span>Lancée le {runDate(run.createdAt)}, tirage n° {run.seed}.</span></p>
+            <p className="flex flex-wrap items-center gap-x-2 gap-y-1 text-sm text-gray-700"><StateBadge run={run} /><span>{runLine(run.ordinal, runDate(run.createdAt))}</span></p>
           </div>
           {!isDone(run) && (
             <div className="space-y-2">
@@ -420,7 +471,7 @@ export default function ProposalWorkspace({ data, suggestedSeed, eventInfoHref, 
             <>
               {report && <p className="max-w-[75ch] text-sm text-gray-800">{stateSentence({ outcome: report.outcome, execution: run.status === "interrupted" ? "interrupted" : "finished", stopReason: (run.stopReason ?? "budget") as ProposalReport["stopReason"] })}</p>}
               {run.status === "failed" && <p className="max-w-[75ch] text-sm text-gray-800">Le calcul a échoué ; rien n&apos;a été écrit. Relancez la proposition.</p>}
-              {run.stopReason === "lease_expired" && <p className="max-w-[75ch] text-sm text-gray-800">Le calcul a été interrompu par un redémarrage du service ; rien n&apos;a été écrit. Relancez la proposition avec le même numéro de tirage pour obtenir le même résultat.</p>}
+              {run.stopReason === "lease_expired" && <p className="max-w-[75ch] text-sm text-gray-800">Le calcul a été interrompu par un redémarrage du service ; rien n&apos;a été écrit. Relancez un calcul depuis Nouvelle proposition.</p>}
               {run.stale.length > 0 && <p className="max-w-[75ch] text-sm text-[#92400e]">{staleSentence(run.stale)}</p>}
               {run.writtenAt && run.writtenCount === 0 && (
                 <p className="max-w-[75ch] rounded-lg border border-amber-300 bg-amber-50 px-3 py-2 text-sm text-amber-900 forced-colors:border-[CanvasText]">Aucune affectation n&apos;a été écrite : toutes ont été écartées à l&apos;écriture, les données ayant changé. Relancez la proposition pour tenir compte des données actuelles.</p>
@@ -432,6 +483,17 @@ export default function ProposalWorkspace({ data, suggestedSeed, eventInfoHref, 
                 {written?.error && <li className="text-[#b91c1c]">{written.error}</li>}
                 {!run.writtenAt && run.status === "interrupted" && report && <li>Rien n&apos;a été écrit dans les brouillons.</li>}
               </ul>
+              {offer === "only_one" && !run.sameAs && <p className="max-w-[75ch] text-sm text-gray-800">{ONLY_ONE_SENTENCE}</p>}
+              {run.sameAs && <p className="max-w-[75ch] text-sm text-gray-800">{sameAsSentence(run.sameAs)}</p>}
+              {offer === "button" && (
+                <div className="space-y-1">
+                  <button id="proposal-another" type="button" onClick={requestAnother} aria-disabled={launching || !!launchBlocked || undefined} aria-busy={launching || undefined} aria-describedby={launchBlocked ? "proposal-another-hint proposal-another-blocked" : "proposal-another-hint"} className={smallButton}>
+                    {launching ? "Lancement…" : "Proposer une autre répartition"}
+                  </button>
+                  <p id="proposal-another-hint" className="max-w-[75ch] text-sm text-gray-700">{ANOTHER_HINT}</p>
+                  {launchBlocked && <p id="proposal-another-blocked" className="max-w-[75ch] text-sm text-gray-800">{launchBlocked}</p>}
+                </div>
+              )}
               <div className="flex flex-wrap items-center gap-x-4 gap-y-2">
                 {canWritePartial && <button id="proposal-write" type="button" onClick={() => setConfirmWrite({ error: null })} aria-disabled={!!busy || undefined} className={smallButton}>Utiliser ce résultat partiel</button>}
                 <Link href={draftsHref} className={`inline-flex min-h-11 items-center text-sm ${linkClass}`}>Voir les affectations en brouillon</Link>
@@ -714,19 +776,6 @@ export default function ProposalWorkspace({ data, suggestedSeed, eventInfoHref, 
           </div>
         </details>
 
-        <details className="rounded-xl border border-gray-200 bg-white px-3 sm:px-4">
-          <summary className={summaryClass}>
-            Paramètres de calcul (facultatif)
-            <span className="block text-sm font-normal text-gray-700">Numéro de tirage : {seed.trim() || "à indiquer"}</span>
-          </summary>
-          <div className="pb-4 pt-1">
-            <label htmlFor="proposal-seed" className="block text-sm font-medium text-gray-900">Numéro de tirage</label>
-            <input id="proposal-seed" type="text" inputMode="numeric" autoComplete="off" className={`${input} w-36`} aria-describedby={["seed-hint", problemOf("proposal-seed") && "proposal-seed-error"].filter(Boolean).join(" ")} aria-invalid={problemOf("proposal-seed") ? true : undefined} value={seed} onChange={(e) => { setSeed(e.target.value); clear("proposal-seed") }} />
-            <p id="seed-hint" className="max-w-[75ch] text-sm text-gray-600">Même numéro et mêmes données : même proposition. Changez-le pour essayer une autre répartition.</p>
-            {problemOf("proposal-seed") && <p id="proposal-seed-error" className="text-xs text-red-700">{problemOf("proposal-seed")!.message}</p>}
-          </div>
-        </details>
-
         <section aria-labelledby="proposal-launch" className="space-y-2">
           <h3 id="proposal-launch" className="text-base font-semibold text-gray-900">Lancer le calcul</h3>
           {(items.length > 0 || serverError) && (
@@ -771,7 +820,7 @@ export default function ProposalWorkspace({ data, suggestedSeed, eventInfoHref, 
               const current = run?.id === r.id
               return (
                 <li key={r.id}>
-                  <Link href={`${basePath}?run=${r.id}`} aria-current={current ? "page" : undefined} className={`inline-block py-1.5 ${linkClass} ${current ? "font-bold" : ""}`}>
+                  <Link href={`${basePath}?run=${r.id}`} aria-current={current ? "page" : undefined} className={`inline-block py-1.5 ${current ? linkClass.replace("font-medium", "font-bold") : linkClass}`}>
                     {historyEntry(r, runDate(r.createdAt))}
                   </Link>
                 </li>
@@ -793,6 +842,15 @@ export default function ProposalWorkspace({ data, suggestedSeed, eventInfoHref, 
           busy={false}
           onConfirm={() => { flushSync(() => setConfirmRelaunch(null)); void launch() }}
           onCancel={() => setConfirmRelaunch(null)}
+        />
+      )}
+
+      {confirmAnother && (
+        <ConfirmActionModal
+          recap={anotherReplaceRecap(confirmAnother.count, confirmAnother.ordinal)}
+          busy={false}
+          onConfirm={() => { const id = confirmAnother.runId; flushSync(() => setConfirmAnother(null)); void launchAnother(id) }}
+          onCancel={() => setConfirmAnother(null)}
         />
       )}
 

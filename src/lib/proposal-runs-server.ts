@@ -4,7 +4,10 @@
 import { createHash, randomUUID } from "node:crypto"
 import { availabilityStamp, draftAvailabilityStamp, draftShiftTerms, MAX_EVENT_DRAFTS } from "./draft-assignments"
 import { readAnswersForFit, readAvailabilityGate } from "./availability-assist-data"
-import { canonicalConfig, changedParts, configProblem, SCRUBBED_HASH, type InputPart, type ProposalConfig } from "./proposal-config"
+import {
+  anotherSeed, canonicalConfig, changedParts, choicesKey, configProblem, DEFAULT_PROPOSAL_SEED, proposalConfigSchema, SCRUBBED_HASH, stableStringify,
+  type InputPart, type ProposalConfig, type ResolvedProposalConfig,
+} from "./proposal-config"
 import { buildReport, type ProposalReport } from "./proposal-explanations"
 import { PROPOSAL_DEADLINE_MS, type ProposalInput } from "./proposal-input"
 import { preflight } from "./proposal-preflight"
@@ -28,7 +31,7 @@ import { lockVolunteerRows, lockWorkloadShared } from "./workload-guard"
  * attempt holds a lease (`leaseToken`, `leaseExpiresAt` in database time), renewed every few seconds
  * only while still current; a lost or expired lease ends the attempt without writing anything. Any
  * read or launch on the event turns an expired run into « recherche interrompue » (lease_expired).
- * No checkpoint: a run lost with its process is retried by the organiser, with the same seed.
+ * No checkpoint: a run lost with its process is retried by the organiser.
  *
  * Writing (one transaction, the global lock order): the event's shared workload lock, the event
  * FOR SHARE, the shifts ORDER BY id, the volunteers ORDER BY id, the replaced drafts ORDER BY id, then
@@ -60,7 +63,13 @@ export type RunView = {
   status: string
   stopReason: string | null
   outcome: string | null
-  seed: number
+  /** Its rank among the event's runs, oldest first (« Proposition 3 »): how the organiser tells runs apart. */
+  ordinal: number
+  /**
+   * The ordinal of an earlier run with the same choices, the same data and another seed whose search
+   * found exactly the same assignments (« Aucune autre répartition trouvée »); null otherwise.
+   */
+  sameAs: number | null
   createdAt: Date
   startedAt: Date | null
   finishedAt: Date | null
@@ -93,38 +102,67 @@ export async function expireRuns(db: Pick<Db, "$executeRaw">, eventId?: string):
 
 export type LaunchResult = { ok: true; runId: string; replay: boolean; notice: string | null } | RunFailure
 
-const runRequestHash = (config: ProposalConfig) => sha(canonicalConfig(config))
+/**
+ * What one launch asks for: the page's configuration (its seed omitted: the first proposal's), or
+ * « Proposer une autre répartition » on an earlier run (`anotherOf`), whose stored choices are taken
+ * again with the next seed. The request hash names the request, not the seed it resolves to, so a
+ * retry with the same key returns the same run before anything is read again (Codex 2026-10-31).
+ */
+export type LaunchRequest = { config: ProposalConfig; anotherOf?: undefined } | { anotherOf: string; config?: undefined }
+
+const requestHashOf = (r: LaunchRequest) => sha(r.anotherOf !== undefined ? stableStringify({ anotherOf: r.anotherOf }) : canonicalConfig(r.config))
+
+const ANOTHER_UNAVAILABLE = "Les choix de cette proposition ne peuvent plus être repris : préparez une nouvelle proposition."
+
+/** The configuration a launch computes, its seed resolved, or why it cannot. */
+async function resolveConfig(db: Db, eventId: string, r: LaunchRequest): Promise<{ ok: true; config: ResolvedProposalConfig } | RunFailure> {
+  if (r.anotherOf === undefined) return { ok: true, config: { ...r.config, seed: r.config.seed ?? DEFAULT_PROPOSAL_SEED } }
+  const source = await db.proposalRun.findFirst({ where: { id: r.anotherOf, eventId }, select: { status: true, configuration: true, inputHash: true } })
+  if (!source) return { ok: false, status: 404, error: "Proposition introuvable.", code: "not_found" }
+  if (source.status !== "finished") return { ok: false, status: 409, error: "Cette proposition n'est pas terminée : attendez sa fin ou préparez une nouvelle proposition.", code: "source_unfinished" }
+  const parsed = proposalConfigSchema.safeParse(source.configuration)
+  if (source.inputHash === SCRUBBED_HASH || !parsed.success) return { ok: false, status: 409, error: ANOTHER_UNAVAILABLE, code: "source_unavailable" }
+  // Every seed already tried with these choices, whatever became of its run (failed, stopped, written).
+  const key = choicesKey(parsed.data)
+  const runs = await db.proposalRun.findMany({ where: { eventId, inputHash: { not: SCRUBBED_HASH } }, select: { seed: true, configuration: true } })
+  const used = runs.filter((x) => { const c = proposalConfigSchema.safeParse(x.configuration); return c.success && choicesKey(c.data) === key }).map((x) => x.seed)
+  return { ok: true, config: { ...parsed.data, seed: anotherSeed(used) } }
+}
 
 /**
  * Records a run, queued, with its frozen input; the caller starts `drainProposalRuns` after the
- * response. The same idempotency key with the same choices returns that run, whatever changed since
- * (checked before any new preflight); with other choices it is refused.
+ * response. The same idempotency key with the same request returns that run, whatever changed since
+ * (checked before any new read); with another request it is refused.
  */
-export async function launchProposal(db: Db, input: { eventId: string; actorId: string | null; idempotencyKey: string; config: ProposalConfig; now?: Date }): Promise<LaunchResult> {
+export async function launchProposal(db: Db, input: { eventId: string; actorId: string | null; idempotencyKey: string; now?: Date } & LaunchRequest): Promise<LaunchResult> {
   const now = input.now ?? new Date()
-  const requestHash = runRequestHash(input.config)
+  const request: LaunchRequest = input.anotherOf !== undefined ? { anotherOf: input.anotherOf } : { config: input.config! }
+  const requestHash = requestHashOf(request)
   const existing = await db.proposalRun.findFirst({ where: { eventId: input.eventId, idempotencyKey: input.idempotencyKey }, select: { id: true, requestHash: true } })
   if (existing) {
-    if (existing.requestHash !== requestHash) return { ok: false, status: 409, error: "Cette proposition a déjà été lancée avec d'autres choix : rechargez la page.", code: "key_reused" }
+    if (existing.requestHash !== requestHash) return { ok: false, status: 409, error: "Cette proposition a déjà été lancée avec d'autres choix : rechargez la page.", code: "key_reused" }
     return { ok: true, runId: existing.id, replay: true, notice: null }
   }
-  const problem = configProblem(input.config)
+  const resolved = await resolveConfig(db, input.eventId, request)
+  if (!resolved.ok) return resolved
+  const config = resolved.config
+  const problem = configProblem(config)
   if (problem) return { ok: false, status: 400, error: problem, code: "invalid" }
   await expireRuns(db, input.eventId)
 
-  const snap = await buildProposalSnapshot(db, input.eventId, input.config, "compute", now)
+  const snap = await buildProposalSnapshot(db, input.eventId, config, "compute", now)
   if (!snap.ok) return { ok: false, status: snap.status, error: snap.error, code: snap.code }
   const check = preflight(snap.input)
   if (!check.ok) return { ok: false, status: 409, error: check.message, code: check.code, counts: check.counts }
 
   const queued = await prisma.proposalRun.count({ where: { status: "queued" } })
-  if (queued >= MAX_QUEUED) return { ok: false, status: 429, error: "Trop de propositions sont en attente sur le service : réessayez dans une minute.", code: "busy" }
+  if (queued >= MAX_QUEUED) return { ok: false, status: 429, error: "Trop de propositions sont en attente sur le service : réessayez dans une minute.", code: "busy" }
 
   try {
     const run = await db.proposalRun.create({
       data: {
         eventId: input.eventId, createdById: input.actorId, idempotencyKey: input.idempotencyKey, requestHash, status: "queued",
-        seed: input.config.seed, configuration: input.config as object, replacement: snap.replacement, snapshot: snap.input as object,
+        seed: config.seed, configuration: config as object, replacement: snap.replacement, snapshot: snap.input as object,
         inputVersion: snap.input.version, inputHash: snap.inputHash, hashes: snap.hashes,
       },
       select: { id: true },
@@ -134,8 +172,8 @@ export async function launchProposal(db: Db, input: { eventId: string; actorId: 
     if ((e as { code?: string }).code !== "P2002") throw e
     // Two launches at once: the same key (a double click) returns the first; another run already active is refused.
     const again = await db.proposalRun.findFirst({ where: { eventId: input.eventId, idempotencyKey: input.idempotencyKey }, select: { id: true, requestHash: true } })
-    if (again) return again.requestHash === requestHash ? { ok: true, runId: again.id, replay: true, notice: null } : { ok: false, status: 409, error: "Cette proposition a déjà été lancée avec d'autres choix : rechargez la page.", code: "key_reused" }
-    return { ok: false, status: 409, error: "Une proposition est déjà en cours pour cet événement : attendez qu'elle finisse ou arrêtez-la.", code: "active" }
+    if (again) return again.requestHash === requestHash ? { ok: true, runId: again.id, replay: true, notice: null } : { ok: false, status: 409, error: "Cette proposition a déjà été lancée avec d'autres choix : rechargez la page.", code: "key_reused" }
+    return { ok: false, status: 409, error: "Une proposition est déjà en cours pour cet événement : attendez qu'elle finisse ou arrêtez-la.", code: "active" }
   }
 }
 
@@ -468,23 +506,64 @@ export async function readRun(db: Db, eventId: string, runId: string): Promise<R
     if (run.inputHash === SCRUBBED_HASH || !baseline) stale = ["people"]
     else stale = snap.ok ? changedParts(baseline, snap.hashes) : ["shifts"]
   }
+  const ordinals = await runOrdinals(db, eventId)
+  const sameAs = run.status === "finished" && run.inputHash !== SCRUBBED_HASH ? await sameResultAs(db, eventId, run, ordinals) : null
   return {
-    id: run.id, status: run.status, stopReason: run.stopReason, outcome: run.outcome, seed: run.seed, createdAt: run.createdAt, startedAt: run.startedAt,
+    id: run.id, status: run.status, stopReason: run.stopReason, outcome: run.outcome, ordinal: ordinals.get(run.id) ?? 0, sameAs, createdAt: run.createdAt, startedAt: run.startedAt,
     finishedAt: run.finishedAt, writtenAt: run.writtenAt, writtenCount: run.writtenCount, droppedCount: run.droppedCount, progress: run.progress,
     configuration: run.configuration, report: ((run.result as { report?: ProposalReport } | null)?.report) ?? null, written: run.written, stale,
     cancelRequested: !!run.cancelRequestedAt,
   }
 }
 
-/** The event's latest runs, newest first, without their payloads. */
+/** The event's latest runs, newest first, without their payloads, each with its ordinal. */
 export async function listRuns(db: Db, eventId: string, take = 10) {
   await expireRuns(db, eventId)
-  return db.proposalRun.findMany({
-    where: { eventId },
-    select: { id: true, status: true, stopReason: true, outcome: true, seed: true, createdAt: true, finishedAt: true, writtenAt: true, writtenCount: true, droppedCount: true },
-    orderBy: [{ createdAt: "desc" }, { id: "desc" }],
-    take,
-  })
+  const [runs, ordinals] = await Promise.all([
+    db.proposalRun.findMany({
+      where: { eventId },
+      select: { id: true, status: true, stopReason: true, outcome: true, createdAt: true, finishedAt: true, writtenAt: true, writtenCount: true, droppedCount: true },
+      orderBy: [{ createdAt: "desc" }, { id: "desc" }],
+      take,
+    }),
+    runOrdinals(db, eventId),
+  ])
+  return runs.map((r) => ({ ...r, ordinal: ordinals.get(r.id) ?? 0 }))
+}
+
+/** Each run's rank among all the event's runs, oldest first, by (createdAt, id): « Proposition 1 », « 2 »… */
+export async function runOrdinals(db: Pick<Db, "$queryRaw">, eventId: string): Promise<Map<string, number>> {
+  const rows = await db.$queryRaw<{ id: string; n: number }[]>`
+    SELECT id, (row_number() OVER (ORDER BY "createdAt", id))::int AS n FROM "ProposalRun" WHERE "eventId" = ${eventId}`
+  return new Map(rows.map((r) => [r.id, Number(r.n)]))
+}
+
+/** Assignments as a canonical set, to compare two results. */
+const assignmentSet = (list: readonly { shiftId: string; volunteerId: string }[] | null | undefined) => (list ?? []).map((a) => `${a.shiftId}|${a.volunteerId}`).sort().join(",")
+
+/**
+ * The ordinal of the first earlier run with the same choices, the same data (input hash), the same
+ * solver and another seed whose search found exactly the same assignments; null when there is none.
+ * Scrubbed runs never count.
+ */
+async function sameResultAs(db: Db, eventId: string, run: { id: string; seed: number; configuration: unknown; inputHash: string; result: unknown }, ordinals: Map<string, number>): Promise<number | null> {
+  const own = proposalConfigSchema.safeParse(run.configuration)
+  const mine = run.result as { assignments?: { shiftId: string; volunteerId: string }[]; solverVersion?: string } | null
+  if (!own.success || !mine?.assignments) return null
+  const rows = await db.$queryRaw<{ id: string; configuration: unknown; assignments: { shiftId: string; volunteerId: string }[] | null; solverVersion: string | null }[]>`
+    SELECT id, configuration, result->'assignments' AS assignments, result->>'solverVersion' AS "solverVersion"
+    FROM "ProposalRun"
+    WHERE "eventId" = ${eventId} AND id <> ${run.id} AND status = 'finished' AND "inputHash" = ${run.inputHash} AND seed <> ${run.seed} AND result IS NOT NULL`
+  const key = choicesKey(own.data)
+  const target = assignmentSet(mine.assignments)
+  const self = ordinals.get(run.id) ?? 0
+  const matches = rows.filter((r) => {
+    const n = ordinals.get(r.id) ?? 0
+    if (n === 0 || n >= self || r.solverVersion !== (mine.solverVersion ?? null)) return false
+    const c = proposalConfigSchema.safeParse(r.configuration)
+    return c.success && choicesKey(c.data) === key && assignmentSet(r.assignments) === target
+  }).map((r) => ordinals.get(r.id)!)
+  return matches.length > 0 ? Math.min(...matches) : null
 }
 
 /** The coverage of each run's report (« 29 places couvertes sur 31 » in the history), read without the whole result. */

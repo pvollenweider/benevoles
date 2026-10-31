@@ -30,7 +30,6 @@ export type ProposalForm = {
   posteChoices: PosteChoice[]
   maxConsecutiveDays: string
   maxNightAddOns: string
-  seed: string
 }
 
 /** The open shifts of the chosen dates and postes, by id. */
@@ -92,8 +91,6 @@ export function formToConfig(form: ProposalForm, shifts: readonly PageShift[], n
   if (maxConsecutiveDays !== null && !(maxConsecutiveDays >= 1 && maxConsecutiveDays <= 31)) problems.push({ field: "proposal-consecutive", message: "Indiquez un nombre de jours entre 1 et 31, ou laissez vide." })
   const maxNightAddOns = wholeOrNull(form.maxNightAddOns)
   if (maxNightAddOns !== null && !(maxNightAddOns >= 0 && maxNightAddOns <= 100)) problems.push({ field: "proposal-nights", message: "Indiquez un nombre entre 0 et 100, ou laissez vide." })
-  const seed = wholeOrNull(form.seed)
-  if (seed === null || Number.isNaN(seed) || seed > 4_294_967_295) problems.push({ field: "proposal-seed", message: "Indiquez un numéro de tirage : un nombre entier positif." })
   form.posteChoices.forEach((c, i) => {
     const cap = Math.max(0, ...shifts.filter((s) => s.roleName === c.roleName).map((s) => s.capacity))
     const bad = (c.reserveText !== undefined && !/^\d+$/.test(c.reserveText.trim())) || !Number.isInteger(c.reserve) || c.reserve < 0 || c.reserve > cap
@@ -123,7 +120,8 @@ export function formToConfig(form: ProposalForm, shifts: readonly PageShift[], n
     scope: { shiftIds, volunteerIds: people.map((p) => p.volunteerId).sort() },
     reserve, nightShiftIds, categories,
     rotation: { maxConsecutiveDays, maxNightAddOns },
-    preferences, seed: seed!,
+    // No seed: the server gives a first proposal its fixed one (src/lib/proposal-config.ts).
+    preferences,
   }
   return { ok: true, config, targets }
 }
@@ -137,11 +135,6 @@ export function posteChoicesFrom(config: Partial<ProposalConfig> | null, shifts:
   const reserveOf = new Map<string, number>()
   for (const r of config?.reserve ?? []) { const role = roleOf.get(r.shiftId); if (role) reserveOf.set(role, Math.max(reserveOf.get(role) ?? 0, r.count)) }
   return postes.map((roleName) => ({ roleName, category: categoryOf.get(roleName) ?? "", night: night.has(roleName), reserve: reserveOf.get(roleName) ?? 0 }))
-}
-
-/** A new seed for a first run: any number, shown and editable; the same seed gives the same proposal. */
-export function freshSeed(random: () => number = Math.random): number {
-  return Math.floor(random() * 1_000_000)
 }
 
 /**
@@ -185,13 +178,48 @@ export function coverageDetails(c: { seats: number; filled: number; criticalSeat
   return out
 }
 
-/** The text of a run in « Propositions précédentes »: date, state, coverage, draw number, what was written. */
-export function historyEntry(r: { status: string; outcome: string | null; seed: number; writtenAt: Date | string | null; writtenCount: number; coverage?: { filled: number; seats: number } | null }, date: string): string {
-  const parts = [`${date} : ${runStateLabel(r).toLowerCase()}`]
+/** The text of a run in « Propositions précédentes »: its ordinal, date, state, coverage, what was written. */
+export function historyEntry(r: { ordinal: number; status: string; outcome: string | null; writtenAt: Date | string | null; writtenCount: number; coverage?: { filled: number; seats: number } | null }, date: string): string {
+  const parts = [`Proposition ${r.ordinal}, ${date} : ${runStateLabel(r).toLowerCase()}`]
   if (r.coverage) parts.push(coverageLine(r.coverage))
-  parts.push(`tirage ${r.seed}`)
   parts.push(r.writtenAt ? `${r.writtenCount} ${r.writtenCount > 1 ? "affectations écrites" : "affectation écrite"}` : "rien d'écrit")
   return parts.join(", ")
+}
+
+/** The line under a run's result: « Proposition 3, lancée le 31 octobre à 14:05. » */
+export function runLine(ordinal: number, date: string): string {
+  return `Proposition ${ordinal}, lancée le ${date}.`
+}
+
+/** What « Proposer une autre répartition » does, in one plain line (Codex 2026-10-31: no promise of quality). */
+export const ANOTHER_HINT = "Même périmètre et mêmes réglages : rechercher une autre répartition, si elle existe."
+
+/** Said instead of the button when the search proved no other assignment covers as many seats. */
+export const ONLY_ONE_SENTENCE = "Aucune autre répartition ne peut couvrir autant de places avec ces données et ces règles."
+
+/** Said on a run whose search found again the result of an earlier run with the same choices and data. */
+export function sameAsSentence(ordinal: number): string {
+  return `Aucune autre répartition trouvée : cette recherche a retrouvé la même répartition que la proposition ${ordinal}.`
+}
+
+/**
+ * Whether « Proposer une autre répartition » is offered for a run: finished with a report, and the
+ * search did not prove that no other assignment covers as many seats (a stale proof does not count).
+ */
+export function anotherOffer(run: { status: string; stale: readonly unknown[]; report: { onlyOne?: boolean } | null }): "button" | "only_one" | null {
+  if (run.status !== "finished" || !run.report) return null
+  return run.report.onlyOne && run.stale.length === 0 ? "only_one" : "button"
+}
+
+/** The confirmation before « another » replaces the drafts the shown run wrote (accessibility review 2026-10-31). */
+export function anotherReplaceRecap(count: number, ordinal: number) {
+  return {
+    title: `Remplacer ${count} ${count > 1 ? "brouillons proposés" : "brouillon proposé"} ?`,
+    lead: `L'autre répartition remplace ${count > 1 ? `les ${count} brouillons proposés non verrouillés` : "le brouillon proposé non verrouillé"} de ce périmètre.`,
+    lines: [`La proposition ${ordinal} reste consultable dans Propositions précédentes.`, "Les brouillons verrouillés et manuels ne changent pas.", "Rien n'est publié et personne n'est prévenu."],
+    confirmLabel: "Remplacer et proposer",
+    danger: true,
+  }
 }
 
 /**

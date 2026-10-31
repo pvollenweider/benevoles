@@ -87,3 +87,35 @@ describe("memoised time zone arithmetic (the search's speed-up)", () => {
     expect(() => localDateTimeToUtc(new Date("2031-01-01T00:00:00Z"), "10:00", "Not/AZone")).toThrow()
   })
 })
+
+describe("proof that no other assignment covers as many seats (« Proposer une autre répartition », Codex 2026-10-31)", () => {
+  it("is set when every statically eligible pair is used: any other set would cover fewer seats", () => {
+    // One person, two shifts she can both take, nobody else: one assignment only.
+    const input = tInput([tShift("a", D1, "09:00", "12:00"), tShift("b", D2, "09:00", "12:00")], [tPerson("p", { targetMinutes: 6 * H })])
+    const report = buildReport(buildModel(input), solveProposal(input))
+    expect(report.assignments).toHaveLength(2)
+    expect(report.onlyOne).toBe(true)
+  })
+
+  it("holds when nobody can take any seat (no pair at all)", () => {
+    const input = tInput([tShift("drive", D1, "09:00", "12:00", { reservedTags: ["Permis"] })], [tPerson("p")])
+    expect(buildReport(buildModel(input), solveProposal(input)).onlyOne).toBe(true)
+  })
+
+  it("is absent when someone else could take a seat, and on an interrupted search", () => {
+    const input = tInput([tShift("a", D1, "09:00", "12:00")], [tPerson("p", { targetMinutes: 3 * H }), tPerson("q", { targetMinutes: 3 * H })])
+    const out = solveProposal(input)
+    const report = buildReport(buildModel(input), out)
+    expect(report.assignments).toHaveLength(1)
+    expect(report).not.toHaveProperty("onlyOne")
+    const lone = tInput([tShift("a", D1, "09:00", "12:00")], [tPerson("p", { targetMinutes: 3 * H })])
+    expect(buildReport(buildModel(lone), { ...solveProposal(lone), execution: "interrupted" })).not.toHaveProperty("onlyOne")
+  })
+
+  it("is absent when a seat stays empty although someone could take it (a heuristic result proves nothing)", () => {
+    const input = tInput([tShift("a", D1, "09:00", "12:00", { capacity: 2 })], [tPerson("p", { targetMinutes: 3 * H }), tPerson("q", { targetMinutes: 3 * H })])
+    const model = buildModel(input)
+    const out = solveProposal(input)
+    expect(buildReport(model, { ...out, assignments: out.assignments.slice(0, 1) })).not.toHaveProperty("onlyOne")
+  })
+})

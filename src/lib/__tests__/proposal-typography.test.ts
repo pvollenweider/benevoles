@@ -4,7 +4,7 @@
 import { describe, it, expect } from "vitest"
 import { INPUT_PART_WORDS, staleSentence, type InputPart } from "../proposal-config"
 import { assignmentSentence, gapSentence, personSentence, stateLabel, stateSentence, type GapReport } from "../proposal-explanations"
-import { coverageDetails, coverageLine, droppedSentence, formToConfig, historyEntry, rotationSummary, runStateLabel, summaryProblems, TARGET_FIELD_ERROR, type PageShift, type ProposalForm } from "../proposal-view"
+import { ANOTHER_HINT, anotherReplaceRecap, coverageDetails, coverageLine, droppedSentence, formToConfig, historyEntry, ONLY_ONE_SENTENCE, runLine, sameAsSentence, rotationSummary, runStateLabel, summaryProblems, TARGET_FIELD_ERROR, type PageShift, type ProposalForm } from "../proposal-view"
 
 /**
  * French typography of the proposal's words (#1172 review): a no-break space (U+00A0 or U+202F)
@@ -21,7 +21,7 @@ function badOnes(texts: readonly string[]): string[] {
 describe("no-break spaces in the proposal's words", () => {
   const shifts: PageShift[] = [{ id: "a", roleName: "Bar", date: "2031-07-07", capacity: 1, open: true }]
   const form = (extra: Partial<ProposalForm>): ProposalForm => ({
-    dates: [], postes: [], people: [], posteChoices: [], maxConsecutiveDays: "0", maxNightAddOns: "x", seed: "x", ...extra,
+    dates: [], postes: [], people: [], posteChoices: [], maxConsecutiveDays: "0", maxNightAddOns: "x", ...extra,
   })
 
   it("covers states, sentences, problems, history, recaps and staleness", () => {
@@ -40,7 +40,9 @@ describe("no-break spaces in the proposal's words", () => {
     texts.push(...r.problems.map((p) => p.message), ...summaryProblems(r.problems).map((p) => p.message), TARGET_FIELD_ERROR)
     const coverage = { seats: 31, filled: 29, criticalSeats: 20, criticalFilled: 19, reserveSeats: 2, reserveFilled: 1 }
     texts.push(coverageLine(coverage), ...coverageDetails(coverage))
-    texts.push(historyEntry({ status: "finished", outcome: "proven_impossible", seed: 2026, writtenAt: new Date(), writtenCount: 29, coverage }, "30 octobre à 23:22"))
+    texts.push(historyEntry({ ordinal: 3, status: "finished", outcome: "proven_impossible", writtenAt: new Date(), writtenCount: 29, coverage }, "30 octobre à 23:22"))
+    texts.push(runLine(3, "30 octobre à 23:22"), ANOTHER_HINT, ONLY_ONE_SENTENCE, sameAsSentence(2))
+    for (const n of [1, 2]) { const r = anotherReplaceRecap(n, 3); texts.push(r.title, r.lead, ...r.lines, r.confirmLabel) }
     texts.push(rotationSummary([{ roleName: "Bar", category: "Bars", night: true, reserve: 1 }], "2", "2"))
     texts.push(droppedSentence([{ reason: "availability" }, { reason: "zzz" }])!)
     texts.push(staleSentence(Object.keys(INPUT_PART_WORDS) as InputPart[])!)

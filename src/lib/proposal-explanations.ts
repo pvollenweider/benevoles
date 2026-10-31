@@ -74,6 +74,13 @@ export type ProposalReport = {
   gaps: GapReport[]
   people: PersonReport[]
   coverage: { seats: number; filled: number; criticalSeats: number; criticalFilled: number; reserveSeats: number; reserveFilled: number }
+  /**
+   * Set (true) when no other assignment can cover as many seats: every statically eligible pair of the
+   * scope is used, so any other valid set is a strict subset and covers fewer seats (Codex
+   * 2026-10-31). Absent otherwise, and on runs stored before it existed. Dropped when a person is
+   * scrubbed from the run.
+   */
+  onlyOne?: true
 }
 
 /** The report of a search's result on its model (the model's eligibility computed). */
@@ -153,10 +160,13 @@ export function buildReport(model: Model, result: Pick<SolveOutcome, "assignment
     filled += Math.min(got, free); criticalFilled += Math.min(got, crit); reserveFilled += Math.min(got, reserve)
   }
 
+  const eligiblePairs = model.open.reduce((n, s) => n + model.candidates.get(s.id)!.length, 0)
+  const onlyOne = result.execution === "finished" && model.ready() && assignments.length === eligiblePairs
   return {
     version: REPORT_VERSION, outcome: outcomeOf(result.score, certs), execution: result.execution, stopReason: result.stopReason,
     certificates: certs, assignments, gaps, people,
     coverage: { seats, filled, criticalSeats, criticalFilled, reserveSeats, reserveFilled },
+    ...(onlyOne ? { onlyOne: true as const } : {}),
   }
 }
 

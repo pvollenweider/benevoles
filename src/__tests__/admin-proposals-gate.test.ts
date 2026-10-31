@@ -31,6 +31,8 @@ function scopedDb(event: Record<string, unknown> | null, runs = 0) {
     draftAssignment: delegate("draftAssignment"),
     $transaction: vi.fn(),
     $executeRaw: vi.fn().mockResolvedValue(0),
+    // The runs' ordinals (« Proposition 3 »), read with the list.
+    $queryRaw: vi.fn().mockResolvedValue([]),
   }
   guard.value = { db, organizationId: "org-a", session: { user: { id: "adm-a", role: "owner", organizationId: "org-a" } } }
   return { db, touched }
@@ -50,6 +52,7 @@ async function everyRoute() {
   return [
     ["GET proposals", () => list.GET(req("GET"), p)],
     ["POST proposals", () => list.POST(req("POST", { idempotencyKey: "key-12345678", configuration: config }), p)],
+    ["POST proposals (another)", () => list.POST(req("POST", { idempotencyKey: "key-12345678", anotherOf: "run-a" }), p)],
     ["GET proposals/[runId]", () => one.GET(req("GET"), p)],
     ["POST cancel", () => cancel.POST(req("POST"), p)],
     ["POST write", () => write.POST(req("POST"), p)],

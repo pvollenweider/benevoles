@@ -4,7 +4,7 @@
 import { createHash } from "node:crypto"
 import { usesAvailability, type AnswerForFit } from "./availability-assist"
 import { readAnswersForFit, readAvailabilityGate } from "./availability-assist-data"
-import { inputParts, type InputPart, type ProposalConfig } from "./proposal-config"
+import { DEFAULT_PROPOSAL_SEED, inputParts, type InputPart, type ProposalConfig } from "./proposal-config"
 import { DEFAULT_PROPOSAL_BUDGET, PROPOSAL_INPUT_VERSION, type ProposalInput, type ProposalPerson, type ProposalShift } from "./proposal-input"
 import type { OrgScopedPrisma } from "./prisma-org"
 import { COMMITTED_STATUSES, LIVE_STATUSES, OCCUPYING_STATUSES, type Tx } from "./registration-capacity"
@@ -150,7 +150,7 @@ export async function buildProposalSnapshot(db: Db, eventId: string, config: Pro
     availability: { timeZone: gate.timeZone, dates: [...gate.dates] },
     policy: workload.kind === "on" ? workload.policy : null,
     rotation: config.rotation,
-    seed: config.seed,
+    seed: config.seed ?? DEFAULT_PROPOSAL_SEED,
     budget: { evaluations: config.budget?.evaluations ?? DEFAULT_PROPOSAL_BUDGET.evaluations, stagnation: DEFAULT_PROPOSAL_BUDGET.stagnation },
     shifts,
     people: people.map((p): ProposalPerson => ({

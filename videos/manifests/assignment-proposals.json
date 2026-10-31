@@ -50,13 +50,13 @@
     },
     {
       "id": "ap-launch",
-      "transcript": "Rotation, nuit et réserve reste replié, sans réglage. Dans Paramètres de calcul, tapons le numéro de tirage deux mille vingt-six : même numéro, mêmes données, même proposition. Puis Générer une proposition.",
-      "fallbackDurationMs": 13350
+      "transcript": "Rotation, nuit et réserve reste replié, sans réglage. Puis Générer une proposition : avec les mêmes données et les mêmes réglages, ce premier calcul donne la même proposition.",
+      "fallbackDurationMs": 12900
     },
     {
       "id": "ap-result",
-      "transcript": "En quelques secondes, le résultat s'affiche en haut de la page : vingt-neuf places couvertes sur trente et une, écrites dans les brouillons. Couverture complète impossible : personne n'est disponible pour tout le rangement du Kiosque, dimanche soir, et la raison est écrite.",
-      "fallbackDurationMs": 18080
+      "transcript": "En quelques secondes, le résultat s'affiche en haut de la page : vingt-neuf places couvertes sur trente et une, écrites dans les brouillons. Couverture complète impossible : personne n'est disponible pour tout le rangement du Kiosque, dimanche soir, et la raison est écrite. Proposer une autre répartition en chercherait une autre, sur le même périmètre.",
+      "fallbackDurationMs": 23130
     },
     {
       "id": "ap-load",
@@ -85,13 +85,13 @@
       "Sur la page Affectations en brouillon, ouvrez Générer une proposition.",
       "Dans Nouvelle proposition, vérifiez Ce qui est vérifié, puis choisissez les dates et les postes dans Périmètre.",
       "Incluez les personnes, choisissez Appliquer la suggestion pour remplir les objectifs d'heures et ajustez celui de chacun.",
-      "Indiquez si besoin un Poste souhaité ou un Poste à éviter, ouvrez au besoin Rotation, nuit et réserve ou Paramètres de calcul, puis choisissez Générer une proposition.",
-      "Lisez le résultat, en haut de la page : les places couvertes, l'état, les Places restées vides avec leur raison, la Charge par personne et les Affectations proposées.",
+      "Indiquez si besoin un Poste souhaité ou un Poste à éviter, ouvrez au besoin Rotation, nuit et réserve, puis choisissez Générer une proposition.",
+      "Lisez le résultat, en haut de la page : les places couvertes, l'état, les Places restées vides avec leur raison, la Charge par personne et les Affectations proposées. Proposer une autre répartition en cherche une autre, sur le même périmètre et avec les mêmes réglages.",
       "Dans Affectations en brouillon, verrouillez ou corrigez les brouillons (un retrait demande une confirmation), puis choisissez Publier les affectations quand vous êtes prêt."
     ],
     "remember": [
       "Une personne n'est placée que sur un créneau entièrement couvert par ses disponibilités, en respectant les règles de l'événement et la protection des pauses et de la charge, qui doit être activée.",
-      "Avec le même numéro de tirage et les mêmes données, la proposition est toujours la même.",
+      "Avec les mêmes choix et les mêmes données, une première proposition est toujours la même ; Proposer une autre répartition en cherche une autre, si elle existe.",
       "Une nouvelle proposition ne remplace jamais un brouillon verrouillé, marqué d'un cadenas, ni un brouillon manuel.",
       "Rien n'est publié et aucun bénévole n'est prévenu avant Publier les affectations. C'est une fonction en bêta : votre organisation doit participer à la bêta."
     ]

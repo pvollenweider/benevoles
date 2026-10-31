@@ -33,7 +33,6 @@ export const PROPOSALS_OWNER_EMAIL = OWNER_EMAIL
 
 /** What the take chooses and types (the fixture test builds the same configuration). */
 export const AP_TYPED = {
-  seed: "2026",
   target: { key: "noah", firstName: "Noah", hours: "6" },
   prefer: { key: "emma", firstName: "Emma", poste: "Bar des Tilleuls" },
   avoid: { key: "lucas", firstName: "Lucas", poste: "Parking" },
@@ -57,6 +56,8 @@ export const AP_EXPECTED = {
   targetLoad: "6 h prévues pour un objectif de 6 h : objectif atteint.",
   wishSentence: "Disponible sur tout le créneau. Place du minimum de ce créneau. Charge prévue : 8 h pour un objectif de 12 h. Poste souhaité.",
   drafts: "29 affectations en brouillon pour 11 personnes.",
+  /** The line under « Proposer une autre répartition » (src/lib/proposal-view.ts ANOTHER_HINT). */
+  anotherHint: "Même périmètre et mêmes réglages\u00a0: rechercher une autre répartition, si elle existe.",
   /** The planning's « À pourvoir » row before the proposal, Friday to Sunday (capacities of the seed). */
   coverage: ["7 places à pourvoir", "11 places à pourvoir", "13 places à pourvoir"],
 } as const
@@ -148,18 +149,11 @@ export async function recordAssignmentProposals(options: Options) {
 
   let proposalStartedAt = 0
   await scene("ap-launch", async at => {
-    await at("Dans Paramètres de calcul")
-    // « Rotation, nuit et réserve » stays folded, with nothing set.
+    // « Rotation, nuit et réserve » stays folded, with nothing set; no seed to type (owner decision 2026-10-31).
     const rotation = page.locator("details").filter({ has: page.locator("summary", { hasText: "Rotation, nuit et réserve (facultatif)" }) })
-    await rotation.locator("summary", { hasText: "Aucun réglage" }).waitFor()
+    await rotation.locator("summary", { hasText: "Aucun réglage" }).scrollIntoViewIfNeeded()
     assert.equal(await rotation.evaluate((d) => (d as HTMLDetailsElement).open), false, "rotation settings stay folded")
-    const details = page.locator("details").filter({ has: page.locator("summary", { hasText: "Paramètres de calcul (facultatif)" }) })
-    await tap(page, details.locator("summary"))
-    const seed = page.getByRole("textbox", { name: "Numéro de tirage", exact: true })
-    await tap(page, seed)
-    await seed.fill("")
-    await seed.pressSequentially(AP_TYPED.seed, { delay: 95 })
-    assert.equal(await seed.inputValue(), AP_TYPED.seed)
+    assert.equal(await page.getByText("Paramètres de calcul", { exact: false }).count(), 0, "no computation settings: the seed is internal")
     await at("Puis Générer une proposition")
     proposalStartedAt = performance.now()
     await tap(page, page.getByRole("button", { name: "Générer une proposition", exact: true }))
@@ -178,10 +172,17 @@ export async function recordAssignmentProposals(options: Options) {
     assert(await page.locator("#proposal-result").evaluate((h) => !!(h.compareDocumentPosition(document.getElementById("proposal-new")!) & Node.DOCUMENT_POSITION_FOLLOWING)), "the result is above the form")
     await at("Couverture complète impossible")
     await result.getByText(AP_EXPECTED.state, exact).waitFor()
-    await result.getByText(`tirage n° ${AP_TYPED.seed}.`, { exact: false }).waitFor()
+    // The first proposal of the event, told apart by its ordinal, never by a draw number.
+    await result.getByText("Proposition 1, lancée le", { exact: false }).waitFor()
     const gaps = result.getByRole("heading", { level: 3, name: "Places restées vides (1)", exact: true })
     await gaps.scrollIntoViewIfNeeded()
     await result.locator("li").filter({ hasText: AP_EXPECTED.gapPoste }).filter({ hasText: AP_EXPECTED.gapReason }).waitFor()
+    await at("Proposer une autre répartition")
+    // Shown, never clicked: the take keeps this first proposal.
+    const another = result.getByRole("button", { name: "Proposer une autre répartition", exact: true })
+    await another.scrollIntoViewIfNeeded()
+    await another.waitFor()
+    await result.getByText(AP_EXPECTED.anotherHint, exact).waitFor()
   })
 
   await scene("ap-load", async at => {
