@@ -56,13 +56,13 @@ describe("DraftBoard", () => {
     expect(container.querySelector("#day-cell-v-n-2031-07-11")).not.toBeNull()
   })
 
-  it("keeps the row header to the name, reads full dates, and names the cell buttons with person and date", () => {
+  it("keeps the row header to the name, reads full dates, and names the cell buttons (the draft itself, « + Ajouter ») with person and date", () => {
     view()
     const table = screen.getByRole("table", { name: /Affectations par personne et par jour/ })
     expect(within(table.querySelector("tbody")!).getByRole("rowheader")).toHaveTextContent(/^Nadia Rochat$/)
     expect(within(table).getByRole("columnheader", { name: "Vendredi 11 juillet" })).toBeInTheDocument()
     expect(within(table).getByRole("button", { name: "Ajouter une affectation pour Nadia Rochat le vendredi 11 juillet" })).toBeInTheDocument()
-    expect(within(table).getByRole("button", { name: /^Voir le brouillon, Nadia Rochat, Bar, Nuit, de 22h à 2h/ })).toBeInTheDocument()
+    expect(within(table).getByRole("button", { name: /^Nadia Rochat, vendredi 11 juillet\W+Bar\W+Nuit, de 22h à 2h/ })).toBeInTheDocument()
   })
 
   it("links each blocking problem to the person and date, and holds the publish button with its reason", () => {
@@ -138,7 +138,7 @@ describe("DraftBoard", () => {
   it("asks for the acknowledgement before recording a review, and sends its key once ticked", async () => {
     fetchMock.mockResolvedValue({ ok: true, status: 200, json: async () => ({ draft: { id: "d1", revision: 3 } }) })
     view()
-    fireEvent.click(within(screen.getByRole("table")).getByRole("button", { name: /^Voir le brouillon/ }))
+    fireEvent.click(within(screen.getByRole("table")).getByRole("button", { name: /vendredi 11 juillet\W+Bar\W+Nuit/ }))
     const dialog = screen.getByRole("dialog")
     fireEvent.click(within(dialog).getByRole("button", { name: "Enregistrer la relecture" }))
     expect(dialog).toHaveAccessibleName(/^Brouillon de Nadia Rochat\W+Bar, Nuit, vendredi 11 juillet, de 22h à 2h/)
@@ -156,7 +156,7 @@ describe("DraftBoard", () => {
   it("removes a draft after a confirmation and puts focus back on the cell's « Ajouter »", async () => {
     fetchMock.mockResolvedValue({ ok: true, status: 200, json: async () => ({ ok: true }) })
     view()
-    fireEvent.click(within(screen.getByRole("table")).getByRole("button", { name: /^Voir le brouillon/ }))
+    fireEvent.click(within(screen.getByRole("table")).getByRole("button", { name: /vendredi 11 juillet\W+Bar\W+Nuit/ }))
     const dialog = screen.getByRole("dialog")
     within(dialog).getByRole("button", { name: "Retirer ce brouillon" }).focus()
     fireEvent.click(within(dialog).getByRole("button", { name: "Retirer ce brouillon" }))
@@ -201,7 +201,7 @@ describe("DraftBoard with generated proposals (#1172)", () => {
     expect(within(table).getByText("Proposé")).toBeInTheDocument()
     // One pill for the kind: « Proposé » replaces « Brouillon » (independent review, P1 #5).
     expect(within(table).queryByText("Brouillon")).not.toBeInTheDocument()
-    fireEvent.click(within(table).getByRole("button", { name: /^Voir le brouillon, Nadia Rochat.*, proposé, pas disponible à ces heures$/ }))
+    fireEvent.click(within(table).getByRole("button", { name: /^Nadia Rochat, vendredi 11 juillet\W+Bar\W+Nuit.*Pas disponible à ces heures\W+Proposé\W/ }))
     const dialog = screen.getByRole("dialog")
     // Reviewing it would lock it: said before, on the button (independent review, P1 #6).
     expect(within(dialog).getByRole("button", { name: "Enregistrer la relecture" })).toHaveAccessibleDescription(/^Enregistrer la relecture verrouille ce brouillon\W+une nouvelle proposition ne le remplacera pas\.$/)
@@ -229,7 +229,7 @@ describe("DraftBoard with generated proposals (#1172)", () => {
   it("takes the draft's real state after a refused lock, in place (finding 12)", async () => {
     fetchMock.mockResolvedValue({ ok: false, status: 409, json: async () => ({ error: "Ce brouillon a changé entre-temps." }) })
     const r = render(<DraftBoard eventId="evt" board={proposalBoard()} day="2031-07-11" view="grid" scope="event" basePath="/x" proposals />)
-    fireEvent.click(within(screen.getByRole("table", { name: /Affectations par personne/ })).getByRole("button", { name: /^Voir le brouillon/ }))
+    fireEvent.click(within(screen.getByRole("table", { name: /Affectations par personne/ })).getByRole("button", { name: /vendredi 11 juillet\W+Bar\W+Nuit/ }))
     const dialog = screen.getByRole("dialog")
     const lock = within(dialog).getByRole("button", { name: "Verrouiller" })
     lock.focus()
@@ -251,7 +251,7 @@ describe("DraftBoard with generated proposals (#1172)", () => {
 
   it("offers no lock without proposals", () => {
     render(<DraftBoard eventId="evt" board={proposalBoard()} day="2031-07-11" view="grid" scope="event" basePath="/x" />)
-    fireEvent.click(within(screen.getByRole("table", { name: /Affectations par personne/ })).getByRole("button", { name: /^Voir le brouillon/ }))
+    fireEvent.click(within(screen.getByRole("table", { name: /Affectations par personne/ })).getByRole("button", { name: /vendredi 11 juillet\W+Bar\W+Nuit/ }))
     expect(within(screen.getByRole("dialog")).queryByRole("button", { name: "Verrouiller" })).not.toBeInTheDocument()
   })
 })
@@ -260,8 +260,8 @@ describe("DraftBoard: states, coverage and reviews (independent review)", () => 
   it("says availability outside the answer as its own warning line, not a pill, before the kind", () => {
     view()
     const table = screen.getByRole("table", { name: /Affectations par personne et par jour/ })
-    const line = within(table).getByText("Pas disponible à ces heures")
-    expect(line.tagName).toBe("P")
+    const line = within(table).getByText("Pas disponible à ces heures").parentElement!
+    expect(line.className).not.toMatch(/rounded-full/)
     expect(line.querySelector("svg[aria-hidden='true']")).not.toBeNull()
     expect(line.className).toMatch(/92400e/)
     expect(within(table).getByText("Brouillon").className).not.toMatch(/92400e/)
@@ -309,7 +309,7 @@ describe("DraftBoard: states, coverage and reviews (independent review)", () => 
   it("elides the person in the dialog's title", () => {
     const emma = row({ firstName: "Emma", lastName: "Johansson" })
     view(board({ rows: [emma] }))
-    fireEvent.click(within(screen.getByRole("table")).getByRole("button", { name: /^Voir le brouillon/ }))
+    fireEvent.click(within(screen.getByRole("table")).getByRole("button", { name: /vendredi 11 juillet\W+Bar\W+Nuit/ }))
     expect(screen.getByRole("dialog")).toHaveAccessibleName(/^Brouillon d'Emma Johansson\W+Bar, Nuit/)
   })
 

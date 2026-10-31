@@ -534,44 +534,73 @@ function CellContent({ eventId, row, cell, layout, onDraft, onAdd }: { eventId: 
   const who = `${personName(row)}${row.sameNameHint ? ` (${row.sameNameHint})` : ""}`
   const date = lowerFirst(dayLabel(cell.date))
   return (
-    <div className="space-y-1.5">
+    <div className="space-y-1">
       <p className="text-xs text-gray-700">{cell.availability}</p>
       {cell.items.length > 0 && (
-        <ul role="list" className="space-y-1.5">
-          {cell.items.map((item) => {
-            const outside = !!item.fit && OUTSIDE_FITS.includes(item.fit)
-            return (
-              <li key={`${item.kind}-${item.draft?.id ?? item.shiftId}`} className="rounded-lg border border-gray-200 bg-gray-50 px-2 py-1.5 text-xs text-gray-900 space-y-1">
-                <p><span className="font-medium"><ShiftName name={item.name} /></span>, {item.time}</p>
-                {item.review ? (
-                  <p className="flex items-start gap-1 font-semibold text-[#92400e]"><WarningIcon />{item.review}</p>
-                ) : outside && (
-                  <p className="flex items-start gap-1 font-semibold text-[#92400e]"><WarningIcon />{item.fitLabel}</p>
-                )}
-                <p className="flex flex-wrap items-center gap-1">
-                  <span className={`${pill} ${KIND_BADGE[item.kind].className}`}>{kindLabel(item)}</span>
-                  {item.draft?.locked && <><span className="sr-only">, </span><LockedChip /></>}
-                </p>
-                {item.draft?.staleText && <p className="text-[#92400e]">{item.draft.staleText}</p>}
-                {item.draft && !item.draft.stale && item.draft.ackKey && !item.draft.acked && <p className="text-[#92400e]">Confirmation à donner avant publication.</p>}
-                {item.draft?.markers.map((m) => <p key={m} className="font-medium text-red-800">{m}</p>)}
-                {item.registrationId && item.review && (
-                  <p><Link href={registrationHref(eventId, item.shiftId, row)} className={linkClass}>Voir l&apos;inscription<span className="sr-only">, {who}, {spokenName(item.name)}, {date}</span></Link></p>
-                )}
-                {item.draft && (
-                  <button id={ids.draft(layout, item.draft.id)} type="button" onClick={() => onDraft(item)} className={smallButton}>
-                    Voir le brouillon<span className="sr-only">, {who}, {spokenName(item.name)}, {item.time}, {date}{item.draft.source === "proposal" ? ", proposé" : ""}{item.draft.locked ? ", verrouillé" : ""}{outside ? `, ${lowerFirst(item.fitLabel ?? "")}` : ""}</span>
-                  </button>
-                )}
-              </li>
-            )
-          })}
+        <ul role="list" className="space-y-1">
+          {cell.items.map((item) => (
+            <li key={`${item.kind}-${item.draft?.id ?? item.shiftId}`}>
+              {item.draft ? (
+                // The draft itself opens its dialog (density pass): one target per draft, named by
+                // the person and the date (sr-only), then everything the item shows.
+                <button id={ids.draft(layout, item.draft.id)} type="button" onClick={() => onDraft(item)}
+                  className={`block w-full rounded-md border border-gray-500 bg-white px-2 py-1 text-left text-xs text-gray-900 hover:border-blue-600 hover:bg-blue-50 ${focusRing}`}>
+                  <span className="sr-only">{who}, {date} : </span>
+                  <ItemLines item={item} />
+                </button>
+              ) : (
+                <div className="py-0.5 text-xs text-gray-900">
+                  <ItemLines item={item} />
+                  {item.registrationId && item.review && (
+                    <Link href={registrationHref(eventId, item.shiftId, row)} className={`inline-block min-h-6 ${linkClass}`}>Voir l&apos;inscription<span className="sr-only">, {who}, {spokenName(item.name)}, {date}</span></Link>
+                  )}
+                </div>
+              )}
+            </li>
+          ))}
         </ul>
       )}
-      <button id={ids.add(layout, row.volunteerId, cell.date)} type="button" onClick={onAdd} className={`${smallButton} ${layout === "day" ? "min-h-11" : ""}`}>
-        Ajouter{" "}<span className="sr-only">une affectation pour {who} le {date}</span>
+      <button id={ids.add(layout, row.volunteerId, cell.date)} type="button" onClick={onAdd}
+        className={`-ml-1 inline-flex ${layout === "day" ? "min-h-11" : "min-h-6"} items-center rounded px-1 text-xs font-medium text-blue-700 underline-offset-2 hover:underline ${focusRing}`}>
+        <span aria-hidden="true">+ </span>Ajouter{" "}<span className="sr-only">une affectation pour {who} le {date}</span>
       </button>
     </div>
+  )
+}
+
+/**
+ * What one mission or draft shows, as spans (they may sit inside a button): the shift, then the
+ * most important fact, availability outside the answer (a warning line, never a pill), then one
+ * pill for the kind and the lock, then what is left to do in short words.
+ */
+function ItemLines({ item }: { item: BoardItem }) {
+  const outside = !!item.fit && OUTSIDE_FITS.includes(item.fit)
+  const warning = item.review ?? (outside ? item.fitLabel : null)
+  const pills = (
+    <>
+      <span className="sr-only">, </span>
+      <span className={`${pill} ${KIND_BADGE[item.kind].className}`}>{kindLabel(item)}</span>
+      {item.draft?.locked && <><span className="sr-only">, </span><LockedChip /></>}
+    </>
+  )
+  // Distill pass: without a warning, the pills sit on the shift's line (one line less per item);
+  // with one, the warning comes first, the most important fact, then the pills.
+  return (
+    <span className="block space-y-0.5">
+      <span className="flex flex-wrap items-center gap-x-1.5 gap-y-0.5">
+        <span><span className="font-medium"><ShiftName name={item.name} /></span>, {item.time}</span>
+        {!warning && pills}
+      </span>
+      {warning && (
+        <>
+          <span className="flex items-start gap-1 font-semibold text-[#92400e]"><span className="sr-only">, </span><WarningIcon /><span>{warning}</span></span>
+          <span className="flex flex-wrap items-center gap-1">{pills}</span>
+        </>
+      )}
+      {item.draft?.staleText && <span className="block text-[#92400e]"><span className="sr-only">, </span>{item.draft.staleText}</span>}
+      {item.draft && !item.draft.stale && item.draft.ackKey && !item.draft.acked && <span className="block text-[#92400e]"><span className="sr-only">, </span>Confirmation à donner avant publication.</span>}
+      {item.draft?.markers.map((m) => <span key={m} className="block font-medium text-red-800"><span className="sr-only">, </span>{m}</span>)}
+    </span>
   )
 }
 
@@ -611,7 +640,7 @@ function DraftDialog({ eventId, target, live, canLock, onClose }: { eventId: str
   const [error, setError] = useState<string | null>(null)
   const who = personName(row)
   const day = lowerFirst(dayLabel(date))
-  // The person in the title (independent review, P2 #12), as in the « Voir le brouillon » name.
+  // The person in the title (independent review, P2 #12), as in the name of the draft's button.
   const title = `Brouillon ${de(who)} : ${spokenName(item.name)}, ${day}, ${item.time}`
   const canReview = draft.stale || needsAck
   // Reviewing a generated draft locks it (#1172): said before the button, not discovered after.

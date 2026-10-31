@@ -210,7 +210,7 @@ export async function recordAssignmentProposals(options: Options) {
     // One pill per draft (independent review): « Proposé » replaces « Brouillon », never both.
     assert.equal(await emma.getByText("Brouillon", exact).count(), 0, "a proposed draft shows « Proposé » only")
     await at("Ouvrons celui d'Emma")
-    await tap(page, emma.getByRole("button", { name: new RegExp(`^Voir le brouillon\\W+${fullNameOf(AP_TYPED.locked.firstName)}, ${AP_TYPED.locked.poste},`) }))
+    await tap(page, emma.getByRole("button", { name: new RegExp(`^${fullNameOf(AP_TYPED.locked.firstName)}, vendredi \\d+ \\p{L}+\\W+${AP_TYPED.locked.poste},`, "u") }))
     // The dialog names the person (independent review): « Brouillon d'Emma Johansson : Bar des Tilleuls, vendredi… ».
     const dialog = page.getByRole("dialog", { name: new RegExp(`^Brouillon d'${fullNameOf(AP_TYPED.locked.firstName)}\\W+${AP_TYPED.locked.poste}, vendredi`) })
     await dialog.waitFor()
@@ -231,7 +231,7 @@ export async function recordAssignmentProposals(options: Options) {
     await at("Léa doit partir plus tôt vendredi")
     const lea = cellOf(AP_TYPED.removed.key, AP_TYPED.removed.day)
     await lea.scrollIntoViewIfNeeded()
-    const open = lea.getByRole("button", { name: new RegExp(`^Voir le brouillon\\W+${fullNameOf(AP_TYPED.removed.firstName)}, ${AP_TYPED.removed.poste},`) })
+    const open = lea.getByRole("button", { name: new RegExp(`^${fullNameOf(AP_TYPED.removed.firstName)}, vendredi \\d+ \\p{L}+\\W+${AP_TYPED.removed.poste},`, "u") })
     await at("ouvrons son brouillon de billetterie")
     await tap(page, open)
     const dialog = page.getByRole("dialog", { name: new RegExp(`^Brouillon de ${fullNameOf(AP_TYPED.removed.firstName)}\\W+${AP_TYPED.removed.poste}, vendredi`) })
