@@ -25,8 +25,11 @@ test("an admin invitation sends the link by email and never shows it", async ({ 
   await form.getByLabel("Email").fill(email)
   await form.getByRole("button", { name: "Envoyer l'invitation" }).click()
 
-  await expect(page.getByRole("status").filter({ hasText: `Invitation envoyée à ${email}.` }))
-    .toContainText("Le lien d'activation, valable 7 jours, lui a été envoyé par email.")
+  // The same answer for every address (it never says whether one is used elsewhere); the team list,
+  // read again, shows the pending invitation.
+  await expect(page.getByRole("status").filter({ hasText: `Si ${email.toLowerCase()} peut rejoindre l'équipe` }))
+    .toContainText("un lien d'activation valable 7 jours")
+  await expect(page.getByText(email.toLowerCase(), { exact: true })).toBeVisible()
   await expect(page.getByRole("button", { name: "Inviter" })).toBeFocused()
   await expect(page.getByText(/accept-invite/)).toHaveCount(0)
   await expect(page.getByRole("button", { name: /Copier le lien/ })).toHaveCount(0)

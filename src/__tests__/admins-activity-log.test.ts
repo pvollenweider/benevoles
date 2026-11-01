@@ -49,7 +49,7 @@ describe("POST /api/admin/settings/admins — activity log", () => {
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify({ email: "bob@x.com", name: "Bob" }),
     }))
-    expect(res.status).toBe(201)
+    expect(res.status).toBe(202)
     expect(orgLogCreate).toHaveBeenCalledWith(
       expect.objectContaining({ data: expect.objectContaining({ action: "adminuser.invited", entityType: "AdminUser", entityId: "adm-2" }) }),
     )

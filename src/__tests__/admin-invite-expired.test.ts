@@ -23,7 +23,10 @@ vi.mock("@/lib/prisma", () => ({
 vi.mock("@/lib/notifications/outbox", () => ({ enqueueNotifications: m.enqueue, deliverAfterResponse: () => {} }))
 vi.mock("bcryptjs", () => ({ default: { hash: vi.fn().mockResolvedValue("$h") }, hash: vi.fn().mockResolvedValue("$h") }))
 
-import { ADMIN_INVITE_SAME_ORG_ERROR, ADMIN_INVITE_UNAVAILABLE_ERROR } from "@/lib/admin-invitation"
+import { ADMIN_INVITE_SAME_ORG_ERROR } from "@/lib/admin-invitation"
+
+/** The answer for a sent invitation and for an address held elsewhere alike: it names nothing. */
+const ACCEPTED = { accepted: true }
 
 const DAY = 24 * 60 * 60 * 1000
 const holder = (over: object = {}) => ({
@@ -61,7 +64,7 @@ describe("POST /api/admin/settings/admins with an address already held (#1053)",
 
   it("looks the address up case-insensitively, like the unique index", async () => {
     m.findFirst.mockResolvedValue(null)
-    expect((await post()).status).toBe(201)
+    expect((await post()).status).toBe(202)
     expect(m.findFirst.mock.calls[0][0].where).toEqual({ email: { equals: "camille@example.org", mode: "insensitive" } })
     expect(m.deleteMany).not.toHaveBeenCalled()
   })
@@ -69,7 +72,7 @@ describe("POST /api/admin/settings/admins with an address already held (#1053)",
   it("replaces an expired invitation of another organisation, only while it is still that expired invitation", async () => {
     m.findFirst.mockResolvedValue(holder())
     const res = await post()
-    expect(res.status).toBe(201)
+    expect(res.status).toBe(202)
     const where = m.deleteMany.mock.calls[0][0].where
     expect(where).toMatchObject({ id: "old-1", isActive: false, setupTokenHash: "old-hash" })
     expect(where.setupTokenExpiresAt.lt).toBeInstanceOf(Date)
@@ -82,14 +85,15 @@ describe("POST /api/admin/settings/admins with an address already held (#1053)",
   it("leaves an invitation that expired less than an hour ago alone (an activation may be finishing)", async () => {
     m.findFirst.mockResolvedValue(holder({ setupTokenExpiresAt: new Date(Date.now() - 5 * 60 * 1000) }))
     const res = await post()
-    expect(res.status).toBe(409)
+    expect(res.status).toBe(202)
+    expect(await res.json()).toEqual(ACCEPTED)
     expect(m.deleteMany).not.toHaveBeenCalled()
     expect(m.create).not.toHaveBeenCalled()
   })
 
   it("lets the same organisation invite again once its invitation has expired", async () => {
     m.findFirst.mockResolvedValue(holder({ organizationId: "org-a" }))
-    expect((await post()).status).toBe(201)
+    expect((await post()).status).toBe(202)
     expect(m.deleteMany).toHaveBeenCalledTimes(1)
     expect(m.create).toHaveBeenCalledTimes(1)
   })
@@ -98,8 +102,8 @@ describe("POST /api/admin/settings/admins with an address already held (#1053)",
     m.findFirst.mockResolvedValue(holder())
     m.count.mockResolvedValue(0)
     const res = await post()
-    expect(res.status).toBe(409)
-    expect(await res.json()).toEqual({ error: ADMIN_INVITE_UNAVAILABLE_ERROR })
+    expect(res.status).toBe(202)
+    expect(await res.json()).toEqual(ACCEPTED)
     expect(m.deleteMany).not.toHaveBeenCalled()
     expect(m.create).not.toHaveBeenCalled()
   })
@@ -107,8 +111,8 @@ describe("POST /api/admin/settings/admins with an address already held (#1053)",
   it("refuses a valid invitation of another organisation without saying where the address is used", async () => {
     m.findFirst.mockResolvedValue(holder({ setupTokenExpiresAt: new Date(Date.now() + DAY) }))
     const res = await post()
-    expect(res.status).toBe(409)
-    expect(await res.json()).toEqual({ error: ADMIN_INVITE_UNAVAILABLE_ERROR })
+    expect(res.status).toBe(202)
+    expect(await res.json()).toEqual(ACCEPTED)
     expect(m.deleteMany).not.toHaveBeenCalled()
     expect(m.create).not.toHaveBeenCalled()
   })
@@ -116,8 +120,8 @@ describe("POST /api/admin/settings/admins with an address already held (#1053)",
   it("never touches an active account, here or elsewhere", async () => {
     m.findFirst.mockResolvedValue(holder({ isActive: true, setupTokenHash: null, setupTokenExpiresAt: null }))
     const elsewhere = await post()
-    expect(elsewhere.status).toBe(409)
-    expect(await elsewhere.json()).toEqual({ error: ADMIN_INVITE_UNAVAILABLE_ERROR })
+    expect(elsewhere.status).toBe(202)
+    expect(await elsewhere.json()).toEqual(ACCEPTED)
 
     m.findFirst.mockResolvedValue(holder({ organizationId: "org-a", isActive: true, setupTokenHash: null, setupTokenExpiresAt: null }))
     const here = await post()
@@ -139,8 +143,8 @@ describe("POST /api/admin/settings/admins with an address already held (#1053)",
     m.findFirst.mockResolvedValue(holder())
     m.deleteMany.mockResolvedValue({ count: 0 })
     const res = await post()
-    expect(res.status).toBe(409)
-    expect(await res.json()).toEqual({ error: ADMIN_INVITE_UNAVAILABLE_ERROR })
+    expect(res.status).toBe(202)
+    expect(await res.json()).toEqual(ACCEPTED)
     expect(m.create).not.toHaveBeenCalled()
     expect(m.enqueue).not.toHaveBeenCalled()
   })
@@ -149,8 +153,46 @@ describe("POST /api/admin/settings/admins with an address already held (#1053)",
     m.findFirst.mockResolvedValue(null)
     m.create.mockRejectedValue(Object.assign(new Error("unique"), { code: "P2002" }))
     const res = await post()
-    expect(res.status).toBe(409)
-    expect(await res.json()).toEqual({ error: ADMIN_INVITE_UNAVAILABLE_ERROR })
+    expect(res.status).toBe(202)
+    expect(await res.json()).toEqual(ACCEPTED)
     expect(m.orgLog).not.toHaveBeenCalled()
   })
 })
+
+describe("POST /api/admin/settings/admins: one answer, and a daily budget per organisation", () => {
+  beforeEach(() => {
+    vi.clearAllMocks()
+    m.deleteMany.mockResolvedValue({ count: 1 })
+    m.count.mockResolvedValue(1)
+    m.create.mockImplementation(async ({ data }: { data: { email: string; name: string; role: string } }) => ({ id: "new-1", ...data, isActive: false }))
+    m.enqueue.mockResolvedValue(["row-1"])
+  })
+  const asOrg = (organizationId: string) => m.guard.mockResolvedValue({
+    db: { organization: { findUnique: vi.fn().mockResolvedValue({ name: "Org", outboundEmailApprovedAt: new Date() }) } },
+    organizationId,
+    session: { user: { id: "owner-1", email: "owner@x.ch", role: "admin" } },
+  })
+
+  it("answers a free address and an address held elsewhere with the same status and body", async () => {
+    asOrg("org-same-answer")
+    m.findFirst.mockResolvedValueOnce(null)
+    const sent = await post()
+    m.findFirst.mockResolvedValueOnce(holder({ isActive: true, setupTokenHash: null, setupTokenExpiresAt: null }))
+    const held = await post()
+    expect([sent.status, await sent.text()]).toEqual([held.status, await held.text()])
+    expect(m.create).toHaveBeenCalledTimes(1)
+  })
+
+  it("counts every attempt, sent or not, and refuses past the daily budget", async () => {
+    const { ADMIN_INVITES_PER_DAY } = await import("@/lib/admin-invitation")
+    asOrg("org-budget")
+    m.findFirst.mockResolvedValue(holder({ isActive: true, setupTokenHash: null, setupTokenExpiresAt: null }))
+    for (let i = 0; i < ADMIN_INVITES_PER_DAY; i++) expect((await post()).status).toBe(202)
+    const refused = await post()
+    expect(refused.status).toBe(429)
+    // Another organisation keeps its own budget.
+    asOrg("org-other-budget")
+    expect((await post()).status).toBe(202)
+  })
+})
+

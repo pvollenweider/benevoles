@@ -117,7 +117,7 @@ describe("public payloads never carry the day-of contact", () => {
   it("GET /api/public/events", async () => {
     prismaMock.event.findMany.mockResolvedValue([eventRow])
     const { GET } = await import("@/app/api/public/events/route")
-    const res = await GET(new Request("http://localhost/api/public/events"))
+    const res = await GET()
     const text = await res.text()
     expect(text).toContain("Fête")
     expect(text).not.toContain(PHONE)
