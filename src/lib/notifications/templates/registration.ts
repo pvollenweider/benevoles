@@ -483,21 +483,28 @@ export function renderShiftCancelled(p: NotificationPayload): RenderedEmail {
 // ── Renvoi du lien de gestion ─────────────────────────────────────────────────
 
 export function renderRegistrationLinkResend(p: NotificationPayload): RenderedEmail {
-  const { volunteerName, eventTitle, orgSlug, editToken } = p.data as {
+  const { volunteerName, eventTitle, orgSlug, editToken, notRecorded } = p.data as {
     volunteerName: string
     eventTitle: string
     orgSlug?: string
-    editToken: string
+    /** Absent from a notice when the volunteer holds no live registration on the event. */
+    editToken?: string | null
+    /**
+     * A sign-up without proof of the address that the owner's own registrations stopped (AUTHZ-01):
+     * the form answered as usual, this email says what was not recorded and why.
+     */
+    notRecorded?: { reason: string }
   }
-  const editUrl = myPageUrl(orgSlug, editToken)
+  const editUrl = editToken ? myPageUrl(orgSlug, editToken) : null
   const firstName = volunteerName.split(" ")[0]
+  if (notRecorded) return renderNotRecorded({ firstName, eventTitle, reason: notRecorded.reason, editUrl })
   const subject = `Ton lien pour gérer tes inscriptions — ${eventTitle}`
 
   const text = [
     `Hello ${firstName} !`,
     ``,
     `Voici ton lien personnel pour gérer tes inscriptions à ${eventTitle} :`,
-    editUrl,
+    editUrl ?? "",
     ``,
     `À très vite !`,
   ].join("\n")
@@ -505,9 +512,28 @@ export function renderRegistrationLinkResend(p: NotificationPayload): RenderedEm
   const html = wrap(`
     <h2 style="margin:0 0 0.25em">Hello ${escapeHtml(firstName)} ! 👋</h2>
     <p style="color:#555;margin:0 0 1.25em">Voici ton lien personnel pour gérer tes inscriptions à <strong>${escapeHtml(eventTitle)}</strong>.</p>
-    <p style="margin-top:1.5em">${btn(editUrl, "Gérer mes inscriptions")}</p>
+    ${editUrl ? `<p style="margin-top:1.5em">${btn(editUrl, "Gérer mes inscriptions")}</p>` : ""}
     <p style="color:#666;font-size:0.85em;margin-top:2em">À très vite !</p>
   `, `Ton lien pour ${escapeHtml(eventTitle)}`)
 
+  return { subject, html, text }
+}
+
+/** The notice of a sign-up not recorded (AUTHZ-01): what, why, and the personal link if any. */
+function renderNotRecorded(o: { firstName: string; eventTitle: string; reason: string; editUrl: string | null }): RenderedEmail {
+  const subject = `Demande d'inscription non enregistrée — ${o.eventTitle}`
+  const lead = `Une demande d'inscription à ${o.eventTitle} a été faite avec ton adresse email. Elle n'a pas été enregistrée : ${o.reason}.`
+  const ifYou = o.editUrl
+    ? "Si c'était toi, utilise ton lien personnel pour consulter tes inscriptions et choisir d'autres créneaux :"
+    : "Si c'était toi, choisis d'autres créneaux sur la page de l'événement."
+  const ifNot = "Si ce n'était pas toi, tu n'as rien à faire : cette demande n'a rien changé."
+  const text = [`Bonjour ${o.firstName},`, ``, lead, ``, ifYou, ...(o.editUrl ? [o.editUrl] : []), ``, ifNot].join("\n")
+  const html = wrap(`
+    <h2 style="margin:0 0 0.25em">Bonjour ${escapeHtml(o.firstName)},</h2>
+    <p style="color:#555;margin:0 0 1em">Une demande d'inscription à <strong>${escapeHtml(o.eventTitle)}</strong> a été faite avec ton adresse email. Elle n'a pas été enregistrée : ${escapeHtml(o.reason)}.</p>
+    <p style="color:#555;margin:0 0 1em">${escapeHtml(ifYou)}</p>
+    ${o.editUrl ? `<p style="margin-top:1em">${btn(o.editUrl, "Gérer mes inscriptions")}</p>` : ""}
+    <p style="color:#666;font-size:0.85em;margin-top:2em">${escapeHtml(ifNot)}</p>
+  `, `Demande d'inscription non enregistrée pour ${escapeHtml(o.eventTitle)}`)
   return { subject, html, text }
 }

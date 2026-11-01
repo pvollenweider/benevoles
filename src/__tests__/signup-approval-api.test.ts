@@ -17,21 +17,25 @@ const m = vi.hoisted(() => ({
   confirmation: vi.fn(),
 }))
 
-vi.mock("@/lib/prisma", () => ({
+vi.mock("@/lib/prisma", async () => {
+  const locked = (await import("./helpers/locked-shifts")).lockedShiftReads()
+  return ({
   prisma: {
+      charterVersion: { upsert: vi.fn() },
     eventQuestion: { findMany: vi.fn().mockResolvedValue([]) },
     event: { findFirst: vi.fn().mockResolvedValue({ id: "evt-1", organizationId: "org-a", title: "Fête", organization: { slug: "a", timeZone: null }, confirmationMessage: "Merci !" }) },
-    shift: { findMany: vi.fn().mockResolvedValue([{ id: "s1", label: "Chauffeur navette", roleName: "Chauffeur", capacity: 1, minAge: null, waitlistEnabled: true, requiresApproval: true, registrations: [], date: new Date("2030-06-01T00:00:00Z"), startTime: "08:00", endTime: "12:00" }]) },
+    shift: { findMany: locked.top(vi.fn().mockResolvedValue([{ id: "s1", label: "Chauffeur navette", roleName: "Chauffeur", capacity: 1, minAge: null, waitlistEnabled: true, requiresApproval: true, registrations: [], date: new Date("2030-06-01T00:00:00Z"), startTime: "08:00", endTime: "12:00" }])) },
     volunteer: { findFirst: vi.fn().mockResolvedValue({ id: "vol-1" }) },
     registration: { findMany: m.regFindMany },
-    memberInvite: { findFirst: vi.fn() },
+    memberInvite: { findFirst: vi.fn().mockResolvedValue({ id: "inv-1" }), updateMany: vi.fn().mockResolvedValue({ count: 1 }) },
     $transaction: vi.fn(async (fn: (tx: unknown) => unknown) => fn({
       $queryRaw: vi.fn().mockResolvedValue([{ id: "locked", erasedAt: null, email: "marc@x.ch" }]), // #516: a locked match, not erased, still at the address
-      shift: { findMany: vi.fn().mockResolvedValue([]) },
-      volunteer: { createMany: vi.fn(), findFirstOrThrow: vi.fn() },
+      shift: { findMany: locked.tx(vi.fn().mockResolvedValue([])) },
+      volunteer: { createMany: vi.fn(), findFirstOrThrow: vi.fn(), update: vi.fn() },
+      memberInvite: { findFirst: vi.fn().mockResolvedValue({ id: "inv-1" }) },
       charterVersion: { upsert: vi.fn() },
       rosterConsent: { findUnique: vi.fn().mockResolvedValue(null), upsert: vi.fn() },
-      registration: {
+      registration: { findFirst: vi.fn().mockResolvedValue(null),
         findMany: m.txRegFindMany,
         count: vi.fn().mockResolvedValue(0),
         aggregate: vi.fn().mockResolvedValue({ _max: { waitingPosition: null } }),
@@ -39,7 +43,8 @@ vi.mock("@/lib/prisma", () => ({
       },
     })),
   },
-}))
+})
+})
 vi.mock("@/lib/notification-helpers", () => ({ sendConfirmationEmail: m.confirmation, sendAdminNotification: vi.fn() }))
 vi.mock("@/lib/notifications", () => ({ sendNotification: vi.fn() }))
 vi.mock("@/lib/notifications/outbox", () => ({
@@ -50,11 +55,11 @@ vi.mock("@/lib/notifications/outbox", () => ({
 vi.mock("@/lib/sector-leaders", () => ({ notifySectorLeadersOfSignup: m.leaders }))
 vi.mock("@/lib/event-log", () => ({ logEvent: m.logEvent }))
 
-function post() {
+function post(extra: Record<string, unknown> = {}) {
   return new Request("http://localhost/api/public/registrations", {
     method: "POST",
     headers: { "Content-Type": "application/json", "x-forwarded-for": `test-${Math.random()}` },
-    body: JSON.stringify({ eventId: "evt-1", shiftIds: ["s1"], firstName: "Marc", lastName: "D", email: "marc@x.ch", consent: true, charterAccepted: true }),
+    body: JSON.stringify({ eventId: "evt-1", shiftIds: ["s1"], firstName: "Marc", lastName: "D", email: "marc@x.ch", consent: true, charterAccepted: true, ...extra }),
   })
 }
 
@@ -74,12 +79,19 @@ describe("public sign-up on a « Sur validation » shift", () => {
     expect(m.confirmation).not.toHaveBeenCalled()
     expect(m.leaders).not.toHaveBeenCalled()
     expect(m.logEvent.mock.calls[0][0].action).toBe("registration.requested")
+    // Without proof of the address (AUTHZ-01), the answer says nothing of the outcome: the email does.
+    expect(await res.json()).toEqual({ success: true, editToken: null, linkSentByEmail: true, received: true })
+  })
+
+  it("with proof of the address, the answer says it is a request", async () => {
+    const { POST } = await import("@/app/api/public/registrations/route")
+    const res = await POST(post({ inviteToken: "inv-tok" }))
     expect(await res.json()).toMatchObject({ requestedShifts: 1, activeShifts: 0, onWaitlist: false, confirmationMessage: null })
   })
 
   it("a pending request counts for the overlap checks, before and under the lock", async () => {
     const { POST } = await import("@/app/api/public/registrations/route")
-    await POST(post())
+    await POST(post({ inviteToken: "inv-tok" }))
     const overlapQuery = m.regFindMany.mock.calls.find((c) => c[0].include?.shift)
     expect(overlapQuery?.[0].where.status).toEqual({ in: ["active", "requested"] })
     expect(m.txRegFindMany.mock.calls[0][0].where.status).toEqual({ in: ["active", "requested"] })

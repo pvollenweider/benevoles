@@ -38,8 +38,12 @@ describe("planRestore (#809)", () => {
     expect(planRestore({ ...base, now: new Date("2026-07-04T08:00:00Z") })).toMatchObject({ ok: false, reason: "started" })
   })
 
-  it("never overbooks: refused once the spot was taken", () => {
-    expect(planRestore({ ...base, occupied: 2 })).toMatchObject({ ok: false, reason: "full", message: "Ce créneau est complet : la place a été reprise." })
+  it("leaves a full shift to the organiser's confirmation (AUTHZ-15), judged by the caller", () => {
+    expect(planRestore({ ...base, occupied: 2 })).toEqual({ ok: true, status: "active" })
+  })
+
+  it("says to reopen a cancelled shift first", () => {
+    expect(planRestore({ ...base, shiftStatus: "cancelled" })).toMatchObject({ message: "Ce créneau est annulé\u00a0: rien n'a été fait. Rouvrez d'abord le créneau." })
   })
 })
 
@@ -73,14 +77,21 @@ describe("recentCancellations (#809)", () => {
   it("offers « Rétablir » with who cancelled and when, in the organisation's time zone", () => {
     expect(recentCancellations([row()], now, "Europe/Zurich")).toEqual([{
       id: "r1", volunteerId: "v1", shiftId: "s1", volunteerName: "Chloé Roy", hasEmail: true, shift: "Bar, samedi 4 juillet, de 10h à 12h",
-      previousStatus: "active", cancelled: "Annulée par la personne le 30 juin à 14:05", blocked: null,
+      previousStatus: "active", cancelled: "Annulée par la personne le 30 juin à 14:05", blocked: null, override: null,
     }])
     expect(recentCancellations([row({ cancellation: { actorType: "admin", at: new Date("2026-06-30T12:05:00Z"), changes: { status: { from: "requested" } } } })], now, "UTC")[0])
       .toMatchObject({ previousStatus: "requested", cancelled: "Annulée par l'organisation le 30 juin à 12:05" })
   })
 
-  it("keeps a full shift or a person signed up again, with the reason instead of the button", () => {
-    expect(recentCancellations([row({ occupied: 2 })], now, "UTC")[0].blocked).toBe("Complet : la place a été reprise.")
+  it("keeps « Rétablir » on a full or closed shift, with the confirmation it needs (AUTHZ-15)", () => {
+    const parts = { roleName: "Bar", label: "Bar", date: "2026-07-04", startTime: "10:00", endTime: "12:00" }
+    const full = recentCancellations([row({ occupied: 2, shiftParts: parts })], now, "UTC")[0]
+    expect(full.blocked).toBeNull()
+    expect(full.override).toMatchObject({ shiftId: "s1", full: true, closed: false, occupied: 2, capacity: 2, key: "o1|restore|r1|s1|open|2|2", roleName: "Bar" })
+    expect(recentCancellations([row({ shiftStatus: "closed", shiftParts: parts })], now, "UTC")[0].override).toMatchObject({ closed: true, full: false })
+  })
+
+  it("keeps a person signed up again, with the reason instead of the button", () => {
     expect(recentCancellations([row({ liveAgainOnShift: true })], now, "UTC")[0].blocked).toBe("Cette personne a une autre inscription en cours sur ce créneau.")
   })
 

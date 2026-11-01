@@ -3,7 +3,7 @@
 // SPDX-FileCopyrightText: 2026 Philippe Vollenweider
 // SPDX-License-Identifier: AGPL-3.0-only
 
-import { useId, useRef, useState, type ReactNode } from "react"
+import { useEffect, useId, useRef, useState, type ReactNode } from "react"
 import { flushSync } from "react-dom"
 import ModalShell from "@/components/admin/ModalShell"
 import type { ActionRecap } from "@/lib/action-recap"
@@ -25,15 +25,33 @@ type Props = {
    * the confirm button relaunches): a plain button, never the form's submit.
    */
   secondaryAction?: { label: string; onClick: () => void; busy?: boolean; failed?: boolean }
+  /**
+   * A warning that appears while the dialog is open (AUTHZ-15: the server says the shift is full or
+   * closed). A description added after opening is not read, so it is said once through an alert,
+   * and focus goes back to Cancel: a second Enter on the confirm button never overrides unheard.
+   */
+  lateWarning?: { text: string } | null
 }
 
 /**
  * Confirmation of a sensitive action (#379): the recap of what is about to happen (people,
  * emails, consequences, logging), Cancel focused first, Confirm styled by the stakes.
  */
-export default function ConfirmActionModal({ recap, busy, onConfirm, onCancel, error, challenge, children, secondaryAction }: Props) {
+export default function ConfirmActionModal({ recap, busy, onConfirm, onCancel, error, challenge, children, secondaryAction, lateWarning }: Props) {
   const id = useId()
   const cancelRef = useRef<HTMLButtonElement>(null)
+  const [lateSaid, setLateSaid] = useState("")
+  // A new object for each refusal: the same text twice is said and focused again.
+  useEffect(() => {
+    let inner = 0
+    if (lateWarning) cancelRef.current?.focus()
+    // Cleared first, then set after the focus move, so a screen reader neither drops it nor skips a repeat.
+    const outer = requestAnimationFrame(() => {
+      setLateSaid("")
+      if (lateWarning) inner = requestAnimationFrame(() => setLateSaid(`Attention\u00a0: ${lateWarning.text}`))
+    })
+    return () => { cancelAnimationFrame(outer); cancelAnimationFrame(inner) }
+  }, [lateWarning])
   const challengeRef = useRef<HTMLInputElement>(null)
   const [typed, setTyped] = useState("")
   const [challengeError, setChallengeError] = useState<string | null>(null)
@@ -112,6 +130,8 @@ export default function ConfirmActionModal({ recap, busy, onConfirm, onCancel, e
           />
         </div>
       )}
+      {/* Always mounted: a warning that appears after opening is voiced once (lateWarning). */}
+      <p aria-live="assertive" className="sr-only">{lateSaid}</p>
       {/* Always mounted so that the failure is voiced when it appears. */}
       <p id={`${id}-error`} role="alert" className={shown ? "mt-3 text-sm text-red-800 bg-red-50 border border-red-200 rounded-xl px-3 py-2" : "sr-only"}>{shown ?? ""}</p>
       <div className="flex flex-wrap justify-end gap-3 pt-4">

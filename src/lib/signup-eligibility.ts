@@ -13,7 +13,7 @@ import { normalizeEmail } from "./email-address"
 import { acceptsRegistrations, refusalMessage, registrationState, type RegistrationWindow } from "./registration-window"
 import { memberMayTake, reservationRefusal } from "./role-reservation"
 import { orgTimeZone } from "./time-zone"
-import { pastShiftLabel } from "./long-event"
+import { endedShift } from "./shift-ended"
 import { shiftsTooYoungFor } from "./utils"
 import { shiftsClash, type OverlapShift } from "./shift-overlap"
 
@@ -165,16 +165,17 @@ export function minimumAgeRefusal(
 }
 
 /**
- * A long-running event (#866): a day that is over can't be taken any more, even from a page left
- * open since. `today` is the organisation's local day, "YYYY-MM-DD".
+ * A shift that is over (#866, then for every event): refused, even from a page left open since.
+ * Its end instant in the organisation's time zone decides (src/lib/shift-ended.ts): a shift still
+ * running can be taken. Checked again under the shift lock, on the shift as it is then.
  */
 export function pastShiftRefusal(
-  event: { startDate?: Date | null; endDate?: Date | null },
-  shifts: { date: Date; label: string }[],
-  today: string,
+  shifts: { date: Date | string; startTime: string; endTime: string; label: string }[],
+  now: Date,
+  timeZone: string,
 ): SignupRefusal | null {
-  const label = pastShiftLabel(event, shifts, today)
-  return label ? { status: 409, body: { error: `Le créneau "${label}" est passé. Recharge la page.` } } : null
+  const ended = endedShift(shifts, now, timeZone)
+  return ended ? { status: 409, body: { error: `Le créneau "${ended.label}" est terminé. Recharge la page.` } } : null
 }
 
 /**
@@ -204,4 +205,14 @@ export const STALE_LINK_MESSAGE =
 
 export function staleLinkRefusal(): SignupRefusal {
   return { status: 409, body: { error: STALE_LINK_MESSAGE, staleLink: true } }
+}
+
+/**
+ * Too many sign-ups at the same moment on the same shifts (AUTHZ-04): the locks could not be had in
+ * time, the transaction rolled back, nothing was recorded. A clean answer to retry, never a 500.
+ */
+export const BUSY_SIGNUP_MESSAGE = "Plusieurs inscriptions sont en cours en même temps. Cette tentative n'a pas été enregistrée."
+
+export function busySignupRefusal(): SignupRefusal {
+  return { status: 409, body: { error: BUSY_SIGNUP_MESSAGE, busy: true } }
 }

@@ -47,9 +47,10 @@ vi.mock("@/lib/auth-guard", () => ({
         findFirst: vi.fn(async ({ where }: { where: { id: string } }) => ({ ...shiftRow, id: where.id })),
         findMany: vi.fn(async ({ where }: { where: { id?: { in: string[] } } }) => (where.id ? where.id.in.map((id) => ({ ...shiftRow, id })) : [])),
         update: vi.fn(),
+        updateMany: vi.fn(),
       },
       volunteer: { findFirst: vi.fn(async () => ({ id: "mem-1", firstName: "Nadia", lastName: "Rochat", email: null })) },
-      registration: { findMany: vi.fn(async () => []), create: m.registrationCreate },
+      registration: { findMany: vi.fn(async () => []), create: m.registrationCreate, count: vi.fn(async () => 0) },
       availabilityRequest: { findFirst: vi.fn(async (args: unknown) => { m.requestRead(args); return m.answer }) },
       adminUser: { findFirst: vi.fn(async () => null) },
       eventLog: { create: m.logCreate },
@@ -151,12 +152,14 @@ describe("POST /api/admin/registrations on an event collecting availability (#11
     expect((await POST(post())).status).toBe(409)
   })
 
-  it("changes nothing for an event that never used the option: no availability read, no shift lock", async () => {
+  it("changes nothing for an event that never used the option: no availability read, no person lock", async () => {
     m.event = { ...EVENT_IN_USE, availabilityEnabled: false, availabilityAdoptedAt: null }
     const { POST } = await import("@/app/api/admin/registrations/route")
     expect((await POST(post())).status).toBe(201)
     expect(m.requestRead).not.toHaveBeenCalled()
-    expect(m.queryRaw).not.toHaveBeenCalled()
+    // Only the shifts, for the full or closed check (AUTHZ-15).
+    expect(m.queryRaw).toHaveBeenCalledTimes(1)
+    expect(String(m.queryRaw.mock.calls[0][0].join("?"))).toContain('FROM "Shift"')
   })
 })
 

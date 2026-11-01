@@ -18,7 +18,7 @@ Pour un poste sensible (conduite, caisse, sécurité, une qualification), l'orga
 
 ### Le créneau indique « Sur validation »
 
-Tu t'inscris normalement, mais ton inscription est une **demande** : le récapitulatif et la page après l'envoi le disent. La place t'est réservée le temps que l'organisation réponde. Tu reçois un email « Demande reçue » avec ton lien personnel ; sur [ta page « Mes inscriptions »](ma-page-personnelle.md), tu suis la demande et peux la retirer (**Retirer ma demande**). Si elle est acceptée, tu reçois l'email de confirmation habituel ; sinon, un email te le dit. Les rappels ne concernent que les créneaux confirmés.
+Tu t'inscris normalement, mais ton inscription est une **demande** : le récapitulatif le dit avant l'envoi, puis l'email « Demande reçue ». La place t'est réservée le temps que l'organisation réponde. Tu reçois un email « Demande reçue » avec ton lien personnel ; sur [ta page « Mes inscriptions »](ma-page-personnelle.md), tu suis la demande et peux la retirer (**Retirer ma demande**). Si elle est acceptée, tu reçois l'email de confirmation habituel ; sinon, un email te le dit. Les rappels ne concernent que les créneaux confirmés.
 
 ## Côté organisation
 
@@ -26,7 +26,7 @@ Cochez **Sur validation** dans le formulaire du créneau (ou dans la série de c
 
 - le bénévole voit le créneau marqué « Sur validation » sur la page d'inscription et dans le récapitulatif, puis « Demande envoyée » après l'envoi. Il reçoit un email « Demande reçue » avec son lien personnel, où il suit sa demande et peut la retirer ;
 - dans les inscriptions de l'événement, chaque demande porte les boutons **Accepter** et **Refuser**, et la case **Demandes à traiter** n'affiche qu'elles. Un récapitulatif dit ce qui va se passer avant de confirmer ;
-- **Accepter** fait de la demande une inscription confirmée : le bénévole reçoit l'email de confirmation habituel, et les responsables du poste sont prévenus. Sur un événement qui recueille les disponibilités, accepter une demande sur des heures où la personne a indiqué ne pas être disponible demande de cocher **Accepter quand même : je sais que …** dans la fenêtre de confirmation ;
+- **Accepter** fait de la demande une inscription confirmée : le bénévole reçoit l'email de confirmation habituel, et les responsables du poste sont prévenus. Sur un événement qui recueille les disponibilités, accepter une demande sur des heures où la personne a indiqué ne pas être disponible demande de cocher **Accepter quand même : je sais que …** dans la fenêtre de confirmation. La demande garde sa place : l'accepter ne dépasse pas les places. Si le créneau est pourtant complet sans elle, par exemple après une baisse des places, ou si ses inscriptions sont fermées, la fenêtre le signale et demande **Accepter quand même**. Sur un créneau annulé, l'acceptation est refusée : rouvrez d'abord le créneau ;
 - **Refuser** libère la place, proposée ensuite à la liste d'attente. Le bénévole reçoit un email poli, sans raison, sauf si vous écrivez un message (facultatif) ;
 - chaque décision est inscrite dans le journal de l'événement (le texte du message n'y figure pas).
 

@@ -69,7 +69,7 @@ async function main() {
       const actual = await response
       assert.equal(actual.status(), 201)
       const body = await actual.json()
-      await page.getByRole("heading", { name: /inscription confirmée/i }).waitFor()
+      await page.getByRole("heading", { name: /inscription confirmée|demande d'inscription reçue/i }).waitFor()
       return body
     }
     await open("Vestiaire")

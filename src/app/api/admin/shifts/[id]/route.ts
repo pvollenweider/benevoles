@@ -49,9 +49,16 @@ const schema = z.object({
   mealOnTheGo: z.boolean().optional(),
   /** Place of the mission (#1171, lot 2); a new place is judged like new hours. */
   placeId: z.string().min(1).nullable().optional(),
-  // Caller can opt out of notifying volunteers (default true).
+  // Caller can opt out of notifying volunteers (default true): of new hours, and of a cancellation
+  // (AUTHZ-15, « Ne pas prévenir les inscrits »).
   notifyVolunteers: z.boolean().optional(),
 }).refine((d) => !(d.startTime && d.endTime) || d.startTime !== d.endTime, { message: SAME_TIME_ERROR, path: ["endTime"] }).refine(isCoordinatePair, { message: COORDINATE_PAIR_ERROR, path: ["longitude"] })
+
+/** A field sent unchanged (the timeline sends the label with every edit). */
+function sameValue(next: unknown, stored: unknown): boolean {
+  if (stored instanceof Date) return typeof next === "string" && stored.toISOString().slice(0, 10) === next
+  return (next ?? null) === (stored ?? null)
+}
 
 function fmtDate(d: Date) {
   return d.toLocaleDateString("fr-FR", { weekday: "long", day: "numeric", month: "long" })
@@ -101,6 +108,25 @@ export async function PATCH(req: Request, { params }: { params: Promise<{ id: st
   }
 
   const { notifyVolunteers, ...rest } = parsed.data
+
+  // Cancelling by the status (AUTHZ-15): the same cancellation as « Supprimer » (registrations and
+  // pending requests cancelled, swaps ended, a published event left with no shift back to draft),
+  // the people registered emailed unless the organiser chose not to. Alone: a cancellation is
+  // never mixed with other changes. Reopening later gives no place back (« Rétablir » does).
+  if (rest.status === "cancelled" && before.status !== "cancelled") {
+    const others = (Object.keys(rest) as (keyof typeof rest)[]).filter((k) => k !== "status" && rest[k] !== undefined && !sameValue(rest[k], before[k as keyof typeof before]))
+    if (others.length > 0) return NextResponse.json({ error: "Annulez le créneau sans autre modification en même temps." }, { status: 400 })
+    const shift = await db.shift.findFirst({
+      where: { id },
+      include: {
+        event: { select: { id: true, title: true, slug: true, organizationId: true, organization: { select: { slug: true } } } },
+        registrations: { where: { status: { in: [...COMMITTED_STATUSES] } }, include: { volunteer: true } },
+      },
+    })
+    if (!shift) return NextResponse.json({ error: "Non trouvé" }, { status: 404 })
+    const result = await cancelShift(shift, adminActor(guard.session), { notify: notifyVolunteers !== false })
+    return NextResponse.json({ ...shift, registrations: undefined, event: undefined, status: "cancelled", ...result })
+  }
   const updateData: Record<string, unknown> = { ...rest }
   // A shift moved to an existing poste takes its settings (#986, #1002): colour, limit, access,
   // cumulable and order, over the order the form sends. A poste new to the event keeps the shift's

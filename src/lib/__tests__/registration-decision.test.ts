@@ -39,13 +39,22 @@ const request = (status = "requested") => ({
   event: { title: "Fête", slug: "fete", organizationId: "org-a", confirmationMessage: null, organization: { slug: "asso" } },
 })
 
-function db(reg: ReturnType<typeof request> | null, updated = 1, availability: ReturnType<typeof availabilityTx> = availabilityTx({ inUse: false })) {
+function db(reg: ReturnType<typeof request> | null, updated = 1, availability: ReturnType<typeof availabilityTx> = availabilityTx({ inUse: false }), state: { status?: string; capacity?: number; occupied?: number } = {}) {
   const updateMany = vi.fn().mockResolvedValue({ count: updated })
   const queryRaw = vi.fn().mockResolvedValue([])
-  const tx = { registration: { updateMany }, event: availability.event, shift: availability.shiftRows, availabilityRequest: availability.availabilityRequest, eventLog: availability.eventLog, $queryRaw: queryRaw }
+  // The full or closed check (AUTHZ-15): the shift's status and places, and the spots held by others.
+  const count = vi.fn().mockResolvedValue(state.occupied ?? 0)
+  const shift = {
+    ...availability.shiftRows,
+    findMany: vi.fn(async (args: { where: { id: { in: string[] } }; select?: { capacity?: boolean } }) => args?.select?.capacity
+      ? [{ id: "sh-1", roleName: "Chauffeur", label: "Chauffeur navette", date: new Date("2026-07-04T00:00:00Z"), startTime: "08:00", endTime: "12:00", status: state.status ?? "open", capacity: state.capacity ?? 5 }]
+      : availability.shiftRows.findMany(args)),
+  }
+  const tx = { registration: { updateMany, count }, event: availability.event, shift, availabilityRequest: availability.availabilityRequest, eventLog: availability.eventLog, $queryRaw: queryRaw }
   return {
     updateMany,
     queryRaw,
+    count,
     availability,
     db: {
       registration: { findFirst: vi.fn().mockResolvedValue(reg) },
@@ -163,15 +172,55 @@ describe("decideRequest on an event collecting availability", () => {
     expect(refusing.availability.availabilityRequest.findFirst).not.toHaveBeenCalled()
   })
 
-  it("takes no shift lock and reads no answer on an event that never used the option", async () => {
+  it("locks the shift only (AUTHZ-15) and reads no answer on an event that never used the option", async () => {
     const d = db(pending())
     expect(await decideRequest(d.db as never, actor, "reg-1", { decision: "accept" })).toEqual({ ok: true, status: "active" })
-    expect(d.queryRaw).not.toHaveBeenCalled()
+    expect(d.queryRaw).toHaveBeenCalledTimes(1)
     expect(d.availability.availabilityRequest.findFirst).not.toHaveBeenCalled()
   })
 
   it("bounds the acknowledgements sent", () => {
     expect(decisionSchema.safeParse({ decision: "accept", availabilityAck: ["a", "b"] }).success).toBe(false)
     expect(decisionSchema.safeParse({ decision: "accept", availabilityAck: ["x".repeat(401)] }).success).toBe(false)
+  })
+})
+
+// A full or closed shift (AUTHZ-15): accepting is the organiser's call, confirmed; a cancelled shift
+// is refused until it is reopened. The request's own spot never counts against it.
+describe("decideRequest on a full, closed or cancelled shift", () => {
+  beforeEach(() => vi.clearAllMocks())
+
+  it("accepts without asking when the request holds its spot", async () => {
+    const d = db(request(), 1, undefined, { capacity: 5, occupied: 4 })
+    expect(await decideRequest(d.db as never, actor, "reg-1", { decision: "accept" })).toEqual({ ok: true, status: "active" })
+    expect(d.count).toHaveBeenCalledWith({ where: { shiftId: "sh-1", status: { in: ["active", "offered", "requested"] }, id: { notIn: ["reg-1"] } } })
+  })
+
+  it("asks first when the places held by others fill the shift: nothing accepted, no email, no log", async () => {
+    const d = db(request(), 1, undefined, { capacity: 5, occupied: 5 })
+    const out = await decideRequest(d.db as never, actor, "reg-1", { decision: "accept" })
+    expect(out).toMatchObject({ ok: false, httpStatus: 409, code: "shift_override", shifts: [{ shiftId: "sh-1", full: true, occupied: 5, capacity: 5, key: "o1|accept|reg-1|sh-1|open|5|5" }] })
+    expect(d.updateMany).not.toHaveBeenCalled()
+    expect(m.enqueue).not.toHaveBeenCalled()
+    expect(m.logEvent).not.toHaveBeenCalled()
+  })
+
+  it("asks first on a closed shift, and accepts with the confirmation, logged", async () => {
+    const d = db(request(), 1, undefined, { status: "closed", capacity: 5, occupied: 2 })
+    expect(await decideRequest(d.db as never, actor, "reg-1", { decision: "accept" })).toMatchObject({ ok: false, code: "shift_override", shifts: [{ closed: true, full: false }] })
+    const again = db(request(), 1, undefined, { status: "closed", capacity: 5, occupied: 2 })
+    expect(await decideRequest(again.db as never, actor, "reg-1", { decision: "accept", shiftOverride: ["o1|accept|reg-1|sh-1|closed|2|5"] })).toEqual({ ok: true, status: "active" })
+    expect(m.logEvent.mock.calls[0][0].changes.shiftOverride).toEqual({ from: null, to: "inscriptions fermées, 3 sur 5" })
+  })
+
+  it("refuses on a cancelled shift, whatever is sent", async () => {
+    const d = db(request(), 1, undefined, { status: "cancelled" })
+    expect(await decideRequest(d.db as never, actor, "reg-1", { decision: "accept", shiftOverride: ["o1|accept|reg-1|sh-1|cancelled|0|5"] })).toMatchObject({ ok: false, httpStatus: 409, code: "shift_cancelled" })
+    expect(d.updateMany).not.toHaveBeenCalled()
+  })
+
+  it("a refusal never asks", async () => {
+    const d = db(request(), 1, undefined, { status: "closed", occupied: 9 })
+    expect(await decideRequest(d.db as never, actor, "reg-1", { decision: "refuse" })).toEqual({ ok: true, status: "refused" })
   })
 })

@@ -131,7 +131,8 @@ export async function recordPrivacy(options: { page: Page; base: string; directo
       const { status, data } = await sent
       if (status !== 201 || data.editToken !== null || data.linkSentByEmail !== true) throw new Error("Anonymous signup unexpectedly disclosed an access link")
       await page.waitForURL(/\/fete-des-liens\/success/); await settle(page)
-      await page.getByRole("heading", { name: "Inscription confirmée !", exact: true }).waitFor()
+      // A public sign-up without proof of the address lands on the neutral page (AUTHZ-01).
+      await page.getByRole("heading", { name: "Demande d'inscription reçue", exact: true }).waitFor()
       if (await page.getByRole("link", { name: "Accéder à mon inscription", exact: true }).count()) throw new Error("Personal link revealed on anonymous success screen")
       await at("Ouvrons donc le vrai message"); signupMail = await openMail(before, "video.privacy.a.new@example.org", "personal")
       personalPath = signupMail.localPath

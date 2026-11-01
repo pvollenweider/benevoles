@@ -19,6 +19,7 @@ vi.mock("@/lib/workload-shipped", () => ({ workloadProtectionShipped: () => true
 vi.mock("@/lib/beta-access", async (orig) => ({ ...(await orig<typeof import("@/lib/beta-access")>()), canAdoptBeta: async () => true }))
 
 import { prisma } from "@/lib/prisma"
+import { openPayload } from "@/lib/notifications/outbox"
 import { getOrgClient } from "@/lib/prisma-org"
 import { generateToken } from "@/lib/utils"
 import { registrationToken } from "@/lib/token-vault"
@@ -125,15 +126,25 @@ describe.skipIf(!url)("workload protection on Postgres (#1171)", () => {
       expect(await prisma.volunteer.count({ where: { organizationId: orgId, email } })).toBe(0)
     })
 
-    it("without proof of the address, a finding about shifts already held stays generic", async () => {
+    // AUTHZ-01: a finding about shifts already held is about the address's own schedule.
+    it("without proof of the address, a finding about shifts already held: nothing recorded, the answer of any sign-up, the owner told", async () => {
       const e = await event()
       const day = await shift(e.id, "2031-07-04", "14:00", "20:00")
       const night = await shift(e.id, "2031-07-05", "01:00", "03:00")
       const email = `${tag}-anon-${n++}@example.org`
-      expect((await signup({ eventId: e.id, shiftIds: [day.id], email })).status).toBe(201)
+      const first = await signup({ eventId: e.id, shiftIds: [day.id], email })
+      expect(first.status).toBe(201)
+      const firstBody = await first.json()
       const res = await signup({ eventId: e.id, shiftIds: [night.id], email })
-      expect(res.status).toBe(409)
-      expect((await res.json()).error).toBe(WORKLOAD_PRIVATE_REFUSAL)
+      expect(res.status).toBe(201)
+      const body = await res.json()
+      expect(body).toEqual(firstBody)
+      expect(JSON.stringify(body)).not.toContain(WORKLOAD_PRIVATE_REFUSAL)
+      expect(await prisma.registration.count({ where: { shiftId: night.id } })).toBe(0)
+      const notice = (await prisma.notificationOutbox.findMany({ where: { organizationId: orgId } }))
+        .map((r) => openPayload(r.payload))
+        .find((p) => p.kind === "registration_link_resend" && p.recipient.email === email)
+      expect(notice?.data.notRecorded.reason).toContain("pauses et limites de charge")
     })
 
     it("from the personal link (« Mes inscriptions »), the details are given", async () => {
@@ -158,7 +169,7 @@ describe.skipIf(!url)("workload protection on Postgres (#1171)", () => {
       const email = `${tag}-wait-${n++}@example.org`
       const res = await signup({ eventId: e.id, shiftIds: [day.id, full.id], email })
       expect(res.status).toBe(201)
-      expect((await res.json()).waitlistShifts).toBe(1)
+      expect(await prisma.registration.findMany({ where: { eventId: e.id, volunteer: { email } }, select: { status: true }, orderBy: { status: "asc" } })).toEqual([{ status: "active" }, { status: "waiting" }])
     })
   })
 
@@ -321,8 +332,9 @@ describe.skipIf(!url)("workload protection on Postgres (#1171)", () => {
       expect(pub.ok).toBe(true)
       if (!pub.ok) return
       const offer = await offerSwap(prisma, { requestId: pub.requestId, registrationId: rj.id, volunteerId: jean.id, now: NOW })
-      expect(offer).toMatchObject({ ok: false, code: "workload_idle", status: "open" })
-      if (!offer.ok) expect(offer.error).toBe("Cet échange ne peut pas être effectué : l'attente entre deux missions dépasserait la limite de l'événement.")
+      // Pierre's plan (the requester's) breaks the rule: one code, never which rule nor whose plan (AUTHZ-08).
+      expect(offer).toMatchObject({ ok: false, code: "not_possible", status: "open" })
+      if (!offer.ok) expect(offer.error).toBe("Cet échange n'est pas possible avec ce créneau. Propose un autre de tes créneaux.")
     })
 
     it("checks again at confirmation: a policy turned on after the offer ends the request", async () => {

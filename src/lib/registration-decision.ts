@@ -14,6 +14,8 @@ import { reportError } from "./report-error"
 import { lockShifts } from "./registration-capacity"
 import { checkDutyChange, lockVolunteerRows, lockWorkloadShared, readWorkloadGate, workloadRefusalBody, WorkloadRefusalError } from "./workload-guard"
 import { AvailabilityAckError, availabilityAckBody, checkAvailabilityAcks, logAvailabilityAcks, readAvailabilityGate } from "./availability-assist-data"
+import { checkShiftOverrides, ShiftCancelledError, ShiftOverrideError } from "./shift-override-server"
+import { cancelledShiftMessage, overrideLogValue, type ShiftOverrideBody, type ShiftOverrideNeed } from "./shift-override"
 
 /**
  * Sign-up approval (#484): the organizer accepts or refuses a request on a « Sur validation »
@@ -33,6 +35,11 @@ export const decisionSchema = z.object({
    * bound to their answer's revision and the shift's hours. Never a way past the workload protection.
    */
   availabilityAck: z.array(z.string().max(400)).max(1).optional(),
+  /**
+   * Accepting on a full or closed shift (AUTHZ-15): the organiser's confirmation, bound to the
+   * request, the shift's status, places and the spots held by others (src/lib/shift-override.ts).
+   */
+  shiftOverride: z.array(z.string().max(400)).max(1).optional(),
 })
 export type Decision = z.infer<typeof decisionSchema>
 
@@ -42,6 +49,8 @@ export type DecisionResult =
   | { ok: true; status: "active" | "refused" }
   | { ok: false; httpStatus: 404 | 409; error: string; code?: "workload"; workload?: string[] }
   | { ok: false; httpStatus: 409; error: string; code: "availability"; outside: ReturnType<typeof availabilityAckBody>["outside"] }
+  | { ok: false; httpStatus: 409; error: string; code: "shift_cancelled" }
+  | ({ ok: false; httpStatus: 409 } & ShiftOverrideBody)
 
 export const ALREADY_SETTLED = "Cette demande a déjà été traitée ou annulée. Rechargez la page."
 
@@ -64,6 +73,8 @@ export async function decideRequest(db: OrgScopedPrisma, actor: LogActor, id: st
   // Conditional on the request still standing: the volunteer may withdraw it, or another
   // organizer decide, at the same moment. The decision and its email commit together (#352).
   let outboxIds: string[] | null
+  // The confirmation used (AUTHZ-15), for the event log.
+  let override: ShiftOverrideNeed | undefined
   try {
     outboxIds = await db.$transaction(async (tx) => {
       // Workload protection (#1171): accepting turns the request into a place. The request already
@@ -77,10 +88,9 @@ export async function decideRequest(db: OrgScopedPrisma, actor: LogActor, id: st
         await lockWorkloadShared(tx, reg.eventId)
         const gate = await readWorkloadGate(tx, reg.eventId)
         const availability = await readAvailabilityGate(tx, reg.eventId)
-        if (gate.kind !== "off" || availability.inUse) {
-          await lockShifts(tx, [reg.shiftId])
-          await lockVolunteerRows(tx, [reg.volunteerId])
-        }
+        // The shift is always locked (AUTHZ-15): its status and spots are judged below.
+        await lockShifts(tx, [reg.shiftId])
+        if (gate.kind !== "off" || availability.inUse) await lockVolunteerRows(tx, [reg.volunteerId])
         if (gate.kind !== "off") {
           const shift = await tx.shift.findFirst({ where: { id: reg.shiftId }, select: { id: true, date: true, startTime: true, endTime: true, mealOnTheGo: true, placeId: true } })
           if (shift) {
@@ -88,6 +98,9 @@ export async function decideRequest(db: OrgScopedPrisma, actor: LogActor, id: st
             if (!verdict.ok) throw new WorkloadRefusalError(verdict, reg.volunteerId)
           }
         }
+        // A cancelled shift refuses; a full or closed one needs the confirmation. The request's own
+        // spot is left out: only the places held by others count.
+        override = (await checkShiftOverrides(tx, "accept", [reg.shiftId], () => id, input.shiftOverride ?? [], { exceptRegistrationIds: [id] })).get(reg.shiftId)
         if (availability.inUse) acknowledged = await checkAvailabilityAcks(tx, availability, reg.eventId, reg.volunteerId, [reg.shiftId], input.availabilityAck ?? [])
       }
       const { count } = await tx.registration.updateMany({ where: { id, status: "requested" }, data: { status } })
@@ -145,6 +158,8 @@ export async function decideRequest(db: OrgScopedPrisma, actor: LogActor, id: st
       return enqueueNotifications(outbox.payloads, tx, { organizationId: reg.event.organizationId })
     })
   } catch (e) {
+    if (e instanceof ShiftCancelledError) return { ok: false, httpStatus: 409, error: cancelledShiftMessage(), code: "shift_cancelled" }
+    if (e instanceof ShiftOverrideError) return { ok: false, httpStatus: 409, ...e.body() }
     if (e instanceof AvailabilityAckError) return { ok: false, httpStatus: 409, ...availabilityAckBody(e, name, "accept") }
     if (e instanceof WorkloadRefusalError) {
       const body = workloadRefusalBody(e.verdict, `Acceptation impossible : le programme de ${name} ne respecterait plus les pauses et limites de charge de cet événement.`)
@@ -165,6 +180,7 @@ export async function decideRequest(db: OrgScopedPrisma, actor: LogActor, id: st
       status: { from: "requested", to: status },
       shiftId: { from: reg.shiftId, to: reg.shiftId },
       ...(note ? { note: { from: null, to: "(rempli)" } } : {}),
+      ...(override ? { shiftOverride: { from: null, to: overrideLogValue(override) } } : {}),
     },
   })
 

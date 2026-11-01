@@ -18,6 +18,30 @@ Comprendre comment reprendre une inscription sans perdre les champs ni créer de
 
 Le formulaire garde les réponses pendant les erreurs. Une inscription réelle est confirmée et son email apparaît dans la boîte locale.
 
+## À refilmer : réponse uniforme sans preuve de l'adresse (2026-11-01)
+
+Depuis la correction de sécurité de l'inscription publique, un formulaire
+public sans lien d'invitation ni lien personnel reçoit toujours la même
+réponse (201) et la page « Demande d'inscription reçue », que l'inscription
+soit enregistrée ou refusée à cause des inscriptions de cette adresse :
+
+- succès (Alex, Zoé) : titre « Demande d'inscription reçue », plus
+  « Inscription confirmée ! » ; la confirmation reste dans l'email ;
+- chevauchement (Aline, Vestiaire) : plus de refus 409 à l'écran ; la page
+  « Demande d'inscription reçue », aucune inscription créée, puis l'email
+  « Demande d'inscription non enregistrée » ouvert dans Mailpit, qui nomme le
+  créneau qui chevauche le sien ;
+- nouvel essai après réponse perdue (Nicolas) : plus de 409 « déjà inscrit » ;
+  la même page, et toujours une seule inscription côté organisation ;
+- invitation (Aline, Logistique) : inchangé, « Inscription confirmée ! » et
+  « Accéder à mon inscription ».
+
+La narration du manifeste, le bloc `viewer` et le recorder
+(`videos/lib/record-registration-errors.ts`) sont à jour ; la vidéo publiée
+montre encore l'ancien comportement tant qu'elle n'est pas régénérée (voir
+`videos/FINAL_REVIEW_EVIDENCE.md`). Le précontrôle historique ci-dessous
+décrit l'ancien comportement.
+
 ## Compléments vérifiés pour la prochaine prise
 
 Le précontrôle `verify-registration-errors.ts` utilise une organisation fictive
