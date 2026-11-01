@@ -51,6 +51,9 @@ jobs:
   build-push:
     name: Build & push image
     runs-on: ubuntu-latest
+    # Build secrets (SENTRY_AUTH_TOKEN, NEXT_PUBLIC_SENTRY_DSN) live in this environment, limited
+    # to main by its deployment branch policy: no other branch's workflow can read them.
+    environment: production-build
     permissions:
       contents: read
       packages: write
@@ -156,9 +159,8 @@ jobs:
             echo "Deployed commit: $deployed_sha, older than or unrelated to $GITHUB_SHA."
           fi
 
-      - name: Apply namespace
-        run: kubectl apply -f k8s/namespace.yaml
-
+      # k8s/namespace.yaml is cluster-scoped: applied by hand (docs/deploiement.md), the deploy
+      # ServiceAccount only has rights inside the benevoles namespace.
       - name: Sync GHCR pull secret
         env:
           GHCR_PULL_TOKEN: ${{ secrets.GHCR_PULL_TOKEN }}
@@ -171,13 +173,30 @@ jobs:
             --save-config --dry-run=client -o yaml | kubectl apply -f -
 
       - name: Check required secrets
+        # Values from the step environment, never printed: only the names of the empty ones. A
+        # secret missing from the production environment would otherwise be written empty to
+        # benevoles-secret.
         env:
           TOKEN_ENCRYPTION_KEY: ${{ secrets.TOKEN_ENCRYPTION_KEY }}
+          AUTH_SECRET: ${{ secrets.AUTH_SECRET }}
+          POSTGRES_USER: ${{ secrets.POSTGRES_USER }}
+          POSTGRES_PASSWORD: ${{ secrets.POSTGRES_PASSWORD }}
+          CRON_SECRET: ${{ secrets.CRON_SECRET }}
+          SMTP_HOST: ${{ secrets.SMTP_HOST }}
+          SMTP_PASSWORD: ${{ secrets.SMTP_PASSWORD }}
+          EMAIL_FROM: ${{ secrets.EMAIL_FROM }}
+          OFFSITE_BUCKET: ${{ secrets.OFFSITE_BUCKET }}
         run: |
-          # The app refuses to start in production without it (src/lib/production-guards.ts);
-          # fail here, before touching the cluster, rather than on a stuck rollout.
-          if [ -z "$TOKEN_ENCRYPTION_KEY" ]; then
-            echo "::error::TOKEN_ENCRYPTION_KEY secret is not set (gh secret set TOKEN_ENCRYPTION_KEY)"
+          # The app refuses to start in production without TOKEN_ENCRYPTION_KEY or AUTH_SECRET
+          # (src/lib/env.ts, src/lib/production-guards.ts); the others break mail, crons or
+          # backups without a visible error. Fail here, before touching the cluster.
+          missing=""
+          for k in TOKEN_ENCRYPTION_KEY AUTH_SECRET POSTGRES_USER POSTGRES_PASSWORD CRON_SECRET \
+            SMTP_HOST SMTP_PASSWORD EMAIL_FROM OFFSITE_BUCKET; do
+            [ -n "${!k:-}" ] || missing="$missing $k"
+          done
+          if [ -n "$missing" ]; then
+            echo "::error::Secret(s) not set in the production environment:$missing (gh secret set <NAME> --env production)"
             exit 1
           fi
 
