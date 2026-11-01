@@ -6,6 +6,7 @@ import { EMERGENCY_NOTE, emergencyNoteFor, shiftInfoText, type ShiftInfo } from 
 import { buildDayParts, type ShiftRow } from "./pdf-export-gantt"
 import { conditionLine, scopeLine, confirmedLine, MULTIPLE_NOTE, numberNote, rowLabel, waitingLine, type AnswerSummary } from "./question-answer-summary"
 import { effectiveMinimum, shiftStaffingState, staffingStateText } from "./staffing"
+import { PRINT_BUTTON_SCRIPT_TAG } from "./inline-scripts"
 
 /**
  * Printable sheets (#400): paper still matters on site. Six views of one event, each a plain
@@ -443,11 +444,12 @@ export function renderSheet(view: SheetView, d: SheetData): string {
         ${d.sectorCaption ? `<p class="kind"><strong>${esc(d.sectorCaption)}</strong></p>` : ""}
       </div>
     </div>
-    <button type="button" class="print-btn" onclick="window.print()">Imprimer</button>
+    <button type="button" class="print-btn" data-print>Imprimer</button>
   </header>
   <main>
     ${d.shifts.length === 0 && view !== "answers" ? `<p class="meta">${d.sectorCaption ? `Aucun créneau dans ce choix (${esc(d.sectorCaption)}).` : "Aucun créneau."}</p>` : BUILDERS[view](d)}
   </main>
+  ${PRINT_BUTTON_SCRIPT_TAG}
 </body>
 </html>`
 }

@@ -169,6 +169,7 @@ Format basé sur [Keep a Changelog](https://keepachangelog.com/fr/1.0.0/).
 - **Images optimisées** : le service d'optimisation d'images ne traite plus que les captures de la documentation.
 - **Notifications push** : chaque connexion à un service de notification est fermée à l'échéance de l'envoi, ou dès que sa réponse dépasse une taille raisonnable.
 - **Dépendances** : les bibliothèques de recherche de fichiers utilisées par l'envoi des cartes de source au suivi des erreurs et par l'export Excel passent à des versions corrigées (glob 14, minimatch 11), qui arrêtent un parcours annulé et bornent le traitement de certains motifs. Aucun changement visible. <!-- interne -->
+- **Politique de scripts imposée** : chaque page n'exécute plus que les scripts de l'application, autorisés par un nonce propre à chaque réponse ou par leur empreinte ; un formulaire ne s'envoie qu'au site lui-même. La politique, jusqu'ici en observation, est désormais appliquée par le navigateur, sur toutes les pages, y compris l'inscription intégrable et les pages d'impression.
 
 ### Infrastructure
 

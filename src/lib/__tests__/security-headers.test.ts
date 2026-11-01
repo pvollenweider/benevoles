@@ -1,29 +1,33 @@
 import { describe, it, expect } from "vitest"
 import { readdirSync, readFileSync } from "fs"
 import { join } from "path"
+import { createHash } from "crypto"
 import {
   APP_TOP_LEVEL_SEGMENTS,
-  FRAME_DENY_HEADERS,
-  FRAME_EMBED_HEADERS,
+  INLINE_SCRIPT_HASHES,
   SECURITY_HEADERS,
-  frameHeaders,
+  contentSecurityPolicy,
+  createNonce,
   isEventSignupPath,
-  scriptPolicyReportOnly,
-  securityHeaders,
+  pageSecurityHeaders,
 } from "../security-headers"
+import { CLEAN_PATH_SCRIPT } from "../clean-path"
+import { INLINE_SCRIPTS, PRINT_BUTTON_SCRIPT, PRINT_BUTTON_SCRIPT_TAG, THEME_INIT_SCRIPT } from "../inline-scripts"
 import { SENTRY_TUNNEL_PATH } from "../sentry-tunnel"
 
 // Framing (#948): only the embeddable sign-up may be shown in another site's frame.
 
+const NONCE = "bm9uY2Utb2YtdGhlLXRlc3Q="
+
 function headersOf(pathAndQuery: string) {
   const url = new URL(pathAndQuery, "https://club.benevol.app")
-  return Object.fromEntries(frameHeaders(url.pathname, url.searchParams).map((h) => [h.key, h.value]))
+  return Object.fromEntries(pageSecurityHeaders(url.pathname, url.searchParams, { nonce: NONCE, dev: false }).map((h) => [h.key, h.value]))
 }
 
-const DENY = { "Content-Security-Policy": "frame-ancestors 'none'", "X-Frame-Options": "DENY" }
-const EMBED = { "Content-Security-Policy": "frame-ancestors *" }
+const DENY = { "Content-Security-Policy": contentSecurityPolicy({ nonce: NONCE, framable: false, dev: false }), "X-Frame-Options": "DENY" }
+const EMBED = { "Content-Security-Policy": contentSecurityPolicy({ nonce: NONCE, framable: true, dev: false }) }
 
-describe("frameHeaders, per route family", () => {
+describe("pageSecurityHeaders: framing, per route family", () => {
   it("lets any site frame the embeddable sign-up and its confirmation, with no X-Frame-Options", () => {
     for (const path of [
       "/fete-du-village?embed=1",
@@ -65,12 +69,9 @@ describe("frameHeaders, per route family", () => {
     ]) expect(headersOf(path), path).toEqual(DENY)
   })
 
-  it("keeps the two header sets as documented", () => {
-    expect(FRAME_DENY_HEADERS).toEqual([
-      { key: "Content-Security-Policy", value: "frame-ancestors 'none'" },
-      { key: "X-Frame-Options", value: "DENY" },
-    ])
-    expect(FRAME_EMBED_HEADERS).toEqual([{ key: "Content-Security-Policy", value: "frame-ancestors *" }])
+  it("frames with frame-ancestors only: 'none' and X-Frame-Options, or * for the embed", () => {
+    expect(directives(DENY["Content-Security-Policy"])["frame-ancestors"]).toEqual(["'none'"])
+    expect(directives(EMBED["Content-Security-Policy"])["frame-ancestors"]).toEqual(["*"])
   })
 })
 
@@ -89,9 +90,15 @@ describe("APP_TOP_LEVEL_SEGMENTS", () => {
 })
 
 describe("the proxy sets them", () => {
-  it("applies frameHeaders to the response it lets through", () => {
-    const proxy = readFileSync(join(process.cwd(), "src/proxy.ts"), "utf8")
-    expect(proxy).toMatch(/frameHeaders\(pathname, req\.nextUrl\.searchParams\)\) response\.headers\.set\(key, value\)/)
+  const proxy = readFileSync(join(process.cwd(), "src/proxy.ts"), "utf8")
+
+  it("draws a nonce per request and applies pageSecurityHeaders to the response it lets through", () => {
+    expect(proxy).toMatch(/pageSecurityHeaders\(pathname, req\.nextUrl\.searchParams, \{ nonce: createNonce\(\), dev: process\.env\.NODE_ENV === "development" \}\)/)
+    expect(proxy).toMatch(/for \(const \{ key, value \} of pageHeaders\) response\.headers\.set\(key, value\)/)
+  })
+
+  it("puts the policy on the forwarded request too, where Next.js reads the nonce", () => {
+    expect(proxy).toMatch(/if \(key === "Content-Security-Policy"\) requestHeaders\.set\(key, value\)/)
   })
 })
 
@@ -119,51 +126,88 @@ describe("SECURITY_HEADERS (next.config.ts, every response)", () => {
     }
   })
 
-  it("adds the script policy in report-only mode, never as an enforced CSP", () => {
-    expect(byKey["Content-Security-Policy-Report-Only"]).toBe(scriptPolicyReportOnly({ dev: false }))
+  it("leaves the script and framing policy to the proxy's per-request header", () => {
     expect(byKey["Content-Security-Policy"]).toBeUndefined()
-  })
-
-  it("leaves framing to the proxy's per-request decision", () => {
+    expect(byKey["Content-Security-Policy-Report-Only"]).toBeUndefined()
     expect(byKey["X-Frame-Options"]).toBeUndefined()
-    for (const { value } of SECURITY_HEADERS) expect(value).not.toContain("frame-ancestors")
-  })
-
-  it("is the same set in development but for the policy's 'unsafe-eval'", () => {
-    const dev = Object.fromEntries(securityHeaders({ dev: true }).map((h) => [h.key, h.value]))
-    expect(Object.keys(dev)).toEqual(Object.keys(byKey))
-    expect(dev["Content-Security-Policy-Report-Only"]).toBe(scriptPolicyReportOnly({ dev: true }))
   })
 })
 
-describe("scriptPolicyReportOnly", () => {
-  it("allows the app's own scripts and inline scripts, and refuses plugins and a foreign <base>", () => {
-    const d = directives(scriptPolicyReportOnly({ dev: false }))
-    expect(d["script-src"]).toEqual(["'self'", "'unsafe-inline'"])
-    expect(d["worker-src"]).toEqual(["'self'", "blob:"])
-    expect(d["object-src"]).toEqual(["'none'"])
-    expect(d["base-uri"]).toEqual(["'self'"])
+// IN-1: an enforced script policy, nonce and hashes, no 'unsafe-inline'.
+describe("contentSecurityPolicy", () => {
+  const d = directives(contentSecurityPolicy({ nonce: NONCE, framable: false, dev: false }))
+
+  it("enforces scripts by nonce and hash, never 'unsafe-inline' or 'unsafe-eval'", () => {
+    expect(d["script-src"]).toEqual(["'self'", `'nonce-${NONCE}'`, "'strict-dynamic'", ...INLINE_SCRIPT_HASHES])
+    expect(d["script-src"]).not.toContain("'unsafe-inline'")
+    expect(d["script-src"]).not.toContain("'unsafe-eval'")
   })
 
-  it("carries no nonce or hash, which would make browsers ignore 'unsafe-inline'", () => {
-    expect(scriptPolicyReportOnly({ dev: false })).not.toMatch(/'(nonce|sha256|sha384|sha512)-/)
+  it("refuses plugins, a foreign <base> and forms to other sites, and allows the workers", () => {
+    expect(d["object-src"]).toEqual(["'none'"])
+    expect(d["base-uri"]).toEqual(["'self'"])
+    expect(d["form-action"]).toEqual(["'self'"])
+    expect(d["worker-src"]).toEqual(["'self'", "blob:"])
+  })
+
+  it("restricts nothing else (styles, images, media, connections)", () => {
+    expect(Object.keys(d).sort()).toEqual(["base-uri", "form-action", "frame-ancestors", "object-src", "script-src", "worker-src"])
   })
 
   it("adds 'unsafe-eval' in development only", () => {
-    expect(directives(scriptPolicyReportOnly({ dev: true }))["script-src"]).toContain("'unsafe-eval'")
-    expect(directives(scriptPolicyReportOnly({ dev: false }))["script-src"]).not.toContain("'unsafe-eval'")
+    expect(directives(contentSecurityPolicy({ nonce: NONCE, framable: false, dev: true }))["script-src"]).toContain("'unsafe-eval'")
   })
 
-  it("sends reports nowhere and never touches framing", () => {
-    const policy = scriptPolicyReportOnly({ dev: true })
-    expect(policy).not.toMatch(/report-(uri|to)/)
-    expect(policy).not.toContain("frame-ancestors")
+  it("hashes every inline script of the app, exactly as written", () => {
+    expect(INLINE_SCRIPTS).toEqual([CLEAN_PATH_SCRIPT, THEME_INIT_SCRIPT, PRINT_BUTTON_SCRIPT])
+    for (const script of INLINE_SCRIPTS) {
+      expect(INLINE_SCRIPT_HASHES).toContain(`'sha256-${createHash("sha256").update(script).digest("base64")}'`)
+    }
+  })
+
+  it("draws a new 128-bit nonce each time", () => {
+    const a = createNonce()
+    expect(Buffer.from(a, "base64")).toHaveLength(16)
+    expect(createNonce()).not.toBe(a)
+  })
+})
+
+describe("inline scripts of the app", () => {
+  function sourceFiles(dir: string): string[] {
+    return readdirSync(dir, { withFileTypes: true }).flatMap((e) => {
+      const path = join(dir, e.name)
+      if (e.isDirectory()) return e.name === "__tests__" ? [] : sourceFiles(path)
+      return /\.tsx?$/.test(e.name) ? [path] : []
+    })
+  }
+  const files = sourceFiles(join(process.cwd(), "src")).map((f) => [f, readFileSync(f, "utf8")] as const)
+
+  it("are only the hashed constants: no other inline <script> in a component", () => {
+    for (const [file, text] of files) {
+      for (const [, html] of text.matchAll(/<script dangerouslySetInnerHTML=\{\{ __html: (\w+) \}\}/g)) {
+        // Data blocks (<script type="application/ld+json">) are never run, so need no hash.
+        expect(["CLEAN_PATH_SCRIPT", "THEME_INIT_SCRIPT"], file).toContain(html)
+      }
+    }
+  })
+
+  it("never use an inline event handler in generated HTML", () => {
+    for (const [file, text] of files) expect(text, file).not.toMatch(/\son(click|load|error|submit|change)="/)
+  })
+
+  it("print pages carry the print button script", () => {
+    for (const file of ["src/lib/print-badges.ts", "src/lib/print-sheets.ts", "src/app/api/admin/events/[id]/export/pdf/route.ts"]) {
+      const text = readFileSync(join(process.cwd(), file), "utf8")
+      expect(text, file).toContain("${PRINT_BUTTON_SCRIPT_TAG}")
+      expect(text, file).toContain("data-print")
+    }
+    expect(PRINT_BUTTON_SCRIPT_TAG).toBe(`<script>${PRINT_BUTTON_SCRIPT}</script>`)
   })
 })
 
 describe("next.config.ts", () => {
-  it("sets securityHeaders on every path, in development with the development policy", () => {
+  it("sets SECURITY_HEADERS on every path", () => {
     const config = readFileSync(join(process.cwd(), "next.config.ts"), "utf8")
-    expect(config).toContain('source: "/:path*", headers: [...securityHeaders({ dev: process.env.NODE_ENV === "development" })]')
+    expect(config).toContain('source: "/:path*", headers: [...SECURITY_HEADERS]')
   })
 })

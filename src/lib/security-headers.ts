@@ -1,7 +1,9 @@
 // SPDX-FileCopyrightText: 2026 Philippe Vollenweider
 // SPDX-License-Identifier: AGPL-3.0-only
 
+import { createHash, randomBytes } from "node:crypto"
 import { EMBED_PARAM, isEmbedMode } from "./embed"
+import { INLINE_SCRIPTS } from "./inline-scripts"
 
 /**
  * Response headers set on every page and route (next.config.ts).
@@ -45,68 +47,78 @@ export const PERMISSIONS_POLICY_HEADER = {
 } as const
 
 /**
- * Script policy, in report-only mode (#1052). A second line of defence behind the sanitised
- * Markdown, and a first step towards an enforced policy. The browser only reports, in the
- * developer console of the page (« [Report Only] … »), what the policy would have refused;
- * nothing is blocked, and no report is sent anywhere (no report-uri / report-to: no endpoint, no
- * third party). How to read the violations: SECURITY.md, « Politique de scripts ».
- *
- * What it reports: a script loaded from another site, a plugin (<object>, <embed>), a <base> tag
- * pointing elsewhere, and in production any eval. What it does not: an injected inline script.
- * `'unsafe-inline'` stays because the policy carries no nonce: Next.js puts the nonce on its own
- * inline scripts only when it finds one in a `script-src` of the request's CSP, and it reads the
- * enforced `Content-Security-Policy` first. The proxy's framing header (frame-ancestors, below)
- * is that header for every page, and Next.js copies the proxy's response headers onto the request
- * before rendering, so a report-only nonce never reaches its scripts (verified on a production
- * build of Next.js 16.4). Without a nonce, every Next.js inline script would be reported on every
- * page. Nonces come with enforcement: the proxy will emit frame-ancestors and a nonce-bearing
- * script-src in one enforced policy, which Next.js then reads.
- *
- * - `worker-src 'self' blob:`: the error-tracking SDK's session-replay worker.
- * - In development only, `'unsafe-eval'`, which React needs there for its error overlay.
- *
- * Kept apart from the enforced `Content-Security-Policy` (frame-ancestors, below): a report-only
- * header never blocks, and the framing decision is unchanged.
+ * The headers of every response (next.config.ts). The script and framing policy is per request
+ * (a nonce), so the proxy sets it: `pageSecurityHeaders` below.
  */
-export function scriptPolicyReportOnly(options: { dev: boolean }): string {
-  const scriptSrc = ["'self'", "'unsafe-inline'", ...(options.dev ? ["'unsafe-eval'"] : [])]
-  return [`script-src ${scriptSrc.join(" ")}`, "worker-src 'self' blob:", "object-src 'none'", "base-uri 'self'"].join("; ")
+export const SECURITY_HEADERS: readonly { key: string; value: string }[] = [REFERRER_POLICY_HEADER, NOSNIFF_HEADER, PERMISSIONS_POLICY_HEADER]
+
+/**
+ * The sha256 hashes of the app's own inline scripts (src/lib/inline-scripts.ts), as CSP sources.
+ * Computed from the strings themselves, so they always match what the pages emit.
+ */
+export const INLINE_SCRIPT_HASHES: readonly string[] = INLINE_SCRIPTS.map(
+  (script) => `'sha256-${createHash("sha256").update(script, "utf8").digest("base64")}'`,
+)
+
+/** A fresh nonce for one response: 128 random bits, base64. */
+export function createNonce(): string {
+  return randomBytes(16).toString("base64")
 }
 
-/** The headers of every response (next.config.ts), in production or in development. */
-export function securityHeaders(options: { dev: boolean }): readonly { key: string; value: string }[] {
+/**
+ * The enforced Content-Security-Policy of every response the proxy lets through (src/proxy.ts),
+ * one header for framing and scripts:
+ *
+ * - `frame-ancestors`: `'none'`, or `*` for the embeddable sign-up (#948, below).
+ * - `script-src 'self' 'nonce-…' 'strict-dynamic'` and the hashes of the app's inline scripts. The
+ *   proxy draws a new nonce per request; Next.js reads it from this header and puts it on its own
+ *   scripts (framework, page chunks, inline data), which then load the rest of the app
+ *   (`'strict-dynamic'`). Every page renders per request (the root layout awaits `connection()`),
+ *   so every page gets its nonce. Any other inline script, inline event handler (`onclick=…`),
+ *   `javascript:` link or script from another site is refused. `'self'` only matters to browsers
+ *   without `'strict-dynamic'`. In development only, `'unsafe-eval'`, which React needs there.
+ * - `worker-src 'self' blob:`: the service worker and the error-tracking SDK's replay worker.
+ * - `object-src 'none'`, `base-uri 'self'`: no plugin, no `<base>` pointing elsewhere.
+ * - `form-action 'self'`: a form only submits to this site.
+ *
+ * Styles, images, media, fonts and connections are not restricted. Responses the proxy does not
+ * see (static files, the image optimiser, the error-report relay) are no pages and carry no policy.
+ */
+export function contentSecurityPolicy(options: { nonce: string; framable: boolean; dev: boolean }): string {
+  const scriptSrc = ["'self'", `'nonce-${options.nonce}'`, "'strict-dynamic'", ...INLINE_SCRIPT_HASHES, ...(options.dev ? ["'unsafe-eval'"] : [])]
   return [
-    REFERRER_POLICY_HEADER,
-    NOSNIFF_HEADER,
-    PERMISSIONS_POLICY_HEADER,
-    { key: "Content-Security-Policy-Report-Only", value: scriptPolicyReportOnly(options) },
-  ]
+    `frame-ancestors ${options.framable ? "*" : "'none'"}`,
+    `script-src ${scriptSrc.join(" ")}`,
+    "worker-src 'self' blob:",
+    "object-src 'none'",
+    "base-uri 'self'",
+    "form-action 'self'",
+  ].join("; ")
 }
-
-/** The production headers of every response. */
-export const SECURITY_HEADERS = securityHeaders({ dev: false })
 
 /**
  * Framing (#948). No page may be shown inside another site's frame (clickjacking: a hidden
  * frame over a decoy button), except the embeddable sign-up, `/<event>?embed=1` and its
  * confirmation `/<event>/success?embed=1`, which an association puts on its own site, whatever
- * that site's address. Set by the proxy (src/proxy.ts) on every response it lets through, so the
- * decision can read the query: next.config.ts headers cannot drop one per request.
+ * that site's address. Decided by the proxy per request (src/proxy.ts), so the decision can read
+ * the query: next.config.ts headers cannot drop one per request.
  *
  * - Everything else: `frame-ancestors 'none'` and its older equivalent `X-Frame-Options: DENY`
  *   (browsers without CSP level 2). Admin, super admin, personal and leader pages, sign-in,
  *   waitlist confirmation, API, the site's own pages.
  * - The embeddable sign-up: `frame-ancestors *` (any http/https site) and no X-Frame-Options,
- *   which would forbid it again in the browsers that read it. The policy carries no other
- *   directive: the app enforces no other CSP anywhere (the script policy above is report-only),
- *   so nothing else changes for the embed.
+ *   which would forbid it again in the browsers that read it. Its script policy is the same as
+ *   everywhere else.
  */
-export const FRAME_DENY_HEADERS = [
-  { key: "Content-Security-Policy", value: "frame-ancestors 'none'" },
-  { key: "X-Frame-Options", value: "DENY" },
-] as const
-
-export const FRAME_EMBED_HEADERS = [{ key: "Content-Security-Policy", value: "frame-ancestors *" }] as const
+export function pageSecurityHeaders(
+  pathname: string,
+  searchParams: URLSearchParams,
+  options: { nonce: string; dev: boolean },
+): readonly { key: string; value: string }[] {
+  const framable = isFramable(pathname, searchParams)
+  const csp = { key: "Content-Security-Policy", value: contentSecurityPolicy({ ...options, framable }) }
+  return framable ? [csp] : [csp, { key: "X-Frame-Options", value: "DENY" }]
+}
 
 /**
  * The first path segments the app answers itself (src/app and the Sentry tunnel): an event slug
@@ -156,9 +168,4 @@ export function isEventSignupPath(pathname: string): boolean {
 /** Whether a request may be framed: the embeddable sign-up only. */
 export function isFramable(pathname: string, searchParams: URLSearchParams): boolean {
   return isEmbedMode(searchParams.getAll(EMBED_PARAM)) && isEventSignupPath(pathname)
-}
-
-/** The framing headers of a response, for its path and query. */
-export function frameHeaders(pathname: string, searchParams: URLSearchParams): readonly { key: string; value: string }[] {
-  return isFramable(pathname, searchParams) ? FRAME_EMBED_HEADERS : FRAME_DENY_HEADERS
 }
