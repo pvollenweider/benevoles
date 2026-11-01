@@ -156,6 +156,33 @@ export function deleteShiftRecap(i: { name: string; when: string; registered: nu
   }
 }
 
+/**
+ * Cancelling a shift by its status (AUTHZ-15): how many people are registered and whether they are
+ * emailed; « Ne pas prévenir les inscrits » (a test shift, people already told by phone) changes
+ * the lead sentence. The registrations and pending requests are cancelled, as with « Supprimer ».
+ */
+export function cancelShiftRecap(i: { name: string; when: string; registered: number; notify: boolean }): ActionRecap {
+  const NBSP = "\u00a0"
+  const many = i.registered > 1
+  const who = `${n(i.registered, "personne est inscrite", "personnes sont inscrites")}.`
+  const told = i.notify
+    ? `${many ? "Elles recevront" : "Elle recevra"} un email d'annulation.`
+    : `${many ? "Elles ne recevront" : "Elle ne recevra"} pas d'email${NBSP}: pensez à ${many ? "les" : "la"} prévenir autrement.`
+  return {
+    title: `Annuler le créneau « ${i.name} »${NBSP}?`,
+    lead: `${who} ${told}`,
+    lines: [
+      `${i.when}.`,
+      `${many ? "Leurs inscriptions sont annulées" : "Son inscription est annulée"}, comme les demandes en attente. Le créneau disparaît du planning.`,
+      "Si c'était le dernier créneau d'un événement publié, l'événement repasse en brouillon.",
+      LOGGED,
+    ],
+    confirmLabel: i.notify ? "Annuler le créneau" : "Annuler sans prévenir",
+    cancelLabel: "Garder le créneau",
+    danger: true,
+  }
+}
+
 export function removeLeaderRecap(name: string, roleName: string, kind?: "sector"): ActionRecap {
   return {
     title: `Retirer ${name} des responsables ${kind === "sector" ? "du secteur " : "de "}« ${roleName} » ?`,

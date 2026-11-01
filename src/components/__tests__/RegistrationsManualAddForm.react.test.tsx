@@ -350,4 +350,52 @@ describe("ManualAddForm — workload protection", () => {
     expect(region).toHaveTextContent("laissent 5 h entre elles")
     expect(region).not.toHaveTextContent("L'ajout reste possible")
   })
+
+  // A full or closed shift (AUTHZ-15): the server's refusal opens a confirmation dialog.
+  describe("on a full or closed shift", () => {
+    const fetchMock = vi.fn()
+    beforeEach(() => { fetchMock.mockReset(); vi.stubGlobal("fetch", fetchMock) })
+    afterEach(() => { cleanup(); vi.unstubAllGlobals() })
+    const need = { shiftId: "s1", key: "o1|manual_add|new:chloé roy|s1|open|3|3", closed: false, full: true, markedFull: false, occupied: 3, capacity: 3, roleName: "Bar", label: "Bar", date: "2026-07-04", startTime: "10:00", endTime: "12:00" }
+    const created = { ok: true, status: 201, json: async () => ({ registrations: [{ id: "r9", status: "active", source: "admin_manual", comment: null, createdAt: "2026-06-01T00:00:00.000Z", volunteer: { id: "v9", firstName: "Chloé", lastName: "Roy", email: null, phone: null }, shift: { ...shift, date: "2026-07-04T00:00:00.000Z" } }] }) }
+    const fill = () => {
+      fireEvent.change(screen.getByRole("textbox", { name: "Prénom" }), { target: { value: "Chloé" } })
+      fireEvent.change(screen.getByRole("textbox", { name: "Nom" }), { target: { value: "Roy" } })
+      fireEvent.click(screen.getByRole("button", { name: "Ajouter" }))
+    }
+
+    it("asks in a dialog, then adds with the confirmation's key", async () => {
+      fetchMock.mockResolvedValueOnce({ ok: false, status: 409, json: async () => ({ code: "shift_override", error: "x", shifts: [need] }) }).mockResolvedValueOnce(created)
+      const onAdded = vi.fn()
+      render(<Harness initial={{ ...EMPTY_ADD_FORM, shiftId: "s1" }} onAdded={onAdded} />)
+      fill()
+      const dialog = await screen.findByRole("dialog", { name: "Créneau complet" })
+      expect(dialog).toHaveAccessibleDescription(/^Ce créneau est complet\W+3 places sur 3 sont prises\. Ajouter Chloé quand même\W+$/)
+      expect(within(dialog).getByText("Il y aura 4 personnes pour 3 places.")).toBeInTheDocument()
+      // Nothing said as an error: the dialog asks.
+      expect(filledAlerts()).toHaveLength(0)
+      fireEvent.click(within(dialog).getByRole("button", { name: "Ajouter quand même" }))
+      await waitFor(() => expect(onAdded).toHaveBeenCalled())
+      expect(JSON.parse(fetchMock.mock.calls[1][1].body).shiftOverride).toEqual([need.key])
+    })
+
+    it("Cancel closes the dialog, adds nothing and puts focus back on « Ajouter »", async () => {
+      fetchMock.mockResolvedValueOnce({ ok: false, status: 409, json: async () => ({ code: "shift_override", error: "x", shifts: [need] }) })
+      render(<Harness initial={{ ...EMPTY_ADD_FORM, shiftId: "s1" }} />)
+      fill()
+      const dialog = await screen.findByRole("dialog")
+      fireEvent.click(within(dialog).getByRole("button", { name: "Annuler" }))
+      expect(screen.queryByRole("dialog")).toBeNull()
+      expect(screen.getByRole("button", { name: "Ajouter" })).toHaveFocus()
+      expect(fetchMock).toHaveBeenCalledTimes(1)
+    })
+
+    it("a cancelled shift is a refusal in the form's alert", async () => {
+      fetchMock.mockResolvedValueOnce({ ok: false, status: 409, json: async () => ({ code: "shift_cancelled", error: "Le créneau « Bar » est annulé\u00a0: rien n'a été fait. Rouvrez d'abord le créneau." }) })
+      render(<Harness initial={{ ...EMPTY_ADD_FORM, shiftId: "s1" }} />)
+      fill()
+      await waitFor(() => expect(filledAlerts()[0]).toHaveTextContent("Rouvrez d'abord le créneau"))
+      expect(screen.queryByRole("dialog")).toBeNull()
+    })
+  })
 })

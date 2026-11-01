@@ -28,15 +28,27 @@ export type CancellableShift = {
   event: { id: string; title: string; slug: string; organizationId: string; organization: { slug: string } }
   registrations: {
     id: string
+    /** Its status before the cancellation (a request is restored as a request); "active" when absent. */
+    status?: string
     volunteerId: string
     volunteer: { email: string | null; firstName: string }
   }[]
 }
 
-export async function cancelShift(shift: CancellableShift, actor: LogActor): Promise<{ cancelledRegistrations: number; notified: number; unpublished: boolean }> {
+export type CancelShiftOptions = {
+  /**
+   * Whether the people registered are emailed (default true). The organiser may leave them out
+   * when cancelling a shift by its status (AUTHZ-15): a test shift, or people already told by phone.
+   * The choice is logged on the shift's cancellation.
+   */
+  notify?: boolean
+}
+
+export async function cancelShift(shift: CancellableShift, actor: LogActor, options: CancelShiftOptions = {}): Promise<{ cancelledRegistrations: number; notified: number; unpublished: boolean }> {
+  const notify = options.notify !== false
   // Through the outbox (#311): `notified` counts notifications queued, retried if SMTP fails.
   const outbox = collectNotifications()
-  for (const reg of shift.registrations) {
+  for (const reg of notify ? shift.registrations : []) {
     await outbox.send({
       kind: "shift_cancelled",
       dedupeKey: `shift_cancelled:${reg.id}`,
@@ -82,7 +94,11 @@ export async function cancelShift(shift: CancellableShift, actor: LogActor): Pro
     action: "shift.cancelled",
     entityType: "Shift",
     entityId: shift.id,
-    changes: { status: { from: shift.status, to: "cancelled" } },
+    changes: {
+      status: { from: shift.status, to: "cancelled" },
+      // Whether the people registered were told (AUTHZ-15), when there were any.
+      ...(shift.registrations.length > 0 ? { volunteersNotified: { from: null, to: notify } } : {}),
+    },
   })
   for (const reg of shift.registrations) {
     await logEvent({
@@ -91,7 +107,8 @@ export async function cancelShift(shift: CancellableShift, actor: LogActor): Pro
       action: "registration.cancelled",
       entityType: "Registration",
       entityId: reg.id,
-      changes: { status: { from: "active", to: "cancelled" }, shiftId: { from: shift.id, to: shift.id } },
+      // The status it had (Codex, AUTHZ-15): « Rétablir » gives a request back as a request.
+      changes: { status: { from: reg.status ?? "active", to: "cancelled" }, shiftId: { from: shift.id, to: shift.id } },
       causedByLogId: cancelLogId ?? undefined,
     })
   }

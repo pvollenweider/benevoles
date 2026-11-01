@@ -37,9 +37,11 @@ vi.mock("@/lib/auth-guard", () => ({
         findFirst: vi.fn(async ({ where }: { where: { id: string } }) => (where.id === "gone" ? null : { ...shift(), id: where.id, roleName: where.id === "s3" ? "Loge" : "Bar" })),
         findMany: vi.fn(async () => m.limits),
         update: vi.fn(),
+        updateMany: vi.fn(),
       },
       volunteer: { findFirst: m.volunteerFindFirst, create: m.volunteerCreate },
-      registration: { findMany: vi.fn(async () => m.held), create: m.registrationCreate },
+      registration: { findMany: vi.fn(async () => m.held), create: m.registrationCreate, count: vi.fn(async () => 0) },
+      $queryRaw: vi.fn(),
       adminUser: { findFirst: m.adminFindFirst },
       $transaction: async (fn: (tx: unknown) => unknown) => fn(db),
     }
