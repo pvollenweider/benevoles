@@ -43,18 +43,35 @@ describe("AdminsManager — roles", () => {
     expect(screen.getByRole("status")).toHaveTextContent("Votre rôle : organisateur.")
   })
 
-  // #1053: re-inviting an expired invitation replaces its row (new id) instead of listing it twice.
-  it("replaces the expired invitation row when the same address is invited again", async () => {
+  // #1053: re-inviting an expired invitation replaces its row (new id) instead of listing it twice;
+  // the answer is the same for every address, so the list is read again.
+  it("reads the team list again after an invitation, the expired row replaced", async () => {
     const expired = { id: "old", name: "Camille", email: "camille@x.ch", role: "organizer", isActive: false, createdAt: "2026-01-03T00:00:00.000Z", pending: true }
-    fetchMock.mockResolvedValue({ ok: true, status: 201, json: async () => ({ ...expired, id: "new", createdAt: "2026-10-17T00:00:00.000Z" }) })
+    fetchMock
+      .mockResolvedValueOnce({ ok: true, status: 202, json: async () => ({ accepted: true }) })
+      .mockResolvedValueOnce({ ok: true, status: 200, json: async () => [...admins, { ...expired, id: "new", createdAt: "2026-10-17T00:00:00.000Z" }] })
     render(<AdminsManager initialAdmins={[...admins, expired]} currentEmail="alice@x.ch" canManage />)
     expect(screen.getAllByText("camille@x.ch")).toHaveLength(1)
     fireEvent.click(screen.getByRole("button", { name: "Inviter" }))
     fireEvent.change(screen.getByLabelText("Nom"), { target: { value: "Camille" } })
-    fireEvent.change(screen.getByLabelText("Email"), { target: { value: "camille@x.ch" } })
+    fireEvent.change(screen.getByLabelText("Email"), { target: { value: "Camille@x.ch" } })
     fireEvent.click(screen.getByRole("button", { name: "Envoyer l'invitation" }))
-    await waitFor(() => expect(screen.getByRole("status")).toHaveTextContent("Invitation envoyée à camille@x.ch."))
+    await waitFor(() => expect(screen.getByRole("status")).toHaveTextContent("Si camille@x.ch peut rejoindre l'équipe, cette adresse reçoit une invitation par email"))
+    expect(fetchMock).toHaveBeenLastCalledWith("/api/admin/settings/admins")
     expect(screen.getAllByText("camille@x.ch")).toHaveLength(1)
+  })
+
+  it("shows the same message, and no new row, for an address that gets no invitation", async () => {
+    fetchMock
+      .mockResolvedValueOnce({ ok: true, status: 202, json: async () => ({ accepted: true }) })
+      .mockResolvedValueOnce({ ok: true, status: 200, json: async () => admins })
+    render(<AdminsManager initialAdmins={admins} currentEmail="alice@x.ch" canManage />)
+    fireEvent.click(screen.getByRole("button", { name: "Inviter" }))
+    fireEvent.change(screen.getByLabelText("Nom"), { target: { value: "Nadia" } })
+    fireEvent.change(screen.getByLabelText("Email"), { target: { value: "nadia@example.org" } })
+    fireEvent.click(screen.getByRole("button", { name: "Envoyer l'invitation" }))
+    await waitFor(() => expect(screen.getByRole("status")).toHaveTextContent("Si nadia@example.org peut rejoindre l'équipe"))
+    expect(screen.queryByText("nadia@example.org")).toBeNull()
   })
 
   it("shows organisers the team without any control", () => {
