@@ -128,7 +128,7 @@ Lues uniquement par `prisma/seed.ts`, jamais par l'application.
 | `ORG_ADMIN_EMAIL` | `org-admin@localhost` |
 | `ORG_ADMIN_PASSWORD` | valeur de `ADMIN_PASSWORD` |
 
-Le seed crée un super admin, une organisation `default` avec son admin, et un événement de démonstration publié dans cette organisation (à archiver en production). Le relancer remet les mots de passe des deux comptes aux valeurs des variables. En production, définir ces quatre variables avant de le lancer. Aucun déploiement ne le lance : sur Kubernetes, `ADMIN_EMAIL` et `ADMIN_PASSWORD` sont présents dans `benevoles-secret` mais ne servent qu'à un seed lancé à la main.
+Le seed crée un super admin, une organisation `default` avec son admin, et un événement de démonstration publié dans cette organisation (à archiver en production). Le relancer remet les mots de passe des deux comptes aux valeurs des variables et ferme leurs sessions ouvertes. En production, définir ces quatre variables et lancer le seed avec `NODE_ENV=production` : il refuse alors de s'exécuter, avant d'écrire quoi que ce soit, si `ADMIN_PASSWORD` ou `ORG_ADMIN_PASSWORD` manque (pas de repli de l'un sur l'autre) ou ne respecte pas les règles des mots de passe (`src/lib/seed-credentials.ts`). Aucun déploiement ne le lance : sur Kubernetes, `ADMIN_EMAIL` et `ADMIN_PASSWORD` sont présents dans `benevoles-secret` mais ne servent qu'à un seed lancé à la main.
 
 Avec `.env.development.example`, le super admin est `admin@local` / `admin`.
 

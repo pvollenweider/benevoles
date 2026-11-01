@@ -13,6 +13,7 @@
 import { PAST_EVENT_NOTICE_DAYS } from "./past-event-retention"
 import { INACTIVITY_MONTHS } from "./org-inactivity"
 import { FINAL_NOTICE_DAYS, MIN_DEACTIVATION_DAYS, REMINDER_GAP_DAYS } from "./org-inactivity-steps"
+import { SESSION_ABSOLUTE_SECONDS } from "./session-lifetime"
 
 export const RETENTION_DAYS = {
   /** Deactivated organisation, with its events, members, registrations, logs (cascade). */
@@ -312,6 +313,15 @@ export const RETENTION: readonly RetentionEntry[] = [
     purpose: "Protéger contre les abus",
     duration: "effacés au nettoyage qui suit la fin de leur fenêtre (15 minutes à 1 heure)",
     trigger: "fin de la fenêtre",
+    mechanism: "nettoyage quotidien (cron cleanup)",
+    backups: inBackups,
+    public: false,
+  },
+  {
+    data: "Identifiant aléatoire d'une session d'administration terminée par « Se déconnecter » (rien d'autre sur la session ni sur la personne)",
+    purpose: "Refuser une copie du cookie de session après la déconnexion",
+    duration: `effacé au nettoyage qui suit la fin de la durée maximale de la session (${SESSION_ABSOLUTE_SECONDS / 86_400} jours après la connexion)`,
+    trigger: "déconnexion",
     mechanism: "nettoyage quotidien (cron cleanup)",
     backups: inBackups,
     public: false,

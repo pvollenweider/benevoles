@@ -1461,6 +1461,17 @@ model RateLimit {
   @@index([resetAt])
 }
 
+// Administration sessions ended by « Se déconnecter »: the session id (`sid` of the JWT, random,
+// src/lib/session-lifetime.ts), so a copy of the signed-out cookie is refused too
+// (refreshAdminToken). Nothing else about the session or the person. Kept until the session could
+// no longer be used anyway (30 days after its sign-in), then pruned by the cleanup cron.
+model RevokedSession {
+  sid       String   @id
+  expiresAt DateTime
+
+  @@index([expiresAt])
+}
+
 // Web push subscription, tied to one Volunteer (hence to one organization through it). Creating
 // one requires the volunteer's registration editToken, not just an email: the reminder payload
 // links to /my/<editToken>, so whoever owns the endpoint receives that link. Same browser can

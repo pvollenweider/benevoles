@@ -35,7 +35,7 @@ Vous recevrez un accusé de réception sous 48 h. Une fois la faille confirmée 
 - Activer HTTPS en production ; ne pas désactiver la vérification TLS
 - Renouveler régulièrement les mots de passe SMTP et les secrets NextAuth
 - Définir `CRON_SECRET` : sans lui, les endpoints `/api/cron/*` refusent toutes les requêtes en production
-- Ne pas laisser les valeurs par défaut du seed en production (mot de passe `change-me`) : définir `ADMIN_EMAIL`, `ADMIN_PASSWORD`, `ORG_ADMIN_EMAIL` et `ORG_ADMIN_PASSWORD` avant `npm run db:seed`
+- Ne pas laisser les valeurs par défaut du seed en production (mot de passe `change-me`) : définir `ADMIN_EMAIL`, `ADMIN_PASSWORD`, `ORG_ADMIN_EMAIL` et `ORG_ADMIN_PASSWORD` avant `npm run db:seed`, lancé avec `NODE_ENV=production` : le seed refuse alors un mot de passe absent ou qui ne respecte pas les règles
 
 ## HTTPS strict (HSTS)
 
