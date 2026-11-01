@@ -1,0 +1,26 @@
+{
+  "checkedAt": "2026-11-01T08:06:14.334914+00:00",
+  "vitest": {
+    "files": 40,
+    "passed": 1344
+  },
+  "eslint": "passed: record-assignment-proposals.ts, local-production.ts",
+  "videoTypes": "passed:217explicitsourcefiles, generated Prisma in verified snapshot",
+  "tsc": "passed: verified snapshot",
+  "videoValidation": {
+    "ASSIGNMENT_PUBLICATION": "passed",
+    "ASSIGNMENT_PROPOSALS": "passed"
+  },
+  "descriptionsUtf8Bytes": {
+    "ASSIGNMENT_PUBLICATION": 141,
+    "ASSIGNMENT_PROPOSALS": 125
+  },
+  "sourceOrGuideChanges": false,
+  "rendersJsonChanged": false,
+  "stoppedOwnPids": [
+    25933,
+    25700
+  ],
+  "inheritedPostgresPidLeftUntouched": 22386,
+  "pushOrMerge": false
+}

@@ -1,0 +1,11 @@
+{
+  "reviewedAt": "2026-11-01T07:57:26.789Z",
+  "videoSha256": "149b2de3e98aa2edf3210ef7bf94e2c581de5360e116dfa3a099078173eaa0aa",
+  "prompt": "Écoute cet enregistrement entier. Combien de personnes parlent dans la narration principale? L'identité vocale reste-t-elle constante du début à la fin? Distingue un vrai changement de personne des variations naturelles d'intonation et de hauteur. Les brefs samples de la musique de fond ne sont pas la narration. Rapporte JSON {speakers:number, consistentVoice:boolean, changes:[{seconds:number,observation:string}], evidence:string}. Aucun texte attendu n'est fourni.",
+  "result": {
+    "speakers": 1,
+    "consistentVoice": true,
+    "changes": [],
+    "evidence": "L'ensemble de la narration est assuré par une seule et même voix féminine tout au long de l'enregistrement."
+  }
+}

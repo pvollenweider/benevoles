@@ -1,0 +1,8 @@
+{
+  "ap-result": {
+    "wavDecodedPcmSha256": "2c967d5588d19237d5755401dbddb31a929c11ccb4f34b1842ea1ed6b0df53b3",
+    "flacDecodedPcmSha256": "2c967d5588d19237d5755401dbddb31a929c11ccb4f34b1842ea1ed6b0df53b3",
+    "encoding": "mono24000Hzs16le",
+    "lossless": true
+  }
+}

@@ -976,47 +976,20 @@ pas ce hook afin d'éviter une nouvelle sauvegarde automatique. Aucun `src/`
 n'est régénéré dans le worktree. Détail : `commit-hook-incident.json` dans les
 preuves du lot.
 
-## Sources prêtes, rendu en attente : publication des affectations et suite du parcours (#1172)
+## Lot 38 — publication et propositions, reprise du 2026-11-01
 
-Demande du propriétaire (2026-10-31) : voir tout le parcours, de la publication à
-l'email reçu par quelques bénévoles, puis ce que les bénévoles peuvent changer.
-Choix (avis Codex en lecture seule, CONFIDENT) : une troisième vidéo liée plutôt
-qu'une `ASSIGNMENT_PROPOSALS` portée au-delà de quatre minutes. Sources ajoutées
-sans rendu (aucune capture narrée, aucune voix, aucune publication) :
+**ASSIGNMENT_PUBLICATION : READY, publiée, révision 1, 164,28 s. ASSIGNMENT_PROPOSALS : READY, republiée, révision 4, 170,88 s.** Les notes de sources en attente et de blocage du 31 octobre sont remplacées par cette revue terminée. Les preuves historiques de l'arrêt restent dans `evidence/batch38/`.
 
-- `assignment-publication` (`ASSIGNMENT_PUBLICATION`, nouvelle, `published: false`,
-  révision 1) : sources prêtes, rendu en attente. Seed
-  `scripts/seed-video-scenario.ts assignment-publication`, neuf avant chaque prise
-  (la prise publie, annule une inscription et enregistre une réponse). Recadrage
-  Mailpit x320/y312/960×488 comme `VOLUNTEER_EVENT_AVAILABILITY` : à vérifier sur
-  les quatre emails filmés (deux placements, le désistement, le lien de
-  disponibilités d'Emma), le sujet n'est jamais lu par la narration.
-- `assignment-proposals` (`ASSIGNMENT_PROPOSALS`) : **À refilmer**. La dernière
-  phrase de `ap-publish` annonce maintenant la vidéo suivante ; nouvelle narration
-  de ce segment, puis nouvelle prise. Ses deux clics suivent maintenant leur annonce (ouverture sur « alors seulement les places sont prises », « Annuler » sur « Tant que vous ne publiez pas »). La révision publiée
-  (3) reste en ligne jusque-là ; la révision est à incrémenter au rendu.
+La branche reprend `996a8ddf` rebasé en `5207d9aa` sur main **59dd70f34c943a129498a8a8bcd3a85c2b8c3f7f** (#1235). Le build vérifié reconstruit depuis ce main est **34vKm3_n2DKX6SypHYFO0**. Les connexions utilisent le `pgAdapter()` de main ; le PostgreSQL natif dédié au port 45439 est également configuré en UTC et a redémarré à 07:52:24 UTC. Les 111 migrations sont appliquées. Mailpit natif : SMTP 41040, interface 48040 ; aucune action sur Docker ni le port 45433.
 
-Organisation fictive dédiée `formation-publication`
-(`scripts/seed-video-publication.ts`), jamais celle des propositions ; la liste
-bêta globale n'ouvre que `availability` et `workloadProtection`. Les 29 brouillons
-semés sont ceux par lesquels se termine la prise des propositions (test de
-continuité dans `videos/lib/__tests__/proposals-fixture.test.ts`). Emails réels du
-produit : la prise rend seulement échues, hors champ, les lignes en attente
-(placements dix minutes, désistement cinq) puis appelle la vraie route
-`/api/cron/outbox`. Phrases lues vérifiées par
-`videos/lib/__tests__/publication-fixture.test.ts` ; contrôle de fixture pour
-`videos/tools/audit-audiovisual.ts` : `videos/lib/verify-publication-review-fixture.ts`
-(base dédiée 45439 ou 45441). Recorder prouvé de bout en bout depuis un harnais
-Playwright jetable (repères neutralisés) contre `next dev`, PostgreSQL et Mailpit
-jetables, sur deux seeds neufs, sans voix ni rendu.
+**Publication : prise 1 conservée**, filmée sur main `0546a73f7981d3c26678cd304ff23c9d53e4d01e`, BUILD_ID `Q_6shklaSW6C6_W2an7HG`. La règle demande des libellés conformes à main et interdit de refilmer après modification de `src/` ; la documentation demande de régénérer lorsqu'un écran filmé change. Ici, aucun écran montré n'a changé : #1235 corrige les sessions UTC et les états d'échec des calculs, absents de ce parcours. La publication avait réussi sur la base Docker du premier tournage. Une répétition complète après seed neuf sur le nouveau build confirme les mêmes 29 publications, le désistement de Noah, la correction d'Emma et la mission à revoir. La provenance du MP4 est conservée, sans la réétiqueter comme le nouveau build.
 
+La revue audiovisuelle couvre maintenant ses douze chapitres. Les deux signalements de résultats absents à une frontière sont résolus sur les vrais extraits traversant les chapitres et sur les images : [confirmation de publication](evidence/batch38/resume/publication-cross-boundary.json), [annulation](evidence/batch38/resume/cancel-cross-boundary.json), [créneau restant](evidence/batch38/resume/publication-cancel-result.png). Le clic enregistré à 32,247 s suit la fin de `pb-publish` à 31,128 s ; le résultat apparaît dans `pb-done`. Le message saisi reste lisible avant le clic d'annulation à 98,214 s, puis le seul créneau du samedi est visible à 99 s. Les timestamps du modèle sont des observations approximatives, distinctes des événements enregistrés. Une attribution vocale isolée dans l'extrait de transition est contredite par les deux chapitres voisins, le master entier et la [bande-son finale entière](evidence/batch38/resume/full-final-voice.json), qui trouvent une seule voix constante. Les quatre vrais corps Mailpit restent cadrés x320/y312/960×488 ; les 64 images de transition déjà contrôlées restent valides pour ce MP4 identique.
 
-## Lot 38 — arrêté avant publication (2026-10-31)
+**Propositions : première prise narrée**, après répétition réussie et nouveau seed sur le build corrigé. La vérification du résultat suit le clic de 3,066 s en répétition et de 9,050 s dans la prise, attente du chapitre comprise. Aucun nouvel incident produit. Les 29 brouillons sont écrits, Emma verrouillée, Léa retirée et Lou ajoutée manuellement ; la confirmation de publication est annulée. Le bouton d'autre répartition est montré sans clic, aucune graine interne n'est saisie. Le [6 saisi](evidence/batch38/resume/ap-targets-end.png) reste visible avant la fin de son chapitre, le [brouillon manuel de Lou](evidence/batch38/resume/ap-adjust-end.png) et les [29 brouillons après annulation](evidence/batch38/resume/ap-publish-end.png) sont lisibles. Les onze chapitres audiovisuels totalisent 38 points de contrôle, sans écart signalé.
 
-**ASSIGNMENT_PUBLICATION : NOT READY, non publiée. ASSIGNMENT_PROPOSALS : NOT READY, révision 3 en ligne conservée.** Branche `video-batch38`, produit `0546a73f7981d3c26678cd304ff23c9d53e4d01e` (#1234), BUILD_ID `Q_6shklaSW6C6_W2an7HG`. Aucun changement de catalogue, révision ou date de publication. Les notes de sources prêtes/à refilmer ci-dessus restent applicables.
+Les deux masters Kore entiers sont conservés sans aucun nouvel appel TTS : 12 et 11 ASR source identiques aux textes et empreintes des manifestes. Toutes les ASR des chapitres finaux passent, ainsi que les ASR multilingues des bandes-son entières et les sous-titres : **0 tutoiement adressé au public**. La nouvelle fin des propositions annonce la publication. Le service a retourné des réponses vides pour le WAV final `ap-result` ; une reconnaissance FLAC sans perte aboutit avec les mêmes instructions, sans texte attendu. Les PCM décodés WAV/FLAC ont la même empreinte ; les onze rapports indépendants sont conservés puis revalidés par l'auditeur standard : [provenance ASR](evidence/batch38/resume/proposals-final-asr-provenance.json). Aucun son n'a été remplacé ou régénéré.
 
-Publication : première prise de 164,28 s, validation, ASR des douze chapitres source/final et ASR multilingue entière réussies ; registre **0**, musique 15,2–18,8 LU sous la voix, minimum sans voix −33,9 LUFS, aucun trou. Répétition complète réussie, liens entiers reçus sur le sous-domaine compris. Quatre vrais corps Mailpit cadrés x320/y312/960×488 ; 64 images aux transitions sans en-tête anglais ni adresse locale. Revue audiovisuelle interrompue par manque d'espace sur l'hôte puis système de fichiers Docker en lecture seule ; la fixture finale n'était plus vérifiable. Elle ne reçoit donc pas READY. Un clic de publication à la frontière pb-publish/pb-done reste à contrôler sur un extrait traversant les deux chapitres.
+Les deux validations et les repères de phrases passent. Musique prescrite : publication **15,2–18,8 LU** sous la voix, minimum sans voix **−33,9 LUFS**, aucun trou ; propositions **15,2–19,6 LU**, aucun trou ni fenêtre de trois secondes entièrement sans voix. Effets sur les interactions réelles : publication 10 clics/28 frappes, propositions 20 clics/2 frappes. Descriptions auditées : **141/125 octets UTF-8**. Affiches et durées dans les métadonnées de revue séparées ; `videos/renders.json` inchangé. Les contrôles automatisés complètent l'inspection des images ; aucune écoute subjective en temps réel n'est revendiquée.
 
-Propositions : première génération Kore entière rejetée pour mots inattendus en fin d'ap-load, deuxième génération entière contrôlée, voix constante et onze ASR réussies après recalage sur silences réels. Les clics Retirer/confirmer/Ajouter ont été retardés après leurs libellés mesurés. Aucune prise narrée. Après les migrations sur une base PostgreSQL portable dédiée au port 45439, la répétition finale affiche **Calcul arrêté avant la fin**, puis « Le calcul a été interrompu par un redémarrage du service ; rien n'a été écrit », sans redémarrage du serveur pendant cette répétition. Arrêt à **41,795 s**, scène **ap-result**, URL `https://www.benevol.app/admin/events/video-proposals-event/availability/proposal`. [Capture de l'anomalie](evidence/batch38/proposals-calculation-stopped.png) et [échec du recorder](evidence/batch38/proposals-calculation-stopped.json). Cause non établie ; arrêt conformément à la consigne du propriétaire, aucun contournement produit.
-
-Le wrapper vidéo autorise désormais le seed publication et charge le client Prisma de la copie vérifiée sur les deux ports dédiés 45439/45441. **1 311 tests vidéo/métadonnées**, eslint des sources modifiées et contrôles de types dans la copie vérifiée réussis. Rapports NOT READY et repères vocaux : `videos/evidence/batch38/`. Aucun `src/`, guide, `renders.json`, fichier ignoré ou non suivi préexistant supprimé ; aucune publication, notification, push ou fusion. Serveurs propres arrêtés par PID ; seuls les conteneurs de ce lot ont fait l'objet d'actions d'arrêt.
+Pour chaque vidéo, aperçu puis `make video-publish KUBE_CONTEXT=default ID=… APPLY=1` : cinq fichiers envoyés. Les deux entrées du catalogue portent `published: true`, les dates du 1er novembre et les révisions 1/4 ; les notifications demandées sont envoyées. [Rapport publication](evidence/batch38/resume/assignment-publication-review-report.txt), [rapport propositions](evidence/batch38/resume/assignment-proposals-review-report.txt), [build vérifié](evidence/batch38/resume/new-main-product-build.json). Aucun `src/`, guide ou capture de documentation modifié ; `doc-img: unchanged`. Commit local uniquement, identité Philippe Vollenweider <pvollenweider@jahia.com> pour auteur et committer.

@@ -1,0 +1,72 @@
+{
+  "videoSha256": "13da4d0725c077fd0b2b2bf4c6ff799f1301aabcd06b179937a0cb21447259b3",
+  "sources": [
+    {
+      "file": "narration-audit-video-ap-welcome.json",
+      "sha256": "47a9659343aea18c477882b5fa331adcc4c56a8bdea4021b6b4a563c8c3a9255",
+      "auditedAt": "2026-11-01T08:03:07.932Z",
+      "transport": "WAV"
+    },
+    {
+      "file": "narration-audit-video-ap-drafts.json",
+      "sha256": "204ee10c00a10dfa8a09f085478f79e05055aa2708eb2fb386e3eec4ea50b97b",
+      "auditedAt": "2026-11-01T08:03:13.602Z",
+      "transport": "WAV"
+    },
+    {
+      "file": "narration-audit-video-ap-scope.json",
+      "sha256": "46ab3eb82d46f42d3cd3279fbbaa6001f24748bb700b07130e3e9a80484ebfcf",
+      "auditedAt": "2026-11-01T08:03:18.193Z",
+      "transport": "WAV"
+    },
+    {
+      "file": "narration-audit-video-ap-targets.json",
+      "sha256": "48e6ab2e58fa291bdda29e4c52a63eed048e4d1d200f9cb80cdfcf44ccc3541d",
+      "auditedAt": "2026-11-01T08:03:07.357Z",
+      "transport": "WAV"
+    },
+    {
+      "file": "narration-audit-video-ap-wishes.json",
+      "sha256": "949464c4d49adcf37cec6addfe182e4e07cf21d51cbe9efc0cfa96e4ab0252d9",
+      "auditedAt": "2026-11-01T08:03:11.052Z",
+      "transport": "WAV"
+    },
+    {
+      "file": "narration-audit-video-ap-launch.json",
+      "sha256": "5724bb7dd915541d47b855b6079abbeafb6fb7570e4099d25aef5dad1e19b0a0",
+      "auditedAt": "2026-11-01T08:03:14.941Z",
+      "transport": "WAV"
+    },
+    {
+      "file": "narration-audit-video-ap-result.json",
+      "sha256": "5e539d83a392f23aafba6bff83042cf04a8b1cdffeb12404c1942dc253d2770f",
+      "auditedAt": "2026-11-01T08:03:50.255Z",
+      "transport": "Lossless FLAC transcoded from the hash-verified actual final WAV; same unprompted multilingual ASR instructions"
+    },
+    {
+      "file": "narration-audit-video-ap-load.json",
+      "sha256": "6e49bd039dc433452c54e2b8928eded74a7c5dc819b179cc827c7d29942fc76e",
+      "auditedAt": "2026-11-01T08:03:08.592Z",
+      "transport": "WAV"
+    },
+    {
+      "file": "narration-audit-video-ap-lock.json",
+      "sha256": "f900beed161b344711319ad2938e040f29832b8b80bf7a39cc067756cb522668",
+      "auditedAt": "2026-11-01T08:03:12.812Z",
+      "transport": "WAV"
+    },
+    {
+      "file": "narration-audit-video-ap-adjust.json",
+      "sha256": "5a3a54020021ffda8c5d01c1c6aeb2352bf26fb55772f8e02c6f0e6621675dea",
+      "auditedAt": "2026-11-01T08:03:24.771Z",
+      "transport": "WAV"
+    },
+    {
+      "file": "narration-audit-video-ap-publish.json",
+      "sha256": "d0c0fe5c68768d4c62d14ac4226fc821f1754d214923379ec99ab7ec7f3dbc2a",
+      "auditedAt": "2026-11-01T08:03:28.412Z",
+      "transport": "WAV"
+    }
+  ],
+  "serviceRetries": "ap-result WAV returned empty after6requests; lossless FLAC passed on attempt3 with identical instructions. No audio regenerated."
+}
