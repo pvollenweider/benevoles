@@ -13,6 +13,7 @@ import {
 import { focusFirstAvailableNextFrame } from "@/lib/focus-return"
 import DocMoreLink from "@/components/DocMoreLink"
 import { SECTION_DOC_LINKS, docHref } from "@/lib/help-links"
+import { MARKDOWN_TEXT_MAX } from "@/lib/text-limits"
 
 export default function OrgCharterForm({
   initialCharter,
@@ -214,6 +215,7 @@ export default function OrgCharterForm({
       <textarea
         ref={textareaRef}
         aria-labelledby={titleId}
+        maxLength={MARKDOWN_TEXT_MAX}
         value={text}
         onChange={(e) => { setText(e.target.value); setPreviewOpen(false); clearStatus() }}
         rows={14}

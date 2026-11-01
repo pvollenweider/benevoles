@@ -3,7 +3,8 @@
 
 import NextAuth from "next-auth"
 import { authConfig } from "./auth.config"
-import { NextResponse } from "next/server"
+import { NextResponse, type NextFetchEvent, type NextRequest } from "next/server"
+import type { NextAuthRequest } from "next-auth"
 import { ORG_HEADER, withOrgHeader } from "@/lib/org-subdomain"
 import { apexRedirectUrl, orgHostApexRedirectUrl } from "@/lib/apex-redirect"
 import { apexBaseUrl, configuredAppUrl } from "@/lib/urls"
@@ -15,6 +16,7 @@ import { loadVideoCatalog } from "@/lib/video-catalog-load"
 import { findBlogPost, loadBlogPosts } from "@/lib/blog"
 import { reportError } from "@/lib/report-error"
 import { REQUEST_PATH_HEADER } from "@/lib/admin-next"
+import { isAuthEndpoint } from "@/lib/auth-endpoints"
 
 const { auth } = NextAuth(authConfig)
 
@@ -49,7 +51,7 @@ function blogPostExists(slug: string): boolean {
 
 // Proxy file convention (Next.js 16, formerly `middleware`): a first filter on pages from the JWT
 // alone and the organization header; the authoritative checks stay server-side (auth-guard.ts).
-export default auth((req) => {
+function handle(req: NextAuthRequest): Response {
   const { pathname } = req.nextUrl
 
   // --- Bare domain to the www site (#759): one address per page for search engines. 308 keeps
@@ -111,8 +113,28 @@ export default auth((req) => {
   // Framing (#948): refused everywhere but the embeddable sign-up (src/lib/security-headers.ts).
   for (const { key, value } of frameHeaders(pathname, req.nextUrl.searchParams)) response.headers.set(key, value)
   return response
+}
+
+// Typed with the event so the middleware overload of auth() is the one picked.
+const withSession = auth((req: NextAuthRequest, event: NextFetchEvent) => {
+  void event
+  return handle(req)
 })
 
+/**
+ * next-auth's own endpoints (/api/auth/…) go through without the session wrapper: they read and
+ * write the session cookie themselves, and the wrapper renewed that cookie on the sign-out
+ * response too, right before next-auth's deletion (the browser kept only the last one, but the
+ * response carried a fresh session cookie). Nothing here needs the session on those paths.
+ */
+export default function proxy(req: NextRequest, event: NextFetchEvent) {
+  if (isAuthEndpoint(req.nextUrl.pathname)) return handle(Object.assign(req, { auth: null }))
+  return withSession(req, event)
+}
+
+// Every path but the Sentry tunnel, Next.js's own files and the favicon. Each exclusion is anchored
+// (whole segment or end of path): an event slug such as `monitoring-…` still goes through the proxy.
+// Kept a literal (Next.js reads it from the source); tested in src/lib/__tests__/proxy-matcher.test.ts.
 export const config = {
-  matcher: ["/((?!monitoring|_next/static|_next/image|favicon.ico).*)"],
+  matcher: ["/((?!monitoring(?:/|$)|_next/static/|_next/image$|favicon\\.ico$).*)"],
 }

@@ -5,10 +5,14 @@ import type { JWT } from "next-auth/jwt"
 import { prisma } from "./prisma"
 import { isRateLimited, rateLimit, releaseHit, reserveHit, type RateLimitStore } from "./rate-limit"
 import { organizationAllowsSignIn } from "./admin-sign-in"
+import { claimLoginSlot, type LoginSlotStore } from "./login-slot"
+import { sessionHardExpiry } from "./session-lifetime"
+import { reportError } from "./report-error"
 
 /**
  * Re-reads the admin behind a session token on every server-side auth() call, so a JWT issued
- * before a change doesn't keep privileges until it expires (30 days): a deactivated or removed
+ * before a change doesn't keep privileges until it expires (src/lib/session-lifetime.ts): a
+ * signed-out session (its id revoked), a deactivated or removed
  * admin, or an org admin whose organization was disabled, gets `null` (NextAuth then clears the
  * session cookie); a changed role or organization is picked up from the DB instead of the token.
  *
@@ -16,11 +20,16 @@ import { organizationAllowsSignIn } from "./admin-sign-in"
  * issued. Every page and API route that reads data goes through auth() from src/auth.ts.
  */
 export async function refreshAdminToken(token: JWT): Promise<JWT | null> {
-  if (!token.sub) return null
-  const admin = await prisma.adminUser.findUnique({
-    where: { id: token.sub },
-    select: { isActive: true, role: true, organizationId: true, sessionVersion: true, email: true, name: true, organization: { select: { active: true, suspendedAt: true } } },
-  })
+  if (!token.sub || !token.sid) return null
+  const [admin, revoked] = await Promise.all([
+    prisma.adminUser.findUnique({
+      where: { id: token.sub },
+      select: { isActive: true, role: true, organizationId: true, sessionVersion: true, email: true, name: true, organization: { select: { active: true, suspendedAt: true } } },
+    }),
+    prisma.revokedSession.findUnique({ where: { sid: token.sid }, select: { sid: true } }),
+  ])
+  // Signed out (revokeSession): a copy of the cookie kept elsewhere is refused too.
+  if (revoked) return null
   if (!admin || !admin.isActive) return null
   // Password changed or reset since this session was opened (#360). Tokens issued before the
   // version existed count as 0, the column's default.
@@ -35,6 +44,25 @@ export async function refreshAdminToken(token: JWT): Promise<JWT | null> {
   return token
 }
 
+/**
+ * « Se déconnecter » (next-auth `events.signOut`, src/auth.ts): records the session's id as
+ * revoked until the session could no longer be used anyway, so the cookie stops working even if a
+ * copy of it was kept (another browser profile, a shared computer, a saved request). The person's
+ * other sessions are untouched. Idempotent: signing out twice with the same cookie is harmless.
+ *
+ * next-auth swallows an error thrown here and clears the cookie anyway, so a failure is reported
+ * instead: the browser is signed out, but a copy of its cookie would live until its own expiry.
+ */
+export async function revokeSession(token: Pick<JWT, "sid" | "authTime"> | null | undefined): Promise<void> {
+  if (!token?.sid || typeof token.authTime !== "number") return
+  const expiresAt = sessionHardExpiry(token.authTime)
+  try {
+    await prisma.revokedSession.upsert({ where: { sid: token.sid }, create: { sid: token.sid, expiresAt }, update: {} })
+  } catch (e) {
+    reportError("session.revoke")(e)
+  }
+}
+
 const LOGIN_WINDOW_MS = 15 * 60 * 1000
 export const LOGIN_MAX_PER_IP = 30
 export const LOGIN_MAX_PER_EMAIL_IP = 10
@@ -47,8 +75,10 @@ const normalizeEmail = (email: string) => email.trim().toLowerCase()
 /**
  * The wait before checking a password, from the account's recent failures from every address:
  * none for the first five, then 1 s, 2 s, 4 s, then 8 s at most. It slows guessing spread across
- * many addresses without ever refusing the account's owner, which a hard block on the account did
- * (anyone could keep a known admin locked out by failing ten times, #1048).
+ * many addresses without a hard block on the account, which let anyone keep a known admin locked
+ * out by failing ten times (#1048). While someone keeps failing from many addresses, the owner's
+ * attempt can still land while another one holds the account's slot and be refused: the price of
+ * checking one password at a time (src/lib/login-slot.ts).
  */
 export function loginDelayMs(accountFailures: number): number {
   if (accountFailures < LOGIN_DELAY_AFTER) return 0
@@ -70,7 +100,8 @@ export type LoginAttempt = {
  * - an address gets 30 failures, whatever the accounts;
  * - an address gets 10 failures on one account: the hard block no longer covers the account from
  *   every address, so a stranger can't lock its owner out;
- * - the account, from every address, gets a growing wait (loginDelayMs) instead of a block.
+ * - the account, from every address, gets a growing wait (loginDelayMs) instead of a block, and
+ *   once it waits, only one attempt at a time may check its password (src/lib/login-slot.ts).
  *
  * Every attempt is counted before the password is checked, and given back once it succeeds: only
  * failures stay counted, but parallel attempts can't all pass a check made before any of them is
@@ -79,7 +110,7 @@ export type LoginAttempt = {
  */
 const BLOCKED: LoginAttempt = { allowed: false, delayMs: 0, succeeded: async () => {} }
 
-export async function beginLoginAttempt(ip: string, email: string, using?: RateLimitStore): Promise<LoginAttempt> {
+export async function beginLoginAttempt(ip: string, email: string, using?: RateLimitStore, slots?: LoginSlotStore): Promise<LoginAttempt> {
   const account = normalizeEmail(email)
   const keys = { ip: `login-ip:${ip}`, emailIp: `login-email-ip:${account}|${ip}`, account: `login-account:${account}` }
   // Already used up: refused without counting, so refused retries never eat the budget other
@@ -99,13 +130,19 @@ export async function beginLoginAttempt(ip: string, email: string, using?: RateL
     return BLOCKED
   }
   const byAccount = await reserveHit(keys.account, LOGIN_WINDOW_MS, using)
-  return {
-    allowed: true,
-    delayMs: byAccount ? loginDelayMs(byAccount.count - 1) : 0,
-    succeeded: async () => {
-      await Promise.all([releaseHit(keys.ip, using), releaseHit(keys.emailIp, using), releaseHit(keys.account, using)])
-    },
+  const giveBack = async () => {
+    await Promise.all([releaseHit(keys.ip, using), releaseHit(keys.emailIp, using), releaseHit(keys.account, using)])
   }
+  const delayMs = byAccount ? loginDelayMs(byAccount.count - 1) : 0
+  if (delayMs === 0) return { allowed: true, delayMs: 0, succeeded: giveBack }
+  // One password check at a time on this account (src/lib/login-slot.ts): parallel attempts can't
+  // all wait side by side. Refused, the attempt checked nothing, so it gives everything back.
+  const wait = await claimLoginSlot(account, delayMs, slots)
+  if (wait === null) {
+    await giveBack()
+    return BLOCKED
+  }
+  return { allowed: true, delayMs: wait, succeeded: giveBack }
 }
 
 const PASSWORD_CHECK_WINDOW_MS = 15 * 60 * 1000

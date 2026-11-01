@@ -191,3 +191,13 @@ describe("eraseMemberRecap (#516)", () => {
     expect(text).not.toMatch(/[·—]/)
   })
 })
+
+describe("memberWriteRefusal: tombstones are never registered or edited", () => {
+  it("refuses an erased record and a merge tombstone, and lets a live record through", async () => {
+    const { memberWriteRefusal, MEMBER_TOMBSTONE_WRITE } = await import("@/lib/member-erasure")
+    expect(memberWriteRefusal({ erasedAt: new Date(), mergedIntoId: null })).toBe(MEMBER_TOMBSTONE_WRITE.erased)
+    expect(memberWriteRefusal({ erasedAt: null, mergedIntoId: "mem-kept" })).toBe(MEMBER_TOMBSTONE_WRITE.merged)
+    expect(memberWriteRefusal({ erasedAt: new Date(), mergedIntoId: "mem-kept" })).toBe(MEMBER_TOMBSTONE_WRITE.erased)
+    expect(memberWriteRefusal({ erasedAt: null, mergedIntoId: null })).toBeNull()
+  })
+})

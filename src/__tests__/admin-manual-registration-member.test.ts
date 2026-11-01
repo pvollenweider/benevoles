@@ -92,6 +92,28 @@ describe("POST /api/admin/registrations with a chosen member (#914)", () => {
     expect(m.registrationCreate).not.toHaveBeenCalled()
   })
 
+  it.each([
+    ["an erased record", { erasedAt: new Date("2026-10-01"), mergedIntoId: null }, /effacées/],
+    ["a merge tombstone", { erasedAt: null, mergedIntoId: "mem-kept" }, /fusionnée/],
+  ])("refuses to register %s, with a clear message, and creates nothing", async (_label, state, message) => {
+    m.volunteerFindFirst.mockResolvedValueOnce({ id: "mem-1", firstName: "", lastName: "", email: null, ...state })
+    const { POST } = await import("@/app/api/admin/registrations/route")
+    const res = await POST(post({ volunteerId: "mem-1" }))
+    expect(res.status).toBe(409)
+    expect((await res.json()).error).toMatch(message)
+    expect(m.registrationCreate).not.toHaveBeenCalled()
+  })
+
+  it("refuses when the member was merged between the first read and the lock", async () => {
+    m.volunteerFindFirst
+      .mockResolvedValueOnce({ id: "mem-1", firstName: "René", lastName: "Meyer", email: null, erasedAt: null, mergedIntoId: null })
+      .mockResolvedValueOnce({ erasedAt: null, mergedIntoId: "mem-kept" })
+    const { POST } = await import("@/app/api/admin/registrations/route")
+    const res = await POST(post({ volunteerId: "mem-1" }))
+    expect(res.status).toBe(409)
+    expect(m.registrationCreate).not.toHaveBeenCalled()
+  })
+
   it("still requires the names for a new person typed by hand", async () => {
     const { POST } = await import("@/app/api/admin/registrations/route")
     const res = await POST(post({ firstName: " ", lastName: "Roy" }))

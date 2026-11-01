@@ -8,6 +8,7 @@ import ModalShell from "@/components/admin/ModalShell"
 import AvailabilityFields from "@/components/AvailabilityFields"
 import FormStatus from "@/components/FormStatus"
 import { useSubmit } from "@/lib/use-submit"
+import { MEMBER_NOTES_MAX } from "@/lib/text-limits"
 import { parseTags, type Member } from "@/lib/members-list"
 import { MEMBER_TAGS_HINT as TAGS_HINT } from "@/lib/role-reservation"
 import type { AvailabilityPeriod } from "@/lib/availability"
@@ -91,7 +92,7 @@ export function EditMemberModal({ member, onClose, onSaved, fallbackFocusOnClose
         />
         <Field label="Téléphone" type="tel" value={phone} onChange={setPhone} autoComplete="off" />
         <Field label="Étiquettes (séparées par des virgules)" value={tags} onChange={setTags} placeholder="bénévole, bar" hint={TAGS_HINT} />
-        <Field label="Notes" value={notes} onChange={setNotes} multiline />
+        <Field label="Notes" value={notes} onChange={setNotes} multiline maxLength={MEMBER_NOTES_MAX} />
         <AvailabilityFields periods={availability.periods} note={availability.note} onChange={setAvailability} />
         <div className="flex items-center gap-2">
           <input id={activeId} type="checkbox" checked={active} onChange={(e) => setActive(e.target.checked)} className="h-4 w-4" />
@@ -178,8 +179,9 @@ function Actions({ busy, onClose, label }: { busy: boolean; onClose: () => void;
 }
 
 function Field({
-  label, value, onChange, type = "text", required = false, placeholder, multiline = false, inputRef, invalid, errorId, autoComplete, hint, liveHint = false,
+  label, value, onChange, type = "text", required = false, placeholder, multiline = false, inputRef, invalid, errorId, autoComplete, hint, liveHint = false, maxLength,
 }: {
+  maxLength?: number
   label: string
   /** A short help line under the field, read with it (aria-describedby). */
   hint?: string
@@ -207,7 +209,7 @@ function Field({
         {label}{required && <RequiredMark />}
       </label>
       {multiline ? (
-        <textarea id={id} value={value} onChange={(e) => onChange(e.target.value)} placeholder={placeholder} rows={3} className={cls} />
+        <textarea id={id} value={value} onChange={(e) => onChange(e.target.value)} placeholder={placeholder} maxLength={maxLength} rows={3} className={cls} />
       ) : (
         <input
           id={id}

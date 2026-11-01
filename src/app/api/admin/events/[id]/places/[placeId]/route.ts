@@ -5,6 +5,7 @@ import { NextResponse } from "next/server"
 import { z } from "zod"
 import { requireOrgSession } from "@/lib/auth-guard"
 import { adminActor, logEvent } from "@/lib/event-log"
+import { workloadProtectionOffered, WORKLOAD_NOT_OFFERED } from "@/lib/workload-policy-data"
 import { placeName, placeNameTaken, PLACE_NAME_MAX, PLACE_NAME_TAKEN_ERROR, PLACE_NOT_FOUND_ERROR } from "@/lib/places"
 
 /**
@@ -33,8 +34,9 @@ export async function PATCH(req: Request, { params }: { params: Promise<{ id: st
   const name = parsed.data.name === undefined ? undefined : placeName(parsed.data.name)
   if (name === null) return NextResponse.json({ error: `Indiquez le nom du lieu (${PLACE_NAME_MAX} caractères au plus).`, field: "name" }, { status: 400 })
 
-  const event = await db.event.findFirst({ where: { id }, select: { id: true } })
+  const event = await db.event.findFirst({ where: { id }, select: { id: true, workloadProtectionEnabled: true } })
   if (!event) return NextResponse.json({ error: "Non trouvé" }, { status: 404 })
+  if (!(await workloadProtectionOffered(guard.organizationId, event))) return NextResponse.json({ error: WORKLOAD_NOT_OFFERED }, { status: 403 })
   const places = await db.eventPlace.findMany({ where: { eventId: id }, select: PLACE_SELECT })
   const place = places.find((p) => p.id === placeId)
   if (!place) return NextResponse.json({ error: PLACE_NOT_FOUND_ERROR }, { status: 404 })
