@@ -220,3 +220,83 @@ describe("NetworkPolicy of the namespace (#1050)", () => {
     expect(workflow.indexOf("Check the site through the NetworkPolicy")).toBeGreaterThan(workflow.indexOf("rollout status deployment/benevoles-app"))
   })
 })
+
+// Deploy credential limited to the namespace: k8s/rbac-ci-deployer.yaml, applied by hand.
+describe("namespace and deploy credential", () => {
+  const rbac = read("k8s/rbac-ci-deployer.yaml")
+  const workflow = read(".github/workflows/deploy.yml")
+  const docs = rbac.split(/^---$/m)
+  const kinds = docs.map((d) => d.match(/^kind: (\w+)$/m)?.[1])
+
+  type Rule = { apiGroups: string[]; resources: string[]; resourceNames?: string[]; verbs: string[] }
+  const list = (s: string) => s.split(",").map((v) => v.trim().replace(/^"|"$/g, ""))
+  const role = docs.find((d) => /^kind: Role$/m.test(d))!
+  const rules: Rule[] = [...role.matchAll(/- apiGroups: \[([^\]]*)\]\n\s+resources: \[([^\]]*)\]\n(?:\s+resourceNames: \[([^\]]*)\]\n)?\s+verbs: \[([^\]]*)\]/g)].map(
+    (m) => ({ apiGroups: list(m[1]), resources: list(m[2]), resourceNames: m[3] === undefined ? undefined : list(m[3]), verbs: list(m[4]) }),
+  )
+
+  it("the namespace enforces the Pod Security baseline level", () => {
+    const ns = read("k8s/namespace.yaml")
+    expect(ns).toMatch(/labels:\n\s+pod-security\.kubernetes\.io\/enforce: baseline\n\s+pod-security\.kubernetes\.io\/enforce-version: latest\n/)
+  })
+
+  it("is namespaced only: a ServiceAccount, its token, a Role and a RoleBinding in benevoles", () => {
+    expect(kinds).toEqual(["ServiceAccount", "Secret", "Role", "RoleBinding"])
+    for (const d of docs) expect(d).toMatch(/^ {2}namespace: benevoles$/m)
+    expect(rbac).not.toMatch(/Cluster(Role|RoleBinding)/)
+    expect(rbac).toMatch(/kind: ServiceAccount\nmetadata:\n\s+name: ci-deployer\n\s+namespace: benevoles\nautomountServiceAccountToken: false\n/)
+    expect(rbac).toMatch(/roleRef:\n\s+apiGroup: rbac\.authorization\.k8s\.io\n\s+kind: Role\n\s+name: ci-deployer\n/)
+  })
+
+  it("parses every rule of the Role", () => {
+    expect(rules.length).toBe(count(role, /- apiGroups:/g))
+    expect(rules.length).toBeGreaterThan(0)
+  })
+
+  it("grants no wildcard, no RBAC, no escalation verb", () => {
+    for (const r of rules) {
+      for (const v of [...r.apiGroups, ...r.resources, ...r.verbs]) expect(v).not.toBe("*")
+      expect(r.apiGroups).not.toContain("rbac.authorization.k8s.io")
+      for (const v of ["escalate", "bind", "impersonate"]) expect(r.verbs).not.toContain(v)
+      for (const res of ["serviceaccounts", "serviceaccounts/token", "pods/exec", "pods/attach", "configmaps"]) {
+        expect(r.resources).not.toContain(res)
+      }
+    }
+  })
+
+  it("reaches secrets only by name: the two the workflow syncs, read and patch, never create or list", () => {
+    const onSecrets = rules.filter((r) => r.apiGroups.includes("") && r.resources.includes("secrets"))
+    expect(onSecrets).toEqual([
+      { apiGroups: [""], resources: ["secrets"], resourceNames: ["benevoles-secret", "ghcr-secret"], verbs: ["get", "patch"] },
+    ])
+    expect(workflow).toContain("kubectl create secret docker-registry ghcr-secret")
+    expect(workflow).toMatch(/kubectl create secret generic benevoles-secret/)
+  })
+
+  it("covers, with get, create and patch, every kind the workflow applies", () => {
+    const resourceOf: Record<string, [string, string]> = {
+      Deployment: ["apps", "deployments"],
+      Service: ["", "services"],
+      PersistentVolumeClaim: ["", "persistentvolumeclaims"],
+      Job: ["batch", "jobs"],
+      CronJob: ["batch", "cronjobs"],
+      NetworkPolicy: ["networking.k8s.io", "networkpolicies"],
+      Ingress: ["networking.k8s.io", "ingresses"],
+      Middleware: ["traefik.io", "middlewares"],
+      IngressRoute: ["traefik.io", "ingressroutes"],
+    }
+    const files = [...new Set([...workflow.matchAll(/(?:kubectl apply -f|envsubst <) (k8s\/[\w.-]+\.yaml)/g)].map((m) => m[1]))]
+    expect(files.length).toBeGreaterThan(10)
+    for (const file of files) {
+      for (const [, kind] of read(file).matchAll(/^kind: (\w+)$/gm)) {
+        const target = resourceOf[kind]
+        expect(target, `${file}: ${kind} is not covered by k8s/rbac-ci-deployer.yaml`).toBeDefined()
+        const [group, resource] = target
+        const verbs = rules
+          .filter((r) => r.apiGroups.includes(group) && r.resources.includes(resource) && !r.resourceNames)
+          .flatMap((r) => r.verbs)
+        for (const v of ["get", "create", "patch"]) expect(verbs, `${file}: ${v} ${resource}`).toContain(v)
+      }
+    }
+  })
+})

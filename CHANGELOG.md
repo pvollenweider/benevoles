@@ -160,6 +160,7 @@ Format basé sur [Keep a Changelog](https://keepachangelog.com/fr/1.0.0/).
 
 ### Infrastructure
 
+- **Déploiement : secrets par environnement, accès au cluster limité au namespace, contrôle des secrets plus strict** : la construction de l'image lit ses secrets dans l'environnement GitHub `production-build` et le déploiement dans `production`, tous deux réservés à `main`. Le workflow n'applique plus le namespace, objet de cluster appliqué à la main, qui impose désormais le niveau Pod Security `baseline` ; `k8s/rbac-ci-deployer.yaml` décrit un compte de déploiement limité au namespace, qui n'atteint que les deux secrets qu'il met à jour. Le déploiement s'arrête avant de toucher au cluster si l'un des secrets indispensables est vide (base, authentification, crons, email, sauvegarde hors site), et ne nomme que les secrets manquants. <!-- interne -->
 - **Noms des personnes des vidéos** : les personnes fictives des données de démonstration filmées ne s'appellent plus « Exemple » mais portent un nom de famille courant en Europe (Martin, Müller, Peeters, García, Nováková, Tóth…), le même pour un prénom donné dans toutes les vidéos ; les adresses restent sur des domaines d'exemple. Huit vidéos sont à refilmer, dont une avec une phrase de narration modifiée (`videos/FINAL_REVIEW_EVIDENCE.md`). <!-- interne -->
 
 - **Suivi des erreurs** : une requête du navigateur restée sans réponse (« Load failed », « Failed to fetch »), sans pile d'appels, n'est plus remontée comme une erreur ; c'est ce que voit un onglet ouvert avant une mise à jour. <!-- interne -->

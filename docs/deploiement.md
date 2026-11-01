@@ -78,7 +78,8 @@ Manifestes dans `k8s/`, namespace `benevoles` :
 
 | Fichier | Objets | Appliqué par `deploy.yml` | Contenu |
 |---------|--------|---------------------------|---------|
-| `namespace.yaml` | Namespace `benevoles` | oui | |
+| `namespace.yaml` | Namespace `benevoles` | non | Objet de cluster, appliqué à la main ; niveau Pod Security `baseline` imposé (`pod-security.kubernetes.io/enforce`), voir « Accès du workflow aux secrets et au cluster » ci-dessous |
+| `rbac-ci-deployer.yaml` | ServiceAccount `ci-deployer`, Secret `ci-deployer-token`, Role et RoleBinding `ci-deployer` | non | Compte de déploiement du workflow, limité au namespace `benevoles` ; appliqué à la main, voir « Accès du workflow aux secrets et au cluster » ci-dessous |
 | `secret.yaml` | Secret `benevoles-secret` | non | Modèle incomplet ; le secret réel est régénéré par le workflow (voir [configuration.md](configuration.md#secrets-kubernetes)) |
 | `postgres.yaml` | PVC `postgres-pvc` (5 Gi), Deployment et Service `postgres` | oui | PostgreSQL 16 |
 | `job-migrate.yaml` | Job `benevoles-migrate` | oui, avant l'application | `prisma migrate deploy` avec l'image déployée ; `backoffLimit: 0`, 300 s au plus |
@@ -147,11 +148,11 @@ Dans la table `RateLimit`, les clés doivent ensuite contenir des adresses publi
 À chaque push sur `main`, `deploy.yml` lance deux jobs en parallèle, puis le déploiement quand les deux ont réussi, et applique les migrations **avant** de mettre à jour l'application :
 
 1. **check** : type-check, lint, tests unitaires, sur le commit fusionné (la CI de la pull request a testé un commit de fusion temporaire, qui peut différer si `main` a avancé entre-temps) ;
-2. **build-push**, en même temps que **check** : `scripts/doc-lastmod.mjs` écrit `doc-lastmod.json` (date du dernier commit de chaque source de la documentation, sur un clone complet `fetch-depth: 0`, en suivant les renommages et en sautant les commits dont le message porte la ligne `Doc-Lastmod: skip`, réservée à un déplacement de sources qui ne change aucune page), le `lastmod` du sitemap ; puis image `ghcr.io/<dépôt>:sha-<7 premiers caractères du commit>`, avec `NEXT_PUBLIC_SENTRY_DSN` et `GIT_SHA` en arguments de build et `sentry_auth_token` en secret de build. Une image dont les contrôles échouent est publiée sous ce seul tag et n'est jamais déployée. Le job transmet la référence complète `…:sha-<commit>@sha256:<empreinte>` : le Job de migration et l'application tournent exactement sur l'image construite, même si le tag était republié ;
+2. **build-push**, en même temps que **check** : `scripts/doc-lastmod.mjs` écrit `doc-lastmod.json` (date du dernier commit de chaque source de la documentation, sur un clone complet `fetch-depth: 0`, en suivant les renommages et en sautant les commits dont le message porte la ligne `Doc-Lastmod: skip`, réservée à un déplacement de sources qui ne change aucune page), le `lastmod` du sitemap ; puis image `ghcr.io/<dépôt>:sha-<7 premiers caractères du commit>`, avec `NEXT_PUBLIC_SENTRY_DSN` et `GIT_SHA` en arguments de build et `sentry_auth_token` en secret de build, lus dans l'environnement GitHub `production-build`. Une image dont les contrôles échouent est publiée sous ce seul tag et n'est jamais déployée. Le job transmet la référence complète `…:sha-<commit>@sha256:<empreinte>` : le Job de migration et l'application tournent exactement sur l'image construite, même si le tag était republié ;
 3. **deploy** (environnement GitHub `production`), après **check** et **build-push** :
    1. refuse de déployer une version plus ancienne que celle en production (« Refuse an older version ») : si le commit de l'image en production contient déjà le commit de ce run, le job échoue avant de toucher au cluster. C'est le cas de la relance d'un ancien run, ou d'un run dont l'image a fini après celle d'un commit plus récent. Redéployer le commit en production (relance pour recopier un secret) reste possible ; un retour volontaire à une version précédente suit la « Mise en place manuelle » ci-dessous ;
-   2. applique `k8s/namespace.yaml` et régénère le secret de tirage `ghcr-secret` ;
-   3. s'arrête, avant de toucher au reste, si le secret GitHub `TOKEN_ENCRYPTION_KEY` est vide ;
+   2. régénère le secret de tirage `ghcr-secret` ;
+   3. s'arrête, avant de toucher au reste, si l'un des secrets `TOKEN_ENCRYPTION_KEY`, `AUTH_SECRET`, `POSTGRES_USER`, `POSTGRES_PASSWORD`, `CRON_SECRET`, `SMTP_HOST`, `SMTP_PASSWORD`, `EMAIL_FROM` ou `OFFSITE_BUCKET` est vide (le journal ne nomme que les secrets vides) ;
    4. régénère `benevoles-secret` (« Sync k8s secret ») ;
    5. applique `k8s/postgres.yaml` et attend PostgreSQL (120 s au plus) ;
    6. supprime le Job de migration précédent, applique `k8s/job-migrate.yaml` avec la nouvelle image et attend sa réussite (300 s au plus). En cas d'échec, le déploiement s'arrête, la version en cours continue de servir, et les journaux du Job s'affichent dans le workflow ;
@@ -163,15 +164,21 @@ Un seul déploiement à la fois (groupe de concurrence `production-deploy`), jam
 
 L'image est toujours reconstruite après la fusion : celle que la CI de la pull request aurait pu construire vient d'un autre commit (le commit de fusion temporaire), avec d'autres arguments (`GIT_SHA`, DSN Sentry, `doc-lastmod.json`), et rien ne prouverait aujourd'hui qu'elle correspond au commit de `main`. Les limites et la piste d'une promotion sans reconstruction sont dans « Construction partagée en CI » plus bas.
 
-Le workflow n'applique pas `secret.yaml` (modèle), `traefik-config.yaml`, `certificate-wildcard.yaml` ni `gandi-webhook.yaml`.
+Le workflow n'applique pas `namespace.yaml` (objet de cluster), `rbac-ci-deployer.yaml` (ses propres droits), `secret.yaml` (modèle), `traefik-config.yaml`, `certificate-wildcard.yaml` ni `gandi-webhook.yaml`.
+
+### Accès du workflow aux secrets et au cluster
+
+- **Secrets dans des environnements GitHub** : le job **deploy** lit ses secrets dans l'environnement `production`, le job **build-push** les siens (`SENTRY_AUTH_TOKEN`, `NEXT_PUBLIC_SENTRY_DSN`) dans l'environnement `production-build`. Les deux n'acceptent que la branche `main` : un workflow lancé depuis une autre branche ou une pull request ne les lit pas. La CI des pull requests (`ci.yml`) n'utilise aucun secret. Deux environnements plutôt qu'un : chaque job qui nomme un environnement crée un déploiement GitHub, et `production` ne doit apparaître actif qu'après le vrai déploiement. Un secret de dépôt du même nom sert de repli tant que l'environnement n'en a pas.
+- **Compte de déploiement limité au namespace** : `KUBECONFIG_BASE64` contient le jeton du compte de service `ci-deployer` (`k8s/rbac-ci-deployer.yaml`), qui n'a de droits que dans le namespace `benevoles`, sur les seuls types d'objets que le workflow applique. Il atteint les secrets par leur nom (`benevoles-secret`, `ghcr-secret`, lecture et modification) : il ne lit ni `rclone-config` ni son propre jeton, et ne recrée pas ces deux secrets s'ils disparaissent (recréation à la main, comme sur un cluster neuf). Le niveau Pod Security `baseline` du namespace (`namespace.yaml`) refuse les pods privilégiés, `hostPath`, `hostNetwork` et `hostPID` : ce compte ne peut pas sortir du namespace vers le nœud. Un type d'objet nouveau dans un manifeste appliqué par le workflow s'ajoute au Role (`k8s-hardening.test.ts` échoue sinon), puis `kubectl apply -f k8s/rbac-ci-deployer.yaml` à la main avant la fusion. Supprimer le secret `ci-deployer-token` révoque le jeton ; `kubectl apply -f k8s/rbac-ci-deployer.yaml` en crée un nouveau, à reposer dans `KUBECONFIG_BASE64`.
+- **Règles de `main`** : pas de push direct ni de force-push, fusion par pull request (squash), contrôles de la CI verts et branche à jour exigés. Les actions des workflows sont épinglées par SHA de commit (`workflow-hardening.test.ts`, et le réglage du dépôt l'exige).
 
 Entre la migration et la fin du remplacement, l'ancienne version du code tourne sur le nouveau schéma : chaque migration doit rester compatible avec la version précédente (règles *expand/contract* dans [CONTRIBUTING.md](../CONTRIBUTING.md), vérifiées par la CI).
 
 ### Changer un secret en production
 
-Les secrets de production sont les secrets GitHub du dépôt (Settings → Secrets and variables → Actions, ou `gh secret set`). Ils arrivent dans l'application en trois temps, et chacun peut être vérifié :
+Les secrets de production sont les secrets de l'environnement GitHub `production` (Settings → Environments → `production`, ou `gh secret set NOM --env production`) ; ceux de la construction de l'image, dans `production-build`. Ils arrivent dans l'application en trois temps, et chacun peut être vérifié :
 
-1. **Secret GitHub** : `gh secret set NOM --repo <dépôt> --body "valeur"` (une valeur seule, sans guillemets dans la valeur, sans espace ni retour à la ligne autour). `gh secret list` montre la date de mise à jour, jamais la valeur.
+1. **Secret GitHub** : `gh secret set NOM --env production --repo <dépôt> --body "valeur"` (une valeur seule, sans guillemets dans la valeur, sans espace ni retour à la ligne autour). `gh secret list --env production` montre la date de mise à jour, jamais la valeur.
 2. **Secret Kubernetes `benevoles-secret`** : recopié depuis GitHub à chaque déploiement (« Sync k8s secret »). Un secret GitHub nouveau ou modifié n'agit qu'au déploiement suivant. Un nouveau secret doit aussi figurer dans cette étape de `deploy.yml`, dans son bloc `env:` et dans la liste des clés, sinon il n'est jamais recopié, et dans la liste `env:` de `k8s/deployment.yaml`, sinon il n'arrive pas dans le pod (`k8s-hardening.test.ts` le rappelle).
 3. **Pod** : le pod lit ses clés de `benevoles-secret` **à son démarrage seulement**. Un pod qui tourne garde l'ancienne valeur.
 
@@ -216,6 +223,7 @@ kubectl apply -f k8s/traefik-config.yaml
 # 1. Namespace et secrets (secret.yaml est un modèle incomplet : remplacer les valeurs et ajouter
 #    les clés qui manquent, voir configuration.md « Secrets Kubernetes »)
 kubectl apply -f k8s/namespace.yaml
+kubectl apply -f k8s/rbac-ci-deployer.yaml   # compte de déploiement du workflow
 kubectl apply -f k8s/secret.yaml
 kubectl -n benevoles create secret docker-registry ghcr-secret \
   --docker-server=ghcr.io --docker-username=<utilisateur> --docker-password=<jeton read:packages>
@@ -328,7 +336,7 @@ La ranger **d'abord** dans un gestionnaire de mots de passe, hors du serveur et 
 
 ### 4. Installer la clé
 
-- **Avec `deploy.yml`** : `gh secret set TOKEN_ENCRYPTION_KEY`. Le workflow s'arrête avant de toucher au cluster si ce secret manque, et il régénère `benevoles-secret` à chaque déploiement : une modification manuelle d'une clé qu'il gère serait écrasée (liste des clés : [configuration.md](configuration.md#secrets-kubernetes)).
+- **Avec `deploy.yml`** : `gh secret set TOKEN_ENCRYPTION_KEY --env production`. Le workflow s'arrête avant de toucher au cluster si ce secret manque, et il régénère `benevoles-secret` à chaque déploiement : une modification manuelle d'une clé qu'il gère serait écrasée (liste des clés : [configuration.md](configuration.md#secrets-kubernetes)).
 - **Kubernetes à la main** : ajouter `TOKEN_ENCRYPTION_KEY` dans `benevoles-secret` (modèle : `k8s/secret.yaml`). Vérifier aussi que ce secret contient `CRON_SECRET` et `NEXT_PUBLIC_APP_URL` : les CronJobs de sauvegarde les lisent, et sans eux leur pod ne démarre pas.
 - **Docker Compose** : `TOKEN_ENCRYPTION_KEY` dans le fichier `.env` à côté de `docker-compose.yml`, et `CRON_SECRET` dans la section `environment` : sans lui, la tâche de nettoyage est refusée et les anciens liens ne sont jamais chiffrés.
 
@@ -471,8 +479,8 @@ L'opérateur de l'instance est prévenu par une notification ntfy sur son télé
 3. Secrets GitHub (voir « Changer un secret en production ») :
 
 ```bash
-gh secret set NTFY_URL --repo <dépôt> --body "https://ntfy.sh/<sujet>"
-gh secret set OPERATOR_ALERT_EMAIL --repo <dépôt> --body "operateur@exemple.org"
+gh secret set NTFY_URL --env production --repo <dépôt> --body "https://ntfy.sh/<sujet>"
+gh secret set OPERATOR_ALERT_EMAIL --env production --repo <dépôt> --body "operateur@exemple.org"
 ```
 
 4. Déployer (push sur `main`), ou relancer le dernier déploiement puis redémarrer le pod.
