@@ -41,7 +41,7 @@ export function planRestore(input: RestoreInput): RestorePlan {
   if (input.previousStatus !== "active" && input.previousStatus !== "requested") {
     return { ok: false, reason: "not_restorable", message: "Seule une place confirmée ou une demande annulée peut être rétablie." }
   }
-  if (input.shiftStatus === "cancelled") return { ok: false, reason: "shift_cancelled", message: "Ce créneau est annulé. Rouvrez d'abord le créneau\u00a0: rien n'a été fait." }
+  if (input.shiftStatus === "cancelled") return { ok: false, reason: "shift_cancelled", message: "Ce créneau est annulé\u00a0: rien n'a été fait. Rouvrez d'abord le créneau." }
   if (input.now.getTime() >= input.shiftStart.getTime()) return { ok: false, reason: "started", message: "Ce créneau a déjà commencé." }
   return { ok: true, status: input.previousStatus }
 }

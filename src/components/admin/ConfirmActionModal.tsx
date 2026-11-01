@@ -30,7 +30,7 @@ type Props = {
    * closed). A description added after opening is not read, so it is said once through an alert,
    * and focus goes back to Cancel: a second Enter on the confirm button never overrides unheard.
    */
-  lateWarning?: string | null
+  lateWarning?: { text: string } | null
 }
 
 /**
@@ -41,12 +41,16 @@ export default function ConfirmActionModal({ recap, busy, onConfirm, onCancel, e
   const id = useId()
   const cancelRef = useRef<HTMLButtonElement>(null)
   const [lateSaid, setLateSaid] = useState("")
+  // A new object for each refusal: the same text twice is said and focused again.
   useEffect(() => {
-    if (!lateWarning) return
-    cancelRef.current?.focus()
-    // After the focus move, so a screen reader does not drop it for the focus change.
-    const frame = requestAnimationFrame(() => setLateSaid(`Attention\u00a0: ${lateWarning}`))
-    return () => cancelAnimationFrame(frame)
+    let inner = 0
+    if (lateWarning) cancelRef.current?.focus()
+    // Cleared first, then set after the focus move, so a screen reader neither drops it nor skips a repeat.
+    const outer = requestAnimationFrame(() => {
+      setLateSaid("")
+      if (lateWarning) inner = requestAnimationFrame(() => setLateSaid(`Attention\u00a0: ${lateWarning.text}`))
+    })
+    return () => { cancelAnimationFrame(outer); cancelAnimationFrame(inner) }
   }, [lateWarning])
   const challengeRef = useRef<HTMLInputElement>(null)
   const [typed, setTyped] = useState("")

@@ -115,7 +115,7 @@ describe("POST /api/admin/registrations on a full, closed or cancelled shift (AU
     const { POST } = await import("@/app/api/admin/registrations/route")
     const res = await POST(post({ shiftOverride: ["o1|manual_add|mem-1|s1|cancelled|0|5"] }))
     expect(res.status).toBe(409)
-    expect(await res.json()).toEqual({ code: "shift_cancelled", error: "Le créneau « Bar » est annulé. Rouvrez d'abord le créneau : rien n'a été fait." })
+    expect(await res.json()).toEqual({ code: "shift_cancelled", error: "Le créneau « Bar » est annulé : rien n'a été fait. Rouvrez d'abord le créneau." })
     expect(m.registrationCreate).not.toHaveBeenCalled()
   })
 

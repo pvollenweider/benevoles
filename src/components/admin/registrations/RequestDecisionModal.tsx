@@ -37,7 +37,7 @@ export default function RequestDecisionModal({ eventId, reg, kind, waitlist, onC
   // A full or closed shift (AUTHZ-15): the server says so; the dialog then warns, and the next
   // confirm sends the confirmation's key.
   const [override, setOverride] = useState<ShiftOverrideBody["shifts"] | null>(null)
-  const overrideWarning = override ? `${shiftOverrideWarning(override)} Choisissez « ${OVERRIDE_CONFIRM_LABEL.accept} » pour confirmer.` : null
+  const [overrideWarning, setOverrideWarning] = useState<{ text: string } | null>(null)
 
   async function runDecision() {
     if (decisionBusy) return
@@ -68,7 +68,12 @@ export default function RequestDecisionModal({ eventId, reg, kind, waitlist, onC
     // The answer changed meanwhile (#1146, lot B): the box says it, never the dialog's error too.
     if (res.status === 409 && ack.refused(data)) { setDecisionError(null); return }
     const toConfirm = res.status === 409 ? shiftOverrideOf(data) : null
-    if (toConfirm) { setDecisionError(null); setOverride(toConfirm); return }
+    if (toConfirm) {
+      setDecisionError(null)
+      setOverride(toConfirm)
+      setOverrideWarning({ text: `${shiftOverrideWarning(toConfirm)} Choisissez « ${OVERRIDE_CONFIRM_LABEL.accept} » pour confirmer.` })
+      return
+    }
     if (!res.ok) { setDecisionError(data?.error ?? "La décision n'a pas pu être enregistrée."); return }
     onDecided(startedAt)
   }

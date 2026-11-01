@@ -68,7 +68,7 @@ export function guardShiftPlacement(via: OverrideVia, subjectId: string, s: Shif
 
 /** The refusal on a cancelled shift: the organiser reopens it first. */
 export function cancelledShiftMessage(label?: string): string {
-  return `${label ? `Le créneau « ${label} »` : "Ce créneau"} est annulé. Rouvrez d'abord le créneau${NBSP}: rien n'a été fait.`
+  return `${label ? `Le créneau « ${label} »` : "Ce créneau"} est annulé${NBSP}: rien n'a été fait. Rouvrez d'abord le créneau.`
 }
 
 /** « complet, 5 places sur 5 sont prises », « inscriptions fermées, 2 places sur 5 sont prises ». */
@@ -125,9 +125,10 @@ export const OVERRIDE_CONFIRM_LABEL: Record<OverrideVia, string> = {
   restore: "Rétablir quand même",
 }
 
-/** « 5 places sur 5 sont prises », « 1 place sur 1 est prise ». */
+/** « 5 places sur 5 sont prises », « 1 place sur 2 est prise », « aucune place sur 3 n'est prise ». */
 export function takenText(n: Pick<ShiftOverrideNeed, "occupied" | "capacity">): string {
-  return `${n.occupied} ${n.capacity > 1 ? "places" : "place"} sur ${n.capacity} ${n.occupied > 1 ? "sont prises" : "est prise"}`
+  if (n.occupied === 0) return `aucune place sur ${n.capacity} n'est prise`
+  return `${n.occupied} ${n.occupied > 1 ? "places" : "place"} sur ${n.capacity} ${n.occupied > 1 ? "sont prises" : "est prise"}`
 }
 
 /** « Il y aura 6 personnes pour 5 places. » */
@@ -147,27 +148,28 @@ export function overrideStateSentence(n: Pick<ShiftOverrideNeed, "closed" | "ful
 type Words = ShiftOverrideNeed & ShiftWords
 
 /**
- * The confirmation, for one shift: « Ce créneau est complet : 5 places sur 5 sont prises. Ajouter
- * Emma quand même ? » then « Il y aura 6 personnes pour 5 places. ». Several shifts (a manual add
- * of several): one line each.
+ * The confirmation, for one shift: the title names the state (« Créneau complet »), the lead says
+ * it and asks once (« Ce créneau est complet : 5 places sur 5 sont prises. Ajouter Emma quand
+ * même ? »), then « Il y aura 6 personnes pour 5 places. ». Several shifts (a manual add of
+ * several): one line each. `verb` « Inscrire » for the button that says so (availability assistant).
  */
-export function shiftOverrideWords(via: OverrideVia, name: string, needs: Words[]): { title: string; lead: string; lines: string[] } {
+export function shiftOverrideWords(via: OverrideVia, name: string, needs: Words[], verb?: "Inscrire"): { title: string; lead: string; lines: string[]; confirmLabel: string } {
   const anyClosed = needs.some((n) => n.closed)
   const anyFull = needs.some((n) => n.full)
   const many = needs.length > 1
   const what = anyFull && anyClosed ? (many ? "complets ou fermés" : "complet ou fermé") : anyFull ? (many ? "complets" : "complet") : (many ? "fermés" : "fermé")
-  const target = many ? `${needs.length} créneaux ${what}` : `un créneau ${what}`
-  const title = via === "manual_add" ? `Ajouter ${name} à ${target}${NBSP}?`
-    : via === "accept" ? `Accepter la demande de ${name} sur ${target}${NBSP}?`
-    : `Rétablir l'inscription de ${name} sur ${target}${NBSP}?`
+  const title = many ? `${needs.length} créneaux ${what}` : `Créneau ${what}`
+  const ask = verb ? `${verb} ${name} quand même${NBSP}?` : VERB[via](name)
+  const confirmLabel = verb ? `${verb} quand même` : OVERRIDE_CONFIRM_LABEL[via]
   if (!many) {
     const n = needs[0]
-    return { title, lead: `${overrideStateSentence(n)} ${VERB[via](name)}`, lines: [`${spokenShift(n)}.`, afterText(n)] }
+    return { title, lead: `${overrideStateSentence(n)} ${ask}`, lines: [`${spokenShift(n)}.`, afterText(n)], confirmLabel }
   }
   return {
     title,
-    lead: `${needs.length} créneaux choisis sont ${what}. ${VERB[via](name)}`,
+    lead: `${needs.length} créneaux choisis sont ${what}. ${ask}`,
     lines: needs.map((n) => `${spokenShift(n)}${NBSP}: ${overrideStateText(n)}. ${afterText(n)}`),
+    confirmLabel,
   }
 }
 

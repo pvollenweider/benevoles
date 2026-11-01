@@ -21,6 +21,7 @@ import { prisma } from "@/lib/prisma"
 import { getOrgClient } from "@/lib/prisma-org"
 import { generateToken } from "@/lib/utils"
 import { registrationToken } from "@/lib/token-vault"
+import { openPayload } from "@/lib/notifications/outbox"
 
 const url = process.env.DATABASE_URL
 const tag = `int-org-guards-${Date.now()}`
@@ -74,7 +75,8 @@ describe.skipIf(!url)("organiser shift guards on Postgres (AUTHZ-15)", () => {
     expect(rows.map((r) => r.status)).toEqual(["cancelled", "cancelled", "waiting"])
     const queued = await outboxFor(regs.map((r) => r.id))
     expect(queued).toHaveLength(2)
-    expect(queued.every((q) => (q.payload as { kind: string }).kind === "shift_cancelled")).toBe(true)
+    // Sealed at rest when a token key is configured: opened as the sender does.
+    expect(queued.map((q) => openPayload(q.payload).kind)).toEqual(["shift_cancelled", "shift_cancelled"])
     const log = await prisma.eventLog.findFirst({ where: { eventId, entityId: shift.id, action: "shift.cancelled" } })
     expect(log?.changes).toMatchObject({ volunteersNotified: { from: null, to: true } })
     // The request is recorded as a request: « Rétablir » gives it back as one.

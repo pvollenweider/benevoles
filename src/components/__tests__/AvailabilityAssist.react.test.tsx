@@ -213,10 +213,10 @@ describe("ShiftAssistPanel", () => {
     panel([row("Rochat")])
     const button = screen.getByRole("button", { name: NAME("Inscrire maintenant : Nadia Rochat") })
     fireEvent.click(button)
-    const dialog = await screen.findByRole("dialog", { name: /^Ajouter Nadia Rochat à un créneau complet/ })
+    const dialog = await screen.findByRole("dialog", { name: "Créneau complet" })
     // Asked, never said as an error.
     for (const alert of screen.getAllByRole("alert")) expect(alert).toHaveTextContent("")
-    fireEvent.click(screen.getByRole("button", { name: "Ajouter quand même" }))
+    fireEvent.click(screen.getByRole("button", { name: "Inscrire quand même" }))
     expect(dialog).not.toBeInTheDocument()
     await waitFor(() => expect(fetchMock).toHaveBeenCalledTimes(2))
     expect(JSON.parse(fetchMock.mock.calls[1][1].body)).toMatchObject({ volunteerId: "v-Rochat", shiftIds: ["s1"], shiftOverride: [need.key] })

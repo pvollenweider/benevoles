@@ -48,7 +48,7 @@ describe("accepting a request on a closed shift", () => {
   })
 
   it("a cancelled shift is a plain refusal in the dialog", async () => {
-    vi.stubGlobal("fetch", vi.fn(async () => json({ code: "shift_cancelled", error: "Ce créneau est annulé. Rouvrez d'abord le créneau : rien n'a été fait." }, 409)))
+    vi.stubGlobal("fetch", vi.fn(async () => json({ code: "shift_cancelled", error: "Ce créneau est annulé : rien n'a été fait. Rouvrez d'abord le créneau." }, 409)))
     render(<RequestDecisionModal eventId="evt-1" reg={reg} kind="accept" waitlist={false} onCancel={() => {}} onDecided={() => {}} />)
     fireEvent.click(screen.getByRole("button", { name: "Accepter" }))
     await waitFor(() => expect(screen.getByRole("alert")).toHaveTextContent("Rouvrez d'abord le créneau"))

@@ -17,7 +17,7 @@ import { localDateTimeToUtc } from "@/lib/time-zone"
 import { ackLabel } from "@/lib/availability-assist"
 import type { PersonFit } from "@/lib/availability-assist-data"
 import ConfirmActionModal from "../ConfirmActionModal"
-import { OVERRIDE_CONFIRM_LABEL, shiftOverrideOf, shiftOverrideWords, type ShiftOverrideBody } from "@/lib/shift-override"
+import { shiftOverrideOf, shiftOverrideWords, type ShiftOverrideBody } from "@/lib/shift-override"
 
 type Props = {
   eventId: string
@@ -387,6 +387,7 @@ export default function ManualAddForm({ eventId, shifts, registrations, timeZone
     flushSync(() => { setOverrideAsk(null); if (sameForm) setOverrideKeys({ form: overrideAsk.form, keys }) })
     submitRef.current?.focus()
     if (sameForm) void handleAdd(null, overLimit, keys)
+    else say("Le formulaire a changé\u00a0: validez à nouveau.")
   }
   function cancelOverride() {
     flushSync(() => setOverrideAsk(null))
@@ -601,8 +602,8 @@ export default function ManualAddForm({ eventId, shifts, registrations, timeZone
         recap={{
           title: overrideWords.title,
           lead: overrideWords.lead,
-          lines: [...overrideWords.lines, "L'ajout est journalisé, avec le dépassement confirmé."],
-          confirmLabel: OVERRIDE_CONFIRM_LABEL.manual_add,
+          lines: [...overrideWords.lines, "L'ajout est journalisé, avec la confirmation."],
+          confirmLabel: overrideWords.confirmLabel,
           danger: false,
         }}
         busy={false}

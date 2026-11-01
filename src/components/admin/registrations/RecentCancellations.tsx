@@ -34,7 +34,7 @@ export default function RecentCancellations({ rows, eventId = "", availability =
   // A full or closed shift (AUTHZ-15): known from the page, so the dialog warns from the start; a
   // change meanwhile comes back from the server and the dialog warns again.
   const [override, setOverride] = useState<ShiftOverrideBody["shifts"] | null>(null)
-  const [lateWarning, setLateWarning] = useState<string | null>(null)
+  const [lateWarning, setLateWarning] = useState<{ text: string } | null>(null)
   // The message said just after the focus move: cleared if the section goes first (page reloaded).
   const announceTimer = useRef<ReturnType<typeof setTimeout> | null>(null)
   useEffect(() => () => { if (announceTimer.current) clearTimeout(announceTimer.current) }, [])
@@ -76,7 +76,7 @@ export default function RecentCancellations({ rows, eventId = "", availability =
     if (toConfirm) {
       setError(null)
       setOverride(toConfirm)
-      setLateWarning(`${shiftOverrideWarning(toConfirm)} Choisissez « ${OVERRIDE_CONFIRM_LABEL.restore} » pour confirmer.`)
+      setLateWarning({ text: `${shiftOverrideWarning(toConfirm)} Choisissez « ${OVERRIDE_CONFIRM_LABEL.restore} » pour confirmer.` })
       return
     }
     if (!res.ok) { setError(data?.error ?? "L'inscription n'a pas pu être rétablie."); return }

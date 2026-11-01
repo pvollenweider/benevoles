@@ -11,7 +11,7 @@ import { announce } from "@/lib/announce"
 import { focusFirstAvailable } from "@/lib/focus-return"
 import { NETWORK_ERROR } from "@/lib/use-submit"
 import ConfirmActionModal from "./ConfirmActionModal"
-import { OVERRIDE_CONFIRM_LABEL, shiftOverrideOf, shiftOverrideWords, type ShiftOverrideBody } from "@/lib/shift-override"
+import { shiftOverrideOf, shiftOverrideWords, type ShiftOverrideBody } from "@/lib/shift-override"
 import {
   ackLabel, committedHoursText, filterCandidates, fitDetail, FIT_LABELS, groupCandidates, SPREAD_SORT_EXPLANATION,
   type AssistSort, type CandidateRow, type FitState,
@@ -291,10 +291,10 @@ export default function ShiftAssistPanel({ eventId, shift, rows }: {
         ))
       )}
       {overrideAsk && (() => {
-        const words = shiftOverrideWords("manual_add", spokenName(overrideAsk.row), overrideAsk.shifts)
+        const words = shiftOverrideWords("manual_add", spokenName(overrideAsk.row), overrideAsk.shifts, "Inscrire")
         return (
           <ConfirmActionModal
-            recap={{ title: words.title, lead: words.lead, lines: [...words.lines, "L'ajout est journalisé, avec le dépassement confirmé."], confirmLabel: OVERRIDE_CONFIRM_LABEL.manual_add, danger: false }}
+            recap={{ title: words.title, lead: words.lead, lines: [...words.lines, "L'ajout est journalisé, avec la confirmation."], confirmLabel: words.confirmLabel, danger: false }}
             busy={false}
             onConfirm={() => closeOverride(true)}
             onCancel={() => closeOverride(false)}

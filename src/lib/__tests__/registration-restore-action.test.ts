@@ -131,7 +131,7 @@ describe("restoreRegistration (#809)", () => {
 
   it("refuses on a cancelled shift: reopen it first (AUTHZ-15)", async () => {
     const { db, tx } = makeDb({ shiftStatus: "cancelled" })
-    expect(await restoreRegistration(db, actor, "r1", before)).toEqual({ ok: false, httpStatus: 409, error: "Ce créneau est annulé. Rouvrez d'abord le créneau\u00a0: rien n'a été fait." })
+    expect(await restoreRegistration(db, actor, "r1", before)).toEqual({ ok: false, httpStatus: 409, error: "Ce créneau est annulé\u00a0: rien n'a été fait. Rouvrez d'abord le créneau." })
     expect(tx.registration.updateMany).not.toHaveBeenCalled()
   })
 

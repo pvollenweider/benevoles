@@ -43,7 +43,7 @@ describe("planRestore (#809)", () => {
   })
 
   it("says to reopen a cancelled shift first", () => {
-    expect(planRestore({ ...base, shiftStatus: "cancelled" })).toMatchObject({ message: "Ce créneau est annulé. Rouvrez d'abord le créneau\u00a0: rien n'a été fait." })
+    expect(planRestore({ ...base, shiftStatus: "cancelled" })).toMatchObject({ message: "Ce créneau est annulé\u00a0: rien n'a été fait. Rouvrez d'abord le créneau." })
   })
 })
 

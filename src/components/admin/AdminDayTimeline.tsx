@@ -706,7 +706,7 @@ export default function AdminDayTimeline({ eventId, date, shifts, eventShifts = 
             <label htmlFor={silentId} className="text-sm text-gray-900">Ne pas prévenir les inscrits</label>
           </div>
           <p id={`${silentId}-hint`} className="mt-1 ml-7 text-xs text-gray-700">
-            Pour un créneau de test, ou si les personnes ont déjà été prévenues, par exemple par téléphone. Le choix est journalisé.
+            Pour un créneau de test, ou si les personnes ont déjà été prévenues, par exemple par téléphone. Le bouton devient alors « Annuler sans prévenir ». Le choix est journalisé.
           </p>
         </ConfirmActionModal>
       )}

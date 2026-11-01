@@ -369,7 +369,7 @@ describe("ManualAddForm — workload protection", () => {
       const onAdded = vi.fn()
       render(<Harness initial={{ ...EMPTY_ADD_FORM, shiftId: "s1" }} onAdded={onAdded} />)
       fill()
-      const dialog = await screen.findByRole("dialog", { name: "Ajouter Chloé à un créneau complet\u00a0?" })
+      const dialog = await screen.findByRole("dialog", { name: "Créneau complet" })
       expect(dialog).toHaveAccessibleDescription(/^Ce créneau est complet\W+3 places sur 3 sont prises\. Ajouter Chloé quand même\W+$/)
       expect(within(dialog).getByText("Il y aura 4 personnes pour 3 places.")).toBeInTheDocument()
       // Nothing said as an error: the dialog asks.
@@ -391,7 +391,7 @@ describe("ManualAddForm — workload protection", () => {
     })
 
     it("a cancelled shift is a refusal in the form's alert", async () => {
-      fetchMock.mockResolvedValueOnce({ ok: false, status: 409, json: async () => ({ code: "shift_cancelled", error: "Le créneau « Bar » est annulé. Rouvrez d'abord le créneau\u00a0: rien n'a été fait." }) })
+      fetchMock.mockResolvedValueOnce({ ok: false, status: 409, json: async () => ({ code: "shift_cancelled", error: "Le créneau « Bar » est annulé\u00a0: rien n'a été fait. Rouvrez d'abord le créneau." }) })
       render(<Harness initial={{ ...EMPTY_ADD_FORM, shiftId: "s1" }} />)
       fill()
       await waitFor(() => expect(filledAlerts()[0]).toHaveTextContent("Rouvrez d'abord le créneau"))

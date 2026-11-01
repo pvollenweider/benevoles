@@ -1,7 +1,7 @@
 import { describe, it, expect } from "vitest"
 import {
   cancelledShiftMessage, guardShiftPlacement, overrideLogValue, shiftOverrideBody, shiftOverrideKey, shiftOverrideOf,
-  shiftOverrideWarning, shiftOverrideWords, type ShiftOverrideNeed,
+  shiftOverrideWarning, shiftOverrideWords, takenText, type ShiftOverrideNeed,
 } from "../shift-override"
 
 const NBSP = " "
@@ -50,9 +50,10 @@ describe("shiftOverrideKey", () => {
 describe("the confirmation's words", () => {
   it("one full shift: the state, the question, then what it becomes", () => {
     expect(shiftOverrideWords("manual_add", "Emma", [need()])).toEqual({
-      title: `Ajouter Emma à un créneau complet${NBSP}?`,
+      title: "Créneau complet",
       lead: `Ce créneau est complet${NBSP}: 5 places sur 5 sont prises. Ajouter Emma quand même${NBSP}?`,
       lines: ["Bar, jeudi 4 juillet, de 10h à 12h.", "Il y aura 6 personnes pour 5 places."],
+      confirmLabel: "Ajouter quand même",
     })
   })
 
@@ -63,11 +64,21 @@ describe("the confirmation's words", () => {
 
   it("several shifts: a plural title and one line each", () => {
     const out = shiftOverrideWords("manual_add", "Emma", [need(), need({ shiftId: "s2", closed: true, full: false, occupied: 1, capacity: 1, label: "Matin" })])
-    expect(out.title).toBe(`Ajouter Emma à 2 créneaux complets ou fermés${NBSP}?`)
+    expect(out.title).toBe("2 créneaux complets ou fermés")
     expect(out.lines).toEqual([
       `Bar, jeudi 4 juillet, de 10h à 12h${NBSP}: complet, 5 places sur 5 sont prises. Il y aura 6 personnes pour 5 places.`,
       `Bar, Matin, jeudi 4 juillet, de 10h à 12h${NBSP}: inscriptions fermées, 1 place sur 1 est prise. Il y aura 2 personnes pour 1 place.`,
     ])
+  })
+
+  it("the availability assistant's button says « Inscrire »", () => {
+    expect(shiftOverrideWords("manual_add", "Emma", [need()], "Inscrire")).toMatchObject({ lead: expect.stringMatching(/Inscrire Emma quand même\u00a0\?$/), confirmLabel: "Inscrire quand même" })
+  })
+
+  it("counts the places taken in good French", () => {
+    expect(takenText({ occupied: 1, capacity: 2 })).toBe("1 place sur 2 est prise")
+    expect(takenText({ occupied: 0, capacity: 3 })).toBe("aucune place sur 3 n'est prise")
+    expect(takenText({ occupied: 3, capacity: 3 })).toBe("3 places sur 3 sont prises")
   })
 
   it("the warning of a dialog already open", () => {
@@ -80,7 +91,7 @@ describe("the confirmation's words", () => {
   })
 
   it("the cancelled shift's refusal says to reopen it first", () => {
-    expect(cancelledShiftMessage("Bar")).toBe(`Le créneau « Bar » est annulé. Rouvrez d'abord le créneau${NBSP}: rien n'a été fait.`)
+    expect(cancelledShiftMessage("Bar")).toBe(`Le créneau « Bar » est annulé${NBSP}: rien n'a été fait. Rouvrez d'abord le créneau.`)
   })
 })
 
