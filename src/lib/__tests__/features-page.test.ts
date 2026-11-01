@@ -213,6 +213,7 @@ describe("FEATURES.md, as /fonctionnalites lays it out", () => {
       "garder-chacun-informe",
       "voir-ou-il-manque-du-monde",
       "tenir-le-jour-j",
+      "les-grands-evenements-en-beta",
       "apres-l-evenement",
       "vos-membres-et-leurs-donnees",
       "a-l-image-de-votre-association",
