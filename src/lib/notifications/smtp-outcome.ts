@@ -207,6 +207,11 @@ export function normalizeAddress(email: string): string {
  * keyed-hash pattern (src/lib/product-updates.ts's unsubscribe token) reused here instead of a
  * new secret: an email address is low-entropy (guessable), unlike the random tokens that
  * src/lib/token-hash.ts hashes unsalted, so a plain SHA-256 would be reversible by dictionary.
+ *
+ * Keyed with AUTH_SECRET itself, not a key derived for this purpose like the unsubscribe links
+ * now are: these hashes are stored (DeliveryOutcome, the erasure register, the sign-up block
+ * list) and matched later, so a new key would need every stored hash recomputed, and some of
+ * their addresses are gone. The inputs never overlap with Auth.js's own key derivation.
  */
 export function addressHash(email: string, secret: string): string {
   return createHmac("sha256", secret).update(normalizeAddress(email)).digest("hex")
