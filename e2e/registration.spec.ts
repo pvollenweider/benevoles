@@ -1,6 +1,7 @@
 import { test, expect } from "@playwright/test"
 import { clearMailbox, waitForMessage, getMessageText } from "./helpers/mailpit"
 import { waitForHydration } from "./helpers/hydration"
+import { createPublicEvent, type PublicEvent } from "./helpers/public-signup"
 
 /**
  * Covers the public registration flow end-to-end, including the regression
@@ -14,6 +15,18 @@ import { waitForHydration } from "./helpers/hydration"
 const ORG_ADMIN_EMAIL = process.env.ORG_ADMIN_EMAIL ?? "org-admin@localhost"
 const FALLBACK_EMAIL = process.env.ADMIN_NOTIFICATION_EMAIL ?? "fallback-should-not-receive@localhost"
 
+// An event of the default organisation still to come: the seeded demo event's shifts are over, and
+// a shift that is over can't be taken.
+let demo: PublicEvent
+const demoPath = () => `/${demo.slug}?org=default`
+const successUrl = () => new RegExp(`/${demo.slug}/success`)
+test.beforeAll(async ({ browser }) => {
+  demo = await createPublicEvent(browser, `E2E Inscription ${Date.now()}`, [
+    { label: "Billetterie", startTime: "09:00", endTime: "12:00", capacity: 10 },
+    { label: "Démontage", startTime: "18:00", endTime: "21:00", capacity: 10 },
+  ])
+})
+
 test.beforeEach(async () => {
   // Emails go through a busy dev server and Mailpit in CI: allow up to 90 s (#592).
   test.slow()
@@ -23,7 +36,7 @@ test.beforeEach(async () => {
 test("volunteer registers for a shift, gets confirmation, org admin gets notified", async ({ page }) => {
   const volunteerEmail = `e2e-volunteer-${Date.now()}@example.com`
 
-  await page.goto("/spectacle-cirque-2026?org=default")
+  await page.goto(demoPath())
 
   // A click before hydration selects nothing (#592).
   const select = page.getByRole("button", { name: /, Billetterie[^:]* : sélectionner/ }).first()
@@ -45,7 +58,7 @@ test("volunteer registers for a shift, gets confirmation, org admin gets notifie
 
   await page.getByRole("button", { name: "Confirmer mon inscription" }).click()
 
-  await expect(page).toHaveURL(/\/spectacle-cirque-2026\/success/)
+  await expect(page).toHaveURL(successUrl())
 
   // Volunteer confirmation email
   const confirmation = await waitForMessage(`to:"${volunteerEmail}"`)
@@ -73,7 +86,7 @@ test("signing up again with the same address: the same page, the reason and the 
     // A fresh context each time: nothing remembered from the first sign-up.
     const context = await browser.newContext()
     const page = await context.newPage()
-    await page.goto("/spectacle-cirque-2026?org=default")
+    await page.goto(demoPath())
     // Démontage: a shift no other spec fills (capacity 5).
     const select = page.getByRole("button", { name: /, Démontage[^:]* : sélectionner/ }).first()
     await waitForHydration(select)
@@ -94,10 +107,10 @@ test("signing up again with the same address: the same page, the reason and the 
     return page
   }
 
-  await expect((await signUp())).toHaveURL(/\/spectacle-cirque-2026\/success/)
+  await expect((await signUp())).toHaveURL(successUrl())
 
   const again = await signUp()
-  await expect(again).toHaveURL(/\/spectacle-cirque-2026\/success/)
+  await expect(again).toHaveURL(successUrl())
   await expect(again.getByRole("heading", { level: 1, name: "Demande d'inscription reçue" })).toBeVisible()
   await expect(again.locator("#signup-failure")).toHaveCount(0)
   const notice = await waitForMessage(`to:"${email}" subject:"Demande d'inscription non enregistrée"`)
@@ -114,7 +127,7 @@ test("after a public sign-up, back to the event and the lost link asked again by
   const email = `e2e-lost-${Date.now()}@example.com`
   const context = await browser.newContext()
   const page = await context.newPage()
-  await page.goto("/spectacle-cirque-2026?org=default")
+  await page.goto(demoPath())
   const select = page.getByRole("button", { name: /, Démontage[^:]* : sélectionner/ }).first()
   await waitForHydration(select)
   await select.click()
@@ -126,7 +139,7 @@ test("after a public sign-up, back to the event and the lost link asked again by
   await page.getByRole("button", { name: "J'ai lu et j'accepte" }).click()
   await page.getByLabel(/J.accepte que l.association/).check()
   await page.getByRole("button", { name: "Confirmer mon inscription" }).click()
-  await expect(page).toHaveURL(/\/spectacle-cirque-2026\/success/)
+  await expect(page).toHaveURL(successUrl())
 
   await expect(page.getByRole("heading", { level: 1, name: "Demande d'inscription reçue" })).toBeVisible()
   await expect(page.getByText(/Vérifie tes emails, y compris les courriers indésirables/)).toBeVisible()
@@ -134,7 +147,7 @@ test("after a public sign-up, back to the event and the lost link asked again by
   await expect(page.getByRole("link", { name: /Accéder à mon inscription/ })).toHaveCount(0)
   await expect(page.getByRole("link", { name: /Retour à l.accueil/ })).toHaveCount(0)
   await page.getByRole("link", { name: "Revenir à l'événement" }).click()
-  await expect(page).toHaveURL(/\/spectacle-cirque-2026\?org=default$/)
+  await expect(page).toHaveURL(new RegExp(`/${demo.slug}\\?org=default$`))
   await waitForMessage(`to:"${email}"`)
 
   const lost = page.getByText("J'ai perdu mon lien personnel")

@@ -2,6 +2,7 @@
 // SPDX-License-Identifier: AGPL-3.0-only
 
 import { PUBLIC_ORG_WHERE } from "@/lib/org-approval"
+import { ORG_HEADER } from "@/lib/org-subdomain"
 import { NextResponse } from "next/server"
 import { birthDateSchema } from "@/lib/civil-date"
 import { prisma } from "@/lib/prisma"
@@ -137,8 +138,12 @@ export async function POST(req: Request) {
 
   const { eventId, shiftIds, firstName, lastName, email, phone, birthDate, comment, inviteToken, personalToken } = parsed.data
 
+  // The organisation of the request, as the proxy resolved it (its subdomain, or `?org=` where the
+  // proxy honours it): an event of another organisation answers like an unknown one. Without the
+  // header (apex host, page without `?org=`), the event id alone decides, as before.
+  const orgSlug = req.headers.get(ORG_HEADER)
   const event = await prisma.event.findFirst({
-    where: { id: eventId, publicStatus: "published", organization: PUBLIC_ORG_WHERE },
+    where: { id: eventId, publicStatus: "published", organization: { ...PUBLIC_ORG_WHERE, ...(orgSlug ? { slug: orgSlug } : {}) } },
     include: { organization: { select: { slug: true, timeZone: true, volunteerCharter: true, hasOrgInsurance: true } } },
   })
   if (!event) return NextResponse.json({ error: "Événement introuvable" }, { status: 404 })

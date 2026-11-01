@@ -85,8 +85,10 @@ test("the same sign-up submitted several times at once creates a single registra
 
   const email = `e2e-double-${stamp}@example.com`
   const responses = await Promise.all(Array.from({ length: 4 }, (_, i) => register(page.request, eventId, shiftId, email, 40 + i)))
-  const statuses = responses.map((r) => r.status())
-  expect(statuses.filter((s) => s === 201)).toHaveLength(1)
-  expect(statuses.filter((s) => s === 409)).toHaveLength(3)
+  // Without proof of the address, the repeats answer like the first (AUTHZ-01), or « réessaie »
+  // when the lock is busy; never a second registration, never a 500.
+  const bodies: { success?: boolean; busy?: boolean }[] = await Promise.all(responses.map((r) => r.json()))
+  responses.forEach((r, i) => expect(r.status() === 201 ? bodies[i].success : r.status() === 409 && bodies[i].busy).toBe(true))
+  expect(responses.filter((r) => r.status() === 201).length).toBeGreaterThanOrEqual(1)
   expect(await activeCount(page.request, eventId)).toBe(1)
 })

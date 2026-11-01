@@ -56,9 +56,9 @@ describe.skipIf(!url)("public sign-up hardening", () => {
     await prisma.$disconnect()
   })
 
-  const signup = (shiftIds: string[], email: string, ev = eventId) => publicSignup(new Request("http://localhost/api/public/registrations", {
+  const signup = (shiftIds: string[], email: string, ev = eventId, orgSlug?: string) => publicSignup(new Request("http://localhost/api/public/registrations", {
     method: "POST",
-    headers: { "content-type": "application/json", "x-forwarded-for": `${tag}-ip-${ipSeq++}` },
+    headers: { "content-type": "application/json", "x-forwarded-for": `${tag}-ip-${ipSeq++}`, ...(orgSlug ? { "x-org-slug": orgSlug } : {}) },
     body: JSON.stringify({ eventId: ev, shiftIds, firstName: "Chloé", lastName: "Roy", email, consent: true, charterAccepted: true }),
   }))
   const answer = async (res: Response) => ({ status: res.status, body: await res.json() })
@@ -118,6 +118,18 @@ describe.skipIf(!url)("public sign-up hardening", () => {
     expect(notices[0].data.notRecorded.reason).toContain("« Accueil »")
     expect(notices[1].data.notRecorded.reason).toBe("le créneau « Bar » chevauche ton créneau « Accueil »")
     expect(typeof notices[0].data.editToken).toBe("string")
+  })
+
+  // The organisation the proxy resolved (subdomain, or `?org=` where honoured) scopes the event.
+  it("an event of another organisation than the request's answers like an unknown one", async () => {
+    const other = await prisma.organization.create({ data: { name: "Autre", slug: `${tag}-other`, timeZone: "Europe/Zurich", publicationApprovedAt: new Date() } })
+    try {
+      expect(await answer(await signup([ids.montage], `${tag}-cross@example.org`, eventId, other.slug))).toEqual({ status: 404, body: { error: "Événement introuvable" } })
+      expect(await prisma.volunteer.count({ where: { email: `${tag}-cross@example.org` } })).toBe(0)
+      expect((await signup([ids.montage], `${tag}-same@example.org`, eventId, `${tag}-org`)).status).toBe(201)
+    } finally {
+      await prisma.organization.delete({ where: { id: other.id } })
+    }
   })
 
   it("refuses a shift that is over on a short event, accepts a night shift still running", async () => {
