@@ -1,5 +1,5 @@
 import { describe, it, expect } from "vitest"
-import { readFileSync } from "fs"
+import { readFileSync, readdirSync } from "fs"
 import { execFileSync } from "child_process"
 import { join } from "path"
 import { SECURITY_HEADERS } from "../security-headers"
@@ -12,7 +12,28 @@ const workflow = readFileSync(join(process.cwd(), ".github/workflows/deploy.yml"
 const FAKE = "fake-value-for-tests-0000"
 const q = (key: string) => `?${key}=${FAKE}`
 
-// Every request shape that carries a token, as the app builds them.
+/**
+ * Every route of the app router that takes a personal token in its path: a directory named after
+ * a dynamic segment whose parameter is a token (`[token]`, `[...token]`, `[inviteToken]`…). Read
+ * from src/app itself, so a new token family is covered by the checks below the day it is added.
+ * Returns the URL prefix before the token (`/my/`, `/api/public/availability/`), route groups
+ * `(x)` and parallel slots `@x` left out of the URL as Next.js does.
+ */
+function tokenRoutePrefixes(dir = join(process.cwd(), "src/app"), url: string[] = []): string[] {
+  const found: string[] = []
+  for (const entry of readdirSync(dir, { withFileTypes: true })) {
+    if (!entry.isDirectory()) continue
+    const name = entry.name
+    if (/^\[{1,2}(?:\.\.\.)?[^\]]*token[^\]]*\]{1,2}$/i.test(name)) found.push(`/${url.join("/")}/`.replace(/\/+/g, "/"))
+    const inUrl = name.startsWith("(") || name.startsWith("@") ? url : [...url, name]
+    found.push(...tokenRoutePrefixes(join(dir, name), inUrl))
+  }
+  return [...new Set(found)].sort()
+}
+const TOKEN_ROUTE_PREFIXES = tokenRoutePrefixes()
+
+// Every request shape that carries a token, as the app builds them (the path families are also
+// read from the app router above; the query ones only exist here).
 const TOKEN_URLS = [
   `/my/${FAKE}`,
   `/waitlist/${FAKE}/confirm`,
@@ -23,6 +44,8 @@ const TOKEN_URLS = [
   `/api/public/member-invite/${FAKE}`,
   `/api/public/leader/${FAKE}`,
   `/api/public/waitlist/${FAKE}/confirm`,
+  `/disponibilites/${FAKE}`,
+  `/api/public/availability/${FAKE}`,
   `/fete-du-village${q("token")}`,
   `/admin/accept-invite${q("token")}`,
   `/admin/reset-password${q("token")}`,
@@ -48,12 +71,31 @@ describe("no personal token in the proxy access log", () => {
     expect(manifest).toMatch(/entryPoints:\n\s+- web\n/)
   })
 
+  it("finds the token routes in the app router", () => {
+    // Sanity check of the scan itself: a page family and its API counterpart.
+    expect(TOKEN_ROUTE_PREFIXES).toEqual(expect.arrayContaining(["/my/", "/api/public/registrations/", "/disponibilites/", "/api/public/availability/"]))
+  })
+
+  it("routes every [token] route of the app with access logs off, by path", () => {
+    // By path, not by luck: a query key exempted for another reason must not hide a missing prefix.
+    for (const prefix of TOKEN_ROUTE_PREFIXES) {
+      expect(prefixes.some((p) => `${prefix}${FAKE}`.startsWith(p)), prefix).toBe(true)
+      expect(TOKEN_URLS.some((u) => u.startsWith(`${prefix}${FAKE}`)), `${prefix} missing from TOKEN_URLS`).toBe(true)
+    }
+  })
+
+  it("scrubs every [token] route from error reports too (sentry-scrub.ts)", () => {
+    for (const prefix of TOKEN_ROUTE_PREFIXES) expect(scrubUrl(`${prefix}${FAKE}/x`), prefix).not.toContain(FAKE)
+  })
+
+  it("keeps every [token] page out of search engines (robots.ts)", () => {
+    const robots = readFileSync(join(process.cwd(), "src/app/robots.ts"), "utf8")
+    const disallow = [...robots.match(/const DISALLOW = \[([^\]]*)\]/)![1].matchAll(/"([^"]+)"/g)].map((m) => m[1])
+    for (const prefix of TOKEN_ROUTE_PREFIXES) expect(disallow.some((d) => prefix.startsWith(d)), prefix).toBe(true)
+  })
+
   it("covers every family the error reports scrub (sentry-scrub.ts)", () => {
     for (const url of TOKEN_URLS) expect(scrubUrl(url), url).not.toContain(FAKE)
-    // A token family added to the Sentry scrubbing must be added to the IngressRoute too.
-    for (const family of ["my", "waitlist", "member-invite", "registrations", "leader"]) {
-      expect(prefixes.some((p) => p.endsWith(`/${family}/`)), family).toBe(true)
-    }
     expect(queryKeys.filter((k) => !["q", "deleted", "tag", "next", "callbackUrl"].includes(k)).sort()).toEqual(["t", "token"])
   })
 

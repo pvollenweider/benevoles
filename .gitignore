@@ -49,6 +49,11 @@ yarn-error.log*
 .env
 .env.local
 .env.*.local
+# Loaded by Next.js on their own (next dev / next start): real values, never committed.
+# The committed templates (.env.example, .env.development.example) are not matched.
+.env.development
+.env.production
+.env.test
 .env.e2e
 .env.e2e.*
 .env.video.e2e
