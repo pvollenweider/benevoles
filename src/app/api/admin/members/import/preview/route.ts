@@ -4,7 +4,7 @@
 import { NextResponse } from "next/server"
 import { requireOrgSession } from "@/lib/auth-guard"
 import { rateLimit } from "@/lib/rate-limit"
-import { analyseImport } from "@/lib/member-import-server"
+import { analyseImport, readImportForm } from "@/lib/member-import-server"
 import { parseOnDuplicate } from "@/lib/member-import-plan"
 
 /** Analyses a member file without writing anything (#464). The import then needs its hashes. */
@@ -16,7 +16,9 @@ export async function POST(req: Request) {
   const rl = await rateLimit(`org:${organizationId}`, "member-import-preview", 30, 60 * 60 * 1000)
   if (!rl.ok) return NextResponse.json({ error: "Trop d'analyses de fichiers cette heure-ci. Réessayez plus tard." }, { status: 429 })
 
-  const form = await req.formData()
+  const read = await readImportForm(req)
+  if (!read.ok) return NextResponse.json({ error: read.error }, { status: read.status })
+  const { form } = read
   const result = await analyseImport(form.get("file"), db, organizationId, parseOnDuplicate(form.get("onDuplicate")))
   if (!result.ok) return NextResponse.json({ error: result.error }, { status: result.status })
   return NextResponse.json(result.analysis)
