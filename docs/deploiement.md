@@ -279,6 +279,17 @@ Quand le script se termine, échoue ou atteint sa limite, l'entrée écrit le fi
 Avec Docker Compose, le préchauffage tourne de la même façon (sur l'hôte de `NEXT_PUBLIC_APP_URL`, `localhost` par défaut) ; rien n'attend `/api/health/ready`, le serveur répond dès son démarrage. Le préchauffage ne se lance que pour la commande `node server.js` : le Job de migration, qui utilise la même image, n'est pas concerné.
 - Les cron jobs de rappels, d'envoi des emails et de purge lisent `NEXT_PUBLIC_APP_URL` et `CRON_SECRET` dans `benevoles-secret`.
 
+## Mise à jour depuis 2.5.x
+
+Les migrations de la 2.6 ajoutent des tables et des colonnes sans rien retirer ; elles passent par le Job habituel sur Kubernetes et au démarrage de l'application avec Docker Compose. Aucune nouvelle variable.
+
+- **Docker Compose : action requise avant la mise à jour.** `POSTGRES_PASSWORD` et `AUTH_SECRET` n'ont plus de valeur par défaut (Compose refuse de démarrer sans eux) et PostgreSQL n'est plus publié sur l'hôte. Sur un volume existant, suivre [Mettre à jour une installation Compose existante](#mettre-à-jour-une-installation-compose-existante) : le mot de passe enregistré par PostgreSQL ne change pas avec la variable.
+- **`AUTH_SECRET` et `CRON_SECRET`** : en production, le serveur refuse de démarrer avec une valeur d'exemple publiée dans le dépôt (dont l'ancienne valeur par défaut de `docker-compose.yml` et l'ancienne valeur de `.env.example`) ou trop simple (`src/lib/production-guards.ts`). Générer une valeur aléatoire propre à l'instance (`openssl rand -base64 48`) ; avant de changer un `AUTH_SECRET` déjà utilisé, voir [configuration.md](configuration.md) (registre des effacements).
+- **Reconnexion** : les sessions d'administration sont désormais fermées côté serveur ; chaque organisateur se reconnecte une fois après la mise à jour.
+- **Seed en production** : lancé avec `NODE_ENV=production`, le seed refuse de s'exécuter si `ADMIN_PASSWORD` ou `ORG_ADMIN_PASSWORD` manque ou ne respecte pas les règles des mots de passe ; relancé sur des comptes existants, il ferme leurs sessions.
+- **Kubernetes** : `k8s/deployment.yaml` donne à l'application une à une les clés de `benevoles-secret` qu'elle lit (`DATABASE_URL`, `AUTH_SECRET` et `TOKEN_ENCRYPTION_KEY` obligatoires, voir [configuration.md](configuration.md#secrets-kubernetes)), et `k8s/networkpolicy.yaml` refuse par défaut les connexions entrantes du namespace (voir [Isolation réseau](#isolation-réseau) : sur un autre cluster, vérifier l'étiquette du pod Traefik avant de l'appliquer).
+- **Fonctions bêta** : fermées par défaut. L'opérateur les ouvre dans l'espace super admin (« Fonctions bêta »), puis un propriétaire y fait participer son organisation dans **Paramètres**.
+
 ## Mise à jour depuis 2.2.x
 
 Aucune action obligatoire : les migrations de base passent par le Job habituel, et aucune variable n'est ajoutée ou rendue obligatoire.

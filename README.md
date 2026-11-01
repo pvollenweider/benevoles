@@ -218,6 +218,8 @@ git pull && docker compose up -d --build   # mise à jour
 
 `POSTGRES_PASSWORD` est obligatoire et PostgreSQL n'est pas publié sur l'hôte. Fichier `.env`, variables à ajouter et cron de l'hôte : [docs/deploiement.md](docs/deploiement.md#docker-compose). Installation existante : [Mettre à jour une installation Compose existante](docs/deploiement.md#mettre-à-jour-une-installation-compose-existante).
 
+**Depuis 2.5.x**, Docker Compose demande `POSTGRES_PASSWORD` et `AUTH_SECRET` avant la mise à jour, et chaque organisateur se reconnecte une fois : voir [Mise à jour depuis 2.5.x](docs/deploiement.md#mise-à-jour-depuis-25x).
+
 **Depuis 2.2.x**, ajouter l'appel de `/api/cron/outbox` toutes les 5 minutes (CronJob `k8s/cronjob-outbox.yaml` sur Kubernetes) : voir [Mise à jour depuis 2.2.x](docs/deploiement.md#mise-à-jour-depuis-22x).
 
 **Depuis une version 1.x**, suivre [Mise à jour depuis 1.x](docs/deploiement.md#mise-à-jour-depuis-1x) : clé de chiffrement obligatoire, migrations par un Job, deux manifestes supplémentaires.

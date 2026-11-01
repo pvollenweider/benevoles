@@ -86,11 +86,27 @@ En savoir plus : [où manque-t-il du monde ?](../guide/ou-manque-t-il-du-monde.m
 - **Une page faite pour le téléphone** : les créneaux en cours et ceux des trois prochaines heures, qui est arrivé et qui manque. Touchez « Marquer présent » quand un bénévole arrive, ou son numéro pour l'appeler. La page se met à jour seule : une arrivée marquée sur un autre téléphone y apparaît.
 - **Le planning complet en frise**, prêt à imprimer, et des feuilles pour le terrain : par jour, par poste et par bénévole, et une feuille de présence à cocher.
 - **Des badges** à imprimer et découper, avec le prénom et le poste de chaque bénévole.
-- **Des responsables de secteur** qui suivent les bénévoles de leur poste depuis un lien personnel, sans compte. Une question rattachée à leur poste (le repas du soir pour l'équipe Cuisine) leur fait suivre les réponses que les bénévoles modifient.
+- **Des responsables de secteur** qui suivent les bénévoles de leur poste, ou de tout un secteur (bêta), depuis un lien personnel, sans compte. Une question rattachée à leur poste (le repas du soir pour l'équipe Cuisine) leur fait suivre les réponses que les bénévoles modifient.
 
 <!-- video: ATTENDANCE_CHECK_IN -->
 
 En savoir plus : [les présences le jour J](../guide/presences-le-jour-j.md), [documents à imprimer, badges et résumé](../guide/rapports-badges-et-resume.md), [les responsables de secteur](../guide/responsables-de-secteur.md).
+
+## Les grands événements, en bêta
+
+Pour les événements qui comptent beaucoup de postes ou de bénévoles, plusieurs fonctions avancées s'essaient en bêta : elles fonctionnent, et nous les affinons avec les associations qui les utilisent. Quand une fonction est ouverte à l'essai, un propriétaire fait participer son organisation dans les **Paramètres**, puis l'active événement par événement ; rien ne change tant qu'elle n'est pas activée.
+
+- **Les disponibilités, date par date (bêta)** : chaque membre sollicité reçoit un lien personnel, sans compte à créer, et indique pour chaque date ses horaires libres ou « Pas disponible ». Vous voyez qui a répondu et relancez les autres.
+- **Un planning en brouillon, publié en une fois (bêta)** : une ligne par personne, une colonne par date. Un brouillon ne prend aucune place et n'envoie rien. **Publier les affectations** publie tout d'un coup, ou rien si un point bloque, et chaque bénévole reçoit un seul email avec ses missions.
+- **Une proposition de répartition (bêta)** : selon les disponibilités, les besoins, les règles de l'événement et l'objectif d'heures de chacun, elle remplit les brouillons et dit pourquoi une place reste vide. Vous verrouillez ce qui vous convient, corrigez le reste ou demandez une autre répartition ; rien n'est publié sans vous.
+- **Les pauses et la charge protégées (bêta)** : vous fixez les limites (temps sans vraie pause, heures par journée, repos, pause repas, jours sans mission, trajet entre deux lieux, limites plus strictes pour les moins de 18 ans), et toute affectation qui les dépasse est refusée, avec la limite en cause, le jour et le dépassement.
+- **Des secteurs (bêta)** : « Parking Nord » et « Parking Sud » se regroupent dans le secteur « Parking ». Le planning, les filtres, les documents à imprimer et les messages suivent vos secteurs ; les bénévoles ne les voient pas.
+- **Un responsable pour tout un secteur (bêta)** : depuis son lien, sans compte, il voit en lecture seule tous les bénévoles du secteur, jour par jour, et reçoit les inscriptions et les désistements de ses postes.
+- **Les échanges de créneaux (bêta)** : un bénévole propose d'échanger un créneau depuis sa page ; une personne inscrite sur le même poste, ou sur un poste du même secteur, propose le sien, et les deux créneaux sont échangés d'un coup, avec un email pour chacun. Vous pouvez valider chaque échange.
+
+<!-- video: ASSIGNMENT_PROPOSALS -->
+
+En savoir plus : [recueillir les disponibilités](../guide/recueillir-les-disponibilites.md), [protection des pauses et de la charge](../guide/suivre-les-inscriptions.md#protection-des-pauses-et-de-la-charge-beta), [organiser les postes par secteurs](../guide/gerer-les-postes.md#organiser-les-postes-par-secteurs-beta), [échanges de créneaux](../guide/suivre-les-inscriptions.md#echanges-de-creneaux-entre-benevoles-beta), [fonctions bêta](../guide/personnaliser-l-organisation.md#fonctions-beta).
 
 ## Après l'événement
 
