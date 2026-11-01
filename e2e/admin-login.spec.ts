@@ -38,3 +38,28 @@ test("wrong password is rejected", async ({ page }) => {
   await expect(page.getByText("Email ou mot de passe incorrect.")).toBeVisible()
   await expect(page).toHaveURL(/\/admin\/login/)
 })
+
+test("signing out ends the session on the server: a copy of the cookie is refused afterwards", async ({ page, playwright, baseURL }) => {
+  await page.goto("/admin/login")
+  await page.getByLabel("Email").fill(ORG_ADMIN_EMAIL)
+  await page.getByLabel("Mot de passe").fill(ORG_ADMIN_PASSWORD)
+  await page.getByRole("button", { name: "Se connecter" }).click()
+  await expect(page).toHaveURL(/\/admin\/dashboard$/)
+
+  // A copy of the session, as another browser profile or a saved request would keep it.
+  const copy = await playwright.request.newContext({ baseURL, storageState: await page.context().storageState() })
+  expect((await copy.get("/api/admin/events")).status()).toBe(200)
+
+  const signOut = page.waitForResponse((r) => r.url().includes("/api/auth/signout") && r.request().method() === "POST")
+  await page.getByRole("navigation", { name: "Navigation de l'administration" }).getByRole("button", { name: "Administrateur (org par défaut)" }).click()
+  await page.getByRole("menu", { name: "Menu du compte" }).getByRole("menuitem", { name: "Se déconnecter" }).click()
+  // The sign-out answer only deletes the session cookie: it never sends a renewed one first.
+  const sessionCookies = (await (await signOut).headersArray())
+    .filter((h) => h.name.toLowerCase() === "set-cookie" && h.value.includes("authjs.session-token"))
+  expect(sessionCookies.length).toBeGreaterThan(0)
+  for (const h of sessionCookies) expect(h.value).toMatch(/Max-Age=0|Expires=Thu, 01 Jan 1970/i)
+  await expect(page).toHaveURL(/\/admin\/login/)
+
+  expect((await copy.get("/api/admin/events")).status()).toBe(401)
+  await copy.dispose()
+})

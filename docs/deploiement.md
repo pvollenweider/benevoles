@@ -50,8 +50,10 @@ Ce qu'il ne fait pas :
   ```bash
   set -a; . ./.env; set +a
   DATABASE_URL="$(POSTGRES_HOST=127.0.0.1 node scripts/database-url.mjs)" \
-  ADMIN_EMAIL=… ADMIN_PASSWORD=… ORG_ADMIN_EMAIL=… ORG_ADMIN_PASSWORD=… npm run db:seed
+  NODE_ENV=production ADMIN_EMAIL=… ADMIN_PASSWORD=… ORG_ADMIN_EMAIL=… ORG_ADMIN_PASSWORD=… npm run db:seed
   ```
+
+  Avec `NODE_ENV=production`, le seed refuse de s'exécuter si l'un des deux mots de passe manque ou ne respecte pas les règles des mots de passe (10 caractères, majuscule, minuscule, chiffre, caractère spécial), avant d'écrire quoi que ce soit. Relancé sur des comptes existants, il remet leurs mots de passe et ferme leurs sessions ouvertes.
 
 ### Accès ponctuel à la base
 

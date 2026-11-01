@@ -180,6 +180,10 @@ async function run(req: Request) {
   // --- 6. Expired rate limit windows (#322) ---
   const deletedRateLimits = await prisma.rateLimit.deleteMany({ where: { resetAt: { lt: now } } })
 
+  // --- 6a. Revoked session ids past the sessions' absolute lifetime (src/lib/session-lifetime.ts):
+  // such a session is refused anyway, the row no longer serves. ---
+  const deletedRevokedSessions = await prisma.revokedSession.deleteMany({ where: { expiresAt: { lt: now } } })
+
   // --- 6b. Delivery outcomes older than their retention window (#598) ---
   const deletedDeliveryOutcomes = await prisma.deliveryOutcome.deleteMany({
     where: { createdAt: { lt: deliveryOutcomeCutoff } },
@@ -316,6 +320,7 @@ async function run(req: Request) {
       targetedMessages: deletedMessages.count,
     scheduledMessages: deletedScheduled.count,
       rateLimits: deletedRateLimits.count,
+      revokedSessions: deletedRevokedSessions.count,
       deliveryOutcomes: deletedDeliveryOutcomes.count,
       limitHits: deletedLimitHits.count,
       sendBatches: deletedBatches.count,
