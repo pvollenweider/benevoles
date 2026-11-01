@@ -164,6 +164,7 @@ Format basé sur [Keep a Changelog](https://keepachangelog.com/fr/1.0.0/).
 - **Suivi des erreurs** : le nettoyage des données envoyées au suivi des erreurs garde un coût proportionnel à la longueur du texte et coupe les textes très longs ; le relais `/monitoring` ne transmet plus qu'au projet Sentry de l'instance.
 - **Images optimisées** : le service d'optimisation d'images ne traite plus que les captures de la documentation.
 - **Notifications push** : chaque connexion à un service de notification est fermée à l'échéance de l'envoi, ou dès que sa réponse dépasse une taille raisonnable.
+- **Dépendances** : les bibliothèques de recherche de fichiers utilisées par l'envoi des cartes de source au suivi des erreurs et par l'export Excel passent à des versions corrigées (glob 14, minimatch 11), qui arrêtent un parcours annulé et bornent le traitement de certains motifs. Aucun changement visible. <!-- interne -->
 
 ### Infrastructure
 
