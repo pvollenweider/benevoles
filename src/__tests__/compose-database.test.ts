@@ -24,6 +24,8 @@ const cleanEnv = (extra: Record<string, string> = {}) =>
   ({ PATH: process.env.PATH ?? "", HOME: process.env.HOME ?? "/tmp", ...extra }) as unknown as NodeJS.ProcessEnv
 
 const RESERVED = "p@ss:w/rd?#%x y!'*()&=+[]"
+// A stand-in for the session key the operator generates (openssl rand -base64 32).
+const SESSION_KEY = "q8V3nZk1LwYt0bRj5sXe2HfUoP9mCaD4gN7iK6lM+Qw="
 
 describe("database URL built from the POSTGRES_* variables", () => {
   it("encodes every reserved character, so the password reads back unchanged", () => {
@@ -129,18 +131,26 @@ describe.skipIf(!hasCompose)("docker compose config", () => {
   )
 
   it("renders with a test password: no published database port, same password on both sides", () => {
-    const out = render({ POSTGRES_PASSWORD: RESERVED })
+    const out = render({ POSTGRES_PASSWORD: RESERVED, AUTH_SECRET: SESSION_KEY })
     expect(out.status, out.stderr).toBe(0)
     const config = JSON.parse(out.stdout)
     expect(config.services.postgres.ports ?? []).toEqual([])
     expect(config.services.postgres.environment.POSTGRES_PASSWORD).toBe(RESERVED)
     expect(config.services.app.environment.POSTGRES_PASSWORD).toBe(RESERVED)
     expect(config.services.app.environment.DATABASE_URL).toBeUndefined()
+    expect(config.services.app.environment.AUTH_SECRET).toBe(SESSION_KEY)
   })
 
   it("refuses to render without the password", () => {
-    const out = render({})
+    const out = render({ AUTH_SECRET: SESSION_KEY })
     expect(out.status).not.toBe(0)
     expect(out.stderr).toMatch(/POSTGRES_PASSWORD/)
+  })
+
+  it("refuses to render without AUTH_SECRET, saying how to generate one", () => {
+    const out = render({ POSTGRES_PASSWORD: RESERVED })
+    expect(out.status).not.toBe(0)
+    expect(out.stderr).toMatch(/AUTH_SECRET/)
+    expect(out.stderr).toMatch(/openssl rand/)
   })
 })

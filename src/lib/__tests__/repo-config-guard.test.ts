@@ -4,6 +4,7 @@
 import { describe, it, expect } from "vitest"
 import { readFileSync } from "node:fs"
 import path from "node:path"
+import { execFileSync } from "node:child_process"
 
 const read = (f: string) => readFileSync(path.join(process.cwd(), f), "utf8")
 
@@ -26,5 +27,22 @@ describe("repository configuration guard", () => {
 
   it("ignores the per-slot e2e env files, which hold generated secrets", () => {
     expect(read(".gitignore")).toMatch(/^\.env\.e2e\.\*$/m)
+  })
+
+  it("ignores every env file Next.js loads by itself, never the committed templates", () => {
+    const ignored = (f: string) => {
+      try {
+        execFileSync("git", ["check-ignore", "-q", "--no-index", f], { stdio: "ignore" })
+        return true
+      } catch {
+        return false
+      }
+    }
+    for (const f of [".env", ".env.local", ".env.development", ".env.production", ".env.test", ".env.development.local", ".env.production.local"]) {
+      expect(ignored(f), f).toBe(true)
+    }
+    for (const f of [".env.example", ".env.development.example"]) expect(ignored(f), f).toBe(false)
+    // The image never receives any of them either.
+    expect(read(".dockerignore")).toMatch(/^\.env\.\*$/m)
   })
 })
