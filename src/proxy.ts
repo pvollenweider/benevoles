@@ -9,7 +9,7 @@ import { ORG_HEADER, withOrgHeader } from "@/lib/org-subdomain"
 import { apexRedirectUrl, orgHostApexRedirectUrl } from "@/lib/apex-redirect"
 import { apexBaseUrl, configuredAppUrl } from "@/lib/urls"
 import { checkAdminMutation } from "@/lib/request-origin"
-import { frameHeaders } from "@/lib/security-headers"
+import { createNonce, pageSecurityHeaders } from "@/lib/security-headers"
 import { isServerNotFound, NOT_FOUND_ROUTE } from "@/lib/server-not-found"
 import { loadDocUnits, resolveDocSlug } from "@/lib/doc-units"
 import { loadVideoCatalog } from "@/lib/video-catalog-load"
@@ -103,6 +103,11 @@ function handle(req: NextAuthRequest): Response {
   requestHeaders.delete(REQUEST_PATH_HEADER)
   if (isAdminPath) requestHeaders.set(REQUEST_PATH_HEADER, `${pathname}${req.nextUrl.search}`)
 
+  // --- Script and framing policy (src/lib/security-headers.ts): a fresh nonce per request, on the
+  // forwarded request too, where Next.js reads it for its own scripts (any client value replaced). ---
+  const pageHeaders = pageSecurityHeaders(pathname, req.nextUrl.searchParams, { nonce: createNonce(), dev: process.env.NODE_ENV === "development" })
+  for (const { key, value } of pageHeaders) if (key === "Content-Security-Policy") requestHeaders.set(key, value)
+
   // --- A 404 rendered on the server (#935): what is known missing here is answered by the
   // not-found page itself, whose HTML carries the page; `notFound()` during a page's render only
   // sends an empty document that the browser fills in. See src/lib/server-not-found.ts. ---
@@ -110,8 +115,8 @@ function handle(req: NextAuthRequest): Response {
   const response = notFound
     ? NextResponse.rewrite(new URL(NOT_FOUND_ROUTE, req.url), { request: { headers: requestHeaders } })
     : NextResponse.next({ request: { headers: requestHeaders } })
-  // Framing (#948): refused everywhere but the embeddable sign-up (src/lib/security-headers.ts).
-  for (const { key, value } of frameHeaders(pathname, req.nextUrl.searchParams)) response.headers.set(key, value)
+  // Framing (#948) refused everywhere but the embeddable sign-up; scripts by nonce and hash only.
+  for (const { key, value } of pageHeaders) response.headers.set(key, value)
   return response
 }
 

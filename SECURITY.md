@@ -55,14 +55,17 @@ Posés sur chaque réponse par `next.config.ts` (`src/lib/security-headers.ts`) 
 - `Permissions-Policy: camera=(), microphone=(), geolocation=(), payment=(), usb=()` : coupe les fonctions de l'appareil dont l'application ne se sert jamais. Le presse-papiers (copier un lien), le partage, le plein écran et l'image dans l'image des vidéos, la lecture automatique et les notifications ne sont pas restreints.
 - `Referrer-Policy: strict-origin` (#485) : un lien personnel ne part jamais dans l'en-tête `Referer`.
 
-## Politique de scripts (en observation)
+## Politique de scripts
 
-Une politique de scripts est envoyée en mode observation seulement (`Content-Security-Policy-Report-Only`) : elle ne bloque rien, et aucun rapport n'est envoyé nulle part (ni point de collecte, ni service tiers).
+Chaque page reçoit une politique de scripts imposée (`Content-Security-Policy`), produite par `src/proxy.ts` à chaque requête (`src/lib/security-headers.ts`), dans le même en-tête que le cadre :
 
 ```
-script-src 'self' 'unsafe-inline'; worker-src 'self' blob:; object-src 'none'; base-uri 'self'
+frame-ancestors 'none'; script-src 'self' 'nonce-<aléatoire>' 'strict-dynamic' 'sha256-…' 'sha256-…' 'sha256-…'; worker-src 'self' blob:; object-src 'none'; base-uri 'self'; form-action 'self'
 ```
 
-Elle signale un script chargé depuis un autre site, un plugin (`<object>`, `<embed>`), une balise `<base>` qui pointe ailleurs et, en production, toute évaluation de texte comme du code (`eval`). Elle ne signale pas un script injecté directement dans la page : sans nonce, `'unsafe-inline'` doit rester. Next.js ne pose son nonce sur ses propres scripts que s'il le trouve dans le `script-src` de la politique imposée (`Content-Security-Policy`), et cette politique est déjà celle du cadre (`frame-ancestors`, posée par le proxy). Le passage en mode imposé réunira donc `frame-ancestors` et un `script-src` avec nonce dans une seule politique, produite par le proxy à chaque requête.
+- Un nonce aléatoire (128 bits) par réponse : Next.js le lit dans la politique et le pose sur ses propres scripts, qui chargent ensuite le reste de l'application (`'strict-dynamic'`). Toutes les pages sont rendues à la requête, donc toutes reçoivent leur nonce.
+- Les scripts en ligne de l'application sont des constantes, autorisées par leur empreinte sha256 (`src/lib/inline-scripts.ts`) : la correction des adresses à double barre oblique, le thème des pages de contenu, le bouton « Imprimer » des pages d'impression.
+- Refusés : tout autre script en ligne, tout attribut d'événement (`onclick=…`), les liens `javascript:`, les scripts d'un autre site, l'évaluation de texte comme du code (`eval`, sauf en développement, où React en a besoin), les plugins (`<object>`, `<embed>`), une balise `<base>` qui pointe ailleurs, un formulaire envoyé à un autre site.
+- Non restreints : styles, images, médias, polices, connexions.
 
-Lire les signalements : ouvrir la console des outils de développement du navigateur sur une page ; chaque refus qui aurait eu lieu y apparaît comme un message « [Report Only] » (Chrome, Edge : « … The policy is report-only, so the violation has been logged »). Pour un parcours automatisé, écouter l'évènement `securitypolicyviolation` du document (Playwright : `page.addInitScript` qui journalise `e.effectiveDirective` et `e.blockedURI`). Relevé sur un build de production (2026-10-17) : aucun signalement sur les pages publiques, la page d'un événement, l'inscription intégrée et la connexion ; un signalement `eval` sur la liste des membres de l'administration : le test de capacité de la bibliothèque de validation zod (`Function("")` dans un `try`), qui continue sans si l'évaluation est refusée ; à faire taire avant le passage en mode imposé (option `jitless` de zod).
+L'inscription intégrable reçoit la même politique, avec `frame-ancestors *`. Aucun rapport n'est envoyé nulle part : un refus apparaît dans la console des outils de développement du navigateur, et un parcours automatisé peut écouter l'évènement `securitypolicyviolation` du document (`e2e/script-policy.spec.ts`).

@@ -44,17 +44,23 @@ test.afterAll(async () => {
   await new Promise((resolve) => association?.close(resolve))
 })
 
-const DENY = { csp: "frame-ancestors 'none'", xfo: "DENY" }
+const DENY = { frameAncestors: "'none'", xfo: "DENY" }
+const EMBED = { frameAncestors: "*", xfo: undefined }
+
+/** The frame-ancestors directive of the enforced policy (which also carries the script policy). */
+function frameAncestorsOf(csp: string | undefined): string | undefined {
+  return csp?.split(";").map((d) => d.trim()).find((d) => d.startsWith("frame-ancestors "))?.slice("frame-ancestors ".length)
+}
 
 async function framing(page: Page, path: string) {
   const res = await page.request.get(path, { headers: { "x-forwarded-for": randomIp() } })
   const headers = res.headers()
-  return { csp: headers["content-security-policy"], xfo: headers["x-frame-options"] }
+  return { frameAncestors: frameAncestorsOf(headers["content-security-policy"]), xfo: headers["x-frame-options"] }
 }
 
 test("only the embeddable sign-up may be framed, every other route family refuses it", async ({ page }) => {
-  expect(await framing(page, `/${event.slug}?org=default&embed=1`)).toEqual({ csp: "frame-ancestors *", xfo: undefined })
-  expect(await framing(page, `/${event.slug}/success?org=default&embed=1`)).toEqual({ csp: "frame-ancestors *", xfo: undefined })
+  expect(await framing(page, `/${event.slug}?org=default&embed=1`)).toEqual(EMBED)
+  expect(await framing(page, `/${event.slug}/success?org=default&embed=1`)).toEqual(EMBED)
   for (const path of [
     `/${event.slug}?org=default`,
     `/${event.slug}/success?org=default`,
@@ -149,7 +155,7 @@ test("the public page without embed=1 is not shown in another site's frame", asy
   associationHtml = associationPage(src, false)
   const refused = page.waitForEvent("response", (r) => r.url() === src)
   await page.goto(`${associationOrigin}/sans-embed`)
-  expect((await refused).headers()["content-security-policy"]).toBe("frame-ancestors 'none'")
+  expect(frameAncestorsOf((await refused).headers()["content-security-policy"])).toBe("'none'")
   // The browser blocks the document: nothing of the event page in the frame.
   await page.waitForTimeout(1_000)
   await expect(page.frameLocator("iframe").getByRole("heading", { name: /E2E Intégration/ })).toHaveCount(0)

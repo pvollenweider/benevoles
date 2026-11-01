@@ -1,6 +1,6 @@
 import type { NextConfig } from "next"
 import { withSentryConfig } from "@sentry/nextjs/config"
-import { CALENDAR_FEED_HEADER_RULES, securityHeaders } from "./src/lib/security-headers"
+import { CALENDAR_FEED_HEADER_RULES, SECURITY_HEADERS } from "./src/lib/security-headers"
 import { STATIC_CACHE_HEADERS } from "./src/lib/static-cache-headers"
 import { PERSONAL_API_HEADER_RULES } from "./src/lib/personal-api-headers"
 import pkg from "./package.json"
@@ -15,7 +15,7 @@ const nextConfig: NextConfig = {
   env: { APP_VERSION: pkg.version },
   async headers() {
     return [
-      { source: "/:path*", headers: [...securityHeaders({ dev: process.env.NODE_ENV === "development" })] },
+      { source: "/:path*", headers: [...SECURITY_HEADERS] },
       ...STATIC_CACHE_HEADERS,
       ...CALENDAR_FEED_HEADER_RULES.map((r) => ({ source: r.source, headers: [...r.headers] })),
       // Personal data and tokens: never kept in a cache (src/lib/personal-api-headers.ts).

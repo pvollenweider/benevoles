@@ -157,6 +157,7 @@ Format basé sur [Keep a Changelog](https://keepachangelog.com/fr/1.0.0/).
 - **Calendrier** : un retour chariot isolé dans un titre, un lieu, un poste ou une consigne est traité comme un saut de ligne dans les fichiers et abonnements .ics.
 - **Sécurité : routage des liens personnels et secrets de configuration renforcés** : les liens de disponibilités datées suivent la même règle que les autres liens personnels côté proxy, et un test relie désormais cette règle à toutes les routes à lien personnel de l'application. En production, le serveur refuse de démarrer avec un `AUTH_SECRET` (ou un `CRON_SECRET`) d'exemple ou trop simple ; `docker-compose.yml` n'a plus de valeur par défaut pour `AUTH_SECRET` et `.env.example` la laisse vide, avec la commande pour en générer une. `.gitignore` couvre aussi `.env.development` et `.env.production`.
 - **Suivi des erreurs** : les liens personnels et les adresses email sont aussi masqués dans le message d'une erreur et dans ses données associées, et l'échec de l'enregistrement ou de la suppression d'un événement est journalisé sur une seule ligne sans les données saisies.
+- **Politique de scripts imposée** : chaque page n'exécute plus que les scripts de l'application, autorisés par un nonce propre à chaque réponse ou par leur empreinte ; un formulaire ne s'envoie qu'au site lui-même. La politique, jusqu'ici en observation, est désormais appliquée par le navigateur, sur toutes les pages, y compris l'inscription intégrable et les pages d'impression.
 
 ### Infrastructure
 

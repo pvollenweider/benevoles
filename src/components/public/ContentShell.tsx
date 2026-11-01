@@ -9,6 +9,7 @@ import ContentShellRoot from "@/components/public/ContentShellRoot"
 import SiteBrandLink from "@/components/public/SiteBrandLink"
 import { SITE_CONTAINER_CLASS, SITE_READING_COLUMN_CLASS } from "@/components/public/site-container"
 import { audienceNav, availablePublicPages } from "@/lib/doc-pages"
+import { THEME_INIT_SCRIPT } from "@/lib/inline-scripts"
 
 // Sets the `dark` class on the shell's own root before first paint — from a saved choice
 // (doc-theme in localStorage) or, absent one, the OS/browser preference — so there's no flash of
@@ -16,17 +17,7 @@ import { audienceNav, availablePublicPages } from "@/lib/doc-pages"
 // the dark theme (its footer would lose contrast); the page canvas under the frame follows it in
 // CSS (globals.css, html:has). DocThemeToggle applies it again, before paint, after a client
 // navigation, where inline scripts don't run.
-// Static string constant, never interpolated with request/user data — safe to inject verbatim.
-const THEME_INIT_SCRIPT = `
-(function () {
-  try {
-    var stored = localStorage.getItem("doc-theme");
-    var dark = stored ? stored === "dark" : window.matchMedia("(prefers-color-scheme: dark)").matches;
-    var el = document.currentScript && document.currentScript.parentElement;
-    if (el) el.classList.toggle("dark", dark);
-  } catch (e) {}
-})();
-`
+// THEME_INIT_SCRIPT: a constant of src/lib/inline-scripts.ts, allowed by its hash in the script policy.
 
 /**
  * The prose recipe of the content pages (changelog, accessibility), shared with
