@@ -14,6 +14,8 @@ import { cancelShift } from "@/lib/shift-cancel"
 import { registrationToken } from "@/lib/token-vault"
 import { collectNotifications, deliverAfterResponse, enqueueNotifications } from "@/lib/notifications/outbox"
 import { validationError } from "@/lib/api-error"
+import { cappedText } from "@/lib/text-limits-schema"
+import { SHIFT_DESCRIPTION_MAX, SHIFT_INTERNAL_NOTES_MAX, SHIFT_LABEL_MAX, SHIFT_LOCATION_DETAILS_MAX, SHIFT_ROLE_NAME_MAX } from "@/lib/text-limits"
 import { SHIFT_CONTACT_NAME_MAX, SHIFT_CONTACT_PHONE_MAX, SHIFT_INSTRUCTIONS_MAX } from "@/lib/shift-info"
 import { minVolunteersProblem } from "@/lib/staffing"
 import { liveRoleShifts, ROLE_SETTINGS_SELECT, roleSettingsOf } from "@/lib/role-settings"
@@ -22,9 +24,9 @@ import { shiftMateriallyChanged } from "@/lib/shift-swaps"
 import { checkScheduleEdit, scheduleEditRefusalBody, ScheduleEditRefusalError } from "@/lib/workload-guard"
 
 const schema = z.object({
-  roleName: z.string().optional(),
-  label: z.string().optional(),
-  description: z.string().optional().nullable(),
+  roleName: cappedText(SHIFT_ROLE_NAME_MAX, "Le nom du poste").optional(),
+  label: cappedText(SHIFT_LABEL_MAX, "Le libellé du créneau").optional(),
+  description: cappedText(SHIFT_DESCRIPTION_MAX, "La description du créneau").optional().nullable(),
   date: civilDateSchema.optional(),
   startTime: clockSchema.optional(),
   endTime: clockSchema.optional(),
@@ -32,14 +34,14 @@ const schema = z.object({
   // Minimum per shift (#949): null removes it; checked below against the places it will have.
   minVolunteers: z.number().nullable().optional(),
   status: z.enum(["open", "full", "closed", "cancelled"]).optional(),
-  locationDetails: z.string().optional().nullable(),
+  locationDetails: cappedText(SHIFT_LOCATION_DETAILS_MAX, "Le lieu de rendez-vous").optional().nullable(),
   latitude: z.number().min(-90).max(90).nullable().optional(),
   longitude: z.number().min(-180).max(180).nullable().optional(),
   contactName: z.string().max(SHIFT_CONTACT_NAME_MAX).optional().nullable(),
   contactPhone: z.string().max(SHIFT_CONTACT_PHONE_MAX).optional().nullable(),
   instructions: z.string().max(SHIFT_INSTRUCTIONS_MAX).optional().nullable(),
   displayOrder: z.number().int().optional(),
-  internalNotes: z.string().optional().nullable(),
+  internalNotes: cappedText(SHIFT_INTERNAL_NOTES_MAX, "Les notes internes").optional().nullable(),
   waitlistEnabled: z.boolean().optional(),
   requiresApproval: z.boolean().optional(),
   minAge: z.number().int().min(0).max(120).nullable().optional(),

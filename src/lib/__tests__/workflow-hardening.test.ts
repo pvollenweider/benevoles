@@ -84,3 +84,65 @@ describe("GitHub workflow hardening", () => {
     })
   })
 })
+
+// Deploy credentials: the build and deploy jobs read their secrets from GitHub
+// environments limited to main, the deploy ServiceAccount only has rights in the namespace, and a
+// secret missing from the environment stops the deploy before it reaches the cluster.
+describe("deploy environments and namespaced credential", () => {
+  const deploy = workflows.find((w) => w.file === "deploy.yml")!.text
+  /** The text of a top-level job of deploy.yml. */
+  const job = (name: string) => {
+    const start = deploy.search(new RegExp(`^  ${name}:$`, "m"))
+    expect(start, name).toBeGreaterThan(-1)
+    const next = deploy.slice(start + 1).search(/^ {2}[\w-]+:$/m)
+    return next === -1 ? deploy.slice(start) : deploy.slice(start, start + 1 + next)
+  }
+
+  it("build-push reads its secrets from the production-build environment", () => {
+    expect(job("build-push")).toMatch(/^ {4}environment: production-build$/m)
+  })
+
+  it("deploy reads its secrets from the production environment", () => {
+    expect(job("deploy")).toMatch(/^ {4}environment: production$/m)
+  })
+
+  it("no other job names an environment, and only build-push and deploy read secrets", () => {
+    for (const name of ["check"]) {
+      expect(job(name), name).not.toMatch(/^ {4}environment:/m)
+      expect(job(name), name).not.toContain("secrets.")
+    }
+  })
+
+  it("never applies the cluster-scoped namespace or the deploy credential's own RBAC", () => {
+    for (const { line, script } of runScripts(deploy)) {
+      expect(script, `deploy.yml:${line}`).not.toContain("k8s/namespace.yaml")
+      expect(script, `deploy.yml:${line}`).not.toContain("k8s/rbac-ci-deployer.yaml")
+      // A directory apply would pick both up.
+      expect(script, `deploy.yml:${line}`).not.toMatch(/apply -f k8s\/?(\s|$)/)
+    }
+  })
+
+  describe("Check required secrets", () => {
+    const start = deploy.indexOf("- name: Check required secrets")
+    const block = deploy.slice(start, deploy.indexOf("- name:", start + 1))
+
+    it("checks every key of its environment, and runs before the k8s secret is written", () => {
+      expect(start).toBeGreaterThan(-1)
+      expect(start).toBeLessThan(deploy.indexOf("- name: Sync k8s secret"))
+      const env = mappingKeys(block, "env")
+      const loop = block.match(/for k in ([\s\S]*?); do/)
+      expect(loop).not.toBeNull()
+      const checked = loop![1].replace(/\\\n/g, " ").split(/\s+/).filter(Boolean)
+      expect([...checked].sort()).toEqual([...env].sort())
+      expect(checked).toEqual(
+        expect.arrayContaining(["TOKEN_ENCRYPTION_KEY", "AUTH_SECRET", "POSTGRES_PASSWORD", "CRON_SECRET", "OFFSITE_BUCKET"]),
+      )
+    })
+
+    it("prints only the names of the empty secrets", () => {
+      const script = runScripts(block)[0].script
+      expect(script).toContain('[ -n "${!k:-}" ] || missing="$missing $k"')
+      expect(script).not.toMatch(/echo[^\n]*\$\{!k/)
+    })
+  })
+})
