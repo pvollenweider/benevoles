@@ -8,7 +8,7 @@ import { env } from "./env"
 import { prisma } from "./prisma"
 import { reportError } from "./report-error"
 import { siteDomain } from "@/lib/site"
-import { isAllowedPushEndpoint, safePushLookup } from "./push-endpoint"
+import { boundPushSocket, isAllowedPushEndpoint, PUSH_RESPONSE_MAX_BYTES, safePushLookup } from "./push-endpoint"
 
 /**
  * Socket inactivity timeout handed to web-push (#1041). Push services answer in well under a
@@ -26,7 +26,15 @@ export const PUSH_SEND_DEADLINE_MS = 60_000
  * resolves to a non-public address, so a stored endpoint cannot reach an internal host, even by
  * changing its DNS answer after it was accepted. web-push 3.6.7 takes it as the `agent` option.
  */
-export const pushAgent = new https.Agent({ lookup: safePushLookup as unknown as https.AgentOptions["lookup"] })
+class BoundedPushAgent extends https.Agent {
+  // Each connection is closed at the send deadline or past the answer size cap (push-endpoint.ts).
+  createConnection(...args: Parameters<https.Agent["createConnection"]>) {
+    const socket = super.createConnection(...args)
+    if (socket) boundPushSocket(socket, { deadlineMs: PUSH_SEND_DEADLINE_MS, maxBytes: PUSH_RESPONSE_MAX_BYTES })
+    return socket
+  }
+}
+export const pushAgent = new BoundedPushAgent({ lookup: safePushLookup as unknown as https.AgentOptions["lookup"] })
 /** Recipients of a targeted message sent to in parallel. */
 const TARGETED_PUSH_CONCURRENCY = 5
 

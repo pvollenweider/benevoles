@@ -55,6 +55,14 @@ Posés sur chaque réponse par `next.config.ts` (`src/lib/security-headers.ts`) 
 - `Permissions-Policy: camera=(), microphone=(), geolocation=(), payment=(), usb=()` : coupe les fonctions de l'appareil dont l'application ne se sert jamais. Le presse-papiers (copier un lien), le partage, le plein écran et l'image dans l'image des vidéos, la lecture automatique et les notifications ne sont pas restreints.
 - `Referrer-Policy: strict-origin` (#485) : un lien personnel ne part jamais dans l'en-tête `Referer`.
 
+## Relais du suivi des erreurs
+
+Le navigateur envoie ses rapports d'erreur à `/monitoring`, sur le domaine de l'application, et le serveur les transmet à Sentry (`src/app/monitoring/route.ts`). Le relais ne transmet qu'au projet Sentry de l'instance : l'en-tête de chaque envoi doit porter son DSN (hôte, projet et clé), sinon l'envoi est refusé. Taille limitée à 2 Mo, ni cookie ni en-tête du navigateur transmis.
+
+## Notifications push
+
+Un navigateur choisit lui-même son service de notification (FCM, Mozilla, Apple, Windows, ou un distributeur UnifiedPush sur son propre domaine) : le serveur accepte donc l'adresse d'abonnement de n'importe quel hôte public en HTTPS, jamais une adresse privée, locale ou qui y mène par le DNS (`src/lib/push-endpoint.ts`). Risque résiduel accepté : une personne qui détient un lien personnel peut faire envoyer par le serveur un message chiffré à un hôte public de son choix ; une liste fermée de services casserait les navigateurs qui n'y figurent pas. Ce que cet hôte peut faire en retour est borné : chaque connexion est fermée à l'échéance de l'envoi (60 s) ou dès que sa réponse dépasse 256 Ko.
+
 ## Politique de scripts (en observation)
 
 Une politique de scripts est envoyée en mode observation seulement (`Content-Security-Policy-Report-Only`) : elle ne bloque rien, et aucun rapport n'est envoyé nulle part (ni point de collecte, ni service tiers).

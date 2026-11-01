@@ -6,6 +6,8 @@ import { requireOrgSession } from "@/lib/auth-guard"
 import { adminActor, diffFields, logOrgEvent } from "@/lib/org-log"
 import { z } from "zod"
 import { validationError } from "@/lib/api-error"
+import { cappedText } from "@/lib/text-limits-schema"
+import { MEMBER_NOTES_MAX } from "@/lib/text-limits"
 import { availabilitySchema } from "@/lib/availability"
 import { isUniqueViolation } from "@/lib/registration-capacity"
 import { MEMBER_ERASURE_REASON } from "@/lib/member-erasure"
@@ -18,12 +20,12 @@ import type { Tx } from "@/lib/registration-capacity"
 const EMAIL_TAKEN = "Un autre membre de l'organisation utilise déjà cette adresse email."
 
 const patchSchema = z.object({
-  firstName: z.string().min(1).optional(),
-  lastName: z.string().min(1).optional(),
+  firstName: z.string().min(1).max(100).optional(),
+  lastName: z.string().min(1).max(100).optional(),
   email: z.string().trim().toLowerCase().email().optional().nullable().or(z.literal("")),
-  phone: z.string().optional().nullable(),
+  phone: z.string().max(50).optional().nullable(),
   tags: z.array(z.string()).optional(),
-  notes: z.string().optional().nullable(),
+  notes: cappedText(MEMBER_NOTES_MAX, "Les notes").optional().nullable(),
   active: z.boolean().optional(),
   availabilityPeriods: availabilitySchema.shape.availabilityPeriods.optional(),
   availabilityNote: availabilitySchema.shape.availabilityNote.optional(),

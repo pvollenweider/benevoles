@@ -8,6 +8,8 @@ import { requireOrgSession } from "@/lib/auth-guard"
 import { clockSchema } from "@/lib/shift-time"
 import { adminActor, logEvent } from "@/lib/event-log"
 import { validationError } from "@/lib/api-error"
+import { cappedText } from "@/lib/text-limits-schema"
+import { SHIFT_LABEL_MAX, SHIFT_LOCATION_DETAILS_MAX, SHIFT_ROLE_NAME_MAX } from "@/lib/text-limits"
 import { generateRecurrence, recurrenceProblem, type RecurrenceInput } from "@/lib/shift-recurrence"
 import { SHIFT_CONTACT_NAME_MAX, SHIFT_CONTACT_PHONE_MAX, SHIFT_INSTRUCTIONS_MAX } from "@/lib/shift-info"
 import { liveRoleShifts, ROLE_SETTINGS_SELECT, roleSettingsOf, type RoleSettings } from "@/lib/role-settings"
@@ -15,8 +17,8 @@ import { newShiftsSector } from "@/lib/sector-adoption"
 
 const schema = z.object({
   eventId: z.string(),
-  roleName: z.string().trim().min(1),
-  label: z.string().optional(),
+  roleName: cappedText(SHIFT_ROLE_NAME_MAX, "Le nom du poste").trim().min(1),
+  label: cappedText(SHIFT_LABEL_MAX, "Le libellé du créneau").optional(),
   from: civilDateSchema,
   until: civilDateSchema,
   weekdays: z.array(z.number().int().min(1).max(7)).min(1).max(7),
@@ -28,7 +30,7 @@ const schema = z.object({
   capacity: z.number().int().min(1),
   holidays: z.enum(["none", "FR", "CH"]),
   closures: z.array(civilDateSchema).max(366).default([]),
-  locationDetails: z.string().optional(),
+  locationDetails: cappedText(SHIFT_LOCATION_DETAILS_MAX, "Le lieu de rendez-vous").optional(),
   contactName: z.string().max(SHIFT_CONTACT_NAME_MAX).optional().nullable(),
   contactPhone: z.string().max(SHIFT_CONTACT_PHONE_MAX).optional().nullable(),
   instructions: z.string().max(SHIFT_INSTRUCTIONS_MAX).optional().nullable(),

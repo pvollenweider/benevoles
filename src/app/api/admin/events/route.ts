@@ -9,6 +9,8 @@ import { ACCENT_KEYS } from "@/lib/event-accent"
 import { requireOrgSession } from "@/lib/auth-guard"
 import { z } from "zod"
 import { validationError } from "@/lib/api-error"
+import { cappedText } from "@/lib/text-limits-schema"
+import { EVENT_LOCATION_MAX, EVENT_TITLE_MAX, MARKDOWN_TEXT_MAX, SHOW_NAME_MAX } from "@/lib/text-limits"
 import { dayContactSchema } from "@/lib/day-contact"
 import { cancelDeadlineSchema } from "@/lib/cancel-deadline-schema"
 import { newEventShiftSwapsEnabled } from "@/lib/shift-swap-data"
@@ -16,20 +18,20 @@ import { newEventWorkload } from "@/lib/workload-policy-data"
 import { newEventSectorsEnabled } from "@/lib/sector-adoption"
 
 const showSchema = z.object({
-  name: z.string(),
+  name: cappedText(SHOW_NAME_MAX, "Le nom du spectacle"),
   date: civilDateSchema,
   startTime: z.string(),
   endTime: z.string(),
 })
 
 const schema = z.object({
-  title: z.string().min(1),
-  description: z.string().optional(),
-  location: z.string().optional(),
+  title: cappedText(EVENT_TITLE_MAX, "Le titre").min(1),
+  description: cappedText(MARKDOWN_TEXT_MAX, "La description").optional(),
+  location: cappedText(EVENT_LOCATION_MAX, "Le lieu").optional(),
   startDate: civilDateSchema,
   endDate: civilDateSchema,
-  publicInstructions: z.string().optional(),
-  confirmationMessage: z.string().optional(),
+  publicInstructions: cappedText(MARKDOWN_TEXT_MAX, "Les informations pratiques").optional(),
+  confirmationMessage: cappedText(MARKDOWN_TEXT_MAX, "Le message de confirmation").optional(),
   showSchedule: z.array(showSchema).optional(),
   requirePhone: z.boolean().optional(),
   shiftRosterEnabled: z.boolean().optional(),
