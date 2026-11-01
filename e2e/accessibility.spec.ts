@@ -3,6 +3,7 @@ import { execFileSync } from "node:child_process"
 import { seriousViolations } from "./helpers/axe"
 import { waitForHydration } from "./helpers/hydration"
 import { passSecondFactor } from "./helpers/super-admin"
+import { createPublicEvent } from "./helpers/public-signup"
 
 /**
  * Automated accessibility checks on the critical paths (#487), as listed on /accessibilite:
@@ -31,8 +32,10 @@ test.describe("public pages", () => {
     expect.soft(await seriousViolations(page)).toEqual([])
   })
 
-  test("event page, then the sign-up form, have no serious violation", async ({ page }) => {
-    await page.goto("/spectacle-cirque-2026?org=default")
+  test("event page, then the sign-up form, have no serious violation", async ({ page, browser }) => {
+    // An event still to come: the seeded demo event's shifts are over and can no longer be chosen.
+    const event = await createPublicEvent(browser, `E2E Accessibilite ${Date.now()}`, [{ label: "Billetterie", startTime: "09:00", endTime: "12:00" }])
+    await page.goto(`/${event.slug}?org=default`)
     await expect(page.getByRole("heading", { level: 1 })).toBeVisible()
     expect.soft(await seriousViolations(page)).toEqual([])
     await page.getByRole("button", { name: /, Billetterie[^:]* : sélectionner/ }).first().click()

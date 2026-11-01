@@ -617,11 +617,12 @@ async function main() {
       await submit.scrollIntoViewIfNeeded()
       await tap(page, submit)
       await page.waitForURL(new RegExp(`/${eventSlug}/success`), { timeout: 20_000 })
-      await page.getByRole("heading", { name: /inscription confirmée/i }).waitFor()
+      await page.getByRole("heading", { name: /inscription confirmée|demande d'inscription reçue/i }).waitFor()
     })
 
     await scene("success", async () => {
-      const emailNotice = page.getByText("Merci pour ton engagement. Un email de confirmation a été envoyé.")
+      // A public sign-up without proof of the address: the neutral page sends to the emails (AUTHZ-01).
+      const emailNotice = page.getByText(/^Merci pour ton engagement\. Vérifie tes emails/)
       await emailNotice.scrollIntoViewIfNeeded()
       await page.waitForTimeout(900)
     })
@@ -3364,7 +3365,7 @@ async function main() {
         await tap(page, page.getByRole("checkbox", { name: /^J'accepte que l'association qui organise cet événement/ }))
         await at("Nous faisons une vraie inscription")
         await tap(page, page.getByRole("button", { name: "Confirmer mon inscription", exact: true }))
-        await page.getByRole("heading", { name: /inscription confirmée/i }).waitFor()
+        await page.getByRole("heading", { name: /inscription confirmée|demande d'inscription reçue/i }).waitFor()
       })
       await scene("reserved", async at => {
         await page.goto(`${baseUrl}/${eventSlug}?org=${encodeURIComponent(org)}`); await page.waitForLoadState("domcontentloaded"); await page.waitForTimeout(650)
@@ -4003,7 +4004,7 @@ async function main() {
         await page.getByLabel(/^Prénom(?: \*)?$/).evaluate(element => element.scrollIntoView({ block: "center" }))
         await at("Nous confirmons maintenant")
         await tap(page, page.getByRole("button", { name: "Confirmer mon inscription" }))
-        await page.getByRole("heading", { name: /inscription confirmée/i }).waitFor()
+        await page.getByRole("heading", { name: /inscription confirmée|demande d'inscription reçue/i }).waitFor()
       })
       const signupQuery = 'to:elodie.rochat@example.org subject:"Nouvelle inscription" "Fête du village de Montvert"'
       let notificationMail: { ID: string } | undefined
@@ -4784,12 +4785,12 @@ async function main() {
         await tap(page, form.getByRole("radio", { name: /Organisateur/ }))
         await at("Cliquez sur Envoyer l’invitation ")
         await tap(page, form.getByRole("button", { name: "Envoyer l'invitation" }))
-        await page.getByRole("status").filter({ hasText: "Invitation envoyée à video.team.lea@example.org. Le lien d'activation, valable 7 jours, lui a été envoyé par email." }).waitFor()
+        await page.getByRole("status").filter({ hasText: "Si video.team.lea@example.org peut rejoindre l'équipe, cette adresse reçoit une invitation par email, avec un lien d'activation valable 7 jours." }).waitFor()
       })
 
       await scene("invite-result", async (at) => {
         await at("La confirmation indique")
-        await page.getByRole("status").filter({ hasText: "Invitation envoyée à video.team.lea@example.org." }).scrollIntoViewIfNeeded()
+        await page.getByRole("status").filter({ hasText: "Si video.team.lea@example.org peut rejoindre l'équipe" }).scrollIntoViewIfNeeded()
         if (await page.getByRole("button", { name: "Copier le lien", exact: true }).count()) throw new Error("Owner must never receive the activation link")
         await at("Son accès ne devient actif")
         await page.getByText("Léa Martin", { exact: true }).scrollIntoViewIfNeeded()
@@ -5619,7 +5620,7 @@ async function main() {
         await tap(page, page.locator("label").filter({ hasText: "J'ai lu et j'accepte" }).getByRole("checkbox"))
         await tap(page, page.getByRole("checkbox", { name: /^J'accepte que l'association qui organise cet événement/ }))
         await tap(page, page.getByRole("button", { name: "Confirmer mon inscription" }))
-        await page.getByRole("heading", { name: /inscription confirmée/i }).waitFor()
+        await page.getByRole("heading", { name: /inscription confirmée|demande d'inscription reçue/i }).waitFor()
       })
 
       await page.goto(`${baseUrl}/admin/events`); await settle(page)

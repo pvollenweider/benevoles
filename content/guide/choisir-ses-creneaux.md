@@ -32,6 +32,7 @@ Si les inscriptions ne sont pas encore ouvertes, ou déjà fermées, un encadré
 | Barre grisée « Complet » | Plus de place disponible |
 | Barre colorée rayée blanc, « Complet · file d'attente » | Complet, mais la liste d'attente est ouverte : clique pour la rejoindre |
 | Barre grisée « Fermé » | Inscriptions désactivées |
+| Barre grisée « Terminé » | Créneau déjà fini (son heure de fin est passée) : on ne peut plus s'y inscrire |
 | Barre colorée, et dessous la mention « Limite atteinte » | Tu as déjà pris le nombre maximum de créneaux de ce poste : ce créneau ne peut pas être ajouté |
 | Barre grisée (striée) | Créneau qui chevauche une de tes sélections : impossible de le choisir (sauf poste cumulable, voir plus bas) |
 | Fond violet (🎪) | Plage d'un spectacle, repère visuel uniquement |

@@ -4,6 +4,7 @@
 import { NextResponse } from "next/server"
 import { requireOrgSession } from "@/lib/auth-guard"
 import { adminActor, logEvent } from "@/lib/event-log"
+import { workloadProtectionOffered, WORKLOAD_NOT_OFFERED } from "@/lib/workload-policy-data"
 import { orderedPlaces, placeName, placeNameTaken, PLACE_NAME_MAX, PLACE_NAME_TAKEN_ERROR } from "@/lib/places"
 
 /**
@@ -21,8 +22,9 @@ export async function GET(_req: Request, { params }: { params: Promise<{ id: str
   if (guard instanceof NextResponse) return guard
   const { db } = guard
   const { id } = await params
-  const event = await db.event.findFirst({ where: { id }, select: { id: true } })
+  const event = await db.event.findFirst({ where: { id }, select: { id: true, workloadProtectionEnabled: true } })
   if (!event) return NextResponse.json({ error: "Non trouvé" }, { status: 404 })
+  if (!(await workloadProtectionOffered(guard.organizationId, event))) return NextResponse.json({ error: WORKLOAD_NOT_OFFERED }, { status: 403 })
   const places = await db.eventPlace.findMany({ where: { eventId: id }, select: PLACE_SELECT })
   return NextResponse.json({ places: orderedPlaces(places) })
 }
@@ -37,8 +39,9 @@ export async function POST(req: Request, { params }: { params: Promise<{ id: str
   const name = placeName((body as { name?: unknown } | null)?.name)
   if (!name) return NextResponse.json({ error: `Indiquez le nom du lieu (${PLACE_NAME_MAX} caractères au plus).`, field: "name" }, { status: 400 })
 
-  const event = await db.event.findFirst({ where: { id }, select: { id: true } })
+  const event = await db.event.findFirst({ where: { id }, select: { id: true, workloadProtectionEnabled: true } })
   if (!event) return NextResponse.json({ error: "Non trouvé" }, { status: 404 })
+  if (!(await workloadProtectionOffered(guard.organizationId, event))) return NextResponse.json({ error: WORKLOAD_NOT_OFFERED }, { status: 403 })
 
   const existing = await db.eventPlace.findMany({ where: { eventId: id }, select: PLACE_SELECT })
   if (placeNameTaken(existing, name)) return NextResponse.json({ error: PLACE_NAME_TAKEN_ERROR, field: "name" }, { status: 409 })

@@ -64,17 +64,17 @@ describe("GET /api/public/events — listed events of one organization", () => {
   it("filters on published + listed, scoped to the host's organization", async () => {
     getHeader.mockImplementation((n: string) => (n === "x-org-slug" ? "fete" : null))
     const { GET } = await import("@/app/api/public/events/route")
-    const res = await GET(new Request("http://localhost/api/public/events"))
+    const res = await GET()
     expect(res.status).toBe(200)
     expect(publicFindMany.mock.calls[0][0].where).toEqual({ publicStatus: "published", isListed: true, organization: { slug: "fete", active: true, publicationApprovedAt: { not: null } } })
   })
 
-  it("accepts ?org= and refuses a request without organization: no list across tenants", async () => {
+  it("refuses a request without the organization the proxy resolved, ?org= included: no list across tenants", async () => {
+    // ?org= reaches the route only as the proxy's header, where it is allowed (src/lib/org-subdomain.ts).
     getHeader.mockReturnValue(null)
     const { GET } = await import("@/app/api/public/events/route")
-    expect((await GET(new Request("http://localhost/api/public/events"))).status).toBe(404)
+    // The route takes no request: it cannot read ?org= itself.
+    expect((await GET()).status).toBe(404)
     expect(publicFindMany).not.toHaveBeenCalled()
-    expect((await GET(new Request("http://localhost/api/public/events?org=fete"))).status).toBe(200)
-    expect(publicFindMany.mock.calls[0][0].where.organization).toEqual({ slug: "fete", active: true, publicationApprovedAt: { not: null } })
   })
 })

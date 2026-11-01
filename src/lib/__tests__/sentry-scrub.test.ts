@@ -1,6 +1,6 @@
 import { describe, it, expect } from "vitest"
 import type { ErrorEvent } from "@sentry/nextjs"
-import { scrubUrl, scrubBreadcrumb, scrubEvent, scrubReplayEvent, scrubReplayFrame, scrubSpan, NO_PII_DATA_COLLECTION, BROWSER_NOISE_ERRORS } from "../sentry-scrub"
+import { SCRUB_MAX_LENGTH, scrubUrl, scrubBreadcrumb, scrubEvent, scrubReplayEvent, scrubReplayFrame, scrubSpan, NO_PII_DATA_COLLECTION, BROWSER_NOISE_ERRORS } from "../sentry-scrub"
 
 const TOKEN = "a1b2c3d4e5f6a7b8c9d0e1f2a3b4c5d6e7f8a9b0c1d2e3f4"
 
@@ -31,6 +31,34 @@ describe("scrubUrl", () => {
   it("masks an email address wherever it appears", () => {
     expect(scrubUrl("delivery failed for jane.doe@example.com")).toBe("delivery failed for [email]")
     expect(scrubUrl("no email here")).toBe("no email here")
+  })
+
+  it("still masks addresses next to other text", () => {
+    expect(scrubUrl("x a.b@c.de y")).toBe("x [email] y")
+    expect(scrubUrl("/path?to=jane+tag@example.org&x=1")).toBe("/path?to=[email]&x=1")
+    expect(scrubUrl("<jane@example.com>, bob@example.ch")).toBe("<[email]>, [email]")
+  })
+
+  // A long request path made of address characters used to take quadratic time (seconds per string).
+  it.each([
+    ["a run of address characters after an @", "/a@" + "a".repeat(1_000_000)],
+    ["a run before an @", "/" + "a".repeat(1_000_000) + "@"],
+    ["many @", "a@".repeat(500_000)],
+    ["dotted domain", "a@" + "a.".repeat(500_000)],
+  ])("scrubs a 1 MB string in bounded time: %s", (_label, input) => {
+    const start = performance.now()
+    const out = scrubUrl(input)
+    expect(performance.now() - start).toBeLessThan(200)
+    // The marker « [email] » may replace a shorter cut address at the end.
+    expect(out.length).toBeLessThanOrEqual(SCRUB_MAX_LENGTH + "[email]…".length)
+  })
+
+  it("cuts a string longer than the cap without leaving part of an address", () => {
+    const input = "x".repeat(SCRUB_MAX_LENGTH - 10) + " jane.doe@example.com tail"
+    const out = scrubUrl(input)
+    expect(out.endsWith("[email]…")).toBe(true)
+    expect(out).not.toContain("jane")
+    expect(scrubUrl("short")).toBe("short")
   })
 })
 

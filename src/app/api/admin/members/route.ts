@@ -6,6 +6,8 @@ import { requireOrgSession } from "@/lib/auth-guard"
 import { adminActor, logOrgEvent } from "@/lib/org-log"
 import { z } from "zod"
 import { validationError } from "@/lib/api-error"
+import { cappedText } from "@/lib/text-limits-schema"
+import { MEMBER_NOTES_MAX } from "@/lib/text-limits"
 import { availabilitySchema } from "@/lib/availability"
 
 const volunteerSchema = z.object({
@@ -14,7 +16,7 @@ const volunteerSchema = z.object({
   email: z.string().trim().toLowerCase().email().optional().or(z.literal("")),
   phone: z.string().max(50).optional(),
   tags: z.array(z.string()).optional(),
-  notes: z.string().optional(),
+  notes: cappedText(MEMBER_NOTES_MAX, "Les notes").optional(),
   active: z.boolean().optional(),
   availabilityPeriods: availabilitySchema.shape.availabilityPeriods.optional(),
   availabilityNote: availabilitySchema.shape.availabilityNote.optional(),

@@ -102,7 +102,7 @@ describe("POST /api/admin/settings/admins (#1045)", () => {
   it("never returns the setup link to the owner; it goes in the invitation email only", async () => {
     asOwner(new Date())
     const res = await invite()
-    expect(res.status).toBe(201)
+    expect(res.status).toBe(202)
     const text = await res.text()
     expect(text).not.toMatch(/accept-invite|inviteUrl/)
     const [payloads] = m.enqueue.mock.calls[0]

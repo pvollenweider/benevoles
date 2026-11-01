@@ -8,6 +8,7 @@ import ConfirmActionModal from "../ConfirmActionModal"
 import { acceptRequestRecap, refuseRequestRecap } from "@/lib/action-recap"
 import { personName, shiftSpoken, type Registration } from "./types"
 import { AvailabilityAckFields, useAvailabilityAck } from "../AvailabilityAck"
+import { OVERRIDE_CONFIRM_LABEL, shiftOverrideOf, shiftOverrideWarning, type ShiftOverrideBody } from "@/lib/shift-override"
 
 type Props = {
   eventId: string
@@ -33,6 +34,10 @@ export default function RequestDecisionModal({ eventId, reg, kind, waitlist, onC
   const [decisionError, setDecisionError] = useState<string | null>(null)
   const people = [{ volunteerId: reg.volunteer.id, shiftId: reg.shift.id, firstName: reg.volunteer.firstName, fullName: personName(reg) }]
   const ack = useAvailabilityAck(eventId, people, availability && kind === "accept", "Accepter")
+  // A full or closed shift (AUTHZ-15): the server says so; the dialog then warns, and the next
+  // confirm sends the confirmation's key.
+  const [override, setOverride] = useState<ShiftOverrideBody["shifts"] | null>(null)
+  const [overrideWarning, setOverrideWarning] = useState<{ text: string } | null>(null)
 
   async function runDecision() {
     if (decisionBusy) return
@@ -50,6 +55,7 @@ export default function RequestDecisionModal({ eventId, reg, kind, waitlist, onC
           decision: kind,
           ...(kind === "refuse" && decisionNote.trim() ? { note: decisionNote } : {}),
           ...(availabilityAck.length > 0 ? { availabilityAck } : {}),
+          ...(kind === "accept" && override ? { shiftOverride: override.map((n) => n.key) } : {}),
         }),
       })
     } catch {
@@ -61,6 +67,13 @@ export default function RequestDecisionModal({ eventId, reg, kind, waitlist, onC
     setDecisionBusy(false)
     // The answer changed meanwhile (#1146, lot B): the box says it, never the dialog's error too.
     if (res.status === 409 && ack.refused(data)) { setDecisionError(null); return }
+    const toConfirm = res.status === 409 ? shiftOverrideOf(data) : null
+    if (toConfirm) {
+      setDecisionError(null)
+      setOverride(toConfirm)
+      setOverrideWarning({ text: `${shiftOverrideWarning(toConfirm)} Choisissez « ${OVERRIDE_CONFIRM_LABEL.accept} » pour confirmer.` })
+      return
+    }
     if (!res.ok) { setDecisionError(data?.error ?? "La décision n'a pas pu être enregistrée."); return }
     onDecided(startedAt)
   }
@@ -68,7 +81,7 @@ export default function RequestDecisionModal({ eventId, reg, kind, waitlist, onC
   return (
     <ConfirmActionModal
       recap={kind === "accept"
-        ? acceptRequestRecap({ name: personName(reg), shift: shiftSpoken(reg), hasEmail: !!reg.volunteer.email })
+        ? { ...acceptRequestRecap({ name: personName(reg), shift: shiftSpoken(reg), hasEmail: !!reg.volunteer.email }), ...(override ? { warning: shiftOverrideWarning(override), confirmLabel: OVERRIDE_CONFIRM_LABEL.accept } : {}) }
         : refuseRequestRecap({
           name: personName(reg),
           shift: shiftSpoken(reg),
@@ -79,6 +92,7 @@ export default function RequestDecisionModal({ eventId, reg, kind, waitlist, onC
       error={decisionError}
       onConfirm={() => void runDecision()}
       onCancel={onCancel}
+      lateWarning={overrideWarning}
     >
       {kind === "accept" && availability && <AvailabilityAckFields prefix={`decision-${reg.id}`} people={people} verb="Accepter" state={ack} />}
       {kind === "refuse" && reg.volunteer.email && (

@@ -52,23 +52,23 @@ Clique sur **Confirmer mon inscription**.
 
 ## Confirmation
 
-Après l'inscription, un **email de confirmation** est envoyé à ton adresse. Il récapitule tes créneaux et contient ton **lien personnel** pour gérer ton inscription (voir [Ton lien personnel](lien-personnel.md)).
+Après l'inscription, un **email de confirmation** est envoyé à ton adresse. Il récapitule tes créneaux, dit si chacun est une place, une place en liste d'attente ou une demande sur validation, et contient ton **lien personnel** pour gérer ton inscription (voir [Ton lien personnel](lien-personnel.md)).
 
-Ce lien t'est envoyé uniquement par email, jamais affiché à l'écran, pour que personne ne puisse y accéder en saisissant ton adresse à ta place. Seule exception : si tu t'inscris depuis un lien d'invitation reçu par email, la page de succès l'affiche aussi. Sinon, la page de succès te rappelle que le lien est dans l'email de confirmation. **Revenir à l'événement** te ramène au planning.
+Ce lien t'est envoyé uniquement par email, jamais affiché à l'écran, pour que personne ne puisse y accéder en saisissant ton adresse à ta place. Pour la même raison, la page qui suit l'envoi du formulaire ne dit rien de tes inscriptions : elle affiche **Demande d'inscription reçue** et t'invite à regarder tes emails. Si ton adresse avait déjà une inscription qui empêche celle-ci (le même créneau, un créneau en même temps, la limite de créneaux d'un poste, ou les pauses et limites de charge de l'événement), rien n'est enregistré et un email **Demande d'inscription non enregistrée** t'explique pourquoi, avec ton lien personnel. Seule exception : si tu t'inscris depuis un lien d'invitation reçu par email ou depuis ta page **Mes inscriptions**, l'adresse est bien la tienne : la page de succès dit alors directement ce qui est enregistré et affiche ton lien. **Revenir à l'événement** te ramène au planning.
 
 ## Questions fréquentes
 
 ### Je n'ai pas reçu l'email de confirmation
 
-Vérifie tes courriers indésirables. Si tu tentes de te réinscrire à un créneau où tu as déjà une inscription ou une place en liste d'attente, le formulaire te le signale et ton lien personnel t'est renvoyé par email (trois fois par heure au plus).
+Vérifie tes courriers indésirables. Si tu tentes de te réinscrire à un créneau où tu as déjà une inscription ou une place en liste d'attente, tu reçois à la place un email **Demande d'inscription non enregistrée** avec ton lien personnel (trois fois par heure au plus).
 
 ### J'ai eu une erreur en confirmant mon inscription
 
-Tout ce que tu as saisi reste en place. Le message dit de quoi il s'agit : un champ à corriger, un créneau qui n'est plus disponible (reviens au planning pour ajuster ton choix), une connexion interrompue ou une erreur du serveur. Dans ces deux derniers cas, clique à nouveau sur **Confirmer mon inscription** : si ton inscription était passée malgré tout, tu reçois simplement ton lien personnel par email au lieu d'une deuxième inscription.
+Tout ce que tu as saisi reste en place. Le message dit de quoi il s'agit : un champ à corriger, un créneau qui n'est plus disponible ou déjà terminé (reviens au planning pour ajuster ton choix), beaucoup d'inscriptions en même temps sur le même créneau, une connexion interrompue ou une erreur du serveur. Dans ces trois derniers cas, clique à nouveau sur **Confirmer mon inscription** : cela ne crée jamais de deuxième inscription sur les mêmes créneaux. Regarde aussi tes emails : si ton inscription était passée malgré tout, la confirmation y est.
 
 ### J'ai un message « Ce créneau chevauche une inscription existante »
 
-Tu as déjà une inscription sur un créneau qui se passe en même temps. Les créneaux qui se chevauchent avec une de tes inscriptions ne peuvent pas être sélectionnés, et le récapitulatif signale un chevauchement avant l'envoi. Seuls les postes que l'organisation a rendus cumulables avec un autre créneau échappent à cette règle.
+Tu as déjà une inscription sur un créneau qui se passe en même temps. Ce message apparaît quand tu t'inscris depuis ta page **Mes inscriptions** ou depuis un lien d'invitation : les créneaux qui se chevauchent avec une de tes inscriptions n'y peuvent pas être sélectionnés, et le récapitulatif signale un chevauchement avant l'envoi. Depuis le formulaire public, c'est l'email **Demande d'inscription non enregistrée** qui te le dit. Seuls les postes que l'organisation a rendus cumulables avec un autre créneau échappent à cette règle.
 
 ### Où sont utilisées mes données personnelles ?
 

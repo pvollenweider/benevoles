@@ -44,17 +44,23 @@ test.afterAll(async () => {
   await new Promise((resolve) => association?.close(resolve))
 })
 
-const DENY = { csp: "frame-ancestors 'none'", xfo: "DENY" }
+const DENY = { frameAncestors: "'none'", xfo: "DENY" }
+const EMBED = { frameAncestors: "*", xfo: undefined }
+
+/** The frame-ancestors directive of the enforced policy (which also carries the script policy). */
+function frameAncestorsOf(csp: string | undefined): string | undefined {
+  return csp?.split(";").map((d) => d.trim()).find((d) => d.startsWith("frame-ancestors "))?.slice("frame-ancestors ".length)
+}
 
 async function framing(page: Page, path: string) {
   const res = await page.request.get(path, { headers: { "x-forwarded-for": randomIp() } })
   const headers = res.headers()
-  return { csp: headers["content-security-policy"], xfo: headers["x-frame-options"] }
+  return { frameAncestors: frameAncestorsOf(headers["content-security-policy"]), xfo: headers["x-frame-options"] }
 }
 
 test("only the embeddable sign-up may be framed, every other route family refuses it", async ({ page }) => {
-  expect(await framing(page, `/${event.slug}?org=default&embed=1`)).toEqual({ csp: "frame-ancestors *", xfo: undefined })
-  expect(await framing(page, `/${event.slug}/success?org=default&embed=1`)).toEqual({ csp: "frame-ancestors *", xfo: undefined })
+  expect(await framing(page, `/${event.slug}?org=default&embed=1`)).toEqual(EMBED)
+  expect(await framing(page, `/${event.slug}/success?org=default&embed=1`)).toEqual(EMBED)
   for (const path of [
     `/${event.slug}?org=default`,
     `/${event.slug}/success?org=default`,
@@ -123,10 +129,10 @@ test("a volunteer signs up inside an iframe of another site, storage blocked, he
   await frame.getByLabel(/J.accepte que l.association/).check()
   await frame.getByRole("button", { name: "Confirmer mon inscription" }).click()
 
-  // The confirmation, still in the frame. The personal link goes by email (#285): the page says so
-  // (when the page shows it too, it opens in a new tab: src/components/__tests__/SuccessPageEmbed).
-  await expect(frame.getByRole("heading", { level: 1, name: "Inscription confirmée !" })).toBeVisible()
-  await expect(frame.getByText("L'email de confirmation contient ton lien personnel")).toBeVisible()
+  // The confirmation, still in the frame. Without proof of the address (#285, AUTHZ-01) the page
+  // sends to the emails (when it shows the link, it opens in a new tab: SuccessPageEmbed test).
+  await expect(frame.getByRole("heading", { level: 1, name: "Demande d'inscription reçue" })).toBeVisible()
+  await expect(frame.getByText(/Vérifie tes emails, y compris les courriers indésirables/)).toBeVisible()
   for (const link of await frame.getByRole("link", { name: /Accéder à mon inscription/ }).all()) {
     await expect(link).toHaveAttribute("target", "_blank")
   }
@@ -149,7 +155,7 @@ test("the public page without embed=1 is not shown in another site's frame", asy
   associationHtml = associationPage(src, false)
   const refused = page.waitForEvent("response", (r) => r.url() === src)
   await page.goto(`${associationOrigin}/sans-embed`)
-  expect((await refused).headers()["content-security-policy"]).toBe("frame-ancestors 'none'")
+  expect(frameAncestorsOf((await refused).headers()["content-security-policy"])).toBe("'none'")
   // The browser blocks the document: nothing of the event page in the frame.
   await page.waitForTimeout(1_000)
   await expect(page.frameLocator("iframe").getByRole("heading", { name: /E2E Intégration/ })).toHaveCount(0)

@@ -11,6 +11,7 @@ import { orgTimeZone } from "@/lib/time-zone"
 import { LIVE_STATUSES } from "@/lib/registration-capacity"
 import { sectorFilterOfRequest } from "@/lib/sector-filter-data"
 import { sectorFilterCaption } from "@/lib/sector-filter"
+import { PRINT_BUTTON_SCRIPT_TAG } from "@/lib/inline-scripts"
 
 function esc(s: string) {
   return s.replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;").replace(/"/g, "&quot;")
@@ -320,7 +321,7 @@ export async function GET(req: Request, { params }: { params: Promise<{ id: stri
       <div class="event-meta">Export du ${esc(ts)}</div>
       ${caption ? `<div class="event-meta"><strong>${esc(caption)}</strong></div>` : ""}
     </div>
-    <button class="print-btn" onclick="window.print()">Imprimer / Enregistrer en PDF</button>
+    <button type="button" class="print-btn" data-print>Imprimer / Enregistrer en PDF</button>
   </div>
 
   <section class="section section-planning" aria-label="Planning">
@@ -344,6 +345,7 @@ export async function GET(req: Request, { params }: { params: Promise<{ id: stri
       <tbody>${volRows}</tbody>
     </table>
   </section>
+  ${PRINT_BUTTON_SCRIPT_TAG}
 </body>
 </html>`
 

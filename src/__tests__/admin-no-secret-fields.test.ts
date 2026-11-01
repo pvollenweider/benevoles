@@ -131,9 +131,10 @@ describe("registration routes never return the personal link's token (#1009)", (
   it("POST /api/admin/registrations: the registration just added", async () => {
     m.db = {
       event: { findFirst: vi.fn(async () => null) },
-      shift: { findFirst: vi.fn(async () => ({ ...shiftRow(), registrations: [], event: { title: "Festival", organization: { name: "Org A", slug: "org-a", timeZone: "Europe/Zurich" } } })), findMany: vi.fn(async () => []), update: vi.fn() },
+      shift: { findFirst: vi.fn(async () => ({ ...shiftRow(), registrations: [], event: { title: "Festival", organization: { name: "Org A", slug: "org-a", timeZone: "Europe/Zurich" } } })), findMany: vi.fn(async () => []), update: vi.fn(), updateMany: vi.fn() },
       volunteer: { findFirst: vi.fn(async () => volunteerRow()), create: vi.fn() },
-      registration: { findMany: vi.fn(async () => []), create: answers(registrationRow) },
+      registration: { findMany: vi.fn(async () => []), create: answers(registrationRow), count: vi.fn(async () => 0) },
+      $queryRaw: vi.fn(),
       adminUser: { findFirst: vi.fn(async () => ({ name: "Léa" })) },
       $transaction: async (fn: (tx: unknown) => unknown) => fn(m.db),
     }

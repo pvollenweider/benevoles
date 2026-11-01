@@ -10,6 +10,7 @@ import ConfirmActionModal from "../ConfirmActionModal"
 import { restoreRecap } from "@/lib/action-recap"
 import type { RecentCancellation } from "@/lib/registration-restore"
 import { AvailabilityAckFields, useAvailabilityAck } from "../AvailabilityAck"
+import { OVERRIDE_CONFIRM_LABEL, shiftOverrideOf, shiftOverrideWarning, type ShiftOverrideBody } from "@/lib/shift-override"
 
 /**
  * « Annulations récentes » (#809): a place or a request cancelled by mistake, or from a personal
@@ -30,6 +31,10 @@ export default function RecentCancellations({ rows, eventId = "", availability =
   const [busy, setBusy] = useState(false)
   const [error, setError] = useState<string | null>(null)
   const [status, setStatus] = useState("")
+  // A full or closed shift (AUTHZ-15): known from the page, so the dialog warns from the start; a
+  // change meanwhile comes back from the server and the dialog warns again.
+  const [override, setOverride] = useState<ShiftOverrideBody["shifts"] | null>(null)
+  const [lateWarning, setLateWarning] = useState<{ text: string } | null>(null)
   // The message said just after the focus move: cleared if the section goes first (page reloaded).
   const announceTimer = useRef<ReturnType<typeof setTimeout> | null>(null)
   useEffect(() => () => { if (announceTimer.current) clearTimeout(announceTimer.current) }, [])
@@ -40,6 +45,8 @@ export default function RecentCancellations({ rows, eventId = "", availability =
     setStatus("")
     setNewLink(false)
     setError(null)
+    setOverride(row.override ? [row.override] : null)
+    setLateWarning(null)
     setTarget(row)
   }
 
@@ -54,7 +61,7 @@ export default function RecentCancellations({ rows, eventId = "", availability =
       res = await fetch(`/api/admin/registrations/${target.id}/restore`, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ newLink, ...(availabilityAck.length > 0 ? { availabilityAck } : {}) }),
+        body: JSON.stringify({ newLink, ...(availabilityAck.length > 0 ? { availabilityAck } : {}), ...(override ? { shiftOverride: override.map((n) => n.key) } : {}) }),
       })
     } catch {
       setBusy(false)
@@ -65,6 +72,13 @@ export default function RecentCancellations({ rows, eventId = "", availability =
     setBusy(false)
     // The answer changed meanwhile (#1146, lot B): the box says it, never the dialog's error too.
     if (res.status === 409 && ack.refused(data)) { setError(null); return }
+    const toConfirm = res.status === 409 ? shiftOverrideOf(data) : null
+    if (toConfirm) {
+      setError(null)
+      setOverride(toConfirm)
+      setLateWarning({ text: `${shiftOverrideWarning(toConfirm)} Choisissez « ${OVERRIDE_CONFIRM_LABEL.restore} » pour confirmer.` })
+      return
+    }
     if (!res.ok) { setError(data?.error ?? "L'inscription n'a pas pu être rétablie."); return }
     const done = `Inscription de ${target.volunteerName} rétablie${newLink ? ", avec un nouveau lien personnel" : ""}.`
     // The row leaves the list: the focus goes to the section's heading, not back to a removed button.
@@ -80,7 +94,7 @@ export default function RecentCancellations({ rows, eventId = "", availability =
     <section id="annulations" aria-labelledby="annulations-heading" className="space-y-3 scroll-mt-4">
       <h2 id="annulations-heading" ref={headingRef} tabIndex={-1} className="text-lg font-semibold text-gray-900 focus:outline-none">Annulations récentes</h2>
       <p className="text-sm text-gray-700">
-        Une place ou une demande annulée par erreur, ou depuis un lien personnel utilisé par quelqu&apos;un d&apos;autre, peut être rétablie jusqu&apos;au début du créneau, si la place est encore libre.
+        Une place ou une demande annulée par erreur, ou depuis un lien personnel utilisé par quelqu&apos;un d&apos;autre, peut être rétablie jusqu&apos;au début du créneau. Sur un créneau complet ou fermé, une confirmation est demandée.
       </p>
       <p role="status" className="text-sm font-medium text-green-800">{status}</p>
       {rows.length === 0 ? (
@@ -112,7 +126,11 @@ export default function RecentCancellations({ rows, eventId = "", availability =
 
       {target && (
         <ConfirmActionModal
-          recap={restoreRecap({ name: target.volunteerName, shift: target.shift, hasEmail: target.hasEmail, previousStatus: target.previousStatus })}
+          recap={{
+            ...restoreRecap({ name: target.volunteerName, shift: target.shift, hasEmail: target.hasEmail, previousStatus: target.previousStatus }),
+            ...(override ? { warning: shiftOverrideWarning(override), confirmLabel: OVERRIDE_CONFIRM_LABEL.restore } : {}),
+          }}
+          lateWarning={lateWarning}
           busy={busy}
           error={error}
           onConfirm={() => void restore()}

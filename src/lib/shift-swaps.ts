@@ -73,6 +73,9 @@ export type SwapRefusalCode =
   | "workload_travel"
   | "workload_places"
   | "workload_birthdate"
+  // AUTHZ-08: an offer the requester's own situation stops (age, tag, overlap, limit, workload):
+  // one code for all, so the offerer never learns which.
+  | "not_possible"
 
 /** Why a request ended other than by a person's own choice. */
 export type SwapEndReason =
@@ -240,6 +243,9 @@ export function agreementTerms(requesterShift: SwapShift, counterShift: SwapShif
  * Why a swap cannot happen, in the volunteers' register. Never names the other person's mission
  * nor which of the two plans breaks a rule: « Cet échange crée un conflit d'horaire » is enough.
  */
+/** An offer the requester's own situation stops (AUTHZ-08): said to the offerer, without why. */
+export const SWAP_OFFER_NOT_POSSIBLE = "Cet échange n'est pas possible avec ce créneau. Propose un autre de tes créneaux."
+
 export function swapRefusalMessage(code: SwapEndReason): string {
   switch (code) {
     case "overlap":
@@ -276,6 +282,8 @@ export function swapRefusalMessage(code: SwapEndReason): string {
       return "Ces deux postes ne permettent pas un échange de créneaux."
     case "sector_changed":
       return "L'organisation des postes a changé : cet échange n'est plus possible."
+    case "not_possible":
+      return "Cet échange n'est pas possible avec ces deux créneaux."
     case "same_person":
     case "same_registration":
     case "same_shift":

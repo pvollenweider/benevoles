@@ -67,6 +67,29 @@ export function canOfferSpot(input: { capacity: number; occupied: number; shiftS
   return input.shiftStatus !== "cancelled" && input.occupied < input.capacity
 }
 
+/** Postgres: lock_timeout reached, deadlock detected, serialization failure. */
+const CONTENTION_SQLSTATES = new Set(["55P03", "40P01", "40001"])
+
+/**
+ * A transaction that gave up because of contention (AUTHZ-04), so rolled back: Prisma's own
+ * transaction timeout or wait (P2028), a write conflict or deadlock (P2034), or a Postgres
+ * lock_timeout / deadlock / serialization error, however the driver adapter wraps it.
+ */
+export function isSignupContention(e: unknown): boolean {
+  const seen = new Set<unknown>()
+  const visit = (x: unknown, depth: number): boolean => {
+    if (typeof x !== "object" || x === null || seen.has(x) || depth > 5) return false
+    seen.add(x)
+    const o = x as Record<string, unknown>
+    for (const key of ["code", "originalCode", "sqlState"]) {
+      const v = o[key]
+      if (v === "P2028" || v === "P2034" || (typeof v === "string" && CONTENTION_SQLSTATES.has(v))) return true
+    }
+    return ["meta", "cause", "driverAdapterError"].some((k) => visit(o[k], depth + 1))
+  }
+  return visit(e, 0)
+}
+
 export function isUniqueViolation(e: unknown): boolean {
   return typeof e === "object" && e !== null && (e as { code?: unknown }).code === "P2002"
 }

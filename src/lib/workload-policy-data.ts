@@ -154,6 +154,17 @@ function snapshotZone(event: { workloadProtectionEnabled: boolean; workloadPolic
   return event.workloadProtectionEnabled && stored.ok ? stored.policy.timeZone : orgTimeZone(event.organization)
 }
 
+/**
+ * Whether the event's workload settings are offered (the places, the preview): the event already
+ * has protection on, or the capability is shipped and the organisation may adopt it. The same rule
+ * as the pages that show them (event settings, shifts page), enforced by their routes too.
+ */
+export async function workloadProtectionOffered(organizationId: string, event: { workloadProtectionEnabled: boolean }): Promise<boolean> {
+  return event.workloadProtectionEnabled || (workloadProtectionShipped() && (await canAdoptBeta(organizationId, "workloadProtection")))
+}
+
+export const WORKLOAD_NOT_OFFERED = "La protection des pauses et de la charge n'est pas proposée pour cette organisation."
+
 export const WORKLOAD_NOT_ADOPTABLE = "La protection des pauses et de la charge ne peut pas être activée pour cette organisation."
 
 export type WorkloadSetResult =
@@ -179,6 +190,9 @@ export function policySummary(p: WorkloadPolicy | null): string {
  */
 export async function setWorkloadPolicy(db: Db, organizationId: string, eventId: string, input: { enabled: boolean; values?: unknown }): Promise<WorkloadSetResult> {
   return db.$transaction(async (tx: Db): Promise<WorkloadSetResult> => {
+    // The scoped client confirms the event belongs to the organisation before any lock is taken on
+    // its id; the event is read again after the lock, for the values the write is judged on.
+    if (!(await tx.event.findFirst({ where: { id: eventId }, select: { id: true } }))) return { ok: false, status: 404, error: "Non trouvé" }
     await lockWorkloadExclusive(tx, eventId)
     const event: EventRow | null = await tx.event.findFirst({ where: { id: eventId }, select: EVENT_SELECT })
     if (!event) return { ok: false, status: 404, error: "Non trouvé" }

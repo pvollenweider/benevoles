@@ -26,7 +26,10 @@ export function resetSuperAdminSecondFactor(email = SUPER_ADMIN_EMAIL): void {
 /** Gives the code on the two-factor page the browser is on (or about to land on). */
 export async function passSecondFactor(page: Page, email = SUPER_ADMIN_EMAIL): Promise<void> {
   await expect(page).toHaveURL(/\/admin\/two-factor/)
+  await expect(page.getByRole("heading", { level: 1 })).toBeVisible()
   const code = superAdminCode(email)
+  // A fresh database: the page offered an enrolment before the script enrolled the account.
+  if (await page.getByRole("button", { name: "Activer" }).isVisible()) await page.reload()
   await page.getByLabel("Code à 6 chiffres").fill(code)
   await page.getByRole("button", { name: "Valider" }).click()
   await expect(page).not.toHaveURL(/\/admin\/two-factor/)

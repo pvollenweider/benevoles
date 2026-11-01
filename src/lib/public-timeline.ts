@@ -104,8 +104,10 @@ export function barText({ shift, held, selected, reserved, locked, conflict = fa
 
   const isFull = shift.status === "full"
   const isClosed = shift.status === "closed"
+  // Over (src/lib/shift-ended.ts): like a closed shift, with its own word.
+  const isEnded = shift.status === "ended"
   const isWaitlistable = isFull && (shift.waitlistEnabled ?? false)
-  const unavail = (isFull && !isWaitlistable) || isClosed
+  const unavail = (isFull && !isWaitlistable) || isClosed || isEnded
   // Informational only: we don't know a first-time visitor's age until the form, so this never
   // blocks selection here; real enforcement is server-side at submit (see #192). Said in the name
   // since the visual sub-label is aria-hidden.
@@ -123,7 +125,7 @@ export function barText({ shift, held, selected, reserved, locked, conflict = fa
 
   let ariaLabel: string
   if (reserved) ariaLabel = `Réservé, ${roleLabel} ${timeSpoken} : ${RESERVED_LABEL}`
-  else if (unavail && !selected) ariaLabel = `${isClosed ? "Fermé" : "Complet"}, ${roleLabel} ${timeSpoken}${minAgeSuffix}`
+  else if (unavail && !selected) ariaLabel = `${isEnded ? "Terminé" : isClosed ? "Fermé" : "Complet"}, ${roleLabel} ${timeSpoken}${minAgeSuffix}`
   // A disabled bar must not offer an action: it says why it can't be chosen.
   else if (conflict && !selected) ariaLabel = `${timeShown} ${count}, ${roleLabel}${minAgeSuffix} : chevauche un créneau déjà choisi`
   // Registrations closed (#1075): the reason in the name, in the list view's words; a bar's name is
@@ -155,8 +157,10 @@ export type ShiftViewState = {
   reserved: boolean
   full: boolean
   closed: boolean
+  /** Over: its end has passed (src/lib/shift-ended.ts). */
+  ended: boolean
   waitlistable: boolean
-  /** Full without a waitlist, or closed. */
+  /** Full without a waitlist, closed or over. */
   unavailable: boolean
   /** The visual state of the bar (src/lib/roles.ts). */
   look: "selected" | "unavailable" | "default"
@@ -176,13 +180,14 @@ export function shiftViewState({ shift, held, selected, conflict, reserved, lock
   const isConflict = !isHeld && conflict
   const full = shift.status === "full"
   const closed = shift.status === "closed"
+  const ended = shift.status === "ended"
   const waitlistable = full && (shift.waitlistEnabled ?? false)
-  const unavailable = !isHeld && ((full && !waitlistable) || closed)
+  const unavailable = !isHeld && ((full && !waitlistable) || closed || ended)
   const isSelected = !isHeld && selected
   const isReserved = !isSelected && !isHeld && reserved
   const look = isSelected ? "selected" : (isConflict || unavailable || isReserved) ? "unavailable" : "default"
   const clickable = !isHeld && !isConflict && !unavailable && !isReserved && (!locked || isSelected)
-  return { held, selected: isSelected, conflict: isConflict, reserved: isReserved, full, closed, waitlistable, unavailable, look, clickable }
+  return { held, selected: isSelected, conflict: isConflict, reserved: isReserved, full, closed, ended, waitlistable, unavailable, look, clickable }
 }
 
 /** The lines of one item of the list view (#808): its visible text is its accessible name. */
@@ -195,6 +200,8 @@ export function shiftListText(shift: TimelineShift, view: ShiftViewState, opts: 
     ? HELD_TAG[view.held]
     : view.selected
       ? (view.waitlistable ? "En attente, sélectionné pour la file d'attente" : "Sélectionné")
+      : view.ended
+        ? "Terminé"
       : view.conflict
         ? "Chevauche un créneau choisi"
         : view.reserved

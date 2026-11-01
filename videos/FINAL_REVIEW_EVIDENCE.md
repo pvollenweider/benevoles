@@ -481,6 +481,26 @@ narration et les blocs `viewer` restent exacts (« la réponse reste la même »
 « regarde aussi les indésirables ») : seule l'image est à reprendre au prochain
 rendu, avec `revision` et `updatedAt` dans `videos/catalog.json`.
 
+## Écart connu : réponse de l'invitation d'un organisateur
+
+L'invitation d'un organisateur (Paramètres, équipe) répond maintenant de la même
+façon pour toute adresse hors de l'équipe, et la confirmation devient « Si
+<adresse> peut rejoindre l'équipe, cette adresse reçoit une invitation par
+email, avec un lien d'activation valable 7 jours. » au lieu de « Invitation
+envoyée à <adresse>. Le lien d'activation, valable 7 jours, lui a été envoyé par
+email. » La liste de l'équipe est relue après l'envoi.
+
+Vidéo dont l'image montre l'ancienne confirmation, non régénérée dans ce
+changement (pas de rendu ici) : `org-team-permissions`, scènes de l'envoi et
+`invite-result`.
+
+Sélecteurs mis à jour : `videos/tools/record.ts` attend la nouvelle
+confirmation. La narration (« le message confirme son adresse », « son lien
+d'activation, valable sept jours, lui a été envoyé par email ») et le bloc
+`viewer` restent exacts pour une adresse libre comme celle de Léa : seule
+l'image est à reprendre au prochain rendu, avec `revision` et `updatedAt` dans
+`videos/catalog.json`.
+
 ## Écart connu : noms de famille réalistes des personnes filmées
 
 Les personnes fictives des données filmées ne s'appellent plus « Exemple ». Chaque
@@ -993,6 +1013,34 @@ Les deux masters Kore entiers sont conservés sans aucun nouvel appel TTS : 12 e
 Les deux validations et les repères de phrases passent. Musique prescrite : publication **15,2–18,8 LU** sous la voix, minimum sans voix **−33,9 LUFS**, aucun trou ; propositions **15,2–19,6 LU**, aucun trou ni fenêtre de trois secondes entièrement sans voix. Effets sur les interactions réelles : publication 10 clics/28 frappes, propositions 20 clics/2 frappes. Descriptions auditées : **141/125 octets UTF-8**. Affiches et durées dans les métadonnées de revue séparées ; `videos/renders.json` inchangé. Les contrôles automatisés complètent l'inspection des images ; aucune écoute subjective en temps réel n'est revendiquée.
 
 Pour chaque vidéo, aperçu puis `make video-publish KUBE_CONTEXT=default ID=… APPLY=1` : cinq fichiers envoyés. Les deux entrées du catalogue portent `published: true`, les dates du 1er novembre et les révisions 1/4 ; les notifications demandées sont envoyées. [Rapport publication](evidence/batch38/resume/assignment-publication-review-report.txt), [rapport propositions](evidence/batch38/resume/assignment-proposals-review-report.txt), [build vérifié](evidence/batch38/resume/new-main-product-build.json). Aucun `src/`, guide ou capture de documentation modifié ; `doc-img: unchanged`. Commit local uniquement, identité Philippe Vollenweider <pvollenweider@jahia.com> pour auteur et committer.
+
+## À refilmer : page après une inscription publique sans preuve de l'adresse (2026-11-01)
+
+Une inscription publique sans lien d'invitation ni lien personnel affiche
+maintenant toujours la page « Demande d'inscription reçue » (plus
+« Inscription confirmée ! », « Tu es sur la liste d'attente ! » ni
+« Demande envoyée »), et les refus qui viennent des inscriptions de l'adresse
+(déjà sur le créneau, chevauchement, limite de créneaux d'un poste, pauses et
+charge de son programme) ne s'affichent plus : l'email « Demande d'inscription
+non enregistrée » les explique au titulaire de l'adresse. Un créneau dont
+l'heure de fin est passée est marqué « Terminé ». Sources mises à jour dans la
+même PR (sélecteurs, narration, bloc `viewer`), régénération pas faite dans ce
+travail (voix et capture) ; révision du catalogue à incrémenter au rendu :
+
+- `VOLUNTEER_CONFIRMATION_ERRORS` : **À refilmer**. Narration de `success`,
+  `overlap`, `response-loss` et `invitation-success`, bloc `viewer`, titres de
+  chapitre et recorder réécrits (la scène du chevauchement montre la page
+  neutre puis l'email reçu par Aline ; le nouvel essai de Nicolas montre la
+  même page) ; nouvelle voix nécessaire.
+- `VOLUNTEER_REGISTER` : **À refilmer**. Narration de `success`
+  (« ta demande est envoyée ! Regarde tes emails ») et sélecteur du texte de la
+  page mis à jour ; nouvelle voix de ce segment.
+- `PRIVACY_PERSONAL_LINKS`, `SHIFT_ROSTER_VISIBILITY`, `SECTOR_LEADERS`
+  (scène `new-signup`), `REGISTRATION_MONITOR_FOLLOWUP` (scène `test`) : narration
+  inchangée, mais l'image de la page de succès d'une inscription publique
+  montre l'ancien titre ; sélecteurs mis à jour (les deux titres acceptés,
+  « Demande d'inscription reçue » exigé pour `PRIVACY_PERSONAL_LINKS`). À
+  refilmer au prochain passage.
 
 ## Double authentification du super admin (constat F6) : outils de capture de l'opérateur
 

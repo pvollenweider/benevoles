@@ -12,8 +12,10 @@ import { publicShifts } from "@/lib/role-assignment"
  * Public list of an organization's events: published and listed ones only (#414), scoped to the
  * organization of the host (x-org-slug) or of `?org=`. Never a list across organizations.
  */
-export async function GET(req: Request) {
-  const orgSlug = (await headers()).get("x-org-slug") ?? new URL(req.url).searchParams.get("org")
+export async function GET() {
+  // The organization the proxy resolved (src/lib/org-subdomain.ts): from the host, or from
+  // `?org=` only where that is allowed. Never read from the query here.
+  const orgSlug = (await headers()).get("x-org-slug")
   if (!orgSlug) return NextResponse.json({ error: "Organisation introuvable" }, { status: 404 })
 
   const events = await prisma.event.findMany({

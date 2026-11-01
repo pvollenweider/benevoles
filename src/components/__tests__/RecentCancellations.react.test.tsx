@@ -97,4 +97,30 @@ describe("RecentCancellations", () => {
     expect(screen.getByRole("dialog")).toBeInTheDocument()
     expect(refresh).not.toHaveBeenCalled()
   })
+
+  // A full or closed shift (AUTHZ-15): « Rétablir » stays, its dialog warns and sends the confirmation.
+  const need = { shiftId: "s1", key: "o1|restore|r1|s1|open|2|2", closed: false, full: true, markedFull: false, occupied: 2, capacity: 2, roleName: "Bar", label: "Bar", date: "2030-07-04", startTime: "10:00", endTime: "12:00" }
+
+  it("warns from the start on a full shift, and sends the confirmation with the first confirm", async () => {
+    render(<RecentCancellations rows={[{ ...row, override: need }]} />)
+    fireEvent.click(screen.getByRole("button", { name: /^Rétablir l'inscription/ }))
+    const dialog = screen.getByRole("dialog")
+    expect(dialog).toHaveAccessibleDescription(/Ce créneau est complet\u00a0: 2 places sur 2 sont prises\. Il y aura 3 personnes pour 2 places\./)
+    fireEvent.click(screen.getByRole("button", { name: "Rétablir quand même" }))
+    await waitFor(() => expect(screen.getByRole("status")).toHaveTextContent("Inscription de Chloé Roy rétablie."))
+    expect(JSON.parse(fetchMock.mock.calls[0][1].body)).toEqual({ newLink: false, shiftOverride: [need.key] })
+  })
+
+  it("warns inside the open dialog when the shift filled meanwhile: focus back on Cancel, the next confirm sends the key", async () => {
+    fetchMock.mockResolvedValueOnce(new Response(JSON.stringify({ code: "shift_override", error: "x", shifts: [need] }), { status: 409 }))
+    render(<RecentCancellations rows={[row]} />)
+    fireEvent.click(screen.getByRole("button", { name: /^Rétablir l'inscription/ }))
+    fireEvent.click(screen.getByRole("button", { name: "Rétablir" }))
+    const confirm = await screen.findByRole("button", { name: "Rétablir quand même" })
+    await waitFor(() => expect(screen.getByRole("button", { name: "Annuler" })).toHaveFocus())
+    expect(screen.getByText(/Attention/).closest("p")).toHaveTextContent("Ce créneau est complet")
+    fireEvent.click(confirm)
+    await waitFor(() => expect(fetchMock).toHaveBeenCalledTimes(2))
+    expect(JSON.parse(fetchMock.mock.calls[1][1].body)).toEqual({ newLink: false, shiftOverride: [need.key] })
+  })
 })
