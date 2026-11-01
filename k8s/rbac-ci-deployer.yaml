@@ -1,0 +1,85 @@
+# SPDX-FileCopyrightText: 2026 Philippe Vollenweider
+# SPDX-License-Identifier: AGPL-3.0-only
+
+# Deploy credential of .github/workflows/deploy.yml: a ServiceAccount with rights only in
+# the benevoles namespace, covering exactly what the workflow applies. Applied by hand (the
+# account cannot change its own rights). Its token goes into the KUBECONFIG_BASE64 secret of the
+# GitHub `production` environment; deleting the ci-deployer-token Secret revokes it.
+apiVersion: v1
+kind: ServiceAccount
+metadata:
+  name: ci-deployer
+  namespace: benevoles
+automountServiceAccountToken: false
+---
+apiVersion: v1
+kind: Secret
+metadata:
+  name: ci-deployer-token
+  namespace: benevoles
+  annotations:
+    kubernetes.io/service-account.name: ci-deployer
+type: kubernetes.io/service-account-token
+---
+apiVersion: rbac.authorization.k8s.io/v1
+kind: Role
+metadata:
+  name: ci-deployer
+  namespace: benevoles
+rules:
+  # Sync GHCR pull secret, Sync k8s secret: kubectl apply on the two existing secrets only.
+  - apiGroups: [""]
+    resources: [secrets]
+    resourceNames: [benevoles-secret, ghcr-secret]
+    verbs: [get, patch]
+  # postgres.yaml, service.yaml, cronjob-backup.yaml (PVCs and Services).
+  - apiGroups: [""]
+    resources: [services, persistentvolumeclaims]
+    verbs: [get, create, patch]
+  # Migration Job logs (kubectl logs job/…), rollout status.
+  - apiGroups: [""]
+    resources: [pods]
+    verbs: [get, list, watch]
+  - apiGroups: [""]
+    resources: [pods/log]
+    verbs: [get]
+  # deployment.yaml, postgres.yaml, « Refuse an older version », rollout status.
+  - apiGroups: [apps]
+    resources: [deployments]
+    verbs: [get, list, watch, create, patch]
+  - apiGroups: [apps]
+    resources: [replicasets]
+    verbs: [get, list, watch]
+  # job-migrate.yaml (delete, apply, wait) and the running-jobs check before the NetworkPolicy.
+  - apiGroups: [batch]
+    resources: [jobs]
+    verbs: [get, list, watch, create, patch, delete]
+  - apiGroups: [batch]
+    resources: [cronjobs]
+    verbs: [get, create, patch]
+  - apiGroups: [networking.k8s.io]
+    resources: [ingresses]
+    verbs: [get, create, patch]
+  # networkpolicy.yaml, and its removal after a failed deploy (delete -l waits for the objects
+  # to be gone: list + watch).
+  - apiGroups: [networking.k8s.io]
+    resources: [networkpolicies]
+    verbs: [get, list, watch, create, patch, delete, deletecollection]
+  # middleware-compress.yaml, middleware-hsts.yaml, ingressroute-tokens.yaml, ingressroute-http.yaml.
+  - apiGroups: [traefik.io]
+    resources: [middlewares, ingressroutes]
+    verbs: [get, create, patch]
+---
+apiVersion: rbac.authorization.k8s.io/v1
+kind: RoleBinding
+metadata:
+  name: ci-deployer
+  namespace: benevoles
+roleRef:
+  apiGroup: rbac.authorization.k8s.io
+  kind: Role
+  name: ci-deployer
+subjects:
+  - kind: ServiceAccount
+    name: ci-deployer
+    namespace: benevoles
