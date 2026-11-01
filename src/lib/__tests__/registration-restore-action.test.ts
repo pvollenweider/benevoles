@@ -47,7 +47,10 @@ function makeDb(over: { reg?: unknown; from?: string; status?: string; occupied?
     },
     shift: {
       findFirst: vi.fn().mockResolvedValue({ status: over.shiftStatus ?? "open", capacity: 2 }),
-      findMany: availability.shiftRows.findMany,
+      // The full or closed check (AUTHZ-15) reads the status and places; the availability read the hours.
+      findMany: vi.fn(async (args: { where: { id: { in: string[] } }; select?: { capacity?: boolean } }) => args?.select?.capacity
+        ? [{ id: "s1", roleName: "Bar", label: "Bar", date: new Date("2026-07-04T00:00:00Z"), startTime: "10:00", endTime: "12:00", status: over.shiftStatus ?? "open", capacity: 2 }]
+        : availability.shiftRows.findMany(args)),
       updateMany: vi.fn().mockResolvedValue({ count: 1 }),
     },
   }
@@ -100,12 +103,36 @@ describe("restoreRegistration (#809)", () => {
     expect(tx.shift.updateMany).not.toHaveBeenCalled()
   })
 
-  it("409 when the spot was taken meanwhile: nothing changed, no email, no log", async () => {
+  it("asks for the confirmation once the spot was taken meanwhile (AUTHZ-15): nothing changed, no email, no log", async () => {
     const { db, tx } = makeDb({ occupied: 2 })
-    expect(await restoreRegistration(db, actor, "r1", before)).toEqual({ ok: false, httpStatus: 409, error: "Ce créneau est complet : la place a été reprise." })
+    const out = await restoreRegistration(db, actor, "r1", before)
+    expect(out).toMatchObject({ ok: false, httpStatus: 409, code: "shift_override", shifts: [{ shiftId: "s1", full: true, closed: false, occupied: 2, capacity: 2, key: "o1|restore|r1|s1|open|2|2" }] })
     expect(tx.registration.updateMany).not.toHaveBeenCalled()
     expect(enqueueNotifications).not.toHaveBeenCalled()
     expect(logEvent).not.toHaveBeenCalled()
+  })
+
+  it("restores on a full shift with the confirmation, and logs the overbooking (AUTHZ-15)", async () => {
+    const { db, tx } = makeDb({ occupied: 2 })
+    expect(await restoreRegistration(db, actor, "r1", before, { shiftOverride: ["o1|restore|r1|s1|open|2|2"] })).toEqual({ ok: true, status: "active" })
+    expect(tx.registration.updateMany).toHaveBeenCalled()
+    expect(logEvent).toHaveBeenCalledWith(expect.objectContaining({ action: "registration.restored", changes: expect.objectContaining({ shiftOverride: { from: null, to: "complet, 3 sur 2" } }) }))
+  })
+
+  it("a confirmation given for another count no longer applies (AUTHZ-15)", async () => {
+    const { db } = makeDb({ occupied: 3 })
+    expect(await restoreRegistration(db, actor, "r1", before, { shiftOverride: ["o1|restore|r1|s1|open|2|2"] })).toMatchObject({ ok: false, code: "shift_override" })
+  })
+
+  it("asks for the confirmation on a closed shift, even with places left (AUTHZ-15)", async () => {
+    const { db } = makeDb({ shiftStatus: "closed" })
+    expect(await restoreRegistration(db, actor, "r1", before)).toMatchObject({ ok: false, code: "shift_override", shifts: [{ closed: true, full: false }] })
+  })
+
+  it("refuses on a cancelled shift: reopen it first (AUTHZ-15)", async () => {
+    const { db, tx } = makeDb({ shiftStatus: "cancelled" })
+    expect(await restoreRegistration(db, actor, "r1", before)).toEqual({ ok: false, httpStatus: 409, error: "Ce créneau est annulé. Rouvrez d'abord le créneau\u00a0: rien n'a été fait." })
+    expect(tx.registration.updateMany).not.toHaveBeenCalled()
   })
 
   it("409 once the shift has started, in the organisation's time zone", async () => {
@@ -196,10 +223,10 @@ describe("restoreRegistration on an event collecting availability", () => {
     expect(await restoreRegistration(db, actor, "r1", early)).toMatchObject({ ok: false, code: "availability" })
   })
 
-  it("a full shift is refused for that reason first, without asking", async () => {
+  it("a full shift asks for its own confirmation first, before the availability one (AUTHZ-15)", async () => {
     const availability = inUse()
     const { db } = makeDb({ reg: later, occupied: 2, availability })
-    expect(await restoreRegistration(db, actor, "r1", early)).toMatchObject({ ok: false, httpStatus: 409, error: "Ce créneau est complet : la place a été reprise." })
+    expect(await restoreRegistration(db, actor, "r1", early)).toMatchObject({ ok: false, httpStatus: 409, code: "shift_override" })
     expect(availability.availabilityRequest.findFirst).not.toHaveBeenCalled()
   })
 

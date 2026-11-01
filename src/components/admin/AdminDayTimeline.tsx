@@ -7,7 +7,7 @@ import { useState, useRef, useCallback, useEffect, useId } from "react"
 import { announce } from "@/lib/announce"
 import { flushSync } from "react-dom"
 import { dayLabel, spokenTimeRange } from "@/lib/spoken-time"
-import { deleteShiftRecapFor, timelineBarDescription, timelineBarName, timelineBarPlaces, timelineBarTime } from "@/lib/shifts-admin"
+import { cancelShiftRecapFor, deleteShiftRecapFor, timelineBarDescription, timelineBarName, timelineBarPlaces, timelineBarTime } from "@/lib/shifts-admin"
 import ConfirmActionModal from "@/components/admin/ConfirmActionModal"
 import { requestJson } from "@/lib/use-submit"
 import { getBarClasses } from "@/lib/roles"
@@ -92,6 +92,13 @@ export default function AdminDayTimeline({ eventId, date, shifts, eventShifts = 
   const [pendingDelete, setPendingDelete] = useState<AdminShift | null>(null)
   const [deleting, setDeleting] = useState(false)
   const [deleteError, setDeleteError] = useState<string | null>(null)
+  // « Créneau annulé » on a shift with people registered (AUTHZ-15): asks first, with the choice
+  // to leave them unwarned (« Ne pas prévenir les inscrits », off by default).
+  const [pendingCancel, setPendingCancel] = useState<AdminShift | null>(null)
+  const [cancelSilently, setCancelSilently] = useState(false)
+  const [cancelling, setCancelling] = useState(false)
+  const [cancelError, setCancelError] = useState<string | null>(null)
+  const silentId = useId()
 
   const visible = shifts
     .filter(s => s.status !== "cancelled")
@@ -237,7 +244,8 @@ export default function AdminDayTimeline({ eventId, date, shifts, eventShifts = 
   async function handlePatch(id: string, data: Partial<AdminShift>): Promise<boolean> {
     const orig = shifts.find(s => s.id === id)
     if (!orig) return false
-    const patch = { ...data, label: data.label?.trim() || orig.roleName }
+    // The label only when the edit carries one: a status change never renames the shift.
+    const patch = { ...data, ...(data.label !== undefined ? { label: data.label.trim() || orig.roleName } : {}) }
     const outcome = await requestJson(() => fetch(`/api/admin/shifts/${id}`, {
       method: "PATCH",
       headers: { "Content-Type": "application/json" },
@@ -256,6 +264,38 @@ export default function AdminDayTimeline({ eventId, date, shifts, eventShifts = 
     document.getElementById(`shift-bar-${id}`)?.focus()
     setDeleteError(null)
     setPendingDelete(shift)
+  }
+
+  // Same path as the deletion: the popover closes (it would save and close itself as soon as the
+  // focus left it), focus goes back to the bar, then the confirmation takes over.
+  function handleCancelShift(id: string) {
+    const shift = shifts.find(s => s.id === id)
+    if (!shift) return
+    flushSync(() => setSelected(null))
+    document.getElementById(`shift-bar-${id}`)?.focus()
+    setCancelError(null)
+    setCancelSilently(false)
+    setPendingCancel(shift)
+  }
+
+  async function runCancel(shift: AdminShift) {
+    setCancelling(true)
+    setCancelError(null)
+    const outcome = await requestJson<{ notified?: number; unpublished?: boolean }>(() => fetch(`/api/admin/shifts/${shift.id}`, {
+      method: "PATCH",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ status: "cancelled", notifyVolunteers: !cancelSilently }),
+    }), "Annulation impossible.")
+    setCancelling(false)
+    if (!outcome.ok) { setCancelError(outcome.error); return }
+    // The bar leaves the timeline with the cancelled shift: land on a neighbour, else the day.
+    const siblings = shifts.filter(s => s.roleName === shift.roleName && s.id !== shift.id && s.status !== "cancelled")
+    const next = siblings.find(s => toMin(s.startTime) >= toMin(shift.startTime)) ?? siblings[siblings.length - 1]
+    flushSync(() => { setPendingCancel(null); onUpdated({ ...shift, status: "cancelled", registrationCount: 0 }) })
+    const unpublished = outcome.data?.unpublished ? " L'événement est repassé en brouillon." : ""
+    showToast(`Créneau annulé${cancelSilently ? ", sans prévenir les inscrits" : ", les inscrits sont prévenus par email"}.${unpublished}`)
+    const target = next ? document.getElementById(`shift-bar-${next.id}`) : null
+    ;(target ?? containerRef.current)?.focus()
   }
 
   async function runDelete(shift: AdminShift) {
@@ -626,6 +666,7 @@ export default function AdminDayTimeline({ eventId, date, shifts, eventShifts = 
           onClose={() => setSelected(null)}
           onPatch={handlePatch}
           onDelete={handleDelete}
+          onCancelShift={handleCancelShift}
           onDuplicate={handleDuplicate}
           eventCount={posteSpansOtherDays(eventShifts, selectedShift.roleName, date)
             ? posteApplyCount(posteApplyTargets(eventShifts, selectedShift.roleName, "event", date))
@@ -643,6 +684,31 @@ export default function AdminDayTimeline({ eventId, date, shifts, eventShifts = 
           onConfirm={() => void runDelete(pendingDelete)}
           onCancel={() => setPendingDelete(null)}
         />
+      )}
+
+      {pendingCancel && (
+        <ConfirmActionModal
+          recap={cancelShiftRecapFor({ ...pendingCancel, date }, !cancelSilently)}
+          busy={cancelling}
+          error={cancelError}
+          onConfirm={() => void runCancel(pendingCancel)}
+          onCancel={() => setPendingCancel(null)}
+        >
+          <div className="mt-4 flex items-start gap-2">
+            <input
+              id={silentId}
+              type="checkbox"
+              checked={cancelSilently}
+              onChange={(e) => setCancelSilently(e.target.checked)}
+              aria-describedby={`${silentId}-hint`}
+              className="mt-0.5 h-5 w-5 flex-shrink-0 accent-blue-700 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-blue-600"
+            />
+            <label htmlFor={silentId} className="text-sm text-gray-900">Ne pas prévenir les inscrits</label>
+          </div>
+          <p id={`${silentId}-hint`} className="mt-1 ml-7 text-xs text-gray-700">
+            Pour un créneau de test, ou si les personnes ont déjà été prévenues, par exemple par téléphone. Le choix est journalisé.
+          </p>
+        </ConfirmActionModal>
       )}
 
       {toast && <Toast message={toast.text} kind={toast.kind} />}

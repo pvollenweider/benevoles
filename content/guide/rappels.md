@@ -55,7 +55,7 @@ Les rappels sont regroupés par bénévole, par événement et par jour : une pe
 
 ### Notifications de modification
 
-- **Annulation d'un créneau** : les bénévoles inscrits sont avertis automatiquement par email et leur inscription est annulée.
+- **Annulation d'un créneau** : les bénévoles inscrits sont avertis automatiquement par email et leur inscription est annulée. En annulant un créneau depuis le planning (**Créneau annulé**), vous pouvez cocher **Ne pas prévenir les inscrits** : leurs inscriptions sont annulées sans email, et le choix est noté dans le journal (voir [Modifier vite depuis le planning](modifier-vite-depuis-le-planning.md)).
 - **Modification des horaires** : un email est envoyé aux bénévoles inscrits.
 
 ### Régler les rappels

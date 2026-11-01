@@ -10,6 +10,8 @@ import { useRouter } from "next/navigation"
 import { announce } from "@/lib/announce"
 import { focusFirstAvailable } from "@/lib/focus-return"
 import { NETWORK_ERROR } from "@/lib/use-submit"
+import ConfirmActionModal from "./ConfirmActionModal"
+import { OVERRIDE_CONFIRM_LABEL, shiftOverrideOf, shiftOverrideWords, type ShiftOverrideBody } from "@/lib/shift-override"
 import {
   ackLabel, committedHoursText, filterCandidates, fitDetail, FIT_LABELS, groupCandidates, SPREAD_SORT_EXPLANATION,
   type AssistSort, type CandidateRow, type FitState,
@@ -148,7 +150,17 @@ export default function ShiftAssistPanel({ eventId, shift, rows }: {
     setErrors((e) => ({ ...e, [row.volunteerId]: error }))
   }
 
-  async function add(row: CandidateRow) {
+  // A full or closed shift (AUTHZ-15): the server's refusal opens a confirmation for that person.
+  const [overrideAsk, setOverrideAsk] = useState<{ row: CandidateRow; shifts: ShiftOverrideBody["shifts"] } | null>(null)
+  function closeOverride(confirmed: boolean) {
+    const ask = overrideAsk
+    if (!ask) return
+    flushSync(() => setOverrideAsk(null))
+    document.getElementById(`assist-add-${ask.row.volunteerId}`)?.focus()
+    if (confirmed) void add(ask.row, ask.shifts.map((n) => n.key))
+  }
+
+  async function add(row: CandidateRow, shiftOverride?: string[]) {
     if (busy) { announce(setStatus, "Un ajout est en cours : attendez sa réponse."); return }
     const name = spokenName(row)
     if (!ackReady(row)) return
@@ -158,10 +170,16 @@ export default function ShiftAssistPanel({ eventId, shift, rows }: {
       const res = await fetch("/api/admin/registrations", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ eventId, volunteerId: row.volunteerId, shiftIds: [shift.id], ...(row.ackKey ? { availabilityAck: [row.ackKey] } : {}) }),
+        body: JSON.stringify({ eventId, volunteerId: row.volunteerId, shiftIds: [shift.id], ...(row.ackKey ? { availabilityAck: [row.ackKey] } : {}), ...(shiftOverride ? { shiftOverride } : {}) }),
       })
       setBusy(null)
-      if (!res.ok) { refused(row, await res.json().catch(() => null), "L'inscription n'a pas abouti."); return }
+      if (!res.ok) {
+        const data = await res.json().catch(() => null)
+        const toConfirm = res.status === 409 ? shiftOverrideOf(data) : null
+        if (toConfirm) { setOverrideAsk({ row, shifts: toConfirm }); return }
+        refused(row, data, "L'inscription n'a pas abouti.")
+        return
+      }
     } catch {
       setBusy(null)
       setErrors((e) => ({ ...e, [row.volunteerId]: NETWORK_ERROR }))
@@ -272,6 +290,17 @@ export default function ShiftAssistPanel({ eventId, shift, rows }: {
           </section>
         ))
       )}
+      {overrideAsk && (() => {
+        const words = shiftOverrideWords("manual_add", spokenName(overrideAsk.row), overrideAsk.shifts)
+        return (
+          <ConfirmActionModal
+            recap={{ title: words.title, lead: words.lead, lines: [...words.lines, "L'ajout est journalisé, avec le dépassement confirmé."], confirmLabel: OVERRIDE_CONFIRM_LABEL.manual_add, danger: false }}
+            busy={false}
+            onConfirm={() => closeOverride(true)}
+            onCancel={() => closeOverride(false)}
+          />
+        )
+      })()}
     </section>
   )
 }
