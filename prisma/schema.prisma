@@ -1523,14 +1523,39 @@ model AdminUser {
   // Release banner (#612): the version this super admin dismissed. A newer version makes the
   // banner reappear even though this field is unchanged — the comparison, not a reset, does it.
   releaseBannerDismissedVersion String?
+  // Second factor of the super admin (pentest F6): TOTP (RFC 6238) from an authenticator app.
+  // The secrets are AES-256-GCM with TOKEN_ENCRYPTION_KEY (src/lib/token-vault.ts), never in clear.
+  // `totpPendingSecretEnc` holds an enrolment not confirmed yet, bound to the sign-in that started
+  // it and short-lived; `totpLastUsedStep` is the last accepted 30-second step, so a code is never
+  // accepted twice. Reset by scripts/reset-two-factor.ts. See src/lib/second-factor-server.ts.
+  totpSecretEnc          String?
+  totpPendingSecretEnc   String?
+  totpEnabledAt          DateTime?
+  totpLastUsedStep       Int?
   createdAt              DateTime  @default(now())
   updatedAt              DateTime  @updatedAt
 
-  organization Organization? @relation(fields: [organizationId], references: [id], onDelete: SetNull)
-  milestones   EventMilestone[]
+  organization  Organization? @relation(fields: [organizationId], references: [id], onDelete: SetNull)
+  milestones    EventMilestone[]
+  recoveryCodes AdminRecoveryCode[]
 
   @@index([organizationId])
   @@index([setupTokenHash])
+}
+
+// One-time recovery codes of the second factor (pentest F6): ten per account, shown once, stored
+// as SHA-256 only (80 random bits each, so no salt is needed). A used code keeps its row with
+// `usedAt`, which makes the count of remaining codes and a reuse attempt both visible.
+model AdminRecoveryCode {
+  id          String    @id @default(cuid())
+  adminUserId String
+  codeHash    String    @unique
+  usedAt      DateTime?
+  createdAt   DateTime  @default(now())
+
+  adminUser AdminUser @relation(fields: [adminUserId], references: [id], onDelete: Cascade)
+
+  @@index([adminUserId])
 }
 
 // Last run of each scheduled job (#383): reminders and cleanup write it themselves, the backup

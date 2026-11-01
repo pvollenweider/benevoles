@@ -1,6 +1,7 @@
 import { test, expect } from "@playwright/test"
 import { Client } from "pg"
 import { seriousViolations } from "./helpers/axe"
+import { passSecondFactor } from "./helpers/super-admin"
 
 /**
  * Sending limits reached (#1100): the super admin sees, above the organisations list, which
@@ -28,6 +29,7 @@ test("the super admin sees a send limit reached, on the list and on the organisa
   await page.getByLabel("Email").fill(SUPER_ADMIN_EMAIL)
   await page.getByLabel("Mot de passe").fill(SUPER_ADMIN_PASSWORD)
   await page.getByRole("button", { name: "Se connecter" }).click()
+  await passSecondFactor(page)
   await expect(page).toHaveURL(/\/admin\/dashboard|\/super-admin\/organizations/)
 
   const slug = `e2e-limit-${Date.now()}`

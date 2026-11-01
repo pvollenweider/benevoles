@@ -1,4 +1,5 @@
 import { test, expect } from "@playwright/test"
+import { passSecondFactor } from "./helpers/super-admin"
 
 /**
  * Regression test for two related bugs: disabling an org didn't actually
@@ -16,6 +17,7 @@ test("disabling an org blocks public access; deletion requires disabled + typed 
   await page.getByLabel("Email").fill(SUPER_ADMIN_EMAIL)
   await page.getByLabel("Mot de passe").fill(SUPER_ADMIN_PASSWORD)
   await page.getByRole("button", { name: "Se connecter" }).click()
+  await passSecondFactor(page)
   // A super admin with no organization picked yet lands on the org picker (#267).
   await expect(page).toHaveURL(/\/admin\/dashboard|\/super-admin\/organizations/)
 

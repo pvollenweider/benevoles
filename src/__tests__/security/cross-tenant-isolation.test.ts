@@ -2647,3 +2647,21 @@ describe("Generated assignment proposals — cross-tenant isolation (#1172)", ()
     expect(writes.draftUpdate).not.toHaveBeenCalled()
   })
 })
+
+describe("Super admin second factor — not organisation-scoped (pentest F6)", () => {
+  // The two-factor step and the recovery codes act on the signed-in account's own row only: no
+  // organisation id, no tenant model. The behaviour is tested in src/__tests__/two-factor-api.test.ts.
+  it("reads and writes nothing but the caller's account", async () => {
+    const fs = await import("node:fs")
+    const path = await import("node:path")
+    const app = path.join(__dirname, "..", "..", "app", "api")
+    const step = fs.readFileSync(path.join(app, "admin", "two-factor", "route.ts"), "utf8")
+    const codes = fs.readFileSync(path.join(app, "super-admin", "two-factor", "recovery-codes", "route.ts"), "utf8")
+    for (const source of [step, codes]) {
+      expect(source).not.toMatch(/organizationId|x-org-slug|sa-org-id/)
+      expect(source).not.toMatch(/prisma\.(event|volunteer|registration|shift|organization)\b/)
+    }
+    expect(step).toContain("step.account.id")
+    expect(codes).toContain("where: { id }")
+  })
+})

@@ -11,16 +11,20 @@ import { beginLoginAttempt, refreshAdminToken, revokeSession } from "@/lib/admin
 import { verifyAdminLogin } from "@/lib/admin-login"
 import { normalizeEmail } from "@/lib/email-address"
 import { MAX_LOGIN_PASSWORD_LENGTH } from "@/lib/password"
+import { acceptSecondFactorUpdate } from "@/lib/second-factor-update"
 
-export const { handlers, auth, signIn, signOut } = NextAuth({
+export const { handlers, auth, signIn, signOut, unstable_update } = NextAuth({
   ...authConfig,
   callbacks: {
     ...authConfig.callbacks,
     // Node-only extension of the edge-safe jwt callback: revalidates the admin against the DB on
-    // every auth() call — see refreshAdminToken().
+    // every auth() call — see refreshAdminToken(). A session update completes the second factor only
+    // with the server's proof (second-factor-update.ts); any other update data is ignored.
     async jwt(params) {
       const token = await authConfig.callbacks!.jwt!(params)
-      return token ? refreshAdminToken(token) : null
+      const refreshed = token ? await refreshAdminToken(token) : null
+      if (refreshed && params.trigger === "update") acceptSecondFactorUpdate(refreshed, params.session, Date.now())
+      return refreshed
     },
   },
   events: {

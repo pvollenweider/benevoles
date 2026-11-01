@@ -168,8 +168,11 @@ export const PERMISSIONS: Record<string, Partial<Record<Method, Level>>> = {
   "shifts/recurrence/[id]/stop": { POST: "organizer" },
 }
 
-/** Routes that don't require an org session at all (the invitation acceptance). */
-export const PUBLIC_ADMIN_ROUTES = ["accept-invite"]
+/**
+ * Routes that don't require an org session at all: the invitation acceptance, and the super admin's
+ * second step at sign-in (pentest F6), which checks its own session (requireSecondFactorStep).
+ */
+export const PUBLIC_ADMIN_ROUTES = ["accept-invite", "two-factor"]
 
 /**
  * Why a change to the team can't be made: an organisation always keeps at least one active owner.

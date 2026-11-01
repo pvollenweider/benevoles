@@ -1,5 +1,6 @@
 import { test, expect } from "@playwright/test"
 import { seriousViolations } from "./helpers/axe"
+import { passSecondFactor } from "./helpers/super-admin"
 
 /**
  * Suspension of an organisation for abuse (#810): distinct from a deactivation, never undone by
@@ -15,6 +16,7 @@ test("suspend for abuse, refuse a plain reactivation, lift, then reactivate", as
   await page.getByLabel("Email").fill(SUPER_ADMIN_EMAIL)
   await page.getByLabel("Mot de passe").fill(SUPER_ADMIN_PASSWORD)
   await page.getByRole("button", { name: "Se connecter" }).click()
+  await passSecondFactor(page)
   await expect(page).toHaveURL(/\/admin\/dashboard|\/super-admin\/organizations/)
 
   const slug = `e2e-suspension-${Date.now()}`

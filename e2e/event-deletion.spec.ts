@@ -1,4 +1,5 @@
 import { test, expect, type Browser, type APIRequestContext } from "@playwright/test"
+import { passSecondFactor } from "./helpers/super-admin"
 
 /**
  * Event deletion must never touch another event or another organization.
@@ -22,6 +23,7 @@ async function login(browser: Browser, email: string, password: string) {
   await page.getByLabel("Email").fill(email)
   await page.getByLabel("Mot de passe").fill(password)
   await page.getByRole("button", { name: "Se connecter" }).click()
+  if (email === SUPER_ADMIN_EMAIL) await passSecondFactor(page)
   // A super admin with no organization picked yet lands on the org picker (#267).
   await expect(page).toHaveURL(/\/admin\/dashboard|\/super-admin\/organizations/)
   return { context, page }

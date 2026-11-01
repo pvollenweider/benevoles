@@ -11,7 +11,9 @@ import pkg from "../../../package.json"
 export default async function SuperAdminLayout({ children }: { children: React.ReactNode }) {
   const session = await auth()
 
-  if (!session) {
+  // Signed out, or a super admin still to give the second factor (pentest F6): no navigation, the
+  // page is the login or the two-factor step (the proxy sends every other admin page there).
+  if (!session || session.secondFactor?.pending) {
     return <>{children}</>
   }
 

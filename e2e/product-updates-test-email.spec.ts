@@ -1,6 +1,7 @@
 import { test, expect } from "@playwright/test"
 import { clearMailbox, waitForMessage, searchMessages, getMessageText } from "./helpers/mailpit"
 import { waitForHydration } from "./helpers/hydration"
+import { passSecondFactor } from "./helpers/super-admin"
 
 /**
  * "Envoyer un test" on /super-admin/product-updates — defaults to the calling super admin's own
@@ -21,6 +22,7 @@ test("sending a test defaults to the super admin's own address", async ({ page }
   await page.getByLabel("Email").fill(SUPER_ADMIN_EMAIL)
   await page.getByLabel("Mot de passe").fill(SUPER_ADMIN_PASSWORD)
   await page.getByRole("button", { name: "Se connecter" }).click()
+  await passSecondFactor(page)
   // A super admin with no organization picked yet lands on the org picker (#267).
   await expect(page).toHaveURL(/\/admin\/dashboard|\/super-admin\/organizations/)
 
@@ -43,6 +45,7 @@ test("sending a test to a custom address delivers it there instead", async ({ pa
   await page.getByLabel("Email").fill(SUPER_ADMIN_EMAIL)
   await page.getByLabel("Mot de passe").fill(SUPER_ADMIN_PASSWORD)
   await page.getByRole("button", { name: "Se connecter" }).click()
+  await passSecondFactor(page)
   // A super admin with no organization picked yet lands on the org picker (#267).
   await expect(page).toHaveURL(/\/admin\/dashboard|\/super-admin\/organizations/)
 
@@ -71,6 +74,7 @@ test("a test email starts from a version of the changelog, edited before sending
   await page.getByLabel("Email").fill(SUPER_ADMIN_EMAIL)
   await page.getByLabel("Mot de passe").fill(SUPER_ADMIN_PASSWORD)
   await page.getByRole("button", { name: "Se connecter" }).click()
+  await passSecondFactor(page)
   await expect(page).toHaveURL(/\/admin\/dashboard|\/super-admin\/organizations/)
 
   const stamp = Date.now()
@@ -100,6 +104,7 @@ test("rejects a malformed test email address", async ({ page }) => {
   await page.getByLabel("Email").fill(SUPER_ADMIN_EMAIL)
   await page.getByLabel("Mot de passe").fill(SUPER_ADMIN_PASSWORD)
   await page.getByRole("button", { name: "Se connecter" }).click()
+  await passSecondFactor(page)
   // A super admin with no organization picked yet lands on the org picker (#267).
   await expect(page).toHaveURL(/\/admin\/dashboard|\/super-admin\/organizations/)
 

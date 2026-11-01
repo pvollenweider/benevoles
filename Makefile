@@ -29,6 +29,11 @@ dev-setup: ## Setup complet : .env, deps, postgres, migrations, seed
 		fi; \
 		echo "→ AUTH_SECRET généré"; \
 	fi
+	@if ! grep -q '^TOKEN_ENCRYPTION_KEY=".\+"' .env; then \
+		grep -v '^TOKEN_ENCRYPTION_KEY=' .env > .env.tmp; mv .env.tmp .env; \
+		echo "TOKEN_ENCRYPTION_KEY=\"$$(openssl rand -base64 32 | tr -d '\n')\"" >> .env; \
+		echo "→ TOKEN_ENCRYPTION_KEY générée (chiffrement des liens et du second facteur)"; \
+	fi
 	@$(MAKE) install
 	@$(MAKE) db-generate
 	@$(MAKE) dev-up
@@ -126,6 +131,11 @@ e2e-setup: ## Crée .env.e2e (ou .env.e2e.N) si absent, migre + seed la DB e2e
 			sed -i "s|^AUTH_SECRET=.*|AUTH_SECRET=\"$$SECRET\"|" $(E2E_ENV_FILE); \
 		fi; \
 		echo "→ AUTH_SECRET (e2e) généré"; \
+	fi
+	@if ! grep -q '^TOKEN_ENCRYPTION_KEY=".\+"' $(E2E_ENV_FILE); then \
+		grep -v '^TOKEN_ENCRYPTION_KEY=' $(E2E_ENV_FILE) > $(E2E_ENV_FILE).tmp; mv $(E2E_ENV_FILE).tmp $(E2E_ENV_FILE); \
+		echo "TOKEN_ENCRYPTION_KEY=\"$$(openssl rand -base64 32 | tr -d '\n')\"" >> $(E2E_ENV_FILE); \
+		echo "→ TOKEN_ENCRYPTION_KEY (e2e) générée (chiffrement des liens et du second facteur)"; \
 	fi
 	node --env-file=$(E2E_ENV_FILE) node_modules/.bin/prisma generate
 	node --env-file=$(E2E_ENV_FILE) node_modules/.bin/prisma migrate deploy

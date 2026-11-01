@@ -1,4 +1,5 @@
 import { test, expect, type Page } from "@playwright/test"
+import { passSecondFactor } from "./helpers/super-admin"
 
 /**
  * Super admin statistics (#805): the « Depuis le début » counters are kept by database triggers and
@@ -21,6 +22,7 @@ test("cumulative counters count a new organisation and keep it after its deletio
   await page.getByLabel("Email").fill(SUPER_ADMIN_EMAIL)
   await page.getByLabel("Mot de passe").fill(SUPER_ADMIN_PASSWORD)
   await page.getByRole("button", { name: "Se connecter" }).click()
+  await passSecondFactor(page)
   await expect(page).toHaveURL(/\/admin\/dashboard|\/super-admin\/organizations/)
 
   const orgsBefore = await cumulative(page, "Organisations créées")

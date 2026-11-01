@@ -1,5 +1,6 @@
 import { test, expect, type Page } from "@playwright/test"
 import { waitForHydration } from "../helpers/hydration"
+import { passSecondFactor } from "../helpers/super-admin"
 
 /**
  * « Super Admin » menu by touch, on the WebKit engine with touch emulation (project
@@ -22,6 +23,7 @@ async function logIn(page: Page) {
   await page.getByLabel("Email").fill(SUPER_ADMIN_EMAIL)
   await page.getByLabel("Mot de passe").fill(SUPER_ADMIN_PASSWORD)
   await page.getByRole("button", { name: "Se connecter" }).tap()
+  await passSecondFactor(page)
   // A super admin with no organization picked yet lands on the org picker (#267).
   await expect(page).toHaveURL(/\/admin\/dashboard|\/super-admin\/organizations/)
 }

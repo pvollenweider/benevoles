@@ -1,4 +1,5 @@
 import { test, expect } from "@playwright/test"
+import { passSecondFactor } from "./helpers/super-admin"
 
 /**
  * The operator's hand on the periodic check of inactive organisations (#811), on the
@@ -14,6 +15,7 @@ test("postpone, cancel, exclude and restore the inactivity check of an organisat
   await page.getByLabel("Email").fill(SUPER_ADMIN_EMAIL)
   await page.getByLabel("Mot de passe").fill(SUPER_ADMIN_PASSWORD)
   await page.getByRole("button", { name: "Se connecter" }).click()
+  await passSecondFactor(page)
   await expect(page).toHaveURL(/\/admin\/dashboard|\/super-admin\/organizations/)
 
   const slug = `e2e-inactivity-${Date.now()}`
