@@ -2,11 +2,16 @@
 // SPDX-License-Identifier: AGPL-3.0-only
 
 import type { NextAuthConfig } from "next-auth"
+import { newSessionClaims, sessionCookieOverride, sessionWithinLifetime, SESSION_IDLE_SECONDS } from "@/lib/session-lifetime"
 
 export const authConfig: NextAuthConfig = {
   pages: {
     signIn: "/admin/login",
   },
+  // Idle limit, renewed by each signed-in request; the absolute limit is checked in jwt() below
+  // (src/lib/session-lifetime.ts).
+  session: { strategy: "jwt", maxAge: SESSION_IDLE_SECONDS },
+  cookies: sessionCookieOverride(),
   callbacks: {
     authorized({ auth, request: { nextUrl } }) {
       const isLoggedIn = !!auth?.user
@@ -22,8 +27,12 @@ export const authConfig: NextAuthConfig = {
         token.role = u.role
         token.organizationId = u.organizationId ?? null
         token.sessionVersion = u.sessionVersion ?? 0
+        Object.assign(token, newSessionClaims())
+        return token
       }
-      return token
+      // Past its absolute lifetime, or issued before sessions had an id: null ends the session and
+      // next-auth clears the cookie. Runs in the proxy too, which has no database.
+      return sessionWithinLifetime(token) ? token : null
     },
     session({ session, token }) {
       if (session.user) {

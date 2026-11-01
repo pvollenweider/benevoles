@@ -32,7 +32,7 @@ vi.mock("@/lib/prisma", () => {
   return {
     prisma: {
       ...tx,
-      volunteer: zero, rateLimit: zero, deliveryOutcome: zero, emailLimitHit: { deleteMany: limitHitDeleteMany }, videoFeedback: { deleteMany: videoFeedbackDeleteMany }, signupRequest: zero, signupBlock: zero, operatorLog: zero,
+      volunteer: zero, rateLimit: zero, revokedSession: zero, deliveryOutcome: zero, emailLimitHit: { deleteMany: limitHitDeleteMany }, videoFeedback: { deleteMany: videoFeedbackDeleteMany }, signupRequest: zero, signupBlock: zero, operatorLog: zero,
       $transaction: async (fn: (t: typeof tx) => unknown) => fn(tx),
     },
   }
