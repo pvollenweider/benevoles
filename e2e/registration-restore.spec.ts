@@ -4,7 +4,7 @@ import { getMessageText, waitForMessage } from "./helpers/mailpit"
 
 /**
  * « Rétablir » (#809): a place removed by mistake comes back from « Annulations récentes », with
- * a new personal link when asked; once the spot is taken, the row says why instead.
+ * a new personal link when asked; once the spot is taken, its dialog asks for a confirmation (AUTHZ-15).
  */
 
 const ORG_ADMIN_EMAIL = process.env.ORG_ADMIN_EMAIL ?? "org-admin@localhost"
@@ -61,7 +61,7 @@ test("restores a removed place with a new personal link", async ({ page }) => {
   expect(await getMessageText(message.ID)).toContain("Ton lien personnel a été renouvelé : l'ancien ne fonctionne plus.")
 })
 
-test("says why when the spot was taken back", async ({ page }) => {
+test("asks for a confirmation once the spot was taken back, then restores over capacity (AUTHZ-15)", async ({ page }) => {
   test.setTimeout(90_000) // dev server compiles each page on first visit
   await login(page)
   const stamp = Date.now()
@@ -73,6 +73,14 @@ test("says why when the spot was taken back", async ({ page }) => {
   await page.goto(`/admin/events/${event.id}/registrations`)
   const section = page.getByRole("region", { name: "Annulations récentes" })
   await expect(section).toContainText(name)
-  await expect(section).toContainText("Complet : la place a été reprise.")
-  await expect(section.getByRole("button", { name: /Rétablir/ })).toHaveCount(0)
+  await section.getByRole("button", { name: `Rétablir l'inscription de ${name}, Bar, mardi 1 octobre, de 10h à 12h` }).click()
+  const dialog = page.getByRole("dialog", { name: `Rétablir l'inscription de ${name} ?` })
+  await expect(dialog).toContainText("Ce créneau est complet")
+  await expect(dialog).toContainText("1 place sur 1 est prise")
+  await expect(dialog).toContainText("Il y aura 2 personnes pour 1 place.")
+  expect.soft(await seriousViolations(page)).toEqual([])
+  await dialog.getByRole("button", { name: "Rétablir quand même" }).click()
+
+  await expect(dialog).toBeHidden()
+  await expect(section.getByRole("status")).toHaveText(`Inscription de ${name} rétablie.`)
 })

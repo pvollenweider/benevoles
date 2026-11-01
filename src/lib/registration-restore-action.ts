@@ -11,6 +11,8 @@ import { localDateTimeToUtc, orgTimeZone } from "./time-zone"
 import { generateToken } from "./utils"
 import { checkDutyChange, lockVolunteerRows, lockWorkloadShared, readWorkloadGate, workloadRefusalBody, WorkloadRefusalError } from "./workload-guard"
 import { AvailabilityAckError, availabilityAckBody, checkAvailabilityAcks, logAvailabilityAcks, readAvailabilityGate } from "./availability-assist-data"
+import { checkShiftOverrides, ShiftOverrideError } from "./shift-override-server"
+import { overrideLogValue, type ShiftOverrideBody, type ShiftOverrideNeed } from "./shift-override"
 
 /**
  * « Rétablir » (#809): puts a cancelled place or request back, as it was. Server only. The
@@ -22,6 +24,7 @@ export type RestoreResult =
   | { ok: true; status: RestoredStatus }
   | { ok: false; httpStatus: 404 | 409; error: string; code?: "workload"; workload?: string[] }
   | { ok: false; httpStatus: 409; error: string; code: "availability"; outside: ReturnType<typeof availabilityAckBody>["outside"] }
+  | ({ ok: false; httpStatus: 409 } & ShiftOverrideBody)
 
 export const ALREADY_LIVE = "Cette personne a déjà une inscription en cours sur ce créneau."
 
@@ -37,6 +40,11 @@ export type RestoreOptions = {
    * they are not available for (availabilityAckKey), needed on an event that uses it.
    */
   availabilityAck?: readonly string[]
+  /**
+   * A full or closed shift (AUTHZ-15): the organiser's confirmation (src/lib/shift-override.ts),
+   * bound to this registration, the shift's status, places and spots taken.
+   */
+  shiftOverride?: readonly string[]
 }
 
 export async function restoreRegistration(db: OrgScopedPrisma, actor: LogActor, id: string, now: Date = new Date(), options: RestoreOptions = {}): Promise<RestoreResult> {
@@ -59,7 +67,7 @@ export async function restoreRegistration(db: OrgScopedPrisma, actor: LogActor, 
   const shiftStart = localDateTimeToUtc(reg.shift.date, reg.shift.startTime, orgTimeZone(reg.event.organization))
   const name = `${reg.volunteer.firstName} ${reg.volunteer.lastName}`
 
-  let outcome: { ok: true; status: RestoredStatus; outboxIds: string[] } | { ok: false; error: string }
+  let outcome: { ok: true; status: RestoredStatus; outboxIds: string[]; override?: ShiftOverrideNeed } | { ok: false; error: string }
   try {
     outcome = await db.$transaction(async (tx) => {
       // Workload protection (#1171): its shared lock first, as every path that adds duty.
@@ -91,6 +99,9 @@ export async function restoreRegistration(db: OrgScopedPrisma, actor: LogActor, 
         const verdict = await checkDutyChange(tx, workloadGate, reg.eventId, reg.volunteerId, { add: [reg.shift] }, { exceptRegistrationIds: [id] })
         if (!verdict.ok) throw new WorkloadRefusalError(verdict, reg.volunteerId)
       }
+      // A full or closed shift needs the organiser's confirmation (AUTHZ-15), after the workload protection
+      // (a hard refusal comes first), on the state read under the lock; the registration being restored is cancelled, so it never counts itself.
+      const override = (await checkShiftOverrides(tx, "restore", [reg.shiftId], () => id, options.shiftOverride ?? [], { exceptRegistrationIds: [id] })).get(reg.shiftId)
       const acknowledged = availability.inUse ? await checkAvailabilityAcks(tx, availability, reg.eventId, reg.volunteerId, [reg.shiftId], options.availabilityAck ?? []) : []
 
       const { count } = await tx.registration.updateMany({ where: { id, status: "cancelled" }, data: { status: plan.status } })
@@ -139,9 +150,10 @@ export async function restoreRegistration(db: OrgScopedPrisma, actor: LogActor, 
           },
         })
       }
-      return { ok: true as const, status: plan.status, outboxIds: await enqueueNotifications(outbox.payloads, tx, { organizationId: reg.event.organizationId }) }
+      return { ok: true as const, status: plan.status, override, outboxIds: await enqueueNotifications(outbox.payloads, tx, { organizationId: reg.event.organizationId }) }
     })
   } catch (e) {
+    if (e instanceof ShiftOverrideError) return { ok: false, httpStatus: 409, ...e.body() }
     if (e instanceof AvailabilityAckError) return { ok: false, httpStatus: 409, ...availabilityAckBody(e, name, "restore") }
     if (e instanceof WorkloadRefusalError) {
       return { ok: false, httpStatus: 409, ...workloadRefusalBody(e.verdict, `Impossible de rétablir : le programme de ${name} ne respecterait plus les pauses et limites de charge de cet événement.`) }
@@ -162,6 +174,7 @@ export async function restoreRegistration(db: OrgScopedPrisma, actor: LogActor, 
       status: { from: "cancelled", to: outcome.status },
       shiftId: { from: reg.shiftId, to: reg.shiftId },
       ...(options.newLink ? { personalLink: { from: "(ancien)", to: "(renouvelé)" } } : {}),
+      ...(outcome.override ? { shiftOverride: { from: null, to: overrideLogValue(outcome.override) } } : {}),
     },
   })
   deliverAfterResponse(outcome.outboxIds)

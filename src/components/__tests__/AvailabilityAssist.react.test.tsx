@@ -205,6 +205,23 @@ describe("ShiftAssistPanel", () => {
     expect(refresh).not.toHaveBeenCalled()
   })
 
+  // A full or closed shift (AUTHZ-15): « Inscrire maintenant » asks in a dialog, then sends the key.
+  it("asks before registering on a full shift, then sends the confirmation's key", async () => {
+    const need = { shiftId: "s1", key: "o1|manual_add|v-Rochat|s1|open|3|3", closed: false, full: true, markedFull: false, occupied: 3, capacity: 3, roleName: "Bar", label: "Soir", date: "2031-07-11", startTime: "14:00", endTime: "20:00" }
+    fetchMock.mockResolvedValueOnce({ ok: false, status: 409, json: async () => ({ code: "shift_override", error: "x", shifts: [need] }) })
+      .mockResolvedValueOnce({ ok: true, status: 201, json: async () => ({ registrations: [] }) })
+    panel([row("Rochat")])
+    const button = screen.getByRole("button", { name: NAME("Inscrire maintenant : Nadia Rochat") })
+    fireEvent.click(button)
+    const dialog = await screen.findByRole("dialog", { name: "Créneau complet" })
+    // Asked, never said as an error.
+    for (const alert of screen.getAllByRole("alert")) expect(alert).toHaveTextContent("")
+    fireEvent.click(screen.getByRole("button", { name: "Inscrire quand même" }))
+    expect(dialog).not.toBeInTheDocument()
+    await waitFor(() => expect(fetchMock).toHaveBeenCalledTimes(2))
+    expect(JSON.parse(fetchMock.mock.calls[1][1].body)).toMatchObject({ volunteerId: "v-Rochat", shiftIds: ["s1"], shiftOverride: [need.key] })
+  })
+
   it("spreads the load inside each group by default and explains how, sorts by name on demand, and filters", () => {
     panel([outside("Aebi"), row("Zbinden", { minutes: { confirmed: 300, pending: 0, draft: 0, committed: 300, sameDay: 0 } }), row("Muller")])
     const spread = screen.getByRole("button", { name: "Pour répartir la charge" })
@@ -257,7 +274,8 @@ describe("ManualAddForm with dated availability", () => {
     await waitFor(() => expect(box).toHaveFocus())
     // Said once, by the box's own error, never a second time by an alert.
     expect(box).toHaveAccessibleDescription(/rien n'a encore été ajouté/)
-    expect(screen.queryByRole("alert")).not.toBeInTheDocument()
+    // The form's alert stays mounted (so a later refusal is read), empty here.
+    expect(screen.getByRole("alert")).toHaveTextContent("")
   })
 
   it("reads nothing for an event without the option", () => {

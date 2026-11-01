@@ -128,6 +128,10 @@ const FIELD_LABELS: Record<string, string> = {
   // Added by an organiser outside the person's declared availability, knowingly (#1146, lot B).
   outsideAvailability: "ajout confirmé hors des disponibilités indiquées",
   availabilityAck: "hors des disponibilités indiquées",
+  // Added knowingly to a full or closed shift (AUTHZ-15): the state confirmed, after the addition.
+  shiftOverride: "ajout confirmé sur un créneau complet ou fermé",
+  // A shift cancelled with people registered (AUTHZ-15): whether they were emailed.
+  volunteersNotified: "inscrits prévenus par email",
   postes: "postes",
 }
 

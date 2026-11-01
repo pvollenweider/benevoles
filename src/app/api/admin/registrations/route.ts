@@ -19,6 +19,9 @@ import { localDateTimeToUtc, orgTimeZone } from "@/lib/time-zone"
 import { checkDutyChange, judgeDutyChange, lockVolunteerRows, lockWorkloadShared, readWorkloadGate, withPlaceNames, workloadRefusalBody, WorkloadRefusalError } from "@/lib/workload-guard"
 import { lockShifts } from "@/lib/registration-capacity"
 import { AvailabilityAckError, availabilityAckBody, checkAvailabilityAcks, logAvailabilityAcks, readAvailabilityGate } from "@/lib/availability-assist-data"
+import { checkShiftOverrides, ShiftCancelledError, ShiftOverrideError } from "@/lib/shift-override-server"
+import { cancelledShiftMessage, overrideLogValue, type ShiftOverrideNeed } from "@/lib/shift-override"
+import { OCCUPYING_STATUSES } from "@/lib/registration-capacity"
 import { memberWriteRefusal } from "@/lib/member-erasure"
 
 /** The organiser's refusal (#1171): who, and the first limit the addition would break. */
@@ -55,6 +58,12 @@ const schema = z.object({
    */
   availabilityAck: z.array(z.string().max(400)).max(MAX_SHIFTS).optional(),
   /**
+   * A full or closed shift (AUTHZ-15): the organiser's confirmation, one key per shift, bound to
+   * the person, the shift's status, places and spots taken (src/lib/shift-override.ts). A
+   * cancelled shift is refused whatever is sent.
+   */
+  shiftOverride: z.array(z.string().max(400)).max(MAX_SHIFTS).optional(),
+  /**
    * Birth date (#1171, lot 2): asked when the event protects minors and the person has none on
    * file. Stored on a new person, or on a member without one; an existing date is never replaced.
    */
@@ -76,14 +85,13 @@ export async function POST(req: Request) {
   const parsed = schema.safeParse(body)
   if (!parsed.success) return validationError(parsed.error)
 
-  const { eventId, shiftId, shiftIds, volunteerId, firstName, lastName, email, phone, comment, allowOverLimit, birthDate, availabilityAck } = parsed.data
+  const { eventId, shiftId, shiftIds, volunteerId, firstName, lastName, email, phone, comment, allowOverLimit, birthDate, availabilityAck, shiftOverride } = parsed.data
   const birthDateValue = birthDate ? new Date(birthDate) : null
   const ids = [...new Set([...(shiftIds ?? []), ...(shiftId ? [shiftId] : [])])]
 
   const found = await Promise.all(ids.map((id) => db.shift.findFirst({
     where: { id, eventId },
     include: {
-      registrations: { where: { status: "active" } },
       event: { select: { title: true, organization: { select: { name: true, slug: true, timeZone: true } } } },
     },
   })))
@@ -91,6 +99,9 @@ export async function POST(req: Request) {
   if (shifts.length !== ids.length) return NextResponse.json({ error: "Créneau introuvable" }, { status: 404 })
 
   const usedEmail = email || null
+  // The confirmation's subject (AUTHZ-15): stable between the refusal and the retry, even for a new
+  // person whose member record does not exist yet.
+  const overrideSubject = volunteerId || (usedEmail ? `email:${usedEmail}` : `new:${(firstName ?? "").trim().toLowerCase()} ${(lastName ?? "").trim().toLowerCase()}`)
   let volunteer = volunteerId
     ? await db.volunteer.findFirst({ where: { id: volunteerId, organizationId } })
     : usedEmail
@@ -134,6 +145,17 @@ export async function POST(req: Request) {
     }
   }
 
+  // A first look before anything is written (a new member is created just below): a cancelled
+  // shift, or a full or closed one not confirmed, refuses here. The authoritative check runs again
+  // under the shift locks.
+  try {
+    await checkShiftOverrides(db, "manual_add", ids, () => overrideSubject, shiftOverride ?? [])
+  } catch (e) {
+    if (e instanceof ShiftCancelledError) return NextResponse.json({ error: cancelledShiftMessage(e.label), code: "shift_cancelled" }, { status: 409 })
+    if (e instanceof ShiftOverrideError) return NextResponse.json(e.body(), { status: 409 })
+    throw e
+  }
+
   if (!volunteer) {
     volunteer = await db.volunteer.create({
       data: { firstName: firstName!.trim(), lastName: lastName!.trim(), email: usedEmail, phone: phone || null, organizationId, ...(birthDateValue ? { birthDate: birthDateValue } : {}) },
@@ -154,6 +176,8 @@ export async function POST(req: Request) {
     : null
 
   let registrations
+  // The confirmations used (AUTHZ-15), per shift, for the event log.
+  let overrides = new Map<string, ShiftOverrideNeed>()
   try {
     const added = volunteer
     registrations = await db.$transaction(async (tx) => {
@@ -165,7 +189,8 @@ export async function POST(req: Request) {
       // locked too (workload → shifts → people), so the shifts' hours and the person's answer read
       // below are those of the commit. An event without it takes no extra lock or read.
       const availability = await readAvailabilityGate(tx, eventId)
-      if (availability.inUse) await lockShifts(tx, ids)
+      // The shifts are always locked (AUTHZ-15): their status and spots taken are judged below.
+      await lockShifts(tx, ids)
       // The person's row is always locked: an erasure or a merge committed meanwhile is seen here.
       await lockVolunteerRows(tx, [added.id])
       const current = await tx.volunteer.findFirst({ where: { id: added.id }, select: { erasedAt: true, mergedIntoId: true } })
@@ -180,6 +205,9 @@ export async function POST(req: Request) {
       // After the workload protection (a hard refusal is never preceded by a request to tick):
       // a shift outside the person's declared availability needs its acknowledgement, or nothing
       // is created. An acknowledgement never bypasses the protection.
+      // A cancelled shift is refused; a full or closed one needs the organiser's confirmation,
+      // judged on the state read under the lock (AUTHZ-15).
+      overrides = await checkShiftOverrides(tx, "manual_add", ids, () => overrideSubject, shiftOverride ?? [])
       const acknowledged = availability.inUse ? await checkAvailabilityAcks(tx, availability, eventId, added.id, ids, availabilityAck ?? []) : []
       const created = []
       const registrationOfShift = new Map<string, string>()
@@ -223,10 +251,17 @@ export async function POST(req: Request) {
       }
       // The acknowledgements' evidence, committed with the registrations (#1146, lot B).
       await logAvailabilityAcks(tx, { eventId, actor: adminActor(guard.session), via: "manual_add", acks: acknowledged, registrationOf: (a) => registrationOfShift.get(a.shiftId) })
+      // A shift whose places are now all taken shows « Complet »; a closed one stays closed.
+      for (const shift of shifts) {
+        const occupied = await tx.registration.count({ where: { shiftId: shift.id, status: { in: [...OCCUPYING_STATUSES] } } })
+        if (occupied >= shift.capacity) await tx.shift.updateMany({ where: { id: shift.id, status: "open" }, data: { status: "full" } })
+      }
       return created
     })
   } catch (e) {
     if (e instanceof TombstoneRefusal) return NextResponse.json({ error: e.message }, { status: 409 })
+    if (e instanceof ShiftCancelledError) return NextResponse.json({ error: cancelledShiftMessage(e.label), code: "shift_cancelled" }, { status: 409 })
+    if (e instanceof ShiftOverrideError) return NextResponse.json(e.body(), { status: 409 })
     if (e instanceof AvailabilityAckError) {
       return NextResponse.json(availabilityAckBody(e, `${volunteer.firstName} ${volunteer.lastName}`), { status: 409 })
     }
@@ -242,12 +277,6 @@ export async function POST(req: Request) {
     throw e
   }
 
-  for (const shift of shifts) {
-    if (shift.registrations.length + 1 >= shift.capacity) {
-      await db.shift.update({ where: { id: shift.id }, data: { status: "full" } })
-    }
-  }
-
   for (const { registration, shiftId: addedShiftId } of registrations) {
     await logEvent({
       eventId,
@@ -260,6 +289,8 @@ export async function POST(req: Request) {
         source: { from: null, to: "admin_manual" },
         confirmationEmail: { from: null, to: manualAddNoticeLog(notices.get(addedShiftId)!) },
         ...(allowOverLimit ? { overRoleLimit: { from: null, to: true } } : {}),
+        // Added knowingly to a full or closed shift (AUTHZ-15): the state confirmed, after the addition.
+        ...(overrides.has(addedShiftId) ? { shiftOverride: { from: null, to: overrideLogValue(overrides.get(addedShiftId)!) } } : {}),
       },
     })
   }

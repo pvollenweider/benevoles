@@ -7,7 +7,7 @@
  * component so it can be tested on its own.
  */
 
-import { deleteShiftRecap, shiftWhen, type ActionRecap } from "./action-recap"
+import { cancelShiftRecap, deleteShiftRecap, shiftWhen, type ActionRecap } from "./action-recap"
 import { fmt } from "./gantt-utils"
 import { spokenShiftName, spokenTimeRange } from "./spoken-time"
 import { shiftStaffingState, spokenStaffingState, staffingStateText } from "./staffing"
@@ -178,6 +178,11 @@ export function timelineBarPlaces(s: { registrationCount: number; capacity: numb
  */
 export function deleteShiftRecapFor(s: ShiftWords & { registrationCount: number }): ActionRecap {
   return deleteShiftRecap({ name: spokenShiftName(s), when: shiftWhen(s.date, s.startTime, s.endTime), registered: s.registrationCount })
+}
+
+/** The status « Créneau annulé » chosen on a shift with people registered (AUTHZ-15). */
+export function cancelShiftRecapFor(s: ShiftWords & { registrationCount: number }, notify: boolean): ActionRecap {
+  return cancelShiftRecap({ name: spokenShiftName(s), when: shiftWhen(s.date, s.startTime, s.endTime), registered: s.registrationCount, notify })
 }
 
 export type ShiftListStatus = "open" | "full" | "closed"
