@@ -1,4 +1,5 @@
 import { test, expect } from "@playwright/test"
+import { passSecondFactor } from "./helpers/super-admin"
 
 /**
  * The super admin's organization switch (#1048): an email link to an event of another
@@ -15,6 +16,7 @@ test("an event link of another organization asks before switching", async ({ pag
   await page.getByLabel("Email").fill(SUPER_ADMIN_EMAIL)
   await page.getByLabel("Mot de passe").fill(SUPER_ADMIN_PASSWORD)
   await page.getByRole("button", { name: "Se connecter" }).click()
+  await passSecondFactor(page)
   await expect(page).toHaveURL(/\/admin\/dashboard|\/super-admin\/organizations/)
 
   const createOrg = async (name: string) => {
@@ -57,6 +59,7 @@ test("the admin APIs refuse a call from another origin or with a form body", asy
   await page.getByLabel("Email").fill(SUPER_ADMIN_EMAIL)
   await page.getByLabel("Mot de passe").fill(SUPER_ADMIN_PASSWORD)
   await page.getByRole("button", { name: "Se connecter" }).click()
+  await passSecondFactor(page)
   await expect(page).toHaveURL(/\/admin\/dashboard|\/super-admin\/organizations/)
 
   const foreign = await page.request.post("/api/super-admin/use-org/any", { headers: { Origin: "https://evil.example" } })

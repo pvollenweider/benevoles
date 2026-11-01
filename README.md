@@ -19,6 +19,7 @@ Ce projet est gratuit et open source. Si vous l'utilisez et voulez soutenir son 
 | [Architecture](docs/architecture.md) | Découpage du code, multi-tenant, flux principaux |
 | [Configuration](docs/configuration.md) | Toutes les variables d'environnement |
 | [Déploiement](docs/deploiement.md) | Docker, Kubernetes, CI/CD, sauvegardes |
+| [Double authentification](docs/double-authentification.md) | Second facteur du super admin : activation, codes de secours, réinitialisation d'urgence |
 | [Rôles et permissions](docs/roles-et-permissions.md) | Bénévoles, admins, super admin, isolation entre organisations |
 | [API](docs/api.md) | Routes HTTP de l'application |
 | [Conservation des données](docs/retention.md) | Durées, déclencheurs et mécanismes de purge |

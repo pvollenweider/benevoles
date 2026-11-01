@@ -1,5 +1,6 @@
 import { test, expect } from "@playwright/test"
 import { getMessageText, waitForMessage } from "./helpers/mailpit"
+import { passSecondFactor } from "./helpers/super-admin"
 
 /**
  * Self-service sign-up end to end (#810): the form, the confirmation email, the « Confirmer »
@@ -70,6 +71,7 @@ test("a confirmed sign-up creates a space with no public page until it is valida
   await page.getByLabel("Email").fill(SUPER_ADMIN_EMAIL)
   await page.getByLabel("Mot de passe").fill(SUPER_ADMIN_PASSWORD)
   await page.getByRole("button", { name: "Se connecter" }).click()
+  await passSecondFactor(page)
   await expect(page).toHaveURL(/\/admin\/dashboard|\/super-admin\/organizations/)
   const orgs = (await (await page.request.get("/api/super-admin/organizations")).json()) as { id: string; slug: string }[]
   const space = orgs.find((o) => o.slug === slug)

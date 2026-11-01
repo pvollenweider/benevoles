@@ -1,6 +1,7 @@
 import { test, expect } from "@playwright/test"
 import { createHash, randomBytes } from "node:crypto"
 import { Client } from "pg"
+import { passSecondFactor } from "./helpers/super-admin"
 
 /**
  * « Conserver mon organisation » (#811): the link of the periodic check's emails opens a page that
@@ -28,6 +29,7 @@ test("an administrator keeps the space with the emailed link, once", async ({ pa
   await page.getByLabel("Email").fill(SUPER_ADMIN_EMAIL)
   await page.getByLabel("Mot de passe").fill(SUPER_ADMIN_PASSWORD)
   await page.getByRole("button", { name: "Se connecter" }).click()
+  await passSecondFactor(page)
   await expect(page).toHaveURL(/\/admin\/dashboard|\/super-admin\/organizations/)
 
   const slug = `e2e-keep-${Date.now()}`

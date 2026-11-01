@@ -249,3 +249,43 @@ describe("getOrgContext (SSR helper)", () => {
     })
   })
 })
+
+// Pentest F6: a super admin who only gave the password reaches no admin or super-admin route.
+describe("second factor pending", () => {
+  const pending = { user: { id: "sa-1", role: undefined, organizationId: null }, secondFactor: { pending: true, loginNonce: "n", authAt: 1 } }
+
+  beforeEach(() => {
+    authMock.mockReset()
+    cookiesMock.mockResolvedValue({ get: () => undefined })
+    redirectMock.mockClear()
+  })
+
+  it("requireSuperAdmin answers 401 with the reason", async () => {
+    authMock.mockResolvedValue(pending)
+    const result = await requireSuperAdmin()
+    expect((result as NextResponse).status).toBe(401)
+    expect(await (result as NextResponse).json()).toMatchObject({ code: "SECOND_FACTOR_REQUIRED" })
+  })
+
+  it("requireOrgSession answers 401 at every level, even with an organization picked", async () => {
+    authMock.mockResolvedValue(pending)
+    withSaCookie("org-A")
+    for (const level of ["organizer", "owner"] as const) {
+      const result = await requireOrgSession(level)
+      expect((result as NextResponse).status).toBe(401)
+    }
+    expect(findUniqueOrgMock).not.toHaveBeenCalled()
+  })
+
+  it("getOrgContext sends an admin page to the two-factor step, back to the page afterwards", async () => {
+    authMock.mockResolvedValue(pending)
+    onPage("/admin/events/evt-1")
+    await expect(getOrgContext()).rejects.toThrow("NEXT_REDIRECT:/admin/two-factor?callbackUrl=%2Fadmin%2Fevents%2Fevt-1")
+  })
+
+  it("lets a completed super admin session through", async () => {
+    authMock.mockResolvedValue({ user: { id: "sa-1", role: "super_admin", organizationId: null }, secondFactor: { pending: false, loginNonce: "n", authAt: 1 } })
+    const result = await requireSuperAdmin()
+    expect(result).not.toBeInstanceOf(NextResponse)
+  })
+})

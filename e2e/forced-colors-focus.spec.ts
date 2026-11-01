@@ -5,6 +5,7 @@ import {
   type Scheme,
 } from "./helpers/forced-colors"
 import { getMessageText, waitForMessage } from "./helpers/mailpit"
+import { passSecondFactor } from "./helpers/super-admin"
 
 /**
  * Keyboard focus in forced colours (#579, follow-up of #574), rendered under Chromium's emulation
@@ -70,6 +71,7 @@ async function login(page: Page, email = ORG_ADMIN_EMAIL, password = ORG_ADMIN_P
   await page.getByLabel("Email").fill(email)
   await page.getByLabel("Mot de passe").fill(password)
   await page.getByRole("button", { name: "Se connecter" }).click()
+  if (email === SUPER_ADMIN_EMAIL) await passSecondFactor(page)
   await expect(page).toHaveURL(/\/admin\/dashboard|\/super-admin/)
 }
 

@@ -3,6 +3,7 @@
 
 import type { NextAuthConfig } from "next-auth"
 import { newSessionClaims, sessionCookieOverride, sessionWithinLifetime, SESSION_IDLE_SECONDS } from "@/lib/session-lifetime"
+import { applySecondFactor, signInClaims } from "@/lib/second-factor-session"
 
 export const authConfig: NextAuthConfig = {
   pages: {
@@ -28,6 +29,8 @@ export const authConfig: NextAuthConfig = {
         token.organizationId = u.organizationId ?? null
         token.sessionVersion = u.sessionVersion ?? 0
         Object.assign(token, newSessionClaims())
+        // A password sign-in starts without a second factor (pentest F6).
+        signInClaims(token, Date.now())
         return token
       }
       // Past its absolute lifetime, or issued before sessions had an id: null ends the session and
@@ -49,7 +52,8 @@ export const authConfig: NextAuthConfig = {
         u.role = token.role as string | undefined
         u.organizationId = (token.organizationId as string | null | undefined) ?? null
       }
-      return session
+      // Super admin still to give the code: role and organization withheld (second-factor-session.ts).
+      return applySecondFactor(session, token, Date.now())
     },
   },
   providers: [],

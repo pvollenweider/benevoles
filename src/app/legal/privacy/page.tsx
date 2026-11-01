@@ -25,7 +25,7 @@ export default function PrivacyPage() {
     <>
       <JsonLd data={publicPageJsonLd("/legal/privacy", apexBaseUrl())} />
       <h1>Politique de confidentialité</h1>
-      <p className="text-gray-500 dark:text-gray-400 text-sm">Dernière mise à jour : 30 octobre 2026</p>
+      <p className="text-gray-500 dark:text-gray-400 text-sm">Dernière mise à jour : 1er novembre 2026</p>
 
       <p>
         La présente politique décrit comment <strong>benevol.app</strong>, éditée par{" "}
@@ -304,6 +304,12 @@ export default function PrivacyPage() {
         <li>Mots de passe hashés (bcrypt, facteur de coût 12) ;</li>
         <li>Isolation des données entre Organisations (multi-tenancy strict) ;</li>
         <li>Tokens de réinitialisation de mot de passe à usage unique, expirés après 1 heure ;</li>
+        <li>
+          Double authentification obligatoire pour les comptes de l&apos;opérateur du service, qui ont accès
+          à toutes les Organisations : un code d&apos;une application d&apos;authentification en plus du mot de
+          passe. Le secret de cette application est chiffré en base de données et les codes de secours n&apos;y
+          sont conservés que sous forme d&apos;empreinte, jusqu&apos;à leur remplacement ou à la fin du compte ;
+        </li>
         <li>Accès à la base de données restreint aux composants applicatifs ;</li>
         <li>Sauvegardes régulières chiffrées.</li>
       </ul>

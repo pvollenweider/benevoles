@@ -2653,6 +2653,44 @@ describe("Generated assignment proposals — cross-tenant isolation (#1172)", ()
   })
 })
 
+describe("Super admin second factor — not organisation-scoped (pentest F6)", () => {
+  // The two-factor step and the recovery codes act on the signed-in account's own row only: no
+  // organisation id, no tenant model. The behaviour is tested in src/__tests__/two-factor-api.test.ts.
+  it("reads and writes nothing but the caller's account", async () => {
+    const fs = await import("node:fs")
+    const path = await import("node:path")
+    const app = path.join(__dirname, "..", "..", "app", "api")
+    const step = fs.readFileSync(path.join(app, "admin", "two-factor", "route.ts"), "utf8")
+    const codes = fs.readFileSync(path.join(app, "super-admin", "two-factor", "recovery-codes", "route.ts"), "utf8")
+    for (const source of [step, codes]) {
+      expect(source).not.toMatch(/organizationId|x-org-slug|sa-org-id/)
+      expect(source).not.toMatch(/prisma\.(event|volunteer|registration|shift|organization)\b/)
+    }
+    expect(step).toContain("step.account.id")
+    expect(codes).toContain("where: { id }")
+  })
+})
+
+describe("Super admin second factor — organisation sessions refused (pentest F6)", () => {
+  it("POST /api/admin/two-factor refuses an organisation admin's session and touches nothing", async () => {
+    vi.clearAllMocks()
+    vi.resetModules()
+    const update = vi.fn()
+    vi.doMock("@/auth", () => ({
+      auth: vi.fn().mockResolvedValue({ user: { id: "adm-a", role: "admin", organizationId: "org-a" }, secondFactor: { pending: false, loginNonce: "n", authAt: Date.now() } }),
+      unstable_update: update,
+    }))
+    vi.doMock("@/lib/operator-alerts", () => ({ notifyOperator: vi.fn() }))
+    const { POST } = await import("@/app/api/admin/two-factor/route")
+    const res = await POST(new Request("http://localhost/api/admin/two-factor", { method: "POST", headers: { "content-type": "application/json" }, body: JSON.stringify({ code: "123456" }) }))
+    expect(res.status).toBe(409)
+    expect(update).not.toHaveBeenCalled()
+    expect(prismaMock.adminUser.findUnique).not.toHaveBeenCalled()
+    vi.doUnmock("@/auth")
+    vi.doUnmock("@/lib/operator-alerts")
+  })
+})
+
 // ── Routes the sweep reached but no test named (pentest coverage list) ──────────────────────────
 // Each answers 404 for an org-B event or record and writes nothing; the settings routes read and
 // write only the caller's organisation or account. src/__tests__/security/admin-route-coverage.test.ts

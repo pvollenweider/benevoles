@@ -17,6 +17,7 @@ import { findBlogPost, loadBlogPosts } from "@/lib/blog"
 import { reportError } from "@/lib/report-error"
 import { REQUEST_PATH_HEADER } from "@/lib/admin-next"
 import { isAuthEndpoint } from "@/lib/auth-endpoints"
+import { SECOND_FACTOR_PATH, secondFactorUrl } from "@/lib/second-factor-session"
 
 const { auth } = NextAuth(authConfig)
 
@@ -76,6 +77,13 @@ function handle(req: NextAuthRequest): Response {
   const isLoginPage = pathname === "/admin/login"
   const isPublicAdminPage = pathname === "/admin/accept-invite" || pathname === "/admin/reset-password" || pathname === "/admin/forgot-password"
     || pathname === "/admin/reactivate" || pathname === "/admin/reactivate/confirm" || pathname === "/admin/keep"
+
+  // --- Second factor (pentest F6): a super admin signed in with the password only reaches the
+  // two-factor page and nothing else of the admin, before any role check (the role is masked in
+  // such a session). The pages and API routes check it again on the server (auth-guard.ts). ---
+  if (req.auth?.secondFactor?.pending && (isSuperAdminPath || isAdminPath) && !isLoginPage && !isPublicAdminPage && pathname !== SECOND_FACTOR_PATH) {
+    return Response.redirect(new URL(secondFactorUrl(`${pathname}${req.nextUrl.search}`), req.url))
+  }
 
   if (isSuperAdminPath) {
     if (!req.auth) {
