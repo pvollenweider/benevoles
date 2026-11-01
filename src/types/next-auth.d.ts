@@ -21,5 +21,9 @@ declare module "next-auth/jwt" {
     role?: string
     organizationId?: string | null
     sessionVersion?: number
+    /** Random id of this session, set at sign-in (src/lib/session-lifetime.ts). */
+    sid?: string
+    /** Sign-in time, in seconds since the epoch: the absolute lifetime counts from it. */
+    authTime?: number
   }
 }
