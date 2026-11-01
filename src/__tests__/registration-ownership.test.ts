@@ -41,7 +41,9 @@ vi.mock("@/lib/prisma", async () => {
     $queryRaw: (...args: unknown[]) => m.txQueryRaw(...args),
     shift: { findMany: locked.tx(vi.fn().mockResolvedValue([])) }, // no role limit (#466)
     // A new volunteer is created inside the registration transaction (#309).
-    volunteer: { createMany: m.txVolCreateMany, findFirstOrThrow: m.txVolFindFirstOrThrow, update: (...args: unknown[]) => m.volUpdate(...args) },
+    volunteer: { createMany: m.txVolCreateMany, findFirstOrThrow: m.txVolFindFirstOrThrow, update: (...args: unknown[]) => m.volUpdate(...args), findFirst: (...args: unknown[]) => m.volFindFirst(...args) },
+    // The notice to the owner (AUTHZ-01) is read in the sign-up's transaction.
+    event: { findFirst: vi.fn().mockResolvedValue({ title: "Festival", organizationId: "org-a", organization: { slug: "a" } }) },
     charterVersion: { upsert: vi.fn() },
     rosterConsent: { findUnique: m.rosterFindUnique, upsert: m.rosterUpsert },
     // The proof is checked again under the member lock (#1138 follow-up).
@@ -51,6 +53,7 @@ vi.mock("@/lib/prisma", async () => {
       count: (...args: unknown[]) => m.txCount(...args),
       aggregate: vi.fn().mockResolvedValue({ _max: { waitingPosition: null } }),
       create: m.txCreate,
+      updateMany: vi.fn().mockResolvedValue({ count: 1 }),
     },
   }
   return {
@@ -523,10 +526,13 @@ describe("POST /api/public/registrations — no answer about the address's own r
     }
   })
 
+  // The duplicate check by shift finds `onShift`; the owner's live registration gives the link.
+  const heldRegs = (onShift: { shift: { label: string } } | null) => m.txRegFindFirst.mockImplementation(async (args: { where?: { shiftId?: unknown } }) => (args?.where?.shiftId ? onShift : ownersReg))
+
   it("tells the owner by email, with their personal link and the reason", async () => {
-    m.regFindFirst.mockResolvedValue(ownersReg)
-    m.txRegFindFirst.mockResolvedValueOnce({ shift: { label: "Bar" } })
+    heldRegs({ shift: { label: "Bar" } })
     await answer({ ...victim, id: "vol-a3" })
+    heldRegs(null)
     m.txRegFindMany.mockResolvedValue([overlapping])
     await answer({ ...victim, id: "vol-a4" })
     const sent = notices()
@@ -536,6 +542,27 @@ describe("POST /api/public/registrations — no answer about the address's own r
     expect(sent[1].data.notRecorded!.reason).toBe("le créneau « Bar » chevauche ton créneau « Accueil »")
     expect(m.deliverAfterResponse).toHaveBeenCalled()
     expect(m.sendNotification).not.toHaveBeenCalled() // never sent within the answer
+  })
+
+  // The same work whatever happened: one transaction, which queues its emails in the outbox and
+  // commits; delivery after the answer; nothing sent within it.
+  it("a recorded and a refused sign-up do the same calls: one transaction, the outbox written in it, delivery after the answer", async () => {
+    const { prisma } = await import("@/lib/prisma")
+    const trace = async (run: () => Promise<unknown>) => {
+      vi.mocked(prisma.$transaction).mockClear(); m.enqueueNotifications.mockClear(); m.deliverAfterResponse.mockClear(); m.sendNotification.mockClear()
+      await run()
+      return {
+        transactions: vi.mocked(prisma.$transaction).mock.calls.length,
+        outboxInTransaction: m.enqueueNotifications.mock.calls.map((c) => c[1] !== undefined && c[1] !== prisma),
+        delivered: m.deliverAfterResponse.mock.calls.map((c) => c[0]),
+        sentInline: m.sendNotification.mock.calls.length,
+      }
+    }
+    const recorded = await trace(() => answer({ ...victim, id: "vol-a8" }))
+    heldRegs({ shift: { label: "Bar" } })
+    const refused = await trace(() => answer({ ...victim, id: "vol-a9" }))
+    expect(recorded).toEqual({ transactions: 1, outboxInTransaction: [true], delivered: [["row-1"]], sentInline: 0 })
+    expect(refused).toEqual(recorded)
   })
 
   it("the same answer once the owner's notices are throttled (3 an hour)", async () => {

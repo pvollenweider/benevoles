@@ -32,7 +32,8 @@ vi.mock("@/lib/prisma", async () => {
     $transaction: vi.fn(async (fn: (tx: unknown) => unknown) => fn({
       $queryRaw: vi.fn(async (strings: TemplateStringsArray) => { m.order.push(strings.join("?").includes("Volunteer") ? "lock:volunteer" : "lock:shifts"); return [{ id: "locked", erasedAt: null, email: "a@x.com" }] }),
       shift: { findMany: locked.tx(vi.fn(async (args: unknown) => { m.order.push("limits"); return m.txShiftFindMany(args) })) },
-      volunteer: { createMany: vi.fn(), findFirstOrThrow: vi.fn(), update: vi.fn() },
+      volunteer: { createMany: vi.fn(), findFirstOrThrow: vi.fn(), update: vi.fn(), findFirst: vi.fn().mockResolvedValue({ email: "a@x.com", firstName: "Alice", lastName: "Martin" }) },
+      event: { findFirst: m.eventFindFirst },
       memberInvite: { findFirst: m.inviteFindFirst },
       charterVersion: { upsert: vi.fn() },
       rosterConsent: { findUnique: vi.fn().mockResolvedValue(null), upsert: vi.fn() },

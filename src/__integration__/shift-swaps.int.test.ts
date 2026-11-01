@@ -253,6 +253,24 @@ describe.skipIf(!url)("shift swaps on Postgres (#1174)", () => {
     expect(await offerSwap(prisma, { requestId: adultReq.requestId, registrationId: ry.id, volunteerId: young.id, now: NOW })).toMatchObject({ ok: false, code: "min_age" })
   })
 
+  // AUTHZ-08, at the confirmation: what now stops the offerer is not told to the requester.
+  it("a confirmation the offerer's side stops answers one code, which says nothing of why", async () => {
+    const { event, shifts } = await setup({ shifts: [{ day: "2030-07-04" }, { day: "2030-07-05" }, { day: "2030-07-04", roleName: "Caisse", start: "11:00", end: "13:00" }] })
+    const pierre = await person("Pierre")
+    const jean = await person("Jean")
+    const rp = await register(event.id, shifts[0].id, pierre.id)
+    const rj = await register(event.id, shifts[1].id, jean.id)
+    const pub = await publishSwapRequest(prisma, { registrationId: rp.id, volunteerId: pierre.id, now: NOW })
+    if (!pub.ok) throw new Error(pub.error)
+    expect((await offerSwap(prisma, { requestId: pub.requestId, registrationId: rj.id, volunteerId: jean.id, now: NOW })).ok).toBe(true)
+    // Jean takes another shift meanwhile, at the same time as Pierre's: he can no longer take it.
+    await register(event.id, shifts[2].id, jean.id)
+    const { revision } = await prisma.shiftSwapRequest.findUniqueOrThrow({ where: { id: pub.requestId } })
+    const res = await confirmSwap(prisma, { requestId: pub.requestId, volunteerId: pierre.id, revision, now: NOW })
+    expect(res).toMatchObject({ ok: false, status: "impossible", code: "not_possible", error: "Cet échange n'est pas possible avec ces deux créneaux." })
+    expect(JSON.stringify(res)).not.toMatch(/overlap|horaire|Caisse/)
+  })
+
   it("E10: one live request per registration, on either side, even for two requests at once", async () => {
     const { event, shifts } = await setup()
     const pierre = await person("Pierre")

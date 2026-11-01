@@ -74,7 +74,7 @@ export const SWAP_REASON_LOG_LABELS: Record<SwapEndReason, string> = {
   min_age: "âge minimum",
   reserved: "poste réservé",
   already_on_shift: "déjà inscrit sur l'autre créneau",
-  not_possible: "pas possible pour la personne qui demande",
+  not_possible: "conditions d'une des deux personnes",
   deadline: "délai passé",
   volunteer_gone: "inscription plus confirmée",
   registration_gone: "inscription plus confirmée",

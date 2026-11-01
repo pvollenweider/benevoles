@@ -6,7 +6,7 @@ import { hasAvailableShift, isShiftSelectable, noAvailableShiftText, type Signup
 import { overlapConflict, signupConflictReason } from "../signup-conflict"
 import { isSignupContention } from "../registration-capacity"
 import { render } from "../notifications/templates"
-import { swapRefusalMessage } from "../shift-swaps"
+import { swapRefusalMessage, SWAP_OFFER_NOT_POSSIBLE } from "../shift-swaps"
 
 const ZH = "Europe/Zurich"
 const day = (d: string) => new Date(`${d}T00:00:00Z`)
@@ -161,6 +161,7 @@ describe("contention on the sign-up's locks", () => {
 // AUTHZ-08: the requester's own situation is never told to the person offering.
 describe("a swap offer the requester's side stops", () => {
   it("has one message, which says nothing of why", () => {
-    expect(swapRefusalMessage("not_possible")).toBe("Cet échange n'est pas possible avec ce créneau. Propose un autre de tes créneaux.")
+    expect(swapRefusalMessage("not_possible")).toBe("Cet échange n'est pas possible avec ces deux créneaux.")
+    expect(SWAP_OFFER_NOT_POSSIBLE).toBe("Cet échange n'est pas possible avec ce créneau. Propose un autre de tes créneaux.")
   })
 })

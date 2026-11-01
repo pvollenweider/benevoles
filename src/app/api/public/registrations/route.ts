@@ -59,7 +59,7 @@ import { touchOrgActivity } from "@/lib/org-activity"
 import { isKnownMinor, signupNoticeVersion } from "@/lib/shift-roster"
 import { applySignupRosterChoice, logRosterChange, type RosterChange } from "@/lib/roster-consent-write"
 import { parseGroupCode } from "@/lib/group-links"
-import { sendSignupNotice } from "@/lib/signup-notice"
+import { sendSignupNotice, signupNotice } from "@/lib/signup-notice"
 import { overlapConflict, type SignupConflict } from "@/lib/signup-conflict"
 import { orgTimeZone } from "@/lib/time-zone"
 import { recordTokenMiss, tokenLookupsBlocked } from "@/lib/token-rate-limit"
@@ -355,6 +355,8 @@ export async function POST(req: Request) {
     updates: { contact: ContactChange[]; answers: AnswerChange[] } | null
     /** The shift roster choice this sign-up changed (#1068), to log; null if none. */
     rosterChange?: RosterChange | null
+    /** Refused because of the address's own registrations, without proof of it (AUTHZ-01). */
+    notRecorded?: boolean
   }
   let matchId = existing?.id ?? null
   for (let attempt = 1; ; attempt++) {
@@ -406,7 +408,7 @@ export async function POST(req: Request) {
         // With proof of the address, every refusal is precise. Without it (AUTHZ-01), the refusals
         // that come from the address's own registrations are only recorded here: the public ones
         // (full, ended, limits of the selection alone) still decide first, the same for any address,
-        // then nothing is written and the owner is told by email (PrivateConflictError).
+        // then nothing is written and the owner is told by email (signupNotice below).
         const proven = ownsEmail && !matchErased
         let conflict: SignupConflict | null = null
         const held = await tx.registration.findFirst({
@@ -489,7 +491,30 @@ export async function POST(req: Request) {
           const own = judgeDutyChange(workloadGate, [], { add: added }, typed)
           if (!own.ok) throw new SignupWorkloadError(own, volunteerId, added, false, typed, true)
         }
-        if (conflict) throw new PrivateConflictError(conflict, volunteerId)
+        // Workload protection (#1171), on the whole resulting schedule, under the volunteer lock:
+        // the places and requests this sign-up would create (a waitlist entry is no mission yet)
+        // next to those already held. Judged before anything is written, conflict or not.
+        if (added.length > 0) {
+          const before: DutyShift[] = await withPlaceNames(tx, liveNow.filter((r) => r.shift.status !== "cancelled").map((r) => r.shift))
+          // The stored birth date wins; without one, the date typed now (#1171, lot 2: minors). The
+          // person's own limits come from their record.
+          const stored = await readWorkloadPerson(tx, eventId, volunteerId)
+          const person = { ...stored, birthDate: stored.birthDate ?? birthDateValue ?? null }
+          const verdict = judgeDutyChange(workloadGate, before, { add: added }, person)
+          if (!verdict.ok) {
+            // Without proof, the selection alone passed above: what fails comes from the address's
+            // own schedule or record (AUTHZ-01), told to its owner only.
+            if (!proven) conflict ??= { kind: "workload" }
+            else throw new SignupWorkloadError(verdict, volunteerId, added, !createdNow, person, !stored.birthDate)
+          }
+        }
+        // Not recorded (AUTHZ-01): nothing written for the sign-up; the notice to the owner is
+        // queued in this very transaction, which commits like a recorded one would.
+        if (conflict) {
+          const notice = await signupNotice(tx, { volunteerId, eventId, conflict })
+          const outboxIds = notice ? await enqueueNotifications([notice], tx, { organizationId: event.organizationId }) : []
+          return { registrations: [], volunteerId, createdNow, matchErased, outboxIds, updates: null, rosterChange: null, notRecorded: true }
+        }
         const created = []
         for (const { shift, placement } of placements) {
           created.push(
@@ -513,23 +538,6 @@ export async function POST(req: Request) {
               },
             })
           )
-        }
-        // Workload protection (#1171), on the whole resulting schedule, under the volunteer lock:
-        // the places and requests this sign-up creates (a waitlist entry is no mission yet) next to
-        // those already held. A refusal rolls everything back.
-        if (added.length > 0) {
-          const before: DutyShift[] = await withPlaceNames(tx, liveNow.filter((r) => r.shift.status !== "cancelled").map((r) => r.shift))
-          // The stored birth date wins; without one, the date typed now (#1171, lot 2: minors). The
-          // person's own limits come from their record.
-          const stored = await readWorkloadPerson(tx, eventId, volunteerId)
-          const person = { ...stored, birthDate: stored.birthDate ?? birthDateValue ?? null }
-          const verdict = judgeDutyChange(workloadGate, before, { add: added }, person)
-          if (!verdict.ok) {
-            // Without proof, the selection alone passed above: what fails comes from the address's
-            // own schedule or record (AUTHZ-01), told to its owner only.
-            if (!proven) throw new PrivateConflictError({ kind: "workload" }, volunteerId)
-            throw new SignupWorkloadError(verdict, volunteerId, added, !createdNow, person, !stored.birthDate)
-          }
         }
         // Shifts added to an event where the volunteer already holds a place or a request (#1191):
         // their confirmation joins one grouped email instead of one per sign-up. A first sign-up's
@@ -624,10 +632,6 @@ export async function POST(req: Request) {
       }
       // Without proof of the address (AUTHZ-01): answered like any sign-up without proof, the owner
       // is told by email what was not recorded and why.
-      if (e instanceof PrivateConflictError) {
-        await sendSignupNotice({ volunteerId: e.volunteerId, eventId, conflict: e.conflict })
-        return unprovenAnswer()
-      }
       if (e instanceof DuplicateError) return alreadyRegistered(e.volunteerId, eventId)
       if (e instanceof SignupRefusalError) return refuse(e.refusal)
       if (isSignupContention(e)) return refuse(busySignupRefusal())
@@ -655,6 +659,10 @@ export async function POST(req: Request) {
   }
 
   const { registrations, volunteerId, matchErased, outboxIds, updates, rosterChange } = outcome
+  if (outcome.notRecorded) {
+    deliverAfterResponse(outboxIds)
+    return unprovenAnswer()
+  }
   if (matchErased) ownsEmail = false
 
   // The answers changed from the personal link (#1013): logged and told as from the personal page.
@@ -855,13 +863,6 @@ class SignupRefusalError extends Error {
 class DuplicateError extends Error {
   constructor(readonly volunteerId: string) {
     super("Already registered on one of the shifts")
-  }
-}
-
-/** A refusal from the address's own registrations, without proof of the address (AUTHZ-01). */
-class PrivateConflictError extends Error {
-  constructor(readonly conflict: SignupConflict, readonly volunteerId: string) {
-    super(`Sign-up not recorded: ${conflict.kind}`)
   }
 }
 
