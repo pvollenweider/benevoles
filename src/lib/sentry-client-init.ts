@@ -4,6 +4,7 @@
 import * as Sentry from "@sentry/nextjs"
 import { BROWSER_NOISE_ERRORS, NO_PII_DATA_COLLECTION, beforeSendClient, scrubBreadcrumb, scrubReplayEvent, scrubSpan } from "@/lib/sentry-scrub"
 import { replayAllowedFor, tracesSampleRateFor } from "@/lib/sentry-client-policy"
+import { SENTRY_TUNNEL_PATH } from "@/lib/sentry-tunnel"
 
 /**
  * The browser Sentry SDK, in its own chunk (#773): src/lib/sentry-client-loader.ts imports it once
@@ -58,6 +59,8 @@ export function maybeStartReplay(href: string): void {
 export function initSentryClient(): void {
   Sentry.init({
     dsn: process.env.NEXT_PUBLIC_SENTRY_DSN,
+    // Through this site (ad blockers), relayed to this project only (src/lib/sentry-tunnel.ts).
+    tunnel: SENTRY_TUNNEL_PATH,
     environment: process.env.NODE_ENV,
     // Only report from production builds: local development and E2E runs use the
     // real DSN from .env and used to pollute the production Sentry project.

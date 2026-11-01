@@ -73,7 +73,7 @@ Les champs libres peuvent contenir n'importe quelle donnée, y compris des caté
   - envoi seulement depuis les builds de production ;
   - `dataCollection` coupe les informations utilisateur, cookies, en-têtes HTTP, corps de requête, paramètres de requête, données de requêtes SQL et variables des piles ; `includeLocalVariables: false` côté serveur ;
   - les jetons personnels sont remplacés par `[token]` dans les URL, fils d'Ariane, étiquettes et spans ;
-  - les événements du navigateur passent par `/monitoring` (tunnel sur le domaine de l'application, `next.config.ts`), relayés par le serveur vers Sentry ;
+  - les événements du navigateur passent par `/monitoring` (relais sur le domaine de l'application, `src/app/monitoring/route.ts`), transmis par le serveur au seul projet Sentry de l'instance ;
   - traces : 10 % ; enregistrements de navigation : 10 % des sessions et 100 % des sessions avec erreur, textes masqués et médias bloqués (`maskAllText`, `blockAllMedia`).
 
   Ces mesures réduisent fortement ce qui part, sans garantir qu'aucune donnée personnelle ne puisse être transmise : un message d'erreur, une URL nettoyée, un identifiant interne ou la structure d'une page enregistrée peuvent en être.

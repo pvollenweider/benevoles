@@ -10,6 +10,7 @@ import { requestJson } from "@/lib/use-submit"
 import { matchingPoste, posteKey } from "@/lib/poste-suggestions"
 import { resolveNewShiftDisplayOrder, isCompleteTime, endAfterStartChange } from "@/lib/gantt-utils"
 import { SHIFT_CONTACT_NAME_MAX, SHIFT_CONTACT_PHONE_MAX, SHIFT_INSTRUCTIONS_MAX } from "@/lib/shift-info"
+import { SHIFT_DESCRIPTION_MAX, SHIFT_INTERNAL_NOTES_MAX, SHIFT_LABEL_MAX, SHIFT_LOCATION_DETAILS_MAX, SHIFT_ROLE_NAME_MAX } from "@/lib/text-limits"
 import { fmtLongDate as fmtDate, normalizeTime } from "@/lib/shifts-admin"
 import { SHIFT_FIELD_ERRORS, missingFieldsSummary, missingShiftFields, type ShiftField } from "@/lib/shift-editor-form"
 import { minVolunteersProblem, parseMinVolunteers } from "@/lib/staffing"
@@ -247,7 +248,7 @@ export default function ShiftEditor({
           <input
             ref={roleInputRef}
             id={`roleName-${sfx}`}
-            type="text" list={listId}
+            type="text" list={listId} maxLength={SHIFT_ROLE_NAME_MAX}
             autoFocus={!sectorFieldShown || !!presetSector} required {...roleInvalidProps}
             aria-describedby={roleDescribedBy}
             value={form.roleName}
@@ -274,6 +275,7 @@ export default function ShiftEditor({
           <input
             id={`label-${sfx}`}
             type="text"
+            maxLength={SHIFT_LABEL_MAX}
             value={form.label}
             onChange={e => setField("label", e.target.value)}
             placeholder={hintPoste ?? (form.roleName || "ex. Entrée principale")}
@@ -342,7 +344,7 @@ export default function ShiftEditor({
         </div>
         <div className="col-span-2 sm:col-span-1">
           <label htmlFor={`description-${sfx}`} className="block text-xs font-medium text-gray-600 mb-1">Description</label>
-          <input id={`description-${sfx}`} type="text" value={form.description} onChange={e => setField("description", e.target.value)} className="input" />
+          <input id={`description-${sfx}`} type="text" maxLength={SHIFT_DESCRIPTION_MAX} value={form.description} onChange={e => setField("description", e.target.value)} className="input" />
         </div>
       </div>
       <fieldset aria-describedby={`shiftinfo-hint-${sfx}`} className="border border-gray-200 rounded-xl p-3 space-y-3">
@@ -351,7 +353,7 @@ export default function ShiftEditor({
         <div className="grid grid-cols-1 sm:grid-cols-3 gap-3">
           <div>
             <label htmlFor={`locationDetails-${sfx}`} className="block text-xs font-medium text-gray-600 mb-1">Lieu de rendez-vous</label>
-            <input id={`locationDetails-${sfx}`} type="text" value={form.locationDetails} onChange={e => setField("locationDetails", e.target.value)} placeholder="ex. Entrée B, côté parking" className="input" />
+            <input id={`locationDetails-${sfx}`} type="text" maxLength={SHIFT_LOCATION_DETAILS_MAX} value={form.locationDetails} onChange={e => setField("locationDetails", e.target.value)} placeholder="ex. Entrée B, côté parking" className="input" />
           </div>
           <div className="sm:col-span-3">
             <CoordinatesField
@@ -400,7 +402,7 @@ export default function ShiftEditor({
       )}
       <div>
         <label htmlFor={`internalNotes-${sfx}`} className="block text-xs font-medium text-gray-600 mb-1">Notes internes (jamais montrées aux bénévoles)</label>
-        <input id={`internalNotes-${sfx}`} type="text" value={form.internalNotes} onChange={e => setField("internalNotes", e.target.value)} className="input" />
+        <input id={`internalNotes-${sfx}`} type="text" maxLength={SHIFT_INTERNAL_NOTES_MAX} value={form.internalNotes} onChange={e => setField("internalNotes", e.target.value)} className="input" />
       </div>
       <div>
         <label htmlFor={`minAge-${sfx}`} className="block text-xs font-medium text-gray-600 mb-1">Âge minimum (optionnel)</label>
