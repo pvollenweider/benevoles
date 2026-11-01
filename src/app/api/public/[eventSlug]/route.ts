@@ -12,9 +12,9 @@ export async function GET(
   { params }: { params: Promise<{ eventSlug: string }> }
 ) {
   const { eventSlug } = await params
-  const orgSlug =
-    (await headers()).get("x-org-slug") ??
-    new URL(_req.url).searchParams.get("org")
+  // The organization the proxy resolved (src/lib/org-subdomain.ts): from the host, or from
+  // `?org=` only where that is allowed. Never read from the query here.
+  const orgSlug = (await headers()).get("x-org-slug")
 
   if (!orgSlug) return NextResponse.json({ error: "Organisation introuvable" }, { status: 404 })
 

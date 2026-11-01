@@ -51,6 +51,22 @@ export const MEMBER_ERASURE_REASON = {
   erased: "Les données personnelles de cette fiche ont déjà été effacées.",
 } as const
 
+/**
+ * Why an organiser can no longer register or edit this record, or null: an erased record (#516)
+ * stays empty, and a merge tombstone (#600) is only a pointer to the kept record, which is the one
+ * to register or edit. Emails of both are null, so a lookup by address never finds them.
+ */
+export const MEMBER_TOMBSTONE_WRITE = {
+  erased: "Les données personnelles de cette fiche ont été effacées : elle ne peut plus être inscrite ni modifiée.",
+  merged: "Cette fiche a été fusionnée dans une autre : inscrivez ou modifiez la fiche conservée.",
+} as const
+
+export function memberWriteRefusal(v: { erasedAt: Date | null; mergedIntoId: string | null }): string | null {
+  if (v.erasedAt) return MEMBER_TOMBSTONE_WRITE.erased
+  if (v.mergedIntoId) return MEMBER_TOMBSTONE_WRITE.merged
+  return null
+}
+
 export interface MemberErasureSubject {
   mergedIntoId: string | null
   erasedAt: Date | null

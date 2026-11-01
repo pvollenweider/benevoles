@@ -210,11 +210,10 @@ describe("login failure budget (#266, #1048)", () => {
     expect(attempts.filter((a) => a.allowed)).toHaveLength(10)
   })
 
-  it("lets the login through when the store fails", async () => {
+  it("refuses the login while the store fails: password guessing never gets an unlimited budget", async () => {
     const broken: RateLimitStore = { hit: () => Promise.reject(new Error("db down")), peek: () => Promise.reject(new Error("db down")) }
     const attempt = await beginLoginAttempt("10.3.3.3", "x@x.com", broken)
-    expect(attempt).toMatchObject({ allowed: true, delayMs: 0 })
-    await attempt.succeeded()
+    expect(attempt).toMatchObject({ allowed: false })
   })
 })
 
@@ -291,3 +290,13 @@ describe("loginDelayMs", () => {
     expect([0, 4, 5, 6, 7, 8, 20].map(loginDelayMs)).toEqual([0, 0, 1000, 2000, 4000, 8000, 8000])
   })
 })
+
+describe("login budget while the rate-limit store fails", () => {
+  it("refuses when only the counting fails, after a successful read", async () => {
+    const base = memoryStore()
+    const store = { peek: base.peek, hit: () => Promise.reject(new Error("db down")), release: base.release }
+    const attempt = await beginLoginAttempt("1.2.3.4", "ana@example.org", store)
+    expect(attempt.allowed).toBe(false)
+  })
+})
+

@@ -13,6 +13,7 @@ import { LISTED_FIELD_HELP, LISTED_FIELD_LABEL, UNLISTED_HINT, visibilityLabel }
 import { announce } from "@/lib/announce"
 import { type SaveState, formatSavedAt, saveErrorText, shouldAnnounceSaved, visibleSaveText } from "@/lib/event-autosave"
 import { DAY_CONTACT_NAME_MAX, DAY_CONTACT_PHONE_MAX } from "@/lib/day-contact"
+import { EVENT_LOCATION_MAX, EVENT_TITLE_MAX, MARKDOWN_TEXT_MAX, SHOW_NAME_MAX } from "@/lib/text-limits"
 import { ROSTER_DOC_LINKS, ROSTER_DOC_TOPIC, ROSTER_ENABLE_REMINDER, ROSTER_SETTING_HINT, ROSTER_SETTING_LABEL } from "@/lib/shift-roster-text"
 import DocMoreLink from "@/components/DocMoreLink"
 import { CANCEL_DEADLINE_CREATE_ERROR, cancelDeadlineFormErrors, cancelDeadlinePayload, type CancelDeadlineForm } from "@/lib/cancel-deadline"
@@ -337,17 +338,17 @@ export default function EventForm({ initialData, createdHref, timeZone = "Europe
 
         <div>
           <label htmlFor="event-title" className="block text-sm font-medium text-gray-700 mb-1">Titre<RequiredMark /></label>
-          <input id="event-title" type="text" required value={form.title} onChange={(e) => set("title", e.target.value)} className={inputCls} />
+          <input id="event-title" type="text" required maxLength={EVENT_TITLE_MAX} value={form.title} onChange={(e) => set("title", e.target.value)} className={inputCls} />
         </div>
 
         <div>
           <label htmlFor="event-description" className="block text-sm font-medium text-gray-700 mb-1">Description</label>
-          <textarea id="event-description" rows={3} value={form.description} onChange={(e) => set("description", e.target.value)} className={`${inputCls} resize-none`} />
+          <textarea id="event-description" rows={3} maxLength={MARKDOWN_TEXT_MAX} value={form.description} onChange={(e) => set("description", e.target.value)} className={`${inputCls} resize-none`} />
         </div>
 
         <div>
           <label htmlFor="event-location" className="block text-sm font-medium text-gray-700 mb-1">Lieu</label>
-          <input id="event-location" type="text" value={form.location} onChange={(e) => set("location", e.target.value)} className={inputCls} />
+          <input id="event-location" type="text" maxLength={EVENT_LOCATION_MAX} value={form.location} onChange={(e) => set("location", e.target.value)} className={inputCls} />
         </div>
 
         <CoordinatesField
@@ -408,6 +409,7 @@ export default function EventForm({ initialData, createdHref, timeZone = "Europe
                     <input
                       id="edit-show-name"
                       type="text"
+                      maxLength={SHOW_NAME_MAX}
                       placeholder="Nom du spectacle"
                       value={editShow.name}
                       onChange={(e) => setEditShow((s) => ({ ...s, name: e.target.value }))}
@@ -463,6 +465,7 @@ export default function EventForm({ initialData, createdHref, timeZone = "Europe
               <input
                 id="new-show-name"
                 type="text"
+                maxLength={SHOW_NAME_MAX}
                 placeholder="Nom du spectacle"
                 value={newShow.name}
                 onChange={(e) => setShow("name", e.target.value)}
@@ -499,7 +502,7 @@ export default function EventForm({ initialData, createdHref, timeZone = "Europe
 
         <div>
           <label htmlFor="event-public-instructions" className="block text-sm font-medium text-gray-700 mb-1">Instructions publiques</label>
-          <textarea id="event-public-instructions" rows={2} value={form.publicInstructions} onChange={(e) => set("publicInstructions", e.target.value)}
+          <textarea id="event-public-instructions" rows={2} maxLength={MARKDOWN_TEXT_MAX} value={form.publicInstructions} onChange={(e) => set("publicInstructions", e.target.value)}
             placeholder="Texte affiché aux bénévoles en haut de la page"
             className={`${inputCls} resize-none`} />
         </div>
@@ -639,7 +642,7 @@ export default function EventForm({ initialData, createdHref, timeZone = "Europe
 
         <div>
           <label htmlFor="event-confirmation-message" className="block text-sm font-medium text-gray-700 mb-1">Message de confirmation</label>
-          <textarea id="event-confirmation-message" aria-describedby="event-confirmation-message-hint" rows={2} value={form.confirmationMessage} onChange={(e) => set("confirmationMessage", e.target.value)}
+          <textarea id="event-confirmation-message" maxLength={MARKDOWN_TEXT_MAX} aria-describedby="event-confirmation-message-hint" rows={2} value={form.confirmationMessage} onChange={(e) => set("confirmationMessage", e.target.value)}
             className={`${inputCls} resize-none`} />
           <p id="event-confirmation-message-hint" className="text-xs text-gray-500 mt-1">{"Supporte le **gras**, les listes (- item) et les liens [texte](url). Variables : {prénom}, et pour le premier créneau de la personne : {créneau}, {date}, {heure}."}</p>
         </div>

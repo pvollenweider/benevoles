@@ -210,7 +210,7 @@ describe("public payloads leave the role out", () => {
   it("GET /api/public/events: totals count public roles only", async () => {
     m.eventFindMany.mockResolvedValue([eventRow([bar, { ...caisse, registrations: [{ id: "r1" }] }])])
     const { GET } = await import("@/app/api/public/events/route")
-    const [ev] = await (await GET(new Request("http://localhost/api/public/events"))).json()
+    const [ev] = await (await GET()).json()
     expect(ev).toMatchObject({ totalCapacity: 3, totalRegistered: 0, spotsLeft: 3 })
   })
 

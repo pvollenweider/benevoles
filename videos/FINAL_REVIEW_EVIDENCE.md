@@ -481,6 +481,26 @@ narration et les blocs `viewer` restent exacts (« la réponse reste la même »
 « regarde aussi les indésirables ») : seule l'image est à reprendre au prochain
 rendu, avec `revision` et `updatedAt` dans `videos/catalog.json`.
 
+## Écart connu : réponse de l'invitation d'un organisateur
+
+L'invitation d'un organisateur (Paramètres, équipe) répond maintenant de la même
+façon pour toute adresse hors de l'équipe, et la confirmation devient « Si
+<adresse> peut rejoindre l'équipe, cette adresse reçoit une invitation par
+email, avec un lien d'activation valable 7 jours. » au lieu de « Invitation
+envoyée à <adresse>. Le lien d'activation, valable 7 jours, lui a été envoyé par
+email. » La liste de l'équipe est relue après l'envoi.
+
+Vidéo dont l'image montre l'ancienne confirmation, non régénérée dans ce
+changement (pas de rendu ici) : `org-team-permissions`, scènes de l'envoi et
+`invite-result`.
+
+Sélecteurs mis à jour : `videos/tools/record.ts` attend la nouvelle
+confirmation. La narration (« le message confirme son adresse », « son lien
+d'activation, valable sept jours, lui a été envoyé par email ») et le bloc
+`viewer` restent exacts pour une adresse libre comme celle de Léa : seule
+l'image est à reprendre au prochain rendu, avec `revision` et `updatedAt` dans
+`videos/catalog.json`.
+
 ## Écart connu : noms de famille réalistes des personnes filmées
 
 Les personnes fictives des données filmées ne s'appellent plus « Exemple ». Chaque

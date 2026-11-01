@@ -4,7 +4,7 @@
 import { NextResponse } from "next/server"
 import { requireOrgSession } from "@/lib/auth-guard"
 import { rateLimit } from "@/lib/rate-limit"
-import { analyseImport } from "@/lib/member-import-server"
+import { analyseImport, readImportForm } from "@/lib/member-import-server"
 import { parseOnDuplicate } from "@/lib/member-import-plan"
 import { adminActor, logOrgEvent } from "@/lib/org-log"
 
@@ -17,7 +17,9 @@ export async function POST(req: Request) {
   if (guard instanceof NextResponse) return guard
   const { db, organizationId } = guard
 
-  const form = await req.formData()
+  const read = await readImportForm(req)
+  if (!read.ok) return NextResponse.json({ error: read.error }, { status: read.status })
+  const { form } = read
   const fileHash = form.get("fileHash")
   const planHash = form.get("planHash")
   if (typeof fileHash !== "string" || typeof planHash !== "string" || !fileHash || !planHash) {

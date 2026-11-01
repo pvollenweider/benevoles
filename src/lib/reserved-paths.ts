@@ -41,9 +41,9 @@ export const APEX_ONLY_PATHS: readonly string[] = [
 
 /**
  * The application's own routes that stay on an organisation's host (administration, personal
- * links, API): not apex-only, but just as unreachable for an event.
+ * links, API, the error-report relay /monitoring): not apex-only, but just as unreachable for an event.
  */
-export const APP_ROUTE_SEGMENTS: readonly string[] = ["admin", "super-admin", "api", "my", "leader", "waitlist", "disponibilites"]
+export const APP_ROUTE_SEGMENTS: readonly string[] = ["admin", "super-admin", "api", "my", "leader", "waitlist", "disponibilites", "monitoring"]
 
 /** The first segment of every top-level address of the site: what an event slug may never be. */
 export const RESERVED_PATH_SEGMENTS: readonly string[] = [...new Set([...APEX_ONLY_PATHS.map((p) => p.split("/")[1]), ...APP_ROUTE_SEGMENTS])]
