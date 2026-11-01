@@ -28,8 +28,13 @@ export async function POST(req: Request, { params }: { params: Promise<{ id: str
 
   const { id } = await params
 
+  // An empty body means the defaults; a body that is not JSON is refused like an invalid one.
   const raw = await req.text()
-  const parsed = duplicateOptionsSchema.safeParse(raw ? JSON.parse(raw) : {})
+  let body: unknown = {}
+  if (raw) {
+    try { body = JSON.parse(raw) } catch { return NextResponse.json({ error: "Corps de requête invalide." }, { status: 400 }) }
+  }
+  const parsed = duplicateOptionsSchema.safeParse(body)
   if (!parsed.success) return validationError(parsed.error)
 
   const source = await db.event.findFirst({

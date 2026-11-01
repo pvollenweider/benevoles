@@ -23,7 +23,7 @@ import { getOrgClient } from "@/lib/prisma-org"
 import { saveAvailabilityAnswers } from "@/lib/event-availability-data"
 import { createDraft, publishDrafts, reviewDraft, setDraftLock } from "@/lib/draft-assignments-server"
 import { proposalConfigSchema, type ProposalConfig } from "@/lib/proposal-config"
-import { cancelRun, claimNext, drainProposalRuns, executeRun, expireRuns, finishWithLease, launchProposal, listRuns, lockRun, readRun, writeRunResult } from "@/lib/proposal-runs-server"
+import { cancelRun, claimNext, drainProposalRuns, executeRun, expireRuns, finishWithLease, launchProposal, listRuns, lockRun, MAX_QUEUED_PER_ORG, readRun, writeRunResult } from "@/lib/proposal-runs-server"
 import { saveTargets } from "@/lib/proposal-targets-server"
 import { loadProposalPage } from "@/lib/proposal-page-data"
 import { runMemberMerge } from "@/lib/member-merge-transaction"
@@ -106,6 +106,34 @@ describe.skipIf(!url)("generated proposals on Postgres (#1172)", () => {
       expect(run).toMatchObject({ status: "queued", seed: 7, inputVersion: 1 })
       expect(JSON.stringify(run.snapshot)).not.toContain("Nadia")
       expect(JSON.stringify(run.snapshot)).toContain(nadia.id)
+    })
+
+    it("caps the runs waiting per organisation, so one organisation never fills the service's queue", async () => {
+      const ids = []
+      for (let i = 0; i < MAX_QUEUED_PER_ORG; i++) {
+        const { e, c } = await team()
+        ids.push(await launch(e.id, c))
+      }
+      const { e, c } = await team()
+      expect(await launchProposal(db(), { eventId: e.id, actorId: null, idempotencyKey: `k-${++n}`, config: c })).toMatchObject({ ok: false, status: 429, code: "busy" })
+      // Another organisation still launches: the cap is this organisation's share only.
+      const other = await prisma.organization.create({ data: { name: `Autre ${tag}`, slug: `${tag}-other`, timeZone: TZ } })
+      try {
+        const oe = await prisma.event.create({ data: { organizationId: other.id, slug: `${tag}-o`, title: "Course populaire", publicStatus: "published", startDate: new Date("2031-07-10"), endDate: new Date("2031-07-12"), availabilityEnabled: true, availabilityAdoptedAt: new Date(), availabilityTimeZone: TZ, workloadProtectionEnabled: true, workloadPolicy: POLICY as object } })
+        const os = await shift(oe.id, "08:00", "12:00")
+        const op = await prisma.volunteer.create({ data: { organizationId: other.id, firstName: "Chiara", lastName: "Fontana", email: `${tag}-chiara@example.org`, birthDate: new Date("1990-03-04") } })
+        await prisma.$transaction((tx) => saveAvailabilityAnswers(tx, { eventId: oe.id, volunteerId: op.id, days: [{ date: "2031-07-10", ranges: [] }, { date: "2031-07-11", ranges: [{ start: "06:00", end: "23:30" }] }, { date: "2031-07-12", ranges: [] }], by: "admin" }))
+        await saveTargets(getOrgClient(other.id), { eventId: oe.id, organizationId: other.id, changes: [{ volunteerId: op.id, targetMinutes: 240 }], actorId: "admin-1" })
+        const r = await launchProposal(getOrgClient(other.id), { eventId: oe.id, actorId: null, idempotencyKey: `k-${++n}`, config: config([os.id], [op.id]) })
+        expect(r).toMatchObject({ ok: true })
+      } finally {
+        await prisma.proposalRun.deleteMany({ where: { event: { organizationId: other.id } } })
+        await prisma.event.deleteMany({ where: { organizationId: other.id } })
+        await prisma.volunteer.deleteMany({ where: { organizationId: other.id } })
+        await prisma.orgLog.deleteMany({ where: { organizationId: other.id } })
+        await prisma.organization.delete({ where: { id: other.id } })
+      }
+      expect(ids).toHaveLength(MAX_QUEUED_PER_ORG)
     })
 
     it("refuses without a complete workload protection (P14), without targets, and when nobody answered (D01)", async () => {

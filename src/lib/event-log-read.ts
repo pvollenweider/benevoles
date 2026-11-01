@@ -53,12 +53,21 @@ const GENERIC_LABEL: Record<string, string> = {
   system: "Système",
 }
 
+export const LOG_LIMIT_DEFAULT = 50
+export const LOG_LIMIT_MAX = 200
+
+/** A page size between 1 and LOG_LIMIT_MAX; anything that is not a positive number gives the default. */
+export function clampLogLimit(limit: number | undefined): number {
+  if (limit === undefined || !Number.isFinite(limit) || limit < 1) return LOG_LIMIT_DEFAULT
+  return Math.min(Math.floor(limit), LOG_LIMIT_MAX)
+}
+
 export async function listEventLogs(eventId: string, filters: EventLogFilters = {}): Promise<{
   entries: EventLogEntry[]
   nextCursor: string | null
   shiftLabels: Record<string, ShiftLabel>
 }> {
-  const limit = Math.min(filters.limit ?? 50, 200)
+  const limit = clampLogLimit(filters.limit)
 
   const where: Record<string, unknown> = { eventId }
   if (filters.entityType) where.entityType = filters.entityType
@@ -83,33 +92,36 @@ export async function listEventLogs(eventId: string, filters: EventLogFilters = 
   const hasMore = rows.length > limit
   const page = hasMore ? rows.slice(0, limit) : rows
 
-  const [entries, shiftLabels] = await Promise.all([resolveActorLabels(page), resolveShiftLabels(page)])
+  const [entries, shiftLabels] = await Promise.all([resolveActorLabels(page), resolveShiftLabels(eventId, page)])
 
   return { entries, nextCursor: hasMore ? page[page.length - 1].id : null, shiftLabels }
 }
 
-/** Fetches one entry plus the full chain of entries it caused, transitively, oldest first. */
-export async function getCausalChain(rootLogId: string): Promise<{ entries: EventLogEntry[]; shiftLabels: Record<string, ShiftLabel> }> {
+/**
+ * Fetches one entry plus the full chain of entries it caused, transitively, oldest first. Every
+ * read is bound to the event: an entry of another event is never read, whatever id is given.
+ */
+export async function getCausalChain(eventId: string, rootLogId: string): Promise<{ entries: EventLogEntry[]; shiftLabels: Record<string, ShiftLabel> }> {
   const collected: EventLogRow[] = []
   let frontier = [rootLogId]
   const seen = new Set<string>()
 
   while (frontier.length > 0) {
-    const rows = await prisma.eventLog.findMany({ where: { id: { in: frontier } } })
+    const rows = await prisma.eventLog.findMany({ where: { id: { in: frontier }, eventId } })
     for (const row of rows) {
       if (seen.has(row.id)) continue
       seen.add(row.id)
       collected.push(row)
     }
     const next = await prisma.eventLog.findMany({
-      where: { causedByLogId: { in: frontier } },
+      where: { causedByLogId: { in: frontier }, eventId },
       select: { id: true },
     })
     frontier = next.map((n) => n.id).filter((id) => !seen.has(id))
   }
 
   collected.sort((a, b) => a.createdAt.getTime() - b.createdAt.getTime())
-  const [entries, shiftLabels] = await Promise.all([resolveActorLabels(collected), resolveShiftLabels(collected)])
+  const [entries, shiftLabels] = await Promise.all([resolveActorLabels(collected), resolveShiftLabels(eventId, collected)])
   return { entries, shiftLabels }
 }
 
@@ -130,7 +142,7 @@ const SHIFT_SELECT = { id: true, roleName: true, label: true, date: true, startT
  * the whole point of a log is to tell them apart. The raw id stays in `changes` untouched — a
  * future "debug mode" toggle could show it instead of the label without needing any change here.
  */
-async function resolveShiftLabels(rows: EventLogRow[]): Promise<Record<string, ShiftLabel>> {
+async function resolveShiftLabels(eventId: string, rows: EventLogRow[]): Promise<Record<string, ShiftLabel>> {
   const shiftIds = new Set<string>()
   const ownerIds = new Set<string>()
   for (const row of rows) {
@@ -145,10 +157,11 @@ async function resolveShiftLabels(rows: EventLogRow[]): Promise<Record<string, S
   if (shiftIds.size === 0 && ownerIds.size === 0) return {}
 
   const [shifts, owners] = await Promise.all([
-    shiftIds.size ? prisma.shift.findMany({ where: { id: { in: [...shiftIds] } }, select: SHIFT_SELECT }) : Promise.resolve([]),
+    // Bound to the event (shifts) and to its organisation (admins): a stray id never resolves.
+    shiftIds.size ? prisma.shift.findMany({ where: { id: { in: [...shiftIds] }, eventId }, select: SHIFT_SELECT }) : Promise.resolve([]),
     // A milestone's owner (#985) is an admin account: its current name, like the actors' (the log
     // stores only the id). Ids are cuids, so they never collide with a shift's in the same map.
-    ownerIds.size ? prisma.adminUser.findMany({ where: { id: { in: [...ownerIds] } }, select: { id: true, name: true } }) : Promise.resolve([]),
+    ownerIds.size ? prisma.adminUser.findMany({ where: { id: { in: [...ownerIds] }, organization: { events: { some: { id: eventId } } } }, select: { id: true, name: true } }) : Promise.resolve([]),
   ])
   return Object.fromEntries([
     ...shifts.map((s) => [s.id, formatShiftLabel(s)] as const),
@@ -180,7 +193,7 @@ export async function listReplayCandidates(eventId: string): Promise<ReplayCandi
   if (groups.length === 0) return []
 
   const shiftIds = groups.filter((g) => g.entityType === "Shift").map((g) => g.entityId)
-  const shifts = shiftIds.length ? await prisma.shift.findMany({ where: { id: { in: shiftIds } }, select: SHIFT_SELECT }) : []
+  const shifts = shiftIds.length ? await prisma.shift.findMany({ where: { id: { in: shiftIds }, eventId }, select: SHIFT_SELECT }) : []
   const shiftLabelById = new Map(shifts.map((s) => [s.id, formatShiftLabel(s)]))
 
   // A Registration has no non-PII label of its own — show which shift it's for instead, taken
@@ -198,7 +211,7 @@ export async function listReplayCandidates(eventId: string): Promise<ReplayCandi
       if (typeof to === "string") referencedShiftIds.add(to)
     }
     const referencedShifts = referencedShiftIds.size
-      ? await prisma.shift.findMany({ where: { id: { in: [...referencedShiftIds] } }, select: SHIFT_SELECT })
+      ? await prisma.shift.findMany({ where: { id: { in: [...referencedShiftIds] }, eventId }, select: SHIFT_SELECT })
       : []
     const refShiftLabelById = new Map(referencedShifts.map((s) => [s.id, formatShiftLabel(s)]))
     for (const row of regRows) {
@@ -257,7 +270,7 @@ export async function listStoryCandidates(eventId: string, timeZone: string = AP
 
   const rootIds = roots.map((r) => r.id)
   const children = await prisma.eventLog.findMany({
-    where: { causedByLogId: { in: rootIds } },
+    where: { causedByLogId: { in: rootIds }, eventId },
     select: { causedByLogId: true },
   })
   const chainSize = new Map<string, number>()

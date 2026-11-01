@@ -100,5 +100,15 @@ describe("PATCH /api/admin/members/[id] — a corrected address renews the membe
     expect(renewMemberLinks).not.toHaveBeenCalled()
     expect((await res.json()).linksRenewed).toBeUndefined()
   })
+
+  it("refuses any edit of a merge tombstone (#600), like an erased record, without writing", async () => {
+    const findFirst = vi.fn().mockResolvedValue({ ...alice, email: null, erasedAt: null, mergedIntoId: "mem-kept" })
+    const update = vi.fn()
+    setup(findFirst, update)
+    const res = await patch({ firstName: "Alice", phone: "079 555 12 34" })
+    expect(res.status).toBe(409)
+    expect((await res.json()).error).toMatch(/fusionnée/)
+    expect(update).not.toHaveBeenCalled()
+  })
 })
 

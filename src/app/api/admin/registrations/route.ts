@@ -22,6 +22,7 @@ import { AvailabilityAckError, availabilityAckBody, checkAvailabilityAcks, logAv
 import { checkShiftOverrides, ShiftCancelledError, ShiftOverrideError } from "@/lib/shift-override-server"
 import { cancelledShiftMessage, overrideLogValue, type ShiftOverrideNeed } from "@/lib/shift-override"
 import { OCCUPYING_STATUSES } from "@/lib/registration-capacity"
+import { memberWriteRefusal } from "@/lib/member-erasure"
 
 /** The organiser's refusal (#1171): who, and the first limit the addition would break. */
 function manualAddWorkloadBody(e: WorkloadRefusalError, name: string, shiftCount: number) {
@@ -31,6 +32,9 @@ function manualAddWorkloadBody(e: WorkloadRefusalError, name: string, shiftCount
 
 /** Shifts at most in one submit (#918): a person's whole programme, not a bulk import. */
 const MAX_SHIFTS = 30
+
+/** The person was erased or merged between the first read and the lock: nothing is created. */
+class TombstoneRefusal extends Error {}
 
 const schema = z.object({
   eventId: z.string(),
@@ -107,6 +111,9 @@ export async function POST(req: Request) {
   if (volunteerId && !volunteer) {
     return NextResponse.json({ error: "Ce membre n'existe plus. Cherchez-le à nouveau." }, { status: 404 })
   }
+  // An erased record or a merge tombstone is never registered (checked again under the lock below).
+  const tombstone = volunteer ? memberWriteRefusal(volunteer) : null
+  if (tombstone) return NextResponse.json({ error: tombstone }, { status: 409 })
 
   // Shifts per volunteer for the role (#466): the organiser may go over it, but knowingly. The
   // shifts added together count too (#918).
@@ -184,7 +191,11 @@ export async function POST(req: Request) {
       const availability = await readAvailabilityGate(tx, eventId)
       // The shifts are always locked (AUTHZ-15): their status and spots taken are judged below.
       await lockShifts(tx, ids)
-      if (availability.inUse || gate.kind !== "off") await lockVolunteerRows(tx, [added.id])
+      // The person's row is always locked: an erasure or a merge committed meanwhile is seen here.
+      await lockVolunteerRows(tx, [added.id])
+      const current = await tx.volunteer.findFirst({ where: { id: added.id }, select: { erasedAt: true, mergedIntoId: true } })
+      const refusal = current ? memberWriteRefusal(current) : null
+      if (refusal) throw new TombstoneRefusal(refusal)
       if (gate.kind !== "off") {
         // A birth date given here fills a member's missing one (never replaces it), before the check.
         if (birthDateValue) await tx.volunteer.updateMany({ where: { id: added.id, birthDate: null }, data: { birthDate: birthDateValue } })
@@ -248,6 +259,7 @@ export async function POST(req: Request) {
       return created
     })
   } catch (e) {
+    if (e instanceof TombstoneRefusal) return NextResponse.json({ error: e.message }, { status: 409 })
     if (e instanceof ShiftCancelledError) return NextResponse.json({ error: cancelledShiftMessage(e.label), code: "shift_cancelled" }, { status: 409 })
     if (e instanceof ShiftOverrideError) return NextResponse.json(e.body(), { status: 409 })
     if (e instanceof AvailabilityAckError) {

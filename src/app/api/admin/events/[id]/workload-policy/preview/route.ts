@@ -4,7 +4,8 @@
 import { NextResponse } from "next/server"
 import { z } from "zod"
 import { requireOrgSession } from "@/lib/auth-guard"
-import { previewWorkloadPolicy } from "@/lib/workload-policy-data"
+import { previewWorkloadPolicy, workloadProtectionOffered, WORKLOAD_NOT_OFFERED } from "@/lib/workload-policy-data"
+import { rateLimit } from "@/lib/rate-limit"
 
 /**
  * « Aperçu avant activation » of the workload protection (#1171): the proposed values judged on
@@ -18,6 +19,12 @@ export async function POST(req: Request, { params }: { params: Promise<{ id: str
   const { id } = await params
   const parsed = schema.safeParse(await req.json().catch(() => null))
   if (!parsed.success) return NextResponse.json({ error: "Indiquez les valeurs à essayer." }, { status: 400 })
+  const event = await guard.db.event.findFirst({ where: { id }, select: { id: true, workloadProtectionEnabled: true } })
+  if (!event) return NextResponse.json({ error: "Non trouvé" }, { status: 404 })
+  if (!(await workloadProtectionOffered(guard.organizationId, event))) return NextResponse.json({ error: WORKLOAD_NOT_OFFERED }, { status: 403 })
+  // Each preview scans the event's commitments: bounded per organisation.
+  const rl = await rateLimit(`org:${guard.organizationId}`, "workload-preview", 120, 60 * 60 * 1000)
+  if (!rl.ok) return NextResponse.json({ error: "Trop d'aperçus cette heure-ci. Réessayez plus tard." }, { status: 429 })
   const result = await previewWorkloadPolicy(guard.db, id, parsed.data.values)
   if (!result.ok) return NextResponse.json({ error: result.error, ...(result.problems ? { problems: result.problems } : {}) }, { status: result.status })
   return NextResponse.json(result)
