@@ -10,6 +10,8 @@ import { z } from "zod"
 import { clockSchema, SAME_TIME_ERROR } from "@/lib/shift-time"
 import { adminActor, logEvent } from "@/lib/event-log"
 import { validationError } from "@/lib/api-error"
+import { cappedText } from "@/lib/text-limits-schema"
+import { SHIFT_DESCRIPTION_MAX, SHIFT_INTERNAL_NOTES_MAX, SHIFT_LABEL_MAX, SHIFT_LOCATION_DETAILS_MAX, SHIFT_ROLE_NAME_MAX } from "@/lib/text-limits"
 import { SHIFT_CONTACT_NAME_MAX, SHIFT_CONTACT_PHONE_MAX, SHIFT_INSTRUCTIONS_MAX } from "@/lib/shift-info"
 import { minVolunteersProblem } from "@/lib/staffing"
 import { liveRoleShifts, ROLE_SETTINGS_SELECT, roleSettingsOf } from "@/lib/role-settings"
@@ -17,23 +19,23 @@ import { newShiftsSector } from "@/lib/sector-adoption"
 
 const schema = z.object({
   eventId: z.string(),
-  roleName: z.string().min(1),
-  label: z.string().min(1),
-  description: z.string().optional(),
+  roleName: cappedText(SHIFT_ROLE_NAME_MAX, "Le nom du poste").min(1),
+  label: cappedText(SHIFT_LABEL_MAX, "Le libellé du créneau").min(1),
+  description: cappedText(SHIFT_DESCRIPTION_MAX, "La description du créneau").optional(),
   date: civilDateSchema,
   startTime: clockSchema,
   endTime: clockSchema,
   capacity: z.number().int().min(1),
   // Minimum per shift (#949): 1 to capacity, null = none (the same as capacity).
   minVolunteers: z.number().nullable().optional(),
-  locationDetails: z.string().optional(),
+  locationDetails: cappedText(SHIFT_LOCATION_DETAILS_MAX, "Le lieu de rendez-vous").optional(),
   latitude: z.number().min(-90).max(90).nullable().optional(),
   longitude: z.number().min(-180).max(180).nullable().optional(),
   contactName: z.string().max(SHIFT_CONTACT_NAME_MAX).optional().nullable(),
   contactPhone: z.string().max(SHIFT_CONTACT_PHONE_MAX).optional().nullable(),
   instructions: z.string().max(SHIFT_INSTRUCTIONS_MAX).optional().nullable(),
   displayOrder: z.number().int().optional(),
-  internalNotes: z.string().optional(),
+  internalNotes: cappedText(SHIFT_INTERNAL_NOTES_MAX, "Les notes internes").optional(),
   waitlistEnabled: z.boolean().optional(),
   requiresApproval: z.boolean().optional(),
   minAge: z.number().int().min(0).max(120).nullable().optional(),

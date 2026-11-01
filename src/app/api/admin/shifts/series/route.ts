@@ -9,6 +9,8 @@ import { requireOrgSession } from "@/lib/auth-guard"
 import { clockSchema } from "@/lib/shift-time"
 import { adminActor, logEvent } from "@/lib/event-log"
 import { validationError } from "@/lib/api-error"
+import { cappedText } from "@/lib/text-limits-schema"
+import { SHIFT_DESCRIPTION_MAX, SHIFT_LABEL_MAX, SHIFT_LOCATION_DETAILS_MAX, SHIFT_ROLE_NAME_MAX } from "@/lib/text-limits"
 import { generateShiftSeries, seriesProblem } from "@/lib/shift-series"
 import { SHIFT_CONTACT_NAME_MAX, SHIFT_CONTACT_PHONE_MAX, SHIFT_INSTRUCTIONS_MAX } from "@/lib/shift-info"
 import { minVolunteersProblem } from "@/lib/staffing"
@@ -20,9 +22,9 @@ type Tx = any
 
 const schema = z.object({
   eventId: z.string(),
-  roleName: z.string().min(1),
-  label: z.string().optional(),
-  description: z.string().optional(),
+  roleName: cappedText(SHIFT_ROLE_NAME_MAX, "Le nom du poste").min(1),
+  label: cappedText(SHIFT_LABEL_MAX, "Le libellé du créneau").optional(),
+  description: cappedText(SHIFT_DESCRIPTION_MAX, "La description du créneau").optional(),
   date: civilDateSchema,
   startTime: clockSchema,
   endTime: clockSchema,
@@ -31,7 +33,7 @@ const schema = z.object({
   capacity: z.number().int().min(1),
   // Minimum per shift (#949), the same on every shift of the series.
   minVolunteers: z.number().nullable().optional(),
-  locationDetails: z.string().optional(),
+  locationDetails: cappedText(SHIFT_LOCATION_DETAILS_MAX, "Le lieu de rendez-vous").optional(),
   latitude: z.number().min(-90).max(90).nullable().optional(),
   longitude: z.number().min(-180).max(180).nullable().optional(),
   contactName: z.string().max(SHIFT_CONTACT_NAME_MAX).optional().nullable(),
