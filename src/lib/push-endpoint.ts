@@ -11,6 +11,12 @@ import net from "node:net"
  * plain http, credentials, and anything that would make the server talk to a non-public
  * address: IP literals outside the public internet, local-only names, and (at connection time,
  * see `safePushLookup`) names that resolve to such an address, which also covers DNS rebinding.
+ *
+ * Accepted residual: a subscription is a browser's own choice, so a person holding a personal link
+ * can make the server send an encrypted POST to a public HTTPS host of their choosing. An
+ * allow-list of push services would break browsers whose service is not on it. What such a host
+ * can do in return is bounded per connection (`boundPushSocket`): it is closed at the send
+ * deadline, and once its answer passes a size cap.
  */
 
 /** A sanity bound only: real endpoints are a few hundred characters. */
@@ -144,3 +150,28 @@ export function createSafeLookup(resolve: Resolver = dns.lookup as unknown as Re
 }
 
 export const safePushLookup = createSafeLookup()
+
+/** Far above a push service's answer (a status line and a few headers, after the TLS handshake). */
+export const PUSH_RESPONSE_MAX_BYTES = 256 * 1024
+
+type BoundableSocket = {
+  on(event: "data", listener: (chunk: Buffer) => void): unknown
+  once(event: "close", listener: () => void): unknown
+  destroy(error?: Error): unknown
+}
+
+/**
+ * Closes a push connection at its deadline or once the peer has sent more than `maxBytes`. A
+ * rejected send otherwise leaves its socket open (web-push has no cancel), and web-push buffers
+ * the answer with no size limit: a hostile endpoint could keep connections and memory busy.
+ */
+export function boundPushSocket(socket: BoundableSocket, limits: { deadlineMs: number; maxBytes: number }): void {
+  const timer = setTimeout(() => socket.destroy(new Error("Push send deadline exceeded")), limits.deadlineMs)
+  timer.unref?.()
+  let received = 0
+  socket.on("data", (chunk) => {
+    received += chunk.length
+    if (received > limits.maxBytes) socket.destroy(new Error("Push service answer too large"))
+  })
+  socket.once("close", () => clearTimeout(timer))
+}
