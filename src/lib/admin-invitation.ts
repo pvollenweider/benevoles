@@ -54,8 +54,12 @@ export function isReleasableInvitation(row: AdminEmailHolder, now: Date): boolea
 
 /** Same organisation: the person already appears in its own team list. */
 export const ADMIN_INVITE_SAME_ORG_ERROR = "Cette adresse fait déjà partie de votre équipe, ou son invitation est encore valable."
-/** Any other holder: says nothing about where the address is used. */
-export const ADMIN_INVITE_UNAVAILABLE_ERROR = "Impossible d'inviter cette adresse pour le moment."
+/**
+ * Invitations an organisation may send per day: every authorised attempt counts, sent or not, so the
+ * budget also bounds attempts on addresses that receive nothing (an address held elsewhere gets the
+ * same answer as a sent invitation).
+ */
+export const ADMIN_INVITES_PER_DAY = 20
 
 export type AdminInviteCheck = "free" | "replace" | "same_org" | "unavailable"
 
@@ -64,16 +68,4 @@ export function adminInviteCheck(holder: AdminEmailHolder | null, organizationId
   if (!holder) return "free"
   if (isReleasableInvitation(holder, now)) return "replace"
   return holder.organizationId === organizationId ? "same_org" : "unavailable"
-}
-
-/**
- * The team list after a successful invitation: the new row takes the place of a pending row with
- * the same address (the expired invitation the server just replaced, under a new id), or goes last.
- * An active member's row is never dropped.
- */
-export function withInvitedAdmin<T extends { email: string; isActive: boolean }>(admins: readonly T[], invited: T): T[] {
-  const email = invited.email.trim().toLowerCase()
-  const i = admins.findIndex((a) => !a.isActive && a.email.trim().toLowerCase() === email)
-  if (i < 0) return [...admins, invited]
-  return admins.map((a, k) => (k === i ? invited : a))
 }

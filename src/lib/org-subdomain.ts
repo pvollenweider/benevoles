@@ -40,16 +40,32 @@ export function orgSlugFromHost(host: string): string | null {
 /** The request header carrying the current organization, set by the proxy only. */
 export const ORG_HEADER = "x-org-slug"
 
+/** A machine-local host (localhost, *.localhost, a loopback address), with or without a port. */
+export function isLocalHost(host: string): boolean {
+  const hostname = host.startsWith("[") ? host.slice(1, host.indexOf("]")) : host.split(":")[0]
+  const name = hostname.toLowerCase()
+  return name === "localhost" || name.endsWith(".localhost") || name === "::1" || /^127\.\d{1,3}\.\d{1,3}\.\d{1,3}$/.test(name)
+}
+
+/**
+ * Whether `?org=` may choose the organization: a convenience for development, tests and local
+ * runs (no subdomains on localhost), never on a public host in production, where the organization
+ * comes from the host only and the apex (also the admin origin) never renders a tenant's pages.
+ */
+export function orgQueryAllowed(host: string, nodeEnv: string | undefined = process.env.NODE_ENV): boolean {
+  return nodeEnv !== "production" || isLocalHost(host)
+}
+
 /**
  * The headers handed to pages and API routes (#541). Any x-org-slug the client sent is removed
  * first (header names are case-insensitive, and every value goes), so the header only ever holds
- * what the proxy resolved: the organization of the host, or else `?org=` (no org subdomain:
- * the apex, localhost). Public routes scope their data with it and trust it as such.
+ * what the proxy resolved: the organization of the host, or else `?org=` where it is allowed
+ * (orgQueryAllowed). Public routes scope their data with it and trust it as such.
  */
-export function withOrgHeader(source: Headers, host: string, orgQuery: string | null): Headers {
+export function withOrgHeader(source: Headers, host: string, orgQuery: string | null, nodeEnv?: string): Headers {
   const headers = new Headers(source)
   headers.delete(ORG_HEADER)
-  const orgSlug = orgSlugFromHost(host) ?? (orgQuery || null)
+  const orgSlug = orgSlugFromHost(host) ?? (orgQuery && orgQueryAllowed(host, nodeEnv) ? orgQuery : null)
   if (orgSlug) headers.set(ORG_HEADER, orgSlug)
   return headers
 }

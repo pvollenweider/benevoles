@@ -71,11 +71,11 @@ describe("activation budget of an invitation link", () => {
     expect(keys).toContain(`accept-invite-token:${activationTokenDigest(token)}`)
   })
 
-  it("lets the request through if the store fails, like every other limit", async () => {
+  it("refuses while the store fails: an activation sets a password, its limit fails closed", async () => {
     const broken: RateLimitStore = {
       hit: async () => { throw new Error("db down") },
       peek: async () => { throw new Error("db down") },
     }
-    expect(await activationAllowed("1.2.3.4", "link-e", broken)).toBe(true)
+    expect(await activationAllowed("1.2.3.4", "link-e", broken)).toBe(false)
   })
 })

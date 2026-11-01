@@ -1422,8 +1422,9 @@ describe("Admin settings — cross-tenant isolation", () => {
     for (const holder of holders) {
       prismaMock.adminUser.findFirst.mockResolvedValueOnce(holder)
       const res = await POST(makeRequest("/api/admin/settings/admins", "POST", { email: "b@b.com", name: "B" }))
-      expect(res.status).toBe(409)
-      expect((await res.json()).error).not.toMatch(/utilisé|autre organisation/)
+      // The same answer as a sent invitation: nothing says the address is used elsewhere.
+      expect(res.status).toBe(202)
+      expect(await res.json()).toEqual({ accepted: true })
     }
     expect(prismaMock.adminUser.deleteMany).not.toHaveBeenCalled()
     expect(prismaMock.adminUser.create).not.toHaveBeenCalled()
