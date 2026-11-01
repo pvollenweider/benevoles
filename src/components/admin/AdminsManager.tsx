@@ -8,7 +8,6 @@ import { useRouter } from "next/navigation"
 import { useSubmit } from "@/lib/use-submit"
 import FormStatus from "@/components/FormStatus"
 import { ORGANIZER_ROLE, OWNER_ROLE, ROLE_LABEL, type OrgRole } from "@/lib/permissions"
-import { withInvitedAdmin } from "@/lib/admin-invitation"
 import DocMoreLink from "@/components/DocMoreLink"
 import { SECTION_DOC_LINKS, docHref } from "@/lib/help-links"
 
@@ -63,7 +62,7 @@ export default function AdminsManager({
     e.preventDefault()
     if (form.name.trim().length < 2) { fail("Indiquez le nom de la personne (2 caractères au moins).", "name", nameRef.current); return }
     if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(form.email.trim())) { fail("Indiquez une adresse email complète.", "email", emailRef.current); return }
-    const outcome = await submit<Admin>(() => fetch("/api/admin/settings/admins", {
+    const outcome = await submit<{ accepted: true }>(() => fetch("/api/admin/settings/admins", {
       method: "POST",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify({ name: form.name.trim(), email: form.email.trim(), role: form.role }),
@@ -73,12 +72,16 @@ export default function AdminsManager({
       fail(outcome.error, outcome.status === 400 || outcome.status === 409 ? "email" : undefined, outcome.status === 400 || outcome.status === 409 ? emailRef.current : null)
       return
     }
-    // A re-invited expired invitation comes back under a new id (#1053): it takes the old row's place.
-    setAdmins((prev) => withInvitedAdmin(prev, outcome.data))
+    // The answer is the same whether an invitation was created or not (it never says whether the
+    // address is used elsewhere): the team list, read again, shows the pending invitation if any,
+    // in place of an expired one re-invited under a new id (#1053).
+    const invited = form.email.trim().toLowerCase()
+    const list = await fetch("/api/admin/settings/admins").catch(() => null)
+    if (list?.ok) setAdmins(await list.json())
     setForm({ name: "", email: "", role: ORGANIZER_ROLE })
     setShowForm(false)
     // The activation link goes by email only (#1045), never on this page.
-    setStatus(`Invitation envoyée à ${outcome.data.email}. Le lien d'activation, valable 7 jours, lui a été envoyé par email.`)
+    setStatus(`Si ${invited} peut rejoindre l'équipe, cette adresse reçoit une invitation par email, avec un lien d'activation valable 7 jours.`)
     inviteButtonRef.current?.focus()
   }
 

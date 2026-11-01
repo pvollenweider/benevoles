@@ -2,7 +2,7 @@ import { describe, it, expect, vi, afterEach } from "vitest"
 
 vi.mock("../report-error", () => ({ reportError: () => () => {} }))
 
-import { decide, isRateLimited, memoryStore, rateLimit, releaseHit, reserveHit, type RateLimitStore } from "../rate-limit"
+import { decide, FAIL_CLOSED_ROUTES, isRateLimited, memoryStore, rateLimit, releaseHit, reserveHit, STORE_FAILURE_RETRY_AFTER, type RateLimitStore } from "../rate-limit"
 
 const HOUR = 60 * 60 * 1000
 
@@ -103,3 +103,42 @@ describe("reserveHit / releaseHit (#1048)", () => {
     expect((await store.peek("k"))?.count).toBe(1)
   })
 })
+
+describe("store failures: open by default, closed for secrets and anonymous sign-ups", () => {
+  const broken: RateLimitStore = { hit: () => Promise.reject(new Error("db down")), peek: () => Promise.reject(new Error("db down")), release: () => Promise.reject(new Error("db down")) }
+
+  it.each(["login-ip", "forgot-password", "registrations", "reg-token-miss", "leader-token-read", "accept-invite-token"])("refuses on %s while the store fails", async (route) => {
+    expect(await rateLimit("1.2.3.4", route, 5, HOUR, broken)).toEqual({ ok: false, remaining: 0, retryAfter: STORE_FAILURE_RETRY_AFTER })
+    expect(await isRateLimited("1.2.3.4", route, 5, broken)).toBe(true)
+  })
+
+  it("gives a fail-closed reservation a window over any budget, the route read from the key", async () => {
+    expect((await reserveHit("login-ip:1.2.3.4", HOUR, broken))?.count).toBe(Number.MAX_SAFE_INTEGER)
+    // An IPv6 address in the key: the route is what comes before the first colon.
+    expect((await reserveHit("login-email-ip:ana@example.org|2001:db8::1", HOUR, broken))?.count).toBe(Number.MAX_SAFE_INTEGER)
+    expect(await reserveHit("some-quota:org-a", HOUR, broken)).toBeNull()
+  })
+
+  it.each(["member-import", "targeted-message", "reg-token-read-link", "push-subscribe", "video-feedback", "swap-proposal"])("still allows %s while the store fails", async (route) => {
+    expect((await rateLimit("k", route, 5, HOUR, broken)).ok).toBe(true)
+    expect(await isRateLimited("k", route, 5, broken)).toBe(false)
+  })
+
+  it("names every limit that guards a password, a recovery, a sign-up or a link lookup", () => {
+    for (const route of ["login-ip", "login-email-ip", "login-account", "password-check-account", "password-check-ip", "accept-invite-ip", "accept-invite-token", "accept-invite-check", "forgot-password", "reset-password", "org-reactivation", "org-reactivation-confirm", "signup", "signup-confirm", "registrations", "reg-token-miss", "reg-feed-miss", "avail-token-miss", "member-invite-roster-miss", "leader-token-read", "member-invite-read", "member-invite-decline", "waitlist-confirm", "org-keep", "reg-calendar", "reg-link-request", "reg-link-resend-ip"]) {
+      expect(FAIL_CLOSED_ROUTES.has(route), route).toBe(true)
+    }
+  })
+
+  it("only names routes some call site actually uses", async () => {
+    const { readFileSync, readdirSync, statSync } = await import("node:fs")
+    const { join, resolve } = await import("node:path")
+    const root = resolve(import.meta.dirname, "../..")
+    const files: string[] = []
+    const walk = (d: string) => { for (const f of readdirSync(d)) { const p = join(d, f); if (statSync(p).isDirectory()) { if (!/__tests__|__integration__|generated/.test(f)) walk(p) } else if (p.endsWith(".ts")) files.push(p) } }
+    walk(root)
+    const source = files.map((f) => readFileSync(f, "utf8")).join("\n")
+    for (const route of FAIL_CLOSED_ROUTES) expect(source.includes(`"${route}"`) || source.includes(`${route}:`), route).toBe(true)
+  })
+})
+

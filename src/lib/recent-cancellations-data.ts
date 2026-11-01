@@ -55,6 +55,7 @@ export async function loadRecentCancellations(db: OrgScopedPrisma, eventId: stri
       volunteerName: `${r.volunteer.firstName} ${r.volunteer.lastName}`,
       hasEmail: !!r.volunteer.email,
       shift: spokenShift({ ...r.shift, date: r.shift.date.toISOString().slice(0, 10) }),
+      shiftParts: { roleName: r.shift.roleName, label: r.shift.label, date: r.shift.date.toISOString().slice(0, 10), startTime: r.shift.startTime, endTime: r.shift.endTime },
       shiftStatus: r.shift.status,
       shiftStart: localDateTimeToUtc(r.shift.date, r.shift.startTime, timeZone),
       capacity: r.shift.capacity,

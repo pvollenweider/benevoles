@@ -37,9 +37,11 @@ vi.mock("@/lib/auth-guard", () => ({
         findFirst: vi.fn(async ({ where }: { where: { id: string } }) => (where.id === "gone" ? null : { ...shift(), id: where.id, roleName: where.id === "s3" ? "Loge" : "Bar" })),
         findMany: vi.fn(async () => m.limits),
         update: vi.fn(),
+        updateMany: vi.fn(),
       },
       volunteer: { findFirst: m.volunteerFindFirst, create: m.volunteerCreate },
-      registration: { findMany: vi.fn(async () => m.held), create: m.registrationCreate },
+      registration: { findMany: vi.fn(async () => m.held), create: m.registrationCreate, count: vi.fn(async () => 0) },
+      $queryRaw: vi.fn(),
       adminUser: { findFirst: m.adminFindFirst },
       $transaction: async (fn: (tx: unknown) => unknown) => fn(db),
     }
@@ -89,6 +91,28 @@ describe("POST /api/admin/registrations with a chosen member (#914)", () => {
     const res = await POST(post({ volunteerId: "mem-other-org", firstName: "Eve", lastName: "B" }))
     expect(res.status).toBe(404)
     expect(m.volunteerCreate).not.toHaveBeenCalled()
+    expect(m.registrationCreate).not.toHaveBeenCalled()
+  })
+
+  it.each([
+    ["an erased record", { erasedAt: new Date("2026-10-01"), mergedIntoId: null }, /effacées/],
+    ["a merge tombstone", { erasedAt: null, mergedIntoId: "mem-kept" }, /fusionnée/],
+  ])("refuses to register %s, with a clear message, and creates nothing", async (_label, state, message) => {
+    m.volunteerFindFirst.mockResolvedValueOnce({ id: "mem-1", firstName: "", lastName: "", email: null, ...state })
+    const { POST } = await import("@/app/api/admin/registrations/route")
+    const res = await POST(post({ volunteerId: "mem-1" }))
+    expect(res.status).toBe(409)
+    expect((await res.json()).error).toMatch(message)
+    expect(m.registrationCreate).not.toHaveBeenCalled()
+  })
+
+  it("refuses when the member was merged between the first read and the lock", async () => {
+    m.volunteerFindFirst
+      .mockResolvedValueOnce({ id: "mem-1", firstName: "René", lastName: "Meyer", email: null, erasedAt: null, mergedIntoId: null })
+      .mockResolvedValueOnce({ erasedAt: null, mergedIntoId: "mem-kept" })
+    const { POST } = await import("@/app/api/admin/registrations/route")
+    const res = await POST(post({ volunteerId: "mem-1" }))
+    expect(res.status).toBe(409)
     expect(m.registrationCreate).not.toHaveBeenCalled()
   })
 

@@ -7,10 +7,12 @@ const adminUserFindUnique = vi.hoisted(() => vi.fn())
 const adminUserCreate = vi.hoisted(() => vi.fn())
 const adminUserDelete = vi.hoisted(() => vi.fn())
 const orgLogCreate = vi.hoisted(() => vi.fn())
+const adminUserCount = vi.hoisted(() => vi.fn())
 vi.mock("@/lib/prisma", () => ({
   prisma: {
-    adminUser: { findUnique: adminUserFindUnique, findFirst: adminUserFindUnique, create: adminUserCreate, delete: adminUserDelete },
+    adminUser: { findUnique: adminUserFindUnique, findFirst: adminUserFindUnique, create: adminUserCreate, delete: adminUserDelete, count: adminUserCount },
     orgLog: { create: orgLogCreate },
+    $queryRaw: async () => [],
     async $transaction(fn: (tx: unknown) => unknown) { return fn(this) },
   },
 }))
@@ -47,7 +49,7 @@ describe("POST /api/admin/settings/admins — activity log", () => {
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify({ email: "bob@x.com", name: "Bob" }),
     }))
-    expect(res.status).toBe(201)
+    expect(res.status).toBe(202)
     expect(orgLogCreate).toHaveBeenCalledWith(
       expect.objectContaining({ data: expect.objectContaining({ action: "adminuser.invited", entityType: "AdminUser", entityId: "adm-2" }) }),
     )
@@ -58,13 +60,10 @@ describe("DELETE /api/admin/settings/admins/[id] — activity log", () => {
   beforeEach(() => vi.clearAllMocks())
 
   it("logs adminuser.removed", async () => {
+    adminUserFindUnique.mockResolvedValue({ id: "adm-2", email: "bob@x.com", isActive: true })
+    adminUserCount.mockResolvedValue(2)
     requireOrgSessionMock.mockResolvedValue({
-      db: {
-        adminUser: {
-          findFirst: vi.fn().mockResolvedValue({ id: "adm-2", email: "bob@x.com", isActive: true }),
-          count: vi.fn().mockResolvedValue(2),
-        },
-      },
+      db: {},
       organizationId: "org-a",
       session: { user: { id: "admin-1", email: "alice@x.com" } },
     })

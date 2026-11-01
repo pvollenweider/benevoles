@@ -4783,12 +4783,12 @@ async function main() {
         await tap(page, form.getByRole("radio", { name: /Organisateur/ }))
         await at("Cliquez sur Envoyer l’invitation ")
         await tap(page, form.getByRole("button", { name: "Envoyer l'invitation" }))
-        await page.getByRole("status").filter({ hasText: "Invitation envoyée à video.team.lea@example.org. Le lien d'activation, valable 7 jours, lui a été envoyé par email." }).waitFor()
+        await page.getByRole("status").filter({ hasText: "Si video.team.lea@example.org peut rejoindre l'équipe, cette adresse reçoit une invitation par email, avec un lien d'activation valable 7 jours." }).waitFor()
       })
 
       await scene("invite-result", async (at) => {
         await at("La confirmation indique")
-        await page.getByRole("status").filter({ hasText: "Invitation envoyée à video.team.lea@example.org." }).scrollIntoViewIfNeeded()
+        await page.getByRole("status").filter({ hasText: "Si video.team.lea@example.org peut rejoindre l'équipe" }).scrollIntoViewIfNeeded()
         if (await page.getByRole("button", { name: "Copier le lien", exact: true }).count()) throw new Error("Owner must never receive the activation link")
         await at("Son accès ne devient actif")
         await page.getByText("Léa Martin", { exact: true }).scrollIntoViewIfNeeded()

@@ -1,5 +1,5 @@
 import { describe, it, expect } from "vitest"
-import { orgSlugFromHost, NON_ORG_SUBDOMAINS, withOrgHeader, isReservedOrgSlug } from "../org-subdomain"
+import { orgSlugFromHost, NON_ORG_SUBDOMAINS, withOrgHeader, isReservedOrgSlug, isLocalHost, orgQueryAllowed } from "../org-subdomain"
 
 describe("orgSlugFromHost", () => {
   it("extracts the org slug from a 3-part subdomain host", () => {
@@ -86,3 +86,33 @@ describe("isReservedOrgSlug", () => {
     expect(orgSlugFromHost("media.benevol.app")).toBe("media")
   })
 })
+
+describe("?org= in production: the host decides", () => {
+  it("ignores ?org= on a public host in production, apex and system subdomains included", () => {
+    for (const host of ["benevol.app", "www.benevol.app", "app.benevol.app", "staging.benevol.app"]) {
+      expect(withOrgHeader(new Headers(), host, "default", "production").get("x-org-slug"), host).toBeNull()
+    }
+  })
+
+  it("keeps the host's organization in production, whatever ?org= says", () => {
+    expect(withOrgHeader(new Headers(), "lausanne-rocks.benevol.app", "other-org", "production").get("x-org-slug")).toBe("lausanne-rocks")
+  })
+
+  it("honours ?org= on a machine-local host, even in production (next start in the end-to-end tests)", () => {
+    for (const host of ["localhost:3000", "127.0.0.1:43411", "[::1]:3000", "app.localhost"]) {
+      expect(withOrgHeader(new Headers(), host, "default", "production").get("x-org-slug"), host).toBe("default")
+    }
+  })
+
+  it("honours ?org= on any host outside production", () => {
+    expect(withOrgHeader(new Headers(), "www.benevol.app", "default", "development").get("x-org-slug")).toBe("default")
+    expect(withOrgHeader(new Headers(), "www.benevol.app", "default", "test").get("x-org-slug")).toBe("default")
+  })
+
+  it("recognises local hosts only", () => {
+    expect(["localhost", "localhost:3000", "127.0.0.1", "127.10.0.3:80", "[::1]:3000", "a.localhost"].every(isLocalHost)).toBe(true)
+    expect(["benevol.app", "www.benevol.app", "localhost.benevol.app", "127.0.0.1.example.org", "10.0.0.1", "evil-localhost.org"].some(isLocalHost)).toBe(false)
+    expect(orgQueryAllowed("www.benevol.app", "production")).toBe(false)
+  })
+})
+

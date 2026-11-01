@@ -16,6 +16,8 @@ import { manualAddNotice, manualAddNoticeSentence } from "@/lib/manual-add-notic
 import { localDateTimeToUtc } from "@/lib/time-zone"
 import { ackLabel } from "@/lib/availability-assist"
 import type { PersonFit } from "@/lib/availability-assist-data"
+import ConfirmActionModal from "../ConfirmActionModal"
+import { shiftOverrideOf, shiftOverrideWords, type ShiftOverrideBody } from "@/lib/shift-override"
 
 type Props = {
   eventId: string
@@ -139,6 +141,11 @@ export default function ManualAddForm({ eventId, shifts, registrations, timeZone
     return newWorkloadNotices(held.map((r) => r.shift), [...held.map((r) => r.shift), ...chosenShifts], mode).map((n) => n.text)
   }, [person, chosenIds, chosenShifts, registrations, mode, blocks])
   const overLimit = overLimitFor === JSON.stringify(addForm)
+  // A full or closed shift (AUTHZ-15): the server's refusal opens a confirmation; once confirmed,
+  // its keys go with every submit of this same form (a role-limit warning after it included).
+  const [overrideAsk, setOverrideAsk] = useState<{ form: string; shifts: ShiftOverrideBody["shifts"] } | null>(null)
+  const [overrideKeys, setOverrideKeys] = useState<{ form: string; keys: string[] } | null>(null)
+  const submitRef = useRef<HTMLButtonElement>(null)
   // What the volunteer will receive (#916), said before submitting, once a shift is chosen. The
   // server decides the same way; « now » is the moment the form opened.
   const [openedAt] = useState(() => new Date())
@@ -260,7 +267,7 @@ export default function ManualAddForm({ eventId, shifts, registrations, timeZone
     requestAnimationFrame(() => addAnotherRef.current?.focus())
   }
 
-  async function handleAdd(e: React.FormEvent | null, allowOverLimit = false) {
+  async function handleAdd(e: React.FormEvent | null, allowOverLimit = false, confirmedKeys?: string[]) {
     e?.preventDefault()
     if (adding) return
     if (!addForm.shiftId) {
@@ -299,6 +306,7 @@ export default function ManualAddForm({ eventId, shifts, registrations, timeZone
         ...(minorsProtected && addForm.birthDate ? { birthDate: addForm.birthDate } : {}),
         shiftIds: chosenIds,
         ...(allowOverLimit ? { allowOverLimit: true } : {}),
+        ...(confirmedKeys ? { shiftOverride: confirmedKeys } : overrideKeys && overrideKeys.form === JSON.stringify(addForm) ? { shiftOverride: overrideKeys.keys } : {}),
         ...(acked.size > 0 ? { availabilityAck: chosenIds.map((id) => fits[id]?.ackKey).filter((k): k is string => !!k && acked.has(k)) } : {}),
       }),
     })
@@ -306,6 +314,9 @@ export default function ManualAddForm({ eventId, shifts, registrations, timeZone
     const data = await res.json()
     setAdding(false)
 
+    // A full or closed shift (AUTHZ-15): the confirmation dialog, nothing added yet.
+    const toConfirm = res.status === 409 ? shiftOverrideOf(data) : null
+    if (toConfirm) { setAddError(null); setErrorFor(null); setOverrideAsk({ form: JSON.stringify(addForm), shifts: toConfirm }); return }
     // The role's limit per person (#466): the organiser may go over it, after reading why.
     if (res.status === 409 && data.code === "role_limit") { setAddError(data.error); setOverLimitFor(JSON.stringify(addForm)); return }
     setOverLimitFor(null)
@@ -368,7 +379,24 @@ export default function ManualAddForm({ eventId, shifts, registrations, timeZone
     }))
   }
 
+  // The dialog closes first; focus goes to « Ajouter », which then shows the addition running.
+  function confirmOverride() {
+    if (!overrideAsk) return
+    const keys = overrideAsk.shifts.map((n) => n.key)
+    const sameForm = overrideAsk.form === JSON.stringify(addForm)
+    flushSync(() => { setOverrideAsk(null); if (sameForm) setOverrideKeys({ form: overrideAsk.form, keys }) })
+    submitRef.current?.focus()
+    if (sameForm) void handleAdd(null, overLimit, keys)
+    else say("Le formulaire a changé\u00a0: validez à nouveau.")
+  }
+  function cancelOverride() {
+    flushSync(() => setOverrideAsk(null))
+    submitRef.current?.focus()
+  }
+  const overrideWords = overrideAsk ? shiftOverrideWords("manual_add", addForm.firstName.trim() || "cette personne", overrideAsk.shifts) : null
+
   return (
+    <>
     <form onSubmit={handleAdd} className="bg-white rounded-2xl border border-blue-200 p-5 space-y-4">
       <h3 className="font-semibold text-gray-800">Inscription manuelle</h3>
       {/* Always mounted, so the search results and the choice are announced. */}
@@ -547,8 +575,9 @@ export default function ManualAddForm({ eventId, shifts, registrations, timeZone
           </div>
         ))}
       </div>
-      {showError && (
-        <div role="alert" className="bg-red-50 border border-red-200 rounded-xl p-3 text-sm text-red-700">
+      {/* Always mounted, so a refusal that appears (a cancelled shift, a duplicate) is read. */}
+      <div role="alert" className={showError ? "bg-red-50 border border-red-200 rounded-xl p-3 text-sm text-red-700" : "sr-only"}>
+        {showError && <>
           <p id="add-error">{addError}</p>
           {overLimitFor !== null && !overLimit && <p className="mt-1">Le formulaire a changé : validez à nouveau.</p>}
           {overLimit && (
@@ -556,16 +585,32 @@ export default function ManualAddForm({ eventId, shifts, registrations, timeZone
               {adding ? "Ajout en cours…" : "Ajouter malgré la limite"}
             </button>
           )}
-        </div>
-      )}
+        </>}
+      </div>
 
       {notice && <p id="add-notice" className="text-sm text-gray-700">{manualAddNoticeSentence(notice)}</p>}
       <div className="flex gap-3">
-        <button type="submit" aria-disabled={adding || undefined} aria-describedby={[addWarnings.length > 0 && "add-workload", notice && "add-notice"].filter(Boolean).join(" ") || undefined} className={`min-h-11 sm:min-h-6 bg-blue-600 text-white px-4 py-2 rounded-xl text-sm font-medium hover:bg-blue-700 ${adding ? "opacity-60 cursor-wait" : ""}`}>
+        <button ref={submitRef} type="submit" aria-disabled={adding || undefined} aria-describedby={[addWarnings.length > 0 && "add-workload", notice && "add-notice"].filter(Boolean).join(" ") || undefined} className={`min-h-11 sm:min-h-6 bg-blue-600 text-white px-4 py-2 rounded-xl text-sm font-medium hover:bg-blue-700 ${adding ? "opacity-60 cursor-wait" : ""}`}>
           {adding ? "Ajout en cours…" : "Ajouter"}
         </button>
         <button type="button" onClick={onCancel} className="min-h-11 sm:min-h-6 text-gray-500 px-3 py-2 text-sm hover:text-gray-800">Annuler</button>
       </div>
     </form>
+    {/* Outside the form: the dialog has its own. */}
+    {overrideAsk && overrideWords && (
+      <ConfirmActionModal
+        recap={{
+          title: overrideWords.title,
+          lead: overrideWords.lead,
+          lines: [...overrideWords.lines, "L'ajout est journalisé, avec la confirmation."],
+          confirmLabel: overrideWords.confirmLabel,
+          danger: false,
+        }}
+        busy={false}
+        onConfirm={confirmOverride}
+        onCancel={cancelOverride}
+      />
+    )}
+    </>
   )
 }

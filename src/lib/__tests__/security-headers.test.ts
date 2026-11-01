@@ -13,6 +13,7 @@ import {
 } from "../security-headers"
 import { CLEAN_PATH_SCRIPT } from "../clean-path"
 import { INLINE_SCRIPTS, PRINT_BUTTON_SCRIPT, PRINT_BUTTON_SCRIPT_TAG, THEME_INIT_SCRIPT } from "../inline-scripts"
+import { SENTRY_TUNNEL_PATH } from "../sentry-tunnel"
 
 // Framing (#948): only the embeddable sign-up may be shown in another site's frame.
 
@@ -83,9 +84,8 @@ describe("APP_TOP_LEVEL_SEGMENTS", () => {
     for (const folder of folders) expect(isEventSignupPath(`/${folder}`), folder).toBe(false)
   })
 
-  it("names the Sentry tunnel of next.config.ts", () => {
-    const tunnel = readFileSync(join(process.cwd(), "next.config.ts"), "utf8").match(/tunnelRoute: "\/([^"]+)"/)![1]
-    expect(APP_TOP_LEVEL_SEGMENTS).toContain(tunnel)
+  it("names the Sentry tunnel", () => {
+    expect(APP_TOP_LEVEL_SEGMENTS).toContain(SENTRY_TUNNEL_PATH.slice(1))
   })
 })
 

@@ -90,4 +90,71 @@ describe("AdminDayTimeline", () => {
     expect(dialog).toHaveTextContent("Samedi 4 juillet, de 10h30 à 12h15.")
     expect(dialog.textContent).not.toMatch(/[–·]/)
   })
+
+  // « Créneau annulé » with people registered (AUTHZ-15): the popover closes, a confirmation says
+  // how many are affected and whether they are emailed; « Ne pas prévenir les inscrits » is off by default.
+  describe("cancelling a shift by its status", () => {
+    afterEach(() => vi.unstubAllGlobals())
+
+    it("asks first, then cancels and tells the people registered by default", async () => {
+      const fetchMock = vi.fn(async () => new Response(JSON.stringify({ status: "cancelled", notified: 3 }), { status: 200 }))
+      vi.stubGlobal("fetch", fetchMock)
+      const onUpdated = vi.fn()
+      render(<AdminDayTimeline eventId="evt-1" date="2026-07-04" shifts={[shift()]} onCreated={vi.fn()} onUpdated={onUpdated} onDeleted={vi.fn()} />)
+      fireEvent.click(screen.getByRole("button", { name: /^Bar, 10h30–12h15, Soir/ }))
+      const select = screen.getByLabelText("Inscriptions")
+      expect(select).toHaveAccessibleDescription(/Créneau annulé\W+une confirmation sera demandée\./)
+      fireEvent.change(select, { target: { value: "cancelled" } })
+      // Nothing saved before the confirmation.
+      expect(fetchMock).not.toHaveBeenCalled()
+      const dialog = screen.getByRole("alertdialog", { name: /^Annuler le créneau « Bar, Soir »/ })
+      expect(dialog).toHaveAccessibleDescription(/^3 personnes sont inscrites\. Elles recevront un email d'annulation\./)
+      const box = screen.getByRole("checkbox", { name: "Ne pas prévenir les inscrits" })
+      expect(box).not.toBeChecked()
+      expect(screen.getByRole("button", { name: "Garder le créneau" })).toHaveFocus()
+      fireEvent.click(screen.getByRole("button", { name: "Annuler le créneau" }))
+      await vi.waitFor(() => expect(onUpdated).toHaveBeenCalledWith(expect.objectContaining({ id: "s1", status: "cancelled", registrationCount: 0 })))
+      const [url, init] = fetchMock.mock.calls[0] as unknown as [string, RequestInit]
+      expect(url).toBe("/api/admin/shifts/s1")
+      expect(JSON.parse(String(init.body))).toEqual({ status: "cancelled", notifyVolunteers: true })
+      await vi.waitFor(() => expect(screen.getAllByText("Créneau annulé, les inscrits sont prévenus par email.").length).toBeGreaterThan(0))
+    })
+
+    it("sends notifyVolunteers false once the box is ticked, and says so before", async () => {
+      const fetchMock = vi.fn(async () => new Response(JSON.stringify({ status: "cancelled", notified: 0 }), { status: 200 }))
+      vi.stubGlobal("fetch", fetchMock)
+      setup([shift({ registrationCount: 1 })])
+      fireEvent.click(screen.getByRole("button", { name: /^Bar, 10h30–12h15, Soir/ }))
+      fireEvent.change(screen.getByLabelText("Inscriptions"), { target: { value: "cancelled" } })
+      fireEvent.click(screen.getByRole("checkbox", { name: "Ne pas prévenir les inscrits" }))
+      expect(screen.getByRole("alertdialog")).toHaveAccessibleDescription(/^1 personne est inscrite\. Elle ne recevra pas d'email/)
+      fireEvent.click(screen.getByRole("button", { name: "Annuler sans prévenir" }))
+      await vi.waitFor(() => expect(fetchMock).toHaveBeenCalled())
+      expect(JSON.parse(String((fetchMock.mock.calls[0] as unknown as [string, RequestInit])[1].body))).toEqual({ status: "cancelled", notifyVolunteers: false })
+    })
+
+    it("« Garder le créneau » changes nothing and puts focus back on the bar", () => {
+      const fetchMock = vi.fn()
+      vi.stubGlobal("fetch", fetchMock)
+      setup([shift()])
+      fireEvent.click(screen.getByRole("button", { name: /^Bar, 10h30–12h15, Soir/ }))
+      fireEvent.change(screen.getByLabelText("Inscriptions"), { target: { value: "cancelled" } })
+      fireEvent.click(screen.getByRole("button", { name: "Garder le créneau" }))
+      expect(screen.queryByRole("alertdialog")).toBeNull()
+      expect(fetchMock).not.toHaveBeenCalled()
+      expect(screen.getByRole("button", { name: /^Bar, 10h30–12h15, Soir/ })).toHaveFocus()
+    })
+
+    it("a shift nobody holds is cancelled at once, without a dialog", async () => {
+      const fetchMock = vi.fn(async () => new Response(JSON.stringify({ status: "cancelled" }), { status: 200 }))
+      vi.stubGlobal("fetch", fetchMock)
+      setup([shift({ registrationCount: 0 })])
+      fireEvent.click(screen.getByRole("button", { name: /^Bar, 10h30–12h15, Soir/ }))
+      fireEvent.change(screen.getByLabelText("Inscriptions"), { target: { value: "cancelled" } })
+      expect(screen.queryByRole("alertdialog")).toBeNull()
+      await vi.waitFor(() => expect(fetchMock).toHaveBeenCalled())
+      // The status alone: the label is never rewritten by a status change.
+      expect(JSON.parse(String((fetchMock.mock.calls[0] as unknown as [string, RequestInit])[1].body))).toEqual({ status: "cancelled" })
+    })
+  })
 })

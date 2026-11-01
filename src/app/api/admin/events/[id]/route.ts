@@ -15,6 +15,8 @@ import { titlesMatch } from "@/lib/confirm-title"
 import { adminActor, diffFields, logEvent } from "@/lib/event-log"
 import { z } from "zod"
 import { validationError } from "@/lib/api-error"
+import { cappedText } from "@/lib/text-limits-schema"
+import { EVENT_LOCATION_MAX, EVENT_TITLE_MAX, MARKDOWN_TEXT_MAX, SHOW_NAME_MAX } from "@/lib/text-limits"
 import { EVENT_PUBLIC_STATUSES } from "@/lib/statuses"
 import { isPublishing, publishBlocker } from "@/lib/event-publish"
 import { dayContactSchema } from "@/lib/day-contact"
@@ -27,20 +29,20 @@ class EventDatesRefusal extends Error {
 }
 
 const showSchema = z.object({
-  name: z.string(),
+  name: cappedText(SHOW_NAME_MAX, "Le nom du spectacle"),
   date: civilDateSchema,
   startTime: z.string(),
   endTime: z.string(),
 })
 
 const schema = z.object({
-  title: z.string().min(1).optional(),
-  description: z.string().optional().nullable(),
-  location: z.string().optional().nullable(),
+  title: cappedText(EVENT_TITLE_MAX, "Le titre").min(1).optional(),
+  description: cappedText(MARKDOWN_TEXT_MAX, "La description").optional().nullable(),
+  location: cappedText(EVENT_LOCATION_MAX, "Le lieu").optional().nullable(),
   startDate: civilDateSchema.optional(),
   endDate: civilDateSchema.optional(),
-  publicInstructions: z.string().optional().nullable(),
-  confirmationMessage: z.string().optional().nullable(),
+  publicInstructions: cappedText(MARKDOWN_TEXT_MAX, "Les informations pratiques").optional().nullable(),
+  confirmationMessage: cappedText(MARKDOWN_TEXT_MAX, "Le message de confirmation").optional().nullable(),
   publicStatus: z.enum(EVENT_PUBLIC_STATUSES).optional(),
   /** Unlisted events (#414): a strict boolean, logged as « visibilité ». */
   isListed: z.boolean().optional(),

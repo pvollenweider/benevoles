@@ -100,6 +100,8 @@ const prismaMock = {
     create: vi.fn().mockResolvedValue({ id: "log-1" }), // org activity log entries (#300 logo)
     findMany: vi.fn().mockResolvedValue([]), // activity export (#1049)
   },
+  // Row locks taken in transactions (the team changes lock the organisation's row).
+  $queryRaw: vi.fn().mockResolvedValue([]),
   async $transaction(fn: (tx: unknown) => unknown) { return fn(this) },
 }
 // Delivery after the response needs a Next request scope; the routes only queue through the outbox here (#1049).
@@ -1402,10 +1404,13 @@ describe("Admin settings — cross-tenant isolation", () => {
 
   it("DELETE /api/admin/settings/admins/[id] returns 404 for org-B admin", async () => {
     const { DELETE } = await import("@/app/api/admin/settings/admins/[id]/route")
-    setupGuard() // adminUser.findFirst → null (org-B admin not visible)
+    setupGuard()
+    // The lookup is filtered by the caller's organisation: an org-B admin is not found.
+    prismaMock.adminUser.findFirst.mockResolvedValueOnce(null)
 
     const res = await DELETE(makeRequest("/api/admin/settings/admins/adm-b", "DELETE"), params("adm-b"))
     expect(res.status).toBe(404)
+    expect(prismaMock.adminUser.findFirst.mock.calls[0][0].where).toEqual({ id: "adm-b", organizationId: ORG_A })
     expect(prismaMock.adminUser.delete).not.toHaveBeenCalled()
   })
 
@@ -1422,8 +1427,9 @@ describe("Admin settings — cross-tenant isolation", () => {
     for (const holder of holders) {
       prismaMock.adminUser.findFirst.mockResolvedValueOnce(holder)
       const res = await POST(makeRequest("/api/admin/settings/admins", "POST", { email: "b@b.com", name: "B" }))
-      expect(res.status).toBe(409)
-      expect((await res.json()).error).not.toMatch(/utilisé|autre organisation/)
+      // The same answer as a sent invitation: nothing says the address is used elsewhere.
+      expect(res.status).toBe(202)
+      expect(await res.json()).toEqual({ accepted: true })
     }
     expect(prismaMock.adminUser.deleteMany).not.toHaveBeenCalled()
     expect(prismaMock.adminUser.create).not.toHaveBeenCalled()
@@ -1431,14 +1437,12 @@ describe("Admin settings — cross-tenant isolation", () => {
 
   it("DELETE /api/admin/settings/admins/[id] blocks removing self", async () => {
     const { DELETE } = await import("@/app/api/admin/settings/admins/[id]/route")
-    setupGuard({
-      adminUser: {
-        findFirst: vi.fn().mockResolvedValue({
-          id: "adm-self",
-          email: SESSION_A.user.email, // same as caller
-          isActive: true,
-        }),
-      },
+    setupGuard()
+    prismaMock.adminUser.findFirst.mockResolvedValueOnce({
+      id: "adm-self",
+      email: SESSION_A.user.email, // same as caller
+      role: "admin",
+      isActive: true,
     })
 
     const res = await DELETE(makeRequest("/api/admin/settings/admins/adm-self", "DELETE"), params("adm-self"))
@@ -2461,7 +2465,8 @@ describe("Places — cross-tenant isolation (#1171)", () => {
     expect((await one.PATCH(makeRequest("/api/admin/events/evt-b/places/pl-b", "PATCH", { name: "X" }), placeParams("evt-b", "pl-b"))).status).toBe(404)
     expect(db.eventPlace.update).not.toHaveBeenCalled()
     // An event of org A, but a place id from elsewhere: the event's list does not have it.
-    const own = placeDb({ id: "evt-a" }, [{ id: "pl-a", name: "Chapiteau", displayOrder: 0, archivedAt: null }])
+    // Protection on (the places are offered): the beta gate is not what this test is about.
+    const own = placeDb({ id: "evt-a", workloadProtectionEnabled: true }, [{ id: "pl-a", name: "Chapiteau", displayOrder: 0, archivedAt: null }])
     expect((await one.PATCH(makeRequest("/api/admin/events/evt-a/places/pl-b", "PATCH", { archived: true }), placeParams("evt-a", "pl-b"))).status).toBe(404)
     expect(own.eventPlace.findMany).toHaveBeenCalledWith(expect.objectContaining({ where: { eventId: "evt-a" } }))
     expect(own.eventPlace.update).not.toHaveBeenCalled()
@@ -2645,5 +2650,155 @@ describe("Generated assignment proposals — cross-tenant isolation (#1172)", ()
     const res = await POST(makeRequest("/api/admin/events/evt-b/drafts/d-b/lock", "POST", { revision: 1, locked: true }), { params: Promise.resolve({ id: "evt-b", draftId: "d-b" }) })
     expect(res.status).toBe(404)
     expect(writes.draftUpdate).not.toHaveBeenCalled()
+  })
+})
+
+// ── Routes the sweep reached but no test named (pentest coverage list) ──────────────────────────
+// Each answers 404 for an org-B event or record and writes nothing; the settings routes read and
+// write only the caller's organisation or account. src/__tests__/security/admin-route-coverage.test.ts
+// fails when an admin route or method has no test here.
+
+describe("Pages, questions, roles, log — cross-tenant isolation", () => {
+  beforeEach(() => vi.clearAllMocks())
+  const extraDb = () => {
+    const db = setupGuard()
+    const extra = {
+      eventPage: { findMany: vi.fn().mockResolvedValue([]), findFirst: vi.fn().mockResolvedValue(null), create: vi.fn(), update: vi.fn(), updateMany: vi.fn(), delete: vi.fn() },
+      eventQuestion: { findMany: vi.fn().mockResolvedValue([]), count: vi.fn().mockResolvedValue(0), create: vi.fn(), update: vi.fn() },
+      eventLog: { findMany: vi.fn().mockResolvedValue([]) },
+      $transaction: vi.fn(),
+    }
+    Object.assign(db, extra)
+    return db as typeof db & typeof extra
+  }
+  const pageParams = (id: string, pageId: string) => ({ params: Promise.resolve({ id, pageId }) })
+
+  it("GET and POST /api/admin/events/[id]/pages return 404 for an org-B event and create nothing", async () => {
+    const { GET, POST } = await import("@/app/api/admin/events/[id]/pages/route")
+    const db = extraDb()
+    expect((await GET(makeRequest("/api/admin/events/evt-b/pages"), params("evt-b"))).status).toBe(404)
+    expect((await POST(makeRequest("/api/admin/events/evt-b/pages", "POST", { title: "Plan d'accès", content: "x" }), params("evt-b"))).status).toBe(404)
+    expect(db.eventPage.findMany).not.toHaveBeenCalled()
+    expect(db.eventPage.create).not.toHaveBeenCalled()
+  })
+
+  it("PATCH and DELETE /api/admin/events/[id]/pages/[pageId] return 404 for an org-B event, and for a page of another event", async () => {
+    const { PATCH, DELETE } = await import("@/app/api/admin/events/[id]/pages/[pageId]/route")
+    const db = extraDb()
+    expect((await PATCH(makeRequest("/api/admin/events/evt-b/pages/pg-b", "PATCH", { title: "X" }), pageParams("evt-b", "pg-b"))).status).toBe(404)
+    expect((await DELETE(makeRequest("/api/admin/events/evt-b/pages/pg-b", "DELETE"), pageParams("evt-b", "pg-b"))).status).toBe(404)
+    db.event.findFirst.mockResolvedValue({ id: "evt-a" })
+    expect((await PATCH(makeRequest("/api/admin/events/evt-a/pages/pg-b", "PATCH", { title: "X" }), pageParams("evt-a", "pg-b"))).status).toBe(404)
+    expect((await DELETE(makeRequest("/api/admin/events/evt-a/pages/pg-b", "DELETE"), pageParams("evt-a", "pg-b"))).status).toBe(404)
+    expect(db.eventPage.findFirst).toHaveBeenCalledWith(expect.objectContaining({ where: { id: "pg-b", eventId: "evt-a" } }))
+    expect(db.eventPage.update).not.toHaveBeenCalled()
+    expect(db.eventPage.delete).not.toHaveBeenCalled()
+  })
+
+  it("POST /api/admin/events/[id]/pages/reorder returns 404 for an org-B event, and scopes each update to the event", async () => {
+    const { POST } = await import("@/app/api/admin/events/[id]/pages/reorder/route")
+    const db = extraDb()
+    expect((await POST(makeRequest("/api/admin/events/evt-b/pages/reorder", "POST", { pageIds: ["pg-b"] }), params("evt-b"))).status).toBe(404)
+    expect(db.eventPage.updateMany).not.toHaveBeenCalled()
+    db.event.findFirst.mockResolvedValue({ id: "evt-a" })
+    expect((await POST(makeRequest("/api/admin/events/evt-a/pages/reorder", "POST", { pageIds: ["pg-a", "pg-b"] }), params("evt-a"))).status).toBe(200)
+    expect(db.eventPage.updateMany.mock.calls.map((c) => c[0].where)).toEqual([{ id: "pg-a", eventId: "evt-a" }, { id: "pg-b", eventId: "evt-a" }])
+  })
+
+  it("GET and POST /api/admin/events/[id]/questions return 404 for an org-B event and create nothing", async () => {
+    const { GET, POST } = await import("@/app/api/admin/events/[id]/questions/route")
+    const db = extraDb()
+    expect((await GET(makeRequest("/api/admin/events/evt-b/questions"), params("evt-b"))).status).toBe(404)
+    expect((await POST(makeRequest("/api/admin/events/evt-b/questions", "POST", { label: "Taille de t-shirt", type: "text" }), params("evt-b"))).status).toBe(404)
+    expect(db.eventQuestion.findMany).not.toHaveBeenCalled()
+    expect(db.eventQuestion.create).not.toHaveBeenCalled()
+  })
+
+  it("POST /api/admin/events/[id]/questions/reorder returns 404 for an org-B event (no active question in scope)", async () => {
+    const { POST } = await import("@/app/api/admin/events/[id]/questions/reorder/route")
+    const db = extraDb()
+    expect((await POST(makeRequest("/api/admin/events/evt-b/questions/reorder", "POST", { ids: ["q-b"] }), params("evt-b"))).status).toBe(404)
+    expect(db.eventQuestion.findMany).toHaveBeenCalledWith(expect.objectContaining({ where: { eventId: "evt-b", archivedAt: null } }))
+    expect(db.$transaction).not.toHaveBeenCalled()
+  })
+
+  it("DELETE /api/admin/events/[id]/roles/[roleName] returns 404 for an org-B event and cancels nothing", async () => {
+    const { DELETE } = await import("@/app/api/admin/events/[id]/roles/[roleName]/route")
+    const db = extraDb()
+    const res = await DELETE(makeRequest("/api/admin/events/evt-b/roles/Bar", "DELETE"), { params: Promise.resolve({ id: "evt-b", roleName: "Bar" }) })
+    expect(res.status).toBe(404)
+    expect(db.shift.findMany).not.toHaveBeenCalled()
+  })
+
+  it("GET /api/admin/events/[id]/log returns 404 for an org-B event", async () => {
+    const { GET } = await import("@/app/api/admin/events/[id]/log/route")
+    extraDb()
+    expect((await GET(makeRequest("/api/admin/events/evt-b/log"), params("evt-b"))).status).toBe(404)
+    expect((await GET(makeRequest("/api/admin/events/evt-b/log?chainOf=log-b"), params("evt-b"))).status).toBe(404)
+  })
+
+  it("POST /api/admin/events/[id]/log/baseline returns 404 for an org-B event and logs nothing", async () => {
+    const { POST } = await import("@/app/api/admin/events/[id]/log/baseline/route")
+    const db = extraDb()
+    expect((await POST(makeRequest("/api/admin/events/evt-b/log/baseline", "POST"), params("evt-b"))).status).toBe(404)
+    expect(db.eventLog.findMany).not.toHaveBeenCalled()
+  })
+})
+
+describe("Members, templates, team, password, invitation — cross-tenant isolation", () => {
+  beforeEach(() => vi.clearAllMocks())
+
+  it("POST /api/admin/members checks the address within the organisation only and creates the member through the scoped client", async () => {
+    const { POST } = await import("@/app/api/admin/members/route")
+    const db = setupGuard()
+    const res = await POST(makeRequest("/api/admin/members", "POST", { firstName: "Chiara", lastName: "Fontana", email: "chiara.fontana@example.org" }))
+    expect(res.status).toBe(201)
+    expect(db.volunteer.findFirst).toHaveBeenCalledWith({ where: { email: "chiara.fontana@example.org" } })
+    // Created through the scoped client, which sets the organisation (prisma-org.ts), never the raw one.
+    expect(db.volunteer.create).toHaveBeenCalledOnce()
+    expect(prismaMock.volunteer.create).not.toHaveBeenCalled()
+  })
+
+  it("GET and POST /api/admin/settings/message-templates read and write the organisation's templates only", async () => {
+    const { GET, POST } = await import("@/app/api/admin/settings/message-templates/route")
+    const db = setupGuard()
+    const extra = { messageTemplate: { findMany: vi.fn().mockResolvedValue([]), count: vi.fn().mockResolvedValue(0), create: vi.fn().mockResolvedValue({ id: "tpl-a" }) } }
+    Object.assign(db, extra)
+    expect((await GET()).status).toBe(200)
+    expect(extra.messageTemplate.findMany).toHaveBeenCalledOnce()
+    const res = await POST(makeRequest("/api/admin/settings/message-templates", "POST", { name: "Rappel", subject: "Rappel", body: "Bonjour" }))
+    expect(res.status).toBeLessThan(300)
+    expect(extra.messageTemplate.create).toHaveBeenCalledWith(expect.objectContaining({ data: expect.objectContaining({ organizationId: ORG_A }) }))
+  })
+
+  it("PATCH /api/admin/settings/admins/[id] returns 404 for an org-B admin and changes nothing", async () => {
+    const { PATCH } = await import("@/app/api/admin/settings/admins/[id]/route")
+    setupGuard()
+    prismaMock.adminUser.findFirst.mockResolvedValueOnce(null)
+    const update = vi.fn()
+    Object.assign(prismaMock.adminUser, { update })
+    const res = await PATCH(makeRequest("/api/admin/settings/admins/adm-b", "PATCH", { role: "organizer" }), params("adm-b"))
+    expect(res.status).toBe(404)
+    expect(prismaMock.adminUser.findFirst.mock.calls[0][0].where).toEqual({ id: "adm-b", organizationId: ORG_A })
+    expect(update).not.toHaveBeenCalled()
+  })
+
+  it("POST /api/admin/settings/password reads and writes the caller's own account only", async () => {
+    const { POST } = await import("@/app/api/admin/settings/password/route")
+    requireOrgSessionMock.mockResolvedValue({ db: mockScopedDb(), organizationId: ORG_A, session: { user: { ...SESSION_A.user, id: "adm-a" } } })
+    prismaMock.adminUser.findUnique.mockResolvedValueOnce(null)
+    const res = await POST(makeRequest("/api/admin/settings/password", "POST", { currentPassword: "x", newPassword: "Un-mot-de-passe-solide-2026", adminId: "adm-b" }))
+    expect(res.status).toBe(404)
+    expect(prismaMock.adminUser.findUnique).toHaveBeenCalledWith(expect.objectContaining({ where: { id: "adm-a" } }))
+  })
+
+  it("GET and POST /api/admin/accept-invite (public, link only) answer 404 for an unknown link and activate nothing", async () => {
+    const { GET, POST } = await import("@/app/api/admin/accept-invite/route")
+    prismaMock.adminUser.findUnique.mockResolvedValue(null)
+    const updateMany = vi.fn()
+    Object.assign(prismaMock.adminUser, { updateMany })
+    expect((await GET(makeRequest("/api/admin/accept-invite?token=unknown"))).status).toBe(404)
+    expect((await POST(makeRequest("/api/admin/accept-invite", "POST", { token: "unknown", password: "Un-mot-de-passe-solide-2026" }))).status).toBe(404)
+    expect(updateMany).not.toHaveBeenCalled()
   })
 })

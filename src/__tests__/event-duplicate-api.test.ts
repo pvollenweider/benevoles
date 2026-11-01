@@ -104,3 +104,25 @@ describe("POST /api/admin/events/[id]/duplicate: sector leaders", () => {
     expect(addSectorLeader).toHaveBeenCalledTimes(3)
   })
 })
+
+describe("POST /api/admin/events/[id]/duplicate: malformed body", () => {
+  beforeEach(() => vi.clearAllMocks())
+
+  it("answers 400, not a server error, for a body that is not JSON, and copies nothing", async () => {
+    const db = makeDb()
+    guard.mockResolvedValue({ db, organizationId: "org-a", session: {} })
+    const { POST } = await import("@/app/api/admin/events/[id]/duplicate/route")
+    const res = await POST(new Request("http://localhost/api/admin/events/evt-1/duplicate", { method: "POST", headers: { "Content-Type": "application/json" }, body: "{" }), params)
+    expect(res.status).toBe(400)
+    expect(db.event.findFirst).not.toHaveBeenCalled()
+    expect(db.event.create).not.toHaveBeenCalled()
+  })
+
+  it("still takes an empty body as the defaults", async () => {
+    const db = makeDb()
+    guard.mockResolvedValue({ db, organizationId: "org-a", session: {} })
+    const { POST } = await import("@/app/api/admin/events/[id]/duplicate/route")
+    const res = await POST(new Request("http://localhost/api/admin/events/evt-1/duplicate", { method: "POST", headers: { "Content-Type": "application/json" } }), params)
+    expect(res.status).toBe(201)
+  })
+})

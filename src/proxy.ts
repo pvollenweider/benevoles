@@ -137,6 +137,9 @@ export default function proxy(req: NextRequest, event: NextFetchEvent) {
   return withSession(req, event)
 }
 
+// Every path but the Sentry tunnel, Next.js's own files and the favicon. Each exclusion is anchored
+// (whole segment or end of path): an event slug such as `monitoring-…` still goes through the proxy.
+// Kept a literal (Next.js reads it from the source); tested in src/lib/__tests__/proxy-matcher.test.ts.
 export const config = {
-  matcher: ["/((?!monitoring|_next/static|_next/image|favicon.ico).*)"],
+  matcher: ["/((?!monitoring(?:/|$)|_next/static/|_next/image$|favicon\\.ico$).*)"],
 }

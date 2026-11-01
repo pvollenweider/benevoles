@@ -57,6 +57,8 @@ const HEARTBEAT_MS = 2_000
 export const QUEUE_MAX_AGE_SECONDS = 120
 /** At most this many runs waiting on the whole service: a queue, not a backlog. */
 export const MAX_QUEUED = 20
+/** At most this many runs waiting per organisation, so one organisation never fills the whole queue. */
+export const MAX_QUEUED_PER_ORG = 3
 
 const sha = (s: string) => createHash("sha256").update(s).digest("hex")
 
@@ -179,6 +181,9 @@ export async function launchProposal(db: Db, input: { eventId: string; actorId: 
   const check = preflight(snap.input)
   if (!check.ok) return { ok: false, status: 409, error: check.message, code: check.code, counts: check.counts }
 
+  // The organisation's own share first (the scoped client counts its runs only), then the service's.
+  const queuedHere = await db.proposalRun.count({ where: { status: "queued" } })
+  if (queuedHere >= MAX_QUEUED_PER_ORG) return { ok: false, status: 429, error: "Plusieurs propositions de votre organisation attendent déjà leur calcul : réessayez dans une minute.", code: "busy" }
   const queued = await prisma.proposalRun.count({ where: { status: "queued" } })
   if (queued >= MAX_QUEUED) return { ok: false, status: 429, error: "Trop de propositions sont en attente sur le service : réessayez dans une minute.", code: "busy" }
 

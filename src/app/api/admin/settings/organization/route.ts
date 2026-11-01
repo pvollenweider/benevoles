@@ -18,6 +18,7 @@ import { WORKLOAD_NOT_ADOPTABLE } from "@/lib/workload-policy-data"
 import { workloadProtectionShipped } from "@/lib/workload-shipped"
 import { checkPolicyValues, WRITE_SECTIONS } from "@/lib/workload-policy"
 import { Prisma } from "@/generated/prisma/client"
+import { MARKDOWN_TEXT_MAX, tooLongMessage } from "@/lib/text-limits"
 
 const SLUG_RE = /^[a-z0-9]([a-z0-9-]*[a-z0-9])?$/
 
@@ -70,9 +71,11 @@ export async function PATCH(req: Request) {
   }
 
   if ("volunteerCharter" in body) {
-    updates.volunteerCharter = typeof body.volunteerCharter === "string" && body.volunteerCharter.trim()
-      ? body.volunteerCharter.trim()
-      : null
+    const charter = typeof body.volunteerCharter === "string" ? body.volunteerCharter.trim() : ""
+    if (charter.length > MARKDOWN_TEXT_MAX) {
+      return NextResponse.json({ error: tooLongMessage("La charte", MARKDOWN_TEXT_MAX) }, { status: 400 })
+    }
+    updates.volunteerCharter = charter || null
   }
 
   if (typeof body.hasOrgInsurance === "boolean") {
