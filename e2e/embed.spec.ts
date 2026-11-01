@@ -129,10 +129,10 @@ test("a volunteer signs up inside an iframe of another site, storage blocked, he
   await frame.getByLabel(/J.accepte que l.association/).check()
   await frame.getByRole("button", { name: "Confirmer mon inscription" }).click()
 
-  // The confirmation, still in the frame. The personal link goes by email (#285): the page says so
-  // (when the page shows it too, it opens in a new tab: src/components/__tests__/SuccessPageEmbed).
-  await expect(frame.getByRole("heading", { level: 1, name: "Inscription confirmée !" })).toBeVisible()
-  await expect(frame.getByText("L'email de confirmation contient ton lien personnel")).toBeVisible()
+  // The confirmation, still in the frame. Without proof of the address (#285, AUTHZ-01) the page
+  // sends to the emails (when it shows the link, it opens in a new tab: SuccessPageEmbed test).
+  await expect(frame.getByRole("heading", { level: 1, name: "Demande d'inscription reçue" })).toBeVisible()
+  await expect(frame.getByText(/Vérifie tes emails, y compris les courriers indésirables/)).toBeVisible()
   for (const link of await frame.getByRole("link", { name: /Accéder à mon inscription/ }).all()) {
     await expect(link).toHaveAttribute("target", "_blank")
   }

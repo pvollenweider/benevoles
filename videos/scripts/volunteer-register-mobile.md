@@ -66,7 +66,7 @@ Chaleureux, détendu et complice. Les bénévoles donnent de leur temps : on les
 
 - **Écran** : confirmation et indication de l’e-mail envoyé.
 - **Action** : laisser le résultat visible. Le lien personnel n’est volontairement jamais révélé à l’écran après une inscription anonyme ; il part uniquement par e-mail.
-- **Voix** : « Et voilà, tu fais partie de l’équipe ! Un e-mail de confirmation arrive dans ta boîte. Il contient ton lien personnel pour retrouver, modifier ou annuler ton inscription. »
+- **Voix** : « Et voilà, ta demande est envoyée ! Regarde tes emails : la confirmation arrive dans ta boîte. Elle contient ton lien personnel pour retrouver, modifier ou annuler ton inscription. »
 
 ## Transcript
 
@@ -82,7 +82,7 @@ Réponds aux quelques questions pratiques, puis accepte la convention et l’uti
 
 Un dernier coup d’œil au récapitulatif, et c’est parti : confirme ton inscription.
 
-Et voilà, tu fais partie de l’équipe ! Un e-mail de confirmation arrive dans ta boîte. Il contient ton lien personnel pour retrouver, modifier ou annuler ton inscription.
+Et voilà, ta demande est envoyée ! Regarde tes emails : la confirmation arrive dans ta boîte. Elle contient ton lien personnel pour retrouver, modifier ou annuler ton inscription.
 
 ## Contrôles avant publication
 

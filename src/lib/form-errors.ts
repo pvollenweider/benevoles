@@ -7,7 +7,7 @@
  * may have been recorded anyway. Built on the API error shape `{ error, details? }`.
  */
 
-export type FailureKind = "validation" | "conflict" | "duplicate" | "stale_link" | "rate_limit" | "network" | "server"
+export type FailureKind = "validation" | "conflict" | "duplicate" | "stale_link" | "busy" | "rate_limit" | "network" | "server"
 
 export type Failure = {
   kind: FailureKind
@@ -24,12 +24,18 @@ export type Failure = {
 export type FailureInput = {
   /** HTTP status; absent when the request never got an answer. */
   status?: number
-  body?: { error?: unknown; duplicate?: unknown; staleLink?: unknown; code?: unknown } | null
+  body?: { error?: unknown; duplicate?: unknown; staleLink?: unknown; busy?: unknown; code?: unknown } | null
   /** fetch threw, or the answer wasn't JSON. */
   network?: boolean
 }
 
 const serverMessage = (body: FailureInput["body"]) => (typeof body?.error === "string" && body.error.trim() ? body.error.trim() : null)
+
+/**
+ * Retrying a sign-up is safe: it never duplicates a registration. Without proof of the address the
+ * answer can't say whether the first attempt went through (AUTHZ-01): the emails do.
+ */
+export const SIGNUP_RETRY_HINT = "Vérifie ta connexion puis confirme à nouveau : cela ne créera pas de doublon sur les mêmes créneaux. Consulte aussi tes emails, y compris les courriers indésirables."
 
 /** A failure of a volunteer's sign-up: retrying is safe, the server re-sends the link instead of duplicating. */
 export function describeSignupFailure(i: FailureInput): Failure {
@@ -38,7 +44,7 @@ export function describeSignupFailure(i: FailureInput): Failure {
     return {
       kind: "network", title: "Connexion interrompue",
       message: "Ton inscription n'a peut-être pas été reçue.",
-      hint: "Vérifie ton réseau puis confirme à nouveau : c'est sans risque, si l'inscription était passée tu recevras simplement ton lien par email.",
+      hint: SIGNUP_RETRY_HINT,
       retryable: true, maybeRecorded: true,
     }
   }
@@ -54,6 +60,10 @@ export function describeSignupFailure(i: FailureInput): Failure {
     // the planning would hit the same refusal, the newest link is the way on.
     return { kind: "stale_link", title: "Ce lien n'est plus valable", message: msg ?? "Le lien avec lequel tu t'inscris a été remplacé.", hint: "Ouvre le dernier lien reçu par email, puis recommence ton inscription.", retryable: false, maybeRecorded: false }
   }
+  if (i.status === 409 && i.body?.busy === true) {
+    // Contention (AUTHZ-04): the transaction rolled back, nothing was recorded; retrying is the way on.
+    return { kind: "busy", title: "Beaucoup d'inscriptions en même temps", message: msg ?? "Plusieurs inscriptions sont en cours en même temps. Cette tentative n'a pas été enregistrée.", hint: "Confirme à nouveau dans quelques secondes ; tes informations restent remplies.", retryable: true, maybeRecorded: false }
+  }
   if (i.status === 409 && i.body?.code === "workload") {
     // Breaks and workload protection (#1171): the server's sentence says which limit, when, by how much.
     return { kind: "conflict", title: "Ces créneaux dépassent les limites de l'événement", message: msg ?? "Les pauses et limites de charge de cet événement ne seraient pas respectées.", hint: "Reviens au planning pour retirer ou changer un créneau ; tes informations restent remplies.", retryable: false, maybeRecorded: false }
@@ -67,7 +77,7 @@ export function describeSignupFailure(i: FailureInput): Failure {
   return {
     kind: "server", title: "Ton inscription n'a pas pu être enregistrée",
     message: msg ?? "Une erreur est survenue de notre côté.",
-    hint: "Confirme à nouveau dans un instant : si l'inscription était passée malgré tout, tu recevras ton lien par email au lieu d'un doublon.",
+    hint: SIGNUP_RETRY_HINT,
     retryable: true, maybeRecorded: i.status >= 500,
   }
 }

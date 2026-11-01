@@ -1,4 +1,4 @@
-import { describe, it, expect, vi, beforeEach } from "vitest"
+import { describe, it, expect, vi, beforeEach, afterEach } from "vitest"
 // Workload protection (#1171) runs on Postgres (src/__integration__/workload-policy.int.test.ts): off here.
 vi.mock("@/lib/workload-guard", async (importOriginal) => ({
   ...(await importOriginal<typeof import("@/lib/workload-guard")>()),
@@ -28,8 +28,12 @@ const m = vi.hoisted(() => ({
   eventLogFindFirst: vi.fn(),
   transaction: vi.fn(),
 }))
+// The read under the shift lock (AUTHZ-05), to change a shift between the early read and the lock.
+const lockedRef = vi.hoisted(() => ({ current: null as null | { override: (id: string, change: Record<string, unknown>) => void; reset: () => void } }))
 
-vi.mock("@/lib/prisma", () => {
+vi.mock("@/lib/prisma", async () => {
+  const locked = (await import("./helpers/locked-shifts")).lockedShiftReads()
+  lockedRef.current = locked
   const registration = {
     findFirst: m.regFindFirst,
     findMany: m.regFindMany,
@@ -43,7 +47,7 @@ vi.mock("@/lib/prisma", () => {
   const tx = {
     $queryRaw: vi.fn().mockResolvedValue([{ id: "locked" }]), // the member lock (#285): the row it locked
     registration,
-    shift: { findUnique: m.shiftFindUnique, findMany: vi.fn().mockResolvedValue([]) },
+    shift: { findUnique: m.shiftFindUnique, findMany: locked.tx(vi.fn().mockResolvedValue([])) },
     volunteer: { createMany: vi.fn().mockResolvedValue({ count: 1 }), findFirstOrThrow: vi.fn().mockResolvedValue({ id: "vol-1" }) },
     charterVersion: { upsert: vi.fn() },
     rosterConsent: { findUnique: vi.fn().mockResolvedValue(null), upsert: vi.fn() },
@@ -51,9 +55,10 @@ vi.mock("@/lib/prisma", () => {
   m.transaction.mockImplementation(async (fn: (t: typeof tx) => unknown) => fn(tx))
   return {
     prisma: {
+      charterVersion: { upsert: vi.fn() },
     eventQuestion: { findMany: vi.fn().mockResolvedValue([]) }, // no custom question (#483)
       event: { findFirst: m.eventFindFirst },
-      shift: { findMany: m.shiftFindMany, findUnique: m.shiftFindUnique },
+      shift: { findMany: locked.top(m.shiftFindMany), findUnique: m.shiftFindUnique },
       volunteer: { findFirst: vi.fn().mockResolvedValue(null), create: vi.fn().mockResolvedValue({ id: "vol-1" }), update: vi.fn() },
       registration,
       eventLog: { findFirst: m.eventLogFindFirst },
@@ -89,7 +94,7 @@ describe("POST /api/public/registrations under contention", () => {
     m.eventFindFirst.mockResolvedValue({ id: "evt-1", organizationId: "org-a", title: "F", organization: { slug: "a" }, confirmationMessage: null })
     // Looked free before the lock...
     m.shiftFindMany.mockResolvedValue([
-      { id: "shift-1", label: "Bar", capacity: 1, minAge: null, waitlistEnabled: false, registrations: [], date: new Date(), startTime: "10:00", endTime: "12:00" },
+      { id: "shift-1", label: "Bar", capacity: 1, minAge: null, waitlistEnabled: false, registrations: [], date: new Date("2030-07-04T00:00:00Z"), startTime: "10:00", endTime: "12:00" },
     ])
     m.regFindMany.mockResolvedValue([])
     m.regAggregate.mockResolvedValue({ _max: { waitingPosition: null } })
@@ -104,14 +109,61 @@ describe("POST /api/public/registrations under contention", () => {
     expect(m.regCreate).not.toHaveBeenCalled()
   })
 
+  // AUTHZ-05: capacity, status and hours are read again under the lock, not taken from before it.
+  describe("the shift as it is under the lock", () => {
+    afterEach(() => lockedRef.current?.reset())
+
+    it("a capacity lowered meanwhile: full", async () => {
+      m.regCount.mockResolvedValue(0)
+      lockedRef.current!.override("shift-1", { capacity: 0 })
+      const { POST } = await import("@/app/api/public/registrations/route")
+      const res = await POST(post())
+      expect(res.status).toBe(409)
+      expect((await res.json()).fullShiftId).toBe("shift-1")
+      expect(m.regCreate).not.toHaveBeenCalled()
+    })
+
+    it("closed or cancelled meanwhile: refused as unavailable", async () => {
+      m.regCount.mockResolvedValue(0)
+      for (const status of ["closed", "cancelled"]) {
+        lockedRef.current!.override("shift-1", { status })
+        const { POST } = await import("@/app/api/public/registrations/route")
+        const res = await POST(post())
+        expect(res.status).toBe(409)
+        expect((await res.json()).error).toContain("invalides ou fermés")
+      }
+      expect(m.regCreate).not.toHaveBeenCalled()
+    })
+
+    it("moved to a day that is over meanwhile: refused as over", async () => {
+      m.regCount.mockResolvedValue(0)
+      lockedRef.current!.override("shift-1", { date: new Date("2020-07-04T00:00:00Z") })
+      const { POST } = await import("@/app/api/public/registrations/route")
+      const res = await POST(post())
+      expect(res.status).toBe(409)
+      expect((await res.json()).error).toBe('Le créneau "Bar" est terminé. Recharge la page.')
+      expect(m.regCreate).not.toHaveBeenCalled()
+    })
+
+    it("a lock not had in time: « réessaie », never a 500 (AUTHZ-04)", async () => {
+      m.regCount.mockRejectedValueOnce(Object.assign(new Error("Transaction already closed"), { code: "P2028" }))
+      const { POST } = await import("@/app/api/public/registrations/route")
+      const res = await POST(post())
+      expect(res.status).toBe(409)
+      expect(await res.json()).toMatchObject({ busy: true })
+    })
+  })
+
   it("answers 409 'already registered' when a racing duplicate hits the unique index", async () => {
     m.regCount.mockResolvedValue(0)
     m.regCreate.mockRejectedValue(Object.assign(new Error("unique"), { code: "P2002" }))
-    m.regFindFirst.mockResolvedValue({
+    const existing = {
       editTokenLegacy: "existing-tok", editTokenEnc: null,
       volunteer: { firstName: "A", lastName: "B", email: "a@x.com" },
       event: { title: "F", organization: { slug: "a" } },
-    })
+    }
+    // The duplicate check under the lock (by shift) saw nothing yet: the race is lost at the insert.
+    m.regFindFirst.mockImplementation(async (args: { where?: { shiftId?: unknown } }) => (args?.where?.shiftId ? null : existing))
     const { POST } = await import("@/app/api/public/registrations/route")
     const res = await POST(post())
     expect(res.status).toBe(409)

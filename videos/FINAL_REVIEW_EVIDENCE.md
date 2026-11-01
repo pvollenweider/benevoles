@@ -1013,3 +1013,31 @@ Les deux masters Kore entiers sont conservés sans aucun nouvel appel TTS : 12 e
 Les deux validations et les repères de phrases passent. Musique prescrite : publication **15,2–18,8 LU** sous la voix, minimum sans voix **−33,9 LUFS**, aucun trou ; propositions **15,2–19,6 LU**, aucun trou ni fenêtre de trois secondes entièrement sans voix. Effets sur les interactions réelles : publication 10 clics/28 frappes, propositions 20 clics/2 frappes. Descriptions auditées : **141/125 octets UTF-8**. Affiches et durées dans les métadonnées de revue séparées ; `videos/renders.json` inchangé. Les contrôles automatisés complètent l'inspection des images ; aucune écoute subjective en temps réel n'est revendiquée.
 
 Pour chaque vidéo, aperçu puis `make video-publish KUBE_CONTEXT=default ID=… APPLY=1` : cinq fichiers envoyés. Les deux entrées du catalogue portent `published: true`, les dates du 1er novembre et les révisions 1/4 ; les notifications demandées sont envoyées. [Rapport publication](evidence/batch38/resume/assignment-publication-review-report.txt), [rapport propositions](evidence/batch38/resume/assignment-proposals-review-report.txt), [build vérifié](evidence/batch38/resume/new-main-product-build.json). Aucun `src/`, guide ou capture de documentation modifié ; `doc-img: unchanged`. Commit local uniquement, identité Philippe Vollenweider <pvollenweider@jahia.com> pour auteur et committer.
+
+## À refilmer : page après une inscription publique sans preuve de l'adresse (2026-11-01)
+
+Une inscription publique sans lien d'invitation ni lien personnel affiche
+maintenant toujours la page « Demande d'inscription reçue » (plus
+« Inscription confirmée ! », « Tu es sur la liste d'attente ! » ni
+« Demande envoyée »), et les refus qui viennent des inscriptions de l'adresse
+(déjà sur le créneau, chevauchement, limite de créneaux d'un poste, pauses et
+charge de son programme) ne s'affichent plus : l'email « Demande d'inscription
+non enregistrée » les explique au titulaire de l'adresse. Un créneau dont
+l'heure de fin est passée est marqué « Terminé ». Sources mises à jour dans la
+même PR (sélecteurs, narration, bloc `viewer`), régénération pas faite dans ce
+travail (voix et capture) ; révision du catalogue à incrémenter au rendu :
+
+- `VOLUNTEER_CONFIRMATION_ERRORS` : **À refilmer**. Narration de `success`,
+  `overlap`, `response-loss` et `invitation-success`, bloc `viewer`, titres de
+  chapitre et recorder réécrits (la scène du chevauchement montre la page
+  neutre puis l'email reçu par Aline ; le nouvel essai de Nicolas montre la
+  même page) ; nouvelle voix nécessaire.
+- `VOLUNTEER_REGISTER` : **À refilmer**. Narration de `success`
+  (« ta demande est envoyée ! Regarde tes emails ») et sélecteur du texte de la
+  page mis à jour ; nouvelle voix de ce segment.
+- `PRIVACY_PERSONAL_LINKS`, `SHIFT_ROSTER_VISIBILITY`, `SECTOR_LEADERS`
+  (scène `new-signup`), `REGISTRATION_MONITOR_FOLLOWUP` (scène `test`) : narration
+  inchangée, mais l'image de la page de succès d'une inscription publique
+  montre l'ancien titre ; sélecteurs mis à jour (les deux titres acceptés,
+  « Demande d'inscription reçue » exigé pour `PRIVACY_PERSONAL_LINKS`). À
+  refilmer au prochain passage.

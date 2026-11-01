@@ -31,8 +31,9 @@ test("the offer page is read-only until « Prendre la place » is pressed", asyn
     data: { eventId: event.id, shiftIds: [shift.id], firstName: "E2E", lastName: `${who}${stamp}`, email: `e2e-offer-${who.toLowerCase()}-${stamp}@example.com`, consent: true, charterAccepted: true },
   })
   expect((await signup("First")).ok()).toBeTruthy()
-  const waiting = await signup("Next")
-  expect((await waiting.json()).onWaitlist).toBe(true)
+  expect((await signup("Next")).status()).toBe(201)
+  // The answer says nothing of the outcome without proof of the address (AUTHZ-01): the email does.
+  expect((await waitForMessage(`to:"e2e-offer-next-${stamp}@example.com"`)).Subject).toMatch(/^Liste d'attente/)
 
   // The first person withdraws: the spot is offered to the next one, by email.
   const firstMail = await waitForMessage(`to:"e2e-offer-first-${stamp}@example.com"`)

@@ -2,7 +2,7 @@
 
 import { useParams, useSearchParams } from "next/navigation"
 import { WAITLIST_STEPS } from "@/lib/waitlist-copy"
-import { outcomeHeading, readOutcome, requestNotice } from "@/lib/signup-outcome"
+import { outcomeHeading, readOutcome, requestNotice, UNPROVEN_HEADING, UNPROVEN_RETRY_TEXT, UNPROVEN_TEXT } from "@/lib/signup-outcome"
 import Link from "next/link"
 import { Suspense, useEffect, useRef, useState } from "react"
 import PublicFooter from "@/components/PublicFooter"
@@ -77,6 +77,19 @@ function SuccessContent() {
     return renderMarkdownWithVariables(regData.confirmationMessage, vars)
   })()
 
+  // Without a link of its own (a public sign-up without proof of the address, AUTHZ-01): one
+  // neutral page, whatever happened; the emails say what was recorded.
+  const card = !token ? (
+    <>
+      <h1 ref={headingRef} tabIndex={-1} className="text-xl font-bold text-gray-900 mb-2 focus:outline-none">{UNPROVEN_HEADING}</h1>
+      <p className="text-gray-700 text-sm mb-3">{UNPROVEN_TEXT}</p>
+      <p className="text-gray-700 text-sm mb-6">
+        {UNPROVEN_RETRY_TEXT}{" "}
+        <DocMoreLink href={PERSONAL_LINK_DOC_LINKS.personalLink} about="ton lien personnel" />
+      </p>
+    </>
+  ) : null
+
   const content = (
     <>
     <main className={`${embed ? "" : "flex-1"} bg-gray-50 flex flex-col px-4`}>
@@ -86,6 +99,8 @@ function SuccessContent() {
           aria-live="polite"
           className="max-w-md w-full bg-white rounded-2xl border border-gray-200 p-8 text-center"
         >
+          {card ?? (
+            <>
           <span aria-hidden="true" className="text-5xl block mb-4">{isWaitlist || onlyRequests ? "🕐" : "🎉"}</span>
           <h1 ref={headingRef} tabIndex={-1} className="text-xl font-bold text-gray-900 mb-2 focus:outline-none">{outcomeHeading(outcome)}</h1>
           {notice && (
@@ -158,6 +173,9 @@ function SuccessContent() {
                 <PushSubscribeButton editToken={token} />
               )}
             </div>
+          )}
+
+            </>
           )}
 
           {/* Back to the event (#1097); embedded, to its schedule in the frame. Not prefetched in

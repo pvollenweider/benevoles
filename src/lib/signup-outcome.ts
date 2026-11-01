@@ -26,3 +26,12 @@ export function requestNotice(o: SignupOutcome): string | null {
   const lead = o.active > 0 ? (o.requested > 1 ? `${o.requested} de tes créneaux sont sur validation` : "Un de tes créneaux est sur validation") : which
   return `${lead} : ce n'est pas encore une inscription confirmée. La place t'est réservée le temps que l'organisation réponde, et tu recevras un email avec sa réponse.`
 }
+
+/**
+ * A sign-up without proof of the address (AUTHZ-01): the page can't say what happened, the server
+ * answers the same whether it was recorded or not. The emails say it: the confirmation, or why it
+ * was not recorded. No celebration, no place or request claimed.
+ */
+export const UNPROVEN_HEADING = "Demande d'inscription reçue"
+export const UNPROVEN_TEXT = "Merci pour ton engagement. Vérifie tes emails, y compris les courriers indésirables : tu y trouveras la suite donnée à ta demande."
+export const UNPROVEN_RETRY_TEXT = "Si tu viens de réessayer, consulte aussi les emails déjà reçus."

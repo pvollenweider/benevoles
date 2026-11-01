@@ -62,10 +62,10 @@ export const EMPTY_SIGNUP_FORM: SignupForm = {
   firstName: "", lastName: "", email: "", phone: "", birthDate: "", comment: "", consent: false,
 }
 
-/** Can this shift be added to the selection (not closed/cancelled, full only with a waitlist, not already mine)? */
+/** Can this shift be added to the selection (not closed/cancelled/over, full only with a waitlist, not already mine)? */
 export function isShiftSelectable(shift: SignupShift | undefined, myShiftIds: Set<string>): boolean {
   if (!shift) return false
-  if (shift.status === "closed" || shift.status === "cancelled") return false
+  if (shift.status === "closed" || shift.status === "cancelled" || shift.status === "ended") return false
   if (shift.status === "full" && !shift.waitlistEnabled) return false
   return !myShiftIds.has(shift.id)
 }
@@ -81,11 +81,18 @@ export function conflictingShiftIds<S extends SignupShift>(shifts: S[], selected
   )
 }
 
-/** Whether at least one shift can still be signed up for (open, or full with a waitlist). */
+/** Whether at least one shift can still be signed up for (open, or full with a waitlist; never one that is over). */
 export function hasAvailableShift(shifts: SignupShift[]): boolean {
   return shifts.some(
-    (s) => (s.status !== "full" && s.status !== "closed" && s.status !== "cancelled") || (s.status === "full" && s.waitlistEnabled),
+    (s) => (s.status !== "full" && s.status !== "closed" && s.status !== "cancelled" && s.status !== "ended") || (s.status === "full" && s.waitlistEnabled),
   )
+}
+
+/** What the page says when no shift can be taken: over, or full (#866: a published event that is over). */
+export function noAvailableShiftText(shifts: SignupShift[], ofTheseRoles: boolean): string {
+  const ended = shifts.length > 0 && shifts.every((s) => s.status === "ended")
+  if (ofTheseRoles) return ended ? "Tous les créneaux de ces postes sont terminés." : "Tous les créneaux de ces postes sont complets."
+  return ended ? "Tous les créneaux sont terminés." : "Tous les créneaux sont complets."
 }
 
 /** Shifts grouped by calendar day (YYYY-MM-DD), in their original order. */

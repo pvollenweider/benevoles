@@ -24,6 +24,7 @@ import {
   conflictingShiftIds as computeConflictingShiftIds,
   hasAvailableShift as anyShiftAvailable,
   isShiftSelectable,
+  noAvailableShiftText,
   prefillContact,
   proposedShiftState,
   proposedShiftText,
@@ -77,6 +78,7 @@ import { attributionCode, groupFilterLine, groupFilterNotice, groupToggleAnnounc
 import RequiredMark from "@/components/RequiredMark"
 import { startingAnswers, type MyAnswerRow } from "@/lib/my-answers"
 import { SESSION_EMAIL_HINT, sessionFormNote, type SignupUpdates } from "@/lib/signup-updates"
+import { continueLabel } from "@/lib/continue-label"
 
 
 type Shift = {
@@ -1123,7 +1125,7 @@ export default function EventPageClient({ orgSlug, eventSlug, preview, initialEv
 
                 {!hasAvailableShift && (
                   <div className="text-center py-8 text-gray-500">
-                    <p className="text-lg font-medium">{groupFiltered && !showAllRoles ? "Tous les créneaux de ces postes sont complets." : "Tous les créneaux sont complets."}</p>
+                    <p className="text-lg font-medium">{noAvailableShiftText(shownShifts, groupFiltered && !showAllRoles)}</p>
                     <p className="text-sm mt-1">Merci pour ton intérêt !</p>
                   </div>
                 )}
@@ -1171,7 +1173,7 @@ export default function EventPageClient({ orgSlug, eventSlug, preview, initialEv
                             onClick={openForm}
                             className="w-full bg-blue-600 text-white rounded-xl py-3 text-sm font-semibold hover:bg-blue-700 motion-safe:active:scale-[0.98] transition-all"
                           >
-                            Continuer ({newShiftIds.size} nouveau{newShiftIds.size > 1 ? "x" : ""} créneau{newShiftIds.size > 1 ? "x" : ""})
+                            {continueLabel(newShiftIds.size)}
                           </button>
                         </div>
                       )}
@@ -1207,7 +1209,7 @@ export default function EventPageClient({ orgSlug, eventSlug, preview, initialEv
                   onClick={openForm}
                   className="w-full bg-blue-600 text-white rounded-2xl py-4 text-base font-semibold hover:bg-blue-700 motion-safe:active:scale-[0.98] transition-all"
                 >
-                  Continuer ({newShiftIds.size} nouveau{newShiftIds.size > 1 ? "x" : ""} créneau{newShiftIds.size > 1 ? "x" : ""})
+                  {continueLabel(newShiftIds.size)}
                 </button>
               </div>
             )}
@@ -1221,7 +1223,7 @@ export default function EventPageClient({ orgSlug, eventSlug, preview, initialEv
                     onClick={openForm}
                     className="w-full bg-blue-600 text-white rounded-2xl py-4 text-base font-semibold shadow-xl hover:bg-blue-700 motion-safe:active:scale-[0.98] transition-all pointer-events-auto"
                   >
-                    Continuer ({newShiftIds.size} nouveau{newShiftIds.size > 1 ? "x" : ""} créneau{newShiftIds.size > 1 ? "x" : ""})
+                    {continueLabel(newShiftIds.size)}
                   </button>
                 </div>
               </div>

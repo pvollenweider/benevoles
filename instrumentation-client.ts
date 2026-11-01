@@ -1,5 +1,9 @@
 import { config as zodConfig } from "zod/v4/core"
 import { onSentryRouterTransitionStart, startSentryClient } from "./src/lib/sentry-client-loader"
+import { installTranslationDomGuard } from "./src/lib/translation-dom-guard"
+
+// Before hydration: a page the browser translated keeps working (src/lib/translation-dom-guard.ts).
+installTranslationDomGuard(Node.prototype)
 
 // The enforced script policy refuses eval (src/lib/security-headers.ts). Zod would otherwise probe
 // for it with `new Function` before its first object schema (caught, but reported by the browser
