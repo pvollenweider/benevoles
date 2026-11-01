@@ -8,6 +8,7 @@ import { launchVideoBrowser } from "../lib/public-hosts"
 import { fullNameOf } from "../lib/fixture-names"
 import { PrismaClient } from "../../src/generated/prisma/client"
 import { pgAdapter } from "../../src/lib/prisma-adapter"
+import { OPERATOR_PLATFORM_EMAIL, passOperatorSecondFactor } from "../lib/operator-second-factor"
 
 async function main() {
   const base = "http://localhost:43104"
@@ -30,6 +31,7 @@ async function main() {
       await page.getByLabel("Email", { exact: true }).fill(email)
       await page.getByLabel("Mot de passe", { exact: true }).fill(loginPassword)
       await page.getByRole("button", { name: "Se connecter", exact: true }).click()
+      if (email === OPERATOR_PLATFORM_EMAIL) await passOperatorSecondFactor(page)
       await page.waitForURL(/\/(?:admin\/dashboard|super-admin\/organizations)/)
     }
     await login(platform, "video.operator.platform@example.org")

@@ -6,6 +6,7 @@ const m = vi.hoisted(() => ({
   leaderFindMany: vi.fn(), leaderUpdateMany: vi.fn(),
   inviteFindMany: vi.fn(), inviteUpdateMany: vi.fn(),
   availabilityFindMany: vi.fn().mockResolvedValue([]), availabilityUpdateMany: vi.fn(),
+  adminFindMany: vi.fn().mockResolvedValue([]), adminUpdateMany: vi.fn(),
 }))
 vi.mock("../prisma", () => ({
   prisma: {
@@ -13,6 +14,7 @@ vi.mock("../prisma", () => ({
     sectorLeader: { findMany: m.leaderFindMany, updateMany: m.leaderUpdateMany },
     memberInvite: { findMany: m.inviteFindMany, updateMany: m.inviteUpdateMany },
     availabilityRequest: { findMany: m.availabilityFindMany, updateMany: m.availabilityUpdateMany },
+    adminUser: { findMany: m.adminFindMany, updateMany: m.adminUpdateMany },
   },
 }))
 
@@ -35,6 +37,7 @@ beforeEach(() => {
   for (const fn of Object.values(m)) fn.mockReset()
   // The availability links (#1146): none in these cases.
   m.availabilityFindMany.mockResolvedValue([])
+  m.adminFindMany.mockResolvedValue([])
   m.regFindMany.mockImplementation(rows([], []))
   m.leaderFindMany.mockImplementation(rows([], []))
   m.inviteFindMany.mockImplementation(rows([], []))
@@ -80,6 +83,26 @@ describe("encryptLegacyTokens (#290, #313)", () => {
     expect(first.data.editTokenEnc.startsWith("v2:k2:")).toBe(true)
     expect(decryptValue(first.data.editTokenEnc, keyring())).toBe("old-tok")
     expect(decryptValue(second.data.editTokenEnc, keyring())).toBe("v1-tok")
+  })
+
+  it("re-encrypts the super admin's second-factor secrets, confirmed and pending, on rotation (pentest F6)", async () => {
+    vi.stubEnv("TOKEN_ENCRYPTION_KEY", b64(newKey))
+    vi.stubEnv("TOKEN_ENCRYPTION_KEY_ID", "k2")
+    vi.stubEnv("TOKEN_ENCRYPTION_PREVIOUS_KEYS", `k1:${b64(oldKey)}`)
+    const secret = encryptToken("JBSWY3DPEHPK3PXP", oldKey, "k1")
+    const pending = encryptToken('{"s":"X"}', oldKey, "k1")
+    m.adminFindMany.mockImplementation(async ({ where }: { where: Record<string, unknown> }) =>
+      "totpSecretEnc" in where ? [{ id: "a1", totpSecretEnc: secret }] : [{ id: "a1", totpPendingSecretEnc: pending }])
+    m.adminUpdateMany.mockResolvedValue({ count: 1 })
+
+    const res = await encryptLegacyTokens()
+    expect(res).toMatchObject({ reencrypted: { adminTotpSecrets: 1, adminTotpPending: 1 } })
+    const [first, second] = m.adminUpdateMany.mock.calls.map((c) => c[0])
+    expect(first.where).toEqual({ id: "a1", totpSecretEnc: secret })
+    expect(decryptValue(first.data.totpSecretEnc, keyring())).toBe("JBSWY3DPEHPK3PXP")
+    expect(first.data.totpSecretEnc.startsWith("v2:k2:")).toBe(true)
+    expect(second.where).toEqual({ id: "a1", totpPendingSecretEnc: pending })
+    expect(decryptValue(second.data.totpPendingSecretEnc, keyring())).toBe('{"s":"X"}')
   })
 
   it("keeps going batch after batch until drained", async () => {

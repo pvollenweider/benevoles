@@ -7,6 +7,7 @@ import { Client } from "pg"
 import bcrypt from "bcryptjs"
 import assert from "node:assert/strict"
 import { fullNameOf, surnameOf } from "../videos/lib/fixture-names"
+import { operatorTotpSecretEnc } from "../videos/lib/operator-second-factor"
 
 async function main() {
   const url = new URL(process.env.DATABASE_URL ?? "")
@@ -52,7 +53,7 @@ async function main() {
     const passwordHash = await bcrypt.hash(process.env.ORG_ADMIN_PASSWORD ?? "e2e-org-admin-password", 10)
     const memberFirstNames = ["Léa", "Emma", "Nicolas", "Zoé", "Sarah", "Lucas"]
     await db.$transaction(async tx => {
-      await tx.adminUser.create({ data: { id: "video-operator-platform", email: "video.operator.platform@example.org", name: fullNameOf("Morgane"), role: "super_admin", passwordHash, receiveProductUpdates: false } })
+      await tx.adminUser.create({ data: { id: "video-operator-platform", email: "video.operator.platform@example.org", name: fullNameOf("Morgane"), role: "super_admin", passwordHash, receiveProductUpdates: false, totpSecretEnc: operatorTotpSecretEnc(), totpEnabledAt: new Date("2026-10-01T08:00:00Z") } })
       const day = new Date("2026-11-07T00:00:00Z")
       for (const [index, label] of ["Parc", "Quartier", "Réserve"].entries()) {
         const side = ["a", "b", "c"][index]

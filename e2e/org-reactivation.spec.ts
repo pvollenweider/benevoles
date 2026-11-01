@@ -1,6 +1,7 @@
 import { test, expect } from "@playwright/test"
 import { Client } from "pg"
 import { getMessageText, waitForMessage } from "./helpers/mailpit"
+import { passSecondFactor } from "./helpers/super-admin"
 
 /**
  * « Réactiver mon espace » (#811): from the sign-in page, an administrator of a space deactivated
@@ -28,6 +29,7 @@ test("an administrator reactivates a space deactivated for inactivity with the e
   await page.getByLabel("Email").fill(SUPER_ADMIN_EMAIL)
   await page.getByLabel("Mot de passe").fill(SUPER_ADMIN_PASSWORD)
   await page.getByRole("button", { name: "Se connecter" }).click()
+  await passSecondFactor(page)
   await expect(page).toHaveURL(/\/admin\/dashboard|\/super-admin\/organizations/)
 
   const slug = `e2e-reactivation-${Date.now()}`

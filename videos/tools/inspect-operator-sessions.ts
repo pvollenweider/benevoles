@@ -3,6 +3,7 @@
 import assert from "node:assert/strict"
 import { chromium } from "playwright"
 import { launchVideoBrowser } from "../lib/public-hosts"
+import { passOperatorSecondFactor } from "../lib/operator-second-factor"
 async function main() {
   assert.equal(process.env.VIDEO_BASE_URL, "http://localhost:43104")
   assert.equal(new URL(process.env.DATABASE_URL!).pathname, "/benevoles_video_operator")
@@ -13,6 +14,7 @@ async function main() {
     await page.getByLabel("Email", { exact: true }).fill("video.operator.platform@example.org")
     await page.getByLabel("Mot de passe", { exact: true }).fill(process.env.ORG_ADMIN_PASSWORD ?? "e2e-org-admin-password")
     await page.getByRole("button", { name: "Se connecter", exact: true }).click()
+    await passOperatorSecondFactor(page)
     await page.waitForURL(/\/super-admin\/organizations/)
     const cookies = await page.context().cookies()
     console.log("Original session cookie names:", cookies.map(cookie => cookie.name))

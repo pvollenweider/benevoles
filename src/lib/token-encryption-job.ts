@@ -17,7 +17,7 @@ import { decryptValue, encryptValue, keyring, needsReencryption } from "./token-
 
 type Row = { id: string; value: string | null }
 type Table = {
-  name: "registrations" | "sectorLeaders" | "memberInvites" | "availabilityRequests"
+  name: "registrations" | "sectorLeaders" | "memberInvites" | "availabilityRequests" | "adminTotpSecrets" | "adminTotpPending"
   legacy?: (take: number) => Promise<Row[]>
   encrypted: (take: number, notPrefix: string) => Promise<Row[]>
   update: (id: string, from: { legacy?: string; enc?: string }, enc: string) => Promise<number>
@@ -69,6 +69,20 @@ const tables: Table[] = [
       data: { tokenEnc: enc, tokenLegacy: null },
     }).then((r) => r.count),
   },
+  {
+    // The super admin's second factor (pentest F6): never in clear, so re-encryption only, of the
+    // confirmed secret and of an enrolment not confirmed yet.
+    name: "adminTotpSecrets",
+    encrypted: (take, notPrefix) => prisma.adminUser.findMany({ where: { totpSecretEnc: { not: null }, NOT: { totpSecretEnc: { startsWith: notPrefix } } }, select: { id: true, totpSecretEnc: true }, take })
+      .then((rows) => rows.map((r) => ({ id: r.id, value: r.totpSecretEnc }))),
+    update: (id, from, enc) => prisma.adminUser.updateMany({ where: { id, totpSecretEnc: from.enc }, data: { totpSecretEnc: enc } }).then((r) => r.count),
+  },
+  {
+    name: "adminTotpPending",
+    encrypted: (take, notPrefix) => prisma.adminUser.findMany({ where: { totpPendingSecretEnc: { not: null }, NOT: { totpPendingSecretEnc: { startsWith: notPrefix } } }, select: { id: true, totpPendingSecretEnc: true }, take })
+      .then((rows) => rows.map((r) => ({ id: r.id, value: r.totpPendingSecretEnc }))),
+    update: (id, from, enc) => prisma.adminUser.updateMany({ where: { id, totpPendingSecretEnc: from.enc }, data: { totpPendingSecretEnc: enc } }).then((r) => r.count),
+  },
 ]
 
 export async function encryptLegacyTokens(opts: { batchSize?: number; maxBatches?: number } = {}) {
@@ -79,11 +93,11 @@ export async function encryptLegacyTokens(opts: { batchSize?: number; maxBatches
   const prefix = `v2:${ring.current.id}:`
 
   const encrypted = { registrations: 0, sectorLeaders: 0, memberInvites: 0, availabilityRequests: 0 }
-  const reencrypted = { registrations: 0, sectorLeaders: 0, memberInvites: 0, availabilityRequests: 0 }
+  const reencrypted = { registrations: 0, sectorLeaders: 0, memberInvites: 0, availabilityRequests: 0, adminTotpSecrets: 0, adminTotpPending: 0 }
 
   for (const t of tables) {
-    const name = t.name as keyof typeof encrypted
     for (let i = 0; t.legacy && i < maxBatches; i++) {
+      const name = t.name as keyof typeof encrypted
       const rows = await t.legacy(batchSize)
       for (const r of rows) encrypted[name] += await t.update(r.id, { legacy: r.value! }, encryptValue(r.value!, ring)!)
       if (rows.length < batchSize) break
@@ -91,7 +105,7 @@ export async function encryptLegacyTokens(opts: { batchSize?: number; maxBatches
     for (let i = 0; i < maxBatches; i++) {
       const rows = (await t.encrypted(batchSize, prefix)).filter((r) => r.value && needsReencryption(r.value, ring))
       for (const r of rows) {
-        reencrypted[name] += await t.update(r.id, { enc: r.value! }, encryptValue(decryptValue(r.value!, ring), ring)!)
+        reencrypted[t.name] += await t.update(r.id, { enc: r.value! }, encryptValue(decryptValue(r.value!, ring), ring)!)
       }
       if (rows.length < batchSize) break
     }

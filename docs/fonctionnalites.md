@@ -223,6 +223,14 @@ Liste exhaustive des fonctionnalités de l'application.
 
 - `GET /api/admin/events/[id]/export/archive` : JSON complet (événement, créneaux, inscriptions + bénévoles, pages, responsables sans jetons, jalons, journal), tout jeton ou hachage retiré (`stripSecrets`) ; `GET /api/admin/members/export` et `GET /api/admin/settings/activity/export` : CSV UTF-8 BOM point-virgule ; logique pure dans `src/lib/data-export.ts` ; tests d'isolation cross-tenant ; durées de conservation (`RETENTION`) reprises dans `content/guide/exporter-et-conserver-ses-donnees.md` et la page de confidentialité
 
+### Double authentification du super admin (constat F6 du test d'intrusion)
+
+- Après le mot de passe, un code à 6 chiffres d'une application d'authentification (TOTP, RFC 6238, HMAC-SHA1, 30 s, implémentation `src/lib/totp.ts` testée sur les vecteurs des RFC 4226 et 6238) ou un code de secours, sur `/admin/two-factor` ; obligatoire pour le rôle `super_admin`, sans effet sur les comptes des organisations
+- Session « en attente » tant que le code n'est pas donné : rôle et organisation masqués (`src/lib/second-factor-session.ts`), redirection par le proxy, 401 `SECOND_FACTOR_REQUIRED` dans `requireSuperAdmin()` / `requireOrgSession()`, redirection dans `getOrgContext()` ; la session est complétée par `unstable_update` avec une preuve HMAC liée au compte, à sa `sessionVersion` et au nonce de la connexion (`src/lib/second-factor-proof.ts`), valable 12 heures
+- Activation à la première connexion (code QR et clé, secret proposé gardé 24 heures, mot de passe de moins d'une heure), dix codes de secours affichés une fois (copie, fichier texte), nouveaux codes depuis `/super-admin/profile` avec un code de l'application
+- Secret chiffré (`TOKEN_ENCRYPTION_KEY`, repris par la rotation de clé), codes de secours en SHA-256, dernier pas de temps accepté gardé contre le rejeu, 5 échecs par compte et 20 par IP sur 15 minutes (refus si le compteur est indisponible), alertes à l'opérateur à l'activation, à l'utilisation d'un code de secours, à la création de nouveaux codes et à la réinitialisation
+- Réinitialisation d'urgence : `scripts/reset-two-factor.ts` (ou SQL), voir [Double authentification du super admin](double-authentification.md)
+
 ### Santé du service (`/super-admin/health`, super admin)
 
 - Base (latence `SELECT 1`), file d'emails (`outboxHealth`), tâches planifiées et sauvegardes (table `JobRun`, #383 : `recordJobRun` autour des routes cron rappels et nettoyage ; `POST /api/cron/heartbeat` avec `CRON_SECRET` pour `backup`, `backup-offsite` et le `restore-test` manuel, appelé par les CronJobs k8s), migrations appliquées (`_prisma_migrations`) et en attente (dossier `prisma/migrations` de l'image), version (`package.json`) et commit (`GIT_SHA`, build arg), configuration (SMTP, VAPID, CRON_SECRET, TOKEN_ENCRYPTION_KEY, Sentry)

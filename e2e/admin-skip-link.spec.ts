@@ -1,4 +1,5 @@
 import { test, expect } from "@playwright/test"
+import { passSecondFactor } from "./helpers/super-admin"
 
 /**
  * Skip link (#389): the first Tab on an admin page reveals « Aller au contenu »; Enter moves the
@@ -37,6 +38,7 @@ test("super admin: the first Tab reveals a skip link that focuses the main conte
   await page.getByLabel("Email").fill(SUPER_ADMIN_EMAIL)
   await page.getByLabel("Mot de passe").fill(SUPER_ADMIN_PASSWORD)
   await page.getByRole("button", { name: "Se connecter" }).click()
+  await passSecondFactor(page)
   await expect(page).toHaveURL(/\/admin\/dashboard|\/super-admin/)
 
   await page.goto("/super-admin/organizations")

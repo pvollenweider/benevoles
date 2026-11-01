@@ -2,6 +2,7 @@ import { test, expect } from "@playwright/test"
 import { execFileSync } from "node:child_process"
 import { seriousViolations } from "./helpers/axe"
 import { waitForHydration } from "./helpers/hydration"
+import { passSecondFactor } from "./helpers/super-admin"
 import { createPublicEvent } from "./helpers/public-signup"
 
 /**
@@ -348,6 +349,7 @@ test.describe("super admin", () => {
     await page.getByLabel("Email").fill(SUPER_ADMIN_EMAIL)
     await page.getByLabel("Mot de passe").fill(SUPER_ADMIN_PASSWORD)
     await page.getByRole("button", { name: "Se connecter" }).click()
+    await passSecondFactor(page)
     await expect(page).toHaveURL(/\/admin\/dashboard|\/super-admin\/organizations/)
 
     await page.goto("/super-admin/organizations")

@@ -7,6 +7,7 @@ import { chromium } from "playwright"
 import { launchVideoBrowser } from "../lib/public-hosts"
 import { PrismaClient } from "../../src/generated/prisma/client"
 import { pgAdapter } from "../../src/lib/prisma-adapter"
+import { OPERATOR_PLATFORM_EMAIL, passOperatorSecondFactor } from "../lib/operator-second-factor"
 
 async function main() {
   const url = new URL(process.env.DATABASE_URL ?? "")
@@ -20,6 +21,7 @@ async function main() {
       await page.getByLabel("Email", { exact: true }).fill(email)
       await page.getByLabel("Mot de passe", { exact: true }).fill(process.env.ORG_ADMIN_PASSWORD ?? "e2e-org-admin-password")
       await page.getByRole("button", { name: "Se connecter", exact: true }).click()
+      if (email === OPERATOR_PLATFORM_EMAIL) await passOperatorSecondFactor(page)
       await page.waitForURL(/\/(?:admin\/dashboard|super-admin\/organizations)/)
     }
     await platform.goto("http://localhost:43104/super-admin/organizations")
