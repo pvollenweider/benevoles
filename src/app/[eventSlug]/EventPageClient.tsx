@@ -77,6 +77,7 @@ import { attributionCode, groupFilterLine, groupFilterNotice, groupToggleAnnounc
 import RequiredMark from "@/components/RequiredMark"
 import { startingAnswers, type MyAnswerRow } from "@/lib/my-answers"
 import { SESSION_EMAIL_HINT, sessionFormNote, type SignupUpdates } from "@/lib/signup-updates"
+import { continueLabel } from "@/lib/continue-label"
 
 
 type Shift = {
@@ -1171,7 +1172,7 @@ export default function EventPageClient({ orgSlug, eventSlug, preview, initialEv
                             onClick={openForm}
                             className="w-full bg-blue-600 text-white rounded-xl py-3 text-sm font-semibold hover:bg-blue-700 motion-safe:active:scale-[0.98] transition-all"
                           >
-                            Continuer ({newShiftIds.size} nouveau{newShiftIds.size > 1 ? "x" : ""} créneau{newShiftIds.size > 1 ? "x" : ""})
+                            {continueLabel(newShiftIds.size)}
                           </button>
                         </div>
                       )}
@@ -1207,7 +1208,7 @@ export default function EventPageClient({ orgSlug, eventSlug, preview, initialEv
                   onClick={openForm}
                   className="w-full bg-blue-600 text-white rounded-2xl py-4 text-base font-semibold hover:bg-blue-700 motion-safe:active:scale-[0.98] transition-all"
                 >
-                  Continuer ({newShiftIds.size} nouveau{newShiftIds.size > 1 ? "x" : ""} créneau{newShiftIds.size > 1 ? "x" : ""})
+                  {continueLabel(newShiftIds.size)}
                 </button>
               </div>
             )}
@@ -1221,7 +1222,7 @@ export default function EventPageClient({ orgSlug, eventSlug, preview, initialEv
                     onClick={openForm}
                     className="w-full bg-blue-600 text-white rounded-2xl py-4 text-base font-semibold shadow-xl hover:bg-blue-700 motion-safe:active:scale-[0.98] transition-all pointer-events-auto"
                   >
-                    Continuer ({newShiftIds.size} nouveau{newShiftIds.size > 1 ? "x" : ""} créneau{newShiftIds.size > 1 ? "x" : ""})
+                    {continueLabel(newShiftIds.size)}
                   </button>
                 </div>
               </div>
