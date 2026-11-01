@@ -7,7 +7,7 @@ import bcrypt from "bcryptjs"
 import { authConfig } from "./auth.config"
 import { prisma } from "@/lib/prisma"
 import { getClientIp } from "@/lib/rate-limit"
-import { beginLoginAttempt, refreshAdminToken } from "@/lib/admin-session"
+import { beginLoginAttempt, refreshAdminToken, revokeSession } from "@/lib/admin-session"
 import { verifyAdminLogin } from "@/lib/admin-login"
 import { normalizeEmail } from "@/lib/email-address"
 import { MAX_LOGIN_PASSWORD_LENGTH } from "@/lib/password"
@@ -21,6 +21,12 @@ export const { handlers, auth, signIn, signOut } = NextAuth({
     async jwt(params) {
       const token = await authConfig.callbacks!.jwt!(params)
       return token ? refreshAdminToken(token) : null
+    },
+  },
+  events: {
+    // « Se déconnecter » ends the session on the server, not only in this browser (revokeSession).
+    async signOut(message) {
+      if ("token" in message) await revokeSession(message.token)
     },
   },
   providers: [

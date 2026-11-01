@@ -3,14 +3,19 @@
 
 import { PrismaClient } from "../src/generated/prisma/client"
 import { pgAdapter } from "../src/lib/prisma-adapter"
+import { seedPasswords } from "../src/lib/seed-credentials"
 import bcrypt from "bcryptjs"
 
 const adapter = pgAdapter(process.env.DATABASE_URL!)
 const prisma = new PrismaClient({ adapter })
 
 async function main() {
+  // In production both passwords are required and must follow the password policy, checked before
+  // anything is written (src/lib/seed-credentials.ts).
+  const passwords = seedPasswords(process.env)
+  if ("error" in passwords) throw new Error(passwords.error)
   const superAdminEmail    = process.env.ADMIN_EMAIL    ?? "admin@localhost"
-  const superAdminPassword = process.env.ADMIN_PASSWORD ?? "change-me"
+  const superAdminPassword = passwords.superAdminPassword
   const passwordHash       = await bcrypt.hash(superAdminPassword, 12)
 
   // Default organization (also used by the multi-tenant migration to backfill
@@ -28,7 +33,8 @@ async function main() {
   // Super admin: not attached to any organization (cross-tenant role).
   await prisma.adminUser.upsert({
     where: { email: superAdminEmail },
-    update: { passwordHash, organizationId: null, role: "super_admin" },
+    // A password reset by the seed ends the account's open sessions, like any other reset.
+    update: { passwordHash, organizationId: null, role: "super_admin", sessionVersion: { increment: 1 } },
     create: {
       email: superAdminEmail,
       name: "Super Administrateur",
@@ -42,12 +48,11 @@ async function main() {
 
   // Demo org admin so the default organization is usable out of the box.
   const orgAdminEmail = process.env.ORG_ADMIN_EMAIL ?? "org-admin@localhost"
-  const orgAdminPassword = process.env.ORG_ADMIN_PASSWORD ?? superAdminPassword
-  const orgAdminHash = await bcrypt.hash(orgAdminPassword, 12)
+  const orgAdminHash = await bcrypt.hash(passwords.orgAdminPassword, 12)
 
   await prisma.adminUser.upsert({
     where: { email: orgAdminEmail },
-    update: { passwordHash: orgAdminHash, organizationId: org.id, role: "admin" },
+    update: { passwordHash: orgAdminHash, organizationId: org.id, role: "admin", sessionVersion: { increment: 1 } },
     create: {
       email: orgAdminEmail,
       name: "Administrateur (org par défaut)",
@@ -113,5 +118,8 @@ async function main() {
 }
 
 main()
-  .catch(console.error)
+  .catch((error) => {
+    console.error(error instanceof Error ? error.message : error)
+    process.exitCode = 1
+  })
   .finally(() => prisma.$disconnect())
