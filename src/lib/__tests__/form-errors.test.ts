@@ -1,6 +1,6 @@
 import { describe, it, expect } from "vitest"
-import { describeBulkFailure, describeSignupFailure, mergeFailureMessage, partialOutcome } from "../form-errors"
-import { STALE_LINK_MESSAGE, staleLinkRefusal } from "../signup-eligibility"
+import { describeBulkFailure, describeSignupFailure, mergeFailureMessage, partialOutcome, SIGNUP_RETRY_HINT } from "../form-errors"
+import { BUSY_SIGNUP_MESSAGE, busySignupRefusal, STALE_LINK_MESSAGE, staleLinkRefusal } from "../signup-eligibility"
 
 // Error recovery on important forms (#375).
 describe("describeSignupFailure", () => {
@@ -35,9 +35,23 @@ describe("describeSignupFailure", () => {
   })
 
   it("says that retrying is safe when the request may have gone through", () => {
-    expect(describeSignupFailure({ network: true }).hint).toContain("sans risque")
-    expect(describeSignupFailure({ status: 500 }).hint).toContain("lien par email")
+    // Without proof of the address the answer can't say whether it went through (AUTHZ-01): the
+    // emails do, and retrying never duplicates.
+    expect(describeSignupFailure({ network: true }).hint).toBe(SIGNUP_RETRY_HINT)
+    expect(describeSignupFailure({ network: true }).maybeRecorded).toBe(true)
+    expect(describeSignupFailure({ status: 500 }).hint).toBe(SIGNUP_RETRY_HINT)
+    expect(SIGNUP_RETRY_HINT).toContain("pas de doublon")
+    expect(SIGNUP_RETRY_HINT).toContain("courriers indésirables")
     expect(describeSignupFailure({ status: 400 }).hint).toContain("conservées")
+  })
+
+  it("contention: nothing recorded, try again in a few seconds (AUTHZ-04)", () => {
+    const busy = describeSignupFailure({ status: 409, body: busySignupRefusal().body })
+    expect(busy).toMatchObject({ kind: "busy", title: "Beaucoup d'inscriptions en même temps", retryable: true, maybeRecorded: false })
+    expect(busy.message).toBe(BUSY_SIGNUP_MESSAGE)
+    expect(busy.hint).toBe("Confirme à nouveau dans quelques secondes\u00a0; tes informations restent remplies.")
+    // Never mistaken for the rate limit.
+    expect(describeSignupFailure({ status: 429 }).kind).toBe("rate_limit")
   })
 
   it("keeps the server's sentence, falls back when it has none", () => {

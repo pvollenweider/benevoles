@@ -18,25 +18,28 @@ const groupLinkFindFirst = vi.hoisted(() => vi.fn())
 const registrationCreate = vi.hoisted(() => vi.fn())
 const logEvent = vi.hoisted(() => vi.fn())
 
-vi.mock("@/lib/prisma", () => ({
+vi.mock("@/lib/prisma", async () => {
+  const locked = (await import("./helpers/locked-shifts")).lockedShiftReads()
+  return ({
   prisma: {
+      charterVersion: { upsert: vi.fn() },
     event: { findFirst: eventFindFirst },
     eventGroupLink: { findFirst: groupLinkFindFirst },
     eventQuestion: { findMany: vi.fn().mockResolvedValue([]) },
     shift: {
-      findMany: vi.fn().mockResolvedValue([
+      findMany: locked.top(vi.fn().mockResolvedValue([
         { id: "shift-1", roleName: "Bar", label: "Bar", capacity: 5, minAge: null, waitlistEnabled: false, requiresApproval: false, registrations: [], date: new Date("2099-10-10T00:00:00Z"), startTime: "10:00", endTime: "12:00", reservedTags: [] },
-      ]),
+      ])),
     },
     volunteer: { findFirst: vi.fn().mockResolvedValue(null), update: vi.fn() },
     registration: { findMany: vi.fn().mockResolvedValue([]) },
     $transaction: vi.fn(async (fn: (tx: unknown) => unknown) => fn({
       $queryRaw: vi.fn(),
-      shift: { findMany: vi.fn().mockResolvedValue([]) },
+      shift: { findMany: locked.tx(vi.fn().mockResolvedValue([])) },
       charterVersion: { upsert: vi.fn() },
       rosterConsent: { findUnique: vi.fn().mockResolvedValue(null), upsert: vi.fn() },
       questionAnswer: { upsert: vi.fn(), createMany: vi.fn(), deleteMany: vi.fn() },
-      registration: {
+      registration: { findFirst: vi.fn().mockResolvedValue(null),
         findMany: vi.fn().mockResolvedValue([]),
         count: vi.fn().mockResolvedValue(0),
         aggregate: vi.fn().mockResolvedValue({ _max: { waitingPosition: null } }),
@@ -44,7 +47,8 @@ vi.mock("@/lib/prisma", () => ({
       },
     })),
   },
-}))
+})
+})
 vi.mock("@/lib/registration-capacity", async (importOriginal) => ({
   ...(await importOriginal<typeof import("@/lib/registration-capacity")>()),
   lockShifts: vi.fn(),

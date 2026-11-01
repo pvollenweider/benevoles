@@ -8,21 +8,24 @@ vi.mock("@/lib/workload-guard", async (importOriginal) => ({
 
 const eventFindFirst = vi.hoisted(() => vi.fn())
 const shiftFindMany = vi.hoisted(() => vi.fn())
-vi.mock("@/lib/prisma", () => ({
+vi.mock("@/lib/prisma", async () => {
+  const locked = (await import("./helpers/locked-shifts")).lockedShiftReads()
+  return ({
   prisma: {
+      charterVersion: { upsert: vi.fn() },
     eventQuestion: { findMany: vi.fn().mockResolvedValue([]) }, // no custom question (#483)
     event: { findFirst: eventFindFirst },
-    shift: { findMany: shiftFindMany },
+    shift: { findMany: locked.top(shiftFindMany) },
     volunteer: { findFirst: vi.fn(), create: vi.fn().mockResolvedValue({ id: "vol-1" }), update: vi.fn() },
     registration: { findMany: vi.fn().mockResolvedValue([]), aggregate: vi.fn(), create: vi.fn() },
     // Interactive transaction: runs the callback against a minimal tx client.
     $transaction: vi.fn(async (fn: (tx: unknown) => unknown) => fn({
       $queryRaw: vi.fn().mockResolvedValue([{ id: "locked" }]), // the member lock (#285): the row it locked
-      shift: { findMany: vi.fn().mockResolvedValue([]) }, // no role limit (#466)
+      shift: { findMany: locked.tx(vi.fn().mockResolvedValue([])) }, // no role limit (#466)
       volunteer: { createMany: vi.fn().mockResolvedValue({ count: 1 }), findFirstOrThrow: vi.fn().mockResolvedValue({ id: "vol-1" }) },
       charterVersion: { upsert: vi.fn() },
       rosterConsent: { findUnique: vi.fn().mockResolvedValue(null), upsert: vi.fn() },
-      registration: {
+      registration: { findFirst: vi.fn().mockResolvedValue(null),
         findMany: vi.fn().mockResolvedValue([]),
         count: vi.fn().mockResolvedValue(0),
         aggregate: vi.fn().mockResolvedValue({ _max: { waitingPosition: null } }),
@@ -30,7 +33,8 @@ vi.mock("@/lib/prisma", () => ({
       },
     })),
   },
-}))
+})
+})
 
 vi.mock("@/lib/notification-helpers", () => ({ sendConfirmationEmail: vi.fn(), sendAdminNotification: vi.fn() }))
 vi.mock("@/lib/notifications", () => ({ sendNotification: vi.fn() }))
@@ -65,7 +69,7 @@ describe("POST /api/public/registrations — minimum age (#192)", () => {
 
   it("rejects when the shift requires an age and no birthDate is given", async () => {
     shiftFindMany.mockResolvedValue([
-      { id: "shift-1", label: "Bar", capacity: 5, minAge: 18, waitlistEnabled: false, registrations: [], date: new Date("2026-10-10T00:00:00Z"), startTime: "10:00", endTime: "12:00" },
+      { id: "shift-1", label: "Bar", capacity: 5, minAge: 18, waitlistEnabled: false, registrations: [], date: new Date("2030-10-10T00:00:00Z"), startTime: "10:00", endTime: "12:00" },
     ])
     const { POST } = await import("@/app/api/public/registrations/route")
     const res = await POST(post(baseBody))
@@ -77,7 +81,7 @@ describe("POST /api/public/registrations — minimum age (#192)", () => {
 
   it("rejects when birthDate shows the volunteer is under the shift's minimum age", async () => {
     shiftFindMany.mockResolvedValue([
-      { id: "shift-1", label: "Bar", capacity: 5, minAge: 18, waitlistEnabled: false, registrations: [], date: new Date("2026-10-10T00:00:00Z"), startTime: "10:00", endTime: "12:00" },
+      { id: "shift-1", label: "Bar", capacity: 5, minAge: 18, waitlistEnabled: false, registrations: [], date: new Date("2030-10-10T00:00:00Z"), startTime: "10:00", endTime: "12:00" },
     ])
     const { POST } = await import("@/app/api/public/registrations/route")
     const res = await POST(post({ ...baseBody, birthDate: "2015-01-01" }))
@@ -89,7 +93,7 @@ describe("POST /api/public/registrations — minimum age (#192)", () => {
 
   it("refuses an invalid or future birth date before any age check (audit: NaN passed the gate)", async () => {
     shiftFindMany.mockResolvedValue([
-      { id: "shift-1", label: "Bar", capacity: 5, minAge: 18, waitlistEnabled: false, registrations: [], date: new Date("2026-10-10T00:00:00Z"), startTime: "10:00", endTime: "12:00" },
+      { id: "shift-1", label: "Bar", capacity: 5, minAge: 18, waitlistEnabled: false, registrations: [], date: new Date("2030-10-10T00:00:00Z"), startTime: "10:00", endTime: "12:00" },
     ])
     const { POST } = await import("@/app/api/public/registrations/route")
     for (const birthDate of ["pas une date", "2010-02-30", "3000-01-01", "01.01.1990"]) {
@@ -100,7 +104,7 @@ describe("POST /api/public/registrations — minimum age (#192)", () => {
 
   it("refuses any sign-up while registrations are closed or not open yet, with the reason (#463)", async () => {
     shiftFindMany.mockResolvedValue([
-      { id: "shift-1", label: "Bar", capacity: 5, minAge: null, waitlistEnabled: false, registrations: [], date: new Date("2026-10-10T00:00:00Z"), startTime: "10:00", endTime: "12:00" },
+      { id: "shift-1", label: "Bar", capacity: 5, minAge: null, waitlistEnabled: false, registrations: [], date: new Date("2030-10-10T00:00:00Z"), startTime: "10:00", endTime: "12:00" },
     ])
     const { POST } = await import("@/app/api/public/registrations/route")
     eventFindFirst.mockResolvedValue({ id: "evt-1", organizationId: "org-a", title: "Festival", organization: { slug: "org-a", timeZone: "Europe/Zurich" }, confirmationMessage: null, registrationsOpen: false })
@@ -116,7 +120,7 @@ describe("POST /api/public/registrations — minimum age (#192)", () => {
 
   it("treats an empty birth date as none: no 400 when no shift needs one", async () => {
     shiftFindMany.mockResolvedValue([
-      { id: "shift-1", label: "Bar", capacity: 5, minAge: null, waitlistEnabled: false, registrations: [], date: new Date("2026-10-10T00:00:00Z"), startTime: "10:00", endTime: "12:00" },
+      { id: "shift-1", label: "Bar", capacity: 5, minAge: null, waitlistEnabled: false, registrations: [], date: new Date("2030-10-10T00:00:00Z"), startTime: "10:00", endTime: "12:00" },
     ])
     const { POST } = await import("@/app/api/public/registrations/route")
     const res = await POST(post({ ...baseBody, birthDate: "" }))
@@ -167,7 +171,7 @@ describe("POST /api/public/registrations — minimum age (#192)", () => {
     const qm = (prisma as unknown as { eventQuestion: { findMany: ReturnType<typeof vi.fn> } }).eventQuestion.findMany
     qm.mockResolvedValue([{ id: "q1", label: "Taille", type: "single", options: ["S", "M"], required: true }])
     shiftFindMany.mockResolvedValue([
-      { id: "shift-1", label: "Bar", capacity: 5, minAge: null, waitlistEnabled: false, registrations: [], date: new Date("2026-10-10T00:00:00Z"), startTime: "10:00", endTime: "12:00" },
+      { id: "shift-1", label: "Bar", capacity: 5, minAge: null, waitlistEnabled: false, registrations: [], date: new Date("2030-10-10T00:00:00Z"), startTime: "10:00", endTime: "12:00" },
     ])
     const { POST } = await import("@/app/api/public/registrations/route")
     const missing = await POST(post(baseBody))

@@ -54,10 +54,12 @@ async function main() {
     const overlapResponse = page.waitForResponse(response => response.url().endsWith("/api/public/registrations") && response.request().method() === "POST")
     await submit.click()
     const overlap = await overlapResponse
-    assert.equal(overlap.status(), 409)
+    // Without proof of the address, the answer of any sign-up (AUTHZ-01): the owner is told by email.
+    assert.equal(overlap.status(), 201)
     const overlapBody = await overlap.json()
-    assert(/chevauch|déjà.*créneau|horaire/i.test(overlapBody.error))
-    await page.locator('[role="alert"]').first().waitFor()
+    assert.equal(overlapBody.editToken, null)
+    assert(!/chevauch|Accueil/i.test(JSON.stringify(overlapBody)))
+    await page.getByRole("heading", { name: "Demande d'inscription reçue", exact: true }).waitFor()
     await page.screenshot({ path: path.join(directory, "actual-server-overlap.png"), fullPage: true })
     assert.equal(await db.registration.count({ where: { eventId } }), 1)
     await openForm("Logistique", "Nicolas", "video.errors.nicolas@example.org")
@@ -78,9 +80,9 @@ async function main() {
     const retryResponse = page.waitForResponse(response => response.url().endsWith("/api/public/registrations") && response.request().method() === "POST")
     await submit.click()
     const retry = await retryResponse
-    assert.equal(retry.status(), 409)
+    assert.equal(retry.status(), 201)
     const retryBody = await retry.json()
-    assert(/déjà inscrit/i.test(retryBody.error))
+    assert.equal(retryBody.editToken, null)
     assert.equal((await db.registration.findMany({ where: { eventId, volunteer: { email: "video.errors.nicolas@example.org" } } })).length, 1)
     await page.screenshot({ path: path.join(directory, "retry-without-duplicate.png"), fullPage: true })
     await page.goto("http://localhost:43102/admin/login")

@@ -17,7 +17,7 @@ import type { LogActor } from "./event-log"
 import { reportError } from "./report-error"
 import {
   agreementTerms, beforeSwapDeadline, materialTerms, needsSwapApproval, personSwapCheck, swapCompatibility, swapDeadline,
-  swapRefusalMessage, SWAP_COUNTER_LIVE_STATUSES, SWAP_LIVE_STATUSES,
+  swapRefusalMessage, SWAP_OFFER_NOT_POSSIBLE, SWAP_COUNTER_LIVE_STATUSES, SWAP_LIVE_STATUSES,
   type SwapEndReason, type SwapRefusalCode, type SwapRegistration, type SwapShift, type SwapStatus,
 } from "./shift-swaps"
 import { deadlineMoment, selfCancelDeadline } from "./cancel-deadline"
@@ -229,7 +229,7 @@ type Evaluation = { ok: true; approval: boolean } | { ok: false; end: "expired" 
  * both registrations still confirmed on the agreed shifts, the agreed terms unchanged, the deadline,
  * compatibility and each person's plan. `terms` false at the offer itself, where they are set.
  */
-async function evaluateSwap(tx: Tx, req: LockedRequest, event: LoadedEvent, mine: LoadedRegistration | null, theirs: LoadedRegistration | null, now: Date, opts: { terms: boolean }): Promise<Evaluation> {
+async function evaluateSwap(tx: Tx, req: LockedRequest, event: LoadedEvent, mine: LoadedRegistration | null, theirs: LoadedRegistration | null, now: Date, opts: { terms: boolean; viewer?: "requester" | "offerer" }): Promise<Evaluation> {
   if (!event.shiftSwapsEnabled) return { ok: false, end: "cancelled", reason: "option_off" }
   const gone = (r: LoadedRegistration | null, volunteerId: string | null, shiftId: string | null) =>
     !r || r.volunteerId !== volunteerId || r.shiftId !== shiftId || r.status !== "active" || r.eventId !== req.eventId
@@ -242,17 +242,26 @@ async function evaluateSwap(tx: Tx, req: LockedRequest, event: LoadedEvent, mine
   const hidden = assignedOnlyRoles(await tx.shift.findMany({ where: { eventId: event.id, status: { not: "cancelled" }, assignedOnly: true }, select: { roleName: true, assignedOnly: true } }))
   const compatible = swapCompatibility(asSwapRegistration(a), asSwapRegistration(b), { assignedOnlyRoles: hidden })
   if (!compatible.ok) return { ok: false, end: "impossible", reason: compatible.code }
-  for (const [giving, receiving] of [[a, b.shift], [b, a.shift]] as const) {
+  // A volunteer acting (AUTHZ-08: the offerer at the offer, the requester at the confirmation)
+  // hears their own side first, with its precise reason; the other person's side then answers
+  // one code whatever stops it (age, tag, overlap, limit, workload): never their situation.
+  // An organiser (no viewer) gets every reason.
+  const sides = opts.viewer === "offerer"
+    ? ([[b, a.shift, false], [a, b.shift, true]] as const)
+    : opts.viewer === "requester"
+      ? ([[a, b.shift, false], [b, a.shift, true]] as const)
+      : ([[a, b.shift, false], [b, a.shift, false]] as const)
+  for (const [giving, receiving, hidden] of sides) {
     const check = await personCheck(tx, event, giving, receiving)
-    if (!check.ok) return { ok: false, end: "impossible", reason: check.code }
+    if (!check.ok) return { ok: false, end: "impossible", reason: hidden ? "not_possible" : check.code }
   }
   // Workload protection (#1171), for both people: each gives their shift away, then takes the other
   // one, judged on their whole schedule. The callers hold the event's workload lock and both
   // volunteers' locks.
   const gate = await readWorkloadGate(tx, event.id)
-  for (const [giving, receiving] of [[a, b.shift], [b, a.shift]] as const) {
+  for (const [giving, receiving, hidden] of sides) {
     const verdict = await checkDutyChange(tx, gate, event.id, giving.volunteerId, { removeShiftIds: [giving.shiftId], add: [receiving] })
-    if (!verdict.ok) return { ok: false, end: "impossible", reason: workloadSwapCode(verdict) }
+    if (!verdict.ok) return { ok: false, end: "impossible", reason: hidden ? "not_possible" : workloadSwapCode(verdict) }
   }
   return { ok: true, approval: needsSwapApproval(a.shift, b.shift, event) }
 }
@@ -478,8 +487,8 @@ export async function offerSwap(db: SwapDbLike, input: { requestId: string; regi
       }
       // Anything else is about this offer: refused, the request stays open for another one.
       const proposed: LockedRequest = { ...req, counterRegistrationId: theirs.id, counterVolunteerId: theirs.volunteerId, counterShiftId: theirs.shiftId }
-      const verdict = await evaluateSwap(tx, proposed, event, mine, theirs, now, { terms: false })
-      if (!verdict.ok) return { ok: false, httpStatus: 409, error: swapRefusalMessage(verdict.reason), status: "open", code: verdict.reason }
+      const verdict = await evaluateSwap(tx, proposed, event, mine, theirs, now, { terms: false, viewer: "offerer" })
+      if (!verdict.ok) return { ok: false, httpStatus: 409, error: verdict.reason === "not_possible" ? SWAP_OFFER_NOT_POSSIBLE : swapRefusalMessage(verdict.reason), status: "open", code: verdict.reason }
       const revision = req.revision + 1
       await tx.shiftSwapRequest.update({
         where: { id: req.id },
@@ -584,7 +593,7 @@ export async function confirmSwap(db: SwapDbLike, input: { requestId: string; vo
     if (req.status !== "offered") return stateError(req.status)
     if (locked.stale || req.revision !== input.revision) return { ok: false, httpStatus: 409, error: SWAP_NEW_TERMS, status: req.status as SwapStatus, code: "revision" }
     const [mine, theirs] = await Promise.all([loadRegistration(tx, req.registrationId), loadRegistration(tx, req.counterRegistrationId)])
-    const verdict = await evaluateSwap(tx, req, event, mine, theirs, now, { terms: true })
+    const verdict = await evaluateSwap(tx, req, event, mine, theirs, now, { terms: true, viewer: "requester" })
     if (!verdict.ok) {
       outboxIds = await endRequest(tx, req, event, verdict.end, verdict.reason, { type: "volunteer", id: input.volunteerId }, now)
       return { ok: false, httpStatus: 409, error: swapRefusalMessage(verdict.reason), status: verdict.end, code: verdict.reason }
