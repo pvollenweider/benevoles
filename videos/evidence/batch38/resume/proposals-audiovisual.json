@@ -1,0 +1,526 @@
+[
+  {
+    "model": "gemini-3.8-flash",
+    "reviewedAt": "2026-11-01T08:03:43.933Z",
+    "videoSha256": "13da4d0725c077fd0b2b2bf4c6ff799f1301aabcd06b179937a0cb21447259b3",
+    "promptSha256": "b7bd2412d79bae5f70af332b3381365f9ac56e55be58fb4357bbfc39ff2a75b5",
+    "clipSha256": "371d60e8d417ff0980ae504f34ae13bedcb6e761d62a451b93c59555927f396a",
+    "scene": "ap-adjust",
+    "review": {
+      "heardOpening": "Léa doit partir plus tôt vendredi",
+      "checkpoints": [
+        {
+          "spokenSeconds": 2.1,
+          "spoken": "ouvrons son brouillon de billetterie",
+          "visibleSeconds": 2.8,
+          "visible": "Ouverture de la fenêtre modale du brouillon de billetterie de Léa Müller",
+          "sync": "aligned",
+          "severity": "none"
+        },
+        {
+          "spokenSeconds": 4.6,
+          "spoken": "puis Retirer ce brouillon, et confirmons.",
+          "visibleSeconds": 5.8,
+          "visible": "Clic sur « Retirer ce brouillon » puis confirmation sur le bouton rouge",
+          "sync": "aligned",
+          "severity": "none"
+        },
+        {
+          "spokenSeconds": 7.5,
+          "spoken": "Dans la case de Lou, Ajouter",
+          "visibleSeconds": 8.3,
+          "visible": "Défilement vers Lou Tóth et clic sur « + Ajouter » pour le vendredi 20 novembre",
+          "sync": "aligned",
+          "severity": "none"
+        },
+        {
+          "spokenSeconds": 9.7,
+          "spoken": "puis Ajouter en brouillon sur la billetterie.",
+          "visibleSeconds": 11.2,
+          "visible": "Clic sur « Ajouter en brouillon » sous la section Billetterie",
+          "sync": "aligned",
+          "severity": "none"
+        }
+      ],
+      "issues": [],
+      "voice": {
+        "consistent": true,
+        "warm": true,
+        "observation": "Voix claire, posée et bien synchronisée avec les manipulations à l'écran."
+      }
+    },
+    "note": "Automated observation of actual final video audio and images; not a claim of complete human validation"
+  },
+  {
+    "model": "gemini-3.8-flash",
+    "reviewedAt": "2026-11-01T08:02:18.705Z",
+    "videoSha256": "13da4d0725c077fd0b2b2bf4c6ff799f1301aabcd06b179937a0cb21447259b3",
+    "promptSha256": "1dcc512cfb06e98801a9a6681dd8c1496c4d245f9461a5fb5ab85d8a55055ef6",
+    "clipSha256": "13ee7b5402b13b2ef716425b3d2db2754aac61f0b22ae9f90592579fa28f166b",
+    "scene": "ap-drafts",
+    "review": {
+      "heardOpening": "Aux Rencontres du Val d'Orsel",
+      "checkpoints": [
+        {
+          "spokenSeconds": 0,
+          "spoken": "Aux Rencontres du Val d'Orsel, onze personnes ont indiqué leurs disponibilités.",
+          "visibleSeconds": 0,
+          "visible": "Page Disponibilités affichant la liste des personnes et leurs réponses pour les Rencontres du Val d'Orsel",
+          "sync": "aligned",
+          "severity": "none"
+        },
+        {
+          "spokenSeconds": 4.5,
+          "spoken": "ouvrons Affectations en brouillon",
+          "visibleSeconds": 4.8,
+          "visible": "Affichage de la page Affectations en brouillon",
+          "sync": "aligned",
+          "severity": "none"
+        },
+        {
+          "spokenSeconds": 8.1,
+          "spoken": "une ligne par personne, une colonne par date avec les places à pourvoir",
+          "visibleSeconds": 8.7,
+          "visible": "Défilement vers le tableau de planning montrant les lignes de personnes et colonnes de dates avec places à pourvoir",
+          "sync": "aligned",
+          "severity": "none"
+        },
+        {
+          "spokenSeconds": 14.1,
+          "spoken": "Cliquons sur Générer une proposition.",
+          "visibleSeconds": 14.8,
+          "visible": "Arrivée sur la page Proposition d'affectations",
+          "sync": "aligned",
+          "severity": "none"
+        }
+      ],
+      "issues": [],
+      "voice": {
+        "consistent": true,
+        "warm": true,
+        "observation": "Voix claire, posée et bien synchronisée avec les actions à l'écran."
+      }
+    },
+    "note": "Automated observation of actual final video audio and images; not a claim of complete human validation"
+  },
+  {
+    "model": "gemini-3.8-flash",
+    "reviewedAt": "2026-11-01T08:02:59.301Z",
+    "videoSha256": "13da4d0725c077fd0b2b2bf4c6ff799f1301aabcd06b179937a0cb21447259b3",
+    "promptSha256": "5194a48f14282b52e945f2b785a552b7c896fced468e44fdccdf8e789e09b49e",
+    "clipSha256": "7dbbafc9fb090caac4c3ebfadc1283c3e433881e5dd5b2b1e6c782ac1d621131",
+    "scene": "ap-launch",
+    "review": {
+      "heardOpening": "Rotation, nuit et réserve reste replié",
+      "checkpoints": [
+        {
+          "spokenSeconds": 0.5,
+          "spoken": "Rotation, nuit et réserve reste replié, sans réglage.",
+          "visibleSeconds": 0.5,
+          "visible": "La section 'Rotation, nuit et réserve (facultatif)' apparaît repliée avec la mention 'Aucun réglage'.",
+          "sync": "aligned",
+          "severity": "none"
+        },
+        {
+          "spokenSeconds": 3.4,
+          "spoken": "Puis Générer une proposition",
+          "visibleSeconds": 4.1,
+          "visible": "Clic sur le bouton bleu 'Générer une proposition' en bas de page.",
+          "sync": "aligned",
+          "severity": "none"
+        },
+        {
+          "spokenSeconds": 7.3,
+          "spoken": "ce premier calcul donne la même proposition.",
+          "visibleSeconds": 7,
+          "visible": "La page se met à jour et affiche le résultat du calcul avec '29 places couvertes sur 31'.",
+          "sync": "aligned",
+          "severity": "none"
+        }
+      ],
+      "issues": [],
+      "voice": {
+        "consistent": true,
+        "warm": true,
+        "observation": "Voix claire, posée et bien synchronisée avec les actions à l'écran."
+      }
+    },
+    "note": "Automated observation of actual final video audio and images; not a claim of complete human validation"
+  },
+  {
+    "model": "gemini-3.8-flash",
+    "reviewedAt": "2026-11-01T08:03:19.160Z",
+    "videoSha256": "13da4d0725c077fd0b2b2bf4c6ff799f1301aabcd06b179937a0cb21447259b3",
+    "promptSha256": "c4ce2242d9c68e42ec36250078fe5c679e80cec98849396b714e85a2454b42f4",
+    "clipSha256": "636a631ae06f500957fd588b3538c0833613a36610ca34c47e6f6369dbda2014",
+    "scene": "ap-load",
+    "review": {
+      "heardOpening": "La charge par personne compare les heures",
+      "checkpoints": [
+        {
+          "spokenSeconds": 0.5,
+          "spoken": "La charge par personne compare les heures prévues à l'objectif de chacun",
+          "visibleSeconds": 1,
+          "visible": "Affichage du tableau récapitulatif Charge par personne",
+          "sync": "aligned",
+          "severity": "none"
+        },
+        {
+          "spokenSeconds": 3.3,
+          "spoken": "Noah a ses six heures.",
+          "visibleSeconds": 3,
+          "visible": "Ligne Noah De Jong affichant 6 h prévues pour un objectif de 6 h",
+          "sync": "aligned",
+          "severity": "none"
+        },
+        {
+          "spokenSeconds": 4.9,
+          "spoken": "Dans Affectations proposées, chaque ligne dit pourquoi.",
+          "visibleSeconds": 5.8,
+          "visible": "Déploiement de la section Affectations proposées avec le détail par ligne",
+          "sync": "aligned",
+          "severity": "none"
+        },
+        {
+          "spokenSeconds": 8.1,
+          "spoken": "Emma est au bar vendredi : disponible sur tout le créneau, c'est son poste souhaité.",
+          "visibleSeconds": 8.8,
+          "visible": "Ligne Emma Johansson au Bar des Tilleuls avec la mention Disponible sur tout le créneau et Poste souhaité",
+          "sync": "aligned",
+          "severity": "none"
+        }
+      ],
+      "issues": [],
+      "voice": {
+        "consistent": true,
+        "warm": true,
+        "observation": "Voix posée, claire et bien articulée, parfaitement synchronisée avec les actions à l'écran."
+      }
+    },
+    "note": "Automated observation of actual final video audio and images; not a claim of complete human validation"
+  },
+  {
+    "model": "gemini-3.8-flash",
+    "reviewedAt": "2026-11-01T08:03:31.238Z",
+    "videoSha256": "13da4d0725c077fd0b2b2bf4c6ff799f1301aabcd06b179937a0cb21447259b3",
+    "promptSha256": "902c298d2c433bc606bad42ee9416c496b2a4dcc02b3f08784a25b43e5237a0b",
+    "clipSha256": "87ad815afcb9a82f9815581866308fa3248092930ce5d2848b770c4f3676b810",
+    "scene": "ap-lock",
+    "review": {
+      "heardOpening": "De retour au planning",
+      "checkpoints": [
+        {
+          "spokenSeconds": 1.5,
+          "spoken": "chaque brouillon proposé porte la mention Proposé",
+          "visibleSeconds": 2,
+          "visible": "Affichage du planning avec les mentions Proposé sur les différents créneaux",
+          "sync": "aligned",
+          "severity": "none"
+        },
+        {
+          "spokenSeconds": 4.3,
+          "spoken": "Ouvrons celui d'Emma",
+          "visibleSeconds": 4.5,
+          "visible": "Clic sur le créneau d'Emma Johansson et ouverture de la fenêtre modale",
+          "sync": "aligned",
+          "severity": "none"
+        },
+        {
+          "spokenSeconds": 5.8,
+          "spoken": "puis Verrouiller",
+          "visibleSeconds": 6.2,
+          "visible": "Clic sur le bouton Verrouiller dans la modale",
+          "sync": "aligned",
+          "severity": "none"
+        },
+        {
+          "spokenSeconds": 9.2,
+          "spoken": "Le cadenas le signale sur le planning",
+          "visibleSeconds": 8.8,
+          "visible": "Retour au planning avec l'icône de cadenas et la mention Verrouillé sous la mission d'Emma",
+          "sync": "aligned",
+          "severity": "none"
+        }
+      ],
+      "issues": [],
+      "voice": {
+        "consistent": true,
+        "warm": true,
+        "observation": "Voix naturelle, claire et bien articulée, synchronisation parfaite avec les actions à l'écran."
+      }
+    },
+    "note": "Automated observation of actual final video audio and images; not a claim of complete human validation"
+  },
+  {
+    "model": "gemini-3.8-flash",
+    "reviewedAt": "2026-11-01T08:03:56.004Z",
+    "videoSha256": "13da4d0725c077fd0b2b2bf4c6ff799f1301aabcd06b179937a0cb21447259b3",
+    "promptSha256": "2b08c19b1d86f82c44eaf3131e9ee3a0c13f8f1d2c78a1d18dac7534fcd5559b",
+    "clipSha256": "997b46300f92e8c075bf74ddfc50c1c0fe82a50018847b7bca73b67f60cc5d95",
+    "scene": "ap-publish",
+    "review": {
+      "heardOpening": "Publier les affectations demande une confirmation",
+      "checkpoints": [
+        {
+          "spokenSeconds": 0.5,
+          "spoken": "Publier les affectations demande une confirmation",
+          "visibleSeconds": 3.2,
+          "visible": "Clic sur le bouton 'Publier les affectations' et ouverture de la fenêtre modale de confirmation",
+          "sync": "aligned",
+          "severity": "none"
+        },
+        {
+          "spokenSeconds": 7,
+          "spoken": "Annulons ici.",
+          "visibleSeconds": 7.6,
+          "visible": "Clic sur le bouton 'Annuler' et fermeture de la modale",
+          "sync": "aligned",
+          "severity": "none"
+        },
+        {
+          "spokenSeconds": 8.9,
+          "spoken": "Tant que vous ne publiez pas, la proposition reste un brouillon",
+          "visibleSeconds": 9,
+          "visible": "Retour à la page des affectations en brouillon",
+          "sync": "aligned",
+          "severity": "none"
+        }
+      ],
+      "issues": [],
+      "voice": {
+        "consistent": true,
+        "warm": true,
+        "observation": "Voix claire, posée et bien articulée, parfaitement synchronisée avec les actions à l'écran."
+      }
+    },
+    "note": "Automated observation of actual final video audio and images; not a claim of complete human validation"
+  },
+  {
+    "model": "gemini-3.8-flash",
+    "reviewedAt": "2026-11-01T08:03:08.726Z",
+    "videoSha256": "13da4d0725c077fd0b2b2bf4c6ff799f1301aabcd06b179937a0cb21447259b3",
+    "promptSha256": "6b3c57c97dc5d3abbae2410e5223308bb2d345ae0af366ec371ba958de54fb0f",
+    "clipSha256": "530f502210732a6311da443dd7b2a214a83e5560e362255ae88edaeba68752c4",
+    "scene": "ap-result",
+    "review": {
+      "heardOpening": "En quelques secondes, le résultat s'affiche",
+      "checkpoints": [
+        {
+          "spokenSeconds": 0.8,
+          "spoken": "le résultat s'affiche en haut de la page : vingt-neuf places couvertes sur trente et une",
+          "visibleSeconds": 0,
+          "visible": "Le bloc 'Résultat de la proposition' affiche bien '29 places couvertes sur 31'",
+          "sync": "aligned",
+          "severity": "none"
+        },
+        {
+          "spokenSeconds": 6.7,
+          "spoken": "personne n'est disponible pour tout le rangement du Kiosque, dimanche soir, et la raison est écrite",
+          "visibleSeconds": 0,
+          "visible": "Dans 'Places restées vides (1)', mention de 'Rangement du Kiosque, dimanche 22 novembre' et 'Personne n'est disponible sur tout ce créneau'",
+          "sync": "aligned",
+          "severity": "none"
+        },
+        {
+          "spokenSeconds": 12.4,
+          "spoken": "Proposer une autre répartition en chercherait une autre, sur le même périmètre",
+          "visibleSeconds": 0,
+          "visible": "Le bouton 'Proposer une autre répartition' est visible avec le sous-titre explicatif",
+          "sync": "aligned",
+          "severity": "none"
+        }
+      ],
+      "issues": [],
+      "voice": {
+        "consistent": true,
+        "warm": true,
+        "observation": "Voix posée, fluide et parfaitement claire avec une musique d'ambiance légère."
+      }
+    },
+    "note": "Automated observation of actual final video audio and images; not a claim of complete human validation"
+  },
+  {
+    "model": "gemini-3.8-flash",
+    "reviewedAt": "2026-11-01T08:02:29.264Z",
+    "videoSha256": "13da4d0725c077fd0b2b2bf4c6ff799f1301aabcd06b179937a0cb21447259b3",
+    "promptSha256": "53b340e3f3474fca48d9524087ff46efe5ec944f5bcefcd55aed24773a716406",
+    "clipSha256": "23f3964107d6f6200ea2b05a47040faf4c26d9acee7067f7409c33b899935fd8",
+    "scene": "ap-scope",
+    "review": {
+      "heardOpening": "Ce qui est vérifié rappelle les règles",
+      "checkpoints": [
+        {
+          "spokenSeconds": 0.5,
+          "spoken": "Ce qui est vérifié rappelle les règles toujours respectées",
+          "visibleSeconds": 0.5,
+          "visible": "Section 'Ce qui est vérifié' visible sous 'Nouvelle proposition'",
+          "sync": "aligned",
+          "severity": "none"
+        },
+        {
+          "spokenSeconds": 3.6,
+          "spoken": "dont la protection des pauses et de la charge, ici activée",
+          "visibleSeconds": 3.6,
+          "visible": "Mention 'Protection des pauses et de la charge : activée' affichée",
+          "sync": "aligned",
+          "severity": "none"
+        },
+        {
+          "spokenSeconds": 6.8,
+          "spoken": "Dans Périmètre, les trois dates et les cinq postes sont cochés",
+          "visibleSeconds": 7,
+          "visible": "Défilement vers la section Périmètre affichant les 3 dates et les 5 postes cochés",
+          "sync": "aligned",
+          "severity": "none"
+        },
+        {
+          "spokenSeconds": 10.3,
+          "spoken": "quatorze créneaux, trente et une places à pourvoir",
+          "visibleSeconds": 10.3,
+          "visible": "Texte '14 créneaux, 31 places à pourvoir' affiché sous les cases",
+          "sync": "aligned",
+          "severity": "none"
+        }
+      ],
+      "issues": [],
+      "voice": {
+        "consistent": true,
+        "warm": true,
+        "observation": "Voix claire, posée et parfaitement synchronisée avec la navigation à l'écran."
+      }
+    },
+    "note": "Automated observation of actual final video audio and images; not a claim of complete human validation"
+  },
+  {
+    "model": "gemini-3.8-flash",
+    "reviewedAt": "2026-11-01T08:02:41.861Z",
+    "videoSha256": "13da4d0725c077fd0b2b2bf4c6ff799f1301aabcd06b179937a0cb21447259b3",
+    "promptSha256": "4dbd00bf0fdbed4c677acf7bde15cb024799be48bca9ac77a83c8f4d33d83de8",
+    "clipSha256": "baae5d36646b6584bc5870a9b68e6551a4791bec9488b82c0c17176567fa030f",
+    "scene": "ap-targets",
+    "review": {
+      "heardOpening": "Jules n'a pas répondu, il n'est pas inclus",
+      "checkpoints": [
+        {
+          "spokenSeconds": 0.5,
+          "spoken": "Jules n'a pas répondu : il n'est pas inclus",
+          "visibleSeconds": 0.5,
+          "visible": "La ligne de Jules Hansen affiche 'Sans réponse' et sa case 'Inclure' n'est pas cochée",
+          "sync": "aligned",
+          "severity": "none"
+        },
+        {
+          "spokenSeconds": 4.8,
+          "spoken": "Appliquer la suggestion les remplit",
+          "visibleSeconds": 5.1,
+          "visible": "Clic sur le bouton 'Appliquer la suggestion' et le champ 'Objectif d'heures' de Noah passe à 12",
+          "sync": "aligned",
+          "severity": "none"
+        },
+        {
+          "spokenSeconds": 10.9,
+          "spoken": "tapons six",
+          "visibleSeconds": 11.4,
+          "visible": "Le champ d'objectif d'heures de Noah est sélectionné et remplacé par 6",
+          "sync": "aligned",
+          "severity": "none"
+        }
+      ],
+      "issues": [],
+      "voice": {
+        "consistent": true,
+        "warm": true,
+        "observation": "Voix féminine naturelle, posée et claire, accompagnée d'une musique de fond discrète."
+      }
+    },
+    "note": "Automated observation of actual final video audio and images; not a claim of complete human validation"
+  },
+  {
+    "model": "gemini-3.8-flash",
+    "reviewedAt": "2026-11-01T08:02:08.989Z",
+    "videoSha256": "13da4d0725c077fd0b2b2bf4c6ff799f1301aabcd06b179937a0cb21447259b3",
+    "promptSha256": "9e7642f497f9756f62bf9b69e6d0223c0516e6d517385e68bb8352a4eb646fe9",
+    "clipSha256": "c65a16027b81065d4585620af6a32a1a361629892bf295a239a0595561599705",
+    "scene": "ap-welcome",
+    "review": {
+      "heardOpening": "La proposition d'affectations",
+      "checkpoints": [
+        {
+          "spokenSeconds": 0,
+          "spoken": "La proposition d'affectations, en bêta",
+          "visibleSeconds": 0,
+          "visible": "Encart noir au centre : 'Générer une proposition d'affectations'",
+          "sync": "aligned",
+          "severity": "none"
+        },
+        {
+          "spokenSeconds": 2.8,
+          "spoken": "prépare un planning en brouillon selon les disponibilités",
+          "visibleSeconds": 2.8,
+          "visible": "L'encart d'introduction disparaît pour afficher l'onglet Inscriptions > Disponibilités",
+          "sync": "aligned",
+          "severity": "none"
+        },
+        {
+          "spokenSeconds": 8.9,
+          "spoken": "Rien n'est publié, et aucun bénévole n'est prévenu",
+          "visibleSeconds": 8.9,
+          "visible": "Page des disponibilités stable présentant la liste des bénévoles et leurs réponses",
+          "sync": "aligned",
+          "severity": "none"
+        }
+      ],
+      "issues": [],
+      "voice": {
+        "consistent": true,
+        "warm": true,
+        "observation": "Voix féminine posée, claire et dynamique, parfaitement synchronisée avec la disparition du carton de titre."
+      }
+    },
+    "note": "Automated observation of actual final video audio and images; not a claim of complete human validation"
+  },
+  {
+    "model": "gemini-3.8-flash",
+    "reviewedAt": "2026-11-01T08:02:50.097Z",
+    "videoSha256": "13da4d0725c077fd0b2b2bf4c6ff799f1301aabcd06b179937a0cb21447259b3",
+    "promptSha256": "c0c227026895dcffbbfb73f88d1248e90ad77ee9e2aba1c4a55c9d3d05366769",
+    "clipSha256": "840bffb80b789a0bf5831e209a3d1b4d2efe145dff019928a332fd3b036a9085",
+    "scene": "ap-wishes",
+    "review": {
+      "heardOpening": "Pour Emma",
+      "checkpoints": [
+        {
+          "spokenSeconds": 0,
+          "spoken": "Pour Emma, Bar des Tilleuls comme poste souhaité",
+          "visibleSeconds": 1,
+          "visible": "Sélection de 'Bar des Tilleuls' dans la colonne Poste souhaité pour Emma Johansson",
+          "sync": "aligned",
+          "severity": "none"
+        },
+        {
+          "spokenSeconds": 3,
+          "spoken": "pour Lucas, Parking comme poste à éviter",
+          "visibleSeconds": 4,
+          "visible": "Défilement vers Lucas Silva et sélection de 'Parking' dans la colonne Poste à éviter",
+          "sync": "aligned",
+          "severity": "none"
+        },
+        {
+          "spokenSeconds": 6,
+          "spoken": "Ces souhaits passent après les règles et l'équilibre des heures.",
+          "visibleSeconds": 6,
+          "visible": "Vue d'ensemble stable du tableau configuré avec les préférences saisies",
+          "sync": "aligned",
+          "severity": "none"
+        }
+      ],
+      "issues": [],
+      "voice": {
+        "consistent": true,
+        "warm": true,
+        "observation": "Voix féminine naturelle, claire et bien articulée, synchronisée avec les actions à l'écran."
+      }
+    },
+    "note": "Automated observation of actual final video audio and images; not a claim of complete human validation"
+  }
+]

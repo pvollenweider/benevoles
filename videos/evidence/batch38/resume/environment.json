@@ -1,0 +1,17 @@
+{
+  "checkedAt": "2026-11-01T07:59:41Z",
+  "nativePostgres": {
+    "cluster": "/tmp/benevoles-video-production.pg38/data",
+    "port": 45439,
+    "timezone": "UTC",
+    "postmasterStart": "2026-11-01T07:52:24.754Z",
+    "migrations": 111,
+    "pending": 0
+  },
+  "mailpit": {
+    "pid": 25700,
+    "smtp": 41040,
+    "http": 48040
+  },
+  "policy": "No Docker actions; port45433 untouched. Current-main build is separate from retained publication take provenance."
+}

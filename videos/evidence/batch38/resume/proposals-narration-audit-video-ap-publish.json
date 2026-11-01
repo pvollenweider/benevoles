@@ -1,0 +1,21 @@
+{
+  "model": "gemini-3.8-flash",
+  "promptVersion": 2,
+  "auditedAt": "2026-11-01T08:03:28.412Z",
+  "revalidatedAt": "2026-11-01T08:03:28.412Z",
+  "source": "actual final MP4 audio",
+  "videoSha256": "13da4d0725c077fd0b2b2bf4c6ff799f1301aabcd06b179937a0cb21447259b3",
+  "note": "Independent multilingual ASR evidence, reused only for identical audio/text and audit instructions; not a full audiovisual or voice-quality validation",
+  "segments": [
+    {
+      "id": "ap-publish",
+      "audioSha256": "49025970b3b95ca0bd1599107ccd0730811ff33bd519fc2367b9708cc205b98e",
+      "recognized": "Publier les affectations demande une confirmation. Alors seulement les places sont prises et chacun reçoit son e-mail. Annulons ici. Tant que vous ne publiez pas, la proposition reste un brouillon et aucun bénévole n'est prévenu. La vidéo suivante montre la publication et ce que reçoivent les bénévoles.",
+      "expected": "Publier les affectations demande une confirmation : alors seulement les places sont prises, et chacun reçoit son email. Annulons ici. Tant que vous ne publiez pas, la proposition reste un brouillon, et aucun bénévole n'est prévenu. La vidéo suivante montre la publication, et ce que reçoivent les bénévoles.",
+      "wordErrorRate": 0,
+      "needsReview": false,
+      "unexpectedInstructions": [],
+      "edgeIssues": []
+    }
+  ]
+}

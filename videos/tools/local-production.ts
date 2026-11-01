@@ -11,7 +11,7 @@ import { verifyProductBuild } from "../lib/product-build"
 import { PUBLIC_APP_URL, videoAdminEmail } from "../lib/public-hosts"
 
 const batch35Takes = ["WORKLOAD_PROTECTION", "ASSIGNMENT_PROPOSALS", "ASSIGNMENT_PUBLICATION", "VOLUNTEER_EVENT_AVAILABILITY"]
-const batch35Seeds = ["workload-protection", "assignment-proposals", "volunteer-event-availability"]
+const batch35Seeds = ["assignment-publication", "workload-protection", "assignment-proposals", "volunteer-event-availability"]
 const memberTakes = ["MEMBERS_MANAGEMENT", "MEMBERS_IMPORT", "MEMBERS_INVITATIONS", "MEMBERS_REMINDERS", "REGISTRATIONS_PLACE_MEMBER", "REGISTRATIONS_MANAGEMENT", "STAFFING_GAPS", "TARGETED_MESSAGES", "REMINDERS_CHANGES"]
 const memberSeeds = ["members-management", "members-invitations", "members-reminders", "registrations-place-member", "registrations-management", "staffing-gaps", "targeted-messages", "reminders-changes"]
 
@@ -210,7 +210,7 @@ async function main() {
     } else if (rest.length) throw new Error("Unexpected tool arguments")
     if (script === "videos/tools/prepare-demo.ts") await verifyProductBuild("http://localhost:43102")
     let tool = script
-    if (url.port === "45441") {
+    if (["45439", "45441"].includes(url.port)) {
       const proof = JSON.parse(await readFile("videos/output/product-server-43102.json", "utf8")) as ProductBuild
       await verifyProductBuild("http://localhost:43102")
       await import("node:fs/promises").then(async fs => {

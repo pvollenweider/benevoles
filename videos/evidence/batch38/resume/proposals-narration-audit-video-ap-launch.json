@@ -1,0 +1,21 @@
+{
+  "model": "gemini-3.8-flash",
+  "promptVersion": 2,
+  "auditedAt": "2026-11-01T08:03:14.941Z",
+  "revalidatedAt": "2026-11-01T08:03:14.942Z",
+  "source": "actual final MP4 audio",
+  "videoSha256": "13da4d0725c077fd0b2b2bf4c6ff799f1301aabcd06b179937a0cb21447259b3",
+  "note": "Independent multilingual ASR evidence, reused only for identical audio/text and audit instructions; not a full audiovisual or voice-quality validation",
+  "segments": [
+    {
+      "id": "ap-launch",
+      "audioSha256": "d77baa5d2420a547544657028d78009e794f876d105dfc6223d0d1aa57239843",
+      "recognized": "Rotation, nuit et réserve restent repliées sans réglage, puis générer une proposition. Avec les mêmes données et les mêmes réglages, ce premier calcul donne la même proposition.",
+      "expected": "Rotation, nuit et réserve reste replié, sans réglage. Puis Générer une proposition : avec les mêmes données et les mêmes réglages, ce premier calcul donne la même proposition.",
+      "wordErrorRate": 0.07407407407407407,
+      "needsReview": false,
+      "unexpectedInstructions": [],
+      "edgeIssues": []
+    }
+  ]
+}

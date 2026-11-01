@@ -1091,11 +1091,11 @@
         "organisateur"
       ],
       "feature": "Proposition d'affectations",
-      "updatedAt": "2026-10-31",
-      "revision": 3,
+      "updatedAt": "2026-11-01",
+      "revision": 4,
       "level": "avance",
       "added": "2026-10-30",
-      "updated": "2026-10-31"
+      "updated": "2026-11-01"
     },
     {
       "id": "ASSIGNMENT_PUBLICATION",
@@ -1109,7 +1109,7 @@
         "disponibilités",
         "bêta"
       ],
-      "published": false,
+      "published": true,
       "seedScenario": "assignment-publication",
       "themes": [
         "planning-creneaux"
@@ -1118,10 +1118,10 @@
         "organisateur"
       ],
       "feature": "Publication des affectations en brouillon",
-      "updatedAt": "2026-10-31",
+      "updatedAt": "2026-11-01",
       "revision": 1,
       "level": "avance",
-      "added": "2026-10-31"
+      "added": "2026-11-01"
     },
     {
       "id": "MEMBERS_MANAGEMENT",

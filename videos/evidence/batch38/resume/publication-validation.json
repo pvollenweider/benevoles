@@ -1,0 +1,95 @@
+{
+  "id": "ASSIGNMENT_PUBLICATION",
+  "slug": "assignment-publication",
+  "validatedAt": "2026-11-01T07:57:27.739Z",
+  "continuousNarration": true,
+  "sentenceRevision": false,
+  "narrationContentChecked": true,
+  "voice": "Kore",
+  "captureMs": 164280,
+  "scenes": [
+    {
+      "id": "pb-welcome",
+      "visualMs": 6262,
+      "audioMs": 6261,
+      "driftMs": 1
+    },
+    {
+      "id": "pb-ready",
+      "visualMs": 9728,
+      "audioMs": 9726,
+      "driftMs": 2
+    },
+    {
+      "id": "pb-publish",
+      "visualMs": 12413,
+      "audioMs": 12410,
+      "driftMs": 3
+    },
+    {
+      "id": "pb-done",
+      "visualMs": 9802,
+      "audioMs": 9801,
+      "driftMs": 1
+    },
+    {
+      "id": "pb-registrations",
+      "visualMs": 8573,
+      "audioMs": 8572,
+      "driftMs": 1
+    },
+    {
+      "id": "pb-email",
+      "visualMs": 12062,
+      "audioMs": 12061,
+      "driftMs": 1
+    },
+    {
+      "id": "pb-volunteer",
+      "visualMs": 16229,
+      "audioMs": 16226,
+      "driftMs": 3
+    },
+    {
+      "id": "pb-cancel",
+      "visualMs": 13465,
+      "audioMs": 13464,
+      "driftMs": 1
+    },
+    {
+      "id": "pb-withdrawal",
+      "visualMs": 12486,
+      "audioMs": 12485,
+      "driftMs": 1
+    },
+    {
+      "id": "pb-correct",
+      "visualMs": 14904,
+      "audioMs": 14903,
+      "driftMs": 1
+    },
+    {
+      "id": "pb-saved",
+      "visualMs": 7688,
+      "audioMs": 7686,
+      "driftMs": 2
+    },
+    {
+      "id": "pb-review",
+      "visualMs": 15846,
+      "audioMs": 15844,
+      "driftMs": 2
+    }
+  ],
+  "anchorsChecked": 17,
+  "music": {
+    "voicedWindows": 137,
+    "musicOnlyWindows": 2,
+    "smallestGapLu": 15.2,
+    "largestGapLu": 18.8,
+    "quietestMusicOnlyLufs": -33.9,
+    "loudestMusicOnlyLufs": -33.6,
+    "medianVoiceLufs": -16.4
+  },
+  "issues": []
+}
