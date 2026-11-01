@@ -36,18 +36,20 @@ const questions = [
 const questionRead = async (args: { select: { answers?: unknown } }) =>
   args.select.answers ? questions : questions.map(({ answers: _a, ...q }) => q)
 
-vi.mock("@/lib/prisma", () => {
+vi.mock("@/lib/prisma", async () => {
+  const locked = (await import("./helpers/locked-shifts")).lockedShiftReads()
   const tx = {
     $queryRaw: vi.fn().mockResolvedValue([{ id: "v1", erasedAt: null, email: "julie@x.com" }]),
-    shift: { findMany: vi.fn().mockResolvedValue([]) },
+    shift: { findMany: locked.tx(vi.fn().mockResolvedValue([])) },
     volunteer: { createMany: vi.fn(), findFirstOrThrow: vi.fn(), update: m.txVolUpdate },
     charterVersion: { upsert: vi.fn() },
     rosterConsent: { findUnique: vi.fn().mockResolvedValue(null), upsert: vi.fn() },
     eventQuestion: { findMany: questionRead },
     questionAnswer: { upsert: m.upsert, deleteMany: m.deleteMany, createMany: m.createMany },
     registration: {
-      // The link is checked again under the member lock (#1138 follow-up).
-      findFirst: (...args: unknown[]) => m.regFindFirst(...args),
+      // The link is checked again under the member lock (#1138 follow-up); the duplicate check
+      // under the lock (by shift) finds nothing.
+      findFirst: (...args: unknown[]) => ((args[0] as { where?: { shiftId?: unknown } })?.where?.shiftId ? null : m.regFindFirst(...args)),
       findMany: m.txRegFindMany,
       count: vi.fn().mockResolvedValue(0),
       aggregate: vi.fn().mockResolvedValue({ _max: { waitingPosition: null } }),
@@ -57,6 +59,7 @@ vi.mock("@/lib/prisma", () => {
   }
   return {
     prisma: {
+      charterVersion: { upsert: vi.fn() },
       eventQuestion: { findMany: questionRead },
       event: {
         findFirst: vi.fn().mockResolvedValue({
@@ -67,9 +70,9 @@ vi.mock("@/lib/prisma", () => {
         }),
       },
       shift: {
-        findMany: vi.fn().mockResolvedValue([
+        findMany: locked.top(vi.fn().mockResolvedValue([
           { id: "shift-2", label: "Bar", roleName: "Bar", capacity: 5, minAge: null, waitlistEnabled: false, registrations: [], date: new Date("2030-06-01T00:00:00Z"), startTime: "14:00", endTime: "16:00" },
-        ]),
+        ])),
       },
       volunteer: { findFirst: m.volFindFirst, update: m.volUpdate },
       memberInvite: { findFirst: vi.fn(), updateMany: vi.fn() },

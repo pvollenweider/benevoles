@@ -24,6 +24,7 @@ import {
   conflictingShiftIds as computeConflictingShiftIds,
   hasAvailableShift as anyShiftAvailable,
   isShiftSelectable,
+  noAvailableShiftText,
   prefillContact,
   proposedShiftState,
   proposedShiftText,
@@ -1123,7 +1124,7 @@ export default function EventPageClient({ orgSlug, eventSlug, preview, initialEv
 
                 {!hasAvailableShift && (
                   <div className="text-center py-8 text-gray-500">
-                    <p className="text-lg font-medium">{groupFiltered && !showAllRoles ? "Tous les créneaux de ces postes sont complets." : "Tous les créneaux sont complets."}</p>
+                    <p className="text-lg font-medium">{noAvailableShiftText(shownShifts, groupFiltered && !showAllRoles)}</p>
                     <p className="text-sm mt-1">Merci pour ton intérêt !</p>
                   </div>
                 )}

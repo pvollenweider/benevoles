@@ -1,4 +1,5 @@
 import { test, expect, type APIRequestContext } from "@playwright/test"
+import { waitForMessage } from "./helpers/mailpit"
 
 /**
  * Concurrency invariants of public registration (#264), against the real Postgres: parallel
@@ -70,11 +71,11 @@ test("parallel sign-ups on a full-soon shift with waitlist: one active, the rest
   const responses = await Promise.all(
     Array.from({ length: 5 }, (_, i) => register(page.request, eventId, shiftId, `e2e-wl-${stamp}-${i}@example.com`, 20 + i))
   )
-  const bodies: { onWaitlist?: boolean }[] = await Promise.all(responses.map((r) => r.json()))
   expect(responses.every((r) => r.status() === 201)).toBe(true)
-  expect(bodies.filter((b) => b.onWaitlist === false)).toHaveLength(1)
-  expect(bodies.filter((b) => b.onWaitlist === true)).toHaveLength(4)
   expect(await activeCount(page.request, eventId)).toBe(1)
+  // Without proof of the address the answer says nothing of the outcome (AUTHZ-01): the emails do.
+  const subjects = await Promise.all(Array.from({ length: 5 }, async (_, i) => (await waitForMessage(`to:"e2e-wl-${stamp}-${i}@example.com"`)).Subject))
+  expect(subjects.filter((s) => s.startsWith("Liste d'attente"))).toHaveLength(4)
 })
 
 test("the same sign-up submitted several times at once creates a single registration", async ({ page }) => {

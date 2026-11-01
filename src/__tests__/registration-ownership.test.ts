@@ -23,6 +23,8 @@ const m = vi.hoisted(() => ({
   regFindMany: vi.fn(),
   regFindFirst: vi.fn(),
   txRegFindMany: vi.fn(),
+  txRegFindFirst: vi.fn(),
+  txCount: vi.fn(),
   txCreate: vi.fn(),
   txQueryRaw: vi.fn(),
   sendNotification: vi.fn(),
@@ -33,25 +35,27 @@ const m = vi.hoisted(() => ({
   rosterUpsert: vi.fn(),
 }))
 
-vi.mock("@/lib/prisma", () => {
+vi.mock("@/lib/prisma", async () => {
+  const locked = (await import("./helpers/locked-shifts")).lockedShiftReads()
   const tx = {
     $queryRaw: (...args: unknown[]) => m.txQueryRaw(...args),
-    shift: { findMany: vi.fn().mockResolvedValue([]) }, // no role limit (#466)
+    shift: { findMany: locked.tx(vi.fn().mockResolvedValue([])) }, // no role limit (#466)
     // A new volunteer is created inside the registration transaction (#309).
     volunteer: { createMany: m.txVolCreateMany, findFirstOrThrow: m.txVolFindFirstOrThrow, update: (...args: unknown[]) => m.volUpdate(...args) },
     charterVersion: { upsert: vi.fn() },
     rosterConsent: { findUnique: m.rosterFindUnique, upsert: m.rosterUpsert },
     // The proof is checked again under the member lock (#1138 follow-up).
     memberInvite: { findFirst: (...args: unknown[]) => m.inviteFindFirst(...args) },
-    registration: {
+    registration: { findFirst: m.txRegFindFirst,
       findMany: m.txRegFindMany,
-      count: vi.fn().mockResolvedValue(0),
+      count: (...args: unknown[]) => m.txCount(...args),
       aggregate: vi.fn().mockResolvedValue({ _max: { waitingPosition: null } }),
       create: m.txCreate,
     },
   }
   return {
     prisma: {
+      charterVersion: { upsert: vi.fn() },
     eventQuestion: { findMany: vi.fn().mockResolvedValue([]) }, // no custom question (#483)
       event: {
         findFirst: vi.fn().mockResolvedValue({
@@ -59,9 +63,9 @@ vi.mock("@/lib/prisma", () => {
         }),
       },
       shift: {
-        findMany: vi.fn().mockResolvedValue([
+        findMany: locked.top(vi.fn().mockResolvedValue([
           { id: "shift-2", label: "Bar", roleName: "Bar", capacity: 5, minAge: null, waitlistEnabled: false, registrations: [], date: new Date("2030-06-01T00:00:00Z"), startTime: "14:00", endTime: "16:00" },
-        ]),
+        ])),
       },
       volunteer: { findFirst: m.volFindFirst, create: m.volCreate, update: m.volUpdate, findFirstOrThrow: vi.fn() },
       memberInvite: { findFirst: m.inviteFindFirst, updateMany: vi.fn().mockResolvedValue({ count: 1 }) },
@@ -110,6 +114,8 @@ beforeEach(() => {
   m.enqueueNotifications.mockResolvedValue(["row-1"])
   m.regFindMany.mockResolvedValue([])
   m.txRegFindMany.mockResolvedValue([])
+  m.txRegFindFirst.mockResolvedValue(null) // the duplicate check under the lock: not on the shift yet
+  m.txCount.mockResolvedValue(0)
   m.txCreate.mockResolvedValue({ id: "reg-new", shiftId: "shift-2", status: "active", waitingPosition: null })
   m.sendNotification.mockResolvedValue({ ok: true })
   m.txQueryRaw.mockResolvedValue([{ id: "locked", erasedAt: null, email: "owner@x.com" }]) // #516: a locked match, not erased, still at the address
@@ -237,7 +243,10 @@ describe("POST /api/public/registrations — ownership of the email (#285)", () 
     m.txRegFindMany.mockResolvedValue([{ shift: { label: "Accueil", date: new Date("2030-06-01T00:00:00Z"), startTime: "15:00", endTime: "17:00" } }])
     const { POST } = await import("@/app/api/public/registrations/route")
     const res = await POST(post({ email: "new@x.com" }))
-    expect(res.status).toBe(409) // failed inside the transaction → rolled back with the volunteer
+    // Refused inside the transaction (rolled back with the volunteer); without proof of the address,
+    // answered like any sign-up (AUTHZ-01).
+    expect(res.status).toBe(201)
+    expect(m.txCreate).not.toHaveBeenCalled()
     expect(m.volCreate).not.toHaveBeenCalled()
     expect(m.txVolCreateMany).toHaveBeenCalledWith(expect.objectContaining({ skipDuplicates: true }))
   })
@@ -271,16 +280,18 @@ describe("POST /api/public/registrations — ownership of the email (#285)", () 
     event: { id: "evt-1", title: "Festival", organizationId: "org-a", organization: { slug: "a" } },
   })
 
+  // With proof of the address (a member invite): the precise answer of #285 / #1047.
   async function duplicateAnswer(volunteerId: string, status: string) {
     m.volFindFirst.mockResolvedValue({ ...victim, id: volunteerId })
+    m.inviteFindFirst.mockResolvedValue({ id: "inv-1" })
     m.regFindMany.mockResolvedValueOnce([{ id: `reg-${volunteerId}` }])
     m.regFindFirst.mockResolvedValue(existingReg(volunteerId, status))
     const { POST } = await import("@/app/api/public/registrations/route")
-    const res = await POST(post())
+    const res = await POST(post({ inviteToken: "inv-tok" }))
     return { status: res.status, body: await res.json() }
   }
 
-  it("already registered: 409 without the existing token, which is emailed to the owner instead", async () => {
+  it("already registered, with proof of the address: 409 without the existing token, which is emailed to the owner instead", async () => {
     const { status, body } = await duplicateAnswer("vol-dup-active", "active")
     expect(status).toBe(409)
     expect(JSON.stringify(body)).not.toContain("victims-tok")
@@ -353,24 +364,25 @@ describe("POST /api/public/registrations — ownership of the email (#285)", () 
     expect(ok.status).toBe(201)
   })
 
-  it("overlap with an existing registration: 409 without any token", async () => {
+  it("overlap with an existing registration, with proof of the address: 409 without any token", async () => {
     m.volFindFirst.mockResolvedValue(victim)
+    m.inviteFindFirst.mockResolvedValue({ id: "inv-1" })
     m.regFindMany
       .mockResolvedValueOnce([]) // no duplicate on the same shift
       .mockResolvedValueOnce([{ editTokenLegacy: "victims-tok", editTokenEnc: null, shift: { label: "Accueil", date: new Date("2030-06-01T00:00:00Z"), startTime: "15:00", endTime: "17:00" } }])
     const { POST } = await import("@/app/api/public/registrations/route")
-    const res = await POST(post())
+    const res = await POST(post({ inviteToken: "inv-tok" }))
     expect(res.status).toBe(409)
     expect(JSON.stringify(await res.json())).not.toContain("victims-tok")
   })
 
-  it("overlap created concurrently is caught under the volunteer lock", async () => {
-    m.volFindFirst.mockResolvedValue(null)
-    m.txVolCreateMany.mockResolvedValue({ count: 1 }); m.txVolFindFirstOrThrow.mockResolvedValue({ id: "vol-new" })
+  it("overlap created concurrently is caught under the volunteer lock (with proof of the address)", async () => {
+    m.volFindFirst.mockResolvedValue(victim)
+    m.inviteFindFirst.mockResolvedValue({ id: "inv-1" })
     // Nothing before the lock, but a concurrent request registered an overlapping shift meanwhile.
     m.txRegFindMany.mockResolvedValue([{ shift: { label: "Accueil", date: new Date("2030-06-01T00:00:00Z"), startTime: "15:00", endTime: "17:00" } }])
     const { POST } = await import("@/app/api/public/registrations/route")
-    const res = await POST(post({ email: "new@x.com" }))
+    const res = await POST(post({ inviteToken: "inv-tok" }))
     expect(res.status).toBe(409)
     expect((await res.json()).error).toContain("chevauche")
     expect(m.txCreate).not.toHaveBeenCalled()
@@ -470,5 +482,88 @@ describe("POST /api/public/registrations — shift roster choice (#1068)", () =>
     await withRosterEvent(true)
     await POST(post({ inviteToken: "inv-tok" }))
     expect(m.rosterUpsert).not.toHaveBeenCalled()
+  })
+})
+
+// AUTHZ-01: without proof of the address, a refusal that comes from its own registrations must not
+// tell the submitter anything: the same answer as any sign-up without proof, nothing created, and
+// only the owner learns by email what was not recorded and why.
+describe("POST /api/public/registrations — no answer about the address's own registrations without proof", () => {
+  const overlapping = { shift: { label: "Accueil", date: new Date("2030-06-01T00:00:00Z"), startTime: "15:00", endTime: "17:00" } }
+  const ownersReg = { editTokenHash: "h", editTokenLegacy: "victims-tok", editTokenEnc: null }
+
+  async function answer(volunteer: typeof victim | null, extra: Record<string, unknown> = {}) {
+    m.volFindFirst.mockResolvedValue(volunteer)
+    if (!volunteer) { m.txVolCreateMany.mockResolvedValue({ count: 1 }); m.txVolFindFirstOrThrow.mockResolvedValue({ id: "vol-new" }) }
+    const { POST } = await import("@/app/api/public/registrations/route")
+    const res = await POST(post(extra))
+    return { status: res.status, body: await res.json() }
+  }
+  const notices = () => m.enqueueNotifications.mock.calls.flatMap((c) => c[0] as { kind: string; data: { notRecorded?: { reason: string }; editToken?: string } }[]).filter((p) => p.data.notRecorded)
+
+  it("answers a duplicate, an overlap and a new sign-up exactly alike, and creates nothing for the refusals", async () => {
+    const fresh = await answer(null, { email: "new@x.com" })
+    expect(fresh.status).toBe(201)
+
+    m.txCreate.mockClear()
+    m.txRegFindFirst.mockResolvedValueOnce({ shift: { label: "Bar" } })
+    const duplicate = await answer({ ...victim, id: "vol-a1" })
+    expect(m.txCreate).not.toHaveBeenCalled()
+
+    m.txRegFindMany.mockResolvedValue([overlapping])
+    const overlap = await answer({ ...victim, id: "vol-a2" })
+    expect(m.txCreate).not.toHaveBeenCalled()
+
+    for (const a of [duplicate, overlap]) expect(a).toEqual(fresh)
+    expect(fresh.body).toEqual({ success: true, editToken: null, linkSentByEmail: true, received: true })
+    // Never a shift name, a duplicate flag or a token in the answer.
+    for (const a of [duplicate, overlap]) {
+      const text = JSON.stringify(a.body)
+      for (const word of ["Accueil", "Bar", "duplicate", "chevauche", "victims-tok"]) expect(text).not.toContain(word)
+    }
+  })
+
+  it("tells the owner by email, with their personal link and the reason", async () => {
+    m.regFindFirst.mockResolvedValue(ownersReg)
+    m.txRegFindFirst.mockResolvedValueOnce({ shift: { label: "Bar" } })
+    await answer({ ...victim, id: "vol-a3" })
+    m.txRegFindMany.mockResolvedValue([overlapping])
+    await answer({ ...victim, id: "vol-a4" })
+    const sent = notices()
+    expect(sent).toHaveLength(2)
+    expect(sent[0]).toMatchObject({ kind: "registration_link_resend", recipient: { email: "owner@x.com" }, data: { editToken: "victims-tok" } })
+    expect(sent[0].data.notRecorded!.reason).toContain("« Bar »")
+    expect(sent[1].data.notRecorded!.reason).toBe("le créneau « Bar » chevauche ton créneau « Accueil »")
+    expect(m.deliverAfterResponse).toHaveBeenCalled()
+    expect(m.sendNotification).not.toHaveBeenCalled() // never sent within the answer
+  })
+
+  it("the same answer once the owner's notices are throttled (3 an hour)", async () => {
+    const answers = []
+    for (let i = 0; i < 4; i++) {
+      m.txRegFindFirst.mockResolvedValueOnce({ shift: { label: "Bar" } })
+      answers.push(await answer({ ...victim, id: "vol-a5" }))
+    }
+    expect(notices()).toHaveLength(3)
+    for (const a of answers) expect(a).toEqual(answers[0])
+  })
+
+  it("a full shift is refused first, whatever the address holds: the same answer as for a new address", async () => {
+    // 5 places taken out of 5, no waitlist: the shift is full under the lock.
+    m.txCount.mockResolvedValue(5)
+    m.txRegFindFirst.mockResolvedValueOnce({ shift: { label: "Bar" } })
+    const known = await answer({ ...victim, id: "vol-a6" })
+    const fresh = await answer(null, { email: "new2@x.com" })
+    expect(known.status).toBe(409)
+    expect(known).toEqual(fresh)
+    expect(notices()).toHaveLength(0)
+  })
+
+  it("keeps the precise answer with proof of the address", async () => {
+    m.inviteFindFirst.mockResolvedValue({ id: "inv-1" })
+    m.txRegFindMany.mockResolvedValue([overlapping])
+    const res = await answer({ ...victim, id: "vol-a7" }, { inviteToken: "inv-tok" })
+    expect(res.status).toBe(409)
+    expect(res.body.error).toContain("Accueil")
   })
 })

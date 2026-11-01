@@ -64,9 +64,10 @@ test("volunteer registers for a shift, gets confirmation, org admin gets notifie
   expect(body).toContain("E2E")
 })
 
-// #1047: a second sign-up with the same address gets the common duplicate answer, which says how
-// to get the link back, and the bounded fields can't take more than their limit.
-test("signing up again with the same address explains how to get the link back", async ({ browser }) => {
+// A second sign-up with the same address, without proof that it is the submitter's (AUTHZ-01):
+// the same page as any sign-up, nothing said about the address's registrations; its owner gets the
+// reason and the link by email. The bounded fields can't take more than their limit (#1047).
+test("signing up again with the same address: the same page, the reason and the link by email", async ({ browser }) => {
   const email = `e2e-dup-${Date.now()}@example.com`
   async function signUp() {
     // A fresh context each time: nothing remembered from the first sign-up.
@@ -96,12 +97,13 @@ test("signing up again with the same address explains how to get the link back",
   await expect((await signUp())).toHaveURL(/\/spectacle-cirque-2026\/success/)
 
   const again = await signUp()
-  const alert = again.locator("#signup-failure")
-  await expect(alert).toBeFocused()
-  await expect(alert).toContainText("Inscription déjà enregistrée")
-  await expect(alert).toContainText("une inscription ou une place en liste d'attente")
-  await expect(alert).toContainText("Vérifie ta boîte de réception")
-  await expect(alert.getByRole("button", { name: "Revenir au planning" })).toBeVisible()
+  await expect(again).toHaveURL(/\/spectacle-cirque-2026\/success/)
+  await expect(again.getByRole("heading", { level: 1, name: "Demande d'inscription reçue" })).toBeVisible()
+  await expect(again.locator("#signup-failure")).toHaveCount(0)
+  const notice = await waitForMessage(`to:"${email}" subject:"Demande d'inscription non enregistrée"`)
+  const text = await getMessageText(notice.ID)
+  expect(text).toContain("une inscription ou une place en liste d'attente")
+  expect(text).toMatch(/\/my\/[\w-]+/)
   await again.screenshot({ path: test.info().outputPath("duplicate.png"), fullPage: false })
 })
 
@@ -126,7 +128,8 @@ test("after a public sign-up, back to the event and the lost link asked again by
   await page.getByRole("button", { name: "Confirmer mon inscription" }).click()
   await expect(page).toHaveURL(/\/spectacle-cirque-2026\/success/)
 
-  await expect(page.getByText("L'email de confirmation contient ton lien personnel")).toBeVisible()
+  await expect(page.getByRole("heading", { level: 1, name: "Demande d'inscription reçue" })).toBeVisible()
+  await expect(page.getByText(/Vérifie tes emails, y compris les courriers indésirables/)).toBeVisible()
   await expect(page.getByRole("link", { name: /^En savoir plus sur ton lien personnel/ })).toHaveAttribute("href", "/doc/lien-personnel")
   await expect(page.getByRole("link", { name: /Accéder à mon inscription/ })).toHaveCount(0)
   await expect(page.getByRole("link", { name: /Retour à l.accueil/ })).toHaveCount(0)

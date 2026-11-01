@@ -228,6 +228,31 @@ describe.skipIf(!url)("shift swaps on Postgres (#1174)", () => {
     expect([await shiftOf(rp.id), await shiftOf(rj.id)]).toEqual([shifts[0].id, shifts[1].id])
   })
 
+  // AUTHZ-08: what stops the requester (here a minimum age they don't reach on the offered shift)
+  // is never told to the person offering; their own side keeps its precise reason.
+  it("an offer the requester's side stops answers one code, which says nothing of why", async () => {
+    const { event, shifts } = await setup({ shifts: [{ day: "2030-07-04" }, { day: "2030-07-05", minAge: 18 }, { day: "2030-07-06", minAge: 18 }] })
+    const pierre = await person("Pierre", { birthDate: new Date("2014-01-01") })
+    const jean = await person("Jean")
+    const rp = await register(event.id, shifts[0].id, pierre.id)
+    const rj = await register(event.id, shifts[1].id, jean.id)
+    const pub = await publishSwapRequest(prisma, { registrationId: rp.id, volunteerId: pierre.id, now: NOW })
+    if (!pub.ok) throw new Error(pub.error)
+    const res = await offerSwap(prisma, { requestId: pub.requestId, registrationId: rj.id, volunteerId: jean.id, now: NOW })
+    expect(res).toMatchObject({ ok: false, httpStatus: 409, status: "open", code: "not_possible", error: "Cet échange n'est pas possible avec ce créneau. Propose un autre de tes créneaux." })
+    expect(JSON.stringify(res)).not.toMatch(/min_age|âge|conditions/)
+    expect(await statusOf(pub.requestId)).toBe("open")
+
+    // The offerer's own side first: a young offerer on the requester's age-gated shift hears why.
+    const young = await person("Lina", { birthDate: new Date("2014-01-01") })
+    const adult = await person("Marc")
+    const ra = await register(event.id, shifts[2].id, adult.id)
+    const ry = await register(event.id, shifts[0].id, young.id)
+    const adultReq = await publishSwapRequest(prisma, { registrationId: ra.id, volunteerId: adult.id, now: NOW })
+    if (!adultReq.ok) throw new Error(adultReq.error)
+    expect(await offerSwap(prisma, { requestId: adultReq.requestId, registrationId: ry.id, volunteerId: young.id, now: NOW })).toMatchObject({ ok: false, code: "min_age" })
+  })
+
   it("E10: one live request per registration, on either side, even for two requests at once", async () => {
     const { event, shifts } = await setup()
     const pierre = await person("Pierre")

@@ -66,7 +66,7 @@ export async function recordShiftRoster({ page, base, dir, scene, tap, settle, f
     await at("Cochez cette case")
     await tap(page, consent)
     await tap(page, page.getByRole("button", { name: "Confirmer mon inscription" }))
-    await page.getByRole("heading", { name: /inscription confirmée/i }).waitFor()
+    await page.getByRole("heading", { name: /inscription confirmée|demande d'inscription reçue/i }).waitFor()
   })
   await scene("roster-confirm", async at => {
     await at("Ouvrez le véritable email de confirmation")

@@ -13,6 +13,7 @@ vi.mock("next/navigation", () => ({
 
 import SuccessPage from "@/app/[eventSlug]/success/page"
 import { PERSONAL_LINK_EMAIL_NOTE } from "@/lib/personal-link"
+import { UNPROVEN_HEADING, UNPROVEN_TEXT } from "@/lib/signup-outcome"
 
 // The confirmation of the embedded sign-up (#948): the personal link in a new tab and in the
 // email, no push button (a third-party frame may not ask for notifications), back to the schedule.
@@ -59,32 +60,43 @@ describe("success page — embedded (#948)", () => {
   })
 })
 
-// No dead end after a public sign-up (#1097): no link on screen without proof of the address
-// (#285), so the page says where it is, and goes back to the event.
-describe("success page — public sign-up without a link (#1097)", () => {
+// A public sign-up without proof of the address (AUTHZ-01, #285): the server answers the same
+// whatever happened, so the page claims nothing (no place, waitlist or request) and sends to the
+// emails; no dead end (#1097): the guide on the personal link, and back to the event.
+describe("success page — public sign-up without a link", () => {
   afterEach(() => {
     cleanup()
     vi.unstubAllGlobals()
     search = ""
   })
 
-  it("says the personal link is in the email, links the guide, goes back to the event", () => {
+  it("says the request was received and the emails tell the rest, links the guide, goes back to the event", () => {
     const fetchMock = vi.fn()
     vi.stubGlobal("fetch", fetchMock)
     search = "org=club"
     render(<SuccessPage />)
-    expect(screen.getByText(PERSONAL_LINK_EMAIL_NOTE)).toBeInTheDocument()
+    expect(screen.getByRole("heading", { level: 1, name: UNPROVEN_HEADING })).toBeInTheDocument()
+    expect(screen.getByText(UNPROVEN_TEXT.replace(/\s+/g, " "))).toBeInTheDocument()
+    expect(screen.queryByText(/Inscription confirmée|liste d'attente|Demande envoyée/)).not.toBeInTheDocument()
+    expect(screen.queryByText(PERSONAL_LINK_EMAIL_NOTE)).not.toBeInTheDocument()
     expect(screen.getByRole("link", { name: /^En savoir plus sur ton lien personnel/ })).toHaveAttribute("href", "/doc/lien-personnel")
     expect(screen.queryByRole("link", { name: /Accéder à mon inscription/ })).not.toBeInTheDocument()
     expect(screen.getByRole("link", { name: "Revenir à l'événement" })).toHaveAttribute("href", "/fete?org=club")
     expect(fetchMock).not.toHaveBeenCalled()
   })
 
-  it("says nothing about a personal link for a waiting list only (its email has none)", () => {
+  it("claims no outcome even when the address carries one", () => {
     vi.stubGlobal("fetch", vi.fn())
-    search = "waitlist=1"
+    search = "waitlist=1&requested=1&active=0"
     render(<SuccessPage />)
-    expect(screen.queryByText(PERSONAL_LINK_EMAIL_NOTE)).not.toBeInTheDocument()
-    expect(screen.getByRole("link", { name: "Revenir à l'événement" })).toHaveAttribute("href", "/fete")
+    expect(screen.getByRole("heading", { level: 1, name: UNPROVEN_HEADING })).toBeInTheDocument()
+    expect(screen.queryByText(/Comment ça marche|sur validation/)).not.toBeInTheDocument()
+  })
+
+  it("embedded, the heading takes the focus", () => {
+    vi.stubGlobal("fetch", vi.fn())
+    search = "embed=1"
+    render(<SuccessPage />)
+    expect(screen.getByRole("heading", { level: 1 })).toHaveFocus()
   })
 })

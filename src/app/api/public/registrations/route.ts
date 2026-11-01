@@ -18,6 +18,7 @@ import {
   LIVE_STATUSES,
   OCCUPYING_STATUSES,
   ShiftFullError,
+  isSignupContention,
   isUniqueViolation,
   lockShifts,
   planPlacement,
@@ -47,6 +48,7 @@ import {
   pastShiftRefusal,
   duplicateSignupRefusal,
   staleLinkRefusal,
+  busySignupRefusal,
   type SignupRefusal,
 } from "@/lib/signup-eligibility"
 import { RoleLimitError, roleLimitBreaches, roleLimitMessage, roleLimits } from "@/lib/role-limit"
@@ -57,7 +59,8 @@ import { touchOrgActivity } from "@/lib/org-activity"
 import { isKnownMinor, signupNoticeVersion } from "@/lib/shift-roster"
 import { applySignupRosterChoice, logRosterChange, type RosterChange } from "@/lib/roster-consent-write"
 import { parseGroupCode } from "@/lib/group-links"
-import { localDay } from "@/lib/day-of"
+import { sendSignupNotice } from "@/lib/signup-notice"
+import { overlapConflict, type SignupConflict } from "@/lib/signup-conflict"
 import { orgTimeZone } from "@/lib/time-zone"
 import { recordTokenMiss, tokenLookupsBlocked } from "@/lib/token-rate-limit"
 import { contactPhone } from "@/lib/contact-phone"
@@ -168,7 +171,8 @@ export async function POST(req: Request) {
 
   // Early, unlocked check for a friendly error — the authoritative one runs under lock below.
   // A full shift with a waitlist goes on: its registration is created with status "waiting".
-  const pastRefusal = pastShiftRefusal(event, shifts, localDay(new Date(), orgTimeZone(event.organization)))
+  const timeZone = orgTimeZone(event.organization)
+  const pastRefusal = pastShiftRefusal(shifts, new Date(), timeZone)
   if (pastRefusal) return refuse(pastRefusal)
 
   const fullRefusal = fullShiftRefusal(shifts)
@@ -266,24 +270,30 @@ export async function POST(req: Request) {
       }
     }
 
-    const existingRegs = await prisma.registration.findMany({
-      where: { volunteerId: existing.id, shiftId: { in: shiftIds }, status: { in: [...LIVE_STATUSES] } },
-      select: { id: true },
-    })
-    if (existingRegs.length > 0) return alreadyRegistered(existing.id, eventId)
+    // The early answers about the address's own registrations (already on the shift, overlap) only
+    // with proof that the submitter owns it (AUTHZ-01): otherwise they would tell anyone typing an
+    // address where its owner is. Without proof, the same checks run under the lock below, and a
+    // refusal they give is answered like any sign-up without proof, explained by email to the owner.
+    if (ownsEmail) {
+      const existingRegs = await prisma.registration.findMany({
+        where: { volunteerId: existing.id, shiftId: { in: shiftIds }, status: { in: [...LIVE_STATUSES] } },
+        select: { id: true },
+      })
+      if (existingRegs.length > 0) return alreadyRegistered(existing.id, eventId)
 
-    const allEventRegs = await prisma.registration.findMany({
-      where: { volunteerId: existing.id, eventId, status: { in: [...COMMITTED_STATUSES] } },
-      include: { shift: true },
-    })
-    // Roles of the event assigned by the organisation only (#1145): an overlap with one of their
-    // shifts is refused without naming it.
-    hiddenRoles = assignedOnlyRoles(await prisma.shift.findMany({
-      where: { eventId, status: { not: "cancelled" }, assignedOnly: true },
-      select: { roleName: true, assignedOnly: true },
-    }))
-    const clashRefusal = existingOverlapRefusal(allEventRegs, shifts, hiddenRoles)
-    if (clashRefusal) return refuse(clashRefusal)
+      const allEventRegs = await prisma.registration.findMany({
+        where: { volunteerId: existing.id, eventId, status: { in: [...COMMITTED_STATUSES] } },
+        include: { shift: true },
+      })
+      // Roles of the event assigned by the organisation only (#1145): an overlap with one of their
+      // shifts is refused without naming it.
+      hiddenRoles = assignedOnlyRoles(await prisma.shift.findMany({
+        where: { eventId, status: { not: "cancelled" }, assignedOnly: true },
+        select: { roleName: true, assignedOnly: true },
+      }))
+      const clashRefusal = existingOverlapRefusal(allEventRegs, shifts, hiddenRoles)
+      if (clashRefusal) return refuse(clashRefusal)
+    }
   }
 
   // Only the questions asked for these postes (#1140) are checked, required and written: an answer
@@ -311,14 +321,28 @@ export async function POST(req: Request) {
   const charterText = resolveCharterText(event.organization.volunteerCharter, event.organization.hasOrgInsurance)
   const charterHash = hashCharterText(charterText)
   const charterAcceptedAt = new Date()
+  // Stored before the transaction, outside the shift locks (AUTHZ-04): a first sign-up's insert of
+  // a new text no longer makes every concurrent one wait for its commit. Never overwritten ("create"
+  // wins a race, "update" is a no-op); a text kept although the sign-up then fails is harmless, it
+  // is the text the organisation shows.
+  // Two first sign-ups racing on a new text: the loser's insert hits the unique key, the row is there.
+  try {
+    await prisma.charterVersion.upsert({
+      where: { organizationId_hash: { organizationId, hash: charterHash } },
+      create: { organizationId, hash: charterHash, text: charterText },
+      update: {},
+    })
+  } catch (e) {
+    if (!isUniqueViolation(e)) throw e
+  }
 
   // Notifications of this sign-up, built by the usual helpers into an outbox collector (#293).
   // Built and stored inside the registration transaction (#352): the registrations and their
   // notifications commit together, then delivery runs after the response. The helpers only read
   // (admins, sector leaders), so the shift locks are held a few queries longer, no more.
-  const buildNotifications = (registrations: CreatedRegistration[], volunteerId: string, groupedConfirmation: boolean) => buildSignupNotifications({
+  const buildNotifications = (registrations: CreatedRegistration[], volunteerId: string, groupedConfirmation: boolean, current: typeof shifts) => buildSignupNotifications({
     event,
-    shifts,
+    shifts: current,
     volunteer: { id: volunteerId, email, firstName, lastName },
     registrations,
     tokens,
@@ -339,16 +363,16 @@ export async function POST(req: Request) {
         // Workload protection (#1171): its shared lock first, then the policy as it is now.
         await lockWorkloadShared(tx, eventId)
         const workloadGate = await readWorkloadGate(tx, eventId)
+        // Contention (AUTHZ-04): a sign-up that can't get the locks soon gives up with a clean
+        // « réessaie » answer (busy), long before the transaction's own timeout.
+        await tx.$queryRaw`SELECT set_config('lock_timeout', ${`${SIGNUP_LOCK_TIMEOUT_MS}ms`}, true)`
         await lockShifts(tx, shiftIds)
-
-        // Resolve the hash back to its text later (#569): upserted once per distinct text, never
-        // overwritten once seen (the "update" below only exists so a race between two sign-ups
-        // doesn't throw on a duplicate key — it changes nothing).
-        await tx.charterVersion.upsert({
-          where: { organizationId_hash: { organizationId, hash: charterHash } },
-          create: { organizationId, hash: charterHash, text: charterText },
-          update: {},
-        })
+        // The shifts as they are now, under their lock (AUTHZ-05): status, capacity, hours and
+        // options read before it may have changed meanwhile (a shift closed, cancelled, shortened).
+        const current = await currentShifts(tx, eventId, shifts)
+        if (!current) throw new AssignedOnlyError()
+        const pastNow = pastShiftRefusal(current, new Date(), timeZone)
+        if (pastNow) throw new SignupRefusalError(pastNow)
 
         // A new volunteer is created in the same transaction as their registrations (#309): if the
         // registration fails (shift full, overlap, duplicate), no member record is left behind.
@@ -379,6 +403,20 @@ export async function POST(req: Request) {
             && (!personal || (await tx.registration.findFirst({ where: { ...registrationToken.where(personalToken!), eventId, volunteerId, status: { in: [...LIVE_STATUSES] } }, select: { id: true } })) != null)
           if (!stillHolds) throw new StaleProofError()
         }
+        // With proof of the address, every refusal is precise. Without it (AUTHZ-01), the refusals
+        // that come from the address's own registrations are only recorded here: the public ones
+        // (full, ended, limits of the selection alone) still decide first, the same for any address,
+        // then nothing is written and the owner is told by email (PrivateConflictError).
+        const proven = ownsEmail && !matchErased
+        let conflict: SignupConflict | null = null
+        const held = await tx.registration.findFirst({
+          where: { volunteerId, shiftId: { in: shiftIds }, status: { in: [...LIVE_STATUSES] } },
+          select: { shift: { select: { label: true } } },
+        })
+        if (held) {
+          if (proven) throw new DuplicateError(volunteerId)
+          conflict = { kind: "duplicate", shift: held.shift.label }
+        }
         const liveNow = await tx.registration.findMany({
           where: { volunteerId, eventId, status: { in: [...COMMITTED_STATUSES] } },
           include: { shift: true },
@@ -392,26 +430,38 @@ export async function POST(req: Request) {
           where: { eventId, status: { not: "cancelled" }, assignedOnly: true },
           select: { roleName: true, assignedOnly: true },
         }))
-        if (asksAssignedOnly(shifts, hiddenNow)) throw new AssignedOnlyError()
-        const clashNow = findOverlap(liveNow, shifts, new Set([...hiddenRoles, ...hiddenNow]))
-        if (clashNow) throw new OverlapError(clashNow.label)
+        if (asksAssignedOnly(current, hiddenNow)) throw new AssignedOnlyError()
+        const clashNow = findOverlap(liveNow, current, new Set([...hiddenRoles, ...hiddenNow]))
+        if (clashNow) {
+          if (proven) throw new OverlapError(clashNow.label)
+          // To the owner, by email: their own shift is named, assigned by the organisation or not.
+          conflict ??= overlapConflict(liveNow, current)
+        }
 
         // Shifts per volunteer for a role (#466), under the same volunteer lock, so two concurrent
         // sign-ups of one person can't both pass. Every live registration counts, waitlist included.
         const limits = roleLimits(await tx.shift.findMany({
-          where: { eventId, roleName: { in: [...new Set(shifts.map((s) => s.roleName))] }, maxPerVolunteer: { not: null } },
+          where: { eventId, roleName: { in: [...new Set(current.map((s) => s.roleName))] }, maxPerVolunteer: { not: null } },
           select: { roleName: true, maxPerVolunteer: true },
         }))
         if (limits.size > 0) {
-          const held = await tx.registration.findMany({
+          // The selection alone over the limit: the same answer for any address.
+          const [own] = roleLimitBreaches(current, [], limits)
+          if (own) throw new RoleLimitError(own)
+          const heldOfRoles = await tx.registration.findMany({
             where: { volunteerId, eventId, status: { in: [...LIVE_STATUSES] }, shift: { roleName: { in: [...limits.keys()] } } },
             select: { shift: { select: { roleName: true } } },
           })
-          const [breach] = roleLimitBreaches(shifts, held.map((h) => h.shift), limits)
-          if (breach) throw new RoleLimitError(breach)
+          const [breach] = roleLimitBreaches(current, heldOfRoles.map((h) => h.shift), limits)
+          if (breach) {
+            if (proven) throw new RoleLimitError(breach)
+            conflict ??= { kind: "role_limit", roleName: breach.roleName, max: breach.max }
+          }
         }
-        const created = []
-        for (const shift of shifts) {
+        // Places first, for every shift (a full one is refused whatever the address), then created
+        // only when nothing stands in the way.
+        const placements: { shift: (typeof current)[number]; placement: Exclude<ReturnType<typeof planPlacement>, { status: "full" }> }[] = []
+        for (const shift of current) {
           const occupied = await tx.registration.count({
             where: { shiftId: shift.id, status: { in: [...OCCUPYING_STATUSES] } },
           })
@@ -427,6 +477,21 @@ export async function POST(req: Request) {
             requiresApproval: shift.requiresApproval,
           })
           if (placement.status === "full") throw new ShiftFullError(shift.id, shift.label)
+          placements.push({ shift, placement })
+        }
+        // Workload protection (#1171): without proof of the address, the selection alone is judged
+        // first, with only the birth date typed now, as for a new address; a refusal it gives is
+        // the public, detailed one. What the address's own schedule or limits add is a conflict.
+        const committedNow = placements.filter((p) => p.placement.status === "active" || p.placement.status === "requested").map((p) => p.shift)
+        const added: DutyShift[] = workloadGate.kind !== "off" && committedNow.length > 0 ? await withPlaceNames(tx, committedNow) : []
+        if (!proven && added.length > 0) {
+          const typed: WorkloadPerson = { birthDate: birthDateValue ?? null }
+          const own = judgeDutyChange(workloadGate, [], { add: added }, typed)
+          if (!own.ok) throw new SignupWorkloadError(own, volunteerId, added, false, typed, true)
+        }
+        if (conflict) throw new PrivateConflictError(conflict, volunteerId)
+        const created = []
+        for (const { shift, placement } of placements) {
           created.push(
             await tx.registration.create({
               data: {
@@ -452,24 +517,25 @@ export async function POST(req: Request) {
         // Workload protection (#1171), on the whole resulting schedule, under the volunteer lock:
         // the places and requests this sign-up creates (a waitlist entry is no mission yet) next to
         // those already held. A refusal rolls everything back.
-        if (workloadGate.kind !== "off") {
-          const committed = new Set(["active", "requested"])
-          const added: DutyShift[] = await withPlaceNames(tx, created.filter((r) => committed.has(r.status)).map((r) => shifts.find((s) => s.id === r.shiftId)!))
-          if (added.length > 0) {
-            const before: DutyShift[] = await withPlaceNames(tx, liveNow.filter((r) => r.shift.status !== "cancelled").map((r) => r.shift))
-            // The stored birth date wins; without one, the date typed now (#1171, lot 2: minors). The
-            // person's own limits come from their record.
-            const stored = await readWorkloadPerson(tx, eventId, volunteerId)
-            const person = { ...stored, birthDate: stored.birthDate ?? birthDateValue ?? null }
-            const verdict = judgeDutyChange(workloadGate, before, { add: added }, person)
-            if (!verdict.ok) throw new SignupWorkloadError(verdict, volunteerId, added, ownsEmail && !matchErased && !createdNow, person, !stored.birthDate)
+        if (added.length > 0) {
+          const before: DutyShift[] = await withPlaceNames(tx, liveNow.filter((r) => r.shift.status !== "cancelled").map((r) => r.shift))
+          // The stored birth date wins; without one, the date typed now (#1171, lot 2: minors). The
+          // person's own limits come from their record.
+          const stored = await readWorkloadPerson(tx, eventId, volunteerId)
+          const person = { ...stored, birthDate: stored.birthDate ?? birthDateValue ?? null }
+          const verdict = judgeDutyChange(workloadGate, before, { add: added }, person)
+          if (!verdict.ok) {
+            // Without proof, the selection alone passed above: what fails comes from the address's
+            // own schedule or record (AUTHZ-01), told to its owner only.
+            if (!proven) throw new PrivateConflictError({ kind: "workload" }, volunteerId)
+            throw new SignupWorkloadError(verdict, volunteerId, added, !createdNow, person, !stored.birthDate)
           }
         }
         // Shifts added to an event where the volunteer already holds a place or a request (#1191):
         // their confirmation joins one grouped email instead of one per sign-up. A first sign-up's
         // confirmation, with the personal link, still leaves at once.
         const grouped = groupsConfirmation(liveNow)
-        const outboxIds = await enqueueNotifications(await buildNotifications(created, volunteerId, grouped), tx, { organizationId: event.organizationId })
+        const outboxIds = await enqueueNotifications(await buildNotifications(created, volunteerId, grouped, current), tx, { organizationId: event.organizationId })
         const activeCreated = created.filter((r) => r.status === "active")
         if (grouped && activeCreated.length > 0) {
           const dueId = await queueAddedShiftsConfirmation(tx, {
@@ -556,6 +622,15 @@ export async function POST(req: Request) {
         if (ownsEmail) return refuse(staleLinkRefusal())
         if (attempt < 3) { matchId = null; continue }
       }
+      // Without proof of the address (AUTHZ-01): answered like any sign-up without proof, the owner
+      // is told by email what was not recorded and why.
+      if (e instanceof PrivateConflictError) {
+        await sendSignupNotice({ volunteerId: e.volunteerId, eventId, conflict: e.conflict })
+        return unprovenAnswer()
+      }
+      if (e instanceof DuplicateError) return alreadyRegistered(e.volunteerId, eventId)
+      if (e instanceof SignupRefusalError) return refuse(e.refusal)
+      if (isSignupContention(e)) return refuse(busySignupRefusal())
       if (e instanceof ShiftFullError) return refuse(fullShift(e.shiftId, e.label))
       if (e instanceof RoleLimitError) {
         return NextResponse.json({ error: roleLimitMessage(e.breach), roleLimit: e.breach.roleName }, { status: 409 })
@@ -568,7 +643,11 @@ export async function POST(req: Request) {
         // Our transaction rolled back; the duplicate belongs to a volunteer that exists
         // independently of it (created before, or by a concurrent sign-up).
         const owner = await prisma.volunteer.findFirst({ where: { email: { equals: email, mode: "insensitive" }, organizationId }, select: { id: true } })
-        if (owner) return alreadyRegistered(owner.id, eventId)
+        if (owner && ownsEmail) return alreadyRegistered(owner.id, eventId)
+        if (owner) {
+          await sendSignupNotice({ volunteerId: owner.id, eventId, conflict: { kind: "duplicate", shift: null } })
+          return unprovenAnswer()
+        }
         return refuse(duplicateSignupRefusal())
       }
       throw e
@@ -640,11 +719,15 @@ export async function POST(req: Request) {
 
   const onWaitlist = waitlistRegs.length > 0 && activeRegs.length === 0 && requestedRegs.length === 0
 
+  // Without proof of the address (AUTHZ-01): one answer, whatever happened to the sign-up (place,
+  // waitlist, request, or not recorded at all); the emails say which.
+  if (!ownsEmail) return unprovenAnswer()
+
   return NextResponse.json({
     success: true,
-    // Only with proof of ownership (member invite); otherwise the link is in the email only.
-    editToken: ownsEmail ? editToken : null,
-    linkSentByEmail: !ownsEmail,
+    // Only with proof of ownership (member invite, personal link).
+    editToken,
+    linkSentByEmail: false,
     confirmationMessage: activeRegs.length === 0 ? null : event.confirmationMessage,
     registrationCount: registrations.length,
     onWaitlist,
@@ -732,6 +815,53 @@ async function savePersonalChanges(tx: PersonalTx, input: {
 class StaleProofError extends Error {
   constructor() {
     super("Proof of address changed before the member lock")
+  }
+}
+
+/** How long a sign-up waits for its locks before answering « réessaie » (AUTHZ-04). */
+const SIGNUP_LOCK_TIMEOUT_MS = 3000
+
+/**
+ * A sign-up without proof of the address (AUTHZ-01, #285): the same answer whether it was recorded
+ * (place, waitlist, request) or refused because of the address's own registrations. The emails say
+ * which: the confirmation, or the notice to the owner (src/lib/signup-notice.ts).
+ */
+function unprovenAnswer() {
+  return NextResponse.json({ success: true, editToken: null, linkSentByEmail: true, received: true }, { status: 201 })
+}
+
+/**
+ * The submitted shifts read again under their lock (AUTHZ-05): status, capacity, options and hours
+ * as they are now, on top of what was read before. Null when one is no longer open on this event.
+ */
+async function currentShifts<S extends { id: string }>(tx: PersonalTx, eventId: string, shifts: S[]) {
+  const rows = await tx.shift.findMany({
+    where: { id: { in: shifts.map((s) => s.id) }, eventId },
+    select: { id: true, status: true, capacity: true, waitlistEnabled: true, requiresApproval: true, date: true, startTime: true, endTime: true, label: true, roleName: true, minAge: true, overlapAllowed: true, mealOnTheGo: true, placeId: true },
+  })
+  const byId = new Map(rows.map((r) => [r.id, r]))
+  if (shifts.some((s) => byId.get(s.id)?.status !== "open")) return null
+  return shifts.map((s) => ({ ...s, ...byId.get(s.id)! }))
+}
+
+/** A refusal decided under the lock, answered as it is. */
+class SignupRefusalError extends Error {
+  constructor(readonly refusal: SignupRefusal) {
+    super(refusal.body.error)
+  }
+}
+
+/** Already on one of the shifts, with proof of the address: the precise answer (#285, #1047). */
+class DuplicateError extends Error {
+  constructor(readonly volunteerId: string) {
+    super("Already registered on one of the shifts")
+  }
+}
+
+/** A refusal from the address's own registrations, without proof of the address (AUTHZ-01). */
+class PrivateConflictError extends Error {
+  constructor(readonly conflict: SignupConflict, readonly volunteerId: string) {
+    super(`Sign-up not recorded: ${conflict.kind}`)
   }
 }
 
