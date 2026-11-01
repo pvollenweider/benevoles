@@ -10,7 +10,7 @@ import { cappedText } from "@/lib/text-limits-schema"
 import { MEMBER_NOTES_MAX } from "@/lib/text-limits"
 import { availabilitySchema } from "@/lib/availability"
 import { isUniqueViolation } from "@/lib/registration-capacity"
-import { MEMBER_ERASURE_REASON } from "@/lib/member-erasure"
+import { memberWriteRefusal } from "@/lib/member-erasure"
 import { addressCorrected } from "@/lib/member-address-change"
 import { SEND_TRANSACTION_OPTIONS } from "@/lib/invitation-sending"
 import { renewMemberLinks } from "@/lib/member-address-revocation"
@@ -43,8 +43,10 @@ export async function PATCH(req: Request, { params }: { params: Promise<{ id: st
 
   const before = await db.volunteer.findFirst({ where: { id } })
   if (!before) return NextResponse.json({ error: "Non trouvé" }, { status: 404 })
-  // An erased record (#516) stays empty: personal data can't be typed back into it.
-  if (before.erasedAt) return NextResponse.json({ error: MEMBER_ERASURE_REASON.erased }, { status: 409 })
+  // An erased record (#516) stays empty, and a merge tombstone (#600) holds no data: personal data
+  // can't be typed back into either.
+  const tombstone = memberWriteRefusal(before)
+  if (tombstone) return NextResponse.json({ error: tombstone }, { status: 409 })
 
   const data = parsed.data
   const updateData: Record<string, unknown> = {}
@@ -82,9 +84,10 @@ export async function PATCH(req: Request, { params }: { params: Promise<{ id: st
     } else {
       const outcome = await db.$transaction(async (tx) => {
         await tx.$queryRaw`SELECT id FROM "Volunteer" WHERE id = ${id} FOR UPDATE`
-        const locked = await tx.volunteer.findFirst({ where: { id }, select: { email: true, erasedAt: true } })
+        const locked = await tx.volunteer.findFirst({ where: { id }, select: { email: true, erasedAt: true, mergedIntoId: true } })
         if (!locked) return { notFound: true as const }
-        if (locked.erasedAt) return { erased: true as const }
+        const refusal = memberWriteRefusal(locked)
+        if (refusal) return { refused: refusal }
         const updated = await tx.volunteer.update({ where: { id }, data: updateData })
         const renewed = addressCorrected(locked.email, updated.email)
           ? await renewMemberLinks(tx as unknown as Tx, {
@@ -98,7 +101,7 @@ export async function PATCH(req: Request, { params }: { params: Promise<{ id: st
         return { updated, renewed }
       }, SEND_TRANSACTION_OPTIONS)
       if ("notFound" in outcome) return NextResponse.json({ error: "Non trouvé" }, { status: 404 })
-      if ("erased" in outcome) return NextResponse.json({ error: MEMBER_ERASURE_REASON.erased }, { status: 409 })
+      if ("refused" in outcome) return NextResponse.json({ error: outcome.refused }, { status: 409 })
       volunteer = outcome.updated
       renewal = outcome.renewed
     }
