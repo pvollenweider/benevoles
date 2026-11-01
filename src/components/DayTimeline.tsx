@@ -212,6 +212,7 @@ export default function DayTimeline({
                   const isConflict      = view.conflict
                   const isFull          = view.full
                   const isClosed        = view.closed
+                  const isEnded         = view.ended
                   const isWaitlistable  = view.waitlistable
                   const unavail         = view.unavailable
                   const isSelected      = view.selected
@@ -307,7 +308,7 @@ export default function DayTimeline({
                                 <path fillRule="evenodd" d="M10 2a4 4 0 00-4 4v2H5a2 2 0 00-2 2v6a2 2 0 002 2h10a2 2 0 002-2v-6a2 2 0 00-2-2h-1V6a4 4 0 00-4-4zm2 6V6a2 2 0 10-4 0v2h4z" clipRule="evenodd" />
                               </svg>
                             )}
-                            <span className="hidden @min-[64px]:inline">{isReserved ? "Réservé" : isFull ? "Complet" : isClosed ? "Fermé" : ""}</span>
+                            <span className="hidden @min-[64px]:inline">{isReserved ? "Réservé" : isEnded ? "Terminé" : isFull ? "Complet" : isClosed ? "Fermé" : ""}</span>
                           </span>
                         ) : (
                           <div className="flex flex-col items-center justify-center gap-0.5 px-1.5 max-w-full overflow-hidden">
