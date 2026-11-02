@@ -4,13 +4,14 @@
 import { PUBLIC_ORG_WHERE } from "@/lib/org-approval"
 import { headers } from "next/headers"
 import { prisma } from "@/lib/prisma"
-import { latestDate, ORG_SITEMAP_EVENTS_WHERE, sitemapIndexEntries, sitemapIndexXml, type OrgForIndex } from "@/lib/sitemap-index"
+import { latestDate, sitemapIndexEntries, sitemapIndexXml, type OrgForIndex } from "@/lib/sitemap-index"
+import { orgHomeEventsWhere } from "@/lib/event-visibility"
 import { apexBaseUrl, isKnownHost, orgSitemapUrl } from "@/lib/urls"
 import { reportError } from "@/lib/report-error"
 import { VIDEO_SITEMAP_PATH } from "@/lib/video-seo"
 
 // The apex sitemap index (src/lib/sitemap-index.ts), referenced by the apex robots.txt: the
-// www sitemap and the video sitemap, then every public organisation's that lists an event. Only on the apex host: an organisation's host has
+// www sitemap and the video sitemap, then every public organisation's whose public page shows an event. Only on the apex host: an organisation's host has
 // its own sitemap, staging, previews and unknown hosts have none. A path ending in .xml is never an
 // event slug, so the route can't shadow an event.
 export const dynamic = "force-dynamic"
@@ -25,16 +26,16 @@ export async function GET() {
   let orgs: OrgForIndex[] = []
   try {
     // Public organisations only (active, approved for publication): another has no public page
-    // (src/lib/resolve-org.ts). The events counted are the ones its own sitemap lists.
+    // (src/lib/resolve-org.ts). The events counted are the ones its public page shows.
     const rows = await prisma.organization.findMany({
       where: PUBLIC_ORG_WHERE,
       select: {
         slug: true,
         updatedAt: true,
-        events: { where: ORG_SITEMAP_EVENTS_WHERE, select: { updatedAt: true }, orderBy: { updatedAt: "desc" }, take: 1 },
+        events: { where: orgHomeEventsWhere(), select: { updatedAt: true }, orderBy: { updatedAt: "desc" }, take: 1 },
       },
     })
-    orgs = rows.map((o) => ({ slug: o.slug, lastmod: latestDate([o.updatedAt, o.events[0]?.updatedAt]), listedEvents: o.events.length }))
+    orgs = rows.map((o) => ({ slug: o.slug, lastmod: latestDate([o.updatedAt, o.events[0]?.updatedAt]), shownEvents: o.events.length }))
   } catch (error) {
     // Without the database, the index still gives the apex sitemap rather than an error.
     reportError("sitemap-index")(error)

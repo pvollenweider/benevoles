@@ -37,12 +37,13 @@ describe("GET /sitemap-index.xml", () => {
     ])
     expect(xml).toContain("<lastmod>2026-10-01T00:00:00.000Z</lastmod>")
     expect(m.findMany).toHaveBeenCalledWith(expect.objectContaining({ where: { active: true, publicationApprovedAt: { not: null } } }))
-    // The events counted are the ones the organisation's own sitemap lists.
-    expect(m.findMany.mock.calls[0][0].select.events.where).toEqual({ publicStatus: "published", isListed: true })
+    // The events counted are the ones the organisation's public page shows: published, listed, not over.
+    expect(m.findMany.mock.calls[0][0].select.events.where).toEqual({ publicStatus: "published", isListed: true, endDate: { gte: expect.any(Date) } })
   })
 
-  // Search Console listed test spaces whose sitemap held their root page alone.
-  it("leaves out an organisation with no published, listed event", async () => {
+  // Search Console listed test spaces whose sitemap held their root page alone, and reported as
+  // soft 404 public pages whose only events were over.
+  it("leaves out an organisation whose public page shows no event", async () => {
     request("www.benevol.app")
     m.findMany.mockResolvedValue([
       { slug: "ape-amandine", updatedAt: new Date("2026-09-01T00:00:00Z"), events: [{ updatedAt: new Date("2026-10-01T00:00:00Z") }] },
