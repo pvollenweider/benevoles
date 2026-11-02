@@ -2,7 +2,7 @@ import { describe, it, expect, vi, beforeEach, afterEach } from "vitest"
 
 const getMock = vi.hoisted(() => vi.fn())
 vi.mock("next/headers", () => ({ headers: () => Promise.resolve({ get: getMock }) }))
-vi.mock("@/lib/prisma", () => ({ prisma: { event: { findMany: vi.fn().mockResolvedValue([]) } } }))
+vi.mock("@/lib/prisma", () => ({ prisma: { event: { findMany: vi.fn().mockResolvedValue([]), count: vi.fn().mockResolvedValue(1) } } }))
 // The video entries read the runtime environment (src/lib/video-seo-context.ts): stubbed per test.
 vi.mock("@/lib/env", () => ({
   env: {
@@ -125,5 +125,19 @@ describe("sitemap on an organisation host", () => {
     const sitemap = (await import("../app/sitemap")).default
     const urls = (await sitemap()).map((e) => e.url)
     expect(urls.some((u) => u.includes("/fonctionnalites") || u.includes("/doc"))).toBe(false)
+  })
+
+  // A public page that shows no event carries noindex: its own sitemap never lists it.
+  it("lists the organisation's public page only while it shows an event", async () => {
+    const { resolveOrgSlug } = await import("@/lib/resolve-org")
+    const { prisma } = await import("@/lib/prisma")
+    vi.mocked(resolveOrgSlug).mockResolvedValue({ org: { id: "o", slug: "asso" } } as never)
+    withHeaders({ host: "asso.benevol.app", "x-org-slug": "asso" })
+    const sitemap = (await import("../app/sitemap")).default
+    vi.mocked(prisma.event.count).mockResolvedValueOnce(1 as never)
+    expect((await sitemap()).map((e) => e.url)).toEqual(["https://asso.benevol.app"])
+    vi.mocked(prisma.event.count).mockResolvedValueOnce(0 as never)
+    expect(await sitemap()).toEqual([])
+    expect(vi.mocked(prisma.event.count).mock.calls.at(-1)?.[0]?.where).toMatchObject({ organizationId: "o", publicStatus: "published", isListed: true, endDate: { gte: expect.any(Date) } })
   })
 })

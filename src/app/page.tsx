@@ -12,7 +12,7 @@ import OrgLogoImage from "@/components/OrgLogoImage"
 import { ORG_LOGO_SELECT, orgLogoOf, type OrgLogo } from "@/lib/org-logo"
 import { apexBaseUrl, orgBaseUrl, orgPageFooterSite } from "@/lib/urls"
 import { orgHomeMetadata } from "@/lib/event-share"
-import { PUBLIC_LIST_WHERE } from "@/lib/event-visibility"
+import { orgHomeEventsWhere, orgHomeRobots } from "@/lib/event-visibility"
 import { publicShifts } from "@/lib/role-assignment"
 import { CONTACT_EMAIL, LANDING_FAQ_SOURCE, REPOSITORY_URL, jsonLdScript, landingJsonLd, landingMetadata } from "@/lib/landing-seo"
 import { loadDocUnits } from "@/lib/doc-units"
@@ -46,11 +46,17 @@ export async function generateMetadata(): Promise<Metadata> {
   if (!rawOrgSlug) return isHostedService() ? landingMetadata(apexBaseUrl()) : instanceHomeMetadata(apexBaseUrl())
   const resolved = await resolveOrgSlug(rawOrgSlug)
   if (!resolved || resolved.redirectUrl) return {}
-  // The organisation's page shared in a message or found in a search (#564 for its events).
-  return orgHomeMetadata(
-    { name: resolved.org.name, title: resolved.org.publicTitle?.trim() || DEFAULT_TITLE },
-    { canonicalUrl: `${orgBaseUrl(resolved.org.slug)}/`, imageUrl: `${apexBaseUrl()}/og-image.png` },
-  )
+  // The organisation's page shared in a message or found in a search (#564 for its events), kept
+  // out of search engines while it shows no event.
+  const shownEvents = await prisma.event.count({ where: { ...orgHomeEventsWhere(), organizationId: resolved.org.id } })
+  const robots = orgHomeRobots(shownEvents)
+  return {
+    ...orgHomeMetadata(
+      { name: resolved.org.name, title: resolved.org.publicTitle?.trim() || DEFAULT_TITLE },
+      { canonicalUrl: `${orgBaseUrl(resolved.org.slug)}/`, imageUrl: `${apexBaseUrl()}/og-image.png` },
+    ),
+    ...(robots && { robots }),
+  }
 }
 
 export default async function HomePage() {
@@ -80,14 +86,10 @@ export default async function HomePage() {
   if (!orgSlug) return isHostedService() ? <LandingPage /> : await InstanceHome()
 
   // Hide events that are already over: they would show "N places à pourvoir".
-  const startOfToday = new Date()
-  startOfToday.setHours(0, 0, 0, 0)
-
   const events = await prisma.event.findMany({
     where: {
-      ...PUBLIC_LIST_WHERE,
+      ...orgHomeEventsWhere(),
       organization: { slug: orgSlug },
-      endDate: { gte: startOfToday },
     },
     include: {
       organization: { select: { slug: true, name: true } },
