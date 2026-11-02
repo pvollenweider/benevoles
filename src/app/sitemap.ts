@@ -3,7 +3,8 @@ import { headers } from "next/headers"
 import { prisma } from "@/lib/prisma"
 import { resolveOrgSlug } from "@/lib/resolve-org"
 import { apexBaseUrl, isKnownHost, orgBaseUrl } from "@/lib/urls"
-import { ORG_SITEMAP_EVENTS_WHERE } from "@/lib/sitemap-index"
+import { ORG_SITEMAP_EVENTS_WHERE, orgSitemapEntries } from "@/lib/sitemap-index"
+import { orgHomeEventsWhere } from "@/lib/event-visibility"
 import { apexSitemap } from "@/lib/doc-pages"
 import { loadDocUnits } from "@/lib/doc-units"
 import { loadBlogPosts } from "@/lib/blog"
@@ -42,24 +43,19 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
   const resolved = await resolveOrgSlug(rawOrgSlug)
   if (!resolved || resolved.redirectUrl) return []
 
-  const events = await prisma.event.findMany({
-    // Listed events only (#414): an unlisted event and its pages stay out of the sitemap. The same
-    // rule decides whether the apex index lists this sitemap at all (src/lib/sitemap-index.ts).
-    where: { organizationId: resolved.org.id, ...ORG_SITEMAP_EVENTS_WHERE },
-    select: {
-      slug: true,
-      updatedAt: true,
-      pages: { select: { slug: true, updatedAt: true } },
-    },
-  })
+  const [events, shownEvents] = await Promise.all([
+    prisma.event.findMany({
+      // Listed events only (#414): an unlisted event and its pages stay out of the sitemap.
+      where: { organizationId: resolved.org.id, ...ORG_SITEMAP_EVENTS_WHERE },
+      select: {
+        slug: true,
+        updatedAt: true,
+        pages: { select: { slug: true, updatedAt: true } },
+      },
+    }),
+    // The public page is listed only while it shows an event, the rule of its robots metadata.
+    prisma.event.count({ where: { organizationId: resolved.org.id, ...orgHomeEventsWhere() } }),
+  ])
 
-  const base = orgBaseUrl(resolved.org.slug)
-  const entries: MetadataRoute.Sitemap = [{ url: base, changeFrequency: "daily" }]
-  for (const event of events) {
-    entries.push({ url: `${base}/${event.slug}`, lastModified: event.updatedAt, changeFrequency: "daily" })
-    for (const page of event.pages) {
-      entries.push({ url: `${base}/${event.slug}/${page.slug}`, lastModified: page.updatedAt, changeFrequency: "monthly" })
-    }
-  }
-  return entries
+  return orgSitemapEntries(orgBaseUrl(resolved.org.slug), shownEvents, events)
 }
