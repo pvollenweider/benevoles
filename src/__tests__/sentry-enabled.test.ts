@@ -100,3 +100,29 @@ describe("browser Sentry sends nothing on a clean public page view (#773)", () =
     expect(sentry.addIntegration).not.toHaveBeenCalled()
   })
 })
+
+describe("Server Sentry ignores client-side aborts only", () => {
+  afterEach(() => vi.unstubAllEnvs())
+
+  async function serverIgnoreErrors(): Promise<RegExp[]> {
+    vi.stubEnv("NODE_ENV", "production")
+    vi.resetModules()
+    init.mockClear()
+    await loadConfig("../../sentry.server.config")
+    return init.mock.calls[0][0].ignoreErrors
+  }
+  const ignored = (patterns: RegExp[], message: string) => patterns.some((p) => p.test(message))
+
+  it("drops a request the browser closed before its body arrived (BENEVOLAPP-11)", async () => {
+    const patterns = await serverIgnoreErrors()
+    expect(ignored(patterns, "aborted")).toBe(true)
+    expect(ignored(patterns, "The destination stream closed early.")).toBe(true)
+  })
+
+  it("still reports longer messages that mention an abort", async () => {
+    const patterns = await serverIgnoreErrors()
+    expect(ignored(patterns, "This operation was aborted")).toBe(false)
+    expect(ignored(patterns, "Transaction aborted: could not serialize access")).toBe(false)
+    expect(ignored(patterns, "Import aborted")).toBe(false)
+  })
+})
