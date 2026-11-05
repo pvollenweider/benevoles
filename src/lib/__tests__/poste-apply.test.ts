@@ -1,6 +1,6 @@
 import { describe, it, expect } from "vitest"
 import {
-  applyResultMessage, applySummary, confirmQuestion, labelToApply, labelUpdates,
+  applyResultMessage, applySummary, confirmQuestion, groupShiftWrites, labelToApply, labelUpdates,
   posteApplyCount, posteApplyTargets, posteSpansOtherDays,
 } from "../poste-apply"
 
@@ -87,5 +87,40 @@ describe("confirmQuestion and applyResultMessage", () => {
       .toBe("Appliqué à 3 créneaux du poste « Bar » ce jour. 1 créneau garde plus de places : déjà plus d'inscrits.")
     expect(applyResultMessage("Bar", "event", { shifts: 1, days: 1, keptHigher: 2 }))
       .toBe("Appliqué à 1 créneau du poste « Bar ». 2 créneaux gardent plus de places : déjà plus d'inscrits.")
+  })
+})
+
+describe("groupShiftWrites", () => {
+  it("writes a poste with a shift every evening in one update (regression, Sentry BENEVOLAPP-13)", () => {
+    const ids = Array.from({ length: 40 }, (_, i) => `s${i}`)
+    const groups = groupShiftWrites(ids, new Map(ids.map((id) => [id, 6])), new Map(ids.map((id) => [id, 2])), new Map(ids.map((id) => [id, "Entrée"])))
+    expect(groups).toEqual([{ ids, data: { capacity: 6, minVolunteers: 2, label: "Entrée" } }])
+  })
+
+  it("keeps apart the shifts that receive different values", () => {
+    // « b » keeps more places (already more volunteers), « c » only gets the label.
+    const groups = groupShiftWrites(
+      ["a", "b", "c", "d"],
+      new Map([["a", 4], ["d", 4]]),
+      new Map([["a", 2], ["b", 2], ["d", 2]]),
+      new Map([["a", "Relève"], ["b", "Relève"], ["c", "Relève"], ["d", "Relève"]]),
+    )
+    expect(groups).toEqual([
+      { ids: ["a", "d"], data: { capacity: 4, minVolunteers: 2, label: "Relève" } },
+      { ids: ["b"], data: { minVolunteers: 2, label: "Relève" } },
+      { ids: ["c"], data: { label: "Relève" } },
+    ])
+  })
+
+  it("tells a removed minimum from a minimum left as is", () => {
+    const groups = groupShiftWrites(["a", "b"], new Map([["a", 3], ["b", 3]]), new Map([["a", null]]), new Map())
+    expect(groups).toEqual([
+      { ids: ["a"], data: { capacity: 3, minVolunteers: null } },
+      { ids: ["b"], data: { capacity: 3 } },
+    ])
+  })
+
+  it("leaves out shifts with nothing to change", () => {
+    expect(groupShiftWrites(["a", "b"], new Map(), new Map(), new Map())).toEqual([])
   })
 })

@@ -844,7 +844,7 @@ describe("Shifts — cross-tenant isolation", () => {
     const update = vi.fn().mockResolvedValue({})
     const findMany = vi.fn().mockResolvedValue([{ id: "s1", label: "Bar", date: new Date("2026-07-04T00:00:00Z"), colorKey: null, capacity: 2, minVolunteers: null, status: "open", _count: { registrations: 0 } }])
     const db = setupGuard({ event: { findFirst: vi.fn().mockResolvedValue({ id: "evt-a" }) }, shift: { findMany } })
-    Object.assign(db, { $transaction: (fn: (tx: unknown) => unknown) => fn({ shift: { update } }) })
+    Object.assign(db, { $transaction: (fn: (tx: unknown) => unknown) => fn({ shift: { updateMany: update } }) })
 
     const res = await PATCH(
       makeRequest("/api/admin/events/evt-a/roles/Bar", "PATCH", { capacity: 3, label: "Bar soir" }),
@@ -852,7 +852,8 @@ describe("Shifts — cross-tenant isolation", () => {
     )
     expect(res.status).toBe(200)
     expect(findMany.mock.calls[0][0].where).toEqual({ eventId: "evt-a", roleName: "Bar", event: { organizationId: ORG_A } })
-    expect(update).toHaveBeenCalledWith({ where: { id: "s1" }, data: { capacity: 3, label: "Bar soir" } })
+    // The grouped write stays pinned to the org-verified event.
+    expect(update).toHaveBeenCalledWith({ where: { id: { in: ["s1"] }, eventId: "evt-a" }, data: { capacity: 3, label: "Bar soir" } })
   })
 
   it("PATCH /api/admin/events/[id]/roles/[roleName] with overlapAllowed (#986) returns 404 for an org-B event, updating nothing", async () => {

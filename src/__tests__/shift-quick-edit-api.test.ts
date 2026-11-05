@@ -67,7 +67,7 @@ describe("PATCH /api/admin/events/[id]/roles/[roleName] with capacity", () => {
           updateMany: vi.fn(),
           update,
         },
-        $transaction: (fn: (tx: unknown) => unknown) => fn({ shift: { update } }),
+        $transaction: (fn: (tx: unknown) => unknown) => fn({ shift: { updateMany: update } }),
       },
       organizationId: "org-a", session: {},
     })
@@ -79,8 +79,8 @@ describe("PATCH /api/admin/events/[id]/roles/[roleName] with capacity", () => {
     expect(res.status).toBe(200)
     expect(await res.json()).toMatchObject({ updated: 2, keptHigher: 1 })
     expect(update.mock.calls.map((c) => c[0])).toEqual([
-      { where: { id: "a" }, data: { capacity: 3 } },
-      { where: { id: "b" }, data: { capacity: 4 } },
+      { where: { id: { in: ["a"] }, eventId: "evt-a" }, data: { capacity: 3 } },
+      { where: { id: { in: ["b"] }, eventId: "evt-a" }, data: { capacity: 4 } },
     ])
     expect(logEvent).toHaveBeenCalledTimes(2)
     expect(logEvent.mock.calls[1][0]).toMatchObject({ entityId: "b", changes: { capacity: { from: 5, to: 4 } } })
