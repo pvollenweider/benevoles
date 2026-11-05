@@ -13,7 +13,7 @@ import { parseTagList } from "@/lib/role-reservation"
 import { removeRoleFromLink, renameRoleInLink } from "@/lib/group-links"
 import { leaderRenamePlan } from "@/lib/sector-leader-rename"
 import { isCivilDate } from "@/lib/civil-date"
-import { labelUpdates, posteApplyCount, posteApplyTargets } from "@/lib/poste-apply"
+import { groupShiftWrites, labelUpdates, posteApplyCount, posteApplyTargets } from "@/lib/poste-apply"
 import { removeRoleFromScope, renameRoleInScope } from "@/lib/question-scope"
 import { assignPosteSector } from "@/lib/sector-adoption"
 import { endSwapsAfter, endSwapsIn } from "@/lib/shift-swap-server"
@@ -320,21 +320,16 @@ export async function PATCH(req: Request, { params }: { params: Promise<{ id: st
   if (capacity !== undefined || minVolunteers !== undefined || label !== undefined) {
     keptHigher = plan.keptHigher.length
     capacityUpdated = plan.updates.length
-    // Places, minimum and label of a shift in one update (the database checks minimum ≤ places per
-    // row), every shift in one transaction.
+    // Places, minimum and label of a shift in one write (the database checks minimum ≤ places per
+    // row), every shift in one transaction. Shifts receiving the same values share one updateMany:
+    // one update per shift outran the 5 s transaction on a poste with a shift every evening.
     const minAfter = new Map(minPlan.updates.map((u) => [u.id, u.minVolunteers]))
     const labelAfter = new Map(labelUpdates(live, label).map((u) => [u.id, u.label]))
     const touched = live.filter((s) => capacityAfter.has(s.id) || minAfter.has(s.id) || labelAfter.has(s.id))
+    const writes = groupShiftWrites(touched.map((s) => s.id), capacityAfter, minAfter, labelAfter)
     await db.$transaction(async (tx) => {
-      for (const s of touched) {
-        await tx.shift.update({
-          where: { id: s.id },
-          data: {
-            ...(capacityAfter.has(s.id) ? { capacity: capacityAfter.get(s.id) } : {}),
-            ...(minAfter.has(s.id) ? { minVolunteers: minAfter.get(s.id) } : {}),
-            ...(labelAfter.has(s.id) ? { label: labelAfter.get(s.id) } : {}),
-          },
-        })
+      for (const w of writes) {
+        await tx.shift.updateMany({ where: { id: { in: w.ids }, eventId: id }, data: w.data })
       }
     })
     for (const s of touched) {

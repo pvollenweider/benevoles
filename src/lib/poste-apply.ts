@@ -77,3 +77,36 @@ export function labelUpdates(shifts: { id: string; label: string }[], label: str
   if (label === undefined) return []
   return shifts.filter((s) => s.label !== label).map((s) => ({ id: s.id, label }))
 }
+
+/** What one shift receives when the poste is applied: places, minimum and label, each when it changes. */
+export type ShiftWriteData = { capacity?: number; minVolunteers?: number | null; label?: string }
+
+/**
+ * The writes of « Appliquer au poste », grouped by identical data so the route issues one
+ * `updateMany` per group instead of one `update` per shift. A poste with a shift every evening
+ * otherwise exceeded the 5 s interactive transaction (Sentry BENEVOLAPP-13). Each shift still
+ * receives its places, minimum and label in the same write, so the database's per-row check
+ * (minimum ≤ places) holds. Shifts with nothing to change are left out.
+ */
+export function groupShiftWrites(
+  ids: string[],
+  capacity: Map<string, number>,
+  minVolunteers: Map<string, number | null>,
+  label: Map<string, string>,
+): { ids: string[]; data: ShiftWriteData }[] {
+  const groups = new Map<string, { ids: string[]; data: ShiftWriteData }>()
+  for (const id of ids) {
+    const data: ShiftWriteData = {
+      ...(capacity.has(id) ? { capacity: capacity.get(id) } : {}),
+      ...(minVolunteers.has(id) ? { minVolunteers: minVolunteers.get(id) } : {}),
+      ...(label.has(id) ? { label: label.get(id) } : {}),
+    }
+    if (Object.keys(data).length === 0) continue
+    // Keys are always added in the same order, and a removed minimum stays `null`: equal data, equal key.
+    const key = JSON.stringify(data)
+    const group = groups.get(key)
+    if (group) group.ids.push(id)
+    else groups.set(key, { ids: [id], data })
+  }
+  return [...groups.values()]
+}
