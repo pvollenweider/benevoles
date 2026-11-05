@@ -20,5 +20,10 @@ Sentry.init({
   // finishes — tab closed mid-load, navigated away, or (the observed case) an RSC prefetch
   // (`?_rsc=...`) aborted by the browser. A client-side abort, not an app error; nothing to fix
   // on this end.
-  ignoreErrors: [/The destination stream closed early/],
+  //
+  // `aborted` (exactly, as Node's http server words it in abortIncoming): the browser closed the
+  // connection before its request body arrived, e.g. a Sentry envelope to the /monitoring tunnel
+  // cut off by a closed tab (BENEVOLAPP-11). Also a client-side abort. Anchored so that longer
+  // messages mentioning an abort (a database transaction, an app's own error) still report.
+  ignoreErrors: [/The destination stream closed early/, /^aborted$/],
 })
