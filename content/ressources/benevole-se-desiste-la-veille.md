@@ -5,7 +5,7 @@ updated: 2026-11-06
 order: 1
 ---
 
-Vendredi, 21 h. La fête du village est demain, et Julien écrit qu'il a de la fièvre : il ne tiendra pas la buvette de 14 h. Le premier réflexe, c'est d'envoyer un message à tout le groupe. C'est rarement le meilleur.
+Vendredi, 21 h. La fête du village est demain, et Julien écrit qu'il a de la fièvre : il ne tiendra pas la buvette de 14 h. Le premier réflexe, c'est d'envoyer un message à tout le groupe. C'est rarement le meilleur.
 
 Avant de chercher quelqu'un, prenez cinq minutes pour vous poser trois questions.
 
@@ -25,7 +25,7 @@ Commencez par ceux qui connaissent déjà le poste, puis par ceux qui ont fait p
 
 Dites tout dans le premier message : l'heure, le lieu, ce qu'il y a à faire, et jusqu'à quand vous attendez une réponse.
 
-> Salut Amandine, Julien est malade et ne pourra pas tenir la buvette demain de 14 h à 17 h, sur la place de l'église. Tu serais libre ? Dis-moi juste oui ou non d'ici 10 h, comme ça je sais où j'en suis. Merci !
+> Salut Amandine, Julien est malade et ne pourra pas tenir la buvette demain de 14 h à 17 h, sur la place de l'église. Tu serais libre ? Dis-moi juste oui ou non d'ici 10 h, comme ça je sais où j'en suis. Merci !
 
 Une échéance claire vous évite d'attendre une réponse qui ne viendra pas, et permet à la personne de refuser sans se sentir coupable.
 
@@ -34,7 +34,7 @@ Une échéance claire vous évite d'attendre une réponse qui ne viendra pas, et
 Les désistements de dernière minute se gèrent bien quand une partie du travail a été faite à froid, quelques semaines avant.
 
 - **Demandez qui peut dépanner.** Au moment de l'inscription, une question suffit : « Si quelqu'un manque, je peux être appelé le jour même ». Ceux qui répondent oui deviennent vos premiers contacts.
-- **Notez combien de personnes il faut au minimum** pour chaque poste, et ce que vous faites si on descend en dessous : carte réduite à la buvette, une seule entrée ouverte, montage commencé plus tôt. Décidé tranquillement, c'est plus juste que décidé à 21 h.
+- **Notez combien de personnes il faut au minimum** pour chaque poste, et ce que vous faites si on descend en dessous : carte réduite à la buvette, une seule entrée ouverte, montage commencé plus tôt. Décidé tranquillement, c'est plus juste que décidé à 21 h.
 - **Fixez une date limite pour se désinscrire seul**, par exemple deux jours avant. Après, on vous prévient directement : vous savez tout de suite qu'il y a un trou.
 
 ## Et après l'événement
