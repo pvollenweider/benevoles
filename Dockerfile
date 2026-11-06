@@ -94,6 +94,9 @@ COPY --from=builder --chown=nextjs:nodejs /app/content/legal/SOUS-TRAITANTS.md .
 COPY --from=builder --chown=nextjs:nodejs /app/CHANGELOG.md ./CHANGELOG.md
 # Blog (#944) : content/blog/<date>-<slug>.md, lu de la même façon par /blog et son flux.
 COPY --from=builder --chown=nextjs:nodejs /app/content/blog ./content/blog
+# Guides pratiques (#1258) : content/ressources/<slug>.md et l'introduction de /ressources.
+COPY --from=builder --chown=nextjs:nodejs /app/content/ressources ./content/ressources
+COPY --from=builder --chown=nextjs:nodejs /app/content/pages/RESSOURCES.md ./content/pages/RESSOURCES.md
 # Documentation par tâche (#649) : content/guide/<slug>.md, lue de la même façon par /doc/<slug>.
 COPY --from=builder --chown=nextjs:nodejs /app/content/guide ./content/guide
 # Date du dernier commit de chacune de ces sources (lastmod du sitemap), écrite par

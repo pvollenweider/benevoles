@@ -201,6 +201,21 @@ export const PUBLIC_PAGES: readonly PublicPage[] = [
     presentation: true,
   },
   {
+    // The practical guides (#1258): methods that also work without software, one page per guide at
+    // /ressources/<slug> (src/lib/ressources.ts). The index renders this source's introduction, the
+    // guides, then its editorial charter (dated, sourced, no claim the product does not support).
+    path: "/ressources",
+    title: "Guides pratiques",
+    summary: "Des méthodes pour organiser vos bénévoles, avec un tableur comme avec un outil : désistements, disponibilités, roulement équitable.",
+    metaTitle: "Guides pratiques pour organiser vos bénévoles",
+    metaDescription: "Des méthodes concrètes pour organiser vos bénévoles, outil ou pas : désistements, disponibilités, roulement équitable. Datées et sourcées.",
+    source: "content/pages/RESSOURCES.md",
+    priority: 0.6,
+    guide: false,
+    availability: "hosted",
+    presentation: true,
+  },
+  {
     // The target of every « Demander un espace » (#810), written in its page.tsx. In the sitemap
     // like the other apex pages (#934): it is where an association searching for the service
     // starts, and it exists on every instance (a closed sign-up shows why, with a contact).
@@ -454,6 +469,7 @@ export function apexSitemap(
   units: readonly { slug: string; source: string }[] = [],
   hosted: boolean = isHostedService(),
   posts: readonly { slug: string; date: string }[] = [],
+  guides: readonly { slug: string; updated: string }[] = [],
 ): MetadataRoute.Sitemap {
   const root = base.replace(/\/+$/, "")
   const day = (date: string) => new Date(`${date}T00:00:00Z`)
@@ -468,6 +484,8 @@ export function apexSitemap(
     ...units.map((u) => entry(`/doc/${u.slug}`, u.source, DOC_UNIT_PRIORITY)),
     // The blog's posts (#944): a post doesn't change once sent, its date is its last change.
     ...posts.map((p) => ({ url: `${root}/blog/${p.slug}`, changeFrequency: "yearly" as const, priority: BLOG_POST_PRIORITY, lastModified: day(p.date) })),
+    // The practical guides (#1258), hosted service only: their last check is their last change.
+    ...(hosted ? guides : []).map((g) => ({ url: `${root}/ressources/${g.slug}`, changeFrequency: "monthly" as const, priority: RESSOURCE_PRIORITY, lastModified: day(g.updated) })),
   ]
 }
 
@@ -476,3 +494,6 @@ export const DOC_UNIT_PRIORITY = 0.5
 
 /** Sitemap priority of a blog post (#944): under the documentation, a dated piece of news. */
 export const BLOG_POST_PRIORITY = 0.4
+
+/** Sitemap priority of a practical guide (#1258): like a documentation unit. */
+export const RESSOURCE_PRIORITY = 0.5

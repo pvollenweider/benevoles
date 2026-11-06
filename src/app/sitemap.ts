@@ -8,6 +8,7 @@ import { orgHomeEventsWhere } from "@/lib/event-visibility"
 import { apexSitemap } from "@/lib/doc-pages"
 import { loadDocUnits } from "@/lib/doc-units"
 import { loadBlogPosts } from "@/lib/blog"
+import { loadRessources } from "@/lib/ressources"
 import { isHostedService } from "@/lib/site"
 import { loadDocLastmod } from "@/lib/doc-lastmod-load"
 import { loadVideoCatalog } from "@/lib/video-catalog-load"
@@ -37,7 +38,7 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
   if (!rawOrgSlug) {
     const hostname = (h.get("host") ?? "").split(":")[0]
     if (!isKnownHost(hostname) || hostname.startsWith("staging.")) return []
-    return [...apexSitemap(apexBaseUrl(), loadDocLastmod(), loadDocUnits(), isHostedService(), loadBlogPosts()), ...apexVideoEntries()]
+    return [...apexSitemap(apexBaseUrl(), loadDocLastmod(), loadDocUnits(), isHostedService(), loadBlogPosts(), loadRessources()), ...apexVideoEntries()]
   }
 
   const resolved = await resolveOrgSlug(rawOrgSlug)

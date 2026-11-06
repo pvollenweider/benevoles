@@ -58,8 +58,8 @@ export function portableMarkdown(markdown: string, base: string): string {
 
 const link = (title: string, url: string, note?: string) => `- [${title}](${url})${note ? `: ${note}` : ""}`
 
-/** Pages of the hosted service listed after the price: the manifesto (#1259), then practical pages (#871). */
-const RESOURCE_PATHS = ["/manifeste", "/tableur-ou-outil-dedie"]
+/** Pages of the hosted service listed after the price: the manifesto (#1259), then practical pages (#871, #1258). */
+const RESOURCE_PATHS = ["/manifeste", "/tableur-ou-outil-dedie", "/ressources"]
 
 const LEGAL_PATHS = ["/legal/privacy", "/legal/terms", "/legal/sous-traitance", "/legal/sous-traitants", "/accessibilite", "/legal/exploitant"]
 

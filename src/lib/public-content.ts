@@ -13,6 +13,7 @@ import { loadVideoCatalog } from "@/lib/video-catalog-load"
 import { homeSignupVideo, type HomeSignupVideo } from "@/lib/home-signup-video"
 import type { DocUnit } from "@/lib/doc-units"
 import { hideLineArrows, type BlogPost } from "@/lib/blog"
+import type { Ressource } from "@/lib/ressources"
 import { formatReleaseDate, parseChangelog, repositoryLinks, type ChangelogRelease } from "@/lib/changelog"
 import { REPOSITORY_URL, type FaqItem } from "@/lib/structured-data"
 import { createRenderCache } from "@/lib/render-cache"
@@ -143,6 +144,30 @@ const blogPostCache = createRenderCache<string>()
  */
 export function renderBlogPost(post: Pick<BlogPost, "source" | "body">): string {
   return blogPostCache(post.source, () => hideLineArrows(renderEventPageMarkdown(linkSourcesToRoutes(localizeInstanceText(post.body)), { shiftHeadings: false, allowImages: true, headingIds: true, image: docImageHtml })))
+}
+
+const ressourceCache = createRenderCache<string>()
+
+/**
+ * A practical guide's HTML (#1258), the blog's rendering: headings at their written depth under the
+ * page's <h1> (the title, from the front matter), each with an id, links between sources made site links.
+ */
+/** /ressources's introduction and charter (#1258): the source's title, then its text cut before its first « ## » section. */
+export function renderRessourcesIndex(source: string): { title: string; introHtml: string; charterHtml: string } {
+  return ressourcesIndexCache(source, () => {
+    const raw = fs.readFileSync(path.join(/*turbopackIgnore: true*/ process.cwd(), source), "utf-8")
+    const { title, body } = splitTitle(raw)
+    const cut = body.search(/^## /m)
+    const intro = cut === -1 ? body : body.slice(0, cut)
+    const charter = cut === -1 ? "" : body.slice(cut)
+    return { title: title ?? "Ressources", introHtml: renderPublicMarkdown(intro), charterHtml: charter ? renderPublicMarkdown(charter) : "" }
+  })
+}
+
+const ressourcesIndexCache = createRenderCache<{ title: string; introHtml: string; charterHtml: string }>()
+
+export function renderRessource(guide: Pick<Ressource, "source" | "body">): string {
+  return ressourceCache(guide.source, () => renderEventPageMarkdown(linkSourcesToRoutes(localizeInstanceText(guide.body)), { shiftHeadings: false, allowImages: true, headingIds: true, image: docImageHtml }))
 }
 
 /** A still of a video (its poster), as /fonctionnalites shows it: never a broken image. */

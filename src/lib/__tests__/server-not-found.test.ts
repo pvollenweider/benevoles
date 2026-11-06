@@ -10,6 +10,7 @@ const APEX: NotFoundLookups = {
   docSlugExists: (slug) => slug === "se-connecter" || slug === "ancien-nom",
   videoExists: (param) => param === "EVENT_CREATE_BLANK" || param === "event-create-blank",
   blogPostExists: (slug) => slug === "premier-billet",
+  ressourceExists: (slug) => slug === "benevole-se-desiste-la-veille",
 }
 const ORG: NotFoundLookups = { ...APEX, hasOrg: true }
 
