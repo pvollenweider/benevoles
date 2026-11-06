@@ -19,16 +19,37 @@ const pretty = { textWrap: "pretty" } as React.CSSProperties
  * aside is a blockquote drawn as a tinted box with a full 1 px border (never a side stripe) and
  * without quotation marks.
  */
-export const FEATURES_PROSE_CLASS = `prose prose-gray dark:prose-invert max-w-none
+const PROSE_BASE_CLASS = `prose prose-gray dark:prose-invert max-w-none
   prose-p:text-base prose-p:leading-[1.75] prose-p:max-w-[65ch] prose-p:text-gray-700 dark:prose-p:text-gray-300
   prose-li:text-base prose-li:leading-[1.75] prose-li:max-w-[65ch] prose-li:text-gray-700 dark:prose-li:text-gray-300 prose-li:my-2
   prose-strong:text-gray-900 dark:prose-strong:text-gray-100 prose-strong:font-semibold
   prose-a:text-blue-700 dark:prose-a:text-blue-300 prose-a:underline prose-a:underline-offset-2 prose-a:hover:decoration-2 prose-a:rounded
   prose-a:focus-visible:outline prose-a:focus-visible:outline-2 prose-a:focus-visible:outline-offset-2 prose-a:focus-visible:outline-blue-700 dark:prose-a:focus-visible:outline-blue-300
-  prose-code:text-sm prose-code:bg-gray-100 dark:prose-code:bg-gray-800 prose-code:px-1 prose-code:py-0.5 prose-code:rounded prose-code:font-mono prose-code:text-gray-800 dark:prose-code:text-gray-200 prose-code:before:content-none prose-code:after:content-none
+  prose-code:text-sm prose-code:bg-gray-100 dark:prose-code:bg-gray-800 prose-code:px-1 prose-code:py-0.5 prose-code:rounded prose-code:font-mono prose-code:text-gray-800 dark:prose-code:text-gray-200 prose-code:before:content-none prose-code:after:content-none`
+
+export const FEATURES_PROSE_CLASS = `${PROSE_BASE_CLASS}
   prose-blockquote:not-italic prose-blockquote:font-normal prose-blockquote:max-w-[65ch] prose-blockquote:rounded-xl prose-blockquote:border prose-blockquote:border-s prose-blockquote:border-blue-200 dark:prose-blockquote:border-blue-800
   prose-blockquote:bg-blue-50 dark:prose-blockquote:bg-blue-950 prose-blockquote:px-5 prose-blockquote:py-1 prose-blockquote:mt-8
   [&_blockquote_p]:before:content-none [&_blockquote_p]:after:content-none [&_blockquote_p]:text-gray-800 dark:[&_blockquote_p]:text-gray-200`
+
+/**
+ * The essay variant (/manifeste): a text read top to bottom, so its quotes are not boxes but the
+ * plain typographic form, a 2 px neutral rule on the inline start side (border-s, so it follows the
+ * reading direction) with an indent. The rule is redundant with the native <blockquote>, the
+ * indent and the « » the text carries, so it needs no contrast of its own (1.4.11). Prose's own
+ * italics, 4 px rule and added quotation marks are turned off. A question set alone in bold
+ * (« **Et ensuite ?** ») gets room above it, so it reads as the start of the next exchange.
+ */
+const ESSAY_QUOTE_CLASS = `prose-blockquote:not-italic prose-blockquote:font-normal prose-blockquote:max-w-[65ch] prose-blockquote:my-6
+  prose-blockquote:border-s-2 prose-blockquote:border-gray-300 dark:prose-blockquote:border-gray-600 prose-blockquote:ps-5 prose-blockquote:pe-0 prose-blockquote:py-0
+  [&_blockquote_p]:before:content-none [&_blockquote_p]:after:content-none [&_blockquote_p]:text-gray-800 dark:[&_blockquote_p]:text-gray-200
+  [&_p:has(>strong:only-child)]:mt-10 [&_p:has(>strong:only-child)]:mb-3`
+
+/** The features prose with the essay's quotes instead of the tinted aside. */
+export const ESSAY_PROSE_CLASS = `${PROSE_BASE_CLASS}
+  ${ESSAY_QUOTE_CLASS}`
+
+export type FeaturesPageVariant = "features" | "essay"
 
 function ActionLinks({ actions }: { actions: FeatureAction[] }) {
   if (actions.length === 0) return null
@@ -64,9 +85,9 @@ function ActionLinks({ actions }: { actions: FeatureAction[] }) {
 }
 
 /** A block's HTML with its inline players where its video lines stand. */
-function Parts({ parts, className = "" }: { parts: DocUnitPart[]; className?: string }) {
+function Parts({ parts, className = "", prose = FEATURES_PROSE_CLASS }: { parts: DocUnitPart[]; className?: string; prose?: string }) {
   return (
-    <div className={`${FEATURES_PROSE_CLASS} ${className}`} style={pretty}>
+    <div className={`${prose} ${className}`} style={pretty}>
       {parts.map((part, i) =>
         part.kind === "html" ? <div key={i} dangerouslySetInnerHTML={{ __html: part.html }} /> : <DocVideoInline key={i} player={part.player} />,
       )}
@@ -116,18 +137,26 @@ function Questions({ faq }: { faq: RenderedQuestion[] }) {
  * list of every section, then each section with its benefits, a still of the matching tutorial,
  * its video and the documentation pages that say more. Server-rendered; only the inline players
  * are client components (DocVideoInline). The editorial pages (/logiciel-planning-benevoles) use
- * the same layout with their own small label above the title, and a FAQ section.
+ * the same layout with their own small label above the title, and a FAQ section. Without a still or
+ * a video at the top, the opening is one text column: never an empty column beside it.
+ *
+ * `variant="essay"` (/manifeste) is a text read from top to bottom: one centred reading column
+ * for the opening and every section, no « Sur cette page » band (its headings keep their anchors),
+ * sections separated by space rather than rules, the lead size on the opening's first paragraph
+ * only, and quotes drawn as a plain rule on the left (ESSAY_PROSE_CLASS).
  */
-export default function FeaturesPage({ page, eyebrow = "Fonctionnalités" }: { page: RenderedFeaturesPage; eyebrow?: string }) {
+export default function FeaturesPage({ page, eyebrow = "Fonctionnalités", variant = "features" }: { page: RenderedFeaturesPage; eyebrow?: string; variant?: FeaturesPageVariant }) {
+  if (variant === "essay") return <EssayPage page={page} eyebrow={eyebrow} />
   const { intro, sections } = page
   const heroStill = intro.stills[0]
   // The opening's text on the left; its video, under the still, on the right.
   const introText = intro.parts.filter((p) => p.kind === "html")
   const introVideos = intro.parts.filter((p) => p.kind === "video")
+  const heroMedia = Boolean(heroStill) || introVideos.length > 0
   return (
     <main id={MAIN_CONTENT_ID} tabIndex={-1} className="focus:outline-none">
       <section className={`${SITE_CONTAINER_CLASS} pt-12 pb-16 sm:pt-16`}>
-        <div className="grid gap-12 lg:grid-cols-[minmax(0,1.05fr)_minmax(0,0.95fr)] lg:items-center">
+        <div className={heroMedia ? "grid gap-12 lg:grid-cols-[minmax(0,1.05fr)_minmax(0,0.95fr)] lg:items-center" : "max-w-3xl"}>
           <div>
             {/* The small label belongs to the title: an <hgroup>, so it reads as its lead-in, not a heading of its own. */}
             <hgroup>
@@ -139,7 +168,7 @@ export default function FeaturesPage({ page, eyebrow = "Fonctionnalités" }: { p
             <Parts parts={introText} className="mt-6 [&_p]:text-lg sm:[&_p]:text-xl [&_p]:leading-relaxed" />
             <ActionLinks actions={intro.actions} />
           </div>
-          {(heroStill || introVideos.length > 0) && (
+          {heroMedia && (
             <div className="min-w-0">
               {heroStill && <Still still={heroStill} priority />}
               {introVideos.length > 0 && <Parts parts={introVideos} className="mt-4" />}
@@ -203,6 +232,37 @@ export default function FeaturesPage({ page, eyebrow = "Fonctionnalités" }: { p
             </section>
           )
         })}
+      </div>
+    </main>
+  )
+}
+
+/** The essay variant of the page (see FeaturesPage): one centred column, read top to bottom. */
+function EssayPage({ page, eyebrow }: { page: RenderedFeaturesPage; eyebrow: string }) {
+  const { intro, sections } = page
+  return (
+    <main id={MAIN_CONTENT_ID} tabIndex={-1} className="focus:outline-none">
+      <div className={`${SITE_CONTAINER_CLASS} pt-12 pb-20 sm:pt-16`}>
+        <article className="mx-auto max-w-[65ch]">
+          <hgroup>
+            <p className="text-base font-semibold text-blue-700 dark:text-blue-300">{eyebrow}</p>
+            <h1 id="features-title" className="mt-3 text-4xl sm:text-5xl font-extrabold tracking-tight leading-[1.08] text-gray-900 dark:text-gray-50 break-words" style={balance}>
+              {page.title}
+            </h1>
+          </hgroup>
+          {/* The lead size on the opening's first paragraph only: each html part is its own <div>. */}
+          <Parts parts={intro.parts} prose={ESSAY_PROSE_CLASS} className="mt-8 [&>div:first-child>p:first-child]:text-xl [&>div:first-child>p:first-child]:leading-relaxed [&>div:first-child>p:first-child]:text-gray-800 dark:[&>div:first-child>p:first-child]:text-gray-200" />
+          <ActionLinks actions={intro.actions} />
+          {sections.map((s) => (
+            <section key={s.id} className="mt-14">
+              <h2 id={s.id} className="scroll-mt-6 text-2xl font-bold tracking-tight text-gray-900 dark:text-gray-50 break-words" style={balance}>
+                {s.heading}
+              </h2>
+              <Parts parts={s.parts} prose={ESSAY_PROSE_CLASS} className="mt-4 [&>div:first-child>p:first-child]:mt-0" />
+              <ActionLinks actions={s.actions} />
+            </section>
+          ))}
+        </article>
       </div>
     </main>
   )

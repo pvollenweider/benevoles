@@ -4,7 +4,7 @@
 import type { Metadata } from "next"
 import { notFound } from "next/navigation"
 import ContentShell from "@/components/public/ContentShell"
-import FeaturesPage from "@/components/public/FeaturesPage"
+import FeaturesPage, { type FeaturesPageVariant } from "@/components/public/FeaturesPage"
 import JsonLd from "@/components/public/JsonLd"
 import { pageAvailable, publicPage, publicPageMetadata } from "@/lib/doc-pages"
 import { env } from "@/lib/env"
@@ -24,14 +24,14 @@ import { apexBaseUrl } from "@/lib/urls"
  * /fonctionnalites: the stills and players of its videos need VIDEO_MEDIA_BASE_URL, only set in
  * the running container.
  */
-export default function EditorialPage({ path, eyebrow }: { path: string; eyebrow: string }) {
+export default function EditorialPage({ path, eyebrow, variant }: { path: string; eyebrow: string; variant?: FeaturesPageVariant }) {
   const page = publicPage(path)
   if (!pageAvailable(page) || !page.source) notFound()
   const rendered = renderFeaturesPage(env.VIDEO_MEDIA_BASE_URL, page.source, page.title)
   return (
     <>
       <JsonLd data={publicPageJsonLd(path, apexBaseUrl(), featuresPageFaq(rendered))} />
-      <FeaturesPage page={rendered} eyebrow={eyebrow} />
+      <FeaturesPage page={rendered} eyebrow={eyebrow} variant={variant} />
     </>
   )
 }
