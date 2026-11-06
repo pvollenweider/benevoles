@@ -59,7 +59,7 @@ Concrètement, l'organisation crée ses postes et ses créneaux, à partir d'un 
 
 ## Comment le projet vit
 
-benevol.app est un outil communautaire, pas un produit commercial. L'hébergement sur benevol.app est gratuit aujourd'hui, sans abonnement. Le faire vivre a pourtant un coût : le développement, la documentation et l'hébergement, en France, avec une sauvegarde chiffrée en Suisse. Ces coûts sont portés par le projet et par les dons.
+benevol.app est un outil communautaire, pas un produit commercial. L'hébergement sur benevol.app est gratuit aujourd'hui, sans abonnement. Le faire vivre a pourtant un coût : le développement et la documentation, faits en Suisse, et l'hébergement, en France, avec une sauvegarde chiffrée en Suisse. Ces coûts sont portés par le projet et par les dons.
 
 L'hébergement ne restera peut-être pas gratuit pour toujours. Si un tarif voit le jour, il servira à couvrir ces coûts, pas à dégager un profit. La page [Tarifs](TARIFS.md) dit ce qui est compris aujourd'hui.
 
