@@ -18,6 +18,7 @@ Format basé sur [Keep a Changelog](https://keepachangelog.com/fr/1.0.0/).
 - Un deuxième guide pratique explique comment obtenir les disponibilités d'une quarantaine de bénévoles : une question fermée, une date limite, une seule relance.
 - Un troisième guide pratique explique comment construire le planning d'un événement poste par poste : dérouler la journée, fixer places, minimum et durée de chaque poste, prévoir les passations.
 - Un quatrième guide pratique explique comment organiser un roulement équitable entre bénévoles : compter, faire tourner les créneaux durs, limiter les postes convoités, et l'annoncer.
+- Un cinquième guide pratique explique comment annoncer un changement de planning : prévenir seulement les personnes concernées, un message clair, au bon moment, et corriger partout l'ancienne information.
 
 ### Corrigé
 
