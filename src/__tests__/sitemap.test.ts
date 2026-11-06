@@ -33,7 +33,7 @@ describe("sitemap on the apex host", () => {
     withHeaders({ host: "www.benevol.app" })
     const sitemap = (await import("../app/sitemap")).default
     const entries = await sitemap()
-    expect(entries.map((e) => e.url).slice(0, 22)).toEqual([
+    expect(entries.map((e) => e.url).slice(0, 23)).toEqual([
       "https://www.benevol.app/",
       "https://www.benevol.app/fonctionnalites",
       // The editorial page on volunteer scheduling (#767).
