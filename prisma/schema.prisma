@@ -1659,6 +1659,9 @@ model EmailLimitHit {
   bucket         String   @unique
   organizationId String?
   limit          String
+  // The email kind held or refused (NotificationKind), for the operator to see what hit the
+  // limit. Null on rows recorded before the column existed.
+  kind           String?
   hourStart      DateTime
   heldCount      Int      @default(0)
   refusedCount   Int      @default(0)

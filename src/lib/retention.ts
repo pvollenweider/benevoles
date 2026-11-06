@@ -236,7 +236,7 @@ export const RETENTION: readonly RetentionEntry[] = [
     public: true,
   },
   {
-    data: "Plafonds d'envoi atteints : organisation, plafond concerné, heure, nombres d'emails retenus et refusés ; ni adresse, ni destinataire, ni contenu",
+    data: "Plafonds d'envoi atteints : organisation, plafond concerné, type d'email, heure, nombres d'emails retenus et refusés ; ni adresse, ni destinataire, ni contenu",
     purpose: "Permettre à l'opérateur de voir quelle organisation atteint quel plafond, et à quelle fréquence",
     duration: `${d.emailLimitHit} jours après le dernier email retenu ou refusé de l'heure`,
     trigger: "un email retenu ou refusé par un plafond d'envoi",

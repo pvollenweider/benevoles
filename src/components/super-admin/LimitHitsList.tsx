@@ -12,7 +12,7 @@ export function LimitHitLines({ hits, indent = false }: { hits: LimitHitLine[]; 
     <ul role="list" className={`mt-1 space-y-1 ${indent ? "pl-3 border-l-2 border-gray-100" : ""}`}>
       {hits.map((h) => (
         <li key={h.id} className="text-sm text-gray-700">
-          {h.label}, <time dateTime={h.firstAt}>{h.when}</time> :{" "}
+          {h.label}{h.kind && <> (email « {h.kind} »)</>}, <time dateTime={h.firstAt}>{h.when}</time> :{" "}
           {h.held}
           {h.held && h.refused && ", "}
           {h.refused && <span className="font-medium text-red-700">{h.refused}</span>}

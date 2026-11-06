@@ -13,6 +13,8 @@ describe("recordLimitHit", () => {
   it("keys a row by limit, organisation or platform, and UTC hour", () => {
     expect(limitHitBucket("org_per_minute", "org1", now)).toBe("org_per_minute:org1:2026-10-23T21")
     expect(limitHitBucket("signup_per_hour", null, now)).toBe("signup_per_hour:platform:2026-10-23T21")
+    // The email kind, when known, splits the hour: a burst of one kind stays apart from another.
+    expect(limitHitBucket("recipient_per_hour", "org1", now, "registration_link_resend")).toBe("recipient_per_hour:org1:registration_link_resend:2026-10-23T21")
     expect(hourStart(now).toISOString()).toBe("2026-10-23T21:00:00.000Z")
   })
 
@@ -21,9 +23,16 @@ describe("recordLimitHit", () => {
     await recordLimitHit({ organizationId: "org1", limit: "org_per_minute", outcome: "held", now }, { emailLimitHit: { upsert } as never })
     expect(upsert).toHaveBeenCalledWith({
       where: { bucket: "org_per_minute:org1:2026-10-23T21" },
-      create: { bucket: "org_per_minute:org1:2026-10-23T21", organizationId: "org1", limit: "org_per_minute", hourStart: new Date("2026-10-23T21:00:00Z"), heldCount: 1, refusedCount: 0, firstAt: now, lastAt: now },
+      create: { bucket: "org_per_minute:org1:2026-10-23T21", organizationId: "org1", limit: "org_per_minute", kind: null, hourStart: new Date("2026-10-23T21:00:00Z"), heldCount: 1, refusedCount: 0, firstAt: now, lastAt: now },
       update: { heldCount: { increment: 1 }, refusedCount: { increment: 0 }, lastAt: now },
     })
+  })
+
+  it("keeps the email kind on the row, never the recipient", async () => {
+    const upsert = vi.fn().mockResolvedValue({})
+    await recordLimitHit({ organizationId: "org1", limit: "recipient_per_hour", kind: "registration_confirmation", outcome: "refused", now }, { emailLimitHit: { upsert } as never })
+    expect(upsert.mock.calls[0][0].where).toEqual({ bucket: "recipient_per_hour:org1:registration_confirmation:2026-10-23T21" })
+    expect(upsert.mock.calls[0][0].create).toMatchObject({ kind: "registration_confirmation", refusedCount: 1 })
   })
 
   it("counts a refused email apart, a platform one without organisation", async () => {

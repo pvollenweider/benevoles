@@ -54,7 +54,7 @@ describe.skipIf(!url)("outbox and sending limits on Postgres (#810)", () => {
     // the queue still holds them.
     expect(held.every((r) => r.lastHeldAt !== null)).toBe(true)
     const hits = await prisma.emailLimitHit.findMany({ where: { organizationId: orgId } })
-    expect(hits).toMatchObject([{ limit: "org_per_minute", heldCount: 2, refusedCount: 0 }])
+    expect(hits).toMatchObject([{ limit: "org_per_minute", kind: "registration_confirmation", heldCount: 2, refusedCount: 0 }])
     let [view] = (await loadLimitHits({ organizationId: orgId, now })).groups
     expect(view).toMatchObject({ key: orgId, stillHeld: 2, queueStatus: "2 emails retenus encore en attente" })
 

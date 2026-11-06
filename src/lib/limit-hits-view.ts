@@ -1,6 +1,8 @@
 // SPDX-FileCopyrightText: 2026 Philippe Vollenweider
 // SPDX-License-Identifier: AGPL-3.0-only
 
+import { kindLabel } from "@/lib/outbox-view"
+
 /**
  * What the super admin reads about sending limits reached (#1100): pure functions, no Prisma (the
  * rows come from src/lib/limit-hits-data.ts). Grouped by organisation, newest first; each limit in
@@ -70,6 +72,7 @@ export type LimitHitRow = {
   organizationId: string | null
   organization: { name: string; slug: string } | null
   limit: string
+  kind: string | null
   heldCount: number
   refusedCount: number
   firstAt: Date
@@ -79,6 +82,8 @@ export type LimitHitRow = {
 export type LimitHitLine = {
   id: string
   label: string
+  /** The email kind in plain French, null on rows recorded before it was kept. */
+  kind: string | null
   when: string
   firstAt: string
   lastAt: string
@@ -140,6 +145,7 @@ export function groupLimitHits(rows: LimitHitRow[], stillHeld: Record<string, nu
     g.entry.hits.push({
       id: r.id,
       label: limitLabel(r.limit),
+      kind: r.kind ? kindLabel(r.kind) : null,
       when: limitHitWhen(r.firstAt, r.lastAt, timeZone),
       firstAt: r.firstAt.toISOString(),
       lastAt: r.lastAt.toISOString(),

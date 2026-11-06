@@ -39,7 +39,7 @@ export async function POST(req: Request) {
   if (outcome.status === "over_cap") {
     // Counted like an email dropped at delivery: the operator's limit page and alert.
     await bumpPlatformCounter("emails_dropped")
-    await recordLimitHit({ organizationId: admin.organizationId, limit: "recipient_per_hour", outcome: "refused" })
+    await recordLimitHit({ organizationId: admin.organizationId, limit: "recipient_per_hour", kind: "password_reset", outcome: "refused" })
     await alertRefusedAtRequest(admin.organizationId, "password_reset", admin.email)
   }
 

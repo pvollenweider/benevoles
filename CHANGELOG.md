@@ -22,6 +22,10 @@ Format basé sur [Keep a Changelog](https://keepachangelog.com/fr/1.0.0/).
 - Un sixième guide pratique explique comment garder ses bénévoles d'une année à l'autre : accueil, journée tenable, merci précis, attestation, invitation personnelle avant l'ouverture au public.
 - Un septième guide pratique explique comment retrouver ses créneaux dans son agenda (Google Agenda, iPhone) : importer un fichier ou s'abonner, et laquelle choisir.
 
+### Modifié
+
+- Les plafonds d'envoi atteints indiquent aussi le type d'email retenu ou refusé (confirmation d'inscription, renvoi du lien personnel, retrait…), pour savoir ce qui les déclenche. Toujours ni adresse ni contenu. <!-- interne -->
+
 ### Corrigé
 
 - Le Manifeste précise que le développement et la documentation se font en Suisse ; seul l'hébergement est en France.

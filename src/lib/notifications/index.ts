@@ -38,13 +38,13 @@ export async function sendNotification(
   // never retried). Over any other limit: held until the window ends.
   if (!allowance.ok && allowance.drop) {
     await bumpPlatformCounter("emails_dropped")
-    await recordLimitHit({ organizationId: payload.organizationId, limit: allowance.limit, outcome: "refused" })
+    await recordLimitHit({ organizationId: payload.organizationId, limit: allowance.limit, kind: payload.kind, outcome: "refused" })
     return { ok: false, reason: `limit:${allowance.limit}`, permanent: true, blocked: true, limit: allowance.limit }
   }
   if (!allowance.ok) {
     await bumpPlatformCounter("emails_held")
     // Outside the outbox nothing holds the email: its caller reports a failure, so it is refused.
-    if (!payload.outboxId) await recordLimitHit({ organizationId: payload.organizationId, limit: allowance.limit, outcome: "refused" })
+    if (!payload.outboxId) await recordLimitHit({ organizationId: payload.organizationId, limit: allowance.limit, kind: payload.kind, outcome: "refused" })
     return { ok: false, reason: `limit:${allowance.limit}`, held: true, retryAfterMs: allowance.retryAfterMs, limit: allowance.limit }
   }
   return emailChannel.send(payload)
