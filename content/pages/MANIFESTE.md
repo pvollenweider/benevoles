@@ -1,8 +1,8 @@
 # Pourquoi benevol.app existe
 
-benevol.app est fait pour les associations qui doivent compter sur des bénévoles : une fête de village, un festival, une course, des permanences chaque semaine. C'est un logiciel libre, hébergé gratuitement, et il est né d'expériences très concrètes. Voici lesquelles, racontées par celui qui l'a construit.
+benevol.app est fait pour les associations qui doivent compter sur des bénévoles : une fête de village, un festival, une course, des permanences chaque semaine. C'est un logiciel libre, hébergé gratuitement, et il est né d'expériences très concrètes. Je vous les raconte.
 
-Il a longtemps été bénévole, puis collaborateur, et responsable d'équipe. Il a donc connu les deux côtés du planning.
+J'ai longtemps été bénévole, puis collaborateur, et responsable d'équipe. J'ai donc connu les deux côtés du planning.
 
 ## Les deux côtés du planning
 
