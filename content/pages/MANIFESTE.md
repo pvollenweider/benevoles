@@ -1,48 +1,50 @@
 # Pourquoi benevol.app existe
 
-benevol.app est fait pour les associations qui doivent compter sur des bénévoles : une fête de village, un festival, une course, des permanences chaque semaine. C'est un logiciel libre, hébergé gratuitement, et il est né d'expériences très concrètes. Je vous les raconte.
+benevol.app est fait pour les associations qui doivent compter sur des bénévoles : une fête de village, un festival, une course, des permanences chaque semaine. C'est un logiciel libre, hébergé gratuitement, et il est né d'expériences très concrètes. Philippe Vollenweider, qui l'a construit, les raconte.
 
-J'ai longtemps été bénévole, puis collaborateur, et responsable d'équipe. J'ai donc connu les deux côtés du planning.
+**Pourquoi l'organisation des bénévoles vous tient-elle à cœur ?**
 
-## Les deux côtés du planning
-
-Quand on est bénévole, on a nos contraintes, nos envies, on veut parfois travailler avec des personnes en particulier. On veut parfois ne pas louper un concert en particulier dans un festival, ou alors on a une obligation familiale, ou simplement des moments où l'on n'est pas disponible.
-
-Et quand on est organisateur, on doit jongler avec tout cela : savoir qui peut venir, à quel moment, répartir les rôles, remplir les trous, répondre aux changements et faire circuler les informations. Cela peut rapidement demander énormément de temps et d'énergie.
-
-Et il y a quelque chose d'essentiel dans cette organisation : respecter tous ceux qui organisent et tous ceux qui participent.
-
-Toutes les structures n'ont pas forcément une personne qui peut consacrer énormément de temps à coordonner les bénévoles. Pourtant, quelqu'un doit tout de même penser aux besoins des uns et des autres, construire un planning, transmettre les informations, suivre les inscriptions et s'assurer que chacun sait ce qu'il doit faire.
+> « J'ai toujours fait du bénévolat, à plusieurs niveaux selon les associations, comme collaborateur et aussi comme responsable. J'ai donc bien connu les deux côtés du planning.
+>
+> Quand on est bénévole, on a nos contraintes, nos envies, on veut parfois travailler avec des personnes en particulier. On veut parfois ne pas louper un concert en particulier dans un festival, ou alors on a une obligation familiale, ou simplement des moments où l'on n'est pas disponible.
+>
+> Et quand on est organisateur, on doit jongler avec tout cela : savoir qui peut venir, à quel moment, répartir les rôles, remplir les trous, répondre aux changements et faire circuler les informations. Cela peut rapidement demander énormément de temps et d'énergie.
+>
+> Quand on est bénévole, on donne son temps et son énergie, et ça n'a pas de prix. C'est donc important de respecter tous les collaborateurs et tous les bénévoles.
+>
+> Toutes les structures n'ont pas forcément une personne qui peut consacrer énormément de temps à coordonner les bénévoles. Pourtant, quelqu'un doit tout de même penser aux besoins des uns et des autres, construire un planning, transmettre les informations, suivre les inscriptions et s'assurer que chacun sait ce qu'il doit faire. »
 
 ## Poser le cadre, puis laisser l'outil faire le reste
 
-C'est là qu'un outil peut vraiment être utile.
-
-Créer les postes, réfléchir aux horaires et définir le nombre de personnes nécessaires oblige déjà à se poser quelques questions simples : de quoi avons-nous réellement besoin ? Quand ? Combien de personnes ? Comment voulons-nous organiser cette journée ?
-
-Construire le planning devient ainsi une manière de clarifier l'organisation elle-même.
-
-Une fois ce cadre posé, l'application peut prendre le relais, pour permettre aux bénévoles de comprendre ce qu'on attend d'eux, de choisir comment ils souhaitent participer, garder le planning à jour et transmettre les informations utiles au bon moment.
-
-L'objectif n'est donc pas simplement de remplacer un tableau Excel par une application, mais de permettre une organisation claire, et de faire en sorte que tout fonctionne avec le moins d'intervention possible.
-
-Au fond, la gestion d'un planning n'est pas tellement le problème à résoudre. C'est plutôt le résultat visible d'un problème d'organisation et de circulation de l'information. Et le but de benevol.app est d'aider à structurer ce qui doit se passer, puis de s'effacer autant que possible une fois cette structure établie.
+> « C'est là qu'un outil peut vraiment être utile.
+>
+> Créer les postes, réfléchir aux horaires et définir le nombre de personnes nécessaires oblige déjà à se poser quelques questions simples : de quoi avons-nous réellement besoin ? Quand ? Combien de personnes ? Comment voulons-nous organiser cette journée ?
+>
+> Construire le planning devient ainsi une manière de clarifier l'organisation elle-même.
+>
+> Une fois ce cadre posé, l'application peut prendre le relais, pour permettre aux bénévoles de comprendre ce qu'on attend d'eux, de choisir comment ils souhaitent participer, garder le planning à jour et transmettre les informations utiles au bon moment.
+>
+> L'objectif n'est donc pas simplement de remplacer un tableau Excel par une application, mais de permettre une organisation claire, et de faire en sorte que tout fonctionne avec le moins d'intervention possible.
+>
+> Au fond, la gestion d'un planning n'est pas tellement le problème à résoudre. C'est plutôt le résultat visible d'un problème d'organisation et de circulation de l'information. Et le but de benevol.app est d'aider à structurer ce qui doit se passer, puis de s'effacer autant que possible une fois cette structure établie. »
 
 ## D'où vient l'outil
 
-Il y a quelque temps, dans plusieurs associations dont j'ai été membre, j'ai pu voir des mécaniques parfois trop lourdes à gérer, lors de spectacles de fin d'année par exemple. Trop d'échanges, beaucoup d'énergie consacrée au planning et, malgré cela, des bénévoles qui recevaient parfois les informations assez tard.
+**Comment l'idée est-elle née ?**
 
-Je me suis dit qu'on devait pouvoir faire plus simple.
+> « Il y a quelque temps, dans plusieurs associations dont j'ai été membre, j'ai pu voir des mécaniques parfois trop lourdes à gérer, lors de spectacles de fin d'année par exemple. Trop d'échanges, beaucoup d'énergie consacrée au planning et, malgré cela, des bénévoles qui recevaient parfois les informations assez tard. Je me suis dit qu'on devait pouvoir faire plus simple. »
 
-Je n'ai pas commencé par chercher quel logiciel existait déjà. J'ai commencé par construire l'outil dont j'aurais moi-même eu besoin pour permettre aux organisateurs de poser ce cadre clairement, puis laisser chacun trouver sa place à l'intérieur.
+**Vous avez d'abord regardé ce qui existait ?**
 
-Puis d'autres organisations de tous bords ont commencé à l'utiliser.
+> « Je n'ai pas commencé par chercher quel logiciel existait déjà. J'ai commencé par construire l'outil dont j'aurais moi-même eu besoin pour permettre aux organisateurs de poser ce cadre clairement, puis laisser chacun trouver sa place à l'intérieur. »
 
-Elles avaient d'autres façons de travailler, d'autres contraintes, d'autres idées. Elles ont demandé de nouvelles possibilités, signalé ce qui était inutilement compliqué et fait apparaître des besoins auxquels je n'avais pas pensé.
+**Et ensuite ?**
 
-Petit à petit, benevol.app est devenu ce qu'il est aujourd'hui.
-
-Mais l'idée de départ n'a pas changé : le temps et l'énergie d'une association devraient servir à faire vivre ses projets et les personnes qui y participent, pas à gérer des plannings.
+> « Assez rapidement, d'autres organisations de tous bords ont commencé à utiliser cet outil. Elles avaient d'autres façons de travailler, d'autres contraintes, d'autres idées. Elles ont demandé de nouvelles possibilités, signalé ce qui était inutilement compliqué et fait apparaître des besoins auxquels je n'avais pas pensé. Alors j'ai fait évoluer cet outil.
+>
+> Petit à petit, benevol.app est devenu ce qu'il est aujourd'hui.
+>
+> L'idée de départ est restée la même : alléger la gestion des plannings pour que les associations puissent consacrer leur temps et leur énergie à leurs projets et aux personnes qui les font vivre. »
 
 ## Aujourd'hui
 
