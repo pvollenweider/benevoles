@@ -17,6 +17,7 @@ Format basé sur [Keep a Changelog](https://keepachangelog.com/fr/1.0.0/).
 - Une rubrique Guides pratiques, à l'adresse `/ressources`, rassemble des méthodes pour organiser ses bénévoles, utiles aussi sans logiciel. Chaque guide affiche la date de sa dernière relecture, et la rubrique dit comment ils sont écrits. Le premier explique quoi faire quand un bénévole se désiste la veille.
 - Un deuxième guide pratique explique comment obtenir les disponibilités d'une quarantaine de bénévoles : une question fermée, une date limite, une seule relance.
 - Un troisième guide pratique explique comment construire le planning d'un événement poste par poste : dérouler la journée, fixer places, minimum et durée de chaque poste, prévoir les passations.
+- Un quatrième guide pratique explique comment organiser un roulement équitable entre bénévoles : compter, faire tourner les créneaux durs, limiter les postes convoités, et l'annoncer.
 
 ### Corrigé
 
