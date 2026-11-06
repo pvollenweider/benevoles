@@ -5,20 +5,26 @@
 
 import { useEffect, useState } from "react"
 import { narrateChain } from "@/lib/event-log-narrative"
-import type { ExplorerEntry as EventLogEntry } from "@/lib/event-log-explorer"
+import { STORY_LOAD_ERROR, type ExplorerEntry as EventLogEntry } from "@/lib/event-log-explorer"
 
 export default function StoryView({ eventId, rootId, onClear }: { eventId: string; rootId: string; onClear: () => void }) {
   const [text, setText] = useState<string | null>(null)
   const [loading, setLoading] = useState(true)
+  const [failed, setFailed] = useState(false)
 
   useEffect(() => {
-    queueMicrotask(() => { setLoading(true) })
+    queueMicrotask(() => { setLoading(true); setFailed(false) })
+    // A refused or failed request says so (#1272), never « Rien à raconter » as if the chain were empty.
     fetch(`/api/admin/events/${eventId}/log?chainOf=${rootId}`)
-      .then((r) => r.json())
+      .then((r) => {
+        if (!r.ok) throw new Error(`log ${r.status}`)
+        return r.json()
+      })
       .then((data) => {
         const chain = data.entries.map((e: EventLogEntry) => ({ ...e, createdAt: new Date(e.createdAt) }))
         setText(narrateChain(chain, data.shiftLabels, data.timeZone))
       })
+      .catch(() => { setText(null); setFailed(true) })
       .finally(() => setLoading(false))
   }, [eventId, rootId])
 
@@ -31,8 +37,8 @@ export default function StoryView({ eventId, rootId, onClear }: { eventId: strin
       {/* One persistent element for both states, not an early-return swap: the loading→loaded
           transition is a text update inside this live region, not a DOM subtree replacement,
           so the finished narration actually gets announced instead of arriving silently. */}
-      <p role="status" className="text-sm text-gray-800 leading-relaxed max-w-[70ch]">
-        {loading ? "Chargement…" : (text || "Rien à raconter pour cette entrée.")}
+      <p role="status" className={`text-sm leading-relaxed max-w-[70ch] ${failed && !loading ? "text-red-700" : "text-gray-800"}`}>
+        {loading ? "Chargement…" : failed ? STORY_LOAD_ERROR : (text || "Rien à raconter pour cette entrée.")}
       </p>
     </div>
   )

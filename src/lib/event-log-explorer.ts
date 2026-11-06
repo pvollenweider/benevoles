@@ -136,3 +136,7 @@ export function entryCountByEntity(entries: Pick<ExplorerEntry, "entityId">[]): 
   for (const e of entries) counts.set(e.entityId, (counts.get(e.entityId) ?? 0) + 1)
   return counts
 }
+
+/** Said in place of the story or the replay when their request fails (#1272), never an empty state. */
+export const STORY_LOAD_ERROR = "Impossible de charger le récit. Réessayez."
+export const REPLAY_LOAD_ERROR = "Impossible de charger l'historique. Réessayez."
