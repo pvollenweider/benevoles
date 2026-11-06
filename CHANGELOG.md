@@ -25,6 +25,7 @@ Format basé sur [Keep a Changelog](https://keepachangelog.com/fr/1.0.0/).
 ### Modifié
 
 - Le Manifeste raconte autrement l'origine du projet : les deux côtés du planning vécus comme bénévole puis comme responsable, et les associations où l'idée est née.
+- Le Manifeste prend la forme d'un échange : le récit de celui qui a construit benevol.app est présenté en citations, introduites par quelques questions.
 - Les plafonds d'envoi atteints indiquent aussi le type d'email retenu ou refusé (confirmation d'inscription, renvoi du lien personnel, retrait…), pour savoir ce qui les déclenche. Toujours ni adresse ni contenu. <!-- interne -->
 
 ### Corrigé
