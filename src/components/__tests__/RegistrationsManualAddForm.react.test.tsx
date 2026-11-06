@@ -8,6 +8,7 @@ import { render, screen, fireEvent, cleanup, waitFor, within } from "@testing-li
 import ManualAddForm from "../admin/registrations/ManualAddForm"
 import { activePolicy, buildPolicy } from "@/lib/workload-policy"
 import { EMPTY_ADD_FORM, type AddFormValues, type Registration } from "../admin/registrations/types"
+import { NETWORK_ERROR } from "@/lib/use-submit"
 
 // Manual addition of a registration by the organizer, on its own (#402, #465, #466).
 const shift = { id: "s1", roleName: "Bar", label: "Bar", date: "2026-07-04", startTime: "10:00", endTime: "12:00", capacity: 3, registrationCount: 1 }
@@ -117,6 +118,23 @@ describe("ManualAddForm", () => {
     expect(combo().getAttribute("aria-describedby")).toBe("add-shift-conflict")
     expect(combo()).toHaveAccessibleDescription("Ce bénévole est déjà inscrit à ce créneau.")
     expect(combo()).not.toHaveAttribute("aria-invalid")
+  })
+
+  // #1272: a failed request used to leave the button on « Ajout en cours… » with nothing said.
+  it("ends the busy state and says so when the request fails on the network", async () => {
+    fetchMock.mockRejectedValueOnce(new TypeError("Failed to fetch"))
+    render(<Harness initial={{ ...EMPTY_ADD_FORM, firstName: "A", lastName: "B", shiftId: "s1" }} />)
+    fireEvent.click(screen.getByRole("button", { name: "Ajouter" }))
+    await waitFor(() => expect(filledAlerts()[0]).toHaveTextContent(NETWORK_ERROR))
+    expect(screen.getByRole("button", { name: "Ajouter" })).toBeEnabled()
+  })
+
+  it("ends the busy state when the answer is not JSON (a proxy error page during a deploy)", async () => {
+    fetchMock.mockResolvedValueOnce({ ok: false, status: 502, json: async () => { throw new SyntaxError("Unexpected token <") } })
+    render(<Harness initial={{ ...EMPTY_ADD_FORM, firstName: "A", lastName: "B", shiftId: "s1" }} />)
+    fireEvent.click(screen.getByRole("button", { name: "Ajouter" }))
+    await waitFor(() => expect(filledAlerts()[0]).toHaveTextContent("Erreur."))
+    expect(screen.getByRole("button", { name: "Ajouter" })).toBeEnabled()
   })
 
   it("offers to go past the role limit, only for the form that was refused", async () => {

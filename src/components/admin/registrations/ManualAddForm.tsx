@@ -18,6 +18,7 @@ import { ackLabel } from "@/lib/availability-assist"
 import type { PersonFit } from "@/lib/availability-assist-data"
 import ConfirmActionModal from "../ConfirmActionModal"
 import { shiftOverrideOf, shiftOverrideWords, type ShiftOverrideBody } from "@/lib/shift-override"
+import { NETWORK_ERROR } from "@/lib/use-submit"
 
 type Props = {
   eventId: string
@@ -292,26 +293,36 @@ export default function ManualAddForm({ eventId, shifts, registrations, timeZone
     // Forcing past the role limit: the alert and its button stay until the answer, so focus stays put.
     if (!allowOverLimit) { setAddError(null); setErrorFor(null); setOverLimitFor(null) }
 
-    const res = await fetch("/api/admin/registrations", {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({
-        eventId,
-        volunteerId: addForm.volunteerId,
-        firstName: addForm.firstName,
-        lastName: addForm.lastName,
-        email: addForm.email,
-        phone: addForm.phone,
-        comment: addForm.comment,
-        ...(minorsProtected && addForm.birthDate ? { birthDate: addForm.birthDate } : {}),
-        shiftIds: chosenIds,
-        ...(allowOverLimit ? { allowOverLimit: true } : {}),
-        ...(confirmedKeys ? { shiftOverride: confirmedKeys } : overrideKeys && overrideKeys.form === JSON.stringify(addForm) ? { shiftOverride: overrideKeys.keys } : {}),
-        ...(acked.size > 0 ? { availabilityAck: chosenIds.map((id) => fits[id]?.ackKey).filter((k): k is string => !!k && acked.has(k)) } : {}),
-      }),
-    })
+    // A failed request (network, or a proxy error page during a deploy) must end the busy state
+    // and say so (#1272): the same alert as any refusal, never a button stuck on « Ajout en cours… ».
+    let res: Response
+    try {
+      res = await fetch("/api/admin/registrations", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          eventId,
+          volunteerId: addForm.volunteerId,
+          firstName: addForm.firstName,
+          lastName: addForm.lastName,
+          email: addForm.email,
+          phone: addForm.phone,
+          comment: addForm.comment,
+          ...(minorsProtected && addForm.birthDate ? { birthDate: addForm.birthDate } : {}),
+          shiftIds: chosenIds,
+          ...(allowOverLimit ? { allowOverLimit: true } : {}),
+          ...(confirmedKeys ? { shiftOverride: confirmedKeys } : overrideKeys && overrideKeys.form === JSON.stringify(addForm) ? { shiftOverride: overrideKeys.keys } : {}),
+          ...(acked.size > 0 ? { availabilityAck: chosenIds.map((id) => fits[id]?.ackKey).filter((k): k is string => !!k && acked.has(k)) } : {}),
+        }),
+      })
+    } catch {
+      setAdding(false)
+      setAddError(NETWORK_ERROR)
+      setErrorFor(JSON.stringify(addForm))
+      return
+    }
 
-    const data = await res.json()
+    const data = await res.json().catch(() => ({}))
     setAdding(false)
 
     // A full or closed shift (AUTHZ-15): the confirmation dialog, nothing added yet.
