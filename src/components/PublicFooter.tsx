@@ -62,6 +62,7 @@ export function footerSiteColumns(name: string = siteName(), support: string | n
           links: [
             { href: "/pour-qui", label: "Pour qui ?" },
             { href: "/tarifs", label: "Tarifs" },
+            { href: "/manifeste", label: "Manifeste" },
           ],
         }]
       : []),

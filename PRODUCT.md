@@ -18,6 +18,8 @@ product
 
 Benevol est un outil communautaire open source qui simplifie la gestion des bénévoles pour les événements (festivals, spectacles, associations). Il couvre le cycle complet : création des créneaux → pool de membres → invitations tokenisées → inscription publique via Gantt → rappels automatiques → exports terrain.
 
+**Principe** (manifeste, novembre 2026) : le planning n'est pas le problème à résoudre, c'est le résultat visible d'un problème d'organisation et de circulation de l'information. Benevol aide à structurer ce qui doit se passer (postes, horaires, besoins, informations), puis s'efface autant que possible une fois cette structure établie : une fonctionnalité qui demande à l'organisateur d'intervenir plus souvent doit le justifier.
+
 Ce n'est pas un produit SaaS commercial — c'est un outil que des organisations gèrent elles-mêmes ou partagent en multi-tenant. Le succès se mesure à la réduction de friction pour les organisateurs et à la clarté absolue pour les bénévoles.
 
 ## Core Loop and Scope

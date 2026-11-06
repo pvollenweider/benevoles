@@ -187,6 +187,20 @@ export const PUBLIC_PAGES: readonly PublicPage[] = [
     presentation: true,
   },
   {
+    // The manifesto (#1259): why the hosted service exists, what it will not do, how it is funded
+    // (same wording as /tarifs, no promise of permanent gratuity) and who maintains it. Facts only.
+    path: "/manifeste",
+    title: "Manifeste",
+    summary: `Pourquoi ${SITE_NAME} existe, ce que nous croyons, ce que nous ne ferons pas, comment le projet vit et qui est derrière.`,
+    metaTitle: `Manifeste : pourquoi ${SITE_NAME} existe`,
+    metaDescription: `Pourquoi ${SITE_NAME} existe : un planning de bénévoles sans compte, sans publicité ni fonction payante, libre sous licence AGPL, et qui le fait vivre.`,
+    source: "content/pages/MANIFESTE.md",
+    priority: 0.5,
+    guide: false,
+    availability: "hosted",
+    presentation: true,
+  },
+  {
     // The target of every « Demander un espace » (#810), written in its page.tsx. In the sitemap
     // like the other apex pages (#934): it is where an association searching for the service
     // starts, and it exists on every instance (a closed sign-up shows why, with a contact).
