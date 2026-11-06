@@ -14,6 +14,7 @@ Format basé sur [Keep a Changelog](https://keepachangelog.com/fr/1.0.0/).
 ### Ajouté
 
 - Une page Manifeste raconte pourquoi benevol.app existe, ce qu'il ne fera pas, comment le projet vit et qui le maintient. Elle est liée depuis le pied de page et la page Tarifs.
+- Une rubrique Guides pratiques, à l'adresse `/ressources`, rassemble des méthodes pour organiser ses bénévoles, utiles aussi sans logiciel. Chaque guide affiche la date de sa dernière relecture, et la rubrique dit comment ils sont écrits. Le premier explique quoi faire quand un bénévole se désiste la veille.
 
 ### Corrigé
 

@@ -48,7 +48,7 @@ describe("PublicFooter", () => {
       render(<PublicFooter variant="site" />)
       expect(columns()).toEqual({
         // #872, #950: what the service is, for whom and at what price, from every page.
-        "Découvrir": [["Pour qui ?", "/pour-qui"], ["Tarifs", "/tarifs"], ["Manifeste", "/manifeste"]],
+        "Découvrir": [["Pour qui ?", "/pour-qui"], ["Tarifs", "/tarifs"], ["Manifeste", "/manifeste"], ["Guides pratiques", "/ressources"]],
         // #757 (changelog) and the public video library stay one click away from every page.
         "Aide": [["Documentation", "/doc"], ["Tutoriels vidéo", "/videos"], ["Nouveautés", "/nouveautes"], ["Blog", "/blog"]],
         "benevol.app": [

@@ -14,6 +14,7 @@ import { isServerNotFound, NOT_FOUND_ROUTE } from "@/lib/server-not-found"
 import { loadDocUnits, resolveDocSlug } from "@/lib/doc-units"
 import { loadVideoCatalog } from "@/lib/video-catalog-load"
 import { findBlogPost, loadBlogPosts } from "@/lib/blog"
+import { findRessource, loadRessources } from "@/lib/ressources"
 import { reportError } from "@/lib/report-error"
 import { REQUEST_PATH_HEADER } from "@/lib/admin-next"
 import { isAuthEndpoint } from "@/lib/auth-endpoints"
@@ -46,6 +47,15 @@ function blogPostExists(slug: string): boolean {
     return findBlogPost(slug, loadBlogPosts()) !== null
   } catch (error) {
     reportError("proxy-not-found-blog")(error)
+    return true
+  }
+}
+
+function ressourceExists(slug: string): boolean {
+  try {
+    return findRessource(slug, loadRessources()) !== null
+  } catch (error) {
+    reportError("proxy-not-found-ressource")(error)
     return true
   }
 }
@@ -119,7 +129,7 @@ function handle(req: NextAuthRequest): Response {
   // --- A 404 rendered on the server (#935): what is known missing here is answered by the
   // not-found page itself, whose HTML carries the page; `notFound()` during a page's render only
   // sends an empty document that the browser fills in. See src/lib/server-not-found.ts. ---
-  const notFound = isServerNotFound(pathname, { hasOrg: requestHeaders.has(ORG_HEADER), docSlugExists, videoExists, blogPostExists })
+  const notFound = isServerNotFound(pathname, { hasOrg: requestHeaders.has(ORG_HEADER), docSlugExists, videoExists, blogPostExists, ressourceExists })
   const response = notFound
     ? NextResponse.rewrite(new URL(NOT_FOUND_ROUTE, req.url), { request: { headers: requestHeaders } })
     : NextResponse.next({ request: { headers: requestHeaders } })

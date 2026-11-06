@@ -29,6 +29,7 @@ export const APEX_ONLY_PATHS: readonly string[] = [
   "/manifeste",
   "/nouveautes",
   "/blog",
+  "/ressources",
   "/accessibilite",
   "/legal",
   "/doc",

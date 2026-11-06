@@ -60,7 +60,7 @@ describe("GET /my/manifest.webmanifest", () => {
   })
 
   it("is not rewritten to the 404 page by the proxy, with or without an organisation", () => {
-    const lookups = { docSlugExists: () => false, videoExists: () => false, blogPostExists: () => false }
+    const lookups = { docSlugExists: () => false, videoExists: () => false, blogPostExists: () => false, ressourceExists: () => false }
     expect(reachesEventRoute(VOLUNTEER_MANIFEST_PATH)).toBe(false)
     expect(isServerNotFound(VOLUNTEER_MANIFEST_PATH, { hasOrg: false, ...lookups })).toBe(false)
     expect(isServerNotFound(VOLUNTEER_MANIFEST_PATH, { hasOrg: true, ...lookups })).toBe(false)

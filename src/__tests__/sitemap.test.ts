@@ -33,7 +33,7 @@ describe("sitemap on the apex host", () => {
     withHeaders({ host: "www.benevol.app" })
     const sitemap = (await import("../app/sitemap")).default
     const entries = await sitemap()
-    expect(entries.map((e) => e.url).slice(0, 22)).toEqual([
+    expect(entries.map((e) => e.url).slice(0, 23)).toEqual([
       "https://www.benevol.app/",
       "https://www.benevol.app/fonctionnalites",
       // The editorial page on volunteer scheduling (#767).
@@ -48,6 +48,8 @@ describe("sitemap on the apex host", () => {
       // Spreadsheet and chat group, or a dedicated tool? (#871).
       "https://www.benevol.app/tableur-ou-outil-dedie",
       "https://www.benevol.app/manifeste",
+      // The practical guides (#1258).
+      "https://www.benevol.app/ressources",
       // The sign-up page (#934).
       "https://www.benevol.app/inscription",
       // What changed, rendered from CHANGELOG.md (#757).
@@ -68,12 +70,16 @@ describe("sitemap on the apex host", () => {
     // without VIDEO_MEDIA_BASE_URL none can be played, so none is indexed.
     const { readDocUnits } = await import("../lib/doc-units")
     const units = readDocUnits()
-    expect(entries.map((e) => e.url).slice(22, 22 + units.length)).toEqual(units.map((u) => `https://www.benevol.app/doc/${u.slug}`))
+    expect(entries.map((e) => e.url).slice(23, 23 + units.length)).toEqual(units.map((u) => `https://www.benevol.app/doc/${u.slug}`))
     // Then the blog posts of content/blog/ (#944), newest first, each dated the day it was sent.
     const { readBlogPosts } = await import("../lib/blog")
     const posts = readBlogPosts()
-    expect(entries.map((e) => e.url).slice(22 + units.length)).toEqual(posts.map((p) => `https://www.benevol.app/blog/${p.slug}`))
-    expect(entries.at(-1)?.lastModified).toEqual(new Date(`${posts.at(-1)!.date}T00:00:00Z`))
+    expect(entries.map((e) => e.url).slice(23 + units.length, 23 + units.length + posts.length)).toEqual(posts.map((p) => `https://www.benevol.app/blog/${p.slug}`))
+    // Then the practical guides of content/ressources/ (#1258), most useful first, dated their last check.
+    const { readRessources } = await import("../lib/ressources")
+    const guides = readRessources()
+    expect(entries.map((e) => e.url).slice(23 + units.length + posts.length)).toEqual(guides.map((g) => `https://www.benevol.app/ressources/${g.slug}`))
+    expect(entries.at(-1)?.lastModified).toEqual(new Date(`${guides.at(-1)!.updated}T00:00:00Z`))
     expect(entries.map((e) => e.url)).toContain("https://www.benevol.app/doc/revenir-sur-la-page-d-inscription")
     expect(entries.map((e) => e.url)).toContain("https://www.benevol.app/doc/configurer-les-creneaux")
     // Dates come from doc-lastmod.json, written at deploy from git: without it (tests,

@@ -239,6 +239,32 @@ export function blogPostJsonLd(post: Pick<BlogPost, "slug" | "title" | "summary"
   ])
 }
 
+/** A practical guide (#1258): an article, modified the day it was last checked, under /ressources. */
+export function ressourceJsonLd(guide: { slug: string; title: string; summary: string; updated: string }, base: string): JsonLdNode {
+  const path = `/ressources/${guide.slug}`
+  const url = absoluteUrl(base, path)
+  const article: JsonLdNode = {
+    "@type": "Article",
+    "@id": `${url}#article`,
+    url,
+    mainEntityOfPage: url,
+    headline: guide.title,
+    description: guide.summary,
+    dateModified: guide.updated,
+    inLanguage: "fr",
+    image: absoluteUrl(base, "/og-image.png"),
+    author: idOf(base, "organization"),
+    publisher: idOf(base, "organization"),
+    isPartOf: idOf(base, "website"),
+  }
+  return jsonLdGraph([
+    article,
+    breadcrumbNode(base, path, [{ name: "Accueil", path: "/" }, { name: "Ressources", path: "/ressources" }, { name: guide.title }]),
+    websiteNode(base),
+    organizationNode(base),
+  ])
+}
+
 /**
  * JSON for a <script type="application/ld+json">: « < », « > » and « & » escaped, so the data can
  * never close the element or open a comment, and the two line separators JavaScript reads as line
