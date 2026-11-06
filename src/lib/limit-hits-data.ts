@@ -21,7 +21,7 @@ export async function loadLimitHits(opts: { organizationId?: string; now?: Date 
     where: { lastAt: { gte: since }, ...org },
     orderBy: { lastAt: "desc" },
     take: LIMIT_HITS_MAX_ROWS + 1,
-    select: { id: true, organizationId: true, organization: { select: { name: true, slug: true } }, limit: true, heldCount: true, refusedCount: true, firstAt: true, lastAt: true },
+    select: { id: true, organizationId: true, organization: { select: { name: true, slug: true } }, limit: true, kind: true, heldCount: true, refusedCount: true, firstAt: true, lastAt: true },
   })
   if (rows.length === 0) return { groups: [], truncated: false }
   const truncated = rows.length > LIMIT_HITS_MAX_ROWS

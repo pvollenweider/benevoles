@@ -6,8 +6,9 @@ import { reportError } from "@/lib/report-error"
 
 /**
  * Sending limits reached (#1100): what the operator sees in /super-admin, kept 90 days
- * (src/lib/retention.ts). One EmailLimitHit row per limit, organisation and UTC hour, the same
- * grain as the operator alert (`alertKey` in send-limits.ts), with two counts:
+ * (src/lib/retention.ts). One EmailLimitHit row per limit, organisation, email kind and UTC hour
+ * (the kind tells the operator what hit the limit: a burst of confirmations to one address is not
+ * a bulk message), with two counts:
  *
  * - **held**: an outbox email over a limit, back to pending until the window ends (harmless if
  *   the queue drains). Counted once per email and hour: the outbox marks the row (`lastHeldAt`)
@@ -16,7 +17,8 @@ import { reportError } from "@/lib/report-error"
  *   `limit:*` (its caller reports the failure) or a public-triggered email dropped over the
  *   per-recipient or sign-up cap. These are attempts, not deduplicated emails.
  *
- * Nothing about the recipient or the content: an organisation id, a limit name, times, counts.
+ * Nothing about the recipient or the content: an organisation id, a limit name, the email kind,
+ * times, counts.
  * Recording is best effort: a failure is reported and never changes whether an email goes.
  */
 
@@ -52,28 +54,30 @@ export function hourStart(now: Date): Date {
   return new Date(Math.floor(now.getTime() / 3_600_000) * 3_600_000)
 }
 
-/** The row's key: one per limit, organisation (or « platform ») and UTC hour. */
-export function limitHitBucket(limit: string, organizationId: string | null | undefined, now: Date): string {
-  return `${limit}:${organizationId ?? "platform"}:${now.toISOString().slice(0, 13)}`
+/** The row's key: one per limit, organisation (or « platform »), email kind when known, and UTC hour. */
+export function limitHitBucket(limit: string, organizationId: string | null | undefined, now: Date, kind?: string | null): string {
+  const kindPart = kind ? `${kind}:` : ""
+  return `${limit}:${organizationId ?? "platform"}:${kindPart}${now.toISOString().slice(0, 13)}`
 }
 
 type LimitHitDb = { emailLimitHit: { upsert: (typeof prisma)["emailLimitHit"]["upsert"] } }
 
 /** Adds one held or refused email to its hour's row (an atomic INSERT … ON CONFLICT upsert). */
 export async function recordLimitHit(
-  hit: { organizationId: string | null | undefined; limit: string; outcome: LimitHitOutcome; now?: Date },
+  hit: { organizationId: string | null | undefined; limit: string; kind?: string | null; outcome: LimitHitOutcome; now?: Date },
   db: LimitHitDb = prisma,
 ): Promise<void> {
   const now = hit.now ?? new Date()
   const held = hit.outcome === "held" ? 1 : 0
   const refused = hit.outcome === "refused" ? 1 : 0
-  const bucket = limitHitBucket(hit.limit, hit.organizationId, now)
+  const bucket = limitHitBucket(hit.limit, hit.organizationId, now, hit.kind)
   await bestEffort("email.limit.record", () => db.emailLimitHit.upsert({
     where: { bucket },
     create: {
       bucket,
       organizationId: hit.organizationId ?? null,
       limit: hit.limit,
+      kind: hit.kind ?? null,
       hourStart: hourStart(now),
       heldCount: held,
       refusedCount: refused,

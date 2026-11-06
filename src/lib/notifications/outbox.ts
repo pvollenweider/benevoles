@@ -278,6 +278,8 @@ export async function deliverOutbox(opts: { ids?: string[]; limit?: number; now?
     let nothingLeft = false
     let recipientRefused: string | null = null
     let inactivityStopped: string | null = null
+    // The email kind, for a sending limit reached (kept on EmailLimitHit for the operator).
+    let kind: string | null = null
     const outcome = await Promise.resolve()
       .then(async () => {
         let payload = openPayload(claimed.payload)
@@ -286,6 +288,7 @@ export async function deliverOutbox(opts: { ids?: string[]; limit?: number; now?
           if (!resolved) { nothingLeft = true; return { ok: true as const } }
           payload = resolved
         }
+        kind = payload.kind
         // Read right before the send: a member whose address was corrected, a link replaced or
         // revoked, a leader removed since the email was queued. Cancelled, never redirected.
         recipientRefused = await outboxRecipientVerdict(payload)
@@ -329,7 +332,7 @@ export async function deliverOutbox(opts: { ids?: string[]; limit?: number; now?
         data: { status: "pending", claimedAt: null, nextAttemptAt: new Date(now.getTime() + (outcome.retryAfterMs ?? 60_000)) },
       })
       result.held++
-      if (outcome.limit) await markHeld(row.id, claimed.organizationId, outcome.limit, now)
+      if (outcome.limit) await markHeld(row.id, claimed.organizationId, outcome.limit, kind, now)
       continue
     }
 
@@ -426,7 +429,7 @@ async function inactivityCopyBlocked(stepId: string, recipientEmail: string, now
  * conditional update lets exactly one delivery through, even when two run at once or a stale
  * claim is picked up again. Best effort, after the row is already back to pending.
  */
-async function markHeld(id: string, organizationId: string | null, limit: string, now: Date): Promise<void> {
+async function markHeld(id: string, organizationId: string | null, limit: string, kind: string | null, now: Date): Promise<void> {
   await bestEffort("email.limit.mark_held", async () => {
     // The first hold (#1101): with sentAt, how long the limit delayed this email.
     await prisma.notificationOutbox.updateMany({ where: { id, firstHeldAt: null }, data: { firstHeldAt: now } })
@@ -434,7 +437,7 @@ async function markHeld(id: string, organizationId: string | null, limit: string
       where: { id, OR: [{ lastHeldAt: null }, { lastHeldAt: { lt: hourStart(now) } }] },
       data: { lastHeldAt: now },
     })
-    if (count === 1) await recordLimitHit({ organizationId, limit, outcome: "held", now })
+    if (count === 1) await recordLimitHit({ organizationId, limit, kind, outcome: "held", now })
   })
 }
 

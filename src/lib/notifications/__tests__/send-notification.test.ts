@@ -38,8 +38,8 @@ describe("sendNotification", () => {
     allowance.mockResolvedValueOnce({ ok: false, limit: "org_per_minute", retryAfterMs: 1000 })
     expect(await sendNotification({ ...payload, organizationId: "org1", outboxId: "row1" })).toMatchObject({ held: true })
     expect(record.mock.calls).toEqual([
-      [{ organizationId: "org1", limit: "recipient_per_hour", outcome: "refused" }],
-      [{ organizationId: "org1", limit: "org_per_minute", outcome: "refused" }],
+      [{ organizationId: "org1", limit: "recipient_per_hour", kind: "registration_confirmation", outcome: "refused" }],
+      [{ organizationId: "org1", limit: "org_per_minute", kind: "registration_confirmation", outcome: "refused" }],
     ])
   })
 

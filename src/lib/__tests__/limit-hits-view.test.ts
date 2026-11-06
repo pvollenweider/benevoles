@@ -3,7 +3,7 @@ import { groupLimitHits, heldText, limitHitWhen, limitLabel, PLATFORM_LABEL, que
 
 // #1100: what the super admin reads about the sending limits reached.
 const row = (o: Partial<LimitHitRow>): LimitHitRow => ({
-  id: "h1", organizationId: "org1", organization: { name: "Fête du village", slug: "fete" }, limit: "org_per_minute",
+  id: "h1", organizationId: "org1", organization: { name: "Fête du village", slug: "fete" }, limit: "org_per_minute", kind: null,
   heldCount: 0, refusedCount: 0, firstAt: new Date("2026-10-23T19:04:10Z"), lastAt: new Date("2026-10-23T19:05:30Z"), ...o,
 })
 
@@ -50,6 +50,14 @@ describe("limit hits view", () => {
     expect(groups[0].hits[0].firstAt).toBe("2026-10-23T09:00:00.000Z")
     // Only refused emails: nothing was queued, so nothing is said about the queue.
     expect(groups[1]).toMatchObject({ name: PLATFORM_LABEL, slug: null, stillHeld: 0, queueStatus: null })
+  })
+
+  it("names the email kind that hit the limit, nothing for older rows without it", () => {
+    const [g] = groupLimitHits([
+      row({ id: "k", limit: "recipient_per_hour", kind: "registration_withdrawn", refusedCount: 6, firstAt: new Date("2026-10-23T20:00:00Z"), lastAt: new Date("2026-10-23T20:02:00Z") }),
+      row({ id: "old", kind: null, heldCount: 1 }),
+    ], {}, "Europe/Zurich")
+    expect(g.hits.map((h) => [h.id, h.kind])).toEqual([["k", "Confirmation d'un retrait fait depuis le lien personnel"], ["old", null]])
   })
 
   it("says the queue is empty once held emails no longer wait", () => {
