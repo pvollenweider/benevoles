@@ -11,6 +11,10 @@ Format basé sur [Keep a Changelog](https://keepachangelog.com/fr/1.0.0/).
 
 ## [Unreleased]
 
+### Ajouté
+
+- Une page Manifeste raconte pourquoi benevol.app existe, ce qu'il ne fera pas, comment le projet vit et qui le maintient. Elle est liée depuis le pied de page et la page Tarifs.
+
 ### Corrigé
 
 - La page publique d'une organisation qui n'affiche aucun événement à venir (« Aucun événement en cours. ») n'est plus proposée aux moteurs de recherche : elle porte une balise `noindex`, sort du sitemap de l'organisation, et l'organisation sort de l'index des sitemaps. Google la classait en « soft 404 ». Elle redevient indexable dès qu'un événement publié et répertorié y apparaît.

@@ -29,7 +29,7 @@ Un nouvel espace passe aussi une courte vérification avant sa première publica
 
 ## Pourquoi l'hébergement est gratuit aujourd'hui
 
-benevol.app est un outil communautaire, pas un produit commercial. Son code est public, sous licence AGPL, et il évolue avec les retours des associations qui l'utilisent. Le faire vivre a quand même un coût : le développement, la documentation (guides et tutoriels vidéo) et l'hébergement. Aujourd'hui, ces coûts sont portés par le projet et par les dons. Si l'outil vous rend service, vous pouvez le soutenir par un don.
+benevol.app est un outil communautaire, pas un produit commercial. Son code est public, sous licence AGPL, et il évolue avec les retours des associations qui l'utilisent. Le faire vivre a quand même un coût : le développement, la documentation (guides et tutoriels vidéo) et l'hébergement. Aujourd'hui, ces coûts sont portés par le projet et par les dons. Si l'outil vous rend service, vous pouvez le soutenir par un don. Le [manifeste](MANIFESTE.md) dit pourquoi le projet existe et ce qu'il ne fera pas.
 
 ## Ce que benevol.app ne fait pas
 

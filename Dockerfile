@@ -85,6 +85,8 @@ COPY --from=builder --chown=nextjs:nodejs /app/content/pages/PLANNING-PERMANENCE
 COPY --from=builder --chown=nextjs:nodejs /app/content/pages/TARIFS.md ./content/pages/TARIFS.md
 # Tableur et groupe de discussion, ou outil dédié ? (#871).
 COPY --from=builder --chown=nextjs:nodejs /app/content/pages/TABLEUR-OU-OUTIL-DEDIE.md ./content/pages/TABLEUR-OU-OUTIL-DEDIE.md
+# Manifeste (#1259).
+COPY --from=builder --chown=nextjs:nodejs /app/content/pages/MANIFESTE.md ./content/pages/MANIFESTE.md
 COPY --from=builder --chown=nextjs:nodejs /app/content/pages/FAQ-ACCUEIL.md ./content/pages/FAQ-ACCUEIL.md
 COPY --from=builder --chown=nextjs:nodejs /app/content/pages/ACCESSIBILITE.md ./content/pages/ACCESSIBILITE.md
 COPY --from=builder --chown=nextjs:nodejs /app/content/legal/ACCORD-SOUS-TRAITANCE.md ./content/legal/ACCORD-SOUS-TRAITANCE.md
