@@ -21,6 +21,7 @@ Format basé sur [Keep a Changelog](https://keepachangelog.com/fr/1.0.0/).
 - Un cinquième guide pratique explique comment annoncer un changement de planning : prévenir seulement les personnes concernées, un message clair, au bon moment, et corriger partout l'ancienne information.
 - Un sixième guide pratique explique comment garder ses bénévoles d'une année à l'autre : accueil, journée tenable, merci précis, attestation, invitation personnelle avant l'ouverture au public.
 - Un septième guide pratique explique comment retrouver ses créneaux dans son agenda (Google Agenda, iPhone) : importer un fichier ou s'abonner, et laquelle choisir.
+- Une alerte automatique prévient l'opérateur, par push ntfy et par email, quand la sauvegarde, la copie hors site ou le test de restauration est en échec ou en retard : le nettoyage nocturne lit les signaux de vie, alerte au plus une fois par jour et par tâche, et reste silencieux pour une tâche qui n'a jamais tourné.
 
 ### Modifié
 

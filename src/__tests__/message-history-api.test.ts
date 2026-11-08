@@ -36,7 +36,7 @@ vi.mock("@/lib/prisma", () => {
   }
 })
 vi.mock("@/lib/env", () => ({ env: { CRON_SECRET: "s", AUTH_SECRET: "a".repeat(32), ADMIN_NOTIFICATION_EMAIL: undefined } }))
-vi.mock("@/lib/job-runs", () => ({ recordJobRun: (_: string, fn: () => unknown) => fn() }))
+vi.mock("@/lib/job-runs", () => ({ recordJobRun: (_: string, fn: () => unknown) => fn(), loadJobRuns: vi.fn().mockResolvedValue({}) }))
 vi.mock("@/lib/token-encryption-job", () => ({ encryptLegacyTokens: vi.fn().mockResolvedValue(null) }))
 vi.mock("@/lib/notifications/outbox", () => ({ deliverAfterResponse: m.deliver }))
 vi.mock("@/lib/event-log", () => ({ logEvent: m.logEvent, adminActor: () => ({ type: "admin", id: "adm" }) }))
