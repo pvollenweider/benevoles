@@ -33,8 +33,10 @@ const questions = [
   { id: "size", label: "Taille ?", type: "single", options: ["S", "M", "L"], required: true, position: 0, archivedAt: null, roleName: null, answers: [{ values: ["M"] }] },
   { id: "note", label: "Remarque ?", type: "text", options: [], required: false, position: 1, archivedAt: null, roleName: null, answers: [{ values: ["Végétarien"] }] },
 ]
+const withoutAnswers = (question: (typeof questions)[number]) =>
+  Object.fromEntries(Object.entries(question).filter(([key]) => key !== "answers"))
 const questionRead = async (args: { select: { answers?: unknown } }) =>
-  args.select.answers ? questions : questions.map(({ answers: _a, ...q }) => q)
+  args.select.answers ? questions : questions.map(withoutAnswers)
 
 vi.mock("@/lib/prisma", async () => {
   const locked = (await import("./helpers/locked-shifts")).lockedShiftReads()

@@ -276,8 +276,7 @@ async function main() {
     // The demo seed supplies 24 members. Add 36 deterministic fictional members for a
     // substantial list, including two distinct homonyms and a contact without email.
     for (let index = 0; index < 36; index++) {
-      const id = `video-member-management-${index}`
-      const { id: _id, ...data } = expectedMemberV2(index, scenario === "members-invitations")
+      const { id, ...data } = expectedMemberV2(index, scenario === "members-invitations")
       await prisma.volunteer.upsert({ where: { id }, create: { id, ...data }, update: data })
     }
     const seededMembers = await prisma.volunteer.findMany({ where: { id: { in: Array.from({ length: 36 }, (_, index) => `video-member-management-${index}`) }, organizationId: "default" } })

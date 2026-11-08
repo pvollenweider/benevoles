@@ -9,18 +9,20 @@ export default defineConfig({
   test: {
     environment: "node",
     env: { APP_VERSION: version },
-    // e2e/**/*.spec.ts are Playwright specs, not vitest tests.
-    exclude: ["**/node_modules/**", "e2e/**", "src/__integration__/**"],
+    // e2e/**/*.spec.ts are Playwright specs, not vitest tests. The assistant worktrees
+    // (.claude/worktrees/...) and the Next build output are never part of the suite.
+    exclude: ["**/node_modules/**", "e2e/**", "src/__integration__/**", "**/.claude/**", "**/.next/**"],
     coverage: {
       provider: "v8",
       // Routes and components too, not just src/lib: the API routes carry most of the
       // security-sensitive logic (tenant scoping, tokens, capacity).
       include: ["src/lib/**", "src/app/api/**", "src/components/**", "videos/lib/**"],
-      exclude: ["**/__tests__/**"],
+      exclude: ["**/__tests__/**", "videos/lib/record-*"],
       reporter: ["text", "lcov"],
-      // Floors just under the measured baseline (2026-09-29: 36.4 / 29.2 / 29.6 / 37.7), so a
-      // drop fails CI (#317). Raise them as coverage grows; never lower them to make CI pass.
-      thresholds: { statements: 35, branches: 28, functions: 28, lines: 36 },
+      // Floors just under the measured baseline (2026-11-08: 75.7 / 70.9 / 75.0 / 78.6, after
+      // excluding the video capture scripts), so a drop fails CI (#317). Raise them as coverage
+      // grows; never lower them to make CI pass.
+      thresholds: { statements: 70, branches: 65, functions: 70, lines: 73 },
     },
   },
   resolve: {

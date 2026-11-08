@@ -45,4 +45,17 @@ describe("repository configuration guard", () => {
     // The image never receives any of them either.
     expect(read(".dockerignore")).toMatch(/^\.env\.\*$/m)
   })
+
+  it("excludes assistant worktrees and the Next build output from test discovery", () => {
+    const config = read("vitest.config.mts")
+    expect(config).toContain('"**/.claude/**"')
+    expect(config).toContain('"**/.next/**"')
+  })
+
+  it("checks the Node version before every development, test, type-check, build and lint script", () => {
+    const pkg = JSON.parse(read("package.json")) as { scripts: Record<string, string> }
+    for (const name of ["predev", "pretest", "pretest:coverage", "pretypecheck", "prebuild", "prelint", "pretest:e2e"]) {
+      expect(pkg.scripts[name], name).toContain("scripts/check-node-version.mjs")
+    }
+  })
 })
