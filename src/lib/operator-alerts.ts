@@ -44,16 +44,25 @@ export function ntfyConfig(env: Record<string, string | undefined> = process.env
   return { url: parsed.toString(), token: env.NTFY_TOKEN?.trim() || null }
 }
 
-/** The ntfy request for an alert: headers carry the title, priority and click link. */
+/**
+ * The ntfy request for an alert. The title travels in the JSON body, not in an HTTP header: ntfy
+ * decodes a raw UTF-8 header as Latin-1, which mangled every accented French title. The JSON
+ * publish endpoint takes the topic in the body; an access token stays in Authorization.
+ */
 export function ntfyRequest(alert: OperatorAlert, config: NtfyConfig): { url: string; init: RequestInit } {
-  const headers: Record<string, string> = {
-    Title: alert.title,
-    Priority: String(alert.priority ?? 3),
-    Tags: (alert.priority ?? 3) >= 4 ? "warning" : "bell",
-  }
-  if (alert.url) headers.Click = alert.url
+  const topicUrl = new URL(config.url)
+  const topic = decodeURIComponent(topicUrl.pathname.replace(/^\/+/, ""))
+  const headers: Record<string, string> = { "Content-Type": "application/json" }
   if (config.token) headers.Authorization = `Bearer ${config.token}`
-  return { url: config.url, init: { method: "POST", headers, body: alert.message } }
+  const body = {
+    topic,
+    title: alert.title,
+    message: alert.message,
+    priority: alert.priority ?? 3,
+    tags: [(alert.priority ?? 3) >= 4 ? "warning" : "bell"],
+    ...(alert.url ? { click: alert.url } : {}),
+  }
+  return { url: new URL("/", topicUrl).toString(), init: { method: "POST", headers, body: JSON.stringify(body) } }
 }
 
 type Deps = { fetch?: typeof fetch; env?: Record<string, string | undefined>; sleep?: (ms: number) => Promise<void> }
@@ -92,12 +101,32 @@ export async function sendNtfy(alert: OperatorAlert, deps: Deps = {}): Promise<b
 }
 
 /**
+ * Whether an outbox row already exists for this alert's key, whatever its status. The cleanup
+ * deletes a sent normal email at once, but keeps operator-alert rows seven days: the row is the
+ * persistent deduplication marker for both the push and the email.
+ */
+async function alreadyAlerted(key: string): Promise<boolean> {
+  try {
+    const row = await prisma.notificationOutbox.findFirst({
+      where: { dedupeKey: { startsWith: `operator_alert:${key}:` } },
+      select: { id: true },
+    })
+    return row !== null
+  } catch (e) {
+    // Never silence an alert because the deduplication lookup failed: a duplicate is better.
+    reportError("operator_alert.dedupe")(e)
+    return false
+  }
+}
+
+/**
  * Push + email to the active super admins, side by side: the push's retries never hold the email
  * back. The email goes through the outbox (sending limits and all), queued with the alert's key so
  * a repeat is stored once; delivered right after the request when there is one, else by the next
- * outbox run.
+ * outbox run. An existing row for the key stops both channels.
  */
 export async function notifyOperator(alert: OperatorAlert, deps: Deps = {}): Promise<void> {
+  if (await alreadyAlerted(alert.key)) return
   await Promise.all([sendNtfy(alert, deps), emailOperator(alert, deps.env ?? process.env)])
 }
 

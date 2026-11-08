@@ -48,6 +48,10 @@ export const RETENTION_DAYS = {
   operatorLog: 365,
   /** Self-service sign-up request (#810): name, contact name and address typed on /inscription. */
   signupRequest: 7,
+  /** Operator alert rows in the outbox: title, message, health link, and the recipient's email.
+   * Kept seven days so a same-day cleanup rerun finds the key and sends neither the push nor the
+   * email again (src/lib/operator-alerts.ts). */
+  operatorAlert: 7,
   /** Encrypted database dump on the server. */
   localBackup: 30,
   /** Copy of the encrypted dumps off site. */
@@ -214,6 +218,15 @@ export const RETENTION: readonly RetentionEntry[] = [
     duration: "tant que l'organisation existe",
     trigger: "effacement des données personnelles d'un membre",
     mechanism: "effacé avec l'organisation (cron cleanup, suppression en cascade)",
+    backups: inBackups,
+    public: false,
+  },
+  {
+    data: "Alertes envoyées à l'opérateur : titre, message, lien vers la page de santé, et l'adresse email du destinataire dans la file d'envoi",
+    purpose: "Éviter qu'une même alerte soit renvoyée plusieurs fois le même jour, et garder la trace de ce qui a été signalé",
+    duration: `${d.operatorAlert} jours après leur mise en file`,
+    trigger: "envoi d'une alerte à l'opérateur",
+    mechanism: "nettoyage quotidien (cron cleanup)",
     backups: inBackups,
     public: false,
   },
