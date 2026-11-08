@@ -52,6 +52,7 @@ async function run(req: Request) {
   const failedCutoff = daysAgo(now, RETENTION_DAYS.failedNotification)
   const deliveryOutcomeCutoff = daysAgo(now, RETENTION_DAYS.deliveryOutcome)
   const mergedTombstoneCutoff = daysAgo(now, RETENTION_DAYS.mergedMemberTombstone)
+  const operatorAlertCutoff = daysAgo(now, RETENTION_DAYS.operatorAlert)
 
   // --- 1. Inactive organizations ---
   // Cascades to: Event → Shift → Registration, Member, MemberInvite.
@@ -128,7 +129,20 @@ async function run(req: Request) {
   // 30 days (kept that long only to investigate why they failed).
   // A targeted message keeps the count of its rows deleted here (#467), in the same transaction,
   // so its delivery summary stays right after the purge.
-  const outboxToDelete = { OR: [{ status: "sent" }, { status: { in: ["failed", "cancelled"] }, createdAt: { lt: failedCutoff } }] }
+  // Operator alerts are the persistent deduplication marker of notifyOperator: keep them seven days,
+  // even once sent, so a same-day rerun finds the key and sends neither the push nor the email again.
+  const outboxToDelete = {
+    OR: [
+      {
+        AND: [
+          { status: "sent" },
+          { OR: [{ dedupeKey: null }, { dedupeKey: { not: { startsWith: "operator_alert:" } } }] },
+        ],
+      },
+      // Failed or cancelled operator alerts keep the ordinary 30-day window.
+      { status: { in: ["failed", "cancelled"] }, createdAt: { lt: failedCutoff } },
+    ],
+  }
   // A batch of emails (#1101) likewise keeps the outcome of its rows (sent, held then sent, failed,
   // cancelled), folded from the same selected rows; both counters come from one read of the rows.
   const deletedOutbox = await prisma.$transaction(async (tx) => {
@@ -158,6 +172,11 @@ async function run(req: Request) {
     const linkedDeleted = await tx.notificationOutbox.deleteMany({ where: { id: { in: linked.map((r) => r.id) } } })
     const otherDeleted = await tx.notificationOutbox.deleteMany({ where: { AND: [outboxToDelete, { targetedMessageId: null }, { sendBatchId: null }] } })
     return { count: linkedDeleted.count + otherDeleted.count }
+  })
+
+  // Operator alerts, kept seven days for deduplication, then deleted like the other sent rows.
+  const deletedOperatorAlerts = await prisma.notificationOutbox.deleteMany({
+    where: { dedupeKey: { startsWith: "operator_alert:" }, status: "sent", createdAt: { lt: operatorAlertCutoff } },
   })
 
   // Targeted messages are kept 12 months (#467): their content may hold personal information.
@@ -329,7 +348,7 @@ async function run(req: Request) {
     inactivityCheck: { mode: inactivityRun, ...(inactivityDone ?? {}) },
     tokenEncryption,
     deleted: {
-      notificationOutbox: deletedOutbox.count,
+      notificationOutbox: deletedOutbox.count + deletedOperatorAlerts.count,
       targetedMessages: deletedMessages.count,
     scheduledMessages: deletedScheduled.count,
       rateLimits: deletedRateLimits.count,
