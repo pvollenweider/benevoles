@@ -22,6 +22,15 @@ import { touchOrgActivity } from "./org-activity"
  *   to an event of this org.
  *
  * A row of another org therefore behaves exactly like a row that doesn't exist.
+ *
+ * Nested writes are outside that net. Prisma applies connect, connectOrCreate, create,
+ * createMany, set, disconnect, update, updateMany, upsert and delete under a relation field in
+ * the same query; the extension only receives the root operation and its top-level arguments.
+ * eventIdOf does read data.event.connect.id for an event-owned create, but that is one specific
+ * parent check, not a traversal. Rule: never connect/connectOrCreate to an id coming from the
+ * request, and declare every nested write in
+ * src/lib/__tests__/prisma-nested-writes-guard.test.ts with its justification; that test also
+ * fails when an entry no longer matches code.
  */
 
 /** Models carrying organizationId themselves. */

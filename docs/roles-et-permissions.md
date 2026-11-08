@@ -101,6 +101,8 @@ Isolation entre organisations :
 3. Le code admin ne peut pas importer le client brut `prisma` (règle ESLint `no-restricted-imports` sur `src/app/api/admin/**` et `src/app/admin/**`) ; les rares exceptions (`Organization`, `AdminUser`, contrôle volontairement inter-organisations d'un slug) sont annotées avec leur justification.
 4. Les tests `src/__tests__/security/cross-tenant-isolation.test.ts` et `src/lib/__tests__/prisma-org.test.ts` vérifient l'isolation route par route et opération par opération.
 
+**Écritures imbriquées.** Le client étendu inspecte `where` et les champs de premier niveau de `data`, mais ne parcourt pas les écritures imbriquées de Prisma (`connect`, `connectOrCreate`, `create`, `createMany`, `set`, `disconnect`, `update`, `updateMany`, `upsert`, `delete` sous un champ de relation) : elles partent dans la même requête, sans repasser par l'extension pour le modèle enfant. Une route qui écrirait `registrations: { connect: { id } }` avec un identifiant venu de la requête pourrait donc rattacher une ligne d'une autre organisation sans être vue. Règle : jamais de `connect`/`connectOrCreate` vers un identifiant fourni par la requête, et toute écriture imbriquée déclarée avec sa justification dans `src/lib/__tests__/prisma-nested-writes-guard.test.ts` ; le test échoue aussi sur une entrée périmée.
+
 Toute nouvelle route admin doit ajouter son test d'isolation (voir [CONTRIBUTING.md](../CONTRIBUTING.md)).
 
 Règles sur l'équipe :
