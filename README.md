@@ -178,7 +178,7 @@ Toutes les variables, leurs défauts et leurs effets, ainsi que la rotation de l
 | `npm run retention:docs` | Régénère les tableaux de conservation de `content/guide/exporter-et-conserver-ses-donnees.md` et `docs/retention.md` depuis `src/lib/retention.ts` |
 | `npm run doc:index` | Régénère la liste des pages de `content/guide/README.md` depuis les fichiers de `content/guide/` |
 
-`db:migrate`, `db:push`, `db:seed` et `db:studio` ne chargent pas `.env` : exporter `DATABASE_URL` avant, ou passer par `make` (voir « Setup manuel »). `npm run dev` et `npm run test:e2e` vérifient d'abord la version de Node (`scripts/check-node-version.mjs`).
+`db:migrate`, `db:push`, `db:seed` et `db:studio` ne chargent pas `.env` : exporter `DATABASE_URL` avant, ou passer par `make` (voir « Setup manuel »). Les commandes `dev`, `build`, `lint`, `typecheck`, `test`, `test:coverage` et `test:e2e` vérifient d'abord la version de Node (`scripts/check-node-version.mjs`).
 
 En production, les migrations sont appliquées une fois par déploiement, par un Job Kubernetes lancé avant la mise à jour de l'application (voir [docs/deploiement.md](docs/deploiement.md#ordre-de-déploiement)).
 

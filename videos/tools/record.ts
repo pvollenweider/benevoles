@@ -2685,7 +2685,7 @@ async function main() {
           const inbox = await (await page.request.get("http://localhost:48026/api/v1/messages?limit=1000")).json() as { messages: { ID: string; Subject: string; To: { Address: string }[]; Created: string }[] }
           const mails = inbox.messages.filter(m => m.Subject.includes("Ton briefing pour Buvette") && Date.parse(m.Created) >= history.createdAt.getTime() - 1000)
           if (mails.length !== recipients.length || mails.filter(m => m.To.some(t => t.Address === "lea.giroud@example.org")).length !== 1) throw new Error("Actual campaign mail deduplication failed")
-          for (const [index, recipient] of recipients.slice(0, 2).entries()) {
+          for (const recipient of recipients.slice(0, 2)) {
             await at("Dans notre boîte de test, ouvrons les emails")
             const mail = mails.find(m => m.To.some(t => t.Address === recipient.volunteer.email)); if (!mail) throw new Error("Recipient mail missing")
             await openRegistrationTakeMailbox(page, dir, mail.ID, 'subject:"Ton briefing pour Buvette" "Fête du village de Montvert"')
@@ -5507,7 +5507,6 @@ async function main() {
         await page.screencast.showChapter("Un suivi clair jusqu’au jour J", { description: "Voir, cibler, préparer", duration: 2_300 })
       })
     } else {
-      let onboardingEventId = ""
       let onboardingPublicUrl = ""
 
       await page.goto(`${baseUrl}/admin/events`); await settle(page)
@@ -5575,7 +5574,6 @@ async function main() {
         await fillVisibly(page, page.getByLabel("Date fin *"), "2031-06-14")
         await tap(page, page.getByRole("button", { name: "Créer l'événement" }))
         await page.waitForURL(/\/admin\/events\/[^/]+\/shifts\?wizard=1$/)
-        onboardingEventId = new URL(page.url()).pathname.split("/")[3]
       })
 
       await scene("shift", async (at) => {

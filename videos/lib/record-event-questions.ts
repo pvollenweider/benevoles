@@ -273,12 +273,10 @@ export async function recordEventQuestions(options: QuestionRecordingOptions) {
     assert.equal(snapshot.answers.length, 4)
     await evidence("volunteer-form", { actualSignup: true, accessLinkOnlyByEmail: true, fourAnswersStored: snapshot.answers.length === 4 })
   })
-  let actualPersonalLink = ""
   await scene("email-proof", async at => {
     await at("Ouvrons le nouveau message réellement")
     const message = await options.showConfirmationEmail(page, email)
     assert.equal(message.recipient, email)
-    actualPersonalLink = message.actualPersonalLink
     const link = new URL(message.actualPersonalLink)
     assert.equal(link.origin, base)
     assert(/^\/my\/[^/]+$/.test(link.pathname), "Actual local personal link required")

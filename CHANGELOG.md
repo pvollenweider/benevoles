@@ -37,6 +37,10 @@ Format basé sur [Keep a Changelog](https://keepachangelog.com/fr/1.0.0/).
 - Appliquer des places, un minimum ou un libellé à tout un poste qui a beaucoup de créneaux (un par soir, par exemple) ne se termine plus par une erreur sans rien enregistrer : les créneaux qui reçoivent les mêmes valeurs sont modifiés ensemble, au lieu d'un par un dans une transaction qui dépassait 5 secondes.
 - Une requête que le navigateur interrompt avant la fin de son envoi (onglet fermé pendant un envoi au suivi d'erreurs, par exemple) n'est plus signalée comme une erreur de l'application.
 
+### Infrastructure
+
+- Les garde-fous de développement : Vitest ignore les worktrees `.claude` et le build Next.js, la couverture exclut les scripts de capture vidéo avec des seuils relevés en conséquence, la version de Node est vérifiée avant chaque commande de développement, test, type-check, build et lint, et le lint ne signale plus d'avertissement.
+
 ## [2.6.0] — 2026-11-01
 
 ### En bref
