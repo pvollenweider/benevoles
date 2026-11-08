@@ -28,6 +28,7 @@ Format basé sur [Keep a Changelog](https://keepachangelog.com/fr/1.0.0/).
 - Le Manifeste prend la forme d'un échange : le récit de celui qui a construit benevol.app est présenté en citations, introduites par quelques questions.
 - Le Manifeste se lit comme un texte : une seule colonne centrée, des citations marquées d'un simple filet à gauche au lieu d'encadrés, sans bandeau de sommaire au milieu. Les pages Tarifs, Pour qui et Logiciel de planning n'ont plus de colonne vide à côté de leur introduction.
 - Les plafonds d'envoi atteints indiquent aussi le type d'email retenu ou refusé (confirmation d'inscription, renvoi du lien personnel, retrait…), pour savoir ce qui les déclenche. Toujours ni adresse ni contenu. <!-- interne -->
+- Docker Compose : l'application n'écoute plus que sur la boucle locale de l'hôte (`127.0.0.1:3000`) par défaut. Un accès depuis une autre machine demande désormais de publier le port sur une interface privée et de passer par un proxy de confiance, documenté dans `docs/deploiement.md` ; exposé directement, le port 3000 permettait de falsifier `X-Forwarded-For` et de contourner les limites de débit par adresse.
 
 ### Corrigé
 
