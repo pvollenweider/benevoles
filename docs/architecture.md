@@ -28,7 +28,8 @@ Job de migration (k8s/job-migrate.yaml) ──► prisma migrate deploy, à chaq
 | `src/app/super-admin/` | Gestion des organisations, nouveautés produit, profil, page santé (`health/`) |
 | `src/app/legal/` | Politique de confidentialité, conditions d'utilisation |
 | `src/app/doc/`, `src/app/fonctionnalites/`, `src/app/accessibilite/` | Pages de contenu publiques rendues depuis `content/guide/GUIDE_*.md`, `content/pages/FEATURES.md`, `content/pages/ACCESSIBILITE.md` (déclarées dans `src/lib/doc-pages.ts`) |
-| `src/app/product-updates/unsubscribed/` | Confirmation du désabonnement des nouveautés produit |
+| `src/app/product-updates/unsubscribe/` | Page de confirmation du désabonnement des nouveautés produit (le bouton envoie le POST) |
+| `src/app/product-updates/unsubscribed/` | Résultat du désabonnement des nouveautés produit |
 | `src/app/api/` | Routes HTTP, voir [api.md](api.md) |
 | `src/components/` | Composants (`admin/`, `super-admin/`, timeline publique `DayTimeline.tsx`) |
 | `src/lib/` | Logique métier partagée |

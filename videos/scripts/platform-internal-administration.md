@@ -124,7 +124,8 @@ organisateurs des autres scénarios pour obtenir un compteur artificiel.
    envoyer un test au compte de formation et lire son vrai email. Puis confirmer
    une diffusion aux seuls comptes fictifs abonnés de la base dédiée. Montrer le
    compteur réellement livré et l'historique ; un compte désabonné ne doit rien
-   recevoir. Illustrer le désabonnement dans son vrai parcours si documenté.
+   recevoir. Le lien de désabonnement ouvre une page de confirmation : cliquer sur
+   « Me désabonner », puis vérifier que le compte ne reçoit plus rien.
 10. **Vérifier le périmètre.** Session propriétaire ordinaire : les routes de
     gestion de plateforme doivent refuser l'accès ; session super-admin sans
     organisation choisie : pas d'action implicite sur un tenant. Récapituler

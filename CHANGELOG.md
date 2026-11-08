@@ -32,6 +32,7 @@ Format basé sur [Keep a Changelog](https://keepachangelog.com/fr/1.0.0/).
 
 ### Corrigé
 
+- Le désabonnement des nouveautés produit ne s'effectue plus à l'ouverture du lien : les scanners de messagerie et les aperçus de liens ne peuvent plus désabonner un administrateur. Le lien ouvre une page de confirmation, et le bouton « Me désabonner » envoie le POST.
 - Ajout manuel d'un bénévole : une coupure réseau ou une erreur passagère du serveur ne laisse plus le bouton bloqué sur « Ajout en cours… » ; un message le dit et on peut réessayer. Dans le journal d'activité, le récit et la relecture d'un élément disent qu'ils n'ont pas pu se charger au lieu d'afficher « rien à raconter ».
 - Le Manifeste précise que le développement et la documentation se font en Suisse ; seul l'hébergement est en France.
 - La page publique d'une organisation qui n'affiche aucun événement à venir (« Aucun événement en cours. ») n'est plus proposée aux moteurs de recherche : elle porte une balise `noindex`, sort du sitemap de l'organisation, et l'organisation sort de l'index des sitemaps. Google la classait en « soft 404 ». Elle redevient indexable dès qu'un événement publié et répertorié y apparaît.

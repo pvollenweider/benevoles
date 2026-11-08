@@ -1045,3 +1045,13 @@ travail (voix et capture) ; révision du catalogue à incrémenter au rendu :
 ## Double authentification du super admin (constat F6) : outils de capture de l'opérateur
 
 Le super admin donne désormais un code d'application d'authentification après son mot de passe. Aucune vidéo publiée ne montre la connexion de l'opérateur (`platform-internal-administration` ouvre sa session avant l'enregistrement), donc aucune régénération n'est nécessaire pour ce changement. Les outils qui se connectent avec le compte fictif `video.operator.platform@example.org` passent le second facteur avec `videos/lib/operator-second-factor.ts` (secret fixe de démonstration, inscrit par `scripts/seed-video-operator.ts` et chiffré avec la clé locale des vidéos) : `videos/tools/record.ts`, `prepare-operator.ts`, `check-batch25-origin.ts`, `inspect-operator-sessions.ts`, `verify-operator-lifecycle.ts`. **Non vérifié** sur la pile vidéo de l'opérateur (base `benevoles_video_operator`) : à confirmer à la prochaine capture de cette vidéo, après un nouveau seed.
+
+## Désabonnement des nouveautés produit par POST (F-07)
+
+Le lien de désabonnement des emails de nouveautés produit n'écrit plus en
+ouvrant : il ouvre une page de confirmation, et le bouton « Me désabonner »
+envoie le POST. `platform-internal-administration`, scène `broadcast`, montre
+l'ancien parcours (désabonnement à l'ouverture du lien). Recorder, script et
+narration mis à jour dans la même PR ; **régénération pas faite dans ce
+travail** (voix et capture). Révision et `updatedAt` du catalogue à incrémenter
+au rendu de la nouvelle version.

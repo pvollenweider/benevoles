@@ -267,7 +267,10 @@ export async function recordOperator(options: { page: Page; base: string; direct
       const unsubscribe = await page.request.get(`${base}${lastMail.localPath}`, { maxRedirects: 0 })
       assert.equal(unsubscribe.status(), 307)
       const redirect = new URL(unsubscribe.headers().location)
+      assert.equal(redirect.pathname, "/product-updates/unsubscribe")
       await session(null); await go(`${redirect.pathname}${redirect.search}`)
+      await tap(page, page.getByRole("button", { name: "Me désabonner", exact: true }))
+      await page.waitForURL(/\/product-updates\/unsubscribed\?ok=1/)
       assert.equal((await db.adminUser.findUniqueOrThrow({ where: { email: ownerEmail } })).receiveProductUpdates, false)
       checks.actualBroadcastEmails = delivered.map(mail => mail.ID); checks.actualUnsubscribe = true
     })

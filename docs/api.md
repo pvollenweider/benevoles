@@ -41,7 +41,7 @@ Les limites utilisent `rateLimit()` de `src/lib/rate-limit.ts` : fenêtre fixe, 
 | `/api/public/video-feedback` | POST | public | Réponse anonyme « Cette vidéo vous a-t-elle été utile ? » (#646) : `{ videoId, revision, useful, context }` validé par Zod, vidéo et révision actuelle vérifiées dans `videos/catalog.json` (404 inconnue, 409 révision dépassée) ; 60 réponses par heure et par IP, compteur en mémoire seulement (429) ; rien sur la personne n'est enregistré |
 | `/api/public/forgot-password` | POST | public | Envoie un email de réinitialisation du mot de passe admin ; 5 requêtes par heure et par IP |
 | `/api/public/reset-password` | POST | public (jeton) | Définit un nouveau mot de passe (72 octets UTF-8 au plus, règles de `src/lib/password.ts`) ; ferme toutes les sessions ouvertes auparavant (`sessionVersion`). Limitée à 10 requêtes par heure et par IP |
-| `/api/public/product-updates/unsubscribe` | GET | public (jeton signé) | Désabonnement des communications de nouveautés produit (#200) ; redirige vers `/product-updates/unsubscribed` |
+| `/api/public/product-updates/unsubscribe` | GET, POST | public (jeton signé) | GET : ouvre la page de confirmation sans rien écrire, ou redirige vers `?ok=0` si le jeton est invalide. POST (formulaire de cette page, même origine) : vérifie de nouveau le jeton, désabonne des communications de nouveautés produit (#200) et redirige vers `/product-updates/unsubscribed?ok=1` (ou `?ok=0`) |
 
 ## Authentification
 
