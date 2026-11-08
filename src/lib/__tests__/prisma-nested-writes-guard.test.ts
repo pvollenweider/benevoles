@@ -44,7 +44,7 @@ export function relationFieldsFromSchema(schema: string): Set<string> {
   return fields
 }
 
-/** Nested Prisma writes in one source: a relation field whose object starts with a write operation. */
+/** Nested Prisma writes in one source: every write operation under a relation field. */
 export function findNestedWrites(source: string, file: string, relationFields: ReadonlySet<string>): NestedWrite[] {
   const sourceFile = ts.createSourceFile(file, source, ts.ScriptTarget.Latest, true, ts.ScriptKind.TS)
   const found: NestedWrite[] = []
@@ -54,11 +54,11 @@ export function findNestedWrites(source: string, file: string, relationFields: R
       const field = propertyName(node.name)
       if (field && NON_WRITE_CLAUSES.has(field)) return
       if (field && relationFields.has(field) && ts.isObjectLiteralExpression(node.initializer)) {
-        const first = node.initializer.properties[0]
-        if (first && ts.isPropertyAssignment(first)) {
-          const operation = propertyName(first.name)
+        for (const property of node.initializer.properties) {
+          if (!ts.isPropertyAssignment(property)) continue
+          const operation = propertyName(property.name)
           if (operation && NESTED_OPERATIONS.has(operation)) {
-            found.push({ file, line: sourceFile.getLineAndCharacterOfPosition(node.getStart(sourceFile)).line + 1, field, operation })
+            found.push({ file, line: sourceFile.getLineAndCharacterOfPosition(property.getStart(sourceFile)).line + 1, field, operation })
           }
         }
       }
@@ -89,48 +89,49 @@ function scannedFiles(dir: string): string[] {
   return out
 }
 
-type AllowedWrite = { file: string; field: string; why: string }
+type AllowedWrite = { file: string; field: string; operation: string; why: string }
 
 /**
  * Every nested write that exists today, with why it cannot attach a row of another organization:
  * the parent is created in the same call, or its organization was checked before, and no id comes
- * from the request. A file and relation field can cover several writes (create and update).
+ * from the request. The entry names the file, the relation field and the operation: a create
+ * does not cover a later connect on the same field.
  */
 const ALLOWED: readonly AllowedWrite[] = [
   {
-    file: "src/app/api/admin/events/[id]/duplicate/route.ts", field: "sectors",
+    file: "src/app/api/admin/events/[id]/duplicate/route.ts", field: "sectors", operation: "create",
     why: "Copies of the source's sectors, with ids made by duplicatePlan's newId; no request id and no connect.",
   },
   {
-    file: "src/app/api/admin/events/[id]/duplicate/route.ts", field: "places",
+    file: "src/app/api/admin/events/[id]/duplicate/route.ts", field: "places", operation: "create",
     why: "Copies of the source's active places, with new ids; shifts point only to those copies, never to a source or request id.",
   },
   {
-    file: "src/app/api/admin/events/[id]/duplicate/route.ts", field: "shifts",
+    file: "src/app/api/admin/events/[id]/duplicate/route.ts", field: "shifts", operation: "create",
     why: "Copied shifts of the new event; sectorId and placeId are remapped to the copies made in the same plan, or null.",
   },
   {
-    file: "src/app/api/admin/events/[id]/duplicate/route.ts", field: "pages",
+    file: "src/app/api/admin/events/[id]/duplicate/route.ts", field: "pages", operation: "create",
     why: "Custom pages copied under the new event; slug, title, content and order only, no id or connect.",
   },
   {
-    file: "src/app/api/admin/events/[id]/duplicate/route.ts", field: "questions",
+    file: "src/app/api/admin/events/[id]/duplicate/route.ts", field: "questions", operation: "createMany",
     why: "Copied questions of the new event, with ids made by newId; a parentId points to the copy of its parent, never to a source id.",
   },
   {
-    file: "src/app/api/admin/events/from-template/route.ts", field: "shifts",
+    file: "src/app/api/admin/events/from-template/route.ts", field: "shifts", operation: "create",
     why: "Shifts built from the static template list; dates, labels and capacity only, no id or connect.",
   },
   {
-    file: "src/app/api/super-admin/organizations/route.ts", field: "admins",
+    file: "src/app/api/super-admin/organizations/route.ts", field: "admins", operation: "create",
     why: "First administrator of the organization just created by the operator; email and name from the validated request, no id.",
   },
   {
-    file: "src/lib/event-availability-data.ts", field: "ranges",
+    file: "src/lib/event-availability-data.ts", field: "ranges", operation: "create",
     why: "Ranges of an availability day just created, on the event whose organization was checked; times only, no id.",
   },
   {
-    file: "src/lib/signup-server.ts", field: "admins",
+    file: "src/lib/signup-server.ts", field: "admins", operation: "create",
     why: "Owner account of the organization just created by the sign-up; email and name from the validated request, no id.",
   },
 ]
@@ -140,7 +141,22 @@ const FILES = [...scannedFiles("src/app/api"), ...scannedFiles("src/lib")].sort(
 const FOUND = FILES.flatMap((file) => findNestedWrites(read(file), file, RELATION_FIELDS))
 
 const label = (write: NestedWrite) => `${write.file}:${write.line} ${write.field}.${write.operation}`
-const key = (write: Pick<NestedWrite, "file" | "field">) => `${write.file}\u0000${write.field}`
+type WriteKey = Pick<NestedWrite, "file" | "field" | "operation">
+const key = (write: WriteKey) => `${write.file}\u0000${write.field}\u0000${write.operation}`
+
+/** Whether the allowlist covers this exact file, relation field and operation. */
+export function isAllowed(write: WriteKey, allowed: readonly AllowedWrite[]): boolean {
+  return allowed.some((entry) => entry.file === write.file && entry.field === write.field && entry.operation === write.operation)
+}
+
+export function undeclaredWrites(found: readonly NestedWrite[], allowed: readonly AllowedWrite[]): NestedWrite[] {
+  return found.filter((write) => !isAllowed(write, allowed))
+}
+
+export function staleAllowed(found: readonly NestedWrite[], allowed: readonly AllowedWrite[]): AllowedWrite[] {
+  const present = new Set(found.map(key))
+  return allowed.filter((entry) => !present.has(key(entry)))
+}
 
 describe("Prisma nested writes guard (F-08)", () => {
   it("scans the API routes and src/lib with the schema's relation fields", () => {
@@ -151,19 +167,16 @@ describe("Prisma nested writes guard (F-08)", () => {
   })
 
   it("declares every nested write with its justification", () => {
-    const allowed = new Set(ALLOWED.map(key))
-    const undeclared = FOUND.filter((write) => !allowed.has(key(write)))
-    expect(undeclared.map(label), "declare these nested writes in ALLOWED with a justification").toEqual([])
+    expect(undeclaredWrites(FOUND, ALLOWED).map(label), "declare these nested writes in ALLOWED with a justification").toEqual([])
   })
 
   it("fails on a stale entry, so the allowed list cannot grow without code", () => {
-    const present = new Set(FOUND.map(key))
-    const stale = ALLOWED.filter((entry) => !present.has(key(entry)))
-    expect(stale.map((entry) => `${entry.file} ${entry.field}`), "remove these stale ALLOWED entries").toEqual([])
+    const stale = staleAllowed(FOUND, ALLOWED)
+    expect(stale.map((entry) => `${entry.file} ${entry.field}.${entry.operation}`), "remove these stale ALLOWED entries").toEqual([])
   })
 
   it("keeps a non-empty justification for every entry", () => {
-    for (const entry of ALLOWED) expect(entry.why.trim().length, `${entry.file} ${entry.field}`).toBeGreaterThan(20)
+    for (const entry of ALLOWED) expect(entry.why.trim().length, `${entry.file} ${entry.field}.${entry.operation}`).toBeGreaterThan(20)
   })
 })
 
@@ -199,6 +212,17 @@ describe("findNestedWrites", () => {
       "inline.ts", relations,
     )
     expect(found.map(({ field, operation }) => ({ field, operation }))).toEqual([{ field: "shifts", operation: "deleteMany" }])
+  })
+
+  it("returns every operation of a relation object, not only the first", () => {
+    const found = findNestedWrites(
+      `db.event.update({ where: { id }, data: { shifts: { create: [{ label: "x" }], connect: { id: otherId } } } })`,
+      "inline.ts", relations,
+    )
+    expect(found.map(({ field, operation }) => ({ field, operation }))).toEqual([
+      { field: "shifts", operation: "create" },
+      { field: "shifts", operation: "connect" },
+    ])
   })
 
   it("does not flag a top-level upsert's create and update arguments", () => {
@@ -239,5 +263,20 @@ describe("findNestedWrites", () => {
   it("does not flag an object key that is not a relation field", () => {
     const found = findNestedWrites(`const plan = { counts: { create: count("create"), update: count("update") } }`, "inline.ts", relations)
     expect(found).toEqual([])
+  })
+})
+
+describe("isAllowed", () => {
+  const allowed: AllowedWrite[] = [{ file: "route.ts", field: "shifts", operation: "create", why: "test entry" }]
+  const connect: NestedWrite = { file: "route.ts", field: "shifts", operation: "connect", line: 1 }
+
+  it("covers the same field only for the allowed operation", () => {
+    expect(isAllowed({ ...connect, operation: "create" }, allowed)).toBe(true)
+    expect(isAllowed(connect, allowed)).toBe(false)
+    expect(undeclaredWrites([connect], allowed)).toEqual([connect])
+  })
+
+  it("marks the create entry stale when only a connect remains on that field", () => {
+    expect(staleAllowed([connect], allowed).map((entry) => entry.operation)).toEqual(["create"])
   })
 })
