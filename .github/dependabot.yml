@@ -16,7 +16,7 @@ updates:
       # eslint-plugin-react (via eslint-config-next) doesn't support ESLint 10 yet
       - dependency-name: "eslint"
         update-types: ["version-update:semver-major"]
-    labels: ["deps"]
+    labels: ["dependencies"]
     open-pull-requests-limit: 5
 
   - package-ecosystem: docker
@@ -24,11 +24,11 @@ updates:
     schedule:
       interval: weekly
       day: monday
-    labels: ["deps"]
+    labels: ["dependencies"]
 
   - package-ecosystem: github-actions
     directory: /
     schedule:
       interval: weekly
       day: monday
-    labels: ["deps"]
+    labels: ["dependencies"]
