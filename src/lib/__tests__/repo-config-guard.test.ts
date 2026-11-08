@@ -59,6 +59,16 @@ describe("repository configuration guard", () => {
     }
   })
 
+  it("pins next-auth exactly while it is a prerelease", () => {
+    const pkg = JSON.parse(read("package.json")) as { dependencies: Record<string, string> }
+    const spec = pkg.dependencies["next-auth"]
+    expect(spec, "next-auth dependency").toBeDefined()
+    // A beta accepts the next betas with ^ or ~; they have no compatibility promise.
+    if (spec.includes("-")) expect(spec, "a prerelease next-auth must be pinned").toMatch(/^\d+\.\d+\.\d+-/)
+    const lock = JSON.parse(read("package-lock.json")) as { packages: Record<string, { version?: string }> }
+    expect(lock.packages["node_modules/next-auth"]?.version).toBe(spec.replace(/^[~^]/, ""))
+  })
+
   it("audits production dependencies in the required check job, after installing them", () => {
     const ci = read(".github/workflows/ci.yml")
     const checkJob = ci.match(/^  check:\n([\s\S]*?)(?=^  [a-z][a-z0-9-]*:\s*$)/m)?.[1] ?? ""
