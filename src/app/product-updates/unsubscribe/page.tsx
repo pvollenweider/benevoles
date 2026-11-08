@@ -30,7 +30,7 @@ export default async function UnsubscribeConfirmPage({
           <>
             <h1 className="text-lg font-bold text-gray-900 mb-2">Se désabonner des nouveautés</h1>
             <p className="text-sm text-gray-500">
-              Vous ne recevrez plus les communications admin de {SITE_NAME}. Votre compte reste actif.
+              Confirmez pour ne plus recevoir les communications admin de {SITE_NAME}. Votre compte reste actif.
             </p>
             <form method="post" action="/api/public/product-updates/unsubscribe" className="mt-6">
               <input type="hidden" name="admin" value={adminId} />
