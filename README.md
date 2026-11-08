@@ -229,7 +229,7 @@ git pull && docker compose up -d --build   # mise à jour
 
 Les manifestes sont dans `k8s/` (application, Job de migration, PostgreSQL, ingress, cron jobs, certificat wildcard via le webhook DNS Gandi de `k8s/gandi-webhook/`). Les migrations passent par un Job dédié, **avant** la mise à jour de l'application ; l'ordre complet des étapes, pour un déploiement manuel comme automatique, est dans [docs/deploiement.md](docs/deploiement.md#kubernetes).
 
-Le CI/CD GitHub Actions (`.github/workflows/`) exécute le type-check, le lint et les tests, construit l'image (GHCR) puis déploie sur Kubernetes à chaque push vers `main`. La CI de pull request exécute en plus la couverture de tests, les contrôles `check-security-md.mjs` et `check-migrations.mjs`, les tests d'intégration sur PostgreSQL et les tests E2E Playwright (détail : [docs/deploiement.md](docs/deploiement.md#cicd)).
+Le CI/CD GitHub Actions (`.github/workflows/`) exécute le type-check, le lint et les tests, construit l'image (GHCR) puis déploie sur Kubernetes à chaque push vers `main`. La CI de pull request exécute en plus la couverture de tests, l'audit des dépendances de production (`npm audit --omit=dev --audit-level=high`), les contrôles `check-security-md.mjs` et `check-migrations.mjs`, les tests d'intégration sur PostgreSQL et les tests E2E Playwright (détail : [docs/deploiement.md](docs/deploiement.md#cicd)).
 
 ## Structure du projet
 

@@ -43,6 +43,7 @@ Format basé sur [Keep a Changelog](https://keepachangelog.com/fr/1.0.0/).
 
 - Les garde-fous de développement : Vitest ignore les worktrees `.claude` et le build Next.js, la couverture exclut les scripts de capture vidéo avec des seuils relevés en conséquence, la version de Node est vérifiée avant chaque commande de développement, test, type-check, build et lint, et le lint ne signale plus d'avertissement.
 - Un test de garde recense les écritures imbriquées Prisma (`connect`, `create`, `createMany`, `update`, `delete`… sous un champ de relation) dans les routes API et les modules `src/lib` : chacune est déclarée avec sa justification, et une entrée qui ne correspond plus à du code fait échouer le test. La limite du client scopé est documentée dans `src/lib/prisma-org.ts` et `docs/roles-et-permissions.md`.
+- La CI refuse une dépendance de production avec un avis de sécurité `high` ou `critical` : le job « Type-check, lint & tests » exécute `npm audit --omit=dev --audit-level=high`, sans bloquer sur les avis des outils de développement.
 
 ## [2.6.0] — 2026-11-01
 
