@@ -30,7 +30,10 @@ services:
     build: .
     restart: unless-stopped
     ports:
-      - "3000:3000"
+      # Loopback only: reach the app through a reverse proxy on this host. Publishing port
+      # 3000 on another interface lets clients forge X-Forwarded-For and bypass IP rate
+      # limits — see docs/deploiement.md, "Exposition et adresse des visiteurs".
+      - "127.0.0.1:3000:3000"
     environment:
       # docker-entrypoint.sh builds DATABASE_URL from these, each part encoded (any password works).
       POSTGRES_HOST: postgres

@@ -38,7 +38,7 @@ docker compose up -d
 
 `TOKEN_ENCRYPTION_KEY` est à conserver (voir « Mise à jour depuis 1.x »), `POSTGRES_PASSWORD` aussi : PostgreSQL l'enregistre à la création du volume.
 
-`docker-compose.yml` lance PostgreSQL 16 et l'application (`build: .`) sur le port 3000. PostgreSQL n'est joignable que par l'application, sur le réseau interne de Compose : aucun port n'est publié sur l'hôte. Sans `POSTGRES_PASSWORD`, Compose refuse de démarrer ; il n'y a pas de valeur par défaut. L'application reçoit `POSTGRES_USER`, `POSTGRES_PASSWORD`, `POSTGRES_DB` et `POSTGRES_HOST` plutôt qu'une URL : `docker-entrypoint.sh` construit `DATABASE_URL` (`scripts/database-url.mjs`, chaque partie encodée), donc tout caractère est accepté dans le mot de passe et les deux services reçoivent toujours le même. Dans `.env`, entourer de guillemets simples une valeur qui contient `$`, `#` ou une espace ; un mot de passe hexadécimal évite la question. Une `DATABASE_URL` fournie explicitement (Kubernetes, base externe) est utilisée telle quelle.
+`docker-compose.yml` lance PostgreSQL 16 et l'application (`build: .`) sur `127.0.0.1:3000` : l'application n'est joignable que depuis la boucle locale de l'hôte. PostgreSQL n'est joignable que par l'application, sur le réseau interne de Compose : aucun port n'est publié sur l'hôte. Sans `POSTGRES_PASSWORD`, Compose refuse de démarrer ; il n'y a pas de valeur par défaut. L'application reçoit `POSTGRES_USER`, `POSTGRES_PASSWORD`, `POSTGRES_DB` et `POSTGRES_HOST` plutôt qu'une URL : `docker-entrypoint.sh` construit `DATABASE_URL` (`scripts/database-url.mjs`, chaque partie encodée), donc tout caractère est accepté dans le mot de passe et les deux services reçoivent toujours le même. Dans `.env`, entourer de guillemets simples une valeur qui contient `$`, `#` ou une espace ; un mot de passe hexadécimal évite la question. Une `DATABASE_URL` fournie explicitement (Kubernetes, base externe) est utilisée telle quelle.
 
 Ce qu'il ne fait pas :
 
@@ -54,6 +54,27 @@ Ce qu'il ne fait pas :
   ```
 
   Avec `NODE_ENV=production`, le seed refuse de s'exécuter si l'un des deux mots de passe manque ou ne respecte pas les règles des mots de passe (10 caractères, majuscule, minuscule, chiffre, caractère spécial), avant d'écrire quoi que ce soit. Relancé sur des comptes existants, il remet leurs mots de passe et ferme leurs sessions ouvertes.
+
+### Exposition et adresse des visiteurs
+
+L'application n'écoute que sur la boucle locale de l'hôte (`127.0.0.1:3000`) : elle n'est joignable ni depuis le réseau local, ni depuis Internet. Installer un proxy inverse sur le même hôte (nginx, Caddy, Traefik…), qui écoute en 443 et transmet à `127.0.0.1:3000`.
+
+Ne jamais publier directement le port 3000 sur une interface publique. Les limites de débit par adresse (connexion, inscription, mot de passe oublié, invitations…) lisent `X-Forwarded-For`, avec `TRUSTED_PROXY_HOPS` à 1 par défaut : sans proxy de confiance devant l'application, un client qui atteint directement le port 3000 peut forger cet en-tête et obtenir un compteur neuf à chaque requête.
+
+Pour un proxy installé sur une autre machine, l'exposition est une modification volontaire : publier sur une interface privée (jamais `0.0.0.0`), limiter l'accès au proxy par un pare-feu ou un réseau dédié, et déclarer le nombre de proxys. Exemple de `docker-compose.override.yml` :
+
+```yaml
+services:
+  app:
+    ports:
+      - "10.0.0.5:3000:3000"
+    environment:
+      AUTH_URL: https://benevoles.example.org
+      AUTH_TRUST_HOST: "true"
+      TRUSTED_PROXY_HOPS: "1"
+```
+
+`TRUSTED_PROXY_HOPS` compte depuis la droite de `X-Forwarded-For` : 1 quand le proxy le plus proche ajoute l'adresse du visiteur, 2 si un répartiteur de charge ajoute encore une entrée devant. Une valeur trop grande fait remonter une entrée que le client a pu fournir.
 
 ### Accès ponctuel à la base
 
