@@ -22,9 +22,10 @@ const refusedOrigin = { status: 403, error: ORIGIN_REFUSED }
 const refusedType = { status: 415, error: CONTENT_TYPE_REFUSED }
 
 describe("isProtectedApiPath", () => {
-  it("covers the admin and super-admin APIs only", () => {
+  it("covers the admin, super-admin and product-updates unsubscribe paths", () => {
     expect(isProtectedApiPath("/api/admin/events")).toBe(true)
     expect(isProtectedApiPath("/api/super-admin/use-org/x")).toBe(true)
+    expect(isProtectedApiPath("/api/public/product-updates/unsubscribe")).toBe(true)
     for (const p of ["/api/public/registrations", "/api/cron/outbox", "/api/auth/callback/credentials", "/api/health", "/api/administrator", "/admin/events"]) {
       expect(isProtectedApiPath(p)).toBe(false)
     }
@@ -38,6 +39,12 @@ describe("checkAdminMutation: Origin present (#1048)", () => {
 
   it("accepts the configured site address", () => {
     expect(checkAdminMutation(input({ headers: { origin: PROD } }))).toBeNull()
+  })
+
+  it("protects the public unsubscribe form, and accepts its form body", () => {
+    const pathname = "/api/public/product-updates/unsubscribe"
+    expect(checkAdminMutation(input({ pathname, headers: { origin: PROD, "content-type": "application/x-www-form-urlencoded" } }))).toBeNull()
+    expect(checkAdminMutation(input({ pathname, headers: { origin: "https://evil.example", "content-type": "application/x-www-form-urlencoded" } }))).toEqual(refusedOrigin)
   })
 
   it("refuses another organization's address, the same site but another origin", () => {
@@ -145,6 +152,10 @@ describe("checkAdminMutation: out of scope", () => {
     for (const method of ["GET", "HEAD", "OPTIONS"]) {
       expect(checkAdminMutation(input({ method, headers: { origin: "https://evil.example", "content-type": "text/plain" } }))).toBeNull()
     }
+  })
+
+  it("leaves the unsubscribe link's GET alone: opening it must never write", () => {
+    expect(checkAdminMutation(input({ method: "GET", pathname: "/api/public/product-updates/unsubscribe", headers: { origin: "https://evil.example" } }))).toBeNull()
   })
 
   it("leaves the public, embed, cron and sign-in endpoints alone", () => {
