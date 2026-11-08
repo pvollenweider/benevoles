@@ -45,6 +45,7 @@ Format basé sur [Keep a Changelog](https://keepachangelog.com/fr/1.0.0/).
 - Un test de garde recense les écritures imbriquées Prisma (`connect`, `create`, `createMany`, `update`, `delete`… sous un champ de relation) dans les routes API et les modules `src/lib` : chacune est déclarée avec sa justification, et une entrée qui ne correspond plus à du code fait échouer le test. La limite du client scopé est documentée dans `src/lib/prisma-org.ts` et `docs/roles-et-permissions.md`.
 - La CI refuse une dépendance de production avec un avis de sécurité `high` ou `critical` : le job « Type-check, lint & tests » exécute `npm audit --omit=dev --audit-level=high`, sans bloquer sur les avis des outils de développement.
 - Les pull requests Dependabot utilisent le label `dependencies` du dépôt, et non le label `deps` qui n'existe pas ; le groupe de mises à jour `all-deps` ne change pas.
+- `next-auth` est épinglé à `5.0.0-beta.32` sans `^` : une pré-version n'offre aucune garantie de compatibilité entre deux bêtas, donc `npm install` ne peut plus en faire entrer une autre par surprise. Un test de garde vérifie l'épinglage tant que la version reste une pré-version.
 
 ## [2.6.0] — 2026-11-01
 
