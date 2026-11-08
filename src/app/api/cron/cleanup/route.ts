@@ -3,11 +3,12 @@
 
 import { PENDING_ORG_WHERE, abandonedSignupSpaceWhere, expiredDeactivatedOrgWhere, pendingSummary } from "@/lib/org-review"
 import { notifyOperator } from "@/lib/operator-alerts"
+import { backupAlerts } from "@/lib/backup-alerts"
 import { countsToFreeze } from "@/lib/message-history"
 import { batchCountsToFreeze } from "@/lib/send-batches"
 import { daysAgo, RETENTION_DAYS } from "@/lib/retention"
 import { NextResponse } from "next/server"
-import { recordJobRun } from "@/lib/job-runs"
+import { loadJobRuns, recordJobRun } from "@/lib/job-runs"
 import { env } from "@/lib/env"
 import { isCronAuthorized } from "@/lib/cron-auth"
 import { prisma } from "@/lib/prisma"
@@ -219,6 +220,18 @@ async function run(req: Request) {
       .catch(reportError("cleanup.pending_summary"))
   }
 
+  // --- 6f. Backup alerts (F-04): this cleanup runs after both backup CronJobs (01:00 and 01:30
+  // UTC). A job that never ran stays silent: a Docker Compose instance has no backup CronJob.
+  let backupAlertsCount = 0
+  try {
+    const base = (process.env.NEXT_PUBLIC_APP_URL ?? "").replace(/\/+$/, "")
+    const alerts = backupAlerts(await loadJobRuns(), now, `${base}/super-admin/health`)
+    backupAlertsCount = alerts.length
+    for (const alert of alerts) await notifyOperator(alert)
+  } catch (e) {
+    reportError("cleanup.backup_alerts")(e)
+  }
+
   // --- 7. Encrypt volunteer-facing tokens still stored in clear (#290) ---
   // No-op until TOKEN_ENCRYPTION_KEY is set; then drains the legacy columns.
   const tokenEncryption = await encryptLegacyTokens().catch((e) => {
@@ -338,6 +351,7 @@ async function run(req: Request) {
       passwordReset: clearedResetTokens.count,
     },
     addressSummariesSent,
+    backupAlerts: backupAlertsCount,
   })
   })
 }
