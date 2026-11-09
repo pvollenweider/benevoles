@@ -1,6 +1,6 @@
 # Les bénévoles d'un festival
 
-Un festival dure plusieurs jours et demande beaucoup de monde : le montage avant l'ouverture, la billetterie et la buvette chaque soir, le démontage une fois le public parti. Les soirées finissent après minuit, et quelqu'un peut se désister la veille. Avec benevol.app, vous découpez le festival en postes et en créneaux, et les bénévoles choisissent les leurs depuis un lien.
+Un festival dure plusieurs jours et demande beaucoup de monde : le montage avant l'ouverture, la billetterie et la buvette chaque soir, le démontage une fois le public parti. Les soirées finissent après minuit, et quelqu'un peut se désister la veille. Avec benevol.app, vous découpez le festival en postes et en créneaux, et le staff choisit les siens depuis un lien.
 
 Le service est gratuit aujourd'hui, le code est open source et les données sont hébergées en France.
 
@@ -20,7 +20,7 @@ Le modèle « Festival sur plusieurs jours » prépare trois soirées :
 
 Si le montage vous prend plusieurs jours, le modèle « Montage, exploitation, démontage » part d'une équipe de montage, d'une exploitation par créneaux de quatre heures et d'une équipe de démontage. Pour compléter, une série couvre une plage en une seule saisie : la buvette de 18 h à 2 h par tranches de deux heures se crée d'un coup, après un aperçu.
 
-Le programme des concerts s'affiche en fond coloré sur le planning, et chaque bénévole voit ce qui se joue pendant son créneau.
+Le programme des concerts s'affiche en fond coloré sur le planning, et chaque membre du staff voit ce qui se joue pendant son créneau.
 
 <!-- video: SHIFT_CREATE_SERIES -->
 
@@ -70,7 +70,7 @@ En savoir plus : [les responsables de secteur](../guide/responsables-de-secteur.
 
 ### Les chefs d'équipe doivent-ils avoir accès à l'administration ?
 
-Non. Un responsable de secteur reçoit un lien personnel, sans compte à créer, qui affiche les bénévoles inscrits sur son poste avec leur email et leur téléphone. Il est prévenu des nouvelles inscriptions sur ce poste, et des désistements tant que le paramètre qui les signale reste coché, ce qui est le cas par défaut. Il ne voit rien d'autre de l'événement.
+Non. Un responsable de secteur reçoit un lien personnel, sans compte à créer, qui affiche les membres du staff inscrits sur son poste avec leur email et leur téléphone. Il est prévenu des nouvelles inscriptions sur ce poste, et des désistements tant que le paramètre qui les signale reste coché, ce qui est le cas par défaut. Il ne voit rien d'autre de l'événement.
 
 ### Un bénévole peut-il prendre deux créneaux qui se chevauchent ?
 

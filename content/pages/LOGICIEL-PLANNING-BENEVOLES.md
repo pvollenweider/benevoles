@@ -1,8 +1,8 @@
 # Logiciel de planning pour bénévoles
 
-benevol.app est un logiciel de planning pour les bénévoles d'un événement. Vous découpez la journée en postes et en créneaux, puis vous partagez un lien. Chaque bénévole choisit ses créneaux depuis son téléphone, sans créer de compte ni installer d'application.
+benevol.app est un logiciel de planning pour les bénévoles et le staff d'un événement. Vous découpez la journée en postes et en créneaux, puis vous partagez un lien. Chaque bénévole choisit ses créneaux depuis son téléphone, sans créer de compte ni installer d'application.
 
-Il sert aux événements d'associations, de la buvette d'un après-midi au festival sur plusieurs jours, en passant par la fête de village ou la manifestation sportive. Les horaires d'une équipe salariée, en revanche, ce n'est pas son rôle. Il est gratuit, hébergé en France, et open source : son code est public et libre de réutilisation.
+Il sert aux événements d'associations, de la buvette d'un après-midi au festival sur plusieurs jours, en passant par la fête de village ou la manifestation sportive, et aux équipes mixtes où collaborateurs et bénévoles se relaient. Les horaires d'une équipe entièrement salariée, en revanche, ce n'est pas son rôle. Il est gratuit, hébergé en France, et open source : son code est public et libre de réutilisation.
 
 <!-- actions -->
 - [Demander un espace](/inscription)

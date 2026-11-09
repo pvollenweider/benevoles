@@ -27,7 +27,7 @@ En savoir plus : [les permanences récurrentes](../guide/permanences-recurrentes
 
 Dans la page des créneaux, le bouton **Répéter chaque semaine** vous demande le poste, les jours, le rythme (chaque semaine ou une semaine sur deux), la plage horaire et le nombre de personnes. La plage peut former un seul créneau, ou se découper en créneaux d'une à quatre heures qui se suivent.
 
-Avant la création, un aperçu donne le nombre de dates, les premières d'entre elles, et chaque date exclue avec sa raison. Une fois créés, ce sont des créneaux ordinaires : les bénévoles s'y inscrivent comme aux autres, et les rappels partent avant chacun.
+Avant la création, un aperçu donne le nombre de dates, les premières d'entre elles, et chaque date exclue avec sa raison. Une fois créés, ce sont des créneaux ordinaires : l'équipe s'y inscrit comme aux autres, et les rappels partent avant chacun.
 
 <!-- video: SHIFT_RECURRENCE -->
 
@@ -63,7 +63,7 @@ En savoir plus : [modifier ou arrêter une permanence](../guide/permanences-recu
 
 ## Une équipe qui tourne
 
-Chaque membre a sa fiche, avec des étiquettes, des notes et ses disponibilités. Un poste peut être réservé aux membres qui portent une étiquette, par exemple la caisse aux personnes formées.
+Chaque membre de l'équipe a sa fiche, avec des étiquettes, des notes et ses disponibilités. Un poste peut être réservé aux membres qui portent une étiquette, par exemple la caisse aux personnes formées.
 
 Les heures de chaque bénévole sur une période s'exportent dans un fichier CSV pour le rapport d'activité de l'année, et une attestation de bénévolat s'imprime pour qui en a besoin. Quand une personne quitte l'association et demande l'effacement de ses données personnelles, elles s'effacent en une action, et les chiffres de la saison restent justes.
 

@@ -1,6 +1,6 @@
 # Les bénévoles d'une fête de village
 
-D'une année à l'autre, une fête de village repose sur les mêmes personnes : le comité, quelques familles fidèles, les jeunes qui tiennent le bar le samedi soir. benevol.app met tous leurs créneaux sur une seule page, que vous partagez par un lien. Chacun choisit ses heures depuis son téléphone, sans créer de compte.
+D'une année à l'autre, une fête de village repose sur la même équipe : le comité, quelques familles fidèles, les jeunes qui tiennent le bar le samedi soir. benevol.app met tous leurs créneaux sur une seule page, que vous partagez par un lien. Chacun choisit ses heures depuis son téléphone, sans créer de compte.
 
 C'est gratuit, open source et hébergé en France.
 
@@ -38,7 +38,7 @@ En savoir plus : [dupliquer un événement](../guide/dupliquer-un-evenement.md),
 
 Le lien de l'événement s'envoie par email, se colle dans le groupe de discussion du comité ou s'imprime sur une affiche avec son QR code. Votre association a aussi sa page, à une adresse du type `votre-association.benevol.app`, qui liste vos événements publiés. Quand une société locale tient un poste, la fanfare à la buvette par exemple, vous pouvez lui créer un lien de groupe, avec son propre QR code, qui n'affiche que ses postes.
 
-Vos habitués peuvent recevoir une invitation par email : vous importez leur liste depuis un fichier Excel ou CSV, puis vous les invitez à l'événement. Un bénévole qui s'est déjà inscrit depuis le même navigateur retrouve ses coordonnées remplies.
+Vos habitués peuvent recevoir une invitation par email : vous importez leur liste depuis un fichier Excel ou CSV, puis vous les invitez à l'événement. Un volontaire qui s'est déjà inscrit depuis le même navigateur retrouve ses coordonnées remplies.
 
 <!-- video: MEMBERS_INVITATIONS -->
 

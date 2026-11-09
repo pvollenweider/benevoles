@@ -49,6 +49,8 @@ Le libre choix des créneaux par les bénévoles reste le fonctionnement par dé
 
 La voix est directe, bienveillante, légèrement chaleureuse — mais jamais familière au point d'être condescendante. On tutoie les bénévoles, dans les emails et sur leur page personnelle ; on vouvoie les organisateurs et les responsables de secteur. On ne vend pas, on organise. L'interface s'efface pour laisser l'information devant.
 
+Le choix des mots (bénévole, staff, équipe, volontaires, collaborateurs) suit [`docs/vocabulaire.md`](docs/vocabulaire.md).
+
 Référence d'élégance : Notion / Linear — sobre, structuré, dense sans être oppressant. Le chrome disparaît, le contenu prime.
 
 ## Anti-references

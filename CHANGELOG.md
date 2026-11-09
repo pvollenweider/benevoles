@@ -20,6 +20,7 @@ Format basé sur [Keep a Changelog](https://keepachangelog.com/fr/1.0.0/).
 
 ### Modifié
 
+- Les pages par public parlent aussi de staff, d'équipe et de volontaires selon le contexte, et une charte fixe l'usage de ces mots.
 - `/llms-full.txt` réunit désormais toutes les pages publiques, pas seulement les fonctionnalités et les guides : la FAQ de l'accueil, les pages par public, les tarifs, le manifeste, les guides pratiques, les nouveautés, les articles du blog et les pages légales. Chacune est précédée de son adresse ; une page sans source Markdown (politique de confidentialité, CGU, exploitant d'une instance) garde son titre, son adresse et son résumé.
 - Les pages Tarifs, Pour qui et Logiciel de planning n'ont plus de colonne vide à côté de leur introduction.
 - Les plafonds d'envoi atteints indiquent aussi le type d'email retenu ou refusé (confirmation d'inscription, renvoi du lien personnel, retrait…), pour savoir ce qui les déclenche. Toujours ni adresse ni contenu. <!-- interne -->
