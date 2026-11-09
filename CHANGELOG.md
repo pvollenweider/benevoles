@@ -21,6 +21,7 @@ Format basé sur [Keep a Changelog](https://keepachangelog.com/fr/1.0.0/).
 ### Modifié
 
 - Les pages par public parlent aussi de staff, d'équipe et de volontaires selon le contexte, et une charte fixe l'usage de ces mots.
+- Les guides organisateurs emploient aussi staff, équipe et volontaires là où le contexte s'y prête, en gardant « bénévole » pour tout ce qui reprend l'interface.
 - Les guides gagnent des captures d'écran là où le texte décrit un écran : disponibilités et affectation, gestion des postes, premier événement, paramètres et envois d'emails, adresse de l'organisation, doublons et fusion, modification rapide d'un créneau, équipe, journal, jalons, connexion et suppression ou effacement d'un membre.
 - `/llms-full.txt` réunit désormais toutes les pages publiques, pas seulement les fonctionnalités et les guides : la FAQ de l'accueil, les pages par public, les tarifs, le manifeste, les guides pratiques, les nouveautés, les articles du blog et les pages légales. Chacune est précédée de son adresse ; une page sans source Markdown (politique de confidentialité, CGU, exploitant d'une instance) garde son titre, son adresse et son résumé.
 - Les pages Tarifs, Pour qui et Logiciel de planning n'ont plus de colonne vide à côté de leur introduction.

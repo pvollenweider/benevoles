@@ -45,7 +45,7 @@ L'aperçu donne le nombre de dates et de créneaux, les premières dates, et cha
 
 ![Formulaire « Répéter un créneau chaque semaine » rempli : poste Accueil, du 19 octobre 2026 au 17 janvier 2027, chaque vendredi de 14:00 à 17:00 en un seul créneau, 2 personnes, jours fériés de Suisse exclus et une fermeture le vendredi 30 octobre 2026 ; l'aperçu annonce 10 dates et 3 dates exclues (la fermeture, Noël et Nouvel an), au-dessus du bouton « Créer 10 créneaux »](/doc-img/admin-recurrence-form.png)
 
-Une fois créés, ce sont des créneaux ordinaires : les bénévoles s'y inscrivent comme aux autres, les rappels partent avant chacun, et chaque date se modifie ou se supprime séparément.
+Une fois créés, ce sont des créneaux ordinaires : l'équipe s'y inscrit comme aux autres, les rappels partent avant chacun, et chaque date se modifie ou se supprime séparément.
 
 ## Modifier ou arrêter une permanence
 

@@ -14,7 +14,7 @@ aliases: []
 
 Dans le formulaire de l'événement, à la création comme dans la page d'édition (onglet **Paramètres** de l'événement), section **Spectacles**. Elle apparaît dès que les dates de début et de fin sont renseignées.
 
-Chaque entrée définit une plage horaire qui apparaît en fond coloré sur la timeline, permettant aux bénévoles de visualiser quand ils travaillent par rapport aux spectacles.
+Chaque entrée définit une plage horaire qui apparaît en fond coloré sur la timeline, permettant au staff de visualiser quand il travaille par rapport aux spectacles.
 
 **+ Ajouter** propose les champs : **Nom du spectacle**, **Date**, **Début**, **Fin**.
 
