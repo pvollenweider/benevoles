@@ -28,6 +28,8 @@ Une fois connecté(e), la liste **Premiers pas** s'affiche en haut du tableau de
 
 **Événements**, puis **Nouvel événement**. Sous **Comment commencer ?**, choisissez un modèle (festival, buvette, fête de village…) ou **Page blanche**, puis donnez un titre et des dates. L'événement est créé en brouillon : personne ne le voit tant qu'il n'est pas publié. Voir [Créer un événement](creer-un-evenement.md).
 
+![Page « Nouvel événement » avec le modèle « Fête de village » choisi : les choix Page blanche, Festival sur plusieurs jours, Buvette, Manifestation sportive, Fête de village et les autres modèles, le titre et le premier jour déjà remplis, la liste « Ce qui sera créé » poste par poste, puis le bouton « Créer le brouillon (10 créneaux) »](/doc-img/admin-new-event.png)
+
 ## 3. Poser les postes et les créneaux
 
 Sur la page **Créneaux**, **+ Ajouter un créneau** : un poste (par exemple « Accueil »), un jour, des horaires et un nombre de places, puis **Ajouter**. Le poste est créé en même temps que son premier créneau. Avec un modèle, les créneaux sont déjà là : ajustez-les. Voir [Configurer les créneaux](configurer-les-creneaux.md), et [Gérer les postes](gerer-les-postes.md) pour renommer ou réordonner les postes.

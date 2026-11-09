@@ -16,6 +16,8 @@ Une fiche se supprime définitivement quand elle est **inactive** et n'a **aucun
 
 Le bouton **Supprimer** n'apparaît, sur la ligne de la fiche dans la liste des membres et sur sa page **Activité**, que lorsqu'elle remplit ces deux conditions ; sinon la page **Activité** explique en mots pourquoi elle ne peut pas être supprimée (fiche encore active, ou inscriptions à conserver). La confirmation nomme la personne, précise que l'action est **irréversible** et liste ce qui disparaît avec la fiche : ses invitations, ses réponses aux questions des événements, ses abonnements aux notifications du navigateur, les suivis d'envoi d'email la concernant et les doublons possibles écartés qui la citaient. Aucun email n'est envoyé. L'action est journalisée dans le journal d'activité de l'organisation ; l'activité des autres fiches n'est pas affectée.
 
+![Fenêtre « Supprimer Antoine Bovard ? » : la phrase « Cette action est irréversible », la liste de ce qui disparaît avec la fiche, « Aucun email n'est envoyé », puis les boutons Annuler et Supprimer](/doc-img/admin-member-delete.png)
+
 ## Effacer les données personnelles d'un membre
 
 Quand une personne demande l'effacement de ses données, ouvrez sa page **Activité** (depuis la liste des membres) et choisissez **Effacer les données personnelles**. C'est possible pour toute fiche, active ou non, avec ou sans inscriptions, par les propriétaires comme par les organisateurs. Seule une fiche déjà fusionnée dans une autre ne le propose pas : effacez alors les données de la fiche conservée.
@@ -24,6 +26,8 @@ La fenêtre de confirmation récapitule, avec les nombres de cette fiche :
 
 - **Effacé** : nom, prénom (la fiche s'appelle désormais « Bénévole effacé » et est désactivée), email, téléphone, date de naissance, notes, étiquettes et disponibilités ; le commentaire et le téléphone laissés à ses inscriptions (ses liens personnels ne fonctionnent plus) ; ses invitations (et leur réponse « pas disponible »), ses réponses aux questions des événements (aussi celles que le journal de l'événement a notées quand elle les a modifiées depuis sa page **Mes inscriptions**), ses abonnements aux notifications, ses désignations comme responsable de secteur faites avec son adresse, les anciennes fiches fusionnées dans la sienne, les emails en attente ou déjà envoyés qui la concernent ou la nomment, et les suivis d'envoi d'email.
 - **Conservé** : ses inscriptions (créneau, statut, présence), sans identité, pour que les effectifs, les heures et l'historique des événements restent justes ; les journaux d'activité, où elle apparaît comme « Bénévole effacé ». Les attestations de bénévolat et les exports d'heures ne la nomment plus.
+
+![Fenêtre « Effacer les données personnelles de Camille Rochat ? » : l'avertissement d'irréversibilité, la liste « Effacé » (nom, email, téléphone, date de naissance, notes, étiquettes et disponibilités, commentaires et téléphones des inscriptions, invitations, réponses aux questions, emails) et la liste « Conservé » (inscriptions sans identité et journaux d'activité), le champ où saisir « effacer », puis les boutons Annuler et Effacer les données](/doc-img/admin-member-erase.png)
 
 Si la personne a encore des inscriptions à venir, le récapitulatif le signale : elles restent comptées dans les effectifs, retirez-les d'abord si elle ne viendra pas. Aucun email n'est envoyé.
 

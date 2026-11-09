@@ -16,6 +16,8 @@ aliases: []
 
 L'historique complet de ce qui s'est passé sur un événement : créneaux créés/modifiés, inscriptions, annulations, pages ajoutées, responsables désignés, jalons… Trois modes :
 
+![Page « Journal » d'un événement : les filtres par type d'élément, auteur, action et période, les onglets « Explorer », « Rejouer » et « Récit », puis la liste datée des entrées — publication de l'événement, créations et modifications de créneaux, invitation envoyée, inscription de Camille Rochat, ajout manuel, annulation, présence marquée et modification de l'événement — avec « Voir le récit » sur chacune](/doc-img/admin-event-log.png)
+
 - **Explorer** : liste filtrable par type d'élément, auteur (organisateur, bénévole ou système), action ou période
 - **Rejouer** : reconstitue l'état d'un créneau ou d'une inscription à un instant donné
 - **Récit** : raconte en une phrase la suite des événements liés (ex. une annulation qui déclenche une offre de liste d'attente)

@@ -7,7 +7,8 @@
  * seeded with the demo event (scripts/seed-demo.ts), never against production.
  *
  *   1. A throwaway Postgres, e.g. `docker run -d -p 55432:5432 … postgres:16-alpine`.
- *   2. DATABASE_URL, AUTH_SECRET, ORG_ADMIN_EMAIL, ORG_ADMIN_PASSWORD and
+ *   2. DATABASE_URL, AUTH_SECRET, ORG_ADMIN_EMAIL (a realistic one such as
+ *      elodie.rochat@example.org: it shows in the team and email settings captures), ORG_ADMIN_PASSWORD and
  *      NEXT_PUBLIC_APP_URL=http://localhost:3200 in the environment.
  *   3. npx prisma migrate deploy && npx tsx prisma/seed.ts && npx tsx scripts/seed-demo.ts
  *      && npx tsx scripts/seed-demo-permanences.ts && npx tsx scripts/seed-demo-day-of.ts
@@ -50,6 +51,14 @@ async function settle(page) {
   // The dev server's floating indicator isn't part of the product.
   await page.addStyleTag({ content: "nextjs-portal { display: none !important; }" })
   await page.evaluate(() => document.fonts?.ready)
+  // The local host never shows in a capture: addresses read as on the hosted service.
+  const host = new URL(BASE).host
+  await page.evaluate((h) => {
+    const walker = document.createTreeWalker(document.body, NodeFilter.SHOW_TEXT)
+    for (let n = walker.nextNode(); n; n = walker.nextNode()) {
+      if (n.nodeValue?.includes(h)) n.nodeValue = n.nodeValue.replaceAll(h, "benevol.app")
+    }
+  }, host)
   // The timeline measures its card once mounted.
   await page.waitForTimeout(500)
 }
@@ -58,7 +67,7 @@ async function settle(page) {
 async function save(page, name, { target, fullPage = false, clip } = {}) {
   const file = path.join(OUT, `${name}.png`)
   if (target) await target.screenshot({ path: file })
-  else if (clip) await page.screenshot({ path: file, clip })
+  else if (clip) await page.screenshot({ path: file, clip, fullPage })
   else await page.screenshot({ path: file, fullPage })
   console.log(`  ✓ ${name}.png`)
 }
@@ -258,12 +267,40 @@ async function run() {
 
   // ── Administration ───────────────────────────────────────────────────────
   console.log("Administration…")
+  // The sign-in screen, in its own signed-out context (the admin session below is not opened yet).
+  await shot("admin-login", async () => {
+    const signedOut = await browser.newContext(DESKTOP)
+    const login = await signedOut.newPage()
+    await login.goto(`${BASE}/admin/login`)
+    await settle(login)
+    await save(login, "admin-login", { target: login.locator("main") })
+    await signedOut.close()
+  })
+
   const { context, page: a, eventId } = await adminSession(browser)
   const ev = (suffix = "") => `${BASE}/admin/events/${eventId}${suffix}`
   const visit = async (url) => { await a.goto(url); await settle(a) }
 
+  // « Nouvel événement »: the « Comment commencer ? » templates, one chosen and dated. Nothing is
+  // created (no submit).
+  await shot("admin-new-event", async () => {
+    await visit(`${BASE}/admin/events/new`)
+    await a.getByRole("radio", { name: /Fête de village/ }).check()
+    const start = new Date(Date.now() + 21 * 86_400_000).toISOString().slice(0, 10)
+    await a.getByLabel(/Premier jour/).fill(start)
+    await a.evaluate(() => document.activeElement?.blur())
+    await a.waitForTimeout(200)
+    await save(a, "admin-new-event", { target: a.locator("main") })
+  })
+
   await shot("admin-dashboard", async () => { await visit(`${BASE}/admin/dashboard`); await save(a, "admin-dashboard") })
   await shot("admin-event-overview", async () => { await visit(ev()); await save(a, "admin-event-overview") })
+  await shot("admin-milestones", async () => {
+    await visit(ev())
+    const section = a.getByRole("region", { name: "Jalons" })
+    await section.waitFor()
+    await save(a, "admin-milestones", { target: section })
+  })
   await shot("admin-group-links", async () => {
     await visit(ev("/share"))
     await save(a, "admin-group-links", { target: a.getByRole("main") })
@@ -278,6 +315,57 @@ async function run() {
   })
   await shot("admin-staffing", async () => { await visit(ev("/staffing")); await save(a, "admin-staffing") })
   await shot("admin-shifts", async () => { await visit(ev("/shifts")); await save(a, "admin-shifts") })
+  // « Gérer les postes »: the panel, with the demo event's six postes and their actions.
+  await shot("admin-roles", async () => {
+    await visit(ev("/shifts"))
+    await a.getByRole("button", { name: "Gérer les postes", exact: true }).click()
+    const panel = a.getByRole("heading", { name: "Gérer les postes", exact: true }).locator("xpath=../..")
+    await panel.waitFor()
+    await save(a, "admin-roles", { target: panel })
+  })
+  // A bar of the timeline, opened: label, places, minimum, apply-to-poste, times, status, duplicate,
+  // registrations and delete, without leaving the planning.
+  await shot("admin-shift-quick-edit", async () => {
+    // A taller window, so the side panel shows its last buttons instead of scrolling.
+    await a.setViewportSize({ width: 1280, height: 1100 })
+    await visit(ev("/shifts"))
+    await a.getByRole("button", { name: /^Buvette, 10h–14h/ }).first().click()
+    const dialog = a.getByRole("dialog")
+    await dialog.waitFor()
+    // The panel scrolls inside itself: stop above its footer instead of cutting it in half.
+    const box = await dialog.boundingBox()
+    const last = await dialog.getByText(/inscriptions? existantes?/).boundingBox()
+    const bottom = last ? last.y + last.height + 12 : box.y + box.height
+    await save(a, "admin-shift-quick-edit", { clip: { x: box.x, y: box.y, width: box.width, height: bottom - box.y } })
+    await a.keyboard.press("Escape")
+    await a.setViewportSize(DESKTOP.viewport)
+  })
+  // « Disponibilités »: the answer filters and the people asked, with their state and link.
+  await shot("admin-availability", async () => {
+    await visit(ev("/availability"))
+    await a.getByRole("region", { name: "Personnes sollicitées" }).waitFor()
+    await a.evaluate(() => window.scrollTo(0, 0))
+    await save(a, "admin-availability")
+  })
+  // « Affecter selon les disponibilités » for the Sunday dismantling: the four availability groups.
+  await shot("admin-availability-assign", async () => {
+    await visit(ev("/availability/assign"))
+    const value = await a.getByLabel("Créneau").locator("option").filter({ hasText: /Démontage, 15:00 à 18:00/ }).getAttribute("value")
+    if (!value) throw new Error("Démontage shift not found in the availabilities page")
+    await visit(`${ev("/availability/assign")}?shift=${encodeURIComponent(value)}`)
+    await a.getByRole("heading", { name: /^Personnes à affecter/ }).waitFor()
+    await a.evaluate(() => window.scrollTo(0, 0))
+    // The shift picker and the first groups of people, not the whole (very long) list.
+    const main = await a.locator("main").boundingBox()
+    await save(a, "admin-availability-assign", { fullPage: true, clip: { x: main.x, y: main.y, width: main.width, height: Math.min(main.height, 1500) } })
+  })
+  // The event journal in « Explorer » mode, with the seeded history.
+  await shot("admin-event-log", async () => {
+    await visit(ev("/log"))
+    await a.getByText("Voir le récit").first().waitFor()
+    await a.evaluate(() => window.scrollTo(0, 0))
+    await save(a, "admin-event-log", { target: a.locator("main") })
+  })
   await shot("admin-registrations", async () => { await visit(ev("/registrations")); await save(a, "admin-registrations") })
   await shot("admin-registrations-requests", async () => { await visit(ev("/registrations?demandes=1")); await save(a, "admin-registrations-requests") })
 
@@ -305,7 +393,61 @@ async function run() {
   await shot("admin-pages", async () => { await visit(ev("/pages")); await save(a, "admin-pages") })
   await shot("admin-message", async () => { await visit(ev("/message")); await save(a, "admin-message") })
   await shot("admin-print", async () => { await visit(ev("/print")); await save(a, "admin-print") })
+
+  // Paramètres → Emails: the organisation's email settings, then the delivery list.
+  await shot("admin-email-settings", async () => {
+    await visit(`${BASE}/admin/settings/notifications`)
+    const form = a.getByRole("heading", { name: "Paramètres des emails" }).locator("xpath=..")
+    await form.waitFor()
+    await save(a, "admin-email-settings", { target: form })
+  })
+  await shot("admin-emails-sent", async () => {
+    await visit(`${BASE}/admin/settings/notifications`)
+    const heading = a.getByRole("heading", { name: "Emails envoyés" })
+    await heading.waitFor()
+    await heading.evaluate((el) => window.scrollTo(0, el.getBoundingClientRect().top + window.scrollY - 120))
+    const region = a.getByRole("region", { name: /Emails récents de l'organisation/ })
+    const h = await heading.boundingBox()
+    const r = await region.boundingBox()
+    if (!h || !r) throw new Error("sent emails table not found")
+    const x = Math.min(h.x, r.x) - 16
+    await save(a, "admin-emails-sent", { clip: { x, y: h.y - 16, width: Math.max(h.x + h.width, r.x + r.width) - x + 16, height: r.y + r.height - h.y + 32 } })
+  })
+
+  // Paramètres → Adresse de votre espace: the identifier and the old identifiers that still redirect.
+  await shot("admin-organisation-settings", async () => {
+    await visit(`${BASE}/admin/settings/admins`)
+    const card = a.getByRole("heading", { name: "Adresse de votre espace" }).locator("xpath=..")
+    await card.waitFor()
+    await save(a, "admin-organisation-settings", { target: card })
+  })
+  // The same Paramètres page, « Organisateurs »: roles, pending invitations and the invitation button.
+  await shot("admin-team", async () => {
+    await visit(`${BASE}/admin/settings/admins`)
+    const heading = a.getByRole("heading", { name: /^Organisateurs \(/ })
+    await heading.waitFor()
+    await save(a, "admin-team", { target: heading.locator("xpath=../..") })
+  })
+
   await shot("admin-members", async () => { await visit(`${BASE}/admin/members`); await save(a, "admin-members") })
+
+  // « Doublons possibles »: the seeded pair (same name, phone and birth date, one letter apart in
+  // the address) with its reasons, « Ignorer » and « Comparer et fusionner ».
+  await shot("admin-duplicates", async () => {
+    await visit(`${BASE}/admin/members/duplicates`)
+    await a.getByText(/Sofia Martin et Sofia Martin/).first().waitFor()
+    await save(a, "admin-duplicates", { target: a.getByRole("list").filter({ hasText: /Sofia Martin/ }).first() })
+  })
+  // The merge preview: the fields to keep, the notes, what will be moved, and the confirmation.
+  await shot("admin-merge-preview", async () => {
+    await visit(`${BASE}/admin/members/duplicates`)
+    await a.getByRole("link", { name: /Comparer et fusionner/ }).first().click()
+    await a.waitForURL(/\/merge\?with=/)
+    await settle(a)
+    const preview = a.getByRole("heading", { name: /Aperçu de la fusion avec/ })
+    await preview.waitFor()
+    await save(a, "admin-merge-preview", { target: preview.locator("xpath=..") })
+  })
 
   await shot("admin-member-activity", async () => {
     await visit(`${BASE}/admin/members`)
@@ -314,6 +456,39 @@ async function run() {
     await settle(a)
     await a.evaluate(() => window.scrollTo(0, 0))
     await save(a, "admin-member-activity")
+  })
+
+  // « Supprimer » on an inactive record without any registration (the seeded Antoine Bovard):
+  // the irreversible confirmation, with what disappears and what is not sent.
+  await shot("admin-member-delete", async () => {
+    await visit(`${BASE}/admin/members?q=${encodeURIComponent("Antoine Bovard")}`)
+    await a.getByRole("link", { name: "Activité de Antoine Bovard" }).click()
+    await a.waitForURL(/\/admin\/members\/[^/]+$/)
+    await settle(a)
+    await a.evaluate(() => window.scrollTo(0, 0))
+    await a.getByRole("button", { name: "Supprimer Antoine Bovard" }).click()
+    const dialog = a.getByRole("alertdialog")
+    await dialog.waitFor()
+    await save(a, "admin-member-delete", { target: dialog })
+    await dialog.getByRole("button", { name: "Annuler" }).click()
+  })
+  // « Effacer les données personnelles » of Camille: the recap of what is erased and kept, and the
+  // word to type before the irreversible confirmation.
+  await shot("admin-member-erase", async () => {
+    await visit(`${BASE}/admin/members?q=${encodeURIComponent("Camille Rochat")}`)
+    await a.getByRole("link", { name: "Activité de Camille Rochat" }).click()
+    await a.waitForURL(/\/admin\/members\/[^/]+$/)
+    await settle(a)
+    await a.evaluate(() => window.scrollTo(0, 0))
+    // A taller window, so the whole confirmation fits without scrolling inside it.
+    await a.setViewportSize({ width: 1280, height: 1300 })
+    await a.getByRole("button", { name: "Effacer les données personnelles de Camille Rochat" }).click()
+    const dialog = a.getByRole("alertdialog")
+    await dialog.waitFor()
+    await dialog.getByLabel(/Pour confirmer, saisissez/).fill("effacer")
+    await save(a, "admin-member-erase", { target: dialog })
+    await dialog.getByRole("button", { name: "Annuler" }).click()
+    await a.setViewportSize(DESKTOP.viewport)
   })
 
   await shot("admin-event-review", async () => {

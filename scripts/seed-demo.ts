@@ -20,7 +20,8 @@
 
 import { PrismaClient } from "../src/generated/prisma/client"
 import { pgAdapter } from "../src/lib/prisma-adapter"
-import { linkToken, registrationToken } from "../src/lib/token-vault"
+import { encryptValue, linkToken, registrationToken } from "../src/lib/token-vault"
+import { resolveDay, type DayAnswerInput } from "../src/lib/event-availability"
 
 export const DEMO_EVENT_SLUG = "fete-du-village"
 export const DEMO_TOKENS = {
@@ -98,6 +99,14 @@ async function main() {
     },
   })
 
+  // An old address, so « Paramètres → Adresse de votre espace » shows the redirect history.
+  await prisma.orgSlugHistory.deleteMany({ where: { organizationId: org.id, slug: { not: "fetes-montvert" } } })
+  await prisma.orgSlugHistory.upsert({
+    where: { slug: "fetes-montvert" },
+    update: { organizationId: org.id, createdAt: at(-90, 10) },
+    create: { organizationId: org.id, slug: "fetes-montvert", createdAt: at(-90, 10) },
+  })
+
   // The organizer signed in on the admin screenshots.
   await prisma.adminUser.updateMany({ where: { organizationId: org.id, email: process.env.ORG_ADMIN_EMAIL ?? "org-admin@localhost" }, data: { name: "Élodie Rochat" } })
   // A small, realistic administration team for the permissions masterclass. Reuse the local
@@ -136,6 +145,11 @@ async function main() {
       publicStatus: "published",
       startDate: SAT,
       endDate: SUN,
+      // Dated availability (#1146, beta): the event asks its members date by date.
+      availabilityEnabled: true,
+      availabilityAdoptedAt: at(-15, 9),
+      availabilityTimeZone: "Europe/Zurich",
+      availabilityDeadline: at(1, 18),
       requirePhone: true,
       accentColorKey: "emerald",
       publicInstructions: "Merci de votre aide ! Présentez-vous au stand d'accueil 15 minutes avant votre créneau : on vous remettra votre t-shirt.",
@@ -188,6 +202,32 @@ async function main() {
   }
   const [camille, julien, lea, noah, emma, lucas, chloe, hugo, manon, louis, sarah, nathan, ines, theo, alice, gabriel, zoe, adam, lina, raphael, anna, tom, eva, marc] = people
 
+  // Two records of the same person (#601): same name, phone and birth date, and an address typed
+  // without one letter. The « Doublons possibles » page and the merge preview show them.
+  const [sofiaKept] = await Promise.all([
+    prisma.volunteer.create({
+      data: {
+        organizationId: org.id, firstName: "Sofia", lastName: "Martin",
+        email: "sofia.martin@example.org", phone: "079 555 90 10", birthDate: new Date("1994-03-18"),
+        tags: ["habitué"], availabilityPeriods: ["après-midi"],
+      },
+    }),
+    prisma.volunteer.create({
+      data: {
+        organizationId: org.id, firstName: "Sofia", lastName: "Martin",
+        email: "sofia.martn@example.org", phone: "+41 79 555 90 10", birthDate: new Date("1994-03-18"),
+        notes: "Fiche créée à la main après une inscription téléphonique.",
+      },
+    }),
+  ])
+  // An inactive record without any registration (#667): « Supprimer » is offered on its page.
+  await prisma.volunteer.create({
+    data: {
+      organizationId: org.id, firstName: "Antoine", lastName: "Bovard",
+      email: "antoine.bovard@example.org", phone: "078 555 80 20", active: false, tags: ["ancien"],
+      notes: "N'a plus participé depuis 2023.",
+    },
+  })
   let n = 0
   const register = (shift: { id: string }, v: { id: string }, extra: Record<string, unknown> = {}) =>
     prisma.registration.create({
@@ -243,6 +283,76 @@ async function main() {
   await prisma.registration.updateMany({ where: { shiftId: { in: [montage.id, securite.id] } }, data: { groupLinkId: pompiers.id } })
   await prisma.registration.updateMany({ where: { shiftId: buvette1.id, volunteerId: { in: [noah.id, chloe.id] } }, data: { groupLinkId: fanfare.id } })
 
+  // Dated availability (#1146, beta): answers in every state of the overview, and useful groups
+  // in « Affecter selon les disponibilités » (complete, partial, no answer, unavailable).
+  const availabilityAnswers: {
+    v: { id: string }; token: string; answeredBy: "volunteer" | "admin"; answeredAt: Date | null
+    days: DayAnswerInput[]
+  }[] = [
+    { v: camille, token: "camille", answeredBy: "volunteer", answeredAt: at(-2, 9), days: [
+      { date: iso(SAT), ranges: [{ start: "08:00", end: "18:00" }] },
+      { date: iso(SUN), ranges: [{ start: "10:00", end: "16:00" }] },
+    ] },
+    { v: lea, token: "lea", answeredBy: "volunteer", answeredAt: at(-2, 14), days: [
+      { date: iso(SAT), ranges: [{ start: "13:00", end: "18:00" }] },
+    ] },
+    { v: emma, token: "emma", answeredBy: "volunteer", answeredAt: at(-1, 19), days: [
+      { date: iso(SAT), ranges: [{ start: "08:00", end: "12:00" }] },
+      { date: iso(SUN), ranges: [{ start: "09:00", end: "13:00" }] },
+    ] },
+    { v: noah, token: "noah", answeredBy: "volunteer", answeredAt: at(-1, 20), days: [
+      { date: iso(SAT), ranges: [{ start: "10:00", end: "14:00" }, { start: "18:00", end: "22:00" }] },
+      { date: iso(SUN), ranges: [{ start: "14:00", end: "18:00" }] },
+    ] },
+    { v: julien, token: "julien", answeredBy: "volunteer", answeredAt: at(-3, 8), days: [
+      { date: iso(SAT), ranges: [] },
+      { date: iso(SUN), ranges: [] },
+    ] },
+    { v: hugo, token: "hugo", answeredBy: "volunteer", answeredAt: null, days: [] },
+    { v: manon, token: "manon", answeredBy: "volunteer", answeredAt: at(-1, 12), days: [
+      { date: iso(SAT), ranges: [{ start: "09:00", end: "18:00" }] },
+      { date: iso(SUN), ranges: [{ start: "09:00", end: "18:00" }] },
+    ] },
+    { v: ines, token: "ines", answeredBy: "volunteer", answeredAt: at(-2, 21), days: [
+      { date: iso(SUN), ranges: [{ start: "17:00", end: "22:00" }] },
+    ] },
+    { v: lucas, token: "lucas", answeredBy: "volunteer", answeredAt: at(-1, 18), days: [
+      { date: iso(SAT), ranges: [{ start: "07:00", end: "12:00" }] },
+      { date: iso(SUN), ranges: [{ start: "14:00", end: "18:00" }] },
+    ] },
+    { v: sarah, token: "sarah", answeredBy: "volunteer", answeredAt: null, days: [] },
+    { v: zoe, token: "zoe", answeredBy: "volunteer", answeredAt: at(-2, 11), days: [
+      { date: iso(SAT), ranges: [{ start: "14:00", end: "18:00" }] },
+    ] },
+  ]
+  for (const answer of availabilityAnswers) {
+    const days = answer.days.map((day) => {
+      const resolved = resolveDay(day, "Europe/Zurich")
+      if (!resolved.ok) throw new Error(resolved.error)
+      return resolved.value
+    })
+    await prisma.availabilityRequest.create({
+      data: {
+        eventId: event.id, volunteerId: answer.v.id, revision: 1,
+        answeredAt: answer.answeredAt, answeredBy: answer.answeredAt ? answer.answeredBy : null,
+        sentAt: at(-6, 9),
+        ...linkToken.data(`demo-availability-${answer.token}-0001`),
+        ...(days.length > 0 ? {
+          days: {
+            create: days.map((day) => ({
+              eventId: event.id, date: new Date(`${day.date}T00:00:00Z`),
+              ranges: {
+                create: day.ranges.map((r) => ({
+                  eventId: event.id, startTime: r.startTime, endTime: r.endTime, startsAt: r.startsAt, endsAt: r.endsAt,
+                })),
+              },
+            })),
+          },
+        } : {}),
+      },
+    })
+  }
+
   await prisma.sectorLeader.create({
     data: { eventId: event.id, roleName: "Buvette", name: "Élodie Rochat", email: "elodie.rochat@example.org", ...linkToken.data(DEMO_TOKENS.leader) },
   })
@@ -275,6 +385,7 @@ async function main() {
     await prisma.questionAnswer.create({ data: { questionId: tshirt.id, eventId: event.id, volunteerId: v.id, values: [size] } })
   }
   await prisma.questionAnswer.create({ data: { questionId: drivingLicense.id, eventId: event.id, volunteerId: lucas.id, values: ["Permis B depuis 2021"] } })
+  await prisma.questionAnswer.create({ data: { questionId: tshirt.id, eventId: event.id, volunteerId: sofiaKept.id, values: ["S"] } })
 
   // Invitations: some used, some not yet answered.
   for (const [i, v] of [camille, julien, lea, emma, manon, raphael, anna, tom, eva].entries()) {
@@ -302,6 +413,42 @@ async function main() {
       subject: "Rendez-vous pour ton créneau", message: "Bonjour,\n\nRendez-vous au stand d'accueil 15 minutes avant ton créneau.",
       audienceLabel: "Tous les inscrits", recipientCount: 22, sentCount: 22, createdAt: day(-2),
     },
+  })
+
+  // Email delivery page (#382): one recent row per state, with a real recipient and kind, so the
+  // guide can show « Envoyé », « En attente d'envoi », « Nouvel essai prévu », « Échec définitif »
+  // and « Annulé » without describing an empty screen.
+  const outboxPayload = (kind: string, name: string, address: string) => {
+    const payload = { kind, recipient: { name, email: address }, data: {} }
+    const enc = encryptValue(JSON.stringify(payload))
+    return enc ? { enc } : payload
+  }
+  await prisma.notificationOutbox.deleteMany({ where: { organizationId: org.id } })
+  await prisma.notificationOutbox.createMany({
+    data: [
+      {
+        organizationId: org.id, status: "sent", createdAt: at(-1, 9), nextAttemptAt: at(-1, 9), sentAt: at(-1, 9),
+        payload: outboxPayload("registration_confirmation", "Camille Rochat", "camille.rochat@example.org"),
+      },
+      {
+        organizationId: org.id, status: "pending", createdAt: new Date(), nextAttemptAt: new Date(),
+        payload: outboxPayload("member_invite", "Léa Morand", "lea.morand@example.org"),
+      },
+      {
+        organizationId: org.id, status: "pending", attempts: 2, createdAt: at(-1, 10),
+        nextAttemptAt: new Date(Date.now() + 10 * 60_000), lastError: "smtp:failed_temporary:timeout:-:-",
+        payload: outboxPayload("reminder_j1", "Julien Favre", "julien.favre@example.org"),
+      },
+      {
+        organizationId: org.id, status: "failed", attempts: 6, createdAt: at(-2, 15), nextAttemptAt: at(-2, 15),
+        lastError: "smtp:rejected_permanent:mailbox_unknown:550:5.1.1",
+        payload: outboxPayload("registration_confirmation", "Marc Duc", "marc.duc@example.org"),
+      },
+      {
+        organizationId: org.id, status: "cancelled", createdAt: at(-3, 11), nextAttemptAt: at(-3, 11), lastError: "member_deleted",
+        payload: outboxPayload("targeted_message", "Anna Bühler", "anna.buhler@example.org"),
+      },
+    ],
   })
 
   // A realistic event history for the admin demo video. The application normally writes these
