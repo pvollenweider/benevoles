@@ -229,15 +229,16 @@ if [ "$RESTORE_MODE" = "full" ]; then
     LOAD_STATUS=1
   fi
 
-  ERROR_COUNT=$(grep -c '^ERROR' "${WORK}/load.log" 2>/dev/null || true)
-  NON_ROLE_ERRORS=$(grep '^ERROR' "${WORK}/load.log" 2>/dev/null \
-    | grep -v -E '^ERROR: +role ".*" does not exist' \
+  # psql may prefix its errors with "psql:<stdin>:<line>: " depending on how it reads the dump.
+  ERROR_COUNT=$(grep -c -E '(^|: )ERROR:' "${WORK}/load.log" 2>/dev/null || true)
+  NON_ROLE_ERRORS=$(grep -E '(^|: )ERROR:' "${WORK}/load.log" 2>/dev/null \
+    | grep -v -E 'ERROR: +role ".*" does not exist' \
     | wc -l | tr -d ' ')
 
   if [ "$NON_ROLE_ERRORS" -gt 0 ]; then
     echo "ERREUR : ${NON_ROLE_ERRORS} erreur(s) de chargement non liée(s) à un rôle absent :" >&2
-    grep '^ERROR' "${WORK}/load.log" \
-      | grep -v -E '^ERROR: +role ".*" does not exist' \
+    grep -E '(^|: )ERROR:' "${WORK}/load.log" \
+      | grep -v -E 'ERROR: +role ".*" does not exist' \
       | head -n 20 >&2
     exit 1
   fi

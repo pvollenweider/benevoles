@@ -315,4 +315,16 @@ assert_no_passphrase_in_traces
 assert_no_decrypted_left
 pass "restore-test-offsite.sh tolerates a lone missing-role error"
 
+# 11. psql may prefix its errors with "psql:<stdin>:<line>: ": still counted as load errors
+reset_traces
+if SWISSBACKUP_DIR="$WORK/local-dumps" BACKUP_PASSPHRASE="$PASSPHRASE" RESTORE_MODE=full \
+     FAKE_DOCKER_LOAD_ERROR='psql:<stdin>:12: ERROR:  relation "public.Organization" does not exist' \
+     sh "$RESTORE_SCRIPT" >"$WORK/out.txt" 2>&1; then
+  fail "restore-test-offsite.sh missed a prefixed load error:\n$(cat "$WORK/out.txt")"
+fi
+grep -q "non liée(s) à un rôle absent" "$WORK/out.txt" || fail "prefixed load error message missing"
+assert_container_removed
+assert_no_decrypted_left
+pass "restore-test-offsite.sh counts psql-prefixed load errors"
+
 echo "All offsite backup tests passed."
