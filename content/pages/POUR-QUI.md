@@ -1,6 +1,6 @@
 # Pour quelles associations ?
 
-benevol.app ne fait qu'une chose : le planning des bénévoles. Vous créez des postes et des créneaux, puis vous partagez un lien que chacun ouvre sur son téléphone pour choisir ses heures. Ce planning prend pourtant une forme différente d'une association à l'autre. Voici quatre situations courantes, et ce qui compte dans chacune.
+benevol.app ne fait qu'une chose : le planning de vos bénévoles, de votre équipe ou de votre staff. Vous créez des postes et des créneaux, puis vous partagez un lien que chacun ouvre sur son téléphone pour choisir ses heures. Ce planning prend pourtant une forme différente d'une association à l'autre. Voici quatre situations courantes, et ce qui compte dans chacune.
 
 <!-- actions -->
 - [Demander un espace](/inscription)
@@ -32,7 +32,7 @@ Une épicerie participative, une distribution alimentaire, un repair café ou un
 
 ## Une autre situation
 
-Un club qui tient la buvette de ses matchs, une association de parents d'élèves pour la kermesse, un salon sur un week-end : le principe reste le même. La page [Fonctionnalités](FEATURES.md) décrit tout ce que fait benevol.app, et les [tutoriels vidéo](/videos) montrent chaque étape. Pour une question sur votre cas, écrivez à [contact@benevol.app](mailto:contact@benevol.app).
+Un club qui tient la buvette de ses matchs, une association de parents d'élèves pour la kermesse, un salon sur un week-end qui réunit des salariés et des bénévoles : le principe reste le même. La page [Fonctionnalités](FEATURES.md) décrit tout ce que fait benevol.app, et les [tutoriels vidéo](/videos) montrent chaque étape. Pour une question sur votre cas, écrivez à [contact@benevol.app](mailto:contact@benevol.app).
 
 ## Questions fréquentes
 

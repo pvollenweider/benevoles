@@ -8,7 +8,7 @@ Rien aujourd'hui. Le logiciel est libre et open source, sous licence AGPL, et le
 
 ### Comment les bénévoles trouvent-ils la page d'inscription ?
 
-Vous partagez le lien de l'événement : par email, sur les réseaux de l'association ou sur une affiche avec son QR code. Vous pouvez aussi intégrer l'inscription dans une page du site de votre association, pour que les bénévoles choisissent leurs créneaux sans le quitter. Vos membres habituels peuvent recevoir une invitation par email. Personne n'a de compte à créer.
+Vous partagez le lien de l'événement : par email, sur les réseaux de l'association ou sur une affiche avec son QR code. Vous pouvez aussi intégrer l'inscription dans une page du site de votre association, pour que les bénévoles et le staff choisissent leurs créneaux sans le quitter. Vos membres habituels peuvent recevoir une invitation par email. Personne n'a de compte à créer.
 
 ### Que reçoit un bénévole après son inscription ?
 
@@ -20,7 +20,7 @@ Oui. La page d'inscription est pensée d'abord pour le téléphone : le planning
 
 ### Où sont les données ?
 
-benevol.app est développé en Suisse, mais l'application et sa base de données sont hébergées en France, chez OVH. Une copie des sauvegardes, chiffrée avec une clé que le prestataire ne détient pas, est conservée hors site chez Infomaniak, en Suisse. Chaque organisation ne voit que ses événements et ses bénévoles, et peut tout exporter à tout moment. Le site ne dépose aucun cookie de pistage, d'analyse ou de publicité. Le détail est dans la [politique de confidentialité](/legal/privacy).
+benevol.app est développé en Suisse, mais l'application et sa base de données sont hébergées en France, chez OVH. Une copie des sauvegardes, chiffrée avec une clé que le prestataire ne détient pas, est conservée hors site chez Infomaniak, en Suisse. Chaque organisation ne voit que ses événements, ses bénévoles et son staff, et peut tout exporter à tout moment. Le site ne dépose aucun cookie de pistage, d'analyse ou de publicité. Le détail est dans la [politique de confidentialité](/legal/privacy).
 
 ### Peut-on l'installer soi-même ?
 

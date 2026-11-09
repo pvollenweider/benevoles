@@ -1,6 +1,6 @@
 # Les bénévoles d'une manifestation sportive
 
-Une course populaire se joue en une matinée. Il faut du monde aux dossards dès 7 h, un signaleur à chaque carrefour avant le départ et un ravitaillement prêt au passage des premiers coureurs. benevol.app place chaque bénévole à son point, avec l'heure et la consigne, et vous montre le matin même qui est arrivé.
+Une course populaire se joue en une matinée. Il faut du monde aux dossards dès 7 h, un signaleur à chaque carrefour avant le départ et un ravitaillement prêt au passage des premiers coureurs. benevol.app place chaque membre du staff à son point, avec l'heure et la consigne, et vous montre le matin même qui est arrivé.
 
 Le service est gratuit aujourd'hui, le code est open source et les données sont hébergées en France.
 
@@ -30,7 +30,7 @@ Le poste « Signaleurs » peut compter un créneau par point du parcours, chacun
 
 Chaque créneau peut porter un lieu de rendez-vous et une consigne courte, par exemple « gilet à retirer au stand des dossards ». Le bénévole les retrouve sur la page d'inscription, dans son email de confirmation, dans ses rappels et sur sa page **Mes inscriptions**. Le nom et le téléphone d'un contact sur place ne sont envoyés qu'aux inscrits, jamais affichés publiquement.
 
-Si un club partenaire fournit une partie des bénévoles, **Créer un lien pour un groupe** lui donne son propre lien et son QR code, qui n'affichent que les postes que vous lui confiez.
+Si un club partenaire fournit une partie des volontaires, **Créer un lien pour un groupe** lui donne son propre lien et son QR code, qui n'affichent que les postes que vous lui confiez.
 
 <!-- video: SHIFT_CREATE_EDIT_DETAIL -->
 
