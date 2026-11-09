@@ -682,18 +682,28 @@ kubectl create secret generic rclone-config -n benevoles \
 
 **`DRY_RUN`** (variable d'environnement du CronJob, `"false"` par défaut) : à `"true"`, `rclone copy` et `rclone delete` reçoivent `--dry-run` (rien n'est envoyé ni supprimé, seul l'inventaire est réel), et le job ne signale pas de réussite à la page santé. Utile pour un test manuel du nouveau remote avant de lui faire confiance (`kubectl create job --from=cronjob/backup-offsite ... ` avec la variable modifiée dans le Job généré).
 
-**Restauration / test.** `scripts/restore-test-offsite.sh` liste le remote, télécharge le dernier fichier, le déchiffre avec `BACKUP_PASSPHRASE` et vérifie qu'il redonne un `pg_dump` gzippé valide — sans jamais rien modifier côté distant (uniquement `lsf`/`lsl`/`copy` en lecture) ni restaurer dans une base :
+**Restauration / test.** `scripts/restore-test-offsite.sh` prend le dump chiffré le plus récent, le déchiffre avec `BACKUP_PASSPHRASE`, vérifie le gzip et l'en-tête `pg_dump`, puis, par défaut, le recharge dans un conteneur PostgreSQL 16 jetable (sans port publié, supprimé à la fin) et compare les comptages : organisations, événements, bénévoles, inscriptions et migrations terminées. La sauvegarde est donc réellement restaurable, pas seulement bien formée. Le script ne modifie jamais la copie hors site : montage local en lecture seule, ou `rclone lsl`/`lsf`/`copy` depuis le remote uniquement.
 
-```bash
-OFFSITE_BUCKET=<container> \
-RCLONE_CONFIG=$HOME/.config/rclone/rclone.conf \
-BACKUP_PASSPHRASE=<valeur du cluster> \
-./scripts/restore-test-offsite.sh
-```
+Source du dump, au choix :
 
-Le script affiche à la fin la commande `curl` à lancer pour enregistrer le test sur la page de santé (voir « Checklist opérationnelle » ci-dessous) ; il ne l'envoie pas lui-même, pour qu'un essai local contre un `rclone.conf` personnel ne signale jamais un faux succès en production.
+- **Montage local Swiss Backup** (application de bureau) : si `SWISSBACKUP_DIR` est défini, ou si `$HOME/SwissBackup/benevol-backups/benevol-backups` existe, le script y prend le plus récent `benevoles_*.sql.gz.enc`, en lecture seule.
+- **Remote rclone** : sinon, avec `OFFSITE_BUCKET` (container Swiss Backup) et éventuellement `RCLONE_CONFIG` :
 
-`scripts/test-offsite-backup.sh` est le test de régression (hors ligne, faux `rclone`/`wget`) du script du CronJob et du script de restauration ; voir son en-tête. `make test-offsite-backup` le lance, et `make restore-test-offsite OFFSITE_BUCKET=… BACKUP_PASSPHRASE=…` lance le test de restauration réel.
+  ```bash
+  # montage local, dossier par défaut ou SWISSBACKUP_DIR=…
+  ./scripts/restore-test-offsite.sh
+
+  # remote rclone
+  OFFSITE_BUCKET=<container> \
+  RCLONE_CONFIG=$HOME/.config/rclone/rclone.conf \
+  ./scripts/restore-test-offsite.sh
+  ```
+
+La phrase secrète est lue dans `BACKUP_PASSPHRASE` si elle est définie, sinon demandée en saisie masquée sur le terminal ; elle n'apparaît jamais dans la liste des processus. `make restore-test-offsite` lance la même chose sans afficher de secret. Sans Docker, `RESTORE_MODE=header` se limite à l'ancienne vérification d'en-tête ; le script indique toujours le mode utilisé. L'image PostgreSQL se change avec `RESTORE_PG_IMAGE` (défaut `postgres:16`, la version de production).
+
+Le script affiche à la fin la commande `kubectl exec` à lancer pour enregistrer le test sur la page de santé (voir « Checklist opérationnelle » ci-dessous) ; il ne l'envoie pas lui-même et ne lit pas `CRON_SECRET` sur le poste, pour qu'un essai local ne signale jamais un faux succès en production. La phrase secrète doit rester dans un gestionnaire de mots de passe hors du serveur : sans elle, les copies hors site restent indéchiffrables si le cluster est perdu (voir « `BACKUP_PASSPHRASE` est un point unique de défaillance » ci-dessus).
+
+`scripts/test-offsite-backup.sh` est le test de régression (hors ligne, faux `rclone`/`docker`/`wget`) du script du CronJob et du script de restauration ; voir son en-tête. `make test-offsite-backup` le lance.
 
 **Retrait de Dropbox (#697), côté opérateur**, une fois ce changement déployé :
 
@@ -701,7 +711,7 @@ Le script affiche à la fin la commande `curl` à lancer pour enregistrer le tes
 2. Retirer la section `[dropbox]` de `rclone.conf` et recréer le secret `rclone-config` (commande ci-dessus).
 3. Si ce n'est pas déjà fait, supprimer l'ancien CronJob : `kubectl delete cronjob backup-offsite-dropbox -n benevoles`.
 
-Restauration depuis le remote actuel : `rclone lsf <remote>:<chemin>` pour lister, `rclone copy <remote>:<chemin>/<fichier> .` pour télécharger, puis déchiffrer comme ci-dessus (ou utiliser `scripts/restore-test-offsite.sh` qui fait tout cela et vérifie le résultat).
+Restauration depuis le remote actuel : `rclone lsf <remote>:<chemin>` pour lister, `rclone copy <remote>:<chemin>/<fichier> .` pour télécharger, puis déchiffrer comme ci-dessus (ou utiliser `scripts/restore-test-offsite.sh`, qui fait tout cela et recharge le dump dans une base jetable).
 
 ### Limites actuelles
 
@@ -728,13 +738,16 @@ Ce que rien n'automatise encore (voir « Limites actuelles ») et qu'il faut don
 
 - [ ] les derniers CronJobs de sauvegarde ont réussi : `kubectl -n benevoles get jobs` (dump et copie hors site) ;
 - [ ] le dernier fichier sur `backup-pvc` et sur Swiss Backup a une taille plausible (pas 0 octet) ;
-- [ ] **test de restauration** : télécharger un dump, le déchiffrer et le charger dans une base PostgreSQL jetable (`psql -f dump.sql`), puis vérifier quelques comptages (organisations, événements, inscriptions) ;
-  puis le signaler à la page de santé (avertissement après 45 jours sans test, erreur après 90) :
+- [ ] **test de restauration** : `make restore-test-offsite` (ou `sh scripts/restore-test-offsite.sh`) prend le dernier dump — montage local Swiss Backup ou `OFFSITE_BUCKET=…` —, le déchiffre et le recharge dans un PostgreSQL 16 jetable, puis compare les comptages (organisations, événements, bénévoles, inscriptions, migrations terminées). Sans Docker, `RESTORE_MODE=header` vérifie seulement l'en-tête. La phrase secrète reste dans le gestionnaire de mots de passe hors du serveur : sans elle, les copies hors site sont indéchiffrables si le cluster est perdu.
+  Puis le signaler à la page de santé (avertissement après 45 jours sans test, erreur après 90), depuis le cluster et sans manipuler `CRON_SECRET` sur le poste : reprendre la commande `kubectl exec` affichée par le script, qui remplit le nom du dump et le mode utilisés :
 
   ```bash
-  curl -s -X POST -H "Authorization: Bearer $CRON_SECRET" -H "Content-Type: application/json" \
-    -d '{"job":"restore-test","ok":true,"summary":{"dump":"benevoles_2026-09-30_01-00"}}' \
-    https://www.benevol.app/api/cron/heartbeat
+  kubectl -n benevoles exec deploy/benevoles-app -- node -e '
+  fetch("http://localhost:3000/api/cron/heartbeat", {
+    method: "POST",
+    headers: { authorization: `Bearer ${process.env.CRON_SECRET}`, "content-type": "application/json" },
+    body: JSON.stringify({ job: "restore-test", ok: true, summary: { dump: "benevoles_2026-09-30_01-00.sql.gz.enc", mode: "full" } }),
+  }).then(async r => console.log(r.status, await r.text()))'
   ```
 
   Les CronJobs de sauvegarde et de copie hors site envoient le même battement de cœur (`backup`, `backup-offsite`) à la fin de chaque exécution réussie ; les rappels et le nettoyage s'enregistrent eux-mêmes.
