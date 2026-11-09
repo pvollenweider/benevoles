@@ -30,10 +30,31 @@ describe("health view", () => {
     expect(assessRestoreTest(null, now).level).toBe("warn")
   })
 
-  it("outbox, database, migrations, config", () => {
-    expect(assessOutbox({ failedLastDay: 0, oldestPendingMinutes: null, staleClaims: 0, healthy: true })).toMatchObject({ level: "ok", detail: "Rien en attente." })
-    expect(assessOutbox({ failedLastDay: 2, oldestPendingMinutes: 40, staleClaims: 0, healthy: false })).toMatchObject({ level: "error", detail: "2 échecs définitifs en 24 h, en attente depuis 40 min." })
-    expect(assessOutbox({ failedLastDay: 0, oldestPendingMinutes: 40, staleClaims: 0, healthy: false }).level).toBe("warn")
+  it("outbox: ok, recipient-address warnings, other failures and blocked sends as errors", () => {
+    const outbox = { failedLastDay: 0, recipientFailuresLastDay: 0, otherFailuresLastDay: 0, oldestPendingMinutes: null, staleClaims: 0, healthy: true }
+    expect(assessOutbox(outbox)).toMatchObject({ level: "ok", detail: "Rien en attente." })
+
+    // Only mistyped/unknown addresses: a warning, never « Problème à traiter ».
+    const addressText = (n: number) => `${n} adresse${n > 1 ? "s" : ""} refusée${n > 1 ? "s" : ""} par le destinataire en 24 h (domaine ou boîte inexistants, souvent une faute de frappe)`
+    expect(assessOutbox({ ...outbox, failedLastDay: 1, recipientFailuresLastDay: 1 }))
+      .toMatchObject({ level: "warn", detail: `${addressText(1)}.` })
+    expect(assessOutbox({ ...outbox, failedLastDay: 3, recipientFailuresLastDay: 3 }))
+      .toMatchObject({ level: "warn", detail: `${addressText(3)}.` })
+
+    // Any other definitive failure stays an error, as before.
+    expect(assessOutbox({ ...outbox, failedLastDay: 2, otherFailuresLastDay: 2, oldestPendingMinutes: 40, healthy: false }))
+      .toMatchObject({ level: "error", detail: "2 échecs définitifs en 24 h, en attente depuis 40 min." })
+
+    // Both causes: error, and the sentence names both.
+    expect(assessOutbox({ ...outbox, failedLastDay: 3, recipientFailuresLastDay: 2, otherFailuresLastDay: 1, healthy: false }))
+      .toMatchObject({ level: "error", detail: `1 échec définitif en 24 h, ${addressText(2)}.` })
+
+    // A blocked send is an error; a slightly late pending row only a warning.
+    expect(assessOutbox({ ...outbox, staleClaims: 2, healthy: false })).toMatchObject({ level: "error", detail: "2 envois bloqués." })
+    expect(assessOutbox({ ...outbox, oldestPendingMinutes: 40, healthy: false })).toMatchObject({ level: "warn", detail: "en attente depuis 40 min." })
+    expect(assessOutbox({ ...outbox, failedLastDay: 1, recipientFailuresLastDay: 1, oldestPendingMinutes: 40 }))
+      .toMatchObject({ level: "warn", detail: `${addressText(1)}, en attente depuis 40 min.` })
+
     expect(assessDatabase(12).level).toBe("ok")
     expect(assessDatabase(800).level).toBe("warn")
     expect(assessDatabase(null).level).toBe("error")

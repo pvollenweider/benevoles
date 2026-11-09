@@ -17,6 +17,7 @@ import { outboxRecipientVerdict } from "../outbox-recipient-check"
 import { bestEffort, hourStart, recordLimitHit } from "./limit-hits"
 import type { SendBatchKind } from "../send-batches"
 import { inactivityCopyVerdict } from "../org-inactivity-steps"
+import { outboxFailureGroup } from "./outbox-failure"
 
 /**
  * Notification outbox (#293).
@@ -442,7 +443,12 @@ async function markHeld(id: string, organizationId: string | null, limit: string
 }
 
 export type OutboxHealth = {
+  /** Total definitive failures of the last day; the sum of the two counts below. */
   failedLastDay: number
+  /** Those caused by the recipient's address (unknown mailbox, disabled mailbox, unknown domain). */
+  recipientFailuresLastDay: number
+  /** Every other definitive failure: relay, policy, timeout, unknown reason, non-SMTP error… */
+  otherFailuresLastDay: number
   oldestPendingMinutes: number | null
   staleClaims: number
   healthy: boolean
@@ -458,13 +464,17 @@ export type OutboxHealth = {
 export const MAX_PENDING_AGE_MINUTES = 120
 
 /**
- * Health of the queue (#316): rows that gave up in the last day, age of the oldest undelivered
- * row, claims abandoned by a crashed delivery. The health page shows it all; the hourly cron sends
- * it to Sentry only when delivery is stuck.
+ * Health of the queue (#316): rows that gave up in the last day, split by cause, age of the oldest
+ * undelivered row, claims abandoned by a crashed delivery. The health page shows it all; the hourly
+ * cron sends it to Sentry only when delivery is stuck. A refusal caused by the recipient's address
+ * doesn't make the queue unhealthy: it says nothing about the platform.
  */
 export async function outboxHealth(now: Date = new Date()): Promise<OutboxHealth> {
-  const [failedLastDay, oldestPending, staleClaims] = await Promise.all([
-    prisma.notificationOutbox.count({ where: { status: "failed", createdAt: { gte: new Date(now.getTime() - 24 * 60 * 60 * 1000) } } }),
+  const [failedRows, oldestPending, staleClaims] = await Promise.all([
+    prisma.notificationOutbox.findMany({
+      where: { status: "failed", createdAt: { gte: new Date(now.getTime() - 24 * 60 * 60 * 1000) } },
+      select: { lastError: true },
+    }),
     prisma.notificationOutbox.findFirst({
       where: { status: { in: ["pending", "sending"] } },
       orderBy: { createdAt: "asc" },
@@ -472,8 +482,11 @@ export async function outboxHealth(now: Date = new Date()): Promise<OutboxHealth
     }),
     prisma.notificationOutbox.count({ where: { status: "sending", claimedAt: { lt: new Date(now.getTime() - STALE_CLAIM_MS) } } }),
   ])
+  const failedLastDay = failedRows.length
+  const recipientFailuresLastDay = failedRows.filter((row) => outboxFailureGroup(row.lastError) === "recipient").length
+  const otherFailuresLastDay = failedLastDay - recipientFailuresLastDay
   const oldestPendingMinutes = oldestPending ? Math.floor((now.getTime() - oldestPending.createdAt.getTime()) / 60000) : null
   const stuck = staleClaims > 0 || (oldestPendingMinutes ?? 0) > MAX_PENDING_AGE_MINUTES
-  const healthy = failedLastDay === 0 && !stuck
-  return { failedLastDay, oldestPendingMinutes, staleClaims, healthy, stuck }
+  const healthy = otherFailuresLastDay === 0 && !stuck
+  return { failedLastDay, recipientFailuresLastDay, otherFailuresLastDay, oldestPendingMinutes, staleClaims, healthy, stuck }
 }
