@@ -211,6 +211,25 @@ describe.skipIf(!url)("outbox delivery counts and job summaries (#1269)", () => 
     expect(await prisma.notificationDeliveryCount.count({ where: { organizationId: org.id } })).toBe(0)
   })
 
+  it("counts and deletes more than one batch, without a double count", async () => {
+    const org = await prisma.organization.create({ data: { name: `Org ${tag} bulk`, slug: `${tag}-bulk`, timeZone: "Europe/Zurich" } })
+    const createdAt = new Date()
+    const payload = sealPayload({ kind: "registration_confirmation" as NotificationKind, recipient: { email: `${tag}-bulk@example.org` }, data: {} })
+    await prisma.notificationOutbox.createMany({
+      data: Array.from({ length: 1200 }, () => ({ payload, status: "sent", organizationId: org.id, createdAt })),
+    })
+
+    const res = await cleanup()
+    expect(res.status).toBe(200)
+    const body = await res.json()
+    // 1 200 rows go in three transactions (500, 500, 200), each writing the same bucket once.
+    expect(body.deliveryCounts).toEqual({ rows: 1200, buckets: 3, unreadable: 0 })
+    expect(body.deleted.notificationOutbox).toBe(1200)
+    expect(await prisma.notificationOutbox.count({ where: { organizationId: org.id } })).toBe(0)
+    expect((await counter(org.id, deliveryDay(createdAt), "registration_confirmation", "sent"))?.count).toBe(1200)
+    await prisma.organization.delete({ where: { id: org.id } })
+  })
+
   it("two cleanups running at once count each row once", async () => {
     const org = await prisma.organization.create({ data: { name: `Org ${tag} ter`, slug: `${tag}-ter`, timeZone: "Europe/Zurich" } })
     const ids = []

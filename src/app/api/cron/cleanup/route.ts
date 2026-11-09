@@ -37,6 +37,14 @@ export const dynamic = "force-dynamic"
  */
 const OUTBOX_PURGE_BATCH = 500
 
+/**
+ * Timeout of one batch's transaction (#1269). Prisma's default is 5 s, too short once a batch
+ * decrypts 500 payloads and updates the message and batch counters: a targeted message can hold
+ * thousands of rows, and a skipped night leaves a bigger backlog. A batch that still times out is
+ * rolled back as a whole; the batches before it stay folded, the rest waits for the next run.
+ */
+const OUTBOX_PURGE_TX_TIMEOUT_MS = 30_000
+
 function isAuthorized(req: Request): boolean {
   return isCronAuthorized(req, env.CRON_SECRET)
 }
@@ -160,47 +168,22 @@ async function run(req: Request) {
   }
   // Before deleting, the rows are folded into per-kind counters (#1269): an aggregate survives the
   // purge, without recipient, address or content. A batch of emails (#1101) and a targeted message
-  // (#467) keep their own outcome too, from the same rows.
-  const deletedOutbox = await prisma.$transaction(async (tx) => {
-    // Two cleanups at once would fold the same rows twice: the second waits here, then finds them gone.
-    await tx.$executeRaw`SELECT pg_advisory_xact_lock(hashtext('cleanup.outbox-freeze'))`
-    const buckets = new Map<string, DeliveryCountBucket>()
-    // Read and delete by batches, each batch counted before it goes: a row that turned « sent »
-    // between the read and the delete is counted here, never deleted uncounted. Deleting by id
-    // (the very ids read) keeps that true.
-    const rows = await freezeOutbox(tx, outboxToDelete, buckets)
-    const operatorAlerts = await freezeOutbox(tx, operatorAlertsToDelete, buckets)
-    for (const b of buckets.values()) {
-      await tx.notificationDeliveryCount.upsert({
-        where: {
-          organizationKey_day_kind_outcome_reason: {
-            organizationKey: b.organizationKey,
-            day: b.day,
-            kind: b.kind,
-            outcome: b.outcome,
-            reason: b.reason,
-          },
-        },
-        create: {
-          organizationId: b.organizationId,
-          organizationKey: b.organizationKey,
-          day: b.day,
-          kind: b.kind,
-          outcome: b.outcome,
-          reason: b.reason,
-          count: b.count,
-        },
-        update: { count: { increment: b.count } },
-      })
-    }
-    return {
-      count: rows.count,
-      operatorAlerts: operatorAlerts.count,
-      deliveryCountRows: rows.rows + operatorAlerts.rows,
-      deliveryCountBuckets: buckets.size,
-      unreadable: rows.unreadable + operatorAlerts.unreadable,
-    }
-  })
+  // (#467) keep their own outcome too, from the same rows. One transaction per batch: a batch that
+  // times out rolls back alone, the previous ones stay counted and deleted.
+  const mainPurge: PurgeTotals = { deleted: 0, rows: 0, buckets: 0, unreadable: 0 }
+  const alertsPurge: PurgeTotals = { deleted: 0, rows: 0, buckets: 0, unreadable: 0 }
+  // Read and delete by batches, each batch counted before it goes: a row that turned « sent »
+  // between the read and the delete is counted here, never deleted uncounted. Deleting by id
+  // (the very ids read) keeps that true.
+  await purgeOutbox(outboxToDelete, mainPurge)
+  await purgeOutbox(operatorAlertsToDelete, alertsPurge)
+  const deletedOutbox = {
+    count: mainPurge.deleted,
+    operatorAlerts: alertsPurge.deleted,
+    deliveryCountRows: mainPurge.rows + alertsPurge.rows,
+    deliveryCountBuckets: mainPurge.buckets + alertsPurge.buckets,
+    unreadable: mainPurge.unreadable + alertsPurge.unreadable,
+  }
   // An unreadable payload (a rotated key, a row written elsewhere) is counted as `unknown`, never
   // dropped, and reported: once for the run, not once per row.
   if (deletedOutbox.unreadable > 0) {
@@ -412,6 +395,8 @@ async function run(req: Request) {
     addressSummariesSent,
     backupAlerts: backupAlertsCount,
     deliveryCounts: {
+      // Rows folded, counter writes (one per bucket per batch: a bucket shared by two batches is
+      // written twice, each with an increment), and unreadable payloads counted as `unknown`.
       rows: deletedOutbox.deliveryCountRows,
       buckets: deletedOutbox.deliveryCountBuckets,
       unreadable: deletedOutbox.unreadable,
@@ -421,20 +406,18 @@ async function run(req: Request) {
   return NextResponse.json(summary)
 }
 
+type PurgeTotals = { deleted: number; rows: number; buckets: number; unreadable: number }
+
 /**
- * Folds and deletes the outbox rows matching `where`, batch by batch (#1269). Each batch is counted
- * (delivery counts, targeted-message and send-batch outcomes) before its exact ids are deleted, so
- * a row that turned « sent » between the read and the delete still counts and still goes.
+ * Counts and deletes one batch of the outbox rows matching `where` (#1269), in its own transaction
+ * and under the cleanup lock. The lock makes a concurrent cleanup wait, then find the rows gone;
+ * the same transaction upserts this batch's counters and deletes the very ids it counted, so a
+ * failure between two batches keeps every finished batch folded and leaves the rest for the next
+ * run, without a double count.
  */
-async function freezeOutbox(
-  tx: Prisma.TransactionClient,
-  where: Prisma.NotificationOutboxWhereInput,
-  buckets: Map<string, DeliveryCountBucket>,
-): Promise<{ count: number; rows: number; unreadable: number }> {
-  let count = 0
-  let rows = 0
-  let unreadable = 0
-  for (;;) {
+async function freezeOutboxBatch(where: Prisma.NotificationOutboxWhereInput): Promise<PurgeTotals> {
+  return prisma.$transaction(async (tx) => {
+    await tx.$executeRaw`SELECT pg_advisory_xact_lock(hashtext('cleanup.outbox-freeze'))`
     const batch = await tx.notificationOutbox.findMany({
       where,
       orderBy: { id: "asc" },
@@ -444,7 +427,7 @@ async function freezeOutbox(
         targetedMessageId: true, sendBatchId: true, lastHeldAt: true, firstHeldAt: true, sentAt: true,
       },
     })
-    if (batch.length === 0) break
+    if (batch.length === 0) return { deleted: 0, rows: 0, buckets: 0, unreadable: 0 }
     for (const [id, c] of countsToFreeze(batch)) {
       await tx.targetedMessage.update({ where: { id }, data: { sentCount: { increment: c.sent }, failedCount: { increment: c.failed } } })
     }
@@ -461,6 +444,8 @@ async function freezeOutbox(
       })
       if (maxHeldWaitSec > 0) await tx.sendBatch.updateMany({ where: { id, maxHeldWaitSec: { lt: maxHeldWaitSec } }, data: { maxHeldWaitSec } })
     }
+    const buckets = new Map<string, DeliveryCountBucket>()
+    let unreadable = 0
     for (const row of batch) {
       let kind = UNKNOWN_KIND
       try { kind = openPayload(row.payload).kind || UNKNOWN_KIND } catch { unreadable++ }
@@ -472,10 +457,42 @@ async function freezeOutbox(
         kind,
       })
     }
+    for (const b of buckets.values()) {
+      await tx.notificationDeliveryCount.upsert({
+        where: {
+          organizationKey_day_kind_outcome_reason: {
+            organizationKey: b.organizationKey,
+            day: b.day,
+            kind: b.kind,
+            outcome: b.outcome,
+            reason: b.reason,
+          },
+        },
+        create: {
+          organizationId: b.organizationId,
+          organizationKey: b.organizationKey,
+          day: b.day,
+          kind: b.kind,
+          outcome: b.outcome,
+          reason: b.reason,
+          count: b.count,
+        },
+        update: { count: { increment: b.count } },
+      })
+    }
     const deleted = await tx.notificationOutbox.deleteMany({ where: { id: { in: batch.map((r) => r.id) } } })
-    count += deleted.count
-    rows += batch.length
-    if (batch.length < OUTBOX_PURGE_BATCH) break
+    return { deleted: deleted.count, rows: batch.length, buckets: buckets.size, unreadable }
+  }, { timeout: OUTBOX_PURGE_TX_TIMEOUT_MS })
+}
+
+/** Runs batches until one comes back short, adding each batch's totals. `buckets` counts the writes. */
+async function purgeOutbox(where: Prisma.NotificationOutboxWhereInput, totals: PurgeTotals): Promise<void> {
+  for (;;) {
+    const batch = await freezeOutboxBatch(where)
+    totals.deleted += batch.deleted
+    totals.rows += batch.rows
+    totals.buckets += batch.buckets
+    totals.unreadable += batch.unreadable
+    if (batch.rows < OUTBOX_PURGE_BATCH) break
   }
-  return { count, rows, unreadable }
 }
