@@ -6,7 +6,7 @@ import type { SmtpOutcome, SmtpReason } from "../notifications/smtp-outcome"
 const stored = (outcome: SmtpOutcome, reason: SmtpReason | null, code: number | null = 550, enhanced: string | null = null) =>
   `smtp:${outcome}:${reason ?? "-"}:${code ?? "-"}:${enhanced ?? "-"}`
 
-describe("outboxFailureGroup (#1291)", () => {
+describe("outboxFailureGroup", () => {
   it("groups every address reason as a recipient failure", () => {
     expect(outboxFailureGroup(stored("rejected_permanent", "mailbox_unknown", 550, "5.1.1"))).toBe("recipient")
     expect(outboxFailureGroup(stored("rejected_permanent", "mailbox_disabled", 550, "5.2.1"))).toBe("recipient")

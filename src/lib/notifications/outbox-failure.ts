@@ -4,7 +4,7 @@
 import type { SmtpReason } from "./smtp-outcome"
 
 /**
- * Groups a definitive outbox failure by what it says about the platform (#1291): a refusal caused
+ * Groups a definitive outbox failure by what it says about the platform: a refusal caused
  * by the recipient's own address is not a delivery outage, while every other failure (relay,
  * policy, timeout, unknown reason, non-SMTP error…) is something to look at.
  */

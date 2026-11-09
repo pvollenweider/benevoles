@@ -34,7 +34,7 @@ describe("health view", () => {
     const outbox = { failedLastDay: 0, recipientFailuresLastDay: 0, otherFailuresLastDay: 0, oldestPendingMinutes: null, staleClaims: 0, healthy: true }
     expect(assessOutbox(outbox)).toMatchObject({ level: "ok", detail: "Rien en attente." })
 
-    // #1291: only mistyped/unknown addresses: a warning, never « Problème à traiter ».
+    // Only mistyped/unknown addresses: a warning, never « Problème à traiter ».
     const addressText = (n: number) => `${n} adresse${n > 1 ? "s" : ""} refusée${n > 1 ? "s" : ""} par le destinataire en 24 h (domaine ou boîte inexistants, souvent une faute de frappe)`
     expect(assessOutbox({ ...outbox, failedLastDay: 1, recipientFailuresLastDay: 1 }))
       .toMatchObject({ level: "warn", detail: `${addressText(1)}.` })

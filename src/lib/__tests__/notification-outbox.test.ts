@@ -431,7 +431,7 @@ describe("outboxHealth (#316)", () => {
     })
   })
 
-  // #1291: a mistyped or unknown address says nothing about the platform. Healthy for the queue,
+  // A mistyped or unknown address says nothing about the platform. Healthy for the queue,
   // and not stuck, so the hourly Sentry alert doesn't fire for it either.
   it("recipient-address failures alone stay healthy and not stuck", async () => {
     m.findMany.mockResolvedValue([
