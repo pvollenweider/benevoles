@@ -125,6 +125,7 @@ model Organization {
   erasureRecords  ErasureRecord[]
   counters    OrganizationCounter[]
   emailLimitHits EmailLimitHit[]
+  deliveryCounts NotificationDeliveryCount[]
 }
 
 // The organization's logo (#300), processed server-side (PNG or JPEG, at most 512 px on its longest
@@ -1672,6 +1673,37 @@ model EmailLimitHit {
 
   @@index([lastAt])
   @@index([organizationId, lastAt])
+}
+
+// Per-kind delivery counts of the transactional emails (#1269), folded from the outbox rows the
+// nightly cleanup deletes: an aggregate survives the purge, without recipient, address, content or
+// member id. One row per organisation (or platform), UTC day the email was queued, kind and
+// outcome; a cancelled email also carries the class of its cancellation reason.
+//
+// `organizationKey` exists because of PostgreSQL: a unique index treats every NULL as distinct, so
+// (organizationId, day, kind, outcome, reason) would let two cleanups create two platform rows.
+// It holds the organisation id, or "platform" for emails without one, and is the column the unique
+// key uses; organizationId stays nullable for the foreign key and the cascade.
+model NotificationDeliveryCount {
+  id              String   @id @default(cuid())
+  organizationId  String?
+  organizationKey String
+  // UTC midnight of the day the email was queued (NotificationOutbox.createdAt), not the purge day:
+  // a late purge (a cleanup skipped, a row held) counts the email on the day it was sent.
+  day             DateTime
+  kind            String
+  outcome         String
+  // Class of the cancellation reason (cancelReasonClass): "" for sent and failed rows.
+  reason          String   @default("")
+  count           Int      @default(0)
+  createdAt       DateTime @default(now())
+  updatedAt       DateTime @updatedAt
+
+  organization Organization? @relation(fields: [organizationId], references: [id], onDelete: Cascade)
+
+  @@unique([organizationKey, day, kind, outcome, reason])
+  @@index([organizationId, day])
+  @@index([day])
 }
 
 model PlatformCounter {

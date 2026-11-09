@@ -529,6 +529,38 @@ kubectl -n benevoles exec deploy/benevoles-app -- node -e 'fetch(process.env.NTF
 - Le parcours complet : une demande sur `/inscription` avec une adresse jamais utilisée, puis « Confirmer » dans l'email reçu. La notification et l'email « Nouvelle demande d'espace » doivent arriver. Une demande confirmée avant la mise en place n'envoie rien de plus.
 - En cas d'absence : `kubectl -n benevoles logs deploy/benevoles-app | grep operator_alert` montre les échecs (par exemple `ConnectTimeoutError` si ntfy.sh n'a pas répondu, ou un statut HTTP de refus).
 
+## Compter les emails envoyés
+
+Le nettoyage nocturne agrège les emails de la file d'envoi avant de les supprimer (#1269) : par
+organisation (ou « plateforme » pour ceux qui n'en ont pas), jour UTC de mise en file, type d'email
+et résultat — envoyé, en échec, ou annulé avec la classe de sa raison (`limit:recipient_per_hour`,
+`org_inactive`…) —, avec un nombre. Ni destinataire, ni adresse, ni contenu, ni identifiant de
+bénévole. Les compteurs sont gardés 13 mois (voir `docs/retention.md`).
+
+Lecture en SQL, sans passer par l'application (base en lecture seule) :
+
+```sql
+SELECT
+  COALESCE(o.name, 'plateforme') AS organisation,
+  c."day"::date                  AS jour,
+  c."kind"                       AS type,
+  c."outcome"                    AS resultat,
+  NULLIF(c."reason", '')         AS raison,
+  c."count"                      AS nombre
+FROM "NotificationDeliveryCount" c
+LEFT JOIN "Organization" o ON o.id = c."organizationId"
+WHERE c."day" >= date_trunc('month', now()) - interval '2 months'
+ORDER BY jour DESC, organisation, type, resultat;
+```
+
+Pour une organisation et une période précises, remplacer le `WHERE` :
+
+```sql
+WHERE o."slug" = 'mon-asso'
+  AND c."day" >= DATE '2026-11-01'
+  AND c."day" <  DATE '2026-12-01'
+```
+
 ## CI/CD
 
 | Workflow | Déclencheur | Étapes |

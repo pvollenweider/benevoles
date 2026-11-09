@@ -18,7 +18,9 @@ import { loadOrganizationsWithNewAddressesToVerify, loadSummaryRecipients } from
 import { SUMMARY_WINDOW_HOURS, summaryDayKey } from "@/lib/delivery-summary"
 import { parseNotificationSettings } from "@/lib/notification-settings"
 import { adminMembersToVerifyUrl } from "@/lib/notifications/templates/shared"
-import { deliverAfterResponse, enqueueNotifications } from "@/lib/notifications/outbox"
+import { deliverAfterResponse, enqueueNotifications, openPayload } from "@/lib/notifications/outbox"
+import { addDeliveryCount, UNKNOWN_KIND, type DeliveryCountBucket } from "@/lib/delivery-counters"
+import type { Prisma } from "@/generated/prisma/client"
 import { siteName } from "@/lib/site"
 import { pastEventRetentionMode, pastEventStep, pastEventSummary, pastEventTotals, type PastEventBatchCounts } from "@/lib/past-event-retention"
 import { observePastEvents } from "@/lib/past-event-retention-data"
@@ -28,6 +30,12 @@ import { loadInactivityReport } from "@/lib/org-inactivity-data"
 import { runInactivityProcedure, type ProcedureCounts } from "@/lib/org-inactivity-procedure"
 
 export const dynamic = "force-dynamic"
+
+/**
+ * Rows read, counted and deleted per batch (#1269): the outbox can hold tens of thousands of rows,
+ * and a single findMany would load them all (payloads included) at once.
+ */
+const OUTBOX_PURGE_BATCH = 500
 
 function isAuthorized(req: Request): boolean {
   return isCronAuthorized(req, env.CRON_SECRET)
@@ -41,7 +49,7 @@ async function run(req: Request) {
     return NextResponse.json({ error: "Unauthorized" }, { status: 401 })
   }
 
-  return recordJobRun("cleanup", async () => {
+  const summary = await recordJobRun("cleanup", async () => {
 
   const now = new Date()
   // 30-day retention cutoff. We use updatedAt as a proxy for deactivation
@@ -143,41 +151,63 @@ async function run(req: Request) {
       { status: { in: ["failed", "cancelled"] }, createdAt: { lt: failedCutoff } },
     ],
   }
-  // A batch of emails (#1101) likewise keeps the outcome of its rows (sent, held then sent, failed,
-  // cancelled), folded from the same selected rows; both counters come from one read of the rows.
+  // Operator alerts are kept seven days for deduplication, then purged like the other sent rows;
+  // they feed the same counts (#1269).
+  const operatorAlertsToDelete = {
+    dedupeKey: { startsWith: "operator_alert:" },
+    status: "sent",
+    createdAt: { lt: operatorAlertCutoff },
+  }
+  // Before deleting, the rows are folded into per-kind counters (#1269): an aggregate survives the
+  // purge, without recipient, address or content. A batch of emails (#1101) and a targeted message
+  // (#467) keep their own outcome too, from the same rows.
   const deletedOutbox = await prisma.$transaction(async (tx) => {
     // Two cleanups at once would fold the same rows twice: the second waits here, then finds them gone.
     await tx.$executeRaw`SELECT pg_advisory_xact_lock(hashtext('cleanup.outbox-freeze'))`
-    // Exactly the rows counted are deleted: one that turns « sent » meanwhile waits for tomorrow.
-    const linked = await tx.notificationOutbox.findMany({
-      where: { AND: [outboxToDelete, { OR: [{ targetedMessageId: { not: null } }, { sendBatchId: { not: null } }] }] },
-      select: { id: true, targetedMessageId: true, sendBatchId: true, status: true, lastHeldAt: true, firstHeldAt: true, sentAt: true },
-    })
-    for (const [id, c] of countsToFreeze(linked)) {
-      await tx.targetedMessage.update({ where: { id }, data: { sentCount: { increment: c.sent }, failedCount: { increment: c.failed } } })
-    }
-    for (const [id, c] of batchCountsToFreeze(linked)) {
-      const { maxHeldWaitSec, ...counts } = c
-      await tx.sendBatch.update({
-        where: { id },
-        data: {
-          sentCount: { increment: counts.sentCount },
-          heldSentCount: { increment: counts.heldSentCount },
-          failedCount: { increment: counts.failedCount },
-          cancelledCount: { increment: counts.cancelledCount },
+    const buckets = new Map<string, DeliveryCountBucket>()
+    // Read and delete by batches, each batch counted before it goes: a row that turned « sent »
+    // between the read and the delete is counted here, never deleted uncounted. Deleting by id
+    // (the very ids read) keeps that true.
+    const rows = await freezeOutbox(tx, outboxToDelete, buckets)
+    const operatorAlerts = await freezeOutbox(tx, operatorAlertsToDelete, buckets)
+    for (const b of buckets.values()) {
+      await tx.notificationDeliveryCount.upsert({
+        where: {
+          organizationKey_day_kind_outcome_reason: {
+            organizationKey: b.organizationKey,
+            day: b.day,
+            kind: b.kind,
+            outcome: b.outcome,
+            reason: b.reason,
+          },
         },
+        create: {
+          organizationId: b.organizationId,
+          organizationKey: b.organizationKey,
+          day: b.day,
+          kind: b.kind,
+          outcome: b.outcome,
+          reason: b.reason,
+          count: b.count,
+        },
+        update: { count: { increment: b.count } },
       })
-      if (maxHeldWaitSec > 0) await tx.sendBatch.updateMany({ where: { id, maxHeldWaitSec: { lt: maxHeldWaitSec } }, data: { maxHeldWaitSec } })
     }
-    const linkedDeleted = await tx.notificationOutbox.deleteMany({ where: { id: { in: linked.map((r) => r.id) } } })
-    const otherDeleted = await tx.notificationOutbox.deleteMany({ where: { AND: [outboxToDelete, { targetedMessageId: null }, { sendBatchId: null }] } })
-    return { count: linkedDeleted.count + otherDeleted.count }
+    return {
+      count: rows.count,
+      operatorAlerts: operatorAlerts.count,
+      deliveryCountRows: rows.rows + operatorAlerts.rows,
+      deliveryCountBuckets: buckets.size,
+      unreadable: rows.unreadable + operatorAlerts.unreadable,
+    }
   })
-
-  // Operator alerts, kept seven days for deduplication, then deleted like the other sent rows.
-  const deletedOperatorAlerts = await prisma.notificationOutbox.deleteMany({
-    where: { dedupeKey: { startsWith: "operator_alert:" }, status: "sent", createdAt: { lt: operatorAlertCutoff } },
-  })
+  // An unreadable payload (a rotated key, a row written elsewhere) is counted as `unknown`, never
+  // dropped, and reported: once for the run, not once per row.
+  if (deletedOutbox.unreadable > 0) {
+    reportError("cleanup.delivery_counters.payload")(
+      new Error(`${deletedOutbox.unreadable} notification payload(s) unreadable, counted as ${UNKNOWN_KIND}.`),
+    )
+  }
 
   // Targeted messages are kept 12 months (#467): their content may hold personal information.
   const deletedMessages = await prisma.targetedMessage.deleteMany({
@@ -195,6 +225,12 @@ async function run(req: Request) {
     if (ids.length === 0) return { count: 0 }
     await tx.orgLog.deleteMany({ where: { entityType: "SendBatch", entityId: { in: ids } } })
     return tx.sendBatch.deleteMany({ where: { id: { in: ids } } })
+  })
+
+  // Aggregated delivery counts (#1269), kept 13 months so a season can be compared with the
+  // previous one; deleted with their organisation (cascade).
+  const deletedDeliveryCounters = await prisma.notificationDeliveryCount.deleteMany({
+    where: { day: { lt: daysAgo(now, RETENTION_DAYS.deliveryCounter) } },
   })
 
   // --- 6. Expired rate limit windows (#322) ---
@@ -341,14 +377,18 @@ async function run(req: Request) {
     reportError("cleanup.past_events_observation")(e)
   }
 
-  return NextResponse.json({
+  // Stored in JobRun.summary and shown to the super admin: counts only. Nothing here names a
+  // member, an address or an email's content (`observed` holds totals, pastEventSummary a sentence
+  // built from them).
+  return {
     runAt: now.toISOString(),
     observed: { inactivity, pastEvents, pastEventsSummary: pastEvents ? pastEventSummary(pastEvents, pastEventRetentionMode()) : null },
     pastEventRetention: { mode: pastEventRetentionMode(), ...pastEventsDone },
     inactivityCheck: { mode: inactivityRun, ...(inactivityDone ?? {}) },
     tokenEncryption,
     deleted: {
-      notificationOutbox: deletedOutbox.count + deletedOperatorAlerts.count,
+      notificationOutbox: deletedOutbox.count + deletedOutbox.operatorAlerts,
+      deliveryCounters: deletedDeliveryCounters.count,
       targetedMessages: deletedMessages.count,
     scheduledMessages: deletedScheduled.count,
       rateLimits: deletedRateLimits.count,
@@ -371,6 +411,71 @@ async function run(req: Request) {
     },
     addressSummariesSent,
     backupAlerts: backupAlertsCount,
+    deliveryCounts: {
+      rows: deletedOutbox.deliveryCountRows,
+      buckets: deletedOutbox.deliveryCountBuckets,
+      unreadable: deletedOutbox.unreadable,
+    },
+  }
   })
-  })
+  return NextResponse.json(summary)
+}
+
+/**
+ * Folds and deletes the outbox rows matching `where`, batch by batch (#1269). Each batch is counted
+ * (delivery counts, targeted-message and send-batch outcomes) before its exact ids are deleted, so
+ * a row that turned « sent » between the read and the delete still counts and still goes.
+ */
+async function freezeOutbox(
+  tx: Prisma.TransactionClient,
+  where: Prisma.NotificationOutboxWhereInput,
+  buckets: Map<string, DeliveryCountBucket>,
+): Promise<{ count: number; rows: number; unreadable: number }> {
+  let count = 0
+  let rows = 0
+  let unreadable = 0
+  for (;;) {
+    const batch = await tx.notificationOutbox.findMany({
+      where,
+      orderBy: { id: "asc" },
+      take: OUTBOX_PURGE_BATCH,
+      select: {
+        id: true, payload: true, status: true, lastError: true, createdAt: true, organizationId: true,
+        targetedMessageId: true, sendBatchId: true, lastHeldAt: true, firstHeldAt: true, sentAt: true,
+      },
+    })
+    if (batch.length === 0) break
+    for (const [id, c] of countsToFreeze(batch)) {
+      await tx.targetedMessage.update({ where: { id }, data: { sentCount: { increment: c.sent }, failedCount: { increment: c.failed } } })
+    }
+    for (const [id, c] of batchCountsToFreeze(batch)) {
+      const { maxHeldWaitSec, ...counts } = c
+      await tx.sendBatch.update({
+        where: { id },
+        data: {
+          sentCount: { increment: counts.sentCount },
+          heldSentCount: { increment: counts.heldSentCount },
+          failedCount: { increment: counts.failedCount },
+          cancelledCount: { increment: counts.cancelledCount },
+        },
+      })
+      if (maxHeldWaitSec > 0) await tx.sendBatch.updateMany({ where: { id, maxHeldWaitSec: { lt: maxHeldWaitSec } }, data: { maxHeldWaitSec } })
+    }
+    for (const row of batch) {
+      let kind = UNKNOWN_KIND
+      try { kind = openPayload(row.payload).kind || UNKNOWN_KIND } catch { unreadable++ }
+      addDeliveryCount(buckets, {
+        status: row.status,
+        lastError: row.lastError,
+        createdAt: row.createdAt,
+        organizationId: row.organizationId,
+        kind,
+      })
+    }
+    const deleted = await tx.notificationOutbox.deleteMany({ where: { id: { in: batch.map((r) => r.id) } } })
+    count += deleted.count
+    rows += batch.length
+    if (batch.length < OUTBOX_PURGE_BATCH) break
+  }
+  return { count, rows, unreadable }
 }
