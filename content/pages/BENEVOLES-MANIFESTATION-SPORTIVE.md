@@ -38,7 +38,7 @@ En savoir plus : [configurer les créneaux](../guide/configurer-les-creneaux.md)
 
 ## Joindre tout le monde le matin même
 
-Vous pouvez rendre le téléphone obligatoire à l'inscription. Le jour de la course, l'équipe utilise la page du jour J sur son téléphone : les créneaux en cours et ceux des trois prochaines heures, « 6 présents sur 8 attendus », le nom de ceux qui ne sont pas encore marqués, et leur numéro, qu'un toucher appelle.
+Vous pouvez rendre le téléphone obligatoire à l'inscription. Le jour de la course, la page du jour J s'utilise sur votre téléphone : les créneaux en cours et ceux des trois prochaines heures, « 6 présents sur 8 attendus », le nom de ceux qui ne sont pas encore marqués, et leur numéro, qu'un toucher appelle.
 
 Depuis « Écrire aux bénévoles », un message part en une fois à tous les signaleurs, et à eux seuls, avec un aperçu avant l'envoi.
 

@@ -8,7 +8,7 @@ Rien aujourd'hui. Le logiciel est libre et open source, sous licence AGPL, et le
 
 ### Comment les bénévoles trouvent-ils la page d'inscription ?
 
-Vous partagez le lien de l'événement : par email, sur les réseaux de l'association ou sur une affiche avec son QR code. Vous pouvez aussi intégrer l'inscription dans une page du site de votre association, pour que les bénévoles, le staff et les équipes mixtes choisissent leurs créneaux sans le quitter. Vos membres habituels peuvent recevoir une invitation par email. Personne n'a de compte à créer.
+Vous partagez le lien de l'événement : par email, sur les réseaux de l'association ou sur une affiche avec son QR code. Vous pouvez aussi intégrer l'inscription dans une page du site de votre association, pour que les bénévoles et le staff choisissent leurs créneaux sans le quitter. Vos membres habituels peuvent recevoir une invitation par email. Personne n'a de compte à créer.
 
 ### Que reçoit un bénévole après son inscription ?
 
