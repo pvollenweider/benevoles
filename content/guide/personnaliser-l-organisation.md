@@ -18,6 +18,8 @@ Ces paramètres sont sur la page **Paramètres** et réservés aux propriétaire
 
 Sections **Nom de l'organisation** et **Adresse de votre espace** :
 
+![Section « Adresse de votre espace » : le champ « Identifiant » et le bouton « Modifier », l'adresse complète affichée sous le champ, la règle des 2 à 40 caractères, puis « Anciens identifiants (redirigent vers l'actuel) » avec l'ancien identifiant et son bouton « Supprimer »](/doc-img/admin-organisation-settings.png)
+
 - **Nom de l'organisation** : 2 à 100 caractères. Affiché dans l'administration, dans les emails et au-dessus du titre de la page publique.
 - **Adresse de votre espace** : l'**Identifiant** qui forme l'adresse (`identifiant.benevol.app`, affichée sous le champ pendant la saisie), 2 à 40 caractères : lettres minuscules, chiffres et tirets, sans tiret au début ni à la fin. Si des événements sont publiés, une confirmation est demandée avant le changement. Après l'enregistrement, vous êtes redirigé(e) vers la nouvelle adresse.
 - **Anciens identifiants** : ils continuent de rediriger vers l'adresse actuelle, pour que les liens déjà partagés fonctionnent. **Supprimer** un ancien identifiant arrête cette redirection : les liens qui l'utilisent ne fonctionnent plus.

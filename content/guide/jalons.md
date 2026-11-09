@@ -16,6 +16,8 @@ Section **Jalons** de l'onglet **Aperçu** de l'événement (**Événements**, p
 
 Une checklist simple de dates clés pour l'événement (ex. « Fermer les inscriptions », « Envoyer les rappels ») : titre, échéance, la personne qui s'en occupe si vous en choisissez une, coché ou non. Cocher un jalon ne déclenche aucune action automatique. Un jalon non coché est en retard dès le lendemain de son échéance, dans le fuseau horaire de l'organisation : il est alors signalé dans **À traiter**, dans l'aperçu de l'événement, et dans **Ce qui demande votre attention** du [tableau de bord](tableau-de-bord.md), avec son titre et la personne qui s'en occupe.
 
+![Section « Jalons » de l'onglet Aperçu : « Commander les t-shirts » coché, « Confirmer la location de la tente » en retard avec son échéance en rouge et « Qui s'en occupe : Samira Diallo », « Envoyer le planning aux responsables » à venir avec Colette Favre, chacun avec les actions Modifier et Supprimer, puis « + Ajouter un jalon »](/doc-img/admin-milestones.png)
+
 ## Qui s'occupe d'un jalon
 
 Le champ **Qui s'en occupe** est facultatif : **Aucun** par défaut, ou un membre de l'[équipe d'organisation](equipe-d-organisation.md) de l'organisation (propriétaire ou organisateur, compte activé). Les responsables de secteur n'y figurent pas : ils n'ont pas de compte et ne voient pas les jalons. Son nom s'affiche sous le titre du jalon (« Qui s'en occupe : … »).
