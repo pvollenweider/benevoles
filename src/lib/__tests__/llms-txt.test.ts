@@ -1,34 +1,18 @@
 import { describe, it, expect, vi } from "vitest"
 import fs from "node:fs"
 import path from "node:path"
-import { createElement } from "react"
-import { renderToStaticMarkup } from "react-dom/server"
 import { llmsFullTxt, llmsTxt, markdownSections, portableMarkdown, LEGAL_PATHS, RESOURCE_PATHS } from "../llms-txt"
-import { pageHtmlToMarkdown } from "../llms-page-text"
 import { AUDIENCE_PAGES, PUBLIC_PAGES, pageAvailable, splitTitle } from "../doc-pages"
 import { DOC_GROUPS, loadDocUnits } from "../doc-units"
 import { headingIdsOf, renderPublicSource } from "../public-content"
 import { blogPostPath, loadBlogPosts } from "../blog"
 import { formatReleaseDate, parseChangelog, releaseMarkdown } from "../changelog"
 import { loadRessources } from "../ressources"
-import InstanceOperatorPage from "@/app/legal/exploitant/page"
-import PrivacyPage from "@/app/legal/privacy/page"
-import TermsPage from "@/app/legal/terms/page"
 
 const BASE = "https://www.benevol.app"
 const read = (f: string) => fs.readFileSync(path.join(process.cwd(), f), "utf-8")
 
-/** A page written in its page.tsx (the legal pages): /llms-full.txt gets it as rendered Markdown. */
-const RENDERED_PAGES = { "/legal/privacy": PrivacyPage, "/legal/terms": TermsPage, "/legal/exploitant": InstanceOperatorPage } as const
-
-const pageSources = () => {
-  const pages = PUBLIC_PAGES.flatMap((p) => (p.source && p.path !== "/nouveautes" ? [{ path: p.path, markdown: read(p.source) }] : []))
-  for (const [pagePath, Page] of Object.entries(RENDERED_PAGES)) {
-    const page = PUBLIC_PAGES.find((candidate) => candidate.path === pagePath)!
-    if (pageAvailable(page)) pages.push({ path: pagePath, markdown: pageHtmlToMarkdown(renderToStaticMarkup(createElement(Page))) })
-  }
-  return pages
-}
+const pageSources = () => PUBLIC_PAGES.flatMap((p) => (p.source && p.path !== "/nouveautes" ? [{ path: p.path, markdown: read(p.source) }] : []))
 
 const sources = () => ({
   base: BASE,
@@ -54,6 +38,13 @@ function excerpt(markdown: string): string {
     .map((l) => l.trim())
     .find((l) => l !== "" && !l.startsWith("#") && !l.startsWith("<!--"))!
   return line.replace(/\[([^\]]+)\]\([^)]*\)/g, "$1").slice(0, 60)
+}
+
+/** The page URLs of the sections of /llms.txt (not the prose links of the features introduction above them). */
+function listedContentPaths(): Set<string> {
+  const txt = llmsTxt(sources())
+  const sections = txt.slice(txt.indexOf("\n## Présentation"))
+  return new Set([...sections.matchAll(new RegExp(`^ {0,2}- \\[[^\\]]+\\]\\(${BASE.replace(/[.*+?^${}()|[\]\\]/g, "\\$&")}([^)#\\s]+)\\)`, "gm"))].map((m) => m[1]))
 }
 
 describe("llmsTxt", () => {
@@ -102,7 +93,7 @@ describe("llmsFullTxt", () => {
     expect(full).not.toMatch(/<!--|\]\(\/(?!\/)/)
   })
 
-  it("gives every content page of the registry with its canonical address and an excerpt of its text", () => {
+  it("gives every content page with a source its canonical address and an excerpt of its text", () => {
     // The lists the issue names (#1256): the registry, the audience pages, the legal and resource paths.
     const paths = new Set([
       ...PUBLIC_PAGES.filter((p) => p.source).map((p) => p.path),
@@ -123,11 +114,23 @@ describe("llmsFullTxt", () => {
     expect(checked).toBeGreaterThan(10)
   })
 
+  it("keeps the title, address and summary of every public page without a source", () => {
+    let checked = 0
+    for (const pagePath of listedContentPaths()) {
+      if (pagePath === "/llms-full.txt") continue
+      const page = PUBLIC_PAGES.find((candidate) => candidate.path === pagePath)
+      if (!page || !pageAvailable(page) || page.source) continue
+      expect(full, pagePath).toContain(`# ${page.title}`)
+      expect(full, pagePath).toContain(`Adresse : ${BASE}${page.path}`)
+      expect(full, pagePath).toContain(page.summary)
+      checked++
+    }
+    // /doc, /blog, /legal/privacy and /legal/terms on the hosted service.
+    expect(checked).toBeGreaterThan(3)
+  })
+
   it("gives the text of every content URL listed by llmsTxt", () => {
-    const txt = llmsTxt(sources())
-    // The page links of the sections, not the prose links of the features introduction above them.
-    const sections = txt.slice(txt.indexOf("\n## Présentation"))
-    const listed = new Set([...sections.matchAll(new RegExp(`^ {0,2}- \\[[^\\]]+\\]\\(${BASE.replace(/[.*+?^${}()|[\]\\]/g, "\\$&")}([^)#\\s]+)\\)`, "gm"))].map((m) => m[1]))
+    const listed = listedContentPaths()
     expect(listed.size).toBeGreaterThan(10)
     for (const pagePath of listed) {
       if (pagePath === "/llms-full.txt") continue
@@ -138,13 +141,11 @@ describe("llmsFullTxt", () => {
   it("gives the operator page on a self-hosted instance, not the hosted service's legal pages", () => {
     vi.stubEnv("HOSTED_SERVICE", "false")
     try {
-      const instance = {
-        ...sources(),
-        pages: [...sources().pages, { path: "/legal/exploitant", markdown: pageHtmlToMarkdown(renderToStaticMarkup(createElement(InstanceOperatorPage))) }],
-      }
-      const text = llmsFullTxt(instance)
+      const exploitant = PUBLIC_PAGES.find((page) => page.path === "/legal/exploitant")!
+      const text = llmsFullTxt(sources())
+      expect(text).toContain(`# ${exploitant.title}`)
       expect(text).toContain(`Adresse : ${BASE}/legal/exploitant`)
-      expect(text).toContain("# Exploitant de cette instance")
+      expect(text).toContain(exploitant.summary)
       expect(text).not.toContain(`Adresse : ${BASE}/legal/privacy`)
       expect(text).not.toContain(`Adresse : ${BASE}/legal/terms`)
     } finally {
@@ -152,13 +153,9 @@ describe("llmsFullTxt", () => {
     }
   })
 
-  it("gives the home's FAQ and the legal pages written in their page.tsx", () => {
+  it("gives the home's FAQ", () => {
     expect(full).toContain(`Adresse : ${BASE}/`)
     expect(full).toContain("### Combien ça coûte ?")
-    expect(full).toContain(`Adresse : ${BASE}/legal/privacy`)
-    expect(full).toContain("responsable du traitement")
-    expect(full).toContain(`Adresse : ${BASE}/legal/terms`)
-    expect(full).toContain("Les présentes conditions générales d'utilisation")
   })
 
   it("gives the published versions of /nouveautes, never the unreleased ones", () => {
@@ -188,13 +185,6 @@ describe("llmsFullTxt", () => {
       expect(full, guide.slug).toContain(`Adresse : ${BASE}/ressources/${guide.slug}`)
       expect(full, guide.slug).toContain(excerpt(guide.body))
     }
-  })
-})
-
-describe("pageHtmlToMarkdown", () => {
-  it("keeps headings, paragraphs and lists, converts links and decodes entities", () => {
-    const html = `<script>{"x":1}</script><h1>A &amp; B</h1><p>Un <strong>texte</strong> &amp; <a href="/x">lien</a>.</p><ul><li>Un</li><li>Deux</li></ul>`
-    expect(pageHtmlToMarkdown(html)).toBe("# A & B\n\nUn **texte** & [lien](/x).\n\n- Un\n- Deux")
   })
 })
 

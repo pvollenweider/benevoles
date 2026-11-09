@@ -140,11 +140,11 @@ export function llmsTxt(s: LlmsSources): string {
 }
 
 /**
- * /llms-full.txt: every public page /llms.txt lists, in its order, each under its title with its address
- * and its text (the source's Markdown, the released versions, a blog post), then the documentation
- * units. A page written in its page.tsx (the hosted service's legal pages) arrives as Markdown
- * through `LlmsSources.pages`, rendered by the route; a page without a source (the documentation
- * and blog indexes) keeps its title and summary.
+ * /llms-full.txt: every public page /llms.txt lists, in its order, each under its title with its
+ * address, then the documentation units. A page with a Markdown source gets its full text (the
+ * released versions, a blog post, a practical guide); a page without one (the hosted service's
+ * privacy policy and terms, the documentation and blog indexes, the instance operator page) keeps
+ * its title and summary.
  */
 export function llmsFullTxt(s: LlmsSources): string {
   const url = (path: string) => absoluteUrl(s.base, path)

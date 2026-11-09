@@ -25,7 +25,7 @@ Format basé sur [Keep a Changelog](https://keepachangelog.com/fr/1.0.0/).
 
 ### Modifié
 
-- `/llms-full.txt` réunit désormais toutes les pages publiques, pas seulement les fonctionnalités et les guides : la FAQ de l'accueil, les pages par public, les tarifs, le manifeste, les guides pratiques, les nouveautés, les articles du blog et les pages légales, chacune sous son adresse.
+- `/llms-full.txt` réunit désormais toutes les pages publiques, pas seulement les fonctionnalités et les guides : la FAQ de l'accueil, les pages par public, les tarifs, le manifeste, les guides pratiques, les nouveautés, les articles du blog et les pages légales. Chacune est précédée de son adresse ; une page sans source Markdown (politique de confidentialité, CGU, exploitant d'une instance) garde son titre, son adresse et son résumé.
 - Le Manifeste raconte autrement l'origine du projet : les deux côtés du planning vécus comme bénévole puis comme responsable, et les associations où l'idée est née.
 - Le Manifeste prend la forme d'un échange : le récit de celui qui a construit benevol.app est présenté en citations, introduites par quelques questions.
 - Le Manifeste se lit comme un texte : une seule colonne centrée, des citations marquées d'un simple filet à gauche au lieu d'encadrés, sans bandeau de sommaire au milieu. Les pages Tarifs, Pour qui et Logiciel de planning n'ont plus de colonne vide à côté de leur introduction.
