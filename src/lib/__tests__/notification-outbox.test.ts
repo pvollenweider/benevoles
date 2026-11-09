@@ -395,30 +395,67 @@ describe("idempotency (#315)", () => {
 
 describe("outboxHealth (#316)", () => {
   it("healthy when nothing failed, nothing stuck", async () => {
+    m.findMany.mockResolvedValue([])
     m.count.mockResolvedValue(0)
     m.findFirst.mockResolvedValue({ createdAt: new Date(now.getTime() - 5 * 60000) })
-    expect(await outboxHealth(now)).toEqual({ failedLastDay: 0, oldestPendingMinutes: 5, staleClaims: 0, healthy: true, stuck: false })
+    expect(await outboxHealth(now)).toEqual({
+      failedLastDay: 0, recipientFailuresLastDay: 0, otherFailuresLastDay: 0, oldestPendingMinutes: 5, staleClaims: 0, healthy: true, stuck: false,
+    })
   })
 
-  it("unhealthy on a failure, a stale claim, or a pending row older than 2 h", async () => {
-    m.count.mockResolvedValueOnce(1).mockResolvedValueOnce(0)
+  it("unhealthy on another failure, a stale claim, or a pending row older than 2 h", async () => {
+    m.findMany.mockResolvedValue([{ lastError: "smtp:rejected_permanent:policy_rejected:550:5.7.1" }])
+    m.count.mockResolvedValue(0)
     m.findFirst.mockResolvedValue(null)
-    expect((await outboxHealth(now)).healthy).toBe(false)
+    expect(await outboxHealth(now)).toMatchObject({ recipientFailuresLastDay: 0, otherFailuresLastDay: 1, healthy: false, stuck: false })
 
-    m.count.mockResolvedValueOnce(0).mockResolvedValueOnce(0)
+    m.findMany.mockResolvedValue([])
+    m.count.mockResolvedValue(0)
     m.findFirst.mockResolvedValue({ createdAt: new Date(now.getTime() - 3 * 60 * 60000) })
     expect(await outboxHealth(now)).toMatchObject({ oldestPendingMinutes: 180, healthy: false, stuck: true })
 
-    m.count.mockResolvedValueOnce(0).mockResolvedValueOnce(2)
+    m.findMany.mockResolvedValue([])
+    m.count.mockResolvedValue(2)
     m.findFirst.mockResolvedValue(null)
     expect(await outboxHealth(now)).toMatchObject({ staleClaims: 2, healthy: false, stuck: true })
   })
 
   // Regression: one row that gave up (already reported when it failed) made the hourly cron alert
   // « Notification outbox unhealthy » every hour for a day. Unhealthy for the health page, not stuck.
-  it("a row that gave up, with nothing pending, is unhealthy but not stuck: no hourly alert", async () => {
-    m.count.mockResolvedValueOnce(1).mockResolvedValueOnce(0)
+  it("a row that gave up for another reason, with nothing pending, is unhealthy but not stuck: no hourly alert", async () => {
+    m.findMany.mockResolvedValue([{ lastError: "smtp:rejected_permanent:relay_error:550:5.0.0" }])
+    m.count.mockResolvedValue(0)
     m.findFirst.mockResolvedValue(null)
-    expect(await outboxHealth(now)).toEqual({ failedLastDay: 1, oldestPendingMinutes: null, staleClaims: 0, healthy: false, stuck: false })
+    expect(await outboxHealth(now)).toEqual({
+      failedLastDay: 1, recipientFailuresLastDay: 0, otherFailuresLastDay: 1, oldestPendingMinutes: null, staleClaims: 0, healthy: false, stuck: false,
+    })
+  })
+
+  // #1291: a mistyped or unknown address says nothing about the platform. Healthy for the queue,
+  // and not stuck, so the hourly Sentry alert doesn't fire for it either.
+  it("recipient-address failures alone stay healthy and not stuck", async () => {
+    m.findMany.mockResolvedValue([
+      { lastError: "smtp:rejected_permanent:mailbox_unknown:550:5.1.1" },
+      { lastError: "smtp:rejected_permanent:mailbox_disabled:550:5.2.1" },
+      { lastError: "smtp:rejected_permanent:domain_not_found:550:5.1.2" },
+    ])
+    m.count.mockResolvedValue(0)
+    m.findFirst.mockResolvedValue(null)
+    expect(await outboxHealth(now)).toEqual({
+      failedLastDay: 3, recipientFailuresLastDay: 3, otherFailuresLastDay: 0, oldestPendingMinutes: null, staleClaims: 0, healthy: true, stuck: false,
+    })
+  })
+
+  it("counts both groups when recipient-address and other failures are mixed", async () => {
+    m.findMany.mockResolvedValue([
+      { lastError: "smtp:rejected_permanent:domain_not_found:550:5.1.2" },
+      { lastError: "smtp:rejected_permanent:mailbox_unknown:550:5.1.1" },
+      { lastError: "smtp:rejected_permanent:policy_rejected:550:5.7.1" },
+    ])
+    m.count.mockResolvedValue(0)
+    m.findFirst.mockResolvedValue(null)
+    expect(await outboxHealth(now)).toMatchObject({
+      failedLastDay: 3, recipientFailuresLastDay: 2, otherFailuresLastDay: 1, healthy: false, stuck: false,
+    })
   })
 })
