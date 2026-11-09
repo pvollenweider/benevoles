@@ -44,6 +44,10 @@ export const RETENTION_DAYS = {
   /** Sending limits reached (#1100): organisation, limit, hour, counts; no address, no content.
    * The operator looks at the last 7 days; three months show whether a limit is hit again and again. */
   emailLimitHit: 90,
+  /** Aggregated delivery counts of the transactional emails (#1269): organisation, day, kind,
+   * outcome, count, no address and no content. Kept 13 months, so a season can be compared with
+   * the previous one. */
+  deliveryCounter: 395,
   /** The operator's decisions (#810): space validated, refused, suspended, deleted, block list. */
   operatorLog: 365,
   /** Self-service sign-up request (#810): name, contact name and address typed on /inscription. */
@@ -236,6 +240,15 @@ export const RETENTION: readonly RetentionEntry[] = [
     duration: `effacés chaque nuit une fois partis ; ceux en échec ou annulés ${d.failedNotification} jours après leur mise en file`,
     trigger: "envoi, échec définitif ou annulation (organisation désactivée)",
     mechanism: "nettoyage quotidien (cron cleanup)",
+    backups: inBackups,
+    public: true,
+  },
+  {
+    data: "Compteurs d'emails transactionnels : organisation (ou « plateforme » pour les emails sans organisation), jour de mise en file, type d'email, résultat (envoyé, en échec ou annulé) et classe de la raison d'annulation, nombre ; ni destinataire, ni adresse, ni contenu, ni identifiant de bénévole",
+    purpose: "Savoir ce qui a été envoyé et ce qui n'est pas parti, après la purge de la file d'envoi",
+    duration: `${d.deliveryCounter} jours après le jour de mise en file`,
+    trigger: "purge d'un email de la file d'envoi",
+    mechanism: "nettoyage quotidien (cron cleanup) ; effacés avec l'organisation",
     backups: inBackups,
     public: true,
   },

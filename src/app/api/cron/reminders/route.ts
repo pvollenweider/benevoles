@@ -53,7 +53,7 @@ async function run(req: Request) {
     return NextResponse.json({ error: "Unauthorized" }, { status: 401 })
   }
 
-  return recordJobRun("reminders", async () => {
+  const summary = await recordJobRun("reminders", async () => {
 
   const now = new Date()
   const totals: Record<string, { eligible: number; groups: number; sent: number; failed: number }> = {}
@@ -204,7 +204,7 @@ async function run(req: Request) {
     Sentry.captureMessage("Notification outbox unhealthy", { level: "warning", extra: { ...outboxStatus } })
   }
 
-  return NextResponse.json({
+  return {
     runAt: now.toISOString(),
     totals,
     expiredOffers: expiredOffers.length,
@@ -213,6 +213,7 @@ async function run(req: Request) {
     milestoneOwners,
     outbox,
     outboxStatus,
+  }
   })
-  })
+  return NextResponse.json(summary)
 }
