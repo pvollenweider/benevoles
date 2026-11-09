@@ -4,11 +4,11 @@
 import { llmsFullTxt } from "@/lib/llms-txt"
 import { llmsSources, markdownResponse } from "@/lib/llms-sources"
 
-// /llms-full.txt: the features page, the guides and every documentation unit as one Markdown
+// /llms-full.txt: every public page /llms.txt lists, then the documentation units, as one Markdown
 // document (src/lib/llms-txt.ts), linked from /llms.txt.
 export const dynamic = "force-dynamic"
 
 export async function GET() {
-  const sources = await llmsSources()
+  const sources = await llmsSources(true)
   return sources ? markdownResponse(llmsFullTxt(sources)) : new Response("Not found", { status: 404 })
 }
