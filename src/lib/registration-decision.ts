@@ -5,9 +5,8 @@ import { cancelPolicySentence } from "./cancel-deadline"
 import { z } from "zod"
 import type { OrgScopedPrisma } from "./prisma-org"
 import { logEvent, type LogActor } from "./event-log"
-import { registrationToken } from "./token-vault"
-import { pickShiftInfo } from "./shift-info"
 import { collectNotifications, deliverAfterResponse, enqueueNotifications } from "./notifications/outbox"
+import { queueAddedShiftsConfirmation } from "./notifications/added-shifts-confirmation"
 import { notifySectorLeadersOfSignup } from "./sector-leaders"
 import { promoteNextInWaitlist } from "./waitlist"
 import { reportError } from "./report-error"
@@ -90,7 +89,11 @@ export async function decideRequest(db: OrgScopedPrisma, actor: LogActor, id: st
         const availability = await readAvailabilityGate(tx, reg.eventId)
         // The shift is always locked (AUTHZ-15): its status and spots are judged below.
         await lockShifts(tx, [reg.shiftId])
-        if (gate.kind !== "off" || availability.inUse) await lockVolunteerRows(tx, [reg.volunteerId])
+        // The member's row is always locked: the workload protection and the dated availability
+        // read it, and the grouped confirmation below needs the same lock as the volunteer's own
+        // sign-ups (lockSignupVolunteer) so two accepts, or an accept and a sign-up, find the same
+        // pending email instead of starting two. Order stays workload → shifts → people.
+        await lockVolunteerRows(tx, [reg.volunteerId])
         if (gate.kind !== "off") {
           const shift = await tx.shift.findFirst({ where: { id: reg.shiftId }, select: { id: true, date: true, startTime: true, endTime: true, mealOnTheGo: true, placeId: true } })
           if (shift) {
@@ -108,29 +111,33 @@ export async function decideRequest(db: OrgScopedPrisma, actor: LogActor, id: st
       // The acknowledgement's evidence commits with the acceptance (#1146, lot B).
       await logAvailabilityAcks(tx, { eventId: reg.eventId, actor, via: "accept", acks: acknowledged, registrationOf: () => id })
       const outbox = collectNotifications()
+      let groupedDueId: string | null = null
       if (status === "active") {
-        await outbox.send({
-          kind: "registration_confirmation",
-          recipient: { email: reg.volunteer.email, name },
-          volunteerId: reg.volunteerId,
-          organizationId: reg.event.organizationId,
-          dedupeKey: `registration_accepted:${id}`,
-          data: {
-            volunteerName: name,
-            eventTitle: reg.event.title,
-            shifts: [{
-              label: reg.shift.label,
-              date: reg.shift.date.toLocaleDateString("fr-FR"),
-              startTime: reg.shift.startTime,
-              endTime: reg.shift.endTime,
-              ...pickShiftInfo(reg.shift, reg.event),
-            }],
-            editToken: registrationToken.reveal(reg),
-            orgSlug: reg.event.organization.slug,
-            confirmationMessage: reg.event.confirmationMessage ?? undefined,
-            cancelNotice: cancelPolicySentence(reg.event),
-          },
-        })
+        // The confirmation is grouped with the volunteer's other confirmations on this event:
+        // an organizer accepting several requests of one person in a row sends one email listing
+        // them, instead of one email per request, the last ones dropped by the per-address cap of
+        // public emails (src/lib/notifications/send-limits.ts). What the email lists is read again
+        // when it leaves, so a place withdrawn meanwhile is not announced. A request's « Demande
+        // reçue » already carried the personal link (buildSignupNotifications, and the waitlist
+        // confirmation), so waiting for the group loses nothing.
+        // A member without an address has no confirmation to send: the outbox skips those rows too.
+        groupedDueId = reg.volunteer.email
+          ? await queueAddedShiftsConfirmation(tx, {
+              volunteerId: reg.volunteerId,
+              organizationId: reg.event.organizationId,
+              recipient: { email: reg.volunteer.email, name },
+              data: {
+                volunteerName: name,
+                eventTitle: reg.event.title,
+                orgSlug: reg.event.organization.slug,
+                confirmationMessage: reg.event.confirmationMessage ?? undefined,
+                cancelNotice: cancelPolicySentence(reg.event),
+                eventId: reg.eventId,
+              },
+              registrationIds: [id],
+              now: new Date(),
+            })
+          : null
         await notifySectorLeadersOfSignup({
           eventId: reg.eventId,
           eventTitle: reg.event.title,
@@ -155,7 +162,11 @@ export async function decideRequest(db: OrgScopedPrisma, actor: LogActor, id: st
           },
         })
       }
-      return enqueueNotifications(outbox.payloads, tx, { organizationId: reg.event.organizationId })
+      const ids = await enqueueNotifications(outbox.payloads, tx, { organizationId: reg.event.organizationId })
+      // Without a digest delay (DIGEST_DELAY_SECONDS=0) the grouped row is due at once: deliver it
+      // after the response, as the public sign-up route does (#1191).
+      if (groupedDueId) ids.push(groupedDueId)
+      return ids
     })
   } catch (e) {
     if (e instanceof ShiftCancelledError) return { ok: false, httpStatus: 409, error: cancelledShiftMessage(), code: "shift_cancelled" }

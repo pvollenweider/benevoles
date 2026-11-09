@@ -96,7 +96,8 @@ describe.skipIf(!url)("availability acknowledgement on accept, restore and swap 
     const refused = await decideRequest(db(), actor, reg.id, { decision: "accept" })
     expect(refused).toMatchObject({ ok: false, httpStatus: 409, code: "availability", outside: [{ volunteerId: p.id, shiftId: bar.id, state: "outside" }] })
     expect((await prisma.registration.findUniqueOrThrow({ where: { id: reg.id } })).status).toBe("requested")
-    expect(await prisma.notificationOutbox.count({ where: { organizationId: orgId, dedupeKey: `registration_accepted:${reg.id}` } })).toBe(0)
+    // No confirmation (grouped per event and volunteer, #1191) was queued by the refused acceptance.
+    expect(await prisma.notificationOutbox.count({ where: { organizationId: orgId, dedupeKey: { startsWith: `registration_confirmation:added:${e.id}:${p.id}:` } } })).toBe(0)
 
     const key = await keyOf(e.id, p.id, bar.id)
     expect(await decideRequest(db(), actor, reg.id, { decision: "accept", availabilityAck: [key] })).toEqual({ ok: true, status: "active" })
