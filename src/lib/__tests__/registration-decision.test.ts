@@ -1,8 +1,9 @@
 import { describe, it, expect, vi, beforeEach } from "vitest"
 // Workload protection (#1171) runs on Postgres (src/__integration__/workload-policy.int.test.ts): off here.
+// lockVolunteerRows stays real: it is the shared member lock the grouped confirmation relies on.
 vi.mock("@/lib/workload-guard", async (importOriginal) => ({
   ...(await importOriginal<typeof import("@/lib/workload-guard")>()),
-  lockWorkloadShared: vi.fn(), lockVolunteerRows: vi.fn(), readWorkloadGate: vi.fn(async () => ({ kind: "off" })),
+  lockWorkloadShared: vi.fn(), readWorkloadGate: vi.fn(async () => ({ kind: "off" })),
   committedDuty: vi.fn(async () => []), checkScheduleEdit: vi.fn(async () => []),
 }))
 
@@ -13,6 +14,7 @@ const m = vi.hoisted(() => ({
   deliver: vi.fn(),
   promote: vi.fn().mockResolvedValue(true),
   leaders: vi.fn().mockResolvedValue(undefined),
+  queueConfirmation: vi.fn().mockResolvedValue("out-group"),
 }))
 vi.mock("../event-log", () => ({ logEvent: m.logEvent }))
 vi.mock("../notifications/outbox", () => ({
@@ -23,6 +25,7 @@ vi.mock("../notifications/outbox", () => ({
   enqueueNotifications: m.enqueue,
   deliverAfterResponse: m.deliver,
 }))
+vi.mock("../notifications/added-shifts-confirmation", () => ({ queueAddedShiftsConfirmation: m.queueConfirmation }))
 vi.mock("../report-error", () => ({ reportError: () => () => {} }))
 vi.mock("../sector-leaders", () => ({ notifySectorLeadersOfSignup: m.leaders }))
 vi.mock("../waitlist", () => ({ promoteNextInWaitlist: m.promote }))
@@ -33,7 +36,7 @@ import { answerRow, availabilityShift, availabilityTx } from "./fixtures/availab
 
 const actor = { type: "admin" as const, id: "admin-1", name: "Admin" }
 const request = (status = "requested") => ({
-  id: "reg-1", status, eventId: "evt-1", shiftId: "sh-1",
+  id: "reg-1", status, eventId: "evt-1", shiftId: "sh-1", volunteerId: "vol-1",
   volunteer: { firstName: "Marc", lastName: "D", email: "marc@x.ch" },
   shift: { label: "Chauffeur navette", roleName: "Chauffeur", date: new Date("2026-07-04T00:00:00Z"), startTime: "08:00", endTime: "12:00" },
   event: { title: "Fête", slug: "fete", organizationId: "org-a", confirmationMessage: null, organization: { slug: "asso" } },
@@ -66,17 +69,29 @@ function db(reg: ReturnType<typeof request> | null, updated = 1, availability: R
 describe("decideRequest", () => {
   beforeEach(() => vi.clearAllMocks())
 
-  it("accepts: the request becomes a place, confirmation email with the personal link, logged, no waitlist offer", async () => {
+  it("accepts: the request becomes a place, its confirmation grouped with the event's others, logged, no waitlist offer", async () => {
     const d = db(request())
     const out = await decideRequest(d.db as never, actor, "reg-1", { decision: "accept" })
     expect(out).toEqual({ ok: true, status: "active" })
     expect(d.updateMany).toHaveBeenCalledWith({ where: { id: "reg-1", status: "requested" }, data: { status: "active" } })
-    const [payloads] = m.enqueue.mock.calls[0]
-    expect(payloads[0]).toMatchObject({ kind: "registration_confirmation", recipient: { email: "marc@x.ch" }, data: { editToken: "tok-1" } })
+    // One grouped email per event and volunteer (#1191's queue), not one immediate email per request.
+    expect(m.queueConfirmation).toHaveBeenCalledTimes(1)
+    const [txArg, queued] = m.queueConfirmation.mock.calls[0]
+    expect(txArg).toHaveProperty("registration")
+    expect(queued).toMatchObject({
+      volunteerId: "vol-1",
+      organizationId: "org-a",
+      recipient: { email: "marc@x.ch", name: "Marc D" },
+      data: { eventId: "evt-1", eventTitle: "Fête", orgSlug: "asso" },
+      registrationIds: ["reg-1"],
+    })
+    // Only the sector leaders' notification goes through the outbox collector; nothing per request.
+    expect(m.enqueue.mock.calls[0][0]).toEqual([])
     expect(m.leaders).toHaveBeenCalled()
     expect(m.logEvent.mock.calls[0][0]).toMatchObject({ action: "registration.accepted", changes: { status: { from: "requested", to: "active" } } })
     expect(m.promote).not.toHaveBeenCalled()
-    expect(m.deliver).toHaveBeenCalledWith(["out-1"])
+    // The grouped row is due at once without a digest delay: it is delivered with the rest.
+    expect(m.deliver).toHaveBeenCalledWith(["out-1", "out-group"])
   })
 
   it("refuses: polite email with the organizer's note, the note's text never logged, the freed spot offered", async () => {
@@ -105,6 +120,7 @@ describe("decideRequest", () => {
     const raced = db(request(), 0)
     expect(await decideRequest(raced.db as never, actor, "reg-1", { decision: "accept" })).toMatchObject({ ok: false, httpStatus: 409 })
     expect(m.enqueue).not.toHaveBeenCalled()
+    expect(m.queueConfirmation).not.toHaveBeenCalled()
     expect(m.logEvent).not.toHaveBeenCalled()
     expect(m.promote).not.toHaveBeenCalled()
   })
@@ -172,10 +188,14 @@ describe("decideRequest on an event collecting availability", () => {
     expect(refusing.availability.availabilityRequest.findFirst).not.toHaveBeenCalled()
   })
 
-  it("locks the shift only (AUTHZ-15) and reads no answer on an event that never used the option", async () => {
+  it("locks the shift and the member (AUTHZ-15, grouped confirmation) and reads no answer on an event that never used the option", async () => {
     const d = db(pending())
     expect(await decideRequest(d.db as never, actor, "reg-1", { decision: "accept" })).toEqual({ ok: true, status: "active" })
-    expect(d.queryRaw).toHaveBeenCalledTimes(1)
+    expect(d.queryRaw).toHaveBeenCalledTimes(2)
+    expect(String(d.queryRaw.mock.calls[0][0].join("?"))).toContain('FROM "Shift"')
+    // The member lock is the one the volunteer's own sign-ups take (lockSignupVolunteer): two
+    // accepts of the same person find the same pending confirmation.
+    expect(String(d.queryRaw.mock.calls[1][0].join("?"))).toContain('FROM "Volunteer"')
     expect(d.availability.availabilityRequest.findFirst).not.toHaveBeenCalled()
   })
 

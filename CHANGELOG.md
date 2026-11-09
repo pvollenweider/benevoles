@@ -33,6 +33,7 @@ Format basé sur [Keep a Changelog](https://keepachangelog.com/fr/1.0.0/).
 
 ### Corrigé
 
+- L'acceptation de plusieurs demandes d'un même bénévole pour un même événement ne lui envoie plus une confirmation par demande, dont les dernières étaient abandonnées par le plafond d'emails publics : les places acceptées sont regroupées dans un seul email, envoyé quelques minutes après la dernière acceptation, qui ne liste que les places encore actives. Une acceptation et un ajout de créneau par le bénévole dans le même intervalle font aussi un seul email.
 - Les alertes opérateur ne partent plus deux fois quand le nettoyage est relancé le même jour : la déduplication couvre désormais le push ntfy et l'email, et sa trace est conservée sept jours. Les titres ntfy accentués s'affichent correctement.
 - Le désabonnement des nouveautés produit ne s'effectue plus à l'ouverture du lien : les scanners de messagerie et les aperçus de liens ne peuvent plus désabonner un administrateur. Le lien ouvre une page de confirmation, et le bouton « Me désabonner » envoie le POST.
 - Ajout manuel d'un bénévole : une coupure réseau ou une erreur passagère du serveur ne laisse plus le bouton bloqué sur « Ajout en cours… » ; un message le dit et on peut réessayer. Dans le journal d'activité, le récit et la relecture d'un élément disent qu'ils n'ont pas pu se charger au lieu d'afficher « rien à raconter ».
