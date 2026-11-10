@@ -1,6 +1,7 @@
 // SPDX-FileCopyrightText: 2026 Philippe Vollenweider
 // SPDX-License-Identifier: AGPL-3.0-only
 
+import { clearShiftDeclines } from "./shift-decline-clear"
 import { cancelPolicySentence } from "./cancel-deadline"
 import { z } from "zod"
 import type { OrgScopedPrisma } from "./prisma-org"
@@ -108,6 +109,8 @@ export async function decideRequest(db: OrgScopedPrisma, actor: LogActor, id: st
       }
       const { count } = await tx.registration.updateMany({ where: { id, status: "requested" }, data: { status } })
       if (count === 0) return null
+      // A request accepted is the person taking the shift: a « Je ne peux pas » answer for it goes (#1303).
+      if (status === "active") await clearShiftDeclines(tx, reg.volunteerId, [reg.shiftId])
       // The acknowledgement's evidence commits with the acceptance (#1146, lot B).
       await logAvailabilityAcks(tx, { eventId: reg.eventId, actor, via: "accept", acks: acknowledged, registrationOf: () => id })
       const outbox = collectNotifications()

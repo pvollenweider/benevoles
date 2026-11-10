@@ -46,6 +46,10 @@ const TOKEN_URLS = [
   `/api/public/waitlist/${FAKE}/confirm`,
   `/disponibilites/${FAKE}`,
   `/api/public/availability/${FAKE}`,
+  `/ne-peux-pas/invitation/${FAKE}/shift-1`,
+  `/ne-peux-pas/inscription/${FAKE}/shift-1`,
+  // The route as the app router names it (its first segment is the kind of link, not a secret).
+  `/ne-peux-pas/[kind]/${FAKE}/shift-1`,
   `/fete-du-village${q("token")}`,
   `/admin/accept-invite${q("token")}`,
   `/admin/reset-password${q("token")}`,

@@ -24,6 +24,8 @@ export type OpenShiftsEmailData = {
   declineUrl?: string
   /** Members already registered without an invitation: their personal page too. */
   editToken?: string
+  /** Per shift, the page « Je ne peux pas » (#1303), from the invitation or personal link. */
+  shiftDeclineUrls?: Record<string, string>
   orgSlug?: string
 }
 
@@ -63,7 +65,11 @@ export function renderOpenShifts(p: NotificationPayload): RenderedEmail {
     ...(note ? [``, note] : []),
     ``,
     several ? `Les créneaux à compléter :` : `Le créneau à compléter :`,
-    ...d.shifts.flatMap((s, i) => [`- ${lines[i]}`, `  Je prends ce créneau : ${takeShiftUrl(d.signupUrl, s.id)}`]),
+    ...d.shifts.flatMap((s, i) => [
+      `- ${lines[i]}`,
+      `  Je prends ce créneau : ${takeShiftUrl(d.signupUrl, s.id)}`,
+      ...(d.shiftDeclineUrls?.[s.id] ? [`  Je ne peux pas : ${d.shiftDeclineUrls[s.id]}`] : []),
+    ]),
     ``,
     several ? `Tous les créneaux : ${d.signupUrl}` : `T'inscrire : ${d.signupUrl}`,
     ...(editUrl ? [`Voir tes inscriptions : ${editUrl}`] : []),
@@ -79,7 +85,10 @@ export function renderOpenShifts(p: NotificationPayload): RenderedEmail {
     ${note ? `<div style="background:#f3f4f6;padding:14px;border-radius:10px;white-space:pre-wrap;margin-bottom:1em">${escapeHtml(note)}</div>` : ""}
     <p style="color:#555;margin-bottom:0.5em">${several ? "Les créneaux à compléter :" : "Le créneau à compléter :"}</p>
     <ul style="background:#f9fafb;border-radius:10px;padding:12px 16px 12px 32px;margin:0">
-      ${d.shifts.map((s, i) => `<li style="padding:4px 0">${escapeHtml(lines[i])}<br><a href="${escapeHtml(takeShiftUrl(d.signupUrl, s.id))}" style="color:#1d4ed8;font-weight:600">Je prends ce créneau${several ? ` (${escapeHtml(takeLabel(s))})` : ""}</a></li>`).join("")}
+      ${d.shifts.map((s, i) => {
+        const declineUrl = d.shiftDeclineUrls?.[s.id]
+        return `<li style="padding:4px 0">${escapeHtml(lines[i])}<br><a href="${escapeHtml(takeShiftUrl(d.signupUrl, s.id))}" style="color:#1d4ed8;font-weight:600">Je prends ce créneau${several ? ` (${escapeHtml(takeLabel(s))})` : ""}</a>${declineUrl ? ` · <a href="${escapeHtml(declineUrl)}" style="color:#2563eb">Je ne peux pas</a>` : ""}</li>`
+      }).join("")}
     </ul>
     <p style="margin-top:1.5em">${btn(d.signupUrl, several ? "Voir tous les créneaux" : "Choisir mon créneau")}</p>
     ${editUrl ? `<p style="font-size:0.9em"><a href="${escapeHtml(editUrl)}" style="color:#2563eb">Voir mes inscriptions</a></p>` : ""}

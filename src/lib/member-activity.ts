@@ -10,7 +10,7 @@
 
 export type ActivityFact = {
   at: Date
-  kind: "invited" | "invite_used" | "invite_declined" | "registered" | "waitlisted" | "cancelled" | "present" | "leader" | "profile"
+  kind: "invited" | "invite_used" | "invite_declined" | "shift_declined" | "registered" | "waitlisted" | "cancelled" | "present" | "leader" | "profile"
   text: string
   eventId?: string
   eventTitle?: string
@@ -18,6 +18,8 @@ export type ActivityFact = {
 
 export type ActivitySources = {
   invites: { sentAt: Date; usedAt: Date | null; declinedAt: Date | null; event: { id: string; title: string } }[]
+  /** « Je ne peux pas » answers for one shift (#1303), each with the shift they are about. */
+  shiftDeclines: { declinedAt: Date; shift: { roleName: string; label: string; date: Date }; event: { id: string; title: string } }[]
   registrations: {
     createdAt: Date
     updatedAt: Date
@@ -51,6 +53,9 @@ export function memberTimeline(s: ActivitySources): ActivityFact[] {
     // #558: not shown again if the person later registers from the same link (declinedAt is
     // cleared then) — this only ever reflects the current state, like the admin invitations list.
     if (i.declinedAt) facts.push({ at: i.declinedAt, kind: "invite_declined", text: "A indiqué ne pas être disponible", eventId: i.event.id, eventTitle: i.event.title })
+  }
+  for (const d of s.shiftDeclines) {
+    facts.push({ at: d.declinedAt, kind: "shift_declined", text: `A indiqué ne pas pouvoir : ${shiftName(d.shift)}`, eventId: d.event.id, eventTitle: d.event.title })
   }
   for (const r of s.registrations) {
     const base = { eventId: r.event.id, eventTitle: r.event.title }

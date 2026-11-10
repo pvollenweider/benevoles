@@ -18,7 +18,7 @@ afterEach(() => {
   vi.unstubAllGlobals()
 })
 
-const counts = { registrations: 3, upcomingLive: 1, invites: 1, answers: 2, pushSubscriptions: 0, sectorLeaders: 0, tombstones: 0 }
+const counts = { registrations: 3, upcomingLive: 1, invites: 1, shiftDeclines: 1, answers: 2, pushSubscriptions: 0, sectorLeaders: 0, tombstones: 0 }
 
 // The member page's « Effacer les données personnelles » action (#516).
 

@@ -48,6 +48,7 @@ vi.mock("@/lib/prisma", async () => {
     rosterConsent: { findUnique: vi.fn().mockResolvedValue(null), upsert: vi.fn() },
     eventQuestion: { findMany: questionRead },
     questionAnswer: { upsert: m.upsert, deleteMany: m.deleteMany, createMany: m.createMany },
+    shiftDecline: { deleteMany: vi.fn().mockResolvedValue({ count: 0 }) },
     registration: {
       // The link is checked again under the member lock (#1138 follow-up); the duplicate check
       // under the lock (by shift) finds nothing.

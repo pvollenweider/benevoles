@@ -708,7 +708,7 @@ model EventLog {
   actorType     String // "admin" | "volunteer" | "system"
   actorId       String? // AdminUser.id or Volunteer.id depending on actorType; null for system actions
   action        String // dot-namespaced, e.g. "shift.created", "registration.cancelled"
-  entityType    String // "Shift" | "Registration" | "Event" | "MemberInvite" | "EventPage" | "SectorLeader" | "EventMilestone"
+  entityType    String // "Shift" | "Registration" | "Event" | "MemberInvite" | "ShiftDecline" | "EventPage" | "SectorLeader" | "EventMilestone"
   entityId      String
   changes       Json? // { field: { from, to } }, non-PII values only
   causedByLogId String? // set when this entry is a direct, known consequence of another one
@@ -934,6 +934,7 @@ model Shift {
   place         EventPlace?      @relation(fields: [placeId], references: [id], onDelete: SetNull)
   registrations Registration[]
   draftAssignments DraftAssignment[]
+  declines      ShiftDecline[]
 
   @@index([recurrenceId])
   @@index([sectorId])
@@ -1009,6 +1010,7 @@ model Volunteer {
   organization  Organization?  @relation(fields: [organizationId], references: [id], onDelete: SetNull)
   registrations     Registration[]
   invites           MemberInvite[]
+  shiftDeclines     ShiftDecline[]
   pushSubscriptions PushSubscription[]
   questionAnswers   QuestionAnswer[]
   deliveryOutcomes  DeliveryOutcome[]
@@ -1174,6 +1176,25 @@ model MemberInvite {
   volunteer Volunteer @relation(fields: [volunteerId], references: [id], onDelete: Cascade)
 
   @@unique([eventId, volunteerId])
+}
+
+// « Je ne peux pas » for one precise shift (#1303): the volunteer's answer from the open-shifts
+// email, one row per (volunteer, shift), with the date it was given. It says nothing about the
+// event's other shifts nor about the event-level answer (MemberInvite.declinedAt, #558), and is
+// never a block: the organiser still sees the person in « Chercher des bénévoles », with the reason
+// and unchecked, and may choose to ask again. Taking the shift later deletes the row. Kept until
+// the event is anonymised, like the invitations; deleted with either side (cascade).
+model ShiftDecline {
+  id          String   @id @default(cuid())
+  shiftId     String
+  volunteerId String
+  declinedAt  DateTime @default(now())
+
+  shift     Shift     @relation(fields: [shiftId], references: [id], onDelete: Cascade)
+  volunteer Volunteer @relation(fields: [volunteerId], references: [id], onDelete: Cascade)
+
+  @@unique([shiftId, volunteerId])
+  @@index([volunteerId])
 }
 
 // Erasure register (#516): one row per member whose personal data was erased, so the erasure can

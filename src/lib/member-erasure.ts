@@ -87,6 +87,8 @@ export interface ErasureInput {
   member: { id: string; firstName: string; lastName: string; email: string | null; mergedIntoId: string | null; erasedAt: Date | null }
   registrations: { id: string; status: string; upcoming: boolean }[]
   inviteIds: string[]
+  /** « Je ne peux pas » answers for one shift (#1303): the person's own. */
+  shiftDeclineIds: string[]
   answerIds: string[]
   pushSubscriptionIds: string[]
   /** Sector leader entries (#186) of the organisation whose email is the member's, case-insensitive. */
@@ -104,6 +106,7 @@ export interface ErasurePlan {
   registrationIdsToRetoken: string[]
   delete: {
     inviteIds: string[]
+    shiftDeclineIds: string[]
     answerIds: string[]
     pushSubscriptionIds: string[]
     sectorLeaderIds: string[]
@@ -114,6 +117,7 @@ export interface ErasurePlan {
     registrations: number
     upcomingLive: number
     invites: number
+    shiftDeclines: number
     answers: number
     pushSubscriptions: number
     sectorLeaders: number
@@ -139,6 +143,7 @@ export function buildErasurePlan(input: ErasureInput): ErasurePlan {
     registrationIdsToRetoken: registrationIds,
     delete: {
       inviteIds: [...input.inviteIds],
+      shiftDeclineIds: [...input.shiftDeclineIds],
       answerIds: [...input.answerIds],
       pushSubscriptionIds: [...input.pushSubscriptionIds],
       sectorLeaderIds: [...input.sectorLeaderIds],
@@ -149,6 +154,7 @@ export function buildErasurePlan(input: ErasureInput): ErasurePlan {
       registrations: registrationIds.length,
       upcomingLive: input.registrations.filter((r) => r.upcoming && LIVE.has(r.status)).length,
       invites: input.inviteIds.length,
+      shiftDeclines: input.shiftDeclineIds.length,
       answers: input.answerIds.length,
       pushSubscriptions: input.pushSubscriptionIds.length,
       sectorLeaders: input.sectorLeaderIds.length,
@@ -229,6 +235,7 @@ export function eraseMemberRecap(name: string, c: ErasureCounts): ActionRecap {
     "notes, étiquettes et disponibilités",
     ...(c.registrations > 0 ? ["commentaires et téléphones laissés à ses inscriptions ; ses liens personnels ne fonctionneront plus"] : []),
     ...(c.invites > 0 ? [n(c.invites, "invitation (et sa réponse « pas disponible » éventuelle)", "invitations (et leurs réponses « pas disponible » éventuelles)")] : []),
+    ...(c.shiftDeclines > 0 ? [n(c.shiftDeclines, "réponse « Je ne peux pas » pour un créneau", "réponses « Je ne peux pas » pour des créneaux")] : []),
     ...(c.answers > 0 ? [n(c.answers, "réponse aux questions des événements", "réponses aux questions des événements")] : []),
     ...(c.pushSubscriptions > 0 ? [n(c.pushSubscriptions, "abonnement aux notifications", "abonnements aux notifications")] : []),
     ...(c.sectorLeaders > 0 ? [n(c.sectorLeaders, "désignation comme responsable de secteur", "désignations comme responsable de secteur")] : []),

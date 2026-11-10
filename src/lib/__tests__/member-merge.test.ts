@@ -42,6 +42,8 @@ function baseInput(overrides: Partial<MemberMergeInput> = {}): MemberMergeInput 
     absorbRegistrations: [],
     keepInvites: [],
     absorbInvites: [],
+    keepShiftDeclines: [],
+    absorbShiftDeclines: [],
     keepAnswers: [],
     absorbAnswers: [],
     absorbPushSubscriptions: [],
@@ -289,5 +291,28 @@ describe("buildMergePlan — delivery outcomes and push subscriptions", () => {
     })
     const plan = buildMergePlan(input, {})
     expect(plan.tokenRegeneration).toEqual({ registrationIds: ["r1"], inviteIds: ["i1"] })
+  })
+})
+
+describe("buildMergePlan — « Je ne peux pas » answers (#1303)", () => {
+  it("unites both records' answers and drops one where a live registration holds the shift", () => {
+    const input = baseInput({
+      keepRegistrations: [{ id: "r-keep", eventId: "e1", shiftId: "s1", status: "active", checkedInAt: null }],
+      absorbRegistrations: [{ id: "r-absorb", eventId: "e1", shiftId: "s2", status: "waiting", checkedInAt: null }],
+      keepShiftDeclines: [
+        { id: "d-keep-s3", shiftId: "s3", declinedAt: new Date("2026-06-20T10:00:00Z") },
+        { id: "d-keep-s1", shiftId: "s1", declinedAt: new Date("2026-06-20T10:00:00Z") },
+      ],
+      absorbShiftDeclines: [
+        { id: "d-absorb-s3", shiftId: "s3", declinedAt: new Date("2026-06-21T10:00:00Z") },
+        { id: "d-absorb-s2", shiftId: "s2", declinedAt: new Date("2026-06-21T10:00:00Z") },
+        { id: "d-absorb-s4", shiftId: "s4", declinedAt: new Date("2026-06-21T10:00:00Z") },
+      ],
+    })
+    const plan = buildMergePlan(input, {})
+    // The kept record's answer on s3 wins over the duplicate; s1 and s2 are held live.
+    expect(plan.shiftDeclineIdsToReassign).toEqual(["d-absorb-s4"])
+    expect(plan.shiftDeclineIdsToDrop).toEqual(["d-keep-s1", "d-absorb-s3", "d-absorb-s2"])
+    expect(buildMergePreview(input, {}).counts).toMatchObject({ shiftDeclinesReassigned: 1, shiftDeclinesDropped: 3 })
   })
 })

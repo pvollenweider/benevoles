@@ -82,11 +82,13 @@ export async function loadMergeInput(db: OrgScopedPrisma, keepId: string, absorb
   const refusal = refuseMerge({ keep, absorb })
   if (refusal) return { error: refusal }
 
-  const [keepRegistrations, absorbRegistrations, keepInvites, absorbInvites, keepAnswers, absorbAnswers, absorbPushSubscriptions, absorbDeliveryOutcomes, sectorLeadersMatchingAbsorbed] = await Promise.all([
+  const [keepRegistrations, absorbRegistrations, keepInvites, absorbInvites, keepShiftDeclines, absorbShiftDeclines, keepAnswers, absorbAnswers, absorbPushSubscriptions, absorbDeliveryOutcomes, sectorLeadersMatchingAbsorbed] = await Promise.all([
     db.registration.findMany({ where: { volunteerId: keepId }, select: { id: true, eventId: true, shiftId: true, status: true, checkedInAt: true } }),
     db.registration.findMany({ where: { volunteerId: absorbId }, select: { id: true, eventId: true, shiftId: true, status: true, checkedInAt: true } }),
     db.memberInvite.findMany({ where: { volunteerId: keepId }, select: { id: true, eventId: true, usedAt: true } }),
     db.memberInvite.findMany({ where: { volunteerId: absorbId }, select: { id: true, eventId: true, usedAt: true } }),
+    db.shiftDecline.findMany({ where: { volunteerId: keepId }, select: { id: true, shiftId: true, declinedAt: true } }),
+    db.shiftDecline.findMany({ where: { volunteerId: absorbId }, select: { id: true, shiftId: true, declinedAt: true } }),
     db.questionAnswer.findMany({ where: { volunteerId: keepId }, select: { id: true, questionId: true, eventId: true, values: true } }),
     db.questionAnswer.findMany({ where: { volunteerId: absorbId }, select: { id: true, questionId: true, eventId: true, values: true } }),
     db.pushSubscription.findMany({ where: { volunteerId: absorbId }, select: { id: true, endpoint: true } }),
@@ -106,7 +108,8 @@ export async function loadMergeInput(db: OrgScopedPrisma, keepId: string, absorb
 
   return {
     keep, absorb, shifts,
-    keepRegistrations, absorbRegistrations, keepInvites, absorbInvites, keepAnswers, absorbAnswers,
+    keepRegistrations, absorbRegistrations, keepInvites, absorbInvites,
+    keepShiftDeclines, absorbShiftDeclines, keepAnswers, absorbAnswers,
     absorbPushSubscriptions, absorbDeliveryOutcomes, sectorLeadersMatchingAbsorbed,
     keepAddressHash,
   }
@@ -172,10 +175,14 @@ export async function runMemberMerge(
     // otherwise collide with the winner once reassigned to the same volunteerId).
     if (plan.answerIdsToDrop.length) await tx.questionAnswer.deleteMany({ where: { id: { in: plan.answerIdsToDrop } } })
     if (plan.inviteIdsToDelete.length) await tx.memberInvite.deleteMany({ where: { id: { in: plan.inviteIdsToDelete } } })
+    // « Je ne peux pas » answers (#1303): the losing duplicate or an answer on a shift now held goes,
+    // the other answers of the absorbed record move to the kept one.
+    if (plan.shiftDeclineIdsToDrop.length) await tx.shiftDecline.deleteMany({ where: { id: { in: plan.shiftDeclineIdsToDrop } } })
 
     // 3. Reassign every remaining relation of the inventory from the absorbed record to the kept one.
     if (plan.registrationsToReassign.length) await tx.registration.updateMany({ where: { id: { in: plan.registrationsToReassign } }, data: { volunteerId: keepId } })
     if (plan.inviteIdsToReassign.length) await tx.memberInvite.updateMany({ where: { id: { in: plan.inviteIdsToReassign } }, data: { volunteerId: keepId } })
+    if (plan.shiftDeclineIdsToReassign.length) await tx.shiftDecline.updateMany({ where: { id: { in: plan.shiftDeclineIdsToReassign } }, data: { volunteerId: keepId } })
     if (plan.answerIdsToReassign.length) await tx.questionAnswer.updateMany({ where: { id: { in: plan.answerIdsToReassign } }, data: { volunteerId: keepId } })
     if (plan.deliveryOutcomeIdsToReassign.length) await tx.deliveryOutcome.updateMany({ where: { id: { in: plan.deliveryOutcomeIdsToReassign } }, data: { volunteerId: keepId } })
     // Push subscriptions are dropped, never moved (owner decision, #600): a device subscribed
@@ -264,17 +271,18 @@ export async function runMemberMerge(
 
     // 7. Invariant: no relation may remain on the absorbed record, except the DeliveryOutcome
     // rows deliberately left (owner decision, #600) for the retention purge to cascade-delete.
-    const [regCount, inviteCount, answerCount, pushCount, availabilityCount, draftCount, targetCount] = await Promise.all([
+    const [regCount, inviteCount, declineCount, answerCount, pushCount, availabilityCount, draftCount, targetCount] = await Promise.all([
       tx.registration.count({ where: { volunteerId: absorbId } }),
       tx.memberInvite.count({ where: { volunteerId: absorbId } }),
+      tx.shiftDecline.count({ where: { volunteerId: absorbId } }),
       tx.questionAnswer.count({ where: { volunteerId: absorbId } }),
       tx.pushSubscription.count({ where: { volunteerId: absorbId } }),
       tx.availabilityRequest.count({ where: { volunteerId: absorbId } }),
       tx.draftAssignment.count({ where: { volunteerId: absorbId } }),
       tx.eventVolunteerTarget.count({ where: { volunteerId: absorbId } }),
     ])
-    if (regCount || inviteCount || answerCount || pushCount || availabilityCount || draftCount || targetCount) {
-      throw new Error(`member merge invariant violated: absorbed record ${absorbId} still has relations (reg=${regCount} invite=${inviteCount} answer=${answerCount} push=${pushCount} availability=${availabilityCount} drafts=${draftCount} targets=${targetCount})`)
+    if (regCount || inviteCount || declineCount || answerCount || pushCount || availabilityCount || draftCount || targetCount) {
+      throw new Error(`member merge invariant violated: absorbed record ${absorbId} still has relations (reg=${regCount} invite=${inviteCount} declines=${declineCount} answer=${answerCount} push=${pushCount} availability=${availabilityCount} drafts=${draftCount} targets=${targetCount})`)
     }
 
     // 8. Audit, written with the transaction's own client so it commits with the merge (unlike
@@ -293,6 +301,8 @@ export async function runMemberMerge(
           registrationsCancelled: { from: null, to: plan.registrationsToCancel.length },
           invitesMoved: { from: null, to: plan.inviteIdsToReassign.length },
           invitesDeleted: { from: null, to: plan.inviteIdsToDelete.length },
+          shiftDeclinesMoved: { from: null, to: plan.shiftDeclineIdsToReassign.length },
+          shiftDeclinesDropped: { from: null, to: plan.shiftDeclineIdsToDrop.length },
           answersMoved: { from: null, to: plan.answerIdsToReassign.length },
           answersDropped: { from: null, to: plan.answerIdsToDrop.length },
           pushSubscriptionsDropped: { from: null, to: plan.pushSubscriptionIdsToDelete.length },

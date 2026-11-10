@@ -78,6 +78,7 @@ export default async function OpenShiftsSearchPage({ params, searchParams }: { p
             members={data.members}
             registrations={data.registrations}
             invites={data.invites}
+            declines={data.declines}
             tags={data.tags}
             initialShiftIds={initialShiftIds}
           />

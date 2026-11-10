@@ -134,6 +134,7 @@ describe("registration routes never return the personal link's token (#1009)", (
       shift: { findFirst: vi.fn(async () => ({ ...shiftRow(), registrations: [], event: { title: "Festival", organization: { name: "Org A", slug: "org-a", timeZone: "Europe/Zurich" } } })), findMany: vi.fn(async () => []), update: vi.fn(), updateMany: vi.fn() },
       volunteer: { findFirst: vi.fn(async () => volunteerRow()), create: vi.fn() },
       registration: { findMany: vi.fn(async () => []), create: answers(registrationRow), count: vi.fn(async () => 0) },
+      shiftDecline: { deleteMany: vi.fn(async () => ({ count: 0 })) },
       $queryRaw: vi.fn(),
       adminUser: { findFirst: vi.fn(async () => ({ name: "Léa" })) },
       $transaction: async (fn: (tx: unknown) => unknown) => fn(m.db),

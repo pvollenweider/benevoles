@@ -132,6 +132,8 @@ export const FAIL_CLOSED_ROUTES: ReadonlySet<string> = new Set([
   // Link tokens: failed lookups, and the pages that look a token up
   "reg-token-miss", "reg-feed-miss", "avail-token-miss", "member-invite-roster-miss",
   "leader-token-read", "member-invite-read", "member-invite-decline", "waitlist-confirm", "org-keep",
+  // « Je ne peux pas » for one shift (#1303): two routes, each guarding a link secret.
+  "shift-decline-invitation", "shift-decline-registration",
   "reg-calendar", "reg-link-request", "reg-link-resend-ip",
 ])
 

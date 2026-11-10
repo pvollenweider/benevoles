@@ -27,6 +27,7 @@ function input(over: Partial<ErasureInput> = {}): ErasureInput {
       { id: "reg-cancelled", status: "cancelled", upcoming: true },
     ],
     inviteIds: ["inv-1", "inv-declined"],
+    shiftDeclineIds: ["sd-1", "sd-2"],
     answerIds: ["ans-1"],
     pushSubscriptionIds: ["push-1"],
     sectorLeaderIds: ["lead-1"],
@@ -64,6 +65,7 @@ describe("buildErasurePlan (#516): what is removed and what is kept", () => {
     const plan = buildErasurePlan(input())
     expect(plan.delete).toEqual({
       inviteIds: ["inv-1", "inv-declined"],
+      shiftDeclineIds: ["sd-1", "sd-2"],
       answerIds: ["ans-1"],
       pushSubscriptionIds: ["push-1"],
       sectorLeaderIds: ["lead-1"],
@@ -74,7 +76,7 @@ describe("buildErasurePlan (#516): what is removed and what is kept", () => {
 
   it("counts upcoming live registrations only (not past, not cancelled) for the recap warning", () => {
     const plan = buildErasurePlan(input())
-    expect(plan.counts).toEqual({ registrations: 4, upcomingLive: 2, invites: 2, answers: 1, pushSubscriptions: 1, sectorLeaders: 1, tombstones: 1 })
+    expect(plan.counts).toEqual({ registrations: 4, upcomingLive: 2, invites: 2, shiftDeclines: 2, answers: 1, pushSubscriptions: 1, sectorLeaders: 1, tombstones: 1 })
   })
 
   it("never lists the member itself as one of its tombstones", () => {
@@ -88,7 +90,7 @@ describe("buildErasurePlan (#516): what is removed and what is kept", () => {
   })
 
   it("an empty record still gets a plan: nothing to delete, the record itself is still emptied", () => {
-    const plan = buildErasurePlan(input({ registrations: [], inviteIds: [], answerIds: [], pushSubscriptionIds: [], sectorLeaderIds: [], duplicateDismissalIds: [], tombstoneIds: [] }))
+    const plan = buildErasurePlan(input({ registrations: [], inviteIds: [], shiftDeclineIds: [], answerIds: [], pushSubscriptionIds: [], sectorLeaderIds: [], duplicateDismissalIds: [], tombstoneIds: [] }))
     expect(plan.counts.registrations).toBe(0)
     expect(Object.values(plan.delete).every((ids) => ids.length === 0)).toBe(true)
   })
@@ -153,7 +155,7 @@ const recapText = (r: ReturnType<typeof eraseMemberRecap>) =>
   [r.title, r.lead, r.warning, ...(r.groups ?? []).flatMap((g) => [g.heading, ...g.items]), ...r.lines].filter(Boolean).join("\n")
 
 describe("eraseMemberRecap (#516)", () => {
-  const counts = { registrations: 4, upcomingLive: 2, invites: 2, answers: 1, pushSubscriptions: 1, sectorLeaders: 1, tombstones: 0 }
+  const counts = { registrations: 4, upcomingLive: 2, invites: 2, shiftDeclines: 1, answers: 1, pushSubscriptions: 1, sectorLeaders: 1, tombstones: 0 }
 
   it("leads with irreversible, then the warning, then « Effacé : » and « Conservé : » groups, one item each", () => {
     const r = eraseMemberRecap("Julie Martin", counts)
@@ -175,7 +177,7 @@ describe("eraseMemberRecap (#516)", () => {
   })
 
   it("singular forms, no warning when nothing is upcoming, no empty item", () => {
-    const r = eraseMemberRecap("Julie Martin", { ...counts, registrations: 1, upcomingLive: 0, invites: 1, answers: 0, pushSubscriptions: 0, sectorLeaders: 0 })
+    const r = eraseMemberRecap("Julie Martin", { ...counts, registrations: 1, upcomingLive: 0, invites: 1, shiftDeclines: 0, answers: 0, pushSubscriptions: 0, sectorLeaders: 0 })
     expect(r.warning).toBeUndefined()
     expect(r.groups![0].items).toContain("1 invitation (et sa réponse « pas disponible » éventuelle)")
     expect(r.groups![0].items.some((i) => i.includes("abonnement"))).toBe(false)
@@ -185,7 +187,7 @@ describe("eraseMemberRecap (#516)", () => {
   })
 
   it("new copy uses no middle dot and no em dash", () => {
-    const text = [eraseMemberRecap("Julie Martin", counts), eraseMemberRecap("J M", { ...counts, registrations: 0, invites: 0, answers: 0, pushSubscriptions: 0, sectorLeaders: 0, upcomingLive: 0 })]
+    const text = [eraseMemberRecap("Julie Martin", counts), eraseMemberRecap("J M", { ...counts, registrations: 0, invites: 0, shiftDeclines: 0, answers: 0, pushSubscriptions: 0, sectorLeaders: 0, upcomingLive: 0 })]
       .map(recapText)
       .join("\n")
     expect(text).not.toMatch(/[·—]/)

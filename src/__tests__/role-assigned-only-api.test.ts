@@ -40,6 +40,7 @@ vi.mock("@/lib/prisma", async () => {
       event: { findFirst: m.eventFindFirst },
       charterVersion: { upsert: vi.fn() },
       rosterConsent: { findUnique: vi.fn().mockResolvedValue(null), upsert: vi.fn() },
+      shiftDecline: { deleteMany: vi.fn().mockResolvedValue({ count: 0 }) },
       registration: { findFirst: vi.fn().mockResolvedValue(null), findMany: m.txRegFindMany, count: vi.fn().mockResolvedValue(0), aggregate: vi.fn().mockResolvedValue({ _max: { waitingPosition: null } }), create: m.txCreate },
     })),
   },

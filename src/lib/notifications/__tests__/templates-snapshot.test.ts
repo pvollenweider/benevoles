@@ -784,6 +784,7 @@ const cases: [string, NotificationPayload][] = [
       ],
       signupUrl: "https://rhone.benevol.app/festival-2026?token=tok-1",
       declineUrl: "https://rhone.benevol.app/festival-2026?token=tok-1&decline=1",
+      shiftDeclineUrls: { s1: "https://rhone.benevol.app/ne-peux-pas/invitation/tok-1/s1", s2: "https://rhone.benevol.app/ne-peux-pas/invitation/tok-1/s2" },
       orgSlug: "rhone",
     },
   }],

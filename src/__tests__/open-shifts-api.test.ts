@@ -62,6 +62,7 @@ describe("POST /api/admin/events/[id]/open-shifts (#566)", () => {
       event: { findFirst: vi.fn().mockResolvedValue(event) },
       volunteer: { findMany: vi.fn().mockResolvedValue(volunteers) },
       memberInvite: { findMany: vi.fn().mockResolvedValue([{ volunteerId: "ana", declinedAt: null }, { volunteerId: "dec", declinedAt: new Date() }]) },
+      shiftDecline: { findMany: vi.fn().mockResolvedValue([{ volunteerId: "dec", shiftId: "bar", declinedAt: new Date("2026-06-20T10:00:00Z") }]) },
       registration: { findMany: vi.fn().mockResolvedValue([{ volunteerId: "reg" }]) },
       $transaction: async (fn: (tx: unknown) => unknown) => fn({
         memberInvite: { createManyAndReturn, findMany: txInviteFindMany },
@@ -114,6 +115,7 @@ describe("POST /api/admin/events/[id]/open-shifts (#566)", () => {
     expect(payloads[1].data.signupUrl).toContain("token=inv-bob")
     expect(payloads[1].data.declineUrl).toContain("decline=1")
     expect(payloads[0].data.shifts).toEqual([expect.objectContaining({ id: "bar", placesLeft: 2 })])
+    expect(payloads[0].data.shiftDeclineUrls.bar).toContain("/ne-peux-pas/invitation/inv-ana/bar")
     expect(enqueueNotifications.mock.calls[0][2]).toEqual({ organizationId: "org-a", targetedMessageId: "msg-1", batch: expect.objectContaining({ kind: "open_shifts" }) })
     expect(deliverAfterResponse).toHaveBeenCalledWith(["row-1", "row-2"])
 
@@ -142,6 +144,7 @@ describe("POST /api/admin/events/[id]/open-shifts (#566)", () => {
     const [payload] = enqueueNotifications.mock.calls[0][0]
     expect(payload.data).toMatchObject({ signupUrl: expect.not.stringContaining("token="), editToken: "edit-reg" })
     expect(payload.data.declineUrl).toBeUndefined()
+    expect(payload.data.shiftDeclineUrls.acc).toContain("/ne-peux-pas/inscription/edit-reg/acc")
     expect(createManyAndReturn).not.toHaveBeenCalled()
   })
 

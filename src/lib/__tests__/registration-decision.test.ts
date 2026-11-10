@@ -53,7 +53,7 @@ function db(reg: ReturnType<typeof request> | null, updated = 1, availability: R
       ? [{ id: "sh-1", roleName: "Chauffeur", label: "Chauffeur navette", date: new Date("2026-07-04T00:00:00Z"), startTime: "08:00", endTime: "12:00", status: state.status ?? "open", capacity: state.capacity ?? 5 }]
       : availability.shiftRows.findMany(args)),
   }
-  const tx = { registration: { updateMany, count }, event: availability.event, shift, availabilityRequest: availability.availabilityRequest, eventLog: availability.eventLog, $queryRaw: queryRaw }
+  const tx = { registration: { updateMany, count }, event: availability.event, shift, availabilityRequest: availability.availabilityRequest, eventLog: availability.eventLog, shiftDecline: availability.shiftDecline, $queryRaw: queryRaw }
   return {
     updateMany,
     queryRaw,
@@ -98,6 +98,8 @@ describe("decideRequest", () => {
     const d = db(request())
     const out = await decideRequest(d.db as never, actor, "reg-1", { decision: "refuse", note: "  Permis requis.  " })
     expect(out).toEqual({ ok: true, status: "refused" })
+    // A refusal does not take the shift: the answer stays.
+    expect(d.availability.shiftDecline.deleteMany).not.toHaveBeenCalled()
     const [payloads] = m.enqueue.mock.calls[0]
     expect(payloads).toHaveLength(1)
     expect(payloads[0]).toMatchObject({ kind: "registration_refused", data: { note: "Permis requis.", shiftLabel: "Chauffeur navette" } })

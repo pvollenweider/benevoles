@@ -99,6 +99,25 @@ describe("findCandidates", () => {
     expect(candidateReasons(dec, [open(bar)])).toContain("A répondu « pas disponible » à son invitation")
   })
 
+  it("shows « A répondu non le … » for that shift, keeps the person listed and selectable (#1303)", () => {
+    const declines = [{ volunteerId: "ana", shiftId: "bar", declinedAt: new Date("2026-06-20T10:00:00Z") }]
+    const { candidates, excluded } = findCandidates({ ...base, shifts: [open(bar)], declines })
+    const ana = candidates.find((c) => c.member.id === "ana")!
+    expect(ana.selectable).toBe(true)
+    expect(ana.offer).toEqual(["bar"])
+    expect(ana.declinedShifts).toEqual([{ shiftId: "bar", declinedAt: new Date("2026-06-20T10:00:00Z") }])
+    expect(candidateReasons(ana, [open(bar)]).some((r) => r.startsWith("A répondu non le 20 juin 2026"))).toBe(true)
+    // The event-level exclusion keeps its own counter: a per-shift answer excludes nobody.
+    expect(excluded.declined).toBe(1)
+  })
+
+  it("shows no per-shift reason when the answered shift is not among the selected ones", () => {
+    const declines = [{ volunteerId: "ana", shiftId: "acc", declinedAt: new Date("2026-06-20T10:00:00Z") }]
+    const { candidates } = findCandidates({ ...base, shifts: [open(bar)], declines })
+    expect(candidates.find((c) => c.member.id === "ana")!.declinedShifts).toEqual([])
+    expect(candidateReasons(candidates.find((c) => c.member.id === "ana")!, [open(bar)]).some((r) => r.includes("A répondu non"))).toBe(false)
+  })
+
   it("shows a member whose shift overlaps by a few minutes, marked, with nothing to offer them", () => {
     const { candidates } = findCandidates({ ...base, shifts: [open(bar)] })
     const ovl = candidates.find((c) => c.member.id === "ovl")!
@@ -187,7 +206,7 @@ describe("email and history", () => {
     const { subject, text, html } = render({
       kind: "open_shifts",
       recipient: { email: "ana@x.ch", name: "Ana" },
-      data: { volunteerName: "Ana", organizationName: "Asso", eventTitle: "Fête", note: "Merci !", shifts, signupUrl: "https://x/fete?t=1", declineUrl: "https://x/fete?t=1&decline=1" },
+      data: { volunteerName: "Ana", organizationName: "Asso", eventTitle: "Fête", note: "Merci !", shifts, signupUrl: "https://x/fete?t=1", declineUrl: "https://x/fete?t=1&decline=1", shiftDeclineUrls: { bar: "https://x/ne-peux-pas/invitation/t/bar", acc: "https://x/ne-peux-pas/invitation/t/acc" } },
     })
     expect(subject).toBe("Fête : on cherche encore du monde")
     expect(text).toContain("- Bar : samedi 4 juillet, de 22:00 à 02:00 le lendemain, 2 places libres")
@@ -195,7 +214,9 @@ describe("email and history", () => {
     expect(text).toContain("Tous les créneaux : https://x/fete?t=1")
     // #869: one « Je prends ce créneau » link per shift, the shift proposed on the sign-up page.
     expect(text).toContain("  Je prends ce créneau : https://x/fete?t=1&creneau=bar")
+    expect(text).toContain("  Je ne peux pas : https://x/ne-peux-pas/invitation/t/bar")
     expect(html).toContain("Je prends ce créneau")
+    expect(html).toContain(">Je ne peux pas</a>")
     expect(text).toContain("Pas disponible cette fois ? Tu peux le dire ici : https://x/fete?t=1&decline=1")
     expect(text).toContain("Merci !")
     expect(html).toContain("Voir tous les créneaux")

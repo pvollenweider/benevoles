@@ -75,6 +75,13 @@ export interface InviteLite {
   usedAt: Date | null
 }
 
+/** « Je ne peux pas » for one shift (#1303): united on merge, dropped where the shift is taken. */
+export interface ShiftDeclineLite {
+  id: string
+  shiftId: string
+  declinedAt: Date
+}
+
 export interface AnswerLite {
   id: string
   questionId: string
@@ -108,6 +115,8 @@ export interface MemberMergeInput {
   absorbRegistrations: RegistrationLite[]
   keepInvites: InviteLite[]
   absorbInvites: InviteLite[]
+  keepShiftDeclines: ShiftDeclineLite[]
+  absorbShiftDeclines: ShiftDeclineLite[]
   keepAnswers: AnswerLite[]
   absorbAnswers: AnswerLite[]
   absorbPushSubscriptions: PushSubscriptionLite[]
@@ -341,6 +350,8 @@ export interface MergePreview {
     pushSubscriptionsDropped: number
     deliveryOutcomesReassigned: number
     deliveryOutcomesLeft: number
+    shiftDeclinesReassigned: number
+    shiftDeclinesDropped: number
     sectorLeadersToReview: number
   }
 }
@@ -363,6 +374,8 @@ export function buildMergePreview(input: MemberMergeInput, choices: MemberMergeC
       pushSubscriptionsDropped: input.absorbPushSubscriptions.length,
       deliveryOutcomesReassigned,
       deliveryOutcomesLeft: input.absorbDeliveryOutcomes.length - deliveryOutcomesReassigned,
+      shiftDeclinesReassigned: shiftDeclinePlan(input).reassign.length,
+      shiftDeclinesDropped: shiftDeclinePlan(input).drop.length,
       sectorLeadersToReview: input.sectorLeadersMatchingAbsorbed.length,
     },
   }
@@ -381,6 +394,10 @@ export interface MergePlan {
   inviteIdsToReassign: string[]
   /** The losing invite of a same-event conflict, deleted outright (its token stops resolving at once). */
   inviteIdsToDelete: string[]
+  /** « Je ne peux pas » answers of the absorbed record to move to the kept one (#1303). */
+  shiftDeclineIdsToReassign: string[]
+  /** Answers on a shift a live registration now holds, or the losing duplicate: deleted outright. */
+  shiftDeclineIdsToDrop: string[]
   answerIdsToReassign: string[]
   /** The losing answer of a same-question conflict, deleted outright (its row would otherwise collide with the winner once reassigned). */
   answerIdsToDrop: string[]
@@ -456,6 +473,7 @@ export function buildMergePlan(input: MemberMergeInput, choices: MemberMergeChoi
   const answerIdsToReassign = input.absorbAnswers.filter((a) => !answerIdsToDrop.includes(a.id)).map((a) => a.id)
 
   const deliveryOutcomeIdsToReassign = input.absorbDeliveryOutcomes.filter((d) => d.addressHash && d.addressHash === input.keepAddressHash).map((d) => d.id)
+  const declines = shiftDeclinePlan(input)
 
   const registrationIdsMoving = input.absorbRegistrations.map((r) => r.id)
 
@@ -467,6 +485,8 @@ export function buildMergePlan(input: MemberMergeInput, choices: MemberMergeChoi
     registrationsToCancel,
     inviteIdsToReassign,
     inviteIdsToDelete,
+    shiftDeclineIdsToReassign: declines.reassign,
+    shiftDeclineIdsToDrop: declines.drop,
     answerIdsToReassign,
     answerIdsToDrop,
     pushSubscriptionIdsToDelete: input.absorbPushSubscriptions.map((p) => p.id),
@@ -474,6 +494,37 @@ export function buildMergePlan(input: MemberMergeInput, choices: MemberMergeChoi
     tokenRegeneration: { registrationIds: registrationIdsMoving, inviteIds: inviteIdsToReassign },
     sendLinksToKeptAddress: !!choices.sendLinksToKeptAddress,
   }
+}
+
+/**
+ * Answers of both records united (#1303). An answer is dropped when its shift is already held by a
+ * live registration of either record after the merge: taking a shift removes the answer, and the
+ * search list must never show « A répondu non » on a shift the person actually holds.
+ */
+function shiftDeclinePlan(input: MemberMergeInput): { reassign: string[]; drop: string[] } {
+  const liveShiftIds = new Set(
+    [...input.keepRegistrations, ...input.absorbRegistrations]
+      .filter((r) => LIVE_REGISTRATION_STATUSES.has(r.status))
+      .map((r) => r.shiftId),
+  )
+  const seen = new Set<string>()
+  const reassign: string[] = []
+  const drop: string[] = []
+  for (const d of [...input.keepShiftDeclines, ...input.absorbShiftDeclines]) {
+    if (liveShiftIds.has(d.shiftId)) {
+      drop.push(d.id)
+      continue
+    }
+    if (seen.has(d.shiftId)) {
+      // Both records answered the same shift: keep the kept record's answer (first in this order).
+      drop.push(d.id)
+      continue
+    }
+    seen.add(d.shiftId)
+    // A kept-record answer stays where it is, but is still listed for the invariant below.
+    if (input.absorbShiftDeclines.some((a) => a.id === d.id)) reassign.push(d.id)
+  }
+  return { reassign, drop }
 }
 
 /** Guard refusals, checked before building any preview or plan. */

@@ -44,6 +44,7 @@ vi.mock("@/lib/auth-guard", () => ({
         findFirst: vi.fn(async ({ where }: { where: { id?: string } }) => (where.id === "mem-1" ? { id: "mem-1", firstName: "Emma", lastName: "Rochat", email: null } : null)),
         create: m.volunteerCreate,
       },
+      shiftDecline: { deleteMany: vi.fn(async () => ({ count: 0 })) },
       registration: {
         findMany: vi.fn(async () => []),
         create: m.registrationCreate,
