@@ -59,6 +59,8 @@ type Props = {
   roles: string[]
   /** A new need on the board: inserted at once, announced, and the visible notice returned. */
   onCreated: (shift: DayOfShift, sectorId: string | null) => string
+  /** Says a step in the board's one live region (a second region would compete with it). */
+  announce: (text: string) => void
 }
 
 const linkClass =
@@ -68,7 +70,7 @@ const fieldClass = "input w-full min-h-11"
 
 const people = (n: number) => `${n} personne${n > 1 ? "s" : ""}`
 
-export default function AddNeedPanel({ eventId, today, timeZone, event, roles, onCreated }: Props) {
+export default function AddNeedPanel({ eventId, today, timeZone, event, roles, onCreated, announce }: Props) {
   const id = useId()
   const [open, setOpen] = useState(false)
   const [step, setStep] = useState<"need" | "notify">("need")
@@ -85,7 +87,6 @@ export default function AddNeedPanel({ eventId, today, timeZone, event, roles, o
   const [context, setContext] = useState<Context | null>(null)
   const [loadingContext, setLoadingContext] = useState(false)
   const [contextError, setContextError] = useState<string | null>(null)
-  const [announcement, setAnnouncement] = useState("")
   const [sent, setSent] = useState<{ sent: number; pushRequested?: boolean; pushDevices?: number } | null>(null)
   const [createdNotice, setCreatedNotice] = useState("")
   const triggerRef = useRef<HTMLButtonElement>(null)
@@ -129,13 +130,13 @@ export default function AddNeedPanel({ eventId, today, timeZone, event, roles, o
     setContextError(null)
     setSent(null)
     setCreatedNotice("")
-    setAnnouncement("Ajouter un besoin. Étape 1 sur 2 : le besoin.")
+    announce("Ajouter un besoin. Étape 1 sur 2 : le besoin.")
     requestAnimationFrame(() => roleRef.current?.focus())
   }
 
   function close() {
     setOpen(false)
-    setAnnouncement("Ajout d'un besoin fermé.")
+    announce("Ajout d'un besoin fermé.")
     requestAnimationFrame(() => triggerRef.current?.focus())
   }
 
@@ -220,7 +221,7 @@ export default function AddNeedPanel({ eventId, today, timeZone, event, roles, o
       }
       setCreated(shift)
       setStep("notify")
-      setAnnouncement("Étape 1 terminée : le créneau est ajouté. Étape 2 sur 2 : prévenir les bénévoles.")
+      announce("Étape 1 terminée : le créneau est ajouté. Étape 2 sur 2 : prévenir les bénévoles.")
       setCreatedNotice(onCreated(dayShift, shift.sectorId))
       requestAnimationFrame(() => stepHeadingRef.current?.focus())
       if (!shift.assignedOnly && registrationState(event, new Date()).open) await loadContext(shift.id)
@@ -254,7 +255,7 @@ export default function AddNeedPanel({ eventId, today, timeZone, event, roles, o
         )}
       </div>
 
-      <p role="status" aria-live="polite" className="sr-only">{announcement}</p>
+      
 
       {open && step === "need" && (
         <div role="group" aria-labelledby={`${id}-need`} className="space-y-4 border-t border-gray-200 pt-4">
@@ -408,7 +409,7 @@ export default function AddNeedPanel({ eventId, today, timeZone, event, roles, o
               </div>
             </div>
           ) : loadingContext ? (
-            <p role="status" className="text-sm text-gray-700">Préparation de la liste des bénévoles…</p>
+            <p aria-busy="true" className="text-sm text-gray-700">Préparation de la liste des bénévoles…</p>
           ) : contextError ? (
             <div className="space-y-2">
               <p role="alert" className="bg-red-50 border border-red-200 rounded-xl p-3 text-sm text-red-700">{contextError}</p>
@@ -437,7 +438,7 @@ export default function AddNeedPanel({ eventId, today, timeZone, event, roles, o
               lockedShift
               onSent={(result) => {
                 setSent(result)
-                setAnnouncement(`Étape 2 terminée : email envoyé à ${people(result.sent)}.${result.pushRequested && (result.pushDevices ?? 0) > 0 ? ` Notification sur ${result.pushDevices} appareil${(result.pushDevices ?? 0) > 1 ? "s" : ""}.` : ""}`)
+                announce(`Étape 2 terminée : email envoyé à ${people(result.sent)}.${result.pushRequested && (result.pushDevices ?? 0) > 0 ? ` Notification sur ${result.pushDevices} appareil${(result.pushDevices ?? 0) > 1 ? "s" : ""}.` : ""}`)
               }}
             />
           ) : null}

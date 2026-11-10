@@ -36,6 +36,7 @@ const json = (body: unknown, status = 200) => ({ ok: status < 400, status, json:
 
 const renderPanel = (over: { registrationsOpen?: boolean; assignedOnly?: boolean } = {}) => {
   const onCreated = vi.fn(() => "Nouveau créneau : Buvette, de 14h à 16h. Il manque 2 personnes. Il est affiché sur le tableau.")
+  const announce = vi.fn()
   const utils = render(
     <AddNeedPanel
       eventId="evt-1"
@@ -44,9 +45,10 @@ const renderPanel = (over: { registrationsOpen?: boolean; assignedOnly?: boolean
       event={{ publicStatus: "published", registrationsOpen: over.registrationsOpen ?? true }}
       roles={["Buvette"]}
       onCreated={onCreated}
+      announce={announce}
     />,
   )
-  return { ...utils, onCreated }
+  return { ...utils, onCreated, announce }
 }
 
 describe("AddNeedPanel", () => {
@@ -73,7 +75,7 @@ describe("AddNeedPanel", () => {
       }
       throw new Error(`unexpected ${url}`)
     })
-    const { onCreated } = renderPanel()
+    const { onCreated, announce } = renderPanel()
 
     fireEvent.click(screen.getByRole("button", { name: "Ajouter un besoin" }))
     fireEvent.change(screen.getByLabelText(/^Poste/), { target: { value: "Buvette" } })
@@ -82,6 +84,10 @@ describe("AddNeedPanel", () => {
     expect(await screen.findByRole("heading", { level: 3, name: "Étape 2 sur 2 : prévenir" })).toBeInTheDocument()
     expect(screen.getByText(/Il est affiché sur le tableau/)).toBeInTheDocument()
     expect(onCreated).toHaveBeenCalledTimes(1)
+    // Each step is said through the board's live region: the panel has none of its own, so the
+    // page keeps a single role="status" (the day-of E2E specs rely on it).
+    expect(announce).toHaveBeenCalledWith(expect.stringContaining("Étape 2 sur 2"))
+    expect(screen.queryAllByRole("status")).toHaveLength(0)
     const created = fetchMock.mock.calls.filter(([url]) => url === "/api/admin/shifts")
     expect(created).toHaveLength(1)
     expect(JSON.parse(created[0][1].body)).toMatchObject({ waitlistEnabled: false, roleName: "Buvette", capacity: 2, label: "Buvette" })

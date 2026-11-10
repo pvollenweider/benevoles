@@ -570,6 +570,7 @@ export default function DayOfBoard({ eventId, board: initialBoard, today: initia
         event={registrationWindow}
         roles={roles}
         onCreated={onNeedCreated}
+        announce={say}
       />
 
       <section aria-labelledby="dayof-now" className="space-y-3">
