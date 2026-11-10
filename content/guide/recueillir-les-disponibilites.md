@@ -11,7 +11,7 @@ added: 2026-10-29
 
 # Recueillir les disponibilités
 
-Fonction bêta « Disponibilités datées ». Elle s'adresse aux événements où l'organisation prépare elle-même les missions : chaque membre sollicité indique, pour chaque date de l'événement, les heures où il est libre ou « Pas disponible ». Les inscriptions restent ouvertes comme d'habitude : rien ne change pour les bénévoles qui choisissent leurs créneaux eux-mêmes.
+Fonction bêta « Disponibilités datées ». Elle s'adresse aux événements où l'organisation prépare elle-même les missions : chaque membre sollicité indique, pour chaque date de l'événement, les heures où il est libre ou « Pas disponible ». Les inscriptions restent ouvertes comme d'habitude : rien ne change pour les volontaires qui choisissent leurs créneaux eux-mêmes.
 
 Ces réponses sont séparées des disponibilités générales de la fiche du membre (« Matin », « Soir »), qui ne disent jamais si une personne est libre une date précise.
 
@@ -68,7 +68,7 @@ Une case cochée ne vaut que pour la réponse affichée : si la réponse de la p
 
 ## Préparer des affectations en brouillon
 
-Page **Affectations en brouillon**, ouverte depuis la page **Disponibilités** ou depuis **Affecter selon les disponibilités**. Elle sert à préparer tout le planning avant que les bénévoles ne voient quoi que ce soit, comme dans un tableur : une ligne par personne, une colonne par date de l'événement.
+Page **Affectations en brouillon**, ouverte depuis la page **Disponibilités** ou depuis **Affecter selon les disponibilités**. Elle sert à préparer tout le planning avant que votre équipe ne voie quoi que ce soit, comme dans un tableur : une ligne par personne, une colonne par date de l'événement.
 
 - **Qui est listé** : les personnes sollicitées pour leurs disponibilités, celles déjà prévues sur l'événement et celles qui ont un brouillon. **Voir tous les membres actifs** élargit la liste.
 - **À pourvoir** : sous chaque date, le nombre de places encore libres une fois tous les brouillons publiés (« 3 places à pourvoir », « Rien à pourvoir »). Le lien ouvre la vue **Par jour** de cette date, qui liste en tête les créneaux à compléter et leurs places manquantes.

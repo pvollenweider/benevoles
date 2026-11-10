@@ -18,7 +18,7 @@ aliases: []
 
 **Événements**, puis l'événement, puis l'onglet **Inscriptions**, et **Invitations** dans ses pages. Raccourcis : sur l'aperçu d'un événement publié, **Prochaines étapes** propose **inviter des membres** (ou **Inviter d'autres membres**, avec le nombre déjà invités) ; sur la page **Membres**, **Inviter à un événement** liste les événements publiés pas encore terminés (un seul : le bouton porte son nom).
 
-Les invitations permettent d'envoyer des emails personnalisés aux membres de votre liste, avec un lien pré-rempli vers la page d'inscription.
+Les invitations permettent d'envoyer des emails personnalisés aux membres de votre équipe, avec un lien pré-rempli vers la page d'inscription.
 
 ## Envoyer des invitations
 
