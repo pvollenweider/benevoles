@@ -1,5 +1,5 @@
 import { describe, it, expect } from "vitest"
-import { acceptRequestRecap, bulkCancelCounts, bulkCancelRecap, dayLabel, bulkLeaderRecap, bulkResendRecap, deactivateMemberRecap, broadcastRecap, prefillRecap, prefillNeedsConfirmation, deleteMilestoneRecap, deleteOrgRecap, deletePageRecap, toggleOrgRecap, deleteRoleRecap, deleteShiftRecap, shiftWhen, logLinkFor, remindInvitedRecap, removeLeaderRecap, unsavedRoleOrderRecap } from "../action-recap"
+import { acceptRequestRecap, bulkCancelCounts, bulkCancelRecap, bulkDeactivateMembersRecap, dayLabel, bulkLeaderRecap, bulkResendRecap, deactivateMemberRecap, broadcastRecap, prefillRecap, prefillNeedsConfirmation, deleteMilestoneRecap, deleteOrgRecap, deletePageRecap, toggleOrgRecap, deleteRoleRecap, deleteShiftRecap, shiftWhen, logLinkFor, remindInvitedRecap, removeLeaderRecap, unsavedRoleOrderRecap } from "../action-recap"
 
 // Confirmation before sensitive actions (#379).
 describe("action recaps", () => {
@@ -123,6 +123,19 @@ describe("action recaps", () => {
     const r = acceptRequestRecap({ name: "Chloé Roy", shift: "Bar, Soir", hasEmail: true })
     expect(r.lines[0]).toBe("La demande de Chloé Roy sur « Bar, Soir » devient une inscription confirmée.")
     expect(r.lines.join(" ")).not.toMatch(/·/)
+  })
+})
+
+describe("bulkDeactivateMembersRecap (#1307)", () => {
+  it("is a simple, reversible confirmation that says how to reactivate", () => {
+    expect(bulkDeactivateMembersRecap(12)).toMatchObject({
+      title: "Désactiver 12 membres ?",
+      confirmLabel: "Désactiver",
+      danger: false,
+    })
+    expect(bulkDeactivateMembersRecap(12).lines.join(" ")).toContain("Vous pourrez les réactiver en affichant les inactifs")
+    expect(bulkDeactivateMembersRecap(1).title).toBe("Désactiver 1 membre ?")
+    expect(bulkDeactivateMembersRecap(1).lines.join(" ")).toContain("Vous pourrez le réactiver en affichant les inactifs")
   })
 })
 

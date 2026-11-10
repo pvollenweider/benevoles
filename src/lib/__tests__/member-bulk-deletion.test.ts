@@ -3,9 +3,12 @@
 
 import { describe, it, expect } from "vitest"
 import {
+  bulkDeactivateKeptLabel,
   bulkDeletionEligibility,
   bulkDeletionResultText,
+  BULK_DEACTIVATE_KEPT_LABEL,
   partitionMembersForBulkDeletion,
+  selectedWithRegistrationsCount,
   type BulkDeletionMember,
   type BulkDeletionResult,
 } from "../member-bulk-deletion"
@@ -85,7 +88,7 @@ describe("partitionMembersForBulkDeletion (#1305)", () => {
 })
 
 describe("bulkDeletionResultText (#1305)", () => {
-  const result = (deleted: string[], skipped: BulkDeletionResult["skipped"] = []): BulkDeletionResult => ({ deleted, skipped })
+  const result = (deleted: string[], skipped: BulkDeletionResult["skipped"] = [], deactivated: string[] = []): BulkDeletionResult => ({ deleted, skipped, deactivated })
 
   it("reads out at most ten names and counts the rest, so a big import stays readable", () => {
     const skipped = Array.from({ length: 13 }, (_, i) => ({ id: `s${i}`, reason: "registrations" as const, name: `Membre ${i + 1}` }))
@@ -142,5 +145,61 @@ describe("bulkDeletionResultText (#1305)", () => {
 
   it("only says what happened when nothing was skipped", () => {
     expect(bulkDeletionResultText(result(["a"]))).not.toMatch(/laissé|introuvable/)
+  })
+})
+
+// #1307: the checkbox says how many selected members have registrations, only when the list knows.
+describe("bulk deletion checkbox (#1307)", () => {
+  it("labels the checkbox with the number of selected members that have registrations, singular included", () => {
+    expect(bulkDeactivateKeptLabel(null)).toBe(BULK_DEACTIVATE_KEPT_LABEL)
+    expect(bulkDeactivateKeptLabel(0)).toBe(BULK_DEACTIVATE_KEPT_LABEL)
+    expect(bulkDeactivateKeptLabel(1)).toBe(`${BULK_DEACTIVATE_KEPT_LABEL} (1 membre)`)
+    expect(bulkDeactivateKeptLabel(3)).toBe(`${BULK_DEACTIVATE_KEPT_LABEL} (3 membres)`)
+  })
+
+  it("counts the selected members with registrations from the counts the list already loaded", () => {
+    const members = [
+      { id: "a", registrationCount: 2 },
+      { id: "b", registrationCount: 0 },
+      { id: "c", registrationCount: 1 },
+      { id: "d" },
+    ]
+    expect(selectedWithRegistrationsCount(members, new Set(["a", "b", "c"]))).toBe(2)
+    expect(selectedWithRegistrationsCount(members, new Set(["b"]))).toBe(0)
+    // One selected member without a count: the list doesn't know, so no number is stated.
+    expect(selectedWithRegistrationsCount(members, new Set(["a", "d"]))).toBeNull()
+  })
+})
+
+describe("bulkDeletionResultText with deactivateKept (#1307)", () => {
+  const skipped = [
+    { id: "a", reason: "registrations" as const, name: "Anne Favre" },
+    { id: "b", reason: "registrations" as const, name: "Marc Rochat" },
+    { id: "c", reason: "registrations" as const, name: "Léa Dubois" },
+  ]
+
+  it("says how many kept members were deactivated, with their names", () => {
+    expect(bulkDeletionResultText(
+      { deleted: ["x", "y"], skipped: skipped.slice(0, 2), deactivated: ["a", "b"] },
+      true,
+    )).toBe("2 membres supprimés. 2 désactivés car ils ont des inscriptions : Anne Favre, Marc Rochat.")
+  })
+
+  it("uses the singular and counts the kept already inactive members as left, not deactivated", () => {
+    expect(bulkDeletionResultText(
+      { deleted: ["x"], skipped: skipped.slice(0, 2), deactivated: ["a"] },
+      true,
+    )).toBe("1 membre supprimé. 1 désactivé car il a des inscriptions : Anne Favre. 1 déjà inactif, laissé tel quel : Marc Rochat.")
+    expect(bulkDeletionResultText(
+      { deleted: [], skipped: skipped.slice(0, 2), deactivated: [] },
+      true,
+    )).toBe("Aucun membre supprimé. 2 déjà inactifs, laissés tels quels : Anne Favre, Marc Rochat.")
+  })
+
+  it("keeps the previous wording when the checkbox wasn't checked", () => {
+    expect(bulkDeletionResultText(
+      { deleted: ["x"], skipped: skipped.slice(0, 1), deactivated: [] },
+      false,
+    )).toBe("1 membre supprimé. 1 laissé car il a des inscriptions : Anne Favre. Vous pouvez l'effacer depuis sa fiche.")
   })
 })

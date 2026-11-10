@@ -16,14 +16,20 @@ import { rateLimit } from "@/lib/rate-limit"
  * never deleted. The transaction re-checks the rule under the same row locks as
  * runMemberDeletion.
  *
+ * `deactivateKept` (#1307) additionally deactivates, in that same batch transaction, the kept
+ * records that have registrations and are still active — the effect and `member.deactivated` log
+ * entry of the single « Désactiver ».
+ *
  * At most BULK_DELETE_MAX ids per request after de-duplication; the members list splits a bigger
- * selection into several requests. Logged once per deleted member, exactly like the single action.
+ * selection into several requests. Logged once per deleted member and once per deactivated one,
+ * exactly like the single actions.
  */
 
 const MAX_MESSAGE = `${BULK_DELETE_MAX} membres au maximum par requête. Envoyez la sélection par lots de ${BULK_DELETE_MAX}.`
 
 const schema = z.object({
   ids: z.array(z.string().trim().min(1)).min(1),
+  deactivateKept: z.boolean().optional(),
 })
 
 export async function POST(req: Request) {
@@ -54,6 +60,8 @@ export async function POST(req: Request) {
     )
   }
 
-  const result = await runBulkMemberDeletion(db, organizationId, adminActor(session), ids)
+  const result = await runBulkMemberDeletion(db, organizationId, adminActor(session), ids, {
+    deactivateKept: parsed.data.deactivateKept ?? false,
+  })
   return NextResponse.json(result)
 }

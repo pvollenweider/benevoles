@@ -128,6 +128,9 @@ export const PERMISSIONS: Record<string, Partial<Record<Method, Level>>> = {
   // difference that an active record without registration can be deleted directly. The
   // confirmation, not the role, replaces the deactivation step.
   "members/bulk-delete": { POST: "organizer" },
+  // Bulk deactivation (#1307): the reversible counterpart of the bulk deletion, same level as the
+  // single « Désactiver » action (members/[id] DELETE).
+  "members/bulk-deactivate": { POST: "organizer" },
   // Erasure of personal data (#516): owners and organizers (owner decision), like deletion above:
   // answering a person's erasure request is part of managing the members.
   "members/[id]/erase": { POST: "organizer" },

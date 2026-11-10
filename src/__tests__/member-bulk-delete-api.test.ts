@@ -29,7 +29,7 @@ describe("POST /api/admin/members/bulk-delete (#1305)", () => {
     requireOrgSession.mockReset()
     runBulkMemberDeletion.mockReset()
     requireOrgSession.mockResolvedValue({ db: {}, organizationId: "org-a", session: { user: { id: "adm-1" } } })
-    runBulkMemberDeletion.mockResolvedValue({ deleted: [], skipped: [] })
+    runBulkMemberDeletion.mockResolvedValue({ deleted: [], skipped: [], deactivated: [] })
   })
 
   it("is open to organisers and owners, like the single-member deletion", () => {
@@ -63,10 +63,10 @@ describe("POST /api/admin/members/bulk-delete (#1305)", () => {
     const ids = Array.from({ length: BULK_DELETE_MAX }, (_, i) => `id-${i}`)
     const res = await call({ ids: [...ids, ids[0]] })
     expect(res.status).toBe(200)
-    expect(runBulkMemberDeletion).toHaveBeenCalledWith({}, "org-a", { type: "admin", id: "adm-1" }, ids)
+    expect(runBulkMemberDeletion).toHaveBeenCalledWith({}, "org-a", { type: "admin", id: "adm-1" }, ids, { deactivateKept: false })
   })
 
-  it("returns the deleted and skipped lists from the transaction", async () => {
+  it("returns the deleted, skipped and deactivated lists from the transaction", async () => {
     const outcome = {
       deleted: ["a", "b"],
       skipped: [
@@ -74,10 +74,30 @@ describe("POST /api/admin/members/bulk-delete (#1305)", () => {
         { id: "d", reason: "merged", name: null },
         { id: "e", reason: "notFound", name: null },
       ],
+      deactivated: [],
     }
     runBulkMemberDeletion.mockResolvedValue(outcome)
     const res = await call({ ids: ["a", "b", "c", "d", "e"] })
     expect(res.status).toBe(200)
     expect(await res.json()).toEqual(outcome)
+  })
+
+  it("forwards deactivateKept to the transaction and returns the deactivated ids (#1307)", async () => {
+    const outcome = {
+      deleted: ["a"],
+      skipped: [{ id: "c", reason: "registrations", name: "Anne Favre" }],
+      deactivated: ["c"],
+    }
+    runBulkMemberDeletion.mockResolvedValue(outcome)
+    const res = await call({ ids: ["a", "c"], deactivateKept: true })
+    expect(res.status).toBe(200)
+    expect(await res.json()).toEqual(outcome)
+    expect(runBulkMemberDeletion).toHaveBeenCalledWith({}, "org-a", { type: "admin", id: "adm-1" }, ["a", "c"], { deactivateKept: true })
+  })
+
+  it("refuses a non-boolean deactivateKept", async () => {
+    const res = await call({ ids: ["a"], deactivateKept: "yes" })
+    expect(res.status).toBe(400)
+    expect(runBulkMemberDeletion).not.toHaveBeenCalled()
   })
 })

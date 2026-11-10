@@ -398,7 +398,7 @@ describe("MembersManager — bulk deleting a selection", () => {
     await waitFor(() => expect(fetchMock).toHaveBeenCalledWith("/api/admin/members/bulk-delete", {
       method: "POST",
       headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({ ids: ["a", "b", "c"] }),
+      body: JSON.stringify({ ids: ["a", "b", "c"], deactivateKept: false }),
     }))
     const text = "2 membres supprimés. 1 laissé car il a des inscriptions : Anne Favre. Vous pouvez l'effacer depuis sa fiche."
     await waitFor(() => expect(screen.getByText(text)).toBeInTheDocument())
@@ -422,6 +422,136 @@ describe("MembersManager — bulk deleting a selection", () => {
     await waitFor(() => expect(screen.getByText("1 membre supprimé.")).toBeInTheDocument())
     rerender(<MembersManager initialMembers={[]} allTags={[]} defaultHoursPeriod={period} />)
     expect(screen.getByRole("heading", { level: 1, name: "Membres" })).toHaveFocus()
+  })
+})
+
+// Bulk deactivation (#1307): the checkbox in the deletion dialog, and the separate reversible action.
+describe("MembersManager — bulk deactivating a selection", () => {
+  const period = { from: "2026-01-01", to: "2026-12-31" }
+  const withCounts = [
+    member({ id: "a", firstName: "Anne", lastName: "Favre", registrationCount: 2 }),
+    member({ id: "b", firstName: "Marc", lastName: "Rochat", registrationCount: 0 }),
+    member({ id: "c", firstName: "Léa", lastName: "Dubois", registrationCount: 0, deletion: { eligible: true } }),
+  ]
+  const setup = (members = withCounts) => render(<MembersManager initialMembers={members} allTags={[]} defaultHoursPeriod={period} />)
+  const counter = (text: string) => screen.getByText(text).closest("[role='status']")
+
+  afterEach(() => vi.unstubAllGlobals())
+
+  it("puts the deactivation checkbox in the deletion dialog, unchecked, with the known number of selected members that have registrations", () => {
+    setup()
+    fireEvent.click(screen.getByRole("checkbox", { name: "Tout sélectionner" }))
+    fireEvent.click(screen.getByRole("button", { name: "Supprimer la sélection" }))
+    const dialog = screen.getByRole("alertdialog", { name: "Supprimer 3 membres ?" })
+    const checkbox = within(dialog).getByRole("checkbox", { name: /^Désactiver les membres qui ne peuvent pas être supprimés \(ceux qui ont des inscriptions\) \(1 membre\)$/ })
+    expect(checkbox).not.toBeChecked()
+  })
+
+  it("hides the checkbox when no selected member has registrations", () => {
+    setup([
+      member({ id: "a", registrationCount: 0 }),
+      member({ id: "b", registrationCount: 0 }),
+    ])
+    fireEvent.click(screen.getByRole("checkbox", { name: "Tout sélectionner" }))
+    fireEvent.click(screen.getByRole("button", { name: "Supprimer la sélection" }))
+    expect(screen.getByRole("alertdialog", { name: "Supprimer 2 membres ?" })).toBeInTheDocument()
+    expect(screen.queryByRole("checkbox", { name: /Désactiver les membres qui ne peuvent pas être supprimés/ })).toBeNull()
+  })
+
+  it("keeps the label without a number when the list doesn't know the counts", () => {
+    setup([member({ id: "a" }), member({ id: "b" })])
+    fireEvent.click(screen.getByRole("checkbox", { name: "Tout sélectionner" }))
+    fireEvent.click(screen.getByRole("button", { name: "Supprimer la sélection" }))
+    expect(screen.getByRole("checkbox", { name: "Désactiver les membres qui ne peuvent pas être supprimés (ceux qui ont des inscriptions)" })).toBeInTheDocument()
+  })
+
+  it("sends deactivateKept when checked and words the deactivated members apart from the already inactive ones", async () => {
+    const fetchMock = vi.fn().mockResolvedValue({
+      ok: true,
+      json: async () => ({
+        deleted: ["a"],
+        skipped: [
+          { id: "b", reason: "registrations", name: "Marc Rochat" },
+          { id: "c", reason: "registrations", name: "Léa Dubois" },
+        ],
+        deactivated: ["b"],
+      }),
+    })
+    vi.stubGlobal("fetch", fetchMock)
+    setup()
+    fireEvent.click(screen.getByRole("checkbox", { name: "Tout sélectionner" }))
+    fireEvent.click(screen.getByRole("button", { name: "Supprimer la sélection" }))
+    const dialog = screen.getByRole("alertdialog", { name: "Supprimer 3 membres ?" })
+    fireEvent.click(within(dialog).getByRole("checkbox", { name: /Désactiver les membres/ }))
+    fireEvent.click(within(dialog).getByRole("button", { name: "Supprimer" }))
+
+    await waitFor(() => expect(fetchMock).toHaveBeenCalledWith("/api/admin/members/bulk-delete", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ ids: ["a", "b", "c"], deactivateKept: true }),
+    }))
+    const text = "1 membre supprimé. 1 désactivé car il a des inscriptions : Marc Rochat. 1 déjà inactif, laissé tel quel : Léa Dubois."
+    await waitFor(() => expect(screen.getByText(text)).toBeInTheDocument())
+    expect(screen.getByText(text).closest("p")).toHaveFocus()
+  })
+
+  it("offers « Désactiver la sélection » next to the deletion, in a simple non-danger dialog that says it is reversible", () => {
+    setup()
+    expect(screen.queryByRole("button", { name: "Désactiver la sélection" })).toBeNull()
+    fireEvent.click(screen.getByRole("checkbox", { name: "Sélectionner Anne Favre" }))
+    fireEvent.click(screen.getByRole("checkbox", { name: "Sélectionner Marc Rochat" }))
+    expect(counter("2 membres sélectionnés")).toBeInTheDocument()
+    fireEvent.click(screen.getByRole("button", { name: "Désactiver la sélection" }))
+
+    const dialog = screen.getByRole("dialog", { name: "Désactiver 2 membres ?" })
+    expect(screen.queryByRole("alertdialog")).toBeNull()
+    expect(dialog).toHaveTextContent("Vous pourrez les réactiver en affichant les inactifs")
+    expect(within(dialog).getByRole("button", { name: "Désactiver" })).toBeInTheDocument()
+    fireEvent.click(within(dialog).getByRole("button", { name: "Annuler" }))
+    expect(screen.queryByRole("dialog")).toBeNull()
+  })
+
+  it("posts the selection to bulk-deactivate, announces the result and focuses it", async () => {
+    const fetchMock = vi.fn().mockResolvedValue({
+      ok: true,
+      json: async () => ({
+        deactivated: ["a", "b"],
+        skipped: [{ id: "c", reason: "inactive", name: "Léa Dubois" }],
+      }),
+    })
+    vi.stubGlobal("fetch", fetchMock)
+    setup()
+    fireEvent.click(screen.getByRole("checkbox", { name: "Tout sélectionner" }))
+    fireEvent.click(screen.getByRole("button", { name: "Désactiver la sélection" }))
+    fireEvent.click(within(screen.getByRole("dialog", { name: "Désactiver 3 membres ?" })).getByRole("button", { name: "Désactiver" }))
+
+    await waitFor(() => expect(fetchMock).toHaveBeenCalledWith("/api/admin/members/bulk-deactivate", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ ids: ["a", "b", "c"] }),
+    }))
+    const text = "2 membres désactivés. 1 déjà inactif."
+    await waitFor(() => expect(screen.getByText(text)).toBeInTheDocument())
+    expect(screen.getByText(text).closest("p")).toHaveFocus()
+    expect(screen.queryByRole("dialog")).toBeNull()
+    expect(screen.queryByRole("button", { name: "Désactiver la sélection" })).toBeNull()
+  })
+
+  it("says when nothing was deactivated because the whole selection was already inactive", async () => {
+    const fetchMock = vi.fn().mockResolvedValue({
+      ok: true,
+      json: async () => ({
+        deactivated: [],
+        skipped: [{ id: "a", reason: "inactive", name: "Anne Favre" }],
+      }),
+    })
+    vi.stubGlobal("fetch", fetchMock)
+    setup([member({ id: "a", firstName: "Anne", lastName: "Favre", active: false, registrationCount: 1 })])
+    fireEvent.click(screen.getByRole("checkbox", { name: "Inclure inactifs" }))
+    fireEvent.click(screen.getByRole("checkbox", { name: "Sélectionner Anne Favre" }))
+    fireEvent.click(screen.getByRole("button", { name: "Désactiver la sélection" }))
+    fireEvent.click(within(screen.getByRole("dialog", { name: "Désactiver 1 membre ?" })).getByRole("button", { name: "Désactiver" }))
+    await waitFor(() => expect(screen.getByText("Aucun membre désactivé. 1 déjà inactif.")).toBeInTheDocument())
   })
 })
 

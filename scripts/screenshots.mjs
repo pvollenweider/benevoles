@@ -431,8 +431,10 @@ async function run() {
 
   await shot("admin-members", async () => { await visit(`${BASE}/admin/members`); await save(a, "admin-members") })
 
-  // Bulk deletion (#1305): two selected members and the single confirmation, which says how many
-  // will go and that members with registrations stay. Declared as pending until the PNG is made.
+  // Bulk deletion (#1305): two selected members with registrations and the single confirmation,
+  // which says how many will go, that members with registrations stay, and offers the unchecked
+  // « Désactiver les membres qui ne peuvent pas être supprimés … (2 membres) » checkbox (#1307).
+  // Declared as pending until the PNG is made.
   await shot("admin-members-bulk-delete", async () => {
     await visit(`${BASE}/admin/members`)
     await a.getByRole("checkbox", { name: "Sélectionner Manon Aebi" }).check()

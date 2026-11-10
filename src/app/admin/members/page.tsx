@@ -9,7 +9,7 @@ import { serializeAddressStatus } from "@/lib/address-status"
 import { addressHash } from "@/lib/notifications/smtp-outcome"
 import { env } from "@/lib/env"
 import { countDuplicatePairs } from "@/lib/member-duplicates-data"
-import { loadMemberDeletionEligibilities } from "@/lib/member-deletion-data"
+import { loadMemberDeletionFacts } from "@/lib/member-deletion-data"
 import { MEMBER_DELETION_REASON } from "@/lib/member-deletion"
 import { memberRecordState } from "@/lib/member-record-state"
 import HelpLink from "@/components/admin/HelpLink"
@@ -77,8 +77,9 @@ export default async function MembersPage({ searchParams }: { searchParams: Prom
   // « Doublons possibles » (#601): count only, for the header link — the full pairs are loaded by
   // /admin/members/duplicates itself.
   const duplicatesCount = await countDuplicatePairs(db, ctx.organizationId)
-  // Whether each member can be permanently deleted (#667): one extra query for the whole list.
-  const deletionEligibilities = await loadMemberDeletionEligibilities(
+  // Whether each member can be permanently deleted (#667), and how many registrations it has
+  // (reused by the bulk deletion's deactivation checkbox, #1307): one extra query for the whole list.
+  const deletionFacts = await loadMemberDeletionFacts(
     db,
     volunteers.map((v) => ({ id: v.id, active: v.active, mergedIntoId: v.mergedIntoId })),
   )
@@ -110,7 +111,8 @@ export default async function MembersPage({ searchParams }: { searchParams: Prom
           lastShiftDate,
           lastPresenceDate,
           addressStatus: serializeAddressStatus(addressStatuses.get(v.id) ?? { kind: "ok" }),
-          deletion: deletionEligibilities.get(v.id) ?? { eligible: false, reason: MEMBER_DELETION_REASON.active },
+          deletion: deletionFacts.get(v.id)?.eligibility ?? { eligible: false, reason: MEMBER_DELETION_REASON.active },
+          registrationCount: deletionFacts.get(v.id)?.registrationCount ?? 0,
           record: memberRecordState(v, byId, timeZone),
         }
       })}
