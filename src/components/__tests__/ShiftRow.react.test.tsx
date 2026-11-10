@@ -57,6 +57,11 @@ describe("ShiftRow", () => {
     expect(screen.getByRole("button", { name: "Retirer Bar du soir de la sélection" })).toBeInTheDocument()
   })
 
+  it("shows a refused answer condition under the selected shift (#962)", () => {
+    renderRow({ notice: "Ce poste est réservé aux personnes qui répondent Oui à « Permis de conduire »." })
+    expect(screen.getByText("Ce poste est réservé aux personnes qui répondent Oui à « Permis de conduire ».")).toBeInTheDocument()
+  })
+
   it("takes a selected shift out of the selection", () => {
     const { onRemove, onCancel } = renderRow()
     fireEvent.click(screen.getByRole("button", { name: "Retirer Bar de la sélection" }))

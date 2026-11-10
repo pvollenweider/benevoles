@@ -13,6 +13,7 @@ const { updateMany, logEvent, db } = vi.hoisted(() => {
     ]),
     updateMany,
   },
+  eventQuestion: { findMany: vi.fn().mockResolvedValue([]) },
   }
   return { updateMany, logEvent, db }
 })
@@ -50,6 +51,40 @@ describe("PATCH /api/admin/events/[id]/roles/[roleName] — maxPerVolunteer", ()
     expect(updateMany).toHaveBeenLastCalledWith(expect.objectContaining({ data: { reservedTags: [] } }))
     expect((await PATCH(patch({ reservedTags: ["x".repeat(41)] }), params)).status).toBe(400)
   })
+  it("sets an answer condition (#962) from a choice question asked to everyone, and clears it", async () => {
+    const { PATCH } = await import("@/app/api/admin/events/[id]/roles/[roleName]/route")
+    db.eventQuestion.findMany.mockResolvedValue([
+      { id: "q1", label: "Permis de conduire", type: "yesno", options: [], parentId: null, displayScope: "event" },
+      { id: "q2", label: "Véhicules", type: "multiple", options: ["Voiture", "Vélo"], parentId: null, displayScope: "event" },
+    ])
+    expect((await PATCH(patch({ reservedQuestionId: "q1", reservedAnswers: ["Oui"] }), params)).status).toBe(200)
+    expect(updateMany).toHaveBeenLastCalledWith({ where: { eventId: "evt-1", roleName: "Loge", event: { organizationId: "org-a" } }, data: { reservedQuestionId: "q1", reservedAnswers: ["Oui"] } })
+    expect((await PATCH(patch({ reservedQuestionId: "q2", reservedAnswers: ["Voiture", "Vélo"] }), params)).status).toBe(200)
+    expect((await PATCH(patch({ reservedQuestionId: null, reservedAnswers: [] }), params)).status).toBe(200)
+    expect(updateMany).toHaveBeenLastCalledWith(expect.objectContaining({ data: { reservedQuestionId: null, reservedAnswers: [] } }))
+  })
+
+  it("refuses a free-text, scoped or follow-up question, a missing or unknown answer (#962)", async () => {
+    const { PATCH } = await import("@/app/api/admin/events/[id]/roles/[roleName]/route")
+    db.eventQuestion.findMany.mockResolvedValue([
+      { id: "q-text", label: "Texte", type: "text", options: [], parentId: null, displayScope: "event" },
+      { id: "q-roles", label: "Certains postes", type: "single", options: ["A"], parentId: null, displayScope: "roles" },
+      { id: "q-suivi", label: "Suivi", type: "single", options: ["A"], parentId: "q1", displayScope: "event" },
+      { id: "q1", label: "Permis de conduire", type: "yesno", options: [], parentId: null, displayScope: "event" },
+      { id: "q2", label: "Véhicules", type: "multiple", options: ["Voiture", "Vélo"], parentId: null, displayScope: "event" },
+    ])
+    for (const body of [
+      { reservedQuestionId: "q-text", reservedAnswers: ["Oui"] },
+      { reservedQuestionId: "q-roles", reservedAnswers: ["A"] },
+      { reservedQuestionId: "q-suivi", reservedAnswers: ["A"] },
+      { reservedQuestionId: "q1", reservedAnswers: [] },
+      { reservedQuestionId: "q2", reservedAnswers: ["Bateau"] },
+      { reservedQuestionId: "unknown", reservedAnswers: ["Oui"] },
+      { reservedQuestionId: "q1" },
+    ]) expect((await PATCH(patch(body), params)).status).toBe(400)
+    expect(db.eventQuestion.findMany).toHaveBeenCalled()
+  })
+
   it("makes the role assigned by the organisation only (#1145) on every shift, logs it, and undoes it", async () => {
     const { PATCH } = await import("@/app/api/admin/events/[id]/roles/[roleName]/route")
     logEvent.mockClear()

@@ -144,6 +144,17 @@ describe("findCandidates", () => {
     expect(candidates.find((c) => c.member.id === "sel")!.link).toBe("new_invitation")
   })
 
+  it("offers a poste reserved to an answer only to members who gave it (#962)", () => {
+    const reserved = { ...open(bar), answerCondition: { questionId: "q1", answers: ["Oui"] } }
+    const { candidates, excluded } = findCandidates({
+      ...base,
+      members: [member("oui", { answers: { q1: ["Oui"] } }), member("non", { answers: { q1: ["Non"] } }), member("sans")],
+      shifts: [reserved],
+    })
+    expect(candidates.filter((c) => c.selectable).map((c) => c.member.id)).toEqual(["oui"])
+    expect(excluded.reserved).toBe(2)
+  })
+
   // #869: a replacement is never someone sign-up would refuse for their age.
   it("does not offer a shift to a member known to be under its minimum age, and counts them", () => {
     const young = [member("kid", { lastName: "Kid", birthDate: "2012-05-01" }), member("adult", { lastName: "Adult", birthDate: "1990-01-01" }), member("unk", { lastName: "Unknown" })]

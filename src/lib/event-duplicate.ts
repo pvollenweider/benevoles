@@ -62,6 +62,9 @@ export type DuplicableShift = {
   colorKey: string | null
   maxPerVolunteer?: number | null
   reservedTags?: string[]
+  /** Answer condition of the poste (#962), remapped to the copy of its question. */
+  reservedQuestionId?: string | null
+  reservedAnswers?: string[]
   /** Role cumulable with another shift (#986), copied with the role's other settings. */
   overlapAllowed?: boolean
   /** Role assigned by the organisation only (#1145), copied with the role's other settings. */
@@ -219,6 +222,8 @@ export function copiedShift(s: DuplicableShift) {
     colorKey: s.colorKey,
     maxPerVolunteer: s.maxPerVolunteer ?? null,
     reservedTags: s.reservedTags ?? [],
+    reservedQuestionId: s.reservedQuestionId ?? null,
+    reservedAnswers: s.reservedAnswers ?? [],
     overlapAllowed: s.overlapAllowed ?? false,
     assignedOnly: s.assignedOnly ?? false,
     sectorId: s.sectorId ?? null,
@@ -268,10 +273,19 @@ export function duplicatePlan(source: DuplicableEvent, options: DuplicateOptions
   const places = (copy.shifts ? source.places ?? [] : []).filter((p) => !p.archivedAt).sort((a, b) => a.displayOrder - b.displayOrder).map((p, i) => ({ from: p.id, id: newId(), name: p.name, displayOrder: i }))
   const placeIds = new Map(places.map((p) => [p.from, p.id]))
   const inSector = <S extends { sectorId: string | null; placeId?: string | null }>(s: S): S => ({ ...s, sectorId: sectorPlan.sectorOf(s.sectorId), ...("placeId" in s ? { placeId: s.placeId ? placeIds.get(s.placeId) ?? null : null } : {}) })
-  const shifts = shiftsCopied.map(inSector)
-  const recurrences = (copy.shifts ? duplicatedRecurrences(source, offsetDays) : []).map((r) => ({ ...r, shifts: r.shifts.map(inSector) }))
   // A question's poste (#984, part 3) follows when the copy has that poste, by the same name.
-  const copiedRoles = new Set([...shifts.map((s) => s.roleName), ...recurrences.flatMap((r) => r.shifts.map((s) => s.roleName))])
+  const copiedRoles = new Set([...shiftsCopied.map((s) => s.roleName), ...(copy.shifts ? duplicatedRecurrences(source, offsetDays) : []).flatMap((r) => r.shifts.map((s) => s.roleName))])
+  // The copied questions, with fresh ids known beforehand: an answer condition (#962) and a
+  // follow-up (#1016) both point to the copy of their question.
+  const sourceQuestionIds = copy.settings ? duplicatedQuestionIds(source.questions ?? [], newId) : new Map<string, string>()
+  const questions = copy.settings ? duplicatedQuestions(source.questions ?? [], copiedRoles, newId, sourceQuestionIds) : []
+  // Answer conditions of the source point to the copy of their question, or are dropped with it.
+  const remapCondition = <S extends { reservedQuestionId?: string | null; reservedAnswers?: string[] }>(s: S): S => {
+    const questionId = s.reservedQuestionId ? sourceQuestionIds.get(s.reservedQuestionId) ?? null : null
+    return { ...s, reservedQuestionId: questionId, reservedAnswers: questionId ? s.reservedAnswers ?? [] : [] }
+  }
+  const shifts = shiftsCopied.map(inSector).map(remapCondition)
+  const recurrences = (copy.shifts ? duplicatedRecurrences(source, offsetDays) : []).map((r) => ({ ...r, shifts: r.shifts.map(inSector).map(remapCondition) }))
   return {
     copy,
     offsetDays,
@@ -309,7 +323,7 @@ export function duplicatePlan(source: DuplicableEvent, options: DuplicateOptions
     shifts,
     recurrences,
     pages: copy.pages ? source.pages.map((p) => ({ slug: p.slug, title: p.title, content: p.content, displayOrder: p.displayOrder })) : [],
-    questions: copy.settings ? duplicatedQuestions(source.questions ?? [], copiedRoles, newId) : [],
+    questions,
     // Never the leaders of a deleted poste (#1010): they would get a link to a poste the copy
     // doesn't have. A poste typed before its shifts exist still follows. A sector leader (#1169)
     // follows in the copy of their sector; never one of an archived sector, which is not copied.
@@ -329,8 +343,11 @@ export function duplicatePlan(source: DuplicableEvent, options: DuplicateOptions
  * (#1016) pointing to the copy of its parent; a follow-up whose parent is not copied is left out,
  * as it would be asked to everyone without the question it depends on.
  */
-function duplicatedQuestions(questions: NonNullable<DuplicableEvent["questions"]>, copiedRoles: Set<string>, newId: () => string) {
-  const ids = new Map(questions.filter((q) => q.id).map((q) => [q.id!, newId()]))
+function duplicatedQuestionIds(questions: NonNullable<DuplicableEvent["questions"]>, newId: () => string): Map<string, string> {
+  return new Map(questions.filter((q) => q.id).map((q) => [q.id!, newId()]))
+}
+
+function duplicatedQuestions(questions: NonNullable<DuplicableEvent["questions"]>, copiedRoles: Set<string>, newId: () => string, ids = duplicatedQuestionIds(questions, newId)) {
   return questions
     .filter((q) => !q.parentId || ids.has(q.parentId))
     .map((q) => ({

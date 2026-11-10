@@ -11,6 +11,7 @@ import { resolveOrgSlug } from "@/lib/resolve-org"
 import { linkToken } from "@/lib/token-vault"
 import { allowedReservedRoles, reservedRoles } from "@/lib/role-reservation"
 import { publicShifts } from "@/lib/role-assignment"
+import { myAnswerRows, myAnswersQuery } from "@/lib/my-answers"
 
 /** One answer for every refusal: an unknown, revoked or foreign invitation looks the same (#541). */
 const invalid = () => NextResponse.json({ error: "Lien invalide" }, { status: 404 })
@@ -50,7 +51,7 @@ export async function GET(
           tags: true,
         },
       },
-      event: { select: { slug: true, organizationId: true, organization: { select: ORG_LIFECYCLE_SELECT }, shifts: { where: { status: { not: "cancelled" } }, select: { roleName: true, reservedTags: true, assignedOnly: true } } } },
+      event: { select: { id: true, slug: true, organizationId: true, organization: { select: ORG_LIFECYCLE_SELECT }, shifts: { where: { status: { not: "cancelled" } }, select: { roleName: true, reservedTags: true, reservedQuestionId: true, assignedOnly: true } } } },
     },
   })
 
@@ -71,8 +72,14 @@ export async function GET(
   // main domain carries no organisation the proxy could have checked.
   if (!orgLinksOpen(invite.event.organization)) return orgUnavailableResponse()
 
+  // The member's own answers (#962): the form starts from them, so a shift reserved to an answer is
+  // bookable without retyping it. The invitation already proves the address.
+  const answers = invite.event.shifts.some((s) => s.reservedQuestionId)
+    ? myAnswerRows(await prisma.eventQuestion.findMany(myAnswersQuery(invite.event.id, invite.volunteer.id)))
+    : []
   return NextResponse.json({
     eventSlug: invite.event.slug,
+    answers,
     // The reserved roles (#470) this invitation opens; the member's tags themselves stay private. A
     // role assigned by the organisation only (#1145) is never one: no invitation opens it.
     reservedRolesAllowed: allowedReservedRoles(reservedRoles(publicShifts(invite.event.shifts)), invite.volunteer.tags),

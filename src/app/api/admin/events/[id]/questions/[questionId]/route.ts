@@ -13,6 +13,7 @@ import { conditionText } from "@/lib/event-questions"
 import { followUpProblem, normalisedShowIf, parentEditProblem } from "@/lib/question-follow-up"
 import { activeQuestions, normalisePositions } from "@/lib/question-follow-up-data"
 import { SCOPE_EVENT, detachedScope, scopeLogText, scopeProblem } from "@/lib/question-scope"
+import { answerConditionDependents, questionAnswerConditionDeletionProblem, questionAnswerConditionProblem } from "@/lib/role-answer"
 
 type Params = { params: Promise<{ id: string; questionId: string }> }
 
@@ -95,6 +96,28 @@ export async function PATCH(req: Request, { params }: Params) {
     if (problem) return NextResponse.json({ error: problem, field: "displayScope" }, { status: 400 })
   }
 
+  // A poste reserved by this question's answer (#962) keeps it a choice question asked to every
+  // volunteer, with every accepted answer still among its choices. Refused with the poste's name.
+  // Only an edit that can change the condition reads the postes; a label or an unrelated field doesn't.
+  const touchesCondition = data.type !== undefined || data.options !== undefined || data.parentId !== undefined
+    || data.displayScope !== undefined || data.displayRoleNames !== undefined
+  if (touchesCondition) {
+    const dependents = answerConditionDependents(await guard.db.shift.findMany({
+      where: { eventId: id, reservedQuestionId: questionId, status: { not: "cancelled" } },
+      select: { roleName: true, reservedQuestionId: true, reservedAnswers: true },
+    }), questionId)
+    if (dependents.length > 0) {
+      const after = {
+        ...existing,
+        ...data,
+        parentId: data.parentId !== undefined ? data.parentId : existing.parentId,
+        displayScope: data.displayScope !== undefined ? data.displayScope : existing.displayScope,
+      }
+      const conditionProblem = questionAnswerConditionProblem(after, dependents)
+      if (conditionProblem) return NextResponse.json({ error: conditionProblem }, { status: 409 })
+    }
+  }
+
   const select = { id: true, label: true, type: true, options: true, required: true, minValue: true, maxValue: true, roleName: true, parentId: true, showIfValues: true, displayScope: true, displayRoleNames: true, position: true, _count: { select: { answers: true } } } as const
   let question = await guard.db.eventQuestion.update({ where: { id: questionId }, data, select })
   const parentChanged = data.parentId !== undefined && (existing.parentId ?? null) !== (question.parentId ?? null)
@@ -131,6 +154,15 @@ export async function DELETE(_req: Request, { params }: Params) {
   const { id, questionId } = await params
   const existing = await load(guard, id, questionId)
   if (!existing) return NextResponse.json({ error: "Question introuvable" }, { status: 404 })
+
+  // A poste reserved by this question's answer (#962): deleting or archiving it would silently open
+  // the poste. Refused with the poste's name until its condition is removed.
+  const dependents = answerConditionDependents(await guard.db.shift.findMany({
+    where: { eventId: id, reservedQuestionId: questionId, status: { not: "cancelled" } },
+    select: { roleName: true, reservedQuestionId: true, reservedAnswers: true },
+  }), questionId)
+  const deletionProblem = questionAnswerConditionDeletionProblem(dependents)
+  if (deletionProblem) return NextResponse.json({ error: deletionProblem }, { status: 409 })
 
   const now = new Date()
   const followUps = existing.followUps ?? []

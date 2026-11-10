@@ -3,6 +3,7 @@
 
 import { fmt, crossesMidnight } from "@/lib/gantt-utils"
 import { RESERVED_LABEL } from "@/lib/role-reservation"
+import { answerConditionMention } from "@/lib/role-answer"
 import { ROLE_LIMIT_REACHED_SHORT, roleLimitReachedText } from "@/lib/role-limit"
 
 /** One shift as the public timeline (DayTimeline) draws it. */
@@ -22,6 +23,8 @@ export type TimelineShift = {
   requiresApproval?: boolean
   minAge?: number | null
   colorKey?: string | null
+  /** Reserved to an answer (#962): said on the bar, never hidden nor disabled by it. */
+  reservedAnswer?: { questionId: string; questionLabel: string; answers: string[] } | null
 }
 
 /** What the visitor already holds on a shift (#534): their registration's live status. */
@@ -113,7 +116,9 @@ export function barText({ shift, held, selected, reserved, locked, conflict = fa
   // since the visual sub-label is aria-hidden.
   const hasMinAge = shift.minAge != null
   const needsApproval = shift.requiresApproval ?? false
-  const minAgeSuffix = (hasMinAge ? ` (${shift.minAge} ans minimum)` : "") + (needsApproval ? " (sur validation)" : "")
+  // #962: the shift stays selectable; the condition is a readable mention, checked at submit.
+  const answerMention = shift.reservedAnswer ? answerConditionMention(shift.reservedAnswer.questionLabel, shift.reservedAnswer.answers) : null
+  const minAgeSuffix = (hasMinAge ? ` (${shift.minAge} ans minimum)` : "") + (needsApproval ? " (sur validation)" : "") + (answerMention ? ` (${answerMention})` : "")
   // Skipped once full: the « Complet » / waitlist wording already says all that matters.
   const spotsSuffix = unavail ? "" : ` (${shift.spotsLeft} place${shift.spotsLeft > 1 ? "s" : ""} libre${shift.spotsLeft > 1 ? "s" : ""} sur ${shift.capacity})`
   // Said only where the bar can otherwise be taken: a bar that can't says its own reason.
@@ -143,6 +148,7 @@ export function barText({ shift, held, selected, reserved, locked, conflict = fa
     isWaitlistable && !selected ? "Complet · file d'attente" : hasLabel ? shift.label : null,
     hasMinAge ? `${shift.minAge}+` : null,
     needsApproval ? "Sur validation" : null,
+    answerMention,
   ].filter(Boolean).join(" · ")
 
   return { ariaLabel, tag: limitText, tagShort: limitText ? ROLE_LIMIT_REACHED_SHORT : null, subLabel: details || null }
@@ -218,6 +224,7 @@ export function shiftListText(shift: TimelineShift, view: ShiftViewState, opts: 
   const details = [
     shift.minAge != null ? `${shift.minAge} ans minimum` : null,
     shift.requiresApproval ? "Sur validation" : null,
+    shift.reservedAnswer ? answerConditionMention(shift.reservedAnswer.questionLabel, shift.reservedAnswer.answers) : null,
   ].filter(Boolean).join(" · ")
   return { title: `${time} · ${roleLabel}`, status, details: details || null }
 }

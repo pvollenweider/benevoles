@@ -45,6 +45,8 @@ export type ProposalShift = {
   minAge: number | null
   /** The poste's reserved tags (#470), empty: open to every member. */
   reservedTags: string[]
+  /** The poste's answer condition (#962), null: no condition. */
+  answerCondition?: { questionId: string; answers: string[] } | null
   /** The poste's limit per person (#466), null: none. */
   maxPerVolunteer: number | null
   /** « Repas sur le pouce possible » (#1171). */
@@ -65,6 +67,8 @@ export type ProposalPerson = {
   id: string
   birthDate: string | null
   tags: string[]
+  /** The person's stored answers on the event, by question id (#962). */
+  answers?: Record<string, string[]>
   /** The person's dated availability on the event, or null when never asked or never answered. */
   answer: AnswerForFit | null
   /** Shifts the person holds that the proposal never moves: committed registrations and preserved drafts. */

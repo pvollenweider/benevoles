@@ -63,6 +63,12 @@ Une question peut n'être posée qu'après une réponse donnée à une autre que
 
 Ne demandez que ce qui est nécessaire à l'organisation, et pas d'information sensible (santé, religion, opinions…) : les réponses sont des données personnelles.
 
+## Réserver un poste selon une réponse
+
+Une question **à choix** (oui / non, choix unique ou choix multiple) posée à **tous les bénévoles** peut servir de condition d'accès à un poste, depuis l'éditeur **Accès** de **Gérer les postes** (voir [Gérer les postes](gerer-les-postes.md)). Choisissez la question et les réponses acceptées ; le créneau affiche alors « Réservé : la question, la réponse », reste visible et sélectionnable, et l'inscription vérifie la réponse enregistrée du bénévole. Une question réservée à certains postes ou une question de suivi ne peut pas servir de condition, car le bénévole ne la verrait pas forcément avant de choisir le poste.
+
+Tant qu'un poste dépend d'une question, celle-ci ne peut pas être supprimée, passer en texte libre, être réservée à certains postes ou devenir une question de suivi, ni perdre un choix encore accepté par ce poste : l'éditeur refuse avec un message qui nomme le poste. Son libellé peut changer : la mention du créneau suit. Une copie de l'événement reprend la condition vers la copie de la question.
+
 ## Synthèse des réponses
 
 Sous la liste des questions, **Synthèse des réponses** compte les réponses, par exemple pour savoir combien de t-shirts de chaque taille commander. Un tableau par question :

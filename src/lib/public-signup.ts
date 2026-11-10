@@ -4,6 +4,7 @@
 import { shiftsTooYoungFor } from "./utils"
 import { shiftsClash } from "./shift-overlap"
 import { tooLongSignupField } from "./signup-limits"
+import { answerConditionProblems, answerConditionRefusal, rawAnswerValues, type ReservedAnswerCondition } from "./role-answer"
 import { INSTANCE_OPERATOR_PATH, isHostedService } from "@/lib/site"
 
 /**
@@ -14,6 +15,8 @@ import { INSTANCE_OPERATOR_PATH, isHostedService } from "@/lib/site"
 
 export type SignupShift = {
   id: string
+  /** The poste (Shift.roleName), for the answer condition shared by its shifts (#962). */
+  roleName?: string
   label: string
   date: string
   startTime: string
@@ -21,8 +24,35 @@ export type SignupShift = {
   status: string
   waitlistEnabled: boolean
   minAge: number | null
+  /** Reserved to an answer (#962): shown on the bar, checked at validation. */
+  reservedAnswer?: { questionId: string; questionLabel: string; answers: string[] } | null
   /** Its role may overlap another shift (#986): never a conflict. */
   overlapAllowed?: boolean
+}
+
+/** The answer conditions of the selected shifts, by role (shared by a poste's shifts, #962). */
+function conditionsOf(shifts: SignupShift[]): Map<string, ReservedAnswerCondition> {
+  const out = new Map<string, ReservedAnswerCondition>()
+  for (const s of shifts) {
+    if (s.reservedAnswer) out.set(s.roleName ?? "", { questionId: s.reservedAnswer.questionId, answers: s.reservedAnswer.answers })
+  }
+  return out
+}
+
+/**
+ * The selected shifts whose role's answer condition the form does not satisfy (#962): refused at
+ * validation, next to the question and the shift. The stored answer of a known volunteer is in
+ * `answers` too, so changing it makes the shift bookable.
+ */
+export function signupAnswerConditionProblems(shifts: SignupShift[], answers: Record<string, unknown> | undefined) {
+  const values = new Map(Object.entries(answers ?? {}).map(([id, v]) => [id, rawAnswerValues(v)]))
+  return answerConditionProblems(shifts.map((s) => ({ ...s, roleName: s.roleName ?? "" })), conditionsOf(shifts), values)
+}
+
+/** The first refusal to show for the answer conditions, or null. */
+export function signupAnswerConditionRefusal(shifts: SignupShift[], answers: Record<string, unknown> | undefined): string | null {
+  const [problem] = signupAnswerConditionProblems(shifts, answers)
+  return problem ? answerConditionRefusal(problem.questionLabel, problem.condition.answers) : null
 }
 
 export type MyRegistration = {
@@ -112,6 +142,10 @@ export function validateSignup(input: {
   ageGatedShifts: SignupShift[]
   /** The event protects minors (#1171, lot 2): the birth date is required. */
   minorsProtected?: boolean
+  /** The selected shifts, whose answer condition is checked here too (#962). */
+  reservedAnswerShifts?: SignupShift[]
+  /** The answers being typed, and the volunteer's stored answers (#962). */
+  answers?: Record<string, unknown>
 }): string | null {
   const { form } = input
   if (!input.charterAccepted) return "Accepte la convention des bénévoles."
@@ -130,7 +164,7 @@ export function validateSignup(input: {
       return `Âge minimum non atteint pour : ${tooYoungFor.map((s) => `${s.label} (${s.minAge} ans min.)`).join(", ")}.`
     }
   }
-  return null
+  return signupAnswerConditionRefusal(input.reservedAnswerShifts ?? [], input.answers)
 }
 
 type ApiRegistration = {

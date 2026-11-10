@@ -136,6 +136,13 @@ describe("personSwapCheck (#1174): the sign-up's rules on the plan without the s
     expect(personSwapCheck({ ...base, reserved, person: { ...person, tags: ["Sécurité"] }, held: [] })).toEqual({ ok: true })
   })
 
+  it("refuses a poste reserved to an answer the person did not give (#962)", () => {
+    const answerCondition = { questionId: "q1", answers: ["Oui"] }
+    expect(personSwapCheck({ ...base, answerCondition, held: [] })).toEqual({ ok: false, code: "reserved" })
+    expect(personSwapCheck({ ...base, answerCondition, answers: new Map([["q1", ["Non"]]]), held: [] })).toEqual({ ok: false, code: "reserved" })
+    expect(personSwapCheck({ ...base, answerCondition, answers: new Map([["q1", ["Oui"]]]), held: [] })).toEqual({ ok: true })
+  })
+
   it("refuses an erased, merged or inactive person", () => {
     expect(personSwapCheck({ ...base, person: { ...person, erasedAt: new Date() }, held: [] })).toEqual({ ok: false, code: "volunteer_gone" })
     expect(personSwapCheck({ ...base, person: { ...person, mergedIntoId: "other" }, held: [] })).toEqual({ ok: false, code: "volunteer_gone" })
@@ -183,6 +190,7 @@ describe("materialTerms (#1174 E09, E13)", () => {
     for (const change of [
       { startTime: "11:00" }, { endTime: "13:00" }, { date: new Date("2030-07-05T00:00:00Z") }, { locationDetails: "Entrée sud" },
       { latitude: 46.2 }, { roleName: "Accueil" }, { minAge: 16 }, { reservedTags: ["secouriste"] }, { assignedOnly: true }, { status: "cancelled" },
+      { reservedQuestionId: "q1", reservedAnswers: ["Oui"] },
     ] as Partial<SwapShift>[]) {
       expect(shiftMateriallyChanged(s, { ...s, ...change })).toBe(true)
     }

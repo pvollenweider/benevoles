@@ -49,6 +49,27 @@ describe("questions admin API", () => {
     expect((await PATCH(json("PATCH", { label: "Taille de t-shirt", type: "single", options: ["S", "M", "L"] }), params)).status).toBe(200)
   })
 
+  it("keeps a question a poste's access depends on: no free text, no narrowed scope, no removed accepted answer, no deletion (#962)", async () => {
+    const dependent = db()
+    dependent.shift.findMany.mockResolvedValue([{ roleName: "Navette", reservedQuestionId: "q1", reservedAnswers: ["S"] }])
+    guard.mockResolvedValue({ db: dependent, session: {} })
+    const { PATCH, DELETE } = await import("@/app/api/admin/events/[id]/questions/[questionId]/route")
+    const text = await PATCH(json("PATCH", { label: "Taille", type: "text" }), params)
+    expect(text.status).toBe(409)
+    expect((await text.json()).error).toContain("« Navette »")
+    const removed = await PATCH(json("PATCH", { label: "Taille", type: "single", options: ["M", "L"] }), params)
+    expect(removed.status).toBe(409)
+    expect((await removed.json()).error).toContain("« S »")
+    const scoped = await PATCH(json("PATCH", { label: "Taille", type: "single", options: ["S", "M"], displayScope: "roles", displayRoleNames: ["Navette"] }), params)
+    expect(scoped.status).toBe(409)
+    expect((await scoped.json()).error).toContain("tous les bénévoles")
+    const deletion = await DELETE(json("DELETE"), params)
+    expect(deletion.status).toBe(409)
+    expect((await deletion.json()).error).toContain("« Navette »")
+    expect(dependent.eventQuestion.update).not.toHaveBeenCalled()
+    expect(dependent.eventQuestion.delete).not.toHaveBeenCalled()
+  })
+
   it("archives an answered question instead of deleting it, deletes an unanswered one", async () => {
     const answered = db({ findFirst: vi.fn().mockResolvedValue({ ...q, answers: [{ values: ["S"] }] }) })
     guard.mockResolvedValue({ db: answered, session: {} })
@@ -174,9 +195,10 @@ describe("questions admin API", () => {
     guard.mockResolvedValue({ db: d, session: {} })
     const { PATCH } = await import("@/app/api/admin/events/[id]/questions/[questionId]/route")
     const body = { label: "Taille", type: "single", options: ["S", "M"] }
-    // Unchanged: accepted without reading the postes, nothing logged about it.
+    // Unchanged roleName: accepted, nothing logged about it. A type/options edit reads the postes
+    // that may depend on the question's answer (#962).
     expect((await PATCH(json("PATCH", { ...body, roleName: "Ancien" }), params)).status).toBe(200)
-    expect(d.shift.findMany).not.toHaveBeenCalled()
+    expect(d.shift.findMany).toHaveBeenCalled()
     expect(logEvent.mock.calls[0][0].changes.roleName).toBeUndefined()
     // Absent: kept as it is.
     await PATCH(json("PATCH", body), params)
@@ -241,7 +263,7 @@ describe("questions admin API", () => {
     const d = db({ findMany: vi.fn().mockResolvedValue(active), findFirst: vi.fn().mockResolvedValue(followUp), update: vi.fn(async ({ data }: { data: Record<string, unknown> }) => ({ ...followUp, ...data })) })
     guard.mockResolvedValue({ db: d, session: {} })
     const { PATCH } = await import("@/app/api/admin/events/[id]/questions/[questionId]/route")
-    await PATCH(json("PATCH", { label: "Combien ?", type: "number", parentId: "meal", showIfValues: ["Oui"], displayScope: "roles", displayRoleNames: ["Bar"] }), params)
+    await PATCH(json("PATCH", { label: "Combien ?", type: "number", parentId: "meal", showIfValues: ["Oui"], displayScope: "roles", displayRoleNames: ["Navette"] }), params)
     expect(d.eventQuestion.update.mock.calls[0][0].data).toMatchObject({ displayScope: "event", displayRoleNames: [] })
     await PATCH(json("PATCH", { label: "Combien ?", type: "number", parentId: null }), params)
     expect(d.eventQuestion.update.mock.calls[1][0].data).toMatchObject({ parentId: null, displayScope: "roles", displayRoleNames: ["Cuisine"] })

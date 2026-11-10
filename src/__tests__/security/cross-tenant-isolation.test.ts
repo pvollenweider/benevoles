@@ -2845,7 +2845,7 @@ describe("Pages, questions, roles, log — cross-tenant isolation", () => {
     const db = setupGuard()
     const extra = {
       eventPage: { findMany: vi.fn().mockResolvedValue([]), findFirst: vi.fn().mockResolvedValue(null), create: vi.fn(), update: vi.fn(), updateMany: vi.fn(), delete: vi.fn() },
-      eventQuestion: { findMany: vi.fn().mockResolvedValue([]), count: vi.fn().mockResolvedValue(0), create: vi.fn(), update: vi.fn() },
+      eventQuestion: { findMany: vi.fn().mockResolvedValue([]), findFirst: vi.fn().mockResolvedValue(null), count: vi.fn().mockResolvedValue(0), create: vi.fn(), update: vi.fn(), delete: vi.fn() },
       eventLog: { findMany: vi.fn().mockResolvedValue([]) },
       $transaction: vi.fn(),
     }
@@ -2901,6 +2901,24 @@ describe("Pages, questions, roles, log — cross-tenant isolation", () => {
     expect((await POST(makeRequest("/api/admin/events/evt-b/questions/reorder", "POST", { ids: ["q-b"] }), params("evt-b"))).status).toBe(404)
     expect(db.eventQuestion.findMany).toHaveBeenCalledWith(expect.objectContaining({ where: { eventId: "evt-b", archivedAt: null } }))
     expect(db.$transaction).not.toHaveBeenCalled()
+  })
+
+  it("PATCH /api/admin/events/[id]/questions/[questionId] and DELETE return 404 for an org-B event, reading no poste", async () => {
+    const { PATCH, DELETE } = await import("@/app/api/admin/events/[id]/questions/[questionId]/route")
+    const db = extraDb()
+    const qp = { params: Promise.resolve({ id: "evt-b", questionId: "q-b" }) }
+    expect((await PATCH(makeRequest("/api/admin/events/evt-b/questions/q-b", "PATCH", { type: "text" }), qp)).status).toBe(404)
+    expect((await DELETE(makeRequest("/api/admin/events/evt-b/questions/q-b", "DELETE"), qp)).status).toBe(404)
+    expect(db.shift.findMany).not.toHaveBeenCalled()
+    expect(db.eventQuestion.update).not.toHaveBeenCalled()
+  })
+
+  it("PATCH /api/admin/events/[id]/roles/[roleName] with an answer condition (#962) returns 404 for an org-B event, reading no question", async () => {
+    const { PATCH } = await import("@/app/api/admin/events/[id]/roles/[roleName]/route")
+    const db = extraDb()
+    expect((await PATCH(makeRequest("/api/admin/events/evt-b/roles/Bar", "PATCH", { reservedQuestionId: "q-b", reservedAnswers: ["Oui"] }), { params: Promise.resolve({ id: "evt-b", roleName: "Bar" }) })).status).toBe(404)
+    expect(db.eventQuestion.findMany).not.toHaveBeenCalled()
+    expect(db.shift.findMany).not.toHaveBeenCalled()
   })
 
   it("DELETE /api/admin/events/[id]/roles/[roleName] returns 404 for an org-B event and cancels nothing", async () => {

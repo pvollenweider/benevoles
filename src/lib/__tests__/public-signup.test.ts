@@ -10,6 +10,7 @@ import {
   prefillContact,
   shiftsByDay,
   toMyRegistrations,
+  signupAnswerConditionProblems,
   validateSignup,
   type SignupShift,
   proposedShiftState,
@@ -103,6 +104,17 @@ describe("validateSignup", () => {
     expect(validateSignup({ ...base, ageGatedShifts: gated })).toContain("Date de naissance")
     expect(validateSignup({ ...base, ageGatedShifts: gated, form: { ...ok, birthDate: "2015-01-01" } })).toContain("Bar (18 ans min.)")
     expect(validateSignup({ ...base, ageGatedShifts: gated, form: { ...ok, birthDate: "2000-01-01" } })).toBeNull()
+  })
+
+  it("refuses a shift reserved to another answer, or to no answer, and accepts a matching one (#962)", () => {
+    const reserved = [shift("navette", { label: "Navette", roleName: "Navette", reservedAnswer: { questionId: "q1", questionLabel: "Permis de conduire", answers: ["Oui"] } })]
+    expect(validateSignup({ ...base, reservedAnswerShifts: reserved, answers: { q1: "Oui" } })).toBeNull()
+    expect(validateSignup({ ...base, reservedAnswerShifts: reserved, answers: { q1: "Non" } }))
+      .toBe("Ce poste est réservé aux personnes qui répondent Oui à « Permis de conduire ».")
+    expect(validateSignup({ ...base, reservedAnswerShifts: reserved, answers: {} }))
+      .toBe("Ce poste est réservé aux personnes qui répondent Oui à « Permis de conduire ».")
+    expect(signupAnswerConditionProblems(reserved, { q1: ["Oui"] })).toEqual([])
+    expect(signupAnswerConditionProblems(reserved, { q1: ["Non"] })).toHaveLength(1)
   })
 })
 

@@ -9,6 +9,7 @@ import { swapsShipped } from "./shift-swap-gate"
 import { LIVE_STATUSES } from "./registration-capacity"
 import { assignedOnlyRoles } from "./role-assignment"
 import { reservedRoles } from "./role-reservation"
+import { reservedAnswerConditions } from "./role-answer"
 import { roleLimits } from "./role-limit"
 import { orgTimeZone } from "./time-zone"
 import { rosterDisplayName } from "./shift-roster-text"
@@ -84,7 +85,7 @@ export async function setShiftSwapsOption(db: OrgScopedPrisma, organizationId: s
 
 const SHIFT_SELECT = {
   id: true, eventId: true, roleName: true, label: true, status: true, date: true, startTime: true, endTime: true,
-  overlapAllowed: true, assignedOnly: true, requiresApproval: true, minAge: true, reservedTags: true,
+  overlapAllowed: true, assignedOnly: true, requiresApproval: true, minAge: true, reservedTags: true, reservedQuestionId: true, reservedAnswers: true,
   locationDetails: true, latitude: true, longitude: true, sectorId: true, instructions: true, maxPerVolunteer: true,
 } as const
 
@@ -115,9 +116,12 @@ export async function loadVolunteerSwapView(eventId: string, volunteerId: string
     prisma.shift.findMany({ where: { eventId }, select: SHIFT_SELECT }),
   ])
   const people = [...new Set([volunteerId, ...requests.filter((r) => r.status === "open").map((r) => r.volunteerId)])]
-  const [persons, held] = await Promise.all([
+  const [persons, held, answers] = await Promise.all([
     prisma.volunteer.findMany({ where: { id: { in: people } }, select: PERSON_SELECT }),
     prisma.registration.findMany({ where: { eventId, volunteerId: { in: people }, status: { in: [...LIVE_STATUSES] } }, select: { id: true, volunteerId: true, eventId: true, status: true, shift: { select: SHIFT_SELECT } } }),
+    eventShifts.some((s) => s.reservedQuestionId)
+      ? prisma.questionAnswer.findMany({ where: { eventId, volunteerId: { in: people } }, select: { volunteerId: true, questionId: true, values: true } })
+      : Promise.resolve([]),
   ])
   // The other party of my requests that have an offer, as « Jean D. » (owner decision, 2026-10-27).
   const parties = [...new Set(requests.filter((r) => r.counterVolunteerId && (r.volunteerId === volunteerId || r.counterVolunteerId === volunteerId)).map((r) => (r.volunteerId === volunteerId ? r.counterVolunteerId! : r.volunteerId)))]
@@ -125,6 +129,8 @@ export async function loadVolunteerSwapView(eventId: string, volunteerId: string
   const byPerson = new Map<string, (ViewRegistration & { status: string })[]>()
   for (const h of held) byPerson.set(h.volunteerId, [...(byPerson.get(h.volunteerId) ?? []), h as ViewRegistration])
   const live = eventShifts.filter((s) => s.status !== "cancelled")
+  const answersOf = new Map<string, Map<string, string[]>>()
+  for (const a of answers) answersOf.set(a.volunteerId, new Map([...(answersOf.get(a.volunteerId) ?? []), [a.questionId, a.values]]))
   return buildVolunteerSwapView({
     now,
     timeZone: orgTimeZone(event.organization),
@@ -136,6 +142,8 @@ export async function loadVolunteerSwapView(eventId: string, volunteerId: string
     requests: requests as ViewRequest[],
     reserved: reservedRoles(live),
     limits: roleLimits(live),
+    answerConditions: reservedAnswerConditions(live),
+    answers: answersOf,
     assignedOnlyRoles: assignedOnlyRoles(live),
     names: new Map(named.map((v) => [v.id, rosterDisplayName(v.firstName, v.lastName)])),
   })

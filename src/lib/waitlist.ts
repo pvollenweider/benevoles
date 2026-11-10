@@ -12,6 +12,7 @@ import { deliverAfterResponse, enqueueNotifications } from "./notifications/outb
 import { shiftStartsAt } from "./cancel-deadline"
 import { waitlistOfferExpiry } from "./waitlist-offer"
 import { committedDuty, judgeDutyChange, readWorkloadGate, readWorkloadPerson } from "./workload-guard"
+import { answerValuesMatch, reservedAnswerConditions } from "./role-answer"
 
 /** Waiting people looked at for one freed spot, at most (a shift's waitlist is small). */
 const PROMOTION_CANDIDATES = 50
@@ -34,7 +35,7 @@ export async function promoteNextInWaitlist(shiftId: string, causedByLogId?: str
     await lockShifts(tx, [shiftId])
     const shift = await tx.shift.findUnique({
       where: { id: shiftId },
-      select: { id: true, eventId: true, capacity: true, status: true, date: true, startTime: true, endTime: true, mealOnTheGo: true, placeId: true, event: { select: { publicStatus: true, registrationsOpen: true, registrationOpensAt: true, registrationClosesAt: true, organization: { select: { timeZone: true } } } } },
+      select: { id: true, eventId: true, roleName: true, reservedQuestionId: true, reservedAnswers: true, capacity: true, status: true, date: true, startTime: true, endTime: true, mealOnTheGo: true, placeId: true, event: { select: { publicStatus: true, registrationsOpen: true, registrationOpensAt: true, registrationClosesAt: true, organization: { select: { timeZone: true } } } } },
     })
     if (!shift) return null
     // The answer window never runs past the shift's start, and a shift starting within the hour
@@ -53,21 +54,36 @@ export async function promoteNextInWaitlist(shiftId: string, causedByLogId?: str
     const gate = await readWorkloadGate(tx, shift.eventId)
     // A policy that does not parse accepts nothing: no offer either, until the organisation fixes it.
     if (gate.kind === "incomplete") return null
+    // Answer condition (#962): someone whose stored answer does not open the poste stays waiting,
+    // like someone the workload protection cannot take; the spot goes to the next person.
+    const condition = reservedAnswerConditions((await tx.shift.findMany({
+      where: { eventId: shift.eventId, roleName: shift.roleName, status: { not: "cancelled" } },
+      select: { roleName: true, reservedQuestionId: true, reservedAnswers: true },
+    })) ?? []).get(shift.roleName)
     let candidate: { id: string } | null = null
-    if (gate.kind === "off") {
+    if (!condition && gate.kind === "off") {
+      // No condition and no workload protection: the first waiting person, one read, as before.
       candidate = await tx.registration.findFirst({
         where: { shiftId, status: "waiting" },
         orderBy: { waitingPosition: "asc" },
         select: { id: true },
       })
     } else {
-      const waiting = await tx.registration.findMany({
+      const waiting = (await tx.registration.findMany({
         where: { shiftId, status: "waiting" },
         orderBy: { waitingPosition: "asc" },
         select: { id: true, volunteerId: true },
         take: PROMOTION_CANDIDATES,
-      })
+      })) ?? []
+      const conditionAnswers = condition
+        ? new Map((await tx.questionAnswer.findMany({
+            where: { eventId: shift.eventId, questionId: condition.questionId, volunteerId: { in: waiting.map((w) => w.volunteerId) } },
+            select: { volunteerId: true, values: true },
+          })).map((a) => [a.volunteerId, a.values]))
+        : new Map<string, string[]>()
       for (const w of waiting) {
+        if (condition && !answerValuesMatch(condition, conditionAnswers.get(w.volunteerId))) continue
+        if (gate.kind === "off") { candidate = w; break }
         const before = await committedDuty(tx, shift.eventId, w.volunteerId)
         // Their birth date and own limits too (#1171, lot 2): a skip, never a lock (Codex, PR 1).
         if (judgeDutyChange(gate, before, { add: [shift] }, await readWorkloadPerson(tx, shift.eventId, w.volunteerId)).ok) {

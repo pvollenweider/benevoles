@@ -70,6 +70,7 @@ describe("POST /api/admin/events/[id]/open-shifts (#566)", () => {
       volunteer: { findMany: vi.fn().mockResolvedValue(volunteers) },
       memberInvite: { findMany: vi.fn().mockResolvedValue([{ volunteerId: "ana", declinedAt: null }, { volunteerId: "dec", declinedAt: new Date() }]) },
       shiftDecline: { findMany: vi.fn().mockResolvedValue([{ volunteerId: "dec", shiftId: "bar", declinedAt: new Date("2026-06-20T10:00:00Z") }]) },
+      questionAnswer: { findMany: vi.fn().mockResolvedValue([]) },
       registration: { findMany: vi.fn().mockResolvedValue([{ volunteerId: "reg" }]) },
       $transaction: async (fn: (tx: unknown) => unknown) => fn({
         memberInvite: { createManyAndReturn, findMany: txInviteFindMany },

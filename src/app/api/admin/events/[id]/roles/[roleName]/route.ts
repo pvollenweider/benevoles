@@ -10,6 +10,7 @@ import { cancelShift } from "@/lib/shift-cancel"
 import { COLOR_OPTIONS } from "@/lib/roles"
 import { capacityPlan, roleMinimumPlan } from "@/lib/shift-quick-edit"
 import { parseTagList } from "@/lib/role-reservation"
+import { answerConditionSettingProblem } from "@/lib/role-answer"
 import { removeRoleFromLink, renameRoleInLink } from "@/lib/group-links"
 import { leaderRenamePlan } from "@/lib/sector-leader-rename"
 import { isCivilDate } from "@/lib/civil-date"
@@ -73,6 +74,10 @@ const updateSchema = z.object({
   maxPerVolunteer: z.number().int().min(1).max(100).nullable().optional(),
   /** Tags one of which a member needs for this role (#470); [] opens it to everyone. */
   reservedTags: z.array(z.string().trim().min(1).max(40)).max(10).optional(),
+  /** Question whose answer reserves the role (#962); null clears the condition. */
+  reservedQuestionId: z.string().trim().min(1).max(64).nullable().optional(),
+  /** Accepted answers among the question's choices (#962), values as stored. */
+  reservedAnswers: z.array(z.string().trim().min(1).max(200)).max(20).optional(),
   /** « Cumulable avec un autre créneau » (#986): the role's shifts may overlap any other shift of a volunteer. */
   overlapAllowed: z.boolean().optional(),
   /** « Attribué par l'organisation uniquement » (#1145): never offered publicly, people added by hand. */
@@ -88,9 +93,11 @@ const updateSchema = z.object({
   label: z.string().trim().min(1).max(200).optional(),
   /** Day the places, minimum and label apply to (#1017, « ce jour »); absent: the whole event. */
   date: z.string().refine(isCivilDate).optional(),
-}).refine((d) => d.name !== undefined || d.colorKey !== undefined || d.capacity !== undefined || d.minVolunteers !== undefined || d.label !== undefined || d.maxPerVolunteer !== undefined || d.reservedTags !== undefined || d.overlapAllowed !== undefined || d.assignedOnly !== undefined || d.sectorId !== undefined || d.mealOnTheGo !== undefined, { message: "Rien à modifier." })
+}).refine((d) => d.name !== undefined || d.colorKey !== undefined || d.capacity !== undefined || d.minVolunteers !== undefined || d.label !== undefined || d.maxPerVolunteer !== undefined || d.reservedTags !== undefined || d.reservedQuestionId !== undefined || d.reservedAnswers !== undefined || d.overlapAllowed !== undefined || d.assignedOnly !== undefined || d.sectorId !== undefined || d.mealOnTheGo !== undefined, { message: "Rien à modifier." })
+  // The question and its accepted answers are one setting: send both, or neither.
+  .refine((d) => (d.reservedQuestionId === undefined) === (d.reservedAnswers === undefined), { message: "La question et ses réponses vont ensemble." })
   // A day only narrows the places, minimum and label: the poste's own settings are event-wide.
-  .refine((d) => d.date === undefined || (d.name === undefined && d.colorKey === undefined && d.maxPerVolunteer === undefined && d.reservedTags === undefined && d.overlapAllowed === undefined && d.assignedOnly === undefined && d.sectorId === undefined && d.mealOnTheGo === undefined), { message: "Un jour ne vaut que pour les places, le minimum et le libellé." })
+  .refine((d) => d.date === undefined || (d.name === undefined && d.colorKey === undefined && d.maxPerVolunteer === undefined && d.reservedTags === undefined && d.reservedQuestionId === undefined && d.reservedAnswers === undefined && d.overlapAllowed === undefined && d.assignedOnly === undefined && d.sectorId === undefined && d.mealOnTheGo === undefined), { message: "Un jour ne vaut que pour les places, le minimum et le libellé." })
 
 export async function PATCH(req: Request, { params }: { params: Promise<{ id: string; roleName: string }> }) {
   const guard = await requireOrgSession()
@@ -108,6 +115,8 @@ export async function PATCH(req: Request, { params }: { params: Promise<{ id: st
   }
   const { name: newName, colorKey, capacity, minVolunteers, maxPerVolunteer, overlapAllowed, assignedOnly, sectorId, mealOnTheGo, label, date } = parsed.data
   const reservedTags = parsed.data.reservedTags === undefined ? undefined : parseTagList(parsed.data.reservedTags.join(","))
+  const reservedQuestionId = parsed.data.reservedQuestionId
+  const reservedAnswers = parsed.data.reservedAnswers
 
   const owned = await db.event.findFirst({ where: { id }, select: { id: true } })
   if (!owned) return NextResponse.json({ error: "Non trouvé" }, { status: 404 })
@@ -116,7 +125,7 @@ export async function PATCH(req: Request, { params }: { params: Promise<{ id: st
   // on top of that, matching reorder-roles/route.ts's own pattern for the same raw-prisma calls.
   const shifts = await db.shift.findMany({
     where: { eventId: id, roleName: decodedRole, event: { organizationId } },
-    select: { id: true, label: true, date: true, startTime: true, endTime: true, colorKey: true, capacity: true, minVolunteers: true, status: true, maxPerVolunteer: true, reservedTags: true, overlapAllowed: true, assignedOnly: true, sectorId: true, mealOnTheGo: true, _count: { select: { registrations: { where: { status: "active" } } } } },
+    select: { id: true, label: true, date: true, startTime: true, endTime: true, colorKey: true, capacity: true, minVolunteers: true, status: true, maxPerVolunteer: true, reservedTags: true, reservedQuestionId: true, reservedAnswers: true, overlapAllowed: true, assignedOnly: true, sectorId: true, mealOnTheGo: true, _count: { select: { registrations: { where: { status: "active" } } } } },
   })
   if (shifts.length === 0) return NextResponse.json({ error: "Poste introuvable" }, { status: 404 })
 
@@ -260,6 +269,35 @@ export async function PATCH(req: Request, { params }: { params: Promise<{ id: st
         eventId: id, actor, action: "shift.updated", entityType: "Shift", entityId: s.id,
         changes: { maxPerVolunteer: { from: s.maxPerVolunteer, to: maxPerVolunteer } },
       })
+    }
+  }
+
+  if (reservedQuestionId !== undefined) {
+    // A choice question asked to every volunteer (#962), with at least one of its choices accepted.
+    // Checked before any write so a refused condition changes nothing.
+    const questions = await db.eventQuestion.findMany({
+      where: { eventId: id, archivedAt: null },
+      select: { id: true, label: true, type: true, options: true, parentId: true, displayScope: true },
+    })
+    const problem = answerConditionSettingProblem({ questionId: reservedQuestionId, answers: reservedAnswers ?? [] }, questions)
+    if (problem) return NextResponse.json({ error: problem }, { status: 400 })
+    const answers = reservedQuestionId ? reservedAnswers ?? [] : []
+    const changed = shifts.filter((sh) => (sh.reservedQuestionId ?? null) !== reservedQuestionId || (sh.reservedAnswers ?? []).join("|") !== answers.join("|"))
+    // Every shift of the role, cancelled ones too, so it keeps one value (#962).
+    await db.shift.updateMany({
+      where: { eventId: id, roleName: newName ?? decodedRole, event: { organizationId } },
+      data: { reservedQuestionId, reservedAnswers: answers },
+    })
+    // A new condition ends the swap requests of the poste (#1174 E13), like the tags.
+    if (changed.length > 0) {
+      await endSwapsAfter(db, { shiftIds: shifts.map((s) => s.id) }, "shift_changed", actor)
+      const labels = new Map(questions.map((q) => [q.id, q.label]))
+      for (const s of changed) {
+        await logEvent({
+          eventId: id, actor, action: "shift.updated", entityType: "Shift", entityId: s.id,
+          changes: { reservedAnswer: { from: s.reservedQuestionId ? `${labels.get(s.reservedQuestionId) ?? s.reservedQuestionId} : ${(s.reservedAnswers ?? []).join(", ")}` : null, to: reservedQuestionId ? `${labels.get(reservedQuestionId) ?? reservedQuestionId} : ${answers.join(", ")}` : null } },
+        })
+      }
     }
   }
 

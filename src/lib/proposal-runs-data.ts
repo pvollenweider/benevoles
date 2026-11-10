@@ -10,6 +10,7 @@ import type { OrgScopedPrisma } from "./prisma-org"
 import { COMMITTED_STATUSES, LIVE_STATUSES, OCCUPYING_STATUSES, type Tx } from "./registration-capacity"
 import { roleLimits } from "./role-limit"
 import { reservedRoles } from "./role-reservation"
+import { reservedAnswerConditions } from "./role-answer"
 import { orgTimeZone } from "./time-zone"
 import { WORKLOAD_EVENT_SELECT, workloadGateOf } from "./workload-guard"
 import { parsePersonalLimits } from "./workload-personal"
@@ -49,12 +50,12 @@ export function hashInput(input: ProposalInput): { hashes: Record<InputPart, str
 
 const SHIFT_SELECT = {
   id: true, roleName: true, date: true, startTime: true, endTime: true, status: true, capacity: true, minVolunteers: true, overlapAllowed: true,
-  minAge: true, reservedTags: true, maxPerVolunteer: true, mealOnTheGo: true, placeId: true, place: { select: { name: true } },
+  minAge: true, reservedTags: true, reservedQuestionId: true, reservedAnswers: true, maxPerVolunteer: true, mealOnTheGo: true, placeId: true, place: { select: { name: true } },
 } as const
 
 type ShiftRow = {
   id: string; roleName: string; date: Date; startTime: string; endTime: string; status: string; capacity: number; minVolunteers: number | null; overlapAllowed: boolean
-  minAge: number | null; reservedTags: string[]; maxPerVolunteer: number | null; mealOnTheGo: boolean; placeId: string | null; place: { name: string } | null
+  minAge: number | null; reservedTags: string[]; reservedQuestionId: string | null; reservedAnswers: string[]; maxPerVolunteer: number | null; mealOnTheGo: boolean; placeId: string | null; place: { name: string } | null
 }
 
 /** The answer with its dates in order: the fingerprint never depends on the order rows came in. */
@@ -92,12 +93,16 @@ export async function buildProposalSnapshot(db: Db, eventId: string, config: Pro
   if (people.length !== new Set(config.scope.volunteerIds).size) return { ok: false, status: 409, error: "Une personne choisie n'est plus membre actif de l'organisation : rechargez la page.", code: "person_gone" }
   const ids = people.map((p) => p.id)
 
-  const [regs, drafts, answers, limits, targets] = await Promise.all([
+  const [regs, drafts, answers, limits, targets, questionAnswers] = await Promise.all([
     db.registration.findMany({ where: { eventId, status: { in: [...LIVE_STATUSES] } }, select: { volunteerId: true, shiftId: true, status: true }, orderBy: { id: "asc" } }),
     db.draftAssignment.findMany({ where: { eventId, status: "draft" }, select: { id: true, revision: true, shiftId: true, volunteerId: true, source: true, locked: true }, orderBy: { id: "asc" } }),
     readAnswersForFit(db as never, eventId, ids),
     db.eventVolunteerLimit.findMany({ where: { eventId, volunteerId: { in: ids } }, select: { volunteerId: true, values: true } }),
     db.eventVolunteerTarget.findMany({ where: { eventId, volunteerId: { in: ids } }, select: { volunteerId: true, targetMinutes: true } }),
+    // Stored answers on the event (#962), only when a poste is reserved to one of them.
+    shiftRows.some((s) => s.reservedQuestionId)
+      ? db.questionAnswer.findMany({ where: { eventId, volunteerId: { in: ids } }, select: { volunteerId: true, questionId: true, values: true } })
+      : Promise.resolve([]),
   ])
   const targetOf = new Map(targets.map((t) => [t.volunteerId, t.targetMinutes]))
   const missing = ids.filter((id) => !targetOf.has(id)).length
@@ -129,13 +134,16 @@ export async function buildProposalSnapshot(db: Db, eventId: string, config: Pro
   }
 
   const reserved = reservedRoles(shiftRows)
+  const answerConditions = reservedAnswerConditions(shiftRows)
+  const answersOf = new Map<string, Record<string, string[]>>()
+  for (const a of questionAnswers) answersOf.set(a.volunteerId, { ...(answersOf.get(a.volunteerId) ?? {}), [a.questionId]: a.values })
   const limitOf = roleLimits(shiftRows)
   const reserveOf = new Map(config.reserve.map((r) => [r.shiftId, r.count]))
   const night = new Set(config.nightShiftIds)
   const categoryOf = new Map(config.categories.flatMap((k) => k.shiftIds.map((id) => [id, k.key] as const)))
   const shifts: ProposalShift[] = shiftRows.map((s) => ({
     id: s.id, roleName: s.roleName, date: day(s.date), startTime: s.startTime, endTime: s.endTime, capacity: s.capacity, minVolunteers: s.minVolunteers,
-    held: held.get(s.id) ?? 0, overlapAllowed: s.overlapAllowed, minAge: s.minAge, reservedTags: reserved.get(s.roleName) ?? [], maxPerVolunteer: limitOf.get(s.roleName) ?? null,
+    held: held.get(s.id) ?? 0, overlapAllowed: s.overlapAllowed, minAge: s.minAge, reservedTags: reserved.get(s.roleName) ?? [], answerCondition: answerConditions.get(s.roleName) ?? null, maxPerVolunteer: limitOf.get(s.roleName) ?? null,
     mealOnTheGo: s.mealOnTheGo, placeId: s.placeId, placeName: s.place?.name ?? null, category: categoryOf.get(s.id) ?? null, night: night.has(s.id),
     reserve: Math.min(s.capacity, reserveOf.get(s.id) ?? 0), inScope: scope.has(s.id),
   }))
@@ -157,6 +165,7 @@ export async function buildProposalSnapshot(db: Db, eventId: string, config: Pro
       id: p.id,
       birthDate: p.birthDate ? day(p.birthDate) : null,
       tags: [...p.tags].sort(),
+      answers: answersOf.get(p.id) ?? {},
       answer: sortedAnswer(answers.get(p.id) ?? null),
       fixedShiftIds: [...(fixedOf.get(p.id) ?? [])].sort(),
       liveShiftIds: [...(liveOf.get(p.id) ?? [])].sort(),

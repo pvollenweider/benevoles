@@ -6,6 +6,7 @@ import { roleLimitBreaches } from "./role-limit"
 import { memberMayTake } from "./role-reservation"
 import { shiftsClash } from "./shift-overlap"
 import { shiftsTooYoungFor } from "./utils"
+import { answerValuesMatch, type ReservedAnswerCondition } from "./role-answer"
 
 /**
  * Shift swaps between volunteers (#1174, beta capability « shiftSwaps »): Pierre and Jean each hold
@@ -104,6 +105,8 @@ export type SwapShift = ShiftWhen & {
   requiresApproval?: boolean | null
   minAge?: number | null
   reservedTags?: string[] | null
+  reservedQuestionId?: string | null
+  reservedAnswers?: string[] | null
   locationDetails?: string | null
   latitude?: number | null
   longitude?: number | null
@@ -163,6 +166,9 @@ export function personSwapCheck(input: {
   held: HeldRegistration[]
   reserved: Map<string, string[]>
   limits: Map<string, number>
+  /** The poste's answer condition (#962), and the person's stored answers by question id. */
+  answerCondition?: ReservedAnswerCondition | null
+  answers?: Map<string, string[]>
 }): SwapCheck {
   const { person, giving, receiving, reserved, limits } = input
   if (!person.active || person.erasedAt || person.mergedIntoId) return refuse("volunteer_gone")
@@ -177,6 +183,7 @@ export function personSwapCheck(input: {
   }
   const required = reserved.get(receiving.roleName)
   if (required && !memberMayTake(person.tags, required)) return refuse("reserved")
+  if (input.answerCondition && !answerValuesMatch(input.answerCondition, input.answers?.get(input.answerCondition.questionId))) return refuse("reserved")
   return OK
 }
 
@@ -223,6 +230,8 @@ export function materialTerms(shift: SwapShift): string {
     shift.longitude ?? null,
     shift.minAge ?? null,
     [...(shift.reservedTags ?? [])].map((t) => t.trim().toLocaleLowerCase("fr")).filter(Boolean).sort(),
+    shift.reservedQuestionId ?? null,
+    [...(shift.reservedAnswers ?? [])].map((a) => a.trim()).filter(Boolean).sort(),
     !!shift.assignedOnly,
   ])
 }

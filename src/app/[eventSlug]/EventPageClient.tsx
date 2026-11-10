@@ -29,6 +29,7 @@ import {
   proposedShiftState,
   proposedShiftText,
   shiftsByDay as groupShiftsByDay,
+  signupAnswerConditionProblems,
   toMyRegistrations,
   validateSignup,
   birthDateHint,
@@ -47,6 +48,7 @@ import DeclineInvite from "@/components/public/DeclineInvite"
 import SignupQuestions, { type Answers } from "@/components/public/SignupQuestions"
 import { checkAnswers, visibleQuestions, type Question } from "@/lib/event-questions"
 import { askedQuestions } from "@/lib/question-scope"
+import { answerConditionRefusal } from "@/lib/role-answer"
 import DayTimeline from "@/components/DayTimeline"
 import ShiftDayList from "@/components/ShiftDayList"
 import { useHydrated } from "@/lib/use-hydrated"
@@ -106,6 +108,8 @@ type Shift = {
   maxPerVolunteer?: number | null
   /** Reserved to some members (#470); which tags is never sent to the page. */
   reserved?: boolean
+  /** Reserved to an answer (#962): a readable mention, checked at validation. */
+  reservedAnswer?: { questionId: string; questionLabel: string; answers: string[] } | null
   /** Its role may overlap another shift (#986): never shown as a conflict. */
   overlapAllowed?: boolean
 }
@@ -204,6 +208,8 @@ export default function EventPageClient({ orgSlug, eventSlug, preview, initialEv
   const [limitNotice, setLimitNotice] = useState("")
   const [answers, setAnswers] = useState<Answers>({})
   const [questionErrors, setQuestionErrors] = useState<Map<string, string>>(new Map())
+  // #962: a selected shift the answers do not open, said on its row too.
+  const [answerShiftErrors, setAnswerShiftErrors] = useState<Map<string, string>>(new Map())
   // Reserved roles (#470) the visitor's invitation opens; none without an invitation.
   const [allowedReserved, setAllowedReserved] = useState<Set<string>>(new Set())
   // Whether this invitation already answered « pas disponible » (#558), from the member-invite GET.
@@ -395,6 +401,8 @@ export default function EventPageClient({ orgSlug, eventSlug, preview, initialEv
         if (!data?.member) return
         setForm((f) => prefillContact(f, data.member, "form"))
         setAllowedReserved(new Set<string>(data.reservedRolesAllowed ?? []))
+        // The member's own answers (#962): a poste reserved to one of them is bookable as is.
+        if (Array.isArray(data.answers)) setAnswers((a) => ({ ...startingAnswers(data.answers as MyAnswerRow[]), ...a }))
         setDeclined(!!data.declined)
       })
       .catch(() => {})
@@ -543,15 +551,29 @@ export default function EventPageClient({ orgSlug, eventSlug, preview, initialEv
 
   async function handleSubmit(e: React.FormEvent) {
     e.preventDefault()
+    // #962: the answer conditions of the shifts being added, checked with the stored answers.
+    const newShifts = (event?.shifts ?? []).filter((s) => selectedShifts.has(s.id) && !myShiftIds.has(s.id))
+    const answerProblems = signupAnswerConditionProblems(newShifts, answers)
     const invalid = validateSignup({
       form,
       charterAccepted,
       requirePhone: event?.requirePhone ?? false,
       ageGatedShifts: ageGatedSelectedShifts,
       minorsProtected,
+      reservedAnswerShifts: newShifts,
+      answers,
     })
     if (invalid) {
-      setFailure(null); setQuestionErrors(new Map()); setError(invalid)
+      setFailure(null); setQuestionErrors(new Map()); setAnswerShiftErrors(new Map()); setError(invalid)
+      const first = answerProblems[0]
+      const conditionMessage = first ? answerConditionRefusal(first.questionLabel, first.condition.answers) : null
+      // Only when nothing more basic is wrong: the form's own order decides which field to show first.
+      if (conditionMessage && invalid === conditionMessage) {
+        setQuestionErrors(new Map([[first.condition.questionId, conditionMessage]]))
+        setAnswerShiftErrors(new Map(answerProblems.map((p) => [p.shiftId, answerConditionRefusal(p.questionLabel, p.condition.answers)])))
+        requestAnimationFrame(() => document.getElementById(`q-${first.condition.questionId}`)?.focus())
+        return
+      }
       const box = !charterAccepted ? "charter" : !form.consent ? "consent" : null
       setInvalidCheckbox(box)
       // A missing birth date (minimum age, minors' protection) is said on its field, which takes focus.
@@ -644,7 +666,15 @@ export default function EventPageClient({ orgSlug, eventSlug, preview, initialEv
     if (!res.ok) {
       // A refused answer (#483) marks its field, like the page's own check.
       const refused = (data as unknown as { questionErrors?: unknown }).questionErrors
-      if (Array.isArray(refused)) setQuestionErrors(new Map(refused.filter((x): x is { questionId: string; message: string } => typeof x?.questionId === "string" && typeof x?.message === "string").map((x) => [x.questionId, x.message])))
+      if (Array.isArray(refused)) {
+        const rows = refused.filter((x): x is { questionId: string; message: string } => typeof x?.questionId === "string" && typeof x?.message === "string")
+        setQuestionErrors(new Map(rows.map((x) => [x.questionId, x.message])))
+        // #962: the refused rows say the same, next to the shift.
+        const ids = (data as unknown as { reservedAnswerShiftIds?: unknown }).reservedAnswerShiftIds
+        if (Array.isArray(ids) && typeof rows[0]?.message === "string") {
+          setAnswerShiftErrors(new Map(ids.filter((id): id is string => typeof id === "string").map((id) => [id, rows[0].message])))
+        }
+      }
       // Errors never carry a management token (#285): the owner gets it by email instead.
       setFailure(describeSignupFailure({ status: res.status, body: data }))
       // The server refused the charter (#569): back to the checkbox, the alert is still announced.
@@ -1133,7 +1163,7 @@ export default function EventPageClient({ orgSlug, eventSlug, preview, initialEv
                 {/* Mobile: selected shifts summary card */}
                 {allSelectedShifts.length > 0 && (
                   <div data-shift-list className="lg:hidden rounded-xl border border-gray-200 bg-white overflow-hidden divide-y divide-gray-100">
-                    {allSelectedShifts.map((s) => <ShiftRow key={s.id} shift={s} registered={myShiftIds.has(s.id)} status={myStatus.get(s.id)} cancellable={!closedShiftIds.has(s.id)} personalHref={myTokenByShift.get(s.id)} newTab={embed} selected={selectedShifts.has(s.id)} onCancel={(trigger) => requestCancel(s, trigger)} onRemove={() => toggleShift(s.id)} />)}
+                    {allSelectedShifts.map((s) => <ShiftRow key={s.id} shift={s} registered={myShiftIds.has(s.id)} status={myStatus.get(s.id)} cancellable={!closedShiftIds.has(s.id)} personalHref={myTokenByShift.get(s.id)} newTab={embed} selected={selectedShifts.has(s.id)} onCancel={(trigger) => requestCancel(s, trigger)} onRemove={() => toggleShift(s.id)} notice={answerShiftErrors.get(s.id)} />)}
                   </div>
                 )}
               </div>
@@ -1164,7 +1194,7 @@ export default function EventPageClient({ orgSlug, eventSlug, preview, initialEv
                         Créneaux sélectionnés
                       </p>
                       <div data-shift-list className="divide-y divide-gray-100">
-                        {allSelectedShifts.map((s) => <ShiftRow key={s.id} shift={s} compact registered={myShiftIds.has(s.id)} status={myStatus.get(s.id)} cancellable={!closedShiftIds.has(s.id)} personalHref={myTokenByShift.get(s.id)} newTab={embed} selected={selectedShifts.has(s.id)} onCancel={(trigger) => requestCancel(s, trigger)} onRemove={() => toggleShift(s.id)} />)}
+                        {allSelectedShifts.map((s) => <ShiftRow key={s.id} shift={s} compact registered={myShiftIds.has(s.id)} status={myStatus.get(s.id)} cancellable={!closedShiftIds.has(s.id)} personalHref={myTokenByShift.get(s.id)} newTab={embed} selected={selectedShifts.has(s.id)} onCancel={(trigger) => requestCancel(s, trigger)} onRemove={() => toggleShift(s.id)} notice={answerShiftErrors.get(s.id)} />)}
                       </div>
                       {newShiftIds.size > 0 && (
                         <div className="p-3 border-t border-gray-100">
@@ -1380,6 +1410,8 @@ export default function EventPageClient({ orgSlug, eventSlug, preview, initialEv
                     setAnswers((a) => ({ ...a, [qid]: value }))
                     // A corrected field no longer says it is invalid.
                     setQuestionErrors((m) => { if (!m.has(qid)) return m; const n = new Map(m); n.delete(qid); return n })
+                    // #962: the rows' refusals are re-checked at the next validation.
+                    if (answerShiftErrors.size > 0) setAnswerShiftErrors(new Map())
                   }}
                   errors={questionErrors}
                   clearable={inSession}

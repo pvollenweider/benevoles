@@ -47,13 +47,15 @@ type Props = {
   onCancel: (trigger: HTMLButtonElement) => void
   /** Selected shift: takes it out of the selection. */
   onRemove: () => void
+  /** #962: why this shift's answer condition is not met, said under the row after validation. */
+  notice?: string
 }
 
 /**
  * A selected or held shift on the public sign-up page, in the mobile summary card and the desktop
  * sidebar.
  */
-export default function ShiftRow({ shift: s, compact = false, registered: isReg, status = "active", cancellable = true, personalHref, newTab = false, selected, onCancel, onRemove }: Props) {
+export default function ShiftRow({ shift: s, compact = false, registered: isReg, status = "active", cancellable = true, personalHref, newTab = false, selected, onCancel, onRemove, notice }: Props) {
   const isWaitlistPending = !isReg && s.status === "full" && (s.waitlistEnabled ?? false)
   const name = s.label && s.label !== s.roleName ? s.label : s.roleName
   return (
@@ -69,6 +71,9 @@ export default function ShiftRow({ shift: s, compact = false, registered: isReg,
         )}
         {isWaitlistPending && (
           <p className="text-[11px] text-gray-500 mt-0.5">Complet · liste d&apos;attente si place libérée</p>
+        )}
+        {!isReg && notice && (
+          <p className="text-xs text-red-700 mt-0.5">{notice}</p>
         )}
         {isReg && !cancellable && (
           <p className="text-xs text-gray-700 mt-0.5">

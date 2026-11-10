@@ -29,12 +29,13 @@ type Conflict =
   | { kind: "role_limit"; roleName: string; limit: number; count: number }
   | { kind: "min_age"; shiftId: string; shiftLabel: string; minAge: number; birthDate: string | null }
   | { kind: "reserved_role"; shiftId: string; shiftLabel: string; reservedTags: string[]; memberTags: string[] }
+  | { kind: "reserved_answer"; shiftId: string; shiftLabel: string }
   | { kind: "same_question"; questionId: string; eventId: string; blocking: boolean }
   | { kind: "same_event_invite"; eventId: string; blocking: boolean; resolvedBy: "used_first" | "choice" | null }
 
 /** Stable key for a conflict row: its kind plus whichever id it's about. */
 function conflictKey(c: Conflict): string {
-  if (c.kind === "same_shift" || c.kind === "min_age" || c.kind === "reserved_role") return `${c.kind}-${c.shiftId}`
+  if (c.kind === "same_shift" || c.kind === "min_age" || c.kind === "reserved_role" || c.kind === "reserved_answer") return `${c.kind}-${c.shiftId}`
   if (c.kind === "overlap") return `${c.kind}-${c.shiftIds[0]}-${c.shiftIds[1]}`
   if (c.kind === "role_limit") return `${c.kind}-${c.roleName}`
   if (c.kind === "same_question") return `${c.kind}-${c.questionId}`
@@ -471,6 +472,9 @@ function ConflictItem({ conflict: c, choices, onChange }: { conflict: Conflict; 
   }
   if (c.kind === "reserved_role") {
     return <li>Le créneau « {c.shiftLabel} » est réservé aux membres ayant une étiquette particulière, que cette fiche n&apos;a pas après fusion. À vérifier après la fusion.</li>
+  }
+  if (c.kind === "reserved_answer") {
+    return <li>Le créneau « {c.shiftLabel} » est réservé à une réponse à une question, que cette fiche n&apos;a pas après fusion. À vérifier après la fusion.</li>
   }
   if (c.kind === "same_question") {
     return (

@@ -11,6 +11,10 @@ Format basé sur [Keep a Changelog](https://keepachangelog.com/fr/1.0.0/).
 
 ## [Unreleased]
 
+### Ajouté
+
+- **Réserver un poste selon une réponse** (#962) : l'éditeur « Accès » de « Gérer les postes » choisit une question à choix posée à tous les bénévoles et les réponses acceptées ; le créneau affiche « Réservé : … » et l'inscription vérifie la réponse, y compris depuis « Mes inscriptions », la liste d'attente, les échanges et la confirmation par email.
+
 ## [2.7.0] — 2026-11-10
 
 ### En bref

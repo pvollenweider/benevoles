@@ -8,6 +8,7 @@ import { localParts } from "./workload-policy"
 import { shiftEndsAt } from "./cancel-deadline"
 import { roleLimitBreaches } from "./role-limit"
 import { memberMayTake } from "./role-reservation"
+import { answerValuesMatch, type ReservedAnswerCondition } from "./role-answer"
 import { shiftsClash } from "./shift-overlap"
 import { materialTerms, type SwapShift } from "./shift-swaps"
 import { spokenShift } from "./spoken-time"
@@ -193,6 +194,8 @@ export type BatchPerson = {
   held: BatchHeld[]
   /** Their answer on the event, or null when they were never asked. */
   answer: AnswerForFit | null
+  /** Their stored answers on the event, by question id (#962). */
+  answers?: Record<string, string[]>
 }
 
 export type BatchDraft = { id: string; shiftId: string; volunteerId: string; shiftTerms: string; availabilityStamp: string; ackKey: string | null }
@@ -210,6 +213,8 @@ export type BatchInput = {
   people: ReadonlyMap<string, BatchPerson>
   /** Roles reserved to tags (reservedRoles), from every live shift of the event. */
   reserved: ReadonlyMap<string, string[]>
+  /** Answer conditions by poste (#962), from every live shift of the event. */
+  answerConditions?: ReadonlyMap<string, ReservedAnswerCondition>
   /** Limits per person and role (roleLimits), from every live shift of the event. */
   limits: ReadonlyMap<string, number>
 }
@@ -307,6 +312,11 @@ export function judgeDraftBatch(input: BatchInput): BatchVerdict {
       const required = input.reserved.get(shift.roleName)
       if (required && !memberMayTake(person.tags, required)) {
         problems.push({ ...at, code: "reserved", message: `${who} : le poste « ${shift.roleName} » est réservé aux membres ${required.map((t) => `« ${t} »`).join(" ou ")}.`, short: `Le poste « ${shift.roleName} » est réservé aux membres ${required.map((t) => `« ${t} »`).join(" ou ")}.` })
+        continue
+      }
+      const condition = input.answerConditions?.get(shift.roleName)
+      if (condition && !answerValuesMatch(condition, person.answers?.[condition.questionId])) {
+        problems.push({ ...at, code: "reserved", message: `${who} : le poste « ${shift.roleName} » est réservé à une réponse à une question de l'inscription.`, short: `Le poste « ${shift.roleName} » est réservé à une réponse à une question de l'inscription.` })
         continue
       }
       usable.push({ draft, shift })

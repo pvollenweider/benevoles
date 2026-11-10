@@ -57,6 +57,9 @@ export interface ShiftMeta {
   minAge: number | null
   maxPerVolunteer: number | null
   reservedTags: string[]
+  /** Answer condition of the poste (#962), shared by its shifts. */
+  reservedQuestionId?: string | null
+  reservedAnswers?: string[]
   /** Its role may overlap another shift (#986): no overlap conflict. Missing = false. */
   overlapAllowed?: boolean
 }
@@ -210,6 +213,7 @@ export type MergeConflict =
   | { kind: "role_limit"; roleName: string; limit: number; count: number }
   | { kind: "min_age"; shiftId: string; shiftLabel: string; minAge: number; birthDate: Date | null }
   | { kind: "reserved_role"; shiftId: string; shiftLabel: string; reservedTags: string[]; memberTags: string[] }
+  | { kind: "reserved_answer"; shiftId: string; shiftLabel: string }
   | { kind: "same_question"; questionId: string; eventId: string; blocking: boolean }
   | { kind: "same_event_invite"; eventId: string; blocking: boolean; resolvedBy: "used_first" | "choice" | null }
 
@@ -308,7 +312,25 @@ export function mergeConflicts(input: MemberMergeInput, choices: MemberMergeChoi
     }
   }
 
-  // Same question answered differently.
+  // Answer conditions (#962) vs the answers the merged record would have. A condition whose
+  // accepted answer is missing is a warning, like the tags: the organiser may still merge.
+  const finalAnswers = new Map<string, string[]>()
+  for (const a of input.keepAnswers) finalAnswers.set(a.questionId, a.values)
+  for (const a of input.absorbAnswers) {
+    const keep = finalAnswers.get(a.questionId)
+    if (!keep) finalAnswers.set(a.questionId, a.values)
+    else if (JSON.stringify([...keep].sort()) !== JSON.stringify([...a.values].sort()) && choices.answerConflicts?.[a.questionId] === "absorb") finalAnswers.set(a.questionId, a.values)
+  }
+  for (const r of allLive) {
+    const shift = shifts.get(r.shiftId)
+    if (!shift?.reservedQuestionId) continue
+    const accepted = shift.reservedAnswers ?? []
+    if (accepted.length === 0) continue
+    const values = finalAnswers.get(shift.reservedQuestionId) ?? []
+    if (!accepted.some((a) => values.includes(a))) conflicts.push({ kind: "reserved_answer", shiftId: shift.id, shiftLabel: shift.label })
+  }
+
+  // Same question answered differently.  // Same question answered differently.
   const absorbAnswerByQ = new Map(input.absorbAnswers.map((a) => [a.questionId, a]))
   for (const keepAnswer of input.keepAnswers) {
     const other = absorbAnswerByQ.get(keepAnswer.questionId)
