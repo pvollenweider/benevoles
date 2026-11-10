@@ -314,8 +314,9 @@ async function run() {
     await save(a, "admin-embed", { target: panel })
   })
   await shot("admin-staffing", async () => { await visit(ev("/staffing")); await save(a, "admin-staffing") })
-  // « Chercher des bénévoles » (#566, #1303): one shift chosen, the members by name and their
-  // reasons, including « A répondu non le … » for the demo answer (scripts/seed-demo.ts).
+  // « Chercher des bénévoles » (#566, #1303, #1304): one shift chosen, the members by name and
+  // their reasons, including « A répondu non le … » for the demo answer (scripts/seed-demo.ts),
+  // the « Inscrits aujourd'hui » filter, « Tout cocher » and the push option.
   await shot("admin-staffing-search", async () => {
     await visit(ev("/staffing"))
     const href = await a.getByRole("link", { name: /^Chercher des bénévoles pour / }).first().getAttribute("href")
@@ -619,7 +620,8 @@ async function run() {
     await spring.context.close()
   }
 
-  // « Jour J » on a phone, as on site: the first screen, the running shift with one person marked.
+  // « Jour J » on a phone, as on site: the first screen, the running shift with one person marked,
+  // and the « Ajouter un besoin » action (#1304).
   await shot("admin-day-of", async () => {
     const dayOf = await signIn(browser, { ...epicerie, device: MOBILE, title: "Inventaire d'automne", seed: "scripts/seed-demo-day-of.ts" })
     await dayOf.page.goto(`${BASE}/admin/events/${dayOf.eventId}/day-of`)

@@ -1,7 +1,7 @@
 // SPDX-FileCopyrightText: 2026 Philippe Vollenweider
 // SPDX-License-Identifier: AGPL-3.0-only
 
-import { NextResponse } from "next/server"
+import { after, NextResponse } from "next/server"
 import { randomBytes } from "crypto"
 import { z } from "zod"
 import { requireOrgSession } from "@/lib/auth-guard"
@@ -18,9 +18,12 @@ import { acceptsRegistrations } from "@/lib/registration-window"
 import { LIVE_STATUSES } from "@/lib/registration-capacity"
 import { MESSAGE_RATE_LIMIT } from "@/lib/targeted-message"
 import { loadOpenShiftsContext } from "@/lib/open-shifts-data"
+import { localDay } from "@/lib/day-of"
+import { orgTimeZone } from "@/lib/time-zone"
+import { pushDeviceCount, sendTargetedPush } from "@/lib/push"
 import { shiftDeclinePagePath } from "@/lib/shift-declines"
 import {
-  findCandidates, openShiftsHistory, selectedRecipients, shiftName,
+  findCandidates, openShiftsHistory, openShiftsPush, openShiftsPushTtlSeconds, registeredOnLocalDay, selectedRecipients, shiftName,
   OPEN_SHIFTS_MAX_RECIPIENTS, OPEN_SHIFTS_MAX_SHIFTS, OPEN_SHIFTS_NOTE_MAX,
 } from "@/lib/open-shifts"
 
@@ -30,6 +33,10 @@ const bodySchema = z.object({
   note: z.string().trim().max(OPEN_SHIFTS_NOTE_MAX).optional(),
   /** Members who answered « pas disponible » (#558) were shown on request. */
   includeDeclined: z.boolean().optional(),
+  /** Only members with an active registration on a shift overlapping today (#1304). */
+  registeredToday: z.boolean().optional(),
+  /** Also a push notification to the recipients' subscribed devices (#1304). */
+  push: z.boolean().optional(),
   /** Preview only, nothing sent or created. */
   dryRun: z.boolean().optional(),
 })
@@ -57,7 +64,7 @@ export async function POST(req: Request, { params }: { params: Promise<{ id: str
 
   const parsed = bodySchema.safeParse(await req.json().catch(() => ({})))
   if (!parsed.success) return validationError(parsed.error, { useIssueMessage: true })
-  const { shiftIds, volunteerIds, note, includeDeclined, dryRun } = parsed.data
+  const { shiftIds, volunteerIds, note, includeDeclined, registeredToday, push, dryRun } = parsed.data
 
   const ctx = await loadOpenShiftsContext(db, id)
   if (!ctx) return NextResponse.json({ error: "Événement non trouvé" }, { status: 404 })
@@ -75,8 +82,14 @@ export async function POST(req: Request, { params }: { params: Promise<{ id: str
     return NextResponse.json({ error: "Ces créneaux sont complets ou fermés depuis l'ouverture de la page. Rechargez-la." }, { status: 409 })
   }
 
+  const timeZone = orgTimeZone(event.organization)
+  const today = localDay(new Date(), timeZone)
+  // « Inscrits aujourd'hui » (#1304), recomputed here at send time: a member the page listed who is
+  // no longer registered today is simply skipped, like every other candidate exclusion.
+  const todayIds = registeredToday ? registeredOnLocalDay(ctx.registrations, ctx.eventShifts, today, timeZone) : null
+  const members = todayIds ? ctx.members.filter((m) => todayIds.has(m.id)) : ctx.members
   const { candidates } = findCandidates({
-    shifts, eventShifts: ctx.eventShifts, members: ctx.members, registrations: ctx.registrations, invites: ctx.invites, declines: ctx.declines, includeDeclined,
+    shifts, eventShifts: ctx.eventShifts, members, registrations: ctx.registrations, invites: ctx.invites, declines: ctx.declines, includeDeclined,
   })
   const recipients = selectedRecipients(candidates, volunteerIds)
   const skipped = new Set(volunteerIds).size - recipients.length
@@ -131,6 +144,8 @@ export async function POST(req: Request, { params }: { params: Promise<{ id: str
       audience: history.audienceLabel,
       previewName: first.firstName,
       preview: { subject: preview.subject, html: preview.html },
+      // Devices of these recipients, shown before sending whatever the option (#1304).
+      pushDevices: await pushDeviceCount(targets.map((t) => t.volunteerId)),
     })
   }
 
@@ -154,6 +169,12 @@ export async function POST(req: Request, { params }: { params: Promise<{ id: str
 
   const batchId = crypto.randomUUID()
   const createdInvites: { id: string; volunteerId: string }[] = []
+  // The push only complements the email (#1304): per recipient, their own link and the TTL of
+  // their offered shifts, sent after the response.
+  const pushDevices = push ? await pushDeviceCount(targets.map((t) => t.volunteerId)) : 0
+  let pushTargets: { volunteerId: string; url: string; ttlSeconds: number; title: string; body: string }[] = []
+  let historyId: string | null = null
+  const sentAt = new Date()
   // The invitations, the history row (#467) and the emails commit together.
   const outboxIds = await db.$transaction(async (tx) => {
     const toInvite = targets.filter((t) => t.link === "new_invitation").map((t) => t.volunteerId)
@@ -182,9 +203,12 @@ export async function POST(req: Request, { params }: { params: Promise<{ id: str
         message: history.message,
         audienceLabel: history.audienceLabel,
         recipientCount: targets.length,
+        pushRequested: !!push,
+        pushDevices,
       },
       select: { id: true },
     })
+    historyId = row.id
     const payloads = targets.map((t) => {
       const token = inviteTokens.get(t.volunteerId)
       const personal = t.link === "event" || !token
@@ -197,9 +221,24 @@ export async function POST(req: Request, { params }: { params: Promise<{ id: str
         : { signupUrl: linkWithToken(publicUrl, token), declineUrl: linkWithToken(publicUrl, token, { decline: "1" }), shiftDeclineUrls }
       return payloadFor(t, batchId, links)
     })
+    pushTargets = targets.map((t) => {
+      const token = inviteTokens.get(t.volunteerId)
+      const personal = t.link === "event" || !token
+      const editToken = editTokens.get(t.volunteerId)
+      return {
+        volunteerId: t.volunteerId,
+        url: personal && editToken ? `/my/${editToken}` : personal ? publicUrl : linkWithToken(publicUrl, token),
+        ttlSeconds: openShiftsPushTtlSeconds(t.offer, sentAt, timeZone),
+        ...openShiftsPush(t.offer, event.title),
+      }
+    })
     return enqueueBatch(payloads, tx, { organizationId, targetedMessageId: row.id, batch: { kind: "open_shifts", eventId: id, actorId: guard.session.user?.id ?? null } })
   })
   deliverAfterResponse(outboxIds)
+  if (push && historyId && pushDevices > 0) {
+    const messageId = historyId
+    after(() => sendTargetedPush(messageId, pushTargets, { ...openShiftsPush(shifts, event.title), tag: `open-shifts-${batchId}` }).then(() => undefined))
+  }
 
   for (const invite of createdInvites) {
     await logEvent({ eventId: id, actor: adminActor(guard.session), action: "memberinvite.sent", entityType: "MemberInvite", entityId: invite.id })
@@ -223,5 +262,38 @@ export async function POST(req: Request, { params }: { params: Promise<{ id: str
     noLongerOpen,
     newInvitations: createdInvites.length,
     audience: history.audienceLabel,
+    pushRequested: !!push,
+    pushDevices,
   })
+}
+
+/**
+ * GET /api/admin/events/[id]/open-shifts?shift=<id> (#1304): the same « Chercher des bénévoles »
+ * data as its page, for one shift created from the day-of board. Read only, org-scoped, never
+ * cached. The audience and the exclusions stay the page's and the send's own rules.
+ */
+export async function GET(req: Request, { params }: { params: Promise<{ id: string }> }) {
+  const guard = await requireOrgSession()
+  if (guard instanceof NextResponse) return guard
+  const { db } = guard
+  const { id } = await params
+  const shiftId = new URL(req.url).searchParams.get("shift")?.trim()
+  if (!shiftId) return NextResponse.json({ error: "Créneau manquant." }, { status: 400 })
+
+  const ctx = await loadOpenShiftsContext(db, id)
+  if (!ctx) return NextResponse.json({ error: "Événement non trouvé" }, { status: 404 })
+  const shift = ctx.openShifts.find((s) => s.id === shiftId)
+  if (!shift) {
+    return NextResponse.json({ error: "Ce créneau n'est plus à compléter. Rechargez la page." }, { status: 404 })
+  }
+  return NextResponse.json({
+    shift,
+    shifts: [shift],
+    eventShifts: ctx.eventShifts,
+    members: ctx.members,
+    registrations: ctx.registrations,
+    invites: ctx.invites,
+    declines: ctx.declines,
+    tags: ctx.tags,
+  }, { headers: { "Cache-Control": "no-store" } })
 }

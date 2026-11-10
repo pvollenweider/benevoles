@@ -21,7 +21,11 @@ export type DayOfSnapshot = {
 }
 
 export type DayOfLoaded = DayOfSnapshot & {
-  event: { id: string; startDate: Date; endDate: Date }
+  event: {
+    id: string; startDate: Date; endDate: Date
+    /** The registration window (#463), so « Ajouter un besoin » can say why the send is blocked (#1304). */
+    publicStatus: string; registrationsOpen: boolean; registrationOpensAt: Date | null; registrationClosesAt: Date | null
+  }
   timeZone: string
 }
 
@@ -35,6 +39,7 @@ export async function loadDayOf(db: OrgScopedPrisma, eventId: string, now: Date,
     where: { id: eventId },
     select: {
       id: true, startDate: true, endDate: true,
+      publicStatus: true, registrationsOpen: true, registrationOpensAt: true, registrationClosesAt: true,
       organization: { select: { timeZone: true } },
       shifts: {
         where: { status: { not: "cancelled" }, date: { gte: range.from, lte: range.to }, ...shiftWhere },
@@ -69,7 +74,11 @@ export async function loadDayOf(db: OrgScopedPrisma, eventId: string, now: Date,
   }))
   const clock = now.toLocaleTimeString("fr-CH", { timeZone, hour: "2-digit", minute: "2-digit", hourCycle: "h23" })
   return {
-    event: { id: event.id, startDate: event.startDate, endDate: event.endDate },
+    event: {
+      id: event.id, startDate: event.startDate, endDate: event.endDate,
+      publicStatus: event.publicStatus, registrationsOpen: event.registrationsOpen,
+      registrationOpensAt: event.registrationOpensAt, registrationClosesAt: event.registrationClosesAt,
+    },
     timeZone,
     board: dayOfBoard(shifts, now, timeZone),
     today: localDay(now, timeZone),

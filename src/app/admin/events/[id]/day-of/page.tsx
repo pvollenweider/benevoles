@@ -38,6 +38,13 @@ export default async function DayOfPage({ params, searchParams }: { params: Prom
   const loaded = await loadDayOf(ctx.db, id, now, sector.shiftWhere)
   if (!loaded) notFound()
   const { event, timeZone, board, today, refreshedAt } = loaded
+  // The « Ajouter un besoin » form offers the event's existing postes (#1304): a typed one joins it.
+  const roleRows = await ctx.db.shift.findMany({
+    where: { eventId: id, status: { not: "cancelled" } },
+    select: { roleName: true },
+    distinct: ["roleName"],
+    orderBy: { roleName: "asc" },
+  })
   const base = `/admin/events/${event.id}`
   const sectorValue = sectorFilterValue(sector.filter)
   const eventDay = isEventDay({ startDate: event.startDate.toISOString(), endDate: event.endDate.toISOString() }, now, timeZone)
@@ -67,7 +74,23 @@ export default async function DayOfPage({ params, searchParams }: { params: Prom
       )}
 
       {/* Keyed by the sector: the board's marks, search and polling restart on the sector's shifts. */}
-      <DayOfBoard key={sectorValue} eventId={event.id} board={board} today={today} refreshedAt={refreshedAt} sector={sectorValue} />
+      <DayOfBoard
+        key={sectorValue}
+        eventId={event.id}
+        board={board}
+        today={today}
+        refreshedAt={refreshedAt}
+        sector={sectorValue}
+        roles={roleRows.map((r) => r.roleName)}
+        timeZone={timeZone}
+        registrationWindow={{
+          publicStatus: event.publicStatus,
+          registrationsOpen: event.registrationsOpen,
+          registrationOpensAt: event.registrationOpensAt?.toISOString() ?? null,
+          registrationClosesAt: event.registrationClosesAt?.toISOString() ?? null,
+        }}
+        activeSectorIds={sector.options.filter((o) => o.value && o.value !== "autres").map((o) => o.value)}
+      />
 
       <nav aria-labelledby="dayof-more" className="border-t border-gray-200 pt-4 space-y-2">
         <h2 id="dayof-more" className="text-sm font-semibold text-gray-700">Autres pages de l&apos;événement</h2>

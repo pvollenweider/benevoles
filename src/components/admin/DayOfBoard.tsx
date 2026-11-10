@@ -9,6 +9,7 @@ import { focusFirstAvailable, isFocusDropped } from "@/lib/focus-return"
 import { statusBoxClass } from "@/lib/status-message"
 import {
   DAY_OF_WINDOW_HOURS,
+  addShiftToBoard,
   dayOfBoardUrl,
   filterGroups,
   groupHeading,
@@ -27,6 +28,10 @@ import {
   type DayOfPerson,
   type DayOfShift,
 } from "@/lib/day-of"
+import { needCreatedAnnouncement } from "@/lib/day-of-need"
+import type { RegistrationWindow } from "@/lib/registration-window"
+import { fold } from "@/lib/text-fold"
+import AddNeedPanel from "./AddNeedPanel"
 import {
   NO_CHANGES,
   addChanges,
@@ -77,6 +82,13 @@ type Props = {
   refreshedAt: string
   /** The page's « Secteur » filter (#1170, `secteur` param value, "" for all): every read keeps it. */
   sector?: string
+  /** The event's existing postes, for the « Ajouter un besoin » field (#1304). */
+  roles?: string[]
+  timeZone: string
+  /** The registration window (#1304): says why a send is blocked instead of showing the list. */
+  registrationWindow: RegistrationWindow
+  /** The event's active sector ids, to tell whether the page's filter hides the new shift. */
+  activeSectorIds?: string[]
 }
 
 type Snapshot = { board: Board; today: string; refreshedAt: string }
@@ -97,7 +109,7 @@ const telClass = `inline-flex items-center min-h-11 px-3 rounded-xl border borde
  * page. Search, focus, an action in flight and the marks made here survive each read (merge and
  * ordering rules in day-of-sync.ts). Polls are silent unless something changed elsewhere.
  */
-export default function DayOfBoard({ eventId, board: initialBoard, today: initialToday, refreshedAt: initialRefreshedAt, sector = "" }: Props) {
+export default function DayOfBoard({ eventId, board: initialBoard, today: initialToday, refreshedAt: initialRefreshedAt, sector = "", roles = [], timeZone, registrationWindow, activeSectorIds = [] }: Props) {
   const [snap, setSnap] = useState<Snapshot>({ board: initialBoard, today: initialToday, refreshedAt: initialRefreshedAt })
   const { board, today, refreshedAt } = snap
   const [query, setQuery] = useState("")
@@ -152,6 +164,34 @@ export default function DayOfBoard({ eventId, board: initialBoard, today: initia
   const focusAfterSync = useRef<{ registrationId: string | null; shiftId: string; leftText: string | null } | null>(null)
 
   const isPresent = (p: DayOfPerson) => shownCheckIn(p, marks) !== null
+
+  // « Ajouter un besoin » (#1304): the created shift joins the board at once, before any poll, and
+  // the screen says where it is (listed, counted later, or hidden by the search / sector filter).
+  // The tick marks every read sent before as stale, so a poll already in flight cannot drop it.
+  function onNeedCreated(shift: DayOfShift, sectorId: string | null): string {
+    const now = new Date()
+    const result = addShiftToBoard(snapRef.current.board, shift, now, timeZone)
+    const next = { ...snapRef.current, board: result.board, today: shift.date }
+    appliedAt.current = ++tick.current
+    snapRef.current = next
+    setSnap(next)
+    const counts = shiftCounts(shift, () => false)
+    const q = fold(query.trim())
+    const hiddenBySearch = q !== "" && !fold(`${shift.roleName} ${shift.label}`).includes(q)
+    const inActiveSector = sectorId !== null && activeSectorIds.includes(sectorId)
+    const hiddenBySector = sector === "autres" ? inActiveSector : sector !== "" && sectorId !== sector
+    const text = needCreatedAnnouncement({
+      name: shiftName(shift),
+      hours: shiftHours(shift),
+      missing: counts.missing,
+      phase: result.phase,
+      laterCount: result.board.laterCount,
+      hiddenBySearch,
+      hiddenBySector,
+    })
+    say(text)
+    return text
+  }
 
   const inProgress = filterGroups(board.inProgress, query)
   const upcoming = filterGroups(board.upcoming, query)
@@ -520,8 +560,18 @@ export default function DayOfBoard({ eventId, board: initialBoard, today: initia
         />
       </div>
 
-      <p role="status" aria-live="polite" className="sr-only">{status}</p>
+      <p role="status" aria-live="polite" aria-label="Mise à jour du tableau" className="sr-only">{status}</p>
       {nothingFound && <p className="text-sm text-gray-700">Aucun bénévole ni poste ne correspond à « {query.trim()} ».</p>}
+
+      <AddNeedPanel
+        eventId={eventId}
+        today={today}
+        timeZone={timeZone}
+        event={registrationWindow}
+        roles={roles}
+        onCreated={onNeedCreated}
+        announce={say}
+      />
 
       <section aria-labelledby="dayof-now" className="space-y-3">
         <h2 id="dayof-now" className="text-lg font-semibold text-gray-900">En cours</h2>

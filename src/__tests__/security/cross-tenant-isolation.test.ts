@@ -1141,6 +1141,17 @@ describe("Shifts — cross-tenant isolation", () => {
     expect(prismaMock.notificationOutbox.createMany).not.toHaveBeenCalled()
   })
 
+  it("GET /api/admin/events/[id]/open-shifts returns 404 for an org-B event, reading no member (#1304)", async () => {
+    const { GET } = await import("@/app/api/admin/events/[id]/open-shifts/route")
+    const db = setupGuard() // event.findFirst → null
+
+    const res = await GET(makeRequest("/api/admin/events/evt-b/open-shifts?shift=shift-b"), params("evt-b"))
+    expect(res.status).toBe(404)
+    expect(db.event.findFirst).toHaveBeenCalledWith(expect.objectContaining({ where: { id: "evt-b" } }))
+    expect(prismaMock.event.findFirst).not.toHaveBeenCalled()
+    expect(db.volunteer.findMany).not.toHaveBeenCalled()
+  })
+
   it("POST /api/admin/shifts/series returns 404 for an org-B event, creating nothing", async () => {
     const { POST } = await import("@/app/api/admin/shifts/series/route")
     const db = setupGuard() // event.findFirst → null

@@ -1055,3 +1055,14 @@ l'ancien parcours (désabonnement à l'ouverture du lien). Recorder, script et
 narration mis à jour dans la même PR ; **régénération pas faite dans ce
 travail** (voix et capture). Révision et `updatedAt` du catalogue à incrémenter
 au rendu de la nouvelle version.
+
+## « Ajouter un besoin » sur Jour J (#1304)
+
+La page Jour J gagne **Ajouter un besoin**, deux étapes sur la même page, et « Chercher des
+bénévoles » gagne **Inscrits aujourd'hui**, **Tout cocher** et la notification sur le téléphone.
+Deux vidéos montrent cette page : `ATTENDANCE_CHECK_IN` (chapitres `dayof-*`) et `SECTORS`
+(le champ **Secteur** sur Jour J). Leur narration reste juste et leurs sélecteurs ne dépendent
+ni du nouveau bouton ni du formulaire, donc aucun script ni manifeste n'a été modifié. Leur
+image ne montre pas encore le bouton : **à refilmer au prochain passage**, sans régénération
+dans ce travail (voix et capture longues). Aucune vidéo publiée ne montre l'écran
+« Chercher des bénévoles ». Révision du catalogue à incrémenter au rendu.

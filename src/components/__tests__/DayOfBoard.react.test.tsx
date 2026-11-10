@@ -29,7 +29,17 @@ const board: Board = {
   laterCount: 2,
 }
 const jsonOk = (body: unknown) => ({ ok: true, status: 200, json: async () => body })
-const renderBoard = () => render(<DayOfBoard eventId="evt-1" board={board} today="2026-07-04" refreshedAt="14h05" />)
+const renderBoard = () => render(
+  <DayOfBoard
+    eventId="evt-1"
+    board={board}
+    today="2026-07-04"
+    refreshedAt="14h05"
+    timeZone="Europe/Zurich"
+    registrationWindow={{ publicStatus: "published", registrationsOpen: true }}
+    roles={["Bar", "Accueil"]}
+  />,
+)
 
 describe("DayOfBoard", () => {
   const fetchMock = vi.fn()
@@ -71,7 +81,7 @@ describe("DayOfBoard", () => {
     const undo = await screen.findByRole("button", { name: "Annuler la présence, Zoé Müller" })
     expect(undo).toBe(button)
     expect(undo).toHaveFocus()
-    await waitFor(() => expect(screen.getByRole("status")).toHaveTextContent("Présence enregistrée pour Zoé Müller. Bar, Soir : 2 présents sur 2 attendus."))
+    await waitFor(() => expect(screen.getByRole("status", { name: "Mise à jour du tableau" })).toHaveTextContent("Présence enregistrée pour Zoé Müller. Bar, Soir : 2 présents sur 2 attendus."))
     expect(screen.getByRole("heading", { level: 4, name: "Bar, Soir" }).closest("li")).toHaveTextContent("2 présents sur 2 attendus.")
   })
 
@@ -82,7 +92,7 @@ describe("DayOfBoard", () => {
     await waitFor(() => expect(fetchMock).toHaveBeenCalled())
     expect(JSON.parse(fetchMock.mock.calls[0][1].body)).toEqual({ action: "undo_check_in", registrationIds: ["r2"] })
     expect(await screen.findByRole("button", { name: "Marquer présent, Léon Favre" })).toBeInTheDocument()
-    await waitFor(() => expect(screen.getByRole("status")).toHaveTextContent("Présence annulée pour Léon Favre."))
+    await waitFor(() => expect(screen.getByRole("status", { name: "Mise à jour du tableau" })).toHaveTextContent("Présence annulée pour Léon Favre."))
   })
 
   it("a refused request says so and leaves the state as it was", async () => {
@@ -100,7 +110,7 @@ describe("DayOfBoard", () => {
     renderBoard()
     fireEvent.click(screen.getByRole("button", { name: "Marquer présent, Zoé Müller" }))
     await waitFor(() => expect(fetchMock).toHaveBeenCalledWith("/api/admin/events/evt-1/day-of", expect.anything()))
-    await waitFor(() => expect(screen.getByRole("status")).toHaveTextContent("Rien n'a changé pour Zoé Müller"))
+    await waitFor(() => expect(screen.getByRole("status", { name: "Mise à jour du tableau" })).toHaveTextContent("Rien n'a changé pour Zoé Müller"))
   })
 
   it("an action, not a toggle: no aria-pressed", () => {
@@ -126,13 +136,13 @@ describe("DayOfBoard", () => {
     renderBoard()
     fireEvent.click(screen.getByRole("button", { name: "Actualiser" }))
     await waitFor(() => expect(fetchMock).toHaveBeenCalledWith("/api/admin/events/evt-1/day-of", expect.anything()))
-    await waitFor(() => expect(screen.getByRole("status")).toHaveTextContent("Liste mise à jour à 14h07."))
+    await waitFor(() => expect(screen.getByRole("status", { name: "Mise à jour du tableau" })).toHaveTextContent("Liste mise à jour à 14h07."))
     expect(screen.getByText("Mis à jour à 14h07.")).toBeInTheDocument()
   })
 
   it("with a « Secteur » filter, every read of the board keeps it (#1170)", async () => {
     fetchMock.mockResolvedValue(jsonOk({ board, today: "2026-07-04", refreshedAt: "14h07" }))
-    render(<DayOfBoard eventId="evt-1" board={board} today="2026-07-04" refreshedAt="14h05" sector="sec-park" />)
+    render(<DayOfBoard eventId="evt-1" board={board} today="2026-07-04" refreshedAt="14h05" sector="sec-park" timeZone="Europe/Zurich" registrationWindow={{ publicStatus: "published", registrationsOpen: true }} />)
     fireEvent.click(screen.getByRole("button", { name: "Actualiser" }))
     await waitFor(() => expect(fetchMock).toHaveBeenCalledWith("/api/admin/events/evt-1/day-of?secteur=sec-park", expect.anything()))
   })
@@ -141,7 +151,7 @@ describe("DayOfBoard", () => {
     fetchMock.mockResolvedValue({ ok: false, status: 500, json: async () => ({}) })
     renderBoard()
     fireEvent.click(screen.getByRole("button", { name: "Actualiser" }))
-    await waitFor(() => expect(screen.getByRole("status")).toHaveTextContent("La liste n'a pas pu être mise à jour. Elle date de 14h05."))
+    await waitFor(() => expect(screen.getByRole("status", { name: "Mise à jour du tableau" })).toHaveTextContent("La liste n'a pas pu être mise à jour. Elle date de 14h05."))
     expect(screen.getByText("La mise à jour n'a pas abouti : liste de 14h05. Nouvel essai automatique.")).toBeInTheDocument()
     expect(screen.queryByText("Mis à jour à 14h05.")).toBeNull()
   })
@@ -160,13 +170,13 @@ describe("DayOfBoard", () => {
     await waitFor(() => expect(screen.queryByRole("button", { name: /Zoé Müller/ })).toBeNull())
     await waitFor(() => expect(screen.getByRole("heading", { level: 4, name: "Bar, Soir" })).toHaveFocus())
     await new Promise((r) => setTimeout(r, 50))
-    expect(screen.getByRole("status")).toHaveTextContent("Rien n'a changé pour Zoé Müller")
-    expect(screen.getByRole("status")).not.toHaveTextContent("Liste mise à jour")
+    expect(screen.getByRole("status", { name: "Mise à jour du tableau" })).toHaveTextContent("Rien n'a changé pour Zoé Müller")
+    expect(screen.getByRole("status", { name: "Mise à jour du tableau" })).not.toHaveTextContent("Liste mise à jour")
   })
 
   it("finished shifts stay as opened by hand once a search is cleared", () => {
     const withEarlier: Board = { ...board, earlier: [{ key: "2026-07-04T08:00", date: "2026-07-04", startTime: "08:00", shifts: [{ ...accueil, id: "s3", startTime: "08:00", endTime: "10:00" }] }] }
-    const { container } = render(<DayOfBoard eventId="evt-1" board={withEarlier} today="2026-07-04" refreshedAt="14h05" />)
+    const { container } = render(<DayOfBoard eventId="evt-1" board={withEarlier} today="2026-07-04" refreshedAt="14h05" timeZone="Europe/Zurich" registrationWindow={{ publicStatus: "published", registrationsOpen: true }} />)
     const details = container.querySelector("details")!
     expect(details.open).toBe(false)
     details.open = true
@@ -184,7 +194,7 @@ describe("DayOfBoard", () => {
     expect(screen.getByRole("button", { name: "Marquer présent, Zoé Müller" })).toBeInTheDocument()
     expect(screen.queryByRole("button", { name: /Léon Favre/ })).toBeNull()
     expect(screen.queryByRole("heading", { name: "Accueil" })).toBeNull()
-    await waitFor(() => expect(screen.getByRole("status")).toHaveTextContent("1 créneau, 1 personne affichée."), { timeout: 2000 })
+    await waitFor(() => expect(screen.getByRole("status", { name: "Mise à jour du tableau" })).toHaveTextContent("1 créneau, 1 personne affichée."), { timeout: 2000 })
 
     fireEvent.change(search, { target: { value: "accueil" } })
     expect(screen.getByRole("heading", { level: 4, name: "Accueil" })).toBeInTheDocument()
@@ -217,7 +227,7 @@ describe("DayOfBoard", () => {
       expect(search).toHaveValue("bar")
       expect(undo).toHaveFocus()
       expect(screen.getByText("Mis à jour à 14h06.")).toBeInTheDocument()
-      expect(screen.getByRole("status")).toHaveTextContent("Liste mise à jour : 1 personne marquée présente.")
+      expect(screen.getByRole("status", { name: "Mise à jour du tableau" })).toHaveTextContent("Liste mise à jour : 1 personne marquée présente.")
     })
 
     it("a poll that changes nothing says nothing", async () => {
@@ -226,7 +236,7 @@ describe("DayOfBoard", () => {
       await act(async () => { await vi.advanceTimersByTimeAsync(25_000) })
       await flush()
       expect(dayOfCalls()).toHaveLength(1)
-      expect(screen.getByRole("status")).toHaveTextContent("")
+      expect(screen.getByRole("status", { name: "Mise à jour du tableau" })).toHaveTextContent("")
       // The background read never touches the « Actualiser » button.
       expect(screen.getByRole("button", { name: "Actualiser" })).not.toHaveAttribute("aria-disabled")
     })
@@ -252,14 +262,14 @@ describe("DayOfBoard", () => {
       act(() => { window.dispatchEvent(new Event("offline")) })
       await flush()
       expect(screen.getByText(/^Pas de connexion : liste de 14h05\./)).toBeInTheDocument()
-      expect(screen.getByRole("status")).toHaveTextContent("Connexion perdue. La liste affichée date de 14h05.")
+      expect(screen.getByRole("status", { name: "Mise à jour du tableau" })).toHaveTextContent("Connexion perdue. La liste affichée date de 14h05.")
       await act(async () => { await vi.advanceTimersByTimeAsync(120_000) })
       expect(dayOfCalls()).toHaveLength(0)
       act(() => { window.dispatchEvent(new Event("online")) })
       await flush()
       expect(dayOfCalls()).toHaveLength(1)
       expect(screen.getByText("Mis à jour à 14h12.")).toBeInTheDocument()
-      expect(screen.getByRole("status")).toHaveTextContent("Connexion rétablie. Liste mise à jour à 14h12.")
+      expect(screen.getByRole("status", { name: "Mise à jour du tableau" })).toHaveTextContent("Connexion rétablie. Liste mise à jour à 14h12.")
     })
 
     it("one failed poll stays quiet; the second in a row shows and says the list is old", async () => {
@@ -273,7 +283,7 @@ describe("DayOfBoard", () => {
       await flush()
       expect(dayOfCalls()).toHaveLength(2)
       expect(screen.getByText(/La mise à jour n'a pas abouti/)).toBeInTheDocument()
-      expect(screen.getByRole("status")).toHaveTextContent("La liste n'a pas pu être mise à jour. Elle date de 14h05.")
+      expect(screen.getByRole("status", { name: "Mise à jour du tableau" })).toHaveTextContent("La liste n'a pas pu être mise à jour. Elle date de 14h05.")
     })
 
     it("a poll sent before a check-in's answer does not undo it on screen", async () => {
@@ -289,7 +299,7 @@ describe("DayOfBoard", () => {
       // The stale poll answers with Zoé not yet present.
       await act(async () => { answerPoll(jsonOk({ board, today: "2026-07-04", refreshedAt: "14h06" })); await vi.advanceTimersByTimeAsync(50) })
       expect(screen.getByRole("button", { name: "Annuler la présence, Zoé Müller" })).toBeInTheDocument()
-      expect(screen.getByRole("status")).not.toHaveTextContent("présence annulée")
+      expect(screen.getByRole("status", { name: "Mise à jour du tableau" })).not.toHaveTextContent("présence annulée")
     })
 
     it("a poll answering while an action is in flight is not applied (the row stays), then read again", async () => {
@@ -364,7 +374,7 @@ describe("DayOfBoard", () => {
       await flush()
       // Shown, and said once through the status region.
       expect(screen.getAllByText("Votre session a expiré : rechargez la page pour vous reconnecter.")).toHaveLength(2)
-      expect(screen.getByRole("status")).toHaveTextContent("Votre session a expiré")
+      expect(screen.getByRole("status", { name: "Mise à jour du tableau" })).toHaveTextContent("Votre session a expiré")
       await act(async () => { await vi.advanceTimersByTimeAsync(600_000) })
       expect(dayOfCalls()).toHaveLength(1)
     })

@@ -14,10 +14,15 @@ import { memberMayTake } from "./role-reservation"
 import { shiftsTooYoungFor } from "./utils"
 import { shiftsClash } from "./shift-overlap"
 import { declinedShiftsOf, shiftDeclineReason, type ShiftDeclineRef } from "./shift-declines"
+import { shiftInstants } from "./ics"
+import { localDateTimeToUtc } from "./time-zone"
+import { PUSH_BODY_MAX, PUSH_TITLE_MAX } from "./targeted-message"
 
 export const OPEN_SHIFTS_MAX_SHIFTS = 20
 export const OPEN_SHIFTS_MAX_RECIPIENTS = 200
 export const OPEN_SHIFTS_NOTE_MAX = 500
+/** Push of an « open shifts » send (#1304): shorter, like a targeted message. */
+const PUSH_CLIP = (s: string, max: number) => (s.length > max ? `${s.slice(0, max - 1).trimEnd()}…` : s)
 
 /** Subject of the history row (#467); the email adds the event title in front. */
 export const OPEN_SHIFTS_SUBJECT = "On cherche encore du monde"
@@ -111,6 +116,39 @@ export function availabilityFit(member: { availabilityPeriods?: string[] | null 
   const covered = needed.filter((p) => mine.has(p)).length
   if (covered === needed.length) return "match"
   return covered > 0 ? "partial" : "no_match"
+}
+
+// ── « Inscrits aujourd'hui » (#1304) ────────────────────────────────────────
+
+/**
+ * Whether a shift overlaps the local calendar day `day` in `timeZone`: a night shift begun the
+ * day before and still running counts, one ending at midnight sharp does not, and daylight-saving
+ * days are read on real instants (`shiftInstants`).
+ */
+export function shiftOverlapsLocalDay(
+  shift: { date: DateLike; startTime: string; endTime: string },
+  day: string,
+  timeZone: string,
+): boolean {
+  const { start, end } = shiftInstants(shift, timeZone)
+  const dayStart = localDateTimeToUtc(new Date(`${day}T00:00:00Z`), "00:00", timeZone)
+  const nextDay = new Date(Date.parse(`${day}T00:00:00Z`) + 86_400_000)
+  const dayEnd = localDateTimeToUtc(nextDay, "00:00", timeZone)
+  return start.getTime() < dayEnd.getTime() && end.getTime() > dayStart.getTime()
+}
+
+/**
+ * The volunteers with an active registration on a shift overlapping the local day: the audience of
+ * « Inscrits aujourd'hui ». Recomputed on the server at send time, with the same rule as the page.
+ */
+export function registeredOnLocalDay(
+  registrations: LiveRegistration[],
+  shifts: EventShiftRef[],
+  day: string,
+  timeZone: string,
+): Set<string> {
+  const overlapping = new Set(shifts.filter((s) => shiftOverlapsLocalDay(s, day, timeZone)).map((s) => s.id))
+  return new Set(registrations.filter((r) => r.status === "active" && overlapping.has(r.shiftId)).map((r) => r.volunteerId))
 }
 
 // ── Candidates ──────────────────────────────────────────────────────────────
@@ -248,6 +286,41 @@ export function findCandidates(input: {
 export function selectedRecipients(candidates: Candidate[], selectedIds: string[]): Candidate[] {
   const wanted = new Set(selectedIds)
   return candidates.filter((c) => c.selectable && wanted.has(c.member.id))
+}
+
+/**
+ * « Tout cocher » (#1304): adds the selectable people of the list shown, in order, without ever
+ * going past the recipient cap. Non-selectable rows (overlap, already on the shift…) are never
+ * ticked, and people already ticked elsewhere stay ticked.
+ */
+export function checkAllSelectable(selected: Set<string>, candidates: Candidate[], max = OPEN_SHIFTS_MAX_RECIPIENTS): Set<string> {
+  const next = new Set(selected)
+  for (const c of candidates) {
+    if (next.size >= max) break
+    if (c.selectable) next.add(c.member.id)
+  }
+  return next
+}
+
+/** The push of an « open shifts » send (#1304): the event and the need, short. */
+export function openShiftsPush(shifts: OpenShift[], eventTitle: string): { title: string; body: string } {
+  const title = PUSH_CLIP(`${eventTitle} : on cherche encore du monde`, PUSH_TITLE_MAX)
+  const first = shifts[0]
+  if (!first) return { title, body: "Des créneaux cherchent encore du monde." }
+  const body = shifts.length === 1
+    ? `${shiftName(first)} : ${placesLeftLabel(first.placesLeft)}.`
+    : `${shifts.length} créneaux à compléter, à partir de ${shiftName(first)}.`
+  return { title, body: PUSH_CLIP(body, PUSH_BODY_MAX) }
+}
+
+/**
+ * How long the push may wait (#1304): until the last offered shift ends, never the three days of
+ * other pushes. Zero once every need is over (the notification must not outlive it).
+ */
+export function openShiftsPushTtlSeconds(shifts: OpenShift[], now: Date, timeZone: string): number {
+  let end = 0
+  for (const s of shifts) end = Math.max(end, shiftInstants(s, timeZone).end.getTime())
+  return Math.max(0, Math.floor((end - now.getTime()) / 1000))
 }
 
 // ── Words ───────────────────────────────────────────────────────────────────
