@@ -89,7 +89,6 @@ En savoir plus : [où manque-t-il du monde ?](../guide/ou-manque-t-il-du-monde.m
 - **Le planning complet en frise**, prêt à imprimer, et des feuilles pour le terrain : par jour, par poste et par bénévole, et une feuille de présence à cocher.
 - **Des badges** à imprimer et découper, avec le prénom et le poste de chaque bénévole.
 - **Des responsables de secteur** qui suivent les bénévoles de leur poste, ou de tout un secteur, depuis un lien personnel, sans compte. Une question rattachée à leur poste (le repas du soir pour l'équipe Cuisine) leur fait suivre les réponses que les bénévoles modifient.
-- **Un responsable pour tout un secteur** : depuis son lien, sans compte, il voit en lecture seule tous les bénévoles du secteur, jour par jour, et reçoit les inscriptions et les désistements de ses postes.
 
 <!-- video: ATTENDANCE_CHECK_IN -->
 
