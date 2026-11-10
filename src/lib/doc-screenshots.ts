@@ -71,12 +71,14 @@ export const DOC_SCREENSHOTS: Record<string, string[]> = {
   "admin-team": ["src/app/admin/settings/admins/page.tsx"],
   "admin-login": ["src/app/admin/login/page.tsx"],
   "admin-members": ["src/app/admin/members/page.tsx"],
+  "admin-members-bulk-delete": ["src/app/admin/members/page.tsx"],
   "admin-duplicates": ["src/app/admin/members/duplicates/page.tsx"],
   "admin-merge-preview": ["src/app/admin/members/[id]/merge/page.tsx"],
   "admin-member-activity": ["src/app/admin/members/[id]/page.tsx"],
   "admin-member-delete": ["src/app/admin/members/[id]/page.tsx"],
   "admin-member-erase": ["src/app/admin/members/[id]/page.tsx"],
 }
+
 
 export const OPT_OUT = "doc-img: unchanged"
 

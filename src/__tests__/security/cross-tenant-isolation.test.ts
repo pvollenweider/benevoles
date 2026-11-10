@@ -570,6 +570,42 @@ describe("Members — cross-tenant isolation", () => {
     expect(volunteerDelete).not.toHaveBeenCalled()
   })
 
+  it("POST /api/admin/members/bulk-delete never deletes an id of another organisation, and reports it as not found (#1305)", async () => {
+    const { POST } = await import("@/app/api/admin/members/bulk-delete/route")
+    const volunteerDelete = vi.fn().mockResolvedValue({ id: "mem-a" })
+    const orgLogCreate = vi.fn().mockResolvedValue({ id: "log-1" })
+    const tx = {
+      // The raw lock query filters on the session's organization, so mem-b (org B) is never locked.
+      $queryRaw: vi.fn().mockResolvedValue([{ id: "mem-a" }]),
+      volunteer: {
+        // The org-scoped read only sees org-A's record: mem-b behaves exactly like a missing id.
+        findMany: vi.fn().mockResolvedValue([{ id: "mem-a", firstName: "Alice", lastName: "Martin", email: "alice@a.com", active: true, mergedIntoId: null }]),
+        delete: volunteerDelete,
+      },
+      registration: { groupBy: vi.fn().mockResolvedValue([]) },
+      notificationOutbox: { findMany: vi.fn().mockResolvedValue([]), updateMany: vi.fn() },
+      orgLog: { create: orgLogCreate },
+    }
+    const $transaction = vi.fn(async (fn: (tx: unknown) => unknown) => fn(tx))
+    requireOrgSessionMock.mockResolvedValue({ db: { $transaction }, organizationId: ORG_A, session: SESSION_A })
+
+    const res = await POST(makeRequest("/api/admin/members/bulk-delete", "POST", { ids: ["mem-a", "mem-b"] }))
+    expect(res.status).toBe(200)
+    expect(await res.json()).toEqual({
+      deleted: ["mem-a"],
+      skipped: [{ id: "mem-b", reason: "notFound", name: null }],
+    })
+    expect(volunteerDelete).toHaveBeenCalledTimes(1)
+    expect(volunteerDelete).toHaveBeenCalledWith({ where: { id: "mem-a" } })
+    expect(volunteerDelete).not.toHaveBeenCalledWith({ where: { id: "mem-b" } })
+    expect(orgLogCreate).toHaveBeenCalledWith(expect.objectContaining({
+      data: expect.objectContaining({ action: "member.deleted", entityType: "Member", entityId: "mem-a", organizationId: ORG_A }),
+    }))
+    // The lock query is pinned to the caller's organisation.
+    expect(tx.$queryRaw.mock.calls[0].slice(1)).toContain(ORG_A)
+    expect(prismaMock.volunteer.update).not.toHaveBeenCalled()
+  })
+
   // ── Erasure of personal data (#516) ──────────────────────────────────────
 
   function eraseTx(member: Record<string, unknown> | null) {

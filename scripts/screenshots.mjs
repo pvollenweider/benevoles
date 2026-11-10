@@ -431,6 +431,19 @@ async function run() {
 
   await shot("admin-members", async () => { await visit(`${BASE}/admin/members`); await save(a, "admin-members") })
 
+  // Bulk deletion (#1305): two selected members and the single confirmation, which says how many
+  // will go and that members with registrations stay. Declared as pending until the PNG is made.
+  await shot("admin-members-bulk-delete", async () => {
+    await visit(`${BASE}/admin/members`)
+    await a.getByRole("checkbox", { name: "Sélectionner Manon Aebi" }).check()
+    await a.getByRole("checkbox", { name: "Sélectionner Théo Berset" }).check()
+    await a.getByRole("button", { name: "Supprimer la sélection" }).click()
+    const dialog = a.getByRole("alertdialog")
+    await dialog.waitFor()
+    await save(a, "admin-members-bulk-delete", { target: dialog })
+    await dialog.getByRole("button", { name: "Annuler" }).click()
+  })
+
   // « Doublons possibles »: the seeded pair (same name, phone and birth date, one letter apart in
   // the address) with its reasons, « Ignorer » and « Comparer et fusionner ».
   await shot("admin-duplicates", async () => {

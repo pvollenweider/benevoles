@@ -132,6 +132,29 @@ export function deleteMemberRecap(name: string): ActionRecap {
 }
 
 /**
+ * Permanent deletion of a selection (#1305): the count is known from the list, and the two
+ * exclusions the action applies are said before it runs — an explicit confirmation replaces the
+ * deactivation step of the single-member action.
+ */
+export function bulkDeleteMembersRecap(count: number): ActionRecap {
+  return {
+    title: `Supprimer ${n(count, "membre", "membres")} ?`,
+    lead: count > 1
+      ? `${count} fiches seront supprimées définitivement.`
+      : "Cette fiche sera supprimée définitivement.",
+    lines: [
+      "Cette action est irréversible : les fiches ne peuvent pas être récupérées ensuite.",
+      "Les membres qui ont des inscriptions ne seront pas supprimés : leurs inscriptions doivent rester dans l'historique des événements.",
+      "Disparaissent avec chaque fiche : ses invitations, ses réponses aux questions des événements, ses abonnements aux notifications, les suivis d'envoi d'email et les doublons possibles écartés la concernant.",
+      "Aucun email n'est envoyé.",
+      LOGGED_ORG,
+    ],
+    confirmLabel: "Supprimer",
+    danger: true,
+  }
+}
+
+/**
  * "Samedi 4 juillet, de 18h à 23h": the moment of a shift, for a recap shown on screen, in words
  * (#587; an en dash between two hours is read « tiret »). Times are stored "HH:MM".
  */

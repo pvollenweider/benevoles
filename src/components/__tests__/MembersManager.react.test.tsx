@@ -331,6 +331,100 @@ describe("MembersManager — absorbed and erased records", () => {
   })
 })
 
+// Bulk deletion (#1305): selection of the current filter, one confirmation, a result in words.
+describe("MembersManager — bulk deleting a selection", () => {
+  const period = { from: "2026-01-01", to: "2026-12-31" }
+  const members = [
+    member({ id: "a", firstName: "Anne", lastName: "Favre" }),
+    member({ id: "b", firstName: "Marc", lastName: "Rochat" }),
+    member({ id: "c", firstName: "Léa", lastName: "Dubois", deletion: { eligible: true } }),
+  ]
+  const setup = () => render(<MembersManager initialMembers={members} allTags={[]} defaultHoursPeriod={period} />)
+  const counter = (text: string) => screen.getByText(text).closest("[role='status']")
+
+  afterEach(() => vi.unstubAllGlobals())
+
+  it("selects each row with its own accessible name and only offers the action once something is selected", () => {
+    setup()
+    expect(screen.queryByRole("button", { name: "Supprimer la sélection" })).toBeNull()
+    fireEvent.click(screen.getByRole("checkbox", { name: "Sélectionner Anne Favre" }))
+    expect(counter("1 membre sélectionné")).toBeInTheDocument()
+    expect(screen.getByRole("button", { name: "Supprimer la sélection" })).toBeInTheDocument()
+    fireEvent.click(screen.getByRole("checkbox", { name: "Sélectionner Marc Rochat" }))
+    expect(counter("2 membres sélectionnés")).toBeInTheDocument()
+  })
+
+  it("« Tout sélectionner » takes every member of the current filter, and changing the filter empties the selection", () => {
+    const withArchived = [
+      ...members,
+      member({ id: "tomb", firstName: "", lastName: "", active: false, record: { kind: "merged", keptId: "a", keptName: "Anne Favre", deletionDay: "2026-11-14" } }),
+    ]
+    render(<MembersManager initialMembers={withArchived} allTags={[]} defaultHoursPeriod={period} />)
+    fireEvent.click(screen.getByRole("checkbox", { name: "Tout sélectionner" }))
+    // The merged record is history, never part of the selection.
+    expect(counter("3 membres sélectionnés")).toBeInTheDocument()
+
+    fireEvent.change(screen.getByPlaceholderText("Rechercher (nom, email, téléphone)…"), { target: { value: "Anne" } })
+    expect(screen.queryByText("3 membres sélectionnés")).toBeNull()
+    expect(screen.queryByRole("button", { name: "Supprimer la sélection" })).toBeNull()
+    expect(screen.getByRole("checkbox", { name: "Sélectionner Anne Favre" })).not.toBeChecked()
+  })
+
+  it("asks once, in the shared alertdialog, how many members and what stays", () => {
+    setup()
+    fireEvent.click(screen.getByRole("checkbox", { name: "Tout sélectionner" }))
+    fireEvent.click(screen.getByRole("button", { name: "Supprimer la sélection" }))
+    const dialog = screen.getByRole("alertdialog", { name: "Supprimer 3 membres ?" })
+    expect(dialog).toHaveTextContent("irréversible")
+    expect(dialog).toHaveTextContent("Les membres qui ont des inscriptions ne seront pas supprimés")
+    fireEvent.click(within(dialog).getByRole("button", { name: "Annuler" }))
+    expect(screen.queryByRole("alertdialog")).toBeNull()
+  })
+
+  it("posts the selection, announces the result in words, clears the selection and focuses it", async () => {
+    const fetchMock = vi.fn().mockResolvedValue({
+      ok: true,
+      json: async () => ({
+        deleted: ["a", "b"],
+        skipped: [{ id: "c", reason: "registrations", name: "Anne Favre" }],
+      }),
+    })
+    vi.stubGlobal("fetch", fetchMock)
+    setup()
+    fireEvent.click(screen.getByRole("checkbox", { name: "Tout sélectionner" }))
+    fireEvent.click(screen.getByRole("button", { name: "Supprimer la sélection" }))
+    fireEvent.click(within(screen.getByRole("alertdialog")).getByRole("button", { name: "Supprimer" }))
+
+    await waitFor(() => expect(fetchMock).toHaveBeenCalledWith("/api/admin/members/bulk-delete", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ ids: ["a", "b", "c"] }),
+    }))
+    const text = "2 membres supprimés. 1 laissé car il a des inscriptions : Anne Favre. Vous pouvez l'effacer depuis sa fiche."
+    await waitFor(() => expect(screen.getByText(text)).toBeInTheDocument())
+    expect(screen.getByText(text).closest("p")).toHaveFocus()
+    expect(screen.queryByRole("alertdialog")).toBeNull()
+    expect(screen.queryByRole("button", { name: "Supprimer la sélection" })).toBeNull()
+  })
+
+  it("moves focus to the page heading when no member is left after the refresh", async () => {
+    const fetchMock = vi.fn().mockResolvedValue({
+      ok: true,
+      json: async () => ({ deleted: ["a"], skipped: [] }),
+    })
+    vi.stubGlobal("fetch", fetchMock)
+    const { rerender } = render(
+      <MembersManager initialMembers={[member({ id: "a", firstName: "Anne", lastName: "Favre" })]} allTags={[]} defaultHoursPeriod={period} />,
+    )
+    fireEvent.click(screen.getByRole("checkbox", { name: "Sélectionner Anne Favre" }))
+    fireEvent.click(screen.getByRole("button", { name: "Supprimer la sélection" }))
+    fireEvent.click(within(screen.getByRole("alertdialog")).getByRole("button", { name: "Supprimer" }))
+    await waitFor(() => expect(screen.getByText("1 membre supprimé.")).toBeInTheDocument())
+    rerender(<MembersManager initialMembers={[]} allTags={[]} defaultHoursPeriod={period} />)
+    expect(screen.getByRole("heading", { level: 1, name: "Membres" })).toHaveFocus()
+  })
+})
+
 describe("MembersManager — table layout (#1102)", () => {
   const HINT = /Le tableau est plus large que l'écran/
   const renderList = () => render(

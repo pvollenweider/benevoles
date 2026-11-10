@@ -7,7 +7,8 @@
  * the record (cascading at the database level to MemberInvite, QuestionAnswer, PushSubscription,
  * DeliveryOutcome and DuplicateDismissal — see prisma/schema.prisma and the schema guard test),
  * and writes the OrgLog entry, all in one transaction, the same shape as
- * src/lib/member-merge-transaction.ts.
+ * src/lib/member-merge-transaction.ts. Bulk deletion (#1305) shares the same write half through
+ * `deleteMemberRecord` and the same row lock, batch by batch.
  *
  * The lock is what makes "no race with a concurrent sign-up" true, not just the re-check: holding
  * `FOR UPDATE` on the Volunteer row blocks a concurrent `Registration` insert referencing it,
@@ -25,8 +26,17 @@
 
 import type { OrgScopedPrisma } from "./prisma-org"
 import { memberDeletionEligibility, type MemberDeletionEligibility } from "./member-deletion"
+import {
+  BULK_DELETE_BATCH_SIZE,
+  partitionMembersForBulkDeletion,
+  type BulkDeletionResult,
+} from "./member-bulk-deletion"
 import { cancelOutboxForDeletedMember } from "./outbox-deletion-cancel"
 import type { LogActor } from "./event-log"
+
+/** The org-scoped client's transaction, and the delegates the shared write needs. */
+type OrgTx = Parameters<Parameters<OrgScopedPrisma["$transaction"]>[0]>[0]
+type MemberDeletionTx = Pick<OrgTx, "volunteer" | "orgLog" | "notificationOutbox">
 
 export class MemberDeletionConflictError extends Error {
   constructor(message: string, readonly status: 404 | 409 = 409) {
@@ -45,11 +55,50 @@ function conflictMessage(eligibility: MemberDeletionEligibility): string {
 }
 
 /**
+ * The write half shared by single and bulk deletion (#667, #1305): cancels the member's pending
+ * outbox rows, deletes the record and writes its own OrgLog entry, with the transaction client
+ * the caller already locked the row in. Cascades at the database level to MemberInvite,
+ * QuestionAnswer, PushSubscription, DeliveryOutcome and DuplicateDismissal (onDelete: Cascade, see
+ * prisma/schema.prisma and the schema guard test). Registration has no onDelete clause — if one
+ * somehow exists despite the caller's eligibility check (a bug, not the race these functions
+ * close), the database itself refuses the delete with a foreign key violation rather than
+ * silently orphaning history.
+ *
+ * Returns the number of outbox rows cancelled. Kept exported so a future deletion path shares this
+ * exact shape instead of copying it.
+ */
+export async function deleteMemberRecord(
+  tx: MemberDeletionTx,
+  organizationId: string,
+  actor: LogActor,
+  member: { id: string; email: string | null },
+): Promise<number> {
+  // NotificationOutbox has no FK to Volunteer (only the sealed payload knows the recipient), so
+  // cascading delete can't reach it — cancel what's still pending for this member first.
+  const cancelledOutboxIds = await cancelOutboxForDeletedMember(tx, organizationId, { volunteerId: member.id, email: member.email })
+
+  await tx.volunteer.delete({ where: { id: member.id } })
+
+  // Id only, no personal data (owner decision, #667) — same discipline as member.merged.
+  await tx.orgLog.create({
+    data: {
+      organizationId,
+      actorType: actor.type,
+      actorId: "id" in actor ? (actor.id ?? null) : null,
+      action: "member.deleted",
+      entityType: "Member",
+      entityId: member.id,
+    },
+  })
+
+  return cancelledOutboxIds.length
+}
+
+/**
  * Runs the deletion in one transaction: locks the row, re-validates eligibility under lock
- * (guards the race with a concurrent sign-up, see the module comment above), cancels pending
- * outbox rows, deletes the record and writes the audit entry — all or nothing. Throws
- * MemberDeletionConflictError (404 if the row vanished, 409 if it's no longer eligible) instead
- * of deleting anything in that case.
+ * (guards the race with a concurrent sign-up, see the module comment above), then deletes through
+ * `deleteMemberRecord` — all or nothing. Throws MemberDeletionConflictError (404 if the row
+ * vanished, 409 if it's no longer eligible) instead of deleting anything in that case.
  */
 export async function runMemberDeletion(
   db: OrgScopedPrisma,
@@ -69,29 +118,58 @@ export async function runMemberDeletion(
     const eligibility = memberDeletionEligibility(member, registrationCount)
     if (!eligibility.eligible) throw new MemberDeletionConflictError(conflictMessage(eligibility), 409)
 
-    // NotificationOutbox has no FK to Volunteer (only the sealed payload knows the recipient), so
-    // cascading delete can't reach it — cancel what's still pending for this member first.
-    const cancelledOutboxIds = await cancelOutboxForDeletedMember(tx, organizationId, { volunteerId: id, email: member.email })
-
-    // Cascades at the database level to MemberInvite, QuestionAnswer, PushSubscription,
-    // DeliveryOutcome and DuplicateDismissal (onDelete: Cascade, see prisma/schema.prisma and the
-    // schema guard test). Registration has no onDelete clause — if one somehow exists despite the
-    // check above (a bug, not the race this function already closes), the database itself refuses
-    // the delete with a foreign key violation rather than silently orphaning history.
-    await tx.volunteer.delete({ where: { id } })
-
-    // Id only, no personal data (owner decision, #667) — same discipline as member.merged.
-    await tx.orgLog.create({
-      data: {
-        organizationId,
-        actorType: actor.type,
-        actorId: "id" in actor ? (actor.id ?? null) : null,
-        action: "member.deleted",
-        entityType: "Member",
-        entityId: id,
-      },
-    })
-
-    return { id, outboxCancelled: cancelledOutboxIds.length }
+    const outboxCancelled = await deleteMemberRecord(tx, organizationId, actor, member)
+    return { id, outboxCancelled }
   }, { maxWait: 10_000, timeout: 30_000 })
+}
+
+/**
+ * The bulk deletion of #1305. The ids are handled in batches, each in one transaction: the batch's
+ * rows of this organisation are locked first (the same `FOR UPDATE` as the single action, so a
+ * concurrent sign-up either commits before this check or fails once the member is gone), then
+ * loaded through the org-scoped client and split by the pure rule. Ineligible records are returned
+ * as `skipped` without any write, so one of them never cancels the others. Only an unexpected
+ * database failure (not a per-member business reason) aborts its batch; ids of another
+ * organisation are simply absent from the scoped read and end up as "not found".
+ */
+export async function runBulkMemberDeletion(
+  db: OrgScopedPrisma,
+  organizationId: string,
+  actor: LogActor,
+  ids: readonly string[],
+): Promise<BulkDeletionResult> {
+  const unique = [...new Set(ids)]
+  const result: BulkDeletionResult = { deleted: [], skipped: [] }
+
+  for (let start = 0; start < unique.length; start += BULK_DELETE_BATCH_SIZE) {
+    const batch = unique.slice(start, start + BULK_DELETE_BATCH_SIZE)
+    const batchResult = await db.$transaction(async (tx) => {
+      // Lock this batch's rows that belong to the organisation before reading anything. Filtering
+      // on organizationId here means another tenant's rows are never locked, and the org-scoped
+      // read below then treats them exactly like missing ids.
+      await tx.$queryRaw`SELECT id FROM "Volunteer" WHERE "organizationId" = ${organizationId} AND id = ANY(${batch}::text[]) ORDER BY id FOR UPDATE`
+
+      const members = await tx.volunteer.findMany({
+        where: { id: { in: batch } },
+        select: { id: true, firstName: true, lastName: true, email: true, active: true, mergedIntoId: true },
+      })
+      const counts = await tx.registration.groupBy({
+        by: ["volunteerId"],
+        where: { volunteerId: { in: batch } },
+        _count: { _all: true },
+      })
+      const countById = new Map(counts.map((row) => [row.volunteerId, row._count._all]))
+
+      const partition = partitionMembersForBulkDeletion(batch, members, countById)
+      for (const member of partition.deletable) {
+        await deleteMemberRecord(tx, organizationId, actor, member)
+      }
+      return { deleted: partition.deletable.map((member) => member.id), skipped: partition.skipped }
+    }, { maxWait: 10_000, timeout: 30_000 })
+
+    result.deleted.push(...batchResult.deleted)
+    result.skipped.push(...batchResult.skipped)
+  }
+
+  return result
 }
