@@ -1,6 +1,7 @@
 /**
  * Operator level of the beta gate (#1168): the « Fonctions bêta » route of the super admin space,
- * and the server helper `canAdoptBeta`, against an in-memory PlatformSetting row.
+ * and the server helper `canAdoptBeta`, against an in-memory PlatformSetting row. Since #1311 the
+ * sectors and sector leaders are graduated: ignored by the screen, available without the beta.
  */
 import { describe, it, expect, vi, beforeEach } from "vitest"
 import { NextResponse } from "next/server"
@@ -45,45 +46,65 @@ describe("/api/super-admin/beta-capabilities (#1168)", () => {
     expect(m.upsert).not.toHaveBeenCalled()
   })
 
-  it("lists only known, shipped capabilities: unknown ids stored in PlatformSetting are ignored", async () => {
-    m.stored = { open: ["teleportation", "sectors"] }
+  it("lists only known, shipped beta capabilities: unknown and graduated ids stored in PlatformSetting are ignored", async () => {
+    m.stored = { open: ["teleportation", "sectors", "sectorLeaders", "shiftSwaps"] }
     const { GET } = await import("@/app/api/super-admin/beta-capabilities/route")
-    // sectors ships with #1147: it is open; the unknown id is not.
-    expect(await (await GET()).json()).toEqual({ open: ["sectors"] })
+    // Sectors and sector leaders left the beta (#1311); shift swaps are still openable.
+    expect(await (await GET()).json()).toEqual({ open: ["shiftSwaps"] })
   })
 
-  it("refuses to open a capability this version does not ship", async () => {
+  it("refuses to open a capability this version does not ship, or a graduated one", async () => {
     const { PUT } = await import("@/app/api/super-admin/beta-capabilities/route")
-    expect((await PUT(put({ open: ["sectors", "teleportation"] }))).status).toBe(400)
+    expect((await PUT(put({ open: ["shiftSwaps", "teleportation"] }))).status).toBe(400)
     expect((await PUT(put({ open: ["teleportation"] }))).status).toBe(400)
+    expect((await PUT(put({ open: ["sectors"] }))).status).toBe(400)
+    expect((await PUT(put({ open: ["sectorLeaders"] }))).status).toBe(400)
     expect((await PUT(put({ closed: true }))).status).toBe(400)
     expect(m.upsert).not.toHaveBeenCalled()
   })
 
   it("saving the same list changes and logs nothing, and keeps ids it cannot manage", async () => {
-    m.stored = { open: ["future-thing"] }
+    m.stored = { open: ["future-thing", "sectors"] }
     const { PUT } = await import("@/app/api/super-admin/beta-capabilities/route")
     const res = await PUT(put({ open: [] }))
     expect(res.status).toBe(200)
     expect(await res.json()).toEqual({ open: [] })
     expect(m.upsert).not.toHaveBeenCalled()
     expect(m.log).not.toHaveBeenCalled()
-    expect(m.stored).toEqual({ open: ["future-thing"] })
+    // The graduated id is kept untouched, like an unknown one.
+    expect(m.stored).toEqual({ open: ["future-thing", "sectors"] })
   })
 })
 
 describe("canAdoptBeta (#1168)", () => {
-  it("BE01: false while the capability is not open, whatever the organisation", async () => {
+  it("BE01: false while a beta capability is not open, whatever the organisation", async () => {
     const { canAdoptBeta } = await import("@/lib/beta-access")
-    expect(await canAdoptBeta("org-a", "sectors")).toBe(false)
+    expect(await canAdoptBeta("org-a", "shiftSwaps")).toBe(false)
   })
 
-  it("sectors ship with #1147: true once open for an organisation taking part, false when it does not", async () => {
-    m.stored = { open: ["sectors"] }
+  it("a beta capability is true once open for an organisation taking part, false when it does not", async () => {
+    m.stored = { open: ["shiftSwaps"] }
+    const { canAdoptBeta } = await import("@/lib/beta-access")
+    expect(await canAdoptBeta("org-a", "shiftSwaps")).toBe(true)
+    m.org = { active: true, suspendedAt: null, betaOptInAt: null }
+    expect(await canAdoptBeta("org-a", "shiftSwaps")).toBe(false)
+  })
+
+  it("#1311: sectors and sector leaders are true for an active organisation, without opt-in or open list", async () => {
+    m.org = { active: true, suspendedAt: null, betaOptInAt: null }
     const { canAdoptBeta } = await import("@/lib/beta-access")
     expect(await canAdoptBeta("org-a", "sectors")).toBe(true)
-    m.org = { active: true, suspendedAt: null, betaOptInAt: null }
+    expect(await canAdoptBeta("org-a", "sectorLeaders")).toBe(true)
+    m.stored = { open: [] }
+    expect(await canAdoptBeta("org-a", "sectors")).toBe(true)
+  })
+
+  it("false for a suspended or inactive organisation, even for sectors", async () => {
+    m.org = { active: true, suspendedAt: new Date(), betaOptInAt: new Date() }
+    const { canAdoptBeta } = await import("@/lib/beta-access")
     expect(await canAdoptBeta("org-a", "sectors")).toBe(false)
+    m.org = { active: false, suspendedAt: null, betaOptInAt: new Date() }
+    expect(await canAdoptBeta("org-a", "sectorLeaders")).toBe(false)
   })
 
   it("false for a missing organisation", async () => {

@@ -2,13 +2,14 @@ import { describe, it, expect, vi, beforeAll, afterAll, beforeEach } from "vites
 
 /**
  * Sectors grouping postes (#1147) against a real Postgres: the event option and its adoption lock
- * (A02, A03, A04), the beta gate on new adoptions only (BE01, BE06), the poste → sector link kept
- * on every shift through a rename, a move and new shifts (A05, A07), archiving, the
- * case-insensitive name, the organisation default (not retroactive) and duplication.
+ * (A02, A03, A04), the organisation gate on new adoptions only (BE01, BE06, and #1311: available to
+ * every active organisation without the beta), the poste → sector link kept on every shift through
+ * a rename, a move and new shifts (A05, A07), archiving, the case-insensitive name, the
+ * organisation default (not retroactive) and duplication.
  *
  * A04 holds the first sector's transaction on a barrier right after it locked the event (inside
- * the beta gate's check), sends a switch-off meanwhile, and checks the switch-off waited for the
- * lock and was then refused: one consistent result.
+ * the organisation gate's check), sends a switch-off meanwhile, and checks the switch-off waited
+ * for the lock and was then refused: one consistent result.
  */
 
 vi.mock("next/server", async (orig) => ({ ...(await orig<typeof import("next/server")>()), after: vi.fn() }))
@@ -31,7 +32,6 @@ vi.mock("@/lib/beta-access", async (orig) => {
 
 import { prisma } from "@/lib/prisma"
 import { getOrgClient } from "@/lib/prisma-org"
-import { BETA_SETTING_KEY } from "@/lib/beta-capabilities"
 
 const url = process.env.DATABASE_URL
 const tag = `int-sectors-${Date.now()}`
@@ -43,7 +43,6 @@ const sleep = (ms: number) => new Promise((resolve) => setTimeout(resolve, ms))
 
 describe.skipIf(!url)("sectors on Postgres (#1147)", () => {
   let orgId = ""
-  let previousSetting: unknown = undefined
 
   const routes = async () => ({
     sectors: await import("@/app/api/admin/events/[id]/sectors/route"),
@@ -58,9 +57,9 @@ describe.skipIf(!url)("sectors on Postgres (#1147)", () => {
     org: await import("@/app/api/admin/settings/organization/route"),
   })
 
-  const setGate = async (open: boolean, optedIn = true) => {
-    await prisma.platformSetting.upsert({ where: { key: BETA_SETTING_KEY }, create: { key: BETA_SETTING_KEY, value: { open: open ? ["sectors"] : [] } }, update: { value: { open: open ? ["sectors"] : [] } } })
-    await prisma.organization.update({ where: { id: orgId }, data: { betaOptInAt: optedIn ? new Date() : null } })
+  /** The organisation gate of a new adoption: active and not suspended (#1311). */
+  const setOrgAvailable = async (available: boolean) => {
+    await prisma.organization.update({ where: { id: orgId }, data: { active: available } })
   }
 
   let n = 0
@@ -84,7 +83,6 @@ describe.skipIf(!url)("sectors on Postgres (#1147)", () => {
   }
 
   beforeAll(async () => {
-    previousSetting = (await prisma.platformSetting.findUnique({ where: { key: BETA_SETTING_KEY } }))?.value
     const org = await prisma.organization.create({ data: { name: "Org sectors", slug: `${tag}-org` } })
     orgId = org.id
     guard.value = { db: getOrgClient(org.id), organizationId: org.id, session: { user: { id: "adm-test", email: "adm@example.org" } } }
@@ -92,12 +90,10 @@ describe.skipIf(!url)("sectors on Postgres (#1147)", () => {
 
   beforeEach(async () => {
     gateHook.fn = null
-    await setGate(true)
+    await setOrgAvailable(true)
   })
 
   afterAll(async () => {
-    if (previousSetting === undefined) await prisma.platformSetting.deleteMany({ where: { key: BETA_SETTING_KEY } })
-    else await prisma.platformSetting.update({ where: { key: BETA_SETTING_KEY }, data: { value: previousSetting as object } })
     await prisma.organization.deleteMany({ where: { slug: { startsWith: tag } } })
     await prisma.$disconnect()
   })
@@ -119,28 +115,30 @@ describe.skipIf(!url)("sectors on Postgres (#1147)", () => {
     expect(await prisma.sector.count({ where: { eventId: id } })).toBe(0)
   })
 
-  it("refuses a sector while the option is off, and turning it on while the capability is closed (BE01)", async () => {
+  it("refuses a sector while the option is off; turning it on needs no beta, only an available organisation (BE01, #1311)", async () => {
     const id = await newEvent()
     expect((await r.create(id, "Parking")).status).toBe(409)
-    await setGate(false)
-    expect((await r.mode(id, true)).status).toBe(403)
-    await setGate(true, false)
+    await setOrgAvailable(false)
     expect((await r.mode(id, true)).status).toBe(403)
     expect(await eventState(id)).toEqual({ sectorsEnabled: false, sectorsAdoptedAt: null })
+    await setOrgAvailable(true)
+    expect((await r.mode(id, true)).status).toBe(200)
   })
 
-  it("refuses the first sector of an event whose option was on when the capability closed, but keeps full use once adopted (BE06)", async () => {
+  it("refuses a new adoption for an unavailable organisation, but an adopted event keeps full use (BE06, #1311)", async () => {
     const pending = await newEvent()
     const adopted = await newEvent()
     await r.mode(pending, true)
     await r.mode(adopted, true)
     expect((await r.create(adopted, "Parking")).status).toBe(201)
-    await setGate(false, false)
+    await setOrgAvailable(false)
     expect((await r.create(pending, "Parking")).status).toBe(403)
     expect((await eventState(pending)).sectorsAdoptedAt).toBeNull()
-    // Still allowed to switch the pending one off, and the adopted one keeps working.
-    expect((await r.mode(pending, false)).status).toBe(200)
+    // An event that already adopted sectors keeps full use.
     expect((await r.create(adopted, "Buvette")).status).toBe(201)
+    await setOrgAvailable(true)
+    // Still allowed to switch the pending one off.
+    expect((await r.mode(pending, false)).status).toBe(200)
   })
 
   it("A03: the first sector adopts sectors; every sector archived, the structure stays and switching off is refused", async () => {
@@ -315,12 +313,13 @@ describe.skipIf(!url)("sectors on Postgres (#1147)", () => {
     const res = await events.POST(request("/api/admin/events", "POST", { title: `Nouveau ${tag}`, startDate: "2030-07-01", endDate: "2030-07-01" }))
     expect(res.status).toBe(201)
     expect((await res.json()).sectorsEnabled).toBe(true)
-    // The capability closed: a new event starts without, and the default cannot be turned on again.
-    await setGate(false)
+    // An unavailable organisation: a new event starts without, and the default cannot be turned on again.
+    await setOrgAvailable(false)
     const closed = await events.POST(request("/api/admin/events", "POST", { title: `Fermé ${tag}`, startDate: "2030-07-01", endDate: "2030-07-01" }))
     expect((await closed.json()).sectorsEnabled).toBe(false)
     expect((await org.PATCH(request("/api/admin/settings/organization", "PATCH", { sectorsDefault: false }))).status).toBe(200)
     expect((await org.PATCH(request("/api/admin/settings/organization", "PATCH", { sectorsDefault: true }))).status).toBe(403)
+    await setOrgAvailable(true)
   })
 
   it("duplication copies the sectors, the poste links and the adoption, with fresh sectors", async () => {

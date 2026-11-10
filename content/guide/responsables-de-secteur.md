@@ -2,7 +2,7 @@
 roles: [admin]
 group: preparer
 order: 110
-summary: Désigner des bénévoles responsables d'un poste : un lien personnel, sans compte, leur montre qui est inscrit sur ce poste.
+summary: Désigner des bénévoles responsables d'un poste ou de tout un secteur : un lien personnel montre qui est inscrit.
 related: [suivre-les-inscriptions, ou-manque-t-il-du-monde]
 legacy: [admin#responsables-de-secteur]
 aliases: []
@@ -28,9 +28,9 @@ Désignez un ou plusieurs bénévoles responsables d'un poste (ex. « Bar »). C
 - La fiche du bénévole concerné (**Membres**) reçoit automatiquement l'étiquette « responsable »
 - Les volontaires confirmés du poste voient le **nom** de son ou ses responsables (« Responsable du poste : … ») sur leur page **Mes inscriptions**, dans les rappels automatiques et sur le planning individuel imprimé. Jamais son email ni son téléphone : pour que les volontaires puissent l'appeler, indiquez-le comme contact du créneau ou comme **Contact le jour J**. Rien n'apparaît sur la page d'inscription
 
-## Confier tout un secteur (bêta)
+## <a id="confier-tout-un-secteur-beta"></a>Confier tout un secteur
 
-Dans un événement qui [utilise des secteurs](gerer-les-postes.md), un responsable peut suivre **tout un secteur** plutôt qu'un seul poste : le responsable du secteur « Parking » voit tous ses postes, par exemple « Parking Nord », « Parking Sud » et « École ». Cette possibilité fait partie des fonctions bêta : elle apparaît quand la fonction **Responsables de secteur** est active pour votre organisation (**Paramètres**).
+Dans un événement qui [utilise des secteurs](gerer-les-postes.md), un responsable peut suivre **tout un secteur** plutôt qu'un seul poste : le responsable du secteur « Parking » voit tous ses postes, par exemple « Parking Nord », « Parking Sud » et « École ». Cette possibilité apparaît dès que l'événement utilise des secteurs.
 
 - Dans un tel événement, la page s'appelle **Responsables de poste et de secteur** et classe les responsables par secteur : pour chaque secteur, ses postes, la personne responsable de tout le secteur, puis les responsables de ses postes. Les postes qui ne sont dans aucun secteur viennent en dernier
 - **+ Ajouter un responsable** demande d'abord **Responsable de** : **Tout un secteur** (choisissez le secteur dans la liste) ou **Un poste précis** (comme dans un événement sans secteurs)

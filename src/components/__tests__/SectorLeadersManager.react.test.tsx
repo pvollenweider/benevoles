@@ -144,10 +144,10 @@ describe("SectorLeadersManager — poste and sector leaders (#1169)", () => {
     expect((screen.getByRole("combobox", { name: "Poste" }) as HTMLInputElement).value).toBe("Bar")
   })
 
-  it("no choice while the beta capability is closed: poste leaders only, and says why", () => {
+  it("no sector choice while the organisation is unavailable: poste leaders only, and says why", () => {
     render(<SectorLeadersManager eventId="e" roleNames={[]} initialLeaders={[]} sectors={{ ...sectors, canAdd: false }} />)
     fireEvent.click(screen.getByRole("button", { name: "+ Ajouter un responsable" }))
     expect(screen.queryByRole("group", { name: "Responsable de" })).toBeNull()
-    expect(screen.getByText(/fait partie des fonctions bêta/)).toBeInTheDocument()
+    expect(screen.getByText(/demande un événement qui utilise des secteurs/)).toBeInTheDocument()
   })
 })

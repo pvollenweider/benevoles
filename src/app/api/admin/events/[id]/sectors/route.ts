@@ -8,10 +8,10 @@ import { createSector } from "@/lib/sector-adoption"
 import { sectorName, SECTOR_NAME_MAX, SECTOR_NAME_TAKEN_ERROR } from "@/lib/sectors"
 
 /**
- * The sectors of an event (#1147, beta). GET lists them, archived ones included, with the event's
+ * The sectors of an event (#1147). GET lists them, archived ones included, with the event's
  * mode. POST saves a new one; the first one adopts sectors for the event, in the same transaction
  * and under the event's row lock (src/lib/sector-adoption.ts): refused while the option is off or
- * the beta capability cannot be adopted, unless the event already adopted sectors.
+ * the organisation is not available, unless the event already adopted sectors.
  */
 
 const SECTOR_SELECT = { id: true, name: true, displayOrder: true, archivedAt: true } as const

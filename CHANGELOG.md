@@ -24,6 +24,7 @@ Format basé sur [Keep a Changelog](https://keepachangelog.com/fr/1.0.0/).
 
 ### Modifié
 
+- Les secteurs et les responsables de secteur sont disponibles pour toutes les organisations. L'option « Organiser les postes par secteurs » se choisit toujours événement par événement, désactivée par défaut, sans participation à la bêta ni ouverture par l'opérateur ; la valeur de départ des nouveaux événements s'applique de la même façon. Les quatre autres fonctions bêta (échanges de créneaux, protection des pauses et de la charge, disponibilités datées, proposition d'affectations) gardent leur portail inchangé.
 - Les postes ont une couleur par type, la même d'une organisation à l'autre (accueil en bleu, secours en rouge, buvette en ambre…) ; la couleur choisie par l'organisateur reste prioritaire, et le champ Poste propose une vingtaine d'exemples réels au lieu de huit.
 - Les pages par public parlent aussi de staff, d'équipe et de volontaires selon le contexte, et une charte fixe l'usage de ces mots.
 - Les guides organisateurs emploient aussi staff, équipe et volontaires là où le contexte s'y prête, en gardant « bénévole » pour tout ce qui reprend l'interface.

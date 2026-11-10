@@ -87,8 +87,8 @@ export async function PATCH(req: Request) {
     updates.shiftRosterDefault = body.shiftRosterDefault
   }
 
-  // Sectors for the next new events (#1147, beta): turning it on needs the capability open for the
-  // organisation; turning it off is always possible. No existing event changes.
+  // Sectors for the next new events (#1147): turning it on needs the organisation available;
+  // turning it off is always possible. No existing event changes.
   if (typeof body.sectorsDefault === "boolean") {
     if (body.sectorsDefault && !(await canAdoptBeta(organizationId, "sectors"))) {
       return NextResponse.json({ error: SECTORS_CLOSED_ERROR }, { status: 403 })

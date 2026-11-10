@@ -7,7 +7,7 @@ import { auth } from "@/auth"
 import { prisma } from "@/lib/prisma"
 import BetaCapabilitiesForm from "@/components/super-admin/BetaCapabilitiesForm"
 import { readOpenBetaCapabilities } from "@/lib/beta-access"
-import { BETA_CAPABILITIES, BETA_CAPABILITY_IDS } from "@/lib/beta-capabilities"
+import { BETA_CAPABILITIES, OPENABLE_CAPABILITY_IDS } from "@/lib/beta-capabilities"
 import { APP_TIME_ZONE } from "@/lib/time-zone"
 
 export const dynamic = "force-dynamic"
@@ -26,7 +26,7 @@ export default async function BetaPage() {
       select: { id: true, name: true, slug: true, betaOptInAt: true },
     }),
   ])
-  const capabilities = BETA_CAPABILITY_IDS.map((id) => ({ id, ...BETA_CAPABILITIES[id] }))
+  const capabilities = OPENABLE_CAPABILITY_IDS.map((id) => ({ id, ...BETA_CAPABILITIES[id] }))
   const since = (d: Date) => d.toLocaleDateString("fr-FR", { timeZone: APP_TIME_ZONE, day: "numeric", month: "long", year: "numeric" })
 
   return (

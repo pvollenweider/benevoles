@@ -27,7 +27,7 @@
     },
     {
       "id": "beta-operator",
-      "transcript": "Dans l'espace super admin, ouvrons Fonctions bêta depuis le menu Super Admin. La page liste les fonctions disponibles dans cette version, avec une phrase pour chacune. Cochons Secteurs, puis Échanges de créneaux, et enregistrons. Une fonction ouverte peut être adoptée par les organisations qui participent à la bêta. Pour l'instant, aucune organisation n'y participe. Chaque changement est inscrit au journal de l'opérateur.",
+      "transcript": "Dans l'espace super admin, ouvrons Fonctions bêta depuis le menu Super Admin. La page liste les fonctions disponibles dans cette version, avec une phrase pour chacune. Cochons Échanges de créneaux, et enregistrons. Une fonction ouverte peut être adoptée par les organisations qui participent à la bêta. Pour l'instant, aucune organisation n'y participe. Chaque changement est inscrit au journal de l'opérateur.",
       "fallbackDurationMs": 31640
     },
     {
@@ -37,7 +37,7 @@
     },
     {
       "id": "beta-event",
-      "transcript": "Participer à la bêta ne change aucun événement, et rien n'est envoyé aux bénévoles. Ouvrons les informations du Festival de Montvert. Deux cartes proposent maintenant leur option, encore désactivée : Échanges de créneaux et Secteurs. Chaque événement choisit lui-même ce qu'il adopte.",
+      "transcript": "Participer à la bêta ne change aucun événement, et rien n'est envoyé aux bénévoles. Ouvrons les informations du Festival de Montvert. La carte Échanges de créneaux propose maintenant son option, encore désactivée. Chaque événement choisit lui-même ce qu'il adopte.",
       "fallbackDurationMs": 22240
     },
     {

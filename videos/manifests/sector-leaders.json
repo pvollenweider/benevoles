@@ -70,7 +70,7 @@
     },
     {
       "id": "leaders-sector-scope",
-      "transcript": "Voyons maintenant un événement organisé par secteurs, le Festival de Montvert. Sa page s'appelle Responsables de poste et de secteur, et classe les responsables par secteur. En ajoutant un responsable, choisissez d'abord Responsable de. Tout un secteur, ou Un poste précis, comme dans un événement sans secteurs. Confions tout le secteur Parking à Paul. Renseignons son nom et son email, puis ajoutons et envoyons son lien. Cette possibilité fait partie des fonctions bêta.",
+      "transcript": "Voyons maintenant un événement organisé par secteurs, le Festival de Montvert. Sa page s'appelle Responsables de poste et de secteur, et classe les responsables par secteur. En ajoutant un responsable, choisissez d'abord Responsable de. Tout un secteur, ou Un poste précis, comme dans un événement sans secteurs. Confions tout le secteur Parking à Paul. Renseignons son nom et son email, puis ajoutons et envoyons son lien. Cette possibilité est disponible dès que l'événement utilise des secteurs.",
       "fallbackDurationMs": 36810
     },
     {
@@ -94,7 +94,7 @@
       "Le lien d'un responsable est confidentiel : il donne accès aux coordonnées de l'équipe et ne s'affiche jamais sur une page publique.",
       "L'espace du responsable est en lecture seule et ne montre que son poste, ou les postes de son secteur.",
       "Être responsable ne remplace pas une inscription et ne publie pas ses coordonnées comme contact du créneau.",
-      "Confier tout un secteur fait partie des fonctions bêta et demande un événement organisé par secteurs."
+      "Confier tout un secteur demande un événement organisé par secteurs."
     ]
   },
   "continuousPauseTags": false

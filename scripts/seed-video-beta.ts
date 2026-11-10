@@ -2,16 +2,17 @@
 // SPDX-License-Identifier: AGPL-3.0-only
 
 /**
- * Fixtures of the beta videos (#1168, #1147, #1169, #1174): BETA_ACCESS, SECTORS, SHIFT_SWAPS and
- * the sector part of SECTOR_LEADERS. One dedicated synthetic organisation, « Association du
- * Festival de Montvert » (`video-beta`, slug `formation-beta`), with its owner and a separate
- * operator account (super admin) for the « Fonctions bêta » page. Never the demo organisation.
+ * Fixtures of the advanced-feature videos (#1168, #1147, #1169, #1174): BETA_ACCESS, SECTORS,
+ * SHIFT_SWAPS and the sector part of SECTOR_LEADERS. One dedicated synthetic organisation,
+ * « Association du Festival de Montvert » (`video-beta`, slug `formation-beta`), with its owner and
+ * a separate operator account (super admin) for the « Fonctions bêta » page. Never the demo
+ * organisation.
  *
- * The beta gate is set the way the app reads it (src/lib/beta-capabilities.ts, beta-access.ts):
+ * Only the features still in the beta need the gate (src/lib/beta-capabilities.ts, beta-access.ts):
  * the operator's open list in PlatformSetting `beta.capabilities` ({ open: [...] }, level 1) and
- * `Organization.betaOptInAt` (level 2). Each scenario opens only the capabilities its video needs.
- * The open list is platform-wide: scripts/seed-demo.ts removes it again, so the demo videos never
- * show the « Fonctions bêta » card.
+ * `Organization.betaOptInAt` (level 2). Sectors and sector leaders left the beta in #1311: their
+ * seeds run without either, as any active organisation. The open list is platform-wide:
+ * scripts/seed-demo.ts removes it again, so the demo videos never show the « Fonctions bêta » card.
  *
  * Reset guards: an existing `video-beta` organisation is emptied only when every account, member
  * and event in it is one of this fixture's (exact ids and example.org addresses); the operator
@@ -152,7 +153,8 @@ async function createEvent(db: Db, options: {
 
 /**
  * BETA_ACCESS: nothing open, the organisation not taking part. One published event without
- * sectors or swaps: once the organisation joins, its information page offers both options.
+ * sectors or swaps: once the organisation joins, its information page offers the swaps option
+ * (the sectors card is now always offered, since #1311).
  */
 export async function seedVideoBetaAccess(db: Db) {
   await resetOrganization(db)
@@ -171,14 +173,15 @@ export async function seedVideoBetaAccess(db: Db) {
 }
 
 /**
- * SECTORS: « Secteurs » open, the organisation taking part. The event starts tomorrow (so « Jour J »
- * is offered today), with four postes and their registrations but sectors still off: the video
- * turns the option on, creates « Parking » and « Backline », adds a poste inside, then moves the
- * two parking postes. « Bar Grande Scène » and « Accueil Chapiteau » stay in « Autres postes ».
+ * SECTORS: sectors are available to every active organisation since #1311, so no beta gate is
+ * needed. The event starts tomorrow (so « Jour J » is offered today), with four postes and their
+ * registrations but sectors still off: the video turns the option on, creates « Parking » and
+ * « Backline », adds a poste inside, then moves the two parking postes. « Bar Grande Scène » and
+ * « Accueil Chapiteau » stay in « Autres postes ».
  */
 export async function seedVideoSectors(db: Db) {
   await resetOrganization(db)
-  await setBeta(db, ["sectors"], true)
+  await setBeta(db, [], false)
   const firstDay = addDays(localToday(new Date()), 1)
   await createEvent(db, {
     scenario: "sectors", firstDay, days: 2, sectors: null,
@@ -196,18 +199,18 @@ export async function seedVideoSectors(db: Db) {
       { roleName: "Accueil Chapiteau", colorKey: "sky", locationDetails: "Entrée du Chapiteau", shifts: [{ day: 1, start: "14:00", end: "18:00", capacity: 3 }] },
     ],
   })
-  console.log("✓ Sectors fixture: « Secteurs » open, organisation taking part, « Festival de Montvert » from tomorrow, sectors off, 4 postes, 5 confirmed people on the two parking postes")
+  console.log("✓ Sectors fixture: no beta needed, « Festival de Montvert » from tomorrow, sectors off, 4 postes, 5 confirmed people on the two parking postes")
 }
 
 /**
- * SECTOR_LEADERS (sector part), after scripts/seed-demo.ts: « Secteurs » and « Responsables de
- * secteur » open, the organisation taking part, an event that adopted sectors: « Parking »
- * (Parking Nord, Parking Mairie), « Backline » (Backline Grande Scène) and « Bar Grande Scène »
- * without sector. No leader yet: the video names Paul for the whole « Parking » sector.
+ * SECTOR_LEADERS (sector part), after scripts/seed-demo.ts: no beta needed since #1311, an event
+ * that adopted sectors: « Parking » (Parking Nord, Parking Mairie), « Backline » (Backline Grande
+ * Scène) and « Bar Grande Scène » without sector. No leader yet: the video names Paul for the
+ * whole « Parking » sector.
  */
 export async function seedVideoSectorLeadersBeta(db: Db) {
   await resetOrganization(db)
-  await setBeta(db, ["sectors", "sectorLeaders"], true)
+  await setBeta(db, [], false)
   const firstDay = saturdayAfter(localToday(new Date()), 14)
   await createEvent(db, {
     scenario: "leaders", firstDay, days: 2, sectors: ["Parking", "Backline"],
@@ -223,19 +226,19 @@ export async function seedVideoSectorLeadersBeta(db: Db) {
     ],
   })
   assert.equal(await db.sectorLeader.count({ where: { eventId: BETA_EVENT.id } }), 0)
-  console.log("✓ Sector leaders fixture: event with sectors Parking and Backline, no leader; « Responsables de secteur » open and organisation taking part")
+  console.log("✓ Sector leaders fixture: event with sectors Parking and Backline, no leader; no beta needed")
 }
 
 /**
- * SHIFT_SWAPS: « Secteurs » and « Échanges de créneaux » open, the organisation taking part. The
- * event (a Saturday and Sunday at least two weeks ahead) adopted sectors and has swaps OFF: the
- * video turns them on. Same poste: Léa (Bar Grande Scène, Saturday) and Jules (two Sunday shifts
- * of the same bar). Same sector, two postes: Noah (Accueil Scène du Lac, Saturday) and Lou
+ * SHIFT_SWAPS: « Échanges de créneaux » open, the organisation taking part (sectors need no beta
+ * since #1311). The event (a Saturday and Sunday at least two weeks ahead) adopted sectors and has
+ * swaps OFF: the video turns them on. Same poste: Léa (Bar Grande Scène, Saturday) and Jules (two
+ * Sunday shifts of the same bar). Same sector, two postes: Noah (Accueil Scène du Lac, Saturday) and Lou
  * (Accueil Grande Scène, Sunday), validated by the organisation once « Valider chaque échange » is on.
  */
 export async function seedVideoShiftSwaps(db: Db) {
   await resetOrganization(db)
-  await setBeta(db, ["sectors", "shiftSwaps"], true)
+  await setBeta(db, ["shiftSwaps"], true)
   const firstDay = saturdayAfter(localToday(new Date()), 14)
   const { registrations } = await createEvent(db, {
     scenario: "swaps", firstDay, days: 2, sectors: ["Bars", "Accueil"],

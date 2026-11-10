@@ -56,13 +56,13 @@ Avec un taux, le [résumé de l'événement](rapports-badges-et-resume.md#resume
 
 ## Fonctions bêta
 
-Section **Fonctions bêta**, réservée aux propriétaires. Elle n'apparaît que lorsqu'une fonction avancée est ouverte à l'essai, ou si votre organisation participe déjà à la bêta. La carte liste les fonctions ouvertes, avec une phrase pour chacune (par exemple **Secteurs** : regrouper plusieurs postes sous une même coordination, ou **Échanges de créneaux** : permettre à deux bénévoles inscrits sur le même poste d'échanger leurs créneaux).
+Section **Fonctions bêta**, réservée aux propriétaires. Elle n'apparaît que lorsqu'une fonction avancée est ouverte à l'essai, ou si votre organisation participe déjà à la bêta. La carte liste les fonctions ouvertes, avec une phrase pour chacune (par exemple **Échanges de créneaux** : permettre à deux bénévoles inscrits sur le même poste d'échanger leurs créneaux).
 
 L'interrupteur **Essayer les fonctions avancées en bêta**, désactivé par défaut, inscrit votre organisation : la date et la personne qui l'a activé s'affichent au-dessus. L'activer ne change aucun événement et n'envoie rien aux bénévoles ; chaque fonction se choisit ensuite dans les paramètres de l'événement. Pour arrêter, désactivez l'interrupteur : aucune nouvelle fonction bêta ne peut plus être activée, mais ce que vos événements utilisent déjà continue de fonctionner et rien n'est supprimé. Les organisateurs voient la ligne **Participation à la bêta** en lecture seule.
 
 ## Secteurs, paramètre par défaut
 
-Section **Secteurs**, réservée aux propriétaires et visible tant que votre organisation peut utiliser les secteurs (voir [Fonctions bêta](#fonctions-beta)), ou tant que la case est cochée. La case **Organiser les postes par secteurs pour les nouveaux événements** donne la valeur de départ de cette option dans les événements créés ensuite, sur une page blanche, depuis un modèle ou par une copie dont les paramètres ne sont pas repris. Cochez-la ou décochez-la, puis **Enregistrer**. Les événements existants ne changent pas. Si les secteurs ne sont plus ouverts à votre organisation, la case reste sans effet (la carte le dit) et peut seulement être décochée. Voir [Organiser les postes par secteurs](gerer-les-postes.md#organiser-les-postes-par-secteurs-beta).
+Section **Secteurs**, réservée aux propriétaires et visible tant que votre organisation peut utiliser les secteurs, ou tant que la case est cochée. La case **Organiser les postes par secteurs pour les nouveaux événements** donne la valeur de départ de cette option dans les événements créés ensuite, sur une page blanche, depuis un modèle ou par une copie dont les paramètres ne sont pas repris. Cochez-la ou décochez-la, puis **Enregistrer**. Les événements existants ne changent pas. Si l'espace de votre organisation n'est plus actif, la case reste sans effet (la carte le dit) et peut seulement être décochée. Voir [Organiser les postes par secteurs](gerer-les-postes.md#organiser-les-postes-par-secteurs).
 
 ## Protection des pauses et de la charge, valeurs par défaut
 

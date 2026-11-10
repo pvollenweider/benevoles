@@ -31,8 +31,8 @@ export default async function SectorLeadersPage({ params }: { params: Promise<{ 
     select: { id: true, title: true, sectorsEnabled: true, sectorsAdoptedAt: true, sectors: { select: { id: true, name: true, displayOrder: true, archivedAt: true } } },
   })
   if (!event) notFound()
-  // Sector leaders (#1169): only in an event that adopted sectors; a new one also needs the beta
-  // capability « sectorLeaders ». Without sectors the screen is the one of before #1169.
+  // Sector leaders (#1169): only in an event that adopted sectors, and while the organisation is
+  // available. Without sectors the screen is the one of before #1169.
   const adopted = sectorsAdopted(event)
 
   const [leaders, shifts, registrations, liveShifts, canAddSectorLeader] = await Promise.all([
