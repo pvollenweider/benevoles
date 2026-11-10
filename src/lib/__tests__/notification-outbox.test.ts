@@ -397,7 +397,7 @@ describe("outboxHealth (#316)", () => {
   it("healthy when nothing failed, nothing stuck", async () => {
     m.findMany.mockResolvedValue([])
     m.count.mockResolvedValue(0)
-    m.findFirst.mockResolvedValue({ createdAt: new Date(now.getTime() - 5 * 60000) })
+    m.findFirst.mockResolvedValue({ nextAttemptAt: new Date(now.getTime() - 5 * 60000) })
     expect(await outboxHealth(now)).toEqual({
       failedLastDay: 0, recipientFailuresLastDay: 0, otherFailuresLastDay: 0, oldestPendingMinutes: 5, staleClaims: 0, healthy: true, stuck: false,
     })
@@ -411,13 +411,24 @@ describe("outboxHealth (#316)", () => {
 
     m.findMany.mockResolvedValue([])
     m.count.mockResolvedValue(0)
-    m.findFirst.mockResolvedValue({ createdAt: new Date(now.getTime() - 3 * 60 * 60000) })
+    m.findFirst.mockResolvedValue({ nextAttemptAt: new Date(now.getTime() - 3 * 60 * 60000) })
     expect(await outboxHealth(now)).toMatchObject({ oldestPendingMinutes: 180, healthy: false, stuck: true })
 
     m.findMany.mockResolvedValue([])
     m.count.mockResolvedValue(2)
     m.findFirst.mockResolvedValue(null)
     expect(await outboxHealth(now)).toMatchObject({ staleClaims: 2, healthy: false, stuck: true })
+  })
+
+  it("does not count an email waiting for its scheduled retry as late (regression 2026-11-10)", async () => {
+    m.findMany.mockResolvedValue([])
+    m.count.mockResolvedValue(0)
+    m.findFirst.mockResolvedValue(null)
+    expect(await outboxHealth(now)).toMatchObject({ oldestPendingMinutes: null, healthy: true, stuck: false })
+    // Only rows already due are read, oldest due first.
+    const args = m.findFirst.mock.calls.at(-1)![0]
+    expect(args.where).toMatchObject({ status: { in: ["pending", "sending"] }, nextAttemptAt: { lte: now } })
+    expect(args.orderBy).toEqual({ nextAttemptAt: "asc" })
   })
 
   // Regression: one row that gave up (already reported when it failed) made the hourly cron alert

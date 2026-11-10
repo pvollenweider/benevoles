@@ -13,6 +13,12 @@ describe("outboxFailureGroup", () => {
     expect(outboxFailureGroup(stored("rejected_permanent", "domain_not_found", 550, "5.1.2"))).toBe("recipient")
   })
 
+  it("counts a row that gave up on temporary address refusals as a recipient failure", () => {
+    // Regression, 2026-11-10: six « 450 4.1.2 domain not found » then gave up, shown as an outage.
+    expect(outboxFailureGroup(stored("failed_temporary", "domain_not_found", 450, "4.1.2"))).toBe("recipient")
+    expect(outboxFailureGroup(stored("failed_temporary", "mailbox_unknown", 450, "4.1.1"))).toBe("recipient")
+  })
+
   it("keeps relay, policy, timeout and unknown reasons as other failures", () => {
     expect(outboxFailureGroup(stored("rejected_permanent", "policy_rejected", 550, "5.7.1"))).toBe("other")
     expect(outboxFailureGroup(stored("rejected_permanent", "relay_error", 550, "5.0.0"))).toBe("other")
@@ -20,8 +26,6 @@ describe("outboxFailureGroup", () => {
     expect(outboxFailureGroup(stored("failed_temporary", "other", 451, "4.7.1"))).toBe("other")
     // A full mailbox is temporary, not evidence that the address is mistyped.
     expect(outboxFailureGroup(stored("rejected_permanent", "mailbox_full", 550, "5.2.2"))).toBe("other")
-    // An address reason under a temporary outcome is not a definitive address refusal.
-    expect(outboxFailureGroup(stored("failed_temporary", "domain_not_found", 450, "4.1.2"))).toBe("other")
   })
 
   it("falls back to other for anything that is not a structured SMTP rejection", () => {

@@ -28,7 +28,10 @@ const RECIPIENT_ADDRESS_REASONS: ReadonlySet<string> = new Set<SmtpReason>([
 export function outboxFailureGroup(lastError: string | null | undefined): OutboxFailureGroup {
   if (!lastError) return "other"
   const [prefix, outcome, reason] = lastError.split(":")
-  return prefix === "smtp" && outcome === "rejected_permanent" && RECIPIENT_ADDRESS_REASONS.has(reason)
+  // A temporary refusal with an address reason counts too: the health page only reads rows that
+  // gave up after every retry, and a domain still « not found » hours later (450 4.1.2 on
+  // 2026-11-10) is a mistyped address, not a delivery outage.
+  return prefix === "smtp" && (outcome === "rejected_permanent" || outcome === "failed_temporary") && RECIPIENT_ADDRESS_REASONS.has(reason)
     ? "recipient"
     : "other"
 }

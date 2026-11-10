@@ -464,8 +464,8 @@ export type OutboxHealth = {
 export const MAX_PENDING_AGE_MINUTES = 120
 
 /**
- * Health of the queue (#316): rows that gave up in the last day, split by cause, age of the oldest
- * undelivered row, claims abandoned by a crashed delivery. The health page shows it all; the hourly
+ * Health of the queue (#316): rows that gave up in the last day, split by cause, how late the oldest
+ * row already due is, claims abandoned by a crashed delivery. The health page shows it all; the hourly
  * cron sends it to Sentry only when delivery is stuck. A refusal caused by the recipient's address
  * doesn't make the queue unhealthy: it says nothing about the platform.
  */
@@ -475,17 +475,20 @@ export async function outboxHealth(now: Date = new Date()): Promise<OutboxHealth
       where: { status: "failed", createdAt: { gte: new Date(now.getTime() - 24 * 60 * 60 * 1000) } },
       select: { lastError: true },
     }),
+    // Only rows already due: an email waiting for its scheduled retry (a back-off after a
+    // temporary refusal, or a sending limit) is not late. Before, a mistyped domain retried for
+    // hours raised « Notification outbox unhealthy » (2026-11-10).
     prisma.notificationOutbox.findFirst({
-      where: { status: { in: ["pending", "sending"] } },
-      orderBy: { createdAt: "asc" },
-      select: { createdAt: true },
+      where: { status: { in: ["pending", "sending"] }, nextAttemptAt: { lte: now } },
+      orderBy: { nextAttemptAt: "asc" },
+      select: { nextAttemptAt: true },
     }),
     prisma.notificationOutbox.count({ where: { status: "sending", claimedAt: { lt: new Date(now.getTime() - STALE_CLAIM_MS) } } }),
   ])
   const failedLastDay = failedRows.length
   const recipientFailuresLastDay = failedRows.filter((row) => outboxFailureGroup(row.lastError) === "recipient").length
   const otherFailuresLastDay = failedLastDay - recipientFailuresLastDay
-  const oldestPendingMinutes = oldestPending ? Math.floor((now.getTime() - oldestPending.createdAt.getTime()) / 60000) : null
+  const oldestPendingMinutes = oldestPending ? Math.floor((now.getTime() - oldestPending.nextAttemptAt.getTime()) / 60000) : null
   const stuck = staleClaims > 0 || (oldestPendingMinutes ?? 0) > MAX_PENDING_AGE_MINUTES
   const healthy = otherFailuresLastDay === 0 && !stuck
   return { failedLastDay, recipientFailuresLastDay, otherFailuresLastDay, oldestPendingMinutes, staleClaims, healthy, stuck }
