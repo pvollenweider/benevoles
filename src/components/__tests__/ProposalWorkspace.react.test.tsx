@@ -17,7 +17,15 @@ import type { ProposalPageData } from "@/lib/proposal-page-data"
 // « Proposition d'affectations » (#1172): the form, the launch, the follow-up and the result.
 const fetchMock = vi.fn()
 beforeEach(() => { Element.prototype.scrollIntoView = vi.fn(); vi.stubGlobal("fetch", fetchMock); fetchMock.mockReset(); refresh.mockReset(); vi.stubGlobal("crypto", { randomUUID: () => "uuid-12345678" }) })
-afterEach(() => { cleanup(); vi.unstubAllGlobals(); vi.useRealTimers() })
+afterEach(() => {
+  cleanup()
+  vi.unstubAllGlobals()
+  // jsdom 31 runs rAF callbacks and its focus fixup from one shared 60 Hz interval. A pending
+  // fixup keeps that interval alive; switching back to real timers before it ticks would strand
+  // it non-null in jsdom, so every later requestAnimationFrame() (announce()) would never run.
+  if (vi.isFakeTimers()) vi.runOnlyPendingTimers()
+  vi.useRealTimers()
+})
 
 const data = (extra: Partial<ProposalPageData> = {}): ProposalPageData => ({
   eventId: "evt",

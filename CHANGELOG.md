@@ -27,6 +27,7 @@ Format basé sur [Keep a Changelog](https://keepachangelog.com/fr/1.0.0/).
 - Les pages Tarifs, Pour qui et Logiciel de planning n'ont plus de colonne vide à côté de leur introduction.
 - Les plafonds d'envoi atteints indiquent aussi le type d'email retenu ou refusé (confirmation d'inscription, renvoi du lien personnel, retrait…), pour savoir ce qui les déclenche. Toujours ni adresse ni contenu. <!-- interne -->
 - Docker Compose : l'application n'écoute plus que sur la boucle locale de l'hôte (`127.0.0.1:3000`) par défaut. Un accès depuis une autre machine demande désormais de publier le port sur une interface privée et de passer par un proxy de confiance, documenté dans `docs/deploiement.md` ; exposé directement, le port 3000 permettait de falsifier `X-Forwarded-For` et de contourner les limites de débit par adresse.
+- Les tests passent à jsdom 31, la nouvelle version de l'environnement DOM simulé. <!-- interne -->
 
 ### Corrigé
 
