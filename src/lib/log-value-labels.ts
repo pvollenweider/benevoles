@@ -17,6 +17,7 @@ export const REGISTRATION_STATUS_LOG_LABELS: Record<RegistrationStatus, string> 
   waiting: "liste d'attente",
   offered: "place proposée",
   requested: "demande à traiter",
+  unconfirmed: "en attente de confirmation par email",
   cancelled: "annulée",
   refused: "refusée",
   deleted: "supprimée",

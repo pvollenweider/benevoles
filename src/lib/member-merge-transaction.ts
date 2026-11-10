@@ -219,6 +219,11 @@ export async function runMemberMerge(
     await tx.rosterConsent.deleteMany({
       where: { OR: [{ volunteerId: absorbId }, ...(movedEventIds.length ? [{ volunteerId: keepId, eventId: { in: movedEventIds } }] : [])] },
     })
+    // Pending public sign-ups waiting for their email confirmation (#1253) are not moved either: a
+    // merge does not prove the absorbed record's address. Its provisional places are cancelled (the
+    // rows stay for history) and the pending request goes; a later click on the old link does nothing.
+    await tx.registration.updateMany({ where: { volunteerId: absorbId, status: "unconfirmed" }, data: { status: "cancelled", signupConfirmationId: null } })
+    await tx.signupConfirmation.deleteMany({ where: { volunteerId: absorbId } })
 
     // 4. Turn the absorbed record into an inactive tombstone: no personal data left, mapped to
     // the kept record so old ids keep resolving (event-log-read.ts, member-activity-data.ts).

@@ -199,6 +199,9 @@ export default function RegistrationsManager({ eventId, initialRegistrations, sh
   // "N sélectionnée(s)" count already promises.
   const selectedRegs = registrations.filter((r) => selectedIds.has(r.id))
   const selectedActiveRegs = selectedRegs.filter((r) => r.status === "active")
+  // A provisional place waiting for its email confirmation (#1253) can be removed like a
+  // registration; the organizer cannot confirm it in the volunteer's place.
+  const selectedCancellableRegs = selectedRegs.filter((r) => r.status === "active" || r.status === "unconfirmed")
 
   function toggleSelected(id: string) {
     setSelectedIds((prev) => {
@@ -286,11 +289,11 @@ export default function RegistrationsManager({ eventId, initialRegistrations, sh
   }
 
   function handleBulkCancel() {
-    if (selectedActiveRegs.length === 0) return
-    const shiftIds = new Set(selectedActiveRegs.map((r) => r.shift.id))
-    const waitlisted = registrations.filter((r) => r.status !== "active" && shiftIds.has(r.shift.id)).length
+    if (selectedCancellableRegs.length === 0) return
+    const shiftIds = new Set(selectedCancellableRegs.map((r) => r.shift.id))
+    const waitlisted = registrations.filter((r) => (r.status === "waiting" || r.status === "offered") && shiftIds.has(r.shift.id)).length
     setPending({
-      recap: bulkCancelRecap({ ...bulkCancelCounts(selectedRegs), waitlisted: Math.min(waitlisted, selectedActiveRegs.length) }),
+      recap: bulkCancelRecap({ ...bulkCancelCounts(selectedRegs), waitlisted: Math.min(waitlisted, selectedCancellableRegs.length) }),
       run: holdBulkCancel,
     })
   }
@@ -305,7 +308,7 @@ export default function RegistrationsManager({ eventId, initialRegistrations, sh
   // one is already waiting joins it: one window for all of them, restarted, so no batch is
   // committed behind the person's back.
   async function holdBulkCancel() {
-    const rows = selectedActiveRegs
+    const rows = selectedCancellableRegs
     const ids = new Set(rows.map((r) => r.id))
     const all = [...held, ...rows]
     setPending(null)
@@ -577,7 +580,7 @@ export default function RegistrationsManager({ eventId, initialRegistrations, sh
           selectedCount={selectedIds.size}
           toCheckInCount={selectedToCheckIn.length}
           toUndoCount={selectedToUndo.length}
-          activeCount={selectedActiveRegs.length}
+          activeCount={selectedCancellableRegs.length}
           noneWithEmail={selectedRegs.every((r) => !r.volunteer.email)}
           noActiveWithEmail={selectedActiveRegs.every((r) => !r.volunteer.email)}
           busy={bulkBusy}

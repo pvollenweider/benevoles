@@ -134,6 +134,7 @@ export const APP_TOP_LEVEL_SEGMENTS: readonly string[] = [
   "benevoles-fete-de-village",
   "benevoles-manifestation-sportive",
   "blog",
+  "confirmation",
   "disponibilites",
   "doc",
   "fonctionnalites",

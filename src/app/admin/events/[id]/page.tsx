@@ -87,7 +87,7 @@ export default async function AdminEventPage({ params }: { params: Promise<{ id:
     (s, sh) => s + sh.registrations.filter((r) => (OCCUPYING_STATUSES as readonly string[]).includes(r.status)).length,
     0
   )
-  const places = placesSentence({ capacity: totalCapacity, confirmed: count("active"), requested: count("requested"), left: Math.max(0, totalCapacity - totalHeld) })
+  const places = placesSentence({ capacity: totalCapacity, confirmed: count("active"), requested: count("requested"), unconfirmed: count("unconfirmed"), left: Math.max(0, totalCapacity - totalHeld) })
   const staffing = staffingSummary(
     event.shifts.map((sh) => ({
       id: sh.id, roleName: sh.roleName, label: sh.label, date: sh.date.toISOString().slice(0, 10),

@@ -84,7 +84,7 @@ describe("public sign-up and the role limit", () => {
     expect(await res.json()).toMatchObject({ error: "Tu as déjà 2 créneaux « Loge », le maximum pour ce poste.", roleLimit: "Loge" })
     expect(m.txCreate).not.toHaveBeenCalled()
     expect(m.order.indexOf("lock:volunteer")).toBeLessThan(m.order.indexOf("limits"))
-    expect(m.txRegFindMany.mock.calls[0][0].where.status.in).toEqual(["active", "waiting", "offered", "requested"])
+    expect(m.txRegFindMany.mock.calls[0][0].where.status.in).toEqual(["active", "waiting", "offered", "requested", "unconfirmed"])
   })
 
   // AUTHZ-01: the count comes from the address's own registrations; without proof, nothing is said.

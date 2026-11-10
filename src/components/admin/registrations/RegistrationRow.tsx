@@ -111,6 +111,9 @@ export default function RegistrationRow({ reg, selected, onToggleSelected, onDec
         {reg.status === "requested"
           ? <span className="text-xs text-amber-900">Demande à traiter</span>
           : reg.status !== "active" && <StatusBadge status={reg.status} />}
+        {reg.status === "unconfirmed" && reg.confirmationDeadline && (
+          <span className="block text-xs text-gray-600 mt-0.5">Jusqu&apos;au {reg.confirmationDeadline}</span>
+        )}
         {reg.status === "waiting" && reg.waitingPosition != null && (
           <span className="ml-1 text-xs text-gray-500">position {reg.waitingPosition}</span>
         )}

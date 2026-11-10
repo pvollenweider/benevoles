@@ -11,6 +11,7 @@ import { isCronAuthorized } from "@/lib/cron-auth"
 import { prisma } from "@/lib/prisma"
 import { sendNotification } from "@/lib/notifications"
 import { promoteNextInWaitlist, reconcileWaitlists } from "@/lib/waitlist"
+import { expireSignupConfirmations } from "@/lib/signup-confirmation-server"
 import { sendPushToVolunteer } from "@/lib/push"
 import { reportError } from "@/lib/report-error"
 import { deliverOutbox, outboxHealth } from "@/lib/notifications/outbox"
@@ -171,6 +172,16 @@ async function run(req: Request) {
     await promoteNextInWaitlist(reg.shiftId).catch(reportError("waitlist.promote"))
   }
 
+  // Provisional places of public sign-ups whose email confirmation deadline passed (#1253):
+  // freed like a withdrawal, then offered to the waitlist of each shift.
+  const expiredConfirmations = await expireSignupConfirmations(now).catch((e) => {
+    reportError("signup_confirmation.expire")(e)
+    return null
+  })
+  for (const shiftId of expiredConfirmations?.shifts ?? []) {
+    await promoteNextInWaitlist(shiftId).catch(reportError("waitlist.promote"))
+  }
+
   // Catch up on promotions that failed after a cancellation: a free spot with people waiting.
   const waitlist = await reconcileWaitlists(now).catch((e) => {
     reportError("waitlist.reconcile")(e)
@@ -208,6 +219,7 @@ async function run(req: Request) {
     runAt: now.toISOString(),
     totals,
     expiredOffers: expiredOffers.length,
+    expiredConfirmations,
     waitlist,
     expiredSwaps,
     milestoneOwners,

@@ -54,6 +54,8 @@ const schema = z.object({
   reminderMessage: z.string().max(2000).optional().nullable(),
   remindersEnabled: z.boolean().optional(),
   requirePhone: z.boolean().optional(),
+  /** Confirmation by email of public sign-ups (#1253): provisional places until the address is proven. Logged. */
+  requireEmailConfirmation: z.boolean().optional(),
   /** Shift roster between volunteers (#1068): enables the volunteers' opt-in, shows nobody by itself. Logged. */
   shiftRosterEnabled: z.boolean().optional(),
   /** Accent colour of the public page (#300): a palette key, or null for the neutral header. */
@@ -101,7 +103,7 @@ export async function PATCH(req: Request, { params }: { params: Promise<{ id: st
 
   const owned = await db.event.findFirst({
     where: { id },
-    select: { id: true, title: true, publicStatus: true, isListed: true, startDate: true, endDate: true, publicInstructions: true, remindersEnabled: true, requirePhone: true, shiftRosterEnabled: true, cancelDeadlineDays: true, cancelDeadlineHours: true, registrationsOpen: true, registrationOpensAt: true, registrationClosesAt: true, organization: { select: { timeZone: true, publicationApprovedAt: true } } },
+    select: { id: true, title: true, publicStatus: true, isListed: true, startDate: true, endDate: true, publicInstructions: true, remindersEnabled: true, requirePhone: true, requireEmailConfirmation: true, shiftRosterEnabled: true, cancelDeadlineDays: true, cancelDeadlineHours: true, registrationsOpen: true, registrationOpensAt: true, registrationClosesAt: true, organization: { select: { timeZone: true, publicationApprovedAt: true } } },
   })
   if (!owned) return NextResponse.json({ error: "Non trouvé" }, { status: 404 })
 
@@ -155,6 +157,7 @@ export async function PATCH(req: Request, { params }: { params: Promise<{ id: st
       "publicInstructions",
       "remindersEnabled",
       "requirePhone",
+      "requireEmailConfirmation",
       "shiftRosterEnabled",
       "cancelDeadlineDays",
       "cancelDeadlineHours",

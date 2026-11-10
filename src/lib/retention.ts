@@ -127,6 +127,15 @@ export const RETENTION: readonly RetentionEntry[] = [
     public: true,
   },
   {
+    data: "Inscription publique en attente de confirmation par email : prénom, nom, adresse email, téléphone, date de naissance, commentaire, réponses aux questions, empreinte du lien de confirmation et échéance",
+    purpose: "Réserver les places choisies le temps que le bénévole confirme son adresse, puis garder le résultat du lien",
+    duration: "tant que l'événement existe ; les places provisoires sont libérées à l'échéance, la demande remplacée, expirée ou annulée ne tient plus de place ; effacée avec l'événement, à l'effacement des données du membre, à une fusion de fiches et à l'anonymisation de l'événement 3 ans après sa fin",
+    trigger: "inscription publique sur un événement qui demande la confirmation de l'adresse",
+    mechanism: "libération à l'échéance par le cron des rappels ; suppression en cascade avec l'événement ou le membre ; anonymisation des événements passés",
+    backups: inBackups,
+    public: true,
+  },
+  {
     data: "Liste de blocage des inscriptions : adresse email ou domaine bloqué, empreinte d'une adresse IP (jamais l'adresse elle-même), raison",
     purpose: "Empêcher les demandes d'espace abusives",
     duration: "jusqu'au retrait par l'opérateur ou jusqu'à l'échéance choisie ; une adresse IP est toujours bloquée pour une durée limitée, 90 jours au plus",

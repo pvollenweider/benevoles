@@ -20,9 +20,11 @@ Vue tabulaire des inscriptions, en quatre colonnes :
 - **Bénévole** : nom, puis sous le nom l'email, le téléphone, les réponses aux questions, les disponibilités, le commentaire et, s'il y a lieu, l'alerte **Charge élevée** ;
 - **Créneau** : poste, libellé, jour et horaires ;
 - **Source** : **Formulaire** (inscription depuis la page d'inscription) ou **Manuel** (ajout depuis l'administration) ;
-- **Statut** : **Liste d'attente** (avec le rang dans la file, par exemple « position 2 »), **Place proposée** ou **Demande à traiter** ; rien pour une inscription confirmée.
+- **Statut** : **Liste d'attente** (avec le rang dans la file, par exemple « position 2 »), **Place proposée**, **Demande à traiter** ou **En attente de confirmation par email** (avec l'échéance, par exemple « Jusqu'au mercredi 11 novembre à 11:00 ») ; rien pour une inscription confirmée.
 
 ![Page des inscriptions d'un événement : compteurs (actives, liste d'attente, demandes à traiter), recherche et filtres, puis le tableau avec bénévole et coordonnées, créneau et source](/doc-img/admin-registrations.png)
+
+Quand l'événement demande de **confirmer l'adresse email** (option des informations de l'événement, désactivée par défaut), les demandes qui attendent ce clic apparaissent sous **En attente de confirmation par email**, avec leur échéance. Le compteur les compte à part des inscriptions confirmées. Le planning les compte aussi à part, sous les places du créneau. Tant qu'elles attendent, ces places sont tenues comme des places prises, mais elles ne reçoivent ni rappel, ni message ciblé, ni export de présence, ni badge. Vous pouvez les retirer avec **Retirer de leur créneau**, comme une inscription ; vous ne pouvez pas confirmer à la place du bénévole. À l'échéance, les places sont libérées et la liste d'attente est prévenue comme après une annulation.
 
 Au-dessus du tableau, la recherche (nom, email) et les filtres par poste et par créneau. Quand l'événement a des [liens par groupe](partager-le-lien.md#un-lien-par-groupe), un filtre (**Tous les liens de groupe**) montre les inscriptions venues d'un lien (« Lien : … »), ou celles arrivées **Sans lien de groupe**.
 

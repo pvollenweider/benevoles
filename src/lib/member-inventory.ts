@@ -35,6 +35,12 @@ export const VOLUNTEER_RELATIONS: Record<string, VolunteerRelation> = {
     erasure: "scrub",
     why: "history of the events: kept without identity on erasure (comment, phone cleared, token regenerated) so counts, hours and history stay right",
   },
+  SignupConfirmation: {
+    merge: "drop",
+    deletion: "cascade",
+    erasure: "delete",
+    why: "a public sign-up waiting for its email confirmation (#1253): name, address, phone, token hash. A merge is not that person's confirmation, so the absorbed record's pending requests go; erased with the person's data",
+  },
   MemberInvite: {
     merge: "reassign",
     deletion: "cascade",
@@ -179,6 +185,9 @@ export const REGISTRATION_FIELDS_ON_ERASURE: Record<string, "clear" | "keep" | "
   charterAcceptedAt: "keep",
   // The share link per group it came through (#947): the club's link, not the person.
   groupLinkId: "keep",
+  // The pending confirmation (#1253) is deleted on erasure; its provisional rows stay, scrubbed,
+  // and the foreign key is set to null.
+  signupConfirmationId: "keep",
   createdAt: "keep",
   updatedAt: "keep",
 }

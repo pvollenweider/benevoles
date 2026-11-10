@@ -3,6 +3,7 @@
 import { useParams, useSearchParams } from "next/navigation"
 import { WAITLIST_STEPS } from "@/lib/waitlist-copy"
 import { outcomeHeading, readOutcome, requestNotice, UNPROVEN_HEADING, UNPROVEN_RETRY_TEXT, UNPROVEN_TEXT } from "@/lib/signup-outcome"
+import { confirmationDeadlineLabel, confirmationRequestNotice } from "@/lib/signup-confirmation"
 import Link from "next/link"
 import { Suspense, useEffect, useRef, useState } from "react"
 import PublicFooter from "@/components/PublicFooter"
@@ -44,12 +45,21 @@ function SuccessContent() {
   // Only requests, no place yet (#484): no celebration, no confirmation message.
   const onlyRequests = outcome.requested > 0 && outcome.active === 0
   const notice = requestNotice(outcome)
+  // A request waiting for the address's confirmation (#1253): no place is firm yet, and the page
+  // says which email to open and until when the places are held.
+  const confirmationNotice = outcome.emailConfirmation
+    ? confirmationRequestNotice({
+        held: outcome.held,
+        waiting: outcome.waiting,
+        deadline: confirmationDeadlineLabel(outcome.expiresAt, outcome.timeZone ?? "Europe/Zurich"),
+      })
+    : null
   // What a sign-up from the personal page updated (#1013), from the address: there at first render.
   const updatedLine = updatedNotice(readUpdatedParams(params))
   // No dead end (#1097): back to the event, and where the personal link is when the page has
   // none to show (a public sign-up: the link only goes out by email, #285).
   const back = successBackLink(eventSlug, params, embed)
-  const emailNote = showsPersonalLinkEmailNote({ hasToken: !!token, embed, waitlistOnly: isWaitlist })
+  const emailNote = !outcome.emailConfirmation && showsPersonalLinkEmailNote({ hasToken: !!token, embed, waitlistOnly: isWaitlist })
 
   const [regData, setRegData] = useState<RegistrationData | null>(null)
   const [fetching, setFetching] = useState(!!token)
@@ -80,14 +90,25 @@ function SuccessContent() {
   // Without a link of its own (a public sign-up without proof of the address, AUTHZ-01): one
   // neutral page, whatever happened; the emails say what was recorded.
   const card = !token ? (
-    <>
-      <h1 ref={headingRef} tabIndex={-1} className="text-xl font-bold text-gray-900 mb-2 focus:outline-none">{UNPROVEN_HEADING}</h1>
-      <p className="text-gray-700 text-sm mb-3">{UNPROVEN_TEXT}</p>
-      <p className="text-gray-700 text-sm mb-6">
-        {UNPROVEN_RETRY_TEXT}{" "}
-        <DocMoreLink href={PERSONAL_LINK_DOC_LINKS.personalLink} about="ton lien personnel" />
-      </p>
-    </>
+    confirmationNotice ? (
+      <>
+        <h1 ref={headingRef} tabIndex={-1} className="text-xl font-bold text-gray-900 mb-2 focus:outline-none">{confirmationNotice.heading}</h1>
+        <p className="text-gray-700 text-sm mb-3">{confirmationNotice.text}</p>
+        {confirmationNotice.deadline && (
+          <p className="bg-amber-50 border border-amber-200 rounded-xl p-4 text-sm text-amber-900 text-left mb-3">{confirmationNotice.deadline}</p>
+        )}
+        {confirmationNotice.waitlist && <p className="text-gray-700 text-sm mb-6">{confirmationNotice.waitlist}</p>}
+      </>
+    ) : (
+      <>
+        <h1 ref={headingRef} tabIndex={-1} className="text-xl font-bold text-gray-900 mb-2 focus:outline-none">{UNPROVEN_HEADING}</h1>
+        <p className="text-gray-700 text-sm mb-3">{UNPROVEN_TEXT}</p>
+        <p className="text-gray-700 text-sm mb-6">
+          {UNPROVEN_RETRY_TEXT}{" "}
+          <DocMoreLink href={PERSONAL_LINK_DOC_LINKS.personalLink} about="ton lien personnel" />
+        </p>
+      </>
+    )
   ) : null
 
   const content = (
@@ -101,7 +122,7 @@ function SuccessContent() {
         >
           {card ?? (
             <>
-          <span aria-hidden="true" className="text-5xl block mb-4">{isWaitlist || onlyRequests ? "🕐" : "🎉"}</span>
+          <span aria-hidden="true" className="text-5xl block mb-4">{outcome.emailConfirmation ? "✉️" : isWaitlist || onlyRequests ? "🕐" : "🎉"}</span>
           <h1 ref={headingRef} tabIndex={-1} className="text-xl font-bold text-gray-900 mb-2 focus:outline-none">{outcomeHeading(outcome)}</h1>
           {notice && (
             <p className="bg-amber-50 border border-amber-200 rounded-xl p-4 text-sm text-amber-900 text-left mb-4">{notice}</p>

@@ -32,6 +32,8 @@ type EventFormData = {
   reminderMessage: string
   publicStatus: "draft" | "published" | "archived"
   requirePhone: boolean
+  /** Confirmation by email (#1253): a public sign-up without proof of the address reserves its places provisoily until the email link is clicked. Off by default. */
+  requireEmailConfirmation: boolean
   /** « Qui est inscrit » (#1068): opt-in names for confirmed volunteers and invited members; a new event starts with the organisation's default. */
   shiftRosterEnabled: boolean
   /** Automatic reminders of this event (J-2, J-1, day-of); the organization's settings still apply. */
@@ -74,6 +76,7 @@ const defaultData: EventFormData = {
   reminderMessage: "",
   publicStatus: "draft",
   requirePhone: false,
+  requireEmailConfirmation: false,
   shiftRosterEnabled: false,
   remindersEnabled: true,
   isListed: true,
@@ -540,6 +543,26 @@ export default function EventForm({ initialData, createdHref, timeZone = "Europe
             </label>
             <p id="event-require-phone-hint" className="text-xs text-gray-500">
               Les bénévoles devront indiquer un numéro pour s&apos;inscrire via le formulaire public.
+            </p>
+          </div>
+        </div>
+
+        {/* Confirmation by email (#1253): off by default, for existing events too. */}
+        <div id="event-email-confirmation-setting" className="flex items-start gap-3">
+          <input
+            id="event-email-confirmation"
+            type="checkbox"
+            aria-describedby="event-email-confirmation-hint"
+            checked={form.requireEmailConfirmation}
+            onChange={(e) => setForm((f) => ({ ...f, requireEmailConfirmation: e.target.checked }))}
+            className="mt-0.5 h-4 w-4"
+          />
+          <div>
+            <label htmlFor="event-email-confirmation" className="text-sm font-medium text-gray-700">
+              Confirmer l&apos;adresse email avant l&apos;inscription
+            </label>
+            <p id="event-email-confirmation-hint" className="text-xs text-gray-600">
+              Un bénévole qui s&apos;inscrit depuis la page publique sans lien personnel reserve ses places le temps de confirmer son adresse. Il reçoit un email avec un lien à ouvrir et un bouton à cliquer ; les places sont tenues jusqu&apos;à son clic ou pendant 24 heures au plus, sans dépasser le début du premier créneau. Les créneaux complets avec liste d&apos;attente n&apos;entrent dans la liste qu&apos;à ce clic.
             </p>
           </div>
         </div>

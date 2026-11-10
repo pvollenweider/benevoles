@@ -26,7 +26,7 @@ describe("action recaps", () => {
       row("v2", "active", null), // no address: nothing
       row("v3", "waiting"), row("v4", "requested"), row("v5", "offered"), // not removed
     ])
-    expect(counts).toEqual({ registrations: 3, people: 2, withEmail: 1, notConfirmed: 3 })
+    expect(counts).toEqual({ registrations: 3, people: 2, withEmail: 1, notConfirmed: 3, pendingConfirmation: 0 })
     const r = bulkCancelRecap({ ...counts, waitlisted: 0 })
     expect(r.title).toBe("Retirer 2 bénévoles de leur créneau ?")
     expect(r.lines.slice(0, 4)).toEqual([

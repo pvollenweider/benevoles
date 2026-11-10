@@ -50,6 +50,22 @@ Clique sur **Confirmer mon inscription**.
 
 ![Formulaire d'inscription avec, à droite, le récapitulatif des créneaux choisis : Accueil (place disponible) et Chauffeur navette (sur validation, 21 ans minimum). Le champ Date de naissance porte le message « Requis : Chauffeur navette (21 ans min.) »](/doc-img/public-registration-birthdate.png)
 
+## Si l'organisation demande de confirmer ton adresse email
+
+Certaines organisations activent la confirmation de l'adresse email avant que l'inscription soit définitive. Dans ce cas, après **Confirmer mon inscription**, la page **Vérifie tes emails** te dit qu'un email vient d'être envoyé et jusqu'à quand tes places sont réservées : **24 heures au plus**, et jamais au-delà du début de ton premier créneau. Si ce créneau commence dans moins d'une heure, tu peux encore confirmer jusqu'à son début.
+
+Ouvre cet email : il liste tes créneaux et l'échéance. Son lien ouvre une page qui rappelle tout cela, avec un bouton **Confirmer mon inscription**. **Ouvrir le lien ne confirme rien** : c'est le clic sur le bouton qui enregistre tes places. Tu peux cliquer à nouveau : la page affiche alors le résultat déjà enregistré, sans rien changer.
+
+Tant que tu n'as pas confirmé :
+
+- tes places sont **réservées** mais ton inscription n'est pas encore définitive ;
+- un créneau complet avec liste d'attente ne te réserve rien : tu entres dans la liste d'attente **au moment de ta confirmation**, avec ton rang à ce moment-là ;
+- sur un créneau **sur validation**, ta demande n'arrive à l'organisation qu'après ta confirmation ; elle devient alors une demande normale, avec l'email « Demande reçue » et le bouton d'acceptation ou de refus pour l'organisation.
+
+Une nouvelle demande pour la même adresse et le même événement remplace la demande précédente encore en attente : ses places sont libérées et tu reçois un nouvel email. À l'échéance, tes places sont remises à disposition et la liste d'attente est prévenue ; si tu ouvres un lien expiré, la page te l'explique et te propose de refaire une demande. Confirmer après l'échéance ne reprend jamais une place déjà donnée à quelqu'un d'autre.
+
+Si tu t'inscris depuis ton **lien personnel** ou depuis le lien de ton **invitation**, ton adresse est déjà prouvée : tu suis directement le parcours habituel, sans email de confirmation.
+
 ## Confirmation
 
 Après l'inscription, un **email de confirmation** est envoyé à ton adresse. Il récapitule tes créneaux, dit si chacun est une place, une place en liste d'attente ou une demande sur validation, et contient ton **lien personnel** pour gérer ton inscription (voir [Ton lien personnel](lien-personnel.md)).

@@ -22,7 +22,7 @@ describe("placement on a « Sur validation » shift", () => {
   it("a request holds a spot, is live (one per person and shift) and counts for overlaps; the waitlist doesn't", () => {
     expect(OCCUPYING_STATUSES).toContain("requested")
     expect(LIVE_STATUSES).toContain("requested")
-    expect([...COMMITTED_STATUSES]).toEqual(["active", "requested"])
+    expect([...COMMITTED_STATUSES]).toEqual(["active", "requested", "unconfirmed"])
   })
 })
 

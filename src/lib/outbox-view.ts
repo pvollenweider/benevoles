@@ -121,6 +121,7 @@ export function outboxErrorSentence(lastError: string | null): string | null {
 
 export const KIND_LABELS: Record<NotificationKind, string> = {
   registration_confirmation: "Confirmation d'inscription",
+  signup_email_confirmation: "Confirmation de l'adresse avant l'inscription",
   member_invite: "Invitation d'un membre",
   reminder_j2: "Rappel J-2",
   reminder_j1: "Rappel J-1",

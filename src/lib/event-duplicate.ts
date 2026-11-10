@@ -102,6 +102,8 @@ export type DuplicableEvent = {
   reminderMessage: string | null
   remindersEnabled: boolean
   requirePhone: boolean
+  /** Confirmation by email of public sign-ups (#1253): copied with the settings only. */
+  requireEmailConfirmation?: boolean
   /** Shift roster between volunteers (#1068): the setting is copied with the settings, never anyone's choice. */
   shiftRosterEnabled?: boolean
   /** The organisation's default for new events (#1068): the copy's value when the settings are not copied. */
@@ -290,6 +292,7 @@ export function duplicatePlan(source: DuplicableEvent, options: DuplicateOptions
       reminderMessage: copy.settings ? source.reminderMessage : null,
       remindersEnabled: copy.settings ? source.remindersEnabled : true,
       requirePhone: copy.settings ? source.requirePhone : false,
+      requireEmailConfirmation: copy.settings ? source.requireEmailConfirmation ?? false : false,
       shiftRosterEnabled: copy.settings ? source.shiftRosterEnabled ?? false : source.organizationRosterDefault ?? false,
       accentColorKey: copy.settings ? source.accentColorKey : null,
       dayContactName: copy.settings ? source.dayContactName ?? null : null,

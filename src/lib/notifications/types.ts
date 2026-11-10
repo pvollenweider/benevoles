@@ -10,6 +10,7 @@
 
 export type NotificationKind =
   | "registration_confirmation"
+  | "signup_email_confirmation"
   | "member_invite"
   | "reminder_j2"
   | "reminder_j1"

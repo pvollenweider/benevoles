@@ -174,6 +174,10 @@ model Event {
   // Public sign-up form requires a phone number (asked by an organizer who calls volunteers on
   // the day). Only the public form: an admin adding someone by hand may not have it.
   requirePhone        Boolean   @default(false)
+  // Confirmation of public sign-ups by email (#1253). Off by default, existing events included:
+  // a public sign-up without proof of the address reserves its places provisionally and only
+  // becomes a registration once its email link is confirmed (src/lib/signup-confirmation.ts).
+  requireEmailConfirmation Boolean @default(false)
   // Accent colour of the public page (#300, part 1): a key of the curated palette
   // (src/lib/event-accent.ts), never a free value, so the header stays readable.
   accentColorKey      String?
@@ -256,6 +260,7 @@ model Event {
   questionAnswers  QuestionAnswer[]
   groupLinks       EventGroupLink[]
   rosterConsents   RosterConsent[]
+  signupConfirmations SignupConfirmation[]
   sectors          Sector[]
   places           EventPlace[]
   volunteerLimits  EventVolunteerLimit[]
@@ -1009,6 +1014,7 @@ model Volunteer {
 
   organization  Organization?  @relation(fields: [organizationId], references: [id], onDelete: SetNull)
   registrations     Registration[]
+  signupConfirmations SignupConfirmation[]
   invites           MemberInvite[]
   shiftDeclines     ShiftDecline[]
   pushSubscriptions PushSubscription[]
@@ -1074,6 +1080,9 @@ model Registration {
   // The group link (#947) the public sign-up came through, set by the server from the link's code;
   // null for the main link, an admin addition, or once that group link is deleted.
   groupLinkId      String?
+  // Provisional reservation awaiting confirmation by email (#1253). Null for any other
+  // registration; set on the places held while the volunteer proves the address.
+  signupConfirmationId String?
   createdAt        DateTime  @default(now())
   updatedAt        DateTime  @updatedAt
 
@@ -1081,19 +1090,74 @@ model Registration {
   shift     Shift           @relation(fields: [shiftId], references: [id], onDelete: Cascade)
   volunteer Volunteer       @relation(fields: [volunteerId], references: [id])
   groupLink EventGroupLink? @relation(fields: [groupLinkId], references: [id], onDelete: SetNull)
+  signupConfirmation SignupConfirmation? @relation(fields: [signupConfirmationId], references: [id], onDelete: SetNull)
   swapRequests      ShiftSwapRequest[] @relation("SwapRequester")
   swapCounterOffers ShiftSwapRequest[] @relation("SwapCounterpart")
 
   // One live registration per volunteer and shift (#264). Partial: cancelled rows are kept for
   // history, and a volunteer may cancel then register again. Backstops the route-level check,
   // which alone can't stop a double submit racing itself.
-  @@unique([shiftId, volunteerId], map: "Registration_shift_volunteer_live_key", where: raw("status IN ('active', 'waiting', 'offered', 'requested')"))
+  @@unique([shiftId, volunteerId], map: "Registration_shift_volunteer_live_key", where: raw("status IN ('active', 'waiting', 'offered', 'requested', 'unconfirmed')"))
   @@index([status, reminderJ2Sent])
   @@index([status, reminderJ1Sent])
   @@index([status, reminderDdSent])
   @@index([status, shiftId])
   @@index([waitingPosition, shiftId])
   @@index([groupLinkId])
+  @@index([signupConfirmationId])
+}
+
+
+// A public sign-up waiting for its email address to be proven (#1253), when the event asks for it
+// (Event.requireEmailConfirmation). One row per request (address + event), covering every shift
+// chosen: the places it holds are Registration rows with status "unconfirmed" and this id; the
+// shifts that were full with a waitlist are only listed in `waitlistShiftIds` until the click
+// (nothing is reserved for them before). `tokenHash` is the SHA-256 of the 32-byte link token,
+// never the token itself; `expiresAt` is the deadline shown in the email (24 h, never past the
+// first shift's start). `cancelledAt` says the request was replaced, expired or withdrawn; a
+// confirmation is idempotent and keeps its recorded counts.
+model SignupConfirmation {
+  id              String    @id @default(cuid())
+  eventId         String
+  volunteerId     String
+  email           String
+  firstName       String
+  lastName        String
+  phone           String?
+  birthDate       DateTime?
+  comment         String?
+  tokenHash       String    @unique
+  expiresAt       DateTime
+  confirmedAt     DateTime?
+  cancelledAt     DateTime?
+  // "replaced" (a newer request for the same address), "expired" (the cron), "withdrawn" (an
+  // organiser cancelled every held place).
+  cancelReason    String?
+  // The statuses recorded at the click, so a repeated click shows the same result.
+  resultActive    Int?
+  resultRequested Int?
+  resultWaiting   Int?
+  // Proof of acceptance stored until the confirmation creates the registrations (#569).
+  charterAcceptedHash String
+  charterAcceptedAt   DateTime
+  groupLinkId     String?
+  source          String    @default("public_form")
+  // The shifts that were full with a waitlist at the request: only listed in the email, entered
+  // in the waitlist when the volunteer confirms (their rank is taken then).
+  waitlistShiftIds String[] @default([])
+  // Custom answers (#483) kept until the confirmation, by question id.
+  answers         Json?
+  rosterNameVisible   Boolean @default(false)
+  rosterNoticeVersion String?
+  createdAt       DateTime  @default(now())
+
+  event     Event     @relation(fields: [eventId], references: [id], onDelete: Cascade)
+  volunteer Volunteer @relation(fields: [volunteerId], references: [id], onDelete: Cascade)
+  registrations Registration[]
+
+  @@unique([eventId, email], map: "SignupConfirmation_pending_key", where: raw("confirmedAt IS NULL AND cancelledAt IS NULL"))
+  @@index([eventId, email])
+  @@index([expiresAt, confirmedAt, cancelledAt])
 }
 
 // A swap request between two volunteers (#1174, src/lib/shift-swaps.ts and shift-swap-server.ts):

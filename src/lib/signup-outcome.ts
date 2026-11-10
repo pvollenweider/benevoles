@@ -6,14 +6,35 @@
  * « Sur validation » shift (#484), which is not a place and must never read like one.
  */
 
-export type SignupOutcome = { waitlist: boolean; requested: number; active: number }
+export type SignupOutcome = {
+  waitlist: boolean
+  requested: number
+  active: number
+  /** The event asks for the address to be proven before the places become firm (#1253). */
+  emailConfirmation: boolean
+  /** Held places and waitlist intents of that pending request, and its deadline. */
+  held: number
+  waiting: number
+  expiresAt: string | null
+  timeZone: string | null
+}
 
 export function readOutcome(params: { get(name: string): string | null }): SignupOutcome {
   const n = (v: string | null) => (v && /^\d+$/.test(v) ? Number(v) : 0)
-  return { waitlist: params.get("waitlist") === "1", requested: n(params.get("requested")), active: n(params.get("active")) }
+  return {
+    waitlist: params.get("waitlist") === "1",
+    requested: n(params.get("requested")),
+    active: n(params.get("active")),
+    emailConfirmation: params.get("confirm") === "1",
+    held: n(params.get("held")),
+    waiting: n(params.get("waiting")),
+    expiresAt: params.get("expires"),
+    timeZone: params.get("tz"),
+  }
 }
 
 export function outcomeHeading(o: SignupOutcome): string {
+  if (o.emailConfirmation) return "Vérifie tes emails"
   if (o.waitlist) return "Tu es sur la liste d'attente !"
   if (o.requested > 0 && o.active === 0) return o.requested > 1 ? "Demandes envoyées" : "Demande envoyée"
   return "Inscription confirmée !"

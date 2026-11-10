@@ -14,9 +14,9 @@
 # logged as before: date, router, method, status, duration, size, client address.
 #
 # The families follow src/lib/sentry-scrub.ts (same secrets, scrubbed there from error reports):
-#   path  /my/…  /waitlist/…  /leader/…  /disponibilites/…  /api/public/registrations/…
+#   path  /my/…  /waitlist/…  /leader/…  /disponibilites/…  /confirmation/…  /api/public/registrations/…
 #         /api/public/member-invite/…  /api/public/leader/…  /api/public/waitlist/…
-#         /api/public/availability/…
+#         /api/public/availability/…  /api/public/confirmations/…
 #         (every src/app/**/[token] route: no-tokens-in-access-logs.test.ts lists them from the
 #         app router and fails if one is missing here)
 #   query token=…  t=…   (invitations on event pages, admin invitations, password reset,
@@ -62,6 +62,7 @@ spec:
         || PathPrefix(`/api/public/registrations/`) || PathPrefix(`/api/public/member-invite/`)
         || PathPrefix(`/api/public/leader/`) || PathPrefix(`/api/public/waitlist/`)
         || PathPrefix(`/disponibilites/`) || PathPrefix(`/api/public/availability/`) || PathPrefix(`/ne-peux-pas/`)
+        || PathPrefix(`/confirmation/`) || PathPrefix(`/api/public/confirmations/`)
         || Path(`/admin/search`) || Path(`/api/admin/search`)
         || QueryRegexp(`token`, `.+`) || QueryRegexp(`t`, `.+`) || QueryRegexp(`q`, `.+`)
         || QueryRegexp(`deleted`, `.+`) || QueryRegexp(`tag`, `.+`)
@@ -97,6 +98,7 @@ spec:
         || PathPrefix(`/api/public/registrations/`) || PathPrefix(`/api/public/member-invite/`)
         || PathPrefix(`/api/public/leader/`) || PathPrefix(`/api/public/waitlist/`)
         || PathPrefix(`/disponibilites/`) || PathPrefix(`/api/public/availability/`) || PathPrefix(`/ne-peux-pas/`)
+        || PathPrefix(`/confirmation/`) || PathPrefix(`/api/public/confirmations/`)
         || Path(`/admin/search`) || Path(`/api/admin/search`)
         || QueryRegexp(`token`, `.+`) || QueryRegexp(`t`, `.+`) || QueryRegexp(`q`, `.+`)
         || QueryRegexp(`deleted`, `.+`) || QueryRegexp(`tag`, `.+`)

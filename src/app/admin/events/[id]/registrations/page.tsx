@@ -9,7 +9,8 @@ import { leaderKeySet, isSectorLeader } from "@/lib/sector-leaders"
 import { SEARCH_MAX_LENGTH } from "@/lib/admin-search"
 import { orgTimeZone } from "@/lib/time-zone"
 import { answersByVolunteer } from "@/lib/event-questions"
-import { LIVE_STATUSES } from "@/lib/registration-capacity"
+import { BOOKED_STATUSES } from "@/lib/registration-capacity"
+import { confirmationDeadlineLabel } from "@/lib/signup-confirmation"
 import { registrationsSummary, charterAcceptanceLabel } from "@/lib/registrations-list"
 import { resolveCharterText } from "@/lib/volunteer-charter"
 import { hashCharterText } from "@/lib/charter-hash"
@@ -52,8 +53,8 @@ export default async function RegistrationsPage({
         orderBy: [{ date: "asc" }, { startTime: "asc" }],
       },
       registrations: {
-        where: { status: { in: [...LIVE_STATUSES] }, ...sector.registrationWhere },
-        include: { volunteer: true, shift: true },
+        where: { status: { in: [...BOOKED_STATUSES] }, ...sector.registrationWhere },
+        include: { volunteer: true, shift: true, signupConfirmation: { select: { expiresAt: true } } },
         orderBy: [{ status: "asc" }, { createdAt: "desc" }],
       },
       sectorLeaders: { select: { roleName: true, email: true } },
@@ -112,6 +113,7 @@ export default async function RegistrationsPage({
             active: event.registrations.filter(r => r.status === "active").length,
             waiting: event.registrations.filter(r => r.status === "waiting" || r.status === "offered").length,
             requested: event.registrations.filter(r => r.status === "requested").length,
+            unconfirmed: event.registrations.filter(r => r.status === "unconfirmed").length,
           })}
         </p>
       </div>
@@ -159,6 +161,11 @@ export default async function RegistrationsPage({
           groupLinkId: r.groupLinkId,
           createdAt: r.createdAt.toISOString(),
           waitingPosition: r.waitingPosition,
+          // A provisional place (#1253): the organizer sees it apart from the confirmed rows, with
+          // the deadline its email gave.
+          confirmationDeadline: r.status === "unconfirmed" && r.signupConfirmation
+            ? confirmationDeadlineLabel(r.signupConfirmation.expiresAt, orgTimeZone(event.organization))
+            : null,
           checkedInAt: r.checkedInAt?.toISOString() ?? null,
           charterAcceptance: r.charterAcceptedAt
             ? charterAcceptanceLabel({ acceptedAt: r.charterAcceptedAt, hash: r.charterAcceptedHash, currentHash: currentCharterHash, timeZone: orgTimeZone(event.organization) })

@@ -40,14 +40,24 @@ const UNDO_LINE = "Vous aurez 10 secondes pour annuler : rien n'est envoyé ni e
  * one email, however many of their rows are selected. Counted from the rows on screen.
  */
 export function bulkCancelCounts(selected: { status: string; volunteer: { id: string; email: string | null } }[]) {
+  // A provisional place waiting for its email confirmation (#1253) is removed like a registration,
+  // but nobody is emailed: the person confirmed nothing yet.
+  const cancellable = selected.filter((r) => r.status === "active" || r.status === "unconfirmed")
   const active = selected.filter((r) => r.status === "active")
-  const people = new Set(active.map((r) => r.volunteer.id))
+  const pendingConfirmation = selected.filter((r) => r.status === "unconfirmed")
+  const people = new Set(cancellable.map((r) => r.volunteer.id))
   const withEmail = new Set(active.filter((r) => r.volunteer.email).map((r) => r.volunteer.id))
-  return { registrations: active.length, people: people.size, withEmail: withEmail.size, notConfirmed: selected.length - active.length }
+  return {
+    registrations: cancellable.length,
+    people: people.size,
+    withEmail: withEmail.size,
+    notConfirmed: selected.length - cancellable.length,
+    pendingConfirmation: pendingConfirmation.length,
+  }
 }
 
-export function bulkCancelRecap(i: { registrations: number; people: number; withEmail: number; notConfirmed?: number; waitlisted: number }): ActionRecap {
-  const withoutEmail = i.people - i.withEmail
+export function bulkCancelRecap(i: { registrations: number; people: number; withEmail: number; notConfirmed?: number; pendingConfirmation?: number; waitlisted: number }): ActionRecap {
+  const withoutEmail = i.people - i.withEmail - (i.pendingConfirmation ?? 0)
   return {
     title: `Retirer ${n(i.people, "bénévole", "bénévoles")} de leur créneau ?`,
     lines: [
@@ -56,6 +66,7 @@ export function bulkCancelRecap(i: { registrations: number; people: number; with
         ? `${n(i.withEmail, "email d'annulation envoyé", "emails d'annulation envoyés")}, un par personne, avec le lien vers ses autres créneaux s'il lui en reste.`
         : "Aucun email : personne n'a d'adresse.",
       ...(i.withEmail > 0 && withoutEmail > 0 ? [`${n(withoutEmail, "personne sans adresse ne reçoit", "personnes sans adresse ne reçoivent")} rien.`] : []),
+      ...((i.pendingConfirmation ?? 0) > 0 ? [`${n(i.pendingConfirmation!, "inscription en attente de confirmation par email sera retirée", "inscriptions en attente de confirmation par email seront retirées")}, sans email : la personne n'a rien confirmé.`] : []),
       ...(i.notConfirmed ? [`${n(i.notConfirmed, "inscription sélectionnée est", "inscriptions sélectionnées sont")} en liste d'attente, avec une place proposée ou en demande : ${i.notConfirmed > 1 ? "elles restent telles quelles" : "elle reste telle quelle"}, sans email.`] : []),
       i.waitlisted > 0 ? `${n(i.waitlisted, "place libérée sera proposée", "places libérées seront proposées")} à la liste d'attente.` : "Pas de liste d'attente sur ces créneaux.",
       LOGGED,

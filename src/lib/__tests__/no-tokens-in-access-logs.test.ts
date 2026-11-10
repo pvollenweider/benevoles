@@ -47,6 +47,8 @@ const TOKEN_URLS = [
   `/disponibilites/${FAKE}`,
   `/api/public/availability/${FAKE}`,
   `/ne-peux-pas/invitation/${FAKE}/shift-1`,
+  `/confirmation/${FAKE}`,
+  `/api/public/confirmations/${FAKE}/confirm`,
   `/ne-peux-pas/inscription/${FAKE}/shift-1`,
   // The route as the app router names it (its first segment is the kind of link, not a secret).
   `/ne-peux-pas/[kind]/${FAKE}/shift-1`,
@@ -133,7 +135,9 @@ describe("no personal token in the proxy access log", () => {
       // the database connection string's startup options (prisma-adapter.ts, #1172), never a request URL
       "options",
       // external links, never to this server: OpenStreetMap (map-link.ts), mailto subject
-      "mlat", "mlon", "subject"])
+      "mlat", "mlon", "subject",
+      // a pending sign-up's confirmation state on the result page (#1253): no secret, the token is in the email
+      "confirm", "held", "waiting", "expires", "tz"])
     const files = execFileSync("git", ["ls-files", "src"], { encoding: "utf8" }).split("\n").filter((f) => /\.(ts|tsx)$/.test(f) && !f.includes("__tests__") && !f.includes("__integration__"))
     const keys = new Set<string>()
     for (const f of files) {

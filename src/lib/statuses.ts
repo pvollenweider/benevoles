@@ -14,7 +14,7 @@
 
 import { QUESTION_TYPES } from "./event-questions"
 
-export const REGISTRATION_STATUSES = ["active", "waiting", "offered", "requested", "cancelled", "refused", "deleted"] as const
+export const REGISTRATION_STATUSES = ["active", "waiting", "offered", "requested", "unconfirmed", "cancelled", "refused", "deleted"] as const
 export type RegistrationStatus = (typeof REGISTRATION_STATUSES)[number]
 
 // « admin_draft » (#1146, lot C): created by publishing draft assignments (src/lib/draft-assignments.ts).
