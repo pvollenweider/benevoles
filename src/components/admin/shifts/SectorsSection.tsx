@@ -28,7 +28,7 @@ function PosteList({ render, group }: { render: (group: SectorGroup) => React.Re
 const focusRing = "focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-blue-600"
 
 /**
- * The sectors in « Gérer les postes » (#1147, beta): create, rename, reorder (saved at once) and
+ * The sectors in « Gérer les postes » (#1147): create, rename, reorder (saved at once) and
  * archive the event's sectors, restore an archived one.
  *
  * - Before the first sector (the option is on, nothing saved yet): a « Secteurs » part with the add
@@ -248,7 +248,6 @@ export default function SectorsSection({
   const archivedId = `sectors-archived-${eventId}`
   const headingId = `sectors-heading-${eventId}`
   const small = `text-xs text-gray-600 hover:text-blue-700 min-h-6 px-1 rounded-md aria-disabled:opacity-50 ${focusRing}`
-  const betaChip = <span className="ml-1 rounded-md bg-gray-100 px-1.5 py-0.5 text-[11px] font-medium text-gray-700">bêta</span>
 
   const addForm = (
     <form noValidate onSubmit={(e) => { e.preventDefault(); void addSector() }} className="flex flex-wrap items-end gap-2">
@@ -279,7 +278,7 @@ export default function SectorsSection({
     return (
       <section aria-labelledby={headingId} className="space-y-3 rounded-xl border border-gray-200 p-4" data-sectors-section="1">
         <div>
-          <h3 id={headingId} ref={headingRef} tabIndex={-1} className="text-sm font-semibold text-gray-800 focus:outline-none">Secteurs {betaChip}</h3>
+          <h3 id={headingId} ref={headingRef} tabIndex={-1} className="text-sm font-semibold text-gray-800 focus:outline-none">Secteurs</h3>
           <p className="text-xs text-gray-600 mt-0.5">Un secteur regroupe plusieurs postes, par exemple « Parking » pour « Parking Nord » et « Parking Mairie ». Créez vos secteurs, puis ajoutez les postes dans chacun d&apos;eux. La frise et le PDF les rangent par secteur. Les bénévoles ne voient pas les secteurs.</p>
         </div>
         {error && <p role="alert" className="text-sm text-red-700 bg-red-50 rounded-lg px-3 py-2">{error}</p>}
@@ -297,7 +296,7 @@ export default function SectorsSection({
     // The tree: one heading, no landmark per sector (a list of sectors, each with its h4).
     <div className="space-y-4" data-sectors-section="1">
       <div>
-        <h3 id={headingId} ref={headingRef} tabIndex={-1} className="text-sm font-semibold text-gray-800 focus:outline-none">Postes par secteur {betaChip}</h3>
+        <h3 id={headingId} ref={headingRef} tabIndex={-1} className="text-sm font-semibold text-gray-800 focus:outline-none">Postes par secteur</h3>
         <p className="text-xs text-gray-600 mt-0.5">Les flèches d&apos;un secteur enregistrent l&apos;ordre des secteurs tout de suite. Celles d&apos;un poste le déplacent dans son secteur ; enregistrez ensuite l&apos;ordre des postes. « Déplacer… » change le secteur d&apos;un poste. Les bénévoles ne voient pas les secteurs.</p>
       </div>
       {error && <p role="alert" className="text-sm text-red-700 bg-red-50 rounded-lg px-3 py-2">{error}</p>}

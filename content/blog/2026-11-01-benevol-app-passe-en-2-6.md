@@ -45,8 +45,8 @@ Au Trail des Crêtes de Sarnaz, Florian coordonne les ravitaillements. Ses trois
 
 Le planning, les filtres, les documents à imprimer et les messages suivent vos secteurs. Les bénévoles, eux, ne les voient pas.
 
-→ [Organiser les postes par secteurs](/doc/gerer-les-postes#organiser-les-postes-par-secteurs-beta)
-→ [Confier tout un secteur à un responsable](/doc/responsables-de-secteur#confier-tout-un-secteur-beta)
+→ [Organiser les postes par secteurs](/doc/gerer-les-postes#organiser-les-postes-par-secteurs)
+→ [Confier tout un secteur à un responsable](/doc/responsables-de-secteur#confier-tout-un-secteur)
 ▶ Vidéo : [Organiser les postes par secteurs](/videos/SECTORS)
 ▶ Vidéo : [Responsables de poste et de secteur](/videos/SECTOR_LEADERS)
 

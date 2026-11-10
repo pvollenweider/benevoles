@@ -76,7 +76,7 @@ export const PERMISSIONS: Record<string, Partial<Record<Method, Level>>> = {
   "events/[id]/reorder-roles": { POST: "organizer" },
   "events/[id]/roles/[roleName]": { PATCH: "organizer", DELETE: "organizer" },
   "events/[id]/sector-leaders": { GET: "organizer", POST: "organizer" },
-  // Sectors grouping postes (#1147, beta), like the postes: organiser level. Joining the beta stays owner-only.
+  // Sectors grouping postes (#1147), like the postes: organiser level. Joining the beta stays owner-only.
   // Places of an event (#1171, lot 2): where missions happen, for the travel margin.
   "events/[id]/places": { GET: "organizer", POST: "organizer" },
   // Personal workload limits (#1171, lot 2): one person's own, stricter limits on an event.

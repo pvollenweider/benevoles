@@ -3,8 +3,8 @@ import { prisma as prismaMock } from "@/lib/prisma"
 
 /**
  * POST /api/admin/events/[id]/sector-leaders for a sector (#1169): exactly one of poste or sector,
- * the beta capability « sectorLeaders », an event that adopted sectors, an active sector of this
- * event, read under the event's then the sector's row lock.
+ * an available organisation, an event that adopted sectors, an active sector of this event, read
+ * under the event's then the sector's row lock.
  */
 
 const requireOrgSessionMock = vi.hoisted(() => vi.fn())
@@ -68,7 +68,7 @@ describe("POST sector-leaders with a sector (#1169)", () => {
     expect((await POST(post(sectorBody), params)).status).toBe(201)
   })
 
-  it("refuses a sector while the beta capability is closed (403), before any write", async () => {
+  it("refuses a sector while the organisation is unavailable (403), before any write", async () => {
     canAdoptBeta.mockResolvedValue(false)
     const { POST } = await import("@/app/api/admin/events/[id]/sector-leaders/route")
     const res = await POST(post(sectorBody), params)
@@ -120,7 +120,7 @@ describe("POST sector-leaders with a sector (#1169)", () => {
     expect(findFirst).toHaveBeenCalledWith(expect.objectContaining({ where: { eventId: "evt-1", sectorId: "sec-parking", email: "paula@example.org" } }))
   })
 
-  it("a poste leader needs neither the capability nor sectors, as before #1169", async () => {
+  it("a poste leader needs neither the sector gate nor sectors, as before #1169", async () => {
     canAdoptBeta.mockResolvedValue(false)
     const { POST } = await import("@/app/api/admin/events/[id]/sector-leaders/route")
     const res = await POST(post({ roleName: "Bar", name: "Bob", email: "bob@example.org" }), params)

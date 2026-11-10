@@ -22,8 +22,8 @@ model Organization {
   // (Event.shiftRosterEnabled). On by default; existing events keep their own value.
   shiftRosterDefault Boolean @default(true)
   // « Organiser les postes par secteurs » (#1147): the value a NEW event of this organisation starts
-  // with (Event.sectorsEnabled), applied by the creation routes only while the beta capability
-  // « sectors » can be adopted. Off by default; existing events keep their own value.
+  // with (Event.sectorsEnabled), applied by the creation routes while the organisation is active
+  // and not suspended. Off by default; existing events keep their own value.
   sectorsDefault     Boolean @default(false)
   // « Autoriser les demandes d'échange de créneaux » (#1174): the value a NEW event of this
   // organisation starts with (Event.shiftSwapsEnabled), applied by the creation routes only while
@@ -203,11 +203,11 @@ model Event {
   // default stays false (existing events and seeds keep their value). Turning it on shows nobody
   // by itself, and nobody is opted in on their behalf.
   shiftRosterEnabled  Boolean   @default(false)
-  // Sectors grouping several postes (#1147, beta capability « sectors », src/lib/sectors.ts). The
-  // option can be turned on only while the capability can be adopted, and off as long as no sector
-  // was saved. `sectorsAdoptedAt` is set in the same transaction as the first saved sector, under a
-  // row lock on this event (src/lib/sector-adoption.ts): from then on the event keeps the sector
-  // structure, even with every sector archived, and the option can no longer be turned off.
+  // Sectors grouping several postes (#1147, src/lib/sectors.ts). The option can be turned on while
+  // the organisation is active and not suspended, and off as long as no sector was saved.
+  // `sectorsAdoptedAt` is set in the same transaction as the first saved sector, under a row lock
+  // on this event (src/lib/sector-adoption.ts): from then on the event keeps the sector structure,
+  // even with every sector archived, and the option can no longer be turned off.
   sectorsEnabled      Boolean   @default(false)
   sectorsAdoptedAt    DateTime?
   // Shift swaps between volunteers (#1174, beta capability « shiftSwaps », src/lib/shift-swaps.ts):
@@ -273,7 +273,7 @@ model Event {
 }
 
 // A sector groups several postes of one event (#1147): « Parking » for « Parking Nord » and
-// « Parking Mairie ». Optional (Event.sectorsEnabled, beta). A poste belongs to zero or one sector
+// « Parking Mairie ». Optional (Event.sectorsEnabled). A poste belongs to zero or one sector
 // through Shift.sectorId, shared by every shift of the poste like colorKey. Never deleted: archived
 // (archivedAt), its postes moved to « Sans secteur » first, so the event keeps its history.
 // Places of an event (#1171, lot 2): where missions happen (a stage, a tent, a depot), for the
@@ -603,7 +603,7 @@ model EventPage {
 }
 
 // "Sector leader" (responsable de secteur) — see issue #186. Scoped to one poste (`roleName`) or,
-// since #1169, to one sector of the event (`sectorId`, beta): exactly one of the two is set
+// since #1169, to one sector of the event (`sectorId`): exactly one of the two is set
 // (check "SectorLeader_scope_check", migration 20261026200000_sector_scoped_leaders). A sector
 // leader covers the postes currently in their sector, resolved at each request
 // (src/lib/leader-scope.ts). No login: a stable magic-link token, same pattern as MemberInvite,
@@ -1799,7 +1799,8 @@ model OperatorLog {
 
 // A platform-wide setting changed from the super admin space, one row per key (#810): the
 // « Inscriptions fermées » switch (key "signup", value { closed }); the capabilities open for a
-// beta trial (#1168, key "beta.capabilities", value { open: string[] }, unknown ids ignored).
+// beta trial (#1168, key "beta.capabilities", value { open: string[] }, unknown or graduated ids
+// ignored).
 model PlatformSetting {
   key         String   @id
   value       Json

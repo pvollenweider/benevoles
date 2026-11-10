@@ -21,7 +21,6 @@ import { prisma } from "@/lib/prisma"
 import { getOrgClient } from "@/lib/prisma-org"
 import { linkToken, registrationToken } from "@/lib/token-vault"
 import { assignPosteSector } from "@/lib/sector-adoption"
-import { BETA_SETTING_KEY } from "@/lib/beta-capabilities"
 
 const url = process.env.DATABASE_URL
 const MIGRATIONS = join(process.cwd(), "prisma/migrations")
@@ -101,11 +100,8 @@ describe.skipIf(!url)("sector leaders' scope on Postgres (#1169)", () => {
   let nordShift = ""
   const tokens = { parking: `${tag}-parking`, nord: `${tag}-nord` }
 
-  let betaBefore: object | null = null
-
   beforeAll(async () => {
-    betaBefore = ((await prisma.platformSetting.findUnique({ where: { key: BETA_SETTING_KEY } }))?.value as object | undefined) ?? null
-    orgId = (await prisma.organization.create({ data: { name: `Comité ${tag}`, slug: tag, betaOptInAt: new Date() } })).id
+    orgId = (await prisma.organization.create({ data: { name: `Comité ${tag}`, slug: tag } })).id
     guard.value = { db: getOrgClient(orgId), organizationId: orgId, session: { user: { id: "adm-test", email: "adm@example.org" } } }
     eventId = (await prisma.event.create({
       data: { organizationId: orgId, slug: tag, title: "Fête", startDate: new Date("2030-06-01"), endDate: new Date("2030-06-02"), sectorsEnabled: true, sectorsAdoptedAt: new Date() },
@@ -130,9 +126,6 @@ describe.skipIf(!url)("sector leaders' scope on Postgres (#1169)", () => {
       await prisma.notificationOutbox.deleteMany({ where: { organizationId: orgId } })
       await prisma.organization.delete({ where: { id: orgId } }).catch(() => {})
     }
-    // The operator's list as it was before this test.
-    if (betaBefore === null) await prisma.platformSetting.deleteMany({ where: { key: BETA_SETTING_KEY } })
-    else await prisma.platformSetting.update({ where: { key: BETA_SETTING_KEY }, data: { value: betaBefore } })
     await prisma.$disconnect()
   })
 
@@ -153,7 +146,6 @@ describe.skipIf(!url)("sector leaders' scope on Postgres (#1169)", () => {
   })
 
   it("B01: naming a leader through the API takes no place and creates no registration", async () => {
-    await prisma.platformSetting.upsert({ where: { key: BETA_SETTING_KEY }, create: { key: BETA_SETTING_KEY, value: { open: ["sectors", "sectorLeaders"] } }, update: { value: { open: ["sectors", "sectorLeaders"] } } })
     const before = await prisma.registration.count({ where: { eventId } })
     const { POST } = await import("@/app/api/admin/events/[id]/sector-leaders/route")
     const res = await POST(request(`/api/admin/events/${eventId}/sector-leaders`, "POST", { sectorId: parkingId, name: "Ana M", email: `${tag}-Ana@example.org` }), { params: Promise.resolve({ id: eventId }) })

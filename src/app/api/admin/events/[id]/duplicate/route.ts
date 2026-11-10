@@ -65,7 +65,7 @@ export async function POST(req: Request, { params }: { params: Promise<{ id: str
   const deletedPostes = deletedPosteNames([...source.shifts, ...cancelled])
 
   // Sectors (#1147): an adopted source gives an adopted copy; otherwise the option is a new
-  // adoption, read from the beta gate (src/lib/event-duplicate.ts, duplicatedSectors).
+  // adoption, read from the organisation gate (src/lib/event-duplicate.ts, duplicatedSectors).
   const adopted = !!source.sectorsAdoptedAt
   const [sectorsGate, newEventSectors] = adopted ? [true, false] : await Promise.all([
     source.sectorsEnabled ? canAdoptBeta(organizationId, "sectors") : false,

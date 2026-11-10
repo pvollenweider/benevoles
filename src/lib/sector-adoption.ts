@@ -17,8 +17,9 @@ import type { LogActor } from "@/lib/event-log"
  * Writes of the sectors (#1147), server only. Every change of the event's sector mode goes through
  * one row lock on the Event (`SELECT … FOR UPDATE`), taken first in the transaction:
  * - saving a sector: if the event already adopted sectors, continue (BE06: an event keeps what it
- *   uses after an opt-out or an operator close); else require the option on and the beta gate
- *   (canAdoptBeta, read with the transaction client), then set `sectorsAdoptedAt` with the sector;
+ *   uses after an opt-out or an operator close); else require the option on and the organisation
+ *   available (canAdoptBeta, read with the transaction client), then set `sectorsAdoptedAt` with
+ *   the sector;
  * - switching the option: the same lock, and off is refused once `sectorsAdoptedAt` is set.
  * So a first sector and a switch-off sent at the same time give one consistent result: either the
  * sector is saved and the mode is locked, or the sector is refused and the mode is off (A04,
@@ -48,7 +49,7 @@ export async function lockSector(tx: Tx, eventId: string, sectorId: string): Pro
 
 const isUniqueViolation = (err: unknown) => (err as { code?: string } | null)?.code === "P2002"
 
-/** The beta gate, read only when the decision needs it (a new adoption). */
+/** The organisation gate, read only when the decision needs it (a new adoption). */
 async function gateFor(tx: Tx, organizationId: string, needed: boolean): Promise<boolean> {
   return needed ? canAdoptBeta(organizationId, "sectors", tx) : true
 }
@@ -82,8 +83,8 @@ export async function createSector(db: OrgScopedPrisma, organizationId: string, 
 
 /**
  * The option a NEW event starts with (#1147): the organisation's default (Organization.sectorsDefault),
- * only while the capability can be adopted. Changing the default never touches existing events.
- * The gate is read only when the default is on.
+ * only while the organisation can adopt sectors. Changing the default never touches existing
+ * events. The gate is read only when the default is on.
  */
 export async function newEventSectorsEnabled(organizationId: string, sectorsDefault: boolean | null | undefined): Promise<boolean> {
   return sectorsDefault ? canAdoptBeta(organizationId, "sectors") : false

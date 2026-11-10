@@ -10,10 +10,10 @@ import Switch from "@/components/public/Switch"
 import { SECTORS_ADOPTED_NOTICE, SECTORS_OPTION_HINT, SECTORS_OPTION_LABEL } from "@/lib/sectors"
 
 /**
- * « Organiser les postes par secteurs » (#1147, beta), on the event's information page: an
- * immediate switch (DESIGN.md, « Interrupteur ») saved by its own route, apart from the autosaved
- * event form. Its state flips only once the server agreed. Once the event adopted sectors (a first
- * sector saved), the switch gives way to the sentence saying it can no longer be turned off.
+ * « Organiser les postes par secteurs » (#1147), on the event's information page: an immediate
+ * switch (DESIGN.md, « Interrupteur ») saved by its own route, apart from the autosaved event form.
+ * Its state flips only once the server agreed. Once the event adopted sectors (a first sector
+ * saved), the switch gives way to the sentence saying it can no longer be turned off.
  */
 export default function EventSectorsOption({ eventId, initialEnabled, adopted }: { eventId: string; initialEnabled: boolean; adopted: boolean }) {
   const [enabled, setEnabled] = useState(initialEnabled)
@@ -52,7 +52,7 @@ export default function EventSectorsOption({ eventId, initialEnabled, adopted }:
   return (
     <section aria-labelledby="event-sectors-title" className="bg-white border border-gray-200 rounded-2xl p-5 space-y-2" data-event-sectors="1">
       <h2 id="event-sectors-title" className="text-base font-semibold text-gray-900">
-        Secteurs <span className="ml-1 rounded-md bg-gray-100 px-1.5 py-0.5 text-xs font-medium text-gray-700">bêta</span>
+        Secteurs
       </h2>
       {adopted ? (
         <>

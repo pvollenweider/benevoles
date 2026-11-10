@@ -2,16 +2,17 @@
 // SPDX-License-Identifier: AGPL-3.0-only
 
 /**
- * Sectors grouping several postes (#1147), beta capability « sectors » (#1168). A sector groups
- * postes of one event (« Parking » for « Parking Nord » and « Parking Mairie »); a poste belongs to
- * zero or one sector (Shift.sectorId, shared per poste, src/lib/role-settings.ts). Only organisers
- * see sectors: the volunteers' pages, emails and API are unchanged.
+ * Sectors grouping several postes (#1147), available to every active organisation since #1311
+ * (they left the beta programme). A sector groups postes of one event (« Parking » for « Parking
+ * Nord » and « Parking Mairie »); a poste belongs to zero or one sector (Shift.sectorId, shared per
+ * poste, src/lib/role-settings.ts). Only organisers see sectors: the volunteers' pages, emails and
+ * API are unchanged.
  *
  * The event option « Organiser les postes par secteurs » (Event.sectorsEnabled):
- * - is offered while the organisation can adopt the capability (canAdoptBeta), or while the event
- *   already has it on or adopted it (an event never loses what it uses, BE06);
- * - can be turned on only while the capability can be adopted, and off as long as no sector was
- *   saved;
+ * - is offered to every active organisation, or while the event already has it on or adopted it
+ *   (an event never loses what it uses, BE06);
+ * - can be turned on only while the organisation's links are open (active, not suspended), and off
+ *   as long as no sector was saved;
  * - adoption (Event.sectorsAdoptedAt) happens with the first saved sector, in the same transaction,
  *   under a row lock on the event (src/lib/sector-adoption.ts). From then on the structure stays,
  *   even with every sector archived, and the option can no longer be turned off.
@@ -24,7 +25,7 @@
 export const SECTOR_NAME_MAX = 60
 
 export const SECTORS_OPTION_LABEL = "Organiser les postes par secteurs"
-export const SECTORS_OPTION_HINT = "Un secteur regroupe plusieurs postes, par exemple « Parking » pour « Parking Nord » et « Parking Mairie ». Les secteurs servent à l'organisation : les bénévoles ne les voient pas. Fonction en bêta."
+export const SECTORS_OPTION_HINT = "Un secteur regroupe plusieurs postes, par exemple « Parking » pour « Parking Nord » et « Parking Mairie ». Les secteurs servent à l'organisation : les bénévoles ne les voient pas."
 export const SECTORS_FIRST_SAVE_NOTICE = "En créant ce premier secteur, vous conservez l'organisation par secteurs pour cet événement."
 export const SECTORS_ADOPTED_NOTICE = "Cet événement utilise des secteurs. Vous pouvez les réorganiser, mais vous ne pouvez plus désactiver cette organisation."
 export const NO_SECTOR_LABEL = "Autres postes"
@@ -33,7 +34,7 @@ export const NO_SECTOR_OPTION = "Autres postes (aucun secteur)"
 /** Under « Autres postes » while every poste is still there, right after the first sector is saved. */
 export const SECTORS_EXISTING_POSTES_NOTICE = "Vos postes existants restent dans « Autres postes ». Utilisez « Déplacer… » pour les ranger dans vos secteurs."
 
-export const SECTORS_CLOSED_ERROR = "Les secteurs ne sont pas disponibles pour votre organisation : ils font partie des fonctions bêta (Paramètres)."
+export const SECTORS_CLOSED_ERROR = "Les secteurs ne sont pas disponibles pour cette organisation : son espace n'est pas actif."
 export const SECTORS_NOT_ENABLED_ERROR = "Activez d'abord « Organiser les postes par secteurs » dans les informations de l'événement."
 export const SECTORS_LOCKED_ERROR = "Cet événement utilise des secteurs depuis l'enregistrement du premier : cette organisation ne peut plus être désactivée."
 export const SECTOR_NAME_TAKEN_ERROR = "Un secteur porte déjà ce nom dans cet événement."
@@ -46,8 +47,8 @@ export type SectorsEventState = { sectorsEnabled: boolean; sectorsAdoptedAt: Dat
 export const sectorsAdopted = (event: SectorsEventState | null | undefined): boolean => !!event?.sectorsAdoptedAt
 
 /**
- * Whether the event settings show the option: the organisation can adopt the capability now, or
- * the event already has it on or adopted it (the gate covers new adoptions only).
+ * Whether the event settings show the option: the organisation can adopt sectors now, or the event
+ * already has it on or adopted it (the gate covers new adoptions only).
  */
 export function sectorsOptionOffered(event: SectorsEventState, canAdopt: boolean): boolean {
   return canAdopt || event.sectorsEnabled || sectorsAdopted(event)
@@ -73,9 +74,9 @@ export function sectorsManaged(event: SectorsEventState | null | undefined): boo
 export type SectorsDecision = { ok: true; change: boolean } | { ok: false; status: 403 | 409; error: string }
 
 /**
- * Turning the option on or off, read under the event's row lock. On needs the capability (a new
- * adoption), unless already on; off is refused once a sector was saved. Asking for the current
- * value again changes nothing.
+ * Turning the option on or off, read under the event's row lock. On needs the organisation to be
+ * available (a new adoption), unless already on; off is refused once a sector was saved. Asking for
+ * the current value again changes nothing.
  */
 export function sectorsSwitchDecision(event: SectorsEventState, enabled: boolean, canAdopt: boolean): SectorsDecision {
   if (enabled === event.sectorsEnabled) return { ok: true, change: false }
@@ -86,8 +87,8 @@ export function sectorsSwitchDecision(event: SectorsEventState, enabled: boolean
 
 /**
  * Saving a sector, read under the event's row lock. An event that adopted sectors keeps full use
- * (BE06). Otherwise this is the first sector: the option must be on and the capability open; the
- * caller then sets `sectorsAdoptedAt` in the same transaction (`adopt: true`).
+ * (BE06). Otherwise this is the first sector: the option must be on and the organisation available;
+ * the caller then sets `sectorsAdoptedAt` in the same transaction (`adopt: true`).
  */
 export function firstSectorDecision(event: SectorsEventState, canAdopt: boolean): { ok: true; adopt: boolean } | { ok: false; status: 403 | 409; error: string } {
   if (sectorsAdopted(event)) return { ok: true, adopt: false }

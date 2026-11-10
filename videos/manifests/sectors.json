@@ -26,7 +26,7 @@
   "segments": [
     {
       "id": "sectors-welcome",
-      "transcript": "Quand un événement compte beaucoup de postes, les secteurs aident à s'y retrouver. Un secteur Parking regroupe par exemple Parking Nord et Parking Mairie. C'est une fonction en bêta, proposée aux organisations qui y participent. Les bénévoles ne voient jamais les secteurs : leur page d'inscription, leurs emails et leur page Mes inscriptions ne changent pas.",
+      "transcript": "Quand un événement compte beaucoup de postes, les secteurs aident à s'y retrouver. Un secteur Parking regroupe par exemple Parking Nord et Parking Mairie. L'option se choisit pour chaque événement, désactivée par défaut. Les bénévoles ne voient jamais les secteurs : leur page d'inscription, leurs emails et leur page Mes inscriptions ne changent pas.",
       "fallbackDurationMs": 28820
     },
     {
@@ -95,7 +95,7 @@
       "Les bénévoles ne voient jamais les secteurs.",
       "Dès le premier secteur enregistré, l'événement garde son organisation par secteurs : l'option ne peut plus être désactivée.",
       "Le choix du filtre Secteur figure dans l'adresse de la page ; il limite ce que vous voyez, pas ce que vous pouvez faire.",
-      "C'est une fonction en bêta : votre organisation doit participer à la bêta."
+      "L'option se choisit pour chaque événement et reste désactivée par défaut."
     ]
   }
 }

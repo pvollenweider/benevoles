@@ -11,14 +11,14 @@ Expliquer les trois accords d'une fonction en bêta (#1168) : l'opérateur ouvre
 ## Démonstration
 
 1. Session de l'opérateur (compte super admin fictif de la formation) : menu Super Admin, Fonctions bêta. Rien n'est coché, aucune organisation ne participe.
-2. Cocher Secteurs, puis Échanges de créneaux, et Enregistrer : « Fonctions ouvertes enregistrées. ». Organisations participantes : « Aucune organisation ne participe à la bêta. ».
-3. Session de la propriétaire de l'Association du Festival de Montvert : Paramètres, carte Fonctions bêta, avec la liste des deux fonctions ouvertes. Activer Essayer les fonctions avancées en bêta : la phrase indique la date et « activée par Élodie Nováková ».
-4. Informations du Festival de Montvert : les cartes Échanges de créneaux et Secteurs proposent leur option, toutes deux désactivées.
+2. Cocher Échanges de créneaux, et Enregistrer : « Fonctions ouvertes enregistrées. ». Organisations participantes : « Aucune organisation ne participe à la bêta. ».
+3. Session de la propriétaire de l'Association du Festival de Montvert : Paramètres, carte Fonctions bêta, avec la liste de la fonction ouverte. Activer Essayer les fonctions avancées en bêta : la phrase indique la date et « activée par Élodie Nováková ».
+4. Informations du Festival de Montvert : la carte Échanges de créneaux propose son option, désactivée.
 5. Retour chez l'opérateur : l'association figure dans Organisations participantes, avec sa date.
 
 ## Résultat visible
 
-Deux fonctions ouvertes, une organisation inscrite, un événement inchangé dont les options sont proposées.
+Une fonction ouverte, une organisation inscrite, un événement inchangé dont l'option est proposée.
 
 ## Points d'attention
 

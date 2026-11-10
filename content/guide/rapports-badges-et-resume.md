@@ -31,7 +31,7 @@ aliases: []
 
 Dans les plannings par jour et par poste, la colonne **Effectif** ajoute « sous le minimum (2) » ou « minimum atteint » aux créneaux qui ont un minimum de personnes, avec une phrase qui l'explique sous le tableau. Sauf l'export complet, ces documents sont conçus pour le noir et blanc ; le logo de l'organisation, s'il y en a un, figure en gris à côté du titre. La feuille de présence en CSV se télécharge depuis les inscriptions (voir [Présences le jour J](presences-le-jour-j.md)). Les heures planifiées des membres n'y figurent jamais ; la liste avec téléphones porte la mention « Ne pas afficher ni distribuer ».
 
-Dans un événement organisé par secteurs (bêta), le champ **Secteur** en haut de l'onglet **Documents** limite aux postes d'un secteur, ou à « Autres postes », les documents ci-dessus, les badges et le résumé de l'événement ; chaque document limité l'indique sous son titre (« Secteur : Parking »). L'archive de l'événement reste toujours complète. Un poste déplacé dans un autre secteur suit son nouveau secteur dès le document suivant.
+Dans un événement organisé par secteurs, le champ **Secteur** en haut de l'onglet **Documents** limite aux postes d'un secteur, ou à « Autres postes », les documents ci-dessus, les badges et le résumé de l'événement ; chaque document limité l'indique sous son titre (« Secteur : Parking »). L'archive de l'événement reste toujours complète. Un poste déplacé dans un autre secteur suit son nouveau secteur dès le document suivant.
 
 ## Badges
 

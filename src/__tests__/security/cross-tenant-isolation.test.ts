@@ -2122,7 +2122,7 @@ describe("Organization settings — cross-tenant isolation (#1049)", () => {
 
   // #1168: joining the beta writes the session org only; an org-B id in the URL or the body has nowhere to go.
   it("PUT /api/admin/settings/organization/beta opts in the session org only", async () => {
-    vi.doMock("@/lib/beta-access", () => ({ readOpenBetaCapabilities: vi.fn().mockResolvedValue(["sectors"]) }))
+    vi.doMock("@/lib/beta-access", () => ({ readOpenBetaCapabilities: vi.fn().mockResolvedValue(["shiftSwaps"]) }))
     const { PUT } = await import("@/app/api/admin/settings/organization/beta/route")
     setupGuard()
     prismaMock.organization.findUnique.mockResolvedValueOnce({ betaOptInAt: null })
@@ -2297,7 +2297,7 @@ describe("Sectors — cross-tenant isolation (#1147)", () => {
 
   // #1169: a sector leader for an org-A event, naming an org-B sector, is never created.
   it("POST sector-leaders with an org-B sector through an org-A event creates no leader", async () => {
-    // The beta gate open for org A: capability opened by the operator, org in the beta.
+    // The organisation is available; sectors no longer need the beta (#1311).
     ;(prismaMock as Record<string, unknown>).platformSetting = { findUnique: vi.fn().mockResolvedValue({ value: { open: ["sectors", "sectorLeaders"] } }) }
     prismaMock.organization.findUnique.mockResolvedValueOnce({ active: true, suspendedAt: null, betaOptInAt: new Date() })
     const { POST } = await import("@/app/api/admin/events/[id]/sector-leaders/route")

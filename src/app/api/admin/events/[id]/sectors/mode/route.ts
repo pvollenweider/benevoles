@@ -9,9 +9,9 @@ import { setSectorsEnabled } from "@/lib/sector-adoption"
 
 /**
  * « Organiser les postes par secteurs » (#1147), the event's option, under the event's row lock
- * (src/lib/sector-adoption.ts): on needs the beta capability (a new adoption), off is refused (409)
- * once a sector was saved. Its own route, not a field of the autosaved event form, so a form save
- * never touches the mode.
+ * (src/lib/sector-adoption.ts): on needs the organisation to be available (a new adoption), off is
+ * refused (409) once a sector was saved. Its own route, not a field of the autosaved event form, so
+ * a form save never touches the mode.
  */
 const schema = z.object({ enabled: z.boolean() })
 

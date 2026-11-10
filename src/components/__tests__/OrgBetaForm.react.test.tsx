@@ -9,24 +9,25 @@ import OrgBetaForm from "../admin/OrgBetaForm"
 
 // « Fonctions bêta » card of Paramètres (#1168): the switch, its description and the outcome.
 
-const sectors = [{ id: "sectors", label: "Secteurs", description: "Regrouper plusieurs postes sous une même coordination." }]
+// A feature still in the beta: graduated ones (sectors, sector leaders) are filtered out by the page.
+const capabilities = [{ id: "shiftSwaps", label: "Échanges de créneaux", description: "Permettre à deux bénévoles inscrits sur le même poste d'échanger leurs créneaux." }]
 const off = { optedIn: false, optedInAt: null, optedInByName: null }
 
 afterEach(() => { cleanup(); vi.unstubAllGlobals() })
 
 describe("OrgBetaForm", () => {
   it("is off by default, a named switch described by its hint, listing what it opens", () => {
-    render(<OrgBetaForm initial={off} capabilities={sectors} timeZone="Europe/Zurich" contact="contact@example.org" />)
+    render(<OrgBetaForm initial={off} capabilities={capabilities} timeZone="Europe/Zurich" contact="contact@example.org" />)
     const sw = screen.getByRole("switch", { name: "Essayer les fonctions avancées en bêta" })
     expect(sw).toHaveAttribute("aria-checked", "false")
     expect(sw).toHaveAccessibleDescription(/Vos événements existants ne changent pas/)
-    expect(screen.getByRole("list", { name: /Ce que la bêta vous permet d'essayer/ })).toHaveTextContent("Secteurs : regrouper plusieurs postes")
+    expect(screen.getByRole("list", { name: /Ce que la bêta vous permet d'essayer/ })).toHaveTextContent("Échanges de créneaux : permettre à deux bénévoles")
     expect(screen.getByRole("link", { name: "contact@example.org" })).toHaveAttribute("href", "mailto:contact@example.org")
   })
 
   it("flips only after the server agreed, keeps the focus and announces the result", async () => {
     vi.stubGlobal("fetch", vi.fn().mockResolvedValue(new Response(JSON.stringify({ optedIn: true, optedInAt: "2026-10-26T08:00:00Z", optedInByName: "Marie Dupont" }), { status: 200 })))
-    render(<OrgBetaForm initial={off} capabilities={sectors} timeZone="Europe/Zurich" contact={null} />)
+    render(<OrgBetaForm initial={off} capabilities={capabilities} timeZone="Europe/Zurich" contact={null} />)
     const sw = screen.getByRole("switch")
     sw.focus()
     fireEvent.click(sw)
@@ -40,7 +41,7 @@ describe("OrgBetaForm", () => {
 
   it("stays off and says why when the server refuses", async () => {
     vi.stubGlobal("fetch", vi.fn().mockResolvedValue(new Response(JSON.stringify({ error: "Aucune fonction bêta n'est ouverte à l'essai pour le moment." }), { status: 409 })))
-    render(<OrgBetaForm initial={off} capabilities={sectors} timeZone="Europe/Zurich" contact={null} />)
+    render(<OrgBetaForm initial={off} capabilities={capabilities} timeZone="Europe/Zurich" contact={null} />)
     const sw = screen.getByRole("switch")
     fireEvent.click(sw)
     await waitFor(() => expect(screen.getByRole("alert")).toHaveTextContent("Aucune fonction bêta n'est ouverte"))

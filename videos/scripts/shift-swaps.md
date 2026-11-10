@@ -26,7 +26,7 @@ Deux échanges réels, l'un effectué tout de suite, l'autre après validation, 
 
 ## Points d'attention
 
-- Seed : `scripts/seed-video-scenario.ts shift-swaps` (organisation dédiée inscrite à la bêta, fonctions Secteurs et Échanges de créneaux ouvertes, événement un samedi et un dimanche au moins deux semaines plus tard, secteurs Bars et Accueil, échanges désactivés). Une prise par seed.
+- Seed : `scripts/seed-video-scenario.ts shift-swaps` (organisation dédiée inscrite à la bêta pour les échanges, secteur Échanges de créneaux ouvert, événement un samedi et un dimanche au moins deux semaines plus tard, secteurs Bars et Accueil sans bêta depuis #1311, échanges désactivés). Une prise par seed.
 - Les pages des bénévoles s'ouvrent par leur lien personnel, comme depuis leurs emails ; aucun nom de la personne qui demande n'apparaît dans les propositions.
 - La narration dit « Jules, initiale H », la forme lue par les lecteurs d'écran ; l'écran montre « Jules H. ».
 - Ne pas annoncer d'email non observé : seul l'email « Échange effectué » de Léa est ouvert.

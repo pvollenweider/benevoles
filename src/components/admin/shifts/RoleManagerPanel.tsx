@@ -73,7 +73,7 @@ export default function RoleManagerPanel({
   onDeleteError:    (error: string) => void
   /** The role is deleted server-side: the parent closes the modal, drops its shifts and announces. */
   onRoleDeleted:    (role: string, unpublished: boolean | undefined) => void
-  /** Sectors (#1147, beta): null for an event without the option, which keeps the panel as it was. */
+  /** Sectors (#1147): null for an event without the option, which keeps the panel as it was. */
   sectorsState?:    AdminSectorsState | null
   setSectorsState?: React.Dispatch<React.SetStateAction<AdminSectorsState | null>>
   /** Closes the parent's confirmation modal once a confirmed action is done (archiving a sector). */

@@ -11,7 +11,7 @@ import { SECTOR_LEADER_ADMIN_SELECT } from "@/lib/admin-row-selects"
 import { canAdoptBeta } from "@/lib/beta-access"
 import { SECTOR_LEADERS_CLOSED_ERROR } from "@/lib/leader-scope"
 
-// One poste (`roleName`, as before #1169) or one sector (`sectorId`, beta): exactly one.
+// One poste (`roleName`, as before #1169) or one sector (`sectorId`, once the event adopted sectors): exactly one.
 const postSchema = z.object({
   roleName: z.string().min(1).max(100).optional(),
   sectorId: z.string().min(1).max(100).optional(),
@@ -53,9 +53,8 @@ export async function POST(req: Request, { params }: { params: Promise<{ id: str
   })
   if (!event) return NextResponse.json({ error: "Non trouvé" }, { status: 404 })
 
-  // A sector leader (#1169) is a new use of the beta capability « sectorLeaders »: refused while the
-  // operator has not opened it or the organisation has not joined the beta. The event's sectors
-  // are checked under their locks by addSectorLeader.
+  // A sector leader (#1169) follows the event's sectors: refused while the organisation's links are
+  // not open. The event's sectors and adoption are checked under their locks by addSectorLeader.
   if (parsed.data.sectorId && !(await canAdoptBeta(guard.organizationId, "sectorLeaders"))) {
     return NextResponse.json({ error: SECTOR_LEADERS_CLOSED_ERROR }, { status: 403 })
   }

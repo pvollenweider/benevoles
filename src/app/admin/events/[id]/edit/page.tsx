@@ -35,7 +35,7 @@ export default async function EditEventPage({ params, searchParams }: { params: 
   const event = await db.event.findFirst({ where: { id }, include: { organization: { select: { timeZone: true } } } })
   if (!event) notFound()
   const timeZone = orgTimeZone(event.organization)
-  // Sectors (#1147, beta): offered while the organisation can adopt them, or once the event has them.
+  // Sectors (#1147): offered while the organisation can adopt them, or once the event has them.
   // The gate is read only for an event that has neither.
   const sectorsOffered = sectorsOptionOffered(event, event.sectorsEnabled || sectorsAdopted(event) || await canAdoptBeta(event.organizationId, "sectors"))
 

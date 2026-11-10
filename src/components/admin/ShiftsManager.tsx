@@ -63,7 +63,7 @@ export default function ShiftsManager({
   initialRecurrences?: AdminRecurrence[]
   /** "YYYY-MM-DD" today in the organisation's zone. */
   today?: string
-  /** Sectors (#1147, beta): the event's option, adoption and sectors; null = nothing about sectors on the page. */
+  /** Sectors (#1147): the event's option, adoption and sectors; null = nothing about sectors on the page. */
   initialSectors?: AdminSectorsState | null
   /** « Repas sur le pouce possible » (#1171, lot 2): shown where the workload protection can be used. */
   mealOnTheGoShown?: boolean

@@ -6,7 +6,7 @@ Voix Puck, une prise continue, narration au vouvoiement (organisateurs).
 
 ## Utilité
 
-Montrer la fonction bêta des secteurs (#1147, #1170, #1182 à #1187) de bout en bout : activer l'option sur un événement, créer les secteurs d'abord, ajouter un poste dans un secteur, ranger les postes existants, lire la frise et l'export complet groupés, puis suivre un secteur avec le filtre et lui écrire.
+Montrer les secteurs (#1147, #1170, #1182 à #1187) de bout en bout : activer l'option sur un événement, créer les secteurs d'abord, ajouter un poste dans un secteur, ranger les postes existants, lire la frise et l'export complet groupés, puis suivre un secteur avec le filtre et lui écrire.
 
 ## Démonstration
 
@@ -25,7 +25,7 @@ Un événement organisé par secteurs, ses postes rangés, ses vues filtrées et
 
 ## Points d'attention
 
-- Seed : `scripts/seed-video-scenario.ts sectors` (organisation dédiée inscrite à la bêta, fonction Secteurs seule ouverte, événement qui commence demain pour que Jour J soit proposé, secteurs désactivés). Une prise par seed : la prise enregistre des secteurs, ce qui ne peut plus être défait.
+- Seed : `scripts/seed-video-scenario.ts sectors` (organisation dédiée active, sans bêta depuis #1311, événement qui commence demain pour que Jour J soit proposé, secteurs désactivés). Une prise par seed : la prise enregistre des secteurs, ce qui ne peut plus être défait.
 - Les bénévoles ne voient jamais les secteurs : ne rien montrer côté page d'inscription.
 - Le compteur de 5 personnes vient des inscriptions confirmées de Parking Nord (Aline, Nicolas, Léa, Noah) et Parking Mairie (Sarah).
 - L'adresse de la page n'est pas visible dans la capture : la narration le montre en rouvrant la page, sans afficher l'identifiant du secteur.

@@ -28,10 +28,11 @@ C'est gratuit, open source et hébergé en France. Ça convient aussi bien à un
 - **Des permanences qui reviennent chaque semaine** : l'accueil du mercredi ou la distribution du samedi se décrit une fois pour toute la saison, jours fériés et fermetures exclus.
 - **Un bon départ** : des modèles d'événement (festival, buvette, manifestation sportive, fête de village) et d'activités régulières (épicerie participative, distribution alimentaire, permanence d'accueil, repair café), ou l'événement de l'an dernier dupliqué avec toutes ses dates décalées.
 - **Un brouillon, puis la publication**, après une page de vérification qui signale ce qui manque : un créneau sans lieu ou sans contact, des inscriptions fermées sans date d'ouverture.
+- **Des secteurs**, quand un événement compte beaucoup de postes : « Parking Nord » et « Parking Sud » se regroupent dans le secteur « Parking ». Le planning, les filtres, les documents à imprimer et les messages suivent vos secteurs ; les bénévoles ne les voient pas. L'option se choisit événement par événement, désactivée par défaut.
 
 <!-- video: EVENT_CREATE_PUBLISH_OVERVIEW -->
 
-En savoir plus : [créer un événement](../guide/creer-un-evenement.md), [configurer les créneaux](../guide/configurer-les-creneaux.md), [publier un événement](../guide/publier-un-evenement.md).
+En savoir plus : [créer un événement](../guide/creer-un-evenement.md), [configurer les créneaux](../guide/configurer-les-creneaux.md), [organiser les postes par secteurs](../guide/gerer-les-postes.md#organiser-les-postes-par-secteurs), [publier un événement](../guide/publier-un-evenement.md).
 
 ## Inscrire les bénévoles
 
@@ -87,7 +88,7 @@ En savoir plus : [où manque-t-il du monde ?](../guide/ou-manque-t-il-du-monde.m
 - **Un besoin imprévu, sans quitter la page** : **Ajouter un besoin** crée le créneau en quelques champs, puis propose aussitôt les bénévoles déjà inscrits aujourd'hui, par email et par notification. Le créneau apparaît sur le tableau avec ses places manquantes, même si l'envoi échoue et qu'on le retente.
 - **Le planning complet en frise**, prêt à imprimer, et des feuilles pour le terrain : par jour, par poste et par bénévole, et une feuille de présence à cocher.
 - **Des badges** à imprimer et découper, avec le prénom et le poste de chaque bénévole.
-- **Des responsables de secteur** qui suivent les bénévoles de leur poste, ou de tout un secteur (bêta), depuis un lien personnel, sans compte. Une question rattachée à leur poste (le repas du soir pour l'équipe Cuisine) leur fait suivre les réponses que les bénévoles modifient.
+- **Des responsables de secteur** qui suivent les bénévoles de leur poste, ou de tout un secteur, depuis un lien personnel, sans compte. Une question rattachée à leur poste (le repas du soir pour l'équipe Cuisine) leur fait suivre les réponses que les bénévoles modifient.
 
 <!-- video: ATTENDANCE_CHECK_IN -->
 
@@ -101,13 +102,11 @@ Pour les événements qui comptent beaucoup de postes ou de bénévoles, plusieu
 - **Un planning en brouillon, publié en une fois (bêta)** : une ligne par personne, une colonne par date. Un brouillon ne prend aucune place et n'envoie rien. **Publier les affectations** publie tout d'un coup, ou rien si un point bloque, et chaque bénévole reçoit un seul email avec ses missions.
 - **Une proposition de répartition (bêta)** : selon les disponibilités, les besoins, les règles de l'événement et l'objectif d'heures de chacun, elle remplit les brouillons et dit pourquoi une place reste vide. Vous verrouillez ce qui vous convient, corrigez le reste ou demandez une autre répartition ; rien n'est publié sans vous.
 - **Les pauses et la charge protégées (bêta)** : vous fixez les limites (temps sans vraie pause, heures par journée, repos, pause repas, jours sans mission, trajet entre deux lieux, limites plus strictes pour les moins de 18 ans), et toute affectation qui les dépasse est refusée, avec la limite en cause, le jour et le dépassement.
-- **Des secteurs (bêta)** : « Parking Nord » et « Parking Sud » se regroupent dans le secteur « Parking ». Le planning, les filtres, les documents à imprimer et les messages suivent vos secteurs ; les bénévoles ne les voient pas.
-- **Un responsable pour tout un secteur (bêta)** : depuis son lien, sans compte, il voit en lecture seule tous les bénévoles du secteur, jour par jour, et reçoit les inscriptions et les désistements de ses postes.
 - **Les échanges de créneaux (bêta)** : un bénévole propose d'échanger un créneau depuis sa page ; une personne inscrite sur le même poste, ou sur un poste du même secteur, propose le sien, et les deux créneaux sont échangés d'un coup, avec un email pour chacun. Vous pouvez valider chaque échange.
 
 <!-- video: ASSIGNMENT_PROPOSALS -->
 
-En savoir plus : [recueillir les disponibilités](../guide/recueillir-les-disponibilites.md), [protection des pauses et de la charge](../guide/suivre-les-inscriptions.md#protection-des-pauses-et-de-la-charge-beta), [organiser les postes par secteurs](../guide/gerer-les-postes.md#organiser-les-postes-par-secteurs-beta), [échanges de créneaux](../guide/suivre-les-inscriptions.md#echanges-de-creneaux-entre-benevoles-beta), [fonctions bêta](../guide/personnaliser-l-organisation.md#fonctions-beta).
+En savoir plus : [recueillir les disponibilités](../guide/recueillir-les-disponibilites.md), [protection des pauses et de la charge](../guide/suivre-les-inscriptions.md#protection-des-pauses-et-de-la-charge-beta), [échanges de créneaux](../guide/suivre-les-inscriptions.md#echanges-de-creneaux-entre-benevoles-beta), [fonctions bêta](../guide/personnaliser-l-organisation.md#fonctions-beta).
 
 ## Après l'événement
 

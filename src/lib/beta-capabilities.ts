@@ -4,8 +4,8 @@
 import { orgLinksOpen } from "./org-lifecycle"
 
 /**
- * Beta access to advanced features (#1168): one gate shared by every advanced capability (sectors
- * first, then swaps, dated availability, drafts). Three levels, each one required:
+ * Beta access to advanced features (#1168): one gate shared by every capability still in the beta
+ * programme (swaps, dated availability, drafts). For those, three levels are required:
  *
  * 1. operator: the capability is open for trial (PlatformSetting `beta.capabilities`, super admin
  *    space, « Fonctions bêta »), and shipped in this version of the code;
@@ -13,6 +13,14 @@ import { orgLinksOpen } from "./org-lifecycle"
  *    organisation is active and not suspended;
  * 3. event: each capability has its own event option, offered only when levels 1 and 2 allow it
  *    (added by the lot that ships the capability).
+ *
+ * A capability that left the beta programme is marked `graduated` (#1311): it stays in the registry
+ * so the type and the event options keep working, but the operator can no longer open it and no
+ * organisation needs to join the beta. Only the organisation level remains (active, not suspended):
+ * `betaAdoptionAllowed` answers it, so `canAdoptBeta` stays the single server entry point. Stored
+ * ids of graduated capabilities are ignored when reading the open list, and kept by
+ * `storedOpenList` like any id this version cannot manage: saving the operator screen never loses
+ * them, and an older pod serving during a rollout still understands them.
  *
  * Contract for the lots that use it (BE06): `betaAdoptionAllowed` (and its loader `canAdoptBeta`
  * in beta-access.ts) gates NEW adoptions only. An event that already adopted a capability keeps
@@ -33,25 +41,33 @@ export type BetaCapability = {
    * nobody can adopt it, so no owner is ever promised a feature that does not exist yet.
    */
   shipped: boolean
+  /**
+   * A capability that left the beta programme and is available to every active organisation
+   * (#1311): never opened by the operator, never listed, never requiring `betaOptInAt`. Its event
+   * option is still per event, off by default.
+   */
+  graduated?: boolean
 }
 
 export type BetaRegistry = Record<string, BetaCapability>
 
-/** Every capability that can be opened for trial: id → what the owner reads in Paramètres. */
+/** Every declared capability: still in the beta, or graduated and available to all. */
 export const BETA_CAPABILITIES = {
-  // #1147, lot A1: the event option « Organiser les postes par secteurs » (src/lib/sectors.ts).
+  // #1147: the event option « Organiser les postes par secteurs » (src/lib/sectors.ts). Left the
+  // beta programme in #1311: available to every active organisation, per event, off by default.
   sectors: {
     label: "Secteurs",
     description: "Regrouper plusieurs postes sous une même coordination.",
     shipped: true,
+    graduated: true,
   },
-  // #1169, lot B1: a leader responsible for a whole sector (src/lib/leader-scope.ts). Needs an event
-  // that adopted sectors. Its own capability so the operator opens it once the deploy is over: an
-  // older pod still serving during the rollout never meets a sector leader (rollout in #1169).
+  // #1169: a leader responsible for a whole sector (src/lib/leader-scope.ts). Needs an event that
+  // adopted sectors; graduated with them in #1311.
   sectorLeaders: {
     label: "Responsables de secteur",
     description: "Confier tous les postes d'un secteur à un même responsable, en lecture seule.",
     shipped: true,
+    graduated: true,
   },
   // #1174: the event option « Autoriser les demandes d'échange de créneaux » (src/lib/shift-swaps.ts),
   // with « Mes inscriptions », the organisers' approvals and the emails.
@@ -97,10 +113,17 @@ export function isBetaCapabilityId(id: unknown, registry: BetaRegistry = BETA_CA
   return typeof id === "string" && Object.prototype.hasOwnProperty.call(registry, id)
 }
 
-/** Whether the operator may open `id` in this version: a known capability that is shipped. */
+/**
+ * Whether the operator may open `id` in this version: a known capability that is shipped and still
+ * in the beta programme. A graduated capability is never openable, so a stored id of it is ignored
+ * when the open list is read.
+ */
 export function isOpenableCapability(id: unknown, registry: BetaRegistry = BETA_CAPABILITIES): id is BetaCapabilityId {
-  return isBetaCapabilityId(id, registry) && registry[id].shipped === true
+  return isBetaCapabilityId(id, registry) && registry[id].shipped === true && registry[id].graduated !== true
 }
+
+/** The capabilities « Fonctions bêta » lists and the operator may open: shipped, not graduated. */
+export const OPENABLE_CAPABILITY_IDS = BETA_CAPABILITY_IDS.filter((id) => isOpenableCapability(id))
 
 function idList(value: unknown): unknown[] | null {
   const list = Array.isArray(value) ? value : (value as { open?: unknown } | null | undefined)?.open
@@ -156,10 +179,15 @@ export type BetaOrgState = {
 
 /**
  * Whether the organisation may adopt `capabilityId` on a new event (or switch it on for an event
- * that does not use it yet). Levels 1 and 2 only; see the contract above for what is already in use.
+ * that does not use it yet). A capability still in the beta needs the operator's open list and the
+ * organisation's opt-in; a graduated one needs only an organisation whose links are open (active
+ * and not suspended). Levels 1 and 2 only; see the contract above for what is already in use.
  */
 export function betaAdoptionAllowed(org: BetaOrgState | null | undefined, openCapabilities: readonly string[], capabilityId: string, registry: BetaRegistry = BETA_CAPABILITIES): boolean {
-  if (!isOpenableCapability(capabilityId, registry)) return false
+  if (!isBetaCapabilityId(capabilityId, registry)) return false
+  const capability = registry[capabilityId]
+  if (capability.shipped !== true) return false
+  if (capability.graduated === true) return orgLinksOpen(org)
   if (!openCapabilities.includes(capabilityId)) return false
   return orgLinksOpen(org) && !!org?.betaOptInAt
 }

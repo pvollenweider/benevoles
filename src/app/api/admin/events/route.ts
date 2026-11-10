@@ -102,7 +102,7 @@ export async function POST(req: Request) {
 
   // « Qui est inscrit » (#1068): what the form sent, else the organisation's default for new events.
   const org = await db.organization.findUnique({ where: { id: organizationId }, select: { shiftRosterDefault: true, sectorsDefault: true, shiftSwapsDefault: true, workloadPolicyDefault: true, timeZone: true } })
-  // Sectors (#1147, beta): the organisation's default, only while the capability can be adopted.
+  // Sectors (#1147): the organisation's default, only while the organisation is available.
   const sectorsEnabled = await newEventSectorsEnabled(organizationId, org?.sectorsDefault)
   // Shift swaps (#1174, beta): the organisation's default, only while the capability can be adopted.
   const shiftSwapsEnabled = await newEventShiftSwapsEnabled(organizationId, org?.shiftSwapsDefault)

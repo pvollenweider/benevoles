@@ -84,7 +84,8 @@ async function main() {
   await prisma.rateLimit.deleteMany()
   // The beta videos (scripts/seed-video-beta.ts) open capabilities for their own organisation; the
   // open list is platform-wide, so the demo starts without any (no « Fonctions bêta » card in
-  // Paramètres, no beta option on its events), as on a fresh database.
+  // Paramètres, no beta option on its events), as on a fresh database. Sectors, available to every
+  // organisation since #1311, stay off on the demo event, as on a fresh one.
   await prisma.platformSetting.deleteMany({ where: { key: "beta.capabilities" } })
 
   const org = await prisma.organization.update({

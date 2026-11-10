@@ -63,7 +63,7 @@ export default function SectorLeadersManager({
   registeredVolunteers?: RegisteredVolunteer[]
   /**
    * Only for an event that adopted sectors (#1169): its sectors, and whether a sector leader can be
-   * added (beta capability open). Absent: the screen of before #1169, word for word.
+   * added (the organisation's links are open). Absent: the screen of before #1169, word for word.
    */
   sectors?: { list: LeaderSectorOption[]; canAdd: boolean }
 }) {
@@ -153,7 +153,7 @@ export default function SectorLeadersManager({
         : { roleName: roleName.trim(), name: name.trim(), email: email.trim() }),
     }), { silent: true })
     if (!outcome.ok) {
-      // A refused sector (archived meanwhile, beta closed) points to the sector field.
+      // A refused sector (archived meanwhile, organisation unavailable) points to the sector field.
       if (sectorMode && (outcome.status === 403 || outcome.status === 404 || (outcome.status === 409 && !outcome.error.startsWith("Cette personne")))) {
         fail(outcome.error, "sector", sectorSelectRef.current)
         return
@@ -294,7 +294,7 @@ export default function SectorLeadersManager({
             <p id={noScopeHintId} className="text-xs text-gray-600">
               {sectors.canAdd
                 ? `Pour confier tout un secteur à un responsable, créez d'abord un secteur dans « ${MANAGE_SECTORS_POSTES_LABEL} ».`
-                : "Confier tout un secteur à un responsable fait partie des fonctions bêta, pas encore actives pour votre organisation (Paramètres)."}
+                : "Confier tout un secteur à un responsable demande un événement qui utilise des secteurs."}
             </p>
           )}
           {registeredVolunteers.length > 0 && (

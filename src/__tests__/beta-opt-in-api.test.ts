@@ -47,7 +47,7 @@ async function route() {
 
 beforeEach(() => {
   vi.clearAllMocks()
-  m.open = ["sectors"]
+  m.open = ["shiftSwaps"]
   m.org = { id: "org-a", active: true, betaOptInAt: null, betaOptInById: null }
   m.auth.mockResolvedValue(owner)
   m.orgLogCreate.mockResolvedValue({ id: "log-1" })

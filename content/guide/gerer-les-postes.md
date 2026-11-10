@@ -10,7 +10,7 @@ aliases: []
 
 # Gérer les postes
 
-Dans la page des créneaux, le bouton **Gérer les postes** ouvre un panneau qui regroupe ces actions, poste par poste. Dans un événement qui utilise des secteurs, le bouton et le panneau s'appellent **Gérer les secteurs et postes** (voir [Organiser les postes par secteurs](#organiser-les-postes-par-secteurs-beta)) :
+Dans la page des créneaux, le bouton **Gérer les postes** ouvre un panneau qui regroupe ces actions, poste par poste. Dans un événement qui utilise des secteurs, le bouton et le panneau s'appellent **Gérer les secteurs et postes** (voir [Organiser les postes par secteurs](#organiser-les-postes-par-secteurs)) :
 
 ![Panneau « Gérer les postes » ouvert dans la page des créneaux : pour chaque poste (Montage, Accueil, Buvette, Navette, Sécurité, Démontage), les flèches Monter et Descendre, la pastille de couleur, les boutons « Limite », « Accès : tous » ou « Accès : sécurité », « Cumul : non », « Renommer » et « Supprimer » ; en bas, « Enregistrer l'ordre » et « Fermer »](/doc-img/admin-roles.png)
 
@@ -26,15 +26,14 @@ Dans la page des créneaux, le bouton **Gérer les postes** ouvre un panneau qui
 
 L'ordre, la couleur, la limite par personne, l'accès (réservé ou attribué par l'organisation) et le cumul appartiennent au poste. Un créneau ajouté ensuite au poste, seul, en série, en permanence récurrente ou en dupliquant un créneau, les prend, de même qu'un créneau déplacé vers ce poste. Dans les formulaires de créneau, le champ « Poste » propose en premier les postes de l'événement qui ont encore un créneau non annulé et rappelle, quand vous en choisissez un, que ses paramètres s'appliquent. Un créneau placé dans un poste qui n'existe pas encore garde les paramètres par défaut, ou les siens s'il vient d'un autre poste.
 
-## Organiser les postes par secteurs (bêta)
+## <a id="organiser-les-postes-par-secteurs-beta"></a>Organiser les postes par secteurs
 
 Un secteur regroupe plusieurs postes d'un événement : le secteur **Parking** pour les postes « Parking Nord » et « Parking Mairie », le secteur **Scène** pour la régie et l'accueil des artistes. Les secteurs servent à l'organisation : la frise des créneaux et le PDF du planning rangent les postes par secteur. Les bénévoles ne voient aucun secteur : la page d'inscription, les emails et leur page **Mes inscriptions** ne changent pas. Les responsables de secteur restent attachés à leur poste.
 
-C'est une fonction en bêta. Pour l'utiliser :
+L'option se choisit pour chaque événement, désactivée par défaut :
 
-1. Un propriétaire active **Essayer les fonctions avancées en bêta** dans **Paramètres**, carte **Fonctions bêta** (voir [Personnaliser l'organisation](personnaliser-l-organisation.md#fonctions-beta)).
-2. Dans les informations de l'événement, carte **Secteurs**, activez l'interrupteur **Organiser les postes par secteurs**. Tant qu'aucun secteur n'est enregistré, vous pouvez le désactiver : l'événement reste tel qu'il était.
-3. Dans **Créneaux**, ouvrez **Gérer les postes** : la partie **Secteurs** apparaît en haut du panneau, même si l'événement n'a encore aucun poste. Dès le premier secteur enregistré, le bouton et le panneau s'appellent **Gérer les secteurs et postes**.
+1. Dans les informations de l'événement, carte **Secteurs**, activez l'interrupteur **Organiser les postes par secteurs**. Tant qu'aucun secteur n'est enregistré, vous pouvez le désactiver : l'événement reste tel qu'il était.
+2. Dans **Créneaux**, ouvrez **Gérer les postes** : la partie **Secteurs** apparaît en haut du panneau, même si l'événement n'a encore aucun poste. Dès le premier secteur enregistré, le bouton et le panneau s'appellent **Gérer les secteurs et postes**.
 
 Commencez par créer vos secteurs, puis ajoutez les postes dans chacun d'eux :
 

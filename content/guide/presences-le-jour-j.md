@@ -41,7 +41,7 @@ Si les inscriptions sont fermées, le créneau est quand même créé, mais l'é
 
 La page reste accessible en dehors des dates, par exemple depuis un favori enregistré sur le téléphone : elle le signale et n'affiche que ce qui tombe dans la fenêtre du moment. Elle est ouverte aux propriétaires et aux organisateurs, pas aux responsables de secteur.
 
-Dans un événement organisé par secteurs (bêta), le champ **Secteur**, au-dessus de la recherche, limite la page aux postes d'un secteur, ou à « Autres postes » : pratique quand chaque responsable suit son secteur sur son téléphone. La mise à jour automatique garde ce choix, et les liens du bas aussi. Le choix figure dans l'adresse de la page, à garder en favori.
+Dans un événement organisé par secteurs, le champ **Secteur**, au-dessus de la recherche, limite la page aux postes d'un secteur, ou à « Autres postes » : pratique quand chaque responsable suit son secteur sur son téléphone. La mise à jour automatique garde ce choix, et les liens du bas aussi. Le choix figure dans l'adresse de la page, à garder en favori.
 
 ## Depuis les inscriptions
 

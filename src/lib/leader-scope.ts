@@ -5,8 +5,8 @@ import { roleSectorOf, type RoleSettingsShift } from "./role-settings"
 
 /**
  * What a leader is responsible for (#1169): one poste (`roleName`, every leader before #1169) or
- * one sector of the event (`sectorId`, beta, once the event adopted sectors). Exactly one of the
- * two is set (database check "SectorLeader_scope_check").
+ * one sector of the event (`sectorId`, once the event adopted sectors). Exactly one of the two is
+ * set (database check "SectorLeader_scope_check").
  *
  * A sector leader covers every poste whose CURRENT sector is theirs, computed at each request with
  * the poste's majority rule (roleSectorOf, src/lib/role-settings.ts): a poste moved out of the
@@ -117,7 +117,7 @@ export function leadersToNotify<T extends LeaderScopeRow & { email: string }>(ro
  * everywhere, nothing renamed. Once the event adopted sectors, a poste leader is a « Responsable de
  * poste » and a sector leader a « Responsable de secteur ».
  */
-export const SECTOR_LEADERS_CLOSED_ERROR = "Les responsables de secteur ne sont pas disponibles pour votre organisation : ils font partie des fonctions bêta (Paramètres)."
+export const SECTOR_LEADERS_CLOSED_ERROR = "Les responsables de secteur ne sont pas disponibles pour cette organisation : son espace n'est pas actif."
 
 export const LEGACY_LEADERS_TITLE = "Responsables de secteur"
 export const POSTE_LEADER_TITLE = "Responsable de poste"

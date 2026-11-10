@@ -8,7 +8,7 @@ import { announce } from "@/lib/announce"
 import { SECTORS_OPTION_LABEL } from "@/lib/sectors"
 
 /**
- * Sectors for the next new events (#1147, beta), Paramètres (owners), like « Qui est inscrit »
+ * Sectors for the next new events (#1147), Paramètres (owners), like « Qui est inscrit »
  * (OrgRosterDefaultForm): the value the organisation's next new events start with, saved with its
  * button. Existing events never change. Shown while the organisation can adopt sectors, or while
  * the default is on (so it can be turned off); `available` false says it has no effect for now.
@@ -44,7 +44,7 @@ export default function OrgSectorsDefaultForm({ initialValue, available }: { ini
   return (
     <section aria-labelledby="org-sectors-default-title" className="bg-white border border-gray-200 rounded-2xl p-5 space-y-3" data-org-sectors-default="1">
       <h2 id="org-sectors-default-title" className="text-sm font-semibold text-gray-800">
-        Secteurs <span className="ml-1 rounded-md bg-gray-100 px-1.5 py-0.5 text-[11px] font-medium text-gray-700">bêta</span>
+        Secteurs
       </h2>
       <div className="flex items-start gap-3">
         <input
@@ -58,8 +58,8 @@ export default function OrgSectorsDefaultForm({ initialValue, available }: { ini
         <div>
           <label htmlFor="org-sectors-default" className="text-sm font-medium text-gray-700">{SECTORS_OPTION_LABEL} pour les nouveaux événements</label>
           <p id="org-sectors-default-hint" className="text-xs text-gray-600">
-            Valeur de départ de l&apos;option dans chaque nouvel événement ; vos événements existants ne changent pas. Fonction en bêta.
-            {!available && " Sans effet pour le moment : les secteurs ne sont pas ouverts à votre organisation (fonctions bêta)."}
+            Valeur de départ de l&apos;option dans chaque nouvel événement ; vos événements existants ne changent pas.
+            {!available && " Sans effet pour le moment : les secteurs ne sont pas disponibles pour cette organisation."}
           </p>
         </div>
       </div>

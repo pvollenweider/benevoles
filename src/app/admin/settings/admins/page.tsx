@@ -82,7 +82,7 @@ export default async function AdminsSettingsPage() {
   }
   const showBeta = !!org && betaCardVisible(openBeta, beta.optedIn)
   const zone = org ? orgTimeZone(org) : APP_TIME_ZONE
-  // Sectors for new events (#1147, beta): while the organisation can adopt them, or while the default is on.
+  // Sectors for new events (#1147): while the organisation can adopt them, or while the default is on.
   const sectorsAvailable = !!org && await canAdoptBeta(organizationId, "sectors")
   const showSectorsDefault = !!org && (sectorsAvailable || org.sectorsDefault)
   // Shift swaps for new events (#1174, beta): while the organisation can adopt them (on by default).
