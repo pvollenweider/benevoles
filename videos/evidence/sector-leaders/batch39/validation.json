@@ -1,0 +1,101 @@
+{
+  "id": "SECTOR_LEADERS",
+  "slug": "sector-leaders",
+  "validatedAt": "2026-11-10T20:09:54.861Z",
+  "continuousNarration": true,
+  "sentenceRevision": false,
+  "narrationContentChecked": true,
+  "voice": "Puck",
+  "captureMs": 282640,
+  "scenes": [
+    {
+      "id": "welcome",
+      "visualMs": 23922,
+      "audioMs": 23922,
+      "driftMs": 0
+    },
+    {
+      "id": "nominate",
+      "visualMs": 20194,
+      "audioMs": 20193,
+      "driftMs": 1
+    },
+    {
+      "id": "registered",
+      "visualMs": 17091,
+      "audioMs": 17088,
+      "driftMs": 3
+    },
+    {
+      "id": "email",
+      "visualMs": 16075,
+      "audioMs": 16074,
+      "driftMs": 1
+    },
+    {
+      "id": "roster",
+      "visualMs": 18427,
+      "audioMs": 18425,
+      "driftMs": 2
+    },
+    {
+      "id": "mobile",
+      "visualMs": 18413,
+      "audioMs": 18412,
+      "driftMs": 1
+    },
+    {
+      "id": "scope",
+      "visualMs": 14388,
+      "audioMs": 14386,
+      "driftMs": 2
+    },
+    {
+      "id": "new-signup",
+      "visualMs": 28781,
+      "audioMs": 28780,
+      "driftMs": 1
+    },
+    {
+      "id": "notification",
+      "visualMs": 19201,
+      "audioMs": 19200,
+      "driftMs": 1
+    },
+    {
+      "id": "contact",
+      "visualMs": 16940,
+      "audioMs": 16939,
+      "driftMs": 1
+    },
+    {
+      "id": "remove",
+      "visualMs": 19065,
+      "audioMs": 19064,
+      "driftMs": 1
+    },
+    {
+      "id": "leaders-sector-scope",
+      "visualMs": 29819,
+      "audioMs": 29817,
+      "driftMs": 2
+    },
+    {
+      "id": "leaders-sector-roster",
+      "visualMs": 22540,
+      "audioMs": 22538,
+      "driftMs": 2
+    }
+  ],
+  "anchorsChecked": 28,
+  "music": {
+    "voicedWindows": 265,
+    "musicOnlyWindows": 2,
+    "smallestGapLu": 13.9,
+    "largestGapLu": 19,
+    "quietestMusicOnlyLufs": -32.9,
+    "loudestMusicOnlyLufs": -32.7,
+    "medianVoiceLufs": -16.6
+  },
+  "issues": []
+}

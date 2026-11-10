@@ -26,4 +26,9 @@ Une fonction ouverte, une organisation inscrite, un événement inchangé dont l
 - Les deux sessions sont ouvertes avant la capture (cookies réels) : aucun formulaire de connexion n'est filmé.
 - La liste ouverte est commune à toute la plateforme locale ; `scripts/seed-demo.ts` la retire pour les vidéos de démonstration.
 - Ne pas montrer le journal de l'opérateur en détail : la narration dit seulement que chaque changement y est inscrit.
-- Rendu en attente (sources seulement, 2026-10-28).
+- Lot 39 : READY et publié le 2026-11-10, révision 2 ; 120,600 s, une prise narrée, BUILD_ID `rLDQoLz1bzvkYVRMNsVYi`. Preuves : `videos/evidence/beta-access/batch39/`.
+
+
+## Relecture du 2026-11-10 — lot 39
+
+Référence produit : main `058f35c463cf3b1e6b47596201d0ab6f78ab3015` (#1312). Les quatre fonctions encore en bêta sont Échanges de créneaux, Protection des pauses et de la charge, Disponibilités datées et Proposition d'affectations. Seule Échanges de créneaux est cochée ; les secteurs et leurs responsables ne figurent plus dans ces listes. La session fictive de l'opérateur passe son vrai second facteur avant la capture. Nouvelle narration continue complète, sans balises de pause ; les frontières de chapitres sont recoupées sur les silences du même master et vérifiées par ASR indépendante.

@@ -1,0 +1,44 @@
+{
+  "model": "gemini-3.8-flash",
+  "reviewedAt": "2026-11-10T20:06:56.885Z",
+  "videoSha256": "983832a74c66fe7ca6f906c88a72823d64ae001c6cc00eb117aaa2874de5b2a1",
+  "promptSha256": "2d9178611c5e6d56f41f3a1a5befcf812003cce108e1327d4ca429cbbd873b3a",
+  "clipSha256": "c4d8e2f1773032fe166842a1c24c0e4aed41757bfa14e0fb6603fd8a14780df0",
+  "scene": "sectors-result",
+  "review": {
+    "heardOpening": "Votre événement est maintenant organisé",
+    "checkpoints": [
+      {
+        "spokenSeconds": 0.5,
+        "spoken": "Votre événement est maintenant organisé par secteurs",
+        "visibleSeconds": 0.5,
+        "visible": "Page des créneaux affichant les secteurs configurés (Parking, Backline - Scène)",
+        "sync": "aligned",
+        "severity": "none"
+      },
+      {
+        "spokenSeconds": 3.3,
+        "spoken": "Créez d'abord les secteurs, ajoutez-y les postes",
+        "visibleSeconds": 3.3,
+        "visible": "Écran stable récapitulatif montrant l'organisation par secteur terminée",
+        "sync": "aligned",
+        "severity": "none"
+      },
+      {
+        "spokenSeconds": 10.3,
+        "spoken": "voyez la vidéo sur les responsables de secteur",
+        "visibleSeconds": 10.3,
+        "visible": "Maintien de la vue finale récapitulative pour la conclusion",
+        "sync": "aligned",
+        "severity": "none"
+      }
+    ],
+    "issues": [],
+    "voice": {
+      "consistent": true,
+      "warm": true,
+      "observation": "Voix masculine claire, fluide et naturelle, avec un rythme posé adapté à une conclusion."
+    }
+  },
+  "note": "Automated observation of actual final video audio and images; not a claim of complete human validation"
+}

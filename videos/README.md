@@ -886,3 +886,20 @@ s'applique aux pixels réels de la capture, sans modifier le message.
 Les iframes Mailpit bloquent le script d'instrumentation initial : `tap` conserve
 alors l'horodatage de l'envoi du véritable `mouse.down()` sur le bouton, relayé et
 dédoublonné avant l'effet sonore. Aucun clic n'est inventé.
+
+### Lot 39 : secteurs disponibles pour toute organisation active
+
+Les prises `SECTORS` et la partie par secteur de `SECTOR_LEADERS` utilisent une
+organisation active sans inscription à la bêta et une liste ouverte vide. L'option
+reste propre à l'événement, désactivée par défaut ; aucun badge bêta n'est montré.
+`BETA_ACCESS` vérifie les quatre capacités encore proposées par le super admin et
+n'ouvre que les Échanges de créneaux. Son opérateur fictif passe le vrai second
+facteur avant l'enregistrement (secret de démonstration du helper existant).
+
+Sur macOS, le lanceur français suit Chromium 1254. Les champs horaires natifs du
+nouveau poste sont remplis puis vérifiés : une saisie séquentielle peut modifier
+les minutes seulement. Pour la nouvelle inscription des responsables, ouvrir
+l'hôte public de l'organisation (`https://default.benevol.app/fete-du-village` pour
+la démo), via la passerelle locale ; `?org=` sur `www` n'identifie pas une
+organisation en production. Servir le build vérifié avec `serve-public` pour que
+les redirections Auth.js des sessions préparées restent sur l'hôte public.

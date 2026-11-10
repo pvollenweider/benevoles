@@ -1,4 +1,4 @@
-# Responsable de poste : accompagner son équipe
+# Responsables de poste et de secteur : accompagner son équipe
 
 Révision rédactionnelle du 6 octobre 2026 : narration adressée aux organisateurs au vouvoiement, impératifs compris. Les citations destinées aux bénévoles conservent leur ton initial. Les anciennes preuves audio ne valident pas ce nouveau texte ; narration, sous-titres, synchronisation et MP4 final sont à recontrôler après régénération.
 
@@ -65,4 +65,9 @@ Deux scènes ajoutées après `remove`, sur l'événement organisé par secteurs
 - `leaders-sector-scope` : page « Responsables de poste et de secteur », + Ajouter un responsable, Responsable de : Tout un secteur (Un poste précis reste proposé), secteur Parking, Paul Murphy, Ajouter et envoyer le lien.
 - `leaders-sector-roster` : le vrai lien reçu par Paul, « Responsable de secteur · Parking », postes Parking Nord et Parking Mairie (pas Backline Grande Scène), filtre Jour.
 
-L'histoire du responsable de poste reste celle des événements sans secteurs. La phrase d'ouverture annonce le cas des secteurs ; titre, description et bloc `viewer` suivent. La session de la propriétaire de l'organisation dédiée est ouverte avant la capture : aucun formulaire de connexion n'est filmé. Narration et rendu à régénérer (rendu en attente).
+L'histoire du responsable de poste reste celle des événements sans secteurs. La phrase d'ouverture annonce le cas des secteurs ; titre, description et bloc `viewer` suivent. La session de la propriétaire de l'organisation dédiée est ouverte avant la capture : aucun formulaire de connexion n'est filmé. Lot 39 : narration complète régénérée, rendu READY et publié le 2026-11-10 (révision 7), 282,640 s, une prise narrée, BUILD_ID `rLDQoLz1bzvkYVRMNsVYi`. Preuves : `videos/evidence/sector-leaders/batch39/`.
+
+
+## Relecture du 2026-11-10 — lot 39
+
+Référence produit : main `058f35c463cf3b1e6b47596201d0ab6f78ab3015` (#1312). Les secteurs et les responsables de tout un secteur sont disponibles sans participation à la bêta pour toute organisation active. L'option Secteurs reste désactivée par défaut, événement par événement. Aucun écran ni badge bêta ne fait partie du parcours. Nouvelle narration continue complète, sans balises de pause ; les frontières de chapitres sont recoupées sur les silences du même master et vérifiées par ASR indépendante.

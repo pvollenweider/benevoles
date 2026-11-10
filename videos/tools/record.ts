@@ -231,7 +231,7 @@ async function main() {
   // the context's Accept-Language. Keep French narration separate from this.
   const batch22French = ["shift-roster-visibility", "beta-access", "sectors", "shift-swaps", "workload-protection", "assignment-proposals", "assignment-publication", "volunteer-event-availability", "volunteer-personal-registrations", "volunteer-calendar", "privacy-personal-links", "volunteer-discover-event", "volunteer-register-mobile", "volunteer-choose-shifts", "volunteer-form-recap", "volunteer-confirmation-errors", "volunteer-session-availability", "accessibility-keyboard-display", "org-email-settings", "org-public-identity", "org-team-permissions", "org-timezone-charter", "organization-activity-log", "email-delivery-failures", "data-exports-archives", "global-search", "platform-internal-administration", "members-management", "members-import", "members-invitations", "members-duplicates-merge", "members-reminders", "volunteer-hours-certificate", "volunteer-badges", "registrations-management", "registrations-place-member", "organizer-monitor-followup", "staffing-gaps", "sector-leaders", "attendance-check-in", "last-minute-changes", "targeted-messages", "reminders-changes", "shift-create-edit-detail", "shift-create-series", "shift-eligibility-rules", "shift-night-dst", "shift-timeline-quick-actions", "shift-waitlist-offer", "shifts-roles-views", "shift-recurrence", "shift-approval", "event-duplicate", "event-archive-delete", "event-milestones", "event-program-pages-qr", "event-questions", "event-reports", "event-visibility-registration-window", "event-activity-log", "admin-navigation", "admin-features-tour", "masterclass-03-first-steps", "event-create-blank", "event-create-template", "organizer-create-publish", "event-review-publish"].includes(slug)
   const questionsFrenchLauncher = (batch22French || ["event-questions", "volunteer-hours-certificate", "admin-navigation", "volunteer-confirmation-errors", "members-import", "data-exports-archives"].includes(slug)) && process.platform === "darwin"
-  const frenchChromiumRevision = batch22French || slug === "members-import" ? "1248" : "1243"
+  const frenchChromiumRevision = batch22French || slug === "members-import" ? "1254" : "1243"
   if (questionsFrenchLauncher && chromium.executablePath() !== `/Users/pol/Library/Caches/ms-playwright/chromium-${frenchChromiumRevision}/chrome-mac-arm64/Google Chrome for Testing.app/Contents/MacOS/Google Chrome for Testing`) throw new Error("Questions French launcher must be reverified against the current Playwright Chromium binary")
   const browser = await launchVideoBrowser(chromium, {
     headless: true,
@@ -3986,7 +3986,8 @@ async function main() {
         await page.locator("section").last().scrollIntoViewIfNeeded()
       })
       await scene("new-signup", async (at) => {
-        await page.goto(`${baseUrl}/${eventSlug}?org=${encodeURIComponent(org)}`); await settleSector()
+        // Production public routes identify the organisation by host, never by ?org=.
+        await page.goto(`https://${org}.benevol.app/${eventSlug}`); await settleSector()
         await tap(page, page.getByRole("button", { name: /^10h–14h \d+\/\d+, Buvette : sélectionner/ }).last())
         await at("Nora choisit ce créneau, puis")
         await tap(page, page.getByRole("button", { name: /^Continuer/ }))

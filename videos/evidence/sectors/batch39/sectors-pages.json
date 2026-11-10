@@ -1,0 +1,52 @@
+{
+  "model": "gemini-3.8-flash",
+  "reviewedAt": "2026-11-10T20:06:26.064Z",
+  "videoSha256": "983832a74c66fe7ca6f906c88a72823d64ae001c6cc00eb117aaa2874de5b2a1",
+  "promptSha256": "99c74621da06c1279b6211b885f163df898828447e750dcd87276a1cf2476c69",
+  "clipSha256": "a13d66da3bb1eab0996c801ee03d571142ff82afab46c713779107ab3f86df13",
+  "scene": "sectors-pages",
+  "review": {
+    "heardOpening": "Le même champ existe dans",
+    "checkpoints": [
+      {
+        "spokenSeconds": 0.8,
+        "spoken": "Le même champ existe dans Où manque-t-il du monde",
+        "visibleSeconds": 1.2,
+        "visible": "Affichage de la page Où manque-t-il du monde avec le champ Secteur",
+        "sync": "aligned",
+        "severity": "none"
+      },
+      {
+        "spokenSeconds": 3,
+        "spoken": "dans Jour J",
+        "visibleSeconds": 3,
+        "visible": "Passage sur l'onglet Jour J avec le même champ Secteur",
+        "sync": "aligned",
+        "severity": "none"
+      },
+      {
+        "spokenSeconds": 4,
+        "spoken": "et dans Documents, avec leurs exports",
+        "visibleSeconds": 4.6,
+        "visible": "Passage sur l'onglet Documents montrant le filtre Secteur",
+        "sync": "aligned",
+        "severity": "none"
+      },
+      {
+        "spokenSeconds": 6.6,
+        "spoken": "Il ne propose que les secteurs actifs",
+        "visibleSeconds": 7,
+        "visible": "Sélection d'un secteur actif (Parking) dans le menu déroulant",
+        "sync": "aligned",
+        "severity": "none"
+      }
+    ],
+    "issues": [],
+    "voice": {
+      "consistent": true,
+      "warm": true,
+      "observation": "Voix claire, posée et bien synchronisée avec les transitions d'onglets."
+    }
+  },
+  "note": "Automated observation of actual final video audio and images; not a claim of complete human validation"
+}

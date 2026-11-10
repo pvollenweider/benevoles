@@ -1,0 +1,1 @@
+Input audio checks passed: WAV format, separate click/key timings, silence and invalid input rejection.

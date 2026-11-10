@@ -405,48 +405,12 @@ Image seulement, à revoir à la prochaine régénération :
 
 Ces vidéos n'ont pas été régénérées dans la même PR.
 
-## Vérifié sans écart : secteurs en bêta (#1147)
-
-Les secteurs ne s'affichent que pour un événement dont l'option « Organiser les
-postes par secteurs » est activée, ce qui demande une organisation inscrite à
-la bêta et la fonction ouverte par l'opérateur. Les scénarios `seed-video-*`
-n'activent ni l'une ni l'autre : les écrans filmés restent identiques.
-
-Vidéos vérifiées (sources et sélecteurs, sans rendu) : `shifts-roles-views`,
-`accessibility-keyboard-display` (« Gérer les postes », frise au clavier),
-`shift-timeline-quick-actions`, `shift-create-edit-detail`,
-`shift-create-series`, `shift-recurrence`, `shift-eligibility-rules`,
-`shift-approval`, `shift-waitlist-offer`, `shift-night-dst` (frise admin).
-Les sélecteurs de `videos/tools/record.ts` et `videos/lib/record-accessibility.ts`
-(bouton et titre « Gérer les postes », barres de la frise) ne changent pas. Aucune
-narration ni bloc `viewer` à modifier. Une future vidéo des secteurs demandera
-un scénario qui ouvre la bêta.
-
-## Vérifié sans écart : responsables de tout un secteur (#1169)
-
-Les responsables de secteur, le choix « Tout un secteur / Un poste précis », le
-classement par secteur et les nouveaux titres n'apparaissent que dans un événement
-qui a adopté les secteurs. Les scénarios `seed-video-*` n'en créent aucun : la page
-« Responsables de secteur », la page du responsable (« Responsable · Buvette »), les
-emails des responsables et le choix des responsables à la duplication restent
-identiques à l'écran.
-
-Vidéos vérifiées (sources, manifestes, bloc `viewer` et sélecteurs, sans rendu) :
-`sector-leaders`, `event-duplicate`, `staffing-gaps`, `registrations-management`,
-`admin-features-tour`, `admin-navigation`, `privacy-personal-links`,
-`data-exports-archives`, `event-review-publish`. Les sélecteurs de
-`videos/tools/record.ts` (bouton « + Ajouter un responsable », champ « Poste »,
-titre « Responsables de secteur ») ne changent pas ; seule une ligne de calcul y
-accepte désormais un responsable sans poste. Aucune narration à modifier. Une
-future vidéo des responsables de secteur demandera un scénario qui ouvre la bêta.
-
 ## À revoir : choix sous leur destinataire dans « Écrire aux bénévoles » (#1170)
 
 Dans le formulaire « Écrire aux bénévoles », les champs **Poste** et **Créneau** s'affichent
 désormais juste sous leur bouton radio (« Les bénévoles d'un poste », « Les bénévoles d'un
 créneau ») au lieu d'après toute la liste des destinataires. Le destinataire « Les bénévoles
-d'un secteur » n'apparaît qu'avec la bêta des secteurs, que les scénarios `seed-video-*`
-n'ouvrent pas. Les sélecteurs (`getByRole("radio", …)`, `getByLabel(/^Poste/)`) ne changent
+d'un secteur » apparaît dans les événements organisés par secteurs, que ces scénarios ne créent pas. Les sélecteurs (`getByRole("radio", …)`, `getByLabel(/^Poste/)`) ne changent
 pas, mais l'image diffère quand un poste ou un créneau est choisi.
 
 Vidéos à revoir, non régénérées dans ce changement (pas de pile locale, disque Docker plein) :
@@ -1035,8 +999,8 @@ travail (voix et capture) ; révision du catalogue à incrémenter au rendu :
 - `VOLUNTEER_REGISTER` : **À refilmer**. Narration de `success`
   (« ta demande est envoyée ! Regarde tes emails ») et sélecteur du texte de la
   page mis à jour ; nouvelle voix de ce segment.
-- `PRIVACY_PERSONAL_LINKS`, `SHIFT_ROSTER_VISIBILITY`, `SECTOR_LEADERS`
-  (scène `new-signup`), `REGISTRATION_MONITOR_FOLLOWUP` (scène `test`) : narration
+- `PRIVACY_PERSONAL_LINKS`, `SHIFT_ROSTER_VISIBILITY`,
+  `REGISTRATION_MONITOR_FOLLOWUP` (scène `test`) : narration
   inchangée, mais l'image de la page de succès d'une inscription publique
   montre l'ancien titre ; sélecteurs mis à jour (les deux titres acceptés,
   « Demande d'inscription reçue » exigé pour `PRIVACY_PERSONAL_LINKS`). À
@@ -1060,9 +1024,21 @@ au rendu de la nouvelle version.
 
 La page Jour J gagne **Ajouter un besoin**, deux étapes sur la même page, et « Chercher des
 bénévoles » gagne **Inscrits aujourd'hui**, **Tout cocher** et la notification sur le téléphone.
-Deux vidéos montrent cette page : `ATTENDANCE_CHECK_IN` (chapitres `dayof-*`) et `SECTORS`
-(le champ **Secteur** sur Jour J). Leur narration reste juste et leurs sélecteurs ne dépendent
-ni du nouveau bouton ni du formulaire, donc aucun script ni manifeste n'a été modifié. Leur
-image ne montre pas encore le bouton : **à refilmer au prochain passage**, sans régénération
-dans ce travail (voix et capture longues). Aucune vidéo publiée ne montre l'écran
+`ATTENDANCE_CHECK_IN` (chapitres `dayof-*`) reste **à refilmer au prochain passage** :
+sa narration reste juste et ses sélecteurs ne dépendent ni du nouveau bouton ni du formulaire,
+mais son image ne montre pas encore le bouton. Aucun script ni manifeste modifié ; pas de
+régénération dans ce travail (voix et capture longues). Aucune vidéo publiée ne montre l'écran
 « Chercher des bénévoles ». Révision du catalogue à incrémenter au rendu.
+
+
+## Lot 39 — sortie des secteurs de la bêta, 2026-11-10
+
+BETA_ACCESS : READY et publiée, révision 2, après aperçu puis APPLY=1 (contexte default). Build main `058f35c463cf3b1e6b47596201d0ab6f78ab3015`, BUILD_ID `rLDQoLz1bzvkYVRMNsVYi`. Une prise narrée, 120,600 s, musique 15,4–19,2 LU sous la voix, minimum sans voix −33,7 LUFS ; dix ancres et cinq clics sonorisés validés. Cinq chapitres AV / quinze points, zéro signalement, zéro tutoiement VTT/ASR finale. Quatre fonctions bêta seulement, aucun secteur dans leurs listes. [Rapport et preuves](evidence/beta-access/batch39/review-report.txt).
+
+SECTORS : READY et publiée, révision 2 ; 220,480 s, seconde prise après correction de la saisie native des horaires (14h–18h vérifiés dans l’export). Même build. Musique 14,6–19,3 LU, minimum sans voix −34,1 LUFS ; 29 ancres, onze chapitres AV / 38 points. Zéro tutoiement VTT/ASR finale, aucune mention bêta. Observation mineure de barre URL hors champ résolue par les images avant/après réouverture et les assertions du recorder, rapport brut conservé. La note Jour J est retirée pour cette vidéo. [Rapport et preuves](evidence/sectors/batch39/review-report.txt).
+
+SECTOR_LEADERS : READY et publiée, révision 7 ; 282,640 s, une prise narrée. Même build, musique 13,9–19,0 LU, minimum sans voix −32,9 LUFS ; 28 ancres, 36 clics et 152 touches réelles sonorisés. Treize chapitres AV / 45 points, zéro signalement ; zéro tutoiement VTT/ASR finale, aucune mention bêta. Vrais emails et liens contrôlés, refus du lien révoqué et secteurs sans accès bêta. Le scénario public utilise le sous-domaine de l’organisation. La note de refilmage de `new-signup` est retirée pour cette vidéo. [Rapport et preuves](evidence/sector-leaders/batch39/review-report.txt).
+
+Pour tout le lot : descriptions de 122/120/120 octets UTF-8 ; contrôles de types des outils, TypeScript, ESLint, sons des interactions et 1 303 tests vidéo réussis. Nouvelles narrations continues complètes, une génération par vidéo, frontières corrigées sur les silences et réauditées. Aperçu puis APPLY=1 pour chaque vidéo sur default, cinq fichiers envoyés chacune. Aucun fichier produit, guide ou renders.json modifié ; `doc-img: unchanged`. Aucun push, merge ni message ntfy.
+
+Vérification finale du checkout : un autre processus a avancé la référence partagée `origin/main` à `22945bd8` (#1313) pendant le lot. Les trois rendus publiés sont vérifiés sur `058f35c4`, récupéré au départ et épinglé dans la copie de capture ; ils ne sont pas revalidés sur #1313. Aucun second build réussi, rebase, push ni merge.

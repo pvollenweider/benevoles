@@ -1,0 +1,62 @@
+{
+  "model": "gemini-3.8-flash-tts",
+  "voice": "Puck",
+  "generatedAt": "2026-11-10T19:43:07.852Z",
+  "segments": {
+    "sectors-welcome": {
+      "file": "audio/sectors-welcome.wav",
+      "durationMs": 18917,
+      "generationSha256": "cfdbce37f963d9124cabb919a885f882847c93fcdbe09b19ff56b98919dfa4a2"
+    },
+    "sectors-enable": {
+      "file": "audio/sectors-enable.wav",
+      "durationMs": 15228,
+      "generationSha256": "cfdbce37f963d9124cabb919a885f882847c93fcdbe09b19ff56b98919dfa4a2"
+    },
+    "sectors-create": {
+      "file": "audio/sectors-create.wav",
+      "durationMs": 22043,
+      "generationSha256": "cfdbce37f963d9124cabb919a885f882847c93fcdbe09b19ff56b98919dfa4a2"
+    },
+    "sectors-poste": {
+      "file": "audio/sectors-poste.wav",
+      "durationMs": 20575,
+      "generationSha256": "cfdbce37f963d9124cabb919a885f882847c93fcdbe09b19ff56b98919dfa4a2"
+    },
+    "sectors-move": {
+      "file": "audio/sectors-move.wav",
+      "durationMs": 18001,
+      "generationSha256": "cfdbce37f963d9124cabb919a885f882847c93fcdbe09b19ff56b98919dfa4a2"
+    },
+    "sectors-timeline": {
+      "file": "audio/sectors-timeline.wav",
+      "durationMs": 14607,
+      "generationSha256": "cfdbce37f963d9124cabb919a885f882847c93fcdbe09b19ff56b98919dfa4a2"
+    },
+    "sectors-pdf": {
+      "file": "audio/sectors-pdf.wav",
+      "durationMs": 11005,
+      "generationSha256": "cfdbce37f963d9124cabb919a885f882847c93fcdbe09b19ff56b98919dfa4a2"
+    },
+    "sectors-filter": {
+      "file": "audio/sectors-filter.wav",
+      "durationMs": 19369,
+      "generationSha256": "cfdbce37f963d9124cabb919a885f882847c93fcdbe09b19ff56b98919dfa4a2"
+    },
+    "sectors-pages": {
+      "file": "audio/sectors-pages.wav",
+      "durationMs": 11955,
+      "generationSha256": "cfdbce37f963d9124cabb919a885f882847c93fcdbe09b19ff56b98919dfa4a2"
+    },
+    "sectors-message": {
+      "file": "audio/sectors-message.wav",
+      "durationMs": 19724,
+      "generationSha256": "cfdbce37f963d9124cabb919a885f882847c93fcdbe09b19ff56b98919dfa4a2"
+    },
+    "sectors-result": {
+      "file": "audio/sectors-result.wav",
+      "durationMs": 14976,
+      "generationSha256": "cfdbce37f963d9124cabb919a885f882847c93fcdbe09b19ff56b98919dfa4a2"
+    }
+  }
+}

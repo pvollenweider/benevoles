@@ -21,6 +21,7 @@
  * Dates are relative to the take, in Europe/Zurich: the videos do not rot.
  */
 import assert from "node:assert/strict"
+import { operatorTotpSecretEnc } from "../videos/lib/operator-second-factor"
 import bcrypt from "bcryptjs"
 import type { PrismaClient } from "../src/generated/prisma/client"
 import { registrationToken } from "../src/lib/token-vault"
@@ -87,7 +88,7 @@ async function resetOrganization(db: Db) {
   } else {
     assert.equal(await db.adminUser.count({ where: { email: BETA_OPERATOR.email } }), 0, "operator address already used outside the fixture")
   }
-  const op = { email: BETA_OPERATOR.email, name: fullNameOf(BETA_OPERATOR.firstName), role: "super_admin", isActive: true, passwordHash, receiveProductUpdates: false }
+  const op = { totpSecretEnc: operatorTotpSecretEnc(), totpEnabledAt: new Date("2026-10-01T08:00:00Z"), totpLastUsedStep: null, email: BETA_OPERATOR.email, name: fullNameOf(BETA_OPERATOR.firstName), role: "super_admin", isActive: true, passwordHash, receiveProductUpdates: false }
   await db.adminUser.upsert({ where: { id: BETA_OPERATOR.id }, create: { id: BETA_OPERATOR.id, ...op }, update: op })
 
   // Repeated local takes share one browser IP and the same fictitious recipients: stale counters

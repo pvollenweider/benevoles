@@ -1,0 +1,12 @@
+STATUS: READY
+Batch 39 — 2026-11-10
+Product: 058f35c463cf3b1e6b47596201d0ab6f78ab3015
+BUILD_ID: rLDQoLz1bzvkYVRMNsVYi
+Duration: 282.640000 s. Narrated takes: 1.
+One complete continuous Puck generation, source and final independent ASR passed; whole-master voice consistent.
+13 audiovisual chapters / 45 checkpoints, no issues. Actual final frames inspected: genuine nomination email, neutral public signup result, Nora notification/roster, revoked leader link, Paul responsible for Parking only and Jour filter.
+28 anchors validated; 36 clicks and 152 actual key events mixed with synced soft effects.
+Music 13.9–19.0 LU under voice; quietest music-only -32.9 LUFS.
+0 viewer register tokens in final ASR and VTT; no beta narration or stray English.
+Two actual Mailpit intervals cropped to the genuine message body, no fabricated email or still hold.
+Description: 120 UTF-8 bytes. Source change: public signup uses the organisation subdomain instead of obsolete www + ?org=; script title/review note, shared French Chromium1254 launcher. Rehearsal1 URL failure archived; corrected rehearsal passed all13 chapters before this first take. No product defect or product change.
