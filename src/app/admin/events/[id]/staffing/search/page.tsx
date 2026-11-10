@@ -9,6 +9,8 @@ import { loadOpenShiftsContext } from "@/lib/open-shifts-data"
 import { acceptsRegistrations } from "@/lib/registration-window"
 import OpenShiftsFinder from "@/components/admin/OpenShiftsFinder"
 import HelpLink from "@/components/admin/HelpLink"
+import { localDay } from "@/lib/day-of"
+import { orgTimeZone } from "@/lib/time-zone"
 
 export const dynamic = "force-dynamic"
 export const metadata: Metadata = { title: "Chercher des bénévoles" }
@@ -32,6 +34,7 @@ export default async function OpenShiftsSearchPage({ params, searchParams }: { p
   const asked = new Set(Array.isArray(q.shift) ? q.shift : q.shift ? [q.shift] : [])
   const initialShiftIds = data.openShifts.filter((s) => asked.has(s.id)).map((s) => s.id)
   const base = `/admin/events/${event.id}`
+  const timeZone = orgTimeZone(event.organization)
   // Shifts of roles assigned by the organisation only (#1145), left out: where they went, with a way to act.
   const leftOut = data.assignedOnlyLeftOut
   const assignedOnlyNote = leftOut > 0 && (
@@ -81,6 +84,8 @@ export default async function OpenShiftsSearchPage({ params, searchParams }: { p
             declines={data.declines}
             tags={data.tags}
             initialShiftIds={initialShiftIds}
+            today={localDay(new Date(), timeZone)}
+            timeZone={timeZone}
           />
         </>
       )}

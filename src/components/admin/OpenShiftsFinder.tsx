@@ -8,7 +8,7 @@ import Link from "next/link"
 import { useRouter } from "next/navigation"
 import ModalShell from "./ModalShell"
 import {
-  candidateReasons, exclusionSentence, findCandidates, placesLeftLabel, shiftDay, shiftHours, shiftName,
+  candidateReasons, checkAllSelectable, exclusionSentence, findCandidates, placesLeftLabel, registeredOnLocalDay, shiftDay, shiftHours, shiftName,
   OPEN_SHIFTS_MAX_RECIPIENTS, OPEN_SHIFTS_NOTE_MAX,
   type EventShiftRef, type InviteRef, type LiveRegistration, type OpenShift, type PoolMember,
 } from "@/lib/open-shifts"
@@ -26,10 +26,20 @@ type Props = {
   declines: ShiftDeclineRef[]
   tags: string[]
   initialShiftIds: string[]
+  /** "YYYY-MM-DD" in the organisation's zone, for « Inscrits aujourd'hui » (#1304). */
+  today?: string
+  timeZone?: string
+  /** On in the « Ajouter un besoin » flow, off on the usual page (#1304). */
+  registeredTodayDefault?: boolean
+  /** On in the « Ajouter un besoin » flow, off on the usual page (#1304). */
+  pushDefaultOn?: boolean
+  /** One shift fixed by the flow: the picker is replaced by its name. */
+  lockedShift?: boolean
+  onSent?: (sent: Sent) => void
 }
 
-type DryRun = { recipients: number; skipped: number; noLongerOpen: number; newInvitations: number; audience: string; previewName: string; preview: { subject: string; html: string } }
-type Sent = { sent: number; skipped: number; noLongerOpen: number; newInvitations: number; audience: string }
+type DryRun = { recipients: number; skipped: number; noLongerOpen: number; newInvitations: number; audience: string; previewName: string; preview: { subject: string; html: string }; pushDevices?: number }
+type Sent = { sent: number; skipped: number; noLongerOpen: number; newInvitations: number; audience: string; pushRequested?: boolean; pushDevices?: number }
 
 const linkClass =
   "font-medium text-blue-700 underline underline-offset-2 hover:text-blue-900 rounded focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-blue-600"
@@ -40,13 +50,15 @@ const fold = (s: string) => s.normalize("NFD").replace(/[̀-ͯ]/g, "").toLocaleL
  * The shifts to propose, the members with the reasons they're listed, a manual selection, a
  * preview, then one email per person (#566). Nothing is ever ticked by the page itself.
  */
-export default function OpenShiftsFinder({ eventId, shifts, eventShifts, members, registrations, invites, declines, tags, initialShiftIds }: Props) {
+export default function OpenShiftsFinder({ eventId, shifts, eventShifts, members, registrations, invites, declines, tags, initialShiftIds, today, timeZone, registeredTodayDefault = false, pushDefaultOn = false, lockedShift = false, onSent }: Props) {
   const router = useRouter()
   const id = useId()
   const [shiftIds, setShiftIds] = useState<Set<string>>(() => new Set(initialShiftIds))
   const [tag, setTag] = useState("")
   const [search, setSearch] = useState("")
   const [includeDeclined, setIncludeDeclined] = useState(false)
+  const [registeredToday, setRegisteredToday] = useState(registeredTodayDefault)
+  const [push, setPush] = useState(pushDefaultOn)
   const [selected, setSelected] = useState<Set<string>>(new Set())
   const [note, setNote] = useState("")
   const [dry, setDry] = useState<DryRun | null>(null)
@@ -59,8 +71,17 @@ export default function OpenShiftsFinder({ eventId, shifts, eventShifts, members
   const shiftsHeadingRef = useRef<HTMLHeadingElement>(null)
   const [restarts, setRestarts] = useState(0)
 
-  const chosenShifts = useMemo(() => shifts.filter((s) => shiftIds.has(s.id)), [shifts, shiftIds])
+  const chosenShifts = useMemo(() => (lockedShift ? shifts : shifts.filter((s) => shiftIds.has(s.id))), [shifts, shiftIds, lockedShift])
   const anyDeclined = invites.some((i) => i.declined)
+  // « Inscrits aujourd'hui » (#1304): active registrations on a shift overlapping the local day.
+  const todayIds = useMemo(
+    () => (today && timeZone ? registeredOnLocalDay(registrations, eventShifts, today, timeZone) : null),
+    [registrations, eventShifts, today, timeZone],
+  )
+  const viewMembers = useMemo(
+    () => (registeredToday && todayIds ? members.filter((m) => todayIds.has(m.id)) : members),
+    [members, registeredToday, todayIds],
+  )
   // Every member that could be written to for these shifts, whatever the tag shown: a person ticked
   // under one tag stays ticked when the filter changes.
   const all = useMemo(
@@ -68,8 +89,8 @@ export default function OpenShiftsFinder({ eventId, shifts, eventShifts, members
     [chosenShifts, eventShifts, members, registrations, invites, declines, includeDeclined],
   )
   const view = useMemo(
-    () => (tag ? findCandidates({ shifts: chosenShifts, eventShifts, members, registrations, invites, declines, includeDeclined, tag }) : all),
-    [all, tag, chosenShifts, eventShifts, members, registrations, invites, declines, includeDeclined],
+    () => (tag || registeredToday ? findCandidates({ shifts: chosenShifts, eventShifts, members: viewMembers, registrations, invites, declines, includeDeclined, tag }) : all),
+    [all, tag, registeredToday, viewMembers, chosenShifts, eventShifts, registrations, invites, declines, includeDeclined],
   )
   const q = fold(search.trim())
   const listed = q ? view.candidates.filter((c) => fold(`${c.member.firstName} ${c.member.lastName}`).includes(q)) : view.candidates
@@ -77,6 +98,8 @@ export default function OpenShiftsFinder({ eventId, shifts, eventShifts, members
   const excludedText = exclusionSentence(view.excluded)
   const tooMany = chosen.length > OPEN_SHIFTS_MAX_RECIPIENTS
   const canPreview = chosenShifts.length > 0 && chosen.length > 0 && !tooMany
+  const selectableListed = listed.filter((c) => c.selectable)
+  const canCheckAll = selectableListed.length > 0 && chosen.length < OPEN_SHIFTS_MAX_RECIPIENTS
   const countText = chosenShifts.length === 0
     ? ""
     : listed.length === 0 ? "Aucun membre à proposer avec ces critères." : `${listed.length} membre${listed.length > 1 ? "s" : ""} listé${listed.length > 1 ? "s" : ""}.`
@@ -105,6 +128,8 @@ export default function OpenShiftsFinder({ eventId, shifts, eventShifts, members
     volunteerIds: chosen.map((c) => c.member.id),
     note: note.trim() || undefined,
     includeDeclined,
+    registeredToday,
+    push,
     dryRun,
   })
 
@@ -136,6 +161,7 @@ export default function OpenShiftsFinder({ eventId, shifts, eventShifts, members
       setSent(d)
       setSelected(new Set())
       setNote("")
+      onSent?.(d)
       router.refresh()
     } catch {
       setDry(null)
@@ -156,6 +182,9 @@ export default function OpenShiftsFinder({ eventId, shifts, eventShifts, members
           {sent.newInvitations > 0 && ` ${sent.newInvitations} invitation${sent.newInvitations > 1 ? "s ont été créées" : " a été créée"} pour les membres qui n'étaient pas encore invités.`}
           {sent.skipped > 0 && ` ${people(sent.skipped)} cochée${sent.skipped > 1 ? "s n'ont" : " n'a"} rien reçu : plus rien à leur proposer.`}
           {sent.noLongerOpen > 0 && ` ${sent.noLongerOpen} créneau${sent.noLongerOpen > 1 ? "x complets entre-temps n'ont pas été proposés" : " complet entre-temps n'a pas été proposé"}.`}
+          {sent.pushRequested && ((sent.pushDevices ?? 0) > 0
+            ? ` Une notification part aussi sur ${sent.pushDevices} appareil${(sent.pushDevices ?? 0) > 1 ? "s" : ""} abonné${(sent.pushDevices ?? 0) > 1 ? "s" : ""} ; son résultat s'affiche dans les messages envoyés.`
+            : " Aucune notification n'est partie : aucun destinataire n'a activé les notifications.")}
         </p>
         <p className="text-sm flex flex-wrap gap-x-4 gap-y-2">
           <Link href={`/admin/events/${eventId}/message`} className={linkClass}>Voir les messages envoyés</Link>
@@ -169,32 +198,47 @@ export default function OpenShiftsFinder({ eventId, shifts, eventShifts, members
   return (
     <div className="space-y-6">
       <section aria-labelledby={`${id}-shifts`} className="bg-white rounded-2xl border border-gray-200 p-5 space-y-3">
-        <h2 id={`${id}-shifts`} ref={shiftsHeadingRef} tabIndex={-1} className="text-base font-semibold text-gray-900 focus:outline-none">Créneaux à proposer</h2>
+        <h2 id={`${id}-shifts`} ref={shiftsHeadingRef} tabIndex={-1} className="text-base font-semibold text-gray-900 focus:outline-none">{lockedShift ? "Créneau à proposer" : "Créneaux à proposer"}</h2>
         <p id={`${id}-shifts-hint`} className="text-sm text-gray-600">Les créneaux qui manquent de monde, par date. Chaque personne ne reçoit que ceux qu&apos;elle peut prendre.</p>
-        <div role="group" aria-labelledby={`${id}-shifts`} aria-describedby={`${id}-shifts-hint`}>
-        <ul role="list" className="space-y-1">
-          {shifts.map((s) => (
-            <li key={s.id} className="flex items-start gap-3 py-1">
-              <input
-                id={`${id}-shift-${s.id}`}
-                type="checkbox"
-                checked={shiftIds.has(s.id)}
-                onChange={() => setShiftIds((prev) => toggle(prev, s.id))}
-                aria-describedby={`${id}-shift-${s.id}-detail`}
-                className="mt-0.5 h-6 w-6 shrink-0 rounded border-gray-500 text-blue-600 focus:ring-2 focus:ring-blue-500"
-              />
-              <div className="min-w-0 text-sm">
-                <label htmlFor={`${id}-shift-${s.id}`} className="font-medium text-gray-900">{shiftName(s)}, {shiftDay(s.date, "short")}, {shiftHours(s)}</label>
-                <p id={`${id}-shift-${s.id}-detail`} className="text-gray-700">
+        {lockedShift ? (
+          <ul role="list" className="space-y-1">
+            {shifts.map((s) => (
+              <li key={s.id} className="text-sm">
+                <p className="font-medium text-gray-900">{shiftName(s)}, {shiftDay(s.date, "short")}, {shiftHours(s)}</p>
+                <p className="text-gray-700">
                   {placesLeftLabel(s.placesLeft)}
                   {s.staffingState && <>, <span aria-hidden="true">{s.staffingState}</span><span className="sr-only">{s.spokenStaffingState ?? s.staffingState}</span></>}
                   {(s.reservedTags ?? []).length > 0 && `, ${reservedForText(s.reservedTags!)}`}
                 </p>
-              </div>
-            </li>
-          ))}
-        </ul>
-        </div>
+              </li>
+            ))}
+          </ul>
+        ) : (
+          <div role="group" aria-labelledby={`${id}-shifts`} aria-describedby={`${id}-shifts-hint`}>
+          <ul role="list" className="space-y-1">
+            {shifts.map((s) => (
+              <li key={s.id} className="flex items-start gap-3 py-1">
+                <input
+                  id={`${id}-shift-${s.id}`}
+                  type="checkbox"
+                  checked={shiftIds.has(s.id)}
+                  onChange={() => setShiftIds((prev) => toggle(prev, s.id))}
+                  aria-describedby={`${id}-shift-${s.id}-detail`}
+                  className="mt-0.5 h-6 w-6 shrink-0 rounded border-gray-500 text-blue-600 focus:ring-2 focus:ring-blue-500"
+                />
+                <div className="min-w-0 text-sm">
+                  <label htmlFor={`${id}-shift-${s.id}`} className="font-medium text-gray-900">{shiftName(s)}, {shiftDay(s.date, "short")}, {shiftHours(s)}</label>
+                  <p id={`${id}-shift-${s.id}-detail`} className="text-gray-700">
+                    {placesLeftLabel(s.placesLeft)}
+                    {s.staffingState && <>, <span aria-hidden="true">{s.staffingState}</span><span className="sr-only">{s.spokenStaffingState ?? s.staffingState}</span></>}
+                    {(s.reservedTags ?? []).length > 0 && `, ${reservedForText(s.reservedTags!)}`}
+                  </p>
+                </div>
+              </li>
+            ))}
+          </ul>
+          </div>
+        )}
       </section>
 
       <section aria-labelledby={`${id}-members`} className="bg-white rounded-2xl border border-gray-200 p-5 space-y-4">
@@ -205,6 +249,18 @@ export default function OpenShiftsFinder({ eventId, shifts, eventShifts, members
           <p className="text-sm text-gray-700">Cochez au moins un créneau pour voir les membres à qui le proposer.</p>
         ) : (
           <>
+            {todayIds && (
+              <label className="flex min-h-11 items-center gap-2 text-sm text-gray-800">
+                <input
+                  id={`${id}-today`}
+                  type="checkbox"
+                  checked={registeredToday}
+                  onChange={(e) => setRegisteredToday(e.target.checked)}
+                  className="h-6 w-6 shrink-0 rounded border-gray-500 text-blue-600 focus:ring-2 focus:ring-blue-500"
+                />
+                Inscrits aujourd&apos;hui
+              </label>
+            )}
             <div className="flex flex-wrap items-end gap-3">
               <div>
                 <label htmlFor={`${id}-tag`} className="block text-sm font-medium text-gray-700 mb-1">Étiquette</label>
@@ -271,14 +327,36 @@ export default function OpenShiftsFinder({ eventId, shifts, eventShifts, members
               </ul>
               </div>
             )}
-            {/* Always there, so the focus never falls to the page when it empties the selection. */}
-            <button type="button" aria-disabled={chosen.length === 0 || undefined} onClick={() => setSelected(new Set())} className={`text-sm ${linkClass} ${chosen.length === 0 ? "opacity-60 cursor-not-allowed" : ""}`}>Tout décocher</button>
+            {/* Both always there, so the focus never falls to the page when a list empties. */}
+            <div className="flex flex-wrap items-center gap-x-4 gap-y-1">
+              <button
+                type="button"
+                aria-disabled={!canCheckAll || undefined}
+                onClick={() => { if (canCheckAll) setSelected((prev) => checkAllSelectable(prev, listed)) }}
+                className={`min-h-11 text-sm ${linkClass} ${canCheckAll ? "" : "opacity-60 cursor-not-allowed"}`}
+              >
+                Tout cocher
+              </button>
+              <button type="button" aria-disabled={chosen.length === 0 || undefined} onClick={() => setSelected(new Set())} className={`min-h-11 text-sm ${linkClass} ${chosen.length === 0 ? "opacity-60 cursor-not-allowed" : ""}`}>Tout décocher</button>
+            </div>
           </>
         )}
       </section>
 
       <section aria-labelledby={`${id}-send`} className="bg-white rounded-2xl border border-gray-200 p-5 space-y-4">
         <h2 id={`${id}-send`} className="text-base font-semibold text-gray-900">Email</h2>
+        <label className="flex min-h-11 items-center gap-2 text-sm text-gray-800">
+          <input
+            id={`${id}-push`}
+            type="checkbox"
+            checked={push}
+            onChange={(e) => setPush(e.target.checked)}
+            aria-describedby={`${id}-push-hint`}
+            className="h-6 w-6 shrink-0 rounded border-gray-500 text-blue-600 focus:ring-2 focus:ring-blue-500"
+          />
+          Envoyer aussi une notification sur le téléphone
+        </label>
+        <p id={`${id}-push-hint`} className="text-xs text-gray-600">Une notification sur les appareils abonnés des destinataires, en plus de l&apos;email. Leur nombre est indiqué avant l&apos;envoi.</p>
         <div>
           <label htmlFor={`${id}-note`} className="block text-sm font-medium text-gray-700 mb-1">Un mot pour accompagner (facultatif)</label>
           <textarea id={`${id}-note`} rows={3} value={note} maxLength={OPEN_SHIFTS_NOTE_MAX} onChange={(e) => setNote(e.target.value)} aria-describedby={`${id}-note-hint`} className="input w-full" />
@@ -322,6 +400,9 @@ export default function OpenShiftsFinder({ eventId, shifts, eventShifts, members
               {dry.newInvitations > 0 && ` ${dry.newInvitations} invitation${dry.newInvitations > 1 ? "s seront créées" : " sera créée"} pour les membres pas encore invités.`}
               {dry.skipped > 0 && ` ${people(dry.skipped)} cochée${dry.skipped > 1 ? "s ne recevront" : " ne recevra"} rien : plus rien à leur proposer.`}
               {dry.noLongerOpen > 0 && ` ${dry.noLongerOpen} créneau${dry.noLongerOpen > 1 ? "x sont complets" : " est complet"} depuis l'ouverture de la page et ne sera pas proposé.`}
+              {push && ((dry.pushDevices ?? 0) > 0
+                ? ` Une notification part aussi sur ${dry.pushDevices} appareil${(dry.pushDevices ?? 0) > 1 ? "s" : ""} abonné${(dry.pushDevices ?? 0) > 1 ? "s" : ""}.`
+                : " Aucun destinataire n'a activé les notifications : l'email part seul.")}
               {" "}Cet envoi ne peut pas être annulé.
             </p>
             <div className="flex flex-wrap gap-3 justify-end">
