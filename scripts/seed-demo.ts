@@ -162,23 +162,23 @@ async function main() {
     },
   })
 
-  type ShiftSeed = { roleName: string; date: Date; startTime: string; endTime: string; capacity: number; colorKey: string } & Partial<{
+  type ShiftSeed = { roleName: string; date: Date; startTime: string; endTime: string; capacity: number } & Partial<{
     label: string; waitlistEnabled: boolean; requiresApproval: boolean; minAge: number; reservedTags: string[]; maxPerVolunteer: number
     locationDetails: string; instructions: string; contactName: string; contactPhone: string; displayOrder: number
   }>
   const seeds: ShiftSeed[] = [
-    { roleName: "Montage", date: SAT, startTime: "07:00", endTime: "09:00", capacity: 6, colorKey: "slate", locationDetails: "Hangar communal", instructions: "Chaussures fermées" },
-    { roleName: "Accueil", date: SAT, startTime: "09:00", endTime: "12:00", capacity: 3, colorKey: "sky", locationDetails: "Stand d'accueil, entrée de la place" },
-    { roleName: "Accueil", date: SAT, startTime: "12:00", endTime: "15:00", capacity: 3, colorKey: "sky", locationDetails: "Stand d'accueil, entrée de la place" },
-    { roleName: "Accueil", date: SAT, startTime: "15:00", endTime: "18:00", capacity: 3, colorKey: "sky", locationDetails: "Stand d'accueil, entrée de la place" },
-    { roleName: "Buvette", date: SAT, startTime: "10:00", endTime: "14:00", capacity: 4, colorKey: "amber", waitlistEnabled: true, maxPerVolunteer: 2, contactName: "Élodie", contactPhone: "079 000 00 00" },
-    { roleName: "Buvette", date: SAT, startTime: "14:00", endTime: "18:00", capacity: 4, colorKey: "amber", waitlistEnabled: true, maxPerVolunteer: 2 },
-    { roleName: "Buvette", date: SAT, startTime: "18:00", endTime: "22:00", capacity: 4, colorKey: "amber", waitlistEnabled: true, maxPerVolunteer: 2, minAge: 18 },
-    { roleName: "Navette", label: "Chauffeur navette", date: SAT, startTime: "08:00", endTime: "12:00", capacity: 2, colorKey: "violet", requiresApproval: true, minAge: 21, instructions: "Permis B depuis 3 ans" },
-    { roleName: "Navette", label: "Chauffeur navette", date: SAT, startTime: "14:00", endTime: "18:00", capacity: 2, colorKey: "violet", requiresApproval: true, minAge: 21, instructions: "Permis B depuis 3 ans" },
-    { roleName: "Sécurité", date: SAT, startTime: "20:00", endTime: "02:00", capacity: 3, colorKey: "rose", reservedTags: ["sécurité"] },
-    { roleName: "Buvette", date: SUN, startTime: "10:00", endTime: "14:00", capacity: 4, colorKey: "amber", waitlistEnabled: true, maxPerVolunteer: 2 },
-    { roleName: "Démontage", date: SUN, startTime: "15:00", endTime: "18:00", capacity: 6, colorKey: "slate" },
+    { roleName: "Montage", date: SAT, startTime: "07:00", endTime: "09:00", capacity: 6, locationDetails: "Hangar communal", instructions: "Chaussures fermées" },
+    { roleName: "Accueil", date: SAT, startTime: "09:00", endTime: "12:00", capacity: 3, locationDetails: "Stand d'accueil, entrée de la place" },
+    { roleName: "Accueil", date: SAT, startTime: "12:00", endTime: "15:00", capacity: 3, locationDetails: "Stand d'accueil, entrée de la place" },
+    { roleName: "Accueil", date: SAT, startTime: "15:00", endTime: "18:00", capacity: 3, locationDetails: "Stand d'accueil, entrée de la place" },
+    { roleName: "Buvette", date: SAT, startTime: "10:00", endTime: "14:00", capacity: 4, waitlistEnabled: true, maxPerVolunteer: 2, contactName: "Élodie", contactPhone: "079 000 00 00" },
+    { roleName: "Buvette", date: SAT, startTime: "14:00", endTime: "18:00", capacity: 4, waitlistEnabled: true, maxPerVolunteer: 2 },
+    { roleName: "Buvette", date: SAT, startTime: "18:00", endTime: "22:00", capacity: 4, waitlistEnabled: true, maxPerVolunteer: 2, minAge: 18 },
+    { roleName: "Navette", label: "Chauffeur navette", date: SAT, startTime: "08:00", endTime: "12:00", capacity: 2, requiresApproval: true, minAge: 21, instructions: "Permis B depuis 3 ans" },
+    { roleName: "Navette", label: "Chauffeur navette", date: SAT, startTime: "14:00", endTime: "18:00", capacity: 2, requiresApproval: true, minAge: 21, instructions: "Permis B depuis 3 ans" },
+    { roleName: "Sécurité", date: SAT, startTime: "20:00", endTime: "02:00", capacity: 3, reservedTags: ["sécurité"] },
+    { roleName: "Buvette", date: SUN, startTime: "10:00", endTime: "14:00", capacity: 4, waitlistEnabled: true, maxPerVolunteer: 2 },
+    { roleName: "Démontage", date: SUN, startTime: "15:00", endTime: "18:00", capacity: 6 },
   ]
   const roleOrder = ["Montage", "Accueil", "Buvette", "Navette", "Sécurité", "Démontage"]
   const shifts = []
