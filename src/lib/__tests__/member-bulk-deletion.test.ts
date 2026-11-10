@@ -153,8 +153,8 @@ describe("bulk deletion checkbox (#1307)", () => {
   it("labels the checkbox with the number of selected members that have registrations, singular included", () => {
     expect(bulkDeactivateKeptLabel(null)).toBe(BULK_DEACTIVATE_KEPT_LABEL)
     expect(bulkDeactivateKeptLabel(0)).toBe(BULK_DEACTIVATE_KEPT_LABEL)
-    expect(bulkDeactivateKeptLabel(1)).toBe(`${BULK_DEACTIVATE_KEPT_LABEL} (1 membre)`)
-    expect(bulkDeactivateKeptLabel(3)).toBe(`${BULK_DEACTIVATE_KEPT_LABEL} (3 membres)`)
+    expect(bulkDeactivateKeptLabel(1)).toBe("Désactiver le membre qui a des inscriptions : il ne peut pas être supprimé")
+    expect(bulkDeactivateKeptLabel(3)).toBe("Désactiver les 3 membres qui ont des inscriptions : ils ne peuvent pas être supprimés")
   })
 
   it("counts the selected members with registrations from the counts the list already loaded", () => {

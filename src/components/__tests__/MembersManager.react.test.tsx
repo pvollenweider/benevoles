@@ -443,7 +443,7 @@ describe("MembersManager — bulk deactivating a selection", () => {
     fireEvent.click(screen.getByRole("checkbox", { name: "Tout sélectionner" }))
     fireEvent.click(screen.getByRole("button", { name: "Supprimer la sélection" }))
     const dialog = screen.getByRole("alertdialog", { name: "Supprimer 3 membres ?" })
-    const checkbox = within(dialog).getByRole("checkbox", { name: /^Désactiver les membres qui ne peuvent pas être supprimés \(ceux qui ont des inscriptions\) \(1 membre\)$/ })
+    const checkbox = within(dialog).getByRole("checkbox", { name: "Désactiver le membre qui a des inscriptions : il ne peut pas être supprimé" })
     expect(checkbox).not.toBeChecked()
   })
 
@@ -482,7 +482,7 @@ describe("MembersManager — bulk deactivating a selection", () => {
     fireEvent.click(screen.getByRole("checkbox", { name: "Tout sélectionner" }))
     fireEvent.click(screen.getByRole("button", { name: "Supprimer la sélection" }))
     const dialog = screen.getByRole("alertdialog", { name: "Supprimer 3 membres ?" })
-    fireEvent.click(within(dialog).getByRole("checkbox", { name: /Désactiver les membres/ }))
+    fireEvent.click(within(dialog).getByRole("checkbox", { name: /^Désactiver (le|les) / }))
     fireEvent.click(within(dialog).getByRole("button", { name: "Supprimer" }))
 
     await waitFor(() => expect(fetchMock).toHaveBeenCalledWith("/api/admin/members/bulk-delete", {

@@ -547,7 +547,7 @@ export default function MembersManager({ initialMembers, allTags, initialSearch,
       )}
       {pendingBulkDelete && (
         <ConfirmActionModal
-          recap={bulkDeleteMembersRecap(pendingBulkDelete.count)}
+          recap={bulkDeleteMembersRecap(pendingBulkDelete.count, pendingBulkDelete.withRegistrations)}
           busy={bulkDeleting}
           error={bulkDeleteError}
           onConfirm={() => void runBulkDelete(pendingBulkDelete, bulkDeactivateKept)}

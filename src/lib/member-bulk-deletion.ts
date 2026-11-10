@@ -179,9 +179,10 @@ export const BULK_DEACTIVATE_KEPT_LABEL = "Désactiver les membres qui ne peuven
  * already knows it (`null` when an unknown count means the number can't be stated).
  */
 export function bulkDeactivateKeptLabel(withRegistrations: number | null): string {
-  return withRegistrations !== null && withRegistrations > 0
-    ? `${BULK_DEACTIVATE_KEPT_LABEL} (${withRegistrations} membre${withRegistrations > 1 ? "s" : ""})`
-    : BULK_DEACTIVATE_KEPT_LABEL
+  if (withRegistrations === null || withRegistrations <= 0) return BULK_DEACTIVATE_KEPT_LABEL
+  return withRegistrations > 1
+    ? `Désactiver les ${withRegistrations} membres qui ont des inscriptions : ils ne peuvent pas être supprimés`
+    : "Désactiver le membre qui a des inscriptions : il ne peut pas être supprimé"
 }
 
 /**
