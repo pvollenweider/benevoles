@@ -73,7 +73,7 @@ describe("« Je ne peux pas » — the answer for one shift (#1303)", () => {
     expect(shiftDeclineShiftName({ roleName: "Bar", label: "Bar soir" })).toBe("Bar (Bar soir)")
     expect(shiftDeclineShiftName({ roleName: "Bar", label: "Bar" })).toBe("Bar")
     expect(shiftDeclineDay("2026-07-04")).toBe("samedi 4 juillet")
-    expect(shiftDeclineHours({ startTime: "22:00", endTime: "02:00" })).toBe("de 22:00 à 02:00 le lendemain")
+    expect(shiftDeclineHours({ startTime: "22:00", endTime: "02:00" })).toBe("de 22h à 2h, jusqu'au lendemain")
   })
 
   it("builds the confirmation page and the POST paths without a new secret", () => {

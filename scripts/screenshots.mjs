@@ -318,8 +318,13 @@ async function run() {
   // reasons, including « A répondu non le … » for the demo answer (scripts/seed-demo.ts).
   await shot("admin-staffing-search", async () => {
     await visit(ev("/staffing"))
-    await a.getByRole("link", { name: /^Chercher des bénévoles pour / }).first().click()
-    await settle(a)
+    const href = await a.getByRole("link", { name: /^Chercher des bénévoles pour / }).first().getAttribute("href")
+    if (!href) throw new Error("no underfilled shift link found")
+    await visit(new URL(href, BASE).toString())
+    // The member who answered « Je ne peux pas » for this shift, with the reason, in view.
+    const declined = a.getByText(/A répondu non le /).first()
+    await declined.waitFor()
+    await declined.scrollIntoViewIfNeeded()
     await save(a, "admin-staffing-search")
   })
   // The page a « Je ne peux pas » link opens (#1303): the shift named, one confirmation button.

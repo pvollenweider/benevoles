@@ -74,8 +74,8 @@ async function loadErasureInput(db: Db, id: string, now: Date): Promise<ErasureI
   const [registrations, invites, shiftDeclines, answers, pushSubscriptions, sectorLeaders, dismissals, merged] = await Promise.all([
     db.registration.findMany({ where: { volunteerId: id }, select: { id: true, status: true, shift: { select: { date: true } } } }),
     db.memberInvite.findMany({ where: { volunteerId: id }, select: { id: true } }),
-    // Tombstones of records merged into this one already moved their answers here (#1303).
-    db.shiftDecline.findMany({ where: { volunteerId: id }, select: { id: true } }),
+    // The person's own and those of the records merged into this one, all deleted below.
+    db.shiftDecline.findMany({ where: { OR: [{ volunteerId: id }, { volunteer: { mergedIntoId: id } }] }, select: { id: true } }),
     db.questionAnswer.findMany({ where: { volunteerId: id }, select: { id: true } }),
     db.pushSubscription.findMany({ where: { volunteerId: id }, select: { id: true } }),
     member.email

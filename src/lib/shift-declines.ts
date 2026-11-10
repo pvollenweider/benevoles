@@ -14,7 +14,7 @@
  * and the confirmation page can format its labels without a database.
  */
 
-import { clockTime, crossesMidnight } from "./gantt-utils"
+import { spokenTimeRange } from "./spoken-time"
 
 export type DateLike = Date | string
 
@@ -124,9 +124,9 @@ export function shiftDeclineDay(date: DateLike): string {
   return new Date(`${day}T00:00:00Z`).toLocaleDateString("fr-FR", { timeZone: "UTC", weekday: "long", day: "numeric", month: "long" })
 }
 
-/** « de 22:00 à 02:00 le lendemain ». */
+/** « de 22h à 2h, jusqu'au lendemain »: the same wording as every other shift time in words. */
 export function shiftDeclineHours(s: { startTime: string; endTime: string }): string {
-  return `de ${clockTime(s.startTime)} à ${clockTime(s.endTime)}${crossesMidnight(s.startTime, s.endTime) ? " le lendemain" : ""}`
+  return spokenTimeRange(s.startTime, s.endTime)
 }
 
 const PAGE_SEGMENT: Record<ShiftDeclineSecret, string> = { invitation: "invitation", registration: "inscription" }
