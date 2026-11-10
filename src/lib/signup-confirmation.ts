@@ -62,12 +62,21 @@ export function signupConfirmationPageState(
   if (!confirmation) return "invalid"
   if (!orgOpen) return "unavailable"
   if (confirmation.confirmedAt) return "confirmed"
-  if (confirmation.cancelledAt) return confirmation.cancelReason === "replaced" ? "replaced" : "cancelled"
+  if (confirmation.cancelledAt) return cancelledState(confirmation.cancelReason)
   if (confirmation.expiresAt.getTime() <= now.getTime()) return "expired"
   // A place confirmed by someone else meanwhile is no longer this request's: nothing left to
   // confirm, even before the deadline (an organiser may also have cancelled every held row).
   if (provisionalStatuses.every((s) => s !== "unconfirmed") && waitlistShiftIds.length === 0) return "invalid"
   return "pending"
+}
+
+/**
+ * What a closed request says: replaced by a newer one, released by the expiration cron (which
+ * closes it with the reason "expired": the volunteer must read « Lien expiré », not « annulée »),
+ * or cancelled by the organisation.
+ */
+export function cancelledState(reason: string | null): "replaced" | "expired" | "cancelled" {
+  return reason === "replaced" ? "replaced" : reason === "expired" ? "expired" : "cancelled"
 }
 
 /** The decision of a confirmation click, before any write. */
@@ -81,7 +90,7 @@ export function signupConfirmationDecision(
 ): SignupConfirmationDecision {
   if (!confirmation) return "invalid"
   if (confirmation.confirmedAt) return "confirmed"
-  if (confirmation.cancelledAt) return confirmation.cancelReason === "replaced" ? "replaced" : "cancelled"
+  if (confirmation.cancelledAt) return cancelledState(confirmation.cancelReason)
   if (confirmation.expiresAt.getTime() <= now.getTime()) return "expired"
   if (provisionalStatuses.every((s) => s !== "unconfirmed") && waitlistShiftIds.length === 0) return "gone"
   return "pending"

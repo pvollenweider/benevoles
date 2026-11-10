@@ -23,6 +23,8 @@ export const PERSONAL_API_PREFIXES = [
   "/api/public/member-invite",
   "/api/public/availability",
   "/api/public/waitlist",
+  // The email confirmation of a public sign-up (#1253): a token sent by email.
+  "/api/public/confirmations",
   "/api/public/push",
   // Account and organisation links sent by email.
   "/api/public/forgot-password",

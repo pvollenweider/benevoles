@@ -4,6 +4,7 @@
 import { describe, expect, it } from "vitest"
 import {
   SIGNUP_CONFIRMATION_HOURS,
+  cancelledState,
   confirmationDeadlineLabel,
   confirmationRequestNotice,
   signupConfirmationDecision,
@@ -141,5 +142,20 @@ describe("what the organizer counts", () => {
   it("counts it apart from the confirmed registrations", () => {
     expect(registrationsSummary({ active: 2, waiting: 0, requested: 0, unconfirmed: 3 }))
       .toBe("2 inscriptions actives, 3 en attente de confirmation par email")
+  })
+})
+
+describe("a request closed by the expiration cron (#1253)", () => {
+  it("reads as expired, not cancelled, on the page and on a late click", () => {
+    const closed = row({ cancelledAt: hours(25), cancelReason: "expired", expiresAt: hours(24) })
+    expect(signupConfirmationPageState(closed, hours(26), true, ["cancelled"])).toBe("expired")
+    expect(signupConfirmationDecision({ ...closed, id: "c1" }, hours(26), ["cancelled"], [])).toBe("expired")
+  })
+
+  it("keeps replaced and organiser cancellations apart", () => {
+    expect(cancelledState("replaced")).toBe("replaced")
+    expect(cancelledState("expired")).toBe("expired")
+    expect(cancelledState("organizer")).toBe("cancelled")
+    expect(cancelledState(null)).toBe("cancelled")
   })
 })

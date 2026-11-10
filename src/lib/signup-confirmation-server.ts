@@ -21,7 +21,7 @@ import { lockVolunteerRows, lockWorkloadShared, readWorkloadGate, checkDutyChang
 import { planPlacement } from "@/lib/registration-capacity"
 import { orgTimeZone } from "@/lib/time-zone"
 import { ORG_LIFECYCLE_SELECT, orgLinksOpen } from "@/lib/org-lifecycle"
-import { confirmationDeadlineLabel, signupConfirmationDecision, signupConfirmationPageState, type SignupConfirmationPageState } from "@/lib/signup-confirmation"
+import { cancelledState, confirmationDeadlineLabel, signupConfirmationDecision, signupConfirmationPageState, type SignupConfirmationPageState } from "@/lib/signup-confirmation"
 import { applySignupRosterChoice } from "@/lib/roster-consent-write"
 import { isKnownMinor, signupNoticeVersion } from "@/lib/shift-roster"
 import { clearShiftDeclines } from "@/lib/shift-decline-clear"
@@ -204,7 +204,7 @@ export async function confirmSignupConfirmation(token: string, now: Date = new D
       if (claimed.count === 0) {
         const after = await tx.signupConfirmation.findUnique({ where: { id: current.id }, select: CONFIRMATION_SELECT })
         if (after?.confirmedAt) return { result: { ok: true as const, already: true, counts: countsOf(current.registrations, after) }, outboxIds: [], logs: [] }
-        const reason = after?.cancelledAt ? (after.cancelReason === "replaced" ? "replaced" as const : "cancelled" as const) : "expired" as const
+        const reason = after?.cancelledAt ? cancelledState(after.cancelReason) : "expired" as const
         return { result: { ok: false as const, reason }, outboxIds: [], logs: [] }
       }
 

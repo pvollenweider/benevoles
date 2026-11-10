@@ -1,7 +1,9 @@
 // SPDX-FileCopyrightText: 2026 Philippe Vollenweider
 // SPDX-License-Identifier: AGPL-3.0-only
 
-import { describe, it, expect, beforeAll, afterAll } from "vitest"
+import { describe, it, expect, beforeAll, afterAll, vi } from "vitest"
+
+vi.mock("next/server", async (original) => ({ ...(await original<typeof import("next/server")>()), after: () => {} }))
 import { prisma } from "@/lib/prisma"
 import { hashToken } from "@/lib/token-hash"
 import { registrationToken } from "@/lib/token-vault"

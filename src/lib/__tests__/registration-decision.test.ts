@@ -215,7 +215,7 @@ describe("decideRequest on a full, closed or cancelled shift", () => {
   it("accepts without asking when the request holds its spot", async () => {
     const d = db(request(), 1, undefined, { capacity: 5, occupied: 4 })
     expect(await decideRequest(d.db as never, actor, "reg-1", { decision: "accept" })).toEqual({ ok: true, status: "active" })
-    expect(d.count).toHaveBeenCalledWith({ where: { shiftId: "sh-1", status: { in: ["active", "offered", "requested"] }, id: { notIn: ["reg-1"] } } })
+    expect(d.count).toHaveBeenCalledWith({ where: { shiftId: "sh-1", status: { in: ["active", "offered", "requested", "unconfirmed"] }, id: { notIn: ["reg-1"] } } })
   })
 
   it("asks first when the places held by others fill the shift: nothing accepted, no email, no log", async () => {

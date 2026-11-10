@@ -32,7 +32,7 @@ type EventFormData = {
   reminderMessage: string
   publicStatus: "draft" | "published" | "archived"
   requirePhone: boolean
-  /** Confirmation by email (#1253): a public sign-up without proof of the address reserves its places provisoily until the email link is clicked. Off by default. */
+  /** Confirmation by email (#1253): a public sign-up without proof of the address reserves its places provisionally until the email link is clicked. Off by default. */
   requireEmailConfirmation: boolean
   /** « Qui est inscrit » (#1068): opt-in names for confirmed volunteers and invited members; a new event starts with the organisation's default. */
   shiftRosterEnabled: boolean
@@ -562,7 +562,7 @@ export default function EventForm({ initialData, createdHref, timeZone = "Europe
               Confirmer l&apos;adresse email avant l&apos;inscription
             </label>
             <p id="event-email-confirmation-hint" className="text-xs text-gray-600">
-              Un bénévole qui s&apos;inscrit depuis la page publique sans lien personnel reserve ses places le temps de confirmer son adresse. Il reçoit un email avec un lien à ouvrir et un bouton à cliquer ; les places sont tenues jusqu&apos;à son clic ou pendant 24 heures au plus, sans dépasser le début du premier créneau. Les créneaux complets avec liste d&apos;attente n&apos;entrent dans la liste qu&apos;à ce clic.
+              Un bénévole qui s&apos;inscrit depuis la page publique sans son lien personnel reçoit un email et doit cliquer sur « Confirmer mon inscription ». Ses places restent réservées 24 heures au plus, jamais au-delà du début de son premier créneau.
             </p>
           </div>
         </div>
