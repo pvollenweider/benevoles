@@ -14,9 +14,15 @@ import type { ColorKey } from "./roles"
  *
  * Matching: lower case, accents removed, spaces collapsed. A keyword only matches at the start
  * of a word (never inside one), and a three-letter keyword or shorter must be a whole word or
- * its plural, so « bar » matches « Bar » and « Bars » but not « Barbecue », « Barbe à papa »,
- * « Barnum » or « Barrières ». Longer keywords may carry a suffix, so « Crêpes » matches
- * « crêpe » and « Sonorisation » matches « sono ».
+ * its plural, so « bar » matches « Bar » and « Bars » but not « Barbecue », « Barbe à papa » or
+ * « Barrières ». Longer keywords may carry a suffix, so « Crêpes » matches « crêpe » and
+ * « Sonorisation » matches « sono ». Some keywords are whole words only: « loge » matches
+ * « Loge » and « Loges », never « logement ».
+ *
+ * Some keywords are weak: they describe the action rather than the type of poste
+ * (« Préparation », « Stand », « Service »…). A strong keyword anywhere in the name wins over a
+ * weak one, even later, so « Préparation des crêpes » is Restauration; weak keywords only decide
+ * when no strong keyword matches, so « Préparation » is Installation and « Stand » is Vente.
  *
  * When several families match (« Accueil / buvette », « Installation buvette »), the keyword
  * whose match starts first in the name wins. At the same start, the longest keyword wins, so
@@ -29,6 +35,8 @@ type PosteCategoryDefinition = {
   label: string
   colorKey: ColorKey
   keywords: readonly string[]
+  /** Action words: only used when no strong keyword matches anywhere in the name. */
+  weakKeywords: readonly string[]
 }
 
 export const POSTE_CATEGORIES = [
@@ -37,9 +45,10 @@ export const POSTE_CATEGORIES = [
     label: "Accueil et caisse",
     colorKey: "blue",
     keywords: [
-      "accueil", "acceuil", "info", "billetterie", "billet", "caisse", "entree", "inscription",
-      "enregistrement", "ticket", "jeton", "controle", "reception", "guichet",
+      "accueil", "acceuil", "acueil", "info", "billetterie", "billet", "caisse", "inscription",
+      "enregistrement", "ticket", "jeton", "controle", "guichet", "permanence", "pointage",
     ],
+    weakKeywords: ["reception", "entree"],
   },
   {
     key: "boissons",
@@ -49,25 +58,31 @@ export const POSTE_CATEGORIES = [
       "buvette", "bar", "barman", "barmaid", "boisson", "vin", "vin chaud", "cafe", "comptoir",
       "biere", "soda", "jus", "the", "limonade", "sirop", "cocktail", "aperitif", "champagne", "cidre",
     ],
+    weakKeywords: [],
   },
   {
     key: "restauration",
     label: "Restauration",
     colorKey: "orange",
     keywords: [
-      "cuisine", "cuisinier", "restauration", "resto", "repas", "grillade", "barbecue", "frites",
-      "crepe", "galette", "gateau", "patisserie", "snack", "sandwich", "soupe", "service", "cantine",
-      "burger", "pizza", "dessert", "boulangerie", "traiteur", "food truck",
+      "cuisine", "cuisinier", "restauration", "resto", "repas", "grill", "barbecue", "frites",
+      "crepe", "galette", "gateau", "patisserie", "snack", "sandwich", "soupe", "cantine",
+      "burger", "hamburger", "pizza", "dessert", "boulangerie", "traiteur", "food truck",
+      "friterie", "cuisson", "precuisson", "gaufre", "cookie", "pop corn", "popcorn", "collation",
+      "gouter", "tartiflette", "hot dog", "pates", "churros", "barbe a papa", "sucre sale",
+      "gourmandise", "friandise", "bonbon",
     ],
+    weakKeywords: ["service"],
   },
   {
     key: "installation",
     label: "Installation",
     colorKey: "teal",
     keywords: [
-      "montage", "installation", "mise en place", "preparation", "decoration", "balisage",
-      "construction", "amenagement",
+      "montage", "installation", "mise en place", "decoration", "balisage", "construction",
+      "amenagement", "chapiteau", "barnum", "marquage", "signaletique",
     ],
+    weakKeywords: ["preparation"],
   },
   {
     key: "demontage",
@@ -75,8 +90,9 @@ export const POSTE_CATEGORIES = [
     colorKey: "stone",
     keywords: [
       "demontage", "desinstallation", "rangement", "nettoyage", "menage", "plonge", "vaisselle",
-      "poubelle", "debarrassage", "proprete", "balayage", "tri", "dechet", "recyclage",
+      "poubelle", "debarrassage", "proprete", "balayage", "dechet", "recyclage",
     ],
+    weakKeywords: [],
   },
   {
     key: "securite",
@@ -87,6 +103,7 @@ export const POSTE_CATEGORIES = [
       "controle des acces", "controle d acces", "service d ordre", "service de securite", "vigile",
       "filtrage", "rondier",
     ],
+    weakKeywords: [],
   },
   {
     key: "secours",
@@ -97,16 +114,19 @@ export const POSTE_CATEGORIES = [
       "infirmerie", "soin", "soins", "poste de secours", "service de secours", "secouriste",
       "secourisme", "samu", "ambulance", "urgence", "croix rouge",
     ],
+    weakKeywords: [],
   },
   {
     key: "course",
     label: "Course et sport",
     colorKey: "emerald",
     keywords: [
-      "ravitaillement", "signaleur", "dossard", "chrono", "chronometrage", "arrivee", "parcours",
-      "juge", "greffe", "course", "sport", "marathon", "trail", "cyclisme", "cycliste", "depart",
-      "classement", "ligne d arrivee",
+      "ravitaillement", "ravaitaillement", "signaleur", "dossard", "chrono", "chronometrage",
+      "arrivee", "parcours", "juge", "greffe", "greffier", "course", "sport", "marathon", "trail",
+      "cyclisme", "cycliste", "echauffement", "podium", "recompense", "classement",
+      "ligne d arrivee",
     ],
+    weakKeywords: [],
   },
   {
     key: "animation",
@@ -115,18 +135,21 @@ export const POSTE_CATEGORIES = [
     keywords: [
       "animation", "animateur", "animatrice", "enfant", "maquillage", "atelier", "jeu", "jeux",
       "structure gonflable", "chateau gonflable", "loge", "clown", "conte", "ludotheque",
-      "garde d enfants", "espace enfants",
+      "garde d enfants", "espace enfants", "initiation", "loisirs creatifs", "mascotte",
+      "pere noel", "mere noel", "lutin", "parade",
     ],
+    weakKeywords: [],
   },
   {
     key: "vente",
     label: "Vente et stands",
     colorKey: "rose",
     keywords: [
-      "stand", "vente", "vendeur", "vendeuse", "boutique", "tombola", "emballage", "paquet cadeau",
+      "vente", "vendeur", "vendeuse", "boutique", "tombola", "emballage", "paquet cadeau",
       "brocante", "braderie", "foire", "marche", "souvenir", "loterie", "lotterie", "cadeau",
       "merchandising", "merch",
     ],
+    weakKeywords: ["stand"],
   },
   {
     key: "logistique",
@@ -135,8 +158,9 @@ export const POSTE_CATEGORIES = [
     keywords: [
       "transport", "logistique", "chargement", "dechargement", "livraison", "courses", "chauffeur",
       "navette", "camion", "manutention", "materiel", "stock", "approvisionnement", "vehicule", "bus",
-      "conduite", "ramassage",
+      "conduite", "ramassage", "mise en rayon", "etiquetage", "packaging", "intendance",
     ],
+    weakKeywords: ["distribution"],
   },
   {
     key: "image",
@@ -147,6 +171,7 @@ export const POSTE_CATEGORIES = [
       "communication", "audiovisuel", "lumiere", "eclairage", "regie", "regisseur", "micro", "media",
       "photographe", "videaste", "cadreur", "ingenieur du son",
     ],
+    weakKeywords: [],
   },
 ] as const satisfies readonly PosteCategoryDefinition[]
 
@@ -171,14 +196,19 @@ function wordsOf(normalized: string): NameWord[] {
   return [...normalized.matchAll(/[a-z0-9]+/g)].map((match) => ({ text: match[0], start: match.index ?? 0 }))
 }
 
+/** Keywords that must be a whole word (or its plural), even when longer than three letters. */
+const WHOLE_WORD_KEYWORDS = new Set(["loge"])
+
 /**
  * One keyword word against one name word: at the start of the word. A short keyword (3 letters
- * or fewer) must be the whole word or its plural, which keeps « bar » out of « barbecue ».
+ * or fewer), or a keyword listed as a whole word, must be the whole word or its plural, which
+ * keeps « bar » out of « barbecue » and « loge » out of « logement ».
  */
 function wordMatches(nameWord: string, keywordWord: string): boolean {
   if (!nameWord.startsWith(keywordWord)) return false
   const rest = nameWord.slice(keywordWord.length)
   if (rest === "") return true
+  if (WHOLE_WORD_KEYWORDS.has(keywordWord)) return rest === "s"
   if (keywordWord.length <= 3) return rest === "s" || rest === "x"
   return true
 }
@@ -189,18 +219,16 @@ function phraseMatchesAt(words: readonly NameWord[], index: number, keywordWords
   return keywordWords.every((keywordWord, offset) => wordMatches(words[index + offset].text, keywordWord.text))
 }
 
-/**
- * The family of a poste name, or null when no keyword matches. The first keyword encountered in
- * the name wins; at the same position, the longest keyword wins (see the module comment).
- */
-export function posteCategory(name: string): PosteCategory | null {
-  const normalized = normalizePosteName(name)
-  if (!normalized) return null
-  const words = wordsOf(normalized)
+type KeywordMatch = { category: PosteCategory; start: number; length: number }
 
-  let best: { category: PosteCategory; start: number; length: number } | null = null
+/**
+ * The best strong (or weak) keyword match. The first keyword encountered in the name wins; at
+ * the same position, the longest keyword wins.
+ */
+function bestKeywordMatch(words: readonly NameWord[], weak: boolean): KeywordMatch | null {
+  let best: KeywordMatch | null = null
   for (const category of POSTE_CATEGORIES) {
-    for (const keyword of category.keywords) {
+    for (const keyword of weak ? category.weakKeywords : category.keywords) {
       const keywordWords = wordsOf(normalizePosteName(keyword))
       if (keywordWords.length === 0) continue
       for (let index = 0; index < words.length; index++) {
@@ -217,5 +245,18 @@ export function posteCategory(name: string): PosteCategory | null {
       }
     }
   }
-  return best?.category ?? null
+  return best
+}
+
+/**
+ * The family of a poste name, or null when no keyword matches. The first strong keyword
+ * encountered in the name wins; weak keywords only count when no strong keyword matches.
+ */
+export function posteCategory(name: string): PosteCategory | null {
+  const normalized = normalizePosteName(name)
+  if (!normalized) return null
+  const words = wordsOf(normalized)
+  const strong = bestKeywordMatch(words, false)
+  if (strong) return strong.category
+  return bestKeywordMatch(words, true)?.category ?? null
 }

@@ -69,8 +69,8 @@ describe("posteCategory normalisation", () => {
 
   it("matches a keyword at the start of a word, not inside another one", () => {
     expect(family("Barbecue")).toBe("restauration")
-    expect(family("Barbe à papa")).toBeNull()
-    expect(family("Barnum relais")).toBeNull()
+    expect(family("Barbe à papa")).toBe("restauration") // its own keyword, not « bar »
+    expect(family("Barnum relais")).toBe("installation") // its own keyword, not « bar »
     expect(family("Barrières")).toBeNull()
     expect(family("Parcours")).toBe("course")
     expect(family("Pas de tir")).toBeNull()
@@ -109,6 +109,120 @@ describe("posteCategory first match", () => {
     expect(family("Service de sécurité")).toBe("securite")
     expect(family("Service de secours")).toBe("secours")
     expect(family("Service")).toBe("restauration")
+  })
+})
+
+describe("posteCategory weak keywords", () => {
+  it.each([
+    // A strong keyword anywhere in the name wins over the action word before it.
+    ["Préparation des crêpes", "restauration"],
+    ["Préparation de la soupe", "restauration"],
+    ["Préparation sandwichs et paninis", "restauration"],
+    ["PRÉPARATION REPAS", "restauration"],
+    ["Préparation pâte à Churros", "restauration"],
+    ["Preparation buvette", "boissons"],
+    ["Préparation Vin chaud", "boissons"],
+    ["Stand Boissons", "boissons"],
+    ["Stand Vin Chaud", "boissons"],
+    ["Stand Maquillage", "animation"],
+    ["Stand Chateau Gonflable", "animation"],
+    ["Stand de vente", "vente"],
+    ["Réception des livraisons", "logistique"],
+    ["Entrée et dessert", "restauration"],
+    ["Entrée + tickets", "accueil"],
+    ["Service buvette", "boissons"],
+    ["Service au bar", "boissons"],
+    ["Service Crêpes", "restauration"],
+    ["Distribution repas", "restauration"],
+    ["Distribution de tartiflettes", "restauration"],
+  ])("lets the strong keyword win in %s", (name, key) => {
+    expect(family(name)).toBe(key)
+  })
+
+  it.each([
+    // With no strong keyword, the weak action word decides.
+    ["Préparation", "installation"],
+    ["Préparation Salle des fêtes", "installation"],
+    ["Stand", "vente"],
+    ["Tenue du stand", "vente"],
+    ["Réception", "accueil"],
+    ["Entrée", "accueil"],
+    ["Service", "restauration"],
+    ["Service Midi", "restauration"],
+    ["Distribution", "logistique"],
+  ])("falls back to the weak keyword in %s", (name, key) => {
+    expect(family(name)).toBe(key)
+  })
+})
+
+describe("posteCategory whole keywords and removed false positives", () => {
+  it("matches loge as a whole word only", () => {
+    expect(family("Loge")).toBe("animation")
+    expect(family("Loges")).toBe("animation")
+    expect(family("Logement")).toBeNull()
+    expect(family("Permanence consommation logement")).not.toBe("animation")
+  })
+
+  it("does not read depart or tri as a family on their own", () => {
+    expect(family("Départ des exposants")).toBeNull()
+    expect(family("Tri des denrées")).toBeNull()
+    expect(family("Tri des déchets")).toBe("demontage")
+  })
+
+  it("does not treat aide or tenue as keywords", () => {
+    expect(family("Aide")).toBeNull()
+    expect(family("Tenue")).toBeNull()
+  })
+})
+
+describe("posteCategory added keywords", () => {
+  it.each([
+    ["Acueil", "accueil"],
+    ["Permanence", "accueil"],
+    ["Pointage", "accueil"],
+    ["Friterie", "restauration"],
+    ["Cuisson", "restauration"],
+    ["Précuisson", "restauration"],
+    ["Grilleur", "restauration"],
+    ["Grillades", "restauration"],
+    ["Hamburger", "restauration"],
+    ["Gaufre", "restauration"],
+    ["Cookie", "restauration"],
+    ["Pop corn", "restauration"],
+    ["Popcorn", "restauration"],
+    ["Collation", "restauration"],
+    ["Goûter", "restauration"],
+    ["Tartiflette", "restauration"],
+    ["Hot dog", "restauration"],
+    ["Pâtes", "restauration"],
+    ["Churros", "restauration"],
+    ["Barbe à papa", "restauration"],
+    ["Sucré salé", "restauration"],
+    ["Gourmandise", "restauration"],
+    ["Friandise", "restauration"],
+    ["Bonbon", "restauration"],
+    ["Ravaitaillement", "course"],
+    ["Greffier", "course"],
+    ["Échauffement", "course"],
+    ["Podium", "course"],
+    ["Récompense", "course"],
+    ["Chapiteau", "installation"],
+    ["Barnum", "installation"],
+    ["Marquage", "installation"],
+    ["Signalétique", "installation"],
+    ["Mise en rayon", "logistique"],
+    ["Étiquetage", "logistique"],
+    ["Packaging", "logistique"],
+    ["Intendance", "logistique"],
+    ["Initiation", "animation"],
+    ["Loisirs créatifs", "animation"],
+    ["Mascotte", "animation"],
+    ["Père Noël", "animation"],
+    ["Mère Noël", "animation"],
+    ["Lutin", "animation"],
+    ["Parade", "animation"],
+  ])("classifies %s as %s", (name, key) => {
+    expect(family(name)).toBe(key)
   })
 })
 
