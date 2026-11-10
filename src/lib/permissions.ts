@@ -124,6 +124,10 @@ export const PERMISSIONS: Record<string, Partial<Record<Method, Level>>> = {
   // merge below, it only ever applies to a record that was already inactive with no registration
   // at all, so it's a much smaller, local action — not owner-only.
   "members/[id]/delete": { POST: "organizer" },
+  // Bulk permanent deletion (#1305): same level as the single action, with the owner-decided
+  // difference that an active record without registration can be deleted directly. The
+  // confirmation, not the role, replaces the deactivation step.
+  "members/bulk-delete": { POST: "organizer" },
   // Erasure of personal data (#516): owners and organizers (owner decision), like deletion above:
   // answering a person's erasure request is part of managing the members.
   "members/[id]/erase": { POST: "organizer" },

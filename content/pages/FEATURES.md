@@ -125,6 +125,7 @@ En savoir plus : [documents à imprimer, badges et résumé](../guide/rapports-b
 <!-- image: MEMBERS_MANAGEMENT | La fiche d'un membre : prénom, nom, email, téléphone, étiquettes, notes et disponibilités générales. -->
 
 - **Vos membres au même endroit** : fiches avec étiquettes, notes et disponibilités, invitations et relances, import depuis un fichier CSV ou Excel.
+- **Supprimer plusieurs fiches d'un coup** : sélectionnez les membres dans la liste, ou « Tout sélectionner » pour le filtre affiché, puis « Supprimer la sélection ». La confirmation dit une fois combien de fiches partiront et que c'est définitif ; les membres qui ont des inscriptions sont laissés, nommés dans le résultat, avec un lien vers leur fiche.
 - **Placer un membre sur un ou plusieurs créneaux** depuis les inscriptions : cherchez-le par nom ou email, sans retaper ses coordonnées ; il reçoit un seul email de confirmation avec son lien.
 - **Les doublons sont repérés**, mais jamais fusionnés sans vous. Vous choisissez champ par champ ce que vous gardez, et aucune inscription n'est perdue.
 - **Vos données vous appartiennent** : exportez vos membres, votre journal ou l'archive complète d'un événement à tout moment.

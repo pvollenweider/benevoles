@@ -18,6 +18,14 @@ Le bouton **Supprimer** n'apparaît, sur la ligne de la fiche dans la liste des 
 
 ![Fenêtre « Supprimer Antoine Bovard ? » : la phrase « Cette action est irréversible », la liste de ce qui disparaît avec la fiche, « Aucun email n'est envoyé », puis les boutons Annuler et Supprimer](/doc-img/admin-member-delete.png)
 
+## Supprimer plusieurs fiches en une fois
+
+Pour retirer d'un coup des membres importés par erreur, sélectionnez-les dans la liste : chaque ligne propose une case dont le libellé est **Sélectionner** suivi du prénom et du nom. La case **Tout sélectionner** prend tous les membres du filtre en cours (recherche, étiquette, statut), y compris ceux qui ne tiennent pas à l'écran. Le compteur **N membres sélectionnés** suit la sélection ; elle se vide dès que le filtre change. Le bouton **Supprimer la sélection** n'apparaît qu'une fois au moins un membre sélectionné.
+
+La confirmation indique combien de membres seront supprimés, rappelle que l'action est **irréversible** et que les membres qui ont des inscriptions ne seront pas supprimés. À la différence de la suppression d'une fiche seule, un membre **actif sans inscription** est supprimé directement : la confirmation explicite remplace l'étape de désactivation. Les fiches qui ont des inscriptions restent, parce que leurs inscriptions doivent rester dans l'historique des événements ; les fiches fusionnées restent aussi, puisque la fusion les supprime automatiquement après son délai. Aucun email n'est envoyé, et chaque suppression est journalisée dans le journal d'activité de l'organisation.
+
+Après l'action, la liste se rafraîchit et le résultat est annoncé : par exemple « 198 membres supprimés. 3 laissés car ils ont des inscriptions : Anne Favre, Marc Rochat, Léa Dubois. Vous pouvez les effacer depuis leur fiche. » Le focus va sur ce message, ou sur le titre de la page s'il ne reste plus aucun membre. Une sélection de plus de 500 membres part en plusieurs fois, sans que vous ayez à faire quoi que ce soit.
+
 ## Effacer les données personnelles d'un membre
 
 Quand une personne demande l'effacement de ses données, ouvrez sa page **Activité** (depuis la liste des membres) et choisissez **Effacer les données personnelles**. C'est possible pour toute fiche, active ou non, avec ou sans inscriptions, par les propriétaires comme par les organisateurs. Seule une fiche déjà fusionnée dans une autre ne le propose pas : effacez alors les données de la fiche conservée.

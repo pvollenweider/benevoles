@@ -11,6 +11,11 @@
  * registrations of its own (merge reassigns them all) but is deleted by the daily cleanup once its retention delay has passed instead, so
  * deleting it by hand would race that cron for nothing.
  *
+ * Bulk deletion (#1305) reuses this same rule through the `allowActive` option: the only
+ * difference is that an active record with no registration is deletable there, since the explicit
+ * confirmation of the selection replaces the deactivation step. The exclusions (registrations,
+ * merged tombstone) stay identical. See src/lib/member-bulk-deletion.ts.
+ *
  * Deliberately pure (no Prisma import): used both server-side (the route, via
  * member-deletion-data.ts) and client-side (MembersManager, the member page) to show the same
  * reason in words without a round trip. See CLAUDE.md: a Prisma import here would break Turbopack
@@ -39,13 +44,26 @@ export interface MemberDeletionSubject {
   mergedIntoId: string | null
 }
 
+export interface MemberDeletionOptions {
+  /**
+   * Bulk deletion (#1305, owner decision): the explicit confirmation of « Supprimer la sélection »
+   * replaces the deactivation step, so an active record with no registration can go too. Never
+   * used by the single-member action, which still requires an inactive record.
+   */
+  allowActive?: boolean
+}
+
 /**
  * The rule itself. `registrationCount` must count every Registration row of the member, every
  * status included — the caller must not pre-filter by status.
  */
-export function memberDeletionEligibility(member: MemberDeletionSubject, registrationCount: number): MemberDeletionEligibility {
+export function memberDeletionEligibility(
+  member: MemberDeletionSubject,
+  registrationCount: number,
+  options: MemberDeletionOptions = {},
+): MemberDeletionEligibility {
   if (member.mergedIntoId) return { eligible: false, reason: MEMBER_DELETION_REASON.tombstone }
-  if (member.active) return { eligible: false, reason: MEMBER_DELETION_REASON.active }
+  if (member.active && !options.allowActive) return { eligible: false, reason: MEMBER_DELETION_REASON.active }
   if (registrationCount > 0) return { eligible: false, reason: MEMBER_DELETION_REASON.hasRegistrations }
   return { eligible: true }
 }

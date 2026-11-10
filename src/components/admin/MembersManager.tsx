@@ -5,7 +5,8 @@
 
 import Link from "next/link"
 import { useEffect, useId, useLayoutEffect, useMemo, useRef, useState, useTransition } from "react"
-import { deactivateMemberRecap, deleteMemberRecap } from "@/lib/action-recap"
+import { bulkDeleteMembersRecap, deactivateMemberRecap, deleteMemberRecap } from "@/lib/action-recap"
+import { BULK_DELETE_MAX, bulkDeletionResultText, type BulkDeletionResult } from "@/lib/member-bulk-deletion"
 import ConfirmActionModal from "@/components/admin/ConfirmActionModal"
 import { useRouter } from "next/navigation"
 import { fmtHours } from "@/lib/gantt-utils"
@@ -125,6 +126,15 @@ export default function MembersManager({ initialMembers, allTags, initialSearch,
   const [pendingDelete, setPendingDelete] = useState<{ id: string; name: string } | null>(null)
   const [deleting, setDeleting] = useState(false)
   const [deleteError, setDeleteError] = useState<string | null>(null)
+  // Bulk deletion (#1305): the selection is the ids of the rows the filter currently shows (all of
+  // them, not only the ones on screen), and the count is frozen when the dialog opens.
+  const [selectedIds, setSelectedIds] = useState<Set<string>>(new Set())
+  const [pendingBulkDelete, setPendingBulkDelete] = useState<{ ids: string[]; count: number } | null>(null)
+  const [bulkDeleting, setBulkDeleting] = useState(false)
+  const [bulkDeleteError, setBulkDeleteError] = useState<string | null>(null)
+  const [bulkDeleteTick, setBulkDeleteTick] = useState(0)
+  // After a bulk deletion, the refreshed list decides where focus really belongs (see below).
+  const pendingBulkFocusRef = useRef(false)
   // Bumped whenever a confirm attempt (deactivate or delete) fails and the dialog stays open
   // (#667 accessibility review): a layout effect, same tick pattern as editSaveTick/
   // deleteConfirmTick below, refocuses the dialog's own submit button deterministically instead of
@@ -158,6 +168,47 @@ export default function MembersManager({ initialMembers, allTags, initialSearch,
   useLayoutEffect(() => {
     if (deleteConfirmTick > 0) actionRef.current?.focus()
   }, [deleteConfirmTick])
+  // Same parking spot for a successful bulk deletion (#1305), before the refreshed list lands.
+  useLayoutEffect(() => {
+    if (bulkDeleteTick > 0) actionRef.current?.focus()
+  }, [bulkDeleteTick])
+
+  // The selection only ever describes the current filter (#1305): changing search, tag, status or
+  // the archived toggle empties it, so « Tout sélectionner » can never silently keep rows the
+  // organiser no longer sees.
+  const selectionFilterEverSetRef = useRef(false)
+  useEffect(() => {
+    if (!selectionFilterEverSetRef.current) { selectionFilterEverSetRef.current = true; return }
+    setSelectedIds(new Set())
+  }, [search, tagFilter, showInactive, addressToVerify, showArchived])
+
+  // The filter selects every member it shows, never an absorbed or erased record: those are
+  // history, not members, and the bulk rule keeps merged tombstones out anyway.
+  const selectable = useMemo(() => filtered.filter((m) => !isArchived(m)), [filtered])
+  const allSelectableSelected = selectable.length > 0 && selectable.every((m) => selectedIds.has(m.id))
+  const someSelectableSelected = selectable.some((m) => selectedIds.has(m.id))
+
+  function toggleSelected(id: string) {
+    setSelectedIds((prev) => {
+      const next = new Set(prev)
+      if (next.has(id)) next.delete(id)
+      else next.add(id)
+      return next
+    })
+  }
+
+  function toggleSelectAll() {
+    setSelectedIds((prev) => {
+      const next = new Set(prev)
+      const ids = selectable.map((m) => m.id)
+      const allSelected = ids.length > 0 && ids.every((id) => next.has(id))
+      for (const id of ids) {
+        if (allSelected) next.delete(id)
+        else next.add(id)
+      }
+      return next
+    })
+  }
 
   /** Replaces the status line's text via announce() so identical consecutive messages (e.g.
    * désactiver the same way twice) still re-announce, same pattern as the sort announcement. */
@@ -174,10 +225,10 @@ export default function MembersManager({ initialMembers, allTags, initialSearch,
   // region's text actually lands a frame later (announce() clears, then sets, the message).
   const suppressStatusFocusRef = useRef(false)
   useEffect(() => {
-    if (pendingDeactivate || pendingDelete || !actionMessage || pendingDeleteFocusRef.current) return
+    if (pendingDeactivate || pendingDelete || pendingBulkDelete || !actionMessage || pendingDeleteFocusRef.current) return
     if (suppressStatusFocusRef.current) { suppressStatusFocusRef.current = false; return }
     actionRef.current?.focus()
-  }, [pendingDeactivate, pendingDelete, actionMessage])
+  }, [pendingDeactivate, pendingDelete, pendingBulkDelete, actionMessage])
 
   // Once the refreshed list no longer carries the deleted member (#667), move focus to the next
   // row's action, the previous row's if it was last, or the page heading if none remain — never
@@ -194,6 +245,15 @@ export default function MembersManager({ initialMembers, allTags, initialSearch,
     focusFirstAvailable([...candidates, headingRef.current])
     pendingDeleteFocusRef.current = null
   }, [members])
+
+  // Bulk deletion (#1305): once the refreshed list lands, the outcome line stays the focus target
+  // — except when no member is left at all, where the page heading is the more useful place.
+  useLayoutEffect(() => {
+    if (!pendingBulkFocusRef.current) return
+    if (memberCount > 0) actionRef.current?.focus()
+    else headingRef.current?.focus()
+    pendingBulkFocusRef.current = false
+  }, [members, memberCount])
 
   // Saving an edit (#599): focus the status line at once, synchronously (a layout effect, like
   // ModalShell's own documented "a parent that moves focus when the dialog closes wins" escape
@@ -318,6 +378,70 @@ export default function MembersManager({ initialMembers, allTags, initialSearch,
     }
   }
 
+  function askBulkDelete() {
+    if (selectedIds.size === 0) return
+    setBulkDeleteError(null)
+    setPendingBulkDelete({ ids: Array.from(selectedIds), count: selectedIds.size })
+  }
+
+  async function runBulkDelete(target: { ids: string[]; count: number }) {
+    setBulkDeleting(true)
+    setBulkDeleteError(null)
+    const result: BulkDeletionResult = { deleted: [], skipped: [] }
+    try {
+      // The route caps one request at BULK_DELETE_MAX ids; a bigger selection goes in several
+      // requests, in order, and their results are merged into one outcome.
+      for (let start = 0; start < target.ids.length; start += BULK_DELETE_MAX) {
+        const chunk = target.ids.slice(start, start + BULK_DELETE_MAX)
+        const res = await fetch("/api/admin/members/bulk-delete", {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({ ids: chunk }),
+        })
+        if (!res.ok) {
+          const data = await res.json().catch(() => ({}))
+          const message = typeof data?.error === "string" ? data.error : "La suppression n'a pas abouti. Réessayez."
+          if (result.deleted.length > 0) {
+            // A previous batch already went through: close the dialog and say exactly how far it
+            // got, rather than offering a retry that would report those ids as not found.
+            const done = result.deleted.length
+            setPendingBulkDelete(null)
+            setSelectedIds(new Set())
+            announceAction("error", `La suppression s'est arrêtée après ${done} membre${done > 1 ? "s" : ""} supprimé${done > 1 ? "s" : ""}. ${message} La liste va se rafraîchir.`)
+            refresh()
+          } else {
+            setBulkDeleteError(message)
+            setConfirmErrorTick((n) => n + 1)
+          }
+          return
+        }
+        const chunkResult = (await res.json().catch(() => ({ deleted: [], skipped: [] }))) as BulkDeletionResult
+        result.deleted.push(...chunkResult.deleted)
+        result.skipped.push(...chunkResult.skipped)
+      }
+
+      announceAction("ok", bulkDeletionResultText(result))
+      setBulkDeleteTick((n) => n + 1)
+      pendingBulkFocusRef.current = true
+      setPendingBulkDelete(null)
+      setSelectedIds(new Set())
+      refresh()
+    } catch {
+      if (result.deleted.length > 0) {
+        const done = result.deleted.length
+        setPendingBulkDelete(null)
+        setSelectedIds(new Set())
+        announceAction("error", `La suppression s'est arrêtée après ${done} membre${done > 1 ? "s" : ""} supprimé${done > 1 ? "s" : ""}. Connexion impossible : la liste va se rafraîchir.`)
+        refresh()
+      } else {
+        setBulkDeleteError("Connexion impossible : rien n'a changé. Réessayez.")
+        setConfirmErrorTick((n) => n + 1)
+      }
+    } finally {
+      setBulkDeleting(false)
+    }
+  }
+
   return (
     // data-admin-wide (#1102): the admin <main> widens to max-w-7xl for this data-heavy list
     // (src/app/admin/layout.tsx); the top bar keeps its width.
@@ -338,6 +462,15 @@ export default function MembersManager({ initialMembers, allTags, initialSearch,
           error={deleteError}
           onConfirm={() => void runDelete(pendingDelete)}
           onCancel={() => { pendingDeleteFocusRef.current = null; setDeleteError(null); setPendingDelete(null) }}
+        />
+      )}
+      {pendingBulkDelete && (
+        <ConfirmActionModal
+          recap={bulkDeleteMembersRecap(pendingBulkDelete.count)}
+          busy={bulkDeleting}
+          error={bulkDeleteError}
+          onConfirm={() => void runBulkDelete(pendingBulkDelete)}
+          onCancel={() => { setBulkDeleteError(null); setPendingBulkDelete(null) }}
         />
       )}
       <p
@@ -483,6 +616,45 @@ export default function MembersManager({ initialMembers, allTags, initialSearch,
         )}
       </div>
 
+      {/* Selection of the current filter (#1305): « Tout sélectionner » takes every selectable
+          row of `filtered`, not only the ones on screen. The count is a live region; the
+          destructive action appears only once something is selected. */}
+      {selectable.length > 0 && (
+        <div className="flex flex-wrap items-center gap-x-4 gap-y-2">
+          <label className="text-sm text-gray-700 flex items-center gap-1.5">
+            <input
+              type="checkbox"
+              checked={allSelectableSelected}
+              ref={(el) => { if (el) el.indeterminate = someSelectableSelected && !allSelectableSelected }}
+              onChange={toggleSelectAll}
+              className="h-4 w-4 rounded border-gray-500"
+            />
+            Tout sélectionner
+          </label>
+          <p role="status" aria-live="polite" className={selectedIds.size > 0 ? "text-sm font-medium text-gray-900" : "sr-only"}>
+            {selectedIds.size > 0 ? `${selectedIds.size} membre${selectedIds.size > 1 ? "s" : ""} sélectionné${selectedIds.size > 1 ? "s" : ""}` : ""}
+          </p>
+          {selectedIds.size > 0 && (
+            <div className="ml-auto flex flex-wrap gap-2">
+              <button
+                type="button"
+                onClick={() => setSelectedIds(new Set())}
+                className="min-h-11 sm:min-h-6 text-sm text-gray-600 hover:text-gray-900 underline underline-offset-2 rounded focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-blue-600"
+              >
+                Tout désélectionner
+              </button>
+              <button
+                type="button"
+                onClick={askBulkDelete}
+                className="min-h-11 sm:min-h-6 text-sm font-medium text-red-700 border border-red-600 rounded-xl px-3 py-1.5 hover:bg-red-50 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-red-700"
+              >
+                Supprimer la sélection
+              </button>
+            </div>
+          )}
+        </div>
+      )}
+
       {/* One result-count announcement for every filter (search, tag, inactif, adresses à
           vérifier), debounced above; always rendered, not only with the table (#599), since it
           must announce the zero-results case too. */}
@@ -540,6 +712,7 @@ export default function MembersManager({ initialMembers, allTags, initialSearch,
           <table aria-label="Liste des membres" className="w-full text-sm min-w-[56rem]">
             <thead className="bg-gray-50 text-xs text-gray-500">
               <tr>
+                <th scope="col" className="px-4 py-2 w-10 font-medium"><span className="sr-only">Sélection</span></th>
                 <SortTh col="firstName" label="Prénom" sortCol={sortCol} sortDir={sortDir} onSort={toggleSort} />
                 <SortTh col="lastName"  label="Nom"    sortCol={sortCol} sortDir={sortDir} onSort={toggleSort} />
                 <th scope="col" className="text-left px-4 py-2 font-medium">Contact</th>
@@ -559,6 +732,19 @@ export default function MembersManager({ initialMembers, allTags, initialSearch,
                 const subject = recordSubject(record, m.firstName, m.lastName, formatRecordDay)
                 return (
                 <tr key={m.id} className={`border-t border-gray-100 ${!m.active ? "bg-gray-50" : ""}`}>
+                  <td className="px-4 py-3 align-top">
+                    {/* Absorbed and erased records (#1014) are history, not members: no bulk
+                        selection, and their merged tombstones stay out by rule too. */}
+                    {!archived && (
+                      <input
+                        type="checkbox"
+                        aria-label={`Sélectionner ${m.firstName} ${m.lastName}`}
+                        checked={selectedIds.has(m.id)}
+                        onChange={() => toggleSelected(m.id)}
+                        className="h-4 w-4 rounded border-gray-500"
+                      />
+                    )}
+                  </td>
                   {/* An absorbed or erased record (#1014) has no first/last name pair to split: one
                       identity cell over both name columns, wide enough for the sentence saying why
                       it is still listed, read with the record; the « · » is decorative. */}
