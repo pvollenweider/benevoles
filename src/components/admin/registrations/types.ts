@@ -18,6 +18,8 @@ export type Registration = {
   /** The share link per group (#947) the sign-up came through, if any. */
   groupLinkId?: string | null
   createdAt: string; waitingPosition: number | null; volunteer: Volunteer; shift: ShiftRef
+  /** A provisional place waiting for its email confirmation (#1253): the deadline its email gave. */
+  confirmationDeadline?: string | null
   // True when this volunteer is already the (or a) sector leader of this shift's own role —
   // computed server-side from SectorLeader (role + email), see registrations/page.tsx.
   isLeader: boolean

@@ -34,6 +34,7 @@ const schema = z.object({
   confirmationMessage: cappedText(MARKDOWN_TEXT_MAX, "Le message de confirmation").optional(),
   showSchedule: z.array(showSchema).optional(),
   requirePhone: z.boolean().optional(),
+  requireEmailConfirmation: z.boolean().optional(),
   shiftRosterEnabled: z.boolean().optional(),
   /** Accent colour of the public page (#300): a palette key, or null for the neutral header. */
   accentColorKey: z.enum(ACCENT_KEYS).optional().nullable(),

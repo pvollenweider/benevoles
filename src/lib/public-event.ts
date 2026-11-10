@@ -105,6 +105,8 @@ export function toPublicEvent(event: PublicEventRow, now: Date = new Date()) {
     publicInstructions: event.publicInstructions,
     confirmationMessage: event.confirmationMessage,
     requirePhone: event.requirePhone,
+    // Confirmation by email (#1253): the form says so, and the result page reads it.
+    requireEmailConfirmation: event.requireEmailConfirmation,
     // Shift roster (#1068): whether the form offers the optional « show my name » box.
     shiftRosterEnabled: event.shiftRosterEnabled,
     // Registration window (#463): the page shows the schedule either way, the form only when open.

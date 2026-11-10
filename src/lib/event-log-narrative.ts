@@ -199,6 +199,9 @@ export const ACTION_VERB: Record<string, (actor: string) => string> = {
   "registration.checked_in": (a) => `${a} a marqué la personne présente`,
   "registration.check_in_undone": (a) => `${a} a annulé la présence`,
   "registration.requested": (a) => `${a} a demandé une inscription`,
+  "registration.confirmation_requested": (a) => `${a} a demandé une inscription à confirmer par email`,
+  "registration.confirmed_by_email": (a) => `${a} a confirmé son inscription par email`,
+  "registration.confirmation_expired": () => "une demande en attente de confirmation par email a expiré",
   "registration.accepted": (a) => `${a} a accepté la demande d'inscription`,
   "registration.refused": (a) => `${a} a refusé la demande d'inscription`,
   "event.published": (a) => `${a} a publié l'événement`,
@@ -287,6 +290,7 @@ const SHIFT_AWARE_ACTIONS = new Set([
   "registration.waitlist_offered", "registration.waitlist_confirmed", "registration.baseline",
   "registration.checked_in", "registration.check_in_undone",
   "registration.requested", "registration.accepted", "registration.refused", "registration.swapped",
+  "registration.confirmation_requested", "registration.confirmed_by_email",
   "registration.availability_acknowledged",
   "shiftdecline.declined",
 ])

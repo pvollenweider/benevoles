@@ -14,9 +14,10 @@ import { REMINDER_LABELS, type ReminderKey } from "./notification-settings"
 const plural = (n: number, one: string, many: string) => `${n} ${n > 1 ? many : one}`
 
 /** « 30 personnes confirmées, 2 demandes à traiter, 16 places encore libres. » Null without a place. */
-export function placesSentence(p: { capacity: number; confirmed: number; requested: number; left: number }): string | null {
+export function placesSentence(p: { capacity: number; confirmed: number; requested: number; left: number; unconfirmed?: number }): string | null {
   if (p.capacity === 0) return null
   const parts = [plural(p.confirmed, "personne confirmée", "personnes confirmées")]
+  if ((p.unconfirmed ?? 0) > 0) parts.push(plural(p.unconfirmed!, "place en attente de confirmation par email", "places en attente de confirmation par email"))
   if (p.requested > 0) parts.push(plural(p.requested, "demande à traiter", "demandes à traiter"))
   parts.push(p.left === 0 ? "plus aucune place libre" : plural(p.left, "place encore libre", "places encore libres"))
   return `${parts.join(", ")}.`

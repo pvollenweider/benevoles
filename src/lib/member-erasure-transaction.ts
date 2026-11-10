@@ -188,6 +188,11 @@ export async function runMemberErasure(
     if (del.pushSubscriptionIds.length) await tx.pushSubscription.deleteMany({ where: { id: { in: del.pushSubscriptionIds }, volunteerId: id } })
     // Shift roster choices (#1068): the person's own, never shown again.
     await tx.rosterConsent.deleteMany({ where: { volunteerId: { in: authors } } })
+    // Pending public sign-ups waiting for their email confirmation (#1253): the person's own, with
+    // the name, address, phone and token hash. Their provisional registrations become ordinary
+    // cancelled rows (the link is set to null), then scrubbed below like the others.
+    await tx.registration.updateMany({ where: { volunteerId: { in: authors }, status: "unconfirmed" }, data: { status: "cancelled", signupConfirmationId: null } })
+    await tx.signupConfirmation.deleteMany({ where: { volunteerId: { in: authors } } })
     // Personal workload limits (#1171, lot 2): the person's own settings, gone with their data.
     await tx.eventVolunteerLimit.deleteMany({ where: { volunteerId: { in: authors } } })
     // Dated availability (#1146): the person's own answers, with their days and ranges (cascade).

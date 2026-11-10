@@ -201,9 +201,10 @@ export function leaderRemovedAnnouncement(name: string, role: string, kind?: "se
  * plurals instead of « inscription(s) », « Aucune » for zero. The waiting list and the requests only
  * when there are any.
  */
-export function registrationsSummary(c: { active: number; waiting: number; requested: number }): string {
+export function registrationsSummary(c: { active: number; waiting: number; requested: number; unconfirmed?: number }): string {
   return [
     c.active === 0 ? "Aucune inscription active" : `${c.active} ${plural(c.active, "inscription")} ${plural(c.active, "active")}`,
+    (c.unconfirmed ?? 0) > 0 ? `${c.unconfirmed} en attente de confirmation par email` : null,
     c.waiting > 0 ? `${c.waiting} en liste d'attente` : null,
     c.requested > 0 ? `${c.requested} ${plural(c.requested, "demande")} à traiter` : null,
   ].filter(Boolean).join(", ")

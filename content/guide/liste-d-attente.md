@@ -15,6 +15,8 @@ aliases: []
 
 Un créneau complet peut garder une liste d'attente : les inscriptions suivantes y prennent rang dans l'ordre d'arrivée, sans être confirmées. Quand une place se libère, elle est proposée à la première personne de la file, qui a **24 heures** pour la prendre avant qu'elle passe à la suivante. Ce délai s'arrête au début du créneau : une place libérée la veille au soir reste à prendre jusqu'au début du créneau seulement, et une place libérée moins d'une heure avant le début n'est plus proposée (l'organisation, prévenue tout de suite du désistement, cherche quelqu'un elle-même).
 
+Sur un événement qui demande de confirmer l'adresse email, une demande sur un créneau complet avec liste d'attente n'entre dans la file **qu'au moment de la confirmation par le bénévole** : avant ce clic, rien n'est réservé et le rang n'est pas pris. Le rang est celui de la confirmation.
+
 ## Côté bénévole
 
 ### Le créneau que je veux est complet

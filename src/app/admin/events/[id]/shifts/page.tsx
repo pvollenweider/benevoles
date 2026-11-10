@@ -31,8 +31,9 @@ export default async function ShiftsPage({ params, searchParams }: { params: Pro
       sectors: { select: { id: true, name: true, displayOrder: true, archivedAt: true }, orderBy: { displayOrder: "asc" } },
       places: { select: { id: true, name: true, displayOrder: true, archivedAt: true }, orderBy: { displayOrder: "asc" } },
       shifts: {
-        // Only counted: the rows (and their link token) never go to the browser (#1009).
-        include: { registrations: { where: { status: "active" }, select: { id: true } } },
+        // Only counted: the rows (and their link token) never go to the browser (#1009). A
+        // provisional place (#1253) is shown apart from the confirmed ones in the planning.
+        include: { registrations: { where: { status: { in: ["active", "unconfirmed"] } }, select: { id: true, status: true } } },
         orderBy: [{ date: "asc" }, { displayOrder: "asc" }, { startTime: "asc" }],
       },
     },
@@ -88,6 +89,7 @@ export default async function ShiftsPage({ params, searchParams }: { params: Pro
           ...s,
           date: s.date.toISOString().split("T")[0],
           registrationCount: registrations.length,
+          pendingConfirmationCount: registrations.filter((r) => r.status === "unconfirmed").length,
         }))}
       />
     </div>

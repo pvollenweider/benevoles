@@ -3,7 +3,7 @@
 
 import { NextResponse } from "next/server"
 import { placeChoiceProblem } from "@/lib/places"
-import { COMMITTED_STATUSES } from "@/lib/registration-capacity"
+import { NOTIFIED_COMMITTED_STATUSES } from "@/lib/registration-capacity"
 import { civilDateSchema, isDayInPeriod, SHIFT_OUTSIDE_EVENT_ERROR } from "@/lib/civil-date"
 import { COORDINATE_PAIR_ERROR, isCoordinatePair } from "@/lib/map-link"
 import { requireOrgSession } from "@/lib/auth-guard"
@@ -120,7 +120,7 @@ export async function PATCH(req: Request, { params }: { params: Promise<{ id: st
       where: { id },
       include: {
         event: { select: { id: true, title: true, slug: true, organizationId: true, organization: { select: { slug: true } } } },
-        registrations: { where: { status: { in: [...COMMITTED_STATUSES] } }, include: { volunteer: true } },
+        registrations: { where: { status: { in: [...NOTIFIED_COMMITTED_STATUSES] } }, include: { volunteer: true } },
       },
     })
     if (!shift) return NextResponse.json({ error: "Non trouvé" }, { status: 404 })
@@ -251,7 +251,7 @@ export async function DELETE(_req: Request, { params }: { params: Promise<{ id: 
     include: {
       event: { select: { id: true, title: true, slug: true, organizationId: true, organization: { select: { slug: true } } } },
       // Pending requests (#484) are cancelled and told too: they held a spot on this shift.
-      registrations: { where: { status: { in: [...COMMITTED_STATUSES] } }, include: { volunteer: true } },
+      registrations: { where: { status: { in: [...NOTIFIED_COMMITTED_STATUSES] } }, include: { volunteer: true } },
     },
   })
   if (!shift) return NextResponse.json({ error: "Non trouvé" }, { status: 404 })

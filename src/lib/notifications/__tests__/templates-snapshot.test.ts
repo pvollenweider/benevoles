@@ -702,6 +702,20 @@ const cases: [string, NotificationPayload][] = [
     recipient: { email: "camille@example.org" },
     data: { confirmUrl: "https://www.benevol.app/inscription/confirmer?t=tok-1", hours: 24 },
   }],
+  ["signup_email_confirmation", {
+    kind: "signup_email_confirmation",
+    recipient: { email: "lea@example.org" },
+    data: {
+      volunteerName: "Léa M",
+      eventTitle: "Fête du village",
+      confirmUrl: "https://asso.benevol.app/confirmation/tok-1",
+      expiresAt: "mercredi 11 novembre à 11:00",
+      shifts: [
+        { label: "Bar", date: "samedi 14 novembre", startTime: "10:00", endTime: "12:00" },
+        { label: "Accueil", date: "dimanche 15 novembre", startTime: "14:00", endTime: "16:00", waitlist: true },
+      ],
+    },
+  }],
   ["signup_account_link", {
     kind: "signup_account_link",
     recipient: { email: "camille@example.org" },
@@ -802,6 +816,7 @@ describe("render — snapshot of every notification kind", () => {
     // Keep in sync with NotificationKind: the Record type fails to compile when a kind is added.
     const all: Record<NotificationKind, true> = {
       registration_confirmation: true,
+      signup_email_confirmation: true,
       member_invite: true,
       reminder_j2: true,
       reminder_j1: true,

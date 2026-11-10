@@ -20,18 +20,36 @@ export type Tx = Parameters<Parameters<typeof prisma.$transaction>[0]>[0]
 export const LIVE_STATUSES = ["active", "waiting", "offered", "requested"] as const
 
 /**
+ * Statuses that still exist from the organisation's point of view, the provisional reservation of
+ * a public sign-up waiting for its email confirmation included (#1253). The volunteer-facing
+ * pages keep using LIVE_STATUSES: no personal link is sent before the confirmation.
+ */
+export const BOOKED_STATUSES = [...LIVE_STATUSES, "unconfirmed"] as const
+
+/**
  * Statuses that hold a spot out of `capacity`. "offered" counts: the spot is reserved for the
  * waitlisted volunteer until they confirm or the offer expires, so a new sign-up can't take it.
  * "requested" counts too (#484): a request waiting for the organizer's decision keeps its spot,
  * so the last place can't collect unlimited requests; a refusal frees it.
+ * "unconfirmed" is the provisional reservation of a public sign-up waiting for its email
+ * confirmation (#1253): it holds the place exactly like a confirmed one, so nothing is oversold
+ * before the click.
  */
-export const OCCUPYING_STATUSES = ["active", "offered", "requested"] as const
+export const OCCUPYING_STATUSES = ["active", "offered", "requested", "unconfirmed"] as const
 
 /**
  * Registrations that commit the volunteer to the shift's hours, for the overlap check: a
- * confirmed place or a pending request (#484). The waitlist doesn't: it isn't a place yet.
+ * confirmed place, a pending request (#484), or a provisional reservation waiting for its email
+ * confirmation (#1253, counted like an active place for the workload and role limits too). The
+ * waitlist doesn't: it isn't a place yet.
  */
-export const COMMITTED_STATUSES = ["active", "requested"] as const
+export const COMMITTED_STATUSES = ["active", "requested", "unconfirmed"] as const
+
+/**
+ * The committed registrations whose volunteer is emailed about a shift change: a provisional
+ * reservation (#1253) is not told before its confirmation, and a waitlist offer is no mission yet.
+ */
+export const NOTIFIED_COMMITTED_STATUSES = ["active", "requested"] as const
 
 /**
  * Row-locks the given shifts until the end of the transaction. Ordered by id so two

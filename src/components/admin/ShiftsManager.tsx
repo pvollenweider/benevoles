@@ -593,6 +593,11 @@ export default function ShiftsManager({
                       <span aria-hidden="true">{s.registrationCount}/{s.capacity}</span>
                       <span className="sr-only">{spokenPlaces(s.registrationCount, s.capacity)}</span>
                     </p>
+                    {(s.pendingConfirmationCount ?? 0) > 0 && (
+                      <p className="text-[11px] text-amber-800">
+                        {s.pendingConfirmationCount} en attente de confirmation par email
+                      </p>
+                    )}
                     {/* A full row says « Complet » once, in its status badge: the count alone here. */}
                     {s.registrationCount < s.capacity && (
                       <p className="text-[11px] text-green-800">{s.capacity - s.registrationCount} libre{s.capacity - s.registrationCount > 1 ? "s" : ""}</p>

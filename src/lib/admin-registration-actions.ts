@@ -48,7 +48,9 @@ export async function cancelRegistrations(db: OrgScopedPrisma, actor: LogActor, 
     // Swap requests built on these places end with them (#1174), in the same commit.
     if (done.length > 0) await endSwapsIn(tx, { registrationIds: done.map((r) => r.id) }, "registration_gone", actor)
     const outbox = collectNotifications()
-    await queueRemovalEmails(tx, done.map((r) => r.id), outbox.send)
+    // A provisional place waiting for its email confirmation (#1253) is no place yet: removing it
+    // tells nobody, the volunteer has not confirmed anything.
+    await queueRemovalEmails(tx, done.filter((r) => r.status !== "unconfirmed").map((r) => r.id), outbox.send)
     return { done, outboxIds: await enqueueNotifications(outbox.payloads, tx) }
   })
 

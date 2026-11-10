@@ -310,12 +310,12 @@ describe("Events — cross-tenant isolation", () => {
     expect(prismaMock.event.update).not.toHaveBeenCalled()
   })
 
-  it("PATCH /api/admin/events/[id] with the shift roster setting (#1068) returns 404 for org-B event", async () => {
+  it("PATCH /api/admin/events/[id] with the shift roster (#1068) or email confirmation (#1253) setting returns 404 for org-B event", async () => {
     const { PATCH } = await import("@/app/api/admin/events/[id]/route")
     setupGuard()
     prismaMock.event.findFirst.mockResolvedValue({ id: "evt-b", organizationId: "org-b" })
 
-    const res = await PATCH(makeRequest("/api/admin/events/evt-b", "PATCH", { shiftRosterEnabled: true }), params("evt-b"))
+    const res = await PATCH(makeRequest("/api/admin/events/evt-b", "PATCH", { shiftRosterEnabled: true, requireEmailConfirmation: true }), params("evt-b"))
     expect(res.status).toBe(404)
     expect(prismaMock.event.update).not.toHaveBeenCalled()
   })
@@ -707,6 +707,7 @@ describe("Members — cross-tenant isolation", () => {
       orgLogCreate: vi.fn().mockResolvedValue({ id: "log-1" }),
       rosterConsentDeleteMany: vi.fn().mockResolvedValue({ count: 0 }),
       shiftDeclineDeleteMany: vi.fn().mockResolvedValue({ count: 0 }),
+      signupConfirmationDeleteMany: vi.fn().mockResolvedValue({ count: 0 }),
     }
     const none = () => vi.fn().mockResolvedValue([])
     const tx = {
@@ -722,6 +723,7 @@ describe("Members — cross-tenant isolation", () => {
       rosterConsent: { deleteMany: writes.rosterConsentDeleteMany },
       // « Je ne peux pas » answers (#1303): the person's own, and the tombstones merged into it.
       shiftDecline: { findMany: none(), deleteMany: writes.shiftDeclineDeleteMany, count: vi.fn().mockResolvedValue(0) },
+      signupConfirmation: { deleteMany: writes.signupConfirmationDeleteMany },
       eventVolunteerLimit: { deleteMany: vi.fn().mockResolvedValue({ count: 0 }) },
       // Dated availability (#1146): the person's own answers.
       availabilityRequest: { deleteMany: vi.fn().mockResolvedValue({ count: 0 }), count: vi.fn().mockResolvedValue(0) },
@@ -767,6 +769,7 @@ describe("Members — cross-tenant isolation", () => {
     // Its shift roster choices go through the scoped client, by this member only (#1068).
     expect(writes.rosterConsentDeleteMany).toHaveBeenCalledWith({ where: { volunteerId: { in: ["mem-a"] } } })
     expect(writes.shiftDeclineDeleteMany).toHaveBeenCalledWith({ where: { volunteerId: { in: ["mem-a"] } } })
+    expect(writes.signupConfirmationDeleteMany).toHaveBeenCalledWith({ where: { volunteerId: { in: ["mem-a"] } } })
     // Only this member's logged answers are removed (#984): their id is the one bound.
     const scrub = tx.$executeRaw.mock.calls[0]
     expect(scrub[0].join("?")).toContain(`"actorId" = ANY(`)

@@ -7,7 +7,7 @@ import { civilDateSchema } from "@/lib/civil-date"
 import { requireOrgSession } from "@/lib/auth-guard"
 import { adminActor, logEvent } from "@/lib/event-log"
 import { validationError } from "@/lib/api-error"
-import { COMMITTED_STATUSES } from "@/lib/registration-capacity"
+import { NOTIFIED_COMMITTED_STATUSES } from "@/lib/registration-capacity"
 import { cancelShift } from "@/lib/shift-cancel"
 import { addDays } from "@/lib/shift-series"
 import { planStop } from "@/lib/shift-recurrence"
@@ -90,7 +90,7 @@ export async function POST(req: Request, { params }: { params: Promise<{ id: str
       where: { id: s.id },
       include: {
         event: { select: { id: true, title: true, slug: true, organizationId: true, organization: { select: { slug: true } } } },
-        registrations: { where: { status: { in: [...COMMITTED_STATUSES] } }, include: { volunteer: true } },
+        registrations: { where: { status: { in: [...NOTIFIED_COMMITTED_STATUSES] } }, include: { volunteer: true } },
       },
     })
     if (!shift) continue

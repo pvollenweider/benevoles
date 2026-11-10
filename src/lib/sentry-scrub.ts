@@ -19,7 +19,7 @@ type StreamedSpan = Parameters<NonNullable<InitOptions["beforeSendSpan"]>>[0]
  * kept out of the proxy's access log (k8s/ingressroute-tokens.yaml).
  */
 
-const TOKEN_PATH = /(\/(?:my|waitlist|member-invite|registrations|leader|disponibilites|availability)\/)[^/?#\s"']+/g
+const TOKEN_PATH = /(\/(?:my|waitlist|member-invite|registrations|confirmations|confirmation|leader|disponibilites|availability)\/)[^/?#\s"']+/g
 // « Je ne peux pas » for one shift (#1303): /ne-peux-pas/<invitation|inscription>/<token>/<shiftId>,
 // the token is the second segment.
 const DECLINE_TOKEN_PATH = /(\/ne-peux-pas\/[^/?#\s"']+\/)[^/?#\s"']+/g

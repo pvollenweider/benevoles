@@ -537,3 +537,42 @@ function renderNotRecorded(o: { firstName: string; eventTitle: string; reason: s
   `, `Demande d'inscription non enregistrée pour ${escapeHtml(o.eventTitle)}`)
   return { subject, html, text }
 }
+
+// ── Confirmation de l'adresse avant de tenir les places (#1253) ──────────────
+
+export function renderSignupEmailConfirmation(p: NotificationPayload): RenderedEmail {
+  const d = p.data as {
+    volunteerName: string
+    eventTitle: string
+    confirmUrl: string
+    expiresAt: string
+    shifts: { label: string; roleName?: string; date: string; startTime: string; endTime: string; waitlist?: boolean; requiresApproval?: boolean }[]
+  }
+  const firstName = d.volunteerName.split(" ")[0]
+  const subject = `Confirme ton inscription — ${d.eventTitle}`
+  const line = (s: (typeof d.shifts)[number]) =>
+    `${s.label} · ${s.date} · ${clockTime(s.startTime)}–${clockTime(s.endTime)}${s.waitlist ? " (liste d'attente à confirmer)" : s.requiresApproval ? " (demande à valider)" : ""}`
+  const text = [
+    `Hello ${firstName} !`,
+    ``,
+    `Nous avons bien reçu ta demande pour ${d.eventTitle}. Ouvre ce lien et clique sur « Confirmer mon inscription » : c'est ce clic qui enregistre tes créneaux.`,
+    d.confirmUrl,
+    ``,
+    `Tes créneaux :`,
+    ...d.shifts.map((s) => `  • ${line(s)}`),
+    ``,
+    `Tes places sont réservées jusqu'au ${d.expiresAt}. Passé ce délai, elles redeviendront disponibles.`,
+    ...(d.shifts.some((s) => s.waitlist) ? [``, `Les créneaux complets ne réservent rien avant ta confirmation : tu entreras en liste d'attente à ce moment-là.`] : []),
+  ].join("\n")
+  const html = wrap(`
+    <h2 style="margin:0 0 0.25em">Hello ${escapeHtml(firstName)} ! ✉️</h2>
+    <p style="margin:0 0 1em;color:#555">Nous avons bien reçu ta demande pour <strong>${escapeHtml(d.eventTitle)}</strong>. Ouvre ce lien et clique sur « Confirmer mon inscription » : c'est ce clic qui enregistre tes créneaux.</p>
+    <div style="background:#f9fafb;border-radius:10px;padding:14px 16px;line-height:1.9">
+      ${d.shifts.map((s) => `<div>📅 ${escapeHtml(line(s))}</div>`).join("")}
+    </div>
+    <p style="margin-top:1.5em">${btn(d.confirmUrl, "Confirmer mon inscription")}</p>
+    <p style="color:#b91c1c;font-size:0.85em;margin-top:1em">⏱ Tes places sont réservées jusqu'au <strong>${escapeHtml(d.expiresAt)}</strong>. Passé ce délai, elles redeviendront disponibles.</p>
+    ${d.shifts.some((s) => s.waitlist) ? `<p style="color:#555;font-size:0.9em">Les créneaux complets ne réservent rien avant ta confirmation : tu entreras en liste d'attente à ce moment-là.</p>` : ""}
+  `, `Un email pour confirmer ton inscription — places réservées jusqu'au ${d.expiresAt}.`)
+  return { subject, html, text }
+}

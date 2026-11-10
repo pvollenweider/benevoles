@@ -35,6 +35,8 @@ export type AdminShift = {
   minVolunteers?: number | null
   status: string
   registrationCount: number
+  /** Of those places, how many wait for their email confirmation (#1253). */
+  pendingConfirmationCount?: number
   displayOrder: number
   internalNotes?: string | null
   description?: string | null
