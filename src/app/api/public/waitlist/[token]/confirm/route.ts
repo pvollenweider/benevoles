@@ -13,6 +13,7 @@ import { deliverAfterResponse, enqueueNotifications } from "@/lib/notifications/
 import { pickShiftInfo } from "@/lib/shift-info"
 import { lockShifts } from "@/lib/registration-capacity"
 import { checkDutyChange, lockVolunteerRows, lockWorkloadShared, readWorkloadGate, workloadRefusalBody, WorkloadRefusalError } from "@/lib/workload-guard"
+import { clearShiftDeclines } from "@/lib/shift-decline-clear"
 
 /**
  * Accepts a spot offered from the waitlist. POST only (#1044): the offer email's link opens a
@@ -79,6 +80,8 @@ export async function POST(_req: Request, { params }: { params: Promise<{ token:
         },
       })
       if (count === 0) return null
+      // Accepting the offered place takes the shift: a « Je ne peux pas » answer for it goes (#1303).
+      await clearShiftDeclines(tx, reg.volunteerId, [reg.shiftId])
       const shift = {
         label: reg.shift.label,
         date: reg.shift.date.toLocaleDateString("fr-FR"),

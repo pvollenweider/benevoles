@@ -53,6 +53,7 @@ function makeDb(over: { reg?: unknown; from?: string; status?: string; occupied?
         : availability.shiftRows.findMany(args)),
       updateMany: vi.fn().mockResolvedValue({ count: 1 }),
     },
+    shiftDecline: availability.shiftDecline,
   }
   const db = {
     registration: { findFirst: vi.fn().mockResolvedValue(over.reg === undefined ? reg : over.reg) },
@@ -76,6 +77,8 @@ describe("restoreRegistration (#809)", () => {
     const { db, tx } = makeDb()
     expect(await restoreRegistration(db, actor, "r1", before)).toEqual({ ok: true, status: "active" })
     expect(tx.registration.updateMany).toHaveBeenCalledWith({ where: { id: "r1", status: "cancelled" }, data: { status: "active" } })
+    // Restoring the place takes the shift: a « Je ne peux pas » answer for it goes (#1303).
+    expect(tx.shiftDecline.deleteMany).toHaveBeenCalledWith({ where: { volunteerId: "v1", shiftId: { in: ["s1"] } } })
     expect(tx.shift.updateMany).toHaveBeenCalledWith({ where: { id: "s1", status: "open" }, data: { status: "full" } })
     const [payloads] = enqueueNotifications.mock.calls[0]
     expect(payloads).toEqual([expect.objectContaining({

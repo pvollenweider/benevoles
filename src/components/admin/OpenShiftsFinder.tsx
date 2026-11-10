@@ -13,6 +13,7 @@ import {
   type EventShiftRef, type InviteRef, type LiveRegistration, type OpenShift, type PoolMember,
 } from "@/lib/open-shifts"
 import { reservedForText } from "@/lib/role-reservation"
+import type { ShiftDeclineRef } from "@/lib/shift-declines"
 
 type Props = {
   eventId: string
@@ -22,6 +23,7 @@ type Props = {
   members: PoolMember[]
   registrations: LiveRegistration[]
   invites: InviteRef[]
+  declines: ShiftDeclineRef[]
   tags: string[]
   initialShiftIds: string[]
 }
@@ -38,7 +40,7 @@ const fold = (s: string) => s.normalize("NFD").replace(/[̀-ͯ]/g, "").toLocaleL
  * The shifts to propose, the members with the reasons they're listed, a manual selection, a
  * preview, then one email per person (#566). Nothing is ever ticked by the page itself.
  */
-export default function OpenShiftsFinder({ eventId, shifts, eventShifts, members, registrations, invites, tags, initialShiftIds }: Props) {
+export default function OpenShiftsFinder({ eventId, shifts, eventShifts, members, registrations, invites, declines, tags, initialShiftIds }: Props) {
   const router = useRouter()
   const id = useId()
   const [shiftIds, setShiftIds] = useState<Set<string>>(() => new Set(initialShiftIds))
@@ -62,12 +64,12 @@ export default function OpenShiftsFinder({ eventId, shifts, eventShifts, members
   // Every member that could be written to for these shifts, whatever the tag shown: a person ticked
   // under one tag stays ticked when the filter changes.
   const all = useMemo(
-    () => findCandidates({ shifts: chosenShifts, eventShifts, members, registrations, invites, includeDeclined }),
-    [chosenShifts, eventShifts, members, registrations, invites, includeDeclined],
+    () => findCandidates({ shifts: chosenShifts, eventShifts, members, registrations, invites, declines, includeDeclined }),
+    [chosenShifts, eventShifts, members, registrations, invites, declines, includeDeclined],
   )
   const view = useMemo(
-    () => (tag ? findCandidates({ shifts: chosenShifts, eventShifts, members, registrations, invites, includeDeclined, tag }) : all),
-    [all, tag, chosenShifts, eventShifts, members, registrations, invites, includeDeclined],
+    () => (tag ? findCandidates({ shifts: chosenShifts, eventShifts, members, registrations, invites, declines, includeDeclined, tag }) : all),
+    [all, tag, chosenShifts, eventShifts, members, registrations, invites, declines, includeDeclined],
   )
   const q = fold(search.trim())
   const listed = q ? view.candidates.filter((c) => fold(`${c.member.firstName} ${c.member.lastName}`).includes(q)) : view.candidates

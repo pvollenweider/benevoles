@@ -67,12 +67,22 @@ describe.skipIf(!url)("member merge transaction (#600)", () => {
       data: { eventId, shiftId: shift2, volunteerId: absorb.id, status: "active", ...registrationToken.data(oldToken) },
     })
     const pushSub = await prisma.pushSubscription.create({ data: { volunteerId: absorb.id, endpoint: `${tag}-endpoint`, auth: "a", p256dh: "p" } })
+    // « Je ne peux pas » answers (#1303): one on a shift each record holds live is dropped, the
+    // absorbed record's other answer moves to the kept record.
+    const freeShift = await prisma.shift.create({
+      data: { eventId, roleName: "Caisse", label: "Caisse", date: new Date("2030-07-03T00:00:00Z"), startTime: "10:00", endTime: "12:00", capacity: 3 },
+    })
+    const declineKeepTaken = await prisma.shiftDecline.create({ data: { shiftId: shift2, volunteerId: keep.id } })
+    const declineAbsorbTaken = await prisma.shiftDecline.create({ data: { shiftId: shift1, volunteerId: absorb.id } })
+    const declineAbsorbFree = await prisma.shiftDecline.create({ data: { shiftId: freeShift.id, volunteerId: absorb.id } })
 
     const db = getOrgClient(orgId)
     const result = await runMemberMerge(db, orgId, ADMIN_ACTOR, keep.id, absorb.id, {})
 
     expect(result.plan.registrationsToCancel).toEqual([{ id: regKeepSameShift.id, shiftLabel: "Bar" }])
     expect(result.plan.registrationsToReassign.sort()).toEqual([regAbsorbOther.id, regAbsorbSameShift.id].sort())
+    expect(result.plan.shiftDeclineIdsToReassign).toEqual([declineAbsorbFree.id])
+    expect(result.plan.shiftDeclineIdsToDrop.sort()).toEqual([declineKeepTaken.id, declineAbsorbTaken.id].sort())
 
     const cancelled = await prisma.registration.findUniqueOrThrow({ where: { id: regKeepSameShift.id } })
     expect(cancelled.status).toBe("cancelled")
@@ -91,6 +101,11 @@ describe.skipIf(!url)("member merge transaction (#600)", () => {
     // Push subscriptions are dropped, never moved.
     expect(await prisma.pushSubscription.findUnique({ where: { id: pushSub.id } })).toBeNull()
 
+    // « Je ne peux pas » answers (#1303): the taken shifts' answers are gone, the other moved.
+    expect(await prisma.shiftDecline.findUnique({ where: { id: declineKeepTaken.id } })).toBeNull()
+    expect(await prisma.shiftDecline.findUnique({ where: { id: declineAbsorbTaken.id } })).toBeNull()
+    expect((await prisma.shiftDecline.findUniqueOrThrow({ where: { id: declineAbsorbFree.id } })).volunteerId).toBe(keep.id)
+
     // The absorbed record is a tombstone with no personal data left.
     const tombstone = await prisma.volunteer.findUniqueOrThrow({ where: { id: absorb.id } })
     expect(tombstone).toMatchObject({ firstName: "", lastName: "", email: null, phone: null, notes: null, active: false, mergedIntoId: keep.id })
@@ -99,6 +114,7 @@ describe.skipIf(!url)("member merge transaction (#600)", () => {
     // No relation remains on the absorbed record (the invariant the transaction itself asserts).
     expect(await prisma.registration.count({ where: { volunteerId: absorb.id } })).toBe(0)
     expect(await prisma.pushSubscription.count({ where: { volunteerId: absorb.id } })).toBe(0)
+    expect(await prisma.shiftDecline.count({ where: { volunteerId: absorb.id } })).toBe(0)
 
     // Audited with ids and counts only — no names, no email.
     const log = await prisma.orgLog.findFirstOrThrow({ where: { organizationId: orgId, action: "member.merged", entityId: keep.id } })

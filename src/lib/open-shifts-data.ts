@@ -32,7 +32,7 @@ export async function loadOpenShiftsContext(db: OrgScopedPrisma, eventId: string
   })
   if (!event) return null
 
-  const [volunteers, invites] = await Promise.all([
+  const [volunteers, invites, declines] = await Promise.all([
     // Merged records (#600) are tombstones, not members.
     db.volunteer.findMany({
       where: { mergedIntoId: null },
@@ -40,6 +40,11 @@ export async function loadOpenShiftsContext(db: OrgScopedPrisma, eventId: string
       select: { id: true, firstName: true, lastName: true, email: true, active: true, tags: true, availabilityPeriods: true, availabilityNote: true, birthDate: true },
     }),
     db.memberInvite.findMany({ where: { eventId }, select: { volunteerId: true, declinedAt: true } }),
+    // « Je ne peux pas » for one precise shift (#1303), on this event's shifts only.
+    db.shiftDecline.findMany({
+      where: { shift: { eventId } },
+      select: { volunteerId: true, shiftId: true, declinedAt: true },
+    }),
   ])
 
   const eventShifts: EventShiftRef[] = event.shifts.map((s) => ({
@@ -78,7 +83,8 @@ export async function loadOpenShiftsContext(db: OrgScopedPrisma, eventId: string
   }))
   const registrations: LiveRegistration[] = event.shifts.flatMap((s) => s.registrations.map((r) => ({ volunteerId: r.volunteerId, shiftId: s.id, status: r.status })))
   const inviteRefs: InviteRef[] = invites.map((i) => ({ volunteerId: i.volunteerId, declined: !!i.declinedAt }))
+  const declineRefs = declines.map((d) => ({ volunteerId: d.volunteerId, shiftId: d.shiftId, declinedAt: d.declinedAt }))
   const tags = [...new Set(volunteers.flatMap((v) => v.tags))].sort((a, b) => a.localeCompare(b, "fr"))
 
-  return { event, eventShifts, openShifts, assignedOnlyLeftOut, members, registrations, invites: inviteRefs, tags, emails: new Map(volunteers.map((v) => [v.id, v.email])) }
+  return { event, eventShifts, openShifts, assignedOnlyLeftOut, members, registrations, invites: inviteRefs, declines: declineRefs, tags, emails: new Map(volunteers.map((v) => [v.id, v.email])) }
 }

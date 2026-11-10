@@ -51,7 +51,7 @@ Les compteurs en haut récapitulent : **Invités**, **Inscrits**, **Pas disponib
 
 ## Pas disponible
 
-L'email d'invitation et la page d'inscription ouverte depuis le lien personnel proposent un second lien, **Je ne suis pas disponible pour cet événement**, qui ouvre une étape de confirmation avant d'enregistrer quoi que ce soit (un simple aperçu du lien dans la messagerie ne répond jamais à la place de la personne). Aucune raison n'est demandée. La personne peut changer d'avis à tout moment : s'inscrire depuis ce même lien efface le statut « Pas disponible » ; se désinscrire ensuite de tous ses créneaux ne le remet pas.
+L'email d'invitation et la page d'inscription ouverte depuis le lien personnel proposent un second lien, **Je ne suis pas disponible pour cet événement**, qui ouvre une étape de confirmation avant d'enregistrer quoi que ce soit (un simple aperçu du lien dans la messagerie ne répond jamais à la place de la personne). Aucune raison n'est demandée. La personne peut changer d'avis à tout moment : s'inscrire depuis ce même lien efface le statut « Pas disponible » ; se désinscrire ensuite de tous ses créneaux ne le remet pas. C'est une réponse pour tout l'événement ; la réponse **Je ne peux pas** pour un seul créneau, depuis l'email **Chercher des bénévoles**, est distincte et décrite dans [Où manque-t-il du monde ?](ou-manque-t-il-du-monde.md#chercher-des-benevoles).
 
 ## Qui est inscrit, pour les membres invités
 

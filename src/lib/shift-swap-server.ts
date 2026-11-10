@@ -1,6 +1,7 @@
 // SPDX-FileCopyrightText: 2026 Philippe Vollenweider
 // SPDX-License-Identifier: AGPL-3.0-only
 
+import { clearShiftDeclines } from "./shift-decline-clear"
 import type { Prisma } from "@/generated/prisma/client"
 import { prisma } from "./prisma"
 import type { OrgScopedPrisma } from "./prisma-org"
@@ -544,6 +545,9 @@ async function applySwap(tx: Tx, req: LockedRequest, event: LoadedEvent, mine: L
   ]
   // Both rows were read under the locks: anything else is a bug, never half a swap.
   if (moved.some((m) => m.count !== 1)) throw new Error("Shift swap: a registration changed under the locks")
+  // Each person takes the other's shift: an old « Je ne peux pas » answer for the new shift goes (#1303).
+  await clearShiftDeclines(tx, mine.volunteerId, [theirs.shiftId])
+  await clearShiftDeclines(tx, theirs.volunteerId, [mine.shiftId])
   await tx.shiftSwapRequest.update({
     where: { id: req.id },
     data: { status: "applied", appliedAt: now, ...(extra.decidedById ? { decidedById: extra.decidedById, decidedAt: now } : {}), ...(req.status === "offered" ? { confirmedAt: now } : {}) },

@@ -34,7 +34,7 @@ const BASE = (process.env.BASE_URL ?? "http://localhost:3200").replace(/\/$/, ""
 const ORG = process.env.DEMO_ORG ?? "default"
 const EVENT_SLUG = "fete-du-village"
 // Fixed in scripts/seed-demo.ts (demo database only).
-const TOKENS = { volunteer: "demo-volunteer-camille-0001", leader: "demo-leader-buvette-0001" }
+const TOKENS = { volunteer: "demo-volunteer-camille-0001", invite: "demo-invite-camille-0001", leader: "demo-leader-buvette-0001" }
 // « Qui est inscrit » (#1068): its own organization, fixed in scripts/seed-demo-roster.ts.
 const ROSTER = { org: "amicale-du-marche", event: "marche-de-noel", token: "demo-roster-lea-0001", email: "marche.admin@example.org", seed: "scripts/seed-demo-roster.ts" }
 const ORG_ADMIN_EMAIL = process.env.ORG_ADMIN_EMAIL ?? "org-admin@localhost"
@@ -314,6 +314,27 @@ async function run() {
     await save(a, "admin-embed", { target: panel })
   })
   await shot("admin-staffing", async () => { await visit(ev("/staffing")); await save(a, "admin-staffing") })
+  // « Chercher des bénévoles » (#566, #1303): one shift chosen, the members by name and their
+  // reasons, including « A répondu non le … » for the demo answer (scripts/seed-demo.ts).
+  await shot("admin-staffing-search", async () => {
+    await visit(ev("/staffing"))
+    await a.getByRole("link", { name: /^Chercher des bénévoles pour / }).first().click()
+    await settle(a)
+    await save(a, "admin-staffing-search")
+  })
+  // The page a « Je ne peux pas » link opens (#1303): the shift named, one confirmation button.
+  await shot("public-shift-decline", async () => {
+    await visit(ev("/staffing"))
+    const href = await a.getByRole("link", { name: /^Chercher des bénévoles pour / }).first().getAttribute("href")
+    const shiftId = href ? new URL(href, BASE).searchParams.get("shift") : null
+    if (!shiftId) throw new Error("no underfilled shift link found")
+    const publicContext = await browser.newContext(DESKTOP)
+    const d = await publicContext.newPage()
+    await d.goto(withOrg(`/ne-peux-pas/invitation/${TOKENS.invite}/${shiftId}`))
+    await settle(d)
+    await save(d, "public-shift-decline")
+    await publicContext.close()
+  })
   await shot("admin-shifts", async () => { await visit(ev("/shifts")); await save(a, "admin-shifts") })
   // « Gérer les postes »: the panel, with the demo event's six postes and their actions.
   await shot("admin-roles", async () => {

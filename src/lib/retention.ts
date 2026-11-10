@@ -181,7 +181,16 @@ export const RETENTION: readonly RetentionEntry[] = [
     public: true,
   },
   {
-    data: "Événement terminé depuis plus de 3 ans : sur ses inscriptions, l'identité des bénévoles (nom, email, téléphone, par leur fiche de membre), leurs commentaires et téléphones ; ses réponses aux questions (aussi celles que le journal a notées quand un bénévole les a modifiées), invitations, disponibilités datées, affectations en brouillon, propositions d'affectations, objectifs d'heures et responsables de secteur",
+    data: "Réponses « Je ne peux pas » d'un membre pour un créneau : une par membre et par créneau, avec la date de la réponse",
+    purpose: "Ne pas reproposer par erreur un créneau auquel la personne a déjà répondu non, et montrer la raison à l'organisation",
+    duration: "tant que l'événement existe, comme son invitation ; la réponse est supprimée quand la personne prend le créneau, à l'effacement de ses données et à une fusion de fiches, et avec l'événement ou à son anonymisation 3 ans après sa fin",
+    trigger: "réponse depuis le lien de l'email",
+    mechanism: "suppression à la prise du créneau, à l'effacement et à la fusion ; suppression en cascade avec le membre, le créneau ou l'événement",
+    backups: inBackups,
+    public: true,
+  },
+  {
+    data: "Événement terminé depuis plus de 3 ans : sur ses inscriptions, l'identité des bénévoles (nom, email, téléphone, par leur fiche de membre), leurs commentaires et téléphones ; ses réponses aux questions (aussi celles que le journal a notées quand un bénévole les a modifiées), invitations, réponses « Je ne peux pas » par créneau, disponibilités datées, affectations en brouillon, propositions d'affectations, objectifs d'heures et responsables de secteur",
     purpose: "Ne pas garder sans fin les données personnelles d'événements anciens",
     duration: `anonymisées 3 ans après la fin de l'événement : ses inscriptions passent à une fiche « Bénévole effacé » par personne, sans lien avec sa fiche de membre (effectifs, heures et présences gardés, sans nom), le reste est effacé ; l'événement lui-même (titre, dates, créneaux, totaux) et les fiches des membres restent. L'organisation est prévenue ${PAST_EVENT_NOTICE_DAYS} jours avant la première anonymisation, puis les événements qui atteignent 3 ans sont anonymisés chaque mois. Règle appliquée lorsque l'opérateur du service l'active`,
     trigger: "3 ans après la fin de l'événement",
@@ -208,7 +217,7 @@ export const RETENTION: readonly RetentionEntry[] = [
     public: true,
   },
   {
-    data: "Données personnelles d'un membre dont l'effacement est demandé : nom, email, téléphone, date de naissance, notes, étiquettes, disponibilités, commentaires et téléphones de ses inscriptions, invitations (dont « pas disponible »), disponibilités datées des événements, affectations en brouillon, objectifs d'heures et place dans les propositions d'affectations, réponses aux questions, abonnements aux notifications, choix d'afficher son nom aux autres bénévoles, désignations comme responsable de secteur à son adresse, emails en file d'envoi qui la concernent, résultats d'envoi",
+    data: "Données personnelles d'un membre dont l'effacement est demandé : nom, email, téléphone, date de naissance, notes, étiquettes, disponibilités, commentaires et téléphones de ses inscriptions, invitations (dont « pas disponible »), réponses « Je ne peux pas » par créneau, disponibilités datées des événements, affectations en brouillon, objectifs d'heures et place dans les propositions d'affectations, réponses aux questions, abonnements aux notifications, choix d'afficher son nom aux autres bénévoles, désignations comme responsable de secteur à son adresse, emails en file d'envoi qui la concernent, résultats d'envoi",
     purpose: "Droit à l'effacement",
     duration: "effacées immédiatement ; la fiche devient « Bénévole effacé » et ses inscriptions restent, sans identité, pour les effectifs, les heures et l'historique",
     trigger: "effacement par un propriétaire ou un organisateur depuis la page du membre",

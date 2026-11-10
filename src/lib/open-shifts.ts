@@ -13,6 +13,7 @@ import { clockTime, crossesMidnight, toMin, toMinEnd } from "./gantt-utils"
 import { memberMayTake } from "./role-reservation"
 import { shiftsTooYoungFor } from "./utils"
 import { shiftsClash } from "./shift-overlap"
+import { declinedShiftsOf, shiftDeclineReason, type ShiftDeclineRef } from "./shift-declines"
 
 export const OPEN_SHIFTS_MAX_SHIFTS = 20
 export const OPEN_SHIFTS_MAX_RECIPIENTS = 200
@@ -137,6 +138,8 @@ export type Candidate = {
   selectable: boolean
   /** Their confirmed shifts (active or requested) on this event. */
   registeredShifts: EventShiftRef[]
+  /** Their « Je ne peux pas » answers among the selected shifts, with the date. */
+  declinedShifts: { shiftId: string; declinedAt: Date }[]
   invite: "none" | "pending" | "declined"
   /**
    * The link the email carries. invitation: their existing invitation link. new_invitation: an
@@ -169,6 +172,8 @@ export function findCandidates(input: {
   members: PoolMember[]
   registrations: LiveRegistration[]
   invites: InviteRef[]
+  /** The event's per-shift « Je ne peux pas » answers (#1303). Optional: older callers read none. */
+  declines?: ShiftDeclineRef[]
   /** Only members carrying this tag (case-insensitive); empty: everyone. */
   tag?: string
   includeDeclined?: boolean
@@ -228,6 +233,7 @@ export function findCandidates(input: {
       fits,
       selectable: offer.length > 0,
       registeredShifts,
+      declinedShifts: declinedShiftsOf(input.declines ?? [], member.id, input.shifts.map((s) => s.id)),
       invite: invite ? (invite.declined ? "declined" : "pending") : "none",
       // A reserved role is only bookable through an invitation (#470): they get one then.
       link: invite ? "invitation" : registeredShifts.length > 0 && !offersReserved ? "event" : "new_invitation",
@@ -334,6 +340,14 @@ export function candidateReasons(c: Candidate, shifts: OpenShift[]): string[] {
     } else if (f.status === "too_young") {
       out.push(`${which.charAt(0).toUpperCase()}${which.slice(1)} : âge minimum non atteint, pas proposé`)
     }
+  }
+
+  // #1303: a « Je ne peux pas » is about one precise shift, shown next to the others. The person
+  // stays listed and can be ticked by the organiser, who decides whether to ask again.
+  for (const d of c.declinedShifts) {
+    const s = byId.get(d.shiftId)
+    if (!s) continue
+    out.push(single ? shiftDeclineReason(d.declinedAt) : `${shiftDeclineReason(d.declinedAt)} pour ${shiftName(s)}, ${shiftDay(s.date, "short")}`)
   }
 
   if (c.invite === "declined") out.push("A répondu « pas disponible » à son invitation")

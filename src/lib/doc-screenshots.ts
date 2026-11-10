@@ -45,6 +45,8 @@ export const DOC_SCREENSHOTS: Record<string, string[]> = {
   "admin-roster-setting": ["src/app/admin/events/[id]/edit/page.tsx"],
   "admin-day-of": ["src/app/admin/events/[id]/day-of/page.tsx"],
   "admin-staffing": ["src/app/admin/events/[id]/staffing/page.tsx"],
+  "admin-staffing-search": ["src/app/admin/events/[id]/staffing/search/page.tsx"],
+  "public-shift-decline": ["src/app/ne-peux-pas/[secret]/[token]/[shiftId]/page.tsx"],
   "admin-shifts": ["src/app/admin/events/[id]/shifts/page.tsx"],
   "admin-roles": ["src/app/admin/events/[id]/shifts/page.tsx"],
   "admin-shift-quick-edit": ["src/app/admin/events/[id]/shifts/page.tsx"],

@@ -52,6 +52,7 @@ const FIELD_LABELS: Record<string, string> = {
   registrations: "inscriptions anonymisées",
   answers: "réponses aux questions",
   invites: "invitations",
+  shiftDeclines: "réponses « Je ne peux pas » pour un créneau",
   sectorLeaders: "responsables de secteur",
   capacity: "places",
   minVolunteers: "minimum de personnes",
@@ -223,6 +224,8 @@ export const ACTION_VERB: Record<string, (actor: string) => string> = {
   // #1101: an invitation sent again to people already invited, once per batch.
   "memberinvite.resent": (a) => `${a} a renvoyé l'invitation à des personnes déjà invitées`,
   "memberinvite.declined": (a) => `${a} a indiqué ne pas être disponible pour cet événement`,
+  // #1303: one precise shift, never the whole event.
+  "shiftdecline.declined": (a) => `${a} a indiqué ne pas pouvoir prendre un créneau`,
   "eventpage.created": (a) => `${a} a créé une page`,
   "eventpage.updated": (a) => `${a} a modifié une page`,
   "eventpage.deleted": (a) => `${a} a supprimé une page`,
@@ -285,6 +288,7 @@ const SHIFT_AWARE_ACTIONS = new Set([
   "registration.checked_in", "registration.check_in_undone",
   "registration.requested", "registration.accepted", "registration.refused", "registration.swapped",
   "registration.availability_acknowledged",
+  "shiftdecline.declined",
 ])
 
 /** The question an answer change is about (#984), named by its label at the time: « … à « Repas ? » ». */

@@ -3,6 +3,7 @@
 
 import { NextResponse } from "next/server"
 import { birthDateSchema } from "@/lib/civil-date"
+import { clearShiftDeclines } from "@/lib/shift-decline-clear"
 import { requireOrgSession } from "@/lib/auth-guard"
 import { REGISTRATION_ADMIN_SELECT } from "@/lib/admin-row-selects"
 import { generateToken } from "@/lib/utils"
@@ -249,6 +250,8 @@ export async function POST(req: Request) {
         created.push({ registration, shiftId: shift.id })
         registrationOfShift.set(shift.id, registration.id)
       }
+      // Adding the shift by hand removes a « Je ne peux pas » answer for it (#1303).
+      await clearShiftDeclines(tx, added.id, shifts.map((s) => s.id))
       // The acknowledgements' evidence, committed with the registrations (#1146, lot B).
       await logAvailabilityAcks(tx, { eventId, actor: adminActor(guard.session), via: "manual_add", acks: acknowledged, registrationOf: (a) => registrationOfShift.get(a.shiftId) })
       // A shift whose places are now all taken shows « Complet »; a closed one stays closed.

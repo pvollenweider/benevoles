@@ -48,6 +48,7 @@ vi.mock("@/lib/prisma", async () => {
     rosterConsent: { findUnique: m.rosterFindUnique, upsert: m.rosterUpsert },
     // The proof is checked again under the member lock (#1138 follow-up).
     memberInvite: { findFirst: (...args: unknown[]) => m.inviteFindFirst(...args) },
+    shiftDecline: { deleteMany: vi.fn().mockResolvedValue({ count: 0 }) },
     registration: { findFirst: m.txRegFindFirst,
       findMany: m.txRegFindMany,
       count: (...args: unknown[]) => m.txCount(...args),

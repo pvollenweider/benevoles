@@ -70,6 +70,7 @@ import { answerChanges, answersEditState, type AnswerChange } from "@/lib/answer
 import { recordAnswerChanges, writeAnswerChanges } from "@/lib/answer-change-save"
 import { contactChanges, type ContactChange, type SignupUpdates } from "@/lib/signup-updates"
 import { judgeDutyChange, lockWorkloadShared, readWorkloadGate, readWorkloadPerson, reproducibleFrom, withPlaceNames, workloadRefusalBody, WorkloadRefusalError } from "@/lib/workload-guard"
+import { clearShiftDeclines } from "@/lib/shift-decline-clear"
 import { WORKLOAD_PRIVATE_REFUSAL, type DutyShift, type WorkloadFinding, type WorkloadPerson } from "@/lib/workload-policy"
 
 const schema = z.object({
@@ -544,6 +545,8 @@ export async function POST(req: Request) {
             })
           )
         }
+        // Taking a shift removes a « Je ne peux pas » answer for it (#1303), in the same commit.
+        await clearShiftDeclines(tx, volunteerId, created.map((r) => r.shiftId))
         // Shifts added to an event where the volunteer already holds a place or a request (#1191):
         // their confirmation joins one grouped email instead of one per sign-up. A first sign-up's
         // confirmation, with the personal link, still leaves at once.

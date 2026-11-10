@@ -1,6 +1,7 @@
 // SPDX-FileCopyrightText: 2026 Philippe Vollenweider
 // SPDX-License-Identifier: AGPL-3.0-only
 
+import { clearShiftDeclines } from "./shift-decline-clear"
 import type { OrgScopedPrisma } from "./prisma-org"
 import { logEvent, type LogActor } from "./event-log"
 import { registrationToken } from "./token-vault"
@@ -106,6 +107,8 @@ export async function restoreRegistration(db: OrgScopedPrisma, actor: LogActor, 
 
       const { count } = await tx.registration.updateMany({ where: { id, status: "cancelled" }, data: { status: plan.status } })
       if (count === 0) return { ok: false as const, error: "Cette inscription n'est pas annulée." }
+      // A restored place takes the shift again: a « Je ne peux pas » answer for it goes (#1303).
+      await clearShiftDeclines(tx, reg.volunteerId, [reg.shiftId])
       // The acknowledgement's evidence commits with the restore (#1146, lot B).
       await logAvailabilityAcks(tx, { eventId: reg.eventId, actor, via: "restore", acks: acknowledged, registrationOf: () => id })
       // New links for every live registration of the person on the event: the personal page

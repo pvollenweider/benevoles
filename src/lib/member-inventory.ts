@@ -41,6 +41,12 @@ export const VOLUNTEER_RELATIONS: Record<string, VolunteerRelation> = {
     erasure: "delete",
     why: "a personal link, and the « not available » answer (#558) is the person's own",
   },
+  ShiftDecline: {
+    merge: "reassign",
+    deletion: "cascade",
+    erasure: "delete",
+    why: "the person's own « Je ne peux pas » answer for one shift (#1303): on a merge the answers of both records are united, dropping any on a shift the kept record already holds live; erased with the person's data",
+  },
   QuestionAnswer: {
     merge: "reassign",
     deletion: "cascade",

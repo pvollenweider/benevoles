@@ -64,16 +64,18 @@ function startOfTodayUtc(now: Date): Date {
   return new Date(Date.UTC(now.getUTCFullYear(), now.getUTCMonth(), now.getUTCDate()))
 }
 
-type Db = Pick<OrgScopedPrisma, "volunteer" | "registration" | "memberInvite" | "questionAnswer" | "pushSubscription" | "sectorLeader" | "duplicateDismissal">
+type Db = Pick<OrgScopedPrisma, "volunteer" | "registration" | "memberInvite" | "shiftDecline" | "questionAnswer" | "pushSubscription" | "sectorLeader" | "duplicateDismissal">
 
 /** Loads the plan's input for a member through the org-scoped client (or a transaction of it). */
 async function loadErasureInput(db: Db, id: string, now: Date): Promise<ErasureInput | null> {
   const member = await db.volunteer.findFirst({ where: { id }, select: MEMBER_SELECT })
   if (!member) return null
   const today = startOfTodayUtc(now)
-  const [registrations, invites, answers, pushSubscriptions, sectorLeaders, dismissals, merged] = await Promise.all([
+  const [registrations, invites, shiftDeclines, answers, pushSubscriptions, sectorLeaders, dismissals, merged] = await Promise.all([
     db.registration.findMany({ where: { volunteerId: id }, select: { id: true, status: true, shift: { select: { date: true } } } }),
     db.memberInvite.findMany({ where: { volunteerId: id }, select: { id: true } }),
+    // Tombstones of records merged into this one already moved their answers here (#1303).
+    db.shiftDecline.findMany({ where: { volunteerId: id }, select: { id: true } }),
     db.questionAnswer.findMany({ where: { volunteerId: id }, select: { id: true } }),
     db.pushSubscription.findMany({ where: { volunteerId: id }, select: { id: true } }),
     member.email
@@ -86,6 +88,7 @@ async function loadErasureInput(db: Db, id: string, now: Date): Promise<ErasureI
     member,
     registrations: registrations.map((r) => ({ id: r.id, status: r.status, upcoming: r.shift.date >= today })),
     inviteIds: invites.map((r) => r.id),
+    shiftDeclineIds: shiftDeclines.map((r) => r.id),
     answerIds: answers.map((r) => r.id),
     pushSubscriptionIds: pushSubscriptions.map((r) => r.id),
     sectorLeaderIds: sectorLeaders.map((r) => r.id),
@@ -179,6 +182,9 @@ export async function runMemberErasure(
     const authors = [id, ...del.tombstoneIds]
     await tx.$executeRaw`UPDATE "EventLog" SET changes = changes - ${ANSWER_LOG_FIELD}::text WHERE action = ${ANSWER_CHANGED_ACTION} AND "actorType" = 'volunteer' AND "actorId" = ANY(${authors}::text[])`
     if (del.inviteIds.length) await tx.memberInvite.deleteMany({ where: { id: { in: del.inviteIds } } })
+    // « Je ne peux pas » answers for one shift (#1303): the person's own, on this record and on the
+    // tombstones merged into it (the member row is kept, so the cascade never runs here).
+    await tx.shiftDecline.deleteMany({ where: { volunteerId: { in: authors } } })
     if (del.pushSubscriptionIds.length) await tx.pushSubscription.deleteMany({ where: { id: { in: del.pushSubscriptionIds }, volunteerId: id } })
     // Shift roster choices (#1068): the person's own, never shown again.
     await tx.rosterConsent.deleteMany({ where: { volunteerId: { in: authors } } })
@@ -220,15 +226,16 @@ export async function runMemberErasure(
     await endSwapsIn(tx, { volunteerIds: [id] }, "volunteer_gone", actor, now)
 
     // 5. Invariant: nothing the person owns is left.
-    const [answers, invites, push, availability, drafts, targets] = await Promise.all([
+    const [answers, invites, shiftDeclines, push, availability, drafts, targets] = await Promise.all([
       tx.questionAnswer.count({ where: { volunteerId: id } }),
       tx.memberInvite.count({ where: { volunteerId: id } }),
+      tx.shiftDecline.count({ where: { volunteerId: { in: authors } } }),
       tx.pushSubscription.count({ where: { volunteerId: id } }),
       tx.availabilityRequest.count({ where: { volunteerId: id } }),
       tx.draftAssignment.count({ where: { volunteerId: id } }),
       tx.eventVolunteerTarget.count({ where: { volunteerId: id } }),
     ])
-    if (answers || invites || push || availability || drafts || targets) throw new Error(`member erasure invariant violated for ${id} (answers=${answers} invites=${invites} push=${push} availability=${availability} drafts=${drafts} targets=${targets})`)
+    if (answers || invites || shiftDeclines || push || availability || drafts || targets) throw new Error(`member erasure invariant violated for ${id} (answers=${answers} invites=${invites} shiftDeclines=${shiftDeclines} push=${push} availability=${availability} drafts=${drafts} targets=${targets})`)
 
     // 6. Register (replay after a restore) and log: an erasure happened, never who. The admin who
     // did it is the actor, as for every other action.

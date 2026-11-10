@@ -1,6 +1,7 @@
 // SPDX-FileCopyrightText: 2026 Philippe Vollenweider
 // SPDX-License-Identifier: AGPL-3.0-only
 
+import { clearShiftDeclines } from "./shift-decline-clear"
 import { createHash, randomUUID } from "node:crypto"
 import { availabilityAckKey, shiftFit, shiftInterval, usesAvailability, type AnswerForFit } from "./availability-assist"
 import { logAvailabilityAcks, readAnswerForFit, readAnswersForFit, readAvailabilityGate } from "./availability-assist-data"
@@ -421,6 +422,10 @@ export async function publishDrafts(db: Db, input: PublishInput): Promise<Publis
         out.push({ draftId: d.id, registrationId: registration.id })
         registrationOf.set(`${d.volunteerId}|${d.shiftId}`, registration.id)
       }
+      // Publishing the draft takes the shift: a « Je ne peux pas » answer for it goes (#1303).
+      const declinesToClear = new Map<string, string[]>()
+      for (const d of ordered) declinesToClear.set(d.volunteerId, [...(declinesToClear.get(d.volunteerId) ?? []), d.shiftId])
+      for (const [volunteerId, shiftIds] of declinesToClear) await clearShiftDeclines(tx, volunteerId, shiftIds)
       // The acknowledgements' evidence, committed with the registrations (#1146, lot B pattern).
       await logAvailabilityAcks(tx, { eventId, actor: input.actor, via: "publish", acks: verdict.acknowledged, registrationOf: (a) => registrationOf.get(`${a.volunteerId}|${a.shiftId}`), causedByLogId: publicationLog.id })
       // A shift filled by the batch shows « complet », as after a manual addition.

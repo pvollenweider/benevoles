@@ -6,6 +6,7 @@ const ev = { id: "e1", title: "Fête 2026" }
 const d = (s: string) => new Date(s)
 const sources: ActivitySources = {
   invites: [{ sentAt: d("2026-05-01T10:00:00Z"), usedAt: d("2026-05-02T10:00:00Z"), declinedAt: null, event: ev }],
+  shiftDeclines: [],
   registrations: [
     { createdAt: d("2026-05-02T10:05:00Z"), updatedAt: d("2026-05-02T10:05:00Z"), status: "active", checkedInAt: d("2026-07-04T09:55:00Z"), shift: { roleName: "Accueil", label: "Accueil", date: d("2026-07-04T00:00:00Z") }, event: ev },
     { createdAt: d("2026-05-03T10:00:00Z"), updatedAt: d("2026-06-01T10:00:00Z"), status: "cancelled", checkedInAt: null, shift: { roleName: "Bar", label: "Bar soir", date: d("2026-07-04T00:00:00Z") }, event: ev },
@@ -23,6 +24,18 @@ describe("memberTimeline", () => {
     expect(t.find((f) => f.kind === "cancelled")?.text).toBe("Inscription annulée : Bar · Bar soir (sam. 4 juillet)")
     expect(t.at(-1)).toMatchObject({ kind: "profile", text: "Fiche créée" })
     expect(t.some((f) => f.text.includes("something"))).toBe(false)
+  })
+})
+
+describe("memberTimeline — « Je ne peux pas » for one shift (#1303)", () => {
+  it("adds a shift_declined fact for the shift, never for the event", () => {
+    const withShiftDecline: ActivitySources = {
+      ...sources,
+      shiftDeclines: [{ declinedAt: d("2026-06-20T10:00:00Z"), shift: { roleName: "Bar", label: "Bar soir", date: d("2026-07-04T00:00:00Z") }, event: ev }],
+    }
+    const t = memberTimeline(withShiftDecline)
+    expect(t.find((f) => f.kind === "shift_declined")).toMatchObject({ text: "A indiqué ne pas pouvoir : Bar · Bar soir (sam. 4 juillet)", eventTitle: "Fête 2026" })
+    expect(t.some((f) => f.kind === "invite_declined")).toBe(false)
   })
 })
 

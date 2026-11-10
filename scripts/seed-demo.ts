@@ -272,6 +272,10 @@ async function main() {
   // Manual add, with a note.
   await register(accueil1, ines, { source: "admin_manual", comment: "Inscrite par téléphone" })
 
+  // « Je ne peux pas » for one precise shift (#1303): the reason the guide's « Chercher des
+  // bénévoles » capture shows, for a person who is not registered on that shift.
+  await prisma.shiftDecline.create({ data: { shiftId: montage.id, volunteerId: lea.id, declinedAt: at(-4, 9) } })
+
   // Share links per group (#947): the village clubs each recruit for their roles, with fixed codes
   // (demo only) so the guide's captures can open them. Some sign-ups came through them.
   const pompiers = await prisma.eventGroupLink.create({

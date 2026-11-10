@@ -19,13 +19,26 @@ export async function loadMemberActivity(db: OrgScopedPrisma, volunteerId: strin
   // in too, through the merge mapping, so the kept member's activity page shows the full story.
   const absorbed = await db.volunteer.findMany({ where: { mergedIntoId: volunteerId }, select: { id: true } })
   const volunteerIds = [volunteerId, ...absorbed.map((a) => a.id)]
-  const [invites, registrations, leaders, orgLog] = await Promise.all([
+  const [invites, shiftDeclines, registrations, leaders, orgLog] = await Promise.all([
     db.memberInvite.findMany({ where: { volunteerId }, select: { sentAt: true, usedAt: true, declinedAt: true, event } }),
+    db.shiftDecline.findMany({
+      where: { volunteerId },
+      select: { declinedAt: true, shift: { select: { roleName: true, label: true, date: true, event } } },
+    }),
     db.registration.findMany({ where: { volunteerId }, select: { createdAt: true, updatedAt: true, status: true, checkedInAt: true, shift: { select: { roleName: true, label: true, date: true } }, event } }),
     member.email
       ? db.sectorLeader.findMany({ where: { email: { equals: member.email, mode: "insensitive" } }, select: { createdAt: true, roleName: true, sector: { select: { name: true } }, event } })
       : Promise.resolve([]),
     db.orgLog.findMany({ where: { entityType: "Member", entityId: { in: volunteerIds } }, select: { createdAt: true, action: true } }),
   ])
-  return { member, sources: { invites, registrations, leaders, orgLog } }
+  return {
+    member,
+    sources: {
+      invites,
+      shiftDeclines: shiftDeclines.map((d) => ({ declinedAt: d.declinedAt, shift: d.shift, event: d.shift.event })),
+      registrations,
+      leaders,
+      orgLog,
+    },
+  }
 }

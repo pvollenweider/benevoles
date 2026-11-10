@@ -32,5 +32,7 @@ export function availabilityTx(o: { inUse?: boolean; answers?: Record<string, Re
     shiftRows: { findMany: vi.fn(async ({ where }: { where: { id: { in: string[] } } }) => shifts.filter((s) => where.id.in.includes(s.id))) },
     availabilityRequest: { findFirst: vi.fn(async ({ where }: { where: { volunteerId: string } }) => o.answers?.[where.volunteerId] ?? null) },
     eventLog: { create: vi.fn(async () => ({ id: "ack-log" })) },
+    // Taking the shift removes a « Je ne peux pas » answer (#1303); no row in these tests.
+    shiftDecline: { deleteMany: vi.fn(async () => ({ count: 0 })) },
   }
 }
