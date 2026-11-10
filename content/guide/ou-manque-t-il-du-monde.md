@@ -50,9 +50,13 @@ Sous chaque créneau à compléter, **Chercher des bénévoles** ouvre une page 
 
 Une réponse **Je ne peux pas** porte sur un seul créneau : elle ne retire pas la personne de la liste et ne décoche rien à votre place. Vous pouvez donc lui proposer un autre créneau, ou choisir de lui redemander celui-ci : la case reste cochable, et la raison vous dit ce qu'elle a déjà répondu.
 
+![Liste « Chercher des bénévoles » : chaque membre avec sa case décochée et ses raisons, dont Léa Morand avec « A répondu non le 6 novembre 2026 »](/doc-img/admin-staffing-search.png)
+
 Chaque personne reçoit un seul email avec les créneaux qu'elle peut prendre (date, horaires, places libres), un lien **Je prends ce créneau** sous chacun (la page d'inscription s'ouvre avec ce créneau proposé ; premier arrivé, premier servi, avec les règles habituelles de l'inscription), un lien **Je ne peux pas** sous chacun, et son lien pour s'inscrire : son lien d'invitation si elle est déjà invitée ; une invitation est créée pour les membres pas encore invités (elle apparaît ensuite dans les invitations de l'événement) ; un membre déjà inscrit sans invitation reçoit le lien de l'événement et celui de ses inscriptions. Personne ne voit les autres destinataires.
 
 **Je ne peux pas** ouvre une page qui nomme le créneau et demande une seule confirmation : ouvrir le lien ne répond jamais à la place de la personne, un aperçu de l'email dans la messagerie non plus. La réponse est enregistrée pour ce créneau et pour lui seul, avec sa date, et apparaît ensuite dans la liste **Chercher des bénévoles** sous la forme **A répondu non le …**. Elle ne dit rien des autres créneaux de l'événement, ni de la réponse **Je ne suis pas disponible pour cet événement** (voir [Inviter des membres](inviter-des-membres.md#pas-disponible)), qui reste séparée. Si la personne prend finalement le créneau, sa réponse est retirée : il n'y a pas d'autre bouton pour l'annuler. Un créneau annulé, complet, passé, supprimé ou déjà pris par la personne affiche une page claire, sans erreur.
+
+![Page « Je ne peux pas » : le poste Montage, l'événement, « samedi 14 novembre, de 7h à 9h », une phrase qui dit que l'organisation le verra pour ce créneau seulement, et le bouton « Confirmer que je ne peux pas »](/doc-img/public-shift-decline.png)
 
 L'envoi passe par la file d'envoi, compte dans la même limite horaire que [Écrire aux bénévoles](ecrire-aux-benevoles.md), et figure dans les **Messages envoyés** de l'événement. Les inscriptions doivent être ouvertes : sinon l'envoi est refusé.
 
