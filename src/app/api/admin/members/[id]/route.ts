@@ -15,7 +15,6 @@ import { addressCorrected } from "@/lib/member-address-change"
 import { SEND_TRANSACTION_OPTIONS } from "@/lib/invitation-sending"
 import { renewMemberLinks } from "@/lib/member-address-revocation"
 import { deliverAfterResponse } from "@/lib/notifications/outbox"
-import { deactivateMemberRecord } from "@/lib/member-deactivation-transaction"
 import type { Tx } from "@/lib/registration-capacity"
 
 const EMAIL_TAKEN = "Un autre membre de l'organisation utilise déjà cette adresse email."
@@ -164,10 +163,16 @@ export async function DELETE(_req: Request, { params }: { params: Promise<{ id: 
   const owned = await db.volunteer.findFirst({ where: { id }, select: { id: true } })
   if (!owned) return NextResponse.json({ error: "Non trouvé" }, { status: 404 })
 
-  // Soft delete: keep history (registrations, future stats) but hide from roster. Shared with the
-  // bulk deactivation and the bulk deletion's `deactivateKept` (#1307), so the effect and its
-  // `member.deactivated` log entry never drift apart.
-  await deactivateMemberRecord(db, organizationId, adminActor(guard.session), id)
+  // Soft delete: keep history (registrations, future stats) but hide from roster.
+  await db.volunteer.update({ where: { id }, data: { active: false } })
+
+  await logOrgEvent({
+    organizationId,
+    actor: adminActor(guard.session),
+    action: "member.deactivated",
+    entityType: "Member",
+    entityId: id,
+  })
 
   return NextResponse.json({ success: true })
 }

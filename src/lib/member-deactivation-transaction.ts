@@ -4,8 +4,8 @@
 /**
  * The write half of deactivating a member (#1307): the same soft delete as the single
  * `DELETE /api/admin/members/[id]` action — `active: false` and one `member.deactivated` OrgLog
- * entry, id only — shared by the single action, the new bulk deactivation and the
- * `deactivateKept` option of the bulk deletion, instead of duplicating it.
+ * entry, id only — shared by the bulk deactivation and the `deactivateKept` option of the bulk
+ * deletion. The single action keeps its own best-effort `logOrgEvent` outside a transaction.
  *
  * `runBulkMemberDeactivation` handles the ids in batches, each in one transaction: the batch's
  * rows of this organisation are locked first (the same `SELECT … FOR UPDATE` as the bulk
@@ -29,7 +29,7 @@ type OrgTx = Parameters<Parameters<OrgScopedPrisma["$transaction"]>[0]>[0]
 type MemberDeactivationTx = Pick<OrgTx, "volunteer" | "orgLog">
 
 /**
- * The write shared by the single and bulk deactivation: marks the record inactive and writes its
+ * The write shared by the bulk deactivations: marks the record inactive and writes its
  * own `member.deactivated` OrgLog entry (id only, no personal data), with the client — or the
  * transaction client — the caller already checked the record with. This is exactly the effect of
  * `DELETE /api/admin/members/[id]`.
