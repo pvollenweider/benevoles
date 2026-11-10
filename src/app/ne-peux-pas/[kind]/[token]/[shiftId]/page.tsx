@@ -27,8 +27,8 @@ export const metadata: Metadata = {
  * message: unknown link, closed organisation, deleted, cancelled, full, past shift, or a shift
  * the member already holds.
  */
-export default async function ShiftDeclinePage({ params }: { params: Promise<{ secret: string; token: string; shiftId: string }> }) {
-  const { secret: segment, token, shiftId } = await params
+export default async function ShiftDeclinePage({ params }: { params: Promise<{ kind: string; token: string; shiftId: string }> }) {
+  const { kind: segment, token, shiftId } = await params
   const secret = shiftDeclineSecretFromSegment(segment)
   if (!secret || !isTokenShaped(token) || !isTokenShaped(shiftId)) {
     return (

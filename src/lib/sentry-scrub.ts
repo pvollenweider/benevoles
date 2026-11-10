@@ -20,6 +20,9 @@ type StreamedSpan = Parameters<NonNullable<InitOptions["beforeSendSpan"]>>[0]
  */
 
 const TOKEN_PATH = /(\/(?:my|waitlist|member-invite|registrations|leader|disponibilites|availability)\/)[^/?#\s"']+/g
+// « Je ne peux pas » for one shift (#1303): /ne-peux-pas/<invitation|inscription>/<token>/<shiftId>,
+// the token is the second segment.
+const DECLINE_TOKEN_PATH = /(\/ne-peux-pas\/[^/?#\s"']+\/)[^/?#\s"']+/g
 // Also matches a bare query string, as stored in request.query_string.
 const TOKEN_QUERY = /((?:^|[?&])(?:token|t)=)[^&#\s"']*/gi
 // Defensive scrub (#598): an email address is personal data and must never reach Sentry, whatever
@@ -38,7 +41,7 @@ export const SCRUB_MAX_LENGTH = 8192
 export function scrubUrl(value: string): string {
   const cut = value.length > SCRUB_MAX_LENGTH
   const kept = cut ? value.slice(0, SCRUB_MAX_LENGTH) : value
-  const scrubbed = kept.replace(TOKEN_PATH, "$1[token]").replace(TOKEN_QUERY, "$1[token]").replace(EMAIL_RE, "[email]")
+  const scrubbed = kept.replace(TOKEN_PATH, "$1[token]").replace(DECLINE_TOKEN_PATH, "$1[token]").replace(TOKEN_QUERY, "$1[token]").replace(EMAIL_RE, "[email]")
   return cut ? `${scrubbed.replace(CUT_EMAIL_AT_END, "[email]")}…` : scrubbed
 }
 
