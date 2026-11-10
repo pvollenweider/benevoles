@@ -181,6 +181,10 @@ describe("MembersManager — deleting a member", () => {
     fireEvent.click(screen.getByRole("button", { name: "Supprimer Alice Seule" }))
     fireEvent.click(within(screen.getByRole("alertdialog")).getByRole("button", { name: "Supprimer" }))
     await waitFor(() => expect(fetchMock).toHaveBeenCalledOnce())
+    // The announcement lands one frame later (announce() clears, then sets the text): wait for it
+    // before the refreshed list removes the row, as the real router.refresh() does. Otherwise its
+    // late focus-on-status effect can steal the focus from the heading set when the row goes.
+    await waitFor(() => expect(screen.getByText("Alice Seule supprimé·e.")).toBeInTheDocument())
     rerender(<MembersManager initialMembers={[]} allTags={[]} defaultHoursPeriod={period} />)
     expect(screen.getByRole("heading", { level: 1, name: "Membres" })).toHaveFocus()
   })
