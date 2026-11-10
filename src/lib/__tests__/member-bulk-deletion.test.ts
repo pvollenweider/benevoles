@@ -87,6 +87,15 @@ describe("partitionMembersForBulkDeletion (#1305)", () => {
 describe("bulkDeletionResultText (#1305)", () => {
   const result = (deleted: string[], skipped: BulkDeletionResult["skipped"] = []): BulkDeletionResult => ({ deleted, skipped })
 
+  it("reads out at most ten names and counts the rest, so a big import stays readable", () => {
+    const skipped = Array.from({ length: 13 }, (_, i) => ({ id: `s${i}`, reason: "registrations" as const, name: `Membre ${i + 1}` }))
+    const text = bulkDeletionResultText(result(["1"], skipped))
+    expect(text).toContain("Membre 10 et 3 autres.")
+    expect(text).not.toContain("Membre 11")
+    expect(bulkDeletionResultText(result(["1"], skipped.slice(0, 11)))).toContain("Membre 10 et 1 autre.")
+    expect(bulkDeletionResultText(result(["1"], skipped.slice(0, 10)))).toContain("Membre 10.")
+  })
+
   it("says all deleted, with the plural", () => {
     expect(bulkDeletionResultText(result(["1", "2", "3"]))).toBe("3 membres supprimés.")
   })

@@ -3,7 +3,7 @@
 
 import { describe, expect, it } from "vitest"
 import { existsSync, readFileSync, readdirSync } from "node:fs"
-import { DOC_SCREENSHOTS, hasOptOut, importSpecifiers, PENDING_DOC_SCREENSHOTS, resolveLocalImport, screenshotSources, staleScreenshots } from "../doc-screenshots"
+import { DOC_SCREENSHOTS, hasOptOut, importSpecifiers, resolveLocalImport, screenshotSources, staleScreenshots } from "../doc-screenshots"
 
 describe("importSpecifiers", () => {
   it("finds static, multi-line, type, re-export and dynamic imports", () => {
@@ -82,21 +82,11 @@ describe("DOC_SCREENSHOTS", () => {
     const pngs = readdirSync("public/doc-img").filter((f) => f.endsWith(".png")).map((f) => f.slice(0, -4)).sort()
     const shots = [...script.matchAll(/await shot\("([^"]+)"/g)].map((m) => m[1]).sort()
     expect(Object.keys(DOC_SCREENSHOTS).sort()).toEqual(pngs)
-    // A declared pending capture has its shot but no PNG yet; once the PNG exists, its entry moves
-    // into DOC_SCREENSHOTS (the first assertion then requires it).
-    expect([...Object.keys(DOC_SCREENSHOTS), ...Object.keys(PENDING_DOC_SCREENSHOTS)].sort()).toEqual(shots)
+    expect(Object.keys(DOC_SCREENSHOTS).sort()).toEqual(shots)
   })
 
   it("points to route files that exist", () => {
-    for (const entries of [...Object.values(DOC_SCREENSHOTS), ...Object.values(PENDING_DOC_SCREENSHOTS)]) {
-      for (const entry of entries) expect(existsSync(entry), entry).toBe(true)
-    }
-  })
-
-  it("declares no pending capture once its PNG exists", () => {
-    for (const name of Object.keys(PENDING_DOC_SCREENSHOTS)) {
-      expect(existsSync(`public/doc-img/${name}.png`), `${name}.png exists: move it to DOC_SCREENSHOTS`).toBe(false)
-    }
+    for (const entries of Object.values(DOC_SCREENSHOTS)) for (const entry of entries) expect(existsSync(entry), entry).toBe(true)
   })
 
   it("reaches the components a capture shows", () => {

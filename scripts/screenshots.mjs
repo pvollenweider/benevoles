@@ -435,8 +435,8 @@ async function run() {
   // will go and that members with registrations stay. Declared as pending until the PNG is made.
   await shot("admin-members-bulk-delete", async () => {
     await visit(`${BASE}/admin/members`)
-    await a.getByRole("checkbox", { name: "Sélectionner Camille Rochat" }).check()
-    await a.getByRole("checkbox", { name: "Sélectionner Antoine Bovard" }).check()
+    await a.getByRole("checkbox", { name: "Sélectionner Manon Aebi" }).check()
+    await a.getByRole("checkbox", { name: "Sélectionner Théo Berset" }).check()
     await a.getByRole("button", { name: "Supprimer la sélection" }).click()
     const dialog = a.getByRole("alertdialog")
     await dialog.waitFor()

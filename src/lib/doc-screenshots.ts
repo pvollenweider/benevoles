@@ -71,6 +71,7 @@ export const DOC_SCREENSHOTS: Record<string, string[]> = {
   "admin-team": ["src/app/admin/settings/admins/page.tsx"],
   "admin-login": ["src/app/admin/login/page.tsx"],
   "admin-members": ["src/app/admin/members/page.tsx"],
+  "admin-members-bulk-delete": ["src/app/admin/members/page.tsx"],
   "admin-duplicates": ["src/app/admin/members/duplicates/page.tsx"],
   "admin-merge-preview": ["src/app/admin/members/[id]/merge/page.tsx"],
   "admin-member-activity": ["src/app/admin/members/[id]/page.tsx"],
@@ -78,15 +79,6 @@ export const DOC_SCREENSHOTS: Record<string, string[]> = {
   "admin-member-erase": ["src/app/admin/members/[id]/page.tsx"],
 }
 
-/**
- * Captures that are scripted and declared but whose PNG cannot be produced in this change yet
- * (no browser on the branch that adds them, #1305). The shot exists in scripts/screenshots.mjs;
- * once `ONLY=<name> npm run screenshots` has written the PNG, move the entry into DOC_SCREENSHOTS.
- * Kept apart so the coverage guard still checks every existing PNG against its screen.
- */
-export const PENDING_DOC_SCREENSHOTS: Record<string, string[]> = {
-  "admin-members-bulk-delete": ["src/app/admin/members/page.tsx"],
-}
 
 export const OPT_OUT = "doc-img: unchanged"
 

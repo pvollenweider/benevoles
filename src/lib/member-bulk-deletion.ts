@@ -100,9 +100,15 @@ export function partitionMembersForBulkDeletion<M extends BulkDeletionMember>(
 }
 
 const n = (count: number, one: string, many: string) => `${count} ${count > 1 ? many : one}`
+/** At most this many names are read out; the rest are counted (« et 190 autres »). */
+export const BULK_RESULT_NAMES_MAX = 10
+
 const names = (skipped: BulkDeletionSkipped[]) => {
   const found = skipped.map((entry) => entry.name).filter((name): name is string => !!name)
-  return found.length > 0 ? ` : ${found.join(", ")}` : ""
+  if (found.length === 0) return ""
+  const shown = found.slice(0, BULK_RESULT_NAMES_MAX).join(", ")
+  const rest = found.length - BULK_RESULT_NAMES_MAX
+  return rest > 0 ? ` : ${shown} et ${rest > 1 ? `${rest} autres` : "1 autre"}` : ` : ${shown}`
 }
 
 /**
