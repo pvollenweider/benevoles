@@ -1,5 +1,6 @@
 import { describe, expect, it } from "vitest"
 import { eventPostes, matchingPoste, posteKey, posteSettingsHint, posteSuggestions } from "../poste-suggestions"
+import { KNOWN_ROLES } from "../roles"
 
 // #1018: the poste field of the shift forms suggests the event's postes first, then the examples.
 
@@ -46,10 +47,16 @@ describe("posteSuggestions", () => {
   })
 
   it("defaults to the app's example postes", () => {
+    expect(posteSuggestions([])).toEqual(KNOWN_ROLES)
     const list = posteSuggestions([{ roleName: "BUVETTE", displayOrder: 0 }])
     expect(list[0]).toBe("BUVETTE")
     expect(list.filter((p) => posteKey(p) === "buvette")).toHaveLength(1)
     expect(list).toContain("Billetterie")
+    expect(list).toContain("Caisse")
+    expect(list).not.toContain("Loge")
+    expect(list).not.toContain("Vidéo")
+    expect(list).not.toContain("Montage & rangement")
+    expect(list).not.toContain("Préparation")
   })
 })
 

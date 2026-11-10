@@ -51,6 +51,16 @@ describe("posteSuggestionsInSector", () => {
   it("never offers an example the event already uses in another sector", () => {
     expect(posteSuggestionsInSector(shifts, "sec-bar", active, examples)).not.toContain("Accueil")
   })
+
+  it("defaults to the app's wider example list, without the former entries", () => {
+    const list = posteSuggestionsInSector([{ roleName: "Buvette", displayOrder: 0 }], null, active)
+    expect(list[0]).toBe("Buvette")
+    expect(list).toContain("Caisse")
+    expect(list).toContain("Billetterie")
+    expect(list).not.toContain("Loge")
+    expect(list).not.toContain("Vidéo")
+    expect(list).not.toContain("Préparation")
+  })
 })
 
 describe("posteSectorMismatch", () => {

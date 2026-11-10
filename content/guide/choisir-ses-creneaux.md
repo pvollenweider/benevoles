@@ -16,7 +16,7 @@ aliases: []
 
 <!-- video: VOLUNTEER_CHOOSE_SHIFTS -->
 
-La page affiche un **planning par jour**. Chaque ligne correspond à un poste (accueil, photos, buvette…) et chaque barre colorée représente un créneau disponible.
+La page affiche un **planning par jour**. Chaque ligne correspond à un poste (accueil, photos, buvette…) et chaque barre colorée représente un créneau disponible. Chaque type de poste a sa couleur par défaut, la même d'un événement à l'autre (accueil en bleu, secours en rouge, buvette en ambre…) ; l'organisation peut la changer, et le nom du poste reste toujours écrit à côté de la couleur.
 
 ![Planning public d'un événement sur plusieurs jours, avec les postes en lignes, les créneaux en barres colorées, et les liens vers les pages personnalisées (accès et parking, questions fréquentes)](/doc-img/public-timeline.png)
 
