@@ -12,6 +12,8 @@
 import assert from "node:assert/strict"
 import type { Cookie, Locator, Page } from "playwright"
 import type { Cue } from "./sentence-timing"
+import { videoRequestProxy } from "./public-hosts"
+import { passOperatorSecondFactor } from "./operator-second-factor"
 
 type Scene = (id: string, action: (at: Cue) => Promise<void>) => Promise<void>
 type Tap = (page: Page, target: Locator) => Promise<void>
@@ -28,14 +30,15 @@ const MAILPIT = process.env.VIDEO_MAILPIT_URL ?? "http://localhost:48026"
 
 /** A real session of `email`, opened in a separate context before the screencast. */
 export async function betaSessionCookies(page: Page, base: string, email: string): Promise<Cookie[]> {
-  const other = await page.context().browser()!.newContext({ locale: "fr-CH", timezoneId: "Europe/Zurich" })
+  const other = await page.context().browser()!.newContext({ proxy: { server: videoRequestProxy(page.context().browser()!)! }, ignoreHTTPSErrors: true, locale: "fr-CH", timezoneId: "Europe/Zurich" })
   try {
     const login = await other.newPage()
     await login.goto(`${base}/admin/login`)
     await login.getByLabel(/^Email(?:\s|$)/).fill(email)
     await login.getByLabel("Mot de passe", { exact: true }).fill(process.env.ORG_ADMIN_PASSWORD ?? "e2e-org-admin-password")
     await login.getByRole("button", { name: "Se connecter", exact: true }).click()
-    await login.waitForURL(url => !url.pathname.startsWith("/admin/login"))
+    if (email === OPERATOR_EMAIL) await passOperatorSecondFactor(login)
+    await login.waitForURL(url => !url.pathname.startsWith("/admin/login") && !url.pathname.startsWith("/admin/two-factor"))
     return await other.cookies()
   } finally { await other.close() }
 }
@@ -93,6 +96,10 @@ export async function recordBetaAccess(options: Options & { operator: Cookie[]; 
     await tap(page, page.getByRole("button", { name: /^Super Admin/ }).filter({ visible: true }).first())
     await tap(page, page.getByRole("menuitem", { name: "Fonctions bêta", exact: true }))
     await page.getByRole("heading", { level: 1, name: "Fonctions bêta", exact: true }).waitFor()
+    const available = page.getByRole("region", { name: "Fonctions ouvertes à l'essai" })
+    assert.equal(await available.getByRole("checkbox").count(), 4, "Exactly four capabilities remain in beta")
+    for (const label of ["Échanges de créneaux", "Protection des pauses et de la charge", "Disponibilités datées", "Proposition d'affectations"]) await capability(label).waitFor()
+    for (const label of ["Secteurs", "Responsables de secteur"]) assert.equal(await capability(label).count(), 0, `${label} left the beta`)
     assert(!(await capability("Échanges de créneaux").isChecked()), "Beta access fixture already used: run the beta-access seed")
     await at("Cochons Échanges de créneaux")
     await tap(page, capability("Échanges de créneaux"))
@@ -113,7 +120,7 @@ export async function recordBetaAccess(options: Options & { operator: Cookie[]; 
     await card.getByText("Votre organisation ne participe pas à la bêta.", { exact: true }).waitFor()
     await at("Elle liste ce que la bêta permet d'essayer")
     await card.getByText("Échanges de créneaux", { exact: true }).waitFor()
-    assert.equal(await card.getByText("Secteurs", { exact: true }).count(), 0, "Sectors left the beta (#1311)")
+    for (const label of ["Secteurs", "Responsables de secteur"]) assert.equal(await card.getByText(label, { exact: true }).count(), 0, `${label} left the beta`)
     await at("Activons l'interrupteur")
     const toggle = card.getByRole("switch", { name: "Essayer les fonctions avancées en bêta", exact: true })
     assert.equal(await toggle.getAttribute("aria-checked"), "false")
@@ -199,8 +206,14 @@ export async function recordSectors(options: Options) {
     await at("puis son premier créneau")
     const date = editor.getByLabel(/^Date/)
     await tap(page, date); await date.selectOption({ index: 1 })
-    await typeNaturally(page, editor.getByLabel(/^Début/), "14:00")
-    await typeNaturally(page, editor.getByLabel(/^Fin/), "18:00")
+    // Native time fields have separate hour/minute segments; sequential typing can
+    // change only the minutes in current Chromium. Fill and verify the actual UI values.
+    for (const [label, value] of [[/^Début/, "14:00"], [/^Fin/, "18:00"]] as const) {
+      const field = editor.getByLabel(label)
+      await tap(page, field)
+      await field.fill(value)
+      assert.equal(await field.inputValue(), value)
+    }
     const places = editor.getByLabel(/^Places/)
     await places.fill(""); await typeNaturally(page, places, "4")
     await at("Le poste est créé avec ce créneau")
@@ -447,7 +460,7 @@ export async function recordShiftSwaps(options: Options) {
 
 // ── SECTOR_LEADERS, sector part ─────────────────────────────────────────────────────────────
 
-/** Appended to the poste-leader story of record.ts, after its last scene: the beta event with sectors. */
+/** Appended to the poste-leader story of record.ts: an active organisation using sectors, without beta opt-in. */
 export async function recordSectorLeadersBySector(options: Options & { owner: Cookie[] }) {
   const { page, base, scene, tap, settle, typeNaturally, owner } = options
   const leadersUrl = `${base}/admin/events/${EVENT_ID}/sector-leaders`

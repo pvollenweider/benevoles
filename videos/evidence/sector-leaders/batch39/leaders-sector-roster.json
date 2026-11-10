@@ -1,0 +1,44 @@
+{
+  "model": "gemini-3.8-flash",
+  "reviewedAt": "2026-11-10T20:11:31.098Z",
+  "videoSha256": "b5f50d47f432d3635e2bf75984308c0298c0319a54a6aa312f658715c9e5991d",
+  "promptSha256": "b8e28e8e471c5cc574e9ff5afb2a5d64ea1d1be0cb7d839ee4833c846a7879a0",
+  "clipSha256": "26252dbabc7e34eb529b1943da019c7d0322e17acab560040c342700ef988481",
+  "scene": "leaders-sector-roster",
+  "review": {
+    "heardOpening": "Le lien personnel de Paul",
+    "checkpoints": [
+      {
+        "spokenSeconds": 1,
+        "spoken": "Le lien personnel de Paul montre tous les postes qui sont en ce moment dans le secteur Parking, classés par poste : Parking Nord et Parking Mairie.",
+        "visibleSeconds": 1,
+        "visible": "Page 'Responsable de secteur - Parking' affichant les sections 'Parking Mairie' et 'Parking Nord'.",
+        "sync": "aligned",
+        "severity": "none"
+      },
+      {
+        "spokenSeconds": 8.8,
+        "spoken": "Un filtre Jour limite la liste à une journée.",
+        "visibleSeconds": 9.2,
+        "visible": "Le menu déroulant Jour sélectionne 'samedi 28 novembre' et la liste se restreint aux créneaux correspondants.",
+        "sync": "aligned",
+        "severity": "none"
+      },
+      {
+        "spokenSeconds": 20,
+        "spoken": "Les bénévoles, eux, ne voient pas les secteurs.",
+        "visibleSeconds": 19.8,
+        "visible": "Le filtre Jour revient sur 'Tous les jours' pendant la conclusion générale.",
+        "sync": "aligned",
+        "severity": "none"
+      }
+    ],
+    "issues": [],
+    "voice": {
+      "consistent": true,
+      "warm": true,
+      "observation": "Voix off masculine posée, claire et bien articulée, synchronisée avec les interactions à l'écran."
+    }
+  },
+  "note": "Automated observation of actual final video audio and images; not a claim of complete human validation"
+}

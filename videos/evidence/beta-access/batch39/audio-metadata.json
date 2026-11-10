@@ -1,0 +1,32 @@
+{
+  "model": "gemini-3.8-flash-tts",
+  "voice": "Kore",
+  "generatedAt": "2026-11-10T19:42:55.856Z",
+  "segments": {
+    "beta-welcome": {
+      "file": "audio/beta-welcome.wav",
+      "durationMs": 20903,
+      "generationSha256": "5d6c727a8b8e602edf170686f3b9db77a911560b8770eacc789a7ce94d9c05ed"
+    },
+    "beta-operator": {
+      "file": "audio/beta-operator.wav",
+      "durationMs": 24330,
+      "generationSha256": "5d6c727a8b8e602edf170686f3b9db77a911560b8770eacc789a7ce94d9c05ed"
+    },
+    "beta-owner": {
+      "file": "audio/beta-owner.wav",
+      "durationMs": 26302,
+      "generationSha256": "5d6c727a8b8e602edf170686f3b9db77a911560b8770eacc789a7ce94d9c05ed"
+    },
+    "beta-event": {
+      "file": "audio/beta-event.wav",
+      "durationMs": 15199,
+      "generationSha256": "5d6c727a8b8e602edf170686f3b9db77a911560b8770eacc789a7ce94d9c05ed"
+    },
+    "beta-close": {
+      "file": "audio/beta-close.wav",
+      "durationMs": 22025,
+      "generationSha256": "5d6c727a8b8e602edf170686f3b9db77a911560b8770eacc789a7ce94d9c05ed"
+    }
+  }
+}

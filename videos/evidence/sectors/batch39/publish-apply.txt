@@ -1,0 +1,15 @@
+npm run video:publish -- --context "default" --apply  SECTORS 
+
+> benevoles@2.6.0 video:publish
+> node --import tsx videos/tools/publish.ts --context default --apply SECTORS
+
+Contexte default, deploy/benevoles-media (benevoles)
+À envoyer (5) :
+  + sectors/sectors-og.jpg
+  + sectors/sectors.jpg
+  + sectors/sectors.mp4
+  + sectors/sectors.txt
+  + sectors/sectors.vtt
+Inchangés : 0
+Présents seulement sur le serveur (laissés tels quels) : 569
+Envoyé : 5 fichier(s).

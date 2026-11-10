@@ -1,0 +1,44 @@
+{
+  "model": "gemini-3.8-flash",
+  "reviewedAt": "2026-11-10T20:05:38.895Z",
+  "videoSha256": "983832a74c66fe7ca6f906c88a72823d64ae001c6cc00eb117aaa2874de5b2a1",
+  "promptSha256": "c7cccfcfb72c8bc9abca858ab6a1c717d363242fc4d7bf9f3c20b65982f789b8",
+  "clipSha256": "708eb3138f7883e00ff7718b9469ecbb8c098f6424e83f408612f134e8f4666a",
+  "scene": "sectors-move",
+  "review": {
+    "heardOpening": "Les postes qui existaient avant le premier secteur",
+    "checkpoints": [
+      {
+        "spokenSeconds": 5.4,
+        "spoken": "Pour Parking Nord, choisissons Parking, puis Déplacer.",
+        "visibleSeconds": 6.8,
+        "visible": "Sélection du secteur Parking puis clic sur Déplacer pour Parking Nord, qui rejoint le secteur Parking",
+        "sync": "aligned",
+        "severity": "none"
+      },
+      {
+        "spokenSeconds": 11.5,
+        "spoken": "Faisons de même pour Parking Mairie.",
+        "visibleSeconds": 12.8,
+        "visible": "Déplacement de Parking Mairie vers le secteur Parking",
+        "sync": "aligned",
+        "severity": "none"
+      },
+      {
+        "spokenSeconds": 14.5,
+        "spoken": "Le bar de la Grande Scène et l'accueil du Chapiteau restent dans Autres postes.",
+        "visibleSeconds": 15,
+        "visible": "Affichage de Bar Grande Scène et Accueil Chapiteau maintenus sous Autres postes",
+        "sync": "aligned",
+        "severity": "none"
+      }
+    ],
+    "issues": [],
+    "voice": {
+      "consistent": true,
+      "warm": true,
+      "observation": "Voix naturelle, claire et bien calée sur les actions à l'écran."
+    }
+  },
+  "note": "Automated observation of actual final video audio and images; not a claim of complete human validation"
+}

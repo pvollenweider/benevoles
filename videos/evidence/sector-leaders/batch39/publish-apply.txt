@@ -1,0 +1,15 @@
+npm run video:publish -- --context "default" --apply  SECTOR_LEADERS 
+
+> benevoles@2.6.0 video:publish
+> node --import tsx videos/tools/publish.ts --context default --apply SECTOR_LEADERS
+
+Contexte default, deploy/benevoles-media (benevoles)
+À envoyer (5) :
+  + sector-leaders/sector-leaders-og.jpg
+  + sector-leaders/sector-leaders.jpg
+  + sector-leaders/sector-leaders.mp4
+  + sector-leaders/sector-leaders.txt
+  + sector-leaders/sector-leaders.vtt
+Inchangés : 0
+Présents seulement sur le serveur (laissés tels quels) : 569
+Envoyé : 5 fichier(s).

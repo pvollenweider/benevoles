@@ -1,0 +1,60 @@
+{
+  "model": "gemini-3.8-flash",
+  "reviewedAt": "2026-11-10T20:05:51.609Z",
+  "videoSha256": "983832a74c66fe7ca6f906c88a72823d64ae001c6cc00eb117aaa2874de5b2a1",
+  "promptSha256": "6fcb54458dfb4d7beada167a99d0ca8f16a81abe03db3c585b88d63ee78be5ce",
+  "clipSha256": "7c8ef05cf5dabcf3fd87d7e9732c40dde497d4ea07519cbb8fba774608a68324",
+  "scene": "sectors-timeline",
+  "review": {
+    "heardOpening": "Revenons à la frise",
+    "checkpoints": [
+      {
+        "spokenSeconds": 0,
+        "spoken": "Revenons à la frise.",
+        "visibleSeconds": 0.8,
+        "visible": "Retour à la page des Créneaux avec l'onglet Frise actif.",
+        "sync": "aligned",
+        "severity": "none"
+      },
+      {
+        "spokenSeconds": 1.8,
+        "spoken": "Chaque secteur y a sa ligne d'en-tête, avec son nom et son nombre de postes.",
+        "visibleSeconds": 2,
+        "visible": "Lignes d'en-tête visibles sur la frise (ex. Parking - 2 postes, Backline - 1 poste).",
+        "sync": "aligned",
+        "severity": "none"
+      },
+      {
+        "spokenSeconds": 5.2,
+        "spoken": "Un clic sur cette ligne replie ses postes,",
+        "visibleSeconds": 5.5,
+        "visible": "Clic sur la ligne Parking, masquant les postes Parking Nord et Parking Mairie.",
+        "sync": "aligned",
+        "severity": "none"
+      },
+      {
+        "spokenSeconds": 7.2,
+        "spoken": "un autre les déplie.",
+        "visibleSeconds": 7.3,
+        "visible": "Deuxième clic sur la ligne Parking, réaffichant les postes correspondants.",
+        "sync": "aligned",
+        "severity": "none"
+      },
+      {
+        "spokenSeconds": 9.2,
+        "spoken": "Les postes sans secteur sont regroupés à la fin, sous Autres postes.",
+        "visibleSeconds": 10,
+        "visible": "Défilement vers le bas affichant la section Autres postes.",
+        "sync": "aligned",
+        "severity": "none"
+      }
+    ],
+    "issues": [],
+    "voice": {
+      "consistent": true,
+      "warm": true,
+      "observation": "Voix masculine posée, claire et bien synchronisée avec les actions à l'écran."
+    }
+  },
+  "note": "Automated observation of actual final video audio and images; not a claim of complete human validation"
+}

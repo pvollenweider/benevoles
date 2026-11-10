@@ -29,4 +29,9 @@ Un événement organisé par secteurs, ses postes rangés, ses vues filtrées et
 - Les bénévoles ne voient jamais les secteurs : ne rien montrer côté page d'inscription.
 - Le compteur de 5 personnes vient des inscriptions confirmées de Parking Nord (Aline, Nicolas, Léa, Noah) et Parking Mairie (Sarah).
 - L'adresse de la page n'est pas visible dans la capture : la narration le montre en rouvrant la page, sans afficher l'identifiant du secteur.
-- Rendu en attente (sources seulement, 2026-10-28).
+- Lot 39 : READY et publié le 2026-11-10, révision 2 ; 220,480 s, seconde prise retenue, BUILD_ID `rLDQoLz1bzvkYVRMNsVYi`. Première prise archivée pour une saisie horaire native corrigée. Preuves : `videos/evidence/sectors/batch39/`.
+
+
+## Relecture du 2026-11-10 — lot 39
+
+Référence produit : main `058f35c463cf3b1e6b47596201d0ab6f78ab3015` (#1312). Les secteurs et les responsables de tout un secteur sont disponibles sans participation à la bêta pour toute organisation active. L'option Secteurs reste désactivée par défaut, événement par événement. Aucun écran ni badge bêta ne fait partie du parcours. Nouvelle narration continue complète, sans balises de pause ; les frontières de chapitres sont recoupées sur les silences du même master et vérifiées par ASR indépendante.

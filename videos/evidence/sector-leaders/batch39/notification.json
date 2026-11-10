@@ -1,0 +1,44 @@
+{
+  "model": "gemini-3.8-flash",
+  "reviewedAt": "2026-11-10T20:11:02.750Z",
+  "videoSha256": "b5f50d47f432d3635e2bf75984308c0298c0319a54a6aa312f658715c9e5991d",
+  "promptSha256": "a497ecd2e99bd10a8548bbb27a21fef5c42d8d1bcd97226d74718508c37a85ea",
+  "clipSha256": "9504c77d20f21ad86bd3cd2b517043ed7bd88e89305ea1d50771f5cd70e71a66",
+  "scene": "notification",
+  "review": {
+    "heardOpening": "Côté responsable, voici l'email",
+    "checkpoints": [
+      {
+        "spokenSeconds": 1,
+        "spoken": "voici l'email réellement reçu à la suite de cette inscription",
+        "visibleSeconds": 0.5,
+        "visible": "Notification email affichant l'inscription de Nora Perrin sur Buvette (15/11/2026, 10:00-14:00)",
+        "sync": "aligned",
+        "severity": "none"
+      },
+      {
+        "spokenSeconds": 7.5,
+        "spoken": "Le lien permet de retrouver l'équipe complète",
+        "visibleSeconds": 7.5,
+        "visible": "Bouton bleu « Voir la liste complète » visible sous le message",
+        "sync": "aligned",
+        "severity": "none"
+      },
+      {
+        "spokenSeconds": 10.2,
+        "spoken": "En rouvrant la page, Nora apparaît maintenant dans le bon créneau",
+        "visibleSeconds": 10.5,
+        "visible": "Affichage du créneau Buvette dimanche 15 novembre 10:00-14:00 avec le nom et les coordonnées de Nora Perrin",
+        "sync": "aligned",
+        "severity": "none"
+      }
+    ],
+    "issues": [],
+    "voice": {
+      "consistent": true,
+      "warm": true,
+      "observation": "Voix posée, claire et bien articulée, synchronisation parfaite avec les éléments à l'écran."
+    }
+  },
+  "note": "Automated observation of actual final video audio and images; not a claim of complete human validation"
+}

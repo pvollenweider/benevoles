@@ -1,0 +1,12 @@
+STATUS: READY
+Batch 39 — 2026-11-10
+Product: 058f35c463cf3b1e6b47596201d0ab6f78ab3015
+BUILD_ID: rLDQoLz1bzvkYVRMNsVYi
+Duration: 220.480000 s. Narrated takes: 2 (take1 archived: native time typing produced 15:18; take2 verifies 14:00–18:00).
+One continuous Puck generation retained; independent source and final ASR pass, whole-master voice consistent.
+11 audiovisual chapters / 38 checkpoints. One minor URL-bar observation resolved with actual before/after reload frames and runtime assertions; raw report preserved.
+29 sentence anchors validated; all real click/key events have synced effects.
+Music 14.6–19.3 LU under voice; quietest music-only -34.1 LUFS.
+Viewer register: 0 in full final ASR and VTT; no beta narration or stray English.
+Full-resolution export inspected: Backline 14h–18h. No beta chip on sectors card/panel. Jour J and Documents filter checked.
+Description: 120 UTF-8 bytes. Source changes: native time fill + assertions, beta catalog tag removed, editorial review note, shared French Chromium launcher. Product unchanged.

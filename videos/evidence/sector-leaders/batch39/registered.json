@@ -1,0 +1,44 @@
+{
+  "model": "gemini-3.8-flash",
+  "reviewedAt": "2026-11-10T20:10:40.398Z",
+  "videoSha256": "b5f50d47f432d3635e2bf75984308c0298c0319a54a6aa312f658715c9e5991d",
+  "promptSha256": "0046baa415cc739f7d652a4f8c13886647e90a6197de268151e266d1ae9f87f3",
+  "clipSha256": "17909f991508b928d2618314864727553213ea3e5ce01d1ec9473891ca2c2ba8",
+  "scene": "registered",
+  "review": {
+    "heardOpening": "Si la personne participe déjà, la liste des inscrits",
+    "checkpoints": [
+      {
+        "spokenSeconds": 2.2,
+        "spoken": "la liste des inscrits permet de reprendre ses coordonnées sans tout ressaisir",
+        "visibleSeconds": 1.8,
+        "visible": "Le formulaire préremplit automatiquement les champs Nom et Email avec les coordonnées de Camille Rochat",
+        "sync": "aligned",
+        "severity": "none"
+      },
+      {
+        "spokenSeconds": 5.7,
+        "spoken": "Vérifiez le poste proposé avant de confirmer",
+        "visibleSeconds": 8.6,
+        "visible": "Le champ Poste est modifié en « Démontage »",
+        "sync": "aligned",
+        "severity": "none"
+      },
+      {
+        "spokenSeconds": 7.3,
+        "spoken": "avant de confirmer",
+        "visibleSeconds": 12.3,
+        "visible": "Clic sur « Ajouter et envoyer le lien », fermant le formulaire et ajoutant le quatrième responsable à la liste",
+        "sync": "aligned",
+        "severity": "none"
+      }
+    ],
+    "issues": [],
+    "voice": {
+      "consistent": true,
+      "warm": true,
+      "observation": "Voix masculine claire, fluide et posée, en parfaite synchronisation avec les manipulations affichées."
+    }
+  },
+  "note": "Automated observation of actual final video audio and images; not a claim of complete human validation"
+}

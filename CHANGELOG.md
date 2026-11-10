@@ -11,6 +11,10 @@ Format basé sur [Keep a Changelog](https://keepachangelog.com/fr/1.0.0/).
 
 ## [Unreleased]
 
+### Documentation
+
+- Lot vidéo 39 : « Fonctions bêta », « Organiser les postes par secteurs » et « Responsables de poste et de secteur » refilmées et publiées après la sortie des secteurs et de leurs responsables de la bêta ; catalogue et preuves actualisés.
+
 ### Ajouté
 
 - Une option par événement, **désactivée par défaut**, demande aux bénévoles de confirmer leur adresse email avant que leur inscription publique soit définitive : sans lien personnel valide, ils réservent provisoirement leurs places et reçoivent un email qui liste les créneaux et l'échéance, avec un lien qui ouvre une page où seul le bouton **Confirmer mon inscription** confirme. Les places sont tenues 24 heures au plus, jamais au-delà du début du premier créneau ; un créneau complet avec liste d'attente n'y entre qu'à la confirmation, avec son rang pris à ce moment-là. Une demande sur un créneau sur validation devient une demande normale après le clic, avec les emails habituels. Une nouvelle demande pour la même adresse et le même événement remplace la précédente en attente. À l'échéance, les places sont libérées et la liste d'attente est prévenue comme après une annulation ; un clic tardif ne reprend jamais une place réattribuée. L'organisateur voit ces demandes à part dans le suivi et le planning, avec leur échéance, peut les retirer mais pas les confirmer à la place du bénévole, et elles ne reçoivent ni rappel, ni message ciblé, ni export de présence, ni badge avant le clic. (#1253)

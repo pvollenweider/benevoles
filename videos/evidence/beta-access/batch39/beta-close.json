@@ -1,0 +1,44 @@
+{
+  "model": "gemini-3.8-flash",
+  "reviewedAt": "2026-11-10T19:52:44.168Z",
+  "videoSha256": "6a81b1d9046cb9cf8b43b23c2d9302c565fc8fd8f7206da7134cecaa4eab158f",
+  "promptSha256": "a6845dc2d66192bf7cfcb3692a38fe5d579061314ce509fc67835c03def22d78",
+  "clipSha256": "f119e838da9ef11fd8e7c03208e7dd50adb0f19f86227a738ce1ec97bce789c0",
+  "scene": "beta-close",
+  "review": {
+    "heardOpening": "Revenons chez l'opérateur",
+    "checkpoints": [
+      {
+        "spokenSeconds": 0.5,
+        "spoken": "Revenons chez l'opérateur",
+        "visibleSeconds": 0,
+        "visible": "Affichage de l'écran d'administration des Fonctions bêta avec le rôle Super Admin",
+        "sync": "aligned",
+        "severity": "none"
+      },
+      {
+        "spokenSeconds": 3.4,
+        "spoken": "L'association figure maintenant dans Organisations participantes, avec la date de son inscription",
+        "visibleSeconds": 0,
+        "visible": "Ligne Association du Festival de Montvert (formation-beta), depuis le 10 novembre 2026 dans Organisations participantes",
+        "sync": "aligned",
+        "severity": "none"
+      },
+      {
+        "spokenSeconds": 8.4,
+        "spoken": "Si l'opérateur ferme une fonction, seules les nouvelles adoptions sont bloquées",
+        "visibleSeconds": 8.4,
+        "visible": "Écran fixe affichant les cases à cocher des fonctions ouvertes à l'essai",
+        "sync": "aligned",
+        "severity": "none"
+      }
+    ],
+    "issues": [],
+    "voice": {
+      "consistent": true,
+      "warm": true,
+      "observation": "Voix féminine claire, posée et bien articulée, avec une ambiance sonore propre."
+    }
+  },
+  "note": "Automated observation of actual final video audio and images; not a claim of complete human validation"
+}

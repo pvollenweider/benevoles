@@ -1,0 +1,44 @@
+{
+  "model": "gemini-3.8-flash",
+  "reviewedAt": "2026-11-10T20:04:54.364Z",
+  "videoSha256": "983832a74c66fe7ca6f906c88a72823d64ae001c6cc00eb117aaa2874de5b2a1",
+  "promptSha256": "29aeaedf227592f7bd1c0c97f06166e5be89cadc75e5b069f15e4388bde9d09c",
+  "clipSha256": "668dfa500ecd9ea4e0356589e9a68f682640e64853e4ef979fc7e9c710a4ecc2",
+  "scene": "sectors-welcome",
+  "review": {
+    "heardOpening": "Quand un événement compte beaucoup de postes",
+    "checkpoints": [
+      {
+        "spokenSeconds": 0.8,
+        "spoken": "Quand un événement compte beaucoup de postes, les secteurs aident à s'y retrouver.",
+        "visibleSeconds": 0.5,
+        "visible": "Bandeau de titre introductif affichant « Organiser les postes par secteurs - Regrouper les postes sans rien changer pour les bénévoles ».",
+        "sync": "aligned",
+        "severity": "none"
+      },
+      {
+        "spokenSeconds": 4.1,
+        "spoken": "Un secteur Parking regroupe par exemple Parking Nord et Parking Mairie.",
+        "visibleSeconds": 3.2,
+        "visible": "Le bandeau disparaît pour afficher l'onglet Paramètres de l'événement « Festival de Montvert ».",
+        "sync": "aligned",
+        "severity": "none"
+      },
+      {
+        "spokenSeconds": 8.7,
+        "spoken": "L'option se choisit pour chaque événement, désactivée par défaut.",
+        "visibleSeconds": 8.7,
+        "visible": "Vue d'ensemble stable de l'onglet Paramètres lors de cette introduction conceptuelle.",
+        "sync": "aligned",
+        "severity": "none"
+      }
+    ],
+    "issues": [],
+    "voice": {
+      "consistent": true,
+      "warm": true,
+      "observation": "Voix masculine claire, posée et chaleureuse, bien synchronisée avec le fond musical d'ambiance."
+    }
+  },
+  "note": "Automated observation of actual final video audio and images; not a claim of complete human validation"
+}

@@ -1,0 +1,72 @@
+{
+  "model": "gemini-3.8-flash-tts",
+  "voice": "Puck",
+  "generatedAt": "2026-11-10T19:43:08.938Z",
+  "segments": {
+    "welcome": {
+      "file": "audio/welcome.wav",
+      "durationMs": 23922,
+      "generationSha256": "8422260ab16e406727e6a3c6900390f601536b5ff658ee9fb8f4f194678bb498"
+    },
+    "nominate": {
+      "file": "audio/nominate.wav",
+      "durationMs": 20193,
+      "generationSha256": "8422260ab16e406727e6a3c6900390f601536b5ff658ee9fb8f4f194678bb498"
+    },
+    "registered": {
+      "file": "audio/registered.wav",
+      "durationMs": 17088,
+      "generationSha256": "8422260ab16e406727e6a3c6900390f601536b5ff658ee9fb8f4f194678bb498"
+    },
+    "email": {
+      "file": "audio/email.wav",
+      "durationMs": 16074,
+      "generationSha256": "8422260ab16e406727e6a3c6900390f601536b5ff658ee9fb8f4f194678bb498"
+    },
+    "roster": {
+      "file": "audio/roster.wav",
+      "durationMs": 18425,
+      "generationSha256": "8422260ab16e406727e6a3c6900390f601536b5ff658ee9fb8f4f194678bb498"
+    },
+    "mobile": {
+      "file": "audio/mobile.wav",
+      "durationMs": 18412,
+      "generationSha256": "8422260ab16e406727e6a3c6900390f601536b5ff658ee9fb8f4f194678bb498"
+    },
+    "scope": {
+      "file": "audio/scope.wav",
+      "durationMs": 14386,
+      "generationSha256": "8422260ab16e406727e6a3c6900390f601536b5ff658ee9fb8f4f194678bb498"
+    },
+    "new-signup": {
+      "file": "audio/new-signup.wav",
+      "durationMs": 28780,
+      "generationSha256": "8422260ab16e406727e6a3c6900390f601536b5ff658ee9fb8f4f194678bb498"
+    },
+    "notification": {
+      "file": "audio/notification.wav",
+      "durationMs": 19200,
+      "generationSha256": "8422260ab16e406727e6a3c6900390f601536b5ff658ee9fb8f4f194678bb498"
+    },
+    "contact": {
+      "file": "audio/contact.wav",
+      "durationMs": 16939,
+      "generationSha256": "8422260ab16e406727e6a3c6900390f601536b5ff658ee9fb8f4f194678bb498"
+    },
+    "remove": {
+      "file": "audio/remove.wav",
+      "durationMs": 19064,
+      "generationSha256": "8422260ab16e406727e6a3c6900390f601536b5ff658ee9fb8f4f194678bb498"
+    },
+    "leaders-sector-scope": {
+      "file": "audio/leaders-sector-scope.wav",
+      "durationMs": 29817,
+      "generationSha256": "8422260ab16e406727e6a3c6900390f601536b5ff658ee9fb8f4f194678bb498"
+    },
+    "leaders-sector-roster": {
+      "file": "audio/leaders-sector-roster.wav",
+      "durationMs": 22538,
+      "generationSha256": "8422260ab16e406727e6a3c6900390f601536b5ff658ee9fb8f4f194678bb498"
+    }
+  }
+}
