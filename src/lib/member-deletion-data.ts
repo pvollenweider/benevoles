@@ -18,13 +18,28 @@ export async function loadMemberDeletionEligibility(db: OrgScopedPrisma, volunte
 }
 
 /**
- * Every member's eligibility in one extra query (the members list, like loadAddressStatuses):
- * groups every Registration row of the organisation by volunteer, any status included.
+ * Every member's deletion facts in one extra query (the members list, like loadAddressStatuses):
+ * groups every Registration row of the organisation by volunteer, any status included. The count
+ * is reused by the list's bulk deletion checkbox (#1307), so it needs no request of its own.
  */
-export async function loadMemberDeletionEligibilities(db: OrgScopedPrisma, members: (MemberDeletionSubject & { id: string })[]): Promise<Map<string, MemberDeletionEligibility>> {
+export interface MemberDeletionFacts {
+  eligibility: MemberDeletionEligibility
+  registrationCount: number
+}
+
+export async function loadMemberDeletionFacts(db: OrgScopedPrisma, members: (MemberDeletionSubject & { id: string })[]): Promise<Map<string, MemberDeletionFacts>> {
   const counts = await db.registration.groupBy({ by: ["volunteerId"], _count: { _all: true } })
   const countById = new Map(counts.map((c) => [c.volunteerId, c._count._all]))
-  const result = new Map<string, MemberDeletionEligibility>()
-  for (const m of members) result.set(m.id, memberDeletionEligibility(m, countById.get(m.id) ?? 0))
+  const result = new Map<string, MemberDeletionFacts>()
+  for (const m of members) {
+    const registrationCount = countById.get(m.id) ?? 0
+    result.set(m.id, { eligibility: memberDeletionEligibility(m, registrationCount), registrationCount })
+  }
   return result
+}
+
+/** The eligibility alone, for callers that don't need the registration count. */
+export async function loadMemberDeletionEligibilities(db: OrgScopedPrisma, members: (MemberDeletionSubject & { id: string })[]): Promise<Map<string, MemberDeletionEligibility>> {
+  const facts = await loadMemberDeletionFacts(db, members)
+  return new Map([...facts].map(([id, fact]) => [id, fact.eligibility]))
 }

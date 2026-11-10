@@ -1,5 +1,5 @@
 import { describe, it, expect } from "vitest"
-import { acceptRequestRecap, bulkCancelCounts, bulkCancelRecap, dayLabel, bulkLeaderRecap, bulkResendRecap, deactivateMemberRecap, broadcastRecap, prefillRecap, prefillNeedsConfirmation, deleteMilestoneRecap, deleteOrgRecap, deletePageRecap, toggleOrgRecap, deleteRoleRecap, deleteShiftRecap, shiftWhen, logLinkFor, remindInvitedRecap, removeLeaderRecap, unsavedRoleOrderRecap } from "../action-recap"
+import { acceptRequestRecap, bulkCancelCounts, bulkCancelRecap, bulkDeactivateMembersRecap, bulkDeleteMembersRecap, dayLabel, bulkLeaderRecap, bulkResendRecap, deactivateMemberRecap, broadcastRecap, prefillRecap, prefillNeedsConfirmation, deleteMilestoneRecap, deleteOrgRecap, deletePageRecap, toggleOrgRecap, deleteRoleRecap, deleteShiftRecap, shiftWhen, logLinkFor, remindInvitedRecap, removeLeaderRecap, unsavedRoleOrderRecap } from "../action-recap"
 
 // Confirmation before sensitive actions (#379).
 describe("action recaps", () => {
@@ -126,6 +126,19 @@ describe("action recaps", () => {
   })
 })
 
+describe("bulkDeactivateMembersRecap (#1307)", () => {
+  it("is a simple, reversible confirmation that says how to reactivate", () => {
+    expect(bulkDeactivateMembersRecap(12)).toMatchObject({
+      title: "Désactiver 12 membres ?",
+      confirmLabel: "Désactiver",
+      danger: false,
+    })
+    expect(bulkDeactivateMembersRecap(12).lines.join(" ")).toContain("Vous pourrez les réactiver en affichant les inactifs")
+    expect(bulkDeactivateMembersRecap(1).title).toBe("Désactiver 1 membre ?")
+    expect(bulkDeactivateMembersRecap(1).lines.join(" ")).toContain("Vous pourrez le réactiver en affichant les inactifs")
+  })
+})
+
 describe("unsavedRoleOrderRecap", () => {
   it("asks before dropping an unsaved poste order: a safe way back, then closing without saving", () => {
     const r = unsavedRoleOrderRecap()
@@ -135,5 +148,22 @@ describe("unsavedRoleOrderRecap", () => {
     expect(r.confirmLabel).toBe("Fermer sans enregistrer")
     expect(r.danger).toBe(false)
     expect(r.lines).toEqual([])
+  })
+})
+
+describe("bulkDeleteMembersRecap lead (#1307)", () => {
+  it("announces the whole selection when nothing is known about registrations", () => {
+    expect(bulkDeleteMembersRecap(3).lead).toBe("3 fiches seront supprimées définitivement.")
+    expect(bulkDeleteMembersRecap(1, 0).lead).toBe("Cette fiche sera supprimée définitivement.")
+  })
+
+  it("says how many go and how many stay when some members have registrations", () => {
+    expect(bulkDeleteMembersRecap(2, 1).lead).toBe("1 fiche sera supprimée définitivement. 1 membre a des inscriptions et sera conservé.")
+    expect(bulkDeleteMembersRecap(10, 3).lead).toBe("7 fiches seront supprimées définitivement. 3 membres ont des inscriptions et seront conservés.")
+  })
+
+  it("never announces a deletion when every selected member will be kept", () => {
+    expect(bulkDeleteMembersRecap(2, 2).lead).toBe("Aucune fiche ne sera supprimée : les 2 membres sélectionnés ont des inscriptions.")
+    expect(bulkDeleteMembersRecap(1, 1).lead).toBe("Cette fiche ne sera pas supprimée : ce membre a des inscriptions.")
   })
 })

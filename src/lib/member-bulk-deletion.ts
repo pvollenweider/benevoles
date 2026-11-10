@@ -48,6 +48,11 @@ export interface BulkDeletionPartition<M extends BulkDeletionMember> {
 export interface BulkDeletionResult {
   deleted: string[]
   skipped: BulkDeletionSkipped[]
+  /**
+   * Records left because of their registrations that were deactivated instead (#1307), when
+   * « Désactiver les membres qui ne peuvent pas être supprimés » was checked. Empty otherwise.
+   */
+  deactivated: string[]
 }
 
 type BulkDeletionDecision = { eligible: true } | { eligible: false; reason: Exclude<BulkDeletionSkipReason, "notFound"> }
@@ -115,8 +120,12 @@ const names = (skipped: BulkDeletionSkipped[]) => {
  * What the list announces after a bulk deletion, e.g. « 198 membres supprimés. 3 laissés car ils
  * ont des inscriptions : Anne Favre, Marc Rochat, Léa Dubois. Vous pouvez les effacer depuis leur
  * fiche. » Singular, plural and the all-or-none cases are worded explicitly.
+ *
+ * With `deactivateKept` (#1307), the members kept for their registrations that were still active
+ * were deactivated in the same transaction: they are named as « désactivés », and the ones already
+ * inactive before the action stay « laissés » (never counted as deactivated twice).
  */
-export function bulkDeletionResultText(result: BulkDeletionResult): string {
+export function bulkDeletionResultText(result: BulkDeletionResult, deactivateKept = false): string {
   const parts: string[] = []
   const deleted = result.deleted.length
 
@@ -124,10 +133,27 @@ export function bulkDeletionResultText(result: BulkDeletionResult): string {
   else parts.push(`${n(deleted, "membre supprimé", "membres supprimés")}.`)
 
   const withRegistrations = result.skipped.filter((entry) => entry.reason === "registrations")
-  if (withRegistrations.length === 1) {
-    parts.push(`1 laissé car il a des inscriptions${names(withRegistrations)}. Vous pouvez l'effacer depuis sa fiche.`)
-  } else if (withRegistrations.length > 1) {
-    parts.push(`${withRegistrations.length} laissés car ils ont des inscriptions${names(withRegistrations)}. Vous pouvez les effacer depuis leur fiche.`)
+  const deactivatedIds = new Set(result.deactivated)
+  const deactivated = withRegistrations.filter((entry) => deactivatedIds.has(entry.id))
+  const left = withRegistrations.filter((entry) => !deactivatedIds.has(entry.id))
+
+  if (deactivateKept) {
+    if (deactivated.length === 1) {
+      parts.push(`1 désactivé car il a des inscriptions${names(deactivated)}.`)
+    } else if (deactivated.length > 1) {
+      parts.push(`${deactivated.length} désactivés car ils ont des inscriptions${names(deactivated)}.`)
+    }
+    if (left.length === 1) {
+      parts.push(`1 déjà inactif, laissé tel quel${names(left)}.`)
+    } else if (left.length > 1) {
+      parts.push(`${left.length} déjà inactifs, laissés tels quels${names(left)}.`)
+    }
+  } else {
+    if (left.length === 1) {
+      parts.push(`1 laissé car il a des inscriptions${names(left)}. Vous pouvez l'effacer depuis sa fiche.`)
+    } else if (left.length > 1) {
+      parts.push(`${left.length} laissés car ils ont des inscriptions${names(left)}. Vous pouvez les effacer depuis leur fiche.`)
+    }
   }
 
   const merged = result.skipped.filter((entry) => entry.reason === "merged")
@@ -143,4 +169,32 @@ export function bulkDeletionResultText(result: BulkDeletionResult): string {
   }
 
   return parts.join(" ")
+}
+
+/** The exact label of the « Désactiver les membres qui ne peuvent pas être supprimés » checkbox (#1307). */
+export const BULK_DEACTIVATE_KEPT_LABEL = "Désactiver les membres qui ne peuvent pas être supprimés (ceux qui ont des inscriptions)"
+
+/**
+ * The checkbox's label, with the number of selected members that have registrations when the list
+ * already knows it (`null` when an unknown count means the number can't be stated).
+ */
+export function bulkDeactivateKeptLabel(withRegistrations: number | null): string {
+  if (withRegistrations === null || withRegistrations <= 0) return BULK_DEACTIVATE_KEPT_LABEL
+  return withRegistrations > 1
+    ? `Désactiver les ${withRegistrations} membres qui ont des inscriptions : ils ne peuvent pas être supprimés`
+    : "Désactiver le membre qui a des inscriptions : il ne peut pas être supprimé"
+}
+
+/**
+ * How many selected members have at least one registration, from the counts the members list
+ * already loaded (`Member.registrationCount`), without any extra request. `null` when a selected
+ * member's count is unknown: the label then stays without a number instead of guessing.
+ */
+export function selectedWithRegistrationsCount(
+  members: readonly { id: string; registrationCount?: number }[],
+  selectedIds: ReadonlySet<string>,
+): number | null {
+  const selected = members.filter((member) => selectedIds.has(member.id))
+  if (selected.some((member) => typeof member.registrationCount !== "number")) return null
+  return selected.filter((member) => (member.registrationCount ?? 0) > 0).length
 }

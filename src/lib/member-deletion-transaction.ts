@@ -31,6 +31,7 @@ import {
   partitionMembersForBulkDeletion,
   type BulkDeletionResult,
 } from "./member-bulk-deletion"
+import { deactivateMemberRecord } from "./member-deactivation-transaction"
 import { cancelOutboxForDeletedMember } from "./outbox-deletion-cancel"
 import type { LogActor } from "./event-log"
 
@@ -131,15 +132,21 @@ export async function runMemberDeletion(
  * as `skipped` without any write, so one of them never cancels the others. Only an unexpected
  * database failure (not a per-member business reason) aborts its batch; ids of another
  * organisation are simply absent from the scoped read and end up as "not found".
+ *
+ * With `deactivateKept` (#1307), the records kept for their registrations that are still active
+ * are deactivated in that same batch transaction, under the same row locks, through
+ * `deactivateMemberRecord` — exactly the effect and log entry of the single « Désactiver ». The
+ * ones already inactive are left alone and stay listed as skipped.
  */
 export async function runBulkMemberDeletion(
   db: OrgScopedPrisma,
   organizationId: string,
   actor: LogActor,
   ids: readonly string[],
+  options: { deactivateKept?: boolean } = {},
 ): Promise<BulkDeletionResult> {
   const unique = [...new Set(ids)]
-  const result: BulkDeletionResult = { deleted: [], skipped: [] }
+  const result: BulkDeletionResult = { deleted: [], skipped: [], deactivated: [] }
 
   for (let start = 0; start < unique.length; start += BULK_DELETE_BATCH_SIZE) {
     const batch = unique.slice(start, start + BULK_DELETE_BATCH_SIZE)
@@ -164,11 +171,25 @@ export async function runBulkMemberDeletion(
       for (const member of partition.deletable) {
         await deleteMemberRecord(tx, organizationId, actor, member)
       }
-      return { deleted: partition.deletable.map((member) => member.id), skipped: partition.skipped }
+
+      const deactivated: string[] = []
+      if (options.deactivateKept) {
+        const byId = new Map(members.map((member) => [member.id, member]))
+        for (const skipped of partition.skipped) {
+          if (skipped.reason !== "registrations") continue
+          const member = byId.get(skipped.id)
+          if (!member || !member.active || member.mergedIntoId) continue
+          await deactivateMemberRecord(tx, organizationId, actor, member.id)
+          deactivated.push(member.id)
+        }
+      }
+
+      return { deleted: partition.deletable.map((member) => member.id), skipped: partition.skipped, deactivated }
     }, { maxWait: 10_000, timeout: 30_000 })
 
     result.deleted.push(...batchResult.deleted)
     result.skipped.push(...batchResult.skipped)
+    result.deactivated.push(...batchResult.deactivated)
   }
 
   return result

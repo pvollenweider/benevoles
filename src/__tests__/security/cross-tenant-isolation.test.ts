@@ -594,6 +594,7 @@ describe("Members — cross-tenant isolation", () => {
     expect(await res.json()).toEqual({
       deleted: ["mem-a"],
       skipped: [{ id: "mem-b", reason: "notFound", name: null }],
+      deactivated: [],
     })
     expect(volunteerDelete).toHaveBeenCalledTimes(1)
     expect(volunteerDelete).toHaveBeenCalledWith({ where: { id: "mem-a" } })
@@ -602,6 +603,93 @@ describe("Members — cross-tenant isolation", () => {
       data: expect.objectContaining({ action: "member.deleted", entityType: "Member", entityId: "mem-a", organizationId: ORG_A }),
     }))
     // The lock query is pinned to the caller's organisation.
+    expect(tx.$queryRaw.mock.calls[0].slice(1)).toContain(ORG_A)
+    expect(prismaMock.volunteer.update).not.toHaveBeenCalled()
+  })
+
+  it("POST /api/admin/members/bulk-delete with deactivateKept deactivates only the active kept members of the session's organisation (#1307)", async () => {
+    const { POST } = await import("@/app/api/admin/members/bulk-delete/route")
+    const volunteerDelete = vi.fn().mockResolvedValue({ id: "mem-del" })
+    const volunteerUpdate = vi.fn().mockResolvedValue({ id: "mem-kept" })
+    const orgLogCreate = vi.fn().mockResolvedValue({ id: "log-1" })
+    const tx = {
+      $queryRaw: vi.fn().mockResolvedValue([{ id: "mem-del" }, { id: "mem-kept" }]),
+      volunteer: {
+        // mem-b (org B) is absent from the org-scoped read, exactly like a missing id.
+        findMany: vi.fn().mockResolvedValue([
+          { id: "mem-del", firstName: "Alice", lastName: "Martin", email: null, active: true, mergedIntoId: null },
+          { id: "mem-kept", firstName: "Anne", lastName: "Favre", email: "anne@a.com", active: true, mergedIntoId: null },
+          { id: "mem-already", firstName: "Marc", lastName: "Rochat", email: null, active: false, mergedIntoId: null },
+        ]),
+        delete: volunteerDelete,
+        update: volunteerUpdate,
+      },
+      registration: { groupBy: vi.fn().mockResolvedValue([{ volunteerId: "mem-kept", _count: { _all: 2 } }, { volunteerId: "mem-already", _count: { _all: 1 } }]) },
+      notificationOutbox: { findMany: vi.fn().mockResolvedValue([]), updateMany: vi.fn() },
+      orgLog: { create: orgLogCreate },
+    }
+    const $transaction = vi.fn(async (fn: (tx: unknown) => unknown) => fn(tx))
+    requireOrgSessionMock.mockResolvedValue({ db: { $transaction }, organizationId: ORG_A, session: SESSION_A })
+
+    const res = await POST(makeRequest("/api/admin/members/bulk-delete", "POST", { ids: ["mem-del", "mem-kept", "mem-already", "mem-b"], deactivateKept: true }))
+    expect(res.status).toBe(200)
+    expect(await res.json()).toEqual({
+      deleted: ["mem-del"],
+      skipped: [
+        { id: "mem-kept", reason: "registrations", name: "Anne Favre" },
+        { id: "mem-already", reason: "registrations", name: "Marc Rochat" },
+        { id: "mem-b", reason: "notFound", name: null },
+      ],
+      deactivated: ["mem-kept"],
+    })
+    expect(volunteerDelete).toHaveBeenCalledTimes(1)
+    expect(volunteerDelete).toHaveBeenCalledWith({ where: { id: "mem-del" } })
+    // Only the active kept member is deactivated; the already inactive one and the foreign id aren't.
+    expect(volunteerUpdate).toHaveBeenCalledTimes(1)
+    expect(volunteerUpdate).toHaveBeenCalledWith({ where: { id: "mem-kept" }, data: { active: false } })
+    expect(orgLogCreate).toHaveBeenCalledWith(expect.objectContaining({
+      data: expect.objectContaining({ action: "member.deactivated", entityType: "Member", entityId: "mem-kept", organizationId: ORG_A }),
+    }))
+    // The lock query stays pinned to the caller's organisation.
+    expect(tx.$queryRaw.mock.calls[0].slice(1)).toContain(ORG_A)
+  })
+
+  it("POST /api/admin/members/bulk-deactivate never deactivates an id of another organisation, and reports it as not found (#1307)", async () => {
+    const { POST } = await import("@/app/api/admin/members/bulk-deactivate/route")
+    const volunteerUpdate = vi.fn().mockResolvedValue({ id: "mem-a" })
+    const orgLogCreate = vi.fn().mockResolvedValue({ id: "log-1" })
+    const tx = {
+      // The raw lock query filters on the session's organization, so mem-b (org B) is never locked.
+      $queryRaw: vi.fn().mockResolvedValue([{ id: "mem-a" }]),
+      volunteer: {
+        // The org-scoped read only sees org-A's records: mem-b behaves exactly like a missing id.
+        findMany: vi.fn().mockResolvedValue([
+          { id: "mem-a", firstName: "Alice", lastName: "Martin", active: true, mergedIntoId: null },
+          { id: "mem-inactive", firstName: "Marc", lastName: "Rochat", active: false, mergedIntoId: null },
+        ]),
+        update: volunteerUpdate,
+      },
+      orgLog: { create: orgLogCreate },
+    }
+    const $transaction = vi.fn(async (fn: (tx: unknown) => unknown) => fn(tx))
+    requireOrgSessionMock.mockResolvedValue({ db: { $transaction }, organizationId: ORG_A, session: SESSION_A })
+
+    const res = await POST(makeRequest("/api/admin/members/bulk-deactivate", "POST", { ids: ["mem-a", "mem-inactive", "mem-b"] }))
+    expect(res.status).toBe(200)
+    expect(await res.json()).toEqual({
+      deactivated: ["mem-a"],
+      skipped: [
+        { id: "mem-inactive", reason: "inactive", name: "Marc Rochat" },
+        { id: "mem-b", reason: "notFound", name: null },
+      ],
+    })
+    expect(volunteerUpdate).toHaveBeenCalledTimes(1)
+    expect(volunteerUpdate).toHaveBeenCalledWith({ where: { id: "mem-a" }, data: { active: false } })
+    expect(volunteerUpdate).not.toHaveBeenCalledWith({ where: { id: "mem-inactive" }, data: { active: false } })
+    expect(volunteerUpdate).not.toHaveBeenCalledWith({ where: { id: "mem-b" }, data: { active: false } })
+    expect(orgLogCreate).toHaveBeenCalledWith(expect.objectContaining({
+      data: expect.objectContaining({ action: "member.deactivated", entityType: "Member", entityId: "mem-a", organizationId: ORG_A }),
+    }))
     expect(tx.$queryRaw.mock.calls[0].slice(1)).toContain(ORG_A)
     expect(prismaMock.volunteer.update).not.toHaveBeenCalled()
   })

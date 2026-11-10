@@ -5,8 +5,9 @@
 
 import Link from "next/link"
 import { useEffect, useId, useLayoutEffect, useMemo, useRef, useState, useTransition } from "react"
-import { bulkDeleteMembersRecap, deactivateMemberRecap, deleteMemberRecap } from "@/lib/action-recap"
-import { BULK_DELETE_MAX, bulkDeletionResultText, type BulkDeletionResult } from "@/lib/member-bulk-deletion"
+import { bulkDeactivateMembersRecap, bulkDeleteMembersRecap, deactivateMemberRecap, deleteMemberRecap } from "@/lib/action-recap"
+import { BULK_DELETE_MAX, bulkDeactivateKeptLabel, bulkDeletionResultText, selectedWithRegistrationsCount, type BulkDeletionResult } from "@/lib/member-bulk-deletion"
+import { BULK_DEACTIVATE_MAX, bulkDeactivationResultText, type BulkDeactivationResult } from "@/lib/member-bulk-deactivation"
 import ConfirmActionModal from "@/components/admin/ConfirmActionModal"
 import { useRouter } from "next/navigation"
 import { fmtHours } from "@/lib/gantt-utils"
@@ -127,13 +128,21 @@ export default function MembersManager({ initialMembers, allTags, initialSearch,
   const [deleting, setDeleting] = useState(false)
   const [deleteError, setDeleteError] = useState<string | null>(null)
   // Bulk deletion (#1305): the selection is the ids of the rows the filter currently shows (all of
-  // them, not only the ones on screen), and the count is frozen when the dialog opens.
+  // them, not only the ones on screen), and the count is frozen when the dialog opens. With
+  // `withRegistrations` (#1307), the dialog also offers to deactivate the kept records that have
+  // registrations; `null` means the list doesn't know their number, so the label stays bare.
   const [selectedIds, setSelectedIds] = useState<Set<string>>(new Set())
-  const [pendingBulkDelete, setPendingBulkDelete] = useState<{ ids: string[]; count: number } | null>(null)
+  const [pendingBulkDelete, setPendingBulkDelete] = useState<{ ids: string[]; count: number; withRegistrations: number | null } | null>(null)
+  const [bulkDeactivateKept, setBulkDeactivateKept] = useState(false)
   const [bulkDeleting, setBulkDeleting] = useState(false)
   const [bulkDeleteError, setBulkDeleteError] = useState<string | null>(null)
   const [bulkDeleteTick, setBulkDeleteTick] = useState(0)
-  // After a bulk deletion, the refreshed list decides where focus really belongs (see below).
+  // Bulk deactivation (#1307): its own confirmation, result and focus parking, like the deletion.
+  const [pendingBulkDeactivate, setPendingBulkDeactivate] = useState<{ ids: string[]; count: number } | null>(null)
+  const [bulkDeactivating, setBulkDeactivating] = useState(false)
+  const [bulkDeactivateError, setBulkDeactivateError] = useState<string | null>(null)
+  const [bulkDeactivateTick, setBulkDeactivateTick] = useState(0)
+  // After a bulk deletion or deactivation, the refreshed list decides where focus really belongs.
   const pendingBulkFocusRef = useRef(false)
   // Bumped whenever a confirm attempt (deactivate or delete) fails and the dialog stays open
   // (#667 accessibility review): a layout effect, same tick pattern as editSaveTick/
@@ -142,7 +151,7 @@ export default function MembersManager({ initialMembers, allTags, initialSearch,
   // Safari does not focus a clicked button) — no flash on the row's action, the dialog never closes.
   const [confirmErrorTick, setConfirmErrorTick] = useState(0)
   useLayoutEffect(() => {
-    if (confirmErrorTick > 0) document.querySelector<HTMLElement>('[role="alertdialog"] button[type="submit"]')?.focus()
+    if (confirmErrorTick > 0) document.querySelector<HTMLElement>('[role="alertdialog"] button[type="submit"], [role="dialog"] button[type="submit"]')?.focus()
   }, [confirmErrorTick])
   const [actionMessage, setActionMessage] = useState<{ kind: "ok" | "error"; text: string } | null>(null)
   const actionRef = useRef<HTMLParagraphElement>(null)
@@ -172,6 +181,10 @@ export default function MembersManager({ initialMembers, allTags, initialSearch,
   useLayoutEffect(() => {
     if (bulkDeleteTick > 0) actionRef.current?.focus()
   }, [bulkDeleteTick])
+  // And for a successful bulk deactivation (#1307), same reasoning.
+  useLayoutEffect(() => {
+    if (bulkDeactivateTick > 0) actionRef.current?.focus()
+  }, [bulkDeactivateTick])
 
   // The selection only ever describes the current filter (#1305): changing search, tag, status or
   // the archived toggle empties it, so « Tout sélectionner » can never silently keep rows the
@@ -225,10 +238,10 @@ export default function MembersManager({ initialMembers, allTags, initialSearch,
   // region's text actually lands a frame later (announce() clears, then sets, the message).
   const suppressStatusFocusRef = useRef(false)
   useEffect(() => {
-    if (pendingDeactivate || pendingDelete || pendingBulkDelete || !actionMessage || pendingDeleteFocusRef.current) return
+    if (pendingDeactivate || pendingDelete || pendingBulkDelete || pendingBulkDeactivate || !actionMessage || pendingDeleteFocusRef.current) return
     if (suppressStatusFocusRef.current) { suppressStatusFocusRef.current = false; return }
     actionRef.current?.focus()
-  }, [pendingDeactivate, pendingDelete, pendingBulkDelete, actionMessage])
+  }, [pendingDeactivate, pendingDelete, pendingBulkDelete, pendingBulkDeactivate, actionMessage])
 
   // Once the refreshed list no longer carries the deleted member (#667), move focus to the next
   // row's action, the previous row's if it was last, or the page heading if none remain — never
@@ -381,13 +394,19 @@ export default function MembersManager({ initialMembers, allTags, initialSearch,
   function askBulkDelete() {
     if (selectedIds.size === 0) return
     setBulkDeleteError(null)
-    setPendingBulkDelete({ ids: Array.from(selectedIds), count: selectedIds.size })
+    setBulkDeactivateKept(false)
+    setPendingBulkDelete({
+      ids: Array.from(selectedIds),
+      count: selectedIds.size,
+      // #1307: the list already has each member's registration count, so no extra request.
+      withRegistrations: selectedWithRegistrationsCount(members, selectedIds),
+    })
   }
 
-  async function runBulkDelete(target: { ids: string[]; count: number }) {
+  async function runBulkDelete(target: { ids: string[]; count: number; withRegistrations: number | null }, deactivateKept: boolean) {
     setBulkDeleting(true)
     setBulkDeleteError(null)
-    const result: BulkDeletionResult = { deleted: [], skipped: [] }
+    const result: BulkDeletionResult = { deleted: [], skipped: [], deactivated: [] }
     try {
       // The route caps one request at BULK_DELETE_MAX ids; a bigger selection goes in several
       // requests, in order, and their results are merged into one outcome.
@@ -396,7 +415,7 @@ export default function MembersManager({ initialMembers, allTags, initialSearch,
         const res = await fetch("/api/admin/members/bulk-delete", {
           method: "POST",
           headers: { "Content-Type": "application/json" },
-          body: JSON.stringify({ ids: chunk }),
+          body: JSON.stringify({ ids: chunk, deactivateKept }),
         })
         if (!res.ok) {
           const data = await res.json().catch(() => ({}))
@@ -415,12 +434,13 @@ export default function MembersManager({ initialMembers, allTags, initialSearch,
           }
           return
         }
-        const chunkResult = (await res.json().catch(() => ({ deleted: [], skipped: [] }))) as BulkDeletionResult
+        const chunkResult = (await res.json().catch(() => ({ deleted: [], skipped: [], deactivated: [] }))) as BulkDeletionResult
         result.deleted.push(...chunkResult.deleted)
         result.skipped.push(...chunkResult.skipped)
+        result.deactivated.push(...(chunkResult.deactivated ?? []))
       }
 
-      announceAction("ok", bulkDeletionResultText(result))
+      announceAction("ok", bulkDeletionResultText(result, deactivateKept))
       setBulkDeleteTick((n) => n + 1)
       pendingBulkFocusRef.current = true
       setPendingBulkDelete(null)
@@ -439,6 +459,67 @@ export default function MembersManager({ initialMembers, allTags, initialSearch,
       }
     } finally {
       setBulkDeleting(false)
+    }
+  }
+
+  function askBulkDeactivate() {
+    if (selectedIds.size === 0) return
+    setBulkDeactivateError(null)
+    setPendingBulkDeactivate({ ids: Array.from(selectedIds), count: selectedIds.size })
+  }
+
+  async function runBulkDeactivate(target: { ids: string[]; count: number }) {
+    setBulkDeactivating(true)
+    setBulkDeactivateError(null)
+    const result: BulkDeactivationResult = { deactivated: [], skipped: [] }
+    try {
+      // Same batching as the deletion: the route caps one request at BULK_DEACTIVATE_MAX ids.
+      for (let start = 0; start < target.ids.length; start += BULK_DEACTIVATE_MAX) {
+        const chunk = target.ids.slice(start, start + BULK_DEACTIVATE_MAX)
+        const res = await fetch("/api/admin/members/bulk-deactivate", {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({ ids: chunk }),
+        })
+        if (!res.ok) {
+          const data = await res.json().catch(() => ({}))
+          const message = typeof data?.error === "string" ? data.error : "La désactivation n'a pas abouti. Réessayez."
+          if (result.deactivated.length > 0) {
+            const done = result.deactivated.length
+            setPendingBulkDeactivate(null)
+            setSelectedIds(new Set())
+            announceAction("error", `La désactivation s'est arrêtée après ${done} membre${done > 1 ? "s" : ""} désactivé${done > 1 ? "s" : ""}. ${message} La liste va se rafraîchir.`)
+            refresh()
+          } else {
+            setBulkDeactivateError(message)
+            setConfirmErrorTick((n) => n + 1)
+          }
+          return
+        }
+        const chunkResult = (await res.json().catch(() => ({ deactivated: [], skipped: [] }))) as BulkDeactivationResult
+        result.deactivated.push(...chunkResult.deactivated)
+        result.skipped.push(...chunkResult.skipped)
+      }
+
+      announceAction("ok", bulkDeactivationResultText(result))
+      setBulkDeactivateTick((n) => n + 1)
+      pendingBulkFocusRef.current = true
+      setPendingBulkDeactivate(null)
+      setSelectedIds(new Set())
+      refresh()
+    } catch {
+      if (result.deactivated.length > 0) {
+        const done = result.deactivated.length
+        setPendingBulkDeactivate(null)
+        setSelectedIds(new Set())
+        announceAction("error", `La désactivation s'est arrêtée après ${done} membre${done > 1 ? "s" : ""} désactivé${done > 1 ? "s" : ""}. Connexion impossible : la liste va se rafraîchir.`)
+        refresh()
+      } else {
+        setBulkDeactivateError("Connexion impossible : rien n'a changé. Réessayez.")
+        setConfirmErrorTick((n) => n + 1)
+      }
+    } finally {
+      setBulkDeactivating(false)
     }
   }
 
@@ -466,11 +547,34 @@ export default function MembersManager({ initialMembers, allTags, initialSearch,
       )}
       {pendingBulkDelete && (
         <ConfirmActionModal
-          recap={bulkDeleteMembersRecap(pendingBulkDelete.count)}
+          recap={bulkDeleteMembersRecap(pendingBulkDelete.count, pendingBulkDelete.withRegistrations)}
           busy={bulkDeleting}
           error={bulkDeleteError}
-          onConfirm={() => void runBulkDelete(pendingBulkDelete)}
-          onCancel={() => { setBulkDeleteError(null); setPendingBulkDelete(null) }}
+          onConfirm={() => void runBulkDelete(pendingBulkDelete, bulkDeactivateKept)}
+          onCancel={() => { setBulkDeleteError(null); setBulkDeactivateKept(false); setPendingBulkDelete(null) }}
+        >
+          {/* #1307: unchecked by default; hidden when no selected member can be kept for their
+              registrations (the count is known from the list, no extra request). */}
+          {pendingBulkDelete.withRegistrations !== 0 && (
+            <label className="mt-4 flex items-start gap-2 text-sm text-gray-800">
+              <input
+                type="checkbox"
+                checked={bulkDeactivateKept}
+                onChange={(e) => setBulkDeactivateKept(e.target.checked)}
+                className="mt-0.5 h-4 w-4 rounded border-gray-500"
+              />
+              <span>{bulkDeactivateKeptLabel(pendingBulkDelete.withRegistrations)}</span>
+            </label>
+          )}
+        </ConfirmActionModal>
+      )}
+      {pendingBulkDeactivate && (
+        <ConfirmActionModal
+          recap={bulkDeactivateMembersRecap(pendingBulkDeactivate.count)}
+          busy={bulkDeactivating}
+          error={bulkDeactivateError}
+          onConfirm={() => void runBulkDeactivate(pendingBulkDeactivate)}
+          onCancel={() => { setBulkDeactivateError(null); setPendingBulkDeactivate(null) }}
         />
       )}
       <p
@@ -617,8 +721,9 @@ export default function MembersManager({ initialMembers, allTags, initialSearch,
       </div>
 
       {/* Selection of the current filter (#1305): « Tout sélectionner » takes every selectable
-          row of `filtered`, not only the ones on screen. The count is a live region; the
-          destructive action appears only once something is selected. */}
+          row of `filtered`, not only the ones on screen. The count is a live region; the two
+          actions — reversible deactivation (#1307), permanent deletion — appear only once
+          something is selected. */}
       {selectable.length > 0 && (
         <div className="flex flex-wrap items-center gap-x-4 gap-y-2">
           <label className="text-sm text-gray-700 flex items-center gap-1.5">
@@ -642,6 +747,13 @@ export default function MembersManager({ initialMembers, allTags, initialSearch,
                 className="min-h-11 sm:min-h-6 text-sm text-gray-600 hover:text-gray-900 underline underline-offset-2 rounded focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-blue-600"
               >
                 Tout désélectionner
+              </button>
+              <button
+                type="button"
+                onClick={askBulkDeactivate}
+                className="min-h-11 sm:min-h-6 text-sm font-medium text-blue-700 border border-blue-600 rounded-xl px-3 py-1.5 hover:bg-blue-50 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-blue-600"
+              >
+                Désactiver la sélection
               </button>
               <button
                 type="button"

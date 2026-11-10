@@ -132,16 +132,56 @@ export function deleteMemberRecap(name: string): ActionRecap {
 }
 
 /**
+ * Bulk deactivation of a selection (#1307): reversible, so not a danger dialog — the refund is
+ * said in words (« vous pourrez les réactiver en affichant les inactifs »).
+ */
+export function bulkDeactivateMembersRecap(count: number): ActionRecap {
+  return {
+    title: `Désactiver ${n(count, "membre", "membres")} ?`,
+    lead: count > 1 ? `${count} fiches seront désactivées.` : "Cette fiche sera désactivée.",
+    lines: [
+      count > 1
+        ? "Elles disparaissent de la liste des membres actifs et des filtres ; leurs inscriptions passées restent."
+        : "La personne disparaît de la liste des membres actifs et des filtres ; ses inscriptions passées restent.",
+      count > 1
+        ? "Aucun email n'est envoyé. Vous pourrez les réactiver en affichant les inactifs."
+        : "Aucun email n'est envoyé. Vous pourrez le réactiver en affichant les inactifs.",
+      LOGGED_ORG,
+    ],
+    confirmLabel: "Désactiver",
+    danger: false,
+  }
+}
+
+/**
  * Permanent deletion of a selection (#1305): the count is known from the list, and the two
  * exclusions the action applies are said before it runs — an explicit confirmation replaces the
  * deactivation step of the single-member action.
  */
-export function bulkDeleteMembersRecap(count: number): ActionRecap {
+/**
+ * `withRegistrations`: how many selected members have registrations, when the list knows it
+ * (#1307). The lead then says how many records will really go, instead of announcing the whole
+ * selection as deleted when some (or all) of it will be kept.
+ */
+function bulkDeleteLead(count: number, withRegistrations: number | null): string {
+  const all = count > 1 ? `${count} fiches seront supprimées définitivement.` : "Cette fiche sera supprimée définitivement."
+  if (withRegistrations === null || withRegistrations <= 0) return all
+  const kept = Math.min(withRegistrations, count)
+  const deletable = count - kept
+  if (deletable === 0) {
+    return count > 1
+      ? `Aucune fiche ne sera supprimée : les ${count} membres sélectionnés ont des inscriptions.`
+      : "Cette fiche ne sera pas supprimée : ce membre a des inscriptions."
+  }
+  const goes = deletable > 1 ? `${deletable} fiches seront supprimées définitivement.` : "1 fiche sera supprimée définitivement."
+  const stays = kept > 1 ? `${kept} membres ont des inscriptions et seront conservés.` : "1 membre a des inscriptions et sera conservé."
+  return `${goes} ${stays}`
+}
+
+export function bulkDeleteMembersRecap(count: number, withRegistrations: number | null = null): ActionRecap {
   return {
     title: `Supprimer ${n(count, "membre", "membres")} ?`,
-    lead: count > 1
-      ? `${count} fiches seront supprimées définitivement.`
-      : "Cette fiche sera supprimée définitivement.",
+    lead: bulkDeleteLead(count, withRegistrations),
     lines: [
       "Cette action est irréversible : les fiches ne peuvent pas être récupérées ensuite.",
       "Les membres qui ont des inscriptions ne seront pas supprimés : leurs inscriptions doivent rester dans l'historique des événements.",

@@ -20,13 +20,21 @@ Le bouton **Supprimer** n'apparaît, sur la ligne de la fiche dans la liste des 
 
 ## Supprimer plusieurs fiches en une fois
 
-Pour retirer d'un coup des membres importés par erreur, cochez-les dans la liste des membres. La case **Tout sélectionner** prend tous les membres du filtre en cours (recherche, étiquette, statut), y compris ceux qui ne tiennent pas à l'écran. Le compteur **N membres sélectionnés** suit la sélection ; elle se vide dès que le filtre change. Le bouton **Supprimer la sélection** n'apparaît qu'une fois au moins un membre sélectionné.
+Pour retirer d'un coup des membres importés par erreur, cochez-les dans la liste des membres. La case **Tout sélectionner** prend tous les membres du filtre en cours (recherche, étiquette, statut), y compris ceux qui ne tiennent pas à l'écran. Le compteur **N membres sélectionnés** suit la sélection ; elle se vide dès que le filtre change. Les boutons **Désactiver la sélection** et **Supprimer la sélection** n'apparaissent qu'une fois au moins un membre sélectionné.
 
 La confirmation indique combien de membres seront supprimés, rappelle que l'action est **irréversible** et que les membres qui ont des inscriptions ne seront pas supprimés. À la différence de la suppression d'une fiche seule, un membre **actif sans inscription** est supprimé directement : la confirmation explicite remplace l'étape de désactivation. Les fiches qui ont des inscriptions restent, parce que leurs inscriptions doivent rester dans l'historique des événements ; les fiches fusionnées restent aussi, puisque la fusion les supprime automatiquement après son délai. Aucun email n'est envoyé, et chaque suppression est journalisée dans le journal d'activité de l'organisation.
 
-![Confirmation « Supprimer 2 membres ? » : les fiches sont supprimées définitivement, les membres qui ont des inscriptions restent, aucun email n'est envoyé, puis les boutons Annuler et Supprimer](/doc-img/admin-members-bulk-delete.png)
+Quand des membres sélectionnés ont des inscriptions, la confirmation dit combien de fiches seront supprimées et combien seront conservées, et propose une case, décochée par défaut, pour **désactiver** les membres conservés (par exemple « Désactiver les 3 membres qui ont des inscriptions : ils ne peuvent pas être supprimés »). La case n'apparaît pas quand aucun membre sélectionné n'a d'inscription. Cochée, la même action désactive les membres conservés qui sont encore actifs ; ceux qui sont déjà inactifs restent tels quels.
 
-Après l'action, la liste se rafraîchit et le résultat est annoncé : par exemple « 198 membres supprimés. 3 laissés car ils ont des inscriptions : Anne Favre, Marc Rochat, Léa Dubois. Vous pouvez les effacer depuis leur fiche. » Le focus va sur ce message, ou sur le titre de la page s'il ne reste plus aucun membre. Une sélection de plus de 500 membres part en plusieurs fois, sans que vous ayez à faire quoi que ce soit.
+![Confirmation « Supprimer 2 membres ? » : une fiche sera supprimée définitivement et un membre, qui a des inscriptions, sera conservé ; la case décochée « Désactiver le membre qui a des inscriptions : il ne peut pas être supprimé », aucun email n'est envoyé, puis les boutons Annuler et Supprimer](/doc-img/admin-members-bulk-delete.png)
+
+Après l'action, la liste se rafraîchit et le résultat est annoncé : par exemple « 198 membres supprimés. 3 laissés car ils ont des inscriptions : Anne Favre, Marc Rochat, Léa Dubois. Vous pouvez les effacer depuis leur fiche. » Avec la case cochée, il dit plutôt « 198 membres supprimés. 3 désactivés car ils ont des inscriptions : Anne Favre, Marc Rochat, Léa Dubois. », et les membres déjà inactifs sont comptés comme laissés. Le focus va sur ce message, ou sur le titre de la page s'il ne reste plus aucun membre. Une sélection de plus de 500 membres part en plusieurs fois, sans que vous ayez à faire quoi que ce soit.
+
+## Désactiver plusieurs fiches en une fois
+
+Pour retirer plusieurs personnes de la liste sans rien supprimer, cochez-les puis choisissez **Désactiver la sélection**, à côté de **Supprimer la sélection**. La confirmation dit combien de membres seront désactivés, qu'aucun email n'est envoyé et que vous pourrez les réactiver en affichant les inactifs : l'action est réversible, rien n'est effacé.
+
+Après l'action, la liste se rafraîchit et le résultat est annoncé : par exemple « 12 membres désactivés. 2 déjà inactifs. » Les fiches déjà inactives ne sont pas désactivées une seconde fois, et les fiches fusionnées sont ignorées. Le focus va sur ce message. Une sélection de plus de 500 membres part en plusieurs fois.
 
 ## Effacer les données personnelles d'un membre
 
