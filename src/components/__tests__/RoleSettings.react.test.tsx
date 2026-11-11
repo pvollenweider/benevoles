@@ -248,7 +248,7 @@ describe("RoleSettings", () => {
       fireEvent.click(screen.getByRole("button", { name: "Enregistrer" }))
 
       await waitFor(() => expect(cb.onAnnounce).toHaveBeenCalledOnce())
-      expect(JSON.parse(fetchMock.mock.calls[0][1].body)).toEqual({ assignedOnly: false, reservedTags: ["sécurité", "secouriste"] })
+      expect(JSON.parse(fetchMock.mock.calls[0][1].body)).toEqual({ assignedOnly: false, reservedTags: ["sécurité", "secouriste"], reservedQuestionId: null, reservedAnswers: [] })
       expect(applied(cb.setShifts, [shift({})])[0].reservedTags).toEqual(["sécurité", "secouriste"])
       expect(cb.onClose).toHaveBeenCalledWith("Bar")
       expect(cb.onAnnounce).toHaveBeenCalledWith("Poste « Bar » : réservé aux membres avec l'étiquette sécurité ou secouriste. 1 étiquette ignorée (doublons, ou 10 au maximum).")
@@ -290,7 +290,7 @@ describe("RoleSettings", () => {
       const cb = setup("", [], { saved: true, draft: true })
       fireEvent.click(screen.getByRole("button", { name: "Ouvrir à tous" }))
       await waitFor(() => expect(cb.onAnnounce).toHaveBeenCalledOnce())
-      expect(JSON.parse(fetchMock.mock.calls[0][1].body)).toEqual({ assignedOnly: false, reservedTags: [] })
+      expect(JSON.parse(fetchMock.mock.calls[0][1].body)).toEqual({ assignedOnly: false, reservedTags: [], reservedQuestionId: null, reservedAnswers: [] })
       expect(cb.onAnnounce).toHaveBeenCalledWith("Poste « Bar » : ouvert à tous.")
     })
 
@@ -299,6 +299,35 @@ describe("RoleSettings", () => {
       fireEvent.click(screen.getByRole("button", { name: "Enregistrer" }))
       expect(fetchMock).not.toHaveBeenCalled()
       expect(cb.onAnnounce).toHaveBeenCalledWith("Poste « Bar » : aucune modification.")
+    })
+
+    it("saves a choice question and its accepted answers as the poste's condition (#962)", async () => {
+      fetchMock.mockResolvedValue({ ok: true, json: async () => ({}) })
+      const cb = { ...callbacks(), onValueChange: vi.fn(), onAssignedOnlyChange: vi.fn() }
+      function Harness() {
+        const [questionId, setQuestionId] = useState("")
+        const [answers, setAnswers] = useState<string[]>([])
+        return <RoleReserveForm eventId="evt-1" role="Bar" index={0} reservedTags={[]} assignedOnly={false} assignedOnlyValue={false} value="" busyRole={null}
+          questions={[{ id: "q-permis", label: "Permis de conduire", type: "yesno", options: [], parentId: null, displayScope: "event" }]}
+          questionIdValue={questionId} onQuestionIdChange={setQuestionId} acceptedAnswersValue={answers} onAcceptedAnswersChange={setAnswers} {...cb} />
+      }
+      render(<Harness />)
+      fireEvent.change(screen.getByLabelText(/Condition d'accès/), { target: { value: "q-permis" } })
+      fireEvent.click(screen.getByRole("checkbox", { name: "Oui" }))
+      fireEvent.click(screen.getByRole("button", { name: "Enregistrer" }))
+      await waitFor(() => expect(cb.onAnnounce).toHaveBeenCalledOnce())
+      expect(JSON.parse(fetchMock.mock.calls[0][1].body)).toEqual({ assignedOnly: false, reservedTags: [], reservedQuestionId: "q-permis", reservedAnswers: ["Oui"] })
+      expect(cb.onAnnounce).toHaveBeenCalledWith("Poste « Bar » : réservé aux personnes qui répondent Oui à « Permis de conduire ».")
+    })
+
+    it("refuses a condition without an accepted answer (#962)", () => {
+      const cb = { ...callbacks(), onValueChange: vi.fn(), onAssignedOnlyChange: vi.fn(), onQuestionIdChange: vi.fn(), onAcceptedAnswersChange: vi.fn() }
+      render(<RoleReserveForm eventId="evt-1" role="Bar" index={0} reservedTags={[]} assignedOnly={false} assignedOnlyValue={false} value="" busyRole={null}
+        questions={[{ id: "q-permis", label: "Permis de conduire", type: "yesno", options: [], parentId: null, displayScope: "event" }]}
+        questionIdValue="q-permis" acceptedAnswersValue={[]} {...cb} />)
+      fireEvent.click(screen.getByRole("button", { name: "Enregistrer" }))
+      expect(cb.onActionError).toHaveBeenCalledWith("Choisissez au moins une réponse acceptée pour la condition d'accès.")
+      expect(fetchMock).not.toHaveBeenCalled()
     })
 
     it("reports the server's error and stays open", async () => {

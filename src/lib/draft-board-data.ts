@@ -7,6 +7,7 @@ import { buildBoard, draftOptions, type Board, type BoardDraft, type BoardPerson
 import type { OrgScopedPrisma } from "./prisma-org"
 import { LIVE_STATUSES, OCCUPYING_STATUSES } from "./registration-capacity"
 import { reservedRoles } from "./role-reservation"
+import { reservedAnswerConditions } from "./role-answer"
 import { roleLimits } from "./role-limit"
 import { orgTimeZone } from "./time-zone"
 import { WORKLOAD_EVENT_SELECT, workloadGateOf } from "./workload-guard"
@@ -22,7 +23,7 @@ type Db = OrgScopedPrisma
 
 const SHIFT_SELECT = {
   id: true, eventId: true, roleName: true, label: true, date: true, startTime: true, endTime: true, status: true, capacity: true, maxPerVolunteer: true,
-  overlapAllowed: true, assignedOnly: true, requiresApproval: true, minAge: true, reservedTags: true, locationDetails: true, latitude: true, longitude: true,
+  overlapAllowed: true, assignedOnly: true, requiresApproval: true, minAge: true, reservedTags: true, reservedQuestionId: true, reservedAnswers: true, locationDetails: true, latitude: true, longitude: true,
   sectorId: true, mealOnTheGo: true, placeId: true, place: { select: { name: true } },
 } as const
 
@@ -61,18 +62,24 @@ async function loadContext(db: Db, eventId: string, scope: "event" | "all", only
     select: { id: true, firstName: true, lastName: true, email: true, organizationId: true, active: true, erasedAt: true, mergedIntoId: true, birthDate: true, tags: true },
   })
   const ids = people.map((p) => p.id)
-  const [answers, requests, limitsRows] = await Promise.all([
+  const [answers, requests, limitsRows, questionAnswers] = await Promise.all([
     readAnswersForFit(db, eventId, ids),
     db.availabilityRequest.findMany({ where: { eventId, volunteerId: { in: ids } }, select: { volunteerId: true, reviewReason: true } }),
     db.eventVolunteerLimit.findMany({ where: { eventId, volunteerId: { in: ids } }, select: { volunteerId: true, values: true } }),
+    // Stored answers (#962), only when a poste is reserved to one of them.
+    [...shifts.values()].some((s) => s.reservedQuestionId)
+      ? db.questionAnswer.findMany({ where: { eventId, volunteerId: { in: ids } }, select: { volunteerId: true, questionId: true, values: true } })
+      : Promise.resolve([]),
   ])
+  const answersOf = new Map<string, Record<string, string[]>>()
+  for (const a of questionAnswers) answersOf.set(a.volunteerId, { ...(answersOf.get(a.volunteerId) ?? {}), [a.questionId]: a.values })
   const reviewOf = new Map(requests.map((r) => [r.volunteerId, r.reviewReason]))
   const personalOf = new Map(limitsRows.map((l) => [l.volunteerId, parsePersonalLimits(l.values)]))
   const hints = sameNameHints(people)
   const heldOf = new Map<string, BoardPerson["held"]>()
   for (const r of regs) heldOf.set(r.volunteerId, [...(heldOf.get(r.volunteerId) ?? []), { id: r.id, status: r.status, shift: toShift(r.shift, 0) }])
   const boardPeople: BoardPerson[] = people.map((p) => ({
-    ...p, held: heldOf.get(p.id) ?? [], answer: answers.get(p.id) ?? null,
+    ...p, held: heldOf.get(p.id) ?? [], answer: answers.get(p.id) ?? null, answers: answersOf.get(p.id) ?? {},
     sameNameHint: hints.get(p.id) ?? null, reviewReason: reviewOf.get(p.id) ?? null, personal: personalOf.get(p.id) ?? null,
   }))
   const roleRows = [...shifts.values()].filter((s) => s.status !== "cancelled")
@@ -81,7 +88,7 @@ async function loadContext(db: Db, eventId: string, scope: "event" | "all", only
     availability: { timeZone: availability.timeZone, dates: availability.dates },
     gate: workloadGateOf(event), collecting: event.availabilityEnabled,
     shifts, people: boardPeople, drafts,
-    reserved: reservedRoles(roleRows), limits: roleLimits(roleRows),
+    reserved: reservedRoles(roleRows), answerConditions: reservedAnswerConditions(roleRows), limits: roleLimits(roleRows),
   }
 }
 

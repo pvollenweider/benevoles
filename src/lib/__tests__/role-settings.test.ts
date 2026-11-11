@@ -3,7 +3,7 @@ import { liveRoleShifts, roleColorOf, roleSectorOf, roleSettingsOf, type RoleSet
 
 // The settings of a poste (#1002), read from its live shifts for a shift created in it or moved to it.
 const shift = (patch: Partial<RoleSettingsShift> = {}): RoleSettingsShift => ({
-  roleName: "Bar", colorKey: null, maxPerVolunteer: null, reservedTags: [], overlapAllowed: false, assignedOnly: false, displayOrder: 0, updatedAt: "2026-07-01T10:00:00Z", ...patch,
+  roleName: "Bar", colorKey: null, maxPerVolunteer: null, reservedTags: [], reservedQuestionId: null, reservedAnswers: [], overlapAllowed: false, assignedOnly: false, displayOrder: 0, updatedAt: "2026-07-01T10:00:00Z", ...patch,
 })
 
 describe("roleSettingsOf", () => {
@@ -13,12 +13,12 @@ describe("roleSettingsOf", () => {
   })
 
   it("returns the poste's values when its shifts agree, ignoring other postes", () => {
-    const set = { colorKey: "teal", maxPerVolunteer: 2, reservedTags: ["sécurité"], overlapAllowed: true, assignedOnly: true, displayOrder: 300, sectorId: "sec-parking" }
+    const set = { colorKey: "teal", maxPerVolunteer: 2, reservedTags: ["sécurité"], reservedQuestionId: null, reservedAnswers: [], overlapAllowed: true, assignedOnly: true, displayOrder: 300, sectorId: "sec-parking" }
     expect(roleSettingsOf([shift(set), shift(set), shift({ roleName: "Accueil", colorKey: "rose", displayOrder: 0 })], "Bar")).toEqual(set)
   })
 
   it("returns the defaults for a poste whose shifts have none set", () => {
-    expect(roleSettingsOf([shift()], "Bar")).toEqual({ colorKey: null, maxPerVolunteer: null, reservedTags: [], overlapAllowed: false, assignedOnly: false, displayOrder: 0, sectorId: null })
+    expect(roleSettingsOf([shift()], "Bar")).toEqual({ colorKey: null, maxPerVolunteer: null, reservedTags: [], reservedQuestionId: null, reservedAnswers: [], overlapAllowed: false, assignedOnly: false, displayOrder: 0, sectorId: null })
   })
 
   describe("mixed values (shifts added before #1002)", () => {
@@ -40,6 +40,13 @@ describe("roleSettingsOf", () => {
     it("reserved access: every tag set on any shift, as sign-up enforces it", () => {
       expect(roleSettingsOf([shift({ reservedTags: ["sécurité"] }), shift(), shift({ reservedTags: ["Sécurité", "secours"] })], "Bar")?.reservedTags)
         .toEqual(["sécurité", "secours"])
+    })
+
+    it("answer condition (#962): the question most shifts carry, every accepted answer of those", () => {
+      expect(roleSettingsOf([shift({ reservedQuestionId: "q1", reservedAnswers: ["Oui"] }), shift({ reservedQuestionId: "q1", reservedAnswers: ["Oui", "Peut-être"] }), shift()], "Bar"))
+        .toMatchObject({ reservedQuestionId: "q1", reservedAnswers: ["Oui", "Peut-être"] })
+      expect(roleSettingsOf([shift({ reservedQuestionId: "q1", reservedAnswers: ["Oui"] }), shift({ reservedQuestionId: "q2", reservedAnswers: ["Non"] })], "Bar")?.reservedQuestionId).toBe("q1")
+      expect(roleSettingsOf([shift()], "Bar")).toMatchObject({ reservedQuestionId: null, reservedAnswers: [] })
     })
 
     it("cumulable: only when every shift is", () => {

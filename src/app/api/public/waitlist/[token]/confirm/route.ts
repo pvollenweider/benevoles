@@ -14,6 +14,7 @@ import { pickShiftInfo } from "@/lib/shift-info"
 import { lockShifts } from "@/lib/registration-capacity"
 import { checkDutyChange, lockVolunteerRows, lockWorkloadShared, readWorkloadGate, workloadRefusalBody, WorkloadRefusalError } from "@/lib/workload-guard"
 import { clearShiftDeclines } from "@/lib/shift-decline-clear"
+import { answerConditionRefusal, answerValuesMatch, reservedAnswerConditions } from "@/lib/role-answer"
 
 /**
  * Accepts a spot offered from the waitlist. POST only (#1044): the offer email's link opens a
@@ -42,6 +43,23 @@ export async function POST(_req: Request, { params }: { params: Promise<{ token:
 
   if (reg.waitingExpiresAt && reg.waitingExpiresAt < new Date()) {
     return NextResponse.json({ error: "Ce lien a expiré. La place a été proposée à quelqu'un d'autre." }, { status: 410 })
+  }
+
+  // Answer condition (#962), on the volunteer's stored answer: an offer made before their answer
+  // changed is never accepted against the poste's current condition.
+  const condition = reservedAnswerConditions((await prisma.shift.findMany({
+    where: { eventId: reg.eventId, roleName: reg.shift.roleName, status: { not: "cancelled" } },
+    select: { roleName: true, reservedQuestionId: true, reservedAnswers: true },
+  })) ?? []).get(reg.shift.roleName)
+  if (condition) {
+    const answer = await prisma.questionAnswer.findFirst({
+      where: { eventId: reg.eventId, volunteerId: reg.volunteerId, questionId: condition.questionId },
+      select: { values: true },
+    })
+    if (!answerValuesMatch(condition, answer?.values)) {
+      const question = await prisma.eventQuestion.findFirst({ where: { id: condition.questionId, eventId: reg.eventId }, select: { label: true } })
+      return NextResponse.json({ error: answerConditionRefusal(question?.label ?? condition.questionId, condition.answers) }, { status: 403 })
+    }
   }
 
   // Conditional on the offer still standing (#264): a double confirm (double click, link

@@ -34,6 +34,7 @@ import { validationError } from "@/lib/api-error"
 import { checkAnswers, consistentAdditions, planAnswerWrites } from "@/lib/event-questions"
 import { askedQuestions } from "@/lib/question-scope"
 import { reservedRoles } from "@/lib/role-reservation"
+import { answerConditionProblems, answerConditionRefusal, reservedAnswerConditions } from "@/lib/role-answer"
 import { assignedOnlyRoles, asksAssignedOnly } from "@/lib/role-assignment"
 import {
   answersRefusal,
@@ -180,7 +181,7 @@ export async function POST(req: Request) {
   // organisation only (#1145) or reserved (#470) as soon as one of its shifts is.
   const roleShifts = await prisma.shift.findMany({
     where: { eventId, roleName: { in: [...new Set(shifts.map((s) => s.roleName))] }, status: { not: "cancelled" } },
-    select: { roleName: true, reservedTags: true, assignedOnly: true },
+    select: { roleName: true, reservedTags: true, reservedQuestionId: true, reservedAnswers: true, assignedOnly: true },
   })
   // A role assigned by the organisation only (#1145) is never bookable here, invitation or personal
   // link included: its shifts answer as unknown ones, before any other check, so neither the
@@ -340,6 +341,33 @@ export async function POST(req: Request) {
   const questions = askedQuestions(eventQuestions, [...shifts.map((s) => s.roleName), ...(personal ? heldRoles : [])])
   const answerCheck = checkAnswers(questions, parsed.data.answers)
   if (!answerCheck.ok) return refuse(answersRefusal(answerCheck)!)
+
+  // Answer conditions (#962). Without proof of the address, only what this form says counts, as
+  // for a new person: the condition is self-declared anyway, and reading a known member's stored
+  // answer would turn the refusal into an oracle on it, where every other unproven sign-up gets
+  // the same answer (AUTHZ-01). That stored answer is never replaced without proof
+  // (planAnswerWrites below). With proof (personal link, invitation), the stored answer is the
+  // base and the form's answers replace it, so « Mes inscriptions » need not send it again.
+  const answerConditions = reservedAnswerConditions(roleShifts)
+  let effectiveAnswers = new Map(answerCheck.values)
+  if (answerConditions.size > 0 && existing && ownsEmail) {
+    const stored = await prisma.questionAnswer.findMany({ where: { eventId, volunteerId: existing.id }, select: { questionId: true, values: true } })
+    effectiveAnswers = new Map(stored.filter((row) => row.values.length > 0).map((row) => [row.questionId, row.values]))
+    for (const [questionId, values] of answerCheck.values) effectiveAnswers.set(questionId, values)
+  }
+  const answerProblems = answerConditionProblems(shifts, answerConditions, effectiveAnswers)
+  if (answerProblems.length > 0) {
+    const labels = new Map(eventQuestions.map((q) => [q.id, q.label]))
+    const messages = answerProblems.map((p) => answerConditionRefusal(labels.get(p.condition.questionId) ?? p.condition.questionId, p.condition.answers))
+    return refuse({
+      status: 403,
+      body: {
+        error: messages.join(" "),
+        reservedAnswerShiftIds: answerProblems.map((p) => p.shiftId),
+        questionErrors: answerProblems.map((p) => ({ questionId: p.condition.questionId, message: answerConditionRefusal(labels.get(p.condition.questionId) ?? p.condition.questionId, p.condition.answers) })),
+      },
+    })
+  }
 
   // Chaque inscription reçoit son propre token unique.
   // On retourne le token de la première comme lien de confirmation.

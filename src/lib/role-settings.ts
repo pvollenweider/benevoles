@@ -5,6 +5,7 @@ import { roleLimits } from "./role-limit"
 import { reservedRoles } from "./role-reservation"
 import { roleAssignedOnly } from "./role-assignment"
 import { roleOverlapAllowed } from "./shift-overlap"
+import { reservedAnswerConditionOf } from "./role-answer"
 
 /**
  * The settings of a poste (#1002). A poste has no table of its own: it is the roleName shared by
@@ -17,7 +18,8 @@ import { roleOverlapAllowed } from "./shift-overlap"
  * Shifts created before #1002 may disagree (a colour or a limit set, then shifts added without it).
  * The value read is the one already in force for the poste, never a silent rewrite of its shifts:
  * - limit per volunteer: the smallest one set (what sign-up enforces, `roleLimits`);
- * - reserved access: every tag set on any of its shifts (what sign-up enforces, `reservedRoles`);
+ * - reserved access: every tag set on any of its shifts (what sign-up enforces, `reservedRoles`),
+ *   and the answer condition of the question most of them carry (#962, `reservedAnswerConditions`);
  * - cumulable: only when every shift is (`roleOverlapAllowed`, #986);
  * - assigned by the organisation only: as soon as one shift is (`roleAssignedOnly`, #1145), what the
  *   public page and the sign-up enforce;
@@ -37,6 +39,10 @@ export type RoleSettings = {
   colorKey: string | null
   maxPerVolunteer: number | null
   reservedTags: string[]
+  /** Question whose answer reserves the poste (#962), null = no answer condition. */
+  reservedQuestionId: string | null
+  /** Accepted answers of that question (#962), values as stored, never translated. */
+  reservedAnswers: string[]
   overlapAllowed: boolean
   assignedOnly: boolean
   displayOrder: number
@@ -49,6 +55,8 @@ export type RoleSettingsShift = {
   colorKey?: string | null
   maxPerVolunteer?: number | null
   reservedTags?: string[] | null
+  reservedQuestionId?: string | null
+  reservedAnswers?: string[] | null
   overlapAllowed?: boolean | null
   assignedOnly?: boolean | null
   displayOrder?: number | null
@@ -63,7 +71,7 @@ export function liveRoleShifts(eventId: string, roleName: string) {
 
 /** What the routes read for `roleSettingsOf`. */
 export const ROLE_SETTINGS_SELECT = {
-  roleName: true, colorKey: true, maxPerVolunteer: true, reservedTags: true, overlapAllowed: true, assignedOnly: true, displayOrder: true, sectorId: true, updatedAt: true,
+  roleName: true, colorKey: true, maxPerVolunteer: true, reservedTags: true, reservedQuestionId: true, reservedAnswers: true, overlapAllowed: true, assignedOnly: true, displayOrder: true, sectorId: true, updatedAt: true,
 } as const
 
 const time = (d: Date | string | null | undefined) => (d == null ? 0 : new Date(d).getTime())
@@ -109,10 +117,14 @@ export function roleSectorOf(shifts: RoleSettingsShift[]): string | null {
 export function roleSettingsOf(shifts: RoleSettingsShift[], roleName: string): RoleSettings | null {
   const own = shifts.filter((s) => s.roleName === roleName)
   if (own.length === 0) return null
+  const condition = reservedAnswerConditionOf(own, roleName)
   return {
     colorKey: roleColorOf(own),
     maxPerVolunteer: roleLimits(own).get(roleName) ?? null,
     reservedTags: reservedRoles(own).get(roleName) ?? [],
+    // Same sharing as the tags: the question chosen by most shifts, every accepted answer (#962).
+    reservedQuestionId: condition?.questionId ?? null,
+    reservedAnswers: condition?.answers ?? [],
     overlapAllowed: roleOverlapAllowed(own, roleName),
     assignedOnly: roleAssignedOnly(own, roleName),
     displayOrder: Math.min(...own.map((s) => s.displayOrder ?? 0)),

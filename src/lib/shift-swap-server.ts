@@ -8,6 +8,7 @@ import type { OrgScopedPrisma } from "./prisma-org"
 import { lockShifts, LIVE_STATUSES } from "./registration-capacity"
 import { assignedOnlyRoles } from "./role-assignment"
 import { reservedRoles } from "./role-reservation"
+import { reservedAnswerConditions } from "./role-answer"
 import { roleLimits } from "./role-limit"
 import { orgLinksOpen } from "./org-lifecycle"
 import { orgTimeZone } from "./time-zone"
@@ -156,7 +157,7 @@ async function lockRequest(tx: Tx, requestId: string, organizationId?: string): 
 
 const SHIFT_SELECT = {
   id: true, eventId: true, roleName: true, label: true, status: true, date: true, startTime: true, endTime: true,
-  overlapAllowed: true, assignedOnly: true, requiresApproval: true, minAge: true, reservedTags: true,
+  overlapAllowed: true, assignedOnly: true, requiresApproval: true, minAge: true, reservedTags: true, reservedQuestionId: true, reservedAnswers: true,
   locationDetails: true, latitude: true, longitude: true, sectorId: true, instructions: true,
   // Read by the workload check (#1171, meals); not a term of the swap agreement.
   mealOnTheGo: true, placeId: true,
@@ -211,8 +212,15 @@ async function registrationBusy(tx: Tx, registrationId: string, exceptRequestId?
 async function personCheck(tx: Tx, event: LoadedEvent, giving: LoadedRegistration, receiving: SwapShift) {
   const [held, roleShifts] = await Promise.all([
     tx.registration.findMany({ where: { volunteerId: giving.volunteerId, eventId: event.id, status: { in: [...LIVE_STATUSES] } }, select: { id: true, status: true, shift: { select: SHIFT_SELECT } } }),
-    tx.shift.findMany({ where: { eventId: event.id, roleName: receiving.roleName, status: { not: "cancelled" } }, select: { roleName: true, reservedTags: true, maxPerVolunteer: true } }),
+    tx.shift.findMany({ where: { eventId: event.id, roleName: receiving.roleName, status: { not: "cancelled" } }, select: { roleName: true, reservedTags: true, reservedQuestionId: true, reservedAnswers: true, maxPerVolunteer: true } }),
   ])
+  const answerCondition = reservedAnswerConditions(roleShifts).get(receiving.roleName) ?? null
+  const answers = answerCondition
+    ? new Map((await tx.questionAnswer.findMany({
+        where: { eventId: event.id, volunteerId: giving.volunteerId, questionId: answerCondition.questionId },
+        select: { questionId: true, values: true },
+      })).map((a) => [a.questionId, a.values]))
+    : new Map<string, string[]>()
   return personSwapCheck({
     person: giving.volunteer,
     giving,
@@ -220,6 +228,8 @@ async function personCheck(tx: Tx, event: LoadedEvent, giving: LoadedRegistratio
     held,
     reserved: reservedRoles(roleShifts),
     limits: roleLimits(roleShifts),
+    answerCondition,
+    answers,
   })
 }
 

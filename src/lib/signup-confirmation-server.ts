@@ -25,6 +25,7 @@ import { cancelledState, confirmationDeadlineLabel, confirmationIdentityLines, s
 import { applySignupRosterChoice } from "@/lib/roster-consent-write"
 import { isKnownMinor, signupNoticeVersion } from "@/lib/shift-roster"
 import { clearShiftDeclines } from "@/lib/shift-decline-clear"
+import { answerConditionProblems, reservedAnswerConditions } from "@/lib/role-answer"
 
 /** A random 32-byte link token, stored only as its SHA-256 hash. */
 export function newSignupConfirmationToken(): string {
@@ -151,7 +152,7 @@ export async function signupConfirmationView(token: string, now: Date = new Date
 
 export type ConfirmSignupResult =
   | { ok: true; already: boolean; counts: { active: number; requested: number; waiting: number } }
-  | { ok: false; reason: "invalid" | "expired" | "replaced" | "cancelled" | "gone" | "unavailable" }
+  | { ok: false; reason: "invalid" | "expired" | "replaced" | "cancelled" | "gone" | "unavailable" | "reserved_answer" }
 
 /** The counts recorded at the click, or those the registrations show now. */
 function countsOf(regs: { status: string }[], row: { resultActive: number | null; resultRequested: number | null; resultWaiting: number | null }) {
@@ -198,6 +199,22 @@ export async function confirmSignupConfirmation(token: string, now: Date = new D
       const nowDecision = signupConfirmationDecision(current, now, current.registrations.map((r) => r.status), current.waitlistShiftIds)
       if (nowDecision === "confirmed") return { result: { ok: true as const, already: true, counts: countsOf(current.registrations, current) }, outboxIds: [], logs: [] }
       if (nowDecision !== "pending") return { result: { ok: false as const, reason: nowDecision === "gone" ? "gone" as const : nowDecision }, outboxIds: [], logs: [] }
+
+      // Answer conditions (#962): the answers given with the request must still open every poste
+      // held or joined. Refused before anything is claimed, so the request stays as it was.
+      const selectedIds = [...new Set([...current.registrations.map((r) => r.shiftId), ...current.waitlistShiftIds])]
+      const selectedShifts = await tx.shift.findMany({
+        where: { id: { in: selectedIds }, eventId: current.eventId },
+        select: { id: true, roleName: true, reservedQuestionId: true, reservedAnswers: true },
+      })
+      const conditions = reservedAnswerConditions(await tx.shift.findMany({
+        where: { eventId: current.eventId, roleName: { in: [...new Set(selectedShifts.map((s) => s.roleName))] }, status: { not: "cancelled" } },
+        select: { roleName: true, reservedQuestionId: true, reservedAnswers: true },
+      }))
+      const storedAnswers = new Map(Object.entries((current.answers ?? {}) as Record<string, string[]>).filter(([, v]) => Array.isArray(v)))
+      if (answerConditionProblems(selectedShifts, conditions, storedAnswers).length > 0) {
+        return { result: { ok: false as const, reason: "reserved_answer" as const }, outboxIds: [], logs: [] }
+      }
 
       // One click claims the request; a second one, or the cron expiring it, finds nothing to update.
       const claimed = await tx.signupConfirmation.updateMany({

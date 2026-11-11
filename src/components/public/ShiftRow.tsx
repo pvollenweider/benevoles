@@ -7,6 +7,7 @@ import { NEW_TAB_HINT } from "@/lib/embed"
 import { fmt } from "@/lib/gantt-utils"
 import { withdrawCopy } from "@/lib/volunteer-withdraw"
 import { CANCEL_CLOSED_LINK, CANCEL_CLOSED_SHORT } from "@/lib/cancel-deadline"
+import { answerConditionMention } from "@/lib/role-answer"
 
 /** What a selected-shift row shows of a shift. */
 export type ShiftRowShift = {
@@ -19,6 +20,8 @@ export type ShiftRowShift = {
   waitlistEnabled: boolean
   requiresApproval?: boolean
   minAge: number | null
+  /** Reserved to an answer (#962): said here, checked at submit. */
+  reservedAnswer?: { questionLabel: string; answers: string[] } | null
 }
 
 type Props = {
@@ -47,13 +50,15 @@ type Props = {
   onCancel: (trigger: HTMLButtonElement) => void
   /** Selected shift: takes it out of the selection. */
   onRemove: () => void
+  /** #962: why this shift's answer condition is not met, said under the row after validation. */
+  notice?: string
 }
 
 /**
  * A selected or held shift on the public sign-up page, in the mobile summary card and the desktop
  * sidebar.
  */
-export default function ShiftRow({ shift: s, compact = false, registered: isReg, status = "active", cancellable = true, personalHref, newTab = false, selected, onCancel, onRemove }: Props) {
+export default function ShiftRow({ shift: s, compact = false, registered: isReg, status = "active", cancellable = true, personalHref, newTab = false, selected, onCancel, onRemove, notice }: Props) {
   const isWaitlistPending = !isReg && s.status === "full" && (s.waitlistEnabled ?? false)
   const name = s.label && s.label !== s.roleName ? s.label : s.roleName
   return (
@@ -67,8 +72,14 @@ export default function ShiftRow({ shift: s, compact = false, registered: isReg,
         {s.minAge != null && (
           <p className="text-[11px] text-amber-700 mt-0.5 font-medium">{s.minAge} ans minimum</p>
         )}
+        {s.reservedAnswer && (
+          <p className="text-[11px] text-amber-700 mt-0.5 font-medium">{answerConditionMention(s.reservedAnswer.questionLabel, s.reservedAnswer.answers)}</p>
+        )}
         {isWaitlistPending && (
           <p className="text-[11px] text-gray-500 mt-0.5">Complet · liste d&apos;attente si place libérée</p>
+        )}
+        {!isReg && notice && (
+          <p className="text-xs text-red-700 mt-0.5">{notice}</p>
         )}
         {isReg && !cancellable && (
           <p className="text-xs text-gray-700 mt-0.5">

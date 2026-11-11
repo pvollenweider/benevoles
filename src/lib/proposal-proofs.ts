@@ -7,6 +7,7 @@ import type { Model } from "./proposal-eligibility"
 import type { ProposalInput } from "./proposal-input"
 import type { ProposalAssignment } from "./proposal-solver"
 import { memberMayTake } from "./role-reservation"
+import { answerValuesMatch } from "./role-answer"
 import { shiftsClash } from "./shift-overlap"
 import { shiftsTooYoungFor } from "./utils"
 import { evaluateWorkload, minorsApply } from "./workload-policy"
@@ -110,6 +111,7 @@ export function validateAssignments(input: ProposalInput, assignments: readonly 
     if (p.liveShiftIds.includes(s.id) || p.fixedShiftIds.includes(s.id)) v.push({ code: "already_on_shift", ...a })
     if (s.minAge != null && (!p.birthDate || shiftsTooYoungFor(p.birthDate, [{ minAge: s.minAge, date: s.date }]).length > 0)) v.push({ code: "min_age", ...a })
     if (s.reservedTags.length > 0 && !memberMayTake(p.tags, s.reservedTags)) v.push({ code: "reserved", ...a })
+    if (s.answerCondition && !answerValuesMatch(s.answerCondition, p.answers?.[s.answerCondition.questionId])) v.push({ code: "reserved", ...a })
   }
   for (const [shiftId, n] of perShift) {
     const s = shifts.get(shiftId)

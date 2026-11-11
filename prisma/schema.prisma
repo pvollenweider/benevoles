@@ -903,6 +903,15 @@ model Shift {
   // Role reserved to members with one of these tags (#470), checked from the member invitation at
   // sign-up. Shared per role like colorKey. Empty = open to everyone.
   reservedTags    String[] @default([])
+  // Role reserved to volunteers who answered one choice question of the event (#962): the question
+  // (an EventQuestion of the same event, asked to every volunteer, not a follow-up) and the accepted
+  // answers among its choices. Shared per role like colorKey, set on every shift by the role route.
+  // The sign-up compares the stored QuestionAnswer values, never the question label. The question
+  // cannot be deleted, narrowed to some postes or made free text while a poste depends on it; the
+  // API refuses those edits with the poste's name. SetNull is only the database's safety net for a
+  // direct delete, which the app never does.
+  reservedQuestionId String?
+  reservedAnswers    String[] @default([])
   // Role whose shifts may overlap any other shift of the same volunteer (#986), e.g. first aid while
   // serving coffee: two shifts overlap for one person only if neither allows it
   // (src/lib/shift-overlap.ts). Shared per role like colorKey: set on every shift of the role by the
@@ -934,6 +943,7 @@ model Shift {
   updatedAt       DateTime @updatedAt
 
   event         Event            @relation(fields: [eventId], references: [id], onDelete: Cascade)
+  reservedQuestion EventQuestion? @relation(fields: [reservedQuestionId], references: [id], onDelete: SetNull)
   recurrence    ShiftRecurrence? @relation(fields: [recurrenceId], references: [id], onDelete: SetNull)
   sector        Sector?          @relation(fields: [sectorId], references: [id], onDelete: SetNull)
   place         EventPlace?      @relation(fields: [placeId], references: [id], onDelete: SetNull)
@@ -944,6 +954,7 @@ model Shift {
   @@index([recurrenceId])
   @@index([sectorId])
   @@index([placeId])
+  @@index([reservedQuestionId])
 }
 
 // A recurring permanence (#866): one description (« every Wednesday 14:00–17:00 until June »)
@@ -1416,6 +1427,8 @@ model EventQuestion {
   parent    EventQuestion?   @relation("QuestionFollowUps", fields: [parentId], references: [id], onDelete: SetNull)
   followUps EventQuestion[]  @relation("QuestionFollowUps")
   answers   QuestionAnswer[]
+  // Postes whose access depends on this question's answer (#962).
+  reservedByShifts Shift[]
 
   @@index([eventId, position])
 }

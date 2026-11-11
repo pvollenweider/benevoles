@@ -2,6 +2,7 @@
 // SPDX-License-Identifier: AGPL-3.0-only
 
 import { selfCancelDeadline, type CancelDeadlineSetting } from "./cancel-deadline"
+import type { ReservedAnswerCondition } from "./role-answer"
 import {
   beforeSwapDeadline, isLiveSwapStatus, needsSwapApproval, personSwapCheck, swapCompatibility, swapDeadline, swapRefusalMessage,
   type HeldRegistration, type SwapEndReason, type SwapPerson, type SwapShift, type SwapStatus,
@@ -83,6 +84,9 @@ export type VolunteerSwapInput = {
   requests: ViewRequest[]
   reserved: Map<string, string[]>
   limits: Map<string, number>
+  /** Answer conditions by role (#962), and each person's stored answers by question id. */
+  answerConditions?: Map<string, ReservedAnswerCondition>
+  answers?: Map<string, Map<string, string[]>>
   assignedOnlyRoles: Set<string>
   /** « Jean D. » of the other party of my requests, by volunteer id (rosterDisplayName). */
   names?: Map<string, string | null>
@@ -154,9 +158,9 @@ export function buildVolunteerSwapView(input: VolunteerSwapInput): VolunteerSwap
       if (!swapCompatibility(theirs, mineReg, { assignedOnlyRoles: input.assignedOnlyRoles }).ok) continue
       const d = deadlineOf(r.expiresAt, [theirs.shift, mineReg.shift])
       if (!beforeSwapDeadline(now, d)) continue
-      const rules = { reserved: input.reserved, limits: input.limits }
-      if (!personSwapCheck({ person: meAsPerson, giving: mineReg, receiving: theirs.shift, held: myHeld, ...rules }).ok) continue
-      if (!personSwapCheck({ person: requester, giving: theirs, receiving: mineReg.shift, held: theirHeld, ...rules }).ok) continue
+      const conditionFor = (roleName: string) => input.answerConditions?.get(roleName) ?? null
+      if (!personSwapCheck({ person: meAsPerson, giving: mineReg, receiving: theirs.shift, held: myHeld, reserved: input.reserved, limits: input.limits, answerCondition: conditionFor(theirs.shift.roleName), answers: input.answers?.get(me) }).ok) continue
+      if (!personSwapCheck({ person: requester, giving: theirs, receiving: mineReg.shift, held: theirHeld, reserved: input.reserved, limits: input.limits, answerCondition: conditionFor(mineReg.shift.roleName), answers: input.answers?.get(r.volunteerId) }).ok) continue
       ids.push(mineReg.id)
       deadline = deadline && deadline < d ? deadline : d
     }

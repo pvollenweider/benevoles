@@ -204,6 +204,16 @@ describe("mergeConflicts — overlap, role limit, min age, reserved role", () =>
     })
     expect(mergeConflicts(input, {})).toContainEqual(expect.objectContaining({ kind: "reserved_role", shiftId: "s1" }))
   })
+
+  it("reports a reserved-answer conflict when the merged record lacks an accepted answer (#962)", () => {
+    const shift = { id: "s1", eventId: "e1", roleName: "Navette", label: "Navette", date: new Date("2030-06-01"), startTime: "10:00", endTime: "12:00", minAge: null, maxPerVolunteer: null, reservedTags: [], reservedQuestionId: "q1", reservedAnswers: ["Oui"] }
+    const input = baseInput({
+      shifts: [shift],
+      absorbRegistrations: [{ id: "r2", eventId: "e1", shiftId: "s1", status: "active", checkedInAt: null }],
+    })
+    expect(mergeConflicts(input, {})).toContainEqual(expect.objectContaining({ kind: "reserved_answer", shiftId: "s1" }))
+    expect(mergeConflicts(baseInput({ ...input, keepAnswers: [{ id: "a1", questionId: "q1", eventId: "e1", values: ["Oui"] }] }), {})).not.toContainEqual(expect.objectContaining({ kind: "reserved_answer" }))
+  })
 })
 
 describe("mergeConflicts — answers and invites", () => {

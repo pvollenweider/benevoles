@@ -11,6 +11,7 @@
 import { AVAILABILITY_PERIODS, type AvailabilityPeriod } from "./availability"
 import { clockTime, crossesMidnight, toMin, toMinEnd } from "./gantt-utils"
 import { memberMayTake } from "./role-reservation"
+import { answerValuesMatch, type ReservedAnswerCondition } from "./role-answer"
 import { shiftsTooYoungFor } from "./utils"
 import { shiftsClash } from "./shift-overlap"
 import { declinedShiftsOf, shiftDeclineReason, type ShiftDeclineRef } from "./shift-declines"
@@ -36,6 +37,8 @@ export type EventShiftRef = { id: string; roleName: string; label: string; date:
 
 /** An underfilled shift the organizer picked: places left, and the tags its role is reserved to (#470). */
 export type OpenShift = EventShiftRef & { placesLeft: number; reservedTags?: string[]
+  /** The poste's answer condition (#962): a member whose stored answer misses it is not offered the shift. */
+  answerCondition?: ReservedAnswerCondition | null
   /** Shift.minAge (#869): a member known to be younger on the shift's day is not offered it. */
   minAge?: number | null
   /** « sous le minimum (2) », « minimum atteint » (#949), shown to the organizer, never in the email; null without a minimum. */
@@ -54,6 +57,8 @@ export type PoolMember = {
   availabilityNote?: string | null
   /** "YYYY-MM-DD" when known; unknown means the sign-up form will ask it, as for anyone. */
   birthDate?: string | null
+  /** Their stored answers on this event, by question id (#962). */
+  answers?: Record<string, string[]>
 }
 
 /** A live registration (active, requested, waiting or offered) of a member on this event. */
@@ -236,6 +241,7 @@ export function findCandidates(input: {
       const availability = availabilityFit(member, shift)
       if (regs.some((r) => r.shiftId === shift.id)) return { shiftId: shift.id, status: "registered", availability }
       if (!memberMayTake(member.tags, shift.reservedTags ?? [])) return { shiftId: shift.id, status: "reserved", availability }
+      if (shift.answerCondition && !answerValuesMatch(shift.answerCondition, member.answers?.[shift.answerCondition.questionId])) return { shiftId: shift.id, status: "reserved", availability }
       if (member.birthDate && shiftsTooYoungFor(member.birthDate, [{ minAge: shift.minAge ?? null, date: shift.date }]).length > 0) {
         return { shiftId: shift.id, status: "too_young", availability }
       }
@@ -264,7 +270,10 @@ export function findCandidates(input: {
       .map((r) => eventShifts.get(r.shiftId))
       .filter((s): s is EventShiftRef => !!s)
       .sort((a, b) => shiftInterval(a).start - shiftInterval(b).start)
-    const offersReserved = offer.some((id) => (input.shifts.find((s) => s.id === id)?.reservedTags ?? []).length > 0)
+    const offersReserved = offer.some((id) => {
+      const shift = input.shifts.find((s) => s.id === id)
+      return (shift?.reservedTags ?? []).length > 0 || !!shift?.answerCondition
+    })
     candidates.push({
       member,
       offer,

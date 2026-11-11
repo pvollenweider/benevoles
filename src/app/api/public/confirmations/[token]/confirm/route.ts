@@ -24,6 +24,9 @@ export async function POST(req: Request, { params }: { params: Promise<{ token: 
     return NextResponse.json({ ok: true, already: result.already, counts: result.counts })
   }
   if (result.reason === "unavailable") return orgUnavailableResponse()
+  if (result.reason === "reserved_answer") {
+    return NextResponse.json({ error: "Ce poste est réservé aux personnes qui ont répondu à une question de l'inscription. Modifie ta réponse ou choisis un autre créneau, puis refais une demande.", code: "reserved_answer" }, { status: 409 })
+  }
   const message = result.reason === "invalid"
     ? "Ce lien n'est pas valable. Refais une demande depuis la page de l'événement."
     : result.reason === "expired"

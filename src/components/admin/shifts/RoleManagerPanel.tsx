@@ -10,6 +10,7 @@ import { requestJson } from "@/lib/use-submit"
 import { getRoleAccent } from "@/lib/roles"
 import { roleLimits } from "@/lib/role-limit"
 import { reservedRoles } from "@/lib/role-reservation"
+import { answerConditionQuestions, reservedAnswerConditionOf } from "@/lib/role-answer"
 import { roleAssignedOnly } from "@/lib/role-assignment"
 import { roleOverlapAllowed } from "@/lib/shift-overlap"
 import { applyRoleOrder, moveItem, renameRole } from "@/lib/shifts-admin"
@@ -48,10 +49,20 @@ function PosteRows({ render, group }: { render: (group: SectorGroup) => React.Re
  * row button that opened it, or to the panel's heading when that row is gone; never to <body>.
  */
 
+/** An active event question as « Gérer les postes » reads it (#962). */
+export type RoleManagerQuestion = {
+  id: string
+  label: string
+  type: string
+  options: string[]
+  parentId: string | null
+  displayScope: string
+}
+
 export default function RoleManagerPanel({
   open, panelId, eventId, shifts, setShifts, roles, setRoles, onClose, onRequestClose, onAnnounce,
   onRequestDelete, onDeletingChange, onDeleteError, onRoleDeleted,
-  sectorsState = null, setSectorsState, onConfirmDone, onAddPoste, mealOnTheGoShown = false,
+  sectorsState = null, setSectorsState, onConfirmDone, onAddPoste, mealOnTheGoShown = false, questions = [],
 }: {
   open:             boolean
   /** Id of the panel's root, which « Gérer les postes » controls (`aria-controls`). */
@@ -82,6 +93,8 @@ export default function RoleManagerPanel({
   onAddPoste?:      (sector: { id: string; name: string }, opener: () => HTMLElement | null | undefined) => void
   /** « Repas sur le pouce possible » (#1171, lot 2): only where the workload protection can be used. */
   mealOnTheGoShown?: boolean
+  /** The event's active questions (#962): the « Accès » editor offers the choice ones asked to all. */
+  questions?: RoleManagerQuestion[]
 }) {
   const [dragRoleIdx, setDragRoleIdx]     = useState<number | null>(null)
   const [savingOrder, setSavingOrder]     = useState(false)
@@ -102,6 +115,9 @@ export default function RoleManagerPanel({
   const [reserveValue, setReserveValue] = useState("")
   // « Attribué par l'organisation uniquement » (#1145), in the same editor: kept like the typed tags.
   const [assignedOnlyValue, setAssignedOnlyValue] = useState(false)
+  // Answer condition (#962): the chosen question and its accepted answers, kept like the tags.
+  const [reserveQuestionId, setReserveQuestionId] = useState("")
+  const [reserveAnswers, setReserveAnswers] = useState<string[]>([])
   const reserveBtnRefs = useRef(new Map<string, HTMLButtonElement>())
   // « Cumulable avec un autre créneau » (#986): the inline editor, like the limit's.
   const [overlapRole, setOverlapRole] = useState<string | null>(null)
@@ -308,11 +324,17 @@ export default function RoleManagerPanel({
     setReserveRole(reserveRole === role ? null : role)
     setReserveValue(reservedTagsOf(role).join(", "))
     setAssignedOnlyValue(assignedOnlyOf(role))
+    const condition = reservedAnswerConditionOf(shifts, role)
+    setReserveQuestionId(condition?.questionId ?? "")
+    setReserveAnswers(condition?.answers ?? [])
   }
 
   function assignedOnlyOf(role: string): boolean {
     return roleAssignedOnly(shifts, role)
   }
+
+  /** The active questions the « Accès » editor can use (#962): choice questions asked to everyone. */
+  const conditionQuestions = answerConditionQuestions(questions)
 
   function overlapAllowedOf(role: string): boolean {
     return roleOverlapAllowed(shifts, role)
@@ -434,6 +456,8 @@ export default function RoleManagerPanel({
           const limit = roleLimitOf(role)
           const reservedTags = reservedTagsOf(role)
           const assignedOnly = assignedOnlyOf(role)
+          const answerCondition = reservedAnswerConditionOf(shifts, role)
+          const answerQuestion = conditionQuestions.find((q) => q.id === answerCondition?.questionId)
           const cumulable = overlapAllowedOf(role)
           const meal = posteMealOnTheGo(shifts, role)
           const mealLabel = posteMealOnTheGoLabel(meal, role)
@@ -547,11 +571,11 @@ export default function RoleManagerPanel({
                     aria-expanded={reserveRole === role}
                     aria-controls={reserveRole === role ? `reserve-form-${i}` : undefined}
                     // Assigned by the organisation only (#1145) wins over tags still stored.
-                    aria-label={assignedOnly ? `Accès : par l'organisation uniquement, poste « ${role} »` : reservedTags.length === 0 ? `Accès : tous, poste « ${role} »` : `Accès : ${reservedTags.join(", ")}, poste « ${role} » réservé`}
+                    aria-label={assignedOnly ? `Accès : par l'organisation uniquement, poste « ${role} »` : answerCondition ? `Accès : réservé aux réponses ${answerCondition.answers.join(" ou ")} à « ${answerQuestion?.label ?? "une question"} », poste « ${role} »` : reservedTags.length === 0 ? `Accès : tous, poste « ${role} »` : `Accès : ${reservedTags.join(", ")}, poste « ${role} » réservé`}
                     className="text-xs text-gray-600 hover:text-blue-600 disabled:opacity-50 text-left min-w-0 [overflow-wrap:anywhere]"
                   >
                     {/* A long list of tags wraps, whole (#606). */}
-                    {assignedOnly ? "Accès : par l'organisation" : reservedTags.length === 0 ? "Accès : tous" : `Accès : ${reservedTags.join(", ")}`}
+                    {assignedOnly ? "Accès : par l'organisation" : answerCondition ? "Accès : réponse" : reservedTags.length === 0 ? "Accès : tous" : `Accès : ${reservedTags.join(", ")}`}
                   </button>
                   <button
                     ref={(el) => setRoleButton(overlapBtnRefs.current, role, el)}
@@ -630,6 +654,13 @@ export default function RoleManagerPanel({
                 onValueChange={setReserveValue}
                 assignedOnlyValue={assignedOnlyValue}
                 onAssignedOnlyChange={setAssignedOnlyValue}
+                questions={conditionQuestions}
+                reservedQuestionId={answerCondition?.questionId ?? null}
+                reservedAnswers={answerCondition?.answers ?? []}
+                questionIdValue={reserveQuestionId}
+                onQuestionIdChange={(id) => { setReserveQuestionId(id); setReserveAnswers([]) }}
+                acceptedAnswersValue={reserveAnswers}
+                onAcceptedAnswersChange={setReserveAnswers}
                 busyRole={roleActionBusy}
                 onBusyRoleChange={setRoleActionBusy}
                 onActionError={setRoleActionError}

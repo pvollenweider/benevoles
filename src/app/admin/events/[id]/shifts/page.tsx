@@ -36,6 +36,12 @@ export default async function ShiftsPage({ params, searchParams }: { params: Pro
         include: { registrations: { where: { status: { in: ["active", "unconfirmed"] } }, select: { id: true, status: true } } },
         orderBy: [{ date: "asc" }, { displayOrder: "asc" }, { startTime: "asc" }],
       },
+      // The condition of a poste's access (#962) is picked among the event's choice questions.
+      questions: {
+        where: { archivedAt: null },
+        orderBy: { position: "asc" },
+        select: { id: true, label: true, type: true, options: true, parentId: true, displayScope: true },
+      },
     },
   })
 
@@ -85,6 +91,7 @@ export default async function ShiftsPage({ params, searchParams }: { params: Pro
         mealOnTheGoShown={mealOnTheGoShown}
         initialPlaces={mealOnTheGoShown ? event.places.map((p) => ({ ...p, archivedAt: p.archivedAt?.toISOString() ?? null })) : null}
         initialRecurrences={event.shiftRecurrences.map((r) => ({ ...r, fromDate: r.fromDate.toISOString().slice(0, 10), untilDate: r.untilDate.toISOString().slice(0, 10) }))}
+        questions={event.questions}
         initialShifts={event.shifts.map(({ registrations, ...s }) => ({
           ...s,
           date: s.date.toISOString().split("T")[0],

@@ -23,7 +23,7 @@ import ShiftRecurrenceForm from "./ShiftRecurrenceForm"
 import RecurrenceList from "./RecurrenceList"
 import type { HolidayCalendar } from "@/lib/shift-recurrence"
 import ShiftEditor, { type ShiftFormValues } from "./shifts/ShiftEditor"
-import RoleManagerPanel from "./shifts/RoleManagerPanel"
+import RoleManagerPanel, { type RoleManagerQuestion } from "./shifts/RoleManagerPanel"
 import type { AdminRecurrence, RawShift } from "./shifts/types"
 import {
   activeShiftsByDay,
@@ -50,7 +50,7 @@ type Show = { name: string; date: string; startTime: string; endTime: string }
 
 export default function ShiftsManager({
   eventId, eventStartDate, eventEndDate, initialShifts, showSchedule = [], defaultHolidays = "none", initialRecurrences = [], today = "",
-  initialSectors = null, mealOnTheGoShown = false, initialPlaces = null,
+  initialSectors = null, mealOnTheGoShown = false, initialPlaces = null, questions = [],
 }: {
   eventId:        string
   eventStartDate: string
@@ -69,6 +69,8 @@ export default function ShiftsManager({
   mealOnTheGoShown?: boolean
   /** Places of the event (#1171, lot 2): null where the workload protection cannot be used (no section, no field). */
   initialPlaces?: AdminPlace[] | null
+  /** The event's active questions (#962), for a poste's answer condition. */
+  questions?: RoleManagerQuestion[]
 }) {
   const formRef   = useRef<HTMLDivElement>(null)
   const dates     = eventDates(eventStartDate, eventEndDate)
@@ -494,6 +496,7 @@ export default function ShiftsManager({
         onConfirmDone={() => setPendingDelete(null)}
         onAddPoste={(sector, opener) => openForm(singleDay ? { date: dates[0] } : {}, null, { sector, opener })}
         mealOnTheGoShown={mealOnTheGoShown}
+        questions={questions}
       />
 
       {/* Quick-add / edit form */}

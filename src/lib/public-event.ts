@@ -9,6 +9,7 @@ import { ORG_LOGO_SELECT, orgLogoOf } from "@/lib/org-logo"
 import { publicShifts } from "@/lib/role-assignment"
 import { workloadModeOf } from "@/lib/workload-view"
 import { shiftHasEnded } from "@/lib/shift-ended"
+import { reservedAnswerConditions } from "@/lib/role-answer"
 
 /**
  * What volunteers see of an event on its public page. Shared by the public API and the admin
@@ -47,6 +48,9 @@ export function toPublicEvent(event: PublicEventRow, now: Date = new Date()) {
   const eventPoint = coordinatesOf(event)
   // Roles assigned by the organisation only (#1145) are left out here, so of the page, its API, the
   // group links, the embeddable page and the preview alike: nothing counts or names them.
+  // Answer conditions (#962), shared by a poste's shifts: said on every one of them, never hidden.
+  const answerConditions = reservedAnswerConditions(event.shifts)
+  const questionById = new Map((event.questions ?? []).map((q) => [q.id, q]))
   const shifts = publicShifts(event.shifts).map((shift) => {
     // Meeting point (#191): the shift's whole pair, else the event's, never half of each.
     const point = coordinatesOf(shift) ?? eventPoint
@@ -86,6 +90,12 @@ export function toPublicEvent(event: PublicEventRow, now: Date = new Date()) {
     overlapAllowed: shift.overlapAllowed,
     // Reserved to some members (#470): the public page says so, never which tags.
     reserved: (shift.reservedTags ?? []).length > 0,
+    // Reserved to an answer (#962): the condition is public, the page says it and the sign-up checks it.
+    reservedAnswer: (() => {
+      const condition = answerConditions.get(shift.roleName)
+      if (!condition) return null
+      return { questionId: condition.questionId, questionLabel: questionById.get(condition.questionId)?.label ?? "Question de l'inscription", answers: condition.answers }
+    })(),
     }
   })
 

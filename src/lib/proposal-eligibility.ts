@@ -6,6 +6,7 @@ import { shiftEndsAt } from "./cancel-deadline"
 import { unionLength } from "./interval-union"
 import { categoryOf, type ProposalInput, type ProposalPerson, type ProposalShift } from "./proposal-input"
 import { memberMayTake } from "./role-reservation"
+import { answerValuesMatch } from "./role-answer"
 import { shiftsClash } from "./shift-overlap"
 import { shiftsTooYoungFor } from "./utils"
 import { dutyInterval, evaluateWorkload, minorsApply, serviceDayOf, type ActivePolicy, type DutyShift, type WorkloadPerson, type WorkloadRule } from "./workload-policy"
@@ -207,6 +208,7 @@ export function startModel(input: ProposalInput): Model {
       if (shiftsTooYoungFor(p.birthDate, [{ minAge: s.minAge, date: s.date }]).length > 0) return { code: "min_age" }
     }
     if (s.reservedTags.length > 0 && !memberMayTake(p.tags, s.reservedTags)) return { code: "reserved" }
+    if (s.answerCondition && !answerValuesMatch(s.answerCondition, p.answers?.[s.answerCondition.questionId])) return { code: "reserved" }
     if (s.maxPerVolunteer != null && p.liveShiftIds.filter((id) => shiftById.get(id)?.roleName === s.roleName).length >= s.maxPerVolunteer) return { code: "role_limit" }
     const against = p.fixedShiftIds.find((id) => clash(id, s.id))
     if (against) return { code: "overlap", withShiftId: against }

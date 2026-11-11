@@ -9,6 +9,7 @@ import { requestJson } from "@/lib/use-submit"
 import { COLOR_OPTIONS } from "@/lib/roles"
 import { parseTagList } from "@/lib/role-reservation"
 import { ASSIGNED_ONLY_HELP } from "@/lib/role-assignment"
+import { answerConditionChoices, type AnswerConditionQuestion } from "@/lib/role-answer"
 import type { RawShift } from "./types"
 import { NO_SECTOR_LABEL, NO_SECTOR_OPTION } from "@/lib/sectors"
 import { mealOnTheGoAnnouncement, type PosteMealOnTheGo } from "@/lib/meal-on-the-go"
@@ -21,8 +22,9 @@ import { mealOnTheGoAnnouncement, type PosteMealOnTheGo } from "@/lib/meal-on-th
 type SetShifts = React.Dispatch<React.SetStateAction<RawShift[]>>
 
 /** Announced once a role's « Accès » is saved (#470, #1145). */
-export function accessAnnouncement(role: string, assignedOnly: boolean, tags: string[], dropped = 0): string {
+export function accessAnnouncement(role: string, assignedOnly: boolean, tags: string[], dropped = 0, condition?: { label: string; answers: string[] } | null): string {
   if (assignedOnly) return `Poste « ${role} » : attribué par l'organisation uniquement.`
+  if (condition) return `Poste « ${role} » : réservé aux personnes qui répondent ${condition.answers.join(" ou ")} à « ${condition.label} ».`
   if (tags.length === 0) return `Poste « ${role} » : ouvert à tous.`
   return `Poste « ${role} » : réservé aux membres avec l'étiquette ${tags.join(" ou ")}.`
     + (dropped > 0 ? ` ${dropped} étiquette${dropped > 1 ? "s" : ""} ignorée${dropped > 1 ? "s" : ""} (doublons, ou 10 au maximum).` : "")
@@ -30,6 +32,7 @@ export function accessAnnouncement(role: string, assignedOnly: boolean, tags: st
 
 export function RoleReserveForm({
   eventId, autoFocus = true, role, index, reservedTags, assignedOnly, value, onValueChange, assignedOnlyValue, onAssignedOnlyChange, busyRole, onBusyRoleChange, onActionError, onClose, setShifts, onAnnounce,
+  questions = [], reservedQuestionId = null, reservedAnswers = [], questionIdValue, onQuestionIdChange, acceptedAnswersValue, onAcceptedAnswersChange,
 }: {
   eventId:          string
   /** Focus the first control on mount; false when the panel is reopened with this editor still open. */
@@ -45,6 +48,16 @@ export function RoleReserveForm({
   /** The checkbox, kept by the panel while it is closed, like the typed tags. */
   assignedOnlyValue: boolean
   onAssignedOnlyChange: (value: boolean) => void
+  /** The choice questions asked to every volunteer (#962). */
+  questions?:       AnswerConditionQuestion[]
+  /** The role's saved answer condition. */
+  reservedQuestionId?: string | null
+  reservedAnswers?: string[]
+  /** The selected question and accepted answers, kept while the editor is closed. */
+  questionIdValue?: string
+  onQuestionIdChange?: (id: string) => void
+  acceptedAnswersValue?: string[]
+  onAcceptedAnswersChange?: (answers: string[]) => void
   /** The role an action is running on, if any: a save waits for it. */
   busyRole:         string | null
   onBusyRoleChange: (role: string | null) => void
@@ -59,17 +72,27 @@ export function RoleReserveForm({
 
   // Assigned by the organisation only (#1145) leaves the tags as they are: they apply again once
   // the option is removed. Otherwise the tags typed, [] opening the role to everyone.
-  async function saveReserve(role: string, nextAssignedOnly: boolean, tags: string[]) {
+  const questionId = questionIdValue ?? reservedQuestionId ?? ""
+  const accepted = acceptedAnswersValue ?? reservedAnswers
+  const question = questions.find((q) => q.id === questionId)
+  const choices = question ? answerConditionChoices(question) : []
+
+  async function saveReserve(role: string, nextAssignedOnly: boolean, tags: string[], nextQuestionId: string | null, nextAnswers: string[]) {
     if (busyRole) return
+    if (!nextAssignedOnly && nextQuestionId && nextAnswers.length === 0) {
+      onActionError("Choisissez au moins une réponse acceptée pour la condition d'accès.")
+      return
+    }
     const tagsChanged = !nextAssignedOnly && tags.join("|") !== reservedTags.join("|")
-    if (nextAssignedOnly === assignedOnly && (nextAssignedOnly || !tagsChanged)) {
+    const conditionChanged = !nextAssignedOnly && (nextQuestionId !== reservedQuestionId || nextAnswers.join("|") !== reservedAnswers.join("|"))
+    if (nextAssignedOnly === assignedOnly && (nextAssignedOnly || (!tagsChanged && !conditionChanged))) {
       onClose(role)
       onAnnounce(`Poste « ${role} » : aucune modification.`)
       return
     }
     onActionError(null)
     onBusyRoleChange(role)
-    const body = nextAssignedOnly ? { assignedOnly: true } : { assignedOnly: false, reservedTags: tags }
+    const body = nextAssignedOnly ? { assignedOnly: true } : { assignedOnly: false, reservedTags: tags, reservedQuestionId: nextQuestionId, reservedAnswers: nextQuestionId ? nextAnswers : [] }
     const outcome = await requestJson(() => fetch(`/api/admin/events/${eventId}/roles/${encodeURIComponent(role)}`, {
       method: "PATCH",
       headers: { "Content-Type": "application/json" },
@@ -80,17 +103,17 @@ export function RoleReserveForm({
       onActionError(outcome.error)
       return
     }
-    setShifts(prev => prev.map(s => s.roleName === role ? { ...s, assignedOnly: nextAssignedOnly, ...(nextAssignedOnly ? {} : { reservedTags: tags }) } : s))
+    setShifts(prev => prev.map(s => s.roleName === role ? { ...s, assignedOnly: nextAssignedOnly, ...(nextAssignedOnly ? {} : { reservedTags: tags, reservedQuestionId: nextQuestionId, reservedAnswers: nextQuestionId ? nextAnswers : [] }) } : s))
     onClose(role)
     const typed = value.split(/[,;]/).map((t) => t.trim()).filter(Boolean).length
-    onAnnounce(accessAnnouncement(role, nextAssignedOnly, tags, nextAssignedOnly || tags.length === 0 ? 0 : Math.max(0, typed - tags.length)))
+    onAnnounce(accessAnnouncement(role, nextAssignedOnly, tags, nextAssignedOnly || tags.length === 0 ? 0 : Math.max(0, typed - tags.length), nextAssignedOnly || !nextQuestionId ? null : { label: questions.find((q) => q.id === nextQuestionId)?.label ?? "une question", answers: nextAnswers }))
   }
 
   return (
     <form
       id={`reserve-form-${i}`}
       noValidate
-      onSubmit={(e) => { e.preventDefault(); saveReserve(role, assignedOnlyValue, parseTagList(value)) }}
+      onSubmit={(e) => { e.preventDefault(); saveReserve(role, assignedOnlyValue, parseTagList(value), questionId || null, accepted) }}
       // Escape waits for a running save, whose success closes the form and moves focus itself.
       onKeyDown={(e) => { if (e.key === "Escape") { e.stopPropagation(); if (!isBusy) onClose(role) } }}
       className="flex flex-wrap items-end gap-2 px-3 py-2.5 mt-1 rounded-xl border border-blue-100 bg-blue-50/50"
@@ -123,12 +146,49 @@ export function RoleReserveForm({
           />
         </div>
       )}
+      {!assignedOnlyValue && (
+        <div className="basis-full rounded-lg border border-blue-100 bg-white/70 p-2">
+          <label htmlFor={`reserve-question-${i}`} className="block text-xs font-medium text-gray-700 mb-1">Condition d&apos;accès (facultatif) : question dont la réponse réserve le poste « {role} »</label>
+          <select
+            id={`reserve-question-${i}`}
+            value={questionId}
+            onChange={(e) => onQuestionIdChange?.(e.target.value)}
+            aria-describedby={`reserve-question-help-${i}`}
+            className="input w-full py-1 text-sm"
+          >
+            <option value="">Aucune condition</option>
+            {questions.map((q) => <option key={q.id} value={q.id}>{q.label}</option>)}
+          </select>
+          {question && (
+            <fieldset className="mt-2">
+              <legend className="text-xs font-medium text-gray-700">Réponses acceptées (au moins une)</legend>
+              <div className="mt-1 flex flex-wrap gap-x-4 gap-y-1">
+                {choices.map((choice) => (
+                  <label key={choice} className="flex min-h-6 items-center gap-1.5 text-xs text-gray-700">
+                    <input
+                      type="checkbox"
+                      checked={accepted.includes(choice)}
+                      onChange={(e) => onAcceptedAnswersChange?.(e.target.checked ? [...accepted, choice] : accepted.filter((a) => a !== choice))}
+                      className="h-4 w-4"
+                    />
+                    {choice}
+                  </label>
+                ))}
+              </div>
+            </fieldset>
+          )}
+          <p id={`reserve-question-help-${i}`} className="mt-1 text-xs text-gray-600">
+            Seules les questions à choix posées à tous les bénévoles sont proposées : le bénévole doit voir la question avant de choisir le poste. Le créneau affiche « Réponse requise : question, réponse » ; l&apos;inscription vérifie la réponse enregistrée, et vous pouvez toujours ajouter quelqu&apos;un à la main.
+          </p>
+          {questions.length === 0 && <p className="mt-1 text-xs text-gray-700">Aucune question à choix posée à tous les bénévoles pour l&apos;instant : créez-en une dans « Questions aux bénévoles ».</p>}
+        </div>
+      )}
       <button type="submit" aria-disabled={isBusy || undefined} className={`text-xs text-blue-700 font-medium hover:text-blue-900 py-1.5 ${isBusy ? "opacity-60 cursor-wait" : ""}`}>
         {isBusy ? "Enregistrement…" : "Enregistrer"}
       </button>
       {/* From the saved setting, never the draft: the button does not come and go under the hand. */}
-      {(reservedTags.length > 0 || assignedOnly) && (
-        <button type="button" onClick={() => saveReserve(role, false, [])} aria-disabled={isBusy || undefined} className={`text-xs text-gray-700 hover:text-gray-900 py-1.5 ${isBusy ? "opacity-60 cursor-wait" : ""}`}>
+      {(reservedTags.length > 0 || assignedOnly || reservedQuestionId) && (
+        <button type="button" onClick={() => { onQuestionIdChange?.(""); onAcceptedAnswersChange?.([]); saveReserve(role, false, [], null, []) }} aria-disabled={isBusy || undefined} className={`text-xs text-gray-700 hover:text-gray-900 py-1.5 ${isBusy ? "opacity-60 cursor-wait" : ""}`}>
           Ouvrir à tous
         </button>
       )}

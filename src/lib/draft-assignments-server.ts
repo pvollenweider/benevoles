@@ -17,6 +17,7 @@ import { queueAddedByOrganizer } from "./notifications/added-by-organizer"
 import type { OrgScopedPrisma } from "./prisma-org"
 import { LIVE_STATUSES, OCCUPYING_STATUSES, lockShifts, type Tx } from "./registration-capacity"
 import { reservedRoles } from "./role-reservation"
+import { reservedAnswerConditions } from "./role-answer"
 import { roleLimits } from "./role-limit"
 import { orgTimeZone } from "./time-zone"
 import { registrationToken } from "./token-vault"
@@ -56,7 +57,7 @@ const DRAFT_SELECT = { id: true, eventId: true, shiftId: true, volunteerId: true
 
 const SHIFT_SELECT = {
   id: true, eventId: true, roleName: true, label: true, date: true, startTime: true, endTime: true, status: true, capacity: true, maxPerVolunteer: true,
-  overlapAllowed: true, assignedOnly: true, requiresApproval: true, minAge: true, reservedTags: true, locationDetails: true, latitude: true, longitude: true,
+  overlapAllowed: true, assignedOnly: true, requiresApproval: true, minAge: true, reservedTags: true, reservedQuestionId: true, reservedAnswers: true, locationDetails: true, latitude: true, longitude: true,
   sectorId: true, mealOnTheGo: true, placeId: true,
 } as const
 
@@ -341,18 +342,24 @@ export async function publishDrafts(db: Db, input: PublishInput): Promise<Publis
       const occupiedOf = new Map(occupied.map((o) => [o.shiftId, o._count._all]))
       const shifts = new Map<string, ShiftRow & { occupied: number }>(shiftRows.map((s) => [s.id, { ...s, occupied: occupiedOf.get(s.id) ?? 0 }]))
       // Role-level rules (#466, #470) come from every live shift of the event's roles concerned.
-      const roleRows = await tx.shift.findMany({ where: { eventId, status: { not: "cancelled" }, roleName: { in: [...new Set(shiftRows.map((s) => s.roleName))] } }, select: { roleName: true, reservedTags: true, maxPerVolunteer: true } })
+      const roleRows = await tx.shift.findMany({ where: { eventId, status: { not: "cancelled" }, roleName: { in: [...new Set(shiftRows.map((s) => s.roleName))] } }, select: { roleName: true, reservedTags: true, reservedQuestionId: true, reservedAnswers: true, maxPerVolunteer: true } })
 
       const people = await tx.volunteer.findMany({ where: { id: { in: volunteerIds } }, select: { id: true, firstName: true, lastName: true, email: true, organizationId: true, active: true, erasedAt: true, mergedIntoId: true, birthDate: true, tags: true } })
       const held = await tx.registration.findMany({ where: { eventId, volunteerId: { in: volunteerIds }, status: { in: [...LIVE_STATUSES] } }, select: { id: true, volunteerId: true, status: true, shift: { select: SHIFT_SELECT } } })
       const answers = await readAnswersForFit(tx, eventId, volunteerIds)
+      const answerConditions = reservedAnswerConditions(roleRows)
+      const questionAnswers = answerConditions.size > 0
+        ? await tx.questionAnswer.findMany({ where: { eventId, volunteerId: { in: volunteerIds } }, select: { volunteerId: true, questionId: true, values: true } })
+        : []
+      const answersOf = new Map<string, Record<string, string[]>>()
+      for (const a of questionAnswers) answersOf.set(a.volunteerId, { ...(answersOf.get(a.volunteerId) ?? {}), [a.questionId]: a.values })
       const heldOf = new Map<string, BatchHeld[]>()
       for (const h of held as unknown as { id: string; volunteerId: string; status: string; shift: ShiftRow }[]) heldOf.set(h.volunteerId, [...(heldOf.get(h.volunteerId) ?? []), { id: h.id, status: h.status, shift: { ...h.shift, occupied: 0 } }])
-      const personMap = new Map<string, BatchPerson>(people.map((p) => [p.id, { ...p, held: heldOf.get(p.id) ?? [], answer: answers.get(p.id) ?? null }]))
+      const personMap = new Map<string, BatchPerson>(people.map((p) => [p.id, { ...p, held: heldOf.get(p.id) ?? [], answer: answers.get(p.id) ?? null, answers: answersOf.get(p.id) ?? {} }]))
 
       const verdict = judgeDraftBatch({
         eventId, organizationId: event.organizationId, timeZone, availability: { timeZone: availability.timeZone, dates: availability.dates }, now,
-        drafts, shifts, people: personMap, reserved: reservedRoles(roleRows), limits: roleLimits(roleRows),
+        drafts, shifts, people: personMap, reserved: reservedRoles(roleRows), answerConditions, limits: roleLimits(roleRows),
       })
       const problems = [...verdict.problems]
 

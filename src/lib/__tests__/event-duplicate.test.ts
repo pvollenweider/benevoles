@@ -9,6 +9,7 @@ const shift: DuplicableShift & { id: string; eventId: string; status: string } =
   roleName: "Bar", label: "Bar soir", description: "Service", date: new Date("2026-07-04T00:00:00Z"),
   startTime: "18:00", endTime: "23:00", capacity: 4, locationDetails: "Cantine", contactName: "Léa", contactPhone: "079 1",
   instructions: "Gilet fourni", latitude: 46.18, longitude: 6.12, displayOrder: 2, internalNotes: "note", minAge: 18, waitlistEnabled: true, requiresApproval: true, colorKey: "amber", maxPerVolunteer: 2, reservedTags: ["sécurité"],
+  reservedQuestionId: "q1", reservedAnswers: ["Oui"],
 }
 const source: DuplicableEvent = {
   title: "Fête", description: "d", location: "Salle", latitude: 46.2, longitude: 6.1, startDate: new Date("2026-07-04T00:00:00Z"), endDate: new Date("2026-07-05T00:00:00Z"),
@@ -18,6 +19,7 @@ const source: DuplicableEvent = {
   showSchedule: [{ name: "Concert", date: "2026-07-04", startTime: "20:00", endTime: "22:00" }],
   shifts: [shift, { ...shift, date: new Date("2026-07-05T00:00:00Z") }],
   pages: [{ slug: "faq", title: "FAQ", content: "x", displayOrder: 0 }],
+  questions: [{ id: "q1", label: "Permis de conduire", type: "yesno", options: [], required: false, position: 0, displayScope: "event" }],
   leaders: [{ roleName: "Bar", name: "Léa", email: "lea@x.ch" }],
 }
 
@@ -25,7 +27,7 @@ const source: DuplicableEvent = {
 describe("copiedShift", () => {
   it("keeps the minimum age, the waitlist setting and the role color, never the identity or the status", () => {
     const copy = copiedShift(shift) as Record<string, unknown>
-    expect(copy).toMatchObject({ minAge: 18, waitlistEnabled: true, requiresApproval: true, colorKey: "amber", maxPerVolunteer: 2, reservedTags: ["sécurité"], status: "open", capacity: 4 })
+    expect(copy).toMatchObject({ minAge: 18, waitlistEnabled: true, requiresApproval: true, colorKey: "amber", maxPerVolunteer: 2, reservedTags: ["sécurité"], reservedQuestionId: "q1", reservedAnswers: ["Oui"], status: "open", capacity: 4 })
     expect(copy).not.toHaveProperty("id")
     expect(copy).not.toHaveProperty("eventId")
   })
@@ -55,6 +57,17 @@ describe("duplicatePlan", () => {
     expect(plan.event.endDate.toISOString()).toBe("2027-07-04T00:00:00.000Z")
     expect(plan.shifts.map((s) => s.date.toISOString().slice(0, 10))).toEqual(["2027-07-03", "2027-07-04"])
     expect(plan.event.showSchedule).toEqual([{ name: "Concert", date: "2027-07-03", startTime: "20:00", endTime: "22:00" }])
+  })
+
+  it("copies the answer condition onto the copy of its question, and drops it with the settings (#962)", () => {
+    const plan = duplicatePlan(source, {})
+    const copiedQuestion = plan.questions.find((q) => q.label === "Permis de conduire")!
+    expect(plan.shifts.map((s) => s.reservedQuestionId)).toEqual([copiedQuestion.id, copiedQuestion.id])
+    expect(plan.shifts[0].reservedAnswers).toEqual(["Oui"])
+    const withoutSettings = duplicatePlan(source, { copy: { settings: false } })
+    expect(withoutSettings.questions).toEqual([])
+    expect(withoutSettings.shifts.map((s) => s.reservedQuestionId)).toEqual([null, null])
+    expect(withoutSettings.shifts.map((s) => s.reservedAnswers)).toEqual([[], []])
   })
 
   it("honours each choice; settings off resets messages and registration settings", () => {

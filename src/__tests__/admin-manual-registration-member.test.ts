@@ -24,6 +24,8 @@ const m = vi.hoisted(() => ({
 
 const shift = () => ({
   id: "s1", eventId: "evt-1", roleName: "Bar", label: "Bar", capacity: 5, registrations: [],
+  // A poste reserved to an answer (#962): the organiser places people by hand anyway, like tags.
+  reservedQuestionId: "q1", reservedAnswers: ["Oui"],
   date: m.shiftDate, startTime: "10:00", endTime: "12:00",
   event: { title: "Festival", organization: { name: "Org A", slug: "org-a", timeZone: "Europe/Zurich" } },
 })
@@ -84,6 +86,14 @@ describe("POST /api/admin/registrations with a chosen member (#914)", () => {
     expect(m.volunteerFindFirst).toHaveBeenCalledWith({ where: { id: "mem-1", organizationId: "org-a" } })
     expect(m.volunteerCreate).not.toHaveBeenCalled()
     expect(m.registrationCreate.mock.calls[0][0].data).toMatchObject({ volunteerId: "mem-1", source: "admin_manual" })
+  })
+
+  it("places a member by hand even when the poste is reserved to another answer (#962)", async () => {
+    m.volunteerFindFirst.mockResolvedValue({ id: "mem-1", firstName: "René", lastName: "Meyer", email: null })
+    const { POST } = await import("@/app/api/admin/registrations/route")
+    const res = await POST(post({ volunteerId: "mem-1" }))
+    expect(res.status).toBe(201)
+    expect(m.registrationCreate).toHaveBeenCalled()
   })
 
   it("refuses a member it cannot find instead of creating a new person", async () => {

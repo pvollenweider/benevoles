@@ -1042,3 +1042,16 @@ SECTOR_LEADERS : READY et publiée, révision 7 ; 282,640 s, une prise narrée. 
 Pour tout le lot : descriptions de 122/120/120 octets UTF-8 ; contrôles de types des outils, TypeScript, ESLint, sons des interactions et 1 303 tests vidéo réussis. Nouvelles narrations continues complètes, une génération par vidéo, frontières corrigées sur les silences et réauditées. Aperçu puis APPLY=1 pour chaque vidéo sur default, cinq fichiers envoyés chacune. Aucun fichier produit, guide ou renders.json modifié ; `doc-img: unchanged`. Aucun push, merge ni message ntfy.
 
 Vérification finale du checkout : un autre processus a avancé la référence partagée `origin/main` à `22945bd8` (#1313) pendant le lot. Les trois rendus publiés sont vérifiés sur `058f35c4`, récupéré au départ et épinglé dans la copie de capture ; ils ne sont pas revalidés sur #1313. Aucun second build réussi, rebase, push ni merge.
+
+## Poste réservé à une réponse (#962), 2026-11-12
+
+L'éditeur « Accès » de « Gérer les postes » gagne une **Condition d'accès (facultatif)**
+(question à choix posée à tous, réponses acceptées) et le créneau public une mention
+« Réponse requise : … ». `shift-eligibility-rules` ouvre réellement cet éditeur (sélecteur
+« Accès : sécurité, poste « Sécurité » réservé » dans `videos/tools/record.ts`) : son image
+montre l'ancienne version, sans le bloc de condition. **Non régénérée dans ce travail**
+(voix et capture longues) ; recorder et narration restent valides, à refilmer au prochain
+passage. Aucune autre vidéo n'ouvre l'éditeur « Accès » ; `sectors` et
+`accessibility-keyboard-display` ne font que traverser « Gérer les postes », et
+`members-invitations` / `volunteer-choose-shifts` montrent les étiquettes, dont l'affichage
+ne change pas.

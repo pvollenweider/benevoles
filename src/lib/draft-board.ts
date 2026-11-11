@@ -8,6 +8,7 @@ import { unionLength } from "./interval-union"
 import { fmtHour } from "./registrations-list"
 import { spokenTimeRange } from "./spoken-time"
 import { judgeDutyChange, workloadRefusalBody, type WorkloadGate } from "./workload-guard"
+import type { ReservedAnswerCondition } from "./role-answer"
 import type { DutyShift, WorkloadPerson } from "./workload-policy"
 
 /**
@@ -40,6 +41,7 @@ export type BoardInput = {
   people: readonly BoardPerson[]
   drafts: readonly BoardDraft[]
   reserved: ReadonlyMap<string, string[]>
+  answerConditions?: ReadonlyMap<string, ReservedAnswerCondition>
   limits: ReadonlyMap<string, number>
 }
 
@@ -164,7 +166,7 @@ export function buildBoard(input: BoardInput): Board {
   const pending = input.drafts
   const verdict = judgeDraftBatch({
     eventId: input.eventId, organizationId: input.organizationId, timeZone: input.timeZone, availability, now: input.now,
-    drafts: pending, shifts: input.shifts, people: new Map(input.people.map((p) => [p.id, p])), reserved: input.reserved, limits: input.limits,
+    drafts: pending, shifts: input.shifts, people: new Map(input.people.map((p) => [p.id, p])), reserved: input.reserved, answerConditions: input.answerConditions, limits: input.limits,
   })
   type Found = { message: string; marker: string }
   const add = (map: Map<string, Found[]>, key: string, p: DraftProblem) => map.set(key, [...(map.get(key) ?? []), { message: p.message, marker: blockingMarker(p.code) }])

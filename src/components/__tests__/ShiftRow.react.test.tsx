@@ -57,6 +57,11 @@ describe("ShiftRow", () => {
     expect(screen.getByRole("button", { name: "Retirer Bar du soir de la sélection" })).toBeInTheDocument()
   })
 
+  it("shows a refused answer condition under the selected shift (#962)", () => {
+    renderRow({ notice: "Ce poste est réservé aux personnes qui répondent Oui à « Permis de conduire »." })
+    expect(screen.getByText("Ce poste est réservé aux personnes qui répondent Oui à « Permis de conduire ».")).toBeInTheDocument()
+  })
+
   it("takes a selected shift out of the selection", () => {
     const { onRemove, onCancel } = renderRow()
     fireEvent.click(screen.getByRole("button", { name: "Retirer Bar de la sélection" }))
@@ -154,5 +159,19 @@ describe("ShiftRow focus return", () => {
     fireEvent.click(screen.getByRole("button", { name: "Annuler" }))
     expect(cancel.isConnected).toBe(true)
     expect(document.activeElement).toBe(cancel)
+  })
+})
+
+describe("ShiftRow, a poste reserved to an answer (#962)", () => {
+  afterEach(cleanup)
+
+  it("says the required answer under the selected shift", () => {
+    renderRow({ shift: shift({ reservedAnswer: { questionLabel: "Permis de conduire", answers: ["Oui"] } }) })
+    expect(screen.getByText("Réponse requise : Permis de conduire, Oui")).toBeInTheDocument()
+  })
+
+  it("says nothing for a shift without a condition", () => {
+    renderRow()
+    expect(screen.queryByText(/Réponse requise/)).not.toBeInTheDocument()
   })
 })
