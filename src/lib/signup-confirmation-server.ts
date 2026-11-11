@@ -21,7 +21,7 @@ import { lockVolunteerRows, lockWorkloadShared, readWorkloadGate, checkDutyChang
 import { planPlacement } from "@/lib/registration-capacity"
 import { orgTimeZone } from "@/lib/time-zone"
 import { ORG_LIFECYCLE_SELECT, orgLinksOpen } from "@/lib/org-lifecycle"
-import { cancelledState, confirmationDeadlineLabel, signupConfirmationDecision, signupConfirmationPageState, type SignupConfirmationPageState } from "@/lib/signup-confirmation"
+import { cancelledState, confirmationDeadlineLabel, confirmationIdentityLines, signupConfirmationDecision, signupConfirmationPageState, type SignupConfirmationPageState } from "@/lib/signup-confirmation"
 import { applySignupRosterChoice } from "@/lib/roster-consent-write"
 import { isKnownMinor, signupNoticeVersion } from "@/lib/shift-roster"
 import { clearShiftDeclines } from "@/lib/shift-decline-clear"
@@ -107,6 +107,7 @@ export type SignupConfirmationView = {
     organizationName: string
     firstShifts: { label: string; roleName: string; date: Date; startTime: string; endTime: string; waitlist: boolean; requiresApproval: boolean }[]
     deadline: string | null
+    identity: string[]
     deadlineLabel: string | null
     counts: { active: number; requested: number; waiting: number } | null
   } | null
@@ -138,6 +139,8 @@ export async function signupConfirmationView(token: string, now: Date = new Date
         .map((id) => byId.get(id))
         .filter((s): s is NonNullable<typeof s> => !!s)
         .map((s) => ({ label: s.label, roleName: s.roleName, date: s.date, startTime: s.startTime, endTime: s.endTime, waitlist: row.waitlistShiftIds.includes(s.id), requiresApproval: s.requiresApproval })),
+      // Only while it waits: once settled, the page no longer repeats personal data.
+      identity: state === "pending" ? confirmationIdentityLines(row) : [],
       deadline: row.confirmedAt || row.cancelledAt ? null : row.expiresAt.toISOString(),
       deadlineLabel: row.confirmedAt || row.cancelledAt ? null : confirmationDeadlineLabel(row.expiresAt, orgTimeZone(row.event.organization)),
       counts: row.confirmedAt

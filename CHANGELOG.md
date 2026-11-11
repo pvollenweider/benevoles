@@ -15,6 +15,10 @@ Format basé sur [Keep a Changelog](https://keepachangelog.com/fr/1.0.0/).
 
 - **Réserver un poste selon une réponse** (#962) : l'éditeur « Accès » de « Gérer les postes » choisit une question à choix posée à tous les bénévoles et les réponses acceptées ; le créneau affiche « Réponse requise : … » et l'inscription vérifie la réponse, y compris depuis « Mes inscriptions », la liste d'attente, les échanges et la confirmation par email.
 
+### Modifié
+
+- La page de confirmation d'une inscription par email affiche le nom et le téléphone que la confirmation enregistrera dans la fiche, et dit quoi faire si la demande ne vient pas de vous.
+
 ## [2.7.0] — 2026-11-10
 
 ### En bref
