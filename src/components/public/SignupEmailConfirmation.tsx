@@ -12,6 +12,8 @@ export type SignupConfirmationDetails = {
   eventSlug: string
   organizationName: string
   firstShifts: { label: string; roleName: string; date: string; startTime: string; endTime: string; waitlist: boolean; requiresApproval: boolean }[]
+  /** « Nom : … », « Téléphone : … » while the request waits; empty otherwise. */
+  identity: string[]
   deadline: string | null
   deadlineLabel: string | null
   counts: { active: number; requested: number; waiting: number } | null
@@ -145,9 +147,18 @@ export default function SignupEmailConfirmation({ token, state: initial, details
     <>
       <h1 className="text-xl font-bold text-gray-900 mb-2">Confirme ton inscription</h1>
       <p className="text-sm text-gray-700 mb-4">
-        {details?.organizationName} a reçu ta demande pour <strong>{details?.eventTitle}</strong>. Ouvre tes places en cliquant sur le bouton : ouvrir ce lien ne confirme rien.
+        {details?.organizationName} a reçu ta demande pour <strong>{details?.eventTitle}</strong>. Confirme tes places avec le bouton ci-dessous : ouvrir ce lien ne confirme rien.
       </p>
       {details && <ShiftList shifts={details.firstShifts} />}
+      {details && details.identity.length > 0 && (
+        <div className="mt-4 text-sm text-gray-700">
+          <p>Ta confirmation enregistre ces coordonnées dans ta fiche :</p>
+          <ul role="list" className="mt-1">
+            {details.identity.map((line) => <li key={line} className="font-medium text-gray-900">{line}</li>)}
+          </ul>
+          <p className="mt-1 text-xs text-gray-600">Ce n&apos;est pas toi qui as fait cette demande ? Ne confirme pas : les places seront libérées à l&apos;échéance.</p>
+        </div>
+      )}
       {details?.deadlineLabel && (
         <p className="bg-amber-50 border border-amber-200 rounded-xl p-4 text-sm text-amber-900 my-4">
           Tes places sont réservées jusqu&apos;au {details.deadlineLabel}. Passé ce délai, elles redeviendront disponibles.

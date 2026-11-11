@@ -14,6 +14,7 @@ const details: SignupConfirmationDetails = {
     { label: "Bar", roleName: "Bar", date: "2026-11-14", startTime: "10:00", endTime: "12:00", waitlist: false, requiresApproval: false },
     { label: "Accueil", roleName: "Accueil", date: "2026-11-15", startTime: "14:00", endTime: "16:00", waitlist: true, requiresApproval: false },
   ],
+  identity: ["Nom : Nadia Berisha", "Téléphone : 079 555 12 34"],
   deadline: "2026-11-11T10:00:00.000Z",
   deadlineLabel: "mercredi 11 novembre à 11:00",
   counts: null,
@@ -21,6 +22,18 @@ const details: SignupConfirmationDetails = {
 
 describe("confirmation page (#1253)", () => {
   afterEach(() => { cleanup(); vi.unstubAllGlobals(); vi.restoreAllMocks() })
+
+  it("shows the name and phone the click will save, and what to do if the request is not theirs", () => {
+    render(<SignupEmailConfirmation token="tok" state="pending" details={details} />)
+    expect(screen.getByText("Nom : Nadia Berisha")).toBeInTheDocument()
+    expect(screen.getByText("Téléphone : 079 555 12 34")).toBeInTheDocument()
+    expect(screen.getByText(/Ne confirme pas/)).toBeInTheDocument()
+  })
+
+  it("says nothing about the person when there is no identity to show", () => {
+    render(<SignupEmailConfirmation token="tok" state="pending" details={{ ...details, identity: [] }} />)
+    expect(screen.queryByText(/Ta confirmation enregistre/)).not.toBeInTheDocument()
+  })
 
   it("shows the shifts and the deadline, and confirms only on the button", async () => {
     const fetchMock = vi.fn().mockResolvedValue({ ok: true, json: async () => ({ ok: true, already: false, counts: { active: 1, requested: 0, waiting: 1 } }) })

@@ -96,6 +96,17 @@ export function signupConfirmationDecision(
   return "pending"
 }
 
+/**
+ * Who the request was made for, shown above the button while it waits (#1253). Confirming writes
+ * this name and phone into the member's profile (the click proves the address), so the person
+ * sees them before clicking: a request typed by someone else with their address is recognisable.
+ */
+export function confirmationIdentityLines(input: { firstName: string; lastName: string; phone: string | null }): string[] {
+  const name = `${input.firstName} ${input.lastName}`.replace(/\s+/g, " ").trim()
+  const phone = input.phone?.trim()
+  return [name ? `Nom : ${name}` : null, phone ? `Téléphone : ${phone}` : null].filter((l): l is string => l !== null)
+}
+
 /** The browser tab title per state (WCAG 2.4.2): set by generateMetadata, then by the page. */
 export const SIGNUP_CONFIRMATION_PAGE_TITLES: Record<SignupConfirmationPageState, string> = {
   pending: "Confirme ton inscription",

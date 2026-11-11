@@ -11,6 +11,10 @@ Format basé sur [Keep a Changelog](https://keepachangelog.com/fr/1.0.0/).
 
 ## [Unreleased]
 
+### Modifié
+
+- La page de confirmation d'une inscription par email affiche le nom et le téléphone que la confirmation enregistrera dans la fiche, et dit quoi faire si la demande ne vient pas de vous.
+
 ## [2.7.0] — 2026-11-10
 
 ### En bref
