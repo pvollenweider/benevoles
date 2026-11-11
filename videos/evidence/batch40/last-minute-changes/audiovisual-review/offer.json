@@ -1,0 +1,54 @@
+{
+  "model": "gemini-3.8-flash",
+  "reviewedAt": "2026-11-11T12:54:12.545Z",
+  "videoSha256": "e9596ba265566802b388fd4f869ca37b43cbaddff29ccc344a67b4f3e50549da",
+  "promptSha256": "d1c3441fbcb7b39363c5765c03105f1db5be827fcf99c1898445761654f50599",
+  "clipSha256": "ea8fb598d7a5e32e626154b9a60cd3e6337c3576f942bd1747365bb2f1513ead",
+  "scene": "offer",
+  "review": {
+    "heardOpening": "Une place proposée n'est pas encore une personne confirmée.",
+    "checkpoints": [
+      {
+        "spokenSeconds": 4,
+        "spoken": "Nicolas doit répondre dans le délai de son offre.",
+        "visibleSeconds": 1,
+        "visible": "Page « Mes inscriptions » affichant l'offre pour le créneau « Accueil du matin » avec le délai de réponse avant réattribution.",
+        "sync": "aligned",
+        "severity": "none"
+      },
+      {
+        "spokenSeconds": 6.8,
+        "spoken": "Ouvrons son lien et acceptons la place dans cet exemple.",
+        "visibleSeconds": 7.8,
+        "visible": "Affichage de la page « Place confirmée ! » sans visualisation du clic sur le bouton d'acceptation.",
+        "sync": "aligned",
+        "severity": "none"
+      },
+      {
+        "spokenSeconds": 9.9,
+        "spoken": "Puis vérifions le statut dans les inscriptions.",
+        "visibleSeconds": 12,
+        "visible": "Affichage de la vue organisateur dans l'onglet « Inscriptions » de l'événement.",
+        "sync": "aligned",
+        "severity": "none"
+      },
+      {
+        "spokenSeconds": 13,
+        "spoken": "Maintenant seulement, sa participation est confirmée.",
+        "visibleSeconds": 13,
+        "visible": "Le créneau « Accueil du matin » venant d'être accepté n'apparaît pas pour Nicolas Peeters (seul « Préparation, Réception du matériel » est listé).",
+        "sync": "missing",
+        "severity": "major"
+      }
+    ],
+    "issues": [
+      "À 00:13, dans la liste des inscriptions de l'événement, le créneau « Accueil du matin » qui vient d'être accepté par Nicolas Peeters n'apparaît pas ; seul son autre créneau (« Préparation, Réception du matériel ») est présent."
+    ],
+    "voice": {
+      "consistent": true,
+      "warm": true,
+      "observation": "Voix féminine naturelle, claire, fluide et bien synchronisée avec le déroulement du commentaire."
+    }
+  },
+  "note": "Automated observation of actual final video audio and images; not a claim of complete human validation"
+}

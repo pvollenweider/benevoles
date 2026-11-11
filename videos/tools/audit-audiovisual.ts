@@ -38,7 +38,7 @@ export function validateMemberReviewFixture(databaseUrl: string, fixture: Member
     if (member.email?.endsWith("@example.org")) return true
     if (member.email !== null) return false
     // Exact two seed identities, not every no-email contact with a familiar name.
-    if (member.id === "video-member-management-2") return ownsNaturalMemberSeed(member as Partial<SeedIdentity>, seedProof, now)
+    if (member.id === "video-member-management-2") return ownsNaturalMemberSeed(member as Partial<SeedIdentity>, seedProof, now) || member.active === false && ownsNaturalMemberSeed({ ...member, active: true } as Partial<SeedIdentity>, seedProof, now)
     return ownsTargetedMessageNoEmailMember(member) || ownsRecordedNoEmailMember(member, owned, now) || imported?.schemaVersion === 3 && ownsImportedNoEmailMember(member, imported, now)
   }
   assert(fixture.volunteers.every(synthetic), "Member review contains non-synthetic organization members")

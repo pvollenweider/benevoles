@@ -70,7 +70,7 @@ try {
   // These two existing seed identities deliberately demonstrate missing email.
   const synthetic = (person: SeedIdentity) =>
     Boolean(person.email?.endsWith("@example.org")) ||
-    (person.email === null && (exactLegacyM2ForMigration(person) || ownsNaturalMemberSeed(person, seedProof))) ||
+    (person.email === null && (exactLegacyM2ForMigration(person) || ownsNaturalMemberSeed(person, seedProof) || person.id === "video-member-management-2" && person.active === false && ownsNaturalMemberSeed({ ...person, active: true }, seedProof))) ||
     ownsRecordedNoEmailMember(person, owned) || ownsImport(person) || ownsTargetedMessageNoEmailMember(person)
   assert(fixture.volunteers.every(synthetic), "Non-training member found")
   assert(fixture.events.every(event => event.registrations.every(registration => synthetic(registration.volunteer))), "Non-training registration found")

@@ -38,9 +38,14 @@ async function main() {
     const zoe = await db.volunteer.findUniqueOrThrow({ where: { id: "video-last-minute-person-2" } })
     const added = await page.request.post(`${base}/api/admin/registrations`, { data: { eventId, shiftId: "video-last-minute-shift-1", firstName: zoe.firstName, lastName: zoe.lastName, email: zoe.email } })
     if (!added.ok() || await db.registration.count({ where: { shiftId: "video-last-minute-shift-1", status: "active" } }) !== 2) throw new Error("Actual manual replacement did not fill the shift")
-    const duplicate = await page.request.post(`${base}/api/admin/registrations`, { data: { eventId, shiftId: "video-last-minute-shift-1", firstName: zoe.firstName, lastName: zoe.lastName, email: zoe.email } })
-    const duplicateBody = await duplicate.json()
-    if (duplicate.status() !== 409 || duplicateBody.error !== "Cette personne est déjà inscrite sur ce créneau." || await db.registration.count({ where: { shiftId: "video-last-minute-shift-1", status: "active" } }) !== 2) throw new Error("Current duplicate sign-up feedback differs (#1057)")
+    let duplicate = await page.request.post(`${base}/api/admin/registrations`, { data: { eventId, shiftId: "video-last-minute-shift-1", firstName: zoe.firstName, lastName: zoe.lastName, email: zoe.email } })
+    let duplicateBody = await duplicate.json()
+    // Main first confirms any placement on a full shift (AUTHZ-15), then checks duplicates.
+    if (duplicate.status() === 409 && duplicateBody.code === "shift_override") {
+      duplicate = await page.request.post(`${base}/api/admin/registrations`, { data: { eventId, shiftId: "video-last-minute-shift-1", firstName: zoe.firstName, lastName: zoe.lastName, email: zoe.email, shiftOverride: duplicateBody.shifts.map((shift: { key: string }) => shift.key) } })
+      duplicateBody = await duplicate.json()
+    }
+    if (duplicate.status() !== 409 || duplicateBody.error !== "Cette personne est déjà inscrite sur ce créneau." || await db.registration.count({ where: { shiftId: "video-last-minute-shift-1", status: "active" } }) !== 2) throw new Error(`Current duplicate sign-up feedback differs (#1057): ${duplicate.status()} ${JSON.stringify(duplicateBody)}`)
     const changed = await page.request.patch(`${base}/api/admin/shifts/video-last-minute-shift-2`, { data: { startTime: "14:30", endTime: "16:30" } })
     if (!changed.ok() || (await changed.json()).notified !== 1) throw new Error("Changed schedule must notify only its active registration")
     const cancelled = await page.request.delete(`${base}/api/admin/shifts/video-last-minute-shift-3`)

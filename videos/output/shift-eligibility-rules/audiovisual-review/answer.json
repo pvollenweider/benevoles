@@ -1,0 +1,68 @@
+{
+  "model": "gemini-3.8-flash",
+  "reviewedAt": "2026-11-11T12:36:22.674Z",
+  "videoSha256": "d6160b255f4528e8af5a799827f0811c39b29ff70c7ae607ba5c05a9ddb9b381",
+  "promptSha256": "cc56ded9fe0351c1e2a6cfa32c0bc959825611449d5b0d52bb3157bde455190b",
+  "clipSha256": "5b59f4288a38e99b8ba778796fb5c788a9a9c5a687adcc0b35fab6599ed3d73d",
+  "scene": "answer",
+  "review": {
+    "heardOpening": "Le poste Navette demande le permis de conduire",
+    "checkpoints": [
+      {
+        "spokenSeconds": 2.9,
+        "spoken": "Dans Gérer les postes, ouvrons son éditeur Accès.",
+        "visibleSeconds": 3.4,
+        "visible": "Ouverture du volet Gérer les postes puis clic sur le lien Accès de la Navette",
+        "sync": "aligned",
+        "severity": "none"
+      },
+      {
+        "spokenSeconds": 6.4,
+        "spoken": "Choisissons la question Permis de conduire, posée à tous les bénévoles, puis cochons Oui dans Réponses acceptées et enregistrons.",
+        "visibleSeconds": 9.8,
+        "visible": "Sélection de la case Oui sous Réponses acceptées puis clic sur Enregistrer l'ordre",
+        "sync": "aligned",
+        "severity": "none"
+      },
+      {
+        "spokenSeconds": 13.5,
+        "spoken": "Sur la page publique, le créneau annonce Réponse requise : Permis de conduire, Oui.",
+        "visibleSeconds": 17.2,
+        "visible": "Affichage de la vue liste publique avec la mention Réponse requise : Permis de conduire, Oui sous Navette",
+        "sync": "aligned",
+        "severity": "none"
+      },
+      {
+        "spokenSeconds": 19.1,
+        "spoken": "Essayons de nous inscrire avec Non.",
+        "visibleSeconds": 20.3,
+        "visible": "Sélection du créneau puis choix de l'option Non pour le permis de conduire",
+        "sync": "aligned",
+        "severity": "none"
+      },
+      {
+        "spokenSeconds": 22.1,
+        "spoken": "Au moment de confirmer, le formulaire refuse cette réponse pour la Navette.",
+        "visibleSeconds": 25.8,
+        "visible": "Clic sur Confirmer mon inscription et apparition du message d'erreur rouge bloquant l'inscription",
+        "sync": "aligned",
+        "severity": "none"
+      },
+      {
+        "spokenSeconds": 26.5,
+        "spoken": "Choisissons maintenant Oui et confirmons : l'inscription est acceptée.",
+        "visibleSeconds": 27.2,
+        "visible": "Sélection de Oui, validation et affichage de l'écran Inscription confirmée !",
+        "sync": "aligned",
+        "severity": "none"
+      }
+    ],
+    "issues": [],
+    "voice": {
+      "consistent": true,
+      "warm": true,
+      "observation": "Voix claire, posée et parfaitement articulée, calée sans accroc sur les manipulations à l'écran."
+    }
+  },
+  "note": "Automated observation of actual final video audio and images; not a claim of complete human validation"
+}

@@ -33,11 +33,11 @@ export async function seedVideoLastMinute(db: PrismaClient) {
   const firstNames = ["Aline", "Nicolas", "Zoé", "Emma", "Sarah", "Lucas"]
   const people = []
   for (const [index, firstName] of firstNames.entries()) people.push(await db.volunteer.create({ data: { id: `video-last-minute-person-${index}`, organizationId, firstName, lastName: surnameOf(firstName), email: `video.last-minute.person.${index}@example.org`, phone: `+41 79 000 ${String(index).padStart(4, "0")}`, ...(index === 2 ? { availabilityPeriods: ["morning"], availabilityNote: "Peut aussi aider en début d'après-midi après confirmation." } : {}) } }))
-  // Keep withdrawals and offers available when the batch is rendered after the original fixture date.
-  const day = new Date()
-  day.setUTCDate(day.getUTCDate() + 14)
-  day.setUTCHours(0, 0, 0, 0)
-  const event = await db.event.create({ data: { id: "video-last-minute-event", organizationId, slug: "fete-des-imprevus", title: "Fête des imprévus — démonstration", startDate: day, endDate: day, publicStatus: "published", remindersEnabled: false, location: "Parc de démonstration", isListed: false } })
+  // Jour J must be live on the filming day in the organisation time zone.
+  const localDay = new Intl.DateTimeFormat("en-CA", { timeZone: "Europe/Zurich", year: "numeric", month: "2-digit", day: "2-digit" }).format(new Date())
+  const day = new Date(`${localDay}T00:00:00Z`)
+  const tomorrow = new Date(day.getTime() + 86_400_000)
+  const event = await db.event.create({ data: { id: "video-last-minute-event", organizationId, slug: "fete-des-imprevus", title: "Fête des imprévus — démonstration", startDate: day, endDate: tomorrow, publicStatus: "published", remindersEnabled: false, location: "Parc de démonstration", isListed: false } })
   const definitions = [
     { roleName: "Accueil", label: "Accueil du matin", startTime: "10:00", endTime: "12:00", capacity: 1, waitlistEnabled: true },
     { roleName: "Logistique", label: "Installation du matériel", startTime: "12:00", endTime: "14:00", capacity: 2 },
@@ -46,7 +46,7 @@ export async function seedVideoLastMinute(db: PrismaClient) {
     { roleName: "Accueil", label: "Accueil du soir", startTime: "18:00", endTime: "20:00", capacity: 1 },
   ]
   const shifts = []
-  for (const [index, definition] of definitions.entries()) shifts.push(await db.shift.create({ data: { id: `video-last-minute-shift-${index}`, eventId: event.id, date: day, ...definition, status: index === 0 || index === 4 ? "full" : "open", locationDetails: "Entrée nord du parc", instructions: "Passer au stand quinze minutes avant le début." } }))
+  for (const [index, definition] of definitions.entries()) shifts.push(await db.shift.create({ data: { id: `video-last-minute-shift-${index}`, eventId: event.id, date: tomorrow, ...definition, status: index === 0 || index === 4 ? "full" : "open", locationDetails: "Entrée nord du parc", instructions: "Passer au stand quinze minutes avant le début." } }))
   const registrations = [
     { person: 0, shift: 0, status: "active" }, { person: 1, shift: 0, status: "waiting" },
     { person: 3, shift: 1, status: "active" }, { person: 4, shift: 2, status: "active" },
@@ -54,6 +54,8 @@ export async function seedVideoLastMinute(db: PrismaClient) {
     { person: 5, shift: 3, status: "requested" }, { person: 2, shift: 4, status: "active" },
   ]
   for (const [index, definition] of registrations.entries()) await db.registration.create({ data: { id: `video-last-minute-registration-${index}`, eventId: event.id, volunteerId: people[definition.person].id, shiftId: shifts[definition.shift].id, status: definition.status, source: "public_form", ...(definition.status === "waiting" ? { waitingPosition: 1 } : {}), checkedInAt: index === 5 ? new Date(day.getTime() + (14 * 60 + 2) * 60_000) : null, ...registrationToken.data(`demo-last-minute-registration-${index}`) } })
-  if (await db.registration.count({ where: { eventId: event.id } }) !== 8 || await db.eventLog.count({ where: { eventId: event.id } })) throw new Error("Last-minute fixture invariants failed")
+  const todayShift = await db.shift.create({ data: { id: "video-last-minute-shift-today", eventId: event.id, date: day, roleName: "Préparation du jour", label: "Préparation du jour", startTime: "08:00", endTime: "09:00", capacity: 1, status: "full" } })
+  await db.registration.create({ data: { id: "video-last-minute-registration-today", eventId: event.id, volunteerId: people[3].id, shiftId: todayShift.id, status: "active", source: "public_form", ...registrationToken.data("demo-last-minute-today") } })
+  if (await db.registration.count({ where: { eventId: event.id } }) !== 9 || await db.eventLog.count({ where: { eventId: event.id } })) throw new Error("Last-minute fixture invariants failed")
   console.log("✓ Separate last-minute fixture: actual occupied/waiting states, underfilled role, availability, pending requests and prior attendance; no invented journal")
 }

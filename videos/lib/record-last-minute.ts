@@ -93,6 +93,29 @@ export async function recordLastMinute(options: { page: Page; base: string; dire
       await at("Si la mission demande un"); await go(`${base}/admin/members/video-last-minute-person-2`)
       await page.getByRole("heading", { name: `Activité de ${fullNameOf("Zoé")}`, exact: true }).waitFor()
       await page.getByText("Accueil du soir", { exact: false }).first().scrollIntoViewIfNeeded()
+      // Generate the real offer off screen, then open only its volunteer-facing link.
+      const prior = new Set((await inbox()).map(mail => mail.ID))
+      const offered = await page.request.post(`${url.replace("/admin/events/", "/api/admin/events/")}/open-shifts`, { data: { shiftIds: ["video-last-minute-shift-1"], volunteerIds: ["video-last-minute-person-4"], note: "Une place pour aider au matériel.", includeDeclined: false, registeredToday: false, push: false, dryRun: false } })
+      if (!offered.ok()) throw new Error("Actual open-shift email request failed")
+      await promisify(execFile)(process.execPath, ["--import", "tsx", "videos/tools/flush-last-minute-outbox.ts"], { env: process.env })
+      let declineLink: string | undefined
+      for (let attempt = 0; attempt < 40 && !declineLink; attempt++) {
+        for (const mail of (await inbox()).filter(mail => !prior.has(mail.ID) && mail.To.some(to => to.Address === "video.last-minute.person.4@example.org"))) {
+          const detail = await (await page.request.get(`http://localhost:48026/api/v1/message/${mail.ID}`)).json() as { Text: string }
+          declineLink = detail.Text.match(/https?:\/\/[^\s<>]+\/ne-peux-pas\/[^\s<>]+/)?.[0]
+        }
+        if (!declineLink) await page.waitForTimeout(250)
+      }
+      if (!declineLink) throw new Error("Actual shift refusal link missing from email")
+      await at("Depuis le lien de l'email On cherche encore du monde")
+      await go(declineLink)
+      await tap(page, page.getByRole("button", { name: "Confirmer que je ne peux pas", exact: true }))
+      await page.getByRole("status").filter({ hasText: "C'est noté" }).waitFor()
+      await at("Dans Chercher des bénévoles")
+      await go(`${url}/staffing/search?shift=video-last-minute-shift-1`)
+      const sarah = page.getByRole("listitem").filter({ has: page.getByRole("checkbox", { name: fullNameOf("Sarah"), exact: true }) })
+      await sarah.getByText(/^A répondu non le/).scrollIntoViewIfNeeded()
+      checks.shiftDeclineVisibleWithoutRemoval = true
     })
     await scene("message", async at => {
       const prior = new Set((await inbox()).map(mail => mail.ID))
@@ -102,9 +125,10 @@ export async function recordLastMinute(options: { page: Page; base: string; dire
       await write(page.getByLabel(/^Objet(?: \*)?$/), "Un coup de main pour la logistique ?")
       await write(page.getByLabel(/^Message(?: \*)?$/), "Il reste une place de 12h à 14h. Connais-tu quelqu'un qui pourrait aider ? Merci !")
       await at("Vérifions l'aperçu et le destinataire"); await tap(page, page.getByRole("button", { name: "Voir l'aperçu et envoyer", exact: true }))
-      await at("Ouvrons le vrai email reçu."); await tap(page, page.getByRole("dialog").getByRole("button", { name: /^Envoyer à/ }))
+      await tap(page, page.getByRole("dialog").getByRole("button", { name: /^Envoyer à/ }))
       await tap(page, page.getByRole("dialog").getByRole("button", { name: "Confirmer l'envoi", exact: true }))
-      await at("Ce message ne crée aucune"); checks.targetedMail = await openNewMail(prior, "video.last-minute.person.3@example.org", ["Connais-tu quelqu'un"])
+      await at("Ouvrons le vrai email reçu."); checks.targetedMail = await openNewMail(prior, "video.last-minute.person.3@example.org", ["Connais-tu quelqu'un"])
+      await at("Ce message ne crée aucune")
       await at("Revenons aux inscriptions et ouvrons"); await registrations()
       await tap(page, page.getByRole("button", { name: "+ Ajouter manuellement", exact: true }))
       await write(page.getByLabel(/^Prénom(?: \*)?$/), "Zoé")
@@ -117,6 +141,36 @@ export async function recordLastMinute(options: { page: Page; base: string; dire
       if (!(await addition).ok()) throw new Error("Actual manual add request failed")
       if (await db.registration.count({ where: { shiftId: "video-last-minute-shift-1", status: "active" } }) !== 2) throw new Error("Actual manual add failed")
       await at("Enfin, revenons à la couverture"); await coverage(); checks.logisticsFilled = true
+    })
+    await scene("need", async at => {
+      await at("Sur la page Jour J")
+      await go(`${url}/day-of`)
+      await tap(page, page.getByRole("button", { name: "Ajouter un besoin", exact: true }))
+      await at("Indiquons le poste Renfort matériel")
+      await write(page.getByLabel(/^Poste/).first(), "Renfort matériel")
+      const parts = new Intl.DateTimeFormat("en-GB", { timeZone: "Europe/Zurich", hour: "2-digit", minute: "2-digit", hourCycle: "h23" }).format(new Date()).split(":").map(Number)
+      const start = parts[0] * 60 + Math.floor(parts[1] / 15) * 15
+      if (start > 22 * 60) throw new Error("Need capture must finish before midnight")
+      const clock = (minute: number) => `${String(Math.floor(minute / 60)).padStart(2, "0")}:${String(minute % 60).padStart(2, "0")}`
+      await write(page.getByLabel(/^Début/), clock(start))
+      await write(page.getByLabel(/^Fin/), clock(start + 60))
+      await write(page.getByLabel(/^Places/), "1")
+      await at("Ajouter le créneau enregistre d'abord le besoin")
+      await tap(page, page.getByRole("button", { name: "Ajouter le créneau", exact: true }))
+      await page.getByRole("heading", { name: "Étape 2 sur 2 : prévenir", exact: true }).waitFor()
+      await at("Inscrits aujourd'hui est déjà coché")
+      if (!await page.getByRole("checkbox", { name: "Inscrits aujourd'hui", exact: true }).isChecked() || !await page.getByRole("checkbox", { name: "Envoyer aussi une notification sur le téléphone", exact: true }).isChecked()) throw new Error("Day-of defaults differ")
+      await page.waitForTimeout(1400) // Mid-sentence: show the phone option on « comme la notification ».
+      await page.getByRole("checkbox", { name: "Envoyer aussi une notification sur le téléphone", exact: true }).scrollIntoViewIfNeeded()
+      await at("Sélectionnons une personne proposée")
+      await tap(page, page.getByRole("checkbox", { name: fullNameOf("Emma"), exact: true }))
+      await tap(page, page.getByRole("button", { name: "Voir l'aperçu et envoyer", exact: true }))
+      await tap(page, page.getByRole("dialog").getByRole("button", { name: /^Envoyer à/ }))
+      await page.getByRole("heading", { name: "Email envoyé à 1 personne", exact: true }).waitFor()
+      await at("L'email propose le créneau")
+      const need = await db.shift.findFirstOrThrow({ where: { eventId, roleName: "Renfort matériel" } })
+      if (await db.registration.count({ where: { shiftId: need.id } })) throw new Error("Offering the need created an unexpected registration")
+      checks.dayOfNeed = { shiftId: need.id, createdBeforeSend: true, registeredToday: true, pushRequested: true }
     })
     await scene("schedule", async at => {
       const prior = new Set((await inbox()).map(mail => mail.ID))

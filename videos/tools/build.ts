@@ -20,6 +20,18 @@ async function run(command: string, args: string[]) {
 
 async function seed(scenario?: string) {
   if (!scenario) return
+  if (scenario === "shift-eligibility-rules" || scenario === "members-import") {
+    const local = ["--env-file=.env.video.e2e", "--import", "tsx", "videos/tools/local-production.ts", "run"]
+    if (scenario === "members-import") {
+      await run("node", [...local, "scripts/seed-video-scenario.ts", "members-invitations"])
+      await run("node", [...local, "scripts/seed-video-scenario.ts", scenario])
+      await run("node", [...local, "videos/tools/prepare-import-baseline.ts"])
+    } else {
+      await run("node", [...local, "videos/tools/prepare-demo.ts"])
+      await run("node", [...local, "scripts/seed-video-scenario.ts", scenario])
+    }
+    return
+  }
   if (scenario === "shift-roster-visibility") {
     await run("node", ["--env-file=.env.video.e2e", "--import", "tsx", "videos/tools/local-production.ts", "run", "scripts/seed-video-shift-roster.ts"])
     return
@@ -50,7 +62,7 @@ async function main() {
       await run("node", ["--env-file=.env.video.e2e", "--import", "tsx", "videos/tools/verify-reports.ts"])
       await run("node", ["--import", "tsx", "videos/tools/review-pdfs.ts", "videos/output/event-reports/documents"])
     }
-    if (entry.id === "SHIFT_ROSTER_VISIBILITY") {
+    if (["SHIFT_ROSTER_VISIBILITY", "SHIFT_ELIGIBILITY_RULES", "MEMBERS_IMPORT"].includes(entry.id)) {
       await run("node", ["--env-file=.env.video.e2e", "--import", "tsx", "videos/tools/local-production.ts", "run", "videos/tools/record.ts", entry.id])
     } else await run("npm", ["run", "video:record", "--", entry.id])
     await run("npm", ["run", "video:assemble", "--", entry.id])

@@ -13,7 +13,7 @@ import { PUBLIC_APP_URL, videoAdminEmail } from "../lib/public-hosts"
 const batch35Takes = ["WORKLOAD_PROTECTION", "ASSIGNMENT_PROPOSALS", "ASSIGNMENT_PUBLICATION", "VOLUNTEER_EVENT_AVAILABILITY"]
 const batch35Seeds = ["assignment-publication", "workload-protection", "assignment-proposals", "volunteer-event-availability"]
 const memberTakes = ["MEMBERS_MANAGEMENT", "MEMBERS_IMPORT", "MEMBERS_INVITATIONS", "MEMBERS_REMINDERS", "REGISTRATIONS_PLACE_MEMBER", "REGISTRATIONS_MANAGEMENT", "STAFFING_GAPS", "TARGETED_MESSAGES", "REMINDERS_CHANGES"]
-const memberSeeds = ["members-management", "members-invitations", "members-reminders", "registrations-place-member", "registrations-management", "staffing-gaps", "targeted-messages", "reminders-changes"]
+const memberSeeds = ["members-import", "members-management", "members-invitations", "members-reminders", "registrations-place-member", "registrations-management", "staffing-gaps", "targeted-messages", "reminders-changes"]
 
 async function main() {
   const url = new URL(process.env.DATABASE_URL ?? "")
@@ -90,6 +90,7 @@ async function main() {
     allowed.add("videos/tools/verify-last-minute.ts")
     allowed.add("videos/tools/flush-last-minute-outbox.ts")
     allowed.add("videos/tools/prepare-import-baseline.ts")
+    allowed.add("videos/tools/verify-batch40-member-cleanup.ts")
     allowed.add("videos/tools/review-main-ui.ts")
     allowed.add("videos/tools/verify-reports.ts")
     allowed.add("videos/tools/inspect-foundation.ts")
@@ -171,7 +172,7 @@ async function main() {
       await verifyProductBuild("http://localhost:43102")
     } else if (script === "scripts/seed-video-scenario.ts") {
       if (batch35Seeds.includes(rest[0]) && !["45439", "45441"].includes(url.port)) throw new Error("Batch35 seed requires its dedicated database")
-      if (rest.length !== 1 || ![...batch35Seeds, "last-minute-changes", "privacy-personal-links", "event-reports", "event-activity-log", "data-exports-archives", "organization-activity-log", "shift-recurrence", "personal-withdrawals", "personal-calendar", "personal-session", ...memberSeeds].includes(rest[0])) throw new Error("Only explicit local video seeds accepted")
+      if (rest.length !== 1 || ![...batch35Seeds, "last-minute-changes", "privacy-personal-links", "event-reports", "event-activity-log", "data-exports-archives", "organization-activity-log", "shift-recurrence", "personal-withdrawals", "personal-calendar", "personal-session", "shift-eligibility-rules", ...memberSeeds].includes(rest[0])) throw new Error("Only explicit local video seeds accepted")
       if (["data-exports-archives", "event-activity-log"].includes(rest[0])) {
         if (mode !== "run" || url.port !== "45433") throw new Error("Exports require the isolated video DB")
         await verifyProductBuild("http://localhost:43102")
@@ -210,7 +211,7 @@ async function main() {
     } else if (rest.length) throw new Error("Unexpected tool arguments")
     if (script === "videos/tools/prepare-demo.ts") await verifyProductBuild("http://localhost:43102")
     let tool = script
-    if (["45439", "45441"].includes(url.port)) {
+    if (["45433", "45439", "45441"].includes(url.port)) {
       const proof = JSON.parse(await readFile("videos/output/product-server-43102.json", "utf8")) as ProductBuild
       await verifyProductBuild("http://localhost:43102")
       await import("node:fs/promises").then(async fs => {

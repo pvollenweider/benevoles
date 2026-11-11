@@ -1,0 +1,5 @@
+
+> benevoles@2.7.0 video:validate
+> node --import tsx videos/tools/validate.ts MEMBERS_IMPORT
+
+✓ MEMBERS_IMPORT: 10 scene durations aligned, one continuous Kore voice; narration content checked; music 14.2–19.9 LU under the voice

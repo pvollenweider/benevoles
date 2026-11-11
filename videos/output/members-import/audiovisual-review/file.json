@@ -1,34 +1,34 @@
 {
   "model": "gemini-3.8-flash",
-  "reviewedAt": "2026-10-16T16:28:48.862Z",
-  "videoSha256": "fbcd9cf97e149efbe1a278e278a569aa3adcf8bc988d8c401b4e96d2eecbf481",
+  "reviewedAt": "2026-11-11T12:41:29.960Z",
+  "videoSha256": "0aa199ac67fe4ba2703e5516bea95c4d251a3c7481ba81c5920a76a0a1139eae",
   "promptSha256": "2797c7f70dcfd6b192642fe7814ba9f5b9fb23a4a82fe6917c3511fc8a15c756",
-  "clipSha256": "54a231bf2d6e3e5c3a12cdff91131e2e93eacb08c55499648e46f937166d2ba2",
+  "clipSha256": "9862a991b976d28516da4cd5e434dba736798335e4faa713961785e13fa2c6b0",
   "scene": "file",
   "review": {
     "heardOpening": "Le fichier peut être un CSV",
     "checkpoints": [
       {
-        "spokenSeconds": 0,
+        "spokenSeconds": 0.5,
         "spoken": "Le fichier peut être un CSV ou un Excel.",
         "visibleSeconds": 1,
-        "visible": "Ouverture de la fenêtre modale 'Importer des membres' avec le bouton 'Choisir un fichier CSV ou Excel'.",
+        "visible": "Ouverture de la fenêtre modale « Importer des membres » avec le bouton « Choisir un fichier CSV ou Excel »",
         "sync": "aligned",
         "severity": "none"
       },
       {
         "spokenSeconds": 3.6,
         "spoken": "La première ligne contient les noms des colonnes : prénom, nom, email, téléphone et tags.",
-        "visibleSeconds": 4,
-        "visible": "Le texte explicatif des colonnes attendues est affiché dans la boîte de dialogue, puis le fichier 'membres-a-verifier.csv' est chargé.",
+        "visibleSeconds": 5.5,
+        "visible": "Le texte d'aide sous le bouton liste les colonnes requises et le fichier « membres-a-verifier.csv » apparaît sélectionné",
         "sync": "aligned",
         "severity": "none"
       },
       {
-        "spokenSeconds": 19.6,
+        "spokenSeconds": 19.3,
         "spoken": "Les disponibilités, elles, se renseignent ensuite dans la fiche : elles ne sont pas importées.",
-        "visibleSeconds": 20,
-        "visible": "La fenêtre modale d'importation reste affichée avec les options d'import et le bouton 'Analyser le fichier'.",
+        "visibleSeconds": 22,
+        "visible": "Fermeture de la fenêtre modale d'import et retour à la liste des membres",
         "sync": "aligned",
         "severity": "none"
       }
@@ -37,7 +37,7 @@
     "voice": {
       "consistent": true,
       "warm": true,
-      "observation": "Voix claire, posée et bien articulée, synchronisée avec l'affichage à l'écran."
+      "observation": "Voix féminine claire, posée et bien articulée, synchronisée avec l'affichage à l'écran."
     }
   },
   "note": "Automated observation of actual final video audio and images; not a claim of complete human validation"

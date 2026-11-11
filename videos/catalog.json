@@ -582,7 +582,7 @@
         "téléphone"
       ],
       "published": true,
-      "seedScenario": "demo",
+      "seedScenario": "shift-eligibility-rules",
       "themes": [
         "planning-creneaux",
         "membres-invitations"
@@ -591,9 +591,10 @@
         "organisateur"
       ],
       "feature": "Règles d'éligibilité des postes",
-      "updatedAt": "2026-10-16",
-      "revision": 4,
-      "level": "avance"
+      "updatedAt": "2026-11-11",
+      "revision": 5,
+      "level": "avance",
+      "updated": "2026-11-11"
     },
     {
       "id": "VOLUNTEER_DISCOVER_EVENT",
@@ -1483,7 +1484,7 @@
         "tags"
       ],
       "published": true,
-      "seedScenario": "demo",
+      "seedScenario": "members-import",
       "themes": [
         "membres-invitations"
       ],
@@ -1491,9 +1492,10 @@
         "organisateur"
       ],
       "feature": "Import des membres",
-      "updatedAt": "2026-10-16",
-      "revision": 6,
-      "level": "essentiel"
+      "updatedAt": "2026-11-11",
+      "revision": 7,
+      "level": "essentiel",
+      "updated": "2026-11-11"
     },
     {
       "id": "MEMBERS_DUPLICATES_MERGE",
@@ -1663,9 +1665,10 @@
         "organisateur"
       ],
       "feature": "Gérer un imprévu",
-      "updatedAt": "2026-10-17",
-      "revision": 5,
-      "level": "essentiel"
+      "updatedAt": "2026-11-11",
+      "revision": 6,
+      "level": "essentiel",
+      "updated": "2026-11-11"
     },
     {
       "id": "SHIFT_ROSTER_VISIBILITY",

@@ -1,0 +1,60 @@
+{
+  "model": "gemini-3.8-flash",
+  "reviewedAt": "2026-11-11T12:36:37.909Z",
+  "videoSha256": "d6160b255f4528e8af5a799827f0811c39b29ff70c7ae607ba5c05a9ddb9b381",
+  "promptSha256": "2f4e91aaadced577d22986e075788d272b6fc1d01d322038a0ea5f850b4c7ed0",
+  "clipSha256": "84afdf99e5f37ace8ec646efc25e9f22edb9075e875b7ada9a019888ac062726",
+  "scene": "result",
+  "review": {
+    "heardOpening": "Ces règles doivent rester compréhensibles.",
+    "checkpoints": [
+      {
+        "spokenSeconds": 3.4,
+        "spoken": "Dans les paramètres de l'événement, la description permet d'expliquer les critères.",
+        "visibleSeconds": 1.5,
+        "visible": "L'onglet Paramètres de l'événement s'affiche avec le champ Description.",
+        "sync": "aligned",
+        "severity": "none"
+      },
+      {
+        "spokenSeconds": 7.7,
+        "spoken": "Vérifions aussi le téléphone obligatoire si l'équipe doit appeler le jour J.",
+        "visibleSeconds": 7.5,
+        "visible": "L'écran descend sur la case à cocher active « Téléphone obligatoire à l'inscription ».",
+        "sync": "aligned",
+        "severity": "none"
+      },
+      {
+        "spokenSeconds": 13,
+        "spoken": "Pour corriger un profil, retrouvons Julien dans les membres,",
+        "visibleSeconds": 13.2,
+        "visible": "Accès à l'onglet Membres et recherche de Julien Favre.",
+        "sync": "aligned",
+        "severity": "none"
+      },
+      {
+        "spokenSeconds": 16.1,
+        "spoken": "puis ouvrons Modifier : son étiquette sécurité est une information interne.",
+        "visibleSeconds": 16.3,
+        "visible": "Clic sur Modifier, ouverture de la modale avec le champ Étiquettes contenant « sécurité ».",
+        "sync": "aligned",
+        "severity": "none"
+      },
+      {
+        "spokenSeconds": 23.5,
+        "spoken": "puis nous annulons.",
+        "visibleSeconds": 22.8,
+        "visible": "Fermeture de la boîte de dialogue sans enregistrer.",
+        "sync": "aligned",
+        "severity": "none"
+      }
+    ],
+    "issues": [],
+    "voice": {
+      "consistent": true,
+      "warm": true,
+      "observation": "Voix off posée, claire et bien articulée, synchronisée avec les actions à l'écran."
+    }
+  },
+  "note": "Automated observation of actual final video audio and images; not a claim of complete human validation"
+}

@@ -1,0 +1,20 @@
+{
+  "decision": "Resolved: audiovisual model associated the wrong table row with Nicolas",
+  "videoSha256": "e9596ba265566802b388fd4f869ca37b43cbaddff29ccc344a67b4f3e50549da",
+  "frame": "offer-confirmed-settled-frame.png",
+  "seconds": 80.948,
+  "url": "https://formation-imprevus.benevol.app/admin/events/video-last-minute-event/registrations",
+  "observation": "The model sampled 13 s, just as navigation starts at the measured 13.085 s sentence anchor; Nicolas is temporarily below the viewport. The 15.5 s final-video frame shows his entire row with Accueil, Accueil du matin, before that sentence ends at 15.829 s. The Preparation row belongs to Sarah Smith, not Nicolas. The current exact registration is active on Accueil du matin. This is a model row-association error, not an absent or incorrect registration.",
+  "databaseQuery": "SELECT r.id, r.status, s.\"roleName\", s.label, v.\"firstName\", v.\"lastName\" FROM \"Registration\" r JOIN \"Volunteer\" v ON r.\"volunteerId\"=v.id JOIN \"Shift\" s ON r.\"shiftId\"=s.id WHERE r.id = 'video-last-minute-registration-1';",
+  "databaseResult": "offer-confirmed-db.csv",
+  "captureCheck": "capture-checks.json: offerConfirmed=true, checked from the actual active registration after the UI acceptance",
+  "rawFindingRetained": "audiovisual-review/offer.json",
+  "earlierFrame": "offer-confirmed-exact-frame.png",
+  "sentenceAnchor": {
+    "segmentId": "offer",
+    "phrase": "Maintenant seulement, sa participation est",
+    "startMs": 13085,
+    "endMs": 15829,
+    "cueMs": 78534
+  }
+}

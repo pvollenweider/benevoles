@@ -1,272 +1,501 @@
 {
-  "videoSha256": "a2b1a66c35eb114c3656423a2c25ec8762de09b15ecd801b5361e403f131348d",
-  "product": {
-    "commit": "89a884c8d58c22dda6800481e1238bdc4e219dff",
-    "sourceTree": "60284d6b5fdf08719063fe06492832a52a45d996",
-    "productSourceSha256": "bb3c83ca2cff86f744551f64b0f97ab94601895d1893bcce4312c18b0e47413d",
-    "buildId": "gHYEjPtpdQYUNytuIhMkh",
-    "snapshot": "/tmp/benevoles-video-production.Batch231",
-    "builtAt": "2026-10-16T08:22:06.973Z"
-  },
-  "chapters": [
-    {
-      "id": "welcome",
-      "startMs": 574,
-      "endMs": 15458
-    },
-    {
-      "id": "settings",
-      "startMs": 15909,
-      "endMs": 33249
-    },
-    {
-      "id": "age",
-      "startMs": 33701,
-      "endMs": 47856
-    },
-    {
-      "id": "quota",
-      "startMs": 50021,
-      "endMs": 65889
-    },
-    {
-      "id": "reserved",
-      "startMs": 66342,
-      "endMs": 81852
-    },
-    {
-      "id": "eligible",
-      "startMs": 82307,
-      "endMs": 97552
-    },
-    {
-      "id": "result",
-      "startMs": 98003,
-      "endMs": 121940
-    }
-  ],
+  "videoSha256": "d6160b255f4528e8af5a799827f0811c39b29ff70c7ae607ba5c05a9ddb9b381",
+  "source": "Fresh audiovisual reports of the final MP4, compared with real frame evidence",
+  "resolvedFinding": "reserved-voice-resolution.json",
   "anchors": [
     {
       "segmentId": "settings",
       "phrase": "L’âge minimum appartient au créneau.",
-      "startMs": 3021,
-      "endMs": 4848,
-      "cueMs": 18932,
-      "frame": "review/sentence-frames/00-settings.png",
-      "frameSeconds": 20.432,
-      "nextActualInputs": [
-        {
-          "kind": "click",
-          "atMs": 19416
-        },
-        {
-          "kind": "click",
-          "atMs": 21499
-        },
-        {
-          "kind": "click",
-          "atMs": 22281
-        }
-      ]
+      "startMs": 2760,
+      "endMs": 4475,
+      "cueMs": 18027
     },
     {
       "segmentId": "settings",
-      "phrase": "La limite et les étiquettes",
-      "startMs": 5089,
-      "endMs": 12349,
-      "cueMs": 21000,
-      "frame": "review/sentence-frames/01-settings.png",
-      "frameSeconds": 22.5,
-      "nextActualInputs": [
-        {
-          "kind": "click",
-          "atMs": 21499
-        },
-        {
-          "kind": "click",
-          "atMs": 22281
-        },
-        {
-          "kind": "click",
-          "atMs": 24051
-        }
-      ]
+      "phrase": "La limite, les étiquettes réservées",
+      "startMs": 4669,
+      "endMs": 13380,
+      "cueMs": 19936
     },
     {
       "segmentId": "settings",
       "phrase": "Ici, Buvette est limitée à",
-      "startMs": 12472,
-      "endMs": 16939,
-      "cueMs": 28390,
-      "frame": "review/sentence-frames/02-settings.png",
-      "frameSeconds": 29.89,
-      "nextActualInputs": [
-        {
-          "kind": "click",
-          "atMs": 28920
-        },
-        {
-          "kind": "click",
-          "atMs": 29729
-        }
-      ]
+      "startMs": 13669,
+      "endMs": 17681,
+      "cueMs": 28936
     },
     {
       "segmentId": "age",
       "phrase": "La date de naissance demandée",
-      "startMs": 5893,
-      "endMs": 9820,
-      "cueMs": 39594,
-      "frame": "review/sentence-frames/03-age.png",
-      "frameSeconds": 41.094,
-      "nextActualInputs": [
-        {
-          "kind": "click",
-          "atMs": 40067
-        },
-        {
-          "kind": "click",
-          "atMs": 41117
-        }
-      ]
+      "startMs": 5993,
+      "endMs": 9345,
+      "cueMs": 39914
     },
     {
       "segmentId": "age",
       "phrase": "modifier le navigateur ou masquer",
-      "startMs": 10136,
-      "endMs": 13842,
-      "cueMs": 43837,
-      "frame": "review/sentence-frames/04-age.png",
-      "frameSeconds": 45.337,
-      "nextActualInputs": [
-        {
-          "kind": "click",
-          "atMs": 44329
-        }
-      ]
+      "startMs": 9517,
+      "endMs": 13018,
+      "cueMs": 43439
     },
     {
       "segmentId": "quota",
       "phrase": "En revenant au planning depuis",
-      "startMs": 3053,
-      "endMs": 7620,
-      "cueMs": 53074,
-      "frame": "review/sentence-frames/05-quota.png",
-      "frameSeconds": 54.574,
-      "nextActualInputs": [
-        {
-          "kind": "click",
-          "atMs": 53551
-        }
-      ]
+      "startMs": 2961,
+      "endMs": 6778,
+      "cueMs": 52521
     },
     {
       "segmentId": "quota",
       "phrase": "les autres créneaux restent visibles",
-      "startMs": 8216,
-      "endMs": 12101,
-      "cueMs": 58237,
-      "frame": "review/sentence-frames/06-quota.png",
-      "frameSeconds": 59.737,
-      "nextActualInputs": []
+      "startMs": 7322,
+      "endMs": 11166,
+      "cueMs": 56880
     },
     {
       "segmentId": "quota",
       "phrase": "Elle peut d’abord retirer un",
-      "startMs": 12687,
-      "endMs": 15520,
-      "cueMs": 62709,
-      "frame": "review/sentence-frames/07-quota.png",
-      "frameSeconds": 64.209,
-      "nextActualInputs": [
-        {
-          "kind": "click",
-          "atMs": 63178
-        }
-      ]
+      "startMs": 11919,
+      "endMs": 14548,
+      "cueMs": 61479
     },
     {
       "segmentId": "reserved",
       "phrase": "Le message ne révèle pas",
-      "startMs": 4299,
-      "endMs": 5559,
-      "cueMs": 70642,
-      "frame": "review/sentence-frames/08-reserved.png",
-      "frameSeconds": 72.142,
-      "nextActualInputs": []
+      "startMs": 5861,
+      "endMs": 8081,
+      "cueMs": 70835
     },
     {
       "segmentId": "reserved",
       "phrase": "Une invitation sans la bonne",
-      "startMs": 11896,
-      "endMs": 15228,
-      "cueMs": 78240,
-      "frame": "review/sentence-frames/09-reserved.png",
-      "frameSeconds": 79.74,
-      "nextActualInputs": []
+      "startMs": 11731,
+      "endMs": 15011,
+      "cueMs": 76705
     },
     {
       "segmentId": "eligible",
       "phrase": "le lien prouve quel membre",
-      "startMs": 6555,
-      "endMs": 11767,
-      "cueMs": 88862,
-      "frame": "review/sentence-frames/10-eligible.png",
-      "frameSeconds": 90.362,
-      "nextActualInputs": [
-        {
-          "kind": "click",
-          "atMs": 89328
-        },
-        {
-          "kind": "click",
-          "atMs": 93144
-        }
-      ]
+      "startMs": 7001,
+      "endMs": 11449,
+      "cueMs": 87734
+    },
+    {
+      "segmentId": "answer",
+      "phrase": "Dans Gérer les postes",
+      "startMs": 3030,
+      "endMs": 5863,
+      "cueMs": 99068
+    },
+    {
+      "segmentId": "answer",
+      "phrase": "Choisissons la question Permis de conduire",
+      "startMs": 6640,
+      "endMs": 14627,
+      "cueMs": 102678
+    },
+    {
+      "segmentId": "answer",
+      "phrase": "Sur la page publique",
+      "startMs": 14767,
+      "endMs": 18271,
+      "cueMs": 110802
+    },
+    {
+      "segmentId": "answer",
+      "phrase": "Essayons de nous inscrire avec Non",
+      "startMs": 19377,
+      "endMs": 20933,
+      "cueMs": 115414
+    },
+    {
+      "segmentId": "answer",
+      "phrase": "Au moment de confirmer",
+      "startMs": 21974,
+      "endMs": 25801,
+      "cueMs": 121821
+    },
+    {
+      "segmentId": "answer",
+      "phrase": "Choisissons maintenant Oui et confirmons",
+      "startMs": 26484,
+      "endMs": 28566,
+      "cueMs": 122652
     },
     {
       "segmentId": "result",
       "phrase": "Vérifions aussi le téléphone obligatoire",
-      "startMs": 6894,
-      "endMs": 10880,
-      "cueMs": 104898,
-      "frame": "review/sentence-frames/11-result.png",
-      "frameSeconds": 106.398,
-      "nextActualInputs": []
+      "startMs": 7969,
+      "endMs": 11651,
+      "cueMs": 135339
     },
     {
       "segmentId": "result",
       "phrase": "Pour corriger un profil, retrouvons",
-      "startMs": 11659,
-      "endMs": 16531,
-      "cueMs": 109664,
-      "frame": "review/sentence-frames/12-result.png",
-      "frameSeconds": 111.164,
-      "nextActualInputs": [
-        {
-          "kind": "click",
-          "atMs": 110811
-        },
-        {
-          "kind": "click",
-          "atMs": 112442
-        }
-      ]
+      "startMs": 12610,
+      "endMs": 17976,
+      "cueMs": 139981
     },
     {
       "segmentId": "result",
       "phrase": "Ici, nous vérifions la fiche",
-      "startMs": 20141,
-      "endMs": 23669,
-      "cueMs": 118145,
-      "frame": "review/sentence-frames/13-result.png",
-      "frameSeconds": 119.645,
-      "nextActualInputs": [
-        {
-          "kind": "click",
-          "atMs": 118609
-        }
-      ]
+      "startMs": 22026,
+      "endMs": 25129,
+      "cueMs": 149396
+    }
+  ],
+  "checkpoints": [
+    {
+      "scene": "welcome",
+      "globalSpokenSeconds": 1.078,
+      "globalVisibleSeconds": 1.078,
+      "spokenSeconds": 0.5,
+      "spoken": "Certaines missions demandent une règle simple",
+      "visibleSeconds": 0.5,
+      "visible": "Bandeau de titre affiché : « Âge, quotas et postes réservés - Des règles simples, expliquées avant l'inscription »",
+      "sync": "aligned",
+      "severity": "none"
+    },
+    {
+      "scene": "welcome",
+      "globalSpokenSeconds": 3.378,
+      "globalVisibleSeconds": 3.578,
+      "spokenSeconds": 2.8,
+      "spoken": "un âge minimum, un nombre maximum de créneaux",
+      "visibleSeconds": 3,
+      "visible": "Disparition de l'encart de titre et affichage de la vue frise des créneaux de l'événement",
+      "sync": "aligned",
+      "severity": "none"
+    },
+    {
+      "scene": "welcome",
+      "globalSpokenSeconds": 9.078,
+      "globalVisibleSeconds": 9.078,
+      "spokenSeconds": 8.5,
+      "spoken": "Ces contrôles évitent les affectations impossibles",
+      "visibleSeconds": 8.5,
+      "visible": "Vue d'ensemble stable du planning des créneaux en support de l'introduction générale",
+      "sync": "aligned",
+      "severity": "none"
+    },
+    {
+      "scene": "settings",
+      "globalSpokenSeconds": 17.765,
+      "globalVisibleSeconds": 19.065,
+      "spokenSeconds": 2.5,
+      "spoken": "L’âge minimum appartient au créneau.",
+      "visibleSeconds": 3.8,
+      "visible": "Formulaire de modification du créneau affichant le champ Âge minimum fixé à 18 ans",
+      "sync": "aligned",
+      "severity": "none"
+    },
+    {
+      "scene": "settings",
+      "globalSpokenSeconds": 20.565,
+      "globalVisibleSeconds": 21.765,
+      "spokenSeconds": 5.3,
+      "spoken": "La limite, les étiquettes réservées et la condition par une réponse appartiennent au poste entier",
+      "visibleSeconds": 6.5,
+      "visible": "Section Gérer les postes listant les colonnes de règles globales par poste",
+      "sync": "aligned",
+      "severity": "none"
+    },
+    {
+      "scene": "settings",
+      "globalSpokenSeconds": 28.065,
+      "globalVisibleSeconds": 24.765,
+      "spokenSeconds": 12.8,
+      "spoken": "Ici, Buvette est limitée à deux créneaux",
+      "visibleSeconds": 9.5,
+      "visible": "Paramètre Nombre maximal de créneaux fixé à 2 pour Buvette, visible dans le formulaire puis sur la ligne",
+      "sync": "aligned",
+      "severity": "none"
+    },
+    {
+      "scene": "settings",
+      "globalSpokenSeconds": 29.765,
+      "globalVisibleSeconds": 30.465,
+      "spokenSeconds": 14.5,
+      "spoken": "et Sécurité exige l’étiquette sécurité.",
+      "visibleSeconds": 15.2,
+      "visible": "Options du poste Sécurité ouvertes avec le champ Étiquette réservée contenant sécurité",
+      "sync": "aligned",
+      "severity": "none"
+    },
+    {
+      "scene": "age",
+      "globalSpokenSeconds": 35.12,
+      "globalVisibleSeconds": 35.42,
+      "spokenSeconds": 1.2,
+      "spoken": "Sur le planning public, la Buvette du soir annonce dix-huit ans minimum",
+      "visibleSeconds": 1.5,
+      "visible": "Le créneau Buvette 18h-22h est affiché sur la frise du planning public avec la mention d'âge",
+      "sync": "aligned",
+      "severity": "none"
+    },
+    {
+      "scene": "age",
+      "globalSpokenSeconds": 39.62,
+      "globalVisibleSeconds": 40.22,
+      "spokenSeconds": 5.7,
+      "spoken": "La date de naissance demandée dans le formulaire",
+      "visibleSeconds": 6.3,
+      "visible": "Ouverture du formulaire d'inscription affichant le champ Date de naissance obligatoire",
+      "sync": "aligned",
+      "severity": "none"
+    },
+    {
+      "scene": "age",
+      "globalSpokenSeconds": 41.92,
+      "globalVisibleSeconds": 43.42,
+      "spokenSeconds": 8,
+      "spoken": "permet au serveur de vérifier la règle",
+      "visibleSeconds": 9.5,
+      "visible": "Saisie de la date de naissance 28/11/1995 dans le champ correspondant",
+      "sync": "aligned",
+      "severity": "none"
+    },
+    {
+      "scene": "quota",
+      "globalSpokenSeconds": 49.559,
+      "globalVisibleSeconds": 50.059,
+      "spokenSeconds": 0,
+      "spoken": "Camille possède déjà deux engagements de Buvette.",
+      "visibleSeconds": 0.5,
+      "visible": "Page « Mes inscriptions » affichant les créneaux déjà réservés dont la buvette.",
+      "sync": "aligned",
+      "severity": "none"
+    },
+    {
+      "scene": "quota",
+      "globalSpokenSeconds": 52.259,
+      "globalVisibleSeconds": 53.259,
+      "spokenSeconds": 2.7,
+      "spoken": "En revenant au planning depuis son lien personnel, sa session reconnaît ces inscriptions",
+      "visibleSeconds": 3.7,
+      "visible": "Clic sur « S'inscrire à d'autres créneaux » et affichage du planning au nom de Camille Rochat.",
+      "sync": "aligned",
+      "severity": "none"
+    },
+    {
+      "scene": "quota",
+      "globalSpokenSeconds": 56.559,
+      "globalVisibleSeconds": 61.559,
+      "spokenSeconds": 7,
+      "spoken": "les autres créneaux restent visibles, mais indiquent que la limite de deux est atteinte.",
+      "visibleSeconds": 12,
+      "visible": "Affichage en vue Liste mentionnant « Limite de créneaux par personne atteinte » sur les créneaux buvette disponibles.",
+      "sync": "aligned",
+      "severity": "none"
+    },
+    {
+      "scene": "quota",
+      "globalSpokenSeconds": 60.759,
+      "globalVisibleSeconds": 62.359,
+      "spokenSeconds": 11.2,
+      "spoken": "Elle peut d’abord retirer un engagement si elle souhaite en choisir un autre.",
+      "visibleSeconds": 12.8,
+      "visible": "Panneau latéral des créneaux sélectionnés affichant la possibilité de retirer un créneau.",
+      "sync": "aligned",
+      "severity": "none"
+    },
+    {
+      "scene": "reserved",
+      "globalSpokenSeconds": 66.473,
+      "globalVisibleSeconds": 66.973,
+      "spokenSeconds": 1.5,
+      "spoken": "le poste Sécurité reste visible mais marqué réservé à certains membres",
+      "visibleSeconds": 2,
+      "visible": "Le défilement affiche le créneau « 20h–02h - Sécurité » avec la mention « réservé à certains membres »",
+      "sync": "aligned",
+      "severity": "none"
+    },
+    {
+      "scene": "reserved",
+      "globalSpokenSeconds": 72.473,
+      "globalVisibleSeconds": 74.473,
+      "spokenSeconds": 7.5,
+      "spoken": "il demande simplement d’utiliser le lien personnel reçu par email",
+      "visibleSeconds": 9.5,
+      "visible": "L'écran remonte sur le bandeau supérieur indiquant d'utiliser le lien personnel reçu par email",
+      "sync": "aligned",
+      "severity": "none"
+    },
+    {
+      "scene": "reserved",
+      "globalSpokenSeconds": 76.973,
+      "globalVisibleSeconds": 76.973,
+      "spokenSeconds": 12,
+      "spoken": "Une invitation sans la bonne étiquette ne donne pas davantage accès",
+      "visibleSeconds": 12,
+      "visible": "L'écran redescend sur la liste des créneaux incluant le poste Sécurité réservé",
+      "sync": "aligned",
+      "severity": "none"
+    },
+    {
+      "scene": "eligible",
+      "globalSpokenSeconds": 81.532,
+      "globalVisibleSeconds": 82.432,
+      "spokenSeconds": 0.8,
+      "spoken": "Julien possède l'étiquette sécurité.",
+      "visibleSeconds": 1.7,
+      "visible": "Affichage de la frise des créneaux incluant la ligne de mission Sécurité",
+      "sync": "aligned",
+      "severity": "none"
+    },
+    {
+      "scene": "eligible",
+      "globalSpokenSeconds": 83.532,
+      "globalVisibleSeconds": 88.032,
+      "spokenSeconds": 2.8,
+      "spoken": "En ouvrant son invitation, la même mission devient sélectionnable",
+      "visibleSeconds": 7.3,
+      "visible": "Le créneau Sécurité 20h-02h est cliqué et apparaît dans les créneaux sélectionnés",
+      "sync": "aligned",
+      "severity": "none"
+    },
+    {
+      "scene": "eligible",
+      "globalSpokenSeconds": 89.932,
+      "globalVisibleSeconds": 91.332,
+      "spokenSeconds": 9.2,
+      "spoken": "au moment de l'inscription",
+      "visibleSeconds": 10.6,
+      "visible": "Clic sur « Continuer » et ouverture du formulaire d'inscription prérempli avec les coordonnées de Julien Favre",
+      "sync": "aligned",
+      "severity": "none"
+    },
+    {
+      "scene": "eligible",
+      "globalSpokenSeconds": 92.732,
+      "globalVisibleSeconds": 93.232,
+      "spokenSeconds": 12,
+      "spoken": "Il n'y a donc ni compte à créer, ni code à recopier.",
+      "visibleSeconds": 12.5,
+      "visible": "Formulaire d'inscription directement accessible et pré-rempli sans étape de connexion ou de saisie de code",
+      "sync": "aligned",
+      "severity": "none"
+    },
+    {
+      "scene": "answer",
+      "globalSpokenSeconds": 98.937,
+      "globalVisibleSeconds": 99.437,
+      "spokenSeconds": 2.9,
+      "spoken": "Dans Gérer les postes, ouvrons son éditeur Accès.",
+      "visibleSeconds": 3.4,
+      "visible": "Ouverture du volet Gérer les postes puis clic sur le lien Accès de la Navette",
+      "sync": "aligned",
+      "severity": "none"
+    },
+    {
+      "scene": "answer",
+      "globalSpokenSeconds": 102.437,
+      "globalVisibleSeconds": 105.837,
+      "spokenSeconds": 6.4,
+      "spoken": "Choisissons la question Permis de conduire, posée à tous les bénévoles, puis cochons Oui dans Réponses acceptées et enregistrons.",
+      "visibleSeconds": 9.8,
+      "visible": "Sélection de la case Oui sous Réponses acceptées puis clic sur Enregistrer l'ordre",
+      "sync": "aligned",
+      "severity": "none"
+    },
+    {
+      "scene": "answer",
+      "globalSpokenSeconds": 109.537,
+      "globalVisibleSeconds": 113.237,
+      "spokenSeconds": 13.5,
+      "spoken": "Sur la page publique, le créneau annonce Réponse requise : Permis de conduire, Oui.",
+      "visibleSeconds": 17.2,
+      "visible": "Affichage de la vue liste publique avec la mention Réponse requise : Permis de conduire, Oui sous Navette",
+      "sync": "aligned",
+      "severity": "none"
+    },
+    {
+      "scene": "answer",
+      "globalSpokenSeconds": 115.137,
+      "globalVisibleSeconds": 116.337,
+      "spokenSeconds": 19.1,
+      "spoken": "Essayons de nous inscrire avec Non.",
+      "visibleSeconds": 20.3,
+      "visible": "Sélection du créneau puis choix de l'option Non pour le permis de conduire",
+      "sync": "aligned",
+      "severity": "none"
+    },
+    {
+      "scene": "answer",
+      "globalSpokenSeconds": 118.137,
+      "globalVisibleSeconds": 121.837,
+      "spokenSeconds": 22.1,
+      "spoken": "Au moment de confirmer, le formulaire refuse cette réponse pour la Navette.",
+      "visibleSeconds": 25.8,
+      "visible": "Clic sur Confirmer mon inscription et apparition du message d'erreur rouge bloquant l'inscription",
+      "sync": "aligned",
+      "severity": "none"
+    },
+    {
+      "scene": "answer",
+      "globalSpokenSeconds": 122.537,
+      "globalVisibleSeconds": 123.237,
+      "spokenSeconds": 26.5,
+      "spoken": "Choisissons maintenant Oui et confirmons : l'inscription est acceptée.",
+      "visibleSeconds": 27.2,
+      "visible": "Sélection de Oui, validation et affichage de l'écran Inscription confirmée !",
+      "sync": "aligned",
+      "severity": "none"
+    },
+    {
+      "scene": "result",
+      "globalSpokenSeconds": 130.77,
+      "globalVisibleSeconds": 128.87,
+      "spokenSeconds": 3.4,
+      "spoken": "Dans les paramètres de l'événement, la description permet d'expliquer les critères.",
+      "visibleSeconds": 1.5,
+      "visible": "L'onglet Paramètres de l'événement s'affiche avec le champ Description.",
+      "sync": "aligned",
+      "severity": "none"
+    },
+    {
+      "scene": "result",
+      "globalSpokenSeconds": 135.07,
+      "globalVisibleSeconds": 134.87,
+      "spokenSeconds": 7.7,
+      "spoken": "Vérifions aussi le téléphone obligatoire si l'équipe doit appeler le jour J.",
+      "visibleSeconds": 7.5,
+      "visible": "L'écran descend sur la case à cocher active « Téléphone obligatoire à l'inscription ».",
+      "sync": "aligned",
+      "severity": "none"
+    },
+    {
+      "scene": "result",
+      "globalSpokenSeconds": 140.37,
+      "globalVisibleSeconds": 140.57,
+      "spokenSeconds": 13,
+      "spoken": "Pour corriger un profil, retrouvons Julien dans les membres,",
+      "visibleSeconds": 13.2,
+      "visible": "Accès à l'onglet Membres et recherche de Julien Favre.",
+      "sync": "aligned",
+      "severity": "none"
+    },
+    {
+      "scene": "result",
+      "globalSpokenSeconds": 143.47,
+      "globalVisibleSeconds": 143.67,
+      "spokenSeconds": 16.1,
+      "spoken": "puis ouvrons Modifier : son étiquette sécurité est une information interne.",
+      "visibleSeconds": 16.3,
+      "visible": "Clic sur Modifier, ouverture de la modale avec le champ Étiquettes contenant « sécurité ».",
+      "sync": "aligned",
+      "severity": "none"
+    },
+    {
+      "scene": "result",
+      "globalSpokenSeconds": 150.87,
+      "globalVisibleSeconds": 150.17,
+      "spokenSeconds": 23.5,
+      "spoken": "puis nous annulons.",
+      "visibleSeconds": 22.8,
+      "visible": "Fermeture de la boîte de dialogue sans enregistrer.",
+      "sync": "aligned",
+      "severity": "none"
     }
   ]
 }
