@@ -161,3 +161,17 @@ describe("ShiftRow focus return", () => {
     expect(document.activeElement).toBe(cancel)
   })
 })
+
+describe("ShiftRow, a poste reserved to an answer (#962)", () => {
+  afterEach(cleanup)
+
+  it("says the required answer under the selected shift", () => {
+    renderRow({ shift: shift({ reservedAnswer: { questionLabel: "Permis de conduire", answers: ["Oui"] } }) })
+    expect(screen.getByText("Réponse requise : Permis de conduire, Oui")).toBeInTheDocument()
+  })
+
+  it("says nothing for a shift without a condition", () => {
+    renderRow()
+    expect(screen.queryByText(/Réponse requise/)).not.toBeInTheDocument()
+  })
+})

@@ -140,9 +140,9 @@ export function rawAnswerValues(value: unknown): string[] {
   return typeof value === "string" && value !== "" ? [value] : []
 }
 
-/** « Réservé : Permis de conduire, Oui »: the mention under a reserved shift. */
+/** « Réponse requise : Permis de conduire, Oui »: the mention under a reserved shift. */
 export function answerConditionMention(questionLabel: string, answers: string[]): string {
-  return `Réservé : ${questionLabel}, ${answers.join(" ou ")}`
+  return `Réponse requise : ${questionLabel}, ${answers.join(" ou ")}`
 }
 
 /** « Ce poste est réservé aux personnes qui répondent Oui à « Permis de conduire ». » */

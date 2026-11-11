@@ -342,17 +342,18 @@ export async function POST(req: Request) {
   const answerCheck = checkAnswers(questions, parsed.data.answers)
   if (!answerCheck.ok) return refuse(answersRefusal(answerCheck)!)
 
-  // Answer conditions (#962), on the answers that will really be stored: with proof of the address
-  // the posted ones replace, without it the member's stored answer wins (planAnswerWrites below),
-  // and a missing answer never opens the poste.
+  // Answer conditions (#962). Without proof of the address, only what this form says counts, as
+  // for a new person: the condition is self-declared anyway, and reading a known member's stored
+  // answer would turn the refusal into an oracle on it, where every other unproven sign-up gets
+  // the same answer (AUTHZ-01). That stored answer is never replaced without proof
+  // (planAnswerWrites below). With proof (personal link, invitation), the stored answer is the
+  // base and the form's answers replace it, so « Mes inscriptions » need not send it again.
   const answerConditions = reservedAnswerConditions(roleShifts)
   let effectiveAnswers = new Map(answerCheck.values)
-  if (answerConditions.size > 0 && existing && !ownsEmail) {
-    // Without proof, the stored answer wins; the typed one is only added for a question never
-    // answered (planAnswerWrites below never replaces a stored answer).
+  if (answerConditions.size > 0 && existing && ownsEmail) {
     const stored = await prisma.questionAnswer.findMany({ where: { eventId, volunteerId: existing.id }, select: { questionId: true, values: true } })
     effectiveAnswers = new Map(stored.filter((row) => row.values.length > 0).map((row) => [row.questionId, row.values]))
-    for (const [questionId, values] of answerCheck.values) if (!effectiveAnswers.has(questionId)) effectiveAnswers.set(questionId, values)
+    for (const [questionId, values] of answerCheck.values) effectiveAnswers.set(questionId, values)
   }
   const answerProblems = answerConditionProblems(shifts, answerConditions, effectiveAnswers)
   if (answerProblems.length > 0) {

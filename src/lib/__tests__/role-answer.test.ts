@@ -82,8 +82,8 @@ describe("answerConditionProblems", () => {
 
 describe("texts", () => {
   it("says the mention and the refusal with the question and stored answers", () => {
-    expect(answerConditionMention("Permis de conduire", ["Oui"])).toBe("Réservé : Permis de conduire, Oui")
-    expect(answerConditionMention("Véhicules", ["Voiture", "Vélo"])).toBe("Réservé : Véhicules, Voiture ou Vélo")
+    expect(answerConditionMention("Permis de conduire", ["Oui"])).toBe("Réponse requise : Permis de conduire, Oui")
+    expect(answerConditionMention("Véhicules", ["Voiture", "Vélo"])).toBe("Réponse requise : Véhicules, Voiture ou Vélo")
     expect(answerConditionRefusal("Permis de conduire", ["Oui"])).toBe("Ce poste est réservé aux personnes qui répondent Oui à « Permis de conduire ».")
   })
 })

@@ -178,7 +178,7 @@ export function RoleReserveForm({
             </fieldset>
           )}
           <p id={`reserve-question-help-${i}`} className="mt-1 text-xs text-gray-600">
-            Seules les questions à choix posées à tous les bénévoles sont proposées : le bénévole doit voir la question avant de choisir le poste. Le créneau affiche « Réservé : question, réponse » ; l&apos;inscription vérifie la réponse enregistrée, et vous pouvez toujours ajouter quelqu&apos;un à la main.
+            Seules les questions à choix posées à tous les bénévoles sont proposées : le bénévole doit voir la question avant de choisir le poste. Le créneau affiche « Réponse requise : question, réponse » ; l&apos;inscription vérifie la réponse enregistrée, et vous pouvez toujours ajouter quelqu&apos;un à la main.
           </p>
           {questions.length === 0 && <p className="mt-1 text-xs text-gray-700">Aucune question à choix posée à tous les bénévoles pour l&apos;instant : créez-en une dans « Questions aux bénévoles ».</p>}
         </div>

@@ -92,6 +92,9 @@ export default function SignupRecap({ shifts, requirePhone, phoneGiven, commentG
                 {r.minAge !== null && (
                   <span className="inline-block rounded-full px-2 py-0.5 text-xs font-medium bg-gray-100 text-gray-800">{r.minAge} ans minimum</span>
                 )}
+                {r.answerMention && (
+                  <span className="inline-block rounded-full px-2 py-0.5 text-xs font-medium bg-gray-100 text-gray-800">{r.answerMention}</span>
+                )}
               </p>
               {source && <ShiftInfoList info={source} className="mt-1 text-xs text-gray-600" />}
               {label && (

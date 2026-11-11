@@ -1047,7 +1047,7 @@ Vérification finale du checkout : un autre processus a avancé la référence p
 
 L'éditeur « Accès » de « Gérer les postes » gagne une **Condition d'accès (facultatif)**
 (question à choix posée à tous, réponses acceptées) et le créneau public une mention
-« Réservé : … ». `shift-eligibility-rules` ouvre réellement cet éditeur (sélecteur
+« Réponse requise : … ». `shift-eligibility-rules` ouvre réellement cet éditeur (sélecteur
 « Accès : sécurité, poste « Sécurité » réservé » dans `videos/tools/record.ts`) : son image
 montre l'ancienne version, sans le bloc de condition. **Non régénérée dans ce travail**
 (voix et capture longues) ; recorder et narration restent valides, à refilmer au prochain

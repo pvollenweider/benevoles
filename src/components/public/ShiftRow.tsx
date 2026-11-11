@@ -7,6 +7,7 @@ import { NEW_TAB_HINT } from "@/lib/embed"
 import { fmt } from "@/lib/gantt-utils"
 import { withdrawCopy } from "@/lib/volunteer-withdraw"
 import { CANCEL_CLOSED_LINK, CANCEL_CLOSED_SHORT } from "@/lib/cancel-deadline"
+import { answerConditionMention } from "@/lib/role-answer"
 
 /** What a selected-shift row shows of a shift. */
 export type ShiftRowShift = {
@@ -19,6 +20,8 @@ export type ShiftRowShift = {
   waitlistEnabled: boolean
   requiresApproval?: boolean
   minAge: number | null
+  /** Reserved to an answer (#962): said here, checked at submit. */
+  reservedAnswer?: { questionLabel: string; answers: string[] } | null
 }
 
 type Props = {
@@ -68,6 +71,9 @@ export default function ShiftRow({ shift: s, compact = false, registered: isReg,
         <p className="text-[11px] text-gray-500 mt-0.5 font-mono">{fmt(s.startTime)}–{fmt(s.endTime)}</p>
         {s.minAge != null && (
           <p className="text-[11px] text-amber-700 mt-0.5 font-medium">{s.minAge} ans minimum</p>
+        )}
+        {s.reservedAnswer && (
+          <p className="text-[11px] text-amber-700 mt-0.5 font-medium">{answerConditionMention(s.reservedAnswer.questionLabel, s.reservedAnswer.answers)}</p>
         )}
         {isWaitlistPending && (
           <p className="text-[11px] text-gray-500 mt-0.5">Complet · liste d&apos;attente si place libérée</p>

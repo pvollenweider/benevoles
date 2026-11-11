@@ -77,10 +77,10 @@ describe("DayTimeline", () => {
   it("shows a readable answer condition on a bar, still selectable (#962)", () => {
     const onToggle = vi.fn()
     render(<DayTimeline shifts={[shift("a", { reservedAnswer: { questionId: "q1", questionLabel: "Permis de conduire", answers: ["Oui"] } })]} shows={[]} selected={new Set()} onToggle={onToggle} />)
-    const bar = screen.getByRole("button", { name: /Réservé : Permis de conduire, Oui/ })
+    const bar = screen.getByRole("button", { name: /Réponse requise : Permis de conduire, Oui/ })
     expect(bar).toBeEnabled()
     expect(bar).not.toHaveAttribute("aria-disabled")
-    expect(screen.getByText(/Réservé : Permis de conduire, Oui/)).toBeInTheDocument()
+    expect(screen.getByText(/Réponse requise : Permis de conduire, Oui/)).toBeInTheDocument()
     fireEvent.click(bar)
     expect(onToggle).toHaveBeenCalledWith("a", "open")
   })

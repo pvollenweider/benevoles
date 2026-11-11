@@ -85,22 +85,17 @@ describe.skipIf(!url)("public sign-up to a poste reserved to an answer (#962)", 
     expect(await prisma.registration.count({ where: { eventId } })).toBe(before)
   })
 
-  it("uses the volunteer's stored answer, so changing it opens the shift", async () => {
+  it("without proof of the address, checks the typed answer and never touches the stored one", async () => {
     const email = `${tag}-stored@example.org`
     await prisma.volunteer.create({ data: { organizationId: orgId, firstName: "Léa", lastName: "M", email } })
     const volunteer = await prisma.volunteer.findFirstOrThrow({ where: { email } })
     await prisma.questionAnswer.create({ data: { questionId, eventId, volunteerId: volunteer.id, values: ["Oui"] } })
-    // The form proves nothing about the address and sends no answer: the stored « Oui » counts.
-    expect((await signup(email, {})).status).toBe(201)
+    // The stored « Oui » is not read without proof: no answer typed, no place (no oracle on it).
+    expect((await signup(email, {})).status).toBe(403)
     await prisma.questionAnswer.update({ where: { questionId_volunteerId: { questionId, volunteerId: volunteer.id } }, data: { values: ["Non"] } })
-    const other = await prisma.shift.create({
-      data: { eventId, roleName: "Navette", label: "Navette 2", date: new Date("2031-06-02T00:00:00Z"), startTime: "10:00", endTime: "12:00", capacity: 5, reservedQuestionId: questionId, reservedAnswers: ["Oui"] },
-    })
-    const res = await publicSignup(new Request("http://localhost/api/public/registrations", {
-      method: "POST",
-      headers: { "content-type": "application/json", "x-forwarded-for": `${tag}-ip-${ipSeq++}` },
-      body: JSON.stringify({ eventId, shiftIds: [other.id], firstName: "Léa", lastName: "M", email, consent: true, charterAccepted: true }),
-    }))
-    expect(res.status).toBe(403)
+    // A typed « Oui » decides, as for a new person, and the stored « Non » stays as it was.
+    expect((await signup(email, { [questionId]: "Oui" })).status).toBe(201)
+    const stored = await prisma.questionAnswer.findUniqueOrThrow({ where: { questionId_volunteerId: { questionId, volunteerId: volunteer.id } } })
+    expect(stored.values).toEqual(["Non"])
   })
 })

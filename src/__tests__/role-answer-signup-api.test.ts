@@ -6,8 +6,8 @@ vi.mock("@/lib/workload-guard", async (importOriginal) => ({
   committedDuty: vi.fn(async () => []), checkScheduleEdit: vi.fn(async () => []),
 }))
 
-// A poste reserved to an answer (#962): checked at the public sign-up, with the stored answer of a
-// known volunteer when the form proves nothing.
+// A poste reserved to an answer (#962): checked at the public sign-up on the form's answers; a
+// known member's stored answer counts only with proof of the address (no oracle on it, AUTHZ-01).
 const m = vi.hoisted(() => ({
   eventFindFirst: vi.fn(),
   shiftFindMany: vi.fn(),
@@ -105,12 +105,23 @@ describe("public sign-up to a poste reserved to an answer (#962)", () => {
     expect(m.txCreate).toHaveBeenCalledOnce()
   })
 
-  it("uses the member's stored answer when the form proves nothing, never a typed one", async () => {
+  it("without proof of the address, checks the typed answer only, never the stored one", async () => {
     m.volunteerFindFirst.mockResolvedValue({ id: "vol-1" })
+    m.answerFindMany.mockResolvedValue([{ questionId: "q1", values: ["Non"] }])
+    const { POST } = await import("@/app/api/public/registrations/route")
+    // A refusal here would tell a stranger that this member answered « Non ».
+    expect((await POST(post({ answers: { q1: "Oui" } }))).status).toBeLessThan(300)
+    m.answerFindMany.mockResolvedValue([{ questionId: "q1", values: ["Oui"] }])
+    expect((await POST(post({ answers: { q1: "Non" } }))).status).toBe(403)
+    expect(m.answerFindMany).not.toHaveBeenCalledWith(expect.objectContaining({ where: expect.objectContaining({ volunteerId: "vol-1" }) }))
+  })
+
+  it("with the personal link, the stored answer counts when the form does not send it again", async () => {
+    m.volunteerFindFirst.mockResolvedValue({ id: "vol-1" })
+    m.regFindFirst.mockResolvedValue({ volunteerId: "vol-1", phone: null, volunteer: { firstName: "Léa", lastName: "M", phone: null } })
     m.answerFindMany.mockResolvedValue([{ questionId: "q1", values: ["Oui"] }])
     const { POST } = await import("@/app/api/public/registrations/route")
-    // Without proof, a typed « Oui » is only added when missing; the stored answer decides here.
-    expect((await POST(post({ answers: { q1: "Non" } }))).status).toBeLessThan(300)
-    expect(m.txCreate).toHaveBeenCalledOnce()
+    expect((await POST(post({ personalToken: "tok", answers: {} }))).status).toBeLessThan(300)
   })
+
 })
