@@ -1,7 +1,7 @@
 // SPDX-FileCopyrightText: 2026 Philippe Vollenweider
 // SPDX-License-Identifier: AGPL-3.0-only
 
-import { describe, it, expect, vi, beforeEach } from "vitest"
+import { describe, it, expect, vi, beforeEach, afterEach } from "vitest"
 
 vi.mock("@/lib/workload-guard", async (importOriginal) => ({
   ...(await importOriginal<typeof import("@/lib/workload-guard")>()),
@@ -72,7 +72,13 @@ const row = (over: Record<string, unknown> = {}) => ({
 })
 
 describe("confirmation by email: the button, never the link (#1253)", () => {
+  afterEach(() => {
+    vi.useRealTimers()
+  })
+  // The route reads the clock: pin it to the fixtures' day, or the held places expire with time.
   beforeEach(() => {
+    vi.useFakeTimers({ toFake: ["Date"] })
+    vi.setSystemTime(now)
     vi.clearAllMocks()
     m.top.mockResolvedValue(row())
     m.claim.mockResolvedValue({ count: 1 })
