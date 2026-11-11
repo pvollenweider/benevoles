@@ -19,6 +19,10 @@ Format basé sur [Keep a Changelog](https://keepachangelog.com/fr/1.0.0/).
 
 - La page de confirmation d'une inscription par email affiche le nom et le téléphone que la confirmation enregistrera dans la fiche, et dit quoi faire si la demande ne vient pas de vous.
 
+### Exploitation
+
+- Le build webpack (celui des vidéos) ne s'arrête plus à la collecte des pages : `isomorphic-dompurify`, qui embarque sa propre version de jsdom, reste chargé depuis `node_modules`.
+
 ## [2.7.0] — 2026-11-10
 
 ### En bref
