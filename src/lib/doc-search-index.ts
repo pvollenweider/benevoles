@@ -303,14 +303,37 @@ export type DocQuestion = DocSection
  * is what the page's heading renders (and slugs).
  */
 function plainHeading(markdown: string): string {
-  return markdown
-    .replace(/!\[([^\]]*)\]\([^)]*\)/g, "$1")
-    .replace(/!\[([^\]]*)\]\[[^\]]*\]/g, "$1")
-    .replace(/\[([^\]]*)\]\([^)]*\)/g, "$1")
-    .replace(/\[([^\]]*)\]\[[^\]]*\]/g, "$1")
-    .replace(/<[^>]*>/g, "").replace(/[<>]/g, "")
+  return withoutTags(
+    markdown
+      .replace(/!\[([^\]]*)\]\([^)]*\)/g, "$1")
+      .replace(/!\[([^\]]*)\]\[[^\]]*\]/g, "$1")
+      .replace(/\[([^\]]*)\]\([^)]*\)/g, "$1")
+      .replace(/\[([^\]]*)\]\[[^\]]*\]/g, "$1"),
+    "",
+  )
     .replace(/[*_`]/g, "")
     .trim()
+}
+
+/**
+ * The text without its HTML tags, each replaced by `gap`: one pass that drops everything from a
+ * « < » to the next « > », and any stray « > ». No « < » or « > » survives, nested tags included
+ * (« <scr<script>ipt> »). The result is only ever used as plain text (search terms, heading text).
+ */
+function withoutTags(text: string, gap: string): string {
+  let out = ""
+  let inTag = false
+  for (const char of text) {
+    if (char === "<") {
+      if (!inTag) out += gap
+      inTag = true
+    } else if (char === ">") {
+      inTag = false
+    } else if (!inTag) {
+      out += char
+    }
+  }
+  return out
 }
 
 /** A heading of a unit's Markdown, with the depth it is written at. */
@@ -376,14 +399,15 @@ function bodyPlainText(markdown: string): string {
     if (/^\s*\[[^\]]+\]:\s+\S+/.test(line)) continue // a link reference definition
     kept.push(line)
   }
-  return kept
-    .join("\n")
-    .replace(/!\[[^\]]*\]\([^)]*\)/g, " ")
-    .replace(/!\[[^\]]*\]\[[^\]]*\]/g, " ")
-    .replace(/\[([^\]]*)\]\([^)]*\)/g, "$1")
-    .replace(/\[([^\]]*)\]\[[^\]]*\]/g, "$1")
-    .replace(/<[^>]*>/g, " ").replace(/[<>]/g, " ")
-    .replace(/&(?:[a-z]+|#\d+);/gi, " ")
+  return withoutTags(
+    kept
+      .join("\n")
+      .replace(/!\[[^\]]*\]\([^)]*\)/g, " ")
+      .replace(/!\[[^\]]*\]\[[^\]]*\]/g, " ")
+      .replace(/\[([^\]]*)\]\([^)]*\)/g, "$1")
+      .replace(/\[([^\]]*)\]\[[^\]]*\]/g, "$1"),
+    " ",
+  ).replace(/&(?:[a-z]+|#\d+);/gi, " ")
 }
 
 /**
