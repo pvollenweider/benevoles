@@ -308,7 +308,7 @@ function plainHeading(markdown: string): string {
     .replace(/!\[([^\]]*)\]\[[^\]]*\]/g, "$1")
     .replace(/\[([^\]]*)\]\([^)]*\)/g, "$1")
     .replace(/\[([^\]]*)\]\[[^\]]*\]/g, "$1")
-    .replace(/<[^>]*>/g, "")
+    .replace(/<[^>]*>/g, "").replace(/[<>]/g, "")
     .replace(/[*_`]/g, "")
     .trim()
 }
@@ -382,7 +382,7 @@ function bodyPlainText(markdown: string): string {
     .replace(/!\[[^\]]*\]\[[^\]]*\]/g, " ")
     .replace(/\[([^\]]*)\]\([^)]*\)/g, "$1")
     .replace(/\[([^\]]*)\]\[[^\]]*\]/g, "$1")
-    .replace(/<[^>]*>/g, " ")
+    .replace(/<[^>]*>/g, " ").replace(/[<>]/g, " ")
     .replace(/&(?:[a-z]+|#\d+);/gi, " ")
 }
 

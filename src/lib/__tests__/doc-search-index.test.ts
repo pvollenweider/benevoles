@@ -7,6 +7,8 @@ import {
   docSearchDocuments,
   docSearchQuery,
   docSearchScores,
+  docUnitSections,
+  docUnitWords,
   processTerm,
   searchTerms,
   stemForSearch,
@@ -174,5 +176,13 @@ describe("the real guides", () => {
 
   it("« xyzzy » finds none", () => {
     expect(hits("xyzzy")).toEqual([])
+  })
+})
+
+describe("HTML in a guide's Markdown", () => {
+  it("leaves no angle bracket in a heading's text or in the body words, even with nested tags", () => {
+    const markdown = "## Avant <scr<script>ipt>alert(1)</script> après\n\nTexte <b<i>>gras</b>."
+    for (const section of docUnitSections(markdown)) expect(section.text).not.toMatch(/[<>]/)
+    for (const word of docUnitWords(markdown)) expect(word).not.toMatch(/[<>]/)
   })
 })
