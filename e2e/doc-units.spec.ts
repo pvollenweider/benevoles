@@ -282,19 +282,20 @@ test("the filter over the index narrows the list as you type, hides empty groups
   // Every link of the page's lists: the four frequent questions, then one per unit.
   const allLinks = await page.locator("main li").getByRole("link").count()
 
-  // Accents and case don't matter; every word must match.
+  // Accents and case don't matter. While filtering, one ranked list (best unit first, with its
+  // group) replaces the groups; the index arrives on the first interaction (#1319).
+  const firstResult = page.locator("main h3:text-is('Résultats') + ul > li > a.font-medium").first()
   await field.fill("LIEN perdu")
-  await expect(status).toHaveText(/^1 fiche sur \d+ correspond à « LIEN perdu »\.$/)
-  await expect(page.locator("main li").getByRole("link", { name: "Ton lien personnel", exact: true })).toBeVisible()
-  await expect(page.locator("main li").getByRole("link", { name: "S'inscrire", exact: true })).toBeHidden()
-  // A group without any match is hidden whole, heading included.
+  await expect(status).toHaveText(/^\d+ fiches? sur \d+ correspond(ent)? à « LIEN perdu »\.$/)
+  await expect(firstResult).toHaveText("Ton lien personnel")
+  await expect(page.locator("main h3:text-is('Résultats') + ul > li").first()).toContainText(/Rubrique\s*:\s*Après l'inscription/)
+  // The groups are hidden whole, headings included: only the « Résultats » heading is left.
   await expect(page.getByRole("heading", { level: 3, name: "S'inscrire à un créneau" })).toHaveCount(0)
-  await expect(page.getByRole("heading", { level: 3, name: "Après l'inscription" })).toBeVisible()
-  await expect(page.getByRole("region", { name: "Toutes les fiches" }).getByRole("heading", { level: 3 })).toHaveCount(1)
+  await expect(page.getByRole("region", { name: "Toutes les fiches" }).getByRole("heading", { level: 3 })).toHaveText(["Résultats"])
   await expect(field).toBeFocused()
 
   await field.fill("creneau changer")
-  await expect(page.locator("main li").getByRole("link", { name: "Mes inscriptions", exact: true })).toBeVisible()
+  await expect(page.locator("main h3:text-is('Résultats') + ul").getByRole("link", { name: "Mes inscriptions", exact: true })).toBeVisible()
 
   // A unit found by one of its questions links to it, under its result.
   await field.fill("oublier")

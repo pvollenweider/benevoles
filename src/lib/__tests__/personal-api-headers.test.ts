@@ -67,7 +67,7 @@ describe("no-store on API answers with personal data or tokens", () => {
   })
 
   it("leaves the public, cacheable answers alone", async () => {
-    for (const url of ["/api/public/events", "/api/public/spectacle-2026", "/api/public/organizations/abc/logo", "/api/health"]) {
+    for (const url of ["/api/public/events", "/api/public/spectacle-2026", "/api/public/organizations/abc/logo", "/api/public/doc-index", "/api/health"]) {
       expect(await cacheControlFor(url), url).toBeUndefined()
     }
     // A prefix is a whole path segment: /api/admin-like is not /api/admin.

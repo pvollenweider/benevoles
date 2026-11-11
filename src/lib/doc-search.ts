@@ -2,103 +2,139 @@
 // SPDX-License-Identifier: AGPL-3.0-only
 
 /**
- * The filter over the index of the documentation units (#649, src/components/public/DocUnitIndex.tsx):
- * pure functions shared by the server, which extracts what a unit can be found by, and the
- * client, which filters as the reader types. No Node import here: this module is bundled for the
- * browser.
+ * The filter over the index of the documentation units (#649, #1319,
+ * src/components/public/DocUnitIndex.tsx): the pure functions of its interface, alongside the
+ * search index itself (src/lib/doc-search-index.ts). No Node import here: this module is bundled
+ * for the browser.
+ *
+ * The index (MiniSearch) is built on the server and fetched by the browser on the reader's first
+ * interaction. Until it arrives, and if the request fails, `matchesDocTerms` keeps filtering on the
+ * title, the summary and the « ## » / « ### » headings that the page is server-rendered with.
  */
 
-import { createHeadingSlugger } from "@/lib/heading-anchors"
+import {
+  searchTermMatchesWord,
+  searchTerms,
+  tokenize,
+  type DocSection,
+} from "@/lib/doc-search-index"
 import { DOC_FAQ_HEADING_ID } from "@/lib/doc-faq"
 import type { DocRole } from "@/lib/doc-units"
 
-/** What the filter searches in a unit: its title, its summary and the questions its page answers. */
-export type DocSearchEntry = { title: string; summary: string; questions: readonly string[] }
+export {
+  docQueryTerms,
+  docSearchQuery,
+  docSearchDocuments,
+  docUnitQuestionAnchors,
+  docUnitQuestions,
+  docUnitSections,
+  docUnitWords,
+  DOC_INDEX_OPTIONS,
+  DOC_SEARCH_OPTIONS,
+  isOneTypoApart,
+  isSearchStopWord,
+  normalizeForSearch,
+  processTerm,
+  searchTermMatchesWord,
+  searchTerms,
+  stemForSearch,
+  tokenize,
+  type DocQuestion,
+  type DocSearchDocument,
+  type DocSection,
+} from "@/lib/doc-search-index"
 
 /**
- * Lower case, without accents (NFD, then the combining marks removed), typographic apostrophes as
- * straight ones, runs of spaces as one: « Créneau » and « creneau » compare equal.
+ * What the fallback filter searches in a unit before the index arrives: its title, its summary,
+ * the « ## » and « ### » headings of its page. `sections` is optional so an older entry (title,
+ * summary, questions only) still filters: its questions stand in for the headings.
  */
-export function normalizeForSearch(text: string): string {
-  return text
-    .normalize("NFD")
-    .replace(/\p{M}/gu, "")
-    .toLowerCase()
-    .replace(/[’ʼ‘]/g, "'")
-    .replace(/\s+/g, " ")
-    .trim()
+export type DocSearchEntry = {
+  title: string
+  summary: string
+  questions: readonly string[]
+  sections?: readonly DocSection[]
 }
 
-/** The words of a query, normalised; none for a blank query. */
-export function searchTerms(query: string): string[] {
-  const normalized = normalizeForSearch(query)
-  return normalized === "" ? [] : normalized.split(" ")
+/** Whether a term appears in a text (its words, with searchTermMatchesWord). */
+function textMatchesTerm(text: string, term: string): boolean {
+  return tokenize(text).some((word) => searchTermMatchesWord(term, word))
 }
 
-/** The normalised text an entry is searched in. */
-export function searchHaystack(entry: DocSearchEntry): string {
-  return normalizeForSearch([entry.title, entry.summary, ...entry.questions].join(" \n "))
+/** The headings of an entry: `sections` when indexed, else its questions (older callers). */
+function entrySections(entry: DocSearchEntry): DocSection[] {
+  if (entry.sections) return [...entry.sections]
+  return entry.questions.map((text) => ({ text, id: "" }))
 }
 
-/** Whether every word of the query appears in the haystack (searchHaystack); a blank query matches everything. */
-export function haystackMatches(haystack: string, terms: readonly string[]): boolean {
-  return terms.every((term) => haystack.includes(term))
+/**
+ * Whether every term matches somewhere in the entry's title, headings or summary. This is the
+ * fallback used while the MiniSearch index loads (or when it cannot): no body, so the server-
+ * rendered page can filter before anything is fetched.
+ */
+export function matchesDocTerms(entry: DocSearchEntry, terms: readonly string[]): boolean {
+  if (terms.length === 0) return true
+  return terms.every(
+    (term) =>
+      textMatchesTerm(entry.title, term) ||
+      entrySections(entry).some((section) => textMatchesTerm(section.text, term)) ||
+      textMatchesTerm(entry.summary, term),
+  )
 }
 
-/** Whether an entry matches a query: every word, anywhere in its title, summary or questions. */
+/** Whether an entry matches a query in the fallback: every remaining word, stop words dropped. */
 export function matchesDocQuery(entry: DocSearchEntry, query: string): boolean {
-  return haystackMatches(searchHaystack(entry), searchTerms(query))
-}
-
-/** A question of a unit's page: its text, and the id its heading renders with (the link's fragment). */
-export type DocQuestion = { text: string; id: string }
-
-/** A heading's Markdown as plain text: links keep their text, emphasis and code marks are dropped. */
-function plainHeading(markdown: string): string {
-  return markdown
-    .replace(/!?\[([^\]]*)\]\([^)]*\)/g, "$1")
-    .replace(/[*_`]/g, "")
-    .trim()
+  return matchesDocTerms(entry, searchTerms(query))
 }
 
 /**
- * The « ### » headings of a unit's Markdown, with their ids: where the units put the questions
- * readers ask (« Je ne veux pas oublier mon créneau le jour J », under « Questions fréquentes » or
- * « Côté bénévole »). Every heading goes through one slugger, in order, as the unit's page renders
- * them (src/lib/event-page-markdown.ts), so a repeated heading gets the same « -2 » suffix; a test
- * checks these ids against the rendered page. Fenced code is skipped.
+ * The sections to show under a result: only when the unit is not already found by its title or
+ * summary, the « ## » / « ### » headings that hold every remaining word of the query, in page
+ * order, `limit` at most. None for a blank query or one made only of stop words.
  */
-export function docUnitQuestionAnchors(markdown: string): DocQuestion[] {
-  const questions: DocQuestion[] = []
-  const slug = createHeadingSlugger()
-  let fenced = false
-  for (const line of markdown.split("\n")) {
-    if (/^\s*(```|~~~)/.test(line)) fenced = !fenced
-    if (fenced) continue
-    const match = line.match(/^(#{1,6})\s+(.+?)\s*#*\s*$/)
-    if (!match) continue
-    const text = plainHeading(match[2])
-    const id = slug(text)
-    if (match[1].length === 3 && text !== "") questions.push({ text, id })
-  }
-  return questions
-}
-
-/** The « ### » headings of a unit's Markdown, as plain text (docUnitQuestionAnchors without the ids). */
-export function docUnitQuestions(markdown: string): string[] {
-  return docUnitQuestionAnchors(markdown).map((q) => q.text)
-}
-
-/**
- * The questions to show under a result: only when the unit is found by its questions, not by its
- * title or summary (the result already says why it is there), the questions that hold every word
- * of the query, in page order, `limit` at most. None for a blank query.
- */
-export function matchingDocQuestions(entry: DocSearchEntry, query: string, limit = 2): string[] {
+export function matchingDocSections(entry: DocSearchEntry, query: string, limit = 2): DocSection[] {
   const terms = searchTerms(query)
   if (terms.length === 0) return []
-  if (haystackMatches(normalizeForSearch(`${entry.title} \n ${entry.summary}`), terms)) return []
-  return entry.questions.filter((q) => haystackMatches(normalizeForSearch(q), terms)).slice(0, limit)
+  if (terms.every((term) => textMatchesTerm(entry.title, term) || textMatchesTerm(entry.summary, term))) return []
+  const links: DocSection[] = []
+  for (const section of entrySections(entry)) {
+    if (links.some((link) => link.text === section.text)) continue
+    if (terms.every((term) => textMatchesTerm(section.text, term))) links.push(section)
+    if (links.length === limit) break
+  }
+  return links
+}
+
+/**
+ * The questions to show under a result (matchingDocSections, restricted to the « ### » headings):
+ * only when the unit is found by its questions, not by its title or summary.
+ */
+export function matchingDocQuestions(entry: DocSearchEntry, query: string, limit = 2): string[] {
+  return matchingDocSections(entry, query, limit).map((section) => section.text)
+}
+
+/**
+ * The section links under a result: matchingDocSections, each with the heading id the page
+ * renders. A heading without an id is left out rather than linked to « #undefined ».
+ */
+export function matchingDocSectionLinks(entry: DocSearchEntry, query: string, limit = 2): DocSection[] {
+  return matchingDocSections(entry, query, limit).filter((section) => section.id !== "")
+}
+
+/**
+ * The question links under a result, for an entry that carries its questions and their ids
+ * separately (`questionIds[i]` is the id of `questions[i]`). Kept for callers of #649; new code
+ * passes `sections` and uses matchingDocSectionLinks.
+ */
+export function matchingDocQuestionLinks(
+  entry: DocSearchEntry & { questionIds: readonly string[] },
+  query: string,
+  limit = 2,
+): DocSection[] {
+  const sections = entry.questions
+    .map((text, i) => ({ text, id: entry.questionIds[i] ?? "" }))
+    .filter((section) => section.id !== "")
+  return matchingDocSectionLinks({ ...entry, sections }, query, limit)
 }
 
 /**
@@ -110,25 +146,6 @@ export function docFilterStatus(query: string, shown: number, total: number): st
   if (q === "") return total === 1 ? "La fiche est affichée." : `Les ${total} fiches sont affichées.`
   if (shown === 0) return `Aucune fiche pour « ${q} ».`
   return shown === 1 ? `1 fiche sur ${total} correspond à « ${q} ».` : `${shown} fiches sur ${total} correspondent à « ${q} ».`
-}
-
-/**
- * The questions to link under a result: matchingDocQuestions, each with the heading id of its
- * position (`questionIds[i]` is the id of `questions[i]`). A question without an id is left out
- * rather than linked to « #undefined ».
- */
-export function matchingDocQuestionLinks(
-  entry: DocSearchEntry & { questionIds: readonly string[] },
-  query: string,
-  limit = 2,
-): DocQuestion[] {
-  const matched = new Set(matchingDocQuestions(entry, query, Infinity))
-  const links: DocQuestion[] = []
-  entry.questions.forEach((text, i) => {
-    const id = entry.questionIds[i]
-    if (matched.has(text) && id && !links.some((l) => l.text === text)) links.push({ text, id })
-  })
-  return links.slice(0, limit)
 }
 
 /** The help unit for organisers (content/guide/aide-et-retours.md): the last step when nothing matches. */

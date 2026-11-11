@@ -37,7 +37,8 @@ export const PERSONAL_API_PREFIXES = [
 
 /**
  * API routes with nothing personal in their answers: public event pages' data, the logo, the
- * anonymous « utile ? » answer, the health checks. As src/app/api paths, dynamic segments kept.
+ * documentation's search index, the anonymous « utile ? » answer, the health checks. As
+ * src/app/api paths, dynamic segments kept.
  */
 export const NOT_PERSONAL_API_ROUTES = [
   "/api/health",
@@ -45,6 +46,7 @@ export const NOT_PERSONAL_API_ROUTES = [
   "/api/public/events",
   "/api/public/[eventSlug]",
   "/api/public/organizations/[id]/logo",
+  "/api/public/doc-index",
   "/api/public/video-feedback",
 ] as const
 
