@@ -11,8 +11,26 @@
     "height": 800,
     "poster": true
   },
+  "assignment-proposals": {
+    "durationMs": 170880,
+    "width": 1280,
+    "height": 800,
+    "poster": true
+  },
+  "assignment-publication": {
+    "durationMs": 164280,
+    "width": 1280,
+    "height": 800,
+    "poster": true
+  },
   "attendance-check-in": {
     "durationMs": 407920,
+    "width": 1280,
+    "height": 800,
+    "poster": true
+  },
+  "beta-access": {
+    "durationMs": 120600,
     "width": 1280,
     "height": 800,
     "poster": true
@@ -102,7 +120,7 @@
     "poster": true
   },
   "last-minute-changes": {
-    "durationMs": 345400,
+    "durationMs": 395480,
     "width": 1280,
     "height": 800,
     "poster": true
@@ -120,7 +138,7 @@
     "poster": true
   },
   "members-import": {
-    "durationMs": 215320,
+    "durationMs": 241080,
     "width": 1280,
     "height": 800,
     "poster": true
@@ -192,7 +210,7 @@
     "poster": true
   },
   "privacy-personal-links": {
-    "durationMs": 365960,
+    "durationMs": 365360,
     "width": 1280,
     "height": 800,
     "poster": true
@@ -216,7 +234,13 @@
     "poster": true
   },
   "sector-leaders": {
-    "durationMs": 217560,
+    "durationMs": 282640,
+    "width": 1280,
+    "height": 800,
+    "poster": true
+  },
+  "sectors": {
+    "durationMs": 220480,
     "width": 1280,
     "height": 800,
     "poster": true
@@ -240,7 +264,7 @@
     "poster": true
   },
   "shift-eligibility-rules": {
-    "durationMs": 122400,
+    "durationMs": 153280,
     "width": 1280,
     "height": 800,
     "poster": true
@@ -259,6 +283,12 @@
   },
   "shift-roster-visibility": {
     "durationMs": 244920,
+    "width": 1280,
+    "height": 800,
+    "poster": true
+  },
+  "shift-swaps": {
+    "durationMs": 208400,
     "width": 1280,
     "height": 800,
     "poster": true
@@ -323,6 +353,12 @@
     "height": 800,
     "poster": true
   },
+  "volunteer-event-availability": {
+    "durationMs": 90800,
+    "width": 1280,
+    "height": 800,
+    "poster": true
+  },
   "volunteer-form-recap": {
     "durationMs": 167280,
     "width": 1280,
@@ -349,6 +385,12 @@
   },
   "volunteer-session-availability": {
     "durationMs": 184200,
+    "width": 1280,
+    "height": 800,
+    "poster": true
+  },
+  "workload-protection": {
+    "durationMs": 406480,
     "width": 1280,
     "height": 800,
     "poster": true
