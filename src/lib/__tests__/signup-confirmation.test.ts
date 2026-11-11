@@ -5,6 +5,7 @@ import { describe, expect, it } from "vitest"
 import {
   SIGNUP_CONFIRMATION_HOURS,
   cancelledState,
+  confirmationIdentityLines,
   confirmationDeadlineLabel,
   confirmationRequestNotice,
   signupConfirmationDecision,
@@ -157,5 +158,15 @@ describe("a request closed by the expiration cron (#1253)", () => {
     expect(cancelledState("expired")).toBe("expired")
     expect(cancelledState("organizer")).toBe("cancelled")
     expect(cancelledState(null)).toBe("cancelled")
+  })
+})
+
+describe("who the request was made for (#1253)", () => {
+  it("lists the name and the phone the confirmation saves", () => {
+    expect(confirmationIdentityLines({ firstName: "Nadia", lastName: " Berisha ", phone: " 079 555 12 34 " })).toEqual(["Nom : Nadia Berisha", "Téléphone : 079 555 12 34"])
+  })
+  it("leaves out an empty phone", () => {
+    expect(confirmationIdentityLines({ firstName: "Nadia", lastName: "Berisha", phone: null })).toEqual(["Nom : Nadia Berisha"])
+    expect(confirmationIdentityLines({ firstName: "Nadia", lastName: "Berisha", phone: "  " })).toEqual(["Nom : Nadia Berisha"])
   })
 })

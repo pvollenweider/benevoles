@@ -54,7 +54,7 @@ Clique sur **Confirmer mon inscription**.
 
 Certaines organisations activent la confirmation de l'adresse email avant que l'inscription soit définitive. Dans ce cas, après **Confirmer mon inscription**, la page **Vérifie tes emails** te dit qu'un email vient d'être envoyé et jusqu'à quand tes places sont réservées : **24 heures au plus**, et jamais au-delà du début de ton premier créneau. Si ce créneau commence dans moins d'une heure, tu peux encore confirmer jusqu'à son début.
 
-Ouvre cet email : il liste tes créneaux et l'échéance. Son lien ouvre une page qui rappelle tout cela, avec un bouton **Confirmer mon inscription**. **Ouvrir le lien ne confirme rien** : c'est le clic sur le bouton qui enregistre tes places. Tu peux cliquer à nouveau : la page affiche alors le résultat déjà enregistré, sans rien changer.
+Ouvre cet email : il liste tes créneaux et l'échéance. Son lien ouvre une page qui rappelle tout cela, avec le nom et le téléphone que ta confirmation enregistrera dans ta fiche, et un bouton **Confirmer mon inscription**. Si tu n'as pas fait cette demande, ne confirme pas : les places seront libérées à l'échéance. **Ouvrir le lien ne confirme rien** : c'est le clic sur le bouton qui enregistre tes places. Tu peux cliquer à nouveau : la page affiche alors le résultat déjà enregistré, sans rien changer.
 
 Tant que tu n'as pas confirmé :
 
