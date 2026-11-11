@@ -76,10 +76,9 @@
       "Pour retirer des fiches en trop, filtrez la liste, sélectionnez-les et choisissez « Supprimer la sélection » ; lisez la confirmation avant de valider."
     ],
     "remember": [
-      "Rien n'est enregistré avant la confirmation.",
+      "Rien n'est enregistré avant la confirmation, et un import est limité à 2 Mo et 5 000 lignes.",
       "Les fiches sont rapprochées par leur email : deux homonymes ne sont pas fusionnés, et une fiche sans email peut être créée une seconde fois.",
       "Les disponibilités ne sont pas importées, et importer une personne ne l'inscrit à aucun créneau.",
-      "Un import est limité à 2 Mo et 5 000 lignes.",
       "Les membres avec des inscriptions sont conservés ; la case de confirmation permet de les désactiver."
     ]
   },

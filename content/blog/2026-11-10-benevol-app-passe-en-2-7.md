@@ -23,18 +23,21 @@ Les secteurs ne demandent plus de participer à la bêta : l'option « Organiser
 Samedi, 15 h : le camion de boissons arrive plus tôt que prévu et il faut deux bras de plus au déchargement. Depuis la page Jour J, **Ajouter un besoin** crée le créneau en deux étapes, sans quitter la page, puis propose aussitôt la liste des bénévoles inscrits aujourd'hui. Un email et une notification sur leur téléphone partent en un clic.
 
 → [Ajouter un besoin le jour J](/doc/presences-le-jour-j#ajouter-un-besoin)
+▶ Vidéo : [Gérer un imprévu sans perdre le fil](/videos/LAST_MINUTE_CHANGES)
 
 ## « Je ne peux pas », pour un seul créneau
 
 Quand vous cherchez du monde, l'email « On cherche encore du monde » propose maintenant, sous chaque créneau, un lien **Je ne peux pas**. La réponse ne vaut que pour ce créneau : la personne reste dans vos listes, et vous voyez « A répondu non le … » avant de la relancer pour le même créneau.
 
 → [Chercher des bénévoles](/doc/ou-manque-t-il-du-monde#chercher-des-benevoles)
+▶ Vidéo : [Gérer un imprévu sans perdre le fil](/videos/LAST_MINUTE_CHANGES)
 
 ## Le ménage des membres en une fois
 
 Un fichier importé par erreur, et voilà deux cents fiches en trop. La liste des membres permet maintenant de sélectionner les fiches du filtre affiché et de les supprimer en une seule confirmation. Les membres qui ont des inscriptions ne sont jamais supprimés : une case propose de les désactiver au passage, et **Désactiver la sélection** fait la même chose sans rien supprimer.
 
 → [Supprimer plusieurs fiches en une fois](/doc/effacer-ou-supprimer-un-membre#supprimer-plusieurs-fiches-en-une-fois)
+▶ Vidéo : [Importer ses membres sans repartir de zéro](/videos/MEMBERS_IMPORT)
 
 ## Des inscriptions publiques vérifiées, si vous le voulez
 

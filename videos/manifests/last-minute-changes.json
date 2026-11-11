@@ -85,8 +85,7 @@
   "viewer": {
     "summary": "Vous gérez un désistement, cherchez un remplacement, ajoutez un besoin le jour J et vérifiez le planning après chaque changement.",
     "steps": [
-      "Après un désistement, vérifiez dans les inscriptions que la place a été proposée à la personne en liste d'attente.",
-      "Attendez que la personne accepte la place proposée avant de la compter comme confirmée.",
+      "Après un désistement, vérifiez dans les inscriptions que la place a été proposée à la personne en liste d'attente, et attendez qu'elle l'accepte avant de la compter comme confirmée.",
       "Ouvrez « Où manque-t-il du monde ? » pour lire le créneau précis qui manque encore de bénévoles.",
       "Sur « Jour J », créez le créneau avec « Ajouter un besoin », puis proposez-le aux bénévoles avec « Inscrits aujourd'hui ».",
       "Une fois l'accord d'un bénévole obtenu, ajoutez-le avec « Ajouter manuellement » sur le bon créneau.",
@@ -95,8 +94,7 @@
       "Relisez ensuite le journal de l'événement et la vue « Où manque-t-il du monde ? » pour vérifier le nouveau planning."
     ],
     "remember": [
-      "Une place proposée n'est pas encore une participation confirmée.",
-      "Une disponibilité indiquée dans une fiche n'inscrit personne et ne vaut pas accord.",
+      "Une place proposée n'est pas encore une participation confirmée, et une disponibilité indiquée n'inscrit personne ni ne vaut accord.",
       "Ne partagez jamais le lien personnel d'un bénévole pour lui trouver un remplaçant.",
       "Un email envoyé n'est pas une preuve de lecture : pour un changement urgent, contactez aussi les personnes.",
       "« Je ne peux pas » vaut pour un seul créneau : « Chercher des bénévoles » conserve la personne et affiche sa réponse."
