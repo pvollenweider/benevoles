@@ -1,0 +1,46 @@
+{
+  "model": "gemini-3.8-flash",
+  "reviewedAt": "2026-11-11T12:35:57.474Z",
+  "videoSha256": "d6160b255f4528e8af5a799827f0811c39b29ff70c7ae607ba5c05a9ddb9b381",
+  "promptSha256": "e1dc0b2e15fd46e41dd4b39dfee0222dbc369ed154b0d3066924ee4de34d4463",
+  "clipSha256": "d93919ea6105abdbbdd125557ce05723ee7b18cbf6a058915b113e9a6e9be7d3",
+  "scene": "reserved",
+  "review": {
+    "heardOpening": "Sans invitation, le poste Sécurité reste visible",
+    "checkpoints": [
+      {
+        "spokenSeconds": 1.5,
+        "spoken": "le poste Sécurité reste visible mais marqué réservé à certains membres",
+        "visibleSeconds": 2,
+        "visible": "Le défilement affiche le créneau « 20h–02h - Sécurité » avec la mention « réservé à certains membres »",
+        "sync": "aligned",
+        "severity": "none"
+      },
+      {
+        "spokenSeconds": 7.5,
+        "spoken": "il demande simplement d’utiliser le lien personnel reçu par email",
+        "visibleSeconds": 9.5,
+        "visible": "L'écran remonte sur le bandeau supérieur indiquant d'utiliser le lien personnel reçu par email",
+        "sync": "aligned",
+        "severity": "none"
+      },
+      {
+        "spokenSeconds": 12,
+        "spoken": "Une invitation sans la bonne étiquette ne donne pas davantage accès",
+        "visibleSeconds": 12,
+        "visible": "L'écran redescend sur la liste des créneaux incluant le poste Sécurité réservé",
+        "sync": "aligned",
+        "severity": "none"
+      }
+    ],
+    "issues": [
+      "À 00:12, changement inattendu d'orateur : la voix féminine est brutalement remplacée par une voix masculine pour la dernière phrase."
+    ],
+    "voice": {
+      "consistent": false,
+      "warm": true,
+      "observation": "Voix féminine claire et posée jusqu'à 00:11, puis bascule soudaine sur une voix masculine pour la phrase finale."
+    }
+  },
+  "note": "Automated observation of actual final video audio and images; not a claim of complete human validation"
+}

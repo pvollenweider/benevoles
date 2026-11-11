@@ -29,8 +29,11 @@ async function main() {
   try {
     if (["last-minute-changes", "reminders-changes"].includes(scenario)) {
       const lastMinute = scenario === "last-minute-changes"
-      const org = await db.organization.findUniqueOrThrow({ where: { id: lastMinute ? "video-last-minute" : "default" } })
-      assert.equal(org.name, lastMinute ? "Formation — imprévus" : "Fêtes de Montvert")
+      const org = await db.organization.findUnique({ where: { id: lastMinute ? "video-last-minute" : "default" } })
+      // The dedicated imprévus organization does not exist before its first seed.
+      // The exact reserved recipient namespace and event-title checks below still apply.
+      assert(org || lastMinute, "Existing reminder classroom required")
+      if (org) assert.equal(org.name, lastMinute ? "Formation — imprévus" : "Fêtes de Montvert")
       const titles = lastMinute ? ["Fête des imprévus"] : ["Atelier des rappels", "Atelier en brouillon", "Atelier sans rappels"]
       const address = lastMinute ? /^video\.last-minute\.(?:person\.[0-5]|owner)@example\.org$/ : /^video\.reminder\.[a-z0-9.-]+@example\.org$/
       const before = await inventory()

@@ -1,0 +1,91 @@
+{
+  "model": "gemini-3.8-flash",
+  "promptVersion": 2,
+  "auditedAt": "2026-11-11T12:35:42.513Z",
+  "revalidatedAt": "2026-11-11T12:35:42.513Z",
+  "source": "actual final MP4 audio",
+  "videoSha256": "d6160b255f4528e8af5a799827f0811c39b29ff70c7ae607ba5c05a9ddb9b381",
+  "note": "Independent multilingual ASR evidence, reused only for identical audio/text and audit instructions; not a full audiovisual or voice-quality validation",
+  "segments": [
+    {
+      "id": "welcome",
+      "audioSha256": "5413b04f1ad9aa9a8982576dd457a21bd8117722f26e92cc4cdc584a3aaf66c0",
+      "recognized": "Certaines missions demandent une règle simple, un âge minimum, un nombre maximum de créneaux ou l'appartenance à une équipe déjà formée. Ces contrôles évitent les affectations impossibles tout en expliquant clairement la situation avant l'inscription.",
+      "expected": "Certaines missions demandent une règle simple : un âge minimum, un nombre maximum de créneaux, ou l’appartenance à une équipe déjà formée. Ces contrôles évitent les affectations impossibles tout en expliquant clairement la situation avant l’inscription.",
+      "wordErrorRate": 0,
+      "needsReview": false,
+      "unexpectedInstructions": [],
+      "edgeIssues": []
+    },
+    {
+      "id": "settings",
+      "audioSha256": "738cf8f555845710d9b7a30d9121afd7df45ce76f70e20a185bf0002f52383c1",
+      "recognized": "Les règles se configurent au bon niveau. L'âge minimum appartient au créneau, la limite, les étiquettes réservées et la condition pour une réponse appartiennent au poste entier pour rester cohérent sur toutes ses plages horaires. Ici, Buvette est limitée à deux créneaux et Sécurité exige l'étiquette sécurité.",
+      "expected": "Les règles se configurent au bon niveau. L’âge minimum appartient au créneau. La limite, les étiquettes réservées et la condition par une réponse appartiennent au poste entier, pour rester cohérents sur toutes ses plages horaires. Ici, Buvette est limitée à deux créneaux et Sécurité exige l’étiquette sécurité.",
+      "wordErrorRate": 0.04081632653061224,
+      "needsReview": false,
+      "unexpectedInstructions": [],
+      "edgeIssues": []
+    },
+    {
+      "id": "age",
+      "audioSha256": "59dec67a2f4cdbea413f3c28f670a284c39f316ee0cbfb102528a1abe26862fc",
+      "recognized": "Sur le planning public, la buvette du soir annonce dix-huit ans minimum avant toute sélection. La date de naissance demandée dans le formulaire permet au serveur de vérifier la règle. Modifier le navigateur ou masquer le texte ne permet donc pas de la contourner.",
+      "expected": "Sur le planning public, la Buvette du soir annonce dix-huit ans minimum avant toute sélection. La date de naissance demandée dans le formulaire permet au serveur de vérifier la règle ; modifier le navigateur ou masquer le texte ne permet donc pas de la contourner.",
+      "wordErrorRate": 0,
+      "needsReview": false,
+      "unexpectedInstructions": [],
+      "edgeIssues": []
+    },
+    {
+      "id": "quota",
+      "audioSha256": "a576b4658272176553fd42f284d8c7e0c50e6afd74252f3e7574a4596fc346f4",
+      "recognized": "Camille possède déjà deux engagements de buvette. En revenant au planning depuis son lien personnel, sa session reconnaît ses inscriptions. Les autres créneaux restent visibles mais indiquent que la limite de deux est atteinte. Elle peut d'abord retirer un engagement si elle souhaite en choisir un autre.",
+      "expected": "Camille possède déjà deux engagements de Buvette. En revenant au planning depuis son lien personnel, sa session reconnaît ces inscriptions : les autres créneaux restent visibles, mais indiquent que la limite de deux est atteinte. Elle peut d’abord retirer un engagement si elle souhaite en choisir un autre.",
+      "wordErrorRate": 0.020833333333333332,
+      "needsReview": false,
+      "unexpectedInstructions": [],
+      "edgeIssues": []
+    },
+    {
+      "id": "reserved",
+      "audioSha256": "ef48dab3be877a936a2d02de3fb61c846a31d99e13ac26a0508dc1fb043658af",
+      "recognized": "Sans invitation, le poste de sécurité reste visible, mais marqué réservé à certains membres. Le message ne révèle pas les étiquettes internes. Il demande simplement d'utiliser le lien personnel reçu par e-mail. Une invitation sans la bonne étiquette ne donne pas davantage accès.",
+      "expected": "Sans invitation, le poste Sécurité reste visible mais marqué réservé à certains membres. Le message ne révèle pas les étiquettes internes : il demande simplement d’utiliser le lien personnel reçu par email. Une invitation sans la bonne étiquette ne donne pas davantage accès.",
+      "wordErrorRate": 0.023255813953488372,
+      "needsReview": false,
+      "unexpectedInstructions": [],
+      "edgeIssues": []
+    },
+    {
+      "id": "eligible",
+      "audioSha256": "fb8886dfe1ddd65e93bfe58dff3c6a5170e5192203c7ef714cad7a858a760aab",
+      "recognized": "Julien possède l'étiquette sécurité. En ouvrant son invitation, la même mission devient sélectionnable. Le lien prouve quel membre a été invité, et le serveur contrôle cette étiquette au moment de l'inscription. Il n'y a donc ni compte à créer, ni code à recopier.",
+      "expected": "Julien possède l’étiquette sécurité. En ouvrant son invitation, la même mission devient sélectionnable : le lien prouve quel membre a été invité et le serveur contrôle ses étiquettes au moment de l’inscription. Il n’y a donc ni compte à créer, ni code à recopier.",
+      "wordErrorRate": 0.043478260869565216,
+      "needsReview": false,
+      "unexpectedInstructions": [],
+      "edgeIssues": []
+    },
+    {
+      "id": "answer",
+      "audioSha256": "41e97dad6ec3f2de212b2288d505f5a8529b32a0466d460596c87202f1f77dc9",
+      "recognized": "Le poste navette demande le permis de conduire. Dans Gérer les postes, ouvrons son éditeur. Accès. Choisissons la question permis de conduire posée à tous les bénévoles, puis cochons oui dans réponse acceptée, et enregistrons. Sur la page publique, le créneau annonce réponse requise, permis de conduire, oui. Essayons de nous inscrire avec non. Au moment de confirmer, le formulaire refuse cette réponse pour la navette. Choisissons maintenant oui et confirmons. L'inscription est acceptée.",
+      "expected": "Le poste Navette demande le permis de conduire. Dans Gérer les postes, ouvrons son éditeur Accès. Choisissons la question Permis de conduire, posée à tous les bénévoles, puis cochons Oui dans Réponses acceptées et enregistrons. Sur la page publique, le créneau annonce Réponse requise : Permis de conduire, Oui. Essayons de nous inscrire avec Non. Au moment de confirmer, le formulaire refuse cette réponse pour la Navette. Choisissons maintenant Oui et confirmons : l'inscription est acceptée.",
+      "wordErrorRate": 0.02666666666666667,
+      "needsReview": false,
+      "unexpectedInstructions": [],
+      "edgeIssues": []
+    },
+    {
+      "id": "result",
+      "audioSha256": "f90a811fa6a4e5aca15bf42f754136d3fdbf1759842d9fd471abfcd44beaf6b5",
+      "recognized": "Ces règles doivent rester compréhensibles. Dans les paramètres de l'événement, la description permet d'expliquer les critères. Vérifions aussi le téléphone obligatoire, si l'équipe doit appeler le jour J. Pour corriger un profil, retrouvons Julien dans les membres, puis ouvrons Modifier. Son étiquette Sécurité est une information interne. Ici, nous vérifions la fiche sans la modifier, puis nous annulons.",
+      "expected": "Ces règles doivent rester compréhensibles. Dans les paramètres de l’événement, la description permet d’expliquer les critères. Vérifions aussi le téléphone obligatoire si l’équipe doit appeler le jour J. Pour corriger un profil, retrouvons Julien dans les membres, puis ouvrons Modifier : son étiquette sécurité est une information interne. Ici, nous vérifions la fiche sans la modifier, puis nous annulons.",
+      "wordErrorRate": 0,
+      "needsReview": false,
+      "unexpectedInstructions": [],
+      "edgeIssues": []
+    }
+  ]
+}

@@ -1,0 +1,17 @@
+{
+  "decision": "Resolved: no replacement of the narration speaker in the final mix",
+  "evidence": [
+    "whole-voice-review.json: one consistent female speaker across the entire original master",
+    "reserved-voice-crosscheck.json: isolated source chapter also independently recognized as one consistent female speaker",
+    "reserved-waveform-comparison.json: every measured voiced window is aligned at zero sample lag; final phrase correlation remains in the same range as preceding phrases"
+  ],
+  "fullChapterCorrelationRange": [
+    0.9599331853050167,
+    0.9934056449996603
+  ],
+  "lastPhraseCorrelationRange": [
+    0.9608368028320342,
+    0.9893047553627317
+  ],
+  "limitation": "Two automated observations of the mixed final chapter called its last phrase male. Those raw findings are retained. Direct waveform evidence proves the final narration is the same source speech, without pitch or speaker replacement; the prescribed background track remains present. No claim of real-time subjective listening."
+}

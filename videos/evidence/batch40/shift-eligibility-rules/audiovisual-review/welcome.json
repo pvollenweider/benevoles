@@ -1,0 +1,44 @@
+{
+  "model": "gemini-3.8-flash",
+  "reviewedAt": "2026-11-11T12:35:06.468Z",
+  "videoSha256": "d6160b255f4528e8af5a799827f0811c39b29ff70c7ae607ba5c05a9ddb9b381",
+  "promptSha256": "d087171a16979b7e6a63a1ee43b96a3a40e9443e9da0587e0a2d4b781df8bb8f",
+  "clipSha256": "aeb9cfd8cb310cdb96459adf139f7b0fb558f95764c6fc7ecc9206c89954e1c2",
+  "scene": "welcome",
+  "review": {
+    "heardOpening": "Certaines missions demandent une règle simple",
+    "checkpoints": [
+      {
+        "spokenSeconds": 0.5,
+        "spoken": "Certaines missions demandent une règle simple",
+        "visibleSeconds": 0.5,
+        "visible": "Bandeau de titre affiché : « Âge, quotas et postes réservés - Des règles simples, expliquées avant l'inscription »",
+        "sync": "aligned",
+        "severity": "none"
+      },
+      {
+        "spokenSeconds": 2.8,
+        "spoken": "un âge minimum, un nombre maximum de créneaux",
+        "visibleSeconds": 3,
+        "visible": "Disparition de l'encart de titre et affichage de la vue frise des créneaux de l'événement",
+        "sync": "aligned",
+        "severity": "none"
+      },
+      {
+        "spokenSeconds": 8.5,
+        "spoken": "Ces contrôles évitent les affectations impossibles",
+        "visibleSeconds": 8.5,
+        "visible": "Vue d'ensemble stable du planning des créneaux en support de l'introduction générale",
+        "sync": "aligned",
+        "severity": "none"
+      }
+    ],
+    "issues": [],
+    "voice": {
+      "consistent": true,
+      "warm": true,
+      "observation": "Voix féminine claire, naturelle et bien articulée, avec un débit régulier et un fond sonore propre."
+    }
+  },
+  "note": "Automated observation of actual final video audio and images; not a claim of complete human validation"
+}

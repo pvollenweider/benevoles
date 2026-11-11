@@ -40,6 +40,9 @@ test("baseline permits only 24 email fixtures and both exact persistent no-email
   const management = { ...defaults, id: "video-member-management-2", lastName: "Sansmail", phone: "079 000 02 00", tags: ["accueil"], notes: "Contact à joindre par téléphone pour les horaires.", availabilityPeriods: ["evening"] }
   const people = [...Array.from({ length: 24 }, (_, n) => ({ ...defaults, id: `seed-${n}`, email: `seed.${n}@example.org` })), defaults, management]
   validateImportBaseline(people, evidence)
+  const additions = [["Sofia", "Martin", "sofia.martin@example.org"], ["Sofia", "Martin", "sofia.martn@example.org"], ["Antoine", "Bovard", "antoine.bovard@example.org"]].map(([firstName, lastName, email], index) => ({ ...defaults, id: `additive-${index}`, firstName, lastName, email }))
+  validateImportBaseline([...people, ...additions], evidence)
+  assert.throws(() => validateImportBaseline([...people, ...additions.slice(0, 2), { ...additions[2], email: "unknown@example.org" }], evidence))
   validateImportBaseline([...people.slice(0, 25), { ...management, firstName: "Sébastien", lastName: "Morel 3", tags: ["logistique", "permis-b"] }], evidence)
   for (const change of [{ id: "unknown-null-seed" }, { notes: null }, { phone: "0790000200" }, { tags: [] }, { availabilityPeriods: [] }, { active: false }, { birthDate: "2000-01-01" }, { firstName: "Unknown" }]) assert.throws(() => validateImportBaseline([...people.slice(0, 25), { ...management, ...change }], evidence))
   assert.throws(() => validateImportBaseline(people, []))

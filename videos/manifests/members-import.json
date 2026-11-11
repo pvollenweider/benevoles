@@ -54,6 +54,11 @@
       "fallbackDurationMs": 34000
     },
     {
+      "id": "cleanup",
+      "transcript": "Quelques fiches sont en trop. Filtrons la liste, puis cochons Tout sélectionner : la sélection suit le filtre affiché. Avec Supprimer la sélection, une seule confirmation indique les fiches supprimées et celles qui restent. Les membres qui ont des inscriptions ne sont jamais supprimés. Cochons la case pour les désactiver, puis confirmons. Les autres fiches sélectionnées sont supprimées ; les inscriptions restent dans l'historique.",
+      "fallbackDurationMs": 39000
+    },
+    {
       "id": "result",
       "transcript": "Votre liste est prête à être utilisée pour les prochaines invitations. Gardez un fichier simple, vérifiez les coordonnées et lisez l'aperçu avant chaque confirmation. Si quelques personnes manquent, ajoutez-les manuellement. Et si leurs disponibilités changent, complétez leur fiche séparément. L'import fait gagner du temps, tout en vous laissant le dernier mot sur ce qui sera enregistré.",
       "fallbackDurationMs": 32000
@@ -67,13 +72,14 @@
       "Lisez le récapitulatif : créations prévues, personnes déjà présentes et lignes en erreur.",
       "Corrigez les erreurs dans le fichier d'origine, puis relancez l'analyse.",
       "Choisissez « Mettre à jour » seulement si les valeurs du fichier doivent remplacer celles des fiches existantes.",
-      "Confirmez l'import, puis vérifiez une fiche importée dans la liste des membres."
+      "Confirmez l'import, puis vérifiez une fiche importée dans la liste des membres.",
+      "Pour retirer des fiches en trop, filtrez la liste, sélectionnez-les et choisissez « Supprimer la sélection » ; lisez la confirmation avant de valider."
     ],
     "remember": [
-      "Rien n'est enregistré avant la confirmation.",
+      "Rien n'est enregistré avant la confirmation, et un import est limité à 2 Mo et 5 000 lignes.",
       "Les fiches sont rapprochées par leur email : deux homonymes ne sont pas fusionnés, et une fiche sans email peut être créée une seconde fois.",
       "Les disponibilités ne sont pas importées, et importer une personne ne l'inscrit à aucun créneau.",
-      "Un import est limité à 2 Mo et 5 000 lignes."
+      "Les membres avec des inscriptions sont conservés ; la case de confirmation permet de les désactiver."
     ]
   },
   "continuousPauseTags": false

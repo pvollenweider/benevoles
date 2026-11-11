@@ -1,0 +1,52 @@
+{
+  "model": "gemini-3.8-flash",
+  "reviewedAt": "2026-11-11T12:35:43.909Z",
+  "videoSha256": "d6160b255f4528e8af5a799827f0811c39b29ff70c7ae607ba5c05a9ddb9b381",
+  "promptSha256": "e78ba05abfa9ee482343252cf19ead440ce01334426f974b61e19b57e7ce6d98",
+  "clipSha256": "42ef05f91492a73e5de311953efca7e4ca5cf82261dc89ffe0c86bb9bcf3d106",
+  "scene": "quota",
+  "review": {
+    "heardOpening": "Camille possède déjà deux engagements",
+    "checkpoints": [
+      {
+        "spokenSeconds": 0,
+        "spoken": "Camille possède déjà deux engagements de Buvette.",
+        "visibleSeconds": 0.5,
+        "visible": "Page « Mes inscriptions » affichant les créneaux déjà réservés dont la buvette.",
+        "sync": "aligned",
+        "severity": "none"
+      },
+      {
+        "spokenSeconds": 2.7,
+        "spoken": "En revenant au planning depuis son lien personnel, sa session reconnaît ces inscriptions",
+        "visibleSeconds": 3.7,
+        "visible": "Clic sur « S'inscrire à d'autres créneaux » et affichage du planning au nom de Camille Rochat.",
+        "sync": "aligned",
+        "severity": "none"
+      },
+      {
+        "spokenSeconds": 7,
+        "spoken": "les autres créneaux restent visibles, mais indiquent que la limite de deux est atteinte.",
+        "visibleSeconds": 12,
+        "visible": "Affichage en vue Liste mentionnant « Limite de créneaux par personne atteinte » sur les créneaux buvette disponibles.",
+        "sync": "aligned",
+        "severity": "none"
+      },
+      {
+        "spokenSeconds": 11.2,
+        "spoken": "Elle peut d’abord retirer un engagement si elle souhaite en choisir un autre.",
+        "visibleSeconds": 12.8,
+        "visible": "Panneau latéral des créneaux sélectionnés affichant la possibilité de retirer un créneau.",
+        "sync": "aligned",
+        "severity": "none"
+      }
+    ],
+    "issues": [],
+    "voice": {
+      "consistent": true,
+      "warm": true,
+      "observation": "Voix off posée, claire et dynamique, parfaitement synchronisée avec la démonstration à l'écran."
+    }
+  },
+  "note": "Automated observation of actual final video audio and images; not a claim of complete human validation"
+}

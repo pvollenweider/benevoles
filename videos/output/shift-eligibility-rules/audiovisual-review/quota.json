@@ -1,9 +1,9 @@
 {
   "model": "gemini-3.8-flash",
-  "reviewedAt": "2026-10-16T08:50:33.104Z",
-  "videoSha256": "a2b1a66c35eb114c3656423a2c25ec8762de09b15ecd801b5361e403f131348d",
+  "reviewedAt": "2026-11-11T12:35:43.909Z",
+  "videoSha256": "d6160b255f4528e8af5a799827f0811c39b29ff70c7ae607ba5c05a9ddb9b381",
   "promptSha256": "e78ba05abfa9ee482343252cf19ead440ce01334426f974b61e19b57e7ce6d98",
-  "clipSha256": "c6658e08e5c767d71135a3f3393306f053cb96f8a36a3fe54a188d491ef8c293",
+  "clipSha256": "42ef05f91492a73e5de311953efca7e4ca5cf82261dc89ffe0c86bb9bcf3d106",
   "scene": "quota",
   "review": {
     "heardOpening": "Camille possède déjà deux engagements",
@@ -11,40 +11,32 @@
       {
         "spokenSeconds": 0,
         "spoken": "Camille possède déjà deux engagements de Buvette.",
-        "visibleSeconds": 0.9,
-        "visible": "La liste des inscriptions affiche les créneaux de Buvette (en liste d'attente et confirmé).",
+        "visibleSeconds": 0.5,
+        "visible": "Page « Mes inscriptions » affichant les créneaux déjà réservés dont la buvette.",
         "sync": "aligned",
         "severity": "none"
       },
       {
-        "spokenSeconds": 2.5,
-        "spoken": "En revenant au planning depuis son lien personnel,",
-        "visibleSeconds": 3.6,
-        "visible": "Clic sur « S'inscrire à d'autres créneaux » et affichage du planning sous le compte de Camille Rochat.",
+        "spokenSeconds": 2.7,
+        "spoken": "En revenant au planning depuis son lien personnel, sa session reconnaît ces inscriptions",
+        "visibleSeconds": 3.7,
+        "visible": "Clic sur « S'inscrire à d'autres créneaux » et affichage du planning au nom de Camille Rochat.",
         "sync": "aligned",
         "severity": "none"
       },
       {
-        "spokenSeconds": 5.2,
-        "spoken": "sa session reconnaît ces inscriptions :",
-        "visibleSeconds": 5.5,
-        "visible": "Le panneau latéral droit liste les créneaux déjà retenus par la participante.",
-        "sync": "aligned",
-        "severity": "none"
-      },
-      {
-        "spokenSeconds": 8,
+        "spokenSeconds": 7,
         "spoken": "les autres créneaux restent visibles, mais indiquent que la limite de deux est atteinte.",
-        "visibleSeconds": 13.5,
-        "visible": "Après passage en vue Liste, la mention « Limite de 2 créneaux par personne atteinte » apparaît sous les créneaux Buvette restants.",
+        "visibleSeconds": 12,
+        "visible": "Affichage en vue Liste mentionnant « Limite de créneaux par personne atteinte » sur les créneaux buvette disponibles.",
         "sync": "aligned",
         "severity": "none"
       },
       {
-        "spokenSeconds": 12.3,
+        "spokenSeconds": 11.2,
         "spoken": "Elle peut d’abord retirer un engagement si elle souhaite en choisir un autre.",
-        "visibleSeconds": 14,
-        "visible": "Les croix de retrait restent accessibles à droite dans la liste des créneaux sélectionnés.",
+        "visibleSeconds": 12.8,
+        "visible": "Panneau latéral des créneaux sélectionnés affichant la possibilité de retirer un créneau.",
         "sync": "aligned",
         "severity": "none"
       }
@@ -53,7 +45,7 @@
     "voice": {
       "consistent": true,
       "warm": true,
-      "observation": "Voix féminine claire, posée et bien articulée, synchronisée avec les actions à l'écran."
+      "observation": "Voix off posée, claire et dynamique, parfaitement synchronisée avec la démonstration à l'écran."
     }
   },
   "note": "Automated observation of actual final video audio and images; not a claim of complete human validation"

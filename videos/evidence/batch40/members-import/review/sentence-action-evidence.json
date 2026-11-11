@@ -1,0 +1,519 @@
+{
+  "videoSha256": "0aa199ac67fe4ba2703e5516bea95c4d251a3c7481ba81c5920a76a0a1139eae",
+  "source": "Fresh audiovisual reports of the final MP4, compared with actual frame evidence",
+  "anchors": [
+    {
+      "segmentId": "file",
+      "phrase": "prénom, nom, email, téléphone et",
+      "startMs": 6084,
+      "endMs": 7941,
+      "cueMs": 29107
+    },
+    {
+      "segmentId": "file",
+      "phrase": "elles ne sont pas importées",
+      "startMs": 22354,
+      "endMs": 23343,
+      "cueMs": 45376
+    },
+    {
+      "segmentId": "preview",
+      "phrase": "Ouvrez Importer des membres",
+      "startMs": 447,
+      "endMs": 4291,
+      "cueMs": 47706
+    },
+    {
+      "segmentId": "preview",
+      "phrase": "Cliquez sur Analyser le fichier",
+      "startMs": 9226,
+      "endMs": 10263,
+      "cueMs": 56486
+    },
+    {
+      "segmentId": "errors",
+      "phrase": "Corrigez le fichier d'origine plutôt",
+      "startMs": 13779,
+      "endMs": 17119,
+      "cueMs": 85974
+    },
+    {
+      "segmentId": "update",
+      "phrase": "Ici, Camille et Julien passent",
+      "startMs": 19606,
+      "endMs": 26354,
+      "cueMs": 115544
+    },
+    {
+      "segmentId": "corrected",
+      "phrase": "Les erreurs ont disparu.",
+      "startMs": 5141,
+      "endMs": 6139,
+      "cueMs": 128437
+    },
+    {
+      "segmentId": "corrected",
+      "phrase": "René n'a pas d'email ",
+      "startMs": 10774,
+      "endMs": 12250,
+      "cueMs": 134069
+    },
+    {
+      "segmentId": "confirm",
+      "phrase": "Quand l'aperçu vous convient",
+      "startMs": 456,
+      "endMs": 2885,
+      "cueMs": 148823
+    },
+    {
+      "segmentId": "confirm",
+      "phrase": "Fermez la fenêtre et recherchez",
+      "startMs": 12952,
+      "endMs": 14993,
+      "cueMs": 161321
+    },
+    {
+      "segmentId": "confirm",
+      "phrase": "Ouvrez sa fiche pour vérifier",
+      "startMs": 17140,
+      "endMs": 19952,
+      "cueMs": 165509
+    },
+    {
+      "segmentId": "confirm",
+      "phrase": "Importer une personne ne l'inscrit",
+      "startMs": 20313,
+      "endMs": 23345,
+      "cueMs": 168682
+    },
+    {
+      "segmentId": "repeat",
+      "phrase": "Regardez toujours le nombre de",
+      "startMs": 14758,
+      "endMs": 19191,
+      "cueMs": 187127
+    },
+    {
+      "segmentId": "cleanup",
+      "phrase": "Filtrons la liste",
+      "startMs": 1869,
+      "endMs": 4591,
+      "cueMs": 194681
+    },
+    {
+      "segmentId": "cleanup",
+      "phrase": "Avec Supprimer la sélection",
+      "startMs": 7364,
+      "endMs": 12726,
+      "cueMs": 200176
+    },
+    {
+      "segmentId": "cleanup",
+      "phrase": "Les membres qui ont des inscriptions",
+      "startMs": 13114,
+      "endMs": 15913,
+      "cueMs": 205924
+    },
+    {
+      "segmentId": "cleanup",
+      "phrase": "Cochons la case pour les désactiver",
+      "startMs": 16714,
+      "endMs": 18240,
+      "cueMs": 209526
+    },
+    {
+      "segmentId": "cleanup",
+      "phrase": "Les autres fiches sélectionnées sont supprimées",
+      "startMs": 18410,
+      "endMs": 21593,
+      "cueMs": 211221
+    }
+  ],
+  "checkpoints": [
+    {
+      "scene": "welcome",
+      "globalSpokenSeconds": 0.987,
+      "globalVisibleSeconds": 0.187,
+      "spokenSeconds": 0.8,
+      "spoken": "Vous utilisez Benevol pour la première fois et vous avez déjà une liste de bénévoles ?",
+      "visibleSeconds": 0,
+      "visible": "Titre d'introduction « Importer ses membres sans repartir de zéro » affiché en superposition sur la page Membres.",
+      "sync": "aligned",
+      "severity": "none"
+    },
+    {
+      "scene": "welcome",
+      "globalSpokenSeconds": 11.387,
+      "globalVisibleSeconds": 11.387,
+      "spokenSeconds": 11.2,
+      "spoken": "Nous allons utiliser quarante fiches fictives, vérifier les erreurs",
+      "visibleSeconds": 11.2,
+      "visible": "Page Membres affichée de manière stable pour poser le contexte avant la manipulation.",
+      "sync": "aligned",
+      "severity": "none"
+    },
+    {
+      "scene": "welcome",
+      "globalSpokenSeconds": 19.687,
+      "globalVisibleSeconds": 19.687,
+      "spokenSeconds": 19.5,
+      "spoken": "créer les membres manuellement avec Nouveau membre.",
+      "visibleSeconds": 19.5,
+      "visible": "Le bouton bleu « + Nouveau membre » est visible en haut à droite de l'interface.",
+      "sync": "aligned",
+      "severity": "none"
+    },
+    {
+      "scene": "file",
+      "globalSpokenSeconds": 23.521,
+      "globalVisibleSeconds": 24.021,
+      "spokenSeconds": 0.5,
+      "spoken": "Le fichier peut être un CSV ou un Excel.",
+      "visibleSeconds": 1,
+      "visible": "Ouverture de la fenêtre modale « Importer des membres » avec le bouton « Choisir un fichier CSV ou Excel »",
+      "sync": "aligned",
+      "severity": "none"
+    },
+    {
+      "scene": "file",
+      "globalSpokenSeconds": 26.621,
+      "globalVisibleSeconds": 28.521,
+      "spokenSeconds": 3.6,
+      "spoken": "La première ligne contient les noms des colonnes : prénom, nom, email, téléphone et tags.",
+      "visibleSeconds": 5.5,
+      "visible": "Le texte d'aide sous le bouton liste les colonnes requises et le fichier « membres-a-verifier.csv » apparaît sélectionné",
+      "sync": "aligned",
+      "severity": "none"
+    },
+    {
+      "scene": "file",
+      "globalSpokenSeconds": 42.321,
+      "globalVisibleSeconds": 45.021,
+      "spokenSeconds": 19.3,
+      "spoken": "Les disponibilités, elles, se renseignent ensuite dans la fiche : elles ne sont pas importées.",
+      "visibleSeconds": 22,
+      "visible": "Fermeture de la fenêtre modale d'import et retour à la liste des membres",
+      "sync": "aligned",
+      "severity": "none"
+    },
+    {
+      "scene": "preview",
+      "globalSpokenSeconds": 47.258,
+      "globalVisibleSeconds": 48.058,
+      "spokenSeconds": 0,
+      "spoken": "Ouvrez Importer des membres et choisissez le fichier à vérifier.",
+      "visibleSeconds": 0.8,
+      "visible": "Ouverture de la fenêtre « Importer des membres » avec le fichier « membres-a-verifier.csv » sélectionné",
+      "sync": "aligned",
+      "severity": "none"
+    },
+    {
+      "scene": "preview",
+      "globalSpokenSeconds": 52.658,
+      "globalVisibleSeconds": 52.658,
+      "spokenSeconds": 5.4,
+      "spoken": "l'option Ignorer conserve la fiche actuelle.",
+      "visibleSeconds": 5.4,
+      "visible": "L'option « Ignorer » est cochée sous « Si un email existe déjà »",
+      "sync": "aligned",
+      "severity": "none"
+    },
+    {
+      "scene": "preview",
+      "globalSpokenSeconds": 56.158,
+      "globalVisibleSeconds": 56.758,
+      "spokenSeconds": 8.9,
+      "spoken": "Cliquez sur Analyser le fichier.",
+      "visibleSeconds": 9.5,
+      "visible": "Clic sur le bouton bleu « Analyser le fichier »",
+      "sync": "aligned",
+      "severity": "none"
+    },
+    {
+      "scene": "preview",
+      "globalSpokenSeconds": 59.558,
+      "globalVisibleSeconds": 57.458,
+      "spokenSeconds": 12.3,
+      "spoken": "Le récapitulatif montre les créations prévues, les personnes déjà présentes et les lignes en erreur.",
+      "visibleSeconds": 10.2,
+      "visible": "Affichage du rapport d'analyse détaillant créations, présents ignorés et lignes en erreur",
+      "sync": "aligned",
+      "severity": "none"
+    },
+    {
+      "scene": "errors",
+      "globalSpokenSeconds": 73.292,
+      "globalVisibleSeconds": 72.192,
+      "spokenSeconds": 1.1,
+      "spoken": "la ligne six n'a pas de prénom",
+      "visibleSeconds": 0,
+      "visible": "Affichage dans la boîte orange 'Lignes en erreur' : Ligne 6 Prénom manquant",
+      "sync": "aligned",
+      "severity": "none"
+    },
+    {
+      "scene": "errors",
+      "globalSpokenSeconds": 75.392,
+      "globalVisibleSeconds": 72.192,
+      "spokenSeconds": 3.2,
+      "spoken": "la ligne sept contient une adresse email invalide",
+      "visibleSeconds": 0,
+      "visible": "Affichage : Ligne 7 Email invalide : adresse-incomplete",
+      "sync": "aligned",
+      "severity": "none"
+    },
+    {
+      "scene": "errors",
+      "globalSpokenSeconds": 78.492,
+      "globalVisibleSeconds": 72.192,
+      "spokenSeconds": 6.3,
+      "spoken": "La ligne neuf reprend l'email de la ligne huit : ce doublon dans le fichier est également signalé",
+      "visibleSeconds": 0,
+      "visible": "Affichage : Ligne 9 Même email que la ligne 8",
+      "sync": "aligned",
+      "severity": "none"
+    },
+    {
+      "scene": "update",
+      "globalSpokenSeconds": 96.737,
+      "globalVisibleSeconds": 97.037,
+      "spokenSeconds": 0.8,
+      "spoken": "Avec Retour, vous pouvez changer l'option",
+      "visibleSeconds": 1.1,
+      "visible": "Clic sur le bouton Retour puis sélection du bouton radio Mettre à jour",
+      "sync": "aligned",
+      "severity": "none"
+    },
+    {
+      "scene": "update",
+      "globalSpokenSeconds": 99.337,
+      "globalVisibleSeconds": 100.437,
+      "spokenSeconds": 3.4,
+      "spoken": "puis refaire l'analyse.",
+      "visibleSeconds": 4.5,
+      "visible": "Clic sur le bouton Analyser le fichier",
+      "sync": "aligned",
+      "severity": "none"
+    },
+    {
+      "scene": "update",
+      "globalSpokenSeconds": 115.737,
+      "globalVisibleSeconds": 116.137,
+      "spokenSeconds": 19.8,
+      "spoken": "Ici, Camille et Julien passent de Ignorer à Mettre à jour",
+      "visibleSeconds": 20.2,
+      "visible": "Le tableau affiche Camille Rochat et Julien Favre avec l'action Mettre à jour",
+      "sync": "aligned",
+      "severity": "none"
+    },
+    {
+      "scene": "corrected",
+      "globalSpokenSeconds": 123.794,
+      "globalVisibleSeconds": 124.294,
+      "spokenSeconds": 0.5,
+      "spoken": "Nous choisissons maintenant le fichier Excel corrigé",
+      "visibleSeconds": 1,
+      "visible": "La fenêtre d'import affiche le fichier sélectionné membres-corriges.xlsx",
+      "sync": "aligned",
+      "severity": "none"
+    },
+    {
+      "scene": "corrected",
+      "globalSpokenSeconds": 126.494,
+      "globalVisibleSeconds": 128.094,
+      "spokenSeconds": 3.2,
+      "spoken": "et relançons l'analyse",
+      "visibleSeconds": 4.8,
+      "visible": "Un clic est effectué sur le bouton Analyser le fichier",
+      "sync": "aligned",
+      "severity": "none"
+    },
+    {
+      "scene": "corrected",
+      "globalSpokenSeconds": 128.494,
+      "globalVisibleSeconds": 129.094,
+      "spokenSeconds": 5.2,
+      "spoken": "Les erreurs ont disparu. Les quarante lignes sont reconnues",
+      "visibleSeconds": 5.8,
+      "visible": "L'écran d'analyse indique 0 ligne en erreur et la section Membres du fichier (40)",
+      "sync": "aligned",
+      "severity": "none"
+    },
+    {
+      "scene": "corrected",
+      "globalSpokenSeconds": 134.494,
+      "globalVisibleSeconds": 134.794,
+      "spokenSeconds": 11.2,
+      "spoken": "René n'a pas d'email : sa fiche peut être créée avec son téléphone",
+      "visibleSeconds": 11.5,
+      "visible": "La ligne 3 montre René Meyer sans email, avec un numéro de téléphone et l'action Créer",
+      "sync": "aligned",
+      "severity": "none"
+    },
+    {
+      "scene": "confirm",
+      "globalSpokenSeconds": 149.567,
+      "globalVisibleSeconds": 150.067,
+      "spokenSeconds": 1.2,
+      "spoken": "confirmez l'import",
+      "visibleSeconds": 1.7,
+      "visible": "Clic sur le bouton « Importer 40 membres »",
+      "sync": "aligned",
+      "severity": "none"
+    },
+    {
+      "scene": "confirm",
+      "globalSpokenSeconds": 154.667,
+      "globalVisibleSeconds": 152.367,
+      "spokenSeconds": 6.3,
+      "spoken": "Le résultat indique combien ont été créées, mises à jour ou ignorées",
+      "visibleSeconds": 4,
+      "visible": "Fenêtre de résultat affichant : « Import terminé : 38 créés, 2 mis à jour, 0 ignorés (40 lignes lues) »",
+      "sync": "aligned",
+      "severity": "none"
+    },
+    {
+      "scene": "confirm",
+      "globalSpokenSeconds": 161.167,
+      "globalVisibleSeconds": 161.867,
+      "spokenSeconds": 12.8,
+      "spoken": "Fermez la fenêtre et recherchez Maya",
+      "visibleSeconds": 13.5,
+      "visible": "Clic sur « Fermer » puis saisie de « Maya » dans la barre de recherche",
+      "sync": "aligned",
+      "severity": "none"
+    },
+    {
+      "scene": "confirm",
+      "globalSpokenSeconds": 165.367,
+      "globalVisibleSeconds": 165.967,
+      "spokenSeconds": 17,
+      "spoken": "Ouvrez sa fiche pour vérifier son téléphone et ses étiquettes",
+      "visibleSeconds": 17.6,
+      "visible": "Clic sur Modifier et ouverture de la fiche de Maya affichant son téléphone et ses étiquettes",
+      "sync": "aligned",
+      "severity": "none"
+    },
+    {
+      "scene": "repeat",
+      "globalSpokenSeconds": 172.869,
+      "globalVisibleSeconds": 174.869,
+      "spokenSeconds": 0.5,
+      "spoken": "Si vous analysez de nouveau ce fichier avec Ignorer",
+      "visibleSeconds": 2.5,
+      "visible": "Ouverture de la boîte de dialogue d'import avec le fichier sélectionné et l'option Ignorer cochée",
+      "sync": "aligned",
+      "severity": "none"
+    },
+    {
+      "scene": "repeat",
+      "globalSpokenSeconds": 175.769,
+      "globalVisibleSeconds": 176.469,
+      "spokenSeconds": 3.4,
+      "spoken": "les emails déjà présents sont reconnus",
+      "visibleSeconds": 4.1,
+      "visible": "Affichage du rapport d'analyse indiquant 39 membres déjà présents ignorés",
+      "sync": "aligned",
+      "severity": "none"
+    },
+    {
+      "scene": "repeat",
+      "globalSpokenSeconds": 177.769,
+      "globalVisibleSeconds": 177.869,
+      "spokenSeconds": 5.4,
+      "spoken": "Mais attention aux fiches sans email : le système ne peut pas les rapprocher",
+      "visibleSeconds": 5.5,
+      "visible": "La liste montre René Meyer sans email avec l'action à créer et le bouton Importer 1 membre",
+      "sync": "aligned",
+      "severity": "none"
+    },
+    {
+      "scene": "repeat",
+      "globalSpokenSeconds": 188.869,
+      "globalVisibleSeconds": 190.369,
+      "spokenSeconds": 16.5,
+      "spoken": "puis annulez si vous ne souhaitez rien ajouter.",
+      "visibleSeconds": 18,
+      "visible": "Fermeture de l'aperçu d'analyse pour revenir à l'étape précédente sans importer",
+      "sync": "aligned",
+      "severity": "none"
+    },
+    {
+      "scene": "cleanup",
+      "globalSpokenSeconds": 194.611,
+      "globalVisibleSeconds": 195.311,
+      "spokenSeconds": 1.8,
+      "spoken": "Filtrons la liste",
+      "visibleSeconds": 2.5,
+      "visible": "Le prénom René est saisi dans le champ de recherche et la liste est filtrée sur 3 membres",
+      "sync": "aligned",
+      "severity": "none"
+    },
+    {
+      "scene": "cleanup",
+      "globalSpokenSeconds": 196.211,
+      "globalVisibleSeconds": 196.811,
+      "spokenSeconds": 3.4,
+      "spoken": "puis cochons Tout sélectionner",
+      "visibleSeconds": 4,
+      "visible": "La case Tout sélectionner est cochée et les 3 fiches filtrées sont sélectionnées",
+      "sync": "aligned",
+      "severity": "none"
+    },
+    {
+      "scene": "cleanup",
+      "globalSpokenSeconds": 200.311,
+      "globalVisibleSeconds": 200.611,
+      "spokenSeconds": 7.5,
+      "spoken": "Avec Supprimer la sélection",
+      "visibleSeconds": 7.8,
+      "visible": "Clic sur le bouton Supprimer la sélection et ouverture de la boîte de dialogue de confirmation",
+      "sync": "aligned",
+      "severity": "none"
+    },
+    {
+      "scene": "cleanup",
+      "globalSpokenSeconds": 209.311,
+      "globalVisibleSeconds": 210.311,
+      "spokenSeconds": 16.5,
+      "spoken": "Cochons la case pour les désactiver, puis confirmons.",
+      "visibleSeconds": 17.5,
+      "visible": "La case de désactivation du membre avec inscriptions est cochée puis le bouton Supprimer est validé",
+      "sync": "aligned",
+      "severity": "none"
+    },
+    {
+      "scene": "result",
+      "globalSpokenSeconds": 217.21,
+      "globalVisibleSeconds": 217.21,
+      "spokenSeconds": 0,
+      "spoken": "Votre liste est prête à être utilisée pour les prochaines invitations",
+      "visibleSeconds": 0,
+      "visible": "Page Membres affichant la liste finalisée après l'import",
+      "sync": "aligned",
+      "severity": "none"
+    },
+    {
+      "scene": "result",
+      "globalSpokenSeconds": 226.41,
+      "globalVisibleSeconds": 226.41,
+      "spokenSeconds": 9.2,
+      "spoken": "Si quelques personnes manquent, ajoutez-les manuellement",
+      "visibleSeconds": 9.2,
+      "visible": "Écran stable montrant le bouton '+ Nouveau membre' et les membres existants",
+      "sync": "aligned",
+      "severity": "none"
+    },
+    {
+      "scene": "result",
+      "globalSpokenSeconds": 233.91,
+      "globalVisibleSeconds": 233.91,
+      "spokenSeconds": 16.7,
+      "spoken": "L'import fait gagner du temps, tout en vous laissant le dernier mot",
+      "visibleSeconds": 16.7,
+      "visible": "Vue d'ensemble de la liste des membres pour clore le module",
+      "sync": "aligned",
+      "severity": "none"
+    }
+  ]
+}

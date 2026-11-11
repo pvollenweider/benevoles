@@ -2,7 +2,7 @@
 
 Certaines missions demandent une règle simple : un âge minimum, un nombre maximum de créneaux, ou l’appartenance à une équipe déjà formée. Ces contrôles évitent les affectations impossibles tout en expliquant clairement la situation avant l’inscription.
 
-Les règles se configurent au bon niveau. L’âge minimum appartient au créneau. La limite et les étiquettes réservées appartiennent au poste entier, pour rester cohérents sur toutes ses plages horaires. Ici, Buvette est limitée à deux créneaux et Sécurité exige l’étiquette sécurité.
+Les règles se configurent au bon niveau. L’âge minimum appartient au créneau. La limite, les étiquettes réservées et la condition par une réponse appartiennent au poste entier, pour rester cohérents sur toutes ses plages horaires. Ici, Buvette est limitée à deux créneaux et Sécurité exige l’étiquette sécurité.
 
 Sur le planning public, la Buvette du soir annonce dix-huit ans minimum avant toute sélection. La date de naissance demandée dans le formulaire permet au serveur de vérifier la règle ; modifier le navigateur ou masquer le texte ne permet donc pas de la contourner.
 
@@ -11,5 +11,7 @@ Camille possède déjà deux engagements de Buvette. En revenant au planning dep
 Sans invitation, le poste Sécurité reste visible mais marqué réservé à certains membres. Le message ne révèle pas les étiquettes internes : il demande simplement d’utiliser le lien personnel reçu par email. Une invitation sans la bonne étiquette ne donne pas davantage accès.
 
 Julien possède l’étiquette sécurité. En ouvrant son invitation, la même mission devient sélectionnable : le lien prouve quel membre a été invité et le serveur contrôle ses étiquettes au moment de l’inscription. Il n’y a donc ni compte à créer, ni code à recopier.
+
+Le poste Navette demande le permis de conduire. Dans Gérer les postes, ouvrons son éditeur Accès. Choisissons la question Permis de conduire, posée à tous les bénévoles, puis cochons Oui dans Réponses acceptées et enregistrons. Sur la page publique, le créneau annonce Réponse requise : Permis de conduire, Oui. Essayons de nous inscrire avec Non. Au moment de confirmer, le formulaire refuse cette réponse pour la Navette. Choisissons maintenant Oui et confirmons : l'inscription est acceptée.
 
 Ces règles doivent rester compréhensibles. Dans les paramètres de l’événement, la description permet d’expliquer les critères. Vérifions aussi le téléphone obligatoire si l’équipe doit appeler le jour J. Pour corriger un profil, retrouvons Julien dans les membres, puis ouvrons Modifier : son étiquette sécurité est une information interne. Ici, nous vérifions la fiche sans la modifier, puis nous annulons.

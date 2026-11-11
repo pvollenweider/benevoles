@@ -1,0 +1,97 @@
+{
+  "checkedAt": "2026-11-11T12:59:34.341Z",
+  "context": "default",
+  "target": "deploy/benevoles-media",
+  "checks": [
+    {
+      "file": "last-minute-changes/last-minute-changes.mp4",
+      "localSha256": "e9596ba265566802b388fd4f869ca37b43cbaddff29ccc344a67b4f3e50549da",
+      "publishedSha256": "e9596ba265566802b388fd4f869ca37b43cbaddff29ccc344a67b4f3e50549da",
+      "matches": true
+    },
+    {
+      "file": "last-minute-changes/last-minute-changes.vtt",
+      "localSha256": "3c1e81f077a2885ff36286c74a9620325b872f85a04d3e0067831b5a126c91bd",
+      "publishedSha256": "3c1e81f077a2885ff36286c74a9620325b872f85a04d3e0067831b5a126c91bd",
+      "matches": true
+    },
+    {
+      "file": "last-minute-changes/last-minute-changes.txt",
+      "localSha256": "012f51513cad8adbd1efe13dbd19c74865264e92fe911be34096edf5eea22317",
+      "publishedSha256": "012f51513cad8adbd1efe13dbd19c74865264e92fe911be34096edf5eea22317",
+      "matches": true
+    },
+    {
+      "file": "last-minute-changes/last-minute-changes.jpg",
+      "localSha256": "9645f2c9fd863691ae5fe43fd8255ec075f78dbfb8f51cb3cc7826f2843e24f0",
+      "publishedSha256": "9645f2c9fd863691ae5fe43fd8255ec075f78dbfb8f51cb3cc7826f2843e24f0",
+      "matches": true
+    },
+    {
+      "file": "last-minute-changes/last-minute-changes-og.jpg",
+      "localSha256": "2e19c39480efc0526a336239ebf5c3a44a806d6fd9531fabe24e8308d0bdd686",
+      "publishedSha256": "2e19c39480efc0526a336239ebf5c3a44a806d6fd9531fabe24e8308d0bdd686",
+      "matches": true
+    },
+    {
+      "file": "shift-eligibility-rules/shift-eligibility-rules.mp4",
+      "localSha256": "d6160b255f4528e8af5a799827f0811c39b29ff70c7ae607ba5c05a9ddb9b381",
+      "publishedSha256": "d6160b255f4528e8af5a799827f0811c39b29ff70c7ae607ba5c05a9ddb9b381",
+      "matches": true
+    },
+    {
+      "file": "shift-eligibility-rules/shift-eligibility-rules.vtt",
+      "localSha256": "a36c58435f99cb9dec666d0fa241883f7a3b4c4ffd5c71efb6b0764815b91e46",
+      "publishedSha256": "a36c58435f99cb9dec666d0fa241883f7a3b4c4ffd5c71efb6b0764815b91e46",
+      "matches": true
+    },
+    {
+      "file": "shift-eligibility-rules/shift-eligibility-rules.txt",
+      "localSha256": "3c649d2157303b3cc4dff049cdd01ebc9f75479dbf6c11aad4ec772ca37655a9",
+      "publishedSha256": "3c649d2157303b3cc4dff049cdd01ebc9f75479dbf6c11aad4ec772ca37655a9",
+      "matches": true
+    },
+    {
+      "file": "shift-eligibility-rules/shift-eligibility-rules.jpg",
+      "localSha256": "ea9ea02f1a3cd8fcf424a1fb227ffc8d34f2ba76b718731fd55b90a9a409c08f",
+      "publishedSha256": "ea9ea02f1a3cd8fcf424a1fb227ffc8d34f2ba76b718731fd55b90a9a409c08f",
+      "matches": true
+    },
+    {
+      "file": "shift-eligibility-rules/shift-eligibility-rules-og.jpg",
+      "localSha256": "4d05cba9538b7aa56548d46edcec70edd708881ae5f1be12430ea6180663fbd9",
+      "publishedSha256": "4d05cba9538b7aa56548d46edcec70edd708881ae5f1be12430ea6180663fbd9",
+      "matches": true
+    },
+    {
+      "file": "members-import/members-import.mp4",
+      "localSha256": "0aa199ac67fe4ba2703e5516bea95c4d251a3c7481ba81c5920a76a0a1139eae",
+      "publishedSha256": "0aa199ac67fe4ba2703e5516bea95c4d251a3c7481ba81c5920a76a0a1139eae",
+      "matches": true
+    },
+    {
+      "file": "members-import/members-import.vtt",
+      "localSha256": "0eeaca1540c37fd5fae18c0441009a9c3d78f71791c32d6fa688cd72c4156988",
+      "publishedSha256": "0eeaca1540c37fd5fae18c0441009a9c3d78f71791c32d6fa688cd72c4156988",
+      "matches": true
+    },
+    {
+      "file": "members-import/members-import.txt",
+      "localSha256": "df1bd762be06b42a9fe1b579587ccc62c0eeda2cf1b681efa9b8ae11682e5821",
+      "publishedSha256": "df1bd762be06b42a9fe1b579587ccc62c0eeda2cf1b681efa9b8ae11682e5821",
+      "matches": true
+    },
+    {
+      "file": "members-import/members-import.jpg",
+      "localSha256": "560af09d4cf7309e270d83336a41dd69b313c1f0903428fbae224b3538bcd953",
+      "publishedSha256": "560af09d4cf7309e270d83336a41dd69b313c1f0903428fbae224b3538bcd953",
+      "matches": true
+    },
+    {
+      "file": "members-import/members-import-og.jpg",
+      "localSha256": "fce098909274de25f15472deabda4f130e92edf440a65cb72f422d22dc1df11f",
+      "publishedSha256": "fce098909274de25f15472deabda4f130e92edf440a65cb72f422d22dc1df11f",
+      "matches": true
+    }
+  ]
+}

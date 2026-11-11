@@ -1,0 +1,31 @@
+{
+  "auditedAt": "2026-11-11T12:36:55.248Z",
+  "prompt": "Écoute cet extrait sonore en entier. Combien de personnes prononcent les phrases de narration ? Décris leur identité vocale et toute rupture de locuteur réellement audible, notamment entre les phrases. Distingue une variation naturelle de timbre d'un changement de personne. Ne déduis rien du contenu des phrases. Réponds uniquement en JSON {speakers:number, consistentVoice:boolean, changes:[{seconds:number,observation:string}], evidence:string}. Aucun transcript attendu n'est fourni.",
+  "reports": [
+    {
+      "file": "videos/output/shift-eligibility-rules/audio/reserved.wav",
+      "sha256": "48bfbf3dea51559c4ea95c0344db61c1e8b481f9358ca0dcaab421dcec1348d8",
+      "result": {
+        "speakers": 1,
+        "consistentVoice": true,
+        "changes": [],
+        "evidence": "L'ensemble de l'extrait est lu par une seule et même voix féminine, avec un timbre, un débit et une acoustique constants du début à la fin, sans aucune rupture de locuteur."
+      }
+    },
+    {
+      "file": "/tmp/codex-video/b40-reserved-final.wav",
+      "sha256": "ef48dab3be877a936a2d02de3fb61c846a31d99e13ac26a0508dc1fb043658af",
+      "result": {
+        "speakers": 2,
+        "consistentVoice": false,
+        "changes": [
+          {
+            "seconds": 11.8,
+            "observation": "Passage d'une voix féminine à une voix masculine distincte pour la dernière phrase."
+          }
+        ],
+        "evidence": "L'extrait débute avec une voix féminine jusqu'à environ 11 secondes, puis une voix d'homme prend le relais à 11,8 secondes pour prononcer la phrase finale."
+      }
+    }
+  ]
+}

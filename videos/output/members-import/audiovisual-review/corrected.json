@@ -1,50 +1,42 @@
 {
   "model": "gemini-3.8-flash",
-  "reviewedAt": "2026-10-16T16:29:46.227Z",
-  "videoSha256": "fbcd9cf97e149efbe1a278e278a569aa3adcf8bc988d8c401b4e96d2eecbf481",
+  "reviewedAt": "2026-11-11T12:42:16.609Z",
+  "videoSha256": "0aa199ac67fe4ba2703e5516bea95c4d251a3c7481ba81c5920a76a0a1139eae",
   "promptSha256": "4722abadbb7f9a2435deca588f03c7540debb407a43556355a40d1edb9d8809e",
-  "clipSha256": "cb3d1bdbdb0c59028d3662a1bfcb74383bc96aafdbbfcda612ac9a7ebc2030ca",
+  "clipSha256": "05fac19c25277e2a885df128073ff7f7967960b06b7c302ca4dda6f3d36d395b",
   "scene": "corrected",
   "review": {
     "heardOpening": "Nous choisissons maintenant le fichier Excel corrigé",
     "checkpoints": [
       {
-        "spokenSeconds": 0.8,
-        "spoken": "Nous choisissons maintenant le fichier Excel corrigé et relançons l'analyse.",
-        "visibleSeconds": 4.8,
-        "visible": "Le fichier 'membres-corriges.xlsx' est sélectionné puis le bouton 'Analyser le fichier' est cliqué.",
+        "spokenSeconds": 0.5,
+        "spoken": "Nous choisissons maintenant le fichier Excel corrigé",
+        "visibleSeconds": 1,
+        "visible": "La fenêtre d'import affiche le fichier sélectionné membres-corriges.xlsx",
         "sync": "aligned",
         "severity": "none"
       },
       {
-        "spokenSeconds": 6.3,
-        "spoken": "Les erreurs ont disparu. Les quarante lignes sont reconnues, dont les deux adresses déjà présentes.",
-        "visibleSeconds": 6.5,
-        "visible": "Affichage de '0 ligne en erreur', '38 à créer, 2 à mettre à jour' et 'Membres du fichier (40)'.",
+        "spokenSeconds": 3.2,
+        "spoken": "et relançons l'analyse",
+        "visibleSeconds": 4.8,
+        "visible": "Un clic est effectué sur le bouton Analyser le fichier",
+        "sync": "aligned",
+        "severity": "none"
+      },
+      {
+        "spokenSeconds": 5.2,
+        "spoken": "Les erreurs ont disparu. Les quarante lignes sont reconnues",
+        "visibleSeconds": 5.8,
+        "visible": "L'écran d'analyse indique 0 ligne en erreur et la section Membres du fichier (40)",
         "sync": "aligned",
         "severity": "none"
       },
       {
         "spokenSeconds": 11.2,
-        "spoken": "René n'a pas d'email : sa fiche peut être créée avec son téléphone.",
+        "spoken": "René n'a pas d'email : sa fiche peut être créée avec son téléphone",
         "visibleSeconds": 11.5,
-        "visible": "Ligne 3 affichant René Meyer sans adresse email avec action 'Créer'.",
-        "sync": "aligned",
-        "severity": "none"
-      },
-      {
-        "spokenSeconds": 15.9,
-        "spoken": "Vérifiez une dernière fois les noms, les catégories et le récapitulatif.",
-        "visibleSeconds": 16.2,
-        "visible": "Le tableau récapitulatif avec colonnes Nom, Étiquettes et Action reste affiché.",
-        "sync": "aligned",
-        "severity": "none"
-      },
-      {
-        "spokenSeconds": 21.3,
-        "spoken": "Le fichier est limité à deux mégaoctets et cinq mille lignes par import.",
-        "visibleSeconds": 21.5,
-        "visible": "La fenêtre modale reste affichée avec le récapitulatif et le bouton d'import final.",
+        "visible": "La ligne 3 montre René Meyer sans email, avec un numéro de téléphone et l'action Créer",
         "sync": "aligned",
         "severity": "none"
       }
@@ -53,7 +45,7 @@
     "voice": {
       "consistent": true,
       "warm": true,
-      "observation": "Voix claire, posée et bien articulée, parfaitement synchronisée avec les étapes visibles à l'écran."
+      "observation": "Voix claire, posée et parfaitement synchronisée avec les actions affichées à l'écran."
     }
   },
   "note": "Automated observation of actual final video audio and images; not a claim of complete human validation"

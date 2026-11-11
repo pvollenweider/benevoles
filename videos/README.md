@@ -903,3 +903,47 @@ l'hôte public de l'organisation (`https://default.benevol.app/fete-du-village` 
 la démo), via la passerelle locale ; `?org=` sur `www` n'identifie pas une
 organisation en production. Servir le build vérifié avec `serve-public` pour que
 les redirections Auth.js des sessions préparées restent sur l'hôte public.
+
+### Lot 40 : imprévus, accès par réponse et suppression après import
+
+Le build vérifié vient du main courant (dont #1318), avec `npm ci` et le client Prisma
+généré dans la copie jetable. Utilisez une pile créée pour la prise, sur des ports libres :
+PostgreSQL 45433, SMTP 41026, Mailpit 48026 ; `local-production.ts serve-public` sert le
+build sur 43102. Le wrapper charge désormais aussi les outils de cette base avec le
+client de la copie vérifiée, sans régénérer `src/` du checkout. Les trois recorders
+naviguent sur le sous-domaine public de leur organisation par la passerelle locale.
+
+Après le seed démo initial, préparez les deux parcours communs ainsi :
+
+```bash
+# Répéter cette préparation avant chaque répétition ou prise correspondante.
+node --env-file=.env.video.e2e --import tsx videos/tools/local-production.ts run videos/tools/prepare-demo.ts
+node --env-file=.env.video.e2e --import tsx videos/tools/local-production.ts run scripts/seed-video-scenario.ts shift-eligibility-rules
+
+# Pour l'import, les membres d'invitation fournissent le témoin René sans email.
+node --env-file=.env.video.e2e --import tsx videos/tools/local-production.ts run scripts/seed-video-scenario.ts members-invitations
+node --env-file=.env.video.e2e --import tsx videos/tools/local-production.ts run scripts/seed-video-scenario.ts members-import
+node --env-file=.env.video.e2e --import tsx videos/tools/local-production.ts run videos/tools/prepare-import-baseline.ts
+```
+
+L'accès par réponse utilise une question oui/non posée à tous, un poste Navette avec
+des places libres, puis la vraie invitation de Julien. L'import conserve la preuve de la
+création réelle du contact sans email. Les trois témoins supplémentaires du seed démo
+courant sont vérifiés par leurs noms et emails exacts. Après la suppression groupée,
+`verify-batch40-member-cleanup.ts`, par le même wrapper, vérifie en lecture seule les
+deux suppressions, la désactivation de René et la conservation de son inscription.
+
+Pour les imprévus, `seed-video-scenario.ts last-minute-changes`, par le wrapper, nettoie
+uniquement ses messages et prépare un événement publié couvrant aujourd'hui et demain.
+Le créneau du jour permet le filtre « Inscrits aujourd'hui » ; les autres missions restent
+à venir pour le retrait et l'offre. L'horloge du produit reste réelle. Faire les précontrôles
+`verify-last-minute.ts`, `flush-last-minute-outbox.ts` et `verify-last-minute-mail.ts`,
+puis refaire le seed avant la répétition et avant chaque prise narrée. Après la prise,
+refaire la vérification des vrais emails reçus avant la revue audiovisuelle.
+
+Les emails de cette vidéo sont cadrés sur leurs pixels réels (x=320, y=264, 960×536),
+sans en-tête Mailpit ni date anglaise. La page de réponse « Je ne peux pas » s'ouvre
+directement depuis le vrai lien reçu, sans afficher la boîte technique pour ce passage.
+Les nouvelles narrations sont chacune un master Kore entier ; les frontières corrigées
+sur les silences sont réauditées avant le tournage. Les trois identifiants sont admis par
+`audit-full-final-audio.ts` pour la reconnaissance multilingue du MP4 entier.

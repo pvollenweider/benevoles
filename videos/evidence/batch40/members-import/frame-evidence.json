@@ -1,0 +1,174 @@
+{
+  "videoSha256": "0aa199ac67fe4ba2703e5516bea95c4d251a3c7481ba81c5920a76a0a1139eae",
+  "frames": [
+    {
+      "scene": "welcome",
+      "seconds": 20.037,
+      "file": "frames/welcome-3.png",
+      "checkpoint": {
+        "spokenSeconds": 19.5,
+        "spoken": "créer les membres manuellement avec Nouveau membre.",
+        "visibleSeconds": 19.5,
+        "visible": "Le bouton bleu « + Nouveau membre » est visible en haut à droite de l'interface.",
+        "sync": "aligned",
+        "severity": "none"
+      }
+    },
+    {
+      "scene": "file",
+      "seconds": 45.371,
+      "file": "frames/file-3.png",
+      "checkpoint": {
+        "spokenSeconds": 19.3,
+        "spoken": "Les disponibilités, elles, se renseignent ensuite dans la fiche : elles ne sont pas importées.",
+        "visibleSeconds": 22,
+        "visible": "Fermeture de la fenêtre modale d'import et retour à la liste des membres",
+        "sync": "aligned",
+        "severity": "none"
+      }
+    },
+    {
+      "scene": "preview",
+      "seconds": 57.808,
+      "file": "frames/preview-4.png",
+      "checkpoint": {
+        "spokenSeconds": 12.3,
+        "spoken": "Le récapitulatif montre les créations prévues, les personnes déjà présentes et les lignes en erreur.",
+        "visibleSeconds": 10.2,
+        "visible": "Affichage du rapport d'analyse détaillant créations, présents ignorés et lignes en erreur",
+        "sync": "aligned",
+        "severity": "none"
+      }
+    },
+    {
+      "scene": "errors",
+      "seconds": 72.542,
+      "file": "frames/errors-3.png",
+      "checkpoint": {
+        "spokenSeconds": 6.3,
+        "spoken": "La ligne neuf reprend l'email de la ligne huit : ce doublon dans le fichier est également signalé",
+        "visibleSeconds": 0,
+        "visible": "Affichage : Ligne 9 Même email que la ligne 8",
+        "sync": "aligned",
+        "severity": "none"
+      }
+    },
+    {
+      "scene": "update",
+      "seconds": 116.487,
+      "file": "frames/update-3.png",
+      "checkpoint": {
+        "spokenSeconds": 19.8,
+        "spoken": "Ici, Camille et Julien passent de Ignorer à Mettre à jour",
+        "visibleSeconds": 20.2,
+        "visible": "Le tableau affiche Camille Rochat et Julien Favre avec l'action Mettre à jour",
+        "sync": "aligned",
+        "severity": "none"
+      }
+    },
+    {
+      "scene": "corrected",
+      "seconds": 135.144,
+      "file": "frames/corrected-4.png",
+      "checkpoint": {
+        "spokenSeconds": 11.2,
+        "spoken": "René n'a pas d'email : sa fiche peut être créée avec son téléphone",
+        "visibleSeconds": 11.5,
+        "visible": "La ligne 3 montre René Meyer sans email, avec un numéro de téléphone et l'action Créer",
+        "sync": "aligned",
+        "severity": "none"
+      }
+    },
+    {
+      "scene": "confirm",
+      "seconds": 166.317,
+      "file": "frames/confirm-4.png",
+      "checkpoint": {
+        "spokenSeconds": 17,
+        "spoken": "Ouvrez sa fiche pour vérifier son téléphone et ses étiquettes",
+        "visibleSeconds": 17.6,
+        "visible": "Clic sur Modifier et ouverture de la fiche de Maya affichant son téléphone et ses étiquettes",
+        "sync": "aligned",
+        "severity": "none"
+      }
+    },
+    {
+      "scene": "repeat",
+      "seconds": 190.719,
+      "file": "frames/repeat-4.png",
+      "checkpoint": {
+        "spokenSeconds": 16.5,
+        "spoken": "puis annulez si vous ne souhaitez rien ajouter.",
+        "visibleSeconds": 18,
+        "visible": "Fermeture de l'aperçu d'analyse pour revenir à l'étape précédente sans importer",
+        "sync": "aligned",
+        "severity": "none"
+      }
+    },
+    {
+      "scene": "cleanup",
+      "seconds": 195.661,
+      "file": "frames/cleanup-1.png",
+      "checkpoint": {
+        "spokenSeconds": 1.8,
+        "spoken": "Filtrons la liste",
+        "visibleSeconds": 2.5,
+        "visible": "Le prénom René est saisi dans le champ de recherche et la liste est filtrée sur 3 membres",
+        "sync": "aligned",
+        "severity": "none"
+      }
+    },
+    {
+      "scene": "cleanup",
+      "seconds": 197.161,
+      "file": "frames/cleanup-2.png",
+      "checkpoint": {
+        "spokenSeconds": 3.4,
+        "spoken": "puis cochons Tout sélectionner",
+        "visibleSeconds": 4,
+        "visible": "La case Tout sélectionner est cochée et les 3 fiches filtrées sont sélectionnées",
+        "sync": "aligned",
+        "severity": "none"
+      }
+    },
+    {
+      "scene": "cleanup",
+      "seconds": 200.961,
+      "file": "frames/cleanup-3.png",
+      "checkpoint": {
+        "spokenSeconds": 7.5,
+        "spoken": "Avec Supprimer la sélection",
+        "visibleSeconds": 7.8,
+        "visible": "Clic sur le bouton Supprimer la sélection et ouverture de la boîte de dialogue de confirmation",
+        "sync": "aligned",
+        "severity": "none"
+      }
+    },
+    {
+      "scene": "cleanup",
+      "seconds": 210.661,
+      "file": "frames/cleanup-4.png",
+      "checkpoint": {
+        "spokenSeconds": 16.5,
+        "spoken": "Cochons la case pour les désactiver, puis confirmons.",
+        "visibleSeconds": 17.5,
+        "visible": "La case de désactivation du membre avec inscriptions est cochée puis le bouton Supprimer est validé",
+        "sync": "aligned",
+        "severity": "none"
+      }
+    },
+    {
+      "scene": "result",
+      "seconds": 234.26,
+      "file": "frames/result-3.png",
+      "checkpoint": {
+        "spokenSeconds": 16.7,
+        "spoken": "L'import fait gagner du temps, tout en vous laissant le dernier mot",
+        "visibleSeconds": 16.7,
+        "visible": "Vue d'ensemble de la liste des membres pour clore le module",
+        "sync": "aligned",
+        "severity": "none"
+      }
+    }
+  ]
+}

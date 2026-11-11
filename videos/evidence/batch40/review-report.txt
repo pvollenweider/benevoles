@@ -1,0 +1,39 @@
+STATUS: READY
+
+Batch 40 — completed 2026-11-11. All three requested videos were updated, filmed, reviewed and published. No email-confirmation video was added.
+
+Resume provenance
+- Fetched origin/main and rebased video-batch40 onto d3f4c4ba81356b673b1952b19c4ffe99531652f5. The original evidence commit b5b1e063 is preserved after rebase as f72c43b2.
+- Verified #1318: d3f4c4ba is the main fix keeping isomorphic-dompurify external. One new clean git-archive snapshot, npm ci and Prisma generation preceded the prescribed build-main-product.ts --commit command. It verified 2,310 product inputs and succeeded; no older build or product workaround was used.
+- Product commit filmed for every video: d3f4c4ba81356b673b1952b19c4ffe99531652f5. BUILD_ID: AOuqevq41Wdo1_vo9UIzS. Snapshot: /tmp/benevoles-video-production.6ff2AH. Product build proof is product-build.json. The old build-failure evidence remains historical.
+
+Sources
+- LAST_MINUTE_CHANGES: new Jour J need segment; shift-specific refusal folded into availability in two sentences; viewer block and script; real UI recorder; live event today/tomorrow and today's registered witness in the seed. Four real email-body crops, direct real refusal link without Mailpit in that passage. At most one new segment for each requested feature.
+- SHIFT_ELIGIBILITY_RULES: settings chapter includes all poste-level rules; new answer-condition segment, viewer and script. The seed makes Permis de conduire a yes/no question for everyone and leaves Navette open; the UI editor saves Oui. The public condition, Non refusal and Oui confirmation are actual screens, using Julien's real invitation. The matching #962 gap note is removed.
+- MEMBERS_IMPORT: one short cleanup segment before result, viewer and script; filtered selection and one real confirmation. Two extra René contacts are deleted, the registered René is deactivated, and his original active registration remains. A post-action read-only invariant verifies that exact outcome. Current-main demo additions are checked by exact identities; scenario preparation and its receipts stay guarded.
+- Public navigation uses each organization's actual public host through the verified local gateway. The temporary build's current Prisma client is used, without regenerating src/ in the checkout. README documents preparation. A first-run imprévus mailbox cleanup accepts only its reserved namespace and exact title before its dedicated organization exists.
+
+Narration and reviews
+Each video has one complete continuous Kore generation, continuousPauseTags false. Chapter cuts were repaired at real silences and independently re-audited, without mixing old/new voices. Source and final-video chapter ASRs pass; whole-master voice audits pass. Entire final soundtracks were independently transcribed without expected text, in all languages: zero viewer tu/ton/ta/tes/toi/te tokens, zero VTT register tokens, no stray instruction or English narration. No beta wording in narration. Real-time subjective listening is unavailable and is not claimed.
+
+LAST_MINUTE_CHANGES used two narrated takes, the other two one each. Take 1's late email opening was corrected in the recorder under the existing confirmation and email sentence anchors; take 2's message and new need chapters pass. The notification option is visible during its clause. A final model finding confused Sarah's Preparation row with Nicolas; the real final frame shows Nicolas on Accueil du matin at 15.5 s before that measured sentence ends at 15.829 s, and the exact DB query agrees. The raw finding and resolution are retained.
+
+SHIFT_ELIGIBILITY_RULES has one retained mixed-audio voice finding: the whole master and isolated source chapter each have one consistent female voice. Final/source voice-band waveform correlation is 0.960–0.993 at zero sample lag, including the flagged final phrase; no pitch or narration-speaker replacement occurred. Both contrary model observations are retained with this direct evidence. All screen checkpoints pass. MEMBERS_IMPORT has no audiovisual findings. Final reviews cover 29 chapters / 114 checkpoints; raw reports, resolutions, measured anchors and actual final-video frames are retained under each slug.
+
+Checks
+- npm run video:validate passed separately for LAST_MINUTE_CHANGES, SHIFT_ELIGIBILITY_RULES and MEMBERS_IMPORT.
+- TypeScript: all 220 explicit tooling sources and transitive imports pass in the current compiled snapshot, including touched recorders/seeds. The checkout's old generated client was not regenerated; its stale-client diagnostic attempts are not represented as current-build checks.
+- ESLint passes on every touched TypeScript source. 39 video test files / 1,322 tests pass, including sentence anchors and exact import-baseline safeguards.
+- Music: 14.7–19.9, 14.1–19.4 and 14.2–19.9 LU under voice respectively; zero music-rule gaps/issues. Clicks/keys are actual tracked interactions with synced soft effects (41/231, 35/0, 26/2).
+- Descriptions are 108 / 88 / 117 audited UTF-8 bytes, each below 160.
+- No src/, content/guide/ or videos/renders.json change. No public product capability was added by this video-only batch. doc-img: unchanged.
+
+Publication and cleanup
+Each READY video used make video-publish KUBE_CONTEXT=default ID=<ID> for preview, then APPLY=1. Five files uploaded each. Revision/date pairs are LAST_MINUTE_CHANGES 6, SHIFT_ELIGIBILITY_RULES 5, MEMBERS_IMPORT 7; updatedAt and updated are 2026-11-11. The one [Unreleased] changelog line is French. All 15 published files match the final local artifacts by SHA-256 (published-checksums.json).
+
+Only this run's exact capture-server PID and two container IDs were stopped, after verification; owned-resources-stopped.json. No other process or container was touched. Ignored and untracked artifacts were retained, including earlier output archives. No clean, stash, commit -a, push, merge or ntfy message. The local source/evidence commit uses only Philippe Vollenweider <pvollenweider@jahia.com> as author and committer, with HUSKY=0 after the equivalent checks above.
+
+ID | Status | Duration | BUILD_ID | Commit filmed | Music gaps | Viewer tu count | Problems | Source changes
+LAST_MINUTE_CHANGES | READY, published r6 | 395.480 s | AOuqevq41Wdo1_vo9UIzS | d3f4c4ba | 0 | 0 | late email fixed in take 2; model row confusion resolved | manifest/narration/segments/viewer, script, recorder, seeds
+SHIFT_ELIGIBILITY_RULES | READY, published r5 | 153.280 s | AOuqevq41Wdo1_vo9UIzS | d3f4c4ba | 0 | 0 | mixed-audio model voice flag resolved | manifest/settings/answer/viewer, script, recorder, seed
+MEMBERS_IMPORT | READY, published r7 | 241.080 s | AOuqevq41Wdo1_vo9UIzS | d3f4c4ba | 0 | 0 | none | manifest/cleanup/viewer, script, recorder/invariant, seed and baseline guards

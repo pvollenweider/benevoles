@@ -44,3 +44,14 @@ WAITING TTS — plafond mensuel connu ; aucun nouvel appel. Régénérer la narr
 
 - Les colonnes reconnues et les étiquettes sont également indiquées.
 - Ouvrez sa fiche pour vérifier son téléphone et ses étiquettes.
+
+
+## Révision du 2026-11-11 — lot 40
+
+Source produit : main `d3f4c4ba81356b673b1952b19c4ffe99531652f5`, dont #1318. Libellés relus dans les guides et les composants du même commit. Narration entière Kore générée en une passe, sans balises de pause. Prise narrée, audits et publication terminés.
+
+- `cleanup` : Quelques fiches sont en trop. Filtrons la liste, puis cochons Tout sélectionner : la sélection suit le filtre affiché. Avec Supprimer la sélection, une seule confirmation indique les fiches supprimées et celles qui restent. Les membres qui ont des inscriptions ne sont jamais supprimés. Cochons la case pour les désactiver, puis confirmons. Les autres fiches sélectionnées sont supprimées ; les inscriptions restent dans l'historique.
+
+Statut final : **READY**, publiée le 11 novembre 2026, révision 7, 241,080 s. Une prise narrée. Build `AOuqevq41Wdo1_vo9UIzS`, produit `d3f4c4ba`. Musique et sons réels des interactions validés, zéro tutoiement dans le VTT et l’ASR finale entière. [Rapport et preuves](../evidence/batch40/members-import/review-report.txt).
+
+Le filtre René sélectionne trois fiches : deux sans inscription sont supprimées, celle de la graine de formation est désactivée. Le contrôle en lecture seule après la prise retrouve cette fiche inactive et son inscription d’origine toujours active. Le point d’entrée de préparation utilise les trois fiches fictives supplémentaires du main actuel, sans supprimer ni ignorer une identité inconnue.

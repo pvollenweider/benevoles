@@ -62,6 +62,25 @@ async function main() {
     const { seedVideoExports } = await import("./seed-video-exports")
     return seedVideoExports(prisma)
   }
+  if (scenario === "members-import") {
+    const person = await prisma.volunteer.findUniqueOrThrow({ where: { id: "video-member-management-2" } })
+    if (person.organizationId !== "default" || person.firstName !== "René" || person.email !== null) throw new Error("Exact synthetic import witness required")
+    await prisma.volunteer.update({ where: { id: person.id }, data: { active: true } })
+    const event = await prisma.event.findFirstOrThrow({ where: { organizationId: "default", slug: "fete-du-village" } })
+    const shift = await prisma.shift.findFirstOrThrow({ where: { eventId: event.id, roleName: "Montage" } })
+    await prisma.registration.create({ data: { id: "video-import-kept-registration", volunteerId: person.id, eventId: event.id, shiftId: shift.id, status: "active", source: "admin_manual", ...registrationToken.data("demo-import-kept") } })
+    console.log("✓ Import cleanup: one René has a registration to preserve; imported and baseline extra rows have none")
+    return
+  }
+  if (scenario === "shift-eligibility-rules") {
+    const event = await prisma.event.findFirstOrThrow({ where: { organizationId: "default", slug: "fete-du-village" } })
+    const question = await prisma.eventQuestion.findFirstOrThrow({ where: { eventId: event.id, label: "Permis de conduire" } })
+    await prisma.questionAnswer.deleteMany({ where: { questionId: question.id } })
+    await prisma.eventQuestion.update({ where: { id: question.id }, data: { type: "yesno", options: [], required: true, parentId: null, displayScope: "event", displayRoleNames: [] } })
+    await prisma.shift.updateMany({ where: { eventId: event.id, roleName: "Navette" }, data: { reservedQuestionId: null, reservedAnswers: [], capacity: 5, status: "open", requiresApproval: false } })
+    console.log("✓ Eligibility: Permis de conduire is a yes/no question asked to every volunteer; Navette condition is configured on camera")
+    return
+  }
   if (scenario === "fresh-organization") return freshOrganization()
   if (scenario === "shift-recurrence") {
     const { seedVideoRecurrence } = await import("./seed-video-recurrence")
@@ -273,7 +292,7 @@ async function main() {
       { firstName: "René", lastName: "Sansmail" },
       { id: "video-member-management-2" },
     ] } })
-    // The demo seed supplies 24 members. Add 36 deterministic fictional members for a
+    // The current main demo supplies 27 members. Add 36 deterministic fictional members for a
     // substantial list, including two distinct homonyms and a contact without email.
     for (let index = 0; index < 36; index++) {
       const { id, ...data } = expectedMemberV2(index, scenario === "members-invitations")
@@ -284,7 +303,7 @@ async function main() {
     await mkdir("videos/output/member-fixture-v2", { recursive: true })
     await writeFile("videos/output/member-fixture-v2/seed-proof.json", JSON.stringify(seedProof, null, 2))
     const count = await prisma.volunteer.count({ where: { organizationId: "default" } })
-    if (count !== 60) throw new Error(`Members scenario expects 60 members after demo seed, got ${count}`)
+    if (count !== 63) throw new Error(`Members scenario expects 63 members after demo seed, got ${count}`)
     if (scenario === "members-reminders") {
       const event = await prisma.event.findFirstOrThrow({ where: { organizationId: "default", slug: "fete-du-village" } })
       const lucas = await prisma.volunteer.findFirstOrThrow({ where: { organizationId: "default", email: "lucas.girard@example.org" } })
@@ -300,10 +319,10 @@ async function main() {
       await prisma.volunteer.update({ where: { id: "video-member-management-3" }, data: { firstName: "Aline", lastName: "Mercier", tags: ["accueil"] } })
       await prisma.volunteer.update({ where: { id: "video-member-management-4" }, data: { firstName: "Nicolas", lastName: "Renaud", tags: ["sécurité", "permis-b"] } })
       await prisma.volunteer.update({ where: { id: "video-member-management-2" }, data: { firstName: "René", lastName: "Meyer", tags: ["accueil"] } })
-      console.log("✓ Invitation scenario: 60 fictional members, two new invitees and a no-email contact; existing invitation statuses supplied by demo")
+      console.log("✓ Invitation scenario: 63 fictional members, two new invitees and a no-email contact; existing invitation statuses supplied by demo")
       return
     }
-    console.log("✓ Members scenario: 60 fictional members, homonyms, contact without email and inactive member")
+    console.log("✓ Members scenario: 63 fictional members, homonyms, contact without email and inactive member")
     return
   }
   if (scenario === "personal-session") {

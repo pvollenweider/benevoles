@@ -1,0 +1,78 @@
+{
+  "model": "gemini-3.8-flash",
+  "reviewedAt": "2026-11-11T12:41:07.569Z",
+  "videoSha256": "4aae215e6882891533fc2797295a8fe2a5fef9956720bcaaa0912d6e302a20b7",
+  "promptSha256": "0ab1fef9018dc9ebf48cbce3c2af803be558dd4ccd80d5ab235c8797cdd0c511",
+  "clipSha256": "83e016c7a555a124fc29258ea0cdc153a8a154797a4a1aee9894c4aa3a241a6f",
+  "scene": "message",
+  "review": {
+    "heardOpening": "Depuis les messages de l'événement",
+    "checkpoints": [
+      {
+        "spokenSeconds": 2.5,
+        "spoken": "choisissons les bénévoles d'un créneau, puis Installation du matériel.",
+        "visibleSeconds": 1.5,
+        "visible": "L'option 'Les bénévoles d'un créneau' et le créneau 'Logistique - Installation du matériel' sont sélectionnés.",
+        "sync": "aligned",
+        "severity": "none"
+      },
+      {
+        "spokenSeconds": 23.3,
+        "spoken": "Vérifions l'aperçu et le destinataire, puis confirmons l'envoi.",
+        "visibleSeconds": 24.8,
+        "visible": "Clic sur 'Voir l'aperçu et envoyer' et ouverture de la fenêtre modale d'aperçu.",
+        "sync": "aligned",
+        "severity": "none"
+      },
+      {
+        "spokenSeconds": 27.2,
+        "spoken": "Ouvrons le vrai email reçu.",
+        "visibleSeconds": 31.5,
+        "visible": "Affichage de l'email reçu après la confirmation d'envoi dans l'application.",
+        "sync": "late",
+        "severity": "minor"
+      },
+      {
+        "spokenSeconds": 35.5,
+        "spoken": "Revenons aux inscriptions et ouvrons l'ajout manuel.",
+        "visibleSeconds": 36.8,
+        "visible": "Accès à l'onglet Inscriptions puis clic sur le bouton '+ Ajouter manuellement'.",
+        "sync": "aligned",
+        "severity": "none"
+      },
+      {
+        "spokenSeconds": 39.2,
+        "spoken": "Saisissons son prénom, son nom et la même adresse email que sa fiche membre.",
+        "visibleSeconds": 40.5,
+        "visible": "Remplissage des champs Prénom, Nom et Email pour Zoé Papadopoulos.",
+        "sync": "aligned",
+        "severity": "none"
+      },
+      {
+        "spokenSeconds": 43.6,
+        "spoken": "Choisissons le créneau de logistique, de midi à quatorze heures, puis ajoutons-la.",
+        "visibleSeconds": 46.5,
+        "visible": "Sélection du créneau de logistique 12h-14h dans le menu déroulant et clic sur 'Ajouter'.",
+        "sync": "aligned",
+        "severity": "none"
+      },
+      {
+        "spokenSeconds": 48.5,
+        "spoken": "Enfin, revenons à la couverture : le poste est rempli.",
+        "visibleSeconds": 48.2,
+        "visible": "Affichage de la page de couverture 'Où manque-t-il du monde ?'.",
+        "sync": "aligned",
+        "severity": "none"
+      }
+    ],
+    "issues": [
+      "À 00:27, la consigne 'Ouvrons le vrai email reçu' est prononcée alors que la boîte de dialogue de confirmation d'envoi est encore à l'écran ; l'email ne s'affiche qu'à 00:31."
+    ],
+    "voice": {
+      "consistent": true,
+      "warm": true,
+      "observation": "Voix off posée, claire et bien articulée, avec un débit régulier."
+    }
+  },
+  "note": "Automated observation of actual final video audio and images; not a claim of complete human validation"
+}

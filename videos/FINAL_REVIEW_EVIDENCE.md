@@ -1043,15 +1043,37 @@ Pour tout le lot : descriptions de 122/120/120 octets UTF-8 ; contrôles de type
 
 Vérification finale du checkout : un autre processus a avancé la référence partagée `origin/main` à `22945bd8` (#1313) pendant le lot. Les trois rendus publiés sont vérifiés sur `058f35c4`, récupéré au départ et épinglé dans la copie de capture ; ils ne sont pas revalidés sur #1313. Aucun second build réussi, rebase, push ni merge.
 
-## Poste réservé à une réponse (#962), 2026-11-12
+## Lot 40 — besoins du jour J, accès par réponse et nettoyage après import
 
-L'éditeur « Accès » de « Gérer les postes » gagne une **Condition d'accès (facultatif)**
-(question à choix posée à tous, réponses acceptées) et le créneau public une mention
-« Réponse requise : … ». `shift-eligibility-rules` ouvre réellement cet éditeur (sélecteur
-« Accès : sécurité, poste « Sécurité » réservé » dans `videos/tools/record.ts`) : son image
-montre l'ancienne version, sans le bloc de condition. **Non régénérée dans ce travail**
-(voix et capture longues) ; recorder et narration restent valides, à refilmer au prochain
-passage. Aucune autre vidéo n'ouvre l'éditeur « Accès » ; `sectors` et
-`accessibility-keyboard-display` ne font que traverser « Gérer les postes », et
-`members-invitations` / `volunteer-choose-shifts` montrent les étiquettes, dont l'affichage
-ne change pas.
+Le 11 novembre 2026, les trois vidéos sont **READY**, sur un seul build propre du main
+`d3f4c4ba81356b673b1952b19c4ffe99531652f5` (correctif #1318 vérifié), BUILD_ID
+`AOuqevq41Wdo1_vo9UIzS`. Le commit de preuve du premier arrêt de build est conservé
+après rebase sous `f72c43b2` ; le blocage webpack est résolu sur main.
+
+- **LAST_MINUTE_CHANGES**, révision 6, 395,480 s : deux prises narrées. « Ajouter un besoin »
+  sur un Jour J réel, ses deux étapes et « Inscrits aujourd'hui », notification cochée ;
+  réponse de Sarah ouverte directement depuis le vrai lien, puis conservée dans la recherche.
+  Email recalé après la première prise. 47 points AV ; un signalement de mauvaise ligne est
+  résolu par l'image finale avant la fin de la phrase et par la vraie inscription de Nicolas.
+  [Rapport](evidence/batch40/last-minute-changes/review-report.txt).
+- **SHIFT_ELIGIBILITY_RULES**, révision 5, 153,280 s : une prise narrée. L'éditeur Accès choisit
+  la question à tous et Oui, la mention publique est visible, Non est refusé à la confirmation,
+  Oui aboutit. L'écart #962 est retiré. 32 points AV ; le signalement de voix du mix est conservé
+  avec l'audit du master et la comparaison des ondes qui établit l'identité de la narration.
+  [Rapport](evidence/batch40/shift-eligibility-rules/review-report.txt).
+- **MEMBERS_IMPORT**, révision 7, 241,080 s : une prise narrée. Le filtre René sélectionne trois
+  fiches ; une seule confirmation supprime les deux sans inscription et désactive celle qui en a
+  une. Le contrôle en lecture seule retrouve la fiche inactive et son inscription toujours active.
+  35 points AV, aucun signalement. [Rapport](evidence/batch40/members-import/review-report.txt).
+
+Chaque narration est une génération Kore entière, sans balise de pause. Frontières corrigées
+sur les silences puis réauditées ; ASR des chapitres finaux et des bandes-son entières réussies,
+**0 tutoiement** dans les ASR et VTT. Musique : respectivement 14,7–19,9, 14,1–19,4 et
+14,2–19,9 LU sous la voix, aucune fenêtre hors règle. Clics et touches réels sonorisés.
+Descriptions : 108, 88 et 117 octets UTF-8. TypeScript des 220 outils, ESLint et 1 322 tests vidéo
+réussis. La publication utilise pour chacune l'aperçu puis APPLY=1 sur default ; les preuves
+et les empreintes sont sous [batch40](evidence/batch40/review-report.txt).
+
+Sources éditoriales, manifestes et blocs viewer, recorders et seeds actualisés. Aucun nouveau
+film pour la confirmation par email, aucun fichier sous src/ ou content/guide/ changé,
+renders.json inchangé ; `doc-img: unchanged`. Aucun push, merge ni message ntfy.

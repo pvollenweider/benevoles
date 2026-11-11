@@ -55,3 +55,15 @@ Narration finale de référence (génération intégrale si modifiée, même voi
 - `reserved` : Sans invitation, le poste Sécurité reste visible mais marqué réservé à certains membres. Le message ne révèle pas les étiquettes internes : il demande simplement d’utiliser le lien personnel reçu par email. Une invitation sans la bonne étiquette ne donne pas davantage accès.
 - `eligible` : Julien possède l’étiquette sécurité. En ouvrant son invitation, la même mission devient sélectionnable : le lien prouve quel membre a été invité et le serveur contrôle ses étiquettes au moment de l’inscription. Il n’y a donc ni compte à créer, ni code à recopier.
 - `result` : Ces règles doivent rester compréhensibles. Dans les paramètres de l’événement, la description permet d’expliquer les critères. Vérifions aussi le téléphone obligatoire si l’équipe doit appeler le jour J. Pour corriger un profil, retrouvons Julien dans les membres, puis ouvrons Modifier : son étiquette sécurité est une information interne. Ici, nous vérifions la fiche sans la modifier, puis nous annulons.
+
+
+## Révision du 2026-11-11 — lot 40
+
+Source produit : main `d3f4c4ba81356b673b1952b19c4ffe99531652f5`, dont #1318. Libellés relus dans les guides et les composants du même commit. Narration entière Kore générée en une passe, sans balises de pause. Prise narrée, audits et publication terminés.
+
+- `settings` : Les règles se configurent au bon niveau. L’âge minimum appartient au créneau. La limite, les étiquettes réservées et la condition par une réponse appartiennent au poste entier, pour rester cohérents sur toutes ses plages horaires. Ici, Buvette est limitée à deux créneaux et Sécurité exige l’étiquette sécurité.
+- `answer` : Le poste Navette demande le permis de conduire. Dans Gérer les postes, ouvrons son éditeur Accès. Choisissons la question Permis de conduire, posée à tous les bénévoles, puis cochons Oui dans Réponses acceptées et enregistrons. Sur la page publique, le créneau annonce Réponse requise : Permis de conduire, Oui. Essayons de nous inscrire avec Non. Au moment de confirmer, le formulaire refuse cette réponse pour la Navette. Choisissons maintenant Oui et confirmons : l'inscription est acceptée.
+
+Statut final : **READY**, publiée le 11 novembre 2026, révision 5, 153,280 s. Une prise narrée. Build `AOuqevq41Wdo1_vo9UIzS`, produit `d3f4c4ba`. Musique et sons réels des interactions validés, zéro tutoiement dans le VTT et l’ASR finale entière. [Rapport et preuves](../evidence/batch40/shift-eligibility-rules/review-report.txt).
+
+Le signalement de voix sur le mix de `reserved` est conservé avec sa contre-vérification : la voix source et la voix du rendu sont les mêmes ondes, sans décalage ni changement de hauteur. La question et le refus de Non, puis l’inscription avec Oui, sont montrés sur le vrai lien d’invitation de Julien.

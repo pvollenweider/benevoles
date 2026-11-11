@@ -22,22 +22,22 @@ async function main() {
     const seeds = await readSeedProofV2()
     assert(seeds, "Exact natural-name seed proof required")
     const before = await current.db.volunteer.findMany({ where: { organizationId: "default" } })
-    if (before.length === 26) {
+    if ([26, 29].includes(before.length)) {
       validateImportBaseline(before, await recordedMembers(), Date.now(), seeds)
-      console.log("Exact 26-member import baseline already has an actual 201 contact")
+      console.log("Exact current-main import baseline already has an actual 201 contact")
       return
     }
-    assert(before.length === 25 && before.filter(person => person.email?.endsWith("@example.org")).length === 24, "Only the exact 24-email plus M2 pre-baseline is eligible")
+    assert([25, 28].includes(before.length) && before.filter(person => person.email?.endsWith("@example.org")).length === before.length - 1, "Only the exact main-demo email fixtures plus M2 pre-baseline are eligible")
     assert(before.filter(person => person.email === null).length === 1 && ownsNaturalMemberSeed(before.find(person => person.id === "video-member-management-2") ?? {}, seeds), "Exact ledger-backed M2 required; unknown no-email contacts refuse preparation")
     const browser = await launchVideoBrowser(chromium, { headless: true })
     try {
       const page = await browser.newPage({ locale: "fr-CH", timezoneId: "Europe/Zurich" })
-      await page.goto("http://localhost:43102/admin/login")
+      await page.goto("https://default.benevol.app/admin/login")
       await page.getByLabel("Email", { exact: true }).fill(process.env.ORG_ADMIN_EMAIL)
       await page.getByLabel("Mot de passe").fill(process.env.ORG_ADMIN_PASSWORD)
       await page.getByRole("button", { name: "Se connecter", exact: true }).click()
       await page.waitForURL(url => !url.pathname.endsWith("/login"))
-      await page.goto("http://localhost:43102/admin/members")
+      await page.goto("https://default.benevol.app/admin/members")
       await page.getByRole("button", { name: "+ Nouveau membre", exact: true }).click()
       const form = page.getByRole("dialog", { name: "Nouveau membre", exact: true })
       await form.getByLabel(/^Prénom/).fill("René")
@@ -67,7 +67,7 @@ async function main() {
       const after = await current.db.volunteer.findMany({ where: { organizationId: "default" } })
       assert(before.every(member => after.some(value => value.id === member.id)), "Preparation removed a prior identity")
       validateImportBaseline(after, await recordedMembers(), Date.now(), seeds)
-      console.log("Exact 26-member baseline established by one real local application POST201; immutable creation evidence saved")
+      console.log("Exact current-main baseline established by one real local application POST201; immutable creation evidence saved")
     } finally { await browser.close() }
   } finally { await current.db.$disconnect(); await current.unregister() }
 }

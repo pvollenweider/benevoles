@@ -1,0 +1,52 @@
+{
+  "model": "gemini-3.8-flash",
+  "reviewedAt": "2026-11-11T12:35:21.040Z",
+  "videoSha256": "d6160b255f4528e8af5a799827f0811c39b29ff70c7ae607ba5c05a9ddb9b381",
+  "promptSha256": "eabd37d42b3a795567724337b7afa4805a1bbbf6835feadaa2bd63b6a2c06003",
+  "clipSha256": "a35d2b98df070173001802ccf37cce16a949b9432e4cb38ffab9deb15300fa60",
+  "scene": "settings",
+  "review": {
+    "heardOpening": "Les règles se configurent au bon niveau",
+    "checkpoints": [
+      {
+        "spokenSeconds": 2.5,
+        "spoken": "L’âge minimum appartient au créneau.",
+        "visibleSeconds": 3.8,
+        "visible": "Formulaire de modification du créneau affichant le champ Âge minimum fixé à 18 ans",
+        "sync": "aligned",
+        "severity": "none"
+      },
+      {
+        "spokenSeconds": 5.3,
+        "spoken": "La limite, les étiquettes réservées et la condition par une réponse appartiennent au poste entier",
+        "visibleSeconds": 6.5,
+        "visible": "Section Gérer les postes listant les colonnes de règles globales par poste",
+        "sync": "aligned",
+        "severity": "none"
+      },
+      {
+        "spokenSeconds": 12.8,
+        "spoken": "Ici, Buvette est limitée à deux créneaux",
+        "visibleSeconds": 9.5,
+        "visible": "Paramètre Nombre maximal de créneaux fixé à 2 pour Buvette, visible dans le formulaire puis sur la ligne",
+        "sync": "aligned",
+        "severity": "none"
+      },
+      {
+        "spokenSeconds": 14.5,
+        "spoken": "et Sécurité exige l’étiquette sécurité.",
+        "visibleSeconds": 15.2,
+        "visible": "Options du poste Sécurité ouvertes avec le champ Étiquette réservée contenant sécurité",
+        "sync": "aligned",
+        "severity": "none"
+      }
+    ],
+    "issues": [],
+    "voice": {
+      "consistent": true,
+      "warm": true,
+      "observation": "Voix off posée, claire et fluide, synchronisée avec les démonstrations à l'écran."
+    }
+  },
+  "note": "Automated observation of actual final video audio and images; not a claim of complete human validation"
+}

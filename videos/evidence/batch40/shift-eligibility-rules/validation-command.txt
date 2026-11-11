@@ -1,0 +1,5 @@
+
+> benevoles@2.7.0 video:validate
+> node --import tsx videos/tools/validate.ts SHIFT_ELIGIBILITY_RULES
+
+✓ SHIFT_ELIGIBILITY_RULES: 8 scene durations aligned, one continuous Kore voice; narration content checked; music 14.1–19.4 LU under the voice

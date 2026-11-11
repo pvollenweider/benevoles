@@ -1,0 +1,24 @@
+
+> benevoles@2.7.0 video:validate
+> node --import tsx videos/tools/validate.ts MEMBERS_IMPORT
+
+Error: Command failed: ffmpeg -hide_banner -nostats -i /Users/pol/Desktop/benevoles/.claude/worktrees/video-batch25-26-sources/videos/output/members-import/audio/file.wav -af silencedetect=noise=-38dB:d=0.12 -f null -
+[in#0 @ 0x7c7101c000] Error opening input: No such file or directory
+Error opening input file /Users/pol/Desktop/benevoles/.claude/worktrees/video-batch25-26-sources/videos/output/members-import/audio/file.wav.
+Error opening input files: No such file or directory
+
+    at genericNodeError (node:internal/errors:999:15)
+    at wrappedFn (node:internal/errors:544:14)
+    at ChildProcess.exithandler (node:child_process:417:12)
+    at ChildProcess.emit (node:events:514:20)
+    at maybeClose (node:internal/child_process:1125:16)
+    at ChildProcess._handle.onexit (node:internal/child_process:305:5) {
+  code: 254,
+  killed: false,
+  signal: null,
+  cmd: 'ffmpeg -hide_banner -nostats -i /Users/pol/Desktop/benevoles/.claude/worktrees/video-batch25-26-sources/videos/output/members-import/audio/file.wav -af silencedetect=noise=-38dB:d=0.12 -f null -',
+  stdout: '',
+  stderr: '[in#0 @ 0x7c7101c000] Error opening input: No such file or directory\n' +
+    'Error opening input file /Users/pol/Desktop/benevoles/.claude/worktrees/video-batch25-26-sources/videos/output/members-import/audio/file.wav.\n' +
+    'Error opening input files: No such file or directory\n'
+}
