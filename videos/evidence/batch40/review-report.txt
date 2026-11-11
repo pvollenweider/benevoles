@@ -1,0 +1,25 @@
+STATUS: NOT READY
+
+Batch 40 — 2026-11-11
+
+All three videos stopped before filming. No TTS, narrated take, assembly or publication was attempted. Existing ignored and untracked artifacts were retained. No catalog revision/date or public changelog announcement was made because nothing was delivered. The eligibility gap note remains open.
+
+Pinned product commit: eefc160dfd39f86413b9c2940d2da6d44adff2d0 (origin/main fetched at batch start).
+Branch: video-batch40.
+
+Blocker: the prescribed build-main-product.ts --commit command verified 2,309 product inputs, compiled successfully and completed TypeScript, then failed during page-data collection for /api/admin/events/[id]/availability/[volunteerId]. The error is ENOENT opening browser/default-stylesheet.css at the snapshot root. The stylesheet exists under node_modules/isomorphic-dompurify/node_modules/jsdom/lib/jsdom/browser/default-stylesheet.css after npm ci. No dependency, configuration or product workaround was applied.
+
+The clean git-archive snapshot used Node 26.9.0, npm ci from the committed lockfile, and Prisma generation. See build-failure.txt and production-blocker.json. This is a build-time failure: no running product URL, capture frame or verified BUILD_ID exists. An older build was not used.
+
+The current guides, changelog, vocabulary and existing transcripts were read. Partial manifest drafts were restored to their exact HEAD bytes after the build failed; no unfinished editorial changes are delivered. No src/, guide, renders.json or dependency changes were made.
+
+The requested video validator was attempted for every ID; each fails because existing local render/audio inputs are missing. Logs are retained separately. No recorder or seed file changed, so there are no touched TypeScript/ESLint targets. New video tests and audiovisual checks require a successful build and new captures and were not represented as passing.
+
+Ports 43100 and 45433 were checked free. Only codex-batch40-postgres and codex-batch40-mailpit were started; both were stopped by exact name. Other containers and processes were untouched. No push, merge or ntfy message.
+
+ID | Status | New duration | BUILD_ID | Commit filmed | Music gaps | Viewer tu count | Problems | Source changes
+LAST_MINUTE_CHANGES | NOT READY | n/a | none | none | not measured | not measured | clean main build fails | none
+SHIFT_ELIGIBILITY_RULES | NOT READY | n/a | none | none | not measured | not measured | clean main build fails | none
+MEMBERS_IMPORT | NOT READY | n/a | none | none | not measured | not measured | clean main build fails | none
+
+Resume after the product build is fixed on main: fetch the new main, verify one current pinned build, then update all authorized editorial/recorder/seed sources, rehearse, generate each changed narration in one pass, and complete capture/review before publication. The two-take allowance is entirely unused.
