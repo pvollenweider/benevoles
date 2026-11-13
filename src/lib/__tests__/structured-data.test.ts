@@ -72,6 +72,8 @@ describe("publicPageJsonLd", () => {
     expect(types(publicPageJsonLd("/fonctionnalites", BASE))).toContain("SoftwareApplication")
     expect(types(publicPageJsonLd("/legal/privacy", BASE))).not.toContain("SoftwareApplication")
     expect(types(publicPageJsonLd("/logiciel-planning-benevoles", BASE))).toContain("SoftwareApplication")
+    // #1326: the free software page presents the application too.
+    expect(types(publicPageJsonLd("/logiciel-libre-benevoles", BASE))).toContain("SoftwareApplication")
   })
 
   // #1323: the citation page describes the application and its publisher by their stable @ids,
@@ -82,6 +84,14 @@ describe("publicPageJsonLd", () => {
     const page = graphOf(doc)[0]
     expect(page.about).toEqual([{ "@id": `${BASE}/#application` }, { "@id": `${BASE}/#organization` }])
     expect(page).not.toHaveProperty("alternateName")
+  })
+
+  // #1326: the free software page's visible FAQ becomes its FAQPage, through the same mechanism.
+  it("passes the free software page's FAQ to a FAQPage node", () => {
+    const faq = featuresPageFaq(renderFeaturesPage(null, "content/pages/LOGICIEL-LIBRE-BENEVOLES.md"))
+    expect(faq.length).toBeGreaterThanOrEqual(3)
+    const node = graphOf(publicPageJsonLd("/logiciel-libre-benevoles", BASE, faq)).find((n) => n["@type"] === "FAQPage")!
+    expect((node.mainEntity as { name: string }[]).map((q) => q.name)).toEqual(faq.map((q) => q.question))
   })
 
   // #767: only the questions a page renders, word for word, never a FAQ the page doesn't show.
