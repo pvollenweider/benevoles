@@ -21,6 +21,7 @@ Format basé sur [Keep a Changelog](https://keepachangelog.com/fr/1.0.0/).
 ### Modifié
 
 - Le README du dépôt s'ouvre sur le nom officiel « benevol.app », les liens vers le site et trois façons de se servir de l'outil ; son aperçu, raccourci, renvoie à la présentation publique des fonctionnalités. <!-- interne -->
+- La page « Citer benevol.app » propose le logo à télécharger (SVG et PNG) avec ses conditions d'utilisation ; dans le pied de page, son lien s'appelle « Presse » et rejoint la colonne du projet, à côté du code source.
 - Le filtre de la documentation cherche dans tout le texte des fiches, comprend les mots proches et les synonymes, et classe les résultats par pertinence (#1319).
 - **Vidéos de formation** : imprévus, règles d’accès aux postes et import des membres actualisés pour les besoins du jour J, « Je ne peux pas », les postes réservés par réponse et la suppression ou désactivation groupée ; les guides concernés et le billet de la 2.7 renvoient vers ces vidéos.
 - La page de confirmation d'une inscription par email affiche le nom et le téléphone que la confirmation enregistrera dans la fiche, et dit quoi faire si la demande ne vient pas de vous.
@@ -32,6 +33,7 @@ Format basé sur [Keep a Changelog](https://keepachangelog.com/fr/1.0.0/).
 ### Exploitation
 
 - Le build webpack (celui des vidéos) ne s'arrête plus à la collecte des pages : `isomorphic-dompurify`, qui embarque sa propre version de jsdom, reste chargé depuis `node_modules`.
+- Sentry ignore l'erreur « Invalid call to runtime.sendMessage(). Tab not found. », levée par une extension de navigateur et non par le site.
 
 ## [2.7.0] — 2026-11-10
 

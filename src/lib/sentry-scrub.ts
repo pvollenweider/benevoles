@@ -144,6 +144,9 @@ export const NO_PII_DATA_COLLECTION: NonNullable<InitOptions["dataCollection"]> 
  * - Microsoft's link scanners (Outlook Safe Links / Defender) open the personal links of our
  *   emails in an embedded CefSharp browser, which rejects a promise of its own with « Object Not
  *   Found Matching Id:N, MethodName:update, ParamCount:N » (seen on /my/[token], no real user).
+ * - A WebExtension (Firefox, Safari) whose content script messages a tab that is gone rejects
+ *   with « Invalid call to runtime.sendMessage(). Tab not found. »; the site never calls the
+ *   extension API (BENEVOLAPP, issue 160883622, on a public event page).
  */
 export const BROWSER_NOISE_ERRORS: RegExp[] = [
   /__firefox__/,
@@ -151,6 +154,7 @@ export const BROWSER_NOISE_ERRORS: RegExp[] = [
   /window\.ethereum/,
   /MetaMask/,
   /Object Not Found Matching Id:\d+, MethodName:\w+, ParamCount:\d+/,
+  /Invalid call to runtime\.sendMessage\(\)/,
 ]
 
 // « Event `Event` (type=error) captured as promise rejection »: what the SDK reports when a promise

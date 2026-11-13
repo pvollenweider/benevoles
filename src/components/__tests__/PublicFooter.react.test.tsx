@@ -48,12 +48,14 @@ describe("PublicFooter", () => {
       render(<PublicFooter variant="site" />)
       expect(columns()).toEqual({
         // #872, #950: what the service is, for whom and at what price, from every page.
-        "Découvrir": [["Pour qui ?", "/pour-qui"], ["Tarifs", "/tarifs"], ["Logiciel libre", "/logiciel-libre-benevoles"], ["Manifeste", "/manifeste"], ["Citer benevol.app", "/citer"], ["Guides pratiques", "/ressources"]],
+        "Découvrir": [["Pour qui ?", "/pour-qui"], ["Tarifs", "/tarifs"], ["Logiciel libre", "/logiciel-libre-benevoles"], ["Manifeste", "/manifeste"], ["Guides pratiques", "/ressources"]],
         // #757 (changelog) and the public video library stay one click away from every page.
         "Aide": [["Documentation", "/doc"], ["Tutoriels vidéo", "/videos"], ["Nouveautés", "/nouveautes"], ["Blog", "/blog"]],
         "benevol.app": [
           ["Espace organisateur", "/admin/login"],
           [`Code source v${pkg.version} sur GitHub (ouvre dans un nouvel onglet)`, GITHUB],
+          // The citation and press page (#1323), next to the code: who writes about the service looks there.
+          ["Presse", "/citer"],
           ["Soutenir le projet (ouvre dans un nouvel onglet)", "https://buymeacoffee.com/benevol.app"],
         ],
         "Informations légales": [["Confidentialité", "/legal/privacy"], ["CGU", "/legal/terms"], ["Accessibilité", "/accessibilite"]],
@@ -64,6 +66,9 @@ describe("PublicFooter", () => {
     it("leaves the « Découvrir » column out on an instance that is not the hosted service", () => {
       const ids = footerSiteColumns("asso.example.org", null, false).map((c) => c.id)
       expect(ids).toEqual(["help", "project", "legal"])
+      // Its name and press contact are its own: no link to the hosted service's press page.
+      const project = footerSiteColumns("asso.example.org", null, false).find((c) => c.id === "project")!
+      expect(project.links.map((l) => l.href)).not.toContain("/citer")
       expect(footerSiteColumns("benevol.app", null, true).map((c) => c.id)).toEqual(["discover", "help", "project", "legal"])
     })
 
