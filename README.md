@@ -1,12 +1,22 @@
-# Bénévoles
+# benevol.app
 
-Application **SaaS multi-tenant** de gestion de bénévoles pour événements. Chaque organisation dispose de son propre espace isolé ; les bénévoles s'inscrivent via une timeline Gantt interactive accessible sans compte.
+benevol.app est un logiciel libre de planning pour bénévoles : l'association partage un lien, et chacun choisit ses créneaux depuis son téléphone, sans compte.
 
 [![License: AGPL-3.0](https://img.shields.io/badge/License-AGPL%20v3-blue.svg)](LICENSE)
 [![Node.js 26](https://img.shields.io/badge/Node.js-26-green.svg)](https://nodejs.org/)
 [![Buy Me a Coffee](https://img.shields.io/badge/Buy%20me%20a%20coffee-support-ffdd00.svg)](https://buymeacoffee.com/benevol.app)
 
-Ce projet est gratuit et open source. Si vous l'utilisez et voulez soutenir son développement, un café est toujours apprécié : [buymeacoffee.com/benevol.app](https://buymeacoffee.com/benevol.app).
+**[www.benevol.app](https://www.benevol.app)** · [Fonctionnalités](https://www.benevol.app/fonctionnalites) · [Tutoriels vidéo](https://www.benevol.app/videos) · [Documentation](https://www.benevol.app/doc) · [Tarifs](https://www.benevol.app/tarifs) · [Manifeste](https://www.benevol.app/manifeste)
+
+> **In English.** benevol.app is free, open source software for planning volunteer shifts. An association creates its roles and shifts, then shares a link. Each volunteer picks shifts from a phone, with no account or password. The interface is in French.
+
+## Trois façons de s'en servir
+
+- **Utiliser le service hébergé.** Il est gratuit aujourd'hui, sans abonnement ni fonction payante : [demandez un espace](https://www.benevol.app/inscription), puis suivez [Créer son premier événement](content/guide/creer-son-premier-evenement.md). La page [Tarifs](https://www.benevol.app/tarifs) dit ce qui est compris et comment le projet est financé.
+- **L'installer sur votre serveur.** Le code est libre, sous licence AGPL : voir [Déploiement](docs/deploiement.md) et [Configuration](docs/configuration.md).
+- **Contribuer.** [CONTRIBUTING.md](CONTRIBUTING.md) décrit la mise en place, les conventions et les tests ; le [démarrage rapide](#démarrage-rapide-dev) est plus bas.
+
+Si vous utilisez benevol.app et voulez soutenir son développement, un café est toujours apprécié : [buymeacoffee.com/benevol.app](https://buymeacoffee.com/benevol.app).
 
 ## Documentation
 
@@ -31,28 +41,11 @@ Ce projet est gratuit et open source. Si vous l'utilisez et voulez soutenir son 
 
 ## Aperçu
 
-**Côté public**
-- Listing des événements publiés
-- Inscription à un ou plusieurs créneaux via une timeline Gantt interactive (scroll horizontal sur mobile)
-- Détection de conflits d'horaires en temps réel
-- Liste d'attente sur les créneaux complets (offre de place valable 24 h)
-- Gestion personnelle via un lien unique envoyé par email
-- Rappels par notification push navigateur (optionnel, sur abonnement du bénévole)
+- **Pour les bénévoles** : ouvrir le lien, choisir un ou plusieurs créneaux sur le planning, confirmer, sans compte ni mot de passe. Un lien personnel permet ensuite de retrouver ses créneaux, d'en changer ou de les ajouter à son agenda. Liste d'attente quand un créneau est complet, rappels par email.
+- **Pour les organisateurs** : créer les postes et les créneaux (à la main, en série, depuis un modèle ou l'édition précédente), partager le lien, voir où il manque du monde, écrire aux personnes concernées, pointer les arrivées le jour J, imprimer les plannings, puis tirer le bilan et les heures.
+- **Pour l'opérateur d'une instance** : chaque organisation a son espace isolé (événements, membres, équipe d'organisation). Le super admin gère les organisations, la santé du service et les nouveautés envoyées aux organisateurs.
 
-**Côté admin**
-- Multi-tenant : chaque organisation a ses propres événements, membres et admins, isolés des autres
-- Création et gestion des événements, créneaux et programme des spectacles ; archivage, puis suppression définitive avec confirmation et sauvegarde PDF préalable
-- Gestion de la liste des membres (pool de bénévoles) et envoi d'invitations tokenisées
-- Rappels automatiques (J-2, J-1, Jour J) et rappel manuel avec message personnalisé
-- Suivi des inscriptions en temps réel, export Gantt PDF
-- Tableau de bord : événements, taux de remplissage, membres
-- Paramètres de l'organisation : nom, titre de la page publique, slug, charte du bénévole, équipe d'organisation
-
-**Super admin**
-- CRUD des organisations
-- Invitation des premiers admins par lien sécurisé (token révocable)
-- Santé du service (`/super-admin/health`) : base, file d'emails, tâches planifiées, sauvegardes, migrations, configuration
-- Nouveautés produit envoyées aux admins (`/super-admin/product-updates`)
+Cette liste est volontairement courte. La présentation publique, par besoins, est dans [content/pages/FEATURES.md](content/pages/FEATURES.md) (page [/fonctionnalites](https://www.benevol.app/fonctionnalites)) ; l'inventaire détaillé, avec les fichiers concernés, est dans [docs/fonctionnalites.md](docs/fonctionnalites.md). Ce que l'outil ne fait pas, volontairement, figure en bas de la présentation publique.
 
 ## Captures d'écran
 
@@ -301,7 +294,7 @@ L'organisation courante est déterminée par le sous-domaine (`[orgSlug].benevol
 
 ## Auteur
 
-**Bénévoles** a été créé et est maintenu par **Philippe Vollenweider**.
+**benevol.app** a été créé et est maintenu par **Philippe Vollenweider**.
 
 Copyright © 2026 Philippe Vollenweider.\
 Distribué sous licence [GNU Affero General Public License v3.0](LICENSE).
