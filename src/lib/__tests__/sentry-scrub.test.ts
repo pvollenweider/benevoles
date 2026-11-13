@@ -179,6 +179,12 @@ describe("BROWSER_NOISE_ERRORS", () => {
     expect(ignored("Object Not Found Matching Id:17, MethodName:simulateEvent, ParamCount:1")).toBe(true)
   })
 
+  // Regression: a browser extension's content script raised this on a public event page.
+  it("drops the WebExtension messaging error of a closed tab", () => {
+    expect(ignored("Error: Invalid call to runtime.sendMessage(). Tab not found.")).toBe(true)
+    expect(ignored("Invalid call to runtime.sendMessage(). Tab not found.")).toBe(true)
+  })
+
   it("keeps the earlier extension filters", () => {
     for (const m of ["ReferenceError: __firefox__ is not defined", "DarkReader is not defined", "window.ethereum.selectedAddress", "MetaMask - RPC Error"]) {
       expect(ignored(m)).toBe(true)
@@ -186,7 +192,7 @@ describe("BROWSER_NOISE_ERRORS", () => {
   })
 
   it("keeps real application errors", () => {
-    for (const m of ["Object not found", "TypeError: Cannot read properties of undefined (reading 'update')", "Error: Not Found", "Lien invalide"]) {
+    for (const m of ["Object not found", "Tab not found", "Invalid call", "TypeError: Cannot read properties of undefined (reading 'update')", "Error: Not Found", "Lien invalide"]) {
       expect(ignored(m)).toBe(false)
     }
   })
