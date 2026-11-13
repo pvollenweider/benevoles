@@ -17,7 +17,7 @@ const SUPER_ADMIN_PASSWORD = process.env.ADMIN_PASSWORD ?? "e2e-admin-password"
 test.describe("public pages", () => {
   // /videos and /videos/[id] (#644): the public video library, same accessibility bar as every other page.
   // The audience pages, their index and the pricing page (#872, #950).
-  for (const path of ["/", "/fonctionnalites", "/logiciel-planning-benevoles", "/pour-qui", "/benevoles-fete-de-village", "/benevoles-festival", "/benevoles-manifestation-sportive", "/benevoles-mairie-commune", "/planning-permanences-benevoles", "/tarifs", "/tableur-ou-outil-dedie", "/doc", "/doc/admin", "/doc/benevole", "/doc/creer-son-premier-evenement", "/doc/creer-un-evenement", "/doc/rappels", "/accessibilite", "/legal/privacy", "/legal/sous-traitance", "/legal/sous-traitants", "/videos", "/videos/EVENT_CREATE_BLANK"]) {
+  for (const path of ["/", "/fonctionnalites", "/logiciel-planning-benevoles", "/pour-qui", "/benevoles-fete-de-village", "/benevoles-festival", "/benevoles-manifestation-sportive", "/benevoles-mairie-commune", "/planning-permanences-benevoles", "/tarifs", "/tableur-ou-outil-dedie", "/logiciel-libre-benevoles", "/doc", "/doc/admin", "/doc/benevole", "/doc/creer-son-premier-evenement", "/doc/creer-un-evenement", "/doc/rappels", "/accessibilite", "/legal/privacy", "/legal/sous-traitance", "/legal/sous-traitants", "/videos", "/videos/EVENT_CREATE_BLANK"]) {
     test(`${path} has no serious violation`, async ({ page }) => {
       await page.goto(path)
       await expect(page.getByRole("heading", { level: 1 })).toBeVisible()
@@ -50,7 +50,7 @@ test.describe("content pages on a phone, in dark mode", () => {
   // Documentation units (#649): the breadcrumb wraps at 320 px; an organisers' unit has wide tables.
   // /doc/rappels: a unit for both audiences, with its jump links, previous and next, « Dans ce thème ».
   // The video library and the legal documents (#1116): in the content pages' frame, dark theme included.
-  for (const path of ["/accessibilite", "/logiciel-planning-benevoles", "/planning-permanences-benevoles", "/tarifs", "/tableur-ou-outil-dedie", "/doc", "/doc/revenir-sur-la-page-d-inscription", "/doc/creer-un-evenement", "/doc/rappels", "/videos", "/legal/privacy", "/legal/terms", "/legal/sous-traitance", "/legal/sous-traitants"]) {
+  for (const path of ["/accessibilite", "/logiciel-planning-benevoles", "/planning-permanences-benevoles", "/tarifs", "/tableur-ou-outil-dedie", "/logiciel-libre-benevoles", "/doc", "/doc/revenir-sur-la-page-d-inscription", "/doc/creer-un-evenement", "/doc/rappels", "/videos", "/legal/privacy", "/legal/terms", "/legal/sous-traitance", "/legal/sous-traitants"]) {
     test(`${path} has no serious violation at 320 px, dark`, async ({ page }) => {
       await page.goto(path)
       await expect(page.getByRole("heading", { level: 1 })).toBeVisible()

@@ -62,6 +62,7 @@ export function footerSiteColumns(name: string = siteName(), support: string | n
           links: [
             { href: "/pour-qui", label: "Pour qui ?" },
             { href: "/tarifs", label: "Tarifs" },
+            { href: "/logiciel-libre-benevoles", label: "Logiciel libre" },
             { href: "/manifeste", label: "Manifeste" },
             { href: "/citer", label: "Citer benevol.app" },
             { href: "/ressources", label: "Guides pratiques" },

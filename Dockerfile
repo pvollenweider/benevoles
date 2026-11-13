@@ -90,6 +90,8 @@ COPY --from=builder --chown=nextjs:nodejs /app/content/pages/TABLEUR-OU-OUTIL-DE
 COPY --from=builder --chown=nextjs:nodejs /app/content/pages/MANIFESTE.md ./content/pages/MANIFESTE.md
 # Citer benevol.app (#1323).
 COPY --from=builder --chown=nextjs:nodejs /app/content/pages/CITER.md ./content/pages/CITER.md
+# Logiciel libre (#1326).
+COPY --from=builder --chown=nextjs:nodejs /app/content/pages/LOGICIEL-LIBRE-BENEVOLES.md ./content/pages/LOGICIEL-LIBRE-BENEVOLES.md
 COPY --from=builder --chown=nextjs:nodejs /app/content/pages/FAQ-ACCUEIL.md ./content/pages/FAQ-ACCUEIL.md
 COPY --from=builder --chown=nextjs:nodejs /app/content/pages/ACCESSIBILITE.md ./content/pages/ACCESSIBILITE.md
 COPY --from=builder --chown=nextjs:nodejs /app/content/legal/ACCORD-SOUS-TRAITANCE.md ./content/legal/ACCORD-SOUS-TRAITANCE.md
