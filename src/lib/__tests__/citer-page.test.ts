@@ -59,6 +59,16 @@ describe("/citer, the citation page (#1323)", () => {
     expect(featuresHosting?.slice(1)).toEqual(citerHosting?.slice(1))
   })
 
+  it("offers the site's own logo to download, in SVG and PNG", () => {
+    expect(source).toContain("(/presse/benevol-app-logo.svg)")
+    expect(source).toContain("(/presse/benevol-app-logo-512.png)")
+    // The SVG is the favicon's drawing, unchanged.
+    expect(read("public/presse/benevol-app-logo.svg")).toBe(read("src/app/icon.svg"))
+    const png = fs.readFileSync(path.join(process.cwd(), "public/presse/benevol-app-logo-512.png"))
+    expect(png.readUInt32BE(16)).toBe(512)
+    expect(png.readUInt32BE(20)).toBe(512)
+  })
+
   it("is in the sitemap on the hosted service only, and not in the header navigation", () => {
     const base = "https://www.benevol.app"
     expect(PUBLIC_PAGES.filter((candidate) => candidate.path === "/citer")).toHaveLength(1)

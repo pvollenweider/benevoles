@@ -64,7 +64,6 @@ export function footerSiteColumns(name: string = siteName(), support: string | n
             { href: "/tarifs", label: "Tarifs" },
             { href: "/logiciel-libre-benevoles", label: "Logiciel libre" },
             { href: "/manifeste", label: "Manifeste" },
-            { href: "/citer", label: "Citer benevol.app" },
             { href: "/ressources", label: "Guides pratiques" },
           ],
         }]
@@ -85,6 +84,7 @@ export function footerSiteColumns(name: string = siteName(), support: string | n
       links: [
         { href: "/admin/login", label: "Espace organisateur" },
         { href: REPOSITORY_URL, label: `Code source v${APP_VERSION}`, external: true, github: true },
+        ...(hosted ? [{ href: "/citer", label: "Presse" }] : []),
         ...(support ? [{ href: support, label: "Soutenir le projet", external: true }] : []),
       ],
     },
