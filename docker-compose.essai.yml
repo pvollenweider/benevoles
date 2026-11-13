@@ -3,10 +3,10 @@
 #   curl -fO https://raw.githubusercontent.com/pvollenweider/benevoles/main/docker-compose.essai.yml
 #   docker compose -f docker-compose.essai.yml up
 #
-# Le mot de passe du compte d'essai s'affiche dans la sortie de cette commande (ligne « Compte
-# d'essai »), et à tout moment avec : docker compose -f docker-compose.essai.yml logs keys
-# Puis ouvrir http://localhost:3000/admin et lire les emails envoyés sur http://localhost:8025
-# (Mailpit : aucun email ne sort de la machine). Tout arrêter et effacer :
+# Une fois l'application prête (une minute environ), un encadré « benevol.app est prêt » donne
+# l'adresse, le compte et son mot de passe ; à tout moment : docker compose -f docker-compose.essai.yml logs ready
+# Les emails envoyés arrivent sur http://localhost:8025 (Mailpit : aucun email ne sort de la
+# machine). Tout arrêter et effacer :
 #   docker compose -f docker-compose.essai.yml down -v
 #
 # POUR UN ESSAI SEULEMENT, jamais pour une installation réelle (voir docs/deploiement.md). Aucun
@@ -40,8 +40,6 @@ services:
         fi
         chown 1001 /keys/keys.env
         chmod 400 /keys/keys.env
-        echo "Compte d'essai : admin@example.org, mot de passe $$(sed -n 's/^export ADMIN_PASSWORD=//p' /keys/keys.env)"
-        echo "Connexion : http://localhost:3000/admin   Emails : http://localhost:8025"
     volumes:
       - keys:/keys
 
@@ -93,6 +91,13 @@ services:
       ADMIN_NAME: Essai
     volumes:
       - keys:/keys:ro
+    # Prête quand ses pages publiques sont préchauffées (/api/health/ready).
+    healthcheck:
+      test: ["CMD", "node", "-e", "fetch('http://localhost:3000/api/health/ready').then((r) => process.exit(r.ok ? 0 : 1), () => process.exit(1))"]
+      interval: 5s
+      timeout: 5s
+      retries: 60
+      start_period: 20s
     depends_on:
       keys:
         condition: service_completed_successfully
@@ -100,6 +105,32 @@ services:
         condition: service_healthy
       mailpit:
         condition: service_started
+
+  # Dernier message de `up` : où aller et avec quel compte, une fois l'application prête.
+  ready:
+    image: alpine:3.20
+    command:
+      - sh
+      - -c
+      - |
+        pw=$$(sed -n 's/^export ADMIN_PASSWORD=//p' /keys/keys.env)
+        echo ""
+        echo "=========================================================="
+        echo " benevol.app est prêt"
+        echo ""
+        echo " Ouvrir        http://localhost:3000/admin"
+        echo " Compte        admin@example.org"
+        echo " Mot de passe  $$pw"
+        echo " Emails        http://localhost:8025"
+        echo ""
+        echo " La première connexion demande d'activer la double"
+        echo " authentification (application d'authentification)."
+        echo "=========================================================="
+    volumes:
+      - keys:/keys:ro
+    depends_on:
+      app:
+        condition: service_healthy
 
 volumes:
   keys:

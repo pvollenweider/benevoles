@@ -27,7 +27,7 @@ curl -fO https://raw.githubusercontent.com/pvollenweider/benevoles/main/docker-c
 docker compose -f docker-compose.essai.yml up
 ```
 
-Au bout d'une minute environ, ouvrez http://localhost:3000/admin et connectez-vous avec `admin@example.org` et le mot de passe affiché dans la sortie de la commande, à la ligne « Compte d'essai » (à retrouver avec `docker compose -f docker-compose.essai.yml logs keys`). Il est tiré au hasard au premier lancement, comme les clés de l'application. Ce compte de super admin demande d'activer la double authentification : gardez une application d'authentification sous la main (Aegis, Google Authenticator, un gestionnaire de mots de passe). Créez ensuite une organisation depuis l'espace super admin. Les emails envoyés par l'application arrivent sur http://localhost:8025, sans quitter votre machine.
+Au bout d'une minute environ, ouvrez http://localhost:3000/admin et connectez-vous avec `admin@example.org` et le mot de passe donnés dans l'encadré « benevol.app est prêt », à la fin de la sortie de la commande (à retrouver avec `docker compose -f docker-compose.essai.yml logs ready`). Il est tiré au hasard au premier lancement, comme les clés de l'application. Ce compte de super admin demande d'activer la double authentification : gardez une application d'authentification sous la main (Aegis, Google Authenticator, un gestionnaire de mots de passe). Créez ensuite une organisation depuis l'espace super admin. Les emails envoyés par l'application arrivent sur http://localhost:8025, sans quitter votre machine.
 
 Pour tout arrêter et effacer : `docker compose -f docker-compose.essai.yml down -v`.
 
