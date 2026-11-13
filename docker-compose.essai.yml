@@ -1,6 +1,6 @@
 # Essai de benevol.app sur votre machine, sans le code source (#1333) :
 #
-#   curl -O https://raw.githubusercontent.com/pvollenweider/benevoles/main/docker-compose.essai.yml
+#   curl -fO https://raw.githubusercontent.com/pvollenweider/benevoles/main/docker-compose.essai.yml
 #   docker compose -f docker-compose.essai.yml up
 #
 # Le mot de passe du compte d'essai s'affiche dans la sortie de cette commande (ligne « Compte

@@ -23,7 +23,7 @@ Si vous utilisez benevol.app et voulez soutenir son développement, un café est
 Avec Docker, sans télécharger le code :
 
 ```bash
-curl -O https://raw.githubusercontent.com/pvollenweider/benevoles/main/docker-compose.essai.yml
+curl -fO https://raw.githubusercontent.com/pvollenweider/benevoles/main/docker-compose.essai.yml
 docker compose -f docker-compose.essai.yml up
 ```
 
