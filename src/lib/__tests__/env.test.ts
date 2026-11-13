@@ -68,7 +68,7 @@ describe("env validation", () => {
     expect(consoleSpy).toHaveBeenCalledWith(expect.stringContaining("DATABASE_URL"))
   })
 
-  it("ne valide pas ADMIN_EMAIL / ADMIN_PASSWORD (utilisées seulement par le seed)", async () => {
+  it("ne les exige pas (facultatives, lues au démarrage pour le premier super admin)", async () => {
     vi.stubEnv("DATABASE_URL", VALID_ENV.DATABASE_URL)
     vi.stubEnv("AUTH_SECRET", VALID_ENV.AUTH_SECRET)
     // ADMIN_EMAIL / ADMIN_PASSWORD volontairement absents
@@ -76,6 +76,21 @@ describe("env validation", () => {
     await import("../env")
 
     expect(exitSpy).not.toHaveBeenCalled()
+  })
+
+  it("expose ADMIN_EMAIL, ADMIN_PASSWORD et ADMIN_NAME comme chaînes facultatives (#1334)", async () => {
+    vi.stubEnv("DATABASE_URL", VALID_ENV.DATABASE_URL)
+    vi.stubEnv("AUTH_SECRET", VALID_ENV.AUTH_SECRET)
+    vi.stubEnv("ADMIN_EMAIL", "admin@example.org")
+    vi.stubEnv("ADMIN_PASSWORD", "Correct-Horse-Battery9!")
+    vi.stubEnv("ADMIN_NAME", "Opérateur")
+
+    const { env } = await import("../env")
+
+    expect(exitSpy).not.toHaveBeenCalled()
+    expect(env.ADMIN_EMAIL).toBe("admin@example.org")
+    expect(env.ADMIN_PASSWORD).toBe("Correct-Horse-Battery9!")
+    expect(env.ADMIN_NAME).toBe("Opérateur")
   })
 
   describe("releaseCheckEnabled (#612)", () => {

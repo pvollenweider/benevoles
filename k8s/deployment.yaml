@@ -52,9 +52,10 @@ spec:
           env:
             # Only the keys of benevoles-secret the app reads (#1050), not the whole secret:
             # POSTGRES_USER/POSTGRES_PASSWORD (postgres pod), BACKUP_PASSPHRASE (backup CronJob),
-            # OFFSITE_BUCKET (off-site copy) and ADMIN_EMAIL/ADMIN_PASSWORD (prisma/seed.ts, not in
-            # the image) stay out. A key added to the secret in deploy.yml is added here too, or to
-            # the list of keys the app never reads (src/lib/__tests__/k8s-hardening.test.ts).
+            # OFFSITE_BUCKET (off-site copy) and ADMIN_EMAIL/ADMIN_PASSWORD (startup bootstrap and
+            # prisma/seed.ts, deliberately not given to the Kubernetes app) stay out. A key added to
+            # the secret in deploy.yml is added here too, or to the list of keys the app never reads
+            # (src/lib/__tests__/k8s-hardening.test.ts).
             # Optional keys stay optional, as they were with envFrom.
             - name: DATABASE_URL
               valueFrom:

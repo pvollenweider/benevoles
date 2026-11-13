@@ -45,7 +45,8 @@ Ce qu'il ne fait pas :
 - Il ne transmet pas `AUTH_URL`, `AUTH_TRUST_HOST`, `CRON_SECRET`, `EMAIL_REPLY_TO`, `APP_TIME_ZONE`, `TRUSTED_PROXY_HOPS`, `TOKEN_ENCRYPTION_KEY_ID`, `TOKEN_ENCRYPTION_PREVIOUS_KEYS` ni les variables VAPID et Sentry : à ajouter dans la section `environment` si nécessaire.
 - `AUTH_SECRET` n'a pas de valeur par défaut : sans lui, Compose refuse de démarrer, comme pour `POSTGRES_PASSWORD`. Une valeur d'exemple ou trop simple est refusée au démarrage de l'application (`src/lib/production-guards.ts`).
 - Il n'inclut aucun planificateur. Sans `CRON_SECRET`, les endpoints `/api/cron/*` refusent toute requête en production : ajouter ce secret et appeler les endpoints depuis un cron de l'hôte (voir [Tâches planifiées](../README.md#tâches-planifiées-cron) dans le README), dont `/api/cron/outbox` toutes les 5 minutes.
-- Il n'exécute pas le seed, et l'image ne contient pas `tsx` : lancer le seed depuis un checkout, sur l'hôte, avec les variables `ADMIN_*` et `ORG_ADMIN_*` pour créer les premiers comptes, le temps d'un accès local à la base (ci-dessous) :
+- Le premier super admin peut être créé au démarrage à partir de `ADMIN_EMAIL` et `ADMIN_PASSWORD` dans `.env` (et `ADMIN_NAME` pour son nom), sans passer par un checkout : les définir avant `docker compose up -d`, puis se connecter par la page habituelle. Le compte n'est créé qu'une fois, tant qu'aucun super admin n'existe ; changer `ADMIN_PASSWORD` ensuite ne le modifie pas. Détails : [configuration.md](configuration.md#premier-super-admin-auto-hébergement).
+- Il n'exécute pas le seed, et l'image ne contient pas `tsx` : pour l'organisation `default`, son admin et l'événement de démonstration, lancer le seed depuis un checkout, sur l'hôte, avec les variables `ADMIN_*` et `ORG_ADMIN_*`, le temps d'un accès local à la base (ci-dessous) :
 
   ```bash
   set -a; . ./.env; set +a
