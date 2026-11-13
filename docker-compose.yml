@@ -53,6 +53,10 @@ services:
       EMAIL_FROM: ${EMAIL_FROM:-no-reply@example.com}
       ADMIN_NOTIFICATION_EMAIL: ${ADMIN_NOTIFICATION_EMAIL:-}
       NEXT_PUBLIC_APP_URL: ${NEXT_PUBLIC_APP_URL:-http://localhost:3000}
+      # Premier super admin créé au démarrage (facultatif, voir docs/configuration.md).
+      ADMIN_EMAIL: ${ADMIN_EMAIL:-}
+      ADMIN_PASSWORD: ${ADMIN_PASSWORD:-}
+      ADMIN_NAME: ${ADMIN_NAME:-}
       NODE_ENV: production
     depends_on:
       postgres:

@@ -25,7 +25,7 @@ const POD_MANIFESTS = [
 const NOT_FOR_THE_APP = [
   "POSTGRES_USER", // postgres pod (the app gets DATABASE_URL)
   "POSTGRES_PASSWORD",
-  "ADMIN_EMAIL", // prisma/seed.ts only, not in the image
+  "ADMIN_EMAIL", // startup bootstrap (self-hosted image) and prisma/seed.ts; deliberately not passed in k8s
   "ADMIN_PASSWORD",
   "OFFSITE_BUCKET", // k8s/cronjob-backup-offsite.yaml
 ]

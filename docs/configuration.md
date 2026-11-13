@@ -45,7 +45,7 @@ Modèles de fichiers fournis :
 | `DIGEST_DELAY_SECONDS` | non, tests | Remplace le délai de regroupement des emails groupés (#869, #916) : 5 minutes pour les désistements d'un même événement, 10 minutes pour « inscrit par un organisateur ». Nombre de secondes, `0` compris ; une valeur négative ou non numérique est ignorée. `0` dans le job E2E de la CI : l'email part tout de suite, sans attendre `/api/cron/outbox`. À laisser vide en production, qui garde les délais par défaut ; pas transmise par `deploy.yml` |
 | `GIT_SHA` | non | Commit déployé, fixé au build de l'image (argument de build `GIT_SHA`, rempli par `deploy.yml`). Affiché sur la page Santé du service |
 
-L'image et les manifestes fixent eux-mêmes `NODE_ENV=production`, `PORT=3000`, `HOSTNAME=0.0.0.0` et `NEXT_TELEMETRY_DISABLED=1`. `docker-compose.yml` transmet à l'application `POSTGRES_HOST`, `POSTGRES_DB`, `POSTGRES_USER` et `POSTGRES_PASSWORD` (obligatoire, sans valeur par défaut) au lieu de `DATABASE_URL`, que `docker-entrypoint.sh` construit au démarrage.
+L'image et les manifestes fixent eux-mêmes `NODE_ENV=production`, `PORT=3000`, `HOSTNAME=0.0.0.0` et `NEXT_TELEMETRY_DISABLED=1`. `docker-compose.yml` transmet à l'application `POSTGRES_HOST`, `POSTGRES_DB`, `POSTGRES_USER` et `POSTGRES_PASSWORD` (obligatoire, sans valeur par défaut) au lieu de `DATABASE_URL`, que `docker-entrypoint.sh` construit au démarrage. Il transmet aussi `ADMIN_EMAIL`, `ADMIN_PASSWORD` et `ADMIN_NAME` (facultatives) pour créer le premier super admin au démarrage.
 
 ### Rotation de la clé de chiffrement
 
@@ -117,9 +117,19 @@ Données envoyées à Sentry (navigateur, serveur et edge) :
 - Le SDK navigateur se charge quand la page est inactive, ou dès la première erreur (`src/lib/sentry-client-loader.ts`) ; les erreurs survenues avant sont conservées puis envoyées.
 - Région du compte : Union européenne (Allemagne), d'après le DSN public du navigateur (`ingest.de.sentry.io`).
 
+## Premier super admin (auto-hébergement)
+
+Une instance auto-hébergée démarrée depuis l'image publiée n'a pas de seed. Au démarrage, l'application crée donc son premier super admin à partir de ces variables, quand l'instance n'est pas le service hébergé (`HOSTED_SERVICE=true`, ou une adresse `NEXT_PUBLIC_APP_URL` sur benevol.app), qu'aucun compte `super_admin` n'existe encore (actif ou non) et que `ADMIN_EMAIL` et `ADMIN_PASSWORD` sont définies. Le compte est créé une seule fois, sans organisation (`organizationId` nul) et actif ; l'opérateur se connecte ensuite par la page habituelle, double authentification comprise. Une adresse déjà utilisée par un autre compte est refusée sans être modifiée : `ADMIN_EMAIL` doit être une adresse sans compte. Une instance locale (`http://localhost:3000`, une adresse IP) ou sans adresse crée bien le compte, pour qu'un essai de l'image publiée fonctionne.
+
+| Variable | Requis | Description |
+|----------|--------|-------------|
+| `ADMIN_EMAIL` | pour créer | Adresse de connexion du premier super admin, normalisée comme à la connexion (espaces retirés, minuscules). Doit être une adresse sans compte existant. Si une seule des deux variables `ADMIN_EMAIL` / `ADMIN_PASSWORD` est définie, le démarrage ne crée rien et signale celle qui manque ; sans les deux, il ne fait rien. |
+| `ADMIN_PASSWORD` | pour créer | Mot de passe initial, soumis aux règles de tous les mots de passe (10 caractères, majuscule, minuscule, chiffre, caractère spécial, 72 octets au plus). Jamais écrit dans les journaux. Une fois le compte créé, le modifier ici n'a plus d'effet : le mot de passe se change depuis « Mon profil ». |
+| `ADMIN_NAME` | non | Nom affiché du compte. Défaut « Administrateur ». |
+
 ## Seed (`npm run db:seed`)
 
-Lues uniquement par `prisma/seed.ts`, jamais par l'application.
+Lues par `prisma/seed.ts` ; `ADMIN_EMAIL` et `ADMIN_PASSWORD` servent aussi au démarrage pour le premier super admin (ci-dessus).
 
 | Variable | Défaut |
 |----------|--------|
@@ -128,7 +138,7 @@ Lues uniquement par `prisma/seed.ts`, jamais par l'application.
 | `ORG_ADMIN_EMAIL` | `org-admin@localhost` |
 | `ORG_ADMIN_PASSWORD` | valeur de `ADMIN_PASSWORD` |
 
-Le seed crée un super admin, une organisation `default` avec son admin, et un événement de démonstration publié dans cette organisation (à archiver en production). Le relancer remet les mots de passe des deux comptes aux valeurs des variables et ferme leurs sessions ouvertes. En production, définir ces quatre variables et lancer le seed avec `NODE_ENV=production` : il refuse alors de s'exécuter, avant d'écrire quoi que ce soit, si `ADMIN_PASSWORD` ou `ORG_ADMIN_PASSWORD` manque (pas de repli de l'un sur l'autre) ou ne respecte pas les règles des mots de passe (`src/lib/seed-credentials.ts`). Aucun déploiement ne le lance : sur Kubernetes, `ADMIN_EMAIL` et `ADMIN_PASSWORD` sont présents dans `benevoles-secret` mais ne servent qu'à un seed lancé à la main.
+Le seed crée un super admin, une organisation `default` avec son admin, et un événement de démonstration publié dans cette organisation (à archiver en production). Le relancer remet les mots de passe des deux comptes aux valeurs des variables et ferme leurs sessions ouvertes. En production, définir ces quatre variables et lancer le seed avec `NODE_ENV=production` : il refuse alors de s'exécuter, avant d'écrire quoi que ce soit, si `ADMIN_PASSWORD` ou `ORG_ADMIN_PASSWORD` manque (pas de repli de l'un sur l'autre) ou ne respecte pas les règles des mots de passe (`src/lib/seed-credentials.ts`). Aucun déploiement ne le lance : sur Kubernetes, `ADMIN_EMAIL` et `ADMIN_PASSWORD` sont présents dans `benevoles-secret` mais ne sont pas transmis à l'application, qui ne peut donc pas créer le compte au démarrage ; ils ne servent qu'à un seed lancé à la main.
 
 Avec `.env.development.example`, le super admin est `admin@local` / `admin`.
 
@@ -153,7 +163,7 @@ Avec `.env.development.example`, le super admin est `admin@local` / `admin`.
 | `SIGNUP` | secret GitHub du même nom (#810) ; vide : inscription en libre-service ouverte, `off` la ferme |
 | `ORG_INACTIVITY`, `PAST_EVENT_RETENTION` | secrets GitHub du même nom (#811, #813) ; vides : `report` et observation |
 | `SENTRY_DSN` | secret GitHub `SENTRY_DSN`, à défaut `NEXT_PUBLIC_SENTRY_DSN` |
-| `ADMIN_EMAIL`, `ADMIN_PASSWORD` | secrets GitHub du même nom ; lus seulement par le seed |
+| `ADMIN_EMAIL`, `ADMIN_PASSWORD` | secrets GitHub du même nom ; non transmis à l'application, réservés au seed lancé à la main |
 | `NEXT_PUBLIC_APP_URL`, `AUTH_URL` | écrits en dur : `https://www.benevol.app` |
 | `AUTH_TRUST_HOST`, `HOSTED_SERVICE` | écrits en dur : `true` |
 | `VIDEO_MEDIA_BASE_URL` | écrit en dur : `https://medias.benevol.app` (#644) |
