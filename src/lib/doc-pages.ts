@@ -200,6 +200,21 @@ export const PUBLIC_PAGES: readonly PublicPage[] = [
     presentation: true,
   },
   {
+    // The free software page (#1326): what « libre » means here (AGPL, public code,
+    // self-hosting), what the tool covers and leaves to others, how the project lives, and a
+    // visible FAQ that is also its FAQPage structured data.
+    path: "/logiciel-libre-benevoles",
+    title: "Logiciel libre",
+    summary: `Ce que « libre » veut dire pour ${SITE_NAME} : code public sous licence AGPL, installation possible chez vous, et ce que l'outil laisse à d'autres.`,
+    metaTitle: "Logiciel libre pour le planning des bénévoles",
+    metaDescription: `${SITE_NAME}, logiciel libre sous licence AGPL pour le planning des bénévoles : code public, installation chez vous, service hébergé gratuit.`,
+    source: "content/pages/LOGICIEL-LIBRE-BENEVOLES.md",
+    priority: 0.6,
+    guide: false,
+    availability: "hosted",
+    presentation: true,
+  },
+  {
     // The manifesto (#1259): why the hosted service exists, what it will not do, how it is funded
     // (same wording as /tarifs, no promise of permanent gratuity) and who maintains it. Facts only.
     path: "/manifeste",
