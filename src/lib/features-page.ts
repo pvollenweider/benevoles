@@ -13,6 +13,7 @@ import { videoReferenceId } from "@/lib/doc-video-references"
  *     <!-- video: ADMIN_FEATURES_OVERVIEW -->         the video's inline player (src/lib/doc-video-references.ts)
  *     <!-- image: STAFFING_GAPS | Texte alternatif --> a still of that video (its poster), with its alt text
  *     <!-- actions -->                                 the list of links right below becomes buttons
+ *     <!-- citation --> / <!-- citation: en -->        the paragraph right below is a quotable text, with a copy button
  *
  * and one in plain Markdown: a documentation screenshot alone on its line,
  * `![Texte alternatif](/doc-img/admin-shifts.png)`, is the section's still like a video's poster
@@ -35,9 +36,25 @@ export type FeatureStep = { title: string; text: string }
 /** A question of a FAQ section, its answer as written (Markdown). */
 export type FeatureQuestion = { question: string; id: string; answer: string }
 
+/** A quotable text of a block, marked by a `<!-- citation -->` line (#1323). */
+export type FeatureCitation = {
+  /** The paragraph as plain text: what the page shows and what the copy button writes. */
+  text: string
+  /** The language of the text, for the `lang` attribute of the English one (WCAG 3.1.2). */
+  lang: "fr" | "en"
+  /** The heading above the directive, which names the text the button copies. */
+  heading: string | null
+}
+
+/** A block in reading order: its Markdown, and each citation where its directive stood. */
+export type FeatureBlockSegment = { kind: "markdown"; markdown: string } | { kind: "citation"; citation: FeatureCitation }
+
 export type FeatureBlock = {
-  /** The Markdown once the images and actions are taken out (video lines stay, where the players go). */
+  /** The Markdown once the images, actions and citations are taken out (video lines stay, where the players go). */
   markdown: string
+  /** The same text in reading order, citations between their Markdown chunks. */
+  segments: FeatureBlockSegment[]
+  citations: FeatureCitation[]
   actions: FeatureAction[]
   images: FeatureImage[]
   /** Screenshots of public/doc-img, after the video stills. */
@@ -58,6 +75,7 @@ export type FeaturesPage = { title: string | null; intro: FeatureBlock; sections
 
 const IMAGE_RE = /^<!--\s*image:\s*([A-Z][A-Z0-9_]+)\s*\|\s*([\s\S]+?)\s*-->$/
 const ACTIONS_RE = /^<!--\s*actions\s*-->$/i
+const CITATION_RE = /^<!--\s*citation(?:\s*:\s*(en))?\s*-->$/i
 const LINK_ITEM_RE = /^[-*]\s+\[([^\]]+)\]\(([^)\s]+)\)\s*$/
 const SCREENSHOT_RE = /^!\[([^\]]+)\]\((\/doc-img\/[a-z0-9-]+\.png)\)$/
 
@@ -79,8 +97,42 @@ export function parseFeatureBlock(markdown: string): FeatureBlock {
   const images: FeatureImage[] = []
   const screenshots: FeatureScreenshot[] = []
   const videos: string[] = []
+  const citations: FeatureCitation[] = []
+  const segments: FeatureBlockSegment[] = []
+  let segment: string[] = []
+  const flush = () => {
+    const text = segment.join("\n").replace(/\n{3,}/g, "\n\n").trim()
+    if (text) segments.push({ kind: "markdown", markdown: text })
+    segment = []
+  }
   for (let i = 0; i < lines.length; i++) {
     const line = lines[i].trim()
+    const citationLine = line.match(CITATION_RE)
+    if (citationLine) {
+      // The paragraph right below (blank lines before it allowed) is the citation. A directive
+      // followed by another directive, a heading or nothing marks no text: it is dropped.
+      let j = i + 1
+      while (j < lines.length && lines[j].trim() === "") j++
+      const next = j < lines.length ? lines[j].trim() : ""
+      if (!next || next.startsWith("<!--") || /^#{1,6}\s/.test(next)) continue
+      const paragraph: string[] = []
+      while (j < lines.length && lines[j].trim() !== "") {
+        paragraph.push(lines[j].trim())
+        j++
+      }
+      const text = plainAnswer(paragraph.join("\n"))
+      if (!text) continue
+      // The heading above names the text: « Copier : En une phrase ».
+      const headingLine = [...kept].reverse().map((l) => l.trim()).find((l) => /^#{1,6}\s+/.test(l))
+      const heading = headingLine ? headingLine.replace(/^#{1,6}\s+/, "").replace(/\s+#+\s*$/, "").trim() : null
+      const citation: FeatureCitation = { text, lang: citationLine[1]?.toLowerCase() === "en" ? "en" : "fr", heading }
+      // Consume the directive and its paragraph, and cut the block where the citation stands.
+      i = j - 1
+      flush()
+      citations.push(citation)
+      segments.push({ kind: "citation", citation })
+      continue
+    }
     const screenshot = line.match(SCREENSHOT_RE)
     if (screenshot) {
       screenshots.push({ src: screenshot[2], alt: screenshot[1].replace(/\s+/g, " ").trim() })
@@ -97,6 +149,7 @@ export function parseFeatureBlock(markdown: string): FeatureBlock {
       const id = videoReferenceId(line)
       if (id) videos.push(id)
       kept.push(lines[i])
+      segment.push(lines[i])
       continue
     }
     if (ACTIONS_RE.test(line)) {
@@ -113,8 +166,10 @@ export function parseFeatureBlock(markdown: string): FeatureBlock {
       continue
     }
     kept.push(lines[i])
+    segment.push(lines[i])
   }
-  return { markdown: kept.join("\n").replace(/\n{3,}/g, "\n\n").trim(), actions, images, screenshots, videos }
+  flush()
+  return { markdown: kept.join("\n").replace(/\n{3,}/g, "\n\n").trim(), segments, citations, actions, images, screenshots, videos }
 }
 
 /** « 1. **Title.** text » items (comment lines ignored), or null when the Markdown is anything else than such a list. */

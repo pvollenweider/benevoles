@@ -74,6 +74,16 @@ describe("publicPageJsonLd", () => {
     expect(types(publicPageJsonLd("/logiciel-planning-benevoles", BASE))).toContain("SoftwareApplication")
   })
 
+  // #1323: the citation page describes the application and its publisher by their stable @ids,
+  // never as another software (no alternateName).
+  it("links /citer's page to the application and the organisation nodes, without alternateName", () => {
+    const doc = publicPageJsonLd("/citer", BASE)
+    expect(types(doc)).toContain("SoftwareApplication")
+    const page = graphOf(doc)[0]
+    expect(page.about).toEqual([{ "@id": `${BASE}/#application` }, { "@id": `${BASE}/#organization` }])
+    expect(page).not.toHaveProperty("alternateName")
+  })
+
   // #767: only the questions a page renders, word for word, never a FAQ the page doesn't show.
   it("adds a FAQPage only when the page passes the questions it shows", () => {
     expect(types(publicPageJsonLd("/logiciel-planning-benevoles", BASE))).not.toContain("FAQPage")

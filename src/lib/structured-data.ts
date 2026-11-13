@@ -156,7 +156,7 @@ function publicPageCrumbs(path: string, title: string, audience = false): Crumb[
 }
 
 /** The pages that present the application itself, so their structured data describes it too (its price, #950). */
-const APPLICATION_PAGES: readonly string[] = ["/fonctionnalites", "/logiciel-planning-benevoles", "/tarifs"]
+const APPLICATION_PAGES: readonly string[] = ["/fonctionnalites", "/logiciel-planning-benevoles", "/tarifs", "/citer"]
 
 /**
  * The structured data of a public content page (src/lib/doc-pages.ts): the page, its breadcrumb,
@@ -165,8 +165,12 @@ const APPLICATION_PAGES: readonly string[] = ["/fonctionnalites", "/logiciel-pla
  */
 export function publicPageJsonLd(path: string, base: string, faq: readonly FaqItem[] = []): JsonLdNode {
   const page = publicPage(path)
+  const pageNode = webPageNode(base, { path: page.path, name: page.metaTitle, description: page.metaDescription, type: page.path === "/doc" || page.path === "/blog" ? "CollectionPage" : "WebPage" })
+  // The citation page (#1323) describes the application and its publisher, by the same @ids: it
+  // says what to cite, not another software.
+  if (page.path === "/citer") pageNode.about = [idOf(base, "application"), idOf(base, "organization")]
   const nodes: JsonLdNode[] = [
-    webPageNode(base, { path: page.path, name: page.metaTitle, description: page.metaDescription, type: page.path === "/doc" || page.path === "/blog" ? "CollectionPage" : "WebPage" }),
+    pageNode,
     breadcrumbNode(base, page.path, publicPageCrumbs(page.path, page.title, page.audience)),
     websiteNode(base),
     organizationNode(base),

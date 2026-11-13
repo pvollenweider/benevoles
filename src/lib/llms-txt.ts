@@ -3,6 +3,7 @@
 
 import { AUDIENCE_INDEX_PATH, AUDIENCE_PAGES, DOC_GUIDES, PUBLIC_PAGES, linkSourcesToRoutes, pageAvailable, splitTitle, type PublicPage } from "@/lib/doc-pages"
 import { DOC_GROUPS, docUnitAudience, sortDocUnits, type DocUnit } from "@/lib/doc-units"
+import { parseFeaturesPage } from "@/lib/features-page"
 import { createHeadingSlugger } from "@/lib/heading-anchors"
 import { SITE_NAME, absoluteUrl } from "@/lib/seo-metadata"
 import { localizeInstanceText } from "@/lib/site"
@@ -29,6 +30,8 @@ export type LlmsSources = {
   summary: string
   /** FEATURES.md, as written. */
   features: string
+  /** content/pages/CITER.md, the identity block of /llms.txt and /llms-full.txt (#1323). */
+  citer: string
   units: readonly DocUnit[]
   /** Link to the source code. */
   repositoryUrl: string
@@ -75,8 +78,28 @@ export function portableMarkdown(markdown: string, base: string): string {
 
 const link = (title: string, url: string, note?: string) => `- [${title}](${url})${note ? `: ${note}` : ""}`
 
-/** Pages of the hosted service listed after the price: the manifesto (#1259), then practical pages (#871, #1258). */
-export const RESOURCE_PATHS = ["/manifeste", "/tableur-ou-outil-dedie", "/ressources"]
+/** Pages of the hosted service listed after the price: the manifesto (#1259), the citation page (#1323), then practical pages (#871, #1258). */
+export const RESOURCE_PATHS = ["/manifeste", "/citer", "/tableur-ou-outil-dedie", "/ressources"]
+
+/**
+ * The identity block of /llms.txt and /llms-full.txt (#1323), from CITER.md: the exact name, the
+ * one-sentence and few-lines French descriptions, then the English one. Built from the parsed
+ * citations, so their HTML comments never reach the output, and never a paraphrase.
+ */
+export function identityMarkdown(citer: string): string {
+  const page = parseFeaturesPage(citer)
+  const nameLine = page.sections
+    .find((section) => section.heading === "Le nom")
+    ?.markdown.split("\n")
+    .map((line) => line.trim())
+    .find((line) => line !== "" && !line.startsWith("<!--"))
+  const citations = new Map(page.sections.flatMap((section) => section.citations).map((citation) => [citation.heading, citation.text]))
+  const descriptions = ["En une phrase", "En quelques lignes", "En anglais"].flatMap((heading) => {
+    const text = citations.get(heading)
+    return text ? [text] : []
+  })
+  return [nameLine, ...descriptions].filter((line): line is string => Boolean(line)).join("\n\n")
+}
 
 export const LEGAL_PATHS = ["/legal/privacy", "/legal/terms", "/legal/sous-traitance", "/legal/sous-traitants", "/accessibilite", "/legal/exploitant"]
 
@@ -88,8 +111,15 @@ export function llmsTxt(s: LlmsSources): string {
   const news = PUBLIC_PAGES.find((p) => p.path === "/nouveautes")!
   const blog = PUBLIC_PAGES.find((p) => p.path === "/blog")!
   const planning = PUBLIC_PAGES.find((p) => p.path === "/logiciel-planning-benevoles")!
+  const citer = PUBLIC_PAGES.find((p) => p.path === "/citer")!
   const units = sortDocUnits(s.units)
-  const out: string[] = [`# ${SITE_NAME}`, "", `> ${s.summary}`, "", portableMarkdown(introduction(s.features), s.base), ""]
+  const identity = pageAvailable(citer) ? identityMarkdown(s.citer) : ""
+  const out: string[] = [`# ${SITE_NAME}`, "", `> ${s.summary}`, ""]
+
+  // The identity block comes first, before the feature list (#1323): the exact name and the
+  // paragraphs to quote, never their directives. Another instance has no such page and no block (#760).
+  if (identity) out.push(identity, "")
+  out.push(portableMarkdown(introduction(s.features), s.base), "")
 
   out.push("## Présentation", "")
   out.push(link("Accueil", url("/"), "la présentation du service, ses questions fréquentes et comment commencer."))
@@ -149,7 +179,9 @@ export function llmsTxt(s: LlmsSources): string {
 export function llmsFullTxt(s: LlmsSources): string {
   const url = (path: string) => absoluteUrl(s.base, path)
   const markdown = new Map((s.pages ?? []).map((p) => [p.path, p.markdown]))
-  const parts: string[] = [[`# ${SITE_NAME} : documentation complète`, "", `> ${s.summary}`].join("\n")]
+  const citer = PUBLIC_PAGES.find((p) => p.path === "/citer")!
+  const identity = pageAvailable(citer) ? identityMarkdown(s.citer) : ""
+  const parts: string[] = [[`# ${SITE_NAME} : documentation complète`, "", `> ${s.summary}`, ...(identity ? ["", identity] : [])].join("\n")]
 
   const section = (title: string, path: string, body: string, dated?: string, dateLabel = "Dernière mise à jour") =>
     [`# ${title}`, "", `Adresse : ${url(path)}`, ...(dated ? ["", `${dateLabel} : ${dated}`] : []), "", body].join("\n")

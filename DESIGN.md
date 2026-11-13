@@ -1,5 +1,5 @@
 ---
-name: Benevol
+name: benevol.app
 description: Outil communautaire de gestion de bénévoles pour événements
 colors:
   action-blue: "#2563eb"
@@ -95,13 +95,13 @@ components:
     padding: "2px 8px"
 ---
 
-# Design System: Benevol
+# Design System: benevol.app
 
 ## 1. Overview
 
 **Creative North Star: "Le carnet de terrain"**
 
-Benevol est un outil qu'on sort sous la pression d'un événement : à 7h du matin le jour J, sur téléphone, avec des bénévoles qui arrivent en retard. Ce n'est pas une interface qu'on contemple, c'est un outil qu'on consulte vite et qu'on pose. Chaque décision visuelle part de cette scène : l'information doit être lisible d'un coup d'œil, les actions doivent être immédiatement trouvables, et rien ne doit se mettre entre l'organisateur et sa réponse.
+benevol.app est un outil qu'on sort sous la pression d'un événement : à 7h du matin le jour J, sur téléphone, avec des bénévoles qui arrivent en retard. Ce n'est pas une interface qu'on contemple, c'est un outil qu'on consulte vite et qu'on pose. Chaque décision visuelle part de cette scène : l'information doit être lisible d'un coup d'œil, les actions doivent être immédiatement trouvables, et rien ne doit se mettre entre l'organisateur et sa réponse.
 
 Le système est délibérément sobre. La couleur est réservée à l'action et au statut, jamais à la décoration. La typographie est le système sans-serif natif du navigateur : choisir une police web serait ajouter un chargement pour zéro gain expressif sur une interface de gestion. L'espacement crée le rythme ; les bords arrondis signalent la douceur sans chercher à être mignons.
 
@@ -293,13 +293,13 @@ La timeline Gantt (inscription bénévole + vue admin) est le composant le plus 
 - **Do** tester les contrastes des badges : les paires statut fond/texte sont validées AA ; ne pas en introduire de nouvelles sans vérification.
 
 ### Don't:
-- **Don't** ajouter un deuxième bleu ou une deuxième couleur d'action. Benevol n'est pas un SaaS corporate avec une palette de marque étendue.
+- **Don't** ajouter un deuxième bleu ou une deuxième couleur d'action. benevol.app n'est pas un SaaS corporate avec une palette de marque étendue.
 - **Don't** utiliser des ombres au repos sur les cartes. Flat-par-défaut. L'ombre signale l'interactivité, pas la hiérarchie.
 - **Don't** imbriquer des cartes. Un composant fond blanc à l'intérieur d'un composant fond blanc : réécrire avec un `bg-gray-50` et une bordure à la place.
 - **Don't** utiliser `border-left` ou `border-right` épais comme accent de couleur sur des cartes ou items de liste. C'est un anti-pattern visuel interdit (side-stripe border). Exception unique : le filet neutre de 2 px des citations du manifeste (`ESSAY_PROSE_CLASS`), forme typographique d'une citation, pas un accent de couleur.
 - **Don't** créer de gradient text (`background-clip: text`). Zéro sens dans une interface utilitaire.
 - **Don't** mettre de kicker uppercase au-dessus de chaque section ("ÉVÉNEMENTS", "MEMBRES", "PARAMÈTRES"). Si une section a besoin d'un en-tête, c'est un `<h2>` en weight 600.
-- **Don't** copier l'esthétique Salesforce / Monday.com : metrics en gros chiffres, palette bleu-gris, jargon de conversion. Benevol organise des bénévoles, pas des pipelines commerciaux.
+- **Don't** copier l'esthétique Salesforce / Monday.com : metrics en gros chiffres, palette bleu-gris, jargon de conversion. benevol.app organise des bénévoles, pas des pipelines commerciaux.
 - **Don't** introduire de web font pour l'interface admin. La police système est la bonne réponse : native, rapide, lisible. Si un jour une web font est utilisée, ce sera uniquement sur la landing page.
 - **Don't** utiliser des animations qui distraient de la tâche. Motion = retour d'état uniquement (transitions 150ms ease, focus ring, hover), et tout mouvement (défilement doux, effet d'échelle, rotation) passe par `motion-safe:`. Pas de scroll-driven animations, pas d'entrées orchestrées sur les dashboards. Seule animation décorative : la pluie de la page introuvable (404), qui n'accompagne aucune tâche, toujours sous `motion-safe:`.
 

@@ -3,11 +3,11 @@
 
 import { MAIN_CONTENT_ID } from "@/components/admin/SkipLink"
 import DocVideoInline from "@/components/videos/DocVideoInline"
+import CitationBlock from "@/components/public/CitationBlock"
 import { SITE_CONTAINER_CLASS } from "@/components/public/site-container"
 import { mailtoAddress } from "@/lib/features-page"
-import type { FeatureStill, RenderedFeaturesPage, RenderedQuestion } from "@/lib/public-content"
+import type { FeatureStill, RenderedFeaturePart, RenderedFeaturesPage, RenderedQuestion } from "@/lib/public-content"
 import type { FeatureAction } from "@/lib/features-page"
-import type { DocUnitPart } from "@/lib/doc-video-references"
 
 const focusRing = "focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-blue-600 dark:focus-visible:outline-blue-400"
 const balance = { textWrap: "balance" } as React.CSSProperties
@@ -84,12 +84,18 @@ function ActionLinks({ actions }: { actions: FeatureAction[] }) {
   )
 }
 
-/** A block's HTML with its inline players where its video lines stand. */
-function Parts({ parts, className = "", prose = FEATURES_PROSE_CLASS }: { parts: DocUnitPart[]; className?: string; prose?: string }) {
+/** A block's HTML with its inline players where its video lines stand and its citations drawn by the page. */
+function Parts({ parts, className = "", prose = FEATURES_PROSE_CLASS }: { parts: RenderedFeaturePart[]; className?: string; prose?: string }) {
   return (
     <div className={`${prose} ${className}`} style={pretty}>
       {parts.map((part, i) =>
-        part.kind === "html" ? <div key={i} dangerouslySetInnerHTML={{ __html: part.html }} /> : <DocVideoInline key={i} player={part.player} />,
+        part.kind === "html" ? (
+          <div key={i} dangerouslySetInnerHTML={{ __html: part.html }} />
+        ) : part.kind === "video" ? (
+          <DocVideoInline key={i} player={part.player} />
+        ) : (
+          <CitationBlock key={i} {...part.citation} />
+        ),
       )}
     </div>
   )

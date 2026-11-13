@@ -1,7 +1,7 @@
 import { describe, it, expect, vi } from "vitest"
 import fs from "node:fs"
 import path from "node:path"
-import { llmsFullTxt, llmsTxt, markdownSections, portableMarkdown, LEGAL_PATHS, RESOURCE_PATHS } from "../llms-txt"
+import { identityMarkdown, llmsFullTxt, llmsTxt, markdownSections, portableMarkdown, LEGAL_PATHS, RESOURCE_PATHS } from "../llms-txt"
 import { AUDIENCE_PAGES, PUBLIC_PAGES, pageAvailable, splitTitle } from "../doc-pages"
 import { DOC_GROUPS, loadDocUnits } from "../doc-units"
 import { headingIdsOf, renderPublicSource } from "../public-content"
@@ -18,6 +18,7 @@ const sources = () => ({
   base: BASE,
   summary: "Le planning des bénévoles.",
   features: read("content/pages/FEATURES.md"),
+  citer: read("content/pages/CITER.md"),
   units: loadDocUnits(),
   repositoryUrl: "https://github.com/pvollenweider/benevoles",
   pages: pageSources(),
@@ -82,6 +83,17 @@ describe("llmsTxt", () => {
 
   it("keeps nothing internal: no relative link, no Markdown file, no HTML comment", () => {
     expect(txt).not.toMatch(/\]\(\/|\.md\)|<!--/)
+  })
+
+  // #1323: the identity block comes first, before the feature list, built from CITER.md.
+  it("opens with the exact name and the descriptions to quote from CITER.md, before the features", () => {
+    const identity = identityMarkdown(read("content/pages/CITER.md"))
+    expect(identity).toContain("Le nom s'écrit **benevol.app**")
+    expect(identity).toContain("benevol.app est un logiciel libre de planning pour bénévoles :")
+    expect(identity).toContain("benevol.app is free, open source software for planning volunteer shifts.")
+    expect(txt).toContain(`${identity}\n\n`)
+    expect(txt.indexOf(identity)).toBeLessThan(txt.indexOf("## Présentation"))
+    expect(txt).not.toContain("<!-- citation")
   })
 })
 
@@ -168,6 +180,14 @@ describe("llmsFullTxt", () => {
     }
     expect(full).toContain(releaseMarkdown(releases[0]).split("\n").find((line) => line.startsWith("- "))!.slice(0, 40))
     expect(full).not.toContain("[Unreleased]")
+  })
+
+  // #1323: the same identity block, first, before the features page's section.
+  it("opens with the identity block of CITER.md, before the features page", () => {
+    const identity = identityMarkdown(read("content/pages/CITER.md"))
+    expect(full).toContain(identity)
+    expect(full.indexOf(identity)).toBeLessThan(full.indexOf("# Le planning de vos bénévoles, simplement"))
+    expect(full).not.toContain("<!-- citation")
   })
 
   it("gives every blog post and every practical guide under its own address", () => {

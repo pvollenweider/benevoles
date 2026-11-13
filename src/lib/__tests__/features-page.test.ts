@@ -41,6 +41,42 @@ describe("parseFeatureBlock", () => {
   })
 })
 
+// #1323: a `<!-- citation -->` line marks the paragraph right below as a quotable text.
+describe("parseFeatureBlock, citations", () => {
+  it("reads a French citation with the heading above it, and cuts the block where it stands", () => {
+    const block = parseFeatureBlock("### En une phrase\n\n<!-- citation -->\nbenevol.app est **libre**.\n\nSuite.")
+    expect(block.citations).toEqual([{ text: "benevol.app est libre.", lang: "fr", heading: "En une phrase" }])
+    expect(block.segments).toEqual([
+      { kind: "markdown", markdown: "### En une phrase" },
+      { kind: "citation", citation: { text: "benevol.app est libre.", lang: "fr", heading: "En une phrase" } },
+      { kind: "markdown", markdown: "Suite." },
+    ])
+    expect(block.markdown).toBe("### En une phrase\n\nSuite.")
+  })
+
+  it("reads an English citation with its lang", () => {
+    const block = parseFeatureBlock("### En anglais\n\n<!-- citation: en -->\nA sentence.")
+    expect(block.citations).toEqual([{ text: "A sentence.", lang: "en", heading: "En anglais" }])
+    expect(block.segments).toEqual([
+      { kind: "markdown", markdown: "### En anglais" },
+      { kind: "citation", citation: { text: "A sentence.", lang: "en", heading: "En anglais" } },
+    ])
+  })
+
+  it("drops a directive with no paragraph below it", () => {
+    const block = parseFeatureBlock("Texte.\n\n<!-- citation -->")
+    expect(block.citations).toEqual([])
+    expect(block.segments).toEqual([{ kind: "markdown", markdown: "Texte." }])
+    expect(block.markdown).toBe("Texte.")
+  })
+
+  it("drops the first of two citations in a row: only the second one marks the paragraph", () => {
+    const block = parseFeatureBlock("<!-- citation -->\n<!-- citation: en -->\nDeux.")
+    expect(block.citations).toEqual([{ text: "Deux.", lang: "en", heading: null }])
+    expect(block.segments).toEqual([{ kind: "citation", citation: { text: "Deux.", lang: "en", heading: null } }])
+  })
+})
+
 // #872: the audience pages show real captures of public/doc-img, which need no media server.
 describe("parseFeatureBlock, documentation screenshots", () => {
   it("takes a /doc-img screenshot alone on its line out of the Markdown, with its alt text", () => {
