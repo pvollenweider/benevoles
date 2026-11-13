@@ -2,7 +2,7 @@
 
 Vous créez les postes et les créneaux, vous partagez un lien, et chaque bénévole choisit ses créneaux depuis son téléphone, sans compte à créer. Vous voyez tout de suite où il manque du monde, et les rappels partent tout seuls.
 
-C'est gratuit, open source et hébergé en France. Ça convient aussi bien à une [fête de village](BENEVOLES-FETE-DE-VILLAGE.md) ou à une buvette qu'à un [festival sur plusieurs jours](BENEVOLES-FESTIVAL.md), à une [manifestation sportive](BENEVOLES-MANIFESTATION-SPORTIVE.md) ou à des [permanences chaque semaine](PLANNING-PERMANENCES-BENEVOLES.md).
+C'est gratuit, open source et hébergé en France. Ça convient aussi bien à une [fête de village](BENEVOLES-FETE-DE-VILLAGE.md) ou à une buvette qu'à un [festival sur plusieurs jours](BENEVOLES-FESTIVAL.md), à une [manifestation sportive](BENEVOLES-MANIFESTATION-SPORTIVE.md), à une [fête communale](BENEVOLES-MAIRIE-COMMUNE.md) ou à des [permanences chaque semaine](PLANNING-PERMANENCES-BENEVOLES.md).
 
 <!-- actions -->
 - [Demander un espace](/inscription)

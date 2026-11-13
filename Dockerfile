@@ -81,6 +81,7 @@ COPY --from=builder --chown=nextjs:nodejs /app/content/pages/POUR-QUI.md ./conte
 COPY --from=builder --chown=nextjs:nodejs /app/content/pages/BENEVOLES-FETE-DE-VILLAGE.md ./content/pages/BENEVOLES-FETE-DE-VILLAGE.md
 COPY --from=builder --chown=nextjs:nodejs /app/content/pages/BENEVOLES-FESTIVAL.md ./content/pages/BENEVOLES-FESTIVAL.md
 COPY --from=builder --chown=nextjs:nodejs /app/content/pages/BENEVOLES-MANIFESTATION-SPORTIVE.md ./content/pages/BENEVOLES-MANIFESTATION-SPORTIVE.md
+COPY --from=builder --chown=nextjs:nodejs /app/content/pages/BENEVOLES-MAIRIE-COMMUNE.md ./content/pages/BENEVOLES-MAIRIE-COMMUNE.md
 COPY --from=builder --chown=nextjs:nodejs /app/content/pages/PLANNING-PERMANENCES-BENEVOLES.md ./content/pages/PLANNING-PERMANENCES-BENEVOLES.md
 COPY --from=builder --chown=nextjs:nodejs /app/content/pages/TARIFS.md ./content/pages/TARIFS.md
 # Tableur et groupe de discussion, ou outil dédié ? (#871).

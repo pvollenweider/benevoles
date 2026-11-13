@@ -141,7 +141,7 @@ Liste exhaustive des fonctionnalités de l'application.
 
 ### Pour qui ?, Tarifs et pages de comparaison (`/pour-qui`, `/tarifs`, `/tableur-ou-outil-dedie`, #872, #950, #871)
 
-- `/pour-qui` réunit une page par situation (`/benevoles-fete-de-village`, `/benevoles-festival`, `/benevoles-manifestation-sportive`, `/planning-permanences-benevoles`), chacune avec une édition ou une saison type, les guides et tutoriels qui la concernent et ses questions fréquentes (données structurées FAQPage) ; l'en-tête des pages publiques les liste sous « Pour qui ? »
+- `/pour-qui` réunit une page par situation (`/benevoles-fete-de-village`, `/benevoles-festival`, `/benevoles-manifestation-sportive`, `/benevoles-mairie-commune`, `/planning-permanences-benevoles`), chacune avec une édition ou une saison type, les guides et tutoriels qui la concernent et ses questions fréquentes (données structurées FAQPage) ; l'en-tête des pages publiques les liste sous « Pour qui ? »
 - `/tarifs` (`content/pages/TARIFS.md`) distingue le logiciel libre du service hébergé, gratuit, et dit comment le projet est financé
 - `/tableur-ou-outil-dedie` (`content/pages/TABLEUR-OU-OUTIL-DEDIE.md`, #871) : ce que font bien un tableur et un groupe de discussion, ce qui devient plus lourd quand l'événement grandit, et une liste simple pour décider
 - Déclarées dans `src/lib/doc-pages.ts` ; sur une autre instance, les liens vers ces pages de présentation du service hébergé mènent à benevol.app

@@ -40,6 +40,7 @@ const PAGES: { path: string; types: string[]; ogType: string }[] = [
   // #951: the features page's own FAQ; #872 and #950: the audience pages, their index and the price.
   { path: "/pour-qui", types: ["WebPage", "BreadcrumbList", "FAQPage"], ogType: "website" },
   { path: "/benevoles-festival", types: ["WebPage", "BreadcrumbList", "FAQPage"], ogType: "website" },
+  { path: "/benevoles-mairie-commune", types: ["WebPage", "BreadcrumbList", "FAQPage"], ogType: "website" },
   { path: "/planning-permanences-benevoles", types: ["WebPage", "BreadcrumbList", "FAQPage"], ogType: "website" },
   { path: "/tarifs", types: ["WebPage", "BreadcrumbList", "SoftwareApplication", "FAQPage"], ogType: "website" },
   // #871: spreadsheet and chat group, or a dedicated tool?

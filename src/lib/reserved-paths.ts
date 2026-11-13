@@ -23,6 +23,7 @@ export const APEX_ONLY_PATHS: readonly string[] = [
   "/benevoles-fete-de-village",
   "/benevoles-festival",
   "/benevoles-manifestation-sportive",
+  "/benevoles-mairie-commune",
   "/planning-permanences-benevoles",
   "/tarifs",
   "/tableur-ou-outil-dedie",
