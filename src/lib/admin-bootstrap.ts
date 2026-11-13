@@ -48,28 +48,10 @@ export function isHostedDeployment(env: BootstrapEnv): boolean {
   }
 }
 
-/**
- * The password written in docker-compose.essai.yml (#1333), public by design so a try-out takes
- * two commands. It is only accepted on a local address: an instance reached from elsewhere with
- * this file must not get a super admin whose password everyone can read.
- */
-export const TRY_OUT_ADMIN_PASSWORD = "Essai-Benevol-2026!"
-
-/** Whether the instance's address only answers on this machine (localhost, loopback IP). */
-export function isLocalAddress(env: BootstrapEnv): boolean {
-  try {
-    const host = new URL(env.NEXT_PUBLIC_APP_URL ?? "").hostname.toLowerCase()
-    return host === "localhost" || host.endsWith(".localhost") || /^127(\.\d{1,3}){3}$/.test(host) || host === "[::1]"
-  } catch {
-    return false
-  }
-}
-
 export type AdminBootstrapDecision =
   | { action: "skip"; reason: "hosted-service" | "not-configured" | "super-admin-exists" }
   | { action: "warn"; missing: "ADMIN_EMAIL" | "ADMIN_PASSWORD" }
   | { action: "refuse"; reason: "invalid-password"; errors: string[] }
-  | { action: "refuse"; reason: "try-out-password" }
   | { action: "refuse"; reason: "email-taken"; email: string }
   | { action: "check-database" }
   | { action: "create"; email: string; name: string; password: string }
@@ -118,7 +100,6 @@ export function decideAdminBootstrap(
 
   const errors = passwordErrors(rawPassword!)
   if (errors.length > 0) return { action: "refuse", reason: "invalid-password", errors }
-  if (rawPassword === TRY_OUT_ADMIN_PASSWORD && !isLocalAddress(env)) return { action: "refuse", reason: "try-out-password" }
 
   return {
     action: "create",
@@ -142,11 +123,7 @@ function logDecision(decision: AdminBootstrapDecision): void {
       )
       return
     case "refuse":
-      if (decision.reason === "try-out-password") {
-        console.error(
-          "❌ ADMIN_PASSWORD est le mot de passe d'essai de docker-compose.essai.yml, public, alors que l'adresse de l'instance (NEXT_PUBLIC_APP_URL) n'est pas locale. Choisissez un autre mot de passe. Aucun compte super admin créé.",
-        )
-      } else if (decision.reason === "invalid-password") {
+      if (decision.reason === "invalid-password") {
         console.error(
           `❌ ADMIN_PASSWORD ne respecte pas les règles des mots de passe : ${decision.errors.join(", ")}. Aucun compte super admin créé.`,
         )

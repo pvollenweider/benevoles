@@ -27,11 +27,11 @@ curl -O https://raw.githubusercontent.com/pvollenweider/benevoles/main/docker-co
 docker compose -f docker-compose.essai.yml up
 ```
 
-Au bout d'une minute environ, ouvrez http://localhost:3000/admin et connectez-vous avec `admin@example.org` et le mot de passe `Essai-Benevol-2026!`. Ce compte de super admin demande d'activer la double authentification : gardez une application d'authentification sous la main (Aegis, Google Authenticator, un gestionnaire de mots de passe). Créez ensuite une organisation depuis l'espace super admin. Les emails envoyés par l'application arrivent sur http://localhost:8025, sans quitter votre machine.
+Au bout d'une minute environ, ouvrez http://localhost:3000/admin et connectez-vous avec `admin@example.org` et le mot de passe affiché dans la sortie de la commande, à la ligne « Compte d'essai » (à retrouver avec `docker compose -f docker-compose.essai.yml logs keys`). Il est tiré au hasard au premier lancement, comme les clés de l'application. Ce compte de super admin demande d'activer la double authentification : gardez une application d'authentification sous la main (Aegis, Google Authenticator, un gestionnaire de mots de passe). Créez ensuite une organisation depuis l'espace super admin. Les emails envoyés par l'application arrivent sur http://localhost:8025, sans quitter votre machine.
 
 Pour tout arrêter et effacer : `docker compose -f docker-compose.essai.yml down -v`.
 
-Ce fichier sert à essayer, pas à installer : le mot de passe est public et l'application ne l'accepte que sur `localhost`, et l'image `latest` change à chaque mise à jour du service. Pour une vraie installation, voir [Déploiement](docs/deploiement.md). Sur un Mac Apple Silicon, l'image (construite pour amd64) tourne en émulation, un peu plus lentement.
+Ce fichier sert à essayer, pas à installer : les ports ne répondent que sur votre machine, et l'image `latest` change à chaque mise à jour du service. Pour une vraie installation, voir [Déploiement](docs/deploiement.md). Sur un Mac Apple Silicon, l'image (construite pour amd64) tourne en émulation, un peu plus lentement.
 
 ## Documentation
 

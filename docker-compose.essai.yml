@@ -3,16 +3,16 @@
 #   curl -O https://raw.githubusercontent.com/pvollenweider/benevoles/main/docker-compose.essai.yml
 #   docker compose -f docker-compose.essai.yml up
 #
-# Puis ouvrir http://localhost:3000/admin (compte ci-dessous) et lire les emails envoyés sur
-# http://localhost:8025 (Mailpit : aucun email ne sort de la machine). Tout arrêter et effacer :
+# Le mot de passe du compte d'essai s'affiche dans la sortie de cette commande (ligne « Compte
+# d'essai »), et à tout moment avec : docker compose -f docker-compose.essai.yml logs keys
+# Puis ouvrir http://localhost:3000/admin et lire les emails envoyés sur http://localhost:8025
+# (Mailpit : aucun email ne sort de la machine). Tout arrêter et effacer :
 #   docker compose -f docker-compose.essai.yml down -v
 #
-# POUR UN ESSAI SEULEMENT, jamais pour une installation réelle (voir docs/deploiement.md) :
-# - le mot de passe du super admin est écrit ici, donc public. L'application ne l'accepte que sur
-#   une adresse locale (NEXT_PUBLIC_APP_URL sur localhost), et les ports ne répondent que sur cette
-#   machine (127.0.0.1) ;
-# - les clés de session et de chiffrement ne sont pas écrites ici : le service « keys » les tire au
-#   hasard au premier lancement et les garde dans un volume, effacé par `down -v`.
+# POUR UN ESSAI SEULEMENT, jamais pour une installation réelle (voir docs/deploiement.md). Aucun
+# secret n'est écrit ici : au premier lancement, le service « keys » tire au hasard les clés de
+# session et de chiffrement et le mot de passe du super admin, et les garde dans un volume effacé
+# par `down -v`. Les ports ne répondent que sur cette machine (127.0.0.1).
 #
 # L'image `latest` est celle qui tourne sur benevol.app, construite pour amd64 : sur un Mac Apple
 # Silicon, Docker l'émule (démarrage un peu plus lent). Une installation qui dure épingle une
@@ -22,18 +22,26 @@ name: benevoles-essai
 services:
   keys:
     image: alpine:3.20
-    # Une fois : deux valeurs aléatoires, lisibles par l'utilisateur de l'application (uid 1001).
+    # Une fois : trois valeurs aléatoires, lisibles par l'utilisateur de l'application (uid 1001).
+    # Le mot de passe commence par « Essai- » et finit par « -7 » pour respecter les règles des
+    # mots de passe (majuscule, minuscule, chiffre, caractère spécial) quel que soit le tirage.
     command:
       - sh
       - -c
       - |
         set -e
+        rnd() { head -c "$$1" /dev/urandom | base64 | tr -d '/+=\n'; }
         if [ ! -s /keys/keys.env ]; then
-          printf 'export AUTH_SECRET=%s\nexport TOKEN_ENCRYPTION_KEY=%s\n' \
-            "$$(head -c 32 /dev/urandom | base64)" "$$(head -c 32 /dev/urandom | base64)" > /keys/keys.env
+          {
+            echo "export AUTH_SECRET=$$(rnd 32)"
+            echo "export TOKEN_ENCRYPTION_KEY=$$(head -c 32 /dev/urandom | base64)"
+            echo "export ADMIN_PASSWORD=Essai-$$(rnd 12)-7"
+          } > /keys/keys.env
         fi
         chown 1001 /keys/keys.env
         chmod 400 /keys/keys.env
+        echo "Compte d'essai : admin@example.org, mot de passe $$(sed -n 's/^export ADMIN_PASSWORD=//p' /keys/keys.env)"
+        echo "Connexion : http://localhost:3000/admin   Emails : http://localhost:8025"
     volumes:
       - keys:/keys
 
@@ -60,6 +68,7 @@ services:
   app:
     image: ghcr.io/pvollenweider/benevoles:latest
     platform: linux/amd64
+    # Lit les valeurs tirées par « keys » avant le démarrage habituel de l'image.
     entrypoint: ["sh", "-c", ". /keys/keys.env && exec docker-entrypoint.sh \"$$@\"", "--"]
     command: ["node", "server.js"]
     ports:
@@ -69,17 +78,18 @@ services:
       POSTGRES_DB: benevoles
       POSTGRES_USER: benevoles
       POSTGRES_PASSWORD: essai
+      # AUTH_URL fixe l'adresse que la connexion accepte : pas d'AUTH_TRUST_HOST, qui ferait
+      # confiance à l'en-tête Host de la requête.
       NEXT_PUBLIC_APP_URL: http://localhost:3000
       AUTH_URL: http://localhost:3000
-      AUTH_TRUST_HOST: "true"
       HOSTED_SERVICE: "false"
       SMTP_HOST: mailpit
       SMTP_PORT: "1025"
       SMTP_SECURE: "false"
       EMAIL_FROM: essai@example.org
-      # Premier super admin, créé au premier démarrage (src/lib/admin-bootstrap.ts).
+      # Premier super admin, créé au premier démarrage (src/lib/admin-bootstrap.ts), avec le mot
+      # de passe tiré par « keys » (lu dans /keys/keys.env).
       ADMIN_EMAIL: admin@example.org
-      ADMIN_PASSWORD: "Essai-Benevol-2026!"
       ADMIN_NAME: Essai
     volumes:
       - keys:/keys:ro

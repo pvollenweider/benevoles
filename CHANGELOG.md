@@ -13,7 +13,7 @@ Format basé sur [Keep a Changelog](https://keepachangelog.com/fr/1.0.0/).
 
 ### Ajouté
 
-- **Essayer sur sa machine** : `docker-compose.essai.yml` lance benevol.app avec Docker en deux commandes, sans le code, avec un compte de super admin d'essai et une boîte de réception locale ; son mot de passe public n'est accepté que sur `localhost` (#1333).
+- **Essayer sur sa machine** : `docker-compose.essai.yml` lance benevol.app avec Docker en deux commandes, sans le code, avec un compte de super admin d'essai et une boîte de réception locale ; son mot de passe et les clés de l'application sont tirés au hasard au premier lancement (#1333).
 - Le premier super admin d'une instance auto-hébergée peut être créé au démarrage à partir de `ADMIN_EMAIL`, `ADMIN_PASSWORD` et `ADMIN_NAME`, sans lancer le seed depuis un checkout (#1334).
 - **Logiciel libre** : une page publique qui explique ce que « libre » veut dire pour benevol.app (licence AGPL, code public, installation chez vous) et ce que l'outil laisse à d'autres (#1326).
 - **Mairies, communes et collectivités** : une cinquième page « Pour qui ? » pour les fêtes communales et les forums des associations, avec un lien par société locale (#1325).

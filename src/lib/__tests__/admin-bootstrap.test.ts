@@ -3,16 +3,12 @@
 
 import { afterEach, beforeEach, describe, expect, it, vi } from "vitest"
 import bcrypt from "bcryptjs"
-import fs from "node:fs"
-import path from "node:path"
 import {
   ADMIN_BOOTSTRAP_BCRYPT_COST,
   ADMIN_BOOTSTRAP_LOCK,
   bootstrapSuperAdmin,
   decideAdminBootstrap,
   isHostedDeployment,
-  isLocalAddress,
-  TRY_OUT_ADMIN_PASSWORD,
   type AdminBootstrapPrisma,
 } from "../admin-bootstrap"
 
@@ -141,40 +137,6 @@ describe("decideAdminBootstrap (#1334)", () => {
     })
     expect(decideAdminBootstrap({ ...ENV, ADMIN_NAME: undefined }, { superAdminExists: false, emailTaken: false }))
       .toMatchObject({ action: "create", name: "Administrateur" })
-  })
-})
-
-describe("try-out password (#1333)", () => {
-  const state = { superAdminExists: false, emailTaken: false }
-  const tryOut = { ...ENV, ADMIN_PASSWORD: TRY_OUT_ADMIN_PASSWORD }
-
-  it("passes the password rules, so only the address can refuse it", () => {
-    expect(decideAdminBootstrap({ ...tryOut, NEXT_PUBLIC_APP_URL: "http://localhost:3000" }, state).action).toBe("create")
-  })
-
-  it("is accepted on a local address only", () => {
-    for (const url of ["http://localhost:3000", "http://127.0.0.1:3000", "http://essai.localhost", "http://[::1]:3000"]) {
-      expect(decideAdminBootstrap({ ...tryOut, NEXT_PUBLIC_APP_URL: url }, state).action, url).toBe("create")
-    }
-    for (const url of ["https://benevoles.example.org", "http://192.168.1.20:3000", "http://localhost.example.org", undefined]) {
-      expect(decideAdminBootstrap({ ...tryOut, NEXT_PUBLIC_APP_URL: url }, state), String(url))
-        .toEqual({ action: "refuse", reason: "try-out-password" })
-    }
-  })
-
-  it("does not affect any other password on a public address", () => {
-    expect(decideAdminBootstrap({ ...ENV, NEXT_PUBLIC_APP_URL: "https://benevoles.example.org" }, state).action).toBe("create")
-  })
-
-  it("recognises local addresses", () => {
-    expect(isLocalAddress({ NEXT_PUBLIC_APP_URL: "http://LOCALHOST:3000" })).toBe(true)
-    expect(isLocalAddress({ NEXT_PUBLIC_APP_URL: "not a url" })).toBe(false)
-    expect(isLocalAddress({})).toBe(false)
-  })
-
-  it("matches the password written in docker-compose.essai.yml", () => {
-    const compose = fs.readFileSync(path.join(process.cwd(), "docker-compose.essai.yml"), "utf-8")
-    expect(compose).toContain(`ADMIN_PASSWORD: "${TRY_OUT_ADMIN_PASSWORD}"`)
   })
 })
 

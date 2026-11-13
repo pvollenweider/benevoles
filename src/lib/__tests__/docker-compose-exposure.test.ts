@@ -33,16 +33,22 @@ describe("docker-compose.essai.yml (try-out)", () => {
     expect(ports).toEqual(["127.0.0.1:8025:8025", "127.0.0.1:3000:3000"])
   })
 
-  it("draws its keys at random instead of writing them", () => {
-    expect(essai).not.toMatch(/^\s*AUTH_SECRET:/m)
-    expect(essai).not.toMatch(/^\s*TOKEN_ENCRYPTION_KEY:/m)
+  // A published password or key would let anyone who reaches the instance sign in or forge a
+  // session: the « keys » service draws them on first start instead.
+  it("draws its keys and the super admin password at random instead of writing them", () => {
+    for (const name of ["AUTH_SECRET", "TOKEN_ENCRYPTION_KEY", "ADMIN_PASSWORD"]) {
+      expect(essai).not.toMatch(new RegExp(`^\\s*${name}:`, "m"))
+      expect(essai).toContain(`export ${name}=`)
+    }
     expect(essai).toContain("/dev/urandom")
   })
 
-  it("is a local, self-hosted instance that trusts its own address", () => {
+  // AUTH_TRUST_HOST would make sign-in trust the request's Host header (DNS rebinding against
+  // localhost); AUTH_URL alone fixes the address.
+  it("is a local, self-hosted instance that does not trust the Host header", () => {
     expect(essai).toContain("NEXT_PUBLIC_APP_URL: http://localhost:3000")
     expect(essai).toContain("AUTH_URL: http://localhost:3000")
-    expect(essai).toContain('AUTH_TRUST_HOST: "true"')
+    expect(essai).not.toMatch(/^\s*AUTH_TRUST_HOST:/m)
     expect(essai).toContain('HOSTED_SERVICE: "false"')
   })
 })
