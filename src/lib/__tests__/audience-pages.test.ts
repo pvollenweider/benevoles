@@ -9,6 +9,7 @@ import { parseFeaturesPage } from "../features-page"
 import { publicPageJsonLd } from "../structured-data"
 import { loadVideoCatalog } from "../video-catalog-load"
 import { readDocUnits } from "../doc-units"
+import { slugifyHeading } from "../heading-anchors"
 import { LANDING_FAQ_SOURCE } from "../landing-seo"
 
 const read = (f: string) => fs.readFileSync(path.join(process.cwd(), f), "utf-8")
@@ -18,11 +19,12 @@ const BASE = "https://www.benevol.app"
 const EDITORIAL = [AUDIENCE_INDEX_PATH, ...AUDIENCE_PAGES.map((p) => p.path), "/tarifs"]
 
 describe("the audience pages (#872)", () => {
-  it("are the first four situations, in the order of the « Pour qui ? » list, then their index", () => {
+  it("are the five situations, in the order of the « Pour qui ? » list, then their index", () => {
     expect(AUDIENCE_PAGES.map((p) => p.path)).toEqual([
       "/benevoles-fete-de-village",
       "/benevoles-festival",
       "/benevoles-manifestation-sportive",
+      "/benevoles-mairie-commune",
       "/planning-permanences-benevoles",
     ])
     expect(audienceNav(true).map((l) => l.path)).toEqual([...AUDIENCE_PAGES.map((p) => p.path), AUDIENCE_INDEX_PATH])
@@ -167,6 +169,54 @@ describe.each(AUDIENCE_PAGES.map((p) => p.path))("audience page %s", (pagePath) 
     const site = linkSourcesToRoutes(read(page.source!))
     expect(site.match(/\]\(\/doc\/[a-z]/g)?.length ?? 0).toBeGreaterThanOrEqual(4)
     expect(site).toMatch(/\]\(\/videos\/[A-Z]/)
+  })
+})
+
+// #1325: the town hall page, a fifth audience page. Its hosting claims and links are the site's.
+describe("BENEVOLES-MAIRIE-COMMUNE.md, the town hall audience page (#1325)", () => {
+  const page = publicPage("/benevoles-mairie-commune")
+  const source = read(page.source!)
+  const parsed = parseFeaturesPage(source)
+
+  it("is the fifth audience page, after the sports page and before the weekly one", () => {
+    expect(AUDIENCE_PAGES.map((p) => p.path)).toEqual([
+      "/benevoles-fete-de-village",
+      "/benevoles-festival",
+      "/benevoles-manifestation-sportive",
+      "/benevoles-mairie-commune",
+      "/planning-permanences-benevoles",
+    ])
+  })
+
+  // The service's countries are FEATURES.md's: developed in Switzerland, hosted in France, with an
+  // encrypted backup in Switzerland. A page never claims another place for the same data.
+  it("names the same countries as FEATURES.md, encrypted backup in Switzerland included", () => {
+    const hosting = /développé en ([A-Za-zÀ-ÿ]+)[^.]*hébergé en ([A-Za-zÀ-ÿ]+)[^.]*sauvegarde chiffrée en ([A-Za-zÀ-ÿ]+)/i
+    const features = read("content/pages/FEATURES.md").match(hosting)?.slice(1)
+    expect(features).toEqual(["Suisse", "France", "Suisse"])
+    expect(source.match(hosting)?.slice(1)).toEqual(features)
+  })
+
+  it("has four questions under « Questions fréquentes » and ends on « Démarrer », like the other audience pages", () => {
+    const faq = parsed.sections.find((section) => section.id === "questions-frequentes")?.faq
+    expect(faq).toHaveLength(4)
+    expect(parsed.sections.at(-1)?.heading).toBe("Démarrer")
+  })
+
+  // Every relative link of the source is a file of the repository, and its anchor a heading of that
+  // file: `linkSourcesToRoutes` then turns it into the page's site link.
+  it("links only to source files that exist, anchors included", () => {
+    const links = [...source.matchAll(/\]\(([^)\s]+)\)/g)].map((match) => match[1])
+    const relative = links.filter((href) => !href.startsWith("/") && !href.startsWith("#") && !/^[a-z][a-z0-9+.-]*:/i.test(href))
+    expect(relative.length).toBeGreaterThan(0)
+    for (const href of relative) {
+      const [file, anchor] = href.split("#")
+      const target = path.resolve(path.dirname(page.source!), file)
+      expect(fs.existsSync(target), href).toBe(true)
+      if (!anchor) continue
+      const headings = [...read(path.relative(process.cwd(), target)).matchAll(/^#{1,6} +(.+?) *#*$/gm)].map((match) => slugifyHeading(match[1]))
+      expect(headings, href).toContain(anchor)
+    }
   })
 })
 

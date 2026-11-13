@@ -109,6 +109,9 @@ describe("the audience and pricing pages", () => {
     ])
     const index = graphOf(publicPageJsonLd("/pour-qui", BASE)).find((n) => n["@type"] === "BreadcrumbList")!
     expect((index.itemListElement as { name: string }[]).map((c) => c.name)).toEqual(["Accueil", "Pour qui ?"])
+    // #1325: the town hall page sits under the same index.
+    const townHall = graphOf(publicPageJsonLd("/benevoles-mairie-commune", BASE)).find((n) => n["@type"] === "BreadcrumbList")!
+    expect((townHall.itemListElement as { name: string }[]).map((c) => c.name)).toEqual(["Accueil", "Pour qui ?", "Mairies, communes et collectivités"])
   })
 
   it("describes the application on the pricing page, not on an audience page", () => {

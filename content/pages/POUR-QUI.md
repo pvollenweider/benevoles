@@ -1,6 +1,6 @@
 # Pour quelles associations ?
 
-benevol.app ne fait qu'une chose : le planning de vos bénévoles, de votre équipe ou de votre staff. Vous créez des postes et des créneaux, puis vous partagez un lien que chacun ouvre sur son téléphone pour choisir ses heures. Ce planning prend pourtant une forme différente d'une association à l'autre. Voici quatre situations courantes, et ce qui compte dans chacune.
+benevol.app ne fait qu'une chose : le planning de vos bénévoles, de votre équipe ou de votre staff. Vous créez des postes et des créneaux, puis vous partagez un lien que chacun ouvre sur son téléphone pour choisir ses heures. Ce planning prend pourtant une forme différente d'une association à l'autre. Voici cinq situations courantes, et ce qui compte dans chacune.
 
 <!-- actions -->
 - [Demander un espace](/inscription)
@@ -23,6 +23,12 @@ Plusieurs soirées, des créneaux qui passent minuit, le montage et le démontag
 Une matinée chargée : les dossards dès 7 h, un signaleur à chaque carrefour, le ravitaillement. Chaque bénévole doit savoir où se présenter, et vous, qui est arrivé.
 
 [Les bénévoles d'une manifestation sportive](BENEVOLES-MANIFESTATION-SPORTIVE.md)
+
+## Une fête communale ou un forum des associations
+
+La mairie et les sociétés locales sur un même planning : le service technique au montage, chaque société à son stand, et un lien par société pour mobiliser ses propres membres.
+
+[Les bénévoles d'une fête communale](BENEVOLES-MAIRIE-COMMUNE.md)
 
 ## Des permanences toute l'année
 

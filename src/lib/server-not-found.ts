@@ -47,6 +47,7 @@ export const STATIC_ROUTES: ReadonlySet<string> = new Set([
   "/benevoles-festival",
   "/benevoles-fete-de-village",
   "/benevoles-manifestation-sportive",
+  "/benevoles-mairie-commune",
   "/blog",
   "/doc",
   "/doc/admin",

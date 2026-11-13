@@ -17,7 +17,7 @@ const SUPER_ADMIN_PASSWORD = process.env.ADMIN_PASSWORD ?? "e2e-admin-password"
 test.describe("public pages", () => {
   // /videos and /videos/[id] (#644): the public video library, same accessibility bar as every other page.
   // The audience pages, their index and the pricing page (#872, #950).
-  for (const path of ["/", "/fonctionnalites", "/logiciel-planning-benevoles", "/pour-qui", "/benevoles-fete-de-village", "/benevoles-festival", "/benevoles-manifestation-sportive", "/planning-permanences-benevoles", "/tarifs", "/tableur-ou-outil-dedie", "/doc", "/doc/admin", "/doc/benevole", "/doc/creer-son-premier-evenement", "/doc/creer-un-evenement", "/doc/rappels", "/accessibilite", "/legal/privacy", "/legal/sous-traitance", "/legal/sous-traitants", "/videos", "/videos/EVENT_CREATE_BLANK"]) {
+  for (const path of ["/", "/fonctionnalites", "/logiciel-planning-benevoles", "/pour-qui", "/benevoles-fete-de-village", "/benevoles-festival", "/benevoles-manifestation-sportive", "/benevoles-mairie-commune", "/planning-permanences-benevoles", "/tarifs", "/tableur-ou-outil-dedie", "/doc", "/doc/admin", "/doc/benevole", "/doc/creer-son-premier-evenement", "/doc/creer-un-evenement", "/doc/rappels", "/accessibilite", "/legal/privacy", "/legal/sous-traitance", "/legal/sous-traitants", "/videos", "/videos/EVENT_CREATE_BLANK"]) {
     test(`${path} has no serious violation`, async ({ page }) => {
       await page.goto(path)
       await expect(page.getByRole("heading", { level: 1 })).toBeVisible()
