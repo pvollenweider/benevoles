@@ -1,0 +1,137 @@
+# Essai de benevol.app sur votre machine, sans le code source (#1333) :
+#
+#   curl -fO https://raw.githubusercontent.com/pvollenweider/benevoles/main/docker-compose.essai.yml
+#   docker compose -f docker-compose.essai.yml up
+#
+# Une fois l'application prête (une minute environ), un encadré « benevol.app est prêt » donne
+# l'adresse, le compte et son mot de passe ; à tout moment : docker compose -f docker-compose.essai.yml logs ready
+# Les emails envoyés arrivent sur http://localhost:8025 (Mailpit : aucun email ne sort de la
+# machine). Tout arrêter et effacer :
+#   docker compose -f docker-compose.essai.yml down -v
+#
+# POUR UN ESSAI SEULEMENT, jamais pour une installation réelle (voir docs/deploiement.md). Aucun
+# secret n'est écrit ici : au premier lancement, le service « keys » tire au hasard les clés de
+# session et de chiffrement et le mot de passe du super admin, et les garde dans un volume effacé
+# par `down -v`. Les ports ne répondent que sur cette machine (127.0.0.1).
+#
+# L'image `latest` est celle qui tourne sur benevol.app, construite pour amd64 : sur un Mac Apple
+# Silicon, Docker l'émule (démarrage un peu plus lent). Une installation qui dure épingle une
+# version (`sha-…` ou un digest), car `latest` applique les migrations au prochain `pull`.
+name: benevoles-essai
+
+services:
+  keys:
+    image: alpine:3.20
+    # Une fois : trois valeurs aléatoires, lisibles par l'utilisateur de l'application (uid 1001).
+    # Le mot de passe commence par « Essai- » et finit par « -7 » pour respecter les règles des
+    # mots de passe (majuscule, minuscule, chiffre, caractère spécial) quel que soit le tirage.
+    command:
+      - sh
+      - -c
+      - |
+        set -e
+        rnd() { head -c "$$1" /dev/urandom | base64 | tr -d '/+=\n'; }
+        if [ ! -s /keys/keys.env ]; then
+          {
+            echo "export AUTH_SECRET=$$(rnd 32)"
+            echo "export TOKEN_ENCRYPTION_KEY=$$(head -c 32 /dev/urandom | base64)"
+            echo "export ADMIN_PASSWORD=Essai-$$(rnd 12)-7"
+          } > /keys/keys.env
+        fi
+        chown 1001 /keys/keys.env
+        chmod 400 /keys/keys.env
+    volumes:
+      - keys:/keys
+
+  postgres:
+    image: postgres:16-alpine
+    environment:
+      POSTGRES_DB: benevoles
+      POSTGRES_USER: benevoles
+      # Base joignable par l'application seule (aucun port publié) : valeur d'essai.
+      POSTGRES_PASSWORD: essai
+    volumes:
+      - postgres:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U benevoles"]
+      interval: 5s
+      timeout: 5s
+      retries: 10
+
+  mailpit:
+    image: axllent/mailpit:latest
+    ports:
+      - "127.0.0.1:8025:8025"
+
+  app:
+    image: ghcr.io/pvollenweider/benevoles:latest
+    platform: linux/amd64
+    # Lit les valeurs tirées par « keys » avant le démarrage habituel de l'image.
+    entrypoint: ["sh", "-c", ". /keys/keys.env && exec docker-entrypoint.sh \"$$@\"", "--"]
+    command: ["node", "server.js"]
+    ports:
+      - "127.0.0.1:3000:3000"
+    environment:
+      POSTGRES_HOST: postgres
+      POSTGRES_DB: benevoles
+      POSTGRES_USER: benevoles
+      POSTGRES_PASSWORD: essai
+      # AUTH_URL fixe l'adresse que la connexion accepte : pas d'AUTH_TRUST_HOST, qui ferait
+      # confiance à l'en-tête Host de la requête.
+      NEXT_PUBLIC_APP_URL: http://localhost:3000
+      AUTH_URL: http://localhost:3000
+      HOSTED_SERVICE: "false"
+      SMTP_HOST: mailpit
+      SMTP_PORT: "1025"
+      SMTP_SECURE: "false"
+      EMAIL_FROM: essai@example.org
+      # Premier super admin, créé au premier démarrage (src/lib/admin-bootstrap.ts), avec le mot
+      # de passe tiré par « keys » (lu dans /keys/keys.env).
+      ADMIN_EMAIL: admin@example.org
+      ADMIN_NAME: Essai
+    volumes:
+      - keys:/keys:ro
+    # Prête quand ses pages publiques sont préchauffées (/api/health/ready).
+    healthcheck:
+      test: ["CMD", "node", "-e", "fetch('http://localhost:3000/api/health/ready').then((r) => process.exit(r.ok ? 0 : 1), () => process.exit(1))"]
+      interval: 5s
+      timeout: 5s
+      retries: 60
+      start_period: 20s
+    depends_on:
+      keys:
+        condition: service_completed_successfully
+      postgres:
+        condition: service_healthy
+      mailpit:
+        condition: service_started
+
+  # Dernier message de `up` : où aller et avec quel compte, une fois l'application prête.
+  ready:
+    image: alpine:3.20
+    command:
+      - sh
+      - -c
+      - |
+        pw=$$(sed -n 's/^export ADMIN_PASSWORD=//p' /keys/keys.env)
+        echo ""
+        echo "=========================================================="
+        echo " benevol.app est prêt"
+        echo ""
+        echo " Ouvrir        http://localhost:3000/admin"
+        echo " Compte        admin@example.org"
+        echo " Mot de passe  $$pw"
+        echo " Emails        http://localhost:8025"
+        echo ""
+        echo " La première connexion demande d'activer la double"
+        echo " authentification (application d'authentification)."
+        echo "=========================================================="
+    volumes:
+      - keys:/keys:ro
+    depends_on:
+      app:
+        condition: service_healthy
+
+volumes:
+  keys:
+  postgres:
