@@ -53,6 +53,15 @@ L'outil s'en tient au planning des bénévoles. Il ne gère ni adhésions, ni co
 - « Application mobile » : tout se passe dans le navigateur.
 - « Affecte automatiquement les bénévoles » : chacun choisit ses créneaux ; une proposition de répartition existe en bêta et reste un brouillon tant que l'organisation ne la publie pas.
 
+## Logo
+
+Le logo est un carré bleu marine aux coins arrondis, avec trois barres horizontales décalées, comme des créneaux sur un planning : deux blanches et une bleu clair au milieu.
+
+- [Logo au format SVG](/presse/benevol-app-logo.svg), à préférer : il reste net à toutes les tailles.
+- [Logo au format PNG, 512 × 512 pixels](/presse/benevol-app-logo-512.png).
+
+Il s'utilise pour parler de benevol.app ou renvoyer vers le service, tel quel : sans le déformer, le recadrer ni changer ses couleurs, et sans le combiner à un autre logo comme s'il s'agissait d'un partenariat. Le nom s'écrit à côté, en texte, comme indiqué plus haut.
+
 ## Contact et code source
 
-Pour une question, une correction ou une demande de logo et de captures d'écran, écrivez à [contact@benevol.app](mailto:contact@benevol.app). Le code source est publié sur [GitHub](https://github.com/pvollenweider/benevoles).
+Pour une question, une correction ou une demande de captures d'écran, écrivez à [contact@benevol.app](mailto:contact@benevol.app). Le code source est publié sur [GitHub](https://github.com/pvollenweider/benevoles).

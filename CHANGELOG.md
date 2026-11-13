@@ -20,6 +20,7 @@ Format basé sur [Keep a Changelog](https://keepachangelog.com/fr/1.0.0/).
 
 ### Modifié
 
+- La page « Citer benevol.app » propose le logo à télécharger (SVG et PNG) avec ses conditions d'utilisation ; dans le pied de page, son lien s'appelle « Presse » et rejoint la colonne du projet, à côté du code source.
 - Le filtre de la documentation cherche dans tout le texte des fiches, comprend les mots proches et les synonymes, et classe les résultats par pertinence (#1319).
 - **Vidéos de formation** : imprévus, règles d’accès aux postes et import des membres actualisés pour les besoins du jour J, « Je ne peux pas », les postes réservés par réponse et la suppression ou désactivation groupée ; les guides concernés et le billet de la 2.7 renvoient vers ces vidéos.
 - La page de confirmation d'une inscription par email affiche le nom et le téléphone que la confirmation enregistrera dans la fiche, et dit quoi faire si la demande ne vient pas de vous.
