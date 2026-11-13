@@ -13,10 +13,25 @@ benevol.app est un logiciel libre de planning pour bénévoles : l'association p
 ## Trois façons de s'en servir
 
 - **Utiliser le service hébergé.** Il est gratuit aujourd'hui, sans abonnement ni fonction payante : [demandez un espace](https://www.benevol.app/inscription), puis suivez [Créer son premier événement](content/guide/creer-son-premier-evenement.md). La page [Tarifs](https://www.benevol.app/tarifs) dit ce qui est compris et comment le projet est financé.
-- **L'installer sur votre serveur.** Le code est libre, sous licence AGPL : voir [Déploiement](docs/deploiement.md) et [Configuration](docs/configuration.md).
+- **L'installer sur votre serveur.** Le code est libre, sous licence AGPL : voir [Déploiement](docs/deploiement.md) et [Configuration](docs/configuration.md), ou [l'essayer d'abord sur votre machine](#essayer-sur-votre-machine).
 - **Contribuer.** [CONTRIBUTING.md](CONTRIBUTING.md) décrit la mise en place, les conventions et les tests ; le [démarrage rapide](#démarrage-rapide-dev) est plus bas.
 
 Si vous utilisez benevol.app et voulez soutenir son développement, un café est toujours apprécié : [buymeacoffee.com/benevol.app](https://buymeacoffee.com/benevol.app).
+
+## Essayer sur votre machine
+
+Avec Docker, sans télécharger le code :
+
+```bash
+curl -O https://raw.githubusercontent.com/pvollenweider/benevoles/main/docker-compose.essai.yml
+docker compose -f docker-compose.essai.yml up
+```
+
+Au bout d'une minute environ, ouvrez http://localhost:3000/admin et connectez-vous avec `admin@example.org` et le mot de passe `Essai-Benevol-2026!`. Ce compte de super admin demande d'activer la double authentification : gardez une application d'authentification sous la main (Aegis, Google Authenticator, un gestionnaire de mots de passe). Créez ensuite une organisation depuis l'espace super admin. Les emails envoyés par l'application arrivent sur http://localhost:8025, sans quitter votre machine.
+
+Pour tout arrêter et effacer : `docker compose -f docker-compose.essai.yml down -v`.
+
+Ce fichier sert à essayer, pas à installer : le mot de passe est public et l'application ne l'accepte que sur `localhost`, et l'image `latest` change à chaque mise à jour du service. Pour une vraie installation, voir [Déploiement](docs/deploiement.md). Sur un Mac Apple Silicon, l'image (construite pour amd64) tourne en émulation, un peu plus lentement.
 
 ## Documentation
 

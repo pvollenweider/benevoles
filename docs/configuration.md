@@ -124,7 +124,7 @@ Une instance auto-hébergée démarrée depuis l'image publiée n'a pas de seed.
 | Variable | Requis | Description |
 |----------|--------|-------------|
 | `ADMIN_EMAIL` | pour créer | Adresse de connexion du premier super admin, normalisée comme à la connexion (espaces retirés, minuscules). Doit être une adresse sans compte existant. Si une seule des deux variables `ADMIN_EMAIL` / `ADMIN_PASSWORD` est définie, le démarrage ne crée rien et signale celle qui manque ; sans les deux, il ne fait rien. |
-| `ADMIN_PASSWORD` | pour créer | Mot de passe initial, soumis aux règles de tous les mots de passe (10 caractères, majuscule, minuscule, chiffre, caractère spécial, 72 octets au plus). Jamais écrit dans les journaux. Une fois le compte créé, le modifier ici n'a plus d'effet : le mot de passe se change depuis « Mon profil ». |
+| `ADMIN_PASSWORD` | pour créer | Mot de passe initial, soumis aux règles de tous les mots de passe (10 caractères, majuscule, minuscule, chiffre, caractère spécial, 72 octets au plus). Jamais écrit dans les journaux. Le mot de passe public de `docker-compose.essai.yml` n'est accepté que si `NEXT_PUBLIC_APP_URL` est une adresse locale (`localhost`, `127.x.x.x`, `[::1]`). Une fois le compte créé, le modifier ici n'a plus d'effet : le mot de passe se change depuis « Mon profil ». |
 | `ADMIN_NAME` | non | Nom affiché du compte. Défaut « Administrateur ». |
 
 ## Seed (`npm run db:seed`)

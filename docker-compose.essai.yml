@@ -1,0 +1,96 @@
+# Essai de benevol.app sur votre machine, sans le code source (#1333) :
+#
+#   curl -O https://raw.githubusercontent.com/pvollenweider/benevoles/main/docker-compose.essai.yml
+#   docker compose -f docker-compose.essai.yml up
+#
+# Puis ouvrir http://localhost:3000/admin (compte ci-dessous) et lire les emails envoyés sur
+# http://localhost:8025 (Mailpit : aucun email ne sort de la machine). Tout arrêter et effacer :
+#   docker compose -f docker-compose.essai.yml down -v
+#
+# POUR UN ESSAI SEULEMENT, jamais pour une installation réelle (voir docs/deploiement.md) :
+# - le mot de passe du super admin est écrit ici, donc public. L'application ne l'accepte que sur
+#   une adresse locale (NEXT_PUBLIC_APP_URL sur localhost), et les ports ne répondent que sur cette
+#   machine (127.0.0.1) ;
+# - les clés de session et de chiffrement ne sont pas écrites ici : le service « keys » les tire au
+#   hasard au premier lancement et les garde dans un volume, effacé par `down -v`.
+#
+# L'image `latest` est celle qui tourne sur benevol.app, construite pour amd64 : sur un Mac Apple
+# Silicon, Docker l'émule (démarrage un peu plus lent). Une installation qui dure épingle une
+# version (`sha-…` ou un digest), car `latest` applique les migrations au prochain `pull`.
+name: benevoles-essai
+
+services:
+  keys:
+    image: alpine:3.20
+    # Une fois : deux valeurs aléatoires, lisibles par l'utilisateur de l'application (uid 1001).
+    command:
+      - sh
+      - -c
+      - |
+        set -e
+        if [ ! -s /keys/keys.env ]; then
+          printf 'export AUTH_SECRET=%s\nexport TOKEN_ENCRYPTION_KEY=%s\n' \
+            "$$(head -c 32 /dev/urandom | base64)" "$$(head -c 32 /dev/urandom | base64)" > /keys/keys.env
+        fi
+        chown 1001 /keys/keys.env
+        chmod 400 /keys/keys.env
+    volumes:
+      - keys:/keys
+
+  postgres:
+    image: postgres:16-alpine
+    environment:
+      POSTGRES_DB: benevoles
+      POSTGRES_USER: benevoles
+      # Base joignable par l'application seule (aucun port publié) : valeur d'essai.
+      POSTGRES_PASSWORD: essai
+    volumes:
+      - postgres:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U benevoles"]
+      interval: 5s
+      timeout: 5s
+      retries: 10
+
+  mailpit:
+    image: axllent/mailpit:latest
+    ports:
+      - "127.0.0.1:8025:8025"
+
+  app:
+    image: ghcr.io/pvollenweider/benevoles:latest
+    platform: linux/amd64
+    entrypoint: ["sh", "-c", ". /keys/keys.env && exec docker-entrypoint.sh \"$$@\"", "--"]
+    command: ["node", "server.js"]
+    ports:
+      - "127.0.0.1:3000:3000"
+    environment:
+      POSTGRES_HOST: postgres
+      POSTGRES_DB: benevoles
+      POSTGRES_USER: benevoles
+      POSTGRES_PASSWORD: essai
+      NEXT_PUBLIC_APP_URL: http://localhost:3000
+      AUTH_URL: http://localhost:3000
+      AUTH_TRUST_HOST: "true"
+      HOSTED_SERVICE: "false"
+      SMTP_HOST: mailpit
+      SMTP_PORT: "1025"
+      SMTP_SECURE: "false"
+      EMAIL_FROM: essai@example.org
+      # Premier super admin, créé au premier démarrage (src/lib/admin-bootstrap.ts).
+      ADMIN_EMAIL: admin@example.org
+      ADMIN_PASSWORD: "Essai-Benevol-2026!"
+      ADMIN_NAME: Essai
+    volumes:
+      - keys:/keys:ro
+    depends_on:
+      keys:
+        condition: service_completed_successfully
+      postgres:
+        condition: service_healthy
+      mailpit:
+        condition: service_started
+
+volumes:
+  keys:
+  postgres:

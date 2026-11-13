@@ -22,6 +22,15 @@ Le `Dockerfile` est multi-étapes (`node:26-alpine`) :
 
 Au démarrage, `docker-entrypoint.sh` attend PostgreSQL, exécute `prisma migrate deploy` sauf si `MIGRATE_ON_START=false`, puis lance `node server.js` et, en arrière-plan, le préchauffage de ses pages publiques (voir [Préchauffage avant la mise en service](#préchauffage-avant-la-mise-en-service)). Avec Docker Compose, les migrations s'appliquent donc au démarrage de l'application. Sur Kubernetes, les pods de l'application ont `MIGRATE_ON_START=false` : c'est le Job de migration qui les applique, une seule fois par déploiement (voir ci-dessous).
 
+### Images publiées
+
+Le paquet `ghcr.io/pvollenweider/benevoles` est public : `docker pull` ne demande pas de compte. Images construites pour amd64 seulement (un Mac Apple Silicon les émule).
+
+- `sha-<7 premiers caractères du commit>` : une image par push sur `main`, contrôles réussis ou non. Seules celles dont les contrôles passent sont déployées.
+- `latest` : l'image qui tourne sur benevol.app, déplacée par `deploy.yml` après un déploiement réussi, jamais à la construction ; « Refuse an older version » l'empêche de revenir en arrière.
+
+Une installation qui dure épingle un `sha-…` ou un digest (`docker inspect --format '{{index .RepoDigests 0}}' <image>`) : un `latest` qui bouge applique les migrations au `pull` suivant. `docker-compose.essai.yml` (#1333) utilise `latest` pour un essai local, décrit dans le README (« Essayer sur votre machine »).
+
 ## Docker Compose
 
 Nouvelle installation : placer les secrets dans un fichier `.env` à côté de `docker-compose.yml` (lu par Compose, à ne jamais commiter), puis lancer la stack.
