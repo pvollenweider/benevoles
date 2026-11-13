@@ -8,7 +8,7 @@ import { docImageFile, docImageFromBytes, docImageTag, type DocImage } from "@/l
 import { linkSourcesToRoutes, splitTitle } from "@/lib/doc-pages"
 import { docVideoLink, docVideoPlayer, findVideoReferences, renderDocVideoCard, renderDocVideoSlot, splitAtDocVideoSlots, type DocUnitPart, type DocVideoPlayer } from "@/lib/doc-video-references"
 import { resolveVideoReference, videoMediaUrls, type Video } from "@/lib/video-catalog"
-import { parseFaqSource, parseFeaturesPage, plainAnswer, type FeatureAction, type FeatureBlock, type FeatureImage, type FeatureScreenshot, type FeatureStep } from "@/lib/features-page"
+import { parseFaqSource, parseFeaturesPage, plainAnswer, type FeatureAction, type FeatureBlock, type FeatureBlockSegment, type FeatureCitation, type FeatureImage, type FeatureScreenshot, type FeatureStep } from "@/lib/features-page"
 import { loadVideoCatalog } from "@/lib/video-catalog-load"
 import { homeSignupVideo, type HomeSignupVideo } from "@/lib/home-signup-video"
 import type { DocUnit } from "@/lib/doc-units"
@@ -173,9 +173,15 @@ export function renderRessource(guide: Pick<Ressource, "source" | "body">): stri
 /** A still of a video (its poster), as /fonctionnalites shows it: never a broken image. */
 export type FeatureStill = { src: string; width: number; height: number; alt: string }
 
+/** The text of a citation, drawn by the page with its copy button (#1323), never through the sanitizer. */
+export type RenderedCitation = FeatureCitation
+
+/** A block in reading order: its HTML, the inline players, and each citation where its directive stood. */
+export type RenderedFeaturePart = DocUnitPart | { kind: "citation"; citation: RenderedCitation }
+
 export type RenderedFeatureBlock = {
-  /** The block's HTML, cut where its videos go (the inline player in their place). */
-  parts: DocUnitPart[]
+  /** The block's HTML, cut where its videos and citations go. */
+  parts: RenderedFeaturePart[]
   actions: FeatureAction[]
   stills: FeatureStill[]
 }
@@ -225,9 +231,21 @@ function renderFeaturesPageNow(mediaBaseUrl: string | null | undefined, source: 
       players.set(id, player)
       return renderDocVideoSlot(id)
     }
-    const html = block.markdown ? renderEventPageMarkdown(linkSourcesToRoutes(block.markdown), { shiftHeadings: false, allowImages: true, videoCard: videoSlot }) : ""
+    const parts: RenderedFeaturePart[] = []
+    // Citations are drawn by the page, outside the sanitized Markdown HTML: each one cuts its
+    // block where its directive stood, so the heading above it and the text below keep their order.
+    const segments: FeatureBlockSegment[] = block.segments.length > 0 ? block.segments : [{ kind: "markdown", markdown: block.markdown }]
+    for (const segment of segments) {
+      if (segment.kind === "citation") {
+        parts.push({ kind: "citation", citation: segment.citation })
+        continue
+      }
+      if (!segment.markdown) continue
+      const html = renderEventPageMarkdown(linkSourcesToRoutes(segment.markdown), { shiftHeadings: false, allowImages: true, videoCard: videoSlot })
+      parts.push(...splitAtDocVideoSlots(html, players))
+    }
     return {
-      parts: splitAtDocVideoSlots(html, players),
+      parts,
       actions: block.actions,
       stills: [...block.images.map(still), ...block.screenshots.map(screenshot)].filter((s): s is FeatureStill => s !== null),
     }

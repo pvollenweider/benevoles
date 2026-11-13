@@ -20,6 +20,7 @@ docker-compose*.yml
 !content/pages/TARIFS.md
 !content/pages/TABLEUR-OU-OUTIL-DEDIE.md
 !content/pages/MANIFESTE.md
+!content/pages/CITER.md
 # The home's FAQ (#951, LANDING_FAQ_SOURCE in src/lib/landing-seo.ts), read at runtime too.
 !content/pages/FAQ-ACCUEIL.md
 !content/pages/ACCESSIBILITE.md

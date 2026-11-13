@@ -31,6 +31,7 @@ export async function llmsSources(full = false): Promise<LlmsSources | null> {
     base: apexBaseUrl(),
     summary: LANDING_DESCRIPTION,
     features: read("content/pages/FEATURES.md"),
+    citer: read("content/pages/CITER.md"),
     units: loadDocUnits(),
     repositoryUrl: REPOSITORY_URL,
     pages,

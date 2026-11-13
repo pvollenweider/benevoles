@@ -61,6 +61,7 @@ export const STATIC_ROUTES: ReadonlySet<string> = new Set([
   "/legal/terms",
   "/logiciel-planning-benevoles",
   "/manifeste",
+  "/citer",
   "/nouveautes",
   "/planning-permanences-benevoles",
   "/pour-qui",

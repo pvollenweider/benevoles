@@ -201,6 +201,20 @@ export const PUBLIC_PAGES: readonly PublicPage[] = [
     presentation: true,
   },
   {
+    // The citation page (#1323): the exact name, descriptions to quote as they are, and the facts
+    // each with its page. Its citations are rendered by FeaturesPage (src/lib/features-page.ts).
+    path: "/citer",
+    title: `Citer ${SITE_NAME}`,
+    summary: `Le nom exact, des descriptions à reprendre telles quelles et des faits vérifiables pour citer ${SITE_NAME}.`,
+    metaTitle: `Citer ${SITE_NAME} : nom, descriptions et faits`,
+    metaDescription: `Le nom exact de ${SITE_NAME}, des descriptions à reprendre telles quelles et des faits vérifiables pour citer le logiciel dans un article ou une fiche.`,
+    source: "content/pages/CITER.md",
+    priority: 0.4,
+    guide: false,
+    availability: "hosted",
+    presentation: true,
+  },
+  {
     // The practical guides (#1258): methods that also work without software, one page per guide at
     // /ressources/<slug> (src/lib/ressources.ts). The index renders this source's introduction, the
     // guides, then its editorial charter (dated, sourced, no claim the product does not support).
