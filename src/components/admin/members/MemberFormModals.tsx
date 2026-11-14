@@ -52,7 +52,7 @@ export function EditMemberModal({ member, onClose, onSaved, fallbackFocusOnClose
   const emailRef = useRef<HTMLInputElement>(null)
   // Only called from handlers, never during render.
   const elementFor = (f: FieldKey) => (f === "firstName" ? firstNameRef : f === "lastName" ? lastNameRef : emailRef).current
-  const { submit, busy, error, fail, isInvalid } = useSubmit()
+  const { submit, busy, error, fail, isInvalid, quiet, alertShown } = useSubmit()
 
   async function handleSubmit(e: React.FormEvent) {
     e.preventDefault()
@@ -98,7 +98,7 @@ export function EditMemberModal({ member, onClose, onSaved, fallbackFocusOnClose
           <input id={activeId} type="checkbox" checked={active} onChange={(e) => setActive(e.target.checked)} className="h-4 w-4" />
           <label htmlFor={activeId} className="text-sm text-gray-700">Membre actif</label>
         </div>
-        <FormStatus error={error} errorId={errorId} />
+        <FormStatus error={error} errorId={errorId} quiet={quiet} alertShown={alertShown} />
         <Actions busy={busy} onClose={onClose} label="Enregistrer" />
       </form>
     </ModalShell>
@@ -118,7 +118,7 @@ export function AddMemberModal({ onClose, onCreated }: { onClose: () => void; on
   const emailRef = useRef<HTMLInputElement>(null)
   // Only called from handlers, never during render.
   const elementFor = (f: FieldKey) => (f === "firstName" ? firstNameRef : f === "lastName" ? lastNameRef : emailRef).current
-  const { submit, busy, error, fail, isInvalid } = useSubmit()
+  const { submit, busy, error, fail, isInvalid, quiet, alertShown } = useSubmit()
 
   async function handleSubmit(e: React.FormEvent) {
     e.preventDefault()
@@ -154,7 +154,7 @@ export function AddMemberModal({ onClose, onCreated }: { onClose: () => void; on
         <Field label="Téléphone" type="tel" value={phone} onChange={setPhone} autoComplete="off" />
         <Field label="Étiquettes (séparées par des virgules)" value={tags} onChange={setTags} placeholder="parent CM2, bar" hint={TAGS_HINT} />
         <AvailabilityFields periods={availability.periods} note={availability.note} onChange={setAvailability} />
-        <FormStatus error={error} errorId={errorId} />
+        <FormStatus error={error} errorId={errorId} quiet={quiet} alertShown={alertShown} />
         <Actions busy={busy} onClose={onClose} label="Créer" />
       </form>
     </ModalShell>

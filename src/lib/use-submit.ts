@@ -3,7 +3,7 @@
 // SPDX-FileCopyrightText: 2026 Philippe Vollenweider
 // SPDX-License-Identifier: AGPL-3.0-only
 
-import { useCallback, useRef, useState } from "react"
+import { useCallback, useEffect, useRef, useState } from "react"
 import { flushSync } from "react-dom"
 
 /**
@@ -12,10 +12,21 @@ import { flushSync } from "react-dom"
  * sentence, a network sentence when nothing answered, and a `fail(message, field)` that shows the
  * message, remembers which field (by key) it concerns and moves the focus to the element given once the message is in
  * the DOM, so the field is announced with its description.
+ *
+ * `quiet` (#739, step 4) tells FormStatus not to use its alert: when `fail` moves the focus to the
+ * field, the field's description says the error, and the alert would say it a second time. The
+ * alert keeps errors about the field that already had the focus, and general errors.
+ *
+ * `alertShown` (#739, review) lets a repeated alert be emptied without unmounting its box: the
+ * message stays in `error` (wrapper and field description unchanged), only the alert span is
+ * blanked, then filled again a little later so the browser does not coalesce the two writes.
  */
 
 export const NETWORK_ERROR = "Impossible d'enregistrer. Vérifiez votre connexion et réessayez."
 export const GENERIC_ERROR = "Une erreur est survenue."
+
+/** A same-task refill may be coalesced by the browser and stay silent; a little later it is a new change. */
+const ALERT_REFILL_MS = 100
 
 export type SubmitOutcome<T> = { ok: true; data: T; status: number } | { ok: false; error: string; status: number | null }
 
@@ -44,23 +55,83 @@ export function useSubmit() {
   const [busy, setBusy] = useState(false)
   const [error, setError] = useState<string | null>(null)
   const [invalidField, setInvalidField] = useState<string | null>(null)
+  const [quiet, setQuiet] = useState(false)
+  // Keeps the visible box while the alert span alone is blanked for a repeated failure.
+  const [alertShown, setAlertShown] = useState(true)
   const [status, setStatus] = useState("")
+  // Whether the mounted alert already holds text, so a repeat is emptied before being filled again.
+  const alertHasTextRef = useRef(false)
+  // A refill waits for a later task; a newer failure or a reset must not be overwritten by it.
+  const refillRef = useRef<ReturnType<typeof setTimeout> | null>(null)
+
+  const cancelRefill = useCallback(() => {
+    if (refillRef.current !== null) {
+      clearTimeout(refillRef.current)
+      refillRef.current = null
+    }
+  }, [])
+
+  useEffect(() => cancelRefill, [cancelRefill])
 
   /**
-   * Shows an error; with a field, marks and focuses it. Cleared first so the same sentence is
-   * announced again; committed synchronously so the focused field already carries the message.
+   * Shows an error, with a field and an element to focus when it has one. When the focus moves to
+   * that element, the message is its description and stays out of the alert (a); when the field
+   * already had the focus (b), when there is no field (c) or no element to focus (d), the alert
+   * says it. When the alert already holds text, only its own text is emptied, the field stays
+   * marked (a focused field must not lose `aria-invalid` for a moment) and the box stays visible;
+   * the span is refilled after a short delay, since a browser may coalesce empty-then-identical
+   * text written in the same task and stay silent.
    */
   const fail = useCallback((message: string, field?: string, el?: HTMLElement | null) => {
-    flushSync(() => { setError(null); setInvalidField(null) })
-    flushSync(() => { setError(message); setInvalidField(field ?? null) })
-    el?.focus()
-  }, [])
+    cancelRefill()
+    const moves = !!el && document.activeElement !== el
+    if (moves) {
+      flushSync(() => {
+        setError(message)
+        setInvalidField(field ?? null)
+        setQuiet(true)
+        setAlertShown(true)
+      })
+      alertHasTextRef.current = false
+      el.focus()
+      // Focus refused (hidden field, read-only page): the alert says it after all.
+      if (document.activeElement !== el) {
+        flushSync(() => setQuiet(false))
+        alertHasTextRef.current = true
+      }
+      return
+    }
+    const showInAlert = () => {
+      flushSync(() => {
+        setError(message)
+        setInvalidField(field ?? null)
+        setQuiet(false)
+        setAlertShown(true)
+      })
+      alertHasTextRef.current = true
+    }
+    if (alertHasTextRef.current) {
+      // Keep `error` and `invalidField`: the wrapper stays visible and the field stays described.
+      setAlertShown(false)
+      alertHasTextRef.current = false
+      refillRef.current = setTimeout(() => {
+        refillRef.current = null
+        showInAlert()
+      }, ALERT_REFILL_MS)
+      return
+    }
+    showInAlert()
+  }, [cancelRefill])
 
   const reset = useCallback(() => {
+    cancelRefill()
+    alertHasTextRef.current = false
     setError(null)
     setInvalidField(null)
+    setQuiet(false)
+    setAlertShown(true)
     setStatus("")
-  }, [])
+  }, [cancelRefill])
 
   /** For `aria-invalid`: only the field the error is about, by its key (refs can't be read during render). */
   const isInvalid = useCallback((field: string) => (invalidField === field ? true : undefined), [invalidField])
@@ -76,27 +147,31 @@ export function useSubmit() {
   ): Promise<SubmitOutcome<T>> => {
     if (busyRef.current) return { ok: false, error: "", status: null }
     busyRef.current = true
+    cancelRefill()
+    alertHasTextRef.current = false
     setBusy(true)
     setError(null)
     setInvalidField(null)
+    setQuiet(false)
+    setAlertShown(true)
     setStatus("")
     try {
       const res = await request()
       if (!res.ok) {
         const error = await errorOf(res, opts.fallback)
-        if (!opts.silent) setError(error)
+        if (!opts.silent) { setError(error); alertHasTextRef.current = true }
         return { ok: false, error, status: res.status }
       }
       const data = opts.parse ? await opts.parse(res) : ((await res.json().catch(() => ({}))) as T)
       return { ok: true, data, status: res.status }
     } catch {
-      if (!opts.silent) setError(NETWORK_ERROR)
+      if (!opts.silent) { setError(NETWORK_ERROR); alertHasTextRef.current = true }
       return { ok: false, error: NETWORK_ERROR, status: null }
     } finally {
       busyRef.current = false
       setBusy(false)
     }
-  }, [])
+  }, [cancelRefill])
 
-  return { submit, busy, error, status, setStatus, fail, reset, isInvalid, invalidField }
+  return { submit, busy, error, status, setStatus, fail, reset, isInvalid, invalidField, quiet, alertShown }
 }

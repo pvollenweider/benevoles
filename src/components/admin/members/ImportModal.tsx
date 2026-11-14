@@ -43,7 +43,7 @@ export default function ImportModal({ onClose, onImported }: { onClose: () => vo
   const resultRef = useRef<HTMLParagraphElement>(null)
   const fileRef = useRef<HTMLInputElement>(null)
   const backToForm = useRef(false)
-  const { submit: run, busy, error, status, setStatus, fail, reset } = useSubmit()
+  const { submit: run, busy, error, status, setStatus, fail, reset, quiet, alertShown } = useSubmit()
 
   // Each step starts on its summary sentence, so it is read first; « Retour » goes back to the file.
   useEffect(() => {
@@ -167,7 +167,7 @@ export default function ImportModal({ onClose, onImported }: { onClose: () => vo
               </table>
             </div>
           )}
-          <FormStatus status={status} error={error} errorId={`${id}-error`} />
+          <FormStatus status={status} error={error} errorId={`${id}-error`} quiet={quiet} alertShown={alertShown} />
           <div className="flex flex-wrap justify-end gap-2">
             <button type="button" onClick={back} aria-disabled={busy || undefined} className={`text-sm px-4 py-2 text-gray-700 hover:text-gray-900 ${busyCls}`}>
               Retour
@@ -205,7 +205,7 @@ export default function ImportModal({ onClose, onImported }: { onClose: () => vo
                   type="file"
                   accept=".csv,.xlsx,application/vnd.openxmlformats-officedocument.spreadsheetml.sheet,text/csv"
                   onChange={(e) => setFile(e.target.files?.[0] ?? null)}
-                  aria-describedby={`${id}-file-name ${id}-file-help${error ? ` ${id}-error` : ""}`}
+                  aria-describedby={`${error ? `${id}-error ` : ""}${id}-file-name ${id}-file-help`}
                   aria-invalid={error && !file ? true : undefined}
                   className="absolute inset-0 h-full w-full cursor-pointer opacity-0"
                 />
@@ -229,7 +229,7 @@ export default function ImportModal({ onClose, onImported }: { onClose: () => vo
               </label>
             </div>
           </fieldset>
-          {!analysis && <FormStatus status={status} error={error} errorId={`${id}-error`} />}
+          {!analysis && <FormStatus status={status} error={error} errorId={`${id}-error`} quiet={quiet} alertShown={alertShown} />}
           <div className="flex justify-end gap-2">
             <button type="button" onClick={close} aria-disabled={busy || undefined} className={`text-sm px-4 py-2 text-gray-600 hover:text-gray-900 ${busyCls}`}>
               Annuler
