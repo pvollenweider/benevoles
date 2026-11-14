@@ -141,6 +141,7 @@ En savoir plus : [gérer les membres](../guide/gerer-les-membres.md), [doublons 
 
 - **Votre adresse**, du type `votre-association.benevol.app`, avec votre nom, votre logo et une couleur pour l'en-tête de vos pages.
 - **Votre charte du bénévole**, à accepter avant de s'inscrire, et des pages d'information pour chaque événement : accès, FAQ, règlement.
+- **Une page pour les bénévoles d'un poste** : rattachez une page d'information à un ou plusieurs postes ; les personnes qui ont une place confirmée reçoivent son lien avant leur créneau, dans la confirmation, les rappels et leur page Mes inscriptions, sans que la page cesse d'être publique.
 - **Votre fuseau horaire**, pour que rappels et horaires tombent juste.
 
 En savoir plus : [personnaliser l'organisation](../guide/personnaliser-l-organisation.md), [la charte du bénévole](../guide/charte-du-benevole.md).

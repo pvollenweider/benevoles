@@ -24,6 +24,10 @@ export const sectorLeaderLabel = (count: number) => (count > 1 ? "Responsables d
 export const EMERGENCY_NOTE = "En cas d'urgence, appelle les numéros d'urgence officiels : ce contact ne les remplace pas."
 
 import { coordinatesOf, MAP_LINK_LABEL, osmLink } from "@/lib/map-link"
+import { READ_BEFORE_LABEL } from "@/lib/event-page-postes"
+
+/** An information page to read before the shift (#1324): title and absolute URL only. */
+export type ReadBeforePage = { title: string; url: string }
 
 export type ShiftInfo = {
   locationDetails?: string | null
@@ -47,6 +51,12 @@ export type ShiftInfo = {
   sectorLeaderNames?: string[] | null
   /** « Repas sur le pouce possible » (#1171, lot 2): the meal can be taken during the mission. */
   mealOnTheGo?: boolean | null
+  /**
+   * Information pages attached to this shift's poste (#1324), for a confirmed place only: the
+   * link is shown with the shift's practical information, never the page content. Resolved at
+   * send time for emails; set per confirmed registration on the personal page.
+   */
+  readBefore?: ReadBeforePage[] | null
 }
 
 /** What a volunteer reads about a mission marked « repas sur le pouce possible ». */
@@ -130,23 +140,52 @@ export function shiftInfoLines(info: ShiftInfo): ShiftInfoLine[] {
   return lines
 }
 
-export function hasShiftInfo(info: ShiftInfo): boolean {
-  return shiftInfoLines(info).length > 0
+/** The pages to read before the shift, ignoring a blank title or URL. */
+export function readBeforePages(info: ShiftInfo): ReadBeforePage[] {
+  return (info.readBefore ?? []).filter((p) => clean(p.title) && clean(p.url))
 }
 
-/** Plain-text lines for emails: « Lieu : Entrée B. Voir sur la carte : https://… ». */
+export function hasShiftInfo(info: ShiftInfo): boolean {
+  return shiftInfoLines(info).length > 0 || readBeforePages(info).length > 0
+}
+
+/**
+ * Plain-text lines for emails: « Lieu : Entrée B. Voir sur la carte : https://… » and, for a
+ * page attached to the shift's poste, « À lire avant ton créneau : Tenir la caisse : https://… ».
+ */
 export function shiftInfoText(info: ShiftInfo): string[] {
   // A place already ending with . ! or ? keeps its own punctuation instead of getting « .. ».
-  return shiftInfoLines(info).map((l) => l.href
-    ? `${l.label} : ${l.text.replace(/[.!?…]+$/, "")}${/[!?…]$/.test(l.text) ? l.text.slice(-1) : "."} ${MAP_LINK_LABEL} : ${l.href}`
-    : `${l.label} : ${l.text}`)
+  return [
+    ...shiftInfoLines(info).map((l) => l.href
+      ? `${l.label} : ${l.text.replace(/[.!?…]+$/, "")}${/[!?…]$/.test(l.text) ? l.text.slice(-1) : "."} ${MAP_LINK_LABEL} : ${l.href}`
+      : `${l.label} : ${l.text}`),
+    ...readBeforePages(info).map((p) => `${READ_BEFORE_LABEL} : ${p.title} : ${p.url}`),
+  ]
+}
+
+/**
+ * The pages of every shift of an email, once each, put on the first shift: a grouped reminder
+ * shows a page one time even when several shifts belong to its poste (#1324). Other shifts lose
+ * their copy so the shared `shiftInfoText`/`shiftInfoHtml` helpers render it once.
+ */
+export function withReadBeforeOnce<T extends ShiftInfo>(shifts: readonly T[]): T[] {
+  const seen = new Set<string>()
+  const pages: ReadBeforePage[] = []
+  for (const shift of shifts) {
+    for (const page of readBeforePages(shift)) {
+      if (seen.has(page.url)) continue
+      seen.add(page.url)
+      pages.push(page)
+    }
+  }
+  return shifts.map((shift, i) => ({ ...shift, readBefore: i === 0 ? pages : [] }))
 }
 
 /**
  * The same fields picked from a shift row, for a notification payload. With the event, a shift
  * without its own coordinates takes the event's (#191).
  */
-export function pickShiftInfo<T extends ShiftInfo>(s: T, event?: { latitude?: number | null; longitude?: number | null } | null): Required<Omit<ShiftInfo, "dayContactName" | "dayContactPhone" | "sectorLeaderNames" | "mealOnTheGo">> & Pick<ShiftInfo, "mealOnTheGo"> {
+export function pickShiftInfo<T extends ShiftInfo>(s: T, event?: { latitude?: number | null; longitude?: number | null } | null): Required<Omit<ShiftInfo, "dayContactName" | "dayContactPhone" | "sectorLeaderNames" | "mealOnTheGo" | "readBefore">> & Pick<ShiftInfo, "mealOnTheGo"> {
   const coords = coordinatesOf(s) ?? coordinatesOf(event)
   return {
     locationDetails: s.locationDetails ?? null,

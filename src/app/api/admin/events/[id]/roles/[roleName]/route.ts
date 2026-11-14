@@ -16,6 +16,7 @@ import { leaderRenamePlan } from "@/lib/sector-leader-rename"
 import { isCivilDate } from "@/lib/civil-date"
 import { groupShiftWrites, labelUpdates, posteApplyCount, posteApplyTargets } from "@/lib/poste-apply"
 import { removeRoleFromScope, renameRoleInScope } from "@/lib/question-scope"
+import { removeRoleFromPage, renameRoleInPage } from "@/lib/event-page-postes"
 import { assignPosteSector } from "@/lib/sector-adoption"
 import { endSwapsAfter, endSwapsIn } from "@/lib/shift-swap-server"
 import { checkScheduleEdit, scheduleEditRefusalBody, ScheduleEditRefusalError } from "@/lib/workload-guard"
@@ -36,6 +37,24 @@ async function updateGroupLinks(
     select: { id: true, roleNames: true },
   })
   for (const l of links) await db.eventGroupLink.update({ where: { id: l.id }, data: { roleNames: next(l.roleNames) } })
+}
+
+/**
+ * Information pages attached to postes (#1324) name them too: a rename follows, a deletion removes
+ * the name, exactly like a group link. The attachment is never public (src/lib/public-event.ts).
+ */
+async function updatePagePostes(
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  db: any,
+  eventId: string,
+  role: string,
+  next: (roleNames: string[]) => string[],
+) {
+  const pages: { id: string; roleNames: string[] }[] = await db.eventPage.findMany({
+    where: { eventId, roleNames: { has: role } },
+    select: { id: true, roleNames: true },
+  })
+  for (const page of pages) await db.eventPage.update({ where: { id: page.id }, data: { roleNames: next(page.roleNames) } })
 }
 
 /**
@@ -218,6 +237,7 @@ export async function PATCH(req: Request, { params }: { params: Promise<{ id: st
       // A renamed poste is a material change of its shifts (#1174 E13): their swap requests end.
       await endSwapsIn(tx, { shiftIds: shifts.map((s) => s.id) }, "shift_changed", actor)
       await updateGroupLinks(tx, id, decodedRole, (names) => renameRoleInLink(names, decodedRole, newName))
+      await updatePagePostes(tx, id, decodedRole, (names) => renameRoleInPage(names, decodedRole, newName))
       await tx.eventQuestion.updateMany({ where: { eventId: id, roleName: decodedRole }, data: { roleName: newName } })
       await updateQuestionScopes(tx, id, decodedRole, (names) => renameRoleInScope(names, decodedRole, newName))
       const [moving, atTarget] = await Promise.all([
@@ -420,6 +440,7 @@ export async function DELETE(_req: Request, { params }: { params: Promise<{ id: 
     unpublished ||= result.unpublished
   }
   await updateGroupLinks(db, id, decodedRole, (names) => removeRoleFromLink(names, decodedRole))
+  await updatePagePostes(db, id, decodedRole, (names) => removeRoleFromPage(names, decodedRole))
   // Questions attached to the role (#984, part 3) go back to the organisers, as a deleted reference would.
   // Its sector leaders stay: deleting a poste cancels its shifts, which keep their name, and the
   // leaders stay attached to it until removed from « Responsables de secteur » (#1001).

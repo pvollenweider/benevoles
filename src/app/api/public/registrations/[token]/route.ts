@@ -20,6 +20,7 @@ import { contactPhone } from "@/lib/contact-phone"
 import { registrationToken } from "@/lib/token-vault"
 import { calendarFeedKeyFromEnv, calendarFeedToken, calendarFeedUrls } from "@/lib/calendar-feed"
 import { pickShiftInfo, withDayContact, withSectorLeaders } from "@/lib/shift-info"
+import { pagesForPostes } from "@/lib/event-page-postes"
 import { LIVE_STATUSES, OCCUPYING_STATUSES } from "@/lib/registration-capacity"
 import { WITHDRAWABLE_STATUSES, planVolunteerWithdraw } from "@/lib/volunteer-withdraw"
 import { withdrawRequestSchema } from "@/lib/volunteer-withdraw-schema"
@@ -62,7 +63,7 @@ export async function GET(req: Request, { params }: { params: Promise<{ token: s
           workloadProtectionEnabled: true, workloadPolicy: true, startDate: true,
           // Whether a sign-up for more shifts is possible (#988).
           endDate: true, registrationsOpen: true, registrationOpensAt: true, registrationClosesAt: true,
-          pages: { select: { slug: true, title: true }, orderBy: { displayOrder: "asc" } },
+          pages: { select: { slug: true, title: true, roleNames: true }, orderBy: { displayOrder: "asc" } },
           // The sector leaders' names only (#560): never their email nor their link.
           sectorLeaders: { select: { roleName: true, name: true } },
           organization: { select: { slug: true, timeZone: true, replyToEmail: true, ...ORG_LIFECYCLE_SELECT } },
@@ -110,6 +111,13 @@ export async function GET(req: Request, { params }: { params: Promise<{ token: s
   const publicUrl = eventPublicUrl(orgSlug, event.slug)
   const groupCode = volunteerGroupCode(allRegistrations, registration.id)
   const feedKey = calendarFeedKeyFromEnv()
+  // Pages attached to a poste (#1324), for a confirmed place only, and only while the event is
+  // published: the page opens on its public URL. A page attached to no poste stays in the general
+  // « Infos de l'événement » list instead.
+  const readBeforeFor = (roleName: string) =>
+    event.publicStatus === "published"
+      ? pagesForPostes(event.pages, [roleName]).map((p) => ({ title: p.title, url: `${eventUrl}/${p.slug}` }))
+      : []
   return NextResponse.json({
     // What the « Avant ta mission » block falls back on (#560). The information pages only
     // open once the event is published: no link to a page that would answer 404.
@@ -178,7 +186,7 @@ export async function GET(req: Request, { params }: { params: Promise<{ token: s
         // sector leaders are named, for a confirmed place only: never shown to someone on a
         // waitlist or awaiting approval.
         ...(r.status === "active"
-          ? withSectorLeaders(withDayContact(pickShiftInfo(r.shift, event), event), r.shift.roleName, event.sectorLeaders)
+          ? { ...withSectorLeaders(withDayContact(pickShiftInfo(r.shift, event), event), r.shift.roleName, event.sectorLeaders), readBefore: readBeforeFor(r.shift.roleName) }
           : pickShiftInfo(r.shift, event)),
       },
     })),

@@ -9,6 +9,7 @@ import { duplicatedParent } from "./question-follow-up"
 import { duplicatedScope } from "./question-scope"
 import { leadersForCopy } from "./leader-postes"
 import { buildPolicy, parseWorkloadPolicy, policyValues, type WorkloadPolicy } from "./workload-policy"
+import { cleanPageRoleNames } from "./event-page-postes"
 
 /**
  * Event duplication with explicit choices (#378, on top of #356). The organizer picks a title,
@@ -120,7 +121,7 @@ export type DuplicableEvent = {
   cancelDeadlineHours?: number | null
   showSchedule: unknown
   shifts: DuplicableShift[]
-  pages: { slug: string; title: string; content: string; displayOrder: number }[]
+  pages: { slug: string; title: string; content: string; displayOrder: number; roleNames?: string[] }[]
   /** Active custom questions (#483); copied with the registration settings, never their answers. */
   questions?: { id?: string; label: string; type: string; options: string[]; required: boolean; position: number; roleName?: string | null; minValue?: number | null; maxValue?: number | null; parentId?: string | null; showIfValues?: string[]; displayScope?: string | null; displayRoleNames?: string[] | null }[]
   /** A poste (`roleName`) or, since #1169, a sector (`sectorId`) leader. */
@@ -322,7 +323,18 @@ export function duplicatePlan(source: DuplicableEvent, options: DuplicateOptions
     places: places.map(({ id, name, displayOrder }) => ({ id, name, displayOrder })),
     shifts,
     recurrences,
-    pages: copy.pages ? source.pages.map((p) => ({ slug: p.slug, title: p.title, content: p.content, displayOrder: p.displayOrder })) : [],
+    // The postes a page is attached to (#1324) follow only when the copy takes the shifts: a page
+    // copied without them is a general information page, never attached to a poste the copy
+    // doesn't have. A name no copied shift carries is dropped, like a stale group-link role.
+    pages: copy.pages
+      ? source.pages.map((p) => ({
+          slug: p.slug,
+          title: p.title,
+          content: p.content,
+          displayOrder: p.displayOrder,
+          roleNames: copy.shifts ? cleanPageRoleNames(p.roleNames ?? [], [...copiedRoles]) : [],
+        }))
+      : [],
     questions,
     // Never the leaders of a deleted poste (#1010): they would get a link to a poste the copy
     // doesn't have. A poste typed before its shifts exist still follows. A sector leader (#1169)

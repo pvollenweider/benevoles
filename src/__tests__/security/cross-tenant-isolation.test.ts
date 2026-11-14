@@ -190,6 +190,15 @@ function mockScopedDb(overrides: DbOverrides = {}) {
       delete: vi.fn(),
       ...((overrides.eventGroupLink as object) ?? {}),
     },
+    eventPage: {
+      findMany: vi.fn().mockResolvedValue([]),
+      findFirst: vi.fn().mockResolvedValue(null),
+      create: vi.fn(),
+      update: vi.fn(),
+      updateMany: vi.fn(),
+      delete: vi.fn(),
+      ...((overrides.eventPage as object) ?? {}),
+    },
     eventMilestone: {
       findFirst: vi.fn().mockResolvedValue(null),
       update: vi.fn(),

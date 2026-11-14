@@ -18,7 +18,7 @@ const source: DuplicableEvent = {
   cancelDeadlineDays: 2, cancelDeadlineHours: 6,
   showSchedule: [{ name: "Concert", date: "2026-07-04", startTime: "20:00", endTime: "22:00" }],
   shifts: [shift, { ...shift, date: new Date("2026-07-05T00:00:00Z") }],
-  pages: [{ slug: "faq", title: "FAQ", content: "x", displayOrder: 0 }],
+  pages: [{ slug: "faq", title: "FAQ", content: "x", displayOrder: 0, roleNames: ["Bar"] }],
   questions: [{ id: "q1", label: "Permis de conduire", type: "yesno", options: [], required: false, position: 0, displayScope: "event" }],
   leaders: [{ roleName: "Bar", name: "Léa", email: "lea@x.ch" }],
 }
@@ -48,6 +48,20 @@ describe("duplicatePlan", () => {
     expect(plan.shifts).toHaveLength(2)
     expect(plan.pages).toEqual(source.pages)
     expect(plan.leaders).toEqual([])
+  })
+
+  it("copies the postes a page is attached to when the shifts are copied (#1324)", () => {
+    const plan = duplicatePlan(source, { copy: { shifts: true, pages: true } })
+    expect(plan.pages[0].roleNames).toEqual(["Bar"])
+    // A name no copied shift carries is dropped, like a stale group-link role.
+    const stale = { ...source, pages: [{ ...source.pages[0], roleNames: ["Bar", "Poste supprimé"] }] }
+    expect(duplicatePlan(stale, { copy: { shifts: true, pages: true } }).pages[0].roleNames).toEqual(["Bar"])
+  })
+
+  it("clears the attachments when the pages are copied without the shifts (#1324)", () => {
+    const plan = duplicatePlan(source, { copy: { shifts: false, pages: true } })
+    expect(plan.pages).toHaveLength(1)
+    expect(plan.pages[0].roleNames).toEqual([])
   })
 
   it("moves every date by the same offset: event, shifts, shows", () => {

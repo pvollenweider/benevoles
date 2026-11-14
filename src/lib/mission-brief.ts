@@ -11,7 +11,7 @@
 
 import { shiftInstants } from "./ics"
 import { coordinatesOf, osmLink } from "./map-link"
-import { onSiteContact, type OnSiteContact, type ShiftInfo } from "./shift-info"
+import { onSiteContact, readBeforePages, type ReadBeforePage, type OnSiteContact, type ShiftInfo } from "./shift-info"
 
 export const MISSION_BRIEF_TITLE = "Avant ta mission"
 /** Anchor of the block, for the link from its shift's card. */
@@ -42,6 +42,9 @@ export type MissionBrief = {
   /** Names of the role's sector leaders (#560), never their contact details. */
   leaders: string[]
   instructions: string | null
+  /** Pages attached to the shift's poste (#1324), to read before the mission. */
+  readBefore: ReadBeforePage[]
+  /** The event's general pages, without those already shown as « À lire avant ton créneau ». */
   pages: { title: string; url: string }[]
 }
 
@@ -81,11 +84,14 @@ export function missionBrief(shift: BriefShift, event: BriefEvent): MissionBrief
   const ownPlace = clean(shift.locationDetails)
   const coords = coordinatesOf(shift) ?? coordinatesOf(event)
   const placeText = ownPlace || clean(event.location) || (coords ? "Point de rendez-vous" : "")
+  const readBefore = readBeforePages(shift)
+  const shown = new Set(readBefore.map((p) => p.url))
   return {
     place: placeText ? { text: placeText, href: coords ? osmLink(coords) : null } : null,
     contact: onSiteContact(shift),
     leaders: (shift.sectorLeaderNames ?? []).map(clean).filter(Boolean),
     instructions: clean(shift.instructions) || clean(event.publicInstructions) || null,
-    pages: (event.pages ?? []).filter((p) => clean(p.title) && clean(p.url)),
+    readBefore,
+    pages: (event.pages ?? []).filter((p) => clean(p.title) && clean(p.url) && !shown.has(p.url)),
   }
 }

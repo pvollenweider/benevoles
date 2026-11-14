@@ -93,6 +93,7 @@ describe("buildSignupNotifications", () => {
     expect(confirmation.data).toEqual({
       volunteerName: "Ana Rossi",
       eventTitle: "Fête du village",
+      eventId: "ev1",
       shifts: [
         {
           label: "Créneau s1", roleName: "Bar", date: "14/07/2026", startTime: "10:00", endTime: "12:00",

@@ -15,6 +15,7 @@ import { requestJson, useSubmit } from "@/lib/use-submit"
 import ModalShell from "./ModalShell"
 import RequiredMark from "@/components/RequiredMark"
 import { outcomeClass } from "@/lib/status-message"
+import { pagePostesLine, posteChoiceLabel } from "@/lib/event-page-postes"
 
 export type EventPageRow = {
   id: string
@@ -22,7 +23,11 @@ export type EventPageRow = {
   title: string
   content: string
   displayOrder: number
+  roleNames: string[]
 }
+
+/** A poste the page can be attached to (#1324); `sector` null: « Autres postes ». */
+export type EventPagePoste = { name: string; sector: string | null }
 
 /** Ref callback body: keeps a map of buttons keyed by id while each is mounted (#554 pattern). */
 function setButtonRef(map: Map<string, HTMLButtonElement>, key: string, el: HTMLButtonElement | null) {
@@ -38,8 +43,17 @@ function reorderByIds(rows: EventPageRow[], order: string[]): EventPageRow[] {
   return [...ordered, ...extra]
 }
 
-export default function EventPagesManager({ eventId, initialPages }: { eventId: string; initialPages: EventPageRow[] }) {
+export default function EventPagesManager({ eventId, initialPages, postes, sectorsAdopted }: {
+  eventId: string
+  initialPages: EventPageRow[]
+  postes: EventPagePoste[]
+  sectorsAdopted: boolean
+}) {
   const [pages, setPages] = useState(initialPages)
+  // A stored name no live poste carries any more is never counted in the page list (#1324); the
+  // form still shows it, ticked, so the organiser can untick it.
+  const livePosteNames = new Set(postes.map((p) => p.name))
+  const attachedPostes = (page: EventPageRow) => pagePostesLine(page.roleNames.filter((name) => livePosteNames.has(name)))
   const [editing, setEditing] = useState<EventPageRow | "new" | null>(null)
   const [announcement, setAnnouncement] = useState("")
   // Deletion goes through a confirmation (#379); its failure stays in the dialog.
@@ -179,12 +193,13 @@ export default function EventPagesManager({ eventId, initialPages }: { eventId: 
       {pages.length > 0 && (
         <ul ref={listRef} role="list" aria-label="Ordre des pages" className="space-y-2">
           {pages.map((page, i) => (
-            <li key={page.id} className="bg-white border border-gray-200 rounded-xl p-4 flex items-center justify-between gap-3">
+            <li key={page.id} className="bg-white border border-gray-200 rounded-xl p-4 flex flex-col items-start gap-2 sm:flex-row sm:items-center sm:justify-between sm:gap-3">
               <div className="min-w-0">
                 <p className="text-sm font-medium text-gray-900">{page.title}</p>
                 <p className="text-xs text-gray-600"><span className="sr-only">Adresse : </span>/{page.slug}</p>
+                {attachedPostes(page) && <p className="text-xs text-gray-600 break-words">{attachedPostes(page)}</p>}
               </div>
-              <div className="flex items-center gap-1 flex-shrink-0">
+              <div className="flex flex-wrap items-center gap-1 sm:flex-shrink-0">
                 {(["up", "down"] as const).map((dir) => {
                   const atEnd = dir === "up" ? i === 0 : i === pages.length - 1
                   return (
@@ -230,6 +245,8 @@ export default function EventPagesManager({ eventId, initialPages }: { eventId: 
         <PageFormModal
           eventId={eventId}
           page={editing === "new" ? null : editing}
+          postes={postes}
+          sectorsAdopted={sectorsAdopted}
           onClose={() => setEditing(null)}
           onSaved={(page) => handleSaved(page, editing === "new")}
         />
@@ -239,19 +256,69 @@ export default function EventPagesManager({ eventId, initialPages }: { eventId: 
 }
 
 function PageFormModal({
-  eventId, page, onClose, onSaved,
+  eventId, page, postes, sectorsAdopted, onClose, onSaved,
 }: {
   eventId: string
   page: EventPageRow | null
+  postes: EventPagePoste[]
+  sectorsAdopted: boolean
   onClose: () => void
   onSaved: (page: EventPageRow) => void
 }) {
   const [title, setTitle] = useState(page?.title ?? "")
   const [content, setContent] = useState(page?.content ?? "")
+  const [roleNames, setRoleNames] = useState<string[]>(page?.roleNames ?? [])
   const { submit: run, busy: saving, error, fail, isInvalid } = useSubmit()
   const titleId = useId()
   const contentId = useId()
   const errorId = useId()
+  const rolesId = useId()
+  const rolesHintId = useId()
+  const publicHintId = useId()
+  const rolesRef = useRef<HTMLFieldSetElement>(null)
+
+  const liveNames = postes.map((p) => p.name)
+  // A stored name no live poste carries any more stays ticked, so the organiser can untick it;
+  // saving drops it (the API keeps only live names).
+  const missing = roleNames.filter((name) => !liveNames.includes(name))
+
+  function toggle(name: string, checked: boolean) {
+    setRoleNames((prev) => checked ? [...new Set([...prev, name])] : prev.filter((n) => n !== name))
+  }
+
+  function checkbox(name: string, label: string) {
+    return (
+      <li key={name}>
+        <label className="flex min-h-11 items-center gap-2 text-sm break-words">
+          <input
+            type="checkbox"
+            className="h-6 w-6 shrink-0 accent-blue-600"
+            checked={roleNames.includes(name)}
+            onChange={(e) => toggle(name, e.target.checked)}
+          />
+          {label}
+        </label>
+      </li>
+    )
+  }
+
+  const checkboxList = (names: string[]) => <ul role="list" className="grid gap-x-4 sm:grid-cols-2">{names.map((name) => checkbox(name, name))}</ul>
+
+  // One nested fieldset per sector, like ProposalWorkspace (#1324): a plain list without sectors.
+  const groups: { sector: string | null; names: string[] }[] = []
+  for (const poste of postes) {
+    const group = groups.find((g) => g.sector === poste.sector)
+    if (group) group.names.push(poste.name)
+    else groups.push({ sector: poste.sector, names: [poste.name] })
+  }
+  const groupedCheckboxes = sectorsAdopted
+    ? groups.map((group) => (
+        <fieldset key={group.sector ?? "none"} className="mt-2">
+          <legend className="text-sm text-gray-700">{group.sector ?? "Autres postes"}</legend>
+          {checkboxList(group.names)}
+        </fieldset>
+      ))
+    : checkboxList(postes.map((p) => p.name))
 
   async function submit(e: React.FormEvent) {
     e.preventDefault()
@@ -260,10 +327,13 @@ function PageFormModal({
     const outcome = await run<EventPageRow>(() => fetch(url, {
       method: page ? "PATCH" : "POST",
       headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({ title: title.trim(), content }),
+      body: JSON.stringify({ title: title.trim(), content, roleNames }),
     }), { silent: true })
     if (!outcome.ok) {
-      fail(outcome.error, outcome.status === 400 ? "title" : undefined, outcome.status === 400 ? document.getElementById(titleId) : null)
+      // The title is checked here first; a 400 from the API is about the postes: focus their
+      // fieldset, not the title.
+      const aboutPostes = outcome.status === 400
+      fail(outcome.error, aboutPostes ? "roleNames" : undefined, aboutPostes ? rolesRef.current : null)
       return
     }
     onSaved(outcome.data)
@@ -272,6 +342,9 @@ function PageFormModal({
   return (
     <ModalShell title={page ? "Modifier la page" : "Nouvelle page"} busy={saving} onClose={() => { if (!saving) onClose() }} panelClassName="max-w-2xl">
       <form onSubmit={submit} noValidate className="space-y-4">
+        <p id={publicHintId} className="text-sm text-gray-700 bg-blue-50 border border-blue-100 rounded-xl px-3 py-2">
+          Cette page est publique : tout le monde peut lire son titre et son contenu, pas seulement ces bénévoles.
+        </p>
         <div>
           <label htmlFor={titleId} className="block text-sm text-gray-700 mb-1">Titre<RequiredMark /></label>
           <input
@@ -299,6 +372,43 @@ function PageFormModal({
             className="w-full border border-gray-500 rounded-lg px-3 py-1.5 text-sm font-mono"
           />
         </div>
+        {postes.length === 0 ? (
+          <>
+            <p className="text-sm text-gray-700">Cet événement n&apos;a pas encore de poste. Créez des créneaux, puis revenez ici.</p>
+            {/* A name from a poste since deleted still has to be unticked: no fieldset to announce. */}
+            {missing.length > 0 && (
+              <div className="space-y-1">
+                <p className="text-xs text-gray-600">Postes qui n&apos;existent plus : décochez-les pour retirer le lien.</p>
+                <ul role="list" className="grid gap-x-4 sm:grid-cols-2">
+                  {missing.map((name) => checkbox(name, posteChoiceLabel(name, liveNames)))}
+                </ul>
+              </div>
+            )}
+          </>
+        ) : (
+          <fieldset
+            id={rolesId}
+            ref={rolesRef}
+            tabIndex={-1}
+            aria-describedby={`${rolesHintId} ${publicHintId}`}
+            aria-invalid={isInvalid("roleNames")}
+            className="space-y-2 rounded focus:outline-none"
+          >
+            <legend className="text-sm font-medium text-gray-900">Pour les bénévoles de ces postes</legend>
+            <p id={rolesHintId} className="max-w-[75ch] text-xs text-gray-600">
+              Les bénévoles qui ont une place confirmée à un poste coché reçoivent le lien vers cette page : email de confirmation, rappels et page Mes inscriptions. Aucun poste coché : aucun lien envoyé.
+            </p>
+            {groupedCheckboxes}
+            {missing.length > 0 && (
+              <div className="mt-2 space-y-1">
+                <p className="text-xs text-gray-600">Postes qui n&apos;existent plus : décochez-les pour retirer le lien.</p>
+                <ul role="list" className="grid gap-x-4 sm:grid-cols-2">
+                  {missing.map((name) => checkbox(name, posteChoiceLabel(name, liveNames)))}
+                </ul>
+              </div>
+            )}
+          </fieldset>
+        )}
         <FormStatus error={error} errorId={errorId} />
         <div className="flex justify-end gap-2">
           <button type="button" onClick={() => { if (!saving) onClose() }} aria-disabled={saving || undefined} className="text-sm text-gray-600 px-4 py-2 rounded-full hover:bg-gray-50 transition-colors">

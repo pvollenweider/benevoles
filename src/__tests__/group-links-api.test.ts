@@ -37,6 +37,7 @@ function makeDb() {
       delete: vi.fn().mockResolvedValue({ id: "link-1" }),
     },
     eventQuestion: { updateMany: vi.fn().mockResolvedValue({ count: 1 }), findMany: vi.fn().mockResolvedValue([]), update: vi.fn() },
+    eventPage: { findMany: vi.fn().mockResolvedValue([]), update: vi.fn() },
     sectorLeader: { findMany: vi.fn().mockResolvedValue([]), deleteMany: vi.fn(), updateMany: vi.fn().mockResolvedValue({ count: 0 }) },
     async $transaction(fn: (tx: unknown) => unknown) { return fn(this) },
   }

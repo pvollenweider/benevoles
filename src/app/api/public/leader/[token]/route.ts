@@ -12,6 +12,8 @@ import { shiftStaffingState } from "@/lib/staffing"
 import { leaderPageHeading, leaderScopeOf, scopeRoleNames } from "@/lib/leader-scope"
 import { loadPosteSectors } from "@/lib/leader-scope-data"
 import { sectorsAdopted } from "@/lib/sectors"
+import { pagesForPostes } from "@/lib/event-page-postes"
+import { orgBaseUrl } from "@/lib/urls"
 
 // Read-only roster for a leader (#186): who's signed up on the postes of their scope, one poste or
 // one sector (#1169). No mutation here: read-only on purpose, see prisma/schema.prisma's SectorLeader doc.
@@ -26,7 +28,7 @@ export async function GET(req: Request, { params }: { params: Promise<{ token: s
 
   const leader = await prisma.sectorLeader.findUnique({
     where: linkToken.where(token),
-    include: { event: { select: { id: true, title: true, slug: true, sectorsEnabled: true, sectorsAdoptedAt: true, organization: { select: ORG_LIFECYCLE_SELECT } } } },
+    include: { event: { select: { id: true, title: true, slug: true, publicStatus: true, sectorsEnabled: true, sectorsAdoptedAt: true, organization: { select: { ...ORG_LIFECYCLE_SELECT, slug: true } } } } },
   })
   if (!leader) return NextResponse.json({ error: "Lien introuvable." }, { status: 404 })
   // No roster at all while the organisation is deactivated or suspended.
@@ -48,6 +50,14 @@ export async function GET(req: Request, { params }: { params: Promise<{ token: s
     roles = scopeRoleNames(leader, await loadPosteSectors(prisma, leader.eventId))
   }
   const roleWhere = scope.kind === "poste" ? scope.roleName : { in: roles }
+
+  // Information pages attached to a poste of the scope (#1324), for the leader to read and pass on.
+  // Only for a published event: the page opens on its public URL.
+  const readBefore = roles.length === 0 || leader.event.publicStatus !== "published" ? [] : await prisma.eventPage.findMany({
+    where: { eventId: leader.eventId, roleNames: { hasSome: roles } },
+    select: { slug: true, title: true, roleNames: true, displayOrder: true },
+    orderBy: { displayOrder: "asc" },
+  })
 
   const [registrations, minShifts] = roles.length === 0 ? [[], []] : await Promise.all([
     prisma.registration.findMany({
@@ -79,6 +89,8 @@ export async function GET(req: Request, { params }: { params: Promise<{ token: s
     roleName: scopeName,
     postes: roles,
     leaderName: leader.name,
+    // Title and URL only, never the attachment: the same sentence as on a volunteer's page.
+    readBefore: pagesForPostes(readBefore, roles).map((p) => ({ title: p.title, url: `${orgBaseUrl(leader.event.organization.slug)}/${leader.event.slug}/${p.slug}` })),
     registrations: registrations.map((r) => ({
       id: r.id,
       status: r.status,

@@ -20,6 +20,7 @@ Format basé sur [Keep a Changelog](https://keepachangelog.com/fr/1.0.0/).
 - **Mairies, communes et collectivités** : une cinquième page « Pour qui ? » pour les fêtes communales et les forums des associations, avec un lien par société locale (#1325).
 - **Citer benevol.app** : une page publique qui donne le nom exact, des descriptions à reprendre telles quelles et des faits vérifiables, avec un bouton pour copier chaque texte (#1323).
 - **Réserver un poste selon une réponse** (#962) : l'éditeur « Accès » de « Gérer les postes » choisit une question à choix posée à tous les bénévoles et les réponses acceptées ; le créneau affiche « Réponse requise : … » et l'inscription vérifie la réponse, y compris depuis « Mes inscriptions », la liste d'attente, les échanges et la confirmation par email.
+- **Une page d'information pour les bénévoles d'un poste** (#1324) : rattachez une page à un ou plusieurs postes ; les personnes qui ont une place confirmée reçoivent son lien avant leur créneau, dans la confirmation, les rappels et leur page Mes inscriptions, sans que la page cesse d'être publique.
 
 ### Modifié
 

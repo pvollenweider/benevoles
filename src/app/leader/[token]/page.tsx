@@ -14,6 +14,7 @@ import { mailtoHref } from "@/lib/email-address"
 import { telHref } from "@/lib/shift-info"
 import SectorLeaderRoster, { type RosterRegistration, type RosterStaffing } from "@/components/public/SectorLeaderRoster"
 import { titleWithSiteName } from "@/lib/document-title"
+import { READ_BEFORE_LABEL } from "@/lib/event-page-postes"
 
 type RegistrationItem = {
   id: string
@@ -37,11 +38,33 @@ type PageData = {
   heading?: string
   postes?: string[]
   leaderName: string
+  /** Pages attached to a poste of the scope (#1324): title and URL only. */
+  readBefore?: { title: string; url: string }[]
   registrations: RegistrationItem[]
   staffing?: StaffingItem[]
 }
 
 const shiftKey = (s: { label: string; date: string; startTime: string }) => `${s.label}__${s.date}__${s.startTime}`
+
+const readBeforeLinkClass = "py-1 inline-block text-blue-700 underline underline-offset-2 hover:text-blue-900 rounded focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-blue-600 break-words"
+
+/** The pages attached to the postes the leader covers (#1324), one link per page. */
+function ReadBeforeLinks({ pages }: { pages?: { title: string; url: string }[] }) {
+  if (!pages || pages.length === 0) return null
+  return (
+    <section aria-labelledby="leader-read-before" className="bg-white rounded-xl border border-gray-200 p-4">
+      <h2 id="leader-read-before" className="text-sm font-semibold text-gray-900">Avant les créneaux</h2>
+      <p className="text-xs text-gray-600 mt-0.5">Les bénévoles de vos postes reçoivent ce lien avec leur confirmation et leurs rappels.</p>
+      {pages.length === 1 ? (
+        <p className="mt-1"><a href={pages[0].url} className={readBeforeLinkClass}>{READ_BEFORE_LABEL} : {pages[0].title}</a></p>
+      ) : (
+        <ul className="mt-1 space-y-0.5">
+          {pages.map((p) => <li key={p.url}><a href={p.url} className={readBeforeLinkClass}>{READ_BEFORE_LABEL} : {p.title}</a></li>)}
+        </ul>
+      )}
+    </section>
+  )
+}
 
 /** « 2/4 · minimum atteint », « 1/4 · sous le minimum (2) » (#949), read « 2 inscrits sur 4, minimum atteint ». */
 function StaffingLine({ s }: { s: StaffingItem }) {
@@ -137,6 +160,7 @@ export default function SectorLeaderPage() {
           postes={data.postes ?? []}
           registrations={data.registrations as unknown as RosterRegistration[]}
           staffing={(data.staffing ?? []) as unknown as RosterStaffing[]}
+          readBefore={data.readBefore}
         />
       </main>
       <div className="px-4"><PublicFooter site={orgPageFooterSite()} /></div>
@@ -159,6 +183,8 @@ export default function SectorLeaderPage() {
             {data.registrations.length} bénévole{data.registrations.length > 1 ? "s" : ""} inscrit{data.registrations.length > 1 ? "s" : ""}
           </p>
         </div>
+
+        <ReadBeforeLinks pages={data.readBefore} />
 
         {/* Shifts below their minimum (#949), those without anyone included: what to fill first. */}
         {belowMinimum.length > 0 && (

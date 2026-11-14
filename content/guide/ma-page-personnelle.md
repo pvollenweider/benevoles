@@ -28,13 +28,14 @@ En haut de la page, l'encadré **Avant ta mission** reprend ton prochain crénea
 - qui contacter sur place : **Contact pour ce créneau**, sinon le **Contact le jour J** de l'événement, avec son téléphone (touche le numéro pour appeler) et le rappel sur les numéros d'urgence officiels ;
 - le nom du **responsable du poste**, quand l'organisation en a désigné un (son nom seulement, ses coordonnées ne sont pas affichées) ;
 - la consigne (« À savoir ») : celle du créneau, sinon les instructions de l'événement ;
+- les **pages à lire avant ton créneau** quand l'organisation en a rattaché à ton poste : un lien par page, son titre seulement ;
 - les **pages d'information** de l'événement (accès, FAQ, règlement…) et **Écrire à l'organisation**, quand l'organisation les a prévues.
 
 Un créneau en liste d'attente ou sur validation n'y figure pas tant qu'il n'est pas confirmé. Quand ton créneau est passé, l'encadré passe au suivant. Le nom du responsable du poste figure aussi dans les rappels et sur le planning individuel imprimé, pour tes places confirmées.
 
 ## Tous mes créneaux
 
-Tes créneaux sont ensuite listés sous **Tous mes créneaux** ; celui de l'encadré y renvoie par un lien. Chacun montre ses **infos pratiques** : lieu de rendez-vous (et **Voir sur la carte**), consigne, et la personne de contact avec son téléphone (pour le créneau repris dans **Avant ta mission**, elles sont dans l'encadré).
+Tes créneaux sont ensuite listés sous **Tous mes créneaux** ; celui de l'encadré y renvoie par un lien. Chacun montre ses **infos pratiques** : lieu de rendez-vous (et **Voir sur la carte**), consigne, et la personne de contact avec son téléphone (pour le créneau repris dans **Avant ta mission**, elles sont dans l'encadré). Si l'organisation a rattaché une page à ton poste, le lien « À lire avant ton créneau : … » apparaît sous ces infos, une fois par page ; il n'apparaît que pour une place confirmée, pas en liste d'attente ni pour une demande en attente de validation.
 
 ## Pauses et charge
 

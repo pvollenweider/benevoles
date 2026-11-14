@@ -134,7 +134,10 @@ export function toPublicEvent(event: PublicEventRow, now: Date = new Date()) {
     volunteerCharter: event.organization.volunteerCharter,
     hasOrgInsurance: event.organization.hasOrgInsurance,
     shifts,
-    pages: event.pages,
+    // Never the postes a page is attached to (#1324): the link is for the confirmed volunteers
+    // reached with a personal or leader link, and for emails. Pick the two public fields here, so
+    // a wider query can never leak `roleNames` into the page, its API, the embed or the preview.
+    pages: event.pages.map((p) => ({ slug: p.slug, title: p.title })),
   }
 }
 

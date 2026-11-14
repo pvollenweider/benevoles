@@ -4,11 +4,14 @@
 import { fmtRange } from "@/lib/gantt-utils"
 import { MISSION_BRIEF_ID, MISSION_BRIEF_TITLE, missionBrief, orgContactHref, type BriefEvent, type BriefShift } from "@/lib/mission-brief"
 import { ORG_CONTACT_LABEL, sectorLeaderLabel } from "@/lib/shift-info"
+import { READ_BEFORE_LABEL } from "@/lib/event-page-postes"
 import PhoneLink from "@/components/PhoneLink"
 import MapLink from "@/components/MapLink"
 import EmergencyNote from "@/components/EmergencyNote"
 
 const linkCls = "text-blue-700 underline underline-offset-2 hover:text-blue-900 rounded focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-blue-600"
+/** 24 px target under the description list (#1324), whole sentence inside the anchor. */
+const readBeforeCls = "py-1 inline-block text-blue-700 underline underline-offset-2 hover:text-blue-900 rounded focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-blue-600 break-words"
 
 /**
  * « Avant ta mission » (#560), at the top of the personal page: the next confirmed shift, when
@@ -73,6 +76,18 @@ export default function MissionBriefCard({ shift, event, eventTitle, contactEmai
           </div>
         )}
       </dl>
+      {/* The pages attached to the next shift's poste (#1324): after the <dl>, not inside it. */}
+      {brief.readBefore.length === 1 ? (
+        <p>
+          <a href={brief.readBefore[0].url} className={readBeforeCls}>{READ_BEFORE_LABEL} : {brief.readBefore[0].title}</a>
+        </p>
+      ) : brief.readBefore.length > 1 ? (
+        <ul className="space-y-0.5">
+          {brief.readBefore.map((p) => (
+            <li key={p.url}><a href={p.url} className={readBeforeCls}>{READ_BEFORE_LABEL} : {p.title}</a></li>
+          ))}
+        </ul>
+      ) : null}
       {brief.pages.length > 0 && (
         <div>
           <h3 className="text-sm font-semibold text-gray-900">Infos de l&apos;événement</h3>

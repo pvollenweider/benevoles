@@ -7,9 +7,10 @@ vi.mock("@/lib/auth-guard", () => ({ requireOrgSession: requireOrgSessionMock })
 
 const findMany = vi.hoisted(() => vi.fn())
 const create = vi.hoisted(() => vi.fn())
+const shiftFindMany = vi.hoisted(() => vi.fn())
 const logCreate = vi.hoisted(() => vi.fn())
 vi.mock("@/lib/prisma", () => ({
-  prisma: { eventPage: { findMany, create }, eventLog: { create: logCreate } },
+  prisma: { eventPage: { findMany, create }, shift: { findMany: shiftFindMany }, eventLog: { create: logCreate } },
 }))
 
 function get() {
@@ -76,6 +77,17 @@ describe("GET/POST /api/admin/events/[id]/pages", () => {
     const { POST } = await import("@/app/api/admin/events/[id]/pages/route")
     await POST(post({ title: "FAQ", content: "x" }), { params: Promise.resolve({ id: "evt-1" }) })
     expect(create).toHaveBeenCalledWith(expect.objectContaining({ data: expect.objectContaining({ slug: "faq-2" }) }))
+  })
+
+  it("POST keeps the postes a live shift carries and drops a stale name (#1324)", async () => {
+    findMany.mockResolvedValue([])
+    shiftFindMany.mockResolvedValue([{ roleName: "Bar", displayOrder: 0 }, { roleName: "Accueil", displayOrder: 1 }])
+    create.mockResolvedValue({ id: "p5", eventId: "evt-1", slug: "caisse", title: "Caisse", content: "", displayOrder: 0, roleNames: ["Bar"] })
+    const { POST } = await import("@/app/api/admin/events/[id]/pages/route")
+    const res = await POST(post({ title: "Caisse", content: "", roleNames: ["Bar", "Poste supprimé", "Bar"] }), { params: Promise.resolve({ id: "evt-1" }) })
+    expect(res.status).toBe(201)
+    expect(shiftFindMany).toHaveBeenCalledWith({ where: { eventId: "evt-1", status: { not: "cancelled" } }, select: { roleName: true, displayOrder: true } })
+    expect(create).toHaveBeenCalledWith(expect.objectContaining({ data: expect.objectContaining({ roleNames: ["Bar"] }) }))
   })
 
   it("POST logs the creation without including the page content in changes", async () => {

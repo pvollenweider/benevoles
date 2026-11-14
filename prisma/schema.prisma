@@ -598,6 +598,12 @@ model EventPage {
   title        String
   content      String
   displayOrder Int      @default(0)
+  // Postes whose confirmed volunteers are told to read this page before their shift (#1324),
+  // by name like EventGroupLink.roleNames: kept in step when a poste is renamed or deleted
+  // (src/app/api/admin/events/[id]/roles/[roleName]/route.ts), and a name no live shift
+  // carries is dropped when the page is saved. Empty: no poste, the page stays a general
+  // information page. The attachment is never public: see toPublicEvent (src/lib/public-event.ts).
+  roleNames    String[] @default([])
   createdAt    DateTime @default(now())
   updatedAt    DateTime @updatedAt
 
@@ -877,7 +883,9 @@ model Shift {
   requiresApproval Boolean @default(false)
   // Practical info for the volunteers of this shift (#397), shown with the place
   // (locationDetails) in the confirmation email, the reminders, the personal page and the
-  // public sign-up recap. Short by design: no mission sheets, files or workflows.
+  // public sign-up recap. Short by design: no mission sheets, files or workflows. Longer
+  // practical content belongs to an EventPage (#1324), optionally attached to the shift's
+  // poste (EventPage.roleNames), which this field links to instead of holding it.
   contactName     String?
   contactPhone    String?
   instructions    String?

@@ -1,7 +1,8 @@
 // SPDX-FileCopyrightText: 2026 Philippe Vollenweider
 // SPDX-License-Identifier: AGPL-3.0-only
 
-import { onSiteContact, shiftInfoLines, showsDayContact, type ShiftInfo } from "@/lib/shift-info"
+import { onSiteContact, readBeforePages, shiftInfoLines, showsDayContact, type ShiftInfo } from "@/lib/shift-info"
+import { READ_BEFORE_LABEL } from "@/lib/event-page-postes"
 import PhoneLink from "@/components/PhoneLink"
 import MapLink from "@/components/MapLink"
 import EmergencyNote from "@/components/EmergencyNote"
@@ -14,8 +15,10 @@ import EmergencyNote from "@/components/EmergencyNote"
  */
 export default function ShiftInfoList({ info, className = "" }: { info: ShiftInfo; className?: string }) {
   const lines = shiftInfoLines(info)
-  if (lines.length === 0) return null
+  const pages = readBeforePages(info)
+  if (lines.length === 0 && pages.length === 0) return null
   const contact = onSiteContact(info)
+  const linkClass = "py-1 inline-block text-blue-700 underline underline-offset-2 hover:text-blue-900 rounded focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-blue-600 break-words"
   return (
     <div className={className}>
       <dl className="space-y-0.5">
@@ -38,6 +41,19 @@ export default function ShiftInfoList({ info, className = "" }: { info: ShiftInf
           </div>
         ))}
       </dl>
+      {/* The pages attached to the shift's poste (#1324), after the practical info as a <p>, never
+          a dt/dd: one link per page, its whole sentence inside the anchor. */}
+      {pages.length === 1 ? (
+        <p className="mt-1">
+          <a href={pages[0].url} className={linkClass}>{READ_BEFORE_LABEL} : {pages[0].title}</a>
+        </p>
+      ) : pages.length > 1 ? (
+        <ul className="mt-1 space-y-0.5">
+          {pages.map((p) => (
+            <li key={p.url}><a href={p.url} className={linkClass}>{READ_BEFORE_LABEL} : {p.title}</a></li>
+          ))}
+        </ul>
+      ) : null}
       {showsDayContact(lines) && <EmergencyNote className="mt-1" />}
     </div>
   )
