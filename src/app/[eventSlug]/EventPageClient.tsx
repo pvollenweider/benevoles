@@ -52,6 +52,7 @@ import { answerConditionRefusal } from "@/lib/role-answer"
 import DayTimeline from "@/components/DayTimeline"
 import ShiftDayList from "@/components/ShiftDayList"
 import { useHydrated } from "@/lib/use-hydrated"
+import HydrationNotice from "@/components/HydrationNotice"
 import { groupDaysByMonth, isLongEvent, usesMonthView, visibleDays } from "@/lib/long-event"
 import { readShiftView, saveShiftView, type ShiftView } from "@/lib/shift-view"
 import { heldKinds } from "@/lib/public-timeline"
@@ -480,7 +481,14 @@ export default function EventPageClient({ orgSlug, eventSlug, preview, initialEv
   // Only the answer for this very link and these shifts, only while the switch is on.
   const shownRoster = rosterOn && rosterUrl && rosterResult?.key === rosterKey ? rosterResult.shifts : null
 
-  if (loading) return <div role="status" className="flex items-center justify-center min-h-screen text-gray-500">Chargement…</div>
+  // Without an event from the server, « Chargement… » is all the first HTML holds: the notice of a
+  // page that never started (#1343) belongs here too.
+  if (loading) return (
+    <div className="flex flex-col items-center justify-center min-h-screen px-4">
+      {!preview && <HydrationNotice kind="event" id="page-not-started" className="max-w-xl" />}
+      <div role="status" className="text-gray-500">Chargement…</div>
+    </div>
+  )
   if (!event) return <div role="alert" className="flex items-center justify-center min-h-screen text-gray-500">Événement introuvable.</div>
 
   // Registration window (#463). This page only shows published events, or a preview of what
@@ -907,6 +915,9 @@ export default function EventPageClient({ orgSlug, eventSlug, preview, initialEv
           <p id="registration-window-msg" className="rounded-2xl border border-amber-300 bg-amber-50 px-4 py-3 text-sm font-medium text-amber-950">{windowClosedText}</p>
         )}
         {windowUntilText && <p className="text-sm text-gray-700">{windowUntilText}</p>}
+        {/* A page that never started (#1343): shifts cannot be chosen. Not in the organiser's
+            preview, not when nothing can be chosen anyway. */}
+        {!preview && accepting && <HydrationNotice kind="event" id="page-not-started" />}
         {reservedShiftIds.size > 0 && (
           <p id="reserved-roles-msg" className="text-sm text-gray-700">Les postes marqués « Réservé » sont réservés à certains membres. Si tu en fais partie, inscris-toi avec le lien personnel reçu par email.</p>
         )}

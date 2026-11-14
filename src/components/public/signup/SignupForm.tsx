@@ -7,6 +7,9 @@ import { useEffect, useId, useRef, useState } from "react"
 import Link from "next/link"
 import { useSubmit } from "@/lib/use-submit"
 import FormStatus from "@/components/FormStatus"
+import HydrationNotice from "@/components/HydrationNotice"
+import { useHydrated } from "@/lib/use-hydrated"
+import { hydrationNoticeId } from "@/lib/hydration-notice"
 import { DESCRIPTION_LONG_MESSAGE, DESCRIPTION_SHORT_MESSAGE, SIGNUP_ACCEPTED_MESSAGE, SIGNUP_DESCRIPTION_MAX, SIGNUP_DESCRIPTION_MIN } from "@/lib/signup"
 import { cleanSourceDetail, SIGNUP_SOURCE_DETAIL_MAX, SIGNUP_SOURCES, SOURCE_DETAIL_LONG_MESSAGE } from "@/lib/signup-source"
 
@@ -36,6 +39,7 @@ export default function SignupForm({ open, closedMessage = "Les inscriptions son
   const [startedAt] = useState(() => Date.now())
   const [done, setDone] = useState(false)
   const { submit, busy, error, fail, isInvalid } = useSubmit()
+  const hydrated = useHydrated()
 
   useEffect(() => { if (done) doneRef.current?.focus() }, [done])
 
@@ -88,6 +92,8 @@ export default function SignupForm({ open, closedMessage = "Les inscriptions son
 
   return (
     <form onSubmit={handleSubmit} noValidate className="space-y-5">
+      {/* Before the first field (#1343): met before the effort of filling the form is spent. */}
+      <HydrationNotice kind="signup" id={`${id}-not-started`} />
       <p className="text-sm text-gray-700 dark:text-gray-300">Tous les champs sont obligatoires, sauf ceux marqués « facultatif ».</p>
       <div>
         <label htmlFor={`${id}-org`} className={labelClass}>Nom de l&apos;association</label>
@@ -133,7 +139,7 @@ export default function SignupForm({ open, closedMessage = "Les inscriptions son
         <input id={`${id}-website`} tabIndex={-1} autoComplete="off" value={values.website} onChange={(e) => setValues({ ...values, website: e.target.value })} />
       </div>
       <FormStatus error={error} errorId={`${id}-error`} />
-      <button type="submit" aria-disabled={busy || undefined}
+      <button type="submit" aria-disabled={busy || undefined} aria-describedby={hydrationNoticeId(hydrated, `${id}-not-started`)}
         className={`rounded-xl bg-gray-900 px-5 py-3 text-base font-medium text-white hover:bg-gray-800 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-blue-600 dark:focus-visible:outline-blue-400 dark:bg-gray-100 dark:text-gray-900 dark:hover:bg-white ${busy ? "cursor-wait opacity-80" : ""}`}>
         {busy ? "Envoi…" : "Créer mon espace"}
       </button>
