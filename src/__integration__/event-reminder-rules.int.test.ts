@@ -5,8 +5,6 @@ import { describe, it, expect, vi, beforeAll, afterAll, beforeEach } from "vites
  * `src/lib/__tests__/reminder-rules.test.ts` are pure; these prove the parts only a database can
  * prove: two concurrent queue runs claim one occurrence, and a time change between queueing and
  * delivery moves or cancels the unsent occurrence instead of sending a stale email.
- *
- * Not run here (no PostgreSQL in this worktree): `npm run test:integration` needs `DATABASE_URL`.
  */
 
 vi.mock("@/lib/env", () => ({ env: { CRON_SECRET: "s3cret" } }))
@@ -125,8 +123,11 @@ describe.skipIf(!url)("custom reminder rules on Postgres (#1139)", () => {
     sendNotificationMock.mockClear()
     const again = await queueCustomRuleReminders(now)
     expect(again.queued).toBe(0)
+    // The whole outbox is delivered here, as the cron does: rows other test files left pending
+    // may go out too, so only this volunteer's reminder is looked at.
     await deliverOutbox({ now })
-    expect(sendNotificationMock).not.toHaveBeenCalled()
+    const mine = sendNotificationMock.mock.calls.filter(([payload]) => payload.kind === "reminder_rule" && payload.volunteerId === volunteerId)
+    expect(mine).toHaveLength(0)
   })
 
   it("a concurrent time change between queueing and delivery never sends the old time", async () => {
