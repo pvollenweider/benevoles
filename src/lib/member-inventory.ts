@@ -95,6 +95,12 @@ export const VOLUNTEER_RELATIONS: Record<string, VolunteerRelation> = {
     erasure: "delete",
     why: "a device of the person",
   },
+  ReminderOccurrence: {
+    merge: "drop",
+    deletion: "cascade",
+    erasure: "delete",
+    why: "custom reminder send state of one person, event and local day (#1139): ids and timing only, no personal content. Dropped on merge (the kept record keeps its own rows; the absorbed row's registrations move and a reminder already sent to the same address is not re-sent by the kept row's absence of a sent occurrence, but this PR does not merge the two send states), deleted with the person's data",
+  },
   DeliveryOutcome: {
     merge: "reassign",
     deletion: "cascade",

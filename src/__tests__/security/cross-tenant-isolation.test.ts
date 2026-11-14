@@ -717,6 +717,7 @@ describe("Members — cross-tenant isolation", () => {
       rosterConsentDeleteMany: vi.fn().mockResolvedValue({ count: 0 }),
       shiftDeclineDeleteMany: vi.fn().mockResolvedValue({ count: 0 }),
       signupConfirmationDeleteMany: vi.fn().mockResolvedValue({ count: 0 }),
+      reminderOccurrenceDeleteMany: vi.fn().mockResolvedValue({ count: 0 }),
     }
     const none = () => vi.fn().mockResolvedValue([])
     const tx = {
@@ -733,6 +734,8 @@ describe("Members — cross-tenant isolation", () => {
       // « Je ne peux pas » answers (#1303): the person's own, and the tombstones merged into it.
       shiftDecline: { findMany: none(), deleteMany: writes.shiftDeclineDeleteMany, count: vi.fn().mockResolvedValue(0) },
       signupConfirmation: { deleteMany: writes.signupConfirmationDeleteMany },
+      // Custom reminder send state (#1139): the person's own.
+      reminderOccurrence: { deleteMany: writes.reminderOccurrenceDeleteMany },
       eventVolunteerLimit: { deleteMany: vi.fn().mockResolvedValue({ count: 0 }) },
       // Dated availability (#1146): the person's own answers.
       availabilityRequest: { deleteMany: vi.fn().mockResolvedValue({ count: 0 }), count: vi.fn().mockResolvedValue(0) },
@@ -779,6 +782,7 @@ describe("Members — cross-tenant isolation", () => {
     expect(writes.rosterConsentDeleteMany).toHaveBeenCalledWith({ where: { volunteerId: { in: ["mem-a"] } } })
     expect(writes.shiftDeclineDeleteMany).toHaveBeenCalledWith({ where: { volunteerId: { in: ["mem-a"] } } })
     expect(writes.signupConfirmationDeleteMany).toHaveBeenCalledWith({ where: { volunteerId: { in: ["mem-a"] } } })
+    expect(writes.reminderOccurrenceDeleteMany).toHaveBeenCalledWith({ where: { volunteerId: { in: ["mem-a"] } } })
     // Only this member's logged answers are removed (#984): their id is the one bound.
     const scrub = tx.$executeRaw.mock.calls[0]
     expect(scrub[0].join("?")).toContain(`"actorId" = ANY(`)

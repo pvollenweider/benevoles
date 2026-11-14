@@ -40,6 +40,7 @@ Format basé sur [Keep a Changelog](https://keepachangelog.com/fr/1.0.0/).
 
 ### Exploitation
 
+- Les rappels automatiques acceptent des délais propres à chaque événement (jusqu'à trois règles en heures ou en jours), avec une table d'état durable qui empêche un double envoi et une remise en file par l'outbox ; aucune interface ne permet encore de les créer, le chemin reste dormant en production (#1139). <!-- interne -->
 - Les issues du dépôt suivent trois axes de labels (type, statut, domaine), décrits dans `CONTRIBUTING.md` ; le modèle « Amélioration » pose le label `enhancement`. <!-- interne -->
 - Le manifeste du webhook Gandi désigne l'image construite avec OpenTelemetry 1.47.0 et Go 1.26, déployée sur le cluster le 14 novembre 2026. <!-- interne -->
 - `basic-ftp`, une dépendance indirecte de Lighthouse CI (outil de développement), passe à la 6.2.x par `overrides` (une alerte de sécurité). <!-- interne -->

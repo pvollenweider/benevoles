@@ -22,6 +22,7 @@ import { remindersDue, type GroupableRegistration } from "@/lib/reminder-groups"
 import { REMINDER_WINDOW_HOURS } from "@/lib/automatic-reminders"
 import { sendMilestoneOwnerReminders } from "@/lib/milestone-reminders"
 import { expireSwapRequests } from "@/lib/shift-swap-server"
+import { queueCustomRuleReminders } from "@/lib/reminder-rules-server"
 
 export const dynamic = "force-dynamic"
 
@@ -59,6 +60,14 @@ async function run(req: Request) {
   const now = new Date()
   const totals: Record<string, { eligible: number; groups: number; sent: number; failed: number }> = {}
 
+  // Events with their own reminder rules (#1139) never enter the legacy windows below: their
+  // unique occurrence is claimed and queued here, then delivered by the outbox at the end of the
+  // run like every other queued email. No rule row means the legacy path, unchanged.
+  const custom = await queueCustomRuleReminders(now).catch((e) => {
+    reportError("reminders.custom")(e)
+    return null
+  })
+
   for (const win of WINDOWS) {
     const lower = new Date(now.getTime() + win.minHours * 3600 * 1000)
     const upper = new Date(now.getTime() + win.maxHours * 3600 * 1000)
@@ -71,7 +80,7 @@ async function run(req: Request) {
       where: {
         status: "active",
         [win.field]: null,
-        event: { remindersEnabled: true, publicStatus: "published" },
+        event: { remindersEnabled: true, publicStatus: "published", reminderRules: { none: {} } },
         shift: { status: { not: "cancelled" } },
       },
       include: {
@@ -219,6 +228,7 @@ async function run(req: Request) {
   return {
     runAt: now.toISOString(),
     totals,
+    custom,
     expiredOffers: expiredOffers.length,
     expiredConfirmations,
     waitlist,

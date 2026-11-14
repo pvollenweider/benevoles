@@ -224,6 +224,9 @@ export async function runMemberMerge(
     // rows stay for history) and the pending request goes; a later click on the old link does nothing.
     await tx.registration.updateMany({ where: { volunteerId: absorbId, status: "unconfirmed" }, data: { status: "cancelled", signupConfirmationId: null } })
     await tx.signupConfirmation.deleteMany({ where: { volunteerId: absorbId } })
+    // Custom reminder send state (#1139) is not moved either: the kept record keeps its own
+    // occurrence rows, the absorbed ones go with the tombstone.
+    await tx.reminderOccurrence.deleteMany({ where: { volunteerId: absorbId } })
 
     // 4. Turn the absorbed record into an inactive tombstone: no personal data left, mapped to
     // the kept record so old ids keep resolving (event-log-read.ts, member-activity-data.ts).

@@ -17,6 +17,7 @@ export const IMPORTANT_NOTIFICATION_KINDS: ReadonlySet<NotificationKind> = new S
   "reminder_j2",
   "reminder_j1",
   "reminder_dd",
+  "reminder_rule",
 ])
 
 export function isImportantNotificationKind(kind: string): boolean {

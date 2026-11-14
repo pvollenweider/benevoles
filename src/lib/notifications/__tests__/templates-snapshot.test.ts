@@ -156,6 +156,8 @@ const cases: [string, NotificationPayload][] = [
   ["reminder_dd (very soon)", { kind: "reminder_dd", recipient, data: { ...reminder, hoursUntil: 0, shifts: [{ ...reminderShift, locationDetails: null, latitude: null, longitude: null }] } }],
   ["reminder_dd (group of 3, same day)", { kind: "reminder_dd", recipient, data: reminderGroup3 }],
   ["reminder_dd (group with a night shift)", { kind: "reminder_dd", recipient, data: reminderGroupNight }],
+  ["reminder_rule", { kind: "reminder_rule", recipient, data: { ...reminder, ruleHours: 24 } }],
+  ["reminder_rule (group of 3, same day)", { kind: "reminder_rule", recipient, data: { ...reminderGroup3, ruleHours: 24 } }],
   ["manual_reminder", {
     kind: "manual_reminder",
     recipient,
@@ -821,6 +823,7 @@ describe("render — snapshot of every notification kind", () => {
       reminder_j2: true,
       reminder_j1: true,
       reminder_dd: true,
+      reminder_rule: true,
       manual_reminder: true,
       shift_modified: true,
       shift_cancelled: true,

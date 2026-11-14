@@ -15,6 +15,7 @@ export type NotificationKind =
   | "reminder_j2"
   | "reminder_j1"
   | "reminder_dd"
+  | "reminder_rule"
   | "manual_reminder"
   | "shift_modified"
   | "shift_cancelled"

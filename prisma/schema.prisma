@@ -272,9 +272,66 @@ model Event {
   draftPublications    DraftPublication[]
   proposalRuns         ProposalRun[]
   volunteerTargets     EventVolunteerTarget[]
+  reminderRules        EventReminderRule[]
+  reminderOccurrences  ReminderOccurrence[]
 
   @@unique([organizationId, slug])
   @@index([organizationId])
+}
+
+// Custom automatic reminder delays of one event (#1139). Additive: an event without any row keeps
+// exactly the legacy path (REMINDER_WINDOW_HOURS and the three organisation switches); an event
+// with rows (even all disabled) follows only its enabled rows, not the three switches.
+// `unit` is "hours" or "days" (a day is 24 elapsed hours, never calendar arithmetic);
+// `value` is bounded by REMINDER_RULE_BOUNDS in src/lib/reminder-rules.ts. At most three rows per
+// event, and two rows may not resolve to the same number of hours; checked by the pure validator.
+// `displayOrder` is the order the settings screen will show (PR 2); `id` stays stable across edits.
+model EventReminderRule {
+  id           String   @id @default(cuid())
+  eventId      String
+  unit         String // "hours" | "days"
+  value        Int
+  enabled      Boolean  @default(true)
+  displayOrder Int      @default(0)
+  createdAt    DateTime @default(now())
+  updatedAt    DateTime @updatedAt
+
+  event       Event               @relation(fields: [eventId], references: [id], onDelete: Cascade)
+  occurrences ReminderOccurrence[]
+
+  @@index([eventId, displayOrder])
+}
+
+// Durable send state of one custom rule for one volunteer, event and stored local day (#1139):
+// unique on those four columns, so two cron runs can claim the same reminder only once. `dueAt` is
+// recomputed from the current registrations while the occurrence is unsent; a sent occurrence is
+// never reopened. `status`: "pending" (never claimed), "queued" (outbox row created), "sent",
+// "cancelled" (group emptied, rule/event off, or delivery refused). `outboxId` is the
+// NotificationOutbox row, or null once the nightly cleanup purged it; `lastError` keeps the reason
+// of a cancellation for the operator. No relation on `outboxId`: the outbox row is short-lived,
+// this table is not.
+model ReminderOccurrence {
+  id          String    @id @default(cuid())
+  eventId     String
+  volunteerId String
+  // "YYYY-MM-DD": the shift's stored local day (shiftLocalDay), a night shift keeps its start day.
+  localDay    String
+  ruleId      String
+  dueAt       DateTime
+  status      String    @default("pending")
+  outboxId    String?
+  sentAt      DateTime?
+  lastError   String?
+  createdAt   DateTime  @default(now())
+  updatedAt   DateTime  @updatedAt
+
+  event     Event             @relation(fields: [eventId], references: [id], onDelete: Cascade)
+  volunteer Volunteer         @relation(fields: [volunteerId], references: [id], onDelete: Cascade)
+  rule      EventReminderRule @relation(fields: [ruleId], references: [id], onDelete: Cascade)
+
+  @@unique([eventId, volunteerId, localDay, ruleId])
+  @@index([status, dueAt])
+  @@index([outboxId])
 }
 
 // A sector groups several postes of one event (#1147): « Parking » for « Parking Nord » and
@@ -1033,6 +1090,7 @@ model Volunteer {
 
   organization  Organization?  @relation(fields: [organizationId], references: [id], onDelete: SetNull)
   registrations     Registration[]
+  reminderOccurrences ReminderOccurrence[]
   signupConfirmations SignupConfirmation[]
   invites           MemberInvite[]
   shiftDeclines     ShiftDecline[]

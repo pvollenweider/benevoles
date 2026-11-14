@@ -13,7 +13,7 @@ import { withOrgLogo, type RenderedEmail } from "./shared"
 import { emailLogoHtml, type OrgLogo } from "../../org-logo"
 import { renderConfirmation, renderRegistrationRequested, renderRegistrationRefused, renderShiftModified, renderShiftCancelled, renderRegistrationLinkResend, renderRegistrationRemoved, renderRegistrationWithdrawn, renderRegistrationRestored, renderRegistrationAddedByOrganizer, renderSignupEmailConfirmation } from "./registration"
 import { renderMemberInvite, renderAdminInvite } from "./invitations"
-import { renderReminderJ2, renderReminderJ1, renderReminderDd, renderManualReminder, renderTargetedMessage } from "./reminders"
+import { renderReminderJ2, renderReminderJ1, renderReminderDd, renderReminderRule, renderManualReminder, renderTargetedMessage } from "./reminders"
 import { renderWaitlistConfirmation, renderWaitlistOffered } from "./waitlist"
 import { renderSectorLeaderInvite, renderSectorLeaderNewSignup } from "./sector-leaders"
 import { renderOpenShifts } from "./open-shifts"
@@ -49,6 +49,8 @@ function renderKind(payload: NotificationPayload): RenderedEmail {
       return renderReminderJ1(payload)
     case "reminder_dd":
       return renderReminderDd(payload)
+    case "reminder_rule":
+      return renderReminderRule(payload)
     case "manual_reminder":
       return renderManualReminder(payload)
     case "shift_modified":

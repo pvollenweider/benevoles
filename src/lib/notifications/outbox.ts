@@ -18,6 +18,7 @@ import { bestEffort, hourStart, recordLimitHit } from "./limit-hits"
 import type { SendBatchKind } from "../send-batches"
 import { inactivityCopyVerdict } from "../org-inactivity-steps"
 import { outboxFailureGroup } from "./outbox-failure"
+import { isCustomRuleReminder, resolveCustomRuleReminder, sendCustomReminderPush } from "../reminder-occurrence-delivery"
 
 /**
  * Notification outbox (#293).
@@ -279,11 +280,29 @@ export async function deliverOutbox(opts: { ids?: string[]; limit?: number; now?
     let nothingLeft = false
     let recipientRefused: string | null = null
     let inactivityStopped: string | null = null
+    // Custom reminder (#1139): its occurrence decides at the last moment, like the resolvers above.
+    let customReminderCancelled: string | null = null
+    let customReminderDeferredUntil: Date | null = null
+    let customReminderOccurrenceId: string | null = null
+    let payloadForPush: NotificationPayload | null = null
     // The email kind, for a sending limit reached (kept on EmailLimitHit for the operator).
     let kind: string | null = null
     const outcome = await Promise.resolve()
       .then(async () => {
         let payload = openPayload(claimed.payload)
+        if (isCustomRuleReminder(payload)) {
+          customReminderOccurrenceId = (payload.data as { occurrenceId?: string }).occurrenceId ?? null
+          const resolved = await resolveCustomRuleReminder(payload, now)
+          if (resolved.kind === "cancel") {
+            customReminderCancelled = resolved.reason
+            return { ok: true as const }
+          }
+          if (resolved.kind === "defer") {
+            customReminderDeferredUntil = resolved.until
+            return { ok: true as const }
+          }
+          payload = resolved.payload
+        }
         if (isAddedByOrganizer(payload) || isAddedShiftsConfirmation(payload)) {
           const resolved = isAddedByOrganizer(payload) ? await resolveAddedByOrganizer(payload) : await resolveAddedShiftsConfirmation(payload)
           if (!resolved) { nothingLeft = true; return { ok: true as const } }
@@ -301,11 +320,41 @@ export async function deliverOutbox(opts: { ids?: string[]; limit?: number; now?
         }
         // The row's organisation (#814) is checked by sendNotification right before this one send,
         // not when the batch was read: a deactivation during a batch stops the rest of it.
+        payloadForPush = payload
         return sendNotification({ ...payload, organizationId: claimed.organizationId ?? payload.organizationId ?? null, messageId: outboxMessageId(row.id), outboxId: row.id })
       })
       .catch(
       (e: unknown) => ({ ok: false as const, reason: e instanceof Error ? e.message : String(e), permanent: undefined as true | undefined, recipientRejected: undefined as true | undefined, blocked: undefined as true | undefined, held: undefined as true | undefined, retryAfterMs: undefined as number | undefined, limit: undefined as string | undefined }),
     )
+
+    if (customReminderCancelled) {
+      await prisma.$transaction([
+        prisma.notificationOutbox.update({ where: { id: row.id }, data: { status: "cancelled", lastError: customReminderCancelled, claimedAt: null } }),
+        // Never reopen a sent occurrence: only pending/queued rows are cancelled here.
+        prisma.reminderOccurrence.updateMany({
+          where: { id: customReminderOccurrenceId ?? "", status: { in: ["pending", "queued"] } },
+          data: { status: "cancelled", lastError: customReminderCancelled },
+        }),
+      ])
+      result.cancelled++
+      continue
+    }
+
+    if (customReminderDeferredUntil) {
+      // A shift moved later: keep the row for its new due instant, not as a failure.
+      await prisma.$transaction([
+        prisma.notificationOutbox.update({
+          where: { id: row.id },
+          data: { status: "pending", claimedAt: null, nextAttemptAt: customReminderDeferredUntil },
+        }),
+        prisma.reminderOccurrence.updateMany({
+          where: { id: customReminderOccurrenceId ?? "", status: "queued" },
+          data: { dueAt: customReminderDeferredUntil },
+        }),
+      ])
+      result.held++
+      continue
+    }
 
     if (recipientRefused) {
       await prisma.notificationOutbox.update({ where: { id: row.id }, data: { status: "cancelled", lastError: recipientRefused, claimedAt: null } })
@@ -355,8 +404,23 @@ export async function deliverOutbox(opts: { ids?: string[]; limit?: number; now?
           prisma.notificationOutbox.update({ where: { id: row.id }, data: { status: "sent", sentAt, lastError: null } }),
           prisma.orgInactivityStep.updateMany({ where: { id: stepId, confirmedAt: null }, data: { confirmedAt: sentAt } }),
         ])
+      } else if (customReminderOccurrenceId) {
+        // The email and its occurrence commit together: a crash cannot leave the occurrence
+        // unsent while the outbox row says sent (delivery stays at-least-once either way).
+        await prisma.$transaction([
+          prisma.notificationOutbox.update({ where: { id: row.id }, data: { status: "sent", sentAt, lastError: null } }),
+          prisma.reminderOccurrence.updateMany({
+            where: { id: customReminderOccurrenceId, status: "queued" },
+            data: { status: "sent", sentAt, lastError: null },
+          }),
+        ])
       } else {
         await prisma.notificationOutbox.update({ where: { id: row.id }, data: { status: "sent", sentAt, lastError: null } })
+      }
+      if (customReminderOccurrenceId && payloadForPush) {
+        // Push is best effort, only after the email was accepted: a suspended organisation never
+        // reaches this point, and the tag keeps one notification per occurrence.
+        sendCustomReminderPush(payloadForPush).catch(reportError("push.reminder_rule"))
       }
       result.sent++
       continue
