@@ -266,7 +266,7 @@ export async function runMemberMerge(
     if (occurrencePlan.cancelOutboxIds.length) {
       await tx.notificationOutbox.updateMany({
         where: { id: { in: occurrencePlan.cancelOutboxIds }, status: "pending" },
-        data: { status: "cancelled", lastError: MERGED_MEMBER_CANCEL_REASON },
+        data: { status: "cancelled", lastError: MERGED_MEMBER_CANCEL_REASON, deliveryNotBefore: null },
       })
     }
 

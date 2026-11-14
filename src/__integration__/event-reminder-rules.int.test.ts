@@ -18,6 +18,7 @@ import { prisma } from "@/lib/prisma"
 import { registrationToken } from "@/lib/token-vault"
 import { queueCustomRuleReminders } from "@/lib/reminder-rules-server"
 import { deliverOutbox } from "@/lib/notifications/outbox"
+import { retryOutboxRow } from "@/lib/outbox-data"
 
 const url = process.env.DATABASE_URL
 const tag = `int-reminder-rules-${Date.now()}`
@@ -274,6 +275,37 @@ describe.skipIf(!url)("custom reminder rules on Postgres (#1139)", () => {
     expect((await prisma.reminderOccurrence.findFirstOrThrow({ where: { eventId } })).status).toBe("failed")
     const delivered = await deliverOutbox({ now: next })
     expect(delivered.sent).toBe(0)
+    expect(sendNotificationMock).not.toHaveBeenCalled()
+  })
+
+  it("an administrator's retry reopens the failed occurrence and the next delivery sends it once (#1139)", async () => {
+    await queueCustomRuleReminders(now)
+    const [row] = await customOutbox()
+    sendNotificationMock.mockResolvedValueOnce({ ok: false, reason: "550 permanent rejection", permanent: true })
+    expect(await deliverOutbox({ now, ids: [row.id] })).toMatchObject({ failed: 1 })
+    expect((await prisma.reminderOccurrence.findFirstOrThrow({ where: { eventId } })).status).toBe("failed")
+
+    // Without reopening the occurrence, the resolver would cancel the retried row: the
+    // administrator's « Renvoyer » would silently send nothing.
+    expect(await retryOutboxRow(row.id, orgId)).toBe(true)
+    expect(await prisma.notificationOutbox.findUniqueOrThrow({ where: { id: row.id } }))
+      .toMatchObject({ status: "pending", attempts: 0, claimedAt: null })
+    const reopened = await prisma.reminderOccurrence.findFirstOrThrow({ where: { eventId } })
+    expect(reopened).toMatchObject({ status: "queued", outboxId: row.id, lastError: null })
+    expect(reopened.sentAt).toBeNull()
+
+    sendNotificationMock.mockClear()
+    const later = new Date("2030-06-01T08:30:00Z")
+    expect(await deliverOutbox({ now: later, ids: [row.id] })).toMatchObject({ sent: 1 })
+    expect(sendNotificationMock).toHaveBeenCalledTimes(1)
+    expect((await prisma.reminderOccurrence.findFirstOrThrow({ where: { eventId } })).status).toBe("sent")
+    const sent = await prisma.notificationOutbox.findUniqueOrThrow({ where: { id: row.id } })
+    expect(sent.status).toBe("sent")
+    expect(sent.deliveryNotBefore).toBeNull()
+
+    // Once, not twice: nothing is due any more.
+    sendNotificationMock.mockClear()
+    expect(await deliverOutbox({ now: later, ids: [row.id] })).toMatchObject({ sent: 0 })
     expect(sendNotificationMock).not.toHaveBeenCalled()
   })
 

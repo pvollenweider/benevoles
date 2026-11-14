@@ -18,6 +18,8 @@ const m = vi.hoisted(() => ({
   registrationFindUnique: vi.fn(),
   leaderFindUnique: vi.fn(),
   adminFindUnique: vi.fn(),
+  queryRaw: vi.fn(),
+  emailLimitHitUpsert: vi.fn(),
 }))
 vi.mock("../prisma", () => ({
   prisma: {
@@ -32,6 +34,8 @@ vi.mock("../prisma", () => ({
       findUniqueOrThrow: (args: { where: { id?: string; dedupeKey?: string } }) =>
         args.where.dedupeKey ? m.findUniqueOrThrowByKey(args) : m.findUniqueOrThrow(args),
     },
+    emailLimitHit: { upsert: m.emailLimitHitUpsert },
+    $queryRaw: m.queryRaw,
   },
 }))
 vi.mock("../notifications/index", () => ({ sendNotification: m.sendNotification }))
@@ -40,6 +44,7 @@ vi.mock("next/server", () => ({ after: m.after }))
 vi.mock("../report-error", () => ({ reportError: (ctx: string) => (e: unknown) => m.reported(ctx, e) }))
 
 import { backoffMs, collectNotifications, isRecipientDataFailure, deliverAfterResponse, deliverOutbox, enqueueNotifications, MAX_ATTEMPTS, openPayload, outboxHealth, outboxMessageId, sealPayload } from "../notifications/outbox"
+import { hourStart } from "../notifications/limit-hits"
 
 const payload = { kind: "registration_confirmation" as const, recipient: { email: "a@x.com" }, data: {} }
 const now = new Date("2030-01-01T12:00:00Z")
@@ -49,6 +54,8 @@ beforeEach(() => {
   m.updateMany.mockResolvedValue({ count: 1 })
   m.findMany.mockResolvedValue([{ id: "n1", status: "pending", claimedAt: null }])
   m.findUniqueOrThrow.mockResolvedValue({ id: "n1", attempts: 0, payload })
+  m.queryRaw.mockResolvedValue([{ countedThisHour: true }])
+  m.emailLimitHitUpsert.mockResolvedValue({})
 })
 
 describe("collectNotifications / enqueueNotifications / deliverAfterResponse", () => {
@@ -303,28 +310,50 @@ describe("member invitation through the outbox (#1105)", () => {
     m.sendNotification.mockResolvedValue({ ok: false, reason: "limit:org_per_minute", held: true, retryAfterMs: 30_000 })
     const res = await deliverOutbox({ now })
     expect(res).toMatchObject({ held: 1, failed: 0 })
-    expect(m.update).toHaveBeenCalledWith(expect.objectContaining({ data: expect.objectContaining({ status: "pending", claimedAt: null }) }))
+    expect(m.queryRaw).toHaveBeenCalledOnce()
+    expect(m.update).not.toHaveBeenCalled()
   })
 
-  it("writes a sending-limit hold, its markers and its deadline in one statement (#1139)", async () => {
+  it("writes a sending-limit hold, its markers and its deadline in one fenced statement (#1139)", async () => {
     m.findUniqueOrThrow.mockResolvedValue({
       id: "n1", attempts: 0, payload, organizationId: "org-a", firstHeldAt: null, lastHeldAt: null, deliveryNotBefore: null,
     })
     m.sendNotification.mockResolvedValue({ ok: false, reason: "limit:org_per_minute", held: true, retryAfterMs: 30_000 })
     expect(await deliverOutbox({ now })).toMatchObject({ held: 1 })
-    // The rescheduler can never see a pending row without its hold: one update carries them all.
-    expect(m.update).toHaveBeenCalledTimes(1)
-    expect(m.update).toHaveBeenCalledWith({
-      where: { id: "n1" },
-      data: {
-        status: "pending",
-        claimedAt: null,
-        firstHeldAt: now,
-        lastHeldAt: now,
-        deliveryNotBefore: new Date(now.getTime() + 30_000),
-        nextAttemptAt: new Date(now.getTime() + 30_000),
-      },
-    })
+    // The rescheduler can never see a pending row without its hold: one statement carries them all.
+    expect(m.update).not.toHaveBeenCalled()
+    expect(m.queryRaw).toHaveBeenCalledOnce()
+    const [strings, ...values] = m.queryRaw.mock.calls[0] as [TemplateStringsArray, ...unknown[]]
+    const sql = strings.join("?")
+    // Fenced by the claim marker this worker wrote: a reclaimed row is never overwritten.
+    expect(sql).toContain('UPDATE "NotificationOutbox"')
+    expect(sql).toContain('o."claimedAt" = ?')
+    // The hour is decided from the row's own previous lastHeldAt, in the statement.
+    expect(sql).toContain('p."lastHeldAt" < ?')
+    expect(sql).toContain("RETURNING")
+    expect(values).toContain("n1")
+    expect(values).toContain(now.toISOString()) // claim marker, and the new hold marker
+    expect(values).toContain(hourStart(now).toISOString())
+  })
+
+  it("records the limit hit only when the fenced update applied and had not been held this hour", async () => {
+    m.findUniqueOrThrow.mockResolvedValue({ id: "n1", attempts: 0, payload, organizationId: "org-a", lastHeldAt: null })
+    m.sendNotification.mockResolvedValue({ ok: false, reason: "limit:org_per_minute", held: true, retryAfterMs: 30_000, limit: "org_per_minute" })
+    expect(await deliverOutbox({ now })).toMatchObject({ held: 1 })
+    expect(m.emailLimitHitUpsert).toHaveBeenCalledOnce()
+
+    m.queryRaw.mockResolvedValue([{ countedThisHour: false }])
+    m.emailLimitHitUpsert.mockClear()
+    expect(await deliverOutbox({ now })).toMatchObject({ held: 1 })
+    expect(m.emailLimitHitUpsert).not.toHaveBeenCalled()
+  })
+
+  it("a worker whose claim was reclaimed writes no hold and counts no hit", async () => {
+    m.findUniqueOrThrow.mockResolvedValue({ id: "n1", attempts: 0, payload, organizationId: "org-a", lastHeldAt: null })
+    m.sendNotification.mockResolvedValue({ ok: false, reason: "limit:org_per_minute", held: true, retryAfterMs: 30_000 })
+    m.queryRaw.mockResolvedValue([])
+    expect(await deliverOutbox({ now })).toMatchObject({ held: 0 })
+    expect(m.emailLimitHitUpsert).not.toHaveBeenCalled()
   })
 })
 

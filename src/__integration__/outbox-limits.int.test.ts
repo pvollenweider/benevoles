@@ -71,4 +71,70 @@ describe.skipIf(!url)("outbox and sending limits on Postgres (#810)", () => {
     ;[view] = (await loadLimitHits({ organizationId: orgId, now: later })).groups
     expect(view).toMatchObject({ stillHeld: 0, queueStatus: "Plus aucun email retenu en attente" })
   })
+
+  it("counts one hit and keeps the reclaiming worker's markers when a stalled worker reaches the hold (#1139)", async () => {
+    smtp.mockReset().mockResolvedValue({ ok: true })
+    const raceOrg = await prisma.organization.create({ data: { name: `${tag}-race`, slug: `${tag}-race` } })
+    const raceOrgId = raceOrg.id
+    process.env.EMAIL_LIMIT_ORG_PER_MINUTE = "1"
+    try {
+      // Fill this minute's window with one email that goes: both deliveries below are held.
+      const at = new Date()
+      const [fillerId] = await enqueueNotifications([{
+        kind: "registration_confirmation", recipient: { email: `${tag}-filler@example.org` }, organizationId: raceOrgId, data: {},
+      }])
+      rowIds.push(fillerId)
+      expect(await deliverOutbox({ ids: [fillerId], now: at })).toMatchObject({ sent: 1 })
+
+      const [rowId] = await enqueueNotifications([{
+        kind: "registration_confirmation", recipient: { email: `${tag}-race@example.org` }, organizationId: raceOrgId, data: {},
+      }])
+      rowIds.push(rowId)
+      await prisma.notificationOutbox.update({ where: { id: rowId }, data: { nextAttemptAt: at } })
+
+      // A claims first, stalls before its hold write. B reclaims the stale claim (past the
+      // 15-minute timeout) and reaches the hold before A resumes.
+      const aAt = new Date(at.getTime() + 1_000)
+      const bAt = new Date(aAt.getTime() + 16 * 60_000)
+      const original = prisma.$queryRaw.bind(prisma)
+      let releaseA!: () => void
+      let reachedA!: () => void
+      const gate = new Promise<void>((resolve) => { releaseA = resolve })
+      const reached = new Promise<void>((resolve) => { reachedA = resolve })
+      const spy = vi.spyOn(prisma, "$queryRaw").mockImplementation((async (strings: TemplateStringsArray, ...values: unknown[]) => {
+        if (values.includes(aAt.toISOString())) {
+          reachedA()
+          await gate
+        }
+        return (original as unknown as (s: TemplateStringsArray, ...v: unknown[]) => Promise<unknown>)(strings, ...values)
+      }) as never)
+
+      try {
+        const runA = deliverOutbox({ ids: [rowId], now: aAt })
+        await reached
+        expect(await deliverOutbox({ ids: [rowId], now: bAt })).toMatchObject({ held: 1 })
+        releaseA()
+        // A lost its claim: it writes nothing and counts nothing.
+        expect(await runA).toMatchObject({ held: 0 })
+      } finally {
+        releaseA()
+        spy.mockRestore()
+      }
+
+      expect(await prisma.emailLimitHit.findMany({ where: { organizationId: raceOrgId, limit: "org_per_minute" } }))
+        .toMatchObject([{ heldCount: 1, refusedCount: 0 }])
+      const held = await prisma.notificationOutbox.findUniqueOrThrow({ where: { id: rowId } })
+      expect(held.status).toBe("pending")
+      expect(held.claimedAt).toBeNull()
+      // B's markers and deadline, not A's older ones.
+      expect(held.firstHeldAt?.getTime()).toBe(bAt.getTime())
+      expect(held.lastHeldAt?.getTime()).toBe(bAt.getTime())
+      expect(held.nextAttemptAt.getTime()).toBe(held.deliveryNotBefore!.getTime())
+    } finally {
+      delete process.env.EMAIL_LIMIT_ORG_PER_MINUTE
+      await prisma.emailLimitHit.deleteMany({ where: { organizationId: raceOrgId } })
+      await prisma.notificationOutbox.deleteMany({ where: { organizationId: raceOrgId } })
+      await prisma.organization.deleteMany({ where: { id: raceOrgId } })
+    }
+  })
 })

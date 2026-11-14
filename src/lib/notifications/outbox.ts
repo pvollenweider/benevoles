@@ -234,6 +234,53 @@ export function outboxMessageId(rowId: string): string {
 }
 
 /**
+ * Puts a row held over a sending limit (#810) back to pending in ONE statement (#1139): status,
+ * claim release, first/last hold markers and the deadline commit together, so the rescheduler can
+ * never see a pending row without its hold. Fenced by the claim this worker wrote: a delivery that
+ * stalled past the claim timeout and was reclaimed must not touch the newer worker's row. The
+ * `countedThisHour` flag is computed from the row's own pre-update `lastHeldAt` in the same
+ * statement, not from the snapshot read before the send: only the delivery whose write lands
+ * records the limit hit, once per row and UTC hour.
+ */
+async function holdForLimit(
+  rowId: string,
+  claimMarker: Date,
+  now: Date,
+  heldUntil: Date,
+): Promise<{ applied: boolean; countedThisHour: boolean }> {
+  const hour = hourStart(now)
+  // Instants go in as UTC ISO strings cast to the column's timestamp(3): a raw Date parameter's
+  // binding type (timestamp or timestamptz) depends on the driver, and a session timezone must
+  // never move a claim marker or a deadline.
+  const claim = claimMarker.toISOString()
+  const at = now.toISOString()
+  const bucket = hour.toISOString()
+  const until = heldUntil.toISOString()
+  const rows = await prisma.$queryRaw<{ countedThisHour: boolean }[]>`
+    WITH previous AS (
+      SELECT "lastHeldAt" FROM "NotificationOutbox"
+      WHERE id = ${rowId} AND status = 'sending' AND "claimedAt" = ${claim}::timestamp(3)
+    )
+    UPDATE "NotificationOutbox" AS o
+    SET status = 'pending',
+        "claimedAt" = NULL,
+        "firstHeldAt" = COALESCE(o."firstHeldAt", ${at}::timestamp(3)),
+        "lastHeldAt" = CASE
+          WHEN p."lastHeldAt" IS NULL OR p."lastHeldAt" < ${bucket}::timestamp(3) THEN ${at}::timestamp(3)
+          ELSE o."lastHeldAt"
+        END,
+        "deliveryNotBefore" = ${until}::timestamp(3),
+        "nextAttemptAt" = ${until}::timestamp(3)
+    FROM previous AS p
+    WHERE o.id = ${rowId} AND o.status = 'sending' AND o."claimedAt" = ${claim}::timestamp(3)
+    RETURNING (p."lastHeldAt" IS NULL OR p."lastHeldAt" < ${bucket}::timestamp(3)) AS "countedThisHour"
+  `
+  return rows.length === 0
+    ? { applied: false, countedThisHour: false }
+    : { applied: true, countedThisHour: rows[0].countedThisHour }
+}
+
+/**
  * Delivers stored rows once the response has been sent. After a transactional enqueue, call it
  * only once the transaction has committed: before that, the rows aren't visible to delivery.
  */
@@ -330,7 +377,7 @@ export async function deliverOutbox(opts: { ids?: string[]; limit?: number; now?
 
     if (customReminderCancelled) {
       await prisma.$transaction([
-        prisma.notificationOutbox.update({ where: { id: row.id }, data: { status: "cancelled", lastError: customReminderCancelled, claimedAt: null } }),
+        prisma.notificationOutbox.update({ where: { id: row.id }, data: { status: "cancelled", lastError: customReminderCancelled, claimedAt: null, deliveryNotBefore: null } }),
         // Never reopen a sent occurrence: only pending/queued rows are cancelled here.
         prisma.reminderOccurrence.updateMany({
           where: { id: customReminderOccurrenceId ?? "", status: { in: ["pending", "queued"] } },
@@ -364,19 +411,19 @@ export async function deliverOutbox(opts: { ids?: string[]; limit?: number; now?
     }
 
     if (recipientRefused) {
-      await prisma.notificationOutbox.update({ where: { id: row.id }, data: { status: "cancelled", lastError: recipientRefused, claimedAt: null } })
+      await prisma.notificationOutbox.update({ where: { id: row.id }, data: { status: "cancelled", lastError: recipientRefused, claimedAt: null, deliveryNotBefore: null } })
       result.cancelled++
       continue
     }
 
     if (inactivityStopped) {
-      await prisma.notificationOutbox.update({ where: { id: row.id }, data: { status: "cancelled", lastError: inactivityStopped, claimedAt: null } })
+      await prisma.notificationOutbox.update({ where: { id: row.id }, data: { status: "cancelled", lastError: inactivityStopped, claimedAt: null, deliveryNotBefore: null } })
       result.cancelled++
       continue
     }
 
     if (nothingLeft) {
-      await prisma.notificationOutbox.update({ where: { id: row.id }, data: { status: "cancelled", lastError: "Plus aucune inscription à annoncer.", claimedAt: null } })
+      await prisma.notificationOutbox.update({ where: { id: row.id }, data: { status: "cancelled", lastError: "Plus aucune inscription à annoncer.", claimedAt: null, deliveryNotBefore: null } })
       result.cancelled++
       continue
     }
@@ -387,20 +434,13 @@ export async function deliverOutbox(opts: { ids?: string[]; limit?: number; now?
       // and the deadline are written in ONE statement (#1139): the rescheduler must never see a
       // pending row without its hold. The hold is later than the due instant (the row was due).
       const heldUntil = new Date(now.getTime() + (outcome.retryAfterMs ?? 60_000))
-      const heldThisHour = !claimed.lastHeldAt || claimed.lastHeldAt.getTime() < hourStart(now).getTime()
-      await prisma.notificationOutbox.update({
-        where: { id: row.id },
-        data: {
-          status: "pending",
-          claimedAt: null,
-          firstHeldAt: claimed.firstHeldAt ?? now,
-          lastHeldAt: heldThisHour ? now : claimed.lastHeldAt,
-          deliveryNotBefore: heldUntil,
-          nextAttemptAt: heldUntil,
-        },
-      })
+      const hold = await holdForLimit(row.id, now, now, heldUntil)
+      // Our claim was reclaimed meanwhile (a stalled delivery, pick up after the claim timeout):
+      // the row belongs to the newer worker, which writes its own hold. Never overwrite its
+      // markers or deadline, and never count the same row and hour twice.
+      if (!hold.applied) continue
       result.held++
-      if (heldThisHour && outcome.limit) {
+      if (hold.countedThisHour && outcome.limit) {
         await recordLimitHit({ organizationId: claimed.organizationId, limit: outcome.limit, kind, outcome: "held", now })
       }
       continue
@@ -409,7 +449,7 @@ export async function deliverOutbox(opts: { ids?: string[]; limit?: number; now?
     if (!outcome.ok && outcome.blocked) {
       // Deactivated or deleted organisation (#814), or a public-triggered email over its
       // per-recipient cap (#810): cancelled for good, never retried, never sent later.
-      await prisma.notificationOutbox.update({ where: { id: row.id }, data: { status: "cancelled", lastError: outcome.reason, claimedAt: null } })
+      await prisma.notificationOutbox.update({ where: { id: row.id }, data: { status: "cancelled", lastError: outcome.reason, claimedAt: null, deliveryNotBefore: null } })
       result.cancelled++
       continue
     }
@@ -421,21 +461,21 @@ export async function deliverOutbox(opts: { ids?: string[]; limit?: number; now?
         // the sent row itself is purged the next night, the confirmation stays.
         const stepId = claimed.inactivityStepId
         await prisma.$transaction([
-          prisma.notificationOutbox.update({ where: { id: row.id }, data: { status: "sent", sentAt, lastError: null } }),
+          prisma.notificationOutbox.update({ where: { id: row.id }, data: { status: "sent", sentAt, lastError: null, deliveryNotBefore: null } }),
           prisma.orgInactivityStep.updateMany({ where: { id: stepId, confirmedAt: null }, data: { confirmedAt: sentAt } }),
         ])
       } else if (customReminderOccurrenceId) {
         // The email and its occurrence commit together: a crash cannot leave the occurrence
         // unsent while the outbox row says sent (delivery stays at-least-once either way).
         await prisma.$transaction([
-          prisma.notificationOutbox.update({ where: { id: row.id }, data: { status: "sent", sentAt, lastError: null } }),
+          prisma.notificationOutbox.update({ where: { id: row.id }, data: { status: "sent", sentAt, lastError: null, deliveryNotBefore: null } }),
           prisma.reminderOccurrence.updateMany({
             where: { id: customReminderOccurrenceId, status: "queued" },
             data: { status: "sent", sentAt, lastError: null },
           }),
         ])
       } else {
-        await prisma.notificationOutbox.update({ where: { id: row.id }, data: { status: "sent", sentAt, lastError: null } })
+        await prisma.notificationOutbox.update({ where: { id: row.id }, data: { status: "sent", sentAt, lastError: null, deliveryNotBefore: null } })
       }
       if (customReminderOccurrenceId && payloadForPush) {
         // Push is best effort, only after the email was accepted: a suspended organisation never

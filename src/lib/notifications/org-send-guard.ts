@@ -75,7 +75,7 @@ export async function organizationBlocksSending(organizationId: string | null | 
 
 type OutboxCanceller = {
   notificationOutbox: {
-    updateMany(args: { where: { organizationId: string; status: "pending" }; data: { status: "cancelled"; lastError: string; claimedAt: null } }): Promise<{ count: number }>
+    updateMany(args: { where: { organizationId: string; status: "pending" }; data: { status: "cancelled"; lastError: string; claimedAt: null; deliveryNotBefore: null } }): Promise<{ count: number }>
   }
 }
 
@@ -87,7 +87,7 @@ type OutboxCanceller = {
 export async function cancelPendingOutboxForOrganization(db: OutboxCanceller, organizationId: string): Promise<number> {
   const { count } = await db.notificationOutbox.updateMany({
     where: { organizationId, status: "pending" },
-    data: { status: "cancelled", lastError: ORG_INACTIVE_REASON, claimedAt: null },
+    data: { status: "cancelled", lastError: ORG_INACTIVE_REASON, claimedAt: null, deliveryNotBefore: null },
   })
   return count
 }

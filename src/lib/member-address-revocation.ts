@@ -91,7 +91,7 @@ export async function renewMemberLinks(tx: Tx, input: {
     if (memberLinkPayload(payload, volunteer.id, oldLinks, hashToken)) toCancel.push(row.id)
   }
   if (toCancel.length) {
-    await tx.notificationOutbox.updateMany({ where: { id: { in: toCancel }, status: "pending" }, data: { status: "cancelled", lastError: MEMBER_ADDRESS_CHANGED_REASON } })
+    await tx.notificationOutbox.updateMany({ where: { id: { in: toCancel }, status: "pending" }, data: { status: "cancelled", lastError: MEMBER_ADDRESS_CHANGED_REASON, deliveryNotBefore: null } })
   }
   const cancelled = toCancel
 
