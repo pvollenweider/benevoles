@@ -37,6 +37,7 @@ Format basé sur [Keep a Changelog](https://keepachangelog.com/fr/1.0.0/).
 
 ### Exploitation
 
+- `basic-ftp`, une dépendance indirecte de Lighthouse CI (outil de développement), passe à la 6.2.x par `overrides` (une alerte de sécurité). <!-- interne -->
 - Le webhook Gandi de cert-manager passe à OpenTelemetry 1.47.0 (deux alertes de sécurité) et se construit avec Go 1.26. <!-- interne -->
 - Le suivi des erreurs du navigateur ne fonctionne plus que sur benevol.app : une instance lancée depuis l'image publiée (essai local, auto-hébergement) n'envoie plus les erreurs de ses visiteurs au Sentry de benevol.app (#1335).
 - Le build webpack (celui des vidéos) ne s'arrête plus à la collecte des pages : `isomorphic-dompurify`, qui embarque sa propre version de jsdom, reste chargé depuis `node_modules`.
