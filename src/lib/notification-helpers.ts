@@ -21,7 +21,9 @@ type RegistrationEmailData = {
   to: string
   volunteerName: string
   eventTitle: string
-  shifts: ({ label: string; date: string; startTime: string; endTime: string } & ShiftInfo)[]
+  /** The event's id and each shift's poste: the page links (#1324) are resolved at send time. */
+  eventId: string
+  shifts: ({ label: string; roleName: string; date: string; startTime: string; endTime: string } & ShiftInfo)[]
   editToken: string
   orgSlug?: string
   confirmationMessage?: string
@@ -41,6 +43,7 @@ export async function sendConfirmationEmail(data: RegistrationEmailData, send: S
     data: {
       volunteerName: data.volunteerName,
       eventTitle: data.eventTitle,
+      eventId: data.eventId,
       shifts: data.shifts,
       editToken: data.editToken,
       orgSlug: data.orgSlug,

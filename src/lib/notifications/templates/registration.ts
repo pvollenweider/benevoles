@@ -14,7 +14,7 @@ import type { NotificationPayload } from "../types"
 import { digestItems } from "../digest-items"
 import { eventPublicUrl } from "@/lib/urls"
 import { clockTime } from "../../gantt-utils"
-import { shiftInfoText, type ShiftInfo } from "../../shift-info"
+import { shiftInfoText, withReadBeforeOnce, type ShiftInfo } from "../../shift-info"
 import { myPageUrl, docUrl, escapeHtml, shiftInfoHtml, btn, wrap, type RenderedEmail } from "./shared"
 import { SECTION_DOC_LINKS } from "@/lib/help-links"
 
@@ -41,6 +41,8 @@ export function renderConfirmation(p: NotificationPayload): RenderedEmail {
   }
   const editUrl = myPageUrl(orgSlug, editToken)
   const firstName = volunteerName.split(" ")[0]
+  // One link per page, even when several confirmed shifts are on the same poste (#1324).
+  const shiftsWithPages = withReadBeforeOnce(shifts)
   // The organizer's message may use {prénom}, {créneau}, {date}, {heure}: filled here as on the
   // confirmation page and the personal page, never sent raw. The text part substitutes plainly;
   // the HTML part parses the organizer's Markdown first and inserts the values as literal text,
@@ -59,7 +61,7 @@ export function renderConfirmation(p: NotificationPayload): RenderedEmail {
     `Super, ton inscription pour ${eventTitle} est confirmée !`,
     ``,
     `Tes créneaux :`,
-    ...shifts.flatMap((s) => [`  • ${s.label} · ${s.date} · ${clockTime(s.startTime)}–${clockTime(s.endTime)}`, ...shiftInfoText(s).map((l) => `      ${l}`)]),
+    ...shiftsWithPages.flatMap((s) => [`  • ${s.label} · ${s.date} · ${clockTime(s.startTime)}–${clockTime(s.endTime)}`, ...shiftInfoText(s).map((l) => `      ${l}`)]),
     ``,
     ...(message ? [message, ``] : []),
     `Un empêchement ? Tu peux gérer tes inscriptions ici :`,
@@ -77,7 +79,7 @@ export function renderConfirmation(p: NotificationPayload): RenderedEmail {
     <h2 style="margin:0 0 0.25em">Hello ${escapeHtml(firstName)} ! 🎉</h2>
     <p style="margin:0 0 1.25em;color:#555">Super, ton inscription pour <strong>${escapeHtml(eventTitle)}</strong> est confirmée !</p>
     <div style="background:#f9fafb;border-radius:10px;padding:14px 16px">
-      ${shifts.map((s) => `
+      ${shiftsWithPages.map((s) => `
         <div style="padding:6px 0;border-bottom:1px solid #e5e7eb">
           <strong style="color:#111">${escapeHtml(s.label)}</strong>
           <span style="color:#666;font-size:0.9em"> · ${escapeHtml(s.date)} · ${escapeHtml(clockTime(s.startTime))}–${escapeHtml(clockTime(s.endTime))}</span>

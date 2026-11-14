@@ -1,8 +1,10 @@
 // SPDX-FileCopyrightText: 2026 Philippe Vollenweider
 // SPDX-License-Identifier: AGPL-3.0-only
 
-import { onSiteContact, shiftInfoLines, showsDayContact, type ShiftInfo } from "@/lib/shift-info"
+import { onSiteContact, readBeforePages, shiftInfoLines, showsDayContact, type ShiftInfo } from "@/lib/shift-info"
+import { READ_BEFORE_LABEL } from "@/lib/event-page-postes"
 import PhoneLink from "@/components/PhoneLink"
+import ReadBeforeLinks from "@/components/ReadBeforeLinks"
 import MapLink from "@/components/MapLink"
 import EmergencyNote from "@/components/EmergencyNote"
 
@@ -14,7 +16,8 @@ import EmergencyNote from "@/components/EmergencyNote"
  */
 export default function ShiftInfoList({ info, className = "" }: { info: ShiftInfo; className?: string }) {
   const lines = shiftInfoLines(info)
-  if (lines.length === 0) return null
+  const pages = readBeforePages(info)
+  if (lines.length === 0 && pages.length === 0) return null
   const contact = onSiteContact(info)
   return (
     <div className={className}>
@@ -38,6 +41,8 @@ export default function ShiftInfoList({ info, className = "" }: { info: ShiftInf
           </div>
         ))}
       </dl>
+      {/* The pages attached to the shift's poste (#1324), after the practical info, never a dt/dd. */}
+      <ReadBeforeLinks pages={pages} label={READ_BEFORE_LABEL} className="mt-1" />
       {showsDayContact(lines) && <EmergencyNote className="mt-1" />}
     </div>
   )

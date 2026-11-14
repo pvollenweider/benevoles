@@ -5,7 +5,7 @@ import { describe, it, expect, vi, afterEach, beforeEach } from "vitest"
 import "@testing-library/jest-dom/vitest"
 import { render, screen, fireEvent, cleanup, waitFor, within } from "@testing-library/react"
 
-import EventPagesManager, { type EventPageRow } from "../admin/EventPagesManager"
+import EventPagesManager, { type EventPagePoste, type EventPageRow } from "../admin/EventPagesManager"
 
 // « Pages personnalisées » (#605): Monter / Descendre keep focus, announce the new position once,
 // stay reachable at the ends, and a failed save reverts the order while focus stays on the button.
@@ -13,7 +13,7 @@ import EventPagesManager, { type EventPageRow } from "../admin/EventPagesManager
 const fetchMock = vi.fn()
 
 const page = (over: Partial<EventPageRow>): EventPageRow => ({
-  id: "p1", slug: "faq", title: "FAQ", content: "", displayOrder: 0, ...over,
+  id: "p1", slug: "faq", title: "FAQ", content: "", displayOrder: 0, roleNames: [], ...over,
 })
 
 const threePages = [
@@ -22,8 +22,12 @@ const threePages = [
   page({ id: "p3", title: "Règlement", slug: "reglement", displayOrder: 2 }),
 ]
 
-function renderManager(pages = threePages) {
-  return render(<EventPagesManager eventId="evt-1" initialPages={pages} />)
+function renderManager(
+  pages = threePages,
+  postes: EventPagePoste[] = [{ name: "Bar", sector: null }, { name: "Accueil", sector: null }],
+  sectorsAdopted = false,
+) {
+  return render(<EventPagesManager eventId="evt-1" initialPages={pages} postes={postes} sectorsAdopted={sectorsAdopted} />)
 }
 
 const up = (title: string) => screen.getByRole("button", { name: `Monter la page « ${title} »` })
@@ -136,5 +140,87 @@ describe("EventPagesManager, Monter / Descendre (#605)", () => {
     renderManager([page({ id: "p1", title: "FAQ" })])
     expect(up("FAQ")).toHaveAttribute("aria-disabled", "true")
     expect(down("FAQ")).toHaveAttribute("aria-disabled", "true")
+  })
+})
+
+// #1324: a page can be attached to postes, as a labelled group of native checkboxes.
+describe("EventPagesManager, postes of an information page (#1324)", () => {
+  beforeEach(() => {
+    fetchMock.mockReset()
+    fetchMock.mockResolvedValue({ ok: true, json: async () => ({ success: true }) })
+    vi.stubGlobal("fetch", fetchMock)
+  })
+  afterEach(() => {
+    cleanup()
+    vi.unstubAllGlobals()
+  })
+
+  const openEdit = (title = "FAQ") => fireEvent.click(screen.getByRole("button", { name: `Modifier la page « ${title} »` }))
+
+  it("is a labelled group of checkboxes, usable at the keyboard, with the public warning as its description", () => {
+    renderManager([page({ id: "p1", title: "FAQ", roleNames: ["Bar"] })])
+    openEdit()
+    const group = screen.getByRole("group", { name: "Pour les bénévoles de ces postes" })
+    expect(group.tagName).toBe("FIELDSET")
+    const bar = within(group).getByRole("checkbox", { name: "Bar" })
+    expect(bar).toBeChecked()
+    bar.focus()
+    expect(bar).toHaveFocus()
+    expect(bar).toHaveClass("h-6", "w-6")
+    expect(within(group).getByRole("checkbox", { name: "Accueil" })).not.toBeChecked()
+    // The public warning is visible above « Titre » and part of the group's description.
+    const warning = screen.getByText(/Cette page est publique : tout le monde peut lire son titre et son contenu/)
+    expect(within(group).getByRole("checkbox", { name: "Bar" })).toBeInTheDocument()
+    expect(group.getAttribute("aria-describedby")?.split(" ")).toContain(warning.id)
+  })
+
+  it("saves the ticked postes with the page", async () => {
+    fetchMock.mockResolvedValueOnce({ ok: true, json: async () => ({ id: "p9", slug: "caisse", title: "Caisse", content: "", displayOrder: 2, roleNames: ["Bar"] }) })
+    renderManager([page({ id: "p1", title: "FAQ" })])
+    fireEvent.click(screen.getByRole("button", { name: "+ Ajouter une page" }))
+    fireEvent.change(screen.getByRole("textbox", { name: "Titre" }), { target: { value: "Caisse" } })
+    fireEvent.click(screen.getByRole("checkbox", { name: "Bar" }))
+    fireEvent.click(screen.getByRole("button", { name: "Enregistrer" }))
+    await waitFor(() => expect(fetchMock).toHaveBeenCalledWith(
+      "/api/admin/events/evt-1/pages",
+      expect.objectContaining({ method: "POST", body: JSON.stringify({ title: "Caisse", content: "", roleNames: ["Bar"] }) }),
+    ))
+  })
+
+  it("keeps a stored name no live poste carries, ticked and listed last as a deleted poste", () => {
+    renderManager([page({ id: "p1", title: "FAQ", roleNames: ["Bar", "Accueil"] })], [{ name: "Accueil", sector: null }])
+    // Only the live poste counts in the list, never the deleted one.
+    expect(screen.getByText("Pour le poste Accueil")).toBeInTheDocument()
+    expect(screen.queryByText(/Pour 2 postes/)).not.toBeInTheDocument()
+    openEdit()
+    expect(screen.getByRole("checkbox", { name: "Accueil" })).toBeChecked()
+    const deleted = screen.getByRole("checkbox", { name: "Bar (poste supprimé)" })
+    expect(deleted).toBeChecked()
+    // Listed after the live poste.
+    expect(screen.getAllByRole("checkbox").at(-1)).toBe(deleted)
+  })
+
+  it("shows the event's postes grouped by sector when it adopted sectors", () => {
+    renderManager([page({ id: "p1", title: "FAQ" })], [{ name: "Bar", sector: "Buvette" }, { name: "Accueil", sector: "Entrées" }], true)
+    openEdit()
+    const bar = screen.getByRole("group", { name: "Buvette" })
+    expect(within(bar).getByRole("checkbox", { name: "Bar" })).toBeInTheDocument()
+    expect(within(screen.getByRole("group", { name: "Entrées" })).getByRole("checkbox", { name: "Accueil" })).toBeInTheDocument()
+  })
+
+  it("says there is no poste yet instead of an empty fieldset", () => {
+    renderManager([page({ id: "p1", title: "FAQ" })], [])
+    openEdit()
+    expect(screen.queryByRole("group", { name: "Pour les bénévoles de ces postes" })).not.toBeInTheDocument()
+    expect(screen.getByText("Cet événement n'a pas encore de poste. Créez des créneaux, puis revenez ici.")).toBeInTheDocument()
+  })
+
+  // The API drops unknown poste names without refusing: a 400 is about the title, as before.
+  it("on a refused save, still focuses the title", async () => {
+    fetchMock.mockResolvedValueOnce({ ok: false, status: 400, json: async () => ({ error: "Données invalides." }) })
+    renderManager([page({ id: "p1", title: "FAQ" })])
+    openEdit()
+    fireEvent.click(screen.getByRole("button", { name: "Enregistrer" }))
+    await waitFor(() => expect(screen.getByRole("textbox", { name: "Titre" })).toHaveFocus())
   })
 })

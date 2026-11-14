@@ -6,10 +6,14 @@ import { requireOrgSession } from "@/lib/auth-guard"
 import { adminActor, diffFields, logEvent } from "@/lib/event-log"
 import { z } from "zod"
 import { validationError } from "@/lib/api-error"
+import { cleanPageRoleNames } from "@/lib/event-page-postes"
+import { eventPostes } from "@/lib/poste-suggestions"
 
 const patchSchema = z.object({
   title: z.string().min(1).max(120).optional(),
   content: z.string().max(20000).optional(),
+  /** Postes whose confirmed volunteers read this page before their shift (#1324); empty allowed. */
+  roleNames: z.array(z.string().max(100)).max(100).optional(),
 })
 
 export async function PATCH(req: Request, { params }: { params: Promise<{ id: string; pageId: string }> }) {
@@ -28,9 +32,20 @@ export async function PATCH(req: Request, { params }: { params: Promise<{ id: st
   const before = await db.eventPage.findFirst({ where: { id: pageId, eventId } })
   if (!before) return NextResponse.json({ error: "Non trouvé" }, { status: 404 })
 
-  const after = await db.eventPage.update({ where: { id: pageId }, data: parsed.data })
+  // Only names a live shift still carries (#1324): a stored name no live shift has any more is
+  // dropped, as for a group link.
+  let roleNames: string[] | undefined
+  if (parsed.data.roleNames !== undefined) {
+    const liveShifts = await db.shift.findMany({ where: { eventId, status: { not: "cancelled" } }, select: { roleName: true, displayOrder: true } })
+    roleNames = cleanPageRoleNames(parsed.data.roleNames, eventPostes(liveShifts))
+  }
 
-  const changes = diffFields(before, after, ["title", "content"])
+  const after = await db.eventPage.update({
+    where: { id: pageId },
+    data: { ...parsed.data, ...(roleNames !== undefined ? { roleNames } : {}) },
+  })
+
+  const changes = diffFields(before, after, ["title", "content", "roleNames"])
   if (changes) {
     await logEvent({
       eventId,

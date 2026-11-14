@@ -8,9 +8,10 @@ vi.mock("@/lib/auth-guard", () => ({ requireOrgSession: requireOrgSessionMock })
 const findFirst = vi.hoisted(() => vi.fn())
 const update = vi.hoisted(() => vi.fn())
 const del = vi.hoisted(() => vi.fn())
+const shiftFindMany = vi.hoisted(() => vi.fn())
 const logCreate = vi.hoisted(() => vi.fn())
 vi.mock("@/lib/prisma", () => ({
-  prisma: { eventPage: { findFirst, update, delete: del }, eventLog: { create: logCreate } },
+  prisma: { eventPage: { findFirst, update, delete: del }, shift: { findMany: shiftFindMany }, eventLog: { create: logCreate } },
 }))
 
 function patch(body: unknown) {
@@ -63,6 +64,16 @@ describe("PATCH/DELETE /api/admin/events/[id]/pages/[pageId]", () => {
         }),
       }),
     )
+  })
+
+  it("PATCH saves only postes a live shift still carries (#1324)", async () => {
+    findFirst.mockResolvedValue({ id: "p1", eventId: "evt-1", title: "FAQ", content: "x", roleNames: ["Bar"] })
+    update.mockResolvedValue({ id: "p1", eventId: "evt-1", title: "FAQ", content: "x", roleNames: ["Accueil"] })
+    shiftFindMany.mockResolvedValue([{ roleName: "Accueil", displayOrder: 0 }])
+    const { PATCH } = await import("@/app/api/admin/events/[id]/pages/[pageId]/route")
+    const res = await PATCH(patch({ roleNames: ["Accueil", "Bar"] }), { params: Promise.resolve({ id: "evt-1", pageId: "p1" }) })
+    expect(res.status).toBe(200)
+    expect(update).toHaveBeenCalledWith({ where: { id: "p1" }, data: { roleNames: ["Accueil"] } })
   })
 
   it("PATCH does not log anything when nothing actually changed", async () => {

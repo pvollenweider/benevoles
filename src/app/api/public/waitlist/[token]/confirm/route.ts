@@ -102,6 +102,7 @@ export async function POST(_req: Request, { params }: { params: Promise<{ token:
       await clearShiftDeclines(tx, reg.volunteerId, [reg.shiftId])
       const shift = {
         label: reg.shift.label,
+        roleName: reg.shift.roleName,
         date: reg.shift.date.toLocaleDateString("fr-FR"),
         startTime: reg.shift.startTime,
         endTime: reg.shift.endTime,
@@ -125,6 +126,7 @@ export async function POST(_req: Request, { params }: { params: Promise<{ token:
         data: {
           volunteerName: reg.volunteer.firstName,
           eventTitle: reg.event.title,
+          eventId: reg.event.id,
           shifts: [{ ...shift, ...pickShiftInfo(reg.shift, reg.event) }],
           editToken: token,
           orgSlug: reg.event.organization.slug,

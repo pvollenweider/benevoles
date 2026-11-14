@@ -84,6 +84,7 @@ export async function buildSignupNotifications(
       to: email,
       volunteerName: `${firstName} ${lastName}`,
       eventTitle: event.title,
+      eventId: event.id,
       shifts: activeShiftData,
       editToken,
       orgSlug: event.organization.slug,

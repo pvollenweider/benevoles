@@ -8,7 +8,7 @@
 
 import type { NotificationPayload } from "../types"
 import { clockTime, fmtRange } from "../../gantt-utils"
-import { emergencyNoteFor, shiftInfoText, type ShiftInfo } from "../../shift-info"
+import { emergencyNoteFor, shiftInfoText, withReadBeforeOnce, type ShiftInfo } from "../../shift-info"
 import { myPageUrl, escapeHtml, shiftInfoHtml, btn, wrap, type RenderedEmail } from "./shared"
 
 // ── Rappels auto (#672 : un email par bénévole, événement et jour) ──────────
@@ -72,7 +72,9 @@ export function renderReminderJ2(p: NotificationPayload): RenderedEmail {
   const d = p.data as ReminderData
   const editUrl = myPageUrl(d.orgSlug, d.editToken)
   const firstName = d.volunteerName.split(" ")[0]
-  const first = d.shifts[0]
+  // A page attached to a poste once in the group, even when several shifts are on it (#1324).
+  const shifts = withReadBeforeOnce(d.shifts)
+  const first = shifts[0]
   const subject = `J-2 — On se retrouve bientôt ! ${d.eventTitle}`
 
   const text = d.shifts.length === 1
@@ -101,7 +103,7 @@ export function renderReminderJ2(p: NotificationPayload): RenderedEmail {
         `Plus que 2 jours avant ${d.eventTitle}, on se réjouit de te retrouver !`,
         ``,
         `Tes créneaux du ${first.date} :`,
-        ...d.shifts.flatMap(shiftBlockText),
+        ...shifts.flatMap(shiftBlockText),
         ...noteText(d.shifts),
         ``,
         `Un empêchement ? Préviens-nous le plus vite possible :`,
@@ -130,7 +132,7 @@ export function renderReminderJ2(p: NotificationPayload): RenderedEmail {
     <p style="color:#555;margin:0 0 1.25em">Plus que 2 jours avant <strong>${escapeHtml(d.eventTitle)}</strong>, on se réjouit de te retrouver !</p>
     <p style="color:#555;margin:0 0 0.5em">Tes créneaux du <strong>${escapeHtml(first.date)}</strong> :</p>
     <ul style="list-style:none;margin:0;padding:14px 16px;background:#f9fafb;border-radius:10px">
-      ${d.shifts.map(shiftBlockHtml).join("")}
+      ${shifts.map(shiftBlockHtml).join("")}
     </ul>${noteHtml(d.shifts)}
     ${cancelHtml(d)}<p style="margin-top:1.5em">${btn(editUrl, d.cancelClosed ? "Voir qui prévenir si je ne peux plus venir" : "Annuler un créneau si je ne peux plus venir")}</p>
     <p style="color:#666;font-size:0.85em;margin-top:2em">Une grosse bise et à très vite !<br><strong>${escapeHtml(d.organizationName)}</strong></p>
@@ -143,7 +145,9 @@ export function renderReminderJ1(p: NotificationPayload): RenderedEmail {
   const d = p.data as ReminderData
   const editUrl = myPageUrl(d.orgSlug, d.editToken)
   const firstName = d.volunteerName.split(" ")[0]
-  const first = d.shifts[0]
+  // A page attached to a poste once in the group, even when several shifts are on it (#1324).
+  const shifts = withReadBeforeOnce(d.shifts)
+  const first = shifts[0]
   const subject = `Demain c'est le jour J — ${d.eventTitle} !`
 
   const text = d.shifts.length === 1
@@ -166,7 +170,7 @@ export function renderReminderJ1(p: NotificationPayload): RenderedEmail {
         `Hello ${firstName} !`,
         ``,
         `C'est demain ! Tes créneaux du ${first.date} pour ${d.eventTitle} :`,
-        ...d.shifts.flatMap(shiftBlockText),
+        ...shifts.flatMap(shiftBlockText),
         ...noteText(d.shifts),
         ``,
         `Un empêchement de dernière minute ? Préviens-nous vite :`,
@@ -190,7 +194,7 @@ export function renderReminderJ1(p: NotificationPayload): RenderedEmail {
     <h2 style="margin:0 0 0.25em">Hello ${escapeHtml(firstName)} ! C'est demain ! 🙌</h2>
     <p style="color:#555;margin:0 0 0.5em"><strong>${escapeHtml(d.eventTitle)}</strong> demain : tes créneaux du <strong>${escapeHtml(first.date)}</strong> :</p>
     <ul style="list-style:none;margin:0;padding:14px 16px;background:#f9fafb;border-radius:10px">
-      ${d.shifts.map(shiftBlockHtml).join("")}
+      ${shifts.map(shiftBlockHtml).join("")}
     </ul>${noteHtml(d.shifts)}
     ${cancelHtml(d)}<p style="margin-top:1.5em">${btn(editUrl, "Gérer mes inscriptions")}</p>
     <p style="color:#666;font-size:0.85em;margin-top:2em">On se réjouit de te retrouver !<br><strong>${escapeHtml(d.organizationName)}</strong></p>
@@ -203,7 +207,9 @@ export function renderReminderDd(p: NotificationPayload): RenderedEmail {
   const d = p.data as ReminderData
   const editUrl = myPageUrl(d.orgSlug, d.editToken)
   const firstName = d.volunteerName.split(" ")[0]
-  const first = d.shifts[0]
+  // A page attached to a poste once in the group, even when several shifts are on it (#1324).
+  const shifts = withReadBeforeOnce(d.shifts)
+  const first = shifts[0]
   const hoursLabel = d.hoursUntil && d.hoursUntil > 0 ? `dans ${d.hoursUntil}h` : "très bientôt"
   const subject = `C'est aujourd'hui — RDV ${hoursLabel} ! ${d.eventTitle}`
 
@@ -227,7 +233,7 @@ export function renderReminderDd(p: NotificationPayload): RenderedEmail {
         `Hello ${firstName} !`,
         ``,
         `C'est aujourd'hui ! RDV ${hoursLabel} pour le premier de tes ${d.shifts.length} créneaux de ${d.eventTitle} :`,
-        ...d.shifts.flatMap(shiftBlockText),
+        ...shifts.flatMap(shiftBlockText),
         ...noteText(d.shifts),
         ``,
         editUrl,
@@ -253,7 +259,7 @@ export function renderReminderDd(p: NotificationPayload): RenderedEmail {
     <h2 style="margin:0 0 0.25em">Hello ${escapeHtml(firstName)} ! C'est aujourd'hui 🎉</h2>
     <p style="color:#555;margin:0 0 0.5em">RDV <strong>${hoursLabel}</strong> pour le premier de tes <strong>${d.shifts.length} créneaux</strong> de <strong>${escapeHtml(d.eventTitle)}</strong> :</p>
     <ul style="list-style:none;margin:0;padding:14px 16px;background:#f9fafb;border-radius:10px">
-      ${d.shifts.map(shiftBlockHtml).join("")}
+      ${shifts.map(shiftBlockHtml).join("")}
     </ul>${noteHtml(d.shifts)}
     ${cancelHtml(d)}<p style="margin-top:1.5em">${btn(editUrl, "Voir mes inscriptions")}</p>
     <p style="color:#666;font-size:0.85em;margin-top:2em">On se réjouit de te retrouver !<br><strong>${escapeHtml(d.organizationName)}</strong></p>

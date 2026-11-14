@@ -112,6 +112,7 @@ async function run(req: Request) {
         data: {
           volunteerName: first.volunteer.firstName,
           eventTitle: first.event.title,
+          eventId: first.eventId,
           organizationName: first.event.organization.name,
           orgSlug: first.event.organization.slug,
           shifts,

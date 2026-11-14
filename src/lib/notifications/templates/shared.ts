@@ -7,7 +7,8 @@
  */
 
 import { orgBaseUrl } from "@/lib/urls"
-import { onSiteContact, shiftInfoLines, telHref, type ShiftInfo, type ShiftInfoLine } from "../../shift-info"
+import { onSiteContact, readBeforePages, shiftInfoLines, telHref, type ShiftInfo, type ShiftInfoLine } from "../../shift-info"
+import { READ_BEFORE_LABEL } from "@/lib/event-page-postes"
 import { MAP_LINK_EMAIL_LABEL } from "../../map-link"
 import { siteDomain, siteName } from "@/lib/site"
 import { docHref, type AdminHelpTarget } from "@/lib/help-links"
@@ -85,11 +86,17 @@ function lineHtml(l: ShiftInfoLine, info: ShiftInfo): string {
   return `${escapeHtml(l.text)}${l.href ? ` : <a href="${escapeHtml(l.href)}">${MAP_LINK_EMAIL_LABEL}</a>` : ""}`
 }
 
-/** Place, contact and instructions of a shift as small lines under it (#397). */
+/**
+ * Place, contact and instructions of a shift as small lines under it (#397), then the
+ * information pages attached to its poste (#1324): one link per page, the title only, never the
+ * content.
+ */
 export function shiftInfoHtml(info: ShiftInfo): string {
   const lines = shiftInfoLines(info)
-  if (lines.length === 0) return ""
-  return `<div style="color:#444;font-size:0.85em;margin-top:4px">${lines.map((l) => `<div>${escapeHtml(l.label)} : ${lineHtml(l, info)}</div>`).join("")}</div>`
+  const pages = readBeforePages(info)
+  if (lines.length === 0 && pages.length === 0) return ""
+  const pagesHtml = pages.map((p) => `<div><a href="${escapeHtml(p.url)}" style="color:#1d4ed8;text-decoration:underline">${escapeHtml(READ_BEFORE_LABEL)} : ${escapeHtml(p.title)}</a></div>`).join("")
+  return `<div style="color:#444;font-size:0.85em;margin-top:4px">${lines.map((l) => `<div>${escapeHtml(l.label)} : ${lineHtml(l, info)}</div>`).join("")}${pagesHtml}</div>`
 }
 
 export function btn(href: string, label: string): string {

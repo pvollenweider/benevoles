@@ -10,6 +10,7 @@ import { mailtoHref } from "@/lib/email-address"
 import { telHref } from "@/lib/shift-info"
 import { dayKey } from "@/lib/leader-scope"
 import { leaderRosterCount, leaderRosterDays, leaderRosterByPoste } from "@/lib/leader-roster"
+import ReadBeforeLinks from "@/components/ReadBeforeLinks"
 
 /**
  * The read-only roster of a sector leader (#1169): every poste of the sector, grouped by poste,
@@ -50,12 +51,14 @@ function StaffingLine({ s }: { s: RosterStaffing }) {
   )
 }
 
-export default function SectorLeaderRoster({ heading, eventTitle, postes, registrations, staffing }: {
+export default function SectorLeaderRoster({ heading, eventTitle, postes, registrations, staffing, readBefore }: {
   heading: string
   eventTitle: string
   postes: string[]
   registrations: RosterRegistration[]
   staffing: RosterStaffing[]
+  /** Pages attached to a poste of the sector (#1324), title and URL only. */
+  readBefore?: { title: string; url: string }[]
 }) {
   const ids = useId()
   const days = useMemo(() => leaderRosterDays(registrations, staffing), [registrations, staffing])
@@ -98,6 +101,14 @@ export default function SectorLeaderRoster({ heading, eventTitle, postes, regist
           <p className="text-sm text-gray-600 mt-1">{countText}</p>
         )}
       </div>
+
+      {readBefore && readBefore.length > 0 && (
+        <section aria-labelledby={`${ids}-read-before`} className="bg-white rounded-xl border border-gray-200 p-4">
+          <h2 id={`${ids}-read-before`} className="text-sm font-semibold text-gray-900">À lire avant les créneaux</h2>
+          <p className="text-xs text-gray-600 mt-0.5">{readBefore.length > 1 ? "Les bénévoles de vos postes reçoivent ces liens avec leur confirmation et leurs rappels." : "Les bénévoles de vos postes reçoivent ce lien avec leur confirmation et leurs rappels."}</p>
+          <ReadBeforeLinks pages={readBefore} className="mt-1" />
+        </section>
+      )}
 
       {belowMinimum.length > 0 && (
         <section aria-labelledby={`${ids}-below`} className="bg-white rounded-xl border border-red-200 p-4">

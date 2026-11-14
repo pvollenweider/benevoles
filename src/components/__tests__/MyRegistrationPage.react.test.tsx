@@ -3,7 +3,7 @@
  */
 import { describe, it, expect, vi, afterEach } from "vitest"
 import "@testing-library/jest-dom/vitest"
-import { render, screen, fireEvent, waitFor, cleanup, act } from "@testing-library/react"
+import { render, screen, fireEvent, waitFor, cleanup, act, within } from "@testing-library/react"
 
 vi.mock("next/navigation", () => ({ useParams: () => ({ token: "tok-bar" }) }))
 
@@ -23,7 +23,7 @@ const accueil = { id: "r-accueil", editToken: "tok-accueil", status: "waiting", 
 function pageData(registrations: unknown[], extra: Record<string, unknown> = {}) {
   return {
     ...extra,
-    event: { id: "e1", title: "Fête d'été", slug: "fete" },
+    event: { id: "e1", title: "Fête d'été", slug: "fete", ...((extra.event as object | undefined) ?? {}) },
     volunteer: { firstName: "Chloé", lastName: "Roy", email: "chloe@example.com" },
     registrations,
     orgHomeUrl: "https://org.example",
@@ -277,5 +277,35 @@ describe("MyRegistrationPage — more shifts", () => {
     confirmBar()
     await screen.findByRole("heading", { level: 1, name: "Toutes tes inscriptions ont été annulées" })
     expect(screen.getByRole("link", { name: "S'inscrire à d'autres créneaux" })).toHaveAttribute("href", signUpUrl)
+  })
+})
+
+// #1324: a page attached to a shift's poste is named with the shift's practical information,
+// never inside the description list, and never twice on the personal page.
+describe("MyRegistrationPage — pages to read before a shift (#1324)", () => {
+  afterEach(() => { cleanup(); vi.unstubAllGlobals(); vi.restoreAllMocks() })
+
+  const page = { title: "Tenir la caisse", url: "https://asso.example/fete/caisse" }
+
+  it("shows the link after the <dl> of a shift card", async () => {
+    await renderPage([{ ...bar, shift: { ...bar.shift, readBefore: [page] } }])
+    const link = screen.getByRole("link", { name: "À lire avant ton créneau : Tenir la caisse" })
+    expect(link).toHaveAttribute("href", page.url)
+    expect(link.closest("dl")).toBeNull()
+    expect(link).toHaveClass("text-blue-700", "underline", "py-1")
+  })
+
+  it("shows it in « Avant ta mission » for the next shift, and drops it from the event pages list", async () => {
+    const soon = new Date(Date.now() + 7 * 86_400_000).toISOString()
+    await renderPage(
+      [{ ...bar, shift: { ...bar.shift, date: soon, readBefore: [page] } }],
+      undefined,
+      { event: { id: "e1", title: "Fête d'été", slug: "fete", pages: [page, { title: "Accès", url: "https://asso.example/fete/acces" }] } },
+    )
+    const brief = screen.getByRole("region", { name: "Avant ta mission" })
+    expect(within(brief).getByRole("link", { name: "À lire avant ton créneau : Tenir la caisse" })).toHaveAttribute("href", page.url)
+    // Once as « À lire avant ton créneau », not again under « Infos de l'événement ».
+    expect(within(brief).getAllByRole("link", { name: /Tenir la caisse/ })).toHaveLength(1)
+    expect(within(brief).getByRole("link", { name: "Accès" })).toBeInTheDocument()
   })
 })

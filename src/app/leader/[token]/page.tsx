@@ -14,6 +14,7 @@ import { mailtoHref } from "@/lib/email-address"
 import { telHref } from "@/lib/shift-info"
 import SectorLeaderRoster, { type RosterRegistration, type RosterStaffing } from "@/components/public/SectorLeaderRoster"
 import { titleWithSiteName } from "@/lib/document-title"
+import LinksToPages from "@/components/ReadBeforeLinks"
 
 type RegistrationItem = {
   id: string
@@ -37,11 +38,26 @@ type PageData = {
   heading?: string
   postes?: string[]
   leaderName: string
+  /** Pages attached to a poste of the scope (#1324): title and URL only. */
+  readBefore?: { title: string; url: string }[]
   registrations: RegistrationItem[]
   staffing?: StaffingItem[]
 }
 
 const shiftKey = (s: { label: string; date: string; startTime: string }) => `${s.label}__${s.date}__${s.startTime}`
+
+
+/** The pages attached to the postes the leader covers (#1324), one link per page. */
+function ReadBeforeLinks({ pages }: { pages?: { title: string; url: string }[] }) {
+  if (!pages || pages.length === 0) return null
+  return (
+    <section aria-labelledby="leader-read-before" className="bg-white rounded-xl border border-gray-200 p-4">
+      <h2 id="leader-read-before" className="text-sm font-semibold text-gray-900">À lire avant les créneaux</h2>
+      <p className="text-xs text-gray-600 mt-0.5">{pages.length > 1 ? "Les bénévoles de vos postes reçoivent ces liens avec leur confirmation et leurs rappels." : "Les bénévoles de vos postes reçoivent ce lien avec leur confirmation et leurs rappels."}</p>
+      <LinksToPages pages={pages} className="mt-1" />
+    </section>
+  )
+}
 
 /** « 2/4 · minimum atteint », « 1/4 · sous le minimum (2) » (#949), read « 2 inscrits sur 4, minimum atteint ». */
 function StaffingLine({ s }: { s: StaffingItem }) {
@@ -137,6 +153,7 @@ export default function SectorLeaderPage() {
           postes={data.postes ?? []}
           registrations={data.registrations as unknown as RosterRegistration[]}
           staffing={(data.staffing ?? []) as unknown as RosterStaffing[]}
+          readBefore={data.readBefore}
         />
       </main>
       <div className="px-4"><PublicFooter site={orgPageFooterSite()} /></div>
@@ -159,6 +176,8 @@ export default function SectorLeaderPage() {
             {data.registrations.length} bénévole{data.registrations.length > 1 ? "s" : ""} inscrit{data.registrations.length > 1 ? "s" : ""}
           </p>
         </div>
+
+        <ReadBeforeLinks pages={data.readBefore} />
 
         {/* Shifts below their minimum (#949), those without anyone included: what to fill first. */}
         {belowMinimum.length > 0 && (

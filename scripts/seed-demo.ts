@@ -376,7 +376,7 @@ async function main() {
 
   await prisma.eventPage.createMany({
     data: [
-      { eventId: event.id, slug: "acces", title: "Accès et parking", displayOrder: 0, content: "## En transports publics\n\nBus 12, arrêt « Montvert, Collège ».\n\n## En voiture\n\nParking du terrain de foot, à 5 minutes à pied. La navette circule le samedi matin et l'après-midi." },
+      { eventId: event.id, slug: "acces", title: "Accès et parking", displayOrder: 0, roleNames: ["Navette"], content: "## En transports publics\n\nBus 12, arrêt « Montvert, Collège ».\n\n## En voiture\n\nParking du terrain de foot, à 5 minutes à pied. La navette circule le samedi matin et l'après-midi." },
       { eventId: event.id, slug: "faq", title: "Questions fréquentes", displayOrder: 1, content: "**Suis-je assuré·e ?** Oui, par l'assurance de l'association.\n\n**Faut-il une tenue ?** Un t-shirt de la fête vous est remis à l'accueil." },
     ],
   })

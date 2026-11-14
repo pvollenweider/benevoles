@@ -9,6 +9,8 @@ import { validationError } from "@/lib/api-error"
 import { publicEventInclude, toPublicEvent } from "@/lib/public-event"
 import { render } from "@/lib/notifications/templates"
 import { pickShiftInfo } from "@/lib/shift-info"
+import { pagesToReadBeforeShift } from "@/lib/event-page-postes"
+import { orgBaseUrl } from "@/lib/urls"
 
 /**
  * Preview of an event as a volunteer (#370), whatever its status (draft included): the same data
@@ -54,22 +56,34 @@ export async function POST(req: Request, { params }: { params: Promise<{ id: str
   const waitlisted = selected.filter((s) => s.registrations.length >= s.capacity).map((s) => s.id)
 
   const volunteerName = `${firstName} ${lastName}`.trim()
+  // The confirmation email's pages (#1324), as the real send resolves them: published event only,
+  // confirmed shifts only. Attached to the first shift, as the send-time helper does.
+  const confirmedShifts = selected.filter((s) => !waitlisted.includes(s.id))
+  const pageRows = event.publicStatus === "published" && confirmedShifts.length > 0
+    ? await guard.db.eventPage.findMany({
+        where: { eventId: id, roleNames: { hasSome: confirmedShifts.map((s) => s.roleName) } },
+        select: { slug: true, title: true, roleNames: true, displayOrder: true },
+        orderBy: { displayOrder: "asc" },
+      })
+    : []
+  const readBefore = pagesToReadBeforeShift(pageRows, confirmedShifts.map((s) => ({ status: "active", roleName: s.roleName })))
+    .map((p) => ({ title: p.title, url: `${orgBaseUrl(event.organization.slug)}/${event.slug}/${p.slug}` }))
   const email = render({
     kind: "registration_confirmation",
     recipient: { email: "apercu@exemple.ch", name: volunteerName },
     data: {
       volunteerName,
       eventTitle: event.title,
-      shifts: selected
-        .filter((s) => !waitlisted.includes(s.id))
-        .map((s) => ({
-          label: s.label,
-          roleName: s.roleName,
-          date: s.date.toLocaleDateString("fr-FR"),
-          startTime: s.startTime,
-          endTime: s.endTime,
-          ...pickShiftInfo(s, event),
-        })),
+      eventId: event.id,
+      shifts: confirmedShifts.map((s, i) => ({
+        label: s.label,
+        roleName: s.roleName,
+        date: s.date.toLocaleDateString("fr-FR"),
+        startTime: s.startTime,
+        endTime: s.endTime,
+        ...pickShiftInfo(s, event),
+        ...(i === 0 && readBefore.length > 0 ? { readBefore } : {}),
+      })),
       editToken: "apercu",
       orgSlug: event.organization.slug,
       confirmationMessage: event.confirmationMessage ?? undefined,

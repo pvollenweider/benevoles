@@ -17,6 +17,7 @@ describe("missionBrief", () => {
       leaders: [],
       instructions: "Entrée par la cour",
       pages: event.pages,
+      readBefore: [],
     })
   })
 
@@ -37,14 +38,14 @@ describe("missionBrief", () => {
   })
 
   it("renders with partial data: nothing invented", () => {
-    expect(missionBrief(shift(), {})).toEqual({ place: null, contact: null, leaders: [], instructions: null, pages: [] })
+    expect(missionBrief(shift(), {})).toEqual({ place: null, contact: null, leaders: [], instructions: null, pages: [], readBefore: [] })
     // Coordinates without a place name: a meeting point.
     expect(missionBrief(shift({ latitude: 46.18, longitude: 6.12 }), {}).place).toEqual({ text: "Point de rendez-vous", href: OSM(46.18, 6.12) })
     // A place name without coordinates: no map link.
     expect(missionBrief(shift(), { location: "Salle" }).place).toEqual({ text: "Salle", href: null })
     // Blank values count as missing; a page without a title is skipped.
     expect(missionBrief(shift({ locationDetails: " ", instructions: "  " }), { location: " ", publicInstructions: " ", pages: [{ title: " ", url: "https://x" }] }))
-      .toEqual({ place: null, contact: null, leaders: [], instructions: null, pages: [] })
+      .toEqual({ place: null, contact: null, leaders: [], instructions: null, pages: [], readBefore: [] })
   })
 })
 

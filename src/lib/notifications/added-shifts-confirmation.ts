@@ -134,6 +134,7 @@ export async function resolveAddedShiftsConfirmation(payload: NotificationPayloa
     data: {
       volunteerName: d.volunteerName,
       eventTitle: d.eventTitle,
+      eventId: d.eventId,
       orgSlug: d.orgSlug,
       confirmationMessage: d.confirmationMessage,
       ...(d.cancelNotice ? { cancelNotice: d.cancelNotice } : {}),

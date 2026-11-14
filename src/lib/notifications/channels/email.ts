@@ -13,6 +13,7 @@ import { recordDeliveryOutcomes } from "../delivery-outcomes"
 import { isRecipientAddressRejection } from "../recipient-rejection"
 import { encodeOutcomeReason } from "@/lib/outbox-view"
 import { siteDomain, siteName } from "@/lib/site"
+import { withReadBeforeShiftPages } from "@/lib/read-before-shift-data"
 
 /**
  * Outcome when no SMTP server is configured. Outside production (dev, tests) the message is printed
@@ -78,7 +79,10 @@ export const emailChannel: { send: Send } = {
     }
 
     const org = payload.organizationId ? await orgEmailContext(payload.organizationId) : null
-    const { subject, html, text } = render(payload, org?.brand)
+    // Pages attached to a shift's poste (#1324) are read now, not when the email was queued: a
+    // page deleted since then leaves no dead link. A read failure never blocks the email.
+    const prepared = await withReadBeforeShiftPages(payload).catch(() => payload)
+    const { subject, html, text } = render(prepared, org?.brand)
     const from = env.EMAIL_FROM ?? `${siteName()} <notifications@${siteDomain()}>`
     // The organization's own reply-to when it set one (#381), else the platform's.
     const replyTo = org?.replyTo ?? env.EMAIL_REPLY_TO ?? undefined
