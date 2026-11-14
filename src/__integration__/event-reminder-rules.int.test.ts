@@ -82,6 +82,9 @@ describe.skipIf(!url)("custom reminder rules on Postgres (#1139)", () => {
   })
 
   afterAll(async () => {
+    // The outbox has no foreign key to the organisation: rows left behind would later be counted
+    // by the nightly cleanup of another test file against an organisation that no longer exists.
+    await prisma.notificationOutbox.deleteMany({ where: { organizationId: orgId } })
     await prisma.organization.deleteMany({ where: { slug: { startsWith: tag } } })
     await prisma.$disconnect()
   })

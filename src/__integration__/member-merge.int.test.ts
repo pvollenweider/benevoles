@@ -45,6 +45,9 @@ describe.skipIf(!url)("member merge transaction (#600)", () => {
   })
 
   afterAll(async () => {
+    // No foreign key from the outbox to the organisation: leave no row for the nightly cleanup of
+    // another test file to count against an organisation that is gone.
+    await prisma.notificationOutbox.deleteMany({ where: { organizationId: orgId } })
     await prisma.organization.deleteMany({ where: { slug: { startsWith: tag } } })
     await prisma.$disconnect()
   })
