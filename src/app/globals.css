@@ -188,3 +188,29 @@ html:has([data-theme-scope].dark) {
 .dark [data-doc-video] :is(a, button):focus-visible {
   outline-color: #60a5fa;
 }
+
+/* « This page did not start » (#1343, src/components/HydrationNotice.tsx): in the server HTML,
+   hidden and taking no room, shown after 4 s if the page's scripts never attached (a browser too
+   old for them). The delay is CSS because scripts are what failed. A step of visibility, not a
+   movement: it must run under « Réduire les animations » too, hence a plain class and no
+   animate-* / motion-safe utility. */
+@keyframes hydration-notice-reveal {
+  to {
+    visibility: visible;
+    max-height: 40rem;
+  }
+}
+
+/* No room while hidden: the margin a « space-y » parent would give it is moved inside, under the
+   block, where max-height: 0 hides it too. */
+.hydration-notice {
+  margin-block: 0 !important;
+  visibility: hidden;
+  max-height: 0;
+  overflow: hidden;
+  animation: hydration-notice-reveal 1ms steps(1, end) 4s forwards;
+}
+
+.hydration-notice > p {
+  margin-bottom: 1rem;
+}
