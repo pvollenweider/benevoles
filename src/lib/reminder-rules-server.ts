@@ -17,8 +17,13 @@ import { groupRemindersByDay, type GroupableRegistration } from "./reminder-grou
 import { orgTimeZone } from "./time-zone"
 import {
   eventUsesCustomReminderRules,
+  HOURS_PER_DAY,
+  reminderPlaceActiveAt,
   reminderRuleDueAt,
   reminderRuleHours,
+  reminderShiftStart,
+  REMINDER_RULE_BOUNDS,
+  rescheduleQueuedOccurrences,
   triggeredCustomReminders,
   validateReminderRules,
 } from "./reminder-rules"
@@ -39,13 +44,15 @@ export type CustomReminderRun = {
   queued: number
   /** Time moved later between the claim and the current registrations: left for a later run. */
   deferred: number
+  /** Queued occurrences whose due instant moved with their shifts this run. */
+  rescheduled: number
   cancelled: number
   /** Another run already claimed or sent it. */
   handled: number
   failed: number
 }
 
-const EMPTY_RUN: CustomReminderRun = { events: 0, rules: 0, eligible: 0, queued: 0, deferred: 0, cancelled: 0, handled: 0, failed: 0 }
+const EMPTY_RUN: CustomReminderRun = { events: 0, rules: 0, eligible: 0, queued: 0, deferred: 0, rescheduled: 0, cancelled: 0, handled: 0, failed: 0 }
 
 /** Statuses written by the outbox on a queued occurrence, folded back before each run. */
 export async function reconcileCustomReminderOccurrences(): Promise<number> {
@@ -79,10 +86,23 @@ export async function reconcileCustomReminderOccurrences(): Promise<number> {
         data: { status: "sent", sentAt: row.sentAt ?? new Date() },
       })
       changed += count
-    } else if (row.status === "cancelled" || row.status === "failed") {
+    } else if (row.status === "failed") {
+      // A final delivery failure is terminal for that reminder (#1139): the occurrence moves to
+      // "failed", which the hourly run never reopens. Reopening automatically was the bug: every
+      // run saw a cancelled occurrence, recomputed it and queued a fresh row with zero attempts,
+      // forever. Only a relevant state change (shift, rule, address) or an explicit retry may
+      // reopen it; neither is built here, so the simplest safe rule is: never automatically.
       const { count } = await prisma.reminderOccurrence.updateMany({
         where: { id: occurrence.id, status: "queued" },
-        data: { status: "cancelled", lastError: row.lastError ?? (row.status === "failed" ? "Envoi en échec." : "Envoi annulé.") },
+        data: { status: "failed", lastError: row.lastError ?? "Envoi en échec." },
+      })
+      changed += count
+    } else if (row.status === "cancelled") {
+      // A cancellation is recomputed from the current registrations: an emptied group, a stopped
+      // rule/event or a shift that has started all stay harmless on the next run.
+      const { count } = await prisma.reminderOccurrence.updateMany({
+        where: { id: occurrence.id, status: "queued" },
+        data: { status: "cancelled", lastError: row.lastError ?? "Envoi annulé." },
       })
       changed += count
     }
@@ -98,8 +118,21 @@ export async function queueCustomRuleReminders(now: Date): Promise<CustomReminde
   await reconcileCustomReminderOccurrences()
   const run: CustomReminderRun = { ...EMPTY_RUN }
 
+  // Bound the hourly work (#1139): an event is worth loading only when one of its shifts can
+  // still reach the largest allowed delay (14 days at most), or when an occurrence is already
+  // queued/pending and must keep moving with its shift. Per-event delays narrow this further below.
+  const workFloor = new Date(now.getTime() - 2 * 86_400_000)
+  const workHorizon = new Date(now.getTime() + (REMINDER_RULE_BOUNDS.days.max * HOURS_PER_DAY + 24) * 3_600_000)
   const events = await prisma.event.findMany({
-    where: { publicStatus: "published", remindersEnabled: true, reminderRules: { some: {} } },
+    where: {
+      publicStatus: "published",
+      remindersEnabled: true,
+      reminderRules: { some: { enabled: true } },
+      OR: [
+        { reminderOccurrences: { some: { status: { in: ["queued", "pending"] } } } },
+        { shifts: { some: { status: { not: "cancelled" }, date: { gte: workFloor, lte: workHorizon } } } },
+      ],
+    },
     select: {
       ...customReminderEventSelect,
       reminderRules: {
@@ -123,18 +156,64 @@ export async function queueCustomRuleReminders(now: Date): Promise<CustomReminde
     run.rules += validation.rules.length
 
     const timeZone = orgTimeZone(event.organization)
-    const registrations = await prisma.registration.findMany({
-      where: { eventId: event.id, status: "active", shift: { status: { not: "cancelled" } } },
-      include: customReminderRegistrationInclude,
-    })
-    const groups = groupRemindersByDay(
-      registrations as (typeof registrations[number] & GroupableRegistration)[],
-      () => timeZone,
-    )
     const occurrences = await prisma.reminderOccurrence.findMany({
       where: { eventId: event.id },
-      select: { eventId: true, volunteerId: true, localDay: true, ruleId: true, status: true },
+      select: { id: true, eventId: true, volunteerId: true, localDay: true, ruleId: true, dueAt: true, status: true, outboxId: true },
     })
+    const hasOpenOccurrence = occurrences.some((occurrence) => occurrence.status === "queued" || occurrence.status === "pending")
+    // Bound the hourly work (#1139): with no queued/pending occurrence to reconcile, only shifts
+    // that can still reach the event's largest enabled delay matter; the stored local day can sit
+    // up to a day away from the start instant, hence the day of slack on each side.
+    const maxHours = Math.max(...validation.rules.map((rule) => reminderRuleHours(rule) ?? 0))
+    const floor = new Date(now.getTime() - 2 * 86_400_000)
+    const horizon = new Date(now.getTime() + (maxHours + 24) * 3_600_000)
+    const registrations = await prisma.registration.findMany({
+      where: {
+        eventId: event.id,
+        status: "active",
+        shift: {
+          status: { not: "cancelled" },
+          ...(hasOpenOccurrence ? {} : { date: { gte: floor, lte: horizon } }),
+        },
+      },
+      include: customReminderRegistrationInclude,
+    })
+    // Only places of shifts that have not started yet: a started shift is never reminded.
+    const upcoming = registrations.filter((registration) => reminderShiftStart(registration.shift, timeZone).getTime() > now.getTime())
+    const groups = groupRemindersByDay(
+      upcoming as (typeof upcoming[number] & GroupableRegistration)[],
+      () => timeZone,
+    )
+    // A queued occurrence is suppressed by the trigger evaluator; recompute its due instant from
+    // the current registrations so a shift moved back earlier brings its outbox row forward.
+    for (const change of rescheduleQueuedOccurrences(groups, validation.rules, occurrences)) {
+      const occurrence = occurrences.find(
+        (candidate) =>
+          candidate.eventId === change.eventId &&
+          candidate.volunteerId === change.volunteerId &&
+          candidate.localDay === change.localDay &&
+          candidate.ruleId === change.ruleId,
+      )
+      if (!occurrence || occurrence.status !== "queued") continue
+      if (occurrence.dueAt.getTime() !== change.dueAt.getTime()) {
+        await prisma.reminderOccurrence.update({ where: { id: occurrence.id }, data: { dueAt: change.dueAt } })
+        run.rescheduled++
+      }
+      if (!occurrence.outboxId) continue
+      const row = await prisma.notificationOutbox.findUnique({
+        where: { id: occurrence.outboxId },
+        select: { status: true, nextAttemptAt: true, attempts: true, firstHeldAt: true },
+      })
+      if (!row || row.status !== "pending") continue
+      // Preserve retry and quota backoff: a row that already attempted or was held keeps its
+      // schedule; only a row deferred purely by the shift time can be brought forward.
+      if (row.attempts > 0 || row.firstHeldAt) continue
+      if (change.dueAt.getTime() >= row.nextAttemptAt.getTime()) continue
+      await prisma.notificationOutbox.updateMany({
+        where: { id: occurrence.outboxId, status: "pending", attempts: 0, firstHeldAt: null },
+        data: { nextAttemptAt: change.dueAt },
+      })
+    }
     const triggers = triggeredCustomReminders(groups, validation.rules, now, occurrences)
     run.eligible += triggers.length
 
@@ -154,7 +233,7 @@ export async function queueCustomRuleReminders(now: Date): Promise<CustomReminde
           const occurrence = await tx.reminderOccurrence.findUniqueOrThrow({
             where: { eventId_volunteerId_localDay_ruleId: key },
           })
-          if (occurrence.status === "sent" || occurrence.status === "queued") return "handled" as const
+          if (occurrence.status === "sent" || occurrence.status === "queued" || occurrence.status === "failed") return "handled" as const
           // A cancelled occurrence may be recomputed from the current registrations. Its old
           // outbox row kept the dedupe key; release it so the new claim can queue a fresh row
           // (the old row stays as history, never sent).
@@ -212,7 +291,7 @@ export async function queueCustomRuleReminders(now: Date): Promise<CustomReminde
             })
             return "deferred" as const
           }
-          if (!group.registrations.some((r) => r.createdAt.getTime() <= dueAt.getTime())) {
+          if (!group.registrations.some((r) => reminderPlaceActiveAt(r).getTime() <= dueAt.getTime())) {
             return cancel("Inscription confirmée après l'heure du rappel.")
           }
           const payload = buildCustomReminderPayload({

@@ -5,6 +5,7 @@ import {
   reminderRuleDueAt,
   reminderRuleHours,
   reminderRuleStatus,
+  rescheduleQueuedOccurrences,
   triggeredCustomReminders,
   validateReminderRules,
   type ReminderOccurrenceKey,
@@ -23,12 +24,15 @@ function registration(over: {
   startTime?: string
   createdAt?: string
   id?: string
+  /** Set to model a sign-up that went through the email confirmation (#1253). */
+  confirmation?: { confirmedAt: string | null }
 } = {}): ReminderRuleRegistration & { id: string } {
   return {
     id: over.id ?? "reg-1",
     volunteerId: over.volunteerId ?? "vol-1",
     eventId: over.eventId ?? "evt-1",
     createdAt: new Date(over.createdAt ?? "2030-01-01T00:00:00Z"),
+    signupConfirmation: over.confirmation ? { confirmedAt: over.confirmation.confirmedAt ? new Date(over.confirmation.confirmedAt) : null } : null,
     shift: {
       date: new Date(over.date ?? "2030-06-01T00:00:00Z"),
       startTime: over.startTime ?? "10:00",
@@ -180,6 +184,35 @@ describe("late confirmations (#1139)", () => {
     expect(triggeredCustomReminders(groups, rules, now).map((t) => t.rule.id)).toEqual(["short"])
   })
 
+  it("uses SignupConfirmation.confirmedAt, not the request date, when email confirmation happened", () => {
+    const now = new Date("2030-06-01T07:30:00Z")
+    // Requested on 1 May but confirmed at 07:00Z, after the 06:00Z due instant: late, not due.
+    const late = groupsOf([registration({
+      startTime: "10:00",
+      createdAt: "2030-05-01T00:00:00Z",
+      confirmation: { confirmedAt: "2030-06-01T07:00:00Z" },
+    })])
+    expect(reminderRuleStatus(late[0], rule({ value: 2 }), now).status).toBe("late")
+
+    const onTime = groupsOf([registration({
+      startTime: "10:00",
+      createdAt: "2030-05-01T00:00:00Z",
+      confirmation: { confirmedAt: "2030-06-01T05:00:00Z" },
+    })])
+    expect(reminderRuleStatus(onTime[0], rule({ value: 2 }), now).status).toBe("due")
+  })
+
+  it("falls back to createdAt for a place created active at once or a confirmation without a timestamp", () => {
+    const now = new Date("2030-06-01T06:30:00Z")
+    const noConfirmation = groupsOf([registration({ startTime: "10:00", createdAt: "2030-05-01T00:00:00Z" })])
+    expect(reminderRuleStatus(noConfirmation[0], rule({ value: 2 }), now).status).toBe("due")
+
+    const confirmationWithoutTimestamp = groupsOf([registration({
+      startTime: "10:00", createdAt: "2030-05-01T00:00:00Z", confirmation: { confirmedAt: null },
+    })])
+    expect(reminderRuleStatus(confirmationWithoutTimestamp[0], rule({ value: 2 }), now).status).toBe("due")
+  })
+
   it("one place confirmed in time keeps the group's rule due", () => {
     const now = new Date("2030-06-01T06:30:00Z")
     const groups = groupsOf([
@@ -242,6 +275,34 @@ describe("sent suppression (#1139)", () => {
 
   it("a cancelled occurrence is recomputed from the current registrations", () => {
     expect(triggeredCustomReminders(groups, [rule()], now, [key("cancelled")])).toHaveLength(1)
+  })
+
+  it("a failed occurrence is terminal and never reopened by the hourly run", () => {
+    expect(triggeredCustomReminders(groups, [rule()], now, [key("failed")])).toEqual([])
+    expect(nextEventReminderPreview({ rules: [rule()], groups, now, occurrences: [key("failed")], eventRemindersEnabled: true }))
+      .toMatchObject({ state: "blocked", reason: "no-upcoming-reminder" })
+  })
+})
+
+describe("queued occurrence schedule (#1139)", () => {
+  it("recomputes a queued occurrence from the current shift so a move back earlier is not lost", () => {
+    const groups = groupsOf([registration({ startTime: "10:00" })])
+    const changes = rescheduleQueuedOccurrences(groups, [rule({ value: 2 })], [{
+      eventId: "evt-1", volunteerId: "vol-1", localDay: "2030-06-01", ruleId: "rule-1",
+      status: "queued", dueAt: new Date("2030-06-01T16:00:00Z"),
+    }])
+    expect(changes).toEqual([{
+      eventId: "evt-1", volunteerId: "vol-1", localDay: "2030-06-01", ruleId: "rule-1",
+      dueAt: new Date("2030-06-01T06:00:00Z"),
+    }])
+  })
+
+  it("leaves sent, unqueued and unknown-rule occurrences alone", () => {
+    const groups = groupsOf([registration({ startTime: "10:00" })])
+    const base = { eventId: "evt-1", volunteerId: "vol-1", localDay: "2030-06-01", ruleId: "rule-1", dueAt: new Date("2030-06-01T16:00:00Z") }
+    expect(rescheduleQueuedOccurrences(groups, [rule({ value: 2 })], [{ ...base, status: "sent" }])).toEqual([])
+    expect(rescheduleQueuedOccurrences(groups, [rule({ value: 2, enabled: false })], [{ ...base, status: "queued" }])).toEqual([])
+    expect(rescheduleQueuedOccurrences(groups, [rule({ value: 2 })], [{ ...base, status: "queued", ruleId: "other" }])).toEqual([])
   })
 })
 

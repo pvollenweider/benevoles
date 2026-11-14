@@ -96,6 +96,9 @@ const prismaMock = {
   deliveryOutcome: {
     findMany: vi.fn().mockResolvedValue([]), // #598
   },
+  reminderOccurrence: {
+    findMany: vi.fn().mockResolvedValue([]), // member export's reminder history (#1139)
+  },
   orgLog: {
     create: vi.fn().mockResolvedValue({ id: "log-1" }), // org activity log entries (#300 logo)
     findMany: vi.fn().mockResolvedValue([]), // activity export (#1049)

@@ -56,7 +56,8 @@ export const EVENT_LOG_ACTOR_TYPES = ["admin", "volunteer", "system"] as const
 export const ORG_LOG_ACTOR_TYPES = ["admin", "system"] as const
 
 // Custom per-event reminders (#1139): "hours" | "days", and the durable occurrence state.
-export const REMINDER_OCCURRENCE_STATUSES = ["pending", "queued", "sent", "cancelled"] as const
+// "failed" is a final delivery failure; the hourly run never reopens it automatically.
+export const REMINDER_OCCURRENCE_STATUSES = ["pending", "queued", "sent", "cancelled", "failed"] as const
 
 /** Table.column → allowed values, as enforced by the CHECK constraints. */
 export const CHECKED_COLUMNS = {

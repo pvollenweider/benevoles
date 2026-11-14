@@ -6,6 +6,7 @@ import { requireOrgSession } from "@/lib/auth-guard"
 import { exportFileName, membersCsv } from "@/lib/data-export"
 import { orgTimeZone } from "@/lib/time-zone"
 import { kindLabel, OUTCOME_LABEL_FR, REASON_LABEL_FR } from "@/lib/outbox-view"
+import { reminderRuleHours } from "@/lib/reminder-rules"
 import type { SmtpOutcome, SmtpReason } from "@/lib/notifications/smtp-outcome"
 // Reads the Organization row for its name and time zone, not a tenant-scoped model.
 // eslint-disable-next-line no-restricted-imports
@@ -56,6 +57,23 @@ export async function GET() {
       latestCharterAcceptanceByVolunteer.set(a.volunteerId, a.charterAcceptedAt)
     }
   }
+  // Custom reminder history (#1139): the occurrence rows identify the member's event, day, rule
+  // and delivery state. This export is the documented access-request mechanism, so it carries
+  // them; only the member ids already scoped above are read.
+  const reminders = await prisma.reminderOccurrence.findMany({
+    where: { volunteerId: { in: members.map((m) => m.id) } },
+    orderBy: [{ dueAt: "desc" }, { localDay: "desc" }],
+    select: {
+      volunteerId: true, localDay: true, status: true, dueAt: true, sentAt: true,
+      event: { select: { title: true } },
+      rule: { select: { unit: true, value: true } },
+    },
+  })
+  const remindersByVolunteer = new Map<string, typeof reminders>()
+  for (const reminder of reminders) {
+    if (!remindersByVolunteer.has(reminder.volunteerId)) remindersByVolunteer.set(reminder.volunteerId, [])
+    remindersByVolunteer.get(reminder.volunteerId)!.push(reminder)
+  }
   const now = new Date()
   const csv = membersCsv(members.map(({ _count, id, ...m }) => ({
     ...m,
@@ -67,6 +85,14 @@ export async function GET() {
       reason: o.reason ? (REASON_LABEL_FR[o.reason as SmtpReason] ?? o.reason) : null,
     })),
     charterAcceptedAt: latestCharterAcceptanceByVolunteer.get(id) ?? null,
+    reminderOccurrences: (remindersByVolunteer.get(id) ?? []).map((o) => ({
+      eventTitle: o.event.title,
+      localDay: o.localDay,
+      status: o.status,
+      dueAt: o.dueAt,
+      sentAt: o.sentAt,
+      ruleHours: reminderRuleHours(o.rule),
+    })),
   })), orgTimeZone(org))
   return new NextResponse(csv, {
     headers: {

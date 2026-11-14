@@ -90,8 +90,9 @@ describe.skipIf(!url)("custom reminder rules on Postgres (#1139)", () => {
     sendNotificationMock.mockResolvedValue({ ok: true })
     await prisma.reminderOccurrence.deleteMany({ where: { eventId } })
     await prisma.notificationOutbox.deleteMany({ where: { organizationId: orgId } })
+    await prisma.signupConfirmation.deleteMany({ where: { eventId } })
     await prisma.shift.update({ where: { id: shiftId }, data: { startTime: "10:00", status: "open" } })
-    await prisma.registration.update({ where: { id: registrationId }, data: { status: "active" } })
+    await prisma.registration.update({ where: { id: registrationId }, data: { status: "active", signupConfirmationId: null } })
     await prisma.eventReminderRule.update({ where: { id: ruleId }, data: { enabled: true, unit: "hours", value: 2 } })
   })
 
@@ -176,6 +177,104 @@ describe.skipIf(!url)("custom reminder rules on Postgres (#1139)", () => {
     expect(result.sent).toBe(1)
     expect(sendNotificationMock).toHaveBeenCalledTimes(1)
     expect(sendNotificationMock.mock.calls[0][0].data.shifts[0].startTime).toBe("09:00")
+  })
+
+  it("brings a deferred reminder forward when the shift moves back earlier", async () => {
+    // 08:00Z: a 2 h rule for a 10:00Z shift is due. The shift moves to 18:00, so delivery defers
+    // the outbox row to 16:00; moving it back to 10:00 must bring that row forward, not leave the
+    // reminder waiting for 16:00 where it would be cancelled because the shift has started.
+    await queueCustomRuleReminders(now)
+    const [row] = await customOutbox()
+    await prisma.shift.update({ where: { id: shiftId }, data: { startTime: "18:00" } })
+    const deferred = await deliverOutbox({ now, ids: [row.id] })
+    expect(deferred).toMatchObject({ sent: 0, held: 1 })
+    expect((await prisma.notificationOutbox.findUniqueOrThrow({ where: { id: row.id } })).nextAttemptAt.toISOString())
+      .toBe("2030-06-01T16:00:00.000Z")
+
+    await prisma.shift.update({ where: { id: shiftId }, data: { startTime: "10:00" } })
+    const earlier = new Date("2030-06-01T08:30:00Z")
+    const run = await queueCustomRuleReminders(earlier)
+    expect(run.rescheduled).toBeGreaterThanOrEqual(1)
+    const forwarded = await prisma.notificationOutbox.findUniqueOrThrow({ where: { id: row.id } })
+    expect(forwarded.nextAttemptAt.getTime()).toBeLessThanOrEqual(earlier.getTime())
+
+    sendNotificationMock.mockClear()
+    const delivered = await deliverOutbox({ now: earlier, ids: [row.id] })
+    expect(delivered.sent).toBe(1)
+    expect(sendNotificationMock).toHaveBeenCalledTimes(1)
+    expect(sendNotificationMock.mock.calls[0][0].data.shifts[0].startTime).toBe("10:00")
+  })
+
+  it("does not queue a reminder for a place confirmed after its due instant", async () => {
+    // Requested on 1 May (before the 08:00Z due instant) but confirmed by email at 08:15Z: the
+    // confirmation timestamp, not the request date, decides.
+    const confirmation = await prisma.signupConfirmation.create({
+      data: {
+        eventId,
+        volunteerId,
+        email: `${tag}@example.com`,
+        firstName: "Alice",
+        lastName: "Martin",
+        tokenHash: `${tag}-late-confirmation`,
+        expiresAt: new Date("2030-06-01T09:00:00Z"),
+        confirmedAt: new Date("2030-06-01T08:15:00Z"),
+        charterAcceptedHash: "test",
+        charterAcceptedAt: new Date("2030-05-01T00:00:00Z"),
+      },
+    })
+    await prisma.registration.update({ where: { id: registrationId }, data: { signupConfirmationId: confirmation.id } })
+
+    const run = await queueCustomRuleReminders(new Date("2030-06-01T08:30:00Z"))
+    expect(run.queued).toBe(0)
+    expect(await prisma.reminderOccurrence.findMany({ where: { eventId } })).toHaveLength(0)
+    expect(await customOutbox()).toHaveLength(0)
+  })
+
+  it("cancels at delivery when the place was confirmed after the due instant", async () => {
+    await queueCustomRuleReminders(now)
+    const [row] = await customOutbox()
+    const confirmation = await prisma.signupConfirmation.create({
+      data: {
+        eventId,
+        volunteerId,
+        email: `${tag}@example.com`,
+        firstName: "Alice",
+        lastName: "Martin",
+        tokenHash: `${tag}-late-delivery`,
+        expiresAt: new Date("2030-06-01T09:00:00Z"),
+        confirmedAt: new Date("2030-06-01T08:15:00Z"),
+        charterAcceptedHash: "test",
+        charterAcceptedAt: new Date("2030-05-01T00:00:00Z"),
+      },
+    })
+    await prisma.registration.update({ where: { id: registrationId }, data: { signupConfirmationId: confirmation.id } })
+
+    const result = await deliverOutbox({ now: new Date("2030-06-01T08:30:00Z"), ids: [row.id] })
+    expect(result).toMatchObject({ sent: 0, cancelled: 1 })
+    expect(sendNotificationMock).not.toHaveBeenCalled()
+    expect((await prisma.reminderOccurrence.findFirstOrThrow({ where: { eventId } })).status).toBe("cancelled")
+  })
+
+  it("does not queue a terminal delivery failure again on the next run", async () => {
+    await queueCustomRuleReminders(now)
+    const [row] = await customOutbox()
+    sendNotificationMock.mockResolvedValueOnce({ ok: false, reason: "550 permanent rejection", permanent: true })
+
+    const failed = await deliverOutbox({ now, ids: [row.id] })
+    expect(failed).toMatchObject({ sent: 0, failed: 1 })
+    expect((await prisma.reminderOccurrence.findFirstOrThrow({ where: { eventId } })).status).toBe("failed")
+    expect((await prisma.notificationOutbox.findUniqueOrThrow({ where: { id: row.id } })).status).toBe("failed")
+
+    sendNotificationMock.mockClear()
+    const next = new Date("2030-06-01T08:30:00Z")
+    const again = await queueCustomRuleReminders(next)
+    expect(again.queued).toBe(0)
+    // No fresh outbox row with zero attempts: the failed occurrence is terminal, not a cancellation.
+    expect((await customOutbox()).filter((r) => r.status !== "failed")).toHaveLength(0)
+    expect((await prisma.reminderOccurrence.findFirstOrThrow({ where: { eventId } })).status).toBe("failed")
+    const delivered = await deliverOutbox({ now: next })
+    expect(delivered.sent).toBe(0)
+    expect(sendNotificationMock).not.toHaveBeenCalled()
   })
 
   it("a cancellation that empties the group cancels the reminder", async () => {

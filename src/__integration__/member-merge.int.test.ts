@@ -17,6 +17,9 @@ import { runMemberMerge, MergeConflictError } from "@/lib/member-merge-transacti
 import { UnresolvedConflictsError } from "@/lib/member-merge"
 import { registrationToken } from "@/lib/token-vault"
 import { hashToken } from "@/lib/token-hash"
+import { sealPayload } from "@/lib/notifications/outbox"
+import { MERGED_MEMBER_CANCEL_REASON } from "@/lib/outbox-merge-cancel"
+import { queueCustomRuleReminders } from "@/lib/reminder-rules-server"
 
 const url = process.env.DATABASE_URL
 const tag = `int-merge-${Date.now()}`
@@ -29,10 +32,10 @@ describe.skipIf(!url)("member merge transaction (#600)", () => {
   let shift2 = ""
 
   beforeAll(async () => {
-    const org = await prisma.organization.create({ data: { name: "Org merge", slug: `${tag}-org` } })
+    const org = await prisma.organization.create({ data: { name: "Org merge", slug: `${tag}-org`, timeZone: "UTC" } })
     orgId = org.id
     const event = await prisma.event.create({
-      data: { organizationId: orgId, slug: "fete", title: "Fête", startDate: new Date("2030-06-01"), endDate: new Date("2030-06-01") },
+      data: { organizationId: orgId, slug: "fete", title: "Fête", publicStatus: "published", startDate: new Date("2030-06-01"), endDate: new Date("2030-06-01") },
     })
     eventId = event.id
     const s1 = await prisma.shift.create({ data: { eventId, roleName: "Bar", label: "Bar", date: new Date("2030-06-01"), startTime: "10:00", endTime: "12:00", capacity: 5 } })
@@ -219,6 +222,74 @@ describe.skipIf(!url)("member merge transaction (#600)", () => {
     expect((await prisma.notificationOutbox.findUniqueOrThrow({ where: { id: sending.id } })).status).toBe("sending")
 
     await prisma.notificationOutbox.deleteMany({ where: { id: { in: [byVolunteerId.id, byEmail.id, unrelated.id, sending.id] } } })
+  })
+
+  it("moves a sent reminder occurrence so a merge cannot resend it (#1139)", async () => {
+    const keep = await makeVolunteer("keep-reminder", `${tag}-keep-reminder@x.ch`)
+    const absorb = await makeVolunteer("absorb-reminder", `${tag}-absorb-reminder@x.ch`)
+    await prisma.registration.create({
+      data: { eventId, shiftId: shift2, volunteerId: absorb.id, status: "active", ...registrationToken.data(`${tag}-tok-reminder`) },
+    })
+    const rule = await prisma.eventReminderRule.create({
+      data: { eventId, unit: "hours", value: 2, enabled: true, displayOrder: 0 },
+    })
+    const sentAt = new Date("2030-06-01T08:00:00Z")
+    const sentOutbox = await prisma.notificationOutbox.create({
+      data: {
+        organizationId: orgId, status: "sent", sentAt,
+        payload: sealPayload({ kind: "reminder_rule", recipient: { email: absorb.email! }, volunteerId: absorb.id, data: { occurrenceId: "sent-occurrence" } }),
+      },
+    })
+    await prisma.reminderOccurrence.create({
+      data: { eventId, volunteerId: absorb.id, localDay: "2030-06-01", ruleId: rule.id, dueAt: sentAt, status: "sent", sentAt, outboxId: sentOutbox.id },
+    })
+
+    await runMemberMerge(getOrgClient(orgId), orgId, ADMIN_ACTOR, keep.id, absorb.id, {})
+
+    const moved = await prisma.reminderOccurrence.findMany({ where: { volunteerId: keep.id, eventId, ruleId: rule.id } })
+    expect(moved).toHaveLength(1)
+    expect(moved[0]).toMatchObject({ status: "sent", sentAt, outboxId: sentOutbox.id })
+    expect(await prisma.reminderOccurrence.count({ where: { volunteerId: absorb.id } })).toBe(0)
+
+    // The next hourly run finds the moved sent key and creates nothing: no second email.
+    await queueCustomRuleReminders(new Date("2030-06-01T12:30:00Z"))
+    expect(await prisma.reminderOccurrence.count({ where: { eventId, volunteerId: keep.id, ruleId: rule.id } })).toBe(1)
+    expect(await prisma.notificationOutbox.count({ where: { organizationId: orgId, dedupeKey: { startsWith: "reminder-rule:" } } })).toBe(0)
+  })
+
+  it("keeps sent precedence over a queued conflict and cancels its superseded outbox row (#1139)", async () => {
+    const keep = await makeVolunteer("keep-reminder-queued", `${tag}-keep-reminder-queued@x.ch`)
+    const absorb = await makeVolunteer("absorb-reminder-sent", `${tag}-absorb-reminder-sent@x.ch`)
+    const rule = await prisma.eventReminderRule.create({
+      data: { eventId, unit: "hours", value: 2, enabled: true, displayOrder: 0 },
+    })
+    const sentAt = new Date("2030-06-02T08:00:00Z")
+    const sentOutbox = await prisma.notificationOutbox.create({
+      data: {
+        organizationId: orgId, status: "sent", sentAt,
+        payload: sealPayload({ kind: "reminder_rule", recipient: { email: absorb.email! }, volunteerId: absorb.id, data: { occurrenceId: "sent-conflict" } }),
+      },
+    })
+    const queuedOutbox = await prisma.notificationOutbox.create({
+      data: {
+        organizationId: orgId, status: "pending",
+        payload: sealPayload({ kind: "reminder_rule", recipient: { email: keep.email! }, volunteerId: keep.id, data: { occurrenceId: "queued-conflict" } }),
+      },
+    })
+    await prisma.reminderOccurrence.createMany({
+      data: [
+        { eventId, volunteerId: keep.id, localDay: "2030-06-02", ruleId: rule.id, dueAt: new Date("2030-06-02T08:00:00Z"), status: "queued", outboxId: queuedOutbox.id },
+        { eventId, volunteerId: absorb.id, localDay: "2030-06-02", ruleId: rule.id, dueAt: sentAt, status: "sent", sentAt, outboxId: sentOutbox.id },
+      ],
+    })
+
+    await runMemberMerge(getOrgClient(orgId), orgId, ADMIN_ACTOR, keep.id, absorb.id, {})
+
+    const kept = await prisma.reminderOccurrence.findFirstOrThrow({ where: { volunteerId: keep.id, eventId, ruleId: rule.id } })
+    expect(kept).toMatchObject({ status: "sent", sentAt, outboxId: sentOutbox.id })
+    const superseded = await prisma.notificationOutbox.findUniqueOrThrow({ where: { id: queuedOutbox.id } })
+    expect(superseded.status).toBe("cancelled")
+    expect(superseded.lastError).toBe(MERGED_MEMBER_CANCEL_REASON)
   })
 
   it("refuses to merge across organizations", async () => {

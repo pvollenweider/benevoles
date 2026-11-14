@@ -19,7 +19,7 @@ import {
   type ReminderGroup,
 } from "./reminder-groups"
 import { orgTimeZone } from "./time-zone"
-import { reminderRuleDueAt, reminderRuleHours, type ReminderRuleInput } from "./reminder-rules"
+import { reminderPlaceActiveAt, reminderRuleDueAt, reminderRuleHours, type ReminderRuleInput } from "./reminder-rules"
 import { pickShiftInfo, withDayContact, withSectorLeaders } from "./shift-info"
 import { registrationToken } from "./token-vault"
 import { hasEarlierDeadline, reminderCancelNotice, selfCancelDeadline } from "./cancel-deadline"
@@ -49,6 +49,9 @@ export type CustomReminderEvent = Prisma.EventGetPayload<{ select: typeof custom
 export const customReminderRegistrationInclude = {
   volunteer: { select: { email: true, firstName: true } },
   shift: true,
+  // The email confirmation (#1253) that made the place active: its `confirmedAt` is the real
+  // activation instant, `Registration.createdAt` stays the request time (see reminderPlaceActiveAt).
+  signupConfirmation: { select: { confirmedAt: true } },
 } satisfies Prisma.RegistrationInclude
 
 export type CustomReminderRegistration = Prisma.RegistrationGetPayload<{
@@ -159,6 +162,7 @@ export async function resolveCustomRuleReminder(payload: NotificationPayload, no
   if (!occurrence) return { kind: "cancel", reason: "Rappel introuvable." }
   if (occurrence.status === "sent") return { kind: "cancel", reason: "Rappel déjà envoyé." }
   if (occurrence.status === "cancelled") return { kind: "cancel", reason: occurrence.lastError ?? "Rappel annulé." }
+  if (occurrence.status === "failed") return { kind: "cancel", reason: occurrence.lastError ?? "Rappel en échec définitif." }
 
   const event = await prisma.event.findUnique({ where: { id: occurrence.eventId }, select: customReminderEventSelect })
   if (!event || event.publicStatus !== "published" || !event.remindersEnabled) {
@@ -190,7 +194,7 @@ export async function resolveCustomRuleReminder(payload: NotificationPayload, no
   if (hours === null) return { kind: "cancel", reason: "Délai de rappel invalide." }
   const dueAt = reminderRuleDueAt(group.earliestStart, hours)
   if (dueAt.getTime() > now.getTime()) return { kind: "defer", until: dueAt }
-  if (!group.registrations.some((r) => r.createdAt.getTime() <= dueAt.getTime())) {
+  if (!group.registrations.some((r) => reminderPlaceActiveAt(r).getTime() <= dueAt.getTime())) {
     return { kind: "cancel", reason: "Inscription confirmée après l'heure du rappel." }
   }
   const built = buildCustomReminderPayload({ occurrenceId: occurrence.id, rule, event, group, now, timeZone })

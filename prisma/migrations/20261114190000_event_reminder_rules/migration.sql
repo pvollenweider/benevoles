@@ -39,7 +39,7 @@ CREATE TABLE "ReminderOccurrence" (
 -- (src/lib/reminder-rules.ts) owns the bounds and the duplicate-delay refusal.
 ALTER TABLE "EventReminderRule" ADD CONSTRAINT "EventReminderRule_unit_check" CHECK ("unit" IN ('hours', 'days'));
 ALTER TABLE "EventReminderRule" ADD CONSTRAINT "EventReminderRule_value_check" CHECK ("value" > 0);
-ALTER TABLE "ReminderOccurrence" ADD CONSTRAINT "ReminderOccurrence_status_check" CHECK ("status" IN ('pending', 'queued', 'sent', 'cancelled'));
+ALTER TABLE "ReminderOccurrence" ADD CONSTRAINT "ReminderOccurrence_status_check" CHECK ("status" IN ('pending', 'queued', 'sent', 'cancelled', 'failed'));
 
 -- CreateIndex
 CREATE INDEX "EventReminderRule_eventId_displayOrder_idx" ON "EventReminderRule"("eventId", "displayOrder");

@@ -123,13 +123,32 @@ export function eventUsesCustomReminderRules(rules: readonly Pick<ReminderRuleIn
 
 /** A registration that can be grouped and whose confirmation time decides late sign-ups. */
 export type ReminderRuleRegistration = GroupableRegistration & {
-  /**
-   * When the place was confirmed, as far as this schema records it: `Registration.createdAt`. A
-   * registration confirmed by email (#1253) keeps the date of its request, so a place requested
-   * before a due instant but confirmed after it is treated as on time. A dedicated confirmation
-   * timestamp would need a new column; PR 2 can decide.
-   */
+  /** When the registration row was created: the request time, not necessarily the confirmation. */
   createdAt: Date
+  /**
+   * The email confirmation that proved the address (#1253), when the sign-up went through one.
+   * `confirmedAt` is the instant the place became active; `Registration.createdAt` stays the
+   * request time. Null for a registration created active at once (admin, or an event without
+   * email confirmation), which falls back to `createdAt`.
+   */
+  signupConfirmation?: { confirmedAt: Date | null } | null
+}
+
+/**
+ * When a place became active, as far as this schema records it (#1139).
+ *
+ * `SignupConfirmation.confirmedAt` covers a public sign-up that waited for its email confirmation;
+ * the registration row keeps that relation after the click (`Registration.signupConfirmationId`),
+ * so a place requested before a reminder's due instant but confirmed after it is late. Every other
+ * registration falls back to `createdAt`, which is right for a place created active at once.
+ *
+ * LIMIT: no column records when a `requested` (approval) or `waiting` place became `active` after
+ * an organiser's approval or a waitlist promotion. Those transitions keep `createdAt` (and, for an
+ * email-confirmed sign-up, `confirmedAt`), so a place approved or promoted after the due instant
+ * can still pass as on time. Adding an activation timestamp is deliberately out of scope here.
+ */
+export function reminderPlaceActiveAt(registration: ReminderRuleRegistration): Date {
+  return registration.signupConfirmation?.confirmedAt ?? registration.createdAt
 }
 
 export type ReminderRuleStatus = "due" | "not-yet" | "late" | "started" | "disabled"
@@ -166,12 +185,12 @@ export function reminderRuleStatus<T extends ReminderRuleRegistration>(
   const dueAt = reminderRuleDueAt(group.earliestStart, hours)
   if (now.getTime() < dueAt.getTime()) return { status: "not-yet", dueAt, hours }
   if (group.earliestStart.getTime() <= now.getTime()) return { status: "started", dueAt, hours }
-  const confirmedBefore = group.registrations.some((r) => r.createdAt.getTime() <= dueAt.getTime())
+  const confirmedBefore = group.registrations.some((r) => reminderPlaceActiveAt(r).getTime() <= dueAt.getTime())
   if (!confirmedBefore) return { status: "late", dueAt, hours }
   return { status: "due", dueAt, hours }
 }
 
-/** The occurrence state that suppresses a reminder: sent once, and never reopened. */
+/** The occurrence state a pair carries: `sent` and `failed` are terminal, `queued` is in flight. */
 export type ReminderOccurrenceKey = {
   eventId: string
   volunteerId: string
@@ -191,9 +210,10 @@ export type CustomReminderTrigger<T extends ReminderRuleRegistration> = {
 }
 
 /**
- * The (group, rule) pairs the cron must claim now (#1139), in due order. A `sent` or `queued`
- * occurrence suppresses its pair; a `pending` or `cancelled` one does not (unsent occurrences are
- * recomputed from the current registrations, a sent one is never reopened).
+ * The (group, rule) pairs the cron must claim now (#1139), in due order. A `sent`, `queued` or
+ * `failed` occurrence suppresses its pair; a `pending` or `cancelled` one does not (unsent
+ * occurrences are recomputed from the current registrations, a sent one is never reopened, and a
+ * terminal delivery failure is not retried by the hourly run).
  */
 export function triggeredCustomReminders<T extends ReminderRuleRegistration>(
   groups: readonly ReminderGroup<T>[],
@@ -202,7 +222,7 @@ export function triggeredCustomReminders<T extends ReminderRuleRegistration>(
   occurrences: readonly ReminderOccurrenceKey[] = [],
 ): CustomReminderTrigger<T>[] {
   const handled = new Set(
-    occurrences.filter((o) => o.status === "sent" || o.status === "queued").map(occurrenceKey),
+    occurrences.filter((o) => o.status === "sent" || o.status === "queued" || o.status === "failed").map(occurrenceKey),
   )
   const triggers: CustomReminderTrigger<T>[] = []
   for (const group of groups) {
@@ -233,6 +253,58 @@ export function triggeredCustomReminders<T extends ReminderRuleRegistration>(
       a.group.volunteerId.localeCompare(b.group.volunteerId) ||
       a.rule.displayOrder - b.rule.displayOrder,
   )
+}
+
+/** A queued occurrence with the schedule stored after its outbox row was created. */
+export type ReminderOccurrenceSchedule = ReminderOccurrenceKey & { dueAt: Date }
+
+export type QueuedOccurrenceReschedule = {
+  eventId: string
+  volunteerId: string
+  localDay: string
+  ruleId: string
+  /** Due instant recomputed from the current registrations. */
+  dueAt: Date
+}
+
+/**
+ * Recomputed due instant of every `queued` occurrence (#1139), pure: a shift moved later makes
+ * delivery defer the outbox row to the new time; a later move back earlier must bring the row's
+ * schedule forward, or the reminder waits for the old, later time and is cancelled because the
+ * shift has started by then. A `queued` occurrence is otherwise suppressed by
+ * `triggeredCustomReminders`, so this is the only place that moves it.
+ *
+ * A missing group (emptied day) or a disabled/deleted rule returns nothing: the delivery recheck
+ * cancels it, exactly as before. Backoff and quota holds of the outbox row are not this function's
+ * business: the caller only advances a schedule that has none.
+ */
+export function rescheduleQueuedOccurrences<T extends ReminderRuleRegistration>(
+  groups: readonly ReminderGroup<T>[],
+  rules: readonly Pick<ReminderRuleInput, "id" | "unit" | "value" | "enabled">[],
+  occurrences: readonly ReminderOccurrenceSchedule[],
+): QueuedOccurrenceReschedule[] {
+  const groupKey = (value: Pick<ReminderOccurrenceKey, "eventId" | "volunteerId" | "localDay">) =>
+    [value.eventId, value.volunteerId, value.localDay].join("\u0000")
+  const groupByKey = new Map(groups.map((group) => [groupKey(group), group]))
+  const ruleById = new Map(rules.map((rule) => [rule.id, rule]))
+  const changes: QueuedOccurrenceReschedule[] = []
+  for (const occurrence of occurrences) {
+    if (occurrence.status !== "queued") continue
+    const rule = ruleById.get(occurrence.ruleId)
+    if (!rule || !rule.enabled) continue
+    const hours = reminderRuleHours(rule)
+    if (hours === null) continue
+    const group = groupByKey.get(groupKey(occurrence))
+    if (!group) continue
+    changes.push({
+      eventId: occurrence.eventId,
+      volunteerId: occurrence.volunteerId,
+      localDay: occurrence.localDay,
+      ruleId: occurrence.ruleId,
+      dueAt: reminderRuleDueAt(group.earliestStart, hours),
+    })
+  }
+  return changes
 }
 
 /** The shift's local day as stored (`shiftLocalDay`), re-exported for callers of this module. */
@@ -317,7 +389,7 @@ export function nextEventReminderPreview<T extends ReminderRuleRegistration>(
   for (const group of input.groups) {
     for (const rule of enabled) {
       const occurrence = byKey.get(occurrenceKey({ ...group, ruleId: rule.id }))
-      if (occurrence?.status === "sent" || occurrence?.status === "cancelled") continue
+      if (occurrence?.status === "sent" || occurrence?.status === "cancelled" || occurrence?.status === "failed") continue
       const evaluation = reminderRuleStatus(group, rule, input.now)
       if (evaluation.status !== "due" && evaluation.status !== "not-yet") continue
       if (!evaluation.dueAt) continue

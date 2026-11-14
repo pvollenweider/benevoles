@@ -304,12 +304,15 @@ model EventReminderRule {
 
 // Durable send state of one custom rule for one volunteer, event and stored local day (#1139):
 // unique on those four columns, so two cron runs can claim the same reminder only once. `dueAt` is
-// recomputed from the current registrations while the occurrence is unsent; a sent occurrence is
-// never reopened. `status`: "pending" (never claimed), "queued" (outbox row created), "sent",
-// "cancelled" (group emptied, rule/event off, or delivery refused). `outboxId` is the
-// NotificationOutbox row, or null once the nightly cleanup purged it; `lastError` keeps the reason
-// of a cancellation for the operator. No relation on `outboxId`: the outbox row is short-lived,
-// this table is not.
+// recomputed from the current registrations while the occurrence is unsent (a queued one too, so a
+// shift moved back earlier brings its outbox row forward); a sent occurrence is never reopened.
+// `status`: "pending" (never claimed), "queued" (outbox row created), "sent", "cancelled" (group
+// emptied, rule/event off, or delivery refused; the hourly run may recompute it), "failed" (final
+// delivery failure: retries exhausted or a permanent rejection; never reopened automatically).
+// `outboxId` is the NotificationOutbox row, or null once the nightly cleanup purged it; `lastError`
+// keeps the reason for the operator. No relation on `outboxId`: the outbox row is short-lived,
+// this table is not. No age-based cleanup yet: when one is wanted, add its window to
+// RETENTION_DAYS (src/lib/retention.ts) and purge it from the existing /api/cron/cleanup job.
 model ReminderOccurrence {
   id          String    @id @default(cuid())
   eventId     String

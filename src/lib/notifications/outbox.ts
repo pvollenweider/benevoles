@@ -430,16 +430,26 @@ export async function deliverOutbox(opts: { ids?: string[]; limit?: number; now?
     // A permanent SMTP rejection (#598) stops the retries at once: a 5xx can't be fixed by
     // waiting, unlike a 4xx or a connection issue, which keep the normal backoff.
     const giveUp = attempts >= MAX_ATTEMPTS || outcome.permanent === true
-    await prisma.notificationOutbox.update({
-      where: { id: row.id },
-      data: {
-        status: giveUp ? "failed" : "pending",
-        attempts,
-        lastError: outcome.reason.slice(0, 500),
-        nextAttemptAt: new Date(now.getTime() + backoffMs(attempts)),
-        claimedAt: null,
-      },
-    })
+    const failure = {
+      status: giveUp ? "failed" : "pending",
+      attempts,
+      lastError: outcome.reason.slice(0, 500),
+      nextAttemptAt: new Date(now.getTime() + backoffMs(attempts)),
+      claimedAt: null,
+    }
+    if (giveUp && customReminderOccurrenceId) {
+      // A custom reminder (#1139) that gives up moves its occurrence to "failed" in the same
+      // transaction: a final failure is not a cancellation the hourly run may recompute.
+      await prisma.$transaction([
+        prisma.notificationOutbox.update({ where: { id: row.id }, data: failure }),
+        prisma.reminderOccurrence.updateMany({
+          where: { id: customReminderOccurrenceId, status: "queued" },
+          data: { status: "failed", lastError: outcome.reason.slice(0, 500) },
+        }),
+      ])
+    } else {
+      await prisma.notificationOutbox.update({ where: { id: row.id }, data: failure })
+    }
     if (giveUp) {
       result.failed++
       let kind = "unknown"

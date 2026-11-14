@@ -15,6 +15,10 @@ import { INACTIVITY_MONTHS } from "./org-inactivity"
 import { FINAL_NOTICE_DAYS, MIN_DEACTIVATION_DAYS, REMINDER_GAP_DAYS } from "./org-inactivity-steps"
 import { SESSION_ABSOLUTE_SECONDS } from "./session-lifetime"
 
+// ReminderOccurrence (#1139) deliberately has no age-based retention yet: a row is send state,
+// kept until its event or volunteer goes (cascade), and a sent one is the only proof that a rule
+// did not send twice. When a window is wanted, add it to RETENTION_DAYS below and purge it from
+// /api/cron/cleanup like DeliveryOutcome — never from the hourly reminder run.
 export const RETENTION_DAYS = {
   /** Deactivated organisation, with its events, members, registrations, logs (cascade). */
   deactivatedOrganization: 30,
