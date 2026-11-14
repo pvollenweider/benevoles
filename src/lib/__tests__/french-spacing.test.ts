@@ -1,4 +1,5 @@
 import { describe, it, expect } from "vitest"
+import DOMPurify from "isomorphic-dompurify"
 import { NBSP, frenchSpacing } from "../french-spacing"
 import { renderEventPageMarkdown } from "../event-page-markdown"
 import { loadDocUnits } from "../doc-units"
@@ -56,7 +57,8 @@ describe("rendered repo content", () => {
   it("leaves no breaking space after « in any real guide", () => {
     for (const unit of loadDocUnits()) {
       const html = renderDocUnitParts(unit).map((p) => (p.kind === "html" ? p.html : "")).join("")
-      const text = html.replace(/<pre>[\s\S]*?<\/pre>|<code>[\s\S]*?<\/code>|<[^>]+>/g, "")
+      // The page's text without its code: the sanitizer drops every tag, and what <pre> and <code> hold.
+      const text = DOMPurify.sanitize(html, { ALLOWED_TAGS: [], FORBID_CONTENTS: ["pre", "code"] })
       expect(text, unit.slug).not.toMatch(/« /)
       expect(text, unit.slug).not.toMatch(/ »/)
     }
