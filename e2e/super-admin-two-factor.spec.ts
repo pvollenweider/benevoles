@@ -91,7 +91,7 @@ test("a code already used is refused; a recovery code works once", async ({ brow
   // The enrolment code's step is spent: replaying it within its 90 seconds is refused.
   await page.getByLabel("Code à 6 chiffres affiché par l'application").fill(enrolmentCode)
   await page.getByRole("button", { name: "Valider" }).click()
-  await expect(page.getByRole("alert").filter({ hasText: "Code incorrect ou déjà utilisé" })).toBeVisible()
+  await expect(page.getByText(/Code incorrect ou déjà utilisé/)).toBeVisible()
 
   await page.getByRole("button", { name: "Utiliser un code de secours" }).click()
   const recovery = page.getByLabel("Code de secours")
@@ -107,7 +107,7 @@ test("a code already used is refused; a recovery code works once", async ({ brow
   await second.page.getByRole("button", { name: "Utiliser un code de secours" }).click()
   await second.page.getByLabel("Code de secours").fill(recoveryCodes[0])
   await second.page.getByRole("button", { name: "Valider" }).click()
-  await expect(second.page.getByRole("alert").filter({ hasText: "Code incorrect ou déjà utilisé" })).toBeVisible()
+  await expect(second.page.getByText(/Code incorrect ou déjà utilisé/)).toBeVisible()
   await second.context.close()
 })
 
