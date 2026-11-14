@@ -124,4 +124,5 @@ Après avoir ajouté, renommé ou retiré une page, mettre à jour la liste ci-d
 
 - [Aide et retours](aide-et-retours.md) : Ouvrir l'aide d'un écran de l'administration, et signaler un problème ou proposer une amélioration par email. Pour : organisateurs.
 - [Questions fréquentes des organisateurs](questions-frequentes-organisateurs.md) : Les questions que se posent souvent les organisateurs, chacune reliée à la page de la documentation qui y répond. Pour : organisateurs.
+- [Navigateurs compatibles](navigateurs-compatibles.md) : Les versions de navigateur avec lesquelles le site fonctionne, comment reconnaître un appareil trop ancien, et quoi faire dans ce cas. Pour : organisateurs, bénévoles.
 <!-- doc-index:end -->

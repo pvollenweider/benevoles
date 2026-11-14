@@ -17,6 +17,10 @@ export function hydrationNoticeText(kind: HydrationNoticeKind): string {
     : "Tu ne peux pas encore choisir de créneaux. Si ce message reste affiché, ton navigateur est sans doute trop ancien pour ce site : mets à jour ton téléphone ou ton navigateur, ouvre cette page sur un autre appareil, ou demande à l'organisation de t'inscrire."
 }
 
+/** The documentation page the notice links to (content/guide/navigateurs-compatibles.md), and the link's words: the page's title. */
+export const HYDRATION_NOTICE_DOC_HREF = "/doc/navigateurs-compatibles"
+export const HYDRATION_NOTICE_DOC_LABEL = "Navigateurs compatibles"
+
 /** The notice's id for the control it explains: its aria-describedby until the page has started. */
 export function hydrationNoticeId(hydrated: boolean, id: string): string | undefined {
   return hydrated ? undefined : id
