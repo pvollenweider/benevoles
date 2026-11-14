@@ -34,6 +34,7 @@ Format basé sur [Keep a Changelog](https://keepachangelog.com/fr/1.0.0/).
 
 ### Exploitation
 
+- Le suivi des erreurs du navigateur ne fonctionne plus que sur benevol.app : une instance lancée depuis l'image publiée (essai local, auto-hébergement) n'envoie plus les erreurs de ses visiteurs au Sentry de benevol.app (#1335).
 - Le build webpack (celui des vidéos) ne s'arrête plus à la collecte des pages : `isomorphic-dompurify`, qui embarque sa propre version de jsdom, reste chargé depuis `node_modules`.
 - Sentry ignore l'erreur « Invalid call to runtime.sendMessage(). Tab not found. », levée par une extension de navigateur et non par le site.
 
