@@ -2,6 +2,7 @@ import { describe, it, expect } from "vitest"
 import {
   eventUsesCustomReminderRules,
   nextEventReminderPreview,
+  nextReminderAttemptAt,
   reminderRuleDueAt,
   reminderRuleHours,
   reminderRuleStatus,
@@ -339,5 +340,25 @@ describe("preview evaluator (#1139)", () => {
   it("blocked when the event has no rule at all (legacy path)", () => {
     expect(nextEventReminderPreview({ rules: [], groups, now, eventRemindersEnabled: true }))
       .toMatchObject({ state: "blocked", reason: "no-rules" })
+  })
+})
+
+describe("next reminder attempt against both deadlines (#1139)", () => {
+  const due = new Date("2030-06-01T08:00:00Z")
+
+  it("uses the due instant when there is no delivery constraint", () => {
+    expect(nextReminderAttemptAt(due, null)).toEqual(due)
+  })
+
+  it("waits for a retry or hold that is later than the due instant", () => {
+    const retry = new Date("2030-06-01T08:05:00Z")
+    expect(nextReminderAttemptAt(due, retry)).toEqual(retry)
+  })
+
+  it("uses a later due instant, or the constraint when that is later still", () => {
+    const later = new Date("2030-06-01T16:00:00Z")
+    expect(nextReminderAttemptAt(later, null)).toEqual(later)
+    expect(nextReminderAttemptAt(later, new Date("2030-06-01T17:00:00Z"))).toEqual(new Date("2030-06-01T17:00:00Z"))
+    expect(nextReminderAttemptAt(later, new Date("2030-06-01T07:00:00Z"))).toEqual(later)
   })
 })

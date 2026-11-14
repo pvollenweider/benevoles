@@ -11,8 +11,11 @@
  * into the kept record in the same transaction:
  *
  * - `sent` wins over every other state, so a reminder already delivered is never sent twice;
- * - otherwise a `queued` row wins over pending/cancelled/failed, so an already enqueued email is
- *   not thrown away when the kept record has no better state;
+ * - otherwise `failed` wins over queued, pending and cancelled: a terminal delivery failure is not
+ *   a recomputable state, and dropping it would let the next hourly run enqueue the reminder again.
+ *   Only an explicit retry or a relevant state change may reopen it;
+ * - otherwise a `queued` row wins over pending/cancelled, so an already enqueued email is not
+ *   thrown away when the kept record has no better state;
  * - the two other rows are deleted, and every superseded outbox row is cancelled so it cannot
  *   leave after the merge.
  *
@@ -82,6 +85,22 @@ export function planReminderOccurrenceMerge(
       // The surviving row is sent; any unsent outbox row on either side is superseded.
       if (!absorbedSent && absorbed.outboxId) plan.cancelOutboxIds.push(absorbed.outboxId)
       if (!keptSent && kept.outboxId) plan.cancelOutboxIds.push(kept.outboxId)
+      continue
+    }
+
+    if (kept.status === "failed") {
+      // Terminal delivery failure on the kept record: keep it and drop the absorbed row.
+      plan.deleteAbsorbIds.push(absorbed.id)
+      if (absorbed.outboxId) plan.cancelOutboxIds.push(absorbed.outboxId)
+      continue
+    }
+
+    if (absorbed.status === "failed") {
+      // Terminal delivery failure on the absorbed record: it wins over the recomputable pending or
+      // cancelled state (and over queued, which is not terminal), so the next run cannot enqueue.
+      plan.deleteKeepIds.push(kept.id)
+      if (kept.outboxId) plan.cancelOutboxIds.push(kept.outboxId)
+      plan.reassignIds.push(absorbed.id)
       continue
     }
 

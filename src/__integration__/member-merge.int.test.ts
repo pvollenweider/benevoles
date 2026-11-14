@@ -295,6 +295,38 @@ describe.skipIf(!url)("member merge transaction (#600)", () => {
     expect(superseded.lastError).toBe(MERGED_MEMBER_CANCEL_REASON)
   })
 
+  it("keeps a terminal failed reminder over a pending conflict when merging (#1139)", async () => {
+    const keep = await makeVolunteer("keep-reminder-failed", `${tag}-keep-reminder-failed@x.ch`)
+    const absorb = await makeVolunteer("absorb-reminder-failed", `${tag}-absorb-reminder-failed@x.ch`)
+    await prisma.registration.create({
+      data: { eventId, shiftId: shift2, volunteerId: keep.id, status: "active", ...registrationToken.data(`${tag}-tok-reminder-failed`) },
+    })
+    const rule = await prisma.eventReminderRule.create({
+      data: { eventId, unit: "hours", value: 2, enabled: true, displayOrder: 0 },
+    })
+    const dueAt = new Date("2030-06-01T12:00:00Z")
+    await prisma.reminderOccurrence.createMany({
+      data: [
+        { eventId, volunteerId: keep.id, localDay: "2030-06-01", ruleId: rule.id, dueAt, status: "pending" },
+        { eventId, volunteerId: absorb.id, localDay: "2030-06-01", ruleId: rule.id, dueAt, status: "failed", lastError: "SMTP définitif" },
+      ],
+    })
+
+    await runMemberMerge(getOrgClient(orgId), orgId, ADMIN_ACTOR, keep.id, absorb.id, {})
+
+    const kept = await prisma.reminderOccurrence.findFirstOrThrow({ where: { volunteerId: keep.id, eventId, ruleId: rule.id } })
+    expect(kept).toMatchObject({ status: "failed", lastError: "SMTP définitif" })
+    expect(await prisma.reminderOccurrence.count({ where: { volunteerId: absorb.id } })).toBe(0)
+
+    // The next run must not reopen it: without failed precedence the kept pending row would be
+    // claimed and queued. Other volunteers of the event may get their own reminders from the same
+    // run: only the merged member's own row for this rule is looked at.
+    await queueCustomRuleReminders(new Date("2030-06-01T12:30:00Z"))
+    const afterRun = await prisma.reminderOccurrence.findMany({ where: { eventId, volunteerId: keep.id, ruleId: rule.id } })
+    expect(afterRun).toHaveLength(1)
+    expect(afterRun[0]).toMatchObject({ status: "failed" })
+  })
+
   it("refuses to merge across organizations", async () => {
     const orgB = await prisma.organization.create({ data: { name: "Org B merge", slug: `${tag}-org-b` } })
     const keep = await makeVolunteer("keep3", `${tag}-keep3@x.ch`)

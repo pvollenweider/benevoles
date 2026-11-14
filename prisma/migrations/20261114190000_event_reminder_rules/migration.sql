@@ -1,7 +1,12 @@
--- Per-event reminder delays and their durable send state (#1139). Additive: two new tables, no
--- existing column touched. The previous release keeps running during the deploy: it ignores these
+-- Per-event reminder delays and their durable send state (#1139). Additive: two new tables and one
+-- nullable outbox column. The previous release keeps running during the deploy: it ignores these
 -- tables and keeps sending the three default reminders for every event, and no rule exists yet
 -- (this PR has no way to create one).
+
+-- The delivery's own deadline, separate from a custom reminder's shift deadline (#1139):
+-- nextAttemptAt is the later of the two. Null for every other notification kind, whose delivery is
+-- unchanged.
+ALTER TABLE "NotificationOutbox" ADD COLUMN "deliveryNotBefore" TIMESTAMP(3);
 
 -- CreateTable
 CREATE TABLE "EventReminderRule" (

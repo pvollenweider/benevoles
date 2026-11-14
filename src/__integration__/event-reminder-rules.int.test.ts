@@ -288,4 +288,104 @@ describe.skipIf(!url)("custom reminder rules on Postgres (#1139)", () => {
     expect((await prisma.reminderOccurrence.findFirstOrThrow({ where: { eventId } })).status).toBe("cancelled")
     expect((await prisma.notificationOutbox.findUniqueOrThrow({ where: { id: row.id } })).status).toBe("cancelled")
   })
+
+  it("brings a deferred reminder forward after a retry once the shift moves back earlier (#1139)", async () => {
+    await queueCustomRuleReminders(now)
+    const [row] = await customOutbox()
+    // A temporary SMTP failure leaves its retry deadline on the row; the reminder must keep it
+    // even after a later shift deferral, and use it when the shift comes back.
+    sendNotificationMock.mockResolvedValueOnce({ ok: false, reason: "smtp down" })
+    expect(await deliverOutbox({ now, ids: [row.id] })).toMatchObject({ retried: 1 })
+    const retried = await prisma.notificationOutbox.findUniqueOrThrow({ where: { id: row.id } })
+    expect(retried.deliveryNotBefore?.toISOString()).toBe("2030-06-01T08:05:00.000Z")
+    expect(retried.nextAttemptAt.toISOString()).toBe("2030-06-01T08:05:00.000Z")
+
+    // The shift moves to 18:00: at the retry instant delivery defers to 16:00.
+    await prisma.shift.update({ where: { id: shiftId }, data: { startTime: "18:00" } })
+    expect(await deliverOutbox({ now: new Date("2030-06-01T08:05:00Z"), ids: [row.id] })).toMatchObject({ held: 1 })
+    expect((await prisma.notificationOutbox.findUniqueOrThrow({ where: { id: row.id } })).nextAttemptAt.toISOString())
+      .toBe("2030-06-01T16:00:00.000Z")
+
+    // Back to 10:00: `attempts > 0` must no longer freeze the row at 16:00. The new attempt is the
+    // later of the shift deadline (08:00) and the retry deadline (08:05), so 08:05.
+    await prisma.shift.update({ where: { id: shiftId }, data: { startTime: "10:00" } })
+    const earlier = new Date("2030-06-01T08:30:00Z")
+    expect((await queueCustomRuleReminders(earlier)).rescheduled).toBeGreaterThanOrEqual(1)
+    const forwarded = await prisma.notificationOutbox.findUniqueOrThrow({ where: { id: row.id } })
+    expect(forwarded.nextAttemptAt.toISOString()).toBe("2030-06-01T08:05:00.000Z")
+
+    sendNotificationMock.mockClear()
+    expect(await deliverOutbox({ now: earlier, ids: [row.id] })).toMatchObject({ sent: 1 })
+    expect(sendNotificationMock).toHaveBeenCalledTimes(1)
+  })
+
+  it("does not let a reschedule bypass a hold deadline (#1139)", async () => {
+    await queueCustomRuleReminders(now)
+    const [row] = await customOutbox()
+    // A held row: markers, constraint and next attempt are already on the pending row.
+    const holdUntil = new Date("2030-06-01T08:30:00Z")
+    await prisma.notificationOutbox.update({
+      where: { id: row.id },
+      data: { firstHeldAt: now, lastHeldAt: now, deliveryNotBefore: holdUntil, nextAttemptAt: new Date("2030-06-01T16:00:00Z") },
+    })
+    await prisma.reminderOccurrence.updateMany({ where: { eventId }, data: { dueAt: new Date("2030-06-01T16:00:00Z") } })
+
+    // Shift back to 10:00 (due 08:00): the row may come forward to the hold, not before it.
+    const earlier = new Date("2030-06-01T08:10:00Z")
+    expect((await queueCustomRuleReminders(earlier)).rescheduled).toBeGreaterThanOrEqual(1)
+    const forwarded = await prisma.notificationOutbox.findUniqueOrThrow({ where: { id: row.id } })
+    expect(forwarded.nextAttemptAt.toISOString()).toBe("2030-06-01T08:30:00.000Z")
+
+    // Not due before the hold ends, due once it does.
+    expect(await deliverOutbox({ now: earlier, ids: [row.id] })).toMatchObject({ sent: 0 })
+    expect(await deliverOutbox({ now: holdUntil, ids: [row.id] })).toMatchObject({ sent: 1 })
+  })
+
+  it("two concurrent reschedules can only move the outbox earlier, never back later (#1139)", async () => {
+    await queueCustomRuleReminders(now)
+    const [row] = await customOutbox()
+    // Start from a deferred row at 16:00, as if the shift had been at 18:00.
+    await prisma.notificationOutbox.update({ where: { id: row.id }, data: { nextAttemptAt: new Date("2030-06-01T16:00:00Z") } })
+    await prisma.reminderOccurrence.updateMany({ where: { eventId }, data: { dueAt: new Date("2030-06-01T16:00:00Z") } })
+
+    const original = prisma.notificationOutbox.updateMany.bind(prisma.notificationOutbox)
+    let releaseFirst!: () => void
+    let releaseSecond!: () => void
+    let reachedFirst!: () => void
+    let reachedSecond!: () => void
+    const firstGate = new Promise<void>((resolve) => { releaseFirst = resolve })
+    const secondGate = new Promise<void>((resolve) => { releaseSecond = resolve })
+    const firstReached = new Promise<void>((resolve) => { reachedFirst = resolve })
+    const secondReached = new Promise<void>((resolve) => { reachedSecond = resolve })
+    const eight = Date.parse("2030-06-01T08:00:00Z")
+    const ten = Date.parse("2030-06-01T10:00:00Z")
+    const spy = vi.spyOn(prisma.notificationOutbox, "updateMany").mockImplementation((async (raw: never) => {
+      const args = raw as unknown as { where?: { id?: string }; data?: { nextAttemptAt?: Date } }
+      if (args.where?.id === row.id && args.data?.nextAttemptAt) {
+        const proposed = args.data.nextAttemptAt.getTime()
+        if (proposed === eight) { reachedFirst(); await firstGate }
+        if (proposed === ten) { reachedSecond(); await secondGate }
+      }
+      return original(raw)
+    }) as never)
+
+    try {
+      const at = new Date("2030-06-01T08:30:00Z")
+      const first = queueCustomRuleReminders(at)
+      await firstReached // first run read the 10:00 shift, proposing 08:00
+      // The shift moves later before the second run reads it: it proposes 10:00 from stale data.
+      await prisma.shift.update({ where: { id: shiftId }, data: { startTime: "12:00" } })
+      const second = queueCustomRuleReminders(at)
+      await secondReached
+      releaseFirst()
+      await first
+      releaseSecond()
+      await second
+    } finally {
+      spy.mockRestore()
+    }
+
+    const after = await prisma.notificationOutbox.findUniqueOrThrow({ where: { id: row.id } })
+    expect(after.nextAttemptAt.toISOString()).toBe("2030-06-01T08:00:00.000Z")
+  })
 })

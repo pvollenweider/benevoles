@@ -305,6 +305,27 @@ describe("member invitation through the outbox (#1105)", () => {
     expect(res).toMatchObject({ held: 1, failed: 0 })
     expect(m.update).toHaveBeenCalledWith(expect.objectContaining({ data: expect.objectContaining({ status: "pending", claimedAt: null }) }))
   })
+
+  it("writes a sending-limit hold, its markers and its deadline in one statement (#1139)", async () => {
+    m.findUniqueOrThrow.mockResolvedValue({
+      id: "n1", attempts: 0, payload, organizationId: "org-a", firstHeldAt: null, lastHeldAt: null, deliveryNotBefore: null,
+    })
+    m.sendNotification.mockResolvedValue({ ok: false, reason: "limit:org_per_minute", held: true, retryAfterMs: 30_000 })
+    expect(await deliverOutbox({ now })).toMatchObject({ held: 1 })
+    // The rescheduler can never see a pending row without its hold: one update carries them all.
+    expect(m.update).toHaveBeenCalledTimes(1)
+    expect(m.update).toHaveBeenCalledWith({
+      where: { id: "n1" },
+      data: {
+        status: "pending",
+        claimedAt: null,
+        firstHeldAt: now,
+        lastHeldAt: now,
+        deliveryNotBefore: new Date(now.getTime() + 30_000),
+        nextAttemptAt: new Date(now.getTime() + 30_000),
+      },
+    })
+  })
 })
 
 describe("recipient checked right before the send: links revoked since the email was queued", () => {

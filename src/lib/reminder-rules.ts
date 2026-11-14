@@ -166,6 +166,16 @@ export function reminderRuleDueAt(earliestStart: Date, hours: number): Date {
 }
 
 /**
+ * When a reminder's outbox row may next be attempted (#1139): the later of the reminder's own due
+ * instant (shift and rule) and the delivery's own constraint (retry backoff or sending-limit hold).
+ * Kept as two deadlines so a shift moved back earlier brings the row forward to its constraint,
+ * never past it, whatever the row's `attempts` count.
+ */
+export function nextReminderAttemptAt(dueAt: Date, deliveryNotBefore: Date | null): Date {
+  return deliveryNotBefore && deliveryNotBefore.getTime() > dueAt.getTime() ? deliveryNotBefore : dueAt
+}
+
+/**
  * Whether a rule may go out now for one group (#1139):
  * - disabled rule: nothing;
  * - due instant still in the future: not yet;
@@ -276,7 +286,7 @@ export type QueuedOccurrenceReschedule = {
  *
  * A missing group (emptied day) or a disabled/deleted rule returns nothing: the delivery recheck
  * cancels it, exactly as before. Backoff and quota holds of the outbox row are not this function's
- * business: the caller only advances a schedule that has none.
+ * business: the caller combines this due instant with the row's `deliveryNotBefore` deadline.
  */
 export function rescheduleQueuedOccurrences<T extends ReminderRuleRegistration>(
   groups: readonly ReminderGroup<T>[],

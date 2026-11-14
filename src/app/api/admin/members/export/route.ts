@@ -59,7 +59,8 @@ export async function GET() {
   }
   // Custom reminder history (#1139): the occurrence rows identify the member's event, day, rule
   // and delivery state. This export is the documented access-request mechanism, so it carries
-  // them; only the member ids already scoped above are read.
+  // them; only the member ids already scoped above are read. The history is unbounded per member
+  // (the full archive), but the `in` filter bounds it to the exported members.
   const reminders = await prisma.reminderOccurrence.findMany({
     where: { volunteerId: { in: members.map((m) => m.id) } },
     orderBy: [{ dueAt: "desc" }, { localDay: "desc" }],

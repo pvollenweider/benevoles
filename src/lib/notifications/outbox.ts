@@ -14,11 +14,12 @@ import { siteDomain } from "@/lib/site"
 import { isAddedByOrganizer, resolveAddedByOrganizer } from "./added-by-organizer"
 import { isAddedShiftsConfirmation, resolveAddedShiftsConfirmation } from "./added-shifts-confirmation"
 import { outboxRecipientVerdict } from "../outbox-recipient-check"
-import { bestEffort, hourStart, recordLimitHit } from "./limit-hits"
+import { hourStart, recordLimitHit } from "./limit-hits"
 import type { SendBatchKind } from "../send-batches"
 import { inactivityCopyVerdict } from "../org-inactivity-steps"
 import { outboxFailureGroup } from "./outbox-failure"
 import { isCustomRuleReminder, resolveCustomRuleReminder, sendCustomReminderPush } from "../reminder-occurrence-delivery"
+import { nextReminderAttemptAt } from "../reminder-rules"
 
 /**
  * Notification outbox (#293).
@@ -341,15 +342,21 @@ export async function deliverOutbox(opts: { ids?: string[]; limit?: number; now?
     }
 
     if (customReminderDeferredUntil) {
-      // A shift moved later: keep the row for its new due instant, not as a failure.
+      // A shift moved later: keep the row for its new due instant, not as a failure. A retry or
+      // hold constraint already on the row still wins when it is later than the new due instant.
+      const deferredUntil = customReminderDeferredUntil
       await prisma.$transaction([
         prisma.notificationOutbox.update({
           where: { id: row.id },
-          data: { status: "pending", claimedAt: null, nextAttemptAt: customReminderDeferredUntil },
+          data: {
+            status: "pending",
+            claimedAt: null,
+            nextAttemptAt: nextReminderAttemptAt(deferredUntil, claimed.deliveryNotBefore),
+          },
         }),
         prisma.reminderOccurrence.updateMany({
           where: { id: customReminderOccurrenceId ?? "", status: "queued" },
-          data: { dueAt: customReminderDeferredUntil },
+          data: { dueAt: deferredUntil },
         }),
       ])
       result.held++
@@ -376,13 +383,26 @@ export async function deliverOutbox(opts: { ids?: string[]; limit?: number; now?
 
     if (!outcome.ok && outcome.held) {
       // Over a sending limit (#810): not an attempt, not a failure. Back to pending, tried again
-      // when the window ends; the attempts count is left as it was.
+      // when the window ends; the attempts count is left as it was. The status, the hold markers
+      // and the deadline are written in ONE statement (#1139): the rescheduler must never see a
+      // pending row without its hold. The hold is later than the due instant (the row was due).
+      const heldUntil = new Date(now.getTime() + (outcome.retryAfterMs ?? 60_000))
+      const heldThisHour = !claimed.lastHeldAt || claimed.lastHeldAt.getTime() < hourStart(now).getTime()
       await prisma.notificationOutbox.update({
         where: { id: row.id },
-        data: { status: "pending", claimedAt: null, nextAttemptAt: new Date(now.getTime() + (outcome.retryAfterMs ?? 60_000)) },
+        data: {
+          status: "pending",
+          claimedAt: null,
+          firstHeldAt: claimed.firstHeldAt ?? now,
+          lastHeldAt: heldThisHour ? now : claimed.lastHeldAt,
+          deliveryNotBefore: heldUntil,
+          nextAttemptAt: heldUntil,
+        },
       })
       result.held++
-      if (outcome.limit) await markHeld(row.id, claimed.organizationId, outcome.limit, kind, now)
+      if (heldThisHour && outcome.limit) {
+        await recordLimitHit({ organizationId: claimed.organizationId, limit: outcome.limit, kind, outcome: "held", now })
+      }
       continue
     }
 
@@ -430,11 +450,15 @@ export async function deliverOutbox(opts: { ids?: string[]; limit?: number; now?
     // A permanent SMTP rejection (#598) stops the retries at once: a 5xx can't be fixed by
     // waiting, unlike a 4xx or a connection issue, which keep the normal backoff.
     const giveUp = attempts >= MAX_ATTEMPTS || outcome.permanent === true
+    const retryAt = new Date(now.getTime() + backoffMs(attempts))
     const failure = {
       status: giveUp ? "failed" : "pending",
       attempts,
       lastError: outcome.reason.slice(0, 500),
-      nextAttemptAt: new Date(now.getTime() + backoffMs(attempts)),
+      nextAttemptAt: retryAt,
+      // Retry backoff is the delivery's own constraint (#1139), kept apart from a reminder's due
+      // instant so a later reschedule cannot erase it.
+      deliveryNotBefore: giveUp ? null : retryAt,
       claimedAt: null,
     }
     if (giveUp && customReminderOccurrenceId) {
@@ -497,23 +521,6 @@ async function inactivityCopyBlocked(stepId: string, recipientEmail: string, now
     lastRetentionConfirmedAt: o.lastRetentionConfirmedAt,
     adminEmails: o.admins.map((a) => a.email),
   }, now)
-}
-
-/**
- * Marks a held row (#1100) and counts it in its limit's hour, once per row and hour: the
- * conditional update lets exactly one delivery through, even when two run at once or a stale
- * claim is picked up again. Best effort, after the row is already back to pending.
- */
-async function markHeld(id: string, organizationId: string | null, limit: string, kind: string | null, now: Date): Promise<void> {
-  await bestEffort("email.limit.mark_held", async () => {
-    // The first hold (#1101): with sentAt, how long the limit delayed this email.
-    await prisma.notificationOutbox.updateMany({ where: { id, firstHeldAt: null }, data: { firstHeldAt: now } })
-    const { count } = await prisma.notificationOutbox.updateMany({
-      where: { id, OR: [{ lastHeldAt: null }, { lastHeldAt: { lt: hourStart(now) } }] },
-      data: { lastHeldAt: now },
-    })
-    if (count === 1) await recordLimitHit({ organizationId, limit, kind, outcome: "held", now })
-  })
 }
 
 export type OutboxHealth = {

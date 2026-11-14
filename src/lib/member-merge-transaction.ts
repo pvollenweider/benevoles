@@ -242,8 +242,9 @@ export async function runMemberMerge(
     await tx.registration.updateMany({ where: { volunteerId: absorbId, status: "unconfirmed" }, data: { status: "cancelled", signupConfirmationId: null } })
     await tx.signupConfirmation.deleteMany({ where: { volunteerId: absorbId } })
     // Custom reminder send state (#1139): folded into the kept record's keys, not dropped. A sent
-    // occurrence wins over any other for the same key; a queued conflict keeps one row and cancels
-    // the superseded outbox row, so no duplicate goes out after the merge.
+    // occurrence wins over any other for the same key, a terminal failed one wins over the
+    // recomputable states, and a queued conflict keeps one row and cancels the superseded outbox
+    // row, so no duplicate goes out after the merge.
     if (occurrencePlan.deleteKeepIds.length) {
       await tx.reminderOccurrence.deleteMany({ where: { id: { in: occurrencePlan.deleteKeepIds } } })
     }

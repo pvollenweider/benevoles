@@ -18,6 +18,7 @@ import { orgTimeZone } from "./time-zone"
 import {
   eventUsesCustomReminderRules,
   HOURS_PER_DAY,
+  nextReminderAttemptAt,
   reminderPlaceActiveAt,
   reminderRuleDueAt,
   reminderRuleHours,
@@ -202,16 +203,24 @@ export async function queueCustomRuleReminders(now: Date): Promise<CustomReminde
       if (!occurrence.outboxId) continue
       const row = await prisma.notificationOutbox.findUnique({
         where: { id: occurrence.outboxId },
-        select: { status: true, nextAttemptAt: true, attempts: true, firstHeldAt: true },
+        select: { status: true, nextAttemptAt: true, deliveryNotBefore: true },
       })
       if (!row || row.status !== "pending") continue
-      // Preserve retry and quota backoff: a row that already attempted or was held keeps its
-      // schedule; only a row deferred purely by the shift time can be brought forward.
-      if (row.attempts > 0 || row.firstHeldAt) continue
-      if (change.dueAt.getTime() >= row.nextAttemptAt.getTime()) continue
+      // Schedule against both deadlines: the reminder's new due instant and the delivery's own
+      // retry/hold deadline. No `attempts` or `firstHeldAt` exclusion: a row that already attempted
+      // or was held can still be brought forward to its constraint after a shift moves back earlier.
+      const proposed = nextReminderAttemptAt(change.dueAt, row.deliveryNotBefore)
+      if (proposed.getTime() >= row.nextAttemptAt.getTime()) continue
+      // Atomic and conditional: concurrent runs can only move the delivery earlier, never back
+      // later, and a hold written meanwhile (deliveryNotBefore now later) is never bypassed.
       await prisma.notificationOutbox.updateMany({
-        where: { id: occurrence.outboxId, status: "pending", attempts: 0, firstHeldAt: null },
-        data: { nextAttemptAt: change.dueAt },
+        where: {
+          id: occurrence.outboxId,
+          status: "pending",
+          nextAttemptAt: { gt: proposed },
+          OR: [{ deliveryNotBefore: null }, { deliveryNotBefore: { lte: proposed } }],
+        },
+        data: { nextAttemptAt: proposed },
       })
     }
     const triggers = triggeredCustomReminders(groups, validation.rules, now, occurrences)

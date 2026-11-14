@@ -71,4 +71,44 @@ describe("reminder occurrence merge (#1139)", () => {
     )
     expect(plan).toMatchObject({ reassignIds: [], deleteAbsorbIds: ["b"], deleteKeepIds: [], cancelOutboxIds: ["out-b"] })
   })
+
+  it("keeps an absorbed failed row over a kept pending one and cancels its outbox row", () => {
+    const plan = planReminderOccurrenceMerge(
+      [occurrence("a", "pending", { outboxId: "out-a" })],
+      [occurrence("b", "failed", { outboxId: "out-b" })],
+    )
+    expect(plan).toEqual({
+      reassignIds: ["b"],
+      deleteAbsorbIds: [],
+      deleteKeepIds: ["a"],
+      markSent: [],
+      cancelOutboxIds: ["out-a"],
+    })
+  })
+
+  it("keeps an absorbed failed row over a kept cancelled one", () => {
+    const plan = planReminderOccurrenceMerge(
+      [occurrence("a", "cancelled")],
+      [occurrence("b", "failed")],
+    )
+    expect(plan).toMatchObject({ reassignIds: ["b"], deleteAbsorbIds: [], deleteKeepIds: ["a"], cancelOutboxIds: [] })
+  })
+
+  it("keeps a kept failed row over an absorbed queued one and cancels the queued outbox row", () => {
+    const plan = planReminderOccurrenceMerge(
+      [occurrence("a", "failed")],
+      [occurrence("b", "queued", { outboxId: "out-b" })],
+    )
+    expect(plan).toMatchObject({ reassignIds: [], deleteAbsorbIds: ["b"], deleteKeepIds: [], cancelOutboxIds: ["out-b"] })
+  })
+
+  it("still lets sent win over failed", () => {
+    const sentAt = new Date("2030-06-01T06:00:00Z")
+    const plan = planReminderOccurrenceMerge(
+      [occurrence("a", "failed")],
+      [occurrence("b", "sent", { sentAt })],
+    )
+    expect(plan.markSent).toEqual([{ id: "a", sentAt, outboxId: null }])
+    expect(plan.deleteAbsorbIds).toEqual(["b"])
+  })
 })

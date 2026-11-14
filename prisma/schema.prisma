@@ -1372,6 +1372,10 @@ model NotificationOutbox {
   status        String    @default("pending") // "pending" | "sending" | "sent" | "failed" | "cancelled" (#814)
   attempts      Int       @default(0)
   nextAttemptAt DateTime  @default(now())
+  // The delivery's own constraint (#1139): retry backoff or sending-limit hold. A custom reminder
+  // also has a shift deadline; nextAttemptAt is the later of the two, so a shift moved back earlier
+  // can advance the row without losing a retry or a hold. Null when there is no such constraint.
+  deliveryNotBefore DateTime?
   claimedAt     DateTime?
   lastError     String?
   // Optional business key (#315): the same notification enqueued twice (retried request,
