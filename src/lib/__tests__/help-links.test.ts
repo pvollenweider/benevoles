@@ -98,7 +98,7 @@ describe("SECTION_DOC_LINKS", () => {
     expect(unit.roles, unit.slug).toContain(role)
     const [pathname, anchor] = docHref(target).split("#")
     expect(pathname).toBe(`/doc/${unit.slug}`)
-    if (target.heading) expect(headingsOf(renderDocUnit(unit)).find((h) => h.id === anchor)?.text, `#${anchor} in ${unit.source}`).toBe(target.heading)
+    if (target.heading) expect(headingsOf(renderDocUnit(unit)).find((h) => h.id === anchor)?.text.replace(/&nbsp;/g, " "), `#${anchor} in ${unit.source}`).toBe(target.heading)
     else expect(anchor).toBeUndefined()
   })
 

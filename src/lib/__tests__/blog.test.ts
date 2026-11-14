@@ -245,7 +245,7 @@ describe("the posts of content/blog/", () => {
   it("render their line arrows hidden from screen readers, still on screen", () => {
     const html = posts.map((p) => renderBlogPost(p)).join("\n")
     expect(html).toContain('<span aria-hidden="true">→ </span><a href="/doc">')
-    expect(html).toContain('<span aria-hidden="true">▶ </span>Vidéo : <a href="/videos/')
+    expect(html).toContain('<span aria-hidden="true">▶ </span>Vidéo&nbsp;: <a href="/videos/')
     expect(html.replace(/<span aria-hidden="true">[→▶] <\/span>/g, "")).not.toMatch(/(^|>|\n)[→▶]/)
   })
 })

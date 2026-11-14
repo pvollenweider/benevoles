@@ -18,10 +18,11 @@
  * page, not just admins. DOMPurify strips anything outside a plain-content allowlist regardless
  * of what an admin (or a compromised admin account) wrote.
  */
-import { marked, Renderer, type Tokens } from "marked"
+import { marked, Renderer, type Token, type Tokens } from "marked"
 import DOMPurify from "isomorphic-dompurify"
 import { createHeadingSlugger } from "@/lib/heading-anchors"
 import { DOC_VIDEO_ATTRIBUTE, videoReferenceId } from "@/lib/doc-video-references"
+import { frenchSpacing } from "@/lib/french-spacing"
 
 // Page title is already rendered as the page's own <h1> (see [eventSlug]/[pageSlug]/page.tsx).
 // Shift every Markdown heading down one level so admin content can't produce a second/duplicate
@@ -155,10 +156,30 @@ export function renderEventPageMarkdown(
     videoCard?: (id: string) => string
     image?: (img: MarkdownImage, index: number) => string
     exampleQuotes?: boolean
+    frenchSpacing?: boolean
   } = {},
 ): string {
   const { shiftHeadings = true, headingIds = false, allowImages = false, videoCard, image, exampleQuotes = false } = options
-  const html = marked.parse(content, { async: false, gfm: true, breaks: true, renderer: makeRenderer(shiftHeadings, headingIds, allowImages, videoCard, image, exampleQuotes) })
+  // French spacing (#1341) on the repo's own content, the documents that allow images, unless a
+  // caller says otherwise. Only leaf text tokens: code spans, code blocks, raw HTML and link
+  // addresses are other token types or fields, left as written. An image's text is its alt
+  // attribute, read aloud and never wrapped: left as written too (marked visits a token before
+  // its children, so the image marks them first).
+  const withFrenchSpacing = options.frenchSpacing ?? allowImages
+  const altText = new WeakSet<Token>()
+  const markAltText = (tokens: Token[] | undefined) => {
+    for (const child of tokens ?? []) {
+      altText.add(child)
+      markAltText("tokens" in child ? child.tokens : undefined)
+    }
+  }
+  const walkTokens = withFrenchSpacing
+    ? (token: Token) => {
+        if (token.type === "image") markAltText(token.tokens)
+        else if (token.type === "text" && !altText.has(token) && !("tokens" in token && token.tokens?.length)) token.text = frenchSpacing(token.text)
+      }
+    : undefined
+  const html = marked.parse(content, { async: false, gfm: true, breaks: true, walkTokens, renderer: makeRenderer(shiftHeadings, headingIds, allowImages, videoCard, image, exampleQuotes) })
   const allowedAttr = [
     ...ALLOWED_ATTR,
     ...(allowImages ? IMAGE_ATTR : []),
