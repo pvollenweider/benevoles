@@ -88,6 +88,7 @@
     "brace-expansion@^2": "^2.1.7",
     "brace-expansion@^5": "^5.0.12",
     "fast-uri": "^3.1.9",
+    "basic-ftp": "^6.2.4",
     "@sentry/bundler-plugins": {
       "glob": "^14.0.2"
     },
