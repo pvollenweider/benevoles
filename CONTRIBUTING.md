@@ -69,6 +69,24 @@ TypeScript est installé en deux versions côte à côte, selon la procédure of
 
 Les messages de commit et les titres de PR sont rédigés en anglais.
 
+## Labels des issues
+
+Une issue triée porte un label par axe, pas plus :
+
+| Axe | Labels | Ce qu'il dit |
+| --- | --- | --- |
+| Type | `bug`, `enhancement`, `documentation`, `decision`, `epic`, `maintenance` | La nature du travail. `decision` : un choix à faire avant toute réalisation. `maintenance` : travail technique sans fonctionnalité visible. |
+| Statut | `status:NOW`, `status:LATER`, `status:PREPARE`, `status:VALIDATE` | `NOW` : défini, utile, à faire. `LATER` : gardé, pas maintenant (le propriétaire décide quand il bouge). `PREPARE` : préparer l'architecture seulement. `VALIDATE` : hypothèse à vérifier auprès des utilisateurs avant de construire. |
+| Domaine | `area:registration`, `area:event-management`, `area:day-of`, `area:communication`, `area:access`, `area:site`, `area:self-hosting`, `area:platform`, `area:business` | La partie du produit touchée en premier. |
+
+Les domaines : `registration` (côté bénévole : inscription, page personnelle, attestation), `event-management` (côté organisateur : créneaux, postes, listes, membres, contreparties), `day-of` (présences, pointage, accueil), `communication` (emails, rappels, notifications), `access` (comptes d'organisation, rôles, droits, cycle de vie), `site` (site public, guides, vidéos, visibilité), `self-hosting`, `platform` (socle technique : build, navigateurs, sécurité, outillage d'accessibilité, internationalisation), `business` (service hébergé : tarifs, offres, mesures et retours).
+
+- Une issue qui touche deux domaines prend celui du parcours principal. Un rappel envoyé le jour J est `communication` ; un droit d'accès à l'accueil est `day-of`.
+- Un epic porte le statut de la prochaine action de l'ensemble, indépendamment de ses tickets. Les jalons (milestones) regroupent par thème ; ils ne disent rien de la priorité.
+- Hors axes, au besoin : `security` (travail de sécurité ; un signalement de faille passe par `SECURITY.md`, pas par une issue publique), `good first issue` et `help wanted` (travail cadré et documenté, ouvert aux contributions), `dependencies` et `go` (posés par Dependabot).
+- Les autres labels (`feature`, `amélioration`, `discussion`, `plus tard`, `phase:*`, `sprint-*`, `mvp`, `ui`, `ux`, `ops`…) sont anciens : ils restent sur les issues fermées pour l'historique, leur description le dit, et ne s'appliquent plus.
+- Une issue qui vient d'être ouverte peut attendre son tri ; les modèles d'issue posent le type.
+
 ## Conventions de commit
 
 Format : `type(scope): description courte`
