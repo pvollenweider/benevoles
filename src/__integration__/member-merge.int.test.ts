@@ -253,8 +253,11 @@ describe.skipIf(!url)("member merge transaction (#600)", () => {
 
     // The next hourly run finds the moved sent key and creates nothing: no second email.
     await queueCustomRuleReminders(new Date("2030-06-01T12:30:00Z"))
-    expect(await prisma.reminderOccurrence.count({ where: { eventId, volunteerId: keep.id, ruleId: rule.id } })).toBe(1)
-    expect(await prisma.notificationOutbox.count({ where: { organizationId: orgId, dedupeKey: { startsWith: "reminder-rule:" } } })).toBe(0)
+    // Other volunteers of this event, left by the tests above, may get their own reminder from
+    // the same run: only the merged member's occurrences are looked at.
+    const afterRun = await prisma.reminderOccurrence.findMany({ where: { eventId, volunteerId: keep.id } })
+    expect(afterRun).toHaveLength(1)
+    expect(afterRun[0]).toMatchObject({ status: "sent", outboxId: sentOutbox.id, ruleId: rule.id })
   })
 
   it("keeps sent precedence over a queued conflict and cancels its superseded outbox row (#1139)", async () => {
