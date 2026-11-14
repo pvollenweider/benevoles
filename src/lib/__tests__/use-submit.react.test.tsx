@@ -3,9 +3,40 @@
  */
 import { describe, it, expect, vi, afterEach } from "vitest"
 import "@testing-library/jest-dom/vitest"
-import { act, cleanup, render, renderHook, screen } from "@testing-library/react"
+import { act, cleanup, fireEvent, render, renderHook, screen } from "@testing-library/react"
+import { useRef, useState } from "react"
 import { errorOf, GENERIC_ERROR, NETWORK_ERROR, useSubmit } from "../use-submit"
 import FormStatus from "@/components/FormStatus"
+
+const FIELD_MESSAGE = "Indiquez le nom (2 caractères au moins)."
+const GENERAL_MESSAGE = "La demande n'a pas pu être envoyée."
+
+/** A form following the pattern of the project: useSubmit, FormStatus, one described field. */
+function Harness({ mode }: { mode?: "no-element" | "disabled" }) {
+  const { error, fail, reset, isInvalid, quiet, alertShown } = useSubmit()
+  const [value, setValue] = useState("")
+  const ref = useRef<HTMLInputElement>(null)
+  return (
+    <form onSubmit={(e) => { e.preventDefault(); fail(FIELD_MESSAGE, "name", mode === "no-element" ? null : ref.current) }}>
+      <label htmlFor="name">Nom</label>
+      <input id="name" ref={ref} value={value} onChange={(e) => setValue(e.target.value)} disabled={mode === "disabled"}
+        aria-invalid={isInvalid("name")} aria-describedby={isInvalid("name") ? "form-error" : undefined} />
+      <button type="submit">Envoyer</button>
+      <button type="button" onClick={() => fail(GENERAL_MESSAGE)}>Action</button>
+      <button type="button" onClick={reset}>Réinitialiser</button>
+      <FormStatus error={error} errorId="form-error" quiet={quiet} alertShown={alertShown} />
+    </form>
+  )
+}
+
+/** The message is in the DOM once, under the one element carrying `errorId`. */
+function expectOneError(message = FIELD_MESSAGE) {
+  expect(document.body.textContent?.split(message)).toHaveLength(2)
+  const wrapper = document.getElementById("form-error")
+  expect(wrapper).not.toBeNull()
+  expect(document.querySelectorAll("#form-error")).toHaveLength(1)
+  return wrapper!
+}
 
 // The shared submit logic of admin forms (#380).
 describe("useSubmit", () => {
@@ -47,11 +78,187 @@ describe("useSubmit", () => {
   it("FormStatus keeps both regions mounted and shows the one with text", () => {
     const { rerender } = render(<FormStatus status="" error={null} errorId="e" />)
     expect(screen.getByRole("status")).toHaveClass("sr-only")
-    expect(screen.getByRole("alert")).toHaveClass("sr-only")
+    expect(screen.getByRole("alert")).toBeEmptyDOMElement()
+    const wrapper = document.getElementById("e")!
+    expect(wrapper).toHaveClass("sr-only")
+    expect(wrapper).not.toHaveClass("hidden")
     rerender(<FormStatus status="Enregistré." error={null} errorId="e" />)
     expect(screen.getByRole("status")).toHaveTextContent("Enregistré.")
     rerender(<FormStatus status="" error="Raté." errorId="e" />)
     expect(screen.getByRole("alert")).toHaveTextContent("Raté.")
-    expect(screen.getByRole("alert")).toHaveAttribute("id", "e")
+    expect(document.getElementById("e")).toBe(wrapper)
+    expect(wrapper).toHaveTextContent("Raté.")
+    expect(wrapper).not.toHaveClass("sr-only")
+    expect(wrapper).not.toHaveClass("hidden")
+  })
+
+  it("FormStatus keeps a quiet field error out of the alert, under the stable id and visible wrapper", () => {
+    render(<FormStatus error={FIELD_MESSAGE} errorId="e" quiet />)
+    expect(screen.getByRole("alert")).toBeEmptyDOMElement()
+    expect(screen.getByRole("alert")).not.toHaveAttribute("id")
+    const wrapper = document.getElementById("e")!
+    expect(wrapper).toBeVisible()
+    expect(wrapper).toHaveTextContent(FIELD_MESSAGE)
+    const span = screen.getByText(FIELD_MESSAGE)
+    expect(span.tagName).toBe("SPAN")
+    expect(span).not.toHaveAttribute("role")
+  })
+
+  describe("a field error is spoken once (#739, step 4)", () => {
+    // (a) The field takes the focus: its description says the error, the alert stays empty.
+    it("leaves the alert empty when the field takes focus", () => {
+      render(<Harness />)
+      fireEvent.click(screen.getByRole("button", { name: "Envoyer" }))
+
+      const input = screen.getByRole("textbox", { name: "Nom" })
+      expect(input).toHaveFocus()
+      expect(input).toHaveAttribute("aria-invalid", "true")
+      expect(input).toHaveAccessibleDescription(FIELD_MESSAGE)
+      expect(screen.getByRole("alert")).toBeEmptyDOMElement()
+      expect(screen.getByText(FIELD_MESSAGE)).toBeVisible()
+      expectOneError()
+    })
+
+    // (b) The field already had the focus: re-focusing would say nothing, so the alert says it.
+    it("uses the alert when the field already had the focus", () => {
+      render(<Harness />)
+      const input = screen.getByRole("textbox", { name: "Nom" })
+      input.focus()
+      fireEvent.submit(input.closest("form")!)
+
+      expect(screen.getByRole("alert")).toHaveTextContent(FIELD_MESSAGE)
+      expect(input).toHaveFocus()
+      expect(input).toHaveAccessibleDescription(FIELD_MESSAGE)
+      expectOneError()
+    })
+
+    // (c) A general error: the alert says it and the focus does not move.
+    it("uses the alert for a general error, without moving the focus", () => {
+      render(<Harness />)
+      const action = screen.getByRole("button", { name: "Action" })
+      action.focus()
+      fireEvent.click(action)
+
+      expect(screen.getByRole("alert")).toHaveTextContent(GENERAL_MESSAGE)
+      expect(action).toHaveFocus()
+      expect(document.querySelector("[aria-invalid]")).toBeNull()
+      expectOneError(GENERAL_MESSAGE)
+    })
+
+    // (d) A field with no element to focus: the alert says it, the field stays described.
+    it("uses the alert when the field has no element to focus", () => {
+      render(<Harness mode="no-element" />)
+      fireEvent.click(screen.getByRole("button", { name: "Envoyer" }))
+
+      const input = screen.getByRole("textbox", { name: "Nom" })
+      expect(screen.getByRole("alert")).toHaveTextContent(FIELD_MESSAGE)
+      expect(input).toHaveAttribute("aria-invalid", "true")
+      expect(input).toHaveAccessibleDescription(FIELD_MESSAGE)
+      expectOneError()
+    })
+  })
+
+  describe("repeated failures and focus refusal (#739, review)", () => {
+    afterEach(() => { vi.useRealTimers() })
+
+    // (d) A field with no focusable element (hidden, disabled): its mark stays, the alert says it.
+    it("says the message in the alert when the focus is refused by a disabled field", () => {
+      render(<Harness mode="disabled" />)
+      fireEvent.click(screen.getByRole("button", { name: "Envoyer" }))
+
+      const input = screen.getByRole("textbox", { name: "Nom" })
+      expect(input).toHaveAttribute("aria-invalid", "true")
+      expect(input).toHaveAccessibleDescription(FIELD_MESSAGE)
+      expect(input).not.toHaveFocus()
+      expect(screen.getByRole("alert")).toHaveTextContent(FIELD_MESSAGE)
+      expectOneError()
+    })
+
+    // (a) then (b): the first failure moves the focus and stays out of the alert; the second one,
+    // with the field already focused, uses the alert, still with a single copy of the message.
+    it("handles a focus-taking failure then an already-focused one on the same form", () => {
+      render(<Harness />)
+      const input = screen.getByRole("textbox", { name: "Nom" })
+
+      fireEvent.submit(input.closest("form")!)
+      expect(input).toHaveFocus()
+      expect(screen.getByRole("alert")).toBeEmptyDOMElement()
+      expectOneError()
+
+      fireEvent.submit(input.closest("form")!)
+      expect(input).toHaveFocus()
+      expect(screen.getByRole("alert")).toHaveTextContent(FIELD_MESSAGE)
+      expect(input).toHaveAccessibleDescription(FIELD_MESSAGE)
+      expectOneError()
+    })
+
+    it("empties then refills a repeated alert after about 100 ms, without unmounting the box", () => {
+      vi.useFakeTimers()
+      render(<Harness />)
+      const input = screen.getByRole("textbox", { name: "Nom" })
+      input.focus()
+
+      fireEvent.submit(input.closest("form")!)
+      expect(screen.getByRole("alert")).toHaveTextContent(FIELD_MESSAGE)
+
+      fireEvent.submit(input.closest("form")!)
+      // The alert is empty, but the message stays visible once and the field keeps its state.
+      expect(screen.getByRole("alert")).toBeEmptyDOMElement()
+      const wrapper = expectOneError()
+      expect(wrapper).toBeVisible()
+      expect(wrapper).not.toHaveClass("sr-only")
+      expect(input).toHaveAttribute("aria-invalid", "true")
+      expect(input).toHaveAccessibleDescription(FIELD_MESSAGE)
+
+      act(() => { vi.advanceTimersByTime(99) })
+      expect(screen.getByRole("alert")).toBeEmptyDOMElement()
+      act(() => { vi.advanceTimersByTime(1) })
+      expect(screen.getByRole("alert")).toHaveTextContent(FIELD_MESSAGE)
+      expectOneError()
+    })
+
+    it("cancels a pending refill on reset, with no stale error in the DOM", () => {
+      vi.useFakeTimers()
+      render(<Harness />)
+      const input = screen.getByRole("textbox", { name: "Nom" })
+      input.focus()
+      fireEvent.submit(input.closest("form")!)
+      fireEvent.submit(input.closest("form")!)
+      expect(screen.getByRole("alert")).toBeEmptyDOMElement()
+      expectOneError()
+
+      fireEvent.click(screen.getByRole("button", { name: "Réinitialiser" }))
+      act(() => { vi.advanceTimersByTime(200) })
+      expect(screen.getByRole("alert")).toBeEmptyDOMElement()
+      expect(document.body.textContent).not.toContain(FIELD_MESSAGE)
+      expect(document.querySelectorAll("#form-error")).toHaveLength(1)
+    })
+
+    it("cancels a pending refill on a new submit", async () => {
+      vi.useFakeTimers()
+      const { result } = renderHook(() => useSubmit())
+      act(() => { result.current.fail(FIELD_MESSAGE) })
+      act(() => { result.current.fail(FIELD_MESSAGE) })
+      expect(result.current.alertShown).toBe(false)
+
+      await act(async () => {
+        await result.current.submit(() => Promise.resolve(new Response(JSON.stringify({ ok: true }), { status: 200 })))
+      })
+      act(() => { vi.advanceTimersByTime(200) })
+      expect(result.current.error).toBeNull()
+      expect(result.current.alertShown).toBe(true)
+    })
+
+    it("cancels a pending refill on unmount", () => {
+      vi.useFakeTimers()
+      const { result, unmount } = renderHook(() => useSubmit())
+      act(() => { result.current.fail(FIELD_MESSAGE) })
+      act(() => { result.current.fail(FIELD_MESSAGE) })
+      expect(vi.getTimerCount()).toBe(1)
+
+      unmount()
+      expect(vi.getTimerCount()).toBe(0)
+      expect(() => act(() => { vi.advanceTimersByTime(200) })).not.toThrow()
+    })
   })
 })

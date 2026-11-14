@@ -15,7 +15,7 @@ export default function NewOrgForm() {
   const [name, setName] = useState("")
   const [adminEmail, setAdminEmail] = useState("")
   const [adminName, setAdminName] = useState("")
-  const { submit: run, busy: submitting, error, fail, isInvalid, reset } = useSubmit()
+  const { submit: run, busy: submitting, error, fail, isInvalid, reset, quiet, alertShown } = useSubmit()
   const id = useId()
   const [result, setResult] = useState<{ orgId: string; orgName: string; inviteUrl: string } | null>(null)
   const [inviteSent, setInviteSent] = useState<"idle" | "sending" | "sent" | "error">("idle")
@@ -199,7 +199,7 @@ export default function NewOrgForm() {
           </div>
         </div>
 
-        <FormStatus error={error} errorId={`${id}-error`} />
+        <FormStatus error={error} errorId={`${id}-error`} quiet={quiet} alertShown={alertShown} />
 
         <div className="flex justify-end gap-3 pt-1">
           <button
