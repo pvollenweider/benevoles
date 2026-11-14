@@ -36,6 +36,9 @@ ENV AUTH_SECRET=build-placeholder-secret-32-characters-min
 # NEXT_PUBLIC_SENTRY_DSN is a public value baked into the browser bundle
 ARG NEXT_PUBLIC_SENTRY_DSN
 ENV NEXT_PUBLIC_SENTRY_DSN=$NEXT_PUBLIC_SENTRY_DSN
+# Domains where the browser SDK runs (#1335, src/lib/sentry-client-loader.ts); empty: any host
+ARG NEXT_PUBLIC_SENTRY_ALLOWED_HOSTS
+ENV NEXT_PUBLIC_SENTRY_ALLOWED_HOSTS=$NEXT_PUBLIC_SENTRY_ALLOWED_HOSTS
 ARG GIT_SHA
 ENV GIT_SHA=$GIT_SHA
 

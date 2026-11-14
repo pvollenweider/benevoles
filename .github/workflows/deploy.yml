@@ -100,6 +100,8 @@ jobs:
           cache-to: type=gha,mode=max
           build-args: |
             NEXT_PUBLIC_SENTRY_DSN=${{ secrets.NEXT_PUBLIC_SENTRY_DSN }}
+            # The published image runs anywhere; only benevol.app reports browser errors (#1335).
+            NEXT_PUBLIC_SENTRY_ALLOWED_HOSTS=benevol.app
             GIT_SHA=${{ github.sha }}
           secrets: |
             sentry_auth_token=${{ secrets.SENTRY_AUTH_TOKEN }}
