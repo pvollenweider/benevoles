@@ -24,3 +24,7 @@ This block is written and re-added by `next dev` — verify at `node_modules/nex
 
 - Tout changement qui modifie un écran montré dans `public/doc-img/` (guides, README) régénère les captures concernées dans le même changement : `ONLY=<captures> npm run screenshots` sur une base jetable de la branche, procédure en tête de `scripts/screenshots.mjs`. Relire ensuite leurs textes alternatifs dans les guides. Une capture ne montre jamais un ancien libellé ou une ancienne disposition.
 - La CI le vérifie (`scripts/check-doc-screenshots.mjs`, correspondance capture → écrans dans `src/lib/doc-screenshots.ts`) : elle échoue si un écran montré change sans sa capture. Un changement sans effet visible le dit par `doc-img: unchanged` dans la description de la PR ou le message du dernier commit. Une nouvelle capture se déclare dans les deux fichiers.
+
+## Issues
+
+- Une issue triée porte un label de type, un de statut (`status:*`) et un de domaine (`area:*`) : règles dans `CONTRIBUTING.md`, section « Labels des issues ». Les labels marqués « Legacy » ne s'appliquent plus.
