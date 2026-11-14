@@ -34,7 +34,7 @@ Format basé sur [Keep a Changelog](https://keepachangelog.com/fr/1.0.0/).
 
 ### Corrigé
 
-- Dans les formulaires de l'administration et la demande d'un espace, une erreur de champ n'est plus annoncée deux fois par un lecteur d'écran : elle est dite avec le champ qui la reçoit, ou par l'alerte quand le champ avait déjà le focus (#739).
+- Dans les formulaires de l'administration et la demande d'un espace, une erreur de champ n'est plus annoncée deux fois par un lecteur d'écran : elle est dite avec le champ qui la reçoit, ou par l'alerte quand le champ avait déjà le focus ; un second échec identique est redit une fois, sans faire disparaître le cadre ni retirer le marquage du champ (#739).
 - Le site fonctionne de nouveau avec Safari 15.4 à 16.3 (iPhone et Mac qui n'ont pas reçu les mises à jour de 2023) : les pages ne démarraient pas, les formulaires et le choix des créneaux restaient sans effet. La page « Navigateurs compatibles » indique Safari 15.4 comme version minimale (#1343).
 - Sur un navigateur trop ancien pour le site (par exemple un iPhone qui ne reçoit plus de mises à jour), la demande d'un espace et la page d'inscription d'un événement ne restent plus muettes : un message dit que la page n'a pas démarré et propose de mettre à jour ou de changer d'appareil (#1343).
 - La vidéothèque, les pages vidéo et le sitemap des vidéos annoncent la durée réelle des vidéos publiées : quatre durées étaient anciennes (dont celles du lot 40) et sept vidéos récentes n'avaient pas leur durée ni leur affiche déclarées.

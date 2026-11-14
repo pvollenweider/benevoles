@@ -22,7 +22,7 @@ export default function LoginPage() {
   const busyRef = useRef(false)
   const [loading, setLoading] = useState(false)
   // signIn isn't a fetch: only the error handling of the shared hook is used here.
-  const { error, fail, isInvalid, reset, quiet } = useSubmit()
+  const { error, fail, isInvalid, reset, quiet, alertShown } = useSubmit()
   // Before hydration the form has no submit handler: a tap on a slow phone reloaded the empty page
   // and lost what was typed (seen in E2E as a login stuck on /admin/login, #592). The button stays
   // disabled until the handler is attached. The fields are uncontrolled (read at submit): with a
@@ -92,7 +92,7 @@ export default function LoginPage() {
             />
           </div>
 
-          <FormStatus error={error} errorId={`${id}-error`} quiet={quiet} />
+          <FormStatus error={error} errorId={`${id}-error`} quiet={quiet} alertShown={alertShown} />
 
           <button
             type="submit"

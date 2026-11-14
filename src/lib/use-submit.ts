@@ -16,10 +16,17 @@ import { flushSync } from "react-dom"
  * `quiet` (#739, step 4) tells FormStatus not to use its alert: when `fail` moves the focus to the
  * field, the field's description says the error, and the alert would say it a second time. The
  * alert keeps errors about the field that already had the focus, and general errors.
+ *
+ * `alertShown` (#739, review) lets a repeated alert be emptied without unmounting its box: the
+ * message stays in `error` (wrapper and field description unchanged), only the alert span is
+ * blanked, then filled again a little later so the browser does not coalesce the two writes.
  */
 
 export const NETWORK_ERROR = "Impossible d'enregistrer. Vérifiez votre connexion et réessayez."
 export const GENERIC_ERROR = "Une erreur est survenue."
+
+/** A same-task refill may be coalesced by the browser and stay silent; a little later it is a new change. */
+const ALERT_REFILL_MS = 100
 
 export type SubmitOutcome<T> = { ok: true; data: T; status: number } | { ok: false; error: string; status: number | null }
 
@@ -49,6 +56,8 @@ export function useSubmit() {
   const [error, setError] = useState<string | null>(null)
   const [invalidField, setInvalidField] = useState<string | null>(null)
   const [quiet, setQuiet] = useState(false)
+  // Keeps the visible box while the alert span alone is blanked for a repeated failure.
+  const [alertShown, setAlertShown] = useState(true)
   const [status, setStatus] = useState("")
   // Whether the mounted alert already holds text, so a repeat is emptied before being filled again.
   const alertHasTextRef = useRef(false)
@@ -68,8 +77,10 @@ export function useSubmit() {
    * Shows an error, with a field and an element to focus when it has one. When the focus moves to
    * that element, the message is its description and stays out of the alert (a); when the field
    * already had the focus (b), when there is no field (c) or no element to focus (d), the alert
-   * says it. The alert is emptied first only when it already holds text, then refilled in a later
-   * task: a same-task refill is what made the same sentence heard twice.
+   * says it. When the alert already holds text, only its own text is emptied, the field stays
+   * marked (a focused field must not lose `aria-invalid` for a moment) and the box stays visible;
+   * the span is refilled after a short delay, since a browser may coalesce empty-then-identical
+   * text written in the same task and stay silent.
    */
   const fail = useCallback((message: string, field?: string, el?: HTMLElement | null) => {
     cancelRefill()
@@ -79,6 +90,7 @@ export function useSubmit() {
         setError(message)
         setInvalidField(field ?? null)
         setQuiet(true)
+        setAlertShown(true)
       })
       alertHasTextRef.current = false
       el.focus()
@@ -94,16 +106,18 @@ export function useSubmit() {
         setError(message)
         setInvalidField(field ?? null)
         setQuiet(false)
+        setAlertShown(true)
       })
       alertHasTextRef.current = true
     }
     if (alertHasTextRef.current) {
-      flushSync(() => { setError(null); setInvalidField(null); setQuiet(false) })
+      // Keep `error` and `invalidField`: the wrapper stays visible and the field stays described.
+      setAlertShown(false)
       alertHasTextRef.current = false
       refillRef.current = setTimeout(() => {
         refillRef.current = null
         showInAlert()
-      }, 0)
+      }, ALERT_REFILL_MS)
       return
     }
     showInAlert()
@@ -115,6 +129,7 @@ export function useSubmit() {
     setError(null)
     setInvalidField(null)
     setQuiet(false)
+    setAlertShown(true)
     setStatus("")
   }, [cancelRefill])
 
@@ -138,6 +153,7 @@ export function useSubmit() {
     setError(null)
     setInvalidField(null)
     setQuiet(false)
+    setAlertShown(true)
     setStatus("")
     try {
       const res = await request()
@@ -157,5 +173,5 @@ export function useSubmit() {
     }
   }, [cancelRefill])
 
-  return { submit, busy, error, status, setStatus, fail, reset, isInvalid, invalidField, quiet }
+  return { submit, busy, error, status, setStatus, fail, reset, isInvalid, invalidField, quiet, alertShown }
 }

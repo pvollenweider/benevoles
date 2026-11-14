@@ -17,7 +17,7 @@ export default function ForgotPasswordPage() {
   const doneRef = useRef<HTMLHeadingElement>(null)
   const [email, setEmail] = useState("")
   const [submitted, setSubmitted] = useState(false)
-  const { submit, busy, error, fail, isInvalid, quiet } = useSubmit()
+  const { submit, busy, error, fail, isInvalid, quiet, alertShown } = useSubmit()
 
   // The form is replaced by the confirmation: the focus follows, onto its heading.
   useEffect(() => { if (submitted) doneRef.current?.focus() }, [submitted])
@@ -72,7 +72,7 @@ export default function ForgotPasswordPage() {
                 autoComplete="email"
               />
             </div>
-            <FormStatus error={error} errorId={`${id}-error`} quiet={quiet} />
+            <FormStatus error={error} errorId={`${id}-error`} quiet={quiet} alertShown={alertShown} />
             <button
               type="submit"
               aria-disabled={busy || undefined}

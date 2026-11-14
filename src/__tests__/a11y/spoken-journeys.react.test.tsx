@@ -13,8 +13,13 @@ import { EMPTY_ADD_FORM, type AddFormValues, type Registration } from "@/compone
 import RegistrationsManager from "@/components/admin/RegistrationsManager"
 import ReadBeforeLinks from "@/components/ReadBeforeLinks"
 import SignupForm from "@/components/public/signup/SignupForm"
+import BlocklistManager from "@/components/super-admin/BlocklistManager"
+import AdminsManager from "@/components/admin/AdminsManager"
+import ImportModal from "@/components/admin/members/ImportModal"
 import { useSubmit } from "@/lib/use-submit"
 import { startVirtualScreenReader, stopVirtualScreenReader, type VirtualScreenReader } from "./virtual-screen-reader"
+
+vi.mock("next/navigation", () => ({ useRouter: () => ({ refresh: vi.fn(), push: vi.fn() }) }))
 
 // The virtual screen reader (#739, step 4) approximates what a person hears from the accessibility
 // tree, the focus changes and the live regions. It is not VoiceOver or NVDA: it checks the phrases
@@ -26,11 +31,15 @@ afterEach(async () => {
   vi.unstubAllGlobals()
 })
 
-/** Waits until `text` was spoken, then lets the test assert on the exact phrase. */
+/** A live region may deliver a late duplicate after the first phrase: let it settle before reading. */
+const settle = () => new Promise((resolve) => setTimeout(resolve, 50))
+
+/** Waits until `text` was spoken and settles, so a late duplicate would be in the log too. */
 async function waitForSpoken(reader: VirtualScreenReader, text: string) {
   await waitFor(async () => {
     expect((await reader.spokenPhraseLog()).join("\n")).toContain(text)
   })
+  await settle()
 }
 
 const FIELD_MESSAGE = "Indiquez le nom (2 caractères au moins)."
@@ -38,7 +47,7 @@ const GENERAL_MESSAGE = "La demande n'a pas pu être envoyée."
 
 /** A form on the project's pattern: useSubmit, FormStatus, one described field, one general action. */
 function ErrorForm() {
-  const { error, fail, isInvalid, quiet } = useSubmit()
+  const { error, fail, isInvalid, quiet, alertShown } = useSubmit()
   const inputRef = useRef<HTMLInputElement>(null)
   return (
     <form onSubmit={(e) => { e.preventDefault(); fail(FIELD_MESSAGE, "name", inputRef.current) }}>
@@ -46,7 +55,7 @@ function ErrorForm() {
       <input id="name" ref={inputRef} aria-invalid={isInvalid("name")} aria-describedby={isInvalid("name") ? "name-error" : undefined} />
       <button type="submit">Envoyer</button>
       <button type="button" onClick={() => fail(GENERAL_MESSAGE)}>Action</button>
-      <FormStatus error={error} errorId="name-error" quiet={quiet} />
+      <FormStatus error={error} errorId="name-error" quiet={quiet} alertShown={alertShown} />
     </form>
   )
 }
@@ -140,9 +149,11 @@ describe("virtual screen reader — spoken journeys (#739)", () => {
     await reader.clear()
     fireEvent.submit(input.closest("form")!)
     await waitFor(async () => {
-      const phrases = (await reader.spokenPhraseLog()).filter((phrase) => phrase.startsWith("assertive:") && phrase.includes(FIELD_MESSAGE))
+      const all = await reader.spokenPhraseLog()
+      const phrases = all.filter((phrase) => phrase.startsWith("assertive:") && phrase.includes(FIELD_MESSAGE))
       expect(phrases).toHaveLength(1)
     })
+    await settle()
     log = await reader.spokenPhraseLog()
     expect(log.filter((phrase) => phrase.includes(FIELD_MESSAGE))).toEqual([`assertive: ${FIELD_MESSAGE}`])
   })
@@ -166,6 +177,7 @@ describe("virtual screen reader — spoken journeys (#739)", () => {
       const phrases = (await reader.spokenPhraseLog()).filter((phrase) => phrase.startsWith("assertive:") && phrase.includes(GENERAL_MESSAGE))
       expect(phrases).toHaveLength(1)
     })
+    await settle()
     log = await reader.spokenPhraseLog()
     expect(log.filter((phrase) => phrase.includes(GENERAL_MESSAGE))).toEqual([`assertive: ${GENERAL_MESSAGE}`])
   })
@@ -210,5 +222,73 @@ describe("virtual screen reader — spoken journeys (#739)", () => {
     await reader.next()
     expect(await reader.lastSpokenPhrase()).toBe("link, À lire avant ton créneau : Tenir la caisse")
     expect((await reader.spokenPhraseLog()).filter((phrase) => phrase.startsWith("link,"))).toHaveLength(1)
+  })
+
+  // The confirmation checkbox appears after the server refuses a common provider: it takes the
+  // focus, so the reason must be its description, not a live region emptied by that same focus.
+  it("reads the blocklist confirmation error once with its checkbox", async () => {
+    const message = "gmail.com est utilisé par beaucoup de personnes : le bloquer empêche toutes de s'inscrire. Cochez la confirmation pour le bloquer quand même."
+    vi.stubGlobal("fetch", vi.fn().mockResolvedValue({ ok: false, json: async () => ({ error: message, field: "value", needsConfirmation: true }) }))
+    const view = render(<BlocklistManager initialBlocks={[]} />)
+    const reader = await startVirtualScreenReader(view.container)
+
+    fireEvent.click(screen.getByRole("radio", { name: "Domaine" }))
+    fireEvent.change(screen.getByLabelText("Domaine à bloquer"), { target: { value: "gmail.com" } })
+    fireEvent.change(screen.getByLabelText("Raison"), { target: { value: "Vague de spam" } })
+    fireEvent.click(screen.getByRole("button", { name: "Ajouter à la liste" }))
+    const checkbox = await screen.findByRole("checkbox", { name: /Je confirme vouloir bloquer ce domaine/ })
+    await waitForSpoken(reader, message)
+
+    expect(checkbox).toHaveFocus()
+    expect(checkbox).toHaveAccessibleDescription(message)
+    expect(screen.getByRole("alert")).toBeEmptyDOMElement()
+    expect((await reader.spokenPhraseLog()).filter((phrase) => phrase.includes(message))).toHaveLength(1)
+  })
+
+  // A role error concerns the row's select: its description says it, and the invite form's name
+  // and email must not inherit that error just because the alert has text.
+  it("reads a role error on one admin row once, from that row's select", async () => {
+    const message = "Il ne peut rester qu'un propriétaire dans l'équipe."
+    vi.stubGlobal("fetch", vi.fn().mockResolvedValue({ ok: false, status: 409, json: async () => ({ error: message }) }))
+    const admins = [
+      { id: "a1", name: "Alice", email: "alice@x.ch", role: "admin", isActive: true, createdAt: "2026-01-01T00:00:00.000Z", pending: false },
+      { id: "a2", name: "Bob", email: "bob@x.ch", role: "organizer", isActive: true, createdAt: "2026-01-02T00:00:00.000Z", pending: false },
+    ]
+    const view = render(<AdminsManager initialAdmins={admins} currentEmail="alice@x.ch" canManage />)
+    const reader = await startVirtualScreenReader(view.container)
+    fireEvent.click(screen.getByRole("button", { name: "Inviter" }))
+
+    fireEvent.change(screen.getByLabelText("Rôle de Bob"), { target: { value: "admin" } })
+    fireEvent.click(screen.getByRole("button", { name: "Appliquer le rôle de Bob" }))
+    await waitForSpoken(reader, message)
+
+    const select = screen.getByLabelText("Rôle de Bob")
+    expect(select).toHaveFocus()
+    expect(select).toHaveAccessibleDescription(message)
+    expect(screen.getByLabelText("Nom")).not.toHaveAttribute("aria-describedby")
+    expect(screen.getByLabelText("Email")).not.toHaveAttribute("aria-describedby")
+    expect(screen.getByRole("alert")).toBeEmptyDOMElement()
+    expect((await reader.spokenPhraseLog()).filter((phrase) => phrase.includes(message))).toHaveLength(1)
+  })
+
+  // The file input's description starts with the error, before the file name and the long help;
+  // the message is in the DOM once and heard once, with the field that takes the focus.
+  it("reads the missing-file error once with the file input", async () => {
+    const view = render(<ImportModal onClose={() => {}} onImported={() => {}} />)
+    const reader = await startVirtualScreenReader(view.container)
+
+    const analyse = screen.getByRole("button", { name: "Analyser le fichier" })
+    analyse.focus()
+    fireEvent.click(analyse)
+    const message = "Choisissez un fichier CSV ou Excel."
+    await waitForSpoken(reader, message)
+
+    const input = screen.getByLabelText(/Choisir un fichier CSV ou Excel/)
+    expect(input).toHaveFocus()
+    expect(input).toHaveAttribute("aria-invalid", "true")
+    expect(input).toHaveAccessibleDescription(/Choisissez un fichier CSV ou Excel\./)
+    expect(input.getAttribute("aria-describedby")!.split(" ")[0]).toMatch(/-error$/)
+    expect(screen.getByRole("alert")).toBeEmptyDOMElement()
+    expect((await reader.spokenPhraseLog()).filter((phrase) => phrase.includes(message))).toHaveLength(1)
   })
 })

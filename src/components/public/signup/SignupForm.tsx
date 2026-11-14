@@ -38,7 +38,7 @@ export default function SignupForm({ open, closedMessage = "Les inscriptions son
   const [values, setValues] = useState({ organizationName: "", description: "", contactName: "", email: "", source: "", sourceDetail: "", website: "" })
   const [startedAt] = useState(() => Date.now())
   const [done, setDone] = useState(false)
-  const { submit, busy, error, fail, isInvalid, quiet } = useSubmit()
+  const { submit, busy, error, fail, isInvalid, quiet, alertShown } = useSubmit()
   const hydrated = useHydrated()
 
   useEffect(() => { if (done) doneRef.current?.focus() }, [done])
@@ -138,7 +138,7 @@ export default function SignupForm({ open, closedMessage = "Les inscriptions son
         <label htmlFor={`${id}-website`}>Site web (laisser vide)</label>
         <input id={`${id}-website`} tabIndex={-1} autoComplete="off" value={values.website} onChange={(e) => setValues({ ...values, website: e.target.value })} />
       </div>
-      <FormStatus error={error} errorId={`${id}-error`} quiet={quiet} />
+      <FormStatus error={error} errorId={`${id}-error`} quiet={quiet} alertShown={alertShown} />
       <button type="submit" aria-disabled={busy || undefined} aria-describedby={hydrationNoticeId(hydrated, `${id}-not-started`)}
         className={`rounded-xl bg-gray-900 px-5 py-3 text-base font-medium text-white hover:bg-gray-800 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-blue-600 dark:focus-visible:outline-blue-400 dark:bg-gray-100 dark:text-gray-900 dark:hover:bg-white ${busy ? "cursor-wait opacity-80" : ""}`}>
         {busy ? "Envoi…" : "Créer mon espace"}

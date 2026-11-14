@@ -52,7 +52,7 @@ export default function AdminsManager({
   const id = useId()
   const nameRef = useRef<HTMLInputElement>(null)
   const emailRef = useRef<HTMLInputElement>(null)
-  const { submit, busy: submitting, error, status, setStatus, fail, reset, isInvalid, quiet } = useSubmit()
+  const { submit, busy: submitting, error, status, setStatus, fail, reset, isInvalid, quiet, alertShown } = useSubmit()
   // Where the focus lands when a control disappears (form closed, admin removed).
   const inviteButtonRef = useRef<HTMLButtonElement>(null)
   const headingRef = useRef<HTMLHeadingElement>(null)
@@ -131,7 +131,7 @@ export default function AdminsManager({
 
   return (
     <div className="space-y-4">
-      <FormStatus status={status} error={error} errorId={`${id}-error`} quiet={quiet} />
+      <FormStatus status={status} error={error} errorId={`${id}-error`} quiet={quiet} alertShown={alertShown} />
 
       <div className="bg-white rounded-2xl border border-gray-200 overflow-hidden">
         <div className="px-4 py-3 border-b border-gray-100 flex items-center justify-between">
@@ -171,7 +171,7 @@ export default function AdminsManager({
                   value={form.name}
                   onChange={(e) => setForm((f) => ({ ...f, name: e.target.value }))}
                   aria-invalid={isInvalid("name")}
-                  aria-describedby={error ? `${id}-error` : undefined}
+                  aria-describedby={isInvalid("name") ? `${id}-error` : undefined}
                   className="w-full border border-gray-500 rounded-lg px-3 py-2 text-sm focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-blue-600"
                   autoComplete="off"
                 />
@@ -185,7 +185,7 @@ export default function AdminsManager({
                   value={form.email}
                   onChange={(e) => setForm((f) => ({ ...f, email: e.target.value }))}
                   aria-invalid={isInvalid("email")}
-                  aria-describedby={error ? `${id}-error` : undefined}
+                  aria-describedby={isInvalid("email") ? `${id}-error` : undefined}
                   className="w-full border border-gray-500 rounded-lg px-3 py-2 text-sm focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-blue-600"
                   autoComplete="off"
                 />

@@ -3,7 +3,7 @@
 // SPDX-FileCopyrightText: 2026 Philippe Vollenweider
 // SPDX-License-Identifier: AGPL-3.0-only
 
-import { useEffect, useId, useRef, useState } from "react"
+import { useId, useRef, useState } from "react"
 import { flushSync } from "react-dom"
 import { NETWORK_ERROR, useSubmit } from "@/lib/use-submit"
 import { announce } from "@/lib/announce"
@@ -44,11 +44,8 @@ export default function BlocklistManager({ initialBlocks }: { initialBlocks: Blo
   const [removing, setRemoving] = useState<Block | null>(null)
   const [removeError, setRemoveError] = useState<string | null>(null)
   const [removeBusy, setRemoveBusy] = useState(false)
-  const { error, fail, isInvalid, quiet } = useSubmit()
+  const { error, fail, isInvalid, quiet, alertShown } = useSubmit()
   const busy = adding
-
-  // The confirmation box appears after the server refuses a common provider: it takes the focus.
-  useEffect(() => { if (needsConfirmation) confirmRef.current?.focus() }, [needsConfirmation])
 
   async function add(e: React.FormEvent) {
     e.preventDefault()
@@ -66,8 +63,10 @@ export default function BlocklistManager({ initialBlocks }: { initialBlocks: Blo
       // The server names the field in error; a common provider shows the confirmation box.
       const message = data.error ?? "L'entrée n'a pas été ajoutée."
       if (data.needsConfirmation) {
-        fail(message, "value")
-        setNeedsConfirmation(true)
+        // Mount the confirmation box first, then focus it through `fail`: a focus change in the
+        // same turn as the message would cancel its speech, and the box carries the reason.
+        flushSync(() => setNeedsConfirmation(true))
+        fail(message, "confirm", confirmRef.current)
         return
       }
       const el = data.field === "reason" ? reasonRef.current : data.field === "days" ? daysRef.current : data.field === "kind" ? firstKindRef.current : valueRef.current
@@ -129,7 +128,9 @@ export default function BlocklistManager({ initialBlocks }: { initialBlocks: Blo
         </div>
         {kind === "domain" && needsConfirmation && (
           <label className="flex items-start gap-2 text-sm text-gray-900">
-            <input ref={confirmRef} type="checkbox" checked={confirmCommon} onChange={(e) => setConfirmCommon(e.target.checked)} className="mt-0.5 h-4 w-4" />
+            <input ref={confirmRef} type="checkbox" checked={confirmCommon} onChange={(e) => setConfirmCommon(e.target.checked)}
+              aria-invalid={isInvalid("confirm")} aria-describedby={isInvalid("confirm") ? `${id}-error` : undefined}
+              className="mt-0.5 h-4 w-4" />
             Je confirme vouloir bloquer ce domaine, utilisé par beaucoup de personnes.
           </label>
         )}
@@ -147,7 +148,7 @@ export default function BlocklistManager({ initialBlocks }: { initialBlocks: Blo
           <textarea id={`${id}-reason`} ref={reasonRef} value={reason} onChange={(e) => setReason(e.target.value)} required rows={2} maxLength={REASON_MAX}
             aria-invalid={isInvalid("reason")} aria-describedby={isInvalid("reason") ? `${id}-error` : undefined} className={inputClass} />
         </div>
-        <FormStatus error={error} errorId={`${id}-error`} quiet={quiet} />
+        <FormStatus error={error} errorId={`${id}-error`} quiet={quiet} alertShown={alertShown} />
         <button type="submit" aria-disabled={busy || undefined}
           className={`rounded-xl bg-gray-900 px-4 py-2 text-sm font-medium text-white hover:bg-gray-800 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-blue-600 ${busy ? "cursor-wait opacity-80" : ""}`}>
           {busy ? "Ajout…" : "Ajouter à la liste"}
