@@ -157,7 +157,7 @@ export function renderAdminWelcome(p: NotificationPayload): RenderedEmail {
     organizationName: string
     adminUrl: string
   }
-  const subject = `Bienvenue sur Bénévoles — ${d.organizationName}`
+  const subject = `Bienvenue sur ${siteName()} — ${d.organizationName}`
 
   const text = [
     `Bonjour ${d.adminName},`,
@@ -168,7 +168,7 @@ export function renderAdminWelcome(p: NotificationPayload): RenderedEmail {
     d.adminUrl,
     ``,
     `Bonne organisation !`,
-    `L'équipe Bénévoles`,
+    `L'équipe ${siteName()}`,
   ].join("\n")
 
   const html = wrap(`
@@ -248,7 +248,7 @@ export function renderReleaseAvailable(p: NotificationPayload): RenderedEmail {
   const subject = `Nouvelle version disponible : ${d.version}`
 
   const text = [
-    `Une nouvelle version de Bénévoles est disponible : ${d.version} (vous utilisez ${d.currentVersion}).`,
+    `Une nouvelle version de ${siteName()} est disponible : ${d.version} (vous utilisez ${d.currentVersion}).`,
     ``,
     `Notes de version :`,
     d.releaseUrl,
@@ -259,7 +259,7 @@ export function renderReleaseAvailable(p: NotificationPayload): RenderedEmail {
 
   const html = wrap(`
     <h2 style="margin:0 0 0.5em">Nouvelle version disponible</h2>
-    <p>Une nouvelle version de Bénévoles est disponible : <strong>${escapeHtml(d.version)}</strong> (vous utilisez ${escapeHtml(d.currentVersion)}).</p>
+    <p>Une nouvelle version de ${escapeHtml(siteName())} est disponible : <strong>${escapeHtml(d.version)}</strong> (vous utilisez ${escapeHtml(d.currentVersion)}).</p>
     <p style="margin-top:1.5em">${btn(d.releaseUrl, "Voir les notes de version")}</p>
     <p style="margin-top:0.75em"><a href="${d.upgradeDocsUrl}" style="color:#2563eb">Documentation de mise à jour</a></p>
   `, `${d.version} est disponible, vous utilisez ${d.currentVersion}.`)

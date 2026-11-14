@@ -12,7 +12,7 @@ import { classifySmtpOutcome, type SmtpErrorLike, type SmtpInfoLike } from "../s
 import { recordDeliveryOutcomes } from "../delivery-outcomes"
 import { isRecipientAddressRejection } from "../recipient-rejection"
 import { encodeOutcomeReason } from "@/lib/outbox-view"
-import { siteDomain } from "@/lib/site"
+import { siteDomain, siteName } from "@/lib/site"
 
 /**
  * Outcome when no SMTP server is configured. Outside production (dev, tests) the message is printed
@@ -79,7 +79,7 @@ export const emailChannel: { send: Send } = {
 
     const org = payload.organizationId ? await orgEmailContext(payload.organizationId) : null
     const { subject, html, text } = render(payload, org?.brand)
-    const from = env.EMAIL_FROM ?? `Bénévoles <notifications@${siteDomain()}>`
+    const from = env.EMAIL_FROM ?? `${siteName()} <notifications@${siteDomain()}>`
     // The organization's own reply-to when it set one (#381), else the platform's.
     const replyTo = org?.replyTo ?? env.EMAIL_REPLY_TO ?? undefined
     const transport = createTransport()

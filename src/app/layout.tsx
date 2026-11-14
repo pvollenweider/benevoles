@@ -3,6 +3,7 @@ import { connection } from "next/server"
 import "./globals.css"
 import { CLEAN_PATH_SCRIPT } from "@/lib/clean-path"
 import { apexBaseUrl } from "@/lib/urls"
+import { siteName } from "@/lib/site"
 
 // Every page's absolute URLs (metadataBase, canonical, Open Graph, structured data) come from
 // NEXT_PUBLIC_APP_URL, which only the running container has: the image is built without it. So no
@@ -13,7 +14,10 @@ export async function generateMetadata(): Promise<Metadata> {
   return {
     // Resolves relative image URLs (the social cards) to absolute ones, as crawlers require.
     metadataBase: new URL(apexBaseUrl()),
-    title: "Bénévoles",
+    // The instance's name (#1340): the default tab title, and <meta name="application-name">,
+    // which client components read back for their own titles (src/lib/document-title.ts).
+    title: siteName(),
+    applicationName: siteName(),
     description: "Planning et inscriptions des bénévoles pour associations et événements.",
   }
 }

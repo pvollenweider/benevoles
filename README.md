@@ -167,7 +167,7 @@ SMTP_HOST="smtp.votre-fournisseur.com"
 SMTP_PORT="587"
 SMTP_USER="..."
 SMTP_PASSWORD="..."
-EMAIL_FROM="Bénévoles <notifications@votre-domaine.com>"
+EMAIL_FROM="Mon instance <notifications@votre-domaine.com>"
 ```
 
 Toutes les variables, leurs défauts et leurs effets, ainsi que la rotation de la clé de chiffrement : [docs/configuration.md](docs/configuration.md).

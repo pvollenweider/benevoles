@@ -13,6 +13,7 @@ import { isTokenShaped, tokenPath } from "@/lib/token-path"
 import { mailtoHref } from "@/lib/email-address"
 import { telHref } from "@/lib/shift-info"
 import SectorLeaderRoster, { type RosterRegistration, type RosterStaffing } from "@/components/public/SectorLeaderRoster"
+import { titleWithSiteName } from "@/lib/document-title"
 
 type RegistrationItem = {
   id: string
@@ -107,7 +108,7 @@ export default function SectorLeaderPage() {
   }, [token])
 
   useEffect(() => {
-    if (data) document.title = `${data.heading ?? `Responsable · ${data.roleName}`} — Bénévoles`
+    if (data) document.title = titleWithSiteName(data.heading ?? `Responsable · ${data.roleName}`)
   }, [data])
 
   if (loading) return <div role="status" className="flex items-center justify-center min-h-screen text-gray-500">Chargement…</div>

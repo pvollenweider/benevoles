@@ -370,7 +370,8 @@ test("a link of a closed organisation shows « Espace indisponible », nothing o
 
   await page.goto("/my/closed-org-link")
   await expect(page.getByRole("heading", { level: 1, name: "Espace indisponible" })).toBeVisible()
-  await expect(page).toHaveTitle("Espace indisponible — Bénévoles")
+  // The instance's name (#1340): benevol.app on a local address.
+  await expect(page).toHaveTitle("Espace indisponible — benevol.app")
   await expect(page.getByText("ce lien ne donne plus accès à tes inscriptions")).toBeVisible()
   await expect(page.getByRole("link", { name: "aide@example.org" })).toHaveAttribute("href", "mailto:aide@example.org")
   await expect(page.getByText("Ce lien ne fonctionne pas")).toHaveCount(0)
