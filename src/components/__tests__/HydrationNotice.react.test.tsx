@@ -8,19 +8,27 @@ import { renderToString } from "react-dom/server"
 import { cleanup, render, screen } from "@testing-library/react"
 import HydrationNotice from "@/components/HydrationNotice"
 import SignupForm from "@/components/public/signup/SignupForm"
-import { HYDRATION_NOTICE_LEAD, hydrationNoticeId, hydrationNoticeText } from "@/lib/hydration-notice"
+import { HYDRATION_NOTICE_DOC_HREF, HYDRATION_NOTICE_DOC_LABEL, HYDRATION_NOTICE_LEAD, hydrationNoticeId, hydrationNoticeText } from "@/lib/hydration-notice"
+import { loadDocUnits } from "@/lib/doc-units"
 
 afterEach(() => cleanup())
 
 describe("HydrationNotice (#1343)", () => {
   it("is in the server HTML, as a status hidden by its class", () => {
     const html = renderToString(<HydrationNotice kind="signup" id="n" />)
-    expect(html).toContain('id="n"')
-    expect(html).toContain('role="status"')
-    expect(html).toContain('class="hydration-notice')
+    expect(html).toContain('role="status" class="hydration-notice')
     expect(html).toContain(HYDRATION_NOTICE_LEAD.replaceAll("'", "&#x27;"))
     // With scripts turned off, the rule in <noscript> shows it at once.
     expect(html).toMatch(/<noscript><style>\.hydration-notice\{[^}]*visibility:visible/)
+  })
+
+  // The button's description is the text alone; the link, a plain <a> that needs no script, comes after it.
+  it("links to the documentation page of that name, outside the described text", () => {
+    const html = renderToString(<HydrationNotice kind="signup" id="n" />)
+    expect(html).toMatch(/<span id="n">.*<\/span> <a href="\/doc\/navigateurs-compatibles"[^>]*>Navigateurs compatibles<\/a>/)
+    const unit = loadDocUnits().find((u) => `/doc/${u.slug}` === HYDRATION_NOTICE_DOC_HREF)
+    expect(unit?.title).toBe(HYDRATION_NOTICE_DOC_LABEL)
+    expect(unit?.roles).toEqual(["admin", "benevole"])
   })
 
   it("is gone once the page has started", () => {
@@ -61,7 +69,8 @@ describe("SignupForm before the page has started (#1343)", () => {
     const notice = html.indexOf('class="hydration-notice')
     expect(notice).toBeGreaterThan(-1)
     expect(notice).toBeLessThan(html.indexOf("<input"))
-    const id = /<div id="([^"]+)" role="status" class="hydration-notice/.exec(html)?.[1]
+    const id = /class="hydration-notice[^>]*><p[^>]*><span id="([^"]+)">/.exec(html)?.[1]
+    expect(id).toBeTruthy()
     expect(html).toMatch(new RegExp(`<button type="submit"[^>]*aria-describedby="${id}"`))
   })
 

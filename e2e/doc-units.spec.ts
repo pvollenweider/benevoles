@@ -213,8 +213,8 @@ test.describe("a unit's navigation on a wide screen", () => {
     expect(new Set(groups).size).toBe(groups.length)
     expect(onRappels).toEqual([
       ["Bénévoles", ["S'inscrire à un créneau"]],
-      ["Organisateurs", ["Démarrer", "Préparer l'événement", "Publier et partager", "Suivre l'événement", "Le jour J", "Membres et invitations", "Communiquer avec les bénévoles", "Paramètres de l'organisation", "Aide"]],
-      ["Commun", ["Après l'inscription", "Règles d'inscription"]],
+      ["Organisateurs", ["Démarrer", "Préparer l'événement", "Publier et partager", "Suivre l'événement", "Le jour J", "Membres et invitations", "Communiquer avec les bénévoles", "Paramètres de l'organisation"]],
+      ["Commun", ["Après l'inscription", "Règles d'inscription", "Aide"]],
     ])
     expect.soft(await seriousViolations(page)).toEqual([])
     // Another group opens from the keyboard and leads to its units.

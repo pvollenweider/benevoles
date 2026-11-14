@@ -13,6 +13,7 @@ Format basé sur [Keep a Changelog](https://keepachangelog.com/fr/1.0.0/).
 
 ### Ajouté
 
+- **Navigateurs compatibles** : une page de la documentation donne les versions minimales (Safari 16.4, Chrome, Edge et Firefox 111), explique comment reconnaître un appareil trop ancien et quoi faire ; le message « Cette page n'a pas fini de se charger » y renvoie (#1343).
 - **Essayer sur sa machine** : `docker-compose.essai.yml` lance benevol.app avec Docker en deux commandes, sans le code, avec un compte de super admin d'essai et une boîte de réception locale ; son mot de passe et les clés de l'application sont tirés au hasard au premier lancement (#1333).
 - Le premier super admin d'une instance auto-hébergée peut être créé au démarrage à partir de `ADMIN_EMAIL`, `ADMIN_PASSWORD` et `ADMIN_NAME`, sans lancer le seed depuis un checkout (#1334).
 - **Logiciel libre** : une page publique qui explique ce que « libre » veut dire pour benevol.app (licence AGPL, code public, installation chez vous) et ce que l'outil laisse à d'autres (#1326).
