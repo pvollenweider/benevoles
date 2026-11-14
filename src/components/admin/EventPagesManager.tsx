@@ -339,7 +339,7 @@ function PageFormModal({
     <ModalShell title={page ? "Modifier la page" : "Nouvelle page"} busy={saving} onClose={() => { if (!saving) onClose() }} panelClassName="max-w-2xl">
       <form onSubmit={submit} noValidate className="space-y-4">
         <p id={publicHintId} className="text-sm text-gray-700 bg-blue-50 border border-blue-100 rounded-xl px-3 py-2">
-          Cette page est publique : tout le monde peut lire son titre et son contenu, pas seulement ces bénévoles.
+          Cette page est publique : tout le monde peut lire son titre et son contenu{postes.length > 0 ? ", pas seulement les bénévoles des postes cochés" : ""}.
         </p>
         <div>
           <label htmlFor={titleId} className="block text-sm text-gray-700 mb-1">Titre<RequiredMark /></label>
@@ -371,14 +371,14 @@ function PageFormModal({
         {postes.length === 0 ? (
           <>
             <p className="text-sm text-gray-700">Cet événement n&apos;a pas encore de poste. Créez des créneaux, puis revenez ici.</p>
-            {/* A name from a poste since deleted still has to be unticked: no fieldset to announce. */}
+            {/* A name from a poste since deleted still has to be unticked: its own small group. */}
             {missing.length > 0 && (
-              <div className="space-y-1">
-                <p className="text-xs text-gray-600">Postes qui n&apos;existent plus : décochez-les pour retirer le lien.</p>
+              <fieldset className="space-y-1">
+                <legend className="text-xs text-gray-600">Postes qui n&apos;existent plus : décochez-les pour retirer le lien.</legend>
                 <ul role="list" className="grid gap-x-4 sm:grid-cols-2">
                   {missing.map((name) => checkbox(name, posteChoiceLabel(name, liveNames)))}
                 </ul>
-              </div>
+              </fieldset>
             )}
           </>
         ) : (
@@ -393,12 +393,12 @@ function PageFormModal({
             </p>
             {groupedCheckboxes}
             {missing.length > 0 && (
-              <div className="mt-2 space-y-1">
-                <p className="text-xs text-gray-600">Postes qui n&apos;existent plus : décochez-les pour retirer le lien.</p>
+              <fieldset className="mt-2 space-y-1">
+                <legend className="text-xs text-gray-600">Postes qui n&apos;existent plus : décochez-les pour retirer le lien.</legend>
                 <ul role="list" className="grid gap-x-4 sm:grid-cols-2">
                   {missing.map((name) => checkbox(name, posteChoiceLabel(name, liveNames)))}
                 </ul>
-              </div>
+              </fieldset>
             )}
           </fieldset>
         )}

@@ -18,5 +18,5 @@ export default function ReadBeforeLinks({ pages, label, className = "" }: { page
     </a>
   )
   if (pages.length === 1) return <p className={className}>{link(pages[0])}</p>
-  return <ul className={`space-y-0.5 ${className}`}>{pages.map((p) => <li key={p.url}>{link(p)}</li>)}</ul>
+  return <ul role="list" className={`space-y-0.5 ${className}`}>{pages.map((p) => <li key={p.url}>{link(p)}</li>)}</ul>
 }

@@ -35,7 +35,7 @@ Un créneau en liste d'attente ou sur validation n'y figure pas tant qu'il n'est
 
 ## Tous mes créneaux
 
-Tes créneaux sont ensuite listés sous **Tous mes créneaux** ; celui de l'encadré y renvoie par un lien. Chacun montre ses **infos pratiques** : lieu de rendez-vous (et **Voir sur la carte**), consigne, et la personne de contact avec son téléphone (pour le créneau repris dans **Avant ta mission**, elles sont dans l'encadré). Si l'organisation a rattaché une page à ton poste, le lien « À lire avant ton créneau : … » apparaît sous ces infos, une fois par page ; il n'apparaît que pour une place confirmée, pas en liste d'attente ni pour une demande en attente de validation.
+Tes créneaux sont ensuite listés sous **Tous mes créneaux** ; celui de l'encadré y renvoie par un lien. Chacun montre ses **infos pratiques** : lieu de rendez-vous (et **Voir sur la carte**), consigne, et la personne de contact avec son téléphone (pour le créneau repris dans **Avant ta mission**, elles sont dans l'encadré). Si l'organisation a rattaché une page à ton poste, le lien « À lire avant ton créneau : … » apparaît sous les infos de chaque créneau de ce poste, un lien par page ; il n'apparaît que pour une place confirmée, pas en liste d'attente ni pour une demande en attente de validation.
 
 ## Pauses et charge
 

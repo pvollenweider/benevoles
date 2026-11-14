@@ -95,7 +95,7 @@ export function shiftInfoHtml(info: ShiftInfo): string {
   const lines = shiftInfoLines(info)
   const pages = readBeforePages(info)
   if (lines.length === 0 && pages.length === 0) return ""
-  const pagesHtml = pages.map((p) => `<div>${escapeHtml(READ_BEFORE_LABEL)} : <a href="${escapeHtml(p.url)}" style="color:#1d4ed8;text-decoration:underline">${escapeHtml(p.title)}</a></div>`).join("")
+  const pagesHtml = pages.map((p) => `<div><a href="${escapeHtml(p.url)}" style="color:#1d4ed8;text-decoration:underline">${escapeHtml(READ_BEFORE_LABEL)} : ${escapeHtml(p.title)}</a></div>`).join("")
   return `<div style="color:#444;font-size:0.85em;margin-top:4px">${lines.map((l) => `<div>${escapeHtml(l.label)} : ${lineHtml(l, info)}</div>`).join("")}${pagesHtml}</div>`
 }
 

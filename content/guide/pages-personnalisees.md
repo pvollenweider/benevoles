@@ -22,7 +22,7 @@ En complément du champ unique « instructions publiques », ajoutez autant de p
 
 Les pages apparaissent sous forme de liens juste après les instructions publiques, sur la page d'inscription. Une page rattachée à un poste reste dans cette liste ; elle est en plus nommée, par son seul lien, aux bénévoles confirmés de ce poste.
 
-![Pages personnalisées d'un événement (« Accès et parking », « Questions fréquentes »), avec leur adresse et les actions modifier et supprimer](/doc-img/admin-pages.png)
+![Pages personnalisées d'un événement (« Accès et parking », rattachée au poste Navette, et « Questions fréquentes »), avec leur adresse et les actions modifier et supprimer](/doc-img/admin-pages.png)
 
 ## Questions fréquentes
 

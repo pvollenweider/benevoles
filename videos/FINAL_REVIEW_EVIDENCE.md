@@ -1077,3 +1077,12 @@ et les empreintes sont sous [batch40](evidence/batch40/review-report.txt).
 Sources éditoriales, manifestes et blocs viewer, recorders et seeds actualisés. Aucun nouveau
 film pour la confirmation par email, aucun fichier sous src/ ou content/guide/ changé,
 renders.json inchangé ; `doc-img: unchanged`. Aucun push, merge ni message ntfy.
+
+## Pages rattachées à un poste (#1324), 14 novembre 2026
+
+Le formulaire d'une page d'information affiche désormais un avertissement « Cette page est
+publique » et un groupe de cases « Pour les bénévoles de ces postes » ; la liste des pages peut
+porter une troisième ligne « Pour le poste … ». Vidéo à revoir, image seulement (narration et
+sélecteurs inchangés, la capture ne coche aucun poste) : `event-program-pages-qr`. Aucune vidéo
+ne montre le lien « À lire avant ton créneau » : les scénarios des vidéos ne rattachent aucune
+page à un poste. Pas de nouveau rendu dans ce changement.

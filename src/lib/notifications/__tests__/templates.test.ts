@@ -153,6 +153,8 @@ describe("render — pages to read before the shift (#1324)", () => {
     })
     expect(html.match(/Tenir la caisse/g)).toHaveLength(1)
     expect(html).toContain('style="color:#1d4ed8;text-decoration:underline"')
+    // The whole sentence is the link: it still says what it is in a list of links.
+    expect(html).toMatch(/<a href="https:\/\/asso\.benevol\.app\/fete\/caisse"[^>]*>À lire avant ton créneau : Tenir la caisse<\/a>/)
     expect(text.match(/À lire avant ton créneau : Tenir la caisse : https:\/\/asso\.benevol\.app\/fete\/caisse/g)).toHaveLength(1)
   })
 
