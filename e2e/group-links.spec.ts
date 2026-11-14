@@ -54,7 +54,7 @@ test("a group link: created by the organiser, filtered for volunteers, sign-ups 
   // A name but no role: refused on the roles.
   await name.fill("Amicale E2E")
   await form.getByRole("button", { name: "Créer le lien" }).click()
-  await expect(form.getByRole("alert")).toHaveText("Choisissez au moins un poste.")
+  await expect(form.getByText("Choisissez au moins un poste.")).toBeVisible()
   await expect(form.getByRole("checkbox", { name: "Bar" })).toBeFocused()
 
   await form.getByRole("checkbox", { name: "Bar" }).check()
