@@ -39,6 +39,7 @@ Format basé sur [Keep a Changelog](https://keepachangelog.com/fr/1.0.0/).
 
 ### Exploitation
 
+- Le manifeste du webhook Gandi désigne l'image construite avec OpenTelemetry 1.47.0 et Go 1.26, déployée sur le cluster le 14 novembre 2026. <!-- interne -->
 - `basic-ftp`, une dépendance indirecte de Lighthouse CI (outil de développement), passe à la 6.2.x par `overrides` (une alerte de sécurité). <!-- interne -->
 - Le webhook Gandi de cert-manager passe à OpenTelemetry 1.47.0 (deux alertes de sécurité) et se construit avec Go 1.26. <!-- interne -->
 - Le suivi des erreurs du navigateur ne fonctionne plus que sur benevol.app : une instance lancée depuis l'image publiée (essai local, auto-hébergement) n'envoie plus les erreurs de ses visiteurs au Sentry de benevol.app (#1335).
