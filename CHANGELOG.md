@@ -32,6 +32,7 @@ Format basé sur [Keep a Changelog](https://keepachangelog.com/fr/1.0.0/).
 
 ### Corrigé
 
+- Sur un navigateur trop ancien pour le site (par exemple un iPhone qui ne reçoit plus de mises à jour), la demande d'un espace et la page d'inscription d'un événement ne restent plus muettes : un message dit que la page n'a pas démarré et propose de mettre à jour ou de changer d'appareil (#1343).
 - La vidéothèque, les pages vidéo et le sitemap des vidéos annoncent la durée réelle des vidéos publiées : quatre durées étaient anciennes (dont celles du lot 40) et sept vidéos récentes n'avaient pas leur durée ni leur affiche déclarées.
 
 ### Exploitation
