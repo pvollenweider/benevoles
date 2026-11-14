@@ -18,7 +18,7 @@ describe("HydrationNotice (#1343)", () => {
     expect(html).toContain('id="n"')
     expect(html).toContain('role="status"')
     expect(html).toContain('class="hydration-notice')
-    expect(html).toContain(HYDRATION_NOTICE_LEAD.replace("'", "&#x27;"))
+    expect(html).toContain(HYDRATION_NOTICE_LEAD.replaceAll("'", "&#x27;"))
     // With scripts turned off, the rule in <noscript> shows it at once.
     expect(html).toMatch(/<noscript><style>\.hydration-notice\{[^}]*visibility:visible/)
   })
