@@ -4,6 +4,7 @@
 import { AVAILABILITY_MAX_RANGES_PER_DAY, nextDate, type AvailabilityErrorAt, type DayAnswerInput, type Voice } from "./event-availability"
 import { dayLabel } from "./spoken-time"
 import { fmtHour } from "./registrations-list"
+import { nbspQuotes } from "@/lib/french-spacing"
 
 /**
  * The form of the dated availability (#1146), shared by the page of the person asked (« tu ») and
@@ -18,10 +19,8 @@ export const NO_ANSWER = "sans réponse"
 export const AVAILABLE_CHOICE_LABEL = "Disponible à certaines heures"
 export const UNAVAILABLE_CHOICE_LABEL = "Pas disponible"
 
-/** French quotes keep their words on the same line: « x » with non-breaking spaces inside. */
-export function nbspQuotes(text: string): string {
-  return text.replace(/« /g, "«\u00a0").replace(/ »/g, "\u00a0»")
-}
+// French quotes keep their words on the same line; the rule is shared with the rendered guides.
+export { nbspQuotes }
 
 export type EditorRange = { key: number; start: string; end: string }
 export type EditorDay = { date: string; choice: "available" | "unavailable" | null; ranges: EditorRange[] }
