@@ -23,7 +23,7 @@ function ResetForm() {
   const [password, setPassword] = useState("")
   const [confirm, setConfirm] = useState("")
   const [done, setDone] = useState(false)
-  const { submit, busy, error, fail, isInvalid } = useSubmit()
+  const { submit, busy, error, fail, isInvalid, quiet } = useSubmit()
 
   // The form is replaced by the confirmation: the focus follows, onto its heading.
   useEffect(() => { if (done) doneRef.current?.focus() }, [done])
@@ -94,7 +94,7 @@ function ResetForm() {
           autoComplete="new-password"
         />
       </div>
-      <FormStatus error={error} errorId={`${id}-error`} />
+      <FormStatus error={error} errorId={`${id}-error`} quiet={quiet} />
       <button
         type="submit"
         aria-disabled={busy || undefined}

@@ -260,7 +260,7 @@ function GroupLinkForm({ eventId, roles, link, onSaved, onCancel }: {
     roleNames: (link?.roleNames ?? []).filter((r) => roles.includes(r)),
     hideFull: link?.hideFull ?? false,
   })
-  const { submit, busy, error, fail, isInvalid } = useSubmit()
+  const { submit, busy, error, fail, isInvalid, quiet } = useSubmit()
   const errorId = `${id}-error`
 
   useLayoutEffect(() => {
@@ -358,7 +358,7 @@ function GroupLinkForm({ eventId, roles, link, onSaved, onCancel }: {
         </label>
         <p id={`${id}-full-hint`} className="text-xs text-gray-600">Les bénévoles ne voient que les créneaux où il reste de la place.</p>
       </div>
-      <FormStatus error={error} errorId={errorId} />
+      <FormStatus error={error} errorId={errorId} quiet={quiet} />
       <p role="status" className="sr-only">{busy ? "Enregistrement en cours…" : ""}</p>
       <div className="flex flex-wrap justify-end gap-2">
         <button type="button" onClick={onCancel} className={quietButton}>Annuler</button>

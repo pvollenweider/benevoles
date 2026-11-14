@@ -3,15 +3,17 @@
  */
 import { describe, it, expect, vi, afterEach } from "vitest"
 import "@testing-library/jest-dom/vitest"
-import { useState } from "react"
+import { useRef, useState } from "react"
 import { cleanup, fireEvent, render, screen, waitFor } from "@testing-library/react"
 
+import FormStatus from "@/components/FormStatus"
 import EventPagesManager, { type EventPageRow } from "@/components/admin/EventPagesManager"
 import ManualAddForm from "@/components/admin/registrations/ManualAddForm"
 import { EMPTY_ADD_FORM, type AddFormValues, type Registration } from "@/components/admin/registrations/types"
 import RegistrationsManager from "@/components/admin/RegistrationsManager"
 import ReadBeforeLinks from "@/components/ReadBeforeLinks"
 import SignupForm from "@/components/public/signup/SignupForm"
+import { useSubmit } from "@/lib/use-submit"
 import { startVirtualScreenReader, stopVirtualScreenReader, type VirtualScreenReader } from "./virtual-screen-reader"
 
 // The virtual screen reader (#739, step 4) approximates what a person hears from the accessibility
@@ -29,6 +31,24 @@ async function waitForSpoken(reader: VirtualScreenReader, text: string) {
   await waitFor(async () => {
     expect((await reader.spokenPhraseLog()).join("\n")).toContain(text)
   })
+}
+
+const FIELD_MESSAGE = "Indiquez le nom (2 caractères au moins)."
+const GENERAL_MESSAGE = "La demande n'a pas pu être envoyée."
+
+/** A form on the project's pattern: useSubmit, FormStatus, one described field, one general action. */
+function ErrorForm() {
+  const { error, fail, isInvalid, quiet } = useSubmit()
+  const inputRef = useRef<HTMLInputElement>(null)
+  return (
+    <form onSubmit={(e) => { e.preventDefault(); fail(FIELD_MESSAGE, "name", inputRef.current) }}>
+      <label htmlFor="name">Nom</label>
+      <input id="name" ref={inputRef} aria-invalid={isInvalid("name")} aria-describedby={isInvalid("name") ? "name-error" : undefined} />
+      <button type="submit">Envoyer</button>
+      <button type="button" onClick={() => fail(GENERAL_MESSAGE)}>Action</button>
+      <FormStatus error={error} errorId="name-error" quiet={quiet} />
+    </form>
+  )
 }
 
 const faq: EventPageRow = { id: "p1", slug: "faq", title: "FAQ", content: "", displayOrder: 0, roleNames: [] }
@@ -84,11 +104,9 @@ describe("virtual screen reader — spoken journeys (#739)", () => {
     expect(screen.getByRole("combobox", { name: "Créneau" })).toHaveFocus()
   })
 
-  // Known defect, deliberately left visible: SignupForm puts the same field error in the field's
-  // description and in FormStatus's alert, so the person hears it with the field and again from the
-  // alert (twice here, because use-submit empties the alert then fills it in the same task).
-  // The fix is to keep the alert for errors that are not tied to a field, as ManualAddForm does.
-  it.fails("does not repeat a field error from the alert when the field takes focus", async () => {
+  // (a) A field error whose field takes the focus: the field's phrase says it, the alert stays
+  // silent, so the person hears the sentence exactly once.
+  it("does not repeat a field error from the alert when the field takes focus", async () => {
     const view = render(<SignupForm open siteName="benevol.app" />)
     const reader = await startVirtualScreenReader(view.container)
 
@@ -97,7 +115,59 @@ describe("virtual screen reader — spoken journeys (#739)", () => {
     await waitForSpoken(reader, message)
 
     const log = await reader.spokenPhraseLog()
-    expect(log.filter((phrase) => phrase.includes(message))).toHaveLength(1)
+    const heard = log.filter((phrase) => phrase.includes(message))
+    expect(heard).toHaveLength(1)
+    expect(heard[0]).toContain("textbox, Nom de l'association")
+    expect(log.filter((phrase) => phrase.startsWith("assertive:") && phrase.includes(message))).toEqual([])
+  })
+
+  // (b) The field already had the focus: re-focusing says nothing, so the alert says the error.
+  // A second identical failure is emptied then refilled in a later task, and heard once more.
+  it("says a field error once from the alert when the field already had focus", async () => {
+    const view = render(<ErrorForm />)
+    const reader = await startVirtualScreenReader(view.container)
+    const input = screen.getByRole("textbox", { name: "Nom" })
+    input.focus()
+    // Let the reader process the focus, as it does before the person presses Enter.
+    await waitForSpoken(reader, "textbox, Nom")
+    await reader.clear()
+
+    fireEvent.submit(input.closest("form")!)
+    await waitForSpoken(reader, FIELD_MESSAGE)
+    let log = await reader.spokenPhraseLog()
+    expect(log.filter((phrase) => phrase.includes(FIELD_MESSAGE))).toEqual([`assertive: ${FIELD_MESSAGE}`])
+
+    await reader.clear()
+    fireEvent.submit(input.closest("form")!)
+    await waitFor(async () => {
+      const phrases = (await reader.spokenPhraseLog()).filter((phrase) => phrase.startsWith("assertive:") && phrase.includes(FIELD_MESSAGE))
+      expect(phrases).toHaveLength(1)
+    })
+    log = await reader.spokenPhraseLog()
+    expect(log.filter((phrase) => phrase.includes(FIELD_MESSAGE))).toEqual([`assertive: ${FIELD_MESSAGE}`])
+  })
+
+  // (c) A general error: the alert says it once and the focus stays where it is.
+  it("says a general error once from the alert, without moving the focus", async () => {
+    const view = render(<ErrorForm />)
+    const reader = await startVirtualScreenReader(view.container)
+    const action = screen.getByRole("button", { name: "Action" })
+    action.focus()
+
+    fireEvent.click(action)
+    await waitForSpoken(reader, GENERAL_MESSAGE)
+    let log = await reader.spokenPhraseLog()
+    expect(log.filter((phrase) => phrase.startsWith("assertive:") && phrase.includes(GENERAL_MESSAGE))).toEqual([`assertive: ${GENERAL_MESSAGE}`])
+    expect(action).toHaveFocus()
+
+    await reader.clear()
+    fireEvent.click(action)
+    await waitFor(async () => {
+      const phrases = (await reader.spokenPhraseLog()).filter((phrase) => phrase.startsWith("assertive:") && phrase.includes(GENERAL_MESSAGE))
+      expect(phrases).toHaveLength(1)
+    })
+    log = await reader.spokenPhraseLog()
+    expect(log.filter((phrase) => phrase.includes(GENERAL_MESSAGE))).toEqual([`assertive: ${GENERAL_MESSAGE}`])
   })
 
   // What a person hears when a filter changes: the count once, in the one polite region. After a

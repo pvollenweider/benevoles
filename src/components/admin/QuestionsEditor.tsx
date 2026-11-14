@@ -419,7 +419,7 @@ export default function QuestionsEditor({ eventId, initialQuestions, roles = [] 
           ) : (
             <p className="text-xs text-gray-600">{NO_ROLES_HINT}</p>
           )}
-          <FormStatus error={editor.error} errorId={`${id}-editor-error`} />
+          <FormStatus error={editor.error} errorId={`${id}-editor-error`} quiet={editor.quiet} />
           <div className="flex gap-3">
             <button type="submit" aria-disabled={editor.busy || undefined} className={`bg-blue-600 text-white px-4 py-2 rounded-xl text-sm font-medium hover:bg-blue-700 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-blue-600 ${editor.busy ? "opacity-60 cursor-wait" : ""}`}>
               {editor.busy ? "Enregistrement…" : "Enregistrer"}

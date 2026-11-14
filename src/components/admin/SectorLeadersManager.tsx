@@ -87,7 +87,7 @@ export default function SectorLeadersManager({
   const noScopeHintId = useId()
   const [name, setName] = useState("")
   const [email, setEmail] = useState("")
-  const { submit, busy: saving, error, fail, isInvalid, reset } = useSubmit()
+  const { submit, busy: saving, error, fail, isInvalid, reset, quiet } = useSubmit()
   const [pendingRemove, setPendingRemove] = useState<SectorLeaderRow | null>(null)
   const [removing, setRemoving] = useState(false)
   // Outcome of a removal: shown in the status or alert region, and the focus parks on it.
@@ -384,7 +384,7 @@ export default function SectorLeadersManager({
               className="w-full border border-gray-500 rounded-lg px-3 py-1.5 text-sm"
             />
           </div>
-          <FormStatus error={error} errorId={errorId} />
+          <FormStatus error={error} errorId={errorId} quiet={quiet} />
           <div className="flex justify-end gap-2 pt-1">
             <button type="button" onClick={closeForm} className="text-sm text-gray-600 px-4 py-2 rounded-full hover:bg-gray-50 transition-colors">
               Annuler

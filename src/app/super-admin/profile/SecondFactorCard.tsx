@@ -24,7 +24,7 @@ type Props = { enabledLabel: string | null; recoveryCodesLeft: number; email: st
 export default function SecondFactorCard({ enabledLabel, recoveryCodesLeft, email }: Props) {
   const id = useId()
   const hydrated = useHydrated()
-  const { error, fail, reset, isInvalid } = useSubmit()
+  const { error, fail, reset, isInvalid, quiet } = useSubmit()
   const [busy, setBusy] = useState(false)
   const busyRef = useRef(false)
   const [codes, setCodes] = useState<string[] | null>(null)
@@ -119,7 +119,7 @@ export default function SecondFactorCard({ enabledLabel, recoveryCodesLeft, emai
               />
               <p id={hintId} className="text-xs text-gray-600 mt-1">Le code change toutes les 30 secondes.</p>
             </div>
-            <FormStatus error={error} errorId={errorId} />
+            <FormStatus error={error} errorId={errorId} quiet={quiet} />
             <button
               type="submit"
               disabled={!hydrated}

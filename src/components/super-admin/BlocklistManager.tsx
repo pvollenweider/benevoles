@@ -44,7 +44,7 @@ export default function BlocklistManager({ initialBlocks }: { initialBlocks: Blo
   const [removing, setRemoving] = useState<Block | null>(null)
   const [removeError, setRemoveError] = useState<string | null>(null)
   const [removeBusy, setRemoveBusy] = useState(false)
-  const { error, fail, isInvalid } = useSubmit()
+  const { error, fail, isInvalid, quiet } = useSubmit()
   const busy = adding
 
   // The confirmation box appears after the server refuses a common provider: it takes the focus.
@@ -129,7 +129,7 @@ export default function BlocklistManager({ initialBlocks }: { initialBlocks: Blo
         </div>
         {kind === "domain" && needsConfirmation && (
           <label className="flex items-start gap-2 text-sm text-gray-900">
-            <input ref={confirmRef} type="checkbox" checked={confirmCommon} onChange={(e) => setConfirmCommon(e.target.checked)} aria-describedby={error ? `${id}-error` : undefined} className="mt-0.5 h-4 w-4" />
+            <input ref={confirmRef} type="checkbox" checked={confirmCommon} onChange={(e) => setConfirmCommon(e.target.checked)} className="mt-0.5 h-4 w-4" />
             Je confirme vouloir bloquer ce domaine, utilisé par beaucoup de personnes.
           </label>
         )}
@@ -147,7 +147,7 @@ export default function BlocklistManager({ initialBlocks }: { initialBlocks: Blo
           <textarea id={`${id}-reason`} ref={reasonRef} value={reason} onChange={(e) => setReason(e.target.value)} required rows={2} maxLength={REASON_MAX}
             aria-invalid={isInvalid("reason")} aria-describedby={isInvalid("reason") ? `${id}-error` : undefined} className={inputClass} />
         </div>
-        <FormStatus error={error} errorId={`${id}-error`} />
+        <FormStatus error={error} errorId={`${id}-error`} quiet={quiet} />
         <button type="submit" aria-disabled={busy || undefined}
           className={`rounded-xl bg-gray-900 px-4 py-2 text-sm font-medium text-white hover:bg-gray-800 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-blue-600 ${busy ? "cursor-wait opacity-80" : ""}`}>
           {busy ? "Ajout…" : "Ajouter à la liste"}

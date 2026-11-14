@@ -27,7 +27,7 @@ export default function MakeLeaderModal({
   const emailErrorId = `${emailId}-error`
   const [roleName, setRoleName] = useState(defaultRole)
   const [email, setEmail] = useState(volunteerEmail ?? "")
-  const { submit: run, busy: saving, error, fail, isInvalid } = useSubmit()
+  const { submit: run, busy: saving, error, fail, isInvalid, quiet } = useSubmit()
 
   async function submit(e: React.FormEvent) {
     e.preventDefault()
@@ -81,7 +81,7 @@ export default function MakeLeaderModal({
             <p id={emailHintId} className="text-xs text-amber-800 mt-1">Aucun email enregistré pour cette personne : il en faut un pour lui envoyer son lien de responsable.</p>
           )}
         </div>
-        <FormStatus error={error} errorId={emailErrorId} />
+        <FormStatus error={error} errorId={emailErrorId} quiet={quiet} />
         <div className="flex justify-end gap-2">
           <button type="button" onClick={() => { if (!saving) onClose() }} aria-disabled={saving || undefined} className="text-sm text-gray-600 px-4 py-2 rounded-full hover:bg-gray-50 transition-colors">
             Annuler

@@ -25,7 +25,7 @@ function AcceptInviteForm() {
   const [done, setDone] = useState(false)
   const [tokenError, setTokenError] = useState<string | null>(null)
   const [checking, setChecking] = useState(() => !!token)
-  const { submit, busy, error, fail, isInvalid } = useSubmit()
+  const { submit, busy, error, fail, isInvalid, quiet } = useSubmit()
 
   useEffect(() => { if (done) doneRef.current?.focus() }, [done])
 
@@ -131,7 +131,7 @@ function AcceptInviteForm() {
           autoComplete="new-password"
         />
       </div>
-      <FormStatus error={error} errorId={`${id}-error`} />
+      <FormStatus error={error} errorId={`${id}-error`} quiet={quiet} />
       <button
         type="submit"
         aria-disabled={busy || undefined}

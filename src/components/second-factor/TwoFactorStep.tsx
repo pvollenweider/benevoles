@@ -34,7 +34,7 @@ export default function TwoFactorStep(props: Props) {
   const id = useId()
   const router = useRouter()
   const hydrated = useHydrated()
-  const { error, fail, reset, isInvalid } = useSubmit()
+  const { error, fail, reset, isInvalid, quiet } = useSubmit()
   const [busy, setBusy] = useState(false)
   const busyRef = useRef(false)
   const [phase, setPhase] = useState<"form" | "codes" | "signin">(props.mode === "signin" ? "signin" : "form")
@@ -159,7 +159,7 @@ export default function TwoFactorStep(props: Props) {
           <p id={codeHintId} className="text-xs text-gray-600 mt-1">Le code change toutes les 30 secondes.</p>
         </div>
       )}
-      <FormStatus error={error} errorId={errorId} />
+      <FormStatus error={error} errorId={errorId} quiet={quiet} />
       <button type="submit" disabled={!hydrated} aria-disabled={busy || undefined} className={primaryButtonClass}>
         {busy ? "Vérification…" : props.mode === "enrol" ? "Activer" : "Valider"}
       </button>

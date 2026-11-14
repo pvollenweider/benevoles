@@ -268,7 +268,7 @@ function PageFormModal({
   const [title, setTitle] = useState(page?.title ?? "")
   const [content, setContent] = useState(page?.content ?? "")
   const [roleNames, setRoleNames] = useState<string[]>(page?.roleNames ?? [])
-  const { submit: run, busy: saving, error, fail, isInvalid } = useSubmit()
+  const { submit: run, busy: saving, error, fail, isInvalid, quiet } = useSubmit()
   const titleId = useId()
   const contentId = useId()
   const errorId = useId()
@@ -402,7 +402,7 @@ function PageFormModal({
             )}
           </fieldset>
         )}
-        <FormStatus error={error} errorId={errorId} />
+        <FormStatus error={error} errorId={errorId} quiet={quiet} />
         <div className="flex justify-end gap-2">
           <button type="button" onClick={() => { if (!saving) onClose() }} aria-disabled={saving || undefined} className="text-sm text-gray-600 px-4 py-2 rounded-full hover:bg-gray-50 transition-colors">
             Annuler

@@ -52,7 +52,7 @@ export default function AdminsManager({
   const id = useId()
   const nameRef = useRef<HTMLInputElement>(null)
   const emailRef = useRef<HTMLInputElement>(null)
-  const { submit, busy: submitting, error, status, setStatus, fail, reset, isInvalid } = useSubmit()
+  const { submit, busy: submitting, error, status, setStatus, fail, reset, isInvalid, quiet } = useSubmit()
   // Where the focus lands when a control disappears (form closed, admin removed).
   const inviteButtonRef = useRef<HTMLButtonElement>(null)
   const headingRef = useRef<HTMLHeadingElement>(null)
@@ -107,12 +107,14 @@ export default function AdminsManager({
       method: "PATCH",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify({ role }),
-    }))
+    }), { silent: true })
     setChangingRole(null)
     setDraft((d) => { const { [admin.id]: _drop, ...rest } = d; void _drop; return rest })
     if (!outcome.ok) {
+      if (!outcome.error) return // a second click while the first request runs
+      // The row's select takes the focus and its description, so the error stays out of the alert.
       setRoleErrorFor(admin.id)
-      selectOf(admin.id)?.focus()
+      fail(outcome.error, `role-${admin.id}`, selectOf(admin.id))
       return
     }
     setAdmins((prev) => prev.map((a) => (a.id === admin.id ? { ...a, role } : a)))
@@ -129,7 +131,7 @@ export default function AdminsManager({
 
   return (
     <div className="space-y-4">
-      <FormStatus status={status} error={error} errorId={`${id}-error`} />
+      <FormStatus status={status} error={error} errorId={`${id}-error`} quiet={quiet} />
 
       <div className="bg-white rounded-2xl border border-gray-200 overflow-hidden">
         <div className="px-4 py-3 border-b border-gray-100 flex items-center justify-between">

@@ -180,7 +180,7 @@ export default function MessageTemplatesManager({ initialTemplates }: { initialT
             </ul>
             <p className="mt-1">Pour écrire une accolade telle quelle, tapez-la deux fois : <code>{"{{"}</code> donne une accolade ouvrante, <code>{"}}"}</code> une accolade fermante.</p>
           </div>
-          <FormStatus error={editor.error} errorId={`${id}-editor-error`} />
+          <FormStatus error={editor.error} errorId={`${id}-editor-error`} quiet={editor.quiet} />
           <div className="flex gap-3">
             <button type="submit" aria-disabled={editor.busy || undefined} className={`bg-blue-600 text-white px-4 py-2 rounded-xl text-sm font-medium hover:bg-blue-700 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-blue-600 ${editor.busy ? "opacity-60 cursor-wait" : ""}`}>
               {editor.busy ? "Enregistrement…" : "Enregistrer"}
