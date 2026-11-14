@@ -28,12 +28,13 @@ const TOKEN_QUERY = /((?:^|[?&])(?:token|t)=)[^&#\s"']*/gi
 // Defensive scrub (#598): an email address is personal data and must never reach Sentry, whatever
 // string it ends up in — an SMTP error message that slipped past a classifier, a log line, a
 // stack frame. Cheap (one regex pass over every string already going through scrubUrl).
-// The lookbehind makes a match start only where a run of address characters starts: without it,
-// every position of a long run was tried again up to the `@`, which costs quadratic time on a long
-// request path.
-const EMAIL_RE = /(?<![A-Za-z0-9._%+-])[A-Za-z0-9._%+-]+@[A-Za-z0-9.-]+\.[A-Za-z]{2,}/g
+// A match starts only where a run of address characters starts (the start of the string, or the
+// character before the run, kept as $1): without that, every position of a long run was tried
+// again up to the `@`, which costs quadratic time on a long request path. No lookbehind: a
+// browser older than Safari 16.4 refuses to parse one, and the whole script with it (#1343).
+const EMAIL_RE = /(^|[^A-Za-z0-9._%+-])[A-Za-z0-9._%+-]+@[A-Za-z0-9.-]+\.[A-Za-z]{2,}/g
 // What is left of an address cut by the length cap below (« jane.doe@exa »).
-const CUT_EMAIL_AT_END = /(?<![A-Za-z0-9._%+-])[A-Za-z0-9._%+-]*@[A-Za-z0-9.-]*$/
+const CUT_EMAIL_AT_END = /(^|[^A-Za-z0-9._%+-])[A-Za-z0-9._%+-]*@[A-Za-z0-9.-]*$/
 
 /** Longest string kept: anything longer is cut before the patterns run (bounded work per string). */
 export const SCRUB_MAX_LENGTH = 8192
@@ -41,8 +42,8 @@ export const SCRUB_MAX_LENGTH = 8192
 export function scrubUrl(value: string): string {
   const cut = value.length > SCRUB_MAX_LENGTH
   const kept = cut ? value.slice(0, SCRUB_MAX_LENGTH) : value
-  const scrubbed = kept.replace(TOKEN_PATH, "$1[token]").replace(DECLINE_TOKEN_PATH, "$1[token]").replace(TOKEN_QUERY, "$1[token]").replace(EMAIL_RE, "[email]")
-  return cut ? `${scrubbed.replace(CUT_EMAIL_AT_END, "[email]")}…` : scrubbed
+  const scrubbed = kept.replace(TOKEN_PATH, "$1[token]").replace(DECLINE_TOKEN_PATH, "$1[token]").replace(TOKEN_QUERY, "$1[token]").replace(EMAIL_RE, "$1[email]")
+  return cut ? `${scrubbed.replace(CUT_EMAIL_AT_END, "$1[email]")}…` : scrubbed
 }
 
 export function scrubDeep<T>(value: T, depth = 0): T {

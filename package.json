@@ -130,5 +130,12 @@
     "typescript": "npm:@typescript/typescript6@^6.0.2",
     "vite": "^8.3.6",
     "vitest": "^5.0.3"
-  }
+  },
+  "browserslist": [
+    "chrome 111",
+    "edge 111",
+    "firefox 111",
+    "safari 15.4",
+    "ios_saf 15.4"
+  ]
 }
