@@ -3,7 +3,7 @@
 
 import type { Metadata } from "next"
 import { headers } from "next/headers"
-import { contactEmail } from "@/lib/site"
+import { contactEmail, siteName } from "@/lib/site"
 import { isTokenShaped } from "@/lib/token-path"
 import { loadShiftDeclineTarget } from "@/lib/shift-decline-read"
 import {
@@ -14,9 +14,8 @@ import OrgUnavailableNotice from "@/components/public/OrgUnavailableNotice"
 
 export const dynamic = "force-dynamic"
 
-export const metadata: Metadata = {
-  title: "Je ne peux pas — Bénévoles",
-  robots: { index: false, follow: false },
+export function generateMetadata(): Metadata {
+  return { title: `Je ne peux pas — ${siteName()}`, robots: { index: false, follow: false } }
 }
 
 /**

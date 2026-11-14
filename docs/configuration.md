@@ -65,7 +65,7 @@ Sans `SMTP_HOST`, aucun email n'est envoyé. En production, chaque envoi échoue
 | `SMTP_PORT` | non | Défaut `587` |
 | `SMTP_SECURE` | non | `true` pour TLS implicite (port 465), sinon `false` |
 | `SMTP_USER`, `SMTP_PASSWORD` | non | Authentification SMTP, utilisée si les deux sont renseignées |
-| `EMAIL_FROM` | recommandé | Expéditeur, avec nom possible : `Bénévoles <notifications@votre-domaine.com>`. Défaut : `Bénévoles <notifications@…>`, avec le domaine de `NEXT_PUBLIC_APP_URL` (`benevol.app` sans adresse) |
+| `EMAIL_FROM` | recommandé | Expéditeur, avec nom possible : `Mon instance <notifications@votre-domaine.com>`. Défaut : le nom de l'instance (`SITE_NAME`, sinon son domaine) et `notifications@` suivi du domaine de `NEXT_PUBLIC_APP_URL` (`benevol.app` sans adresse) |
 | `EMAIL_REPLY_TO` | non | Adresse de réponse par défaut, utilisée quand l'organisation n'a pas défini la sienne dans ses réglages. Doit pointer vers une boîte lue par un humain |
 | `ADMIN_NOTIFICATION_EMAIL` | non | Reçoit une copie de chaque nouvelle inscription |
 

@@ -5,6 +5,7 @@
 
 import { useEffect, useRef } from "react"
 import { ORG_UNAVAILABLE_TITLE, orgUnavailableCopy } from "@/lib/org-lifecycle"
+import { titleWithSiteName } from "@/lib/document-title"
 
 const LINK_CLASS = "text-blue-700 underline underline-offset-2 hover:text-blue-900 rounded focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-blue-600"
 
@@ -36,7 +37,7 @@ export default function OrgUnavailableNotice({ audience, contact, focusHeading =
 }) {
   const headingRef = useRef<HTMLHeadingElement>(null)
   useEffect(() => {
-    document.title = `${ORG_UNAVAILABLE_TITLE} — Bénévoles`
+    document.title = titleWithSiteName(ORG_UNAVAILABLE_TITLE)
     if (focusHeading) headingRef.current?.focus()
   }, [focusHeading])
   return (

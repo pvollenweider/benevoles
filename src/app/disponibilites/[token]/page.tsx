@@ -16,6 +16,7 @@ import { isTokenShaped, tokenPath } from "@/lib/token-path"
 import { dayLabel } from "@/lib/spoken-time"
 import { dayAnswerText, datesCountText, nbspQuotes } from "@/lib/availability-editor"
 import { answerState, type AnswerState, type DayAnswerInput } from "@/lib/event-availability"
+import { titleWithSiteName } from "@/lib/document-title"
 import {
   AVAILABILITY_LINK_NOTICE, CORRECTION_NOTICE, CORRECTION_SAVED_TEXT, DEADLINE_PASSED_ERROR, LINK_NOT_FOUND_ERROR,
   closedNowSentence, contactLine, correctionDeadlineSentence, deadlineSentence, myAvailabilityTitle, savedSentence,
@@ -116,10 +117,10 @@ export default function MyAvailabilityPage() {
   }, [url, fetchPage, apply])
 
   useEffect(() => {
-    if (view) document.title = `${myAvailabilityTitle(view.event.title)} — Bénévoles`
-    else if (failure?.kind === "not_found") document.title = "Lien introuvable — Bénévoles"
-    else if (failure?.kind === "too_many") document.title = "Trop de tentatives — Bénévoles"
-    else if (failure?.kind === "offline") document.title = "Connexion impossible — Bénévoles"
+    if (view) document.title = titleWithSiteName(myAvailabilityTitle(view.event.title))
+    else if (failure?.kind === "not_found") document.title = titleWithSiteName("Lien introuvable")
+    else if (failure?.kind === "too_many") document.title = titleWithSiteName("Trop de tentatives")
+    else if (failure?.kind === "offline") document.title = titleWithSiteName("Connexion impossible")
   }, [view, failure])
 
   async function retry() {

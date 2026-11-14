@@ -9,6 +9,7 @@ import type { NotificationPayload } from "../types"
 import { eventPublicUrl } from "@/lib/urls"
 import { docUrl, escapeHtml, btn, wrap, type RenderedEmail } from "./shared"
 import { SECTION_DOC_LINKS } from "@/lib/help-links"
+import { siteName } from "@/lib/site"
 
 // ── Invitation d'un membre ───────────────────────────────────────────────────
 
@@ -96,12 +97,12 @@ export function renderAdminInvite(p: NotificationPayload): RenderedEmail {
     organizationName: string
     inviteUrl: string
   }
-  const subject = `Invitation à rejoindre ${d.organizationName} sur Bénévoles`
+  const subject = `Invitation à rejoindre ${d.organizationName} sur ${siteName()}`
 
   const text = [
     `Bonjour ${d.adminName},`,
     ``,
-    `Nous vous invitons à rejoindre ${d.organizationName} en tant qu'organisatrice ou organisateur sur Bénévoles.`,
+    `Nous vous invitons à rejoindre ${d.organizationName} en tant qu'organisatrice ou organisateur sur ${siteName()}.`,
     ``,
     `Créez votre compte en cliquant sur ce lien (valable 7 jours) :`,
     d.inviteUrl,
@@ -109,7 +110,7 @@ export function renderAdminInvite(p: NotificationPayload): RenderedEmail {
 
   const html = wrap(`
     <h2 style="margin:0 0 0.5em">Bonjour ${escapeHtml(d.adminName)},</h2>
-    <p>Nous vous invitons à rejoindre <strong>${escapeHtml(d.organizationName)}</strong> en tant qu'organisatrice ou organisateur sur Bénévoles.</p>
+    <p>Nous vous invitons à rejoindre <strong>${escapeHtml(d.organizationName)}</strong> en tant qu'organisatrice ou organisateur sur ${escapeHtml(siteName())}.</p>
     <p style="margin-top:1.5em">${btn(d.inviteUrl, "Créer mon compte")}</p>
     <p style="color:#666;font-size:0.85em;margin-top:2em">Ce lien est valable 7 jours. Si vous n'attendiez pas cette invitation, ignorez cet email.</p>
   `, `Créez votre compte en un clic — lien valable 7 jours.`)
