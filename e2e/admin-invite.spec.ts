@@ -40,7 +40,8 @@ test("an admin invitation sends the link by email and never shows it", async ({ 
   await form.getByLabel("Nom").fill("Invitée E2E")
   await form.getByLabel("Email").fill(email)
   await form.getByRole("button", { name: "Envoyer l'invitation" }).click()
-  await expect(page.getByRole("alert").filter({ hasText: "Cette adresse fait déjà partie de votre équipe, ou son invitation est encore valable." })).toBeVisible()
+  // A field error is carried by the field that takes the focus, not by the alert (#739).
+  await expect(page.getByText("Cette adresse fait déjà partie de votre équipe, ou son invitation est encore valable.")).toBeVisible()
   await form.getByRole("button", { name: "Annuler" }).click()
 
   await page.getByRole("button", { name: "Retirer Invitée E2E" }).click()

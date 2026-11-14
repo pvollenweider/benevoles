@@ -45,7 +45,9 @@ test("first sign-in enrols an authenticator app and shows ten recovery codes onc
   await expect(code).toHaveAttribute("inputmode", "numeric")
   await code.fill("000000")
   await page.getByRole("button", { name: "Activer" }).click()
-  await expect(page.getByRole("alert").filter({ hasText: "Code incorrect" })).toBeVisible()
+  // The code field takes the focus with the message as its description (#739).
+  await expect(page.getByText(/Code incorrect/)).toBeVisible()
+  await expect(code).toHaveAccessibleDescription(/Code incorrect/)
 
   enrolmentCode = totp(base32Decode(secret), Date.now())
   await code.fill(`${enrolmentCode.slice(0, 3)} ${enrolmentCode.slice(3)}`)

@@ -43,7 +43,11 @@ test("a group link: created by the organiser, filtered for volunteers, sign-ups 
 
   // Nothing typed: refused on the name, which keeps the focus and carries the message.
   await form.getByRole("button", { name: "Créer le lien" }).click()
-  await expect(form.getByRole("alert")).toHaveText("Donnez un nom au lien, par exemple celui du club.")
+  // The click left the name: it takes the focus back with the message as its description, and
+  // the alert stays silent (#739).
+  await expect(form.getByText("Donnez un nom au lien, par exemple celui du club.")).toBeVisible()
+  await expect(name).toHaveAccessibleDescription(/Donnez un nom au lien, par exemple celui du club\./)
+  await expect(form.getByRole("alert")).toHaveText("")
   await expect(name).toBeFocused()
   await expect(name).toHaveAttribute("aria-invalid", "true")
 
