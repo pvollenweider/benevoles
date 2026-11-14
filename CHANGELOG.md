@@ -34,6 +34,7 @@ Format basé sur [Keep a Changelog](https://keepachangelog.com/fr/1.0.0/).
 
 ### Corrigé
 
+- Les rappels à délais propres à un événement ne sont plus perdus quand un créneau recule puis revient plus tôt, y compris après un nouvel essai ou une retenue d'envoi, et une retenue n'est plus comptée deux fois pour un même e-mail et une même heure ; ils ne repartent plus après un échec définitif, y compris lors d'une fusion de fiches, mais un échec définitif peut être relancé par l'administrateur, qui rouvre l'occurrence avec l'e-mail ; l'état « envoyé » est conservé lors d'une fusion ; ils apparaissent dans l'export des membres pour une demande d'accès (#1139). <!-- interne -->
 - Dans les formulaires de l'administration et la demande d'un espace, une erreur de champ n'est plus annoncée deux fois par un lecteur d'écran : elle est dite avec le champ qui la reçoit, ou par l'alerte quand le champ avait déjà le focus ; un second échec identique est redit une fois, sans faire disparaître le cadre ni retirer le marquage du champ (#739).
 - Le site fonctionne de nouveau avec Safari 15.4 à 16.3 (iPhone et Mac qui n'ont pas reçu les mises à jour de 2023) : les pages ne démarraient pas, les formulaires et le choix des créneaux restaient sans effet. La page « Navigateurs compatibles » indique Safari 15.4 comme version minimale (#1343).
 - Sur un navigateur trop ancien pour le site (par exemple un iPhone qui ne reçoit plus de mises à jour), la demande d'un espace et la page d'inscription d'un événement ne restent plus muettes : un message dit que la page n'a pas démarré et propose de mettre à jour ou de changer d'appareil (#1343).
@@ -41,6 +42,7 @@ Format basé sur [Keep a Changelog](https://keepachangelog.com/fr/1.0.0/).
 
 ### Exploitation
 
+- Les rappels automatiques acceptent des délais propres à chaque événement (jusqu'à trois règles en heures ou en jours), avec une table d'état durable qui empêche un double envoi et une remise en file par l'outbox ; aucune interface ne permet encore de les créer, le chemin reste dormant en production (#1139). <!-- interne -->
 - Les tests unitaires vérifient aussi les phrases annoncées par un lecteur d'écran virtuel (une approximation, ni VoiceOver ni NVDA) sur l'enregistrement d'une page, une erreur de champ, un compteur d'inscriptions et un lien lu hors contexte (#739). <!-- interne -->
 - Les issues du dépôt suivent trois axes de labels (type, statut, domaine), décrits dans `CONTRIBUTING.md` ; le modèle « Amélioration » pose le label `enhancement`. <!-- interne -->
 - Le manifeste du webhook Gandi désigne l'image construite avec OpenTelemetry 1.47.0 et Go 1.26, déployée sur le cluster le 14 novembre 2026. <!-- interne -->

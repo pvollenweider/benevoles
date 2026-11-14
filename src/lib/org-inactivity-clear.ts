@@ -21,7 +21,7 @@ export async function clearProcedure(tx: Tx, organizationId: string): Promise<vo
   if (steps.length > 0) {
     await tx.notificationOutbox.updateMany({
       where: { inactivityStepId: { in: steps.map((s) => s.id) }, status: "pending" },
-      data: { status: "cancelled", lastError: "Vérification d'inactivité arrêtée : message annulé.", claimedAt: null },
+      data: { status: "cancelled", lastError: "Vérification d'inactivité arrêtée : message annulé.", claimedAt: null, deliveryNotBefore: null },
     })
     await tx.orgInactivityStep.deleteMany({ where: { organizationId } })
   }

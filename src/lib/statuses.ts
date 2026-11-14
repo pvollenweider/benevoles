@@ -13,6 +13,7 @@
  */
 
 import { QUESTION_TYPES } from "./event-questions"
+import { REMINDER_RULE_UNITS } from "./reminder-rules"
 
 export const REGISTRATION_STATUSES = ["active", "waiting", "offered", "requested", "unconfirmed", "cancelled", "refused", "deleted"] as const
 export type RegistrationStatus = (typeof REGISTRATION_STATUSES)[number]
@@ -54,6 +55,10 @@ export type ProposalOutcomeValue = (typeof PROPOSAL_OUTCOMES)[number]
 export const EVENT_LOG_ACTOR_TYPES = ["admin", "volunteer", "system"] as const
 export const ORG_LOG_ACTOR_TYPES = ["admin", "system"] as const
 
+// Custom per-event reminders (#1139): "hours" | "days", and the durable occurrence state.
+// "failed" is a final delivery failure; the hourly run never reopens it automatically.
+export const REMINDER_OCCURRENCE_STATUSES = ["pending", "queued", "sent", "cancelled", "failed"] as const
+
 /** Table.column → allowed values, as enforced by the CHECK constraints. */
 export const CHECKED_COLUMNS = {
   "Registration.status": REGISTRATION_STATUSES,
@@ -72,4 +77,6 @@ export const CHECKED_COLUMNS = {
   "ProposalRun.status": PROPOSAL_RUN_STATUSES,
   "ProposalRun.stopReason": PROPOSAL_STOP_REASONS,
   "ProposalRun.outcome": PROPOSAL_OUTCOMES,
+  "EventReminderRule.unit": REMINDER_RULE_UNITS,
+  "ReminderOccurrence.status": REMINDER_OCCURRENCE_STATUSES,
 } as const

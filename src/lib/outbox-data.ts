@@ -71,6 +71,16 @@ export async function retryOutboxRow(id: string, organizationId: string): Promis
       where: { id, organizationId, status: "failed", NOT: { lastError: { in: [MERGED_MEMBER_CANCEL_REASON, MEMBER_DELETED_CANCEL_REASON] } } },
       data: { status: "pending", attempts: 0, nextAttemptAt: new Date(), claimedAt: null },
     })
-    return count === 1
+    if (count !== 1) return false
+    // A custom reminder (#1139) that gave up left its occurrence "failed", and the resolver
+    // cancels a failed occurrence instead of sending it: an administrator's retry would put the
+    // row back and still send nothing. Reopen the occurrence with its row, same transaction and
+    // same outbox id. Nothing to reopen (a merge or an erasure removed it, or its event is gone)
+    // changes nothing here: the retry still answers for the row, like every other kind.
+    await tx.reminderOccurrence.updateMany({
+      where: { outboxId: id, status: "failed", volunteer: { erasedAt: null } },
+      data: { status: "queued", sentAt: null, lastError: null },
+    })
+    return true
   })
 }

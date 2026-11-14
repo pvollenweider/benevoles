@@ -19,7 +19,7 @@ describe("csv", () => {
       birthDate: new Date("2000-05-06T00:00:00Z"), availabilityPeriods: ["matin"], availabilityNote: null, createdAt: new Date("2026-07-04T08:00:00Z"), registrationCount: 3,
     }], "Europe/Zurich")
     const line = csv.split("\r\n")[1]
-    expect(line).toBe("Zoé;Roy;z@x.ch;;bar, cuisine;non;2000-05-06;matin;;aime le matin;3;04/07/2026 10:00;;")
+    expect(line).toBe("Zoé;Roy;z@x.ch;;bar, cuisine;non;2000-05-06;matin;;aime le matin;3;04/07/2026 10:00;;;")
   })
 
   // #569: proof of acceptance of the volunteer charter is the member's own data too.
@@ -49,6 +49,25 @@ describe("csv", () => {
     }], "Europe/Zurich")
     const line = csv.split("\r\n")[1]
     expect(line).toContain("05/07/2026 10:00 Confirmation d'inscription : refus définitif (boîte aux lettres introuvable)")
+  })
+
+  // #1139: the occurrence rows identify the member's event, day, rule and delivery state; the
+  // access-request export carries them in plain French words, with the timestamps.
+  it("members: reminder occurrence history in French, with the event day, state and timing", () => {
+    const csv = membersCsv([{
+      firstName: "Zoé", lastName: "Roy", email: "z@x.ch", phone: null, tags: [], active: true, notes: null,
+      birthDate: null, availabilityPeriods: [], availabilityNote: null, createdAt: new Date("2026-07-04T08:00:00Z"), registrationCount: 1,
+      reminderOccurrences: [
+        { eventTitle: "Fête", localDay: "2030-06-01", status: "sent", dueAt: new Date("2030-06-01T06:00:00Z"), sentAt: new Date("2030-06-01T06:00:00Z"), ruleHours: 2 },
+        { eventTitle: "Fête", localDay: "2030-06-02", status: "failed", dueAt: new Date("2030-06-02T06:00:00Z"), sentAt: null, ruleHours: 24 },
+        { eventTitle: "Autre", localDay: "2030-06-03", status: "cancelled", dueAt: new Date("2030-06-03T06:00:00Z"), sentAt: null, ruleHours: null },
+      ],
+    }], "Europe/Zurich")
+    const line = csv.split("\r\n")[1]
+    expect(csv.split("\r\n")[0]).toContain("Rappels automatiques (historique)")
+    expect(line).toContain("01/06/2030 « Fête » : envoyé le 01/06/2030 08:00, 2 h avant")
+    expect(line).toContain("02/06/2030 « Fête » : échec de l'envoi (prévu le 02/06/2030 08:00), 24 h avant")
+    expect(line).toContain("03/06/2030 « Autre » : annulé (prévu le 03/06/2030 08:00)")
   })
 
   it("hours by volunteer: one row per member, a total line, and neutralised formula-like names (#557, #567)", () => {

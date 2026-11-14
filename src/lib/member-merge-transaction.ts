@@ -29,7 +29,8 @@ import {
   type VolunteerLite,
 } from "./member-merge"
 import type { LogActor } from "./event-log"
-import { cancelOutboxForMergedMember } from "./outbox-merge-cancel"
+import { cancelOutboxForMergedMember, MERGED_MEMBER_CANCEL_REASON } from "./outbox-merge-cancel"
+import { planReminderOccurrenceMerge } from "./reminder-occurrence-merge"
 import { endSwapsIn } from "./shift-swap-server"
 import { mergeAvailability } from "./event-availability-data"
 import { mergeDraftAssignments } from "./draft-assignments-lifecycle"
@@ -149,6 +150,22 @@ export async function runMemberMerge(
     const input = withKeepAddressHash(loaded, finalEmail)
     const plan = buildMergePlan(input, choices)
 
+    // Custom reminder send state (#1139): the occurrences keep their key (event, local day, rule)
+    // and their outbox rows. Reading both sides under the same lock lets the plan below retain a
+    // `sent` reminder over anything else, so moving the registrations cannot make the next run
+    // send the same reminder again.
+    const [keepOccurrences, absorbOccurrences] = await Promise.all([
+      tx.reminderOccurrence.findMany({
+        where: { volunteerId: keepId },
+        select: { id: true, eventId: true, localDay: true, ruleId: true, status: true, outboxId: true, sentAt: true },
+      }),
+      tx.reminderOccurrence.findMany({
+        where: { volunteerId: absorbId },
+        select: { id: true, eventId: true, localDay: true, ruleId: true, status: true, outboxId: true, sentAt: true },
+      }),
+    ])
+    const occurrencePlan = planReminderOccurrenceMerge(keepOccurrences, absorbOccurrences)
+
     // Swap requests of either record (#1174): the registrations change hands or links, so no
     // agreement given before the merge is applied after it. Ended in the same commit.
     await endSwapsIn(tx, { volunteerIds: [keepId, absorbId] }, "volunteer_gone", actor)
@@ -224,6 +241,34 @@ export async function runMemberMerge(
     // rows stay for history) and the pending request goes; a later click on the old link does nothing.
     await tx.registration.updateMany({ where: { volunteerId: absorbId, status: "unconfirmed" }, data: { status: "cancelled", signupConfirmationId: null } })
     await tx.signupConfirmation.deleteMany({ where: { volunteerId: absorbId } })
+    // Custom reminder send state (#1139): folded into the kept record's keys, not dropped. A sent
+    // occurrence wins over any other for the same key, a terminal failed one wins over the
+    // recomputable states, and a queued conflict keeps one row and cancels the superseded outbox
+    // row, so no duplicate goes out after the merge.
+    if (occurrencePlan.deleteKeepIds.length) {
+      await tx.reminderOccurrence.deleteMany({ where: { id: { in: occurrencePlan.deleteKeepIds } } })
+    }
+    if (occurrencePlan.deleteAbsorbIds.length) {
+      await tx.reminderOccurrence.deleteMany({ where: { id: { in: occurrencePlan.deleteAbsorbIds } } })
+    }
+    if (occurrencePlan.reassignIds.length) {
+      await tx.reminderOccurrence.updateMany({
+        where: { id: { in: occurrencePlan.reassignIds } },
+        data: { volunteerId: keepId },
+      })
+    }
+    for (const sent of occurrencePlan.markSent) {
+      await tx.reminderOccurrence.update({
+        where: { id: sent.id },
+        data: { status: "sent", sentAt: sent.sentAt, outboxId: sent.outboxId, lastError: null },
+      })
+    }
+    if (occurrencePlan.cancelOutboxIds.length) {
+      await tx.notificationOutbox.updateMany({
+        where: { id: { in: occurrencePlan.cancelOutboxIds }, status: "pending" },
+        data: { status: "cancelled", lastError: MERGED_MEMBER_CANCEL_REASON, deliveryNotBefore: null },
+      })
+    }
 
     // 4. Turn the absorbed record into an inactive tombstone: no personal data left, mapped to
     // the kept record so old ids keep resolving (event-log-read.ts, member-activity-data.ts).
@@ -276,7 +321,7 @@ export async function runMemberMerge(
 
     // 7. Invariant: no relation may remain on the absorbed record, except the DeliveryOutcome
     // rows deliberately left (owner decision, #600) for the retention purge to cascade-delete.
-    const [regCount, inviteCount, declineCount, answerCount, pushCount, availabilityCount, draftCount, targetCount] = await Promise.all([
+    const [regCount, inviteCount, declineCount, answerCount, pushCount, availabilityCount, draftCount, targetCount, occurrenceCount] = await Promise.all([
       tx.registration.count({ where: { volunteerId: absorbId } }),
       tx.memberInvite.count({ where: { volunteerId: absorbId } }),
       tx.shiftDecline.count({ where: { volunteerId: absorbId } }),
@@ -285,9 +330,10 @@ export async function runMemberMerge(
       tx.availabilityRequest.count({ where: { volunteerId: absorbId } }),
       tx.draftAssignment.count({ where: { volunteerId: absorbId } }),
       tx.eventVolunteerTarget.count({ where: { volunteerId: absorbId } }),
+      tx.reminderOccurrence.count({ where: { volunteerId: absorbId } }),
     ])
-    if (regCount || inviteCount || declineCount || answerCount || pushCount || availabilityCount || draftCount || targetCount) {
-      throw new Error(`member merge invariant violated: absorbed record ${absorbId} still has relations (reg=${regCount} invite=${inviteCount} declines=${declineCount} answer=${answerCount} push=${pushCount} availability=${availabilityCount} drafts=${draftCount} targets=${targetCount})`)
+    if (regCount || inviteCount || declineCount || answerCount || pushCount || availabilityCount || draftCount || targetCount || occurrenceCount) {
+      throw new Error(`member merge invariant violated: absorbed record ${absorbId} still has relations (reg=${regCount} invite=${inviteCount} declines=${declineCount} answer=${answerCount} push=${pushCount} availability=${availabilityCount} drafts=${draftCount} targets=${targetCount} occurrences=${occurrenceCount})`)
     }
 
     // 8. Audit, written with the transaction's own client so it commits with the merge (unlike
@@ -312,6 +358,8 @@ export async function runMemberMerge(
           answersDropped: { from: null, to: plan.answerIdsToDrop.length },
           pushSubscriptionsDropped: { from: null, to: plan.pushSubscriptionIdsToDelete.length },
           deliveryOutcomesReassigned: { from: null, to: plan.deliveryOutcomeIdsToReassign.length },
+          reminderOccurrencesMoved: { from: null, to: occurrencePlan.reassignIds.length },
+          reminderOccurrencesSuperseded: { from: null, to: occurrencePlan.deleteAbsorbIds.length + occurrencePlan.deleteKeepIds.length },
           outboxCancelled: { from: null, to: cancelledOutboxIds.length },
         },
       },

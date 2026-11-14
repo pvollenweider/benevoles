@@ -33,6 +33,20 @@ export function csvDocument(header: string[], rows: unknown[][]): string {
 const when = (d: Date | string | null | undefined, timeZone: string) =>
   d ? new Date(d).toLocaleString("fr-FR", { timeZone, day: "2-digit", month: "2-digit", year: "numeric", hour: "2-digit", minute: "2-digit" }) : ""
 const day = (d: Date | string | null | undefined) => (d ? new Date(d).toISOString().slice(0, 10) : "")
+/** A stored local day ("YYYY-MM-DD") as a French date, without shifting it through a time zone. */
+const localDayLabel = (value: string) => {
+  const [year, month, date] = value.split("-")
+  return year && month && date ? `${date}/${month}/${year}` : value
+}
+
+/** Plain French words for a reminder occurrence's state (#1139); the export never shows a raw value. */
+const REMINDER_OCCURRENCE_LABEL: Record<string, string> = {
+  pending: "en attente",
+  queued: "en file d'envoi",
+  sent: "envoyé",
+  cancelled: "annulé",
+  failed: "échec de l'envoi",
+}
 
 export type MemberExportRow = {
   firstName: string
@@ -59,17 +73,39 @@ export type MemberExportRow = {
    * (no volunteer consent was given there) or they have none.
    */
   charterAcceptedAt?: Date | string | null
+  /**
+   * The member's own custom reminder history (#1139): one entry per event, day and rule, with its
+   * state and timing. This export answers access requests, so the occurrence rows are included
+   * rather than left in the database: they identify the member's event and day.
+   */
+  reminderOccurrences?: {
+    eventTitle: string
+    localDay: string
+    status: string
+    dueAt: Date | string
+    sentAt: Date | string | null
+    /** The rule's delay in hours (a day is 24), or null when the stored unit is unknown. */
+    ruleHours: number | null
+  }[]
 }
 
 /** Every member of the organization, one row each; the notes are the admins' own, exported too. */
 export function membersCsv(rows: MemberExportRow[], timeZone: string): string {
   return csvDocument(
-    ["Prénom", "Nom", "Email", "Téléphone", "Étiquettes", "Actif", "Date de naissance", "Disponibilités", "Remarque de disponibilité", "Notes", "Inscriptions", "Membre depuis", "Derniers envois (résultat)", "Convention acceptée (dernière fois)"],
+    ["Prénom", "Nom", "Email", "Téléphone", "Étiquettes", "Actif", "Date de naissance", "Disponibilités", "Remarque de disponibilité", "Notes", "Inscriptions", "Membre depuis", "Derniers envois (résultat)", "Convention acceptée (dernière fois)", "Rappels automatiques (historique)"],
     rows.map((r) => [
       r.firstName, r.lastName, r.email, r.phone, r.tags.join(", "), r.active ? "oui" : "non", day(r.birthDate),
       r.availabilityPeriods.join(", "), r.availabilityNote, r.notes, r.registrationCount, when(r.createdAt, timeZone),
       (r.deliveryOutcomes ?? []).map((o) => `${when(o.date, timeZone)} ${o.kind} : ${o.outcome}${o.reason ? ` (${o.reason})` : ""}`).join(" ; "),
       when(r.charterAcceptedAt, timeZone),
+      (r.reminderOccurrences ?? []).map((o) => {
+        const status = REMINDER_OCCURRENCE_LABEL[o.status] ?? o.status
+        const timing = o.status === "sent"
+          ? o.sentAt ? ` le ${when(o.sentAt, timeZone)}` : ""
+          : o.dueAt ? ` (prévu le ${when(o.dueAt, timeZone)})` : ""
+        const delay = o.ruleHours === null ? "" : `, ${o.ruleHours} h avant`
+        return `${localDayLabel(o.localDay)} « ${o.eventTitle} » : ${status}${timing}${delay}`
+      }).join(" ; "),
     ]),
   )
 }

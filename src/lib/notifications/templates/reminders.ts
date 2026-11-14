@@ -268,6 +268,79 @@ export function renderReminderDd(p: NotificationPayload): RenderedEmail {
   return { subject, html, text }
 }
 
+/**
+ * Custom delay of one event (#1139): the same grouped content as the legacy reminders, with
+ * neutral copy since the delay is not necessarily 48 h, 24 h or a few hours. The location,
+ * contacts, sector leaders, attached pages and self-cancellation deadline come from the same
+ * helpers as the legacy templates.
+ */
+export function renderReminderRule(p: NotificationPayload): RenderedEmail {
+  const d = p.data as ReminderData
+  const editUrl = myPageUrl(d.orgSlug, d.editToken)
+  const firstName = d.volunteerName.split(" ")[0]
+  const shifts = withReadBeforeOnce(d.shifts)
+  const first = shifts[0]
+  const subject = `Rappel — ${d.eventTitle}`
+
+  const text = d.shifts.length === 1
+    ? [
+        `Hello ${firstName} !`,
+        ``,
+        `Petit rappel pour ton créneau de ${d.eventTitle} :`,
+        `📅 ${first.date}`,
+        `🕐 ${fmtRange(first.startTime, first.endTime)}`,
+        `Mission : ${roleLine(first)}`,
+        ...shiftInfoText(first),
+        ...noteText(d.shifts),
+        ``,
+        `Un empêchement ? Préviens-nous le plus vite possible :`,
+        editUrl,
+        ...cancelText(d),
+        ``,
+        `À très vite !`,
+        d.organizationName,
+      ].filter(Boolean).join("\n")
+    : [
+        `Hello ${firstName} !`,
+        ``,
+        `Petit rappel pour tes créneaux du ${first.date} de ${d.eventTitle} :`,
+        ...shifts.flatMap(shiftBlockText),
+        ...noteText(d.shifts),
+        ``,
+        `Un empêchement ? Préviens-nous le plus vite possible :`,
+        editUrl,
+        ...cancelText(d),
+        ``,
+        `À très vite !`,
+        d.organizationName,
+      ].join("\n")
+
+  const html = d.shifts.length === 1
+    ? wrap(`
+    <h2 style="margin:0 0 0.25em">Hello ${escapeHtml(firstName)} ! 👋</h2>
+    <p style="color:#555;margin:0 0 1.25em">Petit rappel pour ton créneau de <strong>${escapeHtml(d.eventTitle)}</strong>.</p>
+    <div style="background:#f9fafb;border-radius:10px;padding:14px 16px;line-height:2">
+      <div>📅 ${escapeHtml(first.date)}</div>
+      <div>🕐 ${escapeHtml(fmtRange(first.startTime, first.endTime))}</div>
+      <div>Mission : <strong>${escapeHtml(roleLine(first))}</strong></div>
+      ${shiftInfoHtml(first)}
+    </div>${noteHtml(d.shifts)}
+    ${cancelHtml(d)}<p style="margin-top:1.5em">${btn(editUrl, d.cancelClosed ? "Voir qui prévenir si je ne peux plus venir" : "Annuler si je ne peux plus venir")}</p>
+    <p style="color:#666;font-size:0.85em;margin-top:2em">À très vite !<br><strong>${escapeHtml(d.organizationName)}</strong></p>
+  `, `${escapeHtml(roleLine(first))} · ${escapeHtml(first.date)} · ${escapeHtml(fmtRange(first.startTime, first.endTime))}`)
+    : wrap(`
+    <h2 style="margin:0 0 0.25em">Hello ${escapeHtml(firstName)} ! 👋</h2>
+    <p style="color:#555;margin:0 0 0.5em">Petit rappel pour tes créneaux du <strong>${escapeHtml(first.date)}</strong> de <strong>${escapeHtml(d.eventTitle)}</strong> :</p>
+    <ul style="list-style:none;margin:0;padding:14px 16px;background:#f9fafb;border-radius:10px">
+      ${shifts.map(shiftBlockHtml).join("")}
+    </ul>${noteHtml(d.shifts)}
+    ${cancelHtml(d)}<p style="margin-top:1.5em">${btn(editUrl, d.cancelClosed ? "Voir qui prévenir si je ne peux plus venir" : "Annuler un créneau si je ne peux plus venir")}</p>
+    <p style="color:#666;font-size:0.85em;margin-top:2em">À très vite !<br><strong>${escapeHtml(d.organizationName)}</strong></p>
+  `, `${d.shifts.length} créneaux le ${escapeHtml(first.date)}`)
+
+  return { subject, html, text }
+}
+
 // ── Rappel manuel ─────────────────────────────────────────────────────────────
 
 export function renderManualReminder(p: NotificationPayload): RenderedEmail {

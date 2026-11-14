@@ -193,6 +193,8 @@ export async function runMemberErasure(
     // cancelled rows (the link is set to null), then scrubbed below like the others.
     await tx.registration.updateMany({ where: { volunteerId: { in: authors }, status: "unconfirmed" }, data: { status: "cancelled", signupConfirmationId: null } })
     await tx.signupConfirmation.deleteMany({ where: { volunteerId: { in: authors } } })
+    // Custom reminder send state (#1139): ids and timing only, deleted with the person's data.
+    await tx.reminderOccurrence.deleteMany({ where: { volunteerId: { in: authors } } })
     // Personal workload limits (#1171, lot 2): the person's own settings, gone with their data.
     await tx.eventVolunteerLimit.deleteMany({ where: { volunteerId: { in: authors } } })
     // Dated availability (#1146): the person's own answers, with their days and ranges (cascade).

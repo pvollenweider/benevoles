@@ -126,6 +126,7 @@ export const KIND_LABELS: Record<NotificationKind, string> = {
   reminder_j2: "Rappel J-2",
   reminder_j1: "Rappel J-1",
   reminder_dd: "Rappel du jour",
+  reminder_rule: "Rappel personnalisé",
   manual_reminder: "Rappel envoyé par un organisateur",
   shift_modified: "Créneau modifié",
   shift_cancelled: "Créneau annulé",

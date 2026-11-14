@@ -95,6 +95,12 @@ export const VOLUNTEER_RELATIONS: Record<string, VolunteerRelation> = {
     erasure: "delete",
     why: "a device of the person",
   },
+  ReminderOccurrence: {
+    merge: "reassign",
+    deletion: "cascade",
+    erasure: "delete",
+    why: "custom reminder send state of one person, event, local day and rule (#1139): ids and timing only, no personal content. Merged by key in the merge transaction: a sent occurrence wins over any other (a reminder already delivered is never sent again), a queued conflict keeps one row and cancels the superseded outbox row, and the other keys move with the registrations; deleted with the person's data. No age-based cleanup yet (see src/lib/retention.ts)",
+  },
   DeliveryOutcome: {
     merge: "reassign",
     deletion: "cascade",

@@ -21,7 +21,7 @@ describe("isImportantNotificationKind", () => {
 
   it("exposes the same set directly", () => {
     expect(IMPORTANT_NOTIFICATION_KINDS.has("registration_confirmation")).toBe(true)
-    expect(IMPORTANT_NOTIFICATION_KINDS.size).toBe(5)
+    expect(IMPORTANT_NOTIFICATION_KINDS.size).toBe(6)
   })
 })
 
