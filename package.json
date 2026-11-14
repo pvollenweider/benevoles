@@ -104,6 +104,7 @@
   },
   "devDependencies": {
     "@axe-core/playwright": "^4.14.0",
+    "@guidepup/virtual-screen-reader": "^0.33.0",
     "@lhci/cli": "^0.16.0",
     "@playwright/test": "^1.65.0",
     "@tailwindcss/postcss": "^4",

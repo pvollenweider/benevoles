@@ -40,6 +40,7 @@ Format basé sur [Keep a Changelog](https://keepachangelog.com/fr/1.0.0/).
 
 ### Exploitation
 
+- Les tests unitaires vérifient aussi les phrases annoncées par un lecteur d'écran virtuel (une approximation, ni VoiceOver ni NVDA) sur l'enregistrement d'une page, une erreur de champ, un compteur d'inscriptions et un lien lu hors contexte (#739). <!-- interne -->
 - Les issues du dépôt suivent trois axes de labels (type, statut, domaine), décrits dans `CONTRIBUTING.md` ; le modèle « Amélioration » pose le label `enhancement`. <!-- interne -->
 - Le manifeste du webhook Gandi désigne l'image construite avec OpenTelemetry 1.47.0 et Go 1.26, déployée sur le cluster le 14 novembre 2026. <!-- interne -->
 - `basic-ftp`, une dépendance indirecte de Lighthouse CI (outil de développement), passe à la 6.2.x par `overrides` (une alerte de sécurité). <!-- interne -->
