@@ -164,21 +164,17 @@ export function shiftInfoText(info: ShiftInfo): string[] {
 }
 
 /**
- * The pages of every shift of an email, once each, put on the first shift: a grouped reminder
- * shows a page one time even when several shifts belong to its poste (#1324). Other shifts lose
- * their copy so the shared `shiftInfoText`/`shiftInfoHtml` helpers render it once.
+ * The pages of an email's shifts, once each: a page stays under the first shift that carries it,
+ * and later shifts of the same poste lose their copy. A grouped reminder shows a page one time
+ * even when several shifts belong to its poste (#1324), and never under another poste's shift.
  */
 export function withReadBeforeOnce<T extends ShiftInfo>(shifts: readonly T[]): T[] {
   const seen = new Set<string>()
-  const pages: ReadBeforePage[] = []
-  for (const shift of shifts) {
-    for (const page of readBeforePages(shift)) {
-      if (seen.has(page.url)) continue
-      seen.add(page.url)
-      pages.push(page)
-    }
-  }
-  return shifts.map((shift, i) => ({ ...shift, readBefore: i === 0 ? pages : [] }))
+  return shifts.map((shift) => {
+    const pages = readBeforePages(shift).filter((page) => !seen.has(page.url))
+    for (const page of pages) seen.add(page.url)
+    return { ...shift, readBefore: pages }
+  })
 }
 
 /**

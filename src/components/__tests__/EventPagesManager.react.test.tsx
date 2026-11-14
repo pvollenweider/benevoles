@@ -162,7 +162,6 @@ describe("EventPagesManager, postes of an information page (#1324)", () => {
     openEdit()
     const group = screen.getByRole("group", { name: "Pour les bénévoles de ces postes" })
     expect(group.tagName).toBe("FIELDSET")
-    expect(group).toHaveAttribute("tabindex", "-1")
     const bar = within(group).getByRole("checkbox", { name: "Bar" })
     expect(bar).toBeChecked()
     bar.focus()
@@ -216,13 +215,12 @@ describe("EventPagesManager, postes of an information page (#1324)", () => {
     expect(screen.getByText("Cet événement n'a pas encore de poste. Créez des créneaux, puis revenez ici.")).toBeInTheDocument()
   })
 
-  it("on a validation error about the postes, focuses the fieldset rather than the title", async () => {
-    fetchMock.mockResolvedValueOnce({ ok: false, status: 400, json: async () => ({ error: "Données invalides.", field: "roleNames" }) })
+  // The API drops unknown poste names without refusing: a 400 is about the title, as before.
+  it("on a refused save, still focuses the title", async () => {
+    fetchMock.mockResolvedValueOnce({ ok: false, status: 400, json: async () => ({ error: "Données invalides." }) })
     renderManager([page({ id: "p1", title: "FAQ" })])
     openEdit()
     fireEvent.click(screen.getByRole("button", { name: "Enregistrer" }))
-    const group = screen.getByRole("group", { name: "Pour les bénévoles de ces postes" })
-    await waitFor(() => expect(group).toHaveFocus())
-    expect(screen.getByRole("textbox", { name: "Titre" })).not.toHaveFocus()
+    await waitFor(() => expect(screen.getByRole("textbox", { name: "Titre" })).toHaveFocus())
   })
 })

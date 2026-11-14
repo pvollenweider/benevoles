@@ -5,6 +5,7 @@ vi.mock("../prisma", () => ({ prisma: { event: { findFirst: eventFindFirst } } }
 
 import { readBeforePagesForEvent, withReadBeforeShiftPages } from "../read-before-shift-data"
 import type { NotificationPayload } from "../notifications/types"
+import { withReadBeforeOnce } from "../shift-info"
 
 const event = {
   slug: "fete",
@@ -45,18 +46,34 @@ describe("read-before-shift pages resolved for emails (#1324)", () => {
     expect(await readBeforePagesForEvent("evt-1", ["Caisse"])).toEqual([])
   })
 
-  it("puts the pages on the first shift, once, so a sent email never shows a dead link", async () => {
+  it("puts each page on the shifts of its own poste, never under another poste's shift", async () => {
     eventFindFirst.mockResolvedValue(event)
     const prepared = await withReadBeforeShiftPages(payload({
       eventId: "evt-1",
       shifts: [
+        { label: "Buvette", roleName: "Buvette" },
+        { label: "Parking nord", roleName: "Parking" },
         { label: "Caisse 1", roleName: "Caisse" },
         { label: "Caisse 2", roleName: "Caisse" },
       ],
     }))
     const shifts = prepared.data.shifts as { readBefore?: { title: string }[] }[]
-    expect(shifts[0].readBefore).toEqual([{ title: "Tenir la caisse", url: "http://localhost:3000/fete/caisse" }])
-    expect(shifts[1].readBefore).toBeUndefined()
+    expect(shifts[0].readBefore).toBeUndefined()
+    expect(shifts[1].readBefore).toEqual([{ title: "Plan du parking", url: "http://localhost:3000/fete/parking" }])
+    expect(shifts[2].readBefore).toEqual([{ title: "Tenir la caisse", url: "http://localhost:3000/fete/caisse" }])
+    expect(shifts[3].readBefore).toEqual(shifts[2].readBefore)
+  })
+
+  it("gives no link to a shift marked as a waiting-list place or a request", async () => {
+    eventFindFirst.mockResolvedValue(event)
+    const prepared = await withReadBeforeShiftPages(payload({
+      eventId: "evt-1",
+      shifts: [
+        { label: "Caisse 1", roleName: "Caisse", waitlist: true },
+        { label: "Parking nord", roleName: "Parking", requiresApproval: true },
+      ],
+    }))
+    expect((prepared.data.shifts as { readBefore?: unknown }[]).every((s) => s.readBefore === undefined)).toBe(true)
   })
 
   it("leaves a waiting-list confirmation untouched: no event, no shift, no link", async () => {
@@ -64,5 +81,12 @@ describe("read-before-shift pages resolved for emails (#1324)", () => {
     const prepared = await withReadBeforeShiftPages(waiting)
     expect(prepared).toBe(waiting)
     expect(eventFindFirst).not.toHaveBeenCalled()
+  })
+
+  it("keeps a page once in an email, under the first shift of its poste", () => {
+    const caisse = [{ title: "Tenir la caisse", url: "https://asso.example/fete/caisse" }]
+    const parking = [{ title: "Plan du parking", url: "https://asso.example/fete/parking" }]
+    const once = withReadBeforeOnce([{ readBefore: [] }, { readBefore: caisse }, { readBefore: parking }, { readBefore: caisse }])
+    expect(once.map((s) => s.readBefore)).toEqual([[], caisse, parking, []])
   })
 })

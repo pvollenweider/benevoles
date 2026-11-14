@@ -275,7 +275,6 @@ function PageFormModal({
   const rolesId = useId()
   const rolesHintId = useId()
   const publicHintId = useId()
-  const rolesRef = useRef<HTMLFieldSetElement>(null)
 
   const liveNames = postes.map((p) => p.name)
   // A stored name no live poste carries any more stays ticked, so the organiser can untick it;
@@ -330,10 +329,7 @@ function PageFormModal({
       body: JSON.stringify({ title: title.trim(), content, roleNames }),
     }), { silent: true })
     if (!outcome.ok) {
-      // The title is checked here first; a 400 from the API is about the postes: focus their
-      // fieldset, not the title.
-      const aboutPostes = outcome.status === 400
-      fail(outcome.error, aboutPostes ? "roleNames" : undefined, aboutPostes ? rolesRef.current : null)
+      fail(outcome.error, outcome.status === 400 ? "title" : undefined, outcome.status === 400 ? document.getElementById(titleId) : null)
       return
     }
     onSaved(outcome.data)
@@ -388,11 +384,8 @@ function PageFormModal({
         ) : (
           <fieldset
             id={rolesId}
-            ref={rolesRef}
-            tabIndex={-1}
             aria-describedby={`${rolesHintId} ${publicHintId}`}
-            aria-invalid={isInvalid("roleNames")}
-            className="space-y-2 rounded focus:outline-none"
+            className="space-y-2"
           >
             <legend className="text-sm font-medium text-gray-900">Pour les bénévoles de ces postes</legend>
             <p id={rolesHintId} className="max-w-[75ch] text-xs text-gray-600">

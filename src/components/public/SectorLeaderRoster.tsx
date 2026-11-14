@@ -10,7 +10,7 @@ import { mailtoHref } from "@/lib/email-address"
 import { telHref } from "@/lib/shift-info"
 import { dayKey } from "@/lib/leader-scope"
 import { leaderRosterCount, leaderRosterDays, leaderRosterByPoste } from "@/lib/leader-roster"
-import { READ_BEFORE_LABEL } from "@/lib/event-page-postes"
+import ReadBeforeLinks from "@/components/ReadBeforeLinks"
 
 /**
  * The read-only roster of a sector leader (#1169): every poste of the sector, grouped by poste,
@@ -104,15 +104,9 @@ export default function SectorLeaderRoster({ heading, eventTitle, postes, regist
 
       {readBefore && readBefore.length > 0 && (
         <section aria-labelledby={`${ids}-read-before`} className="bg-white rounded-xl border border-gray-200 p-4">
-          <h2 id={`${ids}-read-before`} className="text-sm font-semibold text-gray-900">Avant les créneaux</h2>
-          <p className="text-xs text-gray-600 mt-0.5">Les bénévoles de vos postes reçoivent ce lien avec leur confirmation et leurs rappels.</p>
-          {readBefore.length === 1 ? (
-            <p className="mt-1"><a href={readBefore[0].url} className="py-1 inline-block text-blue-700 underline underline-offset-2 hover:text-blue-900 rounded focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-blue-600 break-words">{READ_BEFORE_LABEL} : {readBefore[0].title}</a></p>
-          ) : (
-            <ul className="mt-1 space-y-0.5">
-              {readBefore.map((p) => <li key={p.url}><a href={p.url} className="py-1 inline-block text-blue-700 underline underline-offset-2 hover:text-blue-900 rounded focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-blue-600 break-words">{READ_BEFORE_LABEL} : {p.title}</a></li>)}
-            </ul>
-          )}
+          <h2 id={`${ids}-read-before`} className="text-sm font-semibold text-gray-900">À lire avant les créneaux</h2>
+          <p className="text-xs text-gray-600 mt-0.5">{readBefore.length > 1 ? "Les bénévoles de vos postes reçoivent ces liens avec leur confirmation et leurs rappels." : "Les bénévoles de vos postes reçoivent ce lien avec leur confirmation et leurs rappels."}</p>
+          <ReadBeforeLinks pages={readBefore} className="mt-1" />
         </section>
       )}
 

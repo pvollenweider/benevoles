@@ -37,24 +37,35 @@ export async function readBeforePagesForEvent(eventId: string, roleNames: string
 }
 
 /**
- * The same payload with the pages of its confirmed shifts on the first one, for the email
- * templates. A payload from a kind that carries no event or no shift is returned untouched; so
- * is a waiting-list confirmation (no shift info, no link).
+ * The same payload with, on each confirmed shift, the pages attached to its own poste, for the
+ * email templates: a link sits under the shift it is about, never under another poste's shift.
+ * The templates then keep each page once (withReadBeforeOnce). A payload from a kind that carries
+ * no event or no shift is returned untouched; so is a waiting-list confirmation (no shift info,
+ * no link), and a shift marked as a waiting-list place or a request gets no link.
  */
 export async function withReadBeforeShiftPages(payload: NotificationPayload): Promise<NotificationPayload> {
   const data = (payload.data ?? {}) as Record<string, unknown>
   const eventId = typeof data.eventId === "string" ? data.eventId : null
   const shifts = Array.isArray(data.shifts) ? (data.shifts as Record<string, unknown>[]) : null
   if (!eventId || !shifts || shifts.length === 0) return payload
-  const roleNames = [...new Set(shifts.map((s) => (typeof s.roleName === "string" ? s.roleName : "")).filter(Boolean))]
+  const posteOf = (shift: Record<string, unknown>) =>
+    typeof shift.roleName === "string" && shift.roleName && shift.waitlist !== true && shift.requiresApproval !== true ? shift.roleName : null
+  const roleNames = [...new Set(shifts.map(posteOf).filter((name): name is string => name !== null))]
   if (roleNames.length === 0) return payload
-  const pages = await readBeforePagesForEvent(eventId, roleNames)
-  if (pages.length === 0) return payload
+  const byPoste = new Map<string, ReadBeforePage[]>()
+  for (const roleName of roleNames) {
+    const pages = await readBeforePagesForEvent(eventId, [roleName])
+    if (pages.length > 0) byPoste.set(roleName, pages)
+  }
+  if (byPoste.size === 0) return payload
   return {
     ...payload,
     data: {
       ...data,
-      shifts: shifts.map((shift, i) => (i === 0 ? { ...shift, readBefore: pages } : shift)),
+      shifts: shifts.map((shift) => {
+        const pages = byPoste.get(posteOf(shift) ?? "")
+        return pages ? { ...shift, readBefore: pages } : shift
+      }),
     },
   }
 }
