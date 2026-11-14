@@ -1,6 +1,10 @@
 import { config as zodConfig } from "zod/v4/core"
 import { onSentryRouterTransitionStart, startSentryClient } from "./src/lib/sentry-client-loader"
 import { installTranslationDomGuard } from "./src/lib/translation-dom-guard"
+import { installBrowserPolyfills } from "./src/lib/browser-polyfills"
+
+// First: what an older browser of the build targets lacks (src/lib/browser-polyfills.ts).
+installBrowserPolyfills()
 
 // Before hydration: a page the browser translated keeps working (src/lib/translation-dom-guard.ts).
 installTranslationDomGuard(Node.prototype)
