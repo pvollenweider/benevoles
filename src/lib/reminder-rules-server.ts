@@ -14,7 +14,7 @@
 
 import { prisma } from "@/lib/prisma"
 import type { Prisma } from "@/generated/prisma/client"
-import { groupRemindersByDay, type GroupableRegistration } from "./reminder-groups"
+import { groupRemindersByDay, type GroupableRegistration, type ReminderGroup } from "./reminder-groups"
 import { orgTimeZone } from "./time-zone"
 import {
   eventUsesCustomReminderRules,
@@ -121,23 +121,50 @@ export async function loadQueuedReminderOccurrences(db: Db, eventId: string) {
   })
 }
 
-/** Bound of the preview's registration load: the nearest upcoming places are enough. */
-export const PREVIEW_REGISTRATION_LIMIT = 2_000
+/**
+ * Fields the grouping evaluator reads, for every loader below: identity of the place, its
+ * volunteer, its stored local day and start time, and when the place became active (late sign-ups).
+ * The preview can therefore load every eligible registration of an event without dragging the
+ * whole row, its volunteer and its shift.
+ */
+export const customReminderGroupingSelect = {
+  id: true,
+  volunteerId: true,
+  eventId: true,
+  createdAt: true,
+  shift: { select: { date: true, startTime: true } },
+  signupConfirmation: { select: { confirmedAt: true } },
+} satisfies Prisma.RegistrationSelect
+
+type CustomReminderGroupingRegistration = Prisma.RegistrationGetPayload<{ select: typeof customReminderGroupingSelect }>
+
+/** A group built by `loadCustomReminderGroups`, with only the columns its callers evaluate. */
+export type CustomReminderLoadedGroup = ReminderGroup<CustomReminderGroupingRegistration>
+
+/** The local wall-clock day and time in the organisation's zone, for the preview's SQL filter. */
+function localWallClock(now: Date, timeZone: string): { day: string; time: string } {
+  const parts = new Intl.DateTimeFormat("en-CA", {
+    timeZone, hourCycle: "h23",
+    year: "numeric", month: "2-digit", day: "2-digit", hour: "2-digit", minute: "2-digit",
+  }).formatToParts(now)
+  const get = (type: string) => parts.find((part) => part.type === type)?.value ?? "00"
+  return { day: `${get("year")}-${get("month")}-${get("day")}`, time: `${get("hour")}:${get("minute")}` }
+}
 
 /**
  * The groups the preview and the cron both evaluate (#1139): the same active registrations, the
  * same time-zone grouping and the same evaluator. Only the loading window differs: the cron keeps
- * its `maxHours + 24` work horizon, the preview loads the nearest future registrations without it,
- * and a reschedule is bounded to the queued occurrences. Extracted so the paths cannot drift.
+ * its `maxHours + 24` work horizon, the preview loads every future registration without it, and a
+ * reschedule is bounded to the queued occurrences. Extracted so the paths cannot drift.
  */
 export type CustomReminderGroupLoadOptions = {
-  /** Save reconciliation: every shift, because every occurrence must be rescheduled. */
-  allShifts?: boolean
   /**
    * Preview only (#1139): no `maxHours + 24` work horizon. That horizon is right for the cron
    * (nothing further can be due this run) but wrong for a preview, which must still show a 2 h
-   * reminder for a registration next month. The nearest upcoming registrations are loaded,
-   * bounded by `PREVIEW_REGISTRATION_LIMIT`, and the same evaluator does the rest.
+   * reminder for a registration next month. Every active registration of the event whose shift has
+   * not started is loaded (the SQL filter below), with only the grouping columns: an event is
+   * bounded by its own size, and the hourly cron already loads comparably for every event it
+   * evaluates. No `take`: a cap on registrations would hide a later day whose earlier delay is due.
    */
   preview?: boolean
   /** Bound a reschedule to the volunteers and local days that actually have a queued occurrence. */
@@ -149,9 +176,9 @@ export async function loadCustomReminderGroups(
   event: Pick<CustomReminderEventWithRules, "id" | "organization">,
   rules: readonly ReminderRuleInput[],
   now: Date,
-  occurrences: readonly { status: string; localDay?: string }[],
+  occurrences: readonly { status: string; localDay?: string; volunteerId?: string }[],
   opts: CustomReminderGroupLoadOptions = {},
-): Promise<CustomReminderGroup[]> {
+): Promise<CustomReminderLoadedGroup[]> {
   const enabled = rules.filter((rule) => isActiveReminderRule(rule) && rule.enabled && isReminderRuleUnit(rule.unit))
   if (enabled.length === 0) return []
   const hasOpenOccurrence = occurrences.some((occurrence) => occurrence.status === "queued" || occurrence.status === "pending")
@@ -167,39 +194,60 @@ export async function loadCustomReminderGroups(
     ...extra,
     shift,
   })
-  let registrations: { id: string; shift: { date: Date; startTime: string } }[]
+  let registrations: CustomReminderGroupingRegistration[]
   if (days.length > 0) {
     // Reschedule: only the queued occurrences' volunteers and local days.
     registrations = await db.registration.findMany({
       where: baseWhere({ status: { not: "cancelled" }, date: { in: days } }, volunteers.length > 0 ? { volunteerId: { in: volunteers } } : {}),
-      include: customReminderRegistrationInclude,
-    })
-  } else if (opts.allShifts) {
-    // Save reconciliation: every shift, because every occurrence must be rescheduled.
-    registrations = await db.registration.findMany({
-      where: baseWhere({ status: { not: "cancelled" } }),
-      include: customReminderRegistrationInclude,
+      select: customReminderGroupingSelect,
     })
   } else if (opts.preview) {
-    // The preview looks at the next future groups without the cron's per-run work horizon. It is
-    // still bounded: the nearest registrations, plus the days of any open occurrence so the
-    // preview shows the send already in flight even when it sits further out.
-    const nearest = await db.registration.findMany({
-      where: baseWhere({ status: { not: "cancelled" }, date: { gte: floor } }),
-      include: customReminderRegistrationInclude,
-      orderBy: [{ shift: { date: "asc" } }, { shift: { startTime: "asc" } }],
-      take: PREVIEW_REGISTRATION_LIMIT,
+    // Every active registration whose shift has not started, filtered in the query: a shift of an
+    // earlier local day is past, and on today's local day a start time already reached is too. No
+    // cap: the event's own size bounds this load, exactly as the hourly cron's comparable loads do.
+    const timeZone = orgTimeZone(event.organization)
+    const { day, time } = localWallClock(now, timeZone)
+    const today = new Date(`${day}T00:00:00.000Z`)
+    registrations = await db.registration.findMany({
+      where: baseWhere({
+        status: { not: "cancelled" },
+        OR: [
+          { date: { gt: today } },
+          { date: today, startTime: { gt: time } },
+        ],
+      }),
+      select: customReminderGroupingSelect,
     })
-    const openDays = [...new Set(occurrences.filter((occurrence) => occurrence.localDay).map((occurrence) => occurrence.localDay!))]
-    const open = hasOpenOccurrence && openDays.length > 0
+    // An occurrence already pending or queued for a (volunteer, local day) keeps that whole group
+    // visible even when its shift falls outside the SQL window above. Keyed by the pair, not just
+    // the day: loading every registration of that day would bring unrelated volunteers, and a
+    // `take` would truncate the group this preview is meant to show. Only open occurrences count.
+    const openKeys = [...new Map(
+      occurrences
+        .filter((occurrence) => (occurrence.status === "pending" || occurrence.status === "queued") && occurrence.localDay && occurrence.volunteerId)
+        .map((occurrence) => [
+          `${occurrence.volunteerId}\u0000${occurrence.localDay}`,
+          { volunteerId: occurrence.volunteerId!, localDay: occurrence.localDay! },
+        ]),
+    ).values()]
+    const open = openKeys.length > 0
       ? await db.registration.findMany({
-          where: baseWhere({ status: { not: "cancelled" }, date: { in: openDays.map((day) => new Date(`${day}T00:00:00.000Z`)) } }),
-          include: customReminderRegistrationInclude,
-          take: PREVIEW_REGISTRATION_LIMIT,
+          where: {
+            eventId: event.id,
+            status: "active",
+            OR: openKeys.map((key) => ({
+              volunteerId: key.volunteerId,
+              shift: {
+                status: { not: "cancelled" },
+                date: new Date(`${key.localDay}T00:00:00.000Z`),
+              },
+            })),
+          },
+          select: customReminderGroupingSelect,
         })
       : []
     const seen = new Set<string>()
-    registrations = [...nearest, ...open].filter((registration) => {
+    registrations = [...registrations, ...open].filter((registration) => {
       if (seen.has(registration.id)) return false
       seen.add(registration.id)
       return true
@@ -209,16 +257,13 @@ export async function loadCustomReminderGroups(
     if (!hasOpenOccurrence) shiftWhere.date = { gte: floor, lte: horizon }
     registrations = await db.registration.findMany({
       where: baseWhere(shiftWhere),
-      include: customReminderRegistrationInclude,
+      select: customReminderGroupingSelect,
     })
   }
   const timeZone = orgTimeZone(event.organization)
   // Only places of shifts that have not started yet: a started shift is never reminded.
-  const upcoming = registrations.filter((registration: { shift: { date: Date; startTime: string } }) => reminderShiftStart(registration.shift, timeZone).getTime() > now.getTime())
-  return groupRemindersByDay(
-    upcoming as (typeof upcoming[number] & GroupableRegistration)[],
-    () => timeZone,
-  ) as CustomReminderGroup[]
+  const upcoming = registrations.filter((registration) => reminderShiftStart(registration.shift, timeZone).getTime() > now.getTime())
+  return groupRemindersByDay(upcoming, () => timeZone)
 }
 
 /** Statuses written by the outbox on a queued occurrence, folded back before each run. */

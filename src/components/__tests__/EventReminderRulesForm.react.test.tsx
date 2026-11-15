@@ -162,6 +162,26 @@ describe("EventReminderRulesForm (#1139)", () => {
     expect(screen.getByRole("textbox", { name: "Délai" })).toHaveValue("1")
   })
 
+  it("keeps the edited input mounted and focused when the server resolves its row to a new id", async () => {
+    // Changing a delay creates a new rule row server-side: the response id differs from the id the
+    // form sent. The edited input must not remount (its DOM node stays, focus included).
+    fetchMock.mockResolvedValue(json(state({
+      mode: "custom",
+      rules: [{ id: "r-new", unit: "days", value: 6, enabled: true }],
+      preview: scheduled,
+    })))
+    renderForm(state({ mode: "custom", rules: [{ id: "r-old", unit: "days", value: 7, enabled: true }], preview: scheduled }))
+    const input = screen.getByRole("textbox", { name: "Délai" })
+    fireEvent.change(input, { target: { value: "6" } })
+    input.focus()
+    fireEvent.click(screen.getByRole("button", { name: "Enregistrer les rappels" }))
+    expect(await screen.findByText(/Rappels enregistrés\./)).toBeInTheDocument()
+    expect(screen.getByRole("textbox", { name: "Délai" })).toBe(input)
+    expect(input).toHaveValue("6")
+    expect(input).toHaveFocus()
+    expect(screen.queryByText("Enregistrez pour mettre à jour le prochain envoi.")).not.toBeInTheDocument()
+  })
+
   it("says a save is needed while the form differs from the saved state", () => {
     renderForm(state({ mode: "custom", rules: [{ id: "r1", unit: "days", value: 7, enabled: true }], preview: scheduled }))
     expect(screen.getByText("Prochain rappel : mercredi 12 juin à 08:00, pour 14 personnes (22 créneaux).")).toBeInTheDocument()

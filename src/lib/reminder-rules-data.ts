@@ -8,20 +8,19 @@
  * The preview is built from the same loaders as the hourly cron (`loadCustomReminderGroups`,
  * `loadCustomReminderOccurrences` in `reminder-rules-server.ts`), so it cannot drift from what is
  * sent. Saving takes the event's advisory lock (`lockReminderRules`) before reading or writing:
- * two saves, or a save and the hourly run, cannot interleave. Occurrences that would otherwise
- * send with the old timing are cancelled or rescheduled in the same transaction, and a removed
- * rule's already-queued outbox row is cancelled before the cascade deletes the occurrence.
+ * two saves, or a save and the hourly run, cannot interleave. A rule's identity is its delay in
+ * hours: a submitted delay resolves to the event's row of that delay (active or archived, revived)
+ * or creates one, so changing a delay removes the old row and adds the new one. Unsent occurrences
+ * and pending outbox rows of a removed or disabled delay are cancelled in the same transaction.
  */
 
 import {
   eventUsesCustomReminderRules,
   isReminderRuleUnit,
   nextEventReminderPreview,
-  nextReminderAttemptAt,
   reminderPreviewView,
   reminderRuleHours,
   reminderRulesChange,
-  reminderRuleStatus,
   validateReminderRulesInput,
   type EventReminderRuleView,
   type ReminderRuleInput,
@@ -137,10 +136,11 @@ async function cancelUnsentOccurrences(
 }
 
 /**
- * Saves the event's rules (#1139): validates, checks every client id belongs to this event,
- * diffs kept/created/removed rules, then reconciles the unsent occurrences in the same
- * transaction under the event's advisory lock. `mode: "default"` deletes every row, which makes
- * the legacy D-2 / D-1 / day-of path apply again.
+ * Saves the event's rules (#1139): validates, checks every submitted id belongs to this event,
+ * resolves each delay to the event's row of the same delay (active or archived) or creates one,
+ * then cancels the unsent occurrences of every removed or disabled delay in the same transaction
+ * under the event's advisory lock. `mode: "default"` removes every active row (archiving those
+ * with sent history), which makes the legacy D-2 / D-1 / day-of path apply again.
  */
 export async function saveEventReminderRules(
   db: Db,
@@ -174,69 +174,40 @@ export async function saveEventReminderRules(
       }
     }
 
-    const existing = new Map(before.map((rule) => [rule.id, rule]))
+    // A rule's identity is its delay in hours, not the id the client sent (#1139). The submitted
+    // id is only checked to belong to this event; the row resolution below decides which row it is.
     if (validation.mode === "custom") {
-      const seen = new Set<string>()
+      const eventRuleIds = new Set(event.reminderRules.map((row) => row.id))
       for (const [index, rule] of validation.rules.entries()) {
-        if (!rule.id) continue
-        if (seen.has(rule.id)) {
-          return { ok: false, status: 400, error: `Rappel ${index + 1} : ce rappel figure deux fois.`, rule: index + 1 }
-        }
-        seen.add(rule.id)
-        if (!existing.has(rule.id)) {
+        if (rule.id && !eventRuleIds.has(rule.id)) {
           return { ok: false, status: 400, error: `Rappel ${index + 1} : ce rappel n'appartient pas à cet événement.`, rule: index + 1 }
         }
       }
     }
 
-    const archivedRows = event.reminderRules.filter((rule) => !isActiveReminderRule(rule))
-    const archivedById = new Set(archivedRows.map((rule) => rule.id))
-    const afterInput: ValidReminderRule[] = validation.mode === "default"
-      ? []
-      : validation.rules.map((rule) => ({ ...rule, id: rule.id }))
-    const byHours = (rules: readonly ReminderRuleInput[]): Map<number, ReminderRuleInput> => {
-      const map = new Map<number, ReminderRuleInput>()
-      for (const rule of rules) {
-        const hours = reminderRuleHours(rule)
-        if (hours !== null && !map.has(hours)) map.set(hours, rule)
-      }
-      return map
+    // At most one row per (event, delay in hours), archived or not. Nothing has ever created a rule
+    // in production (the setting ships with this PR), so no existing data breaks it and no data fix
+    // is needed; every save takes the event's advisory lock, and this map is what maintains it.
+    const rowsByHours = new Map<number, (typeof event.reminderRules)[number]>()
+    for (const row of event.reminderRules) {
+      const hours = reminderRuleHours(row)
+      if (hours !== null && !rowsByHours.has(hours)) rowsByHours.set(hours, row)
     }
-    // A new row with the delay of a row removed in this same save keeps that row (and its sent
-    // occurrences); otherwise it revives an archived row of the same delay. Creating a fresh id
-    // would forget who was already reminded and send the reminder again.
-    const activeRemovedByHours = byHours(before.filter((rule) => !afterInput.some((candidate) => candidate.id === rule.id)))
-    const archivedByHours = byHours(archivedRows)
-    const after: ValidReminderRule[] = afterInput.map((rule) => {
-      if (rule.id) return rule
-      const hours = reminderRuleHours(rule)
-      if (hours === null) return rule
-      const activeMatch = activeRemovedByHours.get(hours)
-      if (activeMatch) {
-        activeRemovedByHours.delete(hours)
-        return { ...rule, id: activeMatch.id }
-      }
-      const archivedMatch = archivedByHours.get(hours)
-      if (archivedMatch) {
-        archivedByHours.delete(hours)
-        return { ...rule, id: archivedMatch.id }
-      }
-      return rule
-    })
-    const afterById = new Map(after.filter((rule) => rule.id).map((rule) => [rule.id, rule]))
-    const kept = after.filter((rule) => rule.id && existing.has(rule.id))
-    const keptIds = new Set(kept.map((rule) => rule.id))
-    const removed = before.filter((rule) => !keptIds.has(rule.id))
+    const submitted = validation.mode === "custom" ? validation.rules : []
+    // A submitted rule resolves to the event's row of the same delay, active or archived: it
+    // revives and updates that row, or creates a new one. A row never changes its delay in hours.
+    const after: ValidReminderRule[] = submitted.map((rule) => ({
+      ...rule,
+      id: rowsByHours.get(reminderRuleHours(rule)!)?.id ?? "",
+    }))
+    const resolvedIds = new Set(after.filter((rule) => rule.id).map((rule) => rule.id))
+    // Changing a delay is therefore « remove the old delay, add the new one »: the old row is gone
+    // from this list even when the client sent its id, and its unsent occurrences are cancelled.
+    const removed = before.filter((rule) => !resolvedIds.has(rule.id))
     const removedIds = new Set(removed.map((rule) => rule.id))
-    const revived = after.filter((rule) => rule.id && archivedById.has(rule.id))
+    const resolved = after.filter((rule) => rule.id)
     const created = after.filter((rule) => !rule.id)
-    const disabledIds = new Set(after.filter((rule) => rule.id && !rule.enabled).map((rule) => rule.id))
-    const delayChangedIds = new Set(
-      kept.filter((rule) => {
-        const previous = existing.get(rule.id)!
-        return previous.unit !== rule.unit || previous.value !== rule.value
-      }).map((rule) => rule.id),
-    )
+    const disabledIds = new Set(resolved.filter((rule) => !rule.enabled).map((rule) => rule.id))
 
     const occurrences: { id: string; eventId: string; volunteerId: string; localDay: string; ruleId: string; status: string; outboxId: string | null }[] = await loadCustomReminderOccurrences(tx, eventId)
 
@@ -255,65 +226,9 @@ export async function saveEventReminderRules(
       "Rappel désactivé.",
     )
 
-    // A kept rule whose delay changed: recompute every unsent occurrence from the current
-    // registrations with the same `reminderRuleStatus` the cron uses, and cancel what is already
-    // too late (started shift, late sign-up). Sent and failed ones are never reopened.
-    if (delayChangedIds.size > 0) {
-      const loaderRules: ReminderRuleInput[] = after.map((rule) => ({ ...rule, displayOrder: rule.displayOrder }))
-      const groups = await loadCustomReminderGroups(tx, event, loaderRules, now, occurrences, { allShifts: true })
-      const groupKey = (occurrence: { eventId: string; volunteerId: string; localDay: string }) =>
-        [occurrence.eventId, occurrence.volunteerId, occurrence.localDay].join("\u0000")
-      const groupByKey = new Map(groups.map((group) => [groupKey(group), group]))
-      for (const occurrence of occurrences) {
-        if (occurrence.status !== "pending" && occurrence.status !== "queued") continue
-        if (!delayChangedIds.has(occurrence.ruleId)) continue
-        const rule = afterById.get(occurrence.ruleId)
-        if (!rule) continue
-        const group = groupByKey.get(groupKey(occurrence))
-        if (!group) {
-          await cancelUnsentOccurrences(tx, [occurrence], "Plus aucune inscription confirmée ce jour-là.")
-          continue
-        }
-        const evaluation = reminderRuleStatus(group, rule, now)
-        if (evaluation.status === "started") {
-          await cancelUnsentOccurrences(tx, [occurrence], "Le créneau a commencé.")
-          continue
-        }
-        if (evaluation.status === "late") {
-          await cancelUnsentOccurrences(tx, [occurrence], "Inscription confirmée après l'heure du rappel.")
-          continue
-        }
-        if (evaluation.status === "disabled" || !evaluation.dueAt) {
-          await cancelUnsentOccurrences(tx, [occurrence], "Rappel désactivé.")
-          continue
-        }
-        await tx.reminderOccurrence.update({
-          where: { id: occurrence.id },
-          data: { dueAt: evaluation.dueAt },
-        })
-        if (occurrence.status === "queued" && occurrence.outboxId) {
-          const row = await tx.notificationOutbox.findUnique({
-            where: { id: occurrence.outboxId },
-            select: { status: true, deliveryNotBefore: true },
-          })
-          if (row?.status === "pending") {
-            await tx.notificationOutbox.updateMany({
-              where: { id: occurrence.outboxId, status: "pending" },
-              data: { nextAttemptAt: nextReminderAttemptAt(evaluation.dueAt, row.deliveryNotBefore) },
-            })
-          }
-        }
-      }
-    }
-
-    // Keep, revive, create and remove rows. `displayOrder` follows the screen order.
-    for (const rule of kept) {
-      await tx.eventReminderRule.update({
-        where: { id: rule.id },
-        data: { unit: rule.unit, value: rule.value, enabled: rule.enabled, displayOrder: rule.displayOrder },
-      })
-    }
-    for (const rule of revived) {
+    // Resolve, revive and create rows. `displayOrder` follows the screen order; `archivedAt` is
+    // cleared on a revived row so its sent occurrences protect the same delay again.
+    for (const rule of resolved) {
       await tx.eventReminderRule.update({
         where: { id: rule.id },
         data: {

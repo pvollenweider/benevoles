@@ -179,7 +179,19 @@ export default function EventReminderRulesForm({ eventId, timeZone, initialState
 
     const next = outcome.data as EventReminderRulesState
     setMode(next.mode)
-    setRules(next.rules.length > 0 ? toDrafts(next.rules) : [newRule(counter.current++)])
+    // The server resolves identity by delay, so an edited row can come back with another id. The
+    // response keeps the submission order: keep each row's local React key by position, update only
+    // the stored id and values. Remounting on the new id would throw focus out of the input being
+    // edited.
+    setRules((current) => next.rules.length > 0
+      ? next.rules.map((rule, index) => ({
+          key: current[index]?.key ?? rule.id,
+          id: rule.id,
+          unit: rule.unit,
+          value: String(rule.value),
+          enabled: rule.enabled,
+        }))
+      : [newRule(counter.current++)])
     setSaved({ mode: next.mode, rules: next.rules })
     setSavedPreview(next.preview)
     setRemoved("")

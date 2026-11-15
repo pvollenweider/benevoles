@@ -153,31 +153,115 @@ describe.skipIf(!url)("custom reminder rules settings on Postgres (#1139)", () =
     expect(await customOutbox()).toHaveLength(2)
   })
 
-  it("moves an unsent occurrence to the new delay and never reopens a sent one", async () => {
+  it("editing a kept rule to the delay of an archived one does not re-send that delay", async () => {
+    // Rule A (7 days) already reminded both volunteers, then rule B (2 hours) is the only one kept
+    // and is edited to 7 days. B's id must not stop the resolution: the archived 7-day row is
+    // revived, and its sent occurrences still protect the people who already received it.
     const now = new Date("2030-06-03T08:00:00Z")
-    const first = await saveEventReminderRules(prisma, orgId, eventId, { mode: "custom", rules: [rule()] }, now)
-    if (!first.ok) throw new Error("save failed")
-    const ruleId = first.state.rules[0].id
-    await queueCustomRuleReminders(now)
-    const before = await customOccurrences()
-    expect(before).toHaveLength(2)
-
-    // One reminder was sent in the meantime: a later delay change must leave it alone.
-    await prisma.reminderOccurrence.update({ where: { id: before[0].id }, data: { status: "sent", sentAt: now } })
-    if (before[0].outboxId) {
-      await prisma.notificationOutbox.update({ where: { id: before[0].outboxId }, data: { status: "sent", sentAt: now } })
-    }
-    const saved = await saveEventReminderRules(prisma, orgId, eventId, {
+    const first = await saveEventReminderRules(prisma, orgId, eventId, {
       mode: "custom",
-      rules: [{ id: ruleId, unit: "hours", value: 2, enabled: true }],
+      rules: [rule({ value: 7 }), rule({ unit: "hours", value: 2 })],
     }, now)
-    expect(saved).toMatchObject({ ok: true })
-    const after = await customOccurrences()
-    const sent = after.find((occurrence) => occurrence.id === before[0].id)
-    expect(sent).toMatchObject({ status: "sent", dueAt: before[0].dueAt })
-    const moved = after.find((occurrence) => occurrence.id === before[1].id)
-    expect(moved?.status).toBe("queued")
-    expect(moved?.dueAt.toISOString()).toBe("2030-06-10T06:00:00.000Z") // 10:00 local summer = 08:00Z, minus 2 h
+    if (!first.ok) throw new Error("save failed")
+    const sevenId = first.state.rules[0].id
+    const twoId = first.state.rules[1].id
+    await queueCustomRuleReminders(now)
+    expect(await markSent(sevenId, now)).toHaveLength(2)
+
+    const removed = await saveEventReminderRules(prisma, orgId, eventId, {
+      mode: "custom",
+      rules: [{ id: twoId, unit: "hours", value: 2, enabled: true }],
+    }, now)
+    expect(removed).toMatchObject({ ok: true })
+    expect((await prisma.eventReminderRule.findUniqueOrThrow({ where: { id: sevenId } })).archivedAt).not.toBeNull()
+
+    const edited = await saveEventReminderRules(prisma, orgId, eventId, {
+      mode: "custom",
+      rules: [{ id: twoId, unit: "days", value: 7, enabled: true }],
+    }, now)
+    expect(edited).toMatchObject({ ok: true })
+    if (!edited.ok) throw new Error("save failed")
+    // The submitted id was B's; the resolved row is the archived 7-day one.
+    expect(edited.state.rules.map((r) => r.id)).toEqual([sevenId])
+    expect(await prisma.eventReminderRule.findUniqueOrThrow({ where: { id: sevenId } }))
+      .toMatchObject({ unit: "days", value: 7, archivedAt: null })
+    // B had no sent occurrence: it is removed, not archived, once its delay is gone.
+    expect(await prisma.eventReminderRule.findUnique({ where: { id: twoId } })).toBeNull()
+    expect((await queueCustomRuleReminders(now)).queued).toBe(0)
+    expect(await customOutbox()).toHaveLength(2)
+  })
+
+  it("changing 7 days to 6 days after a send creates a new row and archives the old", async () => {
+    const now = new Date("2030-06-03T08:00:00Z")
+    const first = await saveEventReminderRules(prisma, orgId, eventId, { mode: "custom", rules: [rule({ value: 7 })] }, now)
+    if (!first.ok) throw new Error("save failed")
+    const sevenId = first.state.rules[0].id
+    await queueCustomRuleReminders(now)
+    expect(await markSent(sevenId, now)).toHaveLength(2)
+
+    const edited = await saveEventReminderRules(prisma, orgId, eventId, {
+      mode: "custom",
+      rules: [{ id: sevenId, unit: "days", value: 6, enabled: true }],
+    }, now)
+    if (!edited.ok) throw new Error("save failed")
+    const sixId = edited.state.rules[0].id
+    expect(sixId).not.toBe(sevenId)
+    expect(await prisma.eventReminderRule.findUniqueOrThrow({ where: { id: sevenId } }))
+      .toMatchObject({ unit: "days", value: 7, archivedAt: expect.any(Date) })
+    expect(await prisma.eventReminderRule.findUniqueOrThrow({ where: { id: sixId } }))
+      .toMatchObject({ unit: "days", value: 6, archivedAt: null })
+    expect(await prisma.reminderOccurrence.count({ where: { eventId, ruleId: sevenId, status: "sent" } })).toBe(2)
+
+    // The new delay is due on 4 June 08:00Z; the people who got the 7-day reminder get this one.
+    const run = await queueCustomRuleReminders(new Date("2030-06-04T08:00:00Z"))
+    expect(run.queued).toBeGreaterThanOrEqual(2)
+    expect(await prisma.reminderOccurrence.count({ where: { eventId, ruleId: sixId } })).toBe(2)
+  })
+
+  it("changing 7 days to 168 hours keeps the row and its sent history", async () => {
+    const now = new Date("2030-06-03T08:00:00Z")
+    const first = await saveEventReminderRules(prisma, orgId, eventId, { mode: "custom", rules: [rule({ value: 7 })] }, now)
+    if (!first.ok) throw new Error("save failed")
+    const sevenId = first.state.rules[0].id
+    await queueCustomRuleReminders(now)
+    expect(await markSent(sevenId, now)).toHaveLength(2)
+
+    const edited = await saveEventReminderRules(prisma, orgId, eventId, {
+      mode: "custom",
+      rules: [{ id: sevenId, unit: "hours", value: 168, enabled: true }],
+    }, now)
+    if (!edited.ok) throw new Error("save failed")
+    expect(edited.state.rules.map((r) => r.id)).toEqual([sevenId])
+    expect(await prisma.eventReminderRule.findUniqueOrThrow({ where: { id: sevenId } }))
+      .toMatchObject({ unit: "hours", value: 168, archivedAt: null })
+    expect(await prisma.reminderOccurrence.count({ where: { eventId, ruleId: sevenId, status: "sent" } })).toBe(2)
+    expect((await queueCustomRuleReminders(now)).queued).toBe(0)
+  })
+
+  it("never keeps two rows for one delay after ten edits", async () => {
+    const now = new Date("2030-06-03T08:00:00Z")
+    const edits: { unit: "hours" | "days"; value: number; enabled: boolean }[][] = [
+      [{ unit: "days", value: 7, enabled: true }],
+      [{ unit: "hours", value: 168, enabled: true }],
+      [{ unit: "days", value: 7, enabled: true }, { unit: "hours", value: 48, enabled: true }],
+      [{ unit: "hours", value: 72, enabled: true }],
+      [{ unit: "days", value: 3, enabled: true }, { unit: "days", value: 7, enabled: true }],
+      [{ unit: "days", value: 2, enabled: true }, { unit: "hours", value: 72, enabled: true }, { unit: "days", value: 14, enabled: true }],
+      [{ unit: "hours", value: 48, enabled: true }],
+      [{ unit: "days", value: 7, enabled: true }, { unit: "days", value: 2, enabled: true }],
+      [{ unit: "hours", value: 336, enabled: true }],
+      [{ unit: "days", value: 14, enabled: true }, { unit: "hours", value: 168, enabled: true }, { unit: "days", value: 3, enabled: true }],
+    ]
+    for (const rules of edits) {
+      expect(await saveEventReminderRules(prisma, orgId, eventId, { mode: "custom", rules }, now)).toMatchObject({ ok: true })
+      const rows = await prisma.eventReminderRule.findMany({ where: { eventId } })
+      const perHours = new Map<number, number>()
+      for (const row of rows) {
+        const hours = row.unit === "days" ? row.value * 24 : row.value
+        perHours.set(hours, (perHours.get(hours) ?? 0) + 1)
+      }
+      expect([...perHours.values()].every((count) => count === 1)).toBe(true)
+    }
   })
 
   it("cancels a removed rule's queued outbox row instead of sending it", async () => {
@@ -343,6 +427,100 @@ describe.skipIf(!url)("custom reminder rules settings on Postgres (#1139)", () =
     })
     const run = await queueCustomRuleReminders(new Date("2030-07-10T06:00:00Z"))
     expect(run.queued).toBeGreaterThanOrEqual(2)
+  })
+
+  it("finds a later day whose earlier delay is due beyond 2 000 nearer registrations", async () => {
+    // The counter-example of #1139: the nearest 2 000 registrations are on 10 June and already got
+    // their 7-day reminder (their next one is 2 h before the shift). The 2 001st is on 11 June,
+    // whose 7-day reminder is due on 4 June. A cap on the nearest registrations hid that earlier
+    // send; the preview must now find it.
+    const now = new Date("2030-06-04T07:00:00Z")
+    const bigEvent = await prisma.event.create({
+      data: {
+        organizationId: orgId, slug: "grand", title: "Grand",
+        startDate: new Date("2030-06-10T00:00:00Z"), endDate: new Date("2030-06-11T00:00:00Z"),
+        publicStatus: "published", remindersEnabled: true,
+      },
+    })
+    const createdVolunteers: string[] = []
+    try {
+      const nearShift = await prisma.shift.create({
+        data: { eventId: bigEvent.id, roleName: "Bar", label: "Bar", date: new Date("2030-06-10T00:00:00Z"), startTime: "10:00", endTime: "18:00", capacity: 2_500, status: "open" },
+      })
+      const farShift = await prisma.shift.create({
+        data: { eventId: bigEvent.id, roleName: "Bar", label: "Bar", date: new Date("2030-06-11T00:00:00Z"), startTime: "10:00", endTime: "18:00", capacity: 5, status: "open" },
+      })
+      const nearEmails = Array.from({ length: 2_000 }, (_, index) => `${tag}-grand-near-${index}@example.com`)
+      await prisma.volunteer.createMany({
+        data: nearEmails.map((email, index) => ({ organizationId: orgId, firstName: `Near${index}`, lastName: "Martin", email })),
+      })
+      const nearVolunteers = await prisma.volunteer.findMany({
+        where: { organizationId: orgId, email: { in: nearEmails } },
+        select: { id: true },
+      })
+      const farVolunteer = await prisma.volunteer.create({
+        data: { organizationId: orgId, firstName: "Far", lastName: "Martin", email: `${tag}-grand-far@example.com` },
+      })
+      createdVolunteers.push(...nearVolunteers.map((volunteer) => volunteer.id), farVolunteer.id)
+      await prisma.registration.createMany({
+        data: [
+          ...nearVolunteers.map((volunteer, index) => ({
+            eventId: bigEvent.id, shiftId: nearShift.id, volunteerId: volunteer.id, status: "active",
+            createdAt: new Date("2030-01-01T00:00:00Z"), editTokenHash: `${tag}-grand-near-${index}`,
+          })),
+          {
+            eventId: bigEvent.id, shiftId: farShift.id, volunteerId: farVolunteer.id, status: "active",
+            createdAt: new Date("2030-01-01T00:00:00Z"), editTokenHash: `${tag}-grand-far`,
+          },
+        ],
+      })
+
+      const saved = await saveEventReminderRules(prisma, orgId, bigEvent.id, {
+        mode: "custom",
+        rules: [rule({ value: 7 }), rule({ unit: "hours", value: 2 })],
+      }, now)
+      if (!saved.ok) throw new Error("save failed")
+      const sevenId = saved.state.rules[0].id
+      await prisma.reminderOccurrence.createMany({
+        data: nearVolunteers.map((volunteer) => ({
+          eventId: bigEvent.id, volunteerId: volunteer.id, localDay: "2030-06-10", ruleId: sevenId,
+          dueAt: new Date("2030-06-03T08:00:00Z"), status: "sent", sentAt: now,
+        })),
+      })
+
+      expect((await loadEventReminderRulesState(prisma, orgId, bigEvent.id, now))?.preview).toMatchObject({
+        state: "scheduled",
+        ruleId: sevenId,
+        dueAt: "2030-06-04T08:00:00.000Z",
+        localDay: "2030-06-11",
+        recipientCount: 1,
+        shiftCount: 1,
+      })
+    } finally {
+      await prisma.event.deleteMany({ where: { id: bigEvent.id } })
+      if (createdVolunteers.length > 0) {
+        await prisma.volunteer.deleteMany({ where: { id: { in: createdVolunteers } } })
+      }
+    }
+  })
+
+  it("previews a queued occurrence for a day outside every horizon", async () => {
+    await prisma.shift.update({ where: { id: shiftId }, data: { date: new Date("2030-09-10T00:00:00Z"), startTime: "10:00" } })
+    const now = new Date("2030-06-03T08:00:00Z")
+    const saved = await saveEventReminderRules(prisma, orgId, eventId, { mode: "custom", rules: [rule({ unit: "hours", value: 2 })] }, now)
+    if (!saved.ok) throw new Error("save failed")
+    const ruleId = saved.state.rules[0].id
+    await prisma.reminderOccurrence.createMany({
+      data: volunteerIds.map((volunteerId) => ({
+        eventId, volunteerId, localDay: "2030-09-10", ruleId,
+        dueAt: new Date("2030-09-10T06:00:00Z"), status: "queued",
+      })),
+    })
+
+    expect((await stateAt(now))?.preview).toMatchObject({
+      state: "queued", ruleId, dueAt: "2030-09-10T06:00:00.000Z", localDay: "2030-09-10",
+      recipientCount: 2, shiftCount: 2,
+    })
   })
 
   it("two concurrent saves leave exactly one consistent set", async () => {
