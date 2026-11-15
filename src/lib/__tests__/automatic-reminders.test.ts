@@ -98,3 +98,50 @@ describe("reminders box (#705)", () => {
     }
   })
 })
+
+describe("custom reminder rules in the summaries (#1139, PR 2)", () => {
+  const customRules = [
+    { unit: "days", value: 7, enabled: true },
+    { unit: "hours", value: 2, enabled: true },
+  ] as const
+  const CUSTOM_LINK = { href: "/admin/events/evt-1/message#event-reminder-rules", label: "Délais des rappels de l'événement" }
+
+  it("describes the event's own delays, never the legacy three, and ignores the organisation switches", () => {
+    const s = remindersSummary(facts({ customRules, organization: { j2: false, j1: false, dd: false } }))
+    expect(s).toMatchObject({ state: "custom", ok: true, title: "Rappels automatiques avec vos délais" })
+    expect(s.sent.map((x) => x.label)).toEqual(["Rappel 7 jours avant", "Rappel 2 heures avant"])
+    expect(s.sent.every((x) => x.timing === "")).toBe(true)
+    expect(s.notes[0]).toBe("Ces délais remplacent les trois rappels habituels et les paramètres de l'organisation pour cet événement.")
+    expect(s.notes.join("\n")).not.toMatch(/J-2|J-1|Rappel du jour/)
+    expect(s.links).toEqual([CUSTOM_LINK])
+  })
+
+  it("leaves disabled rules out and says how many are disabled", () => {
+    const s = remindersSummary(facts({ customRules: [customRules[0], { unit: "hours", value: 2, enabled: false }] }))
+    expect(s.sent.map((x) => x.label)).toEqual(["Rappel 7 jours avant"])
+    expect(s.notes).toContain("1 rappel est désactivé pour cet événement.")
+  })
+
+  it("says every rule is disabled, even without an upcoming shift", () => {
+    const s = remindersSummary(facts({
+      customRules: [{ unit: "days", value: 1, enabled: false }],
+      upcomingShifts: false,
+      published: false,
+    }))
+    expect(s).toMatchObject({ state: "custom-off", ok: false, title: "Rappels automatiques désactivés pour cet événement", sent: [] })
+    expect(s.notes[0]).toBe("Tous les rappels de cet événement sont désactivés : aucun email automatique ne partira. Activez au moins un rappel pour les rétablir.")
+    expect(s.notes.at(-1)).toBe("Ils ne partent que tant que l'événement est publié.")
+    expect(s.links).toEqual([CUSTOM_LINK])
+  })
+
+  it("keeps the event switch first and words its note without the legacy three", () => {
+    const s = remindersSummary(facts({ customRules, eventEnabled: false }))
+    expect(s).toMatchObject({ state: "event-off", title: "Rappels automatiques coupés pour cet événement" })
+    expect(s.notes[0]).toMatch(/quels que soient les paramètres de l'organisation et les délais choisis/)
+    expect(s.notes.join("\n")).not.toMatch(/J-2|J-1|Rappel du jour/)
+  })
+
+  it("still says nothing is left once every shift is past", () => {
+    expect(remindersState(facts({ customRules, upcomingShifts: false }))).toEqual({ kind: "no-upcoming-shift" })
+  })
+})

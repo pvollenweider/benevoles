@@ -62,7 +62,12 @@ export async function GET() {
   // them; only the member ids already scoped above are read. The history is unbounded per member
   // (the full archive), but the `in` filter bounds it to the exported members.
   const reminders = await prisma.reminderOccurrence.findMany({
-    where: { volunteerId: { in: members.map((m) => m.id) } },
+    // An archived rule is history: only its sent occurrences belong to the member's export, never
+    // a cancelled or pending reminder of a rule that no longer exists.
+    where: {
+      volunteerId: { in: members.map((m) => m.id) },
+      OR: [{ rule: { archivedAt: null } }, { status: "sent" }],
+    },
     orderBy: [{ dueAt: "desc" }, { localDay: "desc" }],
     select: {
       volunteerId: true, localDay: true, status: true, dueAt: true, sentAt: true,

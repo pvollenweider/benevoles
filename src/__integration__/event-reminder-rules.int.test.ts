@@ -1,4 +1,4 @@
-import { describe, it, expect, vi, beforeAll, afterAll, beforeEach } from "vitest"
+import { describe, it, expect, vi, beforeAll, afterAll, beforeEach, afterEach } from "vitest"
 
 /**
  * Custom reminder rules against a real Postgres (#1139). The unit tests of
@@ -87,6 +87,12 @@ describe.skipIf(!url)("custom reminder rules on Postgres (#1139)", () => {
     await prisma.notificationOutbox.deleteMany({ where: { organizationId: orgId } })
     await prisma.organization.deleteMany({ where: { slug: { startsWith: tag } } })
     await prisma.$disconnect()
+  })
+
+  afterEach(async () => {
+    // Also on a failed assertion: no row may leak into the next file or the next run.
+    await prisma.notificationOutbox.deleteMany({ where: { organizationId: orgId } })
+    await prisma.reminderOccurrence.deleteMany({ where: { eventId } })
   })
 
   beforeEach(async () => {
@@ -376,51 +382,69 @@ describe.skipIf(!url)("custom reminder rules on Postgres (#1139)", () => {
     expect(await deliverOutbox({ now: holdUntil, ids: [row.id] })).toMatchObject({ sent: 1 })
   })
 
-  it("two concurrent reschedules can only move the outbox earlier, never back later (#1139)", async () => {
+  /** Wait until a session is blocked on a lock, so the race below is deterministic. */
+  async function waitForWaitingLock(pattern: string) {
+    for (let attempt = 0; attempt < 300; attempt++) {
+      const rows = await prisma.$queryRaw<{ count: number }[]>`
+        SELECT count(*)::int AS count FROM pg_stat_activity
+        WHERE datname = current_database() AND wait_event_type = 'Lock' AND query ILIKE ${`%${pattern}%`}
+      `
+      if (Number(rows[0]?.count ?? 0) > 0) return
+      await new Promise((resolve) => setTimeout(resolve, 20))
+    }
+    throw new Error(`no session waited on ${pattern}`)
+  }
+
+  it("serialises two reschedules: the second reads fresh data and never moves the outbox later", async () => {
     await queueCustomRuleReminders(now)
     const [row] = await customOutbox()
     // Start from a deferred row at 16:00, as if the shift had been at 18:00.
     await prisma.notificationOutbox.update({ where: { id: row.id }, data: { nextAttemptAt: new Date("2030-06-01T16:00:00Z") } })
     await prisma.reminderOccurrence.updateMany({ where: { eventId }, data: { dueAt: new Date("2030-06-01T16:00:00Z") } })
 
-    const original = prisma.notificationOutbox.updateMany.bind(prisma.notificationOutbox)
-    let releaseFirst!: () => void
-    let releaseSecond!: () => void
-    let reachedFirst!: () => void
-    let reachedSecond!: () => void
-    const firstGate = new Promise<void>((resolve) => { releaseFirst = resolve })
-    const secondGate = new Promise<void>((resolve) => { releaseSecond = resolve })
-    const firstReached = new Promise<void>((resolve) => { reachedFirst = resolve })
-    const secondReached = new Promise<void>((resolve) => { reachedSecond = resolve })
-    const eight = Date.parse("2030-06-01T08:00:00Z")
-    const ten = Date.parse("2030-06-01T10:00:00Z")
-    const spy = vi.spyOn(prisma.notificationOutbox, "updateMany").mockImplementation((async (raw: never) => {
-      const args = raw as unknown as { where?: { id?: string }; data?: { nextAttemptAt?: Date } }
-      if (args.where?.id === row.id && args.data?.nextAttemptAt) {
-        const proposed = args.data.nextAttemptAt.getTime()
-        if (proposed === eight) { reachedFirst(); await firstGate }
-        if (proposed === ten) { reachedSecond(); await secondGate }
-      }
-      return original(raw)
-    }) as never)
+    // Hold the outbox row in another session: the first run acquires the advisory lock, reads
+    // the 10:00 shift, then blocks on the row update. While it is blocked, the shift moves to
+    // 12:00 and the second run queues up behind the advisory lock.
+    let releaseRow!: () => void
+    let rowLocked!: () => void
+    const rowGate = new Promise<void>((resolve) => { releaseRow = resolve })
+    const locked = new Promise<void>((resolve) => { rowLocked = resolve })
+    const holder = prisma.$transaction(async (tx) => {
+      await tx.$queryRaw`SELECT id FROM "NotificationOutbox" WHERE id = ${row.id} FOR UPDATE`
+      rowLocked()
+      await rowGate
+    }, { maxWait: 10_000, timeout: 30_000 })
+    await locked
 
-    try {
-      const at = new Date("2030-06-01T08:30:00Z")
-      const first = queueCustomRuleReminders(at)
-      await firstReached // first run read the 10:00 shift, proposing 08:00
-      // The shift moves later before the second run reads it: it proposes 10:00 from stale data.
-      await prisma.shift.update({ where: { id: shiftId }, data: { startTime: "12:00" } })
-      const second = queueCustomRuleReminders(at)
-      await secondReached
-      releaseFirst()
-      await first
-      releaseSecond()
-      await second
-    } finally {
-      spy.mockRestore()
-    }
+    const at = new Date("2030-06-01T08:30:00Z")
+    const first = queueCustomRuleReminders(at)
+    await waitForWaitingLock("NotificationOutbox")
+    await prisma.shift.update({ where: { id: shiftId }, data: { startTime: "12:00" } })
+    const second = queueCustomRuleReminders(at)
+    await waitForWaitingLock("pg_advisory_xact_lock")
+    releaseRow()
+    await holder
+    const [firstRun, secondRun] = await Promise.all([first, second])
 
-    const after = await prisma.notificationOutbox.findUniqueOrThrow({ where: { id: row.id } })
-    expect(after.nextAttemptAt.toISOString()).toBe("2030-06-01T08:00:00.000Z")
+    expect(firstRun.rescheduled).toBeGreaterThanOrEqual(1)
+    expect(secondRun.rescheduled).toBeGreaterThanOrEqual(1)
+    // The first wrote 08:00 (its 10:00 read). The second then read the 12:00 shift fresh (due
+    // 10:00) but its conditional write cannot move the outbox later, so it stays at 08:00.
+    expect((await prisma.notificationOutbox.findUniqueOrThrow({ where: { id: row.id } })).nextAttemptAt.toISOString())
+      .toBe("2030-06-01T08:00:00.000Z")
+    expect((await prisma.reminderOccurrence.findFirstOrThrow({ where: { eventId } })).dueAt.toISOString())
+      .toBe("2030-06-01T10:00:00.000Z")
+
+    // A hold written meanwhile is never bypassed: with the shift back at 10:00, the outbox may
+    // come forward to the hold (09:30), never to the bare shift instant (08:00).
+    await prisma.notificationOutbox.update({
+      where: { id: row.id },
+      data: { deliveryNotBefore: new Date("2030-06-01T09:30:00Z"), nextAttemptAt: new Date("2030-06-01T16:00:00Z") },
+    })
+    await prisma.reminderOccurrence.updateMany({ where: { eventId }, data: { dueAt: new Date("2030-06-01T16:00:00Z") } })
+    await prisma.shift.update({ where: { id: shiftId }, data: { startTime: "10:00" } })
+    expect((await queueCustomRuleReminders(at)).rescheduled).toBeGreaterThanOrEqual(1)
+    expect((await prisma.notificationOutbox.findUniqueOrThrow({ where: { id: row.id } })).nextAttemptAt.toISOString())
+      .toBe("2030-06-01T09:30:00.000Z")
   })
 })

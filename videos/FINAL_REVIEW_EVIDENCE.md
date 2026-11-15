@@ -1086,3 +1086,46 @@ porter une troisième ligne « Pour le poste … ». Vidéo à revoir, image seu
 sélecteurs inchangés, la capture ne coche aucun poste) : `event-program-pages-qr`. Aucune vidéo
 ne montre le lien « À lire avant ton créneau » : les scénarios des vidéos ne rattachent aucune
 page à un poste. Pas de nouveau rendu dans ce changement.
+
+## Délais de rappels propres à un événement (#1139, PR 2), 15 novembre 2026
+
+L’onglet **Messages**, section **Rappels**, gagne le formulaire « Délais des rappels automatiques »
+(radios « Délais habituels » / « Délais propres à cet événement », jusqu’à trois rappels, bloc
+« Prochain envoi »). Les captures et vidéos qui montrent cet écran ne sont pas régénérées dans ce
+travail (pas de base de données ni de tournage ici) :
+
+- `REMINDERS_CHANGES`, scène `manual-send` : la page Messages est filmée pour le rappel manuel ;
+  elle montre désormais le nouveau formulaire sous l’encadré des rappels automatiques. La narration
+  ne le mentionne pas. Aucun sélecteur ne casse : la scène cherche le bouton « Envoyer le rappel »,
+  qui reste à la même place relative.
+- `ORG_EMAIL_SETTINGS`, scène `event-reminders` : la page Messages est filmée et la narration dit
+  que, pour un événement publié, les rappels suivent les choix de l’organisation. Ce n’est plus vrai
+  pour un événement qui a ses propres délais : ils remplacent les trois interrupteurs. La capture
+  vérifie encore le texte « Rappels automatiques coupés pour cet événement », qui reste affiché.
+- `ADMIN_FEATURES_TOUR`, chapitre des messages : la narration décrit les rappels automatiques
+  habituels ; elle reste vraie pour un événement sans délai propre, mais n’annonce pas la nouveauté.
+  À reprendre à la prochaine régénération.
+
+Aucun de ces enregistrements n’a été refait ; les manifestes, scripts et sélecteurs n’ont pas été
+modifiés. `doc-img: unchanged` ne s’applique pas : les captures `admin-reminders` et
+`admin-message` montrent le nouvel écran et restent à régénérer avec une base jetable.
+
+### Correctifs après revue et exécution PostgreSQL (15 novembre 2026)
+
+- Migration additive `20261115120000_event_reminder_rule_archive` : `EventReminderRule.archivedAt`
+  nullable, sans valeur par défaut ni rétro-remplissage. Une règle retirée qui a au moins une
+  occurrence `sent` est archivée au lieu d'être supprimée ; ses occurrences envoyées continuent de
+  protéger les bénévoles déjà rappelés quand le même délai est recréé. Un événement dont toutes les
+  règles sont archivées repasse dans le chemin historique J-2 / J-1 / jour J.
+- L'aperçu utilise le même évaluateur que le cron sans son horizon de travail `maxHours + 24` ; il
+  montre un rappel de 2 h pour une inscription du mois suivant, bloque un brouillon, et la ligne
+  « Prochain rappel automatique » de l'aperçu vient de ce même aperçu. Un rappel annulé est de
+  nouveau proposé, un rappel en file reste visible.
+- Le cron attend le verrou d'enregistrement avec un budget de transaction explicite (30 s) et
+  poursuit les autres événements après une erreur ; le recalcul des occurrences en file est borné
+  à leurs bénévoles et jours locaux.
+- Vérifications sur la base PostgreSQL jetable : `npm run typecheck` et `npx eslint .` réussis,
+  `npx vitest run` 809 fichiers / 9 678 tests réussis, `npm run test:integration` deux fois de
+  suite 67 fichiers / 431 tests réussis. Les trois tests d'inactivité d'organisation n'ont pas
+  échoué ici. Aucun fichier de `public/doc-img/` n'a été modifié : les captures `admin-reminders`
+  et `admin-message` restent à régénérer par le propriétaire, et aucune vidéo n'a été refaite.

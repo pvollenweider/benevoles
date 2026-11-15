@@ -84,6 +84,9 @@ describe.skipIf(!url)("outbox and sending limits on Postgres (#810)", () => {
         kind: "registration_confirmation", recipient: { email: `${tag}-filler@example.org` }, organizationId: raceOrgId, data: {},
       }])
       rowIds.push(fillerId)
+      // `nextAttemptAt` defaults to the database clock, which can be a few milliseconds after
+      // this test's `at`: pin it, or `deliverOutbox({ now: at })` may not see the row at all.
+      await prisma.notificationOutbox.update({ where: { id: fillerId }, data: { nextAttemptAt: at } })
       expect(await deliverOutbox({ ids: [fillerId], now: at })).toMatchObject({ sent: 1 })
 
       const [rowId] = await enqueueNotifications([{

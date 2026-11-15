@@ -80,7 +80,9 @@ async function run(req: Request) {
       where: {
         status: "active",
         [win.field]: null,
-        event: { remindersEnabled: true, publicStatus: "published", reminderRules: { none: {} } },
+        // An event whose rules are all archived is back in default mode: an archived row is
+        // history, not a custom delay, so the legacy windows apply again.
+        event: { remindersEnabled: true, publicStatus: "published", reminderRules: { none: { archivedAt: null } } },
         shift: { status: { not: "cancelled" } },
       },
       include: {

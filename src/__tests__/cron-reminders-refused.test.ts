@@ -97,7 +97,7 @@ describe("POST /api/cron/reminders", () => {
     expect(registrationFindMany).toHaveBeenCalledWith(expect.objectContaining({
       where: expect.objectContaining({
         status: "active",
-        event: { remindersEnabled: true, publicStatus: "published", reminderRules: { none: {} } },
+        event: { remindersEnabled: true, publicStatus: "published", reminderRules: { none: { archivedAt: null } } },
       }),
     }))
   })

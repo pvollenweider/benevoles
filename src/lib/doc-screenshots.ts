@@ -40,6 +40,7 @@ export const DOC_SCREENSHOTS: Record<string, string[]> = {
   "admin-group-links": ["src/app/admin/events/[id]/share/page.tsx"],
   "admin-embed": ["src/app/admin/events/[id]/share/page.tsx"],
   "admin-reminders": ["src/app/admin/events/[id]/message/page.tsx"],
+  "admin-reminder-rules": ["src/components/admin/EventReminderRulesForm.tsx"],
   "admin-event-review": ["src/app/admin/events/[id]/review/page.tsx"],
   "admin-roster-publish-note": ["src/app/admin/events/[id]/review/page.tsx"],
   "admin-roster-setting": ["src/app/admin/events/[id]/edit/page.tsx"],

@@ -7,6 +7,8 @@ import { useRef, useState } from "react"
 import { cleanup, fireEvent, render, screen, waitFor } from "@testing-library/react"
 
 import FormStatus from "@/components/FormStatus"
+import EventReminderRulesForm from "@/components/admin/EventReminderRulesForm"
+import type { EventReminderRulesState } from "@/lib/reminder-rules"
 import EventPagesManager, { type EventPageRow } from "@/components/admin/EventPagesManager"
 import ManualAddForm from "@/components/admin/registrations/ManualAddForm"
 import { EMPTY_ADD_FORM, type AddFormValues, type Registration } from "@/components/admin/registrations/types"
@@ -290,5 +292,31 @@ describe("virtual screen reader — spoken journeys (#739)", () => {
     expect(input.getAttribute("aria-describedby")!.split(" ")[0]).toMatch(/-error$/)
     expect(screen.getByRole("alert")).toBeEmptyDOMElement()
     expect((await reader.spokenPhraseLog()).filter((phrase) => phrase.includes(message))).toHaveLength(1)
+  })
+
+  // The per-event reminder rules (#1139): a bounds error is heard once, with the delay input that
+  // takes the focus and says the message; the always-mounted statuses stay silent.
+  it("reads a reminder delay error once, on the input that takes focus", async () => {
+    const initialState: EventReminderRulesState = {
+      mode: "custom",
+      rules: [{ id: "r1", unit: "hours", value: 1, enabled: true }],
+      preview: {
+        state: "scheduled", reason: null, detail: null, ruleId: "r1", dueAt: "2030-06-12T06:00:00.000Z",
+        localDay: "2030-06-12", recipientCount: 2, shiftCount: 3,
+      },
+    }
+    vi.stubGlobal("fetch", vi.fn())
+    const view = render(<EventReminderRulesForm eventId="evt-1" timeZone="Europe/Zurich" initialState={initialState} />)
+    const reader = await startVirtualScreenReader(view.container)
+    const message = "Rappel 1 : un rappel en heures doit être compris entre 2 et 336 heures."
+    fireEvent.click(screen.getByRole("button", { name: "Enregistrer les rappels" }))
+    await waitForSpoken(reader, message)
+
+    const log = await reader.spokenPhraseLog()
+    const heard = log.filter((phrase) => phrase.includes(message))
+    expect(heard).toHaveLength(1)
+    expect(heard[0]).toContain("textbox, Délai")
+    expect(log.filter((phrase) => phrase.startsWith("assertive:") && phrase.includes(message))).toEqual([])
+    expect(screen.getByRole("textbox", { name: "Délai" })).toHaveFocus()
   })
 })

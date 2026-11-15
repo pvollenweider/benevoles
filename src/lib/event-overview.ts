@@ -8,8 +8,13 @@
 
 import { shiftInstants } from "./ics"
 import { localDay } from "./day-of"
-import { REMINDER_WINDOW_HOURS } from "./automatic-reminders"
+import { REMINDER_WINDOW_HOURS, type RemindersState } from "./automatic-reminders"
 import { REMINDER_LABELS, type ReminderKey } from "./notification-settings"
+import {
+  reminderRuleDelayBefore,
+  type CustomReminderPreviewView,
+  type EventReminderRuleView,
+} from "./reminder-rules"
 
 const plural = (n: number, one: string, many: string) => `${n} ${n > 1 ? many : one}`
 
@@ -23,7 +28,8 @@ export function placesSentence(p: { capacity: number; confirmed: number; request
   return `${parts.join(", ")}.`
 }
 
-export type NextReminder = { key: ReminderKey; label: string; /** "YYYY-MM-DD" in the organisation's zone. */ day: string }
+/** `key` is a `ReminderKey` for the legacy path, the rule's index for a custom one. */
+export type NextReminder = { key: string; label: string; /** "YYYY-MM-DD" in the organisation's zone. */ day: string }
 
 /**
  * The next automatic reminder the hourly cron will send, for the event's shifts still to come:
@@ -54,6 +60,38 @@ export function nextAutomaticReminder(
     }
   }
   return best ? { key: best.key, label: REMINDER_LABELS[best.key].label, day: localDay(new Date(best.at), timeZone) } : null
+}
+
+/**
+ * The legacy next reminder of the overview (#705, #1139): both `on` and `partly-off` send the
+ * reminders in `state.on`; only `partly-off` was lost when the page switched to `kind === "on"`.
+ */
+export function nextLegacyReminder(
+  state: RemindersState,
+  shifts: { date: string; startTime: string; endTime: string }[],
+  now: Date,
+  timeZone: string,
+): NextReminder | null {
+  return state.kind === "on" || state.kind === "partly-off"
+    ? nextAutomaticReminder(shifts, state.on, now, timeZone)
+    : null
+}
+
+/**
+ * The overview line of an event with its own rules (#1139), read from the same preview the
+ * message page shows (`loadEventReminderRulesState` + `nextEventReminderPreview`), never from a
+ * second computation over the event's shifts: a volunteer registered only on the later shift of
+ * the day can be due before the day's first shift is.
+ */
+export function nextCustomReminderFromPreview(
+  preview: CustomReminderPreviewView,
+  rules: readonly EventReminderRuleView[],
+  timeZone: string,
+): NextReminder | null {
+  if (preview.state !== "scheduled" && preview.state !== "queued") return null
+  const rule = rules.find((candidate) => candidate.id === preview.ruleId)
+  if (!rule) return null
+  return { key: `rule-${rule.id}`, label: reminderRuleDelayBefore(rule), day: localDay(new Date(preview.dueAt), timeZone) }
 }
 
 /** « « Infos parking », le 3 octobre, à 25 personnes. » */

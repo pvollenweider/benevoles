@@ -557,6 +557,27 @@ async function run() {
     await visit(ev("/message"))
     await save(a, "admin-reminders", { target: a.getByRole("region", { name: "Rappels automatiques activés" }) })
   })
+  // The event's own reminder delays (#1139): set two, capture the form with its next send, then
+  // put the usual delays back so the other captures keep showing the default reminders.
+  await shot("admin-reminder-rules", async () => {
+    await visit(ev("/message"))
+    const form = a.getByRole("form", { name: "Délais des rappels automatiques" })
+    const saveRules = async () => {
+      await form.getByRole("button", { name: "Enregistrer les rappels" }).click()
+      await form.getByText(/^Rappels enregistrés\./).waitFor()
+    }
+    await form.getByLabel("Délais propres à cet événement").check()
+    await form.getByLabel("Délai", { exact: true }).first().fill("3")
+    await form.getByRole("button", { name: "Ajouter un rappel" }).click()
+    await form.getByLabel("Délai", { exact: true }).nth(1).fill("2")
+    await form.getByLabel("Unité").nth(1).selectOption({ label: "heures" })
+    await saveRules()
+    await visit(ev("/message"))
+    await save(a, "admin-reminder-rules", { target: a.locator("#event-reminder-rules") })
+    await a.getByLabel("Délais habituels : 2 jours avant, la veille et le jour même").check()
+    await a.getByRole("button", { name: "Enregistrer les rappels" }).click()
+    await a.getByText(/^Rappels enregistrés\./).waitFor()
+  })
   await shot("admin-event-archive", async () => {
     await visit(ev("/print"))
     await save(a, "admin-event-archive", { target: a.getByRole("region", { name: "Archive" }) })
