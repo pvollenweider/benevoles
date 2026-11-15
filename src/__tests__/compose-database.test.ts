@@ -26,6 +26,8 @@ const cleanEnv = (extra: Record<string, string> = {}) =>
 const RESERVED = "p@ss:w/rd?#%x y!'*()&=+[]"
 // A stand-in for the session key the operator generates (openssl rand -base64 32).
 const SESSION_KEY = "q8V3nZk1LwYt0bRj5sXe2HfUoP9mCaD4gN7iK6lM+Qw="
+// A stand-in for the value shared by the app and the cron service.
+const TASKS_KEY = "Zt4Hn8Lq1VxB6cRy0JmW3pKe7UaS9dGf2oNiT5lY+Mw="
 
 describe("database URL built from the POSTGRES_* variables", () => {
   it("encodes every reserved character, so the password reads back unchanged", () => {
@@ -131,7 +133,7 @@ describe.skipIf(!hasCompose)("docker compose config", () => {
   )
 
   it("renders with a test password: no published database port, same password on both sides", () => {
-    const out = render({ POSTGRES_PASSWORD: RESERVED, AUTH_SECRET: SESSION_KEY })
+    const out = render({ POSTGRES_PASSWORD: RESERVED, AUTH_SECRET: SESSION_KEY, CRON_SECRET: TASKS_KEY })
     expect(out.status, out.stderr).toBe(0)
     const config = JSON.parse(out.stdout)
     expect(config.services.postgres.ports ?? []).toEqual([])
@@ -139,16 +141,39 @@ describe.skipIf(!hasCompose)("docker compose config", () => {
     expect(config.services.app.environment.POSTGRES_PASSWORD).toBe(RESERVED)
     expect(config.services.app.environment.DATABASE_URL).toBeUndefined()
     expect(config.services.app.environment.AUTH_SECRET).toBe(SESSION_KEY)
+    // #761: the app and the cron service receive the same value; the app is checked on /api/health.
+    expect(config.services.app.environment.CRON_SECRET).toBe(TASKS_KEY)
+    expect(config.services.cron.environment.CRON_SECRET).toBe(TASKS_KEY)
+    expect(config.services.cron.depends_on.app.condition).toBe("service_healthy")
+    expect(config.services.app.healthcheck.test.join(" ")).toContain("/api/health")
+    // Optional settings are passed only when set: none here.
+    expect(config.services.app.environment.AUTH_TRUST_HOST ?? null).toBeNull()
+    expect(config.services.app.environment.AUTH_URL).toBe("http://localhost:3000")
+  })
+
+  it("passes an optional setting through when it is set, and follows the public URL for sign-in", () => {
+    const out = render({ POSTGRES_PASSWORD: RESERVED, AUTH_SECRET: SESSION_KEY, CRON_SECRET: TASKS_KEY, SITE_NAME: "Fête du village", NEXT_PUBLIC_APP_URL: "https://benevoles.example.org" })
+    expect(out.status, out.stderr).toBe(0)
+    const config = JSON.parse(out.stdout)
+    expect(config.services.app.environment.SITE_NAME).toBe("Fête du village")
+    expect(config.services.app.environment.AUTH_URL).toBe("https://benevoles.example.org")
+  })
+
+  it("refuses to render without the secret of the scheduled tasks, saying how to generate one", () => {
+    const out = render({ POSTGRES_PASSWORD: RESERVED, AUTH_SECRET: SESSION_KEY })
+    expect(out.status).not.toBe(0)
+    expect(out.stderr).toMatch(/CRON_SECRET/)
+    expect(out.stderr).toMatch(/openssl rand/)
   })
 
   it("refuses to render without the password", () => {
-    const out = render({ AUTH_SECRET: SESSION_KEY })
+    const out = render({ AUTH_SECRET: SESSION_KEY, CRON_SECRET: TASKS_KEY })
     expect(out.status).not.toBe(0)
     expect(out.stderr).toMatch(/POSTGRES_PASSWORD/)
   })
 
   it("refuses to render without AUTH_SECRET, saying how to generate one", () => {
-    const out = render({ POSTGRES_PASSWORD: RESERVED })
+    const out = render({ POSTGRES_PASSWORD: RESERVED, CRON_SECRET: TASKS_KEY })
     expect(out.status).not.toBe(0)
     expect(out.stderr).toMatch(/AUTH_SECRET/)
     expect(out.stderr).toMatch(/openssl rand/)
