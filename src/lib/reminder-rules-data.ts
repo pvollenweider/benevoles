@@ -19,6 +19,7 @@ import {
   nextEventReminderPreview,
   nextReminderAttemptAt,
   reminderPreviewView,
+  reminderRuleHours,
   reminderRulesChange,
   reminderRuleStatus,
   validateReminderRulesInput,
@@ -30,6 +31,7 @@ import {
 } from "./reminder-rules"
 import {
   customReminderEventWithRulesSelect,
+  isActiveReminderRule,
   loadCustomReminderGroups,
   loadCustomReminderOccurrences,
   lockReminderRules,
@@ -59,7 +61,7 @@ const view = (rule: { id: string; unit: string; value: number; enabled: boolean 
 })
 
 function toRules(event: CustomReminderEventWithRules): ReminderRuleInput[] {
-  return event.reminderRules.map((rule) => ({
+  return event.reminderRules.filter(isActiveReminderRule).map((rule) => ({
     id: rule.id,
     unit: rule.unit,
     value: rule.value,
@@ -75,7 +77,9 @@ async function buildState(
 ): Promise<EventReminderRulesState> {
   const rules = toRules(event)
   const occurrences = await loadCustomReminderOccurrences(db, event.id)
-  const groups = await loadCustomReminderGroups(db, event, rules, now, occurrences)
+  // The preview is the one evaluator, only its loading window differs from the cron's: no
+  // `maxHours + 24` work horizon, so a 2 h reminder for next month's registration is still shown.
+  const groups = await loadCustomReminderGroups(db, event, rules, now, occurrences, { preview: true })
   const organizationBlockedReason = await organizationSendingVerdict(event.organizationId, undefined, db)
   const preview = nextEventReminderPreview({
     rules,
@@ -83,11 +87,12 @@ async function buildState(
     now,
     occurrences,
     eventRemindersEnabled: event.remindersEnabled,
+    eventPublished: event.publicStatus === "published",
     organizationBlockedReason,
   })
   return {
     mode: eventUsesCustomReminderRules(rules) ? "custom" : "default",
-    rules: event.reminderRules.map(view),
+    rules: event.reminderRules.filter(isActiveReminderRule).map(view),
     preview: reminderPreviewView(preview),
   }
 }
@@ -184,15 +189,48 @@ export async function saveEventReminderRules(
       }
     }
 
-    const after: ValidReminderRule[] = validation.mode === "default"
+    const archivedRows = event.reminderRules.filter((rule) => !isActiveReminderRule(rule))
+    const archivedById = new Set(archivedRows.map((rule) => rule.id))
+    const afterInput: ValidReminderRule[] = validation.mode === "default"
       ? []
       : validation.rules.map((rule) => ({ ...rule, id: rule.id }))
+    const byHours = (rules: readonly ReminderRuleInput[]): Map<number, ReminderRuleInput> => {
+      const map = new Map<number, ReminderRuleInput>()
+      for (const rule of rules) {
+        const hours = reminderRuleHours(rule)
+        if (hours !== null && !map.has(hours)) map.set(hours, rule)
+      }
+      return map
+    }
+    // A new row with the delay of a row removed in this same save keeps that row (and its sent
+    // occurrences); otherwise it revives an archived row of the same delay. Creating a fresh id
+    // would forget who was already reminded and send the reminder again.
+    const activeRemovedByHours = byHours(before.filter((rule) => !afterInput.some((candidate) => candidate.id === rule.id)))
+    const archivedByHours = byHours(archivedRows)
+    const after: ValidReminderRule[] = afterInput.map((rule) => {
+      if (rule.id) return rule
+      const hours = reminderRuleHours(rule)
+      if (hours === null) return rule
+      const activeMatch = activeRemovedByHours.get(hours)
+      if (activeMatch) {
+        activeRemovedByHours.delete(hours)
+        return { ...rule, id: activeMatch.id }
+      }
+      const archivedMatch = archivedByHours.get(hours)
+      if (archivedMatch) {
+        archivedByHours.delete(hours)
+        return { ...rule, id: archivedMatch.id }
+      }
+      return rule
+    })
     const afterById = new Map(after.filter((rule) => rule.id).map((rule) => [rule.id, rule]))
     const kept = after.filter((rule) => rule.id && existing.has(rule.id))
     const keptIds = new Set(kept.map((rule) => rule.id))
     const removed = before.filter((rule) => !keptIds.has(rule.id))
     const removedIds = new Set(removed.map((rule) => rule.id))
-    const disabledIds = new Set(kept.filter((rule) => !rule.enabled).map((rule) => rule.id))
+    const revived = after.filter((rule) => rule.id && archivedById.has(rule.id))
+    const created = after.filter((rule) => !rule.id)
+    const disabledIds = new Set(after.filter((rule) => rule.id && !rule.enabled).map((rule) => rule.id))
     const delayChangedIds = new Set(
       kept.filter((rule) => {
         const previous = existing.get(rule.id)!
@@ -268,20 +306,48 @@ export async function saveEventReminderRules(
       }
     }
 
-    // Keep, create and remove rows. `displayOrder` follows the screen order.
+    // Keep, revive, create and remove rows. `displayOrder` follows the screen order.
     for (const rule of kept) {
       await tx.eventReminderRule.update({
         where: { id: rule.id },
         data: { unit: rule.unit, value: rule.value, enabled: rule.enabled, displayOrder: rule.displayOrder },
       })
     }
-    for (const rule of after.filter((candidate) => !candidate.id)) {
+    for (const rule of revived) {
+      await tx.eventReminderRule.update({
+        where: { id: rule.id },
+        data: {
+          unit: rule.unit, value: rule.value, enabled: rule.enabled, displayOrder: rule.displayOrder,
+          archivedAt: null,
+        },
+      })
+    }
+    for (const rule of created) {
       await tx.eventReminderRule.create({
         data: { eventId, unit: rule.unit, value: rule.value, enabled: rule.enabled, displayOrder: rule.displayOrder },
       })
     }
     if (removed.length > 0) {
-      await tx.eventReminderRule.deleteMany({ where: { id: { in: removed.map((rule) => rule.id) }, eventId } })
+      // A removed rule with at least one sent occurrence is archived, not deleted: recreating the
+      // same delay later must keep protecting the volunteers already reminded. A rule without
+      // sent history is deleted as before.
+      const sent = await tx.reminderOccurrence.groupBy({
+        by: ["ruleId"],
+        where: { ruleId: { in: [...removedIds] }, status: "sent" },
+        _count: { _all: true },
+      })
+      const withSent = new Set<string>(sent.map((row: { ruleId: string }) => row.ruleId))
+      const toArchive = removed.filter((rule) => withSent.has(rule.id))
+      const toDelete = removed.filter((rule) => !withSent.has(rule.id))
+      if (toArchive.length > 0) {
+        await tx.eventReminderRule.updateMany({
+          where: { id: { in: toArchive.map((rule) => rule.id) }, eventId },
+          data: { archivedAt: now, enabled: false },
+        })
+      }
+      if (toDelete.length > 0) {
+        await tx.eventReminderRule.deleteMany({ where: { id: { in: toDelete.map((rule) => rule.id) }, eventId } })
+      }
     }
 
     const state = await loadEventReminderRulesState(tx, organizationId, eventId, now)

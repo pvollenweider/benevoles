@@ -169,7 +169,7 @@ export async function resolveCustomRuleReminder(payload: NotificationPayload, no
     return { kind: "cancel", reason: "Rappels coupés pour cet événement." }
   }
   const rule = await prisma.eventReminderRule.findUnique({ where: { id: occurrence.ruleId } })
-  if (!rule || !rule.enabled || rule.eventId !== event.id) {
+  if (!rule || rule.archivedAt || !rule.enabled || rule.eventId !== event.id) {
     return { kind: "cancel", reason: "Rappel désactivé pour cet événement." }
   }
   const registrations = await prisma.registration.findMany({

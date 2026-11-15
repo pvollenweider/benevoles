@@ -104,9 +104,15 @@ describe("bounds and duplicate delays (#1139)", () => {
 })
 
 describe("replacement of the defaults (#1139)", () => {
-  it("no rule row keeps the legacy path; any row, even disabled, switches to the event's rules", () => {
+  it("no rule row keeps the legacy path; any active row, even disabled, switches to the event's rules", () => {
     expect(eventUsesCustomReminderRules([])).toBe(false)
     expect(eventUsesCustomReminderRules([rule({ enabled: false })])).toBe(true)
+    // An archived row is history, not a rule: all rows archived is default mode again.
+    expect(eventUsesCustomReminderRules([rule({ enabled: false, archivedAt: new Date("2030-06-01T00:00:00Z") })])).toBe(false)
+    expect(eventUsesCustomReminderRules([
+      rule({ id: "old", archivedAt: new Date("2030-06-01T00:00:00Z") }),
+      rule({ id: "active" }),
+    ])).toBe(true)
   })
 
   it("uses the event's rule, never the three legacy windows", () => {
@@ -281,8 +287,12 @@ describe("sent suppression (#1139)", () => {
       .toMatchObject({ state: "queued", ruleId: "rule-1", recipientCount: 1, shiftCount: 1 })
   })
 
-  it("a cancelled occurrence is recomputed from the current registrations", () => {
+  it("a cancelled occurrence is recomputed from the current registrations, in both evaluators", () => {
     expect(triggeredCustomReminders(groups, [rule()], now, [key("cancelled")])).toHaveLength(1)
+    // The preview must not hide it either: disable a queued rule, re-enable it, and the cron
+    // queues a reminder the preview omitted before this shared terminal-status policy.
+    expect(nextEventReminderPreview({ rules: [rule()], groups, now, occurrences: [key("cancelled")], eventRemindersEnabled: true }))
+      .toMatchObject({ state: "queued", ruleId: "rule-1", recipientCount: 1, shiftCount: 1 })
   })
 
   it("a failed occurrence is terminal and never reopened by the hourly run", () => {
@@ -347,6 +357,23 @@ describe("preview evaluator (#1139)", () => {
   it("blocked when the event has no rule at all (legacy path)", () => {
     expect(nextEventReminderPreview({ rules: [], groups, now, eventRemindersEnabled: true }))
       .toMatchObject({ state: "blocked", reason: "no-rules" })
+  })
+
+  it("blocked for a draft event, as the cron and the delivery resolver refuse it", () => {
+    expect(nextEventReminderPreview({ rules: [rule()], groups, now, eventRemindersEnabled: true, eventPublished: false }))
+      .toMatchObject({ state: "blocked", reason: "event-unpublished" })
+  })
+
+  it("uses the volunteer's own shift: at 09:00 a 16:00 volunteer is due at 14:00 local even if the day started at 08:00", () => {
+    // The overview used to count back from the day's first shift (08:00), which had started; the
+    // shared evaluator reads each volunteer's group, so the 16:00-only volunteer still has a send.
+    const late = groupsOf([registration({ id: "late", volunteerId: "vol-late", startTime: "16:00" })])
+    const early = groupsOf([registration({ id: "early", volunteerId: "vol-early", startTime: "08:00" })])
+    const preview = nextEventReminderPreview({
+      rules: [rule({ value: 2 })], groups: [...early, ...late], now: new Date("2030-06-01T09:00:00Z"), eventRemindersEnabled: true,
+    })
+    // 16:00 in Europe/Zurich is 14:00Z; the 2 h rule is due 12:00Z (14:00 local).
+    expect(preview).toMatchObject({ state: "scheduled", dueAt: new Date("2030-06-01T12:00:00Z"), recipientCount: 1 })
   })
 })
 
@@ -426,6 +453,8 @@ describe("settings payload and copy (#1139, PR 2)", () => {
     }, "Europe/Zurich")).toBe("Un rappel est en cours d'envoi pour 1 personne (1 créneau).")
     expect(customReminderPreviewSentence({ state: "blocked", reason: "event-off", detail: null, ruleId: null, dueAt: null, localDay: null, recipientCount: 0, shiftCount: 0 }, "Europe/Zurich"))
       .toBe("Les rappels automatiques sont coupés pour cet événement : aucun rappel ne partira.")
+    expect(customReminderPreviewSentence({ state: "blocked", reason: "event-unpublished", detail: null, ruleId: null, dueAt: null, localDay: null, recipientCount: 0, shiftCount: 0 }, "Europe/Zurich"))
+      .toBe("L'événement n'est pas publié : les rappels ne partiront qu'après sa publication.")
     expect(customReminderPreviewSentence({ state: "blocked", reason: "organization-blocked", detail: "org_inactive", ruleId: null, dueAt: null, localDay: null, recipientCount: 0, shiftCount: 0 }, "Europe/Zurich"))
       .toBe("L'organisation est désactivée : aucun email ne partira.")
     expect(customReminderPreviewSentence({ state: "blocked", reason: "no-enabled-rule", detail: null, ruleId: null, dueAt: null, localDay: null, recipientCount: 0, shiftCount: 0 }, "Europe/Zurich"))

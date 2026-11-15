@@ -45,6 +45,8 @@ export type ReminderRuleInput = {
   value: number
   enabled: boolean
   displayOrder?: number
+  /** Set on a removed rule that already sent an occurrence: hidden, never counted nor sent. */
+  archivedAt?: Date | null
 }
 
 export type ValidReminderRule = {
@@ -174,9 +176,11 @@ export function validateReminderRulesInput(input: ReminderRulesInput): ReminderR
  * The single switch between the legacy defaults and an event's own rules (#1139): no row means
  * exactly today's behaviour, at least one row (even all disabled) means the legacy path is off
  * for that event. Organisation switches never apply to an event that has its own rules.
+ * Archived rows are history, not rules: an event whose rows are all archived is back in default
+ * mode, so the legacy path applies again.
  */
-export function eventUsesCustomReminderRules(rules: readonly unknown[]): boolean {
-  return rules.length > 0
+export function eventUsesCustomReminderRules<T extends object>(rules: readonly T[]): boolean {
+  return rules.some((rule) => !("archivedAt" in rule) || !(rule as { archivedAt?: Date | null }).archivedAt)
 }
 
 /** « 7 jours », « 2 heures »: one delay in words, singular agreed. */
@@ -293,10 +297,10 @@ export function nextReminderAttemptAt(dueAt: Date, deliveryNotBefore: Date | nul
  */
 export function reminderRuleStatus<T extends ReminderRuleRegistration>(
   group: ReminderGroup<T>,
-  rule: Pick<ReminderRuleInput, "enabled" | "unit" | "value">,
+  rule: Pick<ReminderRuleInput, "enabled" | "unit" | "value"> & { archivedAt?: Date | null },
   now: Date,
 ): ReminderRuleEvaluation {
-  if (!rule.enabled) return { status: "disabled", dueAt: null, hours: null }
+  if (rule.archivedAt || !rule.enabled) return { status: "disabled", dueAt: null, hours: null }
   const hours = reminderRuleHours(rule)
   if (hours === null) return { status: "disabled", dueAt: null, hours: null }
   const dueAt = reminderRuleDueAt(group.earliestStart, hours)
@@ -319,6 +323,20 @@ export type ReminderOccurrenceKey = {
 const occurrenceKey = (o: Pick<ReminderOccurrenceKey, "eventId" | "volunteerId" | "localDay" | "ruleId">) =>
   [o.eventId, o.volunteerId, o.localDay, o.ruleId].join("\u0000")
 
+/**
+ * The one terminal-status policy shared by the cron and the preview (#1139): `sent` and `failed`
+ * are final, never reopened. `queued` is already in flight: the cron must not claim it again, but
+ * the preview still shows it as the current send. `pending` and `cancelled` are recomputed from
+ * the current registrations, so a disabled-then-re-enabled rule is queued again by both.
+ */
+export function reminderOccurrenceTerminal(status: string): boolean {
+  return status === "sent" || status === "failed"
+}
+
+export function reminderOccurrenceHandled(status: string): boolean {
+  return reminderOccurrenceTerminal(status) || status === "queued"
+}
+
 export type CustomReminderTrigger<T extends ReminderRuleRegistration> = {
   group: ReminderGroup<T>
   rule: ValidReminderRule
@@ -338,13 +356,11 @@ export function triggeredCustomReminders<T extends ReminderRuleRegistration>(
   now: Date,
   occurrences: readonly ReminderOccurrenceKey[] = [],
 ): CustomReminderTrigger<T>[] {
-  const handled = new Set(
-    occurrences.filter((o) => o.status === "sent" || o.status === "queued" || o.status === "failed").map(occurrenceKey),
-  )
+  const handled = new Set(occurrences.filter((o) => reminderOccurrenceHandled(o.status)).map(occurrenceKey))
   const triggers: CustomReminderTrigger<T>[] = []
   for (const group of groups) {
     for (const rule of rules) {
-      if (!rule.enabled) continue
+      if (rule.archivedAt || !rule.enabled) continue
       const candidate = { eventId: group.eventId, volunteerId: group.volunteerId, localDay: group.localDay, ruleId: rule.id }
       if (handled.has(occurrenceKey(candidate))) continue
       const evaluation = reminderRuleStatus(group, rule, now)
@@ -397,7 +413,7 @@ export type QueuedOccurrenceReschedule = {
  */
 export function rescheduleQueuedOccurrences<T extends ReminderRuleRegistration>(
   groups: readonly ReminderGroup<T>[],
-  rules: readonly Pick<ReminderRuleInput, "id" | "unit" | "value" | "enabled">[],
+  rules: readonly (Pick<ReminderRuleInput, "id" | "unit" | "value" | "enabled"> & { archivedAt?: Date | null })[],
   occurrences: readonly ReminderOccurrenceSchedule[],
 ): QueuedOccurrenceReschedule[] {
   const groupKey = (value: Pick<ReminderOccurrenceKey, "eventId" | "volunteerId" | "localDay">) =>
@@ -408,7 +424,7 @@ export function rescheduleQueuedOccurrences<T extends ReminderRuleRegistration>(
   for (const occurrence of occurrences) {
     if (occurrence.status !== "queued") continue
     const rule = ruleById.get(occurrence.ruleId)
-    if (!rule || !rule.enabled) continue
+    if (!rule || rule.archivedAt || !rule.enabled) continue
     const hours = reminderRuleHours(rule)
     if (hours === null) continue
     const group = groupByKey.get(groupKey(occurrence))
@@ -440,6 +456,7 @@ export type ReminderPreviewState = "queued" | "scheduled" | "blocked"
 
 export type ReminderPreviewBlockedReason =
   | "event-off"
+  | "event-unpublished"
   | "organization-blocked"
   | "no-rules"
   | "no-enabled-rule"
@@ -477,6 +494,8 @@ export type ReminderPreviewInput<T extends ReminderRuleRegistration> = {
   occurrences?: readonly ReminderOccurrenceKey[]
   /** `Event.remindersEnabled`, the event-wide stop. */
   eventRemindersEnabled: boolean
+  /** `Event.publicStatus === "published"`: the cron and the delivery resolver send nothing else. */
+  eventPublished?: boolean
   /** Suspension/deactivation decided elsewhere (`organizationSendingVerdict`); null when clear. */
   organizationBlockedReason?: string | null
 }
@@ -494,9 +513,10 @@ export function nextEventReminderPreview<T extends ReminderRuleRegistration>(
     state: "blocked", reason, detail, ruleId: null, dueAt: null, localDay: null, recipientCount: 0, shiftCount: 0,
   })
   if (!input.eventRemindersEnabled) return blocked("event-off")
+  if (input.eventPublished === false) return blocked("event-unpublished")
   if (input.organizationBlockedReason) return blocked("organization-blocked", input.organizationBlockedReason)
   if (!eventUsesCustomReminderRules(input.rules)) return blocked("no-rules")
-  const enabled = input.rules.filter((r) => r.enabled)
+  const enabled = input.rules.filter((r) => !r.archivedAt && r.enabled)
   if (enabled.length === 0) return blocked("no-enabled-rule")
 
   const occurrences = input.occurrences ?? []
@@ -506,7 +526,10 @@ export function nextEventReminderPreview<T extends ReminderRuleRegistration>(
   for (const group of input.groups) {
     for (const rule of enabled) {
       const occurrence = byKey.get(occurrenceKey({ ...group, ruleId: rule.id }))
-      if (occurrence?.status === "sent" || occurrence?.status === "cancelled" || occurrence?.status === "failed") continue
+      // Same terminal policy as `triggeredCustomReminders`: a cancelled occurrence is recomputed,
+      // so disabling then re-enabling a rule shows the reminder the cron will queue again; a
+      // queued one stays visible as the current send.
+      if (occurrence && reminderOccurrenceTerminal(occurrence.status)) continue
       const evaluation = reminderRuleStatus(group, rule, input.now)
       if (evaluation.status !== "due" && evaluation.status !== "not-yet") continue
       if (!evaluation.dueAt) continue
@@ -633,6 +656,8 @@ export function customReminderPreviewSentence(preview: CustomReminderPreviewView
   switch (preview.reason) {
     case "event-off":
       return "Les rappels automatiques sont coupés pour cet événement : aucun rappel ne partira."
+    case "event-unpublished":
+      return "L'événement n'est pas publié : les rappels ne partiront qu'après sa publication."
     case "organization-blocked":
       return organizationBlockedSentence(preview.detail)
     case "no-enabled-rule":

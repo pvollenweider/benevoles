@@ -8,9 +8,13 @@
 
 import { shiftInstants } from "./ics"
 import { localDay } from "./day-of"
-import { REMINDER_WINDOW_HOURS } from "./automatic-reminders"
+import { REMINDER_WINDOW_HOURS, type RemindersState } from "./automatic-reminders"
 import { REMINDER_LABELS, type ReminderKey } from "./notification-settings"
-import { reminderRuleDelayBefore, reminderRuleHours, type ReminderRuleInput } from "./reminder-rules"
+import {
+  reminderRuleDelayBefore,
+  type CustomReminderPreviewView,
+  type EventReminderRuleView,
+} from "./reminder-rules"
 
 const plural = (n: number, one: string, many: string) => `${n} ${n > 1 ? many : one}`
 
@@ -59,34 +63,35 @@ export function nextAutomaticReminder(
 }
 
 /**
- * The next reminder of an event with its own rules (#1139): each enabled rule counted back from
- * the first shift of each local day, the earliest due instant still ahead. The event overview only
- * needs the rule and the day; the message page's preview carries the exact instant and recipients.
+ * The legacy next reminder of the overview (#705, #1139): both `on` and `partly-off` send the
+ * reminders in `state.on`; only `partly-off` was lost when the page switched to `kind === "on"`.
  */
-export function nextCustomReminder(
+export function nextLegacyReminder(
+  state: RemindersState,
   shifts: { date: string; startTime: string; endTime: string }[],
-  rules: readonly Pick<ReminderRuleInput, "unit" | "value" | "enabled">[],
   now: Date,
   timeZone: string,
 ): NextReminder | null {
-  const firstStart = new Map<string, number>()
-  for (const s of shifts) {
-    const start = shiftInstants(s, timeZone).start.getTime()
-    const day = s.date.slice(0, 10)
-    if (!firstStart.has(day) || start < firstStart.get(day)!) firstStart.set(day, start)
-  }
-  let best: { rule: (typeof rules)[number]; at: number; index: number } | null = null
-  for (const start of firstStart.values()) {
-    for (const [index, rule] of rules.entries()) {
-      if (!rule.enabled) continue
-      const hours = reminderRuleHours(rule)
-      if (hours === null) continue
-      const at = start - hours * 3_600_000
-      if (at < now.getTime()) continue
-      if (!best || at < best.at) best = { rule, at, index }
-    }
-  }
-  return best ? { key: `rule-${best.index}`, label: reminderRuleDelayBefore(best.rule), day: localDay(new Date(best.at), timeZone) } : null
+  return state.kind === "on" || state.kind === "partly-off"
+    ? nextAutomaticReminder(shifts, state.on, now, timeZone)
+    : null
+}
+
+/**
+ * The overview line of an event with its own rules (#1139), read from the same preview the
+ * message page shows (`loadEventReminderRulesState` + `nextEventReminderPreview`), never from a
+ * second computation over the event's shifts: a volunteer registered only on the later shift of
+ * the day can be due before the day's first shift is.
+ */
+export function nextCustomReminderFromPreview(
+  preview: CustomReminderPreviewView,
+  rules: readonly EventReminderRuleView[],
+  timeZone: string,
+): NextReminder | null {
+  if (preview.state !== "scheduled" && preview.state !== "queued") return null
+  const rule = rules.find((candidate) => candidate.id === preview.ruleId)
+  if (!rule) return null
+  return { key: `rule-${rule.id}`, label: reminderRuleDelayBefore(rule), day: localDay(new Date(preview.dueAt), timeZone) }
 }
 
 /** « « Infos parking », le 3 octobre, à 25 personnes. » */

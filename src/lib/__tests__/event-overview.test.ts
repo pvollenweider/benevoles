@@ -1,5 +1,13 @@
 import { describe, it, expect } from "vitest"
-import { lastMessageSentence, nextAutomaticReminder, nextCustomReminder, placesSentence } from "../event-overview"
+import {
+  lastMessageSentence,
+  nextAutomaticReminder,
+  nextCustomReminderFromPreview,
+  nextLegacyReminder,
+  placesSentence,
+} from "../event-overview"
+import type { RemindersState } from "../automatic-reminders"
+import type { CustomReminderPreviewView } from "../reminder-rules"
 
 describe("placesSentence", () => {
   it("says the places in words, requests only when there are some", () => {
@@ -46,28 +54,39 @@ describe("lastMessageSentence", () => {
 })
 
 
-describe("nextCustomReminder (#1139)", () => {
+describe("nextLegacyReminder (#705, #1139)", () => {
   const tz = "Europe/Paris"
-  const shifts = [
-    { date: "2030-07-05", startTime: "09:00", endTime: "11:00" },
-    { date: "2030-07-06", startTime: "10:00", endTime: "12:00" },
-  ]
+  const shifts = [{ date: "2030-07-05", startTime: "09:00", endTime: "11:00" }]
 
-  it("takes the earliest enabled rule still ahead, counted from the day's first shift", () => {
-    expect(nextCustomReminder(shifts, [
-      { unit: "days", value: 7, enabled: true },
-      { unit: "days", value: 2, enabled: true },
-      { unit: "hours", value: 2, enabled: true },
-    ], new Date("2030-07-01T08:00:00Z"), tz)).toEqual({ key: "rule-1", label: "2 jours avant", day: "2030-07-03" })
+  it("still computes the line when only some organisation switches are on", () => {
+    const partly: RemindersState = { kind: "partly-off", on: ["dd"], off: ["j2", "j1"] }
+    // 09:00 Paris = 07:00Z; the day-of window opens 2 h before, so 04:00Z is inside it.
+    expect(nextLegacyReminder(partly, shifts, new Date("2030-07-05T04:00:00Z"), tz))
+      .toEqual({ key: "dd", label: "Rappel du jour", day: "2030-07-05" })
+    expect(nextLegacyReminder({ kind: "on", on: ["j2", "j1", "dd"], off: [] }, shifts, new Date("2030-07-01T08:00:00Z"), tz)?.key).toBe("j2")
+    expect(nextLegacyReminder({ kind: "org-off", on: [], off: ["j2", "j1", "dd"] }, shifts, new Date("2030-07-01T08:00:00Z"), tz)).toBeNull()
+  })
+})
+
+describe("nextCustomReminderFromPreview (#1139)", () => {
+  const rules = [
+    { id: "r1", unit: "days" as const, value: 7, enabled: true },
+    { id: "r2", unit: "hours" as const, value: 2, enabled: true },
+  ]
+  const preview = (over: Partial<CustomReminderPreviewView> = {}): CustomReminderPreviewView => ({
+    state: "scheduled", reason: null, detail: null, ruleId: "r2", dueAt: "2030-07-05T14:00:00.000Z",
+    localDay: "2030-07-05", recipientCount: 1, shiftCount: 1, ...over,
+  }) as CustomReminderPreviewView
+
+  it("takes the rule's words and the day of the send instant from the shared preview", () => {
+    expect(nextCustomReminderFromPreview(preview(), rules, "Europe/Paris"))
+      .toEqual({ key: "rule-r2", label: "2 heures avant", day: "2030-07-05" })
+    expect(nextCustomReminderFromPreview(preview({ localDay: "2030-07-06", dueAt: "2030-07-05T23:30:00.000Z" }), rules, "Europe/Paris"))
+      .toEqual({ key: "rule-r2", label: "2 heures avant", day: "2030-07-06" })
   })
 
-  it("skips disabled rules and rules whose delay already passed", () => {
-    expect(nextCustomReminder(shifts, [
-      { unit: "days", value: 7, enabled: true },
-      { unit: "days", value: 2, enabled: false },
-      { unit: "hours", value: 2, enabled: true },
-    ], new Date("2030-07-04T00:00:00Z"), tz)).toEqual({ key: "rule-2", label: "2 heures avant", day: "2030-07-05" })
-    expect(nextCustomReminder(shifts, [{ unit: "days", value: 1, enabled: false }], new Date("2030-07-01T08:00:00Z"), tz)).toBeNull()
-    expect(nextCustomReminder([], [{ unit: "days", value: 1, enabled: true }], new Date("2030-07-01T08:00:00Z"), tz)).toBeNull()
+  it("shows nothing when the preview is blocked or the rule is gone", () => {
+    expect(nextCustomReminderFromPreview(preview({ state: "blocked", reason: "event-unpublished", ruleId: null, dueAt: null, localDay: null, recipientCount: 0, shiftCount: 0 }), rules, "Europe/Paris")).toBeNull()
+    expect(nextCustomReminderFromPreview(preview({ ruleId: "gone" }), rules, "Europe/Paris")).toBeNull()
   })
 })

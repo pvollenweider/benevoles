@@ -20,7 +20,8 @@ import { loadAttention } from "@/lib/attention-data"
 import { eventAttentionItems } from "@/lib/attention"
 import { loadReviewChecks } from "@/lib/review-checks-data"
 import ArchiveFromList from "@/components/admin/ArchiveFromList"
-import { lastMessageSentence, nextAutomaticReminder, nextCustomReminder, placesSentence } from "@/lib/event-overview"
+import { lastMessageSentence, nextCustomReminderFromPreview, nextLegacyReminder, placesSentence } from "@/lib/event-overview"
+import { loadEventReminderRulesState } from "@/lib/reminder-rules-data"
 
 export const dynamic = "force-dynamic"
 
@@ -58,7 +59,7 @@ export default async function AdminEventPage({ params }: { params: Promise<{ id:
       milestones: { orderBy: [{ dueDate: "asc" }, { createdAt: "asc" }], include: { owner: { select: { name: true } } } },
       sectorLeaders: { select: { roleName: true, sectorId: true } },
       sectors: { select: { id: true, archivedAt: true } },
-      reminderRules: { orderBy: [{ displayOrder: "asc" }, { createdAt: "asc" }], select: { unit: true, value: true, enabled: true } },
+      reminderRules: { where: { archivedAt: null }, orderBy: [{ displayOrder: "asc" }, { createdAt: "asc" }], select: { unit: true, value: true, enabled: true } },
     },
   })
 
@@ -112,13 +113,16 @@ export default async function AdminEventPage({ params }: { params: Promise<{ id:
   const customRules = event.reminderRules
   const reminders = remindersSummary({ ...reminderFacts, eventId: event.id, published, customRules })
   const state = remindersState({ ...reminderFacts, customRules })
+  // The custom line comes from the same loader and evaluator as the message page's « Prochain
+  // envoi »: a volunteer registered only on the day's later shift can be due first.
+  const reminderRulesState = state.kind === "custom"
+    ? await loadEventReminderRulesState(db, organizationId, event.id, now)
+    : null
   const nextReminder = !published
     ? null
-    : state.kind === "on"
-      ? nextAutomaticReminder(shiftTimes, state.on, now, timeZone)
-      : state.kind === "custom"
-        ? nextCustomReminder(shiftTimes, customRules, now, timeZone)
-        : null
+    : state.kind === "custom"
+      ? reminderRulesState && nextCustomReminderFromPreview(reminderRulesState.preview, reminderRulesState.rules, timeZone)
+      : nextLegacyReminder(state, shiftTimes, now, timeZone)
   const day = (iso: string) => new Date(`${iso}T00:00:00Z`).toLocaleDateString("fr-FR", { timeZone: "UTC", weekday: "long", day: "numeric", month: "long" })
 
   const base = `/admin/events/${event.id}`

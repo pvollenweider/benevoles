@@ -293,6 +293,10 @@ model EventReminderRule {
   value        Int
   enabled      Boolean  @default(true)
   displayOrder Int      @default(0)
+  // A removed rule that already sent at least one occurrence is archived instead of deleted
+  // (#1139): its sent occurrences keep protecting those volunteers if the same delay is
+  // recreated. Null means active; an archived rule is hidden, never counted, sent or rescheduled.
+  archivedAt   DateTime?
   createdAt    DateTime @default(now())
   updatedAt    DateTime @updatedAt
 

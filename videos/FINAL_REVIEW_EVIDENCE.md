@@ -1109,3 +1109,23 @@ travail (pas de base de données ni de tournage ici) :
 Aucun de ces enregistrements n’a été refait ; les manifestes, scripts et sélecteurs n’ont pas été
 modifiés. `doc-img: unchanged` ne s’applique pas : les captures `admin-reminders` et
 `admin-message` montrent le nouvel écran et restent à régénérer avec une base jetable.
+
+### Correctifs après revue et exécution PostgreSQL (15 novembre 2026)
+
+- Migration additive `20261115120000_event_reminder_rule_archive` : `EventReminderRule.archivedAt`
+  nullable, sans valeur par défaut ni rétro-remplissage. Une règle retirée qui a au moins une
+  occurrence `sent` est archivée au lieu d'être supprimée ; ses occurrences envoyées continuent de
+  protéger les bénévoles déjà rappelés quand le même délai est recréé. Un événement dont toutes les
+  règles sont archivées repasse dans le chemin historique J-2 / J-1 / jour J.
+- L'aperçu utilise le même évaluateur que le cron sans son horizon de travail `maxHours + 24` ; il
+  montre un rappel de 2 h pour une inscription du mois suivant, bloque un brouillon, et la ligne
+  « Prochain rappel automatique » de l'aperçu vient de ce même aperçu. Un rappel annulé est de
+  nouveau proposé, un rappel en file reste visible.
+- Le cron attend le verrou d'enregistrement avec un budget de transaction explicite (30 s) et
+  poursuit les autres événements après une erreur ; le recalcul des occurrences en file est borné
+  à leurs bénévoles et jours locaux.
+- Vérifications sur la base PostgreSQL jetable : `npm run typecheck` et `npx eslint .` réussis,
+  `npx vitest run` 809 fichiers / 9 678 tests réussis, `npm run test:integration` deux fois de
+  suite 67 fichiers / 431 tests réussis. Les trois tests d'inactivité d'organisation n'ont pas
+  échoué ici. Aucun fichier de `public/doc-img/` n'a été modifié : les captures `admin-reminders`
+  et `admin-message` restent à régénérer par le propriétaire, et aucune vidéo n'a été refaite.
