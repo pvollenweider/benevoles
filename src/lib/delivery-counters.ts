@@ -122,3 +122,14 @@ export function addDeliveryCount(buckets: Map<string, DeliveryCountBucket>, row:
   else buckets.set(key, bucket)
   return true
 }
+
+/**
+ * Detaches a purged row from an organisation that no longer exists. The outbox keeps the
+ * organisation id as a plain column, so an email can outlive its organisation (a refused space is
+ * deleted, then told so by email); the counter table references the organisation. Such a row is
+ * counted under the platform key: the total of emails sent stays right, and nothing keeps the
+ * trace of a deleted organisation. Pure.
+ */
+export function organizationIdToCount(organizationId: string | null, living: ReadonlySet<string>): string | null {
+  return organizationId !== null && living.has(organizationId) ? organizationId : null
+}

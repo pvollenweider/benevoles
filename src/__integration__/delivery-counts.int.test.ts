@@ -211,6 +211,26 @@ describe.skipIf(!url)("outbox delivery counts and job summaries (#1269)", () => 
     expect(await prisma.notificationDeliveryCount.count({ where: { organizationId: org.id } })).toBe(0)
   })
 
+  // Regression: a refused space is deleted, then told so by email. The email kept the id of an
+  // organisation that no longer existed and the counter's foreign key stopped the whole cleanup.
+  it("purges the emails of a deleted organisation and counts them under the platform", async () => {
+    const org = await prisma.organization.create({ data: { name: `Org ${tag} gone`, slug: `${tag}-gone`, timeZone: "Europe/Zurich" } })
+    const day = deliveryDay(new Date())
+    const platformBefore = (await counter("platform", day, "admin_notification", "sent"))?.count ?? 0
+    const keptBefore = (await counter(orgId, day, "admin_notification", "sent"))?.count ?? 0
+    const gone = await seed({ kind: "admin_notification", status: "sent", organizationId: org.id })
+    const goneToo = await seed({ kind: "admin_notification", status: "sent", organizationId: org.id })
+    await seed({ kind: "admin_notification", status: "sent" })
+    await prisma.organization.delete({ where: { id: org.id } })
+
+    expect((await cleanup()).status).toBe(200)
+    expect(await prisma.notificationOutbox.count({ where: { id: { in: [gone.id, goneToo.id] } } })).toBe(0)
+    expect((await counter("platform", day, "admin_notification", "sent"))?.count).toBe(platformBefore + 2)
+    // The organisation that still exists keeps its own counter, in the same batch.
+    expect((await counter(orgId, day, "admin_notification", "sent"))?.count).toBe(keptBefore + 1)
+    expect(await prisma.notificationDeliveryCount.count({ where: { organizationKey: org.id } })).toBe(0)
+  })
+
   it("counts and deletes more than one batch, without a double count", async () => {
     const org = await prisma.organization.create({ data: { name: `Org ${tag} bulk`, slug: `${tag}-bulk`, timeZone: "Europe/Zurich" } })
     const createdAt = new Date()
