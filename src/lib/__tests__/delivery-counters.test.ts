@@ -4,6 +4,7 @@ import {
   cancelReasonClass,
   deliveryDay,
   deliveryOutcome,
+  organizationIdToCount,
   PLATFORM_ORGANIZATION_KEY,
   type DeliveryCountBucket,
 } from "../delivery-counters"
@@ -86,5 +87,28 @@ describe("delivery buckets", () => {
     const buckets = new Map<string, DeliveryCountBucket>()
     addDeliveryCount(buckets, row({ kind: "unknown" }))
     expect([...buckets.values()]).toEqual([bucket({ kind: "unknown" })])
+  })
+})
+
+// An email can outlive its organisation; the nightly cleanup failed on the counter's foreign key.
+describe("organizationIdToCount", () => {
+  const living = new Set(["org-kept"])
+
+  it("keeps an organisation that still exists", () => {
+    expect(organizationIdToCount("org-kept", living)).toBe("org-kept")
+  })
+
+  it("counts the email of a deleted organisation under the platform", () => {
+    expect(organizationIdToCount("org-deleted", living)).toBeNull()
+    const buckets = new Map<string, DeliveryCountBucket>()
+    addDeliveryCount(buckets, {
+      status: "sent", lastError: null, createdAt: new Date("2026-11-14T10:00:00Z"), kind: "org_refused",
+      organizationId: organizationIdToCount("org-deleted", living),
+    })
+    expect([...buckets.values()][0]).toMatchObject({ organizationId: null, organizationKey: PLATFORM_ORGANIZATION_KEY, count: 1 })
+  })
+
+  it("leaves a platform email as it is", () => {
+    expect(organizationIdToCount(null, living)).toBeNull()
   })
 })

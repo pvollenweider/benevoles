@@ -27,6 +27,8 @@ vi.mock("@/lib/prisma", () => {
     sendBatch: { update: m.batchUpdate, updateMany: m.batchUpdateMany, findMany: vi.fn().mockResolvedValue([]), deleteMany: vi.fn().mockResolvedValue({ count: 0 }) },
     orgLog: { deleteMany: vi.fn().mockResolvedValue({ count: 0 }) },
     $executeRaw: m.executeRaw,
+    // The organisations of the batch that still exist (the purge detaches the others).
+    $queryRaw: vi.fn(async () => [{ id: "org-a" }]),
   }
   const zero = { deleteMany: vi.fn().mockResolvedValue({ count: 0 }), updateMany: vi.fn().mockResolvedValue({ count: 0 }), findMany: vi.fn().mockResolvedValue([]) }
   return {

@@ -19,7 +19,7 @@ import { SUMMARY_WINDOW_HOURS, summaryDayKey } from "@/lib/delivery-summary"
 import { parseNotificationSettings } from "@/lib/notification-settings"
 import { adminMembersToVerifyUrl } from "@/lib/notifications/templates/shared"
 import { deliverAfterResponse, enqueueNotifications, openPayload } from "@/lib/notifications/outbox"
-import { addDeliveryCount, UNKNOWN_KIND, type DeliveryCountBucket } from "@/lib/delivery-counters"
+import { addDeliveryCount, organizationIdToCount, UNKNOWN_KIND, type DeliveryCountBucket } from "@/lib/delivery-counters"
 import type { Prisma } from "@/generated/prisma/client"
 import { siteName } from "@/lib/site"
 import { pastEventRetentionMode, pastEventStep, pastEventSummary, pastEventTotals, type PastEventBatchCounts } from "@/lib/past-event-retention"
@@ -446,6 +446,14 @@ async function freezeOutboxBatch(where: Prisma.NotificationOutboxWhereInput): Pr
     }
     const buckets = new Map<string, DeliveryCountBucket>()
     let unreadable = 0
+    // An email can outlive its organisation; its counter cannot reference a deleted one. The lock
+    // keeps the organisations found here in place until the counters are written.
+    const organizationIds = [...new Set(batch.map((r) => r.organizationId).filter((id): id is string => id !== null))]
+    const living = new Set(
+      organizationIds.length === 0
+        ? []
+        : (await tx.$queryRaw<{ id: string }[]>`SELECT "id" FROM "Organization" WHERE "id" = ANY(${organizationIds}::text[]) FOR KEY SHARE`).map((o) => o.id),
+    )
     for (const row of batch) {
       let kind = UNKNOWN_KIND
       try { kind = openPayload(row.payload).kind || UNKNOWN_KIND } catch { unreadable++ }
@@ -453,7 +461,7 @@ async function freezeOutboxBatch(where: Prisma.NotificationOutboxWhereInput): Pr
         status: row.status,
         lastError: row.lastError,
         createdAt: row.createdAt,
-        organizationId: row.organizationId,
+        organizationId: organizationIdToCount(row.organizationId, living),
         kind,
       })
     }
