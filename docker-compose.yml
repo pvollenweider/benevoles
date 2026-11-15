@@ -53,13 +53,69 @@ services:
       EMAIL_FROM: ${EMAIL_FROM:-no-reply@example.com}
       ADMIN_NOTIFICATION_EMAIL: ${ADMIN_NOTIFICATION_EMAIL:-}
       NEXT_PUBLIC_APP_URL: ${NEXT_PUBLIC_APP_URL:-http://localhost:3000}
+      # The address sign-in accepts: the public URL, unless AUTH_URL says otherwise. No
+      # AUTH_TRUST_HOST by default, which would trust the Host header of the request.
+      AUTH_URL: ${AUTH_URL:-${NEXT_PUBLIC_APP_URL:-http://localhost:3000}}
+      # Required, no default (openssl rand -base64 32): shared with the cron service below.
+      # Without it /api/cron/* refuses every call, so no reminder and no queued email leaves.
+      CRON_SECRET: ${CRON_SECRET:?CRON_SECRET est requis, générer une valeur avec openssl rand -base64 32 (voir docs/deploiement.md)}
       # Premier super admin créé au démarrage (facultatif, voir docs/configuration.md).
       ADMIN_EMAIL: ${ADMIN_EMAIL:-}
       ADMIN_PASSWORD: ${ADMIN_PASSWORD:-}
       ADMIN_NAME: ${ADMIN_NAME:-}
       NODE_ENV: production
+      # Optional settings (docs/configuration.md), passed only when set in .env or in the shell:
+      # for some of them an empty value is not the same as no value.
+      AUTH_TRUST_HOST:
+      EMAIL_REPLY_TO:
+      APP_TIME_ZONE:
+      TRUSTED_PROXY_HOPS:
+      TOKEN_ENCRYPTION_KEY_ID:
+      TOKEN_ENCRYPTION_PREVIOUS_KEYS:
+      SITE_NAME:
+      CONTACT_EMAIL:
+      SUPPORT_URL:
+      HOSTED_SERVICE:
+      SIGNUP:
+      RELEASE_CHECK:
+      OPERATOR_ALERT_EMAIL:
+      VAPID_PUBLIC_KEY:
+      VAPID_PRIVATE_KEY:
+      VAPID_EMAIL:
+      SENTRY_DSN:
     depends_on:
       postgres:
+        condition: service_healthy
+    # The server answers and reaches the database (/api/health, the liveness check of the
+    # Kubernetes install): `docker compose ps` shows the app « healthy » once it passes.
+    healthcheck:
+      test: ["CMD", "node", "-e", "fetch('http://localhost:3000/api/health').then((r) => process.exit(r.ok ? 0 : 1), () => process.exit(1))"]
+      interval: 10s
+      timeout: 5s
+      retries: 6
+      start_period: 120s
+
+  # The scheduled tasks (queued emails, reminders, daily cleanup, release check), with the same
+  # calls and UTC times as the Kubernetes CronJobs: scripts/compose-cron.sh. It reaches the app on
+  # the Compose network, never through the reverse proxy.
+  cron:
+    image: curlimages/curl:8.7.1
+    restart: unless-stopped
+    entrypoint: ["sh", "/compose-cron.sh"]
+    environment:
+      APP_URL: http://app:3000
+      CRON_SECRET: ${CRON_SECRET:?CRON_SECRET est requis, générer une valeur avec openssl rand -base64 32 (voir docs/deploiement.md)}
+    volumes:
+      - ./scripts/compose-cron.sh:/compose-cron.sh:ro
+    read_only: true
+    tmpfs:
+      - /tmp
+    cap_drop:
+      - ALL
+    security_opt:
+      - no-new-privileges:true
+    depends_on:
+      app:
         condition: service_healthy
 
 volumes:

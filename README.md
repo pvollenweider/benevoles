@@ -224,6 +224,8 @@ Si `CRON_SECRET` est vide, les endpoints refusent toutes les requêtes en produc
 
 Sur Kubernetes, `k8s/` fournit les CronJobs `app-reminders` (toutes les heures), `app-outbox` (toutes les 5 minutes), `app-cleanup` (02:00 UTC), `app-release-check` (03:00 UTC), `postgres-backup` (`pg_dump` chiffré à 01:00 UTC, rétention 30 jours) et `backup-offsite` (copie des fichiers chiffrés vers Infomaniak Swiss Backup à 01:30 UTC, rétention 90 jours).
 
+Avec Docker Compose, le service `cron` de `docker-compose.yml` fait ces quatre appels aux mêmes heures, sans cron de l'hôte ; les sauvegardes restent à mettre en place.
+
 ## Déploiement
 
 ### Docker Compose
@@ -233,7 +235,7 @@ docker compose up -d                       # première installation, après avoi
 git pull && docker compose up -d --build   # mise à jour
 ```
 
-`POSTGRES_PASSWORD` est obligatoire et PostgreSQL n'est pas publié sur l'hôte. Fichier `.env`, variables à ajouter et cron de l'hôte : [docs/deploiement.md](docs/deploiement.md#docker-compose). Installation existante : [Mettre à jour une installation Compose existante](docs/deploiement.md#mettre-à-jour-une-installation-compose-existante).
+`POSTGRES_PASSWORD` est obligatoire et PostgreSQL n'est pas publié sur l'hôte. Fichier `.env`, variables transmises, tâches planifiées et contrôle de santé : [docs/deploiement.md](docs/deploiement.md#docker-compose). Installation existante : [Mettre à jour une installation Compose existante](docs/deploiement.md#mettre-à-jour-une-installation-compose-existante).
 
 **Depuis 2.5.x**, Docker Compose demande `POSTGRES_PASSWORD` et `AUTH_SECRET` avant la mise à jour, et chaque organisateur se reconnecte une fois : voir [Mise à jour depuis 2.5.x](docs/deploiement.md#mise-à-jour-depuis-25x).
 

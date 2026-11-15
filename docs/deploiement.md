@@ -41,6 +41,7 @@ cat > .env <<EOF
 POSTGRES_PASSWORD=$(openssl rand -hex 32)
 AUTH_SECRET=$(openssl rand -base64 48)
 TOKEN_ENCRYPTION_KEY=$(openssl rand -base64 32)
+CRON_SECRET=$(openssl rand -base64 32)
 EOF
 docker compose up -d
 ```
@@ -51,9 +52,10 @@ docker compose up -d
 
 Ce qu'il ne fait pas :
 
-- Il ne transmet pas `AUTH_URL`, `AUTH_TRUST_HOST`, `CRON_SECRET`, `EMAIL_REPLY_TO`, `APP_TIME_ZONE`, `TRUSTED_PROXY_HOPS`, `TOKEN_ENCRYPTION_KEY_ID`, `TOKEN_ENCRYPTION_PREVIOUS_KEYS` ni les variables VAPID et Sentry : à ajouter dans la section `environment` si nécessaire.
+- Il transmet `AUTH_URL` (par défaut la valeur de `NEXT_PUBLIC_APP_URL`) et, seulement si elles sont définies dans `.env` ou dans le shell, `AUTH_TRUST_HOST`, `EMAIL_REPLY_TO`, `APP_TIME_ZONE`, `TRUSTED_PROXY_HOPS`, `TOKEN_ENCRYPTION_KEY_ID`, `TOKEN_ENCRYPTION_PREVIOUS_KEYS`, `SITE_NAME`, `CONTACT_EMAIL`, `SUPPORT_URL`, `HOSTED_SERVICE`, `SIGNUP`, `RELEASE_CHECK`, `OPERATOR_ALERT_EMAIL`, les variables VAPID et `SENTRY_DSN`. Toute autre variable de [configuration.md](configuration.md) est à ajouter dans la section `environment`.
 - `AUTH_SECRET` n'a pas de valeur par défaut : sans lui, Compose refuse de démarrer, comme pour `POSTGRES_PASSWORD`. Une valeur d'exemple ou trop simple est refusée au démarrage de l'application (`src/lib/production-guards.ts`).
-- Il n'inclut aucun planificateur. Sans `CRON_SECRET`, les endpoints `/api/cron/*` refusent toute requête en production : ajouter ce secret et appeler les endpoints depuis un cron de l'hôte (voir [Tâches planifiées](../README.md#tâches-planifiées-cron) dans le README), dont `/api/cron/outbox` toutes les 5 minutes.
+- `CRON_SECRET` n'a pas de valeur par défaut : sans lui, Compose refuse de démarrer. Le service `cron` (`scripts/compose-cron.sh`) appelle l'application sur le réseau interne de Compose, aux mêmes heures UTC que les CronJobs de Kubernetes : `/api/cron/outbox` toutes les 5 minutes, `/api/cron/reminders` toutes les heures, `/api/cron/cleanup` à 02:00, `/api/cron/release-check` à 03:00 (voir [Tâches planifiées](../README.md#tâches-planifiées-cron) dans le README). Il démarre quand l'application est saine et écrit une ligne par appel : `docker compose logs cron`. Un cron de l'hôte qui appelait déjà ces endpoints est à retirer. Les sauvegardes de la base ne sont pas incluses.
+- L'application a un contrôle de santé (`/api/health` : le serveur répond et joint la base) : `docker compose ps` l'affiche « healthy », et `docker compose up -d --wait` rend la main quand elle l'est.
 - Le premier super admin peut être créé au démarrage à partir de `ADMIN_EMAIL` et `ADMIN_PASSWORD` dans `.env` (et `ADMIN_NAME` pour son nom), sans passer par un checkout : les définir avant `docker compose up -d`, puis se connecter par la page habituelle. Le compte n'est créé qu'une fois, tant qu'aucun super admin n'existe ; changer `ADMIN_PASSWORD` ensuite ne le modifie pas. Détails : [configuration.md](configuration.md#premier-super-admin-auto-hébergement).
 - Il n'exécute pas le seed, et l'image ne contient pas `tsx` : pour l'organisation `default`, son admin et l'événement de démonstration, lancer le seed depuis un checkout, sur l'hôte, avec les variables `ADMIN_*` et `ORG_ADMIN_*`, le temps d'un accès local à la base (ci-dessous) :
 
@@ -102,6 +104,8 @@ Le fichier publiait PostgreSQL sur le port 5432 de toutes les interfaces de l'h�
 4. `git pull && docker compose up -d --build` : l'application se reconnecte avec le nouveau mot de passe et le port 5432 n'est plus publié (`docker compose ps` ne l'affiche plus).
 
 Si le mot de passe de `.env` et celui de PostgreSQL diffèrent, l'application s'arrête au démarrage sur une erreur d'authentification : refaire l'étape 2 avec la valeur de `.env`. Si le port était ouvert vers l'extérieur, considérer l'ancien mot de passe comme connu et vérifier le contenu de la base (comptes `AdminUser` en particulier).
+
+Le fichier lance aussi les tâches planifiées (service `cron`) et exige pour cela `CRON_SECRET` dans `.env`. Avant `docker compose up -d --build` : y écrire la valeur que votre cron de l'hôte utilise déjà, ou une nouvelle (`openssl rand -base64 32`), et retirer d'abord du cron de l'hôte les appels à `/api/cron/*`. Ne pas laisser les deux tourner : chaque tâche serait appelée deux fois, et des rappels pourraient partir en double.
 
 ## Kubernetes
 
@@ -381,7 +385,7 @@ La ranger **d'abord** dans un gestionnaire de mots de passe, hors du serveur et 
 
 - **Avec `deploy.yml`** : `gh secret set TOKEN_ENCRYPTION_KEY --env production`. Le workflow s'arrête avant de toucher au cluster si ce secret manque, et il régénère `benevoles-secret` à chaque déploiement : une modification manuelle d'une clé qu'il gère serait écrasée (liste des clés : [configuration.md](configuration.md#secrets-kubernetes)).
 - **Kubernetes à la main** : ajouter `TOKEN_ENCRYPTION_KEY` dans `benevoles-secret` (modèle : `k8s/secret.yaml`). Vérifier aussi que ce secret contient `CRON_SECRET` et `NEXT_PUBLIC_APP_URL` : les CronJobs de sauvegarde les lisent, et sans eux leur pod ne démarre pas.
-- **Docker Compose** : `TOKEN_ENCRYPTION_KEY` dans le fichier `.env` à côté de `docker-compose.yml`, et `CRON_SECRET` dans la section `environment` : sans lui, la tâche de nettoyage est refusée et les anciens liens ne sont jamais chiffrés.
+- **Docker Compose** : `TOKEN_ENCRYPTION_KEY` et `CRON_SECRET` dans le fichier `.env` à côté de `docker-compose.yml` : sans lui, la tâche de nettoyage est refusée et les anciens liens ne sont jamais chiffrés.
 
 ### 5. Kubernetes
 
