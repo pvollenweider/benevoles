@@ -40,7 +40,7 @@ benevol.app est un outil communautaire, pas un produit commercial. Son code est 
 
 ## Vos données et votre liberté
 
-Le service est hébergé en France, avec une copie de sauvegarde chiffrée en Suisse. Vos membres, votre journal d'activité et l'archive complète d'un événement s'exportent à tout moment.
+Le service est hébergé en France, avec une copie de sauvegarde chiffrée en Suisse. Vos membres, votre journal d'activité et l'archive complète d'un événement s'exportent à tout moment. La page [Continuité du service](CONTINUITE-DU-SERVICE.md) dit comment vos données sont sauvegardées et ce que le service ne garantit pas.
 
 Le code est libre ; l'hébergement sur benevol.app est un service, gratuit aujourd'hui. Une association ou une fédération peut donc aussi installer benevol.app sur son propre serveur, en suivant le [guide de déploiement](https://github.com/pvollenweider/benevoles/blob/main/docs/deploiement.md).
 

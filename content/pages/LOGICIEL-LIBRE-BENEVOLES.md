@@ -22,7 +22,7 @@ benevol.app is the free software building block for volunteer shift planning: an
 - **Vous pouvez l'installer chez vous.** Une association, une fédération ou une commune peut installer benevol.app sur son propre serveur. La page [Tarifs](TARIFS.md) explique la différence entre le logiciel et le service hébergé.
 - **Vous pouvez partir.** Vos membres, votre journal d'activité et l'archive complète d'un événement s'exportent à tout moment.
 
-En savoir plus : [exporter et conserver ses données](../guide/exporter-et-conserver-ses-donnees.md).
+En savoir plus : [exporter et conserver ses données](../guide/exporter-et-conserver-ses-donnees.md). La page [Continuité du service](CONTINUITE-DU-SERVICE.md) dit comment vos données sont sauvegardées et ce que le service ne garantit pas.
 
 ## Ce que l'outil couvre
 

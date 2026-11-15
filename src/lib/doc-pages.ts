@@ -215,6 +215,22 @@ export const PUBLIC_PAGES: readonly PublicPage[] = [
     presentation: true,
   },
   {
+    // The service continuity page (#1357): backups and restore, the paper fallback for the day,
+    // the way out (exports, AGPL, self-hosting), the limits of the hosted service and the notice
+    // before a final shutdown, with a visible FAQ that is also its FAQPage structured data. A trust
+    // page: linked from Tarifs, Logiciel libre and the Manifesto, never promoted on the home page.
+    path: "/continuite-du-service",
+    title: "Continuité du service",
+    summary: `Comment ${SITE_NAME} sauvegarde vos données, comment garder votre planning utilisable sans le service, et ce que le service hébergé ne garantit pas.`,
+    metaTitle: "Continuité du service : vos données restent à vous",
+    metaDescription: `Sauvegardes, exports, planning imprimé pour le jour J, logiciel libre et limites du service hébergé : ce que ${SITE_NAME} garantit et ne garantit pas.`,
+    source: "content/pages/CONTINUITE-DU-SERVICE.md",
+    priority: 0.5,
+    guide: false,
+    availability: "hosted",
+    presentation: true,
+  },
+  {
     // The manifesto (#1259): why the hosted service exists, what it will not do, how it is funded
     // (same wording as /tarifs, no promise of permanent gratuity) and who maintains it. Facts only.
     path: "/manifeste",

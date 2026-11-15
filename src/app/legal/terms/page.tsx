@@ -19,7 +19,7 @@ export default function TermsPage() {
     <>
       <JsonLd data={publicPageJsonLd("/legal/terms", apexBaseUrl())} />
       <h1>Conditions générales d&apos;utilisation</h1>
-      <p className="text-gray-500 dark:text-gray-400 text-sm">Dernière mise à jour : 6 octobre 2026</p>
+      <p className="text-gray-500 dark:text-gray-400 text-sm">Dernière mise à jour : 15 novembre 2026</p>
 
       <h2>1. Objet</h2>
       <p>
@@ -131,6 +131,15 @@ export default function TermsPage() {
       <p>
         Une Organisation peut demander la suppression de son compte et de l&apos;ensemble de ses
         données en nous contactant à <a href="mailto:contact@benevol.app">contact@benevol.app</a>.
+      </p>
+      <p>
+        Ce qui précède concerne l&apos;accès d&apos;une Organisation ou d&apos;un utilisateur, pas
+        l&apos;arrêt du Service lui-même. Si nous décidons d&apos;arrêter définitivement le
+        Service, nous en informons les Organisations au moins trois mois à l&apos;avance, pour
+        qu&apos;elles puissent exporter leurs données ou préparer une autre solution. Ce délai ne
+        peut pas être tenu si l&apos;arrêt nous est imposé par un événement indépendant de notre
+        volonté (défaillance d&apos;un prestataire, obligation légale, force majeure). Nous
+        prévenons alors dès que nous le savons.
       </p>
 
       <h2>8. Modifications</h2>

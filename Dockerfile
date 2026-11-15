@@ -95,6 +95,8 @@ COPY --from=builder --chown=nextjs:nodejs /app/content/pages/MANIFESTE.md ./cont
 COPY --from=builder --chown=nextjs:nodejs /app/content/pages/CITER.md ./content/pages/CITER.md
 # Logiciel libre (#1326).
 COPY --from=builder --chown=nextjs:nodejs /app/content/pages/LOGICIEL-LIBRE-BENEVOLES.md ./content/pages/LOGICIEL-LIBRE-BENEVOLES.md
+# Continuité du service (#1357).
+COPY --from=builder --chown=nextjs:nodejs /app/content/pages/CONTINUITE-DU-SERVICE.md ./content/pages/CONTINUITE-DU-SERVICE.md
 COPY --from=builder --chown=nextjs:nodejs /app/content/pages/FAQ-ACCUEIL.md ./content/pages/FAQ-ACCUEIL.md
 COPY --from=builder --chown=nextjs:nodejs /app/content/pages/ACCESSIBILITE.md ./content/pages/ACCESSIBILITE.md
 COPY --from=builder --chown=nextjs:nodejs /app/content/legal/ACCORD-SOUS-TRAITANCE.md ./content/legal/ACCORD-SOUS-TRAITANCE.md
