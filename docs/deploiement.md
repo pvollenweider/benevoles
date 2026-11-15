@@ -105,7 +105,7 @@ Le fichier publiait PostgreSQL sur le port 5432 de toutes les interfaces de l'h�
 
 Si le mot de passe de `.env` et celui de PostgreSQL diffèrent, l'application s'arrête au démarrage sur une erreur d'authentification : refaire l'étape 2 avec la valeur de `.env`. Si le port était ouvert vers l'extérieur, considérer l'ancien mot de passe comme connu et vérifier le contenu de la base (comptes `AdminUser` en particulier).
 
-Le fichier lance aussi les tâches planifiées (service `cron`) et exige pour cela `CRON_SECRET` dans `.env`. Avant `docker compose up -d --build` : y écrire la valeur que votre cron de l'hôte utilise déjà, ou une nouvelle (`openssl rand -base64 32`), puis retirer du cron de l'hôte les appels à `/api/cron/*`. Ne pas laisser les deux tourner : chaque tâche serait appelée deux fois.
+Le fichier lance aussi les tâches planifiées (service `cron`) et exige pour cela `CRON_SECRET` dans `.env`. Avant `docker compose up -d --build` : y écrire la valeur que votre cron de l'hôte utilise déjà, ou une nouvelle (`openssl rand -base64 32`), et retirer d'abord du cron de l'hôte les appels à `/api/cron/*`. Ne pas laisser les deux tourner : chaque tâche serait appelée deux fois, et des rappels pourraient partir en double.
 
 ## Kubernetes
 

@@ -90,6 +90,30 @@ describe("scheduled tasks of the Docker Compose install (scripts/compose-cron.sh
     }
   })
 
+  // The loop sleeps to the start of the next minute from one clock reading; « 08 » and « 09 » would
+  // be invalid octal numbers in shell arithmetic.
+  it("sleeps to the start of the next minute, leading zeros included", () => {
+    const wait = (second: string) => spawnSync("sh", [SCRIPT, "--until-next-minute", second], { env: cleanEnv(), encoding: "utf8" }).stdout.trim()
+    expect(wait("00")).toBe("60")
+    expect(wait("05")).toBe("55")
+    expect(wait("08")).toBe("52")
+    expect(wait("09")).toBe("51")
+    expect(wait("59")).toBe("1")
+  })
+
+  // A restart in the middle of a due minute must not call its tasks again (the reminders are not
+  // safe to run twice at once), a minute is handled once, and a task never overlaps itself.
+  it("waits for a minute boundary before its first call, handles a minute once, and cuts a call before its period", () => {
+    const script = read("scripts/compose-cron.sh")
+    const loop = script.slice(script.indexOf('echo "Tâches planifiées'))
+    expect(loop.indexOf('sleep "$(until_next_minute "$(date -u +%S)")"')).toBeGreaterThan(0)
+    expect(loop.indexOf('sleep "$(until_next_minute "$(date -u +%S)")"')).toBeLessThan(loop.indexOf("while true"))
+    expect(loop).toContain('if [ "$1$2" != "$last" ]; then')
+    expect(loop).toContain("set -- $(date -u '+%H %M %S')")
+    expect(script).toContain("--max-time 280")
+    for (const file of Object.values(K8S_TASKS)) expect(read(`k8s/${file}`), file).toContain("concurrencyPolicy: Forbid")
+  })
+
   it("stops with a message when the shared secret or the app's address is missing", () => {
     const noSecret = spawnSync("sh", [SCRIPT], { env: cleanEnv({ APP_URL: "http://app:3000" }), encoding: "utf8" })
     expect(noSecret.status).toBe(1)
