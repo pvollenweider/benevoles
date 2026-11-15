@@ -222,11 +222,13 @@ export async function saveEventReminderRules(
     // occurrence nor let the rule disappear under it. Only rows really in that state are skipped;
     // a stalled claim is later reclaimed and re-checked by `deliverOutbox`.
     const occurrenceOutboxIds = occurrences.map((occurrence) => occurrence.outboxId).filter((id): id is string => !!id)
+    // Read under a row lock, held until this transaction ends: a delivery claiming one of these
+    // rows meanwhile either committed first (seen here as `sending`) or waits, then finds the row
+    // cancelled. A plain read would miss a claim not yet committed, cancel the occurrence and delete
+    // the rule under an email that then leaves. Same lock order as the hourly run: the event's
+    // advisory lock first, the outbox rows after.
     const inFlightRows: { id: string; status: string }[] = occurrenceOutboxIds.length > 0
-      ? await tx.notificationOutbox.findMany({
-          where: { id: { in: occurrenceOutboxIds } },
-          select: { id: true, status: true },
-        })
+      ? await tx.$queryRaw<{ id: string; status: string }[]>`SELECT "id", "status" FROM "NotificationOutbox" WHERE "id" = ANY(${occurrenceOutboxIds}::text[]) ORDER BY "id" FOR UPDATE`
       : []
     const sendingOutboxIds = new Set<string>(
       inFlightRows.filter((row) => row.status === "sending").map((row) => row.id),

@@ -753,4 +753,46 @@ describe.skipIf(!url)("custom reminder rules settings on Postgres (#1139)", () =
     expect(recreatedRows).toHaveLength(1)
     expect(recreatedRows[0]).toMatchObject({ id: inFlight.id, ruleId, status: "sent" })
   })
+
+  // The claim is not committed yet when the save starts: a plain read would see `pending`, cancel
+  // the occurrence and delete the rule, and the email would leave with nothing left to record it.
+  it("waits for a delivery claim in progress before deciding what to cancel", async () => {
+    const now = new Date("2030-06-03T08:00:00Z")
+    const saved = await saveEventReminderRules(prisma, orgId, eventId, { mode: "custom", rules: [rule()] }, now)
+    if (!saved.ok) throw new Error("save failed")
+    const ruleId = saved.state.rules[0].id
+    await queueCustomRuleReminders(now)
+    const claimed = (await customOccurrences()).find((occurrence) => occurrence.volunteerId === volunteerIds[0])
+    if (!claimed?.outboxId) throw new Error("missing outbox row")
+    const outboxId = claimed.outboxId
+
+    let release!: () => void
+    const gate = new Promise<void>((resolve) => { release = resolve })
+    let claimWritten!: () => void
+    const written = new Promise<void>((resolve) => { claimWritten = resolve })
+    // The delivery's claim, written but not committed.
+    const claim = prisma.$transaction(async (tx) => {
+      await tx.notificationOutbox.update({ where: { id: outboxId }, data: { status: "sending", claimedAt: now } })
+      claimWritten()
+      await gate
+    }, { timeout: 20_000 })
+    await written
+
+    let finished = false
+    const removal = saveEventReminderRules(prisma, orgId, eventId, { mode: "default" }, now).then((result) => { finished = true; return result })
+    // The save must block on the claimed row, not decide from the stale `pending`.
+    for (let attempt = 0; attempt < 100; attempt++) {
+      const waiting = await prisma.$queryRaw<{ n: bigint }[]>`SELECT count(*) AS n FROM pg_stat_activity WHERE wait_event_type = 'Lock' AND query LIKE '%NotificationOutbox%FOR UPDATE%' AND pid <> pg_backend_pid()`
+      if (Number(waiting[0].n) > 0) break
+      await new Promise((resolve) => setTimeout(resolve, 50))
+    }
+    expect(finished).toBe(false)
+    release()
+    await claim
+    expect(await removal).toMatchObject({ ok: true })
+
+    expect((await prisma.eventReminderRule.findUniqueOrThrow({ where: { id: ruleId } })).archivedAt).not.toBeNull()
+    expect(await prisma.reminderOccurrence.findUniqueOrThrow({ where: { id: claimed.id } })).toMatchObject({ status: "queued", outboxId })
+    expect((await prisma.notificationOutbox.findUniqueOrThrow({ where: { id: outboxId } })).status).toBe("sending")
+  })
 })
