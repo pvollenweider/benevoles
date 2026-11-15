@@ -94,6 +94,22 @@ describe("EventReminderRulesForm (#1139)", () => {
     expect(screen.queryByRole("button", { name: "Retirer le rappel 1" })).not.toBeInTheDocument()
   })
 
+  it("clears the removal sentence when a rule is added, so the same removal is announced again", () => {
+    renderForm(state({
+      mode: "custom",
+      rules: [{ id: "r1", unit: "days", value: 7, enabled: true }, { id: "r2", unit: "hours", value: 2, enabled: true }],
+      preview: scheduled,
+    }))
+    fireEvent.click(screen.getByRole("button", { name: "Retirer le rappel 2" }))
+    const status = screen.getByText("Rappel 2 retiré. Il reste 1 rappel.")
+    fireEvent.click(screen.getByRole("button", { name: "Ajouter un rappel" }))
+    // Still mounted, now empty: two rules are shown and the sentence would be wrong.
+    expect(status).toBeInTheDocument()
+    expect(status).toBeEmptyDOMElement()
+    fireEvent.click(screen.getByRole("button", { name: "Retirer le rappel 2" }))
+    expect(status).toHaveTextContent("Rappel 2 retiré. Il reste 1 rappel.")
+  })
+
   it("offers no remove button on a single rule", () => {
     renderForm(state({ mode: "custom", rules: [{ id: "r1", unit: "days", value: 1, enabled: true }], preview: scheduled }))
     expect(screen.queryByRole("button", { name: /^Retirer le rappel/ })).not.toBeInTheDocument()

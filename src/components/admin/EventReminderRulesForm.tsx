@@ -107,6 +107,7 @@ export default function EventReminderRulesForm({ eventId, timeZone, initialState
 
   function chooseCustom() {
     setMode("custom")
+    setRemoved("")
     if (rules.length === 0) setRules([newRule(counter.current++)])
   }
 
@@ -114,6 +115,9 @@ export default function EventReminderRulesForm({ eventId, timeZone, initialState
     if (atMax) return
     const draft = newRule(counter.current++)
     pendingFocus.current = draft.key
+    // The removal sentence no longer describes the list; cleared, the same removal later is
+    // announced again.
+    setRemoved("")
     setRules((current) => [...current, draft])
   }
 
@@ -150,7 +154,9 @@ export default function EventReminderRulesForm({ eventId, timeZone, initialState
       if (!validation.ok) {
         const index = Math.max(0, (validation.rule ?? 1) - 1)
         const rule = rules[index]
-        fail(validation.error, rule.key, inputRefs.current.get(rule.key) ?? null)
+        // No such rule (more rules than the form can hold): the message goes to the form alert.
+        if (rule) fail(validation.error, rule.key, inputRefs.current.get(rule.key) ?? null)
+        else fail(validation.error)
         return
       }
       payload = { mode: "custom", rules: inputs }
@@ -219,8 +225,8 @@ export default function EventReminderRulesForm({ eventId, timeZone, initialState
               type="radio"
               name={`${id}-mode`}
               checked={mode === "default"}
-              onChange={() => setMode("default")}
-              className="mt-0.5 h-4 w-4 shrink-0 border-gray-500 text-blue-600"
+              onChange={() => { setMode("default"); setRemoved("") }}
+              className="mt-0.5 h-4 w-4 shrink-0 text-blue-600 focus:ring-2 focus:ring-blue-500"
             />
             <label htmlFor={`${id}-default`} className="text-sm text-gray-800">
               Délais habituels : 2 jours avant, la veille et le jour même
@@ -234,7 +240,7 @@ export default function EventReminderRulesForm({ eventId, timeZone, initialState
               checked={mode === "custom"}
               onChange={chooseCustom}
               aria-describedby={customHintId}
-              className="mt-0.5 h-4 w-4 shrink-0 border-gray-500 text-blue-600"
+              className="mt-0.5 h-4 w-4 shrink-0 text-blue-600 focus:ring-2 focus:ring-blue-500"
             />
             <label htmlFor={`${id}-custom`} className="text-sm text-gray-800">
               Délais propres à cet événement
@@ -269,7 +275,7 @@ export default function EventReminderRulesForm({ eventId, timeZone, initialState
                         onChange={(e) => setRules((current) => current.map((candidate) => candidate.key === rule.key ? { ...candidate, value: e.target.value } : candidate))}
                         aria-invalid={invalid ? true : undefined}
                         aria-describedby={invalid ? `${boundsId} ${anchorId} ${errorId}` : `${boundsId} ${anchorId}`}
-                        className={inputClass}
+                        className={`${inputClass} ${invalid ? "!border-red-600" : ""}`}
                       />
                     </div>
                     <div>
@@ -290,7 +296,7 @@ export default function EventReminderRulesForm({ eventId, timeZone, initialState
                         type="checkbox"
                         checked={rule.enabled}
                         onChange={(e) => setRules((current) => current.map((candidate) => candidate.key === rule.key ? { ...candidate, enabled: e.target.checked } : candidate))}
-                        className="h-4 w-4 shrink-0 rounded border-gray-500 text-blue-600"
+                        className="h-4 w-4 shrink-0 rounded text-blue-600 focus:ring-2 focus:ring-blue-500"
                       />
                       <label htmlFor={`${id}-${ruleKey}-enabled`} className="text-sm font-medium text-gray-800">Actif</label>
                     </div>
