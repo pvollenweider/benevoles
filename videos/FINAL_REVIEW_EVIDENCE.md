@@ -1129,3 +1129,18 @@ modifiés. `doc-img: unchanged` ne s’applique pas : les captures `admin-remind
   suite 67 fichiers / 431 tests réussis. Les trois tests d'inactivité d'organisation n'ont pas
   échoué ici. Aucun fichier de `public/doc-img/` n'a été modifié : les captures `admin-reminders`
   et `admin-message` restent à régénérer par le propriétaire, et aucune vidéo n'a été refaite.
+
+## Page « Continuité du service » et préavis d’arrêt dans les conditions d’utilisation (#1357), 15 novembre 2026
+
+Les conditions d’utilisation gagnent un paragraphe à l’article 7 (préavis de trois mois avant un
+arrêt définitif du service) et leur date passe au 15 novembre 2026. Aucune vidéo n’est régénérée
+dans ce travail :
+
+- `PRIVACY_PERSONAL_LINKS`, scène `legal` : la page des conditions d’utilisation est ouverte, puis
+  la vue défile jusqu’à « 5. Données personnelles ». L’image du haut de page montre encore
+  « Dernière mise à jour : 6 octobre 2026 ». La narration ne cite ni la date ni l’article 7. Aucun
+  sélecteur ne casse : les titres « Conditions générales d'utilisation » et « 5. Données
+  personnelles » sont inchangés.
+
+Les pages Tarifs, Logiciel libre et Manifeste gagnent une phrase avec un lien ; aucune vidéo ne les
+montre.

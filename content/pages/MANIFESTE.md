@@ -67,6 +67,8 @@ L'hébergement ne restera peut-être pas gratuit pour toujours. Si un tarif voit
 
 benevol.app est conçu et maintenu par Philippe Vollenweider, avec les retours des associations qui l'utilisent. Le code est publié sur [GitHub](https://github.com/pvollenweider/benevoles). Une question, une idée ou un problème : écrivez à [contact@benevol.app](mailto:contact@benevol.app), aucun compte n'est nécessaire.
 
+La page [Continuité du service](CONTINUITE-DU-SERVICE.md) dit comment vos données sont sauvegardées et ce que le service ne garantit pas.
+
 <!-- actions -->
 - [Demander un espace](/inscription)
 - [Voir les fonctionnalités](FEATURES.md)
