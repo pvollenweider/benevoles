@@ -21,6 +21,7 @@ Format basé sur [Keep a Changelog](https://keepachangelog.com/fr/1.0.0/).
 - **Citer benevol.app** : une page publique qui donne le nom exact, des descriptions à reprendre telles quelles et des faits vérifiables, avec un bouton pour copier chaque texte (#1323).
 - **Réserver un poste selon une réponse** (#962) : l'éditeur « Accès » de « Gérer les postes » choisit une question à choix posée à tous les bénévoles et les réponses acceptées ; le créneau affiche « Réponse requise : … » et l'inscription vérifie la réponse, y compris depuis « Mes inscriptions », la liste d'attente, les échanges et la confirmation par email.
 - **Une page d'information pour les bénévoles d'un poste** (#1324) : rattachez une page à un ou plusieurs postes ; les personnes qui ont une place confirmée reçoivent son lien avant leur créneau, dans la confirmation, les rappels et leur page Mes inscriptions, sans que la page cesse d'être publique.
+- **Délais de rappels propres à chaque événement** : depuis l'onglet Messages, section Rappels, choisissez jusqu'à trois rappels en heures ou en jours pour un événement, activez-les ou désactivez-les, et voyez le prochain envoi avec le nombre de personnes et de créneaux ; ces délais remplacent les trois rappels habituels et les paramètres de l'organisation pour cet événement, et un rappel déjà parti n'est jamais renvoyé (#1139).
 
 ### Modifié
 
@@ -34,6 +35,7 @@ Format basé sur [Keep a Changelog](https://keepachangelog.com/fr/1.0.0/).
 
 ### Corrigé
 
+- Le guide des rappels ne promet plus un rappel pour chaque inscription tardive ni un regroupement systématique : il dit ce qui part vraiment quand une place est confirmée après l'heure d'un rappel (#1139).
 - Le nettoyage nocturne ne s'arrête plus sur l'email d'une organisation supprimée (un espace refusé, par exemple) : ces emails sont purgés à l'échéance comme les autres et comptés au niveau de la plateforme. Tant qu'un tel email restait en file, les étapes suivantes du nettoyage ne s'exécutaient pas.
 - Les rappels à délais propres à un événement ne sont plus perdus quand un créneau recule puis revient plus tôt, y compris après un nouvel essai ou une retenue d'envoi, et une retenue n'est plus comptée deux fois pour un même e-mail et une même heure ; ils ne repartent plus après un échec définitif, y compris lors d'une fusion de fiches, mais un échec définitif peut être relancé par l'administrateur, qui rouvre l'occurrence avec l'e-mail ; l'état « envoyé » est conservé lors d'une fusion ; ils apparaissent dans l'export des membres pour une demande d'accès (#1139). <!-- interne -->
 - Dans les formulaires de l'administration et la demande d'un espace, une erreur de champ n'est plus annoncée deux fois par un lecteur d'écran : elle est dite avec le champ qui la reçoit, ou par l'alerte quand le champ avait déjà le focus ; un second échec identique est redit une fois, sans faire disparaître le cadre ni retirer le marquage du champ (#739).
@@ -43,7 +45,7 @@ Format basé sur [Keep a Changelog](https://keepachangelog.com/fr/1.0.0/).
 
 ### Exploitation
 
-- Les rappels automatiques acceptent des délais propres à chaque événement (jusqu'à trois règles en heures ou en jours), avec une table d'état durable qui empêche un double envoi et une remise en file par l'outbox ; aucune interface ne permet encore de les créer, le chemin reste dormant en production (#1139). <!-- interne -->
+- Les rappels automatiques acceptent des délais propres à chaque événement (jusqu'à trois règles en heures ou en jours), avec une table d'état durable qui empêche un double envoi et une remise en file par l'outbox ; le réglage arrive dans l'onglet Messages avec la PR 2 (#1139). <!-- interne -->
 - Les tests unitaires vérifient aussi les phrases annoncées par un lecteur d'écran virtuel (une approximation, ni VoiceOver ni NVDA) sur l'enregistrement d'une page, une erreur de champ, un compteur d'inscriptions et un lien lu hors contexte (#739). <!-- interne -->
 - Les issues du dépôt suivent trois axes de labels (type, statut, domaine), décrits dans `CONTRIBUTING.md` ; le modèle « Amélioration » pose le label `enhancement`. <!-- interne -->
 - Le manifeste du webhook Gandi désigne l'image construite avec OpenTelemetry 1.47.0 et Go 1.26, déployée sur le cluster le 14 novembre 2026. <!-- interne -->

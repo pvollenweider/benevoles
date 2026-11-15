@@ -16,11 +16,13 @@ import { loadMessageHistory, loadScheduledMessages } from "@/lib/message-history
 import { orgTimeZone } from "@/lib/time-zone"
 import HelpLink from "@/components/admin/HelpLink"
 import AutomaticRemindersBox from "@/components/admin/AutomaticRemindersBox"
+import EventReminderRulesForm from "@/components/admin/EventReminderRulesForm"
 import SendReminderButton from "@/components/admin/SendReminderButton"
 import { remindersSummary } from "@/lib/automatic-reminders"
 import { parseNotificationSettings } from "@/lib/notification-settings"
 import { hasUpcomingShift } from "@/lib/event-wizard"
 import { loadSectorFilter } from "@/lib/sector-filter-data"
+import { loadEventReminderRulesState } from "@/lib/reminder-rules-data"
 
 export const dynamic = "force-dynamic"
 export const metadata: Metadata = { title: "Messages" }
@@ -52,7 +54,10 @@ export default async function MessagePage({ params, searchParams }: { params: Pr
     },
   })
   if (!event) notFound()
+  const now = new Date()
   const timeZone = orgTimeZone(event.organization)
+  const reminderRulesState = await loadEventReminderRulesState(ctx.db, ctx.organizationId, event.id, now)
+  if (!reminderRulesState) notFound()
   const history = await loadMessageHistory(ctx.db, ctx.organizationId, event.id)
   const scheduled = await loadScheduledMessages(ctx.db, event.id, timeZone, new Date())
   // Every batch of emails of the event (#1101), with its delivery.
@@ -69,7 +74,8 @@ export default async function MessagePage({ params, searchParams }: { params: Pr
     published: event.publicStatus === "published",
     eventEnabled: event.remindersEnabled,
     organization: parseNotificationSettings(event.organization.notificationSettings).reminders,
-    upcomingShifts: hasUpcomingShift(event.shifts.map((s) => ({ date: s.date.toISOString().slice(0, 10), startTime: s.startTime })), new Date(), timeZone),
+    upcomingShifts: hasUpcomingShift(event.shifts.map((s) => ({ date: s.date.toISOString().slice(0, 10), startTime: s.startTime })), now, timeZone),
+    customRules: reminderRulesState.rules,
   })
   const templates = await ctx.db.messageTemplate.findMany({ orderBy: { name: "asc" }, select: { id: true, name: true, subject: true, body: true } })
 
@@ -117,6 +123,7 @@ export default async function MessagePage({ params, searchParams }: { params: Pr
       <section aria-labelledby="message-reminders" className="space-y-3">
         <h2 id="message-reminders" className="text-base font-semibold text-gray-900">Rappels</h2>
         <AutomaticRemindersBox summary={reminders} />
+        <EventReminderRulesForm eventId={event.id} timeZone={timeZone} initialState={reminderRulesState} />
         <SendReminderButton
           eventId={event.id}
           hasMessage={!!event.reminderMessage?.trim()}

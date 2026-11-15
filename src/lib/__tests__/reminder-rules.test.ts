@@ -1,14 +1,21 @@
 import { describe, it, expect } from "vitest"
 import {
+  customReminderPreviewSentence,
   eventUsesCustomReminderRules,
   nextEventReminderPreview,
   nextReminderAttemptAt,
   reminderRuleDueAt,
   reminderRuleHours,
   reminderRuleStatus,
+  reminderPreviewView,
+  reminderRulesChange,
+  reminderRuleDelay,
+  reminderRuleDelayBefore,
+  reminderRulesDelayList,
   rescheduleQueuedOccurrences,
   triggeredCustomReminders,
   validateReminderRules,
+  validateReminderRulesInput,
   type ReminderOccurrenceKey,
   type ReminderRuleInput,
   type ReminderRuleRegistration,
@@ -60,7 +67,7 @@ describe("bounds and duplicate delays (#1139)", () => {
     const three = [rule({ id: "a" }), rule({ id: "b", value: 4 }), rule({ id: "c", value: 6 })]
     const four = [...three, rule({ id: "d", value: 8 })]
     expect(validateReminderRules(three).ok).toBe(true)
-    expect(validateReminderRules(four)).toMatchObject({ ok: false, error: expect.stringContaining("plus de 3") })
+    expect(validateReminderRules(four)).toMatchObject({ ok: false, error: expect.stringContaining("plus de 3"), rule: 4 })
   })
 
   it("bounds hours to 2–336 and days to 1–14, integer values only", () => {
@@ -83,7 +90,7 @@ describe("bounds and duplicate delays (#1139)", () => {
       rule({ id: "a", unit: "days", value: 2 }),
       rule({ id: "b", unit: "hours", value: 48 }),
     ])
-    expect(result).toMatchObject({ ok: false, error: "Deux rappels ont le même délai : 48 heures." })
+    expect(result).toMatchObject({ ok: false, error: "Les rappels 1 et 2 ont le même délai : 48 heures.", rule: 2, positions: [1, 2] })
     // Distinct delays are fine, and displayOrder defaults to the input position.
     const ok = validateReminderRules([rule({ id: "a", unit: "days", value: 2 }), rule({ id: "b", unit: "hours", value: 2 })])
     expect(ok).toMatchObject({ ok: true, rules: [{ displayOrder: 0 }, { displayOrder: 1 }] })
@@ -360,5 +367,70 @@ describe("next reminder attempt against both deadlines (#1139)", () => {
     expect(nextReminderAttemptAt(later, null)).toEqual(later)
     expect(nextReminderAttemptAt(later, new Date("2030-06-01T17:00:00Z"))).toEqual(new Date("2030-06-01T17:00:00Z"))
     expect(nextReminderAttemptAt(later, new Date("2030-06-01T07:00:00Z"))).toEqual(later)
+  })
+})
+
+
+describe("settings payload and copy (#1139, PR 2)", () => {
+  it("normalises the two modes, requires a rule in custom mode, and keeps positions", () => {
+    expect(validateReminderRulesInput({ mode: "default" })).toEqual({ ok: true, mode: "default", rules: [] })
+    expect(validateReminderRulesInput({ mode: "custom", rules: [] })).toMatchObject({
+      ok: false, error: "Ajoutez au moins un rappel, ou choisissez les délais habituels.",
+    })
+    const ok = validateReminderRulesInput({
+      mode: "custom",
+      rules: [
+        { id: "a", unit: "days", value: 7, enabled: true },
+        { unit: "hours", value: 2, enabled: false },
+      ],
+    })
+    expect(ok).toMatchObject({ ok: true, mode: "custom", rules: [{ id: "a", displayOrder: 0 }, { id: "", displayOrder: 1 }] })
+    const bad = validateReminderRulesInput({ mode: "custom", rules: [{ unit: "hours", value: 1, enabled: true }] })
+    expect(bad).toMatchObject({
+      ok: false,
+      error: "Rappel 1 : un rappel en heures doit être compris entre 2 et 336 heures.",
+      rule: 1,
+    })
+  })
+
+  it("words a delay, a list and the log's compact before/after", () => {
+    expect(reminderRuleDelay({ unit: "days", value: 1 })).toBe("1 jour")
+    expect(reminderRuleDelay({ unit: "days", value: 7 })).toBe("7 jours")
+    expect(reminderRuleDelayBefore({ unit: "hours", value: 2 })).toBe("2 heures avant")
+    expect(reminderRulesDelayList([
+      { unit: "days", value: 7, enabled: true },
+      { unit: "days", value: 2, enabled: false },
+      { unit: "hours", value: 2, enabled: true },
+    ])).toBe("7 jours avant et 2 heures avant")
+    expect(reminderRulesChange(
+      { mode: "default", rules: [] },
+      { mode: "custom", rules: [{ unit: "days", value: 7, enabled: true }, { unit: "hours", value: 2, enabled: false }] },
+    )).toEqual({
+      reminderRulesMode: { from: "default", to: "custom" },
+      reminderRules: { from: "(aucun)", to: "7 jours, 2 heures (désactivé)" },
+    })
+  })
+
+  it("renders the preview in French, in the organisation's zone, with agreed plurals", () => {
+    const at = new Date("2030-06-12T06:00:00Z")
+    const scheduled = reminderPreviewView({
+      state: "scheduled", reason: null, detail: null, ruleId: "r1", dueAt: at, localDay: "2030-06-12",
+      recipientCount: 14, shiftCount: 22,
+    })
+    expect(customReminderPreviewSentence(scheduled, "Europe/Zurich")).toBe(
+      "Prochain rappel : mercredi 12 juin à 08:00, pour 14 personnes (22 créneaux).",
+    )
+    expect(customReminderPreviewSentence({
+      state: "queued", reason: null, detail: null, ruleId: "r1", dueAt: at.toISOString(), localDay: "2030-06-12",
+      recipientCount: 1, shiftCount: 1,
+    }, "Europe/Zurich")).toBe("Un rappel est en cours d'envoi pour 1 personne (1 créneau).")
+    expect(customReminderPreviewSentence({ state: "blocked", reason: "event-off", detail: null, ruleId: null, dueAt: null, localDay: null, recipientCount: 0, shiftCount: 0 }, "Europe/Zurich"))
+      .toBe("Les rappels automatiques sont coupés pour cet événement : aucun rappel ne partira.")
+    expect(customReminderPreviewSentence({ state: "blocked", reason: "organization-blocked", detail: "org_inactive", ruleId: null, dueAt: null, localDay: null, recipientCount: 0, shiftCount: 0 }, "Europe/Zurich"))
+      .toBe("L'organisation est désactivée : aucun email ne partira.")
+    expect(customReminderPreviewSentence({ state: "blocked", reason: "no-enabled-rule", detail: null, ruleId: null, dueAt: null, localDay: null, recipientCount: 0, shiftCount: 0 }, "Europe/Zurich"))
+      .toBe("Tous les rappels de cet événement sont désactivés : aucun email ne partira.")
+    expect(customReminderPreviewSentence({ state: "blocked", reason: "no-upcoming-reminder", detail: null, ruleId: null, dueAt: null, localDay: null, recipientCount: 0, shiftCount: 0 }, "Europe/Zurich"))
+      .toBe("Rien à envoyer pour l'instant : aucun créneau à venir ne peut encore recevoir ces rappels.")
   })
 })

@@ -2597,6 +2597,34 @@ describe("Workload protection — cross-tenant isolation (#1171)", () => {
   })
 })
 
+describe("Per-event reminder rules — cross-tenant isolation (#1139)", () => {
+  beforeEach(() => vi.clearAllMocks())
+
+  it("GET and PUT /api/admin/events/[id]/reminder-rules return 404 for an org-B event and write nothing", async () => {
+    const route = await import("@/app/api/admin/events/[id]/reminder-rules/route")
+    const db = setupGuard()
+    const extra = {
+      eventReminderRule: { findMany: vi.fn().mockResolvedValue([]), create: vi.fn(), update: vi.fn(), updateMany: vi.fn(), deleteMany: vi.fn() },
+      reminderOccurrence: { findMany: vi.fn().mockResolvedValue([]), updateMany: vi.fn() },
+      notificationOutbox: { updateMany: vi.fn(), findUnique: vi.fn().mockResolvedValue(null) },
+      $transaction: vi.fn(),
+    }
+    Object.assign(db, extra)
+    expect((await route.GET(makeRequest("/api/admin/events/evt-b/reminder-rules"), params("evt-b"))).status).toBe(404)
+    const res = await route.PUT(makeRequest("/api/admin/events/evt-b/reminder-rules", "PUT", {
+      mode: "custom",
+      rules: [{ unit: "days", value: 7, enabled: true }],
+    }), params("evt-b"))
+    expect(res.status).toBe(404)
+    expect(db.event.findFirst).toHaveBeenCalledWith(expect.objectContaining({ where: expect.objectContaining({ id: "evt-b" }) }))
+    expect(extra.$transaction).not.toHaveBeenCalled()
+    expect(extra.eventReminderRule.create).not.toHaveBeenCalled()
+    expect(extra.eventReminderRule.update).not.toHaveBeenCalled()
+    expect(extra.eventReminderRule.deleteMany).not.toHaveBeenCalled()
+    expect(extra.notificationOutbox.updateMany).not.toHaveBeenCalled()
+  })
+})
+
 // ── Places of an event (#1171, lot 2) ────────────────────────────────────────
 
 describe("Places — cross-tenant isolation (#1171)", () => {

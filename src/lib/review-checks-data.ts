@@ -19,6 +19,7 @@ export async function loadReviewChecks(db: OrgScopedPrisma, id: string, now: Dat
       id: true, title: true, slug: true, startDate: true, endDate: true, location: true, confirmationMessage: true, publicInstructions: true, publicStatus: true,
       latitude: true, longitude: true, dayContactName: true, dayContactPhone: true, remindersEnabled: true, registrationsOpen: true, registrationOpensAt: true, registrationClosesAt: true,
       shiftRosterEnabled: true,
+      reminderRules: { orderBy: [{ displayOrder: "asc" as const }, { createdAt: "asc" as const }], select: { unit: true, value: true, enabled: true } },
       organization: { select: { slug: true, timeZone: true, publicationApprovedAt: true, notificationSettings: true } },
       shifts: {
         where: { status: { not: "cancelled" } },
@@ -56,6 +57,7 @@ export async function loadReviewChecks(db: OrgScopedPrisma, id: string, now: Dat
       eventEnabled: event.remindersEnabled,
       organization: parseNotificationSettings(event.organization.notificationSettings).reminders,
       upcomingShifts: hasUpcomingShift(shifts, now, timeZone),
+      customRules: event.reminderRules,
     },
     // Leaders don't matter to the coverage line: only the totals and the incomplete shifts are read.
     coverage: staffingSummary(shifts, []),

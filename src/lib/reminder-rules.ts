@@ -8,7 +8,7 @@
  * `automatic-reminders.ts` and the three organisation switches in `notification-settings.ts`).
  * An event with at least one rule row — even all disabled — follows its own rows only. The one
  * function that decides this is `eventUsesCustomReminderRules`, so the rule can be changed in a
- * single place (PR 2 will explain it in the settings screen).
+ * single place; the event's settings screen explains it.
  *
  * A rule is counted back from the volunteer's earliest active shift of the event on that stored
  * local day (`shiftLocalDay` / `shiftStartInstant` in `reminder-groups.ts`): a shift past midnight
@@ -21,6 +21,8 @@ import {
   type GroupableRegistration,
   type ReminderGroup,
 } from "./reminder-groups"
+import { ORG_INACTIVE_REASON } from "./outbox-org-cancel-reason"
+import { ORG_PENDING_REASON } from "./outbox-org-pending-reason"
 
 export const REMINDER_RULE_UNITS = ["hours", "days"] as const
 export type ReminderRuleUnit = (typeof REMINDER_RULE_UNITS)[number]
@@ -66,39 +68,56 @@ export function reminderRuleHours(rule: Pick<ReminderRuleInput, "unit" | "value"
 
 export type ReminderRulesValidation =
   | { ok: true; rules: ValidReminderRule[] }
-  | { ok: false; error: string }
+  | {
+      ok: false
+      error: string
+      /** 1-based position of the faulty rule, when the error is about one rule. */
+      rule?: number
+      /** Both 1-based positions of a duplicate delay, first then later. */
+      positions?: [number, number]
+    }
 
 /**
  * Bounds, integer values and the refusal of two rules with the same delay once converted to hours
- * (#1139). `displayOrder` defaults to the input position. Messages are French, ready for the
- * settings screen of PR 2.
+ * (#1139). `displayOrder` defaults to the input position. Messages are French and name the rule
+ * by its 1-based position, ready for the settings screen of PR 2.
  */
 export function validateReminderRules(rules: readonly ReminderRuleInput[]): ReminderRulesValidation {
   if (rules.length > MAX_REMINDER_RULES) {
-    return { ok: false, error: `Un événement ne peut pas avoir plus de ${MAX_REMINDER_RULES} rappels.` }
+    return { ok: false, error: `Un événement ne peut pas avoir plus de ${MAX_REMINDER_RULES} rappels.`, rule: MAX_REMINDER_RULES + 1 }
   }
   const seen = new Map<number, number>()
   const normalized: ValidReminderRule[] = []
   for (const [index, rule] of rules.entries()) {
+    const position = index + 1
     if (!isReminderRuleUnit(rule.unit)) {
-      return { ok: false, error: `Unité de rappel inconnue : « ${rule.unit} ».` }
+      return { ok: false, error: `Rappel ${position} : unité de rappel inconnue : « ${rule.unit} ».`, rule: position }
     }
     if (!Number.isInteger(rule.value)) {
-      return { ok: false, error: "Le délai d'un rappel doit être un nombre entier." }
+      return { ok: false, error: `Rappel ${position} : le délai doit être un nombre entier.`, rule: position }
     }
     const bounds = REMINDER_RULE_BOUNDS[rule.unit]
     if (rule.value < bounds.min || rule.value > bounds.max) {
       return {
         ok: false,
         error: rule.unit === "hours"
-          ? `Un rappel en heures doit être compris entre ${bounds.min} et ${bounds.max} heures.`
-          : `Un rappel en jours doit être compris entre ${bounds.min} et ${bounds.max} jours.`,
+          ? `Rappel ${position} : un rappel en heures doit être compris entre ${bounds.min} et ${bounds.max} heures.`
+          : `Rappel ${position} : un rappel en jours doit être compris entre ${bounds.min} et ${bounds.max} jours.`,
+        rule: position,
       }
     }
     const hours = reminderRuleHours(rule)!
     const duplicate = seen.get(hours)
     if (duplicate !== undefined) {
-      return { ok: false, error: `Deux rappels ont le même délai : ${hours} heures.` }
+      const first = duplicate + 1
+      return {
+        ok: false,
+        error: `Les rappels ${first} et ${position} ont le même délai : ${hours} heures.`,
+        // The later rule is the one that makes the delay a duplicate: mark it, so the screen can
+        // focus the field the organiser has to change.
+        rule: position,
+        positions: [first, position],
+      }
     }
     seen.set(hours, index)
     normalized.push({
@@ -112,13 +131,101 @@ export function validateReminderRules(rules: readonly ReminderRuleInput[]): Remi
   return { ok: true, rules: normalized }
 }
 
+/** A rule as the settings screen sends it: an existing `id`, or none for a new one. */
+export type ReminderRuleDraftInput = {
+  id?: string
+  unit: string
+  value: number
+  enabled: boolean
+}
+
+/** The whole settings payload: the legacy defaults, or the event's own rules. */
+export type ReminderRulesInput =
+  | { mode: "default" }
+  | { mode: "custom"; rules: readonly ReminderRuleDraftInput[] }
+
+export type ReminderRulesInputValidation =
+  | { ok: true; mode: "default"; rules: [] }
+  | { ok: true; mode: "custom"; rules: ValidReminderRule[] }
+  | { ok: false; error: string; rule?: number; positions?: [number, number] }
+
+/**
+ * Normalises and validates the settings payload (#1139): custom mode needs at least one rule;
+ * a rule without an `id` is new and gets an empty id, which the server treats as a creation.
+ * Messages name the rule, so the API can attach the error to its field.
+ */
+export function validateReminderRulesInput(input: ReminderRulesInput): ReminderRulesInputValidation {
+  if (input.mode === "default") return { ok: true, mode: "default", rules: [] }
+  if (input.rules.length === 0) {
+    return { ok: false, error: "Ajoutez au moins un rappel, ou choisissez les délais habituels." }
+  }
+  const result = validateReminderRules(input.rules.map((rule) => ({
+    id: rule.id ?? "",
+    unit: rule.unit,
+    value: rule.value,
+    enabled: rule.enabled,
+  })))
+  return result.ok
+    ? { ok: true, mode: "custom", rules: result.rules }
+    : { ok: false, error: result.error, ...(result.rule ? { rule: result.rule } : {}), ...(result.positions ? { positions: result.positions } : {}) }
+}
+
 /**
  * The single switch between the legacy defaults and an event's own rules (#1139): no row means
  * exactly today's behaviour, at least one row (even all disabled) means the legacy path is off
  * for that event. Organisation switches never apply to an event that has its own rules.
  */
-export function eventUsesCustomReminderRules(rules: readonly Pick<ReminderRuleInput, "id">[]): boolean {
+export function eventUsesCustomReminderRules(rules: readonly unknown[]): boolean {
   return rules.length > 0
+}
+
+/** « 7 jours », « 2 heures »: one delay in words, singular agreed. */
+export function reminderRuleDelay(rule: Pick<ReminderRuleInput, "unit" | "value">): string {
+  const unit = rule.unit === "days" ? "jour" : "heure"
+  return `${rule.value} ${unit}${rule.value > 1 ? "s" : ""}`
+}
+
+/** « 7 jours avant »: how the summaries and the preview word one delay. */
+export function reminderRuleDelayBefore(rule: Pick<ReminderRuleInput, "unit" | "value">): string {
+  return `${reminderRuleDelay(rule)} avant`
+}
+
+const frenchList = (items: readonly string[]): string =>
+  items.length > 1 ? `${items.slice(0, -1).join(", ")} et ${items[items.length - 1]}` : items[0] ?? ""
+
+/** The enabled delays, in the event's order: « 7 jours avant, 2 heures avant ». */
+export function reminderRulesDelayList(rules: readonly Pick<ReminderRuleInput, "unit" | "value" | "enabled">[]): string {
+  return frenchList(rules.filter((rule) => rule.enabled).map(reminderRuleDelayBefore))
+}
+
+/** A compact before/after description for the event log, disabled rules included. */
+export function reminderRulesDescription(rules: readonly Pick<ReminderRuleInput, "unit" | "value" | "enabled">[]): string {
+  return rules.length === 0
+    ? "(aucun)"
+    : rules.map((rule) => `${reminderRuleDelay(rule)}${rule.enabled ? "" : " (désactivé)"}`).join(", ")
+}
+
+export type ReminderRulesSnapshot = {
+  mode: "default" | "custom"
+  rules: readonly Pick<ReminderRuleInput, "unit" | "value" | "enabled">[]
+}
+
+/**
+ * The change the event log records (#1139): the mode and the compact list before/after, nothing
+ * that is not needed to understand what the organiser changed.
+ */
+export function reminderRulesChange(
+  before: ReminderRulesSnapshot,
+  after: ReminderRulesSnapshot,
+): Record<string, { from: unknown; to: unknown }> {
+  const changes: Record<string, { from: unknown; to: unknown }> = {}
+  if (before.mode !== after.mode) {
+    changes.reminderRulesMode = { from: before.mode, to: after.mode }
+  }
+  const from = reminderRulesDescription(before.rules)
+  const to = reminderRulesDescription(after.rules)
+  if (from !== to) changes.reminderRules = { from, to }
+  return changes
 }
 
 /** A registration that can be grouped and whose confirmation time decides late sign-ups. */
@@ -428,5 +535,113 @@ export function nextEventReminderPreview<T extends ReminderRuleRegistration>(
     localDay: first.group.localDay,
     recipientCount: volunteers.size,
     shiftCount,
+  }
+}
+
+/** The preview as JSON and as the client component receive it (`dueAt` serialised). */
+export type CustomReminderPreviewView =
+  | {
+      state: "blocked"
+      reason: ReminderPreviewBlockedReason
+      detail: string | null
+      ruleId: null
+      dueAt: null
+      localDay: null
+      recipientCount: 0
+      shiftCount: 0
+    }
+  | {
+      state: "queued" | "scheduled"
+      reason: null
+      detail: null
+      ruleId: string
+      dueAt: string
+      localDay: string
+      recipientCount: number
+      shiftCount: number
+    }
+
+/** One rule as the settings screen edits it. */
+export type EventReminderRuleView = {
+  id: string
+  unit: "hours" | "days"
+  value: number
+  enabled: boolean
+}
+
+/** What the reminder-rules API returns and the settings form renders. */
+export type EventReminderRulesState = {
+  mode: "default" | "custom"
+  rules: EventReminderRuleView[]
+  preview: CustomReminderPreviewView
+}
+
+export function reminderPreviewView(preview: CustomReminderPreview): CustomReminderPreviewView {
+  return preview.state === "blocked"
+    ? {
+        state: "blocked",
+        reason: preview.reason,
+        detail: preview.detail,
+        ruleId: null,
+        dueAt: null,
+        localDay: null,
+        recipientCount: 0,
+        shiftCount: 0,
+      }
+    : {
+        state: preview.state,
+        reason: null,
+        detail: null,
+        ruleId: preview.ruleId,
+        dueAt: preview.dueAt.toISOString(),
+        localDay: preview.localDay,
+        recipientCount: preview.recipientCount,
+        shiftCount: preview.shiftCount,
+      }
+}
+
+const plural = (n: number, one: string, many: string) => `${n} ${n > 1 ? many : one}`
+
+/** « jeudi 12 juin à 08:00 », in the organisation's zone. */
+function previewMoment(iso: string, timeZone: string): string {
+  const at = new Date(iso)
+  const day = at.toLocaleDateString("fr-FR", { timeZone, weekday: "long", day: "numeric", month: "long" })
+  const time = at.toLocaleTimeString("fr-FR", { timeZone, hour: "2-digit", minute: "2-digit" })
+  return `${day} à ${time}`
+}
+
+/** Why an email may not go, in one sentence, from `organizationSendingVerdict`'s detail code. */
+function organizationBlockedSentence(detail: string | null): string {
+  if (detail === ORG_INACTIVE_REASON) return "L'organisation est désactivée : aucun email ne partira."
+  if (detail === ORG_PENDING_REASON) return "L'espace attend encore sa validation : aucun email ne partira pour l'instant."
+  return detail
+    ? `L'organisation ne peut pas envoyer d'emails (${detail}).`
+    : "L'organisation ne peut pas envoyer d'emails."
+}
+
+/**
+ * The one sentence of the « Prochain envoi » block (#1139), from the saved preview. Not a live
+ * region: the component renders it as ordinary text.
+ */
+export function customReminderPreviewSentence(preview: CustomReminderPreviewView, timeZone: string): string {
+  if (preview.state === "scheduled") {
+    return `Prochain rappel : ${previewMoment(preview.dueAt, timeZone)}, pour ${plural(preview.recipientCount, "personne", "personnes")} (${plural(preview.shiftCount, "créneau", "créneaux")}).`
+  }
+  if (preview.state === "queued") {
+    return `Un rappel est en cours d'envoi pour ${plural(preview.recipientCount, "personne", "personnes")} (${plural(preview.shiftCount, "créneau", "créneaux")}).`
+  }
+  switch (preview.reason) {
+    case "event-off":
+      return "Les rappels automatiques sont coupés pour cet événement : aucun rappel ne partira."
+    case "organization-blocked":
+      return organizationBlockedSentence(preview.detail)
+    case "no-enabled-rule":
+      return "Tous les rappels de cet événement sont désactivés : aucun email ne partira."
+    case "no-rules":
+      return "Cet événement utilise les délais habituels : choisissez ses propres délais pour voir le prochain envoi."
+    case "no-upcoming-reminder":
+      return "Rien à envoyer pour l'instant : aucun créneau à venir ne peut encore recevoir ces rappels."
+    default:
+      return "Aucun rappel à venir."
   }
 }

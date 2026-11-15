@@ -1086,3 +1086,26 @@ porter une troisième ligne « Pour le poste … ». Vidéo à revoir, image seu
 sélecteurs inchangés, la capture ne coche aucun poste) : `event-program-pages-qr`. Aucune vidéo
 ne montre le lien « À lire avant ton créneau » : les scénarios des vidéos ne rattachent aucune
 page à un poste. Pas de nouveau rendu dans ce changement.
+
+## Délais de rappels propres à un événement (#1139, PR 2), 15 novembre 2026
+
+L’onglet **Messages**, section **Rappels**, gagne le formulaire « Délais des rappels automatiques »
+(radios « Délais habituels » / « Délais propres à cet événement », jusqu’à trois rappels, bloc
+« Prochain envoi »). Les captures et vidéos qui montrent cet écran ne sont pas régénérées dans ce
+travail (pas de base de données ni de tournage ici) :
+
+- `REMINDERS_CHANGES`, scène `manual-send` : la page Messages est filmée pour le rappel manuel ;
+  elle montre désormais le nouveau formulaire sous l’encadré des rappels automatiques. La narration
+  ne le mentionne pas. Aucun sélecteur ne casse : la scène cherche le bouton « Envoyer le rappel »,
+  qui reste à la même place relative.
+- `ORG_EMAIL_SETTINGS`, scène `event-reminders` : la page Messages est filmée et la narration dit
+  que, pour un événement publié, les rappels suivent les choix de l’organisation. Ce n’est plus vrai
+  pour un événement qui a ses propres délais : ils remplacent les trois interrupteurs. La capture
+  vérifie encore le texte « Rappels automatiques coupés pour cet événement », qui reste affiché.
+- `ADMIN_FEATURES_TOUR`, chapitre des messages : la narration décrit les rappels automatiques
+  habituels ; elle reste vraie pour un événement sans délai propre, mais n’annonce pas la nouveauté.
+  À reprendre à la prochaine régénération.
+
+Aucun de ces enregistrements n’a été refait ; les manifestes, scripts et sélecteurs n’ont pas été
+modifiés. `doc-img: unchanged` ne s’applique pas : les captures `admin-reminders` et
+`admin-message` montrent le nouvel écran et restent à régénérer avec une base jetable.

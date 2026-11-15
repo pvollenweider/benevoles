@@ -1,5 +1,5 @@
 import { describe, it, expect } from "vitest"
-import { lastMessageSentence, nextAutomaticReminder, placesSentence } from "../event-overview"
+import { lastMessageSentence, nextAutomaticReminder, nextCustomReminder, placesSentence } from "../event-overview"
 
 describe("placesSentence", () => {
   it("says the places in words, requests only when there are some", () => {
@@ -42,5 +42,32 @@ describe("lastMessageSentence", () => {
     expect(lastMessageSentence({ subject: "Infos parking", createdAt: new Date("2030-10-02T23:30:00Z"), recipientCount: 25 }, "Europe/Paris"))
       .toBe("« Infos parking », le 3 octobre, à 25 personnes.")
     expect(lastMessageSentence({ subject: "Merci", createdAt: new Date("2030-10-02T10:00:00Z"), recipientCount: 1 }, "Europe/Paris")).toContain("à 1 personne.")
+  })
+})
+
+
+describe("nextCustomReminder (#1139)", () => {
+  const tz = "Europe/Paris"
+  const shifts = [
+    { date: "2030-07-05", startTime: "09:00", endTime: "11:00" },
+    { date: "2030-07-06", startTime: "10:00", endTime: "12:00" },
+  ]
+
+  it("takes the earliest enabled rule still ahead, counted from the day's first shift", () => {
+    expect(nextCustomReminder(shifts, [
+      { unit: "days", value: 7, enabled: true },
+      { unit: "days", value: 2, enabled: true },
+      { unit: "hours", value: 2, enabled: true },
+    ], new Date("2030-07-01T08:00:00Z"), tz)).toEqual({ key: "rule-1", label: "2 jours avant", day: "2030-07-03" })
+  })
+
+  it("skips disabled rules and rules whose delay already passed", () => {
+    expect(nextCustomReminder(shifts, [
+      { unit: "days", value: 7, enabled: true },
+      { unit: "days", value: 2, enabled: false },
+      { unit: "hours", value: 2, enabled: true },
+    ], new Date("2030-07-04T00:00:00Z"), tz)).toEqual({ key: "rule-2", label: "2 heures avant", day: "2030-07-05" })
+    expect(nextCustomReminder(shifts, [{ unit: "days", value: 1, enabled: false }], new Date("2030-07-01T08:00:00Z"), tz)).toBeNull()
+    expect(nextCustomReminder([], [{ unit: "days", value: 1, enabled: true }], new Date("2030-07-01T08:00:00Z"), tz)).toBeNull()
   })
 })

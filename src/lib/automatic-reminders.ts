@@ -11,6 +11,7 @@
  */
 
 import { REMINDER_LABELS, type NotificationSettings, type ReminderKey } from "./notification-settings"
+import { eventUsesCustomReminderRules, reminderRuleDelayBefore, type ReminderRuleInput } from "./reminder-rules"
 
 export const REMINDER_KEYS = Object.keys(REMINDER_LABELS) as ReminderKey[]
 
@@ -28,6 +29,9 @@ export function reminderTiming(key: ReminderKey): string {
   return `${span} avant le premier créneau du jour`
 }
 
+/** One of the event's own rules (#1139), as the summaries read it. */
+export type CustomReminderRule = Pick<ReminderRuleInput, "unit" | "value" | "enabled">
+
 export type RemindersFacts = {
   /** The event's « Rappels automatiques » checkbox. */
   eventEnabled: boolean
@@ -35,15 +39,31 @@ export type RemindersFacts = {
   organization: NotificationSettings["reminders"]
   /** Whether a shift of the event still starts in the future. */
   upcomingShifts: boolean
+  /** The event's own rules (#1139). At least one row (even disabled) replaces the three switches. */
+  customRules?: readonly CustomReminderRule[]
 }
 
 export type RemindersState =
   | { kind: "no-upcoming-shift" }
   | { kind: "event-off" }
+  | { kind: "custom-off" }
+  | { kind: "custom"; rules: CustomReminderRule[] }
   | { kind: "on" | "partly-off" | "org-off"; on: ReminderKey[]; off: ReminderKey[] }
 
-/** Which reminders will go out: nothing without a shift to come, then the event, then the organization. */
+/**
+ * Which reminders will go out. An event with its own rules ignores the three organisation
+ * switches entirely (#1139): event switch first, then all rules disabled, then upcoming shifts.
+ * Without a rule row, the legacy order is unchanged: no shift, event switch, organisation.
+ */
 export function remindersState(r: RemindersFacts): RemindersState {
+  const customRules = r.customRules ?? []
+  if (eventUsesCustomReminderRules(customRules)) {
+    if (!r.eventEnabled) return { kind: "event-off" }
+    const enabled = customRules.filter((rule) => rule.enabled)
+    if (enabled.length === 0) return { kind: "custom-off" }
+    if (!r.upcomingShifts) return { kind: "no-upcoming-shift" }
+    return { kind: "custom", rules: enabled }
+  }
   if (!r.upcomingShifts) return { kind: "no-upcoming-shift" }
   if (!r.eventEnabled) return { kind: "event-off" }
   const on = REMINDER_KEYS.filter((k) => r.organization[k])
@@ -58,8 +78,8 @@ export type RemindersSummary = {
   /** True when every reminder goes out. */
   ok: boolean
   title: string
-  /** The reminders that go out, with their timing. */
-  sent: { key: ReminderKey; label: string; timing: string }[]
+  /** The reminders that go out, with their timing. A custom rule keys on its position. */
+  sent: { key: string; label: string; timing: string }[]
   /** Plain sentences, in reading order. */
   notes: string[]
   links: { href: string; label: string }[]
@@ -74,8 +94,10 @@ const list = (keys: ReminderKey[]) => {
 export function remindersSummary(r: RemindersFacts & { eventId: string; published: boolean }): RemindersSummary {
   const state = remindersState(r)
   const eventLink = { href: `/admin/events/${r.eventId}/edit#event-reminders`, label: "Rappels automatiques de l'événement" }
+  const customLink = { href: `/admin/events/${r.eventId}/message#event-reminder-rules`, label: "Délais des rappels de l'événement" }
   const settingsLink = { href: EMAIL_SETTINGS_HREF, label: "Paramètres des emails de l'organisation" }
   const draftNote = "Ils ne partent que tant que l'événement est publié."
+  const custom = eventUsesCustomReminderRules(r.customRules ?? [])
 
   switch (state.kind) {
     case "no-upcoming-shift":
@@ -88,8 +110,39 @@ export function remindersSummary(r: RemindersFacts & { eventId: string; publishe
       return {
         state: state.kind, ok: false, sent: [], links: [eventLink],
         title: "Rappels automatiques coupés pour cet événement",
-        notes: ["Aucun rappel J-2, J-1 ni du jour ne part pour cet événement, quels que soient les paramètres de l'organisation. Cochez la case Rappels automatiques de l'événement pour les rétablir."],
+        notes: [custom
+          ? "Aucun rappel automatique ne part pour cet événement, quels que soient les paramètres de l'organisation et les délais choisis. Cochez la case Rappels automatiques de l'événement pour les rétablir."
+          : "Aucun rappel J-2, J-1 ni du jour ne part pour cet événement, quels que soient les paramètres de l'organisation. Cochez la case Rappels automatiques de l'événement pour les rétablir."],
       }
+    case "custom-off":
+      return {
+        state: state.kind, ok: false, sent: [], links: [customLink],
+        title: "Rappels automatiques désactivés pour cet événement",
+        notes: [
+          "Tous les rappels de cet événement sont désactivés : aucun email automatique ne partira. Activez au moins un rappel pour les rétablir.",
+          ...(!r.published ? [draftNote] : []),
+        ],
+      }
+    case "custom": {
+      const all = r.customRules ?? []
+      const sent = state.rules.map((rule, index) => ({
+        key: `rule-${index}`,
+        label: `Rappel ${reminderRuleDelayBefore(rule)}`,
+        // The delay already carries « avant »: no second timing sentence.
+        timing: "",
+      }))
+      const off = all.filter((rule) => !rule.enabled).length
+      const notes = [
+        "Ces délais remplacent les trois rappels habituels et les paramètres de l'organisation pour cet événement.",
+        "Chaque bénévole inscrit reçoit ces emails sans action de votre part. Inscrit à plusieurs créneaux le même jour, il reçoit un seul email par rappel, qui liste tous ses créneaux de ce jour-là.",
+      ]
+      if (off > 0) notes.push(`${off} rappel${off > 1 ? "s sont désactivés" : " est désactivé"} pour cet événement.`)
+      if (!r.published) notes.push(draftNote)
+      return {
+        state: state.kind, ok: true, sent, notes, links: [customLink],
+        title: "Rappels automatiques avec vos délais",
+      }
+    }
     case "org-off":
       return {
         state: state.kind, ok: false, sent: [], links: [settingsLink, eventLink],
