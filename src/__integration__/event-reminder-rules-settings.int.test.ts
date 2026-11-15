@@ -16,7 +16,7 @@ import { prisma } from "@/lib/prisma"
 import { registrationToken } from "@/lib/token-vault"
 import { loadEventReminderRulesState, saveEventReminderRules } from "@/lib/reminder-rules-data"
 import { queueCustomRuleReminders } from "@/lib/reminder-rules-server"
-import { deliverOutbox } from "@/lib/notifications/outbox"
+import { completeCustomReminderDelivery, deliverOutbox } from "@/lib/notifications/outbox"
 
 const url = process.env.DATABASE_URL
 const tag = `int-reminder-settings-${Date.now()}`
@@ -127,6 +127,46 @@ describe.skipIf(!url)("custom reminder rules settings on Postgres (#1139)", () =
   const stateAt = (now: Date) => loadEventReminderRulesState(prisma, orgId, eventId, now)
   const customOccurrences = () => prisma.reminderOccurrence.findMany({ where: { eventId }, orderBy: { volunteerId: "asc" } })
   const customOutbox = () => prisma.notificationOutbox.findMany({ where: { organizationId: orgId, dedupeKey: { startsWith: "reminder-rule:" } }, orderBy: { createdAt: "asc" } })
+
+  /** A dedicated published event, one volunteer, and one registration per shift on `date`. */
+  async function createLocalDayScenario(
+    label: string,
+    date: string,
+    shifts: { startTime: string; endTime: string }[],
+  ): Promise<{ eventId: string; volunteerId: string }> {
+    const event = await prisma.event.create({
+      data: {
+        organizationId: orgId, slug: `${tag}-${label}`, title: label,
+        startDate: new Date(`${date}T00:00:00Z`), endDate: new Date(`${date}T00:00:00Z`),
+        publicStatus: "published", remindersEnabled: true,
+      },
+    })
+    const volunteer = await prisma.volunteer.create({
+      data: { organizationId: orgId, firstName: label, lastName: "Martin", email: `${tag}-${label}@example.com` },
+    })
+    for (const [index, shift] of shifts.entries()) {
+      const created = await prisma.shift.create({
+        data: {
+          eventId: event.id, roleName: "Bar", label: `Bar ${index}`, date: new Date(`${date}T00:00:00Z`),
+          startTime: shift.startTime, endTime: shift.endTime, capacity: 5, status: "open",
+        },
+      })
+      await prisma.registration.create({
+        data: {
+          eventId: event.id, shiftId: created.id, volunteerId: volunteer.id, status: "active",
+          createdAt: new Date("2026-01-01T00:00:00Z"),
+          ...registrationToken.data(`${tag}-${label}-${index}`),
+        },
+      })
+    }
+    return { eventId: event.id, volunteerId: volunteer.id }
+  }
+
+  async function deleteLocalDayScenario(scenario: { eventId: string; volunteerId: string }): Promise<void> {
+    await prisma.notificationOutbox.deleteMany({ where: { organizationId: orgId } })
+    await prisma.event.deleteMany({ where: { id: scenario.eventId } })
+    await prisma.volunteer.deleteMany({ where: { id: scenario.volunteerId } })
+  }
 
   it("refuses an id that belongs to another event, without touching any rule", async () => {
     const saved = await saveEventReminderRules(prisma, orgId, eventId, {
@@ -567,5 +607,150 @@ describe.skipIf(!url)("custom reminder rules settings on Postgres (#1139)", () =
     expect(queued).toHaveLength(1)
     expect(queued[0]).toMatchObject({ ruleId, volunteerId: volunteerIds[1] })
     expect(queued[0].dueAt.toISOString()).toBe("2031-03-29T08:00:00.000Z")
+  })
+
+  it("previews a shift still ahead through the fall-back DST hour", async () => {
+    // Europe/Zurich, 2026-10-25: at 00:30Z the local clock reads 02:30 (still summer time), but a
+    // stored 02:15 resolves through the real converter to 01:15Z (the repeated hour's second
+    // occurrence), still ahead. A wall-clock SQL comparison would drop it.
+    const scenario = await createLocalDayScenario("dst-automne", "2026-10-25", [{ startTime: "02:15", endTime: "04:15" }])
+    try {
+      const now = new Date("2026-10-25T00:30:00Z")
+      const saved = await saveEventReminderRules(prisma, orgId, scenario.eventId, {
+        mode: "custom", rules: [rule({ unit: "hours", value: 2 })],
+      }, now)
+      expect(saved).toMatchObject({ ok: true })
+      expect((await loadEventReminderRulesState(prisma, orgId, scenario.eventId, now))?.preview).toMatchObject({
+        state: "queued",
+        dueAt: "2026-10-24T23:15:00.000Z",
+        localDay: "2026-10-25",
+        recipientCount: 1,
+        shiftCount: 1,
+      })
+    } finally {
+      await deleteLocalDayScenario(scenario)
+    }
+  })
+
+  it("previews a shift still ahead through the spring-forward DST hour", async () => {
+    // Europe/Zurich, 2026-03-29: at 01:00Z the local clock already reads 03:00 (summer time), but a
+    // stored 02:30 (a non-existent wall time) resolves to 01:30Z, still ahead.
+    const scenario = await createLocalDayScenario("dst-printemps", "2026-03-29", [{ startTime: "02:30", endTime: "04:30" }])
+    try {
+      const now = new Date("2026-03-29T01:00:00Z")
+      const saved = await saveEventReminderRules(prisma, orgId, scenario.eventId, {
+        mode: "custom", rules: [rule({ unit: "hours", value: 2 })],
+      }, now)
+      expect(saved).toMatchObject({ ok: true })
+      expect((await loadEventReminderRulesState(prisma, orgId, scenario.eventId, now))?.preview).toMatchObject({
+        state: "queued",
+        dueAt: "2026-03-28T23:30:00.000Z",
+        localDay: "2026-03-29",
+        recipientCount: 1,
+        shiftCount: 1,
+      })
+    } finally {
+      await deleteLocalDayScenario(scenario)
+    }
+  })
+
+  it("announces nothing for a day whose first shift already started, and the cron queues nothing", async () => {
+    // Shifts at 08:00 and 18:00; at 16:00 local the 08:00 one has started. Grouping both makes the
+    // day's first shift started, so no reminder may be announced or queued for that day.
+    const scenario = await createLocalDayScenario("jour-commence", "2030-06-10", [
+      { startTime: "08:00", endTime: "12:00" },
+      { startTime: "18:00", endTime: "22:00" },
+    ])
+    try {
+      const now = new Date("2030-06-10T14:00:00Z") // 16:00 in Zurich (summer)
+      const saved = await saveEventReminderRules(prisma, orgId, scenario.eventId, {
+        mode: "custom", rules: [rule({ unit: "hours", value: 2 })],
+      }, now)
+      expect(saved).toMatchObject({ ok: true })
+      expect((await loadEventReminderRulesState(prisma, orgId, scenario.eventId, now))?.preview).toMatchObject({
+        state: "blocked",
+        reason: "no-upcoming-reminder",
+        dueAt: null,
+      })
+      const run = await queueCustomRuleReminders(now)
+      expect(run.queued).toBe(0)
+      expect(await prisma.reminderOccurrence.count({ where: { eventId: scenario.eventId, status: "queued" } })).toBe(0)
+    } finally {
+      await deleteLocalDayScenario(scenario)
+    }
+  })
+
+  it("does not announce a night shift started yesterday that is still running", async () => {
+    // 22:00 to 02:00 on 10 June, at 01:00 local on 11 June: the start day is yesterday and the
+    // shift is still running. It belongs to yesterday's group, whose first shift has started.
+    const scenario = await createLocalDayScenario("nuit-encours", "2026-06-10", [{ startTime: "22:00", endTime: "02:00" }])
+    try {
+      const now = new Date("2026-06-10T23:00:00Z") // 01:00 on 11 June in Zurich (summer)
+      const saved = await saveEventReminderRules(prisma, orgId, scenario.eventId, {
+        mode: "custom", rules: [rule({ unit: "hours", value: 2 })],
+      }, now)
+      expect(saved).toMatchObject({ ok: true })
+      expect((await loadEventReminderRulesState(prisma, orgId, scenario.eventId, now))?.preview).toMatchObject({
+        state: "blocked",
+        reason: "no-upcoming-reminder",
+      })
+      expect((await queueCustomRuleReminders(now)).queued).toBe(0)
+    } finally {
+      await deleteLocalDayScenario(scenario)
+    }
+  })
+
+  it("keeps a removed rule archived while one of its emails is in flight, then records its success", async () => {
+    const now = new Date("2030-06-03T08:00:00Z")
+    const saved = await saveEventReminderRules(prisma, orgId, eventId, { mode: "custom", rules: [rule()] }, now)
+    if (!saved.ok) throw new Error("save failed")
+    const ruleId = saved.state.rules[0].id
+    await queueCustomRuleReminders(now)
+    const occurrences = await customOccurrences()
+    expect(occurrences).toHaveLength(2)
+    const inFlight = occurrences.find((occurrence) => occurrence.volunteerId === volunteerIds[0])
+    const other = occurrences.find((occurrence) => occurrence.volunteerId === volunteerIds[1])
+    if (!inFlight?.outboxId || !other?.outboxId) throw new Error("missing outbox rows")
+    // Delivery passed its last check: its row is claimed, SMTP is in flight.
+    await prisma.notificationOutbox.update({
+      where: { id: inFlight.outboxId },
+      data: { status: "sending", claimedAt: now },
+    })
+
+    const removed = await saveEventReminderRules(prisma, orgId, eventId, { mode: "default" }, now)
+    expect(removed).toMatchObject({ ok: true })
+    // No sent occurrence yet, but the in-flight email archives the rule instead of deleting it.
+    expect((await prisma.eventReminderRule.findUniqueOrThrow({ where: { id: ruleId } })).archivedAt).not.toBeNull()
+    // The in-flight occurrence is untouched; the other unsent one and its pending row are cancelled.
+    expect(await prisma.reminderOccurrence.findUniqueOrThrow({ where: { id: inFlight.id } })).toMatchObject({
+      status: "queued", outboxId: inFlight.outboxId,
+    })
+    expect((await prisma.notificationOutbox.findUniqueOrThrow({ where: { id: inFlight.outboxId } })).status).toBe("sending")
+    expect(await prisma.reminderOccurrence.findUniqueOrThrow({ where: { id: other.id } })).toMatchObject({ status: "cancelled" })
+    expect((await prisma.notificationOutbox.findUniqueOrThrow({ where: { id: other.outboxId } })).status).toBe("cancelled")
+
+    // A cron run while SMTP is in flight must not cancel the occurrence out from under its record.
+    await queueCustomRuleReminders(now)
+    expect((await prisma.reminderOccurrence.findUniqueOrThrow({ where: { id: inFlight.id } })).status).toBe("queued")
+
+    // SMTP accepted the email: the real completion path records it even though the rule is archived.
+    const completedAt = new Date(now.getTime() + 60_000)
+    await completeCustomReminderDelivery(inFlight.outboxId, inFlight.id, completedAt)
+    const completed = await prisma.reminderOccurrence.findUniqueOrThrow({ where: { id: inFlight.id } })
+    expect(completed.status).toBe("sent")
+    expect(completed.sentAt?.toISOString()).toBe(completedAt.toISOString())
+
+    // Recreating the same delay revives the archived row; the next run queues nothing for that
+    // volunteer and day (the other volunteer's cancelled email is queued again).
+    const recreated = await saveEventReminderRules(prisma, orgId, eventId, { mode: "custom", rules: [rule()] }, now)
+    if (!recreated.ok) throw new Error("save failed")
+    expect(recreated.state.rules[0].id).toBe(ruleId)
+    const run = await queueCustomRuleReminders(now)
+    expect(run.queued).toBe(1)
+    const recreatedRows = await prisma.reminderOccurrence.findMany({
+      where: { eventId, volunteerId: volunteerIds[0], localDay: "2030-06-10" },
+    })
+    expect(recreatedRows).toHaveLength(1)
+    expect(recreatedRows[0]).toMatchObject({ id: inFlight.id, ruleId, status: "sent" })
   })
 })

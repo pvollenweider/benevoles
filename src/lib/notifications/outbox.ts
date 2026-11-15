@@ -290,6 +290,26 @@ export function deliverAfterResponse(ids: string[]): void {
 }
 
 /**
+ * Completion of a custom reminder whose SMTP send was accepted (#1139): the outbox row and its
+ * occurrence commit together. The rule's current state is deliberately not checked: the email was
+ * already in flight when the organiser may have removed the rule, and its success must stay in the
+ * history so recreating the same delay cannot send it again.
+ */
+export async function completeCustomReminderDelivery(
+  outboxId: string,
+  occurrenceId: string,
+  sentAt: Date,
+): Promise<void> {
+  await prisma.$transaction([
+    prisma.notificationOutbox.update({ where: { id: outboxId }, data: { status: "sent", sentAt, lastError: null, deliveryNotBefore: null } }),
+    prisma.reminderOccurrence.updateMany({
+      where: { id: occurrenceId, status: "queued" },
+      data: { status: "sent", sentAt, lastError: null },
+    }),
+  ])
+}
+
+/**
  * Sends due notifications: the given ids (right after a request), or every due row (cron).
  * Each row is claimed with a conditional update first, so two deliveries running at the same
  * time never send the same notification twice.
@@ -467,13 +487,7 @@ export async function deliverOutbox(opts: { ids?: string[]; limit?: number; now?
       } else if (customReminderOccurrenceId) {
         // The email and its occurrence commit together: a crash cannot leave the occurrence
         // unsent while the outbox row says sent (delivery stays at-least-once either way).
-        await prisma.$transaction([
-          prisma.notificationOutbox.update({ where: { id: row.id }, data: { status: "sent", sentAt, lastError: null, deliveryNotBefore: null } }),
-          prisma.reminderOccurrence.updateMany({
-            where: { id: customReminderOccurrenceId, status: "queued" },
-            data: { status: "sent", sentAt, lastError: null },
-          }),
-        ])
+        await completeCustomReminderDelivery(row.id, customReminderOccurrenceId, sentAt)
       } else {
         await prisma.notificationOutbox.update({ where: { id: row.id }, data: { status: "sent", sentAt, lastError: null, deliveryNotBefore: null } })
       }

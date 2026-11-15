@@ -11,7 +11,8 @@
  * two saves, or a save and the hourly run, cannot interleave. A rule's identity is its delay in
  * hours: a submitted delay resolves to the event's row of that delay (active or archived, revived)
  * or creates one, so changing a delay removes the old row and adds the new one. Unsent occurrences
- * and pending outbox rows of a removed or disabled delay are cancelled in the same transaction.
+ * and pending outbox rows of a removed or disabled delay are cancelled in the same transaction;
+ * an occurrence already `sending` is left to record its own outcome and keeps its rule archived.
  */
 
 import {
@@ -112,15 +113,22 @@ export async function loadEventReminderRulesState(
 }
 
 /**
- * Cancels unsent occurrences (and their pending outbox rows) of one or more rules. A `sending`
- * row is left alone: the delivery re-reads the occurrence/rule and cancels it itself.
+ * Cancels unsent occurrences (and their pending outbox rows) of one or more rules. An occurrence
+ * whose outbox row is `sending` is left alone: delivery already passed its last check, so the
+ * completion or failure path records its outcome; a stalled claim later reclaimed by the outbox
+ * sees the archived/disabled rule in `resolveCustomRuleReminder` and cancels the occurrence then.
  */
 async function cancelUnsentOccurrences(
   tx: Db,
   occurrences: readonly { id: string; outboxId: string | null; status: string }[],
+  sendingOutboxIds: ReadonlySet<string>,
   reason: string,
 ): Promise<void> {
-  const unsent = occurrences.filter((occurrence) => occurrence.status === "pending" || occurrence.status === "queued")
+  const unsent = occurrences.filter(
+    (occurrence) =>
+      (occurrence.status === "pending" || occurrence.status === "queued") &&
+      (!occurrence.outboxId || !sendingOutboxIds.has(occurrence.outboxId)),
+  )
   if (unsent.length === 0) return
   const outboxIds = unsent.map((occurrence) => occurrence.outboxId).filter((id): id is string => !!id)
   if (outboxIds.length > 0) {
@@ -210,12 +218,32 @@ export async function saveEventReminderRules(
     const disabledIds = new Set(resolved.filter((rule) => !rule.enabled).map((rule) => rule.id))
 
     const occurrences: { id: string; eventId: string; volunteerId: string; localDay: string; ruleId: string; status: string; outboxId: string | null }[] = await loadCustomReminderOccurrences(tx, eventId)
+    // An outbox row claimed (`sending`) is an email in flight: the save must neither cancel its
+    // occurrence nor let the rule disappear under it. Only rows really in that state are skipped;
+    // a stalled claim is later reclaimed and re-checked by `deliverOutbox`.
+    const occurrenceOutboxIds = occurrences.map((occurrence) => occurrence.outboxId).filter((id): id is string => !!id)
+    const inFlightRows: { id: string; status: string }[] = occurrenceOutboxIds.length > 0
+      ? await tx.notificationOutbox.findMany({
+          where: { id: { in: occurrenceOutboxIds } },
+          select: { id: true, status: true },
+        })
+      : []
+    const sendingOutboxIds = new Set<string>(
+      inFlightRows.filter((row) => row.status === "sending").map((row) => row.id),
+    )
+    const sendingRuleIds = new Set<string>(
+      occurrences
+        .filter((occurrence) => occurrence.outboxId && sendingOutboxIds.has(occurrence.outboxId))
+        .map((occurrence) => occurrence.ruleId),
+    )
 
     // A removed rule's occurrence cascades away with it: cancel its pending outbox row first, or
-    // the email would leave for a rule that no longer exists.
+    // the email would leave for a rule that no longer exists. An occurrence already `sending` is
+    // kept so its delivery can still record a success.
     await cancelUnsentOccurrences(
       tx,
       occurrences.filter((occurrence) => removedIds.has(occurrence.ruleId)),
+      sendingOutboxIds,
       "Rappel supprimé.",
     )
     // A disabled rule keeps its rows (re-enabling resumes from the current registrations) but
@@ -223,6 +251,7 @@ export async function saveEventReminderRules(
     await cancelUnsentOccurrences(
       tx,
       occurrences.filter((occurrence) => disabledIds.has(occurrence.ruleId)),
+      sendingOutboxIds,
       "Rappel désactivé.",
     )
 
@@ -243,17 +272,17 @@ export async function saveEventReminderRules(
       })
     }
     if (removed.length > 0) {
-      // A removed rule with at least one sent occurrence is archived, not deleted: recreating the
-      // same delay later must keep protecting the volunteers already reminded. A rule without
-      // sent history is deleted as before.
+      // A removed rule is archived, not deleted, when it has sent history or an email in flight:
+      // recreating the same delay later must keep protecting volunteers already reminded. A rule
+      // with neither is deleted as before.
       const sent = await tx.reminderOccurrence.groupBy({
         by: ["ruleId"],
         where: { ruleId: { in: [...removedIds] }, status: "sent" },
         _count: { _all: true },
       })
       const withSent = new Set<string>(sent.map((row: { ruleId: string }) => row.ruleId))
-      const toArchive = removed.filter((rule) => withSent.has(rule.id))
-      const toDelete = removed.filter((rule) => !withSent.has(rule.id))
+      const toArchive = removed.filter((rule) => withSent.has(rule.id) || sendingRuleIds.has(rule.id))
+      const toDelete = removed.filter((rule) => !withSent.has(rule.id) && !sendingRuleIds.has(rule.id))
       if (toArchive.length > 0) {
         await tx.eventReminderRule.updateMany({
           where: { id: { in: toArchive.map((rule) => rule.id) }, eventId },

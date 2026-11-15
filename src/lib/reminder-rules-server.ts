@@ -141,30 +141,30 @@ type CustomReminderGroupingRegistration = Prisma.RegistrationGetPayload<{ select
 /** A group built by `loadCustomReminderGroups`, with only the columns its callers evaluate. */
 export type CustomReminderLoadedGroup = ReminderGroup<CustomReminderGroupingRegistration>
 
-/** The local wall-clock day and time in the organisation's zone, for the preview's SQL filter. */
-function localWallClock(now: Date, timeZone: string): { day: string; time: string } {
+/** The local calendar day in the organisation's zone, as stored in `Shift.date`. */
+function localDay(now: Date, timeZone: string): string {
   const parts = new Intl.DateTimeFormat("en-CA", {
-    timeZone, hourCycle: "h23",
-    year: "numeric", month: "2-digit", day: "2-digit", hour: "2-digit", minute: "2-digit",
+    timeZone, year: "numeric", month: "2-digit", day: "2-digit",
   }).formatToParts(now)
   const get = (type: string) => parts.find((part) => part.type === type)?.value ?? "00"
-  return { day: `${get("year")}-${get("month")}-${get("day")}`, time: `${get("hour")}:${get("minute")}` }
+  return `${get("year")}-${get("month")}-${get("day")}`
 }
 
 /**
  * The groups the preview and the cron both evaluate (#1139): the same active registrations, the
  * same time-zone grouping and the same evaluator. Only the loading window differs: the cron keeps
- * its `maxHours + 24` work horizon, the preview loads every future registration without it, and a
- * reschedule is bounded to the queued occurrences. Extracted so the paths cannot drift.
+ * its `maxHours + 24` work horizon, the preview loads every registration from local yesterday
+ * onwards without it, and a reschedule is bounded to the queued occurrences. Extracted so the
+ * paths cannot drift.
  */
 export type CustomReminderGroupLoadOptions = {
   /**
    * Preview only (#1139): no `maxHours + 24` work horizon. That horizon is right for the cron
    * (nothing further can be due this run) but wrong for a preview, which must still show a 2 h
-   * reminder for a registration next month. Every active registration of the event whose shift has
-   * not started is loaded (the SQL filter below), with only the grouping columns: an event is
-   * bounded by its own size, and the hourly cron already loads comparably for every event it
-   * evaluates. No `take`: a cap on registrations would hide a later day whose earlier delay is due.
+   * reminder for a registration next month. Every active registration of the event whose shift is
+   * dated local yesterday or later is loaded, with only the grouping columns: an event is bounded
+   * by its own size, and the hourly cron already loads comparably for every event it evaluates.
+   * No `take`: a cap on registrations would hide a later day whose earlier delay is due.
    */
   preview?: boolean
   /** Bound a reschedule to the volunteers and local days that actually have a queued occurrence. */
@@ -202,55 +202,18 @@ export async function loadCustomReminderGroups(
       select: customReminderGroupingSelect,
     })
   } else if (opts.preview) {
-    // Every active registration whose shift has not started, filtered in the query: a shift of an
-    // earlier local day is past, and on today's local day a start time already reached is too. No
-    // cap: the event's own size bounds this load, exactly as the hourly cron's comparable loads do.
+    // The preview must evaluate the same local-day group as the cron's claim, which re-reads every
+    // active registration of the day: a started shift still belongs to that group, or the evaluator
+    // takes a later shift as the day's first one and announces a send the claim then cancels. So the
+    // SQL filter is a conservative superset by date only, from local yesterday (night shifts, legacy
+    // start values above 23:59 and both DST edges stay inside), with no comparison of the time of
+    // day and no per-place « started » filter below: `reminderRuleStatus` decides with real instants.
     const timeZone = orgTimeZone(event.organization)
-    const { day, time } = localWallClock(now, timeZone)
-    const today = new Date(`${day}T00:00:00.000Z`)
+    const yesterday = new Date(`${localDay(now, timeZone)}T00:00:00.000Z`)
+    yesterday.setUTCDate(yesterday.getUTCDate() - 1)
     registrations = await db.registration.findMany({
-      where: baseWhere({
-        status: { not: "cancelled" },
-        OR: [
-          { date: { gt: today } },
-          { date: today, startTime: { gt: time } },
-        ],
-      }),
+      where: baseWhere({ status: { not: "cancelled" }, date: { gte: yesterday } }),
       select: customReminderGroupingSelect,
-    })
-    // An occurrence already pending or queued for a (volunteer, local day) keeps that whole group
-    // visible even when its shift falls outside the SQL window above. Keyed by the pair, not just
-    // the day: loading every registration of that day would bring unrelated volunteers, and a
-    // `take` would truncate the group this preview is meant to show. Only open occurrences count.
-    const openKeys = [...new Map(
-      occurrences
-        .filter((occurrence) => (occurrence.status === "pending" || occurrence.status === "queued") && occurrence.localDay && occurrence.volunteerId)
-        .map((occurrence) => [
-          `${occurrence.volunteerId}\u0000${occurrence.localDay}`,
-          { volunteerId: occurrence.volunteerId!, localDay: occurrence.localDay! },
-        ]),
-    ).values()]
-    const open = openKeys.length > 0
-      ? await db.registration.findMany({
-          where: {
-            eventId: event.id,
-            status: "active",
-            OR: openKeys.map((key) => ({
-              volunteerId: key.volunteerId,
-              shift: {
-                status: { not: "cancelled" },
-                date: new Date(`${key.localDay}T00:00:00.000Z`),
-              },
-            })),
-          },
-          select: customReminderGroupingSelect,
-        })
-      : []
-    const seen = new Set<string>()
-    registrations = [...registrations, ...open].filter((registration) => {
-      if (seen.has(registration.id)) return false
-      seen.add(registration.id)
-      return true
     })
   } else {
     const shiftWhere: Record<string, unknown> = { status: { not: "cancelled" } }
@@ -261,9 +224,13 @@ export async function loadCustomReminderGroups(
     })
   }
   const timeZone = orgTimeZone(event.organization)
-  // Only places of shifts that have not started yet: a started shift is never reminded.
-  const upcoming = registrations.filter((registration) => reminderShiftStart(registration.shift, timeZone).getTime() > now.getTime())
-  return groupRemindersByDay(upcoming, () => timeZone)
+  // The preview keeps started registrations, so every local-day group has its real first shift and
+  // the evaluator can suppress the whole day; the cron keeps its work-window filter, and its claim
+  // transaction re-groups the complete day before queueing anyway.
+  const candidates = opts.preview
+    ? registrations
+    : registrations.filter((registration) => reminderShiftStart(registration.shift, timeZone).getTime() > now.getTime())
+  return groupRemindersByDay(candidates, () => timeZone)
 }
 
 /** Statuses written by the outbox on a queued occurrence, folded back before each run. */
@@ -274,16 +241,6 @@ export async function reconcileCustomReminderOccurrences(): Promise<number> {
   })
   let changed = 0
   for (const occurrence of queued) {
-    // An archived rule is hidden and never sends again: a queued occurrence left by a race is
-    // cancelled here as well as by the delivery resolver.
-    if (occurrence.rule.archivedAt) {
-      const { count } = await prisma.reminderOccurrence.updateMany({
-        where: { id: occurrence.id, status: "queued" },
-        data: { status: "cancelled", lastError: "Rappel supprimé." },
-      })
-      changed += count
-      continue
-    }
     if (!occurrence.outboxId) {
       const { count } = await prisma.reminderOccurrence.updateMany({
         where: { id: occurrence.id, status: "queued" },
@@ -303,6 +260,8 @@ export async function reconcileCustomReminderOccurrences(): Promise<number> {
       })
       changed += count
     } else if (row.status === "sent") {
+      // The outcome wins over the rule's state: an archived rule keeps the sent history of an
+      // email that was accepted while it was being removed.
       const { count } = await prisma.reminderOccurrence.updateMany({
         where: { id: occurrence.id, status: "queued" },
         data: { status: "sent", sentAt: row.sentAt ?? new Date() },
@@ -325,6 +284,16 @@ export async function reconcileCustomReminderOccurrences(): Promise<number> {
       const { count } = await prisma.reminderOccurrence.updateMany({
         where: { id: occurrence.id, status: "queued" },
         data: { status: "cancelled", lastError: row.lastError ?? "Envoi annulé." },
+      })
+      changed += count
+    } else if (occurrence.rule.archivedAt && row.status !== "sending") {
+      // An archived rule is hidden and never sends again: a queued occurrence left by a race is
+      // cancelled here as well as by the delivery resolver. A row still `sending` is left for its
+      // completion (sent) or, if the claim stalls and is reclaimed, for the resolver, which sees
+      // the archived rule and cancels the occurrence.
+      const { count } = await prisma.reminderOccurrence.updateMany({
+        where: { id: occurrence.id, status: "queued" },
+        data: { status: "cancelled", lastError: "Rappel supprimé." },
       })
       changed += count
     }
