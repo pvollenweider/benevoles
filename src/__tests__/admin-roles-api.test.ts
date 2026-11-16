@@ -121,7 +121,7 @@ describe("admin levels", () => {
     withDb({ id: "adm-2", role: "admin", isActive: true, email: "b@x.ch" }, 2)
     const { DELETE } = await import("@/app/api/admin/settings/admins/[id]/route")
     expect((await DELETE(new Request("http://localhost/x", { method: "DELETE" }), params)).status).toBe(200)
-    expect(m.findUnique.mock.calls[0][0].where).toEqual({ id: "adm-2", organizationId: "org-a" })
+    expect(m.findUnique.mock.calls[0][0].where).toEqual({ id: "adm-2", organizationId: "org-a", role: { in: ["admin", "organizer", "super_admin"] } })
     for (const [args] of m.count.mock.calls) expect(args.where.organizationId).toBe("org-a")
   })
 })

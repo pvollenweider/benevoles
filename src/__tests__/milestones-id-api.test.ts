@@ -109,13 +109,13 @@ describe("PATCH/DELETE /api/admin/events/[id]/milestones/[milestoneId]", () => {
 
   it("PATCH sets an active admin of the organisation as owner, clears the reminder mark and logs the id (#985)", async () => {
     findFirst.mockResolvedValue(base)
-    adminFindFirst.mockResolvedValue({ organizationId: "org-a", isActive: true })
+    adminFindFirst.mockResolvedValue({ organizationId: "org-a", isActive: true, role: "organizer" })
     update.mockResolvedValue({ ...base, ownerId: "adm-2", owner: { id: "adm-2", name: "Samira Diallo" } })
     const { PATCH } = await import("@/app/api/admin/events/[id]/milestones/[milestoneId]/route")
     const res = await PATCH(patch({ ownerId: "adm-2" }), { params: Promise.resolve({ id: "evt-1", milestoneId: "m1" }) })
     expect(res.status).toBe(200)
     expect((await res.json()).owner).toEqual({ id: "adm-2", name: "Samira Diallo" })
-    expect(adminFindFirst).toHaveBeenCalledWith({ where: { id: "adm-2", organizationId: "org-a", isActive: true }, select: { organizationId: true, isActive: true } })
+    expect(adminFindFirst).toHaveBeenCalledWith({ where: { id: "adm-2", organizationId: "org-a", isActive: true, role: { in: ["admin", "organizer", "super_admin"] } }, select: { organizationId: true, isActive: true, role: true } })
     expect(update).toHaveBeenCalledWith(expect.objectContaining({ data: { ownerId: "adm-2", ownerRemindedAt: null } }))
     expect(logCreate).toHaveBeenCalledWith(expect.objectContaining({
       data: expect.objectContaining({ action: "eventmilestone.updated", changes: { ownerId: { from: null, to: "adm-2" } } }),
@@ -125,7 +125,8 @@ describe("PATCH/DELETE /api/admin/events/[id]/milestones/[milestoneId]", () => {
   it("PATCH refuses a deactivated or unknown owner with 422 and changes nothing (#985)", async () => {
     findFirst.mockResolvedValue(base)
     const { PATCH } = await import("@/app/api/admin/events/[id]/milestones/[milestoneId]/route")
-    for (const candidate of [null, { organizationId: "org-a", isActive: false }]) {
+    // A deactivated account, an unknown one, and a front-desk account (#1142): not a member of the team.
+    for (const candidate of [null, { organizationId: "org-a", isActive: false, role: "admin" }, { organizationId: "org-a", isActive: true, role: "front_desk" }]) {
       adminFindFirst.mockResolvedValueOnce(candidate)
       const res = await PATCH(patch({ ownerId: "adm-x" }), { params: Promise.resolve({ id: "evt-1", milestoneId: "m1" }) })
       expect(res.status).toBe(422)

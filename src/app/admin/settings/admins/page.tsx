@@ -30,6 +30,7 @@ import { parseWorkloadDefault } from "@/lib/workload-policy-data"
 import { workloadProtectionShipped } from "@/lib/workload-shipped"
 import { BETA_CAPABILITIES, betaCardVisible, betaReadOnlyValue, type BetaParticipation } from "@/lib/beta-capabilities"
 import { contactEmail } from "@/lib/site"
+import { ORG_ACCOUNT_ROLE_WHERE } from "@/lib/permissions"
 
 export const dynamic = "force-dynamic"
 
@@ -44,8 +45,9 @@ export default async function AdminsSettingsPage() {
   const baseDomain = spaceBaseDomain(configuredAppUrl(), (await headers()).get("host"), siteDomain())
 
   const [admins, org, slugHistory, publishedEventCount, openBeta] = await Promise.all([
+    // The team's accounts, as before. Front-desk accounts (#1142) are not listed here.
     db.adminUser.findMany({
-      where: { organizationId },
+      where: { organizationId, ...ORG_ACCOUNT_ROLE_WHERE },
       select: {
         id: true,
         name: true,

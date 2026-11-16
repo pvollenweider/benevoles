@@ -31,6 +31,7 @@ vi.mock("@/lib/notifications/outbox", () => ({
 }))
 
 import { buildWithdrawalNotifications } from "../withdrawal-notifications"
+import { COLETTE, ELODIE, SAMI, adminsMatching, teamOf } from "@/__tests__/helpers/front-desk-accounts"
 
 const event = { id: "e1", title: "Fête d'été", organizationId: "org-1", organization: { slug: "org" } }
 const shift = { id: "s1", roleName: "Bar", label: "Bar du soir", date: new Date("2026-07-04"), startTime: "18:00", endTime: "22:00" }
@@ -122,3 +123,16 @@ describe("buildWithdrawalNotifications", () => {
   })
 })
 
+// Front desk (#1142): an account limited to one event is not told about withdrawals.
+describe("buildWithdrawalNotifications and a front-desk account", () => {
+  it("writes to the owner and the organiser, never to the front-desk account of the organisation", async () => {
+    vi.clearAllMocks()
+    findUniqueOrg.mockResolvedValue({ notificationSettings: null })
+    findManyLeader.mockResolvedValue([])
+    findManyAdmin.mockImplementation(async ({ where }: { where: unknown }) => adminsMatching(where, teamOf("org-1")))
+    const payloads = await buildWithdrawalNotifications(baseInput)
+    const recipients = payloads.map((p) => p.recipient.email)
+    expect(recipients).toEqual([ELODIE.email, SAMI.email])
+    expect(recipients).not.toContain(COLETTE.email)
+  })
+})

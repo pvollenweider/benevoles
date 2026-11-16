@@ -80,7 +80,7 @@ describe("GET/POST /api/admin/events/[id]/milestones", () => {
   })
 
   it("POST creates a milestone with an active admin of the organisation as owner, and logs its id (#985)", async () => {
-    adminFindFirst.mockResolvedValue({ organizationId: "org-a", isActive: true })
+    adminFindFirst.mockResolvedValue({ organizationId: "org-a", isActive: true, role: "admin" })
     create.mockResolvedValue({ id: "m3", eventId: "evt-1", title: "Louer la tente", dueDate: new Date("2026-09-20"), done: false, ownerId: "adm-2", owner: { id: "adm-2", name: "Samira Diallo" } })
     const { POST } = await import("@/app/api/admin/events/[id]/milestones/route")
     const res = await POST(post({ title: "Louer la tente", dueDate: "2026-09-20", ownerId: "adm-2" }), { params: Promise.resolve({ id: "evt-1" }) })
@@ -95,7 +95,7 @@ describe("GET/POST /api/admin/events/[id]/milestones", () => {
   })
 
   it("POST refuses an owner who is not an active admin of the organisation (#985)", async () => {
-    adminFindFirst.mockResolvedValue({ organizationId: "org-a", isActive: false })
+    adminFindFirst.mockResolvedValue({ organizationId: "org-a", isActive: false, role: "admin" })
     const { POST } = await import("@/app/api/admin/events/[id]/milestones/route")
     const res = await POST(post({ title: "Louer la tente", dueDate: "2026-09-20", ownerId: "adm-off" }), { params: Promise.resolve({ id: "evt-1" }) })
     expect(res.status).toBe(422)

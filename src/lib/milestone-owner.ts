@@ -20,7 +20,7 @@ export const MILESTONE_OWNER_SELECT = { select: { id: true, name: true } } as co
 export async function checkMilestoneOwner(db: OrgScopedPrisma, organizationId: string, ownerId: string): Promise<NextResponse | null> {
   const candidate = await db.adminUser.findFirst({
     where: { id: ownerId, ...eligibleOwnerWhere(organizationId) },
-    select: { organizationId: true, isActive: true },
+    select: { organizationId: true, isActive: true, role: true },
   })
   if (isEligibleMilestoneOwner(candidate, organizationId)) return null
   return NextResponse.json({ error: MILESTONE_OWNER_UNAVAILABLE, field: "ownerId" }, { status: 422 })

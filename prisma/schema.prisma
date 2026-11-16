@@ -274,6 +274,7 @@ model Event {
   volunteerTargets     EventVolunteerTarget[]
   reminderRules        EventReminderRule[]
   reminderOccurrences  ReminderOccurrence[]
+  adminAccesses        AdminEventAccess[]
 
   @@unique([organizationId, slug])
   @@index([organizationId])
@@ -1724,9 +1725,37 @@ model AdminUser {
   organization  Organization? @relation(fields: [organizationId], references: [id], onDelete: SetNull)
   milestones    EventMilestone[]
   recoveryCodes AdminRecoveryCode[]
+  eventAccesses AdminEventAccess[]
 
   @@index([organizationId])
   @@index([setupTokenHash])
+}
+
+// Front-desk access of one account to one event (#1142): what lets an AdminUser whose role is
+// "front_desk" (no admin level, src/lib/permissions.ts) read the « Jour J » board of that event
+// and record attendance on it, and nothing else. One row per account and event. A grant counts
+// only while it is neither revoked (`revokedAt`) nor expired (`expiresAt`), its event is not
+// archived, and account, event and `organizationId` all belong to the same organisation: read on
+// every request by src/lib/front-desk-access.ts. `organizationId` is denormalised from the event
+// for the org-scoped client (src/lib/prisma-org.ts), which also checks, when a row is created,
+// that the event and the account are the organisation's. `createdById` is the AdminUser id of the
+// owner who granted it, without a foreign key: that account may be deleted later.
+model AdminEventAccess {
+  id             String    @id @default(cuid())
+  adminUserId    String
+  eventId        String
+  organizationId String
+  createdById    String?
+  createdAt      DateTime  @default(now())
+  expiresAt      DateTime?
+  revokedAt      DateTime?
+
+  adminUser AdminUser @relation(fields: [adminUserId], references: [id], onDelete: Cascade)
+  event     Event     @relation(fields: [eventId], references: [id], onDelete: Cascade)
+
+  @@unique([adminUserId, eventId])
+  @@index([eventId])
+  @@index([adminUserId])
 }
 
 // One-time recovery codes of the second factor (pentest F6): ten per account, shown once, stored

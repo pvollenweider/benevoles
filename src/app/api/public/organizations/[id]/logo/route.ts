@@ -5,6 +5,7 @@ import { auth } from "@/auth"
 import { canPublish } from "@/lib/org-approval"
 import { prisma } from "@/lib/prisma"
 import { etagMatches, logoCacheControl, logoEtag } from "@/lib/org-logo"
+import { isOrgAccountRole } from "@/lib/permissions"
 
 /**
  * GET /api/public/organizations/[id]/logo?v=<version> (#300): the organization's logo, from the
@@ -32,7 +33,9 @@ export async function GET(req: Request, { params }: { params: Promise<{ id: stri
   const isPublic = canPublish(logo.organization)
   if (!isPublic) {
     const session = await auth()
-    const allowed = session?.user?.role === "super_admin" || session?.user?.organizationId === id
+    // The organisation's own administrators (and the super admin) see it before publication:
+    // not a front-desk account (#1142), nor any role that is no admin level.
+    const allowed = session?.user?.role === "super_admin" || (isOrgAccountRole(session?.user?.role) && session?.user?.organizationId === id)
     if (!allowed) return notFound()
   }
 

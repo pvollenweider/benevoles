@@ -1,4 +1,5 @@
 import { describe, it, expect, vi, beforeEach } from "vitest"
+import { COLETTE, ELODIE, SAMI, adminsMatching, teamOf } from "@/__tests__/helpers/front-desk-accounts"
 
 vi.mock("@/lib/env", () => ({ env: { AUTH_SECRET: "test-secret-at-least-32-characters-long" } }))
 
@@ -51,7 +52,7 @@ describe("POST /api/super-admin/product-updates/send", () => {
     expect(res.status).toBe(201)
 
     expect(adminUserFindMany).toHaveBeenCalledWith(
-      expect.objectContaining({ where: { isActive: true, receiveProductUpdates: true } }),
+      expect.objectContaining({ where: { isActive: true, receiveProductUpdates: true, role: { in: ["admin", "organizer", "super_admin"] } } }),
     )
     expect(sendNotificationMock).toHaveBeenCalledTimes(2)
     expect(sendNotificationMock).toHaveBeenCalledWith(
@@ -94,5 +95,21 @@ describe("POST /api/super-admin/product-updates/send", () => {
     expect(sendCreate).toHaveBeenCalledWith(
       expect.objectContaining({ data: expect.objectContaining({ recipientCount: 2, successCount: 1 }) }),
     )
+  })
+})
+
+// Front desk (#1142): opted in by the column's default like any account, but never written to.
+describe("POST /api/super-admin/product-updates/send and a front-desk account", () => {
+  it("sends to the owner and the organiser, never to a front-desk account", async () => {
+    vi.clearAllMocks()
+    sendNotificationMock.mockResolvedValue({ ok: true })
+    setupGuard([])
+    adminUserFindMany.mockImplementation(async ({ where }: { where: unknown }) => adminsMatching(where, teamOf("org-fete")))
+    sendCreate.mockResolvedValue({ id: "send-2", subject: "Hello", content: "Body", recipientCount: 2, successCount: 2 })
+    const { POST } = await import("@/app/api/super-admin/product-updates/send/route")
+    expect((await POST(post({ subject: "Hello", content: "Body" }))).status).toBe(201)
+    const recipients = sendNotificationMock.mock.calls.map(([payload]) => payload.recipient.email)
+    expect(recipients.sort()).toEqual([ELODIE.email, SAMI.email].sort())
+    expect(recipients).not.toContain(COLETTE.email)
   })
 })

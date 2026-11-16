@@ -2,7 +2,8 @@
 // SPDX-License-Identifier: AGPL-3.0-only
 
 /**
- * Two admin levels per organisation (#469), no more: Propriétaire and Organisateur. The stored
+ * Two admin levels per organisation (#469), no more: Propriétaire and Organisateur. (The front-desk
+ * role further down, #1142, is not a level: see FRONT_DESK_ROLE.) The stored
  * role « admin » (every admin before #469) is the owner, so existing admins keep every right
  * without a data migration. Checked server-side in every route (requireOrgSession(level)), and
  * the matrix below lists every admin route and method, so a new one has to be classified.
@@ -27,6 +28,40 @@ export function hasLevel(role: string | null | undefined, level: Level): boolean
 }
 
 export const isOwnerRole = (role: string | null | undefined) => role === OWNER_ROLE
+
+/**
+ * Front-desk access limited to one event (#1142): a third stored role that is NOT an admin level.
+ * It reaches no level (`hasLevel` above answers false for it, like for any unknown role), it is
+ * not in ORG_ROLES, so no invitation, team route or role picker can choose or assign it, and it
+ * has no label there. Not assignable from the product yet: the groundwork only. What it may do is
+ * decided per event by a grant (AdminEventAccess, src/lib/front-desk-access.ts) and by the one
+ * guard that accepts it (requireFrontDeskOrOrganizer, src/lib/auth-guard.ts).
+ */
+export const FRONT_DESK_ROLE = "front_desk"
+export const isFrontDeskRole = (role: string | null | undefined) => role === FRONT_DESK_ROLE
+
+/**
+ * The stored roles that count as one of the organisation's own accounts: every role that existed
+ * before the front-desk one (#1142), that is the owner, the organiser and `super_admin` (the
+ * schema lets a super admin account be attached to an organisation). An allow-list on purpose:
+ * for a database holding only those three values it selects exactly what an unfiltered query
+ * selected before, it never includes a front-desk account, and a role added later stays out
+ * until someone decides otherwise.
+ */
+const ORG_ACCOUNT_ROLES: readonly string[] = [OWNER_ROLE, ORGANIZER_ROLE, "super_admin"]
+
+/**
+ * Whether a stored role is one of those: the accounts that receive the organisation's automatic
+ * emails, appear as its team and count as its administrators, as opposed to a front-desk account.
+ */
+export const isOrgAccountRole = (role: string | null | undefined): boolean => typeof role === "string" && ORG_ACCOUNT_ROLES.includes(role)
+
+/**
+ * The same rule as a Prisma `where` fragment on AdminUser: spread it into every query that selects
+ * « the administrators » of an organisation (recipients, team lists, counts). A plain object, no
+ * Prisma import: this module is also loaded by client components.
+ */
+export const ORG_ACCOUNT_ROLE_WHERE = { role: { in: [...ORG_ACCOUNT_ROLES] } }
 
 type Method = "GET" | "POST" | "PATCH" | "PUT" | "DELETE"
 
@@ -175,6 +210,22 @@ export const PERMISSIONS: Record<string, Partial<Record<Method, Level>>> = {
   "shifts/recurrence/[id]/change": { POST: "organizer" },
   "shifts/recurrence/[id]/stop": { POST: "organizer" },
 }
+
+/**
+ * The only routes and methods a front-desk account (#1142) may reach, with a live grant on the
+ * event of the path: they ask requireFrontDeskOrOrganizer(eventId) instead of requireOrgSession(),
+ * and stay at organiser level for everyone else. The bulk route narrows it further to the
+ * attendance actions below. Checked against the files in permissions.test.ts, and at run time by
+ * src/__tests__/security/front-desk-routes.test.ts, whose allow-list must equal this one.
+ */
+export const FRONT_DESK_ROUTES: Record<string, readonly Method[]> = {
+  "events/[id]/day-of": ["GET"],
+  "events/[id]/registrations/bulk": ["POST"],
+}
+
+/** The bulk actions open to a front-desk account: recording attendance, nothing else. */
+export const FRONT_DESK_BULK_ACTIONS = ["check_in", "undo_check_in", "mark_absent", "undo_absent"] as const
+export const isFrontDeskBulkAction = (action: string): boolean => (FRONT_DESK_BULK_ACTIONS as readonly string[]).includes(action)
 
 /**
  * Routes that don't require an org session at all: the invitation acceptance, and the super admin's

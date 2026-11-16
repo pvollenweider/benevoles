@@ -21,6 +21,7 @@ vi.mock("@/lib/prisma", () => ({
 }))
 
 import { buildSignupNotifications, type SignupNotificationInput } from "@/lib/signup-notifications"
+import { COLETTE, ELODIE, SAMI, adminsMatching, teamOf } from "@/__tests__/helpers/front-desk-accounts"
 
 const event = {
   id: "ev1",
@@ -147,7 +148,7 @@ describe("buildSignupNotifications", () => {
         { label: "Créneau s2", roleName: "Caisse", date: "14/07/2026", startTime: "10:00", endTime: "12:00" },
       ],
     })
-    expect(m.adminFindMany).toHaveBeenCalledWith({ where: { organizationId: "org1", isActive: true }, select: { email: true, name: true } })
+    expect(m.adminFindMany).toHaveBeenCalledWith({ where: { organizationId: "org1", isActive: true, role: { in: ["admin", "organizer", "super_admin"] } }, select: { email: true, name: true } })
   })
 
   it("sends no admin notification when the organization switched it off (#381)", async () => {
@@ -232,5 +233,19 @@ describe("buildSignupNotifications", () => {
       "sector_leader_new_signup:r1:lead-Accueil@example.org",
       "waitlist_confirmation:r1:ana@example.org",
     ])
+  })
+})
+
+// Front desk (#1142): an account limited to one event is not told about sign-ups.
+describe("buildSignupNotifications and a front-desk account", () => {
+  it("notifies the owner and the organiser, never the front-desk account of the organisation", async () => {
+    vi.clearAllMocks()
+    m.orgFindUnique.mockResolvedValue({ notificationSettings: null })
+    m.leaderFindMany.mockResolvedValue([])
+    m.adminFindMany.mockImplementation(async ({ where }: { where: unknown }) => adminsMatching(where, teamOf("org1")))
+    const out = await buildSignupNotifications(input())
+    const recipients = out.filter((p) => p.kind === "admin_notification").map((p) => p.recipient.email)
+    expect(recipients).toEqual([ELODIE.email, SAMI.email])
+    expect(recipients).not.toContain(COLETTE.email)
   })
 })

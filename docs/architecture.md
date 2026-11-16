@@ -42,8 +42,8 @@ Modules `src/lib/` à connaître :
 
 | Module | Rôle |
 |--------|------|
-| `auth-guard.ts` | `requireOrgSession(level)` (niveau organisateur par défaut, `"owner"` pour les routes réservées), `requireSuperAdmin`, `getOrgContext` |
-| `permissions.ts` | Deux niveaux par organisation (Propriétaire = rôle stocké `admin`, Organisateur = `organizer`, #469) et matrice `PERMISSIONS` route × méthode → niveau de toutes les routes `src/app/api/admin` |
+| `auth-guard.ts` | `requireOrgSession(level)` (niveau organisateur par défaut, `"owner"` pour les routes réservées), `requireSuperAdmin`, `getOrgContext`, et `requireFrontDeskOrOrganizer(eventId)` pour les deux routes de présence ouvertes à un compte accueil (#1142, voir [roles-et-permissions.md](roles-et-permissions.md)) |
+| `permissions.ts` | Deux niveaux par organisation (Propriétaire = rôle stocké `admin`, Organisateur = `organizer`, #469), le rôle `front_desk` sans niveau ni attribution possible à ce stade (#1142 : `FRONT_DESK_ROUTES`, `ORG_ACCOUNT_ROLE_WHERE`) et matrice `PERMISSIONS` route × méthode → niveau de toutes les routes `src/app/api/admin` |
 | `token-vault.ts` | Jetons des liens bénévoles (inscription, responsable, invitation) : empreinte SHA-256 pour la recherche, copie chiffrée AES-256-GCM (`TOKEN_ENCRYPTION_KEY`, rotation par `TOKEN_ENCRYPTION_KEY_ID` et `TOKEN_ENCRYPTION_PREVIOUS_KEYS`) pour le renvoi ; `token-encryption-job.ts` chiffre les valeurs encore en clair et rechiffre avec la clé courante, depuis le nettoyage nocturne |
 | `production-guards.ts` | Vérifications au démarrage (`src/instrumentation.ts`) : clés de chiffrement et fuseau horaire valides, `TOKEN_ENCRYPTION_KEY` obligatoire en production |
 | `prisma-org.ts` | Client Prisma limité à une organisation (`getOrgClient`) |

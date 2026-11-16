@@ -6,7 +6,7 @@
 import { useEffect, useId, useRef, useState } from "react"
 import Link from "next/link"
 import { usePathname } from "next/navigation"
-import { signOut } from "next-auth/react"
+import { signOutOfAdmin } from "./sign-out"
 
 // The signed-in user's menu in the top bar: their account page and sign-out, behind their name
 // instead of a loose name + "Déconnexion" pair. Same disclosure pattern as SuperAdminMenu
@@ -109,7 +109,7 @@ export default function UserMenu({ userName, isSuperAdmin }: { userName: string;
           <button
             type="button"
             role="menuitem"
-            onClick={() => signOut({ callbackUrl: "/admin/login" })}
+            onClick={() => signOutOfAdmin()}
             className="block w-full text-left px-3 py-2 text-sm text-gray-700 hover:bg-gray-50 focus-visible:outline-2 focus-visible:-outline-offset-2 focus-visible:outline-blue-600 focus-visible:bg-gray-100"
           >
             Se déconnecter

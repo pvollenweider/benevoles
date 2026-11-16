@@ -14,7 +14,7 @@
  * stay fast. The scoping logic itself is covered in prisma-org.test.ts.
  */
 
-import { describe, it, expect, vi, beforeEach } from "vitest"
+import { describe, it, expect, vi, beforeEach, beforeAll, afterAll } from "vitest"
 // Workload protection (#1171) runs on Postgres (src/__integration__/workload-policy.int.test.ts): off here.
 vi.mock("@/lib/workload-guard", async (importOriginal) => ({
   ...(await importOriginal<typeof import("@/lib/workload-guard")>()),
@@ -29,8 +29,18 @@ vi.mock("@/lib/shift-swap-gate", () => ({ swapsShipped: () => true }))
 // ── Shared mocks ──────────────────────────────────────────────────────────────
 
 const requireOrgSessionMock = vi.fn()
+/** Set by the « Front desk » block: the real requireFrontDeskOrOrganizer, instead of the organiser passthrough. */
+const frontDeskGuard: { real: ((eventId: string) => Promise<unknown>) | null } = { real: null }
 vi.mock("@/lib/auth-guard", () => ({
   requireOrgSession: requireOrgSessionMock,
+  // The day-of and bulk routes ask requireFrontDeskOrOrganizer (#1142): for an organiser it is the
+  // same session, marked as such. The « Front desk » block at the end of this file swaps in the
+  // real guard (frontDeskGuard) to run its own cross-tenant cases.
+  requireFrontDeskOrOrganizer: async (eventId: string) => {
+    if (frontDeskGuard.real) return frontDeskGuard.real(eventId)
+    const g = await requireOrgSessionMock()
+    return g instanceof Response ? g : { ...g, access: "organizer", grant: null }
+  },
   getOrgContext: vi.fn(),
 }))
 
@@ -1606,7 +1616,7 @@ describe("Admin settings — cross-tenant isolation", () => {
 
     const res = await DELETE(makeRequest("/api/admin/settings/admins/adm-b", "DELETE"), params("adm-b"))
     expect(res.status).toBe(404)
-    expect(prismaMock.adminUser.findFirst.mock.calls[0][0].where).toEqual({ id: "adm-b", organizationId: ORG_A })
+    expect(prismaMock.adminUser.findFirst.mock.calls[0][0].where).toEqual({ id: "adm-b", organizationId: ORG_A, role: { in: ["admin", "organizer", "super_admin"] } })
     expect(prismaMock.adminUser.delete).not.toHaveBeenCalled()
   })
 
@@ -1809,7 +1819,7 @@ describe("Milestones — cross-tenant isolation", () => {
       params("evt-a"),
     )
     expect(res.status).toBe(422)
-    expect(db.adminUser.findFirst).toHaveBeenCalledWith(expect.objectContaining({ where: { id: "adm-b", organizationId: ORG_A, isActive: true } }))
+    expect(db.adminUser.findFirst).toHaveBeenCalledWith(expect.objectContaining({ where: { id: "adm-b", organizationId: ORG_A, isActive: true, role: { in: ["admin", "organizer", "super_admin"] } } }))
     expect(create).not.toHaveBeenCalled()
   })
 
@@ -1826,7 +1836,7 @@ describe("Milestones — cross-tenant isolation", () => {
       { params: Promise.resolve({ id: "evt-a", milestoneId: "m-a" }) },
     )
     expect(res.status).toBe(422)
-    expect(db.adminUser.findFirst).toHaveBeenCalledWith(expect.objectContaining({ where: { id: "adm-b", organizationId: ORG_A, isActive: true } }))
+    expect(db.adminUser.findFirst).toHaveBeenCalledWith(expect.objectContaining({ where: { id: "adm-b", organizationId: ORG_A, isActive: true, role: { in: ["admin", "organizer", "super_admin"] } } }))
     expect(db.eventMilestone.update).not.toHaveBeenCalled()
     expect(prismaMock.adminUser.findUnique).not.toHaveBeenCalled()
   })
@@ -3059,7 +3069,7 @@ describe("Members, templates, team, password, invitation — cross-tenant isolat
     Object.assign(prismaMock.adminUser, { update })
     const res = await PATCH(makeRequest("/api/admin/settings/admins/adm-b", "PATCH", { role: "organizer" }), params("adm-b"))
     expect(res.status).toBe(404)
-    expect(prismaMock.adminUser.findFirst.mock.calls[0][0].where).toEqual({ id: "adm-b", organizationId: ORG_A })
+    expect(prismaMock.adminUser.findFirst.mock.calls[0][0].where).toEqual({ id: "adm-b", organizationId: ORG_A, role: { in: ["admin", "organizer", "super_admin"] } })
     expect(update).not.toHaveBeenCalled()
   })
 
@@ -3080,5 +3090,118 @@ describe("Members, templates, team, password, invitation — cross-tenant isolat
     expect((await GET(makeRequest("/api/admin/accept-invite?token=unknown"))).status).toBe(404)
     expect((await POST(makeRequest("/api/admin/accept-invite", "POST", { token: "unknown", password: "Un-mot-de-passe-solide-2026" }))).status).toBe(404)
     expect(updateMany).not.toHaveBeenCalled()
+  })
+})
+
+// ── Front desk (#1142) ────────────────────────────────────────────────────────
+// The guard of the two routes a front-desk account reaches, the real one this time (the rest of
+// this file mocks auth-guard): a grant never crosses to another organisation's event, whatever
+// the database returns, and the route then reads only through the organisation's scoped client.
+describe("Front desk — cross-tenant isolation (#1142)", () => {
+  const authMock = vi.fn()
+  const grantFindFirst = vi.fn()
+  let scoped: ReturnType<typeof mockScopedDb>
+  const registrationUpdateMany = vi.fn()
+
+  // Colette Favre, front-desk account of org A, granted on org A's event evt-a.
+  const COLETTE = { user: { id: "adm-colette", name: "Colette Favre", email: "colette.favre@example.org", role: "front_desk", organizationId: ORG_A } }
+  const grantRow = (over: Record<string, unknown> = {}) => ({
+    id: "grant-1", adminUserId: "adm-colette", eventId: "evt-a", organizationId: ORG_A, expiresAt: null, revokedAt: null,
+    adminUser: { organizationId: ORG_A, isActive: true, role: "front_desk" },
+    event: { id: "evt-a", organizationId: ORG_A, publicStatus: "published" },
+    ...over,
+  })
+  const extra = prismaMock as unknown as Record<string, unknown>
+
+  beforeAll(async () => {
+    vi.doMock("@/auth", () => ({ auth: authMock, signIn: vi.fn(), signOut: vi.fn(), unstable_update: vi.fn(), handlers: {} }))
+    const actual = await vi.importActual<typeof import("@/lib/auth-guard")>("@/lib/auth-guard")
+    frontDeskGuard.real = (eventId) => actual.requireFrontDeskOrOrganizer(eventId)
+  })
+  afterAll(() => {
+    frontDeskGuard.real = null
+    vi.doUnmock("@/auth")
+    delete extra.adminEventAccess
+    delete extra.$extends
+  })
+
+  beforeEach(() => {
+    vi.clearAllMocks()
+    authMock.mockResolvedValue(COLETTE)
+    prismaMock.organization.findUnique.mockResolvedValue({ name: "Org A", timeZone: null, active: true })
+    grantFindFirst.mockResolvedValue(grantRow())
+    registrationUpdateMany.mockResolvedValue({ count: 0 })
+    scoped = mockScopedDb({ registration: { updateMany: registrationUpdateMany } })
+    extra.adminEventAccess = { findFirst: grantFindFirst }
+    // getOrgClient(organizationId): the scoped client, which only ever sees org A's rows here.
+    extra.$extends = () => scoped
+  })
+
+  const bulkBody = { action: "check_in", registrationIds: ["reg-a", "reg-b"] }
+
+  it("GET /api/admin/events/[id]/day-of: a grant on org A's event gives nothing on an org-B event — 403, nothing read", async () => {
+    const { GET } = await import("@/app/api/admin/events/[id]/day-of/route")
+    const res = await GET(makeRequest("/api/admin/events/evt-b/day-of"), params("evt-b"))
+    expect(res.status).toBe(403)
+    // The grant was asked for that event, in the caller's organisation, with an event of that organisation.
+    expect(grantFindFirst.mock.calls[0][0].where).toMatchObject({ adminUserId: "adm-colette", eventId: "evt-b", organizationId: ORG_A, event: { organizationId: ORG_A } })
+    expect(scoped.event.findFirst).not.toHaveBeenCalled()
+    expect(prismaMock.event.findFirst).not.toHaveBeenCalled()
+  })
+
+  it("POST /api/admin/events/[id]/registrations/bulk: the same for an org-B event — 403, nothing read or written", async () => {
+    const { POST } = await import("@/app/api/admin/events/[id]/registrations/bulk/route")
+    const res = await POST(makeRequest("/api/admin/events/evt-b/registrations/bulk", "POST", bulkBody), params("evt-b"))
+    expect(res.status).toBe(403)
+    expect(scoped.event.findFirst).not.toHaveBeenCalled()
+    expect(scoped.registration.findMany).not.toHaveBeenCalled()
+    expect(registrationUpdateMany).not.toHaveBeenCalled()
+  })
+
+  it.each([
+    ["a grant row of org B on its own event", grantRow({ organizationId: "org-b", eventId: "evt-b", event: { id: "evt-b", organizationId: "org-b", publicStatus: "published" } })],
+    ["a grant row of org A pointing to an org-B event", grantRow({ eventId: "evt-b", event: { id: "evt-b", organizationId: "org-b", publicStatus: "published" } })],
+    ["a grant row of an org-B account", grantRow({ eventId: "evt-b", adminUser: { organizationId: "org-b", isActive: true, role: "front_desk" }, event: { id: "evt-b", organizationId: ORG_A, publicStatus: "published" } })],
+  ])("even if the database returned %s, both routes refuse — 403", async (_label, row) => {
+    grantFindFirst.mockResolvedValue(row)
+    const dayOf = await import("@/app/api/admin/events/[id]/day-of/route")
+    expect((await dayOf.GET(makeRequest("/api/admin/events/evt-b/day-of"), params("evt-b"))).status).toBe(403)
+    const bulk = await import("@/app/api/admin/events/[id]/registrations/bulk/route")
+    expect((await bulk.POST(makeRequest("/api/admin/events/evt-b/registrations/bulk", "POST", bulkBody), params("evt-b"))).status).toBe(403)
+    expect(scoped.event.findFirst).not.toHaveBeenCalled()
+    expect(registrationUpdateMany).not.toHaveBeenCalled()
+  })
+
+  it("POST bulk on the granted event with an org-B registration in the selection: 404 as a whole, nothing written", async () => {
+    const { POST } = await import("@/app/api/admin/events/[id]/registrations/bulk/route")
+    scoped.event.findFirst.mockResolvedValue({ id: "evt-a", title: "Fête du village", organization: { slug: "org-a" } })
+    // The scoped read only returns org A's registration of this event: reg-b (org B) is missing.
+    scoped.registration.findMany.mockResolvedValue([{ id: "reg-a", eventId: "evt-a", shiftId: "s1", status: "active", volunteer: { id: "v1", firstName: "Nadia", lastName: "Rochat", email: null }, shift: { roleName: "Accueil" } }])
+    const res = await POST(makeRequest("/api/admin/events/evt-a/registrations/bulk", "POST", bulkBody), params("evt-a"))
+    expect(res.status).toBe(404)
+    expect(scoped.registration.findMany).toHaveBeenCalledWith(expect.objectContaining({ where: { id: { in: ["reg-a", "reg-b"] }, eventId: "evt-a" } }))
+    expect(registrationUpdateMany).not.toHaveBeenCalled()
+    expect(prismaMock.registration.update).not.toHaveBeenCalled()
+  })
+
+  it("the routes read through the caller's own organisation: the scoped client is the one of the session, never the event's", async () => {
+    const extendsSpy = vi.fn(() => scoped)
+    extra.$extends = extendsSpy
+    const { GET } = await import("@/app/api/admin/events/[id]/day-of/route")
+    const res = await GET(makeRequest("/api/admin/events/evt-a/day-of"), params("evt-a"))
+    // Past the guard; the scoped mock has no such event (404), read through the scoped client only.
+    expect(res.status).toBe(404)
+    expect(extendsSpy).toHaveBeenCalledTimes(1)
+    expect(scoped.event.findFirst).toHaveBeenCalledWith(expect.objectContaining({ where: { id: "evt-a" } }))
+    expect(prismaMock.event.findFirst).not.toHaveBeenCalled()
+  })
+
+  it("a front-desk account of org B gets nothing on org A's event, whatever grant it holds at home", async () => {
+    authMock.mockResolvedValue({ user: { ...COLETTE.user, id: "adm-paulo", organizationId: "org-b" } })
+    grantFindFirst.mockResolvedValue(null) // no row matches { organizationId: "org-b", eventId: "evt-a", event: { organizationId: "org-b" } }
+    const { GET } = await import("@/app/api/admin/events/[id]/day-of/route")
+    expect((await GET(makeRequest("/api/admin/events/evt-a/day-of"), params("evt-a"))).status).toBe(403)
+    expect(grantFindFirst.mock.calls[0][0].where).toMatchObject({ adminUserId: "adm-paulo", eventId: "evt-a", organizationId: "org-b", event: { organizationId: "org-b" } })
+    expect(scoped.event.findFirst).not.toHaveBeenCalled()
   })
 })

@@ -20,6 +20,9 @@ export const authConfig: NextAuthConfig = {
       const isLoginPage = nextUrl.pathname === "/admin/login"
 
       if (isAdminPath && !isLoginPage && !isLoggedIn) return false
+      // No role rule here: a Response returned by this callback is sent by the next-auth wrapper
+      // without running the proxy's handle() (canonical host, security headers). The front-desk
+      // redirect (#1142) is in handle() itself, src/proxy.ts, and in the server-side guards.
       return true
     },
     jwt({ token, user }) {

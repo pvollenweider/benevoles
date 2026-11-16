@@ -6,6 +6,11 @@ import { PENDING_ORG_WHERE } from "@/lib/org-review"
 import { resolveSuperAdminOrg } from "@/lib/auth-guard"
 import AdminNav from "@/components/admin/AdminNav"
 import SkipLink, { MAIN_CONTENT_ID } from "@/components/admin/SkipLink"
+import { headers } from "next/headers"
+import { redirect } from "next/navigation"
+import { REQUEST_PATH_HEADER } from "@/lib/admin-next"
+import { isFrontDeskRole } from "@/lib/permissions"
+import { frontDeskRedirect } from "@/lib/front-desk-pages"
 
 export default async function AdminLayout({ children }: { children: React.ReactNode }) {
   const session = await auth()
@@ -13,6 +18,17 @@ export default async function AdminLayout({ children }: { children: React.ReactN
   // Signed out, or a super admin still to give the second factor (pentest F6): no navigation, the
   // page is the login or the two-factor step (the proxy sends every other admin page there).
   if (!session || session.secondFactor?.pending) {
+    return <>{children}</>
+  }
+
+  // Front desk (#1142): an account limited to one event is no administrator of the organisation.
+  // No navigation, no organisation name, no banner: only the page, which is its landing page or a
+  // session-less one (src/lib/front-desk-pages.ts); any other admin page asked for is refused here
+  // too, besides the proxy and each page's own loader. Nothing of the organisation is read.
+  if (isFrontDeskRole(session.user?.role)) {
+    const path = (await headers()).get(REQUEST_PATH_HEADER)
+    const target = path ? frontDeskRedirect(path) : null
+    if (target) redirect(target)
     return <>{children}</>
   }
 

@@ -19,6 +19,7 @@ vi.mock("@/lib/prisma", () => ({
 import { loadOrganizationsWithNewAddressesToVerify, loadSummaryRecipients } from "../delivery-summary-data"
 import { addressHash } from "../notifications/smtp-outcome"
 import { env } from "@/lib/env"
+import { COLETTE, ELODIE, SAMI, adminsMatching, teamOf } from "@/__tests__/helpers/front-desk-accounts"
 
 const since = new Date("2026-03-09T02:00:00Z")
 const now = new Date("2026-03-10T02:00:00Z")
@@ -94,5 +95,16 @@ describe("loadSummaryRecipients", () => {
     expect(await loadSummaryRecipients("org-a")).toEqual([{ email: "fallback@benevol.app", name: "Admin" }])
     env.ADMIN_NOTIFICATION_EMAIL = undefined
     expect(await loadSummaryRecipients("org-a")).toEqual([])
+  })
+})
+
+// Front desk (#1142): an account limited to one event gets no delivery summary.
+describe("loadSummaryRecipients and a front-desk account", () => {
+  it("returns the owner and the organiser, never the front-desk account of the organisation", async () => {
+    vi.clearAllMocks()
+    findManyAdminUser.mockImplementation(async ({ where }: { where: unknown }) => adminsMatching(where, teamOf("org-a")).map(({ email, name }) => ({ email, name })))
+    const recipients = await loadSummaryRecipients("org-a")
+    expect(recipients.map((r) => r.email)).toEqual([ELODIE.email, SAMI.email])
+    expect(recipients.map((r) => r.email)).not.toContain(COLETTE.email)
   })
 })

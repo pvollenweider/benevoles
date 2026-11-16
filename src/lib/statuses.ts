@@ -28,7 +28,12 @@ export type ShiftStatus = (typeof SHIFT_STATUSES)[number]
 export const EVENT_PUBLIC_STATUSES = ["draft", "published", "archived"] as const
 export type EventPublicStatus = (typeof EVENT_PUBLIC_STATUSES)[number]
 
-/** Owner (« admin »), organiser (#469) and platform super admin. */
+/**
+ * Owner (« admin »), organiser (#469) and platform super admin. The front-desk role (#1142,
+ * FRONT_DESK_ROLE in src/lib/permissions.ts) is deliberately absent: its groundwork adds a table
+ * only, so the CHECK constraint on AdminUser.role still refuses it and no such account can be
+ * stored. The change that creates those accounts widens the constraint and this list together.
+ */
 export const ADMIN_ROLES = ["admin", "organizer", "super_admin"] as const
 export type AdminRole = (typeof ADMIN_ROLES)[number]
 

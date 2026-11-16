@@ -9,6 +9,7 @@ import { hashToken } from "@/lib/token-hash"
 import { normalizeEmail } from "@/lib/email-address"
 import { deliverAfterResponse, enqueueNotifications } from "@/lib/notifications/outbox"
 import { canSelfReactivate, REACTIVATION_LINK_HOURS } from "@/lib/org-reactivation"
+import { isOrgAccountRole } from "@/lib/permissions"
 
 /**
  * « Réactiver mon espace » (#811), step 1: an address. When it belongs to an active administrator
@@ -27,11 +28,12 @@ export async function POST(req: Request) {
   const admin = await prisma.adminUser.findUnique({
     where: { email: normalizeEmail(email) },
     select: {
-      id: true, name: true, email: true, isActive: true,
+      id: true, name: true, email: true, isActive: true, role: true,
       organization: { select: { name: true, active: true, suspendedAt: true, inactivityDeactivatedAt: true } },
     },
   })
-  if (!admin || !admin.isActive || !admin.organization || !canSelfReactivate(admin.organization)) {
+  // An administrator's address only: a front-desk account (#1142) cannot bring the space back.
+  if (!admin || !admin.isActive || !isOrgAccountRole(admin.role) || !admin.organization || !canSelfReactivate(admin.organization)) {
     return NextResponse.json({ ok: true })
   }
 

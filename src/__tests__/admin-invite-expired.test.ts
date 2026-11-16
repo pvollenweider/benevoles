@@ -76,7 +76,7 @@ describe("POST /api/admin/settings/admins with an address already held (#1053)",
     const where = m.deleteMany.mock.calls[0][0].where
     expect(where).toMatchObject({ id: "old-1", isActive: false, setupTokenHash: "old-hash" })
     expect(where.setupTokenExpiresAt.lt).toBeInstanceOf(Date)
-    expect(m.count).toHaveBeenCalledWith({ where: { organizationId: "org-b", isActive: true } })
+    expect(m.count).toHaveBeenCalledWith({ where: { organizationId: "org-b", isActive: true, role: { in: ["admin", "organizer", "super_admin"] } } })
     expect(m.create.mock.calls[0][0].data).toMatchObject({ organizationId: "org-a", email: "camille@example.org", isActive: false })
     expect(m.deleteMany.mock.invocationCallOrder[0]).toBeLessThan(m.create.mock.invocationCallOrder[0])
     expect(m.enqueue).toHaveBeenCalledTimes(1)

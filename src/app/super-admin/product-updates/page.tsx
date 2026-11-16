@@ -7,6 +7,7 @@ import { productUpdateDrafts } from "@/lib/product-update-draft"
 import { apexBaseUrl } from "@/lib/urls"
 import { siteName } from "@/lib/site"
 import { REPOSITORY_URL } from "@/lib/structured-data"
+import { PRODUCT_UPDATE_RECIPIENT_WHERE } from "@/lib/product-update-recipients"
 
 export const dynamic = "force-dynamic"
 
@@ -17,7 +18,7 @@ export default async function ProductUpdatesPage() {
 
   const [sends, recipientCount] = await Promise.all([
     prisma.productUpdateSend.findMany({ orderBy: { createdAt: "desc" }, take: 50 }),
-    prisma.adminUser.count({ where: { isActive: true, receiveProductUpdates: true } }),
+    prisma.adminUser.count({ where: { isActive: true, receiveProductUpdates: true, ...PRODUCT_UPDATE_RECIPIENT_WHERE } }),
   ])
 
   // One draft per released version (#762), the same filter as /nouveautes: computed here, after

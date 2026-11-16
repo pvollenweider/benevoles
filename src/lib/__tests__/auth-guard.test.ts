@@ -9,11 +9,13 @@ const { firstOrgMock, findUniqueOrgMock, findUniqueEventMock } = vi.hoisted(() =
   findUniqueOrgMock: vi.fn(),
   findUniqueEventMock: vi.fn(),
 }))
+const { grantFindFirstMock } = vi.hoisted(() => ({ grantFindFirstMock: vi.fn() }))
 vi.mock("../prisma", () => ({
   prisma: {
     $extends: () => ({ __scoped: true }),
     organization: { findFirst: firstOrgMock, findUnique: findUniqueOrgMock },
     event: { findUnique: findUniqueEventMock },
+    adminEventAccess: { findFirst: grantFindFirstMock },
   },
 }))
 
@@ -34,7 +36,7 @@ function withSaCookie(value: string | undefined) {
   cookiesMock.mockResolvedValue({ get: (name: string) => (name === "sa-org-id" && value ? { value } : undefined) })
 }
 
-import { requireOrgSession, requireSuperAdmin, getOrgContext } from "../auth-guard"
+import { requireOrgSession, requireSuperAdmin, getOrgContext, requireFrontDeskOrOrganizer } from "../auth-guard"
 
 describe("requireOrgSession", () => {
   beforeEach(() => {
@@ -287,5 +289,149 @@ describe("second factor pending", () => {
     authMock.mockResolvedValue({ user: { id: "sa-1", role: "super_admin", organizationId: null }, secondFactor: { pending: false, loginNonce: "n", authAt: 1 } })
     const result = await requireSuperAdmin()
     expect(result).not.toBeInstanceOf(NextResponse)
+  })
+})
+
+// Front-desk access limited to one event (#1142): a stored role that is no admin level. Every
+// guard and loader refuses it, except the one made for it, and only with a live grant.
+describe("front-desk account", () => {
+  const colette = { user: { id: "adm-colette", name: "Colette Favre", email: "colette.favre@example.org", role: "front_desk", organizationId: "org-fete" } }
+  const grantRow = (over: Record<string, unknown> = {}) => ({
+    id: "grant-1", adminUserId: "adm-colette", eventId: "evt-fete", organizationId: "org-fete", expiresAt: null, revokedAt: null,
+    adminUser: { organizationId: "org-fete", isActive: true, role: "front_desk" },
+    event: { id: "evt-fete", organizationId: "org-fete", publicStatus: "published" },
+    ...over,
+  })
+
+  beforeEach(() => {
+    authMock.mockReset()
+    redirectMock.mockClear()
+    findUniqueOrgMock.mockReset()
+    findUniqueOrgMock.mockResolvedValue({ active: true })
+    findUniqueEventMock.mockReset()
+    grantFindFirstMock.mockReset()
+    grantFindFirstMock.mockResolvedValue(null)
+    cookiesMock.mockResolvedValue({ get: () => undefined })
+    onPage("/admin/events/evt-fete/day-of")
+    authMock.mockResolvedValue(colette)
+  })
+
+  it("requireOrgSession refuses it at both levels with 403, reading nothing", async () => {
+    for (const level of ["organizer", "owner"] as const) {
+      const result = await requireOrgSession(level)
+      expect(result).toBeInstanceOf(NextResponse)
+      expect((result as NextResponse).status).toBe(403)
+    }
+    expect(findUniqueOrgMock).not.toHaveBeenCalled()
+    expect(grantFindFirstMock).not.toHaveBeenCalled()
+  })
+
+  it("requireSuperAdmin refuses it with 403", async () => {
+    const result = await requireSuperAdmin()
+    expect(result).toBeInstanceOf(NextResponse)
+    expect((result as NextResponse).status).toBe(403)
+  })
+
+  it("getOrgContext gives it no context: it is sent to its landing page, whatever page was asked, reading nothing", async () => {
+    await expect(getOrgContext()).rejects.toThrow("NEXT_REDIRECT:/admin/front-desk")
+    onPage("/admin/settings/admins")
+    await expect(getOrgContext()).rejects.toThrow("NEXT_REDIRECT:/admin/front-desk")
+    expect(findUniqueOrgMock).not.toHaveBeenCalled()
+    expect(grantFindFirstMock).not.toHaveBeenCalled()
+  })
+
+  it("getOrgContext does not let a live grant change that", async () => {
+    grantFindFirstMock.mockResolvedValue(grantRow())
+    await expect(getOrgContext()).rejects.toThrow("NEXT_REDIRECT:/admin/front-desk")
+  })
+
+  it("getOrgContext gives no context to a role that is no admin level at all", async () => {
+    authMock.mockResolvedValue({ user: { id: "x", role: "volunteer", organizationId: "org-fete" } })
+    expect(await getOrgContext()).toBeNull()
+    authMock.mockResolvedValue({ user: { id: "x", organizationId: "org-fete" } })
+    expect(await getOrgContext()).toBeNull()
+    expect(redirectMock).not.toHaveBeenCalled()
+  })
+
+  describe("requireFrontDeskOrOrganizer", () => {
+    it("401 when signed out", async () => {
+      authMock.mockResolvedValue(null)
+      const result = await requireFrontDeskOrOrganizer("evt-fete")
+      expect((result as NextResponse).status).toBe(401)
+    })
+
+    it("403 without a grant", async () => {
+      const result = await requireFrontDeskOrOrganizer("evt-fete")
+      expect(result).toBeInstanceOf(NextResponse)
+      expect((result as NextResponse).status).toBe(403)
+      expect(grantFindFirstMock).toHaveBeenCalledTimes(1)
+    })
+
+    it("accepts a live grant on that event, and says which kind of session it is", async () => {
+      grantFindFirstMock.mockResolvedValue(grantRow())
+      const result = await requireFrontDeskOrOrganizer("evt-fete")
+      expect(result).not.toBeInstanceOf(NextResponse)
+      expect(result).toMatchObject({
+        access: "front_desk", organizationId: "org-fete", db: { __scoped: true },
+        grant: { id: "grant-1", adminUserId: "adm-colette", eventId: "evt-fete", organizationId: "org-fete" },
+      })
+      expect(grantFindFirstMock.mock.calls[0][0].where).toMatchObject({ adminUserId: "adm-colette", eventId: "evt-fete", organizationId: "org-fete" })
+    })
+
+    it.each([
+      ["revoked", grantRow({ revokedAt: new Date("2020-01-01T00:00:00Z") })],
+      ["expired", grantRow({ expiresAt: new Date("2020-01-01T00:00:00Z") })],
+      ["on another event", grantRow({ eventId: "evt-marche" })],
+      ["of another organisation", grantRow({ organizationId: "org-tournoi" })],
+      ["on an archived event", grantRow({ event: { id: "evt-fete", organizationId: "org-fete", publicStatus: "archived" } })],
+      ["on an event of another organisation", grantRow({ event: { id: "evt-fete", organizationId: "org-tournoi", publicStatus: "published" } })],
+    ])("403 for a grant %s", async (_label, found) => {
+      grantFindFirstMock.mockResolvedValue(found)
+      const result = await requireFrontDeskOrOrganizer("evt-fete")
+      expect(result).toBeInstanceOf(NextResponse)
+      expect((result as NextResponse).status).toBe(403)
+    })
+
+    it("403 when its organisation is deactivated, before the grant is read", async () => {
+      findUniqueOrgMock.mockResolvedValue({ active: false })
+      grantFindFirstMock.mockResolvedValue(grantRow())
+      const result = await requireFrontDeskOrOrganizer("evt-fete")
+      expect((result as NextResponse).status).toBe(403)
+      expect(grantFindFirstMock).not.toHaveBeenCalled()
+    })
+
+    it("403 without an organisation, an account id or an event id", async () => {
+      grantFindFirstMock.mockResolvedValue(grantRow())
+      authMock.mockResolvedValue({ user: { ...colette.user, organizationId: null } })
+      expect(((await requireFrontDeskOrOrganizer("evt-fete")) as NextResponse).status).toBe(403)
+      authMock.mockResolvedValue({ user: { ...colette.user, id: undefined } })
+      expect(((await requireFrontDeskOrOrganizer("evt-fete")) as NextResponse).status).toBe(403)
+      authMock.mockResolvedValue(colette)
+      expect(((await requireFrontDeskOrOrganizer("")) as NextResponse).status).toBe(403)
+      expect(grantFindFirstMock).not.toHaveBeenCalled()
+    })
+
+    it("an owner or an organiser passes exactly as with requireOrgSession, without a grant being read", async () => {
+      for (const role of ["admin", "organizer"]) {
+        authMock.mockResolvedValue({ user: { id: "adm-sami", role, organizationId: "org-fete" } })
+        const result = await requireFrontDeskOrOrganizer("evt-fete")
+        expect(result).toMatchObject({ access: "organizer", organizationId: "org-fete", db: { __scoped: true }, grant: null })
+      }
+      expect(grantFindFirstMock).not.toHaveBeenCalled()
+    })
+
+    it("the other refusals of requireOrgSession hold: deactivated organisation, no organisation picked, unknown role, pending second factor", async () => {
+      authMock.mockResolvedValue({ user: { id: "adm-sami", role: "organizer", organizationId: "org-fete" } })
+      findUniqueOrgMock.mockResolvedValue({ active: false })
+      expect(((await requireFrontDeskOrOrganizer("evt-fete")) as NextResponse).status).toBe(403)
+      findUniqueOrgMock.mockResolvedValue({ active: true })
+      authMock.mockResolvedValue({ user: { id: "sa", role: "super_admin", organizationId: null } })
+      expect(((await requireFrontDeskOrOrganizer("evt-fete")) as NextResponse).status).toBe(409)
+      authMock.mockResolvedValue({ user: { id: "x", role: "volunteer", organizationId: "org-fete" } })
+      expect(((await requireFrontDeskOrOrganizer("evt-fete")) as NextResponse).status).toBe(403)
+      authMock.mockResolvedValue({ user: { id: "sa" }, secondFactor: { pending: true } })
+      expect(((await requireFrontDeskOrOrganizer("evt-fete")) as NextResponse).status).toBe(401)
+      expect(grantFindFirstMock).not.toHaveBeenCalled()
+    })
   })
 })

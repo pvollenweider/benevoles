@@ -73,16 +73,16 @@ describe("POST /api/public/org-reactivation/request (#811)", () => {
     const { POST } = await import("@/app/api/public/org-reactivation/request/route")
     m.findUnique.mockResolvedValueOnce(null)
     expect(await (await POST(json("http://localhost/x", { email: "nobody@x.org" }))).json()).toEqual({ ok: true })
-    m.findUnique.mockResolvedValueOnce({ id: "a1", name: "A", email: "a@x.org", isActive: true, organization: { ...deactivated, inactivityDeactivatedAt: null } })
+    m.findUnique.mockResolvedValueOnce({ id: "a1", name: "A", email: "a@x.org", isActive: true, role: "admin", organization: { ...deactivated, inactivityDeactivatedAt: null } })
     expect(await (await POST(json("http://localhost/x", { email: "a@x.org" }))).json()).toEqual({ ok: true })
-    m.findUnique.mockResolvedValueOnce({ id: "a1", name: "A", email: "a@x.org", isActive: true, organization: { ...deactivated, suspendedAt: new Date() } })
+    m.findUnique.mockResolvedValueOnce({ id: "a1", name: "A", email: "a@x.org", isActive: true, role: "admin", organization: { ...deactivated, suspendedAt: new Date() } })
     expect(await (await POST(json("http://localhost/x", { email: "a@x.org" }))).json()).toEqual({ ok: true })
     expect(m.adminUpdate).not.toHaveBeenCalled()
     expect(m.queued).toEqual([])
   })
 
   it("stores the hash and emails the link, without an organisation so the send guard lets it go", async () => {
-    m.findUnique.mockResolvedValueOnce({ id: "a1", name: "A", email: "a@x.org", isActive: true, organization: deactivated })
+    m.findUnique.mockResolvedValueOnce({ id: "a1", name: "A", email: "a@x.org", isActive: true, role: "admin", organization: deactivated })
     const { POST } = await import("@/app/api/public/org-reactivation/request/route")
     expect(await (await POST(json("http://localhost/x", { email: "A@x.org" }))).json()).toEqual({ ok: true })
 
@@ -101,7 +101,7 @@ describe("POST /api/public/org-reactivation/confirm (#811)", () => {
   const secret = "a".repeat(64)
 
   it("reactivates, clears every link of the organisation and logs who did it", async () => {
-    presentLink({ id: "a1", isActive: true, organizationId: "org-1", orgReactivationExpiresAt: new Date(Date.now() + 3_600_000), organization: deactivated })
+    presentLink({ id: "a1", isActive: true, role: "admin", organizationId: "org-1", orgReactivationExpiresAt: new Date(Date.now() + 3_600_000), organization: deactivated })
     const { POST } = await import("@/app/api/public/org-reactivation/confirm/route")
     const res = await POST(json("http://localhost/x", { token: secret }))
     expect(await res.json()).toEqual({ ok: true, organizationName: "Fête du village" })
@@ -116,7 +116,7 @@ describe("POST /api/public/org-reactivation/confirm (#811)", () => {
   })
 
   it("spends an expired link without reactivating, and refuses an unknown one", async () => {
-    presentLink({ id: "a1", isActive: true, organizationId: "org-1", orgReactivationExpiresAt: new Date(Date.now() - 1000), organization: deactivated })
+    presentLink({ id: "a1", isActive: true, role: "admin", organizationId: "org-1", orgReactivationExpiresAt: new Date(Date.now() - 1000), organization: deactivated })
     const { POST } = await import("@/app/api/public/org-reactivation/confirm/route")
     expect((await POST(json("http://localhost/x", { token: secret }))).status).toBe(400)
     expect(m.adminUpdateMany).toHaveBeenCalledWith({ where: { id: "a1", orgReactivationTokenHash: hashToken(secret) }, data: { orgReactivationTokenHash: null, orgReactivationExpiresAt: null } })
@@ -128,14 +128,14 @@ describe("POST /api/public/org-reactivation/confirm (#811)", () => {
   })
 
   it("never reactivates a suspended space, even with a valid link", async () => {
-    presentLink({ id: "a1", isActive: true, organizationId: "org-1", orgReactivationExpiresAt: new Date(Date.now() + 3_600_000), organization: { ...deactivated, suspendedAt: new Date() } })
+    presentLink({ id: "a1", isActive: true, role: "admin", organizationId: "org-1", orgReactivationExpiresAt: new Date(Date.now() + 3_600_000), organization: { ...deactivated, suspendedAt: new Date() } })
     const { POST } = await import("@/app/api/public/org-reactivation/confirm/route")
     expect((await POST(json("http://localhost/x", { token: secret }))).status).toBe(400)
     expect(m.orgUpdateMany).not.toHaveBeenCalled()
   })
 
   it("changes nothing when a concurrent confirmation spent the link first", async () => {
-    presentLink({ id: "a1", isActive: true, organizationId: "org-1", orgReactivationExpiresAt: new Date(Date.now() + 3_600_000), organization: deactivated })
+    presentLink({ id: "a1", isActive: true, role: "admin", organizationId: "org-1", orgReactivationExpiresAt: new Date(Date.now() + 3_600_000), organization: deactivated })
     m.adminUpdateMany.mockResolvedValueOnce({ count: 0 })
     const { POST } = await import("@/app/api/public/org-reactivation/confirm/route")
     expect((await POST(json("http://localhost/x", { token: secret }))).status).toBe(400)
@@ -144,10 +144,30 @@ describe("POST /api/public/org-reactivation/confirm (#811)", () => {
   })
 
   it("logs nothing when the organisation's state no longer allows it under the lock", async () => {
-    presentLink({ id: "a1", isActive: true, organizationId: "org-1", orgReactivationExpiresAt: new Date(Date.now() + 3_600_000), organization: deactivated })
+    presentLink({ id: "a1", isActive: true, role: "admin", organizationId: "org-1", orgReactivationExpiresAt: new Date(Date.now() + 3_600_000), organization: deactivated })
     m.orgUpdateMany.mockResolvedValueOnce({ count: 0 })
     const { POST } = await import("@/app/api/public/org-reactivation/confirm/route")
     expect((await POST(json("http://localhost/x", { token: secret }))).status).toBe(400)
+    expect(m.orgLog).not.toHaveBeenCalled()
+  })
+})
+
+// Front desk (#1142): an account limited to one event cannot bring a deactivated space back.
+describe("org reactivation and a front-desk account", () => {
+  it("request: the same answer, no link stored, nothing sent", async () => {
+    m.findUnique.mockResolvedValueOnce({ id: "adm-colette", name: "Colette Favre", email: "colette.favre@example.org", isActive: true, role: "front_desk", organization: deactivated })
+    const { POST } = await import("@/app/api/public/org-reactivation/request/route")
+    expect(await (await POST(json("http://localhost/x", { email: "colette.favre@example.org" }))).json()).toEqual({ ok: true })
+    expect(m.adminUpdate).not.toHaveBeenCalled()
+    expect(m.queued).toEqual([])
+  })
+
+  it("confirm: a link held by a front-desk account is spent and reactivates nothing", async () => {
+    presentLink({ id: "adm-colette", isActive: true, role: "front_desk", organizationId: "org-1", orgReactivationExpiresAt: new Date(Date.now() + 3_600_000), organization: deactivated })
+    const { POST } = await import("@/app/api/public/org-reactivation/confirm/route")
+    const res = await POST(json("http://localhost/x", { token: "b".repeat(64) }))
+    expect(res.status).toBe(400)
+    expect(m.orgUpdateMany).not.toHaveBeenCalled()
     expect(m.orgLog).not.toHaveBeenCalled()
   })
 })

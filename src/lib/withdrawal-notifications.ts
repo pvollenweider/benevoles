@@ -21,6 +21,7 @@ import { linkToken } from "./token-vault"
 import { leadersCoveringRole } from "./leader-scope-data"
 import { deadlineMoment } from "./cancel-deadline"
 import { APP_TIME_ZONE, localDateTimeToUtc } from "./time-zone"
+import { ORG_ACCOUNT_ROLE_WHERE } from "./permissions"
 
 export type WithdrawalNotificationInput = {
   registrationId: string
@@ -72,8 +73,9 @@ export async function buildWithdrawalNotifications(
     ...(input.late ? { late: true, startsAt: deadlineMoment(startInstant(shift, input.timeZone), input.timeZone ?? APP_TIME_ZONE) } : {}),
   }
 
+  // The organisation's administrators only: never a front-desk account (#1142).
   const admins = await prisma.adminUser.findMany({
-    where: { organizationId: event.organizationId, isActive: true },
+    where: { organizationId: event.organizationId, isActive: true, ...ORG_ACCOUNT_ROLE_WHERE },
     select: { email: true, name: true },
   })
   // Same fallback as sendAdminNotification: only when the org has no active admin on record.

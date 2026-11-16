@@ -2,7 +2,8 @@
 // SPDX-License-Identifier: AGPL-3.0-only
 
 import { NextResponse } from "next/server"
-import { requireOrgSession } from "@/lib/auth-guard"
+import { requireFrontDeskOrOrganizer } from "@/lib/auth-guard"
+import { isFrontDeskBulkAction } from "@/lib/permissions"
 import { adminActor } from "@/lib/event-log"
 import { addSectorLeader, cancelRegistrations, resendManagementLinks, setAttendance } from "@/lib/admin-registration-actions"
 import { z } from "zod"
@@ -15,6 +16,11 @@ import type { AttendanceTransition } from "@/lib/attendance-state"
 // in this organization, or nothing is done. Attendance actions (#1141) are check_in,
 // undo_check_in, mark_absent and undo_absent; "left_early" is reserved for a later PR and
 // therefore refused here as an unknown action.
+//
+// A front-desk account holding a live grant on this event (#1142) may use the attendance actions
+// only: any other action is refused with a 403 before the event or a registration is read. The
+// guard reads the grant for the event of the path, and the ownership check below is on that same
+// event, for every id, before any write.
 const schema = z.object({
   action: z.enum(["cancel", "make_leader", "resend_link", "check_in", "undo_check_in", "mark_absent", "undo_absent"]),
   registrationIds: z.array(z.string().min(1)).min(1).max(500),
@@ -25,13 +31,17 @@ const schema = z.object({
 })
 
 export async function POST(req: Request, { params }: { params: Promise<{ id: string }> }) {
-  const guard = await requireOrgSession()
+  const { id: eventId } = await params
+  const guard = await requireFrontDeskOrOrganizer(eventId)
   if (guard instanceof NextResponse) return guard
   const { db, organizationId } = guard
 
-  const { id: eventId } = await params
   const parsed = schema.safeParse(await req.json().catch(() => null))
   if (!parsed.success) return validationError(parsed.error)
+  // Front desk: attendance only. Organisers and owners keep every action.
+  if (guard.access !== "organizer" && !isFrontDeskBulkAction(parsed.data.action)) {
+    return NextResponse.json({ error: "Accès refusé" }, { status: 403 })
+  }
 
   const event = await db.event.findFirst({
     where: { id: eventId },

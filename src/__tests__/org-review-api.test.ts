@@ -1,5 +1,6 @@
 import { describe, it, expect, vi, beforeEach } from "vitest"
 import { NextResponse } from "next/server"
+import { COLETTE, ELODIE, SAMI, adminsMatching, teamOf } from "@/__tests__/helpers/front-desk-accounts"
 
 const m = vi.hoisted(() => ({
   guard: vi.fn(),
@@ -78,5 +79,21 @@ describe("POST /api/super-admin/organizations/[id]/review (#810, part 4c)", () =
     expect((await POST(post("refuse"), params)).status).toBe(409)
     expect(m.orgDelete).not.toHaveBeenCalled()
     expect(m.orgUpdate).not.toHaveBeenCalled()
+  })
+})
+
+// Front desk (#1142): the validation of a space is announced to its administrators only.
+describe("POST review and a front-desk account", () => {
+  it("emails the owner and the organiser, never the front-desk account of the organisation", async () => {
+    vi.clearAllMocks()
+    m.guard.mockResolvedValue({ db: {}, session: { user: { id: "sa-1", role: "super_admin", name: "Opérateur" } } })
+    m.findUnique.mockResolvedValue(pending)
+    m.enqueue.mockResolvedValue(["o1"])
+    m.adminFindMany.mockImplementation(async ({ where }: { where: unknown }) => adminsMatching(where, teamOf("org-1")))
+    const { POST } = await import("@/app/api/super-admin/organizations/[id]/review/route")
+    expect((await POST(post("approve"), params)).status).toBe(200)
+    const recipients = (m.enqueue.mock.calls[0][0] as { recipient: { email: string } }[]).map((p) => p.recipient.email)
+    expect(recipients).toEqual([ELODIE.email, SAMI.email])
+    expect(recipients).not.toContain(COLETTE.email)
   })
 })

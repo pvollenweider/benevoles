@@ -58,4 +58,12 @@ describe("POST /api/super-admin/organizations/[id]/send-invite", () => {
     expect(data.sent).toBe(true)
     expect(data.emailError).toBeNull()
   })
+
+  // #1142: the operator's resend is for an administrator's invitation, never a front-desk account's.
+  it("looks for a pending invitation among owners and organisers only", async () => {
+    sendNotificationMock.mockResolvedValue({ ok: true })
+    const { POST } = await import("@/app/api/super-admin/organizations/[id]/send-invite/route")
+    await POST(post(), { params: Promise.resolve({ id: "org-1" }) })
+    expect(orgFindUnique.mock.calls[0][0].select.admins.where).toEqual({ isActive: false, setupTokenHash: { not: null }, role: { in: ["admin", "organizer", "super_admin"] } })
+  })
 })
