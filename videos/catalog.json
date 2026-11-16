@@ -490,9 +490,10 @@
         "organisateur"
       ],
       "feature": "Frise du planning",
-      "updatedAt": "2026-10-16",
-      "revision": 5,
-      "level": "avance"
+      "updatedAt": "2026-11-16",
+      "revision": 6,
+      "level": "avance",
+      "updated": "2026-11-16"
     },
     {
       "id": "SHIFT_NIGHT_DST",

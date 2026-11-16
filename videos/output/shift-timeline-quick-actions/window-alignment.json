@@ -1,0 +1,33 @@
+{
+  "locatedAt": "2026-11-16T21:52:59.384Z",
+  "masterSha256": "ea38890bbd8e2c64a58c7c4a3e7fe1aa5e9f04cbb2e647b407653fa4e8c24e09",
+  "totalSeconds": 119.88,
+  "cuts": [
+    {
+      "id": "draw",
+      "seconds": 12.5811875
+    },
+    {
+      "id": "resize",
+      "seconds": 29.93025
+    },
+    {
+      "id": "popover",
+      "seconds": 43.2828545
+    },
+    {
+      "id": "copy",
+      "seconds": 61.879896
+    },
+    {
+      "id": "detail",
+      "seconds": 82.8675
+    },
+    {
+      "id": "result",
+      "seconds": 104.251792
+    }
+  ],
+  "applied": true,
+  "independentContentAuditRequired": true
+}

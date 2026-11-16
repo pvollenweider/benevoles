@@ -1,42 +1,42 @@
 {
   "model": "gemini-3.8-flash",
-  "reviewedAt": "2026-10-16T10:31:22.946Z",
-  "videoSha256": "d428c732a68bec6e50e91e0532e1e9f2b1c180d4cbfdb0282f4840407f68ad35",
+  "reviewedAt": "2026-11-16T22:01:35.888Z",
+  "videoSha256": "6feb042986d93210662dc97cf7e6e0ed4b0f8fae6810f1e3b19bb58112dd2437",
   "promptSha256": "7926fad2d30b886182dbb4250c75a693a77d4058141160204a4a38172a23e616",
-  "clipSha256": "47a549223da8df58d5dbbd70cfb767e977143d1e10c63761472105722d3a8abe",
+  "clipSha256": "cfc425f2be0545e5d26f19a75999b11379c2f4b14131d59e9a4ea25283b83260",
   "scene": "detail",
   "review": {
     "heardOpening": "Pour ajouter une consigne à cette relève",
     "checkpoints": [
       {
-        "spokenSeconds": 2.2,
+        "spokenSeconds": 2.5,
         "spoken": "passez en Liste",
-        "visibleSeconds": 1.1,
-        "visible": "Affichage de la vue sous forme de liste de créneaux",
-        "sync": "aligned",
+        "visibleSeconds": 1,
+        "visible": "Bascule vers la vue Liste des créneaux",
+        "sync": "early",
         "severity": "none"
       },
       {
-        "spokenSeconds": 3.2,
+        "spokenSeconds": 3.5,
         "spoken": "puis cliquez sur Modifier",
         "visibleSeconds": 3.8,
-        "visible": "Ouverture du formulaire Modifier le créneau",
+        "visible": "Clic sur Modifier et ouverture du formulaire Modifier le créneau",
         "sync": "aligned",
         "severity": "none"
       },
       {
-        "spokenSeconds": 11.5,
-        "spoken": "saisissez Venir dix minutes avant dans Consigne pratique",
-        "visibleSeconds": 12,
-        "visible": "Saisie de 'Venir 10 minutes avant.' dans le champ Consigne pratique",
+        "spokenSeconds": 12,
+        "spoken": "Ici, saisissez Venir dix minutes avant dans Consigne pratique",
+        "visibleSeconds": 12.2,
+        "visible": "Saisie de Venir 10 minutes avant. dans le champ Consigne pratique",
         "sync": "aligned",
         "severity": "none"
       },
       {
-        "spokenSeconds": 15.6,
+        "spokenSeconds": 15.8,
         "spoken": "puis enregistrez",
-        "visibleSeconds": 17.2,
-        "visible": "Validation et retour à la liste des créneaux",
+        "visibleSeconds": 16.8,
+        "visible": "Défilement vers le bas et clic sur Enregistrer",
         "sync": "aligned",
         "severity": "none"
       }
@@ -45,7 +45,7 @@
     "voice": {
       "consistent": true,
       "warm": true,
-      "observation": "Voix claire, posée et parfaitement articulée, très bonne synchronisation avec les actions à l'écran."
+      "observation": "Voix synthétique féminine claire, posée et parfaitement compréhensible."
     }
   },
   "note": "Automated observation of actual final video audio and images; not a claim of complete human validation"

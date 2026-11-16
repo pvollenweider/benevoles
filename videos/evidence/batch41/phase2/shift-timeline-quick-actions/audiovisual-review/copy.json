@@ -1,0 +1,62 @@
+{
+  "model": "gemini-3.8-flash",
+  "reviewedAt": "2026-11-16T22:01:42.943Z",
+  "videoSha256": "6feb042986d93210662dc97cf7e6e0ed4b0f8fae6810f1e3b19bb58112dd2437",
+  "promptSha256": "3903aa1c3df8b9930ad1c35c4f128e4698a8878cea3882dc2f0f279cb20cf2bf",
+  "clipSha256": "0989afd8099c7845ff38112d213d40901d5f5c085003a4274465dd07c9d35943",
+  "scene": "copy",
+  "review": {
+    "heardOpening": "Dupliquer reprend le poste, la durée",
+    "checkpoints": [
+      {
+        "spokenSeconds": 0,
+        "spoken": "Dupliquer reprend le poste, la durée, la capacité",
+        "visibleSeconds": 2.1,
+        "visible": "Clic sur le bouton Dupliquer et apparition de la notification de confirmation",
+        "sync": "aligned",
+        "severity": "none"
+      },
+      {
+        "spokenSeconds": 7.5,
+        "spoken": "Ouvrez cette copie : elle est indépendante.",
+        "visibleSeconds": 7.8,
+        "visible": "Clic sur le nouveau créneau sur la frise pour ouvrir son panneau d'édition",
+        "sync": "aligned",
+        "severity": "none"
+      },
+      {
+        "spokenSeconds": 10.1,
+        "spoken": "Donnez-lui le libellé Relève suivante",
+        "visibleSeconds": 11.5,
+        "visible": "Le champ Libellé reste vide, le texte « Relève suivante » n'est pas saisi",
+        "sync": "missing",
+        "severity": "major"
+      },
+      {
+        "spokenSeconds": 14.8,
+        "spoken": "Ici, on la décale de quinze minutes avec le bouton Décaler.",
+        "visibleSeconds": 16.3,
+        "visible": "Modification de l'heure de début à 08:00 puis clic sur le bouton Décaler",
+        "sync": "aligned",
+        "severity": "none"
+      },
+      {
+        "spokenSeconds": 18,
+        "spoken": "Fermer et enregistrer conserve le nouveau libellé.",
+        "visibleSeconds": 17.8,
+        "visible": "Fermeture du volet d'édition sans libellé personnalisé enregistré",
+        "sync": "missing",
+        "severity": "minor"
+      }
+    ],
+    "issues": [
+      "À 00:10, la voix donne la consigne de saisir le libellé « Relève suivante », mais l'action n'est pas effectuée à l'écran (le champ Libellé reste vide)."
+    ],
+    "voice": {
+      "consistent": true,
+      "warm": true,
+      "observation": "Voix off féminine naturelle, claire, fluide et posée."
+    }
+  },
+  "note": "Automated observation of actual final video audio and images; not a claim of complete human validation"
+}

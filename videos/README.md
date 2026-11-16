@@ -321,6 +321,8 @@ Les scénarios de `videos/lib/record-*.ts` typent leur paramètre avec `Cue` (`s
 une phrase de sa scène (la plus proche `scene("id", …)` au-dessus) : une coquille ou une narration
 modifiée sans son repère échoue en test, pas au milieu d'une prise.
 
+Avant la première prise narrée, `node --env-file=.env.video.local --import tsx videos/tools/locate-action-phrases.ts <ID>` peut comparer les repères de la répétition rapide aux mots réellement prononcés dans les WAV source déjà contrôlés par ASR. Le rapport `action-phrase-onsets.json`, lié aux empreintes des WAV, signale les écarts avec les débuts de phrase estimés par silence. C’est un diagnostic : il ne change aucun repère, ne valide pas une vidéo et ne remplace pas la revue AV finale. Relisez aussi le temps nécessaire aux saisies ; une attente bien placée ne garantit pas que tout le formulaire sera rempli pendant la phrase.
+
 ### Adresses affichées : benevol.app, jamais localhost
 
 Les liens à partager, QR codes, emails et adresses d'événement que montrent les vidéos sont ceux

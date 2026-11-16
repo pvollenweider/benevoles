@@ -1,34 +1,34 @@
 {
   "model": "gemini-3.8-flash",
-  "reviewedAt": "2026-10-16T10:30:37.555Z",
-  "videoSha256": "d428c732a68bec6e50e91e0532e1e9f2b1c180d4cbfdb0282f4840407f68ad35",
-  "promptSha256": "d8d7b7f05728e39aba516e7dbd5ce0840adee22b10cdda83f8d817b118bbd88c",
-  "clipSha256": "0860366ada939ff10c380000d75452edaf0cc929442406ad485fb9068cc8f379",
+  "reviewedAt": "2026-11-16T22:01:37.476Z",
+  "videoSha256": "6feb042986d93210662dc97cf7e6e0ed4b0f8fae6810f1e3b19bb58112dd2437",
+  "promptSha256": "7bb49e18c4328a874448d374c37cff62dbdace9a8ddc628fd71b21f392dc8ecd",
+  "clipSha256": "c53a596dffb28ba9fe22e0a0d03cd984b46269b1a16fe81cf6efba119cdfb3e1",
   "scene": "popover",
   "review": {
-    "heardOpening": "Un clic sur la barre ouvre ses actions rapides.",
+    "heardOpening": "Un clic sur la barre ouvre",
     "checkpoints": [
       {
         "spokenSeconds": 0.8,
         "spoken": "Un clic sur la barre ouvre ses actions rapides.",
-        "visibleSeconds": 1.7,
-        "visible": "Un clic sur le créneau Buvette fait apparaître la fenêtre contextuelle des actions rapides.",
+        "visibleSeconds": 1.5,
+        "visible": "Le panneau contextuel d'actions rapides du créneau Buvette s'ouvre à l'écran.",
         "sync": "aligned",
         "severity": "none"
       },
       {
-        "spokenSeconds": 3,
+        "spokenSeconds": 3.3,
         "spoken": "On y retrouve les heures, l’état des inscriptions et les commandes utiles.",
-        "visibleSeconds": 3.2,
-        "visible": "Les sections Horaires, Inscriptions et les boutons Dupliquer / Supprimer sont affichés dans le volet.",
+        "visibleSeconds": 2,
+        "visible": "Le panneau affiche les horaires de début/fin, le statut des inscriptions et les boutons Dupliquer / Supprimer.",
         "sync": "aligned",
         "severity": "none"
       },
       {
-        "spokenSeconds": 6.8,
+        "spokenSeconds": 7.4,
         "spoken": "Le choix Appliquer au poste propose Ce jour ou Tout l’événement",
-        "visibleSeconds": 7,
-        "visible": "L'option 'Appliquer au poste' avec les choix 'Ce jour' et 'Tout l'événement' est bien visible dans le volet.",
+        "visibleSeconds": 7.4,
+        "visible": "La section 'Appliquer au poste' avec les options 'Ce jour' et 'Tout l'événement' est bien visible dans le volet.",
         "sync": "aligned",
         "severity": "none"
       }
@@ -37,7 +37,7 @@
     "voice": {
       "consistent": true,
       "warm": true,
-      "observation": "Voix off posée, claire et en parfaite adéquation avec la démonstration visuelle."
+      "observation": "Voix claire, posée et bien articulée, parfaitement synchronisée avec l'interface."
     }
   },
   "note": "Automated observation of actual final video audio and images; not a claim of complete human validation"

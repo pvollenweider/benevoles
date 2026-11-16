@@ -1,43 +1,43 @@
 {
   "model": "gemini-3.8-flash",
-  "reviewedAt": "2026-10-16T10:29:12.688Z",
-  "videoSha256": "d428c732a68bec6e50e91e0532e1e9f2b1c180d4cbfdb0282f4840407f68ad35",
+  "reviewedAt": "2026-11-16T22:01:17.795Z",
+  "videoSha256": "6feb042986d93210662dc97cf7e6e0ed4b0f8fae6810f1e3b19bb58112dd2437",
   "promptSha256": "0f464da687e8a1d7e44863c56c7ef119b4b5dd65553db9652b8aeffc73e36e63",
-  "clipSha256": "43618d220a5c0a0fa4db2a0eac30cfe7921224b8524654b2ec8f7399ccabca31",
+  "clipSha256": "5eba5549e6d3d0a841cb8685f2c2d013d127407143957b2411df0fddd458931e",
   "scene": "welcome",
   "review": {
     "heardOpening": "La Frise n'est pas seulement une vue de lecture",
     "checkpoints": [
       {
-        "spokenSeconds": 0.5,
-        "spoken": "La Frise n'est pas seulement une vue de lecture",
+        "spokenSeconds": 0,
+        "spoken": "La Frise n'est pas seulement une vue de lecture.",
         "visibleSeconds": 0,
+        "visible": "Titre d'introduction affiché : « Créer, dupliquer et redimensionner depuis la Frise ».",
         "sync": "aligned",
-        "severity": "none",
-        "visible": "Affichage de la page des créneaux en arrière-plan avec le bandeau d'introduction 'Créer, dupliquer et redimensionner depuis la Frise'"
+        "severity": "none"
       },
       {
-        "spokenSeconds": 2.5,
+        "spokenSeconds": 2.1,
         "spoken": "Elle permet aussi de construire rapidement un planning visuel",
-        "visibleSeconds": 2.5,
+        "visibleSeconds": 2.8,
+        "visible": "Disparition du bandeau d'introduction et affichage de la vue Frise des créneaux.",
         "sync": "aligned",
-        "severity": "none",
-        "visible": "Disparition du bandeau d'introduction, laissant voir la vue Frise complète avec les différents postes et créneaux"
+        "severity": "none"
       },
       {
-        "spokenSeconds": 6,
+        "spokenSeconds": 5.4,
         "spoken": "dessiner une plage libre, ajuster sa durée, dupliquer une relève",
-        "visibleSeconds": 6,
+        "visibleSeconds": 5.4,
+        "visible": "Vue d'ensemble de la Frise de planning (introduction générale annonçant les fonctionnalités).",
         "sync": "aligned",
-        "severity": "none",
-        "visible": "Écran stable de la vue Frise illustrant l'introduction générale des fonctionnalités à venir"
+        "severity": "none"
       }
     ],
     "issues": [],
     "voice": {
       "consistent": true,
       "warm": true,
-      "observation": "Voix féminine claire, posée et bien articulée, parfaitement synchronisée avec l'animation d'introduction."
+      "observation": "Voix féminine naturelle, claire et rythmée."
     }
   },
   "note": "Automated observation of actual final video audio and images; not a claim of complete human validation"

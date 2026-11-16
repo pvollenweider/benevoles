@@ -186,20 +186,31 @@
     {
       "id": "SHIFT_TIMELINE_QUICK_ACTIONS",
       "slug": "shift-timeline-quick-actions",
-      "status": "NOT DONE",
-      "published": false
+      "status": "READY",
+      "published": true,
+      "narratedTakes": 1,
+      "problems": "Two raw AV observations resolved by actual typed/saved label and automatic-open/close/reopen sequence.",
+      "duration": 126.36,
+      "musicGaps": 0,
+      "tu": 0,
+      "revision": 6,
+      "sourceChanges": "New whole Kore master and six cuts; source-word onset diagnostic and earlier label cue; current Minimum/labels captured."
     },
     {
       "id": "SHIFT_CREATE_SERIES",
       "slug": "shift-create-series",
-      "status": "NOT DONE",
-      "published": false
+      "status": "IN PROGRESS",
+      "published": false,
+      "narratedTakes": 0,
+      "problems": "Fresh source narration preparation; no narrated take yet."
     },
     {
       "id": "SHIFT_CREATE_EDIT_DETAIL",
       "slug": "shift-create-edit-detail",
-      "status": "NOT DONE",
-      "published": false
+      "status": "IN PROGRESS",
+      "published": false,
+      "narratedTakes": 0,
+      "problems": "Fresh source narration preparation; no narrated take yet."
     },
     {
       "id": "EVENT_CREATE_PUBLISH_OVERVIEW",
@@ -399,5 +410,6 @@
       "status": "NOT DONE",
       "published": false
     }
-  ]
+  ],
+  "phase1Complete": true
 }

@@ -1,0 +1,12 @@
+{
+  "anchor": "Dans la ligne d’un poste, cliquez dans une zone vide puis",
+  "windowStart": 0,
+  "result": {
+    "found": true,
+    "startSeconds": 12.9,
+    "wordsHeard": "Dans la ligne d’un poste"
+  },
+  "onset": 12.9,
+  "proposedCut": 12.5811875,
+  "note": "Proposal only; recut then independently audit before capture"
+}

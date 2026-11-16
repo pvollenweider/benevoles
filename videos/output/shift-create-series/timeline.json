@@ -1,15 +1,15 @@
 {
   "slug": "shift-create-series",
-  "capturePurpose": "narration-timed",
-  "recordedAt": "2026-10-16T08:42:09.027Z",
+  "capturePurpose": "rehearsal",
+  "recordedAt": "2026-11-16T22:04:46.527Z",
   "video": "capture.webm",
   "product": {
-    "commit": "89a884c8d58c22dda6800481e1238bdc4e219dff",
-    "sourceTree": "60284d6b5fdf08719063fe06492832a52a45d996",
-    "productSourceSha256": "bb3c83ca2cff86f744551f64b0f97ab94601895d1893bcce4312c18b0e47413d",
-    "buildId": "gHYEjPtpdQYUNytuIhMkh",
-    "snapshot": "/tmp/benevoles-video-production.Batch231",
-    "builtAt": "2026-10-16T08:22:06.973Z"
+    "commit": "e8ed666a48294d77213f8bf64fe35898314b0ed9",
+    "sourceTree": "0bbbe179086261896ad916c785afc276d3708af7",
+    "productSourceSha256": "adc46efaf73e212f4d2825281f2b06c17f4b3c685410312b979423d583523ff3",
+    "buildId": "HO6mRRAZuOevekAmdhN_C",
+    "snapshot": "/tmp/benevoles-video-production.DjebK9ng",
+    "builtAt": "2026-11-16T19:13:45.446Z"
   },
   "captureEnvironment": {
     "locale": "fr-CH",
@@ -26,160 +26,160 @@
   "inputEvents": [
     {
       "kind": "click",
-      "atMs": 7969
+      "atMs": 4313
     },
     {
       "kind": "click",
-      "atMs": 15804
+      "atMs": 5580
     },
     {
       "kind": "click",
-      "atMs": 18888
+      "atMs": 6414
     },
     {
       "kind": "click",
-      "atMs": 19688
+      "atMs": 7231
     },
     {
       "kind": "click",
-      "atMs": 27018
+      "atMs": 8462
     },
     {
       "kind": "click",
-      "atMs": 30535
+      "atMs": 9264
     },
     {
       "kind": "click",
-      "atMs": 36234
+      "atMs": 10114
     },
     {
       "kind": "click",
-      "atMs": 57727
+      "atMs": 11897
     },
     {
       "kind": "click",
-      "atMs": 70316
+      "atMs": 13180
     },
     {
       "kind": "click",
-      "atMs": 71666
+      "atMs": 14030
     },
     {
       "kind": "click",
-      "atMs": 77666
+      "atMs": 14847
     },
     {
       "kind": "click",
-      "atMs": 80699
+      "atMs": 15662
     }
   ],
   "cues": [
     {
       "id": "welcome",
-      "startMs": 1296,
-      "endMs": 14192
+      "startMs": 1182,
+      "endMs": 4629
     },
     {
       "id": "range",
-      "startMs": 14645,
-      "endMs": 26091
+      "startMs": 5083,
+      "endMs": 7541
     },
     {
       "id": "duration",
-      "startMs": 26542,
-      "endMs": 43324
+      "startMs": 7992,
+      "endMs": 10424
     },
     {
       "id": "preview",
-      "startMs": 43807,
-      "endMs": 56338
+      "startMs": 10875,
+      "endMs": 10928
     },
     {
       "id": "create",
-      "startMs": 56789,
-      "endMs": 69397
+      "startMs": 11381,
+      "endMs": 12245
     },
     {
       "id": "adjust",
-      "startMs": 69848,
-      "endMs": 89124
+      "startMs": 12698,
+      "endMs": 16477
     },
     {
       "id": "result",
-      "startMs": 89576,
-      "endMs": 104926
+      "startMs": 16930,
+      "endMs": 16960
     }
   ],
   "anchors": [
     {
       "segmentId": "welcome",
       "phrase": "Au lieu de saisir chaque",
-      "startMs": 6176,
-      "endMs": 12488,
-      "cueMs": 7477
+      "startMs": 10222,
+      "endMs": 23000,
+      "cueMs": 3805
     },
     {
       "segmentId": "range",
       "phrase": "Ici, la buvette fonctionne de",
-      "startMs": 2406,
-      "endMs": 3673,
-      "cueMs": 17052
+      "startMs": 5681,
+      "endMs": 11604,
+      "cueMs": 5908
     },
     {
       "segmentId": "range",
       "phrase": "Cette plage décrit le besoin",
-      "startMs": 4304,
-      "endMs": 6589,
-      "cueMs": 19196
+      "startMs": 11604,
+      "endMs": 15352,
+      "cueMs": 6724
     },
     {
       "segmentId": "duration",
       "phrase": "La pause ajoute un intervalle",
-      "startMs": 9175,
-      "endMs": 11337,
-      "cueMs": 35719
+      "startMs": 15344,
+      "endMs": 20038,
+      "cueMs": 9574
     },
     {
       "segmentId": "duration",
       "phrase": "Ici, choisissons zéro minute ",
-      "startMs": 11782,
-      "endMs": 13337,
-      "cueMs": 38325
+      "startMs": 20038,
+      "endMs": 22786,
+      "cueMs": 10420
     },
     {
       "segmentId": "create",
       "phrase": "Créons la série",
-      "startMs": 414,
-      "endMs": 1147,
-      "cueMs": 57210
+      "startMs": 0,
+      "endMs": 1495,
+      "cueMs": 11394
     },
     {
       "segmentId": "create",
       "phrase": "chacune possède son propre effectif",
-      "startMs": 7737,
-      "endMs": 12173,
-      "cueMs": 64527
+      "startMs": 16100,
+      "endMs": 23000,
+      "cueMs": 12207
     },
     {
       "segmentId": "adjust",
       "phrase": "Enregistrons",
-      "startMs": 10378,
-      "endMs": 10863,
-      "cueMs": 80227
+      "startMs": 14279,
+      "endMs": 15607,
+      "cueMs": 15157
     },
     {
       "segmentId": "result",
       "phrase": "quatre places pour la première relève",
-      "startMs": 2372,
-      "endMs": 5389,
-      "cueMs": 91949
+      "startMs": 2988,
+      "endMs": 9959,
+      "cueMs": 16953
     },
     {
       "segmentId": "result",
       "phrase": "Une série bien découpée facilite",
-      "startMs": 10626,
-      "endMs": 15072,
-      "cueMs": 100202
+      "startMs": 17262,
+      "endMs": 27000,
+      "cueMs": 16954
     }
   ]
 }

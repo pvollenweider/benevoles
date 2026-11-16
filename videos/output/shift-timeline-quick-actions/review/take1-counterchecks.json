@@ -1,0 +1,26 @@
+{
+  "videoSha256": "6feb042986d93210662dc97cf7e6e0ed4b0f8fae6810f1e3b19bb58112dd2437",
+  "copy": {
+    "rawFinding": "Libellé allegedly empty and not saved",
+    "actualFrame": "review-frames/copy-60.png",
+    "visibleValue": "Relève suivante",
+    "alsoVisibleIn": "review-frames/copy-85.png and detailed editor; persisted copy/original API assertions pass"
+  },
+  "resize": {
+    "rawFinding": "Popover opens before narrated reopen",
+    "explanation": "Natural main behavior opens the actual popover on release of the resize handle. It is visibly closed, then genuinely reopened at the spoken request; the first automatic result is not the requested reopen click.",
+    "actualClickSeconds": [
+      1.795,
+      5.182,
+      8.666,
+      12.35
+    ],
+    "frames": [
+      "resize-auto-open",
+      "resize-closed-before-reopen",
+      "resize-reopened-on-cue"
+    ],
+    "persistedExtensionMinutes": 45
+  },
+  "note": "Raw observations retained. Actual final frames/inputs and runtime main values, no substituted product screen or subjective listening."
+}

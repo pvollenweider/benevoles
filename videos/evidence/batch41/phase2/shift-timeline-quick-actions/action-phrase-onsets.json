@@ -1,0 +1,175 @@
+{
+  "checkedAt": "2026-11-16T21:54:36.869Z",
+  "model": "gemini-3.8-flash",
+  "scope": "Independent diagnostic of source audio only; no timing applied, no additional narrated take, no final audiovisual readiness claim. Repeated clause anchors may intentionally share a sentence start; review actual planned actions before changing source.",
+  "results": [
+    {
+      "segmentId": "draw",
+      "audioSha256": "af001f4da235375e789db41d8f54f8354af2c39f87bf6d28a0e4dcdf5089fc1b",
+      "durationMs": 17349,
+      "phrases": [
+        {
+          "phrase": "Donnez-lui un libellé",
+          "found": true,
+          "startSeconds": 10.72,
+          "wordsHeard": "Donnez-lui un libellé",
+          "estimatedSentenceStartMs": 12780,
+          "deltaMs": -2060,
+          "review": true
+        },
+        {
+          "phrase": "Donnez-lui un libellé, ajustez les",
+          "found": true,
+          "startSeconds": 10.72,
+          "wordsHeard": "Donnez-lui un libellé ajustez les",
+          "estimatedSentenceStartMs": 12780,
+          "deltaMs": -2060,
+          "review": true
+        }
+      ]
+    },
+    {
+      "segmentId": "resize",
+      "audioSha256": "c6b6dc923c21b4c8a9d6477ed779321680be1dc70f190985d704323e51ad668b",
+      "durationMs": 13353,
+      "phrases": [
+        {
+          "phrase": "Rouvrez ensuite les actions rapides",
+          "found": true,
+          "startSeconds": 7.85,
+          "wordsHeard": "Rouvrez ensuite les actions rapides",
+          "estimatedSentenceStartMs": 8182,
+          "deltaMs": -332,
+          "review": false
+        },
+        {
+          "phrase": "Vérifiez-la avant de fermer.",
+          "found": true,
+          "startSeconds": 11.45,
+          "wordsHeard": "vérifiez-la avant de fermer",
+          "estimatedSentenceStartMs": 11853,
+          "deltaMs": -403,
+          "review": false
+        }
+      ]
+    },
+    {
+      "segmentId": "popover",
+      "audioSha256": "8f46d541c0c062a3e5679cc308dbd7135e7821e795c79a22a019e2393ddba866",
+      "durationMs": 18597,
+      "phrases": [
+        {
+          "phrase": "Le choix Appliquer au poste",
+          "found": true,
+          "startSeconds": 7.42,
+          "wordsHeard": "Le choix Appliquer au poste",
+          "estimatedSentenceStartMs": 7293,
+          "deltaMs": 127,
+          "review": false
+        },
+        {
+          "phrase": "C’est le bon endroit pour",
+          "found": true,
+          "startSeconds": 14.64,
+          "wordsHeard": "C'est le bon endroit pour",
+          "estimatedSentenceStartMs": 14393,
+          "deltaMs": 247,
+          "review": false
+        }
+      ]
+    },
+    {
+      "segmentId": "copy",
+      "audioSha256": "1166f7bd114feeb0f66c1e480fb4c6207c07bf214baa85f0ff1925fd84b8a815",
+      "durationMs": 20988,
+      "phrases": [
+        {
+          "phrase": "Ouvrez cette copie",
+          "found": true,
+          "startSeconds": 7.8,
+          "wordsHeard": "Ouvrez cette copie",
+          "estimatedSentenceStartMs": 8076,
+          "deltaMs": -276,
+          "review": false
+        },
+        {
+          "phrase": "Donnez-lui le libellé Relève suivante",
+          "found": true,
+          "startSeconds": 10.05,
+          "wordsHeard": "Donnez-lui le libellé Relève suivante",
+          "estimatedSentenceStartMs": 10290,
+          "deltaMs": -240,
+          "review": false
+        },
+        {
+          "phrase": "Ici, on la décale de",
+          "found": true,
+          "startSeconds": 14.7,
+          "wordsHeard": "Ici on la décale de",
+          "estimatedSentenceStartMs": 14814,
+          "deltaMs": -114,
+          "review": false
+        },
+        {
+          "phrase": "Fermer et enregistrer conserve le",
+          "found": true,
+          "startSeconds": 18,
+          "wordsHeard": "Fermer et enregistrer conserve le",
+          "estimatedSentenceStartMs": 18168,
+          "deltaMs": -168,
+          "review": false
+        }
+      ]
+    },
+    {
+      "segmentId": "detail",
+      "audioSha256": "0094052dde678aaef11322e3d47afb4d914b9513bb7f5724bbfd0c8af02cb39f",
+      "durationMs": 21384,
+      "phrases": [
+        {
+          "phrase": "Pour ajouter une consigne à cette relève",
+          "found": true,
+          "startSeconds": 0.67,
+          "wordsHeard": "Pour ajouter une consigne à cette relève",
+          "estimatedSentenceStartMs": 273,
+          "deltaMs": 397,
+          "review": false
+        },
+        {
+          "phrase": "Ici, saisissez Venir dix minutes avant",
+          "found": true,
+          "startSeconds": 11.37,
+          "wordsHeard": "Ici saisissez Venir 10 minutes avant",
+          "estimatedSentenceStartMs": 11779,
+          "deltaMs": -409,
+          "review": false
+        },
+        {
+          "phrase": "Ce conseil appartient à la",
+          "found": true,
+          "startSeconds": 17.07,
+          "wordsHeard": "Ce conseil appartient à la",
+          "estimatedSentenceStartMs": 17362,
+          "deltaMs": -292,
+          "review": false
+        }
+      ]
+    },
+    {
+      "segmentId": "result",
+      "audioSha256": "a8055450de7fdd38e16ccc656a6c4628308c4c8a651d25697b4e87b03aa88dc1",
+      "durationMs": 15628,
+      "phrases": [
+        {
+          "phrase": "L’original conserve son libellé, et",
+          "found": true,
+          "startSeconds": 4.14,
+          "wordsHeard": "L'original conserve son libellé et",
+          "estimatedSentenceStartMs": 4317,
+          "deltaMs": -177,
+          "review": false
+        }
+      ]
+    }
+  ]
+}

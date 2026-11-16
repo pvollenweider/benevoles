@@ -1,14 +1,14 @@
 {
   "model": "gemini-3.8-flash",
   "promptVersion": 2,
-  "auditedAt": "2026-10-16T08:24:24.549Z",
-  "revalidatedAt": "2026-10-16T08:24:24.549Z",
+  "auditedAt": "2026-11-16T21:53:39.648Z",
+  "revalidatedAt": "2026-11-16T21:53:39.649Z",
   "source": "generated narration WAV",
   "note": "Independent multilingual ASR evidence, reused only for identical audio/text and audit instructions; not a full audiovisual or voice-quality validation",
   "segments": [
     {
       "id": "welcome",
-      "audioSha256": "624fcc1954c56a8f3c10e8a2095b0da09ba71b7fe06815c4ba73ff3195967f45",
+      "audioSha256": "01c06fc6c4384f89614d18ce545a8c9fa6e37a45c7d10cdfc8a8fcf8f09ae935",
       "recognized": "Un créneau transforme un poste en besoin concret. Il dit quelle mission doit être assurée, quand, par combien de personnes et avec quelles informations pratiques. Prenons le temps de parcourir chaque champ et son résultat côté bénévole.",
       "expected": "Un créneau transforme un poste en besoin concret. Il dit quelle mission doit être assurée, quand, par combien de personnes et avec quelles informations pratiques. Prenons le temps de parcourir chaque champ et son résultat côté bénévole.",
       "wordErrorRate": 0,
@@ -18,17 +18,17 @@
     },
     {
       "id": "identity",
-      "audioSha256": "49900e5d9f4ecda97e07213624cad91728664028f777f862a702973cb1242765",
-      "recognized": "Choisissez d'abord le poste, et si nécessaire, un libellé plus précis. Quand ce poste existe déjà, le texte sous le champ rappelle que ces réglages s'appliquent aux nouveaux créneaux. La date, l'heure de début et l'heure de fin placent la barre dans le planning. La capacité indique combien de personnes peuvent être confirmées sur cette plage.",
-      "expected": "Choisissez d’abord le poste et, si nécessaire, un libellé plus précis. Quand ce poste existe déjà, le texte sous le champ rappelle que ses réglages s’appliquent aux nouveaux créneaux. La date, l’heure de début et l’heure de fin placent la barre dans le planning. La capacité indique combien de personnes peuvent être confirmées sur cette plage.",
-      "wordErrorRate": 0.016666666666666666,
+      "audioSha256": "86d3b3fd6d515442b890e4a7ceb00dd85a0bc7579b81a707b239f7182d2c0251",
+      "recognized": "Choisissez d'abord le poste et si nécessaire un libellé plus précis. Quand ce poste existe déjà, le texte sous le champ rappelle que ces paramètres s'appliquent au nouveau créneau. La date, l'heure de début et l'heure de fin placent la barre dans le planning. La capacité indique combien de personnes peuvent être confirmées sur cette plage.",
+      "expected": "Choisissez d’abord le poste et, si nécessaire, un libellé plus précis. Quand ce poste existe déjà, le texte sous le champ rappelle que ses paramètres s’appliquent aux nouveaux créneaux. La date, l’heure de début et l’heure de fin placent la barre dans le planning. La capacité indique combien de personnes peuvent être confirmées sur cette plage.",
+      "wordErrorRate": 0.06666666666666667,
       "needsReview": false,
       "unexpectedInstructions": [],
       "edgeIssues": []
     },
     {
       "id": "availability",
-      "audioSha256": "898f252793dfdb849f3189e44f7bd250736489017e2d7d4fc8e0325f9181bf0d",
+      "audioSha256": "ef8ed26a2083e7f20391ebee3815232abb43cd0fd35648e3b5cf5cbe39ab96c2",
       "recognized": "Deux options complètent le fonctionnement du créneau. La liste d'attente recueille les volontaires quand toutes les places sont prises. Le mode sur validation transforme chaque inscription en demande que l'organisateur devra accepter ou refuser.",
       "expected": "Deux options complètent le fonctionnement du créneau. La liste d’attente recueille les volontaires quand toutes les places sont prises. Le mode Sur validation transforme chaque inscription en demande que l’organisateur devra accepter ou refuser.",
       "wordErrorRate": 0,
@@ -38,18 +38,18 @@
     },
     {
       "id": "practical",
-      "audioSha256": "201481bc3f0b4c4836558bd931e03fbbb25687ca9bf07e908e4a43cec19ac995",
-      "recognized": "Renseignons d'abord le lieu de rendez-vous. Entrée artistes, portail nord. Ajoutons une consigne, venir dix minutes avant avec des chaussures fermées. Le contact opérationnel indique qui appeler sur place. Ici Léa, accueil artistes et son téléphone de démonstration. Les coordonnées GPS placent ce rendez-vous sur la carte. Si un créneau n'a pas de lieu propre, il reprend celui de l'événement. Ces détails seront visibles aux personnes inscrites.",
+      "audioSha256": "333558e48eaf30082522098cbe1f977f1d42d7cf3801f35e28f8a763e0e5a392",
+      "recognized": "Renseignons d'abord le lieu de rendez-vous. Entrée artistes, porte A nord. Ajoutons une consigne : venir dix minutes avant avec des chaussures fermées. Le contact opérationnel indique qui appeler sur place. Ici, Léa, accueil artistes et son téléphone de démonstration. Les coordonnées GPS placent ce rendez-vous sur la carte. Si un créneau n'a pas de lieu propre, il reprend celui d'événement. Ces détails seront visibles aux personnes inscrites.",
       "expected": "Renseignons d'abord le lieu de rendez-vous : entrée artistes, portail nord. Ajoutons une consigne : venir dix minutes avant avec des chaussures fermées. Le contact opérationnel indique qui appeler sur place : ici Léa, accueil artistes, et son téléphone de démonstration. Les coordonnées GPS placent ce rendez-vous sur la carte. Si un créneau n'a pas de lieu propre, il reprend celui de l'événement. Ces détails seront visibles aux personnes inscrites.",
-      "wordErrorRate": 0,
+      "wordErrorRate": 0.05555555555555555,
       "needsReview": false,
       "unexpectedInstructions": [],
       "edgeIssues": []
     },
     {
       "id": "save",
-      "audioSha256": "42d1e02c14baf21c40938130526ed3cae2bb404ce60d9ec1527929fa2d1c75a7",
-      "recognized": "Enregistrons le créneau et vérifions sa place dans le planning. Le libellé complète le nom du poste sans le remplacer. La capacité apparaît dans les indicateurs et la fiche détaillée rassemble les consignes utiles au jour J.",
+      "audioSha256": "2894c0a71856f46605e512e91f00a15b1d74e335a4752e3916e8c7e192053cac",
+      "recognized": "Enregistrons le créneau et vérifions sa place dans le planning. Le libellé complète le nom du poste sans le remplacer, la capacité apparaît dans les indicateurs et la fiche détaillée rassemble les consignes utiles au jour J.",
       "expected": "Enregistrons le créneau et vérifions sa place dans le planning. Le libellé complète le nom du poste sans le remplacer, la capacité apparaît dans les indicateurs et la fiche détaillée rassemble les consignes utiles au jour J.",
       "wordErrorRate": 0,
       "needsReview": false,
@@ -58,7 +58,7 @@
     },
     {
       "id": "change",
-      "audioSha256": "06078f09fea28ea5d7458afaf02437fa234c56a77583f494b90ba2a16d66b2e0",
+      "audioSha256": "686399219e8f9f834c6a7b8c118561ce7a89184fae5aca18d08e41e3ef3d5915",
       "recognized": "Dans la liste, le statut indique si les inscriptions sont ouvertes, fermées ou si le créneau est annulé. Rouvrir l'éditeur permet de corriger l'horaire et les informations pratiques. Pour un créneau déjà occupé, relisez toujours le nouveau jour, les heures et le rendez-vous avant de confirmer et de prévenir les bénévoles.",
       "expected": "Dans la liste, le statut indique si les inscriptions sont ouvertes, fermées ou si le créneau est annulé. Rouvrir l’éditeur permet de corriger l’horaire et les informations pratiques. Pour un créneau déjà occupé, relisez toujours le nouveau jour, les heures et le rendez-vous avant de confirmer et de prévenir les bénévoles.",
       "wordErrorRate": 0,
@@ -68,10 +68,10 @@
     },
     {
       "id": "result",
-      "audioSha256": "bfa6bc84ccaa5855e5d7fbc0c2b1dbedcf29f95c4462e346c041402aa9201794",
-      "recognized": "Un bon créneau reste court à lire mais complet pour agir : mission, horaires, capacité, lieu et consignes. Plus ces informations sont fiables, moins l'équipe doit répondre aux mêmes questions par email ou par téléphone.",
+      "audioSha256": "400af2665fcaa61fc752a0790ad0ddf1054e94b7eb8f6a572d758501b68138ee",
+      "recognized": "Un bon créneau reste court à lire mais complet pour agir. Mission, horaire, capacité, lieu et consignes. Plus ces informations sont fiables, moins l'équipe doit répondre aux mêmes questions par email ou par téléphone.",
       "expected": "Un bon créneau reste court à lire mais complet pour agir : mission, horaire, capacité, lieu et consigne. Plus ces informations sont fiables, moins l’équipe doit répondre aux mêmes questions par email ou par téléphone.",
-      "wordErrorRate": 0.05714285714285714,
+      "wordErrorRate": 0.02857142857142857,
       "needsReview": false,
       "unexpectedInstructions": [],
       "edgeIssues": []

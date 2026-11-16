@@ -6,7 +6,7 @@ Dans la ligne d’un poste, cliquez dans une zone vide puis faites glisser jusqu
 
 Pour corriger une durée, attrapez le bord droit du créneau et déplacez-le. Ici, la barre s’allonge de quarante-cinq minutes, par pas de quinze minutes. Rouvrez ensuite les actions rapides : l’heure de fin a bien changé. Vérifiez-la avant de fermer.
 
-Un clic sur la barre ouvre ses actions rapides. On y retrouve les heures, l’état des inscriptions et les commandes utiles. Le choix Appliquer au poste propose Ce jour ou Tout l’événement pour étendre les réglages au poste sur la période choisie. C’est le bon endroit pour une petite correction, sans parcourir tout le formulaire.
+Un clic sur la barre ouvre ses actions rapides. On y retrouve les heures, l’état des inscriptions et les commandes utiles. Le choix Appliquer au poste propose Ce jour ou Tout l’événement pour étendre les paramètres au poste sur la période choisie. C’est le bon endroit pour une petite correction, sans parcourir tout le formulaire.
 
 Dupliquer reprend le poste, la durée, la capacité et les informations du créneau. La nouvelle plage commence juste après l’originale. Ouvrez cette copie : elle est indépendante. Donnez-lui le libellé Relève suivante, puis ajustez ses heures. Ici, on la décale de quinze minutes avec le bouton Décaler. Fermer et enregistrer conserve le nouveau libellé.
 

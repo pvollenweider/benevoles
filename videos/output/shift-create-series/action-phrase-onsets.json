@@ -1,0 +1,139 @@
+{
+  "checkedAt": "2026-11-16T22:03:02.204Z",
+  "model": "gemini-3.8-flash",
+  "scope": "Independent diagnostic of source audio only; no timing applied, no additional narrated take, no final audiovisual readiness claim. Repeated clause anchors may intentionally share a sentence start; review actual planned actions before changing source.",
+  "results": [
+    {
+      "segmentId": "welcome",
+      "audioSha256": "3f1b6d104587088693b8c923467a019034df47c9bb52de80e762c75d5ed93967",
+      "durationMs": 13032,
+      "phrases": [
+        {
+          "phrase": "Au lieu de saisir chaque",
+          "found": true,
+          "startSeconds": 5.96,
+          "wordsHeard": "Au lieu de saisir chaque",
+          "estimatedSentenceStartMs": 5906,
+          "deltaMs": 54,
+          "review": false
+        }
+      ]
+    },
+    {
+      "segmentId": "range",
+      "audioSha256": "4690b2a53f3b7745637e6678e263fa35b7bcd0d9d1f791d24b971e61e4f42de7",
+      "durationMs": 12559,
+      "phrases": [
+        {
+          "phrase": "Ici, la buvette fonctionne de",
+          "found": true,
+          "startSeconds": 4.6,
+          "wordsHeard": "Ici la buvette fonctionne de",
+          "estimatedSentenceStartMs": 3083,
+          "deltaMs": 1517,
+          "review": true
+        },
+        {
+          "phrase": "Cette plage décrit le besoin",
+          "found": true,
+          "startSeconds": 8.08,
+          "wordsHeard": "Cette plage décrit le besoin",
+          "estimatedSentenceStartMs": 6894,
+          "deltaMs": 1186,
+          "review": false
+        }
+      ]
+    },
+    {
+      "segmentId": "duration",
+      "audioSha256": "01f8dc6630a4bec6dd98d33bcd8265fecca5898108d24d1cb7f6683f64f0e081",
+      "durationMs": 16779,
+      "phrases": [
+        {
+          "phrase": "La pause ajoute un intervalle",
+          "found": true,
+          "startSeconds": 9.2,
+          "wordsHeard": "La pause ajoute un intervalle",
+          "estimatedSentenceStartMs": 9219,
+          "deltaMs": -19,
+          "review": false
+        },
+        {
+          "phrase": "Ici, choisissons zéro minute ",
+          "found": true,
+          "startSeconds": 11.5,
+          "wordsHeard": "Ici, choisissons zéro minute",
+          "estimatedSentenceStartMs": 11707,
+          "deltaMs": -207,
+          "review": false
+        }
+      ]
+    },
+    {
+      "segmentId": "create",
+      "audioSha256": "f8993aed87236cf56b00c323da11af84d9215b83044a1648ee9353e30185777f",
+      "durationMs": 11873,
+      "phrases": [
+        {
+          "phrase": "Créons la série",
+          "found": true,
+          "startSeconds": 0.08,
+          "wordsHeard": "Créons la série",
+          "estimatedSentenceStartMs": 467,
+          "deltaMs": -387,
+          "review": false
+        },
+        {
+          "phrase": "chacune possède son propre effectif",
+          "found": true,
+          "startSeconds": 8.34,
+          "wordsHeard": "Chacune possède son propre effectif",
+          "estimatedSentenceStartMs": 8447,
+          "deltaMs": -107,
+          "review": false
+        }
+      ]
+    },
+    {
+      "segmentId": "adjust",
+      "audioSha256": "194f1b8a0d7d39af3e8242ebe2bf7a7c60351709ee171528b360e7f45b005882",
+      "durationMs": 18009,
+      "phrases": [
+        {
+          "phrase": "Enregistrons",
+          "found": true,
+          "startSeconds": 8.72,
+          "wordsHeard": "Enregistrons",
+          "estimatedSentenceStartMs": 9312,
+          "deltaMs": -592,
+          "review": false
+        }
+      ]
+    },
+    {
+      "segmentId": "result",
+      "audioSha256": "ad93084ba143b2ca92b48150eb20f09ebdca12763742291c66fe1d213e6c3036",
+      "durationMs": 14615,
+      "phrases": [
+        {
+          "phrase": "quatre places pour la première relève",
+          "found": true,
+          "startSeconds": 1.9,
+          "wordsHeard": "Quatre places pour la première relève",
+          "estimatedSentenceStartMs": 2054,
+          "deltaMs": -154,
+          "review": false
+        },
+        {
+          "phrase": "Une série bien découpée facilite",
+          "found": true,
+          "startSeconds": 9.6,
+          "wordsHeard": "Une série bien découpée facilite",
+          "estimatedSentenceStartMs": 9881,
+          "deltaMs": -281,
+          "review": false
+        }
+      ]
+    }
+  ]
+}

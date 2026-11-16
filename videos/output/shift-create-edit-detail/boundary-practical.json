@@ -1,0 +1,12 @@
+{
+  "anchor": "Renseignons d'abord le lieu de rendez-vous : entrée artistes, portail nord.",
+  "windowStart": 15.785999999999994,
+  "result": {
+    "found": true,
+    "startSeconds": 30.85,
+    "wordsHeard": "Renseignons d'abord le lieu de rendez-vous : entrée artistes, portail nord."
+  },
+  "onset": 46.635999999999996,
+  "proposedCut": 46.5251875,
+  "note": "Proposal only; recut then independently audit before capture"
+}

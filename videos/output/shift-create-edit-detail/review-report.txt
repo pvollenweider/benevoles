@@ -1,9 +1,0 @@
-STATUS: READY
-SHIFT_CREATE_EDIT_DETAIL — batch 23-1 — 2026-10-16
-BUILD_ID gHYEjPtpdQYUNytuIhMkh; commit 89a884c8d58c22dda6800481e1238bdc4e219dff
-Duration 132.2 s. Music 14.8–18.6 LU under voice.
-Whole narration regenerated in one consistent pass, original voice; paragraph cuts verified independently.
-Validation incl. music-only stretches, subtitles, sentence anchors and real input sounds passed. Full final multilingual ASR, all chapter frames and sentence/action frames reviewed.
-Final VTT viewer « tu » count 0.
-Rappel des réglages du poste Accueil visible sous le champ ; dates françaises, horaires 18h–21h30, trois places, liste d’attente et validation, lieu/consigne/contact/carte puis fiche enregistrée vérifiés. Sept chapitres audiovisuels sans signalement ; deux ASR complets concordent avec la narration, sans consigne ajoutée ni tutoiement.
-Real-time subjective listening unavailable as permitted. Product source unchanged. Only the authorized local WIP transport commit; no further commit, push or publication.

@@ -1,0 +1,44 @@
+{
+  "model": "gemini-3.8-flash",
+  "reviewedAt": "2026-11-16T22:01:18.713Z",
+  "videoSha256": "6feb042986d93210662dc97cf7e6e0ed4b0f8fae6810f1e3b19bb58112dd2437",
+  "promptSha256": "b2900dc527cc36a25a384a24d8a97339928fb6a0e61b267119c03c9404161bee",
+  "clipSha256": "480641b4d1cad1ab842b9bb0a9cd0dd7c44b582c683fef2bd393fd7c518925dd",
+  "scene": "draw",
+  "review": {
+    "heardOpening": "Dans la ligne d'un poste",
+    "checkpoints": [
+      {
+        "spokenSeconds": 0.5,
+        "spoken": "Dans la ligne d’un poste, cliquez dans une zone vide puis faites glisser jusqu’à l’heure de fin souhaitée.",
+        "visibleSeconds": 2,
+        "visible": "Clic et glissement dans la ligne Buvette pour définir l'horaire du créneau",
+        "sync": "aligned",
+        "severity": "none"
+      },
+      {
+        "spokenSeconds": 6.5,
+        "spoken": "Le créneau est créé, et ses actions rapides s’ouvrent avec les horaires calculés.",
+        "visibleSeconds": 4,
+        "visible": "Le créneau apparaît et le volet d'actions rapides s'affiche avec 06:15 - 07:00",
+        "sync": "aligned",
+        "severity": "none"
+      },
+      {
+        "spokenSeconds": 11,
+        "spoken": "Donnez-lui un libellé, ajustez les places, puis fermez avec Fermer et enregistrer.",
+        "visibleSeconds": 11.5,
+        "visible": "Saisie du libellé 'Pause descente', réglage des places à 3 et validation avec Fermer et enregistrer",
+        "sync": "aligned",
+        "severity": "none"
+      }
+    ],
+    "issues": [],
+    "voice": {
+      "consistent": true,
+      "warm": true,
+      "observation": "Voix claire, posée et bien articulée, synchronisation naturelle avec la manipulation à l'écran."
+    }
+  },
+  "note": "Automated observation of actual final video audio and images; not a claim of complete human validation"
+}
