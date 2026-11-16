@@ -4970,7 +4970,7 @@ async function main() {
         await page.screencast.showChapter("Une équipe autonome et maîtrisée", { description: "Des comptes nominatifs, des droits adaptés", duration: 2_300 })
       })
     } else if (slug === "org-email-settings") {
-      if (localBaseUrl !== "http://localhost:43102" || !["http://localhost:43102", "https://formation-email.benevol.app"].includes(baseUrl) || org !== "formation-email" || process.env.ORG_ADMIN_EMAIL !== "video.email.owner@example.org") throw new Error("Email recording requires its owned synthetic fixture")
+      if (localBaseUrl !== "http://localhost:43102" || (baseUrl !== "http://localhost:43102" && baseUrl !== "https://formation-email.benevol.app") || org !== "formation-email" || process.env.ORG_ADMIN_EMAIL !== "video.email.owner@example.org") throw new Error("Email recording requires its owned synthetic fixture")
       const emailEventId = "video-foundation-email-event-0"
       await page.goto(`${baseUrl}/admin/settings/notifications`); await settle(page)
       await scene("welcome", async () => {
