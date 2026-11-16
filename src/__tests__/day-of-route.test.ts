@@ -34,7 +34,7 @@ describe("GET /api/admin/events/[id]/day-of", () => {
     expect(body.today).toBe("2026-07-04")
     expect(body.refreshedAt).toBe("14h30")
     expect(body.board.inProgress[0].shifts[0].people).toEqual([
-      { registrationId: "r1", firstName: "Zoé", lastName: "Müller", phone: "079", checkedInAt: "2026-07-04T11:05:00.000Z" },
+      { registrationId: "r1", firstName: "Zoé", lastName: "Müller", phone: "079", checkedInAt: "2026-07-04T11:05:00.000Z", attendanceStatus: null },
     ])
     expect(findFirst.mock.calls[0][0].select.shifts.select.registrations.where).toEqual({ status: "active" })
   })

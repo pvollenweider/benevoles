@@ -4,17 +4,24 @@
 import { NextResponse } from "next/server"
 import { requireOrgSession } from "@/lib/auth-guard"
 import { adminActor } from "@/lib/event-log"
-import { addSectorLeader, cancelRegistrations, resendManagementLinks, setPresence } from "@/lib/admin-registration-actions"
+import { addSectorLeader, cancelRegistrations, resendManagementLinks, setAttendance } from "@/lib/admin-registration-actions"
 import { z } from "zod"
 import { registrationToken } from "@/lib/token-vault"
 import { validationError } from "@/lib/api-error"
+import type { AttendanceTransition } from "@/lib/attendance-state"
 
 // Bulk actions on the registrations list (#292): one request for the whole selection instead
 // of one per row. All-or-nothing on ownership: every id must be a registration of this event,
-// in this organization, or nothing is done.
+// in this organization, or nothing is done. Attendance actions (#1141) are check_in,
+// undo_check_in, mark_absent and undo_absent; "left_early" is reserved for a later PR and
+// therefore refused here as an unknown action.
 const schema = z.object({
-  action: z.enum(["cancel", "make_leader", "resend_link", "check_in", "undo_check_in"]),
+  action: z.enum(["cancel", "make_leader", "resend_link", "check_in", "undo_check_in", "mark_absent", "undo_absent"]),
   registrationIds: z.array(z.string().min(1)).min(1).max(500),
+  // Attendance actions only (#1141), optional: registration id → the shift the page showed it
+  // on. A registration that has moved to another shift since is not written and comes back as
+  // unchanged with `moved: true`. Callers that send nothing keep the previous behaviour.
+  observedShifts: z.record(z.string().min(1), z.string().min(1)).optional(),
 })
 
 export async function POST(req: Request, { params }: { params: Promise<{ id: string }> }) {
@@ -70,9 +77,17 @@ export async function POST(req: Request, { params }: { params: Promise<{ id: str
       return NextResponse.json({ done, alreadyLeader, skipped })
     }
     case "check_in":
-    case "undo_check_in": {
-      const changedIds = await setPresence(db, actor, regs, parsed.data.action === "check_in")
-      return NextResponse.json({ done: changedIds.length, changedIds, skipped: ids.length - changedIds.length })
+    case "undo_check_in":
+    case "mark_absent":
+    case "undo_absent": {
+      const observed = parsed.data.observedShifts ?? {}
+      const targets = regs.map((r) => ({ id: r.id, eventId: r.eventId, shiftId: r.shiftId, status: r.status, observedShiftId: Object.hasOwn(observed, r.id) ? observed[r.id] : null }))
+      const results = await setAttendance(db, actor, targets, parsed.data.action as AttendanceTransition)
+      const changedIds = results.filter((r) => r.changed).map((r) => r.id)
+      // `done` and `changedIds` stay for existing callers; `results` gives the state of every
+      // requested registration after the call, including the ones that changed nothing, with
+      // `moved` (on another shift than the one acted on) or `gone` (no longer there) when so.
+      return NextResponse.json({ done: changedIds.length, changedIds, skipped: ids.length - changedIds.length, results })
     }
     case "resend_link": {
       const active = regs.filter((r) => r.status === "active")

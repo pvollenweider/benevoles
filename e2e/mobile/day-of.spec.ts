@@ -44,7 +44,9 @@ test("tapping « Présent » then « Annuler la présence » toggles the mark an
   const undo = page.getByRole("button", { name: `Annuler la présence, ${name}` })
   await expect(undo).toBeFocused()
   await expect(page.getByRole("status")).toHaveText(`Présence enregistrée pour ${name}. Accueil : 1 présent sur 1 attendu.`)
-  await expect(page.getByText("Présent", { exact: true })).toBeVisible()
+  // The badge reads « Présent », after a sign hidden from screen readers (#1141): the sign and
+  // the space after it are optional here, so the check holds with or without it.
+  await expect(page.getByText(/^(✓\s*)?Présent$/)).toBeVisible()
 
   await undo.tap()
   await expect(present).toBeFocused()

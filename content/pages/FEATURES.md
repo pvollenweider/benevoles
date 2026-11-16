@@ -85,7 +85,7 @@ En savoir plus : [où manque-t-il du monde ?](../guide/ou-manque-t-il-du-monde.m
 
 <!-- image: EVENT_REPORTS | Le planning imprimé : pour chaque poste, les créneaux de la journée et le nom des bénévoles inscrits, lisible en noir et blanc. -->
 
-- **Une page faite pour le téléphone** : les créneaux en cours et ceux des trois prochaines heures, qui est arrivé et qui manque. Touchez « Marquer présent » quand un bénévole arrive, ou son numéro pour l'appeler. La page se met à jour seule : une arrivée marquée sur un autre téléphone y apparaît.
+- **Une page faite pour le téléphone** : les créneaux en cours et ceux des trois prochaines heures, qui est arrivé et qui manque. Touchez « Marquer présent » quand un bénévole arrive, « Marquer absent » s'il ne vient pas, ou son numéro pour l'appeler. La page se met à jour seule : une arrivée ou une absence notée sur un autre téléphone y apparaît.
 - **Un besoin imprévu, sans quitter la page** : **Ajouter un besoin** crée le créneau en quelques champs, puis propose aussitôt les bénévoles déjà inscrits aujourd'hui, par email et par notification. Le créneau apparaît sur le tableau avec ses places manquantes, même si l'envoi échoue et qu'on le retente.
 - **Le planning complet en frise**, prêt à imprimer, et des feuilles pour le terrain : par jour, par poste et par bénévole, et une feuille de présence à cocher.
 - **Des badges** à imprimer et découper, avec le prénom et le poste de chaque bénévole.

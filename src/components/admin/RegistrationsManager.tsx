@@ -34,6 +34,7 @@ import {
   type ShiftRef,
 } from "@/lib/registrations-list"
 import { statusBoxClass } from "@/lib/status-message"
+import { ATTENDANCE_TRANSITIONS, attendanceStateOf, type AttendanceState, type AttendanceTransition } from "@/lib/attendance-state"
 import { messagePageHref, writeToSectorLabel } from "@/lib/targeted-message"
 
 /** Typing in the search box: its count is announced once typing has paused this long. */
@@ -222,14 +223,14 @@ export default function RegistrationsManager({ eventId, initialRegistrations, sh
 
   // One request for the whole selection (#292): ownership checked for every row up front on the
   // server, all or nothing. Returns null on a request-level failure.
-  const BULK_LABELS = { cancel: "Retrait", make_leader: "Désignation des responsables", resend_link: "Renvoi des liens", check_in: "Présence", undo_check_in: "Présence" } as const
+  const BULK_LABELS = { cancel: "Retrait", make_leader: "Désignation des responsables", resend_link: "Renvoi des liens", check_in: "Présence", undo_check_in: "Présence", mark_absent: "Absence", undo_absent: "Absence" } as const
 
   /**
    * Runs a bulk action. On a whole-request failure (network, refused, server) it explains what
    * happened and whether anything may have been applied, keeps the selection and returns null;
    * the caller then leaves the rows as they are and « Réessayer » repeats the action (#375).
    */
-  async function runBulk(action: keyof typeof BULK_LABELS, ids: string[], again: () => void) {
+  async function runBulk(action: keyof typeof BULK_LABELS, ids: string[], again: () => void, extra: { observedShifts?: Record<string, string> } = {}) {
     setRetry(() => again)
     // The alert stays mounted while the retry runs, so a focused « Réessayer » isn't unmounted under the user.
     let res: Response
@@ -237,7 +238,7 @@ export default function RegistrationsManager({ eventId, initialRegistrations, sh
       res = await fetch(`/api/admin/events/${eventId}/registrations/bulk`, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ action, registrationIds: ids }),
+        body: JSON.stringify({ action, registrationIds: ids, ...extra }),
         // A removal committed while leaving the page must still reach the server.
         keepalive: true,
       })
@@ -256,34 +257,64 @@ export default function RegistrationsManager({ eventId, initialRegistrations, sh
     setBulkError(null)
     // The alert (and its button) goes away with the result: park the focus on the summary line.
     afterBulkRef.current?.focus()
-    return res.json() as Promise<{ done: number; failed?: number; skipped?: number; alreadyLeader?: number; cancelledIds?: string[]; changedIds?: string[] }>
+    return res.json() as Promise<{ done: number; failed?: number; skipped?: number; alreadyLeader?: number; cancelledIds?: string[]; changedIds?: string[]; results?: { id: string; changed: boolean; state: AttendanceState | null; checkedInAt: string | null; moved?: boolean; gone?: boolean }[] }>
   }
 
-  // Lightweight check-in (#399): mark the selected confirmed people present, or undo it.
-  const selectedToCheckIn = selectedActiveRegs.filter((r) => !r.checkedInAt)
-  const selectedToUndo = selectedActiveRegs.filter((r) => r.checkedInAt)
-  const presentCount = registrations.filter((r) => r.status === "active" && r.checkedInAt).length
-  const activeCount = registrations.filter((r) => r.status === "active").length
+  // Lightweight attendance (#399, #1141): mark the selected confirmed people present or absent,
+  // or undo it. Each action applies to the rows in its starting state only: present and absent
+  // never replace each other directly, the undo comes first.
+  const attendanceOf = (r: Registration) => attendanceStateOf(r)
+  const selectedToCheckIn = selectedActiveRegs.filter((r) => attendanceOf(r) === "expected")
+  const selectedToUndo = selectedActiveRegs.filter((r) => attendanceOf(r) === "present")
+  const selectedToUndoAbsent = selectedActiveRegs.filter((r) => attendanceOf(r) === "absent")
+  const activeRegs = registrations.filter((r) => r.status === "active")
+  const presentCount = activeRegs.filter((r) => attendanceOf(r) === "present").length
+  const absentCount = activeRegs.filter((r) => attendanceOf(r) === "absent").length
+  const activeCount = activeRegs.length
 
-  async function handlePresence(present: boolean) {
-    const targets = present ? selectedToCheckIn : selectedToUndo
+  const handlePresence = (present: boolean) => handleAttendance(present ? "check_in" : "undo_check_in")
+  const handleAbsence = (absent: boolean) => handleAttendance(absent ? "mark_absent" : "undo_absent")
+
+  async function handleAttendance(transition: AttendanceTransition) {
+    const plan = ATTENDANCE_TRANSITIONS[transition]
+    const targets = selectedActiveRegs.filter((r) => attendanceOf(r) === plan.from)
     if (targets.length === 0) return
     setBulkBusy(true)
     const startedAt = new Date()
-    const result = await runBulk(present ? "check_in" : "undo_check_in", targets.map((r) => r.id), () => handlePresence(present))
+    // The shift each row shows: a person swapped to another shift since the page was read is not
+    // marked on a shift this list does not show for them.
+    const observedShifts = Object.fromEntries(targets.map((r) => [r.id, r.shift.id]))
+    const result = await runBulk(transition, targets.map((r) => r.id), () => handleAttendance(transition), { observedShifts })
     setBulkBusy(false)
     if (!result) return
     setLastLogLink(logLinkFor(eventId, startedAt))
     const changed = new Set(result.changedIds ?? [])
     const at = new Date().toISOString()
-    setRegistrations((prev) => prev.map((r) => (changed.has(r.id) ? { ...r, checkedInAt: present ? at : null } : r)))
+    // The state of each requested row after the call, as the server read it: a row changed
+    // meanwhile on another device shows what was recorded there, not what was asked here.
+    const truth = new Map((result.results ?? []).map((r) => [r.id, r]))
+    setRegistrations((prev) => prev.map((r) => {
+      const t = truth.get(r.id)
+      // No state for a row the server no longer finds (`gone`): left as shown until the next load.
+      if (t?.state) return { ...r, checkedInAt: t.state === "present" ? t.checkedInAt ?? at : null, attendanceStatus: t.state === "absent" ? "absent" : null }
+      if (!changed.has(r.id)) return r
+      return { ...r, checkedInAt: plan.to === "present" ? at : null, attendanceStatus: plan.to === "absent" ? "absent" : null }
+    }))
     setSelectedIds(new Set())
+    const n = changed.size
+    const s = n > 1 ? "s" : ""
+    const said: Record<AttendanceTransition, string> = {
+      check_in: `${n} personne${s} marquée${s} présente${s}.`,
+      undo_check_in: `Présence annulée pour ${n} personne${s}.`,
+      mark_absent: `${n} personne${s} marquée${s} absente${s}.`,
+      undo_absent: `Absence annulée pour ${n} personne${s}.`,
+    }
+    // Nothing changed: every row was already in another state, recorded elsewhere meanwhile.
+    const text = n === 0 ? "Rien n'a changé : ces personnes ont déjà été marquées sur un autre appareil." : said[transition]
     // Cleared first so the same sentence twice in a row is announced again.
     setActionStatus("")
     requestAnimationFrame(() => {
-      setActionStatus(present
-        ? `${changed.size} personne${changed.size > 1 ? "s" : ""} marquée${changed.size > 1 ? "s" : ""} présente${changed.size > 1 ? "s" : ""}.`
-        : `Présence annulée pour ${changed.size} personne${changed.size > 1 ? "s" : ""}.`)
+      setActionStatus(text)
       afterBulkRef.current?.focus()
     })
   }
@@ -468,10 +499,11 @@ export default function RegistrationsManager({ eventId, initialRegistrations, sh
           )}
         </div>
       )}
-      <p ref={afterBulkRef} tabIndex={-1} className={`text-sm text-gray-700 focus:outline-none ${presentCount > 0 ? "" : "sr-only"}`}>
+      <p ref={afterBulkRef} tabIndex={-1} className={`text-sm text-gray-700 focus:outline-none ${presentCount > 0 || absentCount > 0 ? "" : "sr-only"}`}>
         {presentCount > 0
-          ? <><span className="font-medium text-green-800">{presentCount} présent{presentCount > 1 ? "s" : ""}</span> sur {activeCount} inscrit{activeCount > 1 ? "s" : ""}.</>
-          : `${activeCount} inscrit${activeCount > 1 ? "s" : ""}, personne encore marqué présent.`}
+          ? <><span className="font-medium text-green-800">{presentCount} présent{presentCount > 1 ? "s" : ""}</span> sur {activeCount} inscrit{activeCount > 1 ? "s" : ""}</>
+          : `${activeCount} inscrit${activeCount > 1 ? "s" : ""}, personne encore marqué présent`}
+        {absentCount > 0 ? `, ${absentCount} absent${absentCount > 1 ? "s" : ""}.` : "."}
       </p>
 
       <div className="flex gap-3 flex-wrap">
@@ -580,11 +612,14 @@ export default function RegistrationsManager({ eventId, initialRegistrations, sh
           selectedCount={selectedIds.size}
           toCheckInCount={selectedToCheckIn.length}
           toUndoCount={selectedToUndo.length}
+          toMarkAbsentCount={selectedToCheckIn.length}
+          toUndoAbsentCount={selectedToUndoAbsent.length}
           activeCount={selectedCancellableRegs.length}
           noneWithEmail={selectedRegs.every((r) => !r.volunteer.email)}
           noActiveWithEmail={selectedActiveRegs.every((r) => !r.volunteer.email)}
           busy={bulkBusy}
           onPresence={handlePresence}
+          onAbsence={handleAbsence}
           onMakeResponsible={handleMakeResponsibleClick}
           onResendLink={handleBulkResendLink}
           onCancelRegistrations={handleBulkCancel}

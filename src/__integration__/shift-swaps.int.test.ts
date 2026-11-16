@@ -182,6 +182,22 @@ describe.skipIf(!url)("shift swaps on Postgres (#1174)", () => {
     expect(keys).toEqual(expect.arrayContaining([`shift_swap_applied:${requestId}:${pierre.id}`, `shift_swap_applied:${requestId}:${jean.id}`]))
   })
 
+  it("a swap resets attendance on both registrations: no check-in, no absence, no author or time left (#1141)", async () => {
+    const { shifts, pierre, rp, rj, requestId, revision } = await offered()
+    // Pierre was checked in on his shift; Jean was marked absent on his, by an admin, at a given time.
+    await prisma.registration.update({ where: { id: rp.id }, data: { checkedInAt: NOW } })
+    await prisma.registration.update({ where: { id: rj.id }, data: { attendanceStatus: "absent", attendanceAt: NOW, attendanceBy: "admin-int-1141" } })
+
+    const res = await confirmSwap(prisma, { requestId, volunteerId: pierre.id, revision, now: NOW })
+    expect(res).toEqual({ ok: true, requestId, status: "applied" })
+
+    const [p, j] = await Promise.all([rp.id, rj.id].map((id) => prisma.registration.findUniqueOrThrow({ where: { id } })))
+    // Each holds the other's shift now, where nobody has seen them yet.
+    expect([p.shiftId, j.shiftId]).toEqual([shifts[1].id, shifts[0].id])
+    expect([p.checkedInAt, p.attendanceStatus, p.attendanceAt, p.attendanceBy]).toEqual([null, null, null, null])
+    expect([j.checkedInAt, j.attendanceStatus, j.attendanceAt, j.attendanceBy]).toEqual([null, null, null, null])
+  })
+
   it("E14: a double click confirms once; the replay answers with the current state", async () => {
     const { pierre, rp, rj, shifts, requestId, revision } = await offered()
     lockHook.fn = barrier(2)

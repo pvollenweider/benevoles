@@ -8,6 +8,7 @@ import {
   fieldDiffs,
   mergeConflicts,
   refuseMerge,
+  registrationRank,
   resolvedFields,
   UnresolvedConflictsError,
   type MemberMergeInput,
@@ -146,6 +147,61 @@ describe("mergeConflicts — same shift", () => {
     })
     const plan = buildMergePlan(input, {})
     expect(plan.registrationsToCancel.map((r) => r.id)).toEqual(["r-absorb"])
+  })
+
+  // The « absent » state (#1141): what an organizer recorded on site is kept.
+  it("a present registration wins over an absent one, whichever record holds it", () => {
+    const present = { id: "r-present", eventId: "e1", shiftId: "s1", status: "active", checkedInAt: new Date("2030-06-01T08:05:00Z"), attendanceStatus: null }
+    const absent = { id: "r-absent", eventId: "e1", shiftId: "s1", status: "active", checkedInAt: null, attendanceStatus: "absent" }
+    const keepPresent = baseInput({ shifts: [shift], keepRegistrations: [present], absorbRegistrations: [absent] })
+    expect(buildMergePlan(keepPresent, {}).registrationsToCancel.map((r) => r.id)).toEqual(["r-absent"])
+    // The cancelled loser still moves to the kept record, as every row of the absorbed one does.
+    expect(buildMergePlan(keepPresent, {}).registrationsToReassign).toEqual(["r-absent"])
+    const absorbPresent = baseInput({ shifts: [shift], keepRegistrations: [absent], absorbRegistrations: [present] })
+    expect(buildMergePlan(absorbPresent, {}).registrationsToCancel.map((r) => r.id)).toEqual(["r-absent"])
+    expect(buildMergePlan(absorbPresent, {}).registrationsToReassign).toEqual(["r-present"])
+    expect(mergeConflicts(absorbPresent, {}).find((c) => c.kind === "same_shift")).toMatchObject({ resolvedBy: "rank" })
+  })
+
+  it("an absent registration wins over an expected one, whichever record holds it", () => {
+    const absent = { id: "r-absent", eventId: "e1", shiftId: "s1", status: "active", checkedInAt: null, attendanceStatus: "absent" }
+    const expected = { id: "r-expected", eventId: "e1", shiftId: "s1", status: "active", checkedInAt: null, attendanceStatus: null }
+    const keepExpected = baseInput({ shifts: [shift], keepRegistrations: [expected], absorbRegistrations: [absent] })
+    expect(buildMergePlan(keepExpected, {}).registrationsToCancel.map((r) => r.id)).toEqual(["r-expected"])
+    expect(buildMergePlan(keepExpected, {}).registrationsToReassign).toEqual(["r-absent"])
+    expect(mergeConflicts(keepExpected, {}).find((c) => c.kind === "same_shift")).toMatchObject({ resolvedBy: "rank" })
+    const keepAbsent = baseInput({ shifts: [shift], keepRegistrations: [absent], absorbRegistrations: [expected] })
+    expect(buildMergePlan(keepAbsent, {}).registrationsToCancel.map((r) => r.id)).toEqual(["r-expected"])
+  })
+
+  it("the rank orders present over absent over expected, and a row read without the column is expected or present", () => {
+    const reg = (over: object) => ({ id: "r", eventId: "e1", shiftId: "s1", status: "active", checkedInAt: null, ...over })
+    const present = registrationRank(reg({ checkedInAt: new Date() }))
+    const absent = registrationRank(reg({ attendanceStatus: "absent" }))
+    const expected = registrationRank(reg({ attendanceStatus: null }))
+    expect(present).toBeGreaterThan(absent)
+    expect(absent).toBeGreaterThan(expected)
+    expect(registrationRank(reg({}))).toBe(expected)
+    // A recorded absence beats any status without one, as a check-in does.
+    expect(absent).toBeGreaterThan(registrationRank(reg({ status: "active" })))
+    expect(registrationRank(reg({ status: "waiting", attendanceStatus: "absent" }))).toBeGreaterThan(expected)
+  })
+
+  it("a row with both a check-in and « absent » (rolling deployment) ranks as present", () => {
+    const reg = (over: object) => ({ id: "r", eventId: "e1", shiftId: "s1", status: "active", checkedInAt: null, ...over })
+    const mixed = registrationRank(reg({ checkedInAt: new Date(), attendanceStatus: "absent" }))
+    expect(mixed).toBe(registrationRank(reg({ checkedInAt: new Date() })))
+    expect(mixed).toBeGreaterThan(registrationRank(reg({ attendanceStatus: "absent" })))
+  })
+
+  it("the winner keeps its own row: the plan moves or cancels registrations, it never rewrites attendance columns", () => {
+    const input = baseInput({
+      shifts: [shift],
+      keepRegistrations: [{ id: "r-expected", eventId: "e1", shiftId: "s1", status: "active", checkedInAt: null, attendanceStatus: null }],
+      absorbRegistrations: [{ id: "r-absent", eventId: "e1", shiftId: "s1", status: "active", checkedInAt: null, attendanceStatus: "absent" }],
+    })
+    const plan = buildMergePlan(input, {})
+    expect(JSON.stringify(plan)).not.toMatch(/attendance|checkedInAt/)
   })
 
   it("respects an explicit choice over the rank default", () => {

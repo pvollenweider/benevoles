@@ -84,8 +84,8 @@ export async function loadMergeInput(db: OrgScopedPrisma, keepId: string, absorb
   if (refusal) return { error: refusal }
 
   const [keepRegistrations, absorbRegistrations, keepInvites, absorbInvites, keepShiftDeclines, absorbShiftDeclines, keepAnswers, absorbAnswers, absorbPushSubscriptions, absorbDeliveryOutcomes, sectorLeadersMatchingAbsorbed] = await Promise.all([
-    db.registration.findMany({ where: { volunteerId: keepId }, select: { id: true, eventId: true, shiftId: true, status: true, checkedInAt: true } }),
-    db.registration.findMany({ where: { volunteerId: absorbId }, select: { id: true, eventId: true, shiftId: true, status: true, checkedInAt: true } }),
+    db.registration.findMany({ where: { volunteerId: keepId }, select: { id: true, eventId: true, shiftId: true, status: true, checkedInAt: true, attendanceStatus: true } }),
+    db.registration.findMany({ where: { volunteerId: absorbId }, select: { id: true, eventId: true, shiftId: true, status: true, checkedInAt: true, attendanceStatus: true } }),
     db.memberInvite.findMany({ where: { volunteerId: keepId }, select: { id: true, eventId: true, usedAt: true } }),
     db.memberInvite.findMany({ where: { volunteerId: absorbId }, select: { id: true, eventId: true, usedAt: true } }),
     db.shiftDecline.findMany({ where: { volunteerId: keepId }, select: { id: true, shiftId: true, declinedAt: true } }),

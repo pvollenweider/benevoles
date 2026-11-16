@@ -145,6 +145,7 @@ Les badges de statut (`StatusBadge`) utilisent des combinaisons fond clair / tex
 - Annulé / Erreur : `#fee2e2` / `#b91c1c`
 - Liste d'attente : `#fef3c7` / `#92400e`
 - Demande à traiter : `#fef3c7` / `#78350f`
+- Absent (présence d'une inscription confirmée, #1141) : `#fef3c7` / `#78350f` (`bg-amber-100 text-amber-900`), avec le signe « ✗ » masqué aux lecteurs d'écran devant le mot. Jamais la paire rouge, qui dit une erreur, ni la paire grise de « Pas encore marqué » (`#f3f4f6` / `#4b5563`) : les trois états de présence se lisent par le mot et le signe (« ✓ Présent », « ✗ Absent », « Pas encore marqué »), pas par la couleur seule.
 - Place proposée : `#f3e8ff` / `#6b21a8`
 - Archivé : `#fef9c3` / `#a16207`
 - Brouillon / Fermé : `#f3f4f6` / `#4b5563`

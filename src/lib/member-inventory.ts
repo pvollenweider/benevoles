@@ -186,6 +186,11 @@ export const REGISTRATION_FIELDS_ON_ERASURE: Record<string, "clear" | "keep" | "
   waitingOfferedAt: "keep",
   waitingExpiresAt: "keep",
   checkedInAt: "keep",
+  // The recorded absence (#1141): a fact about an anonymous registration, like the check-in, that
+  // the event summary still counts. `attendanceBy` is an admin account's id, not the volunteer's.
+  attendanceStatus: "keep",
+  attendanceAt: "keep",
+  attendanceBy: "keep",
   linkEmailedAt: "keep",
   charterAcceptedHash: "keep",
   charterAcceptedAt: "keep",

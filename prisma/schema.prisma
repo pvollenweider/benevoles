@@ -1154,6 +1154,15 @@ model Registration {
   // Lightweight check-in (#399): when the organizer marked this person present on site. Null
   // until then; cleared by « Annuler la présence ». No terminals, badges or access control.
   checkedInAt      DateTime?
+  // Explicit absence (#1141): "absent" when an organizer recorded that the person did not come.
+  // Null for expected and present; checkedInAt stays null for absent. "left_early" is reserved for
+  // a later PR and refused by the routes of this one. Cleared by « Annuler l'absence ».
+  attendanceStatus String?
+  // When the absence was recorded (server time), and the AdminUser who recorded it. `attendanceBy`
+  // is a plain string, not a foreign key: the account may be deleted later, the event log keeps
+  // the name.
+  attendanceAt     DateTime?
+  attendanceBy     String?
   // Last email carrying the personal link (confirmation or re-send), for the personal page (#376).
   linkEmailedAt    DateTime?
   // Proof of acceptance of the volunteer charter at public sign-up (#569): SHA-256 of the exact

@@ -106,4 +106,38 @@ describe("RegistrationRow", () => {
     ])
     expect(screen.getByRole("checkbox", { name: /de 22h à 2h, jusqu'au lendemain$/ })).toBeInTheDocument()
   })
+
+  // The « absent » state (#1141).
+  it("shows « Absent » for a confirmed person marked absent: amber, with a sign of its own, never red", () => {
+    renderRow({ reg: reg({ attendanceStatus: "absent" }) })
+    const badge = screen.getByText("Absent")
+    expect(badge.className).toMatch(/bg-amber-100/)
+    expect(badge.className).toMatch(/text-amber-900/)
+    expect(badge.className).not.toMatch(/red-|dark:/)
+    const sign = badge.querySelector("[aria-hidden='true']")!
+    expect(sign).toHaveTextContent("✗")
+    expect(sign).not.toHaveTextContent("✓")
+    expect(screen.queryByText(/Présent/)).toBeNull()
+  })
+
+  it("shows « Présent » and never « Absent » for someone checked in; neither for someone expected", () => {
+    const { unmount } = renderRow({ reg: reg({ checkedInAt: "2026-07-04T08:05:00.000Z" }) })
+    expect(screen.getByText(/Présent/)).toBeInTheDocument()
+    expect(screen.queryByText("Absent")).toBeNull()
+    unmount()
+    renderRow()
+    expect(screen.queryByText(/Présent/)).toBeNull()
+    expect(screen.queryByText("Absent")).toBeNull()
+  })
+
+  it("a row with both a check-in and « absent » (rolling deployment) shows « Présent », never « Absent »", () => {
+    renderRow({ reg: reg({ checkedInAt: "2026-07-04T08:05:00.000Z", attendanceStatus: "absent" }) })
+    expect(screen.getByText(/Présent/)).toBeInTheDocument()
+    expect(screen.queryByText("Absent")).toBeNull()
+  })
+
+  it("shows no attendance badge on a registration that is not confirmed", () => {
+    renderRow({ reg: reg({ status: "cancelled", attendanceStatus: "absent" }) })
+    expect(screen.queryByText("Absent")).toBeNull()
+  })
 })

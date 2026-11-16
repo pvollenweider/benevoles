@@ -8,8 +8,8 @@ import BulkActionsBar from "../admin/registrations/BulkActionsBar"
 
 // The toolbar of the actions on the selected registrations, on its own.
 const base = {
-  selectedCount: 2, toCheckInCount: 2, toUndoCount: 0, activeCount: 2, noneWithEmail: false, noActiveWithEmail: false, busy: false,
-  onPresence: () => {}, onMakeResponsible: () => {}, onResendLink: () => {}, onCancelRegistrations: () => {}, onClearSelection: () => {},
+  selectedCount: 2, toCheckInCount: 2, toUndoCount: 0, toMarkAbsentCount: 2, toUndoAbsentCount: 0, activeCount: 2, noneWithEmail: false, noActiveWithEmail: false, busy: false,
+  onPresence: () => {}, onAbsence: () => {}, onMakeResponsible: () => {}, onResendLink: () => {}, onCancelRegistrations: () => {}, onClearSelection: () => {},
 }
 
 describe("BulkActionsBar", () => {
@@ -82,5 +82,45 @@ describe("BulkActionsBar", () => {
     expect(onMakeResponsible).not.toHaveBeenCalled()
     expect(onResendLink).not.toHaveBeenCalled()
     expect(onCancelRegistrations).not.toHaveBeenCalled()
+  })
+
+  // The « absent » state (#1141).
+  it("offers to mark the expected people absent, and to undo an absence only when there is one", () => {
+    const onAbsence = vi.fn()
+    const { rerender } = render(<BulkActionsBar {...base} onAbsence={onAbsence} />)
+    // The count is in the label; no undo while nobody selected is absent.
+    expect(screen.queryByRole("button", { name: /Annuler l'absence/ })).toBeNull()
+    fireEvent.click(screen.getByRole("button", { name: "Marquer absents (2)" }))
+    expect(onAbsence).toHaveBeenLastCalledWith(true)
+    rerender(<BulkActionsBar {...base} toMarkAbsentCount={1} toUndoAbsentCount={2} onAbsence={onAbsence} />)
+    expect(screen.getByRole("button", { name: "Marquer absent (1)" })).toBeInTheDocument()
+    fireEvent.click(screen.getByRole("button", { name: "Annuler l'absence (2)" }))
+    expect(onAbsence).toHaveBeenLastCalledWith(false)
+  })
+
+  it("keeps « Marquer absent » focusable but inert when nobody is expected, and both inert while a request runs", () => {
+    const onAbsence = vi.fn()
+    const { rerender } = render(<BulkActionsBar {...base} toMarkAbsentCount={0} toUndoAbsentCount={1} onAbsence={onAbsence} />)
+    const mark = screen.getByRole("button", { name: "Marquer absent (0)" })
+    expect(mark).toHaveAttribute("aria-disabled", "true")
+    expect(mark).toBeEnabled()
+    fireEvent.click(mark)
+    const undo = screen.getByRole("button", { name: "Annuler l'absence (1)" })
+    undo.focus()
+    rerender(<BulkActionsBar {...base} toMarkAbsentCount={2} toUndoAbsentCount={1} onAbsence={onAbsence} busy />)
+    expect(undo).toHaveFocus()
+    for (const b of [undo, screen.getByRole("button", { name: "Marquer absents (2)" })]) {
+      expect(b).toBeEnabled()
+      expect(b).toHaveAttribute("aria-disabled", "true")
+      fireEvent.click(b)
+    }
+    expect(onAbsence).not.toHaveBeenCalled()
+  })
+
+  it("the absence buttons are not red: an absence is a fact, not an error", () => {
+    render(<BulkActionsBar {...base} toUndoAbsentCount={1} />)
+    for (const name of ["Marquer absents (2)", "Annuler l'absence (1)"]) {
+      expect(screen.getByRole("button", { name }).className).not.toMatch(/red-/)
+    }
   })
 })

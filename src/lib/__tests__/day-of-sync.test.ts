@@ -4,6 +4,7 @@ import {
   DAY_OF_POLL_MS,
   NO_CHANGES,
   addChanges,
+  answerMark,
   boardChanges,
   changesAnnouncement,
   findOnBoard,
@@ -12,10 +13,13 @@ import {
   marksAfterPoll,
   mayAnnounceChanges,
   nextPollDelay,
+  noticeStillHolds,
   pinMark,
   releasePin,
   shouldSyncOnResume,
+  shownAttendance,
   shownCheckIn,
+  shownState,
   shownStatus,
   statusAnnouncement,
   syncStatusOf,
@@ -26,6 +30,9 @@ import type { DayOfBoard, DayOfPerson, DayOfShift } from "../day-of"
 
 // « Jour J » refreshes itself while open (#1141).
 const person = (id: string, checkedInAt: string | null = null): DayOfPerson => ({ registrationId: id, firstName: "Zoé", lastName: id, phone: null, checkedInAt })
+const absentPerson = (id: string): DayOfPerson => ({ ...person(id), attendanceStatus: "absent" })
+/** A mark of this phone: present at `checkedInAt`, expected when null. */
+const mark = (checkedInAt: string | null, at: number | null) => ({ state: checkedInAt ? "present" as const : "expected" as const, checkedInAt, at })
 const shift = (id: string, people: DayOfPerson[]): DayOfShift => ({
   id, roleName: "Bar", label: "Soir", date: "2026-07-04", startTime: "13:00", endTime: "16:00", capacity: 3, contactName: null, contactPhone: null, people,
 })
@@ -87,7 +94,7 @@ describe("ordering and local marks", () => {
   })
 
   it("a mark shows over the board until a poll sent after its answer", () => {
-    const marks: LocalMarks = { r1: { checkedInAt: "2026-07-04T12:00:00.000Z", at: 7 } }
+    const marks: LocalMarks = { r1: mark("2026-07-04T12:00:00.000Z", 7) }
     expect(shownCheckIn(person("r1"), marks)).toBe("2026-07-04T12:00:00.000Z")
     expect(shownCheckIn(person("r2", "x"), marks)).toBe("x")
     // Poll sent at 6, before the answer (7): stale for r1, the mark stays.
@@ -97,12 +104,24 @@ describe("ordering and local marks", () => {
   })
 
   it("an action in flight keeps its row as tapped, whatever the poll", () => {
-    const marks: LocalMarks = { r1: { checkedInAt: null, at: null }, r2: { checkedInAt: "y", at: 1 } }
-    expect(marksAfterPoll(marks, 99)).toEqual({ r1: { checkedInAt: null, at: null } })
+    const marks: LocalMarks = { r1: mark(null, null), r2: mark("y", 1) }
+    expect(marksAfterPoll(marks, 99)).toEqual({ r1: mark(null, null) })
   })
 
   it("an undo made here (null mark) shows as not present even if the board still says present", () => {
-    expect(shownCheckIn(person("r1", "x"), { r1: { checkedInAt: null, at: 3 } })).toBeNull()
+    expect(shownCheckIn(person("r1", "x"), { r1: mark(null, 3) })).toBeNull()
+  })
+
+  it("a mark carries the state, not only the check-in: an absence made here shows over the board (#1141)", () => {
+    const marks: LocalMarks = { r1: { state: "absent", checkedInAt: null, at: 3 } }
+    expect(shownState(person("r1"), marks)).toBe("absent")
+    expect(shownAttendance(person("r1"), marks)).toEqual({ state: "absent", checkedInAt: null })
+    // Without a mark, the board's own columns say it.
+    expect(shownState(absentPerson("r2"), marks)).toBe("absent")
+    expect(shownState(person("r3", "x"), marks)).toBe("present")
+    expect(shownState(person("r4"), marks)).toBe("expected")
+    // An absence undone here shows as expected even if the board still says absent.
+    expect(shownState(absentPerson("r5"), { r5: mark(null, 4) })).toBe("expected")
   })
 })
 
@@ -111,20 +130,20 @@ describe("boardChanges and changesAnnouncement", () => {
     const before = boardOf([person("a"), person("b", "x"), person("c")])
     const after = boardOf([person("a", "y"), person("b"), person("c", "z")])
     const c = boardChanges(before, {}, after, {})
-    expect(c).toEqual({ arrived: 2, undone: 1, roster: false })
+    expect(c).toEqual({ arrived: 2, undone: 1, absent: 0, absenceUndone: 0, roster: false })
     expect(changesAnnouncement(c)).toBe("Liste mise à jour : 2 personnes marquées présentes, 1 présence annulée.")
   })
 
   it("does not count this phone's own marks once the board catches up", () => {
     const before = boardOf([person("a")])
     const after = boardOf([person("a", "y")])
-    const marksBefore: LocalMarks = { a: { checkedInAt: "y", at: 2 } }
+    const marksBefore: LocalMarks = { a: mark("y", 2) }
     expect(boardChanges(before, marksBefore, after, marksAfterPoll(marksBefore, 3))).toEqual(NO_CHANGES)
   })
 
   it("a stale poll does not read as the user's own check-in undone", () => {
     const before = boardOf([person("a")])
-    const marks: LocalMarks = { a: { checkedInAt: "y", at: 5 } }
+    const marks: LocalMarks = { a: mark("y", 5) }
     expect(boardChanges(before, marks, before, marksAfterPoll(marks, 4))).toEqual(NO_CHANGES)
   })
 
@@ -133,7 +152,7 @@ describe("boardChanges and changesAnnouncement", () => {
     expect(boardChanges(before, {}, boardOf([person("a"), person("b")], "inProgress"), {})).toEqual(NO_CHANGES)
     expect(boardChanges(before, {}, boardOf([person("a")]), {}).roster).toBe(true)
     expect(boardChanges(before, {}, boardOf([person("a"), person("c")]), {}).roster).toBe(true)
-    expect(changesAnnouncement({ arrived: 1, undone: 0, roster: true })).toBe("Liste mise à jour : 1 personne marquée présente, la liste des personnes attendues a changé.")
+    expect(changesAnnouncement({ ...NO_CHANGES, arrived: 1, roster: true })).toBe("Liste mise à jour : 1 personne marquée présente, la liste des personnes attendues a changé.")
   })
 
   it("nothing changed: nothing to say", () => {
@@ -141,7 +160,114 @@ describe("boardChanges and changesAnnouncement", () => {
   })
 
   it("adds up changes waiting to be said", () => {
-    expect(addChanges({ arrived: 1, undone: 0, roster: false }, { arrived: 2, undone: 1, roster: true })).toEqual({ arrived: 3, undone: 1, roster: true })
+    expect(addChanges({ ...NO_CHANGES, arrived: 1 }, { ...NO_CHANGES, arrived: 2, undone: 1, roster: true })).toEqual({ arrived: 3, undone: 1, absent: 0, absenceUndone: 0, roster: true })
+    expect(addChanges({ ...NO_CHANGES, absent: 1 }, { ...NO_CHANGES, absent: 2, absenceUndone: 1 })).toEqual({ arrived: 0, undone: 0, absent: 3, absenceUndone: 1, roster: false })
+  })
+
+  it("three states: an absence marked or undone elsewhere is counted and said (#1141)", () => {
+    const before = boardOf([person("a"), absentPerson("b"), person("c"), absentPerson("d")])
+    const after = boardOf([absentPerson("a"), person("b"), absentPerson("c"), absentPerson("d")])
+    const c = boardChanges(before, {}, after, {})
+    // Expected to absent was silent when presence was a boolean.
+    expect(c).toEqual({ arrived: 0, undone: 0, absent: 2, absenceUndone: 1, roster: false })
+    expect(changesAnnouncement(c)).toBe("Liste mise à jour : 2 personnes marquées absentes, 1 absence annulée.")
+    expect(changesAnnouncement({ ...NO_CHANGES, absent: 1, absenceUndone: 2 })).toBe("Liste mise à jour : 1 personne marquée absente, 2 absences annulées.")
+  })
+
+  it("three states: present here and absent there is one presence undone and one absence, never only « présence annulée » (#1141)", () => {
+    const c = boardChanges(boardOf([person("a", "x"), absentPerson("b")]), {}, boardOf([absentPerson("a"), person("b", "y")]), {})
+    expect(c).toEqual({ arrived: 1, undone: 1, absent: 1, absenceUndone: 1, roster: false })
+    expect(changesAnnouncement(c)).toBe("Liste mise à jour : 1 personne marquée présente, 1 présence annulée, 1 personne marquée absente, 1 absence annulée.")
+  })
+
+  it("does not count an absence made on this phone once the board catches up (#1141)", () => {
+    const marksBefore: LocalMarks = { a: { state: "absent", checkedInAt: null, at: 2 } }
+    expect(boardChanges(boardOf([person("a")]), marksBefore, boardOf([absentPerson("a")]), marksAfterPoll(marksBefore, 3))).toEqual(NO_CHANGES)
+  })
+})
+
+// Two devices (#1141): this phone pressed « Marquer présent » on Inès; the server changed nothing
+// and returned « absent », recorded meanwhile on another phone.
+describe("conflict: the row takes the server's state, said once", () => {
+  const before = boardOf([person("ines"), person("hugo")])
+  const server = { state: "absent" as const, checkedInAt: null }
+
+  it("the server's state replaces the pin, at the tick of the answer", () => {
+    const pinned = pinMark({}, "ines", { state: "expected", checkedInAt: null })
+    const marks = answerMark(pinned, "ines", server, 5)
+    expect(marks).toEqual({ ines: { state: "absent", checkedInAt: null, at: 5 } })
+    expect(shownState(person("ines"), marks)).toBe("absent")
+    // Nothing of the pin is left: a later release cannot bring the old row back.
+    expect(releasePin(marks, "ines")).toBe(marks)
+  })
+
+  it("no later « Liste mise à jour » echo: the read sent after the answer finds nothing new for that row", () => {
+    const marks = answerMark(pinMark({}, "ines", { state: "expected", checkedInAt: null }), "ines", server, 5)
+    // The deferred poll relaunched by the end of the action (sent at 6) brings the absence.
+    const after = boardOf([absentPerson("ines"), person("hugo")])
+    const marksAfter = marksAfterPoll(marks, 6)
+    expect(marksAfter).toEqual({})
+    const c = boardChanges(before, marks, after, marksAfter)
+    expect(c).toEqual(NO_CHANGES)
+    expect(changesAnnouncement(addChanges(NO_CHANGES, c))).toBeNull()
+  })
+
+  it("what the fix prevents: releasing the pin instead would count the conflict as a change made elsewhere", () => {
+    const released = releasePin(pinMark({}, "ines", { state: "expected", checkedInAt: null }), "ines")
+    const c = boardChanges(before, released, boardOf([absentPerson("ines"), person("hugo")]), marksAfterPoll(released, 6))
+    expect(changesAnnouncement(c)).toBe("Liste mise à jour : 1 personne marquée absente.")
+  })
+
+  it("a read sent before the answer leaves the server's state on the row", () => {
+    const marks = answerMark({}, "ines", server, 5)
+    // Sent at 4, it still shows Inès expected: stale for that row, and nothing to say.
+    expect(marksAfterPoll(marks, 4)).toBe(marks)
+    expect(boardChanges(before, marks, before, marksAfterPoll(marks, 4))).toEqual(NO_CHANGES)
+    expect(shownState(person("ines"), marksAfterPoll(marks, 4))).toBe("absent")
+  })
+
+  it("a presence recorded elsewhere comes with its instant", () => {
+    const marks = answerMark(pinMark({}, "hugo", { state: "expected", checkedInAt: null }), "hugo", { state: "present", checkedInAt: "2026-07-04T12:03:00.000Z" }, 9)
+    expect(shownAttendance(person("hugo"), marks)).toEqual({ state: "present", checkedInAt: "2026-07-04T12:03:00.000Z" })
+  })
+})
+
+describe("noticeStillHolds: the sentence shown in a row after an action that changed nothing (#1141)", () => {
+  const before = boardOf([absentPerson("ines"), person("hugo")])
+
+  it("stays while the person shows the same state on the same shift", () => {
+    expect(noticeStillHolds(before, {}, before, {}, "ines")).toBe(true)
+    // The state came from this phone's mark, the read brings the same from the board.
+    const marks: LocalMarks = { ines: { state: "absent", checkedInAt: null, at: 5 } }
+    expect(noticeStillHolds(boardOf([person("ines"), person("hugo")]), marks, before, marksAfterPoll(marks, 6), "ines")).toBe(true)
+    // Someone else's change does not touch it.
+    expect(noticeStillHolds(before, {}, boardOf([absentPerson("ines"), person("hugo", "x")]), {}, "ines")).toBe(true)
+  })
+
+  it("goes when a later read changes that person's state", () => {
+    expect(noticeStillHolds(before, {}, boardOf([person("ines"), person("hugo")]), {}, "ines")).toBe(false)
+    expect(noticeStillHolds(before, {}, boardOf([person("ines", "x"), person("hugo")]), {}, "ines")).toBe(false)
+  })
+
+  it("goes when the person left the board or sits on another shift", () => {
+    expect(noticeStillHolds(before, {}, boardOf([person("hugo")]), {}, "ines")).toBe(false)
+    const elsewhere: DayOfBoard = { inProgress: [{ key: "k", date: "2026-07-04", startTime: "13:00", shifts: [shift("s2", [absentPerson("ines")])] }], upcoming: [], earlier: [], laterCount: 0 }
+    expect(noticeStillHolds(before, {}, elsewhere, {}, "ines")).toBe(false)
+    expect(noticeStillHolds(boardOf([]), {}, before, {}, "ines")).toBe(false)
+  })
+})
+
+describe("a person with both a check-in and « absent » (rolling deployment)", () => {
+  it("shows as present, and a change to it is a presence, not an absence", () => {
+    const mixed: DayOfPerson = { ...person("a", "x"), attendanceStatus: "absent" }
+    expect(shownState(mixed, {})).toBe("present")
+    expect(boardChanges(boardOf([absentPerson("a")]), {}, boardOf([mixed]), {})).toEqual({ ...NO_CHANGES, arrived: 1, absenceUndone: 1 })
+  })
+})
+
+describe("NO_CHANGES", () => {
+  it("has every counter at zero", () => {
+    expect(NO_CHANGES).toEqual({ arrived: 0, undone: 0, absent: 0, absenceUndone: 0, roster: false })
   })
 })
 
@@ -197,16 +323,16 @@ describe("focused person leaving the board", () => {
 
 describe("pinMark and releasePin", () => {
   it("a failed undo puts back the check-in answered earlier but not yet seen by a poll", () => {
-    const checkedIn: LocalMarks = { a: { checkedInAt: "y", at: 4 } }
-    const pinned = pinMark(checkedIn, "a", "y")
-    expect(pinned.a).toEqual({ checkedInAt: "y", at: null, prev: { checkedInAt: "y", at: 4 } })
+    const checkedIn: LocalMarks = { a: mark("y", 4) }
+    const pinned = pinMark(checkedIn, "a", { state: "present", checkedInAt: "y" })
+    expect(pinned.a).toEqual({ state: "present", checkedInAt: "y", at: null, prev: { state: "present", checkedInAt: "y", at: 4 } })
     expect(releasePin(pinned, "a")).toEqual(checkedIn)
   })
   it("without an earlier mark, releasing goes back to the board", () => {
-    expect(releasePin(pinMark({}, "a", null), "a")).toEqual({})
+    expect(releasePin(pinMark({}, "a", { state: "expected", checkedInAt: null }), "a")).toEqual({})
   })
   it("leaves an answered mark alone", () => {
-    const marks: LocalMarks = { a: { checkedInAt: "y", at: 4 } }
+    const marks: LocalMarks = { a: mark("y", 4) }
     expect(releasePin(marks, "a")).toBe(marks)
     expect(releasePin(marks, "zz")).toBe(marks)
   })

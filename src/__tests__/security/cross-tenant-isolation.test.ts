@@ -1523,6 +1523,43 @@ describe("Registrations — cross-tenant isolation", () => {
     expect(prismaMock.registration.update).not.toHaveBeenCalled()
   })
 
+  it("POST /api/admin/events/[id]/registrations/bulk: the absence actions return 404 for an org-B event and write nothing (#1141)", async () => {
+    const { POST } = await import("@/app/api/admin/events/[id]/registrations/bulk/route")
+    for (const action of ["mark_absent", "undo_absent"]) {
+      const findMany = vi.fn()
+      const updateMany = vi.fn()
+      setupGuard({ registration: { findMany, updateMany } }) // event.findFirst → null
+      const res = await POST(
+        makeRequest("/api/admin/events/evt-b/registrations/bulk", "POST", { action, registrationIds: ["reg-b"] }),
+        params("evt-b"),
+      )
+      expect(res.status, action).toBe(404)
+      expect(findMany).not.toHaveBeenCalled()
+      expect(updateMany).not.toHaveBeenCalled()
+    }
+  })
+
+  it("POST /api/admin/events/[id]/registrations/bulk: the absence actions return 404 when a selected registration is org-B's, and mark nobody (#1141)", async () => {
+    const { POST } = await import("@/app/api/admin/events/[id]/registrations/bulk/route")
+    for (const action of ["mark_absent", "undo_absent"]) {
+      // The scoped client finds org-A's registration only: reg-b is not visible.
+      const findMany = vi.fn().mockResolvedValue([{ id: "reg-a", eventId: "evt-a", shiftId: "shift-a", status: "active" }])
+      const updateMany = vi.fn()
+      setupGuard({
+        event: { findFirst: vi.fn().mockResolvedValue({ id: "evt-a", title: "A", organization: { slug: "a" } }) },
+        registration: { findMany, updateMany },
+      })
+      const res = await POST(
+        makeRequest("/api/admin/events/evt-a/registrations/bulk", "POST", { action, registrationIds: ["reg-a", "reg-b"] }),
+        params("evt-a"),
+      )
+      expect(res.status, action).toBe(404)
+      expect(findMany).toHaveBeenCalledWith(expect.objectContaining({ where: { id: { in: ["reg-a", "reg-b"] }, eventId: "evt-a" } }))
+      // All or nothing: org-A's own registration is not marked either.
+      expect(updateMany).not.toHaveBeenCalled()
+    }
+  })
+
   it("POST /api/admin/events/[id]/registrations/bulk returns 404 when a selected registration is org-B's", async () => {
     const { POST } = await import("@/app/api/admin/events/[id]/registrations/bulk/route")
     setupGuard({

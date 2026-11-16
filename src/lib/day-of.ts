@@ -16,6 +16,7 @@ import { crossesMidnight } from "./gantt-utils"
 import { fmtHour } from "./registrations-list"
 import { fold } from "./text-fold"
 import { SECTOR_FILTER_PARAM } from "./sector-filter"
+import { attendanceStateOf, type AttendanceState, type AttendanceTransition } from "./attendance-state"
 
 /** « Dans les prochaines heures »: fixed by the owner (#561), not a setting. */
 export const DAY_OF_WINDOW_HOURS = 3
@@ -28,6 +29,8 @@ export type DayOfPerson = {
   phone: string | null
   /** ISO instant of the check-in, null when not marked present. */
   checkedInAt: string | null
+  /** "absent" when an organizer recorded the absence; null otherwise (#1141). */
+  attendanceStatus?: string | null
 }
 
 export type DayOfShift = {
@@ -183,20 +186,31 @@ export function filterGroups(groups: DayOfGroup[], query: string): DayOfGroup[] 
     .filter((g) => g.shifts.length > 0)
 }
 
-export type ShiftCounts = { expected: number; present: number; missing: number }
+export type ShiftCounts = { expected: number; present: number; absent: number; missing: number }
 
-/** Expected (confirmed) people, those marked present, and the places nobody has taken. */
-export function shiftCounts(shift: Pick<DayOfShift, "capacity" | "people">, isPresent: (p: DayOfPerson) => boolean): ShiftCounts {
+/**
+ * Expected (confirmed) people, those marked present, those marked absent, and the places nobody
+ * has taken. `stateOf` lets the board apply the marks made on this phone over the server's board.
+ */
+export function shiftCounts(shift: Pick<DayOfShift, "capacity" | "people">, stateOf: (p: DayOfPerson) => AttendanceState): ShiftCounts {
   const expected = shift.people.length
-  return { expected, present: shift.people.filter(isPresent).length, missing: Math.max(0, shift.capacity - expected) }
+  let present = 0
+  let absent = 0
+  for (const p of shift.people) {
+    const state = stateOf(p)
+    if (state === "present") present += 1
+    else if (state === "absent") absent += 1
+  }
+  return { expected, present, absent, missing: Math.max(0, shift.capacity - expected) }
 }
 
 const s = (n: number) => (n > 1 ? "s" : "")
 
-/** « 2 présents sur 4 attendus » for a shift card. */
+/** « 2 présents sur 4 attendus, 1 absent » for a shift card. */
 export function presenceLine(c: ShiftCounts): string {
   if (c.expected === 0) return "Personne d'inscrit"
-  return `${c.present} présent${s(c.present)} sur ${c.expected} attendu${s(c.expected)}`
+  const line = `${c.present} présent${s(c.present)} sur ${c.expected} attendu${s(c.expected)}`
+  return c.absent > 0 ? `${line}, ${c.absent} absent${s(c.absent)}` : line
 }
 
 /** « Il manque 1 personne. », or null when every place is taken. */
@@ -226,7 +240,77 @@ export function groupHeading(g: Pick<DayOfGroup, "date" | "startTime">, phase: E
 
 /** What the live region says after a toggle: the person, the new state, and where the shift stands. */
 export function presenceAnnouncement(name: string, present: boolean, shift: string, c: ShiftCounts): string {
-  return `${present ? "Présence enregistrée" : "Présence annulée"} pour ${name}. ${shift} : ${presenceLine(c)}.`
+  return attendanceAnnouncement(name, present ? "check_in" : "undo_check_in", shift, c)
+}
+
+const ANNOUNCED: Record<AttendanceTransition, string> = {
+  check_in: "Présence enregistrée",
+  undo_check_in: "Présence annulée",
+  mark_absent: "Absence enregistrée",
+  undo_absent: "Absence annulée",
+}
+
+/** « Absence enregistrée pour Léa Morel. Bar : 2 présents sur 4 attendus, 1 absent. » (#1141). */
+export function attendanceAnnouncement(name: string, transition: AttendanceTransition, shift: string, c: ShiftCounts): string {
+  return `${ANNOUNCED[transition]} pour ${name}. ${shift} : ${presenceLine(c)}.`
+}
+
+/**
+ * Said once, and shown in the row, when an action changed nothing because another device recorded
+ * a state meanwhile (#1141): the row takes the server's state, nothing is retried. Null when the
+ * server says « attendu » (nothing recorded elsewhere to name): the caller keeps its plain message.
+ */
+export function conflictAnnouncement(name: string, state: AttendanceState, shift: string, c: ShiftCounts): string | null {
+  if (state === "expected") return null
+  return `Une ${state === "absent" ? "absence" : "présence"} est déjà enregistrée pour ${name}, depuis un autre appareil. ${shift} : ${presenceLine(c)}.`
+}
+
+/** What the bulk route says about one requested registration after an attendance action (#1141). */
+export type AttendanceAnswer =
+  | { id: string; changed: boolean; state: AttendanceState; checkedInAt: string | null; moved?: boolean; gone?: boolean }
+  | { id: string; changed: false; state: null; checkedInAt: null; moved?: boolean; gone: true }
+
+const ANSWER_STATES: readonly unknown[] = ["expected", "present", "absent"]
+
+/** The answer about `registrationId` in the route's `results`, or null (previous release, odd shape). */
+export function answerFor(results: unknown, registrationId: string): AttendanceAnswer | null {
+  if (!Array.isArray(results)) return null
+  for (const r of results as Record<string, unknown>[]) {
+    if (typeof r !== "object" || r === null || r.id !== registrationId || typeof r.changed !== "boolean") continue
+    if (r.gone === true && r.changed === false) return { id: registrationId, changed: false, state: null, checkedInAt: null, gone: true }
+    if (!ANSWER_STATES.includes(r.state)) continue
+    return { id: registrationId, changed: r.changed, state: r.state as AttendanceState, checkedInAt: typeof r.checkedInAt === "string" ? r.checkedInAt : null, moved: r.moved === true }
+  }
+  return null
+}
+
+/** The registration is no longer on the shift the press was meant for: swapped away, or deleted. */
+export const leftShift = (a: AttendanceAnswer | null): boolean => !!a && (a.moved === true || a.gone === true)
+
+/** « Zoé Müller ne figure plus parmi les personnes attendues, Bar, Soir. » */
+export function leftShiftSentence(name: string, shift: string): string {
+  return `${name} ne figure plus parmi les personnes attendues, ${shift}.`
+}
+
+/**
+ * What is said once, and shown in the row, when an action changed nothing (#1141). The person
+ * left this shift (`moved`, `gone`): the sentence of a person leaving the board. Another device
+ * recorded a presence or an absence first: that sentence. Otherwise (back to « attendu »
+ * elsewhere, no longer confirmed, or an answer without details): « Rien n'a changé ».
+ */
+export function unchangedAnnouncement(name: string, answer: AttendanceAnswer | null, shift: string, c: ShiftCounts): string {
+  if (leftShift(answer)) return leftShiftSentence(name, shift)
+  return (answer?.state ? conflictAnnouncement(name, answer.state, shift, c) : null) ?? `Rien n'a changé pour ${name} : la liste est mise à jour.`
+}
+
+/** The state the board's own data gives a person, before the marks made on this phone. */
+export const personState = (p: Pick<DayOfPerson, "checkedInAt" | "attendanceStatus">): AttendanceState => attendanceStateOf(p)
+
+/** What a press on the row's first button does from `state`, and its label. */
+export const PRIMARY_ACTION: Record<AttendanceState, { transition: AttendanceTransition; label: string }> = {
+  expected: { transition: "check_in", label: "Marquer présent" },
+  present: { transition: "undo_check_in", label: "Annuler la présence" },
+  absent: { transition: "undo_absent", label: "Annuler l'absence" },
 }
 
 /** Said once typing has paused: how many shifts and people the search leaves. */
@@ -242,20 +326,27 @@ export function telHref(phone: string): string {
   return `tel:${phone.replace(/[^\d+]/g, "")}`
 }
 
-/**
- * The check-in request of this page: the very route and action of « Marquer présents » on the
- * registrations list (#399), for one registration, so the same rules (active registrations only,
- * no double mark) and the same event log entries apply.
- */
 /** The board route the open page polls (#1141), with the page's « Secteur » filter (#1170) when one is chosen. */
 export function dayOfBoardUrl(eventId: string, sector = ""): string {
   const base = `/api/admin/events/${encodeURIComponent(eventId)}/day-of`
   return sector ? `${base}?${new URLSearchParams({ [SECTOR_FILTER_PARAM]: sector })}` : base
 }
 
-export function presenceRequest(eventId: string, registrationId: string, present: boolean): { url: string; body: { action: "check_in" | "undo_check_in"; registrationIds: string[] } } {
+/**
+ * The attendance request of this page: the very route and actions of the registrations list
+ * (#399, #1141), for one registration, so the same rules (active registrations only, a write
+ * conditional on the starting state and on the shift) and the same event log entries apply.
+ */
+export function attendanceRequest(eventId: string, registrationId: string, transition: AttendanceTransition, observedShiftId?: string): { url: string; body: { action: AttendanceTransition; registrationIds: string[]; observedShifts?: Record<string, string> } } {
   return {
     url: `/api/admin/events/${encodeURIComponent(eventId)}/registrations/bulk`,
-    body: { action: present ? "check_in" : "undo_check_in", registrationIds: [registrationId] },
+    // The shift the row was shown on: the server writes nothing if the person has moved since.
+    body: { action: transition, registrationIds: [registrationId], ...(observedShiftId ? { observedShifts: { [registrationId]: observedShiftId } } : {}) },
   }
+}
+
+/** The check-in form of `attendanceRequest` (#399). */
+export function presenceRequest(eventId: string, registrationId: string, present: boolean): { url: string; body: { action: "check_in" | "undo_check_in"; registrationIds: string[] } } {
+  const action = present ? "check_in" : "undo_check_in"
+  return { url: attendanceRequest(eventId, registrationId, action).url, body: { action, registrationIds: [registrationId] } }
 }

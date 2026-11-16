@@ -546,9 +546,20 @@ async function lockForStep(tx: Tx, requestId: string, organizationId?: string) {
   return { req, event, stale }
 }
 
+/**
+ * What a swapped registration loses: it starts again on its new shift, with no reminder sent and
+ * nobody present or absent. The three attendance columns of #1141 go with the check-in, so a row
+ * never keeps « absent » (or its author and time) for a shift the person no longer holds.
+ */
+export const SWAP_REGISTRATION_RESETS = {
+  reminderJ2Sent: null, reminderJ1Sent: null, reminderDdSent: null,
+  checkedInAt: null, attendanceStatus: null, attendanceAt: null, attendanceBy: null,
+  waitingPosition: null, waitingOfferedAt: null, waitingExpiresAt: null,
+} as const
+
 /** The swap itself, inside the step's transaction once every rule passed (E14, E15). */
 async function applySwap(tx: Tx, req: LockedRequest, event: LoadedEvent, mine: LoadedRegistration, theirs: LoadedRegistration, actor: LogActor, now: Date, extra: { decidedById?: string; acks?: AckGiven[] } = {}): Promise<string[]> {
-  const resets = { reminderJ2Sent: null, reminderJ1Sent: null, reminderDdSent: null, checkedInAt: null, waitingPosition: null, waitingOfferedAt: null, waitingExpiresAt: null }
+  const resets = SWAP_REGISTRATION_RESETS
   const moved = [
     await tx.registration.updateMany({ where: { id: mine.id, volunteerId: mine.volunteerId, shiftId: mine.shiftId, status: "active" }, data: { shiftId: theirs.shiftId, ...resets } }),
     await tx.registration.updateMany({ where: { id: theirs.id, volunteerId: theirs.volunteerId, shiftId: theirs.shiftId, status: "active" }, data: { shiftId: mine.shiftId, ...resets } }),

@@ -76,7 +76,7 @@ describe("DayOfBoard", () => {
     await waitFor(() => expect(fetchMock).toHaveBeenCalled())
     const [url, init] = fetchMock.mock.calls[0]
     expect(url).toBe("/api/admin/events/evt-1/registrations/bulk")
-    expect(JSON.parse(init.body)).toEqual({ action: "check_in", registrationIds: ["r1"] })
+    expect(JSON.parse(init.body)).toEqual({ action: "check_in", registrationIds: ["r1"], observedShifts: { r1: "s1" } })
 
     const undo = await screen.findByRole("button", { name: "Annuler la présence, Zoé Müller" })
     expect(undo).toBe(button)
@@ -90,7 +90,7 @@ describe("DayOfBoard", () => {
     renderBoard()
     fireEvent.click(screen.getByRole("button", { name: "Annuler la présence, Léon Favre" }))
     await waitFor(() => expect(fetchMock).toHaveBeenCalled())
-    expect(JSON.parse(fetchMock.mock.calls[0][1].body)).toEqual({ action: "undo_check_in", registrationIds: ["r2"] })
+    expect(JSON.parse(fetchMock.mock.calls[0][1].body)).toEqual({ action: "undo_check_in", registrationIds: ["r2"], observedShifts: { r2: "s1" } })
     expect(await screen.findByRole("button", { name: "Marquer présent, Léon Favre" })).toBeInTheDocument()
     await waitFor(() => expect(screen.getByRole("status", { name: "Mise à jour du tableau" })).toHaveTextContent("Présence annulée pour Léon Favre."))
   })
@@ -206,7 +206,17 @@ describe("DayOfBoard", () => {
 
   describe("refreshes itself while open (#1141)", () => {
     beforeEach(() => vi.useFakeTimers())
-    afterEach(() => vi.useRealTimers())
+    // jsdom starts an interval for its rendering updates (focus fixup, animation frames) as soon
+    // as the DOM changes while an element has the focus. Started under fake timers, that interval
+    // is a fake one: dropped unrun by `useRealTimers`, it would leave jsdom waiting on it for
+    // ever, and no requestAnimationFrame callback (the live region's `announce`) would run in the
+    // tests after this block. So: unmount, let the pending fake timers run (jsdom's interval
+    // fires and stops itself), then bring the real timers back.
+    afterEach(() => {
+      cleanup()
+      vi.runOnlyPendingTimers()
+      vi.useRealTimers()
+    })
     const dayOfCalls = () => fetchMock.mock.calls.filter(([url]) => String(url).endsWith("/day-of"))
     const flush = () => act(async () => { await vi.advanceTimersByTimeAsync(50) })
     const marked: Board = { ...board, inProgress: [{ ...board.inProgress[0], shifts: [{ ...bar, people: [{ ...bar.people[0], checkedInAt: "2026-07-04T12:00:00.000Z" }, bar.people[1]] }] }] }
@@ -378,5 +388,326 @@ describe("DayOfBoard", () => {
       await act(async () => { await vi.advanceTimersByTimeAsync(600_000) })
       expect(dayOfCalls()).toHaveLength(1)
     })
+  })
+})
+
+// The « absent » state on the day-of board (#1141): three states, one persistent button per row,
+// and two devices that never overwrite each other.
+describe("DayOfBoard, absent state (#1141)", () => {
+  const fetchMock = vi.fn()
+  beforeEach(() => {
+    fetchMock.mockReset()
+    vi.stubGlobal("fetch", fetchMock)
+  })
+  afterEach(() => {
+    cleanup()
+    vi.unstubAllGlobals()
+  })
+  const status = () => screen.getByRole("status", { name: "Mise à jour du tableau" })
+  const barCard = () => screen.getByRole("heading", { level: 4, name: "Bar, Soir" }).closest("li")!
+  const withZoe = (over: Record<string, unknown>): Board => ({ ...board, inProgress: [{ ...board.inProgress[0], shifts: [{ ...bar, people: [{ ...bar.people[0], ...over }, bar.people[1]] }] }] })
+  const zoeAbsent = withZoe({ attendanceStatus: "absent" })
+  const renderWith = (b: Board) => render(
+    <DayOfBoard eventId="evt-1" board={b} today="2026-07-04" refreshedAt="14h05" timeZone="Europe/Zurich" registrationWindow={{ publicStatus: "published", registrationsOpen: true }} roles={["Bar", "Accueil"]} />,
+  )
+
+  it("an expected person has two buttons, a recorded one only the undo; « Marquer absent » is outlined, never red", () => {
+    renderBoard()
+    const present = screen.getByRole("button", { name: "Marquer présent, Zoé Müller" })
+    const absent = screen.getByRole("button", { name: "Marquer absent, Zoé Müller" })
+    // The second button comes after the first, in the same row.
+    expect(present.compareDocumentPosition(absent) & Node.DOCUMENT_POSITION_FOLLOWING).toBeTruthy()
+    expect(absent).toHaveTextContent("Marquer absent")
+    expect(absent.className).toMatch(/border-blue-600/)
+    expect(absent.className).not.toMatch(/red-|dark:/)
+    for (const b of [present, absent]) {
+      expect(b.className).toMatch(/min-h-11/)
+      expect(b.className).toMatch(/min-w-11/)
+      expect(b).not.toHaveAttribute("aria-pressed")
+    }
+    // Léon is present: one button, no « Marquer absent » (the presence is undone first).
+    expect(screen.getByRole("button", { name: "Annuler la présence, Léon Favre" })).toBeInTheDocument()
+    expect(screen.queryByRole("button", { name: "Marquer absent, Léon Favre" })).toBeNull()
+    expect(screen.queryByRole("radiogroup")).toBeNull()
+  })
+
+  it("the three badges differ by word and sign, not by colour alone", () => {
+    renderWith({ ...zoeAbsent, upcoming: board.upcoming })
+    const card = barCard()
+    const absent = within(card).getByText("Absent")
+    expect(absent.className).toMatch(/bg-amber-100/)
+    expect(absent.className).toMatch(/text-amber-900/)
+    expect(absent.className).not.toMatch(/bg-gray-100|red-|dark:/)
+    expect(within(absent).getByText(/✗/)).toHaveAttribute("aria-hidden", "true")
+    const present = within(card).getByText("Présent")
+    expect(within(present).getByText(/✓/)).toHaveAttribute("aria-hidden", "true")
+    expect(screen.getByText("Pas encore marqué").className).toMatch(/bg-gray-100/)
+    expect(card).toHaveTextContent("1 présent sur 2 attendus, 1 absent.")
+  })
+
+  it("« Marquer absent » records the absence; its button goes and the focus moves to the row's first button", async () => {
+    fetchMock.mockResolvedValue(jsonOk({ done: 1, changedIds: ["r1"], skipped: 0, results: [{ id: "r1", changed: true, state: "absent", checkedInAt: null }] }))
+    renderBoard()
+    const primary = screen.getByRole("button", { name: "Marquer présent, Zoé Müller" })
+    const absent = screen.getByRole("button", { name: "Marquer absent, Zoé Müller" })
+    absent.focus()
+    fireEvent.click(absent)
+
+    await waitFor(() => expect(fetchMock).toHaveBeenCalled())
+    const [url, init] = fetchMock.mock.calls[0]
+    expect(url).toBe("/api/admin/events/evt-1/registrations/bulk")
+    expect(JSON.parse(init.body)).toEqual({ action: "mark_absent", registrationIds: ["r1"], observedShifts: { r1: "s1" } })
+
+    const undo = await screen.findByRole("button", { name: "Annuler l'absence, Zoé Müller" })
+    // The same node as « Marquer présent »: it never unmounts.
+    expect(undo).toBe(primary)
+    expect(undo).toHaveTextContent("Annuler l'absence")
+    expect(screen.queryByRole("button", { name: "Marquer absent, Zoé Müller" })).toBeNull()
+    await waitFor(() => expect(undo).toHaveFocus())
+    await waitFor(() => expect(status()).toHaveTextContent("Absence enregistrée pour Zoé Müller. Bar, Soir : 1 présent sur 2 attendus, 1 absent."))
+    expect(barCard()).toHaveTextContent("1 présent sur 2 attendus, 1 absent.")
+    expect(within(barCard()).getByText("Absent")).toBeInTheDocument()
+  })
+
+  it("« Annuler l'absence » puts the person back to expected on the same button, and « Marquer absent » comes back", async () => {
+    fetchMock.mockResolvedValue(jsonOk({ done: 1, changedIds: ["r1"], skipped: 0, results: [{ id: "r1", changed: true, state: "expected", checkedInAt: null }] }))
+    renderWith(zoeAbsent)
+    const undo = screen.getByRole("button", { name: "Annuler l'absence, Zoé Müller" })
+    undo.focus()
+    fireEvent.click(undo)
+    await waitFor(() => expect(fetchMock).toHaveBeenCalled())
+    expect(JSON.parse(fetchMock.mock.calls[0][1].body)).toEqual({ action: "undo_absent", registrationIds: ["r1"], observedShifts: { r1: "s1" } })
+    const mark = await screen.findByRole("button", { name: "Marquer présent, Zoé Müller" })
+    expect(mark).toBe(undo)
+    expect(mark).toHaveFocus()
+    expect(screen.getByRole("button", { name: "Marquer absent, Zoé Müller" })).toBeInTheDocument()
+    await waitFor(() => expect(status()).toHaveTextContent("Absence annulée pour Zoé Müller. Bar, Soir : 1 présent sur 2 attendus."))
+  })
+
+  it("while the request runs, both buttons are aria-disabled, never disabled, and a second press does nothing", async () => {
+    let answer: (v: unknown) => void = () => {}
+    fetchMock.mockImplementation(() => new Promise((resolve) => { answer = resolve }))
+    renderBoard()
+    const primary = screen.getByRole("button", { name: "Marquer présent, Zoé Müller" })
+    const absent = screen.getByRole("button", { name: "Marquer absent, Zoé Müller" })
+    absent.focus()
+    fireEvent.click(absent)
+    await waitFor(() => expect(absent).toHaveAttribute("aria-disabled", "true"))
+    expect(primary).toHaveAttribute("aria-disabled", "true")
+    for (const b of [primary, absent]) expect(b).toBeEnabled()
+    // The row keeps what it showed when tapped, and the pressed button keeps the focus.
+    expect(absent).toHaveFocus()
+    fireEvent.click(primary)
+    fireEvent.click(absent)
+    expect(fetchMock).toHaveBeenCalledTimes(1)
+    await act(async () => { answer(jsonOk({ done: 1, changedIds: ["r1"], skipped: 0, results: [{ id: "r1", changed: true, state: "absent", checkedInAt: null }] })) })
+    await waitFor(() => expect(screen.getByRole("button", { name: "Annuler l'absence, Zoé Müller" })).not.toHaveAttribute("aria-disabled"))
+  })
+
+  it("a failed « Marquer absent » names the absence in the row's alert and leaves the person expected", async () => {
+    fetchMock.mockResolvedValue({ ok: false, status: 500, json: async () => ({ error: "Boom" }) })
+    renderBoard()
+    fireEvent.click(screen.getByRole("button", { name: "Marquer absent, Zoé Müller" }))
+    expect(await screen.findByRole("alert")).toHaveTextContent(/^Absence de Zoé Müller : erreur du serveur/)
+    expect(screen.getByRole("button", { name: "Marquer présent, Zoé Müller" })).toBeInTheDocument()
+    expect(screen.getByRole("button", { name: "Marquer absent, Zoé Müller" })).toBeInTheDocument()
+  })
+
+  it("conflict: an absence recorded on another device first. The row takes it, nothing is retried, it is said once and shown in the row", async () => {
+    fetchMock.mockImplementation(async (url: string) => url.endsWith("/bulk")
+      ? jsonOk({ done: 0, changedIds: [], skipped: 1, results: [{ id: "r1", changed: false, state: "absent", checkedInAt: null }] })
+      : jsonOk({ board: zoeAbsent, today: "2026-07-04", refreshedAt: "14h06" }))
+    renderBoard()
+    const primary = screen.getByRole("button", { name: "Marquer présent, Zoé Müller" })
+    primary.focus()
+    fireEvent.click(primary)
+
+    const sentence = "Une absence est déjà enregistrée pour Zoé Müller, depuis un autre appareil. Bar, Soir : 1 présent sur 2 attendus, 1 absent."
+    await waitFor(() => expect(status()).toHaveTextContent(sentence))
+    // The row shows the server's state: the same button now undoes the absence, and keeps the focus.
+    const undo = screen.getByRole("button", { name: "Annuler l'absence, Zoé Müller" })
+    expect(undo).toBe(primary)
+    expect(undo).toHaveFocus()
+    expect(screen.queryByRole("button", { name: "Marquer absent, Zoé Müller" })).toBeNull()
+    // The same sentence in the row, for who does not hear the live region: plain text, no live role.
+    const row = undo.closest("li")!
+    const shown = within(row).getByText(sentence)
+    expect(shown).not.toHaveAttribute("role")
+    expect(shown).not.toHaveAttribute("aria-live")
+    expect(screen.queryByRole("alert")).toBeNull()
+    // The silent read after the action, and nothing else: the check-in is not sent again.
+    await waitFor(() => expect(fetchMock).toHaveBeenCalledWith("/api/admin/events/evt-1/day-of", expect.anything()))
+    await new Promise((r) => setTimeout(r, 50))
+    expect(fetchMock.mock.calls.filter(([u]) => String(u).endsWith("/bulk"))).toHaveLength(1)
+    expect(status()).toHaveTextContent(sentence)
+    expect(status()).not.toHaveTextContent("Liste mise à jour")
+    expect(barCard()).toHaveTextContent("1 présent sur 2 attendus, 1 absent.")
+  })
+
+  it("conflict on « Marquer absent »: a presence recorded elsewhere first. The pressed button goes, the focus moves to the first one", async () => {
+    const zoePresent = withZoe({ checkedInAt: "2026-07-04T12:03:00.000Z" })
+    fetchMock.mockImplementation(async (url: string) => url.endsWith("/bulk")
+      ? jsonOk({ done: 0, changedIds: [], skipped: 1, results: [{ id: "r1", changed: false, state: "present", checkedInAt: "2026-07-04T12:03:00.000Z" }] })
+      : jsonOk({ board: zoePresent, today: "2026-07-04", refreshedAt: "14h06" }))
+    renderBoard()
+    const primary = screen.getByRole("button", { name: "Marquer présent, Zoé Müller" })
+    const absent = screen.getByRole("button", { name: "Marquer absent, Zoé Müller" })
+    absent.focus()
+    fireEvent.click(absent)
+    await waitFor(() => expect(status()).toHaveTextContent("Une présence est déjà enregistrée pour Zoé Müller, depuis un autre appareil. Bar, Soir : 2 présents sur 2 attendus."))
+    const undo = screen.getByRole("button", { name: "Annuler la présence, Zoé Müller" })
+    expect(undo).toBe(primary)
+    expect(screen.queryByRole("button", { name: "Marquer absent, Zoé Müller" })).toBeNull()
+    await waitFor(() => expect(undo).toHaveFocus())
+    await new Promise((r) => setTimeout(r, 50))
+    expect(status()).not.toHaveTextContent("Liste mise à jour")
+  })
+
+  it("the sentence shown in the row goes with the next action", async () => {
+    fetchMock.mockImplementation(async (url: string, init?: { body?: string }) => {
+      if (!url.endsWith("/bulk")) return jsonOk({ board: zoeAbsent, today: "2026-07-04", refreshedAt: "14h06" })
+      return JSON.parse(init?.body ?? "{}").action === "check_in"
+        ? jsonOk({ done: 0, changedIds: [], skipped: 1, results: [{ id: "r1", changed: false, state: "absent", checkedInAt: null }] })
+        : jsonOk({ done: 1, changedIds: ["r1"], skipped: 0, results: [{ id: "r1", changed: true, state: "expected", checkedInAt: null }] })
+    })
+    renderBoard()
+    fireEvent.click(screen.getByRole("button", { name: "Marquer présent, Zoé Müller" }))
+    const undo = await screen.findByRole("button", { name: "Annuler l'absence, Zoé Müller" })
+    expect(within(undo.closest("li")!).getByText(/^Une absence est déjà enregistrée/)).toBeInTheDocument()
+    await waitFor(() => expect(fetchMock).toHaveBeenCalledWith("/api/admin/events/evt-1/day-of", expect.anything()))
+    await new Promise((r) => setTimeout(r, 20))
+    fireEvent.click(undo)
+    await screen.findByRole("button", { name: "Marquer présent, Zoé Müller" })
+    expect(within(undo.closest("li")!).queryByText(/^Une absence est déjà enregistrée/)).toBeNull()
+  })
+
+  it("an absence recorded elsewhere arrives with « Actualiser » and is said as such, never as a presence undone", async () => {
+    fetchMock.mockResolvedValue(jsonOk({ board: zoeAbsent, today: "2026-07-04", refreshedAt: "14h06" }))
+    renderBoard()
+    fireEvent.click(screen.getByRole("button", { name: "Actualiser" }))
+    await waitFor(() => expect(status()).toHaveTextContent("Liste mise à jour à 14h06 : 1 personne marquée absente."))
+    expect(screen.getByRole("button", { name: "Annuler l'absence, Zoé Müller" })).toBeInTheDocument()
+  })
+
+  // Fix round: focus is only moved when it was dropped, never taken from where the person is.
+  it("an answer arriving while the focus is in the search field leaves it there", async () => {
+    let answer: (v: unknown) => void = () => {}
+    fetchMock.mockImplementation((url: string) => url.endsWith("/bulk") ? new Promise((resolve) => { answer = resolve }) : Promise.resolve(jsonOk({ board, today: "2026-07-04", refreshedAt: "14h06" })))
+    renderBoard()
+    const search = screen.getByLabelText("Rechercher un bénévole ou un poste")
+    fireEvent.click(screen.getByRole("button", { name: "Marquer absent, Zoé Müller" }))
+    await waitFor(() => expect(fetchMock).toHaveBeenCalled())
+    // The person goes on to the search while the request is in flight.
+    search.focus()
+    await act(async () => { answer(jsonOk({ done: 1, changedIds: ["r1"], skipped: 0, results: [{ id: "r1", changed: true, state: "absent", checkedInAt: null }] })) })
+    await screen.findByRole("button", { name: "Annuler l'absence, Zoé Müller" })
+    await waitFor(() => expect(status()).toHaveTextContent("Absence enregistrée pour Zoé Müller."))
+    expect(search).toHaveFocus()
+  })
+
+  it("an answer arriving while the focus is on another row's button leaves it there, conflict included", async () => {
+    let answer: (v: unknown) => void = () => {}
+    fetchMock.mockImplementation((url: string) => url.endsWith("/bulk") ? new Promise((resolve) => { answer = resolve }) : Promise.resolve(jsonOk({ board: zoeAbsent, today: "2026-07-04", refreshedAt: "14h06" })))
+    renderBoard()
+    const other = screen.getByRole("button", { name: "Annuler la présence, Léon Favre" })
+    fireEvent.click(screen.getByRole("button", { name: "Marquer présent, Zoé Müller" }))
+    await waitFor(() => expect(fetchMock).toHaveBeenCalled())
+    other.focus()
+    await act(async () => { answer(jsonOk({ done: 0, changedIds: [], skipped: 1, results: [{ id: "r1", changed: false, state: "absent", checkedInAt: null }] })) })
+    await waitFor(() => expect(status()).toHaveTextContent(/^Une absence est déjà enregistrée pour Zoé Müller/))
+    await waitFor(() => expect(fetchMock).toHaveBeenCalledWith("/api/admin/events/evt-1/day-of", expect.anything()))
+    await new Promise((r) => setTimeout(r, 30))
+    expect(other).toHaveFocus()
+  })
+
+  it("the press says which shift the row was shown on", async () => {
+    fetchMock.mockResolvedValue(jsonOk({ done: 1, changedIds: ["r3"], skipped: 0, results: [{ id: "r3", changed: true, state: "absent", checkedInAt: null }] }))
+    renderBoard()
+    fireEvent.click(screen.getByRole("button", { name: "Marquer absent, Anne Roy" }))
+    await waitFor(() => expect(fetchMock).toHaveBeenCalled())
+    expect(JSON.parse(fetchMock.mock.calls[0][1].body)).toEqual({ action: "mark_absent", registrationIds: ["r3"], observedShifts: { r3: "s2" } })
+  })
+
+  it("conflict where the server says « attendu »: the plain sentence is said and also shown in the row, with no live role", async () => {
+    // « Annuler la présence » on Léon, already undone on another device.
+    const leonExpected: Board = { ...board, inProgress: [{ ...board.inProgress[0], shifts: [{ ...bar, people: [bar.people[0], { ...bar.people[1], checkedInAt: null }] }] }] }
+    fetchMock.mockImplementation(async (url: string) => url.endsWith("/bulk")
+      ? jsonOk({ done: 0, changedIds: [], skipped: 1, results: [{ id: "r2", changed: false, state: "expected", checkedInAt: null }] })
+      : jsonOk({ board: leonExpected, today: "2026-07-04", refreshedAt: "14h06" }))
+    renderBoard()
+    const primary = screen.getByRole("button", { name: "Annuler la présence, Léon Favre" })
+    primary.focus()
+    fireEvent.click(primary)
+    const sentence = "Rien n'a changé pour Léon Favre : la liste est mise à jour."
+    await waitFor(() => expect(status()).toHaveTextContent(sentence))
+    // The row takes the server's state.
+    const mark = screen.getByRole("button", { name: "Marquer présent, Léon Favre" })
+    expect(mark).toBe(primary)
+    expect(mark).toHaveFocus()
+    const shown = within(mark.closest("li")!).getByText(sentence)
+    expect(shown).not.toHaveAttribute("role")
+    expect(shown).not.toHaveAttribute("aria-live")
+    await waitFor(() => expect(fetchMock).toHaveBeenCalledWith("/api/admin/events/evt-1/day-of", expect.anything()))
+    await new Promise((r) => setTimeout(r, 50))
+    // Still there after the silent read: the row shows the same state as before it.
+    expect(within(mark.closest("li")!).getByText(sentence)).toBeInTheDocument()
+    expect(status()).not.toHaveTextContent("Liste mise à jour")
+  })
+
+  for (const [what, answer] of [
+    ["moved to another shift", { id: "r1", changed: false, state: "expected", checkedInAt: null, moved: true }],
+    ["no longer there", { id: "r1", changed: false, state: null, checkedInAt: null, gone: true }],
+  ] as const) {
+    it(`the person is ${what}: nothing is marked, the « left the board » sentence is said and shown in the row, and the list is read again silently`, async () => {
+      const without: Board = { ...board, inProgress: [{ ...board.inProgress[0], shifts: [{ ...bar, people: bar.people.slice(1) }] }] }
+      let release: () => void = () => {}
+      const held = new Promise<void>((resolve) => { release = resolve })
+      fetchMock.mockImplementation(async (url: string) => {
+        if (url.endsWith("/bulk")) return jsonOk({ done: 0, changedIds: [], skipped: 1, results: [answer] })
+        await held
+        return jsonOk({ board: without, today: "2026-07-04", refreshedAt: "14h06" })
+      })
+      renderBoard()
+      const primary = screen.getByRole("button", { name: "Marquer présent, Zoé Müller" })
+      primary.focus()
+      fireEvent.click(primary)
+      const sentence = "Zoé Müller ne figure plus parmi les personnes attendues, Bar, Soir."
+      await waitFor(() => expect(status()).toHaveTextContent(sentence))
+      // Until the read lands, the row is as it was (no state invented) and explains itself.
+      expect(screen.getByRole("button", { name: "Marquer présent, Zoé Müller" })).toBe(primary)
+      const shown = within(primary.closest("li")!).getByText(sentence)
+      expect(shown).not.toHaveAttribute("role")
+      expect(barCard()).toHaveTextContent("1 présent sur 2 attendus.")
+      expect(fetchMock.mock.calls.filter(([u]) => String(u).endsWith("/bulk"))).toHaveLength(1)
+      // The silent read removes the row; the focus goes to its shift, and nothing more is said.
+      await act(async () => { release() })
+      await waitFor(() => expect(screen.queryByRole("button", { name: /Zoé Müller/ })).toBeNull())
+      await waitFor(() => expect(screen.getByRole("heading", { level: 4, name: "Bar, Soir" })).toHaveFocus())
+      await new Promise((r) => setTimeout(r, 50))
+      expect(screen.queryByText(sentence, { selector: "li p" })).toBeNull()
+      expect(status()).toHaveTextContent(sentence)
+      expect(status()).not.toHaveTextContent("Liste mise à jour")
+    })
+  }
+
+  it("the sentence shown in a row goes when a later read changes that person's state", async () => {
+    let dayOf: Board = zoeAbsent
+    fetchMock.mockImplementation(async (url: string) => url.endsWith("/bulk")
+      ? jsonOk({ done: 0, changedIds: [], skipped: 1, results: [{ id: "r1", changed: false, state: "absent", checkedInAt: null }] })
+      : jsonOk({ board: dayOf, today: "2026-07-04", refreshedAt: "14h06" }))
+    renderBoard()
+    fireEvent.click(screen.getByRole("button", { name: "Marquer présent, Zoé Müller" }))
+    const undo = await screen.findByRole("button", { name: "Annuler l'absence, Zoé Müller" })
+    const row = undo.closest("li")!
+    await waitFor(() => expect(within(row).getByText(/^Une absence est déjà enregistrée/)).toBeInTheDocument())
+    await waitFor(() => expect(fetchMock).toHaveBeenCalledWith("/api/admin/events/evt-1/day-of", expect.anything()))
+    await new Promise((r) => setTimeout(r, 30))
+    // The silent read after the action brought the same state: the sentence still explains the row.
+    expect(within(row).getByText(/^Une absence est déjà enregistrée/)).toBeInTheDocument()
+    // Someone undoes the absence elsewhere; « Actualiser » brings it.
+    dayOf = board
+    fireEvent.click(screen.getByRole("button", { name: "Actualiser" }))
+    await screen.findByRole("button", { name: "Marquer présent, Zoé Müller" })
+    expect(within(row).queryByText(/^Une absence est déjà enregistrée/)).toBeNull()
   })
 })
