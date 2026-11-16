@@ -133,7 +133,9 @@ const colette = { user: { id: "adm-colette", name: "Colette Favre", email: "cole
 // Sami Haddad: organiser of the same organisation.
 const sami = { user: { id: "adm-sami", name: "Sami Haddad", email: "sami.haddad@example.org", role: "organizer", organizationId: ORG } }
 
-const today = new Date().toISOString().slice(0, 10)
+// The day-of board reads the organisation's calendar day (Europe/Zurich), not the UTC one:
+// between midnight and 1 am (2 am in summer) in Zurich the two differ.
+const today = new Intl.DateTimeFormat("en-CA", { timeZone: "Europe/Zurich" }).format(new Date())
 
 function seed() {
   const s = fake.store
