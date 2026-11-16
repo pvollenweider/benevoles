@@ -33,8 +33,8 @@ export const isOwnerRole = (role: string | null | undefined) => role === OWNER_R
  * Front-desk access limited to one event (#1142): a third stored role that is NOT an admin level.
  * It reaches no level (`hasLevel` above answers false for it, like for any unknown role), it is
  * not in ORG_ROLES, so no invitation, team route or role picker can choose or assign it, and it
- * has no label there. Not assignable from the product yet: the groundwork only. What it may do is
- * decided per event by a grant (AdminEventAccess, src/lib/front-desk-access.ts) and by the one
+ * has no label there. What it may do is decided per event by a grant (AdminEventAccess,
+ * src/lib/front-desk-access.ts), created by an owner on the event's day-of page, and by the one
  * guard that accepts it (requireFrontDeskOrOrganizer, src/lib/auth-guard.ts).
  */
 export const FRONT_DESK_ROLE = "front_desk"
@@ -82,6 +82,11 @@ export const PERMISSIONS: Record<string, Partial<Record<Method, Level>>> = {
   "events/[id]/export/badges": { GET: "organizer" },
   "events/[id]/export/pdf": { GET: "organizer" },
   "events/[id]/export/sheets/[view]": { GET: "organizer" },
+  // Front-desk access of one event (#1142): created, listed, resent and revoked by an owner only,
+  // from the event's day-of page. The role itself is never an admin level.
+  "events/[id]/front-desk-access": { GET: "owner", POST: "owner" },
+  "events/[id]/front-desk-access/[accessId]": { DELETE: "owner" },
+  "events/[id]/front-desk-access/[accessId]/resend": { POST: "owner" },
   // Share links per group (#947), like the event's pages: organiser level.
   "events/[id]/group-links": { GET: "organizer", POST: "organizer" },
   "events/[id]/group-links/[linkId]": { PATCH: "organizer", DELETE: "organizer" },

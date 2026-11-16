@@ -86,15 +86,16 @@ export async function POST(req: Request) {
   // Activation and welcome email commit together (#352). The transactional part lives in
   // src/lib/account-activation-server.ts, also called by the concurrency integration test; its
   // lock order (the account's AdminUser row first, then the Organisation row) is documented there.
+  const organization = admin.organization
   const outboxIds = await prisma.$transaction((tx) => activateAccount(tx, {
-    account: {
+    admin: {
       id: admin.id,
       name: admin.name,
       email: admin.email,
       role: admin.role,
       organizationId: admin.organizationId,
     },
-    organization: admin.organization,
+    organization,
     token,
     passwordHash,
   }))

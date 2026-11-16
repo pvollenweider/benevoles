@@ -104,6 +104,16 @@ describe("DayOfBoard", () => {
     expect(screen.getByRole("button", { name: "Marquer présent, Zoé Müller" })).toBeInTheDocument()
   })
 
+  it("an unexpected 4xx says the server's refusal, never « erreur du serveur »", async () => {
+    fetchMock.mockResolvedValue({ ok: false, status: 422, json: async () => ({ error: "Inscription déjà traitée." }) })
+    renderBoard()
+    fireEvent.click(screen.getByRole("button", { name: "Marquer présent, Zoé Müller" }))
+    const alert = await screen.findByRole("alert")
+    expect(alert).toHaveTextContent("Présence de Zoé Müller : refusé. Inscription déjà traitée.")
+    expect(alert).not.toHaveTextContent("erreur du serveur")
+    expect(screen.getByRole("button", { name: "Marquer présent, Zoé Müller" })).toBeInTheDocument()
+  })
+
   it("nothing changed on the server (marked from another phone): the list is refreshed", async () => {
     fetchMock.mockImplementation(async (url: string) => url.endsWith("/bulk")
       ? jsonOk({ done: 0, changedIds: [], skipped: 1 })

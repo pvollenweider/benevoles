@@ -18,6 +18,7 @@
 export type AdminEmailHolder = {
   organizationId: string | null
   isActive: boolean
+  role: string
   setupTokenHash: string | null
   setupTokenExpiresAt: Date | null
   /** Whether the row's organisation has at least one active administrator. */
@@ -25,11 +26,32 @@ export type AdminEmailHolder = {
 }
 
 /**
+ * Whether the account is still the invitation it was created as: never activated, and therefore
+ * still carrying its setup link. accept-invite clears both token fields and sets `isActive` in one
+ * statement, so an inactive account with no setup token is one that was activated and later
+ * deactivated, not a pending invitation (#1142).
+ */
+export function isNeverActivated(row: Pick<AdminEmailHolder, "isActive" | "setupTokenHash" | "setupTokenExpiresAt">): boolean {
+  return !row.isActive && row.setupTokenHash != null && row.setupTokenExpiresAt != null
+}
+
+/**
+ * The same "never activated" state as a Prisma `where` fragment, for a conditional write that must
+ * not install a setup token on an account activated meanwhile (#1142). Kept next to the predicate
+ * it mirrors, and next to the super-admin resend's own fragment.
+ */
+export const NEVER_ACTIVATED_WHERE: { isActive: false; setupTokenHash: { not: null }; setupTokenExpiresAt: { not: null } } = {
+  isActive: false,
+  setupTokenHash: { not: null },
+  setupTokenExpiresAt: { not: null },
+}
+
+/**
  * Never activated and its setup link expired. An activated account has no setup token (cleared
  * by accept-invite) and is never made inactive again (admins are removed, not deactivated).
  */
 export function isExpiredInvitation(row: AdminEmailHolder, now: Date): boolean {
-  return !row.isActive && row.setupTokenHash != null && row.setupTokenExpiresAt != null && row.setupTokenExpiresAt.getTime() < now.getTime()
+  return isNeverActivated(row) && row.setupTokenExpiresAt!.getTime() < now.getTime()
 }
 
 /**

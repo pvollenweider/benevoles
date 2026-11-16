@@ -51,10 +51,11 @@ describe("nextPollDelay", () => {
   it("polls every 25 s while visible and online", () => {
     expect(nextPollDelay(base)).toBe(DAY_OF_POLL_MS)
   })
-  it("pauses while hidden, offline or signed out", () => {
+  it("pauses while hidden, offline or signed out, and once the access has ended", () => {
     expect(nextPollDelay({ ...base, visible: false })).toBeNull()
     expect(nextPollDelay({ ...base, online: false })).toBeNull()
     expect(nextPollDelay({ ...base, status: "expired" })).toBeNull()
+    expect(nextPollDelay({ ...base, status: "access_ended" })).toBeNull()
   })
   it("backs off after failures, capped", () => {
     expect(nextPollDelay({ ...base, status: "error", failures: 1 })).toBe(2 * DAY_OF_POLL_MS)
@@ -74,6 +75,7 @@ describe("shouldSyncOnResume", () => {
     expect(shouldSyncOnResume(9_999, 10_000, "offline")).toBe(true)
     expect(shouldSyncOnResume(9_999, 10_000, "error")).toBe(true)
     expect(shouldSyncOnResume(null, 10_000, "expired")).toBe(false)
+    expect(shouldSyncOnResume(null, 10_000, "access_ended")).toBe(false)
   })
 })
 
@@ -88,6 +90,20 @@ describe("syncStatusOf", () => {
     expect(syncStatusOf({ status: 403 })).toBe("expired")
     expect(syncStatusOf({ status: 404 })).toBe("error")
     expect(syncStatusOf({ status: 503 })).toBe("error")
+  })
+
+  it("distinguishes the end of a front-desk access (403) from an expired session (401), never for an organiser", () => {
+    expect(syncStatusOf({ status: 401 }, { forbiddenIsAccessEnded: true })).toBe("expired")
+    expect(syncStatusOf({ status: 403 }, { forbiddenIsAccessEnded: true })).toBe("access_ended")
+    expect(syncStatusOf({ status: 403 })).toBe("expired")
+  })
+})
+
+describe("end of a front-desk access (#1142)", () => {
+  it("has its own sentence, distinct from the expired session", () => {
+    expect(syncStatusText("access_ended", "14h05")).toBe("Votre accès à cet événement a pris fin. Adressez-vous à la personne qui vous a invité.")
+    expect(statusAnnouncement("ok", "access_ended", "14h05")).toBe("Votre accès à cet événement a pris fin. Adressez-vous à la personne qui vous a invité.")
+    expect(syncStatusText("expired", "14h05")).toBe("Votre session a expiré : rechargez la page pour vous reconnecter.")
   })
 })
 

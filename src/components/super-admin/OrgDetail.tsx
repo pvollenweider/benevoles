@@ -54,7 +54,7 @@ type Org = {
   admins: Admin[]
 }
 
-export default function OrgDetail({ org, cumulative, inactivity, limitHits, recentBatches = [], zone = "" }: { org: Org; cumulative: UsageRow[]; inactivity?: ComponentProps<typeof InactivityPanel>; limitHits?: { group: OrgLimitHits; zone: string; truncated: boolean }; recentBatches?: { id: string; line: string; createdAt: string; heldSentence: string | null; failed: boolean }[]; zone?: string }) {
+export default function OrgDetail({ org, cumulative, inactivity, limitHits, recentBatches = [], frontDeskCount = 0, zone = "" }: { org: Org; cumulative: UsageRow[]; inactivity?: ComponentProps<typeof InactivityPanel>; limitHits?: { group: OrgLimitHits; zone: string; truncated: boolean }; recentBatches?: { id: string; line: string; createdAt: string; heldSentence: string | null; failed: boolean }[]; frontDeskCount?: number; zone?: string }) {
   const router = useRouter()
   const sourceLabel = signupSourceLabel(org.signupSource, org.signupSourceDetail)
   const [, startTransition] = useTransition()
@@ -571,6 +571,8 @@ export default function OrgDetail({ org, cumulative, inactivity, limitHits, rece
             )}
           </div>
         )}
+        {/* Front-desk accounts (#1142) are not administrators: one count, no list. */}
+        <p className="text-sm text-gray-600 mt-2">Comptes accueil : {frontDeskCount}</p>
       </div>
     </div>
   )

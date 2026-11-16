@@ -23,7 +23,7 @@ export type AdminEmailHolderRow = AdminEmailHolder & { id: string }
 export async function findAdminEmailHolder(db: AdminUserDb, email: string, now: Date = new Date()): Promise<AdminEmailHolderRow | null> {
   const row = await db.adminUser.findFirst({
     where: { email: { equals: email.trim(), mode: "insensitive" } },
-    select: { id: true, organizationId: true, isActive: true, setupTokenHash: true, setupTokenExpiresAt: true },
+    select: { id: true, organizationId: true, isActive: true, role: true, setupTokenHash: true, setupTokenExpiresAt: true },
   })
   if (!row) return null
   const expired = isExpiredInvitation({ ...row, organizationHasActiveAdmin: false }, now)

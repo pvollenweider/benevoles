@@ -192,7 +192,11 @@ describe("admin API as a front-desk account (#1142)", () => {
         return {
           id: "grant-1", adminUserId: "adm-accueil", eventId: "evt-1", organizationId: "org-a", expiresAt: null, revokedAt: null,
           adminUser: { organizationId: "org-a", isActive: true, role: "front_desk" },
-          event: { id: "evt-1", organizationId: "org-a", publicStatus: "published" },
+          event: {
+            id: "evt-1", organizationId: "org-a", publicStatus: "published", title: "Fête du village",
+            startDate: new Date("2027-06-12T00:00:00Z"), endDate: new Date("2027-06-14T00:00:00Z"),
+            organization: { name: "Fête du village", timeZone: "Europe/Zurich" },
+          },
         }
       }
       return null

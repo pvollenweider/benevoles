@@ -208,6 +208,12 @@ export const ACTION_VERB: Record<string, (actor: string) => string> = {
   "registration.absence_undone": (a) => `${a} a annulé l'absence`,
   "registration.marked_left_early": (a) => `${a} a marqué la personne partie avant la fin`,
   "registration.departure_undone": (a) => `${a} a annulé le départ`,
+  // Front-desk access limited to one event (#1142): no name or email in the entry, the account and
+  // its grant are named by their ids like every other event-log target.
+  "frontdesk.access_granted": (a) => `${a} a donné un accès accueil`,
+  "frontdesk.access_reopened": (a) => `${a} a rouvert un accès accueil`,
+  "frontdesk.invitation_resent": (a) => `${a} a renvoyé l'invitation à un accès accueil`,
+  "frontdesk.access_revoked": (a) => `${a} a révoqué un accès accueil`,
   "registration.requested": (a) => `${a} a demandé une inscription`,
   "registration.confirmation_requested": (a) => `${a} a demandé une inscription à confirmer par email`,
   "registration.confirmed_by_email": (a) => `${a} a confirmé son inscription par email`,

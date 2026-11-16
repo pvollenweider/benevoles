@@ -112,13 +112,7 @@ describe.skipIf(!url)("approval, refusal, suspension and activation on Postgres 
 
   const activate = (org: { name: string; slug: string }, account: { id: string; name: string; email: string; role: string; organizationId: string | null }, token: string) =>
     prisma.$transaction((tx) => activateAccount(tx, {
-      account: {
-        id: account.id,
-        name: account.name,
-        email: account.email,
-        role: account.role,
-        organizationId: account.organizationId,
-      },
+      admin: account,
       organization: { name: org.name, slug: org.slug },
       token,
       passwordHash: "y",

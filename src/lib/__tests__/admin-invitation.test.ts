@@ -8,6 +8,7 @@ const future = new Date("2026-10-20T12:00:00Z")
 const row = (over: Partial<AdminEmailHolder> = {}): AdminEmailHolder => ({
   organizationId: "org-b",
   isActive: false,
+  role: "organizer",
   setupTokenHash: "hash",
   setupTokenExpiresAt: past,
   organizationHasActiveAdmin: true,

@@ -75,7 +75,7 @@ describe("every query that selects admin accounts is classified (#1142)", () => 
   /** A read of several admin accounts, or of an organisation's `admins` relation. */
   const SELECTION = /adminUser\.(?:findMany|count|groupBy)\(|\badmins: (?:true\b|\{\s*(?:where|select|none|some|every)\b)/g
   /** What makes such a read leave the front-desk role out (or name one precise role). */
-  const FILTERED = /ORG_ACCOUNT_ROLE_WHERE|PRODUCT_UPDATE_RECIPIENT_WHERE|eligibleOwnerWhere\(|role: OWNER_ROLE|role: "super_admin"|role: \{ in: string\[\] \}|role: \{ in: \["admin", "organizer"\] \}/
+  const FILTERED = /ORG_ACCOUNT_ROLE_WHERE|PRODUCT_UPDATE_RECIPIENT_WHERE|eligibleOwnerWhere\(|role: OWNER_ROLE|role: FRONT_DESK_ROLE|role: "super_admin"|role: \{ in: string\[\] \}|role: \{ in: \["admin", "organizer"\] \}/
 
   /**
    * Reads of every account, whatever its role, with the reason. The number is how many such
@@ -83,9 +83,7 @@ describe("every query that selects admin accounts is classified (#1142)", () => 
    */
   const EVERY_ACCOUNT: Record<string, { count: number; reason: string }> = {
     "app/api/super-admin/organizations/[id]/route.ts": { count: 3, reason: "The operator's view of one organisation (every account, with its role, and their number) and its deletion, which removes every account." },
-    "app/super-admin/organizations/[slug]/page.tsx": { count: 2, reason: "The operator's page of one organisation: every account with its role, and their number." },
     "app/api/super-admin/organizations/route.ts": { count: 1, reason: "The operator's list of organisations: the number of accounts of each, whatever their role." },
-    "app/super-admin/organizations/page.tsx": { count: 1, reason: "The operator's list of organisations: the number of accounts of each, whatever their role." },
     "lib/prisma-org.ts": { count: 1, reason: "Checks that the account a front-desk grant is created for belongs to the organisation: an account of any role, the front-desk one first." },
     "app/api/cron/cleanup/route.ts": { count: 1, reason: "Deletes the accounts of an organisation being erased: every account." },
     "lib/org-log-read.ts": { count: 1, reason: "Names of the authors of log entries, by id: a front-desk account's check-ins must be attributed." },
@@ -138,6 +136,8 @@ describe("every query that selects admin accounts is classified (#1142)", () => 
     "app/api/admin/settings/admins/route.ts",
     "app/api/super-admin/organizations/[id]/send-invite/route.ts",
     "lib/org-approval-server.ts",
+    "app/super-admin/organizations/page.tsx",
+    "app/super-admin/organizations/[slug]/page.tsx",
   ])("%s uses the shared role filter", (file) => {
     expect(fs.readFileSync(path.join(src, file), "utf-8")).toContain("ORG_ACCOUNT_ROLE_WHERE")
     expect(unfiltered.has(file)).toBe(false)

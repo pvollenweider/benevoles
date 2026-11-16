@@ -25,7 +25,13 @@ export const DAY_OF_RESUME_MIN_MS = 5_000
 /** A row whose shown state just changed keeps its buttons inert this long (#1141). */
 export const SETTLE_MS = 600
 
-export type SyncStatus = "ok" | "offline" | "error" | "expired"
+/**
+ * `expired`: the session itself is over (401), the same for every role. `access_ended`: a
+ * front-desk account's grant is no longer live (403): its board has nothing left to show, so the
+ * caller unmounts it instead of keeping a stale list. Organisers keep the old meaning of 403
+ * (see syncStatusOf).
+ */
+export type SyncStatus = "ok" | "offline" | "error" | "expired" | "access_ended"
 
 /**
  * Milliseconds until the next poll, or null for none: hidden page or no network (the return to
@@ -33,14 +39,14 @@ export type SyncStatus = "ok" | "offline" | "error" | "expired"
  * each failure in a row, up to DAY_OF_POLL_MAX_MS.
  */
 export function nextPollDelay(s: { visible: boolean; online: boolean; status: SyncStatus; failures: number }): number | null {
-  if (!s.visible || !s.online || s.status === "expired") return null
+  if (!s.visible || !s.online || s.status === "expired" || s.status === "access_ended") return null
   const factor = 2 ** Math.min(Math.max(0, s.failures), 10)
   return Math.min(DAY_OF_POLL_MS * factor, DAY_OF_POLL_MAX_MS)
 }
 
 /** Whether coming back to the page (or the network coming back) calls for a poll right now. */
 export function shouldSyncOnResume(lastAttemptAt: number | null, now: number, status: SyncStatus): boolean {
-  if (status === "expired") return false
+  if (status === "expired" || status === "access_ended") return false
   if (status !== "ok") return true
   return lastAttemptAt === null || now - lastAttemptAt >= DAY_OF_RESUME_MIN_MS
 }
@@ -49,11 +55,16 @@ export function shouldSyncOnResume(lastAttemptAt: number | null, now: number, st
  * What a poll answer means for the page. A request that never got an answer is « offline » only
  * when the browser says it has no network; otherwise (server unreachable, timeout) a plain failure.
  * Failures and 5xx are retried; 401/403 are not.
+ *
+ * 401 always means the session is over. 403 means the access to this event is over for a
+ * front-desk board (`forbiddenIsAccessEnded`, #1142) and the page unmounts; for an organiser it
+ * keeps its previous meaning, the same message as an expired session.
  */
-export function syncStatusOf(r: { network: true; online: boolean } | { status: number }): SyncStatus {
+export function syncStatusOf(r: { network: true; online: boolean } | { status: number }, opts: { forbiddenIsAccessEnded?: boolean } = {}): SyncStatus {
   if ("network" in r) return r.online ? "error" : "offline"
   if (r.status >= 200 && r.status < 300) return "ok"
-  if (r.status === 401 || r.status === 403) return "expired"
+  if (r.status === 401) return "expired"
+  if (r.status === 403) return opts.forbiddenIsAccessEnded ? "access_ended" : "expired"
   return "error"
 }
 
@@ -232,6 +243,9 @@ export function changesAnnouncement(c: BoardChanges): string | null {
   return parts.length ? `Liste mise à jour : ${parts.join(", ")}.` : null
 }
 
+/** The end-of-access sentence of a front-desk board (#1142), focused once the board is unmounted. */
+export const ACCESS_ENDED_TEXT = "Votre accès à cet événement a pris fin. Adressez-vous à la personne qui vous a invité."
+
 /** The visible line about freshness. `syncedAt` « 14h05 », the last successful read. */
 export function syncStatusText(status: SyncStatus, syncedAt: string): string {
   switch (status) {
@@ -239,6 +253,7 @@ export function syncStatusText(status: SyncStatus, syncedAt: string): string {
     case "offline": return `Pas de connexion : liste de ${syncedAt}. Elle se mettra à jour au retour du réseau.`
     case "error": return `La mise à jour n'a pas abouti : liste de ${syncedAt}. Nouvel essai automatique.`
     case "expired": return "Votre session a expiré : rechargez la page pour vous reconnecter."
+    case "access_ended": return ACCESS_ENDED_TEXT
   }
 }
 
@@ -250,6 +265,7 @@ export function statusAnnouncement(before: SyncStatus, after: SyncStatus, synced
     case "offline": return `Connexion perdue. La liste affichée date de ${syncedAt}.`
     case "error": return `La liste n'a pas pu être mise à jour. Elle date de ${syncedAt}.`
     case "expired": return syncStatusText("expired", syncedAt)
+    case "access_ended": return syncStatusText("access_ended", syncedAt)
   }
 }
 
