@@ -37,6 +37,8 @@ export default async function OrgDetailPage({ params }: { params: Promise<{ slug
       signupSourceDetail: true,
       publicationApprovedAt: true,
       outboundEmailApprovedAt: true,
+      autoApprovedAt: true,
+      autoApprovalReviewedAt: true,
       createdAt: true,
       updatedAt: true,
       _count: {
@@ -83,6 +85,8 @@ export default async function OrgDetailPage({ params }: { params: Promise<{ slug
         suspendedAt: org.suspendedAt?.toISOString() ?? null,
         publicationApprovedAt: org.publicationApprovedAt?.toISOString() ?? null,
         outboundEmailApprovedAt: org.outboundEmailApprovedAt?.toISOString() ?? null,
+        autoApprovedAt: org.autoApprovedAt?.toISOString() ?? null,
+        autoApprovalReviewedAt: org.autoApprovalReviewedAt?.toISOString() ?? null,
         updatedAt: org.updatedAt.toISOString(),
         admins: org.admins.map((a) => ({ ...a, createdAt: a.createdAt.toISOString() })),
       }}

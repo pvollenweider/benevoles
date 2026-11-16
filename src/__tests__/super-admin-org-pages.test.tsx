@@ -66,6 +66,12 @@ beforeEach(() => {
 afterEach(cleanup)
 
 describe("the super-admin organisation list counts administrators only", () => {
+  it("filters the list on the automatic validations not reread yet (#1371)", async () => {
+    const tree = await SuperAdminOrgsPage({ searchParams: Promise.resolve({ filtre: "auto-a-relire" }) })
+    expect(db.orgFindMany.mock.calls[0][0].where).toEqual({ autoApprovedAt: { not: null }, autoApprovalReviewedAt: null })
+    expect(find(tree, "OrgsManager")?.props.filter).toBe(true)
+  })
+
   it("filters _count.admins with ORG_ACCOUNT_ROLE_WHERE and leaves the owner relation filtered", async () => {
     const tree = await SuperAdminOrgsPage({ searchParams: Promise.resolve({}) })
     const args = db.orgFindMany.mock.calls[0][0]
@@ -92,6 +98,7 @@ describe("the super-admin organisation detail page separates front-desk accounts
     const org = {
       ...orgRow(),
       suspendedAt: null, suspensionReason: null, signupDescription: null, signupSource: null, signupSourceDetail: null,
+      autoApprovedAt: null, autoApprovalReviewedAt: null,
       createdAt: "2026-01-10T08:00:00.000Z", updatedAt: "2026-01-11T08:00:00.000Z",
       _count: { events: 2, admins: 3, volunteers: 5 },
       admins: [{ id: "adm-owner", name: "Sacha Bonvin", email: "sacha.bonvin@example.org", role: "admin", isActive: true, createdAt: "2026-01-10T08:00:00.000Z" }],

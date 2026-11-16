@@ -11,15 +11,21 @@ import { loadLimitHits } from "@/lib/limit-hits-data"
 import { zoneSentence } from "@/lib/limit-hits-view"
 import { APP_TIME_ZONE } from "@/lib/time-zone"
 import { eventActivity, eventActivityLabel, eventActivityRank, ownerActivation, ownerActivationLabel } from "@/lib/org-list-activity"
+import { AUTO_APPROVAL_REVIEW_FILTER } from "@/lib/auto-approval"
 
 export const dynamic = "force-dynamic"
 
-export default async function SuperAdminOrgsPage({ searchParams }: { searchParams: Promise<{ tri?: string | string[] }> }) {
+export default async function SuperAdminOrgsPage({ searchParams }: { searchParams: Promise<{ tri?: string | string[]; filtre?: string | string[] }> }) {
   const session = await auth()
   if (!session?.user) redirect("/admin/login")
   if (session.user.role !== "super_admin") redirect("/admin/login")
 
+  const { tri, filtre } = await searchParams
+  // The list's filter (#1371): spaces validated automatically and not reread yet. The sentence in
+  // the list says so and « Voir tous les espaces » goes back to the full list.
+  const reviewFilter = filtre === AUTO_APPROVAL_REVIEW_FILTER
   const orgs = await prisma.organization.findMany({
+    where: reviewFilter ? { autoApprovedAt: { not: null }, autoApprovalReviewedAt: null } : undefined,
     orderBy: { createdAt: "desc" },
     select: {
       id: true,
@@ -30,6 +36,8 @@ export default async function SuperAdminOrgsPage({ searchParams }: { searchParam
       suspensionReason: true,
       publicationApprovedAt: true,
       outboundEmailApprovedAt: true,
+      autoApprovedAt: true,
+      autoApprovalReviewedAt: true,
       createdAt: true,
       timeZone: true,
       // Activity at a glance (#1078): every event's days, whatever its status, and the owner
@@ -47,7 +55,6 @@ export default async function SuperAdminOrgsPage({ searchParams }: { searchParam
     },
   })
 
-  const { tri } = await searchParams
   const now = new Date()
   // Sending limits reached lately (#1100): the block above the list and each row's marker.
   const limitHits = await loadLimitHits({ now })
@@ -55,6 +62,7 @@ export default async function SuperAdminOrgsPage({ searchParams }: { searchParam
   return (
     <OrgsManager
       initialSort={parseSortParam(tri, ORG_SORT_COLS)}
+      filter={reviewFilter}
       limitHits={limitHits.groups}
       limitHitsTruncated={limitHits.truncated}
       limitHitsZone={zoneSentence(APP_TIME_ZONE)}
@@ -76,6 +84,8 @@ export default async function SuperAdminOrgsPage({ searchParams }: { searchParam
           suspendedAt: o.suspendedAt?.toISOString() ?? null,
           publicationApprovedAt: o.publicationApprovedAt?.toISOString() ?? null,
           outboundEmailApprovedAt: o.outboundEmailApprovedAt?.toISOString() ?? null,
+          autoApprovedAt: o.autoApprovedAt?.toISOString() ?? null,
+          autoApprovalReviewedAt: o.autoApprovalReviewedAt?.toISOString() ?? null,
         }
       })}
     />

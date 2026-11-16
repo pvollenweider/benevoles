@@ -30,6 +30,9 @@ type Org = {
   suspendedAt: string | null
   publicationApprovedAt?: string | null
   outboundEmailApprovedAt?: string | null
+  /** Set by the automatic validation (#1371); the mark stays, the review date clears « à relire ». */
+  autoApprovedAt?: string | null
+  autoApprovalReviewedAt?: string | null
   createdAt: string
   /** « 9 oct. 2026 », formatted by the page. */
   createdLabel: string
@@ -47,6 +50,8 @@ type Props = {
   initialOrgs: Org[]
   /** From `?tri=`: the sort chosen before a reload (#820). */
   initialSort?: SortState<OrgSortCol>
+  /** From `?filtre=auto-a-relire`: only the automatic validations not reread yet (#1371). */
+  filter?: boolean
   /** Sending limits reached in the last days (#1100), grouped by organisation; empty: no block. */
   limitHits?: OrgLimitHits[]
   /** « Heures de Zurich. », the zone of the block's times. */
@@ -62,7 +67,7 @@ const STATE_TONE: Record<ReturnType<typeof orgState>, string> = {
   suspended: "text-red-700",
 }
 
-export default function OrgsManager({ initialOrgs, initialSort = { col: null, dir: "asc" }, limitHits = [], limitHitsZone = "", limitHitsTruncated = false }: Props) {
+export default function OrgsManager({ initialOrgs, initialSort = { col: null, dir: "asc" }, filter = false, limitHits = [], limitHitsZone = "", limitHitsTruncated = false }: Props) {
   const hitOrgIds = new Set(limitHits.map((g) => g.key))
   const router = useRouter()
   const [sort, setSort] = useState(initialSort)
@@ -131,6 +136,15 @@ export default function OrgsManager({ initialOrgs, initialSort = { col: null, di
         </Link>
       </div>
 
+      {filter && (
+        <p className="text-sm text-gray-700">
+          Seuls les espaces validés automatiquement et pas encore relus sont affichés.{" "}
+          <Link href="/super-admin/organizations" className="inline-flex min-h-6 items-center px-1 text-blue-700 underline underline-offset-2 hover:text-blue-800 rounded focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-blue-600">
+            Voir tous les espaces
+          </Link>
+        </p>
+      )}
+
       {limitHits.length > 0 && (
         <section aria-labelledby="send-limit-hits-heading" className="bg-white border border-gray-200 rounded-xl p-4">
           <h2 id="send-limit-hits-heading" className="text-base font-semibold text-gray-900">Plafonds d&apos;envoi atteints</h2>
@@ -144,7 +158,7 @@ export default function OrgsManager({ initialOrgs, initialSort = { col: null, di
       {limitHits.length > 0 && <h2 className="sr-only">Liste des organisations</h2>}
       {orgs.length === 0 ? (
         <div className="text-center py-16 text-gray-500">
-          Aucune organisation. Créez-en une pour commencer.
+          {filter ? "Aucun espace à relire." : "Aucune organisation. Créez-en une pour commencer."}
         </div>
       ) : (
         // Focusable region so a keyboard user can scroll the table sideways on a narrow screen.
@@ -193,6 +207,12 @@ export default function OrgsManager({ initialOrgs, initialSort = { col: null, di
                         {/* The line break alone runs both texts together in a screen reader. */}
                         <span className="sr-only">. </span>
                         <span className={`block mt-0.5 ${org.ownerAlert ? "text-amber-800" : "text-gray-600"}`}>{org.ownerLabel}</span>
+                      </>
+                    )}
+                    {org.autoApprovedAt && !org.autoApprovalReviewedAt && (
+                      <>
+                        <span className="sr-only">. </span>
+                        <span className="block mt-0.5 text-amber-800">Validation automatique, à relire</span>
                       </>
                     )}
                   </td>

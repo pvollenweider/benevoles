@@ -64,6 +64,12 @@ model Organization {
   // When the space was created by the self-service sign-up (#810): null for any other creation.
   // Feeds the sign-up indicators of the statistics (median validation delay, unused spaces).
   signupAt          DateTime?
+  // Automatic validation of new spaces (#1371): when the scheduled step validated this space. Set
+  // by the automatic path only (approveOrganization with the automatic actor); null otherwise.
+  autoApprovedAt         DateTime?
+  // When the operator marked that automatic validation as reviewed (#1371): the mark stays, this
+  // date says it was reread. Null = « Validation automatique, à relire ».
+  autoApprovalReviewedAt DateTime?
   // Periodic check that the space is still wanted (#811, src/lib/org-inactivity.ts): the latest
   // meaningful activity (administrators' changes, volunteers' registrations; never scheduled jobs
   // nor page views), and the latest « Conserver mon organisation », kept apart on purpose.
@@ -1692,6 +1698,10 @@ model AdminUser {
   sessionVersion         Int       @default(0)
   role                   String    @default("admin")
   isActive               Boolean   @default(true)
+  // When the account became active by its one-time link (#1371): the automatic validation of a
+  // space waits AUTO_APPROVAL_MIN_AGE_MINUTES after it. Null for an account active before this
+  // column, or created active by another path (such an account is never selected automatically).
+  activatedAt            DateTime?
   // SHA-256 (hex) of the one-time links emailed to the admin, never the tokens themselves (#269):
   // a DB dump or backup must not hand out working account-setup / password-reset links. The
   // plaintext exists only in the email; see src/lib/token-hash.ts.

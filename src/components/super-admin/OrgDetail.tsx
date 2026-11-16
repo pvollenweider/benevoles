@@ -48,6 +48,8 @@ type Org = {
   signupSourceDetail: string | null
   publicationApprovedAt: string | null
   outboundEmailApprovedAt: string | null
+  autoApprovedAt: string | null
+  autoApprovalReviewedAt: string | null
   createdAt: string
   updatedAt: string
   _count: OrgCount
@@ -79,6 +81,10 @@ export default function OrgDetail({ org, cumulative, inactivity, limitHits, rece
   }, [status])
   const [toggleError, setToggleError] = useState<string | null>(null)
   const [outcome, setOutcome] = useState("")
+  // « Marquer comme relu » (#1371): its own busy flag and error, the success is announced and the
+  // button disappears, so focus goes back to the page heading.
+  const [markingReviewed, setMarkingReviewed] = useState(false)
+  const [markError, setMarkError] = useState<string | null>(null)
   // Resending the invite of a pending admin: the new link is shown (the old one is dead, #269).
   const [resend, setResend] = useState<{ busyFor: string | null; link: string | null; email: string | null; error: string | null }>({ busyFor: null, link: null, email: null, error: null })
 
@@ -188,6 +194,18 @@ export default function OrgDetail({ org, cumulative, inactivity, limitHits, rece
     refresh()
   }
 
+  async function markReviewed() {
+    if (markingReviewed) return
+    setMarkingReviewed(true)
+    setMarkError(null)
+    const result = await requestJson(() => fetch(`/api/super-admin/organizations/${org.id}/reviewed`, { method: "POST" }), "Le marquage n'a pas été enregistré.")
+    setMarkingReviewed(false)
+    if (!result.ok) { setMarkError(result.error); return }
+    announce(setOutcome, "Espace marqué comme relu.")
+    headingRef.current?.focus()
+    refresh()
+  }
+
   function deleteOrg() {
     setDeleteError(null)
     setConfirming("delete")
@@ -261,9 +279,18 @@ export default function OrgDetail({ org, cumulative, inactivity, limitHits, rece
             <span className="text-sm text-gray-600">{org.name}</span>
           </div>
           <h1 ref={headingRef} tabIndex={-1} className="text-xl font-bold text-gray-900 mt-1 focus:outline-none">{org.name}</h1>
-          <div className="flex items-center gap-3 mt-1">
+          <div className="flex flex-wrap items-center gap-3 mt-1">
             <span className="font-mono text-xs text-gray-500">{org.slug}</span>
             <span className={`text-xs px-2 py-0.5 rounded-full font-medium ${status === "active" ? "bg-green-100 text-green-800" : status === "pending" ? "bg-amber-100 text-amber-900" : "bg-red-100 text-red-800"}`}>{ORG_STATUS_LABELS[status]}</span>
+            {org.autoApprovedAt && (
+              <>
+                {/* The pill alone does not say it is a second status in a screen reader. */}
+                <span className="sr-only">. </span>
+                <span className="text-xs px-2 py-0.5 rounded-full font-medium bg-amber-100 text-amber-900">
+                  {org.autoApprovalReviewedAt ? "Validation automatique, relue" : "Validation automatique, à relire"}
+                </span>
+              </>
+            )}
           </div>
           {status === "suspended" && org.suspensionReason && (
             <p className="text-sm text-gray-800 mt-1 break-words">Raison de la suspension : {org.suspensionReason}</p>
@@ -271,7 +298,7 @@ export default function OrgDetail({ org, cumulative, inactivity, limitHits, rece
           <p className="text-xs text-gray-500 mt-1">Créée le {createdAt}</p>
         </div>
 
-        <div className="flex items-center gap-2">
+        <div className="flex items-center gap-2 flex-wrap">
           {/* A POST (#1048): opening a link must not switch the organization. */}
           <form method="post" action={orgSwitchAction(org.id)}>
             <button
@@ -299,6 +326,16 @@ export default function OrgDetail({ org, cumulative, inactivity, limitHits, rece
                 Refuser et supprimer
               </button>
             </>
+          )}
+          {org.autoApprovedAt && !org.autoApprovalReviewedAt && (
+            <button
+              type="button"
+              onClick={() => void markReviewed()}
+              aria-disabled={markingReviewed || undefined}
+              className={`text-sm px-4 py-2 rounded-xl font-medium border border-amber-300 text-amber-900 hover:bg-amber-50 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-blue-600 ${markingReviewed ? "cursor-wait" : ""}`}
+            >
+              Marquer comme relu
+            </button>
           )}
           {status === "suspended" ? (
             <button
@@ -340,6 +377,7 @@ export default function OrgDetail({ org, cumulative, inactivity, limitHits, rece
         </div>
       </div>
       <p role="status" className={outcome ? "text-sm text-gray-800 bg-green-50 border border-green-200 rounded-xl px-3 py-2" : "sr-only"}>{outcome}</p>
+      <p role="alert" className={markError ? "text-sm text-red-800 bg-red-50 border border-red-200 rounded-xl px-3 py-2" : "sr-only"}>{markError ?? ""}</p>
       {confirming === "toggle" && (
         <ConfirmActionModal recap={toggleOrgRecap(org.name, org.active)} busy={toggling} error={toggleError} onConfirm={() => void runToggle()} onCancel={() => setConfirming(null)} />
       )}

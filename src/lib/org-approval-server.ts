@@ -90,9 +90,16 @@ export async function approveOrganization(
   // organisation (src/lib/org-refusal-server.ts, src/lib/account-activation-server.ts).
   await tx.$queryRaw`SELECT id FROM "Organization" WHERE id = ${organizationId} FOR UPDATE`
 
+  const automatic = actor.type === "automatic"
   const [org] = await tx.organization.updateManyAndReturn({
     where: { id: organizationId, ...APPROVAL_GRANT_WHERE },
-    data: { publicationApprovedAt: now, outboundEmailApprovedAt: now },
+    data: {
+      publicationApprovedAt: now,
+      outboundEmailApprovedAt: now,
+      // The mark of the automatic path (#1371), written with the grant in the same transaction.
+      // A manual approval never sets it, even over a space that was half-granted before.
+      ...(automatic ? { autoApprovedAt: now } : {}),
+    },
     select: { id: true, name: true, slug: true },
   })
 
@@ -103,7 +110,6 @@ export async function approveOrganization(
     return { approved: false, reason: approvalRefusalReason(current) }
   }
 
-  const automatic = actor.type === "automatic"
   const source: OperatorLogSource = automatic ? "automatic" : "operator"
 
   await tx.orgLog.create({
