@@ -534,9 +534,13 @@ export async function deliverOutbox(opts: { ids?: string[]; limit?: number; now?
       let kind = "unknown"
       try { kind = openPayload(claimed.payload).kind } catch { /* reported below anyway */ }
       const gaveUp = new Error(`Notification ${row.id} failed ${attempts} times: ${outcome.reason}`)
-      if (isRecipientDataFailure(outcome)) {
-        // A mailbox or domain that doesn't exist: the member's address, not an application error.
-        // Failed and shown to the organiser as before, logged as a warning, not sent to Sentry.
+      // A mailbox or domain that doesn't exist: the member's address, not an application error.
+      // Failed and shown to the organiser as before, logged as a warning, not sent to Sentry.
+      // Also when the refusal stayed « temporary » until the last attempt: a domain still not
+      // found after every retry (450 4.1.2) is a mistyped address, the same reading as the
+      // health page's (outboxFailureGroup). Only here, once the row has given up: while it is
+      // retried, a temporary refusal says nothing yet.
+      if (isRecipientDataFailure(outcome) || outboxFailureGroup(outcome.reason) === "recipient") {
         console.warn(errorLogLine(`outbox.gave_up.${kind}`, gaveUp))
       } else {
         reportError(`outbox.gave_up.${kind}`)(gaveUp)
