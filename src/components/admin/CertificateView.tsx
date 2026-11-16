@@ -53,7 +53,9 @@ export default function CertificateView({ memberId, memberName, organizationName
   const period = useMemo(() => (validRange ? { from, to } : { from: to, to: from }), [from, to, validRange])
   const filtered = useMemo(() => entries.filter((e) => withinPeriod(e.localDate, period)), [entries, period])
   const summaries = useMemo(() => eventHourSummaries(filtered), [filtered])
-  const unattested = useMemo(() => filtered.filter((e) => !e.attested), [filtered])
+  // A left-early shift is a recorded participation, not a shift with no presence: it has its own
+  // sentence after the total, never the "no presence recorded" warning (#1141).
+  const unattested = useMemo(() => filtered.filter((e) => !e.attested && !e.endedEarly), [filtered])
 
   // Time on two shifts at once (a role cumulable with another shift, #986) counts once, also
   // between two events: the totals are the union, not the sum of the rows.
@@ -63,6 +65,8 @@ export default function CertificateView({ memberId, memberName, organizationName
   const totalAttested = totals.attestedMinutes
   const totalPlanned = totals.plannedWithoutPresenceMinutes
   const totalShifts = summaries.reduce((n, s) => n + s.shiftsCount, 0)
+  // Participations ended before the end (#1141): a count, never hours.
+  const totalEndedEarly = totals.endedEarlyCount
 
   // Announced after the period or the planned-hours checkbox changes, never on first render
   // (the document itself already shows these figures; this is only for screen-reader users who
@@ -224,6 +228,7 @@ export default function CertificateView({ memberId, memberName, organizationName
                 <th scope="col" className="text-left py-1 pr-2">Postes</th>
                 <th scope="col" className="text-right py-1 pr-2">Créneaux</th>
                 <th scope="col" className="text-right py-1 pr-2">Heures attestées</th>
+                <th scope="col" className="text-right py-1 pr-2">Terminées avant la fin</th>
                 {includePlanned && <th scope="col" className="text-right py-1">Heures prévues (sans présence)</th>}
               </tr>
             </thead>
@@ -236,6 +241,7 @@ export default function CertificateView({ memberId, memberName, organizationName
                   <td className="py-1 pr-2 text-right">
                     {s.noCheckIn ? "présences non saisies pour cet événement" : fmtDuration(s.attestedMinutes)}
                   </td>
+                  <td className="py-1 pr-2 text-right">{s.endedEarlyCount > 0 ? s.endedEarlyCount : ""}</td>
                   {includePlanned && <td className="py-1 text-right">{fmtDuration(s.plannedWithoutPresenceMinutes)}</td>}
                 </tr>
               ))}
@@ -245,10 +251,20 @@ export default function CertificateView({ memberId, memberName, organizationName
                 <th scope="row" className="py-1 pr-2 text-left font-semibold" colSpan={2}>Total</th>
                 <td className="py-1 pr-2 text-right">{totalShifts}</td>
                 <td className="py-1 pr-2 text-right">{fmtDuration(totalAttested)}</td>
+                <td className="py-1 pr-2 text-right">{totalEndedEarly > 0 ? totalEndedEarly : ""}</td>
                 {includePlanned && <td className="py-1 text-right">{fmtDuration(totalPlanned)}</td>}
               </tr>
             </tfoot>
           </table>
+        )}
+        {summaries.length > 0 && totalEndedEarly > 0 && (
+          // Real text, in DOM order right after the total it qualifies and before the signature;
+          // never hidden in print (at least text-gray-700). The number is given (#1141).
+          <p className="text-sm text-gray-700 mt-3">
+            {totalEndedEarly === 1
+              ? "1 participation terminée avant la fin n'est pas comptée dans les heures attestées."
+              : `${totalEndedEarly} participations terminées avant la fin ne sont pas comptées dans les heures attestées.`}
+          </p>
         )}
         {summaries.length > 0 && parallel && (
           <p className="text-sm text-gray-800 mt-4">Certains créneaux se sont déroulés en même temps (missions assurées en parallèle) : ce temps n&apos;est compté qu&apos;une fois dans les heures.</p>

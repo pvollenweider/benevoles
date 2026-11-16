@@ -75,8 +75,8 @@ describe("per-person hours count parallel time once", () => {
   it("gives each member their own union in the hours-by-volunteer export", () => {
     const entries = volunteerHourEntries([coffee, firstAid, reg("x", "10:00", "11:00", { volunteerId: "vol-2" })], TZ)
     expect(memberHourTotals(entries)).toEqual([
-      { volunteerId: "vol-1", eventsCount: 1, shiftsCount: 2, plannedMinutes: 480, attestedMinutes: 480 },
-      { volunteerId: "vol-2", eventsCount: 1, shiftsCount: 1, plannedMinutes: 60, attestedMinutes: 60 },
+      { volunteerId: "vol-1", eventsCount: 1, shiftsCount: 2, plannedMinutes: 480, attestedMinutes: 480, endedEarlyCount: 0 },
+      { volunteerId: "vol-2", eventsCount: 1, shiftsCount: 1, plannedMinutes: 60, attestedMinutes: 60, endedEarlyCount: 0 },
     ])
   })
 
@@ -92,7 +92,7 @@ describe("per-person hours count parallel time once", () => {
     expect(first).toMatchObject({ shiftsCount: 2, attestedMinutes: 240, plannedWithoutPresenceMinutes: 120 })
     expect(second).toMatchObject({ shiftsCount: 1, attestedMinutes: 120, plannedWithoutPresenceMinutes: 0 })
     // 10–16 in all; attested 10–15 (coffee and the other event's 13–15).
-    expect(certificateTotals(entries)).toEqual({ attestedMinutes: 300, plannedWithoutPresenceMinutes: 60 })
+    expect(certificateTotals(entries)).toEqual({ attestedMinutes: 300, plannedWithoutPresenceMinutes: 60, endedEarlyCount: 0 })
     // The rows add up to 8 h, the total is 6 h: the note says why.
     expect(summaries.reduce((n, x) => n + x.attestedMinutes + x.plannedWithoutPresenceMinutes, 0)).toBe(480)
     expect(hasParallelShifts(entries)).toBe(true)

@@ -170,6 +170,54 @@ describe("RegistrationsManager — presence", () => {
     }
   })
 
+  // The left-early state (#1141): a fourth state in the list, its badge and its two bulk actions.
+  it("shows « Parti avant la fin » with the blue pair and an arrow, and counts it apart", () => {
+    render(<RegistrationsManager eventId="evt-1" timeZone="Europe/Zurich" shifts={[shift]} initialRegistrations={[
+      reg("r1", { checkedInAt: "2026-07-04T08:05:00.000Z", attendanceStatus: "left_early" }),
+      reg("r2"),
+    ]} />)
+    const aliceRow = screen.getByText("Alice Martin").closest("tr")!
+    const badge = within(aliceRow).getByText("Parti avant la fin")
+    expect(badge.className).toMatch(/bg-blue-100/)
+    expect(badge.className).toMatch(/text-blue-700/)
+    expect(badge.className).not.toMatch(/amber-|purple-|red-|dark:/)
+    const glyph = badge.querySelector("[aria-hidden='true']")!
+    expect(glyph).toHaveTextContent("→")
+    expect(within(aliceRow).queryByText("Absent")).toBeNull()
+    expect(within(aliceRow).queryByText(/Présent/)).toBeNull()
+    const summary = screen.getByText(/aucun présent/).closest("p")!
+    expect(summary).toHaveTextContent("2 inscrits, aucun présent, 1 parti avant la fin.")
+    expect(summary).not.toHaveClass("sr-only")
+    // Never « personne encore marqué présent » about someone who left.
+    expect(summary).not.toHaveTextContent("personne encore marqué présent")
+  })
+
+  it("offers to mark the present people as gone before the end and to undo a departure", async () => {
+    fetchMock.mockResolvedValue({ ok: true, json: async () => ({
+      done: 1, changedIds: ["r1"], skipped: 0,
+      results: [{ id: "r1", changed: true, state: "left_early", checkedInAt: "2026-07-04T08:05:00.000Z" }],
+    }) })
+    render(<RegistrationsManager eventId="evt-1" timeZone="Europe/Zurich" shifts={[shift]} initialRegistrations={[
+      reg("r1", { checkedInAt: "2026-07-04T08:05:00.000Z" }), reg("r2"),
+    ]} />)
+    fireEvent.click(screen.getByLabelText(/^Sélectionner l'inscription de Alice Martin, /))
+    fireEvent.click(screen.getByRole("button", { name: "Marquer parti avant la fin (1)" }))
+    await waitFor(() => expect(fetchMock).toHaveBeenCalled())
+    expect(JSON.parse(fetchMock.mock.calls[0][1].body)).toEqual({ action: "mark_left_early", registrationIds: ["r1"], observedShifts: { r1: "s1" } })
+    await waitFor(() => expect(screen.getByText("Parti avant la fin")).toBeInTheDocument())
+    await waitFor(() => expect(screen.getAllByRole("status").some((el) => el.textContent?.includes("1 personne marquée partie avant la fin."))).toBe(true))
+    const summary = screen.getByText(/aucun présent/).closest("p")!
+    expect(summary).toHaveTextContent("2 inscrits, aucun présent, 1 parti avant la fin.")
+    expect(summary).toHaveFocus()
+
+    // Undo the departure: the arrival comes back, the person is present again.
+    fireEvent.click(screen.getByLabelText(/^Sélectionner l'inscription de Alice Martin, /))
+    fireEvent.click(screen.getByRole("button", { name: "Annuler le départ (1)" }))
+    await waitFor(() => expect(fetchMock).toHaveBeenCalledTimes(2))
+    expect(JSON.parse(fetchMock.mock.calls[1][1].body)).toEqual({ action: "undo_left_early", registrationIds: ["r1"], observedShifts: { r1: "s1" } })
+    await waitFor(() => expect(screen.getAllByRole("status").some((el) => el.textContent?.includes("Départ annulé pour 1 personne."))).toBe(true))
+  })
+
   it("the same sentence twice in a row is set again (cleared first)", async () => {
     fetchMock.mockResolvedValue({ ok: true, json: async () => ({ done: 0, changedIds: [], skipped: 1, results: [{ id: "r2", changed: false, state: "expected", checkedInAt: null }] }) })
     render(<RegistrationsManager eventId="evt-1" timeZone="Europe/Zurich" shifts={[shift]} initialRegistrations={[reg("r1"), reg("r2")]} />)

@@ -86,7 +86,7 @@ describe("front-desk role", () => {
   })
 
   it("is limited to the attendance actions of the bulk route", () => {
-    expect([...FRONT_DESK_BULK_ACTIONS]).toEqual(["check_in", "undo_check_in", "mark_absent", "undo_absent"])
+    expect([...FRONT_DESK_BULK_ACTIONS]).toEqual(["check_in", "undo_check_in", "mark_absent", "undo_absent", "mark_left_early", "undo_left_early"])
     for (const action of FRONT_DESK_BULK_ACTIONS) expect(isFrontDeskBulkAction(action)).toBe(true)
     for (const action of ["cancel", "make_leader", "resend_link", "left_early", "", "CHECK_IN"]) expect(isFrontDeskBulkAction(action)).toBe(false)
   })

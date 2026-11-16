@@ -42,6 +42,7 @@ import {
   addChanges,
   answerMark,
   boardChanges,
+  changedShownRows,
   changesAnnouncement,
   isFreshAnswer,
   leftBoardAnnouncement,
@@ -58,6 +59,7 @@ import {
   statusAnnouncement,
   syncStatusOf,
   syncStatusText,
+  SETTLE_MS,
   type BoardChanges,
   type LocalMarks,
   type SyncStatus,
@@ -104,16 +106,22 @@ type Snapshot = { board: Board; today: string; refreshedAt: string }
 type SyncKind = "poll" | "manual" | "after_action"
 
 const focusRing = "focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-blue-600"
-const actionWhat: Record<AttendanceTransition, string> = { check_in: "Présence", undo_check_in: "Présence", mark_absent: "Absence", undo_absent: "Absence" }
+const actionWhat: Record<AttendanceTransition, string> = {
+  check_in: "Présence", undo_check_in: "Présence", mark_absent: "Absence", undo_absent: "Absence",
+  mark_left_early: "Départ", undo_left_early: "Départ",
+}
 const outlineButton = "border border-blue-600 text-blue-700 bg-white hover:bg-blue-50"
 const telClass = `inline-flex items-center min-h-11 px-3 rounded-xl border border-gray-300 bg-white text-sm font-medium text-blue-700 underline underline-offset-2 hover:bg-gray-50 ${focusRing}`
 
 /**
- * « Jour J » (#561): the shifts running now and in the next hours, who is expected and who has
- * arrived, one tap to mark someone present or absent (#1141). Each action goes through the same
+ * « Jour J » (#561): the shifts running now and in the next hours, who is expected, arrived,
+ * absent or gone before the end, one tap to record it (#1141). Each action goes through the same
  * route as the registrations list (#399). One live region says each outcome; a row's first button
- * stays in place whatever its label, so the focus does too. « Marquer absent » is a second button,
- * shown only for an expected person: once pressed it goes, and the focus moves to the first one.
+ * stays in place whatever its label, so the focus does too. The second button is one of two keyed
+ * nodes: « Marquer absent » for an expected person, « Marquer parti avant la fin » for a present
+ * one. Once pressed it goes, and the focus moves to the first one. Two distinct nodes, never one
+ * whose label changes: a poll that turns « Marquer absent » into the departure action under a
+ * focused button would otherwise let a second tap record something else.
  *
  * Two devices never overwrite each other: the server changes a row only from the state the press
  * started from. When it changed nothing, the row takes the state the server returned, nothing is
@@ -149,11 +157,48 @@ export default function DayOfBoard({ eventId, board: initialBoard, today: initia
   // region, shown in the person's row for who does not hear it. Plain text, no live role.
   const [notice, setNoticeState] = useState<{ registrationId: string; text: string } | null>(null)
   const noticeRef = useRef(notice)
+  // Rows whose shown state just changed: their buttons stay inert for a moment (#1141).
+  const [settling, setSettling] = useState<Set<string>>(new Set())
+  const settlingRef = useRef<Set<string>>(new Set())
+  const settlingTimers = useRef(new Map<string, ReturnType<typeof setTimeout>>())
   const setNotice = (next: { registrationId: string; text: string } | null) => {
     if (next === noticeRef.current) return
     noticeRef.current = next
     setNoticeState(next)
   }
+  /**
+   * The row's state just changed (an answer or a poll): both of its buttons are inert for
+   * SETTLE_MS, so a second tap cannot run a transition on a button whose meaning changed.
+   */
+  const markSettling = (ids: string[]) => {
+    if (ids.length === 0) return
+    for (const id of ids) {
+      settlingRef.current.add(id)
+      const previous = settlingTimers.current.get(id)
+      if (previous) clearTimeout(previous)
+      settlingTimers.current.set(id, setTimeout(() => {
+        settlingTimers.current.delete(id)
+        settlingRef.current.delete(id)
+        setSettling((current) => {
+          if (!current.has(id)) return current
+          const next = new Set(current)
+          next.delete(id)
+          return next
+        })
+      }, SETTLE_MS))
+    }
+    setSettling((current) => {
+      const next = new Set(current)
+      for (const id of ids) next.add(id)
+      return next
+    })
+  }
+  useEffect(() => () => {
+    for (const timer of settlingTimers.current.values()) clearTimeout(timer)
+    settlingTimers.current.clear()
+    settlingRef.current.clear()
+  }, [])
+
   // « Plus tôt aujourd'hui » opened or closed by hand, kept while a search forces it open.
   const [earlierOpen, setEarlierOpen] = useState(false)
   const buttons = useRef(new Map<string, HTMLButtonElement>())
@@ -316,7 +361,10 @@ export default function DayOfBoard({ eventId, board: initialBoard, today: initia
     } else {
       focusAfterSync.current = null
     }
+    // A row whose shown state changed here must settle before its second button may act again.
+    const settleIds = changedShownRows(before.board, marksBefore, next.board, marksAfter)
     updateMarks(() => marksAfter)
+    markSettling(settleIds)
 
     const reconnected = setFreshness("ok", 0, next.refreshedAt, kind === "after_action")
     const leftText = focusAfterSync.current?.leftText ?? null
@@ -400,9 +448,11 @@ export default function DayOfBoard({ eventId, board: initialBoard, today: initia
 
   async function act(person: DayOfPerson, shift: DayOfShift, transition: AttendanceTransition) {
     const id = person.registrationId
-    if (pending.has(id)) return
+    if (pending.has(id) || settlingRef.current.has(id)) return
     const shownBefore = shownAttendance(person, marksRef.current)
     const plan = ATTENDANCE_TRANSITIONS[transition]
+    // The row changed since it was rendered: this press is about a state it no longer shows.
+    if (plan.from !== shownBefore.state) return
     const name = personName(person)
     setNotice(null)
     setPending((prev) => new Set(prev).add(id))
@@ -463,6 +513,8 @@ export default function DayOfBoard({ eventId, board: initialBoard, today: initia
       if (own?.state && !leftShift(own)) {
         const server = { state: own.state, checkedInAt: own.checkedInAt }
         updateMarks((m) => answerMark(m, id, server, ++tick.current))
+        // The row takes a state recorded elsewhere: let it settle before anything else is pressed.
+        if (own.state !== shownBefore.state) markSettling([id])
       } else unpin()
       done()
       // Said once, and shown in the row for who does not hear the live region.
@@ -475,6 +527,7 @@ export default function DayOfBoard({ eventId, board: initialBoard, today: initia
     // The answer wins over any read sent before it; the next read sent after it confirms it.
     const checkedInAt = plan.to === "present" ? own?.checkedInAt ?? new Date().toISOString() : null
     updateMarks((m) => answerMark(m, id, { state: plan.to, checkedInAt }, ++tick.current))
+    markSettling([id])
     done()
     say(attendanceAnnouncement(name, transition, shiftName(shift), countsNow()))
   }
@@ -513,6 +566,7 @@ export default function DayOfBoard({ eventId, board: initialBoard, today: initia
             {shift.people.map((p) => {
               const state = stateOf(p)
               const busy = pending.has(p.registrationId)
+              const inert = busy || settling.has(p.registrationId)
               const name = personName(p)
               const primary = PRIMARY_ACTION[state]
               return (
@@ -520,9 +574,12 @@ export default function DayOfBoard({ eventId, board: initialBoard, today: initia
                   <div className="min-w-0 flex-1 basis-40">
                     <p className="font-medium text-gray-900 break-words">{name}</p>
                     <p className="text-sm">
-                      {/* Never by colour alone: each state has its word, and a sign for the two recorded ones. */}
+                      {/* Never by colour alone: each of the four states has its word, and a sign for the
+                          three recorded ones. « Parti avant la fin » uses the blue pair of « Complet »,
+                          never the amber of an absence (a fact, not a fault) nor the red of an error. */}
                       {state === "present" && <span className="inline-block rounded-full bg-green-100 text-green-700 px-2 py-0.5 text-xs font-medium"><span aria-hidden="true">✓ </span>Présent</span>}
                       {state === "absent" && <span className="inline-block rounded-full bg-amber-100 text-amber-900 px-2 py-0.5 text-xs font-medium"><span aria-hidden="true">✗ </span>Absent</span>}
+                      {state === "left_early" && <span className="inline-block rounded-full bg-blue-100 text-blue-700 px-2 py-0.5 text-xs font-medium"><span aria-hidden="true">→ </span>Parti avant la fin</span>}
                       {state === "expected" && <span className="inline-block rounded-full bg-gray-100 text-gray-600 px-2 py-0.5 text-xs font-medium">Pas encore marqué</span>}
                     </p>
                   </div>
@@ -539,20 +596,36 @@ export default function DayOfBoard({ eventId, board: initialBoard, today: initia
                       // Named with the person, the visible label first (2.5.3). An action, not a
                       // toggle state: no aria-pressed, the label says what a press does.
                       aria-label={`${primary.label}, ${name}`}
-                      aria-disabled={busy || undefined}
+                      aria-disabled={inert || undefined}
                       className={`min-h-11 min-w-11 px-4 rounded-xl text-sm font-medium transition-colors aria-disabled:opacity-50 ${state === "expected" ? "bg-blue-600 text-white hover:bg-blue-700" : outlineButton}`}
                     >
                       {primary.label}
                     </button>
+                    {/* Two keyed second buttons, never one node with a ternary label (#1141): a poll
+                        that changes the row drops the old node and the focus, instead of silently
+                        turning a focused « Marquer absent » into the departure action. */}
                     {state === "expected" && (
                       <button
+                        key="absent"
                         type="button"
                         onClick={() => act(p, shift, "mark_absent")}
                         aria-label={`Marquer absent, ${name}`}
-                        aria-disabled={busy || undefined}
+                        aria-disabled={inert || undefined}
                         className={`min-h-11 min-w-11 px-4 rounded-xl text-sm font-medium transition-colors aria-disabled:opacity-50 ${outlineButton}`}
                       >
                         Marquer absent
+                      </button>
+                    )}
+                    {state === "present" && (
+                      <button
+                        key="left"
+                        type="button"
+                        onClick={() => act(p, shift, "mark_left_early")}
+                        aria-label={`Marquer parti avant la fin, ${name}`}
+                        aria-disabled={inert || undefined}
+                        className={`min-h-11 min-w-11 px-4 rounded-xl text-sm font-medium transition-colors aria-disabled:opacity-50 ${outlineButton}`}
+                      >
+                        Marquer parti avant la fin
                       </button>
                     )}
                   </div>

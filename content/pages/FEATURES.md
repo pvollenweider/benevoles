@@ -85,7 +85,7 @@ En savoir plus : [où manque-t-il du monde ?](../guide/ou-manque-t-il-du-monde.m
 
 <!-- image: EVENT_REPORTS | Le planning imprimé : pour chaque poste, les créneaux de la journée et le nom des bénévoles inscrits, lisible en noir et blanc. -->
 
-- **Une page faite pour le téléphone** : les créneaux en cours et ceux des trois prochaines heures, qui est arrivé et qui manque. Touchez « Marquer présent » quand un bénévole arrive, « Marquer absent » s'il ne vient pas, ou son numéro pour l'appeler. La page se met à jour seule : une arrivée ou une absence notée sur un autre téléphone y apparaît.
+- **Une page faite pour le téléphone** : les créneaux en cours et ceux des trois prochaines heures, qui est arrivé et qui manque. Touchez « Marquer présent » quand un bénévole arrive, « Marquer absent » s'il ne vient pas, « Marquer parti avant la fin » s'il repart avant la fin du créneau, ou son numéro pour l'appeler. La page se met à jour seule : une arrivée, une absence ou un départ noté sur un autre téléphone y apparaît.
 - **Un besoin imprévu, sans quitter la page** : **Ajouter un besoin** crée le créneau en quelques champs, puis propose aussitôt les bénévoles déjà inscrits aujourd'hui, par email et par notification. Le créneau apparaît sur le tableau avec ses places manquantes, même si l'envoi échoue et qu'on le retente.
 - **Le planning complet en frise**, prêt à imprimer, et des feuilles pour le terrain : par jour, par poste et par bénévole, et une feuille de présence à cocher.
 - **Des badges** à imprimer et découper, avec le prénom et le poste de chaque bénévole.
@@ -111,8 +111,8 @@ En savoir plus : [recueillir les disponibilités](../guide/recueillir-les-dispon
 
 ## Après l'événement
 
-- **Le bilan** compte les bénévoles distincts, nouveaux et de retour, les heures prévues et celles attestées par une présence, le remplissage par poste et les créneaux restés incomplets. Il existe aussi en résumé imprimable.
-- **Une attestation de bénévolat** imprimable pour un membre et une période, avec ses événements, ses postes et ses heures ; deux créneaux tenus en même temps n'y comptent qu'une fois.
+- **Le bilan** compte les bénévoles distincts, nouveaux et de retour, les heures prévues et celles attestées par une présence, les participations terminées avant la fin, le remplissage par poste et les créneaux restés incomplets. Il existe aussi en résumé imprimable.
+- **Une attestation de bénévolat** imprimable pour un membre et une période, avec ses événements, ses postes et ses heures ; deux créneaux tenus en même temps n'y comptent qu'une fois, et une participation terminée avant la fin est comptée à part, sans heures inventées.
 - **Les heures par bénévole** sur une période, dans un fichier CSV, pour le rapport annuel.
 - **La valeur du travail bénévole**, si vous le souhaitez : avec le taux horaire choisi par votre association, le bilan et le fichier des heures donnent une estimation en francs ou en euros, utile pour un dossier de subvention ou les comptes annuels.
 - **Tout est noté** : le journal d'activité de chaque événement retrace qui a fait quoi, et quand.

@@ -32,10 +32,10 @@ describe("GET /api/admin/events/[id]/export/attendance", () => {
     const lines = (await res.text()).split("\r\n")
     // « Présent » and « Pointé le » as before; the recorded absence in its own column after them
     // (#1141). `text()` drops the BOM the file starts with.
-    expect(lines[0]).toBe("Prénom;Nom;Email;Téléphone;Poste;Créneau;Date;Début;Fin;Présent;Pointé le;Absence notée")
-    expect(lines[1]).toBe("Alice;Martin;a@x.ch;079 1;Bar;;2026-07-04;10:00;12:00;oui;04.07.2026 10:05;")
-    expect(lines[2]).toBe("Bob;Durand;;078 2;Bar;Bar soir;2026-07-04;18:00;20:00;non;;")
-    expect(lines[3]).toBe("Camille;Rochat;camille.rochat@example.org;;Bar;Bar soir;2026-07-04;18:00;20:00;non;;oui")
+    expect(lines[0]).toBe("Prénom;Nom;Email;Téléphone;Poste;Créneau;Date;Début;Fin;Présent;Pointé le;Absence notée;Parti avant la fin")
+    expect(lines[1]).toBe("Alice;Martin;a@x.ch;079 1;Bar;;2026-07-04;10:00;12:00;oui;04.07.2026 10:05;;")
+    expect(lines[2]).toBe("Bob;Durand;;078 2;Bar;Bar soir;2026-07-04;18:00;20:00;non;;;")
+    expect(lines[3]).toBe("Camille;Rochat;camille.rochat@example.org;;Bar;Bar soir;2026-07-04;18:00;20:00;non;;oui;")
   })
 
   it("returns 404 for an event outside the organization", async () => {
@@ -56,14 +56,26 @@ describe("setAttendance", () => {
   const now = new Date("2026-07-04T08:05:00Z")
   const earlier = new Date("2026-07-04T07:55:00Z")
 
-  type Where = { id: string; status: string; shiftId: string; checkedInAt: null | { not: null }; attendanceStatus?: string | null }
+  type StatusCond = string | null | { not: "left_early" }
+  type Where = { id: string; status: string; shiftId: string; checkedInAt: null | { not: null }; attendanceStatus?: StatusCond; OR?: { attendanceStatus: StatusCond }[] }
   function fakeDb(rows: Row[]) {
     const updateMany = vi.fn(async ({ where, data }: { where: Where; data: Partial<Row> }) => {
+      // The `attendanceStatus` predicate: absent, exactly "left_early", "not left_early", or the
+      // OR that keeps NULL statuses in (Prisma's `not` alone leaves them out in SQL).
+      const statusMatch = (x: Row, w: StatusCond): boolean => {
+        if (w === null) return x.attendanceStatus === null
+        if (typeof w === "object" && w !== null) return x.attendanceStatus !== w.not
+        return x.attendanceStatus === w
+      }
+      const statusOk = (x: Row): boolean => {
+        if (where.OR) return where.OR.some((cond) => statusMatch(x, cond.attendanceStatus))
+        if (!("attendanceStatus" in where)) return true
+        return statusMatch(x, where.attendanceStatus as StatusCond)
+      }
       const r = rows.find((x) =>
         x.id === where.id && x.status === where.status && x.shiftId === where.shiftId
         && (where.checkedInAt === null ? x.checkedInAt === null : x.checkedInAt !== null)
-        // No `attendanceStatus` key in the predicate: no condition on it.
-        && (!("attendanceStatus" in where) || x.attendanceStatus === where.attendanceStatus))
+        && statusOk(x))
       if (!r) return { count: 0 }
       Object.assign(r, data)
       return { count: 1 }
@@ -101,8 +113,8 @@ describe("setAttendance", () => {
     const fake = fakeDb(rows)
     expect(await setAttendance(fake.db, actor, rows.map(target), "undo_check_in", now)).toEqual([{ id: "r1", changed: true, state: "expected", checkedInAt: null }])
     expect(fake.updateMany.mock.calls[0][0]).toEqual({
-      // Any row with a check-in time, whatever the status column says (see the mixed row below).
-      where: { id: "r1", status: "active", shiftId: "s1", checkedInAt: { not: null } },
+      // Any row with a check-in time whose status is not left_early (see the mixed row below).
+      where: { id: "r1", status: "active", shiftId: "s1", checkedInAt: { not: null }, OR: [{ attendanceStatus: null }, { attendanceStatus: { not: "left_early" } }] },
       data: { checkedInAt: null, attendanceStatus: null, attendanceAt: null, attendanceBy: null },
     })
     expect(logEvent.mock.calls[0][0]).toMatchObject({ action: "registration.check_in_undone", changes: { checkedInAt: { from: "set", to: null }, shiftId: { from: "s1", to: "s1" } } })
@@ -132,6 +144,79 @@ describe("setAttendance", () => {
     expect(fake.updateMany.mock.calls[0][0].where).toEqual({ id: "r1", status: "active", shiftId: "s1", checkedInAt: null, attendanceStatus: "absent" })
     expect(rows[0]).toMatchObject({ checkedInAt: null, attendanceStatus: null, attendanceAt: null, attendanceBy: null })
     expect(logEvent.mock.calls[0][0]).toMatchObject({ action: "registration.absence_undone", changes: { attendance: { from: "absent", to: "expected" }, shiftId: { from: "s1", to: "s1" } } })
+  })
+
+  it("mark_left_early: a present person is marked gone before the end, keeping the arrival", async () => {
+    const { setAttendance } = await import("@/lib/admin-registration-actions")
+    const rows = [row("r1", { checkedInAt: earlier })]
+    const fake = fakeDb(rows)
+    const results = await setAttendance(fake.db, actor, [{ ...target(rows[0]), checkedInAt: earlier.toISOString() }], "mark_left_early", now)
+    expect(results).toEqual([{ id: "r1", changed: true, state: "left_early", checkedInAt: earlier.toISOString() }])
+    expect(fake.updateMany.mock.calls[0][0]).toEqual({
+      where: { id: "r1", status: "active", shiftId: "s1", checkedInAt: { not: null }, OR: [{ attendanceStatus: null }, { attendanceStatus: { not: "left_early" } }] },
+      data: { attendanceStatus: "left_early", attendanceAt: now, attendanceBy: "adm-1" },
+    })
+    // The arrival is untouched, the departure time and author are recorded.
+    expect(rows[0]).toMatchObject({ checkedInAt: earlier, attendanceStatus: "left_early", attendanceAt: now, attendanceBy: "adm-1" })
+    expect(logEvent.mock.calls[0][0]).toEqual({
+      eventId: "evt-a", actor, action: "registration.marked_left_early", entityType: "Registration", entityId: "r1",
+      changes: { attendance: { from: "present", to: "left_early" }, shiftId: { from: "s1", to: "s1" } },
+    })
+  })
+
+  it("mark_left_early returns the arrival even when the caller did not pass it, by reading the row back", async () => {
+    const { setAttendance } = await import("@/lib/admin-registration-actions")
+    const rows = [row("r1", { checkedInAt: earlier })]
+    const fake = fakeDb(rows)
+    const results = await setAttendance(fake.db, actor, rows.map(target), "mark_left_early", now)
+    expect(results).toEqual([{ id: "r1", changed: true, state: "left_early", checkedInAt: earlier.toISOString() }])
+    expect(fake.findMany).toHaveBeenCalledTimes(1)
+    expect(rows[0].attendanceStatus).toBe("left_early")
+  })
+
+  it("undo_left_early: a left-early person is present again, keeping the arrival and clearing the departure columns", async () => {
+    const { setAttendance } = await import("@/lib/admin-registration-actions")
+    const rows = [row("r1", { checkedInAt: earlier, attendanceStatus: "left_early", attendanceAt: earlier, attendanceBy: "adm-2" })]
+    const fake = fakeDb(rows)
+    const results = await setAttendance(fake.db, actor, [{ ...target(rows[0]), checkedInAt: earlier.toISOString() }], "undo_left_early", now)
+    expect(results).toEqual([{ id: "r1", changed: true, state: "present", checkedInAt: earlier.toISOString() }])
+    expect(fake.updateMany.mock.calls[0][0]).toEqual({
+      where: { id: "r1", status: "active", shiftId: "s1", checkedInAt: { not: null }, attendanceStatus: "left_early" },
+      data: { attendanceStatus: null, attendanceAt: null, attendanceBy: null },
+    })
+    expect(rows[0]).toEqual(row("r1", { checkedInAt: earlier }))
+    expect(logEvent.mock.calls[0][0]).toMatchObject({ action: "registration.departure_undone", changes: { attendance: { from: "left_early", to: "present" }, shiftId: { from: "s1", to: "s1" } } })
+  })
+
+  it("undo_check_in is refused on a left-early row: the departure is undone first", async () => {
+    const { setAttendance } = await import("@/lib/admin-registration-actions")
+    const left = () => row("r1", { checkedInAt: earlier, attendanceStatus: "left_early", attendanceAt: earlier, attendanceBy: "adm-2" })
+    const rows = [left()]
+    const fake = fakeDb(rows)
+    expect(await setAttendance(fake.db, actor, rows.map(target), "undo_check_in", now)).toEqual([{ id: "r1", changed: false, state: "left_early", checkedInAt: earlier.toISOString() }])
+    // The write was attempted with the present predicate, which excludes left_early: nothing matched.
+    expect(fake.updateMany.mock.calls[0][0].where).toEqual({ id: "r1", status: "active", shiftId: "s1", checkedInAt: { not: null }, OR: [{ attendanceStatus: null }, { attendanceStatus: { not: "left_early" } }] })
+    expect(rows[0]).toEqual(left())
+    expect(logEvent).not.toHaveBeenCalled()
+  })
+
+  it("a stale departure request changes nothing and returns the state recorded meanwhile", async () => {
+    const { setAttendance } = await import("@/lib/admin-registration-actions")
+    // The page showed the person present; another device marked them absent meanwhile.
+    const rows = [row("r1", { attendanceStatus: "absent", attendanceAt: earlier, attendanceBy: "adm-2" })]
+    const fake = fakeDb(rows)
+    expect(await setAttendance(fake.db, actor, [{ ...target(rows[0]), checkedInAt: null }], "mark_left_early", now)).toEqual([{ id: "r1", changed: false, state: "absent", checkedInAt: null }])
+    expect(logEvent).not.toHaveBeenCalled()
+  })
+
+  it("the shift stays in the departure predicate: a moved row is reported as moved, not written", async () => {
+    const { setAttendance } = await import("@/lib/admin-registration-actions")
+    const rows = [row("r1", { shiftId: "s2", checkedInAt: earlier })]
+    const fake = fakeDb(rows)
+    const results = await setAttendance(fake.db, actor, [{ id: "r1", eventId: "evt-a", shiftId: "s1", status: "active", checkedInAt: earlier.toISOString() }], "mark_left_early", now)
+    expect(results).toEqual([{ id: "r1", changed: false, state: "present", checkedInAt: earlier.toISOString(), moved: true }])
+    expect(rows[0]).toEqual(row("r1", { shiftId: "s2", checkedInAt: earlier }))
+    expect(logEvent).not.toHaveBeenCalled()
   })
 
   it("a stale request changes nothing, logs nothing and returns the state recorded meanwhile", async () => {

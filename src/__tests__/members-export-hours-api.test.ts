@@ -44,7 +44,7 @@ describe("GET /api/admin/members/export-hours (#557)", () => {
     const res = await GET(get("?from=2026-01-01&to=2026-06-30"))
     expect(res.status).toBe(200)
     const text = await res.text()
-    expect(text).toContain("Prénom;Nom;Événements;Créneaux;Heures prévues;Heures attestées")
+    expect(text).toContain("Prénom;Nom;Événements;Créneaux;Heures prévues;Heures attestées;Participations terminées avant la fin")
   })
 
   it("falls back to the default period and still returns 200 without query params", async () => {
@@ -66,7 +66,22 @@ describe("GET /api/admin/members/export-hours (#557)", () => {
     const { GET } = await import("@/app/api/admin/members/export-hours/route")
     const lines = (await (await GET(get("?from=2026-01-01&to=2026-06-30"))).text()).split("\r\n")
     expect(lines[0]).toContain(";Valorisation estimée des heures prévues;Valorisation estimée des heures attestées;Taux horaire;Devise")
-    expect(lines[1]).toBe("Zoé;Roy;1;1;1.5;1.5;45;45;30;EUR")
+    expect(lines[1]).toBe("Zoé;Roy;1;1;1.5;1.5;0;45;45;30;EUR")
+  })
+
+  it("counts a left-early participation in its own column, never as an attested hour (#1141)", async () => {
+    volunteerFindMany.mockResolvedValue([{
+      id: "v1", firstName: "Zoé", lastName: "Roy",
+      registrations: [{
+        id: "r1", status: "active", checkedInAt: new Date("2026-03-01T09:00:00Z"), attendanceStatus: "left_early",
+        shift: { id: "s1", roleName: "Bar", label: "Bar", date: new Date("2026-03-01T00:00:00Z"), startTime: "10:00", endTime: "11:30", status: "open" },
+        event: { id: "e1", title: "Fête" },
+      }],
+    }])
+    const { GET } = await import("@/app/api/admin/members/export-hours/route")
+    const lines = (await (await GET(get("?from=2026-01-01&to=2026-06-30"))).text()).split("\r\n")
+    expect(lines[0]).toContain("Heures prévues;Heures attestées;Participations terminées avant la fin")
+    expect(lines[1]).toBe("Zoé;Roy;1;1;1.5;0;1")
   })
 
   it("leaves the file unchanged without a rate (#867)", async () => {

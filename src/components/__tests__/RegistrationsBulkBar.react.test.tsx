@@ -8,8 +8,8 @@ import BulkActionsBar from "../admin/registrations/BulkActionsBar"
 
 // The toolbar of the actions on the selected registrations, on its own.
 const base = {
-  selectedCount: 2, toCheckInCount: 2, toUndoCount: 0, toMarkAbsentCount: 2, toUndoAbsentCount: 0, activeCount: 2, noneWithEmail: false, noActiveWithEmail: false, busy: false,
-  onPresence: () => {}, onAbsence: () => {}, onMakeResponsible: () => {}, onResendLink: () => {}, onCancelRegistrations: () => {}, onClearSelection: () => {},
+  selectedCount: 2, toCheckInCount: 2, toUndoCount: 0, toMarkAbsentCount: 2, toUndoAbsentCount: 0, toMarkLeftEarlyCount: 0, toUndoLeftEarlyCount: 0, activeCount: 2, noneWithEmail: false, noActiveWithEmail: false, busy: false,
+  onPresence: () => {}, onAbsence: () => {}, onDeparture: () => {}, onMakeResponsible: () => {}, onResendLink: () => {}, onCancelRegistrations: () => {}, onClearSelection: () => {},
 }
 
 describe("BulkActionsBar", () => {
@@ -122,5 +122,41 @@ describe("BulkActionsBar", () => {
     for (const name of ["Marquer absents (2)", "Annuler l'absence (1)"]) {
       expect(screen.getByRole("button", { name }).className).not.toMatch(/red-/)
     }
+  })
+
+  // The left-early state (#1141): its pair stays adjacent, after the absence pair.
+  it("offers the departure pair only when it applies, after the absence pair and before the other actions", () => {
+    const onDeparture = vi.fn()
+    const { rerender } = render(<BulkActionsBar {...base} toMarkAbsentCount={0} toMarkLeftEarlyCount={0} toUndoLeftEarlyCount={0} onDeparture={onDeparture} />)
+    expect(screen.queryByRole("button", { name: /avant la fin/ })).toBeNull()
+    expect(screen.queryByRole("button", { name: /Annuler le départ/ })).toBeNull()
+    rerender(<BulkActionsBar {...base} toMarkAbsentCount={0} toMarkLeftEarlyCount={2} toUndoLeftEarlyCount={1} onDeparture={onDeparture} />)
+    const mark = screen.getByRole("button", { name: "Marquer partis avant la fin (2)" })
+    const undo = screen.getByRole("button", { name: "Annuler le départ (1)" })
+    expect(mark.compareDocumentPosition(undo) & Node.DOCUMENT_POSITION_FOLLOWING).toBeTruthy()
+    expect(screen.getByRole("button", { name: "Marquer absent (0)" }).compareDocumentPosition(mark) & Node.DOCUMENT_POSITION_FOLLOWING).toBeTruthy()
+    expect(undo.compareDocumentPosition(screen.getByRole("button", { name: "Rendre responsable" })) & Node.DOCUMENT_POSITION_FOLLOWING).toBeTruthy()
+    fireEvent.click(mark)
+    expect(onDeparture).toHaveBeenLastCalledWith(true)
+    fireEvent.click(undo)
+    expect(onDeparture).toHaveBeenLastCalledWith(false)
+    // One person: singular, like the other actions.
+    rerender(<BulkActionsBar {...base} toMarkAbsentCount={0} toMarkLeftEarlyCount={1} onDeparture={onDeparture} />)
+    expect(screen.getByRole("button", { name: "Marquer parti avant la fin (1)" })).toBeInTheDocument()
+  })
+
+  it("keeps the departure buttons focusable but inert while a request runs", () => {
+    const onDeparture = vi.fn()
+    const { rerender } = render(<BulkActionsBar {...base} toMarkLeftEarlyCount={2} toUndoLeftEarlyCount={1} onDeparture={onDeparture} />)
+    const undo = screen.getByRole("button", { name: "Annuler le départ (1)" })
+    undo.focus()
+    rerender(<BulkActionsBar {...base} toMarkLeftEarlyCount={2} toUndoLeftEarlyCount={1} onDeparture={onDeparture} busy />)
+    expect(undo).toHaveFocus()
+    for (const b of [undo, screen.getByRole("button", { name: "Marquer partis avant la fin (2)" })]) {
+      expect(b).toBeEnabled()
+      expect(b).toHaveAttribute("aria-disabled", "true")
+      fireEvent.click(b)
+    }
+    expect(onDeparture).not.toHaveBeenCalled()
   })
 })

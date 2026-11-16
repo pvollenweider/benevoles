@@ -226,8 +226,8 @@ describe("POST registrations/bulk as a front-desk account (#1142)", () => {
     expect(businessCalls()).toEqual([])
   })
 
-  it("accepts the four attendance actions with a live grant, and logs the front-desk account as the author", async () => {
-    expect([...FRONT_DESK_BULK_ACTIONS]).toEqual(["check_in", "undo_check_in", "mark_absent", "undo_absent"])
+  it("accepts the six attendance actions with a live grant, and logs the front-desk account as the author", async () => {
+    expect([...FRONT_DESK_BULK_ACTIONS]).toEqual(["check_in", "undo_check_in", "mark_absent", "undo_absent", "mark_left_early", "undo_left_early"])
 
     let res = await bulk(EVENT, { action: "check_in", registrationIds: ["reg-nadia"] })
     expect(res.status).toBe(200)
@@ -250,7 +250,23 @@ describe("POST registrations/bulk as a front-desk account (#1142)", () => {
     expect(res.json).toMatchObject({ done: 1 })
     expect(registrationRow("reg-luc").attendanceStatus).toBeNull()
 
-    expect(logEvent).toHaveBeenCalledTimes(4)
+    // A departure: the arrival is recorded first, kept by the departure, restored by its undo.
+    res = await bulk(EVENT, { action: "check_in", registrationIds: ["reg-nadia"] })
+    expect(res.status).toBe(200)
+    const arrival = registrationRow("reg-nadia").checkedInAt
+    res = await bulk(EVENT, { action: "mark_left_early", registrationIds: ["reg-nadia"] })
+    expect(res.status).toBe(200)
+    expect(res.json).toMatchObject({ done: 1, changedIds: ["reg-nadia"] })
+    expect(registrationRow("reg-nadia")).toMatchObject({ checkedInAt: arrival, attendanceStatus: "left_early", attendanceBy: "adm-colette" })
+    expect(logEvent).toHaveBeenLastCalledWith(expect.objectContaining({ action: "registration.marked_left_early", entityId: "reg-nadia" }))
+
+    res = await bulk(EVENT, { action: "undo_left_early", registrationIds: ["reg-nadia"] })
+    expect(res.status).toBe(200)
+    expect(res.json).toMatchObject({ done: 1 })
+    expect(registrationRow("reg-nadia")).toMatchObject({ checkedInAt: arrival, attendanceStatus: null, attendanceAt: null, attendanceBy: null })
+    expect(logEvent).toHaveBeenLastCalledWith(expect.objectContaining({ action: "registration.departure_undone", entityId: "reg-nadia" }))
+
+    expect(logEvent).toHaveBeenCalledTimes(7)
     expect(sent).not.toHaveBeenCalled()
   })
 

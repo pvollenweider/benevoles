@@ -54,7 +54,7 @@ export default async function ReportsPage({ params, searchParams }: { params: Pr
             id: true, roleName: true, sectorId: true, updatedAt: true, label: true, date: true, startTime: true, endTime: true, capacity: true, minVolunteers: true, status: true,
             registrations: {
               where: { status: { in: [...LIVE_STATUSES] } },
-              select: { status: true, checkedInAt: true, volunteerId: true, volunteer: { select: { id: true, firstName: true, lastName: true, email: true } } },
+              select: { status: true, checkedInAt: true, attendanceStatus: true, volunteerId: true, volunteer: { select: { id: true, firstName: true, lastName: true, email: true } } },
             },
           },
         },
@@ -92,6 +92,7 @@ export default async function ReportsPage({ params, searchParams }: { params: Pr
         volunteerId: r.volunteerId,
         status: r.status,
         checkedInAt: r.checkedInAt,
+        attendanceStatus: r.attendanceStatus,
         shift: { id: s.id, roleName: s.roleName, label: s.label, date: s.date, startTime: s.startTime, endTime: s.endTime, status: s.status },
         event: { id: event.id, title: event.title },
       })),
@@ -251,6 +252,15 @@ export default async function ReportsPage({ params, searchParams }: { params: Pr
             <p className="text-sm text-gray-800 mt-1">
               <strong>{fmtDuration(summary.plannedMinutes)}</strong> prévues, dont <strong>{fmtDuration(summary.attestedMinutes)}</strong> attestées (présence enregistrée).
             </p>
+            {summary.endedEarlyCount > 0 && (
+              // A left-early participation is a recorded participation whose duration is unknown:
+              // a count beside the attested figures, never hours (#1141).
+              <p className="text-sm text-gray-800 mt-1">
+                {summary.endedEarlyCount === 1
+                  ? "1 participation terminée avant la fin n'est pas comptée dans les heures attestées."
+                  : `${summary.endedEarlyCount} participations terminées avant la fin ne sont pas comptées dans les heures attestées.`}
+              </p>
+            )}
             {hourRate && valuation && (
               <p className="text-sm text-gray-800 mt-1">
                 Valeur estimée (contribution volontaire en nature) : <strong>{formatMoney(valuation.plannedCents, hourRate.currency)}</strong> pour les heures prévues,

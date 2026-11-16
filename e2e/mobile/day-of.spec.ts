@@ -48,6 +48,9 @@ test("tapping « Présent » then « Annuler la présence » toggles the mark an
   // the space after it are optional here, so the check holds with or without it.
   await expect(page.getByText(/^(✓\s*)?Présent$/)).toBeVisible()
 
+  // A row whose shown state just changed stays inert for a moment (#1141): wait for the undo to
+  // become actionable instead of tapping an aria-disabled button. Playwright retries this check.
+  await expect(undo).not.toHaveAttribute("aria-disabled", "true")
   await undo.tap()
   await expect(present).toBeFocused()
   await expect(page.getByRole("status")).toHaveText(`Présence annulée pour ${name}. Accueil : 0 présent sur 1 attendu.`)

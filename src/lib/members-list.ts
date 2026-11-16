@@ -26,6 +26,9 @@ export type MemberRow = {
   // Past confirmed shifts with a recorded presence (#557), same scope as hoursTotal: the two never
   // overlap and add up to every hour the member actually gave, as far as check-in was used.
   hoursAttested: number
+  // Participations ended before the end (#1141): a count, never hours. Computed server-side
+  // (page.tsx, volunteer-hours.ts); optional so older call sites leave the line out.
+  participationsEndedEarly?: number
   // Local date ("YYYY-MM-DD") of the most recent past shift with an active registration, and of the
   // most recent recorded presence — null when there is none of either (#557).
   lastShiftDate: string | null

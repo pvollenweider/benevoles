@@ -47,7 +47,7 @@ export default async function MembersPage({ searchParams }: { searchParams: Prom
         registrations: {
           where: { status: "active" },
           select: {
-            id: true, status: true, checkedInAt: true,
+            id: true, status: true, checkedInAt: true, attendanceStatus: true,
             shift: { select: { id: true, roleName: true, label: true, date: true, startTime: true, endTime: true, status: true } },
             event: { select: { id: true, title: true } },
           },
@@ -94,7 +94,7 @@ export default async function MembersPage({ searchParams }: { searchParams: Prom
         const entries = volunteerHourEntries(v.registrations, timeZone)
         // « Heures prévues » over every confirmed shift, past and upcoming; « Heures attestées » the
         // ones with a presence; « Dernière participation » on the past ones (memberListHours).
-        const { plannedMinutes, attestedMinutes, lastShiftDate, lastPresenceDate } = memberListHours(entries, today)
+        const { plannedMinutes, attestedMinutes, endedEarlyCount, lastShiftDate, lastPresenceDate } = memberListHours(entries, today)
         return {
           id: v.id,
           firstName: v.firstName,
@@ -108,6 +108,7 @@ export default async function MembersPage({ searchParams }: { searchParams: Prom
           availabilityNote: v.availabilityNote,
           hoursTotal: plannedMinutes / 60,
           hoursAttested: attestedMinutes / 60,
+          participationsEndedEarly: endedEarlyCount,
           lastShiftDate,
           lastPresenceDate,
           addressStatus: serializeAddressStatus(addressStatuses.get(v.id) ?? { kind: "ok" }),

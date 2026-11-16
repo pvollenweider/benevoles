@@ -908,6 +908,13 @@ export default function MembersManager({ initialMembers, allTags, initialSearch,
                   </td>
                   <td className="px-4 py-3 text-gray-600">
                     {m.hoursAttested > 0 ? fmtHours(m.hoursAttested) : <span className="text-gray-500">—</span>}
+                    {/* A left-early participation is a recorded participation whose duration is
+                        unknown: counted here, never turned into hours (#1141). */}
+                    {(m.participationsEndedEarly ?? 0) > 0 && (
+                      <div className="text-xs text-gray-500">
+                        {m.participationsEndedEarly} participation{m.participationsEndedEarly! > 1 ? "s" : ""} terminée{m.participationsEndedEarly! > 1 ? "s" : ""} avant la fin
+                      </div>
+                    )}
                   </td>
                   <td className="px-4 py-3 text-gray-600">
                     {m.lastShiftDate ? (

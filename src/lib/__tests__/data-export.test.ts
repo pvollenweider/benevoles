@@ -76,10 +76,10 @@ describe("csv", () => {
       { firstName: "=cmd", lastName: "Dupont", eventsCount: 1, shiftsCount: 1, plannedHours: 0, attestedHours: 2 },
     ])
     const lines = csv.split("\r\n")
-    expect(lines[0]).toBe("﻿Prénom;Nom;Événements;Créneaux;Heures prévues;Heures attestées")
-    expect(lines[1]).toBe("Zoé;Roy;2;3;4.5;2")
-    expect(lines[2]).toBe("'=cmd;Dupont;1;1;0;2")
-    expect(lines[3]).toBe("Total;;;4;4.5;4")
+    expect(lines[0]).toBe("﻿Prénom;Nom;Événements;Créneaux;Heures prévues;Heures attestées;Participations terminées avant la fin")
+    expect(lines[1]).toBe("Zoé;Roy;2;3;4.5;2;0")
+    expect(lines[2]).toBe("'=cmd;Dupont;1;1;0;2;0")
+    expect(lines[3]).toBe("Total;;;4;4.5;4;0")
   })
 
   it("hours by volunteer with an hourly rate (#867): estimated amounts from the minutes, rate and currency on every line", () => {
@@ -90,17 +90,27 @@ describe("csv", () => {
       { firstName: "Léo", lastName: "Dupont", eventsCount: 1, shiftsCount: 1, plannedHours: 1, attestedHours: 0, plannedMinutes: 60, attestedMinutes: 0 },
     ], rate)
     const lines = csv.split("\r\n")
-    expect(lines[0]).toBe("\uFEFFPrénom;Nom;Événements;Créneaux;Heures prévues;Heures attestées;Valorisation estimée des heures prévues;Valorisation estimée des heures attestées;Taux horaire;Devise")
-    expect(lines[1]).toBe("Zoé;Roy;2;3;2.83;1.33;72.25;34;25.5;CHF")
-    expect(lines[2]).toBe("Léo;Dupont;1;1;1;0;25.5;0;25.5;CHF")
+    expect(lines[0]).toBe("\uFEFFPrénom;Nom;Événements;Créneaux;Heures prévues;Heures attestées;Participations terminées avant la fin;Valorisation estimée des heures prévues;Valorisation estimée des heures attestées;Taux horaire;Devise")
+    expect(lines[1]).toBe("Zoé;Roy;2;3;2.83;1.33;0;72.25;34;25.5;CHF")
+    expect(lines[2]).toBe("Léo;Dupont;1;1;1;0;0;25.5;0;25.5;CHF")
     // The total adds up the members' amounts; the rate is repeated, never summed.
-    expect(lines[3]).toBe("Total;;;4;3.83;1.33;97.75;34;25.5;CHF")
+    expect(lines[3]).toBe("Total;;;4;3.83;1.33;0;97.75;34;25.5;CHF")
   })
 
   it("hours by volunteer without a rate: the same file as before (#867)", () => {
     const rows = [{ firstName: "Zoé", lastName: "Roy", eventsCount: 1, shiftsCount: 1, plannedHours: 1, attestedHours: 1, plannedMinutes: 60, attestedMinutes: 60 }]
     expect(memberHoursCsv(rows, null)).toBe(memberHoursCsv(rows))
-    expect(memberHoursCsv(rows).split("\r\n")[0]).toBe("\uFEFFPrénom;Nom;Événements;Créneaux;Heures prévues;Heures attestées")
+    expect(memberHoursCsv(rows).split("\r\n")[0]).toBe("\uFEFFPrénom;Nom;Événements;Créneaux;Heures prévues;Heures attestées;Participations terminées avant la fin")
+  })
+
+  it("hours by volunteer: early departures are a count in their own column, the other values unchanged (#1141)", () => {
+    const csv = memberHoursCsv([
+      { firstName: "Zoé", lastName: "Roy", eventsCount: 1, shiftsCount: 2, plannedHours: 4, attestedHours: 2, endedEarlyCount: 1 },
+    ])
+    const lines = csv.split("\r\n")
+    expect(lines[0]).toBe("\uFEFFPrénom;Nom;Événements;Créneaux;Heures prévues;Heures attestées;Participations terminées avant la fin")
+    expect(lines[1]).toBe("Zoé;Roy;1;2;4;2;1")
+    expect(lines[2]).toBe("Total;;;2;4;2;1")
   })
 
   it("activity: changes serialized as JSON", () => {

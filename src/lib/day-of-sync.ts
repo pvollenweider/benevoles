@@ -22,6 +22,8 @@ export const DAY_OF_POLL_MS = 25_000
 export const DAY_OF_POLL_MAX_MS = 120_000
 /** Back on the page: refresh at once, unless the last try is more recent than this. */
 export const DAY_OF_RESUME_MIN_MS = 5_000
+/** A row whose shown state just changed keeps its buttons inert this long (#1141). */
+export const SETTLE_MS = 600
 
 export type SyncStatus = "ok" | "offline" | "error" | "expired"
 
@@ -59,9 +61,10 @@ export function syncStatusOf(r: { network: true; online: boolean } | { status: n
 export type ShownAttendance = { state: AttendanceState; checkedInAt: string | null }
 
 /**
- * An attendance action made on this phone (#399, #1141): the state it left (expected, present or
- * absent, with the check-in instant), `at` the tick of its answer, null while the action is in
- * flight. An in-flight mark keeps the mark it replaced (`prev`), put back if the action fails.
+ * An attendance action made on this phone (#399, #1141): the state it left (expected, present,
+ * absent or left before the end, with the check-in instant), `at` the tick of its answer, null
+ * while the action is in flight. An in-flight mark keeps the mark it replaced (`prev`), put back
+ * if the action fails.
  */
 export type LocalMark = ShownAttendance & { at: number | null; prev?: LocalMark }
 export type LocalMarks = Record<string, LocalMark>
@@ -144,20 +147,22 @@ const peopleOf = (b: DayOfBoard): Map<string, DayOfPerson> => {
   return all
 }
 
-export type BoardChanges = { arrived: number; undone: number; absent: number; absenceUndone: number; roster: boolean }
+export type BoardChanges = { arrived: number; undone: number; absent: number; absenceUndone: number; leftEarly: number; departureUndone: number; roster: boolean }
 
 /**
  * What changed for the person using the page between what was shown (`before` with `marksBefore`)
- * and what is shown after a poll (`after` with `marksAfter`): presences and absences marked or
- * undone elsewhere, and whether people appeared on or left the listed shifts. Three states
- * (#1141): someone present here and absent there is one presence undone and one absence marked,
- * never a silent change. Shifts moving from « à venir » to « en cours » with time are not a
+ * and what is shown after a poll (`after` with `marksAfter`): presences, absences and departures
+ * marked or undone elsewhere, and whether people appeared on or left the listed shifts. Four
+ * states (#1141): someone present here and absent there is one presence undone and one absence
+ * marked, never a silent change. A presence turning into a departure is one departure only, and
+ * the departure turning back into a presence one undone departure only: neither is said as a
+ * presence undone or marked. Shifts moving from « à venir » to « en cours » with time are not a
  * change: the page shows them where they are.
  */
 export function boardChanges(before: DayOfBoard, marksBefore: LocalMarks, after: DayOfBoard, marksAfter: LocalMarks): BoardChanges {
   const was = peopleOf(before)
   const now = peopleOf(after)
-  const c = { arrived: 0, undone: 0, absent: 0, absenceUndone: 0 }
+  const c = { arrived: 0, undone: 0, absent: 0, absenceUndone: 0, leftEarly: 0, departureUndone: 0 }
   let roster = was.size !== now.size
   for (const [id, p] of now) {
     const old = was.get(id)
@@ -165,12 +170,31 @@ export function boardChanges(before: DayOfBoard, marksBefore: LocalMarks, after:
     const a = shownState(old, marksBefore)
     const b = shownState(p, marksAfter)
     if (a === b) continue
-    if (a === "present") c.undone += 1
+    if (a === "present" && b !== "left_early") c.undone += 1
+    if (a === "left_early") c.departureUndone += 1
     if (a === "absent") c.absenceUndone += 1
-    if (b === "present") c.arrived += 1
+    if (b === "present" && a !== "left_early") c.arrived += 1
+    if (b === "left_early") c.leftEarly += 1
     if (b === "absent") c.absent += 1
   }
   return { ...c, roster }
+}
+
+/**
+ * The rows whose shown state changed between a read and another (a poll, or the answer to an
+ * action): the board settles them before their second button may act again (#1141). A row present
+ * on only one side is a roster change, not a settle.
+ */
+export function changedShownRows(before: DayOfBoard, marksBefore: LocalMarks, after: DayOfBoard, marksAfter: LocalMarks): string[] {
+  const was = peopleOf(before)
+  const now = peopleOf(after)
+  const ids: string[] = []
+  for (const [id, p] of now) {
+    const old = was.get(id)
+    if (!old) continue
+    if (shownState(old, marksBefore) !== shownState(p, marksAfter)) ids.push(id)
+  }
+  return ids
 }
 
 const plural = (n: number, one: string, many: string) => `${n} ${n > 1 ? many : one}`
@@ -182,6 +206,8 @@ export function changesAnnouncement(c: BoardChanges): string | null {
   if (c.undone) parts.push(`${plural(c.undone, "présence annulée", "présences annulées")}`)
   if (c.absent) parts.push(`${plural(c.absent, "personne marquée absente", "personnes marquées absentes")}`)
   if (c.absenceUndone) parts.push(`${plural(c.absenceUndone, "absence annulée", "absences annulées")}`)
+  if (c.leftEarly) parts.push(`${plural(c.leftEarly, "personne partie avant la fin", "personnes parties avant la fin")}`)
+  if (c.departureUndone) parts.push(`${plural(c.departureUndone, "départ annulé", "départs annulés")}`)
   if (c.roster) parts.push("la liste des personnes attendues a changé")
   return parts.length ? `Liste mise à jour : ${parts.join(", ")}.` : null
 }
@@ -222,11 +248,13 @@ export function addChanges(a: BoardChanges, b: BoardChanges): BoardChanges {
     undone: a.undone + b.undone,
     absent: a.absent + b.absent,
     absenceUndone: a.absenceUndone + b.absenceUndone,
+    leftEarly: a.leftEarly + b.leftEarly,
+    departureUndone: a.departureUndone + b.departureUndone,
     roster: a.roster || b.roster,
   }
 }
 
-export const NO_CHANGES: BoardChanges = { arrived: 0, undone: 0, absent: 0, absenceUndone: 0, roster: false }
+export const NO_CHANGES: BoardChanges = { arrived: 0, undone: 0, absent: 0, absenceUndone: 0, leftEarly: 0, departureUndone: 0, roster: false }
 
 /** Quiet time after any message before poll changes may be said: the user's own outcome comes first. */
 export const CHANGES_QUIET_MS = 3_000

@@ -154,6 +154,8 @@ export type AttendanceTarget = {
   id: string; eventId: string; shiftId: string; status: string
   /** The shift the client showed this registration on, when it said so (`observedShifts`). */
   observedShiftId?: string | null
+  /** The arrival the caller read, kept by « marquer parti avant la fin » and « annuler le départ ». */
+  checkedInAt?: Date | string | null
 }
 
 /**
@@ -169,15 +171,16 @@ export type AttendanceResult =
 
 /**
  * Lightweight attendance (#399, #1141): marks the given registrations present, undoes it, marks
- * them absent or undoes the absence. Only confirmed registrations, and only rows whose starting
- * state matches the transition: one conditional `updateMany` per row testing `status`, the shift
- * the caller read (`shiftId`) and the attendance columns, so a stale request changes nothing
- * instead of overwriting a state recorded meanwhile on another device, a swap committed since
- * the caller's read is never marked on the wrong shift, and a row selected twice isn't logged
- * twice. A target whose `observedShiftId` differs from its shift is not written at all.
- * Logs each real change. Returns one result per target, in the targets' order: a row that did not
- * change (stale, moved, or not confirmed) is read back and returned with its current state, so
- * the client shows the truth rather than a guess.
+ * them absent or undoes the absence, marks a present person as having left before the end or
+ * undoes that departure. Only confirmed registrations, and only rows whose starting state matches
+ * the transition: one conditional `updateMany` per row testing `status`, the shift the caller read
+ * (`shiftId`) and the attendance columns, so a stale request changes nothing instead of
+ * overwriting a state recorded meanwhile on another device, a swap committed since the caller's
+ * read is never marked on the wrong shift, and a row selected twice isn't logged twice. A target
+ * whose `observedShiftId` differs from its shift is not written at all. Logs each real change.
+ * Returns one result per target, in the targets' order: a row that did not change (stale, moved,
+ * or not confirmed) is read back and returned with its current state, so the client shows the
+ * truth rather than a guess.
  */
 export async function setAttendance(
   db: OrgScopedPrisma,
@@ -206,7 +209,7 @@ export async function setAttendance(
       eventId: reg.eventId,
       actor,
       // Literals on this line: src/lib/__tests__/log-action-labels.test.ts reads them (#704).
-      action: transition === "check_in" ? "registration.checked_in" : transition === "undo_check_in" ? "registration.check_in_undone" : transition === "mark_absent" ? "registration.marked_absent" : "registration.absence_undone",
+      action: transition === "check_in" ? "registration.checked_in" : transition === "undo_check_in" ? "registration.check_in_undone" : transition === "mark_absent" ? "registration.marked_absent" : transition === "undo_absent" ? "registration.absence_undone" : transition === "mark_left_early" ? "registration.marked_left_early" : "registration.departure_undone",
       entityType: "Registration",
       entityId: reg.id,
       // Check-in entries keep the shape they have had since #399; the absence ones carry the
@@ -220,12 +223,26 @@ export async function setAttendance(
   }
   // The rows that did not change, read once: their state and shift as they are now in the database.
   const unchangedIds = [...new Set(targets.filter((t) => !changed.has(t.id)).map((t) => t.id))]
-  const current = unchangedIds.length
-    ? await db.registration.findMany({ where: { id: { in: unchangedIds } }, select: { id: true, shiftId: true, checkedInAt: true, attendanceStatus: true } })
+  // A departure action keeps the arrival: read it back too when the caller did not pass it.
+  const needArrival = transition === "mark_left_early" || transition === "undo_left_early"
+    ? targets.filter((t) => changed.has(t.id) && t.checkedInAt === undefined).map((t) => t.id)
+    : []
+  const toRead = [...new Set([...unchangedIds, ...needArrival])]
+  const current = toRead.length
+    ? await db.registration.findMany({ where: { id: { in: toRead } }, select: { id: true, shiftId: true, checkedInAt: true, attendanceStatus: true } })
     : []
   const currentById = new Map(current.map((r) => [r.id, r]))
+  const iso = (v: Date | string | null | undefined): string | null => (v == null ? null : typeof v === "string" ? v : v.toISOString())
   return targets.map((t): AttendanceResult => {
-    if (changed.has(t.id)) return { id: t.id, changed: true, state: plan.to, checkedInAt: plan.to === "present" ? now.toISOString() : null }
+    if (changed.has(t.id)) {
+      // « Parti avant la fin » keeps the arrival the caller read, and « Annuler le départ »
+      // restores that same presence; the other actions either write now (check-in) or clear it.
+      const keptArrival = t.checkedInAt === undefined ? currentById.get(t.id)?.checkedInAt : t.checkedInAt
+      const checkedInAt = plan.to === "left_early" || transition === "undo_left_early"
+        ? iso(keptArrival)
+        : plan.to === "present" ? now.toISOString() : null
+      return { id: t.id, changed: true, state: plan.to, checkedInAt }
+    }
     const row = currentById.get(t.id)
     // Deleted between the caller's read and this one: said as such, no state invented.
     if (!row) return { id: t.id, changed: false, state: null, checkedInAt: null, gone: true }
@@ -236,17 +253,24 @@ export async function setAttendance(
 
 /**
  * The `where` that makes a write conditional on the transition's starting state. « Present » is
- * any row with a check-in time, whatever `attendanceStatus` says (attendance-state.ts): the
- * previous release's check-in can leave "absent" beside it during a rolling deployment, and
- * « Annuler la présence », which writes the four columns, must be able to clean such a row.
+ * any row with a check-in time whose status is not "left_early": a previous release's check-in
+ * can leave "absent" beside it during a rolling deployment, and « Annuler la présence », which
+ * writes the four columns, must be able to clean such a row. A left-early row is not present here
+ * even though it keeps its arrival: its departure is undone first (attendance-state.ts).
  */
 function startingStateWhere(from: AttendanceState) {
-  if (from === "present") return { checkedInAt: { not: null } }
+  // `not` alone would exclude a NULL status in SQL: the normal present row has none.
+  if (from === "present") return { checkedInAt: { not: null }, OR: [{ attendanceStatus: null }, { attendanceStatus: { not: "left_early" } }] }
   if (from === "absent") return { checkedInAt: null, attendanceStatus: "absent" }
+  if (from === "left_early") return { checkedInAt: { not: null }, attendanceStatus: "left_early" }
   return { checkedInAt: null, attendanceStatus: null }
 }
 
-/** The columns a transition writes: the four of them each time, so the invariants hold. */
+/**
+ * The columns a transition writes. « Marquer parti avant la fin » and « Annuler le départ » leave
+ * `checkedInAt` alone on purpose: the arrival stays known, only the departure mark is added or
+ * cleared. The four attendance columns are written on every other transition.
+ */
 function attendanceData(transition: AttendanceTransition, now: Date, adminId: string | null) {
   switch (transition) {
     case "check_in":
@@ -256,6 +280,10 @@ function attendanceData(transition: AttendanceTransition, now: Date, adminId: st
       return { checkedInAt: null, attendanceStatus: null, attendanceAt: null, attendanceBy: null }
     case "mark_absent":
       return { checkedInAt: null, attendanceStatus: "absent", attendanceAt: now, attendanceBy: adminId }
+    case "mark_left_early":
+      return { attendanceStatus: "left_early", attendanceAt: now, attendanceBy: adminId }
+    case "undo_left_early":
+      return { attendanceStatus: null, attendanceAt: null, attendanceBy: null }
   }
 }
 

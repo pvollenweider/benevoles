@@ -123,6 +123,8 @@ export type MemberHoursExportRow = {
    * the rounded hours. Falls back to the hours when absent. */
   plannedMinutes?: number
   attestedMinutes?: number
+  /** Participations ended before the end (#1141): a count, never hours. */
+  endedEarlyCount?: number
 }
 
 /**
@@ -130,19 +132,23 @@ export type MemberHoursExportRow = {
  * the period (or every member, when the caller asked to include those without one — `rows` already
  * reflects that choice), plus a total line for the organization.
  *
+ * The count of participations ended before the end (#1141) follows « Heures attestées »: a count,
+ * never hours (a left-early shift attests none). The other columns keep their names, order and
+ * values.
+ *
  * With the organisation's hourly rate (#867), four more columns: the estimated value of the planned
  * and of the attested hours (each member's amount rounded to the cent, the total is the sum of those
  * amounts, so the file adds up), then the rate and its currency, repeated on every line so a line
- * read alone still says how it was valued. Without a rate, the file is exactly as before.
+ * read alone still says how it was valued. Without a rate, the file has no valuation columns.
  */
 export function memberHoursCsv(rows: MemberHoursExportRow[], rate?: VolunteerHourRate | null): string {
   const total = rows.reduce(
-    (acc, r) => ({ shiftsCount: acc.shiftsCount + r.shiftsCount, plannedHours: acc.plannedHours + r.plannedHours, attestedHours: acc.attestedHours + r.attestedHours }),
-    { shiftsCount: 0, plannedHours: 0, attestedHours: 0 },
+    (acc, r) => ({ shiftsCount: acc.shiftsCount + r.shiftsCount, plannedHours: acc.plannedHours + r.plannedHours, attestedHours: acc.attestedHours + r.attestedHours, endedEarlyCount: acc.endedEarlyCount + (r.endedEarlyCount ?? 0) }),
+    { shiftsCount: 0, plannedHours: 0, attestedHours: 0, endedEarlyCount: 0 },
   )
-  const header = ["Prénom", "Nom", "Événements", "Créneaux", "Heures prévues", "Heures attestées"]
-  const lines: unknown[][] = rows.map((r) => [r.firstName, r.lastName, r.eventsCount, r.shiftsCount, r.plannedHours, r.attestedHours])
-  const totalLine: unknown[] = ["Total", "", "", total.shiftsCount, total.plannedHours, total.attestedHours]
+  const header = ["Prénom", "Nom", "Événements", "Créneaux", "Heures prévues", "Heures attestées", "Participations terminées avant la fin"]
+  const lines: unknown[][] = rows.map((r) => [r.firstName, r.lastName, r.eventsCount, r.shiftsCount, r.plannedHours, r.attestedHours, r.endedEarlyCount ?? 0])
+  const totalLine: unknown[] = ["Total", "", "", total.shiftsCount, total.plannedHours, total.attestedHours, total.endedEarlyCount]
   if (!rate) return csvDocument(header, [...lines, totalLine])
 
   const values = rows.map((r) =>

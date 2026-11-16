@@ -3,9 +3,11 @@ import {
   DAY_OF_POLL_MAX_MS,
   DAY_OF_POLL_MS,
   NO_CHANGES,
+  SETTLE_MS,
   addChanges,
   answerMark,
   boardChanges,
+  changedShownRows,
   changesAnnouncement,
   findOnBoard,
   isFreshAnswer,
@@ -31,6 +33,7 @@ import type { DayOfBoard, DayOfPerson, DayOfShift } from "../day-of"
 // « Jour J » refreshes itself while open (#1141).
 const person = (id: string, checkedInAt: string | null = null): DayOfPerson => ({ registrationId: id, firstName: "Zoé", lastName: id, phone: null, checkedInAt })
 const absentPerson = (id: string): DayOfPerson => ({ ...person(id), attendanceStatus: "absent" })
+const leftEarlyPerson = (id: string): DayOfPerson => ({ ...person(id, "x"), attendanceStatus: "left_early" })
 /** A mark of this phone: present at `checkedInAt`, expected when null. */
 const mark = (checkedInAt: string | null, at: number | null) => ({ state: checkedInAt ? "present" as const : "expected" as const, checkedInAt, at })
 const shift = (id: string, people: DayOfPerson[]): DayOfShift => ({
@@ -130,7 +133,7 @@ describe("boardChanges and changesAnnouncement", () => {
     const before = boardOf([person("a"), person("b", "x"), person("c")])
     const after = boardOf([person("a", "y"), person("b"), person("c", "z")])
     const c = boardChanges(before, {}, after, {})
-    expect(c).toEqual({ arrived: 2, undone: 1, absent: 0, absenceUndone: 0, roster: false })
+    expect(c).toEqual({ arrived: 2, undone: 1, absent: 0, absenceUndone: 0, leftEarly: 0, departureUndone: 0, roster: false })
     expect(changesAnnouncement(c)).toBe("Liste mise à jour : 2 personnes marquées présentes, 1 présence annulée.")
   })
 
@@ -160,29 +163,68 @@ describe("boardChanges and changesAnnouncement", () => {
   })
 
   it("adds up changes waiting to be said", () => {
-    expect(addChanges({ ...NO_CHANGES, arrived: 1 }, { ...NO_CHANGES, arrived: 2, undone: 1, roster: true })).toEqual({ arrived: 3, undone: 1, absent: 0, absenceUndone: 0, roster: true })
-    expect(addChanges({ ...NO_CHANGES, absent: 1 }, { ...NO_CHANGES, absent: 2, absenceUndone: 1 })).toEqual({ arrived: 0, undone: 0, absent: 3, absenceUndone: 1, roster: false })
+    expect(addChanges({ ...NO_CHANGES, arrived: 1 }, { ...NO_CHANGES, arrived: 2, undone: 1, roster: true })).toEqual({ arrived: 3, undone: 1, absent: 0, absenceUndone: 0, leftEarly: 0, departureUndone: 0, roster: true })
+    expect(addChanges({ ...NO_CHANGES, absent: 1 }, { ...NO_CHANGES, absent: 2, absenceUndone: 1 })).toEqual({ arrived: 0, undone: 0, absent: 3, absenceUndone: 1, leftEarly: 0, departureUndone: 0, roster: false })
   })
 
-  it("three states: an absence marked or undone elsewhere is counted and said (#1141)", () => {
+  it("four states: an absence marked or undone elsewhere is counted and said (#1141)", () => {
     const before = boardOf([person("a"), absentPerson("b"), person("c"), absentPerson("d")])
     const after = boardOf([absentPerson("a"), person("b"), absentPerson("c"), absentPerson("d")])
     const c = boardChanges(before, {}, after, {})
     // Expected to absent was silent when presence was a boolean.
-    expect(c).toEqual({ arrived: 0, undone: 0, absent: 2, absenceUndone: 1, roster: false })
+    expect(c).toEqual({ arrived: 0, undone: 0, absent: 2, absenceUndone: 1, leftEarly: 0, departureUndone: 0, roster: false })
     expect(changesAnnouncement(c)).toBe("Liste mise à jour : 2 personnes marquées absentes, 1 absence annulée.")
     expect(changesAnnouncement({ ...NO_CHANGES, absent: 1, absenceUndone: 2 })).toBe("Liste mise à jour : 1 personne marquée absente, 2 absences annulées.")
   })
 
-  it("three states: present here and absent there is one presence undone and one absence, never only « présence annulée » (#1141)", () => {
+  it("four states: present here and absent there is one presence undone and one absence, never only « présence annulée » (#1141)", () => {
     const c = boardChanges(boardOf([person("a", "x"), absentPerson("b")]), {}, boardOf([absentPerson("a"), person("b", "y")]), {})
-    expect(c).toEqual({ arrived: 1, undone: 1, absent: 1, absenceUndone: 1, roster: false })
+    expect(c).toEqual({ arrived: 1, undone: 1, absent: 1, absenceUndone: 1, leftEarly: 0, departureUndone: 0, roster: false })
     expect(changesAnnouncement(c)).toBe("Liste mise à jour : 1 personne marquée présente, 1 présence annulée, 1 personne marquée absente, 1 absence annulée.")
   })
 
   it("does not count an absence made on this phone once the board catches up (#1141)", () => {
     const marksBefore: LocalMarks = { a: { state: "absent", checkedInAt: null, at: 2 } }
     expect(boardChanges(boardOf([person("a")]), marksBefore, boardOf([absentPerson("a")]), marksAfterPoll(marksBefore, 3))).toEqual(NO_CHANGES)
+  })
+})
+
+describe("four states: departures marked or undone elsewhere (#1141)", () => {
+  it("present → left_early is one departure, never a presence undone", () => {
+    const c = boardChanges(boardOf([person("a", "x")]), {}, boardOf([leftEarlyPerson("a")]), {})
+    expect(c).toEqual({ arrived: 0, undone: 0, absent: 0, absenceUndone: 0, leftEarly: 1, departureUndone: 0, roster: false })
+    expect(changesAnnouncement(c)).toBe("Liste mise à jour : 1 personne partie avant la fin.")
+  })
+
+  it("left_early → present is one departure undone, never an arrival", () => {
+    const c = boardChanges(boardOf([leftEarlyPerson("a")]), {}, boardOf([person("a", "x")]), {})
+    expect(c).toEqual({ arrived: 0, undone: 0, absent: 0, absenceUndone: 0, leftEarly: 0, departureUndone: 1, roster: false })
+    expect(changesAnnouncement(c)).toBe("Liste mise à jour : 1 départ annulé.")
+  })
+
+  it("says the plural forms", () => {
+    expect(changesAnnouncement({ ...NO_CHANGES, leftEarly: 2 })).toBe("Liste mise à jour : 2 personnes parties avant la fin.")
+    expect(changesAnnouncement({ ...NO_CHANGES, departureUndone: 2 })).toBe("Liste mise à jour : 2 départs annulés.")
+  })
+
+  it("adds up the two new counters", () => {
+    expect(addChanges({ ...NO_CHANGES, leftEarly: 1, departureUndone: 2 }, { ...NO_CHANGES, leftEarly: 3, departureUndone: 1 })).toEqual({ ...NO_CHANGES, leftEarly: 4, departureUndone: 3 })
+  })
+
+  it("a departure made on this phone is not counted once the board catches up", () => {
+    const marksBefore: LocalMarks = { a: { state: "left_early", checkedInAt: "x", at: 2 } }
+    expect(boardChanges(boardOf([person("a", "x")]), marksBefore, boardOf([leftEarlyPerson("a")]), marksAfterPoll(marksBefore, 3))).toEqual(NO_CHANGES)
+  })
+
+  it("changedShownRows names the rows whose state the board must settle", () => {
+    expect(changedShownRows(boardOf([person("a"), person("b")]), {}, boardOf([leftEarlyPerson("a"), person("b")]), {})).toEqual(["a"])
+    expect(changedShownRows(boardOf([person("a")]), {}, boardOf([person("a")]), {})).toEqual([])
+    // A row present on one side only is a roster change, not a settle.
+    expect(changedShownRows(boardOf([]), {}, boardOf([person("a")]), {})).toEqual([])
+  })
+
+  it("the settle delay is the short one the board uses", () => {
+    expect(SETTLE_MS).toBe(600)
   })
 })
 
@@ -267,7 +309,7 @@ describe("a person with both a check-in and « absent » (rolling deployment)", 
 
 describe("NO_CHANGES", () => {
   it("has every counter at zero", () => {
-    expect(NO_CHANGES).toEqual({ arrived: 0, undone: 0, absent: 0, absenceUndone: 0, roster: false })
+    expect(NO_CHANGES).toEqual({ arrived: 0, undone: 0, absent: 0, absenceUndone: 0, leftEarly: 0, departureUndone: 0, roster: false })
   })
 })
 

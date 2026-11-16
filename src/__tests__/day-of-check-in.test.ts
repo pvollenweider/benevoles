@@ -22,7 +22,8 @@ vi.mock("@/lib/notifications/outbox", () => ({ enqueueNotifications: vi.fn(), de
 import { attendanceRequest, presenceRequest } from "@/lib/day-of"
 
 type Row = { id: string; eventId: string; shiftId: string; status: string; checkedInAt: Date | null; attendanceStatus?: string | null; attendanceAt?: Date | null; attendanceBy?: string | null }
-type Where = { id: string; status: string; shiftId: string; checkedInAt: null | { not: null }; attendanceStatus?: string | null }
+type StatusCond = string | null | { not: "left_early" }
+type Where = { id: string; status: string; shiftId: string; checkedInAt: null | { not: null }; attendanceStatus?: StatusCond; OR?: { attendanceStatus: StatusCond }[] }
 
 function fakeDb(rows: Row[]) {
   // Applies the conditional write like the database: the status, the check-in and the absence.
@@ -30,7 +31,16 @@ function fakeDb(rows: Row[]) {
     const r = rows.find((x) =>
       x.id === where.id && x.status === where.status && x.shiftId === where.shiftId
       && (where.checkedInAt === null ? x.checkedInAt === null : x.checkedInAt !== null)
-      && (!("attendanceStatus" in where) || (x.attendanceStatus ?? null) === where.attendanceStatus))
+      && (where.OR
+        ? where.OR.some((cond) => cond.attendanceStatus === null
+          ? (x.attendanceStatus ?? null) === null
+          : typeof cond.attendanceStatus === "object" && cond.attendanceStatus !== null
+            ? (x.attendanceStatus ?? null) !== cond.attendanceStatus.not
+            : (x.attendanceStatus ?? null) === cond.attendanceStatus)
+        : !("attendanceStatus" in where)
+          || (typeof where.attendanceStatus === "object" && where.attendanceStatus !== null
+            ? (x.attendanceStatus ?? null) !== where.attendanceStatus.not
+            : (x.attendanceStatus ?? null) === where.attendanceStatus)))
     if (!r) return { count: 0 }
     Object.assign(r, data)
     return { count: 1 }

@@ -18,6 +18,7 @@ const entry = (over: Partial<HourEntry> = {}): HourEntry => ({
   localDate: "2026-05-02",
   minutes: 240,
   attested: true,
+  endedEarly: false,
   ...over,
 })
 
@@ -77,6 +78,32 @@ describe("CertificateView", () => {
     expect(screen.queryByText(/se sont déroulés en même temps/)).not.toBeInTheDocument()
     fireEvent.click(screen.getByRole("checkbox", { name: /Inclure les heures prévues/ }))
     expect(screen.getByText(/se sont déroulés en même temps/)).toBeInTheDocument()
+  })
+
+  it("counts an early departure apart, names it after the total and never warns about a missing presence (#1141)", () => {
+    const leftEarly = entry({ registrationId: "reg-2", eventId: "event-2", eventTitle: "Marché", shiftId: "shift-2", attested: false, endedEarly: true })
+    render(<CertificateView memberId="vol-1" memberName="Julie Martin" organizationName="Festival" entries={[entry(), leftEarly]} defaultPeriod={period} generatedAt="4 octobre 2026" />)
+    const sentence = "1 participation terminée avant la fin n'est pas comptée dans les heures attestées."
+    const shown = screen.getByText(sentence)
+    // Real text, directly after the table's total, before the signature, and printed too.
+    expect(shown).toHaveClass("text-gray-700")
+    expect(shown.className).not.toMatch(/print:hidden|sr-only/)
+    const table = screen.getByRole("table")
+    expect(table.compareDocumentPosition(shown) & Node.DOCUMENT_POSITION_FOLLOWING).toBeTruthy()
+    // It is not in the warning about shifts without a recorded presence.
+    expect(screen.queryByText(/n'a pas de présence enregistrée/)).toBeNull()
+    // The event's attested column says nothing was attested, but the count column says 1.
+    const row = screen.getByText("Marché").closest("tr")!
+    const cells = within(row).getAllByRole("cell")
+    expect(cells[4]).toHaveTextContent("1")
+    // The total row carries the count too.
+    const total = screen.getByRole("rowheader", { name: "Total" }).closest("tr")!
+    expect(total).toHaveTextContent("1")
+  })
+
+  it("says nothing about early departures when there is none", () => {
+    render(<CertificateView memberId="vol-1" memberName="Julie Martin" organizationName="Festival" entries={[entry()]} defaultPeriod={period} generatedAt="4 octobre 2026" />)
+    expect(screen.queryByText(/terminée avant la fin/)).toBeNull()
   })
 
   it("warns, on screen only, about confirmed shifts without a recorded presence", () => {

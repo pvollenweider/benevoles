@@ -14,6 +14,10 @@ type Props = {
   toMarkAbsentCount: number
   /** Selected confirmed people already marked absent. */
   toUndoAbsentCount: number
+  /** Selected confirmed people still present, the ones a departure can be recorded for (#1141). */
+  toMarkLeftEarlyCount: number
+  /** Selected confirmed people already marked as gone before the end. */
+  toUndoLeftEarlyCount: number
   /** Selected confirmed people, the ones a removal applies to. */
   activeCount: number
   /** No selected row has an email: nobody can be made a leader. */
@@ -24,6 +28,7 @@ type Props = {
   busy: boolean
   onPresence: (present: boolean) => void
   onAbsence: (absent: boolean) => void
+  onDeparture: (leftEarly: boolean) => void
   onMakeResponsible: () => void
   onResendLink: () => void
   onCancelRegistrations: () => void
@@ -32,8 +37,8 @@ type Props = {
 
 // ── Toolbar of the actions on the current selection ─────────────────────────
 export default function BulkActionsBar({
-  selectedCount, toCheckInCount, toUndoCount, toMarkAbsentCount, toUndoAbsentCount, activeCount, noneWithEmail, noActiveWithEmail, busy,
-  onPresence, onAbsence, onMakeResponsible, onResendLink, onCancelRegistrations, onClearSelection,
+  selectedCount, toCheckInCount, toUndoCount, toMarkAbsentCount, toUndoAbsentCount, toMarkLeftEarlyCount, toUndoLeftEarlyCount, activeCount, noneWithEmail, noActiveWithEmail, busy,
+  onPresence, onAbsence, onDeparture, onMakeResponsible, onResendLink, onCancelRegistrations, onClearSelection,
 }: Props) {
   // Inert buttons stay focusable (aria-disabled, not disabled): a request starting under the
   // focus does not drop it to the page.
@@ -80,6 +85,28 @@ export default function BulkActionsBar({
           className={`text-xs text-gray-700 border border-gray-300 bg-white px-3 py-1.5 rounded-full hover:bg-gray-50 transition-colors ${noUndo ? "opacity-50 cursor-not-allowed" : ""}`}
         >
           {`Annuler l'absence (${toUndoAbsentCount})`}
+        </button>
+      )}
+      {/* Departures (#1141): the pair stays adjacent, after the absence pair and before the other
+          actions. Both are shown only when they apply, like the undos. */}
+      {toMarkLeftEarlyCount > 0 && (
+        <button
+          type="button"
+          onClick={() => { if (!busy && toMarkLeftEarlyCount > 0) onDeparture(true) }}
+          aria-disabled={busy || toMarkLeftEarlyCount === 0}
+          className={`text-xs text-gray-700 border border-gray-300 bg-white px-3 py-1.5 rounded-full hover:bg-gray-50 transition-colors ${busy || toMarkLeftEarlyCount === 0 ? "opacity-50 cursor-not-allowed" : ""}`}
+        >
+          {`Marquer parti${toMarkLeftEarlyCount > 1 ? "s" : ""} avant la fin (${toMarkLeftEarlyCount})`}
+        </button>
+      )}
+      {toUndoLeftEarlyCount > 0 && (
+        <button
+          type="button"
+          onClick={() => { if (!noUndo) onDeparture(false) }}
+          aria-disabled={noUndo}
+          className={`text-xs text-gray-700 border border-gray-300 bg-white px-3 py-1.5 rounded-full hover:bg-gray-50 transition-colors ${noUndo ? "opacity-50 cursor-not-allowed" : ""}`}
+        >
+          {`Annuler le départ (${toUndoLeftEarlyCount})`}
         </button>
       )}
       <button

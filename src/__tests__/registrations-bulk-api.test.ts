@@ -22,7 +22,7 @@ vi.mock("@/lib/event-log", () => ({ adminActor: () => ({ type: "admin", id: "adm
 
 const event = { id: "evt-1", title: "Festival", organization: { slug: "a" } }
 const reg = (id: string, over: Record<string, unknown> = {}) => ({
-  id, eventId: "evt-1", shiftId: "s1", status: "active", editTokenLegacy: `tok-${id}`, editTokenEnc: null,
+  id, eventId: "evt-1", shiftId: "s1", status: "active", checkedInAt: null, editTokenLegacy: `tok-${id}`, editTokenEnc: null,
   volunteer: { id: `v-${id}`, firstName: "A", lastName: id, email: `${id}@x.com` },
   shift: { roleName: "Bar" },
   ...over,
@@ -121,8 +121,8 @@ describe("POST /api/admin/events/[id]/registrations/bulk", () => {
     const { POST } = await import("@/app/api/admin/events/[id]/registrations/bulk/route")
     const res = await POST(post({ action: "check_in", registrationIds: ["r1", "r2"], observedShifts: { r1: "s1", r2: "s1", other: "s7" } }), params)
     expect(actions.setAttendance.mock.calls[0][2]).toEqual([
-      { id: "r1", eventId: "evt-1", shiftId: "s1", status: "active", observedShiftId: "s1" },
-      { id: "r2", eventId: "evt-1", shiftId: "s2", status: "active", observedShiftId: "s1" },
+      { id: "r1", eventId: "evt-1", shiftId: "s1", status: "active", checkedInAt: null, observedShiftId: "s1" },
+      { id: "r2", eventId: "evt-1", shiftId: "s2", status: "active", checkedInAt: null, observedShiftId: "s1" },
     ])
     // `moved` reaches the client; the counters of #399 are unchanged.
     expect(await res.json()).toMatchObject({ done: 1, changedIds: ["r1"], skipped: 1, results: [{ id: "r1" }, { id: "r2", changed: false, moved: true }] })
@@ -133,7 +133,7 @@ describe("POST /api/admin/events/[id]/registrations/bulk", () => {
     actions.setAttendance.mockResolvedValue([{ id: "r1", changed: true, state: "absent", checkedInAt: null }])
     const { POST } = await import("@/app/api/admin/events/[id]/registrations/bulk/route")
     expect((await POST(post({ action: "mark_absent", registrationIds: ["r1"] }), params)).status).toBe(200)
-    expect(actions.setAttendance.mock.calls[0][2]).toEqual([{ id: "r1", eventId: "evt-1", shiftId: "s1", status: "active", observedShiftId: null }])
+    expect(actions.setAttendance.mock.calls[0][2]).toEqual([{ id: "r1", eventId: "evt-1", shiftId: "s1", status: "active", checkedInAt: null, observedShiftId: null }])
   })
 
   it("passes a « gone » result on as it is", async () => {
@@ -153,14 +153,35 @@ describe("POST /api/admin/events/[id]/registrations/bulk", () => {
     expect(actions.setAttendance).not.toHaveBeenCalled()
   })
 
-  it("refuses « left_early », reserved for a later release, and any other unknown attendance action (#1141)", async () => {
+  it("refuses « left_early » as an action name and any other unknown attendance action (#1141)", async () => {
     regFindMany.mockResolvedValue([reg("r1")])
     const { POST } = await import("@/app/api/admin/events/[id]/registrations/bulk/route")
-    for (const action of ["left_early", "mark_left_early", "absent", "mark_present"]) {
+    for (const action of ["left_early", "absent", "mark_present", "undo_departure"]) {
       expect((await POST(post({ action, registrationIds: ["r1"] }), params)).status, action).toBe(400)
     }
     expect(regFindMany).not.toHaveBeenCalled()
     expect(actions.setAttendance).not.toHaveBeenCalled()
+  })
+
+  it("mark_left_early / undo_left_early: the same path, carrying the arrival the route read (#1141)", async () => {
+    const arrived = "2026-07-04T08:05:00.000Z"
+    regFindMany.mockResolvedValue([reg("r1", { checkedInAt: new Date(arrived) })])
+    const results = [{ id: "r1", changed: true, state: "left_early", checkedInAt: arrived }]
+    actions.setAttendance.mockResolvedValue(results)
+    const { POST } = await import("@/app/api/admin/events/[id]/registrations/bulk/route")
+    const res = await POST(post({ action: "mark_left_early", registrationIds: ["r1"], observedShifts: { r1: "s1" } }), params)
+    expect(res.status).toBe(200)
+    expect(actions.setAttendance).toHaveBeenCalledWith(
+      expect.anything(), { type: "admin", id: "admin-1" },
+      [{ id: "r1", eventId: "evt-1", shiftId: "s1", status: "active", checkedInAt: new Date(arrived), observedShiftId: "s1" }],
+      "mark_left_early",
+    )
+    expect(await res.json()).toEqual({ done: 1, changedIds: ["r1"], skipped: 0, results })
+
+    actions.setAttendance.mockResolvedValue([{ id: "r1", changed: true, state: "present", checkedInAt: arrived }])
+    const undo = await POST(post({ action: "undo_left_early", registrationIds: ["r1"] }), params)
+    expect(actions.setAttendance).toHaveBeenLastCalledWith(expect.anything(), expect.anything(), expect.anything(), "undo_left_early")
+    expect(await undo.json()).toEqual({ done: 1, changedIds: ["r1"], skipped: 0, results: [{ id: "r1", changed: true, state: "present", checkedInAt: arrived }] })
   })
 
   it("cancel: only active rows, duplicates in the selection counted once", async () => {
