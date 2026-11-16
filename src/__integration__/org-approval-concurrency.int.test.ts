@@ -70,7 +70,11 @@ describe.skipIf(!url)("approval, refusal, suspension and activation on Postgres 
 
   /** A pending space with its administrators (owner then organiser), all active. */
   async function space(suffix: string, opts: { grants?: Grants; admins?: number } = {}) {
-    const { grants = {}, admins = 2 } = opts
+    // Both grants empty by default: left out, the database would fill them (a space created by
+    // the operator is usable at once; only the self-service sign-up leaves them empty).
+    const PENDING: Grants = { publicationApprovedAt: null, outboundEmailApprovedAt: null }
+    const { admins = 2 } = opts
+    const grants = { ...PENDING, ...opts.grants }
     const org = await prisma.organization.create({
       data: { name: `Comité ${tag} ${suffix}`, slug: `${tag}-${suffix}`, ...grants },
     })
