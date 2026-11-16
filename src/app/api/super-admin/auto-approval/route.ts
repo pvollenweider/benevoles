@@ -4,8 +4,14 @@
 import { NextResponse } from "next/server"
 import { requireSuperAdmin } from "@/lib/auth-guard"
 import { isHostedService } from "@/lib/site"
-import { AUTO_APPROVAL_HOSTED_ONLY, autoApprovalUntilError } from "@/lib/auto-approval"
-import { AutoApprovalCeilingReachedError, disableAutoApproval, readAutoApprovalView, setAutoApprovalUntil } from "@/lib/auto-approval-server"
+import { AUTO_APPROVAL_HOSTED_ONLY, AUTO_APPROVAL_UNTIL_REFUSED, autoApprovalUntilError } from "@/lib/auto-approval"
+import {
+  AutoApprovalCeilingReachedError,
+  AutoApprovalUntilRefusedError,
+  disableAutoApproval,
+  readAutoApprovalView,
+  setAutoApprovalUntil,
+} from "@/lib/auto-approval-server"
 
 /**
  * « Validation automatique des nouveaux espaces » (#1371): super admin only, hosted service only.
@@ -39,9 +45,17 @@ export async function PUT(req: Request) {
 
   try {
     const view = await setAutoApprovalUntil((body!.until as string).trim(), guard.session.user, now)
+    // Belt and braces: the server refuses before writing, and the response is only a success when
+    // the stored value is read back as on (the screen relies on this to announce success).
+    if (view.state !== "on") {
+      return NextResponse.json({ error: AUTO_APPROVAL_UNTIL_REFUSED, field: "until" }, { status: 400 })
+    }
     return NextResponse.json(view)
   } catch (e) {
     if (e instanceof AutoApprovalCeilingReachedError) return NextResponse.json({ error: e.message }, { status: 409 })
+    if (e instanceof AutoApprovalUntilRefusedError) {
+      return NextResponse.json({ error: e.message, field: "until" }, { status: 400 })
+    }
     throw e
   }
 }

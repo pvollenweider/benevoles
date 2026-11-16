@@ -5,7 +5,7 @@ import { describe, it, expect, vi, afterEach } from "vitest"
 import "@testing-library/jest-dom/vitest"
 import { render, screen, cleanup, fireEvent, waitFor, within } from "@testing-library/react"
 import AutoApprovalSettings from "../super-admin/AutoApprovalSettings"
-import { AUTO_APPROVAL_CEILING_REACHED, AUTO_APPROVAL_INVALID_NOTICE, type AutoApprovalView } from "@/lib/auto-approval"
+import { AUTO_APPROVAL_CEILING_REACHED, AUTO_APPROVAL_INVALID_NOTICE, AUTO_APPROVAL_UNTIL_REFUSED, type AutoApprovalView } from "@/lib/auto-approval"
 
 const view = (over: Partial<AutoApprovalView> = {}): AutoApprovalView => ({
   state: "off",
@@ -137,6 +137,28 @@ describe("the automatic validation section (#1371)", () => {
     fireEvent.click(within(dialog).getByRole("button", { name: "Enregistrer" }))
     await waitFor(() => expect(screen.getByText(/Activée jusqu'au 1 décembre 2026 inclus/)).toBeInTheDocument(), { timeout: 3000 })
     await waitFor(() => expect(screen.getByRole("status").textContent).toBe("Date de fin modifiée : jusqu'au 1 décembre 2026 inclus."))
+  })
+
+  it("does not announce a success when the returned state is not on", async () => {
+    const fetch = vi.fn().mockResolvedValue(ok(view({
+      state: "off",
+      invalid: true,
+      until: "2026-11-28",
+      untilLabel: "28 novembre 2026",
+    })))
+    vi.stubGlobal("fetch", fetch)
+    render(<AutoApprovalSettings initial={view()} />)
+    fireEvent.change(screen.getByLabelText(/Jusqu'au/), { target: { value: "2026-11-28" } })
+    fireEvent.click(screen.getByRole("button", { name: "Activer" }))
+    const dialog = await screen.findByRole("dialog")
+    fireEvent.click(within(dialog).getByRole("button", { name: "Activer" }))
+
+    await waitFor(() => expect(screen.getByLabelText(/Jusqu'au/)).toHaveFocus())
+    expect(screen.getByRole("status").textContent).toBe("")
+    expect(screen.queryByText(/Validation automatique activée/)).toBeNull()
+    expect(screen.getByLabelText(/Jusqu'au/)).toHaveAccessibleDescription(new RegExp(AUTO_APPROVAL_UNTIL_REFUSED.replaceAll(".", "\\.")))
+    // The returned value is shown as it is: the unreadable notice replaces any success.
+    expect(screen.getByText(AUTO_APPROVAL_INVALID_NOTICE)).toBeInTheDocument()
   })
 
   it("dismisses the cut-off notice and moves focus to the heading", async () => {

@@ -16,6 +16,7 @@ import {
   AUTO_APPROVAL_DAILY_CEILING,
   AUTO_APPROVAL_SETTING_KEY,
   AUTO_APPROVAL_TARGET,
+  AUTO_APPROVAL_UNTIL_REFUSED,
   EMPTY_AUTO_APPROVAL,
   autoApprovalActivationCutoff,
   autoApprovalBudgetDay,
@@ -86,6 +87,18 @@ export class AutoApprovalCeilingReachedError extends Error {
 }
 
 /**
+ * Thrown before writing when the value about to be stored would not read back as `on` (the strict
+ * validator, the route and the screen must agree by construction, #1371 review). The route turns
+ * it into a 400 on the date field; nothing is written and nothing is logged.
+ */
+export class AutoApprovalUntilRefusedError extends Error {
+  constructor() {
+    super(AUTO_APPROVAL_UNTIL_REFUSED)
+    this.name = "AutoApprovalUntilRefusedError"
+  }
+}
+
+/**
  * Turns the option on, or changes its end day. Turning it on from off, expired or cut off starts a
  * new session (new activation instant and author, `totalSinceActivation` reset, cut-off notice
  * cleared), but the UTC day's budget survives every state change: it is reset only when the UTC
@@ -117,17 +130,23 @@ export async function setAutoApprovalUntil(until: string, actor: Actor, now: Dat
       budgetUsed = readable
     }
 
+    const untilSetAt = now.toISOString()
     const next: AutoApprovalValue = running
-      ? { ...current.value, until, budgetDate, budgetUsed }
+      ? { ...current.value, until, untilSetAt, budgetDate, budgetUsed }
       : {
           ...EMPTY_AUTO_APPROVAL,
           until,
+          untilSetAt,
+          // The session starts here; a later change of date moves `untilSetAt`, never this.
           activatedAt: now.toISOString(),
           activatedById: actor?.id ?? null,
           activatedByLabel: actor?.name?.trim() || actor?.email?.trim() || null,
           budgetDate,
           budgetUsed,
         }
+    // The route accepted the date; the stored value must read back as on, or nothing is written.
+    const readBack = autoApprovalView(next, now)
+    if (readBack.invalid || readBack.state !== "on") throw new AutoApprovalUntilRefusedError()
     await tx.platformSetting.upsert({
       where: { key: AUTO_APPROVAL_SETTING_KEY },
       create: { key: AUTO_APPROVAL_SETTING_KEY, value: jsonValue(next), updatedById: actor?.id ?? null },
@@ -277,8 +296,25 @@ async function expireIfNeeded(clock: () => Date): Promise<boolean> {
   })
 }
 
+/**
+ * The cut-off log entry. When no address could be alerted, the entry says so: the cut-off notice
+ * on the screen, shown at the operator's next visit, is then the only signal.
+ */
+function cutOffDetail(cutOffAt: string, unaddressed: boolean): string {
+  const base = `Plafond de ${AUTO_APPROVAL_DAILY_CEILING} validations atteint le ${autoApprovalMomentLabel(cutOffAt, APP_TIME_ZONE)}.`
+  return unaddressed ? `${base} Aucune alerte n'a pu être adressée : aucun destinataire.` : base
+}
+
+/** Reports, once per committed cut-off, that its alert reached nobody. */
+function reportUnaddressedCutOff(): void {
+  reportError("auto_approval.cut_off_no_recipient")(
+    new Error("Coupure de la validation automatique : aucune adresse d'alerte (ni OPERATOR_ALERT_EMAIL ni super administrateur actif)."),
+  )
+}
+
 /** The cut-off entry, with its durable alert email, for a budget already used up without one. */
 async function recordCutOff(clock: () => Date): Promise<number> {
+  let unaddressed = false
   const cut = await prisma.$transaction(async (tx) => {
     const raw = await lockSettingRow(tx)
     const now = clock()
@@ -288,8 +324,14 @@ async function recordCutOff(clock: () => Date): Promise<number> {
     if (autoApprovalRemainingBudget(current.value, now) > 0 || current.value.cutOffAt) return false
     const cutOffAt = now.toISOString()
     // The email is queued in the very transaction that writes the cut-off: it exists if and only
-    // if the cut-off committed, exactly once (its dedupe key is the cut-off instant).
-    await notifyOperator(cutOffAlert(cutOffAt), {}, { db: tx, push: false, strictEmail: true })
+    // if the cut-off committed, exactly once (its dedupe key is the cut-off instant). An absence
+    // of recipient is not a rollback reason: it is reported after the commit.
+    await notifyOperator(cutOffAlert(cutOffAt), {}, {
+      db: tx,
+      push: false,
+      strictEmail: true,
+      onNoRecipient: () => { unaddressed = true },
+    })
     await tx.platformSetting.update({
       where: { key: AUTO_APPROVAL_SETTING_KEY },
       data: { value: jsonValue({ ...current.value, cutOffAt, cutOffSeenAt: null, cutOffAlertedAt: null }) },
@@ -300,11 +342,12 @@ async function recordCutOff(clock: () => Date): Promise<number> {
       entityType: "Platform",
       entityId: AUTO_APPROVAL_SETTING_KEY,
       target: AUTO_APPROVAL_TARGET,
-      detail: `Plafond de ${AUTO_APPROVAL_DAILY_CEILING} validations atteint le ${autoApprovalMomentLabel(cutOffAt, APP_TIME_ZONE)}.`,
+      detail: cutOffDetail(cutOffAt, unaddressed),
       source: "automatic",
     })
     return true
   })
+  if (cut && unaddressed) reportUnaddressedCutOff()
   return cut ? 1 : 0
 }
 
@@ -389,7 +432,8 @@ type OneOutcome = { status: "approved"; reached: boolean } | { status: "skipped"
  * emails are delivered by the outbox run that called this step.
  */
 async function approveOne(id: string, clock: () => Date): Promise<OneOutcome> {
-  return prisma.$transaction(async (tx) => {
+  let unaddressed = false
+  const outcome: OneOutcome = await prisma.$transaction(async (tx) => {
     const raw = await lockSettingRow(tx)
     // After the lock: a run that waited across the option's end, or across UTC midnight, decides
     // with this instant, never with the one it captured before selecting candidates.
@@ -448,7 +492,14 @@ async function approveOne(id: string, clock: () => Date): Promise<OneOutcome> {
     }
     if (cutOffAt) {
       // Durable email first, in this transaction: it commits with the cut-off and with the grant.
-      await notifyOperator(cutOffAlert(cutOffAt), {}, { db: tx, push: false, strictEmail: true })
+      // No recipient keeps the grant and the cut-off (a missing reader never undoes a validation)
+      // and is reported after the commit.
+      await notifyOperator(cutOffAlert(cutOffAt), {}, {
+        db: tx,
+        push: false,
+        strictEmail: true,
+        onNoRecipient: () => { unaddressed = true },
+      })
     }
     await tx.platformSetting.update({ where: { key: AUTO_APPROVAL_SETTING_KEY }, data: { value: jsonValue(next) } })
     if (cutOffAt) {
@@ -458,12 +509,14 @@ async function approveOne(id: string, clock: () => Date): Promise<OneOutcome> {
         entityType: "Platform",
         entityId: AUTO_APPROVAL_SETTING_KEY,
         target: AUTO_APPROVAL_TARGET,
-        detail: `Plafond de ${AUTO_APPROVAL_DAILY_CEILING} validations atteint le ${autoApprovalMomentLabel(cutOffAt, APP_TIME_ZONE)}.`,
+        detail: cutOffDetail(cutOffAt, unaddressed),
         source: "automatic",
       })
     }
     return { status: "approved", reached: cutsOff }
   })
+  if (outcome.status === "approved" && outcome.reached && unaddressed) reportUnaddressedCutOff()
+  return outcome
 }
 
 export type AutoApprovalRunOptions = {

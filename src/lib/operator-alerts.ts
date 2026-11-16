@@ -83,6 +83,12 @@ export type OperatorAlertDelivery = {
    * automatic cut-off uses it inside its transaction: no email means no committed cut-off.
    */
   strictEmail?: boolean
+  /**
+   * Called when the alert has no address at all (`OPERATOR_ALERT_EMAIL` unset and no active super
+   * admin). The automatic cut-off passes it to report the absence after its commit; other callers
+   * leave it out, so their behaviour is unchanged.
+   */
+  onNoRecipient?: () => void
 }
 
 /**
@@ -153,7 +159,7 @@ export async function notifyOperator(
 ): Promise<void> {
   const db = delivery.db ?? prisma
   if (await alreadyAlerted(alert.key, db)) return
-  const email = emailOperator(alert, deps.env ?? process.env, db, delivery.strictEmail === true)
+  const email = emailOperator(alert, deps.env ?? process.env, db, delivery.strictEmail === true, delivery.onNoRecipient)
   if (delivery.push === false) {
     await email
     return
@@ -180,9 +186,17 @@ async function emailOperator(
   env: Record<string, string | undefined>,
   db: OperatorAlertDb = prisma,
   strict = false,
+  onNoRecipient?: () => void,
 ): Promise<void> {
   try {
     const recipients = await operatorAlertRecipients(env)
+    if (recipients.length === 0) {
+      // An empty list would « succeed » without queueing anything. Do not pretend: the caller
+      // that must know (the cut-off) is told, and the absence is reported there. The other
+      // callers keep their previous behaviour.
+      onNoRecipient?.()
+      return
+    }
     const ids = await enqueueNotifications(
       recipients.map((email) => ({
         kind: "operator_alert" as const,

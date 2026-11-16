@@ -11,6 +11,7 @@ vi.mock("@/lib/env", () => ({ env: { AUTH_SECRET: "a".repeat(32), CRON_SECRET: "
 
 type Logged = { action: string; actorId?: string | null; entityId?: string; detail?: string | null }
 const store = vi.hoisted(() => ({
+  refuseUntil: false,
   setting: null as null | { value: unknown },
   logs: [] as Logged[],
   org: null as null | {
@@ -56,8 +57,21 @@ vi.mock("@/lib/prisma", () => {
   }
 })
 
+// The route must map the server's pre-write refusal to a 400 on the field. The real module is
+// kept for every other test; only the flag makes the write path refuse.
+vi.mock("@/lib/auto-approval-server", async (importOriginal) => {
+  const actual = await importOriginal<typeof import("@/lib/auto-approval-server")>()
+  return {
+    ...actual,
+    setAutoApprovalUntil: vi.fn(async (...args: Parameters<typeof actual.setAutoApprovalUntil>) => {
+      if (store.refuseUntil) throw new actual.AutoApprovalUntilRefusedError()
+      return actual.setAutoApprovalUntil(...args)
+    }),
+  }
+})
+
 import { APP_TIME_ZONE } from "@/lib/time-zone"
-import { addCalendarDays, autoApprovalBudgetDay, autoApprovalDayInZone, autoApprovalDayLabel, AUTO_APPROVAL_CEILING_REACHED, AUTO_APPROVAL_HOSTED_ONLY, AUTO_APPROVAL_SETTING_KEY } from "@/lib/auto-approval"
+import { addCalendarDays, autoApprovalBudgetDay, autoApprovalDayInZone, autoApprovalDayLabel, AUTO_APPROVAL_CEILING_REACHED, AUTO_APPROVAL_HOSTED_ONLY, AUTO_APPROVAL_SETTING_KEY, AUTO_APPROVAL_UNTIL_REFUSED } from "@/lib/auto-approval"
 
 const PUT_URL = "http://localhost/api/super-admin/auto-approval"
 const json = (method: string, body?: unknown) => new Request(PUT_URL, {
@@ -86,6 +100,7 @@ const stored = (over: Record<string, unknown> = {}) => ({
 
 beforeEach(() => {
   vi.clearAllMocks()
+  store.refuseUntil = false
   store.setting = null
   store.logs = []
   store.org = null
@@ -149,6 +164,66 @@ describe("the automatic validation routes (#1371)", () => {
     }
     // Only the two accepted calls wrote and logged.
     expect(store.logs).toHaveLength(2)
+  })
+
+  it("keeps the option on when a date set on day 10 reaches the next month's day 10", async () => {
+    vi.useFakeTimers()
+    try {
+      vi.setSystemTime(new Date("2026-11-01T09:00:00.000Z"))
+      const { PUT } = await import("@/app/api/super-admin/auto-approval/route")
+      const first = await PUT(json("PUT", { until: "2026-12-01" }))
+      expect(first.status).toBe(200)
+      expect((await first.json()).state).toBe("on")
+      const activatedAt = (store.setting?.value as { activatedAt: string }).activatedAt
+
+      vi.setSystemTime(new Date("2026-11-10T09:00:00.000Z"))
+      const extended = await PUT(json("PUT", { until: "2026-12-10" }))
+      expect(extended.status).toBe(200)
+      const view = await extended.json()
+      expect(view).toMatchObject({ state: "on", invalid: false, until: "2026-12-10" })
+      expect(store.setting?.value).toMatchObject({
+        until: "2026-12-10",
+        untilSetAt: "2026-11-10T09:00:00.000Z",
+        // A change of date never moves the session's start.
+        activatedAt,
+      })
+      expect(store.logs.map((l) => l.action)).toEqual(["auto_approval.activated", "auto_approval.until_changed"])
+    } finally {
+      vi.useRealTimers()
+    }
+  })
+
+  it("resets neither the day's budget nor totalSinceActivation on a change of date", async () => {
+    const before = stored({ until: day(5), budgetUsed: 3, totalSinceActivation: 9 })
+    store.setting = { value: before }
+    const { PUT } = await import("@/app/api/super-admin/auto-approval/route")
+    const res = await PUT(json("PUT", { until: day(6) }))
+    expect(res.status).toBe(200)
+    expect(store.setting?.value).toMatchObject({
+      until: day(6),
+      budgetDate: before.budgetDate,
+      budgetUsed: 3,
+      totalSinceActivation: 9,
+      activatedAt: before.activatedAt,
+    })
+    expect((await res.json()).state).toBe("on")
+  })
+
+  it("refuses before writing a date whose stored value would not read back as on", async () => {
+    const { setAutoApprovalUntil, AutoApprovalUntilRefusedError } = await import("@/lib/auto-approval-server")
+    await expect(setAutoApprovalUntil(day(31), null, new Date())).rejects.toBeInstanceOf(AutoApprovalUntilRefusedError)
+    expect(store.setting).toBeNull()
+    expect(store.logs).toEqual([])
+  })
+
+  it("returns 400 on the date field when the server refuses the value it would store", async () => {
+    store.refuseUntil = true
+    const { PUT } = await import("@/app/api/super-admin/auto-approval/route")
+    const res = await PUT(json("PUT", { until: day(2) }))
+    expect(res.status).toBe(400)
+    expect(await res.json()).toEqual({ error: AUTO_APPROVAL_UNTIL_REFUSED, field: "until" })
+    expect(store.setting).toBeNull()
+    expect(store.logs).toEqual([])
   })
 
   it("refuses every route on an instance that is not the hosted service, with a clear message", async () => {

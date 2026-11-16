@@ -22,6 +22,7 @@ import {
   autoApprovalUntilError,
   autoApprovalView,
   parseAutoApprovalValue,
+  readAutoApprovalStored,
   type AutoApprovalCandidate,
 } from "@/lib/auto-approval"
 
@@ -174,6 +175,45 @@ describe("the view of the section", () => {
   })
 })
 
+describe("the 30 days count from the last setting of the end date", () => {
+  const now = new Date("2026-11-10T10:00:00Z")
+  const extended = {
+    ...EMPTY_AUTO_APPROVAL,
+    until: "2026-12-10",
+    untilSetAt: "2026-11-10T09:00:00.000Z",
+    activatedAt: "2026-11-01T09:00:00.000Z",
+    activatedById: "sa-1",
+    activatedByLabel: "Opérateur",
+    budgetDate: "2026-11-10",
+  }
+
+  it("stays on when a date set on day 10 reaches day 10 of the next month", () => {
+    expect(autoApprovalState(extended, now, ZURICH)).toBe("on")
+    expect(autoApprovalView(extended, now, ZURICH)).toMatchObject({
+      state: "on", invalid: false, until: "2026-12-10", activatedAt: "2026-11-01T09:00:00.000Z",
+    })
+  })
+
+  it("refuses the same end day when the last setting is the original activation", () => {
+    // 1 November + 30 days = 1 December: 10 December was never reachable without a new setting.
+    expect(autoApprovalState({ ...extended, untilSetAt: "2026-11-01T09:00:00.000Z" }, now, ZURICH)).toBe("off")
+    expect(autoApprovalView({ ...extended, untilSetAt: "2026-11-01T09:00:00.000Z" }, now, ZURICH).invalid).toBe(true)
+  })
+
+  it("reads a value without untilSetAt as if its activation were the setting instant", () => {
+    const legacy = { ...extended, untilSetAt: undefined, until: "2026-12-01" }
+    expect(autoApprovalView(legacy, now, ZURICH)).toMatchObject({ state: "on", invalid: false })
+    // 1 November + 31 days is beyond the route's window: the fallback keeps the same boundary.
+    expect(autoApprovalState({ ...legacy, until: "2026-12-02" }, now, ZURICH)).toBe("off")
+    expect(autoApprovalView(legacy, now, ZURICH).until).toBe("2026-12-01")
+  })
+
+  it("refuses a setting instant before the activation, or in the future", () => {
+    expect(autoApprovalState({ ...extended, untilSetAt: "2026-10-31T09:00:00.000Z" }, now, ZURICH)).toBe("off")
+    expect(autoApprovalState({ ...extended, untilSetAt: "2026-11-10T10:10:00.000Z" }, now, ZURICH)).toBe("off")
+  })
+})
+
 describe("eligibility of a space", () => {
   const now = new Date("2026-11-16T10:00:00Z")
   const value = { activatedAt: "2026-11-16T08:00:00.000Z" }
@@ -307,6 +347,42 @@ describe("corrupted stored settings fail closed", () => {
     expect(autoApprovalView(value, now)).toMatchObject({ state: "off", invalid: true })
   })
 
+  it.each([
+    ["year 0 as the activation", { activatedAt: "0000-01-01T00:00:00Z" }],
+    ["the maximum JavaScript date as the activation", { activatedAt: "+275760-09-13T00:00:00Z" }],
+    ["an invalid date string", { activatedAt: "Invalid Date" }],
+    ["a Date that is NaN", { activatedAt: new Date(Number.NaN) }],
+    ["a number where the activation is expected", { activatedAt: 123 }],
+    ["a nested object where the activation is expected", { activatedAt: { at: "2026-11-16T09:00:00Z" } }],
+    ["year 0 as the end day", { until: "0000-01-01" }],
+    ["a number where the end day is expected", { until: 123 }],
+    ["a nested object where the end day is expected", { until: { day: "2026-11-20" } }],
+    ["an instant before 2026 in a nullable field", { cutOffAt: "2025-12-31T23:59:59.000Z" }],
+    ["an instant more than 366 days in the future", { cutOffSeenAt: "2027-12-31T10:00:00.000Z" }],
+    ["a number where the setting instant is expected", { untilSetAt: 42 }],
+  ])("never throws and reads off/invalid with %s", (_label, patch) => {
+    const value = valid(patch)
+    expect(() => readAutoApprovalStored(value, now)).not.toThrow()
+    expect(readAutoApprovalStored(value, now).invalid).toBe(true)
+    expect(() => autoApprovalView(value, now)).not.toThrow()
+    expect(autoApprovalState(value, now)).toBe("off")
+    expect(autoApprovalView(value, now)).toMatchObject({ state: "off", invalid: true })
+  })
+
+  it("never throws on a malformed whole value: null is absent, an array is corruption", () => {
+    for (const value of [null, undefined, [], [valid()], "not json", { ...valid(), until: "0000-01-01" }]) {
+      expect(() => readAutoApprovalStored(value, now)).not.toThrow()
+      expect(() => autoApprovalState(value, now)).not.toThrow()
+      expect(() => autoApprovalView(value, now)).not.toThrow()
+    }
+    expect(readAutoApprovalStored(null, now)).toMatchObject({ invalid: false })
+    expect(autoApprovalState(null, now)).toBe("off")
+    expect(readAutoApprovalStored([], now)).toMatchObject({ invalid: true })
+    expect(autoApprovalState([], now)).toBe("off")
+    expect(readAutoApprovalStored([valid()], now)).toMatchObject({ invalid: true })
+    expect(readAutoApprovalStored("not json", now)).toMatchObject({ invalid: true })
+  })
+
   it("refuses an off value that lost its activation or its budget day", () => {
     expect(autoApprovalView({ ...valid(), until: null, budgetDate: null }, now)).toMatchObject({ state: "off", invalid: true })
     expect(autoApprovalView({ ...valid(), until: null, activatedAt: null }, now)).toMatchObject({ state: "off", invalid: true })
@@ -320,8 +396,9 @@ describe("corrupted stored settings fail closed", () => {
     expect(autoApprovalView(cut, now).invalid).toBe(false)
     expect(autoApprovalView({ ...valid(), until: null }, now)).toMatchObject({ state: "off", invalid: false })
     expect(autoApprovalView(null, now)).toMatchObject({ state: "off", invalid: false })
-    // The inclusive end day may reach the 30-day window plus one day.
-    expect(autoApprovalView(valid({ until: "2026-12-17" }), now).invalid).toBe(false)
+    // The route's window is today .. today + 30: the stored value accepts the same last day.
+    expect(autoApprovalView(valid({ until: "2026-12-16" }), now).invalid).toBe(false)
+    expect(autoApprovalView(valid({ until: "2026-12-17" }), now).invalid).toBe(true)
   })
 
   it("reads today's budget from a corrupted value, or refuses to guess", () => {

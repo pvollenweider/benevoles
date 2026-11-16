@@ -14,7 +14,7 @@ const m = vi.hoisted(() => ({
   blocks: [] as { expiresAt: Date | null }[],
   logs: [] as Record<string, unknown>[],
   approve: vi.fn(),
-  notify: vi.fn(async () => {}),
+  notify: vi.fn(async (...args: unknown[]) => { void args }),
   sendNtfy: vi.fn(async () => true),
   reported: [] as [string, unknown][],
   calls: [] as string[],
@@ -215,8 +215,10 @@ describe("the automatic validation step (#1371)", () => {
     expect(m.notify).toHaveBeenCalledWith(
       expect.objectContaining({ key: "auto-approval-cut-off:2026-11-16T10:00:00.000Z", priority: 4 }),
       {},
-      { db: m.tx, push: false, strictEmail: true },
+      { db: m.tx, push: false, strictEmail: true, onNoRecipient: expect.any(Function) },
     )
+    expect(String(m.logs.find((l) => l.action === "auto_approval.cut_off")?.detail)).not.toContain("Aucune alerte")
+    expect(m.reported.filter(([key]) => key === "auto_approval.cut_off_no_recipient")).toHaveLength(0)
     expect(m.sendNtfy).toHaveBeenCalledTimes(1)
     expect(m.sendNtfy).toHaveBeenCalledWith(expect.objectContaining({ key: "auto-approval-cut-off:2026-11-16T10:00:00.000Z" }))
     expect(m.approve).toHaveBeenCalledTimes(1)
@@ -227,6 +229,35 @@ describe("the automatic validation step (#1371)", () => {
     expect(m.notify).toHaveBeenCalledTimes(1)
     expect(m.sendNtfy).toHaveBeenCalledTimes(1)
     expect(m.logs.filter((l) => l.action === "auto_approval.cut_off")).toHaveLength(1)
+  })
+
+  it("commits a cut-off with no alert recipient, reports it once and says so in the log", async () => {
+    m.setting = { ...baseSetting(), budgetUsed: AUTO_APPROVAL_DAILY_CEILING - 1 }
+    m.candidates = ["org-fete"]
+    m.orgs.set("org-fete", baseOrg())
+    // The real notifyOperator calls onNoRecipient when no address exists.
+    m.notify.mockImplementation(async (...args: unknown[]) => {
+      const delivery = args[2] as { onNoRecipient?: () => void } | undefined
+      delivery?.onNoRecipient?.()
+    })
+
+    const first = await runAutoApproval({ now: NOW, clock: () => NOW })
+    expect(first).toMatchObject({ approved: 1, cutOff: 1 })
+    // The grant and the cut-off are committed; a missing reader never rolls them back.
+    expect(m.approve).toHaveBeenCalledTimes(1)
+    expect(m.setting).toMatchObject({ budgetUsed: AUTO_APPROVAL_DAILY_CEILING, totalSinceActivation: 1 })
+    expect(m.setting?.cutOffAt).toEqual(expect.any(String))
+    const logs = m.logs.filter((l) => l.action === "auto_approval.cut_off")
+    expect(logs).toHaveLength(1)
+    expect(String(logs[0].detail)).toContain("Aucune alerte n'a pu être adressée")
+    expect(String(logs[0].detail)).toContain("aucun destinataire")
+    expect(m.reported.filter(([key]) => key === "auto_approval.cut_off_no_recipient")).toHaveLength(1)
+
+    // The cut-off is behind us: a later run neither logs nor reports it again.
+    const second = await runAutoApproval({ now: new Date("2026-11-16T10:05:00Z"), clock: () => new Date("2026-11-16T10:05:00Z") })
+    expect(second.cutOff).toBe(0)
+    expect(m.logs.filter((l) => l.action === "auto_approval.cut_off")).toHaveLength(1)
+    expect(m.reported.filter(([key]) => key === "auto_approval.cut_off_no_recipient")).toHaveLength(1)
   })
 
   it("records a budget already used up on an option that is still on, once", async () => {
@@ -243,6 +274,19 @@ describe("the automatic validation step (#1371)", () => {
     expect(m.logs.filter((l) => l.action === "auto_approval.cut_off")).toHaveLength(1)
     expect(m.notify).toHaveBeenCalledTimes(1)
     expect(m.sendNtfy).toHaveBeenCalledTimes(1)
+  })
+
+  it("reports an already-spent budget's cut-off once when it has no recipient", async () => {
+    m.setting = { ...baseSetting(), budgetUsed: AUTO_APPROVAL_DAILY_CEILING }
+    m.notify.mockImplementation(async (...args: unknown[]) => {
+      const delivery = args[2] as { onNoRecipient?: () => void } | undefined
+      delivery?.onNoRecipient?.()
+    })
+    const counts = await runAutoApproval({ now: NOW, clock: () => NOW })
+    expect(counts.cutOff).toBe(1)
+    expect(m.setting?.cutOffAt).toEqual(expect.any(String))
+    expect(m.logs.filter((l) => l.action === "auto_approval.cut_off")).toHaveLength(1)
+    expect(m.reported.filter(([key]) => key === "auto_approval.cut_off_no_recipient")).toHaveLength(1)
   })
 
   it("writes the one « expirée » entry, then does nothing more", async () => {
@@ -263,6 +307,17 @@ describe("the automatic validation step (#1371)", () => {
 
   it("reports a corrupted setting once per run and treats it as off", async () => {
     m.setting = { until: "2099-01-01" }
+    m.candidates = ["org-fete"]
+    m.orgs.set("org-fete", baseOrg())
+    const counts = await runAutoApproval({ now: NOW, clock: () => NOW })
+    expect(counts).toEqual({ candidates: 0, approved: 0, skipped: 0, failed: 0, cutOff: 0, expired: 0 })
+    expect(m.reported).toHaveLength(1)
+    expect(m.reported[0][0]).toBe("auto_approval.invalid")
+    expect(m.approve).not.toHaveBeenCalled()
+  })
+
+  it("reports a complete setting with a year-0 activation instead of throwing on the calendar", async () => {
+    m.setting = { ...baseSetting(), activatedAt: "0000-01-01T00:00:00Z" }
     m.candidates = ["org-fete"]
     m.orgs.set("org-fete", baseOrg())
     const counts = await runAutoApproval({ now: NOW, clock: () => NOW })

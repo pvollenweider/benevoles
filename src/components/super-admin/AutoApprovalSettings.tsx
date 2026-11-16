@@ -15,6 +15,7 @@ import {
   AUTO_APPROVAL_INVALID_NOTICE,
   AUTO_APPROVAL_MAX_DAYS,
   AUTO_APPROVAL_REVIEW_HREF,
+  AUTO_APPROVAL_UNTIL_REFUSED,
   autoApprovalCounterSentences,
   autoApprovalDayLabel,
   autoApprovalStateSentence,
@@ -88,6 +89,12 @@ export default function AutoApprovalSettings({ initial }: { initial: AutoApprova
     }
     setConfirming(null)
     setView(result.data)
+    // Only an option read back as on may be announced as a success. The server refuses such a
+    // value before writing; should a response still carry an off state, the operator sees it here.
+    if (result.data.state !== "on") {
+      fail(AUTO_APPROVAL_UNTIL_REFUSED, "until", dateRef.current)
+      return
+    }
     setShowForm(false)
     setDate(result.data.until ?? "")
     headingRef.current?.focus()

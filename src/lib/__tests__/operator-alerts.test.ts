@@ -119,7 +119,9 @@ describe("operator alerts (#810)", () => {
 
   it("pushes and emails every active super admin, one email per alert key", async () => {
     const ok = vi.fn().mockResolvedValue({ ok: true, status: 200 })
-    await notifyOperator(alert, { fetch: ok as unknown as typeof fetch, env: { NTFY_URL: TOPIC } })
+    const onNoRecipient = vi.fn()
+    await notifyOperator(alert, { fetch: ok as unknown as typeof fetch, env: { NTFY_URL: TOPIC } }, { onNoRecipient })
+    expect(onNoRecipient).not.toHaveBeenCalled()
     expect(ok).toHaveBeenCalledTimes(1)
     expect(db.adminUser.findMany).toHaveBeenCalledWith({ where: { role: "super_admin", isActive: true }, select: { email: true } })
     const payloads = outbox.enqueueNotifications.mock.calls[0][0]
@@ -163,6 +165,29 @@ describe("operator alerts (#810)", () => {
     expect(tx.notificationOutbox.findFirst).toHaveBeenCalledTimes(1)
     expect(outbox.enqueueNotifications).toHaveBeenCalledTimes(1)
     expect(outbox.enqueueNotifications.mock.calls[0][1]).toBe(tx)
+  })
+
+  it("tells the cut-off caller when there is no recipient, without queueing an empty email", async () => {
+    db.adminUser.findMany.mockResolvedValue([])
+    const onNoRecipient = vi.fn()
+    const tx = { notificationOutbox: { findFirst: vi.fn().mockResolvedValue(null) } }
+    await notifyOperator(
+      alert,
+      { env: {} },
+      { db: tx as never, push: false, strictEmail: true, onNoRecipient },
+    )
+    expect(onNoRecipient).toHaveBeenCalledTimes(1)
+    expect(outbox.enqueueNotifications).not.toHaveBeenCalled()
+    // The absence is reported by the cut-off, after its commit: never by the email layer, and
+    // never as an exception that would roll the cut-off back.
+    expect(reported).not.toHaveBeenCalled()
+  })
+
+  it("leaves the other callers unchanged when there is no recipient", async () => {
+    db.adminUser.findMany.mockResolvedValue([])
+    await expect(notifyOperator(alert, { env: {} })).resolves.toBeUndefined()
+    expect(outbox.enqueueNotifications).not.toHaveBeenCalled()
+    expect(reported).not.toHaveBeenCalled()
   })
 
   it("lets a durable email failure reach the caller's transaction", async () => {

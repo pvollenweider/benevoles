@@ -39,8 +39,17 @@ export const AUTO_APPROVAL_CEILING_REACHED =
 export const AUTO_APPROVAL_INVALID_NOTICE =
   "Réglage illisible : l'option est désactivée. Réactivez-la pour repartir d'un état propre."
 
-/** How far in the future an activation instant may be before the value is considered corrupt. */
+/** How far in the future a session instant may be before the value is considered corrupt. */
 export const AUTO_APPROVAL_CLOCK_SKEW_MS = 5 * 60 * 1000
+
+/** No stored instant may predate this day: it is before the option existed (#1371 review). */
+export const AUTO_APPROVAL_EARLIEST_DAY = "2026-01-01"
+/** No stored instant may be further than this in the future (a little over a year). */
+export const AUTO_APPROVAL_MAX_STORED_FUTURE_DAYS = 366
+
+/** The message of a date the route accepts but that would not read back as an active option. */
+export const AUTO_APPROVAL_UNTIL_REFUSED =
+  "Cette date de fin ne serait pas lue comme une option active. Choisissez une autre date."
 
 /** The filtered organisations list: spaces validated automatically and not reread yet. */
 export const AUTO_APPROVAL_REVIEW_FILTER = "auto-a-relire"
@@ -62,7 +71,13 @@ export type AutoApprovalState = "off" | "on" | "expired" | "cut_off"
 export type AutoApprovalValue = {
   /** Last calendar day the option is on, inclusive (`YYYY-MM-DD`, `APP_TIME_ZONE`); null = off. */
   until: string | null
-  /** When the current session was turned on. */
+  /**
+   * When `until` was last set (activation or change of date). The 30-day window is counted from
+   * this instant, never from `activatedAt`: extending on day 10 keeps the original session. A value
+   * written before this field existed has none and falls back to `activatedAt`.
+   */
+  untilSetAt: string | null
+  /** When the current session was turned on; a change of date never moves it. */
   activatedAt: string | null
   activatedById: string | null
   activatedByLabel: string | null
@@ -83,6 +98,7 @@ export type AutoApprovalValue = {
 
 export const EMPTY_AUTO_APPROVAL: AutoApprovalValue = {
   until: null,
+  untilSetAt: null,
   activatedAt: null,
   activatedById: null,
   activatedByLabel: null,
@@ -159,6 +175,7 @@ export function parseAutoApprovalValue(raw: unknown): AutoApprovalValue {
   const v = value as Record<string, unknown>
   return {
     until: isCalendarDay(v.until) ? v.until : null,
+    untilSetAt: instantOrNull(v.untilSetAt),
     activatedAt: instantOrNull(v.activatedAt),
     activatedById: stringOrNull(v.activatedById),
     activatedByLabel: stringOrNull(v.activatedByLabel),
@@ -172,48 +189,72 @@ export function parseAutoApprovalValue(raw: unknown): AutoApprovalValue {
   }
 }
 
-function isInstant(value: string): boolean {
-  return !Number.isNaN(new Date(value).getTime())
+/** Whether an instant is inside the sane range shared by every stored instant (#1371 review). */
+function isStoredInstant(value: unknown, now: Date): value is string {
+  if (typeof value !== "string" || !value.trim()) return false
+  const time = Date.parse(value)
+  if (Number.isNaN(time)) return false
+  const earliest = Date.parse(`${AUTO_APPROVAL_EARLIEST_DAY}T00:00:00.000Z`)
+  return time >= earliest && time <= now.getTime() + AUTO_APPROVAL_MAX_STORED_FUTURE_DAYS * 86_400_000
 }
 
-const storedDay = z.string().refine(isCalendarDay, "Jour invalide")
-const storedInstant = z.string().refine(isInstant, "Instant invalide")
+/** Whether a stored calendar day is inside the same sane range as the instants. */
+function isStoredDay(value: unknown, now: Date): value is string {
+  return isCalendarDay(value)
+    && value >= AUTO_APPROVAL_EARLIEST_DAY
+    && value <= addCalendarDays(autoApprovalBudgetDay(now), AUTO_APPROVAL_MAX_STORED_FUTURE_DAYS)
+}
 
 /**
  * The whole safety-relevant shape of the setting row, the one strict validator this module uses.
  * Every field is required (null when absent): a partial value, an unparseable date or a missing
- * counter is corruption, never a usable default (#1371 review).
+ * counter is corruption, never a usable default (#1371 review). `untilSetAt` is the one exception:
+ * it defaults to null so a value written before the field existed still reads (the coherence rule
+ * then falls back to `activatedAt`). Every instant and day is bounded: year 0, year 275760 or a
+ * six-digit year are corruption, not dates the calendar arithmetic may touch.
  */
-const storedValueSchema = z.object({
-  until: storedDay.nullable(),
-  activatedAt: storedInstant.nullable(),
-  activatedById: z.string().nullable(),
-  activatedByLabel: z.string().nullable(),
-  budgetDate: storedDay.nullable(),
-  budgetUsed: z.number().int().nonnegative(),
-  totalSinceActivation: z.number().int().nonnegative(),
-  cutOffAt: storedInstant.nullable(),
-  cutOffSeenAt: storedInstant.nullable(),
-  expiredAt: storedInstant.nullable(),
-  cutOffAlertedAt: storedInstant.nullable(),
-})
+function storedValueSchema(now: Date) {
+  const storedDay = z.string().refine((value) => isStoredDay(value, now), "Jour invalide")
+  const storedInstant = z.string().refine((value) => isStoredInstant(value, now), "Instant invalide")
+  return z.object({
+    until: storedDay.nullable(),
+    untilSetAt: storedInstant.nullable().default(null),
+    activatedAt: storedInstant.nullable(),
+    activatedById: z.string().nullable(),
+    activatedByLabel: z.string().nullable(),
+    budgetDate: storedDay.nullable(),
+    budgetUsed: z.number().int().nonnegative(),
+    totalSinceActivation: z.number().int().nonnegative(),
+    cutOffAt: storedInstant.nullable(),
+    cutOffSeenAt: storedInstant.nullable(),
+    expiredAt: storedInstant.nullable(),
+    cutOffAlertedAt: storedInstant.nullable(),
+  })
+}
 
 /**
  * An active session must make sense: it was activated (not in the future beyond a small clock
- * skew), its end day is after that activation and within the 30-day window it was chosen in, and
- * the UTC budget it carries is present. Anything else is corruption.
+ * skew), it carries a UTC budget day, and its end day was set after the activation and within the
+ * 30-day window counted from that last setting (never from the original activation). A value
+ * without `untilSetAt` was written before the field existed: its activation is the moment its end
+ * day was set. Anything else is corruption.
  */
 function storedValueCoherent(v: AutoApprovalValue, now: Date, timeZone: string): boolean {
   // A stored value always carries its activation and its UTC budget day, even when deactivated.
   if (!v.activatedAt || !v.budgetDate) return false
   const activated = new Date(v.activatedAt)
   if (activated.getTime() > now.getTime() + AUTO_APPROVAL_CLOCK_SKEW_MS) return false
+  const setAt = v.untilSetAt ? new Date(v.untilSetAt) : activated
+  if (setAt.getTime() > now.getTime() + AUTO_APPROVAL_CLOCK_SKEW_MS) return false
+  // The end day can only have been set during the session it belongs to.
+  if (setAt.getTime() < activated.getTime()) return false
   if (v.until === null) return true
   const end = autoApprovalEndInstant(v.until, timeZone)
-  if (!end || end.getTime() <= activated.getTime()) return false
-  const activatedDay = autoApprovalDayInZone(activated, timeZone)
-  // The 30-day window, plus the day the inclusive end day itself adds: one day of tolerance.
-  return v.until <= addCalendarDays(activatedDay, AUTO_APPROVAL_MAX_DAYS + 1)
+  if (!end || end.getTime() <= setAt.getTime()) return false
+  const setDay = autoApprovalDayInZone(setAt, timeZone)
+  // The route accepts today .. today + 30 days: the stored value must accept exactly the same days,
+  // counted from the moment the end date was last set.
+  return v.until >= setDay && v.until <= addCalendarDays(setDay, AUTO_APPROVAL_MAX_DAYS)
 }
 
 /** A stored value, with the sanitized fields and the fail-closed verdict of the strict validator. */
@@ -227,19 +268,26 @@ export type AutoApprovalStored = {
  * Reads the stored JSON through the one strict validator. `invalid` is false only for an absent
  * row or a complete, coherent value; every other stored value is reported as invalid and must be
  * treated as off. `value` stays the best-effort reading, for the fields that can still be shown.
+ *
+ * The reading is total: parsing, schema checks and calendar arithmetic can never throw here. Any
+ * exception (a malformed instant that reaches the format/calendar code, for instance) means the
+ * same invalid state as a failed check.
  */
 export function readAutoApprovalStored(raw: unknown, now: Date, timeZone: string = APP_TIME_ZONE): AutoApprovalStored {
-  const value = parseAutoApprovalValue(raw)
-  if (raw === null || raw === undefined) return { value, invalid: false }
-  let parsed: unknown = raw
-  if (typeof parsed === "string") {
-    try { parsed = JSON.parse(parsed) } catch { return { value, invalid: true } }
+  let value = { ...EMPTY_AUTO_APPROVAL }
+  try {
+    value = parseAutoApprovalValue(raw)
+    if (raw === null || raw === undefined) return { value, invalid: false }
+    let parsed: unknown = raw
+    if (typeof parsed === "string") parsed = JSON.parse(parsed)
+    const result = storedValueSchema(now).safeParse(parsed)
+    if (!result.success || !storedValueCoherent(result.data, now, timeZone)) {
+      return { value, invalid: true }
+    }
+    return { value: result.data, invalid: false }
+  } catch {
+    return { value, invalid: raw !== null && raw !== undefined }
   }
-  const result = storedValueSchema.safeParse(parsed)
-  if (!result.success || !storedValueCoherent(result.data, now, timeZone)) {
-    return { value, invalid: true }
-  }
-  return { value: result.data, invalid: false }
 }
 
 /**
@@ -275,6 +323,17 @@ export function autoApprovalMomentLabel(iso: string, timeZone: string = APP_TIME
   return new Date(iso).toLocaleString("fr-FR", {
     day: "numeric", month: "long", year: "numeric", hour: "2-digit", minute: "2-digit", timeZone,
   })
+}
+
+/** A label for a best-effort stored field: a value the formatter refuses yields no label, never a throw. */
+function safeDayLabel(day: string | null, timeZone: string): string | null {
+  if (!day) return null
+  try { return autoApprovalDayLabel(day, timeZone) } catch { return null }
+}
+
+function safeMomentLabel(iso: string | null, timeZone: string): string | null {
+  if (!iso) return null
+  try { return autoApprovalMomentLabel(iso, timeZone) } catch { return null }
 }
 
 /**
@@ -357,14 +416,14 @@ export function autoApprovalView(value: unknown, now: Date, timeZone: string = A
   const today = autoApprovalDayInZone(now, timeZone)
   const maxUntil = autoApprovalMaxDay(now, timeZone)
   const budgetUsed = !stored.invalid && v.budgetDate === autoApprovalBudgetDay(now) ? v.budgetUsed : 0
-  const cutOffLabel = v.cutOffAt ? autoApprovalMomentLabel(v.cutOffAt, timeZone) : null
+  const cutOffLabel = safeMomentLabel(v.cutOffAt, timeZone)
   return {
     state,
     invalid: stored.invalid,
     until: v.until,
-    untilLabel: v.until ? autoApprovalDayLabel(v.until, timeZone) : null,
+    untilLabel: safeDayLabel(v.until, timeZone),
     activatedAt: v.activatedAt,
-    activatedAtLabel: v.activatedAt ? autoApprovalMomentLabel(v.activatedAt, timeZone) : null,
+    activatedAtLabel: safeMomentLabel(v.activatedAt, timeZone),
     activatedByLabel: v.activatedByLabel,
     budgetUsed,
     budgetCeiling: AUTO_APPROVAL_DAILY_CEILING,
