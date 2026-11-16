@@ -1,0 +1,10 @@
+STATUS: READY
+VOLUNTEER_REGISTER — batch 41, 16 November 2026
+Duration: 56.080 s, 390×844; one narrated take after a complete quick rehearsal.
+Product commit: e8ed666a48294d77213f8bf64fe35898314b0ed9
+BUILD_ID: HO6mRRAZuOevekAmdhN_C
+MP4 SHA-256: 30683142e8ed59b50059996bbda7c15bad4deae35846e8b7c7eaf2f78ba95f92
+New complete Kore master, all six boundaries aligned, all seven source and final ASR chapter checks pass, whole-master one consistent voice. Full multilingual soundtrack and VTT: 13 register candidates each, including 2 literal tu (2 in VTT), all intentional and allowed because the audience is exactly benevole. No stray instruction identified.
+Seven full-chapter AV reviews / 21 checkpoints, zero issues. All seven actual final chapter images inspected. Real public sign-up with the current Demande d'inscription reçue heading, no personal link disclosed on that screen. Actual confirmation email contains a personal link; its real local API returns Alex Martin's active registration (separate read-only proof, token not stored). The displayed synthetic email is now alex.martin@example.org instead of a timestamp address.
+Music 16.0–19.0 LU under voice, no gaps/out-of-rule windows; no full music-only analysis window. Ten real clicks with soft synchronized effects; zero invented keys for fill(). Description 83 UTF-8 bytes. Types, lint and video/catalog tests pass. Subjective real-time listening unavailable, not claimed.
+Publication: preview then APPLY=1 on default, five files sent; revision 4, dates 2026-11-16.

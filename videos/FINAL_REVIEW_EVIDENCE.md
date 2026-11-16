@@ -988,6 +988,9 @@ Pour chaque vidéo, aperçu puis `make video-publish KUBE_CONTEXT=default ID=…
 
 ## À refilmer : page après une inscription publique sans preuve de l'adresse (2026-11-01)
 
+**Résolu pour VOLUNTEER_REGISTER (lot 41, 16 novembre 2026)** : nouvelle narration entière et nouvelle prise montrant « Demande d’inscription reçue », revue READY puis publication révision 4. Les autres vidéos de cette section conservent leurs écarts jusqu’à leur revue individuelle.
+
+
 Une inscription publique sans lien d'invitation ni lien personnel affiche
 maintenant toujours la page « Demande d'inscription reçue » (plus
 « Inscription confirmée ! », « Tu es sur la liste d'attente ! » ni
@@ -1329,3 +1332,9 @@ Pages : un nouveau segment rattache la vraie page à Accueil, montre l’avertis
 Pour chacune : aperçu puis APPLY=1 sur default, cinq fichiers envoyés, vérification distante sans fichier à renvoyer. Les écarts historiques de ces deux vidéos sont résolus par ces images actuelles ; ceux des autres vidéos restent ouverts. Aucun changement du produit, aucune écoute subjective humaine revendiquée.
 
 Les cinq captures documentaires demandées ont été régénérées par `ONLY=admin-reminders,admin-print,admin-event-archive,admin-members,admin-members-bulk-delete npm run screenshots`, sur une nouvelle base canonique indépendante des vidéos et le même build vérifié. Quatre sont identiques octet pour octet à main ; seule `admin-print`, déjà mise à jour dans ce lot, conserve les dates et l’en-tête du scénario actuel. Les textes alternatifs ont été relus et restent exacts. Les essais préliminaires sur la base vidéo avaient conservé des personnes de tournage ; ils sont remplacés par cette exécution isolée, sans effacer leur historique de preuve. [Preuve et empreintes](evidence/batch41/doc-captures-isolated.json).
+
+## Lot 41 — inscription sur téléphone publiée, 16 novembre 2026
+
+**VOLUNTEER_REGISTER : READY, publiée, révision 4, 56,080 s, 390×844.** Même main `e8ed666a48294d77213f8bf64fe35898314b0ed9`, BUILD_ID `HO6mRRAZuOevekAmdhN_C`. Nouvelle narration Kore entière, six frontières recalées, sept chapitres ASR et AV / 21 points sans observation. Une prise narrée après répétition. Véritable inscription publique puis titre actuel « Demande d’inscription reçue », sans lien personnel sur cet écran ; le vrai email contient un lien dont l’API retourne l’inscription active d’Alex Martin. Preuve séparée sans conserver le jeton.
+
+Bande finale multilingue et VTT : deux « tu » littéraux, treize candidats de registre au total, tous voulus et permis pour l’audience exclusivement bénévole. Musique 16,0–19,0 LU sous la voix, aucun trou ; dix clics réels sonorisés et aucune touche inventée pour fill(). Aperçu puis APPLY=1 sur default, cinq fichiers envoyés. [Rapport et images](evidence/batch41/volunteer-register-mobile/review-report.txt). Les écarts historiques de cette vidéo sont résolus ; aucun changement produit ni écoute subjective humaine revendiquée.

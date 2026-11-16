@@ -1,0 +1,36 @@
+{
+  "model": "gemini-3.8-flash",
+  "reviewedAt": "2026-11-16T20:47:01.258Z",
+  "videoSha256": "30683142e8ed59b50059996bbda7c15bad4deae35846e8b7c7eaf2f78ba95f92",
+  "promptSha256": "b0d2b92b78a4bf34ec5ae16ad9261d8dcd266616966c832ff7abd5c1c046591e",
+  "clipSha256": "448ceacededfc84b590db714db2c2c0b017e911538dc019ced0155b8302284b2",
+  "scene": "confirm",
+  "review": {
+    "heardOpening": "Un dernier coup d'œil au récapitulatif",
+    "checkpoints": [
+      {
+        "spokenSeconds": 0.5,
+        "spoken": "Un dernier coup d’œil au récapitulatif",
+        "visibleSeconds": 0.5,
+        "visible": "Section « Tes informations » et récapitulatif du créneau affichés à l'écran",
+        "sync": "aligned",
+        "severity": "none"
+      },
+      {
+        "spokenSeconds": 2.8,
+        "spoken": "confirme ton inscription",
+        "visibleSeconds": 3.7,
+        "visible": "Affichage de la page « Demande d'inscription reçue »",
+        "sync": "aligned",
+        "severity": "none"
+      }
+    ],
+    "issues": [],
+    "voice": {
+      "consistent": true,
+      "warm": true,
+      "observation": "Voix claire, fluide et naturelle, bien synchronisée avec les éléments affichés."
+    }
+  },
+  "note": "Automated observation of actual final video audio and images; not a claim of complete human validation"
+}

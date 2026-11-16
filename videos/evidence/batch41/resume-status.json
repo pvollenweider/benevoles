@@ -88,10 +88,15 @@
     {
       "id": "VOLUNTEER_REGISTER",
       "slug": "volunteer-register-mobile",
-      "status": "IN PROGRESS",
-      "published": false,
-      "narratedTakes": 0,
-      "problems": "New full master and rehearsal passed; awaiting preceding publications."
+      "status": "READY",
+      "published": true,
+      "narratedTakes": 1,
+      "problems": "None; tutoiement allowed for the exclusively volunteer audience.",
+      "duration": 56.08,
+      "musicGaps": 0,
+      "tu": 2,
+      "registerCandidates": 13,
+      "revision": 4
     },
     {
       "id": "VOLUNTEER_CONFIRMATION_ERRORS",

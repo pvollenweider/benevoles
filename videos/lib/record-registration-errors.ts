@@ -166,9 +166,10 @@ export async function recordRegistrationErrors(options: { page: Page; base: stri
       await form("Logistique", "Nicolas", "video.errors.nicolas@example.org", undefined, undefined, async () => { await at("Nicolas choisit la logistique") })
       let committed = 0
       await page.route("**/api/public/registrations", async route => { const result = await route.fetch(); committed = result.status(); await route.abort("internetdisconnected") })
-      await at("Le formulaire affiche Connexion interrompue"); await tap(page, submit)
+      await at("Cette fois, la requête arrive réellement"); await tap(page, submit)
       await page.getByText("Connexion interrompue", { exact: true }).waitFor()
       assert.equal(committed, 201)
+      await at("Le formulaire affiche Connexion interrompue")
       await page.unroute("**/api/public/registrations")
       await at("Rétablissons la connexion et confirmons")
       assert.equal((await post(201)).editToken, null)

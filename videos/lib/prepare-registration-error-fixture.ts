@@ -5,6 +5,7 @@ import assert from "node:assert/strict"
 import type { PrismaClient } from "../../src/generated/prisma/client"
 import { registrationToken } from "../../src/lib/token-vault"
 import { openPayload } from "../../src/lib/notifications/outbox"
+import { PUBLIC_TRIGGERED, recipientWindowKey } from "../../src/lib/notifications/send-limits"
 import { videoAdminEmail } from "./public-hosts"
 import { fullNameOf, isFixtureSurname, LEGACY_FIXTURE_SURNAME, surnameOf } from "./fixture-names"
 
@@ -38,6 +39,10 @@ export async function prepareRegistrationErrorFixture(db: PrismaClient, reset = 
     // The application still enforces its real 20/hour limit. Only the exact
     // recorder-owned test bucket is reset, never loopback/shared counters.
     await tx.rateLimit.deleteMany({ where: { key: `registrations:${registrationErrorFixtureIp}` } })
+    // Repeated takes use these five reserved synthetic recipients only. Reset
+    // their exact per-kind windows, never organization/global sending limits.
+    const recipients = ["aline", "alex", "nicolas", "zoe", "owner"].map(name => `video.errors.${name}@example.org`)
+    await tx.rateLimit.deleteMany({ where: { key: { in: recipients.flatMap(email => PUBLIC_TRIGGERED.map(kind => recipientWindowKey(email, kind))) } } })
     // Delete only the IDs inspected above; never the default/shared organization.
     await tx.notificationOutbox.deleteMany({ where: { organizationId: orgId, id: { in: queued.map(row => row.id) } } })
     if (events.length) await tx.event.delete({ where: { id: eventId } })

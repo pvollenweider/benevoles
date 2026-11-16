@@ -1,0 +1,44 @@
+{
+  "model": "gemini-3.8-flash",
+  "reviewedAt": "2026-11-16T20:47:14.033Z",
+  "videoSha256": "30683142e8ed59b50059996bbda7c15bad4deae35846e8b7c7eaf2f78ba95f92",
+  "promptSha256": "c45c1886d32282825b9653ad6eedfbaf86448341b1fc08fa698e5c4a49ee6bb5",
+  "clipSha256": "553fddc8b3b948900c7cce92fe565d6e332f1a3fefb74cf5a629bc71cd0a70ae",
+  "scene": "success",
+  "review": {
+    "heardOpening": "Et voilà, ta demande est envoyée !",
+    "checkpoints": [
+      {
+        "spokenSeconds": 0.5,
+        "spoken": "ta demande est envoyée",
+        "visibleSeconds": 0,
+        "visible": "Page de confirmation affichant « Demande d'inscription reçue »",
+        "sync": "aligned",
+        "severity": "none"
+      },
+      {
+        "spokenSeconds": 2.5,
+        "spoken": "Regarde tes emails : la confirmation arrive dans ta boîte",
+        "visibleSeconds": 0,
+        "visible": "Texte explicatif à l'écran invitant à vérifier ses emails y compris les courriers indésirables",
+        "sync": "aligned",
+        "severity": "none"
+      },
+      {
+        "spokenSeconds": 5.5,
+        "spoken": "Elle contient ton lien personnel pour retrouver, modifier ou annuler ton inscription",
+        "visibleSeconds": 0,
+        "visible": "Écran stable de confirmation accompagnant la conclusion sur le suivi par email",
+        "sync": "aligned",
+        "severity": "none"
+      }
+    ],
+    "issues": [],
+    "voice": {
+      "consistent": true,
+      "warm": true,
+      "observation": "Voix naturelle, claire et engageante, sans souffle ni hésitation."
+    }
+  },
+  "note": "Automated observation of actual final video audio and images; not a claim of complete human validation"
+}

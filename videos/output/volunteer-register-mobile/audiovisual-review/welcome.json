@@ -1,0 +1,44 @@
+{
+  "model": "gemini-3.8-flash",
+  "reviewedAt": "2026-11-16T20:46:51.297Z",
+  "videoSha256": "30683142e8ed59b50059996bbda7c15bad4deae35846e8b7c7eaf2f78ba95f92",
+  "promptSha256": "2cac244ba4e01721e9b1a2bc83603751ceb1f013c370d9152bdc240fbfd273f4",
+  "clipSha256": "6bcc7967003f80c1aa78a610bc28b2e4b25b6ed97ed6e71da5c10c32edfa3597",
+  "scene": "welcome",
+  "review": {
+    "heardOpening": "Envie de donner un coup de main",
+    "checkpoints": [
+      {
+        "spokenSeconds": 0.8,
+        "spoken": "Envie de donner un coup de main ?",
+        "visibleSeconds": 0,
+        "visible": "Titre d'introduction « S'inscrire comme bénévole depuis son téléphone » affiché en superposition",
+        "sync": "aligned",
+        "severity": "none"
+      },
+      {
+        "spokenSeconds": 2.3,
+        "spoken": "Ouvre le lien reçu, ou scanne le QR code affiché par l’association.",
+        "visibleSeconds": 2.6,
+        "visible": "Affichage direct de la page de l'événement sur mobile (pas de démonstration du scan ou du clic de lien)",
+        "sync": "aligned",
+        "severity": "none"
+      },
+      {
+        "spokenSeconds": 6,
+        "spoken": "Tu peux choisir ton créneau directement depuis ton téléphone.",
+        "visibleSeconds": 3,
+        "visible": "Vue du planning et des plages horaires de bénévolat (« Montage », « Accueil », etc.) sur le téléphone",
+        "sync": "aligned",
+        "severity": "none"
+      }
+    ],
+    "issues": [],
+    "voice": {
+      "consistent": true,
+      "warm": true,
+      "observation": "Voix féminine claire, naturelle et chaleureuse, accompagnée d'un fond musical discret."
+    }
+  },
+  "note": "Automated observation of actual final video audio and images; not a claim of complete human validation"
+}

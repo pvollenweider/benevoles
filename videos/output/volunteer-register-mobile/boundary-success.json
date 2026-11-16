@@ -1,0 +1,12 @@
+{
+  "anchor": "Et voilà, ta demande est envoyée ! Regarde tes emails :",
+  "windowStart": 12.321999999999996,
+  "result": {
+    "found": true,
+    "startSeconds": 29.98,
+    "wordsHeard": "Et voilà ta demande est envoyée ! Regarde tes emails"
+  },
+  "onset": 42.30199999999999,
+  "proposedCut": 42.3218125,
+  "note": "Proposal only; recut then independently audit before capture"
+}

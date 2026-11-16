@@ -841,9 +841,10 @@
         "benevole"
       ],
       "feature": "Inscription bénévole",
-      "updatedAt": "2026-10-16",
-      "revision": 3,
-      "level": "decouverte"
+      "updatedAt": "2026-11-16",
+      "revision": 4,
+      "level": "decouverte",
+      "updated": "2026-11-16"
     },
     {
       "id": "EVENT_CREATE_PUBLISH_OVERVIEW",

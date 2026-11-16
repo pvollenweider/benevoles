@@ -1,0 +1,65 @@
+{
+  "id": "VOLUNTEER_REGISTER",
+  "slug": "volunteer-register-mobile",
+  "validatedAt": "2026-11-16T20:46:46.551Z",
+  "continuousNarration": true,
+  "sentenceRevision": false,
+  "narrationContentChecked": true,
+  "voice": "Kore",
+  "captureMs": 56080,
+  "scenes": [
+    {
+      "id": "welcome",
+      "visualMs": 9670,
+      "audioMs": 9669,
+      "driftMs": 1
+    },
+    {
+      "id": "discover",
+      "visualMs": 6889,
+      "audioMs": 6886,
+      "driftMs": 3
+    },
+    {
+      "id": "choose",
+      "visualMs": 6663,
+      "audioMs": 6660,
+      "driftMs": 3
+    },
+    {
+      "id": "details",
+      "visualMs": 7084,
+      "audioMs": 7083,
+      "driftMs": 1
+    },
+    {
+      "id": "preferences",
+      "visualMs": 6796,
+      "audioMs": 6793,
+      "driftMs": 3
+    },
+    {
+      "id": "confirm",
+      "visualMs": 5233,
+      "audioMs": 5231,
+      "driftMs": 2
+    },
+    {
+      "id": "success",
+      "visualMs": 10560,
+      "audioMs": 10558,
+      "driftMs": 2
+    }
+  ],
+  "anchorsChecked": 2,
+  "music": {
+    "voicedWindows": 50,
+    "musicOnlyWindows": 0,
+    "smallestGapLu": 16,
+    "largestGapLu": 19,
+    "quietestMusicOnlyLufs": null,
+    "loudestMusicOnlyLufs": null,
+    "medianVoiceLufs": -16.5
+  },
+  "issues": []
+}

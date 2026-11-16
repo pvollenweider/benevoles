@@ -1,0 +1,12 @@
+{
+  "anchor": "Réponds aux quelques questions pratiques, puis accepte la convention et l’utilisation",
+  "windowStart": 7.091000000000001,
+  "result": {
+    "found": true,
+    "startSeconds": 23.4,
+    "wordsHeard": "Réponds"
+  },
+  "onset": 30.491,
+  "proposedCut": 30.2982705,
+  "note": "Proposal only; recut then independently audit before capture"
+}
