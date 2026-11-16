@@ -1,0 +1,12 @@
+{
+  "anchor": "Revenons aux inscriptions du secteur Parking. Le bouton Écrire au secteur",
+  "windowStart": 126.43100000000001,
+  "result": {
+    "found": true,
+    "startSeconds": 30.1,
+    "wordsHeard": "Revenons aux inscriptions du secteur Parking. Le bouton Écrire au secteur"
+  },
+  "onset": 156.531,
+  "proposedCut": 156.4307085,
+  "note": "Proposal only; recut then independently audit before capture"
+}

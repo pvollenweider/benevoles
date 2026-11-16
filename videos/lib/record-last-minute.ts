@@ -180,9 +180,12 @@ export async function recordLastMinute(options: { page: Page; base: string; dire
     await scene("schedule", async at => {
       const prior = new Set((await inbox()).map(mail => mail.ID))
       await shifts()
+      await at("Ouvrons le créneau concerné et")
       await tap(page, page.getByRole("row").filter({ hasText: "Réception du matériel" }).getByRole("button", { name: /^Modifier le créneau / }))
-      await at("Ouvrons le créneau concerné et"); await write(page.getByLabel(/^Début(?: \*)?$/), "14:30")
-      await at("Décalons les deux heures, puis"); await write(page.getByLabel(/^Fin(?: \*)?$/), "16:30")
+      await at("Décalons les deux heures, puis")
+      await at(0.35) /* final MP4 review locates this clause at 10.9 s of this unchanged 31.49 s chapter */
+      await write(page.getByLabel(/^Début(?: \*)?$/), "14:30")
+      await write(page.getByLabel(/^Fin(?: \*)?$/), "16:30")
       await at("L'application prévient les personnes déjà"); await tap(page, page.getByRole("button", { name: "Enregistrer", exact: true }))
       await page.getByRole("row").filter({ hasText: "Réception du matériel" }).getByText("14:30–16:30", { exact: true }).waitFor()
       await at("Lisons l'ancien et le nouvel"); checks.changedMail = await openNewMail(prior, "video.last-minute.person.4@example.org", ["14:00–16:00", "14:30–16:30"])

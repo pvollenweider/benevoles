@@ -1,0 +1,12 @@
+{
+  "anchor": "Les postes qui existaient avant le premier secteur restent dans Autres",
+  "windowStart": 47.203,
+  "result": {
+    "found": true,
+    "startSeconds": 30.1,
+    "wordsHeard": "Les postes qui existaient avant le premier secteur restent dans Autres"
+  },
+  "onset": 77.303,
+  "proposedCut": 77.2031045,
+  "note": "Proposal only; recut then independently audit before capture"
+}

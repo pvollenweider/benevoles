@@ -1,0 +1,12 @@
+{
+  "anchor": "Votre événement est maintenant organisé par secteurs. Créez d'abord les secteurs,",
+  "windowStart": 146.52,
+  "result": {
+    "found": true,
+    "startSeconds": 30.1,
+    "wordsHeard": "Votre événement est maintenant organisé par secteur. Créez d'abord les secteurs"
+  },
+  "onset": 176.62,
+  "proposedCut": 176.52047900000002,
+  "note": "Proposal only; recut then independently audit before capture"
+}

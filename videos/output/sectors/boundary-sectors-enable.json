@@ -1,0 +1,12 @@
+{
+  "anchor": "Dans les informations de l'événement, la carte Secteurs propose l'interrupteur Organiser",
+  "windowStart": 0,
+  "result": {
+    "found": true,
+    "startSeconds": 19.4,
+    "wordsHeard": "Dans les informations de l'événement, la carte Secteurs propose l'interrupteur Organiser"
+  },
+  "onset": 19.4,
+  "proposedCut": 19.2806875,
+  "note": "Proposal only; recut then independently audit before capture"
+}

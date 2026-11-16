@@ -139,19 +139,27 @@
       "status": "IN PROGRESS",
       "published": false,
       "narratedTakes": 1,
-      "problems": "Functional/mail preflights and rehearsal pass; first narrated take active."
+      "problems": "First take early schedule edits; preserved. Recorder corrected before next rehearsal and last take."
     },
     {
       "id": "SECTORS",
       "slug": "sectors",
-      "status": "NOT DONE",
-      "published": false
+      "status": "READY",
+      "published": true,
+      "narratedTakes": 1,
+      "duration": 226.08,
+      "musicGaps": 0,
+      "tu": 0,
+      "revision": 3,
+      "problems": "Browser chrome absent; explanatory URL persistence independently checked with actual reopened filter."
     },
     {
       "id": "SHIFT_ROSTER_VISIBILITY",
       "slug": "shift-roster-visibility",
-      "status": "NOT DONE",
-      "published": false
+      "status": "IN PROGRESS",
+      "published": false,
+      "narratedTakes": 1,
+      "problems": "First narrated take active after a complete passing rehearsal."
     },
     {
       "id": "ADMIN_FEATURES_OVERVIEW",

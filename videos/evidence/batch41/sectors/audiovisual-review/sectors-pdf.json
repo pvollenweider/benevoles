@@ -1,0 +1,44 @@
+{
+  "model": "gemini-3.8-flash",
+  "reviewedAt": "2026-11-16T21:33:22.006Z",
+  "videoSha256": "86a4bcb42c4580809057d00a4eeb12006123685b94cf05d3d83fc764791365a7",
+  "promptSha256": "6c8a171985312153253b5727adb029808ae7f3138e88b402433f37e4e698a1d0",
+  "clipSha256": "1497930eab8996457d90fa8c18be0184742c748230302c59aa16ae6b349d4e1c",
+  "scene": "sectors-pdf",
+  "review": {
+    "heardOpening": "Le planning imprimé suit le même ordre.",
+    "checkpoints": [
+      {
+        "spokenSeconds": 0,
+        "spoken": "Le planning imprimé suit le même ordre.",
+        "visibleSeconds": 0,
+        "visible": "Affichage de la grille de planning avec les secteurs et Autres postes.",
+        "sync": "aligned",
+        "severity": "none"
+      },
+      {
+        "spokenSeconds": 2.5,
+        "spoken": "Dans Documents, ouvrons l'export complet.",
+        "visibleSeconds": 3.4,
+        "visible": "Dans l'onglet Documents, clic sur le lien Export complet.",
+        "sync": "aligned",
+        "severity": "none"
+      },
+      {
+        "spokenSeconds": 5,
+        "spoken": "La frise de chaque jour et le récapitulatif par poste sont rangés secteur par secteur, puis Autres postes.",
+        "visibleSeconds": 5.3,
+        "visible": "Affichage du document d'export complet avec la frise et le tableau récapitulatif ordonnés par secteurs puis Autres postes.",
+        "sync": "aligned",
+        "severity": "none"
+      }
+    ],
+    "issues": [],
+    "voice": {
+      "consistent": true,
+      "warm": true,
+      "observation": "Voix claire, posée et parfaitement synchronisée avec la navigation."
+    }
+  },
+  "note": "Automated observation of actual final video audio and images; not a claim of complete human validation"
+}

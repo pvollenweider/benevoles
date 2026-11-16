@@ -1,0 +1,52 @@
+{
+  "model": "gemini-3.8-flash",
+  "reviewedAt": "2026-11-16T21:33:06.712Z",
+  "videoSha256": "86a4bcb42c4580809057d00a4eeb12006123685b94cf05d3d83fc764791365a7",
+  "promptSha256": "4f765dd7923e73d1f925efdcc98fc70a6de6aa4f5585bba086de2d9914b28e59",
+  "clipSha256": "01ff3584a2428b12ae9c12c9a56b72f4f95f2393fc50d70aac72714833215415",
+  "scene": "sectors-poste",
+  "review": {
+    "heardOpening": "Ajoutons ensuite les postes",
+    "checkpoints": [
+      {
+        "spokenSeconds": 3,
+        "spoken": "Sous Backline, le bouton Ajouter un poste dans Backline ouvre le formulaire de créneau, avec ce secteur déjà choisi.",
+        "visibleSeconds": 3.7,
+        "visible": "Clic sur « Ajouter un poste dans Backline », ouvrant le formulaire « Nouveau poste : premier créneau » avec le secteur Backline prérempli.",
+        "sync": "aligned",
+        "severity": "none"
+      },
+      {
+        "spokenSeconds": 10,
+        "spoken": "Tapons le nom du nouveau poste, Backline Scène du Lac",
+        "visibleSeconds": 10.7,
+        "visible": "Le texte « Backline Scène du Lac » est saisi dans le champ Poste.",
+        "sync": "aligned",
+        "severity": "none"
+      },
+      {
+        "spokenSeconds": 13.5,
+        "spoken": "puis son premier créneau, avec le jour, les horaires et les places.",
+        "visibleSeconds": 14,
+        "visible": "La date (mardi 17 novembre), les horaires (14:00 - 18:00) et le nombre de places (2) sont saisis dans le formulaire.",
+        "sync": "aligned",
+        "severity": "none"
+      },
+      {
+        "spokenSeconds": 17,
+        "spoken": "Le poste est créé avec ce créneau, directement dans son secteur.",
+        "visibleSeconds": 17.9,
+        "visible": "Validation du formulaire et retour à la liste : le poste « Backline Scène du Lac » s'affiche dans le secteur Backline.",
+        "sync": "aligned",
+        "severity": "none"
+      }
+    ],
+    "issues": [],
+    "voice": {
+      "consistent": true,
+      "warm": true,
+      "observation": "Voix masculine claire, fluide et bien rythmée, parfaitement calée avec les actions à l'écran."
+    }
+  },
+  "note": "Automated observation of actual final video audio and images; not a claim of complete human validation"
+}

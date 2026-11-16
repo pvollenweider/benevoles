@@ -1012,11 +1012,11 @@
         "organisateur"
       ],
       "feature": "Secteurs",
-      "updatedAt": "2026-11-10",
-      "revision": 2,
+      "updatedAt": "2026-11-16",
+      "revision": 3,
       "level": "avance",
       "added": "2026-10-29",
-      "updated": "2026-11-10"
+      "updated": "2026-11-16"
     },
     {
       "id": "SHIFT_SWAPS",

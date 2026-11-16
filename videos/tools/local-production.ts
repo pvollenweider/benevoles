@@ -88,6 +88,7 @@ async function main() {
     allowed.add("videos/tools/rename-video-admin.ts")
     allowed.add("scripts/seed-video-front-desk.ts")
     allowed.add("videos/tools/verify-badges.ts")
+    allowed.add("videos/tools/verify-sectors-filter.ts")
     allowed.add("videos/tools/prepare-registration-mailbox.ts")
     allowed.add("videos/tools/verify-last-minute.ts")
     allowed.add("videos/tools/flush-last-minute-outbox.ts")
