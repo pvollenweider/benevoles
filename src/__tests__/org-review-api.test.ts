@@ -69,6 +69,38 @@ describe("POST /api/super-admin/organizations/[id]/review (#810, part 4c)", () =
     expect(m.queryRaw.mock.invocationCallOrder[0]).toBeLessThan(m.orgUpdate.mock.invocationCallOrder[0])
   })
 
+  // #1371 fix round: a space is pending as soon as ONE grant is missing. It is approved as the
+  // route did before the branch, writing both timestamps and sending the emails.
+  const halfGranted = [
+    { name: "publication granted, outbound email not", org: { ...pending, publicationApprovedAt: new Date("2026-01-01T00:00:00Z") } },
+    { name: "outbound email granted, publication not", org: { ...pending, outboundEmailApprovedAt: new Date("2026-01-01T00:00:00Z") } },
+  ]
+  for (const c of halfGranted) {
+    it(`approves a space with ${c.name}: both timestamps, logs and emails`, async () => {
+      m.findUnique.mockResolvedValueOnce(c.org)
+      m.orgUpdate.mockResolvedValueOnce([c.org])
+      const { POST } = await import("@/app/api/super-admin/organizations/[id]/review/route")
+      const res = await POST(post("approve"), params)
+
+      expect(res.status).toBe(200)
+      expect(await res.json()).toEqual({ ok: true, decision: "approve" })
+      const data = m.orgUpdate.mock.calls[0][0].data
+      expect(data.publicationApprovedAt).toBeInstanceOf(Date)
+      expect(data.outboundEmailApprovedAt).toBeInstanceOf(Date)
+      expect(m.orgUpdate.mock.calls[0][0].where).toMatchObject({
+        active: true,
+        suspendedAt: null,
+        OR: [{ publicationApprovedAt: null }, { outboundEmailApprovedAt: null }],
+      })
+      expect(m.logCreate).toHaveBeenCalledWith({ data: expect.objectContaining({ action: "organization.approved", actorId: "sa-1" }) })
+      expect(m.operatorLogCreate).toHaveBeenCalledWith({ data: expect.objectContaining({ action: "organization.approved", target: "Fête (fete)" }) })
+      expect(m.enqueue).toHaveBeenCalledTimes(1)
+      const [payloads] = m.enqueue.mock.calls[0] as [{ recipient: { email: string } }[]]
+      expect(payloads.map((p) => p.recipient.email)).toEqual(["owner@example.org"])
+      expect(m.deliver).toHaveBeenCalledWith(["o1"])
+    })
+  }
+
   it("refuses: deleted with its accounts, nothing sent", async () => {
     const { POST } = await import("@/app/api/super-admin/organizations/[id]/review/route")
     const res = await POST(post("refuse"), params)
@@ -78,8 +110,12 @@ describe("POST /api/super-admin/organizations/[id]/review (#810, part 4c)", () =
     expect(m.enqueue).not.toHaveBeenCalled()
     // The organisation's own log is gone with it: the refusal stays in the operator's log.
     expect(m.operatorLogCreate).toHaveBeenCalledWith({ data: expect.objectContaining({ action: "organization.refused", entityId: "org-1", target: "Fête (fete)" }) })
-    // The organisation row is locked first, then read again under that lock.
-    expect(m.queryRaw.mock.invocationCallOrder[0]).toBeLessThan(m.txFindUnique.mock.invocationCallOrder[0])
+    // Same lock order as account activation: the AdminUser rows first, then the organisation.
+    const locks = m.queryRaw.mock.calls.map((call) => String((call[0] as TemplateStringsArray).join(" ")))
+    expect(locks[0]).toContain('"AdminUser"')
+    expect(locks[1]).toContain('"Organization"')
+    expect(m.queryRaw.mock.invocationCallOrder[0]).toBeLessThan(m.queryRaw.mock.invocationCallOrder[1])
+    expect(m.queryRaw.mock.invocationCallOrder[1]).toBeLessThan(m.txFindUnique.mock.invocationCallOrder[0])
     expect(m.txFindUnique.mock.invocationCallOrder[0]).toBeLessThan(m.orgDelete.mock.invocationCallOrder[0])
   })
 

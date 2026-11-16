@@ -25,7 +25,11 @@ export type ApprovalActor =
   | { type: "operator"; id: string | null; label: string | null }
   | { type: "automatic" }
 
-export type ApprovalRefusalReason = "not_found" | "already_approved" | "inactive" | "suspended"
+/**
+ * `pending` cannot come out of `approveOrganization`: the conditional grant matches every active,
+ * non-suspended row missing a grant. It keeps `approvalRefusalReason` honest for the pure helper.
+ */
+export type ApprovalRefusalReason = "not_found" | "pending" | "already_approved" | "inactive" | "suspended"
 
 export type ApproveOrganizationResult =
   | { approved: true; outboxIds: string[] }
@@ -38,16 +42,22 @@ export type ApproveOrganizationInput = {
 }
 
 /**
- * The four conditions of the grant: an organisation still active, not suspended, with both
- * grants empty. The `id` is added by the caller. A single conditional write means two approvals
- * can never both win, even without the row lock.
+ * The grant's conditions: an organisation still active, not suspended, with **at least one** of
+ * the two grants empty. A space is pending as soon as either grant is missing (`orgStatus` and
+ * `decideReview` say so), so a half-granted space is approved as it was before #1371. The `id` is
+ * added by the caller. The write always fills both timestamps, as the route did before this
+ * branch. A single conditional write means two approvals can never both win, even without the
+ * row lock.
  */
-export const APPROVAL_GRANT_WHERE = {
+export const APPROVAL_GRANT_WHERE: {
+  active: true
+  suspendedAt: null
+  OR: ({ publicationApprovedAt: null } | { outboundEmailApprovedAt: null })[]
+} = {
   active: true,
   suspendedAt: null,
-  publicationApprovedAt: null,
-  outboundEmailApprovedAt: null,
-} as const
+  OR: [{ publicationApprovedAt: null }, { outboundEmailApprovedAt: null }],
+}
 
 /** Why a failed conditional grant happened, from the row re-read once under the lock. */
 export function approvalRefusalReason(
@@ -56,6 +66,9 @@ export function approvalRefusalReason(
   if (!org) return "not_found"
   if (org.suspendedAt) return "suspended"
   if (!org.active) return "inactive"
+  // `already_approved` only when both grants are set: a row still waiting for one would have
+  // matched the conditional write, so this is only the honest answer for the pure helper.
+  if (org.publicationApprovedAt === null || org.outboundEmailApprovedAt === null) return "pending"
   return "already_approved"
 }
 
@@ -71,9 +84,10 @@ export async function approveOrganization(
   tx: Prisma.TransactionClient,
   { organizationId, actor, now }: ApproveOrganizationInput,
 ): Promise<ApproveOrganizationResult> {
-  // The organisation row lock, taken first, is the one the manual refusal and the suspension
-  // take too: an approval can never interleave with them. The grant below is still conditional
-  // on the row it locked, so a suspension that committed first is never undone.
+  // Lock order, and the reason there is no cycle with account activation: approval takes the
+  // `Organization` row only. It reads the administrators with a plain SELECT, so it never waits
+  // for an `AdminUser` row. Refusal and activation take the administrator rows first, then the
+  // organisation (src/lib/org-refusal-server.ts, src/lib/account-activation-server.ts).
   await tx.$queryRaw`SELECT id FROM "Organization" WHERE id = ${organizationId} FOR UPDATE`
 
   const [org] = await tx.organization.updateManyAndReturn({

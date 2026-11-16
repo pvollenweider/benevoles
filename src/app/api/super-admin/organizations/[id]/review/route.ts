@@ -6,8 +6,8 @@ import { requireSuperAdmin } from "@/lib/auth-guard"
 import { prisma } from "@/lib/prisma"
 import { decideReview } from "@/lib/org-review"
 import { approveOrganization } from "@/lib/org-approval-server"
+import { refuseOrganization } from "@/lib/org-refusal-server"
 import { deliverAfterResponse } from "@/lib/notifications/outbox"
-import { logOperator, organizationTarget } from "@/lib/operator-log"
 
 /**
  * Review of a space awaiting validation (#810, part 4c), from its super admin page, never from a
@@ -22,7 +22,7 @@ export async function POST(req: Request, { params }: { params: Promise<{ id: str
 
   const org = await prisma.organization.findUnique({
     where: { id },
-    select: { id: true, name: true, slug: true, active: true, suspendedAt: true, publicationApprovedAt: true, outboundEmailApprovedAt: true },
+    select: { id: true, active: true, suspendedAt: true, publicationApprovedAt: true, outboundEmailApprovedAt: true },
   })
   if (!org) return NextResponse.json({ error: "Organisation non trouvée" }, { status: 404 })
 
@@ -30,26 +30,14 @@ export async function POST(req: Request, { params }: { params: Promise<{ id: str
   if (!outcome.ok) return NextResponse.json({ error: outcome.error }, { status: outcome.status })
 
   if (outcome.decision === "refuse") {
-    const refusal = await prisma.$transaction(async (tx) => {
-      // The same organisation row lock as the approval (#1371): the two decisions serialise. The
-      // state is read again under that lock, so an approval that committed first is never undone
-      // by a refusal decided from the older read above.
-      await tx.$queryRaw`SELECT id FROM "Organization" WHERE id = ${id} FOR UPDATE`
-      const current = await tx.organization.findUnique({
-        where: { id },
-        select: { active: true, suspendedAt: true, publicationApprovedAt: true, outboundEmailApprovedAt: true },
-      })
-      if (!current) return { ok: false as const, status: 404 as const, error: "Organisation non trouvée" }
-      const again = decideReview(current, "refuse")
-      if (!again.ok) return { ok: false as const, status: again.status, error: again.error }
-      // Admins are only SET NULL by the organisation's deletion: removed with it, as the cleanup does.
-      await tx.adminUser.deleteMany({ where: { organizationId: id } })
-      await tx.organization.delete({ where: { id } })
-      // The organisation's own log goes with it: the decision is kept in the operator's log.
-      await logOperator(tx, { action: "organization.refused", actor: guard.session.user, entityType: "Organization", entityId: id, target: organizationTarget(org) })
-      return { ok: true as const }
-    })
-    if (!refusal.ok) return NextResponse.json({ error: refusal.error }, { status: refusal.status })
+    // The refusal's transactional part lives in src/lib/org-refusal-server.ts: the integration
+    // test calls the same function outside HTTP. Its lock order (administrator rows first, then
+    // the organisation) is documented there.
+    const refusal = await prisma.$transaction((tx) => refuseOrganization(tx, {
+      organizationId: id,
+      actor: guard.session.user,
+    }))
+    if (!refusal.refused) return NextResponse.json({ error: refusal.error }, { status: refusal.status })
     return NextResponse.json({ ok: true, decision: "refuse" })
   }
 

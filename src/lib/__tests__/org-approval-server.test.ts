@@ -40,7 +40,8 @@ const pendingOrg = (): OrgRow => ({
 
 /**
  * The transaction slice `approveOrganization` uses, over one organisation row. `updateManyAndReturn`
- * applies the real four conditions, so a second call on the same row behaves like the database.
+ * applies the real grant conditions (active, not suspended, at least one grant empty), so a second
+ * call on the same row behaves like the database.
  */
 function fakeTx(org: OrgRow | null, team = teamOf(ORG_ID)) {
   const row = org ? { ...org } : null
@@ -60,8 +61,7 @@ function fakeTx(org: OrgRow | null, team = teamOf(ORG_ID)) {
         if (!row) return []
         const matches = row.active === true
           && row.suspendedAt === null
-          && row.publicationApprovedAt === null
-          && row.outboundEmailApprovedAt === null
+          && (row.publicationApprovedAt === null || row.outboundEmailApprovedAt === null)
         if (!matches) return []
         row.publicationApprovedAt = args.data.publicationApprovedAt
         row.outboundEmailApprovedAt = args.data.outboundEmailApprovedAt
@@ -108,11 +108,11 @@ describe("approveOrganization: a manual approval (#1371)", () => {
     expect(t.tx.$queryRaw.mock.invocationCallOrder[0]).toBeLessThan(t.tx.organization.updateManyAndReturn.mock.invocationCallOrder[0])
 
     expect(t.updateArgs[0].where).toEqual({ id: ORG_ID, ...APPROVAL_GRANT_WHERE })
-    expect(t.updateArgs[0].where).toMatchObject({
+    expect(t.updateArgs[0].where).toEqual({
+      id: ORG_ID,
       active: true,
       suspendedAt: null,
-      publicationApprovedAt: null,
-      outboundEmailApprovedAt: null,
+      OR: [{ publicationApprovedAt: null }, { outboundEmailApprovedAt: null }],
     })
     expect(t.updateArgs[0].data).toEqual({ publicationApprovedAt: NOW, outboundEmailApprovedAt: NOW })
 
@@ -184,11 +184,35 @@ describe("approveOrganization: an automatic approval (#1371)", () => {
   })
 })
 
+describe("approveOrganization: a partially granted space is still pending (#1371 fix)", () => {
+  const OLD = new Date("2026-01-01T00:00:00Z")
+  const cases = [
+    { name: "publication granted, outbound email not", org: { ...pendingOrg(), publicationApprovedAt: OLD } },
+    { name: "outbound email granted, publication not", org: { ...pendingOrg(), outboundEmailApprovedAt: OLD } },
+  ]
+
+  for (const c of cases) {
+    it(`${c.name}: approved, both timestamps written, one log each and the emails`, async () => {
+      const t = fakeTx(c.org)
+      expect(await run(t)).toEqual({ approved: true, outboxIds: ["outbox-1"] })
+
+      // The route wrote both timestamps before #1371, the already-granted one included.
+      expect(t.row?.publicationApprovedAt).toEqual(NOW)
+      expect(t.row?.outboundEmailApprovedAt).toEqual(NOW)
+      expect(t.orgLogs).toHaveLength(1)
+      expect(t.operatorLogs).toHaveLength(1)
+      expect(enqueue).toHaveBeenCalledTimes(1)
+      const [payloads] = enqueue.mock.calls[0] as [{ recipient: { email: string }; data: { organizationName: string } }[]]
+      expect(payloads.map((p) => p.recipient.email)).toEqual([ELODIE.email, SAMI.email])
+      expect(payloads[0].data.organizationName).toBe("Fête du village")
+    })
+  }
+})
+
 describe("approveOrganization: nothing else is written when the grant matches no row", () => {
   const cases: { name: string; org: OrgRow | null; reason: string }[] = [
     { name: "not_found", org: null, reason: "not_found" },
     { name: "already_approved", org: { ...pendingOrg(), publicationApprovedAt: NOW, outboundEmailApprovedAt: NOW }, reason: "already_approved" },
-    { name: "one grant already given", org: { ...pendingOrg(), outboundEmailApprovedAt: NOW }, reason: "already_approved" },
     { name: "inactive", org: { ...pendingOrg(), active: false }, reason: "inactive" },
     { name: "suspended", org: { ...pendingOrg(), active: false, suspendedAt: NOW }, reason: "suspended" },
   ]
@@ -208,12 +232,15 @@ describe("approveOrganization: nothing else is written when the grant matches no
     expect(approvalRefusalReason(null)).toBe("not_found")
     expect(approvalRefusalReason({ active: false, suspendedAt: NOW, publicationApprovedAt: null, outboundEmailApprovedAt: null })).toBe("suspended")
     expect(approvalRefusalReason({ active: false, suspendedAt: null, publicationApprovedAt: null, outboundEmailApprovedAt: null })).toBe("inactive")
+    // `already_approved` only when both grants are set; one grant missing is still pending.
+    expect(approvalRefusalReason({ active: true, suspendedAt: null, publicationApprovedAt: NOW, outboundEmailApprovedAt: null })).toBe("pending")
+    expect(approvalRefusalReason({ active: true, suspendedAt: null, publicationApprovedAt: null, outboundEmailApprovedAt: NOW })).toBe("pending")
     expect(approvalRefusalReason({ active: true, suspendedAt: null, publicationApprovedAt: NOW, outboundEmailApprovedAt: NOW })).toBe("already_approved")
   })
 })
 
-describe("approveOrganization: a second call and a concurrent decision", () => {
-  it("a second call on the same space is already_approved and sends no second email", async () => {
+describe("approveOrganization: a sequential second call and rows already deleted or suspended", () => {
+  it("a sequential second call on the same space is already_approved and sends no second email", async () => {
     const t = fakeTx(pendingOrg())
     expect(await run(t)).toMatchObject({ approved: true })
     expect(await run(t)).toEqual({ approved: false, reason: "already_approved" })
@@ -224,15 +251,15 @@ describe("approveOrganization: a second call and a concurrent decision", () => {
     expect(enqueue).toHaveBeenCalledTimes(1)
   })
 
-  it("a space deleted by a refusal that ran first is not approved", async () => {
-    // The refusal transaction deleted the organisation: its row is gone when the approval locks.
+  it("a space whose row is already deleted is not approved", async () => {
+    // The row is gone when the approval locks: a refusal that committed earlier, for instance.
     const t = fakeTx(null)
     expect(await run(t)).toEqual({ approved: false, reason: "not_found" })
     expect(t.orgLogs).toHaveLength(0)
     expect(enqueue).not.toHaveBeenCalled()
   })
 
-  it("a suspended space is never approved, whichever transaction ran first", async () => {
+  it("a space already suspended is never approved", async () => {
     const t = fakeTx({ ...pendingOrg(), active: false, suspendedAt: NOW })
     expect(await run(t)).toEqual({ approved: false, reason: "suspended" })
     expect(t.row?.publicationApprovedAt).toBeNull()
