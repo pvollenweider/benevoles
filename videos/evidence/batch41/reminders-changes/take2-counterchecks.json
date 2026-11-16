@@ -1,0 +1,30 @@
+{
+  "videoSha256": "03c35f8c1df5ae58d1b180b280352fed257ff898864da5b3efd135294d83686a",
+  "take": 2,
+  "findings": {
+    "manual-send": {
+      "status": "resolved",
+      "evidence": [
+        "take2-manual-send-3.8.png",
+        "take2-manual-send-5.0.png",
+        "take2-manual-send-7.2.png",
+        "take2-manual-send-8.2.png",
+        "take2-manual-send-10.0.png",
+        "reminder-capture-checks.json"
+      ],
+      "observation": "Actual clicks at 59.183, 61.215, 64.248 and 66.047 seconds: open, cancel, reopen, send. Dialog visible at chapter +3.8, absent +5.0, reopened +7.2; then actual delivery and real mail +10.0. The no-action finding is contradicted by frames, inputs and runtime checks."
+    },
+    "organization": {
+      "status": "resolved",
+      "evidence": [
+        "take2-organization-12.5.png",
+        "take2-organization-13.5.png",
+        "take2-organization-14.5.png",
+        "take2-organization-15.8.png",
+        "reminder-capture-checks.json"
+      ],
+      "observation": "Actual J-1 clicks at 97.981 and 100.095 seconds, actual save clicks at 99.279 and 101.396. Final frames show J-1 unchecked +13.5 and checked +14.5, and saved parameters +15.8. No source state or pixels changed."
+    }
+  },
+  "cancellation": "Actual Aline email +10.6/+12/+14, actual Lucas request email +15.8/+17.5. One continuous focused interval spans both real message bodies; no invented email."
+}

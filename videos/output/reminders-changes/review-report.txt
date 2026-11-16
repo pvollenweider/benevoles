@@ -1,2 +1,11 @@
-STATUS: NOT READY
-First narrated take assembled and technically validated. Two AV observations (organisation checkbox actions and confirmed count versus pending request) are being counterchecked against final frames and real API/state/email evidence. No new reminder video published yet.
+STATUS: READY
+REMINDERS_CHANGES — batch 41, 16 November 2026
+Duration: 290.800 s; second and final narrated take. First take rejected because its first cancellation email was too brief; artifacts retained.
+Product commit: e8ed666a48294d77213f8bf64fe35898314b0ed9
+BUILD_ID: HO6mRRAZuOevekAmdhN_C
+MP4 SHA-256: 03c35f8c1df5ae58d1b180b280352fed257ff898864da5b3efd135294d83686a
+One complete new Kore master, nine chapter cuts recut, all ten source and final chapter ASR checks pass; whole-master voice consistent. Full multilingual final soundtrack and VTT contain only two exact quotations of the displayed reminder text (ton horaire, ton aide), zero viewer tutoiement, zero standalone tu. No stray instruction identified.
+Ten AV chapters, 35 checkpoints. Two no-action findings are resolved by actual final frames, recorded input events and fixture assertions; raw reports retained. Both real cancellation mails are readable, Aline then Lucas. No product change, no fabricated email or UI.
+New per-event delays segment: custom three days/two hours saved and actual next send shown; habitual settings restored before checking real automatic reminders. Manual reminder image current. Current labels, real 3-mail audience, exclusions, no duplicates, update and cancellation notifications asserted.
+Music 14.1–19.8 LU under voice; quietest music-only −33.7 LUFS; no gaps/out-of-rule windows. 31 real clicks and 132 real keys with synchronized soft effects. Description within 160 UTF-8 bytes. Video tests, types and lint pass. Subjective real-time listening unavailable, not claimed.
+Publication: preview then APPLY=1 on default, five files sent, revision 5; dates 2026-11-16.

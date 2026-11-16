@@ -1099,6 +1099,9 @@ page à un poste. Pas de nouveau rendu dans ce changement.
 
 ## Délais de rappels propres à un événement (#1139, PR 2), 15 novembre 2026
 
+**Résolu pour REMINDERS_CHANGES et ORG_EMAIL_SETTINGS (lot 41, 16 novembre 2026)** : nouvelles narrations intégrales et images actuelles, revues puis publications révision 5. La vidéo des rappels montre les délais propres et les prochains envois. ADMIN_FEATURES_OVERVIEW reste à traiter dans ce lot.
+
+
 L’onglet **Messages**, section **Rappels**, gagne le formulaire « Délais des rappels automatiques »
 (radios « Délais habituels » / « Délais propres à cet événement », jusqu’à trois rappels, bloc
 « Prochain envoi »). Les captures et vidéos qui montrent cet écran ne sont pas régénérées dans ce
@@ -1295,3 +1298,11 @@ Invitation, véritable email et activation, connexion accueil, pointage et révo
 Quinze chapitres AV / 61 points. Cinq rapports bruts signalent des observations, conservées et résolues par les images finales, les vrais événements d'entrée et les contrôles d'état : présence d'Aline et rechargements, classification des créneaux commencés avec la veille initialement montrée, deux recherches distinctes, rafraîchissement automatique distinct du clic manuel. [Contre-preuves](evidence/batch41/attendance-check-in/take2-counterchecks.json). Musique 14,7–19,2 LU, minimum seule −34,0 LUFS, aucun trou ; 46 clics et 46 touches réels sonorisés. ASR multilingue complète et VTT : zéro tutoiement. Corps mobile réellement capturé centré sans la marge native grise, brut final conservé.
 
 Aperçu puis APPLY=1 sur default, cinq fichiers envoyés. [Rapport complet](evidence/batch41/attendance-check-in/review-report.txt). L'incident d'archivage de la première prise (brut perdu, MP4 et preuves conservés) n'est pas masqué ; le recorder archive désormais automatiquement le brut et sa timeline avant une nouvelle capture, avec deux tests de préservation de fichiers. Aucun troisième tournage ni fichier produit modifié ; aucune écoute subjective humaine revendiquée.
+
+## Lot 41 — rappels et réglages e-mail publiés, 16 novembre 2026
+
+**REMINDERS_CHANGES : READY, publiée, révision 5, 290,800 s. ORG_EMAIL_SETTINGS : READY, publiée, révision 5, 202,960 s.** Même produit main `e8ed666a48294d77213f8bf64fe35898314b0ed9`, BUILD_ID `HO6mRRAZuOevekAmdhN_C`. Deux prises narrées chacune, premières rejetées et conservées. Les limites de deux prises sont respectées. Narrations intégrales Kore, nouvelles coupes vérifiées, ASR de chaque chapitre final et de la bande entière ; zéro tutoiement du spectateur. Les deux « ton » des rappels citent exactement le message saisi et affiché.
+
+Rappels : dix chapitres AV / 35 points, deux signalements de clics absents contredits par les images et les événements réels ; les rapports bruts et les contre-preuves restent conservés. Deux véritables courriels d’annulation lisibles. Réglages : dix chapitres AV / 30 points, une observation sur la démonstration d’une case facultative, sans contradiction avec la phrase conditionnelle ; le passage final de la boîte aux envois est corrigé dans la deuxième prise. Musique respectivement 14,1–19,8 et 14,8–19,5 LU sous la voix, aucun trou. 31 clics / 132 touches et 12 clics / 22 touches réels sonorisés. Aperçu puis APPLY=1 sur default pour chacune, cinq fichiers envoyés. [Rapport des rappels](evidence/batch41/reminders-changes/review-report.txt), [rapport des réglages](evidence/batch41/org-email-settings/review-report.txt).
+
+Les écarts historiques d’image pour ces deux vidéos (libellés, navigation, réglages d’e-mail et aide) sont résolus par ces nouvelles prises du produit actuel ; l’historique et les écarts des autres vidéos restent ouverts. Aucun changement du produit, aucune écoute subjective humaine revendiquée.

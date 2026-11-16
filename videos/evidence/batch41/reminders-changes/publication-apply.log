@@ -1,0 +1,15 @@
+npm run video:publish -- --context "default" --apply  REMINDERS_CHANGES 
+
+> benevoles@2.7.0 video:publish
+> node --import tsx videos/tools/publish.ts --context default --apply REMINDERS_CHANGES
+
+Contexte default, deploy/benevoles-media (benevoles)
+À envoyer (5) :
+  + reminders-changes/reminders-changes-og.jpg
+  + reminders-changes/reminders-changes.jpg
+  + reminders-changes/reminders-changes.mp4
+  + reminders-changes/reminders-changes.txt
+  + reminders-changes/reminders-changes.vtt
+Inchangés : 0
+Présents seulement sur le serveur (laissés tels quels) : 574
+Envoyé : 5 fichier(s).

@@ -1,53 +1,43 @@
 {
   "model": "gemini-3.8-flash",
-  "reviewedAt": "2026-11-16T19:54:45.073Z",
-  "videoSha256": "40bb22ebe7f827cdb96cef14176def2de6045993aaaaeed3bdd141b2c212e776",
+  "reviewedAt": "2026-11-16T20:15:31.792Z",
+  "videoSha256": "03c35f8c1df5ae58d1b180b280352fed257ff898864da5b3efd135294d83686a",
   "promptSha256": "e7f4add303b233e3d4e11c46275c838515ebdc3af29623ce9f0d982d9c6b0a88",
-  "clipSha256": "0bbba9d9b6377190cd2da15d5f4fdc4c439004badd7e1b28e4bff4e3ca66f5ac",
+  "clipSha256": "486889daeb548b0563005a8889e7b83fbd229bfd26d0f559b5f413d69ca327dd",
   "scene": "cancelled",
   "review": {
     "heardOpening": "Pour annuler un créneau entier",
     "checkpoints": [
       {
         "spokenSeconds": 0.5,
-        "spoken": "lisez bien le récapitulatif avant de confirmer",
+        "spoken": "Pour annuler un créneau entier, lisez bien le récapitulatif avant de confirmer.",
         "visibleSeconds": 3,
-        "visible": "Ouverture de la boîte de dialogue récapitulative de suppression du créneau",
+        "visible": "Affichage de la boîte modale « Supprimer le créneau » détaillant le récapitulatif de suppression.",
         "sync": "aligned",
         "severity": "none"
       },
       {
-        "spokenSeconds": 9,
-        "spoken": "Dans notre exemple, une inscription confirmée et une demande sont annulées",
-        "visibleSeconds": 9,
-        "visible": "Clic sur Supprimer dans la fenêtre modale (qui n'indique qu'un seul bénévole inscrit)",
-        "sync": "aligned",
-        "severity": "minor"
-      },
-      {
-        "spokenSeconds": 14.5,
-        "spoken": "Ouvrons les messages reçus",
-        "visibleSeconds": 14.8,
-        "visible": "Affichage des courriels de notification d'annulation reçus",
+        "spokenSeconds": 9.2,
+        "spoken": "Dans notre exemple, une inscription confirmée et une demande sont annulées, et leurs personnes sont prévenues.",
+        "visibleSeconds": 10,
+        "visible": "Affichage de la notification par e-mail d'annulation pour Aline (puis pour Lucas).",
         "sync": "aligned",
         "severity": "none"
       },
       {
-        "spokenSeconds": 16.5,
-        "spoken": "puis revenons au planning",
-        "visibleSeconds": 17.5,
-        "visible": "Retour à la vue planning des créneaux",
+        "spokenSeconds": 16,
+        "spoken": "puis revenons au planning.",
+        "visibleSeconds": 18.5,
+        "visible": "Retour à la vue planning (frise des créneaux de l'Atelier des rappels).",
         "sync": "aligned",
         "severity": "none"
       }
     ],
-    "issues": [
-      "À 00:03-00:08, la boîte de dialogue récapitulative indique « 1 bénévole inscrit », ce qui contredit l'explication orale annonçant l'annulation d'une inscription confirmée et d'une demande."
-    ],
+    "issues": [],
     "voice": {
       "consistent": true,
       "warm": true,
-      "observation": "Voix claire, posée et bien articulée, synchronisée avec les actions affichées."
+      "observation": "Voix féminine claire, posée et expressive, parfaitement synchronisée avec les actions à l'écran."
     }
   },
   "note": "Automated observation of actual final video audio and images; not a claim of complete human validation"

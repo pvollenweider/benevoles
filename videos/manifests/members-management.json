@@ -40,12 +40,12 @@
     },
     {
       "id": "search",
-      "transcript": "La recherchez aide à retrouver une personne par son nom, son email ou son téléphone. Les accents ne doivent pas compliquer la recherche. Attention aussi aux homonymes : ici, deux Stéphane Favre ont des coordonnées différentes. Le même prénom et le même nom ne prouvent pas qu'il s'agit d'un doublon. Vérifiez le contact et les inscriptions avant de modifier une fiche.",
+      "transcript": "La recherche aide à retrouver une personne par son nom, son email ou son téléphone. Les accents ne doivent pas compliquer la recherche. Attention aussi aux homonymes : ici, deux Stéphane Favre ont des coordonnées différentes. Le même prénom et le même nom ne prouvent pas qu'il s'agit d'un doublon. Vérifiez le contact et les inscriptions avant de modifier une fiche.",
       "fallbackDurationMs": 33000
     },
     {
       "id": "filter",
-      "transcript": "Avec le filtre d’étiquettes, vous pouvez afficher seulement les personnes d'une catégorie, puis revenir à Toutes les étiquettes. Les en-têtes permettent aussi de trier la liste. Les heures prévues comptent les créneaux confirmés, passés et à venir, sans compter deux fois les horaires qui se chevauchent. Les heures attestées comptent les créneaux passés avec une présence enregistrée, sans chronométrer le travail réel. Ces repères aident à organiser ; ils ne classent pas la valeur des bénévoles.",
+      "transcript": "Avec le filtre d’étiquettes, vous pouvez afficher seulement les personnes d'une catégorie, puis revenir à Toutes les étiquettes. Les en-têtes permettent aussi de trier la liste. Les heures prévues comptent les créneaux confirmés, passés et à venir, sans compter deux fois les horaires qui se chevauchent. Les heures attestées comptent les créneaux passés avec une présence enregistrée, sauf les participations terminées avant la fin. Ces départs restent enregistrés, mais n'attestent aucune heure : leur durée est inconnue. Ce n'est pas un chronométrage du travail réel. Ces repères aident à organiser ; ils ne classent pas la valeur des bénévoles.",
       "fallbackDurationMs": 33000
     },
     {
@@ -78,7 +78,7 @@
       "Ajouter un membre ne l'inscrit à aucun événement.",
       "Sans adresse email, aucun message ne peut lui être envoyé : prévoyez un autre moyen de la prévenir.",
       "Deux personnes du même nom ne sont pas forcément un doublon : vérifiez leurs coordonnées.",
-      "Gardez seulement les notes utiles à l'organisation."
+      "Une participation terminée avant la fin reste enregistrée, mais n’ajoute aucune heure attestée : sa durée exacte n’est pas connue."
     ]
   },
   "continuousPauseTags": false

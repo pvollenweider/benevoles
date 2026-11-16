@@ -14,6 +14,7 @@ async function main() {
   try {
     const existing = await db.organization.findUnique({ where: { id } })
     if (existing) {
+      if (scenario === "pages") await (await import("../lib/foundation-pages-fixture")).preparePagesVolunteer(db)
       assert.equal(existing.slug, slug)
       if (scenario === "email") {
         assert.equal(await db.adminUser.count({ where: { organizationId: id, email: "video.email.owner@example.org" } }), 1)
@@ -92,6 +93,7 @@ async function main() {
         if (scenario === "pages") for (const [order, [pageTitle, pageSlug]] of [["Questions fréquentes", "questions-frequentes"], ["Accès et parking", "acces-parking"]].entries()) await tx.eventPage.create({ data: { id: `${id}-page-${order}`, eventId, title: pageTitle, slug: pageSlug, displayOrder: order, content: `# ${pageTitle}\n\nContenu fictif de formation.` } })
       }
     })
+    if (scenario === "pages") await (await import("../lib/foundation-pages-fixture")).preparePagesVolunteer(db)
     console.log(`Separate owned ${scenario} fixture created; no messages sent and no other scenario modified.`)
   } finally { await db.$disconnect() }
 }

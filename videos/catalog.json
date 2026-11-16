@@ -142,9 +142,10 @@
         "organisateur"
       ],
       "feature": "Réglages des emails",
-      "updatedAt": "2026-10-16",
-      "revision": 4,
-      "level": "essentiel"
+      "updatedAt": "2026-11-16",
+      "revision": 5,
+      "level": "essentiel",
+      "updated": "2026-11-16"
     },
     {
       "id": "EVENT_CREATE_BLANK",
@@ -1343,9 +1344,10 @@
         "organisateur"
       ],
       "feature": "Rappels et messages de changement",
-      "updatedAt": "2026-10-16",
-      "revision": 4,
-      "level": "essentiel"
+      "updatedAt": "2026-11-16",
+      "revision": 5,
+      "level": "essentiel",
+      "updated": "2026-11-16"
     },
     {
       "id": "TARGETED_MESSAGES",

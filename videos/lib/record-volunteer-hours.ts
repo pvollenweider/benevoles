@@ -11,8 +11,8 @@ import type { Cue } from "./sentence-timing"
 export type HoursScenario = {
   organizationId: string; organizationName: string; organizationSlug: string; product: ProductBuild
   members: { id: string; firstName: string; lastName: string; email: string; plannedMinutes: number; attestedMinutes: number }[]
-  rows: { id: string; volunteerId: string; eventId: string; localDate: string; status: string; shiftStatus: string; minutes: number; checkedInAt: string | null }[]
-  confirmedSummary: { distinct: number; firstTime: number; returning: number; confirmed: number; withPresence: number; plannedMinutes: number; attestedMinutes: number }
+  rows: { id: string; volunteerId: string; eventId: string; localDate: string; status: string; shiftStatus: string; minutes: number; checkedInAt: string | null; attendanceStatus: string | null }[]
+  confirmedSummary: { distinct: number; firstTime: number; returning: number; confirmed: number; withPresence: number; plannedMinutes: number; attestedMinutes: number; endedEarlyCount: number }
 }
 export const HOURS_MEMBER = "video-hours-aline"
 export const HOURS_EVENT = "video-hours-event-september"
@@ -33,7 +33,7 @@ export function assertHoursScenario(scenario: HoursScenario, product: ProductBui
   const expected = [
     ["prior", "aline", "may", "2026-05-02", "active", "open", 240, true],
     ["morning", "aline", "september", "2026-09-12", "active", "open", 120, true],
-    ["afternoon", "aline", "september", "2026-09-12", "active", "open", 120, false],
+    ["afternoon", "aline", "september", "2026-09-12", "active", "open", 120, true],
     ["benoit", "benoit", "september", "2026-09-12", "active", "open", 120, false],
     ["cancelled-shift", "aline", "september", "2026-09-12", "active", "cancelled", 120, true],
     ["cancelled-registration", "aline", "september", "2026-09-12", "cancelled", "open", 120, false],
@@ -42,21 +42,21 @@ export function assertHoursScenario(scenario: HoursScenario, product: ProductBui
   ] as const
   for (const [id, member, event, date, status, shiftStatus, minutes, checked] of expected) {
     const row = scenario.rows.find(r => r.id === `video-hours-registration-${id}`)
-    assert(row && row.volunteerId === `video-hours-${member}` && row.eventId === `video-hours-event-${event}` && row.localDate === date && row.status === status && row.shiftStatus === shiftStatus && row.minutes === minutes && Boolean(row.checkedInAt) === checked, `Owned actual registration differs: ${id}`)
+    assert(row && row.volunteerId === `video-hours-${member}` && row.eventId === `video-hours-event-${event}` && row.localDate === date && row.status === status && row.shiftStatus === shiftStatus && row.minutes === minutes && Boolean(row.checkedInAt) === checked && row.attendanceStatus === (id === "afternoon" ? "left_early" : null), `Owned actual registration differs: ${id}`)
   }
-  assert.deepEqual(scenario.confirmedSummary, { distinct: 2, firstTime: 1, returning: 1, confirmed: 3, withPresence: 1, plannedMinutes: 360, attestedMinutes: 120 })
+  assert.deepEqual(scenario.confirmedSummary, { distinct: 2, firstTime: 1, returning: 1, confirmed: 3, withPresence: 2, plannedMinutes: 360, attestedMinutes: 120, endedEarlyCount: 1 })
 }
 
 /** Synthetic fixture values have no quotes/separators; reject a changed CSV
  * rather than silently parsing a different or potentially sensitive document. */
 export function assertHoursCsv(csv: string, includeAll: boolean) {
   const lines = csv.replace(/^\uFEFF/, "").trim().split(/\r?\n/).map(line => line.split(";"))
-  assert.deepEqual(lines[0], ["Prénom", "Nom", "Événements", "Créneaux", "Heures prévues", "Heures attestées"])
+  assert.deepEqual(lines[0], ["Prénom", "Nom", "Événements", "Créneaux", "Heures prévues", "Heures attestées", "Participations terminées avant la fin"])
   assert.deepEqual(lines.slice(1), [
-    ...(includeAll ? [["Clara", "Besson", "0", "0", "0", "0"]] : []),
-    ["Benoît", "Favre", "1", "1", "2", "0"],
-    ["Aline", "Mercier", "1", "2", "4", "2"],
-    ["Total", "", "", "3", "6", "2"],
+    ...(includeAll ? [["Clara", "Besson", "0", "0", "0", "0", "0"]] : []),
+    ["Benoît", "Favre", "1", "1", "2", "0", "0"],
+    ["Aline", "Mercier", "1", "2", "4", "2", "1"],
+    ["Total", "", "", "3", "6", "2", "1"],
   ])
   assert(!csv.includes("@") && !csv.includes("079"), "Hours export must not include contact details")
 }
@@ -82,7 +82,7 @@ export type HoursRecordingOptions = {
 export async function recordVolunteerHours(options: HoursRecordingOptions) {
   const { page, base, product, scene, tap, settle, readScenario, setFrenchDate, showDownloadedCsv, preparePrintedPdf, evidence } = options
   const url = new URL(base)
-  assert(url.origin === base && base === "http://localhost:43114", "Hours journey requires its explicitly dedicated localhost:43114 server; integration must authorize this port separately")
+  assert(url.origin === base && base === "https://formation-heures.benevol.app", "Hours journey requires its dedicated public host through the verified local 43114 server; integration must authorize this port separately")
   const read = async () => { const scenario = await readScenario(); assertHoursScenario(scenario, product); return scenario }
   await read()
   const go = async (pathname: string) => { await page.goto(`${base}${pathname}`); await settle(page) }
@@ -98,7 +98,7 @@ export async function recordVolunteerHours(options: HoursRecordingOptions) {
     const headers = (await page.getByRole("table", { name: "Liste des membres", exact: true }).getByRole("columnheader").allTextContents()).map(text => text.replace(/[↕↑↓]/g, "").trim())
     assert(headers.includes("Heures prévues") && headers.includes("Heures attestées"), "Current hours columns are required")
     assert.equal((await cells.nth(headers.findIndex(h => h.trim() === "Heures prévues")).innerText()).trim(), "12h")
-    assert.equal((await cells.nth(headers.findIndex(h => h.trim() === "Heures attestées")).innerText()).trim(), "6h")
+    assert.match((await cells.nth(headers.findIndex(h => h.trim() === "Heures attestées")).innerText()).trim(), /^6h[\s\S]*1 participation terminée avant la fin/)
     await evidence("hours-list", { plannedHours: 12, attestedHours: 6, futureIncludedCancelledExcluded: true, attestedIsSubsetNotAdditional: true })
   })
   await scene("last-participation", async at => {
@@ -184,10 +184,12 @@ export async function recordVolunteerHours(options: HoursRecordingOptions) {
     await at("Regardons cette colonne, puis cochons"); await tap(page, include)
     await table.getByRole("columnheader", { name: "Heures prévues (sans présence)", exact: true }).waitFor()
     const total = table.getByRole("row").filter({ has: page.getByRole("rowheader", { name: "Total", exact: true }) })
-    assert.match((await total.innerText()).replace(/\s+/g, " "), /6\s*h.*2\s*h/)
+    assert.match((await total.innerText()).replace(/\s+/g, " "), /6\s*h.*1.*0\s*min/)
     await at("Pour Aline, nous retrouvons six heures")
     await total.scrollIntoViewIfNeeded()
-    await evidence("certificate-presence", { attestedHours: 6, additionalPlannedWithoutPresenceHours: 2, notEightPlusSix: true, noClockedWorkedHoursClaim: true })
+    await at("La colonne Participations terminées avant la fin")
+    await table.getByRole("columnheader", { name: "Participations terminées avant la fin", exact: true }).scrollIntoViewIfNeeded()
+    await evidence("certificate-presence", { attestedHours: 6, additionalPlannedWithoutPresenceHours: 0, endedEarlyCount: 1, notEightPlusSix: true, noClockedWorkedHoursClaim: true })
   })
   await scene("certificate-pdf", async at => {
     const finishPrint = await preparePrintedPdf(page)
@@ -207,7 +209,7 @@ export async function recordVolunteerHours(options: HoursRecordingOptions) {
     // The real UI header has already been checked above; do not mistake that
     // layout extraction for missing document content.
     const pdfText = pdf.text.replace(/\s+/g, " ")
-    assert(pdfText.includes("Heures") && pdfText.includes("attestées") && pdfText.includes("sans présence") && pdfText.includes("Accueil du public et rangement du matériel."))
+    assert(pdfText.includes("Heures") && pdfText.includes("attestées") && pdfText.includes("sans") && pdfText.includes("présence") && pdfText.includes("Accueil du public et rangement du matériel.") && pdfText.includes("terminées"))
     await evidence("certificate-pdf", { actualPdfSha256: pdf.sha256, actualPdfPages: pdf.pages, method: pdf.method, realProductPrintActionLogged: true, serverPdfDownloadFeature: false, stillRequiresHumanReviewAndSignature: true })
   })
   await scene("event-summary", async () => {
@@ -216,7 +218,7 @@ export async function recordVolunteerHours(options: HoursRecordingOptions) {
     await section.getByRole("heading", { name: "Résumé de l'événement", exact: true }).scrollIntoViewIfNeeded()
     const text = (await section.innerText()).replace(/\s+/g, " ")
     assert(text.includes("2 bénévoles distincts") && text.includes("1 pour la première fois") && text.includes("1 de retour"))
-    assert(text.includes("Présences saisies pour 1 sur 3 créneaux confirmés") && text.includes("6 h prévues, dont 2 h attestées"))
+    assert(text.includes("Présences saisies pour 2 sur 3 créneaux confirmés") && text.includes("6 h prévues, dont 2 h attestées"))
     await section.getByRole("table", { name: "Remplissage par poste", exact: true }).scrollIntoViewIfNeeded()
     await evidence("event-summary", { distinctPeopleNotRegistrations: true, partialCheckInNotAbsenceClaim: true, plannedHours: 6, attestedHours: 2, currentRealReportsSummary: true })
   })

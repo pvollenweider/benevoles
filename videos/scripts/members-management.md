@@ -2,7 +2,7 @@
 
 Vidéo autonome 34. Ton souriant, patient et concret. Expliquer le besoin, montrer chaque manipulation puis son résultat.
 
-La narration vouvoie les organisateurs. Les heures prévues comptent les créneaux confirmés passés et à venir, non annulés ; les chevauchements sont comptés une seule fois. Les heures attestées sont la part de ce total avec une présence enregistrée, sans chronométrage du travail réel.
+La narration vouvoie les organisateurs. Les heures prévues comptent les créneaux confirmés passés et à venir, non annulés ; les chevauchements sont comptés une seule fois. Les heures attestées sont la part de ce total avec une présence enregistrée, hors participations terminées avant la fin ; leur durée est inconnue et elles n'attestent aucune heure.
 
 ## Jeu de données
 
@@ -44,7 +44,7 @@ WAITING TTS — plafond mensuel connu ; aucun nouvel appel. Régénérer la narr
 - Gardez-la courte et évitez les informations personnelles inutiles.
 - Avec le filtre d’étiquettes, vous pouvez afficher seulement les personnes d'une catégorie, puis revenir à Toutes les étiquettes.
 - Les heures prévues comptent les créneaux confirmés, passés et à venir, sans compter deux fois les horaires qui se chevauchent.
-- Les heures attestées comptent les créneaux passés avec une présence enregistrée, sans chronométrer le travail réel.
+- Les heures attestées comptent les créneaux passés avec une présence enregistrée, sauf les participations terminées avant la fin : elles restent enregistrées mais n'attestent aucune heure, leur durée étant inconnue.
 - Dans Modifier, la case Membre actif permet de la réactiver.
 - Mettez les fiches à jour quand une personne vous signale un changement.
 - Utilisez les disponibilités pour dialoguer, pas pour décider à sa place.
@@ -61,3 +61,8 @@ Contrôle final 23-2 : NOT READY. Rupture de timbre dans la conclusion à +14,2 
 ## Contrôle du lot 23-3 — 2026-10-16
 
 READY : narration Puck complète régénérée en une passe sans balises, frontières mesurées, tous les chapitres comparés en audio seul avant capture. Première nouvelle génération rejetée pour rupture de voix ; seconde retenue. Revue audiovisuelle finale sans rupture. Référence : main `89a884c8d58c22dda6800481e1238bdc4e219dff`, BUILD_ID `gHYEjPtpdQYUNytuIhMkh`. Preuves locales dans `videos/output/members-management/review/` et `review-report.txt`.
+
+
+## Lot 41 — nuance des heures attestées
+
+Avec le filtre d’étiquettes, vous pouvez afficher seulement les personnes d'une catégorie, puis revenir à Toutes les étiquettes. Les en-têtes permettent aussi de trier la liste. Les heures prévues comptent les créneaux confirmés, passés et à venir, sans compter deux fois les horaires qui se chevauchent. Les heures attestées comptent les créneaux passés avec une présence enregistrée, sauf les participations terminées avant la fin. Ces départs restent enregistrés, mais n'attestent aucune heure : leur durée est inconnue. Ce n'est pas un chronométrage du travail réel. Ces repères aident à organiser ; ils ne classent pas la valeur des bénévoles.

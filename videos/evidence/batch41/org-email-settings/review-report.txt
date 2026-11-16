@@ -1,0 +1,11 @@
+STATUS: READY
+ORG_EMAIL_SETTINGS — batch 41, 16 November 2026
+Duration: 202.960 s; second and final narrated take. First take rejected for an early mailbox-to-settings transition in result; preserved.
+Product commit: e8ed666a48294d77213f8bf64fe35898314b0ed9
+BUILD_ID: HO6mRRAZuOevekAmdhN_C
+MP4 SHA-256: 15dc7f5e9afe8bbf734a9ffbd4d3e37c91944fbe5d2374ec45bcf423fa1f7734
+One new complete Kore master after an incomplete first TTS master was rejected, no sentence splicing. All ten source and final chapter ASR checks pass; whole-master voice consistent. Full final multilingual ASR and VTT: zero register candidates, no stray instruction identified.
+Ten AV chapters, 30 checkpoints. One optional-checkbox presentation observation is resolved with exact final frames and the conditional nature of the sentence, without erasing the raw report. Actual message remains visible through result's mailbox sentence; Emails envoyés follows at its sentence.
+Updated event-reminders narration distinguishes habitual organization choices from event-specific delays that replace them; organization timezone retained. Actual event disable and actual Messages summary shown. Future synthetic date avoids an empty upcoming-reminder summary. Real saved reply-to, test send and received message verified. Real sender/recipient/reply-to/subject and body pixels framed together, technical client tabs and date excluded, no rewritten content.
+Music 14.8–19.5 LU under voice, no out-of-rule windows or gaps; no full music-only analysis window. 12 real clicks and 22 real keys with synchronized soft effects. Description 121 UTF-8 bytes. Types, lint and video/catalog tests pass. Subjective real-time listening unavailable, not claimed.
+Publication: preview then APPLY=1 on default, five files sent; revision 5, dates 2026-11-16.

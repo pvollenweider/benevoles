@@ -1,14 +1,14 @@
 {
   "model": "gemini-3.8-flash",
   "promptVersion": 2,
-  "auditedAt": "2026-10-11T20:38:07.416Z",
-  "revalidatedAt": "2026-10-11T22:20:07.046Z",
+  "auditedAt": "2026-11-16T20:20:07.314Z",
+  "revalidatedAt": "2026-11-16T20:20:07.314Z",
   "source": "generated narration WAV",
   "note": "Independent multilingual ASR evidence, reused only for identical audio/text and audit instructions; not a full audiovisual or voice-quality validation",
   "segments": [
     {
       "id": "welcome",
-      "audioSha256": "020a621f76378380c442b3b0ad82caf06a37c0c650a79a75ef74b720c89b7f21",
+      "audioSha256": "d97ab63ed79f7b531c5379efe42884ab159b525d7197327b8ea790c084210712",
       "recognized": "Envie de donner un coup de main ? Ouvre le lien reçu ou scanne le QR code affiché par l'association. Tu peux choisir ton créneau directement depuis ton téléphone.",
       "expected": "Envie de donner un coup de main ? Ouvre le lien reçu, ou scanne le QR code affiché par l’association. Tu peux choisir ton créneau directement depuis ton téléphone.",
       "wordErrorRate": 0,
@@ -18,7 +18,7 @@
     },
     {
       "id": "discover",
-      "audioSha256": "70653390a03839cdd2b53eb3f3f3d9dd3e452d1eec2823abf3a74ab91fd3d5d5",
+      "audioSha256": "a0cf183fcc4914f0938948016eb82b414ae4399d3d6d15fe4c36c00583ff3e86",
       "recognized": "Sur la page de l'événement, tu retrouves les horaires, les postes et le nombre de places encore disponibles.",
       "expected": "Sur la page de l’événement, tu retrouves les horaires, les postes et le nombre de places encore disponibles.",
       "wordErrorRate": 0,
@@ -28,7 +28,7 @@
     },
     {
       "id": "choose",
-      "audioSha256": "3e44b485c1462109cc766e7ac3ae859726b08bcbc9f8a1558e9315249a1171b4",
+      "audioSha256": "57552be1ab209603f8201ca48b9fd7088ebfcd307dfa8bc26573f115c50f410f",
       "recognized": "Choisis simplement le créneau qui te convient. Ici, on rejoint l'équipe d'accueil de quinze heures à dix-huit heures.",
       "expected": "Choisis simplement le créneau qui te convient. Ici, on rejoint l’équipe d’accueil de quinze heures à dix-huit heures.",
       "wordErrorRate": 0,
@@ -38,8 +38,8 @@
     },
     {
       "id": "details",
-      "audioSha256": "558eedffdd65bc49ff173aed194a58588dda89e19bee05968f28ad565d606c0e",
-      "recognized": "Ajoute ensuite tes coordonnées, elles servent uniquement à l'organisation de l'événement et à l'envoi des informations utiles.",
+      "audioSha256": "b90df5d13eadc2f923f22887bb1618c0c09ca358044c814f22aa1cc9763ec395",
+      "recognized": "Ajoute ensuite tes coordonnées. Elles servent uniquement à l'organisation de l'événement et à l'envoi des informations utiles.",
       "expected": "Ajoute ensuite tes coordonnées. Elles servent uniquement à l’organisation de l’événement et à l’envoi des informations utiles.",
       "wordErrorRate": 0,
       "needsReview": false,
@@ -48,18 +48,18 @@
     },
     {
       "id": "preferences",
-      "audioSha256": "e8d4a1e950e36c57fd5400d4acb85b86be3a2992309ae99e5f0694994fe12f62",
-      "recognized": "Réponds aux quelques questions pratiques, puis accepte la convention et l'utilisation de tes données pour cet événement.",
+      "audioSha256": "3ce7f3c95e7a857110d77d3338d898fbf859eb9907d813716daa43c22312547c",
+      "recognized": "Réponds à quelques questions pratiques, puis accepte la convention et l'utilisation de tes données pour cet événement.",
       "expected": "Réponds aux quelques questions pratiques, puis accepte la convention et l’utilisation de tes données pour cet événement.",
-      "wordErrorRate": 0,
+      "wordErrorRate": 0.05555555555555555,
       "needsReview": false,
       "unexpectedInstructions": [],
       "edgeIssues": []
     },
     {
       "id": "confirm",
-      "audioSha256": "5c9c403018b13f1c8b316be2338b8d96484b0f75003afd55e89c2bc62cef7ff3",
-      "recognized": "Un dernier coup d'œil au récapitulatif et c'est parti ! Confirme ton inscription.",
+      "audioSha256": "b2f58dfe04c5b60f87fd4158f3458d7ebf4825664d63799ce3bd4b41939644d5",
+      "recognized": "Un dernier coup d'œil au récapitulatif et c'est parti, confirme ton inscription.",
       "expected": "Un dernier coup d’œil au récapitulatif, et c’est parti : confirme ton inscription.",
       "wordErrorRate": 0,
       "needsReview": false,
@@ -68,9 +68,9 @@
     },
     {
       "id": "success",
-      "audioSha256": "fa421929527ef4c82b35145f609705a06d9df13c44d6028c20969526c8dfa73b",
-      "recognized": "Et voilà, tu fais partie de l'équipe. Un e-mail de confirmation arrive dans ta boîte. Il contient ton lien personnel pour retrouver, modifier ou annuler ton inscription.",
-      "expected": "Et voilà, tu fais partie de l’équipe ! Un e-mail de confirmation arrive dans ta boîte. Il contient ton lien personnel pour retrouver, modifier ou annuler ton inscription.",
+      "audioSha256": "51899e68856c6377335e2b31210eabb6ebfae63f2703820faa62c8f7206e29c9",
+      "recognized": "Et voilà, ta demande est envoyée. Regarde tes emails, la confirmation arrive dans ta boîte. Elle contient ton lien personnel pour retrouver, modifier ou annuler ton inscription.",
+      "expected": "Et voilà, ta demande est envoyée ! Regarde tes emails : la confirmation arrive dans ta boîte. Elle contient ton lien personnel pour retrouver, modifier ou annuler ton inscription.",
       "wordErrorRate": 0,
       "needsReview": false,
       "unexpectedInstructions": [],

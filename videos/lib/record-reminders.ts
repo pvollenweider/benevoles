@@ -32,6 +32,7 @@ export async function recordReminders(options: { page: Page; base: string; event
     // Email templates can repeat the text in a hidden preheader. Verify the visible body,
     // not the first textual match, before allowing the capture to continue.
     await page.frameLocator("iframe").getByText(expected[0], { exact: false }).filter({ visible: true }).first().waitFor()
+    await page.waitForTimeout(600) // Let the genuine iframe paint before another navigation can replace the email.
   }
   const write = async (field: Locator, value: string) => { await tap(page, field); await field.press("ControlOrMeta+A"); if (await field.getAttribute("type") === "time") { await field.fill(value); if (await field.inputValue() !== value) throw new Error("Native time not filled exactly") } else await field.pressSequentially(value, { delay: 95 }) }
   const checks: Record<string, unknown> = { audiovisualValidation: false, pushReceptionVerified: false, perEventToggleAvailableInForm: true }
@@ -210,7 +211,9 @@ export async function recordReminders(options: { page: Page; base: string; event
       let mails: Mail[] = []
       for (let i = 0; i < 30; i++) { mails = (await inbox()).filter(m => !prior.has(m.ID)); if (mails.length === 2) break; await page.waitForTimeout(250) }
       if (mails.length !== 2) throw new Error("Expected two actual cancellation emails")
-      await at("Ouvrons les messages reçus"); await openMail(mails, "video.reminder.j2@example.org", ["Caisse"])
+      // The first real receipt illustrates the just-announced cancellation. Hold it
+      // until the sentence that opens the second message; neither email is a flash.
+      await openMail(mails, "video.reminder.j2@example.org", ["Caisse"])
       await at("Ouvrons les messages reçus"); await openMail(mails, "video.reminder.request@example.org", ["Caisse"])
       const after = await db.shift.findUniqueOrThrow({ where: { id: cancelled.id }, include: { registrations: true } })
       if (after.status !== "cancelled" || after.registrations.length !== 2 || after.registrations.some(r => r.status !== "cancelled")) throw new Error("Cancelled shift registrations incorrect")

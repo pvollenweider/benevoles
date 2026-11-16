@@ -329,7 +329,7 @@ async function main() {
     try {
       await action(at)
     } catch (error) {
-      if (["org-email-settings", "front-desk-access", "beta-access", "sectors", "shift-swaps", "workload-protection", "assignment-proposals", "assignment-publication", "volunteer-event-availability", "members-management", "members-import", "members-invitations", "members-duplicates-merge", "members-reminders", "volunteer-hours-certificate", "volunteer-badges", "registrations-management", "registrations-place-member", "organizer-monitor-followup", "staffing-gaps", "sector-leaders", "attendance-check-in", "last-minute-changes", "targeted-messages", "reminders-changes", "shift-create-edit-detail", "shift-create-series", "shift-eligibility-rules", "shift-night-dst", "shift-timeline-quick-actions", "shift-waitlist-offer", "shifts-roles-views", "shift-recurrence", "shift-approval"].includes(slug)) {
+      if (["event-program-pages-qr", "org-email-settings", "front-desk-access", "beta-access", "sectors", "shift-swaps", "workload-protection", "assignment-proposals", "assignment-publication", "volunteer-event-availability", "members-management", "members-import", "members-invitations", "members-duplicates-merge", "members-reminders", "volunteer-hours-certificate", "volunteer-badges", "registrations-management", "registrations-place-member", "organizer-monitor-followup", "staffing-gaps", "sector-leaders", "attendance-check-in", "last-minute-changes", "targeted-messages", "reminders-changes", "shift-create-edit-detail", "shift-create-series", "shift-eligibility-rules", "shift-night-dst", "shift-timeline-quick-actions", "shift-waitlist-offer", "shifts-roles-views", "shift-recurrence", "shift-approval"].includes(slug)) {
         await mkdir(path.join(dir, "review"), { recursive: true })
         await page.screenshot({ path: path.join(dir, "review", "rehearsal-failure.png") }).catch(() => {})
         await writeFile(path.join(dir, "review", "rehearsal-failure.json"), JSON.stringify({ scene: id, url: page.url(), elapsedMs: Math.round(performance.now() - startedAt), error: String(error), purpose: rehearsal ? "rehearsal" : "narration-timed" }, null, 2))
@@ -3637,7 +3637,7 @@ async function main() {
       const { execFile } = await import("node:child_process")
       const { promisify } = await import("node:util")
       const execute = promisify(execFile)
-      if (baseUrl !== "http://localhost:43114" || org !== "formation-heures" || process.env.ORG_ADMIN_EMAIL !== HOURS_OWNER) throw new Error("Hours require their dedicated owned local server")
+      if (localBaseUrl !== "http://localhost:43114" || baseUrl !== "https://formation-heures.benevol.app" || org !== "formation-heures" || process.env.ORG_ADMIN_EMAIL !== HOURS_OWNER) throw new Error("Hours require their dedicated owned local server")
       const { db, product: hoursProduct, unregister } = await loadCurrentVideoPrisma("http://localhost:43114")
       try {
         const preparation = JSON.parse(await readFile(path.join(dir, "preparation.json"), "utf8"))
@@ -3656,13 +3656,32 @@ async function main() {
           },
           preparePrintedPdf: async current => {
             const printedFrom = current.url()
+            const printSettings = {
+              from: await current.getByLabel("Du", { exact: true }).inputValue(),
+              to: await current.getByLabel("Au", { exact: true }).inputValue(),
+              note: await current.getByLabel("Texte libre (facultatif)", { exact: true }).inputValue(),
+              includePlanned: await current.getByRole("checkbox", { name: "Inclure les heures prévues sans présence saisie", exact: true }).isChecked(),
+            }
             const folder = path.join(dir, "documents"); await mkdir(folder, { recursive: true })
             return async () => {
               // The product button has already invoked its genuine window.print.
               // Headless Chromium has no visible print dialog; use its actual
               // print engine afterwards, without intercepting or replacing it.
               const file = path.join(folder, "attestation-aline.pdf")
-              await current.pdf({ path: file, format: "A4", printBackground: true, preferCSSPageSize: true })
+              // Headless Chromium leaves the real window.print pending. A second
+              // genuine product preview uses the same UI settings and its print
+              // engine; no print interception or copied HTML is involved.
+              const printPage = await current.context().newPage()
+              try {
+                await printPage.goto(printedFrom); await settle(printPage)
+                await printPage.getByLabel("Du", { exact: true }).fill(printSettings.from)
+                await printPage.getByLabel("Au", { exact: true }).fill(printSettings.to)
+                await printPage.getByLabel("Texte libre (facultatif)", { exact: true }).fill(printSettings.note)
+                await printPage.getByRole("checkbox", { name: "Inclure les heures prévues sans présence saisie", exact: true }).setChecked(printSettings.includePlanned)
+                const logo = printPage.getByRole("article", { name: "Attestation de bénévolat", exact: true }).locator("img")
+                await logo.evaluate((image: HTMLImageElement) => image.decode())
+                await printPage.pdf({ path: file, format: "A4", printBackground: true, preferCSSPageSize: true })
+              } finally { await printPage.close() }
               const bytes = await readFile(file)
               const extracted = await execute("pdftotext", ["-layout", file, "-"])
               const info = await execute("pdfinfo", [file])
@@ -3762,7 +3781,7 @@ async function main() {
       }
       await scene("welcome", async () => {
         await page.screencast.showChapter(manifest.title, { description: "Des fiches utiles, sans complication", duration: 2_300 })
-        await page.getByText("60 membres", { exact: true }).waitFor()
+        await page.getByText("63 membres", { exact: true }).waitFor()
       })
       await scene("create", async at => {
         await tap(page, page.getByRole("button", { name: "+ Nouveau membre", exact: true }))
@@ -3778,7 +3797,7 @@ async function main() {
         await form.waitFor({ state: "hidden" })
         await page.getByRole("button", { name: "Modifier Maya Berger", exact: true }).waitFor()
         await mayaRow().getByText("maya.berger@example.org", { exact: true }).waitFor()
-        await page.getByText("61 membres", { exact: true }).waitFor()
+        await page.getByText("64 membres", { exact: true }).waitFor()
       })
       await scene("edit", async at => {
         await editMaya()
@@ -4355,6 +4374,35 @@ async function main() {
         await confirmation.waitFor()
         await at("vérifions-la sans perdre notre contenu")
         await tap(page, confirmation.getByRole("button", { name: "Annuler", exact: true }))
+      })
+
+      await scene("post-pages", async at => {
+        await at("Rattachons maintenant cette page au poste Accueil")
+        await tap(page, page.getByRole("button", { name: "Modifier la page « Ce qu’il faut apporter »", exact: true }))
+        const form = page.getByRole("dialog", { name: "Modifier la page", exact: true })
+        await form.getByText(/Cette page est publique/).waitFor()
+        const group = form.getByRole("group", { name: "Pour les bénévoles de ces postes", exact: true })
+        await at("Dans Modifier, le groupe Pour les bénévoles")
+        await group.scrollIntoViewIfNeeded()
+        await tap(page, group.getByRole("checkbox", { name: "Accueil", exact: true }))
+        await tap(page, form.getByRole("button", { name: "Enregistrer", exact: true }))
+        await form.waitFor({ state: "hidden" })
+        await page.getByRole("listitem").filter({ hasText: "Ce qu’il faut apporter" }).getByText("Pour le poste Accueil", { exact: true }).waitFor()
+        await at("L'avertissement le rappelle")
+        await tap(page, page.getByRole("button", { name: "Modifier la page « Ce qu’il faut apporter »", exact: true }))
+        await form.getByText(/Cette page est publique/).scrollIntoViewIfNeeded()
+        await at("Voici la vraie page Mes inscriptions d'Aline")
+        const { PAGES_PERSONAL_TOKEN } = await import("../lib/foundation-pages-fixture")
+        await page.goto(`https://formation-pages.benevol.app/my/${PAGES_PERSONAL_TOKEN}`); await settle(page)
+        await page.getByRole("link", { name: /À lire avant ton créneau.*Ce qu.il faut apporter/ }).first().scrollIntoViewIfNeeded()
+        const link = page.getByRole("link", { name: /À lire avant ton créneau.*Ce qu.il faut apporter/ }).first()
+        await link.waitFor()
+        await at("Ouvrons-le")
+        const destination = await link.getAttribute("href")
+        if (!destination) throw new Error("Actual poste page link missing")
+        await tap(page, link)
+        await page.goto(new URL(destination, "https://formation-pages.benevol.app").href); await settle(page)
+        await page.getByText("Une gourde", { exact: true }).waitFor()
       })
 
       await scene("public", async (at) => {
@@ -5041,10 +5089,9 @@ async function main() {
       })
 
       await scene("result", async (at) => {
-        await at("Les paramètres sont enregistrés")
+        await at("Dans Emails envoyés")
         await page.goto(`${baseUrl}/admin/settings/notifications`); await settle(page)
         await page.getByRole("heading", { name: "Paramètres des emails" }).waitFor()
-        await at("Dans Emails envoyés")
         await page.getByRole("heading", { name: "Emails envoyés", exact: true }).scrollIntoViewIfNeeded()
         await page.getByRole("row").filter({ hasText: "video.email.owner@example.org" }).first().waitFor()
       })

@@ -178,7 +178,8 @@ async function main() {
       const scenario = ({ ORG_TIMEZONE_CHARTER: "charter", EVENT_MILESTONES: "milestones", ORG_EMAIL_SETTINGS: "email", EVENT_PROGRAM_PAGES_QR: "pages", SHIFTS_ROLES_VIEWS: "planning" } as Record<string, string>)[manifest.id]
       const id = `video-foundation-${scenario}`
       const fixture = await db.organization.findUniqueOrThrow({ where: { id }, include: { events: { include: { registrations: true } }, volunteers: true, admins: true } })
-      if (fixture.slug !== `formation-${scenario}` || fixture.events.length !== 1 || fixture.events[0].id !== `${id}-event-0` || fixture.events[0].registrations.length || fixture.volunteers.length || fixture.admins.length !== 1 || fixture.admins[0].email !== `video.${scenario}.owner@example.org`) throw new Error("Foundation data is not exclusively synthetic")
+      const pagesOwned = scenario === "pages" && fixture.volunteers.length === 1 && fixture.volunteers[0].id === `${id}-aline` && fixture.volunteers[0].email === "video.pages.aline@example.org" && fixture.events[0]?.registrations.length === 1 && fixture.events[0].registrations[0].id === `${id}-registration-aline` && fixture.events[0].registrations[0].volunteerId === `${id}-aline` && fixture.events[0].registrations[0].status === "active"
+      if (fixture.slug !== `formation-${scenario}` || fixture.events.length !== 1 || fixture.events[0].id !== `${id}-event-0` || (scenario === "pages" ? !pagesOwned : fixture.events[0].registrations.length || fixture.volunteers.length) || fixture.admins.length !== 1 || fixture.admins[0].email !== `video.${scenario}.owner@example.org`) throw new Error("Foundation data is not exclusively synthetic")
       if (scenario === "email") {
         const { openPayload } = await import("../../src/lib/notifications/outbox")
         const messages = await db.notificationOutbox.findMany({ where: { organizationId: id } })

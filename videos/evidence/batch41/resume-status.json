@@ -28,14 +28,25 @@
     {
       "id": "REMINDERS_CHANGES",
       "slug": "reminders-changes",
-      "status": "IN PROGRESS",
-      "published": false
+      "status": "READY",
+      "published": true,
+      "duration": 290.8,
+      "musicGaps": 0,
+      "tu": 0,
+      "quotedRegister": 2,
+      "revision": 5,
+      "problems": "Take 1 rejected; two AV no-action findings resolved with actual frames and inputs."
     },
     {
       "id": "ORG_EMAIL_SETTINGS",
       "slug": "org-email-settings",
-      "status": "IN PROGRESS",
-      "published": false
+      "status": "READY",
+      "published": true,
+      "duration": 202.96,
+      "musicGaps": 0,
+      "tu": 0,
+      "revision": 5,
+      "problems": "Incomplete first TTS rejected. Take 1 early transition fixed in take 2. Optional checkbox AV observation resolved."
     },
     {
       "id": "VOLUNTEER_HOURS_CERTIFICATE",

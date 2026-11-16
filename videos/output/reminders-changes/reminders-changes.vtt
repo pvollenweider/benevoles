@@ -1,245 +1,245 @@
 WEBVTT
 
-00:00:00.186 --> 00:00:04.472
+00:00:00.203 --> 00:00:04.489
 Un petit rappel aide les bénévoles à
 retrouver leur rendez-vous. Et si
 
-00:00:04.472 --> 00:00:08.401
+00:00:04.489 --> 00:00:08.418
 l'horaire change, mieux vaut les prévenir
 clairement. Ici, nous allons distinguer
 
-00:00:08.401 --> 00:00:13.401
+00:00:08.418 --> 00:00:13.418
 trois choses : le rappel que vous envoyez
 vous-même, les rappels automatiques et les
 
-00:00:13.401 --> 00:00:17.687
+00:00:13.418 --> 00:00:17.704
 messages de changement. Nous utiliserons
 un événement de démonstration et sa vraie
 
-00:00:17.687 --> 00:00:21.616
+00:00:17.704 --> 00:00:21.633
 boîte mail de test pour regarder ce que
 les personnes reçoivent.
 
-00:00:23.878 --> 00:00:28.227
+00:00:23.896 --> 00:00:28.245
 Dans les paramètres de l'événement, le
 Message de rappel complète le
 
-00:00:28.227 --> 00:00:32.972
+00:00:28.245 --> 00:00:32.990
 récapitulatif des créneaux. Écrivons une
 consigne simple : « Retrouve-nous au stand
 
-00:00:32.972 --> 00:00:38.903
+00:00:32.990 --> 00:00:38.921
 quinze minutes avant ton horaire. Prends
 une gourde. Merci pour ton aide ! » Le
 
-00:00:38.903 --> 00:00:42.067
+00:00:38.921 --> 00:00:42.085
 texte s'enregistre automatiquement :
 attendez la confirmation Modifications
 
-00:00:42.067 --> 00:00:47.602
+00:00:42.085 --> 00:00:47.620
 enregistrées avant de quitter la page. Ce
 message est propre à cet événement. Ce
 
-00:00:47.602 --> 00:00:53.138
+00:00:47.620 --> 00:00:53.156
 n'est pas un modèle de campagne ni une
 nouvelle invitation : il accompagne le
 
-00:00:53.138 --> 00:00:55.115
+00:00:53.156 --> 00:00:55.133
 planning des personnes déjà confirmées.
 
-00:00:57.378 --> 00:01:01.632
+00:00:57.400 --> 00:01:01.654
 Dans Messages, Envoyer le rappel demande
 une confirmation. Nous annulons une
 
-00:01:01.632 --> 00:01:05.499
+00:01:01.654 --> 00:01:05.521
 première fois, puis reprenons et
 confirmons le véritable envoi. Ouvrons
 
-00:01:05.499 --> 00:01:11.300
+00:01:05.521 --> 00:01:11.322
 l'email de Léa : ses deux créneaux sont
 regroupés dans un seul message, avec notre
 
-00:01:11.300 --> 00:01:16.328
+00:01:11.322 --> 00:01:16.350
 consigne. Les personnes qui ont seulement
 une demande ou une attente ne reçoivent
 
-00:01:16.328 --> 00:01:20.968
+00:01:16.350 --> 00:01:20.990
 pas ce rappel des inscriptions confirmées.
 Regardez le résultat de l'envoi, pas
 
-00:01:20.968 --> 00:01:22.902
+00:01:20.990 --> 00:01:22.924
 seulement le nombre affiché avant.
 
-00:01:25.169 --> 00:01:28.882
+00:01:25.188 --> 00:01:28.901
 Dans Paramètres, puis Emails, vous
 choisissez les rappels automatiques de
 
-00:01:28.882 --> 00:01:34.823
+00:01:28.901 --> 00:01:34.842
 toute l'organisation : J moins deux, J
 moins un et le rappel du jour. Une case
 
-00:01:34.823 --> 00:01:39.279
+00:01:34.842 --> 00:01:39.298
 décochée ne suffit pas : il faut
 enregistrer le changement. Nous coupons
 
-00:01:39.279 --> 00:01:43.734
+00:01:39.298 --> 00:01:43.753
 celui de la veille, enregistrons, puis le
 réactivons. Vous trouvez aussi l'adresse
 
-00:01:43.734 --> 00:01:48.933
+00:01:43.753 --> 00:01:48.952
 de réponse : c'est là que les réponses des
 bénévoles arrivent, pas une adresse
 
-00:01:48.933 --> 00:01:50.418
+00:01:48.952 --> 00:01:50.437
 différente pour chaque rappel.
 
-00:01:52.689 --> 00:01:58.186
+00:01:52.702 --> 00:01:58.199
 Les trois cases que nous venons de voir
 concernent toute l'organisation. Dans le
 
-00:01:58.186 --> 00:02:02.414
+00:01:58.199 --> 00:02:02.427
 formulaire de l'événement, vous pouvez
 aussi couper seulement ses rappels
 
-00:02:02.414 --> 00:02:04.951
+00:02:02.427 --> 00:02:04.964
 automatiques. Décochons Rappels
 automatiques et attendons
 
-00:02:04.951 --> 00:02:08.757
+00:02:04.964 --> 00:02:08.770
 l'enregistrement. Réactivons-les pour
 poursuivre notre exemple. Ce paramètre ne
 
-00:02:08.757 --> 00:02:13.408
+00:02:08.770 --> 00:02:13.421
 change pas le rappel manuel. Regardons
 maintenant notre événement en brouillon.
 
-00:02:13.408 --> 00:02:18.059
+00:02:13.421 --> 00:02:18.072
 Il ne reçoit pas les rappels automatiques
 réservés aux événements publiés.
 
-00:02:20.324 --> 00:02:24.489
+00:02:20.334 --> 00:02:24.499
 Un événement peut avoir ses propres
 délais. Dans Messages, section Rappels,
 
-00:02:24.489 --> 00:02:28.654
+00:02:24.499 --> 00:02:28.664
 choisissons Délais propres à cet
 événement. Préparons un rappel trois jours
 
-00:02:28.654 --> 00:02:33.955
+00:02:28.664 --> 00:02:33.965
 avant, puis un autre 2 h avant, et
 enregistrons les rappels. Vous pouvez en
 
-00:02:33.955 --> 00:02:38.498
+00:02:33.965 --> 00:02:38.508
 définir jusqu'à trois. Ils remplacent les
 rappels habituels et les choix de
 
-00:02:38.498 --> 00:02:42.663
+00:02:38.508 --> 00:02:42.673
 l'organisation pour cet événement. La
 ligne Prochain envoi indique le jour,
 
-00:02:42.663 --> 00:02:47.585
+00:02:42.673 --> 00:02:47.595
 l'heure et les personnes concernées.
 Chaque délai part du premier créneau de la
 
-00:02:47.585 --> 00:02:51.750
+00:02:47.595 --> 00:02:51.760
 journée du bénévole. Revenons aux délais
 habituels et enregistrons, pour regarder
 
-00:02:51.750 --> 00:02:54.022
+00:02:51.760 --> 00:02:54.032
 les trois échéances de notre exemple.
 
-00:02:56.287 --> 00:03:00.981
+00:02:56.298 --> 00:03:00.992
 Les rappels partent autour de deux jours
 avant, autour de la veille, puis entre
 
-00:03:00.981 --> 00:03:06.009
+00:03:00.992 --> 00:03:06.020
 deux et 4 h avant le début du créneau. Ce
 n'est pas une promesse d'envoi
 
-00:03:06.009 --> 00:03:10.703
+00:03:06.020 --> 00:03:10.714
 à une minute fixe. Les heures sont lues
 dans le fuseau de l'organisation, Europe
 
-00:03:10.703 --> 00:03:14.726
+00:03:10.714 --> 00:03:14.737
 Zurich ici. Voici les trois emails
 réellement reçus pour nos trois échéances
 
-00:03:14.726 --> 00:03:19.084
+00:03:14.737 --> 00:03:19.095
 : chacun retrouve son horaire local, le
 point de rendez-vous et les informations
 
-00:03:19.084 --> 00:03:20.425
+00:03:19.095 --> 00:03:20.436
 utiles à son poste.
 
-00:03:22.688 --> 00:03:27.229
+00:03:22.701 --> 00:03:27.242
 Une demande à valider ou une place en
 attente n'est pas une inscription
 
-00:03:27.229 --> 00:03:31.771
+00:03:27.242 --> 00:03:31.784
 confirmée : elle ne reçoit pas ces
 rappels. Même chose pour notre brouillon
 
-00:03:31.771 --> 00:03:36.312
+00:03:31.784 --> 00:03:36.325
 et l'événement dont les rappels sont
 coupés. En revanche, fermer un créneau aux
 
-00:03:36.312 --> 00:03:39.805
+00:03:36.325 --> 00:03:39.818
 nouvelles inscriptions ne l'annule pas.
 Les personnes déjà confirmées peuvent
 
-00:03:39.805 --> 00:03:44.346
+00:03:39.818 --> 00:03:44.359
 encore recevoir leur rappel. Un second
 passage du traitement ne renvoie pas les
 
-00:03:44.346 --> 00:03:47.141
+00:03:44.359 --> 00:03:47.154
 rappels déjà marqués comme envoyés dans
 notre démonstration.
 
-00:03:49.405 --> 00:03:54.623
+00:03:49.417 --> 00:03:54.635
 Si un horaire change, ouvrez le créneau
 concerné. Nous décalons son début et sa
 
-00:03:54.623 --> 00:03:58.724
+00:03:54.635 --> 00:03:58.736
 fin, puis enregistrons. Le système prépare
 automatiquement le message de changement
 
-00:03:58.724 --> 00:04:03.197
+00:03:58.736 --> 00:04:03.209
 pour les confirmations de ce créneau.
 Voici l'email réellement reçu avec le
 
-00:04:03.197 --> 00:04:08.042
+00:04:03.209 --> 00:04:08.054
 nouvel horaire. La personne dont la
 demande attend encore une décision n'a pas
 
-00:04:08.042 --> 00:04:13.261
+00:04:08.054 --> 00:04:13.273
 reçu ce message. Vérifions donc le
 résultat dans le planning et dans la boîte
 
-00:04:13.261 --> 00:04:16.988
+00:04:13.273 --> 00:04:17.000
 mail, plutôt que de supposer qu'un clic
 prouve la réception.
 
-00:04:19.255 --> 00:04:24.219
+00:04:19.261 --> 00:04:24.225
 Pour annuler un créneau entier, lisez bien
 le récapitulatif avant de confirmer. Ce
 
-00:04:24.219 --> 00:04:29.183
+00:04:24.225 --> 00:04:29.189
 n'est pas simplement retirer une personne
 de son horaire. Dans notre exemple, une
 
-00:04:29.183 --> 00:04:33.383
+00:04:29.189 --> 00:04:33.389
 inscription confirmée et une demande sont
 annulées, et leurs personnes sont
 
-00:04:33.383 --> 00:04:37.583
+00:04:33.389 --> 00:04:37.589
 prévenues. Ouvrons les messages reçus puis
 revenons au planning. Rappeler, modifier,
 
-00:04:37.583 --> 00:04:42.165
+00:04:37.589 --> 00:04:42.171
 annuler : ce sont trois situations
 différentes. Et pour une consigne urgente,
 
-00:04:42.165 --> 00:04:47.893
+00:04:42.171 --> 00:04:47.899
 gardez aussi un contact direct avec votre
 équipe : envoyé ne veut pas dire lu.
 

@@ -1,0 +1,22 @@
+{
+  "sourceSha256": "df7c57763328f45bebbf2533312c1bf725181eabad8d2cb56e188846a93d5bba",
+  "sampledActualMailpitIntervals": [
+    {
+      "startMs": 166520,
+      "endMs": 189800
+    }
+  ],
+  "header": {
+    "x": 320,
+    "y": 60,
+    "width": 960,
+    "height": 110
+  },
+  "body": {
+    "x": 320,
+    "y": 264,
+    "width": 960,
+    "height": 536
+  },
+  "note": "Actual sender, recipient, reply-to and subject rows, then actual body pixels. Date, technical tabs and unrelated inbox excluded. No content rewritten; original raw capture retained."
+}

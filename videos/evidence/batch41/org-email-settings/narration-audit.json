@@ -1,0 +1,110 @@
+{
+  "model": "gemini-3.8-flash",
+  "promptVersion": 2,
+  "auditedAt": "2026-11-16T19:52:41.445Z",
+  "revalidatedAt": "2026-11-16T19:52:41.445Z",
+  "source": "generated narration WAV",
+  "note": "Independent multilingual ASR evidence, reused only for identical audio/text and audit instructions; not a full audiovisual or voice-quality validation",
+  "segments": [
+    {
+      "id": "welcome",
+      "audioSha256": "b3422b2815f36d671f76020835e7eee26c6b4975068962046130fc7201636051",
+      "recognized": "Dans paramètres, e-mails, le propriétaire choisit les messages utiles pour toute l'organisation. Les organisateurs peuvent suivre les envois, mais pas changer ces paramètres. Voyons les rappels, les alertes et l'adresse de réponse, puis vérifions un vrai message de test, sans contacter les bénévoles.",
+      "expected": "Dans Paramètres, Emails, le propriétaire choisit les messages utiles pour toute l’organisation. Les organisateurs peuvent suivre les envois, mais pas changer ces paramètres. Voyons les rappels, les alertes et l’adresse de réponse, puis vérifions un vrai message de test, sans contacter les bénévoles.",
+      "wordErrorRate": 0.044444444444444446,
+      "needsReview": false,
+      "unexpectedInstructions": [],
+      "edgeIssues": []
+    },
+    {
+      "id": "reminders",
+      "audioSha256": "d5cbe586d1475e062ba0e5be4454ffa394d5525a433796b73118f34518aee098",
+      "recognized": "Vous pouvez activer le rappel à deux jours, à un jour, puis le jour même, deux à quatre heures avant le premier créneau de la journée. Décochons, puis recochons le premier rappel. Pour une personne sur plusieurs créneaux du même événement, le même jour, chaque rappel regroupe ces créneaux dans un seul e-mail, pas un e-mail par créneau.",
+      "expected": "Vous pouvez activer le rappel à deux jours, à un jour, puis le jour même, deux à quatre heures avant le premier créneau de la journée. Décochons puis recochons le premier rappel. Pour une personne sur plusieurs créneaux du même événement le même jour, chaque rappel regroupe ses créneaux dans un seul email, pas un email par créneau.",
+      "wordErrorRate": 0.017241379310344827,
+      "needsReview": false,
+      "unexpectedInstructions": [],
+      "edgeIssues": []
+    },
+    {
+      "id": "event-reminders",
+      "audioSha256": "00a7a55afa06ea2a95a6d79f1f389954b0c55523e2cf94cddaec54d8cc113acc",
+      "recognized": "Dans les paramètres d'un événement, la case Rappels automatiques peut couper tous ses rappels, sans changer les autres événements. Son onglet Messages indique ce qui partira vraiment. Un brouillon n'envoie pas de rappel. Pour un événement publié, les rappels habituels suivent les choix de l'organisation. Des délais propres à cet événement les remplacent. Le fuseau de l'organisation reste utilisé.",
+      "expected": "Dans les paramètres d’un événement, la case Rappels automatiques peut couper tous ses rappels, sans changer les autres événements. Son onglet Messages indique ce qui partira vraiment. Un brouillon n’envoie pas de rappel. Pour un événement publié, les rappels habituels suivent les choix de l'organisation. Des délais propres à cet événement les remplacent. Le fuseau de l'organisation reste utilisé.",
+      "wordErrorRate": 0,
+      "needsReview": false,
+      "unexpectedInstructions": [],
+      "edgeIssues": []
+    },
+    {
+      "id": "admin-alert",
+      "audioSha256": "c92aba927766ad7e827c2d4900e43fb7f99eef10b3a922051af7a3db3c986b76",
+      "recognized": "L'option prévenir les organisateurs à chaque inscription envoie un e-mail à chaque organisateur actif lorsqu'une personne s'inscrit depuis la page d'inscription. Elle facilite le suivi d'un petit événement, mais peut devenir bruyante lorsque les inscriptions sont nombreuses.",
+      "expected": "L’option Prévenir les organisateurs à chaque inscription envoie un email à chaque organisateur actif lorsqu’une personne s’inscrit depuis la page d’inscription. Elle facilite le suivi d’un petit événement, mais peut devenir bruyante lorsque les inscriptions sont nombreuses.",
+      "wordErrorRate": 0,
+      "needsReview": false,
+      "unexpectedInstructions": [],
+      "edgeIssues": []
+    },
+    {
+      "id": "withdrawal",
+      "audioSha256": "64d5df0a91252fd268485646a2f82f43ef439065563c878b15e429cec9eaec9b",
+      "recognized": "Prévenir en cas de désistement est un paramètre séparé. Il informe les organisateurs et les responsables du poste quand une place confirmée ou une demande est annulée, avec les places manquantes et le mot éventuel du bénévole. Décocher cette option coupe aussi l'e-mail aux responsables. Quitter une liste d'attente ou refuser une place proposée n'envoie pas cette alerte.",
+      "expected": "Prévenir en cas de désistement est un paramètre séparé. Il informe les organisateurs et les responsables du poste quand une place confirmée ou une demande est annulée, avec les places manquantes et le mot éventuel du bénévole. Décocher cette option coupe aussi l’email aux responsables. Quitter une liste d’attente ou refuser une place proposée n’envoie pas cette alerte.",
+      "wordErrorRate": 0,
+      "needsReview": false,
+      "unexpectedInstructions": [],
+      "edgeIssues": []
+    },
+    {
+      "id": "addresses",
+      "audioSha256": "fdd891d4d5a30d526010b9f0973a6a790662d7ec1ee464dc1c7f0af67fecfdba",
+      "recognized": "Le résumé quotidien des adresses à vérifier aide à repérer les problèmes de contact. Il part seulement si une confirmation, une proposition de place ou un rappel a échoué définitivement depuis la veille. Un incident temporaire seul ne le déclenche pas. L'équipe reçoit au maximum un résumé par jour, même après plusieurs échecs.",
+      "expected": "Le résumé quotidien des adresses à vérifier aide à repérer les problèmes de contact. Il part seulement si une confirmation, une proposition de place ou un rappel a échoué définitivement depuis la veille. Un incident temporaire seul ne le déclenche pas. L’équipe reçoit au maximum un résumé par jour, même après plusieurs échecs.",
+      "wordErrorRate": 0,
+      "needsReview": false,
+      "unexpectedInstructions": [],
+      "edgeIssues": []
+    },
+    {
+      "id": "reply-to",
+      "audioSha256": "d7a042ef814098fc0ba0a6e36875e2f1d6383aaa0e1c17957f2ac551342d58ab",
+      "recognized": "L'adresse de réponse indique où arrive un message lorsqu'un bénévole répond à un e-mail de la plateforme. Saisissons benevole@example.org. Si le champ reste vide, l'adresse par défaut est utilisée. Cette adresse apparaît aussi sur la page Mes inscriptions des bénévoles.",
+      "expected": "L’adresse de réponse indique où arrive un message lorsqu’un bénévole répond à un email de la plateforme. Saisissons benevoles arobase example point org. Si le champ reste vide, l’adresse par défaut est utilisée. Cette adresse apparaît aussi sur la page Mes inscriptions des bénévoles.",
+      "wordErrorRate": 0.0425531914893617,
+      "needsReview": false,
+      "unexpectedInstructions": [],
+      "edgeIssues": []
+    },
+    {
+      "id": "save",
+      "audioSha256": "0534a8ed99d86c082bc31344142437c9682e9ad14a3f087d4df024dcca3e5793",
+      "recognized": "Enregistrez les paramètres avant de les tester. Le message paramètres enregistrés confirme que vos choix sont conservés. Modifier les cases sans enregistrer ne change pas les prochains envois. Le test utilise lui aussi la dernière configuration enregistrée.",
+      "expected": "Enregistrez les paramètres avant de les tester. Le message Paramètres enregistrés confirme que vos choix sont conservés. Modifier les cases sans enregistrer ne change pas les prochains envois. Le test utilise lui aussi la dernière configuration enregistrée.",
+      "wordErrorRate": 0,
+      "needsReview": false,
+      "unexpectedInstructions": [],
+      "edgeIssues": []
+    },
+    {
+      "id": "test",
+      "audioSha256": "21141ae0caebce7dbb8d59394ebf5c1849d89c52250f0db7c1be1d7feab31a48",
+      "recognized": "Envoyer un e-mail de test envoie un exemple à votre propre compte, pas aux bénévoles. Ouvrons le message reçu dans la boîte locale de démonstration. Vérifiez l'expéditeur et l'adresse de réponse, ici bénévole@exemple.org, puis le contenu du message. Dans cette formation, les e-mails restent sur notre serveur local et ne partent pas sur internet.",
+      "expected": "M’envoyer un email de test envoie un exemple à votre propre compte, pas aux bénévoles. Ouvrons le message reçu dans la boîte locale de démonstration. Vérifiez l’expéditeur et l’adresse de réponse, ici benevoles arobase example point org, puis le contenu du message. Dans cette formation, les emails restent sur notre serveur local et ne partent pas sur Internet.",
+      "wordErrorRate": 0.09836065573770492,
+      "needsReview": false,
+      "unexpectedInstructions": [],
+      "edgeIssues": []
+    },
+    {
+      "id": "result",
+      "audioSha256": "b37596bd127d07fc24220036943f0ba567c228f3aa9ca84d69ded77665ff4912",
+      "recognized": "Les paramètres sont enregistrés et le message de test est visible dans la boîte de démonstration. Dans e-mails envoyés, envoyé indique une acceptation par le serveur d'envoi, pas une preuve de remise ni de lecture par le bénévole. Pour écrire ponctuellement à un groupe, utilisez plutôt les messages ciblés de l'événement.",
+      "expected": "Les paramètres sont enregistrés et le message de test est visible dans la boîte de démonstration. Dans Emails envoyés, Envoyé indique une acceptation par le serveur d’envoi, pas une preuve de remise ni de lecture par le bénévole. Pour écrire ponctuellement à un groupe, utilisez plutôt les messages ciblés de l’événement.",
+      "wordErrorRate": 0.03773584905660377,
+      "needsReview": false,
+      "unexpectedInstructions": [],
+      "edgeIssues": []
+    }
+  ]
+}

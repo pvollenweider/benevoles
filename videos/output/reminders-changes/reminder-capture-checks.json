@@ -1,5 +1,5 @@
 {
-  "checkedAt": "2026-11-16T19:49:33.846Z",
+  "checkedAt": "2026-11-16T20:13:38.569Z",
   "audiovisualValidation": false,
   "pushReceptionVerified": false,
   "perEventToggleAvailableInForm": true,
@@ -9,9 +9,9 @@
     "cancelledWithoutEmail": true,
     "twoShiftsInOneEmail": true,
     "mailIds": [
-      "3Lda6mYQYkExax2O9rAaq5",
-      "3cuPv7Azhivr1cXZHQEWxq",
-      "7GZv7WdDcRcNRtI96PqziE"
+      "17PVg25d3Ks3M65CIFmfYg",
+      "4D6lcgRm9IP6LLXqgOIJ9a",
+      "4Q4g95YqPa7RMuoaTg0uki"
     ]
   },
   "organizationSavedOffThenOn": true,
@@ -23,13 +23,13 @@
   },
   "automaticReminders": {
     "mailIds": [
-      "2LDOWoBvWGMkVNXErrpbpv",
-      "7XuCLqjUuX02dmoyCg9UHl",
-      "1Je3SlpnLoyTI3MU4qlV69"
+      "1wBKLCtvuUVNQLToRRwzQn",
+      "3ylYakiRJWBzm9dvBM6ACb",
+      "0nXCGGiWHnjZZAjUr0rrxA"
     ],
     "noDuplicate": true,
     "first": {
-      "runAt": "2026-11-16T19:47:42.935Z",
+      "runAt": "2026-11-16T20:11:47.672Z",
       "totals": {
         "reminder_j2": {
           "eligible": 1,
@@ -93,7 +93,7 @@
       }
     },
     "second": {
-      "runAt": "2026-11-16T19:47:43.313Z",
+      "runAt": "2026-11-16T20:11:48.015Z",
       "totals": {
         "reminder_j2": {
           "eligible": 0,
@@ -161,14 +161,14 @@
   "changed": {
     "notified": 1,
     "pendingRequestExcluded": true,
-    "mailId": "2qCrQ6MX0xba7ssMUgiWlo"
+    "mailId": "6cD8UNDzIdkQMlMvXFtcnY"
   },
   "cancelled": {
     "registrations": 2,
     "includesPendingRequest": true,
     "mailIds": [
-      "6W7CvnoWbsjwbw7qChntyU",
-      "7HxItLA9emnmbifujcw1oW"
+      "0aEwIXMMX0TnWWnxQ07pL4",
+      "6TzettqpUJTskDR7Yi2u4D"
     ]
   }
 }

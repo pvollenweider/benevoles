@@ -1,34 +1,34 @@
 {
   "model": "gemini-3.8-flash",
-  "reviewedAt": "2026-11-16T19:53:57.791Z",
-  "videoSha256": "40bb22ebe7f827cdb96cef14176def2de6045993aaaaeed3bdd141b2c212e776",
+  "reviewedAt": "2026-11-16T20:14:35.690Z",
+  "videoSha256": "03c35f8c1df5ae58d1b180b280352fed257ff898864da5b3efd135294d83686a",
   "promptSha256": "c0ea01bc1712243cc0ea660b25561b87f2280074a25a57907f5cf44dfa5c4f83",
-  "clipSha256": "f53e7e960bca5014320e94d3f5f1b4f71cd9ffe019bfaca649c04a2bf4c58698",
+  "clipSha256": "720d0ea7ad15f48e2f28cdcfd138d98b5a40482f9a197d5779d9dcae0e077a7e",
   "scene": "manual-message",
   "review": {
-    "heardOpening": "Dans les paramètres de l'événement",
+    "heardOpening": "Dans les paramètres de l'événement, le Message de rappel",
     "checkpoints": [
       {
-        "spokenSeconds": 2.8,
+        "spokenSeconds": 2.6,
         "spoken": "le Message de rappel complète le récapitulatif des créneaux",
-        "visibleSeconds": 6.5,
-        "visible": "Défilement vers la section comportant le champ Message de rappel",
-        "sync": "late",
-        "severity": "minor"
-      },
-      {
-        "spokenSeconds": 7.2,
-        "spoken": "Écrivons une consigne simple : Retrouve-nous au stand",
-        "visibleSeconds": 8,
-        "visible": "Saisie du texte dans le champ Message de rappel",
+        "visibleSeconds": 6.4,
+        "visible": "Défilement vers le champ « Message de rappel (envoyé manuellement avant l'événement) »",
         "sync": "aligned",
         "severity": "none"
       },
       {
-        "spokenSeconds": 17.5,
+        "spokenSeconds": 7.2,
+        "spoken": "Écrivons une consigne simple : Retrouve-nous au stand quinze minutes avant ton horaire",
+        "visibleSeconds": 8.5,
+        "visible": "Saisie en direct du texte dans le champ Message de rappel",
+        "sync": "aligned",
+        "severity": "none"
+      },
+      {
+        "spokenSeconds": 17.8,
         "spoken": "attendez la confirmation Modifications enregistrées avant de quitter la page",
-        "visibleSeconds": 18.2,
-        "visible": "Notification Modifications enregistrées affichée en haut à droite",
+        "visibleSeconds": 18,
+        "visible": "Remontée en haut de page avec affichage de « Modifications enregistrées à 21h09. »",
         "sync": "aligned",
         "severity": "none"
       }
@@ -37,7 +37,7 @@
     "voice": {
       "consistent": true,
       "warm": true,
-      "observation": "Voix claire, posée et bien articulée, parfaitement intelligible."
+      "observation": "Voix claire, posée et bien articulée, synchronisée avec les actions affichées."
     }
   },
   "note": "Automated observation of actual final video audio and images; not a claim of complete human validation"

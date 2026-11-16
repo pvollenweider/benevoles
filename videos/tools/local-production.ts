@@ -55,7 +55,7 @@ async function main() {
     if (mode === "serve-merge") Object.assign(env, { PORT: "43110", NEXTAUTH_URL: "http://localhost:43110", VIDEO_BASE_URL: "http://localhost:43110", SMTP_HOST: "127.0.0.1", SMTP_PORT: process.env.VIDEO_SMTP_PORT ?? "41026", SMTP_USER: "", SMTP_PASSWORD: "", SMTP_SECURE: "false", SENTRY_DSN: "", NEXT_PUBLIC_SENTRY_DSN: "" })
     if (mode === "serve-questions") Object.assign(env, { PORT: "43112", NEXTAUTH_URL: "http://localhost:43112", VIDEO_BASE_URL: "http://localhost:43112", SMTP_HOST: "127.0.0.1", SMTP_PORT: process.env.VIDEO_SMTP_PORT ?? "41026", SMTP_USER: "", SMTP_PASSWORD: "", SMTP_SECURE: "false", SENTRY_DSN: "", NEXT_PUBLIC_SENTRY_DSN: "" })
     if (mode === "serve-hours") Object.assign(env, { PORT: "43114", NEXTAUTH_URL: "http://localhost:43114", VIDEO_BASE_URL: "http://localhost:43114", SMTP_HOST: "127.0.0.1", SMTP_PORT: process.env.VIDEO_SMTP_PORT ?? "41026", SMTP_USER: "", SMTP_PASSWORD: "", SMTP_SECURE: "false", SENTRY_DSN: "", NEXT_PUBLIC_SENTRY_DSN: "" })
-    if (mode === "serve-public" || mode === "serve-dayof") env.NEXTAUTH_URL = PUBLIC_APP_URL
+    if (mode === "serve-public" || mode === "serve-dayof" || mode === "serve-hours") env.NEXTAUTH_URL = PUBLIC_APP_URL
     serving = { proof, port: Number(env.PORT) }
     commandArgs = [server]
   } else if (mode === "run" || mode === "run-delivery") {

@@ -1,7 +1,7 @@
 {
   "slug": "org-email-settings",
-  "capturePurpose": "rehearsal",
-  "recordedAt": "2026-11-16T19:58:45.120Z",
+  "capturePurpose": "narration-timed",
+  "recordedAt": "2026-11-16T20:14:10.306Z",
   "video": "capture.webm",
   "product": {
     "commit": "e8ed666a48294d77213f8bf64fe35898314b0ed9",
@@ -26,280 +26,279 @@
   "inputEvents": [
     {
       "kind": "click",
-      "atMs": 6456
+      "atMs": 30158
     },
     {
       "kind": "click",
-      "atMs": 7905
+      "atMs": 31575
     },
     {
       "kind": "click",
-      "atMs": 10472
+      "atMs": 47260
     },
     {
       "kind": "click",
-      "atMs": 15187
+      "atMs": 70424
     },
     {
       "kind": "click",
-      "atMs": 15986
+      "atMs": 75089
     },
     {
       "kind": "click",
-      "atMs": 17255
+      "atMs": 94389
     },
     {
       "kind": "click",
-      "atMs": 18055
+      "atMs": 97121
     },
     {
       "kind": "click",
-      "atMs": 19338
+      "atMs": 110722
     },
     {
       "kind": "click",
-      "atMs": 20138
+      "atMs": 117405
     },
     {
       "kind": "click",
-      "atMs": 23139
+      "atMs": 131504
     },
     {
       "kind": "key",
-      "atMs": 23452
+      "atMs": 131815
     },
     {
       "kind": "key",
-      "atMs": 23459
+      "atMs": 131823
     },
     {
       "kind": "key",
-      "atMs": 23578
+      "atMs": 131943
     },
     {
       "kind": "key",
-      "atMs": 23697
+      "atMs": 132063
     },
     {
       "kind": "key",
-      "atMs": 23817
+      "atMs": 132181
     },
     {
       "kind": "key",
-      "atMs": 23936
+      "atMs": 132298
     },
     {
       "kind": "key",
-      "atMs": 24055
+      "atMs": 132416
     },
     {
       "kind": "key",
-      "atMs": 24173
+      "atMs": 132534
     },
     {
       "kind": "key",
-      "atMs": 24291
+      "atMs": 132653
     },
     {
       "kind": "key",
-      "atMs": 24410
+      "atMs": 132772
     },
     {
       "kind": "key",
-      "atMs": 24529
+      "atMs": 132888
     },
     {
       "kind": "key",
-      "atMs": 24647
+      "atMs": 133006
     },
     {
       "kind": "key",
-      "atMs": 24765
+      "atMs": 133126
     },
     {
       "kind": "key",
-      "atMs": 24884
+      "atMs": 133243
     },
     {
       "kind": "key",
-      "atMs": 25002
+      "atMs": 133363
     },
     {
       "kind": "key",
-      "atMs": 25120
+      "atMs": 133481
     },
     {
       "kind": "key",
-      "atMs": 25239
+      "atMs": 133599
     },
     {
       "kind": "key",
-      "atMs": 25358
+      "atMs": 133717
     },
     {
       "kind": "key",
-      "atMs": 25476
+      "atMs": 133837
     },
     {
       "kind": "key",
-      "atMs": 25595
+      "atMs": 133955
     },
     {
       "kind": "key",
-      "atMs": 25713
+      "atMs": 134074
     },
     {
       "kind": "key",
-      "atMs": 25830
+      "atMs": 134193
     },
     {
       "kind": "click",
-      "atMs": 26904
+      "atMs": 143621
     },
     {
       "kind": "click",
-      "atMs": 29953
+      "atMs": 161954
     }
   ],
   "cues": [
     {
       "id": "welcome",
-      "startMs": 1132,
-      "endMs": 3756
+      "startMs": 1138,
+      "endMs": 19600
     },
     {
       "id": "reminders",
-      "startMs": 5919,
-      "endMs": 8236
+      "startMs": 21761,
+      "endMs": 41162
     },
     {
       "id": "event-reminders",
-      "startMs": 8692,
-      "endMs": 13065
+      "startMs": 41615,
+      "endMs": 65097
     },
     {
       "id": "admin-alert",
-      "startMs": 13518,
-      "endMs": 16290
+      "startMs": 65549,
+      "endMs": 80157
     },
     {
       "id": "withdrawal",
-      "startMs": 16742,
-      "endMs": 18361
+      "startMs": 80610,
+      "endMs": 102280
     },
     {
       "id": "addresses",
-      "startMs": 18813,
-      "endMs": 20441
+      "startMs": 102733,
+      "endMs": 122455
     },
     {
       "id": "reply-to",
-      "startMs": 22602,
-      "endMs": 25968
+      "startMs": 124618,
+      "endMs": 142503
     },
     {
       "id": "save",
-      "startMs": 26421,
-      "endMs": 27236
+      "startMs": 142956,
+      "endMs": 159022
     },
     {
       "id": "test",
-      "startMs": 29402,
-      "endMs": 31539
+      "startMs": 161185,
+      "endMs": 183188
     },
     {
       "id": "result",
-      "startMs": 31991,
-      "endMs": 33219
+      "startMs": 183640,
+      "endMs": 201915
     }
   ],
   "anchors": [
     {
       "segmentId": "reminders",
       "phrase": "Décochons puis recochons le premier rappel",
-      "startMs": 12146,
-      "endMs": 16425,
-      "cueMs": 5955
+      "startMs": 7917,
+      "endMs": 10394,
+      "cueMs": 29679
     },
     {
       "segmentId": "reminders",
       "phrase": "Décochons puis recochons le premier rappel",
-      "startMs": 12146,
-      "endMs": 16425,
-      "cueMs": 6762
+      "startMs": 7917,
+      "endMs": 10394,
+      "cueMs": 30464
     },
     {
       "segmentId": "event-reminders",
       "phrase": "Son onglet Messages",
-      "startMs": 8561,
-      "endMs": 12049,
-      "cueMs": 13065
+      "startMs": 8072,
+      "endMs": 10504,
+      "cueMs": 49899
     },
     {
       "segmentId": "withdrawal",
       "phrase": "Décocher cette option coupe aussi",
-      "startMs": 18944,
-      "endMs": 24010,
-      "cueMs": 16752
+      "startMs": 13288,
+      "endMs": 16212,
+      "cueMs": 93901
     },
     {
       "segmentId": "reply-to",
       "phrase": "Saisissons benevoles arobase example point org",
-      "startMs": 8026,
-      "endMs": 11897,
-      "cueMs": 22636
+      "startMs": 6422,
+      "endMs": 9501,
+      "cueMs": 131042
     },
     {
       "segmentId": "save",
       "phrase": "Enregistrez les paramètres avant de les tester",
-      "startMs": 0,
-      "endMs": 3687,
-      "cueMs": 26421
+      "startMs": 189,
+      "endMs": 3064,
+      "cueMs": 143147
     },
     {
       "segmentId": "save",
       "phrase": "Le message Paramètres enregistrés",
-      "startMs": 3687,
-      "endMs": 9401,
-      "cueMs": 27213
+      "startMs": 3451,
+      "endMs": 7471,
+      "cueMs": 146409
     },
     {
       "segmentId": "test",
       "phrase": "M’envoyer un email de test",
-      "startMs": 0,
-      "endMs": 7276,
-      "cueMs": 29452
+      "startMs": 298,
+      "endMs": 4800,
+      "cueMs": 161485
     },
     {
       "segmentId": "test",
       "phrase": "Ouvrons le message reçu",
-      "startMs": 7276,
-      "endMs": 12759,
-      "cueMs": 30276
-    },
-    {
-      "segmentId": "result",
-      "phrase": "Les paramètres sont enregistrés",
-      "startMs": 0,
-      "endMs": 8008,
-      "cueMs": 31992
+      "startMs": 5225,
+      "endMs": 8697,
+      "cueMs": 166413
     },
     {
       "segmentId": "result",
       "phrase": "Dans Emails envoyés",
-      "startMs": 8008,
-      "endMs": 18487,
-      "cueMs": 33212
+      "startMs": 6055,
+      "endMs": 13415,
+      "cueMs": 189697
     }
   ],
   "detailFrames": [
     {
-      "startMs": 5955,
-      "endMs": 5956,
+      "startMs": 21794,
+      "endMs": 21795,
       "x": 140,
       "y": 223,
       "width": 640,
       "height": 400
+    }
+  ],
+  "mailpitFocusFrames": [
+    {
+      "startMs": 166520,
+      "endMs": 189800
     }
   ]
 }

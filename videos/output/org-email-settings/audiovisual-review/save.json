@@ -1,0 +1,44 @@
+{
+  "model": "gemini-3.8-flash",
+  "reviewedAt": "2026-11-16T20:16:02.787Z",
+  "videoSha256": "15dc7f5e9afe8bbf734a9ffbd4d3e37c91944fbe5d2374ec45bcf423fa1f7734",
+  "promptSha256": "aac36ef3efa0084e16e58b2566581193404caa70088fcb70dcd9134051ea583d",
+  "clipSha256": "007ac35c4fc502566e68bbdb5f1e52cd9e73493c200afb3532529078f943f09e",
+  "scene": "save",
+  "review": {
+    "heardOpening": "Enregistrez les paramètres avant de les tester",
+    "checkpoints": [
+      {
+        "spokenSeconds": 1.1,
+        "spoken": "Enregistrez les paramètres avant de les tester",
+        "visibleSeconds": 0.8,
+        "visible": "Clic sur le bouton bleu Enregistrer",
+        "sync": "aligned",
+        "severity": "none"
+      },
+      {
+        "spokenSeconds": 3.5,
+        "spoken": "Le message Paramètres enregistrés confirme que vos choix sont conservés",
+        "visibleSeconds": 1.2,
+        "visible": "Apparition de la mention Paramètres enregistrés sous le bouton Enregistrer",
+        "sync": "early",
+        "severity": "none"
+      },
+      {
+        "spokenSeconds": 12,
+        "spoken": "Le test utilise lui aussi la dernière configuration enregistrée",
+        "visibleSeconds": 12,
+        "visible": "Le bouton Envoyer un email de test et les paramètres restent visibles à l'écran",
+        "sync": "aligned",
+        "severity": "none"
+      }
+    ],
+    "issues": [],
+    "voice": {
+      "consistent": true,
+      "warm": true,
+      "observation": "Voix féminine naturelle, claire et bien articulée, sans parasite sonore."
+    }
+  },
+  "note": "Automated observation of actual final video audio and images; not a claim of complete human validation"
+}

@@ -39,3 +39,9 @@ Revue sur main `43c1aae776430702dd155711b25f4f0a1331fce5` : en-tête commun et o
 Relecture PR #990, #992–#1000, #1005–#1008, #1011–#1012, #1021 et #1022 (issue #1013), CHANGELOG Unreleased et parcours actuel. Les ajouts facultatifs de narration sont retirés pour conserver la prise audio restaurée quand le texte initial reste exact. Segments nécessitant une nouvelle narration : aucun. Navigation et repères adaptés aux onglets actuels. Toute correction conservée attend une narration intégrale, même voix, sans pause tags.
 
 Lot 22-9 : READY, 165.08 s sur BUILD_ID `03j7XCWy0WJORYSQg2WPB`. Narration restaurée inchangée vérifiée ; répétition, capture narrée, ASR multilingue final, VTT, images de chapitres et actions, musique et validation contrôlés. Rien publié.
+
+## Lot 41 — pages par poste, 16 novembre 2026
+
+Un segment `post-pages` rattache la page au poste Accueil depuis son vrai formulaire, montre l'avertissement public puis le lien « À lire avant ton créneau » sur la page personnelle d'Aline Mercier, réellement confirmée. Le lien ouvre le même contenu public. Nouvelle narration intégrale Kore, sans assemblage de phrases anciennes.
+
+Rattachons maintenant cette page au poste Accueil. Dans Modifier, le groupe Pour les bénévoles de ces postes permet de cocher Accueil, puis d'enregistrer. L'avertissement le rappelle : cette page reste publique. N'y écrivez aucun code d'accès. Voici la vraie page Mes inscriptions d'Aline, qui a une place confirmée à l'accueil. Sous À lire avant ton créneau, elle retrouve le lien Ce qu'il faut apporter. Ouvrons-le : les consignes restent les mêmes. Sans poste coché, la page reste accessible depuis la page d'inscription, sans ce rappel lié au poste.

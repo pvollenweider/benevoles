@@ -11,7 +11,7 @@ test("volunteer-hours-fixture guards", async () => {
   let ownedLogo: Awaited<ReturnType<typeof createHoursLogo>> & { organizationId: string }
 
   const fixture = () => {
-    const registrations = HOURS_ROWS.map(([key, member, event, day, status, , , , checked]) => ({ id: `${HOURS_ORG}-registration-${key}`, eventId: `${HOURS_ORG}-event-${event}`, shiftId: `${HOURS_ORG}-shift-${key}`, volunteerId: `${HOURS_ORG}-${member}`, status, source: "admin_manual", phone: null, comment: null, checkedInAt: checked ? new Date(`${day}T08:00:00Z`) : null }))
+    const registrations = HOURS_ROWS.map(([key, member, event, day, status, , , , checked]) => ({ id: `${HOURS_ORG}-registration-${key}`, eventId: `${HOURS_ORG}-event-${event}`, shiftId: `${HOURS_ORG}-shift-${key}`, volunteerId: `${HOURS_ORG}-${member}`, status, source: "admin_manual", phone: null, comment: null, checkedInAt: checked ? new Date(`${day}T${key === "afternoon" ? "12" : "08"}:00:00Z`) : null, attendanceStatus: key === "afternoon" ? "left_early" : null }))
     const org = {
       id: HOURS_ORG, name: "Formation — heures et attestations", slug: "formation-heures", timeZone: "Europe/Zurich", replyToEmail: HOURS_OWNER, active: true,
       admins: [{ id: `${HOURS_ORG}-owner`, name: "Élodie Rochat", email: HOURS_OWNER, role: "admin", isActive: true }],
@@ -40,6 +40,7 @@ test("volunteer-hours-fixture guards", async () => {
     (org: Fixture) => { org.events[1].registrations[0].status = "cancelled" },
     (org: Fixture) => { org.events[1].registrations[0].source = "admin" },
     (org: Fixture) => { org.events[1].shifts[0].capacity = 20 },
+    (org: Fixture) => { org.events[1].registrations[1].attendanceStatus = null },
   ]) { const org = fixture(); mutate(org); await assert.rejects(() => check(org)) }
   await assert.rejects(() => check(fixture(), 1))
   console.log("Hours complete-cascade adversarial guards passed on memory mocks only")

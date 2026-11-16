@@ -1,24 +1,24 @@
 {
   "id": "REMINDERS_CHANGES",
   "slug": "reminders-changes",
-  "validatedAt": "2026-11-16T19:53:49.843Z",
+  "validatedAt": "2026-11-16T20:14:42.936Z",
   "continuousNarration": true,
   "sentenceRevision": false,
   "narrationContentChecked": true,
   "voice": "Kore",
-  "captureMs": 290800,
+  "captureMs": 288640,
   "scenes": [
     {
       "id": "welcome",
-      "visualMs": 21431,
+      "visualMs": 21432,
       "audioMs": 21430,
-      "driftMs": 1
+      "driftMs": 2
     },
     {
       "id": "manual-message",
-      "visualMs": 31238,
+      "visualMs": 31240,
       "audioMs": 31237,
-      "driftMs": 1
+      "driftMs": 3
     },
     {
       "id": "manual-send",
@@ -28,9 +28,9 @@
     },
     {
       "id": "organization",
-      "visualMs": 25252,
+      "visualMs": 25251,
       "audioMs": 25249,
-      "driftMs": 3
+      "driftMs": 2
     },
     {
       "id": "event-switch",
@@ -40,15 +40,15 @@
     },
     {
       "id": "event-delays",
-      "visualMs": 33698,
+      "visualMs": 33701,
       "audioMs": 33698,
-      "driftMs": 0
+      "driftMs": 3
     },
     {
       "id": "timing",
-      "visualMs": 24139,
+      "visualMs": 24140,
       "audioMs": 24138,
-      "driftMs": 1
+      "driftMs": 2
     },
     {
       "id": "exclusions",
@@ -58,20 +58,20 @@
     },
     {
       "id": "changed",
-      "visualMs": 27584,
+      "visualMs": 27585,
       "audioMs": 27583,
-      "driftMs": 1
+      "driftMs": 2
     },
     {
       "id": "cancelled",
-      "visualMs": 28639,
+      "visualMs": 28641,
       "audioMs": 28638,
-      "driftMs": 1
+      "driftMs": 3
     }
   ],
-  "anchorsChecked": 27,
+  "anchorsChecked": 26,
   "music": {
-    "voicedWindows": 258,
+    "voicedWindows": 256,
     "musicOnlyWindows": 2,
     "smallestGapLu": 14.1,
     "largestGapLu": 19.8,

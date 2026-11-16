@@ -14,7 +14,7 @@ export const HOURS_OWNER = "video.hours.owner@example.org"
 export const HOURS_ROWS = [
   ["prior", "aline", "may", "2026-05-02", "active", "open", "08:00", "12:00", true],
   ["morning", "aline", "september", "2026-09-12", "active", "open", "08:00", "10:00", true],
-  ["afternoon", "aline", "september", "2026-09-12", "active", "open", "14:00", "16:00", false],
+  ["afternoon", "aline", "september", "2026-09-12", "active", "open", "14:00", "16:00", true],
   ["benoit", "benoit", "september", "2026-09-12", "active", "open", "10:00", "12:00", false],
   ["cancelled-shift", "aline", "september", "2026-09-12", "active", "cancelled", "16:00", "18:00", true],
   ["cancelled-registration", "aline", "september", "2026-09-12", "cancelled", "open", "18:00", "20:00", false],
@@ -55,8 +55,8 @@ export async function assertOwnedHoursFixture(db: PrismaClient, identity: "curre
       const shift: (typeof event.shifts)[number] | undefined = event.shifts.find(s => s.id === `${HOURS_ORG}-shift-${key}`)
       const reg: (typeof event.registrations)[number] | undefined = event.registrations.find(r => r.id === `${HOURS_ORG}-registration-${key}`)
       assert(shift && shift.eventId === event.id && shift.roleName === "Accueil" && shift.label === (legacy ? `Formation — ${key}` : HOURS_LABELS[key]) && shift.date.toISOString() === `${day}T00:00:00.000Z` && shift.startTime === start && shift.endTime === end && shift.status === shiftState && shift.capacity === 3 && shift.reservedTags.length === 0 && !shift.minAge)
-      assert(reg && reg.eventId === event.id && reg.shiftId === shift.id && reg.volunteerId === `${HOURS_ORG}-${who}` && reg.status === state && reg.source === "admin_manual" && Boolean(reg.checkedInAt) === checked)
-      assert(reg.phone === null && reg.comment === null && (reg.checkedInAt?.toISOString() ?? null) === (checked ? `${day}T08:00:00.000Z` : null), "Unexpected registration contact, comment or presence time")
+      assert(reg && reg.eventId === event.id && reg.shiftId === shift.id && reg.volunteerId === `${HOURS_ORG}-${who}` && reg.status === state && reg.source === "admin_manual" && Boolean(reg.checkedInAt) === checked && reg.attendanceStatus === (key === "afternoon" ? "left_early" : null))
+      assert(reg.phone === null && reg.comment === null && (reg.checkedInAt?.toISOString() ?? null) === (checked ? `${day}T${key === "afternoon" ? "12" : "08"}:00:00.000Z` : null), "Unexpected registration contact, comment or presence time")
       assert(shift.registrations.length === 1 && shift.registrations[0].id === reg.id, "Foreign shift cascade")
     }
   }
@@ -85,8 +85,8 @@ export async function readHoursScenario(db: PrismaClient, product: ProductBuild)
     const actual = summary.eventSummary(registrations.filter(r => r.eventId === september.id), returned, september.shifts.filter(s => s.status !== "cancelled").map(s => ({ ...s, date: s.date.toISOString().slice(0, 10), active: september.registrations.filter(r => r.shiftId === s.id && r.status === "active").length, waiting: september.registrations.filter(r => r.shiftId === s.id && ["waiting", "offered"].includes(r.status)).length, requested: 0, closed: s.status === "closed" })), [], org.timeZone)
     const scenario: HoursScenario = { organizationId: org.id, organizationName: org.name, organizationSlug: org.slug, product,
       members: org.volunteers.map(member => ({ id: member.id, firstName: member.firstName, lastName: member.lastName, email: member.email!, ...(() => { const total = hours.memberListHours(all.filter((e: { volunteerId: string }) => e.volunteerId === member.id), today); return { plannedMinutes: total.plannedMinutes, attestedMinutes: total.attestedMinutes } })() })),
-      rows: registrations.map(r => { const instants = calendar.shiftInstants(r.shift, org.timeZone); return { id: r.id, volunteerId: r.volunteerId, eventId: r.eventId, localDate: r.shift.date.toISOString().slice(0, 10), status: r.status, shiftStatus: r.shift.status, minutes: Math.round((instants.end.getTime() - instants.start.getTime()) / 60000), checkedInAt: r.checkedInAt?.toISOString() ?? null } }),
-      confirmedSummary: { distinct: actual.distinctVolunteers, firstTime: actual.firstTimeCount, returning: actual.returningCount, confirmed: actual.shiftsConfirmed, withPresence: actual.shiftsWithPresence, plannedMinutes: actual.plannedMinutes, attestedMinutes: actual.attestedMinutes },
+      rows: registrations.map(r => { const instants = calendar.shiftInstants(r.shift, org.timeZone); return { id: r.id, volunteerId: r.volunteerId, eventId: r.eventId, localDate: r.shift.date.toISOString().slice(0, 10), status: r.status, shiftStatus: r.shift.status, minutes: Math.round((instants.end.getTime() - instants.start.getTime()) / 60000), checkedInAt: r.checkedInAt?.toISOString() ?? null, attendanceStatus: r.attendanceStatus } }),
+      confirmedSummary: { distinct: actual.distinctVolunteers, firstTime: actual.firstTimeCount, returning: actual.returningCount, confirmed: actual.shiftsConfirmed, withPresence: actual.shiftsWithPresence, plannedMinutes: actual.plannedMinutes, attestedMinutes: actual.attestedMinutes, endedEarlyCount: actual.endedEarlyCount },
     }
     assertHoursScenario(scenario, product)
     return scenario

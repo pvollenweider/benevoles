@@ -1,0 +1,44 @@
+{
+  "model": "gemini-3.8-flash",
+  "reviewedAt": "2026-11-16T20:15:21.997Z",
+  "videoSha256": "15dc7f5e9afe8bbf734a9ffbd4d3e37c91944fbe5d2374ec45bcf423fa1f7734",
+  "promptSha256": "afa6933956489457fda8b5f936daf2e8f8f80de90627b00ce72dbfa07ce24a62",
+  "clipSha256": "2fff2abe8e1b1691673ba7e9b75cce0d6c8e750aba3a8709090f25d6a9a0c24d",
+  "scene": "event-reminders",
+  "review": {
+    "heardOpening": "Dans les paramètres d'un événement",
+    "checkpoints": [
+      {
+        "spokenSeconds": 2.4,
+        "spoken": "la case Rappels automatiques peut couper tous ses rappels",
+        "visibleSeconds": 4.6,
+        "visible": "Décochage de la case Rappels automatiques dans l'onglet Paramètres",
+        "sync": "aligned",
+        "severity": "none"
+      },
+      {
+        "spokenSeconds": 7.8,
+        "spoken": "Son onglet Messages indique ce qui partira vraiment.",
+        "visibleSeconds": 7.6,
+        "visible": "Ouverture de l'onglet Messages puis défilement jusqu'à la section Rappels",
+        "sync": "aligned",
+        "severity": "none"
+      },
+      {
+        "spokenSeconds": 14.8,
+        "spoken": "les rappels habituels suivent les choix de l'organisation.",
+        "visibleSeconds": 15,
+        "visible": "Affichage des options de rappels avec le choix actif Délais habituels et l'alternative Délais propres",
+        "sync": "aligned",
+        "severity": "none"
+      }
+    ],
+    "issues": [],
+    "voice": {
+      "consistent": true,
+      "warm": true,
+      "observation": "Voix off posée, claire et fluide, sans bruits parasites."
+    }
+  },
+  "note": "Automated observation of actual final video audio and images; not a claim of complete human validation"
+}
