@@ -30,7 +30,7 @@ De la veille du premier jour au dernier jour de l'événement, ses pages affiche
 - La page se met à jour seule toutes les 25 secondes environ tant qu'elle est ouverte à l'écran, et dès que vous y revenez ou que le réseau revient : une présence, une absence ou un départ marqué sur un autre téléphone y apparaît sans rien toucher. Votre recherche, la personne que vous êtes en train de marquer et votre position dans la page restent en place. L'heure de la dernière mise à jour réussie est affichée au-dessus ; sans réseau, ou si la mise à jour n'aboutit pas, un encadré le dit et rappelle l'heure de la liste affichée. **Actualiser** relit la liste tout de suite.
 - En bas, des liens vers les inscriptions, « Où manque-t-il du monde ? » et l'écriture aux bénévoles.
 
-![Page « Jour J » sur un téléphone, de haut en bas : l'heure de la dernière mise à jour et le bouton « Actualiser », le champ de recherche, l'encadré « Ajouter un besoin », puis le titre « En cours » et le haut de la carte du créneau « Comptage en rayon », de 8h à 11h](/doc-img/admin-day-of.png)
+![Carte d'un créneau en cours sur la page « Jour J », sur un téléphone : « Comptage en rayon », ses horaires, « 1 présent sur 2 attendus. Il manque 1 personne. », le contact du créneau et son téléphone. Dessous, David Pasche, « Pas encore marqué », avec son téléphone et les boutons « Marquer présent » et « Marquer absent », puis Céline Ruchet, « Présent », avec son téléphone et les boutons « Annuler la présence » et « Marquer parti avant la fin »](/doc-img/admin-day-of.png)
 
 ## Ajouter un besoin
 
