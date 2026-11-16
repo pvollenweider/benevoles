@@ -59,6 +59,9 @@ export async function activateAccount(
     data: {
       passwordHash,
       isActive: true,
+      // The instant the automatic validation of a space waits from (#1371): a column, not
+      // `updatedAt`, so a later rename never makes the account look freshly activated.
+      activatedAt: new Date(),
       setupTokenHash: null,
       setupTokenExpiresAt: null,
       // A front-desk account never receives the organisation's product-update emails (#1142):

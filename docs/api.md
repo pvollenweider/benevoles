@@ -132,6 +132,9 @@ Pour les routes admin et super admin, `src/proxy.ts` refuse un `POST`, `PUT`, `P
 | `/api/super-admin/organizations` | GET, POST | Lister, créer des organisations (renvoie le lien d'invitation du premier admin) |
 | `/api/super-admin/organizations/[id]` | GET, PATCH, DELETE | Lire, modifier (nom, slug, activation), supprimer |
 | `/api/super-admin/organizations/[id]/send-invite` | POST | Envoyer l'email d'invitation aux admins de l'organisation qui n'ont pas encore activé leur compte ; `{ "adminId" }` facultatif pour un seul admin |
+| `/api/super-admin/organizations/[id]/reviewed` | POST | Marquer comme relu un espace validé automatiquement (`autoApprovalReviewedAt`), journalisé (#1371) ; service hébergé seulement |
+| `/api/super-admin/auto-approval` | GET, PUT, DELETE | Lire, activer ou changer la date de fin (`{ until }`, `AAAA-MM-JJ`, aujourd'hui + 30 au plus) et désactiver la validation automatique des nouveaux espaces (#1371) ; service hébergé seulement |
+| `/api/super-admin/auto-approval/dismiss` | POST | Masquer l'avis de coupure au plafond (#1371), sans changer l'option ; service hébergé seulement |
 | `/api/super-admin/use-org/[id]` | POST | Enregistre l'organisation dans le cookie `sa-org-id` puis redirige (`303`, sur `NEXT_PUBLIC_APP_URL`) vers `next` (champ de formulaire ou paramètre, page `/admin/` seulement) ou `/admin/events`. `GET` ne change rien et ouvre la page de confirmation `/super-admin/use-org/[id]` |
 | `/api/super-admin/profile` | PATCH | Changer l'email ou le mot de passe du super admin : `currentPassword` obligatoire, mêmes règles et même limite d'échecs (`429`) que `/api/admin/settings/password` ; un nouveau mot de passe ferme toutes les autres sessions |
 | `/api/super-admin/product-updates` | GET | Historique des envois, nombre d'administrateurs abonnés (#200) |

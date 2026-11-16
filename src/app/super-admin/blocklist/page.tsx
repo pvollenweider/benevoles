@@ -7,7 +7,10 @@ import { auth } from "@/auth"
 import { prisma } from "@/lib/prisma"
 import BlocklistManager from "@/components/super-admin/BlocklistManager"
 import SignupSwitch from "@/components/super-admin/SignupSwitch"
+import AutoApprovalSettings from "@/components/super-admin/AutoApprovalSettings"
 import { readSignupSwitch } from "@/lib/signup-switch"
+import { readAutoApprovalView } from "@/lib/auto-approval-server"
+import { isHostedService } from "@/lib/site"
 
 export const dynamic = "force-dynamic"
 export const metadata: Metadata = { title: "Inscriptions et blocage" }
@@ -18,6 +21,9 @@ export default async function BlocklistPage() {
   if (!session?.user) redirect("/admin/login")
   if (session.user.role !== "super_admin") redirect("/admin/login")
   const signupState = await readSignupSwitch()
+  // The automatic validation (#1371) belongs to the hosted service: a self-hosted instance does
+  // not see the section, and its routes answer 403.
+  const autoApproval = isHostedService() ? await readAutoApprovalView() : null
   const blocks = await prisma.signupBlock.findMany({
     orderBy: { createdAt: "desc" },
     select: { id: true, kind: true, label: true, reason: true, expiresAt: true, createdAt: true },
@@ -30,7 +36,14 @@ export default async function BlocklistPage() {
           Fermer d&apos;un coup les inscriptions en libre-service, ou bloquer une adresse, un domaine ou une adresse IP. Une inscription bloquée reçoit la même réponse que les autres, sans que rien soit enregistré. Une adresse IP n&apos;est jamais conservée en clair et son blocage expire toujours.
         </p>
       </div>
-      <SignupSwitch initial={signupState} />
+      {autoApproval ? (
+        <div className="grid items-start gap-4 lg:grid-cols-2">
+          <SignupSwitch initial={signupState} />
+          <AutoApprovalSettings initial={autoApproval} />
+        </div>
+      ) : (
+        <SignupSwitch initial={signupState} />
+      )}
       <BlocklistManager initialBlocks={blocks.map((b) => ({ ...b, expiresAt: b.expiresAt?.toISOString() ?? null, createdAt: b.createdAt.toISOString() }))} />
     </div>
   )

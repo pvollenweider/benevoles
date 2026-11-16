@@ -7,6 +7,7 @@ import { env } from "@/lib/env"
 import { isCronAuthorized } from "@/lib/cron-auth"
 import { deliverOutbox } from "@/lib/notifications/outbox"
 import { dispatchScheduledMessages } from "@/lib/scheduled-message-dispatch"
+import { runAutoApproval } from "@/lib/auto-approval-server"
 import { reportError } from "@/lib/report-error"
 
 export const dynamic = "force-dynamic"
@@ -22,6 +23,10 @@ function isAuthorized(req: Request): boolean {
  * reminders run still retries failed sends too. First, the scheduled messages that became due
  * (#1019) are turned into queued emails, delivered in the same run; their push notifications go
  * after the response, so a slow push service never holds up the emails (#1041).
+ *
+ * At the start of the recorded run, the automatic validation of new spaces (#1371) queues the
+ * « espace activé » emails,
+ * delivered by the same run. It never stops the delivery: a failure is reported and the run goes on.
  */
 export async function POST(req: Request) {
   if (!isAuthorized(req)) return NextResponse.json({ error: "Unauthorized" }, { status: 401 })
@@ -29,6 +34,14 @@ export async function POST(req: Request) {
     reportError("scheduled_message.cron")(e)
     return null
   })
-  const outbox = await recordJobRun("outbox", () => deliverOutbox())
+  const outbox = await recordJobRun("outbox", async () => {
+    const autoApproval = await runAutoApproval({ now: new Date() }).catch((e) => {
+      reportError("auto_approval.cron")(e)
+      return null
+    })
+    const delivered = await deliverOutbox()
+    // The job summary carries the step's counts only (numbers, no space), never its identifiers.
+    return { ...delivered, autoApproval }
+  })
   return NextResponse.json({ scheduled, outbox })
 }

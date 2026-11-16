@@ -164,7 +164,8 @@ describe("approveOrganization: an automatic approval (#1371)", () => {
     const result = await run(t, { type: "automatic" })
 
     expect(result).toEqual({ approved: true, outboxIds: ["outbox-1"] })
-    expect(t.updateArgs[0].data).toEqual({ publicationApprovedAt: NOW, outboundEmailApprovedAt: NOW })
+    // The automatic mark is written with the grant, in the same conditional write (#1371).
+    expect(t.updateArgs[0].data).toEqual({ publicationApprovedAt: NOW, outboundEmailApprovedAt: NOW, autoApprovedAt: NOW })
     expect(t.orgLogs[0]).toMatchObject({
       organizationId: ORG_ID,
       actorType: "system",
