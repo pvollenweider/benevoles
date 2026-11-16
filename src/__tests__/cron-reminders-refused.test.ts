@@ -109,6 +109,26 @@ describe("POST /api/cron/reminders", () => {
     }))
   })
 
+  it("asks only for the days around each window, never the whole history", async () => {
+    sendNotificationMock.mockResolvedValue({ ok: true })
+    const { POST } = await import("@/app/api/cron/reminders/route")
+    await POST(post())
+    const dates = registrationFindMany.mock.calls
+      .map((c) => (c[0] as { where: { status?: string; shift?: { date?: { gte: Date; lte: Date } } } }).where)
+      .filter((w) => w.status === "active")
+      .map((w) => w.shift?.date)
+    // One candidate query per window (J-2, J-1, day-of), each bounded on the shift's stored day.
+    expect(dates).toHaveLength(3)
+    for (const d of dates) {
+      expect(d?.gte).toBeInstanceOf(Date)
+      expect(d?.lte).toBeInstanceOf(Date)
+      // Five stored days at most: the window's day and two either side.
+      expect(d!.lte.getTime() - d!.gte.getTime()).toBeLessThanOrEqual(5 * 86_400_000)
+    }
+    // "Now" is 2026-01-10T00:00Z: the day-of window (2 to 4 h) looks at the 8th to the 12th.
+    expect(dates.map((d) => d!.gte.toISOString().slice(0, 10))).toContain("2026-01-08")
+  })
+
   it("counts a refused send as failed and does not mark the reminder sent", async () => {
     sendNotificationMock.mockResolvedValue({ ok: false, reason: "smtp down" })
     const { POST } = await import("@/app/api/cron/reminders/route")

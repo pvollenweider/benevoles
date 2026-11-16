@@ -107,6 +107,33 @@ describe.skipIf(!url)("cron reminders grouping on Postgres (#672)", () => {
     expect(data2.totals.reminder_dd).toEqual({ eligible: 0, groups: 0, sent: 0, failed: 0 })
   })
 
+  it("does not load the registrations of past shifts that never got the reminder", async () => {
+    // A shift of last month, its reminder never sent: it stayed a candidate of every hourly run.
+    const old = await prisma.shift.create({
+      data: { eventId, roleName: "Bar", label: "Bar", date: new Date("2030-05-01"), startTime: "10:00", endTime: "12:00", capacity: 5, status: "open" },
+    })
+    const oldReg = await prisma.registration.create({
+      data: { eventId, shiftId: old.id, volunteerId, status: "active", ...registrationToken.data(`${tag}-old-${old.id}`) },
+    })
+    const { reg: due } = await makeShiftAndRegistration("10:00")
+    const findMany = vi.spyOn(prisma.registration, "findMany")
+    try {
+      const { POST } = await import("@/app/api/cron/reminders/route")
+      const data = await (await POST(post())).json()
+
+      expect(data.totals.reminder_dd).toEqual({ eligible: 1, groups: 1, sent: 1, failed: 0 })
+      // The old registration is in no candidate list the job read.
+      const loaded = (await Promise.all(findMany.mock.results.map((r) => r.value as Promise<{ id: string }[]>))).flat().map((r) => r.id)
+      expect(loaded).toContain(due.id)
+      expect(loaded).not.toContain(oldReg.id)
+      expect((await prisma.registration.findUniqueOrThrow({ where: { id: oldReg.id } })).reminderDdSent).toBeNull()
+    } finally {
+      findMany.mockRestore()
+      await prisma.registration.delete({ where: { id: oldReg.id } })
+      await prisma.shift.delete({ where: { id: old.id } })
+    }
+  })
+
   it("two calls running at the same time send the reminder once", async () => {
     const { reg: reg1 } = await makeShiftAndRegistration("10:00")
     const { reg: reg2 } = await makeShiftAndRegistration("11:30")
