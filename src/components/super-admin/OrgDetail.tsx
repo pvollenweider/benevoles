@@ -279,7 +279,7 @@ export default function OrgDetail({ org, cumulative, inactivity, limitHits, rece
             <span className="text-sm text-gray-600">{org.name}</span>
           </div>
           <h1 ref={headingRef} tabIndex={-1} className="text-xl font-bold text-gray-900 mt-1 focus:outline-none">{org.name}</h1>
-          <div className="flex items-center gap-3 mt-1">
+          <div className="flex flex-wrap items-center gap-3 mt-1">
             <span className="font-mono text-xs text-gray-500">{org.slug}</span>
             <span className={`text-xs px-2 py-0.5 rounded-full font-medium ${status === "active" ? "bg-green-100 text-green-800" : status === "pending" ? "bg-amber-100 text-amber-900" : "bg-red-100 text-red-800"}`}>{ORG_STATUS_LABELS[status]}</span>
             {org.autoApprovedAt && (
@@ -287,7 +287,7 @@ export default function OrgDetail({ org, cumulative, inactivity, limitHits, rece
                 {/* The pill alone does not say it is a second status in a screen reader. */}
                 <span className="sr-only">. </span>
                 <span className="text-xs px-2 py-0.5 rounded-full font-medium bg-amber-100 text-amber-900">
-                  {org.autoApprovalReviewedAt ? "Validation automatique, relu" : "Validation automatique, à relire"}
+                  {org.autoApprovalReviewedAt ? "Validation automatique, relue" : "Validation automatique, à relire"}
                 </span>
               </>
             )}

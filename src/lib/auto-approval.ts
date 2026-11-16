@@ -391,6 +391,8 @@ export function autoApprovalStateSentence(view: AutoApprovalView): string {
     case "expired":
       return `Expirée le ${view.untilLabel} : les nouveaux espaces restent en attente jusqu'à votre validation.`
     case "cut_off":
+      // The notice already carries the whole cut-off explanation: do not say it twice.
+      if (view.cutOffNotice) return "Désactivée."
       return `Coupée automatiquement le ${view.cutOffLabel} : plafond de ${view.budgetCeiling} validations atteint. Les nouveaux espaces restent en attente jusqu'à votre validation.`
     default:
       return "Désactivée : les nouveaux espaces restent en attente jusqu'à votre validation."

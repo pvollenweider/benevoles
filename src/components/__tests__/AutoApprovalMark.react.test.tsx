@@ -61,10 +61,18 @@ describe("the automatic validation mark (#1371)", () => {
     expect(screen.queryByText("Validation automatique, à relire")).toBeNull()
   })
 
-  it("states the active filter and offers the way back to all spaces", () => {
+  it("says no space is left to reread when the filter matches nothing", () => {
     render(<OrgsManager initialOrgs={[]} filter />)
     expect(screen.getByText(/Seuls les espaces validés automatiquement et pas encore relus sont affichés\./)).toBeInTheDocument()
+    expect(screen.getByText("Aucun espace à relire.")).toBeInTheDocument()
+    expect(screen.queryByText("Aucune organisation. Créez-en une pour commencer.")).toBeNull()
     expect(screen.getByRole("link", { name: "Voir tous les espaces" })).toHaveAttribute("href", "/super-admin/organizations")
+  })
+
+  it("keeps the generic empty sentence on the unfiltered list", () => {
+    render(<OrgsManager initialOrgs={[]} />)
+    expect(screen.getByText("Aucune organisation. Créez-en une pour commencer.")).toBeInTheDocument()
+    expect(screen.queryByText("Aucun espace à relire.")).toBeNull()
   })
 
   it("shows the mark as a second pill on the detail page and marks it as reread", async () => {
@@ -73,6 +81,8 @@ describe("the automatic validation mark (#1371)", () => {
     const { rerender } = render(<OrgDetail org={detailOrg()} cumulative={[]} frontDeskCount={0} />)
 
     expect(screen.getByText("Validation automatique, à relire")).toHaveClass("bg-amber-100", "text-amber-900")
+    // The row wraps instead of breaking the pill's rounded shape on a 320 px screen.
+    expect(screen.getByText("Validation automatique, à relire").parentElement).toHaveClass("flex-wrap")
     const button = screen.getByRole("button", { name: "Marquer comme relu" })
     fireEvent.click(button)
 
@@ -82,7 +92,7 @@ describe("the automatic validation mark (#1371)", () => {
 
     rerender(<OrgDetail org={detailOrg({ autoApprovalReviewedAt: "2026-11-16T10:00:00.000Z" })} cumulative={[]} frontDeskCount={0} />)
     expect(screen.queryByRole("button", { name: "Marquer comme relu" })).toBeNull()
-    expect(screen.getByText("Validation automatique, relu")).toBeInTheDocument()
+    expect(screen.getByText("Validation automatique, relue")).toBeInTheDocument()
   })
 
   it("keeps the button and shows the failure when the review is refused", async () => {

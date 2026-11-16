@@ -158,7 +158,7 @@ export default function OrgsManager({ initialOrgs, initialSort = { col: null, di
       {limitHits.length > 0 && <h2 className="sr-only">Liste des organisations</h2>}
       {orgs.length === 0 ? (
         <div className="text-center py-16 text-gray-500">
-          Aucune organisation. Créez-en une pour commencer.
+          {filter ? "Aucun espace à relire." : "Aucune organisation. Créez-en une pour commencer."}
         </div>
       ) : (
         // Focusable region so a keyboard user can scroll the table sideways on a narrow screen.

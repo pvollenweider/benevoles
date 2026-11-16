@@ -80,6 +80,11 @@ describe("the automatic validation section (#1371)", () => {
 
     fireEvent.click(within(dialog).getByRole("button", { name: "Activer" }))
     await waitFor(() => expect(screen.getByText(/Activée jusqu'au 28 novembre 2026 inclus, par Opérateur le 16 novembre 2026 à 11:00\./)).toBeInTheDocument())
+    await waitFor(() => expect(screen.getByRole("status").textContent).toBe("Validation automatique activée jusqu'au 28 novembre 2026 inclus."))
+    const announced = screen.getByRole("status").textContent ?? ""
+    // One complete, punctuated sentence: the old full-state announcement ran the counters together.
+    expect(announced.endsWith(".")).toBe(true)
+    expect(announced).not.toContain("Aujourd'hui :")
     expect(fetch).toHaveBeenCalledWith("/api/super-admin/auto-approval", expect.objectContaining({ method: "PUT" }))
     expect(JSON.parse(fetch.mock.calls[0][1].body)).toEqual({ until: "2026-11-28" })
     expect(screen.getByRole("heading", { name: "Validation automatique des nouveaux espaces" })).toHaveFocus()
@@ -105,6 +110,7 @@ describe("the automatic validation section (#1371)", () => {
 
     fireEvent.click(screen.getByRole("button", { name: "Désactiver maintenant" }))
     await waitFor(() => expect(screen.getByText("Désactivée : les nouveaux espaces restent en attente jusqu'à votre validation.")).toBeInTheDocument())
+    await waitFor(() => expect(screen.getByRole("status").textContent).toBe("Validation automatique désactivée."))
     expect(fetch).toHaveBeenCalledWith("/api/super-admin/auto-approval", expect.objectContaining({ method: "DELETE" }))
     expect(screen.getByRole("heading", { name: "Validation automatique des nouveaux espaces" })).toHaveFocus()
   })
@@ -127,9 +133,10 @@ describe("the automatic validation section (#1371)", () => {
     fireEvent.change(input, { target: { value: "2026-12-01" } })
     fireEvent.click(screen.getByRole("button", { name: "Enregistrer la date de fin" }))
     const dialog = await screen.findByRole("dialog")
-    expect(dialog).toHaveAccessibleName("Modifier la date de fin jusqu'au 1 décembre 2026 inclus ?")
+    expect(dialog).toHaveAccessibleName("Fixer la fin au 1 décembre 2026 inclus ?")
     fireEvent.click(within(dialog).getByRole("button", { name: "Enregistrer" }))
     await waitFor(() => expect(screen.getByText(/Activée jusqu'au 1 décembre 2026 inclus/)).toBeInTheDocument(), { timeout: 3000 })
+    await waitFor(() => expect(screen.getByRole("status").textContent).toBe("Date de fin modifiée : jusqu'au 1 décembre 2026 inclus."))
   })
 
   it("dismisses the cut-off notice and moves focus to the heading", async () => {
@@ -140,6 +147,7 @@ describe("the automatic validation section (#1371)", () => {
     expect(screen.getByText(/^Attention : coupée automatiquement le 16 novembre 2026 à 10:30/)).toBeInTheDocument()
     fireEvent.click(screen.getByRole("button", { name: "Masquer cet avis" }))
     await waitFor(() => expect(screen.queryByText(/^Attention : coupée automatiquement/)).toBeNull())
+    await waitFor(() => expect(screen.getByRole("status").textContent).toBe("Avis masqué."))
     expect(fetch).toHaveBeenCalledWith("/api/super-admin/auto-approval/dismiss", expect.objectContaining({ method: "POST" }))
     expect(screen.getByRole("heading", { name: "Validation automatique des nouveaux espaces" })).toHaveFocus()
   })
@@ -187,5 +195,29 @@ describe("the automatic validation section (#1371)", () => {
     cleanup()
     render(<AutoApprovalSettings initial={on({ state: "cut_off", cutOffLabel: "16 novembre 2026 à 10:30" })} />)
     expect(screen.getByText("Coupée automatiquement le 16 novembre 2026 à 10:30 : plafond de 20 validations atteint. Les nouveaux espaces restent en attente jusqu'à votre validation.")).toBeInTheDocument()
+  })
+
+  it("does not repeat the cut-off explanation under its notice", () => {
+    const notice = "Attention : coupée automatiquement le 16 novembre 2026 à 10:30 : plafond de 20 validations atteint."
+    render(<AutoApprovalSettings initial={on({ state: "cut_off", cutOffAt: "2026-11-16T09:30:00.000Z", cutOffLabel: "16 novembre 2026 à 10:30", cutOffNotice: notice })} />)
+    expect(screen.getByText("Désactivée.")).toBeInTheDocument()
+    expect(screen.getByText(notice)).toBeInTheDocument()
+    expect(screen.queryByText(/^Coupée automatiquement/)).toBeNull()
+  })
+
+  it("ignores « Modifier la date de fin » while a request is running", async () => {
+    let resolveDelete: (value: unknown) => void = () => {}
+    const fetch = vi.fn().mockImplementation(() => new Promise((resolve) => { resolveDelete = resolve }))
+    vi.stubGlobal("fetch", fetch)
+    render(<AutoApprovalSettings initial={on()} />)
+
+    fireEvent.click(screen.getByRole("button", { name: "Désactiver maintenant" }))
+    const modify = screen.getByRole("button", { name: "Modifier la date de fin" })
+    await waitFor(() => expect(modify).toHaveAttribute("aria-disabled", "true"))
+    fireEvent.click(modify)
+    expect(screen.queryByLabelText(/Jusqu'au/)).toBeNull()
+
+    resolveDelete(ok(view()))
+    await waitFor(() => expect(screen.getByRole("status").textContent).toBe("Validation automatique désactivée."))
   })
 })

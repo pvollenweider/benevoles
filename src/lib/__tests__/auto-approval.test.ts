@@ -148,8 +148,13 @@ describe("the view of the section", () => {
 
   it("shows the cut-off notice until it is dismissed, even after a deactivation", () => {
     const cut = { ...on("2026-11-20"), cutOffAt: "2026-11-16T09:30:00.000Z" }
-    expect(autoApprovalView(cut, now, ZURICH).cutOffNotice).toMatch(/^Attention : coupée automatiquement le .* : plafond de 20 validations atteint\.$/)
-    expect(autoApprovalView({ ...cut, cutOffSeenAt: "2026-11-16T09:40:00.000Z" }, now, ZURICH).cutOffNotice).toBeNull()
+    const cutView = autoApprovalView(cut, now, ZURICH)
+    expect(cutView.cutOffNotice).toMatch(/^Attention : coupée automatiquement le .* : plafond de 20 validations atteint\.$/)
+    // The notice carries the cut-off explanation: the state line does not say it again.
+    expect(autoApprovalStateSentence(cutView)).toBe("Désactivée.")
+    const dismissed = autoApprovalView({ ...cut, cutOffSeenAt: "2026-11-16T09:40:00.000Z" }, now, ZURICH)
+    expect(dismissed.cutOffNotice).toBeNull()
+    expect(autoApprovalStateSentence(dismissed)).toBe("Coupée automatiquement le 16 novembre 2026 à 10:30 : plafond de 20 validations atteint. Les nouveaux espaces restent en attente jusqu'à votre validation.")
     expect(autoApprovalView({ ...cut, until: null }, now, ZURICH).state).toBe("off")
     expect(autoApprovalView({ ...cut, until: null }, now, ZURICH).cutOffNotice).not.toBeNull()
   })

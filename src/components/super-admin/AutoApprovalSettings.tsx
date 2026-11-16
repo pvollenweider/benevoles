@@ -23,15 +23,11 @@ import {
 
 const URL = "/api/super-admin/auto-approval"
 
-function announcement(view: AutoApprovalView): string {
-  return ["Validation automatique :", autoApprovalStateSentence(view), ...autoApprovalCounterSentences(view)].join(" ")
-}
-
 /**
  * « Validation automatique des nouveaux espaces » (#1371): the temporary option that validates a
  * self-service space on its own while the operator is away. A form and a confirmation dialog turn
  * it on or move its end day; plain buttons turn it off; the cut-off notice is dismissed in place.
- * The section's single status region takes the full new state after each action.
+ * The section's single status region takes a short outcome after each action.
  */
 export default function AutoApprovalSettings({ initial }: { initial: AutoApprovalView }) {
   const id = useId()
@@ -71,6 +67,7 @@ export default function AutoApprovalSettings({ initial }: { initial: AutoApprova
   }
 
   async function save(until: string) {
+    const activating = view.state !== "on"
     setBusy(true)
     setDialogError(null)
     setOutcome("")
@@ -94,7 +91,10 @@ export default function AutoApprovalSettings({ initial }: { initial: AutoApprova
     setShowForm(false)
     setDate(result.data.until ?? "")
     headingRef.current?.focus()
-    announce(setOutcome, announcement(result.data))
+    const endLabel = result.data.untilLabel ?? autoApprovalDayLabel(until)
+    announce(setOutcome, activating
+      ? `Validation automatique activée jusqu'au ${endLabel} inclus.`
+      : `Date de fin modifiée : jusqu'au ${endLabel} inclus.`)
   }
 
   async function deactivate() {
@@ -112,7 +112,7 @@ export default function AutoApprovalSettings({ initial }: { initial: AutoApprova
     setShowForm(false)
     setDate("")
     headingRef.current?.focus()
-    announce(setOutcome, announcement(result.data))
+    announce(setOutcome, "Validation automatique désactivée.")
   }
 
   async function dismissNotice() {
@@ -134,7 +134,7 @@ export default function AutoApprovalSettings({ initial }: { initial: AutoApprova
   const chosenLabel = date ? autoApprovalDayLabel(date) : ""
   const recap = {
     title: confirming === "change"
-      ? `Modifier la date de fin jusqu'au ${chosenLabel} inclus ?`
+      ? `Fixer la fin au ${chosenLabel} inclus ?`
       : `Activer la validation automatique jusqu'au ${chosenLabel} inclus ?`,
     lines: [
       "Un espace créé par l'inscription est validé tout seul 5 à 10 minutes après l'activation du compte de son responsable, sans aucune vérification.",
@@ -189,6 +189,7 @@ export default function AutoApprovalSettings({ initial }: { initial: AutoApprova
             type="button"
             ref={modifyRef}
             onClick={() => {
+              if (busy) return
               reset()
               setOutcome("")
               setDialogError(null)
