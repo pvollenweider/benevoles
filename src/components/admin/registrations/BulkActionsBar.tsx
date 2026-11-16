@@ -6,10 +6,14 @@
 type Props = {
   /** Rows selected, hidden ones included. */
   selectedCount: number
-  /** Selected confirmed people not marked present yet. */
+  /** Selected confirmed people still expected: neither present nor absent. */
   toCheckInCount: number
   /** Selected confirmed people already marked present. */
   toUndoCount: number
+  /** Selected confirmed people still expected, the ones an absence can be recorded for (#1141). */
+  toMarkAbsentCount: number
+  /** Selected confirmed people already marked absent. */
+  toUndoAbsentCount: number
   /** Selected confirmed people, the ones a removal applies to. */
   activeCount: number
   /** No selected row has an email: nobody can be made a leader. */
@@ -19,6 +23,7 @@ type Props = {
   /** A bulk request is running. */
   busy: boolean
   onPresence: (present: boolean) => void
+  onAbsence: (absent: boolean) => void
   onMakeResponsible: () => void
   onResendLink: () => void
   onCancelRegistrations: () => void
@@ -27,8 +32,8 @@ type Props = {
 
 // ── Toolbar of the actions on the current selection ─────────────────────────
 export default function BulkActionsBar({
-  selectedCount, toCheckInCount, toUndoCount, activeCount, noneWithEmail, noActiveWithEmail, busy,
-  onPresence, onMakeResponsible, onResendLink, onCancelRegistrations, onClearSelection,
+  selectedCount, toCheckInCount, toUndoCount, toMarkAbsentCount, toUndoAbsentCount, activeCount, noneWithEmail, noActiveWithEmail, busy,
+  onPresence, onAbsence, onMakeResponsible, onResendLink, onCancelRegistrations, onClearSelection,
 }: Props) {
   // Inert buttons stay focusable (aria-disabled, not disabled): a request starting under the
   // focus does not drop it to the page.
@@ -57,6 +62,24 @@ export default function BulkActionsBar({
           className={`text-xs text-gray-700 border border-gray-300 bg-white px-3 py-1.5 rounded-full hover:bg-gray-50 transition-colors ${noUndo ? "opacity-50 cursor-not-allowed" : ""}`}
         >
           {`Annuler la présence (${toUndoCount})`}
+        </button>
+      )}
+      <button
+        type="button"
+        onClick={() => { if (!busy && toMarkAbsentCount > 0) onAbsence(true) }}
+        aria-disabled={busy || toMarkAbsentCount === 0}
+        className={`text-xs text-gray-700 border border-gray-300 bg-white px-3 py-1.5 rounded-full hover:bg-gray-50 transition-colors ${busy || toMarkAbsentCount === 0 ? "opacity-50 cursor-not-allowed" : ""}`}
+      >
+        {`Marquer absent${toMarkAbsentCount > 1 ? "s" : ""} (${toMarkAbsentCount})`}
+      </button>
+      {toUndoAbsentCount > 0 && (
+        <button
+          type="button"
+          onClick={() => { if (!noUndo) onAbsence(false) }}
+          aria-disabled={noUndo}
+          className={`text-xs text-gray-700 border border-gray-300 bg-white px-3 py-1.5 rounded-full hover:bg-gray-50 transition-colors ${noUndo ? "opacity-50 cursor-not-allowed" : ""}`}
+        >
+          {`Annuler l'absence (${toUndoAbsentCount})`}
         </button>
       )}
       <button

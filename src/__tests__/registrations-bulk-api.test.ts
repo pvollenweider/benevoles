@@ -10,7 +10,7 @@ const actions = vi.hoisted(() => ({
   cancelRegistrations: vi.fn(),
   addSectorLeader: vi.fn(),
   resendManagementLinks: vi.fn(),
-  setPresence: vi.fn(),
+  setAttendance: vi.fn(),
 }))
 vi.mock("@/lib/admin-registration-actions", () => actions)
 vi.mock("@/lib/event-log", () => ({ adminActor: () => ({ type: "admin", id: "admin-1" }) }))
@@ -58,17 +58,72 @@ describe("POST /api/admin/events/[id]/registrations/bulk", () => {
     expect((await POST(post({ action: "cancel", registrationIds: [] }), params)).status).toBe(400)
   })
 
-  it("check_in / undo_check_in: hands the rows to setPresence and reports what changed (#399)", async () => {
+  it("check_in / undo_check_in: hands the rows to setAttendance and reports what changed (#399)", async () => {
     regFindMany.mockResolvedValue([reg("r1"), reg("r2")])
-    actions.setPresence.mockResolvedValue(["r1"])
+    const results = [
+      { id: "r1", changed: true, state: "present", checkedInAt: "2026-07-04T08:05:00.000Z" },
+      { id: "r2", changed: false, state: "present", checkedInAt: "2026-07-04T08:01:00.000Z" },
+    ]
+    actions.setAttendance.mockResolvedValue(results)
     const { POST } = await import("@/app/api/admin/events/[id]/registrations/bulk/route")
     const res = await POST(post({ action: "check_in", registrationIds: ["r1", "r2"] }), params)
     expect(res.status).toBe(200)
-    expect(actions.setPresence).toHaveBeenCalledWith(expect.anything(), expect.anything(), [expect.objectContaining({ id: "r1" }), expect.objectContaining({ id: "r2" })], true)
-    expect(await res.json()).toEqual({ done: 1, changedIds: ["r1"], skipped: 1 })
+    expect(actions.setAttendance).toHaveBeenCalledWith(expect.anything(), expect.anything(), [expect.objectContaining({ id: "r1" }), expect.objectContaining({ id: "r2" })], "check_in")
+    const body = await res.json()
+    // What existing callers read (#399) is still there, unchanged.
+    expect(body).toMatchObject({ done: 1, changedIds: ["r1"], skipped: 1 })
+    // And the state of every requested registration after the call (#1141).
+    expect(body).toEqual({ done: 1, changedIds: ["r1"], skipped: 1, results })
     regFindMany.mockResolvedValue([reg("r1")])
+    actions.setAttendance.mockResolvedValue([{ id: "r1", changed: true, state: "expected", checkedInAt: null }])
     await POST(post({ action: "undo_check_in", registrationIds: ["r1"] }), params)
-    expect(actions.setPresence).toHaveBeenLastCalledWith(expect.anything(), expect.anything(), expect.anything(), false)
+    expect(actions.setAttendance).toHaveBeenLastCalledWith(expect.anything(), expect.anything(), expect.anything(), "undo_check_in")
+  })
+
+  it("mark_absent / undo_absent: the same path as the check-in, with the per-registration results (#1141)", async () => {
+    regFindMany.mockResolvedValue([reg("r1"), reg("r2"), reg("r3", { status: "waiting" })])
+    const results = [
+      { id: "r1", changed: true, state: "absent", checkedInAt: null },
+      // Marked present meanwhile on another device: nothing changed, the truth comes back.
+      { id: "r2", changed: false, state: "present", checkedInAt: "2026-07-04T08:01:00.000Z" },
+      { id: "r3", changed: false, state: "expected", checkedInAt: null },
+    ]
+    actions.setAttendance.mockResolvedValue(results)
+    const { POST } = await import("@/app/api/admin/events/[id]/registrations/bulk/route")
+    const res = await POST(post({ action: "mark_absent", registrationIds: ["r1", "r2", "r3"] }), params)
+    expect(res.status).toBe(200)
+    // Every row of the selection is handed over with its status: setAttendance skips the inactive ones.
+    expect(actions.setAttendance).toHaveBeenCalledWith(
+      expect.anything(), { type: "admin", id: "admin-1" },
+      [expect.objectContaining({ id: "r1", status: "active" }), expect.objectContaining({ id: "r2" }), expect.objectContaining({ id: "r3", status: "waiting" })],
+      "mark_absent",
+    )
+    expect(await res.json()).toEqual({ done: 1, changedIds: ["r1"], skipped: 2, results })
+
+    regFindMany.mockResolvedValue([reg("r1")])
+    actions.setAttendance.mockResolvedValue([{ id: "r1", changed: true, state: "expected", checkedInAt: null }])
+    const undo = await POST(post({ action: "undo_absent", registrationIds: ["r1"] }), params)
+    expect(actions.setAttendance).toHaveBeenLastCalledWith(expect.anything(), expect.anything(), expect.anything(), "undo_absent")
+    expect(await undo.json()).toEqual({ done: 1, changedIds: ["r1"], skipped: 0, results: [{ id: "r1", changed: true, state: "expected", checkedInAt: null }] })
+  })
+
+  it("the absence actions need the same ownership as the check-in: one foreign id and nothing is done (#1141)", async () => {
+    regFindMany.mockResolvedValue([reg("r1")]) // r2 not found through the scoped client
+    const { POST } = await import("@/app/api/admin/events/[id]/registrations/bulk/route")
+    for (const action of ["mark_absent", "undo_absent"]) {
+      expect((await POST(post({ action, registrationIds: ["r1", "r2"] }), params)).status).toBe(404)
+    }
+    expect(actions.setAttendance).not.toHaveBeenCalled()
+  })
+
+  it("refuses « left_early », reserved for a later release, and any other unknown attendance action (#1141)", async () => {
+    regFindMany.mockResolvedValue([reg("r1")])
+    const { POST } = await import("@/app/api/admin/events/[id]/registrations/bulk/route")
+    for (const action of ["left_early", "mark_left_early", "absent", "mark_present"]) {
+      expect((await POST(post({ action, registrationIds: ["r1"] }), params)).status, action).toBe(400)
+    }
+    expect(regFindMany).not.toHaveBeenCalled()
+    expect(actions.setAttendance).not.toHaveBeenCalled()
   })
 
   it("cancel: only active rows, duplicates in the selection counted once", async () => {

@@ -6,14 +6,15 @@
  * while the page is visible and online, and merges each answer with the marks made on this phone.
  * Pure (no React, no Prisma): when to poll, which answer to keep, what to say.
  *
- * Ordering. One counter (`tick`) numbers every poll when it is sent and every check-in when its
- * answer arrives. A poll answer older than the last one applied is dropped (answers can arrive out
- * of order). A local mark stays over the board until a poll sent after the mark's answer comes
+ * Ordering. One counter (`tick`) numbers every poll when it is sent and every attendance action
+ * (check-in, absence, their undo) when its answer arrives. A poll answer older than the last one
+ * applied is dropped (answers can arrive out of order). A local mark stays over the board until a poll sent after the mark's answer comes
  * back: that poll has seen the mark, or something newer made elsewhere, and wins. A row whose
  * action is still in flight keeps what it showed when tapped, whatever a poll says meanwhile.
  */
 
 import { personName, shiftName, type DayOfBoard, type DayOfGroup, type DayOfPerson, type DayOfShift } from "./day-of"
+import { attendanceStateOf, type AttendanceState } from "./attendance-state"
 
 /** Between two polls while the page is visible and the last poll went through. */
 export const DAY_OF_POLL_MS = 25_000
@@ -54,28 +55,45 @@ export function syncStatusOf(r: { network: true; online: boolean } | { status: n
   return "error"
 }
 
+/** What a row shows: the attendance state, and the check-in instant when present. */
+export type ShownAttendance = { state: AttendanceState; checkedInAt: string | null }
+
 /**
- * A check-in made on this phone: `at` the tick of its answer, null while the action is in flight.
- * An in-flight mark keeps the mark it replaced (`prev`), put back if the action fails.
+ * An attendance action made on this phone (#399, #1141): the state it left (expected, present or
+ * absent, with the check-in instant), `at` the tick of its answer, null while the action is in
+ * flight. An in-flight mark keeps the mark it replaced (`prev`), put back if the action fails.
  */
-export type LocalMark = { checkedInAt: string | null; at: number | null; prev?: LocalMark }
+export type LocalMark = ShownAttendance & { at: number | null; prev?: LocalMark }
 export type LocalMarks = Record<string, LocalMark>
 
-/** The check-in shown for a person: this phone's mark if any, else the board's. */
-export function shownCheckIn(p: Pick<DayOfPerson, "registrationId" | "checkedInAt">, marks: LocalMarks): string | null {
+type Marked = Pick<DayOfPerson, "registrationId" | "checkedInAt" | "attendanceStatus">
+
+/** What is shown for a person: this phone's mark if any, else the board's. */
+export function shownAttendance(p: Marked, marks: LocalMarks): ShownAttendance {
   const m = marks[p.registrationId]
-  return m ? m.checkedInAt : p.checkedInAt
+  return m ? { state: m.state, checkedInAt: m.checkedInAt } : { state: attendanceStateOf(p), checkedInAt: p.checkedInAt }
+}
+
+/** The state shown for a person: this phone's mark if any, else the board's. */
+export function shownState(p: Marked, marks: LocalMarks): AttendanceState {
+  return shownAttendance(p, marks).state
+}
+
+/** The check-in shown for a person: this phone's mark if any, else the board's. */
+export function shownCheckIn(p: Marked, marks: LocalMarks): string | null {
+  return shownAttendance(p, marks).checkedInAt
 }
 
 /** Starts an action on a row: it shows `shown` (what was on screen when tapped) until the answer. */
-export function pinMark(marks: LocalMarks, id: string, shown: string | null): LocalMarks {
+export function pinMark(marks: LocalMarks, id: string, shown: ShownAttendance): LocalMarks {
   const prev = marks[id]
-  return { ...marks, [id]: prev ? { checkedInAt: shown, at: null, prev } : { checkedInAt: shown, at: null } }
+  const pin = { state: shown.state, checkedInAt: shown.checkedInAt, at: null }
+  return { ...marks, [id]: prev ? { ...pin, prev } : pin }
 }
 
 /**
- * The action failed or changed nothing: the row goes back to what it showed before, an earlier
- * mark of this phone included (a check-in answered but not yet seen by a poll is not lost).
+ * The action failed: the row goes back to what it showed before, an earlier mark of this phone
+ * included (a check-in answered but not yet seen by a poll is not lost).
  */
 export function releasePin(marks: LocalMarks, id: string): LocalMarks {
   const m = marks[id]
@@ -84,6 +102,17 @@ export function releasePin(marks: LocalMarks, id: string): LocalMarks {
   if (m.prev) next[id] = m.prev
   else delete next[id]
   return next
+}
+
+/**
+ * The action was answered: the row takes the state the server gave, at the tick of that answer.
+ * Used for a change that went through and for one that changed nothing (#1141): the server then
+ * returns the state recorded meanwhile on another device, and writing it here, in place of the
+ * pin, before any read is sent again, keeps a later poll from counting it as a change made
+ * elsewhere and saying « Liste mise à jour » about what the person was just told.
+ */
+export function answerMark(marks: LocalMarks, id: string, server: ShownAttendance, at: number): LocalMarks {
+  return { ...marks, [id]: { state: server.state, checkedInAt: server.checkedInAt, at } }
 }
 
 /** Whether a poll answer sent at `sentAt` comes after the last applied one (`appliedAt`). */
@@ -115,29 +144,33 @@ const peopleOf = (b: DayOfBoard): Map<string, DayOfPerson> => {
   return all
 }
 
-export type BoardChanges = { arrived: number; undone: number; roster: boolean }
+export type BoardChanges = { arrived: number; undone: number; absent: number; absenceUndone: number; roster: boolean }
 
 /**
  * What changed for the person using the page between what was shown (`before` with `marksBefore`)
- * and what is shown after a poll (`after` with `marksAfter`): presences marked or undone elsewhere,
- * and whether people appeared on or left the listed shifts. Shifts moving from « à venir » to « en
- * cours » with time are not a change: the page shows them where they are.
+ * and what is shown after a poll (`after` with `marksAfter`): presences and absences marked or
+ * undone elsewhere, and whether people appeared on or left the listed shifts. Three states
+ * (#1141): someone present here and absent there is one presence undone and one absence marked,
+ * never a silent change. Shifts moving from « à venir » to « en cours » with time are not a
+ * change: the page shows them where they are.
  */
 export function boardChanges(before: DayOfBoard, marksBefore: LocalMarks, after: DayOfBoard, marksAfter: LocalMarks): BoardChanges {
   const was = peopleOf(before)
   const now = peopleOf(after)
-  let arrived = 0
-  let undone = 0
+  const c = { arrived: 0, undone: 0, absent: 0, absenceUndone: 0 }
   let roster = was.size !== now.size
   for (const [id, p] of now) {
     const old = was.get(id)
     if (!old) { roster = true; continue }
-    const a = shownCheckIn(old, marksBefore) !== null
-    const b = shownCheckIn(p, marksAfter) !== null
-    if (!a && b) arrived += 1
-    if (a && !b) undone += 1
+    const a = shownState(old, marksBefore)
+    const b = shownState(p, marksAfter)
+    if (a === b) continue
+    if (a === "present") c.undone += 1
+    if (a === "absent") c.absenceUndone += 1
+    if (b === "present") c.arrived += 1
+    if (b === "absent") c.absent += 1
   }
-  return { arrived, undone, roster }
+  return { ...c, roster }
 }
 
 const plural = (n: number, one: string, many: string) => `${n} ${n > 1 ? many : one}`
@@ -147,6 +180,8 @@ export function changesAnnouncement(c: BoardChanges): string | null {
   const parts: string[] = []
   if (c.arrived) parts.push(`${plural(c.arrived, "personne marquée présente", "personnes marquées présentes")}`)
   if (c.undone) parts.push(`${plural(c.undone, "présence annulée", "présences annulées")}`)
+  if (c.absent) parts.push(`${plural(c.absent, "personne marquée absente", "personnes marquées absentes")}`)
+  if (c.absenceUndone) parts.push(`${plural(c.absenceUndone, "absence annulée", "absences annulées")}`)
   if (c.roster) parts.push("la liste des personnes attendues a changé")
   return parts.length ? `Liste mise à jour : ${parts.join(", ")}.` : null
 }
@@ -182,10 +217,16 @@ export function shownStatus(status: SyncStatus, failures: number): SyncStatus {
 
 /** Changes seen by polls and not yet said: added up until they may be said. */
 export function addChanges(a: BoardChanges, b: BoardChanges): BoardChanges {
-  return { arrived: a.arrived + b.arrived, undone: a.undone + b.undone, roster: a.roster || b.roster }
+  return {
+    arrived: a.arrived + b.arrived,
+    undone: a.undone + b.undone,
+    absent: a.absent + b.absent,
+    absenceUndone: a.absenceUndone + b.absenceUndone,
+    roster: a.roster || b.roster,
+  }
 }
 
-export const NO_CHANGES: BoardChanges = { arrived: 0, undone: 0, roster: false }
+export const NO_CHANGES: BoardChanges = { arrived: 0, undone: 0, absent: 0, absenceUndone: 0, roster: false }
 
 /** Quiet time after any message before poll changes may be said: the user's own outcome comes first. */
 export const CHANGES_QUIET_MS = 3_000

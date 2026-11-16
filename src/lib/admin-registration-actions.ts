@@ -17,6 +17,7 @@ import { lockEventSectors, lockSector } from "./sector-adoption"
 import { SECTOR_NOT_FOUND_ERROR } from "./sectors"
 import { leaderInviteScope } from "./leader-scope"
 import { endSwapsIn } from "./shift-swap-server"
+import { ATTENDANCE_TRANSITIONS, attendanceStateOf, type AttendanceState, type AttendanceTransition } from "./attendance-state"
 
 /**
  * Admin actions on registrations, shared by the single-row routes and the bulk route (#292), so
@@ -149,33 +150,87 @@ async function queueRemovalEmails(tx: CancelTx, ids: string[], send: Send): Prom
   }
 }
 
-export type PresenceTarget = { id: string; eventId: string; shiftId: string; status: string }
+export type AttendanceTarget = { id: string; eventId: string; shiftId: string; status: string }
+
+/** What the client needs after one attendance action: the truth for each requested registration. */
+export type AttendanceResult = { id: string; changed: boolean; state: AttendanceState; checkedInAt: string | null }
 
 /**
- * Lightweight check-in (#399): marks the given registrations present (or undoes it). Only
- * confirmed registrations, and only rows whose mark actually changes, so a row selected twice
- * or already marked isn't logged twice. Returns the ids changed.
+ * Lightweight attendance (#399, #1141): marks the given registrations present, undoes it, marks
+ * them absent or undoes the absence. Only confirmed registrations, and only rows whose starting
+ * state matches the transition: one conditional `updateMany` per row testing `status`,
+ * `checkedInAt` and `attendanceStatus`, so a stale request changes nothing instead of overwriting
+ * a state recorded meanwhile on another device, and a row selected twice isn't logged twice.
+ * Logs each real change. Returns one result per target, in the targets' order: a row that did not
+ * change (stale, or not confirmed) is read back and returned with its current state, so the
+ * client shows the truth rather than a guess.
  */
-export async function setPresence(db: OrgScopedPrisma, actor: LogActor, targets: PresenceTarget[], present: boolean, now: Date = new Date()): Promise<string[]> {
-  const changed: string[] = []
+export async function setAttendance(
+  db: OrgScopedPrisma,
+  actor: LogActor,
+  targets: AttendanceTarget[],
+  transition: AttendanceTransition,
+  now: Date = new Date(),
+): Promise<AttendanceResult[]> {
+  const plan = ATTENDANCE_TRANSITIONS[transition]
+  const adminId = actor.type === "admin" ? actor.id ?? null : null
+  const changed = new Set<string>()
   for (const reg of targets) {
-    if (reg.status !== "active") continue
+    if (reg.status !== "active" || changed.has(reg.id)) continue
     const { count } = await db.registration.updateMany({
-      where: { id: reg.id, status: "active", checkedInAt: present ? null : { not: null } },
-      data: { checkedInAt: present ? now : null },
+      where: { id: reg.id, status: "active", ...startingStateWhere(plan.from) },
+      data: attendanceData(transition, now, adminId),
     })
     if (count === 0) continue
-    changed.push(reg.id)
+    changed.add(reg.id)
+    const shiftId = { from: reg.shiftId, to: reg.shiftId }
     await logEvent({
       eventId: reg.eventId,
       actor,
-      action: present ? "registration.checked_in" : "registration.check_in_undone",
+      // Literals on this line: src/lib/__tests__/log-action-labels.test.ts reads them (#704).
+      action: transition === "check_in" ? "registration.checked_in" : transition === "undo_check_in" ? "registration.check_in_undone" : transition === "mark_absent" ? "registration.marked_absent" : "registration.absence_undone",
       entityType: "Registration",
       entityId: reg.id,
-      changes: { checkedInAt: { from: present ? null : "set", to: present ? now.toISOString() : null }, shiftId: { from: reg.shiftId, to: reg.shiftId } },
+      // Check-in entries keep the shape they have had since #399; the absence ones carry the
+      // state before and after.
+      changes: transition === "check_in"
+        ? { checkedInAt: { from: null, to: now.toISOString() }, shiftId }
+        : transition === "undo_check_in"
+          ? { checkedInAt: { from: "set", to: null }, shiftId }
+          : { attendance: { from: plan.from, to: plan.to }, shiftId },
     })
   }
-  return changed
+  // The rows that did not change, read once: their state as it is now in the database.
+  const unchangedIds = [...new Set(targets.filter((t) => !changed.has(t.id)).map((t) => t.id))]
+  const current = unchangedIds.length
+    ? await db.registration.findMany({ where: { id: { in: unchangedIds } }, select: { id: true, checkedInAt: true, attendanceStatus: true } })
+    : []
+  const currentById = new Map(current.map((r) => [r.id, r]))
+  return targets.map((t) => {
+    if (changed.has(t.id)) return { id: t.id, changed: true, state: plan.to, checkedInAt: plan.to === "present" ? now.toISOString() : null }
+    const row = currentById.get(t.id)
+    return { id: t.id, changed: false, state: attendanceStateOf(row ?? { checkedInAt: null }), checkedInAt: row?.checkedInAt?.toISOString() ?? null }
+  })
+}
+
+/** The `where` that makes a write conditional on the transition's starting state. */
+function startingStateWhere(from: AttendanceState) {
+  if (from === "present") return { checkedInAt: { not: null }, attendanceStatus: null }
+  if (from === "absent") return { checkedInAt: null, attendanceStatus: "absent" }
+  return { checkedInAt: null, attendanceStatus: null }
+}
+
+/** The columns a transition writes: the four of them each time, so the invariants hold. */
+function attendanceData(transition: AttendanceTransition, now: Date, adminId: string | null) {
+  switch (transition) {
+    case "check_in":
+      return { checkedInAt: now, attendanceStatus: null, attendanceAt: null, attendanceBy: null }
+    case "undo_check_in":
+    case "undo_absent":
+      return { checkedInAt: null, attendanceStatus: null, attendanceAt: null, attendanceBy: null }
+    case "mark_absent":
+      return { checkedInAt: null, attendanceStatus: "absent", attendanceAt: now, attendanceBy: adminId }
+  }
 }
 
 /** One poste (`roleName`) or, since #1169, one sector (`sectorId`) of the event: exactly one. */

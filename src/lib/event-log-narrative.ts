@@ -13,6 +13,7 @@ import type { EventLogEntry, ShiftLabel } from "./event-log-read"
 import { APP_TIME_ZONE } from "./time-zone"
 import { listingChangeLabel } from "./event-visibility"
 import { logValueLabel } from "./log-value-labels"
+import { ATTENDANCE_LABELS, type AttendanceState } from "./attendance-state"
 import { fmtDuration } from "./signup-recap"
 
 const dateFmt = new Intl.DateTimeFormat("fr-FR", { day: "numeric", month: "long" })
@@ -109,6 +110,8 @@ const FIELD_LABELS: Record<string, string> = {
   ownerId: "qui s'en occupe",
   // A check-in (#399): the time it was recorded, « enregistrée » for an undone one (stored as "set").
   checkedInAt: "présence",
+  // A recorded absence or its undo (#1141): the state before and after, in words.
+  attendance: "pointage",
   // A volunteer's answer changed from the personal page (#984); `question` names it in the sentence.
   answer: "réponse",
   // A follow-up question's condition (#1016): « Si « Oui » à « … » », or none.
@@ -165,6 +168,7 @@ export function describeChanges(changes: EventLogEntry["changes"], shiftLabels?:
         : field === "isListed" ? listingChangeLabel(v)
         : field === "answer" && (v === null || v === undefined) ? "pas de réponse"
         : field === "checkedInAt" && v === "set" ? "enregistrée"
+        : field === "attendance" && typeof v === "string" && v in ATTENDANCE_LABELS ? ATTENDANCE_LABELS[v as AttendanceState].toLowerCase()
         : field === "availabilityAck" && v !== null && v !== undefined ? ackEvidenceText(v) ?? "confirmé"
         : logValueLabel(field, v, entityType) ?? fmtValue(v)
       return `${label} : ${fmt(from)} → ${fmt(to)}`
@@ -200,6 +204,8 @@ export const ACTION_VERB: Record<string, (actor: string) => string> = {
   "registration.waitlist_confirmed": (a) => `${a} a confirmé sa place`,
   "registration.checked_in": (a) => `${a} a marqué la personne présente`,
   "registration.check_in_undone": (a) => `${a} a annulé la présence`,
+  "registration.marked_absent": (a) => `${a} a marqué la personne absente`,
+  "registration.absence_undone": (a) => `${a} a annulé l'absence`,
   "registration.requested": (a) => `${a} a demandé une inscription`,
   "registration.confirmation_requested": (a) => `${a} a demandé une inscription à confirmer par email`,
   "registration.confirmed_by_email": (a) => `${a} a confirmé son inscription par email`,
@@ -291,6 +297,7 @@ const SHIFT_AWARE_ACTIONS = new Set([
   "registration.created", "registration.cancelled", "registration.restored", "registration.waitlist_joined",
   "registration.waitlist_offered", "registration.waitlist_confirmed", "registration.baseline",
   "registration.checked_in", "registration.check_in_undone",
+  "registration.marked_absent", "registration.absence_undone",
   "registration.requested", "registration.accepted", "registration.refused", "registration.swapped",
   "registration.confirmation_requested", "registration.confirmed_by_email",
   "registration.availability_acknowledged",

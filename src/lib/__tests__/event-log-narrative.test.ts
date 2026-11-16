@@ -36,6 +36,11 @@ describe("describeChanges", () => {
     expect(describeChanges({ checkedInAt: { from: "set", to: null } }, undefined, "Registration")).toEqual(["présence : enregistrée → —"])
   })
 
+  it("reads an absence and its undo in French, never the stored state names (#1141)", () => {
+    expect(describeChanges({ attendance: { from: "expected", to: "absent" }, shiftId: { from: "s1", to: "s1" } }, undefined, "Registration")).toEqual(["pointage : attendu → absent"])
+    expect(describeChanges({ attendance: { from: "absent", to: "expected" } }, undefined, "Registration")).toEqual(["pointage : absent → attendu"])
+  })
+
   it("shows a registration status change in French, not the stored values (#929)", () => {
     expect(describeChanges({ status: { from: "waiting", to: "offered" } }, undefined, "Registration")).toEqual([
       "statut : liste d'attente → place proposée",
@@ -69,6 +74,26 @@ describe("describeChanges", () => {
 
   it("falls back to the raw field name for an unknown field", () => {
     expect(describeChanges({ mysteryField: { from: 1, to: 2 } })).toEqual(["mysteryField : 1 → 2"])
+  })
+})
+
+describe("describeEntry, attendance (#1141)", () => {
+  const labels = { s1: { compact: "Bar · sam. 4 juil. 10h–12h", prose: "Bar, samedi 4 juillet de 10h à 12h" } }
+  const changes = (from: string, to: string) => ({ attendance: { from, to }, shiftId: { from: "s1", to: "s1" } })
+
+  it("says who marked the person absent, and for which shift, in the style of the check-in", () => {
+    const checkIn = describeEntry(entry({ action: "registration.checked_in", actorLabel: "Claire Perret", changes: { checkedInAt: { from: null, to: "2026-07-04T08:05:00.000Z" }, shiftId: { from: "s1", to: "s1" } } }), labels as never)
+    const absent = describeEntry(entry({ action: "registration.marked_absent", actorLabel: "Claire Perret", changes: changes("expected", "absent") }), labels as never)
+    expect(absent).toBe(checkIn.replace("a marqué la personne présente", "a marqué la personne absente"))
+    expect(absent).toContain("Claire Perret a marqué la personne absente")
+    expect(absent).toContain("pour le créneau Bar, samedi 4 juillet de 10h à 12h")
+  })
+
+  it("says who undid the absence", () => {
+    const undone = describeEntry(entry({ action: "registration.absence_undone", actorLabel: "Claire Perret", changes: changes("absent", "expected") }), labels as never)
+    expect(undone).toContain("Claire Perret a annulé l'absence")
+    expect(undone).toContain("pour le créneau Bar, samedi 4 juillet de 10h à 12h")
+    expect(undone).not.toMatch(/registration\.|absence_undone/)
   })
 })
 

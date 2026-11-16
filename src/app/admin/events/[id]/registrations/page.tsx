@@ -167,6 +167,7 @@ export default async function RegistrationsPage({
             ? confirmationDeadlineLabel(r.signupConfirmation.expiresAt, orgTimeZone(event.organization))
             : null,
           checkedInAt: r.checkedInAt?.toISOString() ?? null,
+          attendanceStatus: r.attendanceStatus ?? null,
           charterAcceptance: r.charterAcceptedAt
             ? charterAcceptanceLabel({ acceptedAt: r.charterAcceptedAt, hash: r.charterAcceptedHash, currentHash: currentCharterHash, timeZone: orgTimeZone(event.organization) })
             : null,

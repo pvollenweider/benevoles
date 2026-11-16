@@ -10,6 +10,11 @@ import {
   localDay,
   missingLine,
   presenceAnnouncement,
+  PRIMARY_ACTION,
+  attendanceAnnouncement,
+  attendanceRequest,
+  conflictAnnouncement,
+  personState,
   presenceLine,
   presenceRequest,
   searchAnnouncement,
@@ -201,16 +206,39 @@ describe("filterGroups (search)", () => {
 
 describe("counts and copy", () => {
   const s = shift({ id: "a", capacity: 4, people: [person("r1", "A", "A", "2026-07-04T12:00:00Z"), person("r2", "B", "B")] })
-  const counts = shiftCounts(s, (p) => p.checkedInAt !== null)
+  const counts = shiftCounts(s, personState)
 
   it("expected, present and missing places", () => {
-    expect(counts).toEqual({ expected: 2, present: 1, missing: 2 })
+    expect(counts).toEqual({ expected: 2, present: 1, absent: 0, missing: 2 })
     expect(presenceLine(counts)).toBe("1 présent sur 2 attendus")
     expect(missingLine(counts)).toBe("Il manque 2 personnes.")
-    expect(missingLine({ expected: 4, present: 0, missing: 0 })).toBeNull()
-    expect(presenceLine({ expected: 0, present: 0, missing: 3 })).toBe("Personne d'inscrit")
+    expect(missingLine({ expected: 4, present: 0, absent: 0, missing: 0 })).toBeNull()
+    expect(presenceLine({ expected: 0, present: 0, absent: 0, missing: 3 })).toBe("Personne d'inscrit")
     // Over capacity (added by hand): nothing missing, never negative.
-    expect(shiftCounts({ capacity: 1, people: s.people }, () => false).missing).toBe(0)
+    expect(shiftCounts({ capacity: 1, people: s.people }, () => "expected").missing).toBe(0)
+  })
+
+  it("counts recorded absences and names them on the card only when there are any (#1141)", () => {
+    const people = [
+      person("r1", "Léa", "Morel", "2026-07-04T12:00:00Z"),
+      person("r2", "Hugo", "Blanc", "2026-07-04T12:01:00Z"),
+      { ...person("r3", "Inès", "Roux"), attendanceStatus: "absent" },
+      person("r4", "Noah", "Girard"),
+    ]
+    const c = shiftCounts({ capacity: 5, people }, personState)
+    // Absent people stay among the expected: the place is theirs, nobody else is missing for it.
+    expect(c).toEqual({ expected: 4, present: 2, absent: 1, missing: 1 })
+    expect(presenceLine(c)).toBe("2 présents sur 4 attendus, 1 absent")
+    expect(presenceLine({ ...c, absent: 2 })).toBe("2 présents sur 4 attendus, 2 absents")
+    expect(presenceLine({ ...c, absent: 0 })).toBe("2 présents sur 4 attendus")
+    // The board applies the marks made on this phone through `stateOf`.
+    expect(shiftCounts({ capacity: 5, people }, (p) => (p.registrationId === "r4" ? "absent" : personState(p))).absent).toBe(2)
+  })
+
+  it("the row's first button: what a press does from each state (#1141)", () => {
+    expect(PRIMARY_ACTION.expected).toEqual({ transition: "check_in", label: "Marquer présent" })
+    expect(PRIMARY_ACTION.present).toEqual({ transition: "undo_check_in", label: "Annuler la présence" })
+    expect(PRIMARY_ACTION.absent).toEqual({ transition: "undo_absent", label: "Annuler l'absence" })
   })
 
   it("names and hours without « · », a night shift ending the next day", () => {
@@ -221,15 +249,45 @@ describe("counts and copy", () => {
   })
 
   it("announces the new state and where the shift stands", () => {
-    expect(presenceAnnouncement("Zoé Müller", true, "Bar, Soir", { expected: 4, present: 3, missing: 0 }))
+    expect(presenceAnnouncement("Zoé Müller", true, "Bar, Soir", { expected: 4, present: 3, absent: 0, missing: 0 }))
       .toBe("Présence enregistrée pour Zoé Müller. Bar, Soir : 3 présents sur 4 attendus.")
-    expect(presenceAnnouncement("Zoé Müller", false, "Bar", { expected: 1, present: 0, missing: 0 }))
+    expect(presenceAnnouncement("Zoé Müller", false, "Bar", { expected: 1, present: 0, absent: 0, missing: 0 }))
       .toBe("Présence annulée pour Zoé Müller. Bar : 0 présent sur 1 attendu.")
+  })
+
+  it("announces an absence recorded or undone, with the shift's counts (#1141)", () => {
+    expect(attendanceAnnouncement("Inès Roux", "mark_absent", "Bar", { expected: 4, present: 2, absent: 1, missing: 0 }))
+      .toBe("Absence enregistrée pour Inès Roux. Bar : 2 présents sur 4 attendus, 1 absent.")
+    expect(attendanceAnnouncement("Inès Roux", "undo_absent", "Bar", { expected: 4, present: 2, absent: 0, missing: 0 }))
+      .toBe("Absence annulée pour Inès Roux. Bar : 2 présents sur 4 attendus.")
+    expect(attendanceAnnouncement("Inès Roux", "check_in", "Bar", { expected: 4, present: 3, absent: 0, missing: 0 }))
+      .toBe("Présence enregistrée pour Inès Roux. Bar : 3 présents sur 4 attendus.")
+  })
+
+  it("says what another device recorded first, without a gendered participle (#1141)", () => {
+    const c = { expected: 4, present: 2, absent: 1, missing: 0 }
+    expect(conflictAnnouncement("Inès Roux", "absent", "Bar", c))
+      .toBe("Une absence est déjà enregistrée pour Inès Roux, depuis un autre appareil. Bar : 2 présents sur 4 attendus, 1 absent.")
+    expect(conflictAnnouncement("Inès Roux", "present", "Bar", { ...c, absent: 0 }))
+      .toBe("Une présence est déjà enregistrée pour Inès Roux, depuis un autre appareil. Bar : 2 présents sur 4 attendus.")
+    // Back to expected elsewhere: nothing recorded to name, the caller keeps its plain sentence.
+    expect(conflictAnnouncement("Inès Roux", "expected", "Bar", c)).toBeNull()
   })
 
   it("tel: links keep digits and the leading +", () => {
     expect(telHref("+41 79 123 45 67")).toBe("tel:+41791234567")
     expect(telHref("079 / 123.45.67")).toBe("tel:0791234567")
+  })
+})
+
+describe("attendanceRequest", () => {
+  it("sends each of the four actions to the registrations list's route, for one registration (#1141)", () => {
+    for (const action of ["check_in", "undo_check_in", "mark_absent", "undo_absent"] as const) {
+      expect(attendanceRequest("evt-1", "r1", action)).toEqual({
+        url: "/api/admin/events/evt-1/registrations/bulk",
+        body: { action, registrationIds: ["r1"] },
+      })
+    }
   })
 })
 

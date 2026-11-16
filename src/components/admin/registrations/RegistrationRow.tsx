@@ -8,6 +8,7 @@ import { contactPhone } from "@/lib/contact-phone"
 import type { WorkloadNotice } from "@/lib/workload-view"
 import { availabilityLabel, hasAvailability } from "@/lib/availability"
 import { spokenShortWhen } from "@/lib/spoken-time"
+import { attendanceStateOf } from "@/lib/attendance-state"
 import { personName, shiftName, shiftSpoken, type Registration } from "./types"
 
 const sourceLabels: Record<string, string> = {
@@ -33,6 +34,8 @@ type Props = {
 
 // ── One row of the registrations table ──────────────────────────────────────
 export default function RegistrationRow({ reg, selected, onToggleSelected, onDecision, answers, workload, workloadBlocks = false }: Props) {
+  // Presence and absence are shown for confirmed people only (#399, #1141).
+  const attendance = reg.status === "active" ? attendanceStateOf(reg) : "expected"
   return (
     <tr className={`hover:bg-gray-50 ${selected ? "bg-blue-50/60" : ""}`}>
       <td className="px-4 py-3">
@@ -57,9 +60,15 @@ export default function RegistrationRow({ reg, selected, onToggleSelected, onDec
               Responsable<span className="sr-only"> du poste {reg.shift.roleName}</span>
             </span>
           )}
-          {reg.checkedInAt && reg.status === "active" && (
+          {attendance === "present" && reg.checkedInAt && (
             <span className="inline-flex items-center rounded-full bg-green-50 px-1.5 py-0.5 text-xs font-semibold text-green-800">
               <span aria-hidden="true">✓ </span>Présent<span className="sr-only"> depuis {new Date(reg.checkedInAt).toLocaleTimeString("fr-FR", { hour: "2-digit", minute: "2-digit" })}</span>
+            </span>
+          )}
+          {attendance === "absent" && (
+            // Amber, never the red pair (an absence is a fact, not an error); the sign differs from « ✓ ».
+            <span className="inline-flex items-center rounded-full bg-amber-100 px-1.5 py-0.5 text-xs font-semibold text-amber-900">
+              <span aria-hidden="true">✗ </span>Absent
             </span>
           )}
         </p>

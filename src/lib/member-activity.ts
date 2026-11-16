@@ -10,7 +10,7 @@
 
 export type ActivityFact = {
   at: Date
-  kind: "invited" | "invite_used" | "invite_declined" | "shift_declined" | "registered" | "waitlisted" | "cancelled" | "present" | "leader" | "profile"
+  kind: "invited" | "invite_used" | "invite_declined" | "shift_declined" | "registered" | "waitlisted" | "cancelled" | "present" | "absent" | "leader" | "profile"
   text: string
   eventId?: string
   eventTitle?: string
@@ -25,6 +25,9 @@ export type ActivitySources = {
     updatedAt: Date
     status: string
     checkedInAt: Date | null
+    /** "absent" with the instant it was recorded (#1141); both null or missing otherwise. */
+    attendanceStatus?: string | null
+    attendanceAt?: Date | null
     shift: { roleName: string; label: string; date: Date }
     event: { id: string; title: string }
   }[]
@@ -64,6 +67,8 @@ export function memberTimeline(s: ActivitySources): ActivityFact[] {
     else facts.push({ at: r.createdAt, kind: "registered", text: `Inscrit : ${name}`, ...base })
     if (r.status === "cancelled") facts.push({ at: r.updatedAt, kind: "cancelled", text: `Inscription annulée : ${name}`, ...base })
     if (r.checkedInAt) facts.push({ at: r.checkedInAt, kind: "present", text: `Présent : ${name}`, ...base })
+    // An absence recorded by an organizer (#1141), never inferred from a missing check-in.
+    else if (r.attendanceStatus === "absent" && r.attendanceAt) facts.push({ at: r.attendanceAt, kind: "absent", text: `Absent : ${name}`, ...base })
   }
   for (const l of s.leaders) facts.push({ at: l.createdAt, kind: "leader", text: l.roleName ? `Responsable du poste « ${l.roleName} »` : `Responsable du secteur « ${l.sector?.name ?? ""} »`, eventId: l.event.id, eventTitle: l.event.title })
   for (const o of s.orgLog) {

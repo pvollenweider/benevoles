@@ -9,15 +9,17 @@ import { focusFirstAvailable, isFocusDropped } from "@/lib/focus-return"
 import { statusBoxClass } from "@/lib/status-message"
 import {
   DAY_OF_WINDOW_HOURS,
+  PRIMARY_ACTION,
   addShiftToBoard,
+  attendanceAnnouncement,
+  attendanceRequest,
+  conflictAnnouncement,
   dayOfBoardUrl,
   filterGroups,
   groupHeading,
   missingLine,
   personName,
-  presenceAnnouncement,
   presenceLine,
-  presenceRequest,
   searchAnnouncement,
   shiftCounts,
   shiftHours,
@@ -31,10 +33,12 @@ import {
 import { needCreatedAnnouncement } from "@/lib/day-of-need"
 import type { RegistrationWindow } from "@/lib/registration-window"
 import { fold } from "@/lib/text-fold"
+import { ATTENDANCE_TRANSITIONS, type AttendanceState, type AttendanceTransition } from "@/lib/attendance-state"
 import AddNeedPanel from "./AddNeedPanel"
 import {
   NO_CHANGES,
   addChanges,
+  answerMark,
   boardChanges,
   changesAnnouncement,
   isFreshAnswer,
@@ -45,7 +49,8 @@ import {
   pinMark,
   releasePin,
   shouldSyncOnResume,
-  shownCheckIn,
+  shownAttendance,
+  shownState,
   shownStatus,
   statusAnnouncement,
   syncStatusOf,
@@ -59,7 +64,7 @@ import {
 const SEARCH_ANNOUNCE_MS = 500
 /** A board read that takes longer than this counts as failed. */
 const SYNC_TIMEOUT_MS = 15_000
-/** A check-in without an answer after this long is reported as possibly not received. */
+/** A check-in or an absence without an answer after this long is reported as possibly not received. */
 const ACTION_TIMEOUT_MS = 20_000
 /** Changes made elsewhere wait this long after the last keystroke in the search box. */
 const TYPING_QUIET_MS = 2_000
@@ -92,17 +97,30 @@ type Props = {
 }
 
 type Snapshot = { board: Board; today: string; refreshedAt: string }
-/** Why the board is read: the timer or a return to the page, « Actualiser », or a check-in that changed nothing. */
+/** Why the board is read: the timer or a return to the page, « Actualiser », or an action that changed nothing. */
 type SyncKind = "poll" | "manual" | "after_action"
 
 const focusRing = "focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-blue-600"
+const STATES: readonly AttendanceState[] = ["expected", "present", "absent"]
+/** What the bulk route says about one requested registration after the call (#1141). */
+type ServerResult = { id: string; changed: boolean; state: AttendanceState; checkedInAt: string | null }
+const isServerResult = (r: unknown): r is ServerResult =>
+  typeof r === "object" && r !== null && typeof (r as ServerResult).id === "string" && typeof (r as ServerResult).changed === "boolean" && STATES.includes((r as ServerResult).state)
+
+const actionWhat: Record<AttendanceTransition, string> = { check_in: "Présence", undo_check_in: "Présence", mark_absent: "Absence", undo_absent: "Absence" }
+const outlineButton = "border border-blue-600 text-blue-700 bg-white hover:bg-blue-50"
 const telClass = `inline-flex items-center min-h-11 px-3 rounded-xl border border-gray-300 bg-white text-sm font-medium text-blue-700 underline underline-offset-2 hover:bg-gray-50 ${focusRing}`
 
 /**
  * « Jour J » (#561): the shifts running now and in the next hours, who is expected and who has
- * arrived, one tap to mark someone present. Check-in goes through the same route and action as the
- * registrations list (#399). One live region says each outcome; the toggled button stays in place,
- * so the focus does too.
+ * arrived, one tap to mark someone present or absent (#1141). Each action goes through the same
+ * route as the registrations list (#399). One live region says each outcome; a row's first button
+ * stays in place whatever its label, so the focus does too. « Marquer absent » is a second button,
+ * shown only for an expected person: once pressed it goes, and the focus moves to the first one.
+ *
+ * Two devices never overwrite each other: the server changes a row only from the state the press
+ * started from. When it changed nothing, the row takes the state the server returned, nothing is
+ * retried, and one sentence says so (also shown in the row).
  *
  * The board keeps itself current (#1141): it reads the board route every 25 s while the page is
  * visible and online, at once on coming back to the page or to the network, never by reloading the
@@ -113,7 +131,7 @@ export default function DayOfBoard({ eventId, board: initialBoard, today: initia
   const [snap, setSnap] = useState<Snapshot>({ board: initialBoard, today: initialToday, refreshedAt: initialRefreshedAt })
   const { board, today, refreshedAt } = snap
   const [query, setQuery] = useState("")
-  // Check-ins made here that the board may not show yet: registration id → mark (day-of-sync.ts).
+  // Actions made here that the board may not show yet: registration id → mark (day-of-sync.ts).
   const [marks, setMarks] = useState<LocalMarks>({})
   const [pending, setPending] = useState<Set<string>>(new Set())
   const [status, setStatus] = useState("")
@@ -130,6 +148,9 @@ export default function DayOfBoard({ eventId, board: initialBoard, today: initia
   // twice in a row is voiced again.
   const [error, setError] = useState<{ registrationId: string; text: string; seq: number } | null>(null)
   const errorSeq = useRef(0)
+  // An action that changed nothing because another device was first: the sentence said in the live
+  // region, shown in the person's row for who does not hear it. Plain text, no live role.
+  const [notice, setNotice] = useState<{ registrationId: string; text: string } | null>(null)
   // « Plus tôt aujourd'hui » opened or closed by hand, kept while a search forces it open.
   const [earlierOpen, setEarlierOpen] = useState(false)
   const buttons = useRef(new Map<string, HTMLButtonElement>())
@@ -163,7 +184,7 @@ export default function DayOfBoard({ eventId, board: initialBoard, today: initia
   // The row that had the focus when a read replaced the board, to find it again after the render.
   const focusAfterSync = useRef<{ registrationId: string | null; shiftId: string; leftText: string | null } | null>(null)
 
-  const isPresent = (p: DayOfPerson) => shownCheckIn(p, marks) !== null
+  const stateOf = (p: DayOfPerson) => shownState(p, marks)
 
   // « Ajouter un besoin » (#1304): the created shift joins the board at once, before any poll, and
   // the screen says where it is (listed, counted later, or hidden by the search / sector filter).
@@ -175,7 +196,7 @@ export default function DayOfBoard({ eventId, board: initialBoard, today: initia
     appliedAt.current = ++tick.current
     snapRef.current = next
     setSnap(next)
-    const counts = shiftCounts(shift, () => false)
+    const counts = shiftCounts(shift, () => "expected")
     const q = fold(query.trim())
     const hiddenBySearch = q !== "" && !fold(`${shift.roleName} ${shift.label}`).includes(q)
     const inActiveSector = sectorId !== null && activeSectorIds.includes(sectorId)
@@ -315,6 +336,8 @@ export default function DayOfBoard({ eventId, board: initialBoard, today: initia
   // After a read changed the board: if the focused row's button went (its card moved to another
   // section, or the person left the board), focus it again, else its shift, else « Plus tôt
   // aujourd'hui », else the page title. Hidden targets (a closed <details>) are skipped.
+  // After an action too (`marks`): « Marquer absent » goes once the person is absent or present,
+  // so a focus left on it drops to the page; it moves to the row's first button (#1141).
   useEffect(() => {
     const target = focusAfterSync.current
     focusAfterSync.current = null
@@ -326,7 +349,7 @@ export default function DayOfBoard({ eventId, board: initialBoard, today: initia
       () => document.getElementById("page-heading"),
     ])
     if (target.leftText) sayAt(lastAnnouncedAt, setStatus, target.leftText)
-  }, [snap])
+  }, [snap, marks])
 
   const onPoll = useEffectEvent(() => {
     if (pollInFlight.current) return
@@ -369,12 +392,13 @@ export default function DayOfBoard({ eventId, board: initialBoard, today: initia
     return () => clearTimeout(timer)
   }, [visible, online, syncStatus, failures, attempts])
 
-  async function toggle(person: DayOfPerson, shift: DayOfShift) {
+  async function act(person: DayOfPerson, shift: DayOfShift, transition: AttendanceTransition) {
     const id = person.registrationId
     if (pending.has(id)) return
-    const shownBefore = shownCheckIn(person, marksRef.current)
-    const present = shownBefore === null
+    const shownBefore = shownAttendance(person, marksRef.current)
+    const plan = ATTENDANCE_TRANSITIONS[transition]
     const name = personName(person)
+    setNotice(null)
     setPending((prev) => new Set(prev).add(id))
     actionsInFlight.current += 1
     // While the action is in flight, the row keeps what it showed when tapped, whatever a read says.
@@ -391,8 +415,8 @@ export default function DayOfBoard({ eventId, board: initialBoard, today: initia
         if (again === "manual" || (document.visibilityState !== "hidden" && navigator.onLine !== false)) void sync(again)
       }
     }
-    const { url, body } = presenceRequest(eventId, id, present)
-    const what = `Présence de ${name}`
+    const { url, body } = attendanceRequest(eventId, id, transition)
+    const what = `${actionWhat[transition]} de ${name}`
     const fail = (text: string) => {
       errorSeq.current += 1
       setError({ registrationId: id, text, seq: errorSeq.current })
@@ -402,7 +426,7 @@ export default function DayOfBoard({ eventId, board: initialBoard, today: initia
     }
     let res: Response
     try {
-      // Bounded: a hung check-in would hold the board's refresh (reads wait for actions to settle).
+      // Bounded: a hung action would hold the board's refresh (reads wait for actions to settle).
       res = await fetch(url, { method: "POST", headers: { "Content-Type": "application/json" }, body: JSON.stringify(body), signal: AbortSignal.timeout(ACTION_TIMEOUT_MS) })
     } catch {
       const f = describeBulkFailure({ network: true }, what)
@@ -414,32 +438,41 @@ export default function DayOfBoard({ eventId, board: initialBoard, today: initia
       fail(`${f.title}. ${f.message}`)
       return
     }
-    const result = (await res.json().catch(() => ({}))) as { changedIds?: string[] }
+    const result = (await res.json().catch(() => ({}))) as { changedIds?: string[]; results?: unknown[] }
+    const own = (Array.isArray(result.results) ? result.results : []).filter(isServerResult).find((r) => r.id === id)
+    const changed = own ? own.changed : (result.changedIds ?? []).includes(id)
     setError(null)
-    // WebKit leaves a tapped button unfocused (focus on <main>): put it back on the button.
+    // WebKit leaves a tapped button unfocused (focus on <main>): put it back on the row's first button.
     const btn = buttons.current.get(id)
     if (btn && isFocusDropped(document.activeElement)) btn.focus()
-    if (!(result.changedIds ?? []).includes(id)) {
-      // Already in that state (marked meanwhile from another phone) or no longer confirmed.
-      unpin()
+    // « Marquer absent » leaves the row with this render: the effect above moves a dropped focus.
+    focusAfterSync.current = { registrationId: id, shiftId: shift.id, leftText: null }
+    const countsNow = () => shiftCounts(shift, (p) => shownState(p, marksRef.current))
+    if (!changed) {
+      // Recorded meanwhile from another device, or no longer confirmed. The row takes the state
+      // the server returned, written before `done()` may send a read again: that read then finds
+      // nothing new for this row, and no « Liste mise à jour » repeats what is said here.
+      if (own) updateMarks((m) => answerMark(m, id, { state: own.state, checkedInAt: own.checkedInAt }, ++tick.current))
+      else unpin()
       done()
-      say(`Rien n'a changé pour ${name} : la liste est mise à jour.`)
+      const conflict = own ? conflictAnnouncement(name, own.state, shiftName(shift), countsNow()) : null
+      if (conflict) setNotice({ registrationId: id, text: conflict })
+      say(conflict ?? `Rien n'a changé pour ${name} : la liste est mise à jour.`)
       void sync("after_action")
       return
     }
     // The answer wins over any read sent before it; the next read sent after it confirms it.
-    const mark = { checkedInAt: present ? new Date().toISOString() : null, at: ++tick.current }
-    updateMarks((m) => ({ ...m, [id]: mark }))
+    const checkedInAt = plan.to === "present" ? own?.checkedInAt ?? new Date().toISOString() : null
+    updateMarks((m) => answerMark(m, id, { state: plan.to, checkedInAt }, ++tick.current))
     done()
-    const counts = shiftCounts(shift, (p) => shownCheckIn(p, marksRef.current) !== null)
-    say(presenceAnnouncement(name, present, shiftName(shift), counts))
+    say(attendanceAnnouncement(name, transition, shiftName(shift), countsNow()))
   }
 
   // Plain render functions, not components declared here: a component type created on each
   // render would remount every card, and the button just toggled would lose the focus.
   function renderShiftCard(shift: DayOfShift) {
     const headingId = `dayof-shift-${shift.id}`
-    const counts = shiftCounts(shift, isPresent)
+    const counts = shiftCounts(shift, stateOf)
     const missing = missingLine(counts)
     const contactPhone = shift.contactPhone?.trim()
     const contactName = shift.contactName?.trim()
@@ -467,38 +500,54 @@ export default function DayOfBoard({ eventId, board: initialBoard, today: initia
           // role="list": Safari/VoiceOver drops list semantics once Tailwind removes the bullets.
           <ul role="list" aria-label={`Personnes attendues, ${shiftName(shift)}`} className="divide-y divide-gray-100 border-t border-gray-100">
             {shift.people.map((p) => {
-              const present = isPresent(p)
+              const state = stateOf(p)
               const busy = pending.has(p.registrationId)
               const name = personName(p)
+              const primary = PRIMARY_ACTION[state]
               return (
                 <li key={p.registrationId} data-registration-id={p.registrationId} className="py-2 flex flex-wrap items-center gap-x-3 gap-y-2">
                   <div className="min-w-0 flex-1 basis-40">
                     <p className="font-medium text-gray-900 break-words">{name}</p>
                     <p className="text-sm">
-                      {present
-                        ? <span className="inline-block rounded-full bg-green-100 text-green-700 px-2 py-0.5 text-xs font-medium">Présent</span>
-                        : <span className="inline-block rounded-full bg-gray-100 text-gray-600 px-2 py-0.5 text-xs font-medium">Pas encore marqué</span>}
+                      {/* Never by colour alone: each state has its word, and a sign for the two recorded ones. */}
+                      {state === "present" && <span className="inline-block rounded-full bg-green-100 text-green-700 px-2 py-0.5 text-xs font-medium"><span aria-hidden="true">✓ </span>Présent</span>}
+                      {state === "absent" && <span className="inline-block rounded-full bg-amber-100 text-amber-900 px-2 py-0.5 text-xs font-medium"><span aria-hidden="true">✗ </span>Absent</span>}
+                      {state === "expected" && <span className="inline-block rounded-full bg-gray-100 text-gray-600 px-2 py-0.5 text-xs font-medium">Pas encore marqué</span>}
                     </p>
                   </div>
                   <div className="flex flex-wrap items-center gap-2">
                     {p.phone && (
                       <a href={telHref(p.phone)} aria-label={`Appeler ${name} au ${p.phone}`} className={telClass}>{p.phone}</a>
                     )}
+                    {/* The row's first button never unmounts: « Marquer présent », then the undo of
+                        what was recorded. The focus stays on it through every change. */}
                     <button
                       type="button"
                       ref={(el) => { if (el) buttons.current.set(p.registrationId, el); else buttons.current.delete(p.registrationId) }}
-                      onClick={() => toggle(p, shift)}
+                      onClick={() => act(p, shift, primary.transition)}
                       // Named with the person, the visible label first (2.5.3). An action, not a
                       // toggle state: no aria-pressed, the label says what a press does.
-                      aria-label={`${present ? "Annuler la présence" : "Marquer présent"}, ${name}`}
+                      aria-label={`${primary.label}, ${name}`}
                       aria-disabled={busy || undefined}
-                      className={`min-h-11 min-w-11 px-4 rounded-xl text-sm font-medium transition-colors aria-disabled:opacity-50 ${present
-                        ? "border border-blue-600 text-blue-700 bg-white hover:bg-blue-50"
-                        : "bg-blue-600 text-white hover:bg-blue-700"}`}
+                      className={`min-h-11 min-w-11 px-4 rounded-xl text-sm font-medium transition-colors aria-disabled:opacity-50 ${state === "expected" ? "bg-blue-600 text-white hover:bg-blue-700" : outlineButton}`}
                     >
-                      {present ? "Annuler la présence" : "Marquer présent"}
+                      {primary.label}
                     </button>
+                    {state === "expected" && (
+                      <button
+                        type="button"
+                        onClick={() => act(p, shift, "mark_absent")}
+                        aria-label={`Marquer absent, ${name}`}
+                        aria-disabled={busy || undefined}
+                        className={`min-h-11 min-w-11 px-4 rounded-xl text-sm font-medium transition-colors aria-disabled:opacity-50 ${outlineButton}`}
+                      >
+                        Marquer absent
+                      </button>
+                    )}
                   </div>
+                  {notice?.registrationId === p.registrationId && (
+                    <p className={`basis-full ${statusBoxClass("info")}`}>{notice.text}</p>
+                  )}
                   {error?.registrationId === p.registrationId && (
                     <p key={error.seq} role="alert" className="basis-full text-sm text-red-800 bg-red-50 border border-red-200 rounded-xl px-3 py-2">{error.text}</p>
                   )}

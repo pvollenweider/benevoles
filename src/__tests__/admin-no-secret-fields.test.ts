@@ -33,7 +33,7 @@ const shiftRow = () => ({ id: "s1", eventId: "evt-1", roleName: "Bar", label: "B
 const registrationRow = () => ({
   id: "r1", eventId: "evt-1", shiftId: "s1", volunteerId: "v1", status: "active", source: "admin_manual", comment: null, phone: null,
   reminderJ2Sent: null, reminderJ1Sent: null, reminderDdSent: null, waitingPosition: null, waitingOfferedAt: null, waitingExpiresAt: null,
-  checkedInAt: null, linkEmailedAt: null, charterAcceptedHash: "c".repeat(64), charterAcceptedAt: null, groupLinkId: null,
+  checkedInAt: null, attendanceStatus: null, attendanceAt: null, attendanceBy: "adm-1", linkEmailedAt: null, charterAcceptedHash: "c".repeat(64), charterAcceptedAt: null, groupLinkId: null,
   createdAt: new Date("2026-09-01"), updatedAt: new Date("2026-09-01"), ...REG_SECRETS,
   volunteer: volunteerRow(), shift: shiftRow(),
 })

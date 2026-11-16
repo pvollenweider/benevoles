@@ -46,10 +46,10 @@ export async function loadDayOf(db: OrgScopedPrisma, eventId: string, now: Date,
         select: {
           id: true, roleName: true, label: true, date: true, startTime: true, endTime: true, capacity: true, displayOrder: true,
           contactName: true, contactPhone: true,
-          // Confirmed people only: check-in applies to them (#399), as on the registrations list.
+          // Confirmed people only: check-in and absence apply to them (#399, #1141), as on the registrations list.
           registrations: {
             where: { status: "active" },
-            select: { id: true, phone: true, checkedInAt: true, volunteer: { select: { firstName: true, lastName: true, phone: true } } },
+            select: { id: true, phone: true, checkedInAt: true, attendanceStatus: true, volunteer: { select: { firstName: true, lastName: true, phone: true } } },
           },
         },
       },
@@ -69,6 +69,7 @@ export async function loadDayOf(db: OrgScopedPrisma, eventId: string, now: Date,
         lastName: r.volunteer.lastName,
         phone: contactPhone(r),
         checkedInAt: r.checkedInAt?.toISOString() ?? null,
+        attendanceStatus: r.attendanceStatus ?? null,
       }))
       .sort((a, b) => a.lastName.localeCompare(b.lastName, "fr") || a.firstName.localeCompare(b.firstName, "fr")),
   }))

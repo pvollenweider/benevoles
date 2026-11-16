@@ -34,7 +34,7 @@ export async function GET(req: Request, { params }: { params: Promise<{ id: stri
         where: { status: "active", ...sector.registrationWhere },
         orderBy: [{ shift: { date: "asc" } }, { shift: { startTime: "asc" } }, { volunteer: { lastName: "asc" } }],
         select: {
-          phone: true, checkedInAt: true, volunteerId: true,
+          phone: true, checkedInAt: true, attendanceStatus: true, volunteerId: true,
           volunteer: { select: { firstName: true, lastName: true, email: true, phone: true } },
           shift: { select: { roleName: true, label: true, date: true, startTime: true, endTime: true } },
         },
@@ -56,6 +56,7 @@ export async function GET(req: Request, { params }: { params: Promise<{ id: stri
       startTime: r.shift.startTime,
       endTime: r.shift.endTime,
       checkedInAt: r.checkedInAt,
+      attendanceStatus: r.attendanceStatus,
       answers: questions.map((q) => answerText(q.answers.find((a) => a.volunteerId === r.volunteerId)?.values)),
     })),
     orgTimeZone(event.organization),

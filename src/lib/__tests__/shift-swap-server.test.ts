@@ -3,7 +3,8 @@ import { describe, expect, it, vi } from "vitest"
 vi.mock("@/lib/prisma", () => ({ prisma: {} }))
 vi.mock("@/lib/notifications/outbox", () => ({ enqueueNotifications: vi.fn(), deliverAfterResponse: vi.fn() }))
 
-import { isRetryableConflict, runSwapTransaction, swapStateError, type SwapDb } from "../shift-swap-server"
+import { SWAP_REGISTRATION_RESETS, isRetryableConflict, runSwapTransaction, swapStateError, type SwapDb } from "../shift-swap-server"
+import { attendanceStateOf } from "../attendance-state"
 
 /** The error Prisma 7's pg adapter throws on a deadlock (seen against Postgres 16). */
 const deadlock = { code: "P2010", meta: { driverAdapterError: { name: "DriverAdapterError", cause: { originalCode: "40P01", originalMessage: "deadlock detected", kind: "TransactionWriteConflict" } } } }
@@ -47,6 +48,24 @@ describe("runSwapTransaction (#1174)", () => {
     const other = db([new Error("boom")])
     await expect(runSwapTransaction(other, async () => "done")).rejects.toThrow("boom")
     expect(other.calls).toBe(1)
+  })
+})
+
+describe("a swap resets attendance (#1141)", () => {
+  it("clears the check-in and the three absence columns together, so the invariants hold on the new shift", () => {
+    expect(SWAP_REGISTRATION_RESETS).toMatchObject({ checkedInAt: null, attendanceStatus: null, attendanceAt: null, attendanceBy: null })
+    // Whatever the row was before (present, or absent with its author and time), it is expected after.
+    const absent = { checkedInAt: null, attendanceStatus: "absent", attendanceAt: new Date("2026-07-04T08:05:00Z"), attendanceBy: "adm-1" }
+    const present = { checkedInAt: new Date("2026-07-04T08:05:00Z"), attendanceStatus: null, attendanceAt: null, attendanceBy: null }
+    for (const before of [absent, present]) {
+      const after = { ...before, ...SWAP_REGISTRATION_RESETS }
+      expect(attendanceStateOf(after)).toBe("expected")
+      expect(after).toMatchObject({ attendanceAt: null, attendanceBy: null })
+    }
+  })
+
+  it("still clears what it cleared before: reminders and waitlist fields", () => {
+    expect(SWAP_REGISTRATION_RESETS).toMatchObject({ reminderJ2Sent: null, reminderJ1Sent: null, reminderDdSent: null, waitingPosition: null, waitingOfferedAt: null, waitingExpiresAt: null })
   })
 })
 

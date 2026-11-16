@@ -27,6 +27,27 @@ describe("memberTimeline", () => {
   })
 })
 
+describe("memberTimeline, recorded absence (#1141)", () => {
+  const reg = (over: object) => ({ createdAt: d("2026-05-02T10:05:00Z"), updatedAt: d("2026-05-02T10:05:00Z"), status: "active", checkedInAt: null, shift: { roleName: "Bar", label: "Bar soir", date: d("2026-07-04T00:00:00Z") }, event: ev, ...over })
+  const only = (r: object): ActivitySources => ({ invites: [], shiftDeclines: [], leaders: [], orgLog: [], registrations: [r as ActivitySources["registrations"][number]] })
+
+  it("shows « Absent » at the time the organizer recorded it, like « Présent »", () => {
+    const t = memberTimeline(only(reg({ attendanceStatus: "absent", attendanceAt: d("2026-07-04T18:20:00Z") })))
+    expect(t.map((f) => f.kind)).toEqual(["absent", "registered"])
+    expect(t[0]).toMatchObject({ at: d("2026-07-04T18:20:00Z"), text: "Absent : Bar · Bar soir (sam. 4 juillet)", eventTitle: "Fête 2026" })
+  })
+
+  it("never infers an absence: an expected person, or a row read without the column, has no such fact", () => {
+    expect(memberTimeline(only(reg({}))).map((f) => f.kind)).toEqual(["registered"])
+    expect(memberTimeline(only(reg({ attendanceStatus: null, attendanceAt: null }))).map((f) => f.kind)).toEqual(["registered"])
+  })
+
+  it("an absence is not a check-in: the summary's count of presences leaves it out", () => {
+    const s = only(reg({ attendanceStatus: "absent", attendanceAt: d("2026-07-04T18:20:00Z") }))
+    expect(activitySummary(s)).toBe("1 événement avec une inscription confirmée, 0 présence pointée.")
+  })
+})
+
 describe("memberTimeline — « Je ne peux pas » for one shift (#1303)", () => {
   it("adds a shift_declined fact for the shift, never for the event", () => {
     const withShiftDecline: ActivitySources = {

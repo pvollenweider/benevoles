@@ -4,16 +4,19 @@
 import { NextResponse } from "next/server"
 import { requireOrgSession } from "@/lib/auth-guard"
 import { adminActor } from "@/lib/event-log"
-import { addSectorLeader, cancelRegistrations, resendManagementLinks, setPresence } from "@/lib/admin-registration-actions"
+import { addSectorLeader, cancelRegistrations, resendManagementLinks, setAttendance } from "@/lib/admin-registration-actions"
 import { z } from "zod"
 import { registrationToken } from "@/lib/token-vault"
 import { validationError } from "@/lib/api-error"
+import type { AttendanceTransition } from "@/lib/attendance-state"
 
 // Bulk actions on the registrations list (#292): one request for the whole selection instead
 // of one per row. All-or-nothing on ownership: every id must be a registration of this event,
-// in this organization, or nothing is done.
+// in this organization, or nothing is done. Attendance actions (#1141) are check_in,
+// undo_check_in, mark_absent and undo_absent; "left_early" is reserved for a later PR and
+// therefore refused here as an unknown action.
 const schema = z.object({
-  action: z.enum(["cancel", "make_leader", "resend_link", "check_in", "undo_check_in"]),
+  action: z.enum(["cancel", "make_leader", "resend_link", "check_in", "undo_check_in", "mark_absent", "undo_absent"]),
   registrationIds: z.array(z.string().min(1)).min(1).max(500),
 })
 
@@ -70,9 +73,14 @@ export async function POST(req: Request, { params }: { params: Promise<{ id: str
       return NextResponse.json({ done, alreadyLeader, skipped })
     }
     case "check_in":
-    case "undo_check_in": {
-      const changedIds = await setPresence(db, actor, regs, parsed.data.action === "check_in")
-      return NextResponse.json({ done: changedIds.length, changedIds, skipped: ids.length - changedIds.length })
+    case "undo_check_in":
+    case "mark_absent":
+    case "undo_absent": {
+      const results = await setAttendance(db, actor, regs, parsed.data.action as AttendanceTransition)
+      const changedIds = results.filter((r) => r.changed).map((r) => r.id)
+      // `done` and `changedIds` stay for existing callers; `results` gives the state of every
+      // requested registration after the call, including the ones that changed nothing.
+      return NextResponse.json({ done: changedIds.length, changedIds, skipped: ids.length - changedIds.length, results })
     }
     case "resend_link": {
       const active = regs.filter((r) => r.status === "active")

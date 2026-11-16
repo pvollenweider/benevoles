@@ -1144,3 +1144,41 @@ dans ce travail :
 
 Les pages Tarifs, Logiciel libre et Manifeste gagnent une phrase avec un lien ; aucune vidéo ne les
 montre.
+
+## État « absent » sur Jour J et dans les inscriptions (#1141), 16 novembre 2026
+
+Une inscription confirmée est maintenant attendue, présente ou **absente**. Sur Jour J, chaque
+personne attendue a un second bouton **Marquer absent** ; le badge « Présent » porte le signe
+« ✓ », un badge **Absent** existe, et le compteur d'un créneau devient « N présents sur M
+attendus, K absents » dès qu'une absence est notée. Dans les inscriptions, la barre des actions sur
+la sélection gagne **Marquer absents (n)** et, quand la sélection contient des absents,
+**Annuler l'absence (n)** ; la ligne de résumé ajoute « , K absents ». L'export des présences
+gagne une colonne « Absence notée » juste après « Pointé le ». Aucune vidéo n'est régénérée dans
+ce travail (voix et capture longues) ; aucun manifeste, script ni sélecteur n'est modifié.
+
+- `ATTENDANCE_CHECK_IN` : **à refilmer au prochain passage**. Image : chapitres `one`, `group`,
+  `correction`, `multiple` et `cancelled` (la barre de sélection des inscriptions ne montre pas
+  « Marquer absents ») ; chapitre `export` (le visualiseur du CSV téléchargé ne montre pas la
+  colonne « Absence notée ») ; chapitres `dayof-*` (pas de bouton « Marquer absent », badge
+  « Présent » sans « ✓ »). Narration : elle reste juste, mais ne dit rien de l'absence notée ;
+  « repérer les absences » (chapitre `welcome`) et « une personne pas encore arrivée reste sans
+  marque » (chapitre `group`) décrivent toujours une personne non marquée, pas l'état « Absent ».
+  Le résumé et les étapes du bloc `viewer` ne citent pas « Marquer absent ». Sélecteurs relus,
+  aucun ne casse : les boutons sont cherchés par leur nom exact (« Marquer présent, Prénom Nom »,
+  « Annuler la présence, Prénom Nom », `^Marquer présents? \(n\)$`, « Annuler la présence (n) »),
+  et le contrôle du CSV lit les colonnes « Email », « Présent » et « Pointé le » par leur nom, pas
+  par leur position.
+- `REGISTRATION_MONITOR_FOLLOWUP`, chapitre `actions` : deux lignes sont sélectionnées et la barre
+  « Actions sur la sélection » est montrée ; son image n'a pas le bouton « Marquer absents ». La
+  narration ne cite aucun bouton de la barre. Sélecteurs inchangés (« Sélectionner l'inscription
+  de … », « Désélectionner »).
+- `LAST_MINUTE_CHANGES`, chapitre qui ouvre Jour J pour « Ajouter un besoin » : les lignes des
+  personnes attendues visibles à l'image n'ont pas « Marquer absent ». Narration sans rapport avec
+  les présences ; sélecteurs inchangés.
+- `SECTORS`, chapitre `sectors-pages` : Jour J est affichée un instant avec le filtre Secteur ;
+  même écart d'image sur les lignes visibles. Narration et sélecteurs inchangés.
+
+Révisions du catalogue à incrémenter au rendu. Les captures `admin-day-of` et celles de la page des
+inscriptions (`admin-registrations`, `admin-registrations-requests`, `admin-refuse-request`,
+`admin-make-leader-modal`) sont déclarées sur des écrans modifiés et restent à régénérer avec une
+base jetable : aucun fichier de `public/doc-img/` n'a été modifié dans ce travail.

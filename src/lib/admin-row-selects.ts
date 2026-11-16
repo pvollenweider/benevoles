@@ -45,6 +45,10 @@ export const REGISTRATION_ADMIN_SELECT = {
   waitingOfferedAt: true,
   waitingExpiresAt: true,
   checkedInAt: true,
+  // The recorded absence (#1141). `attendanceBy` (an admin id) stays on the server: the event log
+  // names who recorded it.
+  attendanceStatus: true,
+  attendanceAt: true,
   linkEmailedAt: true,
   charterAcceptedAt: true,
   groupLinkId: true,
