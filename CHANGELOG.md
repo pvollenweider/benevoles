@@ -11,50 +11,53 @@ Format basé sur [Keep a Changelog](https://keepachangelog.com/fr/1.0.0/).
 
 ## [Unreleased]
 
+## [2.8.0] — 2026-11-17
+
+### En bref
+
+- **Qui est venu, qui est reparti** : le jour J, une absence ou un départ avant la fin se note d'un geste, et ne gonfle jamais les heures attestées.
+- **Un accès accueil pour un seul événement** : une personne extérieure à l'équipe marque les présences, sans rien voir d'autre de l'espace.
+- **Des rappels à votre rythme** : jusqu'à trois délais propres à un événement, en heures ou en jours.
+- **Une page pour les bénévoles d'un poste**, envoyée avec la confirmation et les rappels.
+- **Un poste réservé selon une réponse** à une de vos questions à choix.
+
+### Mise à jour depuis 2.7.x
+
+Les migrations passent par le Job habituel (Kubernetes) ou au démarrage (Docker Compose) ; elles ajoutent des tables et des colonnes sans rien retirer.
+
+- **Docker Compose** : `CRON_SECRET` devient obligatoire dans `.env`, et le fichier lance lui-même les tâches planifiées. Retirer d'abord du cron de l'hôte les appels à `/api/cron/*` (`docs/deploiement.md`, « Mise à jour depuis 2.7.x »).
+
 ### Ajouté
 
-- **Absences et départs le jour J** (#1141) : sur la page Jour J et dans les inscriptions, « Marquer absent » note qu'une personne attendue n'est pas venue, et « Parti avant la fin » qu'une personne venue est repartie plus tôt ; chaque note s'annule. Badges, compteurs (« 2 présents sur 4 attendus, 1 absent ») et colonnes de l'export des présences le montrent. Une absence est toujours notée par un organisateur, jamais déduite, et deux téléphones qui marquent la même personne ne s'écrasent plus. Une participation terminée avant la fin a une durée inconnue : elle n'est jamais comptée dans les heures attestées et reste comptée à part dans le bilan, l'attestation et l'export des heures.
-- **Accès accueil pour le jour J** (#1142) : depuis la page Jour J, un propriétaire invite par email une personne extérieure à l'équipe pour qu'elle marque les présences de ce seul événement. Elle voit le nom et le téléphone des bénévoles attendus, rien d'autre de l'espace ; son accès se termine après l'événement et le propriétaire peut le révoquer à tout moment. Son compte est effacé 90 jours après la fin de son dernier accès ; le journal de l'organisation garde l'événement, jamais la personne.
-- **Délais de rappels propres à chaque événement** (#1139) : dans l'onglet Messages, section Rappels, jusqu'à trois rappels en heures ou en jours remplacent pour cet événement les rappels habituels, avec l'aperçu du prochain envoi (personnes et créneaux). Un même délai n'est jamais envoyé deux fois pour le même jour.
-- **Une page d'information pour les bénévoles d'un poste** (#1324) : rattachez une page à un ou plusieurs postes ; les personnes qui ont une place confirmée reçoivent son lien avant leur créneau, dans la confirmation, les rappels et leur page Mes inscriptions, sans que la page cesse d'être publique.
-- **Réserver un poste selon une réponse** (#962) : l'éditeur « Accès » de « Gérer les postes » choisit une question à choix posée à tous les bénévoles et les réponses acceptées ; le créneau affiche « Réponse requise : … » et l'inscription vérifie la réponse, y compris depuis « Mes inscriptions », la liste d'attente, les échanges et la confirmation par email.
-- **Navigateurs compatibles** (#1343) : une page de la documentation donne les versions minimales (Safari 15.4, Chrome, Edge et Firefox 111) et quoi faire avec un appareil trop ancien ; sur un tel appareil, la demande d'un espace et la page d'inscription d'un événement le disent au lieu de rester muettes.
-- **Essayer sur sa machine** (#1333) : `docker-compose.essai.yml` lance benevol.app avec Docker en deux commandes, sans le code, avec un compte de super admin d'essai et une boîte de réception locale ; son mot de passe et les clés de l'application sont tirés au hasard au premier lancement. Une instance auto-hébergée peut aussi créer son premier super admin au démarrage à partir de `ADMIN_EMAIL`, `ADMIN_PASSWORD` et `ADMIN_NAME` (#1334).
-- **Pages publiques** : « Logiciel libre » (licence AGPL, code public, installation chez vous) (#1326) ; « Mairies, communes et collectivités », cinquième page « Pour qui ? » (#1325) ; « Citer benevol.app », avec le nom exact, des descriptions à reprendre, des faits vérifiables et le logo à télécharger, liée depuis le pied de page sous « Presse » (#1323) ; « Continuité du service » : sauvegardes, planning sur papier si le service ne répond pas, départ avec vos données, ce que le service hébergé ne garantit pas (#1357).
+- **Absences et départs avant la fin** le jour J et dans les inscriptions, avec compteurs et colonnes dans l'export des présences ; une participation terminée avant la fin est comptée à part, jamais en heures (#1141).
+- **Accès accueil pour le jour J**, limité à un événement, invité par email, révocable, effacé 90 jours après son dernier accès (#1142).
+- **Délais de rappels propres à un événement**, dans l'onglet Messages, avec l'aperçu du prochain envoi (#1139).
+- **Page d'information par poste**, dont le lien part avec la confirmation, les rappels et la page Mes inscriptions (#1324).
+- **Poste réservé selon une réponse** à une question à choix, vérifiée à chaque inscription (#962).
+- **Navigateurs compatibles** : une page de la documentation, et un message clair sur un appareil trop ancien (#1343).
+- **Essayer sur sa machine** avec `docker-compose.essai.yml`, et premier super admin créé au démarrage d'une instance auto-hébergée (#1333, #1334).
+- **Pages publiques** : Logiciel libre, Mairies et collectivités, Citer benevol.app, Continuité du service (#1323, #1325, #1326, #1357).
 
 ### Modifié
 
-- **Vidéos de formation** : nouveau tutoriel pour donner un accès accueil le jour J ; vidéos actualisées sur les présences, les rappels, les heures et attestations, les membres, les pages d’information, l’inscription sur téléphone, les liens personnels, les secteurs, la visibilité des équipes, la visite d’administration, la création et la modification des créneaux, les séries de créneaux et les actions rapides de la frise.
-- **Conditions d'utilisation** : si le service hébergé devait s'arrêter définitivement, les organisations sont prévenues au moins trois mois à l'avance (article 7) (#1357).
-- Le filtre de la documentation cherche dans tout le texte des fiches, comprend les mots proches et les synonymes, et classe les résultats par pertinence (#1319).
-- La page de confirmation d'une inscription par email affiche le nom et le téléphone que la confirmation enregistrera dans la fiche, et dit quoi faire si la demande ne vient pas de vous.
-- Les emails, les titres d'onglet et le fichier NOTICE disent « benevol.app », ou le nom de l'instance, au lieu de l'ancien nom « Bénévoles » (#1340).
-- **Vidéos de formation** : imprévus, règles d'accès aux postes et import des membres actualisés, « Je ne peux pas », les postes réservés par réponse et la suppression ou désactivation groupée ; les guides concernés et le billet de la 2.7 y renvoient.
-- Dans la documentation et les pages publiques, un guillemet ou un signe de ponctuation double ne se retrouve plus seul en début ou en fin de ligne (#1341).
-- Le README du dépôt s'ouvre sur le nom officiel « benevol.app », les liens vers le site et trois façons de se servir de l'outil. <!-- interne -->
+- **Conditions d'utilisation** : un arrêt définitif du service hébergé serait annoncé au moins trois mois à l'avance (#1357).
+- La recherche dans la documentation lit tout le texte des fiches, comprend les mots proches et classe par pertinence (#1319).
+- La confirmation d'une inscription par email montre le nom et le téléphone qu'elle enregistrera.
+- Emails et titres d'onglet disent « benevol.app », ou le nom de l'instance (#1340).
+- Vidéos de formation : une nouvelle vidéo sur l'accès accueil, et quinze vidéos actualisées (présences, rappels, attestations, membres, pages d'information, créneaux…).
 
 ### Corrigé
 
-- Le site fonctionne de nouveau avec Safari 15.4 à 16.3 (iPhone et Mac qui n'ont pas reçu les mises à jour de 2023) : les pages ne démarraient pas, les formulaires et le choix des créneaux restaient sans effet (#1343).
-- La tâche horaire des rappels ne relit plus toutes les inscriptions jamais rappelées, événements passés compris, mais seulement les jours autour de chaque rappel : cette liste grossissait jusqu'à épuiser la mémoire du serveur et le faire redémarrer à l'heure pile.
-- Deux appels simultanés de la tâche des rappels n'envoient plus deux fois le même rappel habituel (J-2, J-1, jour J), et deux nettoyages simultanés ne créent plus de fiches anonymes en double. Le service hébergé n'était pas exposé ; une installation autonome avec son propre planificateur pouvait l'être (#1362).
-- Le nettoyage nocturne ne s'arrête plus sur l'email d'une organisation supprimée : ces emails sont purgés à l'échéance comme les autres, et les étapes suivantes du nettoyage s'exécutent.
-- Dans les formulaires de l'administration et la demande d'un espace, une erreur de champ n'est plus annoncée deux fois par un lecteur d'écran (#739).
-- La vidéothèque, les pages vidéo et le sitemap des vidéos annoncent la durée réelle des vidéos publiées, affiches comprises.
+- Le site fonctionne de nouveau avec Safari 15.4 à 16.3 (#1343).
+- Les rappels horaires n'épuisent plus la mémoire du serveur, et ne partent plus en double quand deux exécutions se chevauchent (#1362).
+- Le nettoyage nocturne ne s'arrête plus sur l'email d'une organisation supprimée.
+- Une erreur de champ n'est plus annoncée deux fois par un lecteur d'écran (#739).
+- La vidéothèque annonce la durée réelle des vidéos.
 
 ### Exploitation
 
-- **Docker Compose** (#761) : `docker-compose.yml` lance les tâches planifiées lui-même (service `cron` : emails en file toutes les 5 minutes, rappels toutes les heures, nettoyage à 02:00 UTC, vérification de version à 03:00 UTC) et dit si l'application est saine (`docker compose ps`, `docker compose up -d --wait`). `CRON_SECRET` devient obligatoire dans `.env` : sans lui, Compose refuse de démarrer et dit comment en générer un. **Installation existante** : ajouter `CRON_SECRET` à `.env` (la valeur déjà utilisée par votre cron, sinon `openssl rand -base64 32`), et retirer d'abord du cron de l'hôte les appels à `/api/cron/*`, pour qu'aucune tâche ne soit appelée deux fois. `AUTH_URL` suit `NEXT_PUBLIC_APP_URL` par défaut, et les variables facultatives courantes sont transmises quand elles sont définies dans `.env`.
-- Le suivi des erreurs du navigateur ne fonctionne plus que sur benevol.app : une instance lancée depuis l'image publiée (essai local, auto-hébergement) n'envoie plus les erreurs de ses visiteurs au Sentry de benevol.app (#1335).
-- Migrations additives, sans retrait ni rétro-remplissage : `20261115120000_event_reminder_rule_archive` et les règles de rappel par événement (#1139), `20261117120000_admin_event_access` (rôle `front_desk` et table `AdminEventAccess`, #1142), `20261120120000_auto_approval` (#1371). La version précédente les ignore. <!-- interne -->
-- **Validation automatique des nouveaux espaces** (#1371) : option temporaire du service hébergé, désactivée par défaut, qui valide sans vérification un espace créé par l'inscription 5 à 10 minutes après l'activation du compte de son responsable, jusqu'à une date de fin (30 jours au plus) ; plafond de 20 validations par jour UTC avec coupure et alerte unique, journal de l'opérateur (`source = "automatic"`), marque « Validation automatique, à relire ». Validation manuelle et automatique passent par `approveOrganization` (`src/lib/org-approval-server.ts`), sous le verrou de la ligne de l'organisation. Section masquée et routes refusées sur une instance auto-hébergée. <!-- interne -->
-- L'accès accueil (#1142) est contrôlé par `requireFrontDeskOrOrganizer` sur le tableau « Jour J » et les actions de présence ; le rôle est refusé partout ailleurs (routes, pages, `getOrgContext`), exclu des emails automatiques et des listes d'administrateurs, et un test appelle chaque route admin avec ce rôle. <!-- interne -->
-- La limite mémoire de l'application passe de 512 Mi à 1 Gi (demande : 384 Mi), après l'arrêt du processus par manque de mémoire lors des rappels horaires du 16 novembre 2026. <!-- interne -->
-- Un email abandonné parce que le domaine du destinataire reste introuvable (450 4.1.2) n'est plus signalé comme une erreur de l'application : c'est une adresse mal saisie, déjà montrée à l'organisateur et comptée par la page Santé du service. Sentry ignore aussi l'erreur « Invalid call to runtime.sendMessage(). Tab not found. », levée par une extension de navigateur. <!-- interne -->
-- Les tests unitaires vérifient aussi les phrases annoncées par un lecteur d'écran virtuel (une approximation, ni VoiceOver ni NVDA) (#739) ; la limite de créneaux d'un ajout manuel n'a plus qu'une définition, et `CONTRIBUTING.md` décrit les paramètres et limites par organisation et les trois axes de labels des issues (#653). <!-- interne -->
-- Dépendances : le webhook Gandi de cert-manager passe à OpenTelemetry 1.47.0 (deux alertes de sécurité) et se construit avec Go 1.26, image déployée le 14 novembre 2026 ; `basic-ftp`, dépendance indirecte de Lighthouse CI, passe à la 6.2.x (une alerte de sécurité) ; le build webpack des vidéos garde `isomorphic-dompurify` hors du bundle. <!-- interne -->
-- La route de l'index de recherche de la documentation n'exporte plus que son gestionnaire : le build webpack (celui des vidéos) refusait l'export de `buildDocIndexJson`, déplacé dans `src/lib/doc-index-json.ts` ; un test vérifie les exports de chaque fichier de route. <!-- interne -->
-- Le test de l'accès accueil prend la date du jour à Zurich : il échouait entre minuit et 1 h, heure de Zurich. <!-- interne -->
+- **Docker Compose** : service `cron` intégré et contrôle de santé de l'application (#761).
+- Une instance lancée depuis l'image publiée n'envoie plus ses erreurs de navigateur au Sentry de benevol.app (#1335).
 
 ## [2.7.0] — 2026-11-10
 
