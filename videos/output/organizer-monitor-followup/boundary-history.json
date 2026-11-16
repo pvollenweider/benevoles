@@ -1,0 +1,12 @@
+{
+  "anchor": "Enfin, le journal d’activité permet de comprendre ce qui a changé",
+  "windowStart": 110.86699999999999,
+  "result": {
+    "found": true,
+    "startSeconds": 30.3,
+    "wordsHeard": "Enfin, le journal d’activité permet de comprendre ce qui a changé"
+  },
+  "onset": 141.167,
+  "proposedCut": 140.8669375,
+  "note": "Proposal only; recut then independently audit before capture"
+}

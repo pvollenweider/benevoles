@@ -1,0 +1,44 @@
+{
+  "model": "gemini-3.8-flash",
+  "reviewedAt": "2026-11-16T21:28:43.123Z",
+  "videoSha256": "35162c1040a0cf7585594d3321814d2966b07853cc9f42433df9b26edfd0bd12",
+  "promptSha256": "c9b658073de91193b7f422fe50a6b4a4cb51738dc4c01e5da9dfdc3124222698",
+  "clipSha256": "a00bdeb8947104bccebb53ba5e681f4c0f2cfbe0800b2ad23ecd20220a37b640",
+  "scene": "actions",
+  "review": {
+    "heardOpening": "Vous pouvez agir sur une inscription",
+    "checkpoints": [
+      {
+        "spokenSeconds": 0.8,
+        "spoken": "agir sur une inscription",
+        "visibleSeconds": 1,
+        "visible": "Une première case est cochée sur la ligne d'inscription, affichant la barre d'actions pour 1 sélectionnée",
+        "sync": "aligned",
+        "severity": "none"
+      },
+      {
+        "spokenSeconds": 2.8,
+        "spoken": "renvoyer son lien personnel",
+        "visibleSeconds": 2.8,
+        "visible": "L'option Renvoyer le lien est visible dans la barre d'actions contextuelle",
+        "sync": "aligned",
+        "severity": "none"
+      },
+      {
+        "spokenSeconds": 4.8,
+        "spoken": "sélectionner plusieurs lignes pour appliquer une action groupée",
+        "visibleSeconds": 5.6,
+        "visible": "Une deuxième ligne est cochée, la barre passe à 2 sélectionnées avec actions groupées",
+        "sync": "aligned",
+        "severity": "none"
+      }
+    ],
+    "issues": [],
+    "voice": {
+      "consistent": true,
+      "warm": true,
+      "observation": "Voix féminine claire, posée et bien articulée, accompagnée d'une musique de fond discrète."
+    }
+  },
+  "note": "Automated observation of actual final video audio and images; not a claim of complete human validation"
+}

@@ -5559,11 +5559,17 @@ async function main() {
         await page.getByRole("heading", { name: "Écrire aux bénévoles" }).waitFor()
         await at("tous les inscrits, un poste")
         await tap(page, page.getByLabel("Les bénévoles d'un poste"))
-        await at(0.38) /* mid-sentence */
         await page.getByLabel("Poste", { exact: true }).selectOption("Buvette")
+        await at("un créneau")
+        await at(0.42) /* the named option inside the same enumerating sentence */
+        const shiftAudience = page.getByLabel("Les bénévoles d'un créneau", { exact: true })
+        await tap(page, shiftAudience)
+        if (!(await shiftAudience.isChecked())) throw new Error("Actual shift audience must be selected while it is named")
         await at("la liste d’attente")
+        await at(0.50) /* next named option in this sentence */
         await tap(page, page.getByLabel("Les personnes en liste d'attente"))
         await at("ou les invités qui n’ont encore aucun créneau confirmé")
+        await at(0.58) /* last named option in this sentence */
         await tap(page, page.getByLabel("Les invités sans créneau confirmé"))
         await at(0.88) /* mid-sentence */
         await tap(page, page.getByLabel("Les personnes en liste d'attente"))

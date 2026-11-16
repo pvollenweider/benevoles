@@ -1,0 +1,57 @@
+{
+  "locatedAt": "2026-11-16T20:30:43.204Z",
+  "masterSha256": "7b56c0f9bcdd6b367b4ff0c9225331f26ed41c0879b5b872b44d7700d8f084b6",
+  "totalSeconds": 167.76,
+  "cuts": [
+    {
+      "id": "coverage",
+      "seconds": 12.133708500000001
+    },
+    {
+      "id": "registrations",
+      "seconds": 25.01375
+    },
+    {
+      "id": "requests",
+      "seconds": 40.3577085
+    },
+    {
+      "id": "filters",
+      "seconds": 54.511666500000004
+    },
+    {
+      "id": "actions",
+      "seconds": 66.040396
+    },
+    {
+      "id": "audience",
+      "seconds": 79.164354
+    },
+    {
+      "id": "message",
+      "seconds": 93.85304149999999
+    },
+    {
+      "id": "channels",
+      "seconds": 106.717479
+    },
+    {
+      "id": "reminders",
+      "seconds": 119.359375
+    },
+    {
+      "id": "reports",
+      "seconds": 130.09525000000002
+    },
+    {
+      "id": "history",
+      "seconds": 140.8669375
+    },
+    {
+      "id": "done",
+      "seconds": 155.5831665
+    }
+  ],
+  "applied": true,
+  "independentContentAuditRequired": true
+}

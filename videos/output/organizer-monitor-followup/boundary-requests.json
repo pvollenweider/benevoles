@@ -1,0 +1,12 @@
+{
+  "anchor": "Les postes sur validation sont clairement signalés. Ouvrez une demande pour",
+  "windowStart": 10.358000000000004,
+  "result": {
+    "found": true,
+    "startSeconds": 30.9,
+    "wordsHeard": "Les postes sur validation sont clairement signalés. Ouvrez une demande pour"
+  },
+  "onset": 41.258,
+  "proposedCut": 40.3577085,
+  "note": "Proposal only; recut then independently audit before capture"
+}

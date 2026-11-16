@@ -125,14 +125,21 @@
     {
       "id": "REGISTRATION_MONITOR_FOLLOWUP",
       "slug": "organizer-monitor-followup",
-      "status": "NOT DONE",
-      "published": false
+      "status": "NOT READY",
+      "published": false,
+      "narratedTakes": 2,
+      "problems": "Request modal closes 1.7 s early; role/shift filters too fast. Two-take limit.",
+      "duration": 191.48,
+      "musicGaps": 0,
+      "tu": 0
     },
     {
       "id": "LAST_MINUTE_CHANGES",
       "slug": "last-minute-changes",
-      "status": "NOT DONE",
-      "published": false
+      "status": "IN PROGRESS",
+      "published": false,
+      "narratedTakes": 1,
+      "problems": "Functional/mail preflights and rehearsal pass; first narrated take active."
     },
     {
       "id": "SECTORS",

@@ -1,0 +1,62 @@
+{
+  "model": "gemini-3.8-flash",
+  "reviewedAt": "2026-11-16T21:22:16.096Z",
+  "videoSha256": "d08eefa142d92124a18825e3b5c0f4c32fabc2d9a8a955f2d829a58eca7ca3c7",
+  "promptSha256": "244f9ab0963359ff398fe9f7031b281f84d927cfcb54aad15bc3a87b5bf4d74f",
+  "clipSha256": "a12254af0f0626490aebd2d154b856dae83eecb5cbec03b27ebab344264b9db6",
+  "scene": "audience",
+  "review": {
+    "heardOpening": "Pour une relance, choisissez précisément les destinataires :",
+    "checkpoints": [
+      {
+        "spokenSeconds": 4,
+        "spoken": "Tous les inscrits,",
+        "visibleSeconds": 3.8,
+        "visible": "L'option « Tous les bénévoles inscrits » est sélectionnée avec le décompte affiché",
+        "sync": "aligned",
+        "severity": "none"
+      },
+      {
+        "spokenSeconds": 5,
+        "spoken": "un poste,",
+        "visibleSeconds": 4.8,
+        "visible": "Sélection de l'option « Les bénévoles d'un poste » avec le menu déroulant Montage",
+        "sync": "aligned",
+        "severity": "none"
+      },
+      {
+        "spokenSeconds": 6,
+        "spoken": "un créneau,",
+        "visibleSeconds": 5.8,
+        "visible": "L'option « Les bénévoles d'un créneau » n'est pas cochée, le curseur saute directement sur la liste d'attente",
+        "sync": "missing",
+        "severity": "minor"
+      },
+      {
+        "spokenSeconds": 8.5,
+        "spoken": "ou les invités qui n’ont encore aucun créneau confirmé.",
+        "visibleSeconds": 7.4,
+        "visible": "L'option « Les invités sans créneau confirmé » est cochée",
+        "sync": "aligned",
+        "severity": "none"
+      },
+      {
+        "spokenSeconds": 12.5,
+        "spoken": "Le nombre de personnes est recalculé avant l’envoi.",
+        "visibleSeconds": 13.5,
+        "visible": "Affichage de « Comptage... » puis actualisation du nombre de destinataires (« 3 personnes recevront ce message »)",
+        "sync": "aligned",
+        "severity": "none"
+      }
+    ],
+    "issues": [
+      "À 00:06, l'option « Les bénévoles d'un créneau » annoncée oralement n'est pas sélectionnée à l'écran : le clic passe directement à « Les personnes en liste d'attente »."
+    ],
+    "voice": {
+      "consistent": true,
+      "warm": true,
+      "observation": "Voix off féminine claire, fluide et naturelle, bien articulée."
+    }
+  },
+  "note": "Automated observation of actual final video audio and images; not a claim of complete human validation"
+}
