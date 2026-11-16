@@ -1,0 +1,12 @@
+{
+  "anchor": "Si l’offre expire sans réponse, elle ne bloque pas la place",
+  "windowStart": 47.759,
+  "result": {
+    "found": true,
+    "startSeconds": 30.2,
+    "wordsHeard": "Si"
+  },
+  "onset": 77.959,
+  "proposedCut": 77.75916649999999,
+  "note": "Proposal only; recut then independently audit before capture"
+}

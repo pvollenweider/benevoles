@@ -1,0 +1,44 @@
+{
+  "model": "gemini-3.8-flash",
+  "reviewedAt": "2026-11-16T22:18:22.200Z",
+  "videoSha256": "dbdce05a725e66cf7060c109dbbb8e42556113b6c43ec21c65581c15c62bf33f",
+  "promptSha256": "4de31c06277ccc1d9aa5c9c4338a977c084402fbefec120f14360763edc15359",
+  "clipSha256": "9293ca87dc37b753e1b0a2a162f025784dfa5bfd1eeb1116b270336c97c6ca55",
+  "scene": "change",
+  "review": {
+    "heardOpening": "Dans la liste, le statut indique",
+    "checkpoints": [
+      {
+        "spokenSeconds": 0.5,
+        "spoken": "Dans la liste, le statut indique si les inscriptions sont ouvertes, fermées",
+        "visibleSeconds": 1.5,
+        "visible": "Affichage de l'onglet Liste avec la colonne Statut indiquant Ouvert pour les créneaux",
+        "sync": "aligned",
+        "severity": "none"
+      },
+      {
+        "spokenSeconds": 5.2,
+        "spoken": "Rouvrir l’éditeur permet de corriger l’horaire et les informations pratiques.",
+        "visibleSeconds": 5.7,
+        "visible": "Ouverture du formulaire Modifier le créneau affichant les champs d'horaires et d'informations pratiques",
+        "sync": "aligned",
+        "severity": "none"
+      },
+      {
+        "spokenSeconds": 9.3,
+        "spoken": "relisez toujours le nouveau jour, les heures et le rendez-vous avant de confirmer",
+        "visibleSeconds": 9.5,
+        "visible": "Champs Date, Début, Fin et Lieu de rendez-vous visibles dans le formulaire d'édition",
+        "sync": "aligned",
+        "severity": "none"
+      }
+    ],
+    "issues": [],
+    "voice": {
+      "consistent": true,
+      "warm": true,
+      "observation": "Voix claire, posée et bien articulée, synchronisée avec les transitions d'écran."
+    }
+  },
+  "note": "Automated observation of actual final video audio and images; not a claim of complete human validation"
+}

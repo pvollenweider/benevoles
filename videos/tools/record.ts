@@ -1756,10 +1756,10 @@ async function main() {
       await scene("release", async (at) => {
         await page.goto(`${baseUrl}/my/demo-waitlist-release-zoe-0001`); await settle(page)
         await page.getByRole("heading", { name: /Mes inscriptions/ }).waitFor()
-        await at(0.28) /* mid-sentence */
+        await at("Quand une personne confirmée se désinscrit")
         await tap(page, page.getByRole("button", { name: `Annuler le créneau ${waitlistShift.label}` }))
         await page.getByRole("alertdialog").waitFor()
-        await at(0.52) /* mid-sentence */
+        await at("Une offre est envoyée à la première personne en attente")
         await tap(page, page.getByRole("button", { name: "Oui, annuler" }))
         await page.getByText(/annulée/i).first().waitFor()
         await at(0.78) /* mid-sentence */
@@ -5136,16 +5136,21 @@ async function main() {
         await page.getByRole("status").filter({ hasText: /2 créneaux créés/ }).waitFor()
       })
 
-      await scene("delivery", async () => {
+      await scene("delivery", async at => {
         await tap(page, page.getByRole("button", { name: "+ Ajouter un créneau" }))
         const editor = page.getByRole("group", { name: "Nouveau créneau" })
-        await typeNaturally(page, editor.getByLabel("Poste *"), "Livraison")
-        await fillVisibly(page, editor.getByLabel("Libellé"), "Livraison — permis B requis", 400)
-        await fillVisibly(page, editor.getByLabel("Début *"), "09:00", 400)
-        await fillVisibly(page, editor.getByLabel("Fin *"), "12:00", 400)
-        await fillVisibly(page, editor.getByLabel("Âge minimum (optionnel)"), "18", 400)
-        await fillVisibly(page, editor.getByLabel("Description"), "Permis B valide obligatoire", 400)
-        await fillVisibly(page, editor.getByLabel("Consigne pratique"), "Permis de conduire valide obligatoire. Véhicule fourni.", 400)
+        await editor.getByLabel("Poste *").fill("Livraison")
+        await editor.getByLabel("Libellé").fill("Livraison — permis B requis")
+        await editor.getByLabel("Début *").fill("09:00")
+        await editor.getByLabel("Fin *").fill("12:00")
+        await at("Il faut avoir au moins")
+        await fillVisibly(page, editor.getByLabel("Âge minimum (optionnel)"), "18", 150)
+        await at("posséder un permis B valide")
+        await at(0.40) /* mid-sentence: named licence, after the visible age */
+        await fillVisibly(page, editor.getByLabel("Description"), "Permis B valide obligatoire", 150)
+        await at("Ces conditions sont visibles par les bénévoles")
+        await fillVisibly(page, editor.getByLabel("Consigne pratique"), "Permis de conduire valide obligatoire. Véhicule fourni.", 150)
+        await at(0.97) /* mid-sentence: retain the real instructions through the last words « véhicule fourni » */
         await tap(page, editor.getByRole("button", { name: "Ajouter", exact: true }))
         await page.getByRole("status").filter({ hasText: /Créneau ajouté : Livraison/ }).waitFor()
       })
@@ -5187,9 +5192,9 @@ async function main() {
         await tap(page, previewShift)
         await tap(page, page.getByRole("button", { name: /^Continuer/ }))
         await page.getByRole("heading", { name: "Tes informations" }).waitFor()
-        await fillVisibly(page, page.getByRole("textbox", { name: "Prénom", exact: true }), "Alex", 180)
-        await fillVisibly(page, page.getByRole("textbox", { name: "Nom", exact: true }), "Martin", 180)
-        await fillVisibly(page, page.getByRole("textbox", { name: "Email", exact: true }), "alex.martin@example.org", 180)
+        await page.getByRole("textbox", { name: "Prénom", exact: true }).fill("Alex")
+        await page.getByRole("textbox", { name: "Nom", exact: true }).fill("Martin")
+        await page.getByRole("textbox", { name: "Email", exact: true }).fill("alex.martin@example.org")
         const charter = page.locator("label").filter({ hasText: "J'ai lu et j'accepte" }).getByRole("checkbox")
         await tap(page, charter)
         const privacy = page.getByRole("checkbox", { name: /^J'accepte que l'association qui organise cet événement/ })
@@ -5208,15 +5213,19 @@ async function main() {
         await settle(page)
       })
 
-      await scene("publish", async () => {
+      await scene("publish", async at => {
+        await at("Quand tout est prêt, publiez le planning")
+        await at(0.18) /* mid-sentence: the actual publication verb */
         await tap(page, page.getByRole("button", { name: "Publier" }))
         await page.getByText("L'événement est publié : les bénévoles peuvent s'inscrire.").waitFor()
         organizerPublicUrl = (await page.getByText("Lien à partager :", { exact: false }).locator("span").textContent())?.trim() ?? ""
         if (!organizerPublicUrl) throw new Error("Published event has no public URL")
       })
 
-      await scene("qr", async () => {
+      await scene("qr", async at => {
         await tap(page, page.getByRole("link", { name: "Partage", exact: true }))
+        await at("ouvrez le QR code")
+        await at(0.30) /* mid-sentence: after the examples of where to share it */
         await tap(page, page.getByRole("link", { name: "QR code", exact: true }))
         await page.getByRole("heading", { name: "QR code", exact: true }).waitFor()
         await page.getByText("Scanner pour s'inscrire").scrollIntoViewIfNeeded()
@@ -5244,7 +5253,7 @@ async function main() {
         await at("L’application analyse les colonnes")
         await tap(page, page.getByRole("button", { name: "Analyser le fichier" }))
         await page.getByText("Analyse du fichier, rien n'est encore enregistré.").waitFor()
-        await at(0.86) /* mid-sentence: confirm after the analysis explanation */
+        await at(0.96) /* mid-sentence: let the complete analysis explanation finish before confirmation */
         await tap(page, page.getByRole("button", { name: "Importer 12 membres" }))
         await page.getByText(/Import terminé :/).waitFor()
         await tap(page, page.getByRole("button").filter({ hasText: /^Fermer$/ }))

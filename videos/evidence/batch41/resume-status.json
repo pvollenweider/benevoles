@@ -212,28 +212,39 @@
     {
       "id": "SHIFT_CREATE_EDIT_DETAIL",
       "slug": "shift-create-edit-detail",
-      "status": "IN PROGRESS",
-      "published": false,
-      "narratedTakes": 0,
-      "problems": "Fresh source narration preparation; no narrated take yet."
+      "status": "READY",
+      "published": true,
+      "narratedTakes": 1,
+      "problems": "No final AV issue.",
+      "duration": 134.76,
+      "musicGaps": 0,
+      "tu": 0,
+      "revision": 6,
+      "sourceChanges": "Fresh whole Kore master and six aligned cuts; actual word onsets checked; shorter native hour-entry pauses; current Minimum/labels captured."
     },
     {
       "id": "EVENT_CREATE_PUBLISH_OVERVIEW",
       "slug": "organizer-create-publish",
-      "status": "NOT DONE",
-      "published": false
+      "status": "IN PROGRESS",
+      "published": false,
+      "narratedTakes": 0,
+      "problems": "Source narration/rehearsal preparation; no narrated take yet."
     },
     {
       "id": "SHIFT_APPROVAL",
       "slug": "shift-approval",
-      "status": "NOT DONE",
-      "published": false
+      "status": "IN PROGRESS",
+      "published": false,
+      "narratedTakes": 0,
+      "problems": "Source narration/rehearsal preparation; no narrated take yet."
     },
     {
       "id": "SHIFT_WAITLIST_OFFER",
       "slug": "shift-waitlist-offer",
-      "status": "NOT DONE",
-      "published": false
+      "status": "IN PROGRESS",
+      "published": false,
+      "narratedTakes": 0,
+      "problems": "Source narration/rehearsal preparation; no narrated take yet."
     },
     {
       "id": "STAFFING_GAPS",

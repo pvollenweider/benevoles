@@ -1,0 +1,60 @@
+{
+  "model": "gemini-3.8-flash",
+  "reviewedAt": "2026-11-16T22:18:10.294Z",
+  "videoSha256": "dbdce05a725e66cf7060c109dbbb8e42556113b6c43ec21c65581c15c62bf33f",
+  "promptSha256": "2fdcbda9935aff5a45785a68536426539d3d58e933202dd6f2968d0e3b47c74b",
+  "clipSha256": "7c343b6fe08279c2d00eb7baa629da01e58ad8c46232c0ca286706b81593c456",
+  "scene": "identity",
+  "review": {
+    "heardOpening": "Choisissez d’abord le poste",
+    "checkpoints": [
+      {
+        "spokenSeconds": 0.5,
+        "spoken": "Choisissez d’abord le poste",
+        "visibleSeconds": 1.5,
+        "visible": "Le formulaire Nouveau créneau s'ouvre avec le poste Accueil sélectionné",
+        "sync": "aligned",
+        "severity": "none"
+      },
+      {
+        "spokenSeconds": 2.1,
+        "spoken": "et, si nécessaire, un libellé plus précis.",
+        "visibleSeconds": 3,
+        "visible": "Saisie du libellé Accueil des artistes",
+        "sync": "aligned",
+        "severity": "none"
+      },
+      {
+        "spokenSeconds": 6,
+        "spoken": "le texte sous le champ rappelle que ses paramètres s’appliquent aux nouveaux créneaux.",
+        "visibleSeconds": 6,
+        "visible": "Texte explicatif affiché sous le menu déroulant du poste",
+        "sync": "aligned",
+        "severity": "none"
+      },
+      {
+        "spokenSeconds": 10.3,
+        "spoken": "La date, l’heure de début et l’heure de fin placent la barre dans le planning.",
+        "visibleSeconds": 11.5,
+        "visible": "Sélection de la date Samedi 21 Novembre, puis saisie de 18:00 et 21:30",
+        "sync": "aligned",
+        "severity": "none"
+      },
+      {
+        "spokenSeconds": 15,
+        "spoken": "La capacité indique combien de personnes peuvent être confirmées sur cette plage.",
+        "visibleSeconds": 15.5,
+        "visible": "Saisie de la valeur 3 dans le champ Places",
+        "sync": "aligned",
+        "severity": "none"
+      }
+    ],
+    "issues": [],
+    "voice": {
+      "consistent": true,
+      "warm": true,
+      "observation": "Enregistrement studio clair, voix posée et bien synchronisée avec les actions à l'écran."
+    }
+  },
+  "note": "Automated observation of actual final video audio and images; not a claim of complete human validation"
+}

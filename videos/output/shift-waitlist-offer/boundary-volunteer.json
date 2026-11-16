@@ -1,0 +1,12 @@
+{
+  "anchor": "Sur sa page, la personne voit l’offre, son expiration et les",
+  "windowStart": 28.1,
+  "result": {
+    "found": true,
+    "startSeconds": 30.34,
+    "wordsHeard": "Sur sa page, la personne voit l’offre, son expiration et les"
+  },
+  "onset": 58.44,
+  "proposedCut": 58.0997085,
+  "note": "Proposal only; recut then independently audit before capture"
+}

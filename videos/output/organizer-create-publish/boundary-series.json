@@ -1,0 +1,12 @@
+{
+  "anchor": "Les postes et leurs créneaux peuvent être ajoutés un par un,",
+  "windowStart": 0,
+  "result": {
+    "found": true,
+    "startSeconds": 23.8,
+    "wordsHeard": "Les postes et leurs créneaux peuvent être ajoutés un par un"
+  },
+  "onset": 23.8,
+  "proposedCut": 23.57375,
+  "note": "Proposal only; recut then independently audit before capture"
+}

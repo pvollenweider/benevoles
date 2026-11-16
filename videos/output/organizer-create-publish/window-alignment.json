@@ -1,0 +1,61 @@
+{
+  "locatedAt": "2026-11-16T22:17:37.977Z",
+  "masterSha256": "3bb23937621252f5dd851fd9f42909719295de1d177e4e22c486ce97d3c583ba",
+  "totalSeconds": 171.96,
+  "cuts": [
+    {
+      "id": "basics",
+      "seconds": 12.389187499999998
+    },
+    {
+      "id": "series",
+      "seconds": 23.57375
+    },
+    {
+      "id": "delivery",
+      "seconds": 38.1456455
+    },
+    {
+      "id": "cash",
+      "seconds": 50.158812499999996
+    },
+    {
+      "id": "registration",
+      "seconds": 60.775146
+    },
+    {
+      "id": "review",
+      "seconds": 72.43587500000001
+    },
+    {
+      "id": "preview",
+      "seconds": 82.00539599999999
+    },
+    {
+      "id": "preview-result",
+      "seconds": 96.998875
+    },
+    {
+      "id": "publish",
+      "seconds": 109.43522899999999
+    },
+    {
+      "id": "qr",
+      "seconds": 119.3586455
+    },
+    {
+      "id": "import",
+      "seconds": 130.783646
+    },
+    {
+      "id": "invite",
+      "seconds": 145.84141649999998
+    },
+    {
+      "id": "public",
+      "seconds": 160.6252915
+    }
+  ],
+  "applied": true,
+  "independentContentAuditRequired": true
+}

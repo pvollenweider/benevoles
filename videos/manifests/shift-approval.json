@@ -6,7 +6,7 @@
   "viewer": {
     "summary": "Dans cette vidéo, vous activez l'inscription sur validation pour une mission sensible.",
     "steps": [
-      "Activez « Sur validation » dans le créneau et ajoutez les critères utiles dans la consigne.",
+      "Dans le créneau, vérifiez « Sur validation » et ajoutez les critères utiles dans la consigne.",
       "Laissez le bénévole envoyer sa demande : sa page Mes inscriptions affiche « Demande envoyée », suivi de « en attente de réponse ».",
       "Ouvrez le filtre « Demandes à traiter » pour voir le nom, les coordonnées et les réponses de la personne.",
       "Acceptez ou refusez la demande, avec un message facultatif."
@@ -20,7 +20,7 @@
   "language": "fr-CH",
   "voice": "Puck",
   "continuousNarration": true,
-  "voiceStyle": "Speak with an audible smile throughout. Use a warm, reassuring adult male voice, like an experienced association organizer helping a colleague. Natural conversational French, calm medium pace and clear articulation. Keep exactly the same voice identity, pitch, smile and energy from beginning to end. Never sound corporate, theatrical, childish or rushed.",
+  "voiceStyle": "Speak with an audible smile throughout. Use a warm, reassuring adult male voice, like an experienced association organizer helping a colleague. Natural conversational French, calm medium pace and clear articulation. Keep exactly the same voice identity, pitch, smile and energy from beginning to end. Never sound corporate, theatrical, childish or rushed. Read every provided sentence verbatim: never omit, add, paraphrase or summarize any words.",
   "viewport": {
     "width": 1280,
     "height": 800,
@@ -34,7 +34,7 @@
     },
     {
       "id": "setup",
-      "transcript": "Dans le créneau, activez Sur validation. Ajoutez aussi les critères utiles : ici, vingt et un ans minimum et un permis B depuis trois ans dans la consigne. La capacité reste réelle : une demande occupe déjà une place pendant que l’organisation l’examine.",
+      "transcript": "Dans le créneau, vérifiez que l’option Sur validation est activée. Ajoutez aussi les critères utiles : ici, vingt et un ans minimum et un permis B depuis trois ans dans la consigne. La capacité reste réelle : une demande occupe déjà une place pendant que l’organisation l’examine.",
       "fallbackDurationMs": 26000
     },
     {

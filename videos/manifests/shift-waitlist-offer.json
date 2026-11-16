@@ -21,7 +21,7 @@
   "language": "fr-CH",
   "voice": "Kore",
   "continuousNarration": true,
-  "voiceStyle": "Speak with an audible smile throughout. Use a warm, friendly adult female voice, as if helping another association organizer beside you. Natural conversational French, calm medium pace and clear articulation. Keep exactly the same voice identity, pitch, smile and energy from beginning to end. Never sound corporate, theatrical, childish or rushed.",
+  "voiceStyle": "Speak with an audible smile throughout. Use a warm, friendly adult female voice, as if helping another association organizer beside you. Natural conversational French, calm medium pace and clear articulation. Keep exactly the same voice identity, pitch, smile and energy from beginning to end. Never sound corporate, theatrical, childish or rushed. Read every provided sentence verbatim: never omit, add, paraphrase or summarize any words.",
   "viewport": {
     "width": 1280,
     "height": 800,
@@ -40,7 +40,7 @@
     },
     {
       "id": "admin",
-      "transcript": "Dans l’administration, les inscriptions confirmées et les personnes en attente restent distinctes. L’ordre dépend du moment d’inscription. On peut ainsi répondre à une question sans déplacer manuellement les lignes ni perdre l’historique.",
+      "transcript": "Dans les inscriptions, le statut distingue les personnes confirmées de celles qui attendent une place. L’ordre dépend du moment d’inscription. On peut ainsi répondre à une question sans déplacer manuellement les lignes ni perdre l’historique.",
       "fallbackDurationMs": 22000
     },
     {

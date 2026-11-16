@@ -1,0 +1,12 @@
+{
+  "anchor": "Quand une personne confirmée se désinscrit, la place n’est pas attribuée",
+  "windowStart": 10.011000000000003,
+  "result": {
+    "found": true,
+    "startSeconds": 30.4,
+    "wordsHeard": "Quand une personne confirmée se désinscrit, la place n’est pas attribuée"
+  },
+  "onset": 40.411,
+  "proposedCut": 40.0109585,
+  "note": "Proposal only; recut then independently audit before capture"
+}

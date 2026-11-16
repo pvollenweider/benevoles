@@ -1,0 +1,12 @@
+{
+  "anchor": "Quand tout est prêt, publiez le planning. La page d’inscription devient",
+  "windowStart": 79.43499999999997,
+  "result": {
+    "found": true,
+    "startSeconds": 30.26,
+    "wordsHeard": "Quand"
+  },
+  "onset": 109.69499999999998,
+  "proposedCut": 109.43522899999999,
+  "note": "Proposal only; recut then independently audit before capture"
+}

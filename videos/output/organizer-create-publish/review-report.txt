@@ -1,9 +1,0 @@
-STATUS: READY
-EVENT_CREATE_PUBLISH_OVERVIEW — batch 23-1 — 2026-10-16
-BUILD_ID gHYEjPtpdQYUNytuIhMkh; commit 89a884c8d58c22dda6800481e1238bdc4e219dff
-Duration 184.88 s. Music 14.6–18.9 LU under voice.
-Existing whole narration reused after text/hash checks.
-Validation incl. music-only stretches, subtitles, sentence anchors and real input sounds passed. Full final multilingual ASR, all chapter frames and sentence/action frames reviewed.
-Final VTT viewer « tu » count 0.
-Quatorze chapitres revus sans signalement : page blanche, quatre créneaux sur trois postes, permis et âge minimum, Caisse sur validation, horaires d’inscription, aperçu sans écriture ni envoi, publication, QR, analyse de douze membres et invitation individuelle. Dates françaises et liens benevol.app vérifiés ; narration inchangée et empreintes confirmées, deux ASR finaux sans ajout ni tutoiement.
-Real-time subjective listening unavailable as permitted. Product source unchanged. Only the authorized local WIP transport commit; no further commit, push or publication.
