@@ -138,8 +138,8 @@
       "slug": "last-minute-changes",
       "status": "IN PROGRESS",
       "published": false,
-      "narratedTakes": 1,
-      "problems": "First take early schedule edits; preserved. Recorder corrected before next rehearsal and last take."
+      "narratedTakes": 2,
+      "problems": "Corrected rehearsal passed; second and last narrated take active."
     },
     {
       "id": "SECTORS",
@@ -156,16 +156,23 @@
     {
       "id": "SHIFT_ROSTER_VISIBILITY",
       "slug": "shift-roster-visibility",
-      "status": "IN PROGRESS",
-      "published": false,
+      "status": "READY",
+      "published": true,
       "narratedTakes": 1,
-      "problems": "First narrated take active after a complete passing rehearsal."
+      "problems": "Raw missing \u00c0 confirmer observation directly refuted by exact final frame.",
+      "duration": 260.0,
+      "musicGaps": 0,
+      "tu": 0,
+      "quotedRegister": 1,
+      "revision": 3
     },
     {
       "id": "ADMIN_FEATURES_OVERVIEW",
       "slug": "admin-features-tour",
-      "status": "NOT DONE",
-      "published": false
+      "status": "IN PROGRESS",
+      "published": false,
+      "narratedTakes": 1,
+      "problems": "Complete rehearsal passed; first narrated take active."
     }
   ],
   "phase2": [

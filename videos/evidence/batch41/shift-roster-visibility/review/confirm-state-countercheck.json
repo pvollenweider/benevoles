@@ -1,0 +1,7 @@
+{
+  "videoSha256": "6de0d51b2ebfe0bfb68a56cf242a47e70a61387fc8bcbc331b371552103e5c29",
+  "rawFinding": "À confirmer said but allegedly absent",
+  "actualFrame": "review-frames/roster-confirm-60.png",
+  "actualVisibleText": "À confirmer : tu l’as demandé à l’inscription. Active l’interrupteur pour l’afficher.",
+  "resolution": "The actual MP4 frame visibly contains the exact named state below the off switch. Raw AV observation preserved; no product/source change and no second take needed."
+}

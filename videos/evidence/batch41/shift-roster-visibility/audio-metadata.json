@@ -1,0 +1,47 @@
+{
+  "model": "gemini-3.8-flash-tts",
+  "voice": "Kore",
+  "generatedAt": "2026-11-16T20:30:34.875Z",
+  "segments": {
+    "roster-setting": {
+      "file": "audio/roster-setting.wav",
+      "durationMs": 33719,
+      "generationSha256": "c5fbf27e4f08e3b974cacc37516d56026b9c2ebea8f413ba58d4986b91b8c70c"
+    },
+    "roster-publication": {
+      "file": "audio/roster-publication.wav",
+      "durationMs": 23759,
+      "generationSha256": "c5fbf27e4f08e3b974cacc37516d56026b9c2ebea8f413ba58d4986b91b8c70c"
+    },
+    "roster-signup": {
+      "file": "audio/roster-signup.wav",
+      "durationMs": 38755,
+      "generationSha256": "c5fbf27e4f08e3b974cacc37516d56026b9c2ebea8f413ba58d4986b91b8c70c"
+    },
+    "roster-confirm": {
+      "file": "audio/roster-confirm.wav",
+      "durationMs": 31453,
+      "generationSha256": "c5fbf27e4f08e3b974cacc37516d56026b9c2ebea8f413ba58d4986b91b8c70c"
+    },
+    "roster-event": {
+      "file": "audio/roster-event.wav",
+      "durationMs": 38157,
+      "generationSha256": "c5fbf27e4f08e3b974cacc37516d56026b9c2ebea8f413ba58d4986b91b8c70c"
+    },
+    "roster-invite": {
+      "file": "audio/roster-invite.wav",
+      "durationMs": 17034,
+      "generationSha256": "c5fbf27e4f08e3b974cacc37516d56026b9c2ebea8f413ba58d4986b91b8c70c"
+    },
+    "roster-existing": {
+      "file": "audio/roster-existing.wav",
+      "durationMs": 23093,
+      "generationSha256": "c5fbf27e4f08e3b974cacc37516d56026b9c2ebea8f413ba58d4986b91b8c70c"
+    },
+    "roster-withdraw": {
+      "file": "audio/roster-withdraw.wav",
+      "durationMs": 31790,
+      "generationSha256": "c5fbf27e4f08e3b974cacc37516d56026b9c2ebea8f413ba58d4986b91b8c70c"
+    }
+  }
+}

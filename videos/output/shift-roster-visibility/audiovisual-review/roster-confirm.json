@@ -1,0 +1,70 @@
+{
+  "model": "gemini-3.8-flash",
+  "reviewedAt": "2026-11-16T21:37:59.779Z",
+  "videoSha256": "6de0d51b2ebfe0bfb68a56cf242a47e70a61387fc8bcbc331b371552103e5c29",
+  "promptSha256": "d81594e82f4fa8d77af0e6febc4ac6bb32ea326a2ff5563710aed76fa94b9bea",
+  "clipSha256": "e706dbf1ec4acc725746224eacae2ac915e057f83fb538a4d648c34ea22a753a",
+  "scene": "roster-confirm",
+  "review": {
+    "heardOpening": "Ouvrez le véritable email de confirmation",
+    "checkpoints": [
+      {
+        "spokenSeconds": 1.5,
+        "spoken": "Ouvrez le véritable email de confirmation.",
+        "visibleSeconds": 1,
+        "visible": "Affichage de l'email de confirmation avec le bouton Gérer mes inscriptions",
+        "sync": "aligned",
+        "severity": "none"
+      },
+      {
+        "spokenSeconds": 3,
+        "spoken": "Suivez son lien personnel.",
+        "visibleSeconds": 3.5,
+        "visible": "Clic sur le bouton Gérer mes inscriptions",
+        "sync": "aligned",
+        "severity": "none"
+      },
+      {
+        "spokenSeconds": 5.5,
+        "spoken": "La carte Qui est inscrit montre uniquement vos propres créneaux confirmés",
+        "visibleSeconds": 4.5,
+        "visible": "Page Mes inscriptions affichée avec la carte Qui est inscrit",
+        "sync": "aligned",
+        "severity": "none"
+      },
+      {
+        "spokenSeconds": 16.8,
+        "spoken": "L’état À confirmer rappelle votre demande du formulaire.",
+        "visibleSeconds": 17,
+        "visible": "Aucun état ni mention « À confirmer » n'apparaît à l'écran",
+        "sync": "missing",
+        "severity": "major"
+      },
+      {
+        "spokenSeconds": 20.8,
+        "spoken": "Activez Afficher mon nom aux autres bénévoles.",
+        "visibleSeconds": 22,
+        "visible": "L'interrupteur Afficher mon nom aux autres bénévoles est activé",
+        "sync": "aligned",
+        "severity": "none"
+      },
+      {
+        "spokenSeconds": 26.8,
+        "spoken": "suivez Voir qui est inscrit sur les autres créneaux.",
+        "visibleSeconds": 27.5,
+        "visible": "Clic sur Voir qui est inscrit sur les autres créneaux et ouverture du planning",
+        "sync": "aligned",
+        "severity": "none"
+      }
+    ],
+    "issues": [
+      "À 00:17, la voix mentionne « L'état À confirmer », mais aucune mention ni statut de ce nom n'est visible sur la page."
+    ],
+    "voice": {
+      "consistent": true,
+      "warm": true,
+      "observation": "Voix claire, posée et bien articulée, avec un fond sonore musical discret."
+    }
+  },
+  "note": "Automated observation of actual final video audio and images; not a claim of complete human validation"
+}

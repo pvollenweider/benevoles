@@ -1,0 +1,37 @@
+{
+  "locatedAt": "2026-11-16T20:32:16.657Z",
+  "masterSha256": "203e40325293785e65d629949d1b57ac2ce73af1fabf39cde3ad77b5370afdd1",
+  "totalSeconds": 237.76,
+  "cuts": [
+    {
+      "id": "roster-publication",
+      "seconds": 33.719207999999995
+    },
+    {
+      "id": "roster-signup",
+      "seconds": 57.477854
+    },
+    {
+      "id": "roster-confirm",
+      "seconds": 96.232875
+    },
+    {
+      "id": "roster-event",
+      "seconds": 127.685646
+    },
+    {
+      "id": "roster-invite",
+      "seconds": 165.8429585
+    },
+    {
+      "id": "roster-existing",
+      "seconds": 182.87650000000002
+    },
+    {
+      "id": "roster-withdraw",
+      "seconds": 205.969646
+    }
+  ],
+  "applied": true,
+  "independentContentAuditRequired": true
+}

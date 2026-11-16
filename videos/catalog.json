@@ -1723,10 +1723,11 @@
         "benevole"
       ],
       "feature": "Qui est inscrit",
-      "updatedAt": "2026-10-22",
-      "revision": 2,
+      "updatedAt": "2026-11-16",
+      "revision": 3,
       "level": "essentiel",
-      "added": "2026-10-21"
+      "added": "2026-10-21",
+      "updated": "2026-11-16"
     }
   ]
 }

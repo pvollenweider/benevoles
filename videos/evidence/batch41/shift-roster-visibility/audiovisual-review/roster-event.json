@@ -1,0 +1,68 @@
+{
+  "model": "gemini-3.8-flash",
+  "reviewedAt": "2026-11-16T21:37:58.042Z",
+  "videoSha256": "6de0d51b2ebfe0bfb68a56cf242a47e70a61387fc8bcbc331b371552103e5c29",
+  "promptSha256": "d34f452605a25a15ad5d6afb1dae998485f2e357f1baf532ca2d78830590193b",
+  "clipSha256": "f012a8ff63ec4f84fb5c0f5fdb8cb1af93ba76d8a7ec2deaf2664a809ea40dd6",
+  "scene": "roster-event",
+  "review": {
+    "heardOpening": "Sur la page de l'événement",
+    "checkpoints": [
+      {
+        "spokenSeconds": 2.5,
+        "spoken": "l’interrupteur Voir qui est inscrit se trouve à côté de Frise et Liste",
+        "visibleSeconds": 2.5,
+        "visible": "L'interrupteur « Voir qui est inscrit » est visible et activé à droite des boutons Frise et Liste",
+        "sync": "aligned",
+        "severity": "none"
+      },
+      {
+        "spokenSeconds": 8.8,
+        "spoken": "Passons en Liste.",
+        "visibleSeconds": 9,
+        "visible": "Clic sur l'onglet Liste et bascule vers la vue sous forme de liste",
+        "sync": "aligned",
+        "severity": "none"
+      },
+      {
+        "spokenSeconds": 10.8,
+        "spoken": "Sur votre créneau, la ligne commence par Avec toi.",
+        "visibleSeconds": 11.2,
+        "visible": "La mention « Avec toi : David P. et 1 autre bénévole » est affichée sous le créneau Accueil",
+        "sync": "aligned",
+        "severity": "none"
+      },
+      {
+        "spokenSeconds": 20.6,
+        "spoken": "Passons en Frise.",
+        "visibleSeconds": 21,
+        "visible": "Clic sur l'onglet Frise et retour au planning sous forme de graphique temporel",
+        "sync": "aligned",
+        "severity": "none"
+      },
+      {
+        "spokenSeconds": 24.2,
+        "spoken": "Survolez un créneau",
+        "visibleSeconds": 24.3,
+        "visible": "Le curseur survole la barre orange Buvette (12h-14h), faisant apparaître les inscrits sous le graphique",
+        "sync": "aligned",
+        "severity": "none"
+      },
+      {
+        "spokenSeconds": 34.8,
+        "spoken": "les flèches parcourent ses barres",
+        "visibleSeconds": 33.5,
+        "visible": "Le créneau Rangement 16h-18h est sélectionné au clavier avec l'affichage de ses informations",
+        "sync": "aligned",
+        "severity": "none"
+      }
+    ],
+    "issues": [],
+    "voice": {
+      "consistent": true,
+      "warm": true,
+      "observation": "Voix off féminine naturelle, claire, fluide et au rythme régulier."
+    }
+  },
+  "note": "Automated observation of actual final video audio and images; not a claim of complete human validation"
+}

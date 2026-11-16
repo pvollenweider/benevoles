@@ -1,0 +1,52 @@
+{
+  "model": "gemini-3.8-flash",
+  "reviewedAt": "2026-11-16T21:37:35.810Z",
+  "videoSha256": "6de0d51b2ebfe0bfb68a56cf242a47e70a61387fc8bcbc331b371552103e5c29",
+  "promptSha256": "feb8beb36e6d1f78ea173530ec3da66640c7a5d0968db12ba370c7cd0face870",
+  "clipSha256": "e90bda33e4eb40bb210c6a62389f3210f0feee37f44a6a0a4aa0932a68eb699b",
+  "scene": "roster-setting",
+  "review": {
+    "heardOpening": "Dans Paramètres, la case Par défaut",
+    "checkpoints": [
+      {
+        "spokenSeconds": 0.5,
+        "spoken": "Dans Paramètres, la case Par défaut, montrer aux bénévoles qui est inscrit",
+        "visibleSeconds": 1.2,
+        "visible": "Affichage de la section Qui est inscrit avec la case cochée dans les Paramètres",
+        "sync": "aligned",
+        "severity": "none"
+      },
+      {
+        "spokenSeconds": 13,
+        "spoken": "Ouvrons un nouvel événement.",
+        "visibleSeconds": 13.5,
+        "visible": "Navigation vers la page de création d'un Nouvel événement",
+        "sync": "aligned",
+        "severity": "none"
+      },
+      {
+        "spokenSeconds": 15.6,
+        "spoken": "La case Montrer aux bénévoles qui est inscrit est déjà cochée.",
+        "visibleSeconds": 15.8,
+        "visible": "La case Montrer aux bénévoles qui est inscrit apparaît cochée par défaut dans le formulaire",
+        "sync": "aligned",
+        "severity": "none"
+      },
+      {
+        "spokenSeconds": 27.2,
+        "spoken": "Le lien En savoir plus ouvre le guide.",
+        "visibleSeconds": 27,
+        "visible": "Lien 'En savoir plus' visible sous les explications de la case à cocher",
+        "sync": "aligned",
+        "severity": "none"
+      }
+    ],
+    "issues": [],
+    "voice": {
+      "consistent": true,
+      "warm": true,
+      "observation": "Voix féminine claire, posée et bien articulée, parfaitement synchronisée avec les actions à l'écran."
+    }
+  },
+  "note": "Automated observation of actual final video audio and images; not a claim of complete human validation"
+}
