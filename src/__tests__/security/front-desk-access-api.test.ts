@@ -5,6 +5,7 @@
  * client underneath, the sending functions and the rate limiter are replaced.
  */
 import { describe, it, expect, vi, beforeEach } from "vitest"
+import bcrypt from "bcryptjs"
 
 const auth = vi.hoisted(() => vi.fn())
 vi.mock("@/auth", () => ({ auth }))
@@ -21,6 +22,8 @@ const fake = vi.hoisted(() => {
     forcePendingUpdateZero: false,
     // Simulates a failed session invalidation after the revocation write.
     failAdminUpdateMany: false,
+    // Simulates a POST re-opening the grant between DELETE's first read and the account lock.
+    reopenBeforeLock: false,
   }
 
   function matches(row: R | null | undefined, where: unknown): boolean {
@@ -162,6 +165,13 @@ const fake = vi.hoisted(() => {
       }
       if (name === "$queryRaw") return async () => {
         state.calls.push(["$queryRaw", "$queryRaw", undefined])
+        // The lock is taken after the grant was read: a concurrent POST can re-open it just
+        // before this point, which is exactly the stale-read race the conditional write covers.
+        if (state.reopenBeforeLock) {
+          state.reopenBeforeLock = false
+          const grant = state.grants.find((g) => g.id === "grant-1")
+          if (grant) grant.revokedAt = null
+        }
         return [{ id: "locked" }]
       }
       if (name === "$transaction") return async (arg: unknown) => {
@@ -200,6 +210,7 @@ vi.mock("@/lib/event-log", async (orig) => ({ ...(await orig<typeof import("@/li
 const rateLimit = vi.hoisted(() => vi.fn())
 vi.mock("@/lib/rate-limit", () => ({ rateLimit }))
 vi.mock("@/lib/urls", () => ({ apexBaseUrl: () => "https://app.benevol.test" }))
+vi.mock("@/lib/report-error", () => ({ reportError: () => () => {} }))
 vi.mock("bcryptjs", () => ({ default: { hash: vi.fn().mockResolvedValue("$hashed") }, hash: vi.fn().mockResolvedValue("$hashed") }))
 vi.mock("next/headers", () => ({ cookies: async () => ({ get: () => undefined }), headers: async () => new Headers() }))
 
@@ -218,6 +229,7 @@ function seed() {
   s.nextId = 1
   s.forcePendingUpdateZero = false
   s.failAdminUpdateMany = false
+  s.reopenBeforeLock = false
   s.organizations = [
     { id: ORG, name: "Fête du village", active: true, outboundEmailApprovedAt: new Date("2026-01-01T00:00:00Z"), slug: "fete", timeZone: "Europe/Zurich" },
     { id: OTHER_ORG, name: "Tournoi", active: true, outboundEmailApprovedAt: new Date("2026-01-01T00:00:00Z"), slug: "tournoi", timeZone: "Europe/Zurich" },
@@ -318,6 +330,8 @@ describe("POST front-desk-access", () => {
   it("creates the inactive front-desk account, its grant, and queues the invitation", async () => {
     const res = await call("POST", "events/[id]/front-desk-access", body)
     expect(res.status).toBe(202)
+    // One bcrypt hash, the fixed cost every 202 path pays.
+    expect(bcrypt.hash).toHaveBeenCalledTimes(1)
     const admin = fake.state.admins.find((a) => a.email === "lea.favre@example.org")!
     expect(admin).toMatchObject({ organizationId: ORG, name: "Léa Favre", role: "front_desk", isActive: false, receiveProductUpdates: false })
     expect(admin.setupTokenHash).toEqual(expect.any(String))
@@ -350,6 +364,8 @@ describe("POST front-desk-access", () => {
     fake.state.admins.push({ id: "adm-lea", organizationId: ORG, name: "Léa Favre", email: "lea.favre@example.org", role: "front_desk", isActive: true, sessionVersion: 0, setupTokenHash: null, setupTokenExpiresAt: null })
     const res = await call("POST", "events/[id]/front-desk-access", body)
     expect(res.status).toBe(202)
+    // It sends nothing, but still pays one bcrypt hash like a free address.
+    expect(bcrypt.hash).toHaveBeenCalledTimes(1)
     expect(fake.state.grants).toHaveLength(1)
     expect(enqueue).not.toHaveBeenCalled()
     expect(logEvent).toHaveBeenCalledWith(expect.objectContaining({ action: "frontdesk.access_granted" }))
@@ -366,6 +382,33 @@ describe("POST front-desk-access", () => {
     expect(fake.state.grants).toHaveLength(1)
     expect(fake.state.admins.find((a) => a.id === "adm-lea")!.setupTokenHash).toBe("old-hash")
     expect(enqueue).not.toHaveBeenCalled()
+    // The entry is the access one, as for an account that was already active.
+    expect(logEvent).toHaveBeenCalledWith(expect.objectContaining({ action: "frontdesk.access_granted", entityId: "grant-1" }))
+  })
+
+  it("a token race behaves exactly like a request made once the account is active", async () => {
+    const holder = (active: boolean) => ({
+      id: "adm-lea", organizationId: ORG, name: "Léa Favre", email: "lea.favre@example.org", role: "front_desk",
+      isActive: active, sessionVersion: 0,
+      setupTokenHash: active ? null : "old-hash",
+      setupTokenExpiresAt: active ? null : new Date("2027-01-01T00:00:00Z"),
+    })
+    const run = async (active: boolean) => {
+      seed()
+      fake.state.admins.push(holder(active))
+      // The pending path loses the token write to an activation; the active path never writes it.
+      fake.state.forcePendingUpdateZero = !active
+      const res = await call("POST", "events/[id]/front-desk-access", body)
+      return {
+        status: res.status,
+        action: (logEvent.mock.calls.at(-1)?.[0] as { action?: string } | undefined)?.action,
+        enqueued: enqueue.mock.calls.length,
+        grants: fake.state.grants.length,
+      }
+    }
+    const raced = await run(false)
+    expect(raced).toEqual({ status: 202, action: "frontdesk.access_granted", enqueued: 0, grants: 1 })
+    expect(await run(true)).toEqual(raced)
   })
 
   it("the existing-account grant, token replacement and email commit together: an enqueue failure rolls all of it back", async () => {
@@ -374,7 +417,9 @@ describe("POST front-desk-access", () => {
       isActive: false, sessionVersion: 0, setupTokenHash: "old-hash", setupTokenExpiresAt: new Date("2027-01-01T00:00:00Z"),
     })
     enqueue.mockRejectedValueOnce(new Error("outbox indisponible"))
-    await expect(call("POST", "events/[id]/front-desk-access", body)).rejects.toThrow("outbox indisponible")
+    const res = await call("POST", "events/[id]/front-desk-access", body)
+    expect(res.status).toBe(500)
+    expect(await res.json()).toEqual({ error: "L'accès n'a pas pu être ajouté. Rien n'a été modifié. Réessayez.", notApplied: true })
     expect(fake.state.grants).toEqual([])
     expect(fake.state.admins.find((a) => a.id === "adm-lea")!.setupTokenHash).toBe("old-hash")
     expect(logEvent).not.toHaveBeenCalled()
@@ -410,6 +455,8 @@ describe("POST front-desk-access", () => {
     const res = await call("POST", "events/[id]/front-desk-access", body)
     expect(res.status).toBe(202)
     expect(await res.json()).toEqual({ accepted: true })
+    // The hidden path pays the same one bcrypt hash as a free address.
+    expect(bcrypt.hash).toHaveBeenCalledTimes(1)
     expect(fake.state.admins.filter((a) => a.email === "lea.favre@example.org")).toHaveLength(1)
     expect(fake.state.grants).toEqual([])
     expect(writes()).toEqual([])
@@ -520,15 +567,32 @@ describe("DELETE front-desk-access/[accessId]", () => {
 
   it("a failed session invalidation rolls the revocation back, so a retry completes both", async () => {
     fake.state.failAdminUpdateMany = true
-    await expect(call("DELETE", "events/[id]/front-desk-access/[accessId]")).rejects.toThrow("session invalidation failed")
+    const res = await call("DELETE", "events/[id]/front-desk-access/[accessId]")
+    expect(res.status).toBe(500)
+    expect(await res.json()).toEqual({ error: "La révocation n'a pas pu être faite. Rien n'a été modifié. Réessayez.", notApplied: true })
     expect(fake.state.grants[0].revokedAt).toBeNull()
     expect(fake.state.admins.find((a) => a.id === "adm-lea")!.sessionVersion).toBe(3)
+    expect(logEvent).not.toHaveBeenCalled()
     // The retry is a normal revocation, not the « already revoked » path.
-    const res = await call("DELETE", "events/[id]/front-desk-access/[accessId]")
-    expect(res.status).toBe(200)
+    const retry = await call("DELETE", "events/[id]/front-desk-access/[accessId]")
+    expect(retry.status).toBe(200)
     expect(fake.state.grants[0].revokedAt).toBeInstanceOf(Date)
     expect(fake.state.admins.find((a) => a.id === "adm-lea")!.sessionVersion).toBe(4)
     expect(logEvent).toHaveBeenCalledWith(expect.objectContaining({ action: "frontdesk.access_revoked" }))
+  })
+
+  it("revokes a grant re-opened between the first read and the lock, without answering alreadyRevoked", async () => {
+    const wasRevoked = new Date("2026-11-02T00:00:00Z")
+    fake.state.grants[0].revokedAt = wasRevoked
+    // A concurrent POST re-opens the grant after DELETE's initial read, before its lock.
+    fake.state.reopenBeforeLock = true
+    const res = await call("DELETE", "events/[id]/front-desk-access/[accessId]")
+    expect(res.status).toBe(200)
+    expect(await res.json()).toEqual({ revoked: true })
+    expect(fake.state.grants[0].revokedAt).toBeInstanceOf(Date)
+    expect(fake.state.grants[0].revokedAt).not.toBe(wasRevoked)
+    expect(fake.state.admins.find((a) => a.id === "adm-lea")!.sessionVersion).toBe(4)
+    expect(logEvent).toHaveBeenCalledWith(expect.objectContaining({ action: "frontdesk.access_revoked", entityId: "grant-1" }))
   })
 
   it("a retry repairs a revocation that committed without invalidating the sessions", async () => {

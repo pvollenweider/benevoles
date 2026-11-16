@@ -17,6 +17,7 @@ import { hashToken } from "@/lib/token-hash"
 import { validationError } from "@/lib/api-error"
 import { isUniqueViolation } from "@/lib/registration-capacity"
 import { rateLimit } from "@/lib/rate-limit"
+import { reportError } from "@/lib/report-error"
 import { apexBaseUrl } from "@/lib/urls"
 import { orgTimeZone } from "@/lib/time-zone"
 import { ADMIN_INVITE_PENDING_ERROR, canInviteAdmins } from "@/lib/org-approval"
@@ -129,7 +130,12 @@ export async function POST(req: Request, { params }: { params: Promise<{ id: str
     }
     // Any other account (another organisation's, a super admin's) is not the caller's business:
     // the same answer as a sent invitation, and no write, email or log for that address.
-    if (!(sameOrganization && holder.role === FRONT_DESK_ROLE)) return ACCEPTED()
+    if (!(sameOrganization && holder.role === FRONT_DESK_ROLE)) {
+      // Pay the same fixed bcrypt cost as a free address (#1142): otherwise response time tells
+      // the owner whether the address is held elsewhere.
+      await bcrypt.hash(randomBytes(16).toString("hex"), 10)
+      return ACCEPTED()
+    }
     // A front-desk account activated and later deactivated has no setup link left: it is not a
     // pending invitation, and re-inviting it silently would reset its password. The owner may know.
     if (!holder.isActive && !isNeverActivated(holder)) {
@@ -140,6 +146,9 @@ export async function POST(req: Request, { params }: { params: Promise<{ id: str
   // A new account always gets a link; so does a never-activated front-desk account when it is
   // invited again. An activated account already has its password and gets none.
   const setupToken = !holder || isNeverActivated(holder) ? generateToken() : null
+  // An activated account follows the no-link path above, but pays the same one-hash fixed cost
+  // as a free address (#1142), so response time does not reveal that the address is taken.
+  if (holder?.isActive) await bcrypt.hash(randomBytes(16).toString("hex"), 10)
   const setupTokenExpiresAt = setupToken ? new Date(now.getTime() + SETUP_TOKEN_MS) : null
   const organizationName = event.organization?.name ?? org.name
   const inviteUrl = setupToken ? `${apexBaseUrl()}/admin/accept-invite?token=${setupToken}` : null
@@ -191,6 +200,10 @@ export async function POST(req: Request, { params }: { params: Promise<{ id: str
       // The grant, the link replacement and the email commit together, on the account's row lock:
       // a concurrent revocation (which takes the same lock) and this write cannot interleave.
       const existingOutcome = await prisma.$transaction(async (tx) => {
+        // Lock order: the account row first, then the grant, the same order the revocation uses.
+        // An organisation deletion deletes grants through the cascade before the accounts; a
+        // concurrent run can deadlock one transaction. PostgreSQL aborts one of them, and the
+        // catch below reports that as a retryable failure, never as success.
         const locked = await tx.$queryRaw<{ id: string }[]>`SELECT id FROM "AdminUser" WHERE id = ${holder.id} AND "organizationId" = ${organizationId} FOR UPDATE`
         if (locked.length === 0) return null
         const existing = await tx.adminEventAccess.findFirst({
@@ -224,10 +237,17 @@ export async function POST(req: Request, { params }: { params: Promise<{ id: str
     // The address was taken between the lookup and the write: the same neutral answer as a sent
     // invitation, never a hint that the address now has an account.
     if (isUniqueViolation(e)) return ACCEPTED()
-    throw e
+    // The transaction rolled back. Never report success: the owner can retry, and a retry is safe
+    // (the grant and the link are written together).
+    reportError("frontdesk.access_grant")(e)
+    return NextResponse.json({ error: "L'accès n'a pas pu être ajouté. Rien n'a été modifié. Réessayez.", notApplied: true }, { status: 500 })
   }
   deliverAfterResponse(outcome.outboxIds)
 
+  // A token write that matched no row means the account was activated under the lock: this is the
+  // active-account case. No email went out (`invitationSent` is false), and the entry is the one of
+  // an access added to an existing account, exactly as a request made a moment later would write
+  // it. No invitation-specific entry is emitted.
   await logEvent({
     eventId,
     actor: adminActor(guard.session),

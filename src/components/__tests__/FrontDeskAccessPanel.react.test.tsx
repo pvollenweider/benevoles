@@ -83,6 +83,20 @@ describe("FrontDeskAccessPanel", () => {
     await waitFor(() => expect(screen.getByRole("status")).toHaveTextContent("Accès ajouté pour Léa Favre, qui a déjà un compte accueil."))
   })
 
+  it("does not claim the list was reloaded when the reload fails after a 202", async () => {
+    fetchMock.mockImplementation(async (url: string, init: RequestInit) => {
+      if (init.method === "POST") return json({ accepted: true }, 202)
+      return json({ error: "Une erreur est survenue." }, 500)
+    })
+    renderPanel([])
+    fireEvent.change(screen.getByRole("textbox", { name: /^Nom/ }), { target: { value: "Léa Favre" } })
+    fireEvent.change(screen.getByRole("textbox", { name: /^Email/ }), { target: { value: "lea.favre@example.org" } })
+    fireEvent.click(screen.getByRole("button", { name: "Inviter" }))
+    await waitFor(() => expect(screen.getByRole("status")).toHaveTextContent("L'invitation est prise en compte. La liste n'a pas pu être relue : rechargez la page."))
+    expect(screen.getByRole("status")).not.toHaveTextContent("apparaît dans la liste")
+    expect(screen.getByRole("status")).not.toHaveTextContent("invitation est partie")
+  })
+
   it("a refused address moves the focus to the email field, marked invalid, with the server's sentence", async () => {
     fetchMock.mockResolvedValue(json({ error: "Cette personne fait déjà partie de l'équipe d'administration de votre organisation : elle n'a pas besoin d'un accès accueil." }, 409))
     renderPanel([])

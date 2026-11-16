@@ -20,11 +20,11 @@ function setupGuard() {
 }
 
 const orgFindUnique = vi.hoisted(() => vi.fn())
-const adminUserUpdate = vi.hoisted(() => vi.fn())
+const adminUserUpdateMany = vi.hoisted(() => vi.fn())
 vi.mock("@/lib/prisma", () => ({
   prisma: {
     organization: { findUnique: orgFindUnique },
-    adminUser: { update: adminUserUpdate },
+    adminUser: { updateMany: adminUserUpdateMany },
   },
 }))
 
@@ -37,7 +37,7 @@ describe("POST /api/super-admin/organizations/[id]/send-invite", () => {
     vi.clearAllMocks()
     setupGuard()
     orgFindUnique.mockResolvedValue({ name: "Org", admins: [admin] })
-    adminUserUpdate.mockResolvedValue({})
+    adminUserUpdateMany.mockResolvedValue({ count: 1 })
   })
 
   it("reports sent: false when the email is refused, without the SMTP reason", async () => {
@@ -65,5 +65,22 @@ describe("POST /api/super-admin/organizations/[id]/send-invite", () => {
     const { POST } = await import("@/app/api/super-admin/organizations/[id]/send-invite/route")
     await POST(post(), { params: Promise.resolve({ id: "org-1" }) })
     expect(orgFindUnique.mock.calls[0][0].select.admins.where).toEqual({ isActive: false, setupTokenHash: { not: null }, role: { in: ["admin", "organizer", "super_admin"] } })
+  })
+
+  it("conditions the setup-token write on the never-activated state", async () => {
+    sendNotificationMock.mockResolvedValue({ ok: true })
+    const { POST } = await import("@/app/api/super-admin/organizations/[id]/send-invite/route")
+    await POST(post(), { params: Promise.resolve({ id: "org-1" }) })
+    expect(adminUserUpdateMany.mock.calls[0][0].where).toEqual({ id: "adm-1", isActive: false, setupTokenHash: { not: null }, setupTokenExpiresAt: { not: null } })
+  })
+
+  it("sends nothing and answers like no pending invitation when the account was activated meanwhile", async () => {
+    adminUserUpdateMany.mockResolvedValue({ count: 0 })
+    sendNotificationMock.mockResolvedValue({ ok: true })
+    const { POST } = await import("@/app/api/super-admin/organizations/[id]/send-invite/route")
+    const res = await POST(post(), { params: Promise.resolve({ id: "org-1" }) })
+    expect(res.status).toBe(404)
+    expect(await res.json()).toEqual({ error: "Aucun compte en attente d'activation." })
+    expect(sendNotificationMock).not.toHaveBeenCalled()
   })
 })

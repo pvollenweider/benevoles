@@ -9,12 +9,13 @@ import { prisma } from "@/lib/prisma"
 import { adminActor, logEvent } from "@/lib/event-log"
 import { isGrantLive } from "@/lib/front-desk-access"
 import { orgTimeZone } from "@/lib/time-zone"
+import { reportError } from "@/lib/report-error"
 
 export const dynamic = "force-dynamic"
 
 type RevokeDb = {
   adminEventAccess: {
-    findFirst(args: unknown): Promise<{ id: string; adminUserId: string; revokedAt: Date | null } | null>
+    findFirst(args: unknown): Promise<{ id: string; adminUserId: string } | null>
     findMany(args: unknown): Promise<{
       id: string; revokedAt: Date | null; expiresAt: Date | null
       event: { publicStatus: string; endDate: Date; organization: { timeZone: string | null } | null } | null
@@ -44,47 +45,57 @@ export async function DELETE(_req: Request, { params }: { params: Promise<{ id: 
 
   const access = await (db as unknown as RevokeDb).adminEventAccess.findFirst({
     where: { id: accessId, eventId },
-    select: { id: true, adminUserId: true, revokedAt: true },
+    select: { id: true, adminUserId: true },
   })
   if (!access) return NextResponse.json({ error: "Non trouvé" }, { status: 404 })
 
   const now = new Date()
-  const outcome = await prisma.$transaction(async (tx) => {
-    // Lock the account row first: a concurrent grant creation or re-opening takes the same lock,
-    // so it cannot slip a new live grant in between this count and the version bump.
-    const locked = await tx.$queryRaw<{ id: string }[]>`SELECT id FROM "AdminUser" WHERE id = ${access.adminUserId} AND "organizationId" = ${guard.organizationId} FOR UPDATE`
-    if (locked.length === 0) return null
+  let outcome: { revokedNow: boolean } | null
+  try {
+    outcome = await prisma.$transaction(async (tx) => {
+      // Lock order: the account row is locked first, then the grant is written, like the creation
+      // and re-opening path. An organisation deletion deletes grants through the cascade before
+      // the accounts; a concurrent run can therefore deadlock one transaction. PostgreSQL aborts
+      // one of them, and the catch below reports that as a retryable failure, never as success.
+      const locked = await tx.$queryRaw<{ id: string }[]>`SELECT id FROM "AdminUser" WHERE id = ${access.adminUserId} AND "organizationId" = ${guard.organizationId} FOR UPDATE`
+      if (locked.length === 0) return null
 
-    let revokedNow = false
-    if (!access.revokedAt) {
+      // The pre-lock read may be stale: a POST can have re-opened the grant in between. The
+      // conditional write is the decision, on the value read under the lock: count 1 means this
+      // request revoked it, count 0 means it was already revoked before this request.
       const { count } = await tx.adminEventAccess.updateMany({
         where: { id: access.id, eventId, revokedAt: null },
         data: { revokedAt: now },
       })
-      revokedNow = count === 1
-    }
+      const revokedNow = count === 1
 
-    // Another event may still be open to this person: only the last live grant ends the sessions,
-    // with the same liveness rule as isGrantLive (revoked, expired, archived or ended event).
-    const others = await tx.adminEventAccess.findMany({
-      where: { adminUserId: access.adminUserId, revokedAt: null },
-      select: {
-        id: true, revokedAt: true, expiresAt: true,
-        event: { select: { publicStatus: true, endDate: true, organization: { select: { timeZone: true } } } },
-      },
+      // Another event may still be open to this person: only the last live grant ends the sessions,
+      // with the same liveness rule as isGrantLive (revoked, expired, archived or ended event).
+      const others = await tx.adminEventAccess.findMany({
+        where: { adminUserId: access.adminUserId, revokedAt: null },
+        select: {
+          id: true, revokedAt: true, expiresAt: true,
+          event: { select: { publicStatus: true, endDate: true, organization: { select: { timeZone: true } } } },
+        },
+      })
+      const stillLive = (others ?? []).some((row) => !!row.event && isGrantLive(
+        row,
+        { publicStatus: row.event.publicStatus, endDate: row.event.endDate, timeZone: orgTimeZone(row.event.organization) },
+        now,
+      ))
+      if (!stillLive) {
+        // Scoped to the caller's organisation besides the id: a grant row must never end another
+        // organisation's session, even if a bad row pointed across tenants.
+        await tx.adminUser.updateMany({ where: { id: access.adminUserId, organizationId: guard.organizationId }, data: { sessionVersion: { increment: 1 } } })
+      }
+      return { revokedNow }
     })
-    const stillLive = (others ?? []).some((row) => !!row.event && isGrantLive(
-      row,
-      { publicStatus: row.event.publicStatus, endDate: row.event.endDate, timeZone: orgTimeZone(row.event.organization) },
-      now,
-    ))
-    if (!stillLive) {
-      // Scoped to the caller's organisation besides the id: a grant row must never end another
-      // organisation's session, even if a bad row pointed across tenants.
-      await tx.adminUser.updateMany({ where: { id: access.adminUserId, organizationId: guard.organizationId }, data: { sessionVersion: { increment: 1 } } })
-    }
-    return { revokedNow }
-  })
+  } catch (e) {
+    // The transaction rolled back. Never answer success: the owner can retry, and a retry repairs
+    // the whole revocation, session invalidation included.
+    reportError("frontdesk.access_revoke")(e)
+    return NextResponse.json({ error: "La révocation n'a pas pu être faite. Rien n'a été modifié. Réessayez.", notApplied: true }, { status: 500 })
+  }
   if (!outcome) return NextResponse.json({ error: "Non trouvé" }, { status: 404 })
 
   // Only a revocation performed by this request is a new event; the repair path logs nothing.

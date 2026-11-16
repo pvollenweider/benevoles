@@ -114,9 +114,16 @@ export default function FrontDeskAccessPanel({ eventId, initialAccesses }: Props
     setName("")
     setEmail("")
     const rows = await reload()
+    if (!rows) {
+      // The invitation request succeeded but the list could not be read: say nothing about what
+      // the list shows, and never claim an email was sent.
+      setStatus("L'invitation est prise en compte. La liste n'a pas pu être relue : rechargez la page.")
+      inviteRef.current?.focus()
+      return
+    }
     // An activated front-desk account of this organisation already has its password: the grant
     // was added or re-opened without any email. The reloaded row says which case happened.
-    const existingAccount = rows?.find((row) => row.email.toLowerCase() === invited.toLowerCase() && row.status === "active")
+    const existingAccount = rows.find((row) => row.email.toLowerCase() === invited.toLowerCase() && row.status === "active")
     setStatus(existingAccount
       ? `Accès ajouté pour ${existingAccount.name}, qui a déjà un compte accueil.`
       : "Si cette adresse peut recevoir un accès accueil, l'invitation est partie. L'accès apparaît dans la liste ci-dessous.")
