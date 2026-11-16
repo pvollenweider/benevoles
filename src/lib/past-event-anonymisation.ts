@@ -23,7 +23,7 @@ import { prisma } from "./prisma"
 import { generateToken } from "./utils"
 import { registrationToken } from "./token-vault"
 import { ERASED_REGISTRATION_DATA, erasedVolunteerData } from "./member-erasure"
-import { pastEventCutoff, type PastEventBatchCounts } from "./past-event-retention"
+import { batchMonthStart, pastEventCutoff, type PastEventBatchCounts } from "./past-event-retention"
 import { loadSummaryRecipients } from "./delivery-summary-data"
 import { deliverAfterResponse, enqueueNotifications } from "./notifications/outbox"
 import { orgTimeZone } from "./time-zone"
@@ -55,14 +55,19 @@ export async function loadPastEventOrganizations(now: Date) {
  * of this batch: shared across the batch's events, so a member who came to two old events is one
  * anonymous volunteer in both. Registrations already on an erased record (an erased member, or an
  * earlier batch) are left as they are: nothing identifies them any more.
+ *
+ * The event is marked first, only where it was not yet: that statement holds the event's row until
+ * the transaction ends, so a second call on the same event waits, finds it done and gets `null`.
  */
 export async function anonymisePastEvent(
   eventId: string,
   organizationId: string,
   anonymousIds: Map<string, string>,
   now: Date,
-): Promise<Omit<PastEventBatchCounts, "events">> {
+): Promise<Omit<PastEventBatchCounts, "events"> | null> {
   return prisma.$transaction(async (tx) => {
+    const mine = await tx.event.updateMany({ where: { id: eventId, personalDataAnonymizedAt: null }, data: { personalDataAnonymizedAt: now } })
+    if (mine.count === 0) return null
     const registrations = await tx.registration.findMany({
       where: { eventId, volunteer: { erasedAt: null } },
       select: { id: true, volunteerId: true },
@@ -106,7 +111,6 @@ export async function anonymisePastEvent(
     // Generated proposals and hour targets (#1172): planning data about named people, done with.
     await tx.proposalRun.deleteMany({ where: { eventId } })
     await tx.eventVolunteerTarget.deleteMany({ where: { eventId } })
-    await tx.event.update({ where: { id: eventId }, data: { personalDataAnonymizedAt: now } })
     const counts = { registrations: registrations.length, anonymousRecords, answers: answers.count, invites: invites.count, shiftDeclines: shiftDeclines.count, sectorLeaders: sectorLeaders.count }
     await tx.eventLog.create({
       data: {
@@ -123,23 +127,46 @@ export async function anonymisePastEvent(
   }, { maxWait: 10_000, timeout: 60_000 })
 }
 
-/** One monthly batch: every concerned event of the organisation, then the batch date. */
-export async function runPastEventBatch(organizationId: string, now: Date): Promise<PastEventBatchCounts> {
-  const events = await prisma.event.findMany({ where: concernedEventsWhere(organizationId, now), select: { id: true }, orderBy: { endDate: "asc" } })
-  const anonymousIds = new Map<string, string>()
-  const total: PastEventBatchCounts = { events: 0, registrations: 0, anonymousRecords: 0, answers: 0, invites: 0, shiftDeclines: 0, sectorLeaders: 0 }
-  for (const e of events) {
-    const c = await anonymisePastEvent(e.id, organizationId, anonymousIds, now)
-    total.events++
-    total.registrations += c.registrations
-    total.anonymousRecords += c.anonymousRecords
-    total.answers += c.answers
-    total.invites += c.invites
-    total.shiftDeclines += c.shiftDeclines
-    total.sectorLeaders += c.sectorLeaders
+/**
+ * One monthly batch: every concerned event of the organisation.
+ *
+ * The batch is claimed first: its date is read and written under the organisation's row lock, only
+ * where no batch of this calendar month is recorded, so of two cleanups running together one gets
+ * the organisation and the other gets `null` and leaves it alone. Without that, each would build
+ * its own anonymous records and a member who came to two old events could end as two anonymous
+ * volunteers. A batch that fails gives the date back, so the next night tries again. A process that
+ * dies in the middle leaves the date: the events it did not reach wait for next month's batch.
+ */
+export async function runPastEventBatch(organizationId: string, now: Date): Promise<PastEventBatchCounts | null> {
+  const claim = await prisma.$transaction(async (tx) => {
+    const [org] = await tx.$queryRaw<{ pastEventBatchAt: Date | null }[]>`SELECT "pastEventBatchAt" FROM "Organization" WHERE id = ${organizationId} FOR UPDATE`
+    if (!org || (org.pastEventBatchAt && org.pastEventBatchAt >= batchMonthStart(now))) return null
+    await tx.organization.update({ where: { id: organizationId }, data: { pastEventBatchAt: now } })
+    return { previous: org.pastEventBatchAt }
+  })
+  if (!claim) return null
+  try {
+    const events = await prisma.event.findMany({ where: concernedEventsWhere(organizationId, now), select: { id: true }, orderBy: { endDate: "asc" } })
+    const anonymousIds = new Map<string, string>()
+    const total: PastEventBatchCounts = { events: 0, registrations: 0, anonymousRecords: 0, answers: 0, invites: 0, shiftDeclines: 0, sectorLeaders: 0 }
+    for (const e of events) {
+      const c = await anonymisePastEvent(e.id, organizationId, anonymousIds, now)
+      // Done meanwhile by a batch that started last month and is still running.
+      if (!c) continue
+      total.events++
+      total.registrations += c.registrations
+      total.anonymousRecords += c.anonymousRecords
+      total.answers += c.answers
+      total.invites += c.invites
+      total.shiftDeclines += c.shiftDeclines
+      total.sectorLeaders += c.sectorLeaders
+    }
+    return total
+  } catch (e) {
+    // Only this batch's own date: `previous` was read under the lock that wrote it.
+    await prisma.organization.updateMany({ where: { id: organizationId, pastEventBatchAt: now }, data: { pastEventBatchAt: claim.previous } })
+    throw e
   }
-  await prisma.organization.update({ where: { id: organizationId }, data: { pastEventBatchAt: now } })
-  return total
 }
 
 /**

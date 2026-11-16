@@ -345,10 +345,13 @@ async function run(req: Request) {
             await sendPastEventNotice(org.id, observed.find((o) => o.organizationId === org.id) ?? null, step.firstBatchOn, now)
             pastEventsDone.notices++
           } else if (step.kind === "batch") {
-            const c: PastEventBatchCounts = await runPastEventBatch(org.id, now)
-            pastEventsDone.batches++
-            pastEventsDone.events += c.events
-            pastEventsDone.registrations += c.registrations
+            // `null`: another cleanup running at the same time has this organisation's batch.
+            const c: PastEventBatchCounts | null = await runPastEventBatch(org.id, now)
+            if (c) {
+              pastEventsDone.batches++
+              pastEventsDone.events += c.events
+              pastEventsDone.registrations += c.registrations
+            }
           }
         } catch (e) {
           // One organisation's failure never stops the others; the next night tries again.

@@ -1,5 +1,5 @@
 import { describe, it, expect } from "vitest"
-import { PAST_EVENT_NOTICE_DAYS, pastEventCutoff, pastEventRetentionMode, pastEventStep, pastEventSummary, pastEventTotals, type PastEventObservation } from "../past-event-retention"
+import { PAST_EVENT_NOTICE_DAYS, batchMonthStart, pastEventCutoff, pastEventRetentionMode, pastEventStep, pastEventSummary, pastEventTotals, type PastEventObservation } from "../past-event-retention"
 
 const row = (over: Partial<PastEventObservation>): PastEventObservation => ({ organizationId: "o", organizationName: "O", events: 0, registrations: 0, members: 0, membersOnlyOld: 0, answers: 0, invites: 0, sectorLeaders: 0, ...over })
 
@@ -56,5 +56,28 @@ describe("past events, enforcement (#813, phase 2)", () => {
     expect(pastEventStep({ concernedEvents: 1, noticeAt, batchAt }, day("2026-12-01T02:00:00Z"))).toEqual({ kind: "batch" })
     // Across a year end.
     expect(pastEventStep({ concernedEvents: 1, noticeAt, batchAt: day("2026-12-15T02:00:00Z") }, day("2027-01-01T02:00:00Z"))).toEqual({ kind: "batch" })
+  })
+})
+
+describe("claiming the month's batch", () => {
+  it("starts the month at midnight UTC on the 1st", () => {
+    expect(batchMonthStart(new Date("2026-10-10T02:00:00Z")).toISOString()).toBe("2026-10-01T00:00:00.000Z")
+    expect(batchMonthStart(new Date("2027-01-01T00:00:00Z")).toISOString()).toBe("2027-01-01T00:00:00.000Z")
+    expect(batchMonthStart(new Date("2026-12-31T23:59:59Z")).toISOString()).toBe("2026-12-01T00:00:00.000Z")
+  })
+
+  // The claim (`pastEventBatchAt` empty or before the month's start) and the step computed for the
+  // cleanup must agree, or a due batch would be refused, or a second one accepted.
+  it.each([
+    ["2026-09-30T23:59:59Z", "2026-10-01T00:00:00Z"],
+    ["2026-10-01T00:00:00Z", "2026-10-31T23:00:00Z"],
+    ["2026-10-10T02:00:00Z", "2026-10-10T02:00:00.001Z"],
+    ["2026-10-10T02:00:00Z", "2026-11-01T02:00:00Z"],
+    ["2025-12-31T02:00:00Z", "2026-01-01T02:00:00Z"],
+  ])("agrees with the step: last batch %s, now %s", (batchAt, now) => {
+    const last = new Date(batchAt)
+    const at = new Date(now)
+    const due = pastEventStep({ concernedEvents: 1, noticeAt: new Date("2024-01-01T00:00:00Z"), batchAt: last }, at).kind === "batch"
+    expect(last < batchMonthStart(at)).toBe(due)
   })
 })
