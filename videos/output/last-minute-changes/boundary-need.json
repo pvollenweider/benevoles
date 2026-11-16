@@ -1,0 +1,12 @@
+{
+  "anchor": "Le matériel arrive plus tôt et une paire de mains supplémentaire",
+  "windowStart": 192.091,
+  "result": {
+    "found": true,
+    "startSeconds": 24.08,
+    "wordsHeard": "Le matériel arrive plus tôt et une paire de mains supplémentaire"
+  },
+  "onset": 216.171,
+  "proposedCut": 215.761125,
+  "note": "Proposal only; recut then independently audit before capture"
+}

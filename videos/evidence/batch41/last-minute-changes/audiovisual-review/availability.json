@@ -1,0 +1,52 @@
+{
+  "model": "gemini-3.8-flash",
+  "reviewedAt": "2026-11-16T21:48:12.989Z",
+  "videoSha256": "4653dc79571706a49eeec87491213f683a99fc0d87f06d5568d9f74cf1d2c5da",
+  "promptSha256": "771264862ff2453f11e613510d6d18ce833eaef2e0a417ecb37413b9a1d869c4",
+  "clipSha256": "fc34368e0aeb8337a46dad93bdcc9d0e3f386415d06675217609d55027b9dc3e",
+  "scene": "availability",
+  "review": {
+    "heardOpening": "Pour chercher de l'aide, regardons les disponibilités",
+    "checkpoints": [
+      {
+        "spokenSeconds": 5.4,
+        "spoken": "Zoé a indiqué le matin, avec une remarque.",
+        "visibleSeconds": 5,
+        "visible": "Filtre sur Zoé affichant 'Matin - Peut aussi aider en début d'après-midi après confirmation.' puis ouverture de la fiche de modification",
+        "sync": "aligned",
+        "severity": "none"
+      },
+      {
+        "spokenSeconds": 15.6,
+        "spoken": "Regardons aussi ses inscriptions, pour éviter un chevauchement.",
+        "visibleSeconds": 18.5,
+        "visible": "Navigation vers la page 'Activité de Zoé Papadopoulos' affichant ses inscriptions",
+        "sync": "aligned",
+        "severity": "none"
+      },
+      {
+        "spokenSeconds": 32.5,
+        "spoken": "Sarah répond Je ne peux pas pour ce seul créneau.",
+        "visibleSeconds": 31,
+        "visible": "Clic sur 'Confirmer que je ne peux pas' puis confirmation enregistrée",
+        "sync": "aligned",
+        "severity": "none"
+      },
+      {
+        "spokenSeconds": 37.3,
+        "spoken": "A répondu non le, indique sa réponse, sans la retirer de la liste.",
+        "visibleSeconds": 37,
+        "visible": "Dans la liste des bénévoles, mention 'A répondu non le 16 novembre 2026' sous Sarah Smith",
+        "sync": "aligned",
+        "severity": "none"
+      }
+    ],
+    "issues": [],
+    "voice": {
+      "consistent": true,
+      "warm": true,
+      "observation": "Voix claire, posée et bien synchronisée avec les actions affichées à l'écran."
+    }
+  },
+  "note": "Automated observation of actual final video audio and images; not a claim of complete human validation"
+}

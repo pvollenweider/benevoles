@@ -1,0 +1,757 @@
+{
+  "checkedAt": "2026-11-16T21:50:15.139039+00:00",
+  "scope": "All published catalogue MP4s measured directly at their public media URLs; both actual published posters checked by HEAD",
+  "changedSlugs": [
+    "admin-features-tour",
+    "attendance-check-in",
+    "event-program-pages-qr",
+    "front-desk-access",
+    "members-management",
+    "org-email-settings",
+    "privacy-personal-links",
+    "reminders-changes",
+    "sectors",
+    "shift-roster-visibility",
+    "volunteer-hours-certificate",
+    "volunteer-register-mobile"
+  ],
+  "rows": [
+    {
+      "id": "ADMIN_NAVIGATION",
+      "url": "https://medias.benevol.app/admin-navigation/admin-navigation.mp4",
+      "render": {
+        "durationMs": 138720,
+        "width": 1280,
+        "height": 800,
+        "poster": true
+      },
+      "bothPublishedPostersPresent": true
+    },
+    {
+      "id": "GLOBAL_SEARCH",
+      "url": "https://medias.benevol.app/global-search/global-search.mp4",
+      "render": {
+        "durationMs": 91120,
+        "width": 1280,
+        "height": 800,
+        "poster": true
+      },
+      "bothPublishedPostersPresent": true
+    },
+    {
+      "id": "ORG_PUBLIC_IDENTITY",
+      "url": "https://medias.benevol.app/org-public-identity/org-public-identity.mp4",
+      "render": {
+        "durationMs": 162240,
+        "width": 1280,
+        "height": 800,
+        "poster": true
+      },
+      "bothPublishedPostersPresent": true
+    },
+    {
+      "id": "ORG_TIMEZONE_CHARTER",
+      "url": "https://medias.benevol.app/org-timezone-charter/org-timezone-charter.mp4",
+      "render": {
+        "durationMs": 133480,
+        "width": 1280,
+        "height": 800,
+        "poster": true
+      },
+      "bothPublishedPostersPresent": true
+    },
+    {
+      "id": "ORG_TEAM_PERMISSIONS",
+      "url": "https://medias.benevol.app/org-team-permissions/org-team-permissions.mp4",
+      "render": {
+        "durationMs": 139680,
+        "width": 1280,
+        "height": 800,
+        "poster": true
+      },
+      "bothPublishedPostersPresent": true
+    },
+    {
+      "id": "ORG_EMAIL_SETTINGS",
+      "url": "https://medias.benevol.app/org-email-settings/org-email-settings.mp4",
+      "render": {
+        "durationMs": 202960,
+        "width": 1280,
+        "height": 800,
+        "poster": true
+      },
+      "bothPublishedPostersPresent": true
+    },
+    {
+      "id": "EVENT_CREATE_BLANK",
+      "url": "https://medias.benevol.app/event-create-blank/event-create-blank.mp4",
+      "render": {
+        "durationMs": 152040,
+        "width": 1280,
+        "height": 800,
+        "poster": true
+      },
+      "bothPublishedPostersPresent": true
+    },
+    {
+      "id": "EVENT_CREATE_TEMPLATE",
+      "url": "https://medias.benevol.app/event-create-template/event-create-template.mp4",
+      "render": {
+        "durationMs": 117320,
+        "width": 1280,
+        "height": 800,
+        "poster": true
+      },
+      "bothPublishedPostersPresent": true
+    },
+    {
+      "id": "EVENT_REVIEW_PUBLISH",
+      "url": "https://medias.benevol.app/event-review-publish/event-review-publish.mp4",
+      "render": {
+        "durationMs": 128120,
+        "width": 1280,
+        "height": 800,
+        "poster": true
+      },
+      "bothPublishedPostersPresent": true
+    },
+    {
+      "id": "EVENT_VISIBILITY_REGISTRATION_WINDOW",
+      "url": "https://medias.benevol.app/event-visibility-registration-window/event-visibility-registration-window.mp4",
+      "render": {
+        "durationMs": 127000,
+        "width": 1280,
+        "height": 800,
+        "poster": true
+      },
+      "bothPublishedPostersPresent": true
+    },
+    {
+      "id": "EVENT_DUPLICATE",
+      "url": "https://medias.benevol.app/event-duplicate/event-duplicate.mp4",
+      "render": {
+        "durationMs": 149480,
+        "width": 1280,
+        "height": 800,
+        "poster": true
+      },
+      "bothPublishedPostersPresent": true
+    },
+    {
+      "id": "EVENT_PROGRAM_PAGES_QR",
+      "url": "https://medias.benevol.app/event-program-pages-qr/event-program-pages-qr.mp4",
+      "render": {
+        "durationMs": 194280,
+        "width": 1280,
+        "height": 800,
+        "poster": true
+      },
+      "bothPublishedPostersPresent": true
+    },
+    {
+      "id": "EVENT_MILESTONES",
+      "url": "https://medias.benevol.app/event-milestones/event-milestones.mp4",
+      "render": {
+        "durationMs": 92280,
+        "width": 1280,
+        "height": 800,
+        "poster": true
+      },
+      "bothPublishedPostersPresent": true
+    },
+    {
+      "id": "EVENT_ARCHIVE_DELETE",
+      "url": "https://medias.benevol.app/event-archive-delete/event-archive-delete.mp4",
+      "render": {
+        "durationMs": 100560,
+        "width": 1280,
+        "height": 800,
+        "poster": true
+      },
+      "bothPublishedPostersPresent": true
+    },
+    {
+      "id": "EVENT_QUESTIONS",
+      "url": "https://medias.benevol.app/event-questions/event-questions.mp4",
+      "render": {
+        "durationMs": 539800,
+        "width": 1280,
+        "height": 800,
+        "poster": true
+      },
+      "bothPublishedPostersPresent": true
+    },
+    {
+      "id": "SHIFTS_ROLES_VIEWS",
+      "url": "https://medias.benevol.app/shifts-roles-views/shifts-roles-views.mp4",
+      "render": {
+        "durationMs": 86720,
+        "width": 1280,
+        "height": 800,
+        "poster": true
+      },
+      "bothPublishedPostersPresent": true
+    },
+    {
+      "id": "SHIFT_CREATE_EDIT_DETAIL",
+      "url": "https://medias.benevol.app/shift-create-edit-detail/shift-create-edit-detail.mp4",
+      "render": {
+        "durationMs": 132200,
+        "width": 1280,
+        "height": 800,
+        "poster": true
+      },
+      "bothPublishedPostersPresent": true
+    },
+    {
+      "id": "SHIFT_CREATE_SERIES",
+      "url": "https://medias.benevol.app/shift-create-series/shift-create-series.mp4",
+      "render": {
+        "durationMs": 105360,
+        "width": 1280,
+        "height": 800,
+        "poster": true
+      },
+      "bothPublishedPostersPresent": true
+    },
+    {
+      "id": "SHIFT_RECURRENCE",
+      "url": "https://medias.benevol.app/shift-recurrence/shift-recurrence.mp4",
+      "render": {
+        "durationMs": 142480,
+        "width": 1280,
+        "height": 800,
+        "poster": true
+      },
+      "bothPublishedPostersPresent": true
+    },
+    {
+      "id": "SHIFT_TIMELINE_QUICK_ACTIONS",
+      "url": "https://medias.benevol.app/shift-timeline-quick-actions/shift-timeline-quick-actions.mp4",
+      "render": {
+        "durationMs": 128120,
+        "width": 1280,
+        "height": 800,
+        "poster": true
+      },
+      "bothPublishedPostersPresent": true
+    },
+    {
+      "id": "SHIFT_NIGHT_DST",
+      "url": "https://medias.benevol.app/shift-night-dst/shift-night-dst.mp4",
+      "render": {
+        "durationMs": 106240,
+        "width": 1280,
+        "height": 800,
+        "poster": true
+      },
+      "bothPublishedPostersPresent": true
+    },
+    {
+      "id": "SHIFT_WAITLIST_OFFER",
+      "url": "https://medias.benevol.app/shift-waitlist-offer/shift-waitlist-offer.mp4",
+      "render": {
+        "durationMs": 109760,
+        "width": 1280,
+        "height": 800,
+        "poster": true
+      },
+      "bothPublishedPostersPresent": true
+    },
+    {
+      "id": "SHIFT_APPROVAL",
+      "url": "https://medias.benevol.app/shift-approval/shift-approval.mp4",
+      "render": {
+        "durationMs": 118960,
+        "width": 1280,
+        "height": 800,
+        "poster": true
+      },
+      "bothPublishedPostersPresent": true
+    },
+    {
+      "id": "SHIFT_ELIGIBILITY_RULES",
+      "url": "https://medias.benevol.app/shift-eligibility-rules/shift-eligibility-rules.mp4",
+      "render": {
+        "durationMs": 153280,
+        "width": 1280,
+        "height": 800,
+        "poster": true
+      },
+      "bothPublishedPostersPresent": true
+    },
+    {
+      "id": "VOLUNTEER_DISCOVER_EVENT",
+      "url": "https://medias.benevol.app/volunteer-discover-event/volunteer-discover-event.mp4",
+      "render": {
+        "durationMs": 183480,
+        "width": 1280,
+        "height": 800,
+        "poster": true
+      },
+      "bothPublishedPostersPresent": true
+    },
+    {
+      "id": "VOLUNTEER_CHOOSE_SHIFTS",
+      "url": "https://medias.benevol.app/volunteer-choose-shifts/volunteer-choose-shifts.mp4",
+      "render": {
+        "durationMs": 164720,
+        "width": 1280,
+        "height": 800,
+        "poster": true
+      },
+      "bothPublishedPostersPresent": true
+    },
+    {
+      "id": "VOLUNTEER_FORM_RECAP",
+      "url": "https://medias.benevol.app/volunteer-form-recap/volunteer-form-recap.mp4",
+      "render": {
+        "durationMs": 167280,
+        "width": 1280,
+        "height": 800,
+        "poster": true
+      },
+      "bothPublishedPostersPresent": true
+    },
+    {
+      "id": "VOLUNTEER_CONFIRMATION_ERRORS",
+      "url": "https://medias.benevol.app/volunteer-confirmation-errors/volunteer-confirmation-errors.mp4",
+      "render": {
+        "durationMs": 304320,
+        "width": 1280,
+        "height": 800,
+        "poster": true
+      },
+      "bothPublishedPostersPresent": true
+    },
+    {
+      "id": "VOLUNTEER_PERSONAL_REGISTRATIONS",
+      "url": "https://medias.benevol.app/volunteer-personal-registrations/volunteer-personal-registrations.mp4",
+      "render": {
+        "durationMs": 172040,
+        "width": 1280,
+        "height": 800,
+        "poster": true
+      },
+      "bothPublishedPostersPresent": true
+    },
+    {
+      "id": "VOLUNTEER_CALENDAR",
+      "url": "https://medias.benevol.app/volunteer-calendar/volunteer-calendar.mp4",
+      "render": {
+        "durationMs": 182520,
+        "width": 1280,
+        "height": 800,
+        "poster": true
+      },
+      "bothPublishedPostersPresent": true
+    },
+    {
+      "id": "VOLUNTEER_SESSION_AVAILABILITY",
+      "url": "https://medias.benevol.app/volunteer-session-availability/volunteer-session-availability.mp4",
+      "render": {
+        "durationMs": 184200,
+        "width": 1280,
+        "height": 800,
+        "poster": true
+      },
+      "bothPublishedPostersPresent": true
+    },
+    {
+      "id": "VOLUNTEER_EVENT_AVAILABILITY",
+      "url": "https://medias.benevol.app/volunteer-event-availability/volunteer-event-availability.mp4",
+      "render": {
+        "durationMs": 90800,
+        "width": 1280,
+        "height": 800,
+        "poster": true
+      },
+      "bothPublishedPostersPresent": true
+    },
+    {
+      "id": "VOLUNTEER_REGISTER",
+      "url": "https://medias.benevol.app/volunteer-register-mobile/volunteer-register-mobile.mp4",
+      "render": {
+        "durationMs": 56080,
+        "width": 390,
+        "height": 844,
+        "poster": true
+      },
+      "bothPublishedPostersPresent": true
+    },
+    {
+      "id": "EVENT_CREATE_PUBLISH_OVERVIEW",
+      "url": "https://medias.benevol.app/organizer-create-publish/organizer-create-publish.mp4",
+      "render": {
+        "durationMs": 184880,
+        "width": 1280,
+        "height": 800,
+        "poster": true
+      },
+      "bothPublishedPostersPresent": true
+    },
+    {
+      "id": "ADMIN_FEATURES_OVERVIEW",
+      "url": "https://medias.benevol.app/admin-features-tour/admin-features-tour.mp4",
+      "render": {
+        "durationMs": 292680,
+        "width": 1280,
+        "height": 800,
+        "poster": true
+      },
+      "bothPublishedPostersPresent": true
+    },
+    {
+      "id": "REGISTRATION_MONITOR_FOLLOWUP",
+      "url": "https://medias.benevol.app/organizer-monitor-followup/organizer-monitor-followup.mp4",
+      "render": {
+        "durationMs": 197480,
+        "width": 1280,
+        "height": 800,
+        "poster": true
+      },
+      "bothPublishedPostersPresent": true
+    },
+    {
+      "id": "ORG_FIRST_STEPS",
+      "url": "https://medias.benevol.app/masterclass-03-first-steps/masterclass-03-first-steps.mp4",
+      "render": {
+        "durationMs": 201680,
+        "width": 1280,
+        "height": 800,
+        "poster": true
+      },
+      "bothPublishedPostersPresent": true
+    },
+    {
+      "id": "SECTOR_LEADERS",
+      "url": "https://medias.benevol.app/sector-leaders/sector-leaders.mp4",
+      "render": {
+        "durationMs": 282640,
+        "width": 1280,
+        "height": 800,
+        "poster": true
+      },
+      "bothPublishedPostersPresent": true
+    },
+    {
+      "id": "BETA_ACCESS",
+      "url": "https://medias.benevol.app/beta-access/beta-access.mp4",
+      "render": {
+        "durationMs": 120600,
+        "width": 1280,
+        "height": 800,
+        "poster": true
+      },
+      "bothPublishedPostersPresent": true
+    },
+    {
+      "id": "SECTORS",
+      "url": "https://medias.benevol.app/sectors/sectors.mp4",
+      "render": {
+        "durationMs": 226080,
+        "width": 1280,
+        "height": 800,
+        "poster": true
+      },
+      "bothPublishedPostersPresent": true
+    },
+    {
+      "id": "SHIFT_SWAPS",
+      "url": "https://medias.benevol.app/shift-swaps/shift-swaps.mp4",
+      "render": {
+        "durationMs": 208400,
+        "width": 1280,
+        "height": 800,
+        "poster": true
+      },
+      "bothPublishedPostersPresent": true
+    },
+    {
+      "id": "WORKLOAD_PROTECTION",
+      "url": "https://medias.benevol.app/workload-protection/workload-protection.mp4",
+      "render": {
+        "durationMs": 406480,
+        "width": 1280,
+        "height": 800,
+        "poster": true
+      },
+      "bothPublishedPostersPresent": true
+    },
+    {
+      "id": "ASSIGNMENT_PROPOSALS",
+      "url": "https://medias.benevol.app/assignment-proposals/assignment-proposals.mp4",
+      "render": {
+        "durationMs": 170880,
+        "width": 1280,
+        "height": 800,
+        "poster": true
+      },
+      "bothPublishedPostersPresent": true
+    },
+    {
+      "id": "ASSIGNMENT_PUBLICATION",
+      "url": "https://medias.benevol.app/assignment-publication/assignment-publication.mp4",
+      "render": {
+        "durationMs": 164280,
+        "width": 1280,
+        "height": 800,
+        "poster": true
+      },
+      "bothPublishedPostersPresent": true
+    },
+    {
+      "id": "MEMBERS_MANAGEMENT",
+      "url": "https://medias.benevol.app/members-management/members-management.mp4",
+      "render": {
+        "durationMs": 238840,
+        "width": 1280,
+        "height": 800,
+        "poster": true
+      },
+      "bothPublishedPostersPresent": true
+    },
+    {
+      "id": "DATA_EXPORTS_ARCHIVES",
+      "url": "https://medias.benevol.app/data-exports-archives/data-exports-archives.mp4",
+      "render": {
+        "durationMs": 300320,
+        "width": 1280,
+        "height": 800,
+        "poster": true
+      },
+      "bothPublishedPostersPresent": true
+    },
+    {
+      "id": "ORGANIZATION_ACTIVITY_LOG",
+      "url": "https://medias.benevol.app/organization-activity-log/organization-activity-log.mp4",
+      "render": {
+        "durationMs": 291000,
+        "width": 1280,
+        "height": 800,
+        "poster": true
+      },
+      "bothPublishedPostersPresent": true
+    },
+    {
+      "id": "EVENT_ACTIVITY_LOG",
+      "url": "https://medias.benevol.app/event-activity-log/event-activity-log.mp4",
+      "render": {
+        "durationMs": 266560,
+        "width": 1280,
+        "height": 800,
+        "poster": true
+      },
+      "bothPublishedPostersPresent": true
+    },
+    {
+      "id": "ATTENDANCE_CHECK_IN",
+      "url": "https://medias.benevol.app/attendance-check-in/attendance-check-in.mp4",
+      "render": {
+        "durationMs": 461680,
+        "width": 1280,
+        "height": 800,
+        "poster": true
+      },
+      "bothPublishedPostersPresent": true
+    },
+    {
+      "id": "FRONT_DESK_ACCESS",
+      "url": "https://medias.benevol.app/front-desk-access/front-desk-access.mp4",
+      "render": {
+        "durationMs": 170160,
+        "width": 1280,
+        "height": 800,
+        "poster": true
+      },
+      "bothPublishedPostersPresent": true
+    },
+    {
+      "id": "EVENT_REPORTS",
+      "url": "https://medias.benevol.app/event-reports/event-reports.mp4",
+      "render": {
+        "durationMs": 336120,
+        "width": 1280,
+        "height": 800,
+        "poster": true
+      },
+      "bothPublishedPostersPresent": true
+    },
+    {
+      "id": "VOLUNTEER_BADGES",
+      "url": "https://medias.benevol.app/volunteer-badges/volunteer-badges.mp4",
+      "render": {
+        "durationMs": 252840,
+        "width": 1280,
+        "height": 800,
+        "poster": true
+      },
+      "bothPublishedPostersPresent": true
+    },
+    {
+      "id": "REMINDERS_CHANGES",
+      "url": "https://medias.benevol.app/reminders-changes/reminders-changes.mp4",
+      "render": {
+        "durationMs": 288640,
+        "width": 1280,
+        "height": 800,
+        "poster": true
+      },
+      "bothPublishedPostersPresent": true
+    },
+    {
+      "id": "TARGETED_MESSAGES",
+      "url": "https://medias.benevol.app/targeted-messages/targeted-messages.mp4",
+      "render": {
+        "durationMs": 337720,
+        "width": 1280,
+        "height": 800,
+        "poster": true
+      },
+      "bothPublishedPostersPresent": true
+    },
+    {
+      "id": "STAFFING_GAPS",
+      "url": "https://medias.benevol.app/staffing-gaps/staffing-gaps.mp4",
+      "render": {
+        "durationMs": 218000,
+        "width": 1280,
+        "height": 800,
+        "poster": true
+      },
+      "bothPublishedPostersPresent": true
+    },
+    {
+      "id": "REGISTRATIONS_PLACE_MEMBER",
+      "url": "https://medias.benevol.app/registrations-place-member/registrations-place-member.mp4",
+      "render": {
+        "durationMs": 95640,
+        "width": 1280,
+        "height": 800,
+        "poster": true
+      },
+      "bothPublishedPostersPresent": true
+    },
+    {
+      "id": "REGISTRATIONS_MANAGEMENT",
+      "url": "https://medias.benevol.app/registrations-management/registrations-management.mp4",
+      "render": {
+        "durationMs": 347080,
+        "width": 1280,
+        "height": 800,
+        "poster": true
+      },
+      "bothPublishedPostersPresent": true
+    },
+    {
+      "id": "MEMBERS_REMINDERS",
+      "url": "https://medias.benevol.app/members-reminders/members-reminders.mp4",
+      "render": {
+        "durationMs": 199680,
+        "width": 1280,
+        "height": 800,
+        "poster": true
+      },
+      "bothPublishedPostersPresent": true
+    },
+    {
+      "id": "MEMBERS_INVITATIONS",
+      "url": "https://medias.benevol.app/members-invitations/members-invitations.mp4",
+      "render": {
+        "durationMs": 234280,
+        "width": 1280,
+        "height": 800,
+        "poster": true
+      },
+      "bothPublishedPostersPresent": true
+    },
+    {
+      "id": "MEMBERS_IMPORT",
+      "url": "https://medias.benevol.app/members-import/members-import.mp4",
+      "render": {
+        "durationMs": 241080,
+        "width": 1280,
+        "height": 800,
+        "poster": true
+      },
+      "bothPublishedPostersPresent": true
+    },
+    {
+      "id": "MEMBERS_DUPLICATES_MERGE",
+      "url": "https://medias.benevol.app/members-duplicates-merge/members-duplicates-merge.mp4",
+      "render": {
+        "durationMs": 221560,
+        "width": 1280,
+        "height": 800,
+        "poster": true
+      },
+      "bothPublishedPostersPresent": true
+    },
+    {
+      "id": "VOLUNTEER_HOURS_CERTIFICATE",
+      "url": "https://medias.benevol.app/volunteer-hours-certificate/volunteer-hours-certificate.mp4",
+      "render": {
+        "durationMs": 311360,
+        "width": 1280,
+        "height": 800,
+        "poster": true
+      },
+      "bothPublishedPostersPresent": true
+    },
+    {
+      "id": "EMAIL_DELIVERY_FAILURES",
+      "url": "https://medias.benevol.app/email-delivery-failures/email-delivery-failures.mp4",
+      "render": {
+        "durationMs": 295120,
+        "width": 1280,
+        "height": 800,
+        "poster": true
+      },
+      "bothPublishedPostersPresent": true
+    },
+    {
+      "id": "PLATFORM_INTERNAL_ADMINISTRATION",
+      "url": "https://medias.benevol.app/platform-internal-administration/platform-internal-administration.mp4",
+      "render": {
+        "durationMs": 480640,
+        "width": 1280,
+        "height": 800,
+        "poster": true
+      },
+      "bothPublishedPostersPresent": true
+    },
+    {
+      "id": "PRIVACY_PERSONAL_LINKS",
+      "url": "https://medias.benevol.app/privacy-personal-links/privacy-personal-links.mp4",
+      "render": {
+        "durationMs": 358560,
+        "width": 1280,
+        "height": 800,
+        "poster": true
+      },
+      "bothPublishedPostersPresent": true
+    },
+    {
+      "id": "LAST_MINUTE_CHANGES",
+      "url": "https://medias.benevol.app/last-minute-changes/last-minute-changes.mp4",
+      "render": {
+        "durationMs": 395480,
+        "width": 1280,
+        "height": 800,
+        "poster": true
+      },
+      "bothPublishedPostersPresent": true
+    },
+    {
+      "id": "SHIFT_ROSTER_VISIBILITY",
+      "url": "https://medias.benevol.app/shift-roster-visibility/shift-roster-visibility.mp4",
+      "render": {
+        "durationMs": 260000,
+        "width": 1280,
+        "height": 800,
+        "poster": true
+      },
+      "bothPublishedPostersPresent": true
+    }
+  ]
+}

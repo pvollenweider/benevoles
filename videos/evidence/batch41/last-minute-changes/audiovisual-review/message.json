@@ -1,0 +1,65 @@
+{
+  "model": "gemini-3.8-flash",
+  "reviewedAt": "2026-11-16T21:48:25.074Z",
+  "videoSha256": "4653dc79571706a49eeec87491213f683a99fc0d87f06d5568d9f74cf1d2c5da",
+  "promptSha256": "0ab1fef9018dc9ebf48cbce3c2af803be558dd4ccd80d5ab235c8797cdd0c511",
+  "clipSha256": "6c8f2684ac3617f9dddd4d6357dc4191580c242260ea39a227dcf9029ecf86c0",
+  "scene": "message",
+  "review": {
+    "heardOpening": "Depuis les messages de l'événement, choisissons",
+    "checkpoints": [
+      {
+        "spokenSeconds": 1.2,
+        "spoken": "choisissons les bénévoles d'un créneau, puis Installation du matériel",
+        "visibleSeconds": 2.1,
+        "sync": "aligned",
+        "severity": "none"
+      },
+      {
+        "spokenSeconds": 24.3,
+        "spoken": "Vérifions l'aperçu et le destinataire, puis confirmons l'envoi",
+        "visibleSeconds": 24.8,
+        "sync": "aligned",
+        "severity": "none"
+      },
+      {
+        "spokenSeconds": 28.3,
+        "spoken": "Ouvrons le vrai email reçu",
+        "visibleSeconds": 30.2,
+        "sync": "aligned",
+        "severity": "none"
+      },
+      {
+        "spokenSeconds": 36.6,
+        "spoken": "Revenons aux inscriptions et ouvrons l'ajout manuel",
+        "visibleSeconds": 42.8,
+        "sync": "late",
+        "severity": "minor"
+      },
+      {
+        "spokenSeconds": 45.1,
+        "spoken": "Choisissons le créneau de logistique, de midi à quatorze heures, puis ajoutons-la",
+        "visibleSeconds": 52.3,
+        "sync": "late",
+        "severity": "major"
+      },
+      {
+        "spokenSeconds": 49.6,
+        "spoken": "Enfin, revenons à la couverture : le poste est rempli",
+        "visibleSeconds": 55.1,
+        "sync": "late",
+        "severity": "major"
+      }
+    ],
+    "issues": [
+      "Désynchronisation marquée à partir de 00:45 : la voix annonce la sélection du créneau et l'ajout de la bénévole alors que les champs d'identité sont encore en cours de saisie à l'écran (le créneau n'est choisi qu'à 00:52).",
+      "À 00:50, la voix annonce déjà le retour à la couverture, mais l'écran n'y bascule qu'à 00:55 après validation du formulaire d'inscription."
+    ],
+    "voice": {
+      "consistent": true,
+      "warm": true,
+      "observation": "Voix féminine claire, posée et bien articulée, mais en avance sur les manipulations finales à l'écran."
+    }
+  },
+  "note": "Automated observation of actual final video audio and images; not a claim of complete human validation"
+}

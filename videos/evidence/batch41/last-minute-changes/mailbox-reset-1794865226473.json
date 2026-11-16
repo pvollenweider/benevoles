@@ -1,0 +1,6 @@
+{
+  "slug": "last-minute-changes",
+  "pattern": "^video\\.last-minute\\.(?:person\\.[0-5]|owner)@example\\.org$",
+  "deletedIds": [],
+  "unrelatedMessagesPreserved": true
+}

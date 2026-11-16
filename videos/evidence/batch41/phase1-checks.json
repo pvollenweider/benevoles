@@ -1,0 +1,22 @@
+{
+  "phase": "phase1",
+  "videoAndReaderTests": {
+    "files": 45,
+    "passed": 1472
+  },
+  "videoTypes": {
+    "explicitSources": 228,
+    "passed": true
+  },
+  "applicationTypecheck": true,
+  "publishedRendersMeasured": 67,
+  "publishedVideosInThisPhase": 12,
+  "notReady": [
+    "VOLUNTEER_CONFIRMATION_ERRORS",
+    "REGISTRATION_MONITOR_FOLLOWUP",
+    "LAST_MINUTE_CHANGES"
+  ],
+  "docCaptures": "Separate disposable canonical DB, five explicit captures; four byte-identical to main, admin-print updated",
+  "sourceDiffCheck": true,
+  "productSourcesChanged": false
+}

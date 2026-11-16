@@ -24,6 +24,7 @@ Format basé sur [Keep a Changelog](https://keepachangelog.com/fr/1.0.0/).
 
 ### Modifié
 
+- **Vidéos de formation** : nouveau tutoriel pour donner un accès accueil le jour J ; vidéos actualisées sur les présences, les rappels, les heures et attestations, les membres, les pages d’information, l’inscription sur téléphone, les liens personnels, les secteurs, la visibilité des équipes et la visite d’administration.
 - **Conditions d'utilisation** : si le service hébergé devait s'arrêter définitivement, les organisations sont prévenues au moins trois mois à l'avance (article 7) (#1357).
 - Le filtre de la documentation cherche dans tout le texte des fiches, comprend les mots proches et les synonymes, et classe les résultats par pertinence (#1319).
 - La page de confirmation d'une inscription par email affiche le nom et le téléphone que la confirmation enregistrera dans la fiche, et dit quoi faire si la demande ne vient pas de vous.

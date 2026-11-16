@@ -1,0 +1,2 @@
+STATUS: NOT READY
+First narrated take: schedule start/end edited before the spoken instruction. All eleven source/final ASR checks and technical validation pass. Eleven AV chapters reviewed; only schedule flagged. Eleven real received notifications verified after take, replacing the earlier preflight receipt report. Raw and assembled take preserved before corrective rehearsal.

@@ -136,10 +136,13 @@
     {
       "id": "LAST_MINUTE_CHANGES",
       "slug": "last-minute-changes",
-      "status": "IN PROGRESS",
+      "status": "NOT READY",
       "published": false,
       "narratedTakes": 2,
-      "problems": "Corrected rehearsal passed; second and last narrated take active."
+      "problems": "Schedule fixed in take 2, but manual-registration typing/result remains 5\u20137 s late; two-take limit.",
+      "duration": 403.28,
+      "musicGaps": 0,
+      "tu": 0
     },
     {
       "id": "SECTORS",

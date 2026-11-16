@@ -1,0 +1,52 @@
+{
+  "model": "gemini-3.8-flash",
+  "reviewedAt": "2026-11-16T21:48:56.658Z",
+  "videoSha256": "4653dc79571706a49eeec87491213f683a99fc0d87f06d5568d9f74cf1d2c5da",
+  "promptSha256": "6ca4b8ee82d4ed0d99d918cc73fa611efa3046640b204323436e43f15b5265bd",
+  "clipSha256": "6336e21a68aa5fdc9187570dca9cf3f98e4526654bf79a48a4ac2ba4c5a662db",
+  "scene": "journal",
+  "review": {
+    "heardOpening": "Pour comprendre l'imprévu après coup",
+    "checkpoints": [
+      {
+        "spokenSeconds": 2.5,
+        "spoken": "ouvrons le journal de l'événement",
+        "visibleSeconds": 2.5,
+        "visible": "L'onglet Journal de l'événement est déjà ouvert avec les filtres et les entrées",
+        "sync": "aligned",
+        "severity": "none"
+      },
+      {
+        "spokenSeconds": 5,
+        "spoken": "Retrouvons le retrait, l'offre et son acceptation",
+        "visibleSeconds": 8,
+        "visible": "Défilement vers le bas révélant la libération de place et la confirmation par Nicolas Peeters",
+        "sync": "aligned",
+        "severity": "none"
+      },
+      {
+        "spokenSeconds": 12,
+        "spoken": "Le mode Récit peut montrer les conséquences reliées à une action",
+        "visibleSeconds": 13.8,
+        "visible": "Clic sur le sous-onglet Récit affichant la sélection des enchaînements",
+        "sync": "aligned",
+        "severity": "none"
+      },
+      {
+        "spokenSeconds": 17.5,
+        "spoken": "ne suffisent pas à prouver un lien de cause",
+        "visibleSeconds": 19.5,
+        "visible": "Sélection du récit d'Aline Martin montrant les étapes enchaînées",
+        "sync": "aligned",
+        "severity": "none"
+      }
+    ],
+    "issues": [],
+    "voice": {
+      "consistent": true,
+      "warm": true,
+      "observation": "Voix de synthèse claire, posée et sans artefact sonore."
+    }
+  },
+  "note": "Automated observation of actual final video audio and images; not a claim of complete human validation"
+}

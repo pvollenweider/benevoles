@@ -1,0 +1,52 @@
+{
+  "model": "gemini-3.8-flash",
+  "reviewedAt": "2026-11-16T21:48:40.019Z",
+  "videoSha256": "4653dc79571706a49eeec87491213f683a99fc0d87f06d5568d9f74cf1d2c5da",
+  "promptSha256": "9e67d4e43b4d465597b98ef68d13ad9ba25e08c3ee6d1bad9dc345720ea42018",
+  "clipSha256": "864cb4801250c016c7bc67c173fa769357d5e6269cf6ac40f461b7bfc706673c",
+  "scene": "need",
+  "review": {
+    "heardOpening": "Le matériel arrive plus tôt",
+    "checkpoints": [
+      {
+        "spokenSeconds": 4.5,
+        "spoken": "Sur la page Jour J, ouvrons Ajouter un besoin.",
+        "visibleSeconds": 5.5,
+        "visible": "Clic sur l'onglet Jour J puis ouverture du formulaire Ajouter un besoin.",
+        "sync": "aligned",
+        "severity": "none"
+      },
+      {
+        "spokenSeconds": 8.5,
+        "spoken": "Indiquons le poste Renfort matériel, le début, la fin et une place.",
+        "visibleSeconds": 10.5,
+        "visible": "Saisie du poste Renfort matériel, horaires 22:30 à 00:30 et 1 place.",
+        "sync": "aligned",
+        "severity": "none"
+      },
+      {
+        "spokenSeconds": 15,
+        "spoken": "Ajouter le créneau enregistre d'abord le besoin.",
+        "visibleSeconds": 15.8,
+        "visible": "Clic sur le bouton Ajouter le créneau et affichage de l'étape 2 sur 2.",
+        "sync": "aligned",
+        "severity": "none"
+      },
+      {
+        "spokenSeconds": 27,
+        "spoken": "Sélectionnons une personne proposée, vérifions l'aperçu, puis envoyons.",
+        "visibleSeconds": 27.5,
+        "visible": "Sélection d'Emma Johansson, ouverture de l'aperçu puis clic sur Envoyer à 1 personne.",
+        "sync": "aligned",
+        "severity": "none"
+      }
+    ],
+    "issues": [],
+    "voice": {
+      "consistent": true,
+      "warm": true,
+      "observation": "Voix off posée, claire et parfaitement synchronisée avec les actions à l'écran."
+    }
+  },
+  "note": "Automated observation of actual final video audio and images; not a claim of complete human validation"
+}
