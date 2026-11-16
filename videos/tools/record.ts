@@ -1,7 +1,7 @@
 // SPDX-FileCopyrightText: 2026 Philippe Vollenweider
 // SPDX-License-Identifier: AGPL-3.0-only
 
-import { mkdir, readFile, rm, writeFile } from "node:fs/promises"
+import { mkdir, readFile, writeFile } from "node:fs/promises"
 import path from "node:path"
 import { chromium, type Locator, type Page } from "playwright"
 import { launchVideoBrowser, PUBLIC_URL_PROBE_PATH, servedWithPublicUrl, videoAdminEmail, videoRequestProxy } from "../lib/public-hosts"
@@ -229,7 +229,8 @@ async function main() {
   const durations = new Map(manifest.segments.map((segment) => [segment.id, fallbackTiming ? segment.fallbackDurationMs : audio?.segments[segment.id]?.durationMs ?? segment.fallbackDurationMs]))
   await mkdir(dir, { recursive: true })
   await (await import("../lib/prepare-settings-mailbox")).prepareSettingsMailbox(slug, dir)
-  await rm(rawVideo, { force: true })
+  const archivedCapture = await (await import("../lib/archive-capture")).archiveCapture(dir)
+  if (archivedCapture) console.log(`Previous capture preserved: ${archivedCapture}`)
 
   // Native date controls also depend on Chromium's UI/process locale, not just
   // the context's Accept-Language. Keep French narration separate from this.
@@ -328,7 +329,7 @@ async function main() {
     try {
       await action(at)
     } catch (error) {
-      if (["front-desk-access", "beta-access", "sectors", "shift-swaps", "workload-protection", "assignment-proposals", "assignment-publication", "volunteer-event-availability", "members-management", "members-import", "members-invitations", "members-duplicates-merge", "members-reminders", "volunteer-hours-certificate", "volunteer-badges", "registrations-management", "registrations-place-member", "organizer-monitor-followup", "staffing-gaps", "sector-leaders", "attendance-check-in", "last-minute-changes", "targeted-messages", "reminders-changes", "shift-create-edit-detail", "shift-create-series", "shift-eligibility-rules", "shift-night-dst", "shift-timeline-quick-actions", "shift-waitlist-offer", "shifts-roles-views", "shift-recurrence", "shift-approval"].includes(slug)) {
+      if (["org-email-settings", "front-desk-access", "beta-access", "sectors", "shift-swaps", "workload-protection", "assignment-proposals", "assignment-publication", "volunteer-event-availability", "members-management", "members-import", "members-invitations", "members-duplicates-merge", "members-reminders", "volunteer-hours-certificate", "volunteer-badges", "registrations-management", "registrations-place-member", "organizer-monitor-followup", "staffing-gaps", "sector-leaders", "attendance-check-in", "last-minute-changes", "targeted-messages", "reminders-changes", "shift-create-edit-detail", "shift-create-series", "shift-eligibility-rules", "shift-night-dst", "shift-timeline-quick-actions", "shift-waitlist-offer", "shifts-roles-views", "shift-recurrence", "shift-approval"].includes(slug)) {
         await mkdir(path.join(dir, "review"), { recursive: true })
         await page.screenshot({ path: path.join(dir, "review", "rehearsal-failure.png") }).catch(() => {})
         await writeFile(path.join(dir, "review", "rehearsal-failure.json"), JSON.stringify({ scene: id, url: page.url(), elapsedMs: Math.round(performance.now() - startedAt), error: String(error), purpose: rehearsal ? "rehearsal" : "narration-timed" }, null, 2))
@@ -4920,7 +4921,7 @@ async function main() {
         await page.screencast.showChapter("Une équipe autonome et maîtrisée", { description: "Des comptes nominatifs, des droits adaptés", duration: 2_300 })
       })
     } else if (slug === "org-email-settings") {
-      if (baseUrl !== "http://localhost:43102" || org !== "formation-email" || process.env.ORG_ADMIN_EMAIL !== "video.email.owner@example.org") throw new Error("Email recording requires its owned synthetic fixture")
+      if (localBaseUrl !== "http://localhost:43102" || !["http://localhost:43102", "https://formation-email.benevol.app"].includes(baseUrl) || org !== "formation-email" || process.env.ORG_ADMIN_EMAIL !== "video.email.owner@example.org") throw new Error("Email recording requires its owned synthetic fixture")
       const emailEventId = "video-foundation-email-event-0"
       await page.goto(`${baseUrl}/admin/settings/notifications`); await settle(page)
       await scene("welcome", async () => {
@@ -4950,22 +4951,19 @@ async function main() {
         await page.goto(`${baseUrl}/admin/events/${emailEventId}/edit`); await settle(page)
         const enabled = page.getByRole("checkbox", { name: "Rappels automatiques", exact: true })
         await enabled.scrollIntoViewIfNeeded()
-        await at(0.19)
-        if (!await enabled.isChecked()) {
-          const saved = page.waitForResponse(response => response.url().endsWith(`/api/admin/events/${emailEventId}`) && response.request().method() === "PATCH")
-          await tap(page, enabled)
-          if (!(await saved).ok()) throw new Error("Event reminder enable was not saved")
-          await page.getByText(/^Modifications enregistrées à/).waitFor()
-        }
-        await at(0.35)
+        if (!await enabled.isChecked()) throw new Error("Fresh email fixture must start with event reminders enabled")
+        await at(0.22) /* mid-sentence: turn off the switch while explaining that it cuts this event's reminders */
         const saved = page.waitForResponse(response => response.url().endsWith(`/api/admin/events/${emailEventId}`) && response.request().method() === "PATCH")
         await tap(page, enabled)
         if (!(await saved).ok()) throw new Error("Event reminder disable was not saved")
         await page.getByText(/^Modifications enregistrées à/).waitFor()
-        await at("Son onglet Messages")
         await page.goto(`${baseUrl}/admin/events/${emailEventId}/message`); await settle(page)
-        await page.getByRole("heading", { name: "Messages", exact: true }).scrollIntoViewIfNeeded()
-        await page.getByText("Rappels automatiques coupés pour cet événement", { exact: true }).waitFor()
+        const actualSummary = page.getByText("Rappels automatiques coupés pour cet événement", { exact: true })
+        await actualSummary.waitFor(); await actualSummary.scrollIntoViewIfNeeded()
+        await page.waitForTimeout(500)
+        const summaryBox = await actualSummary.boundingBox()
+        if (!summaryBox || summaryBox.y < 0 || summaryBox.y + summaryBox.height > 800) throw new Error("Actual reminder summary is outside the captured viewport")
+        await at("Son onglet Messages")
       })
 
       await scene("admin-alert", async (at) => {
@@ -5039,8 +5037,7 @@ async function main() {
         await at("Ouvrons le message reçu")
         await page.goto(`http://localhost:48026/view/${mailId}`); await settle(page)
         await page.frameLocator("iframe").locator("body").getByText(/Cet email vérifie l'envoi/).filter({ visible: true }).waitFor()
-        const detailStart = Math.round(performance.now() - startedAt)
-        detailFrames.push({ startMs: detailStart, endMs: detailStart + 1, x: 300, y: 0, width: 960, height: 600 })
+        // The assembler frames the real sender/reply-to rows and body together, excluding the client date and technical controls.
       })
 
       await scene("result", async (at) => {

@@ -1,0 +1,325 @@
+{
+  "productCommit": "e8ed666a48294d77213f8bf64fe35898314b0ed9",
+  "buildId": "HO6mRRAZuOevekAmdhN_C",
+  "snapshot": "/tmp/benevoles-video-production.DjebK9ng",
+  "phase1": [
+    {
+      "id": "ATTENDANCE_CHECK_IN",
+      "slug": "attendance-check-in",
+      "status": "READY",
+      "published": true,
+      "duration": 461.68,
+      "musicGaps": 0,
+      "tu": 0,
+      "revision": 5,
+      "problems": "Take 1 raw lost during rehearsal startup; final raw preserved. Five AV observations resolved with final evidence."
+    },
+    {
+      "id": "FRONT_DESK_ACCESS",
+      "slug": "front-desk-access",
+      "status": "READY",
+      "published": true,
+      "duration": 170.16,
+      "musicGaps": 0,
+      "tu": 0,
+      "revision": 1,
+      "commit": "683dd554"
+    },
+    {
+      "id": "REMINDERS_CHANGES",
+      "slug": "reminders-changes",
+      "status": "IN PROGRESS",
+      "published": false
+    },
+    {
+      "id": "ORG_EMAIL_SETTINGS",
+      "slug": "org-email-settings",
+      "status": "IN PROGRESS",
+      "published": false
+    },
+    {
+      "id": "VOLUNTEER_HOURS_CERTIFICATE",
+      "slug": "volunteer-hours-certificate",
+      "status": "NOT DONE",
+      "published": false
+    },
+    {
+      "id": "MEMBERS_MANAGEMENT",
+      "slug": "members-management",
+      "status": "NOT DONE",
+      "published": false
+    },
+    {
+      "id": "EVENT_PROGRAM_PAGES_QR",
+      "slug": "event-program-pages-qr",
+      "status": "NOT DONE",
+      "published": false
+    },
+    {
+      "id": "VOLUNTEER_REGISTER",
+      "slug": "volunteer-register-mobile",
+      "status": "NOT DONE",
+      "published": false
+    },
+    {
+      "id": "VOLUNTEER_CONFIRMATION_ERRORS",
+      "slug": "volunteer-confirmation-errors",
+      "status": "NOT DONE",
+      "published": false
+    },
+    {
+      "id": "PRIVACY_PERSONAL_LINKS",
+      "slug": "privacy-personal-links",
+      "status": "NOT DONE",
+      "published": false
+    },
+    {
+      "id": "REGISTRATION_MONITOR_FOLLOWUP",
+      "slug": "organizer-monitor-followup",
+      "status": "NOT DONE",
+      "published": false
+    },
+    {
+      "id": "LAST_MINUTE_CHANGES",
+      "slug": "last-minute-changes",
+      "status": "NOT DONE",
+      "published": false
+    },
+    {
+      "id": "SECTORS",
+      "slug": "sectors",
+      "status": "NOT DONE",
+      "published": false
+    },
+    {
+      "id": "SHIFT_ROSTER_VISIBILITY",
+      "slug": "shift-roster-visibility",
+      "status": "NOT DONE",
+      "published": false
+    },
+    {
+      "id": "ADMIN_FEATURES_OVERVIEW",
+      "slug": "admin-features-tour",
+      "status": "NOT DONE",
+      "published": false
+    }
+  ],
+  "phase2": [
+    {
+      "id": "SHIFT_TIMELINE_QUICK_ACTIONS",
+      "slug": "shift-timeline-quick-actions",
+      "status": "NOT DONE",
+      "published": false
+    },
+    {
+      "id": "SHIFT_CREATE_SERIES",
+      "slug": "shift-create-series",
+      "status": "NOT DONE",
+      "published": false
+    },
+    {
+      "id": "SHIFT_CREATE_EDIT_DETAIL",
+      "slug": "shift-create-edit-detail",
+      "status": "NOT DONE",
+      "published": false
+    },
+    {
+      "id": "EVENT_CREATE_PUBLISH_OVERVIEW",
+      "slug": "organizer-create-publish",
+      "status": "NOT DONE",
+      "published": false
+    },
+    {
+      "id": "SHIFT_APPROVAL",
+      "slug": "shift-approval",
+      "status": "NOT DONE",
+      "published": false
+    },
+    {
+      "id": "SHIFT_WAITLIST_OFFER",
+      "slug": "shift-waitlist-offer",
+      "status": "NOT DONE",
+      "published": false
+    },
+    {
+      "id": "STAFFING_GAPS",
+      "slug": "staffing-gaps",
+      "status": "NOT DONE",
+      "published": false
+    },
+    {
+      "id": "ORG_FIRST_STEPS",
+      "slug": "masterclass-03-first-steps",
+      "status": "NOT DONE",
+      "published": false
+    },
+    {
+      "id": "ACCESSIBILITY_KEYBOARD_DISPLAY",
+      "slug": "accessibility-keyboard-display",
+      "status": "NOT DONE",
+      "published": false
+    },
+    {
+      "id": "VOLUNTEER_CHOOSE_SHIFTS",
+      "slug": "volunteer-choose-shifts",
+      "status": "NOT DONE",
+      "published": false
+    },
+    {
+      "id": "PLATFORM_INTERNAL_ADMINISTRATION",
+      "slug": "platform-internal-administration",
+      "status": "NOT DONE",
+      "published": false
+    },
+    {
+      "id": "MEMBERS_DUPLICATES_MERGE",
+      "slug": "members-duplicates-merge",
+      "status": "NOT DONE",
+      "published": false
+    },
+    {
+      "id": "DATA_EXPORTS_ARCHIVES",
+      "slug": "data-exports-archives",
+      "status": "NOT DONE",
+      "published": false
+    },
+    {
+      "id": "EMAIL_DELIVERY_FAILURES",
+      "slug": "email-delivery-failures",
+      "status": "NOT DONE",
+      "published": false
+    },
+    {
+      "id": "ADMIN_NAVIGATION",
+      "slug": "admin-navigation",
+      "status": "NOT DONE",
+      "published": false
+    },
+    {
+      "id": "VOLUNTEER_SESSION_AVAILABILITY",
+      "slug": "volunteer-session-availability",
+      "status": "NOT DONE",
+      "published": false
+    },
+    {
+      "id": "EVENT_QUESTIONS",
+      "slug": "event-questions",
+      "status": "NOT DONE",
+      "published": false
+    },
+    {
+      "id": "SHIFTS_ROLES_VIEWS",
+      "slug": "shifts-roles-views",
+      "status": "NOT DONE",
+      "published": false
+    },
+    {
+      "id": "TARGETED_MESSAGES",
+      "slug": "targeted-messages",
+      "status": "NOT DONE",
+      "published": false
+    },
+    {
+      "id": "SHIFT_NIGHT_DST",
+      "slug": "shift-night-dst",
+      "status": "NOT DONE",
+      "published": false
+    },
+    {
+      "id": "VOLUNTEER_CALENDAR",
+      "slug": "volunteer-calendar",
+      "status": "NOT DONE",
+      "published": false
+    },
+    {
+      "id": "VOLUNTEER_PERSONAL_REGISTRATIONS",
+      "slug": "volunteer-personal-registrations",
+      "status": "NOT DONE",
+      "published": false
+    },
+    {
+      "id": "VOLUNTEER_PHONE_NOTIFICATIONS",
+      "slug": "volunteer-phone-notifications",
+      "status": "NOT DONE",
+      "published": false
+    },
+    {
+      "id": "EVENT_VISIBILITY_REGISTRATION_WINDOW",
+      "slug": "event-visibility-registration-window",
+      "status": "NOT DONE",
+      "published": false
+    },
+    {
+      "id": "EVENT_REVIEW_PUBLISH",
+      "slug": "event-review-publish",
+      "status": "NOT DONE",
+      "published": false
+    },
+    {
+      "id": "ORG_TEAM_PERMISSIONS",
+      "slug": "org-team-permissions",
+      "status": "NOT DONE",
+      "published": false
+    },
+    {
+      "id": "VOLUNTEER_FORM_RECAP",
+      "slug": "volunteer-form-recap",
+      "status": "NOT DONE",
+      "published": false
+    },
+    {
+      "id": "REGISTRATIONS_MANAGEMENT",
+      "slug": "registrations-management",
+      "status": "NOT DONE",
+      "published": false
+    },
+    {
+      "id": "ORGANIZATION_ACTIVITY_LOG",
+      "slug": "organization-activity-log",
+      "status": "NOT DONE",
+      "published": false
+    },
+    {
+      "id": "EVENT_ACTIVITY_LOG",
+      "slug": "event-activity-log",
+      "status": "NOT DONE",
+      "published": false
+    },
+    {
+      "id": "EVENT_CREATE_BLANK",
+      "slug": "event-create-blank",
+      "status": "NOT DONE",
+      "published": false
+    },
+    {
+      "id": "EVENT_DUPLICATE",
+      "slug": "event-duplicate",
+      "status": "NOT DONE",
+      "published": false
+    },
+    {
+      "id": "ORG_PUBLIC_IDENTITY",
+      "slug": "org-public-identity",
+      "status": "NOT DONE",
+      "published": false
+    },
+    {
+      "id": "ORG_TIMEZONE_CHARTER",
+      "slug": "org-timezone-charter",
+      "status": "NOT DONE",
+      "published": false
+    },
+    {
+      "id": "SHIFT_RECURRENCE",
+      "slug": "shift-recurrence",
+      "status": "NOT DONE",
+      "published": false
+    },
+    {
+      "id": "EVENT_ARCHIVE_DELETE",
+      "slug": "event-archive-delete",
+      "status": "NOT DONE",
+      "published": false
+    }
+  ]
+}

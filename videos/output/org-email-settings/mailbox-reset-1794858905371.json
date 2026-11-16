@@ -1,0 +1,8 @@
+{
+  "slug": "org-email-settings",
+  "pattern": "^video\\.email\\.[a-z-]+@example\\.org$",
+  "deletedIds": [
+    "3zII7Oki2kWhY0BJXz9S8h"
+  ],
+  "unrelatedMessagesPreserved": true
+}

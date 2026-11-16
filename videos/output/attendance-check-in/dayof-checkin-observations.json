@@ -1,0 +1,11 @@
+{
+  "observedAt": "2026-11-16T19:43:38.984Z",
+  "chapter": "dayof-checkin",
+  "productCommit": "e8ed666a48294d77213f8bf64fe35898314b0ed9",
+  "observed": {
+    "serverPersisted": true,
+    "oneRegistrationOnly": true,
+    "departureOrWorkedDurationMeasured": false
+  },
+  "finalValidation": false
+}

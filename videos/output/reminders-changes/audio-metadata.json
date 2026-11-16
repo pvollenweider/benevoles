@@ -10,27 +10,27 @@
     },
     "manual-message": {
       "file": "audio/manual-message.wav",
-      "durationMs": 36108,
+      "durationMs": 31237,
       "generationSha256": "06551f353f331f5f2b5d56ced47500c90332f25d53aa1d70f13b1dbbae01e32b"
     },
     "manual-send": {
       "file": "audio/manual-send.wav",
-      "durationMs": 21419,
+      "durationMs": 25524,
       "generationSha256": "06551f353f331f5f2b5d56ced47500c90332f25d53aa1d70f13b1dbbae01e32b"
     },
     "organization": {
       "file": "audio/organization.wav",
-      "durationMs": 28507,
+      "durationMs": 25249,
       "generationSha256": "06551f353f331f5f2b5d56ced47500c90332f25d53aa1d70f13b1dbbae01e32b"
     },
     "event-switch": {
       "file": "audio/event-switch.wav",
-      "durationMs": 21345,
+      "durationMs": 25370,
       "generationSha256": "06551f353f331f5f2b5d56ced47500c90332f25d53aa1d70f13b1dbbae01e32b"
     },
     "event-delays": {
       "file": "audio/event-delays.wav",
-      "durationMs": 33699,
+      "durationMs": 33698,
       "generationSha256": "06551f353f331f5f2b5d56ced47500c90332f25d53aa1d70f13b1dbbae01e32b"
     },
     "timing": {
@@ -40,17 +40,17 @@
     },
     "exclusions": {
       "file": "audio/exclusions.wav",
-      "durationMs": 27542,
+      "durationMs": 24453,
       "generationSha256": "06551f353f331f5f2b5d56ced47500c90332f25d53aa1d70f13b1dbbae01e32b"
     },
     "changed": {
       "file": "audio/changed.wav",
-      "durationMs": 24967,
+      "durationMs": 27583,
       "generationSha256": "06551f353f331f5f2b5d56ced47500c90332f25d53aa1d70f13b1dbbae01e32b"
     },
     "cancelled": {
       "file": "audio/cancelled.wav",
-      "durationMs": 28165,
+      "durationMs": 28638,
       "generationSha256": "06551f353f331f5f2b5d56ced47500c90332f25d53aa1d70f13b1dbbae01e32b"
     }
   }

@@ -1245,9 +1245,10 @@
         "organisateur"
       ],
       "feature": "Pointage des présences",
-      "updatedAt": "2026-10-16",
-      "revision": 4,
-      "level": "essentiel"
+      "updatedAt": "2026-11-16",
+      "revision": 5,
+      "level": "essentiel",
+      "updated": "2026-11-16"
     },
     {
       "id": "FRONT_DESK_ACCESS",

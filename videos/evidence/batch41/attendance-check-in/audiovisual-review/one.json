@@ -1,0 +1,47 @@
+{
+  "model": "gemini-3.8-flash",
+  "reviewedAt": "2026-11-16T19:48:15.908Z",
+  "videoSha256": "3ae1106e223a22e5a097aefd42a76764ee935cbbe6a9f4f3898f013201e1e335",
+  "promptSha256": "885a5592f6ea00c9911cd540f5d7724bc6c35e22765271aad052d12f1d925cbc",
+  "clipSha256": "1b02bf6d207b572498ba81e7c8c59656629ce2cddabc7b1998fe4dfd5ec64665",
+  "scene": "one",
+  "review": {
+    "heardOpening": "Aline vient d'arriver.",
+    "checkpoints": [
+      {
+        "spokenSeconds": 2.2,
+        "spoken": "Sélectionnons uniquement sa ligne",
+        "visibleSeconds": 2.8,
+        "visible": "Défilement vers la ligne d'Aline Martin et coche de la case correspondante",
+        "sync": "aligned",
+        "severity": "none"
+      },
+      {
+        "spokenSeconds": 7.3,
+        "spoken": "La marque apparaît sur son inscription.",
+        "visibleSeconds": 8,
+        "visible": "Le bouton 'Marquer présent' n'est pas cliqué et aucune marque n'apparaît sur la ligne d'Aline",
+        "sync": "missing",
+        "severity": "major"
+      },
+      {
+        "spokenSeconds": 10.1,
+        "spoken": "Rechargeons la page : elle est toujours là.",
+        "visibleSeconds": 11,
+        "visible": "Aucun rechargement de page n'a lieu ; l'écran reste totalement figé jusqu'à la fin",
+        "sync": "missing",
+        "severity": "major"
+      }
+    ],
+    "issues": [
+      "À partir de 00:07, l'action de marquer la présence n'est pas effectuée : aucun clic sur 'Marquer présent' et aucun changement de statut n'est visible sur la ligne d'Aline.",
+      "À 00:10, le rechargement de la page annoncé n'a pas lieu ; l'écran demeure figé jusqu'à la fin de la vidéo."
+    ],
+    "voice": {
+      "consistent": true,
+      "warm": true,
+      "observation": "Voix de synthèse ou enregistrée fluide, claire et bien articulée, avec un ton pédagogique posé."
+    }
+  },
+  "note": "Automated observation of actual final video audio and images; not a claim of complete human validation"
+}

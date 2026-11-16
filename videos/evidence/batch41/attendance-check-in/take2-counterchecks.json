@@ -1,0 +1,51 @@
+{
+  "videoSha256": "3ae1106e223a22e5a097aefd42a76764ee935cbbe6a9f4f3898f013201e1e335",
+  "take": 2,
+  "note": "Counterchecks of preserved AV observations, based on actual final MP4 frames, recorded input events and real runtime state assertions. No product state or pixels rewritten.",
+  "findings": {
+    "one": {
+      "status": "resolved",
+      "evidence": [
+        "take2-one-5.0.png",
+        "take2-one-8.8.png",
+        "take2-one-11.8.png",
+        "attendance-action-checks.json"
+      ],
+      "observation": "At +5.0s Aline is selected; a real action click occurs at +7.802s, then Aline has the green Présent badge at +8.8s and after the real page.reload at +11.8s. The recorded API action is check_in, with unchanged active registration status. The claim of a frozen screen/absent click is contradicted by those frames and recorded inputs."
+    },
+    "dayof-window": {
+      "status": "resolved as general classification, not an unperformed promised action",
+      "evidence": [
+        "take2-dayof-window-2.0.png",
+        "take2-dayof-window-5.0.png",
+        "take2-dayof-window-16.0.png"
+      ],
+      "observation": "The chapter initially shows En cours, Depuis hier 23h and Veille commencée hier. At the classification sentence it pans within the same real En cours group to the currently running Accueil card, retaining the lower part of the overnight card. Both the overnight and current shifts were shown; the narration describes the group generally and does not promise to hold the overnight card at a particular word. The upcoming group and genuinely expanded earlier group follow on their sentence cues."
+    },
+    "dayof-search": {
+      "status": "resolved",
+      "evidence": [
+        "take2-dayof-search-1.4.png",
+        "take2-dayof-search-3.3.png",
+        "take2-dayof-search-7.8.png"
+      ],
+      "observation": "Real key events for z/o/e occur at +0.831/+0.930/+1.029s, before the matching Zoé row is scrolled into the viewport and shown at +3.3s. The role-search sentence starts +5.848s; later keys at +7.494–8.086s enter Accueil, not zoe. The AV confuses the two real searches."
+    },
+    "dayof-refresh": {
+      "status": "resolved",
+      "evidence": [
+        "take2-dayof-refresh-12.2.png",
+        "timeline.json"
+      ],
+      "observation": "The page also polls automatically. The manual-refresh sentence cue is +11.476s (measured audio onset +11.472s) and the actual click is +11.969s. A clock change around +8s is an automatic poll, not that later manual click. The source explicitly awaits the actual manual-refresh result."
+    },
+    "dayof-undo": {
+      "status": "resolved",
+      "evidence": [
+        "take2-dayof-undo-6.3.png",
+        "dayof-undo-observations.json"
+      ],
+      "observation": "The real recorder awaits page.reload at the +5.378s sentence cue, then checks the actual fixture and button: checkedInAt is null, registration still active. A fast reload need not show a visible spinner. The stable correct state after reload is genuine; no reload animation is fabricated."
+    }
+  }
+}

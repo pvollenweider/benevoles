@@ -1,0 +1,46 @@
+{
+  "model": "gemini-3.8-flash",
+  "reviewedAt": "2026-11-16T19:54:14.142Z",
+  "videoSha256": "40bb22ebe7f827cdb96cef14176def2de6045993aaaaeed3bdd141b2c212e776",
+  "promptSha256": "8d576cab854a204d8f74660c76022278476c7b2e1f3534477d6e24e739fd383f",
+  "clipSha256": "b33a79a652d579ed01ac99dd9ff96674d9b1f307be1a1d4cff73646c82ca6b4f",
+  "scene": "organization",
+  "review": {
+    "heardOpening": "Dans Paramètres, puis Emails",
+    "checkpoints": [
+      {
+        "spokenSeconds": 3.2,
+        "spoken": "vous choisissez les rappels automatiques de toute l'organisation : J moins deux, J moins un et le rappel du jour.",
+        "visibleSeconds": 3,
+        "visible": "Section Paramètres des emails avec les cases à cocher Rappel J-2, Rappel J-1 et Rappel du jour affichées et cochées.",
+        "sync": "aligned",
+        "severity": "none"
+      },
+      {
+        "spokenSeconds": 14,
+        "spoken": "Nous coupons celui de la veille, enregistrons, puis le réactivons.",
+        "visibleSeconds": 14.2,
+        "visible": "La page défile vers le bas masquant les options de rappel ; aucune manipulation de case à cocher ni réactivation n'est montrée.",
+        "sync": "missing",
+        "severity": "major"
+      },
+      {
+        "spokenSeconds": 19.1,
+        "spoken": "Vous trouvez aussi l'adresse de réponse",
+        "visibleSeconds": 19,
+        "visible": "Le champ et la section Adresse de réponse sont bien visibles au centre de l'écran.",
+        "sync": "aligned",
+        "severity": "none"
+      }
+    ],
+    "issues": [
+      "À 00:14, l'action annoncée de désactiver le rappel de la veille, d'enregistrer puis de le réactiver n'est pas réalisée à l'écran : la vue défile simplement vers le bas sans interaction sur les cases."
+    ],
+    "voice": {
+      "consistent": true,
+      "warm": true,
+      "observation": "Voix féminine claire, posée et bien articulée, sans bruits parasites."
+    }
+  },
+  "note": "Automated observation of actual final video audio and images; not a claim of complete human validation"
+}

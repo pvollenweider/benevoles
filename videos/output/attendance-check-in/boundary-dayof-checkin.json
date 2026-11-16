@@ -1,0 +1,12 @@
+{
+  "anchor": "Zoé arrive à l'accueil. Marquer présent enregistre sa présence sur ce",
+  "windowStart": 318.03499999999997,
+  "result": {
+    "found": true,
+    "startSeconds": 19.34,
+    "wordsHeard": "Zoé arrive à l'accueil. Marquer présent enregistre sa présence sur ce"
+  },
+  "onset": 337.37499999999994,
+  "proposedCut": 337.3839165,
+  "note": "Proposal only; recut then independently audit before capture"
+}

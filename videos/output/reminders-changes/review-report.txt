@@ -1,2 +1,2 @@
 STATUS: NOT READY
-Batch 41: sources updated for event-specific reminder delays. New complete narration generated; chapter boundaries require correction and independent re-audit. Rehearsal in progress. No narrated take, no publication.
+First narrated take assembled and technically validated. Two AV observations (organisation checkbox actions and confirmed count versus pending request) are being counterchecked against final frames and real API/state/email evidence. No new reminder video published yet.

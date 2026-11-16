@@ -1,0 +1,12 @@
+{
+  "anchor": "Pour annuler un créneau entier, lisez bien le récapitulatif avant de",
+  "windowStart": 224.15499999999997,
+  "result": {
+    "found": true,
+    "startSeconds": 14.8,
+    "wordsHeard": "Pour annuler un créneau entier, lisez bien le récapitulatif avant de"
+  },
+  "onset": 238.95499999999998,
+  "proposedCut": 238.6819375,
+  "note": "Proposal only; recut then independently audit before capture"
+}

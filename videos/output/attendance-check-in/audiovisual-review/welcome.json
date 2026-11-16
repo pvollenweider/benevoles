@@ -1,0 +1,44 @@
+{
+  "model": "gemini-3.8-flash",
+  "reviewedAt": "2026-11-16T19:48:11.662Z",
+  "videoSha256": "3ae1106e223a22e5a097aefd42a76764ee935cbbe6a9f4f3898f013201e1e335",
+  "promptSha256": "93eb0898d370fc54fb24b9afe03e9d8ceda12fc1ad331ded7554aa61929ae1a7",
+  "clipSha256": "ce8ec44abf8ae915a6e0cfa0c03108bfd39adf6e4431ded87c6b8bd918ca74a9",
+  "scene": "welcome",
+  "review": {
+    "heardOpening": "Le jour J",
+    "checkpoints": [
+      {
+        "spokenSeconds": 7.3,
+        "spoken": "Ouvrons les inscriptions et choisissons l'accueil du matin avec les filtres.",
+        "visibleSeconds": 8.5,
+        "visible": "Sélection du poste « Accueil » puis du créneau « Accueil du matin » dans les filtres",
+        "sync": "aligned",
+        "severity": "none"
+      },
+      {
+        "spokenSeconds": 11.2,
+        "spoken": "Chaque ligne correspond à une inscription sur un créneau.",
+        "visibleSeconds": 12.8,
+        "visible": "Affichage de la liste filtrée avec une ligne par bénévole inscrit sur le créneau sélectionné",
+        "sync": "aligned",
+        "severity": "none"
+      },
+      {
+        "spokenSeconds": 20.3,
+        "spoken": "Nous allons pointer une arrivée, corriger une erreur et regarder le bilan réel.",
+        "visibleSeconds": 21,
+        "visible": "Écran stable sur la liste des inscriptions pour le créneau d'accueil du matin (annonce d'actions futures)",
+        "sync": "aligned",
+        "severity": "none"
+      }
+    ],
+    "issues": [],
+    "voice": {
+      "consistent": true,
+      "warm": true,
+      "observation": "Voix off posée, claire et bien articulée, parfaitement synchronisée avec la démonstration à l'écran."
+    }
+  },
+  "note": "Automated observation of actual final video audio and images; not a claim of complete human validation"
+}

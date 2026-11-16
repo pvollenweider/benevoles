@@ -1,0 +1,52 @@
+{
+  "model": "gemini-3.8-flash",
+  "reviewedAt": "2026-11-16T19:54:27.638Z",
+  "videoSha256": "40bb22ebe7f827cdb96cef14176def2de6045993aaaaeed3bdd141b2c212e776",
+  "promptSha256": "5e50bbd4144e2e05878c48ef65359b3d9658e64e9dd2b9c2cf54c5abd2e5f359",
+  "clipSha256": "9ab80a891c47426c11249b76aa720638778ccbe617a4bf0ad79988876eb8c067",
+  "scene": "changed",
+  "review": {
+    "heardOpening": "Si un horaire change, ouvrez le créneau concerné",
+    "checkpoints": [
+      {
+        "spokenSeconds": 1.5,
+        "spoken": "ouvrez le créneau concerné",
+        "visibleSeconds": 1,
+        "visible": "Ouverture du formulaire de modification du créneau",
+        "sync": "aligned",
+        "severity": "none"
+      },
+      {
+        "spokenSeconds": 3.4,
+        "spoken": "Nous décalons son début et sa fin, puis enregistrons",
+        "visibleSeconds": 4.5,
+        "visible": "Modification des heures de début et de fin, puis clic sur Enregistrer",
+        "sync": "aligned",
+        "severity": "none"
+      },
+      {
+        "spokenSeconds": 12.3,
+        "spoken": "Voici l'email réellement reçu avec le nouvel horaire",
+        "visibleSeconds": 12.5,
+        "visible": "Affichage de l'e-mail de notification avec l'ancien et le nouvel horaire",
+        "sync": "aligned",
+        "severity": "none"
+      },
+      {
+        "spokenSeconds": 20.8,
+        "spoken": "Vérifions donc le résultat dans le planning",
+        "visibleSeconds": 20.8,
+        "visible": "Retour à l'écran du planning avec la vue frise et liste des créneaux",
+        "sync": "aligned",
+        "severity": "none"
+      }
+    ],
+    "issues": [],
+    "voice": {
+      "consistent": true,
+      "warm": true,
+      "observation": "Voix posée, claire et bien articulée, synchronisation parfaite avec les actions à l'écran."
+    }
+  },
+  "note": "Automated observation of actual final video audio and images; not a claim of complete human validation"
+}

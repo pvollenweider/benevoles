@@ -1,0 +1,46 @@
+{
+  "model": "gemini-3.8-flash",
+  "reviewedAt": "2026-11-16T19:49:35.457Z",
+  "videoSha256": "3ae1106e223a22e5a097aefd42a76764ee935cbbe6a9f4f3898f013201e1e335",
+  "promptSha256": "713dcb97b4e1a162be5f90f84a14930bbd22fb8aeb25ad778c0c73cafa636097",
+  "clipSha256": "ae0c3d581c98c9f2f4f7586610aabbb09a4801f7e57ca863d27f2e3449af21ce",
+  "scene": "dayof-refresh",
+  "review": {
+    "heardOpening": "Avec Actualiser, vous récupérez les informations",
+    "checkpoints": [
+      {
+        "spokenSeconds": 1,
+        "spoken": "Avec Actualiser, vous récupérez les informations",
+        "visibleSeconds": 1,
+        "visible": "Bouton Actualiser visible à côté de la mention de mise à jour",
+        "sync": "aligned",
+        "severity": "none"
+      },
+      {
+        "spokenSeconds": 5.5,
+        "spoken": "La page indique l'heure de sa mise à jour",
+        "visibleSeconds": 5.5,
+        "visible": "Mention « Mis à jour à 20h43. » bien lisible sur la page",
+        "sync": "aligned",
+        "severity": "none"
+      },
+      {
+        "spokenSeconds": 12,
+        "spoken": "nous actualisons réellement la page",
+        "visibleSeconds": 8.5,
+        "visible": "L'heure bascule à « Mis à jour à 20h44. » dès 00:08",
+        "sync": "early",
+        "severity": "minor"
+      }
+    ],
+    "issues": [
+      "À 00:08, l'heure de mise à jour passe à 20h44 environ 4 secondes avant que la voix n'explique « nous actualisons réellement la page » à 00:12."
+    ],
+    "voice": {
+      "consistent": true,
+      "warm": true,
+      "observation": "Voix féminine claire, posée et chaleureuse, sans bruit parasite."
+    }
+  },
+  "note": "Automated observation of actual final video audio and images; not a claim of complete human validation"
+}

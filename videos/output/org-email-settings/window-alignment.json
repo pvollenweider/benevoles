@@ -1,0 +1,45 @@
+{
+  "locatedAt": "2026-11-16T19:51:42.658Z",
+  "masterSha256": "a3d8d661278c100725356442c62edb1dd154b5203c8e184c834d22425f7268d7",
+  "totalSeconds": 191.56,
+  "cuts": [
+    {
+      "id": "reminders",
+      "seconds": 18.461125
+    },
+    {
+      "id": "event-reminders",
+      "seconds": 37.86
+    },
+    {
+      "id": "admin-alert",
+      "seconds": 61.341187500000004
+    },
+    {
+      "id": "withdrawal",
+      "seconds": 75.947625
+    },
+    {
+      "id": "addresses",
+      "seconds": 97.617104
+    },
+    {
+      "id": "reply-to",
+      "seconds": 117.337042
+    },
+    {
+      "id": "save",
+      "seconds": 135.220292
+    },
+    {
+      "id": "test",
+      "seconds": 151.284333
+    },
+    {
+      "id": "result",
+      "seconds": 173.2854165
+    }
+  ],
+  "applied": true,
+  "independentContentAuditRequired": true
+}

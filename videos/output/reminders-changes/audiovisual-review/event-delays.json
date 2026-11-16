@@ -1,0 +1,52 @@
+{
+  "model": "gemini-3.8-flash",
+  "reviewedAt": "2026-11-16T19:54:09.812Z",
+  "videoSha256": "40bb22ebe7f827cdb96cef14176def2de6045993aaaaeed3bdd141b2c212e776",
+  "promptSha256": "0685e60d87ecce2e7a21003198ca9553e98693feac35f09887bbd44efbeb33c7",
+  "clipSha256": "f94c3370ad8d0ba91b6428a698d37a94e727bf1679ea17c98fd0b4b92032f459",
+  "scene": "event-delays",
+  "review": {
+    "heardOpening": "Un événement peut avoir ses propres délais.",
+    "checkpoints": [
+      {
+        "spokenSeconds": 4.5,
+        "spoken": "choisissons Délais propres à cet événement.",
+        "visibleSeconds": 4.3,
+        "visible": "Sélection du bouton radio Délais propres à cet événement dans la section Rappels.",
+        "sync": "aligned",
+        "severity": "none"
+      },
+      {
+        "spokenSeconds": 8,
+        "spoken": "Préparons un rappel trois jours avant, puis un autre deux heures avant",
+        "visibleSeconds": 8.6,
+        "visible": "Configuration du rappel 1 à 3 jours, ajout d'un rappel 2 configuré à 2 heures.",
+        "sync": "aligned",
+        "severity": "none"
+      },
+      {
+        "spokenSeconds": 11.2,
+        "spoken": "et enregistrons les rappels.",
+        "visibleSeconds": 11.9,
+        "visible": "Clic sur le bouton Enregistrer les rappels.",
+        "sync": "aligned",
+        "severity": "none"
+      },
+      {
+        "spokenSeconds": 28.1,
+        "spoken": "Revenons aux délais habituels et enregistrons",
+        "visibleSeconds": 28.5,
+        "visible": "Sélection de l'option Délais habituels puis clic sur Enregistrer les rappels.",
+        "sync": "aligned",
+        "severity": "none"
+      }
+    ],
+    "issues": [],
+    "voice": {
+      "consistent": true,
+      "warm": true,
+      "observation": "Voix féminine claire, posée et parfaitement synchronisée avec la démonstration à l'écran."
+    }
+  },
+  "note": "Automated observation of actual final video audio and images; not a claim of complete human validation"
+}

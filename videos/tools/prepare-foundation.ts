@@ -20,6 +20,15 @@ async function main() {
         // Reset only this synthetic organization's test-email counter. Never
         // touch IP limits, another organization, or production counters.
         await db.rateLimit.deleteMany({ where: { key: "notification-test:org:video-foundation-email" } })
+        const eventId = `${id}-event-0`
+        const event = await db.event.findUniqueOrThrow({ where: { id: eventId }, include: { shifts: true, registrations: true } })
+        assert(event.organizationId === id && event.description === "Événement fictif de formation." && event.registrations.length === 0 && event.shifts.length === 2 && event.shifts.every(s => [0, 1].some(i => s.id === `${eventId}-shift-${i}`)))
+        const date = new Date(`${new Date().toISOString().slice(0, 10)}T00:00:00Z`)
+        date.setUTCDate(date.getUTCDate() + 7)
+        await db.$transaction([
+          db.event.update({ where: { id: eventId }, data: { startDate: date, endDate: date, remindersEnabled: true } }),
+          db.shift.updateMany({ where: { eventId }, data: { date } }),
+        ])
       }
       if (scenario === "charter") await db.organization.update({ where: { id }, data: { timeZone: "Europe/Paris" } })
       if (scenario === "team") {
@@ -65,8 +74,8 @@ async function main() {
       ] })
       if (scenario === "identity") await tx.orgSlugHistory.create({ data: { id: `${id}-old-address`, organizationId: id, slug: "montvert-ancien" } })
       for (const [index, title] of (scenario === "identity" ? ["Fête du village de Montvert", "Marché solidaire", "Rencontre des organisateurs"] : ["Fête du village de Montvert"]).entries()) {
-        const eventId = `${id}-event-${index}`, date = new Date(`2026-11-${14 + index * 7}T00:00:00Z`)
-        await tx.event.create({ data: { id: eventId, organizationId: id, title, slug: `rencontre-${index}`, description: "Événement fictif de formation.", location: "Place du Collège, Montvert", startDate: date, endDate: date, publicStatus: "published", isListed: index !== 2, remindersEnabled: false } })
+        const eventId = `${id}-event-${index}`, date = scenario === "email" ? new Date(`${new Date(Date.now() + 7 * 86400000).toISOString().slice(0, 10)}T00:00:00Z`) : new Date(`2026-11-${14 + index * 7}T00:00:00Z`)
+        await tx.event.create({ data: { id: eventId, organizationId: id, title, slug: `rencontre-${index}`, description: "Événement fictif de formation.", location: "Place du Collège, Montvert", startDate: date, endDate: date, publicStatus: "published", isListed: index !== 2, remindersEnabled: scenario === "email" } })
         for (const [order, roleName] of ["Accueil", "Buvette"].entries()) await tx.shift.create({ data: { id: `${eventId}-shift-${order}`, eventId, date, roleName, label: order ? "Service du midi" : "Entrée principale", startTime: order ? "12:00" : "09:00", endTime: order ? "14:00" : "12:00", capacity: 4, status: "open", displayOrder: order } })
         if (scenario === "planning") {
           for (const [order, shift] of [

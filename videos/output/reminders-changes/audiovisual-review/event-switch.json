@@ -1,0 +1,44 @@
+{
+  "model": "gemini-3.8-flash",
+  "reviewedAt": "2026-11-16T19:54:09.770Z",
+  "videoSha256": "40bb22ebe7f827cdb96cef14176def2de6045993aaaaeed3bdd141b2c212e776",
+  "promptSha256": "308954e0b025867466f44d3868217b7c77cdcd1dc5f04a787906f7d0952348d2",
+  "clipSha256": "52d25a93e23c09330a09f5708e419a88f337ab90d846ca189567ac87e278d6fd",
+  "scene": "event-switch",
+  "review": {
+    "heardOpening": "Les trois cases que nous venons de voir",
+    "checkpoints": [
+      {
+        "spokenSeconds": 8.9,
+        "spoken": "Décochons Rappels automatiques et attendons l'enregistrement.",
+        "visibleSeconds": 9.5,
+        "visible": "La case « Rappels automatiques » est décochée puis l'enregistrement automatique s'effectue.",
+        "sync": "aligned",
+        "severity": "none"
+      },
+      {
+        "spokenSeconds": 13,
+        "spoken": "Réactivons-les pour poursuivre notre exemple.",
+        "visibleSeconds": 13.3,
+        "visible": "La case « Rappels automatiques » est à nouveau cochée.",
+        "sync": "aligned",
+        "severity": "none"
+      },
+      {
+        "spokenSeconds": 18.5,
+        "spoken": "Regardons maintenant notre événement en brouillon.",
+        "visibleSeconds": 18,
+        "visible": "Affichage de l'onglet Aperçu avec le titre « Atelier en brouillon » et le statut « Prêt à publier ».",
+        "sync": "aligned",
+        "severity": "none"
+      }
+    ],
+    "issues": [],
+    "voice": {
+      "consistent": true,
+      "warm": true,
+      "observation": "Voix off fluide, claire et bien articulée, synchronisée avec les actions à l'écran."
+    }
+  },
+  "note": "Automated observation of actual final video audio and images; not a claim of complete human validation"
+}

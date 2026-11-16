@@ -1,0 +1,12 @@
+{
+  "anchor": "Noah ne viendra pas. Sélectionnons sa ligne et choisissons Marquer absent.",
+  "windowStart": 109.11099999999999,
+  "result": {
+    "found": true,
+    "startSeconds": 15.19,
+    "wordsHeard": "Noah"
+  },
+  "onset": 124.30099999999999,
+  "proposedCut": 124.11066650000001,
+  "note": "Proposal only; recut then independently audit before capture"
+}

@@ -1,0 +1,44 @@
+{
+  "model": "gemini-3.8-flash",
+  "reviewedAt": "2026-11-16T19:54:27.329Z",
+  "videoSha256": "40bb22ebe7f827cdb96cef14176def2de6045993aaaaeed3bdd141b2c212e776",
+  "promptSha256": "cee914f28c8a8c07a1fc45917be19dff396e4684b69236431a590a97d30c9341",
+  "clipSha256": "cebfbd0cf5e4d7c7d660bf22b706a22cda01471108f112b14e515e06f152f81c",
+  "scene": "timing",
+  "review": {
+    "heardOpening": "Les rappels partent autour de deux jours avant",
+    "checkpoints": [
+      {
+        "spokenSeconds": 1.1,
+        "spoken": "Les rappels partent autour de deux jours avant, autour de la veille, puis entre deux et quatre heures",
+        "visibleSeconds": 0,
+        "visible": "Page Paramètres des emails affichant les options Rappel J-2, Rappel J-1 et Rappel du jour cochées",
+        "sync": "aligned",
+        "severity": "none"
+      },
+      {
+        "spokenSeconds": 14.4,
+        "spoken": "Voici les trois emails réellement reçus pour nos trois échéances",
+        "visibleSeconds": 14,
+        "visible": "Affichage du premier e-mail reçu par Aline (J-2), suivi de Nicolas (J-1) et Léa (le jour même)",
+        "sync": "aligned",
+        "severity": "none"
+      },
+      {
+        "spokenSeconds": 18.2,
+        "spoken": "chacun retrouve son horaire local, le point de rendez-vous et les informations utiles",
+        "visibleSeconds": 18,
+        "visible": "Détails de l'email affichant l'horaire, le stand d'information (entrée nord) et les consignes pour le poste",
+        "sync": "aligned",
+        "severity": "none"
+      }
+    ],
+    "issues": [],
+    "voice": {
+      "consistent": true,
+      "warm": true,
+      "observation": "Voix off féminine claire, posée et bien articulée, parfaitement synchronisée avec les visuels."
+    }
+  },
+  "note": "Automated observation of actual final video audio and images; not a claim of complete human validation"
+}

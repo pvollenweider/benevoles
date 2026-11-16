@@ -155,6 +155,8 @@ et `admin-navigation`. Aucune narration ne décrit la disposition du tableau.
 
 Ces vidéos n'ont pas été régénérées dans la même PR.
 
+
+**Résolu pour ATTENDANCE_CHECK_IN — lot 41, 16 novembre 2026, révision 5.** Nouvelle narration et nouvelle prise contrôlées et publiées ; les autres vidéos citées dans cet écart gardent leur propre statut. [Preuves](evidence/batch41/attendance-check-in/review-report.txt).
 ## Écart connu : confirmation et lien perdu (#1097)
 
 Après une inscription par le lien public, la page de confirmation dit maintenant
@@ -252,6 +254,8 @@ Image seulement (la narration reste juste) :
 
 Ces vidéos n'ont pas été régénérées dans la même PR.
 
+
+**Résolu pour ATTENDANCE_CHECK_IN — lot 41, 16 novembre 2026, révision 5.** Nouvelle narration et nouvelle prise contrôlées et publiées ; les autres vidéos citées dans cet écart gardent leur propre statut. [Preuves](evidence/batch41/attendance-check-in/review-report.txt).
 ## Écart connu : communications préremplies depuis une version (#762)
 
 L'écran `/super-admin/product-updates` a maintenant, en tête de la carte
@@ -376,6 +380,8 @@ Image seulement (la narration reste juste) :
 
 Ces vidéos n'ont pas été régénérées dans la même PR.
 
+
+**Résolu pour ATTENDANCE_CHECK_IN — lot 41, 16 novembre 2026, révision 5.** Nouvelle narration et nouvelle prise contrôlées et publiées ; les autres vidéos citées dans cet écart gardent leur propre statut. [Preuves](evidence/batch41/attendance-check-in/review-report.txt).
 ## Écart connu : commutateur d'assurance de la charte
 
 Dans Paramètres, section « Charte des bénévoles », la phrase sous le
@@ -510,6 +516,8 @@ zéro et renomment la fiche ; `prepare-accessibility` (créé une seule fois) de
 une base vidéo remise à zéro. Au prochain rendu, incrémenter `revision` et mettre à
 jour `updatedAt` dans `videos/catalog.json` pour chacune de ces huit vidéos.
 
+
+**Résolu pour ATTENDANCE_CHECK_IN — lot 41, 16 novembre 2026, révision 5.** Nouvelle narration et nouvelle prise contrôlées et publiées ; les autres vidéos citées dans cet écart gardent leur propre statut. [Preuves](evidence/batch41/attendance-check-in/review-report.txt).
 ## Vidéos des fonctions bêta : sources et production (#1168, #1147, #1169, #1174)
 
 Les quatre rendus ont été publiés dans les lots 32 et 33. Chaque rendu utilise
@@ -1031,6 +1039,8 @@ régénération dans ce travail (voix et capture longues). Aucune vidéo publié
 « Chercher des bénévoles ». Révision du catalogue à incrémenter au rendu.
 
 
+
+**Résolu pour ATTENDANCE_CHECK_IN — lot 41, 16 novembre 2026, révision 5.** Nouvelle narration et nouvelle prise contrôlées et publiées ; les autres vidéos citées dans cet écart gardent leur propre statut. [Preuves](evidence/batch41/attendance-check-in/review-report.txt).
 ## Lot 39 — sortie des secteurs de la bêta, 2026-11-10
 
 BETA_ACCESS : READY et publiée, révision 2, après aperçu puis APPLY=1 (contexte default). Build main `058f35c463cf3b1e6b47596201d0ab6f78ab3015`, BUILD_ID `rLDQoLz1bzvkYVRMNsVYi`. Une prise narrée, 120,600 s, musique 15,4–19,2 LU sous la voix, minimum sans voix −33,7 LUFS ; dix ancres et cinq clics sonorisés validés. Cinq chapitres AV / quinze points, zéro signalement, zéro tutoiement VTT/ASR finale. Quatre fonctions bêta seulement, aucun secteur dans leurs listes. [Rapport et preuves](evidence/beta-access/batch39/review-report.txt).
@@ -1183,6 +1193,8 @@ inscriptions (`admin-registrations`, `admin-registrations-requests`, `admin-refu
 `admin-make-leader-modal`) sont déclarées sur des écrans modifiés et restent à régénérer avec une
 base jetable : aucun fichier de `public/doc-img/` n'a été modifié dans ce travail.
 
+
+**Résolu pour ATTENDANCE_CHECK_IN — lot 41, 16 novembre 2026, révision 5.** Nouvelle narration et nouvelle prise contrôlées et publiées ; les autres vidéos citées dans cet écart gardent leur propre statut. [Preuves](evidence/batch41/attendance-check-in/review-report.txt).
 ## État « parti avant la fin » (#1141, second lot), 16 novembre 2026
 
 Une inscription confirmée a désormais quatre états : attendue, présente, **absente** ou **partie
@@ -1232,6 +1244,8 @@ Les captures `admin-day-of`, `admin-registrations`, `admin-registrations-request
 restent à régénérer avec une base jetable : aucun fichier de `public/doc-img/` n'a été modifié dans
 ce travail.
 
+
+**Résolu pour ATTENDANCE_CHECK_IN — lot 41, 16 novembre 2026, révision 5.** Nouvelle narration et nouvelle prise contrôlées et publiées ; les autres vidéos citées dans cet écart gardent leur propre statut. [Preuves](evidence/batch41/attendance-check-in/review-report.txt).
 ## #1142, second lot : accès accueil limité à un événement
 
 La page Jour J des organisateurs gagne, pour un propriétaire seulement, une section repliée
@@ -1249,6 +1263,8 @@ Les sélecteurs de capture ne changent pas (la section est un `<details>` fermé
 les boutons et les champs déjà filmés). Aucun fichier de `public/doc-img/` n'est modifié.
 
 
+
+**Résolu pour ATTENDANCE_CHECK_IN — lot 41, 16 novembre 2026, révision 5.** Nouvelle narration et nouvelle prise contrôlées et publiées ; les autres vidéos citées dans cet écart gardent leur propre statut. [Preuves](evidence/batch41/attendance-check-in/review-report.txt).
 ## Lot 41 — tentative du 16 novembre 2026 : build produit bloqué
 
 Le build neuf du main épinglé `f9fcec47d32af10b0837b2de87beb61535d30888` vérifie les 2 438 entrées du produit et compile le JavaScript, puis Next.js refuse l'export `buildDocIndexJson` de `src/app/api/public/doc-index/route.ts:21` dans ses types de route générés. Aucun BUILD_ID vérifié, aucune prise ni publication. L'interdiction de modifier `src/` est respectée ; aucun ancien build n'est utilisé.
@@ -1270,3 +1286,12 @@ Les douze frontières signalées du pointage sont corrigées sur les silences me
 **READY et publiée**, révision 1, 170,160 s, main `e8ed666a`, BUILD_ID `HO6mRRAZuOevekAmdhN_C`. Une prise narrée après répétition ; huit chapitres AV / 30 points sans signalement, huit ASR source et finales réussies. Le master Kore est une génération entière, frontières corrigées sur les silences ; sa revue signale une variation naturelle d'intonation tout en concluant explicitement à une seule voix constante (rapport initial et résolution conservés).
 
 Invitation, véritable email et activation, connexion accueil, pointage et révocation vérifiés ; aucune expiration simulée. Corps réel de l'email cadré x320/y312/960×488, sans écran technique. Musique 14,8–19,5 LU, minimum seule −34,1 LUFS, aucun trou ; 19 clics réels sonorisés. ASR multilingue complète et VTT : zéro tutoiement du spectateur. Description 108 octets. Aperçu puis APPLY=1 sur default, cinq fichiers envoyés. Lien du guide et de FEATURES ajouté. [Rapport et preuves](evidence/batch41/front-desk-access/review-report.txt). Aucun défaut produit constaté ; aucune écoute subjective humaine revendiquée.
+
+
+### ATTENDANCE_CHECK_IN — reprise terminée du lot 41, 16 novembre 2026
+
+**READY et publiée**, révision 5, 461,680 s, main `e8ed666a`, BUILD_ID `HO6mRRAZuOevekAmdhN_C`. Les douze frontières initiales sont corrigées et les quinze chapitres source/final passent l'ASR indépendante. Deux prises narrées : la première est rejetée pour la ligne de Zoé sous le cadre ; la seconde montre la recherche et ses résultats, les quatre états et leurs annulations sur Jour J et dans les inscriptions, les deux colonnes CSV, et la nuance des heures attestées.
+
+Quinze chapitres AV / 61 points. Cinq rapports bruts signalent des observations, conservées et résolues par les images finales, les vrais événements d'entrée et les contrôles d'état : présence d'Aline et rechargements, classification des créneaux commencés avec la veille initialement montrée, deux recherches distinctes, rafraîchissement automatique distinct du clic manuel. [Contre-preuves](evidence/batch41/attendance-check-in/take2-counterchecks.json). Musique 14,7–19,2 LU, minimum seule −34,0 LUFS, aucun trou ; 46 clics et 46 touches réels sonorisés. ASR multilingue complète et VTT : zéro tutoiement. Corps mobile réellement capturé centré sans la marge native grise, brut final conservé.
+
+Aperçu puis APPLY=1 sur default, cinq fichiers envoyés. [Rapport complet](evidence/batch41/attendance-check-in/review-report.txt). L'incident d'archivage de la première prise (brut perdu, MP4 et preuves conservés) n'est pas masqué ; le recorder archive désormais automatiquement le brut et sa timeline avant une nouvelle capture, avec deux tests de préservation de fichiers. Aucun troisième tournage ni fichier produit modifié ; aucune écoute subjective humaine revendiquée.

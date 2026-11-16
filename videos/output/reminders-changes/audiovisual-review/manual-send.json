@@ -1,0 +1,44 @@
+{
+  "model": "gemini-3.8-flash",
+  "reviewedAt": "2026-11-16T19:53:56.861Z",
+  "videoSha256": "40bb22ebe7f827cdb96cef14176def2de6045993aaaaeed3bdd141b2c212e776",
+  "promptSha256": "a1d04bc93ecd46e359164541430b596f874651f3f194aefa1ec85f04e5f0f425",
+  "clipSha256": "abef8b57bcd672078ebcdc69f47307e8a02fa1a9165a94637ed8489e68a85a01",
+  "scene": "manual-send",
+  "review": {
+    "heardOpening": "Dans Messages,",
+    "checkpoints": [
+      {
+        "spokenSeconds": 1.2,
+        "spoken": "Envoyer le rappel demande une confirmation.",
+        "visibleSeconds": 2,
+        "visible": "Clic sur le bouton 'Envoyer le rappel' et affichage de la fenêtre modale de confirmation.",
+        "sync": "aligned",
+        "severity": "none"
+      },
+      {
+        "spokenSeconds": 5,
+        "spoken": "Nous annulons une première fois, puis reprenons et confirmons le véritable envoi.",
+        "visibleSeconds": 5.5,
+        "visible": "Clic sur Annuler fermant la modale, réouverture du bouton et validation finale sur 'Envoyer'.",
+        "sync": "aligned",
+        "severity": "none"
+      },
+      {
+        "spokenSeconds": 10,
+        "spoken": "Ouvrons l'email de Léa : ses deux créneaux sont regroupés dans un seul message, avec notre consigne.",
+        "visibleSeconds": 10.2,
+        "visible": "Affichage de l'e-mail destiné à Léa récapitulant les deux créneaux avec les consignes d'arrivée.",
+        "sync": "aligned",
+        "severity": "none"
+      }
+    ],
+    "issues": [],
+    "voice": {
+      "consistent": true,
+      "warm": true,
+      "observation": "Voix claire, posée et bien articulée, parfaitement synchronisée avec les actions à l'écran."
+    }
+  },
+  "note": "Automated observation of actual final video audio and images; not a claim of complete human validation"
+}
