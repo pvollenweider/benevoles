@@ -186,6 +186,35 @@ describe("deliverOutbox", () => {
     expect(m.reported).not.toHaveBeenCalled()
   })
 
+  // Sentry 159916088 (2026-11-13): a domain that never resolved stays « temporary » by its code
+  // (450 4.1.2), so the row is retried, then gives up at its last attempt. That is a mistyped
+  // address too, the same reading as the health page's: failed as before, warned, not reported.
+  it("does not report a domain still not found at the last attempt (450 4.1.2)", async () => {
+    m.findUniqueOrThrow.mockResolvedValue({ id: "n1", attempts: MAX_ATTEMPTS - 1, payload })
+    m.sendNotification.mockResolvedValue({ ok: false, reason: "smtp:failed_temporary:domain_not_found:450:4.1.2" })
+    const warn = vi.spyOn(console, "warn").mockImplementation(() => {})
+    try {
+      expect(await deliverOutbox({ now })).toEqual({ sent: 0, retried: 0, failed: 1, cancelled: 0, held: 0 })
+      expect(m.reported).not.toHaveBeenCalled()
+      expect(String(warn.mock.calls[0][0])).toContain("outbox.gave_up.registration_confirmation")
+    } finally {
+      warn.mockRestore()
+    }
+  })
+
+  it("retries that same refusal before the last attempt, without reporting it", async () => {
+    m.sendNotification.mockResolvedValue({ ok: false, reason: "smtp:failed_temporary:domain_not_found:450:4.1.2" })
+    expect(await deliverOutbox({ now })).toEqual({ sent: 0, retried: 1, failed: 0, cancelled: 0, held: 0 })
+    expect(m.reported).not.toHaveBeenCalled()
+  })
+
+  it("still reports another temporary refusal that gave up: a relay or a timeout is ours to look at", async () => {
+    m.findUniqueOrThrow.mockResolvedValue({ id: "n1", attempts: MAX_ATTEMPTS - 1, payload })
+    m.sendNotification.mockResolvedValue({ ok: false, reason: "smtp:failed_temporary:other:451:4.3.0" })
+    expect(await deliverOutbox({ now })).toEqual({ sent: 0, retried: 0, failed: 1, cancelled: 0, held: 0 })
+    expect(m.reported).toHaveBeenCalledWith("outbox.gave_up.registration_confirmation", expect.any(Error))
+  })
+
   it("isRecipientDataFailure needs both permanent and the recipient flag", () => {
     expect(isRecipientDataFailure({ permanent: true, recipientRejected: true })).toBe(true)
     expect(isRecipientDataFailure({ permanent: true })).toBe(false)
