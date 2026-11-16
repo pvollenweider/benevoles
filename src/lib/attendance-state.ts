@@ -6,12 +6,19 @@
  * Pure, no Prisma: shared by the day-of board, the registrations list, the export and the server.
  *
  * `checkedInAt` stays the arrival mark of #399. `attendanceStatus` only carries "absent" in this
- * release: "left_early" is reserved for a later PR and refused by the routes here. The two
- * columns are mutually exclusive:
+ * release: "left_early" is reserved for a later PR and refused by the routes here. What this
+ * release writes:
  *
  * - expected: checkedInAt null, attendanceStatus null;
  * - present: checkedInAt set, attendanceStatus null;
  * - absent: checkedInAt null, attendanceStatus "absent".
+ *
+ * `checkedInAt` wins when both are set. During a rolling deployment the previous release still
+ * runs for a short time, and its check-in knows only `checkedInAt`: on a row this release marked
+ * absent, it sets `checkedInAt` and leaves `attendanceStatus = "absent"`. Such a row is present
+ * (someone recorded an arrival after the absence), here and for every reader of `checkedInAt`
+ * alone (hours, certificates, the « Présent » column), so all of them agree. It repairs itself:
+ * « Annuler la présence » accepts it and writes the four columns back to null.
  *
  * The allowed transitions are the four reversible actions. Present and absent never go directly
  * from one to the other: undo first, so every action is reversible by one press and a stale
@@ -35,10 +42,13 @@ export const ATTENDANCE_LABELS: Record<AttendanceState, string> = {
   absent: "Absent",
 }
 
-/** The state a registration is in. `attendanceStatus` wins when it says "absent". */
+/**
+ * The state a registration is in. A check-in time means present, whatever `attendanceStatus`
+ * says (see above); absent is a null check-in with the status "absent".
+ */
 export function attendanceStateOf({ checkedInAt, attendanceStatus }: AttendanceFacts): AttendanceState {
-  if (attendanceStatus === "absent") return "absent"
-  return checkedInAt ? "present" : "expected"
+  if (checkedInAt) return "present"
+  return attendanceStatus === "absent" ? "absent" : "expected"
 }
 
 export type TransitionPlan = { from: AttendanceState; to: AttendanceState }

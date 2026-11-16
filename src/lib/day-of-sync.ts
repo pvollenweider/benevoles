@@ -13,7 +13,7 @@
  * action is still in flight keeps what it showed when tapped, whatever a poll says meanwhile.
  */
 
-import { personName, shiftName, type DayOfBoard, type DayOfGroup, type DayOfPerson, type DayOfShift } from "./day-of"
+import { leftShiftSentence, personName, shiftName, type DayOfBoard, type DayOfGroup, type DayOfPerson, type DayOfShift } from "./day-of"
 import { attendanceStateOf, type AttendanceState } from "./attendance-state"
 
 /** Between two polls while the page is visible and the last poll went through. */
@@ -263,5 +263,18 @@ export function leftBoardAnnouncement(before: DayOfBoard, after: DayOfBoard, reg
   if (findOnBoard(after, registrationId)) return null
   const was = findOnBoard(before, registrationId)
   if (!was) return null
-  return `${personName(was.person)} ne figure plus parmi les personnes attendues, ${shiftName(was.shift)}.`
+  return leftShiftSentence(personName(was.person), shiftName(was.shift))
+}
+
+/**
+ * Whether the sentence shown in a person's row after an action that changed nothing still
+ * describes the row once a read is applied (#1141): the person is still on the same shift and
+ * shows the same state. Anything else (state changed here or elsewhere, moved, left) and the
+ * sentence goes, so it never stays beside a row it no longer explains.
+ */
+export function noticeStillHolds(before: DayOfBoard, marksBefore: LocalMarks, after: DayOfBoard, marksAfter: LocalMarks, registrationId: string): boolean {
+  const was = findOnBoard(before, registrationId)
+  const now = findOnBoard(after, registrationId)
+  if (!was || !now || was.shift.id !== now.shift.id) return false
+  return shownState(was.person, marksBefore) === shownState(now.person, marksAfter)
 }

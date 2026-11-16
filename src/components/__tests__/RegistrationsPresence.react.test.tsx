@@ -51,7 +51,7 @@ describe("RegistrationsManager — presence", () => {
     await waitFor(() => expect(fetchMock).toHaveBeenCalled())
     const [url, init] = fetchMock.mock.calls[0]
     expect(url).toBe("/api/admin/events/evt-1/registrations/bulk")
-    expect(JSON.parse(init.body)).toEqual({ action: "check_in", registrationIds: ["r2"] })
+    expect(JSON.parse(init.body)).toEqual({ action: "check_in", registrationIds: ["r2"], observedShifts: { r2: "s1" } })
     const bobRow = await screen.findByText("Bob Durand").then((el) => el.closest("tr")!)
     await waitFor(() => expect(within(bobRow).getByText(/Présent/)).toBeInTheDocument())
     await waitFor(() => expect(screen.getAllByRole("status").some((el) => el.textContent?.includes("1 personne marquée présente."))).toBe(true))
@@ -102,7 +102,7 @@ describe("RegistrationsManager — presence", () => {
     fireEvent.click(screen.getByRole("button", { name: "Marquer absents (2)" }))
 
     await waitFor(() => expect(fetchMock).toHaveBeenCalled())
-    expect(JSON.parse(fetchMock.mock.calls[0][1].body)).toEqual({ action: "mark_absent", registrationIds: ["r1", "r2"] })
+    expect(JSON.parse(fetchMock.mock.calls[0][1].body)).toEqual({ action: "mark_absent", registrationIds: ["r1", "r2"], observedShifts: { r1: "s1", r2: "s1" } })
     await waitFor(() => expect(screen.getAllByText("Absent")).toHaveLength(2))
     await waitFor(() => expect(screen.getAllByRole("status").some((el) => el.textContent?.includes("2 personnes marquées absentes."))).toBe(true))
     const summary = screen.getByText(/personne encore marqué présent/).closest("p")!
@@ -117,7 +117,7 @@ describe("RegistrationsManager — presence", () => {
     fireEvent.click(screen.getByLabelText(/^Sélectionner l'inscription de Alice Martin, /))
     fireEvent.click(screen.getByRole("button", { name: "Annuler l'absence (1)" }))
     await waitFor(() => expect(fetchMock).toHaveBeenCalled())
-    expect(JSON.parse(fetchMock.mock.calls[0][1].body)).toEqual({ action: "undo_absent", registrationIds: ["r1"] })
+    expect(JSON.parse(fetchMock.mock.calls[0][1].body)).toEqual({ action: "undo_absent", registrationIds: ["r1"], observedShifts: { r1: "s1" } })
     await waitFor(() => expect(screen.queryByText("Absent")).toBeNull())
     await waitFor(() => expect(screen.getAllByRole("status").some((el) => el.textContent?.includes("Absence annulée pour 1 personne."))).toBe(true))
     expect(screen.getByText("1 présent").closest("p")).toHaveTextContent("1 présent sur 2 inscrits.")
@@ -149,5 +149,55 @@ describe("RegistrationsManager — presence", () => {
     const alert = await screen.findByRole("alert")
     expect(alert).toHaveTextContent(/Absence/)
     expect(screen.queryByText("Absent")).toBeNull()
+  })
+
+  it("nothing changed (everyone already marked elsewhere): says so instead of « 0 personne … », for the four actions", async () => {
+    const cases = [
+      { rows: [reg("r1"), reg("r2")], pick: "Bob Durand", button: "Marquer absent (1)", state: "present", checkedInAt: "2026-07-04T08:01:00.000Z" },
+      { rows: [reg("r1"), reg("r2")], pick: "Bob Durand", button: "Marquer présent (1)", state: "absent", checkedInAt: null },
+      { rows: [reg("r1"), reg("r2", { checkedInAt: "2026-07-04T08:01:00.000Z" })], pick: "Bob Durand", button: "Annuler la présence (1)", state: "expected", checkedInAt: null },
+      { rows: [reg("r1"), reg("r2", { attendanceStatus: "absent" })], pick: "Bob Durand", button: "Annuler l'absence (1)", state: "expected", checkedInAt: null },
+    ]
+    for (const c of cases) {
+      fetchMock.mockReset()
+      fetchMock.mockResolvedValue({ ok: true, json: async () => ({ done: 0, changedIds: [], skipped: 1, results: [{ id: "r2", changed: false, state: c.state, checkedInAt: c.checkedInAt }] }) })
+      render(<RegistrationsManager eventId="evt-1" timeZone="Europe/Zurich" shifts={[shift]} initialRegistrations={c.rows} />)
+      fireEvent.click(screen.getByLabelText(new RegExp(`^Sélectionner l'inscription de ${c.pick}, `)))
+      fireEvent.click(screen.getByRole("button", { name: c.button }))
+      await waitFor(() => expect(screen.getAllByRole("status").some((el) => el.textContent?.includes("Rien n'a changé : ces personnes ont déjà été marquées sur un autre appareil."))).toBe(true))
+      expect(screen.getAllByRole("status").some((el) => /\b0 personne/.test(el.textContent ?? ""))).toBe(false)
+      cleanup()
+    }
+  })
+
+  it("the same sentence twice in a row is set again (cleared first)", async () => {
+    fetchMock.mockResolvedValue({ ok: true, json: async () => ({ done: 0, changedIds: [], skipped: 1, results: [{ id: "r2", changed: false, state: "expected", checkedInAt: null }] }) })
+    render(<RegistrationsManager eventId="evt-1" timeZone="Europe/Zurich" shifts={[shift]} initialRegistrations={[reg("r1"), reg("r2")]} />)
+    const sentence = "Rien n'a changé : ces personnes ont déjà été marquées sur un autre appareil."
+    const said = () => screen.getAllByRole("status").some((el) => el.textContent?.includes(sentence))
+    for (let i = 0; i < 2; i++) {
+      fireEvent.click(screen.getByLabelText(/^Sélectionner l'inscription de Bob Durand, /))
+      fireEvent.click(screen.getByRole("button", { name: "Marquer absent (1)" }))
+      // Emptied when the action ends, then filled on the next frame.
+      if (i === 1) await waitFor(() => expect(said()).toBe(false))
+      await waitFor(() => expect(said()).toBe(true))
+    }
+    expect(fetchMock).toHaveBeenCalledTimes(2)
+  })
+
+  it("a row the server no longer finds (« gone ») is left as shown, and a moved one takes the state returned", async () => {
+    fetchMock.mockResolvedValue({ ok: true, json: async () => ({
+      done: 0, changedIds: [], skipped: 2,
+      results: [{ id: "r1", changed: false, state: null, checkedInAt: null, gone: true }, { id: "r2", changed: false, state: "present", checkedInAt: "2026-07-04T08:01:00.000Z", moved: true }],
+    }) })
+    render(<RegistrationsManager eventId="evt-1" timeZone="Europe/Zurich" shifts={[shift]} initialRegistrations={[reg("r1"), reg("r2")]} />)
+    fireEvent.click(screen.getByLabelText(/^Sélectionner l'inscription de Alice Martin, /))
+    fireEvent.click(screen.getByLabelText(/^Sélectionner l'inscription de Bob Durand, /))
+    fireEvent.click(screen.getByRole("button", { name: "Marquer absents (2)" }))
+    const bobRow = screen.getByText("Bob Durand").closest("tr")!
+    await waitFor(() => expect(within(bobRow).getByText(/Présent/)).toBeInTheDocument())
+    const aliceRow = screen.getByText("Alice Martin").closest("tr")!
+    expect(within(aliceRow).queryByText("Absent")).toBeNull()
+    expect(within(aliceRow).queryByText(/Présent/)).toBeNull()
   })
 })

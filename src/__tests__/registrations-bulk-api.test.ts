@@ -107,6 +107,38 @@ describe("POST /api/admin/events/[id]/registrations/bulk", () => {
     expect(await undo.json()).toEqual({ done: 1, changedIds: ["r1"], skipped: 0, results: [{ id: "r1", changed: true, state: "expected", checkedInAt: null }] })
   })
 
+  it("hands each registration over with the shift the route read and the one the page showed (`observedShifts`, #1141)", async () => {
+    regFindMany.mockResolvedValue([reg("r1"), reg("r2", { shiftId: "s2" })])
+    actions.setAttendance.mockResolvedValue([
+      { id: "r1", changed: true, state: "present", checkedInAt: "2026-07-04T08:05:00.000Z" },
+      { id: "r2", changed: false, state: "expected", checkedInAt: null, moved: true },
+    ])
+    const { POST } = await import("@/app/api/admin/events/[id]/registrations/bulk/route")
+    const res = await POST(post({ action: "check_in", registrationIds: ["r1", "r2"], observedShifts: { r1: "s1", r2: "s1", other: "s7" } }), params)
+    expect(actions.setAttendance.mock.calls[0][2]).toEqual([
+      { id: "r1", eventId: "evt-1", shiftId: "s1", status: "active", observedShiftId: "s1" },
+      { id: "r2", eventId: "evt-1", shiftId: "s2", status: "active", observedShiftId: "s1" },
+    ])
+    // `moved` reaches the client; the counters of #399 are unchanged.
+    expect(await res.json()).toMatchObject({ done: 1, changedIds: ["r1"], skipped: 1, results: [{ id: "r1" }, { id: "r2", changed: false, moved: true }] })
+  })
+
+  it("a caller that sends no `observedShifts` keeps working: no observed shift is handed over", async () => {
+    regFindMany.mockResolvedValue([reg("r1")])
+    actions.setAttendance.mockResolvedValue([{ id: "r1", changed: true, state: "absent", checkedInAt: null }])
+    const { POST } = await import("@/app/api/admin/events/[id]/registrations/bulk/route")
+    expect((await POST(post({ action: "mark_absent", registrationIds: ["r1"] }), params)).status).toBe(200)
+    expect(actions.setAttendance.mock.calls[0][2]).toEqual([{ id: "r1", eventId: "evt-1", shiftId: "s1", status: "active", observedShiftId: null }])
+  })
+
+  it("passes a « gone » result on as it is", async () => {
+    regFindMany.mockResolvedValue([reg("r1")])
+    actions.setAttendance.mockResolvedValue([{ id: "r1", changed: false, state: null, checkedInAt: null, gone: true }])
+    const { POST } = await import("@/app/api/admin/events/[id]/registrations/bulk/route")
+    const res = await POST(post({ action: "mark_absent", registrationIds: ["r1"] }), params)
+    expect(await res.json()).toEqual({ done: 0, changedIds: [], skipped: 1, results: [{ id: "r1", changed: false, state: null, checkedInAt: null, gone: true }] })
+  })
+
   it("the absence actions need the same ownership as the check-in: one foreign id and nothing is done (#1141)", async () => {
     regFindMany.mockResolvedValue([reg("r1")]) // r2 not found through the scoped client
     const { POST } = await import("@/app/api/admin/events/[id]/registrations/bulk/route")

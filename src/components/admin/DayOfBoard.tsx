@@ -12,8 +12,9 @@ import {
   PRIMARY_ACTION,
   addShiftToBoard,
   attendanceAnnouncement,
+  answerFor,
   attendanceRequest,
-  conflictAnnouncement,
+  leftShift,
   dayOfBoardUrl,
   filterGroups,
   groupHeading,
@@ -25,6 +26,7 @@ import {
   shiftHours,
   shiftName,
   telHref,
+  unchangedAnnouncement,
   type DayOfBoard as Board,
   type DayOfGroup,
   type DayOfPerson,
@@ -33,7 +35,7 @@ import {
 import { needCreatedAnnouncement } from "@/lib/day-of-need"
 import type { RegistrationWindow } from "@/lib/registration-window"
 import { fold } from "@/lib/text-fold"
-import { ATTENDANCE_TRANSITIONS, type AttendanceState, type AttendanceTransition } from "@/lib/attendance-state"
+import { ATTENDANCE_TRANSITIONS, type AttendanceTransition } from "@/lib/attendance-state"
 import AddNeedPanel from "./AddNeedPanel"
 import {
   NO_CHANGES,
@@ -46,6 +48,7 @@ import {
   marksAfterPoll,
   mayAnnounceChanges,
   nextPollDelay,
+  noticeStillHolds,
   pinMark,
   releasePin,
   shouldSyncOnResume,
@@ -101,12 +104,6 @@ type Snapshot = { board: Board; today: string; refreshedAt: string }
 type SyncKind = "poll" | "manual" | "after_action"
 
 const focusRing = "focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-blue-600"
-const STATES: readonly AttendanceState[] = ["expected", "present", "absent"]
-/** What the bulk route says about one requested registration after the call (#1141). */
-type ServerResult = { id: string; changed: boolean; state: AttendanceState; checkedInAt: string | null }
-const isServerResult = (r: unknown): r is ServerResult =>
-  typeof r === "object" && r !== null && typeof (r as ServerResult).id === "string" && typeof (r as ServerResult).changed === "boolean" && STATES.includes((r as ServerResult).state)
-
 const actionWhat: Record<AttendanceTransition, string> = { check_in: "Présence", undo_check_in: "Présence", mark_absent: "Absence", undo_absent: "Absence" }
 const outlineButton = "border border-blue-600 text-blue-700 bg-white hover:bg-blue-50"
 const telClass = `inline-flex items-center min-h-11 px-3 rounded-xl border border-gray-300 bg-white text-sm font-medium text-blue-700 underline underline-offset-2 hover:bg-gray-50 ${focusRing}`
@@ -150,7 +147,13 @@ export default function DayOfBoard({ eventId, board: initialBoard, today: initia
   const errorSeq = useRef(0)
   // An action that changed nothing because another device was first: the sentence said in the live
   // region, shown in the person's row for who does not hear it. Plain text, no live role.
-  const [notice, setNotice] = useState<{ registrationId: string; text: string } | null>(null)
+  const [notice, setNoticeState] = useState<{ registrationId: string; text: string } | null>(null)
+  const noticeRef = useRef(notice)
+  const setNotice = (next: { registrationId: string; text: string } | null) => {
+    if (next === noticeRef.current) return
+    noticeRef.current = next
+    setNoticeState(next)
+  }
   // « Plus tôt aujourd'hui » opened or closed by hand, kept while a search forces it open.
   const [earlierOpen, setEarlierOpen] = useState(false)
   const buttons = useRef(new Map<string, HTMLButtonElement>())
@@ -292,6 +295,9 @@ export default function DayOfBoard({ eventId, board: initialBoard, today: initia
     const marksBefore = marksRef.current
     const marksAfter = marksAfterPoll(marksBefore, sentAt)
     const changes = boardChanges(before.board, marksBefore, next.board, marksAfter)
+    // The sentence shown in a row goes once the read changes what that row shows.
+    const shownNotice = noticeRef.current
+    if (shownNotice && !noticeStillHolds(before.board, marksBefore, next.board, marksAfter, shownNotice.registrationId)) setNotice(null)
 
     // The focused row, found again after the render even if its card moved to another section.
     // A person's row, or anywhere else in a shift card (its title, its contact's phone).
@@ -415,7 +421,7 @@ export default function DayOfBoard({ eventId, board: initialBoard, today: initia
         if (again === "manual" || (document.visibilityState !== "hidden" && navigator.onLine !== false)) void sync(again)
       }
     }
-    const { url, body } = attendanceRequest(eventId, id, transition)
+    const { url, body } = attendanceRequest(eventId, id, transition, shift.id)
     const what = `${actionWhat[transition]} de ${name}`
     const fail = (text: string) => {
       errorSeq.current += 1
@@ -438,8 +444,8 @@ export default function DayOfBoard({ eventId, board: initialBoard, today: initia
       fail(`${f.title}. ${f.message}`)
       return
     }
-    const result = (await res.json().catch(() => ({}))) as { changedIds?: string[]; results?: unknown[] }
-    const own = (Array.isArray(result.results) ? result.results : []).filter(isServerResult).find((r) => r.id === id)
+    const result = (await res.json().catch(() => ({}))) as { changedIds?: string[]; results?: unknown }
+    const own = answerFor(result.results, id)
     const changed = own ? own.changed : (result.changedIds ?? []).includes(id)
     setError(null)
     // WebKit leaves a tapped button unfocused (focus on <main>): put it back on the row's first button.
@@ -449,15 +455,20 @@ export default function DayOfBoard({ eventId, board: initialBoard, today: initia
     focusAfterSync.current = { registrationId: id, shiftId: shift.id, leftText: null }
     const countsNow = () => shiftCounts(shift, (p) => shownState(p, marksRef.current))
     if (!changed) {
-      // Recorded meanwhile from another device, or no longer confirmed. The row takes the state
-      // the server returned, written before `done()` may send a read again: that read then finds
-      // nothing new for this row, and no « Liste mise à jour » repeats what is said here.
-      if (own) updateMarks((m) => answerMark(m, id, { state: own.state, checkedInAt: own.checkedInAt }, ++tick.current))
-      else unpin()
+      // Recorded meanwhile from another device, no longer confirmed, or no longer on this shift
+      // (`moved`, `gone`). The row takes the state the server returned, written before `done()`
+      // may send a read again: that read then finds nothing new for this row, and no « Liste mise
+      // à jour » repeats what is said here. A person who left the shift has no state to take:
+      // the row goes back to what it showed and the silent read below removes it.
+      if (own?.state && !leftShift(own)) {
+        const server = { state: own.state, checkedInAt: own.checkedInAt }
+        updateMarks((m) => answerMark(m, id, server, ++tick.current))
+      } else unpin()
       done()
-      const conflict = own ? conflictAnnouncement(name, own.state, shiftName(shift), countsNow()) : null
-      if (conflict) setNotice({ registrationId: id, text: conflict })
-      say(conflict ?? `Rien n'a changé pour ${name} : la liste est mise à jour.`)
+      // Said once, and shown in the row for who does not hear the live region.
+      const text = unchangedAnnouncement(name, own, shiftName(shift), countsNow())
+      setNotice({ registrationId: id, text })
+      say(text)
       void sync("after_action")
       return
     }

@@ -18,6 +18,10 @@ import type { AttendanceTransition } from "@/lib/attendance-state"
 const schema = z.object({
   action: z.enum(["cancel", "make_leader", "resend_link", "check_in", "undo_check_in", "mark_absent", "undo_absent"]),
   registrationIds: z.array(z.string().min(1)).min(1).max(500),
+  // Attendance actions only (#1141), optional: registration id → the shift the page showed it
+  // on. A registration that has moved to another shift since is not written and comes back as
+  // unchanged with `moved: true`. Callers that send nothing keep the previous behaviour.
+  observedShifts: z.record(z.string().min(1), z.string().min(1)).optional(),
 })
 
 export async function POST(req: Request, { params }: { params: Promise<{ id: string }> }) {
@@ -76,10 +80,13 @@ export async function POST(req: Request, { params }: { params: Promise<{ id: str
     case "undo_check_in":
     case "mark_absent":
     case "undo_absent": {
-      const results = await setAttendance(db, actor, regs, parsed.data.action as AttendanceTransition)
+      const observed = parsed.data.observedShifts ?? {}
+      const targets = regs.map((r) => ({ id: r.id, eventId: r.eventId, shiftId: r.shiftId, status: r.status, observedShiftId: Object.hasOwn(observed, r.id) ? observed[r.id] : null }))
+      const results = await setAttendance(db, actor, targets, parsed.data.action as AttendanceTransition)
       const changedIds = results.filter((r) => r.changed).map((r) => r.id)
       // `done` and `changedIds` stay for existing callers; `results` gives the state of every
-      // requested registration after the call, including the ones that changed nothing.
+      // requested registration after the call, including the ones that changed nothing, with
+      // `moved` (on another shift than the one acted on) or `gone` (no longer there) when so.
       return NextResponse.json({ done: changedIds.length, changedIds, skipped: ids.length - changedIds.length, results })
     }
     case "resend_link": {

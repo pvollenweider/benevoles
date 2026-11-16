@@ -42,6 +42,11 @@ describe("memberTimeline, recorded absence (#1141)", () => {
     expect(memberTimeline(only(reg({ attendanceStatus: null, attendanceAt: null }))).map((f) => f.kind)).toEqual(["registered"])
   })
 
+  it("a row with both a check-in and « absent » (rolling deployment) is « Présent » only", () => {
+    const t = memberTimeline(only(reg({ checkedInAt: d("2026-07-04T18:25:00Z"), attendanceStatus: "absent", attendanceAt: d("2026-07-04T18:20:00Z") })))
+    expect(t.map((f) => f.kind)).toEqual(["present", "registered"])
+  })
+
   it("an absence is not a check-in: the summary's count of presences leaves it out", () => {
     const s = only(reg({ attendanceStatus: "absent", attendanceAt: d("2026-07-04T18:20:00Z") }))
     expect(activitySummary(s)).toBe("1 événement avec une inscription confirmée, 0 présence pointée.")

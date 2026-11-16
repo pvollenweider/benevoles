@@ -11,8 +11,12 @@ import {
   missingLine,
   presenceAnnouncement,
   PRIMARY_ACTION,
+  answerFor,
   attendanceAnnouncement,
   attendanceRequest,
+  leftShift,
+  leftShiftSentence,
+  unchangedAnnouncement,
   conflictAnnouncement,
   personState,
   presenceLine,
@@ -235,6 +239,12 @@ describe("counts and copy", () => {
     expect(shiftCounts({ capacity: 5, people }, (p) => (p.registrationId === "r4" ? "absent" : personState(p))).absent).toBe(2)
   })
 
+  it("a person with both a check-in and « absent » (rolling deployment) counts as present, not absent", () => {
+    const mixed = { ...person("r1", "Léa", "Morel", "2026-07-04T12:00:00Z"), attendanceStatus: "absent" }
+    expect(personState(mixed)).toBe("present")
+    expect(shiftCounts({ capacity: 2, people: [mixed, person("r2", "Hugo", "Blanc")] }, personState)).toEqual({ expected: 2, present: 1, absent: 0, missing: 0 })
+  })
+
   it("the row's first button: what a press does from each state (#1141)", () => {
     expect(PRIMARY_ACTION.expected).toEqual({ transition: "check_in", label: "Marquer présent" })
     expect(PRIMARY_ACTION.present).toEqual({ transition: "undo_check_in", label: "Annuler la présence" })
@@ -280,7 +290,53 @@ describe("counts and copy", () => {
   })
 })
 
+describe("the route's answer about one registration (#1141)", () => {
+  const c = { expected: 4, present: 2, absent: 1, missing: 0 }
+
+  it("reads the registration's own entry, and nothing from a previous release or an odd shape", () => {
+    const results = [
+      { id: "r1", changed: false, state: "absent", checkedInAt: null },
+      { id: "r2", changed: true, state: "present", checkedInAt: "2026-07-04T12:03:00.000Z" },
+    ]
+    expect(answerFor(results, "r1")).toEqual({ id: "r1", changed: false, state: "absent", checkedInAt: null, moved: false })
+    expect(answerFor(results, "r2")).toMatchObject({ changed: true, state: "present", checkedInAt: "2026-07-04T12:03:00.000Z" })
+    expect(answerFor(results, "r3")).toBeNull()
+    expect(answerFor(undefined, "r1")).toBeNull()
+    expect(answerFor([{ id: "r1", changed: false, state: "left_early", checkedInAt: null }, null, "x"], "r1")).toBeNull()
+  })
+
+  it("moved: on another shift than the one the press was meant for", () => {
+    const moved = answerFor([{ id: "r1", changed: false, state: "expected", checkedInAt: null, moved: true }], "r1")
+    expect(moved).toMatchObject({ moved: true, state: "expected" })
+    expect(leftShift(moved)).toBe(true)
+    expect(unchangedAnnouncement("Zoé Müller", moved, "Bar, Soir", c)).toBe("Zoé Müller ne figure plus parmi les personnes attendues, Bar, Soir.")
+  })
+
+  it("gone: no longer there at all, with no state", () => {
+    const gone = answerFor([{ id: "r1", changed: false, state: null, checkedInAt: null, gone: true }], "r1")
+    expect(gone).toEqual({ id: "r1", changed: false, state: null, checkedInAt: null, gone: true })
+    expect(leftShift(gone)).toBe(true)
+    expect(unchangedAnnouncement("Zoé Müller", gone, "Bar, Soir", c)).toBe(leftShiftSentence("Zoé Müller", "Bar, Soir"))
+  })
+
+  it("still on the shift: the sentence of what was recorded elsewhere, or « Rien n'a changé »", () => {
+    const absent = answerFor([{ id: "r1", changed: false, state: "absent", checkedInAt: null }], "r1")
+    expect(leftShift(absent)).toBe(false)
+    expect(leftShift(null)).toBe(false)
+    expect(unchangedAnnouncement("Zoé Müller", absent, "Bar", c)).toBe("Une absence est déjà enregistrée pour Zoé Müller, depuis un autre appareil. Bar : 2 présents sur 4 attendus, 1 absent.")
+    const expected = answerFor([{ id: "r1", changed: false, state: "expected", checkedInAt: null }], "r1")
+    expect(unchangedAnnouncement("Zoé Müller", expected, "Bar", c)).toBe("Rien n'a changé pour Zoé Müller : la liste est mise à jour.")
+    // A previous release answers without `results`.
+    expect(unchangedAnnouncement("Zoé Müller", null, "Bar", c)).toBe("Rien n'a changé pour Zoé Müller : la liste est mise à jour.")
+  })
+})
+
 describe("attendanceRequest", () => {
+  it("says which shift the row was shown on, when given (#1141)", () => {
+    expect(attendanceRequest("evt-1", "r1", "mark_absent", "s1").body).toEqual({ action: "mark_absent", registrationIds: ["r1"], observedShifts: { r1: "s1" } })
+    expect(attendanceRequest("evt-1", "r1", "mark_absent").body).not.toHaveProperty("observedShifts")
+  })
+
   it("sends each of the four actions to the registrations list's route, for one registration (#1141)", () => {
     for (const action of ["check_in", "undo_check_in", "mark_absent", "undo_absent"] as const) {
       expect(attendanceRequest("evt-1", "r1", action)).toEqual({

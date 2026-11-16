@@ -55,6 +55,13 @@ describe("attendanceCsv", () => {
     expect(expected.slice(9)).toEqual(["non", "", "", ""])
   })
 
+  it("a row with both a check-in and « absent » (rolling deployment) is present: counted as such, « oui » in « Présent », nothing in « Absence notée »", () => {
+    const mixed = row({ firstName: "Mathieu", lastName: "Bonvin", checkedInAt: new Date("2026-07-04T08:05:00Z"), attendanceStatus: "absent" })
+    expect(attendanceTotals([mixed, row({ attendanceStatus: "absent" })])).toEqual({ registered: 2, present: 1, absent: 1 })
+    const line = attendanceCsv([mixed], "Europe/Zurich").split("\r\n")[1].split(";")
+    expect(line.slice(9)).toEqual(["oui", "04.07.2026 10:05", ""])
+  })
+
   it("formats a missing check-in as empty", () => {
     expect(formatCheckIn(null, "Europe/Zurich")).toBe("")
   })

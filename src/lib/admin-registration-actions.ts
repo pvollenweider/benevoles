@@ -150,20 +150,34 @@ async function queueRemovalEmails(tx: CancelTx, ids: string[], send: Send): Prom
   }
 }
 
-export type AttendanceTarget = { id: string; eventId: string; shiftId: string; status: string }
+export type AttendanceTarget = {
+  id: string; eventId: string; shiftId: string; status: string
+  /** The shift the client showed this registration on, when it said so (`observedShifts`). */
+  observedShiftId?: string | null
+}
 
-/** What the client needs after one attendance action: the truth for each requested registration. */
-export type AttendanceResult = { id: string; changed: boolean; state: AttendanceState; checkedInAt: string | null }
+/**
+ * What the client needs after one attendance action: the truth for each requested registration.
+ * `moved`: the registration is no longer on the shift the action was meant for (a swap since the
+ * page was read, or between the route's read and the write); nothing was written, `state` is its
+ * state on the shift it holds now. `gone`: the row could not be read back at all (deleted
+ * meanwhile); no state is invented, `state` is null.
+ */
+export type AttendanceResult =
+  | { id: string; changed: boolean; state: AttendanceState; checkedInAt: string | null; moved?: true }
+  | { id: string; changed: false; state: null; checkedInAt: null; gone: true }
 
 /**
  * Lightweight attendance (#399, #1141): marks the given registrations present, undoes it, marks
  * them absent or undoes the absence. Only confirmed registrations, and only rows whose starting
- * state matches the transition: one conditional `updateMany` per row testing `status`,
- * `checkedInAt` and `attendanceStatus`, so a stale request changes nothing instead of overwriting
- * a state recorded meanwhile on another device, and a row selected twice isn't logged twice.
+ * state matches the transition: one conditional `updateMany` per row testing `status`, the shift
+ * the caller read (`shiftId`) and the attendance columns, so a stale request changes nothing
+ * instead of overwriting a state recorded meanwhile on another device, a swap committed since
+ * the caller's read is never marked on the wrong shift, and a row selected twice isn't logged
+ * twice. A target whose `observedShiftId` differs from its shift is not written at all.
  * Logs each real change. Returns one result per target, in the targets' order: a row that did not
- * change (stale, or not confirmed) is read back and returned with its current state, so the
- * client shows the truth rather than a guess.
+ * change (stale, moved, or not confirmed) is read back and returned with its current state, so
+ * the client shows the truth rather than a guess.
  */
 export async function setAttendance(
   db: OrgScopedPrisma,
@@ -175,10 +189,14 @@ export async function setAttendance(
   const plan = ATTENDANCE_TRANSITIONS[transition]
   const adminId = actor.type === "admin" ? actor.id ?? null : null
   const changed = new Set<string>()
+  /** The shift each action was meant for: the one the client saw, else the one the caller read. */
+  const intendedShift = (t: AttendanceTarget) => t.observedShiftId ?? t.shiftId
   for (const reg of targets) {
     if (reg.status !== "active" || changed.has(reg.id)) continue
+    // The client acted on another shift than the one the registration holds now: nothing to write.
+    if (intendedShift(reg) !== reg.shiftId) continue
     const { count } = await db.registration.updateMany({
-      where: { id: reg.id, status: "active", ...startingStateWhere(plan.from) },
+      where: { id: reg.id, status: "active", shiftId: reg.shiftId, ...startingStateWhere(plan.from) },
       data: attendanceData(transition, now, adminId),
     })
     if (count === 0) continue
@@ -200,22 +218,30 @@ export async function setAttendance(
           : { attendance: { from: plan.from, to: plan.to }, shiftId },
     })
   }
-  // The rows that did not change, read once: their state as it is now in the database.
+  // The rows that did not change, read once: their state and shift as they are now in the database.
   const unchangedIds = [...new Set(targets.filter((t) => !changed.has(t.id)).map((t) => t.id))]
   const current = unchangedIds.length
-    ? await db.registration.findMany({ where: { id: { in: unchangedIds } }, select: { id: true, checkedInAt: true, attendanceStatus: true } })
+    ? await db.registration.findMany({ where: { id: { in: unchangedIds } }, select: { id: true, shiftId: true, checkedInAt: true, attendanceStatus: true } })
     : []
   const currentById = new Map(current.map((r) => [r.id, r]))
-  return targets.map((t) => {
+  return targets.map((t): AttendanceResult => {
     if (changed.has(t.id)) return { id: t.id, changed: true, state: plan.to, checkedInAt: plan.to === "present" ? now.toISOString() : null }
     const row = currentById.get(t.id)
-    return { id: t.id, changed: false, state: attendanceStateOf(row ?? { checkedInAt: null }), checkedInAt: row?.checkedInAt?.toISOString() ?? null }
+    // Deleted between the caller's read and this one: said as such, no state invented.
+    if (!row) return { id: t.id, changed: false, state: null, checkedInAt: null, gone: true }
+    const result = { id: t.id, changed: false, state: attendanceStateOf(row), checkedInAt: row.checkedInAt?.toISOString() ?? null }
+    return row.shiftId !== intendedShift(t) ? { ...result, moved: true } : result
   })
 }
 
-/** The `where` that makes a write conditional on the transition's starting state. */
+/**
+ * The `where` that makes a write conditional on the transition's starting state. « Present » is
+ * any row with a check-in time, whatever `attendanceStatus` says (attendance-state.ts): the
+ * previous release's check-in can leave "absent" beside it during a rolling deployment, and
+ * « Annuler la présence », which writes the four columns, must be able to clean such a row.
+ */
 function startingStateWhere(from: AttendanceState) {
-  if (from === "present") return { checkedInAt: { not: null }, attendanceStatus: null }
+  if (from === "present") return { checkedInAt: { not: null } }
   if (from === "absent") return { checkedInAt: null, attendanceStatus: "absent" }
   return { checkedInAt: null, attendanceStatus: null }
 }

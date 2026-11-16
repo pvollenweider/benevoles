@@ -187,6 +187,13 @@ describe("mergeConflicts — same shift", () => {
     expect(registrationRank(reg({ status: "waiting", attendanceStatus: "absent" }))).toBeGreaterThan(expected)
   })
 
+  it("a row with both a check-in and « absent » (rolling deployment) ranks as present", () => {
+    const reg = (over: object) => ({ id: "r", eventId: "e1", shiftId: "s1", status: "active", checkedInAt: null, ...over })
+    const mixed = registrationRank(reg({ checkedInAt: new Date(), attendanceStatus: "absent" }))
+    expect(mixed).toBe(registrationRank(reg({ checkedInAt: new Date() })))
+    expect(mixed).toBeGreaterThan(registrationRank(reg({ attendanceStatus: "absent" })))
+  })
+
   it("the winner keeps its own row: the plan moves or cancels registrations, it never rewrites attendance columns", () => {
     const input = baseInput({
       shifts: [shift],

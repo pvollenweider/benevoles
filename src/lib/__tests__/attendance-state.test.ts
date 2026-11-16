@@ -29,6 +29,13 @@ describe("attendanceStateOf", () => {
     expect(attendanceStateOf({ checkedInAt: null, attendanceStatus: "absent" })).toBe("absent")
   })
 
+  it("a check-in wins over the status: a row with both marks is present (rolling deployment)", () => {
+    // The previous release's check-in sets `checkedInAt` and does not know `attendanceStatus`:
+    // on a row marked absent it leaves both. Every reader of `checkedInAt` alone says present.
+    expect(attendanceStateOf({ checkedInAt: new Date("2026-07-04T08:05:00Z"), attendanceStatus: "absent" })).toBe("present")
+    expect(attendanceStateOf({ checkedInAt: "2026-07-04T08:05:00.000Z", attendanceStatus: "absent" })).toBe("present")
+  })
+
   it("« left_early » is reserved for a later release: not a state here, the check-in decides", () => {
     expect(attendanceStateOf({ checkedInAt: null, attendanceStatus: "left_early" })).toBe("expected")
     expect(attendanceStateOf({ checkedInAt: new Date(), attendanceStatus: "left_early" })).toBe("present")

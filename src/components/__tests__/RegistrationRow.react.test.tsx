@@ -130,6 +130,12 @@ describe("RegistrationRow", () => {
     expect(screen.queryByText("Absent")).toBeNull()
   })
 
+  it("a row with both a check-in and « absent » (rolling deployment) shows « Présent », never « Absent »", () => {
+    renderRow({ reg: reg({ checkedInAt: "2026-07-04T08:05:00.000Z", attendanceStatus: "absent" }) })
+    expect(screen.getByText(/Présent/)).toBeInTheDocument()
+    expect(screen.queryByText("Absent")).toBeNull()
+  })
+
   it("shows no attendance badge on a registration that is not confirmed", () => {
     renderRow({ reg: reg({ status: "cancelled", attendanceStatus: "absent" }) })
     expect(screen.queryByText("Absent")).toBeNull()

@@ -17,15 +17,15 @@ vi.mock("@/lib/notifications/outbox", () => ({ enqueueNotifications: vi.fn(), de
 import { attendanceRequest, presenceRequest } from "@/lib/day-of"
 
 type Row = { id: string; eventId: string; shiftId: string; status: string; checkedInAt: Date | null; attendanceStatus?: string | null; attendanceAt?: Date | null; attendanceBy?: string | null }
-type Where = { id: string; status: string; checkedInAt: null | { not: null }; attendanceStatus: string | null }
+type Where = { id: string; status: string; shiftId: string; checkedInAt: null | { not: null }; attendanceStatus?: string | null }
 
 function fakeDb(rows: Row[]) {
   // Applies the conditional write like the database: the status, the check-in and the absence.
   const updateMany = vi.fn(async ({ where, data }: { where: Where; data: Partial<Row> }) => {
     const r = rows.find((x) =>
-      x.id === where.id && x.status === where.status
+      x.id === where.id && x.status === where.status && x.shiftId === where.shiftId
       && (where.checkedInAt === null ? x.checkedInAt === null : x.checkedInAt !== null)
-      && (x.attendanceStatus ?? null) === where.attendanceStatus)
+      && (!("attendanceStatus" in where) || (x.attendanceStatus ?? null) === where.attendanceStatus))
     if (!r) return { count: 0 }
     Object.assign(r, data)
     return { count: 1 }
@@ -152,6 +152,34 @@ describe("« Marquer absent » on the day-of page", () => {
   it("« left_early » is refused: nothing is read or written", async () => {
     const fake = fakeDb(rows())
     const res = await send({ url: "/api/admin/events/evt-1/registrations/bulk", body: { action: "left_early", registrationIds: ["r1"] } }, fake)
+    expect(res.status).toBe(400)
+    expect(fake.updateMany).not.toHaveBeenCalled()
+  })
+
+  // The shift the page showed (#1141): a person swapped to another shift is never marked there.
+  it("`observedShifts`: a registration that moved to another shift is not written, not logged, and comes back as moved", async () => {
+    // The board showed r1 on s1; a swap has put it on s9 since.
+    const moved = rows().map((r) => (r.id === "r1" ? { ...r, shiftId: "s9" } : r))
+    for (const action of ["check_in", "undo_check_in", "mark_absent", "undo_absent"] as const) {
+      const fake = fakeDb(moved.map((r) => ({ ...r })))
+      const res = await send({ url: "/api/admin/events/evt-1/registrations/bulk", body: { action, registrationIds: ["r1"], observedShifts: { r1: "s1" } } }, fake)
+      expect(res, action).toEqual({ status: 200, json: { done: 0, changedIds: [], skipped: 1, results: [{ id: "r1", changed: false, state: "expected", checkedInAt: null, moved: true }] } })
+      expect(fake.updateMany).not.toHaveBeenCalled()
+    }
+    expect(logEvent).not.toHaveBeenCalled()
+  })
+
+  it("`observedShifts` matching the registration's shift changes nothing to the action, and the day-of request sends it", async () => {
+    const fake = fakeDb(rows())
+    const req = attendanceRequest("evt-1", "r1", "mark_absent", "s1")
+    expect(req.body).toEqual({ action: "mark_absent", registrationIds: ["r1"], observedShifts: { r1: "s1" } })
+    expect(await send(req, fake)).toEqual(changedAnswer("absent"))
+    expect(fake.updateMany.mock.calls[0][0].where).toMatchObject({ id: "r1", shiftId: "s1" })
+  })
+
+  it("a malformed `observedShifts` is refused before anything is read", async () => {
+    const fake = fakeDb(rows())
+    const res = await send({ url: "/api/admin/events/evt-1/registrations/bulk", body: { action: "check_in", registrationIds: ["r1"], observedShifts: { r1: 3 } } }, fake)
     expect(res.status).toBe(400)
     expect(fake.updateMany).not.toHaveBeenCalled()
   })

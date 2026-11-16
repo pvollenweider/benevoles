@@ -13,6 +13,7 @@ import {
   marksAfterPoll,
   mayAnnounceChanges,
   nextPollDelay,
+  noticeStillHolds,
   pinMark,
   releasePin,
   shouldSyncOnResume,
@@ -228,6 +229,39 @@ describe("conflict: the row takes the server's state, said once", () => {
   it("a presence recorded elsewhere comes with its instant", () => {
     const marks = answerMark(pinMark({}, "hugo", { state: "expected", checkedInAt: null }), "hugo", { state: "present", checkedInAt: "2026-07-04T12:03:00.000Z" }, 9)
     expect(shownAttendance(person("hugo"), marks)).toEqual({ state: "present", checkedInAt: "2026-07-04T12:03:00.000Z" })
+  })
+})
+
+describe("noticeStillHolds: the sentence shown in a row after an action that changed nothing (#1141)", () => {
+  const before = boardOf([absentPerson("ines"), person("hugo")])
+
+  it("stays while the person shows the same state on the same shift", () => {
+    expect(noticeStillHolds(before, {}, before, {}, "ines")).toBe(true)
+    // The state came from this phone's mark, the read brings the same from the board.
+    const marks: LocalMarks = { ines: { state: "absent", checkedInAt: null, at: 5 } }
+    expect(noticeStillHolds(boardOf([person("ines"), person("hugo")]), marks, before, marksAfterPoll(marks, 6), "ines")).toBe(true)
+    // Someone else's change does not touch it.
+    expect(noticeStillHolds(before, {}, boardOf([absentPerson("ines"), person("hugo", "x")]), {}, "ines")).toBe(true)
+  })
+
+  it("goes when a later read changes that person's state", () => {
+    expect(noticeStillHolds(before, {}, boardOf([person("ines"), person("hugo")]), {}, "ines")).toBe(false)
+    expect(noticeStillHolds(before, {}, boardOf([person("ines", "x"), person("hugo")]), {}, "ines")).toBe(false)
+  })
+
+  it("goes when the person left the board or sits on another shift", () => {
+    expect(noticeStillHolds(before, {}, boardOf([person("hugo")]), {}, "ines")).toBe(false)
+    const elsewhere: DayOfBoard = { inProgress: [{ key: "k", date: "2026-07-04", startTime: "13:00", shifts: [shift("s2", [absentPerson("ines")])] }], upcoming: [], earlier: [], laterCount: 0 }
+    expect(noticeStillHolds(before, {}, elsewhere, {}, "ines")).toBe(false)
+    expect(noticeStillHolds(boardOf([]), {}, before, {}, "ines")).toBe(false)
+  })
+})
+
+describe("a person with both a check-in and « absent » (rolling deployment)", () => {
+  it("shows as present, and a change to it is a presence, not an absence", () => {
+    const mixed: DayOfPerson = { ...person("a", "x"), attendanceStatus: "absent" }
+    expect(shownState(mixed, {})).toBe("present")
+    expect(boardChanges(boardOf([absentPerson("a")]), {}, boardOf([mixed]), {})).toEqual({ ...NO_CHANGES, arrived: 1, absenceUndone: 1 })
   })
 })
 

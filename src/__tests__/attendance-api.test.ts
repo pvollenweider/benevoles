@@ -49,20 +49,21 @@ describe("GET /api/admin/events/[id]/export/attendance", () => {
 // Attendance actions (#399, #1141): one conditional write per row, on a fake org-scoped client
 // that applies the `where` like the database would.
 describe("setAttendance", () => {
-  type Row = { id: string; status: string; checkedInAt: Date | null; attendanceStatus: string | null; attendanceAt: Date | null; attendanceBy: string | null }
-  const row = (id: string, over: Partial<Row> = {}): Row => ({ id, status: "active", checkedInAt: null, attendanceStatus: null, attendanceAt: null, attendanceBy: null, ...over })
+  type Row = { id: string; shiftId: string; status: string; checkedInAt: Date | null; attendanceStatus: string | null; attendanceAt: Date | null; attendanceBy: string | null }
+  const row = (id: string, over: Partial<Row> = {}): Row => ({ id, shiftId: "s1", status: "active", checkedInAt: null, attendanceStatus: null, attendanceAt: null, attendanceBy: null, ...over })
   const target = (r: Row) => ({ id: r.id, eventId: "evt-a", shiftId: "s1", status: r.status })
   const actor = { type: "admin", id: "adm-1" } as never
   const now = new Date("2026-07-04T08:05:00Z")
   const earlier = new Date("2026-07-04T07:55:00Z")
 
-  type Where = { id: string; status: string; checkedInAt: null | { not: null }; attendanceStatus: string | null }
+  type Where = { id: string; status: string; shiftId: string; checkedInAt: null | { not: null }; attendanceStatus?: string | null }
   function fakeDb(rows: Row[]) {
     const updateMany = vi.fn(async ({ where, data }: { where: Where; data: Partial<Row> }) => {
       const r = rows.find((x) =>
-        x.id === where.id && x.status === where.status
+        x.id === where.id && x.status === where.status && x.shiftId === where.shiftId
         && (where.checkedInAt === null ? x.checkedInAt === null : x.checkedInAt !== null)
-        && x.attendanceStatus === where.attendanceStatus)
+        // No `attendanceStatus` key in the predicate: no condition on it.
+        && (!("attendanceStatus" in where) || x.attendanceStatus === where.attendanceStatus))
       if (!r) return { count: 0 }
       Object.assign(r, data)
       return { count: 1 }
@@ -81,7 +82,7 @@ describe("setAttendance", () => {
     expect(results).toEqual([{ id: "r1", changed: true, state: "present", checkedInAt: now.toISOString() }])
     expect(fake.updateMany).toHaveBeenCalledTimes(1)
     expect(fake.updateMany.mock.calls[0][0]).toEqual({
-      where: { id: "r1", status: "active", checkedInAt: null, attendanceStatus: null },
+      where: { id: "r1", status: "active", shiftId: "s1", checkedInAt: null, attendanceStatus: null },
       data: { checkedInAt: now, attendanceStatus: null, attendanceAt: null, attendanceBy: null },
     })
     // The log entry of #399, unchanged.
@@ -100,7 +101,8 @@ describe("setAttendance", () => {
     const fake = fakeDb(rows)
     expect(await setAttendance(fake.db, actor, rows.map(target), "undo_check_in", now)).toEqual([{ id: "r1", changed: true, state: "expected", checkedInAt: null }])
     expect(fake.updateMany.mock.calls[0][0]).toEqual({
-      where: { id: "r1", status: "active", checkedInAt: { not: null }, attendanceStatus: null },
+      // Any row with a check-in time, whatever the status column says (see the mixed row below).
+      where: { id: "r1", status: "active", shiftId: "s1", checkedInAt: { not: null } },
       data: { checkedInAt: null, attendanceStatus: null, attendanceAt: null, attendanceBy: null },
     })
     expect(logEvent.mock.calls[0][0]).toMatchObject({ action: "registration.check_in_undone", changes: { checkedInAt: { from: "set", to: null }, shiftId: { from: "s1", to: "s1" } } })
@@ -112,7 +114,7 @@ describe("setAttendance", () => {
     const fake = fakeDb(rows)
     expect(await setAttendance(fake.db, actor, rows.map(target), "mark_absent", now)).toEqual([{ id: "r1", changed: true, state: "absent", checkedInAt: null }])
     expect(fake.updateMany.mock.calls[0][0]).toEqual({
-      where: { id: "r1", status: "active", checkedInAt: null, attendanceStatus: null },
+      where: { id: "r1", status: "active", shiftId: "s1", checkedInAt: null, attendanceStatus: null },
       data: { checkedInAt: null, attendanceStatus: "absent", attendanceAt: now, attendanceBy: "adm-1" },
     })
     expect(rows[0]).toMatchObject({ checkedInAt: null, attendanceStatus: "absent", attendanceAt: now, attendanceBy: "adm-1" })
@@ -127,7 +129,7 @@ describe("setAttendance", () => {
     const rows = [row("r1", { attendanceStatus: "absent", attendanceAt: earlier, attendanceBy: "adm-2" })]
     const fake = fakeDb(rows)
     expect(await setAttendance(fake.db, actor, rows.map(target), "undo_absent", now)).toEqual([{ id: "r1", changed: true, state: "expected", checkedInAt: null }])
-    expect(fake.updateMany.mock.calls[0][0].where).toEqual({ id: "r1", status: "active", checkedInAt: null, attendanceStatus: "absent" })
+    expect(fake.updateMany.mock.calls[0][0].where).toEqual({ id: "r1", status: "active", shiftId: "s1", checkedInAt: null, attendanceStatus: "absent" })
     expect(rows[0]).toMatchObject({ checkedInAt: null, attendanceStatus: null, attendanceAt: null, attendanceBy: null })
     expect(logEvent.mock.calls[0][0]).toMatchObject({ action: "registration.absence_undone", changes: { attendance: { from: "absent", to: "expected" }, shiftId: { from: "s1", to: "s1" } } })
   })
@@ -209,5 +211,86 @@ describe("setAttendance", () => {
     const fake = fakeDb(rows)
     await setAttendance(fake.db, { type: "system" } as never, rows.map(target), "mark_absent", now)
     expect(rows[0].attendanceBy).toBeNull()
+  })
+
+  // Rolling deployment: the previous release's check-in, which knows only `checkedInAt`, ran on
+  // a row this release had marked absent. Both marks are set.
+  describe("a row with both a check-in and « absent » (previous release during a rolling deployment)", () => {
+    const mixed = () => row("r1", { checkedInAt: earlier, attendanceStatus: "absent", attendanceAt: earlier, attendanceBy: "adm-2" })
+
+    it("« Annuler la présence » accepts it and leaves the four columns null", async () => {
+      const { setAttendance } = await import("@/lib/admin-registration-actions")
+      const rows = [mixed()]
+      const fake = fakeDb(rows)
+      expect(await setAttendance(fake.db, actor, rows.map(target), "undo_check_in", now)).toEqual([{ id: "r1", changed: true, state: "expected", checkedInAt: null }])
+      expect(rows[0]).toEqual(row("r1"))
+      expect(logEvent).toHaveBeenCalledTimes(1)
+      expect(logEvent.mock.calls[0][0]).toMatchObject({ action: "registration.check_in_undone" })
+    })
+
+    it("is reported as present by every other action, which changes nothing", async () => {
+      const { setAttendance } = await import("@/lib/admin-registration-actions")
+      for (const transition of ["check_in", "mark_absent", "undo_absent"] as const) {
+        const rows = [mixed()]
+        const fake = fakeDb(rows)
+        expect(await setAttendance(fake.db, actor, rows.map(target), transition, now), transition).toEqual([{ id: "r1", changed: false, state: "present", checkedInAt: earlier.toISOString() }])
+        expect(rows[0]).toEqual(mixed())
+      }
+      expect(logEvent).not.toHaveBeenCalled()
+    })
+  })
+
+  // The shift is part of the predicate: a swap committed after the caller read the row.
+  describe("a registration that changed shift", () => {
+    it("between the caller's read and the write: nothing is written or logged, and it is reported as moved", async () => {
+      const { setAttendance } = await import("@/lib/admin-registration-actions")
+      for (const transition of ["check_in", "mark_absent"] as const) {
+        // The route read it on s1; the swap moved it to s2 before the write.
+        const rows = [row("r1", { shiftId: "s2" })]
+        const fake = fakeDb(rows)
+        const results = await setAttendance(fake.db, actor, [{ id: "r1", eventId: "evt-a", shiftId: "s1", status: "active" }], transition, now)
+        expect(results, transition).toEqual([{ id: "r1", changed: false, state: "expected", checkedInAt: null, moved: true }])
+        expect(fake.updateMany.mock.calls[0][0].where.shiftId).toBe("s1")
+        expect(rows[0]).toEqual(row("r1", { shiftId: "s2" }))
+      }
+      expect(logEvent).not.toHaveBeenCalled()
+    })
+
+    it("since the client's page was read (`observedShiftId`): no write is even tried, and it is reported as moved with its state on the new shift", async () => {
+      const { setAttendance } = await import("@/lib/admin-registration-actions")
+      // The page showed r1 on s1; the route reads it on s2, already present there.
+      const rows = [row("r1", { shiftId: "s2", checkedInAt: earlier }), row("r2")]
+      const fake = fakeDb(rows)
+      const results = await setAttendance(fake.db, actor, [
+        { id: "r1", eventId: "evt-a", shiftId: "s2", status: "active", observedShiftId: "s1" },
+        { id: "r2", eventId: "evt-a", shiftId: "s1", status: "active", observedShiftId: "s1" },
+      ], "mark_absent", now)
+      expect(results).toEqual([
+        { id: "r1", changed: false, state: "present", checkedInAt: earlier.toISOString(), moved: true },
+        { id: "r2", changed: true, state: "absent", checkedInAt: null },
+      ])
+      expect(fake.updateMany).toHaveBeenCalledTimes(1)
+      expect(fake.updateMany.mock.calls[0][0].where.id).toBe("r2")
+      expect(logEvent).toHaveBeenCalledTimes(1)
+      expect(logEvent.mock.calls[0][0]).toMatchObject({ entityId: "r2" })
+    })
+
+    it("a caller that says nothing about the shift it saw is not told « moved »", async () => {
+      const { setAttendance } = await import("@/lib/admin-registration-actions")
+      const rows = [row("r1", { checkedInAt: earlier })]
+      const fake = fakeDb(rows)
+      const [result] = await setAttendance(fake.db, actor, [{ id: "r1", eventId: "evt-a", shiftId: "s1", status: "active", observedShiftId: null }], "check_in", now)
+      expect(result).toEqual({ id: "r1", changed: false, state: "present", checkedInAt: earlier.toISOString() })
+      expect(result).not.toHaveProperty("moved")
+    })
+  })
+
+  it("a row that disappeared before the read-back is reported as gone, with no invented state", async () => {
+    const { setAttendance } = await import("@/lib/admin-registration-actions")
+    // Deleted after the route read it: the write matches nothing and the read-back finds nothing.
+    const fake = fakeDb([])
+    const results = await setAttendance(fake.db, actor, [{ id: "r1", eventId: "evt-a", shiftId: "s1", status: "active" }], "mark_absent", now)
+    expect(results).toEqual([{ id: "r1", changed: false, state: null, checkedInAt: null, gone: true }])
+    expect(logEvent).not.toHaveBeenCalled()
   })
 })

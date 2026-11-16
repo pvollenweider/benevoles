@@ -265,6 +265,44 @@ export function conflictAnnouncement(name: string, state: AttendanceState, shift
   return `Une ${state === "absent" ? "absence" : "présence"} est déjà enregistrée pour ${name}, depuis un autre appareil. ${shift} : ${presenceLine(c)}.`
 }
 
+/** What the bulk route says about one requested registration after an attendance action (#1141). */
+export type AttendanceAnswer =
+  | { id: string; changed: boolean; state: AttendanceState; checkedInAt: string | null; moved?: boolean; gone?: boolean }
+  | { id: string; changed: false; state: null; checkedInAt: null; moved?: boolean; gone: true }
+
+const ANSWER_STATES: readonly unknown[] = ["expected", "present", "absent"]
+
+/** The answer about `registrationId` in the route's `results`, or null (previous release, odd shape). */
+export function answerFor(results: unknown, registrationId: string): AttendanceAnswer | null {
+  if (!Array.isArray(results)) return null
+  for (const r of results as Record<string, unknown>[]) {
+    if (typeof r !== "object" || r === null || r.id !== registrationId || typeof r.changed !== "boolean") continue
+    if (r.gone === true && r.changed === false) return { id: registrationId, changed: false, state: null, checkedInAt: null, gone: true }
+    if (!ANSWER_STATES.includes(r.state)) continue
+    return { id: registrationId, changed: r.changed, state: r.state as AttendanceState, checkedInAt: typeof r.checkedInAt === "string" ? r.checkedInAt : null, moved: r.moved === true }
+  }
+  return null
+}
+
+/** The registration is no longer on the shift the press was meant for: swapped away, or deleted. */
+export const leftShift = (a: AttendanceAnswer | null): boolean => !!a && (a.moved === true || a.gone === true)
+
+/** « Zoé Müller ne figure plus parmi les personnes attendues, Bar, Soir. » */
+export function leftShiftSentence(name: string, shift: string): string {
+  return `${name} ne figure plus parmi les personnes attendues, ${shift}.`
+}
+
+/**
+ * What is said once, and shown in the row, when an action changed nothing (#1141). The person
+ * left this shift (`moved`, `gone`): the sentence of a person leaving the board. Another device
+ * recorded a presence or an absence first: that sentence. Otherwise (back to « attendu »
+ * elsewhere, no longer confirmed, or an answer without details): « Rien n'a changé ».
+ */
+export function unchangedAnnouncement(name: string, answer: AttendanceAnswer | null, shift: string, c: ShiftCounts): string {
+  if (leftShift(answer)) return leftShiftSentence(name, shift)
+  return (answer?.state ? conflictAnnouncement(name, answer.state, shift, c) : null) ?? `Rien n'a changé pour ${name} : la liste est mise à jour.`
+}
+
 /** The state the board's own data gives a person, before the marks made on this phone. */
 export const personState = (p: Pick<DayOfPerson, "checkedInAt" | "attendanceStatus">): AttendanceState => attendanceStateOf(p)
 
@@ -297,12 +335,13 @@ export function dayOfBoardUrl(eventId: string, sector = ""): string {
 /**
  * The attendance request of this page: the very route and actions of the registrations list
  * (#399, #1141), for one registration, so the same rules (active registrations only, a write
- * conditional on the starting state) and the same event log entries apply.
+ * conditional on the starting state and on the shift) and the same event log entries apply.
  */
-export function attendanceRequest(eventId: string, registrationId: string, transition: AttendanceTransition): { url: string; body: { action: AttendanceTransition; registrationIds: string[] } } {
+export function attendanceRequest(eventId: string, registrationId: string, transition: AttendanceTransition, observedShiftId?: string): { url: string; body: { action: AttendanceTransition; registrationIds: string[]; observedShifts?: Record<string, string> } } {
   return {
     url: `/api/admin/events/${encodeURIComponent(eventId)}/registrations/bulk`,
-    body: { action: transition, registrationIds: [registrationId] },
+    // The shift the row was shown on: the server writes nothing if the person has moved since.
+    body: { action: transition, registrationIds: [registrationId], ...(observedShiftId ? { observedShifts: { [registrationId]: observedShiftId } } : {}) },
   }
 }
 

@@ -230,7 +230,7 @@ export default function RegistrationsManager({ eventId, initialRegistrations, sh
    * happened and whether anything may have been applied, keeps the selection and returns null;
    * the caller then leaves the rows as they are and « Réessayer » repeats the action (#375).
    */
-  async function runBulk(action: keyof typeof BULK_LABELS, ids: string[], again: () => void) {
+  async function runBulk(action: keyof typeof BULK_LABELS, ids: string[], again: () => void, extra: { observedShifts?: Record<string, string> } = {}) {
     setRetry(() => again)
     // The alert stays mounted while the retry runs, so a focused « Réessayer » isn't unmounted under the user.
     let res: Response
@@ -238,7 +238,7 @@ export default function RegistrationsManager({ eventId, initialRegistrations, sh
       res = await fetch(`/api/admin/events/${eventId}/registrations/bulk`, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ action, registrationIds: ids }),
+        body: JSON.stringify({ action, registrationIds: ids, ...extra }),
         // A removal committed while leaving the page must still reach the server.
         keepalive: true,
       })
@@ -257,7 +257,7 @@ export default function RegistrationsManager({ eventId, initialRegistrations, sh
     setBulkError(null)
     // The alert (and its button) goes away with the result: park the focus on the summary line.
     afterBulkRef.current?.focus()
-    return res.json() as Promise<{ done: number; failed?: number; skipped?: number; alreadyLeader?: number; cancelledIds?: string[]; changedIds?: string[]; results?: { id: string; changed: boolean; state: AttendanceState; checkedInAt: string | null }[] }>
+    return res.json() as Promise<{ done: number; failed?: number; skipped?: number; alreadyLeader?: number; cancelledIds?: string[]; changedIds?: string[]; results?: { id: string; changed: boolean; state: AttendanceState | null; checkedInAt: string | null; moved?: boolean; gone?: boolean }[] }>
   }
 
   // Lightweight attendance (#399, #1141): mark the selected confirmed people present or absent,
@@ -281,7 +281,10 @@ export default function RegistrationsManager({ eventId, initialRegistrations, sh
     if (targets.length === 0) return
     setBulkBusy(true)
     const startedAt = new Date()
-    const result = await runBulk(transition, targets.map((r) => r.id), () => handleAttendance(transition))
+    // The shift each row shows: a person swapped to another shift since the page was read is not
+    // marked on a shift this list does not show for them.
+    const observedShifts = Object.fromEntries(targets.map((r) => [r.id, r.shift.id]))
+    const result = await runBulk(transition, targets.map((r) => r.id), () => handleAttendance(transition), { observedShifts })
     setBulkBusy(false)
     if (!result) return
     setLastLogLink(logLinkFor(eventId, startedAt))
@@ -292,7 +295,8 @@ export default function RegistrationsManager({ eventId, initialRegistrations, sh
     const truth = new Map((result.results ?? []).map((r) => [r.id, r]))
     setRegistrations((prev) => prev.map((r) => {
       const t = truth.get(r.id)
-      if (t) return { ...r, checkedInAt: t.state === "present" ? t.checkedInAt ?? at : null, attendanceStatus: t.state === "absent" ? "absent" : null }
+      // No state for a row the server no longer finds (`gone`): left as shown until the next load.
+      if (t?.state) return { ...r, checkedInAt: t.state === "present" ? t.checkedInAt ?? at : null, attendanceStatus: t.state === "absent" ? "absent" : null }
       if (!changed.has(r.id)) return r
       return { ...r, checkedInAt: plan.to === "present" ? at : null, attendanceStatus: plan.to === "absent" ? "absent" : null }
     }))
@@ -305,10 +309,12 @@ export default function RegistrationsManager({ eventId, initialRegistrations, sh
       mark_absent: `${n} personne${s} marquée${s} absente${s}.`,
       undo_absent: `Absence annulée pour ${n} personne${s}.`,
     }
+    // Nothing changed: every row was already in another state, recorded elsewhere meanwhile.
+    const text = n === 0 ? "Rien n'a changé : ces personnes ont déjà été marquées sur un autre appareil." : said[transition]
     // Cleared first so the same sentence twice in a row is announced again.
     setActionStatus("")
     requestAnimationFrame(() => {
-      setActionStatus(said[transition])
+      setActionStatus(text)
       afterBulkRef.current?.focus()
     })
   }
