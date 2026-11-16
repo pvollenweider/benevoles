@@ -20,8 +20,8 @@ const fake = vi.hoisted(() => {
     nextId: 1,
     // Simulates an activation that lands between the read and the conditional token write.
     forcePendingUpdateZero: false,
-    // Simulates a failed session invalidation after the revocation write.
-    failAdminUpdateMany: false,
+    // Simulates a failed revocation write, after the account row was locked.
+    failGrantUpdateMany: false,
     // Simulates a POST re-opening the grant between DELETE's first read and the account lock.
     reopenBeforeLock: false,
   }
@@ -97,10 +97,6 @@ const fake = vi.hoisted(() => {
       },
       updateMany: async ({ where, data }) => {
         if (state.forcePendingUpdateZero) return { count: 0 }
-        if (state.failAdminUpdateMany) {
-          state.failAdminUpdateMany = false
-          throw new Error("session invalidation failed")
-        }
         const hits = state.admins.filter((a) => matches(adminView(a), where))
         for (const admin of hits) {
           for (const [key, value] of Object.entries(data ?? {})) {
@@ -134,6 +130,10 @@ const fake = vi.hoisted(() => {
         return grant
       },
       updateMany: async ({ where, data }) => {
+        if (state.failGrantUpdateMany) {
+          state.failGrantUpdateMany = false
+          throw new Error("revocation write failed")
+        }
         const hits = state.grants.filter((g) => matches(grantView(g), where))
         for (const grant of hits) Object.assign(grant, data)
         return { count: hits.length }
@@ -228,7 +228,7 @@ function seed() {
   s.calls.length = 0
   s.nextId = 1
   s.forcePendingUpdateZero = false
-  s.failAdminUpdateMany = false
+  s.failGrantUpdateMany = false
   s.reopenBeforeLock = false
   s.organizations = [
     { id: ORG, name: "Fête du village", active: true, outboundEmailApprovedAt: new Date("2026-01-01T00:00:00Z"), slug: "fete", timeZone: "Europe/Zurich" },
@@ -552,11 +552,13 @@ describe("DELETE front-desk-access/[accessId]", () => {
     fake.state.grants.push(grantRow({ adminUserId: "adm-lea" }))
   })
 
-  it("revokes, keeps the account, ends its sessions when no other live grant remains, and logs", async () => {
+  it("revokes, keeps the account and its sessionVersion, and logs", async () => {
     const res = await call("DELETE", "events/[id]/front-desk-access/[accessId]")
     expect(res.status).toBe(200)
     expect(fake.state.grants[0].revokedAt).toBeInstanceOf(Date)
-    expect(fake.state.admins.find((a) => a.id === "adm-lea")!).toMatchObject({ id: "adm-lea", isActive: true, sessionVersion: 4 })
+    expect(fake.state.admins.find((a) => a.id === "adm-lea")!).toMatchObject({ id: "adm-lea", isActive: true, sessionVersion: 3 })
+    // The revocation is a grant write only: the session itself is left alone (#1142 fix round 3).
+    expect(fake.state.calls.some(([model, op]) => model === "adminUser" && op === "updateMany")).toBe(false)
     expect(logEvent).toHaveBeenCalledWith(expect.objectContaining({ action: "frontdesk.access_revoked", entityId: "grant-1" }))
     // One transaction, and the account row is locked before the grant is touched.
     const ops = fake.state.calls.map(([model, op]) => `${model}.${op}`)
@@ -565,8 +567,8 @@ describe("DELETE front-desk-access/[accessId]", () => {
     expect(ops.indexOf("$queryRaw.$queryRaw")).toBeLessThan(ops.indexOf("adminEventAccess.updateMany"))
   })
 
-  it("a failed session invalidation rolls the revocation back, so a retry completes both", async () => {
-    fake.state.failAdminUpdateMany = true
+  it("a failed revocation write rolls everything back, so a retry completes it", async () => {
+    fake.state.failGrantUpdateMany = true
     const res = await call("DELETE", "events/[id]/front-desk-access/[accessId]")
     expect(res.status).toBe(500)
     expect(await res.json()).toEqual({ error: "La révocation n'a pas pu être faite. Rien n'a été modifié. Réessayez.", notApplied: true })
@@ -576,8 +578,9 @@ describe("DELETE front-desk-access/[accessId]", () => {
     // The retry is a normal revocation, not the « already revoked » path.
     const retry = await call("DELETE", "events/[id]/front-desk-access/[accessId]")
     expect(retry.status).toBe(200)
+    expect(await retry.json()).toEqual({ revoked: true })
     expect(fake.state.grants[0].revokedAt).toBeInstanceOf(Date)
-    expect(fake.state.admins.find((a) => a.id === "adm-lea")!.sessionVersion).toBe(4)
+    expect(fake.state.admins.find((a) => a.id === "adm-lea")!.sessionVersion).toBe(3)
     expect(logEvent).toHaveBeenCalledWith(expect.objectContaining({ action: "frontdesk.access_revoked" }))
   })
 
@@ -591,17 +594,16 @@ describe("DELETE front-desk-access/[accessId]", () => {
     expect(await res.json()).toEqual({ revoked: true })
     expect(fake.state.grants[0].revokedAt).toBeInstanceOf(Date)
     expect(fake.state.grants[0].revokedAt).not.toBe(wasRevoked)
-    expect(fake.state.admins.find((a) => a.id === "adm-lea")!.sessionVersion).toBe(4)
+    expect(fake.state.admins.find((a) => a.id === "adm-lea")!.sessionVersion).toBe(3)
     expect(logEvent).toHaveBeenCalledWith(expect.objectContaining({ action: "frontdesk.access_revoked", entityId: "grant-1" }))
   })
 
-  it("a retry repairs a revocation that committed without invalidating the sessions", async () => {
-    // The old, non-transactional path could leave the grant revoked and the version unbumped.
+  it("an already revoked grant answers alreadyRevoked and leaves the session alone", async () => {
     fake.state.grants[0].revokedAt = new Date("2026-11-02T00:00:00Z")
     const res = await call("DELETE", "events/[id]/front-desk-access/[accessId]")
     expect(res.status).toBe(200)
     expect(await res.json()).toEqual({ revoked: true, alreadyRevoked: true })
-    expect(fake.state.admins.find((a) => a.id === "adm-lea")!.sessionVersion).toBe(4)
+    expect(fake.state.admins.find((a) => a.id === "adm-lea")!.sessionVersion).toBe(3)
     expect(logEvent).not.toHaveBeenCalled()
   })
 
@@ -613,31 +615,14 @@ describe("DELETE front-desk-access/[accessId]", () => {
     expect(res.status).toBe(200)
     expect(await res.json()).toEqual({ revoked: true, alreadyRevoked: true })
     expect(fake.state.grants[0].revokedAt).toBe(revokedAt)
+    expect(fake.state.admins.find((a) => a.id === "adm-lea")!.sessionVersion).toBe(3)
     expect(logEvent).not.toHaveBeenCalled()
   })
 
-  it("a grant re-opened after a revocation never revives the old session", async () => {
-    await call("DELETE", "events/[id]/front-desk-access/[accessId]")
-    expect(fake.state.admins.find((a) => a.id === "adm-lea")!.sessionVersion).toBe(4)
-    fake.state.admins.find((a) => a.id === "adm-lea")!.isActive = true
-    const res = await call("POST", "events/[id]/front-desk-access", { name: "Léa Favre", email: "lea.favre@example.org" })
-    expect(res.status).toBe(202)
-    expect(fake.state.grants[0].revokedAt).toBeNull()
-    // Re-opening a grant does not lower or reset the version: the session issued before the
-    // revocation (version 3) stays refused.
-    expect(fake.state.admins.find((a) => a.id === "adm-lea")!.sessionVersion).toBe(4)
-  })
-
-  it("keeps the session when the account still has another live grant", async () => {
+  it("does not touch sessionVersion even when another live grant remains", async () => {
     fake.state.grants.push(grantRow({ id: "grant-2", adminUserId: "adm-lea", eventId: OTHER_EVENT, expiresAt: new Date("2027-12-05T05:00:00Z") }))
     await call("DELETE", "events/[id]/front-desk-access/[accessId]")
     expect(fake.state.admins.find((a) => a.id === "adm-lea")!.sessionVersion).toBe(3)
-  })
-
-  it("an expired other grant does not count as live", async () => {
-    fake.state.grants.push(grantRow({ id: "grant-2", adminUserId: "adm-lea", eventId: OTHER_EVENT, expiresAt: new Date("2026-01-01T00:00:00Z") }))
-    await call("DELETE", "events/[id]/front-desk-access/[accessId]")
-    expect(fake.state.admins.find((a) => a.id === "adm-lea")!.sessionVersion).toBe(4)
   })
 
   it("404 for another event's access, changing nothing", async () => {

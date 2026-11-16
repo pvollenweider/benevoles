@@ -88,6 +88,47 @@ describe("FrontDeskDayOfBoard", () => {
     expect(screen.queryByRole("button", { name: /Léa Favre/ })).toBeNull()
   })
 
+  it("a 401 on an attendance action for the role says « session expired » once, with no row error, and stops polling", async () => {
+    fetchMock.mockResolvedValue({ ok: false, status: 401, json: async () => ({ error: "Non autorisé" }) })
+    renderFrontDesk()
+    fireEvent.click(screen.getByRole("button", { name: "Marquer présent, Léa Favre" }))
+    await flush()
+    expect(fetchMock.mock.calls.map(([url]) => url)).toEqual(["/api/admin/events/evt-fete/registrations/bulk"])
+    expect(screen.queryByRole("alert")).toBeNull()
+    expect(screen.queryByRole("heading", { level: 2, name: ACCESS_ENDED_TEXT })).toBeNull()
+    expect(screen.getByRole("button", { name: "Actualiser" })).toBeInTheDocument()
+    // The visible freshness line and the live region say the same sentence: said once, shown too.
+    expect(screen.getAllByText("Votre session a expiré : rechargez la page pour vous reconnecter.")).toHaveLength(2)
+    expect(screen.getByRole("status", { name: "Mise à jour du tableau" })).toHaveTextContent("Votre session a expiré")
+    await act(async () => { await vi.advanceTimersByTimeAsync(600_000) })
+    expect(dayOfCalls()).toHaveLength(0)
+  })
+
+  it("a 401 on an attendance action for an organiser ends in the same session-expired state", async () => {
+    fetchMock.mockResolvedValue({ ok: false, status: 401, json: async () => ({ error: "Non autorisé" }) })
+    render(<DayOfBoard {...props} roles={["Accueil"]} />)
+    fireEvent.click(screen.getByRole("button", { name: "Marquer présent, Léa Favre" }))
+    await flush()
+    expect(fetchMock.mock.calls.map(([url]) => url)).toEqual(["/api/admin/events/evt-fete/registrations/bulk"])
+    expect(screen.queryByRole("alert")).toBeNull()
+    expect(screen.getByRole("button", { name: "Marquer présent, Léa Favre" })).toBeInTheDocument()
+    expect(screen.getAllByText("Votre session a expiré : rechargez la page pour vous reconnecter.")).toHaveLength(2)
+    await act(async () => { await vi.advanceTimersByTimeAsync(600_000) })
+    expect(dayOfCalls()).toHaveLength(0)
+  })
+
+  it("a 403 on an attendance action for an organiser stays a row alert, board still there", async () => {
+    fetchMock.mockResolvedValue({ ok: false, status: 403, json: async () => ({ error: "Accès refusé" }) })
+    render(<DayOfBoard {...props} roles={["Accueil"]} />)
+    fireEvent.click(screen.getByRole("button", { name: "Marquer présent, Léa Favre" }))
+    await flush()
+    const alert = screen.getByRole("alert")
+    expect(alert).toHaveTextContent("Présence de Léa Favre : refusé. Accès refusé")
+    expect(alert).not.toHaveTextContent("erreur du serveur")
+    expect(screen.queryByRole("heading", { level: 2, name: ACCESS_ENDED_TEXT })).toBeNull()
+    expect(screen.getByRole("button", { name: "Marquer présent, Léa Favre" })).toBeInTheDocument()
+  })
+
   it("a 401 keeps meaning « session expired »: the board stays, as before, and never becomes an end of access", async () => {
     fetchMock.mockResolvedValue({ ok: false, status: 401, json: async () => ({ error: "Non autorisé" }) })
     renderFrontDesk()

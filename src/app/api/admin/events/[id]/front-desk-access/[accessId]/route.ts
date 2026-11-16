@@ -3,12 +3,11 @@
 
 import { NextResponse } from "next/server"
 import { requireOrgSession } from "@/lib/auth-guard"
-// AdminUser.sessionVersion is not tenant-scoped: the account was read through the event's grant.
+// The account row lock reads AdminUser, which the org-scoped client does not scope by a plain
+// `where` for `$queryRaw`; the lock query itself carries the caller's `organizationId`.
 // eslint-disable-next-line no-restricted-imports
 import { prisma } from "@/lib/prisma"
 import { adminActor, logEvent } from "@/lib/event-log"
-import { isGrantLive } from "@/lib/front-desk-access"
-import { orgTimeZone } from "@/lib/time-zone"
 import { reportError } from "@/lib/report-error"
 
 export const dynamic = "force-dynamic"
@@ -16,26 +15,21 @@ export const dynamic = "force-dynamic"
 type RevokeDb = {
   adminEventAccess: {
     findFirst(args: unknown): Promise<{ id: string; adminUserId: string } | null>
-    findMany(args: unknown): Promise<{
-      id: string; revokedAt: Date | null; expiresAt: Date | null
-      event: { publicStatus: string; endDate: Date; organization: { timeZone: string | null } | null } | null
-    }[]>
-    update(args: unknown): Promise<unknown>
   }
 }
 
 /**
  * Revokes one front-desk access (#1142), owners only. The account stays (it may hold another
- * event's grant), and the grant stays with `revokedAt`: the next request is refused, the panel
- * keeps the row with « Révoqué ». When no other live grant remains, the account's
- * `sessionVersion` is incremented, so an already-open session is refused on its next request.
+ * event's grant), and the grant stays with `revokedAt`: the guard reloads the grant on every
+ * request, so the next request is refused while the session itself stays valid. The person then
+ * sees the end-of-access message on the open board, and « Mes accès » reads that no access is in
+ * progress.
  *
- * The row lock on the account, the revocation, the count of its remaining live grants and the
- * version bump are one transaction: a failure leaves the grant unrevoked and a retry repairs
- * everything, instead of a committed revocation whose session invalidation was lost. The same
- * lock is taken when a grant is created or re-opened, so the two cannot interleave. Revoking a
- * grant that is already revoked answers the same and still runs the session check, which repairs
- * a grant revoked by an earlier, non-transactional version. No event is logged twice.
+ * The account row lock and the conditional revocation are one transaction: a POST re-opening the
+ * grant takes the same lock, so a revocation and a re-opening cannot interleave. Under the lock,
+ * the conditional write is the re-read of the grant: count 1 means this request revoked it, count
+ * 0 means it was already revoked before this request. A failure rolls everything back, and
+ * revoking an already revoked grant answers the same. No event is logged twice.
  */
 export async function DELETE(_req: Request, { params }: { params: Promise<{ id: string; accessId: string }> }) {
   const guard = await requireOrgSession("owner")
@@ -61,44 +55,23 @@ export async function DELETE(_req: Request, { params }: { params: Promise<{ id: 
       if (locked.length === 0) return null
 
       // The pre-lock read may be stale: a POST can have re-opened the grant in between. The
-      // conditional write is the decision, on the value read under the lock: count 1 means this
-      // request revoked it, count 0 means it was already revoked before this request.
+      // conditional write decides on the value read under the lock: count 1 means this request
+      // revoked it, count 0 means it was already revoked before this request.
       const { count } = await tx.adminEventAccess.updateMany({
         where: { id: access.id, eventId, revokedAt: null },
         data: { revokedAt: now },
       })
-      const revokedNow = count === 1
-
-      // Another event may still be open to this person: only the last live grant ends the sessions,
-      // with the same liveness rule as isGrantLive (revoked, expired, archived or ended event).
-      const others = await tx.adminEventAccess.findMany({
-        where: { adminUserId: access.adminUserId, revokedAt: null },
-        select: {
-          id: true, revokedAt: true, expiresAt: true,
-          event: { select: { publicStatus: true, endDate: true, organization: { select: { timeZone: true } } } },
-        },
-      })
-      const stillLive = (others ?? []).some((row) => !!row.event && isGrantLive(
-        row,
-        { publicStatus: row.event.publicStatus, endDate: row.event.endDate, timeZone: orgTimeZone(row.event.organization) },
-        now,
-      ))
-      if (!stillLive) {
-        // Scoped to the caller's organisation besides the id: a grant row must never end another
-        // organisation's session, even if a bad row pointed across tenants.
-        await tx.adminUser.updateMany({ where: { id: access.adminUserId, organizationId: guard.organizationId }, data: { sessionVersion: { increment: 1 } } })
-      }
-      return { revokedNow }
+      return { revokedNow: count === 1 }
     })
   } catch (e) {
     // The transaction rolled back. Never answer success: the owner can retry, and a retry repairs
-    // the whole revocation, session invalidation included.
+    // the whole revocation.
     reportError("frontdesk.access_revoke")(e)
     return NextResponse.json({ error: "La révocation n'a pas pu être faite. Rien n'a été modifié. Réessayez.", notApplied: true }, { status: 500 })
   }
   if (!outcome) return NextResponse.json({ error: "Non trouvé" }, { status: 404 })
 
-  // Only a revocation performed by this request is a new event; the repair path logs nothing.
+  // Only a revocation performed by this request is a new event; the idempotent path logs nothing.
   if (outcome.revokedNow) {
     await logEvent({
       eventId,

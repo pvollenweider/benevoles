@@ -505,14 +505,37 @@ export default function DayOfBoard({ eventId, board: initialBoard, today: initia
       return
     }
     if (!res.ok) {
+      // A 401 on an action means the same as on a poll: the session itself is over. The board
+      // stays, says so once and stops polling; a row error would invite a retry that cannot work.
+      // Both roles get this: a session really can expire during a check-in.
+      if (res.status === 401) {
+        unpin()
+        setError(null)
+        setNotice(null)
+        setFreshness("expired", statusRef.current.failures + 1, snapRef.current.refreshedAt, false)
+        // A read already in flight must not turn the expired session back into « ok ».
+        appliedAt.current = ++tick.current
+        deferred.current = null
+        done()
+        return
+      }
       // A front-desk access that ended is not a row error to retry: the caller unmounts the board.
-      // 401 keeps its meaning (the session expired) and its row alert for both roles.
       if (frontDesk && res.status === 403) {
         done()
         onAccessEnded?.()
         return
       }
-      const f = describeBulkFailure({ status: res.status, body: await res.json().catch(() => null) }, what)
+      const body = await res.json().catch(() => null)
+      const f = describeBulkFailure({ status: res.status, body }, what)
+      // A 4xx is a refusal, not a server error: say what the server said, never « erreur du
+      // serveur ». 5xx keeps the existing server-failure text.
+      if (res.status >= 400 && res.status < 500) {
+        const said = typeof body?.error === "string" && body.error.trim()
+          ? body.error.trim()
+          : "La demande a été refusée."
+        fail(`${what} : refusé. ${said}`)
+        return
+      }
       fail(`${f.title}. ${f.message}`)
       return
     }

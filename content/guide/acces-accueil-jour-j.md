@@ -46,7 +46,7 @@ L'accès se termine à la fin du dernier jour de l'événement, dans le fuseau h
 
 ## Révoquer un accès
 
-Dans **Accès accueil**, sur la ligne de la personne, **Révoquer** demande confirmation. L'accès est fermé tout de suite, même si la page est déjà ouverte. Le compte de la personne est conservé : vous pouvez lui redonner un accès au même événement en l'invitant de nouveau, avec le même email. S'il ne lui reste aucun autre accès en cours, sa session est fermée.
+Dans **Accès accueil**, sur la ligne de la personne, **Révoquer** demande confirmation. L'accès est fermé tout de suite, même si la page est déjà ouverte. Le compte de la personne est conservé : vous pouvez lui redonner un accès au même événement en l'invitant de nouveau, avec le même email. Sa session reste ouverte : à la prochaine lecture ou action, la page Jour J lui indique que son accès a pris fin, et « Mes accès » ne montre plus aucun accès en cours.
 
 L'état de chaque ligne est écrit en toutes lettres : **Actif**, **Invitation envoyée**, **Révoqué** ou **Expiré**, avec la date de fin de l'événement.
 

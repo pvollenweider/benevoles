@@ -171,7 +171,7 @@ export default function FrontDeskAccessPanel({ eventId, initialAccesses }: Props
     lines: revoking
       ? [
           `${revoking.name} ne pourra plus ouvrir le pointage de cet événement, même avec une page déjà ouverte.`,
-          "Son compte est conservé ; s'il n'a plus aucun autre accès en cours, sa session est fermée.",
+          "Son compte est conservé ; sa session reste ouverte, mais l'accès à cet événement est fermé.",
           "Vous pourrez lui redonner un accès en l'invitant de nouveau.",
         ]
       : [],
