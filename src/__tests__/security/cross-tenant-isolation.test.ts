@@ -85,6 +85,7 @@ const prismaMock = {
     findFirst: vi.fn().mockResolvedValue(null), // holder of an invited address (#1053)
     deleteMany: vi.fn().mockResolvedValue({ count: 0 }),
     create: vi.fn().mockResolvedValue({ id: "adm-new" }),
+    update: vi.fn(),
     count: vi.fn().mockResolvedValue(2),
     delete: vi.fn().mockResolvedValue({}),
   },
@@ -189,6 +190,7 @@ function mockScopedDb(overrides: DbOverrides = {}) {
     organization: {
       findUnique: vi.fn().mockResolvedValue({ id: ORG_A, name: "Org A" }),
       findFirst: vi.fn().mockResolvedValue({ id: ORG_A, name: "Org A" }),
+      ...((overrides.organization as object) ?? {}),
     },
     duplicateDismissal: {
       findMany: vi.fn().mockResolvedValue([]),
@@ -216,6 +218,13 @@ function mockScopedDb(overrides: DbOverrides = {}) {
       findFirst: vi.fn().mockResolvedValue(null),
       update: vi.fn(),
       ...((overrides.eventMilestone as object) ?? {}),
+    },
+    adminEventAccess: {
+      findFirst: vi.fn().mockResolvedValue(null),
+      findMany: vi.fn().mockResolvedValue([]),
+      create: vi.fn().mockResolvedValue({ id: "grant-a" }),
+      update: vi.fn().mockResolvedValue({ id: "grant-a" }),
+      ...((overrides.adminEventAccess as object) ?? {}),
     },
   }
 }
@@ -3093,6 +3102,74 @@ describe("Members, templates, team, password, invitation — cross-tenant isolat
   })
 })
 
+// ── Front-desk access, owner side (#1142) ─────────────────────────────────────
+// The routes an owner uses to create, list, resend and revoke an access. The guard here is the
+// mocked requireOrgSession (as for every other route of this file): the point is that the route
+// only ever reads its event through the caller's scoped client.
+describe("Front-desk access, owner side — cross-tenant isolation (#1142)", () => {
+  beforeEach(() => vi.clearAllMocks())
+
+  const eventParams = (id: string) => ({ params: Promise.resolve({ id }) })
+  const accessParams = (id: string, accessId: string) => ({ params: Promise.resolve({ id, accessId }) })
+
+  it("GET /api/admin/events/[id]/front-desk-access returns 404 for an org-B event and lists nothing", async () => {
+    const { GET } = await import("@/app/api/admin/events/[id]/front-desk-access/route")
+    const db = setupGuard()
+    const res = await GET(makeRequest("/api/admin/events/evt-b/front-desk-access"), eventParams("evt-b"))
+    expect(res.status).toBe(404)
+    expect(db.adminEventAccess.findMany).not.toHaveBeenCalled()
+  })
+
+  it("POST /api/admin/events/[id]/front-desk-access creates no account and no grant for an org-B event", async () => {
+    const { POST } = await import("@/app/api/admin/events/[id]/front-desk-access/route")
+    const db = setupGuard({ organization: { findUnique: vi.fn().mockResolvedValue({ id: ORG_A, name: "Org A", outboundEmailApprovedAt: new Date("2026-01-01T00:00:00Z") }) } })
+    const res = await POST(makeRequest("/api/admin/events/evt-b/front-desk-access", "POST", { name: "Léa Favre", email: "lea.favre@example.org" }), eventParams("evt-b"))
+    expect(res.status).toBe(404)
+    expect(db.adminEventAccess.create).not.toHaveBeenCalled()
+    expect(prismaMock.adminUser.create).not.toHaveBeenCalled()
+  })
+
+  it("POST refuses an address held by another organisation with the one neutral message, and creates nothing", async () => {
+    const { POST } = await import("@/app/api/admin/events/[id]/front-desk-access/route")
+    const db = setupGuard({ organization: { findUnique: vi.fn().mockResolvedValue({ id: ORG_A, name: "Org A", outboundEmailApprovedAt: new Date("2026-01-01T00:00:00Z") }) } })
+    db.event.findFirst.mockResolvedValue({ id: "evt-a", title: "Fête du village", startDate: new Date("2027-06-12T00:00:00Z"), endDate: new Date("2027-06-14T00:00:00Z"), organization: { name: "Org A", timeZone: "Europe/Zurich" } })
+    prismaMock.adminUser.findFirst.mockResolvedValue({ id: "adm-b", organizationId: "org-b", name: "Léa Favre", email: "lea.favre@example.org", role: "front_desk", isActive: true, setupTokenHash: null, setupTokenExpiresAt: null })
+    const res = await POST(makeRequest("/api/admin/events/evt-a/front-desk-access", "POST", { name: "Léa Favre", email: "lea.favre@example.org" }), eventParams("evt-a"))
+    expect(res.status).toBe(409)
+    expect(await res.json()).toEqual({ error: "Cette adresse ne peut pas recevoir d'accès accueil." })
+    expect(db.adminEventAccess.create).not.toHaveBeenCalled()
+    expect(prismaMock.adminUser.create).not.toHaveBeenCalled()
+  })
+
+  it("DELETE /api/admin/events/[id]/front-desk-access/[accessId] returns 404 for an org-B event or another event's access", async () => {
+    const { DELETE } = await import("@/app/api/admin/events/[id]/front-desk-access/[accessId]/route")
+    const db = setupGuard()
+    expect((await DELETE(makeRequest("/api/admin/events/evt-b/front-desk-access/gr-b", "DELETE"), accessParams("evt-b", "gr-b"))).status).toBe(404)
+    expect((await DELETE(makeRequest("/api/admin/events/evt-a/front-desk-access/gr-b", "DELETE"), accessParams("evt-a", "gr-b"))).status).toBe(404)
+    expect(db.adminEventAccess.update).not.toHaveBeenCalled()
+    expect(prismaMock.adminUser.update).not.toHaveBeenCalled()
+  })
+
+  it("POST .../[accessId]/resend returns 404 for an org-B event or another event's access, and sends nothing", async () => {
+    const { POST } = await import("@/app/api/admin/events/[id]/front-desk-access/[accessId]/resend/route")
+    const db = setupGuard()
+    expect((await POST(makeRequest("/api/admin/events/evt-b/front-desk-access/gr-b/resend", "POST"), accessParams("evt-b", "gr-b"))).status).toBe(404)
+    expect((await POST(makeRequest("/api/admin/events/evt-a/front-desk-access/gr-b/resend", "POST"), accessParams("evt-a", "gr-b"))).status).toBe(404)
+    expect(db.adminEventAccess.findFirst).toHaveBeenCalledWith(expect.objectContaining({ where: { id: "gr-b", eventId: "evt-a" } }))
+    expect(prismaMock.adminUser.update).not.toHaveBeenCalled()
+  })
+
+  it("GET lists only the event's rows through the scoped client, never the raw one", async () => {
+    const { GET } = await import("@/app/api/admin/events/[id]/front-desk-access/route")
+    const db = setupGuard({
+      event: { findFirst: vi.fn().mockResolvedValue({ id: "evt-a" }) },
+      adminEventAccess: { findMany: vi.fn().mockResolvedValue([]) },
+    })
+    expect((await GET(makeRequest("/api/admin/events/evt-a/front-desk-access"), eventParams("evt-a"))).status).toBe(200)
+    expect(db.adminEventAccess.findMany).toHaveBeenCalledWith(expect.objectContaining({ where: expect.objectContaining({ eventId: "evt-a" }) }))
+  })
+})
+
 // ── Front desk (#1142) ────────────────────────────────────────────────────────
 // The guard of the two routes a front-desk account reaches, the real one this time (the rest of
 // this file mocks auth-guard): a grant never crosses to another organisation's event, whatever
@@ -3105,10 +3182,16 @@ describe("Front desk — cross-tenant isolation (#1142)", () => {
 
   // Colette Favre, front-desk account of org A, granted on org A's event evt-a.
   const COLETTE = { user: { id: "adm-colette", name: "Colette Favre", email: "colette.favre@example.org", role: "front_desk", organizationId: ORG_A } }
+  const eventRow = (over: Record<string, unknown> = {}) => ({
+    id: "evt-a", organizationId: ORG_A, publicStatus: "published", title: "Fête du village",
+    startDate: new Date("2027-06-12T00:00:00Z"), endDate: new Date("2027-06-14T00:00:00Z"),
+    organization: { name: "Org A", timeZone: "Europe/Zurich" },
+    ...over,
+  })
   const grantRow = (over: Record<string, unknown> = {}) => ({
     id: "grant-1", adminUserId: "adm-colette", eventId: "evt-a", organizationId: ORG_A, expiresAt: null, revokedAt: null,
     adminUser: { organizationId: ORG_A, isActive: true, role: "front_desk" },
-    event: { id: "evt-a", organizationId: ORG_A, publicStatus: "published" },
+    event: eventRow(),
     ...over,
   })
   const extra = prismaMock as unknown as Record<string, unknown>
@@ -3159,9 +3242,9 @@ describe("Front desk — cross-tenant isolation (#1142)", () => {
   })
 
   it.each([
-    ["a grant row of org B on its own event", grantRow({ organizationId: "org-b", eventId: "evt-b", event: { id: "evt-b", organizationId: "org-b", publicStatus: "published" } })],
-    ["a grant row of org A pointing to an org-B event", grantRow({ eventId: "evt-b", event: { id: "evt-b", organizationId: "org-b", publicStatus: "published" } })],
-    ["a grant row of an org-B account", grantRow({ eventId: "evt-b", adminUser: { organizationId: "org-b", isActive: true, role: "front_desk" }, event: { id: "evt-b", organizationId: ORG_A, publicStatus: "published" } })],
+    ["a grant row of org B on its own event", grantRow({ organizationId: "org-b", eventId: "evt-b", event: eventRow({ id: "evt-b", organizationId: "org-b", organization: { name: "Org B", timeZone: "Europe/Zurich" } }) })],
+    ["a grant row of org A pointing to an org-B event", grantRow({ eventId: "evt-b", event: eventRow({ id: "evt-b", organizationId: "org-b", organization: { name: "Org B", timeZone: "Europe/Zurich" } }) })],
+    ["a grant row of an org-B account", grantRow({ eventId: "evt-b", adminUser: { organizationId: "org-b", isActive: true, role: "front_desk" }, event: eventRow({ id: "evt-b" }) })],
   ])("even if the database returned %s, both routes refuse — 403", async (_label, row) => {
     grantFindFirst.mockResolvedValue(row)
     const dayOf = await import("@/app/api/admin/events/[id]/day-of/route")

@@ -35,10 +35,10 @@ import { siteName } from "@/lib/site"
 export type SendCategory = "bulk" | "automatic" | "account"
 
 const BULK: readonly NotificationKind[] = ["targeted_message", "member_invite", "manual_reminder", "open_shifts", "availability_request"]
-// Admin invitations come from an authenticated owner or the super admin. A password reset is not
-// here: anyone can request one, so it has its per-recipient cap instead of an organisation-wide one
-// that a stranger could use up.
-const ACCOUNT: readonly NotificationKind[] = ["admin_invite", "admin_welcome"]
+// Admin invitations come from an authenticated owner or the super admin, and so does a front-desk
+// access invitation (#1142). A password reset is not here: anyone can request one, so it has its
+// per-recipient cap instead of an organisation-wide one that a stranger could use up.
+const ACCOUNT: readonly NotificationKind[] = ["admin_invite", "admin_welcome", "front_desk_invite"]
 
 /** Kinds anyone can trigger from a public page: capped per recipient address. */
 export const PUBLIC_TRIGGERED: readonly NotificationKind[] = ["password_reset", "registration_confirmation", "registration_link_resend", "signup_confirmation", "signup_account_link", "registration_withdrawn", "signup_email_confirmation"]

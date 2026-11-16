@@ -14,7 +14,7 @@ import { hashToken } from "@/lib/token-hash"
 import { deliverAfterResponse, enqueueNotifications } from "@/lib/notifications/outbox"
 import { validationError } from "@/lib/api-error"
 import { replyToOnActivation } from "@/lib/org-reply-to"
-import { isOwnerRole } from "@/lib/permissions"
+import { isOwnerRole, FRONT_DESK_ROLE } from "@/lib/permissions"
 import { activationAllowed } from "@/lib/activation-budget"
 
 const schema = z.object({
@@ -102,9 +102,15 @@ export async function POST(req: Request) {
         isActive: true,
         setupTokenHash: null,
         setupTokenExpiresAt: null,
+        // A front-desk account never receives the organisation's product-update emails (#1142):
+        // they are off by default for it, and no later path turns them on.
+        ...(admin.role === FRONT_DESK_ROLE ? { receiveProductUpdates: false } : {}),
       },
     })
     if (count === 0) return null
+    // A front-desk account (#1142) is no organiser: the welcome email's links point to pages it
+    // cannot open. Its invitation already said everything it needs, and it lands on its own page.
+    if (admin.role === FRONT_DESK_ROLE) return []
     if (!organization || !admin.organizationId) return []
     // An owner's now-confirmed address becomes the reply-to of an organization that has none
     // (#1077), only while it is still null: never over a value an owner set, nor after an owner

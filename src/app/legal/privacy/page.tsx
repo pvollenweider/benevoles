@@ -87,6 +87,12 @@ export default function PrivacyPage() {
         Les connexions à votre compte figurent aussi dans les{" "}
         <a href="#journaux-serveur">journaux du serveur</a> (section 2.3).
       </p>
+      <p>
+        Un <strong>accès accueil</strong> est un compte créé par un propriétaire pour une personne
+        extérieure à l&apos;équipe, limité à un événement. Il contient son nom, son adresse e-mail et
+        un mot de passe, ainsi que le lien vers l&apos;événement auquel elle a accès, et il est
+        supprimé avec l&apos;Organisation ou avec le compte.
+      </p>
 
       <h3 id="donnees-demandes-espace">2.2 Demandes d&apos;espace et prévention des abus</h3>
       <p className="sm:hidden">Faites défiler le tableau horizontalement.</p>

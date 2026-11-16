@@ -7,6 +7,7 @@ import { useEffect, useId, useRef, useState, type ReactNode } from "react"
 import { flushSync } from "react-dom"
 import ModalShell from "@/components/admin/ModalShell"
 import type { ActionRecap } from "@/lib/action-recap"
+import type { FocusCandidate } from "@/lib/focus-return"
 
 type Challenge = { label: string; expected: string }
 type Props = {
@@ -31,13 +32,15 @@ type Props = {
    * and focus goes back to Cancel: a second Enter on the confirm button never overrides unheard.
    */
   lateWarning?: { text: string } | null
+  /** Focus target when the opener is gone (a row whose buttons unmount after the action). */
+  fallbackFocusOnClose?: FocusCandidate
 }
 
 /**
  * Confirmation of a sensitive action (#379): the recap of what is about to happen (people,
  * emails, consequences, logging), Cancel focused first, Confirm styled by the stakes.
  */
-export default function ConfirmActionModal({ recap, busy, onConfirm, onCancel, error, challenge, children, secondaryAction, lateWarning }: Props) {
+export default function ConfirmActionModal({ recap, busy, onConfirm, onCancel, error, challenge, children, secondaryAction, lateWarning, fallbackFocusOnClose }: Props) {
   const id = useId()
   const cancelRef = useRef<HTMLButtonElement>(null)
   const [lateSaid, setLateSaid] = useState("")
@@ -87,6 +90,7 @@ export default function ConfirmActionModal({ recap, busy, onConfirm, onCancel, e
         : [recap.lines.length > 0 ? `${id}-recap` : null, `${id}-error`]
       ).filter(Boolean).join(" ")}
       closeOnBackdrop={false}
+      fallbackFocusOnClose={fallbackFocusOnClose}
       role={recap.danger ? "alertdialog" : "dialog"}
     >
       {/* A form so that Enter in the challenge field confirms; Cancel stays a plain button. */}

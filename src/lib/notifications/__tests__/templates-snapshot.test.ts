@@ -270,6 +270,19 @@ const cases: [string, NotificationPayload][] = [
     recipient,
     data: { adminName: "Julie Martin", organizationName: "Rhône Rocks", inviteUrl: "https://www.benevol.app/invite/abc" },
   }],
+  ["front_desk_invite", {
+    kind: "front_desk_invite",
+    recipient,
+    data: {
+      adminName: "Julie Martin",
+      organizationName: "Rhône Rocks",
+      eventTitle: "Festival du Rhône",
+      eventDates: "du 12 au 14 juin 2026",
+      untilLabel: "14 juin 2026",
+      inviterName: "Sacha Bonvin",
+      inviteUrl: "https://www.benevol.app/admin/accept-invite?token=abc",
+    },
+  }],
   ["admin_welcome", {
     kind: "admin_welcome",
     recipient,
@@ -831,6 +844,7 @@ describe("render — snapshot of every notification kind", () => {
       admin_notification: true,
       admin_invite: true,
       admin_welcome: true,
+      front_desk_invite: true,
       password_reset: true,
       waitlist_confirmation: true,
       waitlist_offered: true,

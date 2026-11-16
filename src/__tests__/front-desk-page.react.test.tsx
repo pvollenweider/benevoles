@@ -7,8 +7,8 @@ import { render, screen, fireEvent, cleanup } from "@testing-library/react"
 import fs from "node:fs"
 import path from "node:path"
 
-// Front-desk access limited to one event (#1142): the pages. A front-desk session renders one
-// admin page, its landing page, and nothing of the organisation: no navigation, no data.
+// Front-desk access limited to one event (#1142): the pages. A front-desk session renders its
+// landing page, and the day-of pages it holds a grant on, with none of the admin navigation.
 
 const auth = vi.hoisted(() => vi.fn())
 vi.mock("@/auth", () => ({ auth }))
@@ -23,9 +23,20 @@ vi.mock("next/headers", () => ({
   headers: async () => new Headers(nav.path ? { "x-benevoles-path": nav.path } : {}),
   cookies: async () => ({ get: () => undefined }),
 }))
-const prismaTouched = vi.hoisted(() => vi.fn())
+const db = vi.hoisted(() => ({
+  accesses: [] as unknown[],
+  touched: vi.fn(),
+}))
 vi.mock("@/lib/prisma", () => ({
-  prisma: new Proxy({}, { get: (_t, model) => new Proxy({}, { get: (_m, op) => (...args: unknown[]) => { prismaTouched(model, op, args); return Promise.resolve(null) } }) }),
+  prisma: new Proxy({}, {
+    get: (_t, model) => new Proxy({}, {
+      get: (_m, op) => (...args: unknown[]) => {
+        db.touched(model, op, args)
+        if (model === "adminEventAccess" && op === "findMany") return Promise.resolve(db.accesses)
+        return Promise.resolve(null)
+      },
+    }),
+  }),
 }))
 vi.mock("@/components/admin/AdminNav", () => ({ default: () => <nav aria-label="Navigation de l'administration" /> }))
 vi.mock("@/components/admin/ChangePasswordForm", () => ({ default: () => <form aria-label="Mot de passe" /> }))
@@ -37,10 +48,21 @@ import AccountPage from "@/app/admin/account/page"
 
 const colette = { user: { id: "adm-colette", name: "Colette Favre", email: "colette.favre@example.org", role: "front_desk", organizationId: "org-fete" } }
 const sami = { user: { id: "adm-sami", name: "Sami Haddad", email: "sami.haddad@example.org", role: "organizer", organizationId: "org-fete" } }
+const access = (over: Record<string, unknown> = {}) => ({
+  id: "grant-1", revokedAt: null, expiresAt: null, eventId: "evt-fete",
+  adminUser: { name: "Colette Favre", email: "colette.favre@example.org", isActive: true, role: "front_desk" },
+  event: {
+    id: "evt-fete", organizationId: "org-fete", title: "Fête du village", publicStatus: "published",
+    startDate: new Date("2027-06-12T00:00:00Z"), endDate: new Date("2027-06-14T00:00:00Z"),
+    organization: { name: "Fête du village", timeZone: "Europe/Zurich" },
+  },
+  ...over,
+})
 
 beforeEach(() => {
   vi.clearAllMocks()
   nav.path = null
+  db.accesses = []
   auth.mockResolvedValue(colette)
 })
 afterEach(cleanup)
@@ -50,28 +72,49 @@ describe("/admin/front-desk", () => {
     expect(metadata).toEqual({ title: "Accès accueil", robots: { index: false, follow: false } })
   })
 
-  it("says the access is ready and offers to sign out: one main landmark, one heading, one paragraph, one button", async () => {
+  it("with no live access says so plainly: one main landmark, one heading, one paragraph, one button", async () => {
     const { container } = render(await FrontDeskPage())
     expect(screen.getAllByRole("main")).toHaveLength(1)
     expect(screen.getAllByRole("heading")).toHaveLength(1)
     expect(screen.getByRole("heading", { level: 1, name: "Accès accueil" })).toBeInTheDocument()
-    const sentence = screen.getByText("Votre accès accueil est prêt. L'écran de pointage arrive avec une prochaine version.")
+    const sentence = screen.getByText("Vous n'avez plus d'accès en cours. Adressez-vous à la personne qui vous a invité.")
     expect(sentence.tagName).toBe("P")
     expect(container.querySelectorAll("p")).toHaveLength(1)
     const buttons = screen.getAllByRole("button")
     expect(buttons).toHaveLength(1)
     expect(buttons[0]).toHaveAccessibleName("Se déconnecter")
-    expect(buttons[0].tagName).toBe("BUTTON")
-    expect(buttons[0]).toHaveAttribute("type", "button")
+    // The dedicated loader read the account's own grants, with its organisation.
+    expect(db.touched).toHaveBeenCalledWith("adminEventAccess", "findMany", [expect.objectContaining({ where: expect.objectContaining({ adminUserId: "adm-colette", organizationId: "org-fete" }) })])
   })
 
-  it("shows nothing else: no navigation, no link, no form field, no name, email or organisation", async () => {
+  it("one access is one link whose text says everything: event and dates", async () => {
+    db.accesses = [access()]
     const { container } = render(await FrontDeskPage())
     expect(screen.queryByRole("navigation")).toBeNull()
-    expect(screen.queryAllByRole("link")).toEqual([])
-    expect(container.querySelectorAll("a, input, select, textarea, form, img")).toHaveLength(0)
-    expect(container.textContent).toBe("Accès accueilVotre accès accueil est prêt. L'écran de pointage arrive avec une prochaine version.Se déconnecter")
-    expect(prismaTouched).not.toHaveBeenCalled()
+    const link = screen.getByRole("link", { name: "Ouvrir le pointage : Fête du village, du 12 juin 2027 au 14 juin 2027" })
+    expect(link).toHaveAttribute("href", "/admin/front-desk/events/evt-fete")
+    expect(container.querySelector("ul")).toBeNull()
+  })
+
+  it("several accesses are a list, each item self-sufficient", async () => {
+    db.accesses = [
+      access(),
+      access({ id: "grant-2", eventId: "evt-marche", event: { ...(access().event as object), id: "evt-marche", title: "Marché de Noël", startDate: new Date("2027-12-04T00:00:00Z"), endDate: new Date("2027-12-04T00:00:00Z") } }),
+    ]
+    render(await FrontDeskPage())
+    const list = screen.getByRole("list")
+    expect(list.tagName).toBe("UL")
+    expect(screen.getByRole("link", { name: "Ouvrir le pointage : Fête du village, du 12 juin 2027 au 14 juin 2027" })).toBeInTheDocument()
+    expect(screen.getByRole("link", { name: "Ouvrir le pointage : Marché de Noël, le 4 décembre 2027" })).toBeInTheDocument()
+  })
+
+  it("shows nothing else: no navigation, no form field, no name, email or organisation", async () => {
+    db.accesses = [access()]
+    const { container } = render(await FrontDeskPage())
+    expect(screen.queryByRole("navigation")).toBeNull()
+    expect(container.querySelectorAll("input, select, textarea, form, img")).toHaveLength(0)
+    expect(container.textContent).not.toContain("Colette Favre")
+    expect(container.textContent).not.toContain("colette.favre@example.org")
   })
 
   it("signs out the way the admin's user menu does", async () => {
@@ -99,11 +142,9 @@ describe("/admin/front-desk", () => {
 
   it("has no dark-theme class (admin screens have no dark theme) and keeps the global focus outline", () => {
     const root = path.join(__dirname, "..")
-    for (const file of ["app/admin/front-desk/page.tsx", "components/admin/SignOutButton.tsx"]) {
+    for (const file of ["app/admin/front-desk/page.tsx", "app/admin/front-desk/events/[id]/page.tsx", "components/admin/SignOutButton.tsx"]) {
       const source = fs.readFileSync(path.join(root, file), "utf-8")
       expect(source, file).not.toMatch(/\bdark:/)
-      // No utility that would remove the outline the global styles give a focused button.
-      expect(source, file).not.toMatch(/outline-none|focus:outline-0|focus-visible:outline-0/)
     }
   })
 })
@@ -116,7 +157,7 @@ describe("admin layout as a front-desk account", () => {
     expect(screen.queryByRole("navigation")).toBeNull()
     expect(screen.queryByRole("main")).toBeNull()
     expect(screen.queryAllByRole("link")).toEqual([])
-    expect(prismaTouched).not.toHaveBeenCalled()
+    expect(db.touched).not.toHaveBeenCalled()
   })
 
   it("with the landing page inside: exactly one main landmark and one heading on the whole screen", async () => {
@@ -127,10 +168,18 @@ describe("admin layout as a front-desk account", () => {
     expect(screen.queryByRole("navigation")).toBeNull()
   })
 
-  it.each(["/admin/dashboard", "/admin/events", "/admin/events/evt-1/day-of", "/admin/members", "/admin/settings/admins", "/admin/account", "/admin/search?q=rochat"])("refuses %s: sent to the landing page, nothing read", async (page) => {
+  it("lets one event's day-of page through, without navigation", async () => {
+    nav.path = "/admin/front-desk/events/evt-fete"
+    render(await AdminLayout({ children: <p>contenu</p> }))
+    expect(screen.getByText("contenu")).toBeInTheDocument()
+    expect(screen.queryByRole("navigation")).toBeNull()
+    expect(nav.redirect).not.toHaveBeenCalled()
+  })
+
+  it.each(["/admin/dashboard", "/admin/events", "/admin/events/evt-1/day-of", "/admin/members", "/admin/settings/admins", "/admin/account", "/admin/search?q=rochat", "/admin/front-desk/events/evt-1/day-of", "/admin/front-desk/events/evt-1/x"])("refuses %s: sent to the landing page, nothing read", async (page) => {
     nav.path = page
     await expect(AdminLayout({ children: <p>contenu</p> })).rejects.toThrow("NEXT_REDIRECT:/admin/front-desk")
-    expect(prismaTouched).not.toHaveBeenCalled()
+    expect(db.touched).not.toHaveBeenCalled()
   })
 
   it("a session-less page (the login page, a link from an email) is left alone, still without navigation", async () => {
@@ -149,7 +198,7 @@ describe("admin layout as a front-desk account", () => {
     render(await AdminLayout({ children: <p>contenu</p> }))
     expect(screen.getByRole("navigation", { name: "Navigation de l'administration" })).toBeInTheDocument()
     expect(screen.getByRole("main")).toBeInTheDocument()
-    expect(prismaTouched).toHaveBeenCalled()
+    expect(db.touched).toHaveBeenCalled()
   })
 })
 

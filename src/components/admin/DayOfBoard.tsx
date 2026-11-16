@@ -100,6 +100,14 @@ type Props = {
   registrationWindow: RegistrationWindow
   /** The event's active sector ids, to tell whether the page's filter hides the new shift. */
   activeSectorIds?: string[]
+  /**
+   * The board rendered for a front-desk account (#1142): « Ajouter un besoin » is not rendered
+   * (and its links with it), and a 403 means the access to this event is over, not a session
+   * problem: `onAccessEnded` is called so the caller unmounts this board.
+   */
+  frontDesk?: boolean
+  /** The grant is no longer live (403): the caller unmounts this board and focuses its message. */
+  onAccessEnded?: () => void
 }
 
 type Snapshot = { board: Board; today: string; refreshedAt: string }
@@ -133,7 +141,7 @@ const telClass = `inline-flex items-center min-h-11 px-3 rounded-xl border borde
  * page. Search, focus, an action in flight and the marks made here survive each read (merge and
  * ordering rules in day-of-sync.ts). Polls are silent unless something changed elsewhere.
  */
-export default function DayOfBoard({ eventId, board: initialBoard, today: initialToday, refreshedAt: initialRefreshedAt, sector = "", roles = [], timeZone, registrationWindow, activeSectorIds = [] }: Props) {
+export default function DayOfBoard({ eventId, board: initialBoard, today: initialToday, refreshedAt: initialRefreshedAt, sector = "", roles = [], timeZone, registrationWindow, activeSectorIds = [], frontDesk = false, onAccessEnded }: Props) {
   const [snap, setSnap] = useState<Snapshot>({ board: initialBoard, today: initialToday, refreshedAt: initialRefreshedAt })
   const { board, today, refreshedAt } = snap
   const [query, setQuery] = useState("")
@@ -304,6 +312,9 @@ export default function DayOfBoard({ eventId, board: initialBoard, today: initia
       finish()
       // A newer read already went through: this older failure says nothing about now.
       if (!isFreshAnswer(sentAt, appliedAt.current)) return
+      // End of a front-desk access (#1142): the caller unmounts the board, its timers and its
+      // freshness line rather than keeping a list that will never be current again.
+      if (next === "access_ended") { onAccessEnded?.(); return }
       appliedAt.current = sentAt
       // A failure of « Actualiser » shows at once: the person asked, the old time must not pass for an answer.
       const nextFailures = kind === "manual" ? Math.max(2, statusRef.current.failures + 1) : statusRef.current.failures + 1
@@ -319,7 +330,7 @@ export default function DayOfBoard({ eventId, board: initialBoard, today: initia
       fail(syncStatusOf({ network: true, online: typeof navigator === "undefined" || navigator.onLine !== false }))
       return
     }
-    if (!res.ok) { fail(syncStatusOf({ status: res.status })); return }
+    if (!res.ok) { fail(syncStatusOf({ status: res.status }, { forbiddenIsAccessEnded: frontDesk })); return }
     let next: Snapshot
     try {
       next = (await res.json()) as Snapshot
@@ -491,6 +502,13 @@ export default function DayOfBoard({ eventId, board: initialBoard, today: initia
       return
     }
     if (!res.ok) {
+      // A front-desk access that ended is not a row error to retry: the caller unmounts the board.
+      // 401 keeps its meaning (the session expired) and its row alert for both roles.
+      if (frontDesk && res.status === 403) {
+        done()
+        onAccessEnded?.()
+        return
+      }
       const f = describeBulkFailure({ status: res.status, body: await res.json().catch(() => null) }, what)
       fail(`${f.title}. ${f.message}`)
       return
@@ -698,15 +716,17 @@ export default function DayOfBoard({ eventId, board: initialBoard, today: initia
       <p role="status" aria-live="polite" aria-label="Mise à jour du tableau" className="sr-only">{status}</p>
       {nothingFound && <p className="text-sm text-gray-700">Aucun bénévole ni poste ne correspond à « {query.trim()} ».</p>}
 
-      <AddNeedPanel
-        eventId={eventId}
-        today={today}
-        timeZone={timeZone}
-        event={registrationWindow}
-        roles={roles}
-        onCreated={onNeedCreated}
-        announce={say}
-      />
+      {!frontDesk && (
+        <AddNeedPanel
+          eventId={eventId}
+          today={today}
+          timeZone={timeZone}
+          event={registrationWindow}
+          roles={roles}
+          onCreated={onNeedCreated}
+          announce={say}
+        />
+      )}
 
       <section aria-labelledby="dayof-now" className="space-y-3">
         <h2 id="dayof-now" className="text-lg font-semibold text-gray-900">En cours</h2>

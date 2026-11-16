@@ -29,12 +29,12 @@ export const EVENT_PUBLIC_STATUSES = ["draft", "published", "archived"] as const
 export type EventPublicStatus = (typeof EVENT_PUBLIC_STATUSES)[number]
 
 /**
- * Owner (« admin »), organiser (#469) and platform super admin. The front-desk role (#1142,
- * FRONT_DESK_ROLE in src/lib/permissions.ts) is deliberately absent: its groundwork adds a table
- * only, so the CHECK constraint on AdminUser.role still refuses it and no such account can be
- * stored. The change that creates those accounts widens the constraint and this list together.
+ * Owner (« admin »), organiser (#469), platform super admin, and the front-desk role (#1142,
+ * FRONT_DESK_ROLE in src/lib/permissions.ts). The last one is a stored role that is NOT an admin
+ * level and never joins ORG_ROLES: it only carries a per-event grant. The CHECK constraint on
+ * AdminUser.role accepts exactly these values (migration 20261118120000_front_desk_role).
  */
-export const ADMIN_ROLES = ["admin", "organizer", "super_admin"] as const
+export const ADMIN_ROLES = ["admin", "organizer", "super_admin", "front_desk"] as const
 export type AdminRole = (typeof ADMIN_ROLES)[number]
 
 export const OUTBOX_STATUSES = ["pending", "sending", "sent", "failed", "cancelled"] as const

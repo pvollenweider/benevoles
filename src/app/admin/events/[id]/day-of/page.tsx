@@ -7,6 +7,9 @@ import { notFound, redirect } from "next/navigation"
 import { getOrgContext } from "@/lib/auth-guard"
 import { formatShortDate } from "@/lib/utils"
 import { isEventDay } from "@/lib/day-of"
+import { hasLevel } from "@/lib/permissions"
+import { listEventFrontDeskAccesses } from "@/lib/front-desk-access"
+import FrontDeskAccessPanel from "@/components/admin/FrontDeskAccessPanel"
 import { loadDayOf } from "@/lib/day-of-load"
 import DayOfBoard from "@/components/admin/DayOfBoard"
 import HelpLink from "@/components/admin/HelpLink"
@@ -48,6 +51,9 @@ export default async function DayOfPage({ params, searchParams }: { params: Prom
   const base = `/admin/events/${event.id}`
   const sectorValue = sectorFilterValue(sector.filter)
   const eventDay = isEventDay({ startDate: event.startDate.toISOString(), endDate: event.endDate.toISOString() }, now, timeZone)
+  // « Accès accueil » (#1142): owners only, at the bottom of the page. Organisers see the page as before.
+  const owner = hasLevel(ctx.session.user?.role, "owner")
+  const frontDeskAccesses = owner ? await listEventFrontDeskAccesses(ctx.db, id, now) : []
 
   return (
     <div className="space-y-6 max-w-2xl">
@@ -91,6 +97,8 @@ export default async function DayOfPage({ params, searchParams }: { params: Prom
         }}
         activeSectorIds={sector.options.filter((o) => o.value && o.value !== "autres").map((o) => o.value)}
       />
+
+      {owner && <FrontDeskAccessPanel eventId={event.id} initialAccesses={frontDeskAccesses} />}
 
       <nav aria-labelledby="dayof-more" className="border-t border-gray-200 pt-4 space-y-2">
         <h2 id="dayof-more" className="text-sm font-semibold text-gray-700">Autres pages de l&apos;événement</h2>

@@ -371,11 +371,15 @@ describe("GET day-of as a front-desk account (#1142)", () => {
     expect(text).not.toContain("Ferreira")
   })
 
-  it("carries no email, answer or note: neither as a key nor as a value", async () => {
+  it("carries exactly the operational keys, and no email, answer or note: neither as a key nor as a value", async () => {
     const res = await dayOf(EVENT)
     expect(res.status).toBe(200)
-    const keys = [...keysOf(res.json)]
-    expect(keys.length).toBeGreaterThan(5)
+    const keys = [...keysOf(res.json)].sort()
+    expect(keys).toEqual([
+      "attendanceStatus", "board", "capacity", "checkedInAt", "contactName", "contactPhone", "date", "displayOrder",
+      "earlier", "endTime", "firstName", "id", "inProgress", "key", "label", "lastName", "laterCount", "people",
+      "phone", "refreshedAt", "registrationId", "roleName", "shifts", "startTime", "today", "upcoming",
+    ])
     expect(keys.filter((k) => /e-?mail|answer|note|comment|token|birth|address/i.test(k))).toEqual([])
     const text = JSON.stringify(res.json)
     for (const secret of ["@example.org", "Allergie", "À surveiller", "Végétarien", "Note interne"]) expect(text).not.toContain(secret)

@@ -2,7 +2,7 @@ import { describe, it, expect } from "vitest"
 import { readdirSync, readFileSync } from "fs"
 import { join } from "path"
 import { ADMIN_ROLES, CHECKED_COLUMNS } from "../statuses"
-import { ORG_ROLES } from "../permissions"
+import { FRONT_DESK_ROLE, ORG_ROLES } from "../permissions"
 
 // The CHECK constraints (#321) and src/lib/statuses.ts must list the same values: a value only
 // in the code would be rejected by the database, one only in the database is dead.
@@ -33,5 +33,18 @@ describe("status value sets match the database CHECK constraints", () => {
 describe("organisation roles can be stored", () => {
   it.each([...ORG_ROLES])("%s is an allowed AdminUser.role", (role) => {
     expect(ADMIN_ROLES).toContain(role)
+  })
+})
+
+// #1142: the stored front-desk role is not an admin level (ORG_ROLES stays unchanged), but the
+// database accepts it because the owner screens create such accounts.
+describe("the front-desk role is stored without being an organisation role", () => {
+  it("is allowed by the CHECK constraint and by ADMIN_ROLES", () => {
+    expect(ADMIN_ROLES).toContain(FRONT_DESK_ROLE)
+    expect([...ADMIN_ROLES]).toContain("front_desk")
+  })
+
+  it("is not offered by the team pickers", () => {
+    expect([...ORG_ROLES]).not.toContain(FRONT_DESK_ROLE)
   })
 })

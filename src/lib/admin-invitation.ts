@@ -18,6 +18,7 @@
 export type AdminEmailHolder = {
   organizationId: string | null
   isActive: boolean
+  role: string
   setupTokenHash: string | null
   setupTokenExpiresAt: Date | null
   /** Whether the row's organisation has at least one active administrator. */

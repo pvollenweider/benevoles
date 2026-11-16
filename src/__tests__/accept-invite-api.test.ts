@@ -270,6 +270,18 @@ describe("accept-invite: the link is consumed once, atomically", () => {
     expect(enqueued).toHaveLength(0)
   })
 
+  it("a front-desk account is activated without the organisers' welcome email, and product emails stay off", async () => {
+    findUnique.mockResolvedValue({ ...admin, role: "front_desk" })
+    const { POST } = await import("@/app/api/admin/accept-invite/route")
+    const res = await POST(post({ token: "front-desk-token", password }))
+    expect(res.status).toBe(200)
+    expect(update).toHaveBeenCalledWith(expect.objectContaining({ data: expect.objectContaining({ isActive: true, receiveProductUpdates: false }) }))
+    expect(enqueued).toHaveLength(0)
+    expect(delivered).toHaveLength(0)
+    expect(queryRaw).not.toHaveBeenCalled()
+    expect(orgUpdateMany).not.toHaveBeenCalled()
+  })
+
   it("a normal activation still queues exactly one welcome email", async () => {
     findUnique.mockResolvedValue(admin)
     const { POST } = await import("@/app/api/admin/accept-invite/route")

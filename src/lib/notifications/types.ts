@@ -23,6 +23,7 @@ export type NotificationKind =
   | "admin_notification"
   | "admin_invite"
   | "admin_welcome"
+  | "front_desk_invite"
   | "password_reset"
   | "waitlist_confirmation"
   | "waitlist_offered"

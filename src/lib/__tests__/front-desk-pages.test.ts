@@ -1,14 +1,16 @@
 import { describe, it, expect } from "vitest"
 import fs from "node:fs"
 import path from "node:path"
-import { FRONT_DESK_HOME, frontDeskRedirect, SESSIONLESS_ADMIN_PAGES } from "../front-desk-pages"
+import { FRONT_DESK_HOME, FRONT_DESK_EVENT_PREFIX, frontDeskRedirect, SESSIONLESS_ADMIN_PAGES } from "../front-desk-pages"
 import { authConfig } from "@/auth.config"
 
 // Front-desk access limited to one event (#1142): the pages such a session may open.
 describe("frontDeskRedirect", () => {
-  it("lets the landing page through, and nothing else of the admin", () => {
+  it("lets the landing page and one event's day-of page through, and nothing else of the admin", () => {
     expect(FRONT_DESK_HOME).toBe("/admin/front-desk")
     expect(frontDeskRedirect("/admin/front-desk")).toBeNull()
+    expect(FRONT_DESK_EVENT_PREFIX).toBe("/admin/front-desk/events/")
+    expect(frontDeskRedirect("/admin/front-desk/events/evt-fete-2027")).toBeNull()
     for (const page of ["/admin", "/admin/", "/admin/dashboard", "/admin/events", "/admin/events/evt-1", "/admin/events/evt-1/day-of", "/admin/members", "/admin/settings/admins", "/admin/account", "/admin/search", "/admin/two-factor"]) {
       expect(frontDeskRedirect(page), page).toBe("/admin/front-desk")
     }
@@ -25,7 +27,7 @@ describe("frontDeskRedirect", () => {
   })
 
   it("matches whole paths only: nothing is let through for starting like an allowed page", () => {
-    for (const page of ["/admin/front-desk/x", "/admin/front-desk-2", "/admin/login/x", "/admin/keep/../events", "/admin/front-desk/../events", "/admin/FRONT-DESK", "/admin/front-desk/"]) {
+    for (const page of ["/admin/front-desk/x", "/admin/front-desk-2", "/admin/login/x", "/admin/keep/../events", "/admin/front-desk/../events", "/admin/FRONT-DESK", "/admin/front-desk/", "/admin/front-desk/events", "/admin/front-desk/events/", "/admin/front-desk/events/evt-1/day-of", "/admin/front-desk/events/evt-1/x"]) {
       expect(frontDeskRedirect(page), page).toBe("/admin/front-desk")
     }
     expect(frontDeskRedirect("/admin/front-desk?x=1")).toBeNull()

@@ -134,6 +134,7 @@ export const KIND_LABELS: Record<NotificationKind, string> = {
   admin_notification: "Notification à l'équipe",
   admin_invite: "Invitation d'un organisateur",
   admin_welcome: "Bienvenue organisateur",
+  front_desk_invite: "Invitation à un accès accueil",
   password_reset: "Réinitialisation du mot de passe",
   waitlist_confirmation: "Liste d'attente : confirmation",
   waitlist_offered: "Liste d'attente : place proposée",
