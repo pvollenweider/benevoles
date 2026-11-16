@@ -56,6 +56,13 @@ export function operatorActionLabel(action: string): string {
   return (OPERATOR_ACTION_LABELS as Record<string, string>)[action] ?? action
 }
 
+/**
+ * Who decided, when the action can have several origins (#1371): the operator from the super
+ * admin space, or the automatic validation. Kept apart from `detail`, which is the human reason
+ * shown in the journal.
+ */
+export type OperatorLogSource = "operator" | "automatic"
+
 export type OperatorLogInput = {
   action: OperatorAction
   actor: { id?: string | null; name?: string | null; email?: string | null } | null | undefined
@@ -65,6 +72,8 @@ export type OperatorLogInput = {
   target: string
   /** The reason given, when there is one (suspension, block). */
   detail?: string | null
+  /** How the decision was taken, when it matters (automatic validation, #1371). */
+  source?: OperatorLogSource
 }
 
 /** The row to store. */
@@ -77,6 +86,7 @@ export function operatorLogData(input: OperatorLogInput) {
     entityId: input.entityId,
     target: input.target,
     detail: input.detail?.trim() || null,
+    ...(input.source ? { source: input.source } : {}),
   }
 }
 

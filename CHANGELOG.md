@@ -53,6 +53,7 @@ Format basé sur [Keep a Changelog](https://keepachangelog.com/fr/1.0.0/).
 
 ### Exploitation
 
+- Validation d'un espace : un seul point d'entrée transactionnel (`approveOrganization`, `src/lib/org-approval-server.ts`) pour la revue manuelle, partagé avec la validation automatique à venir ; le verrou de la ligne de l'organisation sérialise validation, refus et suspension, sans changement visible. <!-- interne -->
 - La limite mémoire de l'application passe de 512 Mi à 1 Gi (demande : 384 Mi), après l'arrêt du processus par manque de mémoire lors des rappels horaires du 16 novembre 2026. <!-- interne -->
 - Socle de l'accès accueil limité à un événement (#1142), sans rien de visible ni d'attribuable : rôle `front_desk` sans niveau d'administration, table `AdminEventAccess` (migration additive `20261117120000_admin_event_access`, une nouvelle table et rien d'autre), contrôle `requireFrontDeskOrOrganizer` sur le tableau « Jour J » et les actions de présence, refus du rôle partout ailleurs (routes, pages, `getOrgContext`), exclusion des emails automatiques et des listes d'administrateurs ; un test appelle chaque route admin avec ce rôle et exige un refus hors de ces deux routes. <!-- interne -->
 - Convention écrite dans `CONTRIBUTING.md` pour les paramètres et limites par organisation ; la limite de créneaux d'un ajout manuel n'a plus qu'une définition, partagée par ses deux routes (#653). <!-- interne -->

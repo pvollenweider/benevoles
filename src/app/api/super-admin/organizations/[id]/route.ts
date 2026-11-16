@@ -152,6 +152,10 @@ export async function PATCH(req: Request, { params }: { params: Promise<{ id: st
   }
 
   const result = await prisma.$transaction(async (tx) => {
+    // Lock order: a suspension takes the `Organization` row only (`FOR NO KEY UPDATE`) and locks
+    // no `AdminUser` row, so it cannot form a cycle with an account activation (which takes the
+    // account's `AdminUser` row first, then the organisation). It serialises with the approval and
+    // the refusal on the organisation row.
     // Decided again under the organisation's row lock (NO KEY UPDATE: the strength of the update itself), the one a self-service reactivation takes
     // too: a suspension committed since the read above is never undone by a reactivation decided
     // on the older state.

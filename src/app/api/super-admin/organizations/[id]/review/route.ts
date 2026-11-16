@@ -5,9 +5,9 @@ import { NextResponse } from "next/server"
 import { requireSuperAdmin } from "@/lib/auth-guard"
 import { prisma } from "@/lib/prisma"
 import { decideReview } from "@/lib/org-review"
-import { deliverAfterResponse, enqueueNotifications } from "@/lib/notifications/outbox"
-import { logOperator, organizationTarget } from "@/lib/operator-log"
-import { ORG_ACCOUNT_ROLE_WHERE } from "@/lib/permissions"
+import { approveOrganization } from "@/lib/org-approval-server"
+import { refuseOrganization } from "@/lib/org-refusal-server"
+import { deliverAfterResponse } from "@/lib/notifications/outbox"
 
 /**
  * Review of a space awaiting validation (#810, part 4c), from its super admin page, never from a
@@ -22,7 +22,7 @@ export async function POST(req: Request, { params }: { params: Promise<{ id: str
 
   const org = await prisma.organization.findUnique({
     where: { id },
-    select: { id: true, name: true, slug: true, active: true, suspendedAt: true, publicationApprovedAt: true, outboundEmailApprovedAt: true },
+    select: { id: true, active: true, suspendedAt: true, publicationApprovedAt: true, outboundEmailApprovedAt: true },
   })
   if (!org) return NextResponse.json({ error: "Organisation non trouvée" }, { status: 404 })
 
@@ -30,33 +30,36 @@ export async function POST(req: Request, { params }: { params: Promise<{ id: str
   if (!outcome.ok) return NextResponse.json({ error: outcome.error }, { status: outcome.status })
 
   if (outcome.decision === "refuse") {
-    await prisma.$transaction(async (tx) => {
-      // Admins are only SET NULL by the organisation's deletion: removed with it, as the cleanup does.
-      await tx.adminUser.deleteMany({ where: { organizationId: id } })
-      await tx.organization.delete({ where: { id } })
-      // The organisation's own log goes with it: the decision is kept in the operator's log.
-      await logOperator(tx, { action: "organization.refused", actor: guard.session.user, entityType: "Organization", entityId: id, target: organizationTarget(org) })
-    })
+    // The refusal's transactional part lives in src/lib/org-refusal-server.ts: the integration
+    // test calls the same function outside HTTP. Its lock order (administrator rows first, then
+    // the organisation) is documented there.
+    const refusal = await prisma.$transaction((tx) => refuseOrganization(tx, {
+      organizationId: id,
+      actor: guard.session.user,
+    }))
+    if (!refusal.refused) return NextResponse.json({ error: refusal.error }, { status: refusal.status })
     return NextResponse.json({ ok: true, decision: "refuse" })
   }
 
-  const base = (process.env.NEXT_PUBLIC_APP_URL ?? "http://localhost:3000").replace(/\/+$/, "")
-  const ids = await prisma.$transaction(async (tx) => {
-    await tx.organization.update({ where: { id }, data: outcome.update })
-    await tx.orgLog.create({
-      data: { organizationId: id, actorType: "admin", actorId: guard.session.user?.id ?? null, action: "organization.approved", entityType: "Organization", entityId: id },
-    })
-    await logOperator(tx, { action: "organization.approved", actor: guard.session.user, entityType: "Organization", entityId: id, target: organizationTarget(org) })
-    // The administrators are told, not a front-desk account (#1142).
-    const admins = await tx.adminUser.findMany({ where: { organizationId: id, ...ORG_ACCOUNT_ROLE_WHERE }, select: { email: true, name: true } })
-    return enqueueNotifications(admins.map((a) => ({
-      kind: "space_approved" as const,
-      organizationId: id,
-      recipient: { email: a.email, name: a.name },
-      dedupeKey: `space_approved:${id}:${a.email}`,
-      data: { adminName: a.name, organizationName: org.name, adminUrl: `${base}/admin/events` },
-    })), tx)
-  })
-  deliverAfterResponse(ids)
+  // The shared validation (#1371): the operator's review and the future scheduled run call the
+  // very same function. It writes only on a successful conditional grant.
+  const result = await prisma.$transaction((tx) => approveOrganization(tx, {
+    organizationId: id,
+    actor: {
+      type: "operator",
+      id: guard.session.user?.id ?? null,
+      label: guard.session.user?.name?.trim() || guard.session.user?.email?.trim() || null,
+    },
+    now: outcome.update.publicationApprovedAt,
+  }))
+
+  if (!result.approved) {
+    // Same responses as today for a space no longer awaiting validation; the race with a refusal
+    // or a suspension ends here instead of writing a second time.
+    if (result.reason === "not_found") return NextResponse.json({ error: "Organisation non trouvée" }, { status: 404 })
+    return NextResponse.json({ error: "Cet espace n'est pas en attente de validation." }, { status: 409 })
+  }
+
+  deliverAfterResponse(result.outboxIds)
   return NextResponse.json({ ok: true, decision: "approve" })
 }

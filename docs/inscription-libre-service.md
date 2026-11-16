@@ -31,6 +31,10 @@ Les deux autorisations sont séparées pour pouvoir, plus tard, les accorder une
 - **Refuser et supprimer** : l'espace est supprimé avec ses comptes, sans email.
 - **Journal de l'opérateur** (`/super-admin/journal`) : chaque décision (valider, refuser, suspendre, désactiver, supprimer, bloquer, débloquer) y reste, avec son auteur et sa raison, même quand l'espace a été supprimé depuis.
 
+## Note développeur : un seul point d'entrée
+
+La validation d'un espace passe par `approveOrganization` (`src/lib/org-approval-server.ts`), appelée dans la transaction de la route de revue (`POST /api/super-admin/organizations/[id]/review`) : c'est le point d'entrée unique, que la validation automatique à venir réutilisera. La fonction accorde les deux autorisations (`publicationApprovedAt`, `outboundEmailApprovedAt`) par une écriture conditionnelle — espace actif, non suspendu, au moins une des deux encore vide (un espace est en attente dès qu'une autorisation manque) — et remplit toujours les deux horodatages, comme le faisait la route avant ce changement. Puis elle écrit le journal de l'organisation, celui de l'opérateur et met en file les emails « Votre espace est activé » aux administrateurs (hors accueil, #1142). Une écriture qui ne trouve aucune ligne ne produit ni journal ni email : elle rend `not_found`, `already_approved` (les deux autorisations déjà accordées), `inactive` ou `suspended`. Le refus et l'activation d'un compte prennent leurs verrous dans le même ordre : d'abord les lignes `AdminUser` de l'organisation (par identifiant), puis la ligne `Organization` ; la validation ne prend que la ligne `Organization` (elle lit les administrateurs sans les verrouiller) et la suspension aussi (`FOR NO KEY UPDATE`, sans verrou `AdminUser`). Ces ordres ne forment donc pas de cycle : une validation, un refus, une suspension et une activation simultanés s'attendent ou s'excluent, sans interblocage.
+
 ## Indicateurs
 
 « Statistiques » (`/super-admin/stats`), section « Inscription en libre-service » (`src/lib/signup-indicators.ts`, requêtes dans `loadSignupFacts`, `src/lib/usage-stats.ts`) : ce qui dit si la validation à la main reste nécessaire.

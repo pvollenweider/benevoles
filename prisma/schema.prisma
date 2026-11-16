@@ -1986,6 +1986,9 @@ model OperatorLog {
   entityId   String
   target     String
   detail     String?
+  // How the decision was taken when several origins are possible: "operator" (the super admin
+  // space) or "automatic" (the scheduled validation, #1371). Null for every other action.
+  source     String?
   createdAt  DateTime @default(now())
 
   @@index([createdAt])
