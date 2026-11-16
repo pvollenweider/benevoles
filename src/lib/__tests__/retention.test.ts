@@ -21,6 +21,13 @@ describe("retention policy", () => {
     expect(cron).not.toMatch(/\d+\s*\*\s*24\s*\*\s*60\s*\*\s*60\s*\*\s*1000/)
   })
 
+  it("has the front-desk account entry (#1142), and the purge reads its own duration from it", () => {
+    const entry = RETENTION.find((e) => e.data.startsWith("Compte d'accès accueil"))
+    expect(entry?.public).toBe(true)
+    expect(entry?.duration).toContain(`${RETENTION_DAYS.frontDeskAccount} jours`)
+    expect(read("src/lib/front-desk-purge.ts")).toContain("RETENTION_DAYS.frontDeskAccount")
+  })
+
   it("matches the backup rotation of the CronJobs", () => {
     expect(read("k8s/cronjob-backup.yaml")).toContain(`-mtime +${RETENTION_DAYS.localBackup}`)
     expect(read("k8s/cronjob-backup-offsite.yaml")).toContain(`--min-age ${RETENTION_DAYS.offsiteBackup}d`)

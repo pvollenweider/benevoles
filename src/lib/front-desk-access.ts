@@ -11,6 +11,7 @@
 import { prisma } from "./prisma"
 import { FRONT_DESK_ROLE } from "./permissions"
 import { orgTimeZone, localDateTimeToUtc } from "./time-zone"
+import { DAY_MS, RETENTION_DAYS } from "./retention"
 import type { OrgScopedPrisma } from "./prisma-org"
 
 export type GrantFacts = { revokedAt: Date | null; expiresAt: Date | null }
@@ -73,6 +74,59 @@ export function isGrantLive(grant: GrantFacts | null | undefined, event: GrantEv
   if (now.getTime() >= frontDeskAccessEnd(event).getTime()) return false
   if (grant.expiresAt && grant.expiresAt.getTime() <= now.getTime()) return false
   return true
+}
+
+/** What a purge decision needs of one access: the moments that can end it. */
+export type FrontDeskAccessEndFacts = {
+  revokedAt: Date | null
+  expiresAt: Date | null
+  event: { endDate: Date }
+}
+
+/**
+ * The instant one access ends: the earliest of its revocation, its expiry, and its event's end
+ * (06:00 local the day after the last day, the same instant isGrantLive uses). Revoked, expired
+ * and event-ended accesses all end this way, whatever the reason.
+ */
+export function frontDeskAccessEndAt(access: FrontDeskAccessEndFacts, timeZone: string): Date {
+  const eventEnd = frontDeskAccessEnd({ endDate: access.event.endDate, timeZone })
+  return new Date(Math.min(
+    access.revokedAt?.getTime() ?? Number.POSITIVE_INFINITY,
+    access.expiresAt?.getTime() ?? Number.POSITIVE_INFINITY,
+    eventEnd.getTime(),
+  ))
+}
+
+/** What a purge decision needs of a front-desk account (#1142). */
+export type FrontDeskAccountPurgeFacts = {
+  createdAt: Date
+  accesses: readonly FrontDeskAccessEndFacts[]
+}
+
+export type FrontDeskAccountPurgeDecision = {
+  /** The latest end among the accesses, or the account's creation when it has none. */
+  referenceAt: Date
+  /** Whether the retention window has passed: strictly more than 90 days after `referenceAt`. */
+  due: boolean
+}
+
+/**
+ * Whether a front-desk account may be deleted (#1142, owner decision of 2026-11-16): every one
+ * of its accesses is over, and the LATEST of their ends is more than RETENTION_DAYS.frontDeskAccount
+ * days before `now`. A live access keeps the account; an access that ended exactly 90 days ago
+ * keeps it until the next millisecond; an account with no access at all counts from its creation.
+ * Pure: the zone is passed in (the organisation's), and reads no clock.
+ */
+export function frontDeskAccountPurgeDecision(
+  account: FrontDeskAccountPurgeFacts,
+  timeZone: string,
+  now: Date,
+): FrontDeskAccountPurgeDecision {
+  const referenceAt = account.accesses.length === 0
+    ? account.createdAt
+    : new Date(Math.max(...account.accesses.map((access) => frontDeskAccessEndAt(access, timeZone).getTime())))
+  const deadline = referenceAt.getTime() + RETENTION_DAYS.frontDeskAccount * DAY_MS
+  return { referenceAt, due: now.getTime() > deadline }
 }
 
 export type FrontDeskGrant = {

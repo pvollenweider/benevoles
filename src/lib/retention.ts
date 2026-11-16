@@ -24,6 +24,10 @@ export const RETENTION_DAYS = {
   deactivatedOrganization: 30,
   /** Admin invitation never accepted, counted from its last send (a removed admin is deleted at once). */
   deactivatedAdmin: 30,
+  /** Front-desk account (#1142) once every one of its accesses is over, counted from the latest
+   * end among them; a never-activated account follows the same rule. No access at all: counted
+   * from the account's creation. */
+  frontDeskAccount: 90,
   /** A notification that failed for good, kept to investigate. */
   failedNotification: 30,
   /** Absorbed record of a member merge (#600): an inactive tombstone (`mergedIntoId` set, every
@@ -326,6 +330,15 @@ export const RETENTION: readonly RetentionEntry[] = [
     duration: `effacées ${d.deactivatedAdmin} jours après leur dernier envoi`,
     trigger: "invitation ou renvoi",
     mechanism: "nettoyage quotidien (cron cleanup)",
+    backups: inBackups,
+    public: true,
+  },
+  {
+    data: "Compte d'accès accueil d'un événement (nom, adresse email, mot de passe haché) et son droit, une fois tous ses accès terminés",
+    purpose: "Permettre à une personne extérieure à l'équipe de marquer les présences d'un seul événement",
+    duration: `effacé ${d.frontDeskAccount} jours après la fin de son dernier accès (le plus tardif de ses droits) ; la fin d'un droit est la première de sa révocation, de son échéance et de la fin de l'événement, et un compte sans accès est effacé ${d.frontDeskAccount} jours après sa création ; un compte jamais activé suit la même règle`,
+    trigger: "fin du dernier accès du compte",
+    mechanism: "nettoyage quotidien (cron cleanup) ; le droit est supprimé avec le compte",
     backups: inBackups,
     public: true,
   },

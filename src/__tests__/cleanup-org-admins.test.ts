@@ -81,7 +81,9 @@ describe("nightly cleanup of deactivated organizations", () => {
     m.orgFindMany.mockResolvedValue([])
     await run()
     expect(m.orgDeleteMany).not.toHaveBeenCalled()
-    expect(m.adminFindMany).not.toHaveBeenCalled()
+    // The front-desk purge reads AdminUser too; step 1's own read of its organisations' admins is
+    // the one that must not happen.
+    expect(m.adminFindMany).not.toHaveBeenCalledWith({ where: { organizationId: { in: ["org-old"] } }, select: { id: true } })
   })
 
   it("also sweeps org accounts orphaned by earlier cleanups, never the super admin", async () => {
