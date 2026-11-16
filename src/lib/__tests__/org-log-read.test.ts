@@ -47,6 +47,26 @@ describe("listOrgLogs", () => {
     expect(entries[0].actorLabel).toBe("Admin (compte supprimé)")
   })
 
+  it("names an automatic approval « Validation automatique » in the activity sentence", async () => {
+    findMany.mockResolvedValue([
+      {
+        id: "log-auto", actorType: "system", actorId: null, action: "organization.approved",
+        entityType: "Organization", entityId: "org-a",
+        changes: { source: { from: null, to: "automatic" } }, createdAt: new Date(),
+      },
+    ])
+    const { entries } = await listOrgLogs("org-a")
+    expect(entries[0].actorLabel).toBe("Validation automatique")
+  })
+
+  it("keeps the system label for an approval with no source (older entries)", async () => {
+    findMany.mockResolvedValue([
+      { id: "log-old", actorType: "system", actorId: null, action: "organization.approved", entityType: "Organization", entityId: "org-a", changes: null, createdAt: new Date() },
+    ])
+    const { entries } = await listOrgLogs("org-a")
+    expect(entries[0].actorLabel).toBe("Système")
+  })
+
   it("paginates via nextCursor when there are more rows than the limit", async () => {
     const rows = Array.from({ length: 3 }, (_, i) => ({
       id: `log-${i}`, actorType: "system", actorId: null, action: "member.created",

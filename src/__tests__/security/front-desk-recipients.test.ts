@@ -137,7 +137,7 @@ describe("every query that selects admin accounts is classified (#1142)", () => 
     "app/admin/settings/admins/page.tsx",
     "app/api/admin/settings/admins/route.ts",
     "app/api/super-admin/organizations/[id]/send-invite/route.ts",
-    "app/api/super-admin/organizations/[id]/review/route.ts",
+    "lib/org-approval-server.ts",
   ])("%s uses the shared role filter", (file) => {
     expect(fs.readFileSync(path.join(src, file), "utf-8")).toContain("ORG_ACCOUNT_ROLE_WHERE")
     expect(unfiltered.has(file)).toBe(false)

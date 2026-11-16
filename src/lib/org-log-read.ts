@@ -7,6 +7,7 @@
  * causal chain, no narrative/replay modes.
  */
 import { prisma } from "./prisma"
+import { AUTOMATIC_APPROVAL_LABEL } from "./org-approval"
 
 export interface OrgLogEntry {
   id: string
@@ -42,6 +43,16 @@ export function entityTypeLabel(entityType: string): string {
   return ENTITY_TYPE_LABEL[entityType] ?? entityType
 }
 
+/**
+ * An approval made automatically has no account, only a system actor (#1371): the sentence reads
+ * « Validation automatique a validé l'espace » instead of « Système a validé l'espace ».
+ */
+export function automaticApprovalEntry(row: { action: string; changes: unknown }): boolean {
+  if (row.action !== "organization.approved") return false
+  const source = (row.changes as { source?: { to?: unknown } } | null)?.source?.to
+  return source === "automatic"
+}
+
 export async function listOrgLogs(organizationId: string, filters: OrgLogFilters = {}): Promise<{
   entries: OrgLogEntry[]
   nextCursor: string | null
@@ -72,7 +83,9 @@ export async function listOrgLogs(organizationId: string, filters: OrgLogFilters
     id: row.id,
     actorType: row.actorType,
     actorId: row.actorId,
-    actorLabel: (row.actorType === "admin" && row.actorId && adminNames.get(row.actorId)) || GENERIC_LABEL[row.actorType] || row.actorType,
+    actorLabel: automaticApprovalEntry(row)
+      ? AUTOMATIC_APPROVAL_LABEL
+      : (row.actorType === "admin" && row.actorId && adminNames.get(row.actorId)) || GENERIC_LABEL[row.actorType] || row.actorType,
     action: row.action,
     entityType: row.entityType,
     entityId: row.entityId,

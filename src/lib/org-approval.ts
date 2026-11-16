@@ -17,6 +17,12 @@
 
 export type OrgApprovals = { publicationApprovedAt: Date | string | null; outboundEmailApprovedAt: Date | string | null }
 
+/**
+ * The author label of an approval made by the scheduled job (#1371): it has no account, so its
+ * log entries say « Validation automatique » instead of a name.
+ */
+export const AUTOMATIC_APPROVAL_LABEL = "Validation automatique"
+
 export function canPublish(org: Pick<OrgApprovals, "publicationApprovedAt">): boolean {
   return !!org.publicationApprovedAt
 }
