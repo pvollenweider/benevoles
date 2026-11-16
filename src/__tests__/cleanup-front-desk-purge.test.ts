@@ -52,18 +52,31 @@ beforeEach(() => {
   m.adminDeleteMany.mockResolvedValue({ count: 0 })
   m.adminFindMany.mockResolvedValue([])
   m.videoFeedbackDeleteMany.mockResolvedValue({ count: 0 })
-  m.purge.mockResolvedValue({ deleted: 0 })
+  m.purge.mockResolvedValue({ deleted: 0, failed: 0 })
 })
 
 describe("nightly cleanup of front-desk accounts (#1142)", () => {
   it("puts the step's count, and only a count, in the summary", async () => {
-    m.purge.mockResolvedValue({ deleted: 3 })
+    m.purge.mockResolvedValue({ deleted: 3, failed: 0 })
     const res = await run()
     expect(res.status).toBe(200)
     const body = await res.json()
     expect(body.deleted.frontDeskAccounts).toBe(3)
+    expect(body.deleted.frontDeskAccountsFailed).toBe(0)
     expect(JSON.stringify(body)).not.toMatch(/colette|example\.org/i)
     expect(m.purge).toHaveBeenCalledTimes(1)
+  })
+
+  it("reports the count really deleted when some accounts failed", async () => {
+    m.purge.mockResolvedValue({ deleted: 2, failed: 1 })
+    const res = await run()
+    const body = await res.json()
+    // The per-account failure is counted by the purge and reported there; the step's own count
+    // stays what was really deleted, never zero and never 3.
+    expect(body.deleted.frontDeskAccounts).toBe(2)
+    expect(body.deleted.frontDeskAccountsFailed).toBe(1)
+    expect(m.report).not.toHaveBeenCalledWith("cleanup.front_desk_accounts", expect.anything())
+    expect(m.report).not.toHaveBeenCalledWith("frontdesk.account_purge", expect.anything())
   })
 
   it("keeps a never-activated front-desk account out of the 30-day invitation sweep", async () => {
@@ -83,6 +96,8 @@ describe("nightly cleanup of front-desk accounts (#1142)", () => {
     expect(m.report).toHaveBeenCalledWith("cleanup.front_desk_accounts", expect.any(Error))
     // Step 6c (anonymous video feedback) still runs, and the summary is still returned.
     expect(m.videoFeedbackDeleteMany).toHaveBeenCalled()
-    expect((await res.json()).deleted.frontDeskAccounts).toBe(0)
+    const body = await res.json()
+    expect(body.deleted.frontDeskAccounts).toBe(0)
+    expect(body.deleted.frontDeskAccountsFailed).toBe(0)
   })
 })

@@ -14,6 +14,7 @@
 import { describe, it, expect, beforeAll, afterAll } from "vitest"
 import { prisma } from "@/lib/prisma"
 import { purgeDueFrontDeskAccounts } from "@/lib/front-desk-purge"
+import { frontDeskInviteDedupeKey } from "@/lib/front-desk-access"
 import { DAY_MS } from "@/lib/retention"
 
 const url = process.env.DATABASE_URL
@@ -28,6 +29,9 @@ describe.skipIf(!url)("front-desk account purge (#1142)", () => {
   let dueAccountId = ""
   let keptAccountId = ""
   let organizerId = ""
+  let dueOutboxKey = ""
+  let keptOutboxKey = ""
+  let otherKindOutboxKey = ""
 
   beforeAll(async () => {
     orgId = (await prisma.organization.create({ data: { name: `Comité ${tag}`, slug: tag } })).id
@@ -56,18 +60,34 @@ describe.skipIf(!url)("front-desk account purge (#1142)", () => {
     organizerId = (await prisma.adminUser.create({
       data: { organizationId: orgId, email: `${tag}-owner@example.org`, name: "Organisateur Intact", passwordHash: "x", role: "organizer", isActive: true },
     })).id
+
+    // Queued invitations: the purged account's row must go with it, another account's row of the
+    // same kind and another kind must stay.
+    dueOutboxKey = frontDeskInviteDedupeKey(orgId, dueAccountId, "due-setup-token-hash")
+    keptOutboxKey = frontDeskInviteDedupeKey(orgId, keptAccountId, "kept-setup-token-hash")
+    otherKindOutboxKey = `admin_invite:${orgId}:${dueAccountId}:other`
+    await prisma.notificationOutbox.createMany({
+      data: [
+        { organizationId: orgId, dedupeKey: dueOutboxKey, payload: { kind: "front_desk_invite" } },
+        { organizationId: orgId, dedupeKey: keptOutboxKey, payload: { kind: "front_desk_invite" } },
+        { organizationId: orgId, dedupeKey: otherKindOutboxKey, payload: { kind: "admin_invite" } },
+      ],
+    })
   })
 
   afterAll(async () => {
     // No row left behind: the accounts first (their grants cascade), then the organisation and its
     // events, which cascades to its logs.
+    await prisma.notificationOutbox.deleteMany({ where: { organizationId: orgId } })
     await prisma.adminUser.deleteMany({ where: { email: { startsWith: tag } } })
     await prisma.organization.deleteMany({ where: { slug: tag } })
     await prisma.$disconnect()
   })
 
-  it("deletes only the account whose access ended more than 90 days ago, with its grant and a log entry without its identity", async () => {
-    await expect(purgeDueFrontDeskAccounts(NOW)).resolves.toEqual({ deleted: 1 })
+  it("deletes only the account whose access ended more than 90 days ago, with its grant, its queued invitation and a log entry without its identity", async () => {
+    // Scoped to this fixture's organisation: a shared database must not have unrelated accounts
+    // purged, and the count must not depend on another fixture.
+    await expect(purgeDueFrontDeskAccounts(NOW, undefined, [orgId])).resolves.toEqual({ deleted: 1, failed: 0 })
 
     // The due account and its grant are gone (onDelete: Cascade).
     expect(await prisma.adminUser.findUnique({ where: { id: dueAccountId } })).toBeNull()
@@ -85,5 +105,17 @@ describe.skipIf(!url)("front-desk account purge (#1142)", () => {
     const serialized = JSON.stringify(log)
     expect(serialized).not.toContain("Colette Due")
     expect(serialized).not.toContain(`${tag}-due@example.org`)
+
+    // The queued invitation of the purged account is gone; another account's row of the same kind,
+    // and another kind, stay.
+    expect(await prisma.notificationOutbox.findUnique({ where: { dedupeKey: dueOutboxKey } })).toBeNull()
+    expect(await prisma.notificationOutbox.findUnique({ where: { dedupeKey: keptOutboxKey } })).not.toBeNull()
+    expect(await prisma.notificationOutbox.findUnique({ where: { dedupeKey: otherKindOutboxKey } })).not.toBeNull()
+  })
+
+  it("deletes nothing on a second run", async () => {
+    await expect(purgeDueFrontDeskAccounts(NOW, undefined, [orgId])).resolves.toEqual({ deleted: 0, failed: 0 })
+    expect(await prisma.notificationOutbox.findUnique({ where: { dedupeKey: keptOutboxKey } })).not.toBeNull()
+    expect(await prisma.notificationOutbox.findUnique({ where: { dedupeKey: otherKindOutboxKey } })).not.toBeNull()
   })
 })

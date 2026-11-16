@@ -24,6 +24,8 @@ const fake = vi.hoisted(() => {
     failGrantUpdateMany: false,
     // Simulates a POST re-opening the grant between DELETE's first read and the account lock.
     reopenBeforeLock: false,
+    // Simulates the purge winning the lock race: the account read above is gone under the lock.
+    vanishedBeforeLock: false,
   }
 
   function matches(row: R | null | undefined, where: unknown): boolean {
@@ -172,6 +174,10 @@ const fake = vi.hoisted(() => {
           const grant = state.grants.find((g) => g.id === "grant-1")
           if (grant) grant.revokedAt = null
         }
+        if (state.vanishedBeforeLock) {
+          state.vanishedBeforeLock = false
+          return []
+        }
         return [{ id: "locked" }]
       }
       if (name === "$transaction") return async (arg: unknown) => {
@@ -230,6 +236,7 @@ function seed() {
   s.forcePendingUpdateZero = false
   s.failGrantUpdateMany = false
   s.reopenBeforeLock = false
+  s.vanishedBeforeLock = false
   s.organizations = [
     { id: ORG, name: "Fête du village", active: true, outboundEmailApprovedAt: new Date("2026-01-01T00:00:00Z"), slug: "fete", timeZone: "Europe/Zurich" },
     { id: OTHER_ORG, name: "Tournoi", active: true, outboundEmailApprovedAt: new Date("2026-01-01T00:00:00Z"), slug: "tournoi", timeZone: "Europe/Zurich" },
@@ -344,6 +351,8 @@ describe("POST front-desk-access", () => {
     expect(payload).toMatchObject({ kind: "front_desk_invite", organizationId: ORG, recipient: { email: "lea.favre@example.org", name: "Léa Favre" } })
     expect(payload.data).toMatchObject({ eventTitle: "Fête du village", eventDates: "du 12 juin 2027 au 14 juin 2027", untilLabel: "14 juin 2027", inviterName: "Sacha Bonvin" })
     expect(payload.data.inviteUrl).toMatch(/^https:\/\/app\.benevol\.test\/admin\/accept-invite\?token=[a-f0-9]{64}$/)
+    // The key links the queued invitation to its account for the purge (#1142).
+    expect(payload.dedupeKey).toMatch(new RegExp(`^front_desk_invite:${ORG}:${admin.id}:`))
     expect(deliver).toHaveBeenCalledWith(["outbox-1"])
     expect(logEvent).toHaveBeenCalledWith(expect.objectContaining({ eventId: EVENT, action: "frontdesk.access_granted", entityId: grant.id, actor: { type: "admin", id: "adm-owner" } }))
   })
@@ -423,6 +432,28 @@ describe("POST front-desk-access", () => {
     expect(fake.state.grants).toEqual([])
     expect(fake.state.admins.find((a) => a.id === "adm-lea")!.setupTokenHash).toBe("old-hash")
     expect(logEvent).not.toHaveBeenCalled()
+  })
+
+  it("answers a retryable failure when the purge deletes the known account under the lock, not a false 202", async () => {
+    fake.state.admins.push({
+      id: "adm-lea", organizationId: ORG, name: "Léa Favre", email: "lea.favre@example.org", role: "front_desk",
+      isActive: true, sessionVersion: 0,
+    })
+    // This account was in the owner's list: the purge won the lock after the lookup.
+    fake.state.vanishedBeforeLock = true
+    const res = await call("POST", "events/[id]/front-desk-access", body)
+    expect(res.status).toBe(500)
+    expect(await res.json()).toEqual({ error: "L'accès n'a pas pu être ajouté. Rien n'a été modifié. Réessayez.", notApplied: true })
+    expect(fake.state.grants).toEqual([])
+    expect(enqueue).not.toHaveBeenCalled()
+    expect(logEvent).not.toHaveBeenCalled()
+
+    // A second attempt is safe: the account is gone, so it invites the person afresh.
+    fake.state.admins = []
+    const retry = await call("POST", "events/[id]/front-desk-access", body)
+    expect(retry.status).toBe(202)
+    expect(fake.state.admins.filter((a) => a.email === "lea.favre@example.org")).toHaveLength(1)
+    expect(fake.state.grants).toHaveLength(1)
   })
 
   it("an activated then deactivated front-desk account is refused openly, and nothing is written", async () => {
@@ -510,6 +541,8 @@ describe("POST front-desk-access/[accessId]/resend", () => {
     const res = await call("POST", "events/[id]/front-desk-access/[accessId]/resend")
     expect(res.status).toBe(200)
     expect(enqueue).toHaveBeenCalledTimes(1)
+    // Each resend has its own nonce, so the outbox keeps it as a new row for the same account.
+    expect(enqueue.mock.calls[0][0][0].dedupeKey).toMatch(/^front_desk_invite:org-fete:adm-lea:/)
     expect(logEvent).toHaveBeenCalledWith(expect.objectContaining({ action: "frontdesk.invitation_resent", entityId: "grant-1" }))
   })
 

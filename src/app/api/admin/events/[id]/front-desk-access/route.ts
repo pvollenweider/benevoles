@@ -30,6 +30,7 @@ import {
   FRONT_DESK_INVITES_PER_DAY,
   formatFrontDeskDay,
   frontDeskAccessEnd,
+  frontDeskInviteDedupeKey,
   listEventFrontDeskAccesses,
 } from "@/lib/front-desk-access"
 
@@ -45,6 +46,15 @@ const postSchema = z.object({
 
 /** The same answer whether the invitation was created, the grant re-opened, or nothing changed. */
 const ACCEPTED = () => NextResponse.json({ accepted: true }, { status: 202 })
+
+/**
+ * The transaction did not apply (rolled back, or the account vanished under the lock): the owner
+ * may retry, and a retry is safe. Never a success, which would leave nothing created or re-opened.
+ */
+const NOT_APPLIED = () => NextResponse.json(
+  { error: "L'accès n'a pas pu être ajouté. Rien n'a été modifié. Réessayez.", notApplied: true },
+  { status: 500 },
+)
 
 const generateToken = () => randomBytes(32).toString("hex")
 
@@ -146,6 +156,7 @@ export async function POST(req: Request, { params }: { params: Promise<{ id: str
   // A new account always gets a link; so does a never-activated front-desk account when it is
   // invited again. An activated account already has its password and gets none.
   const setupToken = !holder || isNeverActivated(holder) ? generateToken() : null
+  const setupTokenHash = setupToken ? hashToken(setupToken) : null
   // An activated account follows the no-link path above, but pays the same one-hash fixed cost
   // as a free address (#1142), so response time does not reveal that the address is taken.
   if (holder?.isActive) await bcrypt.hash(randomBytes(16).toString("hex"), 10)
@@ -154,9 +165,12 @@ export async function POST(req: Request, { params }: { params: Promise<{ id: str
   const inviteUrl = setupToken ? `${apexBaseUrl()}/admin/accept-invite?token=${setupToken}` : null
   const inviterName = guard.session.user?.name?.trim() || "Un propriétaire de l'organisation"
 
-  const payload = (adminName: string) => ({
+  const payload = (adminName: string, adminId: string) => ({
     kind: "front_desk_invite" as const,
     organizationId,
+    // The purge deletes an account's queued invitations by this key (#1142). The nonce is the
+    // setup-token hash, so a resend is a new row instead of being skipped as already queued.
+    dedupeKey: frontDeskInviteDedupeKey(organizationId, adminId, setupTokenHash ?? ""),
     recipient: { email, name: adminName },
     data: {
       adminName,
@@ -183,7 +197,7 @@ export async function POST(req: Request, { params }: { params: Promise<{ id: str
             role: FRONT_DESK_ROLE,
             isActive: false,
             receiveProductUpdates: false,
-            setupTokenHash: setupToken ? hashToken(setupToken) : null,
+            setupTokenHash,
             setupTokenExpiresAt,
           },
           select: { id: true },
@@ -192,7 +206,7 @@ export async function POST(req: Request, { params }: { params: Promise<{ id: str
           data: { adminUserId: admin.id, eventId, organizationId, createdById: guard.session.user?.id ?? null, expiresAt },
           select: { id: true },
         })
-        const outboxIds = inviteUrl ? await enqueueNotifications([payload(name)], tx) : []
+        const outboxIds = inviteUrl ? await enqueueNotifications([payload(name, admin.id)], tx) : []
         return { adminId: admin.id, grantId: grant.id, invitationSent: !!inviteUrl, outboxIds }
       })
       outcome = { ...created, reopened: false }
@@ -221,16 +235,20 @@ export async function POST(req: Request, { params }: { params: Promise<{ id: str
           // happened since the read matches no row, so no setup link lands on an active account.
           const { count } = await tx.adminUser.updateMany({
             where: { id: holder.id, organizationId, ...NEVER_ACTIVATED_WHERE },
-            data: { setupTokenHash: hashToken(setupToken), setupTokenExpiresAt, receiveProductUpdates: false },
+            data: { setupTokenHash, setupTokenExpiresAt, receiveProductUpdates: false },
           })
           if (count === 1) {
             invitationSent = true
-            outboxIds = await enqueueNotifications([payload(name)], tx)
+            outboxIds = await enqueueNotifications([payload(name, holder.id)], tx)
           }
         }
         return { adminId: holder.id, grantId: grant.id, reopened, invitationSent, outboxIds }
       })
-      if (!existingOutcome) return ACCEPTED()
+      // The account this owner already knew (same organisation, read above) disappeared under the
+      // lock: the purge won the race. Nothing was created, so never answer the neutral 202 that
+      // means « accepted »; a second attempt simply invites the person afresh. The hidden 202 path
+      // (an address held elsewhere) is before this transaction and unchanged.
+      if (!existingOutcome) return NOT_APPLIED()
       outcome = existingOutcome
     }
   } catch (e) {
@@ -240,7 +258,7 @@ export async function POST(req: Request, { params }: { params: Promise<{ id: str
     // The transaction rolled back. Never report success: the owner can retry, and a retry is safe
     // (the grant and the link are written together).
     reportError("frontdesk.access_grant")(e)
-    return NextResponse.json({ error: "L'accès n'a pas pu être ajouté. Rien n'a été modifié. Réessayez.", notApplied: true }, { status: 500 })
+    return NOT_APPLIED()
   }
   deliverAfterResponse(outcome.outboxIds)
 

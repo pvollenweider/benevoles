@@ -21,13 +21,19 @@
  *
  * Every deletion writes one OrgLog entry with a system actor, naming neither the person nor their
  * address: « un compte d'accès accueil » in the action label, and the event's title in `changes`.
+ *
+ * One account's failure never stops the others: a timeout, a deadlock or a failed log insert
+ * rolls back that transaction alone, is reported under its own name, and the loop goes on. The
+ * result always carries both counts (`deleted`, `failed`), so the cleanup reports what it really
+ * deleted even when some accounts failed.
  */
 import type { Prisma } from "@/generated/prisma/client"
 import { prisma } from "./prisma"
 import { FRONT_DESK_ROLE } from "./permissions"
 import { DAY_MS, daysAgo, RETENTION_DAYS } from "./retention"
 import { orgTimeZone } from "./time-zone"
-import { frontDeskAccessEndAt, frontDeskAccountPurgeDecision } from "./front-desk-access"
+import { reportError } from "./report-error"
+import { frontDeskAccessEndAt, frontDeskAccountPurgeDecision, frontDeskInviteDedupePrefix } from "./front-desk-access"
 
 /** Accounts read, decided and deleted per batch: never the whole table at once (#1369). */
 export const FRONT_DESK_PURGE_BATCH = 100
@@ -50,6 +56,9 @@ export type FrontDeskPurgeTx = {
     findFirst(args: unknown): Promise<FrontDeskPurgeCandidate | null>
     deleteMany(args: { where: { id: string; role: string } }): Promise<{ count: number }>
   }
+  notificationOutbox: {
+    deleteMany(args: { where: { organizationId: string; dedupeKey: { startsWith: string } } }): Promise<{ count: number }>
+  }
   orgLog: { create(args: unknown): Promise<unknown> }
 }
 
@@ -63,6 +72,8 @@ export type FrontDeskPurgeDb = {
 export type FrontDeskPurgeResult = {
   /** Count only: a job summary never names a person or an address. */
   deleted: number
+  /** Accounts whose transaction failed: rolled back, left in place, retried by a later run. */
+  failed: number
 }
 
 /**
@@ -75,6 +86,11 @@ export type FrontDeskPurgeResult = {
  * makes the exact decision. The event bound keeps two days of margin on `endDate` (a stored UTC
  * midnight): the event ends at 06:00 local the next day, at most 42 hours later, so an end date
  * at least two days before the cutoff can no longer end after it.
+ *
+ * The margin only delays, never advances: a due account can stay out of these results for up to
+ * two days after its deadline, so the purge can delete it up to two days late but never early.
+ * The pure function (frontDeskAccountPurgeDecision) makes the exact decision; this query never
+ * authorises a premature deletion on its own.
  */
 export function frontDeskPurgeCandidateWhere(now: Date): Prisma.AdminUserWhereInput {
   const cutoff = daysAgo(now, RETENTION_DAYS.frontDeskAccount)
@@ -113,16 +129,24 @@ function lastEventTitle(accesses: FrontDeskPurgeCandidate["eventAccesses"], time
 }
 
 /**
- * Deletes the front-desk accounts due at `now`, batch by batch, and returns only how many were
- * deleted. The default client is the application's; tests pass doubles (see
+ * Deletes the front-desk accounts due at `now`, batch by batch, and returns how many were deleted
+ * and how many failed. The default client is the application's; tests pass doubles (see
  * src/lib/__tests__/front-desk-purge.test.ts and src/__integration__/front-desk-purge.int.test.ts).
+ *
+ * `organizationIds` narrows the candidates to those organisations: for tests on a shared database
+ * and for a targeted operator run. The cleanup passes none, so it covers every organisation.
  */
 export async function purgeDueFrontDeskAccounts(
   now: Date,
   db: FrontDeskPurgeDb = prisma as unknown as FrontDeskPurgeDb,
+  organizationIds?: readonly string[],
 ): Promise<FrontDeskPurgeResult> {
   const where = frontDeskPurgeCandidateWhere(now)
+  // The scope replaces the base organisation filter: an id list is already a non-null restriction,
+  // and an empty list deliberately matches nothing.
+  if (organizationIds) where.organizationId = { in: [...organizationIds] }
   let deleted = 0
+  let failed = 0
   let cursor: string | null = null
 
   for (;;) {
@@ -146,55 +170,72 @@ export async function purgeDueFrontDeskAccounts(
       if (!decision.due) continue
       const eventTitle = lastEventTitle(accesses, timeZone, decision.referenceAt)
 
-      const removed = await db.$transaction(async (tx) => {
-        // The same lock as the invitation and revocation routes (src/app/api/admin/events/[id]/
-        // front-desk-access): a re-opening waits here, then finds the account gone.
-        const locked = await tx.$queryRaw<{ id: string }[]>`
-          SELECT id FROM "AdminUser"
-          WHERE id = ${candidate.id} AND role = ${FRONT_DESK_ROLE} AND "organizationId" = ${organizationId}
-          FOR UPDATE`
-        if (locked.length === 0) return false
+      try {
+        const removed = await db.$transaction(async (tx) => {
+          // The same lock as the invitation and revocation routes (src/app/api/admin/events/[id]/
+          // front-desk-access): a re-opening waits here, then finds the account gone.
+          const locked = await tx.$queryRaw<{ id: string }[]>`
+            SELECT id FROM "AdminUser"
+            WHERE id = ${candidate.id} AND role = ${FRONT_DESK_ROLE} AND "organizationId" = ${organizationId}
+            FOR UPDATE`
+          if (locked.length === 0) return false
 
-        // Re-read under the lock: an access re-opened between the batch read and here is live now.
-        const fresh = await tx.adminUser.findFirst({
-          where: { id: candidate.id, role: FRONT_DESK_ROLE, organizationId },
-          select: CANDIDATE_SELECT,
-        })
-        if (!fresh) return false
-        const freshAccesses = fresh.eventAccesses ?? []
-        const freshDecision = frontDeskAccountPurgeDecision(
-          { createdAt: fresh.createdAt, accesses: freshAccesses },
-          orgTimeZone(fresh.organization),
-          now,
-        )
-        if (!freshDecision.due) return false
-        const freshTitle = lastEventTitle(freshAccesses, orgTimeZone(fresh.organization), freshDecision.referenceAt)
+          // Re-read under the lock: an access re-opened between the batch read and here is live now.
+          const fresh = await tx.adminUser.findFirst({
+            where: { id: candidate.id, role: FRONT_DESK_ROLE, organizationId },
+            select: CANDIDATE_SELECT,
+          })
+          if (!fresh) return false
+          const freshAccesses = fresh.eventAccesses ?? []
+          const freshDecision = frontDeskAccountPurgeDecision(
+            { createdAt: fresh.createdAt, accesses: freshAccesses },
+            orgTimeZone(fresh.organization),
+            now,
+          )
+          if (!freshDecision.due) return false
+          const freshTitle = lastEventTitle(freshAccesses, orgTimeZone(fresh.organization), freshDecision.referenceAt)
 
-        // The role condition is part of the delete itself, not only of the read above.
-        const { count } = await tx.adminUser.deleteMany({ where: { id: candidate.id, role: FRONT_DESK_ROLE } })
-        if (count !== 1) return false
+          // The role condition is part of the delete itself, not only of the read above.
+          const { count } = await tx.adminUser.deleteMany({ where: { id: candidate.id, role: FRONT_DESK_ROLE } })
+          if (count !== 1) return false
 
-        // System actor, no name and no address: an entry that named the person would outlive them.
-        await tx.orgLog.create({
-          data: {
-            organizationId,
-            actorType: "system",
-            actorId: null,
-            action: "frontdesk.account_purged",
-            entityType: "AdminUser",
-            entityId: candidate.id,
-            changes: {
-              eventTitle: { from: null, to: freshTitle ?? eventTitle },
+          // Queued invitation data dies with the account (#1142): every outbox row of its
+          // front-desk invitations, whatever its delivery status. The key carries the
+          // organisation, the account and a per-invitation nonce; nothing is read in the payload
+          // and no address is used. Legacy rows have no key and are left to the ordinary cleanup.
+          await tx.notificationOutbox.deleteMany({
+            where: {
+              organizationId,
+              dedupeKey: { startsWith: frontDeskInviteDedupePrefix(organizationId, candidate.id) },
             },
-          },
+          })
+
+          // System actor, no name and no address: an entry that named the person would outlive them.
+          await tx.orgLog.create({
+            data: {
+              organizationId,
+              actorType: "system",
+              actorId: null,
+              action: "frontdesk.account_purged",
+              entityType: "AdminUser",
+              entityId: candidate.id,
+              changes: {
+                eventTitle: { from: null, to: freshTitle ?? eventTitle },
+              },
+            },
+          })
+          return true
         })
-        return true
-      })
-      if (removed) deleted++
+        if (removed) deleted++
+      } catch (e) {
+        // That account's transaction rolled back as a whole; the others still get their turn.
+        failed++
+        reportError("frontdesk.account_purge")(e)
+      }
     }
 
     if (candidates.length < FRONT_DESK_PURGE_BATCH) break
   }
 
-  return { deleted }
+  return { deleted, failed }
 }

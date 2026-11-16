@@ -130,11 +130,15 @@ async function run(req: Request) {
   })
 
   // --- 3b. Front-desk accounts whose accesses are all over (#1142): deleted 90 days after the
-  // latest end among them, their grants cascading away. A failure is reported and never stops the
-  // following steps; the next night tries again.
+  // latest end among them, their grants cascading away. One account's failure is reported and
+  // counted by the purge itself, which goes on with the others; a failure of the whole step (the
+  // candidate query) is reported here and never stops the following steps. The next night retries.
   let deletedFrontDeskAccounts = 0
+  let failedFrontDeskAccounts = 0
   try {
-    deletedFrontDeskAccounts = (await purgeDueFrontDeskAccounts(now)).deleted
+    const result = await purgeDueFrontDeskAccounts(now)
+    deletedFrontDeskAccounts = result.deleted
+    failedFrontDeskAccounts = result.failed
   } catch (e) {
     reportError("cleanup.front_desk_accounts")(e)
   }
@@ -406,6 +410,7 @@ async function run(req: Request) {
       mergedMemberTombstones: deletedMergedTombstones.count,
       adminUsers: deletedOrgAdmins.count + deletedAdmins.count,
       frontDeskAccounts: deletedFrontDeskAccounts,
+      frontDeskAccountsFailed: failedFrontDeskAccounts,
     },
     tokensCleaned: {
       passwordReset: clearedResetTokens.count,

@@ -1,8 +1,11 @@
 import { describe, it, expect, vi, beforeEach } from "vitest"
 
 vi.mock("../prisma", () => ({ prisma: {} }))
+const report = vi.hoisted(() => vi.fn())
+vi.mock("../report-error", () => ({ reportError: (context: string) => (error: unknown) => report(context, error) }))
 
 import { FRONT_DESK_PURGE_BATCH, frontDeskPurgeCandidateWhere, purgeDueFrontDeskAccounts, type FrontDeskPurgeCandidate, type FrontDeskPurgeDb, type FrontDeskPurgeTx } from "../front-desk-purge"
+import { frontDeskInviteDedupeKey, frontDeskInviteDedupePrefix } from "../front-desk-access"
 
 const NOW = new Date("2027-09-20T12:00:00Z")
 const day = (iso: string) => new Date(`${iso}T00:00:00Z`)
@@ -29,28 +32,42 @@ function keptCandidate(over: Partial<FrontDeskPurgeCandidate> = {}): FrontDeskPu
   })
 }
 
+type OutboxRow = { id: string; organizationId: string; dedupeKey: string | null }
+
 type TxDoubles = {
   tx: FrontDeskPurgeTx
   queryRaw: ReturnType<typeof vi.fn>
   findFirst: ReturnType<typeof vi.fn>
   deleteMany: ReturnType<typeof vi.fn>
+  outboxDeleteMany: ReturnType<typeof vi.fn>
   orgLogCreate: ReturnType<typeof vi.fn>
 }
 
-function txDoubles(candidate: FrontDeskPurgeCandidate | null, deleteCount = 1): TxDoubles {
+function txDoubles(candidate: FrontDeskPurgeCandidate | null, deleteCount = 1, outboxRows: OutboxRow[] = []): TxDoubles {
   const queryRaw = vi.fn().mockResolvedValue(candidate ? [{ id: candidate.id }] : [])
   const findFirst = vi.fn().mockResolvedValue(candidate)
   const deleteMany = vi.fn().mockResolvedValue({ count: deleteCount })
   const orgLogCreate = vi.fn().mockResolvedValue({ id: "log-1" })
+  // Behaves like the SQL: delete the rows of this organisation whose key starts with the prefix.
+  const outboxDeleteMany = vi.fn(async ({ where }: { where: { organizationId: string; dedupeKey: { startsWith: string } } }) => {
+    const before = outboxRows.length
+    for (let i = outboxRows.length - 1; i >= 0; i--) {
+      const row = outboxRows[i]
+      if (row.organizationId === where.organizationId && row.dedupeKey?.startsWith(where.dedupeKey.startsWith)) outboxRows.splice(i, 1)
+    }
+    return { count: before - outboxRows.length }
+  })
   return {
     tx: {
       $queryRaw: queryRaw as unknown as FrontDeskPurgeTx["$queryRaw"],
       adminUser: { findFirst: findFirst as unknown as FrontDeskPurgeTx["adminUser"]["findFirst"], deleteMany: deleteMany as unknown as FrontDeskPurgeTx["adminUser"]["deleteMany"] },
+      notificationOutbox: { deleteMany: outboxDeleteMany as unknown as FrontDeskPurgeTx["notificationOutbox"]["deleteMany"] },
       orgLog: { create: orgLogCreate as unknown as FrontDeskPurgeTx["orgLog"]["create"] },
     },
     queryRaw,
     findFirst,
     deleteMany,
+    outboxDeleteMany,
     orgLogCreate,
   }
 }
@@ -91,7 +108,7 @@ describe("purgeDueFrontDeskAccounts", () => {
     const { tx, deleteMany, orgLogCreate, queryRaw } = txDoubles(candidate)
     const { db, findMany } = dbWith([[candidate]], tx)
 
-    await expect(purgeDueFrontDeskAccounts(NOW, db)).resolves.toEqual({ deleted: 1 })
+    await expect(purgeDueFrontDeskAccounts(NOW, db)).resolves.toEqual({ deleted: 1, failed: 0 })
 
     // Candidates: bounded, front-desk role, batch by batch.
     const findArgs = findMany.mock.calls[0][0] as { where: { role: string }; take: number }
@@ -127,9 +144,71 @@ describe("purgeDueFrontDeskAccounts", () => {
     const { tx, deleteMany } = txDoubles(due)
     const { db } = dbWith([[due, kept]], tx)
 
-    await expect(purgeDueFrontDeskAccounts(NOW, db)).resolves.toEqual({ deleted: 1 })
+    await expect(purgeDueFrontDeskAccounts(NOW, db)).resolves.toEqual({ deleted: 1, failed: 0 })
     expect(deleteMany).toHaveBeenCalledTimes(1)
     expect(deleteMany).toHaveBeenCalledWith({ where: { id: due.id, role: "front_desk" } })
+  })
+
+  it("goes on when one account's transaction fails: the others are deleted, the failure is counted and reported", async () => {
+    const first = dueCandidate({ id: "adm-1" })
+    const broken = dueCandidate({ id: "adm-2" })
+    const third = dueCandidate({ id: "adm-3" })
+    const byId = new Map([first, broken, third].map((candidate) => [candidate.id, candidate]))
+    const deletedIds: string[] = []
+    const tx = {
+      // A deadlock, timeout or failed log insert aborts one account's transaction only.
+      $queryRaw: (async (_sql: TemplateStringsArray, id: string) => {
+        if (id === broken.id) throw new Error("deadlock detected")
+        return [{ id }]
+      }) as unknown as FrontDeskPurgeTx["$queryRaw"],
+      adminUser: {
+        findFirst: (async ({ where }: { where: { id: string } }) => byId.get(where.id) ?? null) as unknown as FrontDeskPurgeTx["adminUser"]["findFirst"],
+        deleteMany: (async ({ where }: { where: { id: string } }) => {
+          deletedIds.push(where.id)
+          return { count: 1 }
+        }) as unknown as FrontDeskPurgeTx["adminUser"]["deleteMany"],
+      },
+      notificationOutbox: { deleteMany: vi.fn().mockResolvedValue({ count: 0 }) },
+      orgLog: { create: vi.fn().mockResolvedValue({ id: "log" }) },
+    } as unknown as FrontDeskPurgeTx
+    const { db } = dbWith([[first, broken, third]], tx)
+
+    await expect(purgeDueFrontDeskAccounts(NOW, db)).resolves.toEqual({ deleted: 2, failed: 1 })
+    expect(deletedIds).toEqual(["adm-1", "adm-3"])
+    expect(report).toHaveBeenCalledWith("frontdesk.account_purge", expect.any(Error))
+  })
+
+  it("deletes the purged account's queued invitations, scoped to its organisation and kind", async () => {
+    const candidate = dueCandidate()
+    const rows: OutboxRow[] = [
+      { id: "row-due-pending", organizationId: "org-fete", dedupeKey: frontDeskInviteDedupeKey("org-fete", candidate.id, "token-hash-due") },
+      { id: "row-due-resent", organizationId: "org-fete", dedupeKey: frontDeskInviteDedupeKey("org-fete", candidate.id, "token-hash-resent") },
+      { id: "row-same-kind-other-account", organizationId: "org-fete", dedupeKey: frontDeskInviteDedupeKey("org-fete", "adm-kept", "token-hash-kept") },
+      { id: "row-other-org", organizationId: "org-autre", dedupeKey: frontDeskInviteDedupeKey("org-autre", candidate.id, "token-hash-other-org") },
+      { id: "row-other-kind", organizationId: "org-fete", dedupeKey: `admin_invite:org-fete:${candidate.id}:abc` },
+    ]
+    const { tx, outboxDeleteMany } = txDoubles(candidate, 1, rows)
+    const { db } = dbWith([[candidate]], tx)
+
+    await expect(purgeDueFrontDeskAccounts(NOW, db)).resolves.toEqual({ deleted: 1, failed: 0 })
+
+    // Pending and resent invitations of the purged account are gone; another account's rows of the
+    // same kind, another organisation's, and another kind stay.
+    expect(rows.map((row) => row.id)).toEqual(["row-same-kind-other-account", "row-other-org", "row-other-kind"])
+    expect(outboxDeleteMany).toHaveBeenCalledWith({
+      where: {
+        organizationId: "org-fete",
+        dedupeKey: { startsWith: frontDeskInviteDedupePrefix("org-fete", candidate.id) },
+      },
+    })
+  })
+
+  it("narrows the candidates to the given organisations when asked", async () => {
+    const { tx } = txDoubles(null)
+    const { db, findMany } = dbWith([[]], tx)
+
+    await expect(purgeDueFrontDeskAccounts(NOW, db, ["org-fete"])).resolves.toEqual({ deleted: 0, failed: 0 })
+    expect((findMany.mock.calls[0][0] as { where: { organizationId: unknown } }).where.organizationId).toEqual({ in: ["org-fete"] })
   })
 
   it("deletes nothing when the account was re-opened between the batch read and the lock", async () => {
@@ -141,7 +220,7 @@ describe("purgeDueFrontDeskAccounts", () => {
     const { tx, deleteMany, orgLogCreate } = txDoubles(reopened)
     const { db } = dbWith([[read]], tx)
 
-    await expect(purgeDueFrontDeskAccounts(NOW, db)).resolves.toEqual({ deleted: 0 })
+    await expect(purgeDueFrontDeskAccounts(NOW, db)).resolves.toEqual({ deleted: 0, failed: 0 })
     expect(deleteMany).not.toHaveBeenCalled()
     expect(orgLogCreate).not.toHaveBeenCalled()
   })
@@ -151,7 +230,7 @@ describe("purgeDueFrontDeskAccounts", () => {
     const { tx, orgLogCreate } = txDoubles(candidate, 0)
     const { db } = dbWith([[candidate]], tx)
 
-    await expect(purgeDueFrontDeskAccounts(NOW, db)).resolves.toEqual({ deleted: 0 })
+    await expect(purgeDueFrontDeskAccounts(NOW, db)).resolves.toEqual({ deleted: 0, failed: 0 })
     expect(orgLogCreate).not.toHaveBeenCalled()
   })
 
@@ -163,7 +242,7 @@ describe("purgeDueFrontDeskAccounts", () => {
     })
     const { tx } = txDoubles(empty)
     const { db } = dbWith([[empty]], tx)
-    await expect(purgeDueFrontDeskAccounts(NOW, db)).resolves.toEqual({ deleted: 1 })
+    await expect(purgeDueFrontDeskAccounts(NOW, db)).resolves.toEqual({ deleted: 1, failed: 0 })
   })
 
   it("reads bounded batches and stops, never the whole table at once", async () => {
@@ -171,7 +250,7 @@ describe("purgeDueFrontDeskAccounts", () => {
     const { tx } = txDoubles(kept[0])
     const { db, findMany } = dbWith([kept], tx)
 
-    await expect(purgeDueFrontDeskAccounts(NOW, db)).resolves.toEqual({ deleted: 0 })
+    await expect(purgeDueFrontDeskAccounts(NOW, db)).resolves.toEqual({ deleted: 0, failed: 0 })
     expect(findMany).toHaveBeenCalledTimes(2)
     for (const call of findMany.mock.calls) expect((call[0] as { take: number }).take).toBe(FRONT_DESK_PURGE_BATCH)
     // The next batch starts after the last id read, so a kept account is never read twice.
@@ -183,7 +262,7 @@ describe("purgeDueFrontDeskAccounts", () => {
     const { tx } = txDoubles(candidate)
     const { db } = dbWith([[candidate]], tx)
     const result = await purgeDueFrontDeskAccounts(NOW, db)
-    expect(Object.keys(result)).toEqual(["deleted"])
+    expect(Object.keys(result)).toEqual(["deleted", "failed"])
     expect(JSON.stringify(result)).not.toMatch(/Colette|colette@example\.org/)
   })
 })

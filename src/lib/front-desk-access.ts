@@ -47,6 +47,26 @@ export const FRONT_DESK_INVITES_PER_DAY = 20
 export const FRONT_DESK_ALREADY_ADMIN = "Cette personne fait déjà partie de l'équipe d'administration de votre organisation : elle n'a pas besoin d'un accès accueil."
 
 /**
+ * The prefix shared by every outbox row of one front-desk account's invitations (#1142): the
+ * organisation, the account, then a per-invitation nonce. The purge deletes by this prefix, so it
+ * reaches pending and sending rows as well as sent ones, without opening a payload.
+ */
+export function frontDeskInviteDedupePrefix(organizationId: string, adminUserId: string): string {
+  return `front_desk_invite:${organizationId}:${adminUserId}:`
+}
+
+/**
+ * The dedupe key of one front-desk invitation (#1142). The nonce (the hash of the setup token,
+ * never the token itself) keeps a resend a distinct row: a stable key would make
+ * `enqueueNotifications` skip it as already queued, and the person would get no new link. New
+ * invitations carry this key; rows written before it exist have `dedupeKey = null` and no
+ * reliable link to their account (see the purge report).
+ */
+export function frontDeskInviteDedupeKey(organizationId: string, adminUserId: string, invitationNonce: string): string {
+  return `${frontDeskInviteDedupePrefix(organizationId, adminUserId)}${invitationNonce}`
+}
+
+/**
  * The open refusal for a front-desk account of this organisation that was activated and later
  * deactivated (#1142): it is not a pending invitation, so it may not be silently re-invited.
  */
