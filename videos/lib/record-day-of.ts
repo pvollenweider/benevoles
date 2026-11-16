@@ -118,7 +118,24 @@ export async function recordDayOf(options: DayOfRecordingOptions) {
       const after = await options.verifyFixture()
       assert(after.checkedInAt === null && after.status === "active", "Undo must persist without cancelling registration")
       await card(f.runningShiftId).getByRole("button", { name: `Marquer présent, ${f.volunteerName}`, exact: true }).waitFor()
-      await evidence("dayof-undo", { actualUndoPersisted: true, registrationStillActive: true })
+      const mark = async (action: string, label: string, next: string) => {
+        const pending = page.waitForResponse(r => r.url().endsWith(`/events/${f.eventId}/registrations/bulk`) && r.request().method() === "POST" && r.request().postDataJSON().action === action)
+        await tap(page, card(f.runningShiftId).getByRole("button", { name: `${label}, ${f.volunteerName}`, exact: true }))
+        assert((await pending).ok(), `Actual ${action} request failed`)
+        await card(f.runningShiftId).getByRole("button", { name: `${next}, ${f.volunteerName}`, exact: true }).waitFor()
+      }
+      await at("Si elle ne vient pas")
+      await mark("mark_absent", "Marquer absent", "Annuler l'absence")
+      await card(f.runningShiftId).getByText("Absent", { exact: false }).first().waitFor()
+      await at("Annuler l'absence la remet")
+      await mark("undo_absent", "Annuler l'absence", "Marquer présent")
+      await at("Marquons sa présence à nouveau"); await toggle(true)
+      await at("Si elle repart plus tôt")
+      await mark("mark_left_early", "Marquer parti avant la fin", "Annuler le départ")
+      await card(f.runningShiftId).getByText("Parti avant la fin", { exact: false }).first().waitFor()
+      await at("Annuler le départ retrouve")
+      await mark("undo_left_early", "Annuler le départ", "Annuler la présence")
+      await evidence("dayof-undo", { actualUndoPersisted: true, registrationStillActive: true, absenceAndDepartureCorrected: true })
     })
   } finally { if (oldViewport) await page.setViewportSize(oldViewport) }
 }

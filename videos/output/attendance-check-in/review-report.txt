@@ -1,27 +1,13 @@
-STATUS: READY
+STATUS: NOT READY
 ID: ATTENDANCE_CHECK_IN
-Duration: 398.84
-BUILD_ID: RPQR_7CtwLDa6m9DyYOBY
-Commit: 39b375b9ede4d3a0081fbce1f964e4b79549a7c9
-Music: {'voicedWindows': 350, 'musicOnlyWindows': 7, 'smallestGapLu': 13.6, 'largestGapLu': 19.2, 'quietestMusicOnlyLufs': -34, 'loudestMusicOnlyLufs': -33, 'medianVoiceLufs': -16.2}
-Problems: All objective checks pass. Desktop correction, mobile sections/search and undo now aligned. CSV: five active inscriptions/four people, three pointed/two unpointed, Sarah excluded after cancellation with prior pointage retained. Automated undo-reload flag rejected: successful recorder unconditionally executes page.reload at sentence anchor (374.678 s), then verifies null pointage and active registration in current database; stable redraw does not require clicking Actualiser. Exact frames review/undo-*.png and dayof-undo-observations.json retained.
-Source changes: None; batch 14 sentence anchors retained. No re-film needed.
-Objective evidence: review/stages.json, validation.json, narration-audit.json, narration-audit-video.json, audio-levels.json, audio-mix.json, timeline.json.
-Real-time subjective listening unavailable; never used as a NOT READY reason.
-Subtitles match manifest text exactly: True
-MP4 frame evidence SHA256: ce9593157b5db9e977c5471c2a592f93be46b16963bba4931d0a4b99bf4d44a9
-All chapter sheets inspected for current labels, French dates, forbidden hosts/identities, overlays, clipping, action/result context. See additional observations in Problems.
-welcome: 0.215–24.601 s; review/welcome-sheet.png; sentence/action timings in review/sentence-action-evidence.json; AV checkpoints 3; reported issues []
-one: 26.923–51.59 s; review/one-sheet.png; sentence/action timings in review/sentence-action-evidence.json; AV checkpoints 4; reported issues []
-group: 53.853–77.183 s; review/group-sheet.png; sentence/action timings in review/sentence-action-evidence.json; AV checkpoints 4; reported issues []
-correction: 79.448–102.013 s; review/correction-sheet.png; sentence/action timings in review/sentence-action-evidence.json; AV checkpoints 4; reported issues []
-multiple: 104.274–130.406 s; review/multiple-sheet.png; sentence/action timings in review/sentence-action-evidence.json; AV checkpoints 3; reported issues []
-limits: 132.672–157.053 s; review/limits-sheet.png; sentence/action timings in review/sentence-action-evidence.json; AV checkpoints 3; reported issues []
-cancelled: 159.319–197.23 s; review/cancelled-sheet.png; sentence/action timings in review/sentence-action-evidence.json; AV checkpoints 6; reported issues []
-export: 200.676–224.741 s; review/export-sheet.png; sentence/action timings in review/sentence-action-evidence.json; AV checkpoints 4; reported issues []
-dayof-window: 228.174–256.817 s; review/dayof-window-sheet.png; sentence/action timings in review/sentence-action-evidence.json; AV checkpoints 5; reported issues []
-dayof-search: 260.23–283.554 s; review/dayof-search-sheet.png; sentence/action timings in review/sentence-action-evidence.json; AV checkpoints 3; reported issues []
-dayof-phone: 285.814–311.934 s; review/dayof-phone-sheet.png; sentence/action timings in review/sentence-action-evidence.json; AV checkpoints 3; reported issues []
-dayof-checkin: 314.194–339.242 s; review/dayof-checkin-sheet.png; sentence/action timings in review/sentence-action-evidence.json; AV checkpoints 3; reported issues []
-dayof-refresh: 341.503–366.646 s; review/dayof-refresh-sheet.png; sentence/action timings in review/sentence-action-evidence.json; AV checkpoints 4; reported issues []
-dayof-undo: 368.908–395.852 s; review/dayof-undo-sheet.png; sentence/action timings in review/sentence-action-evidence.json; AV checkpoints 3; reported issues ["À 00:06, la voix annonce une vérification 'après rechargement', mais aucun rechargement ni clic sur 'Actualiser' n'a lieu à l'écran."]
+Batch: 41, 2026-11-16
+Duration: no new MP4
+BUILD_ID: none verified
+Commit filmed: none; requested product commit f9fcec47d32af10b0837b2de87beb61535d30888
+Music gaps: not measured (no new MP4)
+Tu count: 0 in source narration; final ASR/VTT not available
+Published: no
+Problems: clean main product build fails Next.js route-export type validation (buildDocIndexJson). New full Kore master generated; independent ASR flags 12 chapter boundaries, so narration is not validated. Existing 14-cue timeline is historical and does not match the 15 current segments. No rehearsal or narrated take. Previous READY report does not certify batch 41; its historical copy is retained in previous-batch41-before-narration/.
+Source changes: manifest narration, viewer, one absence-departure segment, script, registration/Jour J recorders, owner fixture. Not product-tested; rehearse after an authorized working main build.
+Checks: 1334 video tests, 220-tool typecheck, checkout tsc and touched-file eslint pass. video:validate fails (14 historical cues, 15 current segments).
+Full evidence: videos/evidence/batch41/review-report.md

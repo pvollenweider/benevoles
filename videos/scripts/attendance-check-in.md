@@ -8,7 +8,7 @@ La narration vouvoie les organisateurs, avec un ton accueillant et bienveillant.
 
 ## Utilité
 
-Savoir qui est arrivé à son créneau, éviter de pointer la mauvaise personne et corriger une erreur sans supprimer son inscription. Une inscription décrit ce qui était prévu ; une marque de présence indique un pointage. Elle ne mesure ni l'heure de départ ni la durée réellement travaillée. Le produit appelle « heures attestées » les durées planifiées des créneaux passés avec présence enregistrée, et non des heures chronométrées.
+Savoir qui est arrivé à son créneau, éviter de pointer la mauvaise personne et corriger une erreur sans supprimer son inscription. Une inscription décrit ce qui était prévu ; une marque de présence indique un pointage. Elle ne mesure pas la durée réellement travaillée. Le produit appelle « heures attestées » les durées planifiées des créneaux passés avec présence enregistrée, et non des heures chronométrées.
 
 ## Complément Jour J — prise indépendante
 
@@ -54,7 +54,7 @@ Les marques et compteurs évoluent après les actions ; la correction conserve l
 - Pour l'annulation, comparer un horodatage non nul avant/après. Comparer deux champs nuls ne prouve pas la conservation d'une présence.
 - Contrôler séparément résumé global, filtre courant et nombre de lignes sélectionnées ; ne pas additionner des personnes distinctes et des inscriptions comme si c'était la même unité.
 - Inspecter le vrai CSV téléchargé avant de filmer sa lecture. Utiliser le workflow tableur pour cette inspection ; ne pas composer un tableau qui ressemble au fichier mais omet ses limites.
-- La présence est une marque par inscription. Ni départ, ni QR de pointage, ni émargement autonome, ni total d'heures attestées ne sont annoncés ici sans implémentation et vérification propres.
+- La présence est une marque par inscription. Ni QR de pointage, ni émargement autonome, ni total d'heures attestées ne sont annoncés ici sans implémentation et vérification propres.
 - Intertitres entre sujets ; pause lisible avant une action groupée ; narration continue avec la même voix. Contrôle indépendant du texte prononcé puis contrôle audiovisuel du MP4 final.
 
 Préparation confrontée au code actuel le 5 octobre 2026 : gestion des présences dans les inscriptions, barre d'actions, export des présences et formatage de l'heure locale. L'export filtre explicitement les inscriptions actives. Le plan initial qui demandait des heures attestées reste une exigence non satisfaite par cette seule marque de présence : elle doit rester dans le suivi de couverture, pas devenir une promesse dans la vidéo.
@@ -76,3 +76,70 @@ Narration à régénérer intégralement, même voix, une seule passe, `continuo
 
 - Dans la fiche membre, les heures prévues comptent les créneaux confirmés, passés et à venir.
 - Les heures attestées reprennent les créneaux passés où une présence a été enregistrée.
+
+
+## Lot 41 — sources du 16 novembre 2026 (tournage à vérifier)
+
+Un seul chapitre ajouté, `absence-departure`, pour les deux états livrés ensemble dans #1141. Noah est marqué absent et Aline partie avant la fin par les vraies actions de la barre de sélection. Chaque note est annulée puis rétablie. L’export conserve les cinq inscriptions et montre les deux nouvelles colonnes. Le chapitre `dayof-undo` montre les mêmes notes et corrections sur Zoé, avec badges et compteurs. La fixture utilise un propriétaire : « Accès accueil » reste replié et n’est pas expliqué ici.
+
+### Narration courante (remplace les formulations historiques ci-dessus)
+
+#### welcome
+
+Le jour J, savoir qui est arrivé aide à accueillir l'équipe et à suivre les présences et les absences notées. Ouvrons les inscriptions et choisissons l'accueil du matin avec les filtres. Chaque ligne correspond à une inscription sur un créneau. Être inscrit, c'est ce qui était prévu. Être marqué présent, c'est une autre information. Nous allons pointer une arrivée, corriger une erreur et regarder le bilan réel.
+
+#### one
+
+Aline vient d'arriver. Sélectionnons uniquement sa ligne, puis lisons le nombre indiqué avant de marquer sa présence. La marque apparaît sur son inscription. Rechargeons la page : elle est toujours là. Ce contrôle évite de confondre une sélection à l'écran avec une donnée réellement enregistrée. Le nombre d'inscriptions affichées décrit la liste filtrée, pas le nombre de personnes présentes.
+
+#### group
+
+Nicolas et Léa arrivent ensemble. Sélectionnons leurs deux lignes et vérifions le nombre avant de cliquer sur Marquer présents. Voici les deux marques, tandis qu'une personne pas encore arrivée reste sans marque. Une demande en attente de validation n'est pas une inscription confirmée à pointer. Ne la transformez pas en présence simplement pour compléter votre bilan : traitez d'abord sa demande selon les règles de l'événement.
+
+#### correction
+
+Vous avez pointé Léa par erreur ? Sélectionnons sa ligne et annulons la présence. La marque disparaît, mais son inscription et sa place restent. Ce n'est pas la même action que retirer quelqu'un de son créneau. Quand la bonne personne arrive, vous pouvez enregistrer sa présence à nouveau. Relisez le nom et l'horaire avant chaque correction : c'est plus simple que de reconstruire une inscription supprimée par mégarde.
+
+#### multiple
+
+Une personne peut aider sur plusieurs horaires. Recherchons Léa pour retrouver ses deux inscriptions. Elle aide le matin, puis à la buvette. Le pointage concerne la ligne sélectionnée, pas toute sa journée. Sa présence au premier créneau ne prouve pas qu'elle est arrivée au second. Regardons les deux lignes côte à côte : l'une est pointée et l'autre ne l'est pas. Vous gardez ainsi une information utile pour chaque équipe, sans généraliser une seule arrivée à tous les postes.
+
+#### absence-departure
+
+Noah ne viendra pas. Sélectionnons sa ligne et choisissons Marquer absent. Une absence est toujours notée par un organisateur, jamais déduite d'un pointage manquant. Annuler l'absence permet de corriger cette note. Notons à nouveau son absence pour le bilan. Aline, elle, est arrivée puis repart avant la fin. Sélectionnons sa ligne présente et choisissons Marquer parti avant la fin. Le badge Parti avant la fin distingue ce départ d'une absence. Annuler le départ corrige une erreur et retrouve sa présence. Notons à nouveau son départ pour le bilan. Cette participation reste enregistrée, mais elle n'ajoute aucune heure attestée : sa durée réellement effectuée est inconnue.
+
+#### limits
+
+Le pointage enregistre une arrivée. Il ne mesure pas la durée réellement travaillée. Dans la fiche membre, les heures prévues comptent les créneaux confirmés, passés et à venir. Les heures attestées reprennent les créneaux passés avec présence, sauf les participations terminées avant la fin. Ce ne sont donc pas des heures chronométrées. Une arrivée plus tardive n'est pas un calcul automatique du retard : gardez cette différence en tête quand vous lisez le bilan.
+
+#### cancelled
+
+Un cas à regarder de près : Sarah est arrivée, mais son créneau doit finalement être annulé. Enregistrons d'abord sa présence, puis ouvrons son créneau dans la liste. Lisons le récapitulatif et confirmons la suppression. Revenons aux inscriptions : sa ligne a disparu. Téléchargeons le fichier pour vérifier le bilan. Sarah n'y figure pas, car cet export ne retient que les inscriptions actives. Pourtant, le pointage enregistré avant l'annulation est conservé. Ce fichier n'est donc pas un relevé complet de tout ce qui s'est passé. Avant d'annuler un créneau déjà commencé, vérifiez avec l'organisation comment garder une trace utile.
+
+#### export
+
+Téléchargeons maintenant le véritable export des présences. Comparons une ligne pointée et une ligne non pointée, leurs créneaux et les colonnes Présent et Pointé le. Les colonnes Absence notée et Parti avant la fin distinguent aussi les notes de Noah et d’Aline. Ce fichier ne calcule pas des heures réellement travaillées. Il peut aussi contenir des coordonnées et des réponses aux questions : partagez seulement ce qui est nécessaire. Voyons maintenant un écran plus simple à utiliser sur le terrain, depuis son téléphone.
+
+#### dayof-window
+
+La page Jour J se concentre sur les personnes attendues maintenant. La vue En cours regroupe les créneaux qui ont commencé, y compris une veille commencée hier et pas encore terminée. Dans les trois prochaines heures montre les prochaines relèves. Plus tôt aujourd'hui permet de retrouver les créneaux terminés, par exemple pour corriger une arrivée oubliée. Les horaires suivent le fuseau de l'organisation. Ici, nous montrons cette page dans une fenêtre de la taille d'un téléphone, pas sur un appareil physique.
+
+#### dayof-search
+
+Vous cherchez Zoé ? Tapez son prénom sans accent : sa ligne reste facile à retrouver. Vous pouvez aussi chercher un poste, comme Accueil. Les personnes de ce poste restent ensemble, ce qui aide à coordonner l'équipe. Effaçons la recherche pour retrouver le planning du moment. Cette page montre les inscriptions confirmées : une demande encore à valider n'est pas une personne attendue à pointer.
+
+#### dayof-phone
+
+Quand un téléphone est renseigné, un lien permet de préparer un appel à la personne concernée. Voici celui de Zoé. Le contact du créneau peut aussi figurer sur sa carte. Nous montrons le lien, sans appeler qui que ce soit. Cette page garde seulement les informations utiles sur place : les noms, les horaires, le téléphone et la présence. Elle ne distribue pas les emails, les réponses aux questions ou les notes internes.
+
+#### dayof-checkin
+
+Zoé arrive à l'accueil. Marquer présent enregistre sa présence sur ce créneau, et le bouton devient Annuler la présence. Rechargeons la page : la marque est conservée. C'est la même présence que depuis les inscriptions, pas un deuxième système de pointage. Si une personne aide sur plusieurs créneaux, son arrivée ici ne marque pas automatiquement tous les autres. Ce geste confirme une arrivée ; il ne démarre pas un chronomètre.
+
+#### dayof-refresh
+
+Avec Actualiser, vous récupérez les informations enregistrées sur le serveur. La page indique l'heure de sa mise à jour. C'est utile quand plusieurs personnes accueillent les bénévoles avec des appareils différents. Dans cette démonstration, nous actualisons réellement la page ; nous ne prétendons pas qu'une autre personne vient de modifier une présence ailleurs. Relisez les noms et les compteurs avant d'agir, surtout quand une nouvelle relève arrive.
+
+#### dayof-undo
+
+Une erreur de pointage ? Annuler la présence retire la marque, pas l'inscription. Vérifions après rechargement : Zoé conserve sa place, et son arrivée n'est plus marquée. Si elle ne vient pas, Marquer absent note cette absence. Le badge Absent et le compteur le montrent. Annuler l'absence la remet parmi les personnes attendues. Marquons sa présence à nouveau. Si elle repart plus tôt, Marquer parti avant la fin le note sur ce créneau. Le badge Parti avant la fin et le compteur distinguent ce départ. Annuler le départ retrouve sa présence. Les quatre états sont distincts : pas encore marqué, présent, absent et parti avant la fin. Vérifiez toujours la personne et le créneau avant de corriger.

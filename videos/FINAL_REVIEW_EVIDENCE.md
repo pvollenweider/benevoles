@@ -1247,3 +1247,12 @@ relire au prochain passage :
 
 Les sélecteurs de capture ne changent pas (la section est un `<details>` fermé, sans incidence sur
 les boutons et les champs déjà filmés). Aucun fichier de `public/doc-img/` n'est modifié.
+
+
+## Lot 41 — tentative du 16 novembre 2026 : build produit bloqué
+
+Le build neuf du main épinglé `f9fcec47d32af10b0837b2de87beb61535d30888` vérifie les 2 438 entrées du produit et compile le JavaScript, puis Next.js refuse l'export `buildDocIndexJson` de `src/app/api/public/doc-index/route.ts:21` dans ses types de route générés. Aucun BUILD_ID vérifié, aucune prise ni publication. L'interdiction de modifier `src/` est respectée ; aucun ancien build n'est utilisé.
+
+Les sources du pointage sont préparées pour les quatre états, leurs annulations, les deux colonnes de l'export et l'exclusion des départs anticipés des heures attestées. La narration continue complète a été générée ; son audit indépendant signale douze frontières de chapitres à revoir. Ni le découpage ni une capture ne sont validés. Tous les écarts restent ouverts : aucun n'est marqué résolu sans nouveau film contrôlé.
+
+Catalogue, dates, révisions, `renders.json`, guides et captures inchangés. [Rapport, inventaire NOT DONE et contrôles](evidence/batch41/review-report.md), [journal de l'échec du build](evidence/batch41/build-main-failure.log). Aucune annonce de livraison au CHANGELOG. Aucun push, merge ni message ntfy.

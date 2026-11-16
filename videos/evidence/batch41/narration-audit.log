@@ -1,0 +1,15 @@
+welcome: 0.0% word difference
+one: 1.6% word difference
+group: 1.4% word difference
+correction: 30.0% word difference — REVIEW CONTENT/SPLIT; ending words displaced or missing
+multiple: 25.6% word difference — REVIEW CONTENT/SPLIT; opening words displaced or missing
+absence-departure: 5.6% word difference — REVIEW CONTENT/SPLIT; ending words displaced or missing
+limits: 8.1% word difference — REVIEW CONTENT/SPLIT; opening words displaced or missing
+cancelled: 8.7% word difference — REVIEW CONTENT/SPLIT; ending words displaced or missing
+export: 37.3% word difference — REVIEW CONTENT/SPLIT; opening words displaced or missing, ending words displaced or missing
+dayof-window: 46.4% word difference — REVIEW CONTENT/SPLIT; opening words displaced or missing, ending words displaced or missing
+dayof-search: 50.0% word difference — REVIEW CONTENT/SPLIT; opening words displaced or missing, ending words displaced or missing
+dayof-phone: 37.5% word difference — REVIEW CONTENT/SPLIT; opening words displaced or missing, ending words displaced or missing
+dayof-checkin: 20.0% word difference — REVIEW CONTENT/SPLIT; opening words displaced or missing
+dayof-refresh: 5.7% word difference — REVIEW CONTENT/SPLIT; ending words displaced or missing
+dayof-undo: 3.4% word difference — REVIEW CONTENT/SPLIT; opening words displaced or missing
