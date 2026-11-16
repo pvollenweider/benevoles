@@ -1,0 +1,52 @@
+{
+  "model": "gemini-3.8-flash",
+  "reviewedAt": "2026-11-16T22:09:29.375Z",
+  "videoSha256": "98e90f80a7f6026449f70366316ff09af845fb9b9f918fb44123fbc56e31a2eb",
+  "promptSha256": "ae19829ed6229bffe6c02e04dfbc75e89e2a8c39e425284ec83b637ec1bd9cf0",
+  "clipSha256": "c52f2a3225b2ce0c6d3e2f2106427e691305dc391adcfba2da28c0c3c326a934",
+  "scene": "range",
+  "review": {
+    "heardOpening": "Choisissez le poste, la date",
+    "checkpoints": [
+      {
+        "spokenSeconds": 0.6,
+        "spoken": "Choisissez le poste",
+        "visibleSeconds": 1.5,
+        "visible": "Sélection de « Buvette série » dans le champ Poste",
+        "sync": "aligned",
+        "severity": "none"
+      },
+      {
+        "spokenSeconds": 2,
+        "spoken": "la date",
+        "visibleSeconds": 2.5,
+        "visible": "Sélection de « samedi 21 novembre » dans le champ Date",
+        "sync": "aligned",
+        "severity": "none"
+      },
+      {
+        "spokenSeconds": 5.2,
+        "spoken": "de dix heures",
+        "visibleSeconds": 5,
+        "visible": "Saisie de « 10:00 » dans le champ Début",
+        "sync": "aligned",
+        "severity": "none"
+      },
+      {
+        "spokenSeconds": 6.6,
+        "spoken": "à vingt-deux heures",
+        "visibleSeconds": 7,
+        "visible": "Saisie de « 22:00 » dans le champ Fin",
+        "sync": "aligned",
+        "severity": "none"
+      }
+    ],
+    "issues": [],
+    "voice": {
+      "consistent": true,
+      "warm": true,
+      "observation": "Voix claire, posée et parfaitement synchronisée avec la saisie dans le formulaire."
+    }
+  },
+  "note": "Automated observation of actual final video audio and images; not a claim of complete human validation"
+}

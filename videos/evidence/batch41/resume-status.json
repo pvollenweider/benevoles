@@ -199,10 +199,15 @@
     {
       "id": "SHIFT_CREATE_SERIES",
       "slug": "shift-create-series",
-      "status": "IN PROGRESS",
-      "published": false,
-      "narratedTakes": 0,
-      "problems": "Fresh source narration preparation; no narrated take yet."
+      "status": "READY",
+      "published": true,
+      "narratedTakes": 1,
+      "problems": "No final AV issue.",
+      "duration": 103.04,
+      "musicGaps": 0,
+      "tu": 0,
+      "revision": 7,
+      "sourceChanges": "Fresh whole Puck narration; source-word onsets checked; result first row positioned early; current optional minimum fields captured."
     },
     {
       "id": "SHIFT_CREATE_EDIT_DETAIL",

@@ -1,0 +1,65 @@
+{
+  "id": "SHIFT_CREATE_SERIES",
+  "slug": "shift-create-series",
+  "validatedAt": "2026-11-16T22:09:57.028Z",
+  "continuousNarration": true,
+  "sentenceRevision": false,
+  "narrationContentChecked": true,
+  "voice": "Puck",
+  "captureMs": 103040,
+  "scenes": [
+    {
+      "id": "welcome",
+      "visualMs": 13034,
+      "audioMs": 13032,
+      "driftMs": 2
+    },
+    {
+      "id": "range",
+      "visualMs": 12561,
+      "audioMs": 12559,
+      "driftMs": 2
+    },
+    {
+      "id": "duration",
+      "visualMs": 16780,
+      "audioMs": 16779,
+      "driftMs": 1
+    },
+    {
+      "id": "preview",
+      "visualMs": 11775,
+      "audioMs": 11773,
+      "driftMs": 2
+    },
+    {
+      "id": "create",
+      "visualMs": 11874,
+      "audioMs": 11873,
+      "driftMs": 1
+    },
+    {
+      "id": "adjust",
+      "visualMs": 18012,
+      "audioMs": 18009,
+      "driftMs": 3
+    },
+    {
+      "id": "result",
+      "visualMs": 14616,
+      "audioMs": 14615,
+      "driftMs": 1
+    }
+  ],
+  "anchorsChecked": 10,
+  "music": {
+    "voicedWindows": 96,
+    "musicOnlyWindows": 0,
+    "smallestGapLu": 13,
+    "largestGapLu": 18.9,
+    "quietestMusicOnlyLufs": null,
+    "loudestMusicOnlyLufs": null,
+    "medianVoiceLufs": -16.9
+  },
+  "issues": []
+}

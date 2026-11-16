@@ -1581,12 +1581,11 @@ async function main() {
         if (await date.count()) {
           await tap(page, date)
           await date.selectOption({ index: 1 })
-          await page.waitForTimeout(500)
         }
         await at("La date, l’heure de début")
-        await fillVisibly(page, page.getByLabel(/^Début(?: \*)?$/), "18:00", 850)
+        await fillVisibly(page, page.getByLabel(/^Début(?: \*)?$/), "18:00", 150)
         await at("La date, l’heure de début")
-        await fillVisibly(page, page.getByLabel(/^Fin(?: \*)?$/), "21:30", 850)
+        await fillVisibly(page, page.getByLabel(/^Fin(?: \*)?$/), "21:30", 150)
         await at("La capacité indique combien de")
         await enterDetailText(page.getByLabel(/^Places(?: \*)?$/), "3")
         if (await page.getByLabel(/^Début(?: \*)?$/).inputValue() !== "18:00" || await page.getByLabel(/^Fin(?: \*)?$/).inputValue() !== "21:30") throw new Error("Detailed shift hours must match the visible actual form values")

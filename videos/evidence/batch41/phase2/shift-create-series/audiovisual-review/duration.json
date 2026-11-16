@@ -1,0 +1,44 @@
+{
+  "model": "gemini-3.8-flash",
+  "reviewedAt": "2026-11-16T22:09:31.183Z",
+  "videoSha256": "98e90f80a7f6026449f70366316ff09af845fb9b9f918fb44123fbc56e31a2eb",
+  "promptSha256": "a14cc54261beeb8ecf092ecd1b294cd5a7132f709c9cf945c94e8daa4c9e1242",
+  "clipSha256": "85ca31ead64e4c4d73eb2b52df10757a75d4f6c5fbd9a029fc405f6a3fd1dc0d",
+  "scene": "duration",
+  "review": {
+    "heardOpening": "La durée découpe la plage en équipes de deux heures",
+    "checkpoints": [
+      {
+        "spokenSeconds": 1,
+        "spoken": "La durée découpe la plage en équipes de deux heures",
+        "visibleSeconds": 1,
+        "visible": "Le formulaire affiche une durée de créneau de 2 h pour une plage horaire de 10:00 à 22:00",
+        "sync": "aligned",
+        "severity": "none"
+      },
+      {
+        "spokenSeconds": 5.8,
+        "spoken": "avec trois places, chaque relève accueille trois bénévoles",
+        "visibleSeconds": 4.5,
+        "visible": "Défilement montrant le champ Places par créneau fixé à 3 et l'aperçu indiquant 3 personnes par créneau",
+        "sync": "aligned",
+        "severity": "none"
+      },
+      {
+        "spokenSeconds": 11.8,
+        "spoken": "Ici, choisissons zéro minute",
+        "visibleSeconds": 9.5,
+        "visible": "Le curseur met en évidence le champ Pause entre deux créneaux (min) qui contient la valeur 0",
+        "sync": "aligned",
+        "severity": "none"
+      }
+    ],
+    "issues": [],
+    "voice": {
+      "consistent": true,
+      "warm": true,
+      "observation": "Voix masculine claire, posée et parfaitement intelligible."
+    }
+  },
+  "note": "Automated observation of actual final video audio and images; not a claim of complete human validation"
+}

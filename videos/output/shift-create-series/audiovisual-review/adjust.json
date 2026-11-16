@@ -1,0 +1,52 @@
+{
+  "model": "gemini-3.8-flash",
+  "reviewedAt": "2026-11-16T22:09:47.484Z",
+  "videoSha256": "98e90f80a7f6026449f70366316ff09af845fb9b9f918fb44123fbc56e31a2eb",
+  "promptSha256": "4a1fe3eff6ab1fb9193249561f3eebe03f6383f3bbcaff46f118b7d2392d2127",
+  "clipSha256": "46b671254abed0d20f554ddc862b0d5e48afecddc5c6b2387e0b3d4fc3c89d35",
+  "scene": "adjust",
+  "review": {
+    "heardOpening": "Après la création, passons en Liste",
+    "checkpoints": [
+      {
+        "spokenSeconds": 0.8,
+        "spoken": "passons en Liste et ouvrons un seul créneau",
+        "visibleSeconds": 1.2,
+        "visible": "Affichage de la vue liste puis clic sur Modifier sur le créneau de buvette",
+        "sync": "aligned",
+        "severity": "none"
+      },
+      {
+        "spokenSeconds": 5.8,
+        "spoken": "faisons passer sa capacité de trois à quatre personnes",
+        "visibleSeconds": 7.2,
+        "visible": "La valeur du champ Places passe de 3 à 4 dans le formulaire de modification",
+        "sync": "aligned",
+        "severity": "none"
+      },
+      {
+        "spokenSeconds": 8.8,
+        "spoken": "Enregistrons",
+        "visibleSeconds": 9,
+        "visible": "Clic sur le bouton Enregistrer",
+        "sync": "aligned",
+        "severity": "none"
+      },
+      {
+        "spokenSeconds": 10.8,
+        "spoken": "Cette modification concerne seulement cette plage, pas ses voisines",
+        "visibleSeconds": 10.2,
+        "visible": "Affichage de la liste avec la capacité à 4 pour la première plage et 3 pour les suivantes",
+        "sync": "aligned",
+        "severity": "none"
+      }
+    ],
+    "issues": [],
+    "voice": {
+      "consistent": true,
+      "warm": true,
+      "observation": "Voix masculine claire, fluide et naturelle, bien calée sur les manipulations à l'écran."
+    }
+  },
+  "note": "Automated observation of actual final video audio and images; not a claim of complete human validation"
+}

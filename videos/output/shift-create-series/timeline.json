@@ -1,7 +1,7 @@
 {
   "slug": "shift-create-series",
-  "capturePurpose": "rehearsal",
-  "recordedAt": "2026-11-16T22:04:46.527Z",
+  "capturePurpose": "narration-timed",
+  "recordedAt": "2026-11-16T22:08:30.965Z",
   "video": "capture.webm",
   "product": {
     "commit": "e8ed666a48294d77213f8bf64fe35898314b0ed9",
@@ -26,160 +26,160 @@
   "inputEvents": [
     {
       "kind": "click",
-      "atMs": 4313
+      "atMs": 7595
     },
     {
       "kind": "click",
-      "atMs": 5580
+      "atMs": 15930
     },
     {
       "kind": "click",
-      "atMs": 6414
+      "atMs": 19295
     },
     {
       "kind": "click",
-      "atMs": 7231
+      "atMs": 22045
     },
     {
       "kind": "click",
-      "atMs": 8462
+      "atMs": 28162
     },
     {
       "kind": "click",
-      "atMs": 9264
+      "atMs": 31711
     },
     {
       "kind": "click",
-      "atMs": 10114
+      "atMs": 37446
     },
     {
       "kind": "click",
-      "atMs": 11897
+      "atMs": 58094
     },
     {
       "kind": "click",
-      "atMs": 13180
+      "atMs": 69977
     },
     {
       "kind": "click",
-      "atMs": 14030
+      "atMs": 71210
     },
     {
       "kind": "click",
-      "atMs": 14847
+      "atMs": 76809
     },
     {
       "kind": "click",
-      "atMs": 15662
+      "atMs": 79277
     }
   ],
   "cues": [
     {
       "id": "welcome",
-      "startMs": 1182,
-      "endMs": 4629
+      "startMs": 1195,
+      "endMs": 14229
     },
     {
       "id": "range",
-      "startMs": 5083,
-      "endMs": 7541
+      "startMs": 14682,
+      "endMs": 27243
     },
     {
       "id": "duration",
-      "startMs": 7992,
-      "endMs": 10424
+      "startMs": 27696,
+      "endMs": 44476
     },
     {
       "id": "preview",
-      "startMs": 10875,
-      "endMs": 10928
+      "startMs": 44927,
+      "endMs": 56702
     },
     {
       "id": "create",
-      "startMs": 11381,
-      "endMs": 12245
+      "startMs": 57154,
+      "endMs": 69028
     },
     {
       "id": "adjust",
-      "startMs": 12698,
-      "endMs": 16477
+      "startMs": 69480,
+      "endMs": 87492
     },
     {
       "id": "result",
-      "startMs": 16930,
-      "endMs": 16960
+      "startMs": 87950,
+      "endMs": 102566
     }
   ],
   "anchors": [
     {
       "segmentId": "welcome",
       "phrase": "Au lieu de saisir chaque",
-      "startMs": 10222,
-      "endMs": 23000,
-      "cueMs": 3805
+      "startMs": 5906,
+      "endMs": 12585,
+      "cueMs": 7102
     },
     {
       "segmentId": "range",
       "phrase": "Ici, la buvette fonctionne de",
-      "startMs": 5681,
-      "endMs": 11604,
-      "cueMs": 5908
+      "startMs": 3083,
+      "endMs": 6729,
+      "cueMs": 17767
     },
     {
       "segmentId": "range",
       "phrase": "Cette plage décrit le besoin",
-      "startMs": 11604,
-      "endMs": 15352,
-      "cueMs": 6724
+      "startMs": 6894,
+      "endMs": 9487,
+      "cueMs": 21579
     },
     {
       "segmentId": "duration",
       "phrase": "La pause ajoute un intervalle",
-      "startMs": 15344,
-      "endMs": 20038,
-      "cueMs": 9574
+      "startMs": 9219,
+      "endMs": 11290,
+      "cueMs": 36916
     },
     {
       "segmentId": "duration",
       "phrase": "Ici, choisissons zéro minute ",
-      "startMs": 20038,
-      "endMs": 22786,
-      "cueMs": 10420
+      "startMs": 11707,
+      "endMs": 14944,
+      "cueMs": 39405
     },
     {
       "segmentId": "create",
       "phrase": "Créons la série",
-      "startMs": 0,
-      "endMs": 1495,
-      "cueMs": 11394
+      "startMs": 467,
+      "endMs": 1074,
+      "cueMs": 57623
     },
     {
       "segmentId": "create",
       "phrase": "chacune possède son propre effectif",
-      "startMs": 16100,
-      "endMs": 23000,
-      "cueMs": 12207
+      "startMs": 8447,
+      "endMs": 11300,
+      "cueMs": 65602
     },
     {
       "segmentId": "adjust",
       "phrase": "Enregistrons",
-      "startMs": 14279,
-      "endMs": 15607,
-      "cueMs": 15157
+      "startMs": 9312,
+      "endMs": 9707,
+      "cueMs": 78795
     },
     {
       "segmentId": "result",
       "phrase": "quatre places pour la première relève",
-      "startMs": 2988,
-      "endMs": 9959,
-      "cueMs": 16953
+      "startMs": 2054,
+      "endMs": 4861,
+      "cueMs": 90005
     },
     {
       "segmentId": "result",
       "phrase": "Une série bien découpée facilite",
-      "startMs": 17262,
-      "endMs": 27000,
-      "cueMs": 16954
+      "startMs": 9881,
+      "endMs": 14334,
+      "cueMs": 97832
     }
   ]
 }

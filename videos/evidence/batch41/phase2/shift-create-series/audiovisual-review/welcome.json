@@ -1,0 +1,44 @@
+{
+  "model": "gemini-3.8-flash",
+  "reviewedAt": "2026-11-16T22:09:30.344Z",
+  "videoSha256": "98e90f80a7f6026449f70366316ff09af845fb9b9f918fb44123fbc56e31a2eb",
+  "promptSha256": "2a4e65884d018d4062e51abba85725d095ecdd7e6716da49056d1837f9c9046a",
+  "clipSha256": "35618526964d21bd6a71433ee0f2fed9c3cf76d74b6b9e7413e6602d2d870fa9",
+  "scene": "welcome",
+  "review": {
+    "heardOpening": "Créer une série est idéal",
+    "checkpoints": [
+      {
+        "spokenSeconds": 0.5,
+        "spoken": "Créer une série est idéal lorsqu'un même poste doit être couvert toute la journée",
+        "visibleSeconds": 0,
+        "visible": "Bandeau d'introduction « Créer une série de créneaux » sur la vue générale des créneaux",
+        "sync": "aligned",
+        "severity": "none"
+      },
+      {
+        "spokenSeconds": 5.8,
+        "spoken": "Au lieu de saisir chaque plage séparément",
+        "visibleSeconds": 5.7,
+        "visible": "Clic sur le bouton « Créer une série » qui ouvre le formulaire dédié",
+        "sync": "aligned",
+        "severity": "none"
+      },
+      {
+        "spokenSeconds": 8,
+        "spoken": "on définit une règle commune, on contrôle l'aperçu, puis on crée tous les créneaux en une fois",
+        "visibleSeconds": 6.8,
+        "visible": "Affichage du formulaire « Créer une série de créneaux » avec les paramètres de récurrence et de durée",
+        "sync": "aligned",
+        "severity": "none"
+      }
+    ],
+    "issues": [],
+    "voice": {
+      "consistent": true,
+      "warm": true,
+      "observation": "Voix claire, posée et dynamique, parfaitement synchronisée avec la présentation."
+    }
+  },
+  "note": "Automated observation of actual final video audio and images; not a claim of complete human validation"
+}
