@@ -18,7 +18,7 @@ import { describe, it, expect, beforeAll, afterAll, vi } from "vitest"
 // The routes deliver after the response (`after`), which needs a request: nothing to deliver here.
 vi.mock("next/server", async (importOriginal) => ({ ...(await importOriginal<typeof import("next/server")>()), after: () => {} }))
 // No push or operator email from this test: the alert has its own tests.
-vi.mock("@/lib/operator-alerts", () => ({ notifyOperator: vi.fn(async () => {}) }))
+vi.mock("@/lib/operator-alerts", () => ({ notifyOperator: vi.fn(async () => {}), sendNtfy: vi.fn(async () => true) }))
 
 import type { Prisma } from "@/generated/prisma/client"
 import { prisma } from "@/lib/prisma"
@@ -46,27 +46,39 @@ describe.skipIf(!url)("automatic validation of new spaces on Postgres (#1371)", 
 
   afterAll(async () => {
     if (!url) return
-    // The outbox rows first: they are not deleted with the organisation.
-    await prisma.notificationOutbox.deleteMany({ where: { organizationId: { in: orgIds } } })
-    await prisma.orgLog.deleteMany({ where: { organizationId: { in: orgIds } } })
-    await prisma.operatorLog.deleteMany({ where: { OR: [{ entityId: { in: orgIds } }, { entityId: AUTO_APPROVAL_SETTING_KEY, createdAt: { gte: startedAt } }] } })
-    await prisma.adminUser.deleteMany({ where: { organizationId: { in: orgIds } } })
-    await prisma.organization.deleteMany({ where: { id: { in: orgIds } } })
-
-    // Put the setting row back exactly as it was.
-    if (previousSetting) {
-      await prisma.platformSetting.upsert({
-        where: { key: AUTO_APPROVAL_SETTING_KEY },
-        create: { key: AUTO_APPROVAL_SETTING_KEY, value: previousSetting.value as Prisma.InputJsonValue, updatedById: previousSetting.updatedById },
-        update: { value: previousSetting.value as Prisma.InputJsonValue, updatedById: previousSetting.updatedById },
-      })
-    } else {
-      await prisma.platformSetting.deleteMany({ where: { key: AUTO_APPROVAL_SETTING_KEY } })
+    try {
+      // The outbox rows first: they are not deleted with the organisation.
+      await prisma.notificationOutbox.deleteMany({ where: { organizationId: { in: orgIds } } })
+      await prisma.orgLog.deleteMany({ where: { organizationId: { in: orgIds } } })
+      await prisma.operatorLog.deleteMany({ where: { OR: [{ entityId: { in: orgIds } }, { entityId: AUTO_APPROVAL_SETTING_KEY, createdAt: { gte: startedAt } }] } })
+      await prisma.adminUser.deleteMany({ where: { organizationId: { in: orgIds } } })
+      await prisma.organization.deleteMany({ where: { id: { in: orgIds } } })
+    } finally {
+      // Restore the setting row even when a cleanup step above fails. A case may fail before its
+      // cleanup; the row must not keep the option on for the rest of the database.
+      try {
+        if (previousSetting) {
+          await prisma.platformSetting.upsert({
+            where: { key: AUTO_APPROVAL_SETTING_KEY },
+            create: { key: AUTO_APPROVAL_SETTING_KEY, value: previousSetting.value as Prisma.InputJsonValue, updatedById: previousSetting.updatedById },
+            update: { value: previousSetting.value as Prisma.InputJsonValue, updatedById: previousSetting.updatedById },
+          })
+        } else {
+          await prisma.platformSetting.deleteMany({ where: { key: AUTO_APPROVAL_SETTING_KEY } })
+        }
+      } finally {
+        if (previousHostedService === undefined) delete process.env.HOSTED_SERVICE
+        else process.env.HOSTED_SERVICE = previousHostedService
+        await prisma.$disconnect()
+      }
     }
-    if (previousHostedService === undefined) delete process.env.HOSTED_SERVICE
-    else process.env.HOSTED_SERVICE = previousHostedService
-    await prisma.$disconnect()
   })
+
+  /**
+   * The step narrowed to this case's own spaces: a shared database may hold other eligible spaces
+   * created while the global option is on, and no case may validate them or consume their budget.
+   */
+  const run = (now: Date, ids: string[]) => runAutoApproval({ now, clock: () => now, organizationIds: ids })
 
   /** The option on, with the given session and daily budget. */
   async function enable(opts: { activatedAt: Date; budgetUsed?: number; until?: string; budgetDate?: string }) {
@@ -152,7 +164,7 @@ describe.skipIf(!url)("automatic validation of new spaces on Postgres (#1371)", 
       ownerActivatedAt: new Date(now.getTime() - 10 * 60 * 1000),
     })
 
-    const counts = await runAutoApproval({ now })
+    const counts = await run(now, [org.id])
     expect(counts.approved).toBe(1)
 
     const after = await prisma.organization.findUniqueOrThrow({ where: { id: org.id } })
@@ -177,7 +189,7 @@ describe.skipIf(!url)("automatic validation of new spaces on Postgres (#1371)", 
       ownerActivatedAt: new Date(now.getTime() - 2 * 60 * 1000),
     })
 
-    expect((await runAutoApproval({ now })).approved).toBe(0)
+    expect((await run(now, [org.id])).approved).toBe(0)
     const after = await prisma.organization.findUniqueOrThrow({ where: { id: org.id } })
     expect(after.publicationApprovedAt).toBeNull()
     expect(after.outboundEmailApprovedAt).toBeNull()
@@ -193,7 +205,7 @@ describe.skipIf(!url)("automatic validation of new spaces on Postgres (#1371)", 
       ownerActivatedAt: new Date(now.getTime() - 15 * 60 * 1000),
     })
 
-    expect((await runAutoApproval({ now })).approved).toBe(0)
+    expect((await run(now, [org.id])).approved).toBe(0)
     const after = await prisma.organization.findUniqueOrThrow({ where: { id: org.id } })
     expect(after.publicationApprovedAt).toBeNull()
     expect(after.outboundEmailApprovedAt).toBeNull()
@@ -207,7 +219,7 @@ describe.skipIf(!url)("automatic validation of new spaces on Postgres (#1371)", 
       ownerActivatedAt: new Date(now.getTime() - 10 * 60 * 1000),
     })
 
-    const [a, b] = await Promise.all([runAutoApproval({ now }), runAutoApproval({ now })])
+    const [a, b] = await Promise.all([run(now, [org.id]), run(now, [org.id])])
     expect(a.approved + b.approved).toBe(1)
 
     const after = await prisma.organization.findUniqueOrThrow({ where: { id: org.id } })
@@ -233,7 +245,7 @@ describe.skipIf(!url)("automatic validation of new spaces on Postgres (#1371)", 
       ownerActivatedAt: new Date(now.getTime() - 9 * 60 * 1000),
     })
 
-    const counts = await runAutoApproval({ now })
+    const counts = await run(now, [first.org.id, second.org.id])
     expect(counts.approved).toBe(1)
     expect(counts.cutOff).toBe(1)
 

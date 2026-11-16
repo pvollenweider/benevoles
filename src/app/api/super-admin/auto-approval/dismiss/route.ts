@@ -12,5 +12,5 @@ export async function POST() {
   const guard = await requireSuperAdmin()
   if (guard instanceof NextResponse) return guard
   if (!isHostedService()) return NextResponse.json({ error: AUTO_APPROVAL_HOSTED_ONLY }, { status: 403 })
-  return NextResponse.json(await dismissAutoApprovalNotice(new Date()))
+  return NextResponse.json(await dismissAutoApprovalNotice(guard.session.user, new Date()))
 }

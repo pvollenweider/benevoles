@@ -31,6 +31,7 @@ export const OPERATOR_ACTIONS = [
   "auto_approval.cut_off",
   "auto_approval.expired",
   "auto_approval.reviewed",
+  "auto_approval.notice_dismissed",
   "beta.capability_opened",
   "beta.capability_closed",
 ] as const
@@ -59,6 +60,7 @@ export const OPERATOR_ACTION_LABELS: Record<OperatorAction, string> = {
   "auto_approval.cut_off": "Validation automatique coupée par le plafond",
   "auto_approval.expired": "Validation automatique expirée",
   "auto_approval.reviewed": "Espace validé automatiquement relu",
+  "auto_approval.notice_dismissed": "Avis de coupure de la validation automatique masqué",
   "beta.capability_opened": "Fonction bêta ouverte à l'essai",
   "beta.capability_closed": "Fonction bêta fermée aux nouvelles adoptions",
 }

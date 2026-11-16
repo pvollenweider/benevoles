@@ -151,6 +151,31 @@ describe("operator alerts (#810)", () => {
     expect(reported).toHaveBeenCalledWith("operator_alert.invalid_address", expect.any(Error))
   })
 
+  it("queues the email in the caller's transaction and leaves the push to it when asked", async () => {
+    const tx = { notificationOutbox: { findFirst: vi.fn().mockResolvedValue(null) } }
+    const ok = vi.fn().mockResolvedValue({ ok: true, status: 200 })
+    await notifyOperator(
+      alert,
+      { fetch: ok as unknown as typeof fetch, env: { NTFY_URL: TOPIC } },
+      { db: tx as never, push: false },
+    )
+    expect(ok).not.toHaveBeenCalled()
+    expect(tx.notificationOutbox.findFirst).toHaveBeenCalledTimes(1)
+    expect(outbox.enqueueNotifications).toHaveBeenCalledTimes(1)
+    expect(outbox.enqueueNotifications.mock.calls[0][1]).toBe(tx)
+  })
+
+  it("lets a durable email failure reach the caller's transaction", async () => {
+    const tx = { notificationOutbox: { findFirst: vi.fn().mockResolvedValue(null) } }
+    outbox.enqueueNotifications.mockRejectedValueOnce(new Error("outbox down"))
+    await expect(notifyOperator(
+      alert,
+      { env: {} },
+      { db: tx as never, push: false, strictEmail: true },
+    )).rejects.toThrow("outbox down")
+    expect(reported).toHaveBeenCalledWith("operator_alert.email", expect.any(Error))
+  })
+
   it("still emails when the push fails, and reports an email failure without throwing", async () => {
     const throwing = vi.fn().mockRejectedValue(new Error("offline"))
     await notifyOperator(alert, { fetch: throwing as unknown as typeof fetch, env: { NTFY_URL: TOPIC }, sleep: noWait })

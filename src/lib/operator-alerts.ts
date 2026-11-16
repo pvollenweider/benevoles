@@ -4,7 +4,7 @@
 import { z } from "zod"
 import { prisma } from "@/lib/prisma"
 import { reportError } from "@/lib/report-error"
-import { deliverAfterResponse, enqueueNotifications } from "@/lib/notifications/outbox"
+import { deliverAfterResponse, enqueueNotifications, type OutboxDb } from "@/lib/notifications/outbox"
 
 /**
  * Alerts to the operator (#810): an ntfy push **and** an email to every active super admin. Step
@@ -67,6 +67,24 @@ export function ntfyRequest(alert: OperatorAlert, config: NtfyConfig): { url: st
 
 type Deps = { fetch?: typeof fetch; env?: Record<string, string | undefined>; sleep?: (ms: number) => Promise<void> }
 
+/** What an alert may use as its database: the global client or the transaction making the change. */
+export type OperatorAlertDb = OutboxDb & Pick<typeof prisma, "notificationOutbox">
+
+/**
+ * How much of the alert to deliver now. `push: false` queues only the email, in `db`: a caller
+ * that must make the alert durable with its business change (the automatic cut-off, #1371) queues
+ * it inside its transaction and sends the push after the commit.
+ */
+export type OperatorAlertDelivery = {
+  db?: OperatorAlertDb
+  push?: boolean
+  /**
+   * Let an email enqueue failure reach the caller instead of being reported and swallowed. The
+   * automatic cut-off uses it inside its transaction: no email means no committed cut-off.
+   */
+  strictEmail?: boolean
+}
+
 /**
  * Waits before each new attempt of the push. A single attempt lost a sign-up alert in production
  * (#810): ntfy.sh did not answer the connection for 10 seconds, then answered in half a second.
@@ -105,9 +123,9 @@ export async function sendNtfy(alert: OperatorAlert, deps: Deps = {}): Promise<b
  * deletes a sent normal email at once, but keeps operator-alert rows seven days: the row is the
  * persistent deduplication marker for both the push and the email.
  */
-async function alreadyAlerted(key: string): Promise<boolean> {
+async function alreadyAlerted(key: string, db: OperatorAlertDb = prisma): Promise<boolean> {
   try {
-    const row = await prisma.notificationOutbox.findFirst({
+    const row = await db.notificationOutbox.findFirst({
       where: { dedupeKey: { startsWith: `operator_alert:${key}:` } },
       select: { id: true },
     })
@@ -124,10 +142,23 @@ async function alreadyAlerted(key: string): Promise<boolean> {
  * back. The email goes through the outbox (sending limits and all), queued with the alert's key so
  * a repeat is stored once; delivered right after the request when there is one, else by the next
  * outbox run. An existing row for the key stops both channels.
+ *
+ * `delivery.db` runs the email enqueue in the caller's transaction, and `delivery.push: false`
+ * leaves the push to the caller: that is how a cut-off makes its email durable before committing.
  */
-export async function notifyOperator(alert: OperatorAlert, deps: Deps = {}): Promise<void> {
-  if (await alreadyAlerted(alert.key)) return
-  await Promise.all([sendNtfy(alert, deps), emailOperator(alert, deps.env ?? process.env)])
+export async function notifyOperator(
+  alert: OperatorAlert,
+  deps: Deps = {},
+  delivery: OperatorAlertDelivery = {},
+): Promise<void> {
+  const db = delivery.db ?? prisma
+  if (await alreadyAlerted(alert.key, db)) return
+  const email = emailOperator(alert, deps.env ?? process.env, db, delivery.strictEmail === true)
+  if (delivery.push === false) {
+    await email
+    return
+  }
+  await Promise.all([sendNtfy(alert, deps), email])
 }
 
 /**
@@ -144,7 +175,12 @@ export async function operatorAlertRecipients(env: Record<string, string | undef
   return admins.map((a) => a.email)
 }
 
-async function emailOperator(alert: OperatorAlert, env: Record<string, string | undefined>): Promise<void> {
+async function emailOperator(
+  alert: OperatorAlert,
+  env: Record<string, string | undefined>,
+  db: OperatorAlertDb = prisma,
+  strict = false,
+): Promise<void> {
   try {
     const recipients = await operatorAlertRecipients(env)
     const ids = await enqueueNotifications(
@@ -154,9 +190,11 @@ async function emailOperator(alert: OperatorAlert, env: Record<string, string | 
         dedupeKey: `operator_alert:${alert.key}:${email}`,
         data: { title: alert.title, message: alert.message, url: alert.url ?? null },
       })),
+      db,
     )
     try { deliverAfterResponse(ids) } catch { /* outside a request: the next outbox run sends it */ }
   } catch (e) {
     reportError("operator_alert.email")(e)
+    if (strict) throw e
   }
 }

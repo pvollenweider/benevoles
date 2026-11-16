@@ -18,6 +18,7 @@ import {
   autoApprovalRemainingBudget,
   autoApprovalState,
   autoApprovalStateSentence,
+  autoApprovalStoredBudgetUsed,
   autoApprovalUntilError,
   autoApprovalView,
   parseAutoApprovalValue,
@@ -30,6 +31,7 @@ const on = (until: string, extra: Record<string, unknown> = {}) => ({
   until,
   activatedAt: "2026-11-01T09:00:00.000Z",
   activatedByLabel: "Opérateur",
+  budgetDate: "2026-11-16",
   ...extra,
 })
 
@@ -66,12 +68,14 @@ describe("autoApprovalState", () => {
   it("keeps the whole day when it is a daylight-saving day", () => {
     // Spring forward: 29 March 2026 is 23 hours long in Zurich.
     expect(autoApprovalEndInstant("2026-03-29", ZURICH)?.toISOString()).toBe("2026-03-29T22:00:00.000Z")
-    expect(autoApprovalState(on("2026-03-29"), new Date("2026-03-29T21:59:59.999Z"), ZURICH)).toBe("on")
-    expect(autoApprovalState(on("2026-03-29"), new Date("2026-03-29T22:00:00.000Z"), ZURICH)).toBe("expired")
+    const spring = on("2026-03-29", { activatedAt: "2026-03-01T09:00:00.000Z" })
+    expect(autoApprovalState(spring, new Date("2026-03-29T21:59:59.999Z"), ZURICH)).toBe("on")
+    expect(autoApprovalState(spring, new Date("2026-03-29T22:00:00.000Z"), ZURICH)).toBe("expired")
     // Fall back: 25 October 2026 is 25 hours long.
     expect(autoApprovalEndInstant("2026-10-25", ZURICH)?.toISOString()).toBe("2026-10-25T23:00:00.000Z")
-    expect(autoApprovalState(on("2026-10-25"), new Date("2026-10-25T22:59:59.999Z"), ZURICH)).toBe("on")
-    expect(autoApprovalState(on("2026-10-25"), new Date("2026-10-25T23:00:00.000Z"), ZURICH)).toBe("expired")
+    const autumn = on("2026-10-25", { activatedAt: "2026-10-01T09:00:00.000Z" })
+    expect(autoApprovalState(autumn, new Date("2026-10-25T22:59:59.999Z"), ZURICH)).toBe("on")
+    expect(autoApprovalState(autumn, new Date("2026-10-25T23:00:00.000Z"), ZURICH)).toBe("expired")
   })
 })
 
@@ -109,7 +113,7 @@ describe("the chosen end day", () => {
 
 describe("the daily budget (UTC days)", () => {
   it("rolls over at UTC midnight", () => {
-    const value = { ...EMPTY_AUTO_APPROVAL, budgetDate: "2026-11-15", budgetUsed: AUTO_APPROVAL_DAILY_CEILING }
+    const value = { ...EMPTY_AUTO_APPROVAL, until: null, activatedAt: "2026-11-01T09:00:00.000Z", budgetDate: "2026-11-15", budgetUsed: AUTO_APPROVAL_DAILY_CEILING }
     expect(autoApprovalBudgetDay(new Date("2026-11-15T23:59:59.999Z"))).toBe("2026-11-15")
     expect(autoApprovalRemainingBudget(value, new Date("2026-11-15T23:59:59.999Z"))).toBe(0)
     expect(autoApprovalBudgetDay(new Date("2026-11-16T00:00:00.000Z"))).toBe("2026-11-16")
@@ -117,7 +121,7 @@ describe("the daily budget (UTC days)", () => {
   })
 
   it("subtracts the day's uses and never goes below zero", () => {
-    const value = { ...EMPTY_AUTO_APPROVAL, budgetDate: "2026-11-16", budgetUsed: 3 }
+    const value = { ...EMPTY_AUTO_APPROVAL, until: null, activatedAt: "2026-11-01T09:00:00.000Z", budgetDate: "2026-11-16", budgetUsed: 3 }
     expect(autoApprovalRemainingBudget(value, new Date("2026-11-16T12:00:00Z"))).toBe(17)
     expect(autoApprovalRemainingBudget({ ...value, budgetUsed: 99 }, new Date("2026-11-16T12:00:00Z"))).toBe(0)
   })
@@ -226,6 +230,19 @@ describe("eligibility of a space", () => {
     expect(autoApprovalCandidateProblem(invitedLater, value, now)).toBeNull()
   })
 
+  it("excludes a space whose only active account was invited later", () => {
+    const invitedOnly = {
+      ...base(),
+      admins: [{
+        email: "invitee@example.org",
+        createdAt: new Date("2026-11-16T09:40:00Z"),
+        isActive: true,
+        activatedAt: new Date("2026-11-16T09:45:00Z"),
+      }],
+    }
+    expect(autoApprovalCandidateProblem(invitedOnly, value, now)).toBe("no_active_owner")
+  })
+
   it("excludes an owner activated less than five minutes ago", () => {
     const young = base()
     young.admins[0].activatedAt = new Date(now.getTime() - 2 * 60 * 1000)
@@ -242,5 +259,71 @@ describe("parseAutoApprovalValue", () => {
     })
     expect(parseAutoApprovalValue({ until: "2026-11-20", cutOffAt: "not a date" }).cutOffAt).toBeNull()
     expect(parseAutoApprovalValue(JSON.stringify({ until: "2026-11-20" })).until).toBe("2026-11-20")
+  })
+})
+
+describe("corrupted stored settings fail closed", () => {
+  const now = new Date("2026-11-16T10:00:00Z")
+  const valid = (extra: Record<string, unknown> = {}) => ({
+    until: "2026-11-20",
+    activatedAt: "2026-11-16T09:00:00.000Z",
+    activatedById: "sa-1",
+    activatedByLabel: "Opérateur",
+    budgetDate: "2026-11-16",
+    budgetUsed: 3,
+    totalSinceActivation: 5,
+    cutOffAt: null,
+    cutOffSeenAt: null,
+    expiredAt: null,
+    cutOffAlertedAt: null,
+    ...extra,
+  })
+
+  it("refuses a partial value that only keeps a far-future end day", () => {
+    expect(autoApprovalState({ until: "2099-01-01" }, now)).toBe("off")
+    expect(autoApprovalView({ until: "2099-01-01" }, now)).toMatchObject({ state: "off", invalid: true })
+  })
+
+  it.each([
+    ["missing budgetUsed", { budgetUsed: undefined }],
+    ["missing budgetDate", { budgetDate: undefined }],
+    ["an unparseable cutOffAt", { cutOffAt: "not a date" }],
+    ["a negative budgetUsed", { budgetUsed: -1 }],
+    ["a fractional budgetUsed", { budgetUsed: 1.5 }],
+    ["an impossible budgetDate", { budgetDate: "2026-02-30" }],
+    ["an activation after the end day", { activatedAt: "2026-11-20T09:00:00.000Z" }],
+    ["an end day beyond thirty days plus one after activation", { until: "2026-12-18" }],
+    ["an unparseable activatedAt", { activatedAt: "not a date" }],
+    ["an activation beyond the allowed clock skew", { activatedAt: "2026-11-16T10:10:00.000Z" }],
+    ["a missing counter", { totalSinceActivation: undefined }],
+  ])("is off and invalid with %s", (_label, patch) => {
+    const value = valid(patch)
+    expect(autoApprovalState(value, now)).toBe("off")
+    expect(autoApprovalView(value, now)).toMatchObject({ state: "off", invalid: true })
+  })
+
+  it("refuses an off value that lost its activation or its budget day", () => {
+    expect(autoApprovalView({ ...valid(), until: null, budgetDate: null }, now)).toMatchObject({ state: "off", invalid: true })
+    expect(autoApprovalView({ ...valid(), until: null, activatedAt: null }, now)).toMatchObject({ state: "off", invalid: true })
+  })
+
+  it("accepts a complete coherent value, including a cut-off or a deactivation", () => {
+    expect(autoApprovalState(valid(), now)).toBe("on")
+    expect(autoApprovalView(valid(), now).invalid).toBe(false)
+    const cut = valid({ cutOffAt: "2026-11-16T09:30:00.000Z" })
+    expect(autoApprovalState(cut, now)).toBe("cut_off")
+    expect(autoApprovalView(cut, now).invalid).toBe(false)
+    expect(autoApprovalView({ ...valid(), until: null }, now)).toMatchObject({ state: "off", invalid: false })
+    expect(autoApprovalView(null, now)).toMatchObject({ state: "off", invalid: false })
+    // The inclusive end day may reach the 30-day window plus one day.
+    expect(autoApprovalView(valid({ until: "2026-12-17" }), now).invalid).toBe(false)
+  })
+
+  it("reads today's budget from a corrupted value, or refuses to guess", () => {
+    expect(autoApprovalStoredBudgetUsed({ budgetDate: "2026-11-16", budgetUsed: 19 }, now)).toBe(19)
+    expect(autoApprovalStoredBudgetUsed({ budgetDate: "2026-11-15", budgetUsed: 19 }, now)).toBe(0)
+    expect(autoApprovalStoredBudgetUsed({ budgetDate: "2026-11-16", budgetUsed: "x" }, now)).toBeNull()
+    expect(autoApprovalStoredBudgetUsed({ budgetDate: "2026-11-17", budgetUsed: 1 }, now)).toBeNull()
+    expect(autoApprovalStoredBudgetUsed({}, now)).toBeNull()
   })
 })

@@ -5,7 +5,7 @@ import { NextResponse } from "next/server"
 import { requireSuperAdmin } from "@/lib/auth-guard"
 import { isHostedService } from "@/lib/site"
 import { AUTO_APPROVAL_HOSTED_ONLY, autoApprovalUntilError } from "@/lib/auto-approval"
-import { disableAutoApproval, readAutoApprovalView, setAutoApprovalUntil } from "@/lib/auto-approval-server"
+import { AutoApprovalCeilingReachedError, disableAutoApproval, readAutoApprovalView, setAutoApprovalUntil } from "@/lib/auto-approval-server"
 
 /**
  * « Validation automatique des nouveaux espaces » (#1371): super admin only, hosted service only.
@@ -37,8 +37,13 @@ export async function PUT(req: Request) {
   const problem = autoApprovalUntilError(body?.until, now)
   if (problem) return NextResponse.json({ error: problem, field: "until" }, { status: 400 })
 
-  const view = await setAutoApprovalUntil((body!.until as string).trim(), guard.session.user, now)
-  return NextResponse.json(view)
+  try {
+    const view = await setAutoApprovalUntil((body!.until as string).trim(), guard.session.user, now)
+    return NextResponse.json(view)
+  } catch (e) {
+    if (e instanceof AutoApprovalCeilingReachedError) return NextResponse.json({ error: e.message }, { status: 409 })
+    throw e
+  }
 }
 
 export async function DELETE() {

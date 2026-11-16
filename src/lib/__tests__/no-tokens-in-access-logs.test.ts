@@ -132,6 +132,8 @@ describe("no personal token in the proxy access log", () => {
       "revision", "volunteerId", "date",
       // the proposal run shown (#1172, `?run=`), behind the admin login: an id, no secret
       "run",
+      // the filtered organisations list (#1371, `?filtre=auto-a-relire`), behind the super admin login
+      "filtre",
       // the database connection string's startup options (prisma-adapter.ts, #1172), never a request URL
       "options",
       // external links, never to this server: OpenStreetMap (map-link.ts), mailto subject

@@ -1,6 +1,7 @@
 // SPDX-FileCopyrightText: 2026 Philippe Vollenweider
 // SPDX-License-Identifier: AGPL-3.0-only
 
+import { z } from "zod"
 import { APP_TIME_ZONE, localDateTimeToUtc } from "@/lib/time-zone"
 import { signupOwnerEmails } from "@/lib/org-approval"
 
@@ -29,6 +30,17 @@ export const AUTO_APPROVAL_MIN_AGE_MINUTES = 5
 
 /** The operator's log target of a decision about the option itself. */
 export const AUTO_APPROVAL_TARGET = "Validation automatique des nouveaux espaces"
+
+/** Refusal of a new activation while the current UTC day's budget is already spent. */
+export const AUTO_APPROVAL_CEILING_REACHED =
+  `Le plafond de ${AUTO_APPROVAL_DAILY_CEILING} validations automatiques est atteint pour aujourd'hui. Vous pourrez réactiver l'option demain.`
+
+/** The screen's notice when the stored value cannot be read safely: the option is off. */
+export const AUTO_APPROVAL_INVALID_NOTICE =
+  "Réglage illisible : l'option est désactivée. Réactivez-la pour repartir d'un état propre."
+
+/** How far in the future an activation instant may be before the value is considered corrupt. */
+export const AUTO_APPROVAL_CLOCK_SKEW_MS = 5 * 60 * 1000
 
 /** The filtered organisations list: spaces validated automatically and not reread yet. */
 export const AUTO_APPROVAL_REVIEW_FILTER = "auto-a-relire"
@@ -160,12 +172,85 @@ export function parseAutoApprovalValue(raw: unknown): AutoApprovalValue {
   }
 }
 
+function isInstant(value: string): boolean {
+  return !Number.isNaN(new Date(value).getTime())
+}
+
+const storedDay = z.string().refine(isCalendarDay, "Jour invalide")
+const storedInstant = z.string().refine(isInstant, "Instant invalide")
+
 /**
- * The effective state at `now`. Expiry wins over a cut-off: once the chosen day is over the
- * option is expired, whatever stopped it before. A cut-off notice is kept separately in the view.
+ * The whole safety-relevant shape of the setting row, the one strict validator this module uses.
+ * Every field is required (null when absent): a partial value, an unparseable date or a missing
+ * counter is corruption, never a usable default (#1371 review).
+ */
+const storedValueSchema = z.object({
+  until: storedDay.nullable(),
+  activatedAt: storedInstant.nullable(),
+  activatedById: z.string().nullable(),
+  activatedByLabel: z.string().nullable(),
+  budgetDate: storedDay.nullable(),
+  budgetUsed: z.number().int().nonnegative(),
+  totalSinceActivation: z.number().int().nonnegative(),
+  cutOffAt: storedInstant.nullable(),
+  cutOffSeenAt: storedInstant.nullable(),
+  expiredAt: storedInstant.nullable(),
+  cutOffAlertedAt: storedInstant.nullable(),
+})
+
+/**
+ * An active session must make sense: it was activated (not in the future beyond a small clock
+ * skew), its end day is after that activation and within the 30-day window it was chosen in, and
+ * the UTC budget it carries is present. Anything else is corruption.
+ */
+function storedValueCoherent(v: AutoApprovalValue, now: Date, timeZone: string): boolean {
+  // A stored value always carries its activation and its UTC budget day, even when deactivated.
+  if (!v.activatedAt || !v.budgetDate) return false
+  const activated = new Date(v.activatedAt)
+  if (activated.getTime() > now.getTime() + AUTO_APPROVAL_CLOCK_SKEW_MS) return false
+  if (v.until === null) return true
+  const end = autoApprovalEndInstant(v.until, timeZone)
+  if (!end || end.getTime() <= activated.getTime()) return false
+  const activatedDay = autoApprovalDayInZone(activated, timeZone)
+  // The 30-day window, plus the day the inclusive end day itself adds: one day of tolerance.
+  return v.until <= addCalendarDays(activatedDay, AUTO_APPROVAL_MAX_DAYS + 1)
+}
+
+/** A stored value, with the sanitized fields and the fail-closed verdict of the strict validator. */
+export type AutoApprovalStored = {
+  value: AutoApprovalValue
+  /** A stored value exists but does not satisfy the whole shape: the option is off. */
+  invalid: boolean
+}
+
+/**
+ * Reads the stored JSON through the one strict validator. `invalid` is false only for an absent
+ * row or a complete, coherent value; every other stored value is reported as invalid and must be
+ * treated as off. `value` stays the best-effort reading, for the fields that can still be shown.
+ */
+export function readAutoApprovalStored(raw: unknown, now: Date, timeZone: string = APP_TIME_ZONE): AutoApprovalStored {
+  const value = parseAutoApprovalValue(raw)
+  if (raw === null || raw === undefined) return { value, invalid: false }
+  let parsed: unknown = raw
+  if (typeof parsed === "string") {
+    try { parsed = JSON.parse(parsed) } catch { return { value, invalid: true } }
+  }
+  const result = storedValueSchema.safeParse(parsed)
+  if (!result.success || !storedValueCoherent(result.data, now, timeZone)) {
+    return { value, invalid: true }
+  }
+  return { value: result.data, invalid: false }
+}
+
+/**
+ * The effective state at `now`, from the strict validator: a corrupted value is off, never on.
+ * Expiry wins over a cut-off: once the chosen day is over the option is expired, whatever stopped
+ * it before. A cut-off notice is kept separately in the view.
  */
 export function autoApprovalState(value: unknown, now: Date, timeZone: string = APP_TIME_ZONE): AutoApprovalState {
-  const v = parseAutoApprovalValue(value)
+  const stored = readAutoApprovalStored(value, now, timeZone)
+  if (stored.invalid) return "off"
+  const v = stored.value
   const end = autoApprovalEndInstant(v.until, timeZone)
   if (!end) return "off"
   if (now.getTime() >= end.getTime()) return "expired"
@@ -209,9 +294,33 @@ export function autoApprovalUntilError(until: unknown, now: Date, timeZone: stri
 
 /** The automatic validations still allowed today (a new UTC day starts from zero). */
 export function autoApprovalRemainingBudget(value: unknown, now: Date): number {
-  const v = parseAutoApprovalValue(value)
+  const stored = readAutoApprovalStored(value, now)
+  // A value the strict validator refuses is off: it can never grant capacity.
+  if (stored.invalid) return 0
+  const v = stored.value
   const used = v.budgetDate === autoApprovalBudgetDay(now) ? v.budgetUsed : 0
   return Math.max(0, AUTO_APPROVAL_DAILY_CEILING - used)
+}
+
+/**
+ * Today's used budget as the raw stored value carries it, or null when it cannot be read. Used
+ * when a new activation replaces an invalid value: a readable count is honoured, an unreadable
+ * one is treated as fully used (fail closed). A stored day after today's is not trusted either.
+ */
+export function autoApprovalStoredBudgetUsed(raw: unknown, now: Date): number | null {
+  let value: unknown = raw
+  if (typeof value === "string") {
+    try { value = JSON.parse(value) } catch { return null }
+  }
+  if (!value || typeof value !== "object" || Array.isArray(value)) return null
+  const v = value as Record<string, unknown>
+  if (!isCalendarDay(v.budgetDate)) return null
+  const today = autoApprovalBudgetDay(now)
+  if (v.budgetDate > today) return null
+  if (v.budgetDate < today) return 0
+  const used = v.budgetUsed
+  if (typeof used !== "number" || !Number.isInteger(used) || used < 0) return null
+  return used
 }
 
 /** The instant before which an owner's activation is too recent for the automatic validation. */
@@ -222,6 +331,8 @@ export function autoApprovalActivationCutoff(now: Date): Date {
 /** The view the super admin section and the routes share; labels are rendered in `timeZone`. */
 export type AutoApprovalView = {
   state: AutoApprovalState
+  /** The stored value failed the strict validator: the option is off and the screen says so. */
+  invalid: boolean
   until: string | null
   untilLabel: string | null
   activatedAt: string | null
@@ -240,14 +351,16 @@ export type AutoApprovalView = {
 
 /** The view model of the setting: state, counters, cut-off notice and the bounds of the date field. */
 export function autoApprovalView(value: unknown, now: Date, timeZone: string = APP_TIME_ZONE): AutoApprovalView {
-  const v = parseAutoApprovalValue(value)
-  const state = autoApprovalState(v, now, timeZone)
+  const stored = readAutoApprovalStored(value, now, timeZone)
+  const v = stored.value
+  const state = stored.invalid ? "off" : autoApprovalState(v, now, timeZone)
   const today = autoApprovalDayInZone(now, timeZone)
   const maxUntil = autoApprovalMaxDay(now, timeZone)
-  const budgetUsed = v.budgetDate === autoApprovalBudgetDay(now) ? v.budgetUsed : 0
+  const budgetUsed = !stored.invalid && v.budgetDate === autoApprovalBudgetDay(now) ? v.budgetUsed : 0
   const cutOffLabel = v.cutOffAt ? autoApprovalMomentLabel(v.cutOffAt, timeZone) : null
   return {
     state,
+    invalid: stored.invalid,
     until: v.until,
     untilLabel: v.until ? autoApprovalDayLabel(v.until, timeZone) : null,
     activatedAt: v.activatedAt,
@@ -284,9 +397,9 @@ export function autoApprovalStateSentence(view: AutoApprovalView): string {
   }
 }
 
-/** The two counters, as plain sentences. Empty while the option was never activated. */
+/** The two counters, as plain sentences. Empty while the option was never activated, or unreadable. */
 export function autoApprovalCounterSentences(view: AutoApprovalView): string[] {
-  if (!view.activatedAt) return []
+  if (view.invalid || !view.activatedAt) return []
   return [
     `Aujourd'hui : ${view.budgetUsed} sur ${view.budgetCeiling}`,
     `Depuis l'activation : ${view.totalSinceActivation}`,
@@ -333,15 +446,25 @@ export function autoApprovalCandidateProblem(
 
   const owner = autoApprovalSignupOwner(org)
   if (!owner) return "no_active_owner"
-  const cutoff = autoApprovalActivationCutoff(now)
-  if (owner.activatedAt!.getTime() > cutoff.getTime()) return "owner_too_young"
+  if (!autoApprovalSignupOwner(org, now)) return "owner_too_young"
   return null
 }
 
-/** The active owner account created by the sign-up, once it holds an activation instant. */
+/**
+ * The active owner account created by the sign-up, once it holds an activation instant; with
+ * `now`, only one activated at least five minutes ago. The sign-up provenance is the timestamp
+ * heuristic shared with `signupOwnerEmails` in `src/lib/org-approval.ts` (accounts created within
+ * ten seconds of the organisation, same sign-up transaction): it is not an immutable identifier,
+ * but an account added later never falls in that window and never counts here.
+ */
 export function autoApprovalSignupOwner(
   org: Pick<AutoApprovalCandidate, "createdAt" | "admins">,
+  now?: Date,
 ): AutoApprovalCandidate["admins"][number] | null {
   const emails = new Set(signupOwnerEmails(org.createdAt, org.admins))
-  return org.admins.find((a) => emails.has(a.email) && a.isActive && a.activatedAt !== null) ?? null
+  const cutoff = now ? autoApprovalActivationCutoff(now).getTime() : null
+  return org.admins.find((a) =>
+    emails.has(a.email) && a.isActive && a.activatedAt !== null &&
+    (cutoff === null || a.activatedAt.getTime() <= cutoff),
+  ) ?? null
 }

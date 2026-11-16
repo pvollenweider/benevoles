@@ -5,10 +5,11 @@ import { describe, it, expect, vi, afterEach } from "vitest"
 import "@testing-library/jest-dom/vitest"
 import { render, screen, cleanup, fireEvent, waitFor, within } from "@testing-library/react"
 import AutoApprovalSettings from "../super-admin/AutoApprovalSettings"
-import type { AutoApprovalView } from "@/lib/auto-approval"
+import { AUTO_APPROVAL_CEILING_REACHED, AUTO_APPROVAL_INVALID_NOTICE, type AutoApprovalView } from "@/lib/auto-approval"
 
 const view = (over: Partial<AutoApprovalView> = {}): AutoApprovalView => ({
   state: "off",
+  invalid: false,
   until: null,
   untilLabel: null,
   activatedAt: null,
@@ -154,6 +155,30 @@ describe("the automatic validation section (#1371)", () => {
     await waitFor(() => expect(screen.getByLabelText(/Jusqu'au/)).toHaveFocus())
     expect(screen.getByLabelText(/Jusqu'au/)).toHaveAccessibleDescription(/Choisissez une date entre aujourd'hui et le 16 décembre 2026\./)
     expect(screen.queryByRole("dialog")).toBeNull()
+  })
+
+  it("shows an amber, non-live notice when the stored setting is unreadable", () => {
+    render(<AutoApprovalSettings initial={view({ invalid: true })} />)
+    const notice = screen.getByText(AUTO_APPROVAL_INVALID_NOTICE)
+    expect(notice).toBeInTheDocument()
+    expect(notice.closest("[role='alert'], [role='status']")).toBeNull()
+    expect(screen.getByText("Désactivée : les nouveaux espaces restent en attente jusqu'à votre validation.")).toBeInTheDocument()
+  })
+
+  it("shows the ceiling refusal in the confirmation dialog", async () => {
+    const fetch = vi.fn().mockResolvedValue({
+      ok: false,
+      status: 409,
+      json: async () => ({ error: AUTO_APPROVAL_CEILING_REACHED }),
+    })
+    vi.stubGlobal("fetch", fetch)
+    render(<AutoApprovalSettings initial={view()} />)
+    fireEvent.change(screen.getByLabelText(/Jusqu'au/), { target: { value: "2026-11-28" } })
+    fireEvent.click(screen.getByRole("button", { name: "Activer" }))
+    const dialog = await screen.findByRole("dialog")
+    fireEvent.click(within(dialog).getByRole("button", { name: "Activer" }))
+    await waitFor(() => expect(within(dialog).getByText(AUTO_APPROVAL_CEILING_REACHED)).toBeInTheDocument())
+    expect(within(dialog).getByRole("button", { name: "Réessayer" })).toBeInTheDocument()
   })
 
   it("states the expired and cut-off situations in plain words", () => {

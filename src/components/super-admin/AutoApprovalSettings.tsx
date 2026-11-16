@@ -12,6 +12,7 @@ import { announce } from "@/lib/announce"
 import { requestJson, useSubmit } from "@/lib/use-submit"
 import {
   AUTO_APPROVAL_EXPLANATION,
+  AUTO_APPROVAL_INVALID_NOTICE,
   AUTO_APPROVAL_MAX_DAYS,
   AUTO_APPROVAL_REVIEW_HREF,
   autoApprovalCounterSentences,
@@ -161,6 +162,12 @@ export default function AutoApprovalSettings({ initial }: { initial: AutoApprova
         </p>
       )}
       <p className="text-sm text-gray-700">{AUTO_APPROVAL_EXPLANATION}</p>
+
+      {view.invalid && (
+        <div className="rounded-xl border border-amber-300 bg-amber-50 px-4 py-3 text-sm text-amber-900">
+          <p>{AUTO_APPROVAL_INVALID_NOTICE}</p>
+        </div>
+      )}
 
       {view.cutOffNotice && (
         <div className="rounded-xl border border-amber-300 bg-amber-50 px-4 py-3 text-sm text-amber-900">

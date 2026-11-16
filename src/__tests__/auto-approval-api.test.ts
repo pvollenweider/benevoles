@@ -57,7 +57,7 @@ vi.mock("@/lib/prisma", () => {
 })
 
 import { APP_TIME_ZONE } from "@/lib/time-zone"
-import { addCalendarDays, autoApprovalDayInZone, autoApprovalDayLabel, AUTO_APPROVAL_HOSTED_ONLY, AUTO_APPROVAL_SETTING_KEY } from "@/lib/auto-approval"
+import { addCalendarDays, autoApprovalBudgetDay, autoApprovalDayInZone, autoApprovalDayLabel, AUTO_APPROVAL_CEILING_REACHED, AUTO_APPROVAL_HOSTED_ONLY, AUTO_APPROVAL_SETTING_KEY } from "@/lib/auto-approval"
 
 const PUT_URL = "http://localhost/api/super-admin/auto-approval"
 const json = (method: string, body?: unknown) => new Request(PUT_URL, {
@@ -68,6 +68,21 @@ const json = (method: string, body?: unknown) => new Request(PUT_URL, {
 const params = (id: string) => ({ params: Promise.resolve({ id }) })
 const today = () => autoApprovalDayInZone(new Date(), APP_TIME_ZONE)
 const day = (n: number) => addCalendarDays(today(), n)
+/** A complete, coherent stored value; each test overrides what it needs. */
+const stored = (over: Record<string, unknown> = {}) => ({
+  until: day(5),
+  activatedAt: new Date(Date.now() - 60 * 60 * 1000).toISOString(),
+  activatedById: "sa-1",
+  activatedByLabel: "Opérateur",
+  budgetDate: autoApprovalBudgetDay(new Date()),
+  budgetUsed: 0,
+  totalSinceActivation: 0,
+  cutOffAt: null,
+  cutOffSeenAt: null,
+  expiredAt: null,
+  cutOffAlertedAt: null,
+  ...over,
+})
 
 beforeEach(() => {
   vi.clearAllMocks()
@@ -150,9 +165,9 @@ describe("the automatic validation routes (#1371)", () => {
     expect(store.logs).toEqual([])
   })
 
-  it("dismisses the cut-off notice without a log, and leaves the option cut off", async () => {
+  it("dismisses the cut-off notice, logs the acting super admin, and leaves the option cut off", async () => {
     const cutOffAt = new Date().toISOString()
-    store.setting = { value: { until: day(5), activatedAt: new Date().toISOString(), cutOffAt, cutOffSeenAt: null } }
+    store.setting = { value: stored({ cutOffAt }) }
     const { POST } = await import("@/app/api/super-admin/auto-approval/dismiss/route")
     const res = await POST()
     expect(res.status).toBe(200)
@@ -160,6 +175,75 @@ describe("the automatic validation routes (#1371)", () => {
     expect(view.state).toBe("cut_off")
     expect(view.cutOffNotice).toBeNull()
     expect(store.setting?.value).toMatchObject({ cutOffAt, cutOffSeenAt: expect.any(String) })
+    expect(store.logs).toEqual([expect.objectContaining({
+      action: "auto_approval.notice_dismissed",
+      actorId: "sa-1",
+      entityId: AUTO_APPROVAL_SETTING_KEY,
+      target: "Validation automatique des nouveaux espaces",
+    })])
+  })
+
+  it("refuses a new activation while today's budget is used up", async () => {
+    store.setting = { value: stored({ budgetUsed: 20, cutOffAt: new Date().toISOString() }) }
+    const { PUT } = await import("@/app/api/super-admin/auto-approval/route")
+    const res = await PUT(json("PUT", { until: day(3) }))
+    expect(res.status).toBe(409)
+    expect((await res.json()).error).toBe(AUTO_APPROVAL_CEILING_REACHED)
+    expect(store.logs).toEqual([])
+  })
+
+  it("keeps the UTC day's budget when the option is turned off and on again after 19", async () => {
+    store.setting = { value: stored({ budgetUsed: 19, totalSinceActivation: 7 }) }
+    const { PUT, DELETE } = await import("@/app/api/super-admin/auto-approval/route")
+
+    expect((await DELETE()).status).toBe(200)
+    expect(store.setting?.value).toMatchObject({ until: null, budgetUsed: 19 })
+
+    const res = await PUT(json("PUT", { until: day(5) }))
+    expect(res.status).toBe(200)
+    expect(store.setting?.value).toMatchObject({
+      budgetDate: autoApprovalBudgetDay(new Date()),
+      budgetUsed: 19,
+      totalSinceActivation: 0,
+    })
+  })
+
+  it("allows a new activation the next UTC day, with a zero budget", async () => {
+    const utcToday = autoApprovalBudgetDay(new Date())
+    store.setting = {
+      value: stored({
+        activatedAt: new Date(Date.now() - 2 * 24 * 60 * 60 * 1000).toISOString(),
+        budgetDate: addCalendarDays(utcToday, -1),
+        budgetUsed: 20,
+        cutOffAt: new Date(Date.now() - 24 * 60 * 60 * 1000).toISOString(),
+      }),
+    }
+    const { PUT } = await import("@/app/api/super-admin/auto-approval/route")
+    const res = await PUT(json("PUT", { until: day(5) }))
+    expect(res.status).toBe(200)
+    expect(store.setting?.value).toMatchObject({ budgetDate: utcToday, budgetUsed: 0 })
+  })
+
+  it("replaces an invalid value by a clean one, keeping a readable today budget", async () => {
+    store.setting = { value: stored({ cutOffAt: "not a date", budgetUsed: 3 }) }
+    const { GET, PUT } = await import("@/app/api/super-admin/auto-approval/route")
+    expect(await (await GET()).json()).toMatchObject({ state: "off", invalid: true })
+
+    const res = await PUT(json("PUT", { until: day(5) }))
+    expect(res.status).toBe(200)
+    expect(store.setting?.value).toMatchObject({
+      budgetDate: autoApprovalBudgetDay(new Date()),
+      budgetUsed: 3,
+      cutOffAt: null,
+    })
+  })
+
+  it("refuses to reactivate an invalid value whose today's budget cannot be read", async () => {
+    store.setting = { value: { until: "2099-01-01" } }
+    const { PUT } = await import("@/app/api/super-admin/auto-approval/route")
+    const res = await PUT(json("PUT", { until: day(5) }))
+    expect(res.status).toBe(409)
+    expect((await res.json()).error).toBe(AUTO_APPROVAL_CEILING_REACHED)
     expect(store.logs).toEqual([])
   })
 })
