@@ -1,0 +1,44 @@
+{
+  "model": "gemini-3.8-flash",
+  "reviewedAt": "2026-11-16T21:43:48.482Z",
+  "videoSha256": "c90780275f330137c1ba575433c5939382f541355393d8c81885135ddd1dcde8",
+  "promptSha256": "6cc9c04240f3f77c26e542fe8fd153eb4b929442ceb2dbe8e499cc8b1a2454bb",
+  "clipSha256": "c70014288d4cfdca95978f9b793cd5a6a4c8b5999de34bba35c24f4253aa0179",
+  "scene": "team",
+  "review": {
+    "heardOpening": "Côté équipe, le propriétaire",
+    "checkpoints": [
+      {
+        "spokenSeconds": 0.5,
+        "spoken": "le propriétaire administre l’organisation et ses accès",
+        "visibleSeconds": 1,
+        "visible": "Section Organisateurs affichant le rôle Propriétaire",
+        "sync": "aligned",
+        "severity": "none"
+      },
+      {
+        "spokenSeconds": 4.5,
+        "spoken": "Les organisateurs préparent les événements, les membres et les communications",
+        "visibleSeconds": 4.5,
+        "visible": "Rôles Organisateur affichés dans la liste d'équipe",
+        "sync": "aligned",
+        "severity": "none"
+      },
+      {
+        "spokenSeconds": 9,
+        "spoken": "Les responsables de secteur reçoivent un lien personnel limité à leur poste",
+        "visibleSeconds": 9,
+        "visible": "Affichage de la page Paramètres > Responsables de secteur",
+        "sync": "aligned",
+        "severity": "none"
+      }
+    ],
+    "issues": [],
+    "voice": {
+      "consistent": true,
+      "warm": true,
+      "observation": "Voix claire, posée et naturelle, parfaitement synchronisée avec la navigation à l'écran."
+    }
+  },
+  "note": "Automated observation of actual final video audio and images; not a claim of complete human validation"
+}

@@ -1,0 +1,44 @@
+{
+  "model": "gemini-3.8-flash",
+  "reviewedAt": "2026-11-16T21:44:25.581Z",
+  "videoSha256": "c90780275f330137c1ba575433c5939382f541355393d8c81885135ddd1dcde8",
+  "promptSha256": "9b588d79ff74793010e4d10d7635c5aee65fd3b5a815189218bf22169117e1d3",
+  "clipSha256": "bea1b935c48ddf70f2a99c1d083e7d0b6e173d9a22fb0e41370b49ce1ba42d63",
+  "scene": "members",
+  "review": {
+    "heardOpening": "La liste des membres rassemble inscrits",
+    "checkpoints": [
+      {
+        "spokenSeconds": 0.5,
+        "spoken": "La liste des membres rassemble inscrits et personnes importées",
+        "visibleSeconds": 0.5,
+        "visible": "Page Membres affichant la liste tabulaire des bénévoles et personnes enregistrées",
+        "sync": "aligned",
+        "severity": "none"
+      },
+      {
+        "spokenSeconds": 3.6,
+        "spoken": "avec coordonnées, étiquettes, notes, disponibilités, heures prévues et activité",
+        "visibleSeconds": 3.6,
+        "visible": "Colonnes du tableau affichant Contact, Étiquettes, Heures prévues et lien Activité",
+        "sync": "aligned",
+        "severity": "none"
+      },
+      {
+        "spokenSeconds": 9.3,
+        "spoken": "La fiche d’une personne retrace ses invitations, inscriptions et présences d’un événement à l’autre",
+        "visibleSeconds": 9.3,
+        "visible": "Écran stable sur la vue d'ensemble des membres en illustration du concept général",
+        "sync": "aligned",
+        "severity": "none"
+      }
+    ],
+    "issues": [],
+    "voice": {
+      "consistent": true,
+      "warm": true,
+      "observation": "Voix claire, posée et bien articulée, avec un fond musical discret."
+    }
+  },
+  "note": "Automated observation of actual final video audio and images; not a claim of complete human validation"
+}

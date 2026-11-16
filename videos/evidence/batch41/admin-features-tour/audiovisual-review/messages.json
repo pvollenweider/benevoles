@@ -1,0 +1,52 @@
+{
+  "model": "gemini-3.8-flash",
+  "reviewedAt": "2026-11-16T21:44:41.732Z",
+  "videoSha256": "c90780275f330137c1ba575433c5939382f541355393d8c81885135ddd1dcde8",
+  "promptSha256": "34c7c965c32dfa80c79781b1038a27b38c2be12875c7f32edbfffc7d4096c29b",
+  "clipSha256": "89fcbd60101493cfd8ca5072988a7d77fae4a02bbc2f69b3a5bc2094295aa2c1",
+  "scene": "messages",
+  "review": {
+    "heardOpening": "Les messages ciblent tous les inscrits",
+    "checkpoints": [
+      {
+        "spokenSeconds": 0.5,
+        "spoken": "Les messages ciblent tous les inscrits, un poste, un créneau",
+        "visibleSeconds": 0.5,
+        "visible": "Options de sélection des destinataires affichées sous Écrire aux bénévoles",
+        "sync": "aligned",
+        "severity": "none"
+      },
+      {
+        "spokenSeconds": 6.8,
+        "spoken": "Les modèles réutilisables acceptent des variables comme le prénom",
+        "visibleSeconds": 6.5,
+        "visible": "Affichage de la page Modèles de messages dans les paramètres",
+        "sync": "aligned",
+        "severity": "none"
+      },
+      {
+        "spokenSeconds": 13.5,
+        "spoken": "Vous choisissez un envoi immédiat ou programmé",
+        "visibleSeconds": 12.5,
+        "visible": "Options d'envoi 'Maintenant' ou 'Programmer l'envoi' avec le bouton 'Voir l'aperçu et envoyer'",
+        "sync": "aligned",
+        "severity": "none"
+      },
+      {
+        "spokenSeconds": 19.8,
+        "spoken": "La section Messages programmés permet de suivre les envois à venir",
+        "visibleSeconds": 19.5,
+        "visible": "Affichage de la section 'Messages programmés' et des options de délais des rappels automatiques",
+        "sync": "aligned",
+        "severity": "none"
+      }
+    ],
+    "issues": [],
+    "voice": {
+      "consistent": true,
+      "warm": true,
+      "observation": "Voix off féminine claire, posée, bien articulée et parfaitement synchronisée avec les changements d'écran."
+    }
+  },
+  "note": "Automated observation of actual final video audio and images; not a claim of complete human validation"
+}

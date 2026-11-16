@@ -888,9 +888,10 @@
         "organisateur"
       ],
       "feature": "Vue d'ensemble de l'administration",
-      "updatedAt": "2026-10-16",
-      "revision": 5,
-      "level": "decouverte"
+      "updatedAt": "2026-11-16",
+      "revision": 6,
+      "level": "decouverte",
+      "updated": "2026-11-16"
     },
     {
       "id": "REGISTRATION_MONITOR_FOLLOWUP",

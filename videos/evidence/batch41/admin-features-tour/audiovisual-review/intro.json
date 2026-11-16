@@ -1,0 +1,44 @@
+{
+  "model": "gemini-3.8-flash",
+  "reviewedAt": "2026-11-16T21:43:48.041Z",
+  "videoSha256": "c90780275f330137c1ba575433c5939382f541355393d8c81885135ddd1dcde8",
+  "promptSha256": "cf43ae78225f83d39ffcda55ad3938e61b7f9acb2d75599aa9cc057f9e6cf396",
+  "clipSha256": "680e4e8209ee8439cf781c5626e694a904190930198528357be795304c339ee0",
+  "scene": "intro",
+  "review": {
+    "heardOpening": "Voici une visite complète",
+    "checkpoints": [
+      {
+        "spokenSeconds": 0.1,
+        "spoken": "Voici une visite complète de l'administration",
+        "visibleSeconds": 0,
+        "visible": "Page d'administration avec encart de titre « Organiser ses bénévoles, du premier paramètre au jour J »",
+        "sync": "aligned",
+        "severity": "none"
+      },
+      {
+        "spokenSeconds": 2.5,
+        "spoken": "dans l'ordre où vous l'utiliserez vraiment",
+        "visibleSeconds": 2.7,
+        "visible": "L'encart de titre s'efface pour afficher l'onglet Événements",
+        "sync": "aligned",
+        "severity": "none"
+      },
+      {
+        "spokenSeconds": 4.8,
+        "spoken": "préparer votre organisation, construire un événement",
+        "visibleSeconds": 5,
+        "visible": "Affichage fixe de la liste des événements présentant l'événement Fête du village de Montvert",
+        "sync": "aligned",
+        "severity": "none"
+      }
+    ],
+    "issues": [],
+    "voice": {
+      "consistent": true,
+      "warm": true,
+      "observation": "Voix féminine naturelle, claire et posée, accompagnée d'une musique de fond discrète."
+    }
+  },
+  "note": "Automated observation of actual final video audio and images; not a claim of complete human validation"
+}

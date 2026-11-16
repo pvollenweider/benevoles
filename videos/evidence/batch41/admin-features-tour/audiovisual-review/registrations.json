@@ -1,0 +1,44 @@
+{
+  "model": "gemini-3.8-flash",
+  "reviewedAt": "2026-11-16T21:44:11.420Z",
+  "videoSha256": "c90780275f330137c1ba575433c5939382f541355393d8c81885135ddd1dcde8",
+  "promptSha256": "d1b2c6acc972a82b86c612aa935bd4ba4f4c6880a2956d8300e7448da1765336",
+  "clipSha256": "d2d03a0c6afe7f74f553b01c5a15c7b45a11ca0dd5c564f3015ac652940ec9e1",
+  "scene": "registrations",
+  "review": {
+    "heardOpening": "La vue des inscriptions montre qui est inscrit",
+    "checkpoints": [
+      {
+        "spokenSeconds": 0.5,
+        "spoken": "La vue des inscriptions montre qui est inscrit, sur quel créneau et par quel moyen",
+        "visibleSeconds": 0,
+        "visible": "Page de l'onglet Inscriptions affichant la liste des bénévoles, leurs créneaux et la source d'inscription",
+        "sync": "aligned",
+        "severity": "none"
+      },
+      {
+        "spokenSeconds": 5.1,
+        "spoken": "Vous pouvez filtrer, ajouter quelqu'un manuellement",
+        "visibleSeconds": 0,
+        "visible": "Filtres de recherche et bouton bleu « + Ajouter manuellement » visibles au-dessus du tableau",
+        "sync": "aligned",
+        "severity": "none"
+      },
+      {
+        "spokenSeconds": 8,
+        "spoken": "accepter une demande, renvoyer son lien, désigner un responsable, retirer une inscription et noter les présences",
+        "visibleSeconds": 0,
+        "visible": "Présentation générale des fonctionnalités disponibles sur la vue des inscriptions sur un écran stable pertinent",
+        "sync": "aligned",
+        "severity": "none"
+      }
+    ],
+    "issues": [],
+    "voice": {
+      "consistent": true,
+      "warm": true,
+      "observation": "Voix off féminine claire, posée et bien articulée, sans bruit de fond."
+    }
+  },
+  "note": "Automated observation of actual final video audio and images; not a claim of complete human validation"
+}

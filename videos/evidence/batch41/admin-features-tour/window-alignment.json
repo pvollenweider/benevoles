@@ -1,0 +1,69 @@
+{
+  "locatedAt": "2026-11-16T20:32:29.640Z",
+  "masterSha256": "72ac793a6a42f3c30829e74cd9d4b6e7a863877ec7a56fd189437348cabd5200",
+  "totalSeconds": 258.52,
+  "cuts": [
+    {
+      "id": "organization",
+      "seconds": 12.6311875
+    },
+    {
+      "id": "team",
+      "seconds": 26.6305205
+    },
+    {
+      "id": "lifecycle",
+      "seconds": 43.577833
+    },
+    {
+      "id": "appearance",
+      "seconds": 60.9202085
+    },
+    {
+      "id": "duplicate",
+      "seconds": 74.93606249999999
+    },
+    {
+      "id": "shift-methods",
+      "seconds": 85.2950835
+    },
+    {
+      "id": "shift-fields",
+      "seconds": 99.895375
+    },
+    {
+      "id": "registrations",
+      "seconds": 118.6644585
+    },
+    {
+      "id": "members",
+      "seconds": 133.8656875
+    },
+    {
+      "id": "questions",
+      "seconds": 149.23418750000002
+    },
+    {
+      "id": "pages",
+      "seconds": 169.5119795
+    },
+    {
+      "id": "messages",
+      "seconds": 184.0166875
+    },
+    {
+      "id": "reminders",
+      "seconds": 210.4621665
+    },
+    {
+      "id": "reports",
+      "seconds": 222.7717085
+    },
+    {
+      "id": "activity",
+      "seconds": 241.5504375
+    }
+  ],
+  "applied": true,
+  "independentContentAuditRequired": true
+}

@@ -1,0 +1,44 @@
+{
+  "model": "gemini-3.8-flash",
+  "reviewedAt": "2026-11-16T21:43:59.214Z",
+  "videoSha256": "c90780275f330137c1ba575433c5939382f541355393d8c81885135ddd1dcde8",
+  "promptSha256": "a7180648bfad2e37efa7114b00ecbcdc0fd77a3c62ce2fc6cff0dd286dd4b096",
+  "clipSha256": "6ee9428c9deb8316240845a8932e08ef28f1fcd2a1de706e32b93114ccb01498",
+  "scene": "appearance",
+  "review": {
+    "heardOpening": "Dans ses paramètres, vous réglez le titre",
+    "checkpoints": [
+      {
+        "spokenSeconds": 0.8,
+        "spoken": "Dans ses paramètres, vous réglez le titre, les dates",
+        "visibleSeconds": 1,
+        "visible": "L'onglet Paramètres est affiché avec les champs Titre et Description",
+        "sync": "aligned",
+        "severity": "none"
+      },
+      {
+        "spokenSeconds": 3.7,
+        "spoken": "et une couleur d’en-tête accessible.",
+        "visibleSeconds": 4.1,
+        "visible": "Affichage de la section Couleur d'en-tête avec la palette accessible",
+        "sync": "aligned",
+        "severity": "none"
+      },
+      {
+        "spokenSeconds": 6.2,
+        "spoken": "Le lieu peut recevoir des coordonnées",
+        "visibleSeconds": 6,
+        "visible": "Retour sur les champs Lieu et Coordonnées GPS ou lien de carte",
+        "sync": "aligned",
+        "severity": "none"
+      }
+    ],
+    "issues": [],
+    "voice": {
+      "consistent": true,
+      "warm": true,
+      "observation": "Voix off de synthèse fluide, claire et bien calée sur les sections de l'écran."
+    }
+  },
+  "note": "Automated observation of actual final video audio and images; not a claim of complete human validation"
+}

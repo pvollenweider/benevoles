@@ -1,0 +1,52 @@
+{
+  "model": "gemini-3.8-flash",
+  "reviewedAt": "2026-11-16T21:43:47.564Z",
+  "videoSha256": "c90780275f330137c1ba575433c5939382f541355393d8c81885135ddd1dcde8",
+  "promptSha256": "840f72f133f28a7fcb3523d9e3d0d24a87b819566edbfd1fd22f3162629e36bf",
+  "clipSha256": "46e7c7388f000584d12549056532c8e5b73fdd8ec124d4c5902dba0254523bbe",
+  "scene": "organization",
+  "review": {
+    "heardOpening": "Tout commence avec l'identité de l'organisation",
+    "checkpoints": [
+      {
+        "spokenSeconds": 0,
+        "spoken": "Tout commence avec l'identité de l'organisation",
+        "visibleSeconds": 0,
+        "visible": "Affichage des sections Logo de l'organisation et Titre de la page publique",
+        "sync": "aligned",
+        "severity": "none"
+      },
+      {
+        "spokenSeconds": 2.5,
+        "spoken": "L'adresse de votre espace détermine votre sous-domaine sur benevol point app",
+        "visibleSeconds": 2.5,
+        "visible": "Section Adresse de votre espace visible avec l'URL en sous-domaine benevol.app",
+        "sync": "aligned",
+        "severity": "none"
+      },
+      {
+        "spokenSeconds": 6.8,
+        "spoken": "Vous choisissez aussi le nom affiché",
+        "visibleSeconds": 6.8,
+        "visible": "Défilement vers le haut montrant le Titre de la page publique",
+        "sync": "aligned",
+        "severity": "none"
+      },
+      {
+        "spokenSeconds": 9,
+        "spoken": "le fuseau horaire et la Charte des bénévoles",
+        "visibleSeconds": 10,
+        "visible": "Défilement vers le bas affichant les sections Fuseau horaire et Charte des bénévoles",
+        "sync": "aligned",
+        "severity": "none"
+      }
+    ],
+    "issues": [],
+    "voice": {
+      "consistent": true,
+      "warm": true,
+      "observation": "Voix claire, posée, bien articulée et sans bruit parasite."
+    }
+  },
+  "note": "Automated observation of actual final video audio and images; not a claim of complete human validation"
+}
